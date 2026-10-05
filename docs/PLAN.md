@@ -443,6 +443,26 @@ F = formationFraction × MW 比。
 
 时间解析：不带时区的 `2025-10-23T12:00:00` / `2025-10-23` / `12:00:00` 按**设备时区**（找不到时用 `Europe/Paris`）解释成 `ZonedDateTime`，再存成 UTC 加时区。遇到秋季重叠的本地时间取较早偏移，春季跳时的不存在时间顺延，并记入导入报告。
 
+### 5.0 本地导出文件的值域分析（2026-10-05）
+
+用户提供了一份真实导出文件（只放在会话上传目录，未进仓库）。分析是**只读**的，只看配置类字段的取值集合、各 state 下字段是否为空、时间差的汇总分位数；没有读取药名、备注正文、具体日期或数值记录，下文也不写入任何具体数据。这修正了第 10 节第 6 条"没有真实导出、不做值域分析"的前提。
+
+| 发现 | 依据 | 结论 |
+|---|---|---|
+| 结构与需求一致，`user_version = 8`；另有 Room 自带的 `room_master_table`、`android_metadata`、`sqlite_sequence` | `sqlite_master` | 结构校验忽略这三张表 |
+| **`LATE` 记录全都没有 `takenAt`，`realDose` 全为 0**；所有带 `takenAt` 的记录都是 `TAKEN` | 按 state 统计空值 | Trans Memo 的 `LATE` 实际含义是"**过了时间、一直没有确认服用**"，不是"迟服了"。原规则"导入 `takenAt` 非空的 TAKEN/LATE"在这份数据上会静默丢掉全部 `LATE`，改为 5.3 的显式选择 |
+| `TAKEN` 的"实际时间 − 计划时间"分布很宽（有提前，也有晚数小时到数天），不按任何阈值分成两类 | 时间差分位数 | `TAKEN` **不携带**按时还是迟服的信息，也**无法据此反推 `lateAlertDelay` 的单位** |
+| `lateAlertDelay` 全部等于列默认值 2；`soonAlertDelay` 只出现 0 和 1 | 取值集合 | 两者单位或语义仍然**未知**，维持 5.1"不映射" |
+| `notifications` 在不同药物上取值不同，形似位掩码 | 取值集合 | 位含义仍然未知，不解析 |
+| `intakeInterval` 只出现 1，每个药物只有一个服药时间 | 取值集合 | 只有单一取值，不足以推出其他编码，维持"不猜" |
+| `plannedSide` / `realSide` 只有 `UNDEFINED`；`handleSide` 只有 0 | 取值集合 | 其他取值未知，按原字符串保存 |
+| **`wellbeing.value` 只出现 0 和 1，没有 1–5 的分布** | 取值集合 | 量程**未知**（可能从 0 开始，也可能 0 表示未填）；原规则"不在 1–5 内的跳过"会静默丢数据，改为 5.5 的显式选择 |
+| `medical_appointments.type` 没有可用样本 | 取值集合 | 一律按未知处理（5.6） |
+| `takenAt` 有带小数秒的格式（如 `…T12:00:00.308`） | 字符串长度与后缀 | 解析器支持 0–3 位小数秒，并保留精度 |
+| 单位只有 `MILLIGRAM`、`PILL`；容器状态只有 `OPEN`、`EMPTY` | 取值集合 | 与现有映射一致 |
+
+原则不变：**只有证据充分时才建立映射**；证据不足的字段导入为未知，原值进入导入报告，由用户在预览或确认页明确处理，未处理前相关功能保持安全状态。预览中需要做的选择**都没有默认选项**，不选就不能点"导入"。
+
 ### 5.1 products → MEDICATION（+ SCHEDULE_RULE / RULE_TIME / PK_PROFILE）
 
 | Trans Memo | HRT Log | 处理 |
@@ -474,8 +494,10 @@ F = formationFraction × MW 比。
 | 条件 | 处理 |
 |---|---|
 | `state = PENDING` | **跳过**（预览中显示"忽略 N 条未来计划"） |
-| `state ∈ {TAKEN, LATE}` 且 `takenAt` 非空 | 导入；`TAKEN→ON_TIME`，`LATE→LATE` |
-| `state ∈ {TAKEN, LATE}` 但 `takenAt` 为空 | 跳过，计入"异常记录"并在预览中显示 |
+| `state = TAKEN` 且 `takenAt` 非空 | 导入为 `ON_TIME` 或 `LATE`。`TAKEN` 本身不含按时信息（5.0），所以**预览阶段**要求用户为每个药物填写迟服阈值（分钟），按"实际时间 − 计划时间"分类，并把这个阈值写入 `late_after_minutes_snapshot`。不填就不能导入，不用 Trans Memo 的 `lateAlertDelay` 原值代替。这样不需要新增状态，符合现有 schema 的约束 |
+| `state = TAKEN` 但 `takenAt` 为空 | 跳过，计入"异常记录"并在预览中显示 |
+| `state = LATE` 且 `takenAt` 为空（本地导出中的全部 `LATE`） | **单独成一类**，预览中显示条数和时间范围，并说明"Trans Memo 中过了时间但一直没有确认服用"。用户必须二选一，**没有默认值**：① 跳过；② 导入为 `MISSED`（实际字段全为 NULL，备注写明来自 Trans Memo 的 `LATE`）。`realDose = 0` 不作为实际剂量 |
+| `state = LATE` 且 `takenAt` 非空（本地导出中没有，但不排除其他版本会有） | 与 `TAKEN` 相同处理，并在导入报告中注明 |
 | `state = MISSED` | 导入为 `MISSED`，`taken_*` 为空 |
 | 其他 state | 跳过，计入"未知状态" |
 
@@ -507,14 +529,14 @@ F = formationFraction × MW 比。
 | `wellbeing_types.defaultType` + 空 `name` | `CHECKIN_ITEM.builtin_key` | `OVERALL / MOOD / EMO_STABILITY / DYNAMISM(→精力) / AGGRESSIVENESS / LIBIDO / PAIN / PERIODS(→经期样症状) / APPETITE / SLEEP_QUALITY / SKIN_QUALITY` 对应内置项 |
 | `name` 非空 | `custom_label` | 自定义项 |
 | `enabled` | `enabled` | |
-| `wellbeing(date, typeId, value)` | `CHECKIN_SCORE` | value 不在 1–5 内的跳过并计数；"合并"模式下同一天同一项冲突时以已有数据为准（预览中显示冲突数） |
+| `wellbeing(date, typeId, value)` | `CHECKIN_SCORE` | **量程未知（5.0）**。预览中显示原始取值分布，用户必须三选一，**没有默认值**：① 原值就是 1–5 星（超出范围的跳过并计数）；② 原值从 0 开始（+1 后导入，超出范围的跳过并计数）；③ 不导入身心评分。之后的处理："合并"模式下同一天同一项冲突时以已有数据为准（预览中显示冲突数） |
 | `notes(date, text)` | `DAY_NOTE` | `text` 去空白后为空 → **跳过**；同一天有多条时用换行合并 |
 
 ### 5.6 medical_appointments → APPOINTMENT
 
 | Trans Memo | HRT Log | 处理 |
 |---|---|---|
-| `type` | `type` | 已知值映射，其他值 → `OTHER`，原值写进备注开头 |
+| `type` | `type` | 没有取值样本（5.0），**不建立映射**：一律导入为 `OTHER`，原值写进备注开头，确认页列出这些预约供用户改类型 |
 | `scheduledAt` | `at_utc` / `at_zone` | 本地 → UTC |
 | `location` / `doctorName` / `notes` | `location` / `practitioner` / `note` | 原样 |
 | `reminderMinutesBefore` | `remind_minutes_before` | 原样；对未来的预约导入后排提醒 |
@@ -525,7 +547,7 @@ F = formationFraction × MW 比。
 - **覆盖**：在同一个事务里先清空主库的领域表，再写入。
 - **合并**：药物按 `(molecule, name)` 匹配已有药物，确认页可改为"新建"或"并入某药物"。优先以导入来源身份去重；时间/剂量相似仅作候选冲突供核对，避免静默合并同一时刻的不同记录。导入及覆盖提交前使旧提醒缓存失效，事务成功后重排，失败按原数据库重建。
 - **导入后检查页**：每个药物一张卡片，必须逐个确认周期、提醒时间、通知开关、雌二醇的途径和酯型；未确认的药物保持"暂停提醒"。
-- **测试**：`importer/src/test/resources/transmemo_v8_synthetic.sql` 是**纯合成数据**的建表和插入脚本，结构与 v8 相同，覆盖 DST 边界时间、空备注、PENDING、未知枚举、`takenAt` 为空等情况。测试时用 `sqlite-jdbc` 在临时目录建库。`reference/transmemo.db` 已写进 `.gitignore`，只在本地手动验证时用，内容不会出现在任何测试、截图或日志中。
+- **测试**：`importer/src/test/resources/transmemo_v8_synthetic.sql` 是**纯合成数据**的建表和插入脚本，结构与 v8 相同，覆盖 DST 边界时间、空备注、PENDING、未知枚举、`takenAt` 为空等情况。另外按 5.0 覆盖：不带 `takenAt`、`realDose = 0` 的 `LATE`（两种选择各一个用例）；带 `takenAt` 的 `LATE`；`TAKEN` 的分类阈值边界（前后各 1 秒）和未填阈值时拒绝导入；身心评分取 0/1 和 1–5 两种值时的三种选择；0–3 位小数秒；未知的预约类型。测试时用 `sqlite-jdbc` 在临时目录建库。`reference/transmemo.db` 已写进 `.gitignore`，只在本地手动验证时用，内容不会出现在任何测试、截图或日志中。
 
 ---
 
@@ -577,7 +599,7 @@ F = formationFraction × MW 比。
 
 ### 6.6 备份与导出
 
-- **加密备份**：JSON（含 schema 版本号）→ 用 Argon2id 从备份密码派生密钥 → AES-256-GCM 加密 → 通过 SAF 保存为 `.qlbak` 文件。恢复时先校验，再在一个事务里写入。
+- **加密备份**：JSON（含 schema 版本号）→ 用 Argon2id 从备份密码派生密钥 → AES-256-GCM 加密 → 通过 SAF 保存为 `.pnbak` 文件。恢复时先校验，再在一个事务里写入。
 - **CSV**：服药记录、身心状态、化验分别导出一个文件。
 - **PDF 医生报告**：选择时间段，内容包括药物清单、依从性统计、化验趋势表，可选附上血药浓度估算图（带免责声明）。
 - **一键删除全部数据**：需要二次确认并输入"删除"，然后删掉数据库文件、密钥、设置、伪装状态，最后重启应用。
@@ -628,7 +650,7 @@ F = formationFraction × MW 比。
 3. **Direct Boot 实现**：模拟器/真机覆盖正常重启、未解锁提醒、首次解锁同步、不一致/写入中断、取消和改期不重响、48h 滚动和耗尽、换时区后解锁刷新。domain 单测不能证明系统行为；未解锁换时区不能承诺缓存 UTC 自动变为新的当地墙钟时刻。
 4. **权限与可靠性**：覆盖新装拒权、获权、撤权停止应用、通知拒权、Doze、强制停止、厂商省电和高可靠模式系统信息可见性。测试通过前不宣称可靠性已验证。
 5. **工具链和依赖**：M1 固定 Gradle、Kotlin、AGP、Compose、Room、SQLCipher 等兼容组合；targetSdk 按实施时最新稳定版核对。Vico 3.3.1 来自官方发布，图表能力及工具链兼容性在使用前验证，不把版本固定当作功能已经验证。
-6. **导入未知字段**：当前仓库没有真实导出数据库，不进行值域分析。后续只有导出值与实际 UI 设置可靠对应时才建立单位/编码映射；已观察单值不能推出全部编码含义。
+6. **导入未知字段**：已对用户提供的真实导出做只读值域分析（5.0，不含具体数据）。结论：`soonAlertDelay`、`lateAlertDelay`、`notifications`、`intakeInterval`、预约类型仍然不足以建立映射；新发现 Trans Memo 的 `LATE` 表示"未确认服用"、`TAKEN` 不含按时信息、身心评分量程不确定，已改为 5.3、5.5 中的显式选择。后续只有导出值与实际 UI 设置可靠对应时才建立单位/编码映射。
 
 依据：[固定 PK 源码](https://github.com/TransmtfTeam/Transmtf-HRT-Tracker/blob/8c9abdde/pk.ts)、[Vico 3.3.1 发布](https://github.com/patrykandpatrick/vico/releases/tag/v3.3.1)。完整 PK 数值表延续前次规划，M4 移植时逐项复核并建立 TS/Kotlin 一致性测试，本次并未宣称完成全量参数审计。
 
