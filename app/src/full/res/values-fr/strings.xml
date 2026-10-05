@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="disguise_backup">Faites d’abord une sauvegarde chiffrée (Données → Exporter une sauvegarde). Un code erroné ne donne aucun indice et, en cas d’oubli, il faudra effacer les données de l’app.</string>
+<string name="disguise_code">Code (4 à 12 chiffres)</string>
+<string name="disguise_code_repeat">Répétez le code</string>
+<string name="disguise_decoy">Code leurre (facultatif)</string>
+<string name="disguise_decoy_desc">Ouvre un espace séparé et vide au lieu de vos données.</string>
+<string name="disguise_desc">Remplace l’icône de l’app par une calculatrice ou un bloc-notes fonctionnels. Saisir votre code y ouvre HRT Log.</string>
+<string name="disguise_disable">Désactiver le camouflage</string>
+<string name="disguise_disable_desc">Rétablit l’icône normale, supprime les deux codes et efface tout le contenu de l’espace leurre.</string>
+<string name="disguise_enable">Activer</string>
+<string name="disguise_exit">Secouez le téléphone à tout moment pour revenir au camouflage.</string>
+<string name="disguise_how_calc">Pour ouvrir : tapez votre code puis appuyez sur =.</string>
+<string name="disguise_how_notes">Pour ouvrir : touchez Rechercher et cherchez votre code.</string>
+<string name="disguise_limits">Toujours visible : le vrai nom de l’app dans la liste des apps et les paramètres du système, ainsi qu’en tête des notifications. L’écran d’accueil peut retirer l’ancien raccourci ; ajoutez la nouvelle icône depuis le tiroir d’apps.</string>
+<string name="disguise_mismatch">Les codes ne correspondent pas</string>
+<string name="disguise_on">Activé : %1$s</string>
+<string name="disguise_same">Le code leurre doit être différent de votre code.</string>
+<string name="disguise_setup">Configurer le camouflage</string>
+<string name="disguise_shell">Apparence</string>
+<string name="disguise_title">Mode camouflage</string>
+<string name="disguise_understood">J’ai compris</string>
+<string name="shell_calc">Calculatrice</string>
+<string name="shell_delete">Effacer</string>
+<string name="shell_error">Erreur</string>
+<string name="shell_no_results">Aucun résultat</string>
+<string name="shell_note_hint">Écrivez quelque chose…</string>
+<string name="shell_notes">Notes</string>
+<string name="shell_search">Rechercher</string>
+</resources>

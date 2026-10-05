@@ -1,0 +1,13 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<application>
+<!-- Disguise mode (M7). Shells are only reachable through their launcher aliases, which start disabled. -->
+<activity android:name="net.plainnotes.app.disguise.CalculatorActivity" android:exported="false" android:label="@string/shell_calc" android:icon="@mipmap/ic_shell_calc" android:taskAffinity="" />
+<activity android:name="net.plainnotes.app.disguise.NotesShellActivity" android:exported="false" android:label="@string/shell_notes" android:icon="@mipmap/ic_shell_notes" android:taskAffinity="" android:windowSoftInputMode="adjustResize" />
+<activity-alias android:name="net.plainnotes.app.CalculatorLauncher" android:targetActivity="net.plainnotes.app.disguise.CalculatorActivity" android:enabled="false" android:exported="true" android:label="@string/shell_calc" android:icon="@mipmap/ic_shell_calc">
+<intent-filter><action android:name="android.intent.action.MAIN" /><category android:name="android.intent.category.LAUNCHER" /></intent-filter>
+</activity-alias>
+<activity-alias android:name="net.plainnotes.app.NotesLauncher" android:targetActivity="net.plainnotes.app.disguise.NotesShellActivity" android:enabled="false" android:exported="true" android:label="@string/shell_notes" android:icon="@mipmap/ic_shell_notes">
+<intent-filter><action android:name="android.intent.action.MAIN" /><category android:name="android.intent.category.LAUNCHER" /></intent-filter>
+</activity-alias>
+</application>
+</manifest>

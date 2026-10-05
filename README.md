@@ -31,3 +31,11 @@ See [`docs/milestones/M1.md`](docs/milestones/M1.md) for implementation details,
 test evidence, limitations and device verification. PK and import modules are
 reserved for M4/M5, and deliberately do not implement model defaults or import mappings.
 Health information must never be committed. Use only synthetic test data.
+
+## Disguise mode (full build only)
+
+Settings → Disguise mode swaps the launcher icon for a working calculator or notes app. Type your code and press `=`
+(calculator) or search for it (notes) to open the app; an optional decoy code opens a separate, empty space.
+Shake the phone to return to the disguise. Known limits: the real app name still shows in the system app list,
+in system settings and in notification headers; after switching, some launchers take a few seconds to refresh and
+drop the old home-screen shortcut (add the new icon from the app drawer). The Play build ships without this feature.

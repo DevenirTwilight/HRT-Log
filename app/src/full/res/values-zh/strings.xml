@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="disguise_backup">请先做一份加密备份（数据 → 导出备份）。输错密码不会有任何提示；忘记密码后只能清除应用数据才能重新进入。</string>
+<string name="disguise_code">密码（4–12 位数字）</string>
+<string name="disguise_code_repeat">再次输入密码</string>
+<string name="disguise_decoy">诱饵密码（可选）</string>
+<string name="disguise_decoy_desc">打开一个独立的空白空间，而不是你的数据。</string>
+<string name="disguise_desc">把应用图标换成一个能正常使用的计算器或便签。在其中输入你的密码即可打开 HRT 日志。</string>
+<string name="disguise_disable">关闭伪装</string>
+<string name="disguise_disable_desc">恢复正常图标，删除两个密码，并删除诱饵空间中的所有内容。</string>
+<string name="disguise_enable">开启</string>
+<string name="disguise_exit">随时摇一摇手机即可回到伪装界面。</string>
+<string name="disguise_how_calc">打开方式：输入密码后按 =。</string>
+<string name="disguise_how_notes">打开方式：点搜索，搜索你的密码。</string>
+<string name="disguise_limits">仍然可见：系统应用列表和设置中的真实应用名称，以及通知顶部的应用名称。桌面可能会移除旧的快捷方式，请从应用抽屉添加新图标。</string>
+<string name="disguise_mismatch">两次输入的密码不一致</string>
+<string name="disguise_on">已开启：%1$s</string>
+<string name="disguise_same">诱饵密码必须与密码不同。</string>
+<string name="disguise_setup">设置伪装</string>
+<string name="disguise_shell">伪装成</string>
+<string name="disguise_title">伪装模式</string>
+<string name="disguise_understood">我已了解</string>
+<string name="shell_calc">计算器</string>
+<string name="shell_delete">删除</string>
+<string name="shell_error">错误</string>
+<string name="shell_no_results">无结果</string>
+<string name="shell_note_hint">写点什么…</string>
+<string name="shell_notes">便签</string>
+<string name="shell_search">搜索</string>
+</resources>

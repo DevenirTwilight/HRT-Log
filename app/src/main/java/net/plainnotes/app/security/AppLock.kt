@@ -23,6 +23,7 @@ import javax.crypto.spec.GCMParameterSpec
 class AppLock(private val context: Context, private val file: String = "lock.bin", private val alias: String = "notes.lock") {
     private val prefs = context.getSharedPreferences("prefs", Context.MODE_PRIVATE)
     private val store get() = AtomicFile(File(context.noBackupFilesDir, file))
+    private val failuresKey = "${file}_failures"; private val untilKey = "${file}_until"
 
     val enabled get() = store.baseFile.exists()
     var biometric: Boolean
@@ -54,26 +55,29 @@ class AppLock(private val context: Context, private val file: String = "lock.bin
         val c = Cipher.getInstance("AES/GCM/NoPadding"); c.init(Cipher.ENCRYPT_MODE, key())
         val out = store.startWrite()
         try { out.write(c.iv + c.doFinal(plain)); store.finishWrite(out) } catch (e: Exception) { store.failWrite(out); throw e }
-        prefs.edit().putInt("lock_failures", 0).putLong("lock_until", 0).apply()
+        prefs.edit().putInt(failuresKey, 0).putLong(untilKey, 0).apply()
     }
 
-    fun disable() { store.delete(); biometric = false; runCatching { KeyStore.getInstance("AndroidKeyStore").apply { load(null) }.deleteEntry(alias) } }
+    fun disable() { store.delete(); if (file == "lock.bin") biometric = false; prefs.edit().remove(failuresKey).remove(untilKey).apply(); runCatching { KeyStore.getInstance("AndroidKeyStore").apply { load(null) }.deleteEntry(alias) } }
 
     /** Milliseconds until another attempt is allowed (0 = now). */
-    fun waitMillis(now: Long = System.currentTimeMillis()) = (prefs.getLong("lock_until", 0) - now).coerceAtLeast(0)
+    fun waitMillis(now: Long = System.currentTimeMillis()) = (prefs.getLong(untilKey, 0) - now).coerceAtLeast(0)
 
     fun verify(pin: String, now: Long = System.currentTimeMillis()): Boolean {
         if (waitMillis(now) > 0 || !enabled) return false
-        val ok = runCatching {
-            val bytes = store.readFully()
-            val c = Cipher.getInstance("AES/GCM/NoPadding"); c.init(Cipher.DECRYPT_MODE, key(), GCMParameterSpec(128, bytes.copyOfRange(0, 12)))
-            val plain = c.doFinal(bytes.copyOfRange(12, bytes.size))
-            MessageDigest.isEqual(hash(pin, plain.copyOfRange(0, 16)), plain.copyOfRange(16, plain.size))
-        }.getOrDefault(false)
-        val failures = if (ok) 0 else prefs.getInt("lock_failures", 0) + 1
+        val ok = matches(pin)
+        val failures = if (ok) 0 else prefs.getInt(failuresKey, 0) + 1
         // 5 free attempts, then 30 s, 60 s, 120 s … capped at 15 min.
         val delay = if (failures < 5) 0L else minOf(15 * 60_000L, 30_000L shl (failures - 5).coerceAtMost(10))
-        prefs.edit().putInt("lock_failures", failures).putLong("lock_until", if (delay > 0) now + delay else 0).apply()
+        prefs.edit().putInt(failuresKey, failures).putLong(untilKey, if (delay > 0) now + delay else 0).apply()
         return ok
     }
+
+    /** Compares without touching the failure counter (the caller rate-limits, e.g. the disguise shells). */
+    fun matches(pin: String): Boolean = enabled && runCatching {
+        val bytes = store.readFully()
+        val c = Cipher.getInstance("AES/GCM/NoPadding"); c.init(Cipher.DECRYPT_MODE, key(), GCMParameterSpec(128, bytes.copyOfRange(0, 12)))
+        val plain = c.doFinal(bytes.copyOfRange(12, bytes.size))
+        MessageDigest.isEqual(hash(pin, plain.copyOfRange(0, 16)), plain.copyOfRange(16, plain.size))
+    }.getOrDefault(false)
 }

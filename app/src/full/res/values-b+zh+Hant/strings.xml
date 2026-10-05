@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="disguise_backup">請先做一份加密備份（資料 → 匯出備份）。輸錯密碼不會有任何提示；忘記密碼後只能清除 App 資料才能重新進入。</string>
+<string name="disguise_code">密碼（4–12 位數字）</string>
+<string name="disguise_code_repeat">再次輸入密碼</string>
+<string name="disguise_decoy">誘餌密碼（可選）</string>
+<string name="disguise_decoy_desc">開啟一個獨立的空白空間，而不是你的資料。</string>
+<string name="disguise_desc">把 App 圖示換成一個能正常使用的計算器或便籤。在其中輸入你的密碼即可開啟 HRT 日誌。</string>
+<string name="disguise_disable">關閉偽裝</string>
+<string name="disguise_disable_desc">恢復正常圖示，刪除兩個密碼，並刪除誘餌空間中的所有內容。</string>
+<string name="disguise_enable">開啟</string>
+<string name="disguise_exit">隨時搖一搖手機即可回到偽裝介面。</string>
+<string name="disguise_how_calc">開啟方式：輸入密碼後按 =。</string>
+<string name="disguise_how_notes">開啟方式：點搜尋，搜尋你的密碼。</string>
+<string name="disguise_limits">仍然可見：系統 App 列表和設定中的真實 App 名稱，以及通知頂部的 App 名稱。桌面可能會移除舊的快捷方式，請從 App 抽屜新增新圖示。</string>
+<string name="disguise_mismatch">兩次輸入的密碼不一致</string>
+<string name="disguise_on">已開啟：%1$s</string>
+<string name="disguise_same">誘餌密碼必須與密碼不同。</string>
+<string name="disguise_setup">設定偽裝</string>
+<string name="disguise_shell">偽裝成</string>
+<string name="disguise_title">偽裝模式</string>
+<string name="disguise_understood">我已瞭解</string>
+<string name="shell_calc">計算器</string>
+<string name="shell_delete">刪除</string>
+<string name="shell_error">錯誤</string>
+<string name="shell_no_results">無結果</string>
+<string name="shell_note_hint">寫點什麼…</string>
+<string name="shell_notes">便籤</string>
+<string name="shell_search">搜尋</string>
+</resources>

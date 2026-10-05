@@ -11,14 +11,20 @@ import javax.inject.Singleton
 
 /** Built-in well-being items, in display order. */
 val CHECKIN_DEFAULTS=listOf("OVERALL","MOOD","EMO_STABILITY","ENERGY","AGGRESSIVENESS","LIBIDO","PAIN","PERIOD_LIKE","APPETITE","SLEEP_QUALITY","SKIN_QUALITY")
-@Singleton class NotesRepository @Inject constructor(private val access: DatabaseAccess) {
+@Singleton class NotesRepository(private val access: DatabaseAccess, private val pinned: Space?) {
+    @Inject constructor(access: DatabaseAccess) : this(access, null)
+    /** A repository that always works on [space], whatever the UI has selected (used by background reminders). */
+    fun pinnedTo(space: Space) = NotesRepository(access, space)
+    val space get() = pinned ?: access.current
+    fun select(space: Space) = access.select(space)
+    private fun db() = access.get(space)
     suspend fun <T> transaction(block: suspend (NotesDao) -> T): T = withContext(Dispatchers.IO) {
-        val db=access.get();db.withTransaction { block(db.dao()) }
+        val db=db();db.withTransaction { block(db.dao()) }
     }
-    suspend fun medications()=withContext(Dispatchers.IO){access.get().dao().medications()}
-    suspend fun appointments()=withContext(Dispatchers.IO){access.get().dao().appointments()}
-    suspend fun profile(id:Long)=withContext(Dispatchers.IO){access.get().dao().profile(id)}
-    suspend fun rules()=withContext(Dispatchers.IO){access.get().dao().rules()}
+    suspend fun medications()=withContext(Dispatchers.IO){db().dao().medications()}
+    suspend fun appointments()=withContext(Dispatchers.IO){db().dao().appointments()}
+    suspend fun profile(id:Long)=withContext(Dispatchers.IO){db().dao().profile(id)}
+    suspend fun rules()=withContext(Dispatchers.IO){db().dao().rules()}
     private suspend fun ruleModels(dao:NotesDao)=dao.rules().map { r ->
         ScheduleRule(r.id,r.medication_id,RuleKind.valueOf(r.kind),r.interval,r.anchor_local?.let(LocalDate::parse),r.anchor_utc?.let(Instant::ofEpochMilli),ZoneId.of(r.anchor_zone),
             Instant.ofEpochMilli(r.effective_from_utc),r.effective_until_utc?.let(Instant::ofEpochMilli),Instant.ofEpochMilli(r.missed_tracking_from_utc),
@@ -155,16 +161,16 @@ val CHECKIN_DEFAULTS=listOf("OVERALL","MOOD","EMO_STABILITY","ENERGY","AGGRESSIV
         if(value.skipped && record?.status=="SKIPPED")dao.updateRecord(recordFor(dao,value.apply(slot),"SKIPPED").copy(id=record.id,revision=record.revision+1))
         reconcile(dao,now,ZoneId.systemDefault())
     }
-    suspend fun currentOverride(key:String)=withContext(Dispatchers.IO){access.get().dao().overrides().singleOrNull{it.slot_key==key}?.model() ?: SlotOverride(key)}
+    suspend fun currentOverride(key:String)=withContext(Dispatchers.IO){db().dao().overrides().singleOrNull{it.slot_key==key}?.model() ?: SlotOverride(key)}
     suspend fun appointment(value:AppointmentEntity)=transaction { it.appointment(value) }
-    suspend fun records()=withContext(Dispatchers.IO){access.get().dao().records()}
+    suspend fun records()=withContext(Dispatchers.IO){db().dao().records()}
 
     // --- Import / backup / wipe ---
     suspend fun importTransMemo(plan:net.plainnotes.app.importer.TransMemo.Plan,overwrite:Boolean,zone:ZoneId=ZoneId.systemDefault())=withContext(Dispatchers.IO) {
-        val db=access.get();db.withTransaction { TransMemoWriter.write(db.dao(),db.openHelper.writableDatabase,plan,overwrite,zone) }
+        val db=db();db.withTransaction { TransMemoWriter.write(db.dao(),db.openHelper.writableDatabase,plan,overwrite,zone) }
     }
     suspend fun exportBackup(password:CharArray):ByteArray=withContext(Dispatchers.IO) {
-        val db=access.get()
+        val db=db()
         val json=db.withTransaction { JSONObject().put("format",BackupCodec.FORMAT_VERSION).put("schema",db.openHelper.writableDatabase.version)
             .put("created",Instant.now().toString()).put("tables",RawData.dump(db.openHelper.writableDatabase)) }
         BackupCodec.encrypt(json.toString().toByteArray(Charsets.UTF_8),password)
@@ -172,12 +178,13 @@ val CHECKIN_DEFAULTS=listOf("OVERALL","MOOD","EMO_STABILITY","ENERGY","AGGRESSIV
     /** Replaces all data with the backup; throws [BackupCodec.WrongPassword] or [BackupCodec.BadFile] without touching anything. */
     suspend fun restoreBackup(data:ByteArray,password:CharArray)=withContext(Dispatchers.IO) {
         val json=JSONObject(String(BackupCodec.decrypt(data,password),Charsets.UTF_8))
-        val db=access.get()
+        val db=db()
         if(json.optInt("format")!=BackupCodec.FORMAT_VERSION||json.optInt("schema")!=db.openHelper.writableDatabase.version) throw BackupCodec.BadFile("incompatible version")
         db.withTransaction { RawData.restore(db.openHelper.writableDatabase,json.getJSONObject("tables")) }
     }
     /** Irreversibly deletes the database, its key file and Keystore key. */
-    fun destroyAll()=access.destroy()
+    fun destroyAll()=access.destroy(space)
+    fun destroy(space: Space)=access.destroy(space)
 
     // --- History edits (stock is corrected through REVERSE + new CONSUME entries) ---
     /** Changes time and/or amount of a recorded intake, or turns a missed slot into a backfilled intake. */
@@ -197,7 +204,7 @@ val CHECKIN_DEFAULTS=listOf("OVERALL","MOOD","EMO_STABILITY","ENERGY","AGGRESSIV
     }
 
     // --- Stock ---
-    suspend fun containers()=withContext(Dispatchers.IO){access.get().dao().containers()}
+    suspend fun containers()=withContext(Dispatchers.IO){db().dao().containers()}
     /** Adds [count] containers; the first one is opened right away when nothing is in use. */
     suspend fun addContainers(medicationId:Long,capacity:Double,count:Int,openFirst:Boolean)=transaction { dao ->
         require(capacity.isFinite()&&capacity>0&&count in 1..50)
@@ -221,13 +228,13 @@ val CHECKIN_DEFAULTS=listOf("OVERALL","MOOD","EMO_STABILITY","ENERGY","AGGRESSIV
         dao.checkinItems()
     }
     suspend fun saveCheckinItem(v:CheckinItemEntity)=transaction { dao -> if(v.id==0L)dao.insertCheckinItem(v.copy(sort_order=(dao.checkinItems().maxOfOrNull{it.sort_order} ?: 0)+1)) else {dao.updateCheckinItem(v);v.id} }
-    suspend fun scores(from:LocalDate,to:LocalDate)=withContext(Dispatchers.IO){access.get().dao().scores(from.toString(),to.toString())}
+    suspend fun scores(from:LocalDate,to:LocalDate)=withContext(Dispatchers.IO){db().dao().scores(from.toString(),to.toString())}
     suspend fun setScore(date:LocalDate,item:Long,value:Int?)=transaction { dao -> if(value==null)dao.deleteScore(date.toString(),item) else {require(value in 1..5);dao.score(CheckinScoreEntity(date.toString(),item,value))} }
-    suspend fun notes(from:LocalDate,to:LocalDate)=withContext(Dispatchers.IO){access.get().dao().notes(from.toString(),to.toString())}
+    suspend fun notes(from:LocalDate,to:LocalDate)=withContext(Dispatchers.IO){db().dao().notes(from.toString(),to.toString())}
     suspend fun setNote(date:LocalDate,text:String)=transaction { dao -> if(text.isBlank())dao.deleteNote(date.toString()) else dao.note(DayNoteEntity(date.toString(),text)) }
     /** Planned slots in [from, to) for forecasting; reconciles first so past slots carry their final state. */
     suspend fun planned(from:Instant,to:Instant,now:Instant=Instant.now(),zone:ZoneId=ZoneId.systemDefault())=transaction { dao -> timeline(dao,now,from,to,zone) }
-    suspend fun labs()=withContext(Dispatchers.IO){access.get().dao().labs()}
+    suspend fun labs()=withContext(Dispatchers.IO){db().dao().labs()}
     suspend fun saveLab(value:LabValueEntity)=transaction { dao ->
         require(value.value.isFinite() && value.value>0 && value.analyte_code.isNotBlank() && value.unit.isNotBlank())
         dao.analyte(AnalyteEntity(value.analyte_code,value.unit))
@@ -235,6 +242,6 @@ val CHECKIN_DEFAULTS=listOf("OVERALL","MOOD","EMO_STABILITY","ENERGY","AGGRESSIV
     }
     suspend fun deleteLab(id:Long)=transaction { it.deleteLab(id) }
     /** Body weight is a single current PK parameter (no history in V1). */
-    suspend fun weight()=withContext(Dispatchers.IO){access.get().dao().pkSettings()?.current_weight_kg}
+    suspend fun weight()=withContext(Dispatchers.IO){db().dao().pkSettings()?.current_weight_kg}
     suspend fun setWeight(kg:Double)=transaction { require(kg.isFinite() && kg>0 && kg<1000); it.pkSettings(PkSettingsEntity(1,kg)) }
 }

@@ -1,6 +1,9 @@
 package net.plainnotes.app
 
+import android.app.ActivityManager
 import android.content.Intent
+import android.hardware.SensorManager
+import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.WindowManager
@@ -16,7 +19,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
 import dagger.hilt.android.AndroidEntryPoint
+import net.plainnotes.app.disguise.Disguise
 import net.plainnotes.app.security.AppLock
+import net.plainnotes.app.security.Session
+import net.plainnotes.app.security.ShakeDetector
 import net.plainnotes.app.ui.LockScreen
 import net.plainnotes.app.ui.NotesApp
 import net.plainnotes.app.ui.NotesTheme
@@ -27,11 +33,15 @@ import net.plainnotes.app.ui.UiPrefs
     private lateinit var lock: AppLock
     private var locked by mutableStateOf(false)
     private var leftAt = 0L
+    private val shake = ShakeDetector { if (Disguise.enabled(this)) Disguise.exit(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        // In disguise mode the app is only reachable through the shell code; recents and stale tasks go back to the shell.
+        if (Disguise.enabled(this) && !Session.open) { Disguise.exit(this); return }
+        Disguise.shell(this)?.let { setTaskDescription(taskDescription(getString(it.label), it.icon)) }
         val prefs = UiPrefs(this)
         lock = AppLock(this)
         locked = lock.enabled
@@ -47,10 +57,16 @@ import net.plainnotes.app.ui.UiPrefs
     override fun onNewIntent(intent: Intent) { super.onNewIntent(intent); intent.getStringExtra("reminder_id")?.let { model.notification(it) } }
     override fun onStart() {
         super.onStart()
+        if (Disguise.enabled(this) && (!Session.open || (leftAt > 0 && SystemClock.elapsedRealtime() - leftAt >= UiPrefs(this).lockAfterMillis))) { Disguise.exit(this); return }
         if (lock.enabled && leftAt > 0 && SystemClock.elapsedRealtime() - leftAt >= UiPrefs(this).lockAfterMillis) locked = true
     }
     override fun onStop() { super.onStop(); leftAt = SystemClock.elapsedRealtime() }
-    override fun onResume() { super.onResume(); model.sync() }
+    override fun onResume() { super.onResume(); model.sync(); if (Disguise.enabled(this)) shake.register(getSystemService(SensorManager::class.java)) }
+    override fun onPause() { super.onPause(); shake.unregister(getSystemService(SensorManager::class.java)) }
+
+    @Suppress("DEPRECATION")
+    private fun taskDescription(label: String, icon: Int) =
+        if (Build.VERSION.SDK_INT >= 28) ActivityManager.TaskDescription(label, icon, 0) else ActivityManager.TaskDescription(label)
 
     private fun biometricAvailable() = BiometricManager.from(this).canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK) == BiometricManager.BIOMETRIC_SUCCESS
     private fun showBiometric() {

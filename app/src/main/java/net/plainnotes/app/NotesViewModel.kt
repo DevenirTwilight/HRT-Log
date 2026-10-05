@@ -130,9 +130,17 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         withContext(Dispatchers.IO){app.contentResolver.openOutputStream(uri,"wt")!!.use{net.plainnotes.app.export.PdfReport.write(context,d,days,c,it)}};DataJob.Done(R.string.export_saved)
     }
     /** Deletes everything: database, key, reminders cache and preferences. The caller restarts the UI. */
+    /** True while the UI works on the disguise mode's decoy space. */
+    val decoy get()=repo.space==net.plainnotes.app.data.Space.DECOY
+    /** Disguise mode was turned off: its decoy space goes with it. */
+    fun destroyDecoy()=viewModelScope.launch(Dispatchers.IO){ repo.destroy(net.plainnotes.app.data.Space.DECOY) }
     fun wipeAll(onDone:()->Unit)=viewModelScope.launch {
+        // In the decoy space only the decoy data goes; nothing there may touch (or reveal) the real data and settings.
+        if(decoy){ withContext(Dispatchers.IO){repo.destroyAll()}; onDone(); return@launch }
         withContext(Dispatchers.IO){ reminders.mutate{repo.destroyAll()}
+            net.plainnotes.app.disguise.Disguise.disable(app); repo.destroy(net.plainnotes.app.data.Space.DECOY)
             app.getSharedPreferences("prefs",android.content.Context.MODE_PRIVATE).edit().clear().commit()
+            app.getSharedPreferences("shell_notes",android.content.Context.MODE_PRIVATE).edit().clear().commit()
             net.plainnotes.app.reminder.NotificationPrefs(app).clear(); net.plainnotes.app.security.AppLock(app).disable()
             java.io.File(app.createDeviceProtectedStorageContext().filesDir,"reminders.cache").delete()
             app.getSystemService(android.app.NotificationManager::class.java).cancelAll()

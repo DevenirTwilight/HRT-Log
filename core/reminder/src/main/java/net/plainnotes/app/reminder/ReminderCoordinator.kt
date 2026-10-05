@@ -21,7 +21,9 @@ import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Singleton class ReminderCoordinator @Inject constructor(@ApplicationContext private val context:Context,private val repo:NotesRepository) {
+@Singleton class ReminderCoordinator @Inject constructor(@ApplicationContext private val context:Context,repository:NotesRepository) {
+    // Reminders belong to the real data only, never to the decoy space the UI may have open.
+    private val repo=repository.pinnedTo(Space.PRIMARY)
     private val store=CacheStore(context)
     private val manager=context.getSystemService(AlarmManager::class.java)
     companion object { private val lock=Mutex() }
