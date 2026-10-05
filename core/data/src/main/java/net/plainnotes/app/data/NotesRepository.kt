@@ -40,8 +40,10 @@ import javax.inject.Singleton
     suspend fun calendar(now:Instant=Instant.now(),zone:ZoneId=ZoneId.systemDefault(),displayFrom:LocalDate=LocalDate.now(zone)):List<TimelineEntry> = transaction { dao ->
         reconcile(dao,now,zone)
         val from=dao.rules().minOfOrNull{it.missed_tracking_from_utc}?.let(Instant::ofEpochMilli) ?: now
-        timeline(dao,now,minOf(from,now),now.plusSeconds(86400*14),zone)
-            .filter { it.slot.at>=displayFrom.atStartOfDay(zone).toInstant() || it.state in listOf(SlotState.PENDING,SlotState.SOON,SlotState.OVERDUE) }
+        val window=timeline(dao,now,displayFrom.atStartOfDay(zone).toInstant(),displayFrom.plusDays(14).atStartOfDay(zone).toInstant(),zone)
+        val unfinished=timeline(dao,now,minOf(from,now),now.plusMillis(1),zone)
+            .filter{it.state in listOf(SlotState.PENDING,SlotState.SOON,SlotState.OVERDUE)}
+        (window+unfinished).distinctBy{it.slot.key}.sortedWith(compareBy<TimelineEntry>{it.slot.at}.thenBy{it.slot.key})
     }
     /** Resolve only in credential storage; a stale notification never follows a changed schedule. */
     suspend fun reminderSlot(id:String,generation:String?=null):Slot? {

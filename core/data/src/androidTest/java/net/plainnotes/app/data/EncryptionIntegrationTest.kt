@@ -31,6 +31,8 @@ class EncryptionIntegrationTest {
         val access=DatabaseAccess(context);val repo=NotesRepository(access);val now=java.time.Instant.now()
         repo.saveMedication(MedicationEntity(name="Synthetic reminder",molecule="OTHER",unit="MG",dose_per_intake=2.0,container_capacity=10.0,soon_alert_minutes=0,late_after_minutes=10,site_rotation=false,notifications_on=true,active=true,sort_order=0),null,
             net.plainnotes.app.domain.RuleKind.EVERY_N_HOURS,12,emptyList(),emptySet(),now)
+        val futureDate=now.atZone(java.time.ZoneId.systemDefault()).toLocalDate().plusDays(90)
+        assertTrue(repo.calendar(now,displayFrom=futureDate).any{it.slot.at.atZone(java.time.ZoneId.systemDefault()).toLocalDate()>=futureDate})
         val slot=repo.calendar(now).first().slot
         repo.transaction{it.mapping(ReminderMappingEntity("source","generation",slot.key+":DUE",slot.at.toEpochMilli(),true))}
         assertEquals(slot.key,repo.reminderSlot("source","generation")?.key)
