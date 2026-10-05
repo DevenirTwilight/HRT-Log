@@ -197,7 +197,7 @@
 <string name="labs_empty_body">Enregistrez vos résultats de prise de sang. Les résultats d\'E2 peuvent aussi calibrer l\'estimation.</string>
 <string name="labs_empty_title">Aucune analyse</string>
 <string name="language">Langue</string>
-<string name="language_desc">L\'application suit la langue du système (English, 简体中文 ou Français).</string>
+<string name="language_desc">L\'application suit la langue du système (English, 简体中文, 繁體中文 ou Français).</string>
 <string name="language_open">Choisir la langue de l\'application</string>
 <string name="legend_band">Incertitude</string>
 <string name="legend_forecast">Prévision (plan)</string>

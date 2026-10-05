@@ -63,6 +63,10 @@ private fun niceStep(span: Double, target: Int): Double {
     var end by remember(data) { mutableDoubleStateOf(min(maxX, initialEnd)) }
     var tapX by remember(data) { mutableStateOf<Double?>(null) }
     val density = LocalDensity.current
+    val locale = androidx.compose.ui.platform.LocalConfiguration.current.locales[0]
+    val h24 = android.text.format.DateFormat.is24HourFormat(androidx.compose.ui.platform.LocalContext.current)
+    val hourFmt = remember(locale, h24) { DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, if (h24) "Hm" else "hm"), locale) }
+    val dayFmt = remember(locale) { DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, "Md"), locale) }
     val leftPad = with(density) { 44.dp.toPx() }; val bottomPad = with(density) { 22.dp.toPx() }; val topPad = with(density) { 8.dp.toPx() }
     Box(modifier) {
         Canvas(Modifier.fillMaxSize()
@@ -102,7 +106,7 @@ private fun niceStep(span: Double, target: Int): Double {
                 v += step
             }
             data.range?.let { (lo, hi) -> drawRect(rangeColor.copy(alpha = 0.10f), Offset(leftPad, py(hi)), androidx.compose.ui.geometry.Size(w, py(lo) - py(hi))) }
-            drawTimeAxis(measurer, labelStyle, start, end, ::px, size.height - bottomPad, grid)
+            drawTimeAxis(measurer, labelStyle, start, end, ::px, size.height - bottomPad, grid, hourFmt, dayFmt)
             clipRectSafe(leftPad, 0f, size.width, size.height) {
                 fun bandPath(b: Pair<DoubleArray, DoubleArray>): Path = Path().apply {
                     var first = true
@@ -144,11 +148,12 @@ private fun niceStep(span: Double, target: Int): Double {
 private inline fun DrawScope.clipRectSafe(l: Float, t: Float, r: Float, b: Float, block: DrawScope.() -> Unit) =
     drawContext.canvas.let { canvas -> canvas.save(); canvas.clipRect(l, t, r, b); block(); canvas.restore() }
 
-private fun DrawScope.drawTimeAxis(measurer: TextMeasurer, style: TextStyle, start: Double, end: Double, px: (Double) -> Float, y: Float, grid: Color) {
+private fun DrawScope.drawTimeAxis(measurer: TextMeasurer, style: TextStyle, start: Double, end: Double, px: (Double) -> Float, y: Float, grid: Color,
+                                   hourFmt: DateTimeFormatter, dayFmt: DateTimeFormatter) {
     val span = end - start
     val stepH = when { span <= 36 -> 6.0; span <= 96 -> 12.0; span <= 24 * 10 -> 24.0; span <= 24 * 35 -> 24.0 * 7; span <= 24 * 120 -> 24.0 * 14; else -> 24.0 * 30 }
     val zone = ZoneId.systemDefault()
-    val fmt = if (stepH < 24) DateTimeFormatter.ofPattern("HH:mm") else DateTimeFormatter.ofPattern("M/d")
+    val fmt = if (stepH < 24) hourFmt else dayFmt
     val offsetH = zone.rules.getOffset(Instant.ofEpochMilli((start * 3_600_000).toLong())).totalSeconds / 3600.0
     var t = ceil((start + offsetH) / stepH) * stepH - offsetH
     while (t <= end) {

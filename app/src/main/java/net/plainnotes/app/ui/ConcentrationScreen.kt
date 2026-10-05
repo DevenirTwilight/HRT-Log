@@ -116,7 +116,7 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column(Modifier.weight(1f)) {
                     Text(stringResource(R.string.pk_weight), style = MaterialTheme.typography.bodyLarge)
-                    Text(weight?.let { stringResource(R.string.kg_value, formatNumber(it)) } ?: stringResource(R.string.not_set), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(weight?.let { stringResource(R.string.kg_value, displayNumber(it)) } ?: stringResource(R.string.not_set), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 TextButton(onClick = { editWeight = true }) { Text(stringResource(R.string.edit)) }
             }
@@ -142,8 +142,8 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
                 Metric(stringResource(R.string.calib_convergence), "${((s.diagnostics?.convergenceScore ?: 0.0) * 100).roundToInt()}%", Modifier.weight(1f))
             }
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                Metric(stringResource(R.string.calib_amplitude), "×" + "%.2f".format(kotlin.math.exp(m.thetaS)), Modifier.weight(1f))
-                Metric(stringResource(R.string.calib_clearance), "×" + "%.2f".format(kotlin.math.exp(m.thetaK)), Modifier.weight(1f))
+                Metric(stringResource(R.string.calib_amplitude), "×" + displayNumber(kotlin.math.exp(m.thetaS), 2), Modifier.weight(1f))
+                Metric(stringResource(R.string.calib_clearance), "×" + displayNumber(kotlin.math.exp(m.thetaK), 2), Modifier.weight(1f))
             }
             m.baselinePGmL?.let { Text(stringResource(R.string.calib_baseline, fmt(it), unit), style = MaterialTheme.typography.bodySmall) }
             s.diagnostics?.takeIf { m.postDoseObservationCount > 0 }?.let { d ->
@@ -193,7 +193,7 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
 })
 
 @Composable fun WeightDialog(current: Double?, onDismiss: () -> Unit, onSave: (Double) -> Unit) {
-    var text by remember { mutableStateOf(current?.let(::formatNumber) ?: "") }
+    var text by remember { mutableStateOf(current?.let(::inputNumber) ?: "") }
     val v = text.toDoubleOrNull()?.takeIf { it in 25.0..300.0 }
     AlertDialog(onDismissRequest = onDismiss, title = { Text(stringResource(R.string.pk_weight)) },
         text = { Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {

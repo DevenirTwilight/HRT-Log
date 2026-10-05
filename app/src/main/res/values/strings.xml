@@ -197,7 +197,7 @@
 <string name="labs_empty_body">Record results from your blood tests. E2 results can also calibrate the estimated levels.</string>
 <string name="labs_empty_title">No lab results</string>
 <string name="language">Language</string>
-<string name="language_desc">The app follows your system language (English, 简体中文 or Français).</string>
+<string name="language_desc">The app follows your system language (English, 简体中文, 繁體中文 or Français).</string>
 <string name="language_open">Choose the app language</string>
 <string name="legend_band">Uncertainty band</string>
 <string name="legend_forecast">Forecast (plan)</string>

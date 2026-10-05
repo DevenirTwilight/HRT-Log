@@ -77,5 +77,7 @@ class ScreenshotTest {
         LabValueEntity(2, "E2", 190.0, "pg/mL", now.minusSeconds(9 * 86400).toEpochMilli(), zone.id, 100.0, 300.0, "pg/mL"), LabValueEntity(3, "E2", 142.0, "pg/mL", now.minusSeconds(86400).toEpochMilli(), zone.id, 100.0, 300.0, "pg/mL"),
         LabValueEntity(4, "T", 25.0, "ng/dL", now.minusSeconds(86400).toEpochMilli(), zone.id)), listOf(now.minusSeconds(86400 + 5 * 3600)), {}, {}, PaddingValues()) } }
     @Test fun editor() = shoot("editor") { MedicationEditor(EditMedication(meds[2], profiles[3L], null, emptyList()), {}, inDialog = false) {} }
+    @Test @Config(qualifiers = "fr-rFR-w411dp-h891dp-xxhdpi") fun concentrationFrench() { val r = concResult(); shoot("concentration_fr") { ConcentrationScreen(state(), r, false, 62.5, ConcSettings(false, true, net.plainnotes.app.pk.CalibrationMode.RETROSPECTIVE), {}, {}, {}, {}, PaddingValues()) } }
+    @Test @Config(qualifiers = "zh-rTW-w411dp-h891dp-xxhdpi") fun calendarTraditional() = shoot("calendar_zh_tw") { CalendarScreen(state(), today, {}, {}, {}, {}, PaddingValues()) }
     @Test fun settings() = shoot("settings") { SettingsScreen(Appearance(ThemeMode.SYSTEM, false), {}, false, {}, {}, {}, PaddingValues()) }
 }

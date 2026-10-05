@@ -69,7 +69,8 @@ fun toCanonical(a: Analyte, value: Double, unit: String): Double? = a.units.firs
                     val pad = max(24.0, (xs.last() - xs.first()) * 0.08)
                     val data = ChartData(doubleArrayOf(xs.first() - pad) + xs + doubleArrayOf(xs.last() + pad), doubleArrayOf(ys.first()) + ys + doubleArrayOf(ys.last()),
                         points = points, range = latestRange, unit = a.units.firstOrNull()?.first ?: "")
-                    ConcChart(data, xs.first() - pad, xs.last() + pad, Modifier.fillMaxWidth().height(200.dp)) { v -> if (v >= 10) v.roundToInt().toString() else formatNumber((v * 100).roundToInt() / 100.0) }
+                    val sep = java.text.DecimalFormatSymbols.getInstance(currentLocale()).decimalSeparator
+                    ConcChart(data, xs.first() - pad, xs.last() + pad, Modifier.fillMaxWidth().height(200.dp)) { v -> if (v >= 10) v.roundToInt().toString() else inputNumber((v * 100).roundToInt() / 100.0).replace('.', sep) }
                     if (latestRange != null) Text(stringResource(R.string.lab_range_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
@@ -87,11 +88,11 @@ private fun max(a: Double, b: Double) = if (a > b) a else b
     ElevatedCard(onClick = onEdit, modifier = Modifier.fillMaxWidth(), colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.elevatedCardElevation(0.dp)) {
         Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                Text("${formatNumber(v.value)} ${v.unit}", style = MaterialTheme.typography.titleLarge)
+                Text("${displayNumber(v.value)} ${v.unit}", style = MaterialTheme.typography.titleLarge)
                 Text("${analyteLabel(v.analyte_code)} · ${formatDateTime(at)}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 last?.let { val d = Duration.between(it, at); Text(stringResource(R.string.lab_since_dose, d.toHours().toInt(), (d.toMinutes() % 60).toInt()), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
                 if (v.reference_lower != null || v.reference_upper != null)
-                    Text(stringResource(R.string.lab_range_value, v.reference_lower?.let(::formatNumber) ?: "–", v.reference_upper?.let(::formatNumber) ?: "–", v.reference_unit ?: ""),
+                    Text(stringResource(R.string.lab_range_value, v.reference_lower?.let { displayNumber(it) } ?: "–", v.reference_upper?.let { displayNumber(it) } ?: "–", v.reference_unit ?: ""),
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 v.note?.takeIf { it.isNotBlank() }?.let { Text(it, style = MaterialTheme.typography.bodySmall) }
             }
@@ -111,9 +112,9 @@ private fun max(a: Double, b: Double) = if (a > b) a else b
     val a = analyte(code)
     var unit by remember { mutableStateOf(initial?.unit ?: a.units.first().first) }
     var time by remember { mutableStateOf((initial?.let { Instant.ofEpochMilli(it.sampled_utc) } ?: Instant.now()).toLocalHere()) }
-    var value by remember { mutableStateOf(initial?.value?.let(::formatNumber) ?: "") }
-    var lo by remember { mutableStateOf(initial?.reference_lower?.let(::formatNumber) ?: "") }
-    var hi by remember { mutableStateOf(initial?.reference_upper?.let(::formatNumber) ?: "") }
+    var value by remember { mutableStateOf(initial?.value?.let(::inputNumber) ?: "") }
+    var lo by remember { mutableStateOf(initial?.reference_lower?.let(::inputNumber) ?: "") }
+    var hi by remember { mutableStateOf(initial?.reference_upper?.let(::inputNumber) ?: "") }
     var lab by remember { mutableStateOf(initial?.laboratory ?: "") }; var note by remember { mutableStateOf(initial?.note ?: "") }
     val valueV = value.toDoubleOrNull()?.takeIf { it.isFinite() && it > 0 }
     val loV = lo.toDoubleOrNull(); val hiV = hi.toDoubleOrNull()

@@ -13,7 +13,7 @@ class TranslationsTest {
     @Test fun translationsAreComplete() {
         for(res in listOf(File("src/main/res"),File("../core/reminder/src/main/res"))) {
             val base=read(File(res,"values/strings.xml"))
-            for(locale in listOf("values-zh","values-fr")) {
+            for(locale in listOf("values-zh","values-b+zh+Hant","values-fr")) {
                 val translated=read(File(res,"$locale/strings.xml"))
                 assertEquals("$res/$locale keys",base.keys,translated.keys)
                 base.forEach{(key,args)->assertEquals("$res/$locale placeholders of $key",args,translated[key])}

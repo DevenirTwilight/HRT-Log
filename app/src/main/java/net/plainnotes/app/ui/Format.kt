@@ -39,9 +39,14 @@ import java.util.Locale
 }
 
 private val doseFormat = ThreadLocal.withInitial { DecimalFormat("0.###", DecimalFormatSymbols(Locale.ROOT)) }
-/** Doses print without trailing zeros, e.g. 2 instead of 2.0, 0.25 stays 0.25. */
-fun formatNumber(value: Double): String = doseFormat.get()!!.format(value)
-@Composable fun formatDose(value: Double, unit: String?): String = if (unit == null) formatNumber(value) else stringResource(R.string.dose_display, formatNumber(value), choiceLabel(unit))
+/** Prefill for editable number fields: always "." so parsing never depends on the UI language. */
+fun inputNumber(value: Double): String = doseFormat.get()!!.format(value)
+/** Numbers shown to the user, with the UI language's decimal separator (1,5 in French) and no trailing zeros. */
+@Composable fun displayNumber(value: Double, maxDecimals: Int = 3): String {
+    val locale = currentLocale()
+    return java.text.NumberFormat.getNumberInstance(locale).apply { maximumFractionDigits = maxDecimals; isGroupingUsed = false }.format(value)
+}
+@Composable fun formatDose(value: Double, unit: String?): String = if (unit == null) displayNumber(value) else stringResource(R.string.dose_display, displayNumber(value), choiceLabel(unit))
 
 @Composable fun weekdayShort(day: DayOfWeek): String = day.getDisplayName(TextStyle.SHORT, currentLocale())
 

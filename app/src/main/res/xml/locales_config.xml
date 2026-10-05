@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Regional tags so the system language picker does not ask for a region separately. -->
 <locale-config xmlns:android="http://schemas.android.com/apk/res/android">
-    <locale android:name="en"/>
+    <locale android:name="en-US"/>
+    <locale android:name="fr-FR"/>
     <locale android:name="zh-CN"/>
-    <locale android:name="fr"/>
+    <locale android:name="zh-TW"/>
 </locale-config>

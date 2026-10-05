@@ -27,7 +27,7 @@ fun Instant.toLocalHere(): LocalDateTime = atZone(ZoneId.systemDefault()).toLoca
 
 @Composable fun IntakeDialog(title: String, medication: MedicationEntity?, plannedDose: Double, initial: Instant, onDismiss: () -> Unit, onSave: (Instant, Double) -> Unit) {
     var time by remember { mutableStateOf(initial.toLocalHere()) }
-    var dose by remember { mutableStateOf(formatNumber(plannedDose)) }
+    var dose by remember { mutableStateOf(inputNumber(plannedDose)) }
     val doseV = dose.toDoubleOrNull()?.takeIf { it.isFinite() && it > 0 }
     val future = time.toInstantHere().isAfter(Instant.now().plusSeconds(60))
     AlertDialog(onDismissRequest = onDismiss, icon = { Icon(Icons.Outlined.CheckCircle, null) }, title = { Text(title) },
@@ -47,7 +47,7 @@ fun Instant.toLocalHere(): LocalDateTime = atZone(ZoneId.systemDefault()).toLoca
     var moved by remember { mutableStateOf(initial.rescheduled != null) }
     var time by remember { mutableStateOf((initial.rescheduled ?: slot.original).toLocalHere()) }
     var customDose by remember { mutableStateOf(initial.dose != null) }
-    var dose by remember { mutableStateOf(formatNumber(initial.dose ?: slot.originalDose)) }
+    var dose by remember { mutableStateOf(inputNumber(initial.dose ?: slot.originalDose)) }
     var skip by remember { mutableStateOf(initial.skipped) }
     val doseV = dose.toDoubleOrNull()?.takeIf { it.isFinite() && it > 0 }
     AlertDialog(onDismissRequest = onDismiss, icon = { Icon(Icons.Outlined.EditCalendar, null) }, title = { Text(stringResource(R.string.reschedule)) },
@@ -72,12 +72,12 @@ fun Instant.toLocalHere(): LocalDateTime = atZone(ZoneId.systemDefault()).toLoca
 @Composable fun ManualIntakeDialog(meds: List<MedicationEntity>, onDismiss: () -> Unit, onSave: (Long, Instant, Double) -> Unit) {
     var chosen by remember { mutableStateOf(meds.firstOrNull()) }
     var time by remember { mutableStateOf(Instant.now().toLocalHere()) }
-    var dose by remember { mutableStateOf(chosen?.dose_per_intake?.let(::formatNumber) ?: "") }
+    var dose by remember { mutableStateOf(chosen?.dose_per_intake?.let(::inputNumber) ?: "") }
     val doseV = dose.toDoubleOrNull()?.takeIf { it.isFinite() && it > 0 }
     val future = time.toInstantHere().isAfter(Instant.now().plusSeconds(60))
     AlertDialog(onDismissRequest = onDismiss, icon = { Icon(Icons.Outlined.AddTask, null) }, title = { Text(stringResource(R.string.manual)) },
         text = { Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            DropdownField(stringResource(R.string.medication), meds, chosen, { it.name }, { chosen = it; dose = formatNumber(it.dose_per_intake) })
+            DropdownField(stringResource(R.string.medication), meds, chosen, { it.name }, { chosen = it; dose = inputNumber(it.dose_per_intake) })
             DateTimeRow(time, { time = it })
             if (future) Text(stringResource(R.string.future_time_warning), color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
             NumberField(dose, { dose = it }, stringResource(R.string.actual_dose), suffix = chosen?.let { unitLabel(it.unit) }, isError = doseV == null)

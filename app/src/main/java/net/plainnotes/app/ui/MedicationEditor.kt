@@ -40,8 +40,8 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
     var route by remember { mutableStateOf(m?.route ?: "ORAL") }
     var ester by remember { mutableStateOf(p?.ester ?: "E2") }
     var unit by remember { mutableStateOf(m?.unit ?: "MG") }
-    var dose by remember { mutableStateOf(m?.dose_per_intake?.let(::formatNumber) ?: "") }
-    var capacity by remember { mutableStateOf(m?.container_capacity?.let(::formatNumber) ?: "") }
+    var dose by remember { mutableStateOf(m?.dose_per_intake?.let(::inputNumber) ?: "") }
+    var capacity by remember { mutableStateOf(m?.container_capacity?.let(::inputNumber) ?: "") }
     var expiry by remember { mutableStateOf(m?.expiry_days_after_open?.toString() ?: "") }
     var soon by remember { mutableStateOf(m?.soon_alert_minutes?.toString() ?: "15") }
     var late by remember { mutableStateOf(m?.late_after_minutes?.toString() ?: "120") }
@@ -56,8 +56,8 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
     var gelProduct by remember { mutableStateOf(p?.gel_product_id) }
     var gelSite by remember { mutableStateOf(p?.gel_site) }
     var gelCoverage by remember { mutableStateOf(p?.gel_area_cm2?.let { area -> val prod = Gel.product(p.gel_product_id); if (area == prod.defaultAreaCM2) "product" else Gel.COVERAGE.firstOrNull { it.second == area }?.first ?: "manual" }) }
-    var gelArea by remember { mutableStateOf(p?.gel_area_cm2?.let(::formatNumber) ?: "") }
-    var patchRate by remember { mutableStateOf(p?.patch_release_ug_day?.let(::formatNumber) ?: "") }
+    var gelArea by remember { mutableStateOf(p?.gel_area_cm2?.let(::inputNumber) ?: "") }
+    var patchRate by remember { mutableStateOf(p?.patch_release_ug_day?.let(::inputNumber) ?: "") }
     var tried by remember { mutableStateOf(false) }
     var pickTime by remember { mutableStateOf<Int?>(null) }
 
@@ -201,8 +201,8 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
 @Composable fun gelProductLabel(id: Int) = stringResource(when (id) { 1 -> R.string.gel_oestrogel; 2 -> R.string.gel_estreva; 3 -> R.string.gel_estrogel; 4 -> R.string.gel_divigel; else -> R.string.gel_diy })
 @Composable fun gelSiteLabel(site: String) = stringResource(when (site) { "ARM" -> R.string.site_arm; "THIGH" -> R.string.site_thigh; "ABDOMEN" -> R.string.site_abdomen; else -> R.string.site_scrotal })
 @Composable fun gelCoverageLabel(key: String, product: Int?): String = when (key) {
-    "product" -> stringResource(R.string.cov_product, formatNumber(Gel.product(product).defaultAreaCM2))
-    "palm1" -> stringResource(R.string.cov_palms, 1, formatNumber(Gel.PALM_AREA_CM2)); "palm2" -> stringResource(R.string.cov_palms, 2, formatNumber(2 * Gel.PALM_AREA_CM2))
-    "palm3" -> stringResource(R.string.cov_palms, 3, formatNumber(3 * Gel.PALM_AREA_CM2)); "thigh" -> stringResource(R.string.cov_thigh); "arm" -> stringResource(R.string.cov_arm)
+    "product" -> stringResource(R.string.cov_product, displayNumber(Gel.product(product).defaultAreaCM2))
+    "palm1" -> stringResource(R.string.cov_palms, 1, displayNumber(Gel.PALM_AREA_CM2)); "palm2" -> stringResource(R.string.cov_palms, 2, displayNumber(2 * Gel.PALM_AREA_CM2))
+    "palm3" -> stringResource(R.string.cov_palms, 3, displayNumber(3 * Gel.PALM_AREA_CM2)); "thigh" -> stringResource(R.string.cov_thigh); "arm" -> stringResource(R.string.cov_arm)
     "arms2" -> stringResource(R.string.cov_arms2); else -> stringResource(R.string.cov_manual)
 }
