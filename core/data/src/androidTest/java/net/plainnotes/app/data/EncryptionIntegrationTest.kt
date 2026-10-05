@@ -34,8 +34,16 @@ class EncryptionIntegrationTest {
         val futureDate=now.atZone(java.time.ZoneId.systemDefault()).toLocalDate().plusDays(90)
         assertTrue(repo.calendar(now,displayFrom=futureDate).any{it.slot.at.atZone(java.time.ZoneId.systemDefault()).toLocalDate()>=futureDate})
         val slot=repo.calendar(now).first().slot
-        repo.transaction{it.mapping(ReminderMappingEntity("source","generation",slot.key+":DUE",slot.at.toEpochMilli(),true))}
+        repo.transaction{it.mapping(ReminderMappingEntity("source","generation",slot.key+":DUE",slot.at.toEpochMilli(),false))}
         assertEquals(slot.key,repo.reminderSlot("source","generation")?.key)
+        val delayed=now.plusSeconds(600).toEpochMilli()
+        val cache=net.plainnotes.app.domain.AlarmCache("generation",delayed+1,listOf(net.plainnotes.app.domain.CachedAlarm("source",delayed,"NORMAL")))
+        repo.reconcileCache(cache);repo.reconcileCache(cache)
+        val mappings=repo.transaction{it.mappings()}
+        assertTrue(mappings.single{it.opaque_id=="source"}.sent)
+        assertEquals(1,mappings.count{it.identity=="snooze:source"})
+        assertEquals(delayed,mappings.single{it.identity=="snooze:source"}.trigger_utc)
+        assertEquals(slot.key,repo.reminderSlot(mappings.single{it.identity=="snooze:source"}.opaque_id)?.key)
         repo.override(slot,net.plainnotes.app.domain.SlotOverride(slot.key,now.plusSeconds(60),java.time.ZoneId.systemDefault()))
         assertNull(repo.reminderSlot("source","generation"))
         repo.override(slot,net.plainnotes.app.domain.SlotOverride(slot.key))

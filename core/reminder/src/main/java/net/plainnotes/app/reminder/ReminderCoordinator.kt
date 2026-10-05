@@ -41,7 +41,7 @@ import javax.inject.Singleton
     private suspend fun reconcileConsumed() {
         if(!unlocked())return
         val old=store.read() ?: return
-        repo.transaction { dao -> old.alarms.filter{it.consumed}.forEach{dao.markSent(it.opaqueId)} }
+        repo.reconcileCache(old)
     }
     private fun invalidate() {
         store.write(AlarmCache(UUID.randomUUID().toString(),System.currentTimeMillis(),emptyList()));cancel()

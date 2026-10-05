@@ -45,6 +45,18 @@ import javax.inject.Singleton
             .filter{it.state in listOf(SlotState.PENDING,SlotState.SOON,SlotState.OVERDUE)}
         (window+unfinished).distinctBy{it.slot.key}.sortedWith(compareBy<TimelineEntry>{it.slot.at}.thenBy{it.slot.key})
     }
+    /** Pending delays made before first unlock are reconciled without domain data in DPS. */
+    suspend fun reconcileCache(cache:AlarmCache)=transaction { dao ->
+        cache.alarms.forEach { alarm ->
+            val source=dao.mappings().firstOrNull{it.opaque_id==alarm.opaqueId && it.generation==cache.generation} ?: return@forEach
+            if(alarm.consumed)dao.markSent(source.opaque_id)
+            else if(alarm.triggerMillis!=source.trigger_utc) {
+                dao.markSent(source.opaque_id)
+                val identity="snooze:${source.opaque_id}"
+                if(dao.mappings().none{it.identity==identity})dao.mapping(ReminderMappingEntity(java.util.UUID.randomUUID().toString(),cache.generation,identity,alarm.triggerMillis,false))
+            }
+        }
+    }
     /** Resolve only in credential storage; a stale notification never follows a changed schedule. */
     suspend fun reminderSlot(id:String,generation:String?=null):Slot? {
         val mappings=transaction{it.mappings()}
