@@ -17,7 +17,7 @@ android {
 }
 kotlin { compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17) } }
 dependencies {
-    implementation(project(":core:domain")); implementation(project(":pk-engine"))
+    implementation(project(":core:domain")); implementation(project(":pk-engine")); implementation(project(":importer"))
     implementation(libs.core.ktx)
     implementation(libs.coroutines)
     implementation(project(":core:data")); implementation(project(":core:reminder")); implementation(project(":core:ui"))

@@ -18,7 +18,8 @@ data class ScheduleSummary(val kind:RuleKind,val interval:Int,val weekdays:Set<D
 data class NotesState(val medications:List<MedicationEntity> = emptyList(),val slots:List<TimelineEntry> = emptyList(),val appointments:List<AppointmentEntity> = emptyList(),val error:Int?=null,val loading:Boolean=true,
                       val schedules:Map<Long,ScheduleSummary> = emptyMap(),val profiles:Map<Long,ProfileEntity> = emptyMap(),val calendarStart:LocalDate=LocalDate.now())
 data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEntity?,val rule:RuleEntity?,val times:List<TimeEntity>)
-@HiltViewModel class NotesViewModel @Inject constructor(private val repo:NotesRepository,private val reminders:ReminderCoordinator):ViewModel() {
+@HiltViewModel class NotesViewModel @Inject constructor(private val repo:NotesRepository,private val reminders:ReminderCoordinator,
+    @dagger.hilt.android.qualifiers.ApplicationContext private val app:android.content.Context):ViewModel() {
     val notificationSlot=MutableStateFlow<Slot?>(null)
     fun notification(id:String)=viewModelScope.launch {
         runCatching { val mapping=repo.transaction{it.mappings().firstOrNull{m->m.opaque_id==id}} ?: return@runCatching
@@ -84,6 +85,59 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     fun setScore(date:LocalDate,item:Long,value:Int?)=mutateExtra{repo.setScore(date,item,value)}
     fun setNote(date:LocalDate,text:String)=mutateExtra{repo.setNote(date,text)}
     fun saveCheckinItem(v:CheckinItemEntity)=mutateExtra{repo.saveCheckinItem(v)}
+    // Data: Trans Memo import, encrypted backup, exports, wipe
+    sealed interface DataJob { object Idle:DataJob; object Working:DataJob; class Done(val message:Int,val arg:String?=null):DataJob; class Failed(val message:Int):DataJob
+        class ImportReady(val export:net.plainnotes.app.importer.TmExport,val preview:net.plainnotes.app.importer.TransMemo.Preview):DataJob
+        class Imported(val summary:ImportSummary):DataJob }
+    val dataJob=MutableStateFlow<DataJob>(DataJob.Idle)
+    fun clearDataJob(){dataJob.value=DataJob.Idle}
+    private fun dataOp(block:suspend()->DataJob)=viewModelScope.launch{dataJob.value=DataJob.Working;dataJob.value=try{block()}catch(e:BackupCodec.WrongPassword){DataJob.Failed(R.string.backup_wrong_password)}
+        catch(e:BackupCodec.BadFile){DataJob.Failed(R.string.backup_bad_file)}catch(e:net.plainnotes.app.importer.InvalidExport){DataJob.Failed(R.string.import_invalid)}catch(_:Exception){DataJob.Failed(R.string.operation_error)}}
+    private fun tempImport()=java.io.File(app.noBackupFilesDir,"import").apply{mkdirs()}.resolve("transmemo.db")
+    fun openTransMemo(uri:android.net.Uri)=dataOp {
+        withContext(Dispatchers.IO) {
+            val f=tempImport();app.contentResolver.openInputStream(uri)!!.use{i->f.outputStream().use{i.copyTo(it)}}
+            val export=AndroidSqlSource.open(f).use{net.plainnotes.app.importer.TransMemo.read(it)}
+            DataJob.ImportReady(export,net.plainnotes.app.importer.TransMemo.preview(export,ZoneId.systemDefault()))
+        }
+    }
+    fun runImport(export:net.plainnotes.app.importer.TmExport,choices:net.plainnotes.app.importer.TransMemo.Choices,overwrite:Boolean)=dataOp {
+        val plan=withContext(Dispatchers.Default){net.plainnotes.app.importer.TransMemo.plan(export,ZoneId.systemDefault(),choices)}
+        val summary=reminders.mutate{repo.importTransMemo(plan,overwrite)}
+        withContext(Dispatchers.IO){tempImport().delete()}
+        refresh();loadExtra();loadConcentration();DataJob.Imported(summary)
+    }
+    fun cancelImport()=viewModelScope.launch{withContext(Dispatchers.IO){tempImport().delete()};dataJob.value=DataJob.Idle}
+    fun exportBackup(uri:android.net.Uri,password:CharArray)=dataOp {
+        val bytes=repo.exportBackup(password);password.fill(' ')
+        withContext(Dispatchers.IO){app.contentResolver.openOutputStream(uri,"wt")!!.use{it.write(bytes)}};DataJob.Done(R.string.backup_saved)
+    }
+    fun restoreBackup(uri:android.net.Uri,password:CharArray)=dataOp {
+        val bytes=withContext(Dispatchers.IO){app.contentResolver.openInputStream(uri)!!.use{it.readBytes()}}
+        reminders.mutate{repo.restoreBackup(bytes,password)};password.fill(' ')
+        refresh();loadExtra();loadConcentration();DataJob.Done(R.string.backup_restored)
+    }
+    private suspend fun exportData(labels:(CheckinItemEntity)->String,schedules:Map<Long,String>):net.plainnotes.app.export.ExportData {
+        val meds=repo.medications();val today=LocalDate.now()
+        return net.plainnotes.app.export.ExportData(meds,meds.mapNotNull{m->repo.profile(m.id)?.let{m.id to it}}.toMap(),repo.records(),repo.labs(),repo.checkinItems(),
+            repo.scores(today.minusYears(50),today),repo.notes(today.minusYears(50),today),schedules,labels)
+    }
+    fun exportCsv(uri:android.net.Uri,labels:(CheckinItemEntity)->String,schedules:Map<Long,String>)=dataOp {
+        val d=exportData(labels,schedules);withContext(Dispatchers.IO){app.contentResolver.openOutputStream(uri,"wt")!!.use{net.plainnotes.app.export.CsvExport.write(d,it)}};DataJob.Done(R.string.export_saved)
+    }
+    fun exportPdf(uri:android.net.Uri,days:Int,includeChart:Boolean,context:android.content.Context,labels:(CheckinItemEntity)->String,schedules:Map<Long,String>)=dataOp {
+        val d=exportData(labels,schedules);val c=if(includeChart)conc.value.result else null
+        withContext(Dispatchers.IO){app.contentResolver.openOutputStream(uri,"wt")!!.use{net.plainnotes.app.export.PdfReport.write(context,d,days,c,it)}};DataJob.Done(R.string.export_saved)
+    }
+    /** Deletes everything: database, key, reminders cache and preferences. The caller restarts the UI. */
+    fun wipeAll(onDone:()->Unit)=viewModelScope.launch {
+        withContext(Dispatchers.IO){ reminders.mutate{repo.destroyAll()}
+            app.getSharedPreferences("prefs",android.content.Context.MODE_PRIVATE).edit().clear().commit()
+            java.io.File(app.createDeviceProtectedStorageContext().filesDir,"reminders.cache").delete()
+            app.getSystemService(android.app.NotificationManager::class.java).cancelAll()
+            runCatching{reminders.sync()} }
+        onDone()
+    }
     fun setWeight(kg:Double)=viewModelScope.launch{try{repo.setWeight(kg);loadConcentration()}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}
     fun saveLab(v:LabValueEntity)=viewModelScope.launch{try{repo.saveLab(v);loadConcentration()}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}
     fun deleteLab(v:LabValueEntity)=viewModelScope.launch{try{repo.deleteLab(v.id);loadConcentration()}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}

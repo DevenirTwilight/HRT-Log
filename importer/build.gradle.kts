@@ -1,5 +1,5 @@
 plugins { alias(libs.plugins.kotlin.jvm) }
 kotlin { compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17) } }
 java { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }
-dependencies { testImplementation(libs.junit); testRuntimeOnly(libs.junit.launcher) }
+dependencies { implementation(project(":core:domain")); testImplementation(libs.junit); testImplementation(libs.sqlite.jdbc); testRuntimeOnly(libs.junit.launcher) }
 tasks.test { useJUnitPlatform() }

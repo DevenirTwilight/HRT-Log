@@ -51,6 +51,7 @@ import net.plainnotes.app.data.MedicationEntity
                 Text(stringResource(R.string.per_intake, formatDose(m.dose_per_intake, m.unit)) + " · " + scheduleText(state.schedules[m.id]),
                     style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant)
                 Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.padding(top = 4.dp)) {
+                    if (m.needs_review != null) StatusPill(stringResource(R.string.needs_review), c.tertiaryContainer, c.onTertiaryContainer, Icons.Outlined.Info)
                     if (!m.active) StatusPill(stringResource(R.string.archived), c.surfaceContainerHighest, c.onSurfaceVariant)
                     else if (!m.notifications_on) StatusPill(stringResource(R.string.reminders_off), c.surfaceContainerHighest, c.onSurfaceVariant, Icons.Outlined.NotificationsOff)
                     if (m.molecule == "E2" && net.plainnotes.app.conc.ConcentrationCalculator.missingFor(m, profile).isEmpty())

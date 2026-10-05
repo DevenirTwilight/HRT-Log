@@ -36,6 +36,13 @@ class KeyRecoveryRequired(cause: Throwable? = null) : IllegalStateException("Enc
             instance=db;return db
         } finally { passphrase.fill(0) }
     }
+    /** Closes and deletes the database, the wrapped key and the Keystore alias ("delete all data"). */
+    @Synchronized fun destroy() {
+        instance?.close(); instance=null
+        listOf("notes.db","notes.db-wal","notes.db-shm","notes.db-journal").forEach { context.getDatabasePath(it).delete() }
+        File(context.noBackupFilesDir,"key.wrap").delete(); File(context.noBackupFilesDir,"key.wrap.bak").delete()
+        runCatching { KeyStore.getInstance("AndroidKeyStore").apply { load(null) }.deleteEntry("notes.wrap") }
+    }
     private fun loadPassphrase(): ByteArray {
         val atomic=AtomicFile(File(context.noBackupFilesDir,"key.wrap"))
         val store=KeyStore.getInstance("AndroidKeyStore").apply { load(null) }

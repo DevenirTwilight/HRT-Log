@@ -35,22 +35,25 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable fun MedicationEditor(edit: EditMedication, onDismiss: () -> Unit, inDialog: Boolean = true, onSave: (MedicationDraft) -> Unit) {
     val m = edit.medication; val p = edit.profile
+    val review = remember(m) { m?.needs_review?.let { runCatching { org.json.JSONObject(it) }.getOrNull() } }
+    val prefill = review?.optJSONObject("prefill")
+    val prefillTimes = prefill?.optJSONArray("times")?.let { a -> (0 until a.length()).mapNotNull { runCatching { LocalTime.parse(a.getString(it)) }.getOrNull() } }.orEmpty()
     var name by remember { mutableStateOf(m?.name ?: "") }
     var molecule by remember { mutableStateOf(m?.molecule ?: "E2") }
-    var route by remember { mutableStateOf(m?.route ?: "ORAL") }
+    var route by remember { mutableStateOf(m?.route ?: if (review != null) "" else "ORAL") }
     var ester by remember { mutableStateOf(p?.ester ?: "E2") }
     var unit by remember { mutableStateOf(m?.unit ?: "MG") }
     var dose by remember { mutableStateOf(m?.dose_per_intake?.let(::inputNumber) ?: "") }
     var capacity by remember { mutableStateOf(m?.container_capacity?.let(::inputNumber) ?: "") }
     var expiry by remember { mutableStateOf(m?.expiry_days_after_open?.toString() ?: "") }
-    var soon by remember { mutableStateOf(m?.soon_alert_minutes?.toString() ?: "15") }
-    var late by remember { mutableStateOf(m?.late_after_minutes?.toString() ?: "120") }
+    var soon by remember { mutableStateOf(m?.soon_alert_minutes?.toString() ?: if (m == null) "15" else "") }
+    var late by remember { mutableStateOf(m?.late_after_minutes?.toString() ?: if (m == null) "120" else "") }
     var active by remember { mutableStateOf(m?.active ?: true) }
     var notifications by remember { mutableStateOf(m?.notifications_on ?: true) }
     var siteRotation by remember { mutableStateOf(m?.site_rotation ?: false) }
     var kind by remember { mutableStateOf(edit.rule?.kind?.let(RuleKind::valueOf) ?: RuleKind.EVERY_N_DAYS) }
-    var interval by remember { mutableStateOf(edit.rule?.interval?.toString() ?: "1") }
-    val times = remember { mutableStateListOf<LocalTime>().apply { addAll(edit.times.map { LocalTime.parse(it.local_time) }.sorted().ifEmpty { listOf(LocalTime.of(9, 0)) }) } }
+    var interval by remember { mutableStateOf(edit.rule?.interval?.toString() ?: if (review != null && prefill?.optBoolean("daily") != true) "" else "1") }
+    val times = remember { mutableStateListOf<LocalTime>().apply { addAll(edit.times.map { LocalTime.parse(it.local_time) }.sorted().ifEmpty { prefillTimes.ifEmpty { listOf(LocalTime.of(9, 0)) } }) } }
     val weekdays = remember { mutableStateListOf<DayOfWeek>().apply { edit.rule?.let { r -> addAll(DayOfWeek.entries.filter { r.weekday_mask and (1 shl (it.value - 1)) != 0 }) } } }
     // PK inputs (estradiol only)
     var slTier by remember { mutableStateOf(p?.sl_tier) }
@@ -70,7 +73,7 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
     val isE2 = molecule == "E2"
     val resolvedArea = when (gelCoverage) { null -> null; "product" -> Gel.product(gelProduct).defaultAreaCM2; "manual" -> gelArea.toDoubleOrNull()?.takeIf { it > 0 }
         else -> Gel.COVERAGE.firstOrNull { it.first == gelCoverage }?.second }
-    val valid = name.isNotBlank() && doseV != null && capV != null && expV != -1 && soonV != null && lateV != null && intervalV != null &&
+    val valid = (!isE2 || route in E2_ROUTES) && name.isNotBlank() && doseV != null && capV != null && expV != -1 && soonV != null && lateV != null && intervalV != null &&
         (kind == RuleKind.EVERY_N_HOURS || times.isNotEmpty()) && (kind != RuleKind.WEEKLY || weekdays.isNotEmpty())
 
     val body: @Composable () -> Unit = {
@@ -80,7 +83,7 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
                 actions = { TextButton(onClick = {
                     tried = true
                     if (valid) onSave(MedicationDraft(
-                        MedicationEntity(m?.id ?: 0, name.trim(), molecule, if (isE2) route else null, unit, doseV!!, capV!!, expV, soonV, lateV, siteRotation, if (siteRotation) "LR" else null, notifications, active, m?.sort_order ?: 0, m?.needs_review),
+                        MedicationEntity(m?.id ?: 0, name.trim(), molecule, if (isE2) route else null, unit, doseV!!, capV!!, expV, soonV, lateV, siteRotation, if (siteRotation) "LR" else null, notifications, active, m?.sort_order ?: 0, null),
                         if (isE2) ester else null, kind, intervalV!!, times.toList(), weekdays.toSet(),
                         if (isE2) ProfileEntity(m?.id ?: 0, ester, "", slTier.takeIf { route == "SUBLINGUAL" }, gelProduct.takeIf { route == "GEL" }, gelSite.takeIf { route == "GEL" },
                             resolvedArea.takeIf { route == "GEL" }, patchRate.toDoubleOrNull()?.takeIf { route == "PATCH" && it > 0 }) else null))
@@ -88,11 +91,12 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
         }) { pad ->
             Column(Modifier.padding(pad).fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 if (tried && !valid) Text(stringResource(R.string.invalid), color = MaterialTheme.colorScheme.error)
+                review?.let { r -> ReviewCard(r) }
                 SectionCard(stringResource(R.string.section_basic)) {
                     OutlinedTextField(name, { name = it }, Modifier.fillMaxWidth(), label = { Text(stringResource(R.string.name)) }, singleLine = true, isError = tried && name.isBlank())
                     DropdownField(stringResource(R.string.molecule), MOLECULES, molecule, { choiceLabel(it) }, { molecule = it })
                     if (isE2) {
-                        DropdownField(stringResource(R.string.route), E2_ROUTES, route, { choiceLabel(it) }, {
+                        DropdownField(stringResource(R.string.route), E2_ROUTES, route.takeIf { it in E2_ROUTES }, { choiceLabel(it) }, isError = tried && route !in E2_ROUTES, onSelect = {
                             route = it; if (ester !in estersFor(it)) ester = estersFor(it).first(); if (it == "PATCH") unit = "PATCH" else if (unit == "PATCH") unit = "MG"
                         })
                         DropdownField(stringResource(R.string.ester), estersFor(route), ester, { choiceLabel(it) }, { ester = it })
@@ -207,4 +211,24 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
     "palm1" -> stringResource(R.string.cov_palms, 1, displayNumber(Gel.PALM_AREA_CM2)); "palm2" -> stringResource(R.string.cov_palms, 2, displayNumber(2 * Gel.PALM_AREA_CM2))
     "palm3" -> stringResource(R.string.cov_palms, 3, displayNumber(3 * Gel.PALM_AREA_CM2)); "thigh" -> stringResource(R.string.cov_thigh); "arm" -> stringResource(R.string.cov_arm)
     "arms2" -> stringResource(R.string.cov_arms2); else -> stringResource(R.string.cov_manual)
+}
+
+/** Shows the Trans Memo values that could not be mapped, so the user can set them deliberately. */
+@Composable private fun ReviewCard(review: org.json.JSONObject) {
+    val raw = review.optJSONObject("raw") ?: org.json.JSONObject()
+    Surface(color = MaterialTheme.colorScheme.tertiaryContainer, shape = MaterialTheme.shapes.medium) {
+        Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Text(stringResource(R.string.review_title), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onTertiaryContainer)
+            Text(stringResource(R.string.review_body), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onTertiaryContainer)
+            raw.keys().asSequence().toList().sorted().forEach { k ->
+                val label = when (k) {
+                    "intakeInterval" -> stringResource(R.string.review_interval); "soonAlertDelay" -> stringResource(R.string.review_soon); "lateAlertDelay" -> stringResource(R.string.review_late)
+                    "notifications" -> stringResource(R.string.review_notifications); "route" -> stringResource(R.string.review_route); "molecule" -> stringResource(R.string.review_molecule)
+                    "molecule_inferred" -> stringResource(R.string.review_molecule_inferred); "unit" -> stringResource(R.string.review_unit); else -> k
+                }
+                val v = raw.optString(k)
+                Text("• $label" + if (v.isNotEmpty()) stringResource(R.string.review_raw, v) else "", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onTertiaryContainer)
+            }
+        }
+    }
 }

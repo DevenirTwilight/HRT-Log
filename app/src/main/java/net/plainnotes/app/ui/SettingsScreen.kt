@@ -45,7 +45,8 @@ import net.plainnotes.app.R
 class Appearance(val mode: ThemeMode, val dynamic: Boolean)
 
 @Composable fun SettingsScreen(appearance: Appearance, onAppearance: (Appearance) -> Unit, highReliability: Boolean, onHighReliability: (Boolean) -> Unit,
-                               onSync: () -> Unit, onTest: () -> Unit, contentPadding: PaddingValues, wellbeingPrompt: Boolean = true, onWellbeingPrompt: (Boolean) -> Unit = {}) {
+                               onSync: () -> Unit, onTest: () -> Unit, contentPadding: PaddingValues, wellbeingPrompt: Boolean = true, onWellbeingPrompt: (Boolean) -> Unit = {},
+                               extra: @Composable ColumnScope.() -> Unit = {}) {
     val context = LocalContext.current; val inspection = LocalInspectionMode.current
     val revision = resumeRevision()
     var reliabilityInfo by remember { mutableStateOf(false) }
@@ -90,6 +91,7 @@ class Appearance(val mode: ThemeMode, val dynamic: Boolean)
         SectionCard(stringResource(R.string.wellbeing)) {
             SwitchRow(stringResource(R.string.wb_prompt_setting), wellbeingPrompt, stringResource(R.string.wb_prompt_setting_desc)) { onWellbeingPrompt(it) }
         }
+        extra()
         SectionCard(stringResource(R.string.language)) {
             Text(stringResource(R.string.language_desc), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             if (Build.VERSION.SDK_INT >= 33) OutlinedButton(onClick = { open(Settings.ACTION_APP_LOCALE_SETTINGS, true) }) { Text(stringResource(R.string.language_open)) }

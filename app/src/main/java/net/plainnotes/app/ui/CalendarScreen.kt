@@ -32,7 +32,7 @@ private class DoseItem(val entry: TimelineEntry) : CalendarItem { override val a
 private class AppointmentItem(val appointment: AppointmentEntity) : CalendarItem { override val at: Instant get() = Instant.ofEpochMilli(appointment.at_utc) }
 
 @Composable fun CalendarScreen(state: NotesState, today: LocalDate, onComplete: (TimelineEntry) -> Unit, onChange: (TimelineEntry) -> Unit,
-                               onAddMedication: () -> Unit, onResetStart: () -> Unit, contentPadding: PaddingValues) {
+                               onAddMedication: () -> Unit, onResetStart: () -> Unit, contentPadding: PaddingValues, onReview: () -> Unit = {}) {
     val zone = ZoneId.systemDefault()
     val meds = state.medications.associateBy { it.id }
     val windowStart = state.calendarStart.atStartOfDay(zone).toInstant()
@@ -41,6 +41,15 @@ private class AppointmentItem(val appointment: AppointmentEntity) : CalendarItem
     val groups = items.groupBy { it.at.atZone(zone).toLocalDate() }.toSortedMap()
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = contentPadding.calculateTopPadding() + 8.dp,
         bottom = contentPadding.calculateBottomPadding() + 96.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        val pending = state.medications.count { it.needs_review != null }
+        if (pending > 0) item {
+            Surface(onClick = onReview, color = MaterialTheme.colorScheme.tertiaryContainer, shape = MaterialTheme.shapes.medium) {
+                Row(Modifier.fillMaxWidth().padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Outlined.Info, null, tint = MaterialTheme.colorScheme.onTertiaryContainer); Spacer(Modifier.width(10.dp))
+                    Text(stringResource(R.string.review_banner, pending), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onTertiaryContainer)
+                }
+            }
+        }
         if (state.calendarStart != today) item {
             AssistChip(onClick = onResetStart, label = { Text(stringResource(R.string.calendar_showing_from, formatShortDate(state.calendarStart))) },
                 trailingIcon = { Icon(Icons.Outlined.Close, stringResource(R.string.calendar_back_today), Modifier.size(18.dp)) })

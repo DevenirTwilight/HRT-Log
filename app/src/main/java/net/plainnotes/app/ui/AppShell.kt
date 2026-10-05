@@ -155,13 +155,15 @@ class UiPrefs(context: Context) {
         ) { pad ->
             when (destination) {
                 Destination.CALENDAR -> CalendarScreen(state, today, { completeEntry = it }, { overrideEntry = it; model.loadOverride(it.slot.key) }, { model.edit(null) },
-                    { model.calendarFrom(null) }, pad)
+                    { model.calendarFrom(null) }, pad) { destination = Destination.MEDICATIONS }
                 Destination.MEDICATIONS -> MedicationsScreen(state, { model.edit(null) }, { model.edit(it) }, { archive = it }, pad)
                 Destination.CONCENTRATION -> ConcentrationScreen(state, conc.result, conc.loading, conc.weight, concSettings, { concSettings = it; prefs.conc = it },
                     { model.setWeight(it) }, { model.editById(it) }, { destination = Destination.LABS }, pad)
                 Destination.LABS -> LabsScreen(conc.labs, conc.doseTimes, { labEdit = it; labNew = it == null }, { model.deleteLab(it) }, pad)
                 Destination.SETTINGS -> SettingsScreen(appearance, onAppearance, highReliability, { highReliability = it; prefs.highReliability = it; model.sync() },
-                    { model.sync() }, { model.testReminder() }, pad, wellbeingPrompt) { wellbeingPrompt = it; prefs.wellbeingPrompt = it }
+                    { model.sync() }, { model.testReminder() }, pad, wellbeingPrompt, { wellbeingPrompt = it; prefs.wellbeingPrompt = it }) {
+                    DataSection(model, state.medications.associate { it.id to scheduleText(state.schedules[it.id]) })
+                }
                 Destination.ABOUT -> AboutScreen(pad)
                 Destination.HISTORY -> HistoryScreen(state, extra.records, { editRecord = it }, { deleteRecord = it }, pad)
                 Destination.STOCK -> StockScreen(state, extra.containers, extra.records, { m -> model.replaceContainer(m.id, m.container_capacity) }, { c, m -> adjustStock = c to m }, { addStock = it }, pad)

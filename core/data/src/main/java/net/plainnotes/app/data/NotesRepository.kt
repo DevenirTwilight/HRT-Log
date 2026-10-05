@@ -159,6 +159,26 @@ val CHECKIN_DEFAULTS=listOf("OVERALL","MOOD","EMO_STABILITY","ENERGY","AGGRESSIV
     suspend fun appointment(value:AppointmentEntity)=transaction { it.appointment(value) }
     suspend fun records()=withContext(Dispatchers.IO){access.get().dao().records()}
 
+    // --- Import / backup / wipe ---
+    suspend fun importTransMemo(plan:net.plainnotes.app.importer.TransMemo.Plan,overwrite:Boolean,zone:ZoneId=ZoneId.systemDefault())=withContext(Dispatchers.IO) {
+        val db=access.get();db.withTransaction { TransMemoWriter.write(db.dao(),db.openHelper.writableDatabase,plan,overwrite,zone) }
+    }
+    suspend fun exportBackup(password:CharArray):ByteArray=withContext(Dispatchers.IO) {
+        val db=access.get()
+        val json=db.withTransaction { JSONObject().put("format",BackupCodec.FORMAT_VERSION).put("schema",db.openHelper.writableDatabase.version)
+            .put("created",Instant.now().toString()).put("tables",RawData.dump(db.openHelper.writableDatabase)) }
+        BackupCodec.encrypt(json.toString().toByteArray(Charsets.UTF_8),password)
+    }
+    /** Replaces all data with the backup; throws [BackupCodec.WrongPassword] or [BackupCodec.BadFile] without touching anything. */
+    suspend fun restoreBackup(data:ByteArray,password:CharArray)=withContext(Dispatchers.IO) {
+        val json=JSONObject(String(BackupCodec.decrypt(data,password),Charsets.UTF_8))
+        val db=access.get()
+        if(json.optInt("format")!=BackupCodec.FORMAT_VERSION||json.optInt("schema")!=db.openHelper.writableDatabase.version) throw BackupCodec.BadFile("incompatible version")
+        db.withTransaction { RawData.restore(db.openHelper.writableDatabase,json.getJSONObject("tables")) }
+    }
+    /** Irreversibly deletes the database, its key file and Keystore key. */
+    fun destroyAll()=access.destroy()
+
     // --- History edits (stock is corrected through REVERSE + new CONSUME entries) ---
     /** Changes time and/or amount of a recorded intake, or turns a missed slot into a backfilled intake. */
     suspend fun editRecord(id:Long,taken:Instant,dose:Double,now:Instant=Instant.now())=transaction { dao ->

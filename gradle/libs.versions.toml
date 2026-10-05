@@ -35,6 +35,8 @@ junit = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
 junit-launcher = { module = "org.junit.platform:junit-platform-launcher", version = "1.13.4" }
 junit4 = { module = "junit:junit", version = "4.13.2" }
 org-json = { module = "org.json:json", version = "20260814" }
+sqlite-jdbc = { module = "org.xerial:sqlite-jdbc", version = "3.53.4.0" }
+bouncycastle = { module = "org.bouncycastle:bcprov-jdk18on", version = "1.86" }
 robolectric = { module = "org.robolectric:robolectric", version = "4.16" }
 android-test-core = { module = "androidx.test:core", version = "1.7.0" }
 android-test-runner = { module = "androidx.test:runner", version = "1.7.0" }

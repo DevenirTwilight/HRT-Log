@@ -13,7 +13,7 @@ android {
 }
 kotlin { compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17) } }
 dependencies {
-    implementation(project(":core:domain"))
+    implementation(project(":core:domain")); implementation(project(":importer")); implementation(libs.bouncycastle)
     implementation(libs.core.ktx)
     implementation(libs.coroutines)
     implementation(libs.room.runtime); implementation(libs.room.ktx); implementation(libs.sqlcipher); implementation(libs.sqlite)
