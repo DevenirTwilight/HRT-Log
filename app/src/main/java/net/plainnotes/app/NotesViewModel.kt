@@ -66,12 +66,30 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         val doseTimes=records.filter{it.medication_id in e2 && it.status in listOf("ON_TIME","LATE") && it.taken_utc!=null}.map{Instant.ofEpochMilli(it.taken_utc!!)}.sorted()
         conc.value=ConcState(false,result,weight,labs,doseTimes)
     }catch(_:Exception){conc.value=conc.value.copy(loading=false);mutable.value=mutable.value.copy(error=R.string.data_error)} }
+    // History, stock and well-being
+    data class ExtraState(val records:List<RecordEntity> = emptyList(),val containers:List<ContainerEntity> = emptyList(),val items:List<CheckinItemEntity> = emptyList(),
+                          val scores:List<CheckinScoreEntity> = emptyList(),val notes:List<DayNoteEntity> = emptyList())
+    val extra=MutableStateFlow(ExtraState())
+    private fun guarded(block:suspend()->Unit)=viewModelScope.launch{try{block()}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}
+    fun loadExtra()=guarded {
+        val today=LocalDate.now()
+        extra.value=ExtraState(repo.records(),repo.containers(),repo.checkinItems(),repo.scores(today.minusYears(5),today),repo.notes(today.minusYears(5),today))
+    }
+    private fun mutateExtra(block:suspend()->Unit)=guarded{block();loadExtra();refresh()}
+    fun editRecord(id:Long,t:Instant,d:Double)=guarded{reminders.mutate{repo.editRecord(id,t,d)};loadExtra();refresh();loadConcentration()}
+    fun deleteRecord(id:Long)=guarded{reminders.mutate{repo.deleteRecord(id)};loadExtra();refresh();loadConcentration()}
+    fun addContainers(med:Long,capacity:Double,count:Int,open:Boolean)=mutateExtra{repo.addContainers(med,capacity,count,open)}
+    fun replaceContainer(med:Long,capacity:Double)=mutateExtra{repo.replaceContainer(med,capacity)}
+    fun setRemaining(container:Long,remaining:Double)=mutateExtra{repo.setRemaining(container,remaining)}
+    fun setScore(date:LocalDate,item:Long,value:Int?)=mutateExtra{repo.setScore(date,item,value)}
+    fun setNote(date:LocalDate,text:String)=mutateExtra{repo.setNote(date,text)}
+    fun saveCheckinItem(v:CheckinItemEntity)=mutateExtra{repo.saveCheckinItem(v)}
     fun setWeight(kg:Double)=viewModelScope.launch{try{repo.setWeight(kg);loadConcentration()}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}
     fun saveLab(v:LabValueEntity)=viewModelScope.launch{try{repo.saveLab(v);loadConcentration()}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}
     fun deleteLab(v:LabValueEntity)=viewModelScope.launch{try{repo.deleteLab(v.id);loadConcentration()}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}
     fun delete(id:Long)=change{repo.removeMedication(id)}
-    fun complete(s:Slot,t:Instant,d:Double)=change{repo.complete(s,t,d)}.also{it.invokeOnCompletion{loadConcentration()}}
-    fun manual(id:Long,t:Instant,d:Double)=change{repo.unscheduled(id,t,d)}.also{it.invokeOnCompletion{loadConcentration()}}
+    fun complete(s:Slot,t:Instant,d:Double,site:String?=null)=change{repo.complete(s,t,d,site)}.also{it.invokeOnCompletion{loadConcentration();loadExtra()}}
+    fun manual(id:Long,t:Instant,d:Double,site:String?=null)=change{repo.unscheduled(id,t,d,site)}.also{it.invokeOnCompletion{loadConcentration();loadExtra()}}
     fun loadOverride(key:String)=viewModelScope.launch{override.value=repo.currentOverride(key)}
     fun changeOverride(s:Slot,o:SlotOverride)=change{repo.override(s,o);override.value=null}
     fun appointment(v:AppointmentEntity)=change{repo.appointment(v)}

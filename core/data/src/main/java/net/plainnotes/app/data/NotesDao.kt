@@ -26,6 +26,22 @@ import kotlinx.coroutines.flow.Flow
     @Query("SELECT * FROM appointment ORDER BY at_utc") fun observeAppointments(): Flow<List<AppointmentEntity>>
     @Query("SELECT * FROM appointment ORDER BY at_utc") suspend fun appointments(): List<AppointmentEntity>
     @Insert suspend fun appointment(value: AppointmentEntity): Long
+    @Query("SELECT * FROM dose_record WHERE id = :id") suspend fun recordById(id: Long): RecordEntity?
+    @Query("SELECT * FROM supply_container ORDER BY medication_id, id") suspend fun containers(): List<ContainerEntity>
+    @Query("SELECT * FROM supply_container WHERE id = :id") suspend fun container(id: Long): ContainerEntity
+    @Insert suspend fun insertContainer(value: ContainerEntity): Long
+    @Query("UPDATE supply_container SET state = :state, opened_on = :openedOn WHERE id = :id") suspend fun setContainerState(id: Long, state: String, openedOn: String?)
+    @Query("SELECT * FROM supply_transaction WHERE dose_record_id = :recordId ORDER BY id") suspend fun supplyFor(recordId: Long): List<SupplyEntryEntity>
+    @Insert suspend fun supply(value: SupplyEntryEntity): Long
+    @Query("SELECT * FROM checkin_item ORDER BY sort_order, id") suspend fun checkinItems(): List<CheckinItemEntity>
+    @Insert suspend fun insertCheckinItem(value: CheckinItemEntity): Long
+    @Update suspend fun updateCheckinItem(value: CheckinItemEntity)
+    @Query("SELECT * FROM checkin_score WHERE date BETWEEN :from AND :to") suspend fun scores(from: String, to: String): List<CheckinScoreEntity>
+    @Upsert suspend fun score(value: CheckinScoreEntity)
+    @Query("DELETE FROM checkin_score WHERE date = :date AND item_id = :item") suspend fun deleteScore(date: String, item: Long)
+    @Query("SELECT * FROM day_note WHERE date BETWEEN :from AND :to") suspend fun notes(from: String, to: String): List<DayNoteEntity>
+    @Upsert suspend fun note(value: DayNoteEntity)
+    @Query("DELETE FROM day_note WHERE date = :date") suspend fun deleteNote(date: String)
     @Query("SELECT * FROM lab_value ORDER BY sampled_utc") suspend fun labs(): List<LabValueEntity>
     @Insert suspend fun insertLab(value: LabValueEntity): Long
     @Update suspend fun updateLab(value: LabValueEntity)

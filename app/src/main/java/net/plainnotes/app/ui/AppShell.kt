@@ -28,10 +28,10 @@ import java.time.LocalDate
 
 enum class Destination(val title: Int, val icon: ImageVector, val ready: Boolean) {
     CALENDAR(R.string.calendar, Icons.Outlined.CalendarMonth, true),
-    HISTORY(R.string.history, Icons.Outlined.History, false),
-    STOCK(R.string.stock, Icons.Outlined.Inventory2, false),
+    HISTORY(R.string.history, Icons.Outlined.History, true),
+    STOCK(R.string.stock, Icons.Outlined.Inventory2, true),
     MEDICATIONS(R.string.medications, Icons.Outlined.Medication, true),
-    WELLBEING(R.string.wellbeing, Icons.Outlined.FavoriteBorder, false),
+    WELLBEING(R.string.wellbeing, Icons.Outlined.FavoriteBorder, true),
     CONCENTRATION(R.string.concentration, Icons.AutoMirrored.Outlined.ShowChart, true),
     LABS(R.string.labs, Icons.Outlined.Science, true),
     SETTINGS(R.string.settings, Icons.Outlined.Settings, true),
@@ -50,6 +50,7 @@ class UiPrefs(context: Context) {
             if (p.getString("calib_mode", "RETROSPECTIVE") == "CAUSAL") CalibrationMode.CAUSAL else CalibrationMode.RETROSPECTIVE)
         set(v) { p.edit().putBoolean("conc_pmol", v.pmol).putBoolean("calib_enabled", v.calibrate).putString("calib_mode", v.mode.name).apply() }
     var disclaimerAccepted: Boolean get() = p.getBoolean("pk_disclaimer_ack", false); set(v) { p.edit().putBoolean("pk_disclaimer_ack", v).apply() }
+    var wellbeingPrompt: Boolean get() = p.getBoolean("wellbeing_prompt", true); set(v) { p.edit().putBoolean("wellbeing_prompt", v).apply() }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -60,6 +61,7 @@ class UiPrefs(context: Context) {
     val editor by model.editor.collectAsStateWithLifecycle()
     val override by model.override.collectAsStateWithLifecycle()
     val conc by model.conc.collectAsStateWithLifecycle()
+    val extra by model.extra.collectAsStateWithLifecycle()
     val notificationSlot by model.notificationSlot.collectAsStateWithLifecycle()
     var destination by rememberSaveable { mutableStateOf(Destination.CALENDAR) }
     var concSettings by remember { mutableStateOf(prefs.conc) }
@@ -78,8 +80,24 @@ class UiPrefs(context: Context) {
     var labNew by remember { mutableStateOf(false) }
     var pickStart by remember { mutableStateOf(false) }
     val today = LocalDate.now()
+    var editRecord by remember { mutableStateOf<net.plainnotes.app.data.RecordEntity?>(null) }
+    var deleteRecord by remember { mutableStateOf<net.plainnotes.app.data.RecordEntity?>(null) }
+    var addStock by remember { mutableStateOf<MedicationEntity?>(null) }
+    var adjustStock by remember { mutableStateOf<Pair<net.plainnotes.app.data.ContainerEntity, MedicationEntity>?>(null) }
+    var manageItems by remember { mutableStateOf(false) }
+    var wellbeingPrompt by remember { mutableStateOf(prefs.wellbeingPrompt) }
+    val promptText = stringResource(R.string.wb_prompt); val promptAction = stringResource(R.string.wb_prompt_action)
+    fun afterIntake() {
+        val today = LocalDate.now().toString()
+        if (wellbeingPrompt && extra.scores.none { it.date == today }) scope.launch {
+            if (snackbar.showSnackbar(promptText, promptAction, withDismissAction = true) == SnackbarResult.ActionPerformed) destination = Destination.WELLBEING
+        }
+    }
+    fun siteFor(m: MedicationEntity) = if (m.site_rotation) suggestSite(extra.records, m.id) else null
 
     LaunchedEffect(notificationSlot) { notificationSlot?.let { s -> completeEntry = state.slots.firstOrNull { it.slot.key == s.key } ?: TimelineEntry(s, net.plainnotes.app.domain.SlotState.PENDING); model.notificationSlot.value = null } }
+    LaunchedEffect(Unit) { model.loadExtra() }
+    LaunchedEffect(destination) { if (destination in listOf(Destination.HISTORY, Destination.STOCK, Destination.WELLBEING)) model.loadExtra() }
     LaunchedEffect(destination, concSettings.calibrate, concSettings.mode) {
         if (destination == Destination.CONCENTRATION || destination == Destination.LABS) {
             model.concentrationSettings(concSettings.calibrate, concSettings.mode); model.loadConcentration()
@@ -143,8 +161,11 @@ class UiPrefs(context: Context) {
                     { model.setWeight(it) }, { model.editById(it) }, { destination = Destination.LABS }, pad)
                 Destination.LABS -> LabsScreen(conc.labs, conc.doseTimes, { labEdit = it; labNew = it == null }, { model.deleteLab(it) }, pad)
                 Destination.SETTINGS -> SettingsScreen(appearance, onAppearance, highReliability, { highReliability = it; prefs.highReliability = it; model.sync() },
-                    { model.sync() }, { model.testReminder() }, pad)
+                    { model.sync() }, { model.testReminder() }, pad, wellbeingPrompt) { wellbeingPrompt = it; prefs.wellbeingPrompt = it }
                 Destination.ABOUT -> AboutScreen(pad)
+                Destination.HISTORY -> HistoryScreen(state, extra.records, { editRecord = it }, { deleteRecord = it }, pad)
+                Destination.STOCK -> StockScreen(state, extra.containers, extra.records, { m -> model.replaceContainer(m.id, m.container_capacity) }, { c, m -> adjustStock = c to m }, { addStock = it }, pad)
+                Destination.WELLBEING -> WellbeingScreen(extra.items, extra.scores, extra.notes, { d, i, v -> model.setScore(d, i, v) }, { d, t -> model.setNote(d, t) }, { manageItems = true }, pad)
                 else -> ComingSoonScreen(destination.icon, stringResource(destination.title), pad)
             }
         }
@@ -154,9 +175,17 @@ class UiPrefs(context: Context) {
     editor?.let { MedicationEditor(it, { model.closeEditor() }) { d -> model.save(d) } }
     completeEntry?.let { e -> IntakeDialog(stringResource(R.string.complete), meds[e.slot.medicationId], e.slot.dose,
         if (e.state == net.plainnotes.app.domain.SlotState.MISSED) e.slot.at else Instant.now(),
-        { completeEntry = null }) { t, d -> model.complete(e.slot, t, d); completeEntry = null } }
+        { completeEntry = null }, meds[e.slot.medicationId]?.let(::siteFor)) { t, d, site -> model.complete(e.slot, t, d, site); completeEntry = null; afterIntake() } }
+    editRecord?.let { r -> IntakeDialog(stringResource(if (r.status == "MISSED") R.string.history_backfill else R.string.edit), meds[r.medication_id], r.actual_dose ?: r.planned_dose ?: meds[r.medication_id]?.dose_per_intake ?: 1.0,
+        Instant.ofEpochMilli(r.taken_utc ?: r.scheduled_utc ?: System.currentTimeMillis()), { editRecord = null }) { t, d, _ -> model.editRecord(r.id, t, d); editRecord = null } }
+    deleteRecord?.let { r -> AlertDialog(onDismissRequest = { deleteRecord = null }, icon = { Icon(Icons.Outlined.Delete, null) }, text = { Text(stringResource(R.string.history_delete_confirm)) },
+        confirmButton = { Button(onClick = { model.deleteRecord(r.id); deleteRecord = null }) { Text(stringResource(R.string.remove)) } },
+        dismissButton = { TextButton(onClick = { deleteRecord = null }) { Text(stringResource(R.string.cancel)) } }) }
+    addStock?.let { m -> AddStockDialog(m, { addStock = null }) { cap, n, open -> model.addContainers(m.id, cap, n, open); addStock = null } }
+    adjustStock?.let { (c, m) -> AdjustStockDialog(c, m, { adjustStock = null }) { v -> model.setRemaining(c.id, v); adjustStock = null } }
+    if (manageItems) ManageCheckinItemsDialog(extra.items, { manageItems = false }) { model.saveCheckinItem(it) }
     overrideEntry?.let { e -> if (override?.key == e.slot.key) OverrideDialog(e, meds[e.slot.medicationId], override!!, { overrideEntry = null }) { o -> model.changeOverride(e.slot, o); overrideEntry = null } }
-    if (manual) ManualIntakeDialog(state.medications.filter { it.active }, { manual = false }) { id, t, d -> model.manual(id, t, d); manual = false }
+    if (manual) ManualIntakeDialog(state.medications.filter { it.active }, ::siteFor, { manual = false }) { id, t, d, site -> model.manual(id, t, d, site); manual = false; afterIntake() }
     if (appointment) AppointmentDialog({ appointment = false }) { model.appointment(it); appointment = false }
     if (labNew || labEdit != null) LabDialog(labEdit, { labNew = false; labEdit = null }) { model.saveLab(it); labNew = false; labEdit = null }
     if (pickStart) DatePickerModal(state.calendarStart, { pickStart = false }) { model.calendarFrom(it) }

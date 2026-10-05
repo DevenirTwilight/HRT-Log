@@ -9,6 +9,8 @@ import java.time.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/** Built-in well-being items, in display order. */
+val CHECKIN_DEFAULTS=listOf("OVERALL","MOOD","EMO_STABILITY","ENERGY","AGGRESSIVENESS","LIBIDO","PAIN","PERIOD_LIKE","APPETITE","SLEEP_QUALITY","SKIN_QUALITY")
 @Singleton class NotesRepository @Inject constructor(private val access: DatabaseAccess) {
     suspend fun <T> transaction(block: suspend (NotesDao) -> T): T = withContext(Dispatchers.IO) {
         val db=access.get();db.withTransaction { block(db.dao()) }
@@ -123,19 +125,21 @@ import javax.inject.Singleton
             planned_dose=slot.dose,late_after_minutes_snapshot=slot.lateMinutes,taken_utc=taken?.toEpochMilli(),taken_zone=if(taken==null)null else ZoneId.systemDefault().id,
             actual_dose=dose,status=status,origin=origin,revision=1,config_snapshot=snapshot)
     }
-    suspend fun complete(slot:Slot,taken:Instant,dose:Double)=transaction { dao ->
+    suspend fun complete(slot:Slot,taken:Instant,dose:Double,site:String?=null)=transaction { dao ->
         val existing=dao.records().singleOrNull{it.slot_key==slot.key}
         if(existing?.status in listOf("ON_TIME","LATE"))return@transaction
         require(existing?.status!="SKIPPED");require(dose.isFinite()&&dose>0)
         val status=ScheduleEngine.complete(slot,taken,ZoneId.systemDefault(),dose).status.name
-        val result=recordFor(dao,slot,status,taken,dose).copy(unallocated_supply_amount=dose)
-        if(existing==null)dao.record(result) else dao.updateRecord(result.copy(id=existing.id,revision=existing.revision+1,config_snapshot=existing.config_snapshot))
+        val result=recordFor(dao,slot,status,taken,dose).copy(unallocated_supply_amount=dose,site=site?.takeIf{it.isNotBlank()})
+        val id=if(existing==null)dao.record(result) else {dao.updateRecord(result.copy(id=existing.id,revision=existing.revision+1,config_snapshot=existing.config_snapshot));existing.id}
+        SupplyLedger.allocate(dao,dao.recordById(id)!!)
     }
-    suspend fun unscheduled(id:Long,taken:Instant,dose:Double)=transaction { dao ->
+    suspend fun unscheduled(id:Long,taken:Instant,dose:Double,site:String?=null)=transaction { dao ->
         require(dose.isFinite()&&dose>0);val m=dao.medication(id)
         val snap=JSONObject().put("name",m.name).put("molecule",m.molecule).put("route",m.route).put("unit",m.unit).put("ester",dao.profile(id)?.ester).toString()
-        dao.record(RecordEntity(medication_id=id,taken_utc=taken.toEpochMilli(),taken_zone=ZoneId.systemDefault().id,actual_dose=dose,unallocated_supply_amount=dose,
+        val rid=dao.record(RecordEntity(medication_id=id,taken_utc=taken.toEpochMilli(),taken_zone=ZoneId.systemDefault().id,actual_dose=dose,unallocated_supply_amount=dose,site=site?.takeIf{it.isNotBlank()},
             status="ON_TIME",origin="APP",revision=1,config_snapshot=snap))
+        SupplyLedger.allocate(dao,dao.recordById(rid)!!)
     }
     suspend fun override(slot:Slot,value:SlotOverride,now:Instant=Instant.now())=transaction { dao ->
         require(slot.key==value.key)
@@ -154,6 +158,53 @@ import javax.inject.Singleton
     suspend fun currentOverride(key:String)=withContext(Dispatchers.IO){access.get().dao().overrides().singleOrNull{it.slot_key==key}?.model() ?: SlotOverride(key)}
     suspend fun appointment(value:AppointmentEntity)=transaction { it.appointment(value) }
     suspend fun records()=withContext(Dispatchers.IO){access.get().dao().records()}
+
+    // --- History edits (stock is corrected through REVERSE + new CONSUME entries) ---
+    /** Changes time and/or amount of a recorded intake, or turns a missed slot into a backfilled intake. */
+    suspend fun editRecord(id:Long,taken:Instant,dose:Double,now:Instant=Instant.now())=transaction { dao ->
+        require(dose.isFinite()&&dose>0&&!taken.isAfter(now.plusSeconds(60)))
+        val r=requireNotNull(dao.recordById(id)).also{require(it.deleted_at_utc==null&&it.status!="SKIPPED")}
+        SupplyLedger.reverse(dao,id)
+        val late=r.scheduled_utc?.let{s->r.late_after_minutes_snapshot?.let{l->taken.toEpochMilli()>s+l*60_000L}} ?: false
+        val next=r.copy(taken_utc=taken.toEpochMilli(),taken_zone=ZoneId.systemDefault().id,actual_dose=dose,status=if(late)"LATE" else "ON_TIME",revision=r.revision+1)
+        dao.updateRecord(next);SupplyLedger.allocate(dao,dao.recordById(id)!!)
+    }
+    /** Soft-deletes a taken intake; a scheduled slot becomes due again and may later be marked missed. */
+    suspend fun deleteRecord(id:Long,now:Instant=Instant.now())=transaction { dao ->
+        val r=requireNotNull(dao.recordById(id));require(r.status in listOf("ON_TIME","LATE"))
+        SupplyLedger.reverse(dao,id)
+        dao.updateRecord(r.copy(deleted_at_utc=now.toEpochMilli(),revision=r.revision+1))
+    }
+
+    // --- Stock ---
+    suspend fun containers()=withContext(Dispatchers.IO){access.get().dao().containers()}
+    /** Adds [count] containers; the first one is opened right away when nothing is in use. */
+    suspend fun addContainers(medicationId:Long,capacity:Double,count:Int,openFirst:Boolean)=transaction { dao ->
+        require(capacity.isFinite()&&capacity>0&&count in 1..50)
+        repeat(count){i-> dao.insertContainer(ContainerEntity(medication_id=medicationId,capacity=capacity,initial_used_amount=0.0,used_amount=0.0,
+            opened_on=if(openFirst&&i==0)LocalDate.now().toString() else null,state=if(openFirst&&i==0)"IN_USE" else "SEALED")) }
+    }
+    /** Closes the open container(s) of a medication and opens a sealed one (or a new one with [capacity]). */
+    suspend fun replaceContainer(medicationId:Long,capacity:Double)=transaction { dao ->
+        val all=dao.containers().filter{it.medication_id==medicationId}
+        all.filter{it.state=="IN_USE"}.forEach{dao.setContainerState(it.id,if(it.capacity-it.used_amount<=1e-9)"EMPTY" else "DISCARDED",it.opened_on)}
+        val sealed=all.filter{it.state=="SEALED"}.minByOrNull{it.id}
+        if(sealed!=null)dao.setContainerState(sealed.id,"IN_USE",LocalDate.now().toString())
+        else dao.insertContainer(ContainerEntity(medication_id=medicationId,capacity=capacity,initial_used_amount=0.0,used_amount=0.0,opened_on=LocalDate.now().toString(),state="IN_USE"))
+    }
+    suspend fun setRemaining(containerId:Long,remaining:Double)=transaction { SupplyLedger.setRemaining(it,containerId,remaining) }
+    suspend fun discardContainer(containerId:Long)=transaction { dao -> val c=dao.container(containerId);dao.setContainerState(c.id,"DISCARDED",c.opened_on) }
+
+    // --- Well-being ---
+    suspend fun checkinItems()=transaction { dao ->
+        if(dao.checkinItems().isEmpty()) CHECKIN_DEFAULTS.forEachIndexed{i,k->dao.insertCheckinItem(CheckinItemEntity(builtin_key=k,enabled=true,sort_order=i))}
+        dao.checkinItems()
+    }
+    suspend fun saveCheckinItem(v:CheckinItemEntity)=transaction { dao -> if(v.id==0L)dao.insertCheckinItem(v.copy(sort_order=(dao.checkinItems().maxOfOrNull{it.sort_order} ?: 0)+1)) else {dao.updateCheckinItem(v);v.id} }
+    suspend fun scores(from:LocalDate,to:LocalDate)=withContext(Dispatchers.IO){access.get().dao().scores(from.toString(),to.toString())}
+    suspend fun setScore(date:LocalDate,item:Long,value:Int?)=transaction { dao -> if(value==null)dao.deleteScore(date.toString(),item) else {require(value in 1..5);dao.score(CheckinScoreEntity(date.toString(),item,value))} }
+    suspend fun notes(from:LocalDate,to:LocalDate)=withContext(Dispatchers.IO){access.get().dao().notes(from.toString(),to.toString())}
+    suspend fun setNote(date:LocalDate,text:String)=transaction { dao -> if(text.isBlank())dao.deleteNote(date.toString()) else dao.note(DayNoteEntity(date.toString(),text)) }
     /** Planned slots in [from, to) for forecasting; reconciles first so past slots carry their final state. */
     suspend fun planned(from:Instant,to:Instant,now:Instant=Instant.now(),zone:ZoneId=ZoneId.systemDefault())=transaction { dao -> timeline(dao,now,from,to,zone) }
     suspend fun labs()=withContext(Dispatchers.IO){access.get().dao().labs()}

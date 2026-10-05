@@ -71,3 +71,25 @@ class ConcentrationCalculatorTest {
         assertEquals(single.currentPgMl!! * 2, two.currentPgMl!!, 1e-6)
     }
 }
+
+class StockSummaryTest {
+    private val m = MedicationEntity(1, "m", "E2", "ORAL", "MG", 2.0, 30.0, 30, 15, 120, false, null, true, true, 0)
+    private val twiceDaily = ScheduleSummary(RuleKind.EVERY_N_DAYS, 1, emptySet(), listOf(java.time.LocalTime.of(8, 0), java.time.LocalTime.of(20, 0)))
+    @Test fun untrackedIsNeverLow() {
+        val s = net.plainnotes.app.ui.stockSummary(m, emptyList(), twiceDaily)
+        assertFalse(s.tracked); assertFalse(s.low)
+    }
+    @Test fun daysLeftCountsOpenAndSealed() {
+        val open = ContainerEntity(1, 1, 30.0, 0.0, 22.0, java.time.LocalDate.now().minusDays(28).toString(), "IN_USE")
+        val sealed = ContainerEntity(2, 1, 30.0, 0.0, 0.0, null, "SEALED")
+        val s = net.plainnotes.app.ui.stockSummary(m, listOf(open, sealed), twiceDaily)
+        assertEquals(38.0, s.remaining, 1e-9); assertEquals(9, s.daysLeft); assertTrue(!s.low)
+        assertEquals(java.time.LocalDate.now().plusDays(2), s.expiresOn); assertTrue(s.expiringSoon(java.time.LocalDate.now()))
+        assertTrue(net.plainnotes.app.ui.stockSummary(m, listOf(open), twiceDaily).low)
+    }
+    @Test fun dailyUseFollowsScheduleKind() {
+        assertEquals(4.0, net.plainnotes.app.ui.dailyUse(m, twiceDaily)!!, 1e-9)
+        assertEquals(2.0 * 3 / 14, net.plainnotes.app.ui.dailyUse(m, ScheduleSummary(RuleKind.WEEKLY, 2, setOf(java.time.DayOfWeek.MONDAY, java.time.DayOfWeek.WEDNESDAY, java.time.DayOfWeek.FRIDAY), listOf(java.time.LocalTime.NOON)))!!, 1e-9)
+        assertEquals(6.0, net.plainnotes.app.ui.dailyUse(m, ScheduleSummary(RuleKind.EVERY_N_HOURS, 8, emptySet(), emptyList()))!!, 1e-9)
+    }
+}

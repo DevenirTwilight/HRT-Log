@@ -25,8 +25,10 @@ import java.time.ZoneId
 fun LocalDateTime.toInstantHere(): Instant = ScheduleEngine.wallInstant(this, ZoneId.systemDefault())
 fun Instant.toLocalHere(): LocalDateTime = atZone(ZoneId.systemDefault()).toLocalDateTime().withSecond(0).withNano(0)
 
-@Composable fun IntakeDialog(title: String, medication: MedicationEntity?, plannedDose: Double, initial: Instant, onDismiss: () -> Unit, onSave: (Instant, Double) -> Unit) {
+@Composable fun IntakeDialog(title: String, medication: MedicationEntity?, plannedDose: Double, initial: Instant, onDismiss: () -> Unit, siteSuggestion: String? = null,
+                             onSave: (Instant, Double, String?) -> Unit) {
     var time by remember { mutableStateOf(initial.toLocalHere()) }
+    var site by remember { mutableStateOf(siteSuggestion) }
     var dose by remember { mutableStateOf(inputNumber(plannedDose)) }
     val doseV = dose.toDoubleOrNull()?.takeIf { it.isFinite() && it > 0 }
     val future = time.toInstantHere().isAfter(Instant.now().plusSeconds(60))
@@ -37,8 +39,9 @@ fun Instant.toLocalHere(): LocalDateTime = atZone(ZoneId.systemDefault()).toLoca
             DateTimeRow(time, { time = it })
             if (future) Text(stringResource(R.string.future_time_warning), color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
             NumberField(dose, { dose = it }, stringResource(R.string.actual_dose), suffix = medication?.let { unitLabel(it.unit) }, isError = doseV == null)
+            if (siteSuggestion != null) SitePicker(site, siteSuggestion) { site = it }
         } },
-        confirmButton = { Button(onClick = { onSave(time.toInstantHere(), doseV!!) }, enabled = doseV != null && !future) { Text(stringResource(R.string.save)) } },
+        confirmButton = { Button(onClick = { onSave(time.toInstantHere(), doseV!!, site) }, enabled = doseV != null && !future) { Text(stringResource(R.string.save)) } },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } })
 }
 
@@ -69,10 +72,16 @@ fun Instant.toLocalHere(): LocalDateTime = atZone(ZoneId.systemDefault()).toLoca
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } })
 }
 
-@Composable fun ManualIntakeDialog(meds: List<MedicationEntity>, onDismiss: () -> Unit, onSave: (Long, Instant, Double) -> Unit) {
+@Composable fun SitePicker(site: String?, suggestion: String, onChange: (String) -> Unit) {
+    Text(stringResource(R.string.site_title, siteLabel(suggestion)), style = MaterialTheme.typography.labelLarge)
+    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) { SITES.forEach { s -> FilterChip(site == s, { onChange(s) }, label = { Text(siteLabel(s)) }) } }
+}
+
+@Composable fun ManualIntakeDialog(meds: List<MedicationEntity>, siteFor: (MedicationEntity) -> String?, onDismiss: () -> Unit, onSave: (Long, Instant, Double, String?) -> Unit) {
     var chosen by remember { mutableStateOf(meds.firstOrNull()) }
     var time by remember { mutableStateOf(Instant.now().toLocalHere()) }
     var dose by remember { mutableStateOf(chosen?.dose_per_intake?.let(::inputNumber) ?: "") }
+    var site by remember(chosen) { mutableStateOf(chosen?.let(siteFor)) }
     val doseV = dose.toDoubleOrNull()?.takeIf { it.isFinite() && it > 0 }
     val future = time.toInstantHere().isAfter(Instant.now().plusSeconds(60))
     AlertDialog(onDismissRequest = onDismiss, icon = { Icon(Icons.Outlined.AddTask, null) }, title = { Text(stringResource(R.string.manual)) },
@@ -81,8 +90,9 @@ fun Instant.toLocalHere(): LocalDateTime = atZone(ZoneId.systemDefault()).toLoca
             DateTimeRow(time, { time = it })
             if (future) Text(stringResource(R.string.future_time_warning), color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
             NumberField(dose, { dose = it }, stringResource(R.string.actual_dose), suffix = chosen?.let { unitLabel(it.unit) }, isError = doseV == null)
+            chosen?.let(siteFor)?.let { sug -> SitePicker(site, sug) { site = it } }
         } },
-        confirmButton = { Button(enabled = chosen != null && doseV != null && !future, onClick = { onSave(chosen!!.id, time.toInstantHere(), doseV!!) }) { Text(stringResource(R.string.save)) } },
+        confirmButton = { Button(enabled = chosen != null && doseV != null && !future, onClick = { onSave(chosen!!.id, time.toInstantHere(), doseV!!, site) }) { Text(stringResource(R.string.save)) } },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } })
 }
 

@@ -79,5 +79,21 @@ class ScreenshotTest {
     @Test fun editor() = shoot("editor") { MedicationEditor(EditMedication(meds[2], profiles[3L], null, emptyList()), {}, inDialog = false) {} }
     @Test @Config(qualifiers = "fr-rFR-w411dp-h891dp-xxhdpi") fun concentrationFrench() { val r = concResult(); shoot("concentration_fr") { ConcentrationScreen(state(), r, false, 62.5, ConcSettings(false, true, net.plainnotes.app.pk.CalibrationMode.RETROSPECTIVE), {}, {}, {}, {}, PaddingValues()) } }
     @Test @Config(qualifiers = "zh-rTW-w411dp-h891dp-xxhdpi") fun calendarTraditional() = shoot("calendar_zh_tw") { CalendarScreen(state(), today, {}, {}, {}, {}, PaddingValues()) }
+    private fun history(): List<RecordEntity> = (0 until 12).map { i ->
+        val sched = now.minusSeconds((i + 1) * 12L * 3600)
+        val status = when (i) { 2 -> "LATE"; 5 -> "MISSED"; 8 -> "SKIPPED"; else -> "ON_TIME" }
+        RecordEntity(i + 1L, if (i % 3 == 0) 2 else 1, 1, "wall:1@$i", sched.toEpochMilli(), zone.id, 2.0, 120,
+            if (status in listOf("ON_TIME", "LATE")) sched.plusSeconds(if (status == "LATE") 3 * 3600L else 600).toEpochMilli() else null,
+            if (status in listOf("ON_TIME", "LATE")) zone.id else null, if (status in listOf("ON_TIME", "LATE")) 2.0 else null, null, status, origin = "APP", revision = 1, config_snapshot = "{}")
+    }
+    @Test fun historyScreen() = shoot("history") { HistoryScreen(state(), history(), {}, {}, PaddingValues()) }
+    @Test fun stockScreen() = shoot("stock") { StockScreen(state(), listOf(
+        ContainerEntity(1, 1, 30.0, 0.0, 22.0, today.minusDays(10).toString(), "IN_USE"), ContainerEntity(2, 1, 30.0, 0.0, 0.0, null, "SEALED"),
+        ContainerEntity(3, 3, 80.0, 0.0, 74.0, today.minusDays(27).toString(), "IN_USE")), history(), {}, { _, _ -> }, {}, PaddingValues()) }
+    @Test fun wellbeingScreen() {
+        val items = net.plainnotes.app.data.CHECKIN_DEFAULTS.mapIndexed { i, k -> CheckinItemEntity(i + 1L, k, null, i < 6, i) }
+        val scores = (0 until 20).flatMap { d -> (1..3).map { it -> CheckinScoreEntity(today.minusDays(d.toLong()).toString(), it.toLong(), 1 + (d * it + 2) % 5) } }
+        shoot("wellbeing") { WellbeingScreen(items, scores, listOf(DayNoteEntity(today.toString(), "Synthetic note")), { _, _, _ -> }, { _, _ -> }, {}, PaddingValues()) }
+    }
     @Test fun settings() = shoot("settings") { SettingsScreen(Appearance(ThemeMode.SYSTEM, false), {}, false, {}, {}, {}, PaddingValues()) }
 }

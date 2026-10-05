@@ -45,7 +45,7 @@ import net.plainnotes.app.R
 class Appearance(val mode: ThemeMode, val dynamic: Boolean)
 
 @Composable fun SettingsScreen(appearance: Appearance, onAppearance: (Appearance) -> Unit, highReliability: Boolean, onHighReliability: (Boolean) -> Unit,
-                               onSync: () -> Unit, onTest: () -> Unit, contentPadding: PaddingValues) {
+                               onSync: () -> Unit, onTest: () -> Unit, contentPadding: PaddingValues, wellbeingPrompt: Boolean = true, onWellbeingPrompt: (Boolean) -> Unit = {}) {
     val context = LocalContext.current; val inspection = LocalInspectionMode.current
     val revision = resumeRevision()
     var reliabilityInfo by remember { mutableStateOf(false) }
@@ -86,6 +86,9 @@ class Appearance(val mode: ThemeMode, val dynamic: Boolean)
                 }
             }
             if (Build.VERSION.SDK_INT >= 31) SwitchRow(stringResource(R.string.dynamic_color), appearance.dynamic, stringResource(R.string.dynamic_color_desc)) { onAppearance(Appearance(appearance.mode, it)) }
+        }
+        SectionCard(stringResource(R.string.wellbeing)) {
+            SwitchRow(stringResource(R.string.wb_prompt_setting), wellbeingPrompt, stringResource(R.string.wb_prompt_setting_desc)) { onWellbeingPrompt(it) }
         }
         SectionCard(stringResource(R.string.language)) {
             Text(stringResource(R.string.language_desc), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)

@@ -47,6 +47,7 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
     var late by remember { mutableStateOf(m?.late_after_minutes?.toString() ?: "120") }
     var active by remember { mutableStateOf(m?.active ?: true) }
     var notifications by remember { mutableStateOf(m?.notifications_on ?: true) }
+    var siteRotation by remember { mutableStateOf(m?.site_rotation ?: false) }
     var kind by remember { mutableStateOf(edit.rule?.kind?.let(RuleKind::valueOf) ?: RuleKind.EVERY_N_DAYS) }
     var interval by remember { mutableStateOf(edit.rule?.interval?.toString() ?: "1") }
     val times = remember { mutableStateListOf<LocalTime>().apply { addAll(edit.times.map { LocalTime.parse(it.local_time) }.sorted().ifEmpty { listOf(LocalTime.of(9, 0)) }) } }
@@ -79,7 +80,7 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
                 actions = { TextButton(onClick = {
                     tried = true
                     if (valid) onSave(MedicationDraft(
-                        MedicationEntity(m?.id ?: 0, name.trim(), molecule, if (isE2) route else null, unit, doseV!!, capV!!, expV, soonV, lateV, false, null, notifications, active, m?.sort_order ?: 0, m?.needs_review),
+                        MedicationEntity(m?.id ?: 0, name.trim(), molecule, if (isE2) route else null, unit, doseV!!, capV!!, expV, soonV, lateV, siteRotation, if (siteRotation) "LR" else null, notifications, active, m?.sort_order ?: 0, m?.needs_review),
                         if (isE2) ester else null, kind, intervalV!!, times.toList(), weekdays.toSet(),
                         if (isE2) ProfileEntity(m?.id ?: 0, ester, "", slTier.takeIf { route == "SUBLINGUAL" }, gelProduct.takeIf { route == "GEL" }, gelSite.takeIf { route == "GEL" },
                             resolvedArea.takeIf { route == "GEL" }, patchRate.toDoubleOrNull()?.takeIf { route == "PATCH" && it > 0 }) else null))
@@ -167,6 +168,7 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
                     }
                     SwitchRow(stringResource(R.string.notifications), notifications) { notifications = it }
                     SwitchRow(stringResource(R.string.active), active) { active = it }
+                    SwitchRow(stringResource(R.string.site_rotation), siteRotation, stringResource(R.string.site_rotation_desc)) { siteRotation = it }
                 }
                 SectionCard(stringResource(R.string.section_supply)) {
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
