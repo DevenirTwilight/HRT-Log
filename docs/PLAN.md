@@ -1,6 +1,6 @@
 # HRT Log 开发计划（待确认）
 
-> 状态：**规划稿，尚未写任何应用代码**。请审阅第 9 节"需要你确认的问题"，确认后从 M1 开始。
+> 状态：**M1 前架构审查修订稿，尚未写任何应用代码**。2026-10-05 按《HRT_Log_项目会话转移包》更新；已确认决策见第 9 节，实施前验证项见第 10 节。计划经用户确认后再开始 M1。
 >
 > 参考源码：`TransmtfTeam/Transmtf-HRT-Tracker`，固定在提交 `8c9abdde`（2026-09-15）。下文所有 PK 参数都以**该提交的代码**为准，不以其文档为准，原因见 4.6。
 
@@ -43,7 +43,7 @@ HRT-Log/
 | 数据库 | Room + `net.zetetic:sqlcipher-android` | 加密密钥见 2.4 |
 | 设置 | DataStore（Proto） | 不含敏感内容的设置；敏感项放加密库 |
 | 时间 | `java.time`（minSdk 26 原生支持） | 不用 desugaring |
-| 图表 | **Vico**（Compose 原生，Apache-2.0） | 支持缩放、多序列、散点叠加 |
+| 图表 | **Vico 3.3.1**（Compose 原生，Apache-2.0） | 固定版本，不使用动态版本；实现时验证缩放、化验点叠加和 Compose 兼容性，纳入第三方许可说明 |
 | PDF | Android 自带 `PdfDocument` | 不引入第三方库 |
 | 密码哈希 | BouncyCastle `Argon2BytesGenerator`（纯 Java） | 不用 native 库，方便 F-Droid 构建 |
 | 生物识别 | `androidx.biometric` | |
@@ -65,8 +65,8 @@ HRT-Log/
 
 1. **计划不落库**。计划服药由"给药规则"实时展开；数据库只存：已经发生的记录（服药 / 跳过 / 漏服）、被用户改过的单次计划（改期 / 跳过 / 改剂量）。
 2. **时间 = UTC 时间戳 + 时区 ID**。凡是"真实发生的时刻"（服药时间、预约时间、化验采样时间），都存 `*_utc: Long`（毫秒）加 `*_zone: String`（如 `Europe/Paris`）。规则里的时刻存**本地墙钟时间**（`LocalTime`），展开时再结合当时的时区计算。
-3. **计划槽位的身份 = 规则 ID + 本地日期时间**，即 `slot_key = "<ruleId>@2025-10-26T12:00"`。这样无论之后换时区还是跨夏令时，同一个计划槽位的键都不会变，服药记录和改期记录都能稳定关联上。
-4. **规则有版本**。修改给药周期时，不改旧规则，而是把旧规则的 `valid_until` 设为修改当天，再新建一条 `valid_from` = 当天的规则。这样过去的漏服判定不会被新周期"重新解释"。
+3. **墙钟计划槽位的身份 = 规则版本 ID + 原本地计划日期时间**，规范键为 `wall:<ruleVersionId>@2025-10-26T12:00:00`，采用 DST 修正前的时间，改期不改键。每 N 小时规则用 `elapsed:<ruleVersionId>#<occurrenceIndex>`，其中 k 为非负整数，以固定 UTC 锚点 `anchor_utc + k × N 小时` 展开，不从设备当前本地时间生成身份。键中的时间无 UTC 偏移、保留秒；类型前缀避免两种规则混淆。显示时间独立转换为当前时区，改期、跳过和剂量 override 始终绑定原键。跨时区需结合已触发和已完成状态去重；单靠键不能保证跨日期线时不遗漏计划。
+4. **规则有版本**。修改当天使用明确的切换时刻 `effective_at_utc` 和时区，旧版本在切换时刻截止，新版本从该时刻生效，窗口为左闭右开。保留原本地生效日期供展示，不以两个版本都包含整天的方式切换。切换前的槽位及历史判定不变；切换前产生而改期到切换后的槽位仍保留。
 
 ### 2.2 ER 图
 
@@ -77,7 +77,8 @@ erDiagram
     MEDICATION ||--o{ SLOT_OVERRIDE : "one-off changes"
     MEDICATION ||--o{ DOSE_RECORD : "history"
     MEDICATION ||--o{ SUPPLY_CONTAINER : "stock"
-    SUPPLY_CONTAINER ||--o{ DOSE_RECORD : "deducted from"
+    SUPPLY_CONTAINER ||--o{ SUPPLY_TRANSACTION : "usage ledger"
+    DOSE_RECORD o|--o{ SUPPLY_TRANSACTION : "consumption or reversal"
     MEDICATION ||--o| PK_PROFILE : "E2 only"
     CHECKIN_ITEM ||--o{ CHECKIN_SCORE : "rated"
     LAB_ANALYTE ||--o{ LAB_VALUE : "measured"
@@ -113,24 +114,28 @@ erDiagram
     SCHEDULE_RULE {
         long id PK
         long medication_id FK
-        string kind "EVERY_N_DAYS / EVERY_N_HOURS / WEEKLY"
+        string kind "EVERY_N_DAYS / EVERY_N_HOURS / WEEKLY (N weeks)"
         int interval "N"
         int weekday_mask "WEEKLY only"
-        string anchor_local "LocalDate, or LocalDateTime for hours"
-        string anchor_zone "for EVERY_N_HOURS"
-        string valid_from "LocalDate"
-        string valid_until "LocalDate, nullable"
+        string anchor_local "LocalDate for wall-clock rules; nullable for hours"
+        string anchor_zone
+        long anchor_utc "EVERY_N_HOURS only"
+        long effective_from_utc "inclusive"
+        long effective_until_utc "exclusive, nullable"
+        string effective_zone
+        long missed_tracking_from_utc "no retroactive missed records before this"
     }
     RULE_TIME {
         long id PK
         long rule_id FK
-        string local_time "HH:mm"
+        string local_time "HH:mm:ss, unique within rule"
         double dose_override "nullable"
     }
     SLOT_OVERRIDE {
         long id PK
         long medication_id FK
-        string slot_key "ruleId@LocalDateTime"
+        long rule_version_id FK
+        string slot_key "wall-clock key or hourly occurrence index"
         string action "RESCHEDULE / SKIP / DOSE"
         long new_utc "nullable"
         string new_zone "nullable"
@@ -139,27 +144,45 @@ erDiagram
     DOSE_RECORD {
         long id PK
         long medication_id FK
-        string slot_key "nullable = unscheduled"
+        long rule_version_id FK "nullable for unscheduled/import"
+        string slot_key "nullable = unscheduled/import without rule association"
         long scheduled_utc "nullable"
-        string scheduled_zone
+        string scheduled_zone "nullable iff scheduled_utc is NULL"
         long taken_utc "nullable for MISSED/SKIPPED"
-        string taken_zone
-        double planned_dose
-        double actual_dose
+        string taken_zone "nullable iff taken_utc is NULL"
+        double planned_dose "nullable for unscheduled/unknown import"
+        int late_after_minutes_snapshot "nullable for unscheduled/unverified import"
+        double actual_dose "nullable for MISSED/SKIPPED/unknown import"
+        double unallocated_supply_amount "nullable/remaining amount not allocated to stock"
         string status "ON_TIME / LATE / MISSED / SKIPPED"
         string site "nullable, free string"
-        long container_id FK "nullable"
         string note
         string origin "APP / IMPORT_TM / AUTO_MISSED"
+        string source_record_key "nullable, import source + table + original ID"
+        int revision "increment on edit"
+        long deleted_at_utc "nullable, logical deletion preserves ledger audit"
     }
     SUPPLY_CONTAINER {
         long id PK
         long medication_id FK
         double capacity
-        double used_amount
+        double initial_used_amount "import/opening baseline"
+        double used_amount "cached baseline + ledger sum"
         string opened_on "LocalDate, nullable = sealed"
         string state "SEALED / IN_USE / EMPTY / DISCARDED"
-        double manual_adjustment
+    }
+    SUPPLY_TRANSACTION {
+        long id PK
+        long container_id FK
+        long dose_record_id FK "nullable for manual adjustment"
+        int dose_revision "nullable for manual adjustment"
+        string operation_id "idempotency key, unique with container and entry kind"
+        string kind "CONSUME / REVERSE / ADJUST"
+        double used_delta "positive consumes, negative restores"
+        long reversal_of_id FK "nullable, references original ledger entry"
+        long created_utc
+        string created_zone
+        string reason "nullable"
     }
     APPOINTMENT {
         long id PK
@@ -198,21 +221,35 @@ erDiagram
         string unit "as entered"
         long sampled_utc
         string sampled_zone
+        double reference_lower "nullable, per sample"
+        double reference_upper "nullable, per sample"
+        string reference_unit "nullable"
+        string laboratory "nullable"
         string note
     }
-    BODY_WEIGHT {
-        long id PK
-        string date
-        double kg
+    PK_SETTINGS {
+        int id PK "single settings row"
+        double current_weight_kg "nullable until PK first use"
     }
 ```
 
 说明：
 
 - 距上次服药的时间（化验记录用）、剩余天数、依从性统计，都是**查询时计算**，不存储。
-- `BODY_WEIGHT` 是规格里没写、但 PK 模拟必需的数据（表观分布容积 Vd = 2.0 L/kg × 体重），见第 9 节问题 1。
+- 体重仅属于 PK 参数：首次进入 PK 页面填写，kg，可小数、可修改；不在首次启动要求填写，V1 不建立体重历史。修改后所有模拟按当前体重重算，界面明确说明这一点。
+- 有效 `DOSE_RECORD` 的非空 `slot_key` 设置部分唯一索引（`deleted_at_utc IS NULL`）；`SLOT_OVERRIDE.slot_key` 唯一，同一槽位的改期和剂量变化可组合存储，而不创建重复例外行。补记已漏服槽位时更新原记录，不另插一条。规则版本以不可复用 ID 标识，外键引用该版本；同一药物的有效区间不得重叠，切换旧版本截止和创建新版本须在同一事务内完成。导入记录身份用来源和原始 ID，不把同一时间的不同药物混为一条。
+- 途径/酯型、剂量单位或 PK 相关参数变更时，已有服药记录应保留当时的输入快照或引用不可变配置版本，不能用当前药物配置重新解释历史。M1 保存记录时先落实此边界，M4 再补齐模型专用参数。
+- 一次服药跨多个容器时，每个容器各写一条 `SUPPLY_TRANSACTION`，以 `dose_record_id` 和 revision 关联。消费为正 `used_delta`；编辑先为旧消费追加等量负值 REVERSE，再写新消费；删除逻辑标记服药记录并追加反向流水。不改写/删除旧流水，同一消费只能被完整冲销一次，以约束和事务保证幂等。手动库存修正写 ADJUST，导入已有用量为 baseline，历史导入记录不重复扣库存。`used_amount = initial_used_amount + Σused_delta`，只是可重建的缓存；操作须校验单位一致、数量有限且库存不为负。M1 在 schema 中确定关联与审计边界，M2 实现扣减 UI 与流水操作，服药/库存写入始终在同一事务。
+- 未核实的导入字段保留原值及待确认状态，不写入已解析的分钟数/规则等字段；相关已解析字段允许 NULL。导入确认完成前保持暂停提醒和 PK 禁用，健康数据仅存在加密库和必要临时副本中。
 - 设置（主题、隐蔽通知文字、精简模式……）放在 DataStore 里。暗门密码哈希、应用锁 PIN 哈希放在 Keystore 保护的加密 DataStore 中。
 - 诱饵空间是另一个独立的数据库文件 `notes_b.db`，结构相同，用独立密钥加密。Hilt 根据当前"会话空间"注入对应的数据库，两个空间在代码层面不共享任何 DAO 实例。
+
+#### 服药记录的 NULL 与状态约束
+
+- `MISSED / SKIPPED`：`taken_utc`、`taken_zone`、`actual_dose`、实际 `site` 必须全为 NULL，无消费流水；不能用 0、空字符串或计划剂量填实际值。
+- `ON_TIME / LATE`：`taken_utc` 和有效的 `taken_zone` 必填；应用新建记录的实际剂量须为有限正数，实际部位可空。旧导入缺少实际剂量时可保留 NULL 并标记待核对，PK 禁用；不能回退到 `planned_dose`。计划外记录无计划槽位，使用 ON_TIME 表示已服且不进入计划依从率分母。
+- `scheduled_utc` 与 `scheduled_zone` 必须同时存在或同时为空；有槽位关联的记录须有原计划快照。`planned_dose` 仅表达计划，计划外或来源缺失时可空。保留原计划和实际发生信息，状态变化不得使它们混用。
+- 状态和 NULL 约束由 Room 写入入口校验，并以 SQLite CHECK/触发器等数据库约束兜底；迁移测试验证非法状态不能写入。软删除记录从历史、PK、统计和槽位关联查询中排除，唯一槽位约束只作用于有效记录。
 
 ### 2.3 Room 迁移
 
@@ -222,6 +259,7 @@ erDiagram
 
 - 首次启动时生成 256 位随机口令，用 Android Keystore 中的 AES-GCM 密钥加密后，写入 `noBackupFilesDir`。
 - 数据库口令**不由 PIN 派生**。原因：闹钟在后台触发时要读库（药名、剂量、库存扣减），这时用户还没解锁应用。所以应用锁和伪装是"界面门禁"，数据库加密防的是"文件被拷走"。这一点会在设置页如实写明。
+- 包装数据库口令的 Keystore 密钥不要求每次 UI 认证；首次系统解锁后，UI 锁定、后台和提醒触发均可按需访问凭据加密存储中的数据库。重启后未首次解锁时不可访问主库，仅使用 3.3 的最小缓存。不得把主库或裸密钥移到 Device Protected Storage；Keystore 失效需显示恢复路径，不得静默创建空库覆盖原数据。
 - `android:allowBackup="false"`，并配置 `dataExtractionRules` 排除全部数据（系统备份里只有加密口令也解不开，而且也不该上传）。迁移数据请用 3.8 的加密备份。
 
 ---
@@ -240,38 +278,43 @@ fun expand(rule: ScheduleRule, times: List<RuleTime>, from: Instant, to: Instant
 | `WEEKLY(n, mask)` | 从 anchor 所在周起每 n 周一次，取 mask 中的星期几（`n = 1` 即"每周固定几天"），也按本地墙钟时间 |
 | `EVERY_N_HOURS(n)` | **按真实流逝时间**：`anchorInstant + k·n 小时`。不随夏令时或时区漂移，显示时换算成当前本地时间 |
 
-墙钟时间 → 时刻：`ZonedDateTime.ofLocal(date.atTime(t), zone, null)`。
+墙钟时间 → 时刻：先检查 `ZoneRules.getValidOffsets`，正常/重复时段按有效偏移解析，空偏移的跳时时段按下述规则处理。
 
-- **春季跳时（法国 3 月最后一个周日 02:00→03:00）**：不存在的 02:30 顺延为 03:30（`java.time` 的默认行为，即按间隙长度后移），**不会丢失这次服药**。
+- **春季跳时（法国 3 月最后一个周日 02:00→03:00）**：按转移包的“下一个有效本地时刻”，不存在的 02:30 顺延为 03:00。须检查 `ZoneRules.getValidOffsets` 并用 transition 的 `dateTimeAfter`，不能直接采用 `ofLocal` 会得到的 03:30。不同原计划同时落在 03:00 时仍各有独立身份，可合并通知，不能合并服药记录。
 - **秋季重叠（10 月最后一个周日 03:00→02:00）**：02:30 出现两次，取**较早**那次（夏令时偏移），**不会提醒两次**。
-- **换时区**：`zone` 永远取设备当前时区，因此"每天 12:00"到东京后依然是当地 12:00。时区变化当天，同一个 `slot_key` 只会出现一次（因为键是本地日期时间）。已经发生的记录保留原来的 UTC 时间和时区，不会改写。
+- **换时区**：未来墙钟计划取设备当前时区，因此"每天 12:00"到东京后依然是当地 12:00；小时规则保持固定 UTC 锚点。结合原槽位身份、已派发状态及已完成记录防止重复，跨日期线/系统时间回退须专项测试，不能仅因键稳定就声称绝不会遗漏。已经发生的记录保留原来的 UTC 时间和时区，不会改写。
 
 ### 3.2 时间线合成
 
 `TimelineBuilder` 在一个时间窗口内依次：展开规则 → 应用 `SLOT_OVERRIDE`（改期 / 跳过 / 改剂量）→ 按 `slot_key` 与 `DOSE_RECORD` 关联 → 得到每个槽位的状态：
 
 ```
-            S−soon        S              S+late                    cutoff
+            S−soon        S              S+late                    nextSlot
  ──待服────────┼──即将到时──┼────待服(到时)────┼─────已迟服(醒目)────────┼── 漏服
 ```
 
-- `S` 是计划时刻，`soon` 和 `late` 由药物设置决定；`cutoff = min(下一个槽位的时刻, S + 24h)`。
+- `S` 是单次例外处理后的有效计划时刻，`soon` 和 `late` 由药物设置决定。V1 没有固定时长漏服阈值：当**同一药物下一个有效计划槽位到来**，且当前槽位仍未完成、未明确跳过时，将当前槽位固化为 `MISSED`。下一个槽位取生效规则版本与单次改期合成后，时刻严格晚于 S 的最早计划；其他药物或计划外服药不作为边界。同刻槽位各自独立，不相互判漏服，已明确跳过的后续槽位仍属于计划边界。
 - 已服：`taken ≤ S + late` 记为**按时**，否则为**迟服**。
-- 过了 cutoff 仍没有记录 → **漏服**。漏服由"补账器"（`MissedReconciler`）在应用打开、闹钟触发、开机后各运行一次，把它写成 `status = MISSED, origin = AUTO_MISSED` 的记录。补账只从规则的 `valid_from` 和"导入时刻"之后开始算，因此导入或新建药物时不会凭空补出一堆历史漏服。
+- 未服且 `now > S + late` 显示“已迟服”；在下一个槽位时刻 `now >= nextSlot` 判为漏服，nextSlot 优先于迟服显示，即使用户配置的 late 大于计划间隔也不延后漏服。若没有后续槽位（停药、规则结束、暂停且无继续计划），保持待服/已迟服，不凭空自动生成 MISSED；用户可明确跳过或补记。
+- 补账器在主库可用时运行，起点不早于 `missed_tracking_from_utc`（新规则开始或导入时刻），以唯一槽位约束幂等写入。长周期与每日规则均使用下一计划边界，不引入隐藏的医学判断。后台不运行时可延迟落库，但恢复后的逻辑判定一致；Direct Boot 不写服药或漏服记录。
+- 修改规则或改期前先按旧时间线补账并冻结已发生状态；已生效但尚未完成的旧槽位作为必要例外保留其原计划快照，和新版本槽位一起寻找后续边界，不预生成整年计划。后续修改不重算已经固化的 MISSED。补记时更新原 MISSED 为 ON_TIME/LATE，按实际服药时刻和该槽位当时的 late 快照判定，不能生成双份记录。迟服参数修改不追溯改变已发生状态。
+- 删除记录时撤销其消费流水；有关联的计划槽位恢复未完成状态，并按上述规则重新计算（边界已过可重新形成 MISSED）。明确 SKIPPED 仅由用户操作产生，既不扣库存也不计漏服。未来如引入独立 `missed_after`，须作为明确可配置产品参数另行设计。
 - 只提示"已漏服"，不给任何补服或加倍的建议（见第 7 节措辞规范）。
 
-### 3.3 闹钟
+### 3.3 闹钟与 Direct Boot
 
-- **只排下一个**：每次重排都计算所有启用药物的"下一个需要响铃的时刻"（提前提醒 / 到时提醒 / 迟服提醒 / 预约提醒 / 补药提醒），取最早的一个，用 `setExactAndAllowWhileIdle` 排上。闹钟触发后先发通知，再排下一个。`PendingIntent` 的 requestCode 固定，所以重排是幂等的，不会越排越多。
-- **重排触发点**：`BOOT_COMPLETED`、`LOCKED_BOOT_COMPLETED`、`MY_PACKAGE_REPLACED`、`TIME_SET`、`TIMEZONE_CHANGED`、`ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED`、应用启动、任何药物/规则/记录变更之后。另外用 WorkManager 每 6 小时跑一次"看门狗"，以防闹钟被厂商系统清掉。
-- **直接启动（Direct Boot）**：手机重启后、用户首次解锁前，加密库所在的凭据加密存储还不可用。为了不漏这段时间的提醒，每次重排时把"接下来 48 小时的提醒时刻"（**只有时间戳和中性文字，没有药名**）写到设备加密存储里。`LOCKED_BOOT_COMPLETED` 时先用这份缓存排闹钟，用户解锁后再做完整重排。
-- **权限**：
-  - Android 12–13：`SCHEDULE_EXACT_ALARM`；Android 14+ 对新安装默认拒绝，首次引导会跳转到"闹钟和提醒"设置页，拒绝后在日历顶部常驻警告条。
-  - `full` 变体额外声明 `USE_EXACT_ALARM`（无需用户授权）。`play` 变体不声明，因为 Play 政策只允许闹钟/日历类应用使用它。
-  - Android 13+：`POST_NOTIFICATIONS`。
-  - 精确闹钟权限被撤销时，降级为 `setAndAllowWhileIdle`，并在界面上明确提示"提醒可能延迟"。
-- **通知操作**："已服"（按计划剂量、当前时间记录）、"稍后 10 分钟"、点击打开完成服药页。已服记录写入后立即扣减库存并取消该通知。
-- **"闹钟模式"开关**（设置项，默认关闭）：改用 `setAlarmClock()`。它可靠性最高、不受 Doze 限制，但状态栏会出现闹钟图标，和隐蔽需求有冲突，所以交给用户自己选。
+- **普通提醒**：默认用 `setExactAndAllowWhileIdle`，同一时刻的提醒批量处理，再排下一个；PendingIntent 使用中性 action 和 opaque ID，不携带健康字段。请求身份与缓存代次区分，旧请求在派发前校验，不能仅靠固定 requestCode 保证改期与取消安全。
+- **权限**：两个变体先统一使用 `SCHEDULE_EXACT_ALARM`（API 31+），不自动为 full 加上 `USE_EXACT_ALARM`；如以后需要后者，另核对 API 33+ 的适用条件和分发政策。每次调度前检查 `canScheduleExactAlarms()` 并处理 `SecurityException`；无权限时降级为 `setAndAllowWhileIdle`，显示可能延迟。API 33+ 另外申请 `POST_NOTIFICATIONS`。
+- **撤权边界**：精确闹钟权限撤销会停止应用并取消未来精确闹钟；权限变更广播用于获权后的重排，不能依赖收到撤权广播及时降级。应用恢复、看门狗运行时重新检查并排不精确提醒，撤权至恢复之间存在提醒中断风险。
+- **高可靠提醒模式**：可选，默认关闭；有精确闹钟权限时改用 `setAlarmClock()`，无权限时明确提示并降级。系统可能显示闹钟图标及下一次闹钟信息，showIntent 使用中性入口。不能承诺抵抗强制停止、关机或全部厂商限制。
+- **重排触发点**：`BOOT_COMPLETED`、`LOCKED_BOOT_COMPLETED`、`USER_UNLOCKED`（按平台要求动态注册并结合 boot/app 启动检查解锁状态）、`MY_PACKAGE_REPLACED`、`TIME_SET`、`TIMEZONE_CHANGED`、获精确闹钟权限、应用启动及领域数据变更。Receiver 有明确的 `directBootAware` / exported 配置，并防止外部伪造提醒；短任务使用 `goAsync()`，不能在 Receiver 内执行长计算。
+- **48 小时最小缓存**：主库可用时展开未来约 48 小时提醒，Device Protected Storage 仅允许 opaque alarm ID、trigger timestamp、调度类型、中性通知资源 ID/中性文字。不保存药名、分子、剂量、途径、部位、化验、身心或备注；不保存 slot_key 或可反推出药物的标识。opaque ID 与领域对象的映射只在主库。去重所需的缓存代次/消费状态作为最小调度元数据，不含健康字段。
+- **重启未解锁**：Direct Boot Receiver 仅从原子写入的缓存调度并发送中性通知；不可打开主库、扣库存或将提醒触发视为已服。缓存事件触发后标记已消费并调度下一条，到期耗尽后无法生成新计划。解锁前不提供直接“已服”写库操作，进入应用需先系统解锁及应用认证。
+- **首次解锁同步**：把缓存消费状态用于提醒去重，从完整数据库重算计划、替换缓存和系统请求，清理旧代次。取消/改期时先使受影响旧缓存及请求失效，再发布新缓存；数据库与文件无法共用事务，采用可恢复的同步流程，崩溃恢复优先避免旧提醒重响，重新生成缺失未来提醒。旧代次 Receiver 即使迟到也不得再次发送。
+- **滚动及失败边界**：正常提醒触发、数据变更、应用启动和解锁后更新缓存；WorkManager 每 6 小时作为尽力而为的维护，不能保证准点，也不能作为未解锁阶段的主调度器。重启未解锁超过缓存窗口后提醒不受保证，设置及验证说明中如实展示。未解锁时换时区仅凭最小缓存无法重算墙钟规则，继续使用已缓存 UTC 时刻，解锁后刷新；不能把规则等健康关联数据塞入缓存来隐藏此局限。
+- **通知操作**：主库可用时“已服”按计划剂量和当前时间写入，库存同事务更新，重复点击幂等；应用锁启用时需认证后完成。支持稍后 10 分钟和点击打开完成页，改期及稍后提醒不能改变原槽位身份。M1 尚未有库存时保留事务接口，M2 完成扣减。
+
+官方依据（2026-10-05 核对）：[AlarmManager 调度与权限](https://developer.android.com/develop/background-work/services/alarms)、[Direct Boot 存储和解锁处理](https://developer.android.com/privacy-and-security/direct-boot)。
 
 ### 3.4 电池优化引导
 
@@ -287,7 +330,7 @@ fun expand(rule: ScheduleRule, times: List<RuleTime>, from: Instant, to: Instant
 
 | 场景 | 断言 |
 |---|---|
-| 法国 3 月跳时（2026-03-29），规则 02:30 | 当天槽位在 03:30 CEST，只有一个 |
+| 法国 3 月跳时（2026-03-29），规则 02:30 | 当天槽位在 03:00 CEST，原槽位身份不变 |
 | 法国 10 月重叠（2026-10-25），规则 02:30 | 只有一个槽位，在 CEST 偏移那次 |
 | 每天 12:00 跨夏令时 | 前后两天都是本地 12:00，UTC 相差 1 小时 |
 | 巴黎 → 东京 → 纽约 | 每天都是当地 12:00；跨时区当天不重复、不遗漏同一个 `slot_key` |
@@ -296,7 +339,10 @@ fun expand(rule: ScheduleRule, times: List<RuleTime>, from: Instant, to: Instant
 | 修改给药周期 | 旧规则截止，新规则生效；修改前的历史判定不变，修改后按新周期展开 |
 | 改期单次服药 | 原槽位消失，新时刻出现；改期后再改期、改期后撤销 |
 | 跳过 | 记为 SKIPPED，不算漏服 |
-| 迟服/漏服边界 | `S+late` 前后 1 秒；cutoff 前后 1 秒；与下一个槽位重叠时的 cutoff |
+| 迟服/漏服边界 | `S+late` 前后 1 秒；nextSlot 前/正好/后；late 大于计划间隔；同刻独立槽位；无下一槽位不自动判漏服 |
+| 每日与长周期漏服 | 每日 12:00 到下一天 12:00；每 7 天注射到下一次计划；两者无隐藏固定时长边界 |
+| 小时槽位身份 | 换时区、DST、改期后 occurrenceIndex 不变；跳过和剂量 override 仍匹配 |
+| 即时版本切换 | 15:00 修改：旧版本 `[from,15:00)`，新版本 `[15:00,until)`；15:00 不重复；未完成旧槽位例外保留 |
 | 手机重启 | 给定"当前时间 + 数据库状态"，`nextAlarm()` 的结果与重启前相同；直接启动缓存与完整计算一致 |
 | 多个服药时间 | 早晚两次各自独立判定 |
 
@@ -309,7 +355,7 @@ fun expand(rule: ScheduleRule, times: List<RuleTime>, from: Instant, to: Instant
 ### 4.1 结构
 
 - 模型是**线性、可叠加的**：每次给药是一个事件 `DoseEvent(route, ester, timeH, doseMG, weightKG, extras)`，各自用闭式解析解算出"中心室药量 A(t)"（单位 mg），再把所有事件逐点相加。
-- 浓度 = `ΣA(t) × 1e9 / (vdPerKG × 体重kg × 1000)`，单位 pg/mL；`vdPerKG = 2.0 L/kg`；体重取"该时刻之前最近一次记录"（阶梯函数）。
+- 浓度 = `ΣA(t) × 1e9 / (vdPerKG × 体重kg × 1000)`，单位 pg/mL；`vdPerKG = 2.0 L/kg`；上游支持按事件体重阶梯变化，但 HRT Log V1 向所有模拟事件传入当前体重，不声称保留历史体重。
 - **剂量按酯/化合物的质量输入**，换算成 E2 当量靠生物利用度项里的分子量比 `MW(E2)/MW(ester)`：E2 272.38、EB 376.50、EV 356.50、EC 396.58、EN 384.56、EU 440.66。
 - 时间网格：从第一次给药前 24 小时到最后一次给药后 14 天（或调用方指定的结束时间）。步长按途径取 0.25 小时（舌下）/ 0.5 小时（口服）/ 1 小时（凝胶）/ 2 小时（其他），至少 1000 个点。AUC 用梯形法计算。
 
@@ -340,9 +386,18 @@ F = formationFraction × MW 比。
 
 ### 4.4 移植范围
 
-- **M4 移植**：上表中全部雌二醇途径和酯型、凝胶产品表（含部位、面积）、贴片两种模式、体重阶梯、网格与 AUC、线性插值。
+- **M4 移植**：上表中全部雌二醇途径和酯型、凝胶产品表（含部位、面积）、贴片两种模式（一级模式仅底层一致性测试）、上游体重阶梯算法（不开放历史体重 UI）、网格与 AUC、线性插值。
 - **不移植**：上游的 EKF / MIPD / `personalModel.ts` / `calibration.ts`（根据化验个体化校准参数），这符合你"暂不根据化验调整"的要求。云同步、分享、Turnstile 等与本应用无关的部分也不移植。
-- **CPA / 比卡鲁胺**：上游有模型（CPA 二室口服、比卡鲁胺单室），引擎可以顺带移植，但界面是否显示由你决定（第 9 节问题 2）。
+- **CPA / 比卡鲁胺**：上游有模型（CPA 二室口服、比卡鲁胺单室），一并移植底层并做一致性测试；V1 UI 仅开放雌二醇，不增加 CPA / 比卡鲁胺曲线。
+
+### 4.4.1 模型输入及假设透明
+
+已直接核对固定提交 `pk.ts` 的 `resolveGelKinetics`、`gelEventCentralAmount` 和 `deriveParams`：凝胶产品的速率常数、浓度、参考面积/剂量、部位、实际涂抹面积均参与计算；阴囊部位禁用面积密度修正，仍有低证据的部位系数。洗去时间和同用防晒/保湿也影响输出，不能将这些视为纯备注。名称、颜色等展示元数据不参与方程。
+
+- 凝胶产品、部位和面积需明确输入或明确选择可见的默认假设；显示具体默认值、单位和来源。默认无洗去/无同用护肤品也须在假设摘要中可见。上游缺省产品/部位/面积不能直接作为产品 UI 的静默默认行为。
+- 贴片的 `releaseRateUGPerDay > 0` 才进入零阶模型，缺失时上游回退到一级假库模型；因此 V1 启用贴片 PK 必填标称释放量 µg/day，缺失时只做提醒和记录。不得把贴片总载药量当作释放速率。
+- TABLET / ML / PUMP 等记录单位进入模型前需明确转换为化合物 mg，缺少每片/每毫升/每泵含量时禁用 PK。舌下档位等会改变模型输出的参数同样需要输入或明确可见假设。
+- `docs/pk-model.md` 记录全部输入、默认假设、固定提交及源码位置；模拟页显示当前假设，修改后使缓存失效。
 
 ### 4.5 一致性测试方案
 
@@ -365,11 +420,11 @@ F = formationFraction × MW 比。
 
 ### 4.7 在 HRT Log 中如何使用
 
-- **真实段**：数据来自 `DOSE_RECORD` 中 `status ∈ {ON_TIME, LATE}` 的记录，取**实际剂量、实际时间**。只有配了 `PK_PROFILE` 的雌二醇药物参与模拟。贴片的"揭下"由下一次贴片记录（或手动揭下记录）推断。
+- **真实段**：数据来自 `DOSE_RECORD` 中 `status ∈ {ON_TIME, LATE}` 的记录，取**实际剂量、实际时间**。只有配了 `PK_PROFILE` 的雌二醇药物参与模拟。贴片使用独立实例 ID 及明确的揭下事件配对；下一次贴上不必然表示上一片已揭下。如用户采用换贴规则推断，须明确展示该假设，不得静默处理重叠贴片。
 - **预测段**：从现在起，按当前规则和计划剂量展开未来 N 天（默认 30 天）的虚拟事件。两段一起计算（预测段需要叠加真实段的残留），绘图时以"现在"为界：实线表示基于记录，虚线表示按计划预测。
 - **单位切换**：1 pg/mL = 3.671 pmol/L（E2 分子量 272.38）。
 - **化验叠加**：E2 化验值统一换算成当前显示单位，作为散点画在曲线上。**不做任何拟合，也不调整曲线**。
-- 计算放在 `Dispatchers.Default`，结果按（记录哈希，时间窗）缓存。
+- 计算放在 `Dispatchers.Default`，结果按（记录及不可变配置、规则/例外、当前体重、模型版本、全部假设、时间窗与网格）缓存。
 
 ---
 
@@ -389,13 +444,13 @@ F = formationFraction × MW 比。
 | `unit` | `unit` | `MILLIGRAM→MG`、`PILL→TABLET`；其他值 → `OTHER` 并标记待检查 |
 | `dosePerIntake` | `dose_per_intake` | 原样 |
 | `capacity` | `container_capacity` | 原样 |
-| `expirationDays` | `expiry_days_after_open` | 0 或 NULL → 不限 |
+| `expirationDays` | `expiry_days_after_open` | 正数保留；0、NULL 或异常值的语义未经验证，保留原值并待核对，不猜为“不限” |
 | `intakeInterval` | `SCHEDULE_RULE` | **不猜**。值为 1 时**预填** `EVERY_N_DAYS(1)`，其他值都不预填；两种情况都标记"周期待确认"，确认前该药物不排提醒 |
-| `soonAlertDelay` | `soon_alert_minutes` | 单位未知 → 原值放在确认页让用户确认（第 9 节问题 4） |
-| `lateAlertDelay` | `late_after_minutes` | 默认值 2，推测单位是小时 → 预填 120 分钟，标记待确认 |
-| `handleSide` | `site_rotation` | 非 0 即 true；部位集合默认为"左/右" |
+| `soonAlertDelay` | `soon_alert_minutes` | 单位未知，保留原值不预填分钟数，确认页明确设置后写入 |
+| `lateAlertDelay` | `late_after_minutes` | 单位未知；保留原值（包括默认 2），不预填分钟数，用户明确选择后再写入 |
+| `handleSide` | `site_rotation` | 语义尚未验证；保留原值，不推断部位集合，确认前不启用轮换 |
 | `inUse` | `active` | 非 0 即 true |
-| `notifications` | `notifications_on` | **不解析位掩码**。默认 true，原值保留在导入报告中，确认页让用户逐个确认 |
+| `notifications` | `notifications_on` | **不解析位掩码**，原值保留在加密导入元数据中，默认暂停提醒，确认页明确设置 |
 | （无） | `PK_PROFILE` | 雌二醇药物**不建** PK_PROFILE；确认页要求补选途径和酯型，未补选前血药浓度页提示"缺少途径信息" |
 
 ### 5.2 product_intake_time → RULE_TIME
@@ -403,7 +458,7 @@ F = formationFraction × MW 比。
 | Trans Memo | HRT Log | 处理 |
 |---|---|---|
 | `productId` | 通过映射挂到该药物的规则上 | |
-| `intakeTime` (`12:00:00`) | `local_time` | `LocalTime.parse`，去掉秒 |
+| `intakeTime` (`12:00:00`) | `local_time` | `LocalTime.parse`，保留秒，不静默改变原计划时间 |
 
 ### 5.3 intakes → DOSE_RECORD
 
@@ -419,11 +474,11 @@ F = formationFraction × MW 比。
 |---|---|---|
 | `scheduledAt` | `scheduled_utc` / `scheduled_zone` | 本地时间 → UTC |
 | `takenAt` | `taken_utc` / `taken_zone` | 同上 |
-| `plannedDose` / `realDose` | `planned_dose` / `actual_dose` | `realDose` 为空时用 `plannedDose` |
+| `plannedDose` / `realDose` | `planned_dose` / `actual_dose` | 实际剂量缺失保持未知，不能把计划剂量伪装成实际剂量；待用户核对前不进入 PK |
 | `realSide` | `site` | `UNDEFINED` 或空 → NULL；其他值原样保存为字符串 |
 | `plannedSide` | — | 历史记录用不到计划部位，丢弃（导入报告里注明） |
-| — | `slot_key` | 设为 `import@<本地日期时间>`；补账器只从导入时刻之后开始算，不会和导入记录冲突 |
-| — | `container_id` | NULL（历史记录不回溯扣减库存，库存以导入的 containers 为准） |
+| — | `slot_key` | 不伪造规则槽位键；slot_key 可空，以来源指纹 + 表名 + 原始 ID 标识导入记录，补账仅从导入时刻后开始 |
+| — | `SUPPLY_TRANSACTION` | 历史导入不创建消费流水，库存以 containers 的导入 baseline 为准 |
 | — | `origin` | `IMPORT_TM` |
 
 ### 5.4 containers → SUPPLY_CONTAINER
@@ -431,9 +486,9 @@ F = formationFraction × MW 比。
 | Trans Memo | HRT Log | 处理 |
 |---|---|---|
 | `productId` | `medication_id` | 映射 |
-| `usedCapacity` | `used_amount` | 原样 |
+| `usedCapacity` | `initial_used_amount` / `used_amount` | 合法值原样作为 baseline 并初始化缓存；不以导入历史记录再次扣减 |
 | `openDate` | `opened_on` | `LocalDate` |
-| `state` | `state` | `OPEN→IN_USE`、`EMPTY→EMPTY`；其他值 → `IN_USE` 并标记待检查 |
+| `state` | `state` | `OPEN→IN_USE`、`EMPTY→EMPTY`；其他值保留原始状态、标记待检查，不视为在用容器，不自动扣减 |
 | — | `capacity` | 取该药物的 `capacity` |
 
 ### 5.5 wellbeing_types / wellbeing / notes → CHECKIN_* / DAY_NOTE
@@ -459,7 +514,7 @@ F = formationFraction × MW 比。
 
 - **预览**：各表条数（导入 / 跳过 / 异常），服药记录和身心记录的时间范围，以及待确认项数量。
 - **覆盖**：在同一个事务里先清空主库的领域表，再写入。
-- **合并**：药物按 `(molecule, name)` 匹配已有药物，确认页可改为"新建"或"并入某药物"。服药记录按 `(药物, scheduled_utc, taken_utc)` 去重。
+- **合并**：药物按 `(molecule, name)` 匹配已有药物，确认页可改为"新建"或"并入某药物"。优先以导入来源身份去重；时间/剂量相似仅作候选冲突供核对，避免静默合并同一时刻的不同记录。导入及覆盖提交前使旧提醒缓存失效，事务成功后重排，失败按原数据库重建。
 - **导入后检查页**：每个药物一张卡片，必须逐个确认周期、提醒时间、通知开关、雌二醇的途径和酯型；未确认的药物保持"暂停提醒"。
 - **测试**：`importer/src/test/resources/transmemo_v8_synthetic.sql` 是**纯合成数据**的建表和插入脚本，结构与 v8 相同，覆盖 DST 边界时间、空备注、PENDING、未知枚举、`takenAt` 为空等情况。测试时用 `sqlite-jdbc` 在临时目录建库。`reference/transmemo.db` 已写进 `.gitignore`，只在本地手动验证时用，内容不会出现在任何测试、截图或日志中。
 
@@ -469,9 +524,9 @@ F = formationFraction × MW 比。
 
 ### 6.1 库存
 
-- 每次记录服药时，扣减该药物 `IN_USE` 容器中最早开封的一个。剩余量不够时，余数扣到下一个容器上，并提示"开封新容器"（一键换新：把旧的设为 EMPTY，开封一个 SEALED 的或新建一个）。
+- 每次记录服药时，扣减该药物 `IN_USE` 容器中最早开封的一个。剩余量不够时，余数可扣到下一个已开封容器；需要新容器时提示用户确认“开封新容器”（一键换新：旧的设为 EMPTY，开封一个 SEALED 的或新建一个）。库存不足部分记录为 `unallocated_supply_amount`，后续确认分配时只扣该部分，重复确认不重扣。
 - 剩余天数 = 剩余总量 ÷ 规则展开后的日均用量。触发补药提醒的条件：剩余天数 < 阈值（默认 7 天），或开封天数接近有效期（默认提前 3 天）。
-- 删除或编辑服药记录时，会回补或重新扣减对应容器。
+- 跨容器扣减、编辑和删除遵循 2.2 的 `SUPPLY_TRANSACTION` 流水设计；容器明细中的数量单位须一致，不覆盖旧流水。若库存不足，保留真实服药记录并标记未分配用量待核对，不虚构负库存或自动将未开封容器视为已开封。
 
 ### 6.2 身心状态
 
@@ -492,11 +547,11 @@ F = formationFraction × MW 比。
 | 钾 | mmol/L = mEq/L |
 | ALT / AST / GGT | U/L（= IU/L） |
 
-**参考范围暂不内置**：不同实验室的参考范围不一样，而且容易被理解为"建议"。用户可以为每个指标填写自己报告上的参考范围，图表上画成浅色带（第 9 节问题 5）。
+**参考范围暂不内置**：不同实验室的参考范围不一样，而且容易被理解为"建议"。用户为每条化验填写该次报告的下限、上限、单位及可选实验室，同一指标不同日期可不同范围；图表按各次录入范围显示，不自动解释或调整方案。
 
 ### 6.4 应用锁、隐蔽通知、精简模式
 
-- 应用锁：生物识别，或 4–8 位 PIN（Argon2id 哈希）。进入后台超过 N 秒（默认立即）就锁定。
+- 应用锁：生物识别，或 4–8 位 PIN（Argon2id 哈希）。进入后台立即锁定；真实界面使用 FLAG_SECURE。
 - 隐蔽通知：通知标题和内容替换为用户自定义的文字（默认"提醒"），不出现药名、剂量；锁屏通知可见性设为 `VISIBILITY_SECRET` 或 `PRIVATE`（可选）。伪装模式下强制使用隐蔽通知。
 - 精简模式：只有一个在用药物时可以开启，开启后隐藏药物筛选、药物列表入口等多药物界面。
 
@@ -504,7 +559,7 @@ F = formationFraction × MW 比。
 
 - 两个 activity-alias：`.Entry`（HRT Log）和 `.EntryAlt1`（计算器）/ `.EntryAlt2`（笔记），同一时间只启用其中一个（用 `setComponentEnabledSetting` 切换，加 `DONT_KILL_APP`）。
 - **计算器**：自己实现的表达式解析器（调度场算法），支持四则运算、百分比、括号，并有完整的单元测试。用户输入 `<数字密码>=` 时，先与 Argon2 哈希比对（暗门密码 → 真实空间，诱饵密码 → 诱饵空间）；**不匹配就按正常计算显示结果**，两种情况的耗时和界面表现相同。
-- **笔记**：一个本地笔记本（数据放在单独的、不加密的普通库里，因为它本来就是"诱饵外观"），新建一条内容恰好等于密码的笔记时进入真实空间，**同时丢弃这条笔记**。
+- **笔记**：一个本地笔记本（使用与真实空间隔离的存储；外壳笔记也可能含私人内容，优先加密，不因伪装外观而视为公开数据），新建一条内容恰好等于密码的笔记时进入真实空间，**同时丢弃这条笔记**。
 - **一键退出**：摇一摇（加速度阈值 + 去抖），或在顶部区域 600 ms 内连续两次快速下滑 → `finishAndRemoveTask` 后回到伪装入口并锁定。
 - **防泄露**：真实界面设 `FLAG_SECURE`；用 `setTaskDescription` 把最近任务中的标题和图标设为伪装的；`onStop` 时立即锁定；伪装模式下通知强制使用隐蔽文字，通知小图标也换成中性图标。
 - **开启流程**：设置暗门密码（两次确认）→ 强制导出一次加密备份（可以跳过，但会有明确的风险提示）→ 选择外壳类型 → 显示一页"今后如何进入、如何关闭"的说明 → 切换 alias。
@@ -536,9 +591,9 @@ F = formationFraction × MW 比。
 | 里程碑 | 内容 | 主要测试 |
 |---|---|---|
 | **M1** | 工程骨架（Gradle 多模块、版本目录、`full`/`play` 变体、CI）；加密数据库与密钥；药物增删改查（含雌二醇途径和酯型）；规则引擎与时间线；日历主页（今天/明天/某月某日 · N 天后，三种状态，完成服药、改期、补记）；悬浮按钮（计划外服药、预约）；闹钟调度全套、通知操作、开机/时区/时间变更后重排、直接启动缓存、精确闹钟权限引导、电池优化引导页、测试提醒按钮 | 3.5 节全部；`nextAlarm` 幂等；Receiver 用 Robolectric 测试 |
-| **M2** | 历史（下一次待服卡片、倒序列表、编辑删除、按药物和日期筛选、依从性统计图）；库存（容器、自动扣减、换新、剩余天数、补药提醒、手动修正）；注射部位轮换 | 扣减跨容器、删除记录后回补、依从率计算 |
+| **M2** | 历史（下一次待服卡片、倒序列表、编辑删除、按药物和日期筛选、依从性统计图）；库存（容器、自动扣减、换新、剩余天数、补药提醒、手动修正）；注射部位轮换 | 跨容器流水、编辑/删除精确冲销、重复操作幂等、手动修正后再回补、库存不足待分配、事务回滚、依从率计算 |
 | **M3** | 身心状态（打分、备注、项目管理、补填、统计页、服药后自动弹出） | 统计聚合、缺失日期处理 |
-| **M4** | `:pk-engine` 移植、`docs/pk-model.md`、参考 JSON 和一致性测试；血药浓度页（真实段加预测段、缩放、单位切换、化验点叠加、免责声明）；化验（录入、换算、距上次服药时间、趋势图）；体重记录 | 一致性测试 ≤ 1%；单位换算；距上次服药时间 |
+| **M4** | `:pk-engine` 移植、`docs/pk-model.md`、参考 JSON 和一致性测试；血药浓度页（真实段加预测段、缩放、单位切换、化验点叠加、免责声明）；化验（录入、换算、距上次服药时间、趋势图）；当前 PK 体重参数（无历史） | 一致性测试 ≤ 1%；单位换算；距上次服药时间 |
 | **M5** | Trans Memo 导入（预览、合并或覆盖、事务、导入后检查）；加密备份和恢复；CSV 和 PDF 导出 | 合成库导入的完整测试，包括回滚、DST 时间、各种异常数据；备份往返 |
 | **M6** | 隐蔽通知、应用锁（生物识别 / PIN）、精简模式、主题与对比度、动态取色、三语（中/法/英，所有文字在 strings.xml 中）、应用内语言切换（`AppCompatDelegate.setApplicationLocales`）、关于页（含 MIT 声明） | 锁定状态机；三种语言的字符串键是否齐全；措辞 lint |
 | **M7** | 伪装模式全套（见 6.5），在 `play` 变体中移除 | 暗门：正确 / 错误 / 诱饵；后台自动锁定；一键退出；alias 切换后启动器组件状态（Robolectric `PackageManager` 检查）；开关伪装前后数据库内容的哈希一致；计算器解析器 |
@@ -547,15 +602,25 @@ F = formationFraction × MW 比。
 
 ---
 
-## 9. 需要你确认的问题
+## 9. 已确认的产品决策
 
-1. **体重**：PK 模型必须知道体重（Vd = 2 L/kg × 体重）。我打算在血药浓度页加一个"体重记录"（可多次记录，按时间生效），首次进入模拟页时要求填写。可以吗？
-2. **CPA / 比卡鲁胺曲线**：上游已经有这两种药的模型。是否在 M4 一并移植并显示（单独的纵轴，单位 ng/mL）？还是像规格里说的，先只做雌二醇？我倾向于引擎一并移植，界面先只开放雌二醇。
-3. **凝胶和贴片的额外字段**：为了 PK 模拟，凝胶需要"产品（Oestrogel / Estreva …）+ 部位 + 涂抹范围"，贴片需要"标称释放量 µg/天"。我打算把这些放在药物编辑页"雌二醇 → 途径"之后的可选项里，留空时用产品默认值。可以吗？
-4. **Trans Memo 的 `soonAlertDelay` 单位**：你的导出里这个字段一般是什么数值？如果你在 Trans Memo 界面里设置的是"提前 15 分钟"，而这里存的是 15，我就按分钟处理。不确定也没关系，会在确认页让用户核对。
-5. **化验参考范围**：同意"不内置、由用户自己填写"吗？
-6. ~~**包名**~~：已确认为 `net.plainnotes.app`。
-7. **图表库**：选 Vico（Apache-2.0，纯 Compose）。如果你对 F-Droid 收录有要求，它是兼容的。没有异议就照此执行。
-8. **"闹钟模式"（`setAlarmClock`）**：作为可选项提供（可靠性最高，但状态栏会显示闹钟图标），默认关闭。同意吗？
+以下均以会话转移包为准，不重复询问：包名 `net.plainnotes.app`；体重只用于 PK、V1 无历史；CPA / 比卡鲁胺仅底层；凝胶/贴片假设透明、贴片 PK 必填释放量；Trans Memo 未知字段不猜；化验不内置统一范围；Vico 固定版本；高可靠模式默认关闭并展示隐私代价；随机数据库密钥由 Keystore 保护，PIN 仅管 UI；Direct Boot 仅 48 小时最小缓存并处理 LOCKED_BOOT_COMPLETED。
 
-确认后，我将从 **M1** 开始。
+## 10. M1 前审查结论与实施验证项
+
+本次修订消除了转移包与旧规划的冲突，并补充易导致 schema 返工的规则切换、小时槽位身份、历史参数快照、库存分配、导入身份和每次化验参考范围。保持现有模块划分，M1 不提前实现 M4–M7 功能。
+
+补充审查落实：下一槽位漏服语义已确定；ER 图用库存追加流水替换单个容器 FK；明确未实际服药字段的 NULL/状态约束，补齐相关验证场景。已具备的化验和 Direct Boot 边界保留，不重复变更。
+
+仍需明确或验证：
+
+1. **漏服已确定**：采用第 3.2 节的同药下一计划边界；M1 覆盖短间隔、长周期、无后续槽位、同刻槽位、改期、版本切换与补记测试，不采用隐藏固定时长阈值。
+2. **DST 解释**：按转移包原文将春季 02:30 推至第一个有效时刻 03:00；旧规划的 03:30 是另一种语义。如用户原意是保持分钟偏移，应在实现前修订该决策。
+3. **Direct Boot 实现**：模拟器/真机覆盖正常重启、未解锁提醒、首次解锁同步、不一致/写入中断、取消和改期不重响、48h 滚动和耗尽、换时区后解锁刷新。domain 单测不能证明系统行为；未解锁换时区不能承诺缓存 UTC 自动变为新的当地墙钟时刻。
+4. **权限与可靠性**：覆盖新装拒权、获权、撤权停止应用、通知拒权、Doze、强制停止、厂商省电和高可靠模式系统信息可见性。测试通过前不宣称可靠性已验证。
+5. **工具链和依赖**：M1 固定 Gradle、Kotlin、AGP、Compose、Room、SQLCipher 等兼容组合；targetSdk 按实施时最新稳定版核对。Vico 3.3.1 来自官方发布，图表能力及工具链兼容性在使用前验证，不把版本固定当作功能已经验证。
+6. **导入未知字段**：当前仓库没有真实导出数据库，不进行值域分析。后续只有导出值与实际 UI 设置可靠对应时才建立单位/编码映射；已观察单值不能推出全部编码含义。
+
+依据：[固定 PK 源码](https://github.com/TransmtfTeam/Transmtf-HRT-Tracker/blob/8c9abdde/pk.ts)、[Vico 3.3.1 发布](https://github.com/patrykandpatrick/vico/releases/tag/v3.3.1)。完整 PK 数值表延续前次规划，M4 移植时逐项复核并建立 TS/Kotlin 一致性测试，本次并未宣称完成全量参数审计。
+
+**本次仅修订规划；计划确认后再进入 M1。**
