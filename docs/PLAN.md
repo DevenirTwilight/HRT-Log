@@ -66,7 +66,7 @@ HRT-Log/
 1. **计划不落库**。计划服药由"给药规则"实时展开；数据库只存：已经发生的记录（服药 / 跳过 / 漏服）、被用户改过的单次计划（改期 / 跳过 / 改剂量）。
 2. **时间 = UTC 时间戳 + 时区 ID**。凡是"真实发生的时刻"（服药时间、预约时间、化验采样时间），都存 `*_utc: Long`（毫秒）加 `*_zone: String`（如 `Europe/Paris`）。规则里的时刻存**本地墙钟时间**（`LocalTime`），展开时再结合当时的时区计算。
 3. **墙钟计划槽位的身份 = 规则版本 ID + 原本地计划日期时间**，规范键为 `wall:<ruleVersionId>@2025-10-26T12:00:00`，采用 DST 修正前的时间，改期不改键。每 N 小时规则用 `elapsed:<ruleVersionId>#<occurrenceIndex>`，其中 k 为非负整数，以固定 UTC 锚点 `anchor_utc + k × N 小时` 展开，不从设备当前本地时间生成身份。键中的时间无 UTC 偏移、保留秒；类型前缀避免两种规则混淆。显示时间独立转换为当前时区，改期、跳过和剂量 override 始终绑定原键。跨时区需结合已触发和已完成状态去重；单靠键不能保证跨日期线时不遗漏计划。
-4. **规则有版本**。修改当天使用明确的切换时刻 `effective_at_utc` 和时区，旧版本在切换时刻截止，新版本从该时刻生效，窗口为左闭右开。保留原本地生效日期供展示，不以两个版本都包含整天的方式切换。切换前的槽位及历史判定不变；切换前产生而改期到切换后的槽位仍保留。
+4. **规则有版本**。统一使用 UTC 半开区间 `[effective_from_utc, effective_until_utc)`；结束为空表示无截止时刻。修改当天选定明确的切换时刻及其时区，将旧版本的 `effective_until_utc` 和新版本的 `effective_from_utc` 设为同一时刻。保留原本地生效日期供展示，不以两个版本都包含整天的方式切换。切换前的槽位及历史判定不变；切换前产生而改期到切换后的槽位仍保留。
 
 ### 2.2 ER 图
 
@@ -135,11 +135,11 @@ erDiagram
         long id PK
         long medication_id FK
         long rule_version_id FK
-        string slot_key "wall-clock key or hourly occurrence index"
-        string action "RESCHEDULE / SKIP / DOSE"
-        long new_utc "nullable"
-        string new_zone "nullable"
-        double new_dose "nullable"
+        string slot_key "unique, wall-clock key or hourly occurrence index"
+        long rescheduled_utc "nullable"
+        string rescheduled_zone "nullable iff rescheduled_utc is NULL"
+        double dose_override "nullable"
+        bool skipped "not null, default false"
     }
     DOSE_RECORD {
         long id PK
@@ -244,6 +244,15 @@ erDiagram
 - 设置（主题、隐蔽通知文字、精简模式……）放在 DataStore 里。暗门密码哈希、应用锁 PIN 哈希放在 Keystore 保护的加密 DataStore 中。
 - 诱饵空间是另一个独立的数据库文件 `notes_b.db`，结构相同，用独立密钥加密。Hilt 根据当前"会话空间"注入对应的数据库，两个空间在代码层面不共享任何 DAO 实例。
 
+#### 单次覆盖的组合与撤销约束
+
+- 一个 `slot_key` 仅有一条 `SLOT_OVERRIDE`。改期、改剂量和跳过为独立字段，可同时存在；`rescheduled_utc` 与有效 `rescheduled_zone` 必须同时填写或同时为空，`dose_override` 为空表示沿用该槽位原规则版本的剂量，非空须为有限正数且单位与药物配置一致。
+- 展开时先取改期后的有效计划时间、再取覆盖剂量；`skipped = true` 时不发提醒、不扣库存，显示 SKIPPED，仍保留改期和剂量字段，取消跳过后恢复这些覆盖。已跳过槽位仍按其有效计划时间参与第 3.2 节的下一槽位边界。
+- 部分撤销只清除对应字段：撤销改期将时间和时区同时设 NULL；撤销改剂量将 `dose_override` 设 NULL；撤销跳过将 `skipped` 设 false。其他覆盖字段及原槽位身份保持不变。
+- 所有字段恢复默认（两项改期字段为 NULL、剂量为 NULL、skipped 为 false）时删除该 override 行，不能持久化无效果的空覆盖。删除覆盖仅恢复原计划，不删除规则版本、必要的原计划快照或真实服药历史。
+- 跳过/取消跳过与对应 SKIPPED 记录变更在同一事务；取消跳过仅撤销该跳过产生的有效 SKIPPED 记录，再按时间线计算待服/迟服/漏服。已有 ON_TIME/LATE 的槽位不能用 override 跳过或撤销操作删除实际服药，修改实际服药走记录编辑流程。已固化历史遵循第 3.2 节规则，不因覆盖字段变化静默重写。
+- 字段配对、有效剂量、非空覆盖和唯一槽位由写入入口与数据库约束共同保证；覆盖写入、部分撤销及全部恢复后均更新提醒缓存，使旧请求失效。M1 验证改期加改剂量、叠加跳过、逐项撤销、全量恢复、重复操作以及事务失败回滚。
+
 #### 服药记录的 NULL 与状态约束
 
 - `MISSED / SKIPPED`：`taken_utc`、`taken_zone`、`actual_dose`、实际 `site` 必须全为 NULL，无消费流水；不能用 0、空字符串或计划剂量填实际值。
@@ -308,7 +317,7 @@ fun expand(rule: ScheduleRule, times: List<RuleTime>, from: Instant, to: Instant
 - **撤权边界**：精确闹钟权限撤销会停止应用并取消未来精确闹钟；权限变更广播用于获权后的重排，不能依赖收到撤权广播及时降级。应用恢复、看门狗运行时重新检查并排不精确提醒，撤权至恢复之间存在提醒中断风险。
 - **高可靠提醒模式**：可选，默认关闭；有精确闹钟权限时改用 `setAlarmClock()`，无权限时明确提示并降级。系统可能显示闹钟图标及下一次闹钟信息，showIntent 使用中性入口。不能承诺抵抗强制停止、关机或全部厂商限制。
 - **重排触发点**：`BOOT_COMPLETED`、`LOCKED_BOOT_COMPLETED`、`USER_UNLOCKED`（按平台要求动态注册并结合 boot/app 启动检查解锁状态）、`MY_PACKAGE_REPLACED`、`TIME_SET`、`TIMEZONE_CHANGED`、获精确闹钟权限、应用启动及领域数据变更。Receiver 有明确的 `directBootAware` / exported 配置，并防止外部伪造提醒；短任务使用 `goAsync()`，不能在 Receiver 内执行长计算。
-- **48 小时最小缓存**：主库可用时展开未来约 48 小时提醒，Device Protected Storage 仅允许 opaque alarm ID、trigger timestamp、调度类型、中性通知资源 ID/中性文字。不保存药名、分子、剂量、途径、部位、化验、身心或备注；不保存 slot_key 或可反推出药物的标识。opaque ID 与领域对象的映射只在主库。去重所需的缓存代次/消费状态作为最小调度元数据，不含健康字段。
+- **48 小时最小缓存**：主库可用时展开未来约 48 小时提醒，Device Protected Storage 仅允许 opaque alarm ID、trigger timestamp、调度类型、中性通知资源 ID/中性文字。不保存药名、分子、剂量、途径、部位、化验、身心或备注；不保存 slot_key 或可反推出药物的标识。`opaque reminder ID → domain slot/reminder identity` 的映射只保存在主库（Credential Protected Storage），用于首次解锁 reconciliation 和提醒去重，不能为解决映射而把 slot_key 或健康信息放入 Direct Boot 缓存。首次解锁同步前保留旧代次映射，结合缓存消费状态确认已发送提醒并防止重发，完成 reconciliation 后再清理旧映射。去重所需的缓存代次/消费状态作为最小调度元数据，不含健康字段。
 - **重启未解锁**：Direct Boot Receiver 仅从原子写入的缓存调度并发送中性通知；不可打开主库、扣库存或将提醒触发视为已服。缓存事件触发后标记已消费并调度下一条，到期耗尽后无法生成新计划。解锁前不提供直接“已服”写库操作，进入应用需先系统解锁及应用认证。
 - **首次解锁同步**：把缓存消费状态用于提醒去重，从完整数据库重算计划、替换缓存和系统请求，清理旧代次。取消/改期时先使受影响旧缓存及请求失效，再发布新缓存；数据库与文件无法共用事务，采用可恢复的同步流程，崩溃恢复优先避免旧提醒重响，重新生成缺失未来提醒。旧代次 Receiver 即使迟到也不得再次发送。
 - **滚动及失败边界**：正常提醒触发、数据变更、应用启动和解锁后更新缓存；WorkManager 每 6 小时作为尽力而为的维护，不能保证准点，也不能作为未解锁阶段的主调度器。重启未解锁超过缓存窗口后提醒不受保证，设置及验证说明中如实展示。未解锁时换时区仅凭最小缓存无法重算墙钟规则，继续使用已缓存 UTC 时刻，解锁后刷新；不能把规则等健康关联数据塞入缓存来隐藏此局限。
