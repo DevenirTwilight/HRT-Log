@@ -28,6 +28,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import dagger.hilt.android.AndroidEntryPoint
 import net.plainnotes.app.data.*
 import net.plainnotes.app.domain.*
@@ -49,6 +52,17 @@ private fun localString(instant:Instant)=instant.atZone(ZoneId.systemDefault()).
 private fun parseInstant(value:String)=ScheduleEngine.wallInstant(LocalDateTime.parse(value,dateFormat),ZoneId.systemDefault())
 private fun label(state:SlotState)=when(state){SlotState.PENDING->R.string.status_pending;SlotState.SOON->R.string.status_soon;SlotState.OVERDUE->R.string.status_overdue;SlotState.ON_TIME->R.string.status_on_time;SlotState.LATE->R.string.status_late;SlotState.MISSED->R.string.status_missed;SlotState.SKIPPED->R.string.status_skipped}
 
+/** System settings can change without changing database rows. */
+@Composable private fun systemSettingsRevision():MutableIntState {
+    val revision=remember{mutableIntStateOf(0)}
+    val owner=LocalLifecycleOwner.current
+    DisposableEffect(owner) {
+        val observer=LifecycleEventObserver{_,event->if(event==Lifecycle.Event.ON_RESUME)revision.intValue++}
+        owner.lifecycle.addObserver(observer)
+        onDispose{owner.lifecycle.removeObserver(observer)}
+    }
+    return revision
+}
 @Composable private fun NotesApp(model:NotesViewModel) {
     val state by model.state.collectAsStateWithLifecycle();val editor by model.editor.collectAsStateWithLifecycle();val override by model.override.collectAsStateWithLifecycle()
     var page by remember{mutableIntStateOf(0)};var doseSlot by remember{mutableStateOf<Slot?>(null)};var overrideSlot by remember{mutableStateOf<Slot?>(null)}
@@ -62,8 +76,9 @@ private fun label(state:SlotState)=when(state){SlotState.PENDING->R.string.statu
         if(state.loading)Text(stringResource(R.string.loading))
         when(page) {
             0 -> {
-                val ctx=LocalContext.current
-                if(Build.VERSION.SDK_INT>=31 && !ctx.getSystemService(AlarmManager::class.java).canScheduleExactAlarms())Text(stringResource(R.string.exact_denied),color=MaterialTheme.colorScheme.error)
+                val ctx=LocalContext.current;val revision=systemSettingsRevision()
+                val exact=remember(revision.intValue){Build.VERSION.SDK_INT<31 || ctx.getSystemService(AlarmManager::class.java).canScheduleExactAlarms()}
+                if(!exact)Text(stringResource(R.string.exact_denied),color=MaterialTheme.colorScheme.error)
                 var fromDate by remember{mutableStateOf(LocalDate.now().toString())}
                 Field(R.string.calendar_from,fromDate){fromDate=it}
                 TextButton(onClick={model.calendarFrom(fromDate)}){Text(stringResource(R.string.refresh))}
@@ -173,14 +188,15 @@ private fun label(state:SlotState)=when(state){SlotState.PENDING->R.string.statu
 @Composable private fun ReliabilityContent(onSync:()->Unit,onTest:()->Unit) {
     val context=LocalContext.current;val inspection=LocalInspectionMode.current;val prefs=remember{context.getSharedPreferences("prefs",Context.MODE_PRIVATE)}
     var high by remember{mutableStateOf(prefs.getBoolean("high_reliability",false))}
-    val launcher=rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()){onSync()}
+    val revision=systemSettingsRevision()
+    val launcher=rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()){revision.intValue++;onSync()}
     fun open(action:String,packageUri:Boolean=false){runCatching{context.startActivity(Intent(action).apply{if(packageUri)data=Uri.parse("package:${context.packageName}")})}}
     Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState())) {
-        val exact=inspection||Build.VERSION.SDK_INT<31||context.getSystemService(AlarmManager::class.java).canScheduleExactAlarms()
+        val exact=remember(revision.intValue){inspection||Build.VERSION.SDK_INT<31||context.getSystemService(AlarmManager::class.java).canScheduleExactAlarms()}
         Text(stringResource(if(exact)R.string.exact_allowed else R.string.exact_denied))
-        val notifications=inspection||androidx.core.app.NotificationManagerCompat.from(context).areNotificationsEnabled()
-        val battery=inspection||context.getSystemService(PowerManager::class.java).isIgnoringBatteryOptimizations(context.packageName)
-        val channel=if(inspection)null else context.getSystemService(android.app.NotificationManager::class.java).getNotificationChannel("reminders")
+        val notifications=remember(revision.intValue){inspection||androidx.core.app.NotificationManagerCompat.from(context).areNotificationsEnabled()}
+        val battery=remember(revision.intValue){inspection||context.getSystemService(PowerManager::class.java).isIgnoringBatteryOptimizations(context.packageName)}
+        val channel=remember(revision.intValue){if(inspection)null else context.getSystemService(android.app.NotificationManager::class.java).getNotificationChannel("reminders")}
         Text(stringResource(R.string.notification_state,stringResource(if(notifications)R.string.enabled else R.string.disabled)))
         Text(stringResource(R.string.battery_state,stringResource(if(battery)R.string.enabled else R.string.disabled)))
         Text(stringResource(R.string.channel_state,stringResource(if(channel==null||channel.importance!=android.app.NotificationManager.IMPORTANCE_NONE)R.string.enabled else R.string.disabled)))
