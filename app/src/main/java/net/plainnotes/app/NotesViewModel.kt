@@ -133,6 +133,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     fun wipeAll(onDone:()->Unit)=viewModelScope.launch {
         withContext(Dispatchers.IO){ reminders.mutate{repo.destroyAll()}
             app.getSharedPreferences("prefs",android.content.Context.MODE_PRIVATE).edit().clear().commit()
+            net.plainnotes.app.reminder.NotificationPrefs(app).clear(); net.plainnotes.app.security.AppLock(app).disable()
             java.io.File(app.createDeviceProtectedStorageContext().filesDir,"reminders.cache").delete()
             app.getSystemService(android.app.NotificationManager::class.java).cancelAll()
             runCatching{reminders.sync()} }

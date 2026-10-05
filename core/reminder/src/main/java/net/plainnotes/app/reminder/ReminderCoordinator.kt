@@ -101,10 +101,18 @@ import javax.inject.Singleton
         val batch=consumed.copy(alarms=consumed.alarms.map{if(!it.consumed&&it.triggerMillis<=System.currentTimeMillis()+1000)it.copy(consumed=true)else it})
         // Persist before sending: after a crash we prefer no duplicate to an uncertain resend.
         store.write(batch)
-        notifyNeutral(generation,id)
+        notifyNeutral(generation,id,if(unlocked())detailText(id,generation) else null)
         if(unlocked()) { reconcileConsumed();invalidate();rebuild() } else scheduleCached()
     } }
-    private fun notifyNeutral(generation:String,id:String) {
+    /** "Name · dose" for the notification body, only when the user opted in and the device is unlocked. */
+    private suspend fun detailText(id:String,generation:String):String? {
+        if(!NotificationPrefs(context).details)return null
+        return runCatching { val slot=repo.reminderSlot(id,generation) ?: return null
+            val m=repo.medications().firstOrNull{it.id==slot.medicationId} ?: return null
+            "${m.name} · ${java.text.NumberFormat.getNumberInstance().apply{maximumFractionDigits=3}.format(slot.dose)} ${m.unit.lowercase()}" }.getOrNull()
+    }
+    private fun notifyNeutral(generation:String,id:String,detail:String?=null) {
+        val text=NotificationPrefs(context)
         val nm=context.getSystemService(NotificationManager::class.java)
         nm.createNotificationChannel(NotificationChannel("reminders",context.getString(R.string.reminder_channel),NotificationManager.IMPORTANCE_HIGH))
         if(Build.VERSION.SDK_INT>=33 && ContextCompat.checkSelfPermission(context,Manifest.permission.POST_NOTIFICATIONS)!=PackageManager.PERMISSION_GRANTED)return
@@ -113,7 +121,7 @@ import javax.inject.Singleton
         val complete=PendingIntent.getBroadcast(context,2,Intent(context,AlarmReceiver::class.java).setAction("net.plainnotes.app.COMPLETE").putExtra("generation",generation).putExtra("id",id),PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
         val snooze=PendingIntent.getBroadcast(context,3,Intent(context,AlarmReceiver::class.java).setAction("net.plainnotes.app.SNOOZE").putExtra("generation",generation).putExtra("id",id),PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
         val builder=NotificationCompat.Builder(context,"reminders").setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
-            .setContentTitle(context.getString(R.string.neutral_reminder)).setContentText(context.getString(R.string.neutral_open))
+            .setContentTitle(text.title ?: context.getString(R.string.neutral_reminder)).setContentText(detail ?: text.body ?: context.getString(R.string.neutral_open))
             .setVisibility(NotificationCompat.VISIBILITY_SECRET).setContentIntent(open).setAutoCancel(true)
             .addAction(0,context.getString(R.string.snooze_action),snooze)
         if(unlocked())builder.addAction(0,context.getString(R.string.record_action),complete)

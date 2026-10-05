@@ -86,7 +86,8 @@ fun Instant.toLocalHere(): LocalDateTime = atZone(ZoneId.systemDefault()).toLoca
     val future = time.toInstantHere().isAfter(Instant.now().plusSeconds(60))
     AlertDialog(onDismissRequest = onDismiss, icon = { Icon(Icons.Outlined.AddTask, null) }, title = { Text(stringResource(R.string.manual)) },
         text = { Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            DropdownField(stringResource(R.string.medication), meds, chosen, { it.name }, { chosen = it; dose = inputNumber(it.dose_per_intake) })
+            if (meds.size > 1) DropdownField(stringResource(R.string.medication), meds, chosen, { it.name }, { chosen = it; dose = inputNumber(it.dose_per_intake) })
+            else chosen?.let { Text(it.name, style = MaterialTheme.typography.titleMedium) }
             DateTimeRow(time, { time = it })
             if (future) Text(stringResource(R.string.future_time_warning), color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
             NumberField(dose, { dose = it }, stringResource(R.string.actual_dose), suffix = chosen?.let { unitLabel(it.unit) }, isError = doseV == null)

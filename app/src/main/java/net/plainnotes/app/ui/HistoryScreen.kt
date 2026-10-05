@@ -47,6 +47,7 @@ private fun RecordEntity.at(): Instant = Instant.ofEpochMilli(taken_utc ?: sched
     val since = if (days == 0) Instant.EPOCH else LocalDate.now().minusDays(days.toLong() - 1).atStartOfDay(zone).toInstant()
     val shown = records.filter { it.deleted_at_utc == null && (medFilter == null || it.medication_id == medFilter) && !it.at().isBefore(since) }.sortedByDescending { it.at() }
     val next = state.slots.filter { it.state in listOf(SlotState.PENDING, SlotState.SOON, SlotState.OVERDUE) && (medFilter == null || it.slot.medicationId == medFilter) }.minByOrNull { it.slot.at }
+    val simple = LocalSimpleMode.current
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = contentPadding.calculateTopPadding() + 8.dp,
         bottom = contentPadding.calculateBottomPadding() + 32.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         next?.let { e -> item {
@@ -61,7 +62,7 @@ private fun RecordEntity.at(): Instant = Instant.ofEpochMilli(taken_utc ?: sched
                 }
             }
         } }
-        item {
+        if (!simple) item {
             Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 FilterChip(medFilter == null, { medFilter = null }, label = { Text(stringResource(R.string.all_medications)) })
                 state.medications.forEach { m -> FilterChip(medFilter == m.id, { medFilter = m.id }, label = { Text(m.name) }) }

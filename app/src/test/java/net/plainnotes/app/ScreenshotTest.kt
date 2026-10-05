@@ -1,5 +1,6 @@
 package net.plainnotes.app
 
+import androidx.compose.foundation.layout.padding
 import android.graphics.Bitmap
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
@@ -96,4 +97,6 @@ class ScreenshotTest {
         shoot("wellbeing") { WellbeingScreen(items, scores, listOf(DayNoteEntity(today.toString(), "Synthetic note")), { _, _, _ -> }, { _, _ -> }, {}, PaddingValues()) }
     }
     @Test fun settings() = shoot("settings") { SettingsScreen(Appearance(ThemeMode.SYSTEM, false), {}, false, {}, {}, {}, PaddingValues()) }
+    @Test fun privacy() = shoot("privacy") { androidx.compose.foundation.layout.Column(androidx.compose.ui.Modifier.padding(androidx.compose.ui.unit.Dp(16f))) { PrivacySection(1, false) {} } }
+    @Test fun lock() = shoot("lock") { LockScreen({ false }, { 0L }, {}) }
 }

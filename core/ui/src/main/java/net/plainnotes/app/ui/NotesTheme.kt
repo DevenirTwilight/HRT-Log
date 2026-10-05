@@ -39,12 +39,22 @@ private val Dark = darkColorScheme(
 )
 
 enum class ThemeMode { SYSTEM, LIGHT, DARK }
+enum class Contrast { STANDARD, MEDIUM, HIGH }
 
-@Composable fun NotesTheme(mode: ThemeMode = ThemeMode.SYSTEM, dynamicColor: Boolean = false, content: @Composable () -> Unit) {
+/** Raises contrast of secondary text and outlines (medium) and of containers too (high). */
+private fun ColorScheme.withContrast(c: Contrast, dark: Boolean): ColorScheme = when (c) {
+    Contrast.STANDARD -> this
+    Contrast.MEDIUM -> copy(onSurfaceVariant = onSurface.copy(alpha = 0.92f), outline = onSurfaceVariant, outlineVariant = outline)
+    Contrast.HIGH -> copy(onSurfaceVariant = onSurface, outline = onSurface, outlineVariant = onSurfaceVariant,
+        surfaceContainerLow = if (dark) Color.Black else Color.White, surfaceContainerLowest = if (dark) Color.Black else Color.White,
+        background = if (dark) Color.Black else Color.White, surface = if (dark) Color.Black else Color.White)
+}
+
+@Composable fun NotesTheme(mode: ThemeMode = ThemeMode.SYSTEM, dynamicColor: Boolean = false, contrast: Contrast = Contrast.STANDARD, content: @Composable () -> Unit) {
     val dark = when (mode) { ThemeMode.SYSTEM -> isSystemInDarkTheme(); ThemeMode.LIGHT -> false; ThemeMode.DARK -> true }
     val scheme: ColorScheme = if (dynamicColor && Build.VERSION.SDK_INT >= 31) {
         val context = LocalContext.current
         if (dark) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
     } else if (dark) Dark else Light
-    MaterialTheme(colorScheme = scheme, shapes = Shapes(small = androidx.compose.foundation.shape.RoundedCornerShape(10.dp), medium = androidx.compose.foundation.shape.RoundedCornerShape(16.dp), large = androidx.compose.foundation.shape.RoundedCornerShape(24.dp)), content = content)
+    MaterialTheme(colorScheme = scheme.withContrast(contrast, dark), shapes = Shapes(small = androidx.compose.foundation.shape.RoundedCornerShape(10.dp), medium = androidx.compose.foundation.shape.RoundedCornerShape(16.dp), large = androidx.compose.foundation.shape.RoundedCornerShape(24.dp)), content = content)
 }

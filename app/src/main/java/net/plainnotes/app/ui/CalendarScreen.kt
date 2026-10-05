@@ -112,7 +112,7 @@ private class AppointmentItem(val appointment: AppointmentEntity) : CalendarItem
                 if (s.at != s.original) Text(stringResource(R.string.moved_from, formatTime(s.original)), style = MaterialTheme.typography.labelSmall, color = c.onSurfaceVariant)
             }
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(med?.name ?: "", style = MaterialTheme.typography.titleMedium, maxLines = 1)
+                if (!LocalSimpleMode.current) Text(med?.name ?: "", style = MaterialTheme.typography.titleMedium, maxLines = 1)
                 Text(listOfNotNull(formatDose(s.dose, med?.unit), med?.route?.let { choiceLabel(it) }).joinToString(" · "),
                     style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant)
                 StatusPill(stateLabel(st), pillBg, pillFg, if (done && st != SlotState.SKIPPED) Icons.Rounded.Check else if (st == SlotState.OVERDUE) Icons.Outlined.ErrorOutline else null)

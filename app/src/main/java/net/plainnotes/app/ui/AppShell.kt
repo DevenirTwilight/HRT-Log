@@ -42,8 +42,11 @@ enum class Destination(val title: Int, val icon: ImageVector, val ready: Boolean
 class UiPrefs(context: Context) {
     private val p = context.getSharedPreferences("prefs", Context.MODE_PRIVATE)
     var appearance: Appearance
-        get() = Appearance(runCatching { ThemeMode.valueOf(p.getString("theme_mode", "SYSTEM")!!) }.getOrDefault(ThemeMode.SYSTEM), p.getBoolean("dynamic_color", false))
-        set(v) { p.edit().putString("theme_mode", v.mode.name).putBoolean("dynamic_color", v.dynamic).apply() }
+        get() = Appearance(runCatching { ThemeMode.valueOf(p.getString("theme_mode", "SYSTEM")!!) }.getOrDefault(ThemeMode.SYSTEM), p.getBoolean("dynamic_color", false),
+            runCatching { Contrast.valueOf(p.getString("contrast", "STANDARD")!!) }.getOrDefault(Contrast.STANDARD))
+        set(v) { p.edit().putString("theme_mode", v.mode.name).putBoolean("dynamic_color", v.dynamic).putString("contrast", v.contrast.name).apply() }
+    var lockAfterMillis: Long get() = p.getLong("lock_after", 30_000L); set(v) { p.edit().putLong("lock_after", v).apply() }
+    var simpleMode: Boolean get() = p.getBoolean("simple_mode", false); set(v) { p.edit().putBoolean("simple_mode", v).apply() }
     var highReliability: Boolean get() = p.getBoolean("high_reliability", false); set(v) { p.edit().putBoolean("high_reliability", v).apply() }
     var conc: ConcSettings
         get() = ConcSettings(p.getBoolean("conc_pmol", false), p.getBoolean("calib_enabled", true),
@@ -86,6 +89,7 @@ class UiPrefs(context: Context) {
     var adjustStock by remember { mutableStateOf<Pair<net.plainnotes.app.data.ContainerEntity, MedicationEntity>?>(null) }
     var manageItems by remember { mutableStateOf(false) }
     var wellbeingPrompt by remember { mutableStateOf(prefs.wellbeingPrompt) }
+    var simpleMode by remember { mutableStateOf(prefs.simpleMode) }
     val promptText = stringResource(R.string.wb_prompt); val promptAction = stringResource(R.string.wb_prompt_action)
     fun afterIntake() {
         val today = LocalDate.now().toString()
@@ -107,6 +111,7 @@ class UiPrefs(context: Context) {
     val errorText = state.error?.let { stringResource(it) }
     LaunchedEffect(errorText) { errorText?.let { snackbar.showSnackbar(it); model.clearError() } }
 
+    CompositionLocalProvider(LocalSimpleMode provides (simpleMode && state.medications.count { it.active } <= 1)) {
     ModalNavigationDrawer(drawerState = drawer, drawerContent = {
         ModalDrawerSheet {
             Column(Modifier.padding(horizontal = 12.dp)) {
@@ -162,6 +167,7 @@ class UiPrefs(context: Context) {
                 Destination.LABS -> LabsScreen(conc.labs, conc.doseTimes, { labEdit = it; labNew = it == null }, { model.deleteLab(it) }, pad)
                 Destination.SETTINGS -> SettingsScreen(appearance, onAppearance, highReliability, { highReliability = it; prefs.highReliability = it; model.sync() },
                     { model.sync() }, { model.testReminder() }, pad, wellbeingPrompt, { wellbeingPrompt = it; prefs.wellbeingPrompt = it }) {
+                    PrivacySection(state.medications.count { it.active }, simpleMode) { simpleMode = it; prefs.simpleMode = it }
                     DataSection(model, state.medications.associate { it.id to scheduleText(state.schedules[it.id]) })
                 }
                 Destination.ABOUT -> AboutScreen(pad)
@@ -173,6 +179,7 @@ class UiPrefs(context: Context) {
         }
     }
 
+    }
     val meds = state.medications.associateBy { it.id }
     editor?.let { MedicationEditor(it, { model.closeEditor() }) { d -> model.save(d) } }
     completeEntry?.let { e -> IntakeDialog(stringResource(R.string.complete), meds[e.slot.medicationId], e.slot.dose,

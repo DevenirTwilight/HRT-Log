@@ -42,7 +42,7 @@ import net.plainnotes.app.R
     return revision
 }
 
-class Appearance(val mode: ThemeMode, val dynamic: Boolean)
+class Appearance(val mode: ThemeMode, val dynamic: Boolean, val contrast: Contrast = Contrast.STANDARD)
 
 @Composable fun SettingsScreen(appearance: Appearance, onAppearance: (Appearance) -> Unit, highReliability: Boolean, onHighReliability: (Boolean) -> Unit,
                                onSync: () -> Unit, onTest: () -> Unit, contentPadding: PaddingValues, wellbeingPrompt: Boolean = true, onWellbeingPrompt: (Boolean) -> Unit = {},
@@ -81,20 +81,31 @@ class Appearance(val mode: ThemeMode, val dynamic: Boolean)
             Text(stringResource(R.string.theme), style = MaterialTheme.typography.labelLarge)
             SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
                 ThemeMode.entries.forEachIndexed { i, m ->
-                    SegmentedButton(appearance.mode == m, { onAppearance(Appearance(m, appearance.dynamic)) }, SegmentedButtonDefaults.itemShape(i, 3)) {
+                    SegmentedButton(appearance.mode == m, { onAppearance(Appearance(m, appearance.dynamic, appearance.contrast)) }, SegmentedButtonDefaults.itemShape(i, 3)) {
                         Text(stringResource(when (m) { ThemeMode.SYSTEM -> R.string.theme_system; ThemeMode.LIGHT -> R.string.theme_light; ThemeMode.DARK -> R.string.theme_dark }))
                     }
                 }
             }
-            if (Build.VERSION.SDK_INT >= 31) SwitchRow(stringResource(R.string.dynamic_color), appearance.dynamic, stringResource(R.string.dynamic_color_desc)) { onAppearance(Appearance(appearance.mode, it)) }
+            if (Build.VERSION.SDK_INT >= 31) SwitchRow(stringResource(R.string.dynamic_color), appearance.dynamic, stringResource(R.string.dynamic_color_desc)) { onAppearance(Appearance(appearance.mode, it, appearance.contrast)) }
+            Text(stringResource(R.string.contrast), style = MaterialTheme.typography.labelLarge)
+            SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
+                Contrast.entries.forEachIndexed { i, c ->
+                    SegmentedButton(appearance.contrast == c, { onAppearance(Appearance(appearance.mode, appearance.dynamic, c)) }, SegmentedButtonDefaults.itemShape(i, 3)) {
+                        Text(stringResource(when (c) { Contrast.STANDARD -> R.string.contrast_low; Contrast.MEDIUM -> R.string.contrast_medium; Contrast.HIGH -> R.string.contrast_high }))
+                    }
+                }
+            }
         }
         SectionCard(stringResource(R.string.wellbeing)) {
             SwitchRow(stringResource(R.string.wb_prompt_setting), wellbeingPrompt, stringResource(R.string.wb_prompt_setting_desc)) { onWellbeingPrompt(it) }
         }
         extra()
         SectionCard(stringResource(R.string.language)) {
-            Text(stringResource(R.string.language_desc), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            if (Build.VERSION.SDK_INT >= 33) OutlinedButton(onClick = { open(Settings.ACTION_APP_LOCALE_SETTINGS, true) }) { Text(stringResource(R.string.language_open)) }
+            val current = androidx.appcompat.app.AppCompatDelegate.getApplicationLocales().toLanguageTags()
+            val options = listOf("" to stringResource(R.string.language_system), "en-US" to "English", "fr-FR" to "Français", "zh-CN" to "简体中文", "zh-TW" to "繁體中文")
+            DropdownField(stringResource(R.string.language), options.map { it.first }, options.firstOrNull { it.first == current }?.first ?: "", { t -> options.first { it.first == t }.second }, { tag ->
+                androidx.appcompat.app.AppCompatDelegate.setApplicationLocales(if (tag.isEmpty()) androidx.core.os.LocaleListCompat.getEmptyLocaleList() else androidx.core.os.LocaleListCompat.forLanguageTags(tag))
+            })
         }
     }
 }
