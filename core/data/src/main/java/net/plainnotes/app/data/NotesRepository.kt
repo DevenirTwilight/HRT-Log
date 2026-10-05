@@ -74,7 +74,7 @@ import javax.inject.Singleton
         val trigger=when(type){"SOON"->entry.slot.at.minusSeconds(entry.slot.soonMinutes.toLong()*60);"LATE"->entry.slot.at.plusSeconds(entry.slot.lateMinutes.toLong()*60+1);else->entry.slot.at}
         return entry.slot.takeIf{trigger.toEpochMilli()==source.trigger_utc}
     }
-    suspend fun saveMedication(value:MedicationEntity,ester:String?,kind:RuleKind,interval:Int,times:List<LocalTime>,weekdays:Set<DayOfWeek>,now:Instant=Instant.now()):Long=transaction { dao ->
+    suspend fun saveMedication(value:MedicationEntity,ester:String?,kind:RuleKind,interval:Int,times:List<LocalTime>,weekdays:Set<DayOfWeek>,now:Instant=Instant.now(),pk:ProfileEntity?=null):Long=transaction { dao ->
         val effectiveNow=Instant.ofEpochMilli(now.toEpochMilli())
         require(value.name.isNotBlank() && value.dose_per_intake.isFinite() && value.dose_per_intake>0)
         val zone=ZoneId.systemDefault();reconcile(dao,effectiveNow,zone)
@@ -94,7 +94,8 @@ import javax.inject.Singleton
             old.forEach{require(cut>it.effective_from_utc);dao.updateRule(it.copy(effective_until_utc=cut))}
         }
         if(value.molecule=="E2" && value.route!=null && ester!=null)
-            dao.profile(ProfileEntity(id,ester,when(value.route){"ORAL"->"oral";"SUBLINGUAL"->"sublingual";"GEL"->"gel";"PATCH"->"patchApply";"INJECTION"->"injection";else->error("Unsupported estradiol route")}))
+            dao.profile(ProfileEntity(id,ester,when(value.route){"ORAL"->"oral";"SUBLINGUAL"->"sublingual";"GEL"->"gel";"PATCH"->"patchApply";"INJECTION"->"injection";else->error("Unsupported estradiol route")},
+                pk?.sl_tier,pk?.gel_product_id,pk?.gel_site,pk?.gel_area_cm2,pk?.patch_release_ug_day))
         if(value.active) {
             val soon=requireNotNull(value.soon_alert_minutes);val late=requireNotNull(value.late_after_minutes)
             val anchorDate=if(kind==RuleKind.EVERY_N_HOURS)null else effectiveNow.atZone(zone).toLocalDate().toString()
@@ -152,4 +153,17 @@ import javax.inject.Singleton
     }
     suspend fun currentOverride(key:String)=withContext(Dispatchers.IO){access.get().dao().overrides().singleOrNull{it.slot_key==key}?.model() ?: SlotOverride(key)}
     suspend fun appointment(value:AppointmentEntity)=transaction { it.appointment(value) }
+    suspend fun records()=withContext(Dispatchers.IO){access.get().dao().records()}
+    /** Planned slots in [from, to) for forecasting; reconciles first so past slots carry their final state. */
+    suspend fun planned(from:Instant,to:Instant,now:Instant=Instant.now(),zone:ZoneId=ZoneId.systemDefault())=transaction { dao -> timeline(dao,now,from,to,zone) }
+    suspend fun labs()=withContext(Dispatchers.IO){access.get().dao().labs()}
+    suspend fun saveLab(value:LabValueEntity)=transaction { dao ->
+        require(value.value.isFinite() && value.value>0 && value.analyte_code.isNotBlank() && value.unit.isNotBlank())
+        dao.analyte(AnalyteEntity(value.analyte_code,value.unit))
+        if(value.id==0L)dao.insertLab(value) else dao.updateLab(value)
+    }
+    suspend fun deleteLab(id:Long)=transaction { it.deleteLab(id) }
+    /** Body weight is a single current PK parameter (no history in V1). */
+    suspend fun weight()=withContext(Dispatchers.IO){access.get().dao().pkSettings()?.current_weight_kg}
+    suspend fun setWeight(kg:Double)=transaction { require(kg.isFinite() && kg>0 && kg<1000); it.pkSettings(PkSettingsEntity(1,kg)) }
 }

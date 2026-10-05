@@ -43,7 +43,7 @@ HRT-Log/
 | 数据库 | Room + `net.zetetic:sqlcipher-android` | 加密密钥见 2.4 |
 | 设置 | DataStore（Proto） | 不含敏感内容的设置；敏感项放加密库 |
 | 时间 | `java.time`（minSdk 26 原生支持） | 不用 desugaring |
-| 图表 | **Vico 3.3.1**（Compose 原生，Apache-2.0） | 固定版本，不使用动态版本；实现时验证缩放、化验点叠加和 Compose 兼容性，纳入第三方许可说明 |
+| 图表 | ~~Vico 3.3.1~~ → **自绘 Compose Canvas 图表**（2026-10-05 变更） | 需要精确控制"记录实线 / 预测虚线 / 68%·95% 区间 / 化验点 / 用户参考范围带"，且无需新依赖；支持双指缩放、拖动、点按读数。Vico 不再引入 |
 | PDF | Android 自带 `PdfDocument` | 不引入第三方库 |
 | 密码哈希 | BouncyCastle `Argon2BytesGenerator`（纯 Java） | 不用 native 库，方便 F-Droid 构建 |
 | 生物识别 | `androidx.biometric` | |
@@ -373,7 +373,7 @@ fun expand(rule: ScheduleRule, times: List<RuleTime>, from: Instant, to: Instant
 | 途径 | 模型 | 关键参数（代码值） |
 |---|---|---|
 | 口服 E2 | 单室 Bateman（一级吸收 + 一级消除） | `ka = 0.32/h`，`F = 0.03`，`ke = kClear = 0.41/h` |
-| 口服 EV | 三室链式：吸收 → 酯水解 → 消除（`_analytic3C`） | `ka = 0.05`，`k2 = 0.070`，`F = 0.03 × MW比` |
+| 口服 EV | **单室 Bateman**（上游解析出 `k2` 但口服模型不使用，2026-10-05 读码更正） | `ka = 0.05`，`F = 0.03 × MW比` |
 | 舌下 E2 | 双通路 Bateman：快支（黏膜，比例 θ，F = 1）+ 慢支（吞咽，等同口服） | `kSL = 1.8/h`；θ 按含服时长四档：0.01 / 0.04 / 0.11 / 0.18（2 / 5 / 10 / 15 分钟） |
 | 舌下 EV | 双通路，每支都走三室链式（带 `k2`） | 同上，`k2 = 0.070` |
 | 凝胶 | 三层级联：皮表 → 皮肤贮库 → 中心室（闭式解，近似相等的特征值做微扰处理） | 产品表（Oestrogel、Estreva、EstroGel、Divigel、DIY）的 `kPenBase / kLoss / kRel`；部位系数（手臂 1.0、大腿 1.0、腹部 1.1；阴囊 8.0 为低证据先验）；剂量密度软饱和 `σ_sat = 0.008 × 浓度`，限制在 [0.5, 2]；可选：洗去时间、防晒 ×0.84 / 保湿 ×1.38 |
@@ -396,7 +396,7 @@ F = formationFraction × MW 比。
 ### 4.4 移植范围
 
 - **M4 移植**：上表中全部雌二醇途径和酯型、凝胶产品表（含部位、面积）、贴片两种模式（一级模式仅底层一致性测试）、上游体重阶梯算法（不开放历史体重 UI）、网格与 AUC、线性插值。
-- **不移植**：上游的 EKF / MIPD / `personalModel.ts` / `calibration.ts`（根据化验个体化校准参数），这符合你"暂不根据化验调整"的要求。云同步、分享、Turnstile 等与本应用无关的部分也不移植。
+- **化验校准（2026-10-05 用户决定纳入）**：移植上游默认的 EKF 校准（`personalModel.ts`），含回溯/因果两种模式、用药前基线、离群值处理，并纳入一致性测试；校准只改变估算曲线，不给任何剂量建议。上游另外两种可选模型 OU-Kalman 与 Hybrid-MIPD 暂不移植。云同步、分享、Turnstile 等与本应用无关的部分不移植。详见 `docs/pk-model.md`。
 - **CPA / 比卡鲁胺**：上游有模型（CPA 二室口服、比卡鲁胺单室），一并移植底层并做一致性测试；V1 UI 仅开放雌二醇，不增加 CPA / 比卡鲁胺曲线。
 
 ### 4.4.1 模型输入及假设透明
@@ -424,7 +424,7 @@ F = formationFraction × MW 比。
 |---|---|---|
 | `kClearInjection` | 0.05 /h | **0.041** /h |
 | 口服 `kAbsE2` | 0.08 /h | **0.32** /h |
-| 口服 EV | 单室，`k2` 折叠进 `kAbsEV` | **三室，带 `k2 = 0.070`** |
+| 口服 EV | 单室，`k2` 折叠进 `kAbsEV` | **单室 Bateman，ka 0.05；`k2` 虽解析出来但不参与口服计算**（此处原写"三室"有误，已更正） |
 | 剂量口径 | "已按 E2 当量输入，F 不乘分子量比" | **按酯质量输入，F 乘分子量比**（`types.ts` 也是这样写的） |
 
 ### 4.7 在 HRT Log 中如何使用
@@ -634,6 +634,8 @@ F = formationFraction × MW 比。
 ---
 
 ## 9. 已确认的产品决策
+
+2026-10-05 用户追加决定：移植 Transmtf HRT Tracker 的计算核心（方案 A：Kotlin 移植 + 原生界面），化验校准一并移植；界面重做与浓度模拟同步推进。
 
 以下均以会话转移包为准，不重复询问：包名 `net.plainnotes.app`；体重只用于 PK、V1 无历史；CPA / 比卡鲁胺仅底层；凝胶/贴片假设透明、贴片 PK 必填释放量；Trans Memo 未知字段不猜；化验不内置统一范围；Vico 固定版本；高可靠模式默认关闭并展示隐私代价；随机数据库密钥由 Keystore 保护，PIN 仅管 UI；Direct Boot 仅 48 小时最小缓存并处理 LOCKED_BOOT_COMPLETED。
 

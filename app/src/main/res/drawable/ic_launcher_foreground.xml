@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Original mark: a rounded page with a calendar band and a check, in a 108dp adaptive canvas. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
+    <path android:fillColor="#FFFFFF" android:pathData="M38,32h32a6,6 0,0 1,6 6v34a6,6 0,0 1,-6 6h-32a6,6 0,0 1,-6 -6v-34a6,6 0,0 1,6 -6z"/>
+    <path android:fillColor="#9EF2E8" android:pathData="M38,32h32a6,6 0,0 1,6 6v6h-44v-6a6,6 0,0 1,6 -6z"/>
+    <path android:fillColor="#FFFFFF" android:pathData="M42,27h4v10h-4z M62,27h4v10h-4z"/>
+    <path android:strokeColor="#006A63" android:strokeWidth="5" android:strokeLineCap="round" android:strokeLineJoin="round" android:fillColor="#00000000" android:pathData="M43,60l7,7l14,-14"/>
+</vector>

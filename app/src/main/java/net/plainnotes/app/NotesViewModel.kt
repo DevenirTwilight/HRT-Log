@@ -9,8 +9,14 @@ import net.plainnotes.app.domain.*
 import net.plainnotes.app.reminder.ReminderCoordinator
 import java.time.*
 import javax.inject.Inject
+import net.plainnotes.app.conc.ConcentrationCalculator
+import net.plainnotes.app.conc.ConcentrationResult
+import net.plainnotes.app.pk.CalibrationMode
 
-data class NotesState(val medications:List<MedicationEntity> = emptyList(),val slots:List<TimelineEntry> = emptyList(),val appointments:List<AppointmentEntity> = emptyList(),val error:Int?=null,val loading:Boolean=true)
+/** Current schedule of one medication, for display only. */
+data class ScheduleSummary(val kind:RuleKind,val interval:Int,val weekdays:Set<DayOfWeek>,val times:List<LocalTime>)
+data class NotesState(val medications:List<MedicationEntity> = emptyList(),val slots:List<TimelineEntry> = emptyList(),val appointments:List<AppointmentEntity> = emptyList(),val error:Int?=null,val loading:Boolean=true,
+                      val schedules:Map<Long,ScheduleSummary> = emptyMap(),val profiles:Map<Long,ProfileEntity> = emptyMap(),val calendarStart:LocalDate=LocalDate.now())
 data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEntity?,val rule:RuleEntity?,val times:List<TimeEntity>)
 @HiltViewModel class NotesViewModel @Inject constructor(private val repo:NotesRepository,private val reminders:ReminderCoordinator):ViewModel() {
     val notificationSlot=MutableStateFlow<Slot?>(null)
@@ -22,11 +28,16 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     var editor=MutableStateFlow<EditMedication?>(null);private set
     var override=MutableStateFlow<SlotOverride?>(null);private set
     private var calendarStart=LocalDate.now()
-    fun calendarFrom(value:String){try{calendarStart=LocalDate.parse(value);refresh()}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.invalid)}}
+    fun calendarFrom(value:LocalDate?){calendarStart=value ?: LocalDate.now();refresh()}
     init { refresh();viewModelScope.launch{while(isActive){delay(30000);refresh()}} }
     fun refresh()=viewModelScope.launch { try {
         val meds=repo.medications();val slots=repo.calendar(displayFrom=calendarStart);val appts=repo.appointments()
-        mutable.value=NotesState(meds,slots,appts,null,false)
+        val schedules=repo.rules().filter{it.effective_until_utc==null}.associate { r ->
+            r.medication_id to ScheduleSummary(RuleKind.valueOf(r.kind),r.interval,DayOfWeek.entries.filter{r.weekday_mask and (1 shl (it.value-1))!=0}.toSet(),
+                repo.transaction{it.times(r.id)}.map{LocalTime.parse(it.local_time)}.sorted())
+        }
+        val profiles=meds.mapNotNull{m->repo.profile(m.id)?.let{m.id to it}}.toMap()
+        mutable.value=NotesState(meds,slots,appts,null,false,schedules,profiles,calendarStart)
     }catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.data_error,loading=false)} }
     fun clearError(){mutable.value=mutable.value.copy(error=null)}
     private fun change(block:suspend()->Unit)=viewModelScope.launch{try{reminders.mutate(block);refresh()}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}
@@ -36,10 +47,31 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         editor.value=EditMedication(m,m?.let{repo.profile(it.id)},r,t)
     }catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)} }
     fun closeEditor(){editor.value=null}
-    fun save(m:MedicationEntity,ester:String?,kind:RuleKind,n:Int,times:List<LocalTime>,days:Set<DayOfWeek>)=change {repo.saveMedication(m,ester,kind,n,times,days);editor.value=null}
+    fun save(d:net.plainnotes.app.ui.MedicationDraft)=change {repo.saveMedication(d.medication,d.ester,d.kind,d.interval,d.times,d.weekdays,pk=d.pk);editor.value=null;loadConcentration()}
+    fun editById(id:Long){state.value.medications.firstOrNull{it.id==id}?.let{edit(it)}}
+
+    // Concentration (PK) page
+    data class ConcState(val loading:Boolean=false,val result:ConcentrationResult?=null,val weight:Double?=null,val labs:List<LabValueEntity> = emptyList(),val doseTimes:List<Instant> = emptyList())
+    val conc=MutableStateFlow(ConcState())
+    private var concSettings=Pair(true,CalibrationMode.RETROSPECTIVE)
+    fun concentrationSettings(calibrate:Boolean,mode:CalibrationMode){if(concSettings!=calibrate to mode){concSettings=calibrate to mode;loadConcentration()}}
+    fun loadConcentration()=viewModelScope.launch { try {
+        conc.value=conc.value.copy(loading=true)
+        val now=Instant.now()
+        val meds=repo.medications();val profiles=meds.mapNotNull{m->repo.profile(m.id)?.let{m.id to it}}.toMap()
+        val records=repo.records();val labs=repo.labs();val weight=repo.weight()
+        val planned=repo.planned(now.minusSeconds(3600),now.plusSeconds(ConcentrationCalculator.FORECAST_DAYS*86400))
+        val result=withContext(Dispatchers.Default){ConcentrationCalculator.compute(meds,profiles,records,planned,labs,weight,now,concSettings.first,concSettings.second)}
+        val e2=meds.filter{it.molecule=="E2"}.map{it.id}.toSet()
+        val doseTimes=records.filter{it.medication_id in e2 && it.status in listOf("ON_TIME","LATE") && it.taken_utc!=null}.map{Instant.ofEpochMilli(it.taken_utc!!)}.sorted()
+        conc.value=ConcState(false,result,weight,labs,doseTimes)
+    }catch(_:Exception){conc.value=conc.value.copy(loading=false);mutable.value=mutable.value.copy(error=R.string.data_error)} }
+    fun setWeight(kg:Double)=viewModelScope.launch{try{repo.setWeight(kg);loadConcentration()}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}
+    fun saveLab(v:LabValueEntity)=viewModelScope.launch{try{repo.saveLab(v);loadConcentration()}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}
+    fun deleteLab(v:LabValueEntity)=viewModelScope.launch{try{repo.deleteLab(v.id);loadConcentration()}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}
     fun delete(id:Long)=change{repo.removeMedication(id)}
-    fun complete(s:Slot,t:Instant,d:Double)=change{repo.complete(s,t,d)}
-    fun manual(id:Long,t:Instant,d:Double)=change{repo.unscheduled(id,t,d)}
+    fun complete(s:Slot,t:Instant,d:Double)=change{repo.complete(s,t,d)}.also{it.invokeOnCompletion{loadConcentration()}}
+    fun manual(id:Long,t:Instant,d:Double)=change{repo.unscheduled(id,t,d)}.also{it.invokeOnCompletion{loadConcentration()}}
     fun loadOverride(key:String)=viewModelScope.launch{override.value=repo.currentOverride(key)}
     fun changeOverride(s:Slot,o:SlotOverride)=change{repo.override(s,o);override.value=null}
     fun appointment(v:AppointmentEntity)=change{repo.appointment(v)}

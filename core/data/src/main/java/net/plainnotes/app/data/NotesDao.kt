@@ -26,6 +26,13 @@ import kotlinx.coroutines.flow.Flow
     @Query("SELECT * FROM appointment ORDER BY at_utc") fun observeAppointments(): Flow<List<AppointmentEntity>>
     @Query("SELECT * FROM appointment ORDER BY at_utc") suspend fun appointments(): List<AppointmentEntity>
     @Insert suspend fun appointment(value: AppointmentEntity): Long
+    @Query("SELECT * FROM lab_value ORDER BY sampled_utc") suspend fun labs(): List<LabValueEntity>
+    @Insert suspend fun insertLab(value: LabValueEntity): Long
+    @Update suspend fun updateLab(value: LabValueEntity)
+    @Query("DELETE FROM lab_value WHERE id = :id") suspend fun deleteLab(id: Long)
+    @Insert(onConflict = OnConflictStrategy.IGNORE) suspend fun analyte(value: AnalyteEntity)
+    @Query("SELECT * FROM pk_settings WHERE id = 1") suspend fun pkSettings(): PkSettingsEntity?
+    @Upsert suspend fun pkSettings(value: PkSettingsEntity)
     @Query("SELECT * FROM reminder_mapping") suspend fun mappings(): List<ReminderMappingEntity>
     @Insert suspend fun mapping(value: ReminderMappingEntity)
     @Query("UPDATE reminder_mapping SET sent=1 WHERE opaque_id=:id") suspend fun markSent(id:String)
