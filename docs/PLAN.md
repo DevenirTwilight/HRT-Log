@@ -53,7 +53,7 @@ HRT-Log/
 
 ### 1.3 中性命名约定
 
-- 包名 `net.quietledger.app`，数据库文件 `ledger.db`，诱饵库 `ledger_b.db`，通知渠道 ID `reminders` / `supply` / `appointments`，SharedPrefs / DataStore 文件名 `prefs`。
+- 包名 `net.plainnotes.app`，数据库文件 `notes.db`，诱饵库 `notes_b.db`，通知渠道 ID `reminders` / `supply` / `appointments`，SharedPrefs / DataStore 文件名 `prefs`。
 - 类名中不出现 hrt / trans / hormone / estradiol 之类字样。领域里用的是 `Medication`、`Dose`、`Supply`、`Checkin`、`LabValue`、`ConcentrationModel`。分子枚举的**值**不可避免会出现药名，但持久化时只存短代码（如 `E2`、`SPI`），release 构建开启 R8 混淆。
 - 应用的显示名称（`app_name`）是 "HRT Log" / "HRT 日志"，这是有意为之；伪装模式靠 activity-alias 实现。
 
@@ -212,7 +212,7 @@ erDiagram
 - 距上次服药的时间（化验记录用）、剩余天数、依从性统计，都是**查询时计算**，不存储。
 - `BODY_WEIGHT` 是规格里没写、但 PK 模拟必需的数据（表观分布容积 Vd = 2.0 L/kg × 体重），见第 9 节问题 1。
 - 设置（主题、隐蔽通知文字、精简模式……）放在 DataStore 里。暗门密码哈希、应用锁 PIN 哈希放在 Keystore 保护的加密 DataStore 中。
-- 诱饵空间是另一个独立的数据库文件 `ledger_b.db`，结构相同，用独立密钥加密。Hilt 根据当前"会话空间"注入对应的数据库，两个空间在代码层面不共享任何 DAO 实例。
+- 诱饵空间是另一个独立的数据库文件 `notes_b.db`，结构相同，用独立密钥加密。Hilt 根据当前"会话空间"注入对应的数据库，两个空间在代码层面不共享任何 DAO 实例。
 
 ### 2.3 Room 迁移
 
@@ -554,7 +554,7 @@ F = formationFraction × MW 比。
 3. **凝胶和贴片的额外字段**：为了 PK 模拟，凝胶需要"产品（Oestrogel / Estreva …）+ 部位 + 涂抹范围"，贴片需要"标称释放量 µg/天"。我打算把这些放在药物编辑页"雌二醇 → 途径"之后的可选项里，留空时用产品默认值。可以吗？
 4. **Trans Memo 的 `soonAlertDelay` 单位**：你的导出里这个字段一般是什么数值？如果你在 Trans Memo 界面里设置的是"提前 15 分钟"，而这里存的是 15，我就按分钟处理。不确定也没关系，会在确认页让用户核对。
 5. **化验参考范围**：同意"不内置、由用户自己填写"吗？
-6. **包名**：`net.quietledger.app` 上线后就不能再改了，请最后确认一次。
+6. ~~**包名**~~：已确认为 `net.plainnotes.app`。
 7. **图表库**：选 Vico（Apache-2.0，纯 Compose）。如果你对 F-Droid 收录有要求，它是兼容的。没有异议就照此执行。
 8. **"闹钟模式"（`setAlarmClock`）**：作为可选项提供（可靠性最高，但状态栏会显示闹钟图标），默认关闭。同意吗？
 
