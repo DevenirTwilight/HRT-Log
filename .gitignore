@@ -25,3 +25,6 @@ captures/
 
 # Node (tools/pk-reference)
 node_modules/
+
+# Kotlin compilation caches
+.kotlin/
