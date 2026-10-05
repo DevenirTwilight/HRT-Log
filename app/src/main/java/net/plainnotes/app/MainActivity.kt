@@ -47,9 +47,8 @@ import java.time.format.DateTimeFormatter
     override fun onNewIntent(intent:Intent){super.onNewIntent(intent);intent.getStringExtra("reminder_id")?.let{model.notification(it)}}
     override fun onResume(){super.onResume();model.sync()}
 }
-private val dateFormat=DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm:ss")
-private fun localString(instant:Instant)=instant.atZone(ZoneId.systemDefault()).toLocalDateTime().format(dateFormat)
-private fun parseInstant(value:String)=ScheduleEngine.wallInstant(LocalDateTime.parse(value,dateFormat),ZoneId.systemDefault())
+private fun localString(instant:Instant)=TimestampInput.format(instant,ZoneId.systemDefault())
+private fun parseInstant(value:String)=TimestampInput.parse(value,ZoneId.systemDefault())
 private fun label(state:SlotState)=when(state){SlotState.PENDING->R.string.status_pending;SlotState.SOON->R.string.status_soon;SlotState.OVERDUE->R.string.status_overdue;SlotState.ON_TIME->R.string.status_on_time;SlotState.LATE->R.string.status_late;SlotState.MISSED->R.string.status_missed;SlotState.SKIPPED->R.string.status_skipped}
 
 /** System settings can change without changing database rows. */
@@ -215,3 +214,5 @@ private fun label(state:SlotState)=when(state){SlotState.PENDING->R.string.statu
 @Preview(showBackground=true) @Composable fun OverridePreview(){NotesTheme{val s=Slot("wall:1@2026-10-05T12:00:00",1,1,Instant.EPOCH,Instant.EPOCH,ZoneId.of("UTC"),1.0,15,120,Instant.EPOCH);OverrideDialog(s,SlotOverride(s.key),{}, {})}}
 @Preview(showBackground=true) @Composable fun AppointmentPreview(){NotesTheme{AppointmentDialog({}, {})}}
 @Preview(showBackground=true) @Composable fun ReliabilityPreview(){NotesTheme{ReliabilityContent({}, {})}}
+
+@Preview(showBackground=true) @Composable fun ManualIntakePreview(){NotesTheme{ManualDialog(listOf(MedicationEntity(id=1,name="Synthetic note",molecule="OTHER",unit="MG",dose_per_intake=1.0,container_capacity=10.0,soon_alert_minutes=15,late_after_minutes=120,site_rotation=false,notifications_on=false,active=true,sort_order=0)),{}, {_,_,_->})}}

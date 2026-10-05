@@ -152,4 +152,16 @@ class ScheduleTest {
         assertNull(c.consume("opaque","old"));val consumed=c.consume("opaque","new")!!
         assertNull(consumed.consume("opaque","new"));assertNull(consumed.next(4500));assertNull(c.next(6000))
     }
+    @Test fun `actual timestamp input preserves second DST overlap and subseconds`() {
+        val at=Instant.parse("2026-11-01T06:30:00.001Z");val zone=ZoneId.of("America/New_York")
+        val text=TimestampInput.format(at,zone)
+        assertTrue(text.endsWith("-05:00"))
+        assertEquals(at,TimestampInput.parse(text,ZoneId.of("Asia/Tokyo")))
+    }
+    @Test fun `unqualified timestamp input retains established wall DST policy`() {
+        val zone=ZoneId.of("America/New_York")
+        assertEquals(Instant.parse("2026-03-08T07:00:00Z"),TimestampInput.parse("2026-03-08T02:30:00",zone))
+        assertEquals(Instant.parse("2026-11-01T05:30:00Z"),TimestampInput.parse("2026-11-01T01:30:00",zone))
+    }
+
 }
