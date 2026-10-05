@@ -1,0 +1,27 @@
+# 用户真实健康数据：只用于本地测试导入器，绝不提交
+reference/
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+!**/src/test/resources/**/*.sql
+
+# Gradle / Android
+.gradle/
+build/
+local.properties
+*.apk
+*.aab
+*.keystore
+*.jks
+captures/
+.externalNativeBuild/
+.cxx/
+
+# IDE
+.idea/
+*.iml
+.DS_Store
+
+# Node (tools/pk-reference)
+node_modules/
