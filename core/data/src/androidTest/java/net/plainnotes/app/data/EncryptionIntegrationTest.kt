@@ -54,4 +54,17 @@ class EncryptionIntegrationTest {
         assertEquals(1,record.revision);access.get().close()
     }
 
+    @Test fun versionCutoverUsesDatabaseMillisecondPrecisionWithoutDuplicateSlot()=runBlocking {
+        val access=DatabaseAccess(context);val repo=NotesRepository(access)
+        val cut=java.time.Instant.ofEpochMilli(System.currentTimeMillis())
+        val med=MedicationEntity(name="Synthetic cutover",molecule="OTHER",unit="MG",dose_per_intake=1.0,container_capacity=10.0,soon_alert_minutes=0,late_after_minutes=10,site_rotation=false,notifications_on=false,active=true,sort_order=0)
+        val kind=net.plainnotes.app.domain.RuleKind.EVERY_N_HOURS
+        val id=repo.saveMedication(med,null,kind,12,emptyList(),emptySet(),cut.minusSeconds(12*3600))
+        repo.saveMedication(med.copy(id=id),null,kind,12,emptyList(),emptySet(),cut.plusNanos(500_000))
+        val slots=repo.calendar(cut).filter{it.slot.at==cut}
+        assertEquals(1,slots.size)
+        assertEquals(repo.rules().last().id,slots.single().slot.ruleId)
+        access.get().close()
+    }
+
 }

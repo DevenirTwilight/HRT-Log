@@ -75,20 +75,21 @@ import javax.inject.Singleton
         return entry.slot.takeIf{trigger.toEpochMilli()==source.trigger_utc}
     }
     suspend fun saveMedication(value:MedicationEntity,ester:String?,kind:RuleKind,interval:Int,times:List<LocalTime>,weekdays:Set<DayOfWeek>,now:Instant=Instant.now()):Long=transaction { dao ->
+        val effectiveNow=Instant.ofEpochMilli(now.toEpochMilli())
         require(value.name.isNotBlank() && value.dose_per_intake.isFinite() && value.dose_per_intake>0)
-        val zone=ZoneId.systemDefault();reconcile(dao,now,zone)
+        val zone=ZoneId.systemDefault();reconcile(dao,effectiveNow,zone)
         val id=if(value.id==0L)dao.insertMedication(value) else {dao.updateMedication(value);value.id}
-        val cut=now.toEpochMilli()
+        val cut=effectiveNow.toEpochMilli()
         // Preserve pending/overridden slots born before the cutover without persisting future PENDING rows.
         val old=dao.rules().filter { it.medication_id==id && it.effective_until_utc==null }
         if(old.isNotEmpty()) {
             val earliest=old.minOf{it.effective_from_utc}
-            val keep=timeline(dao,now,Instant.ofEpochMilli(earliest),now.plusSeconds(86400*14),zone)
-                .filter{it.slot.medicationId==id && it.slot.original<now && it.state in listOf(SlotState.PENDING,SlotState.SOON,SlotState.OVERDUE)}
+            val keep=timeline(dao,effectiveNow,Instant.ofEpochMilli(earliest),effectiveNow.plusSeconds(86400*14),zone)
+                .filter{it.slot.medicationId==id && it.slot.original<effectiveNow && it.state in listOf(SlotState.PENDING,SlotState.SOON,SlotState.OVERDUE)}
             keep.forEach{dao.retain(it.slot.retained())}
             val models=ruleModels(dao).filter{r->old.any{it.id==r.id}}
             dao.overrides().filter{it.medication_id==id}.forEach { change ->
-                models.firstNotNullOfOrNull{ScheduleEngine.resolve(it,change.slot_key,zone)}?.takeIf{it.original<now}?.let{dao.retain(it.retained())}
+                models.firstNotNullOfOrNull{ScheduleEngine.resolve(it,change.slot_key,zone)}?.takeIf{it.original<effectiveNow}?.let{dao.retain(it.retained())}
             }
             old.forEach{require(cut>it.effective_from_utc);dao.updateRule(it.copy(effective_until_utc=cut))}
         }
@@ -96,7 +97,7 @@ import javax.inject.Singleton
             dao.profile(ProfileEntity(id,ester,when(value.route){"ORAL"->"oral";"SUBLINGUAL"->"sublingual";"GEL"->"gel";"PATCH"->"patchApply";"INJECTION"->"injection";else->error("Unsupported estradiol route")}))
         if(value.active) {
             val soon=requireNotNull(value.soon_alert_minutes);val late=requireNotNull(value.late_after_minutes)
-            val anchorDate=if(kind==RuleKind.EVERY_N_HOURS)null else now.atZone(zone).toLocalDate().toString()
+            val anchorDate=if(kind==RuleKind.EVERY_N_HOURS)null else effectiveNow.atZone(zone).toLocalDate().toString()
             val mask=weekdays.sumOf{1 shl (it.value-1)}
             val r=RuleEntity(medication_id=id,kind=kind.name,interval=interval,weekday_mask=mask,anchor_local=anchorDate,anchor_zone=zone.id,
                 anchor_utc=if(kind==RuleKind.EVERY_N_HOURS)cut else null,effective_from_utc=cut,effective_until_utc=null,effective_zone=zone.id,
