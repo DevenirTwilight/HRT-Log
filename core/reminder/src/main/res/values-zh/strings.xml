@@ -1,0 +1,7 @@
+<resources>
+<string name="reminder_channel">提醒</string>
+<string name="neutral_reminder">提醒</string>
+<string name="neutral_open">打开查看你的记录</string>
+<string name="snooze_action">稍后（10 分钟）</string>
+<string name="record_action">已服</string>
+</resources>

@@ -22,6 +22,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
@@ -49,6 +50,8 @@ import java.time.format.DateTimeFormatter
 }
 private fun localString(instant:Instant)=TimestampInput.format(instant,ZoneId.systemDefault())
 private fun parseInstant(value:String)=TimestampInput.parse(value,ZoneId.systemDefault())
+/** Display-only date in the current UI language; input fields keep the ISO format. */
+@Composable private fun localDate(date:LocalDate):String=date.format(DateTimeFormatter.ofLocalizedDate(java.time.format.FormatStyle.MEDIUM).withLocale(LocalConfiguration.current.locales[0]))
 private fun label(state:SlotState)=when(state){SlotState.PENDING->R.string.status_pending;SlotState.SOON->R.string.status_soon;SlotState.OVERDUE->R.string.status_overdue;SlotState.ON_TIME->R.string.status_on_time;SlotState.LATE->R.string.status_late;SlotState.MISSED->R.string.status_missed;SlotState.SKIPPED->R.string.status_skipped}
 
 /** System settings can change without changing database rows. */
@@ -89,7 +92,7 @@ private fun label(state:SlotState)=when(state){SlotState.PENDING->R.string.statu
                 if(state.medications.isEmpty())Text(stringResource(R.string.no_medications))
                 LazyColumn { items(state.medications,key={it.id}) { m ->
                     Card(Modifier.fillMaxWidth().padding(vertical=4.dp)){Column(Modifier.padding(12.dp)){
-                        Text(m.name,style=MaterialTheme.typography.titleMedium);Text(stringResource(R.string.dose_display,m.dose_per_intake.toString(),m.unit))
+                        Text(m.name,style=MaterialTheme.typography.titleMedium);Text(stringResource(R.string.dose_display,m.dose_per_intake.toString(),choiceLabel(m.unit)))
                         Row{TextButton(onClick={model.edit(m)}){Text(stringResource(R.string.edit))};TextButton(onClick={archive=m}){Text(stringResource(R.string.delete))}}
                     }}
                 } }
@@ -111,11 +114,11 @@ private fun label(state:SlotState)=when(state){SlotState.PENDING->R.string.statu
     LazyColumn(Modifier.fillMaxWidth()) {
         items(state.slots,key={it.slot.key}){e->
             val s=e.slot;val date=s.at.atZone(ZoneId.systemDefault()).toLocalDate();val days=java.time.temporal.ChronoUnit.DAYS.between(today,date)
-            val heading=when(days){0L->stringResource(R.string.today);1L->stringResource(R.string.tomorrow);else->if(days>1)stringResource(R.string.date_ahead,date.toString(),days.toInt())else date.toString()}
+            val heading=when(days){0L->stringResource(R.string.today);1L->stringResource(R.string.tomorrow);else->if(days>1)stringResource(R.string.date_ahead,localDate(date),days.toInt())else localDate(date)}
             Card(Modifier.fillMaxWidth().padding(vertical=4.dp)){Column(Modifier.padding(12.dp)){
                 Text(heading,style=MaterialTheme.typography.labelLarge);Text(names[s.medicationId]?.name ?: "",style=MaterialTheme.typography.titleMedium)
                 Text(stringResource(R.string.due,s.at.atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("HH:mm:ss"))))
-                Text(stringResource(R.string.dose_display,s.dose.toString(),names[s.medicationId]?.unit ?: ""));Text(stringResource(label(e.state)))
+                Text(stringResource(R.string.dose_display,s.dose.toString(),names[s.medicationId]?.unit?.let{choiceLabel(it)} ?: ""));Text(stringResource(label(e.state)))
                 if(e.state !in listOf(SlotState.ON_TIME,SlotState.LATE,SlotState.SKIPPED))TextButton(onClick={onComplete(s)}){Text(stringResource(R.string.complete))}
                 if(e.state !in listOf(SlotState.ON_TIME,SlotState.LATE,SlotState.MISSED))TextButton(onClick={onOverride(s)}){Text(stringResource(R.string.reschedule))}
             }}

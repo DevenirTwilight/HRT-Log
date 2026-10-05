@@ -1,0 +1,7 @@
+<resources>
+<string name="reminder_channel">Rappels</string>
+<string name="neutral_reminder">Rappel</string>
+<string name="neutral_open">Ouvrir pour consulter vos notes</string>
+<string name="snooze_action">Plus tard (10 minutes)</string>
+<string name="record_action">Pris</string>
+</resources>
