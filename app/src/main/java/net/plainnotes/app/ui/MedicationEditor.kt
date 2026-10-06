@@ -150,7 +150,7 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
                     }
                     // Times a day: fills evenly spaced times only (each stays editable); the dose always stays the user's own entry.
                     TimesPerDayRow(if (kind == RuleKind.EVERY_N_HOURS) 1 else times.size.coerceIn(1, MAX_TIMES_PER_DAY)) { n ->
-                        if (kind == RuleKind.EVERY_N_HOURS) { kind = RuleKind.EVERY_N_DAYS; interval = "1" }
+                        kind = RuleKind.EVERY_N_DAYS; interval = "1"
                         times.clear(); times.addAll(evenTimes(n))
                     }
                     Text(stringResource(R.string.times_per_day_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)

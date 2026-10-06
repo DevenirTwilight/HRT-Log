@@ -30,6 +30,8 @@ val OPEN_STATES = setOf(SlotState.PENDING, SlotState.SOON, SlotState.OVERDUE)
 class RunOut(val medicationId: Long, val remaining: Double, val lastCovered: Instant?, val firstShort: Instant?) {
     /** True when stock lasts past the forecast horizon. */
     val beyondHorizon get() = firstShort == null
+    /** Full days until the first dose stock cannot cover, independent of the viewed date. */
+    fun daysLeft(now:Instant):Int? = firstShort?.let { java.time.Duration.between(now,it).toDays().coerceAtLeast(0).toInt() }
 }
 
 /** Remaining amount across open and sealed containers, or null when the medication's stock is not tracked. */

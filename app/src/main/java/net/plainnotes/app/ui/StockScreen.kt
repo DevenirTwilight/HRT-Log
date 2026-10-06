@@ -28,10 +28,12 @@ const val EXPIRY_WARNING_DAYS = net.plainnotes.app.reminder.StockAlerts.EXPIRY_W
 
 /** Average planned use per day, from the current schedule (null when unscheduled). */
 fun dailyUse(m: MedicationEntity, s: ScheduleSummary?): Double? = s?.let {
+    val dose=it.dose ?: m.dose_per_intake
+    val perDay=it.times.indices.sumOf { index -> it.timeDoses.getOrNull(index) ?: dose }
     when (it.kind) {
-        RuleKind.EVERY_N_DAYS -> it.times.size * m.dose_per_intake / it.interval
-        RuleKind.EVERY_N_HOURS -> 24.0 / it.interval * m.dose_per_intake
-        RuleKind.WEEKLY -> it.weekdays.size * it.times.size * m.dose_per_intake / (7.0 * it.interval)
+        RuleKind.EVERY_N_DAYS -> perDay / it.interval
+        RuleKind.EVERY_N_HOURS -> 24.0 / it.interval * dose
+        RuleKind.WEEKLY -> it.weekdays.size * perDay / (7.0 * it.interval)
     }
 }?.takeIf { it > 0 }
 

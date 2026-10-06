@@ -14,12 +14,19 @@ import net.plainnotes.app.conc.ConcentrationResult
 import net.plainnotes.app.pk.CalibrationMode
 
 /** Current schedule of one medication, for display only. */
-data class ScheduleSummary(val kind:RuleKind,val interval:Int,val weekdays:Set<DayOfWeek>,val times:List<LocalTime>)
+data class ScheduleSummary(val kind:RuleKind,val interval:Int,val weekdays:Set<DayOfWeek>,val times:List<LocalTime>,val dose:Double?=null,val timeDoses:List<Double?> = emptyList())
 data class NotesState(val medications:List<MedicationEntity> = emptyList(),val slots:List<TimelineEntry> = emptyList(),val appointments:List<AppointmentEntity> = emptyList(),val error:Int?=null,val loading:Boolean=true,
                       val schedules:Map<Long,ScheduleSummary> = emptyMap(),val profiles:Map<Long,ProfileEntity> = emptyMap(),val calendarStart:LocalDate=LocalDate.now())
 data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEntity?,val rule:RuleEntity?,val times:List<TimeEntity>)
-@HiltViewModel class NotesViewModel @Inject constructor(private val repo:NotesRepository,private val reminders:ReminderCoordinator,
+@HiltViewModel class NotesViewModel @Inject constructor(repository:NotesRepository,private val reminders:ReminderCoordinator,
     @dagger.hilt.android.qualifiers.ApplicationContext private val app:android.content.Context):ViewModel() {
+    // One activity owns one data space; an old activity must never follow a shell switch.
+    private val repo=repository.pinnedTo(repository.space)
+    private var refreshJob:Job?=null
+    private var concJob:Job?=null
+    private var readFailureShown=false
+    private suspend fun <T> mutate(block:suspend()->T):T = if(decoy) block() else reminders.mutate(block)
+    private fun readFailure(cause:Exception) { if(!readFailureShown){readFailureShown=true;mutable.value=mutable.value.copy(error=if(cause is KeyRecoveryRequired || cause is DataLockedException) R.string.data_error else R.string.operation_error,loading=false)} }
     val notificationSlot=MutableStateFlow<Slot?>(null)
     fun notification(id:String)=viewModelScope.launch {
         runCatching { val mapping=repo.transaction{it.mappings().firstOrNull{m->m.opaque_id==id}} ?: return@runCatching
@@ -30,25 +37,39 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     var override=MutableStateFlow<SlotOverride?>(null);private set
     private var calendarStart=LocalDate.now()
     fun calendarFrom(value:LocalDate?){calendarStart=value ?: LocalDate.now();refresh()}
-    init { refresh();viewModelScope.launch{while(isActive){delay(30000);refresh()}} }
-    fun refresh()=viewModelScope.launch { try {
-        val meds=repo.medications();val slots=repo.calendar(displayFrom=calendarStart);val appts=repo.appointments()
-        val schedules=repo.rules().filter{it.effective_until_utc==null}.associate { r ->
-            r.medication_id to ScheduleSummary(RuleKind.valueOf(r.kind),r.interval,DayOfWeek.entries.filter{r.weekday_mask and (1 shl (it.value-1))!=0}.toSet(),
-                repo.transaction{it.times(r.id)}.map{LocalTime.parse(it.local_time)}.sorted())
-        }
-        val profiles=meds.mapNotNull{m->repo.profile(m.id)?.let{m.id to it}}.toMap()
-        mutable.value=NotesState(meds,slots,appts,null,false,schedules,profiles,calendarStart)
-    }catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.data_error,loading=false)} }
+    init { refresh();viewModelScope.launch{while(isActive){delay(30000);if(!readFailureShown)refresh()}} }
+    /** All pages read the same committed snapshot; a newer refresh cancels older work. */
+    fun refresh():Job {
+        refreshJob?.cancel();concJob?.cancel()
+        return viewModelScope.launch { try {
+            val today=LocalDate.now();val now=Instant.now();val start=calendarStart
+            val snapshot=repo.transaction { dao ->
+                val slots=repo.calendar(now,displayFrom=start)
+                val meds=dao.medications()
+                val schedules=dao.rules().filter{it.effective_until_utc==null}.associate { r ->
+                    val times=dao.times(r.id).sortedBy{it.local_time}
+                    r.medication_id to ScheduleSummary(RuleKind.valueOf(r.kind),r.interval,DayOfWeek.entries.filter{r.weekday_mask and (1 shl (it.value-1))!=0}.toSet(),
+                        times.map{LocalTime.parse(it.local_time)},r.dose_snapshot,times.map{it.dose_override})
+                }
+                val profiles=meds.mapNotNull{m->dao.profile(m.id)?.let{m.id to it}}.toMap()
+                val upcoming=(repo.planned(now,now.plus(Duration.ofDays(366)),now)+slots.filter{it.slot.at<now}).distinctBy{it.slot.key}.filter{it.state in net.plainnotes.app.ui.OPEN_STATES}
+                NotesState(meds,slots,dao.appointments(),mutable.value.error,false,schedules,profiles,start) to
+                    ExtraState(dao.records(),dao.containers(),repo.checkinItems(),dao.scores(today.minusYears(5).toString(),today.toString()),dao.notes(today.minusYears(5).toString(),today.toString()),upcoming)
+            }
+            ensureActive()
+            mutable.value=snapshot.first.copy(error=mutable.value.error);extra.value=snapshot.second;readFailureShown=false
+            loadConcentration()
+        }catch(e:CancellationException){throw e}catch(e:Exception){readFailure(e)} }.also{refreshJob=it}
+    }
     fun clearError(){mutable.value=mutable.value.copy(error=null)}
-    private fun change(block:suspend()->Unit)=viewModelScope.launch{try{reminders.mutate(block);refresh().join();loadExtra()}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}
+    private fun change(block:suspend()->Unit)=guarded{mutate(block);refresh().join()}
     fun edit(m:MedicationEntity?)=viewModelScope.launch {try {
         val r=m?.let{repo.rules().lastOrNull{r->r.medication_id==it.id&&r.effective_until_utc==null}}
         val t=if(r==null)emptyList()else repo.transaction{it.times(r.id)}
         editor.value=EditMedication(m,m?.let{repo.profile(it.id)},r,t)
-    }catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)} }
+    }catch(e:CancellationException){throw e}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)} }
     fun closeEditor(){editor.value=null}
-    fun save(d:net.plainnotes.app.ui.MedicationDraft)=change {repo.saveMedication(d.medication,d.ester,d.kind,d.interval,d.times,d.weekdays,pk=d.pk);editor.value=null;loadConcentration()}
+    fun save(d:net.plainnotes.app.ui.MedicationDraft)=change {repo.saveMedication(d.medication,d.ester,d.kind,d.interval,d.times,d.weekdays,pk=d.pk);editor.value=null}
     fun editById(id:Long){state.value.medications.firstOrNull{it.id==id}?.let{edit(it)}}
 
     // Concentration (PK) page
@@ -56,35 +77,32 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     val conc=MutableStateFlow(ConcState())
     private var concSettings=Pair(true,CalibrationMode.RETROSPECTIVE)
     fun concentrationSettings(calibrate:Boolean,mode:CalibrationMode){if(concSettings!=calibrate to mode){concSettings=calibrate to mode;loadConcentration()}}
-    fun loadConcentration()=viewModelScope.launch { try {
+    fun loadConcentration():Job { concJob?.cancel(); return viewModelScope.launch { try {
         conc.value=conc.value.copy(loading=true)
         val now=Instant.now()
-        val meds=repo.medications();val profiles=meds.mapNotNull{m->repo.profile(m.id)?.let{m.id to it}}.toMap()
-        val records=repo.records();val labs=repo.labs();val weight=repo.weight()
-        val planned=repo.planned(now.minusSeconds(3600),now.plusSeconds(ConcentrationCalculator.FORECAST_DAYS*86400))
-        val result=withContext(Dispatchers.Default){ConcentrationCalculator.compute(meds,profiles,records,planned,labs,weight,now,concSettings.first,concSettings.second)}
+        data class Inputs(val meds:List<MedicationEntity>,val profiles:Map<Long,ProfileEntity>,val records:List<RecordEntity>,val labs:List<LabValueEntity>,val weight:Double?,val planned:List<TimelineEntry>)
+        val inputs=repo.transaction { dao ->
+            val meds=dao.medications()
+            Inputs(meds,meds.mapNotNull{m->dao.profile(m.id)?.let{m.id to it}}.toMap(),dao.records(),dao.labs(),dao.pkSettings()?.current_weight_kg,
+                repo.planned(now.minusSeconds(3600),now.plusSeconds(ConcentrationCalculator.FORECAST_DAYS*86400),now))
+        }
+        val (meds,profiles,records,labs,weight,planned)=inputs
+        val settings=concSettings
+        val result=withContext(Dispatchers.Default){ConcentrationCalculator.compute(meds,profiles,records,planned,labs,weight,now,settings.first,settings.second)}
         val e2=meds.filter{it.molecule=="E2"}.map{it.id}.toSet()
         val doseTimes=records.filter{it.medication_id in e2 && it.status in listOf("ON_TIME","LATE") && it.taken_utc!=null}.map{Instant.ofEpochMilli(it.taken_utc!!)}.sorted()
-        conc.value=ConcState(false,result,weight,labs,doseTimes)
-    }catch(_:Exception){conc.value=conc.value.copy(loading=false);mutable.value=mutable.value.copy(error=R.string.data_error)} }
+        ensureActive();conc.value=ConcState(false,result,weight,labs,doseTimes)
+    }catch(e:CancellationException){throw e}catch(e:Exception){conc.value=conc.value.copy(loading=false);readFailure(e)} }.also{concJob=it} }
     // History, stock and well-being
     data class ExtraState(val records:List<RecordEntity> = emptyList(),val containers:List<ContainerEntity> = emptyList(),val items:List<CheckinItemEntity> = emptyList(),
                           val scores:List<CheckinScoreEntity> = emptyList(),val notes:List<DayNoteEntity> = emptyList(),
                           /** Open doses for the next year (calendar colours and the stock forecast). */ val upcoming:List<TimelineEntry> = emptyList())
     val extra=MutableStateFlow(ExtraState())
     private fun guarded(block:suspend()->Unit)=viewModelScope.launch{try{block()}catch(e:kotlinx.coroutines.CancellationException){throw e}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}
-    private var extraJob:kotlinx.coroutines.Job?=null
-    /** Reloads history, stock and well-being. The latest call wins, so a slow earlier load can never overwrite newer stock with stale values. */
-    fun loadExtra():kotlinx.coroutines.Job{ extraJob?.cancel(); return guarded {
-        val today=LocalDate.now()
-        val now=Instant.now()
-        // The freshly reconciled forecast first, so a slot's newest state wins before open ones are kept.
-        val upcoming=(repo.planned(now,now.plus(java.time.Duration.ofDays(366)))+mutable.value.slots).distinctBy{it.slot.key}.filter{it.state in net.plainnotes.app.ui.OPEN_STATES}
-        extra.value=ExtraState(repo.records(),repo.containers(),repo.checkinItems(),repo.scores(today.minusYears(5),today),repo.notes(today.minusYears(5),today),upcoming)
-    }.also{extraJob=it} }
-    private fun mutateExtra(block:suspend()->Unit)=guarded{block();loadExtra();refresh()}
-    fun editRecord(id:Long,t:Instant,d:Double)=guarded{reminders.mutate{repo.editRecord(id,t,d)};loadExtra();refresh();loadConcentration()}
-    fun deleteRecord(id:Long)=guarded{reminders.mutate{repo.deleteRecord(id)};loadExtra();refresh();loadConcentration()}
+    fun loadExtra():Job=refresh()
+    private fun mutateExtra(block:suspend()->Unit)=change(block)
+    fun editRecord(id:Long,t:Instant,d:Double)=change{repo.editRecord(id,t,d)}
+    fun deleteRecord(id:Long)=change{repo.deleteRecord(id)}
     fun addContainers(med:Long,capacity:Double,count:Int,open:Boolean)=mutateExtra{repo.addContainers(med,capacity,count,open)}
     fun replaceContainer(med:Long,capacity:Double)=mutateExtra{repo.replaceContainer(med,capacity)}
     fun setRemaining(container:Long,remaining:Double)=mutateExtra{repo.setRemaining(container,remaining)}
@@ -100,7 +118,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     val dataJob=MutableStateFlow<DataJob>(DataJob.Idle)
     fun clearDataJob(){dataJob.value=DataJob.Idle}
     private fun dataOp(block:suspend()->DataJob)=viewModelScope.launch{dataJob.value=DataJob.Working;dataJob.value=try{block()}catch(e:BackupCodec.WrongPassword){DataJob.Failed(R.string.backup_wrong_password)}
-        catch(e:BackupCodec.BadFile){DataJob.Failed(R.string.backup_bad_file)}catch(e:net.plainnotes.app.importer.InvalidExport){DataJob.Failed(R.string.import_invalid)}catch(e:net.plainnotes.app.importer.HrtTracker.InvalidExport){DataJob.Failed(R.string.ht_invalid)}catch(_:Exception){DataJob.Failed(R.string.operation_error)}}
+        catch(e:BackupCodec.BadFile){DataJob.Failed(R.string.backup_bad_file)}catch(e:net.plainnotes.app.importer.InvalidExport){DataJob.Failed(R.string.import_invalid)}catch(e:net.plainnotes.app.importer.HrtTracker.InvalidExport){DataJob.Failed(R.string.ht_invalid)}catch(e:CancellationException){throw e}catch(_:Exception){DataJob.Failed(R.string.operation_error)}}
     private fun tempImport()=java.io.File(app.noBackupFilesDir,"import").apply{mkdirs()}.resolve("transmemo.db")
     fun openTransMemo(uri:android.net.Uri)=dataOp {
         withContext(Dispatchers.IO) {
@@ -111,9 +129,9 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     }
     fun runImport(export:net.plainnotes.app.importer.TmExport,choices:net.plainnotes.app.importer.TransMemo.Choices,overwrite:Boolean)=dataOp {
         val plan=withContext(Dispatchers.Default){net.plainnotes.app.importer.TransMemo.plan(export,ZoneId.systemDefault(),choices)}
-        val summary=reminders.mutate{repo.importTransMemo(plan,overwrite)}
+        val summary=mutate{repo.importTransMemo(plan,overwrite)}
         withContext(Dispatchers.IO){tempImport().delete()}
-        refresh();loadExtra();loadConcentration();DataJob.Imported(summary)
+        refresh().join();DataJob.Imported(summary)
     }
     fun openHrtTracker(uri:android.net.Uri)=dataOp {
         val limit=32*1024*1024
@@ -127,8 +145,8 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     fun runHtImport(export:net.plainnotes.app.importer.HrtTracker.Export,duplicates:net.plainnotes.app.importer.HrtTracker.Duplicates?,
                     targets:Map<net.plainnotes.app.importer.HrtTracker.Group,Long?>,names:Map<net.plainnotes.app.importer.HrtTracker.Group,String>,weight:Boolean)=dataOp {
         val plan=withContext(Dispatchers.Default){net.plainnotes.app.importer.HrtTracker.plan(export,duplicates)}
-        val summary=reminders.mutate{repo.importHrtTracker(plan,targets,names,if(weight)export.weightKg else null)}
-        refresh();loadExtra();loadConcentration();DataJob.HtImported(summary)
+        val summary=mutate{repo.importHrtTracker(plan,targets,names,if(weight)export.weightKg else null)}
+        refresh().join();DataJob.HtImported(summary)
     }
     fun cancelImport()=viewModelScope.launch{withContext(Dispatchers.IO){tempImport().delete()};dataJob.value=DataJob.Idle}
     fun exportBackup(uri:android.net.Uri,password:CharArray)=dataOp {
@@ -141,8 +159,8 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     }
     fun restoreBackup(uri:android.net.Uri,password:CharArray)=dataOp {
         val bytes=withContext(Dispatchers.IO){app.contentResolver.openInputStream(uri)!!.use{it.readBytes()}}
-        reminders.mutate{repo.restoreBackup(bytes,password)};password.fill(' ')
-        refresh();loadExtra();loadConcentration();DataJob.Done(R.string.backup_restored)
+        mutate{repo.restoreBackup(bytes,password)};password.fill(' ')
+        refresh().join();DataJob.Done(R.string.backup_restored)
     }
     private suspend fun exportData(labels:(CheckinItemEntity)->String,schedules:Map<Long,String>):net.plainnotes.app.export.ExportData {
         val meds=repo.medications();val today=LocalDate.now()
@@ -164,7 +182,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     fun wipeAll(onDone:()->Unit)=viewModelScope.launch {
         // In the decoy space only the decoy data goes; nothing there may touch (or reveal) the real data and settings.
         if(decoy){ withContext(Dispatchers.IO){repo.destroyAll()}; onDone(); return@launch }
-        withContext(Dispatchers.IO){ reminders.mutate{repo.destroyAll()}
+        withContext(Dispatchers.IO){ mutate{repo.destroyAll()}
             net.plainnotes.app.disguise.Disguise.disable(app); repo.destroy(net.plainnotes.app.data.Space.DECOY)
             app.getSharedPreferences("prefs",android.content.Context.MODE_PRIVATE).edit().clear().commit()
             app.getSharedPreferences("shell_notes",android.content.Context.MODE_PRIVATE).edit().clear().commit()
@@ -174,19 +192,19 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
             runCatching{reminders.sync()} }
         onDone()
     }
-    fun setWeight(kg:Double)=viewModelScope.launch{try{repo.setWeight(kg);loadConcentration()}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}
-    fun saveLab(v:LabValueEntity)=viewModelScope.launch{try{repo.saveLab(v);loadConcentration()}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}
-    fun deleteLab(v:LabValueEntity)=viewModelScope.launch{try{repo.deleteLab(v.id);loadConcentration()}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}
+    fun setWeight(kg:Double)=change{repo.setWeight(kg)}
+    fun saveLab(v:LabValueEntity)=change{repo.saveLab(v)}
+    fun deleteLab(v:LabValueEntity)=change{repo.deleteLab(v.id)}
     fun delete(id:Long)=change{repo.removeMedication(id)}
-    fun complete(s:Slot,t:Instant,d:Double,site:String?=null)=change{repo.complete(s,t,d,site)}.also{it.invokeOnCompletion{loadConcentration();loadExtra()}}
+    fun complete(s:Slot,t:Instant,d:Double,site:String?=null)=change{repo.complete(s,t,d,site)}
     fun backfill(id:Long,from:LocalDate,to:LocalDate,times:List<java.time.LocalTime>,d:Double,onDone:(Int)->Unit)=viewModelScope.launch {
-        try { val n=reminders.mutate{repo.backfill(id,from,to,times,d)}; refresh(); loadConcentration(); loadExtra(); onDone(n) }
-        catch(_:Exception){ mutable.value=mutable.value.copy(error=R.string.operation_error) }
+        try { val n=mutate{repo.backfill(id,from,to,times,d)}; refresh().join(); onDone(n) }
+        catch(e:CancellationException){throw e}catch(_:Exception){ mutable.value=mutable.value.copy(error=R.string.operation_error) }
     }
-    fun manual(id:Long,t:Instant,d:Double,site:String?=null)=change{repo.unscheduled(id,t,d,site)}.also{it.invokeOnCompletion{loadConcentration();loadExtra()}}
+    fun manual(id:Long,t:Instant,d:Double,site:String?=null)=change{repo.unscheduled(id,t,d,site)}
     fun loadOverride(key:String)=viewModelScope.launch{override.value=repo.currentOverride(key)}
     fun changeOverride(s:Slot,o:SlotOverride)=change{repo.override(s,o);override.value=null}
     fun appointment(v:AppointmentEntity)=change{repo.appointment(v)}
     fun testReminder()=viewModelScope.launch{try{reminders.testReminder()}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}
-    fun sync()=viewModelScope.launch{runCatching{reminders.sync()};refresh().join();loadExtra()}
+    fun sync()=viewModelScope.launch{if(!decoy)runCatching{reminders.sync()};refresh().join()}
 }

@@ -57,7 +57,7 @@ private fun ComponentActivity.attempt(repo: NotesRepository, input: String, onMi
     lifecycleScope.launch {
         val space = withContext(Dispatchers.Default) { Disguise.check(this@attempt, input) }
         if (space == null) { onMiss(); return@launch }
-        repo.select(space); Session.open = true
+        repo.select(space); Session.begin()
         startActivity(Intent(this@attempt, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
         finish()
     }

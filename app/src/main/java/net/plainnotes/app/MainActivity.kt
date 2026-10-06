@@ -33,6 +33,7 @@ import net.plainnotes.app.ui.UiPrefs
     private lateinit var lock: AppLock
     private var locked by mutableStateOf(false)
     private var leftAt = 0L
+    private var sessionGeneration = Session.generation
     private val shake = ShakeDetector { if (Disguise.enabled(this)) Disguise.exit(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +42,7 @@ import net.plainnotes.app.ui.UiPrefs
         window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         // In disguise mode the app is only reachable through the shell code; recents and stale tasks go back to the shell.
         if (Disguise.enabled(this) && !Session.open) { Disguise.exit(this); return }
+        sessionGeneration = Session.generation
         Disguise.shell(this)?.let { setTaskDescription(taskDescription(getString(it.label), it.icon)) }
         val prefs = UiPrefs(this)
         lock = AppLock(this)
@@ -65,9 +67,9 @@ import net.plainnotes.app.ui.UiPrefs
     override fun onStop() {
         super.onStop(); leftAt = SystemClock.elapsedRealtime()
         // Disguise mode locks as soon as the app leaves the screen; only a system file picker is exempt.
-        if (Disguise.enabled(this) && !Session.externalPicker && !isChangingConfigurations) Session.open = false
+        if (Disguise.enabled(this) && !Session.externalPicker && !isChangingConfigurations) Session.lock(sessionGeneration)
     }
-    override fun onResume() { super.onResume(); model.sync(); if (Disguise.enabled(this)) shake.register(getSystemService(SensorManager::class.java)) }
+    override fun onResume() { super.onResume(); if (Disguise.enabled(this) && !Session.open) return; model.sync(); if (Disguise.enabled(this)) shake.register(getSystemService(SensorManager::class.java)) }
     override fun onPause() { super.onPause(); shake.unregister(getSystemService(SensorManager::class.java)) }
 
     @Suppress("DEPRECATION")

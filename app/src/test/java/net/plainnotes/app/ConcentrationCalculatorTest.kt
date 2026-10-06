@@ -94,6 +94,15 @@ class ConcentrationCalculatorTest {
 class StockSummaryTest {
     private val m = MedicationEntity(1, "m", "E2", "ORAL", "MG", 2.0, 30.0, 30, 15, 120, false, null, true, true, 0)
     private val twiceDaily = ScheduleSummary(RuleKind.EVERY_N_DAYS, 1, emptySet(), listOf(java.time.LocalTime.of(8, 0), java.time.LocalTime.of(20, 0)))
+    @Test fun eightyFourMilligramsAtFourADayLastsTwentyOneDays() {
+        val boxes=listOf(ContainerEntity(1,1,84.0,0.0,0.0,null,"SEALED"))
+        assertEquals(21,net.plainnotes.app.ui.stockSummary(m,boxes,twiceDaily).daysLeft)
+        // The current schedule's snapshot/overrides, not a stale medication default, determine use.
+        val overridden=twiceDaily.copy(dose=0.178, timeDoses=listOf(2.0,2.0))
+        assertEquals(21,net.plainnotes.app.ui.stockSummary(m.copy(dose_per_intake=0.178),boxes,overridden).daysLeft)
+        assertEquals(21,net.plainnotes.app.ui.stockSummary(m.copy(dose_per_intake=4.0),boxes,
+            ScheduleSummary(RuleKind.EVERY_N_DAYS,1,emptySet(),listOf(java.time.LocalTime.NOON),dose=4.0)).daysLeft)
+    }
     @Test fun untrackedIsNeverLow() {
         val s = net.plainnotes.app.ui.stockSummary(m, emptyList(), twiceDaily)
         assertFalse(s.tracked); assertFalse(s.low)

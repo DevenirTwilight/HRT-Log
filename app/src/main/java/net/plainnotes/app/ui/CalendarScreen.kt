@@ -53,9 +53,10 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
     var selectedText by rememberSaveable { mutableStateOf(state.calendarStart.toString()) }
     val selected = LocalDate.parse(selectedText)
     LaunchedEffect(state.calendarStart) { selectedText = state.calendarStart.toString() }
-    val upcoming = remember(extra.upcoming, state.slots) { (state.slots + extra.upcoming).distinctBy { it.slot.key }.filter { it.state in OPEN_STATES } }
+    val upcoming = remember(extra.upcoming) { extra.upcoming }
     val runOut = remember(state.medications, extra.containers, upcoming) { forecast(state.medications, extra.containers, upcoming) }
-    val infos = remember(extra.records, upcoming, state.appointments, runOut) { dayInfos(extra.records, upcoming, state.appointments, runOut, zone) }
+    val displayedUpcoming = remember(upcoming, state.slots) { (state.slots + upcoming).distinctBy { it.slot.key }.filter { it.state in OPEN_STATES } }
+    val infos = remember(extra.records, displayedUpcoming, state.appointments, runOut) { dayInfos(extra.records, displayedUpcoming, state.appointments, runOut, zone) }
     fun select(d: LocalDate) { selectedText = d.toString() }
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = contentPadding.calculateTopPadding() + 8.dp,
         bottom = contentPadding.calculateBottomPadding() + 96.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -285,7 +286,7 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
                         !hasPlan -> stringResource(R.string.forecast_no_plan, formatDose(f.remaining, m.unit)) to false
                         f.lastCovered == null -> stringResource(R.string.forecast_empty) to true
                         f.beyondHorizon -> stringResource(R.string.forecast_year, formatDose(f.remaining, m.unit)) to false
-                        else -> { val d = f.lastCovered.atZone(zone).toLocalDate(); val days = java.time.temporal.ChronoUnit.DAYS.between(today, d).toInt()
+                        else -> { val d = f.lastCovered.atZone(zone).toLocalDate(); val days = f.daysLeft(Instant.now()) ?: 0
                             stringResource(R.string.forecast_until, formatShortDate(d), days, formatDose(f.remaining, m.unit)) to (days < LOW_STOCK_DAYS) }
                     }
                     Text(text, style = MaterialTheme.typography.bodyMedium, color = if (warn) c.error else c.onSurfaceVariant)

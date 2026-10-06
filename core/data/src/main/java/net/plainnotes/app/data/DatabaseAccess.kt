@@ -31,18 +31,19 @@ enum class Space(val file:String,val wrap:String,val alias:String) {
 
 @Singleton open class DatabaseAccess @Inject constructor(@ApplicationContext private val context: Context) {
     private val instances=mutableMapOf<Space,NotesDatabase>()
+    private val passphrases=mutableMapOf<Space,ByteArray>()
     /** The space the UI works on. Background reminders always use PRIMARY. Not persisted: a new process starts in PRIMARY. */
     @Volatile var current=Space.PRIMARY
         private set
     @Synchronized fun select(space:Space) {
         if(space==current)return
-        if(current!=Space.PRIMARY)instances.remove(current)?.close()
+        // Switching the UI must not close a database still used by an in-flight transaction.
         current=space
     }
     fun get(): NotesDatabase=get(current)
     @Synchronized open fun get(space:Space): NotesDatabase {
         if(!context.getSystemService(UserManager::class.java).isUserUnlocked) throw DataLockedException()
-        instances[space]?.let { return it }
+        instances[space]?.let { if (it.isOpen) return it else close(space) }
         val passphrase=loadPassphrase(space)
         try {
             System.loadLibrary("sqlcipher")
@@ -50,12 +51,18 @@ enum class Space(val file:String,val wrap:String,val alias:String) {
                 .openHelperFactory(SupportOpenHelperFactory(passphrase))
                 .addCallback(SchemaGuards).build()
             try { db.openHelper.writableDatabase } catch(e:Exception) { db.close(); throw KeyRecoveryRequired(e) }
-            instances[space]=db;return db
-        } finally { passphrase.fill(0) }
+            // SQLCipher 4.10 retains this array for every WAL connection. Clearing it here
+            // makes later concurrent reads fail to decrypt the same database.
+            instances[space]=db;passphrases[space]=passphrase;return db
+        } catch(e:Throwable) { passphrase.fill(0); throw e }
+    }
+    @Synchronized fun close(space:Space=current) {
+        instances.remove(space)?.close()
+        passphrases.remove(space)?.fill(0)
     }
     /** Closes and deletes one space's database, wrapped key and Keystore alias ("delete all data"). */
     @Synchronized fun destroy(space:Space=current) {
-        instances.remove(space)?.close()
+        close(space)
         listOf("","-wal","-shm","-journal").forEach { context.getDatabasePath(space.file+it).delete() }
         File(context.noBackupFilesDir,space.wrap).delete(); File(context.noBackupFilesDir,space.wrap+".bak").delete()
         runCatching { KeyStore.getInstance("AndroidKeyStore").apply { load(null) }.deleteEntry(space.alias) }

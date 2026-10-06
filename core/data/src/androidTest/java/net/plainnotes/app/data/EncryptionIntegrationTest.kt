@@ -1,7 +1,8 @@
 package net.plainnotes.app.data
 import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
+import androidx.room.withTransaction
 import org.junit.*
 import org.junit.Assert.*
 import java.security.KeyStore
@@ -9,7 +10,7 @@ import java.security.KeyStore
 /** Real Android Keystore + native SQLCipher; only synthetic data. */
 class EncryptionIntegrationTest {
     private val context:Context get()=InstrumentationRegistry.getInstrumentation().targetContext
-    @Before fun reset(){context.deleteDatabase("notes.db");java.io.File(context.noBackupFilesDir,"key.wrap").delete();java.io.File(context.noBackupFilesDir,"key.wrap.bak").delete();KeyStore.getInstance("AndroidKeyStore").apply{load(null)}.deleteEntry("notes.wrap")}
+    @Before fun reset(){context.deleteDatabase("notes_b.db");java.io.File(context.noBackupFilesDir,"key_b.wrap").delete();java.io.File(context.noBackupFilesDir,"key_b.wrap.bak").delete();KeyStore.getInstance("AndroidKeyStore").apply{load(null)}.deleteEntry("notes_b.wrap");context.deleteDatabase("notes.db");java.io.File(context.noBackupFilesDir,"key.wrap").delete();java.io.File(context.noBackupFilesDir,"key.wrap.bak").delete();KeyStore.getInstance("AndroidKeyStore").apply{load(null)}.deleteEntry("notes.wrap")}
     @After fun cleanup(){reset()}
     @Test fun encryptedDatabaseReopensWithWrappedRandomKey(){
         val first=DatabaseAccess(context).get()
@@ -21,6 +22,43 @@ class EncryptionIntegrationTest {
         assertEquals("Synthetic native test",runBlocking{reopened.dao().medications().single().name});reopened.close()
         assertTrue(java.io.File(context.noBackupFilesDir,"key.wrap").length()>32)
     }
+    @Test fun concurrentWalReaderAfterEditKeepsTheEncryptionKey()=runBlocking {
+        val access=DatabaseAccess(context);val db=access.get()
+        try {
+            val med=MedicationEntity(name="Synthetic WAL",molecule="OTHER",unit="MG",dose_per_intake=2.0,container_capacity=84.0,soon_alert_minutes=0,late_after_minutes=10,site_rotation=false,notifications_on=false,active=true,sort_order=0)
+            val id=db.dao().insertMedication(med)
+            val writing=CompletableDeferred<Unit>();val release=CompletableDeferred<Unit>()
+            val writer=launch(Dispatchers.IO) { db.withTransaction {
+                db.dao().updateMedication(med.copy(id=id,dose_per_intake=4.0));writing.complete(Unit);release.await()
+            } }
+            writing.await()
+            try {
+                withContext(Dispatchers.IO) {
+                    // While the primary connection is held by the writer, this opens a second WAL connection.
+                    db.openHelper.readableDatabase.query("SELECT dose_per_intake FROM medication").use {
+                        assertTrue(it.moveToFirst());assertEquals(2.0,it.getDouble(0),0.0)
+                    }
+                }
+            } finally { release.complete(Unit);writer.join() }
+            assertEquals(4.0,db.dao().medications().single().dose_per_intake,0.0)
+        } finally { access.close() }
+    }
+
+    @Test fun realSpaceSurvivesRepeatedDecoySwitchesAndReopen()=runBlocking {
+        val access=DatabaseAccess(context);val ui=NotesRepository(access)
+        val real=ui.pinnedTo(Space.PRIMARY);val decoy=ui.pinnedTo(Space.DECOY)
+        try {
+            real.transaction { it.insertMedication(MedicationEntity(name="Synthetic real",molecule="OTHER",unit="MG",dose_per_intake=4.0,container_capacity=84.0,soon_alert_minutes=0,late_after_minutes=10,site_rotation=false,notifications_on=false,active=true,sort_order=0)) }
+            repeat(3) {
+                ui.select(Space.DECOY);assertTrue(decoy.medications().isEmpty())
+                assertEquals("Synthetic real",real.medications().single().name)
+                ui.select(Space.PRIMARY);assertEquals("Synthetic real",ui.medications().single().name)
+            }
+            access.close(Space.PRIMARY);access.close(Space.DECOY)
+            assertEquals("Synthetic real",real.medications().single().name)
+        } finally { access.close(Space.PRIMARY);access.close(Space.DECOY) }
+    }
+
     @Test fun missingWrappedKeyFailsWithoutReplacingDatabase(){
         val db=DatabaseAccess(context).get();db.close()
         val original=context.getDatabasePath("notes.db").readBytes();java.io.File(context.noBackupFilesDir,"key.wrap").delete()

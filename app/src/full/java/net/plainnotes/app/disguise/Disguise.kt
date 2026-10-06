@@ -41,6 +41,7 @@ object Disguise {
 
     fun enable(c: Context, shell: Shell, secret: String, decoyCode: String?) {
         require(AppLock.validPin(secret) && (decoyCode == null || (AppLock.validPin(decoyCode) && decoyCode != secret)))
+        Session.open = true
         code(c).setPin(secret)
         if (decoyCode != null) decoy(c).setPin(decoyCode) else decoy(c).disable()
         NotificationPrefs(c).disguised = true

@@ -26,6 +26,17 @@ class CalendarModelTest {
         assertNull(forecast(listOf(med.copy(active = false)), boxes, upcoming)[1])
     }
 
+    @Test fun eightyFourMilligramsCoversExactlyFortyTwoTwiceDailyDoses() {
+        val boxes=listOf(ContainerEntity(1,1,84.0,0.0,0.0,null,"SEALED"))
+        val f=forecast(listOf(med),boxes,(0 until 732).map{open(it)}).getValue(1)
+        assertEquals(open(41).slot.at,f.lastCovered)
+        assertEquals(21,f.daysLeft(t0.minusSeconds(3600)))
+        assertEquals(t0.atZone(zone).toLocalDate().plusDays(21),f.firstShort!!.atZone(zone).toLocalDate())
+        // Already completed slots cannot consume stock again.
+        val completed=upcoming.take(2).map{TimelineEntry(it.slot,SlotState.ON_TIME)}
+        assertEquals(open(41).slot.at,forecast(listOf(med),boxes,completed+(0 until 732).map{open(it)}.drop(2)).getValue(1).lastCovered!!.minusSeconds(86400))
+    }
+
     @Test fun dayKindsFromRecordsAndOpenSlots() {
         fun rec(day: String, status: String) = RecordEntity(medication_id = 1, taken_utc = if (status in listOf("ON_TIME", "LATE")) Instant.parse("${day}T08:00:00Z").toEpochMilli() else null,
             taken_zone = if (status in listOf("ON_TIME", "LATE")) "UTC" else null, actual_dose = if (status in listOf("ON_TIME", "LATE")) 2.0 else null,
