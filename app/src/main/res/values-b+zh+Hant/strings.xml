@@ -410,7 +410,7 @@
 <string name="import_tm">從 Trans Memo 匯入</string>
 <string name="import_tm_desc">讀取你從 Trans Memo 匯出的資料庫檔案</string>
 <string name="needs_review">待確認</string>
-<string name="report_adherence_line">按時 %1$d，遲服 %2$d，漏服 %3$d，跳過 %4$d，計畫外 %5$d</string>
+<string name="report_adherence_line">按時 %1$d，遲服 %2$d，漏服 %3$d，跳過 %4$d，計畫外 %5$d，匯入 %6$d</string>
 <string name="report_col_date">日期</string>
 <string name="report_col_range">檢驗報告參考範圍</string>
 <string name="report_col_since_dose">距 E2 用藥</string>
@@ -493,9 +493,6 @@
 <string name="history_planned_dose_label">計畫劑量：%1$s</string>
 <string name="history_title">用藥記錄</string>
 <string name="history_unscheduled_short">計畫外</string>
-<string name="quick_fill">快速填寫</string>
-<string name="quick_once_daily">每天一次</string>
-<string name="quick_twice_daily">早晚各一次</string>
 <string name="ht_default_name">%1$s（%2$s）</string>
 <string name="ht_done">已匯入 %1$d 條服藥記錄，新建 %2$d 種藥物（%3$d 條之前已匯入），%4$d 條檢驗結果。</string>
 <string name="ht_dup_keep">全部保留（確實同時服用了）</string>
@@ -592,4 +589,10 @@
 <string name="unsupported_route">這種途徑沒有文獻模型，所以不畫曲線。</string>
 <string name="unsupported_sl_ev">舌下戊酸雌二醇：沒有研究測過，所以不畫曲線。舌下資料只有雌二醇（E2）片。</string>
 <string name="gel_site_not_modelled">僅作記錄：模型不使用塗抹部位。</string>
+<string name="history_imported_short">匯入</string>
+<string name="times_fewer">減少</string>
+<string name="times_more">增加</string>
+<string name="times_per_day">每天幾次</string>
+<string name="times_per_day_hint">按 08:00 到 20:00 平均排好時間，點時間可以單獨修改。劑量仍由你自己填寫。</string>
+<string name="times_per_day_value">每天 %1$d 次</string>
 </resources>

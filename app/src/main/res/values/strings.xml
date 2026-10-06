@@ -410,7 +410,7 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="import_tm">Import from Trans Memo</string>
 <string name="import_tm_desc">Read a database file you exported from Trans Memo</string>
 <string name="needs_review">To confirm</string>
-<string name="report_adherence_line">on time %1$d, late %2$d, missed %3$d, skipped %4$d, unscheduled %5$d</string>
+<string name="report_adherence_line">on time %1$d, late %2$d, missed %3$d, skipped %4$d, unscheduled %5$d, imported %6$d</string>
 <string name="report_col_date">Date</string>
 <string name="report_col_range">Report range</string>
 <string name="report_col_since_dose">After E2 dose</string>
@@ -493,9 +493,6 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="history_planned_dose_label">Planned: %1$s</string>
 <string name="history_title">Intake log</string>
 <string name="history_unscheduled_short">Unscheduled</string>
-<string name="quick_fill">Quick fill</string>
-<string name="quick_once_daily">Once a day</string>
-<string name="quick_twice_daily">Morning and evening</string>
 <string name="ht_default_name">%1$s (%2$s)</string>
 <string name="ht_done">Imported %1$d intakes into %2$d new medications (%3$d were already there) and %4$d lab results.</string>
 <string name="ht_dup_keep">Keep all (I really took them together)</string>
@@ -592,4 +589,10 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="unsupported_route">No literature model for this route, so no curve is drawn.</string>
 <string name="unsupported_sl_ev">Sublingual estradiol valerate: no study measured it, so no curve is drawn. Sublingual data exist only for estradiol (E2) tablets.</string>
 <string name="gel_site_not_modelled">Recorded only: the model does not use the application site.</string>
+<string name="history_imported_short">Imported</string>
+<string name="times_fewer">Fewer</string>
+<string name="times_more">More</string>
+<string name="times_per_day">Times a day</string>
+<string name="times_per_day_hint">Sets evenly spaced times between 08:00 and 20:00; tap a time to change it. The dose stays your own entry.</string>
+<string name="times_per_day_value">%1$d × a day</string>
 </resources>

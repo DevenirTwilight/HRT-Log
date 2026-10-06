@@ -189,7 +189,8 @@ fun routeIcon(route: String?): ImageVector = when (route) {
                     "LATE" -> StatusPill(stringResource(R.string.status_late), c.tertiaryContainer, c.onTertiaryContainer, null)
                     "MISSED" -> StatusPill(stringResource(R.string.status_missed), c.errorContainer, c.onErrorContainer, null)
                     "SKIPPED" -> StatusPill(stringResource(R.string.status_skipped), c.surfaceContainerHighest, c.onSurfaceVariant, null)
-                    else -> if (r.scheduled_utc == null) Chip(stringResource(R.string.history_unscheduled_short))
+                    // Imported intakes carry no schedule in the source file, so they are labelled as imported, not as unscheduled.
+                    else -> if (r.scheduled_utc == null) Chip(stringResource(if (r.origin.startsWith("IMPORT_")) R.string.history_imported_short else R.string.history_unscheduled_short))
                 }
             }
         }

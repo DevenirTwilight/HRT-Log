@@ -72,13 +72,16 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
                           val scores:List<CheckinScoreEntity> = emptyList(),val notes:List<DayNoteEntity> = emptyList(),
                           /** Open doses for the next year (calendar colours and the stock forecast). */ val upcoming:List<TimelineEntry> = emptyList())
     val extra=MutableStateFlow(ExtraState())
-    private fun guarded(block:suspend()->Unit)=viewModelScope.launch{try{block()}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}
-    fun loadExtra()=guarded {
+    private fun guarded(block:suspend()->Unit)=viewModelScope.launch{try{block()}catch(e:kotlinx.coroutines.CancellationException){throw e}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}
+    private var extraJob:kotlinx.coroutines.Job?=null
+    /** Reloads history, stock and well-being. The latest call wins, so a slow earlier load can never overwrite newer stock with stale values. */
+    fun loadExtra():kotlinx.coroutines.Job{ extraJob?.cancel(); return guarded {
         val today=LocalDate.now()
         val now=Instant.now()
-        val upcoming=(mutable.value.slots+repo.planned(now,now.plus(java.time.Duration.ofDays(366)))).filter{it.state in net.plainnotes.app.ui.OPEN_STATES}.distinctBy{it.slot.key}
+        // The freshly reconciled forecast first, so a slot's newest state wins before open ones are kept.
+        val upcoming=(repo.planned(now,now.plus(java.time.Duration.ofDays(366)))+mutable.value.slots).distinctBy{it.slot.key}.filter{it.state in net.plainnotes.app.ui.OPEN_STATES}
         extra.value=ExtraState(repo.records(),repo.containers(),repo.checkinItems(),repo.scores(today.minusYears(5),today),repo.notes(today.minusYears(5),today),upcoming)
-    }
+    }.also{extraJob=it} }
     private fun mutateExtra(block:suspend()->Unit)=guarded{block();loadExtra();refresh()}
     fun editRecord(id:Long,t:Instant,d:Double)=guarded{reminders.mutate{repo.editRecord(id,t,d)};loadExtra();refresh();loadConcentration()}
     fun deleteRecord(id:Long)=guarded{reminders.mutate{repo.deleteRecord(id)};loadExtra();refresh();loadConcentration()}
@@ -185,5 +188,5 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     fun changeOverride(s:Slot,o:SlotOverride)=change{repo.override(s,o);override.value=null}
     fun appointment(v:AppointmentEntity)=change{repo.appointment(v)}
     fun testReminder()=viewModelScope.launch{try{reminders.testReminder()}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}
-    fun sync()=viewModelScope.launch{runCatching{reminders.sync()};refresh()}
+    fun sync()=viewModelScope.launch{runCatching{reminders.sync()};refresh().join();loadExtra()}
 }

@@ -148,14 +148,12 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
                         }
                         if (tried && weekdays.isEmpty()) Text(stringResource(R.string.weekdays_required), color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
                     }
-                    // Quick fill of frequency and times only; the dose always stays the user's own entry.
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Text(stringResource(R.string.quick_fill), style = MaterialTheme.typography.labelLarge)
-                        listOf(R.string.quick_once_daily to listOf(LocalTime.of(9, 0)), R.string.quick_twice_daily to TWICE_DAILY).forEach { (label, preset) ->
-                            FilterChip(kind == RuleKind.EVERY_N_DAYS && interval == "1" && times.toList() == preset,
-                                { kind = RuleKind.EVERY_N_DAYS; interval = "1"; times.clear(); times.addAll(preset) }, label = { Text(stringResource(label)) })
-                        }
+                    // Times a day: fills evenly spaced times only (each stays editable); the dose always stays the user's own entry.
+                    TimesPerDayRow(if (kind == RuleKind.EVERY_N_HOURS) 1 else times.size.coerceIn(1, MAX_TIMES_PER_DAY)) { n ->
+                        if (kind == RuleKind.EVERY_N_HOURS) { kind = RuleKind.EVERY_N_DAYS; interval = "1" }
+                        times.clear(); times.addAll(evenTimes(n))
                     }
+                    Text(stringResource(R.string.times_per_day_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     if (kind != RuleKind.EVERY_N_HOURS) {
                         Text(stringResource(R.string.times_label), style = MaterialTheme.typography.labelLarge)
                         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {

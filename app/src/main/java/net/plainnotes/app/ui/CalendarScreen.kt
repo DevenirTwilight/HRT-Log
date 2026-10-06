@@ -53,7 +53,7 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
     var selectedText by rememberSaveable { mutableStateOf(state.calendarStart.toString()) }
     val selected = LocalDate.parse(selectedText)
     LaunchedEffect(state.calendarStart) { selectedText = state.calendarStart.toString() }
-    val upcoming = remember(extra.upcoming, state.slots) { (state.slots + extra.upcoming).filter { it.state in OPEN_STATES }.distinctBy { it.slot.key } }
+    val upcoming = remember(extra.upcoming, state.slots) { (state.slots + extra.upcoming).distinctBy { it.slot.key }.filter { it.state in OPEN_STATES } }
     val runOut = remember(state.medications, extra.containers, upcoming) { forecast(state.medications, extra.containers, upcoming) }
     val infos = remember(extra.records, upcoming, state.appointments, runOut) { dayInfos(extra.records, upcoming, state.appointments, runOut, zone) }
     fun select(d: LocalDate) { selectedText = d.toString() }

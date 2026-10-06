@@ -410,7 +410,7 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="import_tm">Importer depuis Trans Memo</string>
 <string name="import_tm_desc">Lire un fichier de base exporté depuis Trans Memo</string>
 <string name="needs_review">À confirmer</string>
-<string name="report_adherence_line">à l\'heure %1$d, en retard %2$d, oubliées %3$d, sautées %4$d, hors planning %5$d</string>
+<string name="report_adherence_line">à l’heure %1$d, en retard %2$d, oubliées %3$d, sautées %4$d, hors planning %5$d, importées %6$d</string>
 <string name="report_col_date">Date</string>
 <string name="report_col_range">Intervalle du compte rendu</string>
 <string name="report_col_since_dose">Après prise d\'E2</string>
@@ -493,9 +493,6 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="history_planned_dose_label">Prévu : %1$s</string>
 <string name="history_title">Journal des prises</string>
 <string name="history_unscheduled_short">Hors plan</string>
-<string name="quick_fill">Remplissage rapide</string>
-<string name="quick_once_daily">Une fois par jour</string>
-<string name="quick_twice_daily">Matin et soir</string>
 <string name="ht_default_name">%1$s (%2$s)</string>
 <string name="ht_done">%1$d prises importées, %2$d nouveaux médicaments (%3$d déjà présentes) et %4$d analyses.</string>
 <string name="ht_dup_keep">Tout garder (prises réellement ensemble)</string>
@@ -592,4 +589,10 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="unsupported_route">Aucun modèle de la littérature pour cette voie, donc aucune courbe.</string>
 <string name="unsupported_sl_ev">Valérate d’estradiol sublingual : aucune étude ne l’a mesuré, donc aucune courbe n’est tracée. Les données sublinguales ne concernent que les comprimés d’estradiol (E2).</string>
 <string name="gel_site_not_modelled">Enregistré seulement : le modèle n’utilise pas le site d’application.</string>
+<string name="history_imported_short">Importée</string>
+<string name="times_fewer">Moins</string>
+<string name="times_more">Plus</string>
+<string name="times_per_day">Fois par jour</string>
+<string name="times_per_day_hint">Répartit les heures de 08:00 à 20:00 ; touchez une heure pour la modifier. La dose reste votre propre saisie.</string>
+<string name="times_per_day_value">%1$d × par jour</string>
 </resources>

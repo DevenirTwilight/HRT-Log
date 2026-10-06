@@ -8,6 +8,7 @@ import androidx.compose.material.icons.automirrored.outlined.*
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -148,6 +149,7 @@ val APPOINTMENT_TYPES = listOf("ENDO", "GP", "LAB", "PSY", "SURGERY", "OTHER")
             }
             if (!rangeOk) Text(stringResource(R.string.batch_range_error), color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
             Text(stringResource(R.string.batch_times), style = MaterialTheme.typography.labelLarge)
+            TimesPerDayRow(times.size.coerceIn(1, MAX_TIMES_PER_DAY)) { times = evenTimes(it) }
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 times.forEach { t -> InputChip(true, { times = times - t }, label = { Text(formatTime(t)) }, trailingIcon = { Icon(Icons.Outlined.Close, stringResource(R.string.remove), Modifier.size(16.dp)) }) }
                 AssistChip({ addTime = true }, label = { Text(stringResource(R.string.add_time)) }, leadingIcon = { Icon(Icons.Outlined.Add, null, Modifier.size(16.dp)) })
@@ -163,5 +165,24 @@ val APPOINTMENT_TYPES = listOf("ENDO", "GP", "LAB", "PSY", "SURGERY", "OTHER")
     if (addTime) TimePickerModal(LocalTime.of(12, 0), { addTime = false }) { if (it !in times) times = (times + it).sorted(); addTime = false }
 }
 
-/** Morning and evening: the "twice a day" quick fill used by the editor and batch add. */
-val TWICE_DAILY: List<LocalTime> = listOf(LocalTime.of(8, 0), LocalTime.of(20, 0))
+/** Morning and evening: the default times of batch add when the medication has no daily schedule. */
+val TWICE_DAILY: List<LocalTime> = evenTimes(2)
+
+const val MAX_TIMES_PER_DAY = 6
+
+/** [n] intake times a day: 09:00 for one, otherwise spread evenly from 08:00 to 20:00 and rounded to the half hour. Times only, never a dose. */
+fun evenTimes(n: Int): List<LocalTime> {
+    require(n in 1..MAX_TIMES_PER_DAY)
+    if (n == 1) return listOf(LocalTime.of(9, 0))
+    return (0 until n).map { i -> val min = 8 * 60 + Math.round(i * 720.0 / (n - 1) / 30).toInt() * 30; LocalTime.of(min / 60, min % 60) }.distinct()
+}
+
+/** "Times a day" stepper: changing the count refills the times evenly; each time stays editable afterwards. */
+@Composable fun TimesPerDayRow(count: Int, onCount: (Int) -> Unit) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Text(stringResource(R.string.times_per_day), Modifier.weight(1f), style = MaterialTheme.typography.labelLarge)
+        IconButton(onClick = { onCount(count - 1) }, enabled = count > 1) { Icon(Icons.Outlined.Remove, stringResource(R.string.times_fewer)) }
+        Text(stringResource(R.string.times_per_day_value, count), style = MaterialTheme.typography.titleSmall)
+        IconButton(onClick = { onCount(count + 1) }, enabled = count < MAX_TIMES_PER_DAY) { Icon(Icons.Outlined.Add, stringResource(R.string.times_more)) }
+    }
+}
