@@ -61,7 +61,7 @@ private fun Long.pickerDate() = Instant.ofEpochMilli(this).atZone(ZoneOffset.UTC
     var expanded by remember { mutableStateOf(false) }
     val labels = options.map { display(it) }
     ExposedDropdownMenuBox(expanded, { expanded = it }, modifier) {
-        OutlinedTextField(selected?.let { labels[options.indexOf(it)] } ?: "", {}, readOnly = true, label = { Text(label) }, singleLine = true, isError = isError,
+        OutlinedTextField(options.indexOf(selected).takeIf { it >= 0 }?.let { labels[it] } ?: "", {}, readOnly = true, label = { Text(label) }, singleLine = true, isError = isError,
             supportingText = supporting?.let { { Text(it) } },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
             modifier = Modifier.fillMaxWidth().menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable))

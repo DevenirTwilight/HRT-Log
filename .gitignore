@@ -13,6 +13,8 @@ local.properties
 *.apk
 *.aab
 *.keystore
+# Debug-only signing key, intentionally shared (see app/build.gradle.kts)
+!/app/debug.keystore
 *.jks
 captures/
 .externalNativeBuild/

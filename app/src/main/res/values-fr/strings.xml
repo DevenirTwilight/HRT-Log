@@ -554,4 +554,5 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="view_month">Mois</string>
 <string name="view_week">Semaine</string>
 <string name="view_year">Année</string>
+<string name="ht_choose_duplicates">Choisissez d’abord comment traiter les doublons ci-dessus.</string>
 </resources>

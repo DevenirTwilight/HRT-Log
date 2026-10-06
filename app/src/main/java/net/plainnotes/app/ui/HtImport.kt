@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import net.plainnotes.app.R
 import net.plainnotes.app.data.MedicationEntity
@@ -55,9 +56,16 @@ fun matchingMedication(g: HrtTracker.Group, meds: List<MedicationEntity>, profil
                 OutlinedCard(Modifier.fillMaxWidth()) { Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(groupLabel(g), style = MaterialTheme.typography.titleSmall)
                     Text(stringResource(R.string.ht_group_count, n), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    val options = listOf<MedicationEntity?>(null) + meds
-                    DropdownField(stringResource(R.string.ht_import_into), options, targets[g]?.medication, { it?.name ?: stringResource(R.string.ht_new_medication) }, { targets[g] = Target(it) })
+                    // Plain choice rows instead of a popup menu: popups inside this dialog were not reliably selectable on devices.
+                    Text(stringResource(R.string.ht_import_into), style = MaterialTheme.typography.labelLarge)
                     val chosen = targets[g]?.medication
+                    (listOf<MedicationEntity?>(null) + meds).forEach { m ->
+                        Row(Modifier.fillMaxWidth().selectable(chosen?.id == m?.id, role = Role.RadioButton) { targets[g] = Target(m) }.padding(vertical = 2.dp),
+                            verticalAlignment = Alignment.CenterVertically) {
+                            RadioButton(chosen?.id == m?.id, null)
+                            Text(m?.name ?: stringResource(R.string.ht_new_medication), style = MaterialTheme.typography.bodyMedium)
+                        }
+                    }
                     if (chosen == null) OutlinedTextField(names[g] ?: "", { names[g] = it }, Modifier.fillMaxWidth(), label = { Text(stringResource(R.string.name)) }, singleLine = true)
                     else if (matchingMedication(g, listOf(chosen), profiles) == null)
                         Text(stringResource(R.string.ht_profile_differs), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.tertiary)
@@ -66,8 +74,8 @@ fun matchingMedication(g: HrtTracker.Group, meds: List<MedicationEntity>, profil
             if (preview.needsDuplicateChoice) {
                 Text(stringResource(R.string.ht_duplicates, preview.duplicates), style = MaterialTheme.typography.labelLarge)
                 listOf(HrtTracker.Duplicates.MERGE to R.string.ht_dup_merge, HrtTracker.Duplicates.KEEP_ALL to R.string.ht_dup_keep).forEach { (d, label) ->
-                    Row(Modifier.fillMaxWidth().selectable(duplicates == d) { duplicates = d }, verticalAlignment = Alignment.CenterVertically) {
-                        RadioButton(duplicates == d, { duplicates = d }); Text(stringResource(label), style = MaterialTheme.typography.bodyMedium)
+                    Row(Modifier.fillMaxWidth().selectable(duplicates == d, role = Role.RadioButton) { duplicates = d }.padding(vertical = 2.dp), verticalAlignment = Alignment.CenterVertically) {
+                        RadioButton(duplicates == d, null); Text(stringResource(label), style = MaterialTheme.typography.bodyMedium)
                     }
                 }
             }
@@ -78,6 +86,8 @@ fun matchingMedication(g: HrtTracker.Group, meds: List<MedicationEntity>, profil
                 Text(stringResource(R.string.ht_skipped_title), style = MaterialTheme.typography.labelLarge)
                 preview.skipped.forEach { (k, n) -> Text("• ${skipLabel(k)}: $n", style = MaterialTheme.typography.bodySmall) }
             }
+            if (preview.needsDuplicateChoice && duplicates == null)
+                Text(stringResource(R.string.ht_choose_duplicates), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
             Text(stringResource(R.string.ht_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         } },
         confirmButton = { Button(enabled = ready, onClick = {

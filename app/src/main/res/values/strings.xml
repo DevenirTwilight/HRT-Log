@@ -554,4 +554,5 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="view_month">Month</string>
 <string name="view_week">Week</string>
 <string name="view_year">Year</string>
+<string name="ht_choose_duplicates">Choose how to handle the duplicates above to continue.</string>
 </resources>

@@ -554,4 +554,5 @@
 <string name="view_month">月</string>
 <string name="view_week">周</string>
 <string name="view_year">年</string>
+<string name="ht_choose_duplicates">請先在上面選擇重複記錄怎麼處理，才能匯入。</string>
 </resources>
