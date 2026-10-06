@@ -598,4 +598,5 @@
     <string name="import_link">關聯服藥計畫</string>
     <string name="import_link_help">請選擇這筆匯入紀錄對應的服藥計畫。保留原紀錄的時間、劑量和庫存，不會再次扣減庫存。</string>
     <string name="import_link_empty">同一天沒有此藥物尚未完成的服藥計畫。</string>
+<string name="system_app_name">便箋</string>
 </resources>

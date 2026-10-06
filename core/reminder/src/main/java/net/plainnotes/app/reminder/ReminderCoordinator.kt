@@ -131,7 +131,7 @@ import javax.inject.Singleton
             .setContentTitle(text.title ?: context.getString(R.string.neutral_reminder)).setContentText(detail ?: text.body ?: context.getString(R.string.neutral_open))
             .setVisibility(NotificationCompat.VISIBILITY_SECRET).setContentIntent(open).setAutoCancel(true)
             .addAction(0,context.getString(R.string.snooze_action),snooze)
-        if(unlocked())builder.addAction(0,context.getString(R.string.record_action),complete)
+        if(unlocked())builder.addAction(0,context.getString(if(text.disguised)R.string.neutral_done else R.string.record_action),complete)
         NotificationManagerCompat.from(context).notify(100,builder.build())
     }
     suspend fun complete(generation:String,id:String) {

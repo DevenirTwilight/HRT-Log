@@ -21,11 +21,11 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
 @HiltViewModel class NotesViewModel @Inject constructor(repository:NotesRepository,private val reminders:ReminderCoordinator,
     @dagger.hilt.android.qualifiers.ApplicationContext private val app:android.content.Context):ViewModel() {
     // One activity owns one data space; an old activity must never follow a shell switch.
-    private val repo=repository.pinnedTo(repository.space)
+    private val repo=repository.pinnedTo(Space.PRIMARY)
     private var refreshJob:Job?=null
     private var concJob:Job?=null
     private var readFailureShown=false
-    private suspend fun <T> mutate(block:suspend()->T):T = if(decoy) block() else reminders.mutate(block)
+    private suspend fun <T> mutate(block:suspend()->T):T = reminders.mutate(block)
     private fun readFailure(cause:Exception) { if(!readFailureShown){readFailureShown=true;mutable.value=mutable.value.copy(error=if(cause is KeyRecoveryRequired || cause is DataLockedException) R.string.data_error else R.string.operation_error,loading=false)} }
     val notificationSlot=MutableStateFlow<Slot?>(null)
     fun notification(id:String)=viewModelScope.launch {
@@ -184,13 +184,9 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         withContext(Dispatchers.IO){app.contentResolver.openOutputStream(uri,"wt")!!.use{net.plainnotes.app.export.PdfReport.write(context,d,days,c,it)}};DataJob.Done(R.string.export_saved)
     }
     /** Deletes everything: database, key, reminders cache and preferences. The caller restarts the UI. */
-    /** True while the UI works on the disguise mode's decoy space. */
-    val decoy get()=repo.space==net.plainnotes.app.data.Space.DECOY
-    /** Disguise mode was turned off: its decoy space goes with it. */
-    fun destroyDecoy()=viewModelScope.launch(Dispatchers.IO){ repo.destroy(net.plainnotes.app.data.Space.DECOY) }
+    /** Legacy empty HRT database is retained across upgrade and erased only after explicit confirmation. */
+    fun destroyLegacyPrivateData()=viewModelScope.launch(Dispatchers.IO){repo.destroy(Space.DECOY)}
     fun wipeAll(onDone:()->Unit)=viewModelScope.launch {
-        // In the decoy space only the decoy data goes; nothing there may touch (or reveal) the real data and settings.
-        if(decoy){ withContext(Dispatchers.IO){repo.destroyAll()}; onDone(); return@launch }
         withContext(Dispatchers.IO){ mutate{repo.destroyAll()}
             net.plainnotes.app.disguise.Disguise.disable(app); repo.destroy(net.plainnotes.app.data.Space.DECOY)
             app.getSharedPreferences("prefs",android.content.Context.MODE_PRIVATE).edit().clear().commit()
@@ -215,5 +211,5 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     fun changeOverride(s:Slot,o:SlotOverride)=change{repo.override(s,o);override.value=null}
     fun appointment(v:AppointmentEntity)=change{repo.appointment(v)}
     fun testReminder()=viewModelScope.launch{try{reminders.testReminder()}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}
-    fun sync()=viewModelScope.launch{if(!decoy)runCatching{reminders.sync()};refresh().join()}
+    fun sync()=viewModelScope.launch{runCatching{reminders.sync()};refresh().join()}
 }

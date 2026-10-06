@@ -170,11 +170,8 @@ class UiPrefs(context: Context) {
                 Destination.LABS -> LabsScreen(conc.labs, conc.doseTimes, { labEdit = it; labNew = it == null }, { model.deleteLab(it) }, pad)
                 Destination.SETTINGS -> SettingsScreen(appearance, onAppearance, highReliability, { highReliability = it; prefs.highReliability = it; model.sync() },
                     { model.sync() }, { model.testReminder() }, pad, wellbeingPrompt, { wellbeingPrompt = it; prefs.wellbeingPrompt = it }) {
-                    // The decoy space must not expose (or change) the lock, notification wording or disguise settings.
-                    if (!model.decoy) {
-                        PrivacySection(state.medications.count { it.active }, simpleMode) { simpleMode = it; prefs.simpleMode = it }
-                        net.plainnotes.app.disguise.DisguiseSection(model::destroyDecoy, model::backupTo)
-                    }
+                    PrivacySection(state.medications.count { it.active }, simpleMode) { simpleMode = it; prefs.simpleMode = it }
+                    net.plainnotes.app.disguise.DisguiseSection(model::destroyLegacyPrivateData, onRoutingChanged = { model.sync() }, backup = model::backupTo)
                     DataSection(model, state.medications.associate { it.id to scheduleText(state.schedules[it.id]) })
                 }
                 Destination.ABOUT -> AboutScreen(pad)

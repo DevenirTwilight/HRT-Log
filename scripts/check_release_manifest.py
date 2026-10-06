@@ -10,6 +10,30 @@ for path in root.rglob('AndroidManifest.xml'):
         permissions=[n.get('{http://schemas.android.com/apk/res/android}name') for n in xml if n.tag.startswith('uses-permission')]
         assert 'android.permission.INTERNET' not in permissions, f'INTERNET present: {path}'
         assert xml.get('package')=='net.plainnotes.app', f'Wrong applicationId: {path}'
+        ns='{http://schemas.android.com/apk/res/android}'
+        app=xml.find('application')
+        assert app.get(ns+'label')=='@string/system_app_name', f'Non-neutral application label: {path}'
+        activities={a.get(ns+'name'):a for a in app.findall('activity')}
+        aliases={a.get(ns+'name'):a for a in app.findall('activity-alias')}
+        normal=aliases['net.plainnotes.app.Launcher']
+        assert normal.get(ns+'label')=='@string/app_name'
+        assert normal.get(ns+'icon')=='@mipmap/ic_launcher'
+        assert activities['net.plainnotes.app.MainActivity'].get(ns+'exported')=='false'
+        private='net.plainnotes.app.disguise.privatenotes.PrivateNotesActivity'
+        if variant=='fullRelease':
+            assert app.get(ns+'icon')=='@mipmap/ic_shell_notes'
+            assert private in activities and activities[private].get(ns+'exported')=='false'
+            assert activities[private].find('intent-filter') is None
+            assert activities[private].get(ns+'label')=='@string/private_notes'
+            for name in ['Calculator','Notes']:
+                alias=aliases['net.plainnotes.app.'+name+'Launcher']
+                assert alias.get(ns+'enabled')=='false' and alias.get(ns+'exported')=='true'
+                target=activities[alias.get(ns+'targetActivity')]
+                assert target.get(ns+'exported')=='false'
+                assert target.get(ns+'taskAffinity')!='', f'Shell must share the protected task: {path}'
+            assert activities[private].get(ns+'taskAffinity')!=''
+        else:
+            assert private not in activities and len(aliases)==1, f'Full-only entry leaked into play: {path}'
         found[variant]=str(path)
 assert set(found)=={'fullRelease','playRelease'}, f'Missing release manifests: {found}'
-for variant,path in found.items():print(f'PASS {variant}: no INTERNET permission ({path})')
+for variant,path in found.items():print(f'PASS {variant}: neutral application identity, correct entry points, no INTERNET ({path})')

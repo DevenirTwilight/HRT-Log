@@ -118,7 +118,7 @@
 
 用户明确替换旧“空白 HRT DECOY”产品设计（REQUIREMENTS §11）。已读并核对 Disguise/Shells/Section/MainActivity/AppLock/Session/DatabaseAccess/Repository、main/full Manifest、通知和现有测试。当前确实是两种密码都打开 MainActivity，且应用级 label 为 HRT Log；普通 PIN 可能在真实秘密之后再次显示。
 
-采用两种 shell 共用独立 Private Notes Activity + 小型 AES-GCM/Keystore/AtomicFile 存储，无 HRT schema/repository/domain 引用。认证目标为 PRIMARY/PRIVATE，与 Space 分离；旧 DECOY 仅留兼容和确认后清理，不展示、不迁移医疗内容。将处理 PRIMARY/PRIVATE 内存会话、单任务清栈与 Back/Close 回 shell、配置代码与清空、应用中性身份和通知。下一步实现并补足单元与 Android 原生/Activity 流程测试；当前尚未完成，不能按此前 M7 验证结论发布新设计。
+采用两种 shell 共用独立 Private Notes Activity + 小型 AES-GCM/Keystore/AtomicFile 存储，无 HRT schema/repository/domain 引用。认证目标为 PRIMARY/PRIVATE，与 Space 分离；旧 DECOY 仅留兼容和确认后清理，不展示、不迁移医疗内容。将处理 PRIMARY/PRIVATE 内存会话、单任务清栈与 Back/Close 回 shell、配置代码与清空、应用中性身份和通知。已实现：独立加密 Store/Model/Screen/Editor/Activity、代码配置/改动/移除/准备/清空、目标分离与会话代次、主 UI 固定 PRIMARY、单任务清栈、普通 App Lock/第二 PIN/picker 处理、中性应用/任务/通知身份；审计见 `docs/disguise-privacy.md`。私人 CRUD/边界和 Session 的 14 项专项单元测试通过，full Android test APK 已编译（`/workspace/tooling/private-preflight.log`）。新增原生 Keystore、Activity 流程和两进程 force-stop 测试并加入 CI；正在进行全量、双变体 release/lint 和 API 35 原生验证，未完成前不能按此前 M7 结论发布。
 
 ## 3. 代码结构
 

@@ -6,4 +6,5 @@
 <string name="record_action">Pris</string>
 <string name="stock_expiry_detail">%1$s : l’emballage ouvert approche de sa date limite après ouverture</string>
 <string name="stock_low_detail">%1$s : le stock ne suffira pas pour la semaine</string>
+<string name="neutral_done">Terminé</string>
 </resources>

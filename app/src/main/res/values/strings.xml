@@ -598,4 +598,5 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="import_link">Link to planned intake</string>
     <string name="import_link_help">Choose the planned intake this imported record completes. Its original time, dose and stock stay unchanged.</string>
     <string name="import_link_empty">No unfinished intake for this medication on the same day.</string>
+<string name="system_app_name">Notes</string>
 </resources>

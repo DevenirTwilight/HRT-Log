@@ -6,4 +6,5 @@
 <string name="record_action">Taken</string>
 <string name="stock_expiry_detail">%1$s: the open package is close to its expiry after opening</string>
 <string name="stock_low_detail">%1$s: stock will not last the coming week</string>
+<string name="neutral_done">Done</string>
 </resources>

@@ -598,4 +598,5 @@
     <string name="import_link">关联服药计划</string>
     <string name="import_link_help">请选择这条导入记录对应的服药计划。保留原记录的时间、剂量和库存，不会再次扣减库存。</string>
     <string name="import_link_empty">同一天没有此药物尚未完成的服药计划。</string>
+<string name="system_app_name">便签</string>
 </resources>

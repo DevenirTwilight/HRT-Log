@@ -6,4 +6,5 @@
 <string name="record_action">已服</string>
 <string name="stock_expiry_detail">%1$s：已開封的包裝快到開封後有效期了</string>
 <string name="stock_low_detail">%1$s：庫存不夠接下來一週了</string>
+<string name="neutral_done">完成</string>
 </resources>

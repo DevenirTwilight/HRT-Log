@@ -22,8 +22,8 @@ class DataLockedException : IllegalStateException("Credential storage unavailabl
 class KeyRecoveryRequired(cause: Throwable? = null) : IllegalStateException("Encrypted data requires recovery",cause)
 
 /**
- * Independent encrypted data spaces. DECOY is the empty space opened by the disguise mode's decoy code
- * (full flavor): its own file, wrapped key and Keystore alias, so nothing in it refers to PRIMARY.
+ * Encrypted HRT storage. DECOY is legacy storage retained for upgrade compatibility/explicit cleanup.
+ * No authentication target or new UI routes to it; ordinary private notes use their own full-flavor store.
  */
 enum class Space(val file:String,val wrap:String,val alias:String) {
     PRIMARY("notes.db","key.wrap","notes.wrap"), DECOY("notes_b.db","key_b.wrap","notes_b.wrap")

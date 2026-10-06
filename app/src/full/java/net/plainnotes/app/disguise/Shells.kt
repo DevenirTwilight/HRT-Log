@@ -30,15 +30,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import net.plainnotes.app.MainActivity
 import net.plainnotes.app.R
-import net.plainnotes.app.data.NotesRepository
-import net.plainnotes.app.security.Session
-import javax.inject.Inject
 
 /** Generic look on purpose: system dynamic colours where available, Material baseline otherwise. */
 @Composable fun ShellTheme(content: @Composable () -> Unit) {
@@ -51,32 +46,31 @@ import javax.inject.Inject
     MaterialTheme(scheme, content = content)
 }
 
-/** Opens the real app (or the decoy space) when [input] is a code; otherwise does nothing visible. */
-private fun ComponentActivity.attempt(repo: NotesRepository, input: String, onMiss: () -> Unit = {}) {
-    if (!net.plainnotes.app.security.AppLock.validPin(input)) { onMiss(); return }
+/** Valid secrets select a UI target. Neither shell constructs or selects an HRT repository. */
+private fun ComponentActivity.attempt(input:String,onMiss:()->Unit={}) {
+    if(!net.plainnotes.app.security.AppLock.validPin(input)){onMiss();return}
     lifecycleScope.launch {
-        val space = withContext(Dispatchers.Default) { Disguise.check(this@attempt, input) }
-        if (space == null) { onMiss(); return@launch }
-        repo.select(space); Session.begin()
-        startActivity(Intent(this@attempt, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
-        finish()
+        val revision=Disguise.revision
+        val target=withContext(Dispatchers.Default){Disguise.check(this@attempt,input)}
+        if(target==null){onMiss();return@launch}
+        if(!Disguise.enter(this@attempt,target,revision))onMiss()
     }
 }
 
-@AndroidEntryPoint class CalculatorActivity : ComponentActivity() {
-    @Inject lateinit var repo: NotesRepository
-    override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge(); super.onCreate(savedInstanceState)
-        setContent { ShellTheme { CalculatorScreen { attempt(repo, it) } } }
+class CalculatorActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState:Bundle?) {
+        enableEdgeToEdge();super.onCreate(savedInstanceState)
+        setTaskDescription(net.plainnotes.app.security.taskIdentity(getString(R.string.shell_calc),R.mipmap.ic_shell_calc))
+        setContent { ShellTheme { CalculatorScreen { attempt(it) } } }
     }
 }
 
-@AndroidEntryPoint class NotesShellActivity : ComponentActivity() {
-    @Inject lateinit var repo: NotesRepository
-    override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge(); super.onCreate(savedInstanceState)
-        val store = getSharedPreferences("shell_notes", Context.MODE_PRIVATE)
-        setContent { ShellTheme { NotesShellScreen(store.getString("text", "") ?: "", { store.edit().putString("text", it).apply() }) { q, miss -> attempt(repo, q.trim(), miss) } } }
+class NotesShellActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState:Bundle?) {
+        enableEdgeToEdge();super.onCreate(savedInstanceState)
+        setTaskDescription(net.plainnotes.app.security.taskIdentity(getString(R.string.shell_notes),R.mipmap.ic_shell_notes))
+        val store=getSharedPreferences("shell_notes",Context.MODE_PRIVATE)
+        setContent { ShellTheme { NotesShellScreen(store.getString("text","") ?: "",{store.edit().putString("text",it).apply()}) { q,miss->attempt(q.trim(),miss) } } }
     }
 }
 
@@ -128,7 +122,7 @@ private val KEYS = listOf(listOf("C", "(", ")", "÷"), listOf("7", "8", "9", "×
         TopAppBar(title = {
             if (searching) TextField(query, { query = it; noResults = false }, Modifier.fillMaxWidth(), placeholder = { Text(stringResource(R.string.shell_search)) }, singleLine = true,
                 colors = TextFieldDefaults.colors(focusedContainerColor = MaterialTheme.colorScheme.surface, unfocusedContainerColor = MaterialTheme.colorScheme.surface),
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search), keyboardActions = KeyboardActions(onSearch = { onSearch(query) { noResults = true } }))
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search), keyboardActions = KeyboardActions(onSearch = { onSearch(query) { noResults = query.isNotBlank() && !text.contains(query,ignoreCase=true) } }))
             else Text(stringResource(R.string.shell_notes))
         }, actions = {
             IconButton(onClick = { searching = !searching; query = ""; noResults = false }) {

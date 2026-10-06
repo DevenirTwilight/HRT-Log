@@ -598,4 +598,5 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="import_link">Associer à une prise prévue</string>
     <string name="import_link_help">Choisissez la prise prévue correspondant à cet import. Son heure, sa dose et le stock restent inchangés.</string>
     <string name="import_link_empty">Aucune prise inachevée de ce médicament le même jour.</string>
+<string name="system_app_name">Notes</string>
 </resources>
