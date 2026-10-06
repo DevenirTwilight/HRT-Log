@@ -1,4 +1,4 @@
-name: Upload verified release assets
+name: Publish and verify authorized hotfix assets
 on:
   push:
     branches: [claude/new-session-1959qb]
@@ -13,7 +13,7 @@ concurrency:
   group: release-assets
   cancel-in-progress: false
 jobs:
-  upload:
+  verify:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -21,7 +21,7 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - name: Verify binaries and upload to draft release
+      - name: Upload authorized signed assets and verify hashes/source tag
         env:
           GH_TOKEN: ${{ github.token }}
         run: python3 scripts/upload_release_assets.py

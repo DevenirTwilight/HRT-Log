@@ -1,65 +1,64 @@
 {
   "release_id": 404602730,
   "tag": "v0.2.0",
-  "source_commit": "fcca5590679073820df0fe0d2c9f308941400c30",
+  "source_commit": "c52c8518c40727ff4f5b0316670e109551886f93",
+  "version_name": "0.2.0",
+  "version_code": 4,
   "assets": [
     {
       "name": "plainnotes-0.2.0-full.apk",
-      "size": 22891540,
-      "sha256": "7be640f039b50bb14ac12c2887365d20496b55dc98f2fe83243291be70129548",
+      "size": 23002192,
+      "sha256": "54774fa744d741f8c6e3538119b2072e4a900a0e1f65af08aa1d0ce331d2245c",
       "blobs": [
-        "6c9a2fadb215a2db64ef1bf37dd34c154eb91ba3",
-        "d7291c3c03c74fbc9192941a79c9d1badda50f7c",
-        "c6b4a2b58760e2057bddde2eab57f4204f6bbafc",
-        "ff42d2308cd0bafa7efb111c2e0b83f624b4062f",
-        "dea98fda9e385da22ea43faaf911e6446a0934ff",
-        "51c3d211a501651dd00ac313cbd0039ac9764ce1"
+        "ffae79bdc6cd21a2197c1bb90cdd172161838197",
+        "46a246a475e0c5e1c74098939f8d164e49789659",
+        "7b7c0960e7163270aa3206a0fb4fa649fc6fa918",
+        "35c8ffb0bcce2f0d3ed7ae1e96aca980bf78017e",
+        "922e0df983fd4a1dd2da1447ad87a1948215b73b",
+        "0fac6c0f48476e35c28f47d16eb641c395ad28fc",
+        "3c85cfbf7cbe85937d6ba8a0d134cf41cba6566c",
+        "5df4cc48dd474f4aec87e316a08e7ffe6327b9db"
       ]
     },
     {
       "name": "plainnotes-0.2.0-play.apk",
-      "size": 22829764,
-      "sha256": "1f23565f89e563e96d1ad2e3fe27553a7cd6496c60abe6baa9b6af79f4840f13",
+      "size": 22915840,
+      "sha256": "8ec2bf7b1bb1a5fb0dbf30256e84e6dca6c81015632b9e3e177da8bb809e67e3",
       "blobs": [
-        "9ffa0ffb58e87cf28a8b8265521aac4a0d05da6c",
-        "ec3a01218c0336d3d454c145e1b0e33d73221238",
-        "1aecc4f76fef1d701103e04ff96d6b67b898cfe9",
-        "437b7ac05510064874fc7254d5b879ffa37f6ad8",
-        "43eaa05f3c34b3937435b21efcbfd6ba67d156b4",
-        "ed6937d528d2303746ebf181228e1fd6c210eecb"
+        "99bc7e17cd2ce995bf9c0c94c243534dae97b9fd",
+        "79a0d94b7efa7adc374eb4447f61cd1abf483210",
+        "e79f998cba8242f34fb4e3b45397ba3898b84338",
+        "0c86b6dc8f6e675614dc0f9f871b4924c52b05b8",
+        "6a082c0d8655d47f095f028f9d7b411da7fabda3",
+        "2af7c07a988a114c3636b5c4d4abff8e966432b5",
+        "3ba9ef5aa014217dacdcfd7f9d1910873e99881c",
+        "865e104b000880bb956c43897077bc033c63254e"
       ]
     },
     {
       "name": "SIGNING_CERTIFICATE.txt",
-      "size": 387,
-      "sha256": "63d5e152308b99693f8ca551d2bde866889a843eb410f8a52174b4989270cdde",
+      "size": 358,
+      "sha256": "00669b6875a13d6eef258adfe4d67ad5f2955440d00a167e9d10a18119a0c004",
       "blobs": [
-        "f294cfb3acfd3e74008e909e9006993f612163b6"
-      ]
-    },
-    {
-      "name": "SHA256SUMS.txt",
-      "size": 450,
-      "sha256": "2264250a35ea1fe6384ce2f728a1128c673727fd1cd01df6581da09b0ef03269",
-      "blobs": [
-        "c65fc52e8458ecbe845ace2546e9539483cd9225"
+        "a76c217c827a9aefab518e0773d4da52d3f93b49"
       ]
     },
     {
       "name": "THIRD_PARTY_NOTICES.md",
-      "size": 1607,
-      "sha256": "fca5a4b2f9e30a2010fb32b3c46fd31cc55f28bac667bd38a992341f881acaf3",
+      "size": 1356,
+      "sha256": "c8e18578f29994473542fafe7777cb6939899e3ea814acee171efd469d9a17b8",
       "blobs": [
-        "55c41d9f2bec56068a1e17747708346a5d8f277c"
+        "86db72518f845120e3edb656b700ed02f89ebb6c"
       ]
     },
     {
-      "name": "UPSTREAM_LICENSE.txt",
-      "size": 1070,
-      "sha256": "a883a72031ec40ef92543b80377086ec219c36df6269882adc0b29b8bfba8417",
+      "name": "SHA256SUMS.txt",
+      "size": 363,
+      "sha256": "55113778391263ecdcedd2e183b7ab2b3b69c8467260dec6d2408ce5f2165710",
       "blobs": [
-        "d3ed37bfc8b4757996d22057c03c05cc3b075e16"
+        "910559152c938c43fc50fd656d3dc68b5c1e2af1"
       ]
     }
-  ]
+  ],
+  "replacement_authorized": true
 }

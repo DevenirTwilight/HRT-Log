@@ -61,3 +61,7 @@ Hi! I'm building an open-source Android HRT tracking app. Its concentration mode
 
 - 上游 issue #12 无回复，不再等待，按文献独立重写（已完成，见上）。
 - 0.3.0 已准备好但**不发布**：不建 Release、不传 APK、不动 0.2.0 的 Release 和标签，直到用户另行通知。
+
+## 0.2.0 紧急修复替换（build 4，2026-10-06）
+
+用户最新要求将公开版本名保留为 0.2.0，并替换原 Release。内部 versionCode 4，代码保留此前准备的独立文献引擎及所有已验证修复，不回退至旧移植引擎。此次附件与原 0.2.0/build 2 不同，第三方通知同步更新；旧上游许可状态仍作为历史记录，不能说已获得授权。用户已授权替换 Release 与标签，此决定覆盖上面的待通知限制；Git 历史仍保留旧代码。

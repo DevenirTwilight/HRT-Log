@@ -14,8 +14,9 @@ Development-only tools include Gradle (Apache-2.0), JUnit (EPL-2.0), Robolectric
 The concentration models (`pk-engine`, `tools/pk-fit`) and the lab calibration were written for
 HRT Log from published pharmacokinetic studies; parameters and references are in
 `pk-engine/src/main/resources/pk-params.json` and `docs/pk-model.md`. No third-party code is used.
-Versions up to 0.2.0 contained a port of Transmtf HRT Tracker's model (MIT; its own upstream
-had no license); that port was removed in 0.3.0. See `docs/licensing.md`.
+The original 0.2.0 (build 2) contained a port of Transmtf HRT Tracker's model (MIT; its own
+upstream had no license). That port was removed during development and is absent from
+the replacement 0.2.0 emergency hotfix (build 4). See `docs/licensing.md`.
 
 The HRT tracker importer reads the JSON export format of Transmtf HRT Tracker; it contains no
 code from that project.
