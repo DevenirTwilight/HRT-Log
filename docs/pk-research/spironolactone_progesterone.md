@@ -67,3 +67,86 @@ For an app model, the simplest defensible structure is parent (1–2 cmt, ka ≈
 - CaroSpir (oral suspension) FDA label: likely has fed/fasted and tablet-vs-suspension BA numbers. Not fetched.
 - Food-effect study 084-15 (CMP Pharma; high-fat meal ≈ +90 % AUC0-∞) is cited only secondarily in Tatipalli 2021.
 
+---
+
+## 2. Oral micronized progesterone (Utrogestan, Prometrium 100/200 mg)
+
+### 2.1 Structure and what is known
+
+- **Absorption:** first-order (Simon 1993, n=15, "absorption and elimination were first-order processes"). Tmax is about 1–3 h (ANSM RCP), 1–4 h (NL SmPC) or "within 3 hours" (FDA). PK is linear and dose-proportional from 100 to 300 mg (FDA label; Simon 1993) and from 100 to 400 mg in men (FDA label).
+- **Bioavailability:** the absolute value is "not known" (FDA Prometrium label). The NL SmPC says about 60 % of the dose is absorbed as progesterone + metabolites, and only **6–10 % remains unmetabolized** after hepatic first pass. Relative F vs IM progesterone is **8.6 %** (Simon 1993).
+- **Food:** about 2-fold increase in absorption (AUC and Cmax), Tmax unchanged (Simon 1993). For the Bijuva softgel (different formulation, not micronized-in-peanut-oil), a high-fat meal raised Cmax by 162 % and AUC by 79 %, and median Tmax went from 2 to 3 h (FDA Bijuva label). The ANSM RCP advises taking it away from meals at bedtime. Bijuva is labelled "with food".
+- **Elimination half-life:** **no reliable half-life is published for Prometrium or Utrogestan** in the labels. The best label-grade value is from Bijuva (oral progesterone 100 mg softgel, steady state): t½ 8.77 ± 2.78 h (n=13) and 9.98 ± 2.57 h (n=18). Health Canada notes levels stay above baseline 84 h after the last dose. The ANSM RCP recommends splitting the dose about 12 h apart. Short apparent decline after Cmax (ANSM mean profile: 11.75 ng/mL at 2 h → 2 ng/mL at 6 h → 1.64 ng/mL at 8 h) suggests a biphasic profile: fast distribution/first decline plus a slower terminal tail.
+- **Steady state:** within 7 days (Bijuva label; Lobo 2019, accumulation ratios 1.36–1.94).
+- **Metabolites:** pregnanediols/pregnanolones (FDA). 20α-hydroxy-Δ4-pregnanolone and 5α-dihydroprogesterone are the main plasma metabolites (ANSM). 95 % is eliminated in urine as glucuronides (ANSM).
+- **Assay problem (critical for an app comparing to user lab results):** after oral dosing, direct RIA gave values **about 8× higher than LC-MS** (Levine & Watson 2000), and the authors call RIA "inappropriate" after oral progesterone. Prometrium label values (Cmax 17–61 ng/mL) and older studies (Maxson, Hargrove, Norman, ANSM time course) are immunoassay-era. By LC-MS, 100 mg oral gave Cmax 2.20 ng/mL (Levine 2000), and Bijuva 100 mg gave Cavg,ss 0.55–0.76 ng/mL. Treat these as different "truths" depending on the user's lab method.
+
+For an app model, use a one-compartment model with first-order absorption (ka from Tmax ≈ 1.5–3 h). Choose the elimination rate to match a profile with a fast post-peak fall (apparent t½ of a few hours in the 2–8 h window, from the ANSM mean curve) plus a slower terminal phase (t½ ≈ 9–10 h, Bijuva, LC-MS-era). Calibrate the scale to the assay type: LC-MS values are about 1/8 of immunoassay values (Levine 2000). Food multiplies F by about 2 (Simon 1993). Population variability is large; see 2.3.
+
+### 2.2 Parameter table
+
+| Parameter | Value | Unit | Ref | Location | Population (n) | Notes |
+|---|---|---|---|---|---|---|
+| Cmax 100 / 200 / 300 mg/day (day 5) | 17.3 ± 21.91 / 38.1 ± 37.8 / 60.6 ± 72.5 | ng/mL | FDA Prometrium 2026 | Table 1 | postmenopausal women, 5 daily doses (n not stated) | implied CV 127 / 99 / 120 % |
+| Tmax 100 / 200 / 300 mg | 1.5 ± 0.8 / 2.3 ± 1.4 / 1.7 ± 0.6 | h | FDA Prometrium 2026 | Table 1 | same | |
+| AUC0-10 100 / 200 / 300 mg | 43.3 ± 30.8 / 101.2 ± 66.0 / 175.7 ± 170.3 | ng·h/mL | FDA Prometrium 2026 | Table 1 | same | implied CV 71 / 65 / 97 %; AUC only to 10 h |
+| Absolute F | not known | – | FDA Prometrium 2026 | A. Absorption | – | |
+| Fraction absorbed / unmetabolized after first pass | ~60 / 6–10 | % | CBG NL SmPC (RVG 11473) | 5.2 | – | proxy for systemic F |
+| Relative F oral vs IM | 8.6 | % | Simon 1993 | abstract | postmenopausal women (15) | |
+| Food effect | ~2× (AUC0-24 and Cmax up; Tmax unchanged) | – | Simon 1993 | abstract | (15), 200 mg ×5 d | FDA: ↑BA, magnitude not given |
+| Food effect, Bijuva softgel | +162 Cmax, +79 AUC | % | FDA Bijuva 2026 | 12.3 Food Effect | postmenopausal, high-fat | other formulation |
+| Mean time course after 200 mg | 0.13 → 4.25 (1 h) → 11.75 (2 h) → 8.37 (4 h) → 2 (6 h) → 1.64 (8 h) | ng/mL | ANSM Utrogestan RCP 2026 | 5.2 Voie orale | volunteers (n not given) | immunoassay era presumably |
+| Tmax (labels) | 1–3 (ANSM); 1–4 (NL); "within 3" (FDA) | h | ANSM; CBG; FDA | 5.2 / A. Absorption | – | |
+| Mean peak after 200 mg | 77.3 | nmol/L | Health Canada PM 2025 | 10.3 | postmenopausal | ≈24 ng/mL (my conversion); peak 2–4 h; above baseline 84 h after last dose |
+| Bijuva SS AUC0-τ (0.5/100; 1/100) | 12.19 ± 11.01; 18.05 ± 15.58 | ng·h/mL | FDA Bijuva 2026 | Table 2 | healthy postmenopausal, fed, day 7 (17; 20) | baseline-adjusted |
+| Bijuva SS Cmax | 4.40 ± 5.72; 11.31 ± 23.10 | ng/mL | FDA Bijuva 2026 | Table 2 | (17; 20) | implied CV 130 % / 204 % |
+| Bijuva SS Cavg | 0.55 ± 0.45; 0.76 ± 0.65 | ng/mL | FDA Bijuva 2026 | Table 2 | (17; 20) | |
+| Bijuva SS Tmax median (range) | 2.00 (0.67–8.00); 2.51 (0.67–6.00) | h | FDA Bijuva 2026 | Table 2 | | |
+| Bijuva t½ | 8.77 ± 2.78; 9.98 ± 2.57 | h | FDA Bijuva 2026 | Table 2 + Elimination | (13; 18) | only labelled oral P4 t½ found |
+| Steady state | within 7 days | – | FDA Bijuva 2026; Lobo 2019 | 12.3; abstract | | Lobo: accumulation 1.36–1.94 |
+| Cavg,ss 100 mg (TX-001HR phase 1) | 0.66 | ng/mL | Lobo 2019 | abstract | postmenopausal (40) | |
+| Levine LC-MS: Cmax / Tmax, 100 mg | 2.20 ± 3.06 / 1.00 ± 0.41 | ng/mL / h | Levine 2000 | abstract | postmenopausal (6 oral arm) | ± as reported (SD/SEM not stated in abstract) |
+| Levine dose-normalized AUC0-24 | 0.035 ± 0.0052 | ng·h/mL per mg | Levine 2000 | abstract | (6) | i.e. ~3.5 ng·h/mL for 100 mg |
+| RIA vs LC-MS bias after oral | ~8× higher by RIA | ratio | Levine 2000 | abstract | (6) | |
+| Cmax 200 mg single | 17.0 ± 4.9 (Tmax 2.8 ± 0.35 h) | ng/mL | Maxson 1985 | abstract | 9 postmenopausal F + 1 M (10) | baseline by 24 h |
+| Cmax 200 mg micronized in oil | 30.3 ± 7.0 (Tmax 2.0 ± 0.3 h) | ng/mL | Hargrove 1989 | abstract | (7) | formulation matters |
+| Cmax range 200 mg | 8.5–70.6 | ng/mL | Norman 1991 | abstract | premenopausal women (10), RIA | ~8-fold inter-individual range |
+| Protein binding | 96–99 (albumin 50–54, CBG 43–48) | % | FDA Prometrium 2026 | B. Distribution | – | |
+| Urinary elimination as glucuronides | 95 | % | ANSM 2026 | 5.2 | – | |
+
+### 2.3 Variability and limitations (progesterone)
+
+- **Very large inter-individual variability.** Implied CV of Cmax is about 100–130 % (Prometrium Table 1) and up to 204 % (Bijuva Table 2). Norman 1991 found an 8.5–70.6 ng/mL range at 200 mg, and Bolaji 1993 reported "striking differences". Intra-individual PK is reported stable over months (ANSM, NL SmPC). That supports per-user calibration from the user's own lab values rather than a population prior.
+- **Assay dependence dominates.** Labels and most older studies used immunoassays that cross-react with oral-route metabolites (5α-DHP, 20α-DHP, pregnanolones). LC-MS values are roughly an order of magnitude lower (Levine 2000; Bijuva vs Prometrium numbers). Prometrium Table 1 does not state the assay or n.
+- **No published popPK model of oral micronized progesterone was found.** Simon 1993 confirms first-order kinetics but its abstract gives no ka, CL or t½.
+- **Half-life is thin.** The only label-grade terminal t½ (≈9–10 h) is from Bijuva, a different formulation measured at steady state. Prometrium and Utrogestan labels give no t½. Most of the exposure after a dose is in the first 6–8 h.
+- Populations are mostly postmenopausal cis women. Men are mentioned qualitatively in the FDA label. No trans-feminine PK data on oral progesterone were found (Dijkman 2023 RCT protocol, PMID 38124194, measures serum P4 but no results yet).
+- The ANSM time course is a single mean curve with no n, assay or SD. Treat it as illustrative.
+
+### 2.4 Unverified leads (progesterone)
+
+- Simon 1993 full text (Fertil Steril 60:26–33): should contain the fed/fasted AUC, Cmax, t½ and ka values. Paywalled, not read.
+- Stanczyk 1999 (J Reprod Med 44(2 Suppl):141–7, PMID 11392023): review of progesterone measurement methods and oral PK. Abstract only.
+- Sitruk-Ware 1987 review (Contraception 36:373–402, PMID 3327648) and de Lignières 1999 (Clin Ther, PMID 10090424). The latter states that inter-/intra-individual AUC variability is similar to synthetic progestins. Neither full text was read.
+- Wang 2021 (PMID 34912388): oral Utrogestan AUC geomean 413.68 and Cmax 129.85. Units and dose are not in the abstract, so do not use without the full text.
+- Health Canada Prometrium monograph Table 4 is an embedded image and was not extracted.
+- Prometrium label wording on PK in men ("generally consistent") has no numbers.
+
+---
+
+## 3. Overall assessment
+
+| Topic | Strength |
+|---|---|
+| Spironolactone parent + canrenone/TMS/HTMS half-lives, Cmax, AUC, Tmax at steady state | **Solid** (Gardiner 1989 = FDA label table; n=12 healthy men) |
+| Spironolactone food effect | **Solid** (Overdiek 1986, n=9; label) |
+| Spironolactone parent→canrenone chain model | **Moderate** (Tatipalli 2021 popPK, n=92, but suspension, Indian males, Fm fixed, no TMS) |
+| Spironolactone in trans women | **Thin but direct** (Cattani 2023, n=19, NCA, parent + canrenone) |
+| Spironolactone absolute F / female-specific PK | **No reliable source found** |
+| Progesterone Cmax/Tmax/AUC by dose | **Moderate** (FDA label Table 1; immunoassay-era, n not given) |
+| Progesterone food effect | **Moderate** (Simon 1993 abstract "twofold"; Bijuva label numbers for another formulation) |
+| Progesterone absolute F | **Thin** (label "not known"; NL SmPC 6–10 % unmetabolized; Simon 8.6 % relative to IM) |
+| Progesterone elimination half-life | **Thin** (only Bijuva label, 9–10 h) |
+| Progesterone inter-individual variability | **Solid qualitatively** (implied CV 100–200 %; multiple sources) |
+| Progesterone assay cross-reactivity | **Solid** (Levine 2000: RIA about 8× LC-MS) |
+| Progesterone popPK model | **No reliable source found** |
