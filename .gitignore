@@ -1,5 +1,5 @@
 # 用户真实健康数据：只用于本地测试导入器，绝不提交
-reference/
+/reference/
 *.db
 *.db-wal
 *.db-shm
