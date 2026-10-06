@@ -1,0 +1,25 @@
+{
+  "meta": { "version": 2, "exportedAt": "2026-01-10T00:00:00.000Z" },
+  "weight": 61.5,
+  "events": [
+    { "id": "s1", "route": "sublingual", "timeH": 491000, "doseMG": 1.5, "ester": "E2", "weightKG": 61.5, "extras": { "sublingualTier": 1 } },
+    { "id": "s2", "route": "sublingual", "timeH": 491012.25, "doseMG": 1.5, "ester": "E2", "weightKG": 61.5, "extras": { "sublingualTier": 1 } },
+    { "id": "s2b", "route": "sublingual", "timeH": 491012.25, "doseMG": 1.5, "ester": "E2", "weightKG": 61.5, "extras": { "sublingualTier": 1 } },
+    { "id": "s3", "route": "sublingual", "timeH": 491024, "doseMG": 3, "ester": "EV", "weightKG": 61.5, "extras": { "sublingualTier": 3 } },
+    { "id": "s4", "route": "sublingual", "timeH": 491030, "doseMG": 1, "ester": "E2", "weightKG": 61.5, "extras": { "sublingualTheta": 0.07 } },
+    { "id": "i1", "route": "injection", "timeH": 491100, "doseMG": 4, "ester": "EV", "weightKG": 61.5, "extras": {} },
+    { "id": "o1", "route": "oral", "timeH": 491110, "doseMG": 12.5, "ester": "CPA", "weightKG": 61.5, "extras": {} },
+    { "id": "g1", "route": "gel", "timeH": 491120, "doseMG": 1.5, "ester": "E2", "weightKG": 61.5, "extras": { "gelProductId": 2, "gelSite": 1, "areaCM2": 400 } },
+    { "id": "g2", "route": "gel", "timeH": 491130, "doseMG": 1.5, "ester": "E2", "weightKG": 61.5, "extras": { "gelProductId": 1000, "areaCM2": 400 } },
+    { "id": "g3", "route": "gel", "timeH": 491140, "doseMG": 1.5, "ester": "E2", "weightKG": 61.5, "extras": { "gelProductId": 1, "gelWashAfterH": 2 } },
+    { "id": "p1", "route": "patchApply", "timeH": 491150, "doseMG": 0, "ester": "E2", "weightKG": 61.5, "extras": { "releaseRateUGPerDay": 50 } },
+    { "id": "p2", "route": "patchRemove", "timeH": 491234, "doseMG": 0, "ester": "E2", "weightKG": 61.5, "extras": {} },
+    { "id": "x1", "route": "nasal", "timeH": 491240, "doseMG": 1, "ester": "E2", "weightKG": 61.5, "extras": {} }
+  ],
+  "labResults": [
+    { "id": "l1", "timeH": 491050, "concValue": 180, "unit": "pg/ml" },
+    { "id": "l2", "timeH": 491200, "concValue": 600, "unit": "pmol/l" },
+    { "id": "l3", "timeH": 491210, "concValue": 1, "unit": "ng/ml" }
+  ],
+  "gelProducts": [ { "id": 1000, "name": "Synthetic custom gel" } ]
+}

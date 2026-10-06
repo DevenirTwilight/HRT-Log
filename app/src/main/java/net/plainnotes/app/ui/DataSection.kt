@@ -39,6 +39,8 @@ import java.time.LocalDate
     var wipe by remember { mutableStateOf(false) }
     val labels = checkinLabels()
     val importLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { it?.let(model::openTransMemo) }
+    val htLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { it?.let(model::openHrtTracker) }
+    val state by model.state.collectAsStateWithLifecycle()
     val backupLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/octet-stream")) { uri ->
         val pw = backupPassword; backupPassword = null; if (uri != null && pw != null) model.exportBackup(uri, pw) }
     val restoreLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { restoreUri = it }
@@ -46,6 +48,7 @@ import java.time.LocalDate
     val pdfLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { it?.let { u -> model.exportPdf(u, pdfChoice.first, pdfChoice.second, context, labels, scheduleTexts) } }
 
     SectionCard(stringResource(R.string.data)) {
+        DataRow(Icons.Outlined.MoveToInbox, stringResource(R.string.import_ht), stringResource(R.string.import_ht_desc)) { htLauncher.launch(arrayOf("application/json", "text/plain", "*/*")) }
         DataRow(Icons.Outlined.MoveToInbox, stringResource(R.string.import_tm), stringResource(R.string.import_tm_desc)) { importLauncher.launch(arrayOf("*/*")) }
         DataRow(Icons.Outlined.Lock, stringResource(R.string.backup_export), stringResource(R.string.backup_export_desc)) { askBackup = true }
         DataRow(Icons.Outlined.SettingsBackupRestore, stringResource(R.string.backup_restore), stringResource(R.string.backup_restore_desc)) { restoreLauncher.launch(arrayOf("*/*")) }
@@ -81,6 +84,10 @@ import java.time.LocalDate
         is NotesViewModel.DataJob.Imported -> AlertDialog(onDismissRequest = model::clearDataJob, icon = { Icon(Icons.Outlined.CheckCircle, null) }, title = { Text(stringResource(R.string.import_done)) },
             text = { Text(stringResource(R.string.import_done_body, j.summary.medications, j.summary.reusedMedications, j.summary.intakes, j.summary.duplicates, j.summary.containers,
                 j.summary.scores, j.summary.notes, j.summary.appointments)) },
+            confirmButton = { TextButton(onClick = model::clearDataJob) { Text(stringResource(R.string.ok)) } })
+        is NotesViewModel.DataJob.HtReady -> HtImportWizard(j.export, j.preview, state.medications, state.profiles, model::clearDataJob) { d, t, n, w -> model.runHtImport(j.export, d, t, n, w) }
+        is NotesViewModel.DataJob.HtImported -> AlertDialog(onDismissRequest = model::clearDataJob, icon = { Icon(Icons.Outlined.CheckCircle, null) }, title = { Text(stringResource(R.string.import_done)) },
+            text = { Text(stringResource(R.string.ht_done, j.summary.intakes, j.summary.medications, j.summary.alreadyImported, j.summary.labs)) },
             confirmButton = { TextButton(onClick = model::clearDataJob) { Text(stringResource(R.string.ok)) } })
         else -> {}
     }

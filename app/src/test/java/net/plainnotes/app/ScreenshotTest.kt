@@ -71,7 +71,21 @@ class ScreenshotTest {
         File(dir, "$name.png").outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
     }
 
-    @Test fun calendar() = shoot("calendar") { CalendarScreen(state(), today, {}, {}, {}, {}, PaddingValues()) }
+    @Test fun calendar() = shoot("calendar") { CalendarScreen(state(), today, {}, {}, {}, {}, PaddingValues(), extra = calendarExtra()) }
+    @Test fun calendarWeek() = shoot("calendar_week") { CalendarScreen(state(), today, {}, {}, {}, {}, PaddingValues(), extra = calendarExtra(), initialView = CalView.WEEK) }
+    @Test fun calendarYear() = shoot("calendar_year") { CalendarScreen(state(), today, {}, {}, {}, {}, PaddingValues(), extra = calendarExtra(), initialView = CalView.YEAR) }
+    /** Synthetic month: twice-daily intakes with a few misses, planned doses ahead and stock that runs out in about a week. */
+    private fun calendarExtra(): NotesViewModel.ExtraState {
+        val d = today.atStartOfDay(zone).toInstant()
+        val past = (1..40).flatMap { day -> listOf(8, 20).map { h -> day to h } }.mapIndexed { i, (day, h) ->
+            val at = d.minusSeconds(day * 86400L).plusSeconds(h * 3600L)
+            val missed = day in listOf(4, 11) && h == 20 || day == 17
+            RecordEntity(1000L + i, 1, 1, "wall:1@$at", at.toEpochMilli(), zone.id, 2.0, 120, if (missed) null else at.plusSeconds(300).toEpochMilli(), if (missed) null else zone.id,
+                if (missed) null else 2.0, null, if (missed) "MISSED" else "ON_TIME", origin = "APP", revision = 1, config_snapshot = "{}")
+        }
+        val ahead = (1..60).flatMap { day -> listOf(8, 20).map { h -> slot(1, d.plusSeconds(day * 86400L + h * 3600L), 2.0, SlotState.PENDING) } }
+        return NotesViewModel.ExtraState(records = past, containers = listOf(ContainerEntity(1, 1, 28.0, 0.0, 14.0, today.minusDays(7).toString(), "IN_USE")), upcoming = ahead)
+    }
     @Test fun medications() = shoot("medications") { MedicationsScreen(state(), {}, {}, {}, PaddingValues()) }
     @Test fun concentration() { val r = concResult(); shoot("concentration") { ConcentrationScreen(state(), r, false, 62.0, ConcSettings(false, true, net.plainnotes.app.pk.CalibrationMode.RETROSPECTIVE), {}, {}, {}, {}, PaddingValues()) } }
     @Test fun labs() { val r = concResult(); shoot("labs") { LabsScreen(listOf(LabValueEntity(1, "E2", 160.0, "pg/mL", now.minusSeconds(40 * 86400).toEpochMilli(), zone.id, 100.0, 300.0, "pg/mL"),

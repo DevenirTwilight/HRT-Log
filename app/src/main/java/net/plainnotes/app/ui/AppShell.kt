@@ -103,7 +103,7 @@ class UiPrefs(context: Context) {
 
     LaunchedEffect(notificationSlot) { notificationSlot?.let { s -> completeEntry = state.slots.firstOrNull { it.slot.key == s.key } ?: TimelineEntry(s, net.plainnotes.app.domain.SlotState.PENDING); model.notificationSlot.value = null } }
     LaunchedEffect(Unit) { model.loadExtra() }
-    LaunchedEffect(destination) { if (destination in listOf(Destination.HISTORY, Destination.STOCK, Destination.WELLBEING)) model.loadExtra() }
+    LaunchedEffect(destination) { if (destination in listOf(Destination.CALENDAR, Destination.HISTORY, Destination.STOCK, Destination.WELLBEING)) model.loadExtra() }
     LaunchedEffect(destination, concSettings.calibrate, concSettings.mode) {
         if (destination == Destination.CONCENTRATION || destination == Destination.LABS) {
             model.concentrationSettings(concSettings.calibrate, concSettings.mode); model.loadConcentration()
@@ -162,7 +162,7 @@ class UiPrefs(context: Context) {
         ) { pad ->
             when (destination) {
                 Destination.CALENDAR -> CalendarScreen(state, today, { completeEntry = it }, { overrideEntry = it; model.loadOverride(it.slot.key) }, { model.edit(null) },
-                    { model.calendarFrom(null) }, pad) { destination = Destination.MEDICATIONS }
+                    { model.calendarFrom(null) }, pad, onReview = { destination = Destination.MEDICATIONS }, extra = extra, onStock = { destination = Destination.STOCK })
                 Destination.MEDICATIONS -> MedicationsScreen(state, { model.edit(null) }, { model.edit(it) }, { archive = it }, pad)
                 Destination.CONCENTRATION -> ConcentrationScreen(state, conc.result, conc.loading, conc.weight, concSettings, { concSettings = it; prefs.conc = it },
                     { model.setWeight(it) }, { model.editById(it) }, { destination = Destination.LABS }, pad)

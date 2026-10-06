@@ -41,7 +41,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         mutable.value=NotesState(meds,slots,appts,null,false,schedules,profiles,calendarStart)
     }catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.data_error,loading=false)} }
     fun clearError(){mutable.value=mutable.value.copy(error=null)}
-    private fun change(block:suspend()->Unit)=viewModelScope.launch{try{reminders.mutate(block);refresh()}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}
+    private fun change(block:suspend()->Unit)=viewModelScope.launch{try{reminders.mutate(block);refresh().join();loadExtra()}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}
     fun edit(m:MedicationEntity?)=viewModelScope.launch {try {
         val r=m?.let{repo.rules().lastOrNull{r->r.medication_id==it.id&&r.effective_until_utc==null}}
         val t=if(r==null)emptyList()else repo.transaction{it.times(r.id)}
@@ -69,12 +69,15 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     }catch(_:Exception){conc.value=conc.value.copy(loading=false);mutable.value=mutable.value.copy(error=R.string.data_error)} }
     // History, stock and well-being
     data class ExtraState(val records:List<RecordEntity> = emptyList(),val containers:List<ContainerEntity> = emptyList(),val items:List<CheckinItemEntity> = emptyList(),
-                          val scores:List<CheckinScoreEntity> = emptyList(),val notes:List<DayNoteEntity> = emptyList())
+                          val scores:List<CheckinScoreEntity> = emptyList(),val notes:List<DayNoteEntity> = emptyList(),
+                          /** Open doses for the next year (calendar colours and the stock forecast). */ val upcoming:List<TimelineEntry> = emptyList())
     val extra=MutableStateFlow(ExtraState())
     private fun guarded(block:suspend()->Unit)=viewModelScope.launch{try{block()}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}
     fun loadExtra()=guarded {
         val today=LocalDate.now()
-        extra.value=ExtraState(repo.records(),repo.containers(),repo.checkinItems(),repo.scores(today.minusYears(5),today),repo.notes(today.minusYears(5),today))
+        val now=Instant.now()
+        val upcoming=(mutable.value.slots+repo.planned(now,now.plus(java.time.Duration.ofDays(366)))).filter{it.state in net.plainnotes.app.ui.OPEN_STATES}.distinctBy{it.slot.key}
+        extra.value=ExtraState(repo.records(),repo.containers(),repo.checkinItems(),repo.scores(today.minusYears(5),today),repo.notes(today.minusYears(5),today),upcoming)
     }
     private fun mutateExtra(block:suspend()->Unit)=guarded{block();loadExtra();refresh()}
     fun editRecord(id:Long,t:Instant,d:Double)=guarded{reminders.mutate{repo.editRecord(id,t,d)};loadExtra();refresh();loadConcentration()}
@@ -88,11 +91,13 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     // Data: Trans Memo import, encrypted backup, exports, wipe
     sealed interface DataJob { object Idle:DataJob; object Working:DataJob; class Done(val message:Int,val arg:String?=null):DataJob; class Failed(val message:Int):DataJob
         class ImportReady(val export:net.plainnotes.app.importer.TmExport,val preview:net.plainnotes.app.importer.TransMemo.Preview):DataJob
-        class Imported(val summary:ImportSummary):DataJob }
+        class Imported(val summary:ImportSummary):DataJob
+        class HtReady(val export:net.plainnotes.app.importer.HrtTracker.Export,val preview:net.plainnotes.app.importer.HrtTracker.Preview):DataJob
+        class HtImported(val summary:net.plainnotes.app.data.HtImportSummary):DataJob }
     val dataJob=MutableStateFlow<DataJob>(DataJob.Idle)
     fun clearDataJob(){dataJob.value=DataJob.Idle}
     private fun dataOp(block:suspend()->DataJob)=viewModelScope.launch{dataJob.value=DataJob.Working;dataJob.value=try{block()}catch(e:BackupCodec.WrongPassword){DataJob.Failed(R.string.backup_wrong_password)}
-        catch(e:BackupCodec.BadFile){DataJob.Failed(R.string.backup_bad_file)}catch(e:net.plainnotes.app.importer.InvalidExport){DataJob.Failed(R.string.import_invalid)}catch(_:Exception){DataJob.Failed(R.string.operation_error)}}
+        catch(e:BackupCodec.BadFile){DataJob.Failed(R.string.backup_bad_file)}catch(e:net.plainnotes.app.importer.InvalidExport){DataJob.Failed(R.string.import_invalid)}catch(e:net.plainnotes.app.importer.HrtTracker.InvalidExport){DataJob.Failed(R.string.ht_invalid)}catch(_:Exception){DataJob.Failed(R.string.operation_error)}}
     private fun tempImport()=java.io.File(app.noBackupFilesDir,"import").apply{mkdirs()}.resolve("transmemo.db")
     fun openTransMemo(uri:android.net.Uri)=dataOp {
         withContext(Dispatchers.IO) {
@@ -106,6 +111,21 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         val summary=reminders.mutate{repo.importTransMemo(plan,overwrite)}
         withContext(Dispatchers.IO){tempImport().delete()}
         refresh();loadExtra();loadConcentration();DataJob.Imported(summary)
+    }
+    fun openHrtTracker(uri:android.net.Uri)=dataOp {
+        val limit=32*1024*1024
+        val text=withContext(Dispatchers.IO){app.contentResolver.openInputStream(uri)!!.use{ i ->
+            val out=java.io.ByteArrayOutputStream();val buf=ByteArray(64*1024)
+            while(true){val n=i.read(buf);if(n<0)break;out.write(buf,0,n);if(out.size()>limit)throw net.plainnotes.app.importer.HrtTracker.InvalidExport("too large")}
+            out.toString("UTF-8") }}
+        val export=withContext(Dispatchers.Default){net.plainnotes.app.importer.HrtTracker.read(text)}
+        DataJob.HtReady(export,net.plainnotes.app.importer.HrtTracker.preview(export))
+    }
+    fun runHtImport(export:net.plainnotes.app.importer.HrtTracker.Export,duplicates:net.plainnotes.app.importer.HrtTracker.Duplicates?,
+                    targets:Map<net.plainnotes.app.importer.HrtTracker.Group,Long?>,names:Map<net.plainnotes.app.importer.HrtTracker.Group,String>,weight:Boolean)=dataOp {
+        val plan=withContext(Dispatchers.Default){net.plainnotes.app.importer.HrtTracker.plan(export,duplicates)}
+        val summary=reminders.mutate{repo.importHrtTracker(plan,targets,names,if(weight)export.weightKg else null)}
+        refresh();loadExtra();loadConcentration();DataJob.HtImported(summary)
     }
     fun cancelImport()=viewModelScope.launch{withContext(Dispatchers.IO){tempImport().delete()};dataJob.value=DataJob.Idle}
     fun exportBackup(uri:android.net.Uri,password:CharArray)=dataOp {

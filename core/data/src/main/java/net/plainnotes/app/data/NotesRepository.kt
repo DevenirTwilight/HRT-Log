@@ -33,7 +33,7 @@ const val BACKFILL_MAX_DAYS=731L
             dao.times(r.id).map{RuleTime(LocalTime.parse(it.local_time),it.dose_override)},DayOfWeek.entries.filter{r.weekday_mask and (1 shl (it.value-1))!=0}.toSet(),r.dose_snapshot,r.soon_snapshot,r.late_snapshot)
     }
     private fun OverrideEntity.model()=SlotOverride(slot_key,rescheduled_utc?.let(Instant::ofEpochMilli),rescheduled_zone?.let(ZoneId::of),dose_override,skipped)
-    private fun RecordEntity.model()=DoseRecord(slot_key,medication_id,DoseStatus.valueOf(status),taken_utc?.let(Instant::ofEpochMilli),taken_zone?.let(ZoneId::of),actual_dose,site,origin=="IMPORT_TM",deleted_at_utc!=null,scheduled_utc?.let(Instant::ofEpochMilli),scheduled_zone?.let(ZoneId::of),planned_dose,late_after_minutes_snapshot,rule_version_id)
+    private fun RecordEntity.model()=DoseRecord(slot_key,medication_id,DoseStatus.valueOf(status),taken_utc?.let(Instant::ofEpochMilli),taken_zone?.let(ZoneId::of),actual_dose,site,origin.startsWith("IMPORT_"),deleted_at_utc!=null,scheduled_utc?.let(Instant::ofEpochMilli),scheduled_zone?.let(ZoneId::of),planned_dose,late_after_minutes_snapshot,rule_version_id)
     private fun RetainedEntity.model()=Slot(slot_key,rule_id,medication_id,Instant.ofEpochMilli(original_utc),Instant.ofEpochMilli(at_utc),ZoneId.of(zone),dose,soon_minutes,late_minutes,Instant.ofEpochMilli(tracking_from_utc))
     private suspend fun timeline(dao:NotesDao,now:Instant,from:Instant,to:Instant,zone:ZoneId):List<TimelineEntry> {
         val meds=dao.medications().associateBy{it.id}
@@ -201,6 +201,10 @@ const val BACKFILL_MAX_DAYS=731L
     // --- Import / backup / wipe ---
     suspend fun importTransMemo(plan:net.plainnotes.app.importer.TransMemo.Plan,overwrite:Boolean,zone:ZoneId=ZoneId.systemDefault())=withContext(Dispatchers.IO) {
         val db=db();db.withTransaction { TransMemoWriter.write(db.dao(),db.openHelper.writableDatabase,plan,overwrite,zone) }
+    }
+    suspend fun importHrtTracker(plan:net.plainnotes.app.importer.HrtTracker.Plan,targets:Map<net.plainnotes.app.importer.HrtTracker.Group,Long?>,
+                                 names:Map<net.plainnotes.app.importer.HrtTracker.Group,String>,weightKg:Double?,zone:ZoneId=ZoneId.systemDefault())=transaction { dao ->
+        HrtTrackerWriter.write(dao,plan,targets,names,weightKg,zone)
     }
     suspend fun exportBackup(password:CharArray):ByteArray=withContext(Dispatchers.IO) {
         val db=db()

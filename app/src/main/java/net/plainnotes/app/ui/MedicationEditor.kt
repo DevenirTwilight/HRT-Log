@@ -44,7 +44,8 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
     var ester by remember { mutableStateOf(p?.ester ?: "E2") }
     var unit by remember { mutableStateOf(m?.unit ?: "MG") }
     var dose by remember { mutableStateOf(m?.dose_per_intake?.let(::inputNumber) ?: "") }
-    var capacity by remember { mutableStateOf(m?.container_capacity?.let(::inputNumber) ?: "") }
+    // HRT tracker has no package size; the stored placeholder is not shown as if it were known.
+    var capacity by remember { mutableStateOf(m?.container_capacity?.takeUnless { review?.optJSONObject("raw")?.has("capacity") == true }?.let(::inputNumber) ?: "") }
     var expiry by remember { mutableStateOf(m?.expiry_days_after_open?.toString() ?: "") }
     var soon by remember { mutableStateOf(m?.soon_alert_minutes?.toString() ?: if (m == null) "15" else "") }
     var late by remember { mutableStateOf(m?.late_after_minutes?.toString() ?: if (m == null) "120" else "") }
@@ -226,13 +227,15 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
     val raw = review.optJSONObject("raw") ?: org.json.JSONObject()
     Surface(color = MaterialTheme.colorScheme.tertiaryContainer, shape = MaterialTheme.shapes.medium) {
         Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Text(stringResource(R.string.review_title), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onTertiaryContainer)
-            Text(stringResource(R.string.review_body), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onTertiaryContainer)
+            val ht = review.optString("source") == "hrttracker"
+            Text(stringResource(if (ht) R.string.review_title_ht else R.string.review_title), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onTertiaryContainer)
+            Text(stringResource(if (ht) R.string.review_body_ht else R.string.review_body), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onTertiaryContainer)
             raw.keys().asSequence().toList().sorted().forEach { k ->
                 val label = when (k) {
                     "intakeInterval" -> stringResource(R.string.review_interval); "soonAlertDelay" -> stringResource(R.string.review_soon); "lateAlertDelay" -> stringResource(R.string.review_late)
                     "notifications" -> stringResource(R.string.review_notifications); "route" -> stringResource(R.string.review_route); "molecule" -> stringResource(R.string.review_molecule)
-                    "molecule_inferred" -> stringResource(R.string.review_molecule_inferred); "unit" -> stringResource(R.string.review_unit); else -> k
+                    "molecule_inferred" -> stringResource(R.string.review_molecule_inferred); "unit" -> stringResource(R.string.review_unit)
+                    "capacity" -> stringResource(R.string.review_capacity); else -> k
                 }
                 val v = raw.optString(k)
                 Text("• $label" + if (v.isNotEmpty()) stringResource(R.string.review_raw, v) else "", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onTertiaryContainer)
