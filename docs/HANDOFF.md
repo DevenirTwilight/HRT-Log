@@ -19,7 +19,7 @@
 | M4 浓度估算、化验 | 文献调研、独立重写、化验校准和不确定性区间已完成；舌下 8 h 后的数据冲突仍待用户决定（见 2a–2b） |
 | M5 Trans Memo 导入、加密备份、CSV/PDF 导出 | 完成；另加 HRT tracker 导入 |
 | M6 应用锁、隐蔽通知、精简模式、多语言、对比度 | 完成 |
-| M7 伪装模式（仅 full 变体） | 新私人便签设计正在实现，见 2e；此前修复见 2d |
+| M7 伪装模式（仅 full 变体） | 新私人便签实现与本地完整/原生/进程重启验证完成，见 2e；待 OEM 真机复核 |
 | 日历改版（日/周/月/年视图、库存预计） | 完成 |
 | 版本 | 源码 0.3.0（versionCode 3），**已就绪但未发布**；公开 Release 仍是 0.2.0 |
 
@@ -122,7 +122,11 @@
 
 补强边界：配置落盘本身不开放会话；完成回调只对前台且同代次的 Main 激活 PRIMARY，不能认证 PRIVATE。校验结果返回时 shell 已离开前台则不打开受保护页面。启用时立即更新当前 Recents 标签。PRIVATE 实时观察授权，撤销即隐藏/退出。清空使旧 store 实例失效，防止迟到的保存重建密文；新私人存储和旧 DECOY 清理均等待完成且不随界面销毁取消。
 
-验证进行中：之前本地全量 202 项单元测试，200 通过、2 PDF 跳过；full/play lint 0 错误，63/58 条既有警告；四个 debug/release 构建和合并 Manifest 身份/入口/无网络检查通过。最终 `0d6bbea` 的专项 15 项单元测试、full Android test APK、play Kotlin 编译已通过，正在运行最终全量检查 `/workspace/tooling/private-final-all.log` 和 [CI 37508020927](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37508020927)。CI 前两轮 JVM/Android 构建均通过；原生测试驱动的 Search 选择、已销毁 Activity 恢复和重复数字 matcher 已修正，断言未减少、用例未跳过。`0d6bbea` 的原生流程 21 项全通过，另 2 个重启阶段按设计由独立 host 运行，7 项 core 原生也通过。host 阶段因 connected tests 完成后 APK 被清理而无法启动 instrumentation；已增加显式重装 target/test APK 和完整错误输出，待确认两进程 force-stop 检查通过。
+最终验证通过：应用代码 `0d6bbea`、host 测试修正 `0b339d1`。本地 `/workspace/tooling/private-final-all.log`（12m34s）：202 项单元测试，200 通过、2 项因 Robolectric 不支持原生 PDF 写入而跳过，零失败；full/play lint 零错误，63/58 条既有警告；full/play debug 与 release 四构建全部成功；full 原生测试 APK、合并 release Manifest 中性身份/入口隔离/无网络检查通过。源码 schema 无改动。
+
+[CI 37508856551](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37508856551)：JVM 成功；[API 35 原生任务](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37508856551/job/112425145054) 成功，7 项 core 数据库和 19 项应用流程通过。两个 restart 用例仅在普通 connected suite 中按参数跳过，随后 host 显式重装测试 APK，在两个独立进程分别执行 prepare 与 verify，各 `OK (1 test)`，中间真正 `am force-stop`；最终输出 `PASS: fresh process requires authentication, private ciphertext persists`，新进程无授权且 direct private intent 回 Calculator，密文仍保留。合计 28 项实际原生测试通过。CI Android 四构建、单元、lint、Manifest 任务成功，三个任务全部为 success；本地同源码完整构建也已通过。
+
+前两轮仅测试驱动的 Search 选择、已销毁 Activity 恢复和重复数字 matcher 失败，均已修正，断言未减少。第三轮原生界面全通过但 host 未处理 AGP 完成后的 APK 清理，最终脚本显式安装后两进程检查通过。未把失败隐藏为跳过。尚未完成 OEM 真机、真实生物识别硬件及实际厂商文件选择器的系统验证；现有 biometric 与 picker 策略保留，API 35 测试覆盖会话/picker 生命周期边界。
 
 没有发布 Release、改变签名或手动上传 APK；保持现有安装数据，真机复核时不要卸载或清除数据。
 
