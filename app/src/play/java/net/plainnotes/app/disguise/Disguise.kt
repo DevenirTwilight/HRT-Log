@@ -14,4 +14,4 @@ object Disguise {
     fun exit(a: Activity) {}
 }
 
-@Suppress("UNUSED_PARAMETER") @Composable fun DisguiseSection(onPrivateDataCleared: () -> Unit, onRoutingChanged: () -> Unit = {}, backup: suspend (android.net.Uri, CharArray) -> Boolean) {}
+@Suppress("UNUSED_PARAMETER") @Composable fun DisguiseSection(onPrivateDataCleared: suspend () -> Unit, onRoutingChanged: () -> Unit = {}, backup: suspend (android.net.Uri, CharArray) -> Boolean) {}

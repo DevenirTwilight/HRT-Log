@@ -3,6 +3,8 @@ package net.plainnotes.app.disguise
 import android.app.Activity
 import android.content.ComponentName
 import android.content.Context
+import android.content.ContextWrapper
+import net.plainnotes.app.security.taskIdentity
 import android.content.Intent
 import android.content.pm.PackageManager
 import net.plainnotes.app.MainActivity
@@ -26,6 +28,7 @@ object Disguise {
     private const val PAUSE_MILLIS=60_000L
     @Volatile var revision=0L
         private set
+    private tailrec fun activity(c:Context):Activity?=when(c){is Activity->c;is ContextWrapper->activity(c.baseContext);else->null}
     private fun code(c:Context)=AppLock(c,"disguise.bin","notes.disguise")
     // Keep the existing credential filename/alias so installed users retain their alternate code.
     private fun privateCode(c:Context)=AppLock(c,"decoy.bin","notes.decoy")
@@ -41,6 +44,7 @@ object Disguise {
         require(AppLock.validPin(secret) && (alternate==null || (AppLock.validPin(alternate) && alternate!=secret)))
         code(c).setPin(secret)
         if(alternate!=null)privateCode(c).setPin(alternate) else privateCode(c).disable()
+        activity(c)?.setTaskDescription(taskIdentity(c.getString(shell.label),shell.icon))
         NotificationPrefs(c).disguised=true
         // Old detailed notifications must not remain visible after enabling disguise.
         c.getSystemService(android.app.NotificationManager::class.java).cancelAll()
@@ -51,6 +55,8 @@ object Disguise {
     }
     /** Async setup cannot authenticate an activity that left the screen, or a newer unrelated session. */
     @Synchronized fun completeSetup(a:Activity,owner:Long) {
+        if(a !is MainActivity)return
+        if(owner==Session.generation)shell(a)?.let{a.setTaskDescription(taskIdentity(a.getString(it.label),it.icon))}
         val resumed=(a as? androidx.lifecycle.LifecycleOwner)?.lifecycle?.currentState==androidx.lifecycle.Lifecycle.State.RESUMED
         if(enabled(a) && resumed && owner==Session.generation)Session.protectCurrentPrimary() else Session.lock(owner)
     }
@@ -73,6 +79,7 @@ object Disguise {
         code(c).disable();privateCode(c).disable();NotificationPrefs(c).disguised=false
         prefs(c).edit().remove("disguise_misses").remove("disguise_until").apply()
         revision++;Session.reset()
+        activity(c)?.setTaskDescription(taskIdentity(c.getString(R.string.app_name),R.mipmap.ic_launcher))
     }
     /** No visible authentication errors: misses retain ordinary Calculator/Notes behavior and a shared silent delay. */
     @Synchronized fun check(c:Context,input:String,now:Long=System.currentTimeMillis()):UnlockTarget? {
@@ -89,6 +96,7 @@ object Disguise {
     fun targetIntent(c:Context,target:UnlockTarget)=Intent(c,when(target){UnlockTarget.PRIMARY->MainActivity::class.java;UnlockTarget.PRIVATE->PrivateNotesActivity::class.java})
         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
     @Synchronized fun enter(a:Activity,target:UnlockTarget,checkedRevision:Long):Boolean {
+        if((a as? androidx.lifecycle.LifecycleOwner)?.lifecycle?.currentState!=androidx.lifecycle.Lifecycle.State.RESUMED)return false
         if(!enabled(a) || checkedRevision!=revision || (target==UnlockTarget.PRIVATE && !hasPrivateCode(a)))return false
         Session.begin(target)
         try { a.startActivity(targetIntent(a,target));a.finish() } catch(e:Exception) { Session.reset();throw e }

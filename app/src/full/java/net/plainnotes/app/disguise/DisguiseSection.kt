@@ -29,7 +29,7 @@ import net.plainnotes.app.ui.SectionCard
 
 private tailrec fun Context.activity():Activity?=when(this){is Activity->this;is ContextWrapper->baseContext.activity();else->null}
 
-@Composable fun DisguiseSection(onPrivateDataCleared:()->Unit,onRoutingChanged:()->Unit={},backup:suspend(Uri,CharArray)->Boolean) {
+@Composable fun DisguiseSection(onPrivateDataCleared:suspend()->Unit,onRoutingChanged:()->Unit={},backup:suspend(Uri,CharArray)->Boolean) {
     val context=LocalContext.current
     val scope=rememberCoroutineScope()
     var shell by remember{mutableStateOf(Disguise.shell(context))}
@@ -42,10 +42,10 @@ private tailrec fun Context.activity():Activity?=when(this){is Activity->this;is
     var clearNotes by remember{mutableStateOf(false)}
     var working by remember{mutableStateOf(false)}
     var failed by remember{mutableStateOf(false)}
-    fun operation(block:()->Unit,onSuccess:()->Unit) {
+    fun operation(block:suspend()->Unit,onSuccess:()->Unit) {
         working=true;failed=false
         scope.launch {
-            try { withContext(Dispatchers.IO){block()};onSuccess() }
+            try { withContext(Dispatchers.IO+kotlinx.coroutines.NonCancellable){block()};onSuccess() }
             catch(e:kotlinx.coroutines.CancellationException){throw e}
             catch(_:Exception){failed=true}
             finally { working=false }
@@ -90,13 +90,13 @@ private tailrec fun Context.activity():Activity?=when(this){is Activity->this;is
         }},confirmButton={Button(onClick={explained=null}){Text(stringResource(R.string.ok))}})}
     if(changeCode)PrivateCodeDialog({changeCode=false;configured=Disguise.hasPrivateCode(context)}){value->Disguise.setPrivateCode(context,value)}
     if(confirmOff)AlertDialog(onDismissRequest={if(!working)confirmOff=false},title={Text(stringResource(R.string.disguise_disable))},text={Text(stringResource(R.string.disguise_disable_desc))},
-        confirmButton={Button(enabled=!working,onClick={operation({Disguise.disable(context)}){shell=null;configured=false;confirmOff=false;onPrivateDataCleared();onRoutingChanged()}}){Text(stringResource(R.string.disguise_disable))}},
+        confirmButton={Button(enabled=!working,onClick={operation({Disguise.disable(context);onPrivateDataCleared()}){shell=null;configured=false;confirmOff=false;onRoutingChanged()}}){Text(stringResource(R.string.disguise_disable))}},
         dismissButton={TextButton(enabled=!working,onClick={confirmOff=false}){Text(stringResource(R.string.cancel))}})
     if(removeCode)AlertDialog(onDismissRequest={if(!working)removeCode=false},title={Text(stringResource(R.string.private_code_remove))},text={Text(stringResource(R.string.private_code_remove_desc))},
-        confirmButton={Button(enabled=!working,onClick={operation({Disguise.removePrivateCode(context)}){configured=false;removeCode=false;onPrivateDataCleared()}}){Text(stringResource(R.string.private_code_remove))}},
+        confirmButton={Button(enabled=!working,onClick={operation({Disguise.removePrivateCode(context);onPrivateDataCleared()}){configured=false;removeCode=false}}){Text(stringResource(R.string.private_code_remove))}},
         dismissButton={TextButton(enabled=!working,onClick={removeCode=false}){Text(stringResource(R.string.cancel))}})
     if(clearNotes)AlertDialog(onDismissRequest={if(!working)clearNotes=false},title={Text(stringResource(R.string.private_clear))},text={Text(stringResource(R.string.private_clear_desc))},
-        confirmButton={Button(enabled=!working,onClick={operation({Disguise.clearPrivate(context)}){clearNotes=false;onPrivateDataCleared()}}){Text(stringResource(R.string.private_clear))}},
+        confirmButton={Button(enabled=!working,onClick={operation({Disguise.clearPrivate(context);onPrivateDataCleared()}){clearNotes=false}}){Text(stringResource(R.string.private_clear))}},
         dismissButton={TextButton(enabled=!working,onClick={clearNotes=false}){Text(stringResource(R.string.cancel))}})
 }
 

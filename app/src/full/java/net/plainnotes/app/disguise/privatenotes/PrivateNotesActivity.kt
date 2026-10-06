@@ -40,11 +40,15 @@ class PrivateNotesActivity:ComponentActivity() {
         contentVisible=true;initialized=true
         onBackPressedDispatcher.addCallback(this,object:OnBackPressedCallback(true){override fun handleOnBackPressed(){close()}})
         setContent { ShellTheme {
-            if(contentVisible){val state by model.state.collectAsStateWithLifecycle()
+            val authorization by Session.authorization.collectAsStateWithLifecycle()
+            val active=authorization.target==UnlockTarget.PRIVATE && authorization.generation==owner
+            LaunchedEffect(authorization){if(!active)authorized()}
+            if(contentVisible && active){val state by model.state.collectAsStateWithLifecycle()
                 PrivateNotesScreen(state,::close,model::edit,model::draft,model::cancel,model::save,model::delete,model::reload)
             } else Surface(Modifier.fillMaxSize()){}
         } }
     }
+    override fun onNewIntent(intent:android.content.Intent){super.onNewIntent(intent);authorized()}
     private fun authorized():Boolean {
         if(!Disguise.enabled(this)){Session.lock(owner);finishAndRemoveTask();return false}
         if(Disguise.hasPrivateCode(this) && Session.allows(UnlockTarget.PRIVATE,owner))return true

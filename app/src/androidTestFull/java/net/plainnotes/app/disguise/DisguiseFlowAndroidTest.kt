@@ -46,7 +46,7 @@ class DisguiseFlowAndroidTest {
         return found
     }
     private fun await(type:Class<out Activity>){ui.waitUntil(20_000){resumed(type)};ui.waitForIdle()}
-    private fun pressCode(code:String){code.forEach{ui.onNodeWithText(it.toString(),useUnmergedTree=true).performClick()};ui.onNodeWithText("=",useUnmergedTree=true).performClick()}
+    private fun pressCode(code:String){code.forEach{ui.onNode(hasText(it.toString()) and hasClickAction()).performClick()};ui.onNodeWithText("=",useUnmergedTree=true).performClick()}
     private fun notesCode(code:String) {
         ui.onNodeWithContentDescription(context.getString(R.string.shell_search)).performClick()
         val search=ui.onNode(SemanticsMatcher.expectValue(SemanticsProperties.ImeAction,ImeAction.Search))
@@ -54,7 +54,7 @@ class DisguiseFlowAndroidTest {
     }
     private fun goHome() {
         context.startActivity(Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-        ui.waitUntil(10_000){Session.target==null}
+        ui.waitUntil(10_000){Session.target==null && !resumed(MainActivity::class.java) && !resumed(PrivateNotesActivity::class.java) && !resumed(CalculatorActivity::class.java) && !resumed(NotesShellActivity::class.java)}
     }
     private fun resumeProtected(type:Class<out Activity>) {
         context.startActivity(Intent(context,type).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
@@ -72,7 +72,7 @@ class DisguiseFlowAndroidTest {
             ui.onNodeWithText("C",useUnmergedTree=true).performClick();pressCode(alternate)
             await(PrivateNotesActivity::class.java);assertEquals(UnlockTarget.PRIVATE,Session.target)
             ui.onNodeWithText(context.getString(R.string.private_empty)).assertIsDisplayed();assertNoHealthUi();assertEquals(0,monitor.hits)
-            instrument.runOnMainSync{ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED).forEach{a->assertTrue(a.window.attributes.flags and WindowManager.LayoutParams.FLAG_SECURE!=0);(a as PrivateNotesActivity).onBackPressedDispatcher.onBackPressed()}}
+            instrument.runOnMainSync{ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED).forEach{a->assertTrue(a.window.attributes.flags and WindowManager.LayoutParams.FLAG_SECURE!=0);Disguise.completeSetup(a,Session.generation);assertEquals(UnlockTarget.PRIVATE,Session.target);(a as PrivateNotesActivity).onBackPressedDispatcher.onBackPressed()}}
             await(CalculatorActivity::class.java);assertNull(Session.target);assertNoHealthUi();assertEquals(0,monitor.hits)
             assertTrue(context.getSystemService(ActivityManager::class.java).appTasks.none{it.taskInfo?.baseActivity?.className==MainActivity::class.java.name || it.taskInfo?.topActivity?.className==MainActivity::class.java.name})
         }finally{instrument.removeMonitor(monitor)}
@@ -152,6 +152,24 @@ class DisguiseFlowAndroidTest {
         main.moveToState(Lifecycle.State.RESUMED);await(MainActivity::class.java);assertFalse(Session.pickerActive(owner))
         goHome();resumeProtected(MainActivity::class.java);await(CalculatorActivity::class.java)
     }
+    @Test fun revokingAnOpenPrivateSessionImmediatelyReturnsToTheShell() {
+        configure(Disguise.Shell.NOTES);Session.begin(UnlockTarget.PRIVATE)
+        launch(PrivateNotesActivity::class.java);await(PrivateNotesActivity::class.java)
+        Session.reset();await(NotesShellActivity::class.java);assertNoHealthUi()
+    }
+    @Test fun aSecretResultDeliveredAfterLeavingAShellCannotOpenEitherProtectedTarget() {
+        configure(Disguise.Shell.CALCULATOR)
+        val shell=launch(CalculatorActivity::class.java);await(CalculatorActivity::class.java)
+        var activity:Activity?=null;shell.onActivity{activity=it}
+        val revision=Disguise.revision
+        val primary=Disguise.check(context,real)!!;val privateTarget=Disguise.check(context,alternate)!!
+        goHome()
+        instrument.runOnMainSync {
+            assertFalse(Disguise.enter(activity!!,primary,revision))
+            assertFalse(Disguise.enter(activity!!,privateTarget,revision))
+        }
+        assertNull(Session.target);assertFalse(resumed(MainActivity::class.java));assertFalse(resumed(PrivateNotesActivity::class.java))
+    }
     @Test fun setupCompletionCannotReopenAnActivityThatLeftOrReplaceANewerPrivateSession() {
         val owner=Session.generation
         val main=launch(MainActivity::class.java);await(MainActivity::class.java)
@@ -161,6 +179,8 @@ class DisguiseFlowAndroidTest {
         assertNull(Session.target)
         main.onActivity{Disguise.completeSetup(it,owner)}
         assertTrue(Session.allows(UnlockTarget.PRIMARY,owner))
+        val task=context.getSystemService(ActivityManager::class.java).appTasks.first{it.taskInfo?.taskId==activity!!.taskId}
+        assertEquals(context.getString(R.string.shell_calc),task.taskInfo?.taskDescription?.label)
         goHome()
         instrument.runOnMainSync{Disguise.completeSetup(activity!!,owner)}
         assertNull(Session.target)

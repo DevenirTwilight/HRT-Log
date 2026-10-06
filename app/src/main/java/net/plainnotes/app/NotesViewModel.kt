@@ -185,7 +185,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     }
     /** Deletes everything: database, key, reminders cache and preferences. The caller restarts the UI. */
     /** Legacy empty HRT database is retained across upgrade and erased only after explicit confirmation. */
-    fun destroyLegacyPrivateData()=viewModelScope.launch(Dispatchers.IO){repo.destroy(Space.DECOY)}
+    suspend fun destroyLegacyPrivateData()=withContext(Dispatchers.IO){repo.destroy(Space.DECOY)}
     fun wipeAll(onDone:()->Unit)=viewModelScope.launch {
         withContext(Dispatchers.IO){ mutate{repo.destroyAll()}
             net.plainnotes.app.disguise.Disguise.disable(app); repo.destroy(net.plainnotes.app.data.Space.DECOY)
