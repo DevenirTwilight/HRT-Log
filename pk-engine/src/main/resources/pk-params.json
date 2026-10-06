@@ -7051,6 +7051,261 @@
      "ka_per_h": 0.18518115129165108
     }
    ]
+  },
+  "E2_PATCH": {
+   "unit": "pg/mL",
+   "ka_per_h": 0.6931471805599453,
+   "terms": [
+    {
+     "A_per_mg": 2705.740652081504,
+     "lambda_per_h": 0.10193340890587431,
+     "t_half_h": 6.8
+    }
+   ],
+   "basis": [
+    "transdermal_cpa:L_VIVELLEDOT (steady-state Cavg 34 / 57 / 72 / 89 pg/mL at 0.0375 / 0.05 / 0.075 / 0.1 mg/day; half-life after removal 5.9-7.7 h)",
+    "transdermal_cpa:RCP_DERMESTRIL (estradiol plasma half-life about 1 h)"
+   ],
+   "assumption": "Constant release at the labelled rate during wear into a skin reservoir (apparent half-life 6.8 h, the midpoint of the label's 5.9-7.7 h after removal), then plasma (half-life about 1 h). The response is linear in the release rate. Application site (buttock about +17 % Cavg on the Climara label) and the within-wear rise and fall are not modelled.",
+   "checks": {
+    "vivelle_0.0375_cavg": 35.37600000000017,
+    "vivelle_0.05_cavg": 47.16799999999977,
+    "vivelle_0.075_cavg": 70.75200000000034,
+    "vivelle_0.1_cavg": 94.33599999999954,
+    "climara_0.025_cavg_single_week": 21.973985995285705,
+    "climara_0.05_cavg_single_week": 43.94797199057141,
+    "climara_0.1_cavg_single_week": 87.89594398114282
+   },
+   "cv": 0.48,
+   "cv_source": "transdermal_cpa:L_CLIMARA (relative SD of Cavg 48 %, abdomen)",
+   "e2_per_mg": 1.0,
+   "input": "zero-order release during wear"
+  },
+  "E2_GEL_ESTROGEL": {
+   "unit": "pg/mL",
+   "ka_per_h": 0.8647456410499397,
+   "terms": [
+    {
+     "A_per_mg": 17.83357788135906,
+     "lambda_per_h": 0.01925408834888737,
+     "t_half_h": 36.0
+    }
+   ],
+   "basis": [
+    "transdermal_cpa:L_ESTROGEL (0.75 mg/day, day 14: Cmax 46.4 pg/mL, Cavg 28.3 pg/mL; apparent terminal half-life about 36 h)",
+    "transdermal_cpa:Jarvinen1999 (Tmax 4-5 h after gel application)"
+   ],
+   "assumption": "Applies to EstroGel and Oestrogel (same 0.06 % formulation). One absorption and one elimination term; the apparent half-life (36 h) is the label value; AUC per mg from the steady-state Cavg; absorption rate from Tmax 4.5 h (Jarvinen 1999). The label's steady-state Cmax (46.4 pg/mL) is not reproduced: a 36 h half-life with once-daily dosing gives a flatter profile. Application area and body site are taken as on the label (no quantitative literature for other areas or sites).",
+   "checks": {
+    "ss_0.75mg_cmax": 33.14925993661595,
+    "ss_0.75mg_cavg": 28.299901566451755,
+    "tmax_single_h": 4.500000137323223
+   },
+   "cv": 0.9,
+   "cv_source": "transdermal_cpa:L_DIVIGEL (CV of Cavg 81-149 %; no CV is given for EstroGel)",
+   "e2_per_mg": 1.0,
+   "products": [
+    "oestrogel",
+    "estrogel"
+   ]
+  },
+  "E2_GEL_DIVIGEL": {
+   "unit": "pg/mL",
+   "ka_per_h": 0.4445109708106326,
+   "terms": [
+    {
+     "A_per_mg": 65.24559009276736,
+     "lambda_per_h": 0.06931471805599453,
+     "t_half_h": 10.0
+    }
+   ],
+   "basis": [
+    "transdermal_cpa:L_DIVIGEL (steady state at 0.25 / 0.5 / 1.0 mg/day: Cmax 14.7 / 28.4 / 51.5, Cavg 9.8 / 21 / 30.5 pg/mL; apparent terminal half-life about 10 h)"
+   ],
+   "assumption": "One absorption and one elimination term; apparent half-life 10 h (label); AUC per mg fitted to the three steady-state Cavg values, absorption rate to the mean Cmax/Cavg ratio. Application area and site as on the label.",
+   "checks": {
+    "ss_0.25mg_cavg": 8.276137351921685,
+    "ss_0.5mg_cavg": 16.55227470384337,
+    "ss_1mg_cavg": 33.10454940768674,
+    "sirvio2026_1.5mg_cavg": 49.656824111530135
+   },
+   "cv": 0.9,
+   "cv_source": "transdermal_cpa:L_DIVIGEL (CV of Cavg 81-149 %)",
+   "e2_per_mg": 1.0,
+   "products": [
+    "divigel"
+   ]
+  },
+  "E2_GEL_OTHER": {
+   "unit": "pg/mL",
+   "ka_per_h": 0.6199910680061218,
+   "terms": [
+    {
+     "A_per_mg": 32.99874462048484,
+     "lambda_per_h": 0.03653206407155688,
+     "t_half_h": 18.973665961010276
+    }
+   ],
+   "basis": [
+    "E2_GEL_ESTROGEL and E2_GEL_DIVIGEL (no data for this product)"
+   ],
+   "assumption": "No pharmacokinetic data for this product (Estreva, home-made gel, others). Half-life is the geometric mean of the two products with data (36 h and 10 h, about 19 h); AUC per mg and absorption rate are their means. Shown with a wider band and the label 'no data for this product'.",
+   "checks": {
+    "estreva_single_1.5mg_cmax": 39.01375900420163
+   },
+   "cv": 1.2,
+   "cv_source": "assumption: wider than the Divigel label CV (about 0.9) because no product data exist",
+   "e2_per_mg": 1.0,
+   "products": [
+    "estreva",
+    "diy"
+   ],
+   "no_product_data": true
+  },
+  "EV_IM": {
+   "unit": "pg/mL",
+   "ka_per_h": 0.038109490619468445,
+   "terms": [
+    {
+     "A_per_mg": 108.83491804764358,
+     "lambda_per_h": 0.009785686393146014,
+     "t_half_h": 70.8327604944945
+    }
+   ],
+   "basis": [
+    "estradiol_oral_sl_im:Schug2012 (single 10 mg IM: Cmax 505.7 pg/mL, AUC0-t 82,660 pg*h/mL, geometric means)",
+    "estradiol_oral_sl_im:Oriowo1980 (Tmax about 2 days; elevated for 7-8 days after 5 mg)"
+   ],
+   "assumption": "One absorption (depot) term and one elimination term fitted jointly to Cmax, AUC (Schug 2012) and Tmax 48 h (Oriowo 1980). AUC0-t is used for AUC0-inf.",
+   "checks": {
+    "tmax_h": 48.00000023454389,
+    "cmax_10mg": 505.70000000000016,
+    "hours_until_below_half_peak": 148
+   },
+   "cv": 0.5,
+   "cv_source": "assumption: Schug 2012 gives geometric means without dispersion in the abstract",
+   "e2_per_mg": 0.7641035711280051
+  },
+  "E2_SL": {
+   "unit": "pg/mL",
+   "ka_per_h": 1.0005,
+   "terms": [
+    {
+     "A_per_mg": 391432.56698842294,
+     "lambda_per_h": 0.9995,
+     "t_half_h": 0.6934939275237071
+    }
+   ],
+   "basis": [
+    "estradiol_oral_sl_im:Doll2022 (1 mg sublingual vs oral in 10 trans women: SL Tmax 1 h, Cmax 144 pg/mL, AUC0-8 1.8 x oral; oral 35 pg/mL at 8 h; LC-MS/MS; sampled to 8 h only)"
+   ],
+   "assumption": "Fast mucosal term (rise and decline both about 1/h) plus a swallowed share that behaves like oral estradiol (E2_ORAL). Fitted to Tmax 1 h, Cmax 144 pg/mL and AUC0-8 = 1.8 x the study's own oral arm (E2_ORAL scaled to its 35 pg/mL at 8 h). These three values leave essentially no room for a swallowed share, so after a few hours the curve falls close to zero. Everything after 8 h is extrapolation and is very likely an underestimate: Cortez 2024 reports trough estradiol of about 95 pg/mL on 6.2 mg/day (immunoassay). Doll 2022 does not report how long the tablet was held; only the default tier is calibrated, other tiers scale the mucosal share with hold time (extrapolation, no literature).",
+   "checks": {
+    "tmax_h": 1.0,
+    "cmax_1mg": 144.02380642618826,
+    "auc0_8": 390.6484170483408,
+    "doll_oral_reference_auc0_8": 217.0268983601893,
+    "ratio_auc0_8": 1.8,
+    "swallowed_share": 0.0024079912862392887,
+    "c_at_24h_1mg": 0.03305841648477258
+   },
+   "cv": 0.6,
+   "cv_source": "assumption: Doll 2022 abstract gives no dispersion; wider than oral (Activella AUC CV 48 %)",
+   "e2_per_mg": 1.0,
+   "swallowed_model": "E2_ORAL",
+   "swallowed_share": 0.0024079912862392887,
+   "default_tier": 2,
+   "tier_minutes": [
+    2,
+    5,
+    10,
+    15
+   ],
+   "calibrated_hours": 8.0
+  },
+  "SPI_PARENT": {
+   "unit": "ng/mL",
+   "ka_per_h": 2.9872133149556506,
+   "terms": [
+    {
+     "A_per_mg": 1.3709093861784012,
+     "lambda_per_h": 0.49510512897138953,
+     "t_half_h": 1.4
+    }
+   ],
+   "basis": [
+    "spironolactone_progesterone:Gardiner1989 (100 mg daily, day 15: spironolactone Cmax 80 ng/mL, AUC0-24 231 ng*h/mL, post-steady-state t1/2 1.4 h)"
+   ],
+   "assumption": "One absorption and one elimination term for spironolactone; half-life as measured after steady state, absorption rate and amplitude fitted to steady-state Cmax and AUC0-24. Data are from healthy men; food raises exposure (parent AUC about +95 %, Overdiek 1986) and is not modelled.",
+   "checks": {
+    "day1_cmax_100mg": 80.02661132463713,
+    "ss_cmax_100mg": 80.00000000000001,
+    "ss_tmax_h": 0.7000000000000001
+   },
+   "cv": 0.25,
+   "cv_source": "spironolactone_progesterone:Gardiner1989 (SD of steady-state Cmax: 20/80, 39/181)",
+   "parent": "SPI",
+   "compound": "spironolactone"
+  },
+  "SPI_CANRENONE": {
+   "unit": "ng/mL",
+   "ka_per_h": 0.2,
+   "terms": [
+    {
+     "A_per_mg": -10.95921806244866,
+     "lambda_per_h": 0.28916015624999997,
+     "t_half_h": 2.3971047379040327
+    },
+    {
+     "A_per_mg": 0.25707061358890976,
+     "lambda_per_h": 0.04200892003393608,
+     "t_half_h": 16.5
+    }
+   ],
+   "basis": [
+    "spironolactone_progesterone:Gardiner1989 (100 mg daily: canrenone Cmax day 1 155 +/- 43, day 15 181 +/- 39 ng/mL, AUC0-24 2173 ng*h/mL, post-steady-state t1/2 16.5 h)",
+    "spironolactone_progesterone:FDA_Aldactone_2014 (canrenone Tmax 4.3 h at steady state, same study)"
+   ],
+   "assumption": "Canrenone formed from spironolactone, described directly as a response to the spironolactone dose: one absorption/formation rate and two elimination terms (a faster one fitted, and the measured 16.5 h). Data are from healthy men; food raises exposure (canrenone AUC about +41 %, Overdiek 1986) and is not modelled.",
+   "checks": {
+    "ss_cmax_100mg": 174.127430071729,
+    "ss_tmax_h": 4.2,
+    "day1_cmax_100mg": 158.26373953706593,
+    "fast_t_half_h": 2.3971047379040327,
+    "accumulation_auc": 1.1380820213607035
+   },
+   "cv": 0.15,
+   "cv_source": "spironolactone_progesterone:Gardiner1989 (SD of steady-state Cmax 39 / 181)",
+   "parent": "SPI",
+   "compound": "canrenone"
+  },
+  "P4_ORAL": {
+   "unit": "ng/mL",
+   "ka_per_h": 1.8680886317819025,
+   "terms": [
+    {
+     "A_per_mg": 0.06922100646897841,
+     "lambda_per_h": 0.0739356992597275,
+     "t_half_h": 9.375
+    }
+   ],
+   "basis": [
+    "spironolactone_progesterone:FDA_Prometrium_2026 (after 5 daily doses of 100 / 200 / 300 mg: Cmax 17.3 / 38.1 / 60.6 ng/mL, AUC0-10 43.3 / 101.2 / 175.7 ng*h/mL; CV about 100-130 %)",
+    "spironolactone_progesterone:FDA_Bijuva_2026 (half-life 8.77 / 9.98 h; a different oral progesterone product)"
+   ],
+   "assumption": "Illustrative curve only. One absorption and one elimination term: amplitude fitted to the Prometrium label AUC0-10 after 5 daily doses (100 / 200 / 300 mg), absorption rate to Tmax 1.8 h (label 1.5-2.3 h). The label's mean Cmax is about 2.3 x higher than the peak of this curve, as expected when Cmax varies this much between people (each person's own peak is averaged); the half-life is borrowed from another product's label because Prometrium and Utrogestan labels give none. Between-person variability is very large, and lab results depend strongly on the assay (direct immunoassay read about 8 x higher than LC-MS after oral dosing, Levine 2000).",
+   "checks": {
+    "ss_auc0_10_100mg": 55.20000000000001,
+    "ss_auc0_10_200mg": 110.40000000000002,
+    "ss_auc0_10_300mg": 165.59999999999997,
+    "ss_cmax_100mg": 7.060960870867056,
+    "ss_cmax_200mg": 14.121921741734113,
+    "ss_cmax_300mg": 21.18288261260117,
+    "tmax_h": 1.8000000344565397
+   },
+   "cv": 1.2,
+   "cv_source": "spironolactone_progesterone:FDA_Prometrium_2026 (Cmax CV about 100-130 %)",
+   "illustrative": true
   }
  },
  "models_note": "Fitted by tools/pk-fit/fit.py from the literature entries named in each model's basis; 'checks' are model outputs for comparison with the literature, recomputed by the engine's validation tests."
