@@ -47,7 +47,12 @@ object Disguise {
         Shell.entries.forEach{if(it!=shell)set(c,it.alias,false)}
         set(c,shell.alias,true);set(c,NORMAL,false)
         prefs(c).edit().remove("disguise_misses").remove("disguise_until").apply()
-        revision++;Session.protectCurrentPrimary()
+        revision++
+    }
+    /** Async setup cannot authenticate an activity that left the screen, or a newer unrelated session. */
+    @Synchronized fun completeSetup(a:Activity,owner:Long) {
+        val resumed=(a as? androidx.lifecycle.LifecycleOwner)?.lifecycle?.currentState==androidx.lifecycle.Lifecycle.State.RESUMED
+        if(enabled(a) && resumed && owner==Session.generation)Session.protectCurrentPrimary() else Session.lock(owner)
     }
     @Synchronized fun setPrivateCode(c:Context,value:String) {
         require(enabled(c) && AppLock.validPin(value) && !code(c).matches(value))

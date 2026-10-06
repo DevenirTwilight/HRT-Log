@@ -13,13 +13,13 @@
 
 PRIMARY 只进入 MainActivity，NotesViewModel 固定 PRIMARY；提醒一直固定 PRIMARY。PRIVATE 只进入非 exported 的 PrivateNotesActivity，没有 NotesApp、HRT 导航、onboarding、repository/entity/domain/PK/导入导出依赖。私人界面只允许编辑、删除和回 shell，没有进入 PRIMARY 的入口。
 
-私人笔记的 id/title/body/createdAt/updatedAt 保存于 credential-protected `noBackupFilesDir/private.bin`。AES-256-GCM、每次写入随机 nonce、版本/AAD 和独立非导出 Keystore `notes.private`；单个 AtomicFile 文档，无明文缓存和数据库。读取损坏/缺 key 时显示普通错误，绝不将其当空文件覆盖。跨 store 实例串行读改写；10 MiB 文件上限。输入、列表和草稿只在内存中，配置重建用独立 ViewModel 保留，锁定清空内存，不写 Activity Bundle。备份被全应用禁用，HRT backup/export 不涉及此文件。
+私人笔记的 id/title/body/createdAt/updatedAt 保存于 credential-protected `noBackupFilesDir/private.bin`。AES-256-GCM、每次写入随机 nonce、版本/AAD 和独立非导出 Keystore `notes.private`；单个 AtomicFile 文档，无明文缓存和数据库。读取损坏/缺 key 时显示普通错误，绝不将其当空文件覆盖。跨 store 实例串行读改写；清空使旧实例失效，防止排队/迟到的后台保存重新创建已删除内容；10 MiB 文件上限。输入、列表和草稿只在内存中，配置重建用独立 ViewModel 保留，锁定清空内存，不写 Activity Bundle。备份被全应用禁用，HRT backup/export 不涉及此文件。
 
 旧 Space.DECOY 保留已有 `notes_b.db` / wrapped key / alias，目的仅为升级时不静默删除原内容以及显式清理。新认证和任何新 UI 均不选择它，不把旧 HRT 内容转换成私人便签。用户确认清空、移除替代码或禁用伪装时，清除新私人笔记及旧空间；PRIMARY 不受影响。改替代码保留私人笔记；清空保留替代码；移除替代码同时删文件、AtomicFile sidecars 及独立 key。
 
 ## 会话与返回栈
 
-会话只有内存中的 target 和 generation。新进程无认证；Intent/Bundle 无法设置 target。PRIMARY 和 PRIVATE 互斥，停止旧 Activity 的回调不能锁掉新认证会话。开启伪装是在已解锁的设置页中保护当前 PRIMARY，保留当前 Activity 的代次；因此后台仍能正确锁定。
+会话只有内存中的 target 和 generation。新进程无认证；Intent/Bundle 无法设置 target。PRIMARY 和 PRIVATE 互斥，停止旧 Activity 的回调不能锁掉新认证会话。开启伪装是在已解锁的设置页中保护当前 PRIMARY，保留当前 Activity 的代次；因此后台仍能正确锁定。配置异步写入本身不开放会话；完成回调核对原 Activity 仍 RESUMED、代次仍相同，不能在用户离开后或新 PRIVATE 认证后重开 PRIMARY。
 
 真实伪装认证后的 PRIMARY 不再立刻要求普通 PIN；非伪装模式仍遵守普通 PIN、后台超时和生物识别。MainActivity 的 create/start/resume/newIntent 均验证会话，PRIVATE 不能通过它。PRIMARY 只有 system document picker 在前台时免于离开即锁，例外按代次持有、返回只消费一次、launch 失败撤销；配置重建不锁定，进程重启不保留例外。PRIVATE 无 picker 例外。
 

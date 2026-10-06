@@ -27,9 +27,10 @@ class PrivateStorageAndroidTest {
     @Test fun erasingTheSpaceDestroysItsKeyAndLeavesUnrelatedDataAlone() {
         val other=File(context.noBackupFilesDir,"synthetic-unrelated-file").apply{writeText("unchanged")}
         try {
+            val oldEditor=PrivateStore(context)
             store.save(null,"Travel","Charger")
             assertTrue(KeyStore.getInstance("AndroidKeyStore").apply{load(null)}.containsAlias(PrivateStore.KEY_ALIAS))
-            store.destroy();assertFalse(file.exists())
+            store.destroy();assertTrue(runCatching{oldEditor.save(null,"Other","Late write")}.isFailure);assertFalse(file.exists())
             assertFalse(KeyStore.getInstance("AndroidKeyStore").apply{load(null)}.containsAlias(PrivateStore.KEY_ALIAS))
             assertEquals("unchanged",other.readText())
         }finally{other.delete()}

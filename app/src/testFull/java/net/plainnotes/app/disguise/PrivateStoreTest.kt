@@ -52,6 +52,18 @@ class PrivateStoreTest {
         keys.get(true);val bytes=file.readBytes();bytes[bytes.lastIndex]=(bytes.last().toInt() xor 1).toByte();file.writeBytes(bytes)
         assertTrue(runCatching{store.list()}.isFailure);assertArrayEquals(bytes,file.readBytes())
     }
+    @Test fun clearingInvalidatesOldStoresSoTheyCannotRecreateDeletedContent() {
+        val oldEditor=PrivateStore(context,keys)
+        store.save(null,"Travel","Passport")
+        val settings=PrivateStore(context,keys)
+        settings.destroy()
+        assertTrue(runCatching{oldEditor.save(null,"Travel","A late background save")}.isFailure)
+        assertTrue(runCatching{store.list()}.isFailure)
+        assertFalse(file.exists());assertNull(keys.key)
+        val fresh=PrivateStore(context,keys)
+        assertTrue(fresh.list().isEmpty());fresh.save(null,"Shopping","Coffee")
+        assertEquals("Coffee",fresh.list().single().body)
+    }
     @Test fun independentInstancesSerializeConcurrentReadModifyWrite() {
         val second=PrivateStore(context,keys)
         val threads=(1..12).map{i->Thread{(if(i%2==0)second else store).save(null,"Note $i","Ordinary text")}.apply{start()}}

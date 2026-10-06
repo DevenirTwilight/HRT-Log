@@ -12,6 +12,8 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
 import androidx.test.runner.lifecycle.Stage
 import androidx.compose.ui.test.*
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import net.plainnotes.app.MainActivity
 import net.plainnotes.app.R
@@ -45,7 +47,18 @@ class DisguiseFlowAndroidTest {
     }
     private fun await(type:Class<out Activity>){ui.waitUntil(20_000){resumed(type)};ui.waitForIdle()}
     private fun pressCode(code:String){code.forEach{ui.onNodeWithText(it.toString(),useUnmergedTree=true).performClick()};ui.onNodeWithText("=",useUnmergedTree=true).performClick()}
-    private fun notesCode(code:String){ui.onNodeWithContentDescription(context.getString(R.string.shell_search)).performClick();ui.onAllNodes(hasSetTextAction())[0].performTextInput(code);ui.onAllNodes(hasSetTextAction())[0].performImeAction()}
+    private fun notesCode(code:String) {
+        ui.onNodeWithContentDescription(context.getString(R.string.shell_search)).performClick()
+        val search=ui.onNode(SemanticsMatcher.expectValue(SemanticsProperties.ImeAction,ImeAction.Search))
+        search.performTextInput(code);search.performImeAction()
+    }
+    private fun goHome() {
+        context.startActivity(Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        ui.waitUntil(10_000){Session.target==null}
+    }
+    private fun resumeProtected(type:Class<out Activity>) {
+        context.startActivity(Intent(context,type).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+    }
     private fun assertNoHealthUi() {
         listOf(R.string.app_name,R.string.medications,R.string.labs,R.string.concentration,R.string.stock).forEach{ui.onAllNodesWithText(context.getString(it),substring=true).assertCountEquals(0)}
     }
@@ -78,7 +91,7 @@ class DisguiseFlowAndroidTest {
     }
     @Test fun wrongSecretsRemainOrdinaryShellInput() {
         configure(Disguise.Shell.NOTES);launch(NotesShellActivity::class.java);await(NotesShellActivity::class.java)
-        notesCode("9999");ui.onNodeWithText(context.getString(R.string.shell_no_results)).assertIsDisplayed();assertTrue(resumed(NotesShellActivity::class.java));assertNull(Session.target)
+        notesCode("9999");ui.waitUntil(10_000){ui.onAllNodesWithText(context.getString(R.string.shell_no_results)).fetchSemanticsNodes().isNotEmpty()};ui.onNodeWithText(context.getString(R.string.shell_no_results)).assertIsDisplayed();assertTrue(resumed(NotesShellActivity::class.java));assertNull(Session.target)
         configure(Disguise.Shell.CALCULATOR);launch(CalculatorActivity::class.java);await(CalculatorActivity::class.java)
         pressCode("9999");ui.onNodeWithText("9999").assertIsDisplayed();assertTrue(resumed(CalculatorActivity::class.java));assertNull(Session.target)
     }
@@ -110,11 +123,12 @@ class DisguiseFlowAndroidTest {
         ui.onNode(hasSetTextAction() and hasText(context.getString(R.string.private_body))).performTextInput("Charger, passport")
         scenario.recreate();await(PrivateNotesActivity::class.java);ui.onNodeWithText("Charger, passport").assertIsDisplayed()
         ui.onNodeWithText(context.getString(R.string.private_save)).performClick()
-        ui.waitUntil(10_000){ui.onAllNodesWithText("Travel").fetchSemanticsNodes().isNotEmpty()}
+        ui.waitUntil(10_000){ui.onAllNodesWithContentDescription(context.getString(R.string.private_new)).fetchSemanticsNodes().isNotEmpty()}
         ui.onNodeWithText("Travel").performClick()
         ui.onNode(hasSetTextAction() and hasText(context.getString(R.string.private_body))).performTextReplacement("Headphones")
         ui.onNodeWithText(context.getString(R.string.private_save)).performClick()
-        ui.waitUntil(10_000){ui.onAllNodesWithText("Headphones").fetchSemanticsNodes().isNotEmpty()}
+        ui.waitUntil(10_000){ui.onAllNodesWithContentDescription(context.getString(R.string.private_new)).fetchSemanticsNodes().isNotEmpty()}
+        ui.onNodeWithText("Headphones").assertIsDisplayed()
         assertNoHealthUi()
         ui.onNodeWithContentDescription(context.getString(R.string.private_delete)).performClick()
         ui.onNodeWithText(context.getString(R.string.private_delete_confirm)).assertIsDisplayed()
@@ -124,12 +138,11 @@ class DisguiseFlowAndroidTest {
     }
     @Test fun backgroundAndRecreatedClosedSessionReturnToShell() {
         configure(Disguise.Shell.NOTES);Session.begin(UnlockTarget.PRIVATE)
-        val privateScenario=launch(PrivateNotesActivity::class.java);await(PrivateNotesActivity::class.java)
-        privateScenario.moveToState(Lifecycle.State.CREATED);assertNull(Session.target)
-        privateScenario.moveToState(Lifecycle.State.RESUMED);await(NotesShellActivity::class.java);assertNoHealthUi()
+        launch(PrivateNotesActivity::class.java);await(PrivateNotesActivity::class.java)
+        goHome();resumeProtected(PrivateNotesActivity::class.java);await(NotesShellActivity::class.java);assertNoHealthUi()
         Session.begin(UnlockTarget.PRIMARY)
         val main=launch(MainActivity::class.java);await(MainActivity::class.java)
-        Session.reset();main.recreate();await(NotesShellActivity::class.java);assertNoHealthUi()
+        Session.reset();main.onActivity{it.recreate()};await(NotesShellActivity::class.java);assertNoHealthUi()
     }
     @Test fun primaryDocumentPickerIsTheOnlyBackgroundException() {
         configure(Disguise.Shell.CALCULATOR);val owner=Session.begin(UnlockTarget.PRIMARY)
@@ -137,8 +150,23 @@ class DisguiseFlowAndroidTest {
         Session.beginPicker();main.moveToState(Lifecycle.State.CREATED)
         assertTrue(Session.allows(UnlockTarget.PRIMARY,owner))
         main.moveToState(Lifecycle.State.RESUMED);await(MainActivity::class.java);assertFalse(Session.pickerActive(owner))
-        main.moveToState(Lifecycle.State.CREATED);assertNull(Session.target)
-        main.moveToState(Lifecycle.State.RESUMED);await(CalculatorActivity::class.java)
+        goHome();resumeProtected(MainActivity::class.java);await(CalculatorActivity::class.java)
+    }
+    @Test fun setupCompletionCannotReopenAnActivityThatLeftOrReplaceANewerPrivateSession() {
+        val owner=Session.generation
+        val main=launch(MainActivity::class.java);await(MainActivity::class.java)
+        var activity:Activity?=null
+        main.onActivity{activity=it}
+        Disguise.enable(context,Disguise.Shell.CALCULATOR,real,alternate)
+        assertNull(Session.target)
+        main.onActivity{Disguise.completeSetup(it,owner)}
+        assertTrue(Session.allows(UnlockTarget.PRIMARY,owner))
+        goHome()
+        instrument.runOnMainSync{Disguise.completeSetup(activity!!,owner)}
+        assertNull(Session.target)
+        val newer=Session.begin(UnlockTarget.PRIVATE)
+        instrument.runOnMainSync{Disguise.completeSetup(activity!!,owner)}
+        assertTrue(Session.allows(UnlockTarget.PRIVATE,newer))
     }
     @Test fun alternateCodeChangesAndRemovalPreserveMainCodeAndEraseOnlyPrivateContent() {
         configure(Disguise.Shell.CALCULATOR)

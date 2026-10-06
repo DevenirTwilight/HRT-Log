@@ -77,7 +77,8 @@ private tailrec fun Context.activity():Activity?=when(this){is Activity->this;is
         Text(stringResource(R.string.disguise_limits),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
     }
     if(setup)SetupDialog({setup=false},backup){s,code,alternate->
-        operation({Disguise.enable(context,s,code,alternate)}){shell=s;configured=alternate!=null;setup=false;explained=s;onRoutingChanged()}
+        val owner=net.plainnotes.app.security.Session.generation
+        operation({Disguise.enable(context,s,code,alternate)}){context.activity()?.let{Disguise.completeSetup(it,owner)};shell=s;configured=alternate!=null;setup=false;explained=s;onRoutingChanged()}
     }
     explained?.let{s->AlertDialog(onDismissRequest={explained=null},title={Text(stringResource(R.string.disguise_enabled_title))},
         text={Column(Modifier.verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(10.dp)){

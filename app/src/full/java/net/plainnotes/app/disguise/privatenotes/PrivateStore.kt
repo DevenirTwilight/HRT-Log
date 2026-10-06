@@ -38,11 +38,13 @@ internal class AndroidPrivateKeys : PrivateKeys {
 class PrivateStore internal constructor(context:Context,private val keys:PrivateKeys) {
     constructor(context:Context):this(context,AndroidPrivateKeys())
     private val file=AtomicFile(File(context.noBackupFilesDir,FILE_NAME))
+    private var epoch=synchronized(lock){generation}
     companion object {
         const val FILE_NAME="private.bin"
         const val KEY_ALIAS="notes.private"
         private const val MAX_BYTES=10*1024*1024
         private val lock=Any() // Serializes read/modify/write across Activity/settings instances.
+        private var generation=0L // Clearing invalidates every previously opened store, including queued writers.
         private val aad="net.plainnotes.app.private.v1".toByteArray(Charsets.UTF_8)
     }
     fun list():List<PrivateNote> = synchronized(lock) { read().sortedByDescending{it.updatedAt} }
@@ -58,11 +60,13 @@ class PrivateStore internal constructor(context:Context,private val keys:Private
     }
     /** Also removes AtomicFile backup/new files and the non-exportable key. Never touches other storage. */
     fun destroy() = synchronized(lock) {
+        generation++;epoch=generation
         file.delete();File(file.baseFile.path+".new").delete()
         keys.destroy()
         check(!file.baseFile.exists() && !File(file.baseFile.path+".bak").exists())
     }
     private fun read():List<PrivateNote> {
+        check(epoch==generation){"Storage unavailable"}
         if(!file.baseFile.exists() && !File(file.baseFile.path+".bak").exists())return emptyList()
         require(maxOf(file.baseFile.length(),File(file.baseFile.path+".bak").length())<=MAX_BYTES+64)
         val bytes=file.readFully();require(bytes.size>=29 && bytes[0]==1.toByte())
