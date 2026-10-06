@@ -355,6 +355,14 @@ models["P4_ORAL"] = model("ng/mL", [(pa_, lam_p)], pk_,
     {("ss_auc0_10_%gmg" % d): p4_auc10(pa_, d) for d, _, _ in P4} | {("ss_cmax_%gmg" % d): ss_profile([(pa_, lam_p)], pk_, d, 24.0, 5)[0] for d, _, _ in P4} | {"tmax_h": peak([(pa_, lam_p)], pk_, 48)[1]},
     {"cv": 1.2, "cv_source": "spironolactone_progesterone:FDA_Prometrium_2026 (Cmax CV about 100-130 %)", "illustrative": True})
 
+# Between-person variability of the elimination rate, for uncertainty bands (coefficient of variation).
+RATE_CV = {"EV_ORAL": (0.29, "estradiol_oral_sl_im:Zhang2024 (t1/2 14.48 +/- 4.17 h)"),
+           "CPA_ORAL": (0.48, "transdermal_cpa:Kuhnz1993 (single-dose terminal t1/2 54 +/- 26 h)"),
+           "E2_PATCH": (0.13, "transdermal_cpa:L_VIVELLEDOT (half-life after removal 5.9-7.7 h)")}
+for k, m in models.items():
+    cv, src = RATE_CV.get(k, (0.29, "assumption: no between-person data on this half-life; borrowed from oral estradiol valerate (Zhang 2024, 29 %)"))
+    m["rate_cv"] = cv; m["rate_cv_source"] = src
+
 with open(PARAMS) as f: data = json.load(f)
 data["models"] = models
 data["models_note"] = "Fitted by tools/pk-fit/fit.py from the literature entries named in each model's basis; 'checks' are model outputs for comparison with the literature, recomputed by the engine's validation tests."

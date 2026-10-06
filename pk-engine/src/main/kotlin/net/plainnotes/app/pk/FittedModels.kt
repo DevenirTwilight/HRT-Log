@@ -41,6 +41,9 @@ class FittedModel(
     val calibratedHours: Double? = null,
     val illustrative: Boolean = false,
     val noProductData: Boolean = false,
+    /** Between-person variability of the elimination rate (coefficient of variation) and its source. */
+    val rateCv: Double = 0.29,
+    val rateCvSource: String = "",
 ) {
     /** Absorption rate for a dose (dose-dependent where the model says so). */
     fun kaAt(doseMg: Double): Double = kaFor(doseMg)
@@ -95,7 +98,8 @@ object PkParams {
                 o.optJSONArray("tier_minutes")?.let { a -> (0 until a.length()).map { a.getInt(it) } }.orEmpty(),
                 if (o.has("default_tier")) o.getInt("default_tier") else null,
                 if (o.has("calibrated_hours")) o.getDouble("calibrated_hours") else null,
-                o.optBoolean("illustrative", false), o.optBoolean("no_product_data", false))
+                o.optBoolean("illustrative", false), o.optBoolean("no_product_data", false),
+                o.optDouble("rate_cv", 0.29), o.optString("rate_cv_source"))
         }
     }
 

@@ -128,7 +128,7 @@ object Engine {
      * Population curves (or scaled ones for calibration / Monte Carlo via [scale]).
      * Returns null for no events.
      */
-    fun simulate(events: List<DoseEvent>, endTimeH: Double? = null, grid: DoubleArray? = null, scale: (FittedModel) -> Scale = { Scale() }): EngineResult? {
+    fun simulate(events: List<DoseEvent>, endTimeH: Double? = null, grid: DoubleArray? = null, scale: (Curve, FittedModel) -> Scale = { _, _ -> Scale() }): EngineResult? {
         if (events.isEmpty()) return null
         val sorted = events.sortedBy { it.timeH }
         val t = grid ?: gridFor(sorted, endTimeH)
@@ -147,7 +147,7 @@ object Engine {
                     used.getOrPut(curve) { mutableSetOf() }.add(model)
                     if (e.route == Route.PATCH_APPLY) {
                         val rate = e.extras.releaseRateUGPerDay!! / 1000.0 / 24.0
-                        val wear = wearOf(e, sorted); val s = scale(model); val arr = curves.getValue(curve)
+                        val wear = wearOf(e, sorted); val s = scale(curve, model); val arr = curves.getValue(curve)
                         for (i in t.indices) arr[i] += infusion(model, t[i] - e.timeH, rate * share, wear, s)
                     } else {
                         val w = model.refWeightKg?.let { it / e.weightKG } ?: 1.0
@@ -157,7 +157,7 @@ object Engine {
             }
         }
         for ((key, doses) in bolus) {
-            val s = scale(key.model); val arr = curves.getValue(key.curve)
+            val s = scale(key.curve, key.model); val arr = curves.getValue(key.curve)
             val ka = key.ka
             for ((a0, lam0) in key.model.terms) {
                 // Keep each term's AUC when the absorption rate differs from the fitted one (dose-dependent absorption).

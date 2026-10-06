@@ -35,7 +35,6 @@ data class EkfDiagnostics(
     val scale: Double, val clearanceScale: Double,
 )
 
-enum class CalibrationMode { RETROSPECTIVE, CAUSAL }
 
 class CalibratedCurve(
     val timeH: DoubleArray, val e2: DoubleArray,
