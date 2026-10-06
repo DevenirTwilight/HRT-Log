@@ -19,7 +19,7 @@ import net.plainnotes.app.R
 import net.plainnotes.app.data.MedicationEntity
 import net.plainnotes.app.data.ProfileEntity
 import net.plainnotes.app.domain.RuleKind
-import net.plainnotes.app.pk.Gel
+import net.plainnotes.app.pk.GEL_PRODUCT_IDS
 import java.time.DayOfWeek
 import java.time.LocalTime
 
@@ -60,8 +60,6 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
     var slTier by remember { mutableStateOf(p?.sl_tier) }
     var gelProduct by remember { mutableStateOf(p?.gel_product_id) }
     var gelSite by remember { mutableStateOf(p?.gel_site) }
-    var gelCoverage by remember { mutableStateOf(p?.gel_area_cm2?.let { area -> val prod = Gel.product(p.gel_product_id); if (area == prod.defaultAreaCM2) "product" else Gel.COVERAGE.firstOrNull { it.second == area }?.first ?: "manual" }) }
-    var gelArea by remember { mutableStateOf(p?.gel_area_cm2?.let(::inputNumber) ?: "") }
     var patchRate by remember { mutableStateOf(p?.patch_release_ug_day?.let(::inputNumber) ?: "") }
     var tried by remember { mutableStateOf(false) }
     var pickTime by remember { mutableStateOf<Int?>(null) }
@@ -72,8 +70,8 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
     val soonV = soon.toIntOrNull()?.takeIf { it >= 0 }; val lateV = late.toIntOrNull()?.takeIf { it >= 0 }
     val intervalV = interval.toIntOrNull()?.takeIf { it in 1..36500 }
     val isE2 = molecule == "E2"
-    val resolvedArea = when (gelCoverage) { null -> null; "product" -> Gel.product(gelProduct).defaultAreaCM2; "manual" -> gelArea.toDoubleOrNull()?.takeIf { it > 0 }
-        else -> Gel.COVERAGE.firstOrNull { it.first == gelCoverage }?.second }
+    // Application area is not a model input any more; a value saved by an older version is kept as is.
+    val resolvedArea = p?.gel_area_cm2
     val valid = (!isE2 || route in E2_ROUTES) && name.isNotBlank() && doseV != null && capV != null && expV != -1 && soonV != null && lateV != null && intervalV != null &&
         (kind == RuleKind.EVERY_N_HOURS || times.isNotEmpty()) && (kind != RuleKind.WEEKLY || weekdays.isNotEmpty())
 
@@ -114,13 +112,10 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
                         "SUBLINGUAL" -> DropdownField(stringResource(R.string.sl_tier), listOf(0, 1, 2, 3), slTier, { slTierLabel(it) }, { slTier = it },
                             supporting = if (slTier == null) stringResource(R.string.pk_required) else null)
                         "GEL" -> {
-                            DropdownField(stringResource(R.string.gel_product), Gel.PRODUCTS.map { it.id }, gelProduct, { gelProductLabel(it) }, { gelProduct = it },
+                            DropdownField(stringResource(R.string.gel_product), GEL_PRODUCT_IDS, gelProduct, { gelProductLabel(it) }, { gelProduct = it },
                                 supporting = if (gelProduct == null) stringResource(R.string.pk_required) else null)
                             DropdownField(stringResource(R.string.gel_site), GEL_SITES, gelSite, { gelSiteLabel(it) }, { gelSite = it },
-                                supporting = if (gelSite == "SCROTAL") stringResource(R.string.gel_site_scrotal_warning) else if (gelSite == null) stringResource(R.string.pk_required) else null)
-                            DropdownField(stringResource(R.string.gel_coverage), Gel.COVERAGE.map { it.first } + "manual", gelCoverage, { gelCoverageLabel(it, gelProduct) }, { gelCoverage = it },
-                                supporting = if (gelCoverage == null) stringResource(R.string.pk_required) else null)
-                            if (gelCoverage == "manual") NumberField(gelArea, { gelArea = it }, stringResource(R.string.gel_area), suffix = "cm²")
+                                supporting = stringResource(R.string.gel_site_not_modelled))
                             Text(stringResource(R.string.gel_assumptions), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                         "PATCH" -> {
@@ -211,16 +206,10 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
     }
 }
 
-@Composable fun slTierLabel(tier: Int) = stringResource(R.string.sl_tier_option, net.plainnotes.app.pk.Pk.SL_TIER_HOLD_MIN[tier],
+@Composable fun slTierLabel(tier: Int) = stringResource(R.string.sl_tier_option, net.plainnotes.app.pk.PkParams.model("E2_SL").tierMinutes[tier],
     stringResource(listOf(R.string.sl_quick, R.string.sl_casual, R.string.sl_standard, R.string.sl_strict)[tier]))
 @Composable fun gelProductLabel(id: Int) = stringResource(when (id) { 1 -> R.string.gel_oestrogel; 2 -> R.string.gel_estreva; 3 -> R.string.gel_estrogel; 4 -> R.string.gel_divigel; else -> R.string.gel_diy })
 @Composable fun gelSiteLabel(site: String) = stringResource(when (site) { "ARM" -> R.string.site_arm; "THIGH" -> R.string.site_thigh; "ABDOMEN" -> R.string.site_abdomen; else -> R.string.site_scrotal })
-@Composable fun gelCoverageLabel(key: String, product: Int?): String = when (key) {
-    "product" -> stringResource(R.string.cov_product, displayNumber(Gel.product(product).defaultAreaCM2))
-    "palm1" -> stringResource(R.string.cov_palms, 1, displayNumber(Gel.PALM_AREA_CM2)); "palm2" -> stringResource(R.string.cov_palms, 2, displayNumber(2 * Gel.PALM_AREA_CM2))
-    "palm3" -> stringResource(R.string.cov_palms, 3, displayNumber(3 * Gel.PALM_AREA_CM2)); "thigh" -> stringResource(R.string.cov_thigh); "arm" -> stringResource(R.string.cov_arm)
-    "arms2" -> stringResource(R.string.cov_arms2); else -> stringResource(R.string.cov_manual)
-}
 
 /** Shows the Trans Memo values that could not be mapped, so the user can set them deliberately. */
 @Composable private fun ReviewCard(review: org.json.JSONObject) {

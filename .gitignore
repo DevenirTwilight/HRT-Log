@@ -25,7 +25,7 @@ captures/
 *.iml
 .DS_Store
 
-# Node (tools/pk-reference)
+# Node
 node_modules/
 
 # Kotlin compilation caches

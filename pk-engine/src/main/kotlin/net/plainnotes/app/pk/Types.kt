@@ -1,35 +1,24 @@
 package net.plainnotes.app.pk
 
-/*
- * Ported from TransmtfTeam/Transmtf-HRT-Tracker (commit 8c9abdde, types.ts), MIT License,
- * Copyright (c) 2025 Transmtf Team. See pk-engine/UPSTREAM_LICENSE.
- */
-
-/** Administration route; [code] matches the upstream serialized value. */
+/** Administration route; [code] is the value stored in the medication profile. */
 enum class Route(val code: String) {
     INJECTION("injection"), PATCH_APPLY("patchApply"), PATCH_REMOVE("patchRemove"),
     GEL("gel"), ORAL("oral"), SUBLINGUAL("sublingual");
     companion object { fun of(code: String) = entries.first { it.code == code } }
 }
 
-/** Compound / ester. Doses are always the mass of this compound, not E2-equivalent. */
+/** Compound or estradiol ester. Doses are always the mass of this compound, not E2-equivalent. */
 enum class Ester { E2, EB, EV, EC, EN, EU, CPA, BICA, SPI, P4 }
 
-/**
- * Optional per-event inputs. Numeric fields keep the upstream index encodings
- * (gelSite, sublingualTier, gelCoApplied) so parity tests can feed identical events.
- */
+/** Per-event inputs that only some routes use. */
 data class DoseExtras(
-    val concentrationMGmL: Double? = null,
-    val areaCM2: Double? = null,
+    /** Patch: nominal release rate of this application (µg/day). */
     val releaseRateUGPerDay: Double? = null,
-    val sublingualTheta: Double? = null,
+    /** Sublingual: hold-time tier index (see E2_SL `tier_minutes` in pk-params.json). */
     val sublingualTier: Double? = null,
-    val gelSite: Double? = null,
+    /** Gel: product id (see [GEL_PRODUCT_IDS]). */
     val gelProductId: Double? = null,
-    val gelWashAfterH: Double? = null,
-    val gelCoverage: Double? = null,
-    val gelCoApplied: Double? = null,
+    /** Patch: id of this application, and on a removal event the application it ends. */
     val patchInstanceId: String? = null,
     val patchRemovalFor: String? = null,
 )
@@ -45,20 +34,9 @@ data class DoseEvent(
     val extras: DoseExtras = DoseExtras(),
 )
 
-class SimulationResult(
-    val timeH: DoubleArray,
-    val concPGmL: DoubleArray,
-    val concPGmLE2: DoubleArray,
-    /** CPA component in ng/mL (upstream's legacy name keeps "PGmL"). */
-    val concPGmLCPA: DoubleArray,
-    /** Non-E2 compounds in ng/mL. */
-    val byCompound: Map<Ester, DoubleArray>,
-    val auc: Double,
-)
-
 enum class LabUnit { PG_ML, PMOL_L }
 
 data class LabResult(val id: String, val timeH: Double, val concValue: Double, val unit: LabUnit)
 
-/** JavaScript `Math.round`: halves round toward +∞. */
-internal fun jsRound(x: Double): Double = kotlin.math.floor(x + 0.5)
+/** Gel products the editor offers: 1 Oestrogel, 2 Estreva, 3 EstroGel, 4 Divigel, 5 other / home-made. */
+val GEL_PRODUCT_IDS = listOf(1, 2, 3, 4, 5)

@@ -24,9 +24,8 @@ class ConcentrationCalculatorTest {
         val profiles = mapOf(1L to ProfileEntity(1, "E2", "gel", gel_product_id = 1), 2L to ProfileEntity(2, "E2", "patchApply"), 3L to ProfileEntity(3, "EV", "sublingual"))
         val r = ConcentrationCalculator.compute(listOf(gel, patch, sl), profiles, listOf(rec(1, 1, 10)), emptyList(), emptyList(), null, now)
         val m = r.missing.map { it.medicationId to it.input }.toSet()
-        // Weight only enters the cyproterone model; gel site and area are not model inputs any more.
+        // Weight only enters the cyproterone model.
         assertFalse((null to MissingInput.WEIGHT) in m)
-        assertFalse((1L to MissingInput.GEL_SITE) in m || (1L to MissingInput.GEL_AREA) in m)
         assertTrue((2L to MissingInput.PATCH_RELEASE) in m)
         assertTrue((3L to MissingInput.SL_TIER) in m && (3L to MissingInput.UNIT_NOT_MG) in m)
         assertEquals("only the complete gel is simulated", setOf(1L), r.simulatedMedications)

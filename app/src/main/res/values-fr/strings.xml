@@ -129,12 +129,6 @@
 <string name="coming_soon_body">Cette section est en cours de développement et arrivera dans une prochaine version.</string>
 <string name="complete_info">Compléter</string>
 <string name="concentration">Concentrations estimées</string>
-<string name="cov_arm">Un bras, du poignet à l\'épaule (≈750 cm²)</string>
-<string name="cov_arms2">Les deux bras (≈1500 cm²)</string>
-<string name="cov_manual">Saisir la surface</string>
-<string name="cov_palms">Environ %1$d paume(s) (≈%2$s cm²)</string>
-<string name="cov_product">Selon la notice (%1$s cm²)</string>
-<string name="cov_thigh">Une cuisse, face avant (≈200 cm²)</string>
 <string name="credits">Remerciements</string>
 <string name="credits_body">HRT Log s’inspire de Trans Memo, créée par l’association Chrysalide, et de Transmtf HRT Tracker. HRT Log n’a aucun lien d’affiliation ni de partenariat avec Chrysalide ou Transmtf. Elle n’utilise aucun code, texte ni design de Trans Memo.</string>
 <string name="day_unit">jours</string>
@@ -147,9 +141,7 @@
 <string name="empty_title">Rien de prévu pour l\'instant</string>
 <string name="fix">Corriger</string>
 <string name="future_time_warning">Cette heure est dans le futur.</string>
-<string name="gel_area">Surface d\'application</string>
-<string name="gel_assumptions">Hypothèses par défaut : gel non lavé, pas de crème solaire ni d\'hydratant par-dessus (valeurs par défaut du modèle d\'origine).</string>
-<string name="gel_coverage">Étendue d\'application</string>
+<string name="gel_assumptions">La courbe du gel dépend du produit et de la dose. Le site, la surface, le lavage et les autres produits cutanés ne sont pas modélisés.</string>
 <string name="gel_divigel">Divigel</string>
 <string name="gel_diy">Préparation maison (1 mg/g)</string>
 <string name="gel_estreva">Estreva</string>
@@ -157,7 +149,6 @@
 <string name="gel_oestrogel">Oestrogel</string>
 <string name="gel_product">Gel</string>
 <string name="gel_site">Zone d\'application</string>
-<string name="gel_site_scrotal_warning">A priori peu étayé, extrapolé d\'études sur la testostérone ; résultat très incertain.</string>
 <string name="history">Historique</string>
 <string name="hours_anchor_hint">Compté en heures réellement écoulées à partir de l\'enregistrement.</string>
 <string name="in_days">dans %1$d jours</string>
@@ -208,9 +199,7 @@
 <string name="menu">Menu</string>
 <string name="minutes_unit">min</string>
 <string name="missed_note">Si vous l\'avez pris, vous pouvez encore saisir l\'heure réelle.</string>
-<string name="missing_gel_area">étendue d\'application</string>
 <string name="missing_gel_product">gel</string>
-<string name="missing_gel_site">zone d\'application</string>
 <string name="missing_patch_release">débit nominal (µg/jour)</string>
 <string name="missing_patch_unit">l\'unité doit être « patch »</string>
 <string name="missing_route">voie et ester</string>
@@ -557,7 +546,7 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="chrysalide_body">Chrysalide est une association française de soutien aux personnes trans ; Trans Memo est leur application. Vous pouvez faire un don sur leur site.</string>
 <string name="chrysalide_link">Site de Chrysalide</string>
 <string name="chrysalide_title">Soutenir Chrysalide</string>
-<string name="pk_origin_body">Le modèle de concentration et la calibration par analyses sont repris de Transmtf HRT Tracker (licence MIT, commit 8c9abdde). Transmtf indique que son modèle et ses paramètres proviennent de LaoZhong-Mihari/HRT-Recorder-PKcomponent-Test. Ce dépôt n’a pas de licence : l’autorisation de réutiliser cette partie reste à clarifier.</string>
+<string name="pk_origin_body">Les modèles de concentration et la calibration par analyses ont été écrits pour HRT Log à partir d’études publiées. Pour chaque courbe, la page Concentration indique les paramètres utilisés et les études sur lesquelles ils sont ajustés. Les versions jusqu’à 0.2.0 utilisaient un modèle repris d’une autre app dont l’autorisation de réutilisation n’était pas claire ; ce code a été supprimé.</string>
 <string name="pk_origin_title">Origine du modèle de concentration</string>
 <string name="curve_canrenone">Canrénone (métabolite de la spironolactone)</string>
 <string name="flag_after_8h">Les données sublinguales ne couvrent que 8 heures après une prise ; au-delà, les valeurs sont extrapolées.</string>
@@ -602,4 +591,5 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="unsupported_patch_rate">Patch sans débit nominal, donc aucune courbe.</string>
 <string name="unsupported_route">Aucun modèle de la littérature pour cette voie, donc aucune courbe.</string>
 <string name="unsupported_sl_ev">Valérate d’estradiol sublingual : aucune étude ne l’a mesuré, donc aucune courbe n’est tracée. Les données sublinguales ne concernent que les comprimés d’estradiol (E2).</string>
+<string name="gel_site_not_modelled">Enregistré seulement : le modèle n’utilise pas le site d’application.</string>
 </resources>

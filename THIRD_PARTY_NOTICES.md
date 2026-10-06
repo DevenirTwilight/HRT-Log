@@ -9,20 +9,15 @@ artifacts. SQLCipher licensing: https://www.zetetic.net/sqlcipher/license/ .
 Development-only tools include Gradle (Apache-2.0), JUnit (EPL-2.0), Robolectric
 (MIT) and org.json (public domain, tests only). No analytics or advertising SDKs are included.
 
-## Transmtf-HRT-Tracker (MIT)
+## Concentration model
 
-`pk-engine` contains a Kotlin port of `pk.ts` and `personalModel.ts` (default EKF lab
-calibration) from TransmtfTeam/Transmtf-HRT-Tracker, commit 8c9abdde:
-https://github.com/TransmtfTeam/Transmtf-HRT-Tracker . Copyright (c) 2025 Transmtf Team,
-MIT License — full text in `pk-engine/UPSTREAM_LICENSE` and shown in the app's About page.
-`tools/pk-reference/upstream/` holds the unmodified upstream files used only to generate
-test fixtures.
+The concentration models (`pk-engine`, `tools/pk-fit`) and the lab calibration were written for
+HRT Log from published pharmacokinetic studies; parameters and references are in
+`pk-engine/src/main/resources/pk-params.json` and `docs/pk-model.md`. No third-party code is used.
+Versions up to 0.2.0 contained a port of Transmtf HRT Tracker's model (MIT; its own upstream
+had no license); that port was removed in 0.3.0. See `docs/licensing.md`.
 
-### Upstream of the PK model (license pending)
-
-Transmtf HRT Tracker states that its pharmacokinetic algorithms, models and parameters are derived
-directly from `PKcore.swift` / `PKparameter.swift` in LaoZhong-Mihari/HRT-Recorder-PKcomponent-Test:
-https://github.com/LaoZhong-Mihari/HRT-Recorder-PKcomponent-Test . That repository has no license file,
-so permission to reuse this part is not yet established. See `docs/licensing.md` for the status.
+The HRT tracker importer reads the JSON export format of Transmtf HRT Tracker; it contains no
+code from that project.
 
 Charts are drawn with Compose Canvas; Vico is not shipped.

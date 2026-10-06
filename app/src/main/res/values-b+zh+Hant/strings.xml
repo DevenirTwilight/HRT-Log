@@ -129,12 +129,6 @@
 <string name="coming_soon_body">這部分正在開發中，將在後續版本提供。</string>
 <string name="complete_info">補齊</string>
 <string name="concentration">血藥濃度</string>
-<string name="cov_arm">單側手臂，手腕到肩（約 750 cm²）</string>
-<string name="cov_arms2">雙側手臂（約 1500 cm²）</string>
-<string name="cov_manual">手動輸入面積</string>
-<string name="cov_palms">約 %1$d 個手掌（約 %2$s cm²）</string>
-<string name="cov_product">按說明書面積（%1$s cm²）</string>
-<string name="cov_thigh">單側大腿前側（約 200 cm²）</string>
 <string name="credits">致謝</string>
 <string name="credits_body">HRT 日誌受到 Chrysalide 協會出品的 Trans Memo 和 Transmtf HRT Tracker 的啟發。HRT 日誌與 Chrysalide、Transmtf 都沒有隸屬或合作關係，也沒有使用 Trans Memo 的任何程式碼、文案或設計。</string>
 <string name="day_unit">天</string>
@@ -147,9 +141,7 @@
 <string name="empty_title">還沒有計畫</string>
 <string name="fix">前往設定</string>
 <string name="future_time_warning">這個時間在未來。</string>
-<string name="gel_area">塗抹面積</string>
-<string name="gel_assumptions">預設假設：塗抹後未洗去，也沒有疊塗防曬或保濕產品（上游模型預設值）。</string>
-<string name="gel_coverage">塗抹範圍</string>
+<string name="gel_assumptions">凝膠曲線只取決於產品和劑量，不考慮塗抹部位、面積、洗去以及其他護膚品。</string>
 <string name="gel_divigel">Divigel</string>
 <string name="gel_diy">自配（1 mg/g）</string>
 <string name="gel_estreva">Estreva</string>
@@ -157,7 +149,6 @@
 <string name="gel_oestrogel">Oestrogel</string>
 <string name="gel_product">凝膠產品</string>
 <string name="gel_site">塗抹部位</string>
-<string name="gel_site_scrotal_warning">低證據先驗，由睪酮研究外推而來，結果非常不確定。</string>
 <string name="history">歷史</string>
 <string name="hours_anchor_hint">從儲存時刻起，按實際經過的小時數計算。</string>
 <string name="in_days">%1$d 天后</string>
@@ -208,9 +199,7 @@
 <string name="menu">選單</string>
 <string name="minutes_unit">分鐘</string>
 <string name="missed_note">如果其實已經服用，仍可補記實際時間。</string>
-<string name="missing_gel_area">塗抹範圍</string>
 <string name="missing_gel_product">凝膠產品</string>
-<string name="missing_gel_site">塗抹部位</string>
 <string name="missing_patch_release">標稱釋放量（µg/天）</string>
 <string name="missing_patch_unit">劑量單位需為\"貼\"</string>
 <string name="missing_route">給藥途徑和酯型</string>
@@ -557,7 +546,7 @@
 <string name="chrysalide_body">Chrysalide 是一個支援跨性別者的法國協會，Trans Memo 是他們開發的 App。可以在他們的網站上捐助。</string>
 <string name="chrysalide_link">Chrysalide 網站</string>
 <string name="chrysalide_title">支援 Chrysalide</string>
-<string name="pk_origin_body">濃度模型和檢驗校準移植自 Transmtf HRT Tracker（MIT 許可，提交 8c9abdde）。Transmtf 說明其模型和參數來自 LaoZhong-Mihari/HRT-Recorder-PKcomponent-Test。該倉庫沒有許可證，這部分的複用許可尚待確認。</string>
+<string name="pk_origin_body">濃度模型和檢驗校準是 HRT 日誌根據已發表的研究獨立編寫的。每條曲線用了哪些參數、按哪些研究擬合，都能在濃度頁查到。0.2.0 及更早的版本用的是移植自其他 App、複用許可不明確的模型，這部分程式碼已經刪除。</string>
 <string name="pk_origin_title">濃度模型的來源</string>
 <string name="curve_canrenone">坎利酮（螺內酯代謝物）</string>
 <string name="flag_after_8h">舌下資料只覆蓋服藥後 8 小時，之後的數值是外推的。</string>
@@ -602,4 +591,5 @@
 <string name="unsupported_patch_rate">貼片沒有填標稱釋放速率，所以不畫曲線。</string>
 <string name="unsupported_route">這種途徑沒有文獻模型，所以不畫曲線。</string>
 <string name="unsupported_sl_ev">舌下戊酸雌二醇：沒有研究測過，所以不畫曲線。舌下資料只有雌二醇（E2）片。</string>
+<string name="gel_site_not_modelled">僅作記錄：模型不使用塗抹部位。</string>
 </resources>

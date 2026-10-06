@@ -141,12 +141,9 @@ class Appearance(val mode: ThemeMode, val dynamic: Boolean, val contrast: Contra
         }
         SectionCard(stringResource(R.string.pk_origin_title)) {
             Text(stringResource(R.string.pk_origin_body), style = MaterialTheme.typography.bodyMedium)
-            LinkButton("Transmtf HRT Tracker", "https://github.com/TransmtfTeam/Transmtf-HRT-Tracker")
-            LinkButton("HRT-Recorder-PKcomponent-Test", "https://github.com/LaoZhong-Mihari/HRT-Recorder-PKcomponent-Test")
         }
         SectionCard(stringResource(R.string.licenses)) {
             Text(stringResource(R.string.licenses_body), style = MaterialTheme.typography.bodySmall)
-            Text(UPSTREAM_MIT, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }
@@ -164,13 +161,3 @@ class Appearance(val mode: ThemeMode, val dynamic: Boolean, val contrast: Contra
         EmptyState(icon, title, stringResource(R.string.coming_soon_body))
     }
 }
-
-private const val UPSTREAM_MIT = """Transmtf-HRT-Tracker — MIT License
-
-Copyright (c) 2025 Transmtf Team
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."""

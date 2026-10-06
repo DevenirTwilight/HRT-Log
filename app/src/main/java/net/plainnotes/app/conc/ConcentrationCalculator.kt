@@ -26,7 +26,7 @@ import net.plainnotes.app.pk.Unsupported
 import java.time.Instant
 
 /** Why a medication (or the whole page) cannot be simulated; never silently defaulted. */
-enum class MissingInput { WEIGHT, ROUTE_OR_ESTER, UNIT_NOT_MG, PATCH_RELEASE, PATCH_UNIT, GEL_PRODUCT, GEL_SITE, GEL_AREA, SL_TIER, ROUTE_NOT_MODELLED }
+enum class MissingInput { WEIGHT, ROUTE_OR_ESTER, UNIT_NOT_MG, PATCH_RELEASE, PATCH_UNIT, GEL_PRODUCT, SL_TIER, ROUTE_NOT_MODELLED }
 
 data class Missing(val medicationId: Long?, val input: MissingInput)
 
@@ -60,7 +60,6 @@ object ConcentrationCalculator {
     const val FORECAST_DAYS = 30L
     const val HISTORY_DAYS = 180L
     const val E2_CODE = "E2"
-    private val GEL_SITES = listOf("ARM", "THIGH", "SCROTAL", "ABDOMEN")
     /** Molecules with a literature model (oral only for the non-estradiol ones). */
     private val OTHER_MOLECULES = mapOf("CPA" to Ester.CPA, "SPI" to Ester.SPI, "P4" to Ester.P4)
 
@@ -89,7 +88,7 @@ object ConcentrationCalculator {
 
     private fun extras(p: ProfileEntity?, count: Double, instance: String?): DoseExtras = when (p?.pk_route) {
         "sublingual" -> DoseExtras(sublingualTier = p.sl_tier?.toDouble())
-        "gel" -> DoseExtras(gelProductId = p.gel_product_id?.toDouble(), gelSite = GEL_SITES.indexOf(p.gel_site).coerceAtLeast(0).toDouble(), areaCM2 = p.gel_area_cm2)
+        "gel" -> DoseExtras(gelProductId = p.gel_product_id?.toDouble())
         "patchApply" -> DoseExtras(releaseRateUGPerDay = p.patch_release_ug_day!! * count, patchInstanceId = instance)
         else -> DoseExtras()
     }

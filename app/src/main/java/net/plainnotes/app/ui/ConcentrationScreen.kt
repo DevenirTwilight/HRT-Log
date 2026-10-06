@@ -209,7 +209,7 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
 @Composable fun missingLabel(m: MissingInput) = stringResource(when (m) {
     MissingInput.WEIGHT -> R.string.missing_weight; MissingInput.ROUTE_OR_ESTER -> R.string.missing_route; MissingInput.UNIT_NOT_MG -> R.string.missing_unit_mg
     MissingInput.PATCH_RELEASE -> R.string.missing_patch_release; MissingInput.PATCH_UNIT -> R.string.missing_patch_unit; MissingInput.GEL_PRODUCT -> R.string.missing_gel_product
-    MissingInput.GEL_SITE -> R.string.missing_gel_site; MissingInput.GEL_AREA -> R.string.missing_gel_area; MissingInput.SL_TIER -> R.string.missing_sl_tier
+    MissingInput.SL_TIER -> R.string.missing_sl_tier
     MissingInput.ROUTE_NOT_MODELLED -> R.string.missing_route_not_modelled
 })
 
