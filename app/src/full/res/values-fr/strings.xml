@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string name="disguise_backup">Faites d’abord une sauvegarde chiffrée (Données → Exporter une sauvegarde). Un code erroné ne donne aucun indice et, en cas d’oubli, il faudra effacer les données de l’app.</string>
+<string name="disguise_backup">Étape 1 : enregistrez une sauvegarde chiffrée. Un code erroné ne donne aucun indice ; si vous oubliez votre code, seule cette sauvegarde permet de récupérer vos données (réinstaller, puis restaurer).</string>
 <string name="disguise_code">Code (4 à 12 chiffres)</string>
 <string name="disguise_code_repeat">Répétez le code</string>
 <string name="disguise_decoy">Code leurre (facultatif)</string>
@@ -19,7 +19,6 @@
 <string name="disguise_setup">Configurer le camouflage</string>
 <string name="disguise_shell">Apparence</string>
 <string name="disguise_title">Mode camouflage</string>
-<string name="disguise_understood">J’ai compris</string>
 <string name="shell_calc">Calculatrice</string>
 <string name="shell_delete">Effacer</string>
 <string name="shell_error">Erreur</string>
@@ -27,4 +26,12 @@
 <string name="shell_note_hint">Écrivez quelque chose…</string>
 <string name="shell_notes">Notes</string>
 <string name="shell_search">Rechercher</string>
+<string name="disguise_backup_action">Enregistrer une sauvegarde chiffrée</string>
+<string name="disguise_backup_done">Sauvegarde enregistrée. Choisissez maintenant l’apparence et votre code.</string>
+<string name="disguise_backup_failed">La sauvegarde n’a pas pu être enregistrée. Réessayez ou choisissez un autre emplacement.</string>
+<string name="disguise_enabled_title">Mode camouflage activé</string>
+<string name="disguise_guide_disable">Pour le désactiver : ouvrez l’app avec votre code, puis Réglages → Mode camouflage → Désactiver le camouflage.</string>
+<string name="disguise_guide_enter">Désormais, l’app apparaît comme « %1$s » sur l’écran d’accueil et dans le tiroir d’apps.</string>
+<string name="disguise_guide_forgot">Code oublié ? Désinstallez l’app, réinstallez-la et restaurez la sauvegarde que vous venez d’enregistrer.</string>
+<string name="disguise_lock_note">Quitter l’app la verrouille aussitôt et réaffiche le camouflage, sauf pendant le choix d’un fichier pour importer ou exporter.</string>
 </resources>

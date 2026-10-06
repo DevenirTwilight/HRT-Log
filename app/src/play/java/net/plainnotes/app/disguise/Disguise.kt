@@ -14,4 +14,4 @@ object Disguise {
     fun exit(a: Activity) {}
 }
 
-@Suppress("UNUSED_PARAMETER") @Composable fun DisguiseSection(onDisabled: () -> Unit) {}
+@Suppress("UNUSED_PARAMETER") @Composable fun DisguiseSection(onDisabled: () -> Unit, backup: suspend (android.net.Uri, CharArray) -> Boolean) {}

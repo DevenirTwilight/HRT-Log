@@ -35,5 +35,5 @@ class ShellScreenshotTest {
 
     @Test fun calculator() = shoot("shell_calc") { ShellTheme { CalculatorScreen {} } }
     @Test fun notes() = shoot("shell_notes") { ShellTheme { NotesShellScreen("购物：牛奶、面包", {}) { _, _ -> } } }
-    @Test fun settings() = shoot("disguise_settings") { NotesTheme(ThemeMode.LIGHT) { Surface { Column(Modifier.padding(16.dp)) { DisguiseSection {} } } } }
+    @Test fun settings() = shoot("disguise_settings") { NotesTheme(ThemeMode.LIGHT) { Surface { Column(Modifier.padding(16.dp)) { DisguiseSection({}) { _, _ -> true } } } } }
 }

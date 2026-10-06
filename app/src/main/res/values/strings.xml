@@ -136,7 +136,7 @@
 <string name="cov_product">As in the product leaflet (%1$s cm²)</string>
 <string name="cov_thigh">One thigh, front (≈200 cm²)</string>
 <string name="credits">Credits</string>
-<string name="credits_body">The concentration model and lab calibration are ported from Transmtf HRT Tracker (TransmtfTeam/Transmtf-HRT-Tracker, commit 8c9abdde), used under the MIT License. Thank you to its authors.</string>
+<string name="credits_body">HRT Log was inspired by Trans Memo, made by the Chrysalide association, and by Transmtf HRT Tracker. HRT Log has no affiliation or partnership with Chrysalide or Transmtf. It uses no code, text or design from Trans Memo.</string>
 <string name="day_unit">days</string>
 <string name="days_ago">%1$d days ago</string>
 <string name="days_short">%1$dd</string>
@@ -555,4 +555,9 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="view_week">Week</string>
 <string name="view_year">Year</string>
 <string name="ht_choose_duplicates">Choose how to handle the duplicates above to continue.</string>
+<string name="chrysalide_body">Chrysalide is a French association supporting trans people; Trans Memo is their app. You can donate on their website.</string>
+<string name="chrysalide_link">Chrysalide website</string>
+<string name="chrysalide_title">Support Chrysalide</string>
+<string name="pk_origin_body">The concentration model and lab calibration are ported from Transmtf HRT Tracker (MIT license, commit 8c9abdde). Transmtf states that its model and parameters come from LaoZhong-Mihari/HRT-Recorder-PKcomponent-Test. That repository has no license, so permission to reuse this part is still being clarified.</string>
+<string name="pk_origin_title">Where the concentration model comes from</string>
 </resources>

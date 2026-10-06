@@ -18,4 +18,11 @@ MIT License — full text in `pk-engine/UPSTREAM_LICENSE` and shown in the app's
 `tools/pk-reference/upstream/` holds the unmodified upstream files used only to generate
 test fixtures.
 
+### Upstream of the PK model (license pending)
+
+Transmtf HRT Tracker states that its pharmacokinetic algorithms, models and parameters are derived
+directly from `PKcore.swift` / `PKparameter.swift` in LaoZhong-Mihari/HRT-Recorder-PKcomponent-Test:
+https://github.com/LaoZhong-Mihari/HRT-Recorder-PKcomponent-Test . That repository has no license file,
+so permission to reuse this part is not yet established. See `docs/licensing.md` for the status.
+
 Charts are drawn with Compose Canvas; Vico is not shipped.

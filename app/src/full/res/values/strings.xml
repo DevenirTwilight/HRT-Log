@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string name="disguise_backup">Make an encrypted backup first (Data → Export backup). Wrong codes give no hint, and if you forget your code the only way back in is clearing the app’s data.</string>
+<string name="disguise_backup">Step 1: save an encrypted backup. Wrong codes give no hint, and if you forget your code, the backup is the only way to get your data back (reinstall, then restore it).</string>
 <string name="disguise_code">Code (4–12 digits)</string>
 <string name="disguise_code_repeat">Repeat code</string>
 <string name="disguise_decoy">Decoy code (optional)</string>
@@ -19,7 +19,6 @@
 <string name="disguise_setup">Set up disguise</string>
 <string name="disguise_shell">Look like</string>
 <string name="disguise_title">Disguise mode</string>
-<string name="disguise_understood">I understand</string>
 <string name="shell_calc">Calculator</string>
 <string name="shell_delete">Delete</string>
 <string name="shell_error">Error</string>
@@ -27,4 +26,12 @@
 <string name="shell_note_hint">Write something…</string>
 <string name="shell_notes">Notes</string>
 <string name="shell_search">Search</string>
+<string name="disguise_backup_action">Save encrypted backup</string>
+<string name="disguise_backup_done">Backup saved. Now choose the look and your code.</string>
+<string name="disguise_backup_failed">The backup could not be saved. Try again or pick another location.</string>
+<string name="disguise_enabled_title">Disguise mode is on</string>
+<string name="disguise_guide_disable">To turn it off: open the app with your code, then Settings → Disguise mode → Turn off disguise.</string>
+<string name="disguise_guide_enter">From now on, the app appears as “%1$s” on your home screen and in the app drawer.</string>
+<string name="disguise_guide_forgot">Forgot the code? Uninstall the app, install it again and restore the backup you just saved.</string>
+<string name="disguise_lock_note">Leaving the app locks it at once and brings back the disguise. Choosing a file for import or export is the only exception.</string>
 </resources>

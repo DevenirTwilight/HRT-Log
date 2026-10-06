@@ -80,6 +80,11 @@ import javax.inject.Singleton
         // Keep sent identities until their trigger ages out, including across repeated replans.
         repo.transaction { dao -> dao.pruneMappings(now.minusSeconds(48*3600).toEpochMilli()) }
         scheduleCached()
+        runCatching {
+            val today=java.time.LocalDate.now()
+            val week=repo.planned(now,now.plusSeconds(StockAlerts.LOW_STOCK_DAYS*86400L))
+            StockAlerts.post(context,StockAlerts.due(repo.medications(),repo.containers(),week,today),today)
+        }
     }
     private fun scheduleCached() {
         val cache=store.read() ?: return;val next=cache.next(System.currentTimeMillis()) ?: return

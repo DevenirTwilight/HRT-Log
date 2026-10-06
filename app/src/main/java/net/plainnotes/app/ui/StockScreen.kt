@@ -23,8 +23,8 @@ import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import kotlin.math.floor
 
-const val LOW_STOCK_DAYS = 7
-const val EXPIRY_WARNING_DAYS = 3
+const val LOW_STOCK_DAYS = net.plainnotes.app.reminder.StockAlerts.LOW_STOCK_DAYS
+const val EXPIRY_WARNING_DAYS = net.plainnotes.app.reminder.StockAlerts.EXPIRY_WARNING_DAYS
 
 /** Average planned use per day, from the current schedule (null when unscheduled). */
 fun dailyUse(m: MedicationEntity, s: ScheduleSummary?): Double? = s?.let {

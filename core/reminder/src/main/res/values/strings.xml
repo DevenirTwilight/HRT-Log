@@ -4,4 +4,6 @@
 <string name="neutral_open">Open to review your notes</string>
 <string name="snooze_action">Later (10 minutes)</string>
 <string name="record_action">Taken</string>
+<string name="stock_expiry_detail">%1$s: the open package is close to its expiry after opening</string>
+<string name="stock_low_detail">%1$s: stock will not last the coming week</string>
 </resources>

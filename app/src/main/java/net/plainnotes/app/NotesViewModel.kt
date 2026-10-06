@@ -132,6 +132,10 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         val bytes=repo.exportBackup(password);password.fill(' ')
         withContext(Dispatchers.IO){app.contentResolver.openOutputStream(uri,"wt")!!.use{it.write(bytes)}};DataJob.Done(R.string.backup_saved)
     }
+    /** Backup used as a gate (disguise mode): true only once the encrypted file is fully written. */
+    suspend fun backupTo(uri:android.net.Uri,password:CharArray):Boolean=withContext(Dispatchers.IO){
+        runCatching{ val bytes=repo.exportBackup(password); app.contentResolver.openOutputStream(uri,"wt")!!.use{it.write(bytes)} }.isSuccess.also{password.fill(' ')}
+    }
     fun restoreBackup(uri:android.net.Uri,password:CharArray)=dataOp {
         val bytes=withContext(Dispatchers.IO){app.contentResolver.openInputStream(uri)!!.use{it.readBytes()}}
         reminders.mutate{repo.restoreBackup(bytes,password)};password.fill(' ')

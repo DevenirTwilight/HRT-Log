@@ -136,7 +136,7 @@
 <string name="cov_product">按说明书面积（%1$s cm²）</string>
 <string name="cov_thigh">单侧大腿前侧（约 200 cm²）</string>
 <string name="credits">致谢</string>
-<string name="credits_body">血药浓度模型和化验校准移植自 Transmtf HRT Tracker（TransmtfTeam/Transmtf-HRT-Tracker，提交 8c9abdde），依 MIT 许可使用。感谢原作者。</string>
+<string name="credits_body">HRT 日志受到 Chrysalide 协会出品的 Trans Memo 和 Transmtf HRT Tracker 的启发。HRT 日志与 Chrysalide、Transmtf 都没有隶属或合作关系，也没有使用 Trans Memo 的任何代码、文案或设计。</string>
 <string name="day_unit">天</string>
 <string name="days_ago">%1$d 天前</string>
 <string name="days_short">%1$d天</string>
@@ -555,4 +555,9 @@
 <string name="view_week">周</string>
 <string name="view_year">年</string>
 <string name="ht_choose_duplicates">请先在上面选择重复记录怎么处理，才能导入。</string>
+<string name="chrysalide_body">Chrysalide 是一个支持跨性别者的法国协会，Trans Memo 是他们开发的应用。可以在他们的网站上捐助。</string>
+<string name="chrysalide_link">Chrysalide 网站</string>
+<string name="chrysalide_title">支持 Chrysalide</string>
+<string name="pk_origin_body">浓度模型和化验校准移植自 Transmtf HRT Tracker（MIT 许可，提交 8c9abdde）。Transmtf 说明其模型和参数来自 LaoZhong-Mihari/HRT-Recorder-PKcomponent-Test。该仓库没有许可证，这部分的复用许可尚待确认。</string>
+<string name="pk_origin_title">浓度模型的来源</string>
 </resources>

@@ -77,3 +77,25 @@ fun choiceRes(value: String): Int = when (value) {
 }
 /** Unit label used after a number; the PATCH unit reads as a count, not the route. */
 @Composable fun unitLabel(unit: String): String = if (unit == "PATCH") stringResource(R.string.unit_patch) else choiceLabel(unit)
+
+/**
+ * Common brand names in China and France for a molecule or ester code, shown next to the generic name so people
+ * recognise their medicine. Proper nouns, identical in every language; null when none is listed.
+ */
+fun brandNames(code: String): String? = when (code) {
+    "EV" -> "补佳乐 / Progynova"
+    "E2" -> "Provames · Oestrodose · Estreva · 爱斯妥 / Oestrogel"
+    "EC" -> "Depo-Estradiol"
+    "CPA" -> "色普龙 / Androcur"
+    "SPI" -> "安体舒通 / Aldactone"
+    "P4" -> "安琪坦 / Utrogestan"
+    "BICA" -> "康士得 / Casodex"
+    "FIN" -> "保列治 / Proscar · Propecia"
+    "DUT" -> "安福达 / Avodart"
+    "DHT" -> "Andractim"
+    "CMA" -> "Lutéran"
+    "NOMAC" -> "Lutényl"
+    "TRIP" -> "达菲林 / Décapeptyl"
+    "T" -> "Androtardyl"
+    else -> null
+}

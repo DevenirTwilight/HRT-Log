@@ -57,10 +57,16 @@ import net.plainnotes.app.ui.UiPrefs
     override fun onNewIntent(intent: Intent) { super.onNewIntent(intent); intent.getStringExtra("reminder_id")?.let { model.notification(it) } }
     override fun onStart() {
         super.onStart()
-        if (Disguise.enabled(this) && (!Session.open || (leftAt > 0 && SystemClock.elapsedRealtime() - leftAt >= UiPrefs(this).lockAfterMillis))) { Disguise.exit(this); return }
+        val picking = Session.externalPicker; Session.externalPicker = false
+        if (Disguise.enabled(this) && !Session.open) { Disguise.exit(this); return }
+        if (picking) { leftAt = 0; return }
         if (lock.enabled && leftAt > 0 && SystemClock.elapsedRealtime() - leftAt >= UiPrefs(this).lockAfterMillis) locked = true
     }
-    override fun onStop() { super.onStop(); leftAt = SystemClock.elapsedRealtime() }
+    override fun onStop() {
+        super.onStop(); leftAt = SystemClock.elapsedRealtime()
+        // Disguise mode locks as soon as the app leaves the screen; only a system file picker is exempt.
+        if (Disguise.enabled(this) && !Session.externalPicker && !isChangingConfigurations) Session.open = false
+    }
     override fun onResume() { super.onResume(); model.sync(); if (Disguise.enabled(this)) shake.register(getSystemService(SensorManager::class.java)) }
     override fun onPause() { super.onPause(); shake.unregister(getSystemService(SensorManager::class.java)) }
 

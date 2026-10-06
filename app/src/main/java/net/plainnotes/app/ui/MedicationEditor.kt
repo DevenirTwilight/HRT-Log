@@ -95,12 +95,12 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
                 review?.let { r -> ReviewCard(r) }
                 SectionCard(stringResource(R.string.section_basic)) {
                     OutlinedTextField(name, { name = it }, Modifier.fillMaxWidth(), label = { Text(stringResource(R.string.name)) }, singleLine = true, isError = tried && name.isBlank())
-                    DropdownField(stringResource(R.string.molecule), MOLECULES, molecule, { choiceLabel(it) }, { molecule = it })
+                    DropdownField(stringResource(R.string.molecule), MOLECULES, molecule, { choiceLabel(it) }, { molecule = it }, detail = { if (it == "E2") null else brandNames(it) })
                     if (isE2) {
                         DropdownField(stringResource(R.string.route), E2_ROUTES, route.takeIf { it in E2_ROUTES }, { choiceLabel(it) }, isError = tried && route !in E2_ROUTES, onSelect = {
                             route = it; if (ester !in estersFor(it)) ester = estersFor(it).first(); if (it == "PATCH") unit = "PATCH" else if (unit == "PATCH") unit = "MG"
                         })
-                        DropdownField(stringResource(R.string.ester), estersFor(route), ester, { choiceLabel(it) }, { ester = it })
+                        DropdownField(stringResource(R.string.ester), estersFor(route), ester, { choiceLabel(it) }, { ester = it }, detail = ::brandNames)
                     }
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         NumberField(dose, { dose = it }, stringResource(R.string.dose), Modifier.weight(1f), isError = tried && doseV == null)

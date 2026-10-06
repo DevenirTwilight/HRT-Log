@@ -16,6 +16,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -134,10 +135,27 @@ class Appearance(val mode: ThemeMode, val dynamic: Boolean, val contrast: Contra
         }
         SectionCard(stringResource(R.string.privacy)) { Text(stringResource(R.string.privacy_body), style = MaterialTheme.typography.bodyMedium) }
         SectionCard(stringResource(R.string.credits)) { Text(stringResource(R.string.credits_body), style = MaterialTheme.typography.bodyMedium) }
+        SectionCard(stringResource(R.string.chrysalide_title)) {
+            Text(stringResource(R.string.chrysalide_body), style = MaterialTheme.typography.bodyMedium)
+            LinkButton(stringResource(R.string.chrysalide_link), "https://www.chrysalide-asso.fr/")
+        }
+        SectionCard(stringResource(R.string.pk_origin_title)) {
+            Text(stringResource(R.string.pk_origin_body), style = MaterialTheme.typography.bodyMedium)
+            LinkButton("Transmtf HRT Tracker", "https://github.com/TransmtfTeam/Transmtf-HRT-Tracker")
+            LinkButton("HRT-Recorder-PKcomponent-Test", "https://github.com/LaoZhong-Mihari/HRT-Recorder-PKcomponent-Test")
+        }
         SectionCard(stringResource(R.string.licenses)) {
             Text(stringResource(R.string.licenses_body), style = MaterialTheme.typography.bodySmall)
             Text(UPSTREAM_MIT, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
+    }
+}
+
+/** Opens a web page in the browser (the app itself has no internet access). */
+@Composable private fun LinkButton(label: String, url: String) {
+    val context = LocalContext.current
+    TextButton(onClick = { runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url))) } }, contentPadding = PaddingValues(0.dp)) {
+        Icon(Icons.AutoMirrored.Outlined.OpenInNew, null, Modifier.size(18.dp)); Spacer(Modifier.width(6.dp)); Text(label)
     }
 }
 

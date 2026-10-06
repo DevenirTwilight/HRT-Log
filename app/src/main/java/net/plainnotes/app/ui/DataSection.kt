@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import net.plainnotes.app.NotesViewModel
 import net.plainnotes.app.R
+import net.plainnotes.app.security.launchPicker
 import net.plainnotes.app.importer.TmExport
 import net.plainnotes.app.importer.TransMemo
 import java.time.LocalDate
@@ -48,18 +49,18 @@ import java.time.LocalDate
     val pdfLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { it?.let { u -> model.exportPdf(u, pdfChoice.first, pdfChoice.second, context, labels, scheduleTexts) } }
 
     SectionCard(stringResource(R.string.data)) {
-        DataRow(Icons.Outlined.MoveToInbox, stringResource(R.string.import_ht), stringResource(R.string.import_ht_desc)) { htLauncher.launch(arrayOf("application/json", "text/plain", "*/*")) }
-        DataRow(Icons.Outlined.MoveToInbox, stringResource(R.string.import_tm), stringResource(R.string.import_tm_desc)) { importLauncher.launch(arrayOf("*/*")) }
+        DataRow(Icons.Outlined.MoveToInbox, stringResource(R.string.import_ht), stringResource(R.string.import_ht_desc)) { htLauncher.launchPicker(arrayOf("application/json", "text/plain", "*/*")) }
+        DataRow(Icons.Outlined.MoveToInbox, stringResource(R.string.import_tm), stringResource(R.string.import_tm_desc)) { importLauncher.launchPicker(arrayOf("*/*")) }
         DataRow(Icons.Outlined.Lock, stringResource(R.string.backup_export), stringResource(R.string.backup_export_desc)) { askBackup = true }
-        DataRow(Icons.Outlined.SettingsBackupRestore, stringResource(R.string.backup_restore), stringResource(R.string.backup_restore_desc)) { restoreLauncher.launch(arrayOf("*/*")) }
-        DataRow(Icons.Outlined.TableChart, stringResource(R.string.export_csv), stringResource(R.string.export_csv_desc)) { csvLauncher.launch("notes-export-${LocalDate.now()}.zip") }
+        DataRow(Icons.Outlined.SettingsBackupRestore, stringResource(R.string.backup_restore), stringResource(R.string.backup_restore_desc)) { restoreLauncher.launchPicker(arrayOf("*/*")) }
+        DataRow(Icons.Outlined.TableChart, stringResource(R.string.export_csv), stringResource(R.string.export_csv_desc)) { csvLauncher.launchPicker("notes-export-${LocalDate.now()}.zip") }
         DataRow(Icons.Outlined.PictureAsPdf, stringResource(R.string.export_pdf), stringResource(R.string.export_pdf_desc)) { pdfOptions = true }
         HorizontalDivider()
         DataRow(Icons.Outlined.DeleteForever, stringResource(R.string.wipe), stringResource(R.string.wipe_desc), danger = true) { wipe = true }
     }
 
     if (askBackup) PasswordDialog(stringResource(R.string.backup_export), stringResource(R.string.backup_password_note), confirm = true, { askBackup = false }) { pw ->
-        askBackup = false; backupPassword = pw; backupLauncher.launch("notes-${LocalDate.now()}.pnbak") }
+        askBackup = false; backupPassword = pw; backupLauncher.launchPicker("notes-${LocalDate.now()}.pnbak") }
     restoreUri?.let { uri -> PasswordDialog(stringResource(R.string.backup_restore), stringResource(R.string.backup_restore_warning), confirm = false, { restoreUri = null }) { pw ->
         restoreUri = null; model.restoreBackup(uri, pw) } }
     if (pdfOptions) AlertDialog(onDismissRequest = { pdfOptions = false }, icon = { Icon(Icons.Outlined.PictureAsPdf, null) }, title = { Text(stringResource(R.string.export_pdf)) },
@@ -69,7 +70,7 @@ import java.time.LocalDate
                 SegmentedButton(pdfChoice.first == d, { pdfChoice = d to pdfChoice.second }, SegmentedButtonDefaults.itemShape(i, 4)) { Text(stringResource(R.string.days_short, d)) } } }
             SwitchRow(stringResource(R.string.report_include_chart), pdfChoice.second, stringResource(R.string.report_include_chart_desc)) { pdfChoice = pdfChoice.first to it }
         } },
-        confirmButton = { Button(onClick = { pdfOptions = false; if (pdfChoice.second) model.loadConcentration(); pdfLauncher.launch("notes-report-${LocalDate.now()}.pdf") }) { Text(stringResource(R.string.export_action)) } },
+        confirmButton = { Button(onClick = { pdfOptions = false; if (pdfChoice.second) model.loadConcentration(); pdfLauncher.launchPicker("notes-report-${LocalDate.now()}.pdf") }) { Text(stringResource(R.string.export_action)) } },
         dismissButton = { TextButton(onClick = { pdfOptions = false }) { Text(stringResource(R.string.cancel)) } })
     if (wipe) WipeDialog({ wipe = false }) { wipe = false; model.wipeAll { (context as? Activity)?.let { a -> a.finish(); a.startActivity(Intent(a, a.javaClass)) } } }
 
@@ -103,7 +104,7 @@ import java.time.LocalDate
     }
 }
 
-@Composable private fun PasswordDialog(title: String, note: String, confirm: Boolean, onDismiss: () -> Unit, onOk: (CharArray) -> Unit) {
+@Composable fun PasswordDialog(title: String, note: String, confirm: Boolean, onDismiss: () -> Unit, onOk: (CharArray) -> Unit) {
     var pw by remember { mutableStateOf("") }; var pw2 by remember { mutableStateOf("") }
     val ok = pw.length >= 8 && (!confirm || pw == pw2)
     AlertDialog(onDismissRequest = onDismiss, icon = { Icon(Icons.Outlined.Lock, null) }, title = { Text(title) },

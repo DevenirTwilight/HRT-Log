@@ -4,4 +4,6 @@
 <string name="neutral_open">打开查看你的记录</string>
 <string name="snooze_action">稍后（10 分钟）</string>
 <string name="record_action">已服</string>
+<string name="stock_expiry_detail">%1$s：已开封的包装快到开封后有效期了</string>
+<string name="stock_low_detail">%1$s：库存不够接下来一周了</string>
 </resources>

@@ -4,4 +4,6 @@
 <string name="neutral_open">Ouvrir pour consulter vos notes</string>
 <string name="snooze_action">Plus tard (10 minutes)</string>
 <string name="record_action">Pris</string>
+<string name="stock_expiry_detail">%1$s : l’emballage ouvert approche de sa date limite après ouverture</string>
+<string name="stock_low_detail">%1$s : le stock ne suffira pas pour la semaine</string>
 </resources>

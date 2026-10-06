@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string name="disguise_backup">请先做一份加密备份（数据 → 导出备份）。输错密码不会有任何提示；忘记密码后只能清除应用数据才能重新进入。</string>
+<string name="disguise_backup">第一步：先保存一份加密备份。输错密码不会有任何提示；忘记密码时，只能卸载重装后用这份备份恢复数据。</string>
 <string name="disguise_code">密码（4–12 位数字）</string>
 <string name="disguise_code_repeat">再次输入密码</string>
 <string name="disguise_decoy">诱饵密码（可选）</string>
@@ -19,7 +19,6 @@
 <string name="disguise_setup">设置伪装</string>
 <string name="disguise_shell">伪装成</string>
 <string name="disguise_title">伪装模式</string>
-<string name="disguise_understood">我已了解</string>
 <string name="shell_calc">计算器</string>
 <string name="shell_delete">删除</string>
 <string name="shell_error">错误</string>
@@ -27,4 +26,12 @@
 <string name="shell_note_hint">写点什么…</string>
 <string name="shell_notes">便签</string>
 <string name="shell_search">搜索</string>
+<string name="disguise_backup_action">保存加密备份</string>
+<string name="disguise_backup_done">备份已保存。接下来选择外观并设置密码。</string>
+<string name="disguise_backup_failed">备份没有保存成功，请重试或换一个保存位置。</string>
+<string name="disguise_enabled_title">伪装模式已开启</string>
+<string name="disguise_guide_disable">关闭方法：用密码进入应用，然后 设置 → 伪装模式 → 关闭伪装。</string>
+<string name="disguise_guide_enter">从现在起，应用在桌面和应用抽屉里显示为“%1$s”。</string>
+<string name="disguise_guide_forgot">忘记密码？卸载应用后重新安装，再恢复刚才保存的备份。</string>
+<string name="disguise_lock_note">离开应用会立即锁定并回到伪装界面；只有导入、导出时选择文件除外。</string>
 </resources>

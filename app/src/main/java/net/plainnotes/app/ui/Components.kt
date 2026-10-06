@@ -57,16 +57,18 @@ private fun Long.pickerDate() = Instant.ofEpochMilli(this).atZone(ZoneOffset.UTC
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable fun <T> DropdownField(label: String, options: List<T>, selected: T?, display: @Composable (T) -> String, onSelect: (T) -> Unit,
-                                  modifier: Modifier = Modifier, isError: Boolean = false, supporting: String? = null) {
+                                  modifier: Modifier = Modifier, isError: Boolean = false, supporting: String? = null, detail: (T) -> String? = { null }) {
     var expanded by remember { mutableStateOf(false) }
     val labels = options.map { display(it) }
     ExposedDropdownMenuBox(expanded, { expanded = it }, modifier) {
         OutlinedTextField(options.indexOf(selected).takeIf { it >= 0 }?.let { labels[it] } ?: "", {}, readOnly = true, label = { Text(label) }, singleLine = true, isError = isError,
-            supportingText = supporting?.let { { Text(it) } },
+            supportingText = (supporting ?: selected?.let(detail))?.let { { Text(it) } },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
             modifier = Modifier.fillMaxWidth().menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable))
         ExposedDropdownMenu(expanded, { expanded = false }) {
-            options.forEachIndexed { i, o -> DropdownMenuItem(text = { Text(labels[i]) }, onClick = { onSelect(o); expanded = false }) }
+            options.forEachIndexed { i, o -> DropdownMenuItem(text = {
+                Column { Text(labels[i]); detail(o)?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) } }
+            }, onClick = { onSelect(o); expanded = false }) }
         }
     }
 }

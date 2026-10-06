@@ -172,7 +172,7 @@ class UiPrefs(context: Context) {
                     // The decoy space must not expose (or change) the lock, notification wording or disguise settings.
                     if (!model.decoy) {
                         PrivacySection(state.medications.count { it.active }, simpleMode) { simpleMode = it; prefs.simpleMode = it }
-                        net.plainnotes.app.disguise.DisguiseSection(model::destroyDecoy)
+                        net.plainnotes.app.disguise.DisguiseSection(model::destroyDecoy, model::backupTo)
                     }
                     DataSection(model, state.medications.associate { it.id to scheduleText(state.schedules[it.id]) })
                 }

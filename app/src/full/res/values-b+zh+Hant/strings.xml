@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string name="disguise_backup">請先做一份加密備份（資料 → 匯出備份）。輸錯密碼不會有任何提示；忘記密碼後只能清除 App 資料才能重新進入。</string>
+<string name="disguise_backup">第一步：先儲存一份加密備份。輸錯密碼不會有任何提示；忘記密碼時，只能解除安裝重灌後用這份備份恢復資料。</string>
 <string name="disguise_code">密碼（4–12 位數字）</string>
 <string name="disguise_code_repeat">再次輸入密碼</string>
 <string name="disguise_decoy">誘餌密碼（可選）</string>
@@ -19,7 +19,6 @@
 <string name="disguise_setup">設定偽裝</string>
 <string name="disguise_shell">偽裝成</string>
 <string name="disguise_title">偽裝模式</string>
-<string name="disguise_understood">我已瞭解</string>
 <string name="shell_calc">計算器</string>
 <string name="shell_delete">刪除</string>
 <string name="shell_error">錯誤</string>
@@ -27,4 +26,12 @@
 <string name="shell_note_hint">寫點什麼…</string>
 <string name="shell_notes">便籤</string>
 <string name="shell_search">搜尋</string>
+<string name="disguise_backup_action">儲存加密備份</string>
+<string name="disguise_backup_done">備份已儲存。接下來選擇外觀並設定密碼。</string>
+<string name="disguise_backup_failed">備份沒有儲存成功，請重試或換一個儲存位置。</string>
+<string name="disguise_enabled_title">偽裝模式已開啟</string>
+<string name="disguise_guide_disable">關閉方法：用密碼進入 App，然後 設定 → 偽裝模式 → 關閉偽裝。</string>
+<string name="disguise_guide_enter">從現在起，App 在桌面和 App 抽屜裡顯示為“%1$s”。</string>
+<string name="disguise_guide_forgot">忘記密碼？解除安裝 App 後重新安裝，再恢復剛才儲存的備份。</string>
+<string name="disguise_lock_note">離開 App 會立即鎖定並回到偽裝介面；只有匯入、匯出時選擇檔案除外。</string>
 </resources>
