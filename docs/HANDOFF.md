@@ -242,3 +242,10 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 - play：22,919,936 bytes，SHA-256 `f390a5cbb3ab3e21508521d286a00e4fa1f15f6da6a961795e85069d11b816f8`。
 
 **未完成（卡点）**：替换公开 Release 页面上的附件。本环境 `gh` 的 GH_TOKEN 无效，GitHub 连接没有上传 Release 附件的接口，原上传工作流已是只读；APK 不提交到仓库。公开 Release 仍是 build 4。需要用户自己上传，或在有可用 GitHub 登录的环境中按 2f 的流程替换（附件名 `plainnotes-0.2.0-full.apk` / `-play.apk`，同时更新 SHA256SUMS 与 `.github/release-assets.json`）。
+
+**用户已同意发布 build 5（2026-10-06），正在开权限。** 新会话的步骤：
+1. 用户在环境设置里加环境变量 `HRTLOG_RELEASE_TOKEN`：fine-grained token，只授权 `DevenirTwilight/HRT-Log`，权限 Contents: Read and write。新会话才读得到；不要让用户把令牌贴进聊天。新会话需同时挂上 `DevenirTwilight/HRT-Log` 和私有签名仓库 `DevenirTwilight/-`。
+2. 在 `462da22`（或之后只改文档的提交）构建 full/play release，按第 7 节在仓库外签名，签后删除密钥与密码；核对证书指纹、versionCode 5、非调试、无 INTERNET、16 KB 对齐。重新签名的哈希可能与上面不同，以新文件为准。
+3. 用令牌调用 GitHub REST API（`GH_TOKEN=$HRTLOG_RELEASE_TOKEN gh ...` 或 curl）：Release id 404602730 删除旧的 `plainnotes-0.2.0-full.apk`、`plainnotes-0.2.0-play.apk`、`SHA256SUMS.txt`，上传新的三个文件；`SIGNING_CERTIFICATE.txt`、`THIRD_PARTY_NOTICES.md` 不变。正文用 `docs/releases/0.2.0-hotfix.md`（已改为 build 5），标题保持“HRT Log 0.2.0”。是否移动 v0.2.0 标签到新源码，先问用户（2f 中标签曾按授权移动）。
+4. 以前 `gh release upload` 经代理出现过 Bad Content-Length；若再出现，改用 curl `--data-binary @file` 并显式 `Content-Type: application/vnd.android.package-archive`；仍失败就停下告诉用户，可改为用户在网页手动上传。
+5. 下载回查三个附件的大小与 SHA-256，更新 `.github/release-assets.json`（release_id、tag、source_commit、version_code 5、附件清单）并推送，让只读校验工作流验证。
