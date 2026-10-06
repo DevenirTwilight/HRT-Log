@@ -44,3 +44,9 @@ Hi! I'm building an open-source Android HRT tracking app. Its concentration mode
 - 不发布任何包含现有浓度模型的公开版本（GitHub Release、F-Droid）。
 - 仓库应保持私有。**注意：截至 2026-10-06，本仓库是公开的**，包括 `tools/pk-reference/upstream/` 中的原文件副本，以及 CI 产物中的 APK（任何登录 GitHub 的人都能下载）。
 - 同时进行 M4a 文献调研（`docs/pk-model.md`、`pk-params.json`），以便在得不到授权时按文献独立实现。
+
+## 0.2.0 发布指令与最新核实
+
+- 产品负责人在本轮明确要求将 0.2.0 做成公开 GitHub Release；本次按这一最新发布指令执行，发布说明保留上游许可待确认的事实。这不表示已经取得上游授权，也不表示已有文献独立实现。
+- 2026-10-06 再次检查上游：仓库仍没有 LICENSE；已有 [许可询问 #12](https://github.com/LaoZhong-Mihari/HRT-Recorder-PKcomponent-Test/issues/12)，尚无回复。本轮仅核实，未代产品负责人发出留言或新 issue。
+- 上述来源链、MIT 通知和未完成的 M4a 工作继续保留；本次指令不包含 F-Droid 发布。

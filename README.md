@@ -25,12 +25,22 @@ signing setup outside source control. Gradle verifies the distribution checksum.
 AGP 9.1.1 uses external Kotlin 2.2.20 with the documented legacy DSL opt-outs;
 these fixed versions are tested together, not automatically upgraded.
 
-## M1
+## Current progress (0.2.0)
 
-See [`docs/milestones/M1.md`](docs/milestones/M1.md) for implementation details,
-test evidence, limitations and device verification. PK and import modules are
-reserved for M4/M5, and deliberately do not implement model defaults or import mappings.
-Health information must never be committed. Use only synthetic test data.
+Medication rules and reminders, calendar, history and inventory, well-being and labs,
+concentration estimation/calibration, Trans Memo/HRT tracker import, encrypted backup,
+CSV/PDF export, app lock and privacy settings are implemented. Full builds also include
+calculator/notes disguise. English, Simplified/Traditional Chinese and French are supported.
+See [`docs/HANDOFF.md`](docs/HANDOFF.md) for verification and remaining work,
+[`docs/REQUIREMENTS.md`](docs/REQUIREMENTS.md) for current requirements, and
+[`docs/licensing.md`](docs/licensing.md) for the unresolved upstream model license.
+Literature validation and physical-device verification remain incomplete.
+Health information must never be committed; use only synthetic test data.
+
+Public binaries: [0.2.0 release](https://github.com/DevenirTwilight/HRT-Log/releases/tag/v0.2.0).
+They use a private release key, distinct from the public debug key. Back up your data
+before replacing a debug-signed installation; uninstalling deletes local app data.
+Never commit the private signing key or upload its backup to a public release.
 
 ## Disguise mode (full build only)
 

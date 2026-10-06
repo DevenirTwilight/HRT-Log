@@ -12,7 +12,7 @@
 | M4 浓度估算、化验 | 引擎移植自 Transmtf（见第 4 节）；文献调研（M4a）进行中，尚未入库 |
 | M5 Trans Memo 导入、加密备份、CSV/PDF 导出 | 完成；另加 HRT tracker 导入 |
 | M6 应用锁、隐蔽通知、精简模式、多语言、对比度 | 完成 |
-| M7 伪装模式（仅 full 变体） | 完成；2026-10-06 按新要求调整，**调整部分未跑测试**（见第 3 节） |
+| M7 伪装模式（仅 full 变体） | 完成；2026-10-06 的调整已通过发布前全量检查 |
 | 日历改版（日/周/月/年视图、库存预计） | 完成 |
 | 版本 | 0.2.0（versionCode 2） |
 
@@ -25,7 +25,7 @@
 - **仓库目前是公开的**，与"授权明确前保持私有"的要求冲突；已告知用户，可见性只有用户能改。公开内容包括 `tools/pk-reference/upstream/`（上游 TS 原文件副本）和 CI 产物中的 APK。
 - `docs/licensing.md` 已写好（来源链、许可状态、issue 文本），发出后补上链接和日期。
 
-### 4.2 补齐小项：代码已写完，**未提交前的全量测试被用户中断**
+### 4.2 补齐小项：代码与发布前全量检查已完成
 1. **关于页**（`app/.../ui/SettingsScreen.kt` 的 `AboutScreen`）：已完成。新增 Chrysalide 致谢和捐助链接、"无隶属或合作关系"声明、浓度模型出处说明（含上游许可待确认），链接用系统浏览器打开。`THIRD_PARTY_NOTICES.md` 已补上游说明。
 2. **补药通知**：已完成，并有单元测试 `core/reminder/src/test/.../StockAlertsTest.kt`（已通过）。
    - 代码在 `core/reminder/.../StockAlerts.kt`，由 `ReminderCoordinator.rebuild()` 末尾调用。
@@ -39,7 +39,7 @@
    - 离开应用立即锁定：`MainActivity.onStop` 把 `Session.open` 置 false；例外是 `Session.externalPicker`，所有系统文件选择器都改用 `launchPicker()` 启动（`security/Session.kt`），返回 `onStart` 时清除该标记。
    - `DisguiseSection` 的签名改为 `(onDisabled, backup)`，play 变体的空实现同步修改。
 
-**这些改动的验证情况**：`compileFullDebugKotlin` 和 `compilePlayDebugKotlin` 都通过；`StockAlertsTest` 通过；**全量 `test` 和 lint 还没跑**（运行中被用户中断）。接手后第一件事：跑第 5 节的完整检查，通过后再提交。
+**发布前复检**：`test` 共执行 179 项，177 项通过、2 项 PDF 写入测试因 Robolectric 不支持原生 PdfDocument 而跳过，无失败。`lintFullDebug` / `lintPlayDebug` 均为 0 错误，分别有 64 / 59 条警告；full 与 play release 构建通过，签名后 APK 的包名、0.2.0/versionCode 2、私有签名、16 KB 对齐、非调试构建和无 INTERNET 权限检查均通过。源代码 `fcca559` 的 CI（JVM、Android、API 35 模拟器数据库测试）全部通过。
 
 ### 4.3 M4a 文献调研：**进行中，结果不在仓库**
 - 已启动三个并行调研任务（雌二醇口服/舌下/肌注；透皮凝胶、贴片和 CPA；螺内酯含坎利酮、口服孕酮），要求每条引用都用 PubMed 或说明书核实，没有可靠来源就不填。
@@ -74,7 +74,8 @@
   ```
   2026-10-06 之前最后一次全量结果：177 个测试全部通过，lint 0 错误。
 - CI：`.github/workflows/android.yml`（jvm、android、device-tests 三个任务）。android 任务把所有 APK 上传为 `build-results` 产物；可安装的是 `apk/full/debug/app-full-debug.apk`。
-- 签名：debug 构建固定用仓库里的 `app/debug.keystore`（仅调试用的公开密钥），所以本地和 CI 的 debug APK 能互相覆盖安装。发给用户的 release APK 也用这个密钥手动签名（zipalign + apksigner），以便覆盖安装；**正式发布必须换成私有密钥**。
+- 签名：debug 继续使用公开的 `app/debug.keystore`，仅供调试。0.2.0 的正式发布使用新生成的独立私有密钥，保存在仓库外，私有备份交产品负责人保管；不得上传为公开附件或提交到 Git。正式包不能覆盖旧调试签名安装，必须先导出加密备份，再换装与恢复。后续正式更新必须沿用同一私有密钥。
+- 发布附件工作流：`.github/workflows/release-assets.yml` 根据 `.github/release-assets.json` 从 Git blob 取回已在本地签名的 APK，校验 SHA-256、大小后上传到草稿 Release；工作流不接触签名密钥、不自动公开 Release。这样避免当前开发环境的二进制上传 `Bad Content-Length` 错误。
 - 截图测试：`ScreenshotTest`、`ShellScreenshotTest` 输出到 `app/build/screenshots/`。在 Robolectric 里，对话框中的 TextField 在手机尺寸限定符下不会进入空闲状态，所以对话框的交互测试使用默认屏幕尺寸（见 `HtImportWizardTest`）。
 - 翻译：新增文字要同时加到 `values`、`values-zh`、`values-b+zh+Hant`、`values-fr`（app、app/src/full、core/reminder 各自的 res 目录），`TranslationsTest` 会检查各语言的键和占位符是否一致。
 
@@ -88,7 +89,7 @@
 
 ## 6. 给接手者的工作顺序建议
 
-1. 跑第 4 节的完整检查，修复问题后提交 4.2 的改动。
+1. 4.2 已提交并通过发布前完整检查；新增功能继续运行同样的检查。
 2. 和用户确认：`gh` 是否已登录（可以发授权 issue）、仓库可见性。
 3. 完成或重做 M4a 文献调研，提交 `docs/pk-model.md` 和 `pk-params.json` 交用户审核。
 4. 按用户的审核结果决定浓度模型是重写还是补齐，再做蒙特卡洛区间和文献验证测试。
