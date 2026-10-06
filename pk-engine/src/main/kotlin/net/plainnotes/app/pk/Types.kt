@@ -13,7 +13,7 @@ enum class Route(val code: String) {
 }
 
 /** Compound / ester. Doses are always the mass of this compound, not E2-equivalent. */
-enum class Ester { E2, EB, EV, EC, EN, EU, CPA, BICA }
+enum class Ester { E2, EB, EV, EC, EN, EU, CPA, BICA, SPI, P4 }
 
 /**
  * Optional per-event inputs. Numeric fields keep the upstream index encodings

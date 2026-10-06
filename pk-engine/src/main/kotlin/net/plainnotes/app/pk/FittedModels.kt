@@ -31,7 +31,20 @@ class FittedModel(
     val refWeightKg: Double?,
     /** Dose-dependent absorption rate: (dose mg, ka) points, interpolated on log(dose). */
     val kaDosePoints: List<Pair<Double, Double>>,
+    /** Sublingual: share of the dose that is swallowed and follows [swallowedModel]. */
+    val swallowedShare: Double = 0.0,
+    val swallowedModel: String? = null,
+    /** Sublingual tiers: hold minutes per tier and the calibrated tier. */
+    val tierMinutes: List<Int> = emptyList(),
+    val defaultTier: Int? = null,
+    /** Hours after a dose that the source data cover; later is extrapolation. */
+    val calibratedHours: Double? = null,
+    val illustrative: Boolean = false,
+    val noProductData: Boolean = false,
 ) {
+    /** Absorption rate for a dose (dose-dependent where the model says so). */
+    fun kaAt(doseMg: Double): Double = kaFor(doseMg)
+
     private fun kaFor(doseMg: Double): Double {
         if (kaDosePoints.size < 2 || doseMg <= 0) return ka
         val (d0, k0) = kaDosePoints.first(); val (d1, k1) = kaDosePoints.last()
@@ -77,7 +90,12 @@ object PkParams {
             val points = o.optJSONArray("ka_dose_points")?.let { a -> (0 until a.length()).map { a.getJSONObject(it).let { p -> p.getDouble("dose_mg") to p.getDouble("ka_per_h") } } }.orEmpty()
             FittedModel(key, o.getString("unit"), o.getDouble("ka_per_h"), terms, basis, o.getString("assumption"), o.getDouble("cv"),
                 o.optString("cv_source"), if (o.has("e2_per_mg")) o.getDouble("e2_per_mg") else null,
-                if (o.has("ref_weight_kg")) o.getDouble("ref_weight_kg") else null, points)
+                if (o.has("ref_weight_kg")) o.getDouble("ref_weight_kg") else null, points,
+                o.optDouble("swallowed_share", 0.0), o.optString("swallowed_model").takeIf { it.isNotEmpty() },
+                o.optJSONArray("tier_minutes")?.let { a -> (0 until a.length()).map { a.getInt(it) } }.orEmpty(),
+                if (o.has("default_tier")) o.getInt("default_tier") else null,
+                if (o.has("calibrated_hours")) o.getDouble("calibrated_hours") else null,
+                o.optBoolean("illustrative", false), o.optBoolean("no_product_data", false))
         }
     }
 
