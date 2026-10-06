@@ -21,7 +21,7 @@
 | M6 应用锁、隐蔽通知、精简模式、多语言、对比度 | 完成 |
 | M7 伪装模式（仅 full 变体） | 新私人便签实现与本地完整/原生/进程重启验证完成，见 2e；待 OEM 真机复核 |
 | 日历改版（日/周/月/年视图、库存预计） | 完成 |
-| 版本 | 公开 Release 仍为 0.2.0 build 4；源码已是 0.2.0 build 5（§14 修复），待正式签名与替换，见 2g |
+| 版本 | 公开 Release 仍为 0.2.0 build 4；build 5（§14 修复）已正式签名并直接交给用户，Release 页面待替换，见 2g |
 
 ## 2. 当前任务（`docs/REQUIREMENTS.md` 第 4 节）的进度
 
@@ -237,4 +237,8 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 
 版本：`versionName=0.2.0`、`versionCode=5`（高于已发布的 build 4）。完整检查已通过：207 项单元测试 0 失败、2 项 PDF 跳过；lint full 0 错误 66 警告、play 0 错误 61 警告（新增 3 条均为新文案的 PluralsCandidate 提示）；full/play debug 与 release 四构建成功；`check_release_manifest.py` 两个 release 变体通过（应用名/图标为 HRT Log，无 INTERNET）。
 
-**未完成（卡点）**：用第 7 节正式签名签 build 5 并替换当前 Release。本会话读取私有签名仓库 `DevenirTwilight/-` 的请求被权限策略拒绝；`gh` 的 GH_TOKEN 无效，GitHub 连接也没有上传 Release 附件的接口，原上传工作流已是只读。没有生成新密钥、没有改用调试密钥签正式包。需要用户决定：在设置中允许本会话读取该私有仓库（并提供可上传 Release 的方式），或自行用正式密钥签名/上传。真机复核仍需要：覆盖安装后恢复修复备份，检查桌面名称/图标、库存天数、20:00 状态、编辑页容量开关。
+**正式签名（已完成）**：用户授权后读取私有签名仓库，在仓库外解压签名，签名后立即删除密钥与密码文件。源码 `462da22`，证书 SHA-256 与第 7 节一致，v2/v3 签名，16 KB 对齐，非调试，无 INTERNET，应用名 HRT Log。
+- full：23,006,288 bytes，SHA-256 `231a2b2f0ba7146df3d8b24c98d27316429af1059876b7e5aab82b657a2ed4bc`（已直接发给用户）。
+- play：22,919,936 bytes，SHA-256 `f390a5cbb3ab3e21508521d286a00e4fa1f15f6da6a961795e85069d11b816f8`。
+
+**未完成（卡点）**：替换公开 Release 页面上的附件。本环境 `gh` 的 GH_TOKEN 无效，GitHub 连接没有上传 Release 附件的接口，原上传工作流已是只读；APK 不提交到仓库。公开 Release 仍是 build 4。需要用户自己上传，或在有可用 GitHub 登录的环境中按 2f 的流程替换（附件名 `plainnotes-0.2.0-full.apk` / `-play.apk`，同时更新 SHA256SUMS 与 `.github/release-assets.json`）。
