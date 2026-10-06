@@ -112,7 +112,7 @@
 
 继续不发布、不手动上传 APK。真机验证：覆盖安装同签名测试包 → 用正常伪装密码进入 → 核对原历史与库存 → 修改库存和计划后检查各页 → 在历史页把当天导入记录关联到对应计划，再点击完成另一时刻 → 切到后台再返回，确认两个槽位仍已完成。不要卸载或清除数据来验证；保持现有签名。
 
-补充复现（用户最新答复）：一天两次中一次导入、一次点击完成。已补历史页显式“关联服药计划”：点击导入记录，选择同日同药未完成的槽位；不预选、不自动猜测关系。事务内重新核对状态，替换自动漏服占位记录，保留导入时间、剂量（含未知剂量）、来源键及配置，不再次扣库存。历史与 PDF 仍保留导入来源。`DataRefreshTest` 的 4 项集成测试全部通过，包括一次导入加一次点击、反复刷新、重复关联、漏服占位替换与拒绝关联已完成槽位。本地全量单元测试、双变体 lint/debug 构建正在运行（`/workspace/tooling/link-checks.log`）；原 176 项统计仅对应前一提交。
+补充复现（用户最新答复）：一天两次中一次导入、一次点击完成。已补历史页显式“关联服药计划”：点击导入记录，选择同日同药未完成的槽位；不预选、不自动猜测关系。事务内重新核对状态，替换自动漏服占位记录，保留导入时间、剂量（含未知剂量）、来源键及配置，不再次扣库存。历史与 PDF 仍保留导入来源。`DataRefreshTest` 的 4 项集成测试全部通过，包括一次导入加一次点击、反复刷新、重复关联、漏服占位替换与拒绝关联已完成槽位。补充修复源码提交：`4be1a4b4aceb375049230d9ed5de339bb006ca8d`。本地全量检查已通过（`/workspace/tooling/link-checks.log`）：180 项单元测试，178 通过、2 项 PDF 跳过、0 失败；lint full/play 均 0 错误（63/58 警告）；full/play debug 均构建成功。最新 [CI](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37496040841) 的 jvm 已通过，android（包含双变体 release）及 device-tests 尚在运行；下次交接核实最终结果。先前修复提交的双变体 release、本地全量与 7 项原生数据库测试均已通过。
 
 ## 3. 代码结构
 
@@ -139,7 +139,7 @@
   ./gradlew test lintFullDebug lintPlayDebug          # 加上 -ProbolectricDir=... 如需离线
   ./gradlew -PjvmOnly :core:domain:test :pk-engine:test :importer:test   # CI 的 jvm 任务
   ```
-  2026-10-06 最新全量结果：176 项单元测试，174 通过、2 项 PDF 写入跳过，0 失败；lint 0 错误（full 63 / play 58 警告）；CI 7 项原生数据库测试通过，详见 2d。
+  2026-10-06 最新全量结果：180 项单元测试，178 通过、2 项 PDF 写入跳过，0 失败；lint 0 错误（full 63 / play 58 警告）；CI 7 项原生数据库测试通过，详见 2d。
 - CI：`.github/workflows/android.yml`（jvm、android、device-tests 三个任务）。android 任务把所有 APK 上传为 `build-results` 产物；可安装的是 `apk/full/debug/app-full-debug.apk`。
 - 签名：debug 继续使用公开的 `app/debug.keystore`，仅供调试。0.2.0 的正式发布使用新生成的独立私有密钥，保存在仓库外，私有备份已按产品负责人授权存入专用私有仓库，位置与恢复步骤见第 7 节；不得上传为公开附件或提交到公开应用仓库。正式包不能覆盖旧调试签名安装，必须先导出加密备份，再换装与恢复。后续正式更新必须沿用同一私有密钥。
 - 发布附件工作流：`.github/workflows/release-assets.yml` 根据 `.github/release-assets.json` 从 Git blob 取回已在本地签名的 APK，校验 SHA-256、大小后上传到草稿 Release；工作流不接触签名密钥、不自动公开 Release。这样避免当前开发环境的二进制上传 `Bad Content-Length` 错误。
