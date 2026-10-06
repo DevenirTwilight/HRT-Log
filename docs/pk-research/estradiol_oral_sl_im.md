@@ -143,3 +143,125 @@ Qualitative findings:
 - Cassidenti 1990 (PMID 2256508): 1–2 mg micronized E2 profiles in smokers vs non-smokers. No numbers in the abstract.
 - Price 1997 (oral arms of 0.5/1 mg): oral clearance, t1/2 and AUC. Numbers are in the full text only.
 
+---
+
+## 3. Sublingual estradiol (micronized E2 tablets held under the tongue); sublingual EV
+
+**DATA ARE THIN.**
+- No official label (FDA, EMA or ANSM) describes sublingual use. Provames, Estrofem and Oromone are labelled oral only.
+- There are only small single-dose studies (n = 5–10) and a few steady-state trough observations.
+- No study reports a full parameter set (ka, t1/2, F) with SD in an abstract.
+- **Sublingual EV: no reliable source found.** PubMed searches for "sublingual AND estradiol valerate" returned no PK study.
+
+**Structure (qualitative, all sources agree):**
+- Absorption through the oral mucosa is very fast and "burst-like" (Price 1997). Peak E2 comes at 15 min to 1 h (Casper 1981; Fridriksdóttir 1996; Doll 2022).
+- E2 then falls rapidly over about 2–6 h (Price 1997; Burnier 1981).
+- E2 and E1 are higher than after the same oral dose. Early on the E1/E2 ratio is lower than with oral dosing, but over the day E1 still dominates (Casper 1981; Hoon 1993; Cortez 2024 troughs).
+- Mechanistically this looks like two parallel inputs:
+  - a fast mucosal fraction that skips first pass;
+  - a swallowed fraction that behaves like oral dosing.
+- **No published estimates of the split, the mucosal ka or the absolute F were found.**
+
+| Parameter | Value | Unit | SD/range | Ref | Location | Population (n) | Notes |
+|---|---|---|---|---|---|---|---|
+| Cmax E2, single 1 mg SL | 144 | pg/mL | – | Doll 2022 | abstract | trans women (10) | LC-MS/MS; oral 1 mg 35 pg/mL |
+| Tmax E2, 1 mg SL | 1 | h | – | Doll 2022 | abstract | (10) | first sample at 1 h |
+| AUC0-8 SL/oral | 1.8 | fold | – | Doll 2022 | abstract | (10) | |
+| E2/E1 ratio SL vs oral | 1.1 vs 0.7 | – | SD 1.0 vs 0.4 | Doll 2022 | abstract | (10) | |
+| 2 mg SL: rise in 30 min | E2 ×41, E1 ×9 | fold | – | Casper 1981 | abstract | premenopausal follicular (6) + hypogonadal (3) | E1 predominant most of 24 h |
+| 0.5 mg SL | E2 ×26 at 1 h; peak in first 2 h; baseline (24 pg/mL) by 24 h | – | – | Burnier 1981 | abstract | PM (5) | E1 max ×13 at 4 h |
+| 0.5 mg SL plasma E2 | 133.2–320 | pmol/L | range | Fiet 1982 | abstract | PM (8) | ≈ 36–87 pg/mL |
+| 100 µg E2-HPβCD SL tablet, Cmax | 568 | pmol/L | SD 97 | Fridriksdóttir 1996 | abstract | PM (6) | Tmax 15 min; cyclodextrin, not plain tablet |
+| SL (1, 0.5, 0.25 mg) vs oral | rapid burst, E2 falls over 6 h, lower E1/E2 | – | – | Price 1997 | abstract | PM (6) | numbers in full text only |
+| SL HPβCD 0.675 mg vs oral 1 mg | higher Cmax and AUC SL | – | – | Hoon 1993 | abstract | PM (5) | numbers in full text only |
+| **Trough E2**, 6 mo, once-daily SL (mean 6.2 mg/d) | 95.3 | pg/mL | ±10.5 (labelled SD) | Cortez 2024 | Table 3 / Table 1 | trans women + spironolactone (13) | pre-dose; E2 by immunoassay |
+| Trough E1, 6 mo, once-daily | 635.7 | pg/mL | ±81.3 | Cortez 2024 | Table 3 | (13) | E1 by LC-MS/MS |
+| Trough E2, 6 mo, twice-daily (6.2 mg/d) | 79.4 | pg/mL | ±11.6 | Cortez 2024 | Table 3 | (14) | E1 532.9 ± 124.6 |
+| Trough E2, 1 mo (2 mg/d start) | 52.6 (QD) / 55.2 (BID) | pg/mL | ±9.6 / ±5.2 | Cortez 2024 | Table 3 | (13/14) | conflicts with Results text values |
+| E1/E2 ratio, clinic samples | 6.88 SL; 9.28 oral; 2.22 TD; 0.84 inj | – | – | Kariyawasam 2025 | abstract | transfeminine (286) | retrospective, timing uncontrolled |
+
+Qualitative findings:
+- Cirrincione 2021 (n=93, LC-MS/MS): E1 is higher with SL than with transdermal or injectable routes. E2 is similar.
+- Yaish 2023: 0.5 mg four times daily SL causes "alarming excursions" of E2.
+
+**Populations:**
+- Postmenopausal cis women: 1980s–1990s studies, RIA era.
+- Trans women: Doll 2022, Cortez 2024, Yaish 2023, Kariyawasam 2025, Cirrincione 2021.
+- Men: no data found.
+
+**Limitations:**
+- Sample sizes are tiny.
+- Hold time under the tongue and the swallowed fraction are not standardized.
+- The 2022 study sampled only 0–8 h, starting at 1 h.
+- The Cortez Table 3 "SD" values look like SEs, and Table 3 disagrees with the Results text.
+- No intra-day concentration profile at steady state was found.
+- Any app model of SL dosing (for example a fast-absorption fraction plus an oral fraction) would be an **assumption, not literature-derived**.
+
+**Unverified leads:**
+- Price 1997 full text: Cmax, Tmax, terminal t1/2, AUC and oral clearance for 0.25/0.5/1 mg SL vs 0.5/1 mg oral in 6 PM women. This is the best candidate for SL parameters but was not accessible here.
+- Hoon 1993 full text.
+- Doll 2022 full text: SDs, immunoassay results and E1 values.
+- Loftsson 2003 (PMID 12779059, Pharmazie): SL cyclodextrin E2 with half-life. Its abstract is not available.
+
+---
+
+## 4. Estradiol valerate, intramuscular injection (Delestrogen / Progynon Depot)
+
+**Structure:**
+- The oily depot releases EV slowly. The Delestrogen PI says a single IM injection "is absorbed over several weeks", and gives no numbers.
+- Released EV is hydrolysed to E2. Biotransformation is the same as after IV dosing (Düsterberg 1985).
+- E2 is not subject to first pass, so E1 stays below E2 (Schug 2012 E1/E2 Cmax ≈ 0.4; clinic E1/E2 0.84 in Kariyawasam 2025).
+- The kinetics are absorption rate-limited (flip-flop): the decline after the peak reflects release from the depot, not E2 elimination.
+- Tmax is about 2 days and E2 stays elevated for about 7–8 days after 5 mg (Oriowo 1980). After 10 mg, E2 is still elevated at 10 days (Rauramo 1980).
+- **No published compartmental model, ka or depot release half-life for IM EV was found in PubMed or label sources.**
+- A one-compartment model with first-order (or dual first-order) depot absorption is the natural structure. Its parameters would have to be fitted to the Schug 2012 / Oriowo 1980 curves, which were not accessible as full text.
+
+| Parameter | Value | Unit | SD/range | Ref | Location | Population (n) | Notes |
+|---|---|---|---|---|---|---|---|
+| Cmax E2, single 10 mg IM (Progynon Depot-10) | 505.7 | pg/mL | geometric mean | Schug 2012 | abstract | healthy PM (24) | GC-MS; test 543.5; measured values |
+| AUC0-t E2, 10 mg | 82,660 | pg·h/mL | geometric mean | Schug 2012 | abstract | (24) | test 84,734; ~2-week sampling |
+| Cmax / AUC0-t E1, 10 mg | 204.9 / 37,159 | pg/mL; pg·h/mL | geometric mean | Schug 2012 | abstract | (24) | test 219.0 / 38,950 |
+| PD persistence | effects outlast plasma E2; 4-wk washout insufficient | | | Schug 2012 | abstract | (24) | |
+| Tmax E2/E1, single 5 mg IM in arachis oil | ~2 | days | – | Oriowo 1980 | abstract | women on COC (9) | cypionate ~4 d |
+| Duration of elevated E2/E1, 5 mg | 7–8 | days | – | Oriowo 1980 | abstract | (9) | none elevated at 2 wk |
+| 10 mg IM (Primogyn Depot) | E2/E1 high at 24 h, still elevated at 10 d | | | Rauramo 1980 | abstract | castrated women | no numbers |
+| 4 mg IM clinical duration | 2–4 | weeks | – | Düsterberg 1982 | abstract | climacteric women | therapeutic effect, not PK |
+| Trans: share at 100–357 pg/mL mid-cycle, 3 / 4 mg weekly | 78.3 / 76.0 | % | – | Krikorian 2026 | abstract | AMAB adults (459) | EV; 46.0/42.0% at 100–200 pg/mL |
+| Trans: median weekly dose reaching 100–200 pg/mL | 4.0 | mg | IQR 3.0–5.0 | Misakian 2025 JCEM | abstract | TGD (131/562) | EV+EC, IM+SC pooled; no route/ester difference |
+| Trans: median E2 on weekly injections | 232 | pg/mL | IQR 134–371 | Misakian 2025 Endocr Pract | abstract | TGD (357) | median dose 4 mg; timing varies |
+| Trans: mean E2, injectable group | 424.1 | pg/mL | – | Kariyawasam 2025 | abstract | transfeminine | ester/dose/timing not in abstract |
+
+Rothman 2024 (scoping review) concludes that guideline doses of 2–10 mg weekly or 5–30 mg every 2 weeks are likely supraphysiologic, and suggests starting at ≤5 mg weekly.
+
+**Inter-individual variability:** no CV% was found in any accessible abstract. Schug 2012 gives only geometric means, without SD, in the abstract.
+
+**Populations:**
+- PK studies: PM / castrated cis women (Schug 2012, Rauramo 1980) and young women on a COC (Oriowo 1980).
+- Trans women: only retrospective, sparsely sampled clinic levels (useful for validating simulated steady-state levels, not for fitting).
+- Men: no data found.
+
+**Limitations:**
+- Formal single-dose PK exists mainly as bioequivalence studies (Schug 2012), and their full texts were not accessible (Tmax, t1/2 and SD unknown here).
+- The older studies used RIA and report qualitative or approximate results.
+- No steady-state peak/trough PK study with controlled sampling was found.
+- SC vs IM: no difference in the trans cohort (Misakian 2025), but that is not a controlled PK comparison.
+
+**Unverified leads:**
+- Schug 2012 full text: Tmax, t1/2 and baseline-corrected values for 10 mg IM EV in 24 PM women. This is the best candidate for fitting depot kinetics.
+- Oriowo 1980 full text: daily E2 curves after 5 mg EV IM.
+- Düsterberg 1985 full text: IV/IM EV parameters.
+- Kanin 2025 (PMID 40170698; PMC11957913): weekly injectable estradiol 4.3→3.7 mg, final E2 248 pg/mL. The ester is not specified in the abstract, so it was not entered in the JSON.
+
+---
+
+## Summary of evidence strength
+
+| Drug × route | Strength | Best sources |
+|---|---|---|
+| EV oral | **Solid** for Cmax/AUC/t1/2/Tmax in PM women (modern LC-MS/MS BE study with SD and CV%, plus labels). No ka or popPK. No trans/male data. | Zhang 2024; Natazia PI; Progynova RCP; Zimmermann 1998 |
+| E2 micronized oral | **Solid**: absolute F, SS Cmax/Cmin/Cavg/AUC with SD, t1/2, accumulation. No ka or popPK. One small trans study. | Oromone RCP; Activella PI; Kuhnz 1993 |
+| E2 sublingual | **Thin**: n = 5–10 single-dose studies, mostly qualitative in abstracts. One trans LC-MS/MS study (0–8 h). Trough-only trans RCT. No F, ka or t1/2. **SL EV: no reliable source found.** | Doll 2022; Price 1997 (abstract); Cortez 2024 |
+| EV IM | **Moderate/thin**: one modern BE study (10 mg; geometric-mean Cmax/AUC only in abstract) and qualitative Tmax ~2 d / duration 7–8 d for 5 mg. No depot ka/t1/2 published in accessible sources. Trans cohort levels exist (retrospective). | Schug 2012; Oriowo 1980; Misakian 2025; Krikorian 2026 |
+
+Conversion: 1 mg EV contains 0.764 mg E2 (PubChem MW 272.4 / 356.5).
+Unit conversion: 1 pg/mL E2 = 3.671 pmol/L. This follows from the MW 272.4 (1000/272.4) and is a derived figure. Kariyawasam 2025 also states 1557 pmol/L = 424.1 pg/mL.

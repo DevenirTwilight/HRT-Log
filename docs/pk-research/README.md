@@ -5,7 +5,7 @@
 | 文件 | 内容 | 状态 |
 |---|---|---|
 | `transdermal_cpa.*` | 透皮凝胶、贴片、醋酸环丙孕酮 | 完成 |
-| `estradiol_oral_sl_im.*` | 戊酸雌二醇和 17β-雌二醇口服、舌下、戊酸雌二醇肌注 | 进行中（快照） |
+| `estradiol_oral_sl_im.*` | 戊酸雌二醇和 17β-雌二醇口服、舌下、戊酸雌二醇肌注 | 完成 |
 | `spironolactone_progesterone.*` | 螺内酯（含坎利酮）、口服微粒化孕酮 | 完成 |
 
 下一步：据此写 `docs/pk-model.md`、`pk-engine/src/main/resources/pk-params.json`，以及"移植模型参数 vs 文献参数"对照表，交用户审核。
