@@ -120,7 +120,7 @@
 <string name="change_dose">修改剂量</string>
 <string name="change_time">修改时间</string>
 <string name="check_battery">电池优化</string>
-<string name="check_battery_bad">系统可能延迟或丢弃提醒</string>
+<string name="check_battery_bad">系统可能延迟或丢弃提醒。点“修复”会打开本应用的应用信息：进入“电池”，选择“不受限制”。</string>
 <string name="check_exact">精确闹钟</string>
 <string name="check_exact_bad">未允许：提醒可能延迟</string>
 <string name="check_notifications">通知</string>
@@ -598,5 +598,8 @@
     <string name="import_link">关联服药计划</string>
     <string name="import_link_help">请选择这条导入记录对应的服药计划。保留原记录的时间、剂量和库存，不会再次扣减库存。</string>
     <string name="import_link_empty">同一天没有此药物尚未完成的服药计划。</string>
-<string name="system_app_name">便签</string>
+<string name="resize_containers">同时把库存中 %1$d 个包装改为每盒 %2$s</string>
+<string name="resize_containers_blocked">有 %1$d 个包装已用量超过新的每盒量，保持不变。</string>
+<string name="resize_containers_desc">已使用的量保持不变。关闭后保留不同规格的包装。</string>
+<string name="interval_days_meaning">每 %1$d 天才服药一天，不是每天。</string>
 </resources>

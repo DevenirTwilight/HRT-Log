@@ -66,7 +66,11 @@ class Appearance(val mode: ThemeMode, val dynamic: Boolean, val contrast: Contra
                 if (Build.VERSION.SDK_INT >= 33 && !notifications) launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
                 else runCatching { context.startActivity(Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)) }
             }
-            CheckRow(Icons.Outlined.BatteryChargingFull, stringResource(R.string.check_battery), battery, stringResource(R.string.check_battery_bad)) { open(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS) }
+            CheckRow(Icons.Outlined.BatteryChargingFull, stringResource(R.string.check_battery), battery, stringResource(R.string.check_battery_bad)) {
+                // This app's own system info page (no new permission); the battery setting is one tap away there.
+                runCatching { context.startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", context.packageName, null))) }
+                    .onFailure { open(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS) }
+            }
             Surface(color = MaterialTheme.colorScheme.surfaceContainerHigh, shape = MaterialTheme.shapes.small) {
                 Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Text(stringResource(R.string.manufacturer, Build.MANUFACTURER), style = MaterialTheme.typography.labelLarge)

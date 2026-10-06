@@ -120,7 +120,7 @@
 <string name="change_dose">Change the dose</string>
 <string name="change_time">Change the time</string>
 <string name="check_battery">Battery optimisation</string>
-<string name="check_battery_bad">The system may delay or drop reminders</string>
+<string name="check_battery_bad">Android may delay or drop reminders. Fix opens this app\'s info page: choose Battery, then Unrestricted.</string>
 <string name="check_exact">Exact alarms</string>
 <string name="check_exact_bad">Not allowed: reminders may be late</string>
 <string name="check_notifications">Notifications</string>
@@ -598,5 +598,8 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="import_link">Link to planned intake</string>
     <string name="import_link_help">Choose the planned intake this imported record completes. Its original time, dose and stock stay unchanged.</string>
     <string name="import_link_empty">No unfinished intake for this medication on the same day.</string>
-<string name="system_app_name">Notes</string>
+<string name="resize_containers">Also set %1$d package(s) in stock to %2$s</string>
+<string name="resize_containers_blocked">%1$d package(s) have already used more than the new size and stay unchanged.</string>
+<string name="resize_containers_desc">The amount already used stays as recorded. Turn off to keep packages of a different size.</string>
+<string name="interval_days_meaning">Doses on one day every %1$d days, not every day.</string>
 </resources>

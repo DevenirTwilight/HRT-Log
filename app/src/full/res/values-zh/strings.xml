@@ -10,7 +10,7 @@
 <string name="disguise_exit">随时摇一摇手机即可回到伪装界面。</string>
 <string name="disguise_how_calc">打开方式：输入密码后按 =。</string>
 <string name="disguise_how_notes">打开方式：点搜索，搜索你的密码。</string>
-<string name="disguise_limits">系统应用设置和通知顶部使用中性名称“便签”。导出的文件、系统活动记录和以前保存的快捷方式仍可能暴露应用用途；需要时从应用列表重新添加当前图标。</string>
+<string name="disguise_limits">伪装只改变桌面图标。系统的应用设置里仍显示真实名称“HRT Log”，通知顶部也可能显示。导出的文件、系统活动记录和以前保存的快捷方式也可能暴露应用用途；需要时从应用列表重新添加当前图标。</string>
 <string name="disguise_mismatch">两次输入的密码不一致</string>
 <string name="disguise_on">已开启：%1$s</string>
 <string name="disguise_same">替代解锁码必须与主要解锁码不同。</string>

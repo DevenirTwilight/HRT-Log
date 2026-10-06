@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-<application android:icon="@mipmap/ic_shell_notes" xmlns:tools="http://schemas.android.com/tools" tools:replace="android:icon">
+<application>
 <activity android:name="net.plainnotes.app.disguise.privatenotes.PrivateNotesActivity" android:exported="false" android:label="@string/private_notes" android:icon="@mipmap/ic_shell_notes" android:windowSoftInputMode="adjustResize" />
 <!-- Disguise mode (M7). Shells are only reachable through their launcher aliases, which start disabled. -->
 <activity android:name="net.plainnotes.app.disguise.CalculatorActivity" android:exported="false" android:label="@string/shell_calc" android:icon="@mipmap/ic_shell_calc" />

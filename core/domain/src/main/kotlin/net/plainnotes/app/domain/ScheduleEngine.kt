@@ -77,6 +77,21 @@ object ScheduleEngine {
 }
 
 object Timeline {
+    /**
+     * Editing a medication ends its rule version and starts a new one, so the same planned dose (same medication,
+     * original time, effective time and dose) can appear once per version, e.g. a dose completed early under the old
+     * version and again as open under the new one. Only such cross-version copies are merged: a copy with a record
+     * always stays and makes the unrecorded copies disappear; otherwise one copy is kept (an overridden one first,
+     * then the newest version). Slots of one version, or with different times or doses, are never merged.
+     */
+    fun dedupeVersions(slots: Collection<Slot>, recorded: Set<String?>, overridden: Set<String>): List<Slot> =
+        slots.groupBy { listOf(it.medicationId, it.original, it.at, it.dose) }.values.flatMap { group ->
+            if (group.size < 2 || group.map { it.ruleId }.distinct().size < 2) return@flatMap group
+            val withRecord = group.filter { it.key in recorded }
+            if (withRecord.isNotEmpty()) withRecord
+            else listOf(group.maxWith(compareBy<Slot>({ it.key in overridden }, { it.ruleId })))
+        }
+
     fun build(rules: List<ScheduleRule>, overrides: List<SlotOverride>, records: List<DoseRecord>,
               from: Instant, to: Instant, now: Instant, zone: ZoneId, retained: List<Slot> = emptyList()): List<TimelineEntry> {
         ScheduleEngine.validateVersions(rules)
@@ -97,7 +112,8 @@ object Timeline {
             slots[record.key!!]=Slot(record.key,r.id,record.medicationId,record.scheduled!!,record.scheduled,record.scheduledZone!!,
                 record.plannedDose ?: r.dose,r.soonMinutes,record.lateSnapshot ?: r.lateMinutes,r.trackingFrom)
         }
-        val effective=slots.values.map { if(byKey[it.key]?.scheduled!=null) it else changes[it.key]?.apply(it) ?: it }.sortedWith(compareBy<Slot> { it.at }.thenBy { it.key })
+        val effective=dedupeVersions(slots.values.map { if(byKey[it.key]?.scheduled!=null) it else changes[it.key]?.apply(it) ?: it }, byKey.keys, changes.keys)
+            .sortedWith(compareBy<Slot> { it.at }.thenBy { it.key })
         val successors=effective.groupBy { it.medicationId }.mapValues { (_,group) -> group.map { it.at }.distinct().sorted() }
         return effective.filter { it.at >= from && it.at < to }.map { s ->
             val record=byKey[s.key]; val next=successors[s.medicationId]!!.firstOrNull { it>s.at }

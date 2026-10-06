@@ -84,12 +84,21 @@ const val BACKFILL_MAX_DAYS=731L
         val trigger=when(type){"SOON"->entry.slot.at.minusSeconds(entry.slot.soonMinutes.toLong()*60);"LATE"->entry.slot.at.plusSeconds(entry.slot.lateMinutes.toLong()*60+1);else->entry.slot.at}
         return entry.slot.takeIf{trigger.toEpochMilli()==source.trigger_utc}
     }
-    suspend fun saveMedication(value:MedicationEntity,ester:String?,kind:RuleKind,interval:Int,times:List<LocalTime>,weekdays:Set<DayOfWeek>,now:Instant=Instant.now(),pk:ProfileEntity?=null):Long=transaction { dao ->
+    suspend fun saveMedication(value:MedicationEntity,ester:String?,kind:RuleKind,interval:Int,times:List<LocalTime>,weekdays:Set<DayOfWeek>,now:Instant=Instant.now(),pk:ProfileEntity?=null,resizeContainers:Boolean=false):Long=transaction { dao ->
         val effectiveNow=Instant.ofEpochMilli(now.toEpochMilli())
         require(value.name.isNotBlank() && value.dose_per_intake.isFinite() && value.dose_per_intake>0)
         val zone=ZoneId.systemDefault();reconcile(dao,effectiveNow,zone)
         val id=if(value.id==0L)dao.insertMedication(value) else {dao.updateMedication(value);value.id}
+        if(resizeContainers) resizableContainers(dao.containers(),id,value.container_capacity).forEach{dao.setContainerCapacity(it.id,value.container_capacity)}
         val cut=effectiveNow.toEpochMilli()
+        val snapshot=JSONObject().put("name",value.name).put("molecule",value.molecule).put("route",value.route).put("unit",value.unit).put("ester",ester).toString()
+        // Editing only metadata (name, stock, notifications, profile) keeps the plan: no new version, so no slot can appear twice.
+        val current=dao.rules().filter { it.medication_id==id && it.effective_until_utc==null }.singleOrNull()
+        if(value.active && current!=null && samePlan(dao,current,value,kind,interval,times,weekdays,zone,snapshot)) {
+            if(current.config_snapshot!=snapshot) dao.updateRule(current.copy(config_snapshot=snapshot))
+            saveProfile(dao,id,value,ester,pk)
+            return@transaction id
+        }
         // Preserve pending/overridden slots born before the cutover without persisting future PENDING rows.
         val old=dao.rules().filter { it.medication_id==id && it.effective_until_utc==null }
         if(old.isNotEmpty()) {
@@ -103,9 +112,7 @@ const val BACKFILL_MAX_DAYS=731L
             }
             old.forEach{require(cut>it.effective_from_utc);dao.updateRule(it.copy(effective_until_utc=cut))}
         }
-        if(value.molecule=="E2" && value.route!=null && ester!=null)
-            dao.profile(ProfileEntity(id,ester,when(value.route){"ORAL"->"oral";"SUBLINGUAL"->"sublingual";"GEL"->"gel";"PATCH"->"patchApply";"INJECTION"->"injection";else->error("Unsupported estradiol route")},
-                pk?.sl_tier,pk?.gel_product_id,pk?.gel_site,pk?.gel_area_cm2,pk?.patch_release_ug_day))
+        saveProfile(dao,id,value,ester,pk)
         if(value.active) {
             val soon=requireNotNull(value.soon_alert_minutes);val late=requireNotNull(value.late_after_minutes)
             val anchorDate=if(kind==RuleKind.EVERY_N_HOURS)null else effectiveNow.atZone(zone).toLocalDate().toString()
@@ -113,12 +120,28 @@ const val BACKFILL_MAX_DAYS=731L
             val r=RuleEntity(medication_id=id,kind=kind.name,interval=interval,weekday_mask=mask,anchor_local=anchorDate,anchor_zone=zone.id,
                 anchor_utc=if(kind==RuleKind.EVERY_N_HOURS)cut else null,effective_from_utc=cut,effective_until_utc=null,effective_zone=zone.id,
                 missed_tracking_from_utc=cut,dose_snapshot=value.dose_per_intake,soon_snapshot=soon,late_snapshot=late,
-                config_snapshot=JSONObject().put("name",value.name).put("molecule",value.molecule).put("route",value.route).put("unit",value.unit).put("ester",ester).toString())
+                config_snapshot=snapshot)
             require(interval in 1..36500); require(kind!=RuleKind.WEEKLY || mask>0)
             require(kind==RuleKind.EVERY_N_HOURS || times.isNotEmpty())
             val rid=dao.rule(r)
             if(kind!=RuleKind.EVERY_N_HOURS)times.distinct().forEach{dao.time(TimeEntity(rule_id=rid,local_time=it.withNano(0).format(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss")),dose_override=null))}
         };id
+    }
+    private suspend fun saveProfile(dao:NotesDao,id:Long,value:MedicationEntity,ester:String?,pk:ProfileEntity?) {
+        if(value.molecule=="E2" && value.route!=null && ester!=null)
+            dao.profile(ProfileEntity(id,ester,when(value.route){"ORAL"->"oral";"SUBLINGUAL"->"sublingual";"GEL"->"gel";"PATCH"->"patchApply";"INJECTION"->"injection";else->error("Unsupported estradiol route")},
+                pk?.sl_tier,pk?.gel_product_id,pk?.gel_site,pk?.gel_area_cm2,pk?.patch_release_ug_day))
+    }
+    /** True when the edit leaves the plan as it is: same kind, interval, weekdays, times, dose, alert windows, zone and compound (the name may differ). */
+    private suspend fun samePlan(dao:NotesDao,r:RuleEntity,value:MedicationEntity,kind:RuleKind,interval:Int,times:List<LocalTime>,weekdays:Set<DayOfWeek>,zone:ZoneId,snapshot:String):Boolean {
+        val mask=weekdays.sumOf{1 shl (it.value-1)}
+        val ruleTimes=dao.times(r.id)
+        val wanted=if(kind==RuleKind.EVERY_N_HOURS) emptySet() else times.map{it.withNano(0).format(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss"))}.toSet()
+        fun compound(json:String)=JSONObject(json).let{o->listOf("molecule","route","unit","ester").map{k->if(o.isNull(k))null else o.opt(k)?.toString()}}
+        return r.kind==kind.name && r.interval==interval && r.weekday_mask==mask && r.effective_zone==zone.id &&
+            r.dose_snapshot==value.dose_per_intake && r.soon_snapshot==value.soon_alert_minutes && r.late_snapshot==value.late_after_minutes &&
+            ruleTimes.all{it.dose_override==null} && ruleTimes.map{it.local_time}.toSet()==wanted && ruleTimes.size==wanted.size &&
+            compound(r.config_snapshot)==compound(snapshot)
     }
     suspend fun removeMedication(id:Long,now:Instant=Instant.now())=transaction { dao ->
         reconcile(dao,now,ZoneId.systemDefault())

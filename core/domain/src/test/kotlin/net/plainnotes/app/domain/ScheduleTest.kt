@@ -164,4 +164,35 @@ class ScheduleTest {
         assertEquals(Instant.parse("2026-11-01T05:30:00Z"),TimestampInput.parse("2026-11-01T01:30:00",zone))
     }
 
+
+    private fun versions(cut:String):Pair<ScheduleRule,ScheduleRule> {
+        val c=utc(cut)
+        val v1=rule(id=1,times=listOf("08:00","20:00")).copy(until=c)
+        val v2=rule(id=2,times=listOf("08:00","20:00")).copy(from=c,trackingFrom=c,anchorDate=day("2026-02-02"))
+        return v1 to v2
+    }
+    @Test fun `a dose completed early under the old version is not open again under the new one`() {
+        val (v1,v2)=versions("2026-02-02T18:30:00Z")   // edited at 19:30 Paris
+        // Recorded before the edit, while version 1 was still open-ended.
+        val evening=ScheduleEngine.expand(v1.copy(until=null),utc("2026-02-02T18:00:00Z"),utc("2026-02-02T20:00:00Z"),paris).single()
+        val done=DoseRecord(evening.key,1,DoseStatus.ON_TIME,utc("2026-02-02T18:00:00Z"),paris,2.0,scheduled=evening.at,scheduledZone=paris,plannedDose=2.0,ruleVersionId=1)
+        val day=Timeline.build(listOf(v1,v2),emptyList(),listOf(done),day("2026-02-02").atStartOfDay(paris).toInstant(),day("2026-02-03").atStartOfDay(paris).toInstant(),utc("2026-02-02T19:00:00Z"),paris)
+        assertEquals(2,day.size)
+        assertEquals(SlotState.ON_TIME,day.single{it.slot.at==evening.at}.state)
+    }
+    @Test fun `identical open copies of two versions collapse to the newest one`() {
+        val (v1,v2)=versions("2026-02-02T06:00:00Z")
+        val newer=ScheduleEngine.expand(v2,utc("2026-02-02T18:00:00Z"),utc("2026-02-02T20:00:00Z"),paris).single()
+        val stale=newer.copy(key="${newer.key}-v1",ruleId=1)
+        val day=Timeline.build(listOf(v1,v2),emptyList(),emptyList(),utc("2026-02-02T12:00:00Z"),day("2026-02-03").atStartOfDay(paris).toInstant(),utc("2026-02-02T12:00:00Z"),paris,retained=listOf(stale))
+        assertEquals(listOf(newer.key),day.map{it.slot.key})
+    }
+    @Test fun `different doses or a single version are never merged`() {
+        val (v1,v2)=versions("2026-02-02T06:00:00Z")
+        val newer=ScheduleEngine.expand(v2,utc("2026-02-02T18:00:00Z"),utc("2026-02-02T20:00:00Z"),paris).single()
+        val other=newer.copy(key="${newer.key}-v1",ruleId=1,dose=4.0,originalDose=4.0)
+        val day=Timeline.build(listOf(v1,v2),emptyList(),emptyList(),utc("2026-02-02T12:00:00Z"),day("2026-02-03").atStartOfDay(paris).toInstant(),utc("2026-02-02T12:00:00Z"),paris,retained=listOf(other))
+        assertEquals(2,day.size)
+        assertEquals(2,Timeline.dedupeVersions(listOf(newer,newer.copy(key="x")),emptySet(),emptySet()).size)
+    }
 }

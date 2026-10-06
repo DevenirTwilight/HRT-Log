@@ -120,7 +120,7 @@
 <string name="change_dose">Modifier la dose</string>
 <string name="change_time">Modifier l\'heure</string>
 <string name="check_battery">Optimisation de la batterie</string>
-<string name="check_battery_bad">Le système peut retarder ou supprimer les rappels</string>
+<string name="check_battery_bad">Android peut retarder ou supprimer les rappels. Corriger ouvre la fiche de cette app : choisissez Batterie, puis Non restreinte.</string>
 <string name="check_exact">Alarmes exactes</string>
 <string name="check_exact_bad">Non autorisées : les rappels peuvent être en retard</string>
 <string name="check_notifications">Notifications</string>
@@ -598,5 +598,8 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="import_link">Associer à une prise prévue</string>
     <string name="import_link_help">Choisissez la prise prévue correspondant à cet import. Son heure, sa dose et le stock restent inchangés.</string>
     <string name="import_link_empty">Aucune prise inachevée de ce médicament le même jour.</string>
-<string name="system_app_name">Notes</string>
+<string name="resize_containers">Mettre aussi %1$d emballage(s) en stock à %2$s</string>
+<string name="resize_containers_blocked">%1$d emballage(s) ont déjà utilisé plus que la nouvelle taille et restent inchangés.</string>
+<string name="resize_containers_desc">La quantité déjà utilisée reste inchangée. Désactivez pour garder des emballages d’une autre taille.</string>
+<string name="interval_days_meaning">Prises un jour tous les %1$d jours, pas tous les jours.</string>
 </resources>

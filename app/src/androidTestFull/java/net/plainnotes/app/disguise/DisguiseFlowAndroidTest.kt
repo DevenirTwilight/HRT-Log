@@ -215,9 +215,10 @@ class DisguiseFlowAndroidTest {
         Disguise.Shell.entries.forEach{assertEquals(android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED,context.packageManager.getComponentEnabledSetting(ComponentName(context,it.alias)))}
         launch(PrivateNotesActivity::class.java);instrument.waitForIdleSync();assertFalse(resumed(PrivateNotesActivity::class.java));assertFalse(resumed(MainActivity::class.java))
     }
-    @Test fun applicationAliasAndProtectedActivityIdentityAreNeutralAndPrivateIsNotExported() {
+    @Test fun applicationKeepsItsRealIdentityAndPrivateIsNotExported() {
         configure(Disguise.Shell.CALCULATOR)
-        assertEquals(context.getString(R.string.system_app_name),context.applicationInfo.loadLabel(context.packageManager).toString())
+        // The application itself is HRT Log (system settings, normal launcher); only the launcher aliases are disguised.
+        assertEquals(context.getString(R.string.app_name),context.applicationInfo.loadLabel(context.packageManager).toString())
         val normal=context.packageManager.getActivityInfo(ComponentName(context,"net.plainnotes.app.Launcher"),android.content.pm.PackageManager.MATCH_DISABLED_COMPONENTS)
         assertEquals(context.getString(R.string.app_name),normal.loadLabel(context.packageManager).toString())
         val info=context.packageManager.getActivityInfo(ComponentName(context,PrivateNotesActivity::class.java),0)

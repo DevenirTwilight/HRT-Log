@@ -10,7 +10,7 @@
 <string name="disguise_exit">隨時搖一搖手機即可回到偽裝介面。</string>
 <string name="disguise_how_calc">開啟方式：輸入密碼後按 =。</string>
 <string name="disguise_how_notes">開啟方式：點搜尋，搜尋你的密碼。</string>
-<string name="disguise_limits">系統應用設定和通知頂部使用中性名稱「便箋」。匯出的檔案、系統活動紀錄和先前儲存的捷徑仍可能暴露應用用途；需要時從應用列表重新加入目前圖示。</string>
+<string name="disguise_limits">偽裝只改變桌面圖示。系統的 App 設定裡仍顯示真實名稱“HRT Log”，通知頂部也可能顯示。匯出的檔案、系統活動記錄和以前儲存的快捷方式也可能暴露 App 用途；需要時從 App 列表重新新增目前圖示。</string>
 <string name="disguise_mismatch">兩次輸入的密碼不一致</string>
 <string name="disguise_on">已開啟：%1$s</string>
 <string name="disguise_same">替代解鎖碼必須與主要解鎖碼不同。</string>

@@ -120,7 +120,7 @@
 <string name="change_dose">修改劑量</string>
 <string name="change_time">修改時間</string>
 <string name="check_battery">電池最佳化</string>
-<string name="check_battery_bad">系統可能延遲或丟棄提醒</string>
+<string name="check_battery_bad">系統可能延遲或丟棄提醒。點“修復”會開啟本 App 的 App 資訊：進入“電池”，選擇“不受限制”。</string>
 <string name="check_exact">精確鬧鐘</string>
 <string name="check_exact_bad">未允許：提醒可能延遲</string>
 <string name="check_notifications">通知</string>
@@ -598,5 +598,8 @@
     <string name="import_link">關聯服藥計畫</string>
     <string name="import_link_help">請選擇這筆匯入紀錄對應的服藥計畫。保留原紀錄的時間、劑量和庫存，不會再次扣減庫存。</string>
     <string name="import_link_empty">同一天沒有此藥物尚未完成的服藥計畫。</string>
-<string name="system_app_name">便箋</string>
+<string name="resize_containers">同時把庫存中 %1$d 個包裝改為每盒 %2$s</string>
+<string name="resize_containers_blocked">有 %1$d 個包裝已用量超過新的每盒量，保持不變。</string>
+<string name="resize_containers_desc">已使用的量保持不變。關閉後保留不同規格的包裝。</string>
+<string name="interval_days_meaning">每 %1$d 天才服藥一天，不是每天。</string>
 </resources>

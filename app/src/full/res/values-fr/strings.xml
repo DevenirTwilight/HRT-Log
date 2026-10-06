@@ -10,7 +10,7 @@
 <string name="disguise_exit">Secouez le téléphone à tout moment pour revenir au camouflage.</string>
 <string name="disguise_how_calc">Pour ouvrir : tapez votre code puis appuyez sur =.</string>
 <string name="disguise_how_notes">Pour ouvrir : touchez Rechercher et cherchez votre code.</string>
-<string name="disguise_limits">Les réglages système et les en-têtes des notifications utilisent le nom neutre Notes. Les fichiers exportés, les activités système et les anciens raccourcis peuvent encore révéler cet usage. Ajoutez à nouveau le raccourci actuel si nécessaire.</string>
+<string name="disguise_limits">Seule l’icône de l’écran d’accueil change. Android affiche toujours le vrai nom HRT Log dans les réglages système, et les en-têtes des notifications peuvent aussi l’afficher. Les fichiers exportés, les activités système et les anciens raccourcis peuvent aussi révéler cet usage. Ajoutez à nouveau le raccourci actuel si nécessaire.</string>
 <string name="disguise_mismatch">Les codes ne correspondent pas</string>
 <string name="disguise_on">Activé : %1$s</string>
 <string name="disguise_same">Le code alternatif doit différer du code principal.</string>

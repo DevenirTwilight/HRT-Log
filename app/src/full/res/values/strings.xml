@@ -10,7 +10,7 @@
 <string name="disguise_exit">Shake the phone at any time to go back to the disguise.</string>
 <string name="disguise_how_calc">To open: type your code, then press =.</string>
 <string name="disguise_how_notes">To open: tap search and search for your code.</string>
-<string name="disguise_limits">System app settings and notification headers use the neutral name Notes. Exported files, system activity history and previously saved shortcuts may still reveal app use. Add the current icon again from the app drawer if needed.</string>
+<string name="disguise_limits">Only the home screen icon changes. Android still shows the real name HRT Log in system app settings, and notification headers can show it too. Exported files, system activity history and previously saved shortcuts may also reveal app use. Add the current icon again from the app drawer if needed.</string>
 <string name="disguise_mismatch">Codes do not match</string>
 <string name="disguise_on">On: %1$s</string>
 <string name="disguise_same">The alternate code must differ from the main code.</string>

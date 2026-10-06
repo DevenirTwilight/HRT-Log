@@ -186,7 +186,7 @@ class UiPrefs(context: Context) {
     }
     val meds = state.medications.associateBy { it.id }
     importedLink?.let { link -> ImportedPlanDialog(link, meds[link.record.medication_id], model::closeImportedLink) { key -> model.linkImported(link.record.id, key) } }
-    editor?.let { MedicationEditor(it, { model.closeEditor() }) { d -> model.save(d) } }
+    editor?.let { MedicationEditor(it, { model.closeEditor() }, containers = extra.containers) { d -> model.save(d) } }
     completeEntry?.let { e -> IntakeDialog(stringResource(R.string.complete), meds[e.slot.medicationId], e.slot.dose,
         if (e.state == net.plainnotes.app.domain.SlotState.MISSED) e.slot.at else Instant.now(),
         { completeEntry = null }, meds[e.slot.medicationId]?.let(::siteFor)) { t, d, site -> model.complete(e.slot, t, d, site); completeEntry = null; afterIntake() } }

@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.Flow
     @Query("SELECT * FROM supply_container ORDER BY medication_id, id") suspend fun containers(): List<ContainerEntity>
     @Query("SELECT * FROM supply_container WHERE id = :id") suspend fun container(id: Long): ContainerEntity
     @Insert suspend fun insertContainer(value: ContainerEntity): Long
+    @Query("UPDATE supply_container SET capacity = :capacity WHERE id = :id") suspend fun setContainerCapacity(id: Long, capacity: Double)
     @Query("UPDATE supply_container SET state = :state, opened_on = :openedOn WHERE id = :id") suspend fun setContainerState(id: Long, state: String, openedOn: String?)
     @Query("SELECT * FROM supply_transaction WHERE dose_record_id = :recordId ORDER BY id") suspend fun supplyFor(recordId: Long): List<SupplyEntryEntity>
     @Insert suspend fun supply(value: SupplyEntryEntity): Long

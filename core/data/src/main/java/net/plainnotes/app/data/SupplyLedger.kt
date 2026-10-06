@@ -62,3 +62,11 @@ internal object SupplyLedger {
         if (after.capacity - after.used_amount > EPS && after.state == "EMPTY") dao.setContainerState(c.id, "IN_USE", c.opened_on)
     }
 }
+
+/**
+ * Open and sealed packages of [medicationId] whose capacity differs from [capacity] and can take it: the amount
+ * already used stays as recorded, so a package that has used more than the new capacity is left unchanged.
+ */
+fun resizableContainers(containers: List<ContainerEntity>, medicationId: Long, capacity: Double): List<ContainerEntity> =
+    containers.filter { it.medication_id == medicationId && it.state in setOf("IN_USE", "SEALED") && it.capacity != capacity &&
+        it.used_amount <= capacity && it.initial_used_amount <= capacity }

@@ -30,10 +30,11 @@ fun estersFor(route: String) = when (route) { "INJECTION" -> listOf("EV", "EC", 
 private val GEL_SITES = listOf("ARM", "THIGH", "ABDOMEN", "SCROTAL")
 
 class MedicationDraft(val medication: MedicationEntity, val ester: String?, val kind: RuleKind, val interval: Int, val times: List<LocalTime>,
-                      val weekdays: Set<DayOfWeek>, val pk: ProfileEntity?)
+                      val weekdays: Set<DayOfWeek>, val pk: ProfileEntity?, val resizeContainers: Boolean = false)
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
-@Composable fun MedicationEditor(edit: EditMedication, onDismiss: () -> Unit, inDialog: Boolean = true, onSave: (MedicationDraft) -> Unit) {
+@Composable fun MedicationEditor(edit: EditMedication, onDismiss: () -> Unit, inDialog: Boolean = true,
+                                 containers: List<net.plainnotes.app.data.ContainerEntity> = emptyList(), onSave: (MedicationDraft) -> Unit) {
     val m = edit.medication; val p = edit.profile
     val review = remember(m) { m?.needs_review?.let { runCatching { org.json.JSONObject(it) }.getOrNull() } }
     val prefill = review?.optJSONObject("prefill")
@@ -46,6 +47,7 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
     var dose by remember { mutableStateOf(m?.dose_per_intake?.let(::inputNumber) ?: "") }
     // HRT tracker has no package size; the stored placeholder is not shown as if it were known.
     var capacity by remember { mutableStateOf(m?.container_capacity?.takeUnless { review?.optJSONObject("raw")?.has("capacity") == true }?.let(::inputNumber) ?: "") }
+    var resize by remember { mutableStateOf(true) }
     var expiry by remember { mutableStateOf(m?.expiry_days_after_open?.toString() ?: "") }
     var soon by remember { mutableStateOf(m?.soon_alert_minutes?.toString() ?: if (m == null) "15" else "") }
     var late by remember { mutableStateOf(m?.late_after_minutes?.toString() ?: if (m == null) "120" else "") }
@@ -85,7 +87,8 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
                         MedicationEntity(m?.id ?: 0, name.trim(), molecule, if (isE2) route else null, unit, doseV!!, capV!!, expV, soonV, lateV, siteRotation, if (siteRotation) "LR" else null, notifications, active, m?.sort_order ?: 0, null),
                         if (isE2) ester else null, kind, intervalV!!, times.toList(), weekdays.toSet(),
                         if (isE2) ProfileEntity(m?.id ?: 0, ester, "", slTier.takeIf { route == "SUBLINGUAL" }, gelProduct.takeIf { route == "GEL" }, gelSite.takeIf { route == "GEL" },
-                            resolvedArea.takeIf { route == "GEL" }, patchRate.toDoubleOrNull()?.takeIf { route == "PATCH" && it > 0 }) else null))
+                            resolvedArea.takeIf { route == "GEL" }, patchRate.toDoubleOrNull()?.takeIf { route == "PATCH" && it > 0 }) else null,
+                        resizeContainers = resize))
                 }) { Text(stringResource(R.string.save)) } })
         }) { pad ->
             Column(Modifier.padding(pad).fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -138,6 +141,9 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
                     }
                     NumberField(interval, { interval = it }, stringResource(when (kind) { RuleKind.EVERY_N_DAYS -> R.string.interval_days; RuleKind.EVERY_N_HOURS -> R.string.interval_hours; RuleKind.WEEKLY -> R.string.interval_weeks }),
                         decimal = false, isError = tried && intervalV == null)
+                    // An interval above one day is easy to type by accident (e.g. "11" for "1"), so say plainly what it means.
+                    if (kind == RuleKind.EVERY_N_DAYS && (intervalV ?: 1) > 1) Text(stringResource(R.string.interval_days_meaning, intervalV!!),
+                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
                     if (kind == RuleKind.EVERY_N_HOURS) Text(stringResource(R.string.hours_anchor_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     if (kind == RuleKind.WEEKLY) {
                         Text(stringResource(R.string.weekdays_label), style = MaterialTheme.typography.labelLarge)
@@ -180,6 +186,16 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         NumberField(capacity, { capacity = it }, stringResource(R.string.capacity), Modifier.weight(1f), suffix = unitLabel(unit), isError = tried && capV == null)
                         NumberField(expiry, { expiry = it }, stringResource(R.string.expiry), Modifier.weight(1f), suffix = stringResource(R.string.day_unit), decimal = false, isError = tried && expV == -1)
+                    }
+                    // Packages already in stock keep their own size unless the user chooses to update them here.
+                    val mine = m?.let { med -> containers.filter { it.medication_id == med.id && it.state in setOf("IN_USE", "SEALED") } }.orEmpty()
+                    val differing = capV?.let { c -> mine.filter { it.capacity != c } }.orEmpty()
+                    if (differing.isNotEmpty()) {
+                        val fits = net.plainnotes.app.data.resizableContainers(mine, m!!.id, capV!!)
+                        SwitchRow(stringResource(R.string.resize_containers, differing.size, formatDose(capV, unit)), resize,
+                            stringResource(R.string.resize_containers_desc)) { resize = it }
+                        if (resize && fits.size < differing.size) Text(stringResource(R.string.resize_containers_blocked, differing.size - fits.size),
+                            style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
                     }
                 }
             }
