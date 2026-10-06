@@ -19,7 +19,7 @@
 | M4 浓度估算、化验 | 文献调研、独立重写、化验校准和不确定性区间已完成；舌下 8 h 后的数据冲突仍待用户决定（见 2a–2b） |
 | M5 Trans Memo 导入、加密备份、CSV/PDF 导出 | 完成；另加 HRT tracker 导入 |
 | M6 应用锁、隐蔽通知、精简模式、多语言、对比度 | 完成 |
-| M7 伪装模式（仅 full 变体） | 完成；2026-10-06 的调整已通过发布前全量检查 |
+| M7 伪装模式（仅 full 变体） | 新私人便签设计正在实现，见 2e；此前修复见 2d |
 | 日历改版（日/周/月/年视图、库存预计） | 完成 |
 | 版本 | 源码 0.3.0（versionCode 3），**已就绪但未发布**；公开 Release 仍是 0.2.0 |
 
@@ -113,6 +113,12 @@
 继续不发布、不手动上传 APK。真机验证：覆盖安装同签名测试包 → 用正常伪装密码进入 → 核对原历史与库存 → 修改库存和计划后检查各页 → 在历史页把当天导入记录关联到对应计划，再点击完成另一时刻 → 切到后台再返回，确认两个槽位仍已完成。不要卸载或清除数据来验证；保持现有签名。
 
 补充复现（用户最新答复）：一天两次中一次导入、一次点击完成。已补历史页显式“关联服药计划”：点击导入记录，选择同日同药未完成的槽位；不预选、不自动猜测关系。事务内重新核对状态，替换自动漏服占位记录，保留导入时间、剂量（含未知剂量）、来源键及配置，不再次扣库存。历史与 PDF 仍保留导入来源。`DataRefreshTest` 的 4 项集成测试全部通过，包括一次导入加一次点击、反复刷新、重复关联、漏服占位替换与拒绝关联已完成槽位。补充修复源码提交：`4be1a4b4aceb375049230d9ed5de339bb006ca8d`。本地全量检查已通过（`/workspace/tooling/link-checks.log`）：180 项单元测试，178 通过、2 项 PDF 跳过、0 失败；lint full/play 均 0 错误（63/58 警告）；full/play debug 均构建成功。最新 [CI](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37496040841) 的 jvm 已通过，android（包含双变体 release）及 device-tests 尚在运行；下次交接核实最终结果。先前修复提交的双变体 release、本地全量与 7 项原生数据库测试均已通过。
+
+### 2e. 独立私人便签与伪装认证（2026-10-06，正在实现）
+
+用户明确替换旧“空白 HRT DECOY”产品设计（REQUIREMENTS §11）。已读并核对 Disguise/Shells/Section/MainActivity/AppLock/Session/DatabaseAccess/Repository、main/full Manifest、通知和现有测试。当前确实是两种密码都打开 MainActivity，且应用级 label 为 HRT Log；普通 PIN 可能在真实秘密之后再次显示。
+
+采用两种 shell 共用独立 Private Notes Activity + 小型 AES-GCM/Keystore/AtomicFile 存储，无 HRT schema/repository/domain 引用。认证目标为 PRIMARY/PRIVATE，与 Space 分离；旧 DECOY 仅留兼容和确认后清理，不展示、不迁移医疗内容。将处理 PRIMARY/PRIVATE 内存会话、单任务清栈与 Back/Close 回 shell、配置代码与清空、应用中性身份和通知。下一步实现并补足单元与 Android 原生/Activity 流程测试；当前尚未完成，不能按此前 M7 验证结论发布新设计。
 
 ## 3. 代码结构
 

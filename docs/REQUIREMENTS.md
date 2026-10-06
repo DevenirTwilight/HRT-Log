@@ -112,3 +112,15 @@
 - 每天两次服药都已完成后，日历不得再次提示这两个槽位待服；返回前台、刷新及编辑历史后同样适用。
 - 补充复现：两次中一次来自导入、一次点击完成。导入本身仍不猜测计划；历史页提供“关联服药计划”，由用户选择同药物、同一天未完成的槽位，保留导入时间、剂量、来源及库存，不再次扣库存；关联后各页和提醒同步更新。
 - 本轮继续只提交源码，不发布、不上传 APK、不改变现有 Release 或签名密钥。
+
+## 11. 伪装与独立私人便签（2026-10-06）
+
+- 表层 Calculator / Notes 无需密码、可正常使用；真实秘密进入 PRIMARY HRT，替代解锁码进入两种 shell 共用的“私人便签”。私人便签不得进入 MainActivity、NotesApp 或 HRT onboarding/导航。
+- 认证返回独立 `UnlockTarget.PRIMARY / PRIVATE`，不再映射数据库 `Space`；会话只在内存中，明确区分目标，PRIVATE 不能授权 PRIMARY。新进程锁定，真实伪装认证不重复要求普通 PIN；非伪装的 PIN/生物识别行为保留。
+- 私人便签仅提供普通笔记的新建、编辑、删除和自然空状态；不生成内容，不联网、不遥测、不云同步。独立加密本地存储，不复用 HRT Room schema/entity/repository，不纳入 HRT 备份/导出，不被提醒访问；可完整销毁。
+- 设置使用“替代解锁码（高级）”，支持启用、设置、修改、移除、进入准备内容及清空私人便签；两个秘密不能相同。错误输入保持表层行为，保留限速。移除解锁码和关闭伪装须清理私人数据，确认文案说清楚。
+- 应用级身份永久中性 Notes；正常 launcher 独立显示 HRT Log，伪装 aliases 显示 Calculator / Notes。审查合并 Manifest、应用/任务图标、TaskDescription、Recents、通知及 header、shortcut/share/file picker、错误、intent/deep link、备份文件名和重建/重启。
+- 私人空间 Back / Close 回到当前 shell，不进入 HRT；任务栈切换清空前一受保护界面。后台、退出和摇动锁定；PRIMARY 文件选择器例外保留。禁用伪装后不得遗留可访问隐藏空间的入口。
+- 独立便签采用 AES-256-GCM + 自有 Android Keystore key + AtomicFile，凭据仍使用现有 Argon2id/Keystore 体系。旧 `Space.DECOY` 不再用于认证和 UI；保留已有加密文件以免升级静默删掉原内容，仅在用户确认清空/禁用时清理。
+- 补单元及 Android 测试，覆盖两个 shell、目标路由、错误与限速、代码配置、便签 CRUD/隔离/删除、会话/重启、Back、后台、直接 MainActivity、普通 App Lock 与不重复 PIN，运行已有测试并编译 full/play。最终报告行为、主要文件、边界、返回栈、验证、平台身份限制及 1–3 项后续改进。
+- 本轮只提交源码到 `claude/new-session-1959qb`；不建 PR、不发布、不上传 APK、不改变签名密钥。
