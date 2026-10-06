@@ -21,7 +21,7 @@
 | M6 应用锁、隐蔽通知、精简模式、多语言、对比度 | 完成 |
 | M7 伪装模式（仅 full 变体） | 新私人便签实现与本地完整/原生/进程重启验证完成，见 2e；待 OEM 真机复核 |
 | 日历改版（日/周/月/年视图、库存预计） | 完成 |
-| 版本 | 公开 Release 仍为 0.2.0 build 4；build 5（§14 修复）已正式签名并直接交给用户，Release 页面待替换，见 2g |
+| 版本 | 公开 Release 为 0.2.0 build 5（§14 修复，正式签名，标签指向 462da22），见 2g |
 
 ## 2. 当前任务（`docs/REQUIREMENTS.md` 第 4 节）的进度
 
@@ -218,7 +218,7 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 
 2026-10-06：已恢复 Release 标题下的三语语言选择指引，与旧版一致，三语折叠区块保留；公开文案与仓库源文件同步。
 
-### 2g. 当前备份/库存/正常身份修复（2026-10-06，代码完成，发布未做）
+### 2g. 当前备份/库存/正常身份修复（2026-10-06，已完成并发布 build 5）
 
 用户第二次提供加密备份并要求修好。诊断只在仓库外的会话临时目录进行，未把密码、明文或健康数据写入仓库/日志/CI。结论（只记结构，不记内容）：
 - 备份能用密码正常解密，格式和关联完整，**文件没有损坏**。
@@ -241,11 +241,7 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 - full：23,006,288 bytes，SHA-256 `231a2b2f0ba7146df3d8b24c98d27316429af1059876b7e5aab82b657a2ed4bc`（已直接发给用户）。
 - play：22,919,936 bytes，SHA-256 `f390a5cbb3ab3e21508521d286a00e4fa1f15f6da6a961795e85069d11b816f8`。
 
-**未完成（卡点）**：替换公开 Release 页面上的附件。本环境 `gh` 的 GH_TOKEN 无效，GitHub 连接没有上传 Release 附件的接口，原上传工作流已是只读；APK 不提交到仓库。公开 Release 仍是 build 4。需要用户自己上传，或在有可用 GitHub 登录的环境中按 2f 的流程替换（附件名 `plainnotes-0.2.0-full.apk` / `-play.apk`，同时更新 SHA256SUMS 与 `.github/release-assets.json`）。
-
-**用户已同意发布 build 5（2026-10-06），正在开权限。** 新会话的步骤：
-1. 用户在环境设置里加环境变量 `HRTLOG_RELEASE_TOKEN`：fine-grained token，只授权 `DevenirTwilight/HRT-Log`，权限 Contents: Read and write。新会话才读得到；不要让用户把令牌贴进聊天。新会话需同时挂上 `DevenirTwilight/HRT-Log` 和私有签名仓库 `DevenirTwilight/-`。
-2. 在 `462da22`（或之后只改文档的提交）构建 full/play release，按第 7 节在仓库外签名，签后删除密钥与密码；核对证书指纹、versionCode 5、非调试、无 INTERNET、16 KB 对齐。重新签名的哈希可能与上面不同，以新文件为准。
-3. 用令牌调用 GitHub REST API（`GH_TOKEN=$HRTLOG_RELEASE_TOKEN gh ...` 或 curl）：Release id 404602730 删除旧的 `plainnotes-0.2.0-full.apk`、`plainnotes-0.2.0-play.apk`、`SHA256SUMS.txt`，上传新的三个文件；`SIGNING_CERTIFICATE.txt`、`THIRD_PARTY_NOTICES.md` 不变。正文用 `docs/releases/0.2.0-hotfix.md`（已改为 build 5），标题保持“HRT Log 0.2.0”。是否移动 v0.2.0 标签到新源码，先问用户（2f 中标签曾按授权移动）。
-4. 以前 `gh release upload` 经代理出现过 Bad Content-Length；若再出现，改用 curl `--data-binary @file` 并显式 `Content-Type: application/vnd.android.package-archive`；仍失败就停下告诉用户，可改为用户在网页手动上传。
-5. 下载回查三个附件的大小与 SHA-256，更新 `.github/release-assets.json`（release_id、tag、source_commit、version_code 5、附件清单）并推送，让只读校验工作流验证。
+**公开 Release 已替换为 build 5（2026-10-06，用户授权）**：
+- 方法：本环境没有可用的 GitHub 登录，所以把已签名的 full/play APK、SHA256SUMS 和说明放在临时孤立分支 `release-upload-build5`，由只在该分支运行的工作流（GITHUB_TOKEN，contents: write）删除旧的三个附件、上传新的并更新说明，再下载回查（[run 37524801315](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37524801315)）。会话的 git 代理不允许删除其他分支或推送标签（403），所以用一次性工作流（[run 37525061741](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37525061741)，随后删除）删除了临时分支，并把 `v0.2.0` 标签移到 build 5 源码 `462da22`。临时分支中的 APK 是公开发布文件，不含密钥或密码；分支已删除。
+- 本机从公开下载地址独立回查：两个 APK 与 SHA256SUMS 一致；标题“HRT Log 0.2.0”，说明为 build 5，`SIGNING_CERTIFICATE.txt`、`THIRD_PARTY_NOTICES.md` 未变。`.github/release-assets.json` 已更新（source 462da22、versionCode 5、新大小/哈希），由只读校验工作流验证。
+- 以后再发布：提高 versionCode；可沿用同一临时分支+工作流的方法，结束后删除分支和一次性工作流。

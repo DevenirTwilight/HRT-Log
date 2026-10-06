@@ -1,19 +1,19 @@
 {
   "release_id": 404602730,
   "tag": "v0.2.0",
-  "source_commit": "c52c8518c40727ff4f5b0316670e109551886f93",
+  "source_commit": "462da22e064b97a7799c87770ea49ebeb9521e5c",
   "version_name": "0.2.0",
-  "version_code": 4,
+  "version_code": 5,
   "assets": [
     {
       "name": "plainnotes-0.2.0-full.apk",
-      "size": 23002192,
-      "sha256": "54774fa744d741f8c6e3538119b2072e4a900a0e1f65af08aa1d0ce331d2245c"
+      "size": 23006288,
+      "sha256": "231a2b2f0ba7146df3d8b24c98d27316429af1059876b7e5aab82b657a2ed4bc"
     },
     {
       "name": "plainnotes-0.2.0-play.apk",
-      "size": 22915840,
-      "sha256": "8ec2bf7b1bb1a5fb0dbf30256e84e6dca6c81015632b9e3e177da8bb809e67e3"
+      "size": 22919936,
+      "sha256": "f390a5cbb3ab3e21508521d286a00e4fa1f15f6da6a961795e85069d11b816f8"
     },
     {
       "name": "SIGNING_CERTIFICATE.txt",
@@ -27,8 +27,8 @@
     },
     {
       "name": "SHA256SUMS.txt",
-      "size": 363,
-      "sha256": "55113778391263ecdcedd2e183b7ab2b3b69c8467260dec6d2408ce5f2165710"
+      "size": 184,
+      "sha256": "54c1b2a05616bdcf1fa97d3447cc97ba228e1219fb6c6ea1d3e4c6e0eb33202d"
     }
   ]
 }
