@@ -107,8 +107,8 @@ object PdfReport {
             val r = inRange.filter { it.medication_id == m.id && it.scheduled_utc != null }
             val onTime = r.count { it.status == "ON_TIME" }; val late = r.count { it.status == "LATE" }; val missed = r.count { it.status == "MISSED" }; val skipped = r.count { it.status == "SKIPPED" }
             val free = inRange.filter { it.medication_id == m.id && it.scheduled_utc == null && it.status in listOf("ON_TIME", "LATE") }
-            val imported = free.count { it.origin.startsWith("IMPORT_") }
-            text("• ${m.name}: " + context.getString(R.string.report_adherence_line, onTime, late, missed, skipped, free.size - imported, imported), body, 2f)
+            val imported = inRange.count { it.medication_id == m.id && it.origin.startsWith("IMPORT_") && it.status in listOf("ON_TIME", "LATE") }
+            text("• ${m.name}: " + context.getString(R.string.report_adherence_line, onTime, late, missed, skipped, free.count { !it.origin.startsWith("IMPORT_") }, imported), body, 2f)
         }
         y += 8f
         val labs = d.labs.filter { it.sampled_utc >= since }.sortedBy { it.sampled_utc }

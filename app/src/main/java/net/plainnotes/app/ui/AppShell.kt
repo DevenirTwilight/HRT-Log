@@ -65,6 +65,7 @@ class UiPrefs(context: Context) {
     val override by model.override.collectAsStateWithLifecycle()
     val conc by model.conc.collectAsStateWithLifecycle()
     val extra by model.extra.collectAsStateWithLifecycle()
+    val importedLink by model.importedLink.collectAsStateWithLifecycle()
     val notificationSlot by model.notificationSlot.collectAsStateWithLifecycle()
     var destination by rememberSaveable { mutableStateOf(Destination.CALENDAR) }
     var concSettings by remember { mutableStateOf(prefs.conc) }
@@ -177,7 +178,7 @@ class UiPrefs(context: Context) {
                     DataSection(model, state.medications.associate { it.id to scheduleText(state.schedules[it.id]) })
                 }
                 Destination.ABOUT -> AboutScreen(pad)
-                Destination.HISTORY -> HistoryScreen(state, extra.records, { editRecord = it }, { deleteRecord = it }, pad, onAdd = { manual = true }, onBatch = { batch = true })
+                Destination.HISTORY -> HistoryScreen(state, extra.records, { editRecord = it }, { deleteRecord = it }, pad, onAdd = { manual = true }, onBatch = { batch = true }, onLink = model::prepareImportedLink)
                 Destination.STOCK -> StockScreen(state, extra.containers, extra.records, { m -> model.replaceContainer(m.id, m.container_capacity) }, { c, m -> adjustStock = c to m }, { addStock = it }, pad)
                 Destination.WELLBEING -> WellbeingScreen(extra.items, extra.scores, extra.notes, { d, i, v -> model.setScore(d, i, v) }, { d, t -> model.setNote(d, t) }, { manageItems = true }, pad)
                 else -> ComingSoonScreen(destination.icon, stringResource(destination.title), pad)
@@ -187,6 +188,7 @@ class UiPrefs(context: Context) {
 
     }
     val meds = state.medications.associateBy { it.id }
+    importedLink?.let { link -> ImportedPlanDialog(link, meds[link.record.medication_id], model::closeImportedLink) { key -> model.linkImported(link.record.id, key) } }
     editor?.let { MedicationEditor(it, { model.closeEditor() }) { d -> model.save(d) } }
     completeEntry?.let { e -> IntakeDialog(stringResource(R.string.complete), meds[e.slot.medicationId], e.slot.dose,
         if (e.state == net.plainnotes.app.domain.SlotState.MISSED) e.slot.at else Instant.now(),

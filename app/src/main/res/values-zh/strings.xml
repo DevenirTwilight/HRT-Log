@@ -595,4 +595,7 @@
 <string name="times_per_day">每天几次</string>
 <string name="times_per_day_hint">按 08:00 到 20:00 平均排好时间，点时间可以单独修改。剂量仍由你自己填写。</string>
 <string name="times_per_day_value">每天 %1$d 次</string>
+    <string name="import_link">关联服药计划</string>
+    <string name="import_link_help">请选择这条导入记录对应的服药计划。保留原记录的时间、剂量和库存，不会再次扣减库存。</string>
+    <string name="import_link_empty">同一天没有此药物尚未完成的服药计划。</string>
 </resources>

@@ -101,6 +101,15 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     private fun guarded(block:suspend()->Unit)=viewModelScope.launch{try{block()}catch(e:kotlinx.coroutines.CancellationException){throw e}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}
     fun loadExtra():Job=refresh()
     private fun mutateExtra(block:suspend()->Unit)=change(block)
+    data class ImportedLink(val record:RecordEntity,val candidates:List<TimelineEntry>)
+    val importedLink=MutableStateFlow<ImportedLink?>(null)
+    private var importedLinkJob:Job?=null
+    fun prepareImportedLink(record:RecordEntity) {
+        importedLinkJob?.cancel()
+        importedLinkJob=guarded{val candidates=repo.importedCandidates(record.id);importedLink.value=ImportedLink(record,candidates)}
+    }
+    fun closeImportedLink(){importedLinkJob?.cancel();importedLink.value=null}
+    fun linkImported(id:Long,key:String)=change{repo.linkImported(id,key);importedLink.value=null}
     fun editRecord(id:Long,t:Instant,d:Double)=change{repo.editRecord(id,t,d)}
     fun deleteRecord(id:Long)=change{repo.deleteRecord(id)}
     fun addContainers(med:Long,capacity:Double,count:Int,open:Boolean)=mutateExtra{repo.addContainers(med,capacity,count,open)}

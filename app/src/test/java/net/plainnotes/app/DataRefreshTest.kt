@@ -72,4 +72,52 @@ class DataRefreshTest {
         assertEquals(3.0,model.extra.value.records.single{it.id==record.id}.actual_dose!!,0.0)
         assertNull(model.state.value.error)
     }
+    @Test fun importedAndClickedIntakesCompleteBothSlotsWithoutDoubleStockDeduction() {
+        val slots=model.state.value.slots.filter{it.slot.at.atZone(zone).toLocalDate()==today}.map{it.slot}.sortedBy{it.at}
+        val imported=RecordEntity(medication_id=id,taken_utc=slots.first().at.toEpochMilli(),taken_zone=zone.id,actual_dose=2.0,
+            status="ON_TIME",origin="IMPORT_HT",source_record_key="synthetic-source",revision=1,config_snapshot="{}")
+        val recordId=runBlocking{repo.transaction{it.record(imported)}}
+        model.refresh()
+        await{model.extra.value.records.any{it.id==recordId}}
+        // Imports do not silently claim a slot; the user selects the matching planned intake.
+        assertTrue(model.state.value.slots.any{it.slot.key==slots.first().key && it.state !in listOf(SlotState.ON_TIME,SlotState.LATE)})
+        model.prepareImportedLink(model.extra.value.records.single{it.id==recordId})
+        await{model.importedLink.value!=null}
+        assertTrue(model.importedLink.value!!.candidates.any{it.slot.key==slots.first().key})
+        model.linkImported(recordId,slots.first().key)
+        await{model.extra.value.records.any{it.id==recordId && it.slot_key==slots.first().key}}
+        model.complete(slots.last(),Instant.now(),2.0)
+        await{model.extra.value.records.count{it.status in listOf("ON_TIME","LATE")}==2}
+        repeat(3){model.sync();model.refresh()}
+        await{model.state.value.slots.count{it.slot.key in slots.map{it.key} && it.state in listOf(SlotState.ON_TIME,SlotState.LATE)}==2}
+        assertTrue(model.extra.value.upcoming.none{it.slot.key in slots.map{it.key}})
+        val linked=model.extra.value.records.single{it.id==recordId}
+        assertEquals(imported.taken_utc,linked.taken_utc);assertEquals(imported.taken_zone,linked.taken_zone)
+        assertEquals(imported.actual_dose,linked.actual_dose);assertEquals(imported.source_record_key,linked.source_record_key)
+        assertEquals(imported.config_snapshot,linked.config_snapshot);assertEquals(imported.origin,linked.origin)
+        assertEquals(2.0,model.extra.value.containers.single().used_amount,0.0)
+        runBlocking{repo.linkImported(recordId,slots.first().key)}
+        assertEquals(2.0,runBlocking{repo.transaction{it.containers().single().used_amount}},0.0)
+        assertNull(model.state.value.error)
+    }
+
+    @Test fun linkingUnknownDoseReplacesMissedPlaceholderAndRejectsOccupiedSlot() {
+        val slots=model.state.value.slots.filter{it.slot.at.atZone(zone).toLocalDate()==today}.map{it.slot}.sortedBy{it.at}
+        val now=today.plusDays(1).atTime(21,0).atZone(zone).toInstant()
+        runBlocking {
+            repo.calendar(now,zone,today)
+            assertEquals("MISSED",repo.transaction{it.records().single{r->r.slot_key==slots.first().key}.status})
+            val imported=RecordEntity(medication_id=id,taken_utc=slots.first().at.toEpochMilli(),taken_zone=zone.id,status="ON_TIME",origin="IMPORT_TM",source_record_key="synthetic-unknown-dose",revision=1,config_snapshot="{}")
+            val first=repo.transaction{it.record(imported)}
+            val second=repo.transaction{it.record(imported.copy(source_record_key="synthetic-other"))}
+            repo.linkImported(first,slots.first().key,now,zone)
+            assertNull(repo.transaction{it.recordById(first)!!.actual_dose})
+            assertEquals(1,repo.transaction{it.records().count{r->r.slot_key==slots.first().key}})
+            assertFalse(repo.importedCandidates(second,now,zone).any{it.slot.key==slots.first().key})
+            assertTrue(runCatching{repo.linkImported(second,slots.first().key,now,zone)}.isFailure)
+            assertNull(repo.transaction{it.recordById(second)!!.slot_key})
+            assertEquals(0.0,repo.transaction{it.containers().single().used_amount},0.0)
+        }
+    }
+
 }

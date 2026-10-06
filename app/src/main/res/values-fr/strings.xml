@@ -595,4 +595,7 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="times_per_day">Fois par jour</string>
 <string name="times_per_day_hint">Répartit les heures de 08:00 à 20:00 ; touchez une heure pour la modifier. La dose reste votre propre saisie.</string>
 <string name="times_per_day_value">%1$d × par jour</string>
+    <string name="import_link">Associer à une prise prévue</string>
+    <string name="import_link_help">Choisissez la prise prévue correspondant à cet import. Son heure, sa dose et le stock restent inchangés.</string>
+    <string name="import_link_empty">Aucune prise inachevée de ce médicament le même jour.</string>
 </resources>

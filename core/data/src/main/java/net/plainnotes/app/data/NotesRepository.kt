@@ -133,6 +133,29 @@ const val BACKFILL_MAX_DAYS=731L
             planned_dose=slot.dose,late_after_minutes_snapshot=slot.lateMinutes,taken_utc=taken?.toEpochMilli(),taken_zone=if(taken==null)null else ZoneId.systemDefault().id,
             actual_dose=dose,status=status,origin=origin,revision=1,config_snapshot=snapshot)
     }
+    /** No inferred matching: the user chooses an unfinished same-medication slot on the intake's local day. */
+    suspend fun importedCandidates(id:Long,now:Instant=Instant.now(),zone:ZoneId=ZoneId.systemDefault()):List<TimelineEntry> = transaction { dao ->
+        val record=dao.recordById(id) ?: error("Record missing")
+        require(record.deleted_at_utc==null && record.origin.startsWith("IMPORT_") && record.slot_key==null && record.scheduled_utc==null && record.taken_utc!=null)
+        val day=Instant.ofEpochMilli(record.taken_utc).atZone(zone).toLocalDate()
+        reconcile(dao,now,zone)
+        timeline(dao,now,day.atStartOfDay(zone).toInstant(),day.plusDays(1).atStartOfDay(zone).toInstant(),zone)
+            .filter{it.slot.medicationId==record.medication_id && it.state !in listOf(SlotState.ON_TIME,SlotState.LATE,SlotState.SKIPPED)}
+    }
+    /** Attach schedule metadata only. Imported intake data and the stock ledger remain untouched. */
+    suspend fun linkImported(id:Long,key:String,now:Instant=Instant.now(),zone:ZoneId=ZoneId.systemDefault())=transaction { dao ->
+        val record=dao.recordById(id) ?: error("Record missing")
+        require(record.deleted_at_utc==null && record.origin.startsWith("IMPORT_") && record.taken_utc!=null)
+        if(record.slot_key==key)return@transaction
+        val slot=importedCandidates(id,now,zone).single{it.slot.key==key}.slot
+        val existing=dao.records().singleOrNull{it.slot_key==key}
+        require(existing==null || existing.status=="MISSED")
+        if(existing!=null)dao.updateRecord(existing.copy(deleted_at_utc=now.toEpochMilli(),revision=existing.revision+1))
+        val taken=Instant.ofEpochMilli(record.taken_utc)
+        val status=if(taken>slot.at.plusSeconds(slot.lateMinutes.toLong()*60)) "LATE" else "ON_TIME"
+        dao.updateRecord(record.copy(rule_version_id=slot.ruleId,slot_key=key,scheduled_utc=slot.at.toEpochMilli(),scheduled_zone=slot.zone.id,
+            planned_dose=slot.dose,late_after_minutes_snapshot=slot.lateMinutes,status=status,revision=record.revision+1))
+    }
     suspend fun complete(slot:Slot,taken:Instant,dose:Double,site:String?=null)=transaction { dao ->
         val existing=dao.records().singleOrNull{it.slot_key==slot.key}
         if(existing?.status in listOf("ON_TIME","LATE"))return@transaction

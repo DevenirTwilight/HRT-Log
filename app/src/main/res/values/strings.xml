@@ -595,4 +595,7 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="times_per_day">Times a day</string>
 <string name="times_per_day_hint">Sets evenly spaced times between 08:00 and 20:00; tap a time to change it. The dose stays your own entry.</string>
 <string name="times_per_day_value">%1$d × a day</string>
+    <string name="import_link">Link to planned intake</string>
+    <string name="import_link_help">Choose the planned intake this imported record completes. Its original time, dose and stock stay unchanged.</string>
+    <string name="import_link_empty">No unfinished intake for this medication on the same day.</string>
 </resources>
