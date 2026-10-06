@@ -6946,5 +6946,112 @@
    "notes": "peak within 2 h; 'striking differences' between subjects; supports BID dosing",
    "topic": "spironolactone_progesterone"
   }
- ]
+ ],
+ "models": {
+  "EV_ORAL": {
+   "unit": "pg/mL",
+   "ka_per_h": 0.3814292395068821,
+   "terms": [
+    {
+     "A_per_mg": 31.529124602035544,
+     "lambda_per_h": 0.04786928042541058,
+     "t_half_h": 14.48
+    }
+   ],
+   "basis": [
+    "estradiol_oral_sl_im:Zhang2024 (t1/2 14.48 h, Cmax 20.47 pg/mL, AUC0-inf 575.99 pg*h/mL, 1 mg EV fasted)"
+   ],
+   "assumption": "One absorption + one elimination term; the apparent half-life is taken as observed (it reflects absorption and estrone recycling, not intrinsic E2 clearance).",
+   "checks": {
+    "tmax_h": 6.222123905243663,
+    "cmax_1mg": 20.470000000000002,
+    "zimmermann1998_4mg_cmax": 81.88000000000001,
+    "zimmermann1998_4mg_auc0_48": 2039.2163753707905,
+    "natazia_2mg_ss_cmax": 63.310985889817694,
+    "natazia_2mg_ss_auc24": 1151.9756180080174
+   },
+   "cv": 0.37,
+   "cv_source": "estradiol_oral_sl_im:Zhang2024 (AUC0-inf CV 37.41%)",
+   "e2_per_mg": 0.7641035711280051
+  },
+  "E2_ORAL": {
+   "unit": "pg/mL",
+   "ka_per_h": 0.31109807764375685,
+   "terms": [
+    {
+     "A_per_mg": 45.13254431413082,
+     "lambda_per_h": 0.049510512897138946,
+     "t_half_h": 14.0
+    }
+   ],
+   "basis": [
+    "estradiol_oral_sl_im:FDA_ACTIVELLA (t1/2 14.0 h, Cmax 26.8 pg/mL, AUC0-t 766.5 pg*h/mL used as AUC0-inf, 1 mg)"
+   ],
+   "assumption": "One absorption + one elimination term with the observed apparent half-life (14 h). AUC0-t is used for AUC0-inf (the label gives no AUC0-inf), which slightly underestimates exposure.",
+   "checks": {
+    "tmax_h": 7.026034463112554,
+    "cmax_1mg": 26.799999999999997,
+    "oromone_2mg_ss_cmax": 82.57655128764726,
+    "oromone_2mg_ss_cmin": 39.51501024750846,
+    "oromone_2mg_ss_cavg": 63.87479503375045,
+    "oromone_2mg_ss_auc24": 1532.995080810011
+   },
+   "cv": 0.48,
+   "cv_source": "estradiol_oral_sl_im:FDA_ACTIVELLA (AUC geometric CV 48%)",
+   "e2_per_mg": 1.0
+  },
+  "CPA_ORAL": {
+   "unit": "ng/mL",
+   "ka_per_h": 0.7015380874276156,
+   "terms": [
+    {
+     "A_per_mg": -77.67585905306814,
+     "lambda_per_h": 0.8664339756999315,
+     "t_half_h": 0.8
+    },
+    {
+     "A_per_mg": 0.14670073810478043,
+     "lambda_per_h": 0.015789229625511284,
+     "t_half_h": 43.9
+    },
+    {
+     "A_per_mg": 0.2504842163918142,
+     "lambda_per_h": 0.008818666419337727,
+     "t_half_h": 78.6
+    }
+   ],
+   "basis": [
+    "transdermal_cpa:Kuhnz1993 (2 mg: Cmax 15.2 ng/mL, initial t1/2 0.8 h, single-dose terminal t1/2 54 h, clearance 3.6 mL/min/kg, t1/2 78.6 h after repeated dosing, ~2-fold accumulation)",
+    "transdermal_cpa:SMPC_DIANETTE_UK (Tmax 1.6 h after 2 mg; AUC accumulation 2.2-2.4 fold)",
+    "transdermal_cpa:SMPC_ANDROCUR_UK (F 88 %, terminal t1/2 43.9 h, Tmax 3 h after 100 mg)",
+    "transdermal_cpa:Huber1988 (F 88 %, Cmax 255 +/- 110 ng/mL after 100 mg)"
+   ],
+   "assumption": "Three elimination terms (0.8 h, 43.9 h, 78.6 h) sharing one absorption rate; their shares are fitted so that Cmax and Tmax after 2 mg and the ~2.2-fold accumulation of daily dosing match. The 78.6 h term makes the half-life longer after repeated doses. Absorption is slower at high doses (Cmax per mg at 100 mg is about a third of that at 2 mg with similar clearance): ka is fitted to Cmax ~270 ng/mL at 100 mg and interpolated on log(dose) between 2 mg and 100 mg. Amplitudes are for 70 kg and scale with 70 / weight. Age effects (about 95 h in older men) are not modelled.",
+   "checks": {
+    "cmax_2mg": 12.505306913580792,
+    "tmax_2mg_h": 1.3101074982517922,
+    "accumulation_R": 2.0170444868253186,
+    "cmax_100mg": 270.0,
+    "tmax_100mg_h": 2.381193952785216,
+    "apparent_t_half_single_h": 66.3002500892758,
+    "apparent_t_half_after_21_daily_h": 69.83406650473016,
+    "ss_2mg_cmax": 15.229374246759683,
+    "ss_2mg_cmin": 2.7615961899642807
+   },
+   "cv": 0.43,
+   "cv_source": "transdermal_cpa:Huber1988 (Cmax SD 110 / 255 ng/mL)",
+   "ref_weight_kg": 70.0,
+   "ka_dose_points": [
+    {
+     "dose_mg": 2,
+     "ka_per_h": 0.7015380874276156
+    },
+    {
+     "dose_mg": 100,
+     "ka_per_h": 0.18518115129165108
+    }
+   ]
+  }
+ },
+ "models_note": "Fitted by tools/pk-fit/fit.py from the literature entries named in each model's basis; 'checks' are model outputs for comparison with the literature, recomputed by the engine's validation tests."
 }
