@@ -118,7 +118,13 @@
 
 用户明确替换旧“空白 HRT DECOY”产品设计（REQUIREMENTS §11）。已读并核对 Disguise/Shells/Section/MainActivity/AppLock/Session/DatabaseAccess/Repository、main/full Manifest、通知和现有测试。当前确实是两种密码都打开 MainActivity，且应用级 label 为 HRT Log；普通 PIN 可能在真实秘密之后再次显示。
 
-采用两种 shell 共用独立 Private Notes Activity + 小型 AES-GCM/Keystore/AtomicFile 存储，无 HRT schema/repository/domain 引用。认证目标为 PRIMARY/PRIVATE，与 Space 分离；旧 DECOY 仅留兼容和确认后清理，不展示、不迁移医疗内容。将处理 PRIMARY/PRIVATE 内存会话、单任务清栈与 Back/Close 回 shell、配置代码与清空、应用中性身份和通知。已实现：独立加密 Store/Model/Screen/Editor/Activity、代码配置/改动/移除/准备/清空、目标分离与会话代次、主 UI 固定 PRIMARY、单任务清栈、普通 App Lock/第二 PIN/picker 处理、中性应用/任务/通知身份；审计见 `docs/disguise-privacy.md`。私人 CRUD/边界和 Session 的 14 项专项单元测试通过，full Android test APK 已编译（`/workspace/tooling/private-preflight.log`）。新增原生 Keystore、Activity 流程和两进程 force-stop 测试并加入 CI；本地全量单元测试已通过：201 项，199 通过、2 PDF 跳过；full/play lint 0 错误、63/58 警告（与前一致）；合并 release Manifest 身份/入口/无网络检查通过。本地 full/play debug 与 release 四个构建全部通过（`/workspace/tooling/private-checks.log`，11m33s）；原生 test APK 也已构建。首轮 CI android 与 jvm 全部通过。首轮 [CI](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37501520452) 原生测试中 4 项测试驱动失败：Search 选成正文输入框、ActivityScenario 要求恢复已经按锁定设计销毁的 Activity。已改明确 IME Search matcher 和真实 Home/重新打开的行为，仍保留所有断言，不跳过失败用例；补强开启伪装时的异步竞态：配置落盘不开放会话，完成回调仅对仍在前台/同代次的原 Main 激活 PRIMARY，并补原生生命周期测试。清空 storage 同时使旧实例失效，阻止迟到的后台保存复建已删文件/密钥，并补单元及原生断言。旧空间清理回调改为 suspend 并等待完成，避免刚显示成功就退出时取消清理。最新 15 项专项单元测试与 full 原生 test APK 编译再次通过（`/workspace/tooling/private-storage-final.log`），正在推送补强与修正后重跑原生及两进程 force-stop；补强后的 202 项全量单元测试无失败（200 通过、2 PDF 跳过）；full release 尚在本地收尾。第二轮 CI `37504215078` 的原生测试仅剩一个测试驱动失败：重复按 9 时同时匹配了计算器显示文本与数字键。已限定 hasClickAction 选择真正的按键；其余原生 16 个用例通过（包括新增 setup 前台/代次及清空旧写入边界），force-stop 阶段因前面的失败尚未执行。补明异步认证结果返回时必须仍在前台，避免 shell 已离开却弹出真实/私人内容；并在启用时立即替换当前 task description，防止首次设置后 Recents 沿用 HRT 标签。PRIVATE 持续观察内存中的原子认证快照，撤销会话立即隐藏/退出，不能等下次 resume；增加 live reset、PRIVATE 不得借 setup 回调开放 PRIMARY 的原生断言。清理回调等待、这些最终边界及原生完整重跑仍待验证。其余原生用例/7 项 core 原生通过。记录不能按此前 M7 结论直接发布。
+已实现并推送：`b22b965`、`f4d87a5`、`0d6bbea`。两种 shell 共用独立 Private Notes Activity + AES-256-GCM/Keystore/AtomicFile 存储，无 HRT schema/repository/domain 依赖。认证为 UnlockTarget PRIMARY/PRIVATE，与 Space 分离；旧 DECOY 仅保留升级兼容和显式清理，不显示、不迁移医疗数据。包括代码配置/改码/移除/准备/清空、进程内原子 target/generation 会话、单任务清栈、Back/Close/摇动回 shell、普通 App Lock/第二 PIN/picker 处理、中性应用/任务/通知身份。审计见 [disguise-privacy.md](disguise-privacy.md)。
+
+补强边界：配置落盘本身不开放会话；完成回调只对前台且同代次的 Main 激活 PRIMARY，不能认证 PRIVATE。校验结果返回时 shell 已离开前台则不打开受保护页面。启用时立即更新当前 Recents 标签。PRIVATE 实时观察授权，撤销即隐藏/退出。清空使旧 store 实例失效，防止迟到的保存重建密文；新私人存储和旧 DECOY 清理均等待完成且不随界面销毁取消。
+
+验证进行中：之前本地全量 202 项单元测试，200 通过、2 PDF 跳过；full/play lint 0 错误，63/58 条既有警告；四个 debug/release 构建和合并 Manifest 身份/入口/无网络检查通过。最终 `0d6bbea` 的专项 15 项单元测试、full Android test APK、play Kotlin 编译已通过，正在运行最终全量检查 `/workspace/tooling/private-final-all.log` 和 [CI 37508020927](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37508020927)。CI 前两轮 JVM/Android 构建均通过；原生测试驱动的 Search 选择、已销毁 Activity 恢复和重复数字 matcher 已修正，断言未减少、用例未跳过。`0d6bbea` 的原生流程 21 项全通过，另 2 个重启阶段按设计由独立 host 运行，7 项 core 原生也通过。host 阶段因 connected tests 完成后 APK 被清理而无法启动 instrumentation；已增加显式重装 target/test APK 和完整错误输出，待确认两进程 force-stop 检查通过。
+
+没有发布 Release、改变签名或手动上传 APK；保持现有安装数据，真机复核时不要卸载或清除数据。
 
 ## 3. 代码结构
 
@@ -145,7 +151,7 @@
   ./gradlew test lintFullDebug lintPlayDebug          # 加上 -ProbolectricDir=... 如需离线
   ./gradlew -PjvmOnly :core:domain:test :pk-engine:test :importer:test   # CI 的 jvm 任务
   ```
-  2026-10-06 最新全量结果：180 项单元测试，178 通过、2 项 PDF 写入跳过，0 失败；lint 0 错误（full 63 / play 58 警告）；CI 7 项原生数据库测试通过，详见 2d。
+  2026-10-06 最新全量结果：202 项单元测试，200 通过、2 项 PDF 写入跳过，0 失败；lint 0 错误（full 63 / play 58 条既有警告）；本次原生与四构建最终结果见 2e。
 - CI：`.github/workflows/android.yml`（jvm、android、device-tests 三个任务）。android 任务把所有 APK 上传为 `build-results` 产物；可安装的是 `apk/full/debug/app-full-debug.apk`。
 - 签名：debug 继续使用公开的 `app/debug.keystore`，仅供调试。0.2.0 的正式发布使用新生成的独立私有密钥，保存在仓库外，私有备份已按产品负责人授权存入专用私有仓库，位置与恢复步骤见第 7 节；不得上传为公开附件或提交到公开应用仓库。正式包不能覆盖旧调试签名安装，必须先导出加密备份，再换装与恢复。后续正式更新必须沿用同一私有密钥。
 - 发布附件工作流：`.github/workflows/release-assets.yml` 根据 `.github/release-assets.json` 从 Git blob 取回已在本地签名的 APK，校验 SHA-256、大小后上传到草稿 Release；工作流不接触签名密钥、不自动公开 Release。这样避免当前开发环境的二进制上传 `Bad Content-Length` 错误。
@@ -154,15 +160,15 @@
 
 ## 5. 已知限制与注意事项
 
-- 伪装模式下，系统应用列表、系统设置和通知顶部仍显示真实应用名（运行时无法更改），设置页已如实说明。
+- 应用级名称已永久改为中性 Notes，伪装任务/通知使用中性身份；APK 静态分析、安装来源、签名、旧 OEM 缓存及用户导出文档无法完全隐藏，详见 `disguise-privacy.md`。
 - 进入系统设置页（例如精确闹钟、电池优化）也会触发伪装模式的立即锁定，只有文件选择器例外（按用户要求）。
 - 补药通知在提醒重建时检查（打开应用、服药、闹钟触发、开机等），没有单独的每日定时任务。
 - 导入 HRT tracker 时，如果把某组记录导入到参数不同的已有药物（例如把 E2 记录导入到 EV 药物），浓度估算会按该药物的参数计算；界面只给出提示，没有阻止。
-- 所有功能都只在 Robolectric 和截图中验证过，没有在真机上做系统测试；用户在自己的手机上测试，并反馈过问题（导入对话框的选项选不了，已修复）。
+- 已有 Robolectric、截图和 API 35 原生模拟器测试；尚未完成 OEM 真机系统验证。用户此前报告的导入对话框选项问题已修复。
 
 ## 6. 给接手者的工作顺序建议
 
-1. 当前工作优先看 2d：修复及自动验证已完成，等用户真机复核；新增变更继续同样的检查。
+1. 当前工作优先看 2e 的私人便签与身份审计；此前库存、同步和导入关联修复见 2d。新增变更继续完整检查，并安排 OEM 真机复核。
 2. 0.3.0 文献引擎及重写已完成；不要按前面的历史过程重新做 M4a 或移植代码。
 3. 舌下 8 h 后的模型选择仍待用户决定，维持现有外推标记。
 4. 未获新的发布指令前不发布、不动 0.2.0；正式签名只用第 7 节的既有私有备份。
