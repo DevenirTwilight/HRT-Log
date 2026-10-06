@@ -490,4 +490,22 @@
 <string name="simple_mode">简洁模式</string>
 <string name="simple_mode_desc">只记录一种项目时，隐藏项目名称和选择器</string>
 <string name="simple_mode_unavailable">仅在只有一个启用项目时可用</string>
+<string name="batch_add">批量添加</string>
+<string name="batch_done">已补录 %1$d 次服药</string>
+<string name="batch_dose">每次剂量</string>
+<string name="batch_from">开始日期</string>
+<string name="batch_note">只补录历史，用于浓度估算，不扣减库存。已有记录前后 1 小时内的时间会跳过。</string>
+<string name="batch_range_error">结束日期不能早于开始日期，且相隔最多两年。</string>
+<string name="batch_summary">最多补录 %1$d 次（只算已经过去的时间）。</string>
+<string name="batch_times">每天的时间</string>
+<string name="batch_to">结束日期</string>
+<string name="history_add">补记一次</string>
+<string name="history_dose">剂量：%1$s</string>
+<string name="history_e2_eq">（%1$s mg E2）</string>
+<string name="history_planned_dose_label">计划剂量：%1$s</string>
+<string name="history_title">用药记录</string>
+<string name="history_unscheduled_short">计划外</string>
+<string name="quick_fill">快速填写</string>
+<string name="quick_once_daily">每天一次</string>
+<string name="quick_twice_daily">早晚各一次</string>
 </resources>

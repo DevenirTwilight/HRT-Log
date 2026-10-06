@@ -77,6 +77,8 @@ class UiPrefs(context: Context) {
     var overrideEntry by remember { mutableStateOf<TimelineEntry?>(null) }
     var addMenu by remember { mutableStateOf(false) }
     var manual by remember { mutableStateOf(false) }
+    var batch by remember { mutableStateOf(false) }
+    var batchDone by remember { mutableStateOf<Int?>(null) }
     var appointment by remember { mutableStateOf(false) }
     var archive by remember { mutableStateOf<MedicationEntity?>(null) }
     var labEdit by remember { mutableStateOf<LabValueEntity?>(null) }
@@ -175,7 +177,7 @@ class UiPrefs(context: Context) {
                     DataSection(model, state.medications.associate { it.id to scheduleText(state.schedules[it.id]) })
                 }
                 Destination.ABOUT -> AboutScreen(pad)
-                Destination.HISTORY -> HistoryScreen(state, extra.records, { editRecord = it }, { deleteRecord = it }, pad)
+                Destination.HISTORY -> HistoryScreen(state, extra.records, { editRecord = it }, { deleteRecord = it }, pad, onAdd = { manual = true }, onBatch = { batch = true })
                 Destination.STOCK -> StockScreen(state, extra.containers, extra.records, { m -> model.replaceContainer(m.id, m.container_capacity) }, { c, m -> adjustStock = c to m }, { addStock = it }, pad)
                 Destination.WELLBEING -> WellbeingScreen(extra.items, extra.scores, extra.notes, { d, i, v -> model.setScore(d, i, v) }, { d, t -> model.setNote(d, t) }, { manageItems = true }, pad)
                 else -> ComingSoonScreen(destination.icon, stringResource(destination.title), pad)
@@ -198,6 +200,11 @@ class UiPrefs(context: Context) {
     adjustStock?.let { (c, m) -> AdjustStockDialog(c, m, { adjustStock = null }) { v -> model.setRemaining(c.id, v); adjustStock = null } }
     if (manageItems) ManageCheckinItemsDialog(extra.items, { manageItems = false }) { model.saveCheckinItem(it) }
     overrideEntry?.let { e -> if (override?.key == e.slot.key) OverrideDialog(e, meds[e.slot.medicationId], override!!, { overrideEntry = null }) { o -> model.changeOverride(e.slot, o); overrideEntry = null } }
+    if (batch) BatchAddDialog(state.medications.filter { it.active && it.needs_review == null }, { m ->
+        state.schedules[m.id]?.takeIf { it.kind == net.plainnotes.app.domain.RuleKind.EVERY_N_DAYS && it.interval == 1 && it.times.isNotEmpty() }?.times ?: TWICE_DAILY
+    }, { batch = false }) { id, from, to, times, d -> batch = false; model.backfill(id, from, to, times, d) { batchDone = it } }
+    val batchText = batchDone?.let { stringResource(R.string.batch_done, it) }
+    LaunchedEffect(batchText) { batchText?.let { snackbar.showSnackbar(it); batchDone = null } }
     if (manual) ManualIntakeDialog(state.medications.filter { it.active }, ::siteFor, { manual = false }) { id, t, d, site -> model.manual(id, t, d, site); manual = false; afterIntake() }
     if (appointment) AppointmentDialog({ appointment = false }) { model.appointment(it); appointment = false }
     if (labNew || labEdit != null) LabDialog(labEdit, { labNew = false; labEdit = null }) { model.saveLab(it); labNew = false; labEdit = null }

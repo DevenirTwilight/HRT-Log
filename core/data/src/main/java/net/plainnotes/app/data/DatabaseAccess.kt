@@ -29,7 +29,7 @@ enum class Space(val file:String,val wrap:String,val alias:String) {
     PRIMARY("notes.db","key.wrap","notes.wrap"), DECOY("notes_b.db","key_b.wrap","notes_b.wrap")
 }
 
-@Singleton class DatabaseAccess @Inject constructor(@ApplicationContext private val context: Context) {
+@Singleton open class DatabaseAccess @Inject constructor(@ApplicationContext private val context: Context) {
     private val instances=mutableMapOf<Space,NotesDatabase>()
     /** The space the UI works on. Background reminders always use PRIMARY. Not persisted: a new process starts in PRIMARY. */
     @Volatile var current=Space.PRIMARY
@@ -40,7 +40,7 @@ enum class Space(val file:String,val wrap:String,val alias:String) {
         current=space
     }
     fun get(): NotesDatabase=get(current)
-    @Synchronized fun get(space:Space): NotesDatabase {
+    @Synchronized open fun get(space:Space): NotesDatabase {
         if(!context.getSystemService(UserManager::class.java).isUserUnlocked) throw DataLockedException()
         instances[space]?.let { return it }
         val passphrase=loadPassphrase(space)

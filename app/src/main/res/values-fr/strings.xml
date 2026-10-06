@@ -490,4 +490,22 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="simple_mode">Mode simple</string>
 <string name="simple_mode_desc">Masque les noms et sélecteurs quand vous ne suivez qu’un seul élément</string>
 <string name="simple_mode_unavailable">Disponible quand un seul élément est actif</string>
+<string name="batch_add">Ajout groupé</string>
+<string name="batch_done">%1$d prises ajoutées</string>
+<string name="batch_dose">Dose à chaque prise</string>
+<string name="batch_from">Du</string>
+<string name="batch_note">Complète l’historique pour l’estimation des concentrations ; le stock n’est pas modifié. Les heures à moins d’une heure d’une prise existante sont ignorées.</string>
+<string name="batch_range_error">La date de fin doit suivre la date de début, deux ans au plus tard.</string>
+<string name="batch_summary">Ajoute jusqu’à %1$d prises (heures passées uniquement).</string>
+<string name="batch_times">Heures chaque jour</string>
+<string name="batch_to">Au</string>
+<string name="history_add">Ajouter une prise</string>
+<string name="history_dose">Dose : %1$s</string>
+<string name="history_e2_eq">(%1$s mg E2)</string>
+<string name="history_planned_dose_label">Prévu : %1$s</string>
+<string name="history_title">Journal des prises</string>
+<string name="history_unscheduled_short">Hors plan</string>
+<string name="quick_fill">Remplissage rapide</string>
+<string name="quick_once_daily">Une fois par jour</string>
+<string name="quick_twice_daily">Matin et soir</string>
 </resources>

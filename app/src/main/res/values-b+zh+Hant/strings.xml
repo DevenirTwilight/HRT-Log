@@ -490,4 +490,22 @@
 <string name="simple_mode">簡潔模式</string>
 <string name="simple_mode_desc">只記錄一種項目時，隱藏項目名稱和選擇器</string>
 <string name="simple_mode_unavailable">僅在只有一個啟用項目時可用</string>
+<string name="batch_add">批次新增</string>
+<string name="batch_done">已補錄 %1$d 次服藥</string>
+<string name="batch_dose">每次劑量</string>
+<string name="batch_from">開始日期</string>
+<string name="batch_note">只補錄歷史，用於濃度估算，不扣減庫存。已有記錄前後 1 小時內的時間會跳過。</string>
+<string name="batch_range_error">結束日期不能早於開始日期，且相隔最多兩年。</string>
+<string name="batch_summary">最多補錄 %1$d 次（只算已經過去的時間）。</string>
+<string name="batch_times">每天的時間</string>
+<string name="batch_to">結束日期</string>
+<string name="history_add">補記一次</string>
+<string name="history_dose">劑量：%1$s</string>
+<string name="history_e2_eq">（%1$s mg E2）</string>
+<string name="history_planned_dose_label">計畫劑量：%1$s</string>
+<string name="history_title">用藥記錄</string>
+<string name="history_unscheduled_short">計畫外</string>
+<string name="quick_fill">快速填寫</string>
+<string name="quick_once_daily">每天一次</string>
+<string name="quick_twice_daily">早晚各一次</string>
 </resources>

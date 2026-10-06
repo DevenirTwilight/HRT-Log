@@ -152,6 +152,10 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     fun deleteLab(v:LabValueEntity)=viewModelScope.launch{try{repo.deleteLab(v.id);loadConcentration()}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}
     fun delete(id:Long)=change{repo.removeMedication(id)}
     fun complete(s:Slot,t:Instant,d:Double,site:String?=null)=change{repo.complete(s,t,d,site)}.also{it.invokeOnCompletion{loadConcentration();loadExtra()}}
+    fun backfill(id:Long,from:LocalDate,to:LocalDate,times:List<java.time.LocalTime>,d:Double,onDone:(Int)->Unit)=viewModelScope.launch {
+        try { val n=reminders.mutate{repo.backfill(id,from,to,times,d)}; refresh(); loadConcentration(); loadExtra(); onDone(n) }
+        catch(_:Exception){ mutable.value=mutable.value.copy(error=R.string.operation_error) }
+    }
     fun manual(id:Long,t:Instant,d:Double,site:String?=null)=change{repo.unscheduled(id,t,d,site)}.also{it.invokeOnCompletion{loadConcentration();loadExtra()}}
     fun loadOverride(key:String)=viewModelScope.launch{override.value=repo.currentOverride(key)}
     fun changeOverride(s:Slot,o:SlotOverride)=change{repo.override(s,o);override.value=null}

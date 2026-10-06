@@ -18,7 +18,9 @@ import net.plainnotes.app.domain.ScheduleEngine
 import net.plainnotes.app.domain.SlotOverride
 import net.plainnotes.app.domain.TimelineEntry
 import java.time.Instant
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.ZoneId
 
 /** Picker values are wall times; DST gaps move forward, overlaps take the earlier offset. */
@@ -120,3 +122,46 @@ val APPOINTMENT_TYPES = listOf("ENDO", "GP", "LAB", "PSY", "SURGERY", "OTHER")
         }) { Text(stringResource(R.string.save)) } },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } })
 }
+
+/** Batch backfill of past intakes over a date range at fixed daily times (HRT tracker's "batch add"). History only, no stock change. */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable fun BatchAddDialog(meds: List<MedicationEntity>, timesFor: (MedicationEntity) -> List<LocalTime>, onDismiss: () -> Unit,
+                               onSave: (Long, LocalDate, LocalDate, List<LocalTime>, Double) -> Unit) {
+    var chosen by remember { mutableStateOf(meds.firstOrNull()) }
+    var from by remember { mutableStateOf(LocalDate.now().minusDays(13)) }
+    var to by remember { mutableStateOf(LocalDate.now()) }
+    var times by remember { mutableStateOf(chosen?.let(timesFor) ?: TWICE_DAILY) }
+    var dose by remember { mutableStateOf(chosen?.dose_per_intake?.let(::inputNumber) ?: "") }
+    var pickFrom by remember { mutableStateOf(false) }; var pickTo by remember { mutableStateOf(false) }; var addTime by remember { mutableStateOf(false) }
+    val doseV = dose.toDoubleOrNull()?.takeIf { it.isFinite() && it > 0 }
+    val now = Instant.now()
+    val count = if (to.isBefore(from)) 0 else generateSequence(from) { it.plusDays(1) }.takeWhile { !it.isAfter(to) }
+        .sumOf { d -> times.count { d.atTime(it).atZone(ZoneId.systemDefault()).toInstant().isBefore(now) } }
+    val rangeOk = !to.isBefore(from) && java.time.temporal.ChronoUnit.DAYS.between(from, to) <= net.plainnotes.app.data.BACKFILL_MAX_DAYS
+    AlertDialog(onDismissRequest = onDismiss, icon = { Icon(Icons.Outlined.Layers, null) }, title = { Text(stringResource(R.string.batch_add)) },
+        text = { Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            if (meds.size > 1) DropdownField(stringResource(R.string.medication), meds, chosen, { it.name }, { chosen = it; dose = inputNumber(it.dose_per_intake); times = timesFor(it) })
+            else chosen?.let { Text(it.name, style = MaterialTheme.typography.titleMedium) }
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                OutlinedButton(onClick = { pickFrom = true }, Modifier.weight(1f)) { Column { Text(stringResource(R.string.batch_from), style = MaterialTheme.typography.labelSmall); Text(formatShortDate(from)) } }
+                OutlinedButton(onClick = { pickTo = true }, Modifier.weight(1f)) { Column { Text(stringResource(R.string.batch_to), style = MaterialTheme.typography.labelSmall); Text(formatShortDate(to)) } }
+            }
+            if (!rangeOk) Text(stringResource(R.string.batch_range_error), color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+            Text(stringResource(R.string.batch_times), style = MaterialTheme.typography.labelLarge)
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                times.forEach { t -> InputChip(true, { times = times - t }, label = { Text(formatTime(t)) }, trailingIcon = { Icon(Icons.Outlined.Close, stringResource(R.string.remove), Modifier.size(16.dp)) }) }
+                AssistChip({ addTime = true }, label = { Text(stringResource(R.string.add_time)) }, leadingIcon = { Icon(Icons.Outlined.Add, null, Modifier.size(16.dp)) })
+            }
+            NumberField(dose, { dose = it }, stringResource(R.string.batch_dose), suffix = chosen?.let { unitLabel(it.unit) }, isError = doseV == null)
+            Text(stringResource(R.string.batch_summary, count), style = MaterialTheme.typography.bodyMedium)
+            Text(stringResource(R.string.batch_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        } },
+        confirmButton = { Button(enabled = chosen != null && doseV != null && rangeOk && times.isNotEmpty() && count > 0, onClick = { onSave(chosen!!.id, from, to, times.sorted(), doseV!!) }) { Text(stringResource(R.string.save)) } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } })
+    if (pickFrom) DatePickerModal(from, { pickFrom = false }) { from = it; pickFrom = false }
+    if (pickTo) DatePickerModal(to, { pickTo = false }) { to = it; pickTo = false }
+    if (addTime) TimePickerModal(LocalTime.of(12, 0), { addTime = false }) { if (it !in times) times = (times + it).sorted(); addTime = false }
+}
+
+/** Morning and evening: the "twice a day" quick fill used by the editor and batch add. */
+val TWICE_DAILY: List<LocalTime> = listOf(LocalTime.of(8, 0), LocalTime.of(20, 0))

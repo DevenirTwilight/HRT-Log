@@ -11,6 +11,8 @@ import javax.inject.Singleton
 
 /** Built-in well-being items, in display order. */
 val CHECKIN_DEFAULTS=listOf("OVERALL","MOOD","EMO_STABILITY","ENERGY","AGGRESSIVENESS","LIBIDO","PAIN","PERIOD_LIKE","APPETITE","SLEEP_QUALITY","SKIN_QUALITY")
+const val BACKFILL_MAX_DAYS=731L
+
 @Singleton class NotesRepository(private val access: DatabaseAccess, private val pinned: Space?) {
     @Inject constructor(access: DatabaseAccess) : this(access, null)
     /** A repository that always works on [space], whatever the UI has selected (used by background reminders). */
@@ -139,6 +141,37 @@ val CHECKIN_DEFAULTS=listOf("OVERALL","MOOD","EMO_STABILITY","ENERGY","AGGRESSIV
         val result=recordFor(dao,slot,status,taken,dose).copy(unallocated_supply_amount=dose,site=site?.takeIf{it.isNotBlank()})
         val id=if(existing==null)dao.record(result) else {dao.updateRecord(result.copy(id=existing.id,revision=existing.revision+1,config_snapshot=existing.config_snapshot));existing.id}
         SupplyLedger.allocate(dao,dao.recordById(id)!!)
+    }
+    /**
+     * Batch backfill ("batch add" in HRT tracker): one intake per day in [from]..[to] at each of [times], past instants only.
+     * An open scheduled slot at exactly that instant is completed; otherwise an unscheduled intake is added, unless the
+     * medication already has an intake within an hour of it. History only: no stock is deducted. Returns the count added.
+     */
+    suspend fun backfill(medicationId:Long,from:LocalDate,to:LocalDate,times:List<LocalTime>,dose:Double,now:Instant=Instant.now(),zone:ZoneId=ZoneId.systemDefault())=transaction { dao ->
+        require(dose.isFinite()&&dose>0&&!to.isBefore(from)&&times.isNotEmpty()&&java.time.temporal.ChronoUnit.DAYS.between(from,to)<=BACKFILL_MAX_DAYS)
+        reconcile(dao,now,zone)
+        val m=dao.medication(medicationId)
+        val instants=generateSequence(from){it.plusDays(1)}.takeWhile{!it.isAfter(to)}
+            .flatMap{d->times.distinct().sorted().map{ScheduleEngine.wallInstant(d.atTime(it),zone)}}.filter{it.isBefore(now)}.toList()
+        if(instants.isEmpty())return@transaction 0
+        val slots=timeline(dao,now,instants.first(),now.plusMillis(1),zone).filter{it.slot.medicationId==medicationId}.associateBy{it.slot.at}
+        val records=dao.records().filter{it.medication_id==medicationId&&it.deleted_at_utc==null}.toMutableList()
+        val taken=records.mapNotNull{it.taken_utc}.toMutableList()
+        val snap=JSONObject().put("name",m.name).put("molecule",m.molecule).put("route",m.route).put("unit",m.unit).put("ester",dao.profile(medicationId)?.ester).toString()
+        var added=0
+        instants.forEach { t ->
+            val slot=slots[t]?.slot
+            val existing=slot?.let{s->records.singleOrNull{it.slot_key==s.key}}
+            if(slot!=null&&existing?.status!in listOf("ON_TIME","LATE","SKIPPED")) {
+                val status=ScheduleEngine.complete(slot,t,zone,dose).status.name
+                val r=recordFor(dao,slot,status,t,dose)
+                if(existing==null)dao.record(r) else dao.updateRecord(r.copy(id=existing.id,revision=existing.revision+1,config_snapshot=existing.config_snapshot))
+            } else if(slot==null&&taken.none{kotlin.math.abs(it-t.toEpochMilli())<3_600_000}) {
+                dao.record(RecordEntity(medication_id=medicationId,taken_utc=t.toEpochMilli(),taken_zone=zone.id,actual_dose=dose,status="ON_TIME",origin="APP",revision=1,config_snapshot=snap))
+            } else return@forEach
+            taken+=t.toEpochMilli(); added++
+        }
+        added
     }
     suspend fun unscheduled(id:Long,taken:Instant,dose:Double,site:String?=null)=transaction { dao ->
         require(dose.isFinite()&&dose>0);val m=dao.medication(id)

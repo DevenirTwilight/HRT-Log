@@ -490,4 +490,22 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="simple_mode">Simple mode</string>
 <string name="simple_mode_desc">Hides item names and pickers when you track a single item</string>
 <string name="simple_mode_unavailable">Available when only one item is active</string>
+<string name="batch_add">Batch add</string>
+<string name="batch_done">Added %1$d intakes</string>
+<string name="batch_dose">Dose each time</string>
+<string name="batch_from">From</string>
+<string name="batch_note">Fills in history for the concentration estimate; stock is not changed. Times within an hour of an existing intake are skipped.</string>
+<string name="batch_range_error">The end date must be on or after the start date, at most two years later.</string>
+<string name="batch_summary">Adds up to %1$d intakes (past times only).</string>
+<string name="batch_times">Times each day</string>
+<string name="batch_to">To</string>
+<string name="history_add">Log intake</string>
+<string name="history_dose">Dose: %1$s</string>
+<string name="history_e2_eq">(%1$s mg E2)</string>
+<string name="history_planned_dose_label">Planned: %1$s</string>
+<string name="history_title">Intake log</string>
+<string name="history_unscheduled_short">Unscheduled</string>
+<string name="quick_fill">Quick fill</string>
+<string name="quick_once_daily">Once a day</string>
+<string name="quick_twice_daily">Morning and evening</string>
 </resources>
