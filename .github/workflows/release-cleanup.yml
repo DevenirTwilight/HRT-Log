@@ -1,0 +1,22 @@
+name: One-off release cleanup (removed in the next commit)
+on:
+  push:
+    branches: [claude/new-session-1959qb]
+    paths: [.github/workflows/release-cleanup.yml]
+permissions:
+  contents: write
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+    steps:
+      - name: Delete the temporary upload branch
+        run: gh api -X DELETE "repos/$REPO/git/refs/heads/release-upload-build5" || echo "branch already gone"
+      - name: Point v0.2.0 at the build 5 source
+        run: |
+          gh api -X PATCH "repos/$REPO/git/refs/tags/v0.2.0" -f sha=462da22e064b97a7799c87770ea49ebeb9521e5c -F force=true \
+            && echo "TAG_MOVED" || echo "TAG_NOT_MOVED"
+          gh api "repos/$REPO/git/refs/tags/v0.2.0" --jq .object.sha
