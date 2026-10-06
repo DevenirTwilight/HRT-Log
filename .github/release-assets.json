@@ -1,0 +1,15 @@
+{
+  "release_id": 404602730,
+  "tag": "v0.2.0",
+  "source_commit": "fcca5590679073820df0fe0d2c9f308941400c30",
+  "assets": [
+    {
+      "name": "SIGNING_CERTIFICATE.txt",
+      "size": 387,
+      "sha256": "63d5e152308b99693f8ca551d2bde866889a843eb410f8a52174b4989270cdde",
+      "blobs": [
+        "f294cfb3acfd3e74008e909e9006993f612163b6"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+name: Upload verified release assets
+on:
+  push:
+    branches: [claude/new-session-1959qb]
+    paths:
+      - .github/release-assets.json
+      - .github/workflows/release-assets.yml
+      - scripts/upload_release_assets.py
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: release-assets
+  cancel-in-progress: false
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Verify binaries and upload to draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/upload_release_assets.py
