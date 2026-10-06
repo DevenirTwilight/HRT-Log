@@ -8,57 +8,27 @@
     {
       "name": "plainnotes-0.2.0-full.apk",
       "size": 23002192,
-      "sha256": "54774fa744d741f8c6e3538119b2072e4a900a0e1f65af08aa1d0ce331d2245c",
-      "blobs": [
-        "ffae79bdc6cd21a2197c1bb90cdd172161838197",
-        "46a246a475e0c5e1c74098939f8d164e49789659",
-        "7b7c0960e7163270aa3206a0fb4fa649fc6fa918",
-        "35c8ffb0bcce2f0d3ed7ae1e96aca980bf78017e",
-        "922e0df983fd4a1dd2da1447ad87a1948215b73b",
-        "0fac6c0f48476e35c28f47d16eb641c395ad28fc",
-        "3c85cfbf7cbe85937d6ba8a0d134cf41cba6566c",
-        "5df4cc48dd474f4aec87e316a08e7ffe6327b9db"
-      ]
+      "sha256": "54774fa744d741f8c6e3538119b2072e4a900a0e1f65af08aa1d0ce331d2245c"
     },
     {
       "name": "plainnotes-0.2.0-play.apk",
       "size": 22915840,
-      "sha256": "8ec2bf7b1bb1a5fb0dbf30256e84e6dca6c81015632b9e3e177da8bb809e67e3",
-      "blobs": [
-        "99bc7e17cd2ce995bf9c0c94c243534dae97b9fd",
-        "79a0d94b7efa7adc374eb4447f61cd1abf483210",
-        "e79f998cba8242f34fb4e3b45397ba3898b84338",
-        "0c86b6dc8f6e675614dc0f9f871b4924c52b05b8",
-        "6a082c0d8655d47f095f028f9d7b411da7fabda3",
-        "2af7c07a988a114c3636b5c4d4abff8e966432b5",
-        "3ba9ef5aa014217dacdcfd7f9d1910873e99881c",
-        "865e104b000880bb956c43897077bc033c63254e"
-      ]
+      "sha256": "8ec2bf7b1bb1a5fb0dbf30256e84e6dca6c81015632b9e3e177da8bb809e67e3"
     },
     {
       "name": "SIGNING_CERTIFICATE.txt",
       "size": 358,
-      "sha256": "00669b6875a13d6eef258adfe4d67ad5f2955440d00a167e9d10a18119a0c004",
-      "blobs": [
-        "a76c217c827a9aefab518e0773d4da52d3f93b49"
-      ]
+      "sha256": "00669b6875a13d6eef258adfe4d67ad5f2955440d00a167e9d10a18119a0c004"
     },
     {
       "name": "THIRD_PARTY_NOTICES.md",
       "size": 1356,
-      "sha256": "c8e18578f29994473542fafe7777cb6939899e3ea814acee171efd469d9a17b8",
-      "blobs": [
-        "86db72518f845120e3edb656b700ed02f89ebb6c"
-      ]
+      "sha256": "c8e18578f29994473542fafe7777cb6939899e3ea814acee171efd469d9a17b8"
     },
     {
       "name": "SHA256SUMS.txt",
       "size": 363,
-      "sha256": "55113778391263ecdcedd2e183b7ab2b3b69c8467260dec6d2408ce5f2165710",
-      "blobs": [
-        "910559152c938c43fc50fd656d3dc68b5c1e2af1"
-      ]
+      "sha256": "55113778391263ecdcedd2e183b7ab2b3b69c8467260dec6d2408ce5f2165710"
     }
-  ],
-  "replacement_authorized": true
+  ]
 }

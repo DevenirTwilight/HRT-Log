@@ -21,7 +21,7 @@
 | M6 应用锁、隐蔽通知、精简模式、多语言、对比度 | 完成 |
 | M7 伪装模式（仅 full 变体） | 新私人便签实现与本地完整/原生/进程重启验证完成，见 2e；待 OEM 真机复核 |
 | 日历改版（日/周/月/年视图、库存预计） | 完成 |
-| 版本 | 用户已授权 0.2.0 紧急修复（versionCode 4），正在构建并替换现有 Release；见 2f |
+| 版本 | 0.2.0 紧急修复（versionCode 4）已替换原公开 Release；同一正式签名，见 2f |
 
 ## 2. 当前任务（`docs/REQUIREMENTS.md` 第 4 节）的进度
 
@@ -132,7 +132,19 @@
 
 ### 2f. 0.2.0 紧急修复发布（2026-10-06）
 
-用户最新授权替换现有 Release（REQUIREMENTS §12），覆盖此前不发布限制。版本名 0.2.0、内部构建 4；代码保留全部已通过检查的修复。已确认原 Release id 404602730/tag v0.2.0，并从已验证为 Private 的签名备份仓库恢复既有密钥到公开仓库之外的受限目录。没有新生成密钥。接下来构建 full/play release、正式签名及证书/包名/版本/无网络/非调试/16KB 校验，通过后替换 APK 和三语说明、更新标签及发布校验清单。本地 full/play release 构建通过（8m26s），签名后证书/0.2.0 build4/非调试/无网络/ZIP及ELF 16KB校验通过。直接 gh 上传遇到已知 Bad Content-Length，clobber 已移除 full APK 和 SHA256SUMS 原附件，play/其他原附件仍在；原附件完整备份于仓库外。正在采用已有 Git blob 分块 + Actions 上传方式恢复完整 hotfix 下载：只有签名后的公开 APK/通知/摘要进入 blob，无私钥或密码。应用树不提交二进制文件。上传 workflow 同时更新 tag/三语说明、移除过时上游许可附件、下载回查摘要。成功后移除一次性 replacement_authorized，降为只读验证。
+已完成用户授权的替换（REQUIREMENTS §12）：[原 0.2.0 Release](https://github.com/DevenirTwilight/HRT-Log/releases/tag/v0.2.0)，id 404602730，名称为 emergency hotfix/build 4。`versionName=0.2.0`、`versionCode=4`，代码不回退；应用构建源码和 v0.2.0 标签均为 `c52c8518c40727ff4f5b0316670e109551886f93`。标签原指向 `78d25e23bc7dd2808b03e45653c326ccb5d1c7e8`，按本轮替换授权已更新；旧历史仍保留。
+
+full/play release 本地构建成功（8m26s）；签名证书与原正式版完全一致，第 7 节私有备份不变。签名后核对包名、0.2.0/build4、非调试、无 INTERNET、ZIP 和所有 native ELF 16KB 对齐。数据库 schema 仍为 1，与原 tag 无差异；正式版可覆盖安装，不能因此保证未做真机安装测试的 OEM 行为。调试签名 CI 安装仍须先成功导出加密备份再换装；正式版不要卸载或清数据。
+
+[应用源码完整 CI 37510874945](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37510874945) 的 JVM、Android、原生任务全部 success。沿用并再次验证此前 200 项单元通过、2 PDF 跳过、28 项实际原生用例、四构建和 lint/Manifest 检查。三语说明记录此次包含独立文献引擎，估算可能与原包不同，不虚称取得旧上游授权。
+
+直接 gh 上传遇到已知 Bad Content-Length；采用既有 Git blob 分块 + Actions 只上传已签名的公开文件，无私钥/密码，不向应用文件树提交 APK。Actions 已上传完整附件，但更新含 workflow 历史的 tag 时收到 403；随后通过当前已登录且有权限的用户连接完成 tag/说明更新和旧 UPSTREAM_LICENSE.txt 附件移除。本地从公开 Release 下载五份新附件逐个核对大小/SHA-256，全部通过。上传辅助随后关闭为只读验证，contents 权限降为 read；旧 blob 上传入口不会重放。
+
+- full APK：23,002,192 bytes，SHA-256 `54774fa744d741f8c6e3538119b2072e4a900a0e1f65af08aa1d0ce331d2245c`。
+- play APK：22,915,840 bytes，SHA-256 `8ec2bf7b1bb1a5fb0dbf30256e84e6dca6c81015632b9e3e177da8bb809e67e3`。
+- 同步替换 SHA256SUMS、SIGNING_CERTIFICATE、THIRD_PARTY_NOTICES；最新完整清单在 `.github/release-assets.json`。
+- 本地原附件备份在公开仓库外 `/workspace/release-hotfix/prior`；既有正式密钥备份位置仍见第 7 节。本轮临时恢复的密钥/密码/ZIP 在签名完成后删除，不触碰永久私有备份。
+- 只读附件校验 CI 待最后记录。后续发布必须提高 versionCode；版本名回到 0.2.0 不是内部编号或代码回退。
 
 ## 3. 代码结构
 
@@ -162,7 +174,7 @@
   2026-10-06 最新全量结果：202 项单元测试，200 通过、2 项 PDF 写入跳过，0 失败；lint 0 错误（full 63 / play 58 条既有警告）；本次原生与四构建最终结果见 2e。
 - CI：`.github/workflows/android.yml`（jvm、android、device-tests 三个任务）。android 任务把所有 APK 上传为 `build-results` 产物；可安装的是 `apk/full/debug/app-full-debug.apk`。
 - 签名：debug 继续使用公开的 `app/debug.keystore`，仅供调试。0.2.0 的正式发布使用新生成的独立私有密钥，保存在仓库外，私有备份已按产品负责人授权存入专用私有仓库，位置与恢复步骤见第 7 节；不得上传为公开附件或提交到公开应用仓库。正式包不能覆盖旧调试签名安装，必须先导出加密备份，再换装与恢复。后续正式更新必须沿用同一私有密钥。
-- 发布附件工作流：`.github/workflows/release-assets.yml` 根据 `.github/release-assets.json` 从 Git blob 取回已在本地签名的 APK，校验 SHA-256、大小后上传到草稿 Release；工作流不接触签名密钥、不自动公开 Release。这样避免当前开发环境的二进制上传 `Bad Content-Length` 错误。
+- 发布附件工作流现为只读验证：`.github/workflows/release-assets.yml` 根据 `.github/release-assets.json` 下载现有公开附件核对 SHA-256/大小/源码 tag，不上传或改动 Release；此前 Git blob 上传仅用于已完成的紧急替换。
 - 截图测试：`ScreenshotTest`、`ShellScreenshotTest` 输出到 `app/build/screenshots/`。在 Robolectric 里，对话框中的 TextField 在手机尺寸限定符下不会进入空闲状态，所以对话框的交互测试使用默认屏幕尺寸（见 `HtImportWizardTest`）。
 - 翻译：新增文字要同时加到 `values`、`values-zh`、`values-b+zh+Hant`、`values-fr`（app、app/src/full、core/reminder 各自的 res 目录），`TranslationsTest` 会检查各语言的键和占位符是否一致。
 

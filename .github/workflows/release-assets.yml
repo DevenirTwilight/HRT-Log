@@ -1,4 +1,4 @@
-name: Publish and verify authorized hotfix assets
+name: Verify published release assets
 on:
   push:
     branches: [claude/new-session-1959qb]
@@ -8,7 +8,7 @@ on:
       - scripts/upload_release_assets.py
   workflow_dispatch:
 permissions:
-  contents: write
+  contents: read
 concurrency:
   group: release-assets
   cancel-in-progress: false
@@ -21,7 +21,7 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - name: Upload authorized signed assets and verify hashes/source tag
+      - name: Verify published hotfix hashes and source tag
         env:
           GH_TOKEN: ${{ github.token }}
         run: python3 scripts/upload_release_assets.py
