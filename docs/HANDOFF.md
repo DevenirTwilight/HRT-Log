@@ -244,4 +244,5 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 **公开 Release 已替换为 build 5（2026-10-06，用户授权）**：
 - 方法：本环境没有可用的 GitHub 登录，所以把已签名的 full/play APK、SHA256SUMS 和说明放在临时孤立分支 `release-upload-build5`，由只在该分支运行的工作流（GITHUB_TOKEN，contents: write）删除旧的三个附件、上传新的并更新说明，再下载回查（[run 37524801315](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37524801315)）。会话的 git 代理不允许删除其他分支或推送标签（403），所以用一次性工作流（[run 37525061741](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37525061741)，随后删除）删除了临时分支，并把 `v0.2.0` 标签移到 build 5 源码 `462da22`。临时分支中的 APK 是公开发布文件，不含密钥或密码；分支已删除。
 - 本机从公开下载地址独立回查：两个 APK 与 SHA256SUMS 一致；标题“HRT Log 0.2.0”，说明为 build 5，`SIGNING_CERTIFICATE.txt`、`THIRD_PARTY_NOTICES.md` 未变。`.github/release-assets.json` 已更新（source 462da22、versionCode 5、新大小/哈希），由只读校验工作流验证。
+- **真机确认（2026-10-06）**：用户已覆盖安装 build 5，恢复修复备份后显示正常。
 - 以后再发布：提高 versionCode；可沿用同一临时分支+工作流的方法，结束后删除分支和一次性工作流。
