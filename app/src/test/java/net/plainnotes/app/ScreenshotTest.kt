@@ -30,8 +30,8 @@ class ScreenshotTest {
 
     private fun med(id: Long, name: String, molecule: String, route: String?, unit: String, dose: Double) =
         MedicationEntity(id, name, molecule, route, unit, dose, 30.0, null, 15, 120, false, null, true, true, id.toInt())
-    private val meds = listOf(med(1, "Progynova", "E2", "SUBLINGUAL", "MG", 2.0), med(2, "Androcur", "CPA", null, "MG", 12.5), med(3, "Gynokadin", "E2", "GEL", "MG", 1.5))
-    private val profiles = mapOf(1L to ProfileEntity(1, "EV", "sublingual", 2), 3L to ProfileEntity(3, "E2", "gel", null, 1, "ARM", 750.0))
+    private val meds = listOf(med(1, "Progynova", "E2", "ORAL", "MG", 2.0), med(2, "Androcur", "CPA", null, "MG", 12.5), med(3, "Gynokadin", "E2", "GEL", "MG", 1.5))
+    private val profiles = mapOf(1L to ProfileEntity(1, "EV", "oral"), 3L to ProfileEntity(3, "E2", "gel", null, 1, "ARM", 750.0))
 
     private fun slot(med: Long, at: Instant, dose: Double, state: SlotState, original: Instant = at) =
         TimelineEntry(Slot("wall:$med@$at", med, med, original, at, zone, dose, 15, 120, at.minusSeconds(86400 * 30)), state)
@@ -54,11 +54,11 @@ class ScreenshotTest {
     private fun concResult(): net.plainnotes.app.conc.ConcentrationResult {
         val records = (0 until 40).flatMap { i ->
             val t = now.minusSeconds(((40 - i) * 12L) * 3600)
-            listOf(RecordEntity(i.toLong() + 1, 1, taken_utc = t.toEpochMilli(), taken_zone = zone.id, actual_dose = 2.0, status = "ON_TIME", origin = "APP", revision = 1, config_snapshot = "{}"))
+            listOf(RecordEntity(i.toLong() + 1, 1, taken_utc = t.toEpochMilli(), taken_zone = zone.id, actual_dose = 2.0, status = "ON_TIME", origin = "APP", revision = 1, config_snapshot = "{}")) + (if (i % 2 == 0) listOf(RecordEntity(i.toLong() + 1000, 2, taken_utc = t.toEpochMilli(), taken_zone = zone.id, actual_dose = 12.5, status = "ON_TIME", origin = "APP", revision = 1, config_snapshot = "{}")) else emptyList())
         }
         val planned = (1..20).map { slot(1, now.plusSeconds(it * 12L * 3600), 2.0, SlotState.PENDING) }
         val labs = listOf(LabValueEntity(1, "E2", 160.0, "pg/mL", now.minusSeconds(9 * 86400).toEpochMilli(), zone.id), LabValueEntity(2, "E2", 520.0, "pmol/L", now.minusSeconds(3 * 86400 + 5 * 3600).toEpochMilli(), zone.id, 0.0, 600.0, "pmol/L"))
-        return ConcentrationCalculator.compute(meds.take(1), profiles, records, planned, labs, 62.0, now)
+        return ConcentrationCalculator.compute(meds.take(2), profiles, records, planned, labs, 62.0, now)
     }
 
     private fun shoot(name: String, content: @Composable () -> Unit) {

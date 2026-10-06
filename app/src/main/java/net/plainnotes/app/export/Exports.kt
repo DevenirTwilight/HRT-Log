@@ -125,7 +125,7 @@ object PdfReport {
             }
         }
         y += 8f
-        if (conc != null && conc.timeH.isNotEmpty()) {
+        if (conc != null && conc.timeH.isNotEmpty() && conc.models.containsKey(net.plainnotes.app.pk.Curve.E2)) {
             if (y + 260f > H - 48f) newPage()
             text(context.getString(R.string.report_conc_title), head)
             text(context.getString(R.string.pk_disclaimer_short), small)
@@ -149,14 +149,14 @@ object PdfReport {
     private fun drawChart(c: Canvas, r: ConcentrationResult, x: Float, y: Float, w: Float, h: Float, startH: Double, endH: Double) {
         val idx = r.timeH.indices.filter { r.timeH[it] in startH..endH }
         if (idx.size < 2) return
-        val maxY = (idx.maxOf { r.ci95?.second?.get(it) ?: r.e2[it] }.coerceAtLeast(1.0)) * 1.1
+        val maxY = (idx.maxOf { r.bandOuter?.second?.get(it) ?: r.e2[it] }.coerceAtLeast(1.0)) * 1.1
         val axis = Paint().apply { color = Color.LTGRAY; strokeWidth = 0.7f }
         val label = Paint().apply { color = Color.DKGRAY; textSize = 8f; isAntiAlias = true }
         c.drawLine(x, y + h, x + w, y + h, axis); c.drawLine(x, y, x, y + h, axis)
         listOf(0.0, maxY / 2, maxY).forEach { v -> c.drawText("${v.toInt()} pg/mL", x + 2, (y + h - v / maxY * h).toFloat() - 2, label) }
         fun px(t: Double) = (x + (t - startH) / (endH - startH) * w).toFloat()
         fun py(v: Double) = (y + h - v / maxY * h).toFloat()
-        r.ci95?.let { (lo, hi) -> val band = Path(); var first = true
+        r.bandOuter?.let { (lo, hi) -> val band = Path(); var first = true
             idx.forEach { i -> if (first) { band.moveTo(px(r.timeH[i]), py(hi[i])); first = false } else band.lineTo(px(r.timeH[i]), py(hi[i])) }
             idx.reversed().forEach { i -> band.lineTo(px(r.timeH[i]), py(lo[i])) }; band.close()
             c.drawPath(band, Paint().apply { color = Color.argb(40, 0, 0x6A, 0x63); style = Paint.Style.FILL }) }

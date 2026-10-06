@@ -1,6 +1,7 @@
 package net.plainnotes.app.ui
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -17,7 +18,13 @@ import net.plainnotes.app.NotesState
 import net.plainnotes.app.R
 import net.plainnotes.app.conc.ConcentrationResult
 import net.plainnotes.app.conc.MissingInput
+import net.plainnotes.app.pk.BandedCurve
 import net.plainnotes.app.pk.CalibrationMode
+import net.plainnotes.app.pk.Curve
+import net.plainnotes.app.pk.CurveFlag
+import net.plainnotes.app.pk.FittedModel
+import net.plainnotes.app.pk.PkParams
+import net.plainnotes.app.pk.Unsupported
 import net.plainnotes.app.pk.Pk
 import kotlin.math.roundToInt
 
@@ -39,7 +46,7 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
             }
         }
         val missing = result?.missing.orEmpty()
-        if (weight == null) SectionCard(stringResource(R.string.pk_need_weight_title)) {
+        if (missing.any { it.medicationId == null && it.input == MissingInput.WEIGHT }) SectionCard(stringResource(R.string.pk_need_weight_title)) {
             Text(stringResource(R.string.pk_need_weight_body), style = MaterialTheme.typography.bodyMedium)
             Button(onClick = { editWeight = true }) { Text(stringResource(R.string.pk_set_weight)) }
         }
@@ -57,9 +64,17 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
                 }
             }
         }
-        if (state.medications.none { it.molecule == "E2" }) EmptyState(Icons.AutoMirrored.Outlined.ShowChart, stringResource(R.string.pk_no_e2_title), stringResource(R.string.pk_no_e2_body))
+        val unsupported = result?.unsupported.orEmpty()
+        if (unsupported.isNotEmpty()) SectionCard(stringResource(R.string.pk_unsupported_title)) {
+            unsupported.forEach { (id, why) ->
+                val med = state.medications.firstOrNull { it.id == id } ?: return@forEach
+                Text(med.name, style = MaterialTheme.typography.titleSmall)
+                Text(unsupportedLabel(why), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+        }
+        if (state.medications.none { it.molecule in listOf("E2", "CPA", "SPI", "P4") }) EmptyState(Icons.AutoMirrored.Outlined.ShowChart, stringResource(R.string.pk_no_e2_title), stringResource(R.string.pk_no_e2_body))
 
-        if (result != null && result.timeH.isNotEmpty()) {
+        if (result != null && result.timeH.isNotEmpty() && result.models.containsKey(Curve.E2)) {
             ElevatedCard(Modifier.fillMaxWidth(), colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.primaryContainer), elevation = CardDefaults.elevatedCardElevation(0.dp)) {
                 Column(Modifier.padding(20.dp)) {
                     Text(stringResource(R.string.pk_current), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onPrimaryContainer)
@@ -68,7 +83,7 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
                         Spacer(Modifier.width(6.dp))
                         Text(unit, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onPrimaryContainer, modifier = Modifier.padding(bottom = 8.dp))
                     }
-                    val calibrated = result.ci95 != null
+                    val calibrated = result.calibration != null
                     Text(stringResource(if (calibrated) R.string.pk_basis_calibrated else R.string.pk_basis_population, result.usedDoses),
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onPrimaryContainer)
                     if (result.skippedDoses > 0) Text(stringResource(R.string.pk_skipped_doses, result.skippedDoses), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onPrimaryContainer)
@@ -85,8 +100,8 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
                     }
                 }
                 val data = ChartData(result.timeH, DoubleArray(result.e2.size) { result.e2[it] * factor },
-                    result.ci68?.let { (l, h) -> DoubleArray(l.size) { l[it] * factor } to DoubleArray(h.size) { h[it] * factor } },
-                    result.ci95?.let { (l, h) -> DoubleArray(l.size) { l[it] * factor } to DoubleArray(h.size) { h[it] * factor } },
+                    result.bandInner?.let { (l, h) -> DoubleArray(l.size) { l[it] * factor } to DoubleArray(h.size) { h[it] * factor } },
+                    result.bandOuter?.let { (l, h) -> DoubleArray(l.size) { l[it] * factor } to DoubleArray(h.size) { h[it] * factor } },
                     result.nowH, result.labs.map { it.first to it.second * factor }, unit = unit)
                 key(rangeDays) {
                     ConcChart(data, result.nowH - rangeDays * 24 * 0.75, result.nowH + rangeDays * 24 * 0.25, Modifier.fillMaxWidth().height(260.dp)) { (it).roundToInt().toString() }
@@ -95,8 +110,10 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
                     Legend(stringResource(R.string.legend_recorded), MaterialTheme.colorScheme.primary, dashed = false)
                     Legend(stringResource(R.string.legend_forecast), MaterialTheme.colorScheme.primary, dashed = true)
                     if (result.labs.isNotEmpty()) Legend(stringResource(R.string.legend_labs), MaterialTheme.colorScheme.tertiary, dot = true)
-                    if (result.ci95 != null) Legend(stringResource(R.string.legend_band), MaterialTheme.colorScheme.primary.copy(alpha = 0.25f), block = true)
+                    if (result.bandInner != null) Legend(stringResource(R.string.legend_band_inner), MaterialTheme.colorScheme.primary.copy(alpha = 0.3f), block = true)
+                    if (result.bandOuter != null) Legend(stringResource(R.string.legend_band_outer), MaterialTheme.colorScheme.primary.copy(alpha = 0.15f), block = true)
                 }
+                FlagNotes(result.flags[Curve.E2].orEmpty())
                 Text(stringResource(R.string.pk_chart_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(stringResource(R.string.pk_unit), Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
@@ -107,8 +124,10 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
                 }
             }
         } else if (loading) Box(Modifier.fillMaxWidth().padding(32.dp), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
-        else if (weight != null && result != null && result.simulatedMedications.isNotEmpty())
+        else if (result != null && result.simulatedMedications.isNotEmpty() && result.others.isEmpty())
             EmptyState(Icons.AutoMirrored.Outlined.ShowChart, stringResource(R.string.pk_no_doses_title), stringResource(R.string.pk_no_doses_body))
+
+        if (result != null && result.others.isNotEmpty()) OtherCurvesCard(result)
 
         CalibrationCard(result, settings, onSettings, onOpenLabs, ::fmt, unit)
 
@@ -125,6 +144,7 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
             Text(stringResource(R.string.pk_assumptions), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Text(stringResource(R.string.pk_source), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
+        if (result != null && result.models.isNotEmpty()) ModelsCard(result.models)
     }
     if (editWeight) WeightDialog(weight, { editWeight = false }) { onWeight(it); editWeight = false }
 }
@@ -142,8 +162,8 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
                 Metric(stringResource(R.string.calib_convergence), "${((s.diagnostics?.convergenceScore ?: 0.0) * 100).roundToInt()}%", Modifier.weight(1f))
             }
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                Metric(stringResource(R.string.calib_amplitude), "×" + displayNumber(kotlin.math.exp(m.thetaS), 2), Modifier.weight(1f))
-                Metric(stringResource(R.string.calib_clearance), "×" + displayNumber(kotlin.math.exp(m.thetaK), 2), Modifier.weight(1f))
+                Metric(stringResource(R.string.calib_amplitude), "×" + displayNumber(kotlin.math.exp(m.logAmplitude), 2), Modifier.weight(1f))
+                Metric(stringResource(R.string.calib_clearance), "×" + displayNumber(kotlin.math.exp(m.logRate), 2), Modifier.weight(1f))
             }
             m.baselinePGmL?.let { Text(stringResource(R.string.calib_baseline, fmt(it), unit), style = MaterialTheme.typography.bodySmall) }
             s.diagnostics?.takeIf { m.postDoseObservationCount > 0 }?.let { d ->
@@ -190,7 +210,94 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
     MissingInput.WEIGHT -> R.string.missing_weight; MissingInput.ROUTE_OR_ESTER -> R.string.missing_route; MissingInput.UNIT_NOT_MG -> R.string.missing_unit_mg
     MissingInput.PATCH_RELEASE -> R.string.missing_patch_release; MissingInput.PATCH_UNIT -> R.string.missing_patch_unit; MissingInput.GEL_PRODUCT -> R.string.missing_gel_product
     MissingInput.GEL_SITE -> R.string.missing_gel_site; MissingInput.GEL_AREA -> R.string.missing_gel_area; MissingInput.SL_TIER -> R.string.missing_sl_tier
+    MissingInput.ROUTE_NOT_MODELLED -> R.string.missing_route_not_modelled
 })
+
+@Composable fun unsupportedLabel(u: Unsupported) = stringResource(when (u) {
+    Unsupported.SUBLINGUAL_EV -> R.string.unsupported_sl_ev; Unsupported.NO_LITERATURE_ESTER -> R.string.unsupported_ester
+    Unsupported.NO_LITERATURE_ROUTE -> R.string.unsupported_route; Unsupported.BICALUTAMIDE -> R.string.unsupported_bica
+    Unsupported.PATCH_WITHOUT_RATE -> R.string.unsupported_patch_rate
+})
+
+@Composable fun curveLabel(c: Curve) = stringResource(when (c) {
+    Curve.E2 -> R.string.pk_chart_title; Curve.CPA -> R.string.choice_cpa; Curve.SPIRONOLACTONE -> R.string.choice_spi
+    Curve.CANRENONE -> R.string.curve_canrenone; Curve.PROGESTERONE -> R.string.choice_p4
+})
+
+@Composable private fun FlagNotes(flags: Set<CurveFlag>) {
+    flags.sortedBy { it.ordinal }.forEach { f ->
+        Text(stringResource(when (f) {
+            CurveFlag.EXTRAPOLATED_TIER -> R.string.flag_extrapolated_tier; CurveFlag.EXTRAPOLATED_AFTER_CALIBRATED_HOURS -> R.string.flag_after_8h
+            CurveFlag.NO_PRODUCT_DATA -> R.string.flag_no_product_data; CurveFlag.ILLUSTRATIVE -> R.string.flag_illustrative
+        }), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
+    }
+}
+
+/** CPA, spironolactone, canrenone and progesterone: one chart at a time, each with its own unit and axis. */
+@Composable private fun OtherCurvesCard(result: ConcentrationResult) {
+    val curves = result.others.keys.sortedBy { it.ordinal }
+    var selected by remember(curves) { mutableStateOf(curves.first()) }
+    var rangeDays by remember { mutableIntStateOf(14) }
+    SectionCard(stringResource(R.string.pk_other_title)) {
+        Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            curves.forEach { c -> FilterChip(selected == c, { selected = c }, label = { Text(curveLabel(c)) }) }
+        }
+        val b: BandedCurve = result.others.getValue(selected)
+        val data = ChartData(b.timeH, b.center, b.p25 to b.p75, b.p5 to b.p95, result.nowH, unit = selected.unit)
+        SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
+            listOf(7, 14, 60).forEachIndexed { i, d -> SegmentedButton(rangeDays == d, { rangeDays = d }, SegmentedButtonDefaults.itemShape(i, 3)) { Text(stringResource(R.string.days_short, d)) } }
+        }
+        val loc = currentLocale()
+        val nf = remember(loc) { java.text.NumberFormat.getNumberInstance(loc).apply { maximumFractionDigits = 1; isGroupingUsed = false } }
+        key(selected, rangeDays) {
+            ConcChart(data, result.nowH - rangeDays * 24 * 0.75, result.nowH + rangeDays * 24 * 0.25, Modifier.fillMaxWidth().height(220.dp)) { v ->
+                if (v >= 10) v.roundToInt().toString() else nf.format(v) }
+        }
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Legend(stringResource(R.string.legend_band_inner), MaterialTheme.colorScheme.primary.copy(alpha = 0.3f), block = true)
+            Legend(stringResource(R.string.legend_band_outer), MaterialTheme.colorScheme.primary.copy(alpha = 0.15f), block = true)
+        }
+        FlagNotes(result.flags[selected].orEmpty())
+        when (selected) {
+            Curve.CPA -> R.string.note_cpa; Curve.SPIRONOLACTONE, Curve.CANRENONE -> R.string.note_spi; Curve.PROGESTERONE -> R.string.note_p4; else -> null
+        }?.let { Text(stringResource(it), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
+    }
+}
+
+@Composable fun modelLabel(key: String) = stringResource(when (key) {
+    "EV_ORAL" -> R.string.model_ev_oral; "E2_ORAL" -> R.string.model_e2_oral; "CPA_ORAL" -> R.string.model_cpa_oral; "E2_PATCH" -> R.string.model_e2_patch
+    "E2_GEL_ESTROGEL" -> R.string.model_gel_estrogel; "E2_GEL_DIVIGEL" -> R.string.model_gel_divigel; "E2_GEL_OTHER" -> R.string.model_gel_other
+    "EV_IM" -> R.string.model_ev_im; "E2_SL" -> R.string.model_e2_sl; "SPI_PARENT" -> R.string.model_spi_parent; "SPI_CANRENONE" -> R.string.model_spi_canrenone
+    "P4_ORAL" -> R.string.model_p4_oral; else -> R.string.choice_other
+})
+
+/** Every curve's model, its fitted numbers and the literature it was fitted to. */
+@Composable private fun ModelsCard(models: Map<Curve, Set<FittedModel>>) {
+    var open by remember { mutableStateOf<String?>(null) }
+    SectionCard(stringResource(R.string.pk_models_title)) {
+        Text(stringResource(R.string.pk_models_intro, PkParams.version), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        models.values.flatten().distinctBy { it.key }.sortedBy { it.key }.forEach { m ->
+            HorizontalDivider()
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(modelLabel(m.key), style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f))
+                TextButton(onClick = { open = if (open == m.key) null else m.key }) { Text(stringResource(if (open == m.key) R.string.pk_model_hide else R.string.pk_model_show)) }
+            }
+            val nf = java.text.NumberFormat.getNumberInstance(currentLocale()).apply { maximumFractionDigits = 1; isGroupingUsed = false }
+            val halfLives = m.terms.joinToString(" / ") { nf.format(kotlin.math.ln(2.0) / it.second) }
+            Text(stringResource(R.string.pk_model_params, displayNumber(m.ka, 3), halfLives, (m.cv * 100).roundToInt(), m.unit), style = MaterialTheme.typography.bodySmall)
+            if (open == m.key) {
+                Text(m.assumption, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                if (m.cvSource.isNotEmpty()) Text("CV: " + m.cvSource, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                m.basis.forEach { b ->
+                    val ref = PkParams.reference(b.substringBefore(" ("))
+                    val cite = ref?.let { "${it.optString("authors")} (${it.optString("year")}). ${it.optString("title")}. ${it.optString("journal")}" + (it.optString("pmid").takeIf { p -> p.isNotEmpty() }?.let { p -> " PMID $p" } ?: "") }
+                    Text("• " + (cite ?: b), style = MaterialTheme.typography.bodySmall)
+                    if (ref != null && b.contains(" (")) Text("  " + b.substringAfter(" (").removeSuffix(")"), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
+        }
+    }
+}
 
 @Composable fun WeightDialog(current: Double?, onDismiss: () -> Unit, onSave: (Double) -> Unit) {
     var text by remember { mutableStateOf(current?.let(::inputNumber) ?: "") }

@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.ui.semantics.Role
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
@@ -27,7 +29,10 @@ class Analyte(val code: String, val units: List<Pair<String, Double>>)
 val ANALYTES = listOf(
     Analyte("E2", listOf("pg/mL" to 1.0, "pmol/L" to 3.671)),
     Analyte("T", listOf("ng/dL" to 1.0, "nmol/L" to 0.03467)),
+    // Progesterone by assay method: results from different methods never share a chart. "P4" = method unknown (also imports).
     Analyte("P4", listOf("ng/mL" to 1.0, "nmol/L" to 3.18)),
+    Analyte("P4_IA", listOf("ng/mL" to 1.0, "nmol/L" to 3.18)),
+    Analyte("P4_MS", listOf("ng/mL" to 1.0, "nmol/L" to 3.18)),
     Analyte("PRL", listOf("ng/mL" to 1.0, "mIU/L" to 21.2)),
     Analyte("LH", listOf("IU/L" to 1.0)), Analyte("FSH", listOf("IU/L" to 1.0)),
     Analyte("SHBG", listOf("nmol/L" to 1.0)),
@@ -35,12 +40,13 @@ val ANALYTES = listOf(
     Analyte("CREA", listOf("µmol/L" to 1.0, "mg/dL" to 1 / 88.42)),
     Analyte("K", listOf("mmol/L" to 1.0)),
 )
+private val P4_CODES = setOf("P4", "P4_IA", "P4_MS")
 fun analyte(code: String) = ANALYTES.firstOrNull { it.code == code } ?: Analyte(code, emptyList())
 /** Converts a value in [unit] to the analyte's canonical unit; null when the unit is unknown. */
 fun toCanonical(a: Analyte, value: Double, unit: String): Double? = a.units.firstOrNull { it.first == unit }?.let { value / it.second }
 
 @Composable fun analyteLabel(code: String) = stringResource(when (code) {
-    "E2" -> R.string.lab_e2; "T" -> R.string.lab_t; "P4" -> R.string.lab_p4; "PRL" -> R.string.lab_prl; "LH" -> R.string.lab_lh; "FSH" -> R.string.lab_fsh
+    "E2" -> R.string.lab_e2; "T" -> R.string.lab_t; "P4" -> R.string.lab_p4; "P4_IA" -> R.string.lab_p4_ia; "P4_MS" -> R.string.lab_p4_ms; "PRL" -> R.string.lab_prl; "LH" -> R.string.lab_lh; "FSH" -> R.string.lab_fsh
     "SHBG" -> R.string.lab_shbg; "ALT" -> R.string.lab_alt; "AST" -> R.string.lab_ast; "GGT" -> R.string.lab_ggt; "CREA" -> R.string.lab_crea; "K" -> R.string.lab_k
     else -> R.string.choice_other
 })
@@ -121,7 +127,18 @@ private fun max(a: Double, b: Double) = if (a > b) a else b
     val rangeOk = (lo.isBlank() || loV != null) && (hi.isBlank() || hiV != null) && (loV == null || hiV == null || loV <= hiV)
     AlertDialog(onDismissRequest = onDismiss, icon = { Icon(Icons.Outlined.Science, null) }, title = { Text(stringResource(if (initial == null) R.string.lab_add else R.string.lab_edit)) },
         text = { Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            DropdownField(stringResource(R.string.lab_analyte), ANALYTES.map { it.code }, code, { analyteLabel(it) }, { code = it; unit = analyte(it).units.first().first })
+            val p4 = code in P4_CODES
+            DropdownField(stringResource(R.string.lab_analyte), ANALYTES.map { it.code }.filter { it !in P4_CODES || it == "P4" }, if (p4) "P4" else code,
+                { if (it == "P4") stringResource(R.string.lab_p4_family) else analyteLabel(it) }, { code = it; unit = analyte(it).units.first().first })
+            if (p4) {
+                Text(stringResource(R.string.lab_p4_method), style = MaterialTheme.typography.labelLarge)
+                listOf("P4_IA" to R.string.lab_p4_method_ia, "P4_MS" to R.string.lab_p4_method_ms, "P4" to R.string.lab_p4_method_unknown).forEach { (c, label) ->
+                    Row(Modifier.fillMaxWidth().selectable(code == c, onClick = { code = c }, role = Role.RadioButton), verticalAlignment = Alignment.CenterVertically) {
+                        RadioButton(code == c, null); Spacer(Modifier.width(8.dp)); Text(stringResource(label), style = MaterialTheme.typography.bodyMedium)
+                    }
+                }
+                Text(stringResource(R.string.lab_p4_method_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
             DateTimeRow(time, { time = it })
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 NumberField(value, { value = it }, stringResource(R.string.lab_value), Modifier.weight(1f), isError = value.isNotEmpty() && valueV == null)
