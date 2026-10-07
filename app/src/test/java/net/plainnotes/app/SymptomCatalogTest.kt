@@ -22,6 +22,8 @@ class SymptomCatalogTest {
         assertEquals(MedSymptoms.Listed(listOf("FR_ANDROCUR", "FR_ANSM_CPA", "TW_MOHW_2022_CPA"), false), c.forMedication(MedKey(1, "CPA", null, null)))
         assertEquals(MedSymptoms.NoneListedByOfficialSources, c.forMedication(MedKey(1, "SPI", null, null)))
         assertEquals(MedSymptoms.NoOfficialSource, c.forMedication(MedKey(1, "E2", "INJECTION", "EV")))
+        assertEquals(MedSymptoms.NoOfficialSource, c.forMedication(MedKey(1, "E2", "ORAL", null)))
+        assertTrue(c.groupsFor(listOf(MedKey(1,"E2","ORAL",null))).isEmpty())
         assertEquals(MedSymptoms.NoOfficialSource, c.forMedication(MedKey(1, "P4", null, null)))
         assertEquals(MedSymptoms.NoOfficialSource, c.forMedication(MedKey(1, "OTHER", null, null)))
     }

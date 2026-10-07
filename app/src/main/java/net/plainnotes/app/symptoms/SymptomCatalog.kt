@@ -54,7 +54,7 @@ class SymptomCatalog(json: String) {
     fun forMedication(m: MedKey): MedSymptoms {
         for (r in rules) {
             if (r.getString("molecule") != m.molecule) continue
-            if (r.has("ester") && r.getString("ester") != (m.ester ?: "E2")) continue
+            if (r.has("ester") && r.getString("ester") != m.ester) continue
             if (r.has("routes")) { val routes = r.getJSONArray("routes").let { a -> (0 until a.length()).map { a.getString(it) } }; if (m.route !in routes) continue }
             if (r.optBoolean("none_listed")) return MedSymptoms.NoneListedByOfficialSources
             val src = r.getJSONArray("sources").let { a -> (0 until a.length()).map { a.getString(it) } }
