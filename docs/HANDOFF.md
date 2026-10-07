@@ -4,6 +4,12 @@
 
 用户再次纠正：**play版本已废弃。以后只维护、测试、构建和交付full，不再生成或签署play APK。** 已移除Gradle play flavor、src/play空实现、CI play任务，release manifest检查只要求full。AGENTS/CLAUDE/REQUIREMENTS/README同步。下文双变体测试与play附件均为历史记录，不是下一步任务；旧公开Release核验清单保持历史事实，不修改公开Release/标签。最新可安装full为build10。
 
+## 待用户审核：阶段/时间线修订与里程碑问题（2026-10-07，REQUIREMENTS §26）
+
+- 设计 [epochs-timeline-p1-revision](design/epochs-timeline-p1-revision.md)：投影时计算的 v2 治疗标准签名、按日期对齐的阶段边界、不迁移数据、阶段列表式时间线、测试计划与 11 个待决定问题。**未改功能代码。**
+- 里程碑“开始激素治疗保存没反应”根因已用合成探针确认：保存成功，但时间线默认只显示最近90天、阶段视图不列里程碑，旧日期的里程碑被过滤，且没有保存提示。属UI层；最小修复与回归测试列在设计第一部分。探针测试未提交。
+- 按钮大小一致性审计（用户第3项）进行中，见下条完成后的 `docs/ui-button-consistency.md`。
+
 ## 当前最新交付：Visit Pack 第一批 build 11（2026-10-07，已签名）
 
 开发分支已按用户指示快进合并回 `claude/new-session-1959qb`（`847df84`），以后只在该分支开发；`ccr-5165d4ec-vof9xq` 仅为本会话临时分支。需求 REQUIREMENTS §25，设计 [visit-pack-p1](design/visit-pack-p1.md)，合成验证 [visit-pack-verification](visit-pack-verification.md)。
