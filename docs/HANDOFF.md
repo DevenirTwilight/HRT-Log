@@ -2,13 +2,23 @@
 
 ## 最新硬性决定：play已废弃，仅维护full（2026-10-07）
 
-用户再次纠正：**play版本已废弃。以后只维护、测试、构建和交付full，不再生成或签署play APK。** 已移除Gradle play flavor、src/play空实现、CI play任务，release manifest检查只要求full。AGENTS/CLAUDE/REQUIREMENTS/README同步。下文双变体测试与play附件均为历史记录，不是下一步任务；旧公开Release核验清单保持历史事实，不修改公开Release/标签。最新可安装full仍为build9。
+用户再次纠正：**play版本已废弃。以后只维护、测试、构建和交付full，不再生成或签署play APK。** 已移除Gradle play flavor、src/play空实现、CI play任务，release manifest检查只要求full。AGENTS/CLAUDE/REQUIREMENTS/README同步。下文双变体测试与play附件均为历史记录，不是下一步任务；旧公开Release核验清单保持历史事实，不修改公开Release/标签。最新可安装full为build10。
 
 ## 最新交付规则与正式签名测试包（2026-10-07）
 
 用户明确日常使用此应用，测试时不能反复卸载正式安装。以后所有交付给用户的 APK（含测试包）统一使用第 7 节现有私有正式密钥；不再交付 CI 的调试签名包。CI 内部自动验证仍可使用调试密钥，不将私钥或密码上传 CI。此决定优先于本文历史交付说明。
 
-### 当前最新交付：地区候选框 build 9（2026-10-07，已完成）
+### 当前最新交付：冻结化验上下文 build 10（2026-10-07，已完成）
+
+- 最终功能源码 `a30c850`（主体 `2ff40f3`，防护/回归 `51a4430`），指定分支 `claude/new-session-1959qb`。schema5/versionCode10/versionName0.2.0；只构建、签署与交付full，未改公开Release/标签/根LICENSE。设计先行 `9f5dfaa`，见 [Lab Context设计](design/lab-context-p1.md)、[合成验证步骤](lab-context-verification.md)。
+- 新化验同事务保存冻结上下文：采样时间/时区/项目、阶段和方案版本、每成分最近实际服药（含并列）、时间差/剂量/途径/输入快照、采样前48h迟服/确认漏服/未确认。未知旧导入不使用当前药物配置补猜。编辑结果/备注不重写；修改采样字段或明确重建新增版本，旧版可选择。旧化验升级不自动回填，用户明确重建时标记实际捕获时间和回推方式。排期含星期、计时起点和时区。
+- 可选PK默认关闭，仅采样前180天范围内actual、无计划/无化验拟合；保存结果/5–95区间/局限、输入与参数文档、保存时体重设置。参数/体重来自保存时，不代表历史实测，不是完整旧引擎/模型bundle重执行系统。CSV新增lab_contexts.csv全部修订；主PDF显示最新版事实，取消任意药物最近dose误关联。schema1–4备份兼容，schema5上下文预算/结构/阶段键/修订与采样一致性校验，失败回滚。
+- 最终本机221项（domain33/pk18/importer12/data51/reminder14/full app93）：220通过、1既有Robolectric PDF跳过、0失败。末轮最新debug/单元/lint、full debug/release与两个原生测试APK全部成功（6m29s，R8确认UP-TO-DATE）；初轮完整任务12m41s成功。lint full0错误69警告（原66，新增2复数候选与已弃用lab_since_dose资源）；无INTERNET/入口/版本/schema无漂移检查通过。合成上下文截图已查看，无重叠或截断。
+- 最终CI [37658823665](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37658823665) jvm/android/device-tests全部success，连接器核验最终结论。API35原生data10项含1→5/3→5/4→5、旧化验不造上下文、SQLCipher；应用23项成功，另2重启项在主套件跳过后分别新进程OK，含上下文PDF分页/伪装/应用锁。
+- 正式full：`/workspace/HRT-Log-build10-full-signed.apk`，23,260,379 bytes，SHA256 `33995abae21be8d1a82dd6cb27ccbbc5b19babfc490161289a4bc80f962f7156`。核对既有正式证书、16KB对齐、非调试、net.plainnotes.app/build10、无INTERNET；可覆盖原正式安装，升级前建议导出加密备份。tmpfiles真实令牌下载入口已独立下载，字节数与SHA一致：https://tmpfiles.org/dl/1791395210.68cde14c45721959/wGA3lIs9rrTb/hrt-log-build10-full-signed.apk 。临时链接失效重新上传同一APK，不交工作区预览路径。
+- 私有签名备份再次确认private；临时克隆/ZIP/私钥/密码全部已清理，原备份未改。无未完成本批代码/验证任务。用户真实覆盖安装、OEM/大字体/TalkBack未验证；不声称已验证用户健康数据。LabPanel/Visit Pack/事实变化摘要、完整模型bundle、包装单位等仍待后续，路线图已更新。
+
+### 上一阶段：地区候选框 build 9（2026-10-07，已完成）
 
 - 功能源码 `0511922`，分支 `claude/new-session-1959qb`，schema4/versionCode9/versionName0.2.0。设置页地区改为单个只读候选框，点击弹出六项列表；复用原翻译、原存储值、未选择与帮助说明，保留与界面语言独立性。本包包含build8浓度修复。
 - 本机full91/play78应用回归（167通过、2 PDF跳过、0失败）、lint full0错误66警告/play0错误61警告、full release构建成功（8m53s）。本次未新增低影响UI镜像测试；复用现有DropdownField，未改数据层/PK。最终CI [37645063384](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37645063384) jvm/android/device-tests全部成功（连接器核验最终job结论；公开API状态更新有延迟）。
@@ -420,7 +430,7 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 
 用户要求继续前先说明。已核对schema4实体、化验界面（孕酮检测方法已有）、预约/复诊导出与原设计，更新hrt-roadmap当前状态表13项。优先仍Lab Context、Visit Pack/事实摘要，之后阶段导出与注射/库存；已实现Epoch/Timeline/里程碑/症状快照不重复算待办。本轮仅清单/文档，没有启动新功能、改版本或生成APK；仅full规则继续。
 
-### 2q. Lab Context第一批（2026-10-07，进行中）
+### 2q. Lab Context第一批（2026-10-07，已完成）
 
 基线b1e60be，用户要求继续。设计lab-context-p1.md已写，拟schema5/build10，逐化验上下文修订与显式旧数据回推；各成分actual独立，不再用全局最近doseTimes。可选PK仅采样前actual/无自校准，保留参数和结果快照。下一步数据层/备份/合成回归、四语UI与导出，再full验证和原正式签名交付。数据层与schema5迁移、不可变修订、旧备份兼容/校验回滚、四语化验详情和CSV/PDF已写。合成data51项和full app93项回归已通过（app的1项Robolectric PDF按既有条件跳过）；原生测试APK正在编译，尚未运行设备验证/完整lint与release，未生成正式build10。新增UI回归覆盖旧版切换/明确重建，PK回归覆盖舌下正值、采样后事件排除与不自校准；native PDF用例已加入上下文。下一步全量full验证、原生CI、原正式签名与真实下载交付。
 
@@ -431,3 +441,5 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 2026-10-07 最终功能源码a30c850，CI37658823665的jvm与device-tests已success；设备日志核验原生data10、应用23（主套件另2重启项跳过后分别新进程OK）。含1→5/3→5/4→5、SQLCipher、上下文PDF分页/伪装锁等。android构建仍在运行。本机domain33/pk18/importer12/data51/reminder14/full app93=221项，0失败、1既有PDF跳过；此轮debug尚未含最后阶段结构/排期显示补丁，结束后必须重跑最新debug单元/lint/构建，release已在补丁后编译、仍在R8。lint当次0错误69警告（新增两条复数候选和原已无调用的资源等，最终计数待复核）。新增lab-context-verification.md，路线图Lab Context第一批标已编码，其余Visit Pack/LabPanel等待办。尚未签名/下载build10，临时密钥须在签后清理。
 
 2026-10-07 最终源码a30c850的CI37658823665三作业jvm/android/device-tests均success（连接器核验）。本机第一轮完整full任务12m41s成功，末轮最新debug校验继续；最新data51/full93均无失败、1既有PDF跳过，lint/打包尚待结束。正式签名与真实下载仍未做，不把unsigned包交付。
+
+2026-10-07 build10最终完成：最新源码末轮完整full任务成功、CI三作业success，正式full包签署/版本/证书/对齐/manifest核验及真实下载回查完成，临时凭据已清理。顶部最新交付块记录所有结果与剩余边界。本批无未完成任务，后续Visit Pack/事实摘要另批。
