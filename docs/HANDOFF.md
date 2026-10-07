@@ -307,3 +307,7 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 2026-10-07 调研最终完成并验证：5份研究/设计/路线图/流程Markdown+1份CSV，81项矩阵、28个六维评分候选。已程序核对16个相对文档链接、74个固定提交源码路径、Markdown表宽、CSV列宽/唯一性，全部通过；git diff --check通过。报告只针对代码/官方资料，未安装竞品/未验证商店binary，不称完整安全审计。未运行Android测试：本轮仅文档，没有更改应用、模型或发布。
 
 提交阶段：131ad14（本项目现状）、c926b85（竞品矩阵）、beef98e（独立设计/评分/PRIOR_ART），均推送claude/new-session-1959qb。给用户通过GitHub页面阅读，避免Android本地文件预览限制。建议定位local-first longitudinal HRT record；P0历史上下文/症状来源/未确认语义/恢复边界/许可治理；后续实现需另行明确范围，本轮建议不是实现授权。无未完成研究文件。
+
+### 2k. P0应用更新（2026-10-07，开始）
+
+用户已要求开始更新，先做history-integrity-p0设计范围。源码基线456fa1c，无远程新功能。本地JDK21已具备，正在/workspace/tooling安装SDK37/build-tools37并准备Gradle测试；之前的构建缓存不存在。设计/需求已记录；下一步历史snapshot与症状schema3、未确认语义和恢复校验。不得读/提交真实健康数据，不选LICENSE、不发布。
