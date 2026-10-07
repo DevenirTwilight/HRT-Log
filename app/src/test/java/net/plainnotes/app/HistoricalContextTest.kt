@@ -69,4 +69,27 @@ class HistoricalContextTest {
         assertNull(rejected.currentPgMl);assertEquals(1,rejected.skippedDoses)
     }
 
+    @Test fun mixedImportedAndNativeSublingualWithoutCalibrationUsesHistoricalInputsAndReadableScale() {
+        val sl=med.copy(route="SUBLINGUAL")
+        val profile=ProfileEntity(1,"E2","sublingual",sl_tier=2)
+        val snapshot=MedicationSnapshot.encode(sl,profile)
+        val native=record("{}").copy(rule_version_id=10)
+        val imported=record("{\"source\":\"hrttracker\"}").copy(id=2,origin="IMPORT_HT",taken_utc=now.minusSeconds(13*3600).toEpochMilli())
+        val repaired=imported.copy(config_snapshot=HistoricalContext.confirmed(imported.config_snapshot,snapshot,"USER_CONFIRMED",now.toEpochMilli())!!)
+        val future=net.plainnotes.app.domain.TimelineEntry(
+            net.plainnotes.app.domain.Slot("wall:1@future",1,10,now.plusSeconds(11*3600),now.plusSeconds(11*3600),java.time.ZoneId.of("UTC"),2.0,15,120,now.minusSeconds(86400)),
+            net.plainnotes.app.domain.SlotState.PENDING)
+        val result=ConcentrationCalculator.compute(listOf(sl),mapOf(1L to profile),listOf(native,repaired),listOf(future),emptyList(),null,now,
+            calibrate=false,plannedSnapshots=mapOf(10L to snapshot))
+        assertNull(result.calibration);assertEquals(2,result.usedDoses);assertEquals(0,result.skippedDoses)
+        assertFalse(result.missing.any{it.input==MissingInput.HISTORICAL_CONTEXT || it.input==MissingInput.SL_TIER})
+        val start=result.nowH-24;val end=result.nowH+24
+        val points=net.plainnotes.app.ui.ChartViewport.samples(result.timeH,result.e2,start,end,result.nowH)
+        assertTrue(points.filter{it.first<result.nowH}.any{it.second>0})
+        assertTrue(points.filter{it.first>result.nowH}.any{it.second>0})
+        assertEquals(points.filter{it.first<=result.nowH}.last(),points.filter{it.first>=result.nowH}.first())
+        val top=net.plainnotes.app.ui.ChartViewport.top(net.plainnotes.app.ui.ChartData(result.timeH,result.e2,band95=result.bandOuter),start,end)
+        assertTrue(points.maxOf{it.second}/top>0.75)
+    }
+
 }
