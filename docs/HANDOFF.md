@@ -9,8 +9,9 @@
 接手基线 `95b82bc`；本会话开发分支为环境指定的 `ccr-5165d4ec-vof9xq`（与 `claude/new-session-1959qb` 同基线，未推送到后者）。需求 REQUIREMENTS §25，设计 [visit-pack-p1](design/visit-pack-p1.md)，合成验证 [visit-pack-verification](visit-pack-verification.md)。
 
 - 已提交：数据层 `618af21`（schema6：appointment.completed_utc、visit_question、visit_pack 不可改触发器、5→6迁移、备份校验与schema1–5恢复）；应用层（“复诊”导航页、预约编辑/删除/确认就诊、问题清单、资料包对话框、按勾选输出的PDF、事实摘要 `visit/VisitPack.kt`、SHA-256校验码与生成记录）。versionCode 11。
-- 已通过：JVM三模块；core:data 55项（新增VisitPackDataTest 4项）；app VisitPackTest 4项与TranslationsTest；对话框合成截图已查看。原生MigrationBaselineTest新增5→6，WellbeingAndroidTest加入资料包PDF分页——需CI设备任务执行。
-- 进行中：完整本机检查（data/reminder/app单元、lint、full debug/release、两个测试APK）；然后CI、正式签名build11与下载回查。
+- 最终源码 `ecedb19`。本机完整检查通过：domain/pk/importer（JVM）；core:data 55项、reminder 14项、app full 97项（96通过、1项既有Robolectric PDF跳过）、0失败；lint full 0错误69警告（与build10相同，无新增）；full debug/release、两个原生测试APK构建成功；release manifest检查与schema无漂移通过。对话框合成截图已查看。
+- CI：`618af21` 的 [37678068937](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37678068937) 与应用层 `f4a02c6` 的 [37678980663](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37678980663) 成功；最终 `ecedb19` 的 [37681451042](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37681451042) 提交时仍在运行，下次接手先核对（含原生5→6迁移和资料包PDF分页）。
+- **卡点：正式签名未做。** 本会话从私有备份仓库 `DevenirTwilight/-` 取签名密钥的操作被会话权限系统拦截（未尝试其他方式）。需要用户在设置中允许该操作或另行指示后，再按第7节签署 build11、核对证书并临时下载回查。尚无可交付的 build11 APK；未签名 release 仅在本机，不交付。
 - 本会话工具链：Android SDK 装在 `/opt/android-sdk`；Maven Central 经代理返回429，本机用 `~/.gradle/init.d/mirror.gradle.kts` 改走 Google 的 Maven Central 镜像（含 Robolectric 下载），不改仓库。
 
 ## 项目许可证 MIT（2026-10-07，REQUIREMENTS §24，已完成）
