@@ -43,9 +43,17 @@ object LabContext {
         val o=JSONObject(json);require(o.getInt("version")==1)
         val at=o.getLong("sampled_utc");ZoneId.of(o.getString("sampled_zone"));require(o.getString("analyte_code").isNotBlank())
         require(o.getInt("window_hours")==WINDOW_HOURS)
-        val epoch=o.getJSONObject("epoch");epoch.getBoolean("unknown");epoch.getBoolean("reconstructed")
-        if(!epoch.isNull("from")){require(epoch.getLong("from")<=at);if(!epoch.isNull("until"))require(at<epoch.getLong("until"))}
-        val regimens=o.getJSONArray("regimens");for(i in 0 until regimens.length()){val r=regimens.getJSONObject(i);require(r.getLong("id")>0 && r.getLong("medication_id")>0);RegimenDefinition.read(r.getJSONObject("definition").toString())}
+        val epoch=o.getJSONObject("epoch");val unknownEpoch=epoch.getBoolean("unknown");epoch.getBoolean("reconstructed")
+        if(unknownEpoch)require(epoch.isNull("from") && epoch.isNull("until") && epoch.isNull("key") && !epoch.getBoolean("reconstructed"))
+        else {require(!epoch.isNull("from") && epoch.getLong("from")<=at);if(!epoch.isNull("until"))require(at<epoch.getLong("until"))}
+        val regimens=o.getJSONArray("regimens");val regimenIds=mutableSetOf<Long>();val medicationIds=mutableSetOf<Long>();var reconstructed=false
+        for(i in 0 until regimens.length()) {
+            val r=regimens.getJSONObject(i);require(r.getLong("id")>0 && regimenIds.add(r.getLong("id")) && r.getLong("medication_id")>0 && medicationIds.add(r.getLong("medication_id")))
+            require(r.getString("origin") in listOf("APP","LEGACY_RULE"));reconstructed=reconstructed || r.getString("origin")=="LEGACY_RULE"
+            RegimenDefinition.read(r.getJSONObject("definition").toString())
+        }
+        require(!unknownEpoch || regimens.length()==0)
+        if(!unknownEpoch)require(epoch.getBoolean("reconstructed")==reconstructed && epoch.getString("key")=="epoch:${epoch.getLong("from")}:${regimenIds.sorted().joinToString(",")}")
         val actual=o.getJSONArray("actual");val groups=mutableMapOf<String,Long>();val actualIds=mutableSetOf<Long>()
         for(i in 0 until actual.length()) {
             val r=actual.getJSONObject(i);require(r.getLong("record_id")>0 && r.getInt("record_revision")>0 && r.getLong("medication_id")>0)
@@ -64,6 +72,7 @@ object LabContext {
             when(r.getString("status")){"LATE"->{require(r.getString("origin")!="AUTO_MISSED");late++};"MISSED"->if(r.getString("origin")=="AUTO_MISSED")unknown++ else missed++;else->error("Invalid nearby event")}
         }
         val counts=o.getJSONObject("counts");require(counts.getInt("late")==late && counts.getInt("missed")==missed && counts.getInt("unconfirmed")==unknown)
+        require(o.has("estimate") && (o.isNull("estimate") || o.get("estimate") is JSONObject))
         o.optJSONObject("estimate")?.let{e->
             require(e.getInt("version")==1 && e.get("calibrated")==false && e.getLong("sampled_utc")==at && e.getInt("calculator_version")==1)
             require(e.getInt("used_doses")>=0 && e.getInt("skipped_doses")>=0)

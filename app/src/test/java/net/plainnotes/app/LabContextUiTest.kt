@@ -15,9 +15,11 @@ import org.junit.Assert.*
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import org.robolectric.annotation.GraphicsMode
 import java.time.Instant
 
-@RunWith(RobolectricTestRunner::class) @Config(sdk=[35],application=android.app.Application::class)
+@RunWith(RobolectricTestRunner::class) @GraphicsMode(GraphicsMode.Mode.NATIVE)
+@Config(sdk=[35],qualifiers="w411dp-h891dp-xxhdpi",application=android.app.Application::class)
 class LabContextUiTest {
     @get:Rule val ui=createAndroidComposeRule<ComponentActivity>()
     @Test fun historicalVersionCanBeViewedAndRebuildingRequiresExplicitAction() {
@@ -30,6 +32,12 @@ class LabContextUiTest {
         ui.setContent{MaterialTheme{Column(Modifier.verticalScroll(rememberScrollState())){LabContextSection(lab,listOf(row(1,1),row(2,2))){_,include->called++;estimate=include}}}}
         ui.onNodeWithText(ui.activity.getString(R.string.lab_context_title)).performClick()
         ui.onNodeWithText(ui.activity.getString(R.string.lab_context_actual_line,"2","MG",ui.activity.getString(R.string.choice_sublingual),2L,0L)).assertExists()
+        ui.waitForIdle()
+        val view=ui.activity.window.decorView
+        val image=android.graphics.Bitmap.createBitmap(view.width,view.height,android.graphics.Bitmap.Config.ARGB_8888)
+        view.draw(android.graphics.Canvas(image))
+        val file=java.io.File("build/screenshots/lab_context.png");file.parentFile!!.mkdirs()
+        file.outputStream().use{image.compress(android.graphics.Bitmap.CompressFormat.PNG,100,it)}
         ui.onNodeWithText(ui.activity.getString(R.string.lab_context_version_number,2)).performClick()
         ui.onNodeWithText(ui.activity.getString(R.string.lab_context_version_number,1)).performClick()
         ui.onNodeWithText(ui.activity.getString(R.string.lab_context_actual_line,"2","MG",ui.activity.getString(R.string.choice_sublingual),1L,0L)).assertExists()

@@ -34,8 +34,14 @@ class LabEstimateTest {
             db.dao().record(RecordEntity(medication_id=id,taken_utc=at.plusSeconds(3600).toEpochMilli(),taken_zone="UTC",actual_dose=200.0,status="ON_TIME",origin="APP",revision=1,config_snapshot=snapshot))
             val other=JSONObject(LabEstimate.capture(db.dao(),lab.copy(value=12_000.0)))
             assertEquals(original.getJSONArray("values").toString(),other.getJSONArray("values").toString());assertEquals(1,other.getJSONArray("inputs").length())
+            // A genuinely unknown imported input remains unknown and cannot prevent capturing the other facts.
+            db.dao().record(RecordEntity(medication_id=id,taken_utc=at.minusSeconds(1800).toEpochMilli(),taken_zone="UTC",actual_dose=null,status="ON_TIME",origin="IMPORT_TM",revision=1,config_snapshot="{}"))
             repo.saveLab(lab,at,estimate={dao,l->LabEstimate.capture(dao,l)})
             val saved=repo.labContexts().single();assertEquals(original.getJSONArray("values").toString(),LabContext.validate(saved.context_json).getJSONObject("estimate").getJSONArray("values").toString())
+            val malformed=JSONObject(saved.context_json)
+            malformed.getJSONObject("estimate").getJSONArray("values").getJSONObject(0).put("unit","MG")
+            assertThrows(IllegalArgumentException::class.java){LabContext.validate(malformed.toString())}
+            assertEquals(2,LabContext.validate(saved.context_json).getJSONObject("estimate").getJSONArray("inputs").length())
             val password="synthetic-pass".toCharArray();val backup=repo.exportBackup(password);repo.restoreBackup(backup,password);assertEquals(saved,repo.labContexts().single())
         } finally { db.close() }
     }

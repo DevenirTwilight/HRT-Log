@@ -64,6 +64,11 @@ class LabContextTest {
         contexts.getJSONObject(0).put("context_json",json.toString())
         try{repo.restoreBackup(BackupCodec.encrypt(o.toString().toByteArray(),pwd),pwd);fail()}catch(_:Exception){}
         assertEquals(expected,repo.labContexts());assertEquals(1,repo.labs().size)
+        val broken=JSONObject(expected.single().context_json)
+        broken.getJSONObject("epoch").put("from",JSONObject.NULL)
+        assertThrows(IllegalArgumentException::class.java){LabContext.validate(broken.toString())}
+        val badEstimate=JSONObject(expected.single().context_json).put("estimate","invalid")
+        assertThrows(IllegalArgumentException::class.java){LabContext.validate(badEstimate.toString())}
         val old=JSONObject(String(BackupCodec.decrypt(backup,pwd)));old.put("schema",4);old.getJSONObject("tables").remove("lab_context_revision")
         repo.restoreBackup(BackupCodec.encrypt(old.toString().toByteArray(),pwd),pwd);assertEquals(1,repo.labs().size);assertTrue(repo.labContexts().isEmpty())
     }
