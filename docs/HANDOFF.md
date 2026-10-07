@@ -4,15 +4,16 @@
 
 用户再次纠正：**play版本已废弃。以后只维护、测试、构建和交付full，不再生成或签署play APK。** 已移除Gradle play flavor、src/play空实现、CI play任务，release manifest检查只要求full。AGENTS/CLAUDE/REQUIREMENTS/README同步。下文双变体测试与play附件均为历史记录，不是下一步任务；旧公开Release核验清单保持历史事实，不修改公开Release/标签。最新可安装full为build10。
 
-## 当前进行中：Visit Pack 第一批 build 11（2026-10-07）
+## 当前最新交付：Visit Pack 第一批 build 11（2026-10-07，已签名）
 
-接手基线 `95b82bc`；本会话开发分支为环境指定的 `ccr-5165d4ec-vof9xq`（与 `claude/new-session-1959qb` 同基线，未推送到后者）。需求 REQUIREMENTS §25，设计 [visit-pack-p1](design/visit-pack-p1.md)，合成验证 [visit-pack-verification](visit-pack-verification.md)。
+开发分支已按用户指示快进合并回 `claude/new-session-1959qb`（`847df84`），以后只在该分支开发；`ccr-5165d4ec-vof9xq` 仅为本会话临时分支。需求 REQUIREMENTS §25，设计 [visit-pack-p1](design/visit-pack-p1.md)，合成验证 [visit-pack-verification](visit-pack-verification.md)。
 
-- 已提交：数据层 `618af21`（schema6：appointment.completed_utc、visit_question、visit_pack 不可改触发器、5→6迁移、备份校验与schema1–5恢复）；应用层（“复诊”导航页、预约编辑/删除/确认就诊、问题清单、资料包对话框、按勾选输出的PDF、事实摘要 `visit/VisitPack.kt`、SHA-256校验码与生成记录）。versionCode 11。
-- 最终源码 `ecedb19`。本机完整检查通过：domain/pk/importer（JVM）；core:data 55项、reminder 14项、app full 97项（96通过、1项既有Robolectric PDF跳过）、0失败；lint full 0错误69警告（与build10相同，无新增）；full debug/release、两个原生测试APK构建成功；release manifest检查与schema无漂移通过。对话框合成截图已查看。
-- CI：`618af21` 的 [37678068937](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37678068937) 与应用层 `f4a02c6` 的 [37678980663](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37678980663) 成功；最终 `ecedb19` 的 [37681451042](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37681451042) 提交时仍在运行，下次接手先核对（含原生5→6迁移和资料包PDF分页）。
-- **卡点：正式签名未做。** 本会话从私有备份仓库 `DevenirTwilight/-` 取签名密钥的操作被会话权限系统拦截（未尝试其他方式）。需要用户在设置中允许该操作或另行指示后，再按第7节签署 build11、核对证书并临时下载回查。尚无可交付的 build11 APK；未签名 release 仅在本机，不交付。
-- 本会话工具链：Android SDK 装在 `/opt/android-sdk`；Maven Central 经代理返回429，本机用 `~/.gradle/init.d/mirror.gradle.kts` 改走 Google 的 Maven Central 镜像（含 Robolectric 下载），不改仓库。
+- 功能源码最终 `ecedb19`（数据层 `618af21`，应用层 `f4a02c6`）。schema6/versionCode11/versionName0.2.0：appointment.completed_utc、visit_question、visit_pack（不可改）、5→6迁移、备份校验与schema1–5恢复；“复诊”页、预约编辑/删除/确认就诊、问题清单、按区间与勾选生成PDF、事实摘要（`visit/VisitPack.kt`）、SHA-256校验码与生成记录。
+- 本机：JVM三模块；core:data 55、reminder 14、app full 97（1项既有Robolectric PDF跳过），0失败；lint full 0错误69警告（无新增）；full debug/release与两个原生测试APK成功；manifest/schema无漂移检查通过。
+- 最终CI [37681451042](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37681451042) jvm/android/device-tests全部success：原生data 11项（含5→6）、app 23项0失败（WellbeingAndroidTest含资料包PDF分页），2个重启项另起进程OK。
+- 正式full：会话scratchpad `sign/out/HRT-Log-build11-full-signed.apk`，23,325,915 bytes，SHA256 `5045a2ad8b40ec96adfa60a630476fffed9a249bf021cd7120e2c317d0c0cd10`。签名脚本核对证书 `98:9B:A0…79:B1`（与build10相同），v2/v3、16KB对齐、非调试、net.plainnotes.app/versionCode11、无INTERNET。私有备份仓库确认private；临时克隆/ZIP/私钥/密码签名后立即删除，原备份未改。未改公开Release/标签。
+- 交付方式偏差：tmpfiles.org 在本环境TLS握手即被出口代理断开（连续5次 ws_closed_mid_exchange），无法生成临时链接；未改用其他第三方站点。改为在对话中以文件直接发送同一APK，用户需确认手机能否下载；回查哈希因此只在本地完成。如需链接，下次换可达的环境重新上传同一APK。
+- 本会话工具链：Android SDK 装在 `/opt/android-sdk`；Maven Central 经代理返回429，本机用 `~/.gradle/init.d/mirror.gradle.kts` 改走 Google 的 Maven Central 镜像（含 Robolectric），不改仓库。
 
 ## 项目许可证 MIT（2026-10-07，REQUIREMENTS §24，已完成）
 
