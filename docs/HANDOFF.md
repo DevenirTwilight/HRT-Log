@@ -336,3 +336,7 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 2026-10-07 最终源码2a58d01的本机单元回归已通过：domain30、pk18、importer12、data37、reminder14、app full78（1 PDF跳过）、play65（1 PDF跳过），按模块/变体合计254项，252通过、2跳过、0失败；不是254个互不重复用例。新增库存旧单位、未知导入route、REVERSE空关联及b64:字面备注均已跑过。最终lint/四构建仍运行；CI37630464376针对同一源码运行中，JVM已成功。此前中间版本的native31项成功不能冒充最终源码结果。下一步完成最终构建/native结果、正式签名与临时下载回查，再更新顶部最新交付信息。无公开发布。
 
 2026-10-07 P0最终完成：本机完整检查和最终CI三个任务成功；已签署full/play build6并清理临时凭据，full临时下载独立回查一致。顶部最新交付块已列出源码、测试、文件哈希与剩余限制。无未完成P0代码/未提交修改，无公开发布；下一批按design/longitudinal-hrt-record讨论的Epoch与Timeline推进。
+
+### 2l. P1第一批（2026-10-07，进行中）
+
+用户要求下一阶段，启动Epoch/统一时间线与用户里程碑。基线734444a，设计epochs-timeline-p1.md先行，需求§20。计划schema4新增regimen_version/regimen_rule_link/milestone；Epoch为确定性半开区间投影，旧规则回推标记、date-only跨阶段不猜。提醒变化保持周期锚点；不改PK/公开Release。尚未写功能代码，下一步数据层/迁移与合成回归，再四语UI和正式签名build7。
