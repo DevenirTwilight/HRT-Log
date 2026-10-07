@@ -303,3 +303,7 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 2026-10-07 调研第二阶段完成：`docs/hrt-competitor-matrix-2026-10-07.md` 与 UTF-8 BOM CSV，81项×9产品列；固定各默认分支提交、源码审阅路径、许可/issue边界，标记源码/官方/部分/未知。特别区分Yuuki Swift HRT-Tracker与Transmtf导入目标、Chrysalide PWA与Trans Memo协会、MyHRT安全层的禁止复用许可、Featherline T模型与未合并校准PR。独立设计/评分/PRIOR_ART仍在写，无功能代码改动。
 
 2026-10-07 第三阶段完成：独立设计 `docs/design/longitudinal-hrt-record.md`、六维评分 `docs/hrt-roadmap-2026-10-07.md`、根 `PRIOR_ART.md` 已写入。Featherline逐项分析medicine/identity/group/log/instruction/equivalent量、365天simulation、widget/cache/quicklog、TrackedDate/Anchor、Argon2/GCM/gzip/bounds；与HRT现有固定KDF/无压缩区分，不把不存在的可变cost/gzip路径当漏洞。P0历史PK/source/missed/restore/许可；P1epoch-context-timeline-visitpack，P2widget/模型扩张。明确此次已读源码不是真正法律隔离clean room。下一步文档链接/矩阵和证据一致性检查，再最终回复；无应用代码改动。
+
+2026-10-07 调研最终完成并验证：5份研究/设计/路线图/流程Markdown+1份CSV，81项矩阵、28个六维评分候选。已程序核对16个相对文档链接、74个固定提交源码路径、Markdown表宽、CSV列宽/唯一性，全部通过；git diff --check通过。报告只针对代码/官方资料，未安装竞品/未验证商店binary，不称完整安全审计。未运行Android测试：本轮仅文档，没有更改应用、模型或发布。
+
+提交阶段：131ad14（本项目现状）、c926b85（竞品矩阵）、beef98e（独立设计/评分/PRIOR_ART），均推送claude/new-session-1959qb。给用户通过GitHub页面阅读，避免Android本地文件预览限制。建议定位local-first longitudinal HRT record；P0历史上下文/症状来源/未确认语义/恢复边界/许可治理；后续实现需另行明确范围，本轮建议不是实现授权。无未完成研究文件。
