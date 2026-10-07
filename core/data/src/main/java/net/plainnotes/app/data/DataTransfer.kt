@@ -66,7 +66,8 @@ internal object RawData {
                 r.keys().forEach { k -> when (val v = r.get(k)) {
                     JSONObject.NULL -> cv.putNull(k)
                     is Int -> cv.put(k, v.toLong()); is Long -> cv.put(k, v); is Double -> cv.put(k, v); is Boolean -> cv.put(k, if (v) 1 else 0)
-                    is String -> if (v.startsWith("b64:")) cv.put(k, Base64.decode(v.substring(4), Base64.NO_WRAP)) else cv.put(k, v)
+                    // Current domain schema has no BLOB columns. A literal text prefix is not a type tag.
+                    is String -> cv.put(k, v)
                     else -> cv.put(k, v.toString())
                 } }
                 db.insert(t, SQLiteDatabase.CONFLICT_ABORT, cv)

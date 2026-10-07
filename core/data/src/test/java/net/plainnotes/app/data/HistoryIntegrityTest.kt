@@ -69,6 +69,8 @@ class HistoryIntegrityTest {
 
     @Test fun invalidAuthenticatedBackupRollsBackExistingData()=runBlocking {
         val id=seed();repo.addContainers(id,40.0,1,true);repo.unscheduled(id,start,2.0)
+        val day=LocalDate.of(2026,3,9)
+        repo.setNote(day,"b64:c3ludGhldGlj") // Literal user text must not be treated as a binary type tag.
         val password="synthetic-password".toCharArray()
         val before=JSONObject(String(BackupCodec.decrypt(repo.exportBackup(password),password)))
         val original=before.getJSONObject("tables").toString()
@@ -91,6 +93,7 @@ class HistoryIntegrityTest {
         }
         repo.restoreBackup(repo.exportBackup(password),password)
         assertEquals(38.0,repo.containers().single().capacity-repo.containers().single().used_amount,0.0)
+        assertEquals("b64:c3ludGhldGlj",repo.notes(day,day).single().text)
     }
 
     @Test fun backfilledHistoricalUnitIsNotDeductedFromDifferentCurrentUnit()=runBlocking {
