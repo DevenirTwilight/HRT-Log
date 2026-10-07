@@ -4,7 +4,17 @@
 
 用户明确日常使用此应用，测试时不能反复卸载正式安装。以后所有交付给用户的 APK（含测试包）统一使用第 7 节现有私有正式密钥；不再交付 CI 的调试签名包。CI 内部自动验证仍可使用调试密钥，不将私钥或密码上传 CI。此决定优先于本文历史交付说明。
 
-### 当前最新交付：P1 build 7（2026-10-07，已完成）
+### 当前最新交付：浓度修复 build 8（2026-10-07，已完成）
+
+- 功能逻辑 `d4c3c92`；用户舌下场景回归最终 `0d6b80f`（其后仅文档）；分支 `claude/new-session-1959qb`。schema4/versionCode8/versionName0.2.0，未改公开Release/标签/PK公式参数。设计 `design/concentration-context-chart-hotfix.md`，来源 `PRIOR_ART.md`。
+- 上下文：事件快照优先，本应用明确关联的兼容旧rule快照可补缺项，拒绝覆盖已知字段；导入实际不从计划推断。旧HT可用原导出重新导入恢复同key/药物/实际时间/剂量的兼容行，或浓度页“确认历史配置”按日期范围明确确认。原快照/确认时间留存，记录ID/剂量/时间/revision/库存账本不变；仍缺实际剂量时提示单独原因。不能声称已自动恢复所有旧导入的未知制剂。
+- 绘图：默认按可见中心曲线、化验及已配置参考范围缩放，完整区间可切换；概率带超出视窗裁剪并提示，零基线、边界插值和实虚线连续、细小刻度不全显示0。不改估算/区间数值。已查看极宽区间合成截图；用户场景为HT导入+本应用、舌下E2、关闭校准，合成回归在full/play均通过。未读取用户实际健康数据或做OEM真机验证。
+- 本机最终按模块/变体计292项（domain33/pk18/importer12/data46/reminder14/full91/play78），290通过、2 PDF跳过、0失败；不是292个独立用例。完整四构建/测试APK成功，lint full0错误66警告/play0错误61警告；manifest/schema无漂移检查通过。最终CI [37643141363](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37643141363) jvm/android/device-tests全部成功；原生data9、app23（两项重启另起进程执行）通过。
+- 正式full：`/workspace/HRT-Log-build8-full-signed.apk`，23,223,515 bytes，SHA256 `c1b9ef54c8386a8eaef85edb033d6c21e2530350f7941dcf8d8bc687bda45e89`。正式play：`/workspace/HRT-Log-build8-play-signed.apk`，23,133,067 bytes，SHA256 `00f0ff21c87ad14135abdbab2cab43c27f1e3a6ba7e1f143b7b904bd5e0e5af7`；校验文件 `/workspace/HRT-Log-build8-SHA256SUMS.txt`。
+- 两包同现有正式证书，16KB对齐、非调试、无INTERNET、net.plainnotes.app/build8已核验。full的tmpfiles真实令牌入口已独立下载核对大小/SHA并交付；临时链接失效重新上传同包，不交工作区预览路径。私有备份未改，仓库外临时克隆/ZIP/私钥/密码均删除。覆盖安装前建议加密备份，用户真机结果待确认。
+- 本次修复完成，无未完成代码；路线图仍为Lab Context/Visit Pack/事实摘要等，root LICENSE、模型bundle、包装单位限制不变。最终分支源码已保存，不创建PR或公开发布。
+
+### 上一阶段：P1 build 7（2026-10-07，已完成）
 
 - 功能源码 `bcc629f`；分支 `claude/new-session-1959qb`；公开0.2.0/build5 Release与标签未改。schema4、versionCode7、versionName0.2.0。
 - 本批：冻结的方案版本、组合治疗阶段、统一时间线/筛选、明确用户里程碑；提醒/名称不切临床阶段，旧规则回推标记、日期观察候选/未知、未确认与漏服区分、计划默认隐藏、四语/精简模式。只连接已保存事实，不判断因果/化验正常与否；设计 `design/epochs-timeline-p1.md`，独立来源记录 `PRIOR_ART.md`。
@@ -13,7 +23,7 @@
 - 正式签名play：`/workspace/HRT-Log-build7-play-signed.apk`，23,128,971 bytes，SHA256 `31066cef128ea1c58eb955c7bae93d6b7e838267af0a6f6a111053fe0310dccc`。两个变体均为同一正式证书/versionCode7，两个release/debug及测试APK构建、release manifest与schema无漂移检查成功；`/workspace/HRT-Log-build7-SHA256SUMS.txt`保存校验值。签名临时克隆/ZIP/私钥/密码已全部删除，原私有备份未改。
 - 后续批次仍是Lab Context、Appointment/Visit Pack与事实变化摘要；本批没有实现这些，也没有新增历史模型bundle、复方强度或包装单位。加密备份包含新表，现有CSV/PDF未扩展阶段/里程碑专属导出。root LICENSE仍未选择。
 
-### 上一阶段：P0 build 6（2026-10-07，已完成）
+### 更早阶段：P0 build 6（2026-10-07，已完成）
 
 - 功能源码 `2a58d01`；分支 `claude/new-session-1959qb`；公开0.2.0/build5 Release与标签未改。schema3、versionCode6、versionName0.2.0。
 - 已独立实现用药PK输入/历史单位快照、症状匹配来源冻结、自动未登记UNCONFIRMED及确认漏服、备份32MiB/JSON/结构/账本校验与失败回滚；修复b64:字面备注误解码。旧缺失上下文明确未知，不用当前配置补猜；未改变PK公式、参数或当前体重政策。P1 Epoch/Timeline/Visit Pack未实现。
@@ -363,7 +373,7 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 
 2026-10-07 P1第一批最终完成：功能源码bcc629f的本机276项回归/两变体lint/四构建/测试APK/manifest/schema检查和CI37638118061三个任务全部成功。full/play已使用既有正式证书签署，full上传真实令牌入口并下载回查，临时签名凭据已清理。顶部最新交付列出字节数/哈希与实际边界。无未完成本批代码，无公开Release/标签/根LICENSE变更；后续仍为Lab Context与Visit Pack/事实变化摘要，真机未验证。
 
-### 2m. build8浓度修复（2026-10-07，进行中）
+### 2m. build8浓度修复（2026-10-07，已完成；过程记录）
 
 用户反馈上下文缺失与曲线贴轴，已定位旧导入writer只存source标记、新版逐事件读取跳过；图表用95%最大上界撑轴。已读Transmtf ResultChart/chartAxis现存研究checkout，采用独立可切换中心/完整区间，非复制其实现。设计先行concentration-context-chart-hotfix.md/需求§21；下一步可信旧rule上下文、再导入/用户确认修复与图窗缩放合成回归。未读取用户真实健康数据、未改PK参数、尚无build8 APK。
 
@@ -376,3 +386,5 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 2026-10-07 build8完整基础检查：domain33、pk18、importer12、data46、reminder14、full90/play77（两PDF跳过），288通过/2跳过/0失败；两变体lint0错误（full66/play61警告），release manifest与schema无漂移通过。用户场景新增回归0d6b80f尚待本机执行，最终CI改为37643141363，不能把基础290项当新增场景验证。release打包继续运行，暂不能交付新APK。
 
 2026-10-07 build8 full包已构建/原正式证书签署：/workspace/HRT-Log-build8-full-signed.apk，23,223,515 bytes，SHA256 c1b9ef54c8386a8eaef85edb033d6c21e2530350f7941dcf8d8bc687bda45e89。versionCode8/非调试/16KB/无INTERNET核验，tmpfiles真实令牌下载回查大小与SHA一致，已在commentary提供浏览器临时链接。生产逻辑d4c3c92，0d6b80f仅新增用户场景回归；CI37643141363 jvm/device-tests成功，android未结束，本机新增场景未执行。play R8继续运行；临时密钥尚需用于play，签后立即清理。剩余：最终本机场景测试、play签名、最终CI和顶部交付块。
+
+2026-10-07 build8最终完成：补充用户舌下/混合来源/不校准回归full91/play78已完成，两变体各1 PDF跳过；最终合计292项/290通过/2跳过。CI37643141363三个任务全部成功，两正式包签署并删除临时凭据，full下载回查一致。顶部交付块已更新；无本轮未完成代码，无公开发布，真机确认待用户。
