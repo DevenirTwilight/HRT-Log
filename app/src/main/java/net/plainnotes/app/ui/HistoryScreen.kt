@@ -1,6 +1,7 @@
 @file:OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 package net.plainnotes.app.ui
 
+import androidx.compose.ui.platform.testTag
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -60,7 +61,7 @@ private fun RecordEntity.at(): Instant = Instant.ofEpochMilli(taken_utc ?: sched
     val byDay = shown.groupBy { it.at().atZone(zone).toLocalDate() }
     val simple = LocalSimpleMode.current
     val canAdd = state.medications.any { it.active }
-    LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = contentPadding.calculateTopPadding() + 8.dp,
+    LazyColumn(Modifier.fillMaxSize().testTag("history-records"), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = contentPadding.calculateTopPadding() + 8.dp,
         bottom = contentPadding.calculateBottomPadding() + 32.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item { HistoryHeader(canAdd, onAdd, onBatch) }
         if(selectedRecordIds!=null)item{TextButton(onClick=onClearSelection){Text(stringResource(R.string.timeline_imported_clear_selection))}}
@@ -169,7 +170,7 @@ fun routeIcon(route: String?): ImageVector = when (route) {
     val historyProfile=context?.profile
     val route = context?.route
     Box {
-        Row(Modifier.fillMaxWidth().clickable(enabled = r.status != "SKIPPED") { menu = true }.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(Modifier.fillMaxWidth().testTag("history-record:${r.id}").clickable(enabled = r.status != "SKIPPED") { menu = true }.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
             val injection = route == "INJECTION"
             Box(Modifier.size(52.dp).clip(RoundedCornerShape(16.dp)).background(if (injection) c.primaryContainer else c.surfaceContainerHigh)
                 .border(1.dp, c.outlineVariant.copy(alpha = 0.6f), RoundedCornerShape(16.dp)), contentAlignment = Alignment.Center) {

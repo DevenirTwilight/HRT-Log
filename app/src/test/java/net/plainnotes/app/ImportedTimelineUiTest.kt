@@ -15,7 +15,8 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import java.time.Instant
 
-@RunWith(RobolectricTestRunner::class) @Config(sdk=[35],application=android.app.Application::class,qualifiers="zh")
+@RunWith(RobolectricTestRunner::class) @org.robolectric.annotation.GraphicsMode(org.robolectric.annotation.GraphicsMode.Mode.NATIVE)
+@Config(sdk=[35],application=android.app.Application::class,qualifiers="zh-rCN-w411dp-h891dp-xxhdpi")
 class ImportedTimelineUiTest {
     @get:Rule val ui=createAndroidComposeRule<ComponentActivity>()
     private val med=MedicationEntity(1,"Synthetic frozen import","E2","SUBLINGUAL","MG",2.0,40.0,site_rotation=false,notifications_on=false,active=true,sort_order=0)
@@ -24,13 +25,14 @@ class ImportedTimelineUiTest {
     @Test fun importedSummaryOpensFrozenDetailsAndExactHistoryIds() {
         var selected:List<Long>?=null
         ui.setContent{MaterialTheme{LongitudinalScreen(NotesState(loading=false),NotesViewModel.ExtraState(records=listOf(row())),{},{},{},PaddingValues(),onImportedHistory={selected=it})}}
-        ui.onNodeWithTag("timeline:import-history:IMPORT_HT:unknown:false").assertIsDisplayed().performClick()
-        ui.onNodeWithText("Synthetic frozen import").assertIsDisplayed()
+        ui.onNodeWithTag("timeline:import-history:IMPORT_HT:unknown:false").assertIsDisplayed()
         val view=ui.activity.window.decorView
         val bitmap=android.graphics.Bitmap.createBitmap(view.width,view.height,android.graphics.Bitmap.Config.ARGB_8888)
         view.draw(android.graphics.Canvas(bitmap))
         java.io.File("build/screenshots").mkdirs()
-        java.io.File("build/screenshots/imported_timeline_detail.png").outputStream().use{bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG,100,it)}
+        java.io.File("build/screenshots/imported_timeline_overview.png").outputStream().use{bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG,100,it)}
+        ui.onNodeWithTag("timeline:import-history:IMPORT_HT:unknown:false").performClick()
+        ui.onNodeWithText("Synthetic frozen import").assertIsDisplayed()
         ui.onNodeWithText(ui.activity.getString(R.string.timeline_imported_open_history)).performClick()
         ui.runOnIdle{assertEquals(listOf(71L),selected)}
     }
@@ -47,8 +49,8 @@ class ImportedTimelineUiTest {
         val selected=row();val other=med.copy(id=2,name="Synthetic excluded source")
         val excluded=selected.copy(id=72,medication_id=2,config_snapshot=MedicationSnapshot.encode(other,null))
         ui.setContent{MaterialTheme{HistoryScreen(NotesState(medications=listOf(med,other),loading=false),listOf(selected,excluded),{},{},PaddingValues(),selectedRecordIds=setOf(71))}}
-        ui.onAllNodesWithText("Synthetic frozen import").assertCountEquals(2)
-        // Medication filter chips also contain names; only the selected drug has an execution row.
-        ui.onAllNodesWithText("Synthetic excluded source").assertCountEquals(1)
+        ui.onNodeWithTag("history-records").performScrollToNode(hasTestTag("history-record:71"))
+        ui.onNodeWithTag("history-record:71").assertIsDisplayed()
+        ui.onNodeWithTag("history-record:72").assertDoesNotExist()
     }
 }
