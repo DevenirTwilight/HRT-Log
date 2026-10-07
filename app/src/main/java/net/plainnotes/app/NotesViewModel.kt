@@ -54,7 +54,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
                 val profiles=meds.mapNotNull{m->dao.profile(m.id)?.let{m.id to it}}.toMap()
                 val upcoming=(repo.planned(now,now.plus(Duration.ofDays(366)),now)+slots.filter{it.slot.at<now}).distinctBy{it.slot.key}.filter{it.state in net.plainnotes.app.ui.OPEN_STATES}
                 NotesState(meds,slots,dao.appointments(),mutable.value.error,false,schedules,profiles,start,dao.rules().associate{it.id to it.config_snapshot}) to
-                    ExtraState(dao.records(),dao.containers(),repo.checkinItems(),dao.scores("0001-01-01",today.toString()),dao.notes("0001-01-01",today.toString()),upcoming,dao.stageReviews(),dao.symptomChecks("0001-01-01",today.toString()),dao.reviewEffects())
+                    ExtraState(dao.records(),dao.containers(),repo.checkinItems(),dao.scores("0001-01-01",today.toString()),dao.notes("0001-01-01",today.toString()),upcoming,dao.stageReviews(),dao.symptomChecks("0001-01-01",today.toString()),dao.reviewEffects(),dao.regimens(),dao.regimenLinks(),dao.milestones(),dao.labs())
             }
             ensureActive()
             mutable.value=snapshot.first.copy(error=mutable.value.error);extra.value=snapshot.second;readFailureShown=false
@@ -96,7 +96,9 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     data class ExtraState(val records:List<RecordEntity> = emptyList(),val containers:List<ContainerEntity> = emptyList(),val items:List<CheckinItemEntity> = emptyList(),
                           val scores:List<CheckinScoreEntity> = emptyList(),val notes:List<DayNoteEntity> = emptyList(),
                           /** Open doses for the next year (calendar colours and the stock forecast). */ val upcoming:List<TimelineEntry> = emptyList(),
-                          val reviews:List<StageReviewEntity> = emptyList(),val symptoms:List<SymptomCheckEntity> = emptyList(),val effects:List<ReviewEffectEntity> = emptyList())
+                          val reviews:List<StageReviewEntity> = emptyList(),val symptoms:List<SymptomCheckEntity> = emptyList(),val effects:List<ReviewEffectEntity> = emptyList(),
+                          val regimens:List<RegimenVersionEntity> = emptyList(),val regimenLinks:List<RegimenRuleLinkEntity> = emptyList(),
+                          val milestones:List<MilestoneEntity> = emptyList(),val labs:List<LabValueEntity> = emptyList())
     val extra=MutableStateFlow(ExtraState())
     private fun guarded(block:suspend()->Unit)=viewModelScope.launch{try{block()}catch(e:kotlinx.coroutines.CancellationException){throw e}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}
     fun loadExtra():Job=refresh()
@@ -119,6 +121,8 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     fun setNote(date:LocalDate,text:String)=mutateExtra{repo.setNote(date,text)}
     fun saveCheckinItem(v:CheckinItemEntity)=mutateExtra{repo.saveCheckinItem(v)}
     fun saveReview(v:StageReviewEntity)=mutateExtra{repo.saveStageReview(v)}
+    fun saveMilestone(value:MilestoneEntity)=mutateExtra{repo.saveMilestone(value)}
+    fun deleteMilestone(id:Long)=mutateExtra{repo.deleteMilestone(id)}
     fun deleteReview(id:Long)=mutateExtra{repo.deleteStageReview(id)}
     fun confirmMissed(id:Long)=change{repo.confirmMissed(id)}
     fun setSymptom(date:LocalDate,group:String,checked:Boolean,note:String?=null)=mutateExtra{repo.setSymptomCheck(date,group,checked,note) { meds, profiles ->

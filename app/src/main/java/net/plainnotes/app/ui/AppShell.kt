@@ -30,6 +30,7 @@ import java.time.LocalDate
 
 enum class Destination(val title: Int, val icon: ImageVector, val ready: Boolean) {
     CALENDAR(R.string.calendar, Icons.Outlined.CalendarMonth, true),
+    TIMELINE(R.string.timeline, Icons.Outlined.Timeline, true),
     HISTORY(R.string.history, Icons.Outlined.History, true),
     STOCK(R.string.stock, Icons.Outlined.Inventory2, true),
     MEDICATIONS(R.string.medications, Icons.Outlined.Medication, true),
@@ -110,7 +111,7 @@ class UiPrefs(context: Context) {
 
     LaunchedEffect(notificationSlot) { notificationSlot?.let { s -> completeEntry = state.slots.firstOrNull { it.slot.key == s.key } ?: TimelineEntry(s, net.plainnotes.app.domain.SlotState.PENDING); model.notificationSlot.value = null } }
     LaunchedEffect(Unit) { model.loadExtra() }
-    LaunchedEffect(destination) { if (destination in listOf(Destination.CALENDAR, Destination.HISTORY, Destination.STOCK, Destination.WELLBEING)) model.loadExtra() }
+    LaunchedEffect(destination) { if (destination in listOf(Destination.CALENDAR, Destination.HISTORY, Destination.STOCK, Destination.WELLBEING, Destination.TIMELINE)) model.loadExtra() }
     LaunchedEffect(destination, concSettings.calibrate, concSettings.mode) {
         if (destination == Destination.CONCENTRATION || destination == Destination.LABS) {
             model.concentrationSettings(concSettings.calibrate, concSettings.mode); model.loadConcentration()
@@ -183,6 +184,12 @@ class UiPrefs(context: Context) {
                     DataSection(model, state.medications.associate { it.id to scheduleText(state.schedules[it.id]) })
                 }
                 Destination.ABOUT -> AboutScreen(pad)
+                Destination.TIMELINE -> LongitudinalScreen(state,extra,model::saveMilestone,model::deleteMilestone,{kind->destination=when(kind){
+                    net.plainnotes.app.timeline.EventKind.LAB->Destination.LABS
+                    net.plainnotes.app.timeline.EventKind.SYMPTOM,net.plainnotes.app.timeline.EventKind.WELLBEING,net.plainnotes.app.timeline.EventKind.REVIEW->Destination.WELLBEING
+                    net.plainnotes.app.timeline.EventKind.APPOINTMENT->Destination.CALENDAR
+                    else->Destination.HISTORY
+                }},pad)
                 Destination.HISTORY -> HistoryScreen(state, extra.records, { editRecord = it }, { deleteRecord = it }, pad, onAdd = { manual = true }, onBatch = { batch = true }, onLink = model::prepareImportedLink,onConfirmMissed={model.confirmMissed(it.id)})
                 Destination.STOCK -> StockScreen(state, extra.containers, extra.records, { m -> model.replaceContainer(m.id, m.container_capacity) }, { c, m -> adjustStock = c to m }, { addStock = it }, pad,onInfo={packageInfo=it})
                 Destination.WELLBEING -> WellbeingHub(state,extra,model,region,{manageItems=true},pad)

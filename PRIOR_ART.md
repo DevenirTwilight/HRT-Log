@@ -59,3 +59,7 @@
 实现 PR 提供来源声明：使用了哪些外部材料，哪些实现是独立的；任何真实复用逐文件列出许可/作者/通知，不写无法证实的“全部原创”。审阅扫描新增源码/资源中的上游路径、copyright、literal文案/fixture/模型参数，重点核对未授权搬入与跨语言逐行翻译；相似度工具只是线索，不是法务结论。图标/字体/医学量表/翻译另有许可，MIT软件许可不覆盖它们。
 
 项目级 LICENSE 是当前缺口：由维护者在历史/作者/依赖审计后选择，记载版权归属和第三方通知；不要让新贡献者以为没有LICENSE也可自动复用。旧移植代码仍在history，不通过新增LICENSE追溯授权他人的作品。本轮不删除旧标签/history或代作者联系许可方。
+
+## P1第一批独立实施（2026-10-07）
+
+设计先行74175c9（`docs/design/epochs-timeline-p1.md`），数据实现91d4813（`RegimenHistory` / `TreatmentEpochs` / schema4）。采用自身Rule与Record的adapter关系、临床signature排除提醒、组合半开区间、date-only候选关系和原记录引用。时间线/阶段/里程碑使用自身Compose主题、四语原创文案；不从Featherline/Mona/Recorder复制代码、算法表达、UI或资源。本次未重新载入竞品源码；历史研究者看过代码的事实不变，不宣称严格法律clean room。Lab Context、Visit Pack及Widget不在本批。

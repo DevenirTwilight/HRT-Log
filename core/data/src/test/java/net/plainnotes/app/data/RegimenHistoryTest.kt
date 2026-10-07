@@ -72,4 +72,14 @@ class RegimenHistoryTest {
         assertEquals("Synthetic retained",db.dao().milestones().single().title)
         assertEquals(JSONObject(String(BackupCodec.decrypt(original,password))).getJSONObject("tables").toString(),JSONObject(String(BackupCodec.decrypt(repo.exportBackup(password),password))).getJSONObject("tables").toString())
     }
+    @Test fun forgedRuleLinkIsRejectedAndFrozenDefinitionCannotBeUpdated()=runBlocking {
+        save(med);val password="synthetic-password".toCharArray();val original=repo.exportBackup(password)
+        try{db.openHelper.writableDatabase.execSQL("UPDATE regimen_version SET definition_json='{}'");fail()}catch(_:Exception){}
+        val json=JSONObject(String(BackupCodec.decrypt(original,password)))
+        json.getJSONObject("tables").getJSONArray("schedule_rule").getJSONObject(0).put("dose_snapshot",9.0)
+        try{repo.restoreBackup(BackupCodec.encrypt(json.toString().toByteArray(),password),password);fail()}catch(_:Exception){}
+        assertEquals(2.0,repo.rules().single().dose_snapshot,0.0)
+        assertEquals(2.0,RegimenDefinition.read(db.dao().regimens().single().definition_json).dose,0.0)
+    }
+
 }

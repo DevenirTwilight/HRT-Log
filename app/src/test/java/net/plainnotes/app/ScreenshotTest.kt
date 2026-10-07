@@ -110,6 +110,13 @@ class ScreenshotTest {
         val scores = (0 until 20).flatMap { d -> (1..3).map { it -> CheckinScoreEntity(today.minusDays(d.toLong()).toString(), it.toLong(), 1 + (d * it + 2) % 5) } }
         shoot("wellbeing") { WellbeingScreen(items, scores, listOf(DayNoteEntity(today.toString(), "Synthetic note")), { _, _, _ -> }, { _, _ -> }, {}, PaddingValues()) }
     }
+    @Test fun longitudinalTimeline() {
+        val r=RuleEntity(id=1,medication_id=1,kind="EVERY_N_DAYS",interval=1,weekday_mask=0,anchor_local=today.minusDays(30).toString(),anchor_zone=zone.id,effective_from_utc=now.minusSeconds(30*86400).toEpochMilli(),effective_zone=zone.id,missed_tracking_from_utc=now.minusSeconds(30*86400).toEpochMilli(),dose_snapshot=2.0,soon_snapshot=15,late_snapshot=120,config_snapshot=MedicationSnapshot.encode(meds[0],profiles[1]))
+        val d=RegimenDefinition.from(r,listOf(TimeEntity(rule_id=1,local_time="20:00:00")))
+        val extra=NotesViewModel.ExtraState(regimens=listOf(RegimenVersionEntity(1,1,r.effective_from_utc,zone=zone.id,definition_json=d.json(),clinical_signature=d.signature(),origin="APP")),
+            milestones=listOf(MilestoneEntity(1,today.toString(),title="Synthetic milestone")),labs=listOf(LabValueEntity(1,"E2",160.0,"pg/mL",now.minusSeconds(86400).toEpochMilli(),zone.id)))
+        shoot("timeline"){LongitudinalScreen(state(),extra,{},{},{},PaddingValues())}
+    }
     @Test fun settings() = shoot("settings") { SettingsScreen(Appearance(ThemeMode.SYSTEM, false), {}, false, {}, {}, {}, PaddingValues()) }
     @Test fun privacy() = shoot("privacy") { androidx.compose.foundation.layout.Column(androidx.compose.ui.Modifier.padding(androidx.compose.ui.unit.Dp(16f))) { PrivacySection(1, false) {} } }
     @Test fun lock() = shoot("lock") { LockScreen({ false }, { 0L }, {}) }

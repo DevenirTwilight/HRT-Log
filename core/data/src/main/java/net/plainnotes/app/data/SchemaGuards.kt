@@ -43,6 +43,9 @@ object SchemaGuards : RoomDatabase.Callback() {
             // Re-created on every open so a predicate change reaches existing databases.
             operations.forEach { op -> db.execSQL("DROP TRIGGER IF EXISTS guard_${table}_${op.lowercase()}"); db.execSQL("CREATE TRIGGER guard_${table}_${op.lowercase()} BEFORE $op ON $table BEGIN SELECT CASE WHEN COALESCE(($predicate),0)=0 THEN RAISE(ABORT,'Invalid $table') END; END") }
         }
+        val frozen=listOf("id","medication_id","effective_from_utc","zone","definition_json","clinical_signature","origin","recorded_at_utc").joinToString(" AND "){"NEW.$it IS OLD.$it"}
+        db.execSQL("CREATE TRIGGER IF NOT EXISTS immutable_regimen_update BEFORE UPDATE ON regimen_version WHEN NOT ($frozen) BEGIN SELECT RAISE(ABORT,'Frozen regimen definition'); END")
+        db.execSQL("CREATE TRIGGER IF NOT EXISTS immutable_regimen_link_update BEFORE UPDATE ON regimen_rule_link BEGIN SELECT RAISE(ABORT,'Frozen regimen link'); END")
         listOf("UPDATE","DELETE").forEach { op -> db.execSQL("CREATE TRIGGER IF NOT EXISTS immutable_supply_${op.lowercase()} BEFORE $op ON supply_transaction BEGIN SELECT RAISE(ABORT,'Append-only supply ledger'); END") }
         db.execSQL("CREATE TRIGGER IF NOT EXISTS supply_cache AFTER INSERT ON supply_transaction BEGIN UPDATE supply_container SET used_amount=used_amount+NEW.used_delta WHERE id=NEW.container_id; END")
     }
