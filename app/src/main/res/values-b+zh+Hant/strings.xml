@@ -690,4 +690,6 @@
     <string name="unconfirmed_count">未確認：%1$d 次，未計入確認漏服。</string>
     <string name="unconfirmed_help">尚未登記服藥，不能據此確認漏服。</string>
     <string name="backup_too_large">備份超過支援的大小或結構限制，未還原任何資料。</string>
+    <string name="report_current_plan">目前記錄的方案</string>
+    <string name="report_recorded_contexts">該時間段儲存的用藥上下文</string>
 </resources>

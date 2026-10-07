@@ -90,6 +90,20 @@ class HistoryIntegrityTest {
         assertEquals(38.0,repo.containers().single().capacity-repo.containers().single().used_amount,0.0)
     }
 
+    @Test fun backfilledHistoricalUnitIsNotDeductedFromDifferentCurrentUnit()=runBlocking {
+        val id=seed();repo.addContainers(id,40.0,1,true)
+        val now=start.plusSeconds(2*86400)
+        repo.calendar(now,zone,LocalDate.of(2026,3,9))
+        val record=repo.records().first{it.unconfirmed}
+        repo.saveMedication(base.copy(id=id,unit="ML"),"E2",RuleKind.EVERY_N_DAYS,1,listOf(LocalTime.of(20,0)),emptySet(),now,
+            pk=ProfileEntity(id,"E2","gel",gel_product_id=1))
+        repo.editRecord(record.id,Instant.ofEpochMilli(record.scheduled_utc!!),2.0,now)
+        assertEquals("MG",MedicationSnapshot.decode(repo.records().single{it.id==record.id}.config_snapshot,id)!!.unit)
+        assertEquals(0.0,repo.containers().single().used_amount,0.0)
+        assertEquals(2.0,repo.records().single{it.id==record.id}.unallocated_supply_amount,0.0)
+        assertTrue(repo.transaction{it.supplyFor(record.id)}.isEmpty())
+    }
+
     @Test fun lexicalAndStreamLimitsRejectBeforeParsing() {
         try{BackupLimits.checkJson("[".repeat(33)+"]".repeat(33));fail()}catch(_:BackupCodec.TooLarge){}
         try{BackupLimits.checkJson("{\"x\":\""+"a".repeat(1024*1024)+"\"}");fail()}catch(_:BackupCodec.TooLarge){}

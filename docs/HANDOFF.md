@@ -228,7 +228,7 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 - 应用级名称已永久改为中性 Notes，伪装任务/通知使用中性身份；APK 静态分析、安装来源、签名、旧 OEM 缓存及用户导出文档无法完全隐藏，详见 `disguise-privacy.md`。
 - 进入系统设置页（例如精确闹钟、电池优化）也会触发伪装模式的立即锁定，只有文件选择器例外（按用户要求）。
 - 补药通知在提醒重建时检查（打开应用、服药、闹钟触发、开机等），没有单独的每日定时任务。
-- 导入 HRT tracker 时，如果把某组记录导入到参数不同的已有药物（例如把 E2 记录导入到 EV 药物），浓度估算会按该药物的参数计算；界面只给出提示，没有阻止。
+- P0 build6起，新HRT tracker导入保留来源组的PK配置，不按映射目标当前配置重解释；旧导入快照未保存的参数无法恢复。Trans Memo没有实际途径字段，新记录也不猜途径。
 - 已有 Robolectric、截图和 API 35 原生模拟器测试；尚未完成 OEM 真机系统验证。用户此前报告的导入对话框选项问题已修复。
 
 ## 6. 给接手者的工作顺序建议
@@ -313,3 +313,5 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 用户已要求开始更新，先做history-integrity-p0设计范围。源码基线456fa1c，无远程新功能。本地JDK21已具备，正在/workspace/tooling安装SDK37/build-tools37并准备Gradle测试；之前的构建缓存不存在。设计/需求已记录；下一步历史snapshot与症状schema3、未确认语义和恢复校验。不得读/提交真实健康数据，不选LICENSE、不发布。
 
 2026-10-07 P0首轮代码已保存：MedicationSnapshot v2与profile/导入上下文、计算/历史/CSV读取快照，schema3症状来源snapshot及2→3迁移，AUTO_MISSED映射UNCONFIRMED、确认漏服入口与统计/日历分列，32MiB bounded备份读取/JSON预算/字段类型与恢复后约束/账本检查、密码finally清理。versionCode6。新增合成历史/恢复/来源/迁移回归。JVM测试已通过；Android首次编译只报缺少AppShell import，已修正，正在跑data/app单元测试并生成schema3。仍需完整lint/四构建/原生验证；现在不能称已完成或可交付APK。工具链新安装在/workspace/tooling（SDK37、Gradle9.3.1、TemurinJDK21），Gradle使用代理与系统CA。未改PK公式/参数、无真实数据、无发布。
+
+2026-10-07 P0第二阶段：data 36/36、reminder 14/14、app full 77项（76通过、1 PDF写入跳过）已通过。Robolectric测试依赖已补齐至本地离线目录，首次失败是缺少测试Android jar，不是业务断言。补齐日历旧计划上下文/自动状态、PDF当前方案与历史上下文分标、CSV/PDF一致读取事务、不把旧单位补记自动扣到不同当前单位包装。原生测试已跟进schema3及症状context往返，新增单位不一致回归待下一轮执行。README/PLAN同步现状。play测试、lint、四构建和原生检查仍进行中，不称整轮完成/无发布。

@@ -22,6 +22,7 @@ data class MedicationSnapshot(val name: String?, val molecule: String?, val rout
 
         fun decode(json: String, medicationId: Long): MedicationSnapshot? = runCatching {
             val o = JSONObject(json)
+            require(!o.has("snapshot_version") || o.getInt("snapshot_version")==2)
             fun text(key: String): String? = if (o.isNull(key)) null else o.optString(key).takeIf { it.isNotBlank() }
             val saved = o.optJSONObject("pk_profile")
             val profile = if (saved != null) {

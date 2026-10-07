@@ -16,7 +16,7 @@ import net.plainnotes.app.pk.CalibrationMode
 /** Current schedule of one medication, for display only. */
 data class ScheduleSummary(val kind:RuleKind,val interval:Int,val weekdays:Set<DayOfWeek>,val times:List<LocalTime>,val dose:Double?=null,val timeDoses:List<Double?> = emptyList())
 data class NotesState(val medications:List<MedicationEntity> = emptyList(),val slots:List<TimelineEntry> = emptyList(),val appointments:List<AppointmentEntity> = emptyList(),val error:Int?=null,val loading:Boolean=true,
-                      val schedules:Map<Long,ScheduleSummary> = emptyMap(),val profiles:Map<Long,ProfileEntity> = emptyMap(),val calendarStart:LocalDate=LocalDate.now())
+                      val schedules:Map<Long,ScheduleSummary> = emptyMap(),val profiles:Map<Long,ProfileEntity> = emptyMap(),val calendarStart:LocalDate=LocalDate.now(),val ruleSnapshots:Map<Long,String> = emptyMap())
 data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEntity?,val rule:RuleEntity?,val times:List<TimeEntity>)
 @HiltViewModel class NotesViewModel @Inject constructor(repository:NotesRepository,private val reminders:ReminderCoordinator,
     @dagger.hilt.android.qualifiers.ApplicationContext private val app:android.content.Context):ViewModel() {
@@ -53,7 +53,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
                 }
                 val profiles=meds.mapNotNull{m->dao.profile(m.id)?.let{m.id to it}}.toMap()
                 val upcoming=(repo.planned(now,now.plus(Duration.ofDays(366)),now)+slots.filter{it.slot.at<now}).distinctBy{it.slot.key}.filter{it.state in net.plainnotes.app.ui.OPEN_STATES}
-                NotesState(meds,slots,dao.appointments(),mutable.value.error,false,schedules,profiles,start) to
+                NotesState(meds,slots,dao.appointments(),mutable.value.error,false,schedules,profiles,start,dao.rules().associate{it.id to it.config_snapshot}) to
                     ExtraState(dao.records(),dao.containers(),repo.checkinItems(),dao.scores("0001-01-01",today.toString()),dao.notes("0001-01-01",today.toString()),upcoming,dao.stageReviews(),dao.symptomChecks("0001-01-01",today.toString()),dao.reviewEffects())
             }
             ensureActive()
@@ -190,7 +190,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
             repo.scores(LocalDate.of(1,1,1),today),repo.notes(LocalDate.of(1,1,1),today),schedules,labels,repo.containers(),repo.symptomChecks(LocalDate.of(1,1,1),today),repo.stageReviews())
     }
     fun exportCsv(uri:android.net.Uri,labels:(CheckinItemEntity)->String,schedules:Map<Long,String>)=dataOp {
-        val d=exportData(labels,schedules);withContext(Dispatchers.IO){app.contentResolver.openOutputStream(uri,"wt")!!.use{net.plainnotes.app.export.CsvExport.write(d,it)}};DataJob.Done(R.string.export_saved)
+        val d=repo.transaction{exportData(labels,schedules)};withContext(Dispatchers.IO){app.contentResolver.openOutputStream(uri,"wt")!!.use{net.plainnotes.app.export.CsvExport.write(d,it)}};DataJob.Done(R.string.export_saved)
     }
     fun exportSummary(uri:android.net.Uri,from:LocalDate,to:LocalDate,context:android.content.Context,labels:(CheckinItemEntity)->String,schedules:Map<Long,String>)=dataOp {
         val d=repo.transaction{exportData(labels,schedules)}
@@ -198,7 +198,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         DataJob.Done(R.string.export_saved)
     }
     fun exportPdf(uri:android.net.Uri,days:Int,includeChart:Boolean,context:android.content.Context,labels:(CheckinItemEntity)->String,schedules:Map<Long,String>)=dataOp {
-        val d=exportData(labels,schedules);val c=if(includeChart)conc.value.result else null
+        val d=repo.transaction{exportData(labels,schedules)};val c=if(includeChart)conc.value.result else null
         withContext(Dispatchers.IO){app.contentResolver.openOutputStream(uri,"wt")!!.use{net.plainnotes.app.export.PdfReport.write(context,d,days,c,it)}};DataJob.Done(R.string.export_saved)
     }
     /** Deletes everything: database, key, reminders cache and preferences. The caller restarts the UI. */

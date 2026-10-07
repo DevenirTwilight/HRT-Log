@@ -1,5 +1,6 @@
 package net.plainnotes.app.ui
 import net.plainnotes.app.data.unconfirmed
+import net.plainnotes.app.data.MedicationSnapshot
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -97,8 +98,8 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
             val dayOpen = upcoming.filter { it.slot.at.atZone(zone).toLocalDate() == selected }.sortedBy { it.slot.at }
             val dayAppts = state.appointments.filter { Instant.ofEpochMilli(it.at_utc).atZone(zone).toLocalDate() == selected }
             if (dayRecords.isEmpty() && dayOpen.isEmpty() && dayAppts.isEmpty()) item { Text(stringResource(R.string.calendar_day_empty), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(start = 4.dp)) }
-            items(dayOpen, key = { it.slot.key }) { e -> DoseCard(e, meds[e.slot.medicationId], { onComplete(e) }, { onChange(e) }) }
-            items(dayRecords, key = { "r${it.id}" }) { r -> RecordLine(r, meds[r.medication_id]) }
+            items(dayOpen, key = { it.slot.key }) { e -> DoseCard(e, state.ruleSnapshots[e.slot.ruleId]?.let{MedicationSnapshot.decode(it,e.slot.medicationId)?.medication(e.slot.medicationId)} ?: meds[e.slot.medicationId], { onComplete(e) }, { onChange(e) }) }
+            items(dayRecords, key = { "r${it.id}" }) { r -> RecordLine(r, MedicationSnapshot.decode(r.config_snapshot,r.medication_id)?.medication(r.medication_id)) }
             items(dayAppts, key = { "a${it.id}" }) { AppointmentCard(it) }
         }
         item(key = "stock") { StockForecast(state.medications.filter { it.active }, runOut, upcoming, today, zone, onStock) }
@@ -257,14 +258,14 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
     val (bg, fg, label) = when (r.status) {
         "ON_TIME" -> Triple(c.primaryContainer, c.onPrimaryContainer, R.string.status_on_time)
         "LATE" -> Triple(c.tertiaryContainer, c.onTertiaryContainer, R.string.status_late)
-        "MISSED" -> Triple(c.errorContainer, c.onErrorContainer, R.string.status_missed)
+        "MISSED" -> if(r.unconfirmed)Triple(c.surfaceContainerHigh,c.onSurfaceVariant,R.string.status_unconfirmed) else Triple(c.errorContainer, c.onErrorContainer, R.string.status_missed)
         else -> Triple(c.surfaceContainerHighest, c.onSurfaceVariant, R.string.status_skipped)
     }
     Surface(color = c.surfaceContainerLow, shape = MaterialTheme.shapes.large, modifier = Modifier.fillMaxWidth()) {
         Row(Modifier.padding(horizontal = 16.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically) {
             Text(formatTime(Instant.ofEpochMilli(r.taken_utc ?: r.scheduled_utc ?: 0)), style = MaterialTheme.typography.titleMedium, modifier = Modifier.width(64.dp))
             Column(Modifier.weight(1f)) {
-                if (!LocalSimpleMode.current) Text(med?.name ?: "", style = MaterialTheme.typography.bodyLarge, maxLines = 1)
+                if (!LocalSimpleMode.current) Text(med?.name ?: stringResource(R.string.history_context_unknown), style = MaterialTheme.typography.bodyLarge, maxLines = 1)
                 (r.actual_dose ?: r.planned_dose)?.let { Text(formatDose(it, med?.unit), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant) }
             }
             StatusPill(stringResource(label), bg, fg, if (r.status in listOf("ON_TIME", "LATE")) Icons.Rounded.Check else null)

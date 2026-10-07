@@ -44,6 +44,15 @@ See [`docs/HANDOFF.md`](docs/HANDOFF.md) for verification and remaining work,
 Literature validation and physical-device verification remain incomplete.
 Health information must never be committed; use only synthetic test data.
 
+The development branch now targets build 6 / database schema 3. New medication
+events preserve their formulation inputs, and new symptom observations preserve
+their matched catalogue sources. Missing legacy context remains explicitly unknown.
+An overdue dose without an intake record is shown as unconfirmed until the user
+confirms it was missed. Backup restoration has size/structure limits and transactional
+validation. These changes are described in
+[`history-integrity-p0.md`](docs/design/history-integrity-p0.md); they are not yet a
+new public release. Historical model bundles and treatment epochs are future work.
+
 Public binaries: [0.2.0 release](https://github.com/DevenirTwilight/HRT-Log/releases/tag/v0.2.0).
 They use a private release key, distinct from the public debug key. Back up your data
 before replacing a debug-signed installation; uninstalling deletes local app data.

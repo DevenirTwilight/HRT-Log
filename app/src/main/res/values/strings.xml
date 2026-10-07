@@ -690,4 +690,6 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="unconfirmed_count">Unconfirmed: %1$d. Not included as confirmed missed doses.</string>
     <string name="unconfirmed_help">No intake has been recorded. This does not confirm a missed dose.</string>
     <string name="backup_too_large">This backup exceeds the supported size or structure limits. No data was restored.</string>
+    <string name="report_current_plan">Current recorded plan</string>
+    <string name="report_recorded_contexts">Medication contexts recorded in this period</string>
 </resources>

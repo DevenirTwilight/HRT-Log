@@ -690,4 +690,6 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="unconfirmed_count">Non confirmées : %1$d. Non comptées comme prises manquées confirmées.</string>
     <string name="unconfirmed_help">Aucune prise n’a été enregistrée. Cela ne confirme pas une prise manquée.</string>
     <string name="backup_too_large">Cette sauvegarde dépasse les limites de taille ou de structure prises en charge. Aucune donnée n’a été restaurée.</string>
+    <string name="report_current_plan">Schéma actuellement enregistré</string>
+    <string name="report_recorded_contexts">Contextes médicamenteux enregistrés sur cette période</string>
 </resources>

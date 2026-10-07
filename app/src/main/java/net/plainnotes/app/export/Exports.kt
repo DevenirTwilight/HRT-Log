@@ -110,7 +110,7 @@ object PdfReport {
         text(context.getString(if(period==null)R.string.report_title else R.string.wb_summary), title, 2f)
         text(context.getString(R.string.report_period, from.format(dateFmt), to.format(dateFmt)) + " · " + context.getString(R.string.report_generated, java.time.LocalDateTime.now().format(dtFmt)), small, 12f)
 
-        text(context.getString(R.string.medications), head)
+        text(context.getString(R.string.report_current_plan), head)
         d.medications.filter { it.active }.forEach { m ->
             val ester = d.profiles[m.id]?.ester
             text("• ${m.name} — ${listOfNotNull(m.molecule, ester?.takeIf { it != "E2" }, m.route).joinToString(" / ")} — ${fmt(m.dose_per_intake)} ${m.unit} · ${d.scheduleText[m.id] ?: ""}", body, 2f)
@@ -118,6 +118,11 @@ object PdfReport {
         y += 8f
         text(context.getString(R.string.adherence_title), head)
         val inRange = d.records.filter { it.deleted_at_utc == null && (it.taken_utc ?: it.scheduled_utc ?: 0) in since until until }
+        text(context.getString(R.string.report_recorded_contexts),head)
+        inRange.map{MedicationSnapshot.decode(it.config_snapshot,it.medication_id)}.distinct().forEach{snapshot->
+            val description=snapshot?.let{listOfNotNull(it.name,it.molecule,it.profile?.ester,it.route,it.unit).joinToString(" · ")}
+            text(description?.takeIf{it.isNotBlank()} ?: context.getString(R.string.history_context_unknown),body)
+        }
         d.medications.filter { m -> inRange.any { it.medication_id == m.id } }.forEach { m ->
             val r = inRange.filter { it.medication_id == m.id && it.scheduled_utc != null }
             val onTime = r.count { it.status == "ON_TIME" }; val late = r.count { it.status == "LATE" }; val missed = r.count { it.status == "MISSED" && !it.unconfirmed }; val skipped = r.count { it.status == "SKIPPED" }

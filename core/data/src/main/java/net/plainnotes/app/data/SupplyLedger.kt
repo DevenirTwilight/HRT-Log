@@ -22,6 +22,11 @@ internal object SupplyLedger {
     suspend fun allocate(dao: NotesDao, record: RecordEntity): Double {
         val dose = record.actual_dose ?: return 0.0
         if (record.status !in listOf("ON_TIME", "LATE") || record.deleted_at_utc != null) return 0.0
+        val snapshotUnit=MedicationSnapshot.decode(record.config_snapshot,record.medication_id)?.unit
+        if(snapshotUnit!=null && snapshotUnit!=dao.medication(record.medication_id).unit) {
+            dao.updateRecord(record.copy(unallocated_supply_amount=dose))
+            return dose // No implicit conversion between historical and current inventory units.
+        }
         var remaining = dose
         while (remaining > EPS) {
             val all = dao.containers().filter { it.medication_id == record.medication_id }
