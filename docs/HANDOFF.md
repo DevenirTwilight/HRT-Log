@@ -4,6 +4,19 @@
 
 用户明确日常使用此应用，测试时不能反复卸载正式安装。以后所有交付给用户的 APK（含测试包）统一使用第 7 节现有私有正式密钥；不再交付 CI 的调试签名包。CI 内部自动验证仍可使用调试密钥，不将私钥或密码上传 CI。此决定优先于本文历史交付说明。
 
+### 当前最新交付：P0 build 6（2026-10-07，已完成）
+
+- 功能源码 `2a58d01`；分支 `claude/new-session-1959qb`；公开0.2.0/build5 Release与标签未改。schema3、versionCode6、versionName0.2.0。
+- 已独立实现用药PK输入/历史单位快照、症状匹配来源冻结、自动未登记UNCONFIRMED及确认漏服、备份32MiB/JSON/结构/账本校验与失败回滚；修复b64:字面备注误解码。旧缺失上下文明确未知，不用当前配置补猜；未改变PK公式、参数或当前体重政策。P1 Epoch/Timeline/Visit Pack未实现。
+- 最终CI [37630464376](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37630464376) 针对2a58d01：jvm/android/device-tests全部成功。本机同一功能源码单元254项（按模块/变体计，252通过、2 Robolectric PDF跳过、零失败）、lint full 0错误64警告/play 0错误59警告、四构建与测试APK构建成功；release manifest检查与schema无漂移通过。API35原生data8+app23项及重启流程成功，含PDF/SQLCipher/迁移。未做OEM真机验证。
+- 正式签名full：`/workspace/HRT-Log-build6-full-signed.apk`，23,141,595 bytes，SHA256 `aed2b0c9c35dd2bb89b1468938e0ae6a46bbe3f09f14963d08289621c83b1180`。
+- 正式签名play：`/workspace/HRT-Log-build6-play-signed.apk`，23,067,531 bytes，SHA256 `970f9c70be4265ad89b5fceebab677690e422b474b40993a3a23aedb090c0686`。
+- 本地签署正式release，核对第7节现有证书；两个包均为非调试、16KB对齐、无INTERNET、net.plainnotes.app/build6。私有仓库仍为private；签名后临时克隆、ZIP、私钥和密码全部清理。APK不在源码仓库。
+- full已交付tmpfiles临时下载入口，实际下载APK回查字节数/SHA256一致。服务当前下载入口多一层时间令牌，简单拼接 /dl/ 会返回HTML：从返回页面的download按钮提取真正入口，再下载回查。临时链接失效时重新上传同签名APK，不把工作区路径当成手机下载交付。
+- 用户可覆盖现有正式安装，建议先导出加密备份；真机覆盖安装仍待用户确认。root LICENSE/模型bundle快照/包装自身单位持久化保持明确待办，不能把P0描述成完整安全审计或全路线图已完成。
+
+### 前一份build 5正式签名测试包（历史记录）
+
 本次已从成功的 CI `37602133462` 的 `build-results` 提取 full release unsigned APK（功能源码 `bf7d6d4`），使用私有备份在源码仓库外完成正式签名。新增 `scripts/sign_local_apk.sh`：16 KB zipalign、密码文件输入、核对既有正式证书，拒绝凭据或输出 APK 位于源码仓库内。不把密钥或密码作为命令行明文传入。
 
 - 交付文件：会话工作区 `/workspace/HRT-Log-latest-full-signed.apk`，23,133,403 bytes。APK 没有提交到仓库，也没有修改公开 Release 或标签。
@@ -19,7 +32,7 @@
 - 尝试 GitHub 未公开草稿附件：创建草稿成功，但 uploads 端点未通过认证，未上传任何 APK；空草稿已删除，没有发布或改动现有 Release/标签。
 - 本次只把已正式签名的安装包放在 tmpfiles.org 临时下载通道（不是源码、健康数据或签名凭据）。使用 `/dl/` 直接下载入口，下载回查 SHA-256 与本地 APK 一致。链接临时有效，不作永久下载地址；若失效，重新交付上述同签名 APK。
 
-最后更新：2026-10-06。需求见 `docs/REQUIREMENTS.md`，务必先读第 2 节"硬性规则"。**准备正式发布时，先读本文件第 7 节：已有私有签名备份，必须恢复并沿用，不能重新生成替代密钥。**
+最后更新：2026-10-07。需求见 `docs/REQUIREMENTS.md`，务必先读第 2 节"硬性规则"。**准备正式发布时，先读本文件第 7 节：已有私有签名备份，必须恢复并沿用，不能重新生成替代密钥。**
 
 ## 0. 交接规则（每个接手者都必须遵守）
 
@@ -308,7 +321,7 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 
 提交阶段：131ad14（本项目现状）、c926b85（竞品矩阵）、beef98e（独立设计/评分/PRIOR_ART），均推送claude/new-session-1959qb。给用户通过GitHub页面阅读，避免Android本地文件预览限制。建议定位local-first longitudinal HRT record；P0历史上下文/症状来源/未确认语义/恢复边界/许可治理；后续实现需另行明确范围，本轮建议不是实现授权。无未完成研究文件。
 
-### 2k. P0应用更新（2026-10-07，开始）
+### 2k. P0应用更新（2026-10-07，已完成；过程记录）
 
 用户已要求开始更新，先做history-integrity-p0设计范围。源码基线456fa1c，无远程新功能。本地JDK21已具备，正在/workspace/tooling安装SDK37/build-tools37并准备Gradle测试；之前的构建缓存不存在。设计/需求已记录；下一步历史snapshot与症状schema3、未确认语义和恢复校验。不得读/提交真实健康数据，不选LICENSE、不发布。
 
@@ -321,3 +334,5 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 恢复复核补充：发现旧RawData.restore把任何以b64:开头的TEXT误当成BLOB。当前domain schema没有BLOB字段，已改为保留字面文本，并将合成备注往返断言加入历史完整性测试；这个修复随最终全量回归一起验证。签名私有仓库已通过连接器确认仍为private，临时密钥恢复在仓库外，签名结束立即清理。
 
 2026-10-07 最终源码2a58d01的本机单元回归已通过：domain30、pk18、importer12、data37、reminder14、app full78（1 PDF跳过）、play65（1 PDF跳过），按模块/变体合计254项，252通过、2跳过、0失败；不是254个互不重复用例。新增库存旧单位、未知导入route、REVERSE空关联及b64:字面备注均已跑过。最终lint/四构建仍运行；CI37630464376针对同一源码运行中，JVM已成功。此前中间版本的native31项成功不能冒充最终源码结果。下一步完成最终构建/native结果、正式签名与临时下载回查，再更新顶部最新交付信息。无公开发布。
+
+2026-10-07 P0最终完成：本机完整检查和最终CI三个任务成功；已签署full/play build6并清理临时凭据，full临时下载独立回查一致。顶部最新交付块已列出源码、测试、文件哈希与剩余限制。无未完成P0代码/未提交修改，无公开发布；下一批按design/longitudinal-hrt-record讨论的Epoch与Timeline推进。
