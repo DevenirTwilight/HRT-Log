@@ -48,7 +48,7 @@ object LongitudinalProjection {
             // Count is a daily summary; individual scheduled instants remain in the source.
             add("unconfirmed:${group.first}:${group.second}",EventKind.UNCONFIRMED,null,group.first,rows.map{it.medication_id}.toSet(),EventSource.Unconfirmed(rows))
         }
-        records.filterNot{it in unconfirmed}.forEach{r->
+        records.filterNot{it.status=="MISSED" && it.origin=="AUTO_MISSED"}.forEach{r->
             val kind=when(r.status){"ON_TIME","LATE"->EventKind.DOSE;"MISSED"->EventKind.MISSED;"SKIPPED"->EventKind.SKIPPED;else->return@forEach}
             val at=(if(kind==EventKind.DOSE)r.taken_utc else r.scheduled_utc)?.let(Instant::ofEpochMilli)
             add("dose:${r.id}",kind,at,null,setOf(r.medication_id),EventSource.Intake(r,r.rule_version_id?.let(links::get)))

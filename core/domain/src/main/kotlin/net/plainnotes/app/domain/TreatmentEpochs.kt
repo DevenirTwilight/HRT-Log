@@ -16,15 +16,19 @@ object TreatmentEpochs {
     fun build(spans:List<RegimenSpan>):List<TreatmentEpoch> {
         require(spans.map{it.id}.distinct().size==spans.size)
         require(spans.all{it.until==null || it.until>it.from})
-        val boundaries=spans.flatMap{listOfNotNull(it.from,it.until)}.distinct().sorted()
+        val starts=spans.groupBy{it.from}
+        val ends=spans.filter{it.until!=null}.groupBy{it.until!!}
+        val boundaries=(starts.keys+ends.keys).sorted()
+        val active=mutableMapOf<Long,RegimenSpan>()
         val result=mutableListOf<TreatmentEpoch>()
         boundaries.forEachIndexed{i,start->
             val end=boundaries.getOrNull(i+1)
-            val members=spans.filter{it.from<=start && (it.until==null || start<it.until)}
-            val ids=members.map{it.id}.toSortedSet()
+            ends[start].orEmpty().forEach{active.remove(it.id)}
+            starts[start].orEmpty().forEach{active[it.id]=it}
+            val ids=active.keys.toSortedSet()
             val previous=result.lastOrNull()
             if(previous!=null && previous.regimenIds==ids) result[result.lastIndex]=previous.copy(until=end)
-            else result+=TreatmentEpoch("epoch:${start.toEpochMilli()}:${ids.joinToString(",")}",start,end,ids,members.any{it.reconstructed})
+            else result+=TreatmentEpoch("epoch:${start.toEpochMilli()}:${ids.joinToString(",")}",start,end,ids,active.values.any{it.reconstructed})
         }
         return result
     }
