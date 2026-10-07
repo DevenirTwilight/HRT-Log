@@ -4,10 +4,10 @@
 
 用户明确日常使用此应用，测试时不能反复卸载正式安装。以后所有交付给用户的 APK（含测试包）统一使用第 7 节现有私有正式密钥；不再交付 CI 的调试签名包。CI 内部自动验证仍可使用调试密钥，不将私钥或密码上传 CI。此决定优先于本文历史交付说明。
 
-### 当前最新交付：地区候选框 build 9（2026-10-07）
+### 当前最新交付：地区候选框 build 9（2026-10-07，已完成）
 
 - 功能源码 `0511922`，分支 `claude/new-session-1959qb`，schema4/versionCode9/versionName0.2.0。设置页地区改为单个只读候选框，点击弹出六项列表；复用原翻译、原存储值、未选择与帮助说明，保留与界面语言独立性。本包包含build8浓度修复。
-- 本机full91/play78应用回归（167通过、2 PDF跳过、0失败）、lint full0错误66警告/play0错误61警告、full release构建成功（8m53s）。本次未新增低影响UI镜像测试；复用现有DropdownField，未改数据层/PK。最终CI [37645063384](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37645063384) jvm/device-tests成功，android仍在运行，须继续核对最终结果。
+- 本机full91/play78应用回归（167通过、2 PDF跳过、0失败）、lint full0错误66警告/play0错误61警告、full release构建成功（8m53s）。本次未新增低影响UI镜像测试；复用现有DropdownField，未改数据层/PK。最终CI [37645063384](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37645063384) jvm/android/device-tests全部成功（连接器核验最终job结论；公开API状态更新有延迟）。
 - 已签署full：`/workspace/HRT-Log-build9-full-signed.apk`，23,223,515 bytes，SHA256 `657baac99e8c95bbd2580381739ec176a8105556d33f2111290cae2d4d848f5c`。同现有正式证书、16KB对齐、非调试、无INTERNET、net.plainnotes.app/build9核验。tmpfiles真实令牌入口独立下载大小/SHA一致，已交付；临时链接失效重新上传同一包。
 - 此次本机仅签署full；play debug编译/回归通过，CI负责两变体release，无交付调试包。私有签名备份仓库确认private，签后临时克隆/ZIP/私钥/密码全部删除，原备份未改。不动公开Release/标签；无根LICENSE变更。用户真机候选框及覆盖安装仍待确认。
 
@@ -396,7 +396,7 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 
 2026-10-07 build8最终完成：补充用户舌下/混合来源/不校准回归full91/play78已完成，两变体各1 PDF跳过；最终合计292项/290通过/2跳过。CI37643141363三个任务全部成功，两正式包签署并删除临时凭据，full下载回查一致。顶部交付块已更新；无本轮未完成代码，无公开发布，真机确认待用户。
 
-### 2n. build9地区候选框（2026-10-07，交付；过程记录）
+### 2n. build9地区候选框（2026-10-07，已完成；过程记录）
 
 用户要求紧凑地区候选框。RegionSection已替换常驻六行RadioButton，复用DropdownField；仅显示选中地区，点击弹出六项列表，未选择和帮助说明保留。设置持久化键/值与语言独立性不变；versionCode9/schema4。下一步相关现有UI/翻译回归、full/play编译与lint、正式full包签名下载，不改公开Release。无需新增镜像式UI测试。
 
@@ -405,3 +405,5 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 2026-10-07 build9静态检查完成：full0错误66警告/play0错误61警告；仅界面选择器变化，无新翻译/数据库迁移。本机正式full R8运行中，CI37645063384仍进行；完成后签署和实际下载回查。
 
 2026-10-07 build9 full正式签名与下载回查完成，临时签名凭据已清理；顶部交付块已更新。仅CI android最终结果尚待核对，不能称三个CI均成功；无需另造新APK或重复已通过本机测试。
+
+2026-10-07 build9最终完成：CI37645063384三个任务全部success，四构建/manifest/schema检查通过。本机169项应用回归（167通过、2 PDF跳过）/两lint/full release成功；正式full已独立下载核验并交付。临时签名凭据清理，无本轮未完成代码或验证任务、无公开发布；用户真机结果待确认。
