@@ -2,6 +2,14 @@ package net.plainnotes.app.data
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 @Dao interface NotesDao {
+    @Query("SELECT * FROM regimen_version ORDER BY effective_from_utc,id") suspend fun regimens():List<RegimenVersionEntity>
+    @Insert suspend fun regimen(value:RegimenVersionEntity):Long
+    @Query("UPDATE regimen_version SET effective_until_utc=:until WHERE id=:id") suspend fun closeRegimen(id:Long,until:Long)
+    @Query("SELECT * FROM regimen_rule_link") suspend fun regimenLinks():List<RegimenRuleLinkEntity>
+    @Insert suspend fun regimenLink(value:RegimenRuleLinkEntity)
+    @Query("SELECT * FROM milestone ORDER BY date,id") suspend fun milestones():List<MilestoneEntity>
+    @Upsert suspend fun milestone(value:MilestoneEntity)
+    @Query("DELETE FROM milestone WHERE id=:id") suspend fun deleteMilestone(id:Long)
     @Query("SELECT * FROM medication ORDER BY sort_order, id") fun observeMedications(): Flow<List<MedicationEntity>>
     @Query("SELECT * FROM medication ORDER BY id") suspend fun medications(): List<MedicationEntity>
     @Query("SELECT * FROM medication WHERE id = :id") suspend fun medication(id: Long): MedicationEntity

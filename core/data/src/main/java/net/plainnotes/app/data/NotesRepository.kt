@@ -24,6 +24,12 @@ const val BACKFILL_MAX_DAYS=731L
         val db=db();db.withTransaction { block(db.dao()) }
     }
     suspend fun medications()=withContext(Dispatchers.IO){db().dao().medications()}
+    suspend fun saveMilestone(value:MilestoneEntity)=transaction{dao->
+        LocalDate.parse(value.date);require(value.kind in listOf("CUSTOM","STARTED","ROUTE","SURGERY"))
+        require(value.kind!="CUSTOM" || !value.title.isNullOrBlank())
+        dao.milestone(value.copy(title=value.title?.trim()?.takeIf{it.isNotEmpty()},note=value.note?.trim()?.takeIf{it.isNotEmpty()}))
+    }
+    suspend fun deleteMilestone(id:Long)=transaction{it.deleteMilestone(id)}
     suspend fun appointments()=withContext(Dispatchers.IO){db().dao().appointments()}
     suspend fun profile(id:Long)=withContext(Dispatchers.IO){db().dao().profile(id)}
     suspend fun rules()=withContext(Dispatchers.IO){db().dao().rules()}
@@ -85,6 +91,7 @@ const val BACKFILL_MAX_DAYS=731L
         return entry.slot.takeIf{trigger.toEpochMilli()==source.trigger_utc}
     }
     suspend fun saveMedication(value:MedicationEntity,ester:String?,kind:RuleKind,interval:Int,times:List<LocalTime>,weekdays:Set<DayOfWeek>,now:Instant=Instant.now(),pk:ProfileEntity?=null,resizeContainers:Boolean=false):Long=transaction { dao ->
+        RegimenHistory.seed(db().openHelper.writableDatabase)
         val effectiveNow=Instant.ofEpochMilli(now.toEpochMilli())
         require(value.name.isNotBlank() && value.dose_per_intake.isFinite() && value.dose_per_intake>0)
         val zone=ZoneId.systemDefault();reconcile(dao,effectiveNow,zone)
@@ -98,8 +105,16 @@ const val BACKFILL_MAX_DAYS=731L
         if(value.active && current!=null && samePlan(dao,current,value,kind,interval,times,weekdays,zone,snapshot)) {
             if(current.config_snapshot!=snapshot) dao.updateRule(current.copy(config_snapshot=snapshot))
             saveProfile(dao,id,value,ester,pk)
+            RegimenHistory.changed(dao,id,cut)
             return@transaction id
         }
+        val cadenceUnchanged=current?.let{r->
+            if(r.kind!=kind.name || r.interval!=interval || r.effective_zone!=zone.id) false else {
+                val proposed=r.copy(weekday_mask=weekdays.sumOf{1 shl (it.value-1)},dose_snapshot=value.dose_per_intake,config_snapshot=snapshot)
+                val newTimes=if(kind==RuleKind.EVERY_N_HOURS)emptyList() else times.distinct().map{TimeEntity(rule_id=r.id,local_time=it.withNano(0).format(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss")))}
+                RegimenDefinition.from(r,dao.times(r.id)).signature()==RegimenDefinition.from(proposed,newTimes).signature()
+            }
+        } ?: false
         // Preserve pending/overridden slots born before the cutover without persisting future PENDING rows.
         val old=dao.rules().filter { it.medication_id==id && it.effective_until_utc==null }
         if(old.isNotEmpty()) {
@@ -116,17 +131,18 @@ const val BACKFILL_MAX_DAYS=731L
         saveProfile(dao,id,value,ester,pk)
         if(value.active) {
             val soon=requireNotNull(value.soon_alert_minutes);val late=requireNotNull(value.late_after_minutes)
-            val anchorDate=if(kind==RuleKind.EVERY_N_HOURS)null else effectiveNow.atZone(zone).toLocalDate().toString()
+            val anchorDate=if(cadenceUnchanged)current!!.anchor_local else if(kind==RuleKind.EVERY_N_HOURS)null else effectiveNow.atZone(zone).toLocalDate().toString()
             val mask=weekdays.sumOf{1 shl (it.value-1)}
             val r=RuleEntity(medication_id=id,kind=kind.name,interval=interval,weekday_mask=mask,anchor_local=anchorDate,anchor_zone=zone.id,
-                anchor_utc=if(kind==RuleKind.EVERY_N_HOURS)cut else null,effective_from_utc=cut,effective_until_utc=null,effective_zone=zone.id,
+                anchor_utc=if(cadenceUnchanged)current!!.anchor_utc else if(kind==RuleKind.EVERY_N_HOURS)cut else null,effective_from_utc=cut,effective_until_utc=null,effective_zone=zone.id,
                 missed_tracking_from_utc=cut,dose_snapshot=value.dose_per_intake,soon_snapshot=soon,late_snapshot=late,
                 config_snapshot=snapshot)
             require(interval in 1..36500); require(kind!=RuleKind.WEEKLY || mask>0)
             require(kind==RuleKind.EVERY_N_HOURS || times.isNotEmpty())
             val rid=dao.rule(r)
             if(kind!=RuleKind.EVERY_N_HOURS)times.distinct().forEach{dao.time(TimeEntity(rule_id=rid,local_time=it.withNano(0).format(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss")),dose_override=null))}
-        };id
+        }
+        RegimenHistory.changed(dao,id,cut);id
     }
     private fun profileFor(id:Long,value:MedicationEntity,ester:String?,pk:ProfileEntity?):ProfileEntity? =
         if(value.molecule=="E2" && value.route!=null && ester!=null)
@@ -149,9 +165,11 @@ const val BACKFILL_MAX_DAYS=731L
             MedicationSnapshot.decode(r.config_snapshot,r.medication_id)?.profile==MedicationSnapshot.decode(snapshot,r.medication_id)?.profile
     }
     suspend fun removeMedication(id:Long,now:Instant=Instant.now())=transaction { dao ->
+        RegimenHistory.seed(db().openHelper.writableDatabase)
         reconcile(dao,now,ZoneId.systemDefault())
         val m=dao.medication(id);dao.updateMedication(m.copy(active=false,notifications_on=false))
         dao.rules().filter{it.medication_id==id && it.effective_until_utc==null}.forEach{dao.updateRule(it.copy(effective_until_utc=maxOf(now.toEpochMilli(),it.effective_from_utc+1)))}
+        RegimenHistory.changed(dao,id,dao.rules().filter{it.medication_id==id}.maxOfOrNull{it.effective_until_utc ?: now.toEpochMilli()} ?: now.toEpochMilli())
     }
     private fun Slot.retained()=RetainedEntity(key,ruleId,medicationId,original.toEpochMilli(),original.toEpochMilli(),originalZone.id,originalDose,soonMinutes,lateMinutes,trackingFrom.toEpochMilli())
     private suspend fun recordFor(dao:NotesDao,slot:Slot,status:String,taken:Instant?=null,dose:Double?=null,origin:String="APP"):RecordEntity {
@@ -259,7 +277,7 @@ const val BACKFILL_MAX_DAYS=731L
     }
     suspend fun exportBackup(password:CharArray):ByteArray=withContext(Dispatchers.IO) {
         val db=db()
-        val json=db.withTransaction { JSONObject().put("format",BackupCodec.FORMAT_VERSION).put("schema",db.openHelper.writableDatabase.version)
+        val json=db.withTransaction { RegimenHistory.seed(db.openHelper.writableDatabase);JSONObject().put("format",BackupCodec.FORMAT_VERSION).put("schema",db.openHelper.writableDatabase.version)
             .put("created",Instant.now().toString()).put("tables",RawData.dump(db.openHelper.writableDatabase)) }
         val plain=json.toString().toByteArray(Charsets.UTF_8)
         try{BackupCodec.encrypt(plain,password)}finally{plain.fill(0)}
@@ -276,11 +294,11 @@ const val BACKFILL_MAX_DAYS=731L
         if(json.optInt("format")!=BackupCodec.FORMAT_VERSION||schema<1) throw BackupCodec.BadFile("incompatible version")
         if(schema>current) throw BackupCodec.NewerBackup()
         val tables=json.getJSONObject("tables")
-        val required=DOMAIN_TABLES.filterNot{schema<2 && it in listOf("stage_review","symptom_check","review_effect")}
+        val required=DOMAIN_TABLES.filterNot{(schema<2 && it in listOf("stage_review","symptom_check","review_effect")) || (schema<4 && it in listOf("regimen_version","regimen_rule_link","milestone"))}
         require(required.all{tables.has(it)}) { "Incomplete backup" }
         db.withTransaction {
             val sql=db.openHelper.writableDatabase
-            RawData.restore(sql,tables)
+            RawData.restore(sql,tables,upgradeRegimens=schema<4)
             if(schema<2) WellbeingUpgrade.apply(sql,today)
         }
     }

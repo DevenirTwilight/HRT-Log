@@ -23,4 +23,14 @@ val migration2To3 = object : Migration(2, 3) {
         db.execSQL("ALTER TABLE `symptom_check` ADD COLUMN `context_snapshot` TEXT")
     }
 }
-fun allMigrations(today: () -> LocalDate = LocalDate::now): Array<Migration> = arrayOf(migration1To2(today), migration2To3)
+val migration3To4 = object : Migration(3, 4) {
+    override fun migrate(db:SupportSQLiteDatabase) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS regimen_version (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, medication_id INTEGER NOT NULL, effective_from_utc INTEGER NOT NULL, effective_until_utc INTEGER, zone TEXT NOT NULL, definition_json TEXT NOT NULL, clinical_signature TEXT NOT NULL, origin TEXT NOT NULL, recorded_at_utc INTEGER, FOREIGN KEY(medication_id) REFERENCES medication(id) ON UPDATE NO ACTION ON DELETE RESTRICT)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS index_regimen_version_medication_id ON regimen_version(medication_id)")
+        db.execSQL("CREATE TABLE IF NOT EXISTS regimen_rule_link (rule_id INTEGER NOT NULL, regimen_id INTEGER NOT NULL, PRIMARY KEY(rule_id), FOREIGN KEY(rule_id) REFERENCES schedule_rule(id) ON UPDATE NO ACTION ON DELETE RESTRICT, FOREIGN KEY(regimen_id) REFERENCES regimen_version(id) ON UPDATE NO ACTION ON DELETE RESTRICT)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS index_regimen_rule_link_regimen_id ON regimen_rule_link(regimen_id)")
+        db.execSQL("CREATE TABLE IF NOT EXISTS milestone (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, date TEXT NOT NULL, kind TEXT NOT NULL, title TEXT, note TEXT)")
+        RegimenHistory.seed(db)
+    }
+}
+fun allMigrations(today: () -> LocalDate = LocalDate::now): Array<Migration> = arrayOf(migration1To2(today), migration2To3, migration3To4)
