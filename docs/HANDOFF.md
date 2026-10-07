@@ -301,3 +301,5 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 未完成：完整矩阵、Featherline深度设计、独立schema/迁移方案、评分路线图、PRIOR_ART及文档链接检查。报告中预先列出的这些文件随后补齐。无应用修改/无发布/无向第三方发消息；研究临时克隆位于/workspace/scratch/research，结果须继续写入仓库。
 
 2026-10-07 调研第二阶段完成：`docs/hrt-competitor-matrix-2026-10-07.md` 与 UTF-8 BOM CSV，81项×9产品列；固定各默认分支提交、源码审阅路径、许可/issue边界，标记源码/官方/部分/未知。特别区分Yuuki Swift HRT-Tracker与Transmtf导入目标、Chrysalide PWA与Trans Memo协会、MyHRT安全层的禁止复用许可、Featherline T模型与未合并校准PR。独立设计/评分/PRIOR_ART仍在写，无功能代码改动。
+
+2026-10-07 第三阶段完成：独立设计 `docs/design/longitudinal-hrt-record.md`、六维评分 `docs/hrt-roadmap-2026-10-07.md`、根 `PRIOR_ART.md` 已写入。Featherline逐项分析medicine/identity/group/log/instruction/equivalent量、365天simulation、widget/cache/quicklog、TrackedDate/Anchor、Argon2/GCM/gzip/bounds；与HRT现有固定KDF/无压缩区分，不把不存在的可变cost/gzip路径当漏洞。P0历史PK/source/missed/restore/许可；P1epoch-context-timeline-visitpack，P2widget/模型扩张。明确此次已读源码不是真正法律隔离clean room。下一步文档链接/矩阵和证据一致性检查，再最终回复；无应用代码改动。
