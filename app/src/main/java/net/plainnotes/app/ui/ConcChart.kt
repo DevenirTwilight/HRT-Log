@@ -40,6 +40,7 @@ class ChartData(
     /** Optional horizontal reference range (user-entered), drawn as a light band. */
     val range: Pair<Double, Double>? = null,
     val unit: String = "",
+    val includeBandsInScale:Boolean = false,
 )
 
 private fun niceStep(span: Double, target: Int): Double {
@@ -59,8 +60,8 @@ private fun niceStep(span: Double, target: Int): Double {
     val labColor = c.tertiary; val nowColor = c.error; val rangeColor = c.secondary
     val measurer = rememberTextMeasurer()
     val minX = data.x.firstOrNull() ?: initialStart; val maxX = data.x.lastOrNull() ?: initialEnd
-    var start by remember(data) { mutableDoubleStateOf(max(minX, initialStart)) }
-    var end by remember(data) { mutableDoubleStateOf(min(maxX, initialEnd)) }
+    var start by remember(initialStart,initialEnd,minX,maxX) { mutableDoubleStateOf(max(minX, initialStart)) }
+    var end by remember(initialStart,initialEnd,minX,maxX) { mutableDoubleStateOf(min(maxX, initialEnd)) }
     var tapX by remember(data) { mutableStateOf<Double?>(null) }
     val density = LocalDensity.current
     val locale = androidx.compose.ui.platform.LocalConfiguration.current.locales[0]
@@ -83,14 +84,8 @@ private fun niceStep(span: Double, target: Int): Double {
             .pointerInput(data) { detectTapGestures { o -> val w = size.width - leftPad; tapX = if (o.x < leftPad) null else start + (end - start) * ((o.x - leftPad) / w) } }) {
             val w = size.width - leftPad; val h = size.height - bottomPad - topPad
             if (w <= 0 || h <= 0 || data.x.isEmpty()) return@Canvas
-            fun visibleMax(): Double {
-                var m = 1.0
-                for (i in data.x.indices) if (data.x[i] in start..end) { m = max(m, data.y[i]); data.band95?.let { m = max(m, it.second[i]) } }
-                data.points.forEach { if (it.first in start..end) m = max(m, it.second) }
-                data.range?.let { m = max(m, it.second) }
-                return m * 1.12
-            }
-            val yMax = visibleMax()
+            if(end<=start)return@Canvas
+            val yMax = ChartViewport.top(data,start,end)
             val step = niceStep(yMax, 4)
             val top = ceil(yMax / step) * step
             fun px(x: Double) = leftPad + ((x - start) / (end - start) * w).toFloat()
@@ -107,7 +102,7 @@ private fun niceStep(span: Double, target: Int): Double {
             }
             data.range?.let { (lo, hi) -> drawRect(rangeColor.copy(alpha = 0.10f), Offset(leftPad, py(hi)), androidx.compose.ui.geometry.Size(w, py(lo) - py(hi))) }
             drawTimeAxis(measurer, labelStyle, start, end, ::px, size.height - bottomPad, grid, hourFmt, dayFmt)
-            clipRectSafe(leftPad, 0f, size.width, size.height) {
+            clipRectSafe(leftPad, topPad, size.width, topPad+h) {
                 fun bandPath(b: Pair<DoubleArray, DoubleArray>): Path = Path().apply {
                     var first = true
                     for (i in data.x.indices) { if (data.x[i] < start - 48 || data.x[i] > end + 48) continue; val p = Offset(px(data.x[i]), py(b.second[i])); if (first) { moveTo(p.x, p.y); first = false } else lineTo(p.x, p.y) }
@@ -117,12 +112,10 @@ private fun niceStep(span: Double, target: Int): Double {
                 data.band95?.let { drawPath(bandPath(it), band.copy(alpha = 0.10f)) }
                 data.band68?.let { drawPath(bandPath(it), band.copy(alpha = 0.16f)) }
                 val solid = Path(); val dashed = Path(); var sStarted = false; var dStarted = false
-                for (i in data.x.indices) {
-                    val x = data.x[i]; if (x < start - 48 || x > end + 48) continue
-                    val p = Offset(px(x), py(data.y[i]))
-                    val forecast = data.splitX != null && x > data.splitX
-                    if (!forecast) { if (!sStarted) { solid.moveTo(p.x, p.y); sStarted = true } else solid.lineTo(p.x, p.y) }
-                    if (forecast || (data.splitX != null && i + 1 < data.x.size && data.x[i + 1] > data.splitX)) { if (!dStarted) { dashed.moveTo(p.x, p.y); dStarted = true } else dashed.lineTo(p.x, p.y) }
+                for ((x,y) in ChartViewport.samples(data.x,data.y,start,end,data.splitX)) {
+                    val p = Offset(px(x), py(y))
+                    if(data.splitX==null || x<=data.splitX){if(!sStarted){solid.moveTo(p.x,p.y);sStarted=true}else solid.lineTo(p.x,p.y)}
+                    if(data.splitX!=null && x>=data.splitX){if(!dStarted){dashed.moveTo(p.x,p.y);dStarted=true}else dashed.lineTo(p.x,p.y)}
                 }
                 drawPath(solid, line, style = Stroke(width = 2.5.dp.toPx(), cap = StrokeCap.Round, join = StrokeJoin.Round))
                 drawPath(dashed, line.copy(alpha = 0.75f), style = Stroke(width = 2.dp.toPx(), cap = StrokeCap.Round, pathEffect = PathEffect.dashPathEffect(floatArrayOf(14f, 10f))))

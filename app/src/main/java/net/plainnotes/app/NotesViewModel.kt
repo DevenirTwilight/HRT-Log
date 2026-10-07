@@ -70,6 +70,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     }catch(e:CancellationException){throw e}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)} }
     fun closeEditor(){editor.value=null}
     fun save(d:net.plainnotes.app.ui.MedicationDraft)=change {repo.saveMedication(d.medication,d.ester,d.kind,d.interval,d.times,d.weekdays,pk=d.pk,resizeContainers=d.resizeContainers);editor.value=null}
+    fun confirmHistoricalContext(m:MedicationEntity,p:ProfileEntity?,from:LocalDate,to:LocalDate)=change{repo.confirmHistoricalContext(m,p,from,to)}
     fun editById(id:Long){state.value.medications.firstOrNull{it.id==id}?.let{edit(it)}}
 
     // Concentration (PK) page

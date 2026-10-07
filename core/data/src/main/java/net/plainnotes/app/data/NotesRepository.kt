@@ -164,6 +164,14 @@ const val BACKFILL_MAX_DAYS=731L
             compound(r.config_snapshot)==compound(snapshot) &&
             MedicationSnapshot.decode(r.config_snapshot,r.medication_id)?.profile==MedicationSnapshot.decode(snapshot,r.medication_id)?.profile
     }
+    /** Explicit user confirmation, restricted to missing and compatible saved fields. No inventory mutation. */
+    suspend fun confirmHistoricalContext(medication:MedicationEntity,profile:ProfileEntity?,from:LocalDate,to:LocalDate,now:Instant=Instant.now()):Int=transaction { dao ->
+        require(!to.isBefore(from));val candidate=MedicationSnapshot.encode(medication,profile);val zone=ZoneId.systemDefault()
+        val rows=dao.records().filter{it.medication_id==medication.id && it.deleted_at_utc==null && it.status in listOf("ON_TIME","LATE") && it.taken_utc?.let{t->Instant.ofEpochMilli(t).atZone(zone).toLocalDate() in from..to}==true && HistoricalContext.incomplete(it)}
+        val snapshots=dao.rules().associate{it.id to it.config_snapshot}
+        require(rows.isNotEmpty());val contexts=rows.map{r->r.id to HistoricalContext.confirmed(r.config_snapshot,candidate,"USER_CONFIRMED",now,HistoricalContext.resolved(r,snapshots))}
+        contexts.forEach{(id,json)->dao.recordContext(id,json)};contexts.size
+    }
     suspend fun removeMedication(id:Long,now:Instant=Instant.now())=transaction { dao ->
         RegimenHistory.seed(db().openHelper.writableDatabase)
         reconcile(dao,now,ZoneId.systemDefault())

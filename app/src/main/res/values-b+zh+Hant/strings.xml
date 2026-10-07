@@ -737,4 +737,12 @@
     <string name="milestone_route">給藥途徑改變</string>
     <string name="milestone_custom">自訂里程碑</string>
     <string name="milestone_delete_confirm">刪除這個里程碑及其備註？</string>
+    <string name="chart_full_band">完整顯示不確定性區間</string>
+    <string name="chart_scale_note">縱軸按可見曲線及化驗值縮放。超出圖窗的區間會裁剪；開啟上方選項可看完整範圍，計算值不變。</string>
+    <string name="history_context_repair">確認歷史配置</string>
+    <string name="history_context_repair_note">舊匯入沒有為每條服藥儲存製劑配置。下面可編輯的值僅從目前藥物預填，請只確認當時確實使用此配置的日期。服藥時間、劑量和庫存不會改變。也可重新匯入原 HRT Tracker 檔案，恢復匹配記錄的缺失配置。</string>
+    <string name="history_context_repair_count">此日期範圍內有 %1$d 條缺失配置的記錄</string>
+    <string name="history_context_confirm">確認用於這些歷史記錄</string>
+    <string name="history_context_conflict">與已儲存的歷史欄位衝突。請縮小日期範圍或修改所選配置；不會覆蓋已知欄位。</string>
+    <string name="missing_actual_dose">缺少實際劑量，可在歷史頁編輯服藥記錄</string>
 </resources>

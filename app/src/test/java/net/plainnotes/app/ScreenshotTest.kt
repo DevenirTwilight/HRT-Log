@@ -58,7 +58,7 @@ class ScreenshotTest {
         }
         val planned = (1..20).map { slot(1, now.plusSeconds(it * 12L * 3600), 2.0, SlotState.PENDING) }
         val labs = listOf(LabValueEntity(1, "E2", 160.0, "pg/mL", now.minusSeconds(9 * 86400).toEpochMilli(), zone.id), LabValueEntity(2, "E2", 520.0, "pmol/L", now.minusSeconds(3 * 86400 + 5 * 3600).toEpochMilli(), zone.id, 0.0, 600.0, "pmol/L"))
-        return ConcentrationCalculator.compute(meds.take(2), profiles, records, planned, labs, 62.0, now)
+        return ConcentrationCalculator.compute(meds.take(2), profiles, records.map{r->r.copy(config_snapshot=MedicationSnapshot.encode(meds.single{it.id==r.medication_id},profiles[r.medication_id]))}, planned, labs, 62.0, now)
     }
 
     private fun shoot(name: String, content: @Composable () -> Unit) {
@@ -116,6 +116,12 @@ class ScreenshotTest {
         val extra=NotesViewModel.ExtraState(regimens=listOf(RegimenVersionEntity(1,1,r.effective_from_utc,zone=zone.id,definition_json=d.json(),clinical_signature=d.signature(),origin="APP")),
             milestones=listOf(MilestoneEntity(1,today.toString(),title="Synthetic milestone")),labs=listOf(LabValueEntity(1,"E2",160.0,"pg/mL",now.minusSeconds(86400).toEpochMilli(),zone.id)))
         shoot("timeline"){LongitudinalScreen(state(),extra,{},{},{},PaddingValues())}
+    }
+    @Test fun concentrationWideBand() {
+        val actual=concResult()
+        val upper=actual.bandOuter!!.second.map{it*100}.toDoubleArray()
+        val result=net.plainnotes.app.conc.ConcentrationResult(actual.missing,actual.timeH,actual.e2,actual.bandInner,actual.bandOuter!!.first to upper,actual.nowH,actual.currentPgMl,actual.labs,actual.calibration,actual.usedDoses,actual.skippedDoses,actual.simulatedMedications,actual.others,actual.flags,actual.models,actual.unsupported)
+        shoot("concentration_wide_band"){ConcentrationScreen(state(),result,false,62.0,ConcSettings(false,true,net.plainnotes.app.pk.CalibrationMode.RETROSPECTIVE),{},{},{},{},PaddingValues())}
     }
     @Test fun settings() = shoot("settings") { SettingsScreen(Appearance(ThemeMode.SYSTEM, false), {}, false, {}, {}, {}, PaddingValues()) }
     @Test fun privacy() = shoot("privacy") { androidx.compose.foundation.layout.Column(androidx.compose.ui.Modifier.padding(androidx.compose.ui.unit.Dp(16f))) { PrivacySection(1, false) {} } }

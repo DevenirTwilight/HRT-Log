@@ -33,10 +33,14 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
 @OptIn(ExperimentalLayoutApi::class)
 @Composable fun ConcentrationScreen(state: NotesState, result: ConcentrationResult?, loading: Boolean, weight: Double?, settings: ConcSettings,
                                     onSettings: (ConcSettings) -> Unit, onWeight: (Double) -> Unit, onEditMedication: (Long) -> Unit, onOpenLabs: () -> Unit,
-                                    contentPadding: PaddingValues) {
+                                    contentPadding: PaddingValues,records:List<net.plainnotes.app.data.RecordEntity> = emptyList(),profiles:Map<Long,net.plainnotes.app.data.ProfileEntity> = emptyMap(),
+                                    onConfirmHistory:(net.plainnotes.app.data.MedicationEntity,net.plainnotes.app.data.ProfileEntity?,java.time.LocalDate,java.time.LocalDate)->Unit={_,_,_,_->},onOpenHistory:()->Unit={}) {
+    var repair by remember{mutableStateOf<net.plainnotes.app.data.MedicationEntity?>(null)}
     var editWeight by remember { mutableStateOf(false) }
     val factor = if (settings.pmol) Pk.PMOL_PER_PG else 1.0
     val unit = if (settings.pmol) "pmol/L" else "pg/mL"
+    val chartLocale=currentLocale()
+    val chartNumber=remember(chartLocale){java.text.NumberFormat.getNumberInstance(chartLocale).apply{maximumFractionDigits=3;isGroupingUsed=false}}
     fun fmt(v: Double) = (v * factor).roundToInt().toString()
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(contentPadding).padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
         Surface(color = MaterialTheme.colorScheme.secondaryContainer, shape = MaterialTheme.shapes.medium) {
@@ -60,7 +64,12 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
                         val labels = list.map { missingLabel(it.input) }
                         Text(labels.joinToString(stringResource(R.string.list_separator)), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
                     }
-                    TextButton(onClick = { onEditMedication(id) }) { Text(stringResource(R.string.complete_info)) }
+                    Column {
+                        if(list.any{it.input==MissingInput.ACTUAL_DOSE})TextButton(onClick=onOpenHistory){Text(stringResource(R.string.history))}
+                        if(list.any{it.input==MissingInput.HISTORICAL_CONTEXT || it.input in listOf(MissingInput.GEL_PRODUCT,MissingInput.SL_TIER,MissingInput.PATCH_RELEASE,MissingInput.ROUTE_OR_ESTER)} && records.any{it.medication_id==id && it.deleted_at_utc==null && it.taken_utc!=null && net.plainnotes.app.data.HistoricalContext.incomplete(it)})
+                            TextButton(onClick={repair=med}){Text(stringResource(R.string.history_context_repair))}
+                        TextButton(onClick = { onEditMedication(id) }) { Text(stringResource(R.string.complete_info)) }
+                    }
                 }
             }
         }
@@ -90,6 +99,7 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
                 }
             }
             var rangeDays by remember { mutableIntStateOf(14) }
+            var fullBand by remember { mutableStateOf(false) }
             SectionCard(null) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(stringResource(R.string.pk_chart_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
@@ -102,10 +112,12 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
                 val data = ChartData(result.timeH, DoubleArray(result.e2.size) { result.e2[it] * factor },
                     result.bandInner?.let { (l, h) -> DoubleArray(l.size) { l[it] * factor } to DoubleArray(h.size) { h[it] * factor } },
                     result.bandOuter?.let { (l, h) -> DoubleArray(l.size) { l[it] * factor } to DoubleArray(h.size) { h[it] * factor } },
-                    result.nowH, result.labs.map { it.first to it.second * factor }, unit = unit)
+                    result.nowH, result.labs.map { it.first to it.second * factor }, unit = unit,includeBandsInScale=fullBand)
                 key(rangeDays) {
-                    ConcChart(data, result.nowH - rangeDays * 24 * 0.75, result.nowH + rangeDays * 24 * 0.25, Modifier.fillMaxWidth().height(260.dp)) { (it).roundToInt().toString() }
+                    ConcChart(data, result.nowH - rangeDays * 24 * 0.75, result.nowH + rangeDays * 24 * 0.25, Modifier.fillMaxWidth().height(260.dp)) { if(it>=10)it.roundToInt().toString() else chartNumber.format(it) }
                 }
+                SwitchRow(stringResource(R.string.chart_full_band),fullBand){fullBand=it}
+                if(!fullBand)Text(stringResource(R.string.chart_scale_note),style=MaterialTheme.typography.bodySmall)
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Legend(stringResource(R.string.legend_recorded), MaterialTheme.colorScheme.primary, dashed = false)
                     Legend(stringResource(R.string.legend_forecast), MaterialTheme.colorScheme.primary, dashed = true)
@@ -146,6 +158,7 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
         }
         if (result != null && result.models.isNotEmpty()) ModelsCard(result.models)
     }
+    repair?.let{med->HistoricalContextDialog(med,profiles[med.id],records.map{r->r.copy(config_snapshot=net.plainnotes.app.data.HistoricalContext.resolved(r,state.ruleSnapshots))},{repair=null}){m,p,from,to->onConfirmHistory(m,p,from,to);repair=null}}
     if (editWeight) WeightDialog(weight, { editWeight = false }) { onWeight(it); editWeight = false }
 }
 
@@ -212,6 +225,7 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
     MissingInput.SL_TIER -> R.string.missing_sl_tier
     MissingInput.ROUTE_NOT_MODELLED -> R.string.missing_route_not_modelled
     MissingInput.HISTORICAL_CONTEXT -> R.string.history_context_unknown
+    MissingInput.ACTUAL_DOSE -> R.string.missing_actual_dose
 })
 
 @Composable fun unsupportedLabel(u: Unsupported) = stringResource(when (u) {
@@ -239,12 +253,13 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
     val curves = result.others.keys.sortedBy { it.ordinal }
     var selected by remember(curves) { mutableStateOf(curves.first()) }
     var rangeDays by remember { mutableIntStateOf(14) }
+    var fullBand by remember { mutableStateOf(false) }
     SectionCard(stringResource(R.string.pk_other_title)) {
         Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             curves.forEach { c -> FilterChip(selected == c, { selected = c }, label = { Text(curveLabel(c)) }) }
         }
         val b: BandedCurve = result.others.getValue(selected)
-        val data = ChartData(b.timeH, b.center, b.p25 to b.p75, b.p5 to b.p95, result.nowH, unit = selected.unit)
+        val data = ChartData(b.timeH, b.center, b.p25 to b.p75, b.p5 to b.p95, result.nowH, unit = selected.unit,includeBandsInScale=fullBand)
         SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
             listOf(7, 14, 60).forEachIndexed { i, d -> SegmentedButton(rangeDays == d, { rangeDays = d }, SegmentedButtonDefaults.itemShape(i, 3)) { Text(stringResource(R.string.days_short, d)) } }
         }
@@ -254,6 +269,8 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
             ConcChart(data, result.nowH - rangeDays * 24 * 0.75, result.nowH + rangeDays * 24 * 0.25, Modifier.fillMaxWidth().height(220.dp)) { v ->
                 if (v >= 10) v.roundToInt().toString() else nf.format(v) }
         }
+        SwitchRow(stringResource(R.string.chart_full_band),fullBand){fullBand=it}
+        if(!fullBand)Text(stringResource(R.string.chart_scale_note),style=MaterialTheme.typography.bodySmall)
         FlowRow(horizontalArrangement = Arrangement.spacedBy(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Legend(stringResource(R.string.legend_band_inner), MaterialTheme.colorScheme.primary.copy(alpha = 0.3f), block = true)
             Legend(stringResource(R.string.legend_band_outer), MaterialTheme.colorScheme.primary.copy(alpha = 0.15f), block = true)

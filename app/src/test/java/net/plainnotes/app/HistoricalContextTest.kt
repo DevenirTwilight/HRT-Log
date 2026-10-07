@@ -57,4 +57,16 @@ class HistoricalContextTest {
         assertTrue(r.others.isEmpty());assertEquals(0,r.usedDoses);assertEquals(1,r.skippedDoses)
         assertTrue(r.missing.any{it.input==MissingInput.HISTORICAL_CONTEXT})
     }
+    @Test fun legacySourceOnlyRecordUsesExplicitlyLinkedCompatibleRuleWithoutUsingCurrentProfile() {
+        val p=ProfileEntity(1,"EV","oral");val old=record("{\"source\":\"hrttracker\"}").copy(rule_version_id=10,origin="APP")
+        val known=MedicationSnapshot.encode(med,p)
+        val result=ConcentrationCalculator.compute(listOf(med.copy(route="GEL")),mapOf(1L to ProfileEntity(1,"E2","gel",gel_product_id=1)),listOf(old),emptyList(),emptyList(),null,now,plannedSnapshots=mapOf(10L to known))
+        assertNotNull(result.currentPgMl);assertEquals(1,result.usedDoses);assertFalse(result.missing.any{it.input==MissingInput.HISTORICAL_CONTEXT})
+        val imported=ConcentrationCalculator.compute(listOf(med),mapOf(1L to p),listOf(old.copy(origin="IMPORT_HT")),emptyList(),emptyList(),null,now,plannedSnapshots=mapOf(10L to known))
+        assertNull(imported.currentPgMl);assertTrue(imported.missing.any{it.input==MissingInput.HISTORICAL_CONTEXT})
+        val conflict=old.copy(config_snapshot="{\"molecule\":\"E2\",\"route\":\"GEL\",\"unit\":\"MG\",\"ester\":\"E2\"}")
+        val rejected=ConcentrationCalculator.compute(listOf(med),mapOf(1L to p),listOf(conflict),emptyList(),emptyList(),null,now,plannedSnapshots=mapOf(10L to known))
+        assertNull(rejected.currentPgMl);assertEquals(1,rejected.skippedDoses)
+    }
+
 }

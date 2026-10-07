@@ -27,10 +27,18 @@ internal object HrtTrackerWriter {
             dao.profile(ProfileEntity(id, g.ester, g.pkRoute, g.slTier, g.gelProductId, g.gelSite, g.gelAreaCm2, g.patchUgDay))
             medIds[g] = id; created++
         }
-        val known = dao.records().mapNotNull { it.source_record_key }.toHashSet()
+        val existingRecords=dao.records().filter{it.source_record_key!=null}.associateBy{it.source_record_key}
+        val known = existingRecords.keys.toHashSet()
         var added = 0; var dups = 0
         plan.intakes.forEach { p ->
-            if (!known.add(p.sourceKey)) { dups++; return@forEach }
+            if (!known.add(p.sourceKey)) {
+                val old=existingRecords[p.sourceKey];val id=medIds.getValue(p.group)
+                if(old!=null && old.origin=="IMPORT_HT" && old.deleted_at_utc==null && old.medication_id==id && old.taken_utc==p.taken.toEpochMilli() && old.actual_dose==p.dose && HistoricalContext.incomplete(old)) {
+                    val candidate=MedicationSnapshot.encode(dao.medication(id).copy(molecule=p.group.molecule,route=p.group.route,unit=p.group.unit),ProfileEntity(id,p.group.ester,p.group.pkRoute,p.group.slTier,p.group.gelProductId,p.group.gelSite,p.group.gelAreaCm2,p.group.patchUgDay))
+                    if(HistoricalContext.fill(old.config_snapshot,candidate)!=null)dao.recordContext(old.id,HistoricalContext.confirmed(old.config_snapshot,candidate,"ORIGINAL_HT_EXPORT",java.time.Instant.now()))
+                }
+                dups++; return@forEach
+            }
             dao.record(RecordEntity(medication_id = medIds.getValue(p.group), taken_utc = p.taken.toEpochMilli(), taken_zone = zone.id, actual_dose = p.dose,
                 status = "ON_TIME", origin = "IMPORT_HT", source_record_key = p.sourceKey, revision = 1, config_snapshot = MedicationSnapshot.encode(
                     dao.medication(medIds.getValue(p.group)).copy(molecule=p.group.molecule,route=p.group.route,unit=p.group.unit),

@@ -5,6 +5,7 @@ import net.plainnotes.app.data.MedicationEntity
 import net.plainnotes.app.data.ProfileEntity
 import net.plainnotes.app.data.RecordEntity
 import net.plainnotes.app.data.MedicationSnapshot
+import net.plainnotes.app.data.HistoricalContext
 import net.plainnotes.app.domain.SlotState
 import net.plainnotes.app.domain.TimelineEntry
 import net.plainnotes.app.pk.BandedCurve
@@ -27,7 +28,7 @@ import net.plainnotes.app.pk.Unsupported
 import java.time.Instant
 
 /** Why a medication (or the whole page) cannot be simulated; never silently defaulted. */
-enum class MissingInput { WEIGHT, ROUTE_OR_ESTER, UNIT_NOT_MG, PATCH_RELEASE, PATCH_UNIT, GEL_PRODUCT, SL_TIER, ROUTE_NOT_MODELLED, HISTORICAL_CONTEXT }
+enum class MissingInput { WEIGHT, ROUTE_OR_ESTER, UNIT_NOT_MG, PATCH_RELEASE, PATCH_UNIT, GEL_PRODUCT, SL_TIER, ROUTE_NOT_MODELLED, HISTORICAL_CONTEXT, ACTUAL_DOSE }
 
 data class Missing(val medicationId: Long?, val input: MissingInput)
 
@@ -129,14 +130,14 @@ object ConcentrationCalculator {
                 return
             }
             if(m.molecule=="CPA" && weightKg==null){missing+=Missing(null,MissingInput.WEIGHT);if(historical)skipped++;return}
-            if(dose==null || !dose.isFinite() || dose<=0){skipped++;return}
+            if(dose==null || !dose.isFinite() || dose<=0){skipped++;if(historical)missing+=Missing(medId,MissingInput.ACTUAL_DOSE);return}
             raw+=Raw(m,p,t,dose,id)
         }
         for (r in records) {
             if(r.status !in listOf("ON_TIME","LATE") || r.deleted_at_utc!=null)continue
             val t=r.taken_utc ?: continue
             if(hours(t)<historyStart)continue
-            val saved=context(r.config_snapshot,r.medication_id)
+            val saved=context(HistoricalContext.resolved(r,plannedSnapshots),r.medication_id)
             // Import sources without route data cannot inherit the app's oral-model assumption.
             val c=if(r.origin.startsWith("IMPORT_") && saved!=null && simulated(saved.first) && saved.first.route==null) null else saved
             add(c,hours(t),r.actual_dose,"r${r.id}",r.medication_id,true)

@@ -3,6 +3,7 @@ package net.plainnotes.app
 import net.plainnotes.app.conc.ConcentrationCalculator
 import net.plainnotes.app.conc.ConcentrationResult
 import net.plainnotes.app.conc.MissingInput
+import net.plainnotes.app.conc.Missing
 import net.plainnotes.app.pk.Curve
 import net.plainnotes.app.data.*
 import net.plainnotes.app.domain.*
@@ -42,7 +43,7 @@ class ConcentrationCalculatorTest {
         val oral = med(1, "ORAL")
         val r = compute(listOf(oral), mapOf(1L to ProfileEntity(1, "E2", "oral")),
             listOf(rec(1, 1, 36), rec(2, 1, 24), rec(3, 1, 12), rec(4, 1, 6, null)), listOf(plan(1, 12), plan(1, 24)), emptyList(), 60.0, now)
-        assertTrue(r.missing.isEmpty())
+        assertEquals(listOf(Missing(1L,MissingInput.ACTUAL_DOSE)),r.missing)
         assertEquals(3, r.usedDoses); assertEquals(1, r.skippedDoses)
         assertTrue(r.currentPgMl!! > 0)
         assertTrue(r.timeH.last() >= ConcentrationCalculator.hours(now) + ConcentrationCalculator.FORECAST_DAYS * 24 - 1e-6)

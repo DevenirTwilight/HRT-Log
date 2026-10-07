@@ -2,6 +2,7 @@ package net.plainnotes.app.data
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 @Dao interface NotesDao {
+    @Query("UPDATE dose_record SET config_snapshot=:snapshot WHERE id=:id") suspend fun recordContext(id:Long,snapshot:String)
     @Query("SELECT * FROM regimen_version ORDER BY effective_from_utc,id") suspend fun regimens():List<RegimenVersionEntity>
     @Insert suspend fun regimen(value:RegimenVersionEntity):Long
     @Query("UPDATE regimen_version SET effective_until_utc=:until WHERE id=:id") suspend fun closeRegimen(id:Long,until:Long)

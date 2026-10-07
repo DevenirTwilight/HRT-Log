@@ -737,4 +737,12 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="milestone_route">Changement de voie d’administration</string>
     <string name="milestone_custom">Jalon personnalisé</string>
     <string name="milestone_delete_confirm">Supprimer ce jalon et ses notes ?</string>
+    <string name="chart_full_band">Afficher toute la plage d’incertitude</string>
+    <string name="chart_scale_note">L’axe suit la courbe et les analyses visibles. Les bandes hors du graphique sont rognées ; activez l’option ci-dessus pour voir leur plage entière. Les valeurs calculées restent identiques.</string>
+    <string name="history_context_repair">Confirmer le contexte historique</string>
+    <string name="history_context_repair_note">Les anciens imports ne conservaient pas la formulation pour chaque prise. Les valeurs modifiables sont préremplies depuis le médicament actuel. Confirmez uniquement les dates où cette formulation était réellement utilisée. Les heures, doses et stocks restent identiques. Vous pouvez aussi réimporter le fichier HRT Tracker original pour récupérer le contexte manquant des prises correspondantes.</string>
+    <string name="history_context_repair_count">%1$d prises sans contexte dans cette plage de dates</string>
+    <string name="history_context_confirm">Confirmer pour ces prises</string>
+    <string name="history_context_conflict">Conflit avec les données historiques enregistrées. Réduisez la plage de dates ou corrigez la formulation choisie. Les champs connus ne seront pas écrasés.</string>
+    <string name="missing_actual_dose">Dose réelle manquante ; modifiez la prise dans l’historique</string>
 </resources>

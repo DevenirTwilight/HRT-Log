@@ -174,7 +174,7 @@ class UiPrefs(context: Context) {
                     { model.calendarFrom(null) }, pad, onReview = { destination = Destination.MEDICATIONS }, extra = extra, onStock = { destination = Destination.STOCK })
                 Destination.MEDICATIONS -> MedicationsScreen(state, { model.edit(null) }, { model.edit(it) }, { archive = it }, pad)
                 Destination.CONCENTRATION -> ConcentrationScreen(state, conc.result, conc.loading, conc.weight, concSettings, { concSettings = it; prefs.conc = it },
-                    { model.setWeight(it) }, { model.editById(it) }, { destination = Destination.LABS }, pad)
+                    { model.setWeight(it) }, { model.editById(it) }, { destination = Destination.LABS }, pad,extra.records,state.profiles,model::confirmHistoricalContext,{destination=Destination.HISTORY})
                 Destination.LABS -> LabsScreen(conc.labs, conc.doseTimes, { labEdit = it; labNew = it == null }, { model.deleteLab(it) }, pad)
                 Destination.SETTINGS -> SettingsScreen(appearance, onAppearance, highReliability, { highReliability = it; prefs.highReliability = it; model.sync() },
                     { model.sync() }, { model.testReminder() }, pad, wellbeingPrompt, { wellbeingPrompt = it; prefs.wellbeingPrompt = it }) {

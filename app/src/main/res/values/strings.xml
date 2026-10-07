@@ -737,4 +737,12 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="milestone_route">Route changed</string>
     <string name="milestone_custom">Custom milestone</string>
     <string name="milestone_delete_confirm">Delete this milestone and its notes?</string>
+    <string name="chart_full_band">Show the full uncertainty range</string>
+    <string name="chart_scale_note">The axis follows the visible curve and lab values. Bands outside the plot are clipped; switch above to see their full range. Calculated values do not change.</string>
+    <string name="history_context_repair">Confirm historical context</string>
+    <string name="history_context_repair_note">Older imports did not save a formulation on each intake. These editable values are prefilled from the medication today. Confirm only the dates for which this was your actual formulation. Intake times, doses and stock remain unchanged. You can also re-import the original HRT Tracker export to recover matching missing context.</string>
+    <string name="history_context_repair_count">%1$d records with missing context in this date range</string>
+    <string name="history_context_confirm">Confirm for these records</string>
+    <string name="history_context_conflict">This conflicts with saved historical fields. Narrow the dates or correct the chosen formulation. Known fields will not be overwritten.</string>
+    <string name="missing_actual_dose">Actual dose missing; edit the intake in History</string>
 </resources>

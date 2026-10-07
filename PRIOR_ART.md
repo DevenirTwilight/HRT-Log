@@ -63,3 +63,7 @@
 ## P1第一批独立实施（2026-10-07）
 
 设计先行74175c9（`docs/design/epochs-timeline-p1.md`），数据实现91d4813（`RegimenHistory` / `TreatmentEpochs` / schema4）。采用自身Rule与Record的adapter关系、临床signature排除提醒、组合半开区间、date-only候选关系和原记录引用。时间线/阶段/里程碑使用自身Compose主题、四语原创文案；不从Featherline/Mona/Recorder复制代码、算法表达、UI或资源。本次未重新载入竞品源码；历史研究者看过代码的事实不变，不宣称严格法律clean room。Lab Context、Visit Pack及Widget不在本批。
+
+## build8浓度修复（2026-10-07）
+
+用户明确要求核查HRT Tracker绘图。阅读Transmtf固定8c9abdde的`src/components/ResultChart.tsx`可见值/CI撑轴处理和`src/utils/chartAxis.ts`，研究问题不是复制实现。自身`ChartViewport`采用中心+化验视图/完整区间切换，零基线、边界插值与裁剪说明，不使用其CI倍率阈值、Recharts或UI表达。自身旧writer source-only兼容、原文件再导入确认、日期范围历史确认见`design/concentration-context-chart-hotfix.md`，不改PK参数/公式。
