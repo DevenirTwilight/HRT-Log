@@ -4,6 +4,10 @@
 
 用户再次纠正：**play版本已废弃。以后只维护、测试、构建和交付full，不再生成或签署play APK。** 已移除Gradle play flavor、src/play空实现、CI play任务，release manifest检查只要求full。AGENTS/CLAUDE/REQUIREMENTS/README同步。下文双变体测试与play附件均为历史记录，不是下一步任务；旧公开Release核验清单保持历史事实，不修改公开Release/标签。最新交付full为build12（见下文交付与下载边界）。
 
+## 当前工作：build13导入时间线修复（2026-10-07，设计完成，尚未实现）
+
+用户要求修复导入内容不体现在Timeline，并再实现一批；用户反馈TalkBack没问题。根因：导入仅实际records，没有可信方案时Timeline不读取它们；refresh已读取records。设计见design/imported-timeline-history-p1.md、需求§28。本批：只读按时期/未知区导入摘要，用户填写暂停/停用/恢复历史里程碑，不自动修改方案/提醒、不推断旧频率。保持schema6表结构、旧key/Context1/VisitPack1/PK，full/build13原签名。下一步实现并验证/交付，尚无新APK。稳定slot身份和完整停用状态仍未实现。
+
 ## 当前最新交付：Treatment Period / Timeline build12（2026-10-07，完成）
 
 指定分支`claude/new-session-1959qb`；功能主体`dbb9688`，长列表/兼容`2c3b68b`，最终功能`b0dc178`。versionCode12/versionName0.2.0/schema6；需求§27，原始[扫描](design/treatment-period-timeline-scan.md)、[设计历史](design/epochs-timeline-p1-revision.md)、[验证与边界](treatment-period-timeline-verification.md)。用户在Phase 1报告后回复“继续”，按旧slot身份保留unknown的有限保证实施；不要求重新批准一般开发。
