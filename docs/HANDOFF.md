@@ -368,3 +368,5 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 用户反馈上下文缺失与曲线贴轴，已定位旧导入writer只存source标记、新版逐事件读取跳过；图表用95%最大上界撑轴。已读Transmtf ResultChart/chartAxis现存研究checkout，采用独立可切换中心/完整区间，非复制其实现。设计先行concentration-context-chart-hotfix.md/需求§21；下一步可信旧rule上下文、再导入/用户确认修复与图窗缩放合成回归。未读取用户真实健康数据、未改PK参数、尚无build8 APK。
 
 2026-10-07 build8功能修复已写：HistoricalContext补缺失/拒绝覆盖已知字段、本应用关联rule可信读取、旧HT同key/时间/剂量/药物原文件重导入仅补snapshot、按日期历史确认保留original/provenance且不改剂量修订/库存；导入实际不按关联计划自动补，另加此反例正在最终回归。ChartViewport中心/完整区间切换、零基线/有限值/边界/实虚连续、精简小数与四语。首轮data46和app full90（89通过、1 PDF跳过）通过；极宽区间合成截图已查看，中心曲线清晰可见。新增历史确认UI/日期/库存/备份/旧rule冲突反例。正在重跑最终语义检查，之后完整lint/四构建/CI、正式签名build8；尚无可交付build8 APK，不改PK公式/参数或schema4。
+
+2026-10-07 build8最终语义回归完成：data46/46、full90项（89通过、1 PDF跳过），含导入记录不得从计划推断实际制剂。功能源码d4c3c92已推送（GitHub短暂500后重试成功）；最终CI37642789943已启动。本机最终play/lint/四构建仍运行，正式签名尚未完成；临时凭据位于仓库外，签署后必须删除。
