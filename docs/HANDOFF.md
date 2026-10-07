@@ -427,3 +427,5 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 2026-10-07 Lab Context功能阶段2ff40f3已推送，初始data51/full93回归（1 PDF跳过）及两个原生测试APK构建成功。新增合成截图已查看，旧版切换/重建确认成功。追加缺实际剂量的Trans Memo导入与非法估算单位回归（无实际剂量按既有schema只允许IMPORT_TM，测试fixture已更正）；恢复校验进一步拒绝已知阶段缺起始时间/版本键冲突与非object估算。最终full全量检查在运行，新增校验仍须末轮重跑；CI初版37657997859进行中，不作为最终源码验收。私有签名仓库已再次确认private，临时恢复在/workspace/tooling/build10-signing，仅用于full签名，完成必须清理；尚无可交付build10。
 
 2026-10-07 上下文方案显示补齐周计划星期与原冻结计时起点/时区，四语齐全，避免只看到间隔而无法确定排期。末轮需复跑最新debug编译/单元/lint（此显示与阶段结构校验是在全量任务过程中补入）；release编译尚未开始时补入，将再检查最新release任务确实无待重编译。
+
+2026-10-07 最终功能源码a30c850，CI37658823665的jvm与device-tests已success；设备日志核验原生data10、应用23（主套件另2重启项跳过后分别新进程OK）。含1→5/3→5/4→5、SQLCipher、上下文PDF分页/伪装锁等。android构建仍在运行。本机domain33/pk18/importer12/data51/reminder14/full app93=221项，0失败、1既有PDF跳过；此轮debug尚未含最后阶段结构/排期显示补丁，结束后必须重跑最新debug单元/lint/构建，release已在补丁后编译、仍在R8。lint当次0错误69警告（新增两条复数候选和原已无调用的资源等，最终计数待复核）。新增lab-context-verification.md，路线图Lab Context第一批标已编码，其余Visit Pack/LabPanel等待办。尚未签名/下载build10，临时密钥须在签后清理。
