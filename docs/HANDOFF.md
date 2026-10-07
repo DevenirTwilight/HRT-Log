@@ -299,3 +299,5 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 已在仓库外只读核查 Featherline、Mona、Chrysalide、Yuuki HRT-Tracker、NoMTF Recorder、归档TransTracks、Transmtf源码/许可/最近提交；MyHRT/HRTMe/MyTRT/Trans Memo官方资料。MyHRT新发现security子仓库仅限验证用途，并非开源/允许复用，必须另写进许可证分析。
 
 未完成：完整矩阵、Featherline深度设计、独立schema/迁移方案、评分路线图、PRIOR_ART及文档链接检查。报告中预先列出的这些文件随后补齐。无应用修改/无发布/无向第三方发消息；研究临时克隆位于/workspace/scratch/research，结果须继续写入仓库。
+
+2026-10-07 调研第二阶段完成：`docs/hrt-competitor-matrix-2026-10-07.md` 与 UTF-8 BOM CSV，81项×9产品列；固定各默认分支提交、源码审阅路径、许可/issue边界，标记源码/官方/部分/未知。特别区分Yuuki Swift HRT-Tracker与Transmtf导入目标、Chrysalide PWA与Trans Memo协会、MyHRT安全层的禁止复用许可、Featherline T模型与未合并校准PR。独立设计/评分/PRIOR_ART仍在写，无功能代码改动。

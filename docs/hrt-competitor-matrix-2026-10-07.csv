@@ -1,0 +1,82 @@
+﻿分类,功能,HRT Log,Featherline,Mona,Chrysalide,MyHRT,HRT-Tracker,HRT Recorder,Trans Memo,其他
+用药,medication catalog,◐ 自建+成分选项,✓ 内建/自建,✓ 分子/自建,✓ 类型/自建,○,◐ 识别/模板,◐ 成分预设,○ 产品,HM○；TRT○
+用药,regimen,✓ 单药,✓ 多药group,✓ 单药,✓ 单药,○,◐ 剂量模板,✓ Daily/Weekly,○,HM○；TRT○
+用药,schedule version,✓ Rule有效期,◐ group替换链/时间槽有效期,— 独立版本,◐ replaces/change表,?,—,—,?,TMtf—
+用药,recurring schedule,✓ 日/小时/周,✓ 日/周间隔,✓ 日/周/月/动态间隔,✓,○,— 模板无时间表,✓ 日/周,○,HM○；TRT○
+用药,cyclical regimen,— ON/OFF,— ON/OFF,— ON/OFF,?,○ ON/OFF,—,—,?,HM○ phased；TRT○ alternating weeks
+用药,injection,✓ 记录/部分E2 PK,✓,✓ IM/SC/器材,✓,○,✓,✓,◐ 导入部位,TRT○；TMtf✓
+用药,gel,✓ 产品profile,✓,✓,✓,○,✓,✓,?,TMtf✓
+用药,patch,◐ 隐含移除,✓ apply/off,✓,✓,○,✓ apply/remove,✓ apply/remove,?,TMtf✓ 实例配对
+用药,oral,✓,✓,✓,✓,○,✓,✓,◐ 导入药物,HM○；TMtf✓
+用药,sublingual,✓,✓,✓,✓ pill route,○,✓,✓,?,TMtf✓
+用药,implant,— 结构化,—,✓ 记录route,✓ 记录method,○,—,—,?,PK均勿推定
+用药,manual dose,✓,✓,✓,◐ taken log无独立amount,○,✓,✓,◐ 导入,TRT○；TMtf✓
+用药,late dose,✓ 阈值快照,◐ 窗外记录,◐ overdue/实际时间,◐ 延迟补记,○,◐ 时间记录无计划阈值,◐ plan状态,◐ 导入LATE,TRT○
+用药,missed dose,◐ 推定/记录混合,◐ 未记录槽位,◐ overdue,◐ taken=false,○,—,✓ plan status,◐ 导入MISSED,HM○
+用药,adherence,✓ 计数/报告，语义待改,✓ 槽位进度,◐ 已服/逾期,◐ logs,○,—,◐ plan counts,○,HM○；TRT○
+库存,包装,✓ 独立Container,◐ 每medicine stock,◐ supply item非box层,◐ stock scalar,○,—,✓ PillBottle,○ 盒容量,TRT○ 多vial
+库存,开封包装,✓,✓ openContainerAmount,◐ used amount,— 独立包装,○,—,◐ bottle,◐ 导入openDate,TRT○
+库存,批次,✓ 可选batch,—,?,—,?,—,—,?,TRT?
+库存,来源,✓ 可选source note,—,?,—,?,—,—,?,TRT?
+库存,runway,✓ 两种口径,✓ 未来simulation,◐ 供应剩余,◐ 频率估算,○,—,◐ 药瓶计数,?,TRT○
+库存,low stock,✓ 预警/日历,✓ warnAtDays,◐ supply UI,✓ stockAlert,○,—,◐ remaining,?,TRT○
+库存,scheduled consumption simulation,✓ 366天upcoming,✓ 365天,— 未确认完整future walk,—,?,—,—,?,TRT?
+库存,实际 consumption rate,—,— scheduled rate非observed,—,—,?,—,—,?,TRT?
+PK,E2,✓ 部分制剂/途径,✓,✓ 注射图,—,?,✓,✓,— 未见官方证据,TMtf✓
+PK,T,—,✓ 源码main有,—,—,?,—,✓,—,TRT? 实测图不等于PK
+PK,CPA,✓ 口服,—,—,—,?,—,✓,—,TMtf✓
+PK,progesterone,◐ 示意,—,—,—,?,—,—,—,TMtf—
+PK,antiandrogen,◐ CPA/SPI,—,—,—,?,—,✓ 多成分趋势,—,TMtf✓ CPA/BICA等
+PK,多途径,✓ E2有支持矩阵,✓ E2/T有支持矩阵,◐ 注射PK,—,?,✓,✓,—,TMtf✓
+PK,个体校准,✓ E2 fit,R PR99,—,—,?,✓ ratio/time,✓,—,TMtf✓
+PK,lab calibration,✓ E2,R 非main,—,—,?,✓ E2,✓ E2,—,TMtf✓ E2
+PK,uncertainty / CI,◐ 模型分位带,— main未见,—,—,?,—,✓ 模型带,—,TMtf✓ 模型带，非临床保证
+PK,historical parameter snapshot,◐ 不完整且calculator忽略,◐ equivalent量非整套PK参数,◐ intake成分/route非PK包,—,?,◐ event extras非模型版本,◐ event extras非模型版本,—,TMtf◐ weight/event；custom gel可重解释
+化验,analyte catalog,◐ 固定14项,✓ 内建+custom,◐ E2/T,✓ 多marker,○ 自定义,◐ E2,◐ hormone,— 官方未见,TRT○ 多项
+化验,单位转换,✓ 部分marker,✓ canonical/original,✓ E2/T,◐ marker units,○,✓ E2,✓,?,TMtf✓ E2
+化验,reference range,✓ 用户范围不解读,— model未见,—,◐ profile targets非单次范围,○ 逐次范围,—,?,?,TRT○
+化验,与最近实际服药时间关系,◐ 动态E2 list,✓ panel E2/T间隔,?,—,?,—,?,?,HM?；TRT?
+化验,与 regimen version 关系,— 固定关联,— panel未见groupversion,—,—,?,—,—,?,其他未确认
+化验,longitudinal comparison,✓,✓,✓ E2/T图,✓ 多panel,○,✓,✓,?,TRT○；TMtf✓
+wellbeing,daily tracking,✓ 三项+custom,— 结构化,—,✓ mood/energy/sleep,○,—,—,◐ 导入scores,HM○；TRT○
+wellbeing,symptom tracking,✓ 来源匹配,—,—,✓ journal/sideEffects,○,—,—,?,HM○；TRT○
+wellbeing,side-effect tracking,◐ 中性症状非诊断,—,◐ intake notes,✓ 文本,○,—,◐ notes,?,HM○；TRT○
+wellbeing,source provenance,◐ 当前目录有源，历史无snapshot,—,—,—,?,—,—,?,其他未确认immutable snapshot
+wellbeing,stage review,✓,—,—,—,○ weekly check-in非epoch,—,—,—,HM○ review非epoch
+wellbeing,journal,◐ 日备注,✓ note journal,—,✓,○ diary,—,◐ notes非journal,◐ 导入notes,HM○；TRT○
+wellbeing,free notes,✓,✓,✓,✓,○,◐ dose/lab边界,✓,◐ 导入,TRT○；TMtf◐
+wellbeing,bleeding,◐ legacy PERIOD_LIKE非flow,—,—,◐ 自定义文本非专用,○ flow,—,—,◐ legacy scores非flow,HM○
+wellbeing,body measurements,◐ 回顾BP/weight非专用时间序列,—,—,✓ 多measurements,○,—,◐ 当前体重非历史,?,TRT○
+wellbeing,injection-site rotation,◐ site配置/记录，无体积模型,— 已审log未见site,✓ placement记录，rotation图未确认,◐ gel/patch zones,○,◐ site picker，rotation图未确认,—,◐ 导入realSide,TRT○ site history
+wellbeing,photos,—,—,—,✓ local progress,?,—,—,?,TT✓；TRT○
+longitudinal / timeline,treatment phases,—,◐ group替换非组合epoch,—,◐ treatment Gantt,?,—,—,—,HM○ cycle phase非history epoch
+longitudinal / timeline,milestones,—,✓ TrackedDate,—,✓ objectives/milestones,?,—,—,—,TT✓；TRT○
+longitudinal / timeline,regimen changes,◐ Rule版本非eventfeed,◐ replacedBy chain,◐ current schedules,✓ TreatmentChange,○ history,—,—,?,HM○
+longitudinal / timeline,lab events,◐ 独立labs页,◐ 独立blood页,◐ 独立tests,✓ 时间型panel,○,✓ timeline/graph,✓ graph,?,TRT○；TMtf✓
+longitudinal / timeline,symptoms timeline,◐ 日期记录独立页,—,—,◐ journal日期,○,—,—,?,HM○
+longitudinal / timeline,appointments timeline,◐ 日历已有,—,—,✓ calendar,?,—,—,◐ 导入appts,HM?；TRT?
+longitudinal / timeline,unified timeline,— 跨模块整合,— dose/history+独立journal,—,◐ 多页面/治疗图非完整统一feed,?,◐ dose/lab非综合,◐ dose/lab非综合,—,其他未确认完整组合
+医疗沟通,appointment,✓,—,—,✓,?,—,—,◐ 导入,HM?；TRT?
+医疗沟通,practitioner,◐ 字符串,—,—,✓ directory,?,—,—,◐ doctorName,其他?
+医疗沟通,visit preparation,◐ 日期摘要,—,—,◐ appointment objective,?,—,—,—,HM○ GP report
+医疗沟通,PDF,✓,— audited backup/export未见,—,?,?,— CSV/JSON,— HTML非PDF,?,HM○
+医疗沟通,longitudinal report,◐ 区间report非epoch,—,—,◐ treatment chart,○ CSV/history非确认PDF,◐ CSV,◐ HTML/CSV,?,HM○；TRT○ sharing
+医疗沟通,selectable export,◐ 区间/图开关,◐ 格式/backup,◐ backup,◐ whole JSON,○ formats,◐ formats,◐ formats,◐ DB backup,HM○ period
+医疗沟通,doctor-facing summary,✓ 复诊PDF但历史语义待改,—,—,— 完整visitpack未见,?,—,—,—,HM○ GP PDF
+隐私,offline,✓ 无INTERNET,✓ 本地health，外部链接另计,✓ 本地；update可联网,✓ 本地PWA,✓ 安全配置去INTERNET,✓ local；集成另计,✓ local,○ 不收输入,HM○ local+iCloud；TMtf✓ guest
+隐私,no account,✓,✓,✓,✓,○,✓,✓,○,HM○；TMtf✓ guest；TRT—sync账户
+隐私,SQLCipher,✓,✓,— sqflite,— IndexedDB,— 行级AES非SQLCipher,— SwiftData,— prefs,?,其他未确认
+隐私,encrypted backup,✓ portablepassword,✓ portablepassword,— plainJSON,— plainJSON,✓ 本机同key；○外部AESZIP,✓ AESGCM/PBKDF2 export,— plain默认,— 支持格式明文SQLite,TMtf?；HM○ iCloud≠独立密码容器
+隐私,app lock,✓ PIN/biometric,✓ 系统biometric/credential,— 未见,— privateflag非lock,✓ PIN/biometric/recovery,—,—,?,TMtf◐ security password云流程
+隐私,disguise,✓ 两种launcher+shell,—,—,—,○ calculatoralias,—,—,?,其他?
+隐私,neutral notifications,✓ 内容可中性/OS名暴露,✓ hideMedicationDetails,?,?,○,— 没有recurring reminder,?,?,其他?
+隐私,privacy widget,—,◐ hide details+配置,?,— nativewidget,○ hide/rename,—,—,—,HM?；TRT?
+隐私,screenshot blocking,✓ FLAG_SECURE,✓ 可配置保护,— 未见,— PWA,○ 可选,—,— 未见,?,其他?
+系统集成,Widget,—,✓ dose+Anchor,✓ Android,— nativewidget,○ Android,—,—,—,HM○ iOS；TRT○ iOS/Android
+系统集成,quick log,✓ 通知/应用入口；无widget,✓ widget/notification,✓ widget,◐ app操作,○ widget,✓ Watch,◐ app操作,◐ app操作,HM○ Watch；TRT○ widget/watch
+系统集成,Health Connect,—,R issue26,—,—,?,— iOS,—,—,TRT○ weight；别推定读写药物
+系统集成,HealthKit,— Android,— Android,—,—,— Android目前,◐ 非OPENSOURCE构建条件,—,—,HM?；TRT?
+系统集成,Apple Watch,—,—,—,—,—,✓,—,—,HM○；TRT○
+系统集成,Wear OS,—,R issue79,—,—,?,—,—,—,其他?
+系统集成,shortcuts,— 系统AppShortcut,— 未确认,— 未确认,—,?,— 未确认AppIntents,—,—,其他?
+系统集成,Quick Settings tile,—,—,—,—,?,— iOS,—,—,其他?
