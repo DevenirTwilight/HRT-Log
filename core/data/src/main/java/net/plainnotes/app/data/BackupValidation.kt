@@ -71,10 +71,11 @@ internal object BackupValidation {
                         else -> false
                     }) { "Invalid column type" }
                     if (v is String) when (key) {
-                        "date", "opened_on", "anchor_local" -> LocalDate.parse(v)
+                        "date", "opened_on", "anchor_local", "range_from", "range_to" -> LocalDate.parse(v)
                         "local_time" -> { require(v.length == 8); LocalTime.parse(v) }
                         "anchor_zone", "effective_zone", "scheduled_zone", "taken_zone", "at_zone", "created_zone", "sampled_zone", "rescheduled_zone", "zone" -> ZoneId.of(v)
-                        "config_snapshot", "effects_json", "context_snapshot", "definition_json" -> { BackupLimits.checkJson(v); JSONObject(v) }
+                        "config_snapshot", "effects_json", "context_snapshot", "definition_json", "facts_json" -> { BackupLimits.checkJson(v); JSONObject(v) }
+                        "sections" -> VisitSection.parse(v)
                     }
                 }
             }

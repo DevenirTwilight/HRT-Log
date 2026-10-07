@@ -39,4 +39,13 @@ val migration4To5 = object : Migration(4,5) {
         db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_lab_context_revision_lab_id_revision ON lab_context_revision(lab_id,revision)")
     }
 }
-fun allMigrations(today: () -> LocalDate = LocalDate::now): Array<Migration> = arrayOf(migration1To2(today), migration2To3, migration3To4, migration4To5)
+val migration5To6 = object : Migration(5,6) {
+    override fun migrate(db:SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE appointment ADD COLUMN completed_utc INTEGER")
+        db.execSQL("CREATE TABLE IF NOT EXISTS visit_question (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, appointment_id INTEGER NOT NULL, sort_order INTEGER NOT NULL, text TEXT NOT NULL, status TEXT NOT NULL, answer_note TEXT, FOREIGN KEY(appointment_id) REFERENCES appointment(id) ON UPDATE NO ACTION ON DELETE CASCADE)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS index_visit_question_appointment_id ON visit_question(appointment_id)")
+        db.execSQL("CREATE TABLE IF NOT EXISTS visit_pack (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, appointment_id INTEGER NOT NULL, generated_utc INTEGER NOT NULL, zone TEXT NOT NULL, range_from TEXT NOT NULL, range_to TEXT NOT NULL, sections TEXT NOT NULL, language TEXT NOT NULL, template_version INTEGER NOT NULL, input_digest TEXT NOT NULL, facts_json TEXT NOT NULL, FOREIGN KEY(appointment_id) REFERENCES appointment(id) ON UPDATE NO ACTION ON DELETE CASCADE)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS index_visit_pack_appointment_id ON visit_pack(appointment_id)")
+    }
+}
+fun allMigrations(today: () -> LocalDate = LocalDate::now): Array<Migration> = arrayOf(migration1To2(today), migration2To3, migration3To4, migration4To5, migration5To6)

@@ -272,7 +272,44 @@ const val BACKFILL_MAX_DAYS=731L
         reconcile(dao,now,ZoneId.systemDefault())
     }
     suspend fun currentOverride(key:String)=withContext(Dispatchers.IO){db().dao().overrides().singleOrNull{it.slot_key==key}?.model() ?: SlotOverride(key)}
-    suspend fun appointment(value:AppointmentEntity)=transaction { it.appointment(value) }
+    suspend fun appointment(value:AppointmentEntity)=saveAppointment(value)
+    /** Inserts or edits an appointment; the confirmed-visit time is kept as stored unless changed through [setVisitCompleted]. */
+    suspend fun saveAppointment(value:AppointmentEntity)=transaction { dao ->
+        ZoneId.of(value.at_zone);require(value.remind_minutes_before>=0)
+        val clean=value.copy(location=value.location?.trim()?.takeIf{it.isNotEmpty()},practitioner=value.practitioner?.trim()?.takeIf{it.isNotEmpty()},note=value.note?.trim()?.takeIf{it.isNotEmpty()})
+        if(value.id==0L)dao.appointment(clean.copy(completed_utc=null)) else {
+            val old=requireNotNull(dao.appointmentById(value.id));dao.updateAppointment(clean.copy(completed_utc=old.completed_utc));value.id
+        }
+    }
+    suspend fun setVisitCompleted(id:Long,completed:Boolean,now:Instant=Instant.now())=transaction { dao ->
+        val old=requireNotNull(dao.appointmentById(id));dao.updateAppointment(old.copy(completed_utc=if(completed)now.toEpochMilli() else null))
+    }
+    /** Also removes the appointment's questions and visit-pack records; files already exported are not touched. */
+    suspend fun deleteAppointment(id:Long)=transaction { dao -> dao.deleteVisitQuestions(id);dao.deleteVisitPacks(id);dao.deleteAppointment(id) }
+    suspend fun visitQuestions()=withContext(Dispatchers.IO){db().dao().visitQuestions()}
+    suspend fun saveVisitQuestion(value:VisitQuestionEntity)=transaction { dao ->
+        val text=value.text.trim();require(text.isNotEmpty() && value.status in listOf("OPEN","ASKED"))
+        val answer=value.answer_note?.trim()?.takeIf{it.isNotEmpty()}
+        if(value.id==0L){requireNotNull(dao.appointmentById(value.appointment_id))
+            val next=(dao.visitQuestions().filter{it.appointment_id==value.appointment_id}.maxOfOrNull{it.sort_order} ?: -1)+1
+            dao.insertVisitQuestion(value.copy(text=text,answer_note=answer,sort_order=next))
+        } else { val old=dao.visitQuestions().single{it.id==value.id};dao.updateVisitQuestion(old.copy(text=text,status=value.status,answer_note=answer));value.id }
+    }
+    suspend fun deleteVisitQuestion(id:Long)=transaction{it.deleteVisitQuestion(id)}
+    /** Swaps a question with its neighbour; order is kept dense from 0. */
+    suspend fun moveVisitQuestion(id:Long,up:Boolean)=transaction { dao ->
+        val all=dao.visitQuestions();val q=all.single{it.id==id}
+        val list=all.filter{it.appointment_id==q.appointment_id}.sortedWith(compareBy({it.sort_order},{it.id})).toMutableList()
+        val i=list.indexOf(q);val j=if(up)i-1 else i+1
+        if(j in list.indices){java.util.Collections.swap(list,i,j)}
+        list.forEachIndexed{n,v->if(v.sort_order!=n)dao.updateVisitQuestion(v.copy(sort_order=n))}
+    }
+    suspend fun visitPacks()=withContext(Dispatchers.IO){db().dao().visitPacks()}
+    suspend fun recordVisitPack(value:VisitPackEntity)=transaction { dao ->
+        requireNotNull(dao.appointmentById(value.appointment_id));VisitSection.parse(value.sections);ZoneId.of(value.zone)
+        require(LocalDate.parse(value.range_from)<=LocalDate.parse(value.range_to));JSONObject(value.facts_json)
+        dao.insertVisitPack(value.copy(id=0))
+    }
     suspend fun records()=withContext(Dispatchers.IO){db().dao().records()}
 
     // --- Import / backup / wipe ---
@@ -302,7 +339,7 @@ const val BACKFILL_MAX_DAYS=731L
         if(json.optInt("format")!=BackupCodec.FORMAT_VERSION||schema<1) throw BackupCodec.BadFile("incompatible version")
         if(schema>current) throw BackupCodec.NewerBackup()
         val tables=json.getJSONObject("tables")
-        val required=DOMAIN_TABLES.filterNot{(schema<2 && it in listOf("stage_review","symptom_check","review_effect")) || (schema<4 && it in listOf("regimen_version","regimen_rule_link","milestone")) || (schema<5 && it=="lab_context_revision")}
+        val required=DOMAIN_TABLES.filterNot{(schema<2 && it in listOf("stage_review","symptom_check","review_effect")) || (schema<4 && it in listOf("regimen_version","regimen_rule_link","milestone")) || (schema<5 && it=="lab_context_revision") || (schema<6 && it in listOf("visit_question","visit_pack"))}
         require(required.all{tables.has(it)}) { "Incomplete backup" }
         db.withTransaction {
             val sql=db.openHelper.writableDatabase

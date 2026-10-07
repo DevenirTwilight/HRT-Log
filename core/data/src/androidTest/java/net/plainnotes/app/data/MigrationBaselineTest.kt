@@ -15,7 +15,7 @@ class MigrationBaselineTest {
             db.execSQL("INSERT INTO checkin_item (id,builtin_key,custom_label,enabled,sort_order) VALUES (1,'MOOD',NULL,1,0),(2,'PAIN',NULL,1,1),(3,'APPETITE',NULL,1,2)")
             db.execSQL("INSERT INTO checkin_score (date,item_id,value) VALUES ('2026-02-10',1,4),('2026-02-09',2,2),('2025-01-01',3,3)")
         }
-        helper.runMigrationsAndValidate("migration-baseline",5,true,*allMigrations{LocalDate.of(2026,2,10)}).use{db->
+        helper.runMigrationsAndValidate("migration-baseline",6,true,*allMigrations{LocalDate.of(2026,2,10)}).use{db->
             SchemaGuards.install(db)
             db.query("SELECT builtin_key FROM checkin_item WHERE id=1").use{assertTrue(it.moveToFirst());assertEquals("DAY_MOOD",it.getString(0))}
             db.query("SELECT value FROM checkin_score WHERE item_id=1").use{assertTrue(it.moveToFirst());assertEquals(4,it.getInt(0))}
@@ -34,7 +34,7 @@ class MigrationBaselineTest {
                 db.execSQL("INSERT INTO rule_time (rule_id,local_time,dose_override) VALUES (?,'20:00:00',NULL)",arrayOf(id))
             }
         }
-        helper.runMigrationsAndValidate("migration-regimens",5,true,migration3To4,migration4To5).use{db->
+        helper.runMigrationsAndValidate("migration-regimens",6,true,migration3To4,migration4To5,migration5To6).use{db->
             SchemaGuards.install(db);RegimenHistory.validateLinks(db)
             db.query("SELECT definition_json,effective_from_utc,effective_until_utc,origin,recorded_at_utc FROM regimen_version ORDER BY effective_from_utc").use{c->
                 assertEquals(2,c.count);assertTrue(c.moveToFirst());val frozen=RegimenDefinition.read(c.getString(0))
@@ -50,11 +50,25 @@ class MigrationBaselineTest {
             db.execSQL("INSERT INTO lab_analyte(code,canonical_unit) VALUES ('E2','pg/mL')")
             db.execSQL("INSERT INTO lab_value(id,analyte_code,value,unit,sampled_utc,sampled_zone) VALUES (1,'E2',120,'pg/mL',1000,'UTC')")
         }
-        helper.runMigrationsAndValidate("migration-lab-context",5,true,migration4To5).use{db->
+        helper.runMigrationsAndValidate("migration-lab-context",6,true,migration4To5,migration5To6).use{db->
             SchemaGuards.install(db)
             db.query("SELECT value,sampled_utc FROM lab_value WHERE id=1").use{assertTrue(it.moveToFirst());assertEquals(120.0,it.getDouble(0),0.0);assertEquals(1000L,it.getLong(1))}
             db.query("SELECT * FROM lab_context_revision").use{assertEquals(0,it.count)}
         }
     }
 
+    @Test fun exportedV5KeepsAppointmentsUnconfirmedWithNoQuestionsOrPacks() {
+        helper.createDatabase("migration-visits",5).use{db->
+            db.execSQL("INSERT INTO appointment(id,type,at_utc,at_zone,location,practitioner,note,remind_minutes_before) VALUES (1,'ENDO',1000,'UTC','Synthetic place','Synthetic clinic','Synthetic note',60)")
+        }
+        helper.runMigrationsAndValidate("migration-visits",6,true,migration5To6).use{db->
+            SchemaGuards.install(db)
+            db.query("SELECT type,at_utc,practitioner,note,completed_utc FROM appointment WHERE id=1").use{assertTrue(it.moveToFirst());assertEquals("ENDO",it.getString(0));assertEquals(1000L,it.getLong(1))
+                assertEquals("Synthetic clinic",it.getString(2));assertEquals("Synthetic note",it.getString(3));assertTrue(it.isNull(4))}
+            db.query("SELECT * FROM visit_question").use{assertEquals(0,it.count)}
+            db.query("SELECT * FROM visit_pack").use{assertEquals(0,it.count)}
+            db.execSQL("INSERT INTO visit_pack(appointment_id,generated_utc,zone,range_from,range_to,sections,language,template_version,input_digest,facts_json) VALUES (1,2000,'UTC','2026-01-01','2026-02-01','FACTS','en',1,?,'{}')",arrayOf("0".repeat(64)))
+            try{db.execSQL("UPDATE visit_pack SET range_from='2025-01-01'");fail()}catch(_:Exception){}
+        }
+    }
 }

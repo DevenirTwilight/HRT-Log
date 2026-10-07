@@ -22,7 +22,7 @@ import javax.crypto.spec.SecretKeySpec
 /** Tables in foreign-key order (parents first). Reminder mappings are rebuilt by the scheduler and never exported. */
 internal val DOMAIN_TABLES = listOf("medication", "pk_profile", "schedule_rule", "rule_time", "slot_override", "dose_record", "supply_container", "supply_transaction",
     "retained_slot", "appointment", "checkin_item", "checkin_score", "day_note", "lab_analyte", "lab_value", "pk_settings",
-    "stage_review", "symptom_check", "review_effect", "regimen_version", "regimen_rule_link", "milestone", "lab_context_revision")
+    "stage_review", "symptom_check", "review_effect", "regimen_version", "regimen_rule_link", "milestone", "lab_context_revision", "visit_question", "visit_pack")
 
 /** Raw-SQL maintenance that has to bypass the append-only ledger triggers: full clear and backup restore. */
 internal object RawData {

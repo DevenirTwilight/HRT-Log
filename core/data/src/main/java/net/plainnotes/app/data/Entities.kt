@@ -137,7 +137,26 @@ data class AppointmentEntity(
     val practitioner: String? = null,
     val note: String? = null,
     val remind_minutes_before: Int,
+    /** Set only when the user confirms the visit took place; never inferred from the time passing. */
+    val completed_utc: Long? = null,
 )
+
+/** A question the user wants to raise at an appointment, with the user's own note of the answer. */
+@Entity(tableName="visit_question",foreignKeys=[ForeignKey(entity=AppointmentEntity::class,parentColumns=["id"],childColumns=["appointment_id"],onDelete=ForeignKey.CASCADE)],indices=[Index("appointment_id")])
+data class VisitQuestionEntity(@PrimaryKey(autoGenerate=true)val id:Long=0,val appointment_id:Long,val sort_order:Int,val text:String,val status:String="OPEN",val answer_note:String?=null)
+
+/** Immutable metadata of one exported visit pack; the PDF itself is only written where the user chose. */
+@Entity(tableName="visit_pack",foreignKeys=[ForeignKey(entity=AppointmentEntity::class,parentColumns=["id"],childColumns=["appointment_id"],onDelete=ForeignKey.CASCADE)],indices=[Index("appointment_id")])
+data class VisitPackEntity(@PrimaryKey(autoGenerate=true)val id:Long=0,val appointment_id:Long,val generated_utc:Long,val zone:String,val range_from:String,val range_to:String,
+    val sections:String,val language:String,val template_version:Int,val input_digest:String,val facts_json:String)
+
+/** Parts a visit pack can contain; stored by name. */
+enum class VisitSection(val defaultOn:Boolean) { FACTS(true), REGIMEN(true), INTAKES(true), LABS(true), SYMPTOMS(true), REVIEWS(true), DAILY(true), QUESTIONS(true), PACKAGES(false), MILESTONES(false);
+    companion object {
+        fun parse(value:String):Set<VisitSection> = value.split(',').map{valueOf(it)}.toSet().also{require(it.isNotEmpty() && it.sortedBy{s->s.ordinal}.joinToString(","){s->s.name}==value)}
+        fun encode(values:Set<VisitSection>)=values.sortedBy{it.ordinal}.joinToString(","){it.name}.also{require(values.isNotEmpty())}
+    }
+}
 
 @Entity(tableName = "checkin_item")
 data class CheckinItemEntity(

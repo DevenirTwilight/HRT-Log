@@ -38,6 +38,17 @@ import kotlinx.coroutines.flow.Flow
     @Query("SELECT * FROM appointment ORDER BY at_utc") fun observeAppointments(): Flow<List<AppointmentEntity>>
     @Query("SELECT * FROM appointment ORDER BY at_utc") suspend fun appointments(): List<AppointmentEntity>
     @Insert suspend fun appointment(value: AppointmentEntity): Long
+    @Update suspend fun updateAppointment(value: AppointmentEntity)
+    @Query("SELECT * FROM appointment WHERE id=:id") suspend fun appointmentById(id:Long): AppointmentEntity?
+    @Query("DELETE FROM appointment WHERE id=:id") suspend fun deleteAppointment(id:Long)
+    @Query("SELECT * FROM visit_question ORDER BY appointment_id,sort_order,id") suspend fun visitQuestions():List<VisitQuestionEntity>
+    @Insert suspend fun insertVisitQuestion(value:VisitQuestionEntity):Long
+    @Update suspend fun updateVisitQuestion(value:VisitQuestionEntity)
+    @Query("DELETE FROM visit_question WHERE id=:id") suspend fun deleteVisitQuestion(id:Long)
+    @Query("DELETE FROM visit_question WHERE appointment_id=:appointment") suspend fun deleteVisitQuestions(appointment:Long)
+    @Query("SELECT * FROM visit_pack ORDER BY generated_utc,id") suspend fun visitPacks():List<VisitPackEntity>
+    @Insert suspend fun insertVisitPack(value:VisitPackEntity):Long
+    @Query("DELETE FROM visit_pack WHERE appointment_id=:appointment") suspend fun deleteVisitPacks(appointment:Long)
     @Query("SELECT * FROM dose_record WHERE id = :id") suspend fun recordById(id: Long): RecordEntity?
     @Query("SELECT * FROM supply_container ORDER BY medication_id, id") suspend fun containers(): List<ContainerEntity>
     @Query("SELECT * FROM supply_container WHERE id = :id") suspend fun container(id: Long): ContainerEntity
