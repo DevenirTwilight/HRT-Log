@@ -106,4 +106,25 @@ class EncryptionIntegrationTest {
         access.get().close()
     }
 
+    @Test fun encryptedWellbeingRecordsAndPackageMetadataSurviveBackupAndReopen()=runBlocking {
+        val access=DatabaseAccess(context);val repo=NotesRepository(access);val day=java.time.LocalDate.of(2026,2,10)
+        try {
+            val medId=repo.transaction{it.insertMedication(MedicationEntity(name="Synthetic package",molecule="OTHER",unit="MG",dose_per_intake=1.0,container_capacity=10.0,soon_alert_minutes=0,late_after_minutes=60,site_rotation=false,notifications_on=false,active=false,sort_order=0))}
+            repo.addContainers(medId,10.0,1,false,"Synthetic source","LOT-SYNTHETIC")
+            repo.setSymptomCheck(day,"JAUNDICE",true,"Synthetic note")
+            repo.saveStageReview(StageReviewEntity(date=day.toString(),effects_json="{\"FAT\":\"NOTICED\"}",weight_kg=60.0))
+            repo.setReviewEffect("FAT",false)
+            val archived=repo.exportBackup("synthetic-password".toCharArray())
+            repo.deleteStageReview(repo.stageReviews().single().id)
+            repo.restoreBackup(archived,"synthetic-password".toCharArray())
+            access.close()
+            assertEquals(60.0,repo.stageReviews().single().weight_kg!!,0.0)
+            assertEquals("Synthetic note",repo.symptomChecks(day,day).single().note)
+            assertFalse(repo.reviewEffects().single().enabled)
+            assertEquals("LOT-SYNTHETIC",repo.containers().single().batch)
+            assertEquals("Synthetic source",repo.containers().single().source_note)
+            assertNull(repo.transaction{it.pkSettings()?.current_weight_kg})
+        } finally {access.close()}
+    }
+
 }

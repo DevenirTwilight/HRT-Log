@@ -1,5 +1,6 @@
 package net.plainnotes.app.ui
 
+import androidx.core.content.edit
 import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -53,7 +54,7 @@ class UiPrefs(context: Context) {
             if (p.getString("calib_mode", "RETROSPECTIVE") == "CAUSAL") CalibrationMode.CAUSAL else CalibrationMode.RETROSPECTIVE)
         set(v) { p.edit().putBoolean("conc_pmol", v.pmol).putBoolean("calib_enabled", v.calibrate).putString("calib_mode", v.mode.name).apply() }
     var disclaimerAccepted: Boolean get() = p.getBoolean("pk_disclaimer_ack", false); set(v) { p.edit().putBoolean("pk_disclaimer_ack", v).apply() }
-    var region:String? get()=p.getString("wellbeing_region",null);set(v){p.edit().putString("wellbeing_region",v).apply()}
+    var region:String? get()=p.getString("wellbeing_region",null);set(v){p.edit{putString("wellbeing_region",v)}}
     var wellbeingPrompt: Boolean get() = p.getBoolean("wellbeing_prompt", true); set(v) { p.edit().putBoolean("wellbeing_prompt", v).apply() }
 }
 
