@@ -98,12 +98,12 @@ import java.time.*
     }
     edit?.let{value->MilestoneDialog(value,saveState,{if(!saveState.saving){edit=null;onSaveHandled()}}){onSave(it)}}
     val detail=(record.events+record.upcoming).firstOrNull{it.key==detailKey}
-    detail?.let{event->EventDetail(event,extra,{detailKey=null},{edit=it;detailKey=null},{removeId=it.id;detailKey=null})}
+    detail?.let{event->EventDetail(event,extra,zone,{detailKey=null},{edit=it;detailKey=null},{removeId=it.id;detailKey=null})}
     val audit=periods.firstOrNull{it.key==auditKey}
     audit?.let{period->AlertDialog(onDismissRequest={auditKey=null},title={Text(stringResource(R.string.period_saved_changes))},
         text={Column(Modifier.verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(8.dp)) {
             projection.raw.filter{it.span.from<(period.until ?: Instant.MAX) && (it.span.until?.let{end->end>period.from} ?: true)}.forEach{raw->
-                Text("#${raw.span.id} · "+formatDateTime(raw.span.from)+" → "+(raw.span.until?.let{formatDateTime(it)} ?: stringResource(R.string.epoch_ongoing)))
+                Text("#${raw.span.id} · "+raw.span.from.toString()+" → "+(raw.span.until?.toString() ?: stringResource(R.string.epoch_ongoing)))
                 StandardSummary(extra.regimens.first{it.id==raw.span.id},raw.standard)
             }
         }},confirmButton={TextButton(onClick={auditKey=null}){Text(stringResource(R.string.ok))}})}
@@ -132,9 +132,9 @@ import java.time.*
         Text(formatDate(event.date)+" · "+eventKindLabel(event.kind)+(if(LocalSimpleMode.current)"" else " · "+eventTitle(event)),modifier=Modifier.fillMaxWidth())
     }
 }
-@Composable private fun EventDetail(event:PeriodEvent,extra:NotesViewModel.ExtraState,onDismiss:()->Unit,onEdit:(MilestoneEntity)->Unit,onDelete:(MilestoneEntity)->Unit) {
+@Composable private fun EventDetail(event:PeriodEvent,extra:NotesViewModel.ExtraState,zone:ZoneId,onDismiss:()->Unit,onEdit:(MilestoneEntity)->Unit,onDelete:(MilestoneEntity)->Unit) {
     AlertDialog(onDismissRequest=onDismiss,title={Text(eventKindLabel(event.kind))},text={Column(Modifier.verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(8.dp)) {
-        Text(event.at?.let{formatDateTime(it)} ?: formatDate(event.date))
+        Text(event.at?.let{formatDate(it.atZone(zone).toLocalDate())+" · "+formatTime(it.atZone(zone).toLocalTime())+" · "+zone.id} ?: formatDate(event.date),modifier=Modifier.testTag("timeline-event-time"))
         if(event.dateOnly)Text(stringResource(R.string.timeline_date_only),style=MaterialTheme.typography.bodySmall)
         if(!LocalSimpleMode.current) {
             Text(eventTitle(event))

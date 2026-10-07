@@ -45,7 +45,7 @@ removed model port (now rewritten independently from published literature).
 Literature validation and physical-device verification remain incomplete.
 Health information must never be committed; use only synthetic test data.
 
-The development branch now targets build 11 / database schema 6. New medication
+The development branch now targets build 12 / database schema 6. New medication
 events preserve their formulation inputs, and new symptom observations preserve
 their matched catalogue sources. Missing legacy context remains explicitly unknown.
 An overdue dose without an intake record is shown as unconfirmed until the user
@@ -65,9 +65,13 @@ completed visits, visit questions, selectable PDF exports, factual summaries and
 immutable generation records with a digest. See
 [`visit-pack-p1.md`](docs/design/visit-pack-p1.md).
 Lab panels and full historical model bundles remain future work.
-The revised Treatment Period timeline is not implemented yet; its source audit and
-historical dose-slot ambiguity are recorded in
-[`treatment-period-timeline-scan.md`](docs/design/treatment-period-timeline-scan.md).
+Build 12 groups the Timeline by treatment periods, with labs, reviews, milestones
+and appointments; individual doses remain in History. Reminder-only versions merge
+for display while exact historical versions and saved lab contexts stay unchanged.
+Old milestones are visible without a 90-day limit and saving has commit feedback.
+Future events appear separately. Legacy nonuniform dose-slot correspondence remains
+explicitly unknown; no stop or treatment start is inferred from intake history.
+See [`verification and limits`](docs/treatment-period-timeline-verification.md).
 
 Build 8 repairs compatible native historical context using its saved rule snapshot.
 Old HRT Tracker imports can recover missing context from the original export, or users

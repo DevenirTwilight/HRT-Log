@@ -1,6 +1,6 @@
 # 治疗阶段与时间线修订（P1 revision）+ 里程碑“点了没反应”
 
-2026-10-07。依据用户修订说明（REQUIREMENTS §26）。**本文件仍为未实现设计。用户后续附件已授权实施（REQUIREMENTS §27），此前“等待审核”是历史状态；当前停在Phase 1剂量时段身份卡点，见[扫描报告](treatment-period-timeline-scan.md)。未改功能代码、未出新APK。** 与 [epochs-timeline-p1](epochs-timeline-p1.md) 冲突处以本文为准（用户已确定规则已同步改写原文；具体实现方案仍待审核）。
+2026-10-07。依据用户修订说明（REQUIREMENTS §26）。**本稿保留设计及历史审核过程。用户后续附件及“继续”已授权保守范围实施（REQUIREMENTS §27）；build12已写入V2时期与单视图Timeline，schema仍6。具体实现与未实现边界以[验证说明](../treatment-period-timeline-verification.md)为准。旧非均匀slot对应未知，未来稳定身份另批；本批不实现Visit Pack template2。** 与 [epochs-timeline-p1](epochs-timeline-p1.md) 冲突处以本文为准（用户已确定规则已同步改写原文；具体实现方案仍待审核）。
 
 ---
 

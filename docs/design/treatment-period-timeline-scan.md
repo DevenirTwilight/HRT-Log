@@ -1,6 +1,6 @@
 # Treatment Period / Timeline：Phase 1 源码扫描
 
-2026-10-07。扫描基线 `9e55c10`，功能基线 `ecedb19`，分支 `claude/new-session-1959qb`。用户新附件 `HRT-Log-Codex-treatment-period-timeline-prompt.md` 已授权实施，不再受上一轮仅设计的范围限制；但附件明确要求第8项不能安全解决时先停下报告。本次不修改功能代码。
+2026-10-07。扫描基线 `9e55c10`，功能基线 `ecedb19`，分支 `claude/new-session-1959qb`。用户新附件 `HRT-Log-Codex-treatment-period-timeline-prompt.md` 已授权实施，不再受上一轮仅设计的范围限制；但附件明确要求第8项不能安全解决时先停下报告。本文记录Phase 1当时结论；随后用户回复“继续”，实现进度另见[验证说明](../treatment-period-timeline-verification.md)。
 
 ## 八项结论
 

@@ -56,4 +56,20 @@ class LongitudinalUiTest {
         ui.onNodeWithText(ui.activity.getString(R.string.save)).assertIsEnabled()
     }
 
+    @Test fun labDetailKeepsTheTimelineZoneWhenTheDeviceZoneChanges() {
+        val before=java.util.TimeZone.getDefault()
+        try {
+            java.util.TimeZone.setDefault(java.util.TimeZone.getTimeZone("Asia/Tokyo"))
+            val med=MedicationEntity(1,"Synthetic","E2","ORAL","MG",2.0,30.0,site_rotation=false,notifications_on=false,active=true,sort_order=0)
+            val d=RegimenDefinition(MedicationSnapshot.encode(med,ProfileEntity(1,"EV","oral")),"EVERY_N_DAYS",1,0,2.0,"UTC","2026-01-01",null,listOf("08:00:00" to null))
+            val from=java.time.Instant.now().minusSeconds(86400*10).toEpochMilli()
+            val extra=NotesViewModel.ExtraState(regimens=listOf(RegimenVersionEntity(1,1,from,null,"UTC",d.json(),d.signature(),"APP",from)),
+                labs=listOf(LabValueEntity(8,"E2",100.0,"pg/mL",from+86400*1000,"UTC")))
+            ui.setContent{MaterialTheme{LongitudinalScreen(NotesState(loading=false),extra,{},{},{},PaddingValues())}}
+            ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag("timeline:lab:8"))
+            ui.onNodeWithTag("timeline:lab:8").performClick()
+            ui.onNodeWithTag("timeline-event-time").assert(hasText("UTC",substring=true))
+        } finally {java.util.TimeZone.setDefault(before)}
+    }
+
 }

@@ -25,7 +25,7 @@
 - 已写入MilestoneSaving：事务提交回执与提醒/refresh错误分开；保存ID回传、busy防重复、失败留草稿、saveable恢复。Timeline移除默认90天与双视图，成功后滚动并打开该source，四语反馈。
 - 新增domain/TreatmentPeriods与app/timeline/PeriodTimeline：clock无关V2、多药精确组合与同日显示分组；旧V1 builder/signature/Context1/VisitPack1源码未改。主列表仅时期+LAB/REVIEW/MILESTONE/APPOINTMENT，未来事件Upcoming；simple不显示药物/标题/备注；原始变更独立查看。
 - MedicationEditor移动钟点携带override；repository接收显式对应剂量，缺对应信息时拒绝非均匀计划的破坏性编辑；未改schema或冻结JSON。非均匀集合相同的交换仍明确unknown，不声称恢复历史slot身份。
-- versionCode12/versionName0.2.0/schema6。初步domain39项及targeted app11/data7通过；首轮全模块domain39/pk18/importer12/data57/reminder14/app106共246项，0失败、1既有PDF跳过；UI包含400天Started、精确source、失败/busy与saveable恢复。后续追加长列表逐项懒加载、大字体原生source导航、VM保存整合与Context/VisitPack1兼容回归，最终本机检查和新CI须覆盖这些变更。尚需最终回归/lint/full debug-release/schema-manifest/原生迁移SQLCipher和正式签名；不是可交付APK或最终验收结论。私有签名仓库已核验private，临时密钥在/workspace/tooling/build12-signing，签后立即清理，不显示内容。
+- versionCode12/versionName0.2.0/schema6。初步domain39项及targeted app11/data7通过；首轮全模块domain39/pk18/importer12/data57/reminder14/app106共246项，0失败、1既有PDF跳过；UI包含400天Started、精确source、失败/busy与saveable恢复。后续追加长列表逐项懒加载、大字体原生source导航、VM保存整合与Context/VisitPack1兼容回归；最新app108/domain39单元通过，共248项0失败1跳过。又补详情时区标注与UTC原始审计显示/旅行回归，最终本机检查和新CI须覆盖这些变更。尚需最终回归/lint/full debug-release/schema-manifest/原生迁移SQLCipher和正式签名；不是可交付APK或最终验收结论。私有签名仓库已核验private，临时密钥在/workspace/tooling/build12-signing，签后立即清理，不显示内容。
 
 ## 当前最新交付：Visit Pack 第一批 build 11（2026-10-07，已签名）
 
