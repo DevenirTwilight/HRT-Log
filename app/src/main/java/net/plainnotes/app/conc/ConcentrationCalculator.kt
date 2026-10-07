@@ -136,7 +136,10 @@ object ConcentrationCalculator {
             if(r.status !in listOf("ON_TIME","LATE") || r.deleted_at_utc!=null)continue
             val t=r.taken_utc ?: continue
             if(hours(t)<historyStart)continue
-            add(context(r.config_snapshot,r.medication_id),hours(t),r.actual_dose,"r${r.id}",r.medication_id,true)
+            val saved=context(r.config_snapshot,r.medication_id)
+            // Import sources without route data cannot inherit the app's oral-model assumption.
+            val c=if(r.origin.startsWith("IMPORT_") && saved!=null && simulated(saved.first) && saved.first.route==null) null else saved
+            add(c,hours(t),r.actual_dose,"r${r.id}",r.medication_id,true)
         }
         val used = raw.size
         val horizon = nowH + FORECAST_DAYS * 24

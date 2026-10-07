@@ -26,8 +26,9 @@
 | hormone-agnostic记录 | Mona广泛route；MyHRT、MyTRT、HRTMe | 不把数据结构绑定一种人群 | ingredient/form/route/product分离、复方和CyclePlan；记录支持与PK能力分开 | 设计 II.8 |
 | backup bounds | AEAD/KDF/有限解析通用安全原则；Featherline/MyHRT核查 | 安全恢复不破坏原有历史 | 自己的PNBAK兼容、有限读取/typed semantic validation、候选预算实测 | 设计 I.E |
 | 浓度与校准 | 原始文献/公开数学；曾经参考Transmtf来源链 | 提供明确局限的可选估算 | 当前已文献独立重写，不能回灌竞品算法/未授权参数；旧history许可记录保留 | licensing.md、pk-model.md、pk-params.json、LiteratureValidationTest |
+| P0 历史完整性实施 | 通用事件快照、来源溯源、未确认状态与事务验证；上方各主题研究 | 修复当前可变配置重解释历史与自动未登记语义 | 扩展自身config_snapshot；nullable症状context；兼容旧存储的UNCONFIRMED映射；固定PNBAK1协议下自写预算与校验。不引入竞品实现/参数/UI/文字 | [先行设计](docs/design/history-integrity-p0.md) 53eb35e；实现4667086、显示/单位边界b7aae2b；后续验证见HANDOFF 2k |
 
-当前行均为“已有行为审计或设计提案”，后续实现才填对应 implementation commit，不用本次文档提交冒充功能实现。首次研究提交 `131ad14`，矩阵提交 `c926b85`；具体提案参见其 Git history。
+除明确列出的P0实施行外，各行仍为“已有行为审计或设计提案”，后续实现才填对应 implementation commit，不用研究文档提交冒充功能实现。首次研究提交 `131ad14`，矩阵提交 `c926b85`；具体提案参见其 Git history。
 
 ## 哪些项目尤其需要隔离式流程
 

@@ -77,7 +77,10 @@ class HistoryIntegrityTest {
             {it.getJSONArray("medication").getJSONObject(0).put("unexpected_column","x")},
             {it.getJSONArray("dose_record").getJSONObject(0).put("taken_zone","not/a/zone")},
             {it.getJSONArray("schedule_rule").getJSONObject(0).put("interval",0)},
-            {it.getJSONArray("supply_transaction").getJSONObject(0).put("kind","REVERSE")}
+            {it.getJSONArray("supply_transaction").getJSONObject(0).put("kind","REVERSE")},
+            {val ledger=it.getJSONArray("supply_transaction");val original=ledger.getJSONObject(0)
+                ledger.put(JSONObject(original.toString()).put("id",2).put("kind","REVERSE").put("used_delta",-original.getDouble("used_delta"))
+                    .put("reversal_of_id",original.getLong("id")).put("operation_id","synthetic-invalid-reversal").put("dose_record_id",JSONObject.NULL))}
         )
         alterations.forEach{change->
             val broken=JSONObject(before.toString());change(broken.getJSONObject("tables"))
@@ -100,7 +103,7 @@ class HistoryIntegrityTest {
         repo.editRecord(record.id,Instant.ofEpochMilli(record.scheduled_utc!!),2.0,now)
         assertEquals("MG",MedicationSnapshot.decode(repo.records().single{it.id==record.id}.config_snapshot,id)!!.unit)
         assertEquals(0.0,repo.containers().single().used_amount,0.0)
-        assertEquals(2.0,repo.records().single{it.id==record.id}.unallocated_supply_amount,0.0)
+        assertEquals(2.0,repo.records().single{it.id==record.id}.unallocated_supply_amount!!,0.0)
         assertTrue(repo.transaction{it.supplyFor(record.id)}.isEmpty())
     }
 

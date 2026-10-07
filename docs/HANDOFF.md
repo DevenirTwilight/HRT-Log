@@ -315,3 +315,5 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 2026-10-07 P0首轮代码已保存：MedicationSnapshot v2与profile/导入上下文、计算/历史/CSV读取快照，schema3症状来源snapshot及2→3迁移，AUTO_MISSED映射UNCONFIRMED、确认漏服入口与统计/日历分列，32MiB bounded备份读取/JSON预算/字段类型与恢复后约束/账本检查、密码finally清理。versionCode6。新增合成历史/恢复/来源/迁移回归。JVM测试已通过；Android首次编译只报缺少AppShell import，已修正，正在跑data/app单元测试并生成schema3。仍需完整lint/四构建/原生验证；现在不能称已完成或可交付APK。工具链新安装在/workspace/tooling（SDK37、Gradle9.3.1、TemurinJDK21），Gradle使用代理与系统CA。未改PK公式/参数、无真实数据、无发布。
 
 2026-10-07 P0第二阶段：data 36/36、reminder 14/14、app full 77项（76通过、1 PDF写入跳过）已通过。Robolectric测试依赖已补齐至本地离线目录，首次失败是缺少测试Android jar，不是业务断言。补齐日历旧计划上下文/自动状态、PDF当前方案与历史上下文分标、CSV/PDF一致读取事务、不把旧单位补记自动扣到不同当前单位包装。原生测试已跟进schema3及症状context往返，新增单位不一致回归待下一轮执行。README/PLAN同步现状。play测试、lint、四构建和原生检查仍进行中，不称整轮完成/无发布。
+
+2026-10-07 验证第三阶段：b7aae2b的CI原生device-tests与JVM成功（run37629214363）；android任务因新增库存单元测试的Double?断言编译失败，已修正为显式非空断言，未影响生产代码。进一步补上导入未知途径不继承口服模型与恶意账本REVERSE空关联校验/合成反例；PRIOR_ART记录独立实施commit，设计如实保留native非E2口服假设/包装单位未独立持久化的限制。修正后的完整检查将重跑；本机首次lint full 0错误64警告、play 0错误59警告，四构建仍在进行。后续按既有用户要求生成正式签名build6测试包，不替换公开Release。

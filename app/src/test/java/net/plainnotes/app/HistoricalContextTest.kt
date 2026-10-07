@@ -49,4 +49,12 @@ class HistoricalContextTest {
         val a=adherence(listOf(taken,auto));assertEquals(0,a.missed);assertEquals(1,a.unconfirmed);assertNull(a.onTimeRate)
         val confirmed=adherence(listOf(taken,auto.copy(origin="APP")));assertEquals(1,confirmed.missed);assertEquals(0,confirmed.unconfirmed)
     }
+
+    @Test fun importedAntiandrogenWithoutRouteDoesNotInheritOralModel() {
+        val current=med.copy(molecule="CPA",route="ORAL")
+        val imported=record(MedicationSnapshot.encode(current.copy(route=null),null)).copy(origin="IMPORT_TM")
+        val r=ConcentrationCalculator.compute(listOf(current),emptyMap(),listOf(imported),emptyList(),emptyList(),60.0,now)
+        assertTrue(r.others.isEmpty());assertEquals(0,r.usedDoses);assertEquals(1,r.skippedDoses)
+        assertTrue(r.missing.any{it.input==MissingInput.HISTORICAL_CONTEXT})
+    }
 }
