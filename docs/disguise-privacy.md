@@ -30,7 +30,7 @@ Shell/Main/Private 使用同一 task affinity。切换和退出通过 NEW_TASK |
 | 位置 | 处理与限制 |
 |---|---|
 | Launcher | 正常 alias 独立 HRT Log/原图标；伪装 aliases Calculator/Notes，非当前 aliases 关闭 |
-| Android Settings / 通知 header | application label 永久中性 Notes（便签/便箋）；full application icon 为普通 Notes 图标 |
+| Android Settings / 通知 header | 按用户最新要求（REQUIREMENTS §14）恢复 HRT Log / 原图标；这是固定 application 身份，系统设置及通知 header 可以显示真实名称 |
 | Recents / TaskDescription | shell 用对应标签/图标；PRIMARY 在伪装时也用 shell 身份，启用时立即替换当前 task description；PRIVATE 用 Private Notes/Notes 图标；受保护窗口禁截图 |
 | Notifications / AlarmClock | 伪装时强制使用中性标题/正文，不显示详情或自定义内容；“Taken”改为“Done”，提醒源仍 PRIMARY。启用取消旧通知，启用/禁用后重建提醒 |
 | Shortcut | 不发布动态或固定 shortcut；旧 launcher shortcut/OEM 缓存可能保留旧身份，需用户移除/重加 |
@@ -40,7 +40,7 @@ Shell/Main/Private 使用同一 task affinity。切换和退出通过 NEW_TASK |
 | Crash / error | 私人 UI 只有普通便签错误，没有异常文本、数据库名、内部类名或恢复 HRT 的按钮；不记日志。系统崩溃/ANR/历史记录由平台控制 |
 | 重启 / 重建 / 后台 / 摇动 | 目标不持久化；重启锁定，重建保留有效内存会话，后台及退出撤销；两种 shell 都回自身，不经过 HRT |
 
-中性名称不是抹除 Android 身份：applicationId、安装来源、签名、APK 内的真实功能与正常 launcher alias 都可被系统/包分析查看；旧 Recents/shortcut/OEM 缓存、文件选择器最近文档和用户导出的报告不能由本应用可靠擦除。输入法和可访问性服务属于系统/用户启用的服务，也不能保证隐藏其观察结果。此功能保护普通界面流程，不承诺抵抗 root、恶意系统或 APK 静态分析。CI debug APK 使用公开调试密钥并允许调试，仅用于验证；正式非调试安装须使用既有私有签名，不能将 debug 包当作抵抗设备调试的安全边界。
+伪装 launcher 不会抹除 Android 身份：applicationId、安装来源、签名、APK 内的真实功能与正常 launcher alias 都可被系统/包分析查看；旧 Recents/shortcut/OEM 缓存、文件选择器最近文档和用户导出的报告不能由本应用可靠擦除。输入法和可访问性服务属于系统/用户启用的服务，也不能保证隐藏其观察结果。此功能保护普通界面流程，不承诺抵抗 root、恶意系统或 APK 静态分析。CI debug APK 使用公开调试密钥并允许调试，仅用于验证；正式非调试安装须使用既有私有签名，不能将 debug 包当作抵抗设备调试的安全边界。
 
 ## 验证
 

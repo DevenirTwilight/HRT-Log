@@ -15,7 +15,7 @@
 |---|---|
 | M1 药物、提醒调度、日历 | 完成 |
 | M2 历史、库存 | 完成（另加 HRT tracker 风格的历史页和批量补录） |
-| M3 身心状态 | 完成 |
+| M3 身心状态 | 三标签重设计、迁移、来源、摘要完成并通过 CI；未发布，见 2h |
 | M4 浓度估算、化验 | 文献调研、独立重写、化验校准和不确定性区间已完成；舌下 8 h 后的数据冲突仍待用户决定（见 2a–2b） |
 | M5 Trans Memo 导入、加密备份、CSV/PDF 导出 | 完成；另加 HRT tracker 导入 |
 | M6 应用锁、隐蔽通知、精简模式、多语言、对比度 | 完成 |
@@ -146,18 +146,26 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 - 本地原附件备份在公开仓库外 `/workspace/release-hotfix/prior`；既有正式密钥备份位置仍见第 7 节。本轮临时恢复的密钥/密码/ZIP 在签名完成后删除，不触碰永久私有备份。
 - [只读附件校验 CI 37512727438](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37512727438) 成功：下载回查五个公开附件大小/SHA-256，并核对 source tag；最终本地只读校验也通过。后续发布必须提高 versionCode；版本名回到 0.2.0 不是内部编号或代码回退。
 
-## 2h. 身心状态重新设计（2026-10-07，`REQUIREMENTS.md` 第 15、15a、15b 节）：**设计已审核通过，实现中**
+## 2h. 身心状态重新设计（2026-10-07，REQUIREMENTS 15 / 15a / 15b）：**实现与验证完成，未发布**
 
-- 第 1 步完成：`docs/wellbeing-research.md`（已核实/部分核实/未核实逐条标注）；`docs/licensing.md` 记 GENDER-Q、GCLS 为"候选，未获授权"。要点：三份指南都没有患者自测清单；内分泌学会监测表是 Table 15；SOC8 附录 C 表 1 与 ES Table 13 数值不同；所有症状来源最强措辞是"立即"，没有任何来源提急救电话；螺内酯法国/大陆说明书都没有面向患者的就医症状清单；medRxiv 2022 是研究方案，"多数自行用药"无数据，不用于界面；大陆个人上报无在线入口（按卫生部令 81 号第 23 条）；大陆说明书只有补佳乐、爱斯妥（第三方转载）满足规则，单方 CPA 未核实。
-- 第 2 步完成并已审核通过：`docs/wellbeing-design.md`，审核结论见 15b。
-- 审核结论（15b）已写入需求和设计文档：MOOD/ENERGY/SLEEP_QUALITY 并入 DAY_*；其余 8 个旧条目按最近 30 天是否有记录决定启用，名称不加"旧"；症状中性译名点开看原文；补佳乐、爱斯妥按第三方转载使用，tfsci 不算独立来源；舌下按口服片说明书并注明未涉及舌下；来源/批号放在库存包装；化验参考范围保留不解读；血压体重选方案 B；效果条目可隐藏。
-- 第 3 步（实现）：进行中。
-  - 已完成：数据层（数据库版本 2：`checkin_item.legacy`、`stage_review`、`symptom_check`、`review_effect`、包装 `source_note`/`batch`；`migration1To2` 与旧备份恢复共用 `WellbeingUpgrade.apply`；`restoreBackup` 接受旧版本、拒绝更新版本 `NewerBackup`）；Trans Memo 导入映射到 DAY_*。测试 `WellbeingMigrationTest`（Room 迁移、恢复 `core/data/src/test/resources/backup/v1-synthetic.pnbak`——由 0.2.0 代码生成的合成备份，测试密码在测试里——以及两条路径结果一致）。
-  - 已完成：症状来源目录 `app/src/main/resources/symptom-sources.json`（10 个来源、27 个症状组、89 条引文，全部逐字核对原文；由 `tools/symptom-catalog/build_catalog.py` 生成）和 `SymptomCatalog`（按药匹配、共有症状合并、"立即"按来源措辞、地区规则、上报渠道）；测试 `SymptomCatalogTest`。
-  - 2026-10-07 接手：已同步最新远程 `7aa11e2`。此前本地未提交 build 5 草稿已隔离保存，不覆盖已发布修复；继续审核通过的实现，不发布、不改浓度模型。已接入每日滑块/历史折线（所有旧记录可见、不算平均）、三标签、症状原话/地区规则、阶段回顾、每日/效果条目管理、包装来源批号、可选日期范围的复诊摘要 PDF 与扩展 CSV。四语文案齐全，full/play Kotlin 编译通过。新增数据保存/加密备份往返、每日空值/清除、症状无资料和摘要日期边界回归通过；全量第一次运行单元测试无失败，lint 检出两处 Compose Configuration 读取错误，已改为 LocalConfiguration；第二次全量单元测试无失败，full/play lint 0 错误，debug/release 四构建成功。源码 `64502cf` 原生 Android 数据库、伪装、PDF/滑块和进程重启 CI 已通过（run 37600491137）；最后中性旧条目名称、监测日期与回顾删除文案修正后正在进行最终复检。来源匹配取消缺失酯型时默认 E2 的推断，补回归，确保未知产品不会匹配到另一产品的说明书。
-  - 未完成：全量测试/lint/四变体构建、真实 Android PDF/数据库/界面回归及最后审计。
-  - 来源译文已独立打包（`wellbeing-translations.json`），明确标为非官方；原话保持不变，紧急分组只读原始目录，不能由译文推断。发现前次 CI 的原生迁移基线仍在 schema 1 安装 schema 2 触发器导致失败，已改为验证真实 1→2 迁移后再安装。新增原生 PDF 长文本分页与滑块测试待运行。另补 SQLCipher 实际环境保存/备份恢复/重开及包装元数据验证，确认阶段体重不会写入浓度当前体重。摘要/回顾入口保留重建状态；来源动作按段去重，避免重复展示同一原话。关键硬性要求：v1 备份可恢复（§9.3）；不放急救电话；"立即"醒目；螺内酯"官方来源未列出"。
-- 原始调研中间文件只在会话临时目录（未入库）；结论已全部写入研究文档。
+研究、设计审核、schema 2 和来源目录的前置工作分别见 `wellbeing-research.md`、`wellbeing-design.md`、`WellbeingMigrationTest`、`SymptomCatalogTest`。本轮从远程 `7aa11e2` 接手，已完成原交接列出的界面与导出，不再等待设计审批。
+
+- 三标签：今天、症状记录、阶段回顾。每日四个 DAY_* 项为五档滑块，未操作不写入，支持清除、开关、排序和自定义项；所有历史可查询与导出，各项折线只显示记录天数，不计算平均分。
+- 旧 MOOD / ENERGY / SLEEP_QUALITY 的分数按前置迁移并入 DAY_*；以前八项名称与审核附录一致，最近使用决定迁移启用状态，原分数/备注不丢失。
+- 症状按在用药物明确的分子/途径/酯型匹配，共有条目合并；**缺失酯型不默认 E2**。原话不改，动作按段去重；立即分组只读原始目录，不由译文、勾选或地区推断。螺内酯显示“官方来源未列出”，未知产品不添加症状。第三方转载、版本/日期、原链接、法国归档和舌下未涉及说明均显示。
+- 非官方译文单独打包为 `wellbeing-translations.json`，原话并列；四语 UI 齐全。地区是与语言独立的设备偏好，不进入健康备份；只影响地区规定与上报渠道，不减少症状集合。不添加急救电话、不评判或提供剂量建议。
+- 阶段回顾按效果、耐受、风险因素、满意度组织，日期与各字段均由用户记录。效果支持三档/备注和两个原表数值并列查看，可隐藏且保存旧值。血压/体重/吸烟/满意度默认未填；阶段体重不写入浓度当前体重。支持新建、编辑、专用确认删除；回顾编辑状态和摘要入口可随配置重建恢复。
+- 包装来源/批号可在新增与库存逐包装编辑；不改变容量、已用量或账本。CSV 扩展为六文件（服药、每日、化验、包装、症状、回顾）。复诊摘要 PDF 可选日期范围，包含方案/服药统计、化验原值与参考范围、症状来源、完整回顾、每日记录天数/折线和备注；长文字按行分页，页脚明确不是诊断。
+- 修复已有原生迁移基线测试在 schema 1 安装 schema 2 触发器的失败，改为真实迁移后再安装。未来备份拒绝有专用提示，v1 加密备份升级继续通过。没有修改浓度模型、没有发布新版本、没有动当前 Release/标签/正式签名。
+
+**最终源码与验证**：`bf7d6d4a29b4e36926e4521ab11f200d25f065b1`，指定分支 `claude/new-session-1959qb`。[CI 37602133462](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37602133462) 三作业 JVM / Android / device-tests 全部成功。
+
+- 本地全量 237 项单元测试：235 通过、2 项 PDF 因 Robolectric 无原生后端跳过、0 失败。最后明确酯型修正后的 full/play app 测试和 lint 再次通过。
+- full/play lint 都 0 错误，64 / 59 条已有警告，没有留下本轮新增 lint 错误或警告。
+- full/play debug/release 四构建通过；full app 与 core/data instrumentation APK 构建通过。最终源码 CI 重新完成四构建、合并 Manifest 检查及 schema 差异检查；无 INTERNET，正常 HRT Log 身份与 full-only 入口隔离保留。
+- API 35 原生验证：SQLite 1→2、SQLCipher 新记录/包装信息备份往返与重开、阶段体重隔离、滑块、长篇多语 PDF 分页，及全部既有伪装/应用锁/返回/强制进程重启回归均成功。真实用户健康数据和密码未用于仓库或 CI。
+
+真机复核步骤与已知边界见 [`wellbeing-verification.md`](wellbeing-verification.md)。OEM、大字体/TalkBack 尚待真机确认；症状记录当前保存组 ID 而非当时药物/来源版本快照，摘要引用当前目录对应来源；浓度同轴叠加按设计留待后续。上轮未提交的本地 build 5 草稿已用 stash 隔离保存，已被远程完成的 build 5 工作取代，不应恢复覆盖当前实现。
 
 ## 2i. 致谢口径更正（2026-10-07，`REQUIREMENTS.md` 第 16 节）：源码完成，Release 未改
 
@@ -170,7 +178,7 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 |---|---|
 | `app` | 界面（Compose）、ViewModel、导出（CSV/PDF）、应用锁、伪装模式。`src/full`：伪装外壳（计算器、便签）、activity-alias、`DisguiseSection`；`src/play`：空实现 |
 | `core/domain` | 纯 Kotlin：给药规则展开、槽位 key（`wall:<ver>@<local>`）、夏令时规则（跳过的时间取第一个有效时刻，重复的时间取较早的偏移）、迟服和漏服判定 |
-| `core/data` | Room + SQLCipher、`NotesRepository`、SQL 触发器约束（`SchemaGuards`，每次打开数据库都重建）、只追加的库存流水（`SupplyLedger`）、备份（`DataTransfer.kt`，Argon2id + AES-GCM）、Trans Memo / HRT tracker 写入、数据空间（`Space.PRIMARY` / `DECOY`，诱饵空间是独立的 `notes_b.db`） |
+| `core/data` | Room + SQLCipher、`NotesRepository`、SQL 触发器约束（`SchemaGuards`，每次打开数据库都重建）、只追加的库存流水（`SupplyLedger`）、备份（`DataTransfer.kt`，Argon2id + AES-GCM）、Trans Memo / HRT tracker 写入、数据空间（PRIMARY 固定真实数据；旧 DECOY / notes_b.db 仅保留兼容清理，不用于私人便签认证/UI） |
 | `core/reminder` | 精确闹钟、直接启动（Direct Boot）缓存、通知（`NotificationPrefs`）、补药通知（`StockAlerts`）。提醒始终只读真实空间 |
 | `core/ui` | 主题（`NotesTheme`、对比度） |
 | `pk-engine` | 纯 Kotlin 浓度引擎（按文献独立编写）：`FittedModels.kt`、`Engine.kt`、`LabFit.kt`（化验校准 + 蒙特卡洛区间）、`Types.kt`、`Units.kt`；参数在 `src/main/resources/pk-params.json`；测试 `LiteratureValidationTest`、`EngineTest`、`LabFitTest` |
