@@ -1,0 +1,1068 @@
+{
+ "version": "2026-10-07",
+ "note": "Generated from the originals listed in docs/wellbeing-research.md; every quote was checked verbatim against the downloaded source.",
+ "sources": [
+  {
+   "id": "FR_PROVAMES",
+   "region": "FR",
+   "kind": "label",
+   "title": "PROVAMES 2 mg, comprimé pelliculé — notice",
+   "publisher": "ANSM / Base de données publique des médicaments",
+   "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/65421374/extrait#tab-notice",
+   "document_date": "2023-12-05",
+   "section": "Notice, rubrique 2 « Avertissements et précautions »",
+   "third_party": false,
+   "viewed": "2026-10-07"
+  },
+  {
+   "id": "FR_OESTRODOSE",
+   "region": "FR",
+   "kind": "label",
+   "title": "OESTRODOSE 0,06 POUR CENT, gel — notice",
+   "publisher": "ANSM / Base de données publique des médicaments",
+   "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/63071975/extrait#tab-notice",
+   "document_date": "2026-08-14",
+   "section": "Notice, rubrique 2 « Avertissements et précautions »",
+   "third_party": false,
+   "viewed": "2026-10-07"
+  },
+  {
+   "id": "FR_ESTREVA",
+   "region": "FR",
+   "kind": "label",
+   "title": "ESTREVA 0,1 %, gel — notice",
+   "publisher": "ANSM / Base de données publique des médicaments",
+   "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/63216075/extrait#tab-notice",
+   "document_date": "2026-07-06",
+   "section": "Notice, rubrique 2 « Avertissements et précautions »",
+   "third_party": false,
+   "viewed": "2026-10-07"
+  },
+  {
+   "id": "FR_DERMESTRIL",
+   "region": "FR",
+   "kind": "label",
+   "title": "DERMESTRIL 50 microgrammes/24 heures, dispositif transdermique — notice",
+   "publisher": "ANSM / Base de données publique des médicaments",
+   "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/65662980/extrait#tab-notice",
+   "document_date": "2025-07-11",
+   "section": "Notice, rubrique 2 « Avertissements et précautions »",
+   "third_party": false,
+   "viewed": "2026-10-07"
+  },
+  {
+   "id": "FR_PROGYNOVA",
+   "region": "FR",
+   "kind": "label",
+   "title": "PROGYNOVA 2 mg, comprimé enrobé — notice",
+   "publisher": "ANSM / Base de données publique des médicaments",
+   "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/60940721/extrait#tab-notice",
+   "document_date": "2024-05-30",
+   "section": "Notice, rubrique 2 « Avertissements et précautions »",
+   "third_party": false,
+   "note": "ARCHIVED_FR",
+   "viewed": "2026-10-07"
+  },
+  {
+   "id": "FR_ANDROCUR",
+   "region": "FR",
+   "kind": "label",
+   "title": "ANDROCUR 50 mg, comprimé sécable — notice",
+   "publisher": "ANSM / Base de données publique des médicaments",
+   "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/61255738/extrait#tab-notice",
+   "document_date": "2024-11-05",
+   "section": "Notice, rubrique 2 « Avertissements et précautions »",
+   "third_party": false,
+   "viewed": "2026-10-07"
+  },
+  {
+   "id": "FR_ANSM_CPA",
+   "region": "FR",
+   "kind": "regulator",
+   "title": "Androcur et risque de méningiome — Questions/réponses",
+   "publisher": "ANSM",
+   "url": "https://ansm.sante.fr/dossiers-thematiques/androcur-et-risque-de-meningiome/questions-reponses",
+   "document_date": "2022-12-01",
+   "section": "« Quels sont les symptômes d’un méningiome ? »",
+   "third_party": false,
+   "note": "NON_EXHAUSTIVE",
+   "viewed": "2026-10-07"
+  },
+  {
+   "id": "TW_MOHW_2022_CPA",
+   "region": "TW",
+   "kind": "regulator",
+   "title": "公告含cyproterone成分藥品之臨床效益及風險再評估結果",
+   "publisher": "衛生福利部",
+   "url": "https://mohw.gov.tw/cp-16-71612-1.html",
+   "document_date": "2022-09-15",
+   "section": "公告正文",
+   "third_party": false,
+   "viewed": "2026-10-07"
+  },
+  {
+   "id": "CN_BUJIALE",
+   "region": "CN",
+   "kind": "label",
+   "title": "补佳乐 戊酸雌二醇片 说明书",
+   "publisher": "第三方转载（药智网；医院用药知识库 swin.zy91.com）",
+   "url": "https://db.yaozh.com/instruct/2679625942310912.html",
+   "document_date": "核准日期 2006-10-13",
+   "section": "【注意事项】",
+   "third_party": true,
+   "sites": [
+    {
+     "site": "药智网",
+     "url": "https://db.yaozh.com/instruct/2679625942310912.html",
+     "revised": "2023-05-23"
+    },
+    {
+     "site": "医院用药知识库",
+     "url": "https://swin.zy91.com/pages/m-instruction/m.instruction.html?webHisId=26908&hospitalCode=1",
+     "revised": "2025-05-30"
+    }
+   ],
+   "viewed": "2026-10-07"
+  },
+  {
+   "id": "CN_AISITUO",
+   "region": "CN",
+   "kind": "label",
+   "title": "爱斯妥 雌二醇凝胶 说明书",
+   "publisher": "第三方转载（药智网；39药品通；药源网）",
+   "url": "https://db.yaozh.com/instruct/35999.html",
+   "document_date": "核准日期 2007-10-17",
+   "section": "【不良反应】",
+   "third_party": true,
+   "sites": [
+    {
+     "site": "药智网",
+     "url": "https://db.yaozh.com/instruct/35999.html",
+     "revised": "2016-01-06"
+    },
+    {
+     "site": "39药品通",
+     "url": "https://ypk.39.net/2309838/manual/",
+     "revised": null
+    },
+    {
+     "site": "药源网",
+     "url": "https://www.yaopinnet.com/huayao/hy67164.htm",
+     "revised": null
+    }
+   ],
+   "viewed": "2026-10-07"
+  }
+ ],
+ "actions": {
+  "FR_PROVAMES": {
+   "text": "Arrêtez de prendre PROVAMES 2 mg, comprimé pelliculé et prévenez immédiatement votre médecin si vous notez l’apparition des signes suivants lors de l’utilisation d’un THS :",
+   "urgent": true
+  },
+  "FR_OESTRODOSE": {
+   "text": "Arrêtez de prendre OESTRODOSE 0,06 POUR CENT et prévenez immédiatement votre médecin si vous notez l’apparition des signes suivants lors de l’utilisation d’un THS :",
+   "urgent": true
+  },
+  "FR_ESTREVA": {
+   "text": "Arrêtez votre traitement et prévenez immédiatement votre médecin : Si vous notez l’apparition des signes suivants :",
+   "urgent": true
+  },
+  "FR_DERMESTRIL": {
+   "text": "Arrêtez votre traitement et prévenez immédiatement votre médecin Si vous notez l’apparition des signes suivants :",
+   "urgent": true
+  },
+  "FR_PROGYNOVA": {
+   "text": "Arrêtez de prendre PROGYNOVA 2 mg et prévenez immédiatement votre médecin si vous notez l'apparition des signes suivants :",
+   "urgent": true
+  },
+  "FR_ANDROCUR_LIVER": {
+   "text": "Arrêtez votre traitement et consultez immédiatement votre médecin si vous présentez des symptômes de toxicité hépatique (ex : démangeaisons sur le corps entier, jaunissement de la peau, urines foncées, douleurs abdominales, troubles digestifs).",
+   "urgent": true
+  },
+  "FR_ANDROCUR_MENINGIOMA": {
+   "text": "Si vous remarquez des symptômes tels que des troubles de la vision (par exemple une vision double ou floue), une perte d’audition ou un sifflement dans les oreilles, une perte d’odorat, des maux de tête qui s’aggravent au fil du temps, des pertes de mémoire, des crises convulsives, une faiblesse dans les bras ou les jambes, vous devez en informer immédiatement votre médecin.",
+   "urgent": true
+  },
+  "FR_ANDROCUR_STOP": {
+   "text": "Arrêtez le traitement et prévenez immédiatement votre médecin en cas de :",
+   "urgent": true
+  },
+  "FR_ANSM_CPA": {
+   "text": "Si vous êtes ou vous avez été traitée par Androcur ou ses génériques et que vous présentez un ou plusieurs de ces symptômes, consultez votre médecin qui vous prescrira une IRM cérébrale de contrôle.",
+   "urgent": false
+  },
+  "TW_MOHW_2022_CPA": {
+   "text": "提醒病人若出現視力變化、聽力喪失或耳鳴、嗅覺喪失、隨時間惡化之頭痛、記憶力喪失、癲癇發作或四肢無力等不適症狀應儘速回診。",
+   "urgent": false
+  },
+  "CN_BUJIALE_STOP": {
+   "text": "如果患者有禁忌症或出现以下状况，应立即停止治疗：",
+   "urgent": true
+  },
+  "CN_BUJIALE_VTE": {
+   "text": "如果患者出现血栓栓塞的可能症状(尤其是腿部痛性肿胀、突发性胸痛、呼吸急促)，必须立即联系医生。",
+   "urgent": true
+  },
+  "CN_BUJIALE_BREAST": {
+   "text": "必须告知女性患者，出现哪些乳房改变时必须报告医师或护士",
+   "urgent": false
+  },
+  "CN_AISITUO": {
+   "text": "当然，为慎重起见，若出现下列任何一种情况，最好停止用药：",
+   "urgent": false
+  }
+ },
+ "groups": {
+  "JAUNDICE": {
+   "en": "Yellowing of the skin or eyes",
+   "zh": "皮肤或眼白发黄",
+   "zh_Hant": "皮膚或眼白發黃",
+   "fr": "Jaunissement de la peau ou des yeux"
+  },
+  "FACE_SWELLING": {
+   "en": "Swelling of the face, tongue or throat",
+   "zh": "脸、舌头或喉咙肿胀",
+   "zh_Hant": "臉、舌頭或喉嚨腫脹",
+   "fr": "Gonflement du visage, de la langue ou de la gorge"
+  },
+  "BLOOD_PRESSURE": {
+   "en": "Large rise in blood pressure",
+   "zh": "血压明显升高",
+   "zh_Hant": "血壓明顯升高",
+   "fr": "Forte hausse de la tension"
+  },
+  "HEADACHE": {
+   "en": "Headache",
+   "zh": "头痛",
+   "zh_Hant": "頭痛",
+   "fr": "Maux de tête"
+  },
+  "LEG": {
+   "en": "Leg pain or swelling",
+   "zh": "腿部疼痛或肿胀",
+   "zh_Hant": "腿部疼痛或腫脹",
+   "fr": "Douleur ou gonflement des jambes"
+  },
+  "CHEST_PAIN": {
+   "en": "Chest pain",
+   "zh": "胸痛",
+   "zh_Hant": "胸痛",
+   "fr": "Douleur dans la poitrine"
+  },
+  "BREATHING": {
+   "en": "Difficulty breathing or sudden breathlessness",
+   "zh": "呼吸困难或突然气短",
+   "zh_Hant": "呼吸困難或突然氣短",
+   "fr": "Difficulté à respirer ou essoufflement soudain"
+  },
+  "ALLERGY": {
+   "en": "Allergic reaction",
+   "zh": "过敏反应",
+   "zh_Hant": "過敏反應",
+   "fr": "Réaction allergique"
+  },
+  "VISION": {
+   "en": "Changes in vision",
+   "zh": "视力变化",
+   "zh_Hant": "視力變化",
+   "fr": "Troubles de la vision"
+  },
+  "BREAST_CHANGES": {
+   "en": "Breast changes",
+   "zh": "乳房变化",
+   "zh_Hant": "乳房變化",
+   "fr": "Modifications des seins"
+  },
+  "CARDIO_THROMBO_EVENT": {
+   "en": "Cardiovascular or blood-clot event",
+   "zh": "心血管或血栓事件",
+   "zh_Hant": "心血管或血栓事件",
+   "fr": "Accident cardiovasculaire ou thrombotique"
+  },
+  "NIPPLE_DISCHARGE": {
+   "en": "Nipple discharge",
+   "zh": "乳头溢液",
+   "zh_Hant": "乳頭溢液",
+   "fr": "Écoulement du mamelon"
+  },
+  "HEARING": {
+   "en": "Hearing loss or ringing in the ears",
+   "zh": "听力下降或耳鸣",
+   "zh_Hant": "聽力下降或耳鳴",
+   "fr": "Perte d’audition ou sifflements d’oreille"
+  },
+  "SMELL": {
+   "en": "Loss of smell",
+   "zh": "嗅觉丧失",
+   "zh_Hant": "嗅覺喪失",
+   "fr": "Perte d’odorat"
+  },
+  "MEMORY": {
+   "en": "Memory problems",
+   "zh": "记忆力问题",
+   "zh_Hant": "記憶力問題",
+   "fr": "Troubles de la mémoire"
+  },
+  "SEIZURE": {
+   "en": "Seizures",
+   "zh": "抽搐或癫痫发作",
+   "zh_Hant": "抽搐或癲癇發作",
+   "fr": "Convulsions"
+  },
+  "LIMB_WEAKNESS": {
+   "en": "Weakness in the arms or legs",
+   "zh": "四肢无力",
+   "zh_Hant": "四肢無力",
+   "fr": "Faiblesse des bras ou des jambes"
+  },
+  "SPEECH": {
+   "en": "Speech problems",
+   "zh": "说话困难",
+   "zh_Hant": "說話困難",
+   "fr": "Troubles de la parole"
+  },
+  "DIZZINESS": {
+   "en": "Dizziness",
+   "zh": "头晕",
+   "zh_Hant": "頭暈",
+   "fr": "Vertiges"
+  },
+  "NAUSEA": {
+   "en": "Nausea",
+   "zh": "恶心",
+   "zh_Hant": "噁心",
+   "fr": "Nausées"
+  },
+  "ITCHING": {
+   "en": "Itching all over the body",
+   "zh": "全身瘙痒",
+   "zh_Hant": "全身搔癢",
+   "fr": "Démangeaisons sur tout le corps"
+  },
+  "DARK_URINE": {
+   "en": "Dark urine",
+   "zh": "尿色变深",
+   "zh_Hant": "尿色變深",
+   "fr": "Urines foncées"
+  },
+  "ABDOMINAL_PAIN": {
+   "en": "Abdominal pain",
+   "zh": "腹痛",
+   "zh_Hant": "腹痛",
+   "fr": "Douleurs abdominales"
+  },
+  "DIGESTIVE": {
+   "en": "Digestive problems",
+   "zh": "消化不适",
+   "zh_Hant": "消化不適",
+   "fr": "Troubles digestifs"
+  },
+  "IRREGULAR_PULSE": {
+   "en": "Irregular pulse",
+   "zh": "心跳不规则",
+   "zh_Hant": "心跳不規則",
+   "fr": "Pouls irrégulier"
+  },
+  "CONSCIOUSNESS": {
+   "en": "Loss of consciousness",
+   "zh": "意识丧失",
+   "zh_Hant": "意識喪失",
+   "fr": "Perte de connaissance"
+  },
+  "CONFUSION": {
+   "en": "Confusion",
+   "zh": "意识混乱",
+   "zh_Hant": "意識混亂",
+   "fr": "Confusion"
+  }
+ },
+ "entries": [
+  {
+   "source": "FR_PROVAMES",
+   "group": "JAUNDICE",
+   "quote": "un jaunissement de votre peau ou du blanc de vos yeux (jaunisse). C’est peut être un signe d’une maladie du foie",
+   "action": "FR_PROVAMES"
+  },
+  {
+   "source": "FR_PROVAMES",
+   "group": "FACE_SWELLING",
+   "quote": "gonflement du visage, de la langue et/ou de la gorge, et/ou difficultés à déglutir ou urticaire, accompagnés de difficultés à respirer qui sont des signes évocateurs d’angioœdème",
+   "action": "FR_PROVAMES"
+  },
+  {
+   "source": "FR_PROVAMES",
+   "group": "BLOOD_PRESSURE",
+   "quote": "une augmentation importante de votre pression artérielle (les symptômes peuvent être un mal de tête, une fatigue, des sensations vertigineuses)",
+   "action": "FR_PROVAMES"
+  },
+  {
+   "source": "FR_PROVAMES",
+   "group": "HEADACHE",
+   "quote": "des maux de tête de type migraine, qui apparaissent pour la première fois",
+   "action": "FR_PROVAMES"
+  },
+  {
+   "source": "FR_PROVAMES",
+   "group": "LEG",
+   "quote": "gonflement douloureux et rougeur au niveau des jambes",
+   "action": "FR_PROVAMES"
+  },
+  {
+   "source": "FR_PROVAMES",
+   "group": "CHEST_PAIN",
+   "quote": "douleur brutale à la poitrine",
+   "action": "FR_PROVAMES"
+  },
+  {
+   "source": "FR_PROVAMES",
+   "group": "BREATHING",
+   "quote": "difficulté à respirer",
+   "action": "FR_PROVAMES"
+  },
+  {
+   "source": "FR_OESTRODOSE",
+   "group": "JAUNDICE",
+   "quote": "un jaunissement de votre peau ou du blanc de vos yeux. C’est peut être un signe d’une maladie du foie",
+   "action": "FR_OESTRODOSE"
+  },
+  {
+   "source": "FR_OESTRODOSE",
+   "group": "FACE_SWELLING",
+   "quote": "un gonflement du visage, de la langue et/ou de la gorge, et/ou des difficultés à déglutir ou une urticaire accompagnée de difficultés à respirer, suggérant un angioedème",
+   "action": "FR_OESTRODOSE"
+  },
+  {
+   "source": "FR_OESTRODOSE",
+   "group": "BLOOD_PRESSURE",
+   "quote": "une augmentation importante de votre pression artérielle (les symptômes peuvent être mal de tête, fatigue, sensations vertigineuses)",
+   "action": "FR_OESTRODOSE"
+  },
+  {
+   "source": "FR_OESTRODOSE",
+   "group": "HEADACHE",
+   "quote": "des maux de tête tels qu’une migraine, qui apparaissent pour la première fois",
+   "action": "FR_OESTRODOSE"
+  },
+  {
+   "source": "FR_OESTRODOSE",
+   "group": "LEG",
+   "quote": "Gonflement douloureux dans vos jambes",
+   "action": "FR_OESTRODOSE"
+  },
+  {
+   "source": "FR_OESTRODOSE",
+   "group": "CHEST_PAIN",
+   "quote": "Douleur brutale à la poitrine",
+   "action": "FR_OESTRODOSE"
+  },
+  {
+   "source": "FR_OESTRODOSE",
+   "group": "BREATHING",
+   "quote": "Difficulté à respirer",
+   "action": "FR_OESTRODOSE"
+  },
+  {
+   "source": "FR_ESTREVA",
+   "group": "JAUNDICE",
+   "quote": "un jaunissement de votre peau ou du blanc de vos yeux. C’est peut être un signe d’une maladie du foie",
+   "action": "FR_ESTREVA"
+  },
+  {
+   "source": "FR_ESTREVA",
+   "group": "FACE_SWELLING",
+   "quote": "un gonflement du visage, de la langue et/ou de la gorge, et/ou difficultés à déglutir ou urticaire, accompagnés de difficultés à respirer ; des signes évocateurs d’angiœdème",
+   "action": "FR_ESTREVA"
+  },
+  {
+   "source": "FR_ESTREVA",
+   "group": "BLOOD_PRESSURE",
+   "quote": "une augmentation importante de votre pression artérielle (les symptômes peuvent être mal de tête, fatigue, sensations vertigineuses)",
+   "action": "FR_ESTREVA"
+  },
+  {
+   "source": "FR_ESTREVA",
+   "group": "HEADACHE",
+   "quote": "des maux de tête tels qu’une migraine, qui apparaissent pour la première fois",
+   "action": "FR_ESTREVA"
+  },
+  {
+   "source": "FR_ESTREVA",
+   "group": "LEG",
+   "quote": "Gonflement douloureux dans vos jambes",
+   "action": "FR_ESTREVA"
+  },
+  {
+   "source": "FR_ESTREVA",
+   "group": "CHEST_PAIN",
+   "quote": "Douleur brutale à la poitrine",
+   "action": "FR_ESTREVA"
+  },
+  {
+   "source": "FR_ESTREVA",
+   "group": "BREATHING",
+   "quote": "Difficulté à respirer",
+   "action": "FR_ESTREVA"
+  },
+  {
+   "source": "FR_DERMESTRIL",
+   "group": "JAUNDICE",
+   "quote": "un jaunissement de votre peau ou du blanc de vos yeux. C’est peut-être un signe d’une maladie du foie",
+   "action": "FR_DERMESTRIL"
+  },
+  {
+   "source": "FR_DERMESTRIL",
+   "group": "FACE_SWELLING",
+   "quote": "un gonflement du visage, de la langue et/ou de la gorge, et/ou des difficultés à déglutir ou une urticaire accompagnée de difficultés à respirer qui suggèrent un angioœdème",
+   "action": "FR_DERMESTRIL"
+  },
+  {
+   "source": "FR_DERMESTRIL",
+   "group": "BLOOD_PRESSURE",
+   "quote": "une augmentation importante de votre pression artérielle (les symptômes peuvent être mal de tête, fatigue, sensations vertigineuses)",
+   "action": "FR_DERMESTRIL"
+  },
+  {
+   "source": "FR_DERMESTRIL",
+   "group": "HEADACHE",
+   "quote": "des maux de tête tels qu’une migraine, qui apparaissent pour la première fois",
+   "action": "FR_DERMESTRIL"
+  },
+  {
+   "source": "FR_DERMESTRIL",
+   "group": "LEG",
+   "quote": "Gonflement douloureux dans vos jambes",
+   "action": "FR_DERMESTRIL"
+  },
+  {
+   "source": "FR_DERMESTRIL",
+   "group": "CHEST_PAIN",
+   "quote": "Douleur brutale à la poitrine",
+   "action": "FR_DERMESTRIL"
+  },
+  {
+   "source": "FR_DERMESTRIL",
+   "group": "BREATHING",
+   "quote": "Difficulté à respirer",
+   "action": "FR_DERMESTRIL"
+  },
+  {
+   "source": "FR_PROGYNOVA",
+   "group": "ALLERGY",
+   "quote": "une réaction allergique (respiration difficile, oppression thoracique, éruption généralisée à type d'urticaire, démangeaisons)",
+   "action": "FR_PROGYNOVA"
+  },
+  {
+   "source": "FR_PROGYNOVA",
+   "group": "JAUNDICE",
+   "quote": "jaunissement de votre peau ou du blanc des yeux ; c’est peut être un signe d’une maladie du foie",
+   "action": "FR_PROGYNOVA"
+  },
+  {
+   "source": "FR_PROGYNOVA",
+   "group": "FACE_SWELLING",
+   "quote": "gonflement du visage, de la langue et/ou de la gorge, et/ou difficultés à déglutir ou urticaire, accompagnés de difficultés à respirer ; des signes évocateurs d’angioedème",
+   "action": "FR_PROGYNOVA"
+  },
+  {
+   "source": "FR_PROGYNOVA",
+   "group": "BLOOD_PRESSURE",
+   "quote": "une augmentation importante de votre pression artérielle (les symptômes peuvent être mal de tête, fatigue, sensations vertigineuses)",
+   "action": "FR_PROGYNOVA"
+  },
+  {
+   "source": "FR_PROGYNOVA",
+   "group": "HEADACHE",
+   "quote": "maux de tête tels qu’une migraine, qui apparaissent pour la première fois",
+   "action": "FR_PROGYNOVA"
+  },
+  {
+   "source": "FR_PROGYNOVA",
+   "group": "LEG",
+   "quote": "gonflement douloureux et rougeur au niveau de vos jambes",
+   "action": "FR_PROGYNOVA"
+  },
+  {
+   "source": "FR_PROGYNOVA",
+   "group": "CHEST_PAIN",
+   "quote": "douleur brutale dans la poitrine",
+   "action": "FR_PROGYNOVA"
+  },
+  {
+   "source": "FR_PROGYNOVA",
+   "group": "BREATHING",
+   "quote": "difficulté à respirer",
+   "action": "FR_PROGYNOVA"
+  },
+  {
+   "source": "FR_ANDROCUR",
+   "group": "ITCHING",
+   "quote": "Arrêtez votre traitement et consultez immédiatement votre médecin si vous présentez des symptômes de toxicité hépatique (ex : démangeaisons sur le corps entier, jaunissement de la peau, urines foncées, douleurs abdominales, troubles digestifs).",
+   "action": "FR_ANDROCUR_LIVER"
+  },
+  {
+   "source": "FR_ANDROCUR",
+   "group": "JAUNDICE",
+   "quote": "Arrêtez votre traitement et consultez immédiatement votre médecin si vous présentez des symptômes de toxicité hépatique (ex : démangeaisons sur le corps entier, jaunissement de la peau, urines foncées, douleurs abdominales, troubles digestifs).",
+   "action": "FR_ANDROCUR_LIVER"
+  },
+  {
+   "source": "FR_ANDROCUR",
+   "group": "DARK_URINE",
+   "quote": "Arrêtez votre traitement et consultez immédiatement votre médecin si vous présentez des symptômes de toxicité hépatique (ex : démangeaisons sur le corps entier, jaunissement de la peau, urines foncées, douleurs abdominales, troubles digestifs).",
+   "action": "FR_ANDROCUR_LIVER"
+  },
+  {
+   "source": "FR_ANDROCUR",
+   "group": "ABDOMINAL_PAIN",
+   "quote": "Arrêtez votre traitement et consultez immédiatement votre médecin si vous présentez des symptômes de toxicité hépatique (ex : démangeaisons sur le corps entier, jaunissement de la peau, urines foncées, douleurs abdominales, troubles digestifs).",
+   "action": "FR_ANDROCUR_LIVER"
+  },
+  {
+   "source": "FR_ANDROCUR",
+   "group": "DIGESTIVE",
+   "quote": "Arrêtez votre traitement et consultez immédiatement votre médecin si vous présentez des symptômes de toxicité hépatique (ex : démangeaisons sur le corps entier, jaunissement de la peau, urines foncées, douleurs abdominales, troubles digestifs).",
+   "action": "FR_ANDROCUR_LIVER"
+  },
+  {
+   "source": "FR_ANDROCUR",
+   "group": "VISION",
+   "quote": "Si vous remarquez des symptômes tels que des troubles de la vision (par exemple une vision double ou floue), une perte d’audition ou un sifflement dans les oreilles, une perte d’odorat, des maux de tête qui s’aggravent au fil du temps, des pertes de mémoire, des crises convulsives, une faiblesse dans les bras ou les jambes, vous devez en informer immédiatement votre médecin.",
+   "action": "FR_ANDROCUR_MENINGIOMA"
+  },
+  {
+   "source": "FR_ANDROCUR",
+   "group": "HEARING",
+   "quote": "Si vous remarquez des symptômes tels que des troubles de la vision (par exemple une vision double ou floue), une perte d’audition ou un sifflement dans les oreilles, une perte d’odorat, des maux de tête qui s’aggravent au fil du temps, des pertes de mémoire, des crises convulsives, une faiblesse dans les bras ou les jambes, vous devez en informer immédiatement votre médecin.",
+   "action": "FR_ANDROCUR_MENINGIOMA"
+  },
+  {
+   "source": "FR_ANDROCUR",
+   "group": "SMELL",
+   "quote": "Si vous remarquez des symptômes tels que des troubles de la vision (par exemple une vision double ou floue), une perte d’audition ou un sifflement dans les oreilles, une perte d’odorat, des maux de tête qui s’aggravent au fil du temps, des pertes de mémoire, des crises convulsives, une faiblesse dans les bras ou les jambes, vous devez en informer immédiatement votre médecin.",
+   "action": "FR_ANDROCUR_MENINGIOMA"
+  },
+  {
+   "source": "FR_ANDROCUR",
+   "group": "HEADACHE",
+   "quote": "Si vous remarquez des symptômes tels que des troubles de la vision (par exemple une vision double ou floue), une perte d’audition ou un sifflement dans les oreilles, une perte d’odorat, des maux de tête qui s’aggravent au fil du temps, des pertes de mémoire, des crises convulsives, une faiblesse dans les bras ou les jambes, vous devez en informer immédiatement votre médecin.",
+   "action": "FR_ANDROCUR_MENINGIOMA"
+  },
+  {
+   "source": "FR_ANDROCUR",
+   "group": "MEMORY",
+   "quote": "Si vous remarquez des symptômes tels que des troubles de la vision (par exemple une vision double ou floue), une perte d’audition ou un sifflement dans les oreilles, une perte d’odorat, des maux de tête qui s’aggravent au fil du temps, des pertes de mémoire, des crises convulsives, une faiblesse dans les bras ou les jambes, vous devez en informer immédiatement votre médecin.",
+   "action": "FR_ANDROCUR_MENINGIOMA"
+  },
+  {
+   "source": "FR_ANDROCUR",
+   "group": "SEIZURE",
+   "quote": "Si vous remarquez des symptômes tels que des troubles de la vision (par exemple une vision double ou floue), une perte d’audition ou un sifflement dans les oreilles, une perte d’odorat, des maux de tête qui s’aggravent au fil du temps, des pertes de mémoire, des crises convulsives, une faiblesse dans les bras ou les jambes, vous devez en informer immédiatement votre médecin.",
+   "action": "FR_ANDROCUR_MENINGIOMA"
+  },
+  {
+   "source": "FR_ANDROCUR",
+   "group": "LIMB_WEAKNESS",
+   "quote": "Si vous remarquez des symptômes tels que des troubles de la vision (par exemple une vision double ou floue), une perte d’audition ou un sifflement dans les oreilles, une perte d’odorat, des maux de tête qui s’aggravent au fil du temps, des pertes de mémoire, des crises convulsives, une faiblesse dans les bras ou les jambes, vous devez en informer immédiatement votre médecin.",
+   "action": "FR_ANDROCUR_MENINGIOMA"
+  },
+  {
+   "source": "FR_ANDROCUR",
+   "group": "JAUNDICE",
+   "quote": "Jaunisse (au niveau des yeux et de la peau), démangeaisons sur le corps entier.",
+   "action": "FR_ANDROCUR_STOP"
+  },
+  {
+   "source": "FR_ANDROCUR",
+   "group": "ITCHING",
+   "quote": "Jaunisse (au niveau des yeux et de la peau), démangeaisons sur le corps entier.",
+   "action": "FR_ANDROCUR_STOP"
+  },
+  {
+   "source": "FR_ANDROCUR",
+   "group": "LEG",
+   "quote": "Douleur inhabituelle dans les jambes, faiblesse dans les membres.",
+   "action": "FR_ANDROCUR_STOP"
+  },
+  {
+   "source": "FR_ANDROCUR",
+   "group": "LIMB_WEAKNESS",
+   "quote": "Douleur inhabituelle dans les jambes, faiblesse dans les membres.",
+   "action": "FR_ANDROCUR_STOP"
+  },
+  {
+   "source": "FR_ANDROCUR",
+   "group": "CHEST_PAIN",
+   "quote": "Douleur de la poitrine, pouls irrégulier, essoufflement soudain.",
+   "action": "FR_ANDROCUR_STOP"
+  },
+  {
+   "source": "FR_ANDROCUR",
+   "group": "IRREGULAR_PULSE",
+   "quote": "Douleur de la poitrine, pouls irrégulier, essoufflement soudain.",
+   "action": "FR_ANDROCUR_STOP"
+  },
+  {
+   "source": "FR_ANDROCUR",
+   "group": "BREATHING",
+   "quote": "Douleur de la poitrine, pouls irrégulier, essoufflement soudain.",
+   "action": "FR_ANDROCUR_STOP"
+  },
+  {
+   "source": "FR_ANDROCUR",
+   "group": "CONSCIOUSNESS",
+   "quote": "Perte de connaissance, confusion, maux de tête sévères inhabituels, vertiges, troubles visuels, élocution ralentie ou perte de la parole.",
+   "action": "FR_ANDROCUR_STOP"
+  },
+  {
+   "source": "FR_ANDROCUR",
+   "group": "CONFUSION",
+   "quote": "Perte de connaissance, confusion, maux de tête sévères inhabituels, vertiges, troubles visuels, élocution ralentie ou perte de la parole.",
+   "action": "FR_ANDROCUR_STOP"
+  },
+  {
+   "source": "FR_ANDROCUR",
+   "group": "HEADACHE",
+   "quote": "Perte de connaissance, confusion, maux de tête sévères inhabituels, vertiges, troubles visuels, élocution ralentie ou perte de la parole.",
+   "action": "FR_ANDROCUR_STOP"
+  },
+  {
+   "source": "FR_ANDROCUR",
+   "group": "DIZZINESS",
+   "quote": "Perte de connaissance, confusion, maux de tête sévères inhabituels, vertiges, troubles visuels, élocution ralentie ou perte de la parole.",
+   "action": "FR_ANDROCUR_STOP"
+  },
+  {
+   "source": "FR_ANDROCUR",
+   "group": "VISION",
+   "quote": "Perte de connaissance, confusion, maux de tête sévères inhabituels, vertiges, troubles visuels, élocution ralentie ou perte de la parole.",
+   "action": "FR_ANDROCUR_STOP"
+  },
+  {
+   "source": "FR_ANDROCUR",
+   "group": "SPEECH",
+   "quote": "Perte de connaissance, confusion, maux de tête sévères inhabituels, vertiges, troubles visuels, élocution ralentie ou perte de la parole.",
+   "action": "FR_ANDROCUR_STOP"
+  },
+  {
+   "source": "FR_ANSM_CPA",
+   "group": "HEADACHE",
+   "quote": "maux de tête fréquents, troubles de l’audition, vertiges, troubles de la mémoire, troubles du langage, faiblesse, paralysie, troubles de la vision, perte d’odorat, convulsions, nausées...",
+   "action": "FR_ANSM_CPA"
+  },
+  {
+   "source": "FR_ANSM_CPA",
+   "group": "HEARING",
+   "quote": "maux de tête fréquents, troubles de l’audition, vertiges, troubles de la mémoire, troubles du langage, faiblesse, paralysie, troubles de la vision, perte d’odorat, convulsions, nausées...",
+   "action": "FR_ANSM_CPA"
+  },
+  {
+   "source": "FR_ANSM_CPA",
+   "group": "DIZZINESS",
+   "quote": "maux de tête fréquents, troubles de l’audition, vertiges, troubles de la mémoire, troubles du langage, faiblesse, paralysie, troubles de la vision, perte d’odorat, convulsions, nausées...",
+   "action": "FR_ANSM_CPA"
+  },
+  {
+   "source": "FR_ANSM_CPA",
+   "group": "MEMORY",
+   "quote": "maux de tête fréquents, troubles de l’audition, vertiges, troubles de la mémoire, troubles du langage, faiblesse, paralysie, troubles de la vision, perte d’odorat, convulsions, nausées...",
+   "action": "FR_ANSM_CPA"
+  },
+  {
+   "source": "FR_ANSM_CPA",
+   "group": "SPEECH",
+   "quote": "maux de tête fréquents, troubles de l’audition, vertiges, troubles de la mémoire, troubles du langage, faiblesse, paralysie, troubles de la vision, perte d’odorat, convulsions, nausées...",
+   "action": "FR_ANSM_CPA"
+  },
+  {
+   "source": "FR_ANSM_CPA",
+   "group": "LIMB_WEAKNESS",
+   "quote": "maux de tête fréquents, troubles de l’audition, vertiges, troubles de la mémoire, troubles du langage, faiblesse, paralysie, troubles de la vision, perte d’odorat, convulsions, nausées...",
+   "action": "FR_ANSM_CPA"
+  },
+  {
+   "source": "FR_ANSM_CPA",
+   "group": "VISION",
+   "quote": "maux de tête fréquents, troubles de l’audition, vertiges, troubles de la mémoire, troubles du langage, faiblesse, paralysie, troubles de la vision, perte d’odorat, convulsions, nausées...",
+   "action": "FR_ANSM_CPA"
+  },
+  {
+   "source": "FR_ANSM_CPA",
+   "group": "SMELL",
+   "quote": "maux de tête fréquents, troubles de l’audition, vertiges, troubles de la mémoire, troubles du langage, faiblesse, paralysie, troubles de la vision, perte d’odorat, convulsions, nausées...",
+   "action": "FR_ANSM_CPA"
+  },
+  {
+   "source": "FR_ANSM_CPA",
+   "group": "SEIZURE",
+   "quote": "maux de tête fréquents, troubles de l’audition, vertiges, troubles de la mémoire, troubles du langage, faiblesse, paralysie, troubles de la vision, perte d’odorat, convulsions, nausées...",
+   "action": "FR_ANSM_CPA"
+  },
+  {
+   "source": "FR_ANSM_CPA",
+   "group": "NAUSEA",
+   "quote": "maux de tête fréquents, troubles de l’audition, vertiges, troubles de la mémoire, troubles du langage, faiblesse, paralysie, troubles de la vision, perte d’odorat, convulsions, nausées...",
+   "action": "FR_ANSM_CPA"
+  },
+  {
+   "source": "TW_MOHW_2022_CPA",
+   "group": "VISION",
+   "quote": "提醒病人若出現視力變化、聽力喪失或耳鳴、嗅覺喪失、隨時間惡化之頭痛、記憶力喪失、癲癇發作或四肢無力等不適症狀應儘速回診。",
+   "action": "TW_MOHW_2022_CPA"
+  },
+  {
+   "source": "TW_MOHW_2022_CPA",
+   "group": "HEARING",
+   "quote": "提醒病人若出現視力變化、聽力喪失或耳鳴、嗅覺喪失、隨時間惡化之頭痛、記憶力喪失、癲癇發作或四肢無力等不適症狀應儘速回診。",
+   "action": "TW_MOHW_2022_CPA"
+  },
+  {
+   "source": "TW_MOHW_2022_CPA",
+   "group": "SMELL",
+   "quote": "提醒病人若出現視力變化、聽力喪失或耳鳴、嗅覺喪失、隨時間惡化之頭痛、記憶力喪失、癲癇發作或四肢無力等不適症狀應儘速回診。",
+   "action": "TW_MOHW_2022_CPA"
+  },
+  {
+   "source": "TW_MOHW_2022_CPA",
+   "group": "HEADACHE",
+   "quote": "提醒病人若出現視力變化、聽力喪失或耳鳴、嗅覺喪失、隨時間惡化之頭痛、記憶力喪失、癲癇發作或四肢無力等不適症狀應儘速回診。",
+   "action": "TW_MOHW_2022_CPA"
+  },
+  {
+   "source": "TW_MOHW_2022_CPA",
+   "group": "MEMORY",
+   "quote": "提醒病人若出現視力變化、聽力喪失或耳鳴、嗅覺喪失、隨時間惡化之頭痛、記憶力喪失、癲癇發作或四肢無力等不適症狀應儘速回診。",
+   "action": "TW_MOHW_2022_CPA"
+  },
+  {
+   "source": "TW_MOHW_2022_CPA",
+   "group": "SEIZURE",
+   "quote": "提醒病人若出現視力變化、聽力喪失或耳鳴、嗅覺喪失、隨時間惡化之頭痛、記憶力喪失、癲癇發作或四肢無力等不適症狀應儘速回診。",
+   "action": "TW_MOHW_2022_CPA"
+  },
+  {
+   "source": "TW_MOHW_2022_CPA",
+   "group": "LIMB_WEAKNESS",
+   "quote": "提醒病人若出現視力變化、聽力喪失或耳鳴、嗅覺喪失、隨時間惡化之頭痛、記憶力喪失、癲癇發作或四肢無力等不適症狀應儘速回診。",
+   "action": "TW_MOHW_2022_CPA"
+  },
+  {
+   "source": "CN_BUJIALE",
+   "group": "JAUNDICE",
+   "quote": "黄疸或肝功能恶化",
+   "action": "CN_BUJIALE_STOP"
+  },
+  {
+   "source": "CN_BUJIALE",
+   "group": "BLOOD_PRESSURE",
+   "quote": "严重的血压升高",
+   "action": "CN_BUJIALE_STOP"
+  },
+  {
+   "source": "CN_BUJIALE",
+   "group": "HEADACHE",
+   "quote": "新发的偏头痛型头痛",
+   "action": "CN_BUJIALE_STOP"
+  },
+  {
+   "source": "CN_BUJIALE",
+   "group": "VISION",
+   "quote": "急性视觉障碍或其他损伤",
+   "action": "CN_BUJIALE_STOP"
+  },
+  {
+   "source": "CN_BUJIALE",
+   "group": "LEG",
+   "quote": "如果患者出现血栓栓塞的可能症状(尤其是腿部痛性肿胀、突发性胸痛、呼吸急促)，必须立即联系医生。",
+   "action": "CN_BUJIALE_VTE"
+  },
+  {
+   "source": "CN_BUJIALE",
+   "group": "CHEST_PAIN",
+   "quote": "如果患者出现血栓栓塞的可能症状(尤其是腿部痛性肿胀、突发性胸痛、呼吸急促)，必须立即联系医生。",
+   "action": "CN_BUJIALE_VTE"
+  },
+  {
+   "source": "CN_BUJIALE",
+   "group": "BREATHING",
+   "quote": "如果患者出现血栓栓塞的可能症状(尤其是腿部痛性肿胀、突发性胸痛、呼吸急促)，必须立即联系医生。",
+   "action": "CN_BUJIALE_VTE"
+  },
+  {
+   "source": "CN_BUJIALE",
+   "group": "BREAST_CHANGES",
+   "quote": "必须告知女性患者，出现哪些乳房改变时必须报告医师或护士",
+   "action": "CN_BUJIALE_BREAST"
+  },
+  {
+   "source": "CN_AISITUO",
+   "group": "CARDIO_THROMBO_EVENT",
+   "quote": "心血管或血栓栓塞性意外",
+   "action": "CN_AISITUO"
+  },
+  {
+   "source": "CN_AISITUO",
+   "group": "JAUNDICE",
+   "quote": "胆汁郁积性黄疸",
+   "action": "CN_AISITUO"
+  },
+  {
+   "source": "CN_AISITUO",
+   "group": "NIPPLE_DISCHARGE",
+   "quote": "乳头溢液：若出现此症状，应检查是否有垂体腺瘤。",
+   "action": "CN_AISITUO"
+  }
+ ],
+ "rules": [
+  {
+   "molecule": "E2",
+   "ester": "E2",
+   "routes": [
+    "ORAL"
+   ],
+   "sources": [
+    "FR_PROVAMES"
+   ]
+  },
+  {
+   "molecule": "E2",
+   "ester": "E2",
+   "routes": [
+    "SUBLINGUAL"
+   ],
+   "sources": [
+    "FR_PROVAMES"
+   ],
+   "note": "SUBLINGUAL_NOT_COVERED"
+  },
+  {
+   "molecule": "E2",
+   "ester": "EV",
+   "routes": [
+    "ORAL"
+   ],
+   "sources": [
+    "CN_BUJIALE",
+    "FR_PROGYNOVA"
+   ]
+  },
+  {
+   "molecule": "E2",
+   "ester": "EV",
+   "routes": [
+    "SUBLINGUAL"
+   ],
+   "sources": [
+    "CN_BUJIALE",
+    "FR_PROGYNOVA"
+   ],
+   "note": "SUBLINGUAL_NOT_COVERED"
+  },
+  {
+   "molecule": "E2",
+   "ester": "E2",
+   "routes": [
+    "GEL"
+   ],
+   "sources": [
+    "FR_OESTRODOSE",
+    "FR_ESTREVA",
+    "CN_AISITUO"
+   ]
+  },
+  {
+   "molecule": "E2",
+   "ester": "E2",
+   "routes": [
+    "PATCH"
+   ],
+   "sources": [
+    "FR_DERMESTRIL"
+   ]
+  },
+  {
+   "molecule": "CPA",
+   "sources": [
+    "FR_ANDROCUR",
+    "FR_ANSM_CPA",
+    "TW_MOHW_2022_CPA"
+   ]
+  },
+  {
+   "molecule": "SPI",
+   "none_listed": true
+  }
+ ],
+ "monitoring": [
+  {
+   "id": "FR_HAS_R32",
+   "region": "FR",
+   "when": "SPI",
+   "publisher": "HAS",
+   "title": "Transidentité : prise en charge de l’adulte — R32",
+   "url": "https://www.has-sante.fr/upload/docs/application/pdf/2025-07/transidentite_prise_en_charge_de_ladulte_-_recommandations.pdf",
+   "document_date": "2025-07",
+   "section": "Page 19, R32",
+   "quote": "R32. L’utilisation de spironolactone, en complément des œstrogènes, peut s’envisager en cas de prescription d’hormones féminisantes chez une personne trans (AE) sous réserve d’une surveillance de la pression artérielle, ionogramme sanguin et de la créatininémie en respectant les conditions habituelles de prescription."
+  },
+  {
+   "id": "FR_ANSM_IRM",
+   "region": "FR",
+   "when": "CPA",
+   "publisher": "ANSM",
+   "title": "Androcur et risque de méningiome — Questions/réponses",
+   "url": "https://ansm.sante.fr/dossiers-thematiques/androcur-et-risque-de-meningiome/questions-reponses",
+   "document_date": "2022-12-01",
+   "section": "« Je suis traité(e) actuellement par Androcur ou ses génériques, que dois-je faire ? »",
+   "quote": "En complément un suivi périodique par imagerie cérébrale (IRM) est à réaliser selon le schéma suivant : une IRM en début de traitement, à renouveler dans les 5 ans, puis tous les 2 ans tant que l’IRM est normale et que le traitement est poursuivi."
+  },
+  {
+   "id": "FR_ANSM_ATTESTATION",
+   "region": "FR",
+   "when": "CPA",
+   "publisher": "ANSM",
+   "title": "Androcur et risque de méningiome — Questions/réponses",
+   "url": "https://ansm.sante.fr/dossiers-thematiques/androcur-et-risque-de-meningiome/questions-reponses",
+   "document_date": "2022-12-01",
+   "section": "« Je suis traité(e) actuellement par Androcur ou ses génériques, que dois-je faire ? »",
+   "quote": "Au-delà d’un an de traitement, votre médecin doit vous remettre chaque année une attestation d’information que vous devez compléter et signer ensemble."
+  },
+  {
+   "id": "FR_HAS_R40",
+   "region": "FR",
+   "when": "ANY",
+   "publisher": "HAS",
+   "title": "Transidentité : prise en charge de l’adulte — R40",
+   "url": "https://www.has-sante.fr/upload/docs/application/pdf/2025-07/transidentite_prise_en_charge_de_ladulte_-_recommandations.pdf",
+   "document_date": "2025-07",
+   "section": "Page 21, R40",
+   "quote": "R40. En l’absence d’étude clinique spécifique, le bilan clinique de surveillance d’une personne trans sous hormones féminisantes sera fait à 3 mois puis à une fréquence adaptée au cas par cas jusqu’à ce que le dosage soit dans les valeurs de référence puis une fois par an."
+  }
+ ],
+ "reporting": [
+  {
+   "region": "FR",
+   "publisher": "ANSM",
+   "url": "https://ansm.sante.fr/documents/reference/declarer-un-effet-indesirable/comment-declarer-si-vous-etes-patient-ou-usager",
+   "quotes": [
+    "Utilisez le portail de signalement des effets indésirables : signalement.social-sante.gouv.fr"
+   ]
+  },
+  {
+   "region": "TW",
+   "publisher": "衛生福利部食品藥物管理署",
+   "url": "https://www.fda.gov.tw/TC/sitecontent.aspx?sid=4240",
+   "quotes": [
+    "民眾亦可主動通報相關不良反應。",
+    "1.諮詢電話: 02-23960100"
+   ]
+  },
+  {
+   "region": "CN",
+   "publisher": "《药品不良反应报告和监测管理办法》（卫生部令第81号）",
+   "url": "https://www.gov.cn/gongbao/content/2011/content_2004739.htm",
+   "quotes": [
+    "个人发现新的或者严重的药品不良反应，可以向经治医师报告，也可以向药品生产、经营企业或者当地的药品不良反应监测机构报告，必要时提供相关的病历资料。"
+   ]
+  }
+ ]
+}

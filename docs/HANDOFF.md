@@ -153,7 +153,8 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 - 审核结论（15b）已写入需求和设计文档：MOOD/ENERGY/SLEEP_QUALITY 并入 DAY_*；其余 8 个旧条目按最近 30 天是否有记录决定启用，名称不加"旧"；症状中性译名点开看原文；补佳乐、爱斯妥按第三方转载使用，tfsci 不算独立来源；舌下按口服片说明书并注明未涉及舌下；来源/批号放在库存包装；化验参考范围保留不解读；血压体重选方案 B；效果条目可隐藏。
 - 第 3 步（实现）：进行中。
   - 已完成：数据层（数据库版本 2：`checkin_item.legacy`、`stage_review`、`symptom_check`、`review_effect`、包装 `source_note`/`batch`；`migration1To2` 与旧备份恢复共用 `WellbeingUpgrade.apply`；`restoreBackup` 接受旧版本、拒绝更新版本 `NewerBackup`）；Trans Memo 导入映射到 DAY_*。测试 `WellbeingMigrationTest`（Room 迁移、恢复 `core/data/src/test/resources/backup/v1-synthetic.pnbak`——由 0.2.0 代码生成的合成备份，测试密码在测试里——以及两条路径结果一致）。
-  - 未完成：症状来源目录与匹配、界面（三个标签、管理条目、地区、包装来源/批号）、复诊摘要 PDF、四语文字。关键硬性要求：v1 备份可恢复（§9.3）；不放急救电话；"立即"醒目；螺内酯"官方来源未列出"。
+  - 已完成：症状来源目录 `app/src/main/resources/symptom-sources.json`（10 个来源、27 个症状组、89 条引文，全部逐字核对原文；由 `tools/symptom-catalog/build_catalog.py` 生成）和 `SymptomCatalog`（按药匹配、共有症状合并、"立即"按来源措辞、地区规则、上报渠道）；测试 `SymptomCatalogTest`。
+  - 未完成：界面（三个标签、管理条目、地区、包装来源/批号）、复诊摘要 PDF、四语文字。关键硬性要求：v1 备份可恢复（§9.3）；不放急救电话；"立即"醒目；螺内酯"官方来源未列出"。
 - 原始调研中间文件只在会话临时目录（未入库）；结论已全部写入研究文档。
 
 ## 2i. 致谢口径更正（2026-10-07，`REQUIREMENTS.md` 第 16 节）：源码完成，Release 未改
