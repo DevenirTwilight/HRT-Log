@@ -291,3 +291,11 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 - 本机从公开下载地址独立回查：两个 APK 与 SHA256SUMS 一致；标题“HRT Log 0.2.0”，说明为 build 5，`SIGNING_CERTIFICATE.txt`、`THIRD_PARTY_NOTICES.md` 未变。`.github/release-assets.json` 已更新（source 462da22、versionCode 5、新大小/哈希），由只读校验工作流验证。
 - **真机确认（2026-10-06）**：用户已覆盖安装 build 5，恢复修复备份后显示正常。
 - 以后再发布：提高 versionCode；可沿用同一临时分支+工作流的方法，结束后删除分支和一次性工作流。
+
+### 2j. 产品源码调研（2026-10-07，进行中）
+
+已完成 HRT Log 当前源码审计，保存 `docs/hrt-product-research-2026-10-07.md`。基线759ee88，最新功能bf7d6d4；公开APK462da22/build5与最新wellbeing源码区分。发现：已有单药Rule版本/实际快照与包装账本，但PK仍用当前profile解释历史；症状只存date/group/note且PDF从当前目录所有group来源取值；预约已有，Visit Pack应扩展而非从零。项目未发现根LICENSE。
+
+已在仓库外只读核查 Featherline、Mona、Chrysalide、Yuuki HRT-Tracker、NoMTF Recorder、归档TransTracks、Transmtf源码/许可/最近提交；MyHRT/HRTMe/MyTRT/Trans Memo官方资料。MyHRT新发现security子仓库仅限验证用途，并非开源/允许复用，必须另写进许可证分析。
+
+未完成：完整矩阵、Featherline深度设计、独立schema/迁移方案、评分路线图、PRIOR_ART及文档链接检查。报告中预先列出的这些文件随后补齐。无应用修改/无发布/无向第三方发消息；研究临时克隆位于/workspace/scratch/research，结果须继续写入仓库。
