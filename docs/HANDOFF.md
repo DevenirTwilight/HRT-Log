@@ -4,7 +4,16 @@
 
 用户明确日常使用此应用，测试时不能反复卸载正式安装。以后所有交付给用户的 APK（含测试包）统一使用第 7 节现有私有正式密钥；不再交付 CI 的调试签名包。CI 内部自动验证仍可使用调试密钥，不将私钥或密码上传 CI。此决定优先于本文历史交付说明。
 
-### 当前最新交付：P0 build 6（2026-10-07，已完成）
+### 当前最新交付：P1 build 7 full（2026-10-07，full已签署/下载回查；play及最终构建收尾中）
+
+- 功能源码 `bcc629f`；分支 `claude/new-session-1959qb`；公开0.2.0/build5 Release与标签未改。schema4、versionCode7、versionName0.2.0。
+- 本批：冻结的方案版本、组合治疗阶段、统一时间线/筛选、明确用户里程碑；提醒/名称不切临床阶段，旧规则回推标记、日期观察候选/未知、未确认与漏服区分、计划默认隐藏、四语/精简模式。只连接已保存事实，不判断因果/化验正常与否；设计 `design/epochs-timeline-p1.md`，独立来源记录 `PRIOR_ART.md`。
+- 最终源码本机单元276项（按模块/变体计，274通过、2 PDF跳过、0失败）；lint full0错误65警告/play0错误59警告。CI [37638118061](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37638118061) JVM/device-tests已成功，android仍运行。原生data9项含1→4和3→4；app23项中2个重启用例分开新进程执行成功。未做OEM真机验证。
+- 正式签名full：`/workspace/HRT-Log-build7-full-signed.apk`，23,198,939 bytes，SHA256 `670869f429ec923af37937c09d9d86eb33ae352b2b3ca475e3bdb02f7faefb2c`。同一正式证书、非调试、16KB对齐、无INTERNET、包名/版本已核验；tmpfiles真实令牌下载入口下载回查一致，临时链接失效需重新上传同一包，不交付工作区预览路径。
+- 剩余：play release R8仍在运行，尚未签署；本机四构建和最终android CI尚未全部结束。签名临时目录 `/workspace/tooling/p1-signing` 仍存在供play签署，完成后立即删除；凭据不得进仓库/CI。不能把这一条称为全部验证完成。
+- 后续批次仍是Lab Context、Appointment/Visit Pack与事实变化摘要；本批没有实现这些，也没有新增历史模型bundle、复方强度或包装单位。加密备份包含新表，现有CSV/PDF未扩展阶段/里程碑专属导出。root LICENSE仍未选择。
+
+### 上一阶段：P0 build 6（2026-10-07，已完成）
 
 - 功能源码 `2a58d01`；分支 `claude/new-session-1959qb`；公开0.2.0/build5 Release与标签未改。schema3、versionCode6、versionName0.2.0。
 - 已独立实现用药PK输入/历史单位快照、症状匹配来源冻结、自动未登记UNCONFIRMED及确认漏服、备份32MiB/JSON/结构/账本校验与失败回滚；修复b64:字面备注误解码。旧缺失上下文明确未知，不用当前配置补猜；未改变PK公式、参数或当前体重政策。P1 Epoch/Timeline/Visit Pack未实现。
