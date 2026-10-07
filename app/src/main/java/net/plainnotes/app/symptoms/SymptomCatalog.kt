@@ -1,6 +1,8 @@
 package net.plainnotes.app.symptoms
 
 import org.json.JSONObject
+import org.json.JSONArray
+import net.plainnotes.app.data.*
 
 /**
  * Official symptom sources bundled with the app (`symptom-sources.json`, REQUIREMENTS 15/15a/15b). Every quote and action is
@@ -73,6 +75,32 @@ class SymptomCatalog(json: String) {
             .sortedWith(compareBy<ShownGroup>({ !it.urgent }, { order.indexOf(it.id) }))
     }
 
+    /** A compact immutable copy of exactly what was matched, not every source sharing the group. */
+    fun snapshot(groupId:String,medications:List<MedicationEntity>,profiles:Map<Long,ProfileEntity>):String? {
+        val meds=medications.filter{it.active}
+        val group=groupsFor(meds.map{MedKey(it.id,it.molecule,it.route,profiles[it.id]?.ester)}).firstOrNull{it.id==groupId} ?: return null
+        val sources=group.entries.map{it.source.id}.toSet()
+        val entries=root.getJSONArray("entries")
+        return JSONObject().put("version",version).put("captured_at",java.time.Instant.now().toString()).put("zone",java.time.ZoneId.systemDefault().id)
+            .put("matched_medication_ids",JSONArray(group.medicationIds.toList()))
+            .put("matched_medications",JSONArray(meds.filter{it.id in group.medicationIds}.map{JSONObject(MedicationSnapshot.encode(it,profiles[it.id])).put("id",it.id).put("source_ids",JSONArray(
+                (forMedication(MedKey(it.id,it.molecule,it.route,profiles[it.id]?.ester)) as? MedSymptoms.Listed)?.sources.orEmpty().filter{it in sources}))}))
+            .put("groups",JSONObject().put(groupId,root.getJSONObject("groups").getJSONObject(groupId)))
+            .put("sources",JSONArray(root.getJSONArray("sources").let{a->(0 until a.length()).map{a.getJSONObject(it)}.filter{it.getString("id") in sources}.map{source->
+                val frozen=JSONObject(source.toString())
+                val digest=java.security.MessageDigest.getInstance("SHA-256").digest(source.toString().toByteArray(Charsets.UTF_8)).joinToString(""){"%02x".format(it)}
+                frozen.put("source_revision_id",source.getString("id")+":"+digest).put("content_sha256",digest)
+            }}))
+            .put("entries",JSONArray((0 until entries.length()).map{entries.getJSONObject(it)}.filter{it.getString("group")==groupId && it.getString("source") in sources}))
+            .put("actions",root.getJSONObject("actions")).put("rules",JSONArray()).put("monitoring",JSONArray()).put("reporting",JSONArray()).toString()
+    }
+
+    fun savedGroup(groupId:String):ShownGroup? {
+        val names=groups[groupId] ?: return null
+        val ids=root.optJSONArray("matched_medication_ids")?.let{a->(0 until a.length()).map{a.getLong(it)}.toSet()}.orEmpty()
+        return ShownGroup(groupId,names,entries.filter{it.group==groupId},ids)
+    }
+
     /** Country rules and monitoring shown only to users who chose that region. */
     fun monitoringFor(region: String?, molecules: Set<String>): List<Monitoring> =
         if (region == null) emptyList() else monitoring.filter { it.region == region && (it.whenMolecule == "ANY" && molecules.isNotEmpty() || it.whenMolecule in molecules) }
@@ -80,6 +108,11 @@ class SymptomCatalog(json: String) {
     fun reportingFor(region: String?): Reporting? = reporting.firstOrNull { it.region == region }
 
     companion object {
+        fun saved(check:SymptomCheckEntity):ShownGroup? = check.context_snapshot?.let{runCatching{SymptomCatalog(it).savedGroup(check.group_id)}.getOrNull()}
+        fun savedMedicationNames(check:SymptomCheckEntity):List<String> = check.context_snapshot?.let{runCatching{
+            val a=JSONObject(it).getJSONArray("matched_medications");(0 until a.length()).map{a.getJSONObject(it).getString("name")}
+        }.getOrNull()}.orEmpty()
+
         @Volatile private var cached: SymptomCatalog? = null
         fun load(): SymptomCatalog = cached ?: SymptomCatalog(SymptomCatalog::class.java.getResourceAsStream("/symptom-sources.json")!!.bufferedReader().use { it.readText() }).also { cached = it }
     }

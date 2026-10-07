@@ -32,7 +32,9 @@ internal object HrtTrackerWriter {
         plan.intakes.forEach { p ->
             if (!known.add(p.sourceKey)) { dups++; return@forEach }
             dao.record(RecordEntity(medication_id = medIds.getValue(p.group), taken_utc = p.taken.toEpochMilli(), taken_zone = zone.id, actual_dose = p.dose,
-                status = "ON_TIME", origin = "IMPORT_HT", source_record_key = p.sourceKey, revision = 1, config_snapshot = JSONObject().put("source", "hrttracker").toString()))
+                status = "ON_TIME", origin = "IMPORT_HT", source_record_key = p.sourceKey, revision = 1, config_snapshot = MedicationSnapshot.encode(
+                    dao.medication(medIds.getValue(p.group)).copy(molecule=p.group.molecule,route=p.group.route,unit=p.group.unit),
+                    ProfileEntity(medIds.getValue(p.group),p.group.ester,p.group.pkRoute,p.group.slTier,p.group.gelProductId,p.group.gelSite,p.group.gelAreaCm2,p.group.patchUgDay))))
             added++
         }
         val labs = dao.labs(); var labCount = 0

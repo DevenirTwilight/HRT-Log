@@ -75,12 +75,12 @@ class ScheduleTest {
     }
     @Test fun `missed only when next same medication slot arrives`() {
         val r=rule();val s=span(r,"2026-01-02").single();val next=s.at.plusSeconds(86400)
-        assertEquals(SlotState.OVERDUE,state(r,s.at,next.minusSeconds(1)));assertEquals(SlotState.MISSED,state(r,s.at,next))
+        assertEquals(SlotState.OVERDUE,state(r,s.at,next.minusSeconds(1)));assertEquals(SlotState.UNCONFIRMED,state(r,s.at,next))
     }
     @Test fun `long interval has no 24 hour missed threshold`() {
         val r=rule(n=7);val s=span(r,"2026-01-01").single()
         assertEquals(SlotState.OVERDUE,state(r,s.at,s.at.plusSeconds(86400*6)))
-        assertEquals(SlotState.MISSED,state(r,s.at,s.at.plusSeconds(86400*7)))
+        assertEquals(SlotState.UNCONFIRMED,state(r,s.at,s.at.plusSeconds(86400*7)))
     }
     @Test fun `ended rule without successor stays overdue`() {
         val r=rule().copy(until=utc("2026-01-02T00:00:00Z"));val s=span(r,"2026-01-01").single()
@@ -88,11 +88,11 @@ class ScheduleTest {
     }
     @Test fun `late larger than interval does not delay missed`() {
         val r=rule().copy(lateMinutes=4000);val s=span(r,"2026-01-02").single()
-        assertEquals(SlotState.MISSED,state(r,s.at,s.at.plusSeconds(86400)))
+        assertEquals(SlotState.UNCONFIRMED,state(r,s.at,s.at.plusSeconds(86400)))
     }
     @Test fun `skipped successor remains a boundary and skipped current is not missed`() {
         val r=rule();val s=span(r,"2026-01-02").single();val n=span(r,"2026-01-03").single()
-        assertEquals(SlotState.MISSED,state(r,s.at,n.at,listOf(SlotOverride(n.key,skipped=true))))
+        assertEquals(SlotState.UNCONFIRMED,state(r,s.at,n.at,listOf(SlotOverride(n.key,skipped=true))))
         assertEquals(SlotState.SKIPPED,state(r,s.at,n.at,listOf(SlotOverride(s.key,skipped=true))))
     }
     @Test fun `backfill replaces missed and actual time controls classification`() {
@@ -125,7 +125,7 @@ class ScheduleTest {
         val old=originalRule.copy(until=cut);val next=rule(id=2,times=listOf("18:00")).copy(from=cut,trackingFrom=cut)
         val now=s.at.plusSeconds(21600)
         val result=Timeline.build(listOf(old,next),emptyList(),emptyList(),s.at,s.at.plusSeconds(1),now,paris,listOf(s))
-        assertEquals(SlotState.MISSED,result.single().state)
+        assertEquals(SlotState.UNCONFIRMED,result.single().state)
     }
     @Test fun `frozen missed record is not reinterpreted by a later reschedule`() {
         val r=rule();val s=span(r,"2026-01-02").single()

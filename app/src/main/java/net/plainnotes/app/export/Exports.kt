@@ -45,10 +45,10 @@ object CsvExport {
         val meds = d.medications.associateBy { it.id }
         ZipOutputStream(out).use { zip ->
             fun file(name: String, body: StringBuilder) { zip.putNextEntry(ZipEntry(name)); zip.write(byteArrayOf(0xEF.toByte(), 0xBB.toByte(), 0xBF.toByte())); zip.write(body.toString().toByteArray()); zip.closeEntry() }
-            file("intakes.csv", StringBuilder(line("taken_at", "planned_at", "medication", "molecule", "ester", "route", "actual_dose", "planned_dose", "unit", "status", "site", "origin")).apply {
-                d.records.filter { it.deleted_at_utc == null }.sortedBy { it.taken_utc ?: it.scheduled_utc }.forEach { r -> val m = meds[r.medication_id]
-                    append(line(ts(r.taken_utc, r.taken_zone), ts(r.scheduled_utc, r.scheduled_zone), m?.name, m?.molecule, d.profiles[r.medication_id]?.ester, m?.route,
-                        r.actual_dose, r.planned_dose, m?.unit, r.status, r.site, r.origin)) }
+            file("intakes.csv", StringBuilder(line("taken_at", "planned_at", "medication", "molecule", "ester", "route", "actual_dose", "planned_dose", "unit", "status", "site", "origin", "context_snapshot")).apply {
+                d.records.filter { it.deleted_at_utc == null }.sortedBy { it.taken_utc ?: it.scheduled_utc }.forEach { r -> val m = MedicationSnapshot.decode(r.config_snapshot,r.medication_id)
+                    append(line(ts(r.taken_utc, r.taken_zone), ts(r.scheduled_utc, r.scheduled_zone), m?.name, m?.molecule, m?.profile?.ester, m?.route,
+                        r.actual_dose, r.planned_dose, m?.unit, if(r.unconfirmed)"UNCONFIRMED" else r.status, r.site, r.origin,r.config_snapshot)) }
             })
             file("wellbeing.csv", StringBuilder(line("date", "item", "value_1_to_5", "note")).apply {
                 val items = d.items.associateBy { it.id }
@@ -59,7 +59,7 @@ object CsvExport {
                 }
             })
             file("packages.csv",StringBuilder(line("id","medication","capacity","used_amount","state","source_note","batch")).apply{d.containers.forEach{c->append(line(c.id,meds[c.medication_id]?.name,c.capacity,c.used_amount,c.state,c.source_note,c.batch))}})
-            file("symptoms.csv",StringBuilder(line("date","symptom_group","note")).apply{d.symptoms.sortedBy{it.date}.forEach{append(line(it.date,it.group_id,it.note))}})
+            file("symptoms.csv",StringBuilder(line("date","symptom_group","note","context_snapshot")).apply{d.symptoms.sortedBy{it.date}.forEach{append(line(it.date,it.group_id,it.note,it.context_snapshot))}})
             file("reviews.csv",StringBuilder(line("date","effects_json","tolerance_note","risk_note","smoking","systolic_mmHg","diastolic_mmHg","weight_kg","satisfaction_1_to_5","satisfaction_note")).apply{d.reviews.sortedBy{it.date}.forEach{r->append(line(r.date,r.effects_json,r.tolerance_note,r.risk_note,r.smoking,r.systolic,r.diastolic,r.weight_kg,r.satisfaction,r.satisfaction_note))}})
             file("labs.csv", StringBuilder(line("sampled_at", "analyte", "value", "unit", "report_lower", "report_upper", "report_unit", "laboratory", "note")).apply {
                 d.labs.sortedBy { it.sampled_utc }.forEach { l -> append(line(ts(l.sampled_utc, l.sampled_zone), l.analyte_code, l.value, l.unit, l.reference_lower, l.reference_upper, l.reference_unit, l.laboratory, l.note)) }
@@ -120,9 +120,10 @@ object PdfReport {
         val inRange = d.records.filter { it.deleted_at_utc == null && (it.taken_utc ?: it.scheduled_utc ?: 0) in since until until }
         d.medications.filter { m -> inRange.any { it.medication_id == m.id } }.forEach { m ->
             val r = inRange.filter { it.medication_id == m.id && it.scheduled_utc != null }
-            val onTime = r.count { it.status == "ON_TIME" }; val late = r.count { it.status == "LATE" }; val missed = r.count { it.status == "MISSED" }; val skipped = r.count { it.status == "SKIPPED" }
+            val onTime = r.count { it.status == "ON_TIME" }; val late = r.count { it.status == "LATE" }; val missed = r.count { it.status == "MISSED" && !it.unconfirmed }; val skipped = r.count { it.status == "SKIPPED" }
             val free = inRange.filter { it.medication_id == m.id && it.scheduled_utc == null && it.status in listOf("ON_TIME", "LATE") }
             val imported = inRange.count { it.medication_id == m.id && it.origin.startsWith("IMPORT_") && it.status in listOf("ON_TIME", "LATE") }
+            if(r.any{it.unconfirmed})text(context.getString(R.string.unconfirmed_count,r.count{it.unconfirmed}),body)
             text("• ${m.name}: " + context.getString(R.string.report_adherence_line, onTime, late, missed, skipped, free.count { !it.origin.startsWith("IMPORT_") }, imported), body, 2f)
         }
         y += 8f
@@ -133,7 +134,7 @@ object PdfReport {
             row(listOf(context.getString(R.string.report_col_date), context.getString(R.string.lab_analyte), context.getString(R.string.lab_value),
                 context.getString(R.string.report_col_range), context.getString(R.string.report_col_since_dose)), widths, small.apply { isFakeBoldText = true })
             small.isFakeBoldText = false
-            val doseTimes = d.records.filter { r -> r.status in listOf("ON_TIME", "LATE") && r.deleted_at_utc == null && d.medications.firstOrNull { it.id == r.medication_id }?.molecule == "E2" }.mapNotNull { it.taken_utc }.sorted()
+            val doseTimes = d.records.filter { r -> r.status in listOf("ON_TIME", "LATE") && r.deleted_at_utc == null && MedicationSnapshot.decode(r.config_snapshot,r.medication_id)?.molecule == "E2" }.mapNotNull { it.taken_utc }.sorted()
             labs.forEach { l ->
                 val last = doseTimes.lastOrNull { it <= l.sampled_utc }?.let { val m = (l.sampled_utc - it) / 60000; "${m / 60} h ${m % 60} min" } ?: ""
                 val range = if (l.reference_lower != null || l.reference_upper != null) "${l.reference_lower?.let(::fmt) ?: "–"} – ${l.reference_upper?.let(::fmt) ?: "–"} ${l.reference_unit ?: ""}" else ""

@@ -6,6 +6,7 @@ import net.plainnotes.app.export.CsvExport
 import net.plainnotes.app.export.ExportData
 import net.plainnotes.app.export.PdfReport
 import org.junit.Assert.*
+import org.json.JSONObject
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -20,8 +21,8 @@ class ExportTest {
     private val data = ExportData(
         listOf(MedicationEntity(1, "Gel, \"synthetic\"", "E2", "GEL", "MG", 1.5, 80.0, null, 15, 120, false, null, true, true, 0)),
         mapOf(1L to ProfileEntity(1, "E2", "gel")),
-        listOf(RecordEntity(1, 1, taken_utc = now - 3_600_000, taken_zone = "Europe/Paris", actual_dose = 1.5, status = "ON_TIME", origin = "APP", revision = 1, config_snapshot = "{}"),
-            RecordEntity(2, 1, scheduled_utc = now - 90_000_000, scheduled_zone = "Europe/Paris", status = "MISSED", origin = "AUTO_MISSED", revision = 1, config_snapshot = "{}")),
+        listOf(RecordEntity(1, 1, taken_utc = now - 3_600_000, taken_zone = "Europe/Paris", actual_dose = 1.5, status = "ON_TIME", origin = "APP", revision = 1, config_snapshot = JSONObject().put("name","Gel, \"synthetic\"").put("molecule","E2").put("unit","MG").put("route","GEL").toString()),
+            RecordEntity(2, 1, scheduled_utc = now - 90_000_000, scheduled_zone = "Europe/Paris", status = "MISSED", origin = "AUTO_MISSED", revision = 1, config_snapshot = JSONObject().put("name","Gel, \"synthetic\"").put("molecule","E2").put("unit","MG").put("route","GEL").toString())),
         listOf(LabValueEntity(1, "E2", 150.0, "pg/mL", now - 7_200_000, "Europe/Paris", 50.0, 300.0, "pg/mL", note = "line1\nline2")),
         listOf(CheckinItemEntity(1, "MOOD", null, true, 0)), listOf(CheckinScoreEntity(java.time.LocalDate.now().toString(), 1, 4)),
         listOf(DayNoteEntity(java.time.LocalDate.now().toString(), "note, with comma")), mapOf(1L to "daily"), { "Mood" })

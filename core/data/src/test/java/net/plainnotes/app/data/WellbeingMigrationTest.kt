@@ -94,6 +94,13 @@ class WellbeingMigrationTest {
         room.close()
     }
 
+    @Test fun schema2SymptomMigrationPreservesUnknownContext() {
+        helper.createDatabase(dbName,2).use{it.execSQL("INSERT INTO symptom_check(date,group_id,note) VALUES ('2026-03-09','SYNTHETIC','old note')")}
+        helper.runMigrationsAndValidate(dbName,3,true,migration2To3).use{db->
+            db.query("SELECT note,context_snapshot FROM symptom_check").use{assertTrue(it.moveToFirst());assertEquals("old note",it.getString(0));assertTrue(it.isNull(1))}
+        }
+    }
+
     @Test fun aBackupFromANewerSchemaIsRefused() = runBlocking {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val room = Room.inMemoryDatabaseBuilder(context, NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build(); room.openHelper.writableDatabase

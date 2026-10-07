@@ -31,6 +31,8 @@ import net.plainnotes.app.NotesState
 import net.plainnotes.app.R
 import net.plainnotes.app.data.MedicationEntity
 import net.plainnotes.app.data.RecordEntity
+import net.plainnotes.app.data.MedicationSnapshot
+import net.plainnotes.app.data.unconfirmed
 import net.plainnotes.app.domain.SlotState
 import java.time.Instant
 import java.time.LocalDate
@@ -38,17 +40,17 @@ import java.time.ZoneId
 import kotlin.math.roundToInt
 
 /** Adherence counts for scheduled intakes; unscheduled intakes are listed but not counted. */
-class Adherence(val onTime: Int, val late: Int, val missed: Int, val skipped: Int) {
+class Adherence(val onTime: Int, val late: Int, val missed: Int, val skipped: Int, val unconfirmed: Int = 0) {
     val due get() = onTime + late + missed
-    val onTimeRate get() = if (due == 0) null else onTime.toDouble() / due
+    val onTimeRate get() = if (due == 0 || unconfirmed > 0) null else onTime.toDouble() / due
 }
 fun adherence(records: List<RecordEntity>) = records.filter { it.slot_key != null || it.scheduled_utc != null }.let { r ->
-    Adherence(r.count { it.status == "ON_TIME" }, r.count { it.status == "LATE" }, r.count { it.status == "MISSED" }, r.count { it.status == "SKIPPED" })
+    Adherence(r.count { it.status == "ON_TIME" }, r.count { it.status == "LATE" }, r.count { it.status == "MISSED" && !it.unconfirmed }, r.count { it.status == "SKIPPED" },r.count { it.unconfirmed })
 }
 private fun RecordEntity.at(): Instant = Instant.ofEpochMilli(taken_utc ?: scheduled_utc ?: 0)
 
 @Composable fun HistoryScreen(state: NotesState, records: List<RecordEntity>, onEdit: (RecordEntity) -> Unit, onDelete: (RecordEntity) -> Unit, contentPadding: PaddingValues,
-                              onAdd: () -> Unit = {}, onBatch: () -> Unit = {}, onLink: (RecordEntity) -> Unit = {}) {
+                              onAdd: () -> Unit = {}, onBatch: () -> Unit = {}, onLink: (RecordEntity) -> Unit = {}, onConfirmMissed:(RecordEntity)->Unit = {}) {
     val meds = state.medications.associateBy { it.id }
     var medFilter by rememberSaveable { mutableStateOf<Long?>(null) }
     var days by rememberSaveable { mutableIntStateOf(30) }
@@ -76,7 +78,7 @@ private fun RecordEntity.at(): Instant = Instant.ofEpochMilli(taken_utc ?: sched
         }
         item { AdherenceCard(adherence(shown)) }
         if (shown.isEmpty()) item { EmptyState(Icons.Outlined.History, stringResource(R.string.history_empty_title), stringResource(R.string.history_empty_body)) }
-        byDay.forEach { (day, list) -> item(key = day.toString()) { DayCard(day, list, meds, state.profiles, onEdit, onDelete, onLink) } }
+        byDay.forEach { (day, list) -> item(key = day.toString()) { DayCard(day, list, meds, state.profiles, onEdit, onDelete, onLink,onConfirmMissed) } }
     }
 }
 
@@ -101,7 +103,7 @@ private fun RecordEntity.at(): Instant = Instant.ofEpochMilli(taken_utc ?: sched
 }
 
 @Composable private fun DayCard(day: LocalDate, list: List<RecordEntity>, meds: Map<Long, MedicationEntity>, profiles: Map<Long, ProfileEntity>,
-                                onEdit: (RecordEntity) -> Unit, onDelete: (RecordEntity) -> Unit, onLink: (RecordEntity) -> Unit) {
+                                onEdit: (RecordEntity) -> Unit, onDelete: (RecordEntity) -> Unit, onLink: (RecordEntity) -> Unit,onConfirmMissed:(RecordEntity)->Unit) {
     val c = MaterialTheme.colorScheme
     Surface(shape = MaterialTheme.shapes.extraLarge, color = c.surfaceContainerLow, modifier = Modifier.fillMaxWidth()) {
         Column {
@@ -111,7 +113,7 @@ private fun RecordEntity.at(): Instant = Instant.ofEpochMilli(taken_utc ?: sched
             }
             list.forEachIndexed { i, r ->
                 if (i > 0) HorizontalDivider(Modifier.padding(horizontal = 16.dp), color = c.outlineVariant.copy(alpha = 0.5f))
-                RecordRow(r, meds[r.medication_id], profiles[r.medication_id], { onEdit(r) }, { onDelete(r) }, { onLink(r) })
+                RecordRow(r, meds[r.medication_id], profiles[r.medication_id], { onEdit(r) }, { onDelete(r) }, { onLink(r) },{onConfirmMissed(r)})
             }
         }
     }
@@ -132,11 +134,12 @@ fun routeIcon(route: String?): ImageVector = when (route) {
 @Composable private fun AdherenceCard(a: Adherence) {
     val c = MaterialTheme.colorScheme
     SectionCard(stringResource(R.string.adherence_title)) {
+        if(a.unconfirmed>0)Text(stringResource(R.string.unconfirmed_count,a.unconfirmed),style=MaterialTheme.typography.bodySmall)
         Row(verticalAlignment = Alignment.Bottom) {
             Text(a.onTimeRate?.let { "${(it * 100).roundToInt()}%" } ?: "—", style = MaterialTheme.typography.displaySmall, fontWeight = FontWeight.SemiBold)
             Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.adherence_on_time_rate), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(bottom = 6.dp))
         }
-        val parts = listOf(a.onTime to c.primary, a.late to c.tertiary, a.missed to c.error, a.skipped to c.outline)
+        val parts = listOf(a.onTime to c.primary, a.late to c.tertiary, a.missed to c.error, a.skipped to c.outline,a.unconfirmed to c.outlineVariant)
         val total = parts.sumOf { it.first }
         if (total > 0) Row(Modifier.fillMaxWidth().height(12.dp).clip(MaterialTheme.shapes.small)) {
             parts.filter { it.first > 0 }.forEach { (n, col) -> Box(Modifier.weight(n.toFloat()).fillMaxHeight().background(col)) }
@@ -155,12 +158,15 @@ fun routeIcon(route: String?): ImageVector = when (route) {
     }
 }
 
-@Composable private fun RecordRow(r: RecordEntity, med: MedicationEntity?, profile: ProfileEntity?, onEdit: () -> Unit, onDelete: () -> Unit, onLink: () -> Unit) {
+@Composable private fun RecordRow(r: RecordEntity, med: MedicationEntity?, profile: ProfileEntity?, onEdit: () -> Unit, onDelete: () -> Unit, onLink: () -> Unit,onConfirmMissed:()->Unit) {
     val c = MaterialTheme.colorScheme
     var menu by remember { mutableStateOf(false) }
     val simple = LocalSimpleMode.current
     val taken = r.status in listOf("ON_TIME", "LATE")
-    val route = med?.route ?: profile?.pk_route
+    val context=MedicationSnapshot.decode(r.config_snapshot,r.medication_id)
+    val historyMed=context?.medication(r.medication_id)
+    val historyProfile=context?.profile
+    val route = context?.route
     Box {
         Row(Modifier.fillMaxWidth().clickable(enabled = r.status != "SKIPPED") { menu = true }.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
             val injection = route == "INJECTION"
@@ -170,17 +176,17 @@ fun routeIcon(route: String?): ImageVector = when (route) {
             }
             Spacer(Modifier.width(14.dp))
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
-                Text(if (simple) choiceLabel(med?.molecule ?: "OTHER") else med?.name ?: "", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, maxLines = 1)
-                val sub = listOfNotNull(route?.let { choiceLabel(it) }, profile?.ester?.takeIf { it != "E2" && !simple }?.let { choiceLabel(it) }, r.site?.let { siteLabel(it) })
+                Text(if (simple) choiceLabel(historyMed?.molecule ?: "OTHER") else historyMed?.name ?: stringResource(R.string.history_context_unknown), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, maxLines = 1)
+                val sub = listOfNotNull(route?.let { choiceLabel(it) }, historyProfile?.ester?.takeIf { it != "E2" && !simple }?.let { choiceLabel(it) }, r.site?.let { siteLabel(it) })
                 if (sub.isNotEmpty()) Text(sub.joinToString(" · "), style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant)
                 val dose = r.actual_dose ?: r.planned_dose
                 if (dose != null) FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), itemVerticalAlignment = Alignment.CenterVertically) {
-                    Text(stringResource(if (r.actual_dose != null) R.string.history_dose else R.string.history_planned_dose_label, formatDose(dose, med?.unit)), style = MaterialTheme.typography.bodyLarge)
-                    e2Equivalent(dose, med?.unit, profile?.ester)?.let {
+                    Text(stringResource(if (r.actual_dose != null) R.string.history_dose else R.string.history_planned_dose_label, formatDose(dose, historyMed?.unit)), style = MaterialTheme.typography.bodyLarge)
+                    e2Equivalent(dose, historyMed?.unit, historyProfile?.ester)?.let {
                         Text(stringResource(R.string.history_e2_eq, displayNumber(it, 2)), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
                     }
                 }
-                if ((r.unallocated_supply_amount ?: 0.0) > 0) Text(stringResource(R.string.history_unallocated, formatDose(r.unallocated_supply_amount!!, med?.unit)), style = MaterialTheme.typography.labelSmall, color = c.tertiary)
+                if ((r.unallocated_supply_amount ?: 0.0) > 0) Text(stringResource(R.string.history_unallocated, formatDose(r.unallocated_supply_amount!!, historyMed?.unit)), style = MaterialTheme.typography.labelSmall, color = c.tertiary)
             }
             Spacer(Modifier.width(8.dp))
             Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -188,7 +194,7 @@ fun routeIcon(route: String?): ImageVector = when (route) {
                 if (r.origin.startsWith("IMPORT_")) Chip(stringResource(R.string.history_imported_short))
                 when (r.status) {
                     "LATE" -> StatusPill(stringResource(R.string.status_late), c.tertiaryContainer, c.onTertiaryContainer, null)
-                    "MISSED" -> StatusPill(stringResource(R.string.status_missed), c.errorContainer, c.onErrorContainer, null)
+                    "MISSED" -> StatusPill(stringResource(if(r.unconfirmed)R.string.status_unconfirmed else R.string.status_missed), if(r.unconfirmed)c.surfaceContainerHigh else c.errorContainer, c.onSurface, null)
                     "SKIPPED" -> StatusPill(stringResource(R.string.status_skipped), c.surfaceContainerHighest, c.onSurfaceVariant, null)
                     // Source identity stays visible even after an explicit association.
                     else -> if (r.scheduled_utc == null && !r.origin.startsWith("IMPORT_")) Chip(stringResource(R.string.history_unscheduled_short))
@@ -196,6 +202,7 @@ fun routeIcon(route: String?): ImageVector = when (route) {
             }
         }
         DropdownMenu(menu, { menu = false }) {
+            if(r.unconfirmed)DropdownMenuItem(text={Text(stringResource(R.string.confirm_missed))},onClick={menu=false;onConfirmMissed()})
             if (taken && r.origin.startsWith("IMPORT_") && r.slot_key == null && r.scheduled_utc == null) DropdownMenuItem(text = { Text(stringResource(R.string.import_link)) }, onClick = { menu = false; onLink() })
             DropdownMenuItem(text = { Text(stringResource(if (r.status == "MISSED") R.string.history_backfill else R.string.edit)) }, leadingIcon = { Icon(Icons.Outlined.Edit, null) }, onClick = { menu = false; onEdit() })
             if (taken) DropdownMenuItem(text = { Text(stringResource(R.string.remove)) }, leadingIcon = { Icon(Icons.Outlined.Delete, null) }, onClick = { menu = false; onDelete() })

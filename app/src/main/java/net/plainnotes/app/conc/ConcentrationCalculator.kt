@@ -4,6 +4,7 @@ import net.plainnotes.app.data.LabValueEntity
 import net.plainnotes.app.data.MedicationEntity
 import net.plainnotes.app.data.ProfileEntity
 import net.plainnotes.app.data.RecordEntity
+import net.plainnotes.app.data.MedicationSnapshot
 import net.plainnotes.app.domain.SlotState
 import net.plainnotes.app.domain.TimelineEntry
 import net.plainnotes.app.pk.BandedCurve
@@ -26,7 +27,7 @@ import net.plainnotes.app.pk.Unsupported
 import java.time.Instant
 
 /** Why a medication (or the whole page) cannot be simulated; never silently defaulted. */
-enum class MissingInput { WEIGHT, ROUTE_OR_ESTER, UNIT_NOT_MG, PATCH_RELEASE, PATCH_UNIT, GEL_PRODUCT, SL_TIER, ROUTE_NOT_MODELLED }
+enum class MissingInput { WEIGHT, ROUTE_OR_ESTER, UNIT_NOT_MG, PATCH_RELEASE, PATCH_UNIT, GEL_PRODUCT, SL_TIER, ROUTE_NOT_MODELLED, HISTORICAL_CONTEXT }
 
 data class Missing(val medicationId: Long?, val input: MissingInput)
 
@@ -97,61 +98,79 @@ object ConcentrationCalculator {
 
     fun compute(
         medications: List<MedicationEntity>, profiles: Map<Long, ProfileEntity>, records: List<RecordEntity>, planned: List<TimelineEntry>,
-        labs: List<LabValueEntity>, weightKg: Double?, now: Instant, calibrate: Boolean = true, mode: CalibrationMode = CalibrationMode.RETROSPECTIVE,
+        labs: List<LabValueEntity>, weightKg: Double?, now: Instant, calibrate: Boolean = true, mode: CalibrationMode = CalibrationMode.RETROSPECTIVE, plannedSnapshots: Map<Long,String> = emptyMap(),
     ): ConcentrationResult {
         val nowH = hours(now)
         val missing = mutableListOf<Missing>()
         val usable = medications.filter(::simulated).filter { m ->
             val reasons = missingFor(m, profiles[m.id]); reasons.forEach { missing += Missing(m.id, it) }; reasons.isEmpty()
         }.associateBy { it.id }
-        // Weight only enters the cyproterone model (clearance per kg).
-        val needsWeight = usable.values.any { it.molecule == "CPA" }
-        if (weightKg == null && needsWeight) missing += Missing(null, MissingInput.WEIGHT)
         val e2Labs = labs.filter { it.analyte_code == E2_CODE && (it.unit == "pg/mL" || it.unit == "pmol/L") }
         val labPoints = e2Labs.map { hours(it.sampled_utc) to LabFit.toPgMl(it.value, if (it.unit == "pmol/L") LabUnit.PMOL_L else LabUnit.PG_ML) }
-        val active = if (weightKg == null) usable.filterValues { it.molecule != "CPA" } else usable
-        if (active.isEmpty())
-            return ConcentrationResult(missing, DoubleArray(0), DoubleArray(0), null, null, nowH, null, labPoints, null, 0, 0, emptySet())
-
-        data class Raw(val med: Long, val timeH: Double, val dose: Double, val id: String)
+        data class Raw(val med: MedicationEntity, val profile: ProfileEntity?, val timeH: Double, val dose: Double, val id: String)
         val raw = mutableListOf<Raw>()
         var skipped = 0
         val historyStart = nowH - HISTORY_DAYS * 24
+        fun context(json:String,id:Long):Pair<MedicationEntity,ProfileEntity?>? {
+            val snap=MedicationSnapshot.decode(json,id) ?: return null
+            return snap.medication(id)?.let{it to snap.profile}
+        }
+        fun add(c:Pair<MedicationEntity,ProfileEntity?>?,t:Double,dose:Double?,id:String,medId:Long,historical:Boolean) {
+            if(c==null) {
+                if(historical){skipped++;missing+=Missing(medId,MissingInput.HISTORICAL_CONTEXT)}
+                return
+            }
+            val (m,p)=c
+            if(!simulated(m))return
+            val reasons=missingFor(m,p)
+            if(reasons.isNotEmpty()) {
+                reasons.forEach{missing+=Missing(m.id,it)}
+                if(historical)skipped++
+                return
+            }
+            if(m.molecule=="CPA" && weightKg==null){missing+=Missing(null,MissingInput.WEIGHT);if(historical)skipped++;return}
+            if(dose==null || !dose.isFinite() || dose<=0){skipped++;return}
+            raw+=Raw(m,p,t,dose,id)
+        }
         for (r in records) {
-            if (r.medication_id !in active || r.status !in listOf("ON_TIME", "LATE") || r.deleted_at_utc != null) continue
-            val t = r.taken_utc ?: continue
-            if (hours(t) < historyStart) continue
-            val dose = r.actual_dose
-            if (dose == null || !dose.isFinite() || dose <= 0) { skipped++; continue }
-            raw += Raw(r.medication_id, hours(t), dose, "r${r.id}")
+            if(r.status !in listOf("ON_TIME","LATE") || r.deleted_at_utc!=null)continue
+            val t=r.taken_utc ?: continue
+            if(hours(t)<historyStart)continue
+            add(context(r.config_snapshot,r.medication_id),hours(t),r.actual_dose,"r${r.id}",r.medication_id,true)
         }
         val used = raw.size
         val horizon = nowH + FORECAST_DAYS * 24
         for (e in planned) {
-            if (e.slot.medicationId !in active || e.slot.skipped || e.state !in listOf(SlotState.PENDING, SlotState.SOON)) continue
+            if (e.slot.skipped || e.state !in listOf(SlotState.PENDING, SlotState.SOON)) continue
             val t = hours(e.slot.at)
             if (t <= nowH || t > horizon) continue
-            raw += Raw(e.slot.medicationId, t, e.slot.dose, "f${e.slot.key}")
+            // Production passes every rule's immutable context, including a retained old slot.
+            val c=plannedSnapshots[e.slot.ruleId]?.let{context(it,e.slot.medicationId)}
+                ?: if(plannedSnapshots.isEmpty())usable[e.slot.medicationId]?.let{it to profiles[it.id]} else null
+            add(c,t,e.slot.dose,"f${e.slot.key}",e.slot.medicationId,false)
         }
+        val active=raw.map{it.med.id}.toSet()
         val events = mutableListOf<DoseEvent>(); val medOfEvent = HashMap<String, Long>()
         val w = weightKg ?: 70.0   // unused by the estradiol, spironolactone and progesterone models
-        for ((med, list) in raw.groupBy { it.med }) {
-            val m = active.getValue(med); val p = profiles[med]
-            val other = OTHER_MOLECULES[m.molecule]
-            val route = if (other != null) Route.ORAL else Route.of(p!!.pk_route)
-            val ester = other ?: Ester.valueOf(p!!.ester)
-            val sorted = list.sortedBy { it.timeH }
-            sorted.forEachIndexed { i, x ->
-                medOfEvent[x.id] = med
-                if (route == Route.PATCH_APPLY) {
-                    events += DoseEvent(x.id, route, x.timeH, x.dose, ester, w, extras(p, x.dose, x.id))
-                    // Assumption shown in the UI: each new patch replaces the previous one.
-                    sorted.getOrNull(i + 1)?.let { next -> events += DoseEvent("${x.id}-off", Route.PATCH_REMOVE, next.timeH, 0.0, ester, w, DoseExtras(patchRemovalFor = x.id)) }
-                } else events += DoseEvent(x.id, route, x.timeH, x.dose, ester, w, extras(p, 1.0, null))
+        for ((medId, list) in raw.groupBy { it.med.id }) {
+            val sorted=list.sortedBy{it.timeH}
+            sorted.forEach { x ->
+                val other=OTHER_MOLECULES[x.med.molecule]
+                val route=if(other!=null)Route.ORAL else runCatching{Route.of(x.profile!!.pk_route)}.getOrNull()
+                val ester=other ?: runCatching{Ester.valueOf(x.profile!!.ester)}.getOrNull()
+                if(route==null || ester==null){skipped++;missing+=Missing(medId,MissingInput.HISTORICAL_CONTEXT);return@forEach}
+                medOfEvent[x.id]=medId
+                events+=DoseEvent(x.id,route,x.timeH,x.dose,ester,w,extras(x.profile,if(route==Route.PATCH_APPLY)x.dose else 1.0,x.id))
+                if(route==Route.PATCH_APPLY) {
+                    // Assumption shown in the UI: the next recorded patch replaces this one.
+                    sorted.firstOrNull{it.timeH>x.timeH && it.profile?.pk_route=="patchApply"}?.let{next->
+                        events+=DoseEvent("${x.id}-off",Route.PATCH_REMOVE,next.timeH,0.0,ester,w,DoseExtras(patchRemovalFor=x.id))
+                    }
+                }
             }
         }
         if (events.isEmpty())
-            return ConcentrationResult(missing, DoubleArray(0), DoubleArray(0), null, null, nowH, null, labPoints, null, used, skipped, active.keys)
+            return ConcentrationResult(missing.distinct(), DoubleArray(0), DoubleArray(0), null, null, nowH, null, labPoints, null, used, skipped, active)
         val grid = Engine.gridFor(events, horizon)
         val base = Engine.simulate(events, grid = grid)!!
         val unsupported = base.unsupported.mapNotNull { (id, why) -> medOfEvent[id]?.let { it to why } }.toMap()
@@ -160,8 +179,8 @@ object ConcentrationCalculator {
         val summary = if (labResults.isNotEmpty() && base.curves.containsKey(Curve.E2))
             CalibrationSummary(LabFit.fit(events, labResults), LabFit.lastDiagnostics(events, labResults), labResults.size) else null
         val e2 = bands[Curve.E2]
-        return ConcentrationResult(missing, grid, e2?.center ?: DoubleArray(grid.size), e2?.let { it.p25 to it.p75 }, e2?.let { it.p5 to it.p95 },
-            nowH, e2?.let { Pk.interpolate(grid, it.center, nowH) }, labPoints, summary, used, skipped, active.keys,
+        return ConcentrationResult(missing.distinct(), grid, e2?.center ?: DoubleArray(grid.size), e2?.let { it.p25 to it.p75 }, e2?.let { it.p5 to it.p95 },
+            nowH, e2?.let { Pk.interpolate(grid, it.center, nowH) }, labPoints, summary, used, skipped, active,
             bands.filterKeys { it != Curve.E2 }, base.flags, base.models, unsupported)
     }
 }

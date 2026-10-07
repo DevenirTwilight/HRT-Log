@@ -174,6 +174,8 @@ data class SymptomCheckEntity(
     val date: String,
     val group_id: String,
     val note: String? = null,
+    /** Immutable catalog/matched-medication/source context. Null means the original context is unknown. */
+    val context_snapshot: String? = null,
 )
 
 /** Visibility of a stage-review effect item; no row means shown. */

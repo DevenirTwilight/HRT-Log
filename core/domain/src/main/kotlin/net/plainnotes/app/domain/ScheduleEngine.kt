@@ -120,7 +120,7 @@ object Timeline {
             val state=when {
                 record != null -> SlotState.valueOf(record.status.name)
                 s.skipped -> SlotState.SKIPPED
-                s.original>=s.trackingFrom && next!=null && now>=next -> SlotState.MISSED
+                s.original>=s.trackingFrom && next!=null && now>=next -> SlotState.UNCONFIRMED
                 now>s.at.plusSeconds(s.lateMinutes.toLong()*60) -> SlotState.OVERDUE
                 now>=s.at.minusSeconds(s.soonMinutes.toLong()*60) && now<s.at -> SlotState.SOON
                 else -> SlotState.PENDING

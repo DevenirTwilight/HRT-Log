@@ -39,10 +39,12 @@ fun reviewLines(context:Context,r:StageReviewEntity):List<String> {
     }
 }
 fun symptomLines(context:Context,checks:List<SymptomCheckEntity>):List<String> {
-    val catalog=SymptomCatalog.load();val locale=context.resources.configuration.locales[0]
+    val locale=context.resources.configuration.locales[0]
     return checks.flatMap{check->buildList{
-        add(check.date+" · "+(catalog.groups[check.group_id]?.localized(locale)?:check.group_id))
+        val saved=SymptomCatalog.saved(check)
+        add(check.date+" · "+(saved?.names?.localized(locale)?:check.group_id))
+        if(saved==null)add(context.getString(R.string.wb_context_unknown))
         check.note?.let{add(it)}
-        catalog.entries.filter{it.group==check.group_id}.map{it.source}.distinctBy{it.id}.forEach{source->add(source.title+" · "+source.documentDate+" · "+source.section+" · "+source.url)}
+        saved?.entries.orEmpty().map{it.source}.distinctBy{it.id}.forEach{source->add(source.title+" · "+source.documentDate+" · "+source.section+" · "+source.url)}
     }}
 }

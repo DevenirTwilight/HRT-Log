@@ -57,6 +57,7 @@ internal object RawData {
     }
     /** Replaces all data with [tables]; the container cache is recomputed from the ledger afterwards. */
     fun restore(db: SupportSQLiteDatabase, tables: JSONObject) = unguarded(db) {
+        BackupValidation.validateTables(db,tables)
         (DOMAIN_TABLES + "reminder_mapping").reversed().forEach { db.execSQL("DELETE FROM $it") }
         DOMAIN_TABLES.forEach { t ->
             val rows = tables.optJSONArray(t) ?: return@forEach
@@ -72,6 +73,7 @@ internal object RawData {
             }
         }
         db.execSQL("UPDATE supply_container SET used_amount = initial_used_amount + COALESCE((SELECT SUM(used_delta) FROM supply_transaction WHERE container_id = supply_container.id), 0)")
+        BackupValidation.validateState(db)
     }
 }
 
@@ -83,6 +85,7 @@ object BackupCodec {
     class BadFile(msg: String) : Exception(msg)
     /** The backup was written by a newer version of the app. */
     class NewerBackup : Exception()
+    class TooLarge : Exception()
 
     private fun key(password: CharArray, salt: ByteArray): ByteArray {
         val gen = Argon2BytesGenerator()
@@ -90,15 +93,17 @@ object BackupCodec {
         return ByteArray(32).also { gen.generateBytes(password, it) }
     }
     fun encrypt(plain: ByteArray, password: CharArray): ByteArray {
+        if(plain.size>BackupLimits.MAX_JSON_BYTES)throw TooLarge()
         require(password.size >= 8)
         val rnd = SecureRandom(); val salt = ByteArray(16).also(rnd::nextBytes); val nonce = ByteArray(12).also(rnd::nextBytes)
         val k = key(password, salt)
         try {
             val c = Cipher.getInstance("AES/GCM/NoPadding"); c.init(Cipher.ENCRYPT_MODE, SecretKeySpec(k, "AES"), GCMParameterSpec(128, nonce)); c.updateAAD(MAGIC)
-            return MAGIC + salt + nonce + c.doFinal(plain)
+            return (MAGIC + salt + nonce + c.doFinal(plain)).also{if(it.size>BackupLimits.MAX_FILE_BYTES)throw TooLarge()}
         } finally { k.fill(0) }
     }
     fun decrypt(data: ByteArray, password: CharArray): ByteArray {
+        if(data.size>BackupLimits.MAX_FILE_BYTES)throw TooLarge()
         if (data.size < MAGIC.size + 28 + 16 || !data.copyOfRange(0, MAGIC.size).contentEquals(MAGIC)) throw BadFile("not a backup")
         val salt = data.copyOfRange(MAGIC.size, MAGIC.size + 16); val nonce = data.copyOfRange(MAGIC.size + 16, MAGIC.size + 28)
         val k = key(password, salt)
@@ -147,7 +152,8 @@ internal object TransMemoWriter {
             val med = medIds[p.productId] ?: return@forEach
             dao.record(RecordEntity(medication_id = med, scheduled_utc = p.scheduled?.toEpochMilli(), scheduled_zone = p.scheduled?.let { zone.id }, planned_dose = p.plannedDose,
                 late_after_minutes_snapshot = p.lateMinutes, taken_utc = p.taken?.toEpochMilli(), taken_zone = p.taken?.let { zone.id }, actual_dose = p.actualDose,
-                status = p.status, site = p.site, origin = "IMPORT_TM", source_record_key = p.sourceKey, revision = 1, config_snapshot = JSONObject().put("source", "transmemo").toString()))
+                status = p.status, site = p.site, origin = "IMPORT_TM", source_record_key = p.sourceKey, revision = 1, config_snapshot = plan.medications.single{it.sourceId==p.productId}.let{source->
+                    MedicationSnapshot.encode(dao.medication(med).copy(name=source.name,molecule=source.molecule,unit=source.unit,route=null),null)}))
             intakes++
         }
         var containers = 0

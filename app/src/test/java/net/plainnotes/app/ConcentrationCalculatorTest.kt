@@ -1,6 +1,7 @@
 package net.plainnotes.app
 
 import net.plainnotes.app.conc.ConcentrationCalculator
+import net.plainnotes.app.conc.ConcentrationResult
 import net.plainnotes.app.conc.MissingInput
 import net.plainnotes.app.pk.Curve
 import net.plainnotes.app.data.*
@@ -19,10 +20,16 @@ class ConcentrationCalculatorTest {
     private fun plan(med: Long, hoursAhead: Long, dose: Double = 2.0) = TimelineEntry(Slot("wall:$med@$hoursAhead", med, med, now.plusSeconds(hoursAhead * 3600),
         now.plusSeconds(hoursAhead * 3600), zone, dose, 15, 120, now.minusSeconds(86400)), SlotState.PENDING)
 
+    /** Existing test scenarios explicitly supply their configured event context as synthetic fixture data. */
+    private fun compute(meds:List<MedicationEntity>,profiles:Map<Long,ProfileEntity>,records:List<RecordEntity>,planned:List<TimelineEntry>,
+        labs:List<LabValueEntity>,weight:Double?,now:Instant,calibrate:Boolean=true):ConcentrationResult = ConcentrationCalculator.compute(
+            meds,profiles,records.map{r->r.copy(config_snapshot=MedicationSnapshot.encode(meds.single{it.id==r.medication_id},profiles[r.medication_id]))},
+            planned,labs,weight,now,calibrate)
+
     @Test fun missingInputsAreReportedNotDefaulted() {
         val gel = med(1, "GEL"); val patch = med(2, "PATCH", "PATCH"); val sl = med(3, "SUBLINGUAL", "TABLET")
         val profiles = mapOf(1L to ProfileEntity(1, "E2", "gel", gel_product_id = 1), 2L to ProfileEntity(2, "E2", "patchApply"), 3L to ProfileEntity(3, "EV", "sublingual"))
-        val r = ConcentrationCalculator.compute(listOf(gel, patch, sl), profiles, listOf(rec(1, 1, 10)), emptyList(), emptyList(), null, now)
+        val r = compute(listOf(gel, patch, sl), profiles, listOf(rec(1, 1, 10)), emptyList(), emptyList(), null, now)
         val m = r.missing.map { it.medicationId to it.input }.toSet()
         // Weight only enters the cyproterone model.
         assertFalse((null to MissingInput.WEIGHT) in m)
@@ -33,7 +40,7 @@ class ConcentrationCalculatorTest {
 
     @Test fun recordsAndForecastProduceCurveAndImportedDosesWithoutAmountAreSkipped() {
         val oral = med(1, "ORAL")
-        val r = ConcentrationCalculator.compute(listOf(oral), mapOf(1L to ProfileEntity(1, "E2", "oral")),
+        val r = compute(listOf(oral), mapOf(1L to ProfileEntity(1, "E2", "oral")),
             listOf(rec(1, 1, 36), rec(2, 1, 24), rec(3, 1, 12), rec(4, 1, 6, null)), listOf(plan(1, 12), plan(1, 24)), emptyList(), 60.0, now)
         assertTrue(r.missing.isEmpty())
         assertEquals(3, r.usedDoses); assertEquals(1, r.skippedDoses)
@@ -48,9 +55,9 @@ class ConcentrationCalculatorTest {
     @Test fun weightOnlyScalesCyproterone() {
         val oral = med(1, "ORAL"); val cpa = med(2, "ORAL", molecule = "CPA"); val p = mapOf(1L to ProfileEntity(1, "E2", "oral"))
         val recs = listOf(rec(1, 1, 30), rec(2, 1, 6), rec(3, 2, 30), rec(4, 2, 6))
-        assertTrue((null to MissingInput.WEIGHT) in ConcentrationCalculator.compute(listOf(oral, cpa), p, recs, emptyList(), emptyList(), null, now).missing.map { it.medicationId to it.input })
-        val a = ConcentrationCalculator.compute(listOf(oral, cpa), p, recs, emptyList(), emptyList(), 60.0, now)
-        val b = ConcentrationCalculator.compute(listOf(oral, cpa), p, recs, emptyList(), emptyList(), 80.0, now)
+        assertTrue((null to MissingInput.WEIGHT) in compute(listOf(oral, cpa), p, recs, emptyList(), emptyList(), null, now).missing.map { it.medicationId to it.input })
+        val a = compute(listOf(oral, cpa), p, recs, emptyList(), emptyList(), 60.0, now)
+        val b = compute(listOf(oral, cpa), p, recs, emptyList(), emptyList(), 80.0, now)
         assertEquals(a.currentPgMl!!, b.currentPgMl!!, 1e-9)
         val c = net.plainnotes.app.pk.Curve.CPA
         val i = a.timeH.indexOfFirst { it >= a.nowH }
@@ -60,7 +67,7 @@ class ConcentrationCalculatorTest {
     @Test fun otherCompoundsGetTheirOwnCurvesAndUnsupportedRoutesAreExplained() {
         val spi = med(1, "ORAL", molecule = "SPI"); val p4 = med(2, "ORAL", molecule = "P4"); val slEv = med(3, "SUBLINGUAL")
         val p = mapOf(3L to ProfileEntity(3, "EV", "sublingual", sl_tier = 2))
-        val r = ConcentrationCalculator.compute(listOf(spi, p4, slEv), p, listOf(rec(1, 1, 5), rec(2, 2, 5), rec(3, 3, 5)), emptyList(), emptyList(), null, now)
+        val r = compute(listOf(spi, p4, slEv), p, listOf(rec(1, 1, 5), rec(2, 2, 5), rec(3, 3, 5)), emptyList(), emptyList(), null, now)
         assertEquals(setOf(Curve.SPIRONOLACTONE, Curve.CANRENONE, Curve.PROGESTERONE), r.others.keys)
         assertTrue(net.plainnotes.app.pk.CurveFlag.ILLUSTRATIVE in r.flags[Curve.PROGESTERONE].orEmpty())
         assertEquals(net.plainnotes.app.pk.Unsupported.SUBLINGUAL_EV, r.unsupported[3L])
@@ -71,22 +78,22 @@ class ConcentrationCalculatorTest {
         val oral = med(1, "ORAL"); val p = mapOf(1L to ProfileEntity(1, "E2", "oral"))
         val recs = (1..20L).map { rec(it, 1, it * 12) }
         val lab = LabValueEntity(1, "E2", 150.0, "pg/mL", now.minusSeconds(5 * 3600).toEpochMilli(), zone.id)
-        val pop = ConcentrationCalculator.compute(listOf(oral), p, recs, emptyList(), emptyList(), 60.0, now)
-        val cal = ConcentrationCalculator.compute(listOf(oral), p, recs, emptyList(), listOf(lab), 60.0, now)
+        val pop = compute(listOf(oral), p, recs, emptyList(), emptyList(), 60.0, now)
+        val cal = compute(listOf(oral), p, recs, emptyList(), listOf(lab), 60.0, now)
         assertNotNull(cal.bandOuter); assertEquals(1, cal.calibration!!.labCount)
         assertTrue("calibration pulls the estimate toward the higher lab", cal.currentPgMl!! > pop.currentPgMl!!)
-        val off = ConcentrationCalculator.compute(listOf(oral), p, recs, emptyList(), listOf(lab), 60.0, now, calibrate = false)
+        val off = compute(listOf(oral), p, recs, emptyList(), listOf(lab), 60.0, now, calibrate = false)
         assertEquals(pop.currentPgMl!!, off.currentPgMl!!, 1e-9)
     }
 
     @Test fun patchesAreRemovedWhenTheNextOneIsApplied() {
         val patch = med(1, "PATCH", "PATCH"); val p = mapOf(1L to ProfileEntity(1, "E2", "patchApply", patch_release_ug_day = 50.0))
-        val one = ConcentrationCalculator.compute(listOf(patch), p, listOf(rec(1, 1, 200, 1.0)), emptyList(), emptyList(), 60.0, now)
-        val replaced = ConcentrationCalculator.compute(listOf(patch), p, listOf(rec(1, 1, 200, 1.0), rec(2, 1, 116, 1.0)), emptyList(), emptyList(), 60.0, now)
+        val one = compute(listOf(patch), p, listOf(rec(1, 1, 200, 1.0)), emptyList(), emptyList(), 60.0, now)
+        val replaced = compute(listOf(patch), p, listOf(rec(1, 1, 200, 1.0), rec(2, 1, 116, 1.0)), emptyList(), emptyList(), 60.0, now)
         // With a single patch it is worn indefinitely; after replacement only one patch contributes, not two.
         assertEquals(one.currentPgMl!!, replaced.currentPgMl!!, one.currentPgMl!! * 0.01)
-        val two = ConcentrationCalculator.compute(listOf(patch), p, listOf(rec(1, 1, 10, 2.0)), emptyList(), emptyList(), 60.0, now)
-        val single = ConcentrationCalculator.compute(listOf(patch), p, listOf(rec(1, 1, 10, 1.0)), emptyList(), emptyList(), 60.0, now)
+        val two = compute(listOf(patch), p, listOf(rec(1, 1, 10, 2.0)), emptyList(), emptyList(), 60.0, now)
+        val single = compute(listOf(patch), p, listOf(rec(1, 1, 10, 1.0)), emptyList(), emptyList(), 60.0, now)
         assertEquals(single.currentPgMl!! * 2, two.currentPgMl!!, 1e-6)
     }
 }

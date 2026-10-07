@@ -1,4 +1,5 @@
 package net.plainnotes.app.ui
+import net.plainnotes.app.data.unconfirmed
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -128,6 +129,7 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
         DayKind.TAKEN -> c.primaryContainer to c.onPrimaryContainer
         DayKind.PARTIAL -> c.tertiaryContainer to c.onTertiaryContainer
         DayKind.MISSED -> c.error to c.onError
+        DayKind.UNCONFIRMED -> c.surfaceContainerHigh to c.onSurfaceVariant
         DayKind.PLANNED -> c.surfaceContainerHighest to c.onSurface
         DayKind.NONE -> Color.Transparent to c.onSurface
     }
@@ -181,7 +183,7 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
             val date = start.plusDays(i.toLong()); val info = infos[date]
             val (bg, fg) = kindColors(info?.kind ?: DayKind.NONE)
             val marks = records.filter { it.deleted_at_utc == null && (it.taken_utc ?: it.scheduled_utc)?.let { t -> Instant.ofEpochMilli(t).atZone(zone).toLocalDate() } == date }
-                .map { Instant.ofEpochMilli(it.taken_utc ?: it.scheduled_utc!!) to it.status } +
+                .map { Instant.ofEpochMilli(it.taken_utc ?: it.scheduled_utc!!) to (if(it.unconfirmed) "UNCONFIRMED" else it.status) } +
                 upcoming.filter { it.slot.at.atZone(zone).toLocalDate() == date }
                     .map { e -> e.slot.at to (if (runOut[e.slot.medicationId]?.firstShort?.let { !e.slot.at.isBefore(it) } == true) "SHORT" else "OPEN") }
             Column(Modifier.weight(1f).heightIn(min = 140.dp).clip(RoundedCornerShape(12.dp)).background(bg)
@@ -217,7 +219,7 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
                                 (0 until 7).forEach { d ->
                                     val date = start.plusDays(w * 7L + d)
                                     val color = if (YearMonth.from(date) != ym) Color.Transparent else when (infos[date]?.kind ?: DayKind.NONE) {
-                                        DayKind.TAKEN -> c.primary; DayKind.PARTIAL -> c.tertiary; DayKind.MISSED -> c.error; DayKind.PLANNED -> c.outlineVariant; DayKind.NONE -> c.surfaceContainerHigh
+                                        DayKind.TAKEN -> c.primary; DayKind.PARTIAL -> c.tertiary; DayKind.MISSED -> c.error; DayKind.UNCONFIRMED -> c.outline; DayKind.PLANNED -> c.outlineVariant; DayKind.NONE -> c.surfaceContainerHigh
                                     }
                                     Box(Modifier.weight(1f).aspectRatio(1f).clip(RoundedCornerShape(2.dp)).background(color)
                                         .then(if (date == today) Modifier.border(1.dp, c.onSurface, RoundedCornerShape(2.dp)) else Modifier))
@@ -235,7 +237,7 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
 @Composable private fun Legend(year: Boolean) {
     val c = MaterialTheme.colorScheme
     FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        val swatches = if (year) listOf(c.primary to R.string.legend_taken, c.tertiary to R.string.legend_partial, c.error to R.string.legend_missed, c.outlineVariant to R.string.legend_planned)
+        val swatches = listOf(c.outline to R.string.status_unconfirmed) + if (year) listOf(c.primary to R.string.legend_taken, c.tertiary to R.string.legend_partial, c.error to R.string.legend_missed, c.outlineVariant to R.string.legend_planned)
             else listOf(c.primaryContainer to R.string.legend_taken, c.tertiaryContainer to R.string.legend_partial, c.error to R.string.legend_missed, c.surfaceContainerHighest to R.string.legend_planned)
         swatches.forEach { (col, label) ->
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -315,7 +317,7 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
 
 @Composable fun stateLabel(state: SlotState) = stringResource(when (state) {
     SlotState.PENDING -> R.string.status_pending; SlotState.SOON -> R.string.status_soon; SlotState.OVERDUE -> R.string.status_overdue
-    SlotState.ON_TIME -> R.string.status_on_time; SlotState.LATE -> R.string.status_late; SlotState.MISSED -> R.string.status_missed; SlotState.SKIPPED -> R.string.status_skipped
+    SlotState.ON_TIME -> R.string.status_on_time; SlotState.LATE -> R.string.status_late; SlotState.MISSED -> R.string.status_missed; SlotState.UNCONFIRMED -> R.string.status_unconfirmed; SlotState.SKIPPED -> R.string.status_skipped
 })
 
 @Composable private fun DoseCard(entry: TimelineEntry, med: MedicationEntity?, onComplete: () -> Unit, onChange: () -> Unit) {
@@ -343,11 +345,12 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
                 Text(listOfNotNull(formatDose(s.dose, med?.unit), med?.route?.let { choiceLabel(it) }).joinToString(" · "),
                     style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant)
                 StatusPill(stateLabel(st), pillBg, pillFg, if (done && st != SlotState.SKIPPED) Icons.Rounded.Check else if (st == SlotState.OVERDUE) Icons.Outlined.ErrorOutline else null)
+                if(st==SlotState.UNCONFIRMED)Text(stringResource(R.string.unconfirmed_help),style=MaterialTheme.typography.bodySmall)
                 if (st == SlotState.MISSED) Text(stringResource(R.string.missed_note), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
                 if (!done) Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(top = 4.dp)) {
                     if (st == SlotState.OVERDUE || st == SlotState.SOON || st == SlotState.MISSED) Button(onClick = onComplete) { Text(stringResource(R.string.complete)) }
                     else FilledTonalButton(onClick = onComplete) { Text(stringResource(R.string.complete)) }
-                    if (st != SlotState.MISSED) TextButton(onClick = onChange) { Text(stringResource(R.string.reschedule)) }
+                    if (st !in listOf(SlotState.MISSED,SlotState.UNCONFIRMED)) TextButton(onClick = onChange) { Text(stringResource(R.string.reschedule)) }
                 }
             }
         }

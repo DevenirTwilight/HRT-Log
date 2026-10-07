@@ -683,4 +683,11 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="wb_no">Non</string>
     <string name="backup_newer_version">Cette sauvegarde provient d’une version plus récente de l’application. Mettez l’application à jour avant de la restaurer.</string>
     <string name="wb_review_delete_confirm">Supprimer ce bilan périodique ? Ses saisies seront supprimées.</string>
+    <string name="wb_context_unknown">Le contexte des médicaments et des sources au moment de la saisie n’a pas été enregistré.</string>
+    <string name="history_context_unknown">Contexte historique du médicament indisponible</string>
+    <string name="status_unconfirmed">Non confirmé</string>
+    <string name="confirm_missed">Confirmer la prise manquée</string>
+    <string name="unconfirmed_count">Non confirmées : %1$d. Non comptées comme prises manquées confirmées.</string>
+    <string name="unconfirmed_help">Aucune prise n’a été enregistrée. Cela ne confirme pas une prise manquée.</string>
+    <string name="backup_too_large">Cette sauvegarde dépasse les limites de taille ou de structure prises en charge. Aucune donnée n’a été restaurée.</string>
 </resources>

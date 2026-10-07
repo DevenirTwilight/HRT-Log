@@ -683,4 +683,11 @@
     <string name="wb_no">否</string>
     <string name="backup_newer_version">这份备份来自更新的应用版本，请先更新应用再恢复。</string>
     <string name="wb_review_delete_confirm">删除这次阶段回顾？其中的记录会被移除。</string>
+    <string name="wb_context_unknown">未保存当时的药物和来源上下文。</string>
+    <string name="history_context_unknown">缺少历史用药上下文</string>
+    <string name="status_unconfirmed">未确认</string>
+    <string name="confirm_missed">确认漏服</string>
+    <string name="unconfirmed_count">未确认：%1$d 次，未计入确认漏服。</string>
+    <string name="unconfirmed_help">尚未登记服药，不能据此确认漏服。</string>
+    <string name="backup_too_large">备份超过支持的大小或结构限制，未恢复任何数据。</string>
 </resources>

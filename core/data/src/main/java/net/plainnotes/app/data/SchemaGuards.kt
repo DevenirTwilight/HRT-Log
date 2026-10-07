@@ -6,7 +6,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 object SchemaGuards : RoomDatabase.Callback() {
     private const val finite = "1.7976931348623157e308"
     private val predicates = mapOf(
-        "medication" to "length(trim(NEW.name))>0 AND NEW.dose_per_intake>0 AND NEW.dose_per_intake<=$finite AND NEW.container_capacity>0 AND (NEW.soon_alert_minutes IS NULL OR NEW.soon_alert_minutes>=0) AND (NEW.late_after_minutes IS NULL OR NEW.late_after_minutes>=0)",
+        "pk_profile" to "length(NEW.ester)>0 AND length(NEW.pk_route)>0 AND (NEW.sl_tier IS NULL OR NEW.sl_tier BETWEEN 0 AND 3) AND (NEW.gel_product_id IS NULL OR NEW.gel_product_id>0) AND (NEW.gel_area_cm2 IS NULL OR NEW.gel_area_cm2>0 AND NEW.gel_area_cm2<=$finite) AND (NEW.patch_release_ug_day IS NULL OR NEW.patch_release_ug_day>0 AND NEW.patch_release_ug_day<=$finite)",
+        "medication" to "length(trim(NEW.name))>0 AND NEW.dose_per_intake>0 AND NEW.dose_per_intake<=$finite AND NEW.container_capacity>0 AND NEW.container_capacity<=$finite AND (NEW.soon_alert_minutes IS NULL OR NEW.soon_alert_minutes>=0) AND (NEW.late_after_minutes IS NULL OR NEW.late_after_minutes>=0)",
         "schedule_rule" to "NEW.interval>0 AND NEW.interval<=36500 AND NEW.kind IN ('EVERY_N_DAYS','EVERY_N_HOURS','WEEKLY') AND (NEW.effective_until_utc IS NULL OR NEW.effective_until_utc>NEW.effective_from_utc) AND NEW.missed_tracking_from_utc>=NEW.effective_from_utc AND NEW.dose_snapshot>0 AND NEW.dose_snapshot<=$finite AND NEW.late_snapshot>=0 AND NEW.soon_snapshot>=0 AND ((NEW.kind='EVERY_N_HOURS' AND NEW.anchor_utc IS NOT NULL AND NEW.anchor_local IS NULL) OR (NEW.kind!='EVERY_N_HOURS' AND NEW.anchor_local IS NOT NULL AND NEW.anchor_utc IS NULL)) AND (NEW.kind!='WEEKLY' OR NEW.weekday_mask BETWEEN 1 AND 127) AND NOT EXISTS (SELECT 1 FROM schedule_rule r WHERE r.medication_id=NEW.medication_id AND r.id!=NEW.id AND (r.effective_until_utc IS NULL OR NEW.effective_from_utc<r.effective_until_utc) AND (NEW.effective_until_utc IS NULL OR r.effective_from_utc<NEW.effective_until_utc))",
         "rule_time" to "length(NEW.local_time)=8 AND (NEW.dose_override IS NULL OR (NEW.dose_override>0 AND NEW.dose_override<=$finite))",
         "slot_override" to "((NEW.rescheduled_utc IS NULL AND NEW.rescheduled_zone IS NULL) OR (NEW.rescheduled_utc IS NOT NULL AND length(NEW.rescheduled_zone)>0)) AND (NEW.dose_override IS NULL OR (NEW.dose_override>0 AND NEW.dose_override<=$finite)) AND NEW.skipped IN (0,1) AND (NEW.rescheduled_utc IS NOT NULL OR NEW.dose_override IS NOT NULL OR NEW.skipped=1) AND EXISTS (SELECT 1 FROM schedule_rule WHERE id=NEW.rule_version_id AND medication_id=NEW.medication_id)",
@@ -15,7 +16,7 @@ object SchemaGuards : RoomDatabase.Callback() {
         "supply_transaction" to "NEW.used_delta!=0 AND abs(NEW.used_delta)<=$finite AND ((NEW.kind='ADJUST' AND NEW.dose_record_id IS NULL AND NEW.reversal_of_id IS NULL) OR (NEW.kind='CONSUME' AND NEW.used_delta>0 AND NEW.reversal_of_id IS NULL AND EXISTS (SELECT 1 FROM dose_record WHERE id=NEW.dose_record_id AND status IN ('ON_TIME','LATE') AND deleted_at_utc IS NULL AND revision=NEW.dose_revision)) OR (NEW.kind='REVERSE' AND EXISTS (SELECT 1 FROM supply_transaction t WHERE t.id=NEW.reversal_of_id AND t.kind='CONSUME' AND t.container_id=NEW.container_id AND t.dose_record_id=NEW.dose_record_id AND NEW.used_delta=-t.used_delta))) AND EXISTS (SELECT 1 FROM supply_container c WHERE c.id=NEW.container_id AND c.used_amount+NEW.used_delta BETWEEN 0 AND c.capacity) AND (NEW.dose_record_id IS NULL OR EXISTS (SELECT 1 FROM dose_record d JOIN supply_container c ON c.medication_id=d.medication_id WHERE d.id=NEW.dose_record_id AND c.id=NEW.container_id))",
         "appointment" to "NEW.remind_minutes_before>=0 AND length(NEW.at_zone)>0",
         "checkin_score" to "NEW.value BETWEEN 1 AND 5",
-        "lab_value" to "(NEW.reference_lower IS NULL OR NEW.reference_upper IS NULL OR NEW.reference_lower<=NEW.reference_upper) AND ((NEW.reference_lower IS NULL AND NEW.reference_upper IS NULL) OR length(NEW.reference_unit)>0)",
+        "lab_value" to "NEW.value>0 AND NEW.value<=$finite AND length(NEW.unit)>0 AND (NEW.reference_lower IS NULL OR abs(NEW.reference_lower)<=$finite) AND (NEW.reference_upper IS NULL OR abs(NEW.reference_upper)<=$finite) AND (NEW.reference_lower IS NULL OR NEW.reference_upper IS NULL OR NEW.reference_lower<=NEW.reference_upper) AND ((NEW.reference_lower IS NULL AND NEW.reference_upper IS NULL) OR length(NEW.reference_unit)>0)",
         "stage_review" to "length(NEW.date)=10 AND length(NEW.effects_json)>=2 AND (NEW.smoking IS NULL OR NEW.smoking IN ('YES','NO')) AND (NEW.systolic IS NULL OR (NEW.systolic>0 AND NEW.systolic<1000)) AND (NEW.diastolic IS NULL OR (NEW.diastolic>0 AND NEW.diastolic<1000)) AND (NEW.weight_kg IS NULL OR (NEW.weight_kg>0 AND NEW.weight_kg<=$finite)) AND (NEW.satisfaction IS NULL OR NEW.satisfaction BETWEEN 1 AND 5)",
         "symptom_check" to "length(NEW.date)=10 AND length(NEW.group_id)>0",
         "checkin_score" to "NEW.value BETWEEN 1 AND 5 AND length(NEW.date)=10",
@@ -23,6 +24,13 @@ object SchemaGuards : RoomDatabase.Callback() {
     )
     override fun onCreate(db: SupportSQLiteDatabase) = install(db)
     override fun onOpen(db: SupportSQLiteDatabase) = install(db)
+    fun validateRestored(db: SupportSQLiteDatabase) {
+        predicates.filterKeys{it!="supply_transaction"}.forEach{(table,predicate)->
+            db.query("SELECT 1 FROM `$table` AS NEW WHERE COALESCE(($predicate),0)=0 LIMIT 1").use{
+                require(!it.moveToFirst()){ "Invalid $table" }
+            }
+        }
+    }
     fun install(db: SupportSQLiteDatabase) {
         // Same Room index name/columns; partial predicate implements active-record uniqueness.
         db.execSQL("DROP INDEX IF EXISTS index_dose_record_slot_key")

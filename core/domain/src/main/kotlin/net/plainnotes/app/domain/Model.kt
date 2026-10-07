@@ -3,8 +3,8 @@ package net.plainnotes.app.domain
 import java.time.*
 
 enum class RuleKind { EVERY_N_DAYS, EVERY_N_HOURS, WEEKLY }
-enum class DoseStatus { ON_TIME, LATE, MISSED, SKIPPED }
-enum class SlotState { PENDING, SOON, OVERDUE, ON_TIME, LATE, MISSED, SKIPPED }
+enum class DoseStatus { ON_TIME, LATE, MISSED, SKIPPED, UNCONFIRMED }
+enum class SlotState { PENDING, SOON, OVERDUE, ON_TIME, LATE, MISSED, SKIPPED, UNCONFIRMED }
 data class RuleTime(val time: LocalTime, val dose: Double? = null) {
     init { require(time.nano == 0); require(dose == null || dose.isFinite() && dose > 0) }
 }
@@ -46,7 +46,7 @@ data class DoseRecord(val key: String?, val medicationId: Long, val status: Dose
     init {
         require((taken == null) == (takenZone == null))
         require((scheduled == null) == (scheduledZone == null))
-        if (status == DoseStatus.MISSED || status == DoseStatus.SKIPPED)
+        if (status == DoseStatus.MISSED || status == DoseStatus.SKIPPED || status == DoseStatus.UNCONFIRMED)
             require(taken == null && actualDose == null && site == null)
         else { require(taken != null); require(actualDose != null || imported) }
         require(actualDose == null || actualDose.isFinite() && actualDose > 0)

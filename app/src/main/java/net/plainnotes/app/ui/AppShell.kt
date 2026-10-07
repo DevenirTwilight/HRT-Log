@@ -1,4 +1,5 @@
 package net.plainnotes.app.ui
+import net.plainnotes.app.data.MedicationSnapshot
 
 import androidx.core.content.edit
 import android.content.Context
@@ -182,7 +183,7 @@ class UiPrefs(context: Context) {
                     DataSection(model, state.medications.associate { it.id to scheduleText(state.schedules[it.id]) })
                 }
                 Destination.ABOUT -> AboutScreen(pad)
-                Destination.HISTORY -> HistoryScreen(state, extra.records, { editRecord = it }, { deleteRecord = it }, pad, onAdd = { manual = true }, onBatch = { batch = true }, onLink = model::prepareImportedLink)
+                Destination.HISTORY -> HistoryScreen(state, extra.records, { editRecord = it }, { deleteRecord = it }, pad, onAdd = { manual = true }, onBatch = { batch = true }, onLink = model::prepareImportedLink,onConfirmMissed={model.confirmMissed(it.id)})
                 Destination.STOCK -> StockScreen(state, extra.containers, extra.records, { m -> model.replaceContainer(m.id, m.container_capacity) }, { c, m -> adjustStock = c to m }, { addStock = it }, pad,onInfo={packageInfo=it})
                 Destination.WELLBEING -> WellbeingHub(state,extra,model,region,{manageItems=true},pad)
                 else -> ComingSoonScreen(destination.icon, stringResource(destination.title), pad)
@@ -195,9 +196,9 @@ class UiPrefs(context: Context) {
     importedLink?.let { link -> ImportedPlanDialog(link, meds[link.record.medication_id], model::closeImportedLink) { key -> model.linkImported(link.record.id, key) } }
     editor?.let { MedicationEditor(it, { model.closeEditor() }, containers = extra.containers) { d -> model.save(d) } }
     completeEntry?.let { e -> IntakeDialog(stringResource(R.string.complete), meds[e.slot.medicationId], e.slot.dose,
-        if (e.state == net.plainnotes.app.domain.SlotState.MISSED) e.slot.at else Instant.now(),
+        if (e.state in listOf(net.plainnotes.app.domain.SlotState.MISSED,net.plainnotes.app.domain.SlotState.UNCONFIRMED)) e.slot.at else Instant.now(),
         { completeEntry = null }, meds[e.slot.medicationId]?.let(::siteFor)) { t, d, site -> model.complete(e.slot, t, d, site); completeEntry = null; afterIntake() } }
-    editRecord?.let { r -> IntakeDialog(stringResource(if (r.status == "MISSED") R.string.history_backfill else R.string.edit), meds[r.medication_id], r.actual_dose ?: r.planned_dose ?: meds[r.medication_id]?.dose_per_intake ?: 1.0,
+    editRecord?.let { r -> IntakeDialog(stringResource(if (r.status == "MISSED") R.string.history_backfill else R.string.edit), MedicationSnapshot.decode(r.config_snapshot,r.medication_id)?.medication(r.medication_id), r.actual_dose ?: r.planned_dose ?: meds[r.medication_id]?.dose_per_intake ?: 1.0,
         Instant.ofEpochMilli(r.taken_utc ?: r.scheduled_utc ?: System.currentTimeMillis()), { editRecord = null }) { t, d, _ -> model.editRecord(r.id, t, d); editRecord = null } }
     deleteRecord?.let { r -> AlertDialog(onDismissRequest = { deleteRecord = null }, icon = { Icon(Icons.Outlined.Delete, null) }, text = { Text(stringResource(R.string.history_delete_confirm)) },
         confirmButton = { Button(onClick = { model.deleteRecord(r.id); deleteRecord = null }) { Text(stringResource(R.string.remove)) } },

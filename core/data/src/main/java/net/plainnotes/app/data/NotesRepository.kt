@@ -33,7 +33,7 @@ const val BACKFILL_MAX_DAYS=731L
             dao.times(r.id).map{RuleTime(LocalTime.parse(it.local_time),it.dose_override)},DayOfWeek.entries.filter{r.weekday_mask and (1 shl (it.value-1))!=0}.toSet(),r.dose_snapshot,r.soon_snapshot,r.late_snapshot)
     }
     private fun OverrideEntity.model()=SlotOverride(slot_key,rescheduled_utc?.let(Instant::ofEpochMilli),rescheduled_zone?.let(ZoneId::of),dose_override,skipped)
-    private fun RecordEntity.model()=DoseRecord(slot_key,medication_id,DoseStatus.valueOf(status),taken_utc?.let(Instant::ofEpochMilli),taken_zone?.let(ZoneId::of),actual_dose,site,origin.startsWith("IMPORT_"),deleted_at_utc!=null,scheduled_utc?.let(Instant::ofEpochMilli),scheduled_zone?.let(ZoneId::of),planned_dose,late_after_minutes_snapshot,rule_version_id)
+    private fun RecordEntity.model()=DoseRecord(slot_key,medication_id,if(unconfirmed) DoseStatus.UNCONFIRMED else DoseStatus.valueOf(status),taken_utc?.let(Instant::ofEpochMilli),taken_zone?.let(ZoneId::of),actual_dose,site,origin.startsWith("IMPORT_"),deleted_at_utc!=null,scheduled_utc?.let(Instant::ofEpochMilli),scheduled_zone?.let(ZoneId::of),planned_dose,late_after_minutes_snapshot,rule_version_id)
     private fun RetainedEntity.model()=Slot(slot_key,rule_id,medication_id,Instant.ofEpochMilli(original_utc),Instant.ofEpochMilli(at_utc),ZoneId.of(zone),dose,soon_minutes,late_minutes,Instant.ofEpochMilli(tracking_from_utc))
     private suspend fun timeline(dao:NotesDao,now:Instant,from:Instant,to:Instant,zone:ZoneId):List<TimelineEntry> {
         val meds=dao.medications().associateBy{it.id}
@@ -43,7 +43,7 @@ const val BACKFILL_MAX_DAYS=731L
     private suspend fun reconcile(dao:NotesDao,now:Instant,zone:ZoneId) {
         val from=dao.rules().minOfOrNull{it.missed_tracking_from_utc}?.let(Instant::ofEpochMilli) ?: now
         if(from>now)return
-        timeline(dao,now,from,now.plusMillis(1),zone).filter{it.state==SlotState.MISSED}.forEach { entry ->
+        timeline(dao,now,from,now.plusMillis(1),zone).filter{it.state==SlotState.UNCONFIRMED}.forEach { entry ->
             if(dao.records().none{it.slot_key==entry.slot.key}) dao.record(recordFor(dao,entry.slot,"MISSED",origin="AUTO_MISSED"))
         }
     }
@@ -91,7 +91,8 @@ const val BACKFILL_MAX_DAYS=731L
         val id=if(value.id==0L)dao.insertMedication(value) else {dao.updateMedication(value);value.id}
         if(resizeContainers) resizableContainers(dao.containers(),id,value.container_capacity).forEach{dao.setContainerCapacity(it.id,value.container_capacity)}
         val cut=effectiveNow.toEpochMilli()
-        val snapshot=JSONObject().put("name",value.name).put("molecule",value.molecule).put("route",value.route).put("unit",value.unit).put("ester",ester).toString()
+        val newProfile=profileFor(id,value,ester,pk)
+        val snapshot=MedicationSnapshot.encode(value,newProfile)
         // Editing only metadata (name, stock, notifications, profile) keeps the plan: no new version, so no slot can appear twice.
         val current=dao.rules().filter { it.medication_id==id && it.effective_until_utc==null }.singleOrNull()
         if(value.active && current!=null && samePlan(dao,current,value,kind,interval,times,weekdays,zone,snapshot)) {
@@ -127,10 +128,13 @@ const val BACKFILL_MAX_DAYS=731L
             if(kind!=RuleKind.EVERY_N_HOURS)times.distinct().forEach{dao.time(TimeEntity(rule_id=rid,local_time=it.withNano(0).format(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss")),dose_override=null))}
         };id
     }
-    private suspend fun saveProfile(dao:NotesDao,id:Long,value:MedicationEntity,ester:String?,pk:ProfileEntity?) {
+    private fun profileFor(id:Long,value:MedicationEntity,ester:String?,pk:ProfileEntity?):ProfileEntity? =
         if(value.molecule=="E2" && value.route!=null && ester!=null)
-            dao.profile(ProfileEntity(id,ester,when(value.route){"ORAL"->"oral";"SUBLINGUAL"->"sublingual";"GEL"->"gel";"PATCH"->"patchApply";"INJECTION"->"injection";else->error("Unsupported estradiol route")},
-                pk?.sl_tier,pk?.gel_product_id,pk?.gel_site,pk?.gel_area_cm2,pk?.patch_release_ug_day))
+            ProfileEntity(id,ester,when(value.route){"ORAL"->"oral";"SUBLINGUAL"->"sublingual";"GEL"->"gel";"PATCH"->"patchApply";"INJECTION"->"injection";else->error("Unsupported estradiol route")},
+                pk?.sl_tier,pk?.gel_product_id,pk?.gel_site,pk?.gel_area_cm2,pk?.patch_release_ug_day)
+        else null
+    private suspend fun saveProfile(dao:NotesDao,id:Long,value:MedicationEntity,ester:String?,pk:ProfileEntity?) {
+        profileFor(id,value,ester,pk)?.let{dao.profile(it)}
     }
     /** True when the edit leaves the plan as it is: same kind, interval, weekdays, times, dose, alert windows, zone and compound (the name may differ). */
     private suspend fun samePlan(dao:NotesDao,r:RuleEntity,value:MedicationEntity,kind:RuleKind,interval:Int,times:List<LocalTime>,weekdays:Set<DayOfWeek>,zone:ZoneId,snapshot:String):Boolean {
@@ -141,7 +145,8 @@ const val BACKFILL_MAX_DAYS=731L
         return r.kind==kind.name && r.interval==interval && r.weekday_mask==mask && r.effective_zone==zone.id &&
             r.dose_snapshot==value.dose_per_intake && r.soon_snapshot==value.soon_alert_minutes && r.late_snapshot==value.late_after_minutes &&
             ruleTimes.all{it.dose_override==null} && ruleTimes.map{it.local_time}.toSet()==wanted && ruleTimes.size==wanted.size &&
-            compound(r.config_snapshot)==compound(snapshot)
+            compound(r.config_snapshot)==compound(snapshot) &&
+            MedicationSnapshot.decode(r.config_snapshot,r.medication_id)?.profile==MedicationSnapshot.decode(snapshot,r.medication_id)?.profile
     }
     suspend fun removeMedication(id:Long,now:Instant=Instant.now())=transaction { dao ->
         reconcile(dao,now,ZoneId.systemDefault())
@@ -203,7 +208,7 @@ const val BACKFILL_MAX_DAYS=731L
         val slots=timeline(dao,now,instants.first(),now.plusMillis(1),zone).filter{it.slot.medicationId==medicationId}.associateBy{it.slot.at}
         val records=dao.records().filter{it.medication_id==medicationId&&it.deleted_at_utc==null}.toMutableList()
         val taken=records.mapNotNull{it.taken_utc}.toMutableList()
-        val snap=JSONObject().put("name",m.name).put("molecule",m.molecule).put("route",m.route).put("unit",m.unit).put("ester",dao.profile(medicationId)?.ester).toString()
+        val snap=MedicationSnapshot.encode(m,dao.profile(medicationId))
         var added=0
         instants.forEach { t ->
             val slot=slots[t]?.slot
@@ -221,7 +226,7 @@ const val BACKFILL_MAX_DAYS=731L
     }
     suspend fun unscheduled(id:Long,taken:Instant,dose:Double,site:String?=null)=transaction { dao ->
         require(dose.isFinite()&&dose>0);val m=dao.medication(id)
-        val snap=JSONObject().put("name",m.name).put("molecule",m.molecule).put("route",m.route).put("unit",m.unit).put("ester",dao.profile(id)?.ester).toString()
+        val snap=MedicationSnapshot.encode(m,dao.profile(id))
         val rid=dao.record(RecordEntity(medication_id=id,taken_utc=taken.toEpochMilli(),taken_zone=ZoneId.systemDefault().id,actual_dose=dose,unallocated_supply_amount=dose,site=site?.takeIf{it.isNotBlank()},
             status="ON_TIME",origin="APP",revision=1,config_snapshot=snap))
         SupplyLedger.allocate(dao,dao.recordById(rid)!!)
@@ -256,7 +261,8 @@ const val BACKFILL_MAX_DAYS=731L
         val db=db()
         val json=db.withTransaction { JSONObject().put("format",BackupCodec.FORMAT_VERSION).put("schema",db.openHelper.writableDatabase.version)
             .put("created",Instant.now().toString()).put("tables",RawData.dump(db.openHelper.writableDatabase)) }
-        BackupCodec.encrypt(json.toString().toByteArray(Charsets.UTF_8),password)
+        val plain=json.toString().toByteArray(Charsets.UTF_8)
+        try{BackupCodec.encrypt(plain,password)}finally{plain.fill(0)}
     }
     /** Replaces all data with the backup; throws [BackupCodec.WrongPassword] or [BackupCodec.BadFile] without touching anything. */
     /**
@@ -264,13 +270,17 @@ const val BACKFILL_MAX_DAYS=731L
      * same steps as the Room migration). A backup from a newer schema is refused.
      */
     suspend fun restoreBackup(data:ByteArray,password:CharArray,today:LocalDate=LocalDate.now())=withContext(Dispatchers.IO) {
-        val json=JSONObject(String(BackupCodec.decrypt(data,password),Charsets.UTF_8))
+        val plain=BackupCodec.decrypt(data,password)
+        val json=try{String(plain,Charsets.UTF_8).let{BackupLimits.checkJson(it);JSONObject(it)}}finally{plain.fill(0)}
         val db=db(); val current=db.openHelper.writableDatabase.version; val schema=json.optInt("schema")
         if(json.optInt("format")!=BackupCodec.FORMAT_VERSION||schema<1) throw BackupCodec.BadFile("incompatible version")
         if(schema>current) throw BackupCodec.NewerBackup()
+        val tables=json.getJSONObject("tables")
+        val required=DOMAIN_TABLES.filterNot{schema<2 && it in listOf("stage_review","symptom_check","review_effect")}
+        require(required.all{tables.has(it)}) { "Incomplete backup" }
         db.withTransaction {
             val sql=db.openHelper.writableDatabase
-            RawData.restore(sql,json.getJSONObject("tables"))
+            RawData.restore(sql,tables)
             if(schema<2) WellbeingUpgrade.apply(sql,today)
         }
     }
@@ -340,8 +350,19 @@ const val BACKFILL_MAX_DAYS=731L
     }
     suspend fun deleteStageReview(id:Long)=transaction { it.deleteStageReview(id) }
     suspend fun symptomChecks(from:LocalDate,to:LocalDate)=withContext(Dispatchers.IO){db().dao().symptomChecks(from.toString(),to.toString())}
-    suspend fun setSymptomCheck(date:LocalDate,group:String,checked:Boolean,note:String?=null)=transaction { dao ->
-        if(checked)dao.symptomCheck(SymptomCheckEntity(date.toString(),group,note?.takeIf{it.isNotBlank()})) else dao.deleteSymptomCheck(date.toString(),group) }
+    suspend fun setSymptomCheck(date:LocalDate,group:String,checked:Boolean,note:String?=null,
+        contextProvider:((List<MedicationEntity>,Map<Long,ProfileEntity>)->String?)?=null)=transaction { dao ->
+        if(checked) {
+            val previous=dao.symptomChecks(date.toString(),date.toString()).firstOrNull{it.group_id==group}
+            val meds=dao.medications()
+            val context=if(previous!=null)previous.context_snapshot else contextProvider?.invoke(meds,meds.mapNotNull{m->dao.profile(m.id)?.let{m.id to it}}.toMap())
+            dao.symptomCheck(SymptomCheckEntity(date.toString(),group,note?.takeIf{it.isNotBlank()},context))
+        } else dao.deleteSymptomCheck(date.toString(),group)
+    }
+    suspend fun confirmMissed(id:Long)=transaction { dao ->
+        val r=requireNotNull(dao.recordById(id));require(r.unconfirmed && r.deleted_at_utc==null)
+        dao.updateRecord(r.copy(origin="APP",revision=r.revision+1))
+    }
     suspend fun reviewEffects()=withContext(Dispatchers.IO){db().dao().reviewEffects()}
     suspend fun setReviewEffect(id:String,enabled:Boolean)=transaction { it.reviewEffect(ReviewEffectEntity(id,enabled)) }
     suspend fun setContainerInfo(id:Long,source:String?,batch:String?)=transaction { it.setContainerInfo(id,source?.trim()?.takeIf{s->s.isNotEmpty()},batch?.trim()?.takeIf{s->s.isNotEmpty()}) }

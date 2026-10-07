@@ -80,17 +80,16 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     fun loadConcentration():Job { concJob?.cancel(); return viewModelScope.launch { try {
         conc.value=conc.value.copy(loading=true)
         val now=Instant.now()
-        data class Inputs(val meds:List<MedicationEntity>,val profiles:Map<Long,ProfileEntity>,val records:List<RecordEntity>,val labs:List<LabValueEntity>,val weight:Double?,val planned:List<TimelineEntry>)
+        data class Inputs(val meds:List<MedicationEntity>,val profiles:Map<Long,ProfileEntity>,val records:List<RecordEntity>,val labs:List<LabValueEntity>,val weight:Double?,val planned:List<TimelineEntry>,val snapshots:Map<Long,String>)
         val inputs=repo.transaction { dao ->
             val meds=dao.medications()
             Inputs(meds,meds.mapNotNull{m->dao.profile(m.id)?.let{m.id to it}}.toMap(),dao.records(),dao.labs(),dao.pkSettings()?.current_weight_kg,
-                repo.planned(now.minusSeconds(3600),now.plusSeconds(ConcentrationCalculator.FORECAST_DAYS*86400),now))
+                repo.planned(now.minusSeconds(3600),now.plusSeconds(ConcentrationCalculator.FORECAST_DAYS*86400),now),dao.rules().associate{it.id to it.config_snapshot})
         }
-        val (meds,profiles,records,labs,weight,planned)=inputs
+        val (meds,profiles,records,labs,weight,planned,snapshots)=inputs
         val settings=concSettings
-        val result=withContext(Dispatchers.Default){ConcentrationCalculator.compute(meds,profiles,records,planned,labs,weight,now,settings.first,settings.second)}
-        val e2=meds.filter{it.molecule=="E2"}.map{it.id}.toSet()
-        val doseTimes=records.filter{it.medication_id in e2 && it.status in listOf("ON_TIME","LATE") && it.taken_utc!=null}.map{Instant.ofEpochMilli(it.taken_utc!!)}.sorted()
+        val result=withContext(Dispatchers.Default){ConcentrationCalculator.compute(meds,profiles,records,planned,labs,weight,now,settings.first,settings.second,snapshots)}
+        val doseTimes=records.filter{MedicationSnapshot.decode(it.config_snapshot,it.medication_id)?.molecule=="E2" && it.deleted_at_utc==null && it.status in listOf("ON_TIME","LATE") && it.taken_utc!=null}.map{Instant.ofEpochMilli(it.taken_utc!!)}.sorted()
         ensureActive();conc.value=ConcState(false,result,weight,labs,doseTimes)
     }catch(e:CancellationException){throw e}catch(e:Exception){conc.value=conc.value.copy(loading=false);readFailure(e)} }.also{concJob=it} }
     // History, stock and well-being
@@ -121,7 +120,10 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     fun saveCheckinItem(v:CheckinItemEntity)=mutateExtra{repo.saveCheckinItem(v)}
     fun saveReview(v:StageReviewEntity)=mutateExtra{repo.saveStageReview(v)}
     fun deleteReview(id:Long)=mutateExtra{repo.deleteStageReview(id)}
-    fun setSymptom(date:LocalDate,group:String,checked:Boolean,note:String?=null)=mutateExtra{repo.setSymptomCheck(date,group,checked,note)}
+    fun confirmMissed(id:Long)=change{repo.confirmMissed(id)}
+    fun setSymptom(date:LocalDate,group:String,checked:Boolean,note:String?=null)=mutateExtra{repo.setSymptomCheck(date,group,checked,note) { meds, profiles ->
+        net.plainnotes.app.symptoms.SymptomCatalog.load().snapshot(group,meds,profiles)
+    }}
     fun setReviewEffect(id:String,enabled:Boolean)=mutateExtra{repo.setReviewEffect(id,enabled)}
     fun setContainerInfo(id:Long,source:String?,batch:String?)=mutateExtra{repo.setContainerInfo(id,source,batch)}
     fun reorderItems(ids:List<Long>)=mutateExtra{repo.reorderCheckinItems(ids)}
@@ -134,6 +136,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     val dataJob=MutableStateFlow<DataJob>(DataJob.Idle)
     fun clearDataJob(){dataJob.value=DataJob.Idle}
     private fun dataOp(block:suspend()->DataJob)=viewModelScope.launch{dataJob.value=DataJob.Working;dataJob.value=try{block()}catch(e:BackupCodec.WrongPassword){DataJob.Failed(R.string.backup_wrong_password)}
+        catch(e:BackupCodec.TooLarge){DataJob.Failed(R.string.backup_too_large)}
         catch(e:BackupCodec.NewerBackup){DataJob.Failed(R.string.backup_newer_version)}
         catch(e:BackupCodec.BadFile){DataJob.Failed(R.string.backup_bad_file)}catch(e:net.plainnotes.app.importer.InvalidExport){DataJob.Failed(R.string.import_invalid)}catch(e:net.plainnotes.app.importer.HrtTracker.InvalidExport){DataJob.Failed(R.string.ht_invalid)}catch(e:CancellationException){throw e}catch(_:Exception){DataJob.Failed(R.string.operation_error)}}
     private fun tempImport()=java.io.File(app.noBackupFilesDir,"import").apply{mkdirs()}.resolve("transmemo.db")
@@ -167,7 +170,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     }
     fun cancelImport()=viewModelScope.launch{withContext(Dispatchers.IO){tempImport().delete()};dataJob.value=DataJob.Idle}
     fun exportBackup(uri:android.net.Uri,password:CharArray)=dataOp {
-        val bytes=repo.exportBackup(password);password.fill(' ')
+        val bytes=try{repo.exportBackup(password)}finally{password.fill(' ')}
         withContext(Dispatchers.IO){app.contentResolver.openOutputStream(uri,"wt")!!.use{it.write(bytes)}};DataJob.Done(R.string.backup_saved)
     }
     /** Backup used as a gate (disguise mode): true only once the encrypted file is fully written. */
@@ -175,8 +178,10 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         runCatching{ val bytes=repo.exportBackup(password); app.contentResolver.openOutputStream(uri,"wt")!!.use{it.write(bytes)} }.isSuccess.also{password.fill(' ')}
     }
     fun restoreBackup(uri:android.net.Uri,password:CharArray)=dataOp {
-        val bytes=withContext(Dispatchers.IO){app.contentResolver.openInputStream(uri)!!.use{it.readBytes()}}
-        mutate{repo.restoreBackup(bytes,password)};password.fill(' ')
+        try {
+            val bytes=withContext(Dispatchers.IO){app.contentResolver.openInputStream(uri)!!.use{BackupLimits.read(it)}}
+            mutate{repo.restoreBackup(bytes,password)}
+        }finally{password.fill(' ')}
         refresh().join();DataJob.Done(R.string.backup_restored)
     }
     private suspend fun exportData(labels:(CheckinItemEntity)->String,schedules:Map<Long,String>):net.plainnotes.app.export.ExportData {

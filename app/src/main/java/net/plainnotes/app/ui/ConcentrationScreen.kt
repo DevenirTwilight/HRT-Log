@@ -211,6 +211,7 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
     MissingInput.PATCH_RELEASE -> R.string.missing_patch_release; MissingInput.PATCH_UNIT -> R.string.missing_patch_unit; MissingInput.GEL_PRODUCT -> R.string.missing_gel_product
     MissingInput.SL_TIER -> R.string.missing_sl_tier
     MissingInput.ROUTE_NOT_MODELLED -> R.string.missing_route_not_modelled
+    MissingInput.HISTORICAL_CONTEXT -> R.string.history_context_unknown
 })
 
 @Composable fun unsupportedLabel(u: Unsupported) = stringResource(when (u) {

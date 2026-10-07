@@ -683,4 +683,11 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="wb_no">No</string>
     <string name="backup_newer_version">This backup was created by a newer app version. Update the app before restoring it.</string>
     <string name="wb_review_delete_confirm">Delete this periodic review? Its entries will be removed.</string>
+    <string name="wb_context_unknown">The original medication and source context was not saved.</string>
+    <string name="history_context_unknown">Historical medication context unavailable</string>
+    <string name="status_unconfirmed">Unconfirmed</string>
+    <string name="confirm_missed">Confirm missed dose</string>
+    <string name="unconfirmed_count">Unconfirmed: %1$d. Not included as confirmed missed doses.</string>
+    <string name="unconfirmed_help">No intake has been recorded. This does not confirm a missed dose.</string>
+    <string name="backup_too_large">This backup exceeds the supported size or structure limits. No data was restored.</string>
 </resources>

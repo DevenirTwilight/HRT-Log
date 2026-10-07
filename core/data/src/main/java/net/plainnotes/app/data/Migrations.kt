@@ -18,4 +18,9 @@ fun migration1To2(today: () -> LocalDate = LocalDate::now) = object : Migration(
 }
 
 /** Every migration, in order; also used to know which backup schemas can be restored. */
-fun allMigrations(today: () -> LocalDate = LocalDate::now): Array<Migration> = arrayOf(migration1To2(today))
+val migration2To3 = object : Migration(2, 3) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE `symptom_check` ADD COLUMN `context_snapshot` TEXT")
+    }
+}
+fun allMigrations(today: () -> LocalDate = LocalDate::now): Array<Migration> = arrayOf(migration1To2(today), migration2To3)

@@ -33,7 +33,12 @@ fun GroupNames.localized(locale:Locale):String=when(locale.language){"fr"->fr;"z
     onCheck:(LocalDate,String,Boolean,String?)->Unit) {
     val catalog=remember{SymptomCatalog.load()};val context=LocalContext.current;val locale=androidx.compose.ui.platform.LocalConfiguration.current.locales[0]
     val active=medications.filter{it.active};val keys=active.map{MedKey(it.id,it.molecule,it.route,profiles[it.id]?.ester)}
-    val groups=remember(keys){catalog.groupsFor(keys)}
+    val current=catalog.groupsFor(keys)
+    val groups=current.map{g->checks.firstOrNull{it.date==date.toString() && it.group_id==g.id}?.let{saved->
+        SymptomCatalog.saved(saved) ?: ShownGroup(g.id,g.names,emptyList(),emptySet())
+    } ?: g} + checks.filter{it.date==date.toString() && current.none{g->g.id==it.group_id}}.map{saved->
+        SymptomCatalog.saved(saved) ?: ShownGroup(saved.group_id,GroupNames(saved.group_id,saved.group_id,saved.group_id,saved.group_id),emptyList(),emptySet())
+    }
     var expanded by remember {mutableStateOf<String?>(null)}
     Text(stringResource(R.string.wb_symptoms_help),style=MaterialTheme.typography.bodySmall)
     active.forEach{m->when(val result=catalog.forMedication(keys.first{it.id==m.id})){
@@ -56,7 +61,8 @@ fun GroupNames.localized(locale:Locale):String=when(locale.language){"fr"->fr;"z
                 val saved=checks.firstOrNull{it.date==date.toString()&&it.group_id==g.id}
                 Row {
                     Checkbox(saved!=null,{onCheck(date,g.id,it,saved?.note)},Modifier.semantics{contentDescription=context.getString(R.string.wb_symptom_checked)+": "+g.names.localized(locale)})
-                    Column(Modifier.weight(1f)){Text(g.names.localized(locale));Text(g.medicationIds.mapNotNull{id->active.firstOrNull{it.id==id}?.name}.joinToString(" · "),style=MaterialTheme.typography.bodySmall)}
+                    Column(Modifier.weight(1f)){Text(g.names.localized(locale));Text((saved?.let{SymptomCatalog.savedMedicationNames(it)} ?: g.medicationIds.mapNotNull{id->active.firstOrNull{it.id==id}?.name}).joinToString(" · "),style=MaterialTheme.typography.bodySmall)
+                        if(saved!=null && saved.context_snapshot==null)Text(stringResource(R.string.wb_context_unknown),style=MaterialTheme.typography.bodySmall)}
                     TextButton(onClick={expanded=if(expanded==g.id)null else g.id}){Text(stringResource(R.string.wb_source))}
                 }
                 if(saved!=null) key(date,g.id) {
