@@ -270,3 +270,12 @@
 2026-10-07 接手补充：用户确认里程碑保存时在时间线视图、日期超过90天。设计审核稿复核须以build11/schema6为当前基线，保留已实现Visit Pack及MIT决定。本轮完成根因/新设计/待决定项后停止，不改功能/测试源码、不构建APK。
 
 2026-10-07 设计复核：同日多药变化仅一个显示切点（附件验收），精确历史/采样上下文不倒推午夜；冻结旧key/definition保持原值，按时刻建立新时期映射，单个原版本可能跨多个组合阶段。旧存储signature/校验不直接换V2；新增临床投影方案与暂停恢复/计数/视图/同日过渡细则等待审核。本次仅docs，设计完成停止。
+
+
+## 27. Treatment Period / Timeline 实施附件（2026-10-07）
+
+用户提供HRT-Log-Codex-treatment-period-timeline-prompt.md，已授权扫描后制定最小计划并实施，不再仅做设计。四种职责：Regimen计划、Treatment Period记录的治疗标准、History实际执行ledger、Timeline长期重要变化。明确stop/pause/deactivation切时期，gap后同方案恢复另开；missed/late/skipped/unconfirmed和单次实际量偏离不切、不推断停用或Started HRT。
+
+保留RegimenDefinition.signature/clinical_signature、V1 TreatmentEpochs及旧key、Context1 JSON/PK结果、VisitPack1 facts/digest/原started-ended语义，新增只读V2投影。schema6优先；按精确UTC保留审计与采样归属，同日显示合并不抹去中间事实。Timeline只列时期和LAB/REVIEW/MILESTONE/APPOINTMENT，统一视图、当前置顶、旧事实不被90天隐藏，未来事件单列Upcoming，History保持完整。里程碑提交成功后关闭、saving防双击、反馈/定位、失败留草稿、区分写库成功而refresh失败。四语、full-only、原签名、不改PK/库存、不发布、不用真实数据。
+
+附件Phase 1明确：“如果第8点无法安全解决，停下并报告，不要偷偷做schema migration。”本次源码扫描确认跨版本slot身份缺失，旧非均匀剂量无法同时可靠识别提醒移动和剂量分配交换，已按此条件暂停功能实现。详见design/treatment-period-timeline-scan.md；没有自行决定schema7。下一步需明确是否接受旧歧义对应关系保留unknown及有限保证，再评估未来操作身份记录，不能猜旧历史。此次完成扫描及文档状态纠正，未改功能/版本/数据库、未构建新APK。

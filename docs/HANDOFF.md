@@ -4,7 +4,17 @@
 
 用户再次纠正：**play版本已废弃。以后只维护、测试、构建和交付full，不再生成或签署play APK。** 已移除Gradle play flavor、src/play空实现、CI play任务，release manifest检查只要求full。AGENTS/CLAUDE/REQUIREMENTS/README同步。下文双变体测试与play附件均为历史记录，不是下一步任务；旧公开Release核验清单保持历史事实，不修改公开Release/标签。最新交付full为build11（见下文交付与下载边界）。
 
-## 待用户审核：阶段/时间线修订与里程碑问题（2026-10-07，REQUIREMENTS §26）
+## 当前任务：Treatment Period / Timeline Phase 1 卡点（2026-10-07，REQUIREMENTS §27）
+
+用户新附件已授权按Scan→Plan→Implement→Verify实施，上一轮“待用户审核”不再是一般开发限制。扫描基线9e55c10，功能仍ecedb19/build11/schema6。完整八项结论与下一步文件/验证计划见[源码扫描](design/treatment-period-timeline-scan.md)。
+
+- **按附件明确停止条件暂停功能实现**：Phase 1“如果第8点无法安全解决，停下并报告，不要偷偷做schema migration”。TimeEntity行ID未保存在冻结定义中，也不跨rule重建保持；旧非均匀剂量快照不能区分提醒移动与剂量分配交换。按钟点排序会误切、按剂量集合会漏切，不能声称全部要求可安全满足。没有证明必须schema7；schema升级也补不回旧历史身份。
+- 建议先明确能否接受旧歧义历史显示“时段对应关系未记录”、保留全部raw changes、只作有限保证，并为未来编辑独立保存操作/slot身份。schema6元数据扩展尚未验证兼容，不应当成已完成。不要继续以排序顺序/数据库返回顺序假造身份。
+- 里程碑保存/可见性问题仍存在，新Timeline/V2尚未实现。LabContext1继续依赖旧epoch key；VisitPack1计数/digest继续沿用原版本边界；不修改冻结事实、PK、库存或真实数据。
+- 本次仅docs：README修正build11/schema6和VisitPack第一批已实现；路线图更新build11、MIT已选及当前修订状态；旧设计标题说明用户已授权与当前卡点。无版本/数据库变动，无新APK；未执行构建/测试，不挪用旧CI作为新版通过证据。
+- 后续先解决上述旧歧义处理范围，然后按附件顺序里程碑→V2→Timeline/History→单视图→兼容→测试→文档。保留full-only、原正式签名、不发布Release/标签。
+
+## 上一轮设计审核：阶段/时间线修订与里程碑问题（2026-10-07，REQUIREMENTS §26）
 
 - 设计 [epochs-timeline-p1-revision](design/epochs-timeline-p1-revision.md)：投影时计算的V2治疗标准签名、精确历史与按日期时期显示分离/同日过渡组、不迁移schema6、旧key时刻映射、冻结Lab Context/Visit Pack兼容、ASCII/测试及7组待定项。**未改功能代码。**
 - 里程碑“开始激素治疗保存没反应”根因已用合成探针确认：保存成功，但时间线默认只显示最近90天、阶段视图不列里程碑，旧日期的里程碑被过滤，且没有保存提示。属UI层；最小修复与回归测试列在设计第一部分。探针测试未提交。
