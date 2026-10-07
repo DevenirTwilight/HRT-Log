@@ -414,4 +414,4 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 
 ### 2o. 废弃play（2026-10-07）
 
-用户要求记住并写入交接。已清理实际构建/CI/空实现/校验脚本，保留full flavor命名使现有full任务与安装兼容，不改schema/版本号/运行时逻辑。本轮不生成新APK；下一步验证Gradle不再提供play任务与full构建，然后保存结果。
+用户要求记住并写入交接。已清理实际构建/CI/空实现/校验脚本，保留full flavor命名使现有full任务与安装兼容，不改schema/版本号/运行时逻辑。本轮不生成新APK。验证已完成：Gradle任务列表无play目标、assembleFullDebug成功；CI/源码变体无play，manifest检查只要求full并通过。本轮仅构建配置/接手规则变更，不重复运行运行时单元测试。源码24cd854已推送；full-only CI自动启动，其结果尚未核对，不称已完成CI。最新交付APK仍为full build9。
