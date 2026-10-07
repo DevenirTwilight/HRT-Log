@@ -27,6 +27,7 @@ class ExportData(
     val medications: List<MedicationEntity>, val profiles: Map<Long, ProfileEntity>, val records: List<RecordEntity>, val labs: List<LabValueEntity>,
     val items: List<CheckinItemEntity>, val scores: List<CheckinScoreEntity>, val notes: List<DayNoteEntity>,
     val scheduleText: Map<Long, String>, val itemLabel: (CheckinItemEntity) -> String,
+    val containers:List<ContainerEntity> = emptyList(),val symptoms:List<SymptomCheckEntity> = emptyList(),val reviews:List<StageReviewEntity> = emptyList(),
 )
 
 object CsvExport {
@@ -56,6 +57,9 @@ object CsvExport {
                     if (day.isEmpty()) append(line(date, "", "", note)) else day.forEachIndexed { i, s -> append(line(date, items[s.item_id]?.let(d.itemLabel), s.value, if (i == 0) note else "")) }
                 }
             })
+            file("packages.csv",StringBuilder(line("id","medication","capacity","used_amount","state","source_note","batch")).apply{d.containers.forEach{c->append(line(c.id,meds[c.medication_id]?.name,c.capacity,c.used_amount,c.state,c.source_note,c.batch))}})
+            file("symptoms.csv",StringBuilder(line("date","symptom_group","note")).apply{d.symptoms.sortedBy{it.date}.forEach{append(line(it.date,it.group_id,it.note))}})
+            file("reviews.csv",StringBuilder(line("date","effects_json","tolerance_note","risk_note","smoking","systolic_mmHg","diastolic_mmHg","weight_kg","satisfaction_1_to_5","satisfaction_note")).apply{d.reviews.sortedBy{it.date}.forEach{r->append(line(r.date,r.effects_json,r.tolerance_note,r.risk_note,r.smoking,r.systolic,r.diastolic,r.weight_kg,r.satisfaction,r.satisfaction_note))}})
             file("labs.csv", StringBuilder(line("sampled_at", "analyte", "value", "unit", "report_lower", "report_upper", "report_unit", "laboratory", "note")).apply {
                 d.labs.sortedBy { it.sampled_utc }.forEach { l -> append(line(ts(l.sampled_utc, l.sampled_zone), l.analyte_code, l.value, l.unit, l.reference_lower, l.reference_upper, l.reference_unit, l.laboratory, l.note)) }
             })
@@ -67,12 +71,14 @@ object CsvExport {
 object PdfReport {
     private const val W = 595; private const val H = 842; private const val M = 48f
 
-    fun write(context: Context, d: ExportData, days: Int, conc: ConcentrationResult?, out: OutputStream) {
+    fun write(context: Context, d: ExportData, days: Int, conc: ConcentrationResult?, out: OutputStream, period:Pair<LocalDate,LocalDate>?=null) {
         val zone = ZoneId.systemDefault()
         val locale = context.resources.configuration.locales[0]
         val dateFmt = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(locale)
         val dtFmt = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withLocale(locale)
-        val to = LocalDate.now(); val from = to.minusDays(days.toLong() - 1)
+        val to = period?.second?:LocalDate.now(); val from = period?.first?:to.minusDays(days.toLong() - 1)
+        require(from<=to)
+        val until=to.plusDays(1).atStartOfDay(zone).toInstant().toEpochMilli()
         val since = from.atStartOfDay(zone).toInstant().toEpochMilli()
         val doc = PdfDocument()
         var pageNo = 0; var page: PdfDocument.Page? = null; var canvas: Canvas? = null; var y = 0f
@@ -81,18 +87,26 @@ object PdfReport {
         val body = TextPaint().apply { textSize = 10f; color = Color.BLACK; isAntiAlias = true }
         val small = TextPaint().apply { textSize = 8.5f; color = Color.DKGRAY; isAntiAlias = true }
         fun newPage() { page?.let(doc::finishPage); pageNo++; page = doc.startPage(PdfDocument.PageInfo.Builder(W, H, pageNo).create()); canvas = page!!.canvas; y = M
-            canvas!!.drawText(context.getString(R.string.report_footer, pageNo), M, H - 24f, small) }
-        fun text(s: String, p: TextPaint, gap: Float = 4f) {
-            val layout = StaticLayout.Builder.obtain(s, 0, s.length, p, (W - 2 * M).toInt()).setAlignment(Layout.Alignment.ALIGN_NORMAL).build()
-            if (y + layout.height > H - 48f) newPage()
-            canvas!!.save(); canvas!!.translate(M, y); layout.draw(canvas!!); canvas!!.restore(); y += layout.height + gap
+            canvas!!.drawText(if(period==null)context.getString(R.string.report_footer,pageNo)else context.getString(R.string.wb_summary_footer)+" · "+pageNo, M, H - 24f, small) }
+        fun text(s:String,p:TextPaint,gap:Float=4f) {
+            var remaining=s
+            do {
+                val layout=StaticLayout.Builder.obtain(remaining,0,remaining.length,p,(W-2*M).toInt()).setAlignment(Layout.Alignment.ALIGN_NORMAL).build()
+                if(y+layout.getLineBottom(0)>H-48f)newPage()
+                val fit=(0 until layout.lineCount).lastOrNull{y+layout.getLineBottom(it)<=H-48f}?:0
+                val end=layout.getLineEnd(fit)
+                canvas!!.save();canvas!!.translate(M,y);canvas!!.clipRect(0f,0f,W-2*M,layout.getLineBottom(fit).toFloat());layout.draw(canvas!!);canvas!!.restore()
+                y+=layout.getLineBottom(fit)+gap
+                remaining=remaining.substring(end)
+                if(remaining.isNotEmpty())newPage()
+            } while(remaining.isNotEmpty())
         }
         fun row(cols: List<String>, widths: List<Float>, p: TextPaint) {
             if (y + 14f > H - 48f) newPage()
             var x = M; cols.forEachIndexed { i, c -> canvas!!.drawText(TextUtilsEllipsize(c, p, widths[i] - 6f), x, y + 10f, p); x += widths[i] }; y += 14f
         }
         newPage()
-        text(context.getString(R.string.report_title), title, 2f)
+        text(context.getString(if(period==null)R.string.report_title else R.string.wb_summary), title, 2f)
         text(context.getString(R.string.report_period, from.format(dateFmt), to.format(dateFmt)) + " · " + context.getString(R.string.report_generated, java.time.LocalDateTime.now().format(dtFmt)), small, 12f)
 
         text(context.getString(R.string.medications), head)
@@ -102,7 +116,7 @@ object PdfReport {
         }
         y += 8f
         text(context.getString(R.string.adherence_title), head)
-        val inRange = d.records.filter { it.deleted_at_utc == null && (it.taken_utc ?: it.scheduled_utc ?: 0) >= since }
+        val inRange = d.records.filter { it.deleted_at_utc == null && (it.taken_utc ?: it.scheduled_utc ?: 0) in since until until }
         d.medications.filter { m -> inRange.any { it.medication_id == m.id } }.forEach { m ->
             val r = inRange.filter { it.medication_id == m.id && it.scheduled_utc != null }
             val onTime = r.count { it.status == "ON_TIME" }; val late = r.count { it.status == "LATE" }; val missed = r.count { it.status == "MISSED" }; val skipped = r.count { it.status == "SKIPPED" }
@@ -111,7 +125,7 @@ object PdfReport {
             text("• ${m.name}: " + context.getString(R.string.report_adherence_line, onTime, late, missed, skipped, free.count { !it.origin.startsWith("IMPORT_") }, imported), body, 2f)
         }
         y += 8f
-        val labs = d.labs.filter { it.sampled_utc >= since }.sortedBy { it.sampled_utc }
+        val labs = d.labs.filter { it.sampled_utc in since until until }.sortedBy { it.sampled_utc }
         text(context.getString(R.string.labs), head)
         if (labs.isEmpty()) text(context.getString(R.string.report_none), body) else {
             val widths = listOf(120f, 90f, 90f, 120f, 79f)
@@ -133,12 +147,34 @@ object PdfReport {
             drawChart(canvas!!, conc, M, y, W - 2 * M, 180f, from.atStartOfDay(zone).toEpochSecond() / 3600.0, conc.nowH)
             y += 196f
         }
-        val scored = d.scores.filter { it.date >= from.toString() }
+        val scored = d.scores.filter { it.date >= from.toString() && it.date<=to.toString() }
         if (scored.isNotEmpty()) {
             text(context.getString(R.string.wellbeing), head)
             d.items.forEach { item -> scored.filter { it.item_id == item.id }.takeIf { it.isNotEmpty() }?.let { s ->
-                text("• ${d.itemLabel(item)}: ${context.getString(R.string.wb_average, fmt(s.map { it.value }.average(), 1))} (n = ${s.size})", body, 2f) } }
+                text("• ${d.itemLabel(item)}: ${context.getString(R.string.wb_recorded_days,s.size)}", body, 2f) } }
         }
+        val summary=WellbeingSummary(d,from,to)
+        if(period!=null){
+            text(context.getString(R.string.wb_symptoms),head)
+            symptomLines(context,summary.symptoms).forEach{text(it,body)}
+            text(context.getString(R.string.wb_reviews),head)
+            summary.reviews.forEach{r->reviewLines(context,r).forEach{text(it,body)}}
+            d.items.forEach{item->val pts=summary.scores.filter{it.item_id==item.id}.sortedBy{it.date}
+                if(pts.isNotEmpty()){
+                    if(y+100>H-48)newPage()
+                    text(d.itemLabel(item)+" · "+context.getString(R.string.wb_recorded_days,pts.size),body)
+                    val paint=Paint().apply{color=Color.DKGRAY;strokeWidth=1f;isAntiAlias=true}
+                    val first=from.toEpochDay();val span=(to.toEpochDay()-first).coerceAtLeast(1)
+                    var last:Pair<Float,Float>?=null
+                    pts.forEach{point->val x=M+(LocalDate.parse(point.date).toEpochDay()-first).toFloat()/span*(W-2*M);val py=y+65f-(point.value-1)*15f
+                        last?.let{canvas!!.drawLine(it.first,it.second,x,py,paint)};canvas!!.drawCircle(x,py,2f,paint);last=x to py}
+                    canvas!!.drawText("1",M,y+66f,small);canvas!!.drawText("5",M,y+6f,small);y+=82f
+                }
+            }
+            summary.notes.forEach{text(it.date+" · "+it.text,body)}
+        }
+        text(context.getString(R.string.wb_package_info),head)
+        d.containers.filter{it.source_note!=null||it.batch!=null}.forEach{c->text(listOfNotNull(d.medications.firstOrNull{it.id==c.medication_id}?.name,"#"+c.id,c.source_note,c.batch).joinToString(" · "),body)}
         page?.let(doc::finishPage)
         doc.writeTo(out); doc.close()
     }

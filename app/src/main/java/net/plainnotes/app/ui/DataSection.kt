@@ -197,6 +197,7 @@ import java.time.LocalDate
 @Composable fun checkinLabels(): (net.plainnotes.app.data.CheckinItemEntity) -> String {
     val res = LocalContext.current.resources
     return { item -> item.custom_label ?: res.getString(when (item.builtin_key) {
+        "DAY_MOOD" -> R.string.wb_day_mood; "DAY_ENERGY" -> R.string.wb_day_energy; "DAY_SLEEP" -> R.string.wb_day_sleep; "DAY_BODY" -> R.string.wb_day_body;
         "OVERALL" -> R.string.wb_overall; "MOOD" -> R.string.wb_mood; "EMO_STABILITY" -> R.string.wb_emo_stability; "ENERGY" -> R.string.wb_energy
         "AGGRESSIVENESS" -> R.string.wb_aggressiveness; "LIBIDO" -> R.string.wb_libido; "PAIN" -> R.string.wb_pain; "PERIOD_LIKE" -> R.string.wb_period_like
         "APPETITE" -> R.string.wb_appetite; "SLEEP_QUALITY" -> R.string.wb_sleep; "SKIN_QUALITY" -> R.string.wb_skin; else -> R.string.choice_other }) }

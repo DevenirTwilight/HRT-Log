@@ -53,6 +53,7 @@ class UiPrefs(context: Context) {
             if (p.getString("calib_mode", "RETROSPECTIVE") == "CAUSAL") CalibrationMode.CAUSAL else CalibrationMode.RETROSPECTIVE)
         set(v) { p.edit().putBoolean("conc_pmol", v.pmol).putBoolean("calib_enabled", v.calibrate).putString("calib_mode", v.mode.name).apply() }
     var disclaimerAccepted: Boolean get() = p.getBoolean("pk_disclaimer_ack", false); set(v) { p.edit().putBoolean("pk_disclaimer_ack", v).apply() }
+    var region:String? get()=p.getString("wellbeing_region",null);set(v){p.edit().putString("wellbeing_region",v).apply()}
     var wellbeingPrompt: Boolean get() = p.getBoolean("wellbeing_prompt", true); set(v) { p.edit().putBoolean("wellbeing_prompt", v).apply() }
 }
 
@@ -60,6 +61,9 @@ class UiPrefs(context: Context) {
 @Composable fun NotesApp(model: NotesViewModel, appearance: Appearance, onAppearance: (Appearance) -> Unit) {
     val context = LocalContext.current
     val prefs = remember { UiPrefs(context) }
+    var region by remember { mutableStateOf(prefs.region) }
+    var summary by remember { mutableStateOf(false) }
+    var packageInfo by remember { mutableStateOf<net.plainnotes.app.data.ContainerEntity?>(null) }
     val state by model.state.collectAsStateWithLifecycle()
     val editor by model.editor.collectAsStateWithLifecycle()
     val override by model.override.collectAsStateWithLifecycle()
@@ -139,6 +143,7 @@ class UiPrefs(context: Context) {
                 TopAppBar(title = { Text(stringResource(if (destination == Destination.CALENDAR) R.string.app_name else destination.title)) },
                     navigationIcon = { IconButton(onClick = { scope.launch { drawer.open() } }) { Icon(Icons.Outlined.Menu, stringResource(R.string.menu)) } },
                     actions = {
+                        if (destination == Destination.WELLBEING) IconButton(onClick={summary=true}) { Icon(Icons.Outlined.PictureAsPdf,stringResource(R.string.wb_summary)) }
                         if (destination == Destination.CALENDAR) IconButton(onClick = { pickStart = true }) { Icon(Icons.Outlined.EditCalendar, stringResource(R.string.calendar_pick_start)) }
                         if (destination == Destination.CONCENTRATION) IconButton(onClick = { model.loadConcentration() }) { Icon(Icons.Outlined.Refresh, stringResource(R.string.refresh)) }
                     })
@@ -170,14 +175,15 @@ class UiPrefs(context: Context) {
                 Destination.LABS -> LabsScreen(conc.labs, conc.doseTimes, { labEdit = it; labNew = it == null }, { model.deleteLab(it) }, pad)
                 Destination.SETTINGS -> SettingsScreen(appearance, onAppearance, highReliability, { highReliability = it; prefs.highReliability = it; model.sync() },
                     { model.sync() }, { model.testReminder() }, pad, wellbeingPrompt, { wellbeingPrompt = it; prefs.wellbeingPrompt = it }) {
+                    RegionSection(region){region=it;prefs.region=it}
                     PrivacySection(state.medications.count { it.active }, simpleMode) { simpleMode = it; prefs.simpleMode = it }
                     net.plainnotes.app.disguise.DisguiseSection(model::destroyLegacyPrivateData, onRoutingChanged = { model.sync() }, backup = model::backupTo)
                     DataSection(model, state.medications.associate { it.id to scheduleText(state.schedules[it.id]) })
                 }
                 Destination.ABOUT -> AboutScreen(pad)
                 Destination.HISTORY -> HistoryScreen(state, extra.records, { editRecord = it }, { deleteRecord = it }, pad, onAdd = { manual = true }, onBatch = { batch = true }, onLink = model::prepareImportedLink)
-                Destination.STOCK -> StockScreen(state, extra.containers, extra.records, { m -> model.replaceContainer(m.id, m.container_capacity) }, { c, m -> adjustStock = c to m }, { addStock = it }, pad)
-                Destination.WELLBEING -> WellbeingScreen(extra.items, extra.scores, extra.notes, { d, i, v -> model.setScore(d, i, v) }, { d, t -> model.setNote(d, t) }, { manageItems = true }, pad)
+                Destination.STOCK -> StockScreen(state, extra.containers, extra.records, { m -> model.replaceContainer(m.id, m.container_capacity) }, { c, m -> adjustStock = c to m }, { addStock = it }, pad,onInfo={packageInfo=it})
+                Destination.WELLBEING -> WellbeingHub(state,extra,model,region,{manageItems=true},pad)
                 else -> ComingSoonScreen(destination.icon, stringResource(destination.title), pad)
             }
         }
@@ -195,9 +201,11 @@ class UiPrefs(context: Context) {
     deleteRecord?.let { r -> AlertDialog(onDismissRequest = { deleteRecord = null }, icon = { Icon(Icons.Outlined.Delete, null) }, text = { Text(stringResource(R.string.history_delete_confirm)) },
         confirmButton = { Button(onClick = { model.deleteRecord(r.id); deleteRecord = null }) { Text(stringResource(R.string.remove)) } },
         dismissButton = { TextButton(onClick = { deleteRecord = null }) { Text(stringResource(R.string.cancel)) } }) }
-    addStock?.let { m -> AddStockDialog(m, { addStock = null }) { cap, n, open -> model.addContainers(m.id, cap, n, open); addStock = null } }
+    addStock?.let { m -> AddStockDialog(m, { addStock = null }) { cap, n, open,source,batch -> model.addContainers(m.id, cap, n, open,source,batch); addStock = null } }
+    packageInfo?.let{box->ContainerInfoDialog(box,{packageInfo=null}){source,batch->model.setContainerInfo(box.id,source,batch);packageInfo=null}}
     adjustStock?.let { (c, m) -> AdjustStockDialog(c, m, { adjustStock = null }) { v -> model.setRemaining(c.id, v); adjustStock = null } }
-    if (manageItems) ManageCheckinItemsDialog(extra.items, { manageItems = false }) { model.saveCheckinItem(it) }
+    if (manageItems) ManageCheckinItemsDialog(extra.items,{manageItems=false},model::saveCheckinItem,extra.effects,model::setReviewEffect,model::reorderItems)
+    if(summary) SummaryExportDialog(model,state,{summary=false})
     overrideEntry?.let { e -> if (override?.key == e.slot.key) OverrideDialog(e, meds[e.slot.medicationId], override!!, { overrideEntry = null }) { o -> model.changeOverride(e.slot, o); overrideEntry = null } }
     if (batch) BatchAddDialog(state.medications.filter { it.active && it.needs_review == null }, { m ->
         state.schedules[m.id]?.takeIf { it.kind == net.plainnotes.app.domain.RuleKind.EVERY_N_DAYS && it.interval == 1 && it.times.isNotEmpty() }?.times ?: TWICE_DAILY

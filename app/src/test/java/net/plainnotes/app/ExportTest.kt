@@ -30,7 +30,7 @@ class ExportTest {
         val out = ByteArrayOutputStream(); CsvExport.write(data, out)
         val files = HashMap<String, String>()
         ZipInputStream(out.toByteArray().inputStream()).use { z -> generateSequence { z.nextEntry }.forEach { e -> files[e.name] = String(z.readBytes()) } }
-        assertEquals(setOf("intakes.csv", "wellbeing.csv", "labs.csv"), files.keys)
+        assertEquals(setOf("intakes.csv", "wellbeing.csv", "labs.csv", "packages.csv", "symptoms.csv", "reviews.csv"), files.keys)
         files.values.forEach { assertTrue(it.startsWith("﻿")) }
         assertTrue(files.getValue("intakes.csv").contains("\"Gel, \"\"synthetic\"\"\""))
         assertEquals(3, files.getValue("intakes.csv").trim().lines().size)

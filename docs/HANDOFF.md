@@ -149,12 +149,13 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 ## 2h. 身心状态重新设计（2026-10-07，`REQUIREMENTS.md` 第 15、15a、15b 节）：**设计已审核通过，实现中**
 
 - 第 1 步完成：`docs/wellbeing-research.md`（已核实/部分核实/未核实逐条标注）；`docs/licensing.md` 记 GENDER-Q、GCLS 为"候选，未获授权"。要点：三份指南都没有患者自测清单；内分泌学会监测表是 Table 15；SOC8 附录 C 表 1 与 ES Table 13 数值不同；所有症状来源最强措辞是"立即"，没有任何来源提急救电话；螺内酯法国/大陆说明书都没有面向患者的就医症状清单；medRxiv 2022 是研究方案，"多数自行用药"无数据，不用于界面；大陆个人上报无在线入口（按卫生部令 81 号第 23 条）；大陆说明书只有补佳乐、爱斯妥（第三方转载）满足规则，单方 CPA 未核实。
-- 第 2 步完成：`docs/wellbeing-design.md`，第 12 节列出 7 个待用户决定的问题。**审核通过前不写功能代码。**
+- 第 2 步完成并已审核通过：`docs/wellbeing-design.md`，审核结论见 15b。
 - 审核结论（15b）已写入需求和设计文档：MOOD/ENERGY/SLEEP_QUALITY 并入 DAY_*；其余 8 个旧条目按最近 30 天是否有记录决定启用，名称不加"旧"；症状中性译名点开看原文；补佳乐、爱斯妥按第三方转载使用，tfsci 不算独立来源；舌下按口服片说明书并注明未涉及舌下；来源/批号放在库存包装；化验参考范围保留不解读；血压体重选方案 B；效果条目可隐藏。
 - 第 3 步（实现）：进行中。
   - 已完成：数据层（数据库版本 2：`checkin_item.legacy`、`stage_review`、`symptom_check`、`review_effect`、包装 `source_note`/`batch`；`migration1To2` 与旧备份恢复共用 `WellbeingUpgrade.apply`；`restoreBackup` 接受旧版本、拒绝更新版本 `NewerBackup`）；Trans Memo 导入映射到 DAY_*。测试 `WellbeingMigrationTest`（Room 迁移、恢复 `core/data/src/test/resources/backup/v1-synthetic.pnbak`——由 0.2.0 代码生成的合成备份，测试密码在测试里——以及两条路径结果一致）。
   - 已完成：症状来源目录 `app/src/main/resources/symptom-sources.json`（10 个来源、27 个症状组、89 条引文，全部逐字核对原文；由 `tools/symptom-catalog/build_catalog.py` 生成）和 `SymptomCatalog`（按药匹配、共有症状合并、"立即"按来源措辞、地区规则、上报渠道）；测试 `SymptomCatalogTest`。
-  - 未完成：界面（三个标签、管理条目、地区、包装来源/批号）、复诊摘要 PDF、四语文字。关键硬性要求：v1 备份可恢复（§9.3）；不放急救电话；"立即"醒目；螺内酯"官方来源未列出"。
+  - 2026-10-07 接手：已同步最新远程 `7aa11e2`。此前本地未提交 build 5 草稿已隔离保存，不覆盖已发布修复；继续审核通过的实现，不发布、不改浓度模型。已接入每日滑块/历史折线（所有旧记录可见、不算平均）、三标签、症状原话/地区规则、阶段回顾、每日/效果条目管理、包装来源批号、可选日期范围的复诊摘要 PDF 与扩展 CSV。四语文案齐全，full/play Kotlin 编译通过。新增合成数据回归正在执行；这不是最终验证结论。
+  - 未完成：全量测试/lint/四变体构建、真实 Android PDF/数据库/界面回归、来源译文及最后审计。关键硬性要求：v1 备份可恢复（§9.3）；不放急救电话；"立即"醒目；螺内酯"官方来源未列出"。
 - 原始调研中间文件只在会话临时目录（未入库）；结论已全部写入研究文档。
 
 ## 2i. 致谢口径更正（2026-10-07，`REQUIREMENTS.md` 第 16 节）：源码完成，Release 未改

@@ -54,7 +54,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
                 val profiles=meds.mapNotNull{m->dao.profile(m.id)?.let{m.id to it}}.toMap()
                 val upcoming=(repo.planned(now,now.plus(Duration.ofDays(366)),now)+slots.filter{it.slot.at<now}).distinctBy{it.slot.key}.filter{it.state in net.plainnotes.app.ui.OPEN_STATES}
                 NotesState(meds,slots,dao.appointments(),mutable.value.error,false,schedules,profiles,start) to
-                    ExtraState(dao.records(),dao.containers(),repo.checkinItems(),dao.scores(today.minusYears(5).toString(),today.toString()),dao.notes(today.minusYears(5).toString(),today.toString()),upcoming)
+                    ExtraState(dao.records(),dao.containers(),repo.checkinItems(),dao.scores("0001-01-01",today.toString()),dao.notes("0001-01-01",today.toString()),upcoming,dao.stageReviews(),dao.symptomChecks("0001-01-01",today.toString()),dao.reviewEffects())
             }
             ensureActive()
             mutable.value=snapshot.first.copy(error=mutable.value.error);extra.value=snapshot.second;readFailureShown=false
@@ -96,7 +96,8 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     // History, stock and well-being
     data class ExtraState(val records:List<RecordEntity> = emptyList(),val containers:List<ContainerEntity> = emptyList(),val items:List<CheckinItemEntity> = emptyList(),
                           val scores:List<CheckinScoreEntity> = emptyList(),val notes:List<DayNoteEntity> = emptyList(),
-                          /** Open doses for the next year (calendar colours and the stock forecast). */ val upcoming:List<TimelineEntry> = emptyList())
+                          /** Open doses for the next year (calendar colours and the stock forecast). */ val upcoming:List<TimelineEntry> = emptyList(),
+                          val reviews:List<StageReviewEntity> = emptyList(),val symptoms:List<SymptomCheckEntity> = emptyList(),val effects:List<ReviewEffectEntity> = emptyList())
     val extra=MutableStateFlow(ExtraState())
     private fun guarded(block:suspend()->Unit)=viewModelScope.launch{try{block()}catch(e:kotlinx.coroutines.CancellationException){throw e}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}
     fun loadExtra():Job=refresh()
@@ -112,12 +113,18 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     fun linkImported(id:Long,key:String)=change{repo.linkImported(id,key);importedLink.value=null}
     fun editRecord(id:Long,t:Instant,d:Double)=change{repo.editRecord(id,t,d)}
     fun deleteRecord(id:Long)=change{repo.deleteRecord(id)}
-    fun addContainers(med:Long,capacity:Double,count:Int,open:Boolean)=mutateExtra{repo.addContainers(med,capacity,count,open)}
+    fun addContainers(med:Long,capacity:Double,count:Int,open:Boolean,source:String?=null,batch:String?=null)=mutateExtra{repo.addContainers(med,capacity,count,open,source,batch)}
     fun replaceContainer(med:Long,capacity:Double)=mutateExtra{repo.replaceContainer(med,capacity)}
     fun setRemaining(container:Long,remaining:Double)=mutateExtra{repo.setRemaining(container,remaining)}
     fun setScore(date:LocalDate,item:Long,value:Int?)=mutateExtra{repo.setScore(date,item,value)}
     fun setNote(date:LocalDate,text:String)=mutateExtra{repo.setNote(date,text)}
     fun saveCheckinItem(v:CheckinItemEntity)=mutateExtra{repo.saveCheckinItem(v)}
+    fun saveReview(v:StageReviewEntity)=mutateExtra{repo.saveStageReview(v)}
+    fun deleteReview(id:Long)=mutateExtra{repo.deleteStageReview(id)}
+    fun setSymptom(date:LocalDate,group:String,checked:Boolean,note:String?=null)=mutateExtra{repo.setSymptomCheck(date,group,checked,note)}
+    fun setReviewEffect(id:String,enabled:Boolean)=mutateExtra{repo.setReviewEffect(id,enabled)}
+    fun setContainerInfo(id:Long,source:String?,batch:String?)=mutateExtra{repo.setContainerInfo(id,source,batch)}
+    fun reorderItems(ids:List<Long>)=mutateExtra{repo.reorderCheckinItems(ids)}
     // Data: Trans Memo import, encrypted backup, exports, wipe
     sealed interface DataJob { object Idle:DataJob; object Working:DataJob; class Done(val message:Int,val arg:String?=null):DataJob; class Failed(val message:Int):DataJob
         class ImportReady(val export:net.plainnotes.app.importer.TmExport,val preview:net.plainnotes.app.importer.TransMemo.Preview):DataJob
@@ -174,10 +181,15 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     private suspend fun exportData(labels:(CheckinItemEntity)->String,schedules:Map<Long,String>):net.plainnotes.app.export.ExportData {
         val meds=repo.medications();val today=LocalDate.now()
         return net.plainnotes.app.export.ExportData(meds,meds.mapNotNull{m->repo.profile(m.id)?.let{m.id to it}}.toMap(),repo.records(),repo.labs(),repo.checkinItems(),
-            repo.scores(today.minusYears(50),today),repo.notes(today.minusYears(50),today),schedules,labels)
+            repo.scores(LocalDate.of(1,1,1),today),repo.notes(LocalDate.of(1,1,1),today),schedules,labels,repo.containers(),repo.symptomChecks(LocalDate.of(1,1,1),today),repo.stageReviews())
     }
     fun exportCsv(uri:android.net.Uri,labels:(CheckinItemEntity)->String,schedules:Map<Long,String>)=dataOp {
         val d=exportData(labels,schedules);withContext(Dispatchers.IO){app.contentResolver.openOutputStream(uri,"wt")!!.use{net.plainnotes.app.export.CsvExport.write(d,it)}};DataJob.Done(R.string.export_saved)
+    }
+    fun exportSummary(uri:android.net.Uri,from:LocalDate,to:LocalDate,context:android.content.Context,labels:(CheckinItemEntity)->String,schedules:Map<Long,String>)=dataOp {
+        val d=repo.transaction{exportData(labels,schedules)}
+        withContext(Dispatchers.IO){app.contentResolver.openOutputStream(uri,"wt")!!.use{net.plainnotes.app.export.PdfReport.write(context,d,1,null,it,from to to)}}
+        DataJob.Done(R.string.export_saved)
     }
     fun exportPdf(uri:android.net.Uri,days:Int,includeChart:Boolean,context:android.content.Context,labels:(CheckinItemEntity)->String,schedules:Map<Long,String>)=dataOp {
         val d=exportData(labels,schedules);val c=if(includeChart)conc.value.result else null

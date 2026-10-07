@@ -52,7 +52,7 @@ fun stockSummary(m: MedicationEntity, containers: List<ContainerEntity>, s: Sche
 }
 
 @Composable fun StockScreen(state: NotesState, containers: List<ContainerEntity>, records: List<RecordEntity>, onReplace: (MedicationEntity) -> Unit,
-                            onAdjust: (ContainerEntity, MedicationEntity) -> Unit, onAdd: (MedicationEntity) -> Unit, contentPadding: PaddingValues) {
+                            onAdjust: (ContainerEntity, MedicationEntity) -> Unit, onAdd: (MedicationEntity) -> Unit, contentPadding: PaddingValues, onInfo:(ContainerEntity)->Unit={}) {
     val meds = state.medications.filter { it.active }
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = contentPadding.calculateTopPadding() + 8.dp,
         bottom = contentPadding.calculateBottomPadding() + 32.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -60,7 +60,15 @@ fun stockSummary(m: MedicationEntity, containers: List<ContainerEntity>, s: Sche
         items(meds, key = { it.id }) { m ->
             val sum = stockSummary(m, containers, state.schedules[m.id])
             val unallocated = records.filter { it.medication_id == m.id && it.deleted_at_utc == null }.sumOf { it.unallocated_supply_amount ?: 0.0 }
-            StockCard(m, sum, unallocated, { onReplace(m) }, { sum.open?.let { onAdjust(it, m) } }, { onAdd(m) })
+            Column(verticalArrangement=Arrangement.spacedBy(6.dp)) {
+                StockCard(m,sum,unallocated,{onReplace(m)},{sum.open?.let{onAdjust(it,m)}},{onAdd(m)})
+                containers.filter{it.medication_id==m.id}.sortedByDescending{it.id}.forEach{box->
+                    Row(verticalAlignment=Alignment.CenterVertically){
+                        Text(listOfNotNull("#${box.id} · ${formatDose(box.capacity,m.unit)}",box.source_note,box.batch).joinToString(" · "),Modifier.weight(1f),style=MaterialTheme.typography.bodySmall)
+                        TextButton(onClick={onInfo(box)}){Text(stringResource(R.string.wb_package_info))}
+                    }
+                }
+            }
         }
     }
 }
@@ -102,18 +110,21 @@ fun stockSummary(m: MedicationEntity, containers: List<ContainerEntity>, s: Sche
     }
 }
 
-@Composable fun AddStockDialog(m: MedicationEntity, onDismiss: () -> Unit, onSave: (Double, Int, Boolean) -> Unit) {
+@Composable fun AddStockDialog(m: MedicationEntity, onDismiss: () -> Unit, onSave: (Double, Int, Boolean,String?,String?) -> Unit) {
     var capacity by remember { mutableStateOf(inputNumber(m.container_capacity)) }; var count by remember { mutableStateOf("1") }
     var openNow by remember { mutableStateOf(false) }
+    var source by remember{mutableStateOf("")};var batch by remember{mutableStateOf("")}
     val cap = capacity.toDoubleOrNull()?.takeIf { it > 0 }; val n = count.toIntOrNull()?.takeIf { it in 1..50 }
     AlertDialog(onDismissRequest = onDismiss, icon = { Icon(Icons.Outlined.Inventory2, null) }, title = { Text(stringResource(R.string.stock_add)) },
         text = { Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Text(m.name, style = MaterialTheme.typography.titleSmall)
             NumberField(count, { count = it }, stringResource(R.string.stock_count), decimal = false, isError = n == null)
             NumberField(capacity, { capacity = it }, stringResource(R.string.capacity), suffix = unitLabel(m.unit), isError = cap == null)
+            OutlinedTextField(source,{source=it},label={Text(stringResource(R.string.wb_source_note))})
+            OutlinedTextField(batch,{batch=it},label={Text(stringResource(R.string.wb_batch))})
             SwitchRow(stringResource(R.string.stock_open_now), openNow) { openNow = it }
         } },
-        confirmButton = { Button(enabled = cap != null && n != null, onClick = { onSave(cap!!, n!!, openNow) }) { Text(stringResource(R.string.save)) } },
+        confirmButton = { Button(enabled = cap != null && n != null, onClick = { onSave(cap!!, n!!, openNow,source.takeIf{it.isNotBlank()},batch.takeIf{it.isNotBlank()}) }) { Text(stringResource(R.string.save)) } },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } })
 }
 
@@ -128,4 +139,12 @@ fun stockSummary(m: MedicationEntity, containers: List<ContainerEntity>, s: Sche
         } },
         confirmButton = { Button(enabled = v != null, onClick = { onSave(v!!) }) { Text(stringResource(R.string.save)) } },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } })
+}
+
+@Composable fun ContainerInfoDialog(box:ContainerEntity,onDismiss:()->Unit,onSave:(String?,String?)->Unit) {
+    var source by remember{mutableStateOf(box.source_note.orEmpty())};var batch by remember{mutableStateOf(box.batch.orEmpty())}
+    AlertDialog(onDismissRequest=onDismiss,title={Text(stringResource(R.string.wb_package_info)+" #"+box.id)},text={Column {
+        OutlinedTextField(source,{source=it},label={Text(stringResource(R.string.wb_source_note))})
+        OutlinedTextField(batch,{batch=it},label={Text(stringResource(R.string.wb_batch))})
+    }},confirmButton={Button(onClick={onSave(source.takeIf{it.isNotBlank()},batch.takeIf{it.isNotBlank()})}){Text(stringResource(R.string.save))}},dismissButton={TextButton(onClick=onDismiss){Text(stringResource(R.string.cancel))}})
 }

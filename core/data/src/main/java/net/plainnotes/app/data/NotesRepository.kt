@@ -321,11 +321,23 @@ const val BACKFILL_MAX_DAYS=731L
         dao.checkinItems()
     }
     suspend fun saveCheckinItem(v:CheckinItemEntity)=transaction { dao -> if(v.id==0L)dao.insertCheckinItem(v.copy(sort_order=(dao.checkinItems().maxOfOrNull{it.sort_order} ?: 0)+1)) else {dao.updateCheckinItem(v);v.id} }
+    suspend fun reorderCheckinItems(ids:List<Long>)=transaction { dao ->
+        val items=dao.checkinItems().associateBy{it.id};require(ids.size==items.size && ids.toSet()==items.keys)
+        ids.forEachIndexed{i,id->dao.updateCheckinItem(items.getValue(id).copy(sort_order=i))}
+    }
     suspend fun scores(from:LocalDate,to:LocalDate)=withContext(Dispatchers.IO){db().dao().scores(from.toString(),to.toString())}
     suspend fun setScore(date:LocalDate,item:Long,value:Int?)=transaction { dao -> if(value==null)dao.deleteScore(date.toString(),item) else {require(value in 1..5);dao.score(CheckinScoreEntity(date.toString(),item,value))} }
     // --- Stage reviews, symptom checks, effect visibility (REQUIREMENTS 15) ---
     suspend fun stageReviews()=withContext(Dispatchers.IO){db().dao().stageReviews()}
-    suspend fun saveStageReview(v:StageReviewEntity)=transaction { dao -> require(v.satisfaction==null||v.satisfaction in 1..5); val id=dao.stageReview(v); if(v.id!=0L)v.id else id }
+    suspend fun saveStageReview(v:StageReviewEntity)=transaction { dao ->
+        LocalDate.parse(v.date);require(v.satisfaction==null||v.satisfaction in 1..5)
+        require(v.smoking==null||v.smoking in listOf("YES","NO"))
+        require(v.systolic==null||v.systolic in 1..999);require(v.diastolic==null||v.diastolic in 1..999)
+        require(v.weight_kg==null||v.weight_kg.isFinite()&&v.weight_kg>0)
+        val effects=JSONObject(v.effects_json)
+        effects.keys().forEach{key->val value=effects.get(key);require(value is String && (key.endsWith(":note")||value in listOf("NOT_YET","NOTICED","UNSURE")))}
+        val id=dao.stageReview(v);if(v.id!=0L)v.id else id
+    }
     suspend fun deleteStageReview(id:Long)=transaction { it.deleteStageReview(id) }
     suspend fun symptomChecks(from:LocalDate,to:LocalDate)=withContext(Dispatchers.IO){db().dao().symptomChecks(from.toString(),to.toString())}
     suspend fun setSymptomCheck(date:LocalDate,group:String,checked:Boolean,note:String?=null)=transaction { dao ->
