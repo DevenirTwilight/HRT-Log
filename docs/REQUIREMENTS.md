@@ -279,3 +279,5 @@
 保留RegimenDefinition.signature/clinical_signature、V1 TreatmentEpochs及旧key、Context1 JSON/PK结果、VisitPack1 facts/digest/原started-ended语义，新增只读V2投影。schema6优先；按精确UTC保留审计与采样归属，同日显示合并不抹去中间事实。Timeline只列时期和LAB/REVIEW/MILESTONE/APPOINTMENT，统一视图、当前置顶、旧事实不被90天隐藏，未来事件单列Upcoming，History保持完整。里程碑提交成功后关闭、saving防双击、反馈/定位、失败留草稿、区分写库成功而refresh失败。四语、full-only、原签名、不改PK/库存、不发布、不用真实数据。
 
 附件Phase 1明确：“如果第8点无法安全解决，停下并报告，不要偷偷做schema migration。”本次源码扫描确认跨版本slot身份缺失，旧非均匀剂量无法同时可靠识别提醒移动和剂量分配交换，已按此条件暂停功能实现。详见design/treatment-period-timeline-scan.md；没有自行决定schema7。下一步需明确是否接受旧歧义对应关系保留unknown及有限保证，再评估未来操作身份记录，不能猜旧历史。此次完成扫描及文档状态纠正，未改功能/版本/数据库、未构建新APK。
+
+2026-10-07 用户回复“继续”：按上次报告的保守范围继续实施。旧非均匀剂量若仅交换相同剂量集合，时段对应关系明确未知，不宣称能可靠恢复所有历史分配改变；保留raw changes用于核对。均匀剂量与明确集合/频率/成分/途径变化正常判定，时钟排序不作为身份。第一批保持schema6，旧签名/Context1/VisitPack1不动。未来稳定slot身份/显式操作记录另行设计，当前编辑不得静默丢弃既有dose_override。
