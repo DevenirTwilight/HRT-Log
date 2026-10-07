@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
     @Query("SELECT * FROM regimen_rule_link") suspend fun regimenLinks():List<RegimenRuleLinkEntity>
     @Insert suspend fun regimenLink(value:RegimenRuleLinkEntity)
     @Query("SELECT * FROM milestone ORDER BY date,id") suspend fun milestones():List<MilestoneEntity>
-    @Upsert suspend fun milestone(value:MilestoneEntity)
+    @Upsert suspend fun milestone(value:MilestoneEntity):Long
     @Query("DELETE FROM milestone WHERE id=:id") suspend fun deleteMilestone(id:Long)
     @Query("SELECT * FROM medication ORDER BY sort_order, id") fun observeMedications(): Flow<List<MedicationEntity>>
     @Query("SELECT * FROM medication ORDER BY id") suspend fun medications(): List<MedicationEntity>

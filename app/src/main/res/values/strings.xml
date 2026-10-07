@@ -831,4 +831,20 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="visit_milestones">Milestones</string>
     <string name="visit_packages_current">Current package details; they do not show changes during the period.</string>
     <string name="visit_questions">Questions for this visit</string>
+    <string name="milestone_saving">Saving…</string>
+    <string name="milestone_saved">Milestone saved</string>
+    <string name="milestone_saved_refresh_failed">Milestone saved. Refresh could not finish; do not save it again.</string>
+    <string name="period_timeline_intro">Treatment periods and important events. Individual doses are in History.</string>
+    <string name="period_current">Current period</string>
+    <string name="period_past">Past period</string>
+    <string name="period_upcoming">Upcoming</string>
+    <string name="period_future_note">Future events are separate from recorded treatment periods.</string>
+    <string name="period_slot_unknown">Dose slot correspondence was not recorded. Reminder moves and dose swaps cannot be distinguished.</string>
+    <string name="period_same_day">Several changes were recorded this day. The summary shows the final recorded standard; exact changes remain available.</string>
+    <string name="period_saved_changes">Recorded plan changes</string>
+    <string name="period_unknown_note">No recorded regimen establishes the treatment standard for these events.</string>
+    <string name="period_frequency_hours">%1$d dose(s) every %2$d hour(s)</string>
+    <string name="period_frequency_weeks">%1$d dose(s) every %2$d week(s)</string>
+    <string name="period_frequency_days">%1$d dose(s) every %2$d day(s)</string>
+    <string name="period_current_mapping">Current display mapping · regimen versions: %1$s. The saved context above is unchanged.</string>
 </resources>

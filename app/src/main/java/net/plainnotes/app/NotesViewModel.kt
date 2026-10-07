@@ -23,6 +23,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     // One activity owns one data space; an old activity must never follow a shell switch.
     private val repo=repository.pinnedTo(Space.PRIMARY)
     private var refreshJob:Job?=null
+    private var refreshRevision=0L
     private var concJob:Job?=null
     private var readFailureShown=false
     private suspend fun <T> mutate(block:suspend()->T):T = reminders.mutate(block)
@@ -57,7 +58,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
                     ExtraState(dao.records(),dao.containers(),repo.checkinItems(),dao.scores("0001-01-01",today.toString()),dao.notes("0001-01-01",today.toString()),upcoming,dao.stageReviews(),dao.symptomChecks("0001-01-01",today.toString()),dao.reviewEffects(),dao.regimens(),dao.regimenLinks(),dao.milestones(),dao.labs(),dao.labContexts(),dao.visitQuestions(),dao.visitPacks())
             }
             ensureActive()
-            mutable.value=snapshot.first.copy(error=mutable.value.error);extra.value=snapshot.second;readFailureShown=false
+            mutable.value=snapshot.first.copy(error=mutable.value.error);extra.value=snapshot.second;refreshRevision++;readFailureShown=false
             loadConcentration()
         }catch(e:CancellationException){throw e}catch(e:Exception){readFailure(e)} }.also{refreshJob=it}
     }
@@ -69,7 +70,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         editor.value=EditMedication(m,m?.let{repo.profile(it.id)},r,t)
     }catch(e:CancellationException){throw e}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)} }
     fun closeEditor(){editor.value=null}
-    fun save(d:net.plainnotes.app.ui.MedicationDraft)=change {repo.saveMedication(d.medication,d.ester,d.kind,d.interval,d.times,d.weekdays,pk=d.pk,resizeContainers=d.resizeContainers);editor.value=null}
+    fun save(d:net.plainnotes.app.ui.MedicationDraft)=change {repo.saveMedication(d.medication,d.ester,d.kind,d.interval,d.times,d.weekdays,pk=d.pk,resizeContainers=d.resizeContainers,timeDoses=d.timeDoses);editor.value=null}
     fun confirmHistoricalContext(m:MedicationEntity,p:ProfileEntity?,from:LocalDate,to:LocalDate)=change{repo.confirmHistoricalContext(m,p,from,to)}
     fun editById(id:Long){state.value.medications.firstOrNull{it.id==id}?.let{edit(it)}}
 
@@ -123,7 +124,20 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     fun setNote(date:LocalDate,text:String)=mutateExtra{repo.setNote(date,text)}
     fun saveCheckinItem(v:CheckinItemEntity)=mutateExtra{repo.saveCheckinItem(v)}
     fun saveReview(v:StageReviewEntity)=mutateExtra{repo.saveStageReview(v)}
-    fun saveMilestone(value:MilestoneEntity)=mutateExtra{repo.saveMilestone(value)}
+    private val milestoneSaving=net.plainnotes.app.timeline.MilestoneSaving(viewModelScope,{value,committed->
+        mutate {
+            val saved=repo.saveMilestone(value)
+            committed(saved) // transaction has returned: subsequent reminder errors cannot undo it
+            extra.update{it.copy(milestones=(it.milestones.filterNot{row->row.id==saved.id}+saved).sortedWith(compareBy({row->row.date},{row->row.id})))}
+        }
+    },{
+        val before=refreshRevision
+        refresh().join()
+        refreshRevision>before
+    })
+    val milestoneSave=milestoneSaving.state
+    fun saveMilestone(value:MilestoneEntity)=milestoneSaving.save(value)
+    fun clearMilestoneSave()=milestoneSaving.clear()
     fun deleteMilestone(id:Long)=mutateExtra{repo.deleteMilestone(id)}
     fun deleteReview(id:Long)=mutateExtra{repo.deleteStageReview(id)}
     fun confirmMissed(id:Long)=change{repo.confirmMissed(id)}

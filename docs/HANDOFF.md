@@ -20,6 +20,13 @@
 - 里程碑“开始激素治疗保存没反应”根因已用合成探针确认：保存成功，但时间线默认只显示最近90天、阶段视图不列里程碑，旧日期的里程碑被过滤，且没有保存提示。属UI层；最小修复与回归测试列在设计第一部分。探针测试未提交。
 - 前会话提及按钮大小审计，未列入本次附件范围，本轮不处理；如有后续任务另行核对，不把不存在的报告视为完成。
 
+## build12 修订实现检查点（2026-10-07，尚未交付）
+
+- 已写入MilestoneSaving：事务提交回执与提醒/refresh错误分开；保存ID回传、busy防重复、失败留草稿、saveable恢复。Timeline移除默认90天与双视图，成功后滚动并打开该source，四语反馈。
+- 新增domain/TreatmentPeriods与app/timeline/PeriodTimeline：clock无关V2、多药精确组合与同日显示分组；旧V1 builder/signature/Context1/VisitPack1源码未改。主列表仅时期+LAB/REVIEW/MILESTONE/APPOINTMENT，未来事件Upcoming；simple不显示药物/标题/备注；原始变更独立查看。
+- MedicationEditor移动钟点携带override；repository接收显式对应剂量，缺对应信息时拒绝非均匀计划的破坏性编辑；未改schema或冻结JSON。非均匀集合相同的交换仍明确unknown，不声称恢复历史slot身份。
+- versionCode12/versionName0.2.0/schema6。初步domain39项及targeted app11/data7通过；UI包含400天Started、精确source、失败/busy与saveable恢复。尚需完整回归/lint/full debug-release/schema-manifest/原生迁移SQLCipher和正式签名；不是可交付APK或最终验收结论。
+
 ## 当前最新交付：Visit Pack 第一批 build 11（2026-10-07，已签名）
 
 开发分支已按用户指示快进合并回 `claude/new-session-1959qb`（`847df84`），以后只在该分支开发；`ccr-5165d4ec-vof9xq` 仅为本会话临时分支。需求 REQUIREMENTS §25，设计 [visit-pack-p1](design/visit-pack-p1.md)，合成验证 [visit-pack-verification](visit-pack-verification.md)。

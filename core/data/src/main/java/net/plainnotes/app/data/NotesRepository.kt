@@ -27,7 +27,9 @@ const val BACKFILL_MAX_DAYS=731L
     suspend fun saveMilestone(value:MilestoneEntity)=transaction{dao->
         LocalDate.parse(value.date);require(value.kind in listOf("CUSTOM","STARTED","ROUTE","SURGERY"))
         require(value.kind!="CUSTOM" || !value.title.isNullOrBlank())
-        dao.milestone(value.copy(title=value.title?.trim()?.takeIf{it.isNotEmpty()},note=value.note?.trim()?.takeIf{it.isNotEmpty()}))
+        val normalized=value.copy(title=value.title?.trim()?.takeIf{it.isNotEmpty()},note=value.note?.trim()?.takeIf{it.isNotEmpty()})
+        val inserted=dao.milestone(normalized)
+        normalized.copy(id=if(value.id==0L)inserted else value.id)
     }
     suspend fun deleteMilestone(id:Long)=transaction{it.deleteMilestone(id)}
     suspend fun appointments()=withContext(Dispatchers.IO){db().dao().appointments()}
@@ -90,7 +92,7 @@ const val BACKFILL_MAX_DAYS=731L
         val trigger=when(type){"SOON"->entry.slot.at.minusSeconds(entry.slot.soonMinutes.toLong()*60);"LATE"->entry.slot.at.plusSeconds(entry.slot.lateMinutes.toLong()*60+1);else->entry.slot.at}
         return entry.slot.takeIf{trigger.toEpochMilli()==source.trigger_utc}
     }
-    suspend fun saveMedication(value:MedicationEntity,ester:String?,kind:RuleKind,interval:Int,times:List<LocalTime>,weekdays:Set<DayOfWeek>,now:Instant=Instant.now(),pk:ProfileEntity?=null,resizeContainers:Boolean=false):Long=transaction { dao ->
+    suspend fun saveMedication(value:MedicationEntity,ester:String?,kind:RuleKind,interval:Int,times:List<LocalTime>,weekdays:Set<DayOfWeek>,now:Instant=Instant.now(),pk:ProfileEntity?=null,resizeContainers:Boolean=false,timeDoses:List<Double?>?=null):Long=transaction { dao ->
         RegimenHistory.seed(db().openHelper.writableDatabase)
         val effectiveNow=Instant.ofEpochMilli(now.toEpochMilli())
         require(value.name.isNotBlank() && value.dose_per_intake.isFinite() && value.dose_per_intake>0)
@@ -102,7 +104,16 @@ const val BACKFILL_MAX_DAYS=731L
         val snapshot=MedicationSnapshot.encode(value,newProfile)
         // Editing only metadata (name, stock, notifications, profile) keeps the plan: no new version, so no slot can appear twice.
         val current=dao.rules().filter { it.medication_id==id && it.effective_until_utc==null }.singleOrNull()
-        if(value.active && current!=null && samePlan(dao,current,value,kind,interval,times,weekdays,zone,snapshot)) {
+        val oldTimes=current?.let{dao.times(it.id)}.orEmpty()
+        require(timeDoses==null || timeDoses.size==times.size)
+        require(timeDoses.orEmpty().all{it==null || it.isFinite() && it>0})
+        fun clock(t:LocalTime)=t.withNano(0).format(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss"))
+        if(kind!=RuleKind.EVERY_N_HOURS && timeDoses==null && oldTimes.any{it.dose_override!=null})
+            require(times.map(::clock).toSet()==oldTimes.map{it.local_time}.toSet()){"Dose correspondence is required for a non-uniform plan edit"}
+        val wantedDoses=timeDoses ?: times.map{t->oldTimes.firstOrNull{it.local_time==clock(t)}?.dose_override}
+        require(times.distinct().size==times.size)
+        val desiredTimes=times.mapIndexed{i,t->TimeEntity(rule_id=0,local_time=clock(t),dose_override=wantedDoses[i])}
+        if(value.active && current!=null && samePlan(dao,current,value,kind,interval,times,weekdays,zone,snapshot,wantedDoses)) {
             if(current.config_snapshot!=snapshot) dao.updateRule(current.copy(config_snapshot=snapshot))
             saveProfile(dao,id,value,ester,pk)
             RegimenHistory.changed(dao,id,cut)
@@ -111,7 +122,7 @@ const val BACKFILL_MAX_DAYS=731L
         val cadenceUnchanged=current?.let{r->
             if(r.kind!=kind.name || r.interval!=interval || r.effective_zone!=zone.id) false else {
                 val proposed=r.copy(weekday_mask=weekdays.sumOf{1 shl (it.value-1)},dose_snapshot=value.dose_per_intake,config_snapshot=snapshot)
-                val newTimes=if(kind==RuleKind.EVERY_N_HOURS)emptyList() else times.distinct().map{TimeEntity(rule_id=r.id,local_time=it.withNano(0).format(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss")))}
+                val newTimes=if(kind==RuleKind.EVERY_N_HOURS)emptyList() else desiredTimes.map{it.copy(rule_id=r.id)}
                 RegimenDefinition.from(r,dao.times(r.id)).signature()==RegimenDefinition.from(proposed,newTimes).signature()
             }
         } ?: false
@@ -140,7 +151,7 @@ const val BACKFILL_MAX_DAYS=731L
             require(interval in 1..36500); require(kind!=RuleKind.WEEKLY || mask>0)
             require(kind==RuleKind.EVERY_N_HOURS || times.isNotEmpty())
             val rid=dao.rule(r)
-            if(kind!=RuleKind.EVERY_N_HOURS)times.distinct().forEach{dao.time(TimeEntity(rule_id=rid,local_time=it.withNano(0).format(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss")),dose_override=null))}
+            if(kind!=RuleKind.EVERY_N_HOURS)desiredTimes.forEach{dao.time(it.copy(rule_id=rid))}
         }
         RegimenHistory.changed(dao,id,cut);id
     }
@@ -153,14 +164,14 @@ const val BACKFILL_MAX_DAYS=731L
         profileFor(id,value,ester,pk)?.let{dao.profile(it)}
     }
     /** True when the edit leaves the plan as it is: same kind, interval, weekdays, times, dose, alert windows, zone and compound (the name may differ). */
-    private suspend fun samePlan(dao:NotesDao,r:RuleEntity,value:MedicationEntity,kind:RuleKind,interval:Int,times:List<LocalTime>,weekdays:Set<DayOfWeek>,zone:ZoneId,snapshot:String):Boolean {
+    private suspend fun samePlan(dao:NotesDao,r:RuleEntity,value:MedicationEntity,kind:RuleKind,interval:Int,times:List<LocalTime>,weekdays:Set<DayOfWeek>,zone:ZoneId,snapshot:String,timeDoses:List<Double?>):Boolean {
         val mask=weekdays.sumOf{1 shl (it.value-1)}
         val ruleTimes=dao.times(r.id)
         val wanted=if(kind==RuleKind.EVERY_N_HOURS) emptySet() else times.map{it.withNano(0).format(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss"))}.toSet()
         fun compound(json:String)=JSONObject(json).let{o->listOf("molecule","route","unit","ester").map{k->if(o.isNull(k))null else o.opt(k)?.toString()}}
         return r.kind==kind.name && r.interval==interval && r.weekday_mask==mask && r.effective_zone==zone.id &&
             r.dose_snapshot==value.dose_per_intake && r.soon_snapshot==value.soon_alert_minutes && r.late_snapshot==value.late_after_minutes &&
-            ruleTimes.all{it.dose_override==null} && ruleTimes.map{it.local_time}.toSet()==wanted && ruleTimes.size==wanted.size &&
+            (kind==RuleKind.EVERY_N_HOURS || ruleTimes.associate{it.local_time to it.dose_override}==times.mapIndexed{i,t->t.withNano(0).format(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss")) to timeDoses[i]}.toMap()) && ruleTimes.map{it.local_time}.toSet()==wanted && ruleTimes.size==wanted.size &&
             compound(r.config_snapshot)==compound(snapshot) &&
             MedicationSnapshot.decode(r.config_snapshot,r.medication_id)?.profile==MedicationSnapshot.decode(snapshot,r.medication_id)?.profile
     }

@@ -82,4 +82,32 @@ class RegimenHistoryTest {
         assertEquals(2.0,RegimenDefinition.read(db.dao().regimens().single().definition_json).dose,0.0)
     }
 
+    @Test fun nonuniformReminderMovePreservesSlotDosesFrozenVersionsAndBackupLinks()=runBlocking {
+        val id=repo.saveMedication(med,"EV",RuleKind.EVERY_N_DAYS,1,listOf(LocalTime.of(8,0),LocalTime.of(20,0)),emptySet(),now,timeDoses=listOf(1.0,2.0))
+        val original=db.dao().regimens().single()
+        repo.saveMedication(med.copy(id=id),"EV",RuleKind.EVERY_N_DAYS,1,listOf(LocalTime.of(21,0),LocalTime.of(20,0)),emptySet(),now.plusSeconds(86400),timeDoses=listOf(1.0,2.0))
+        val current=repo.rules().last()
+        assertEquals(mapOf("21:00:00" to 1.0,"20:00:00" to 2.0),db.dao().times(current.id).associate{it.local_time to it.dose_override})
+        val closed=db.dao().regimens().first()
+        assertEquals(original.definition_json,closed.definition_json);assertEquals(original.clinical_signature,closed.clinical_signature)
+        RegimenHistory.validateLinks(db.openHelper.writableDatabase)
+        val before=db.dao().regimens();val password="synthetic-password".toCharArray()
+        repo.restoreBackup(repo.exportBackup(password),password)
+        assertEquals(before,db.dao().regimens());RegimenHistory.validateLinks(db.openHelper.writableDatabase)
+        // A time-only caller without correspondence must not silently erase nonuniform doses.
+        try{repo.saveMedication(med.copy(id=id),"EV",RuleKind.EVERY_N_DAYS,1,listOf(LocalTime.NOON),emptySet(),now.plusSeconds(2*86400));fail()}catch(_:IllegalArgumentException){}
+        assertEquals(before,db.dao().regimens())
+    }
+    @Test fun startedMilestoneCRUDUsesCommittedIdsAllowsEmptyTitleAndRollsBackFailure()=runBlocking {
+        val oldDate="2025-01-01"
+        val first=repo.saveMilestone(MilestoneEntity(date=oldDate,kind="STARTED"))
+        val second=repo.saveMilestone(MilestoneEntity(date=oldDate,kind="STARTED"))
+        assertTrue(first.id>0);assertNotEquals(first.id,second.id);assertNull(first.title)
+        val changed=repo.saveMilestone(first.copy(date="2025-01-02",note="Synthetic edited"))
+        assertEquals(first.id,changed.id);assertEquals(2,db.dao().milestones().size)
+        try{repo.saveMilestone(first.copy(kind="CUSTOM",title=null));fail()}catch(_:IllegalArgumentException){}
+        assertEquals(changed,db.dao().milestones().first{it.id==first.id})
+        repo.deleteMilestone(first.id);assertEquals(listOf(second),db.dao().milestones())
+    }
+
 }

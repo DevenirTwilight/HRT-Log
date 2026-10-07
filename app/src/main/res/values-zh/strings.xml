@@ -831,4 +831,20 @@
     <string name="visit_milestones">里程碑</string>
     <string name="visit_packages_current">当前包装信息，不代表区间内的变化。</string>
     <string name="visit_questions">本次想问的问题</string>
+    <string name="milestone_saving">正在保存…</string>
+    <string name="milestone_saved">里程碑已保存</string>
+    <string name="milestone_saved_refresh_failed">里程碑已保存，但刷新未完成；请勿重复保存。</string>
+    <string name="period_timeline_intro">治疗时期与重要事件。每一次服药请在历史中查看。</string>
+    <string name="period_current">当前时期</string>
+    <string name="period_past">过去时期</string>
+    <string name="period_upcoming">即将发生</string>
+    <string name="period_future_note">未来事件独立显示，不归入已发生的治疗时期。</string>
+    <string name="period_slot_unknown">未记录剂量时段的对应关系，无法区分移动提醒与交换时段剂量。</string>
+    <string name="period_same_day">当天记录了多次变化。摘要显示当天最终记录的方案，精确变化仍可查看。</string>
+    <string name="period_saved_changes">查看原始方案变化</string>
+    <string name="period_unknown_note">这些事件没有可证实治疗标准的方案记录。</string>
+    <string name="period_frequency_hours">每 %2$d 小时 %1$d 次</string>
+    <string name="period_frequency_weeks">每 %2$d 周 %1$d 次</string>
+    <string name="period_frequency_days">每 %2$d 天 %1$d 次</string>
+    <string name="period_current_mapping">当前显示归属 · 方案版本：%1$s。上方保存的上下文保持不变。</string>
 </resources>

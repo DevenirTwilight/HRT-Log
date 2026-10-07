@@ -30,7 +30,7 @@ fun estersFor(route: String) = when (route) { "INJECTION" -> listOf("EV", "EC", 
 private val GEL_SITES = listOf("ARM", "THIGH", "ABDOMEN", "SCROTAL")
 
 class MedicationDraft(val medication: MedicationEntity, val ester: String?, val kind: RuleKind, val interval: Int, val times: List<LocalTime>,
-                      val weekdays: Set<DayOfWeek>, val pk: ProfileEntity?, val resizeContainers: Boolean = false)
+                      val weekdays: Set<DayOfWeek>, val pk: ProfileEntity?, val resizeContainers: Boolean = false, val timeDoses: List<Double?>? = null)
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable fun MedicationEditor(edit: EditMedication, onDismiss: () -> Unit, inDialog: Boolean = true,
@@ -57,6 +57,7 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
     var kind by remember { mutableStateOf(edit.rule?.kind?.let(RuleKind::valueOf) ?: RuleKind.EVERY_N_DAYS) }
     var interval by remember { mutableStateOf(edit.rule?.interval?.toString() ?: if (review != null && prefill?.optBoolean("daily") != true) "" else "1") }
     val times = remember { mutableStateListOf<LocalTime>().apply { addAll(edit.times.map { LocalTime.parse(it.local_time) }.sorted().ifEmpty { prefillTimes.ifEmpty { listOf(LocalTime.of(9, 0)) } }) } }
+    val timeDoses = remember { mutableStateListOf<Double?>().apply { addAll(if(edit.times.isEmpty()) times.map{null} else edit.times.sortedBy{it.local_time}.map{it.dose_override}) } }
     val weekdays = remember { mutableStateListOf<DayOfWeek>().apply { edit.rule?.let { r -> addAll(DayOfWeek.entries.filter { r.weekday_mask and (1 shl (it.value - 1)) != 0 }) } } }
     // PK inputs (estradiol only)
     var slTier by remember { mutableStateOf(p?.sl_tier) }
@@ -88,7 +89,7 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
                         if (isE2) ester else null, kind, intervalV!!, times.toList(), weekdays.toSet(),
                         if (isE2) ProfileEntity(m?.id ?: 0, ester, "", slTier.takeIf { route == "SUBLINGUAL" }, gelProduct.takeIf { route == "GEL" }, gelSite.takeIf { route == "GEL" },
                             resolvedArea.takeIf { route == "GEL" }, patchRate.toDoubleOrNull()?.takeIf { route == "PATCH" && it > 0 }) else null,
-                        resizeContainers = resize))
+                        resizeContainers = resize, timeDoses = timeDoses.toList()))
                 }) { Text(stringResource(R.string.save)) } })
         }) { pad ->
             Column(Modifier.padding(pad).fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -157,16 +158,16 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
                     // Times a day: fills evenly spaced times only (each stays editable); the dose always stays the user's own entry.
                     TimesPerDayRow(if (kind == RuleKind.EVERY_N_HOURS) 1 else times.size.coerceIn(1, MAX_TIMES_PER_DAY)) { n ->
                         kind = RuleKind.EVERY_N_DAYS; interval = "1"
-                        times.clear(); times.addAll(evenTimes(n))
+                        if(n!=times.size) { times.clear(); times.addAll(evenTimes(n)); timeDoses.clear(); timeDoses.addAll(times.map{null}) }
                     }
                     Text(stringResource(R.string.times_per_day_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     if (kind != RuleKind.EVERY_N_HOURS) {
                         Text(stringResource(R.string.times_label), style = MaterialTheme.typography.labelLarge)
                         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                             times.forEachIndexed { i, t ->
-                                InputChip(true, { pickTime = i }, label = { Text(formatTime(t)) },
+                                InputChip(true, { pickTime = i }, label = { Text(formatTime(t)+(timeDoses.getOrNull(i)?.let{" · "+formatDose(it,unit)} ?: "")) },
                                     trailingIcon = if (times.size > 1) ({
-                                        IconButton(onClick = { times.removeAt(i) }, Modifier.size(24.dp)) { Icon(Icons.Outlined.Close, stringResource(R.string.remove), Modifier.size(18.dp)) }
+                                        IconButton(onClick = { times.removeAt(i); timeDoses.removeAt(i) }, Modifier.size(24.dp)) { Icon(Icons.Outlined.Close, stringResource(R.string.remove), Modifier.size(18.dp)) }
                                     }) else null)
                             }
                             AssistChip({ pickTime = -1 }, label = { Text(stringResource(R.string.add_time)) }, leadingIcon = { Icon(Icons.Outlined.Add, null, Modifier.size(18.dp)) })
@@ -204,8 +205,9 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
     if (inDialog) Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) { body() } else body()
     pickTime?.let { idx ->
         TimePickerModal(if (idx >= 0) times[idx] else LocalTime.of(21, 0), { pickTime = null }) { t ->
-            if (idx >= 0) times[idx] = t else if (t !in times) times.add(t)
-            val sorted = times.distinct().sorted(); times.clear(); times.addAll(sorted)
+            if (t !in times || idx >= 0 && times[idx]==t) {
+                if (idx >= 0) times[idx] = t else { times.add(t); timeDoses.add(null) }
+            }
         }
     }
 }

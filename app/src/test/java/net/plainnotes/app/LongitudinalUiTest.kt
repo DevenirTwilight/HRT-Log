@@ -31,4 +31,29 @@ class LongitudinalUiTest {
         ui.onAllNodesWithText("Synthetic sensitive title").assertCountEquals(0)
         ui.onAllNodesWithText("Synthetic sensitive note").assertCountEquals(0)
     }
+    @Test fun historicalStartedMilestoneIsVisibleAndOpensItsExactSourceWithoutInferringStart() {
+        val oldDate=java.time.LocalDate.now().minusDays(400).toString()
+        val extra=NotesViewModel.ExtraState(milestones=listOf(MilestoneEntity(42,oldDate,kind="STARTED",note="Synthetic exact-source note")))
+        ui.setContent{MaterialTheme{LongitudinalScreen(NotesState(loading=false),extra,{},{},{},PaddingValues())}}
+        ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag("timeline:milestone:42"))
+        ui.onNodeWithTag("timeline:milestone:42").performClick()
+        ui.onNodeWithText("Synthetic exact-source note").assertIsDisplayed()
+    }
+    @Test fun failedSaveKeepsDraftAndSavingDisablesRepeatWhileStateRestorationPreservesInput() {
+        val restoration=androidx.compose.ui.test.junit4.StateRestorationTester(ui)
+        val result=androidx.compose.runtime.mutableStateOf(net.plainnotes.app.timeline.MilestoneSaveState())
+        var calls=0
+        restoration.setContent{MaterialTheme{LongitudinalScreen(NotesState(loading=false),NotesViewModel.ExtraState(),{calls++;result.value=net.plainnotes.app.timeline.MilestoneSaveState(saving=true)},{},{},PaddingValues(),saveState=result.value)}}
+        ui.onNodeWithText(ui.activity.getString(R.string.milestone_add)).performClick()
+        ui.onNodeWithText(ui.activity.getString(R.string.milestone_title)).performTextInput("Synthetic restored draft")
+        restoration.emulateSavedInstanceStateRestore()
+        ui.onNodeWithText("Synthetic restored draft").assertExists()
+        ui.onNodeWithText(ui.activity.getString(R.string.save)).performClick()
+        ui.onNodeWithText(ui.activity.getString(R.string.milestone_saving)).assertIsNotEnabled()
+        ui.runOnIdle{assertEquals(1,calls);result.value=net.plainnotes.app.timeline.MilestoneSaveState(failed=true)}
+        ui.onNodeWithText("Synthetic restored draft").assertExists()
+        ui.onNodeWithText(ui.activity.getString(R.string.operation_error)).assertExists()
+        ui.onNodeWithText(ui.activity.getString(R.string.save)).assertIsEnabled()
+    }
+
 }

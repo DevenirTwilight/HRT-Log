@@ -73,6 +73,7 @@ class UiPrefs(context: Context) {
     val override by model.override.collectAsStateWithLifecycle()
     val conc by model.conc.collectAsStateWithLifecycle()
     val extra by model.extra.collectAsStateWithLifecycle()
+    val milestoneSave by model.milestoneSave.collectAsStateWithLifecycle()
     val importedLink by model.importedLink.collectAsStateWithLifecycle()
     val notificationSlot by model.notificationSlot.collectAsStateWithLifecycle()
     var destination by rememberSaveable { mutableStateOf(Destination.CALENDAR) }
@@ -193,7 +194,7 @@ class UiPrefs(context: Context) {
                     net.plainnotes.app.timeline.EventKind.SYMPTOM,net.plainnotes.app.timeline.EventKind.WELLBEING,net.plainnotes.app.timeline.EventKind.REVIEW->Destination.WELLBEING
                     net.plainnotes.app.timeline.EventKind.APPOINTMENT->Destination.VISITS
                     else->Destination.HISTORY
-                }},pad){visitId=it;destination=Destination.VISITS}
+                }},pad,onAppointment={visitId=it;destination=Destination.VISITS},saveState=milestoneSave,onSaveHandled=model::clearMilestoneSave)
                 Destination.VISITS -> VisitsScreen(state, extra, model, visitId, { visitId = it }, { appointment = true }, pad)
                 Destination.HISTORY -> HistoryScreen(state, extra.records, { editRecord = it }, { deleteRecord = it }, pad, onAdd = { manual = true }, onBatch = { batch = true }, onLink = model::prepareImportedLink,onConfirmMissed={model.confirmMissed(it.id)})
                 Destination.STOCK -> StockScreen(state, extra.containers, extra.records, { m -> model.replaceContainer(m.id, m.container_capacity) }, { c, m -> adjustStock = c to m }, { addStock = it }, pad,onInfo={packageInfo=it})
