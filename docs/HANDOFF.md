@@ -8,6 +8,11 @@
 
 用户要求修复导入内容不体现在Timeline，并再实现一批；用户反馈TalkBack没问题。根因：导入仅实际records，没有可信方案时Timeline不读取它们；refresh已读取records。设计见design/imported-timeline-history-p1.md、需求§28。本批：只读按时期/未知区导入摘要，用户填写暂停/停用/恢复历史里程碑，不自动修改方案/提醒、不推断旧频率。保持schema6表结构、旧key/Context1/VisitPack1/PK，full/build13原签名。源码已实现：按时期/未知区/Upcoming聚合两类导入，不造方案；详情只读冻结药物/剂量/状态，按源ID打开History，默认all并可清除筛选；records加入remember依赖。PAUSED/STOPPED/RESUMED共用allowlist，onOpen/restore校验同步、UI/PDF四语。schema6、build13。首轮data回归通过；完整轮新增跨层测试因Robolectric错误启动正式Application的receiver权限失败，已改测试application=android.app.Application隔离数据库（不是修改正式manifest）。最终完整测试/lint/release/native测试APK构建正在/workspace/tooling/build13-final-checks.log运行，不能把初轮失败写成全部通过。增加了两项原生导入摘要/简单模式验收，尚未执行。验证进展：旧来源History界面测试最初只查到屏幕上的药物筛选chip（原行在屏幕外），已补独立source tag并真实滚动断言；本机261项（app120/data58/domain39/pk18/importer12/reminder14）260通过/1既有PDF跳过。正在继续lint/release构建；UI截图图形模式最后调整需再跑app单元（初次legacy图形截图为空白，不能称已视觉验收）。源码tags与UI验证修正本次提交；CI新提交需等待最终结论。原生测试APK编译发现新增测试wildcard导入同时带入多个模块R，已显式导入app.R修正；正式APK功能源码未变，原生测试/最终构建仍需重跑。尚无新APK。稳定slot身份和完整停用状态仍未实现。
 
+## 待用户审核：按钮大小一致性（2026-10-07，另一会话并行）
+
+**待办：按钮大小一致性（REQUIREMENTS §29）**——审计结果与建议修复方案见 [ui-button-consistency](ui-button-consistency.md)，证据截图在 `docs/ui-audit/`，审计测试 `app/src/testFull/.../audit/ButtonAuditTest.kt`（仅在 `BUTTON_AUDIT=1` 时运行）。等用户审核后再改界面。严重项：库存卡三按钮、日期/时间按钮截断、复诊页编辑/删除行、编辑药物频率截断、设置主题/对比度两行不一致。
+审计基于 `ab983c5`（早于本分支的 build 12–13 时间线重写），只记录、未改界面；修复前需按当前代码重新核对行号，可用同一审计测试重跑。
+
 ## 当前最新交付：Treatment Period / Timeline build12（2026-10-07，完成）
 
 指定分支`claude/new-session-1959qb`；功能主体`dbb9688`，长列表/兼容`2c3b68b`，最终功能`b0dc178`。versionCode12/versionName0.2.0/schema6；需求§27，原始[扫描](design/treatment-period-timeline-scan.md)、[设计历史](design/epochs-timeline-p1-revision.md)、[验证与边界](treatment-period-timeline-verification.md)。用户在Phase 1报告后回复“继续”，按旧slot身份保留unknown的有限保证实施；不要求重新批准一般开发。
