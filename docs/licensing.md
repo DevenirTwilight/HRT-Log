@@ -65,3 +65,11 @@ Hi! I'm building an open-source Android HRT tracking app. Its concentration mode
 ## 0.2.0 紧急修复替换（build 4，2026-10-06）
 
 用户最新要求将公开版本名保留为 0.2.0，并替换原 Release。内部 versionCode 4，代码保留此前准备的独立文献引擎及所有已验证修复，不回退至旧移植引擎。此次附件与原 0.2.0/build 2 不同，第三方通知同步更新；旧上游许可状态仍作为历史记录，不能说已获得授权。用户已授权替换 Release 与标签，此决定覆盖上面的待通知限制；Git 历史仍保留旧代码。
+
+## 身心状态相关量表（2026-10-07）
+
+| 量表 | 版权方与条款（已核实，见 `docs/wellbeing-research.md` 第 5 节） | 状态 |
+|---|---|---|
+| GENDER-Q | © 2024 McMaster University and Brigham and Women's Hospital；非营利研究和临床免费但须向 McMaster 申请；PROM 电子平台提供方属商业许可对象（https://qportfolio.org/copyright-information/ ） | **候选，未获授权**。不得复制任何题目。 |
+| GCLS | Jones et al. 2019（DOI 10.1080/15532739.2018.1453425）；作者写 "freely available for use"，翻译须联系作者；文章 CC BY-NC-ND 4.0；嵌入应用、修改未说明 | **候选，未获授权**。不得复制任何题目。 |
+| PHQ-9 / GAD-7 | 计分筛查量表 | 不采用（算分即构成筛查判断，PHQ-9 涉及自伤问题）。 |
