@@ -120,4 +120,17 @@ class DataRefreshTest {
         }
     }
 
+    @Test fun milestoneAcknowledgementIsCommittedVisibleAndDuplicateClickDoesNotInsertTwice() {
+        val draft=MilestoneEntity(date=today.minusDays(400).toString(),kind="STARTED")
+        model.saveMilestone(draft);model.saveMilestone(draft)
+        await{model.milestoneSave.value.saved!=null}
+        val saved=model.milestoneSave.value.saved!!
+        assertTrue(saved.id>0);assertEquals(draft.date,saved.date)
+        assertTrue(model.extra.value.milestones.any{it.id==saved.id})
+        assertEquals(listOf(saved),runBlocking{db.dao().milestones()})
+        model.clearMilestoneSave();model.saveMilestone(saved.copy(kind="CUSTOM",title=null))
+        await{model.milestoneSave.value.failed}
+        assertEquals(listOf(saved),runBlocking{db.dao().milestones()})
+    }
+
 }

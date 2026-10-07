@@ -2,6 +2,7 @@ package net.plainnotes.app.ui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -38,7 +39,11 @@ import java.time.*
     var focusKey by rememberSaveable{mutableStateOf<String?>(null)}
     var feedback by rememberSaveable{mutableStateOf<Int?>(null)}
     val periods=projection.periods.filter{it.from<=Instant.now()}.asReversed()
-    val upcomingOffset=if(record.upcoming.isEmpty())0 else 1
+    val blocks=buildList<StoryBlock> {
+        if(record.upcoming.isNotEmpty()){add(StoryBlock("upcoming"));record.upcoming.forEach{add(StoryBlock(it.key,event=it))}}
+        periods.forEach{period->add(StoryBlock(period.key,period=period));record.eventsIn(period).forEach{add(StoryBlock(it.key,event=it))}}
+        if(record.unknownEvents.isNotEmpty() || periods.isEmpty()){add(StoryBlock("unknown"));record.unknownEvents.forEach{add(StoryBlock(it.key,event=it))}}
+    }
     LaunchedEffect(saveState.saved?.id) {
         saveState.saved?.let{saved->
             edit=null;focusKey="milestone:${saved.id}"
@@ -48,7 +53,7 @@ import java.time.*
     }
     LaunchedEffect(focusKey,record) {
         val target=focusKey?.let{key->(record.events+record.upcoming).firstOrNull{it.key==key}} ?: return@LaunchedEffect
-        val index=if(target in record.upcoming)2 else target.displayPeriodKey?.let{key->periods.indexOfFirst{it.key==key}.takeIf{it>=0}?.let{2+upcomingOffset+it}} ?: (2+upcomingOffset+periods.size)
+        val index=blocks.indexOfFirst{it.event?.key==target.key}+2
         list.animateScrollToItem(index)
         detailKey=target.key // exact source is visible even inside a large historical period
         focusKey=null
@@ -66,34 +71,28 @@ import java.time.*
         item(key="actions") {
             FilledTonalButton(onClick={onSaveHandled();edit=MilestoneEntity(date=LocalDate.now(zone).toString())},enabled=!saveState.saving){Text(stringResource(R.string.milestone_add))}
         }
-        if(record.upcoming.isNotEmpty())item(key="upcoming") {
-            SectionCard(stringResource(R.string.period_upcoming)) {
-                Text(stringResource(R.string.period_future_note),style=MaterialTheme.typography.bodySmall)
-                record.upcoming.forEach{EventRow(it,::open)}
-            }
-        }
-        periods.forEach{period->item(key=period.key) {
-            val current=period.contains(Instant.now())
-            SectionCard(stringResource(if(current)R.string.period_current else R.string.period_past)) {
-                val end=period.until?.minusNanos(1)?.atZone(zone)?.toLocalDate()
-                Text(formatDate(period.from.atZone(zone).toLocalDate())+" → "+(end?.let{formatDate(it)} ?: stringResource(R.string.epoch_ongoing)))
-                val standards=projection.standards.filter{it.key in period.finalStandardSpanKeys}
-                if(standards.isEmpty())Text(stringResource(R.string.epoch_no_plan))
-                if(!simple)standards.forEach{span->
-                    val raw=extra.regimens.first{it.id==span.rawVersionIds.first()}
-                    StandardSummary(raw,span.standard)
-                    if(span.standard.slotIdentityUnknown)Text(stringResource(R.string.period_slot_unknown),style=MaterialTheme.typography.bodySmall)
+        items(blocks,key={it.key}){block->
+            val event=block.event;val period=block.period
+            when {
+                event!=null->Surface(modifier=Modifier.padding(start=12.dp),shape=MaterialTheme.shapes.medium,tonalElevation=1.dp){EventRow(event,::open)}
+                period!=null->{
+                    val current=period.contains(now)
+                    SectionCard(stringResource(if(current)R.string.period_current else R.string.period_past)) {
+                        val end=period.until?.minusNanos(1)?.atZone(zone)?.toLocalDate()
+                        Text(formatDate(period.from.atZone(zone).toLocalDate())+" → "+(end?.let{formatDate(it)} ?: stringResource(R.string.epoch_ongoing)))
+                        val standards=projection.standards.filter{it.key in period.finalStandardSpanKeys}
+                        if(standards.isEmpty())Text(stringResource(R.string.epoch_no_plan))
+                        if(!simple)standards.forEach{span->
+                            StandardSummary(extra.regimens.first{it.id==span.rawVersionIds.first()},span.standard)
+                            if(span.standard.slotIdentityUnknown)Text(stringResource(R.string.period_slot_unknown),style=MaterialTheme.typography.bodySmall)
+                        }
+                        if(period.segments.size>1)Text(stringResource(R.string.period_same_day),style=MaterialTheme.typography.bodySmall)
+                        if(standards.any{it.reconstructed})Text(stringResource(R.string.epoch_reconstructed),style=MaterialTheme.typography.bodySmall)
+                        if(!simple)TextButton(onClick={auditKey=period.key}){Text(stringResource(R.string.period_saved_changes))}
+                    }
                 }
-                if(period.segments.size>1)Text(stringResource(R.string.period_same_day),style=MaterialTheme.typography.bodySmall)
-                if(standards.any{it.reconstructed})Text(stringResource(R.string.epoch_reconstructed),style=MaterialTheme.typography.bodySmall)
-                record.eventsIn(period).forEach{EventRow(it,::open)}
-                if(!simple)TextButton(onClick={auditKey=period.key}){Text(stringResource(R.string.period_saved_changes))}
-            }
-        }}
-        if(record.unknownEvents.isNotEmpty() || periods.isEmpty())item(key="unknown") {
-            SectionCard(stringResource(R.string.timeline_epoch_unknown)) {
-                Text(stringResource(R.string.period_unknown_note),style=MaterialTheme.typography.bodySmall)
-                record.unknownEvents.forEach{EventRow(it,::open)}
+                block.key=="upcoming"->SectionCard(stringResource(R.string.period_upcoming)){Text(stringResource(R.string.period_future_note),style=MaterialTheme.typography.bodySmall)}
+                else->SectionCard(stringResource(R.string.timeline_epoch_unknown)){Text(stringResource(R.string.period_unknown_note),style=MaterialTheme.typography.bodySmall)}
             }
         }
     }
@@ -130,7 +129,7 @@ import java.time.*
 }
 @Composable private fun EventRow(event:PeriodEvent,onOpen:(PeriodEvent)->Unit) {
     TextButton(onClick={onOpen(event)},modifier=Modifier.fillMaxWidth().testTag("timeline:${event.key}")) {
-        Text(formatDate(event.date)+" · "+eventKindLabel(event.kind)+(if(LocalSimpleMode.current)"" else " · "+eventTitle(event)))
+        Text(formatDate(event.date)+" · "+eventKindLabel(event.kind)+(if(LocalSimpleMode.current)"" else " · "+eventTitle(event)),modifier=Modifier.fillMaxWidth())
     }
 }
 @Composable private fun EventDetail(event:PeriodEvent,extra:NotesViewModel.ExtraState,onDismiss:()->Unit,onEdit:(MilestoneEntity)->Unit,onDelete:(MilestoneEntity)->Unit) {
@@ -144,7 +143,19 @@ import java.time.*
                     LabContextSection(v,extra.labContexts.filter{it.lab_id==v.id},null)
                     if(event.at!=null)Text(stringResource(R.string.period_current_mapping,event.exactRegimenIds.sorted().joinToString(", ").ifEmpty{"—"}),style=MaterialTheme.typography.bodySmall)
                 }
-                is EventSource.Review->listOfNotNull(s.value.tolerance_note,s.value.risk_note,s.value.satisfaction_note).forEach{Text(it)}
+                is EventSource.Review->{val v=s.value
+                    val effects=org.json.JSONObject(v.effects_json)
+                    REVIEW_EFFECTS.forEach{effect->
+                        effects.optString(effect.id).takeIf{it.isNotEmpty()}?.let{value->Text(stringResource(effect.label)+" · "+stringResource(when(value){"NOT_YET"->R.string.wb_not_yet;"NOTICED"->R.string.wb_noticed;else->R.string.wb_unsure}))}
+                        effects.optString(effect.id+":note").takeIf{it.isNotEmpty()}?.let{Text(it)}
+                    }
+                    listOfNotNull(v.tolerance_note,v.risk_note,v.satisfaction_note).forEach{Text(it)}
+                    v.smoking?.let{Text(stringResource(R.string.wb_smoking)+" · "+stringResource(if(it=="YES")R.string.yes else R.string.wb_no))}
+                    v.systolic?.let{Text(stringResource(R.string.wb_systolic)+" · $it")}
+                    v.diastolic?.let{Text(stringResource(R.string.wb_diastolic)+" · $it")}
+                    v.weight_kg?.let{Text(stringResource(R.string.wb_review_weight)+" · "+displayNumber(it))}
+                    v.satisfaction?.let{Text(stringResource(R.string.wb_satisfaction)+" · $it/5")}
+                }
                 is EventSource.Milestone->s.value.note?.let{Text(it)}
                 else->{}
             }
@@ -182,3 +193,5 @@ import java.time.*
 private val milestoneSaver=androidx.compose.runtime.saveable.Saver<MilestoneEntity?,List<String>>(
     save={v->v?.let{listOf(it.id.toString(),it.date,it.kind,it.title.orEmpty(),it.note.orEmpty())} ?: emptyList()},
     restore={v->v.takeIf{it.isNotEmpty()}?.let{MilestoneEntity(it[0].toLong(),it[1],it[2],it[3].takeIf(String::isNotEmpty),it[4].takeIf(String::isNotEmpty))}})
+
+private data class StoryBlock(val key:String,val period:DisplayPeriod?=null,val event:PeriodEvent?=null)

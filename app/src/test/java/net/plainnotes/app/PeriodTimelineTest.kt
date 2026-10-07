@@ -65,4 +65,25 @@ class PeriodTimelineTest {
         LabContext.validate(saved)
         assertEquals("epoch:${start.toEpochMilli()}:1",org.json.JSONObject(saved).getJSONObject("epoch").getString("key"))
     }
+    @Test fun reminderMergedDisplayDoesNotChangeLegacyEpochContextOrTemplateOneFactsAndDigest() {
+        val versions=listOf(version(1,start,cut,definition()),version(2,cut,null,definition("09:00:00")))
+        val lab=LabValueEntity(1,"E2",100.0,"pg/mL",cut.plusSeconds(3600).toEpochMilli(),"UTC")
+        val context=LabContext.build(lab,emptyList(),versions,emptyMap())
+        val appointment=AppointmentEntity(1,"ENDO",now.toEpochMilli(),"UTC",remind_minutes_before=0)
+        val d=net.plainnotes.app.export.ExportData(listOf(med),emptyMap(),emptyList(),listOf(lab),emptyList(),emptyList(),emptyList(),emptyMap(),{"Synthetic"},
+            regimens=versions,labContexts=listOf(LabContextEntity(1,1,1,now.toEpochMilli(),"AT_ENTRY",context)))
+        val from=start.atZone(zone).toLocalDate();val to=now.atZone(zone).toLocalDate()
+        val facts=VisitFacts.build(d,appointment,from,to,zone)
+        val spec=VisitPackSpec(appointment,from,to,setOf(VisitSection.FACTS,VisitSection.REGIMEN,VisitSection.LABS),emptyList(),emptyMap(),"Synthetic unknown")
+        val digest=VisitDigest.compute(d,spec,facts,"en",zone)
+        val original=versions.map{it.definition_json to it.clinical_signature}
+        val view=build(versions,NotesViewModel.ExtraState(labs=listOf(lab)))
+        assertEquals(1,view.projection.periods.size);assertEquals(2,TreatmentEpochs.build(versions.map{it.span()}).size)
+        assertEquals(2,facts.regimenStarted);assertEquals(1,facts.regimenEnded)
+        assertEquals("epoch:${cut.toEpochMilli()}:2",LabContext.validate(context).getJSONObject("epoch").getString("key"))
+        assertEquals(context,LabContext.build(lab,emptyList(),versions,emptyMap()))
+        assertEquals(digest,VisitDigest.compute(d,spec,VisitFacts.build(d,appointment,from,to,zone),"en",zone))
+        assertEquals(original,versions.map{it.definition_json to it.clinical_signature});assertEquals(1,VISIT_TEMPLATE_VERSION)
+    }
+
 }

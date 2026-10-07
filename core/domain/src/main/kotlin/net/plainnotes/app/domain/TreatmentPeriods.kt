@@ -42,13 +42,21 @@ object TreatmentPeriods {
         require(raw.all{it.span.until==null || it.span.until>it.span.from})
         val standards=raw.groupBy{it.span.medicationId}.toSortedMap().flatMap{(med,rows)->
             val result=mutableListOf<TreatmentStandardSpan>()
+            var currentIds=mutableListOf<Long>()
+            var previousSignature:String?=null
             rows.sortedWith(compareBy({it.span.from},{it.span.id})).forEach{r->
                 val prev=result.lastOrNull()
                 require(prev==null || prev.until!=null && prev.until<=r.span.from){"Overlapping recorded regimen"}
-                if(prev!=null && prev.until==r.span.from && prev.standard.therapySignatureV2()==r.standard.therapySignatureV2())
-                    result[result.lastIndex]=prev.copy(until=r.span.until,rawVersionIds=prev.rawVersionIds+r.span.id,reconstructed=prev.reconstructed||r.span.reconstructed)
-                else result+=TreatmentStandardSpan("standard-v2:$med:${r.span.from.toEpochMilli()}:${r.span.id}",med,r.span.from,r.span.until,listOf(r.span.id),r.standard,r.span.reconstructed)
-            };result
+                val signature=r.standard.therapySignatureV2()
+                if(prev!=null && prev.until==r.span.from && previousSignature==signature) {
+                    currentIds.add(r.span.id)
+                    result[result.lastIndex]=prev.copy(until=r.span.until,reconstructed=prev.reconstructed||r.span.reconstructed)
+                } else {
+                    currentIds=mutableListOf(r.span.id)
+                    result+=TreatmentStandardSpan("standard-v2:$med:${r.span.from.toEpochMilli()}:${r.span.id}",med,r.span.from,r.span.until,currentIds,r.standard,r.span.reconstructed)
+                }
+                previousSignature=signature
+            };result.map{it.copy(rawVersionIds=it.rawVersionIds.toList())}
         }
         val starts=standards.groupBy{it.from};val ends=standards.filter{it.until!=null}.groupBy{it.until!!}
         val boundaries=(starts.keys+ends.keys).sorted();val active=mutableMapOf<Long,TreatmentStandardSpan>()
