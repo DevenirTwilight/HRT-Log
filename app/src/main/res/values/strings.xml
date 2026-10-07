@@ -330,19 +330,19 @@
 <string name="stock_sealed">%1$d unopened in reserve</string>
 <string name="stock_start">Start tracking</string>
 <string name="stock_unallocated">%1$s taken while no stock was available</string>
-<string name="wb_aggressiveness">Aggressiveness</string>
+<string name="wb_aggressiveness">Irritability</string>
 <string name="wb_appetite">Appetite</string>
 <string name="wb_custom">New item</string>
-<string name="wb_emo_stability">Emotional stability</string>
+<string name="wb_emo_stability">Mood swings</string>
 <string name="wb_energy">Energy</string>
-<string name="wb_libido">Libido</string>
+<string name="wb_libido">Sex drive</string>
 <string name="wb_manage">Choose items</string>
 <string name="wb_mood">Mood</string>
 <string name="wb_no_data">No ratings in this period.</string>
 <string name="wb_note">Notes for the day</string>
-<string name="wb_overall">Overall</string>
+<string name="wb_overall">Overall feeling</string>
 <string name="wb_pain">Pain</string>
-<string name="wb_period_like">Period-like symptoms</string>
+<string name="wb_period_like">Cyclic discomfort</string>
 <string name="wb_prompt">Recorded. Rate how you feel today?</string>
 <string name="wb_prompt_action">Rate</string>
 <string name="wb_prompt_setting">Ask after an intake</string>
@@ -682,4 +682,5 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="wb_unofficial">Translation (unofficial)</string>
     <string name="wb_no">No</string>
     <string name="backup_newer_version">This backup was created by a newer app version. Update the app before restoring it.</string>
+    <string name="wb_review_delete_confirm">Delete this periodic review? Its entries will be removed.</string>
 </resources>

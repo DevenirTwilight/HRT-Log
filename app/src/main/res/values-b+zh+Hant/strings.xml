@@ -330,24 +330,24 @@
 <string name="stock_sealed">另有 %1$d 盒未開封</string>
 <string name="stock_start">開始記錄庫存</string>
 <string name="stock_unallocated">有 %1$s 是在沒有庫存時服用的</string>
-<string name="wb_aggressiveness">攻擊性</string>
+<string name="wb_aggressiveness">易怒</string>
 <string name="wb_appetite">食慾</string>
 <string name="wb_custom">新項目</string>
-<string name="wb_emo_stability">情緒穩定性</string>
+<string name="wb_emo_stability">情緒起伏</string>
 <string name="wb_energy">精力</string>
 <string name="wb_libido">性慾</string>
 <string name="wb_manage">管理項目</string>
 <string name="wb_mood">情緒</string>
 <string name="wb_no_data">這段時間還沒有打分。</string>
 <string name="wb_note">當天備註</string>
-<string name="wb_overall">整體狀態</string>
+<string name="wb_overall">整體感受</string>
 <string name="wb_pain">疼痛</string>
-<string name="wb_period_like">經期樣症狀</string>
+<string name="wb_period_like">週期性不適</string>
 <string name="wb_prompt">已記錄。要記一下今天的身心狀態嗎？</string>
 <string name="wb_prompt_action">去記錄</string>
 <string name="wb_prompt_setting">服藥後提醒記錄</string>
 <string name="wb_prompt_setting_desc">記錄服藥後，如果當天還沒打分，提示去記錄身心狀態</string>
-<string name="wb_skin">皮膚狀態</string>
+<string name="wb_skin">皮膚</string>
 <string name="wb_sleep">睡眠質量</string>
 <string name="wb_stats">趨勢統計</string>
 <string name="backup_bad_file">這不是相容的備份檔案，沒有做任何更改。</string>
@@ -682,4 +682,5 @@
     <string name="wb_unofficial">譯文（非官方）</string>
     <string name="wb_no">否</string>
     <string name="backup_newer_version">這份備份來自更新的應用版本，請先更新應用再還原。</string>
+    <string name="wb_review_delete_confirm">刪除這次階段回顧？其中的紀錄會被移除。</string>
 </resources>

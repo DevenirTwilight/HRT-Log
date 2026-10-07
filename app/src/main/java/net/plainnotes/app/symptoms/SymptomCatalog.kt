@@ -12,7 +12,7 @@ class Site(val site: String, val url: String, val revised: String?)
 class Action(val id: String, val text: String, val urgent: Boolean)
 class Entry(val source: Source, val group: String, val quote: String, val action: Action)
 class GroupNames(val en: String, val zh: String, val zhHant: String, val fr: String)
-class Monitoring(val id: String, val region: String, val whenMolecule: String, val publisher: String, val title: String, val url: String, val section: String, val quote: String)
+class Monitoring(val id: String, val region: String, val whenMolecule: String, val publisher: String, val title: String, val url: String, val section: String, val quote: String, val documentDate:String)
 class Reporting(val region: String, val publisher: String, val url: String, val quotes: List<String>)
 
 /** What a medication gets: entries from its sources, or one of the two "nothing to show" states. */
@@ -46,7 +46,7 @@ class SymptomCatalog(json: String) {
     val entries: List<Entry> = root.getJSONArray("entries").let { a -> (0 until a.length()).map { a.getJSONObject(it) }.map { o ->
         Entry(sources.getValue(o.getString("source")), o.getString("group"), o.getString("quote"), actions.getValue(o.getString("action"))) } }
     val monitoring: List<Monitoring> = root.getJSONArray("monitoring").let { a -> (0 until a.length()).map { a.getJSONObject(it) }.map { o ->
-        Monitoring(o.getString("id"), o.getString("region"), o.getString("when"), o.getString("publisher"), o.getString("title"), o.getString("url"), o.getString("section"), o.getString("quote")) } }
+        Monitoring(o.getString("id"), o.getString("region"), o.getString("when"), o.getString("publisher"), o.getString("title"), o.getString("url"), o.getString("section"), o.getString("quote"),o.getString("document_date")) } }
     val reporting: List<Reporting> = root.getJSONArray("reporting").let { a -> (0 until a.length()).map { a.getJSONObject(it) }.map { o ->
         Reporting(o.getString("region"), o.getString("publisher"), o.getString("url"), o.getJSONArray("quotes").let { q -> (0 until q.length()).map { q.getString(it) } }) } }
     private val rules = root.getJSONArray("rules").let { a -> (0 until a.length()).map { a.getJSONObject(it) } }

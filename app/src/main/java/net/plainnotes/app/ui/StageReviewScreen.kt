@@ -27,7 +27,7 @@ import java.time.LocalDate
         listOfNotNull(review.tolerance_note,review.risk_note,review.satisfaction_note).filter{it.isNotBlank()}.forEach{Text(it)}
         Row{TextButton(onClick={onEdit(review)}){Text(stringResource(R.string.edit))};TextButton(onClick={deleting=review}){Text(stringResource(R.string.remove))}}
     }}
-    deleting?.let{review->AlertDialog(onDismissRequest={deleting=null},text={Text(stringResource(R.string.history_delete_confirm))},confirmButton={TextButton(onClick={onDelete(review.id);deleting=null}){Text(stringResource(R.string.remove))}},dismissButton={TextButton(onClick={deleting=null}){Text(stringResource(R.string.cancel))}})}
+    deleting?.let{review->AlertDialog(onDismissRequest={deleting=null},text={Text(stringResource(R.string.wb_review_delete_confirm))},confirmButton={TextButton(onClick={onDelete(review.id);deleting=null}){Text(stringResource(R.string.remove))}},dismissButton={TextButton(onClick={deleting=null}){Text(stringResource(R.string.cancel))}})}
 }
 
 @Composable fun StageReviewDialog(review:StageReviewEntity?,reviews:List<StageReviewEntity>,checks:List<SymptomCheckEntity>,visibility:List<ReviewEffectEntity>,onDismiss:()->Unit,onSave:(StageReviewEntity)->Unit) {

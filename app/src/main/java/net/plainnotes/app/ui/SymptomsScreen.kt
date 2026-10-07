@@ -78,7 +78,7 @@ fun GroupNames.localized(locale:Locale):String=when(locale.language){"fr"->fr;"z
         }
     }
     val monitoring=catalog.monitoringFor(region,active.map{it.molecule}.toSet())
-    if(monitoring.isNotEmpty())SectionCard(stringResource(R.string.wb_monitoring)){monitoring.forEach{m->OriginalQuotation(m.quote);Text("${m.publisher} · ${m.title} · ${m.section}",style=MaterialTheme.typography.bodySmall);SourceLink(m.url)}}
+    if(monitoring.isNotEmpty())SectionCard(stringResource(R.string.wb_monitoring)){monitoring.forEach{m->OriginalQuotation(m.quote);Text("${m.publisher} · ${m.title} · ${m.documentDate} · ${m.section}",style=MaterialTheme.typography.bodySmall);SourceLink(m.url)}}
     catalog.reportingFor(region)?.let{report->SectionCard(stringResource(R.string.wb_about_symptoms)){Text(report.publisher);report.quotes.forEach{OriginalQuotation(it)};SourceLink(report.url)}}
 }
 

@@ -330,19 +330,19 @@
 <string name="stock_sealed">%1$d non entamé(s) en réserve</string>
 <string name="stock_start">Commencer le suivi</string>
 <string name="stock_unallocated">%1$s pris sans stock disponible</string>
-<string name="wb_aggressiveness">Agressivité</string>
+<string name="wb_aggressiveness">Irritabilité</string>
 <string name="wb_appetite">Appétit</string>
 <string name="wb_custom">Nouvel élément</string>
-<string name="wb_emo_stability">Stabilité émotionnelle</string>
+<string name="wb_emo_stability">Variations d\'humeur</string>
 <string name="wb_energy">Énergie</string>
-<string name="wb_libido">Libido</string>
+<string name="wb_libido">Désir sexuel</string>
 <string name="wb_manage">Choisir les éléments</string>
 <string name="wb_mood">Humeur</string>
 <string name="wb_no_data">Aucune note sur cette période.</string>
 <string name="wb_note">Notes du jour</string>
-<string name="wb_overall">État général</string>
+<string name="wb_overall">Ressenti général</string>
 <string name="wb_pain">Douleur</string>
-<string name="wb_period_like">Symptômes de type règles</string>
+<string name="wb_period_like">Inconfort cyclique</string>
 <string name="wb_prompt">Enregistré. Noter comment vous allez aujourd\'hui ?</string>
 <string name="wb_prompt_action">Noter</string>
 <string name="wb_prompt_setting">Proposer après une prise</string>
@@ -682,4 +682,5 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="wb_unofficial">Traduction (non officielle)</string>
     <string name="wb_no">Non</string>
     <string name="backup_newer_version">Cette sauvegarde provient d’une version plus récente de l’application. Mettez l’application à jour avant de la restaurer.</string>
+    <string name="wb_review_delete_confirm">Supprimer ce bilan périodique ? Ses saisies seront supprimées.</string>
 </resources>
