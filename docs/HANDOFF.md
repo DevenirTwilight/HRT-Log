@@ -415,3 +415,7 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 ### 2o. 废弃play（2026-10-07）
 
 用户要求记住并写入交接。已清理实际构建/CI/空实现/校验脚本，保留full flavor命名使现有full任务与安装兼容，不改schema/版本号/运行时逻辑。本轮不生成新APK。验证已完成：Gradle任务列表无play目标、assembleFullDebug成功；CI/源码变体无play，manifest检查只要求full并通过。本轮仅构建配置/接手规则变更，不重复运行运行时单元测试。源码24cd854已推送；full-only CI自动启动，其结果尚未核对，不称已完成CI。最新交付APK仍为full build9。
+
+### 2p. 后续已构想未实现清单（2026-10-07）
+
+用户要求继续前先说明。已核对schema4实体、化验界面（孕酮检测方法已有）、预约/复诊导出与原设计，更新hrt-roadmap当前状态表13项。优先仍Lab Context、Visit Pack/事实摘要，之后阶段导出与注射/库存；已实现Epoch/Timeline/里程碑/症状快照不重复算待办。本轮仅清单/文档，没有启动新功能、改版本或生成APK；仅full规则继续。
