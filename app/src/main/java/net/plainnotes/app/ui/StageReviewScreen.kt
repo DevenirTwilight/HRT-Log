@@ -61,7 +61,7 @@ import java.time.LocalDate
         val groups=SymptomCatalog.load().groups;val locale=androidx.compose.ui.platform.LocalContext.current.resources.configuration.locales[0]
         Text(stringResource(R.string.wb_period_symptoms))
         checks.filter{it.date>previous&&it.date<=date}.forEach{Text("${it.date} · ${groups[it.group_id]?.localized(locale)?:it.group_id}${it.note?.let{n->" · $n"}.orEmpty()}")}
-        Text("L'évaluation de la tolérance clinique est à considérer au même titre que les dosages sanguins.\nHAS 2025 · R45 · p. 21",style=MaterialTheme.typography.bodySmall)
+        OriginalQuotation("L'évaluation de la tolérance clinique est à considérer au même titre que les dosages sanguins.");Text("HAS 2025 · R45 · p. 21",style=MaterialTheme.typography.bodySmall)
         OutlinedTextField(tolerance,{tolerance=it},label={Text(stringResource(R.string.wb_other_tolerance))})
         HorizontalDivider();Text(stringResource(R.string.wb_risks),style=MaterialTheme.typography.titleMedium)
         OutlinedTextField(risks,{risks=it},label={Text(stringResource(R.string.wb_risk_note))})

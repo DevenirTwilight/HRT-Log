@@ -21,6 +21,12 @@ fun GroupNames.localized(locale:Locale):String=when(locale.language){"fr"->fr;"z
     TextButton(onClick={runCatching{context.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(url)))}}){Text(stringResource(R.string.wb_source))}
 }
 
+@Composable fun OriginalQuotation(text:String,urgent:Boolean=false) {
+    val locale=LocalContext.current.resources.configuration.locales[0]
+    Text(text,style=MaterialTheme.typography.bodySmall,color=if(urgent)MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant)
+    SourceTranslations.translation(text,locale)?.let{translated->Text(stringResource(R.string.wb_unofficial)+": "+translated,style=MaterialTheme.typography.bodySmall)}
+}
+
 @Composable fun SymptomsScreen(date:LocalDate,medications:List<MedicationEntity>,profiles:Map<Long,ProfileEntity>,checks:List<SymptomCheckEntity>,region:String?,
     onCheck:(LocalDate,String,Boolean,String?)->Unit) {
     val catalog=remember{SymptomCatalog.load()};val context=LocalContext.current;val locale=context.resources.configuration.locales[0]
@@ -48,7 +54,7 @@ fun GroupNames.localized(locale:Locale):String=when(locale.language){"fr"->fr;"z
                 }
                 // Source actions are always visible, exactly as written; urgency is never inferred from a selection.
                 g.entries.map{it.source to it.action}.distinctBy{it.first.id to it.second.id}.forEach{(source,action)->
-                    Text(source.publisher+": "+action.text,style=MaterialTheme.typography.bodySmall,color=if(action.urgent)MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(source.publisher,style=MaterialTheme.typography.labelSmall);OriginalQuotation(action.text,action.urgent)
                 }
                 if(saved!=null) key(date,g.id) {
                     var note by remember(saved.note){mutableStateOf(saved.note.orEmpty())}
@@ -57,7 +63,7 @@ fun GroupNames.localized(locale:Locale):String=when(locale.language){"fr"->fr;"z
                 }
                 if(expanded==g.id) g.entries.forEach{e->
                     Text(e.source.title,style=MaterialTheme.typography.titleSmall)
-                    Text(e.quote);Text(e.action.text)
+                    OriginalQuotation(e.quote);OriginalQuotation(e.action.text,e.action.urgent)
                     Text("${e.source.publisher} · ${e.source.region} · ${e.source.documentDate}\n${e.source.section}",style=MaterialTheme.typography.bodySmall)
                     if(e.source.thirdParty){Text(stringResource(R.string.wb_third_party));e.source.sites.forEach{site->Text("${site.site} · ${site.revised.orEmpty()}",style=MaterialTheme.typography.bodySmall);SourceLink(site.url)}}
                     if(e.source.note=="ARCHIVED_FR")Text(stringResource(R.string.wb_archived_fr))
@@ -68,8 +74,8 @@ fun GroupNames.localized(locale:Locale):String=when(locale.language){"fr"->fr;"z
         }
     }
     val monitoring=catalog.monitoringFor(region,active.map{it.molecule}.toSet())
-    if(monitoring.isNotEmpty())SectionCard(stringResource(R.string.wb_monitoring)){monitoring.forEach{m->Text(m.quote);Text("${m.publisher} · ${m.title} · ${m.section}",style=MaterialTheme.typography.bodySmall);SourceLink(m.url)}}
-    catalog.reportingFor(region)?.let{report->SectionCard(stringResource(R.string.wb_about_symptoms)){Text(report.publisher);report.quotes.forEach{Text(it)};SourceLink(report.url)}}
+    if(monitoring.isNotEmpty())SectionCard(stringResource(R.string.wb_monitoring)){monitoring.forEach{m->OriginalQuotation(m.quote);Text("${m.publisher} · ${m.title} · ${m.section}",style=MaterialTheme.typography.bodySmall);SourceLink(m.url)}}
+    catalog.reportingFor(region)?.let{report->SectionCard(stringResource(R.string.wb_about_symptoms)){Text(report.publisher);report.quotes.forEach{OriginalQuotation(it)};SourceLink(report.url)}}
 }
 
 @Composable fun RegionSection(value:String?,onValue:(String?)->Unit) {

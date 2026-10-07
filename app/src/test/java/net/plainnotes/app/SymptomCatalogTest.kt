@@ -7,6 +7,14 @@ import org.junit.Test
 class SymptomCatalogTest {
     private val c = SymptomCatalog.load()
 
+    @Test fun translatedPassagesKeepOriginalsAndNeverDriveUrgency() {
+        val originals=c.entries.flatMap{listOf(it.quote,it.action.text)}+c.monitoring.map{it.quote}+c.reporting.flatMap{it.quotes}
+        originals.forEach{assertTrue(it,SourceTranslations.covers(it))}
+        assertNull(SourceTranslations.translation(c.actions.getValue("FR_ANSM_CPA").text,java.util.Locale.FRENCH))
+        assertTrue(SourceTranslations.translation(c.actions.getValue("FR_ANSM_CPA").text,java.util.Locale.SIMPLIFIED_CHINESE)!!.contains("医生"))
+        assertFalse(c.actions.getValue("FR_ANSM_CPA").urgent)
+    }
+
     @Test fun eachMedicationGetsItsOwnSources() {
         assertEquals(MedSymptoms.Listed(listOf("FR_PROVAMES"), false), c.forMedication(MedKey(1, "E2", "ORAL", "E2")))
         assertEquals(MedSymptoms.Listed(listOf("CN_BUJIALE", "FR_PROGYNOVA"), true), c.forMedication(MedKey(1, "E2", "SUBLINGUAL", "EV")))
