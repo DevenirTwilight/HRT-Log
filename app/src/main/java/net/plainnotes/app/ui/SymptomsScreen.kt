@@ -1,7 +1,9 @@
 package net.plainnotes.app.ui
 
 import android.content.Intent
-import android.net.Uri
+import androidx.core.net.toUri
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -18,18 +20,18 @@ import java.util.Locale
 fun GroupNames.localized(locale:Locale):String=when(locale.language){"fr"->fr;"zh"->if(locale.script=="Hant"||locale.country in listOf("TW","HK"))zhHant else zh;else->en}
 @Composable fun SourceLink(url:String) {
     val context=LocalContext.current
-    TextButton(onClick={runCatching{context.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(url)))}}){Text(stringResource(R.string.wb_source))}
+    TextButton(onClick={runCatching{context.startActivity(Intent(Intent.ACTION_VIEW,url.toUri()))}}){Text(stringResource(R.string.wb_source))}
 }
 
 @Composable fun OriginalQuotation(text:String,urgent:Boolean=false) {
-    val locale=LocalContext.current.resources.configuration.locales[0]
+    val locale=androidx.compose.ui.platform.LocalConfiguration.current.locales[0]
     Text(text,style=MaterialTheme.typography.bodySmall,color=if(urgent)MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant)
     SourceTranslations.translation(text,locale)?.let{translated->Text(stringResource(R.string.wb_unofficial)+": "+translated,style=MaterialTheme.typography.bodySmall)}
 }
 
 @Composable fun SymptomsScreen(date:LocalDate,medications:List<MedicationEntity>,profiles:Map<Long,ProfileEntity>,checks:List<SymptomCheckEntity>,region:String?,
     onCheck:(LocalDate,String,Boolean,String?)->Unit) {
-    val catalog=remember{SymptomCatalog.load()};val context=LocalContext.current;val locale=context.resources.configuration.locales[0]
+    val catalog=remember{SymptomCatalog.load()};val context=LocalContext.current;val locale=androidx.compose.ui.platform.LocalConfiguration.current.locales[0]
     val active=medications.filter{it.active};val keys=active.map{MedKey(it.id,it.molecule,it.route,profiles[it.id]?.ester)}
     val groups=remember(keys){catalog.groupsFor(keys)}
     var expanded by remember {mutableStateOf<String?>(null)}
@@ -48,7 +50,7 @@ fun GroupNames.localized(locale:Locale):String=when(locale.language){"fr"->fr;"z
             section.forEach { g ->
                 val saved=checks.firstOrNull{it.date==date.toString()&&it.group_id==g.id}
                 Row {
-                    Checkbox(saved!=null,{onCheck(date,g.id,it,saved?.note)})
+                    Checkbox(saved!=null,{onCheck(date,g.id,it,saved?.note)},Modifier.semantics{contentDescription=context.getString(R.string.wb_symptom_checked)+": "+g.names.localized(locale)})
                     Column(Modifier.weight(1f)){Text(g.names.localized(locale));Text(g.medicationIds.mapNotNull{id->active.firstOrNull{it.id==id}?.name}.joinToString(" · "),style=MaterialTheme.typography.bodySmall)}
                     TextButton(onClick={expanded=if(expanded==g.id)null else g.id}){Text(stringResource(R.string.wb_source))}
                 }
@@ -61,13 +63,14 @@ fun GroupNames.localized(locale:Locale):String=when(locale.language){"fr"->fr;"z
                     OutlinedTextField(note,{note=it},Modifier.fillMaxWidth(),label={Text(stringResource(R.string.wb_optional_note))})
                     TextButton(onClick={onCheck(date,g.id,true,note)}){Text(stringResource(R.string.save))}
                 }
-                if(expanded==g.id) g.entries.forEach{e->
+                if(expanded==g.id) {Text(stringResource(R.string.wb_sources));g.entries.forEach{e->
                     Text(e.source.title,style=MaterialTheme.typography.titleSmall)
                     OriginalQuotation(e.quote);OriginalQuotation(e.action.text,e.action.urgent)
                     Text("${e.source.publisher} · ${e.source.region} · ${e.source.documentDate}\n${e.source.section}",style=MaterialTheme.typography.bodySmall)
                     if(e.source.thirdParty){Text(stringResource(R.string.wb_third_party));e.source.sites.forEach{site->Text("${site.site} · ${site.revised.orEmpty()}",style=MaterialTheme.typography.bodySmall);SourceLink(site.url)}}
                     if(e.source.note=="ARCHIVED_FR")Text(stringResource(R.string.wb_archived_fr))
                     Text(stringResource(R.string.wb_viewed,e.source.viewed),style=MaterialTheme.typography.bodySmall);SourceLink(e.source.url)
+                }
                 }
                 HorizontalDivider()
             }

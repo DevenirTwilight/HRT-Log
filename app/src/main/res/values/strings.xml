@@ -309,7 +309,6 @@
 <string name="site_rotation">Site rotation</string>
 <string name="site_rotation_desc">Suggest the other side each time and record the site used</string>
 <string name="site_title">Site (suggested: %1$s)</string>
-<string name="stars">%1$d stars</string>
 <string name="stock_add">Add stock</string>
 <string name="stock_adjust">Correct</string>
 <string name="stock_adjust_body">Enter what is actually left in the open container.</string>
@@ -333,7 +332,6 @@
 <string name="stock_unallocated">%1$s taken while no stock was available</string>
 <string name="wb_aggressiveness">Aggressiveness</string>
 <string name="wb_appetite">Appetite</string>
-<string name="wb_average">average %1$s</string>
 <string name="wb_custom">New item</string>
 <string name="wb_emo_stability">Emotional stability</string>
 <string name="wb_energy">Energy</string>
@@ -623,7 +621,7 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="wb_custom_group">Your items</string>
     <string name="wb_move_up">Move up</string>
     <string name="wb_move_down">Move down</string>
-    <string name="wb_recorded_days">%1$d recorded days</string>
+    <string name="wb_recorded_days">Recorded days: %1$d</string>
     <string name="wb_source">Source</string>
     <string name="wb_sources">Source quotations</string>
     <string name="wb_symptom_checked">Noticed today</string>

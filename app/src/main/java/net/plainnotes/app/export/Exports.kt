@@ -1,5 +1,6 @@
 package net.plainnotes.app.export
 
+import androidx.core.graphics.withSave
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -95,7 +96,7 @@ object PdfReport {
                 if(y+layout.getLineBottom(0)>H-48f)newPage()
                 val fit=(0 until layout.lineCount).lastOrNull{y+layout.getLineBottom(it)<=H-48f}?:0
                 val end=layout.getLineEnd(fit)
-                canvas!!.save();canvas!!.translate(M,y);canvas!!.clipRect(0f,0f,W-2*M,layout.getLineBottom(fit).toFloat());layout.draw(canvas!!);canvas!!.restore()
+                canvas!!.withSave{translate(M,y);clipRect(0f,0f,W-2*M,layout.getLineBottom(fit).toFloat());layout.draw(this)}
                 y+=layout.getLineBottom(fit)+gap
                 remaining=remaining.substring(end)
                 if(remaining.isNotEmpty())newPage()

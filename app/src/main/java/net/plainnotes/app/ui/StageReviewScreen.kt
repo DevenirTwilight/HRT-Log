@@ -58,7 +58,7 @@ import java.time.LocalDate
         }
         HorizontalDivider();Text(stringResource(R.string.wb_tolerance),style=MaterialTheme.typography.titleMedium)
         val previous=reviews.filter{it.id!=review?.id&&it.date<date}.maxOfOrNull{it.date}?:"0001-01-01"
-        val groups=SymptomCatalog.load().groups;val locale=androidx.compose.ui.platform.LocalContext.current.resources.configuration.locales[0]
+        val groups=SymptomCatalog.load().groups;val locale=androidx.compose.ui.platform.LocalConfiguration.current.locales[0]
         Text(stringResource(R.string.wb_period_symptoms))
         checks.filter{it.date>previous&&it.date<=date}.forEach{Text("${it.date} · ${groups[it.group_id]?.localized(locale)?:it.group_id}${it.note?.let{n->" · $n"}.orEmpty()}")}
         OriginalQuotation("L'évaluation de la tolérance clinique est à considérer au même titre que les dosages sanguins.");Text("HAS 2025 · R45 · p. 21",style=MaterialTheme.typography.bodySmall)

@@ -309,7 +309,6 @@
 <string name="site_rotation">Alternance des sites</string>
 <string name="site_rotation_desc">Proposer l\'autre côté à chaque fois et noter le site utilisé</string>
 <string name="site_title">Site (suggéré : %1$s)</string>
-<string name="stars">%1$d étoiles</string>
 <string name="stock_add">Ajouter du stock</string>
 <string name="stock_adjust">Corriger</string>
 <string name="stock_adjust_body">Indiquez ce qui reste réellement dans le conditionnement ouvert.</string>
@@ -333,7 +332,6 @@
 <string name="stock_unallocated">%1$s pris sans stock disponible</string>
 <string name="wb_aggressiveness">Agressivité</string>
 <string name="wb_appetite">Appétit</string>
-<string name="wb_average">moyenne %1$s</string>
 <string name="wb_custom">Nouvel élément</string>
 <string name="wb_emo_stability">Stabilité émotionnelle</string>
 <string name="wb_energy">Énergie</string>

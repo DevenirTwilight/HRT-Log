@@ -36,7 +36,6 @@ class WellbeingAndroidTest {
             reviews=listOf(StageReviewEntity(date=day.toString(),tolerance_note="Synthetic long note. 合成文字。 Texte synthétique.\n".repeat(300),weight_kg=60.0)))
         val out=ByteArrayOutputStream();PdfReport.write(context,d,1,null,out,day to day)
         val bytes=out.toByteArray();assertEquals("%PDF-",String(bytes.copyOfRange(0,5)))
-        android.os.ParcelFileDescriptor.createPipe().let{pipe->pipe.forEach{it.close()}}
         val file=java.io.File(context.cacheDir,"synthetic-summary.pdf")
         try{file.writeBytes(bytes);android.os.ParcelFileDescriptor.open(file,android.os.ParcelFileDescriptor.MODE_READ_ONLY).use{fd->android.graphics.pdf.PdfRenderer(fd).use{renderer->assertTrue(renderer.pageCount>2);renderer.openPage(renderer.pageCount-1).use{assertTrue(it.width>0)}}}}finally{file.delete()}
     }

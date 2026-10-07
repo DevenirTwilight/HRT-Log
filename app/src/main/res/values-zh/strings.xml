@@ -309,7 +309,6 @@
 <string name="site_rotation">注射部位轮换</string>
 <string name="site_rotation_desc">每次提示换到另一侧，并记录实际部位</string>
 <string name="site_title">部位（建议：%1$s）</string>
-<string name="stars">%1$d 星</string>
 <string name="stock_add">添加库存</string>
 <string name="stock_adjust">修正剩余</string>
 <string name="stock_adjust_body">填写当前开封的这一盒实际还剩多少。</string>
@@ -333,7 +332,6 @@
 <string name="stock_unallocated">有 %1$s 是在没有库存时服用的</string>
 <string name="wb_aggressiveness">攻击性</string>
 <string name="wb_appetite">食欲</string>
-<string name="wb_average">平均 %1$s</string>
 <string name="wb_custom">新项目</string>
 <string name="wb_emo_stability">情绪稳定性</string>
 <string name="wb_energy">精力</string>

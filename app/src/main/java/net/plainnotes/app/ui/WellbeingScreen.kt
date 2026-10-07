@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
+import kotlin.math.roundToInt
 import net.plainnotes.app.R
 import net.plainnotes.app.data.CheckinItemEntity
 import net.plainnotes.app.data.CheckinScoreEntity
@@ -102,7 +103,7 @@ import java.time.ZoneId
 @Composable fun FiveLevelInput(value:Int?,low:String,high:String,label:String,onValue:(Int?)->Unit) {
     var draft by remember(value){mutableFloatStateOf((value?:3).toFloat())}
     Text(if(value==null)stringResource(R.string.wb_unrecorded) else value.toString(),style=MaterialTheme.typography.labelSmall)
-    Slider(draft,{draft=it;onValue(it.toInt().coerceIn(1,5))},valueRange=1f..5f,steps=3,
+    Slider(draft,{draft=it;onValue(it.roundToInt().coerceIn(1,5))},valueRange=1f..5f,steps=3,
         modifier=Modifier.fillMaxWidth().semantics{contentDescription=label})
     Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween){Text(low,style=MaterialTheme.typography.bodySmall);Text(high,style=MaterialTheme.typography.bodySmall)}
     if(value!=null) TextButton(onClick={onValue(null)}){Text(stringResource(R.string.wb_clear))}
@@ -123,6 +124,7 @@ import java.time.ZoneId
                 }
             }
         }
+        Text(stringResource(R.string.wb_custom_group),style=MaterialTheme.typography.titleSmall)
         Row(verticalAlignment=Alignment.CenterVertically){
             OutlinedTextField(newLabel,{newLabel=it},Modifier.weight(1f),label={Text(stringResource(R.string.wb_custom))},singleLine=true)
             IconButton(enabled=newLabel.isNotBlank(),onClick={onSave(CheckinItemEntity(custom_label=newLabel.trim(),enabled=true,sort_order=0));newLabel=""}){Icon(Icons.Outlined.Add,stringResource(R.string.add))}
