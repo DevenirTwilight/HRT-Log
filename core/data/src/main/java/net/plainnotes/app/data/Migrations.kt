@@ -33,4 +33,10 @@ val migration3To4 = object : Migration(3, 4) {
         RegimenHistory.seed(db)
     }
 }
-fun allMigrations(today: () -> LocalDate = LocalDate::now): Array<Migration> = arrayOf(migration1To2(today), migration2To3, migration3To4)
+val migration4To5 = object : Migration(4,5) {
+    override fun migrate(db:SupportSQLiteDatabase) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS lab_context_revision (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, lab_id INTEGER NOT NULL, revision INTEGER NOT NULL, captured_utc INTEGER NOT NULL, origin TEXT NOT NULL, context_json TEXT NOT NULL, FOREIGN KEY(lab_id) REFERENCES lab_value(id) ON UPDATE NO ACTION ON DELETE CASCADE)")
+        db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_lab_context_revision_lab_id_revision ON lab_context_revision(lab_id,revision)")
+    }
+}
+fun allMigrations(today: () -> LocalDate = LocalDate::now): Array<Migration> = arrayOf(migration1To2(today), migration2To3, migration3To4, migration4To5)

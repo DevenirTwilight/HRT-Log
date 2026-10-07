@@ -85,6 +85,7 @@ internal object BackupValidation {
     fun validateState(db: SupportSQLiteDatabase) {
         db.query("PRAGMA foreign_key_check").use { require(!it.moveToFirst()) { "Invalid reference" } }
         SchemaGuards.validateRestored(db)
+        LabContext.validateState(db)
         db.query("SELECT id,definition_json,clinical_signature,zone FROM regimen_version").use{c->while(c.moveToNext()) {
             val definition=RegimenDefinition.read(c.getString(1));require(definition.signature()==c.getString(2) && definition.zone==c.getString(3)){"Invalid regimen snapshot"}
         }}

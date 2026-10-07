@@ -25,18 +25,20 @@ class ExportTest {
             RecordEntity(2, 1, scheduled_utc = now - 90_000_000, scheduled_zone = "Europe/Paris", status = "MISSED", origin = "AUTO_MISSED", revision = 1, config_snapshot = JSONObject().put("name","Gel, \"synthetic\"").put("molecule","E2").put("unit","MG").put("route","GEL").toString())),
         listOf(LabValueEntity(1, "E2", 150.0, "pg/mL", now - 7_200_000, "Europe/Paris", 50.0, 300.0, "pg/mL", note = "line1\nline2")),
         listOf(CheckinItemEntity(1, "MOOD", null, true, 0)), listOf(CheckinScoreEntity(java.time.LocalDate.now().toString(), 1, 4)),
-        listOf(DayNoteEntity(java.time.LocalDate.now().toString(), "note, with comma")), mapOf(1L to "daily"), { "Mood" })
+        listOf(DayNoteEntity(java.time.LocalDate.now().toString(), "note, with comma")), mapOf(1L to "daily"), { "Mood" },labContexts=listOf(LabContextEntity(id=1,lab_id=1,revision=1,captured_utc=now,origin="AT_ENTRY",context_json=LabContext.build(LabValueEntity(1,"E2",150.0,"pg/mL",now-7_200_000,"Europe/Paris"),emptyList(),emptyList(),emptyMap()))))
 
-    @Test fun csvZipHasThreeQuotedFilesWithBom() {
+    @Test fun csvZipPreservesQuotedFilesAndFrozenLabContextsWithBom() {
         val out = ByteArrayOutputStream(); CsvExport.write(data, out)
         val files = HashMap<String, String>()
         ZipInputStream(out.toByteArray().inputStream()).use { z -> generateSequence { z.nextEntry }.forEach { e -> files[e.name] = String(z.readBytes()) } }
-        assertEquals(setOf("intakes.csv", "wellbeing.csv", "labs.csv", "packages.csv", "symptoms.csv", "reviews.csv"), files.keys)
+        assertEquals(setOf("intakes.csv", "wellbeing.csv", "labs.csv", "packages.csv", "symptoms.csv", "reviews.csv", "lab_contexts.csv"), files.keys)
         files.values.forEach { assertTrue(it.startsWith("﻿")) }
         assertTrue(files.getValue("intakes.csv").contains("\"Gel, \"\"synthetic\"\"\""))
         assertEquals(3, files.getValue("intakes.csv").trim().lines().size)
         assertTrue(files.getValue("wellbeing.csv").contains("Mood,4,\"note, with comma\""))
         assertTrue(files.getValue("labs.csv").contains("\"line1\nline2\""))
+        assertTrue(files.getValue("lab_contexts.csv").contains("AT_ENTRY"))
+        assertTrue(files.getValue("lab_contexts.csv").contains("\"\"version\"\":1"))
     }
 
     @Test fun pdfReportIsWritten() {

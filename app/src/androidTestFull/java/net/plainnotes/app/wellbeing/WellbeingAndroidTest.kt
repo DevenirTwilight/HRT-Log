@@ -31,9 +31,11 @@ class WellbeingAndroidTest {
     @Test fun longMultilingualAppointmentSummaryHasValidNativePages(){
         val context=InstrumentationRegistry.getInstrumentation().targetContext
         val day=LocalDate.of(2026,2,10)
-        val d=ExportData(emptyList(),emptyMap(),emptyList(),emptyList(),listOf(CheckinItemEntity(1,"DAY_MOOD",null,false,0)),listOf(CheckinScoreEntity(day.toString(),1,4)),emptyList(),emptyMap(),{"Synthetic mood"},
+        val lab=LabValueEntity(1,"E2",120.0,"pg/mL",day.atTime(12,0).atZone(java.time.ZoneId.systemDefault()).toInstant().toEpochMilli(),java.time.ZoneId.systemDefault().id)
+        val snapshot=LabContextEntity(1,1,1,lab.sampled_utc,"AT_ENTRY",LabContext.build(lab,emptyList(),emptyList(),emptyMap()))
+        val d=ExportData(emptyList(),emptyMap(),emptyList(),listOf(lab),listOf(CheckinItemEntity(1,"DAY_MOOD",null,false,0)),listOf(CheckinScoreEntity(day.toString(),1,4)),emptyList(),emptyMap(),{"Synthetic mood"},
             symptoms=listOf(SymptomCheckEntity(day.toString(),"JAUNDICE","Synthetic symptom note")),
-            reviews=listOf(StageReviewEntity(date=day.toString(),tolerance_note="Synthetic long note. 合成文字。 Texte synthétique.\n".repeat(300),weight_kg=60.0)))
+            reviews=listOf(StageReviewEntity(date=day.toString(),tolerance_note="Synthetic long note. 合成文字。 Texte synthétique.\n".repeat(300),weight_kg=60.0)),labContexts=listOf(snapshot))
         val out=ByteArrayOutputStream();PdfReport.write(context,d,1,null,out,day to day)
         val bytes=out.toByteArray();assertEquals("%PDF-",String(bytes.copyOfRange(0,5)))
         val file=java.io.File(context.cacheDir,"synthetic-summary.pdf")

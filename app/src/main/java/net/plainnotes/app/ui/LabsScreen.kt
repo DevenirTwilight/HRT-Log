@@ -51,7 +51,7 @@ fun toCanonical(a: Analyte, value: Double, unit: String): Double? = a.units.firs
     else -> R.string.choice_other
 })
 
-@Composable fun LabsScreen(labs: List<LabValueEntity>, doseTimes: List<Instant>, onEdit: (LabValueEntity?) -> Unit, onDelete: (LabValueEntity) -> Unit, contentPadding: PaddingValues) {
+@Composable fun LabsScreen(labs: List<LabValueEntity>, doseTimes: List<Instant>, onEdit: (LabValueEntity?) -> Unit, onDelete: (LabValueEntity) -> Unit, contentPadding: PaddingValues,contexts:List<net.plainnotes.app.data.LabContextEntity> = emptyList(),onRebuild:((LabValueEntity,Boolean)->Unit)?=null) {
     val present = ANALYTES.filter { a -> labs.any { it.analyte_code == a.code } }
     var selected by remember { mutableStateOf<String?>(null) }
     val code = selected?.takeIf { s -> present.any { it.code == s } } ?: present.firstOrNull()?.code
@@ -80,23 +80,21 @@ fun toCanonical(a: Analyte, value: Double, unit: String): Double? = a.units.firs
                     if (latestRange != null) Text(stringResource(R.string.lab_range_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
-            items(values.reversed(), key = { it.id }) { v -> LabRow(v, doseTimes, { onEdit(v) }, { onDelete(v) }) }
+            items(values.reversed(), key = { it.id }) { v -> LabRow(v, { onEdit(v) }, { onDelete(v) },contexts.filter{it.lab_id==v.id},onRebuild) }
         }
     }
 }
 
 private fun max(a: Double, b: Double) = if (a > b) a else b
 
-@Composable private fun LabRow(v: LabValueEntity, doseTimes: List<Instant>, onEdit: () -> Unit, onDelete: () -> Unit) {
+@Composable private fun LabRow(v: LabValueEntity, onEdit: () -> Unit, onDelete: () -> Unit,contexts:List<net.plainnotes.app.data.LabContextEntity>,onRebuild:((LabValueEntity,Boolean)->Unit)?) {
     var menu by remember { mutableStateOf(false) }
     val at = Instant.ofEpochMilli(v.sampled_utc)
-    val last = doseTimes.lastOrNull { !it.isAfter(at) }
     ElevatedCard(onClick = onEdit, modifier = Modifier.fillMaxWidth(), colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.elevatedCardElevation(0.dp)) {
         Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                 Text("${displayNumber(v.value)} ${v.unit}", style = MaterialTheme.typography.titleLarge)
                 Text("${analyteLabel(v.analyte_code)} · ${formatDateTime(at)}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                last?.let { val d = Duration.between(it, at); Text(stringResource(R.string.lab_since_dose, d.toHours().toInt(), (d.toMinutes() % 60).toInt()), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
                 if (v.reference_lower != null || v.reference_upper != null)
                     Text(stringResource(R.string.lab_range_value, v.reference_lower?.let { displayNumber(it) } ?: "–", v.reference_upper?.let { displayNumber(it) } ?: "–", v.reference_unit ?: ""),
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -110,10 +108,12 @@ private fun max(a: Double, b: Double) = if (a > b) a else b
                 }
             }
         }
+        LabContextSection(v,contexts,onRebuild)
     }
 }
 
-@Composable fun LabDialog(initial: LabValueEntity?, onDismiss: () -> Unit, onSave: (LabValueEntity) -> Unit) {
+@Composable fun LabDialog(initial: LabValueEntity?, onDismiss: () -> Unit, onSave: (LabValueEntity) -> Unit,onSaveWithEstimate:((LabValueEntity,Boolean)->Unit)?=null) {
+    var includeEstimate by remember { mutableStateOf(false) }
     var code by remember { mutableStateOf(initial?.analyte_code ?: "E2") }
     val a = analyte(code)
     var unit by remember { mutableStateOf(initial?.unit ?: a.units.first().first) }
@@ -151,11 +151,16 @@ private fun max(a: Double, b: Double) = if (a > b) a else b
             }
             OutlinedTextField(lab, { lab = it }, Modifier.fillMaxWidth(), label = { Text(stringResource(R.string.lab_laboratory)) }, singleLine = true)
             OutlinedTextField(note, { note = it }, Modifier.fillMaxWidth(), label = { Text(stringResource(R.string.note)) })
+            if(onSaveWithEstimate!=null) {
+                Row(verticalAlignment=Alignment.CenterVertically){Checkbox(includeEstimate,{includeEstimate=it});Text(stringResource(R.string.lab_context_include_estimate))}
+                Text(stringResource(R.string.lab_context_save_note),style=MaterialTheme.typography.bodySmall)
+            }
         } },
         confirmButton = { Button(enabled = valueV != null && rangeOk, onClick = {
             val hasRange = loV != null || hiV != null
-            onSave(LabValueEntity(initial?.id ?: 0, code, valueV!!, unit, time.toInstantHere().toEpochMilli(), ZoneId.systemDefault().id,
-                loV, hiV, if (hasRange) unit else null, lab.ifBlank { null }, note.ifBlank { null }))
+            val saved=LabValueEntity(initial?.id ?: 0, code, valueV!!, unit, time.toInstantHere().toEpochMilli(), ZoneId.systemDefault().id,
+                loV, hiV, if (hasRange) unit else null, lab.ifBlank { null }, note.ifBlank { null })
+            if(onSaveWithEstimate!=null)onSaveWithEstimate(saved,includeEstimate) else onSave(saved)
         }) { Text(stringResource(R.string.save)) } },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } })
 }

@@ -28,7 +28,7 @@ class ExportData(
     val medications: List<MedicationEntity>, val profiles: Map<Long, ProfileEntity>, val records: List<RecordEntity>, val labs: List<LabValueEntity>,
     val items: List<CheckinItemEntity>, val scores: List<CheckinScoreEntity>, val notes: List<DayNoteEntity>,
     val scheduleText: Map<Long, String>, val itemLabel: (CheckinItemEntity) -> String,
-    val containers:List<ContainerEntity> = emptyList(),val symptoms:List<SymptomCheckEntity> = emptyList(),val reviews:List<StageReviewEntity> = emptyList(),
+    val containers:List<ContainerEntity> = emptyList(),val symptoms:List<SymptomCheckEntity> = emptyList(),val reviews:List<StageReviewEntity> = emptyList(),val labContexts:List<LabContextEntity> = emptyList(),
 )
 
 object CsvExport {
@@ -61,6 +61,7 @@ object CsvExport {
             file("packages.csv",StringBuilder(line("id","medication","capacity","used_amount","state","source_note","batch")).apply{d.containers.forEach{c->append(line(c.id,meds[c.medication_id]?.name,c.capacity,c.used_amount,c.state,c.source_note,c.batch))}})
             file("symptoms.csv",StringBuilder(line("date","symptom_group","note","context_snapshot")).apply{d.symptoms.sortedBy{it.date}.forEach{append(line(it.date,it.group_id,it.note,it.context_snapshot))}})
             file("reviews.csv",StringBuilder(line("date","effects_json","tolerance_note","risk_note","smoking","systolic_mmHg","diastolic_mmHg","weight_kg","satisfaction_1_to_5","satisfaction_note")).apply{d.reviews.sortedBy{it.date}.forEach{r->append(line(r.date,r.effects_json,r.tolerance_note,r.risk_note,r.smoking,r.systolic,r.diastolic,r.weight_kg,r.satisfaction,r.satisfaction_note))}})
+            file("lab_contexts.csv",StringBuilder(line("lab_id","revision","captured_at","origin","context_snapshot")).apply{d.labContexts.sortedWith(compareBy<LabContextEntity>{it.lab_id}.thenBy{it.revision}).forEach{append(line(it.lab_id,it.revision,Instant.ofEpochMilli(it.captured_utc).toString(),it.origin,it.context_json))}})
             file("labs.csv", StringBuilder(line("sampled_at", "analyte", "value", "unit", "report_lower", "report_upper", "report_unit", "laboratory", "note")).apply {
                 d.labs.sortedBy { it.sampled_utc }.forEach { l -> append(line(ts(l.sampled_utc, l.sampled_zone), l.analyte_code, l.value, l.unit, l.reference_lower, l.reference_upper, l.reference_unit, l.laboratory, l.note)) }
             })
@@ -139,11 +140,15 @@ object PdfReport {
             row(listOf(context.getString(R.string.report_col_date), context.getString(R.string.lab_analyte), context.getString(R.string.lab_value),
                 context.getString(R.string.report_col_range), context.getString(R.string.report_col_since_dose)), widths, small.apply { isFakeBoldText = true })
             small.isFakeBoldText = false
-            val doseTimes = d.records.filter { r -> r.status in listOf("ON_TIME", "LATE") && r.deleted_at_utc == null && MedicationSnapshot.decode(r.config_snapshot,r.medication_id)?.molecule == "E2" }.mapNotNull { it.taken_utc }.sorted()
             labs.forEach { l ->
-                val last = doseTimes.lastOrNull { it <= l.sampled_utc }?.let { val m = (l.sampled_utc - it) / 60000; "${m / 60} h ${m % 60} min" } ?: ""
+                val saved=d.labContexts.filter{it.lab_id==l.id}.maxByOrNull{it.revision}
+                val ingredient=when(l.analyte_code){"E2","T"->l.analyte_code;"P4","P4_IA","P4_MS"->"P4";else->null}
+                val actual=saved?.let{LabContext.validate(it.context_json).getJSONArray("actual")}
+                val last=if(ingredient==null || actual==null)"" else (0 until actual.length()).map{actual.getJSONObject(it)}.firstOrNull{it.optString("ingredient")==ingredient}?.let{r->val m=r.getLong("elapsed_ms")/60000;"${m/60} h ${m%60} min"}.orEmpty()
                 val range = if (l.reference_lower != null || l.reference_upper != null) "${l.reference_lower?.let(::fmt) ?: "–"} – ${l.reference_upper?.let(::fmt) ?: "–"} ${l.reference_unit ?: ""}" else ""
                 row(listOf(Instant.ofEpochMilli(l.sampled_utc).atZone(zone).format(dtFmt), l.analyte_code, "${fmt(l.value)} ${l.unit}", range, last), widths, body)
+                if(saved==null)text(context.getString(R.string.lab_context_not_saved),small)
+                else net.plainnotes.app.ui.labContextLines(context,saved).forEach{text(it,small)}
             }
         }
         y += 8f

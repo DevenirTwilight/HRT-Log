@@ -302,7 +302,7 @@ const val BACKFILL_MAX_DAYS=731L
         if(json.optInt("format")!=BackupCodec.FORMAT_VERSION||schema<1) throw BackupCodec.BadFile("incompatible version")
         if(schema>current) throw BackupCodec.NewerBackup()
         val tables=json.getJSONObject("tables")
-        val required=DOMAIN_TABLES.filterNot{(schema<2 && it in listOf("stage_review","symptom_check","review_effect")) || (schema<4 && it in listOf("regimen_version","regimen_rule_link","milestone"))}
+        val required=DOMAIN_TABLES.filterNot{(schema<2 && it in listOf("stage_review","symptom_check","review_effect")) || (schema<4 && it in listOf("regimen_version","regimen_rule_link","milestone")) || (schema<5 && it=="lab_context_revision")}
         require(required.all{tables.has(it)}) { "Incomplete backup" }
         db.withTransaction {
             val sql=db.openHelper.writableDatabase
@@ -397,10 +397,26 @@ const val BACKFILL_MAX_DAYS=731L
     /** Planned slots in [from, to) for forecasting; reconciles first so past slots carry their final state. */
     suspend fun planned(from:Instant,to:Instant,now:Instant=Instant.now(),zone:ZoneId=ZoneId.systemDefault())=transaction { dao -> timeline(dao,now,from,to,zone) }
     suspend fun labs()=withContext(Dispatchers.IO){db().dao().labs()}
-    suspend fun saveLab(value:LabValueEntity)=transaction { dao ->
+    suspend fun labContexts()=withContext(Dispatchers.IO){db().dao().labContexts()}
+    private suspend fun captureLab(dao:NotesDao,lab:LabValueEntity,origin:String,now:Instant,estimate:String?) {
+        val old=dao.labContexts().filter{it.lab_id==lab.id}.maxByOrNull{it.revision}
+        val captured=maxOf(now.toEpochMilli(),old?.captured_utc ?: Long.MIN_VALUE)
+        val json=LabContext.build(lab,dao.records(),dao.regimens(),dao.rules().associate{it.id to it.config_snapshot},estimate)
+        dao.labContext(LabContextEntity(lab_id=lab.id,revision=(old?.revision ?: 0)+1,captured_utc=captured,origin=origin,context_json=json))
+    }
+    suspend fun saveLab(value:LabValueEntity,now:Instant=Instant.now(),recapture:Boolean=false,estimate:suspend(NotesDao,LabValueEntity)->String?={_,_->null})=transaction { dao ->
         require(value.value.isFinite() && value.value>0 && value.analyte_code.isNotBlank() && value.unit.isNotBlank())
+        ZoneId.of(value.sampled_zone)
+        val old=if(value.id==0L)null else requireNotNull(dao.labs().singleOrNull{it.id==value.id})
         dao.analyte(AnalyteEntity(value.analyte_code,value.unit))
-        if(value.id==0L)dao.insertLab(value) else dao.updateLab(value)
+        val saved=if(value.id==0L)value.copy(id=dao.insertLab(value)) else value.also{dao.updateLab(it)}
+        val sampleChanged=old!=null && (old.sampled_utc!=value.sampled_utc || old.sampled_zone!=value.sampled_zone || old.analyte_code!=value.analyte_code)
+        if(old==null || sampleChanged || recapture)
+            captureLab(dao,saved,if(old==null)"AT_ENTRY" else if(sampleChanged)"SAMPLE_CHANGED" else "RECONSTRUCTED",now,estimate(dao,saved))
+    }
+    suspend fun rebuildLabContext(id:Long,now:Instant=Instant.now(),estimate:suspend(NotesDao,LabValueEntity)->String?={_,_->null})=transaction { dao ->
+        val lab=requireNotNull(dao.labs().singleOrNull{it.id==id})
+        captureLab(dao,lab,"RECONSTRUCTED",now,estimate(dao,lab))
     }
     suspend fun deleteLab(id:Long)=transaction { it.deleteLab(id) }
     /** Body weight is a single current PK parameter (no history in V1). */

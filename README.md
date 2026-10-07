@@ -44,7 +44,7 @@ See [`docs/HANDOFF.md`](docs/HANDOFF.md) for verification and remaining work,
 Literature validation and physical-device verification remain incomplete.
 Health information must never be committed; use only synthetic test data.
 
-The development branch now targets build 9 / database schema 4. New medication
+The development branch now targets build 10 / database schema 5. New medication
 events preserve their formulation inputs, and new symptom observations preserve
 their matched catalogue sources. Missing legacy context remains explicitly unknown.
 An overdue dose without an intake record is shown as unconfirmed until the user
@@ -54,8 +54,12 @@ validation. These changes are described in
 new public release. Treatment stages, a unified timeline and user milestones are now implemented;
 regimen definitions are frozen independently of reminder versions. Legacy schedules are
 marked as reconstructed, and date-only observations may span several stages. See
-[`epochs-timeline-p1.md`](docs/design/epochs-timeline-p1.md). Historical model bundles,
-saved lab context and Visit Packs remain future work.
+[`epochs-timeline-p1.md`](docs/design/epochs-timeline-p1.md). Saved lab context is implemented in build 10: frozen regimen/stage, per-ingredient
+last actual intake, and a clearly labelled preceding 48-hour record window. Optional
+uncalibrated estimates preserve inputs, parameters and results. Old labs require explicit
+reconstruction; edits to results do not rewrite context. CSV includes all context revisions
+and PDF shows the latest. See [`lab-context-p1.md`](docs/design/lab-context-p1.md).
+Lab panels, full historical model bundles and Visit Packs remain future work.
 
 Build 8 repairs compatible native historical context using its saved rule snapshot.
 Old HRT Tracker imports can recover missing context from the original export, or users

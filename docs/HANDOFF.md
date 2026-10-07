@@ -422,4 +422,4 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 
 ### 2q. Lab Context第一批（2026-10-07，进行中）
 
-基线b1e60be，用户要求继续。设计lab-context-p1.md已写，拟schema5/build10，逐化验上下文修订与显式旧数据回推；各成分actual独立，不再用全局最近doseTimes。可选PK仅采样前actual/无自校准，保留参数和结果快照。下一步数据层/备份/合成回归、四语UI与导出，再full验证和原正式签名交付。尚未写功能代码/未生成build10。
+基线b1e60be，用户要求继续。设计lab-context-p1.md已写，拟schema5/build10，逐化验上下文修订与显式旧数据回推；各成分actual独立，不再用全局最近doseTimes。可选PK仅采样前actual/无自校准，保留参数和结果快照。下一步数据层/备份/合成回归、四语UI与导出，再full验证和原正式签名交付。数据层与schema5迁移、不可变修订、旧备份兼容/校验回滚、四语化验详情和CSV/PDF已写。合成data51项和full app93项回归已通过（app的1项Robolectric PDF按既有条件跳过）；原生测试APK正在编译，尚未运行设备验证/完整lint与release，未生成正式build10。新增UI回归覆盖旧版切换/明确重建，PK回归覆盖舌下正值、采样后事件排除与不自校准；native PDF用例已加入上下文。下一步全量full验证、原生CI、原正式签名与真实下载交付。

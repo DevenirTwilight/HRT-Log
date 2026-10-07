@@ -15,7 +15,7 @@ class MigrationBaselineTest {
             db.execSQL("INSERT INTO checkin_item (id,builtin_key,custom_label,enabled,sort_order) VALUES (1,'MOOD',NULL,1,0),(2,'PAIN',NULL,1,1),(3,'APPETITE',NULL,1,2)")
             db.execSQL("INSERT INTO checkin_score (date,item_id,value) VALUES ('2026-02-10',1,4),('2026-02-09',2,2),('2025-01-01',3,3)")
         }
-        helper.runMigrationsAndValidate("migration-baseline",4,true,*allMigrations{LocalDate.of(2026,2,10)}).use{db->
+        helper.runMigrationsAndValidate("migration-baseline",5,true,*allMigrations{LocalDate.of(2026,2,10)}).use{db->
             SchemaGuards.install(db)
             db.query("SELECT builtin_key FROM checkin_item WHERE id=1").use{assertTrue(it.moveToFirst());assertEquals("DAY_MOOD",it.getString(0))}
             db.query("SELECT value FROM checkin_score WHERE item_id=1").use{assertTrue(it.moveToFirst());assertEquals(4,it.getInt(0))}
@@ -34,7 +34,7 @@ class MigrationBaselineTest {
                 db.execSQL("INSERT INTO rule_time (rule_id,local_time,dose_override) VALUES (?,'20:00:00',NULL)",arrayOf(id))
             }
         }
-        helper.runMigrationsAndValidate("migration-regimens",4,true,migration3To4).use{db->
+        helper.runMigrationsAndValidate("migration-regimens",5,true,migration3To4,migration4To5).use{db->
             SchemaGuards.install(db);RegimenHistory.validateLinks(db)
             db.query("SELECT definition_json,effective_from_utc,effective_until_utc,origin,recorded_at_utc FROM regimen_version ORDER BY effective_from_utc").use{c->
                 assertEquals(2,c.count);assertTrue(c.moveToFirst());val frozen=RegimenDefinition.read(c.getString(0))
@@ -42,6 +42,18 @@ class MigrationBaselineTest {
                 assertEquals(1000L,c.getLong(1));assertEquals(3000L,c.getLong(2));assertEquals("LEGACY_RULE",c.getString(3));assertTrue(c.isNull(4))
                 assertTrue(c.moveToNext());assertEquals(3.0,RegimenDefinition.read(c.getString(0)).dose,0.0)
             }
+        }
+    }
+
+    @Test fun exportedV4KeepsLabWithoutInventingSamplingContext() {
+        helper.createDatabase("migration-lab-context",4).use{db->
+            db.execSQL("INSERT INTO lab_analyte(code,canonical_unit) VALUES ('E2','pg/mL')")
+            db.execSQL("INSERT INTO lab_value(id,analyte_code,value,unit,sampled_utc,sampled_zone) VALUES (1,'E2',120,'pg/mL',1000,'UTC')")
+        }
+        helper.runMigrationsAndValidate("migration-lab-context",5,true,migration4To5).use{db->
+            SchemaGuards.install(db)
+            db.query("SELECT value,sampled_utc FROM lab_value WHERE id=1").use{assertTrue(it.moveToFirst());assertEquals(120.0,it.getDouble(0),0.0);assertEquals(1000L,it.getLong(1))}
+            db.query("SELECT * FROM lab_context_revision").use{assertEquals(0,it.count)}
         }
     }
 

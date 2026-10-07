@@ -255,3 +255,6 @@ data class RegimenVersionEntity(@PrimaryKey(autoGenerate=true)val id:Long=0,val 
 data class RegimenRuleLinkEntity(@PrimaryKey val rule_id:Long,val regimen_id:Long)
 @Entity(tableName="milestone")
 data class MilestoneEntity(@PrimaryKey(autoGenerate=true)val id:Long=0,val date:String,val kind:String="CUSTOM",val title:String?=null,val note:String?=null)
+
+@Entity(tableName="lab_context_revision",foreignKeys=[ForeignKey(entity=LabValueEntity::class,parentColumns=["id"],childColumns=["lab_id"],onDelete=ForeignKey.CASCADE)],indices=[Index(value=["lab_id","revision"],unique=true)])
+data class LabContextEntity(@PrimaryKey(autoGenerate=true)val id:Long=0,val lab_id:Long,val revision:Int,val captured_utc:Long,val origin:String,val context_json:String)

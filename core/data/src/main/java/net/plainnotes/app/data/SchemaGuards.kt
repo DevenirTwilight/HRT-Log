@@ -6,6 +6,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 object SchemaGuards : RoomDatabase.Callback() {
     private const val finite = "1.7976931348623157e308"
     private val predicates = mapOf(
+        "lab_context_revision" to "NEW.revision>=1 AND NEW.origin IN ('AT_ENTRY','RECONSTRUCTED','SAMPLE_CHANGED') AND length(NEW.context_json)>=2",
         "regimen_version" to "NEW.origin IN ('APP','LEGACY_RULE') AND length(NEW.zone)>0 AND length(NEW.definition_json)>=2 AND length(NEW.clinical_signature)=64 AND (NEW.effective_until_utc IS NULL OR NEW.effective_until_utc>NEW.effective_from_utc) AND NOT EXISTS (SELECT 1 FROM regimen_version r WHERE r.medication_id=NEW.medication_id AND r.id!=NEW.id AND (r.effective_until_utc IS NULL OR NEW.effective_from_utc<r.effective_until_utc) AND (NEW.effective_until_utc IS NULL OR r.effective_from_utc<NEW.effective_until_utc))",
         "regimen_rule_link" to "EXISTS (SELECT 1 FROM schedule_rule r JOIN regimen_version v ON v.id=NEW.regimen_id WHERE r.id=NEW.rule_id AND r.medication_id=v.medication_id AND r.effective_from_utc>=v.effective_from_utc AND (v.effective_until_utc IS NULL OR r.effective_until_utc IS NOT NULL AND r.effective_until_utc<=v.effective_until_utc))",
         "milestone" to "length(NEW.date)=10 AND NEW.kind IN ('CUSTOM','STARTED','ROUTE','SURGERY') AND (NEW.kind!='CUSTOM' OR length(trim(NEW.title))>0)",
@@ -43,6 +44,7 @@ object SchemaGuards : RoomDatabase.Callback() {
             // Re-created on every open so a predicate change reaches existing databases.
             operations.forEach { op -> db.execSQL("DROP TRIGGER IF EXISTS guard_${table}_${op.lowercase()}"); db.execSQL("CREATE TRIGGER guard_${table}_${op.lowercase()} BEFORE $op ON $table BEGIN SELECT CASE WHEN COALESCE(($predicate),0)=0 THEN RAISE(ABORT,'Invalid $table') END; END") }
         }
+        db.execSQL("CREATE TRIGGER IF NOT EXISTS immutable_lab_context_update BEFORE UPDATE ON lab_context_revision BEGIN SELECT RAISE(ABORT,'Frozen lab context'); END")
         val frozen=listOf("id","medication_id","effective_from_utc","zone","definition_json","clinical_signature","origin","recorded_at_utc").joinToString(" AND "){"NEW.$it IS OLD.$it"}
         db.execSQL("CREATE TRIGGER IF NOT EXISTS immutable_regimen_update BEFORE UPDATE ON regimen_version WHEN NOT ($frozen) BEGIN SELECT RAISE(ABORT,'Frozen regimen definition'); END")
         db.execSQL("CREATE TRIGGER IF NOT EXISTS immutable_regimen_link_update BEFORE UPDATE ON regimen_rule_link BEGIN SELECT RAISE(ABORT,'Frozen regimen link'); END")

@@ -67,3 +67,7 @@
 ## build8浓度修复（2026-10-07）
 
 用户明确要求核查HRT Tracker绘图。阅读Transmtf固定8c9abdde的`src/components/ResultChart.tsx`可见值/CI撑轴处理和`src/utils/chartAxis.ts`，研究问题不是复制实现。自身`ChartViewport`采用中心+化验视图/完整区间切换，零基线、边界插值与裁剪说明，不使用其CI倍率阈值、Recharts或UI表达。自身旧writer source-only兼容、原文件再导入确认、日期范围历史确认见`design/concentration-context-chart-hotfix.md`，不改PK参数/公式。
+
+## Lab Context 第一批实施（2026-10-07）
+
+设计先于代码提交9f5dfaa，见[采样上下文设计](docs/design/lab-context-p1.md)。自身schema5追加不可变修订；逐成分并列最近实际事件、半开区间阶段快照、48h事实窗口、显式回推、采样前无自校准的可选参数/结果快照。UI与CSV/PDF独立实现，未纳入竞品源代码/文字/布局/模型参数。不是完整历史模型bundle或LabPanel，实施与验收状态见HANDOFF 2q。
