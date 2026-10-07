@@ -22,6 +22,13 @@ python3 scripts/check_release_manifest.py
 Android modules and does not require an SDK. Full and play have the same package;
 installing one over the other replaces it. Release APKs are unsigned; use your own
 signing setup outside source control. Gradle verifies the distribution checksum.
+
+Builds delivered to the product owner, including test builds, use the existing private
+official signing key so they can replace the installed official app without uninstalling.
+CI debug artifacts are for automated checks, not delivery. Use
+`bash scripts/sign_local_apk.sh BUILD_TOOLS_DIR UNSIGNED_APK KEYSTORE PASSWORD_FILE OUTPUT_APK`
+to sign a release APK locally and verify the existing official certificate. Keep all
+credentials and delivered APKs outside this repository; never upload private keys to CI.
 AGP 9.1.1 uses external Kotlin 2.2.20 with the documented legacy DSL opt-outs;
 these fixed versions are tested together, not automatically upgraded.
 
