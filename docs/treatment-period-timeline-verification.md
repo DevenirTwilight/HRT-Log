@@ -1,6 +1,6 @@
 # Treatment Period / Timeline build12：验证与边界
 
-2026-10-07。功能提交 `dbb9688`、长列表及兼容回归 `2c3b68b`。full only、versionCode12/versionName0.2.0、schema6。用户在Phase 1卡点报告后回复“继续”，采用历史slot对应未知的保守边界。
+2026-10-07。功能提交 `dbb9688`、长列表及兼容回归 `2c3b68b`、时区标注和旅行回归 `b0dc178`。full only、versionCode12/versionName0.2.0、schema6。用户在Phase 1卡点报告后回复“继续”，采用历史slot对应未知的保守边界。
 
 ## 最终职责
 
@@ -27,14 +27,14 @@
 | 验证 | 当前证据 |
 |---|---|
 | domain | 39项通过，含连续提醒版本合并/原ID、gap恢复、临床变化、旧剂量排列未知、同日多药与A→B→A、精确采样、DST/月边界与多药组合 |
-| 初轮全模块 | domain39/pk18/importer12/data57/reminder14/app106，共246项，0失败，1既有Robolectric PDF跳过。后续最终单元重跑app108项通过（含VM整合与冻结报告回归），合计248项、247通过/1既有跳过 |
+| 初轮全模块 | domain39/pk18/importer12/data57/reminder14/app106，共246项，0失败，1既有Robolectric PDF跳过。后续稳定源码app109项通过（含VM整合、冻结报告、旅行时区回归），合计249项、248通过/1既有跳过 |
 | Milestone针对性 | saving防双击、事务失败、提交后提醒/refresh失败、STARTED空标题/重复/CRUD、400天可见、source详情、saveable草稿恢复 |
 | 兼容回归 | 旧V1保留2段但V2合并1时期；Context1旧key有效，VisitPack1仍为2次开始/1次结束且digest不变；数据备份roundtrip/validateLinks/旧definition与signature不变 |
 | 本机release首轮 | 两个本机构建并发导致domain.jar读取冲突；失败，不算通过。已改为单一构建进程重跑最终任务 |
 | 最新本机构建/lint | 最终任务进行中，尚未声称通过 |
 | 原生测试 | 新增API35长历史160事件、2倍字体、source按钮语义与准确详情验证；迁移/SQLCipher复用现有原生套件。最新CI待结论 |
 
-当前CI：`37700705349`，对应功能 `2c3b68b`。未结束时不能标已通过。APK仅在最终release构建成功后用原私有正式证书签署；不交付debug或unsigned包。
+当前CI：`37701395265`，对应功能 `b0dc178`。先前37700705349在新提交后由分支并发策略取消，不代表原生已通过。未结束时不能标已通过。APK仅在最终release构建成功后用原私有正式证书签署；不交付debug或unsigned包。
 
 ## 用户复核
 
