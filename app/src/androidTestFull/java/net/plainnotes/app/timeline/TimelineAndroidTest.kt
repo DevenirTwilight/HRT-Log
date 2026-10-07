@@ -9,6 +9,7 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.unit.Density
 import net.plainnotes.app.*
+import net.plainnotes.app.R
 import net.plainnotes.app.data.*
 import net.plainnotes.app.ui.*
 import org.junit.Test
