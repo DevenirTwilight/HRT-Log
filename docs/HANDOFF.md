@@ -4,6 +4,10 @@
 
 用户再次纠正：**play版本已废弃。以后只维护、测试、构建和交付full，不再生成或签署play APK。** 已移除Gradle play flavor、src/play空实现、CI play任务，release manifest检查只要求full。AGENTS/CLAUDE/REQUIREMENTS/README同步。下文双变体测试与play附件均为历史记录，不是下一步任务；旧公开Release核验清单保持历史事实，不修改公开Release/标签。最新可安装full为build10。
 
+## 当前进行中：Visit Pack 第一批 build 11（2026-10-07）
+
+接手基线 `95b82bc`；本会话开发分支为环境指定的 `ccr-5165d4ec-vof9xq`（与 `claude/new-session-1959qb` 同基线，未推送到后者）。需求 REQUIREMENTS §25，设计 [visit-pack-p1](design/visit-pack-p1.md)：schema6（appointment.completed_utc、visit_question、visit_pack）、复诊导航页与预约详情、问题清单、按区间/勾选生成PDF与不可变生成记录、确定性事实摘要。工具链：本会话新装 Android SDK 于 `/opt/android-sdk`（platform 37、build-tools 37），JDK 21 系统自带；`local.properties` 已指向它（不提交）。状态：设计已写，代码尚未开始。
+
 ## 项目许可证 MIT（2026-10-07，REQUIREMENTS §24，已完成）
 
 审计后新增根 `LICENSE`（标准 MIT）、`CONTRIBUTING.md`、`docs/AI-DEVELOPMENT.md`；更新 README（License / AI 开发说明、去掉过时的"上游许可未决"）、`THIRD_PARTY_NOTICES.md`（Gradle wrapper、官方原文引用、非官方翻译、文献数据不属 MIT）、`docs/licensing.md`（覆盖范围与不追溯）、根 `PRIOR_ART.md`（按项目对照表）。当前树未发现移植残留或其他 LICENSE/SPDX（Gradle wrapper 除外）。未发布、未改标签/签名/APK/功能或 UI 代码，无 CLA。下文"根LICENSE未选择"等表述为历史记录。
