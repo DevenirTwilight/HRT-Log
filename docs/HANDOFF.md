@@ -374,3 +374,5 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 用户补充复现为HT导入+应用内混合记录、雌二醇舌下、未开化验校准。新增对应合成回归：本应用linked rule、用户确认HT旧上下文、实际与未来舌下曲线均非零、实虚分界连续、中心占视窗比例；无生产逻辑改动。待最终构建结束后执行新增测试，并重跑最终CI。
 
 2026-10-07 build8完整基础检查：domain33、pk18、importer12、data46、reminder14、full90/play77（两PDF跳过），288通过/2跳过/0失败；两变体lint0错误（full66/play61警告），release manifest与schema无漂移通过。用户场景新增回归0d6b80f尚待本机执行，最终CI改为37643141363，不能把基础290项当新增场景验证。release打包继续运行，暂不能交付新APK。
+
+2026-10-07 build8 full包已构建/原正式证书签署：/workspace/HRT-Log-build8-full-signed.apk，23,223,515 bytes，SHA256 c1b9ef54c8386a8eaef85edb033d6c21e2530350f7941dcf8d8bc687bda45e89。versionCode8/非调试/16KB/无INTERNET核验，tmpfiles真实令牌下载回查大小与SHA一致，已在commentary提供浏览器临时链接。生产逻辑d4c3c92，0d6b80f仅新增用户场景回归；CI37643141363 jvm/device-tests成功，android未结束，本机新增场景未执行。play R8继续运行；临时密钥尚需用于play，签后立即清理。剩余：最终本机场景测试、play签名、最终CI和顶部交付块。
