@@ -847,4 +847,16 @@
     <string name="period_frequency_weeks">每 %2$d 周 %1$d 次</string>
     <string name="period_frequency_days">每 %2$d 天 %1$d 次</string>
     <string name="period_current_mapping">当前显示归属 · 方案版本：%1$s。上方保存的上下文保持不变。</string>
+    <string name="timeline_imported_history">导入用药历史</string>
+    <string name="timeline_imported_count">%1$d 条导入记录</string>
+    <string name="timeline_imported_context">这些是已记录的事件，不能从记录间隔推断用药方案。缺失的历史信息仍标为未知。</string>
+    <string name="timeline_imported_unknown_route">原记录途径未知</string>
+    <string name="timeline_imported_amounts">记录的实际剂量：%1$s – %2$s</string>
+    <string name="timeline_imported_unknown_amount">%1$d 条已服记录缺少实际剂量</string>
+    <string name="timeline_imported_open_history">查看这些原始记录</string>
+    <string name="timeline_imported_clear_selection">清除导入记录筛选</string>
+    <string name="milestone_paused">暂停治疗</string>
+    <string name="milestone_stopped">停止治疗</string>
+    <string name="milestone_resumed">恢复治疗</string>
+    <string name="milestone_history_only">记录历史事件，可在下方备注中填写原因。不会改变当前用药方案或提醒。</string>
 </resources>

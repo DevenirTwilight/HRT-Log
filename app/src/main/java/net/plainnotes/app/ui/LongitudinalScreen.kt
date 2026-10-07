@@ -26,23 +26,32 @@ import java.time.*
 
 @Composable fun LongitudinalScreen(state:NotesState,extra:NotesViewModel.ExtraState,onSave:(MilestoneEntity)->Unit,
     onDelete:(Long)->Unit,onOpen:(EventKind)->Unit,contentPadding:PaddingValues,onAppointment:(Long)->Unit={},
-    saveState:MilestoneSaveState=MilestoneSaveState(),onSaveHandled:()->Unit={}) {
+    saveState:MilestoneSaveState=MilestoneSaveState(),onSaveHandled:()->Unit={},onImportedHistory:(List<Long>)->Unit={onOpen(EventKind.DOSE)}) {
     var now by remember{mutableStateOf(Instant.now())}
     LaunchedEffect(Unit){while(true){kotlinx.coroutines.delay(60_000);now=Instant.now()}}
-    val record=remember(extra.regimens,extra.labs,extra.reviews,extra.milestones,state.appointments,now){PeriodTimelineProjection.build(extra,state.appointments,now)}
+    val record=remember(extra.records,extra.regimens,extra.labs,extra.reviews,extra.milestones,state.appointments,now){PeriodTimelineProjection.build(extra,state.appointments,now)}
     val projection=record.projection;val zone=projection.zone;val simple=LocalSimpleMode.current
     val list=rememberLazyListState()
     var edit by rememberSaveable(stateSaver=milestoneSaver){mutableStateOf<MilestoneEntity?>(null)}
     var removeId by rememberSaveable{mutableStateOf<Long?>(null)}
     var detailKey by rememberSaveable{mutableStateOf<String?>(null)}
+    var importKey by rememberSaveable{mutableStateOf<String?>(null)}
     var auditKey by rememberSaveable{mutableStateOf<String?>(null)}
     var focusKey by rememberSaveable{mutableStateOf<String?>(null)}
     var feedback by rememberSaveable{mutableStateOf<Int?>(null)}
     val periods=projection.periods.filter{it.from<=Instant.now()}.asReversed()
     val blocks=buildList<StoryBlock> {
-        if(record.upcoming.isNotEmpty()){add(StoryBlock("upcoming"));record.upcoming.forEach{add(StoryBlock(it.key,event=it))}}
-        periods.forEach{period->add(StoryBlock(period.key,period=period));record.eventsIn(period).forEach{add(StoryBlock(it.key,event=it))}}
-        if(record.unknownEvents.isNotEmpty() || periods.isEmpty()){add(StoryBlock("unknown"));record.unknownEvents.forEach{add(StoryBlock(it.key,event=it))}}
+        if(record.upcoming.isNotEmpty() || record.importedHistory.any{it.future}){
+            add(StoryBlock("upcoming"));record.upcoming.forEach{add(StoryBlock(it.key,event=it))}
+            record.importedHistory.filter{it.future}.forEach{add(StoryBlock(it.key,imported=it))}
+        }
+        periods.forEach{period->add(StoryBlock(period.key,period=period));record.eventsIn(period).forEach{add(StoryBlock(it.key,event=it))}
+            record.importedHistory.filter{!it.future && it.displayPeriodKey==period.key}.forEach{add(StoryBlock(it.key,imported=it))}
+        }
+        if(record.unknownEvents.isNotEmpty() || periods.isEmpty() || record.importedHistory.any{!it.future && it.displayPeriodKey==null}){
+            add(StoryBlock("unknown"));record.unknownEvents.forEach{add(StoryBlock(it.key,event=it))}
+            record.importedHistory.filter{!it.future && it.displayPeriodKey==null}.forEach{add(StoryBlock(it.key,imported=it))}
+        }
     }
     LaunchedEffect(saveState.saved?.id) {
         saveState.saved?.let{saved->
@@ -74,6 +83,17 @@ import java.time.*
         items(blocks,key={it.key}){block->
             val event=block.event;val period=block.period
             when {
+                block.imported!=null->{val imported=block.imported
+                    Surface(modifier=Modifier.padding(start=12.dp),shape=MaterialTheme.shapes.medium,tonalElevation=1.dp){
+                        TextButton(onClick={importKey=imported.key},modifier=Modifier.fillMaxWidth().testTag("timeline:${imported.key}")){
+                            Column(Modifier.fillMaxWidth()){
+                                Text(stringResource(R.string.timeline_imported_history))
+                                Text(importedRange(imported,zone))
+                                Text(stringResource(R.string.timeline_imported_count,imported.records.size),style=MaterialTheme.typography.bodySmall)
+                            }
+                        }
+                    }
+                }
                 event!=null->Surface(modifier=Modifier.padding(start=12.dp),shape=MaterialTheme.shapes.medium,tonalElevation=1.dp){EventRow(event,::open)}
                 period!=null->{
                     val current=period.contains(now)
@@ -99,6 +119,9 @@ import java.time.*
     edit?.let{value->MilestoneDialog(value,saveState,{if(!saveState.saving){edit=null;onSaveHandled()}}){onSave(it)}}
     val detail=(record.events+record.upcoming).firstOrNull{it.key==detailKey}
     detail?.let{event->EventDetail(event,extra,zone,{detailKey=null},{edit=it;detailKey=null},{removeId=it.id;detailKey=null})}
+    record.importedHistory.firstOrNull{it.key==importKey}?.let{summary->
+        ImportedHistoryDialog(summary,zone,{importKey=null}){onImportedHistory(summary.records.map{it.id});importKey=null}
+    }
     val audit=periods.firstOrNull{it.key==auditKey}
     audit?.let{period->AlertDialog(onDismissRequest={auditKey=null},title={Text(stringResource(R.string.period_saved_changes))},
         text={Column(Modifier.verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(8.dp)) {
@@ -173,7 +196,7 @@ import java.time.*
     EventKind.SYMPTOM->R.string.wb_symptoms;EventKind.WELLBEING->R.string.wellbeing;EventKind.REVIEW->R.string.wb_reviews
     EventKind.APPOINTMENT->R.string.appointment;EventKind.MILESTONE->R.string.milestone;EventKind.PLANNED->R.string.timeline_planned
 })
-@Composable private fun milestoneKindLabel(kind:String)=stringResource(when(kind){"STARTED"->R.string.milestone_started;"ROUTE"->R.string.milestone_route;"SURGERY"->R.string.appt_surgery;else->R.string.milestone_custom})
+@Composable private fun milestoneKindLabel(kind:String)=stringResource(when(kind){"STARTED"->R.string.milestone_started;"ROUTE"->R.string.milestone_route;"SURGERY"->R.string.appt_surgery;"PAUSED"->R.string.milestone_paused;"STOPPED"->R.string.milestone_stopped;"RESUMED"->R.string.milestone_resumed;else->R.string.milestone_custom})
 @Composable private fun MilestoneDialog(initial:MilestoneEntity,saveState:MilestoneSaveState,onDismiss:()->Unit,onSave:(MilestoneEntity)->Unit) {
     var dateText by rememberSaveable(initial.id){mutableStateOf(initial.date)};val date=LocalDate.parse(dateText);var kind by rememberSaveable(initial.id){mutableStateOf(initial.kind)}
     var title by rememberSaveable(initial.id){mutableStateOf(initial.title.orEmpty())};var note by rememberSaveable(initial.id){mutableStateOf(initial.note.orEmpty())};var pick by remember{mutableStateOf(false)}
@@ -182,7 +205,8 @@ import java.time.*
             if(saveState.failed)Text(stringResource(R.string.operation_error),color=MaterialTheme.colorScheme.error)
             Text(stringResource(R.string.milestone_intro),style=MaterialTheme.typography.bodySmall)
             OutlinedButton(enabled=!saveState.saving,onClick={pick=true}){Text(formatDate(date))}
-            DropdownField(stringResource(R.string.timeline_type),listOf("CUSTOM","STARTED","ROUTE","SURGERY"),kind,{milestoneKindLabel(it)},{kind=it})
+            DropdownField(stringResource(R.string.timeline_type),MILESTONE_KINDS,kind,{milestoneKindLabel(it)},{kind=it})
+            if(kind in listOf("PAUSED","STOPPED","RESUMED"))Text(stringResource(R.string.milestone_history_only),style=MaterialTheme.typography.bodySmall)
             OutlinedTextField(title,{title=it},enabled=!saveState.saving,label={Text(stringResource(R.string.milestone_title))},modifier=Modifier.fillMaxWidth(),singleLine=true)
             OutlinedTextField(note,{note=it},enabled=!saveState.saving,label={Text(stringResource(R.string.note))},modifier=Modifier.fillMaxWidth(),minLines=2)
         }},confirmButton={Button(enabled=!saveState.saving && (kind!="CUSTOM" || title.isNotBlank()),onClick={onSave(initial.copy(date=date.toString(),kind=kind,title=title.trim().takeIf{it.isNotEmpty()},note=note.trim().takeIf{it.isNotEmpty()}))}){Text(stringResource(if(saveState.saving)R.string.milestone_saving else R.string.save))}},
@@ -194,4 +218,40 @@ private val milestoneSaver=androidx.compose.runtime.saveable.Saver<MilestoneEnti
     save={v->v?.let{listOf(it.id.toString(),it.date,it.kind,it.title.orEmpty(),it.note.orEmpty())} ?: emptyList()},
     restore={v->v.takeIf{it.isNotEmpty()}?.let{MilestoneEntity(it[0].toLong(),it[1],it[2],it[3].takeIf(String::isNotEmpty),it[4].takeIf(String::isNotEmpty))}})
 
-private data class StoryBlock(val key:String,val period:DisplayPeriod?=null,val event:PeriodEvent?=null)
+private data class StoryBlock(val key:String,val period:DisplayPeriod?=null,val event:PeriodEvent?=null,val imported:ImportedHistorySummary?=null)
+
+@Composable private fun importedRange(summary:ImportedHistorySummary,zone:ZoneId)=
+    formatDate(summary.from.atZone(zone).toLocalDate())+" → "+formatDate(summary.through.atZone(zone).toLocalDate())
+
+@Composable private fun ImportedHistoryDialog(summary:ImportedHistorySummary,zone:ZoneId,onDismiss:()->Unit,onHistory:()->Unit) {
+    // Decode frozen contexts only; current medication names, doses and routes must not reinterpret imports.
+    data class SavedMedication(val id:Long,val name:String?,val compound:String?,val route:String?,val unit:String?,val ester:String?)
+    val simple=LocalSimpleMode.current
+    val groups=remember(summary.records){
+        val decoded=summary.records.map{it.medication_id to it.config_snapshot}.distinct().associateWith{(id,json)->MedicationSnapshot.decode(json,id)}
+        summary.records.groupBy{r->val m=decoded[r.medication_id to r.config_snapshot]
+            SavedMedication(r.medication_id,m?.name,m?.molecule,m?.route,m?.unit,m?.profile?.ester)}.toList()
+    }
+    AlertDialog(onDismissRequest=onDismiss,title={Text(stringResource(R.string.timeline_imported_history))},text={
+        LazyColumn(Modifier.heightIn(max=420.dp),verticalArrangement=Arrangement.spacedBy(10.dp)){
+            item{
+                Text(importedRange(summary,zone)+" · "+zone.id)
+                Text(if(summary.origin=="IMPORT_HT")"HRT Tracker" else "Trans Memo")
+                Text(stringResource(R.string.timeline_imported_count,summary.records.size))
+                Text(stringResource(R.string.timeline_imported_context),style=MaterialTheme.typography.bodySmall)
+            }
+            if(!simple)items(groups){(m,rows)->Column{
+                Text(m.name ?: "#${m.id}",style=MaterialTheme.typography.titleSmall)
+                Text(listOfNotNull(m.compound?.let{choiceLabel(it)},m.ester?.takeIf{it!=m.compound}?.let{choiceLabel(it)},
+                    m.route?.let{choiceLabel(it)} ?: stringResource(R.string.timeline_imported_unknown_route)).joinToString(" · "))
+                val amounts=rows.mapNotNull{it.actual_dose}
+                if(amounts.isNotEmpty())Text(stringResource(R.string.timeline_imported_amounts,
+                    formatDose(amounts.min(),m.unit),formatDose(amounts.max(),m.unit)),style=MaterialTheme.typography.bodySmall)
+                val missing=rows.count{it.taken_utc!=null && it.actual_dose==null}
+                if(missing>0)Text(stringResource(R.string.timeline_imported_unknown_amount,missing),style=MaterialTheme.typography.bodySmall)
+                rows.groupingBy{it.status}.eachCount().toSortedMap().forEach{(status,count)->Text(choiceLabel(status)+" · $count",style=MaterialTheme.typography.bodySmall)}
+            }}
+        }
+    },confirmButton={TextButton(onClick=onHistory){Text(stringResource(R.string.timeline_imported_open_history))}},
+        dismissButton={TextButton(onClick=onDismiss){Text(stringResource(R.string.ok))}})
+}

@@ -110,4 +110,22 @@ class RegimenHistoryTest {
         repo.deleteMilestone(first.id);assertEquals(listOf(second),db.dao().milestones())
     }
 
+    @Test fun historicalLifecycleTypesRoundTripWithoutChangingCurrentPlans()=runBlocking {
+        save(med)
+        val rules=repo.rules();val regimens=db.dao().regimens();val before=repo.medications()
+        val rows=listOf("PAUSED","STOPPED","RESUMED").mapIndexed{i,kind->repo.saveMilestone(MilestoneEntity(date="2025-01-0${i+1}",kind=kind,note=" Synthetic reason "))}
+        assertTrue(rows.all{it.id>0 && it.note=="Synthetic reason"})
+        val password="synthetic-password".toCharArray()
+        repo.restoreBackup(repo.exportBackup(password),password)
+        assertEquals(rows,db.dao().milestones());assertEquals(before,repo.medications());assertEquals(rules,repo.rules());assertEquals(regimens,db.dao().regimens())
+        try{repo.saveMilestone(MilestoneEntity(date="2025-01-01",kind="NOT_A_KIND"));fail()}catch(_:IllegalArgumentException){}
+        val raw=db.openHelper.writableDatabase
+        // Existing build12 databases replace their old trigger on opening; no table migration.
+        raw.execSQL("DROP TRIGGER guard_milestone_insert")
+        raw.execSQL("CREATE TRIGGER guard_milestone_insert BEFORE INSERT ON milestone WHEN NEW.kind='PAUSED' BEGIN SELECT RAISE(ABORT,'old guard'); END")
+        SchemaGuards.onOpen(raw)
+        repo.saveMilestone(MilestoneEntity(date="2025-02-01",kind="PAUSED"))
+        assertEquals(4,db.dao().milestones().size)
+        try{db.dao().milestone(MilestoneEntity(date="2025-01-01",kind="NOT_A_KIND"));fail()}catch(_:android.database.sqlite.SQLiteException){}
+    }
 }

@@ -50,19 +50,20 @@ fun adherence(records: List<RecordEntity>) = records.filter { it.slot_key != nul
 private fun RecordEntity.at(): Instant = Instant.ofEpochMilli(taken_utc ?: scheduled_utc ?: 0)
 
 @Composable fun HistoryScreen(state: NotesState, records: List<RecordEntity>, onEdit: (RecordEntity) -> Unit, onDelete: (RecordEntity) -> Unit, contentPadding: PaddingValues,
-                              onAdd: () -> Unit = {}, onBatch: () -> Unit = {}, onLink: (RecordEntity) -> Unit = {}, onConfirmMissed:(RecordEntity)->Unit = {}) {
+                              onAdd: () -> Unit = {}, onBatch: () -> Unit = {}, onLink: (RecordEntity) -> Unit = {}, onConfirmMissed:(RecordEntity)->Unit = {},selectedRecordIds:Set<Long>?=null,onClearSelection:()->Unit={}) {
     val meds = state.medications.associateBy { it.id }
-    var medFilter by rememberSaveable { mutableStateOf<Long?>(null) }
-    var days by rememberSaveable { mutableIntStateOf(30) }
+    var medFilter by rememberSaveable(selectedRecordIds) { mutableStateOf<Long?>(null) }
+    var days by rememberSaveable(selectedRecordIds) { mutableIntStateOf(if(selectedRecordIds==null)30 else 0) }
     val zone = ZoneId.systemDefault()
     val since = if (days == 0) Instant.EPOCH else LocalDate.now().minusDays(days.toLong() - 1).atStartOfDay(zone).toInstant()
-    val shown = records.filter { it.deleted_at_utc == null && (medFilter == null || it.medication_id == medFilter) && !it.at().isBefore(since) }.sortedByDescending { it.at() }
+    val shown = records.filter { it.deleted_at_utc == null && (selectedRecordIds==null || it.id in selectedRecordIds) && (medFilter == null || it.medication_id == medFilter) && !it.at().isBefore(since) }.sortedByDescending { it.at() }
     val byDay = shown.groupBy { it.at().atZone(zone).toLocalDate() }
     val simple = LocalSimpleMode.current
     val canAdd = state.medications.any { it.active }
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = contentPadding.calculateTopPadding() + 8.dp,
         bottom = contentPadding.calculateBottomPadding() + 32.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item { HistoryHeader(canAdd, onAdd, onBatch) }
+        if(selectedRecordIds!=null)item{TextButton(onClick=onClearSelection){Text(stringResource(R.string.timeline_imported_clear_selection))}}
         if (!simple && state.medications.size > 1) item {
             Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 FilterChip(medFilter == null, { medFilter = null }, label = { Text(stringResource(R.string.all_medications)) })

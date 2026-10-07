@@ -27,4 +27,26 @@ class TimelineAndroidTest {
         ui.onNodeWithTag("timeline:milestone:160").assertHasClickAction().performClick()
         ui.onNodeWithText("Synthetic exact-source 160").assertIsDisplayed()
     }
+    @Test fun oldImportedHistoryWithoutARegimenOpensExactSources() {
+        val time=java.time.Instant.now().minusSeconds(400*86400L).toEpochMilli()
+        val medication=MedicationEntity(1,"Synthetic frozen import","E2","SUBLINGUAL","MG",2.0,40.0,site_rotation=false,notifications_on=false,active=true,sort_order=0)
+        val row=RecordEntity(71,1,taken_utc=time,taken_zone="UTC",actual_dose=2.0,status="ON_TIME",origin="IMPORT_HT",source_record_key="ht:synthetic",revision=1,
+            config_snapshot=MedicationSnapshot.encode(medication,ProfileEntity(1,"E2","sublingual")))
+        var opened:List<Long>?=null
+        ui.setContent{MaterialTheme{LongitudinalScreen(NotesState(loading=false),NotesViewModel.ExtraState(records=listOf(row)),{},{},{},PaddingValues(),onImportedHistory={opened=it})}}
+        ui.onNodeWithTag("timeline:import-history:IMPORT_HT:unknown:false").assertIsDisplayed().performClick()
+        ui.onNodeWithText("Synthetic frozen import").assertIsDisplayed()
+        ui.onNodeWithText(ui.activity.getString(R.string.timeline_imported_open_history)).performClick()
+        ui.runOnIdle{org.junit.Assert.assertEquals(listOf(71L),opened)}
+    }
+    @Test fun simpleModeImportedDetailHidesFrozenMedicationNames() {
+        val time=java.time.Instant.now().minusSeconds(400*86400L).toEpochMilli()
+        val row=RecordEntity(71,1,taken_utc=time,taken_zone="UTC",actual_dose=null,status="ON_TIME",origin="IMPORT_TM",source_record_key="tm:synthetic",revision=1,
+            config_snapshot="""{"name":"Synthetic private import","molecule":"E2","unit":"MG"}""")
+        ui.setContent{CompositionLocalProvider(LocalSimpleMode provides true){MaterialTheme{
+            LongitudinalScreen(NotesState(loading=false),NotesViewModel.ExtraState(records=listOf(row)),{},{},{},PaddingValues())}}}
+        ui.onNodeWithTag("timeline:import-history:IMPORT_TM:unknown:false").performClick()
+        ui.onNodeWithText("Synthetic private import").assertDoesNotExist()
+        ui.onNodeWithText(ui.activity.getString(R.string.timeline_imported_open_history)).assertIsDisplayed()
+    }
 }

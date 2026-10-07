@@ -4,9 +4,9 @@
 
 用户再次纠正：**play版本已废弃。以后只维护、测试、构建和交付full，不再生成或签署play APK。** 已移除Gradle play flavor、src/play空实现、CI play任务，release manifest检查只要求full。AGENTS/CLAUDE/REQUIREMENTS/README同步。下文双变体测试与play附件均为历史记录，不是下一步任务；旧公开Release核验清单保持历史事实，不修改公开Release/标签。最新交付full为build12（见下文交付与下载边界）。
 
-## 当前工作：build13导入时间线修复（2026-10-07，设计完成，尚未实现）
+## 当前工作：build13导入时间线修复（2026-10-07，源码已实现，验证中）
 
-用户要求修复导入内容不体现在Timeline，并再实现一批；用户反馈TalkBack没问题。根因：导入仅实际records，没有可信方案时Timeline不读取它们；refresh已读取records。设计见design/imported-timeline-history-p1.md、需求§28。本批：只读按时期/未知区导入摘要，用户填写暂停/停用/恢复历史里程碑，不自动修改方案/提醒、不推断旧频率。保持schema6表结构、旧key/Context1/VisitPack1/PK，full/build13原签名。下一步实现并验证/交付，尚无新APK。稳定slot身份和完整停用状态仍未实现。
+用户要求修复导入内容不体现在Timeline，并再实现一批；用户反馈TalkBack没问题。根因：导入仅实际records，没有可信方案时Timeline不读取它们；refresh已读取records。设计见design/imported-timeline-history-p1.md、需求§28。本批：只读按时期/未知区导入摘要，用户填写暂停/停用/恢复历史里程碑，不自动修改方案/提醒、不推断旧频率。保持schema6表结构、旧key/Context1/VisitPack1/PK，full/build13原签名。源码已实现：按时期/未知区/Upcoming聚合两类导入，不造方案；详情只读冻结药物/剂量/状态，按源ID打开History，默认all并可清除筛选；records加入remember依赖。PAUSED/STOPPED/RESUMED共用allowlist，onOpen/restore校验同步、UI/PDF四语。schema6、build13。首轮data回归通过；完整轮新增跨层测试因Robolectric错误启动正式Application的receiver权限失败，已改测试application=android.app.Application隔离数据库（不是修改正式manifest）。最终完整测试/lint/release/native测试APK构建正在/workspace/tooling/build13-final-checks.log运行，不能把初轮失败写成全部通过。增加了两项原生导入摘要/简单模式验收，尚未执行。尚无新APK。稳定slot身份和完整停用状态仍未实现。
 
 ## 当前最新交付：Treatment Period / Timeline build12（2026-10-07，完成）
 

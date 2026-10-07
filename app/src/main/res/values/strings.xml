@@ -847,4 +847,16 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="period_frequency_weeks">%1$d dose(s) every %2$d week(s)</string>
     <string name="period_frequency_days">%1$d dose(s) every %2$d day(s)</string>
     <string name="period_current_mapping">Current display mapping · regimen versions: %1$s. The saved context above is unchanged.</string>
+    <string name="timeline_imported_history">Imported medication history</string>
+    <string name="timeline_imported_count">%1$d imported records</string>
+    <string name="timeline_imported_context">These are recorded events. Their spacing does not establish a prescribed regimen. Unknown historical details remain unknown.</string>
+    <string name="timeline_imported_unknown_route">Route unknown in saved record</string>
+    <string name="timeline_imported_amounts">Recorded amounts: %1$s – %2$s</string>
+    <string name="timeline_imported_unknown_amount">Actual amount unknown in %1$d taken records</string>
+    <string name="timeline_imported_open_history">Open these history records</string>
+    <string name="timeline_imported_clear_selection">Clear imported-record filter</string>
+    <string name="milestone_paused">Treatment paused</string>
+    <string name="milestone_stopped">Treatment stopped</string>
+    <string name="milestone_resumed">Treatment resumed</string>
+    <string name="milestone_history_only">Record a historical event and optionally its reason below. This does not change current medication schedules or reminders.</string>
 </resources>

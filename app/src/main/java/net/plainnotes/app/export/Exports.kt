@@ -223,7 +223,7 @@ object PdfReport {
             text(context.getString(R.string.visit_milestones),head)
             val rows=d.milestones.filter{LocalDate.parse(it.date) in from..to}.sortedBy{it.date}
             if(rows.isEmpty())text(context.getString(R.string.report_none),body)
-            rows.forEach{m->text(listOfNotNull(m.date,context.getString(when(m.kind){"STARTED"->R.string.milestone_started;"ROUTE"->R.string.milestone_route;"SURGERY"->R.string.appt_surgery;else->R.string.milestone_custom}),m.title,m.note).joinToString(" · "),body)}
+            rows.forEach{m->text(listOfNotNull(m.date,context.getString(when(m.kind){"STARTED"->R.string.milestone_started;"ROUTE"->R.string.milestone_route;"SURGERY"->R.string.appt_surgery;"PAUSED"->R.string.milestone_paused;"STOPPED"->R.string.milestone_stopped;"RESUMED"->R.string.milestone_resumed;else->R.string.milestone_custom}),m.title,m.note).joinToString(" · "),body)}
         }
         if(on(VisitSection.PACKAGES)){
         text(context.getString(R.string.wb_package_info),head)

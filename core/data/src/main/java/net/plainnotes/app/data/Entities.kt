@@ -272,6 +272,8 @@ data class RegimenVersionEntity(@PrimaryKey(autoGenerate=true)val id:Long=0,val 
     val effective_until_utc:Long?=null,val zone:String,val definition_json:String,val clinical_signature:String,val origin:String,val recorded_at_utc:Long?=null)
 @Entity(tableName="regimen_rule_link",foreignKeys=[ForeignKey(entity=RuleEntity::class,parentColumns=["id"],childColumns=["rule_id"],onDelete=ForeignKey.RESTRICT),ForeignKey(entity=RegimenVersionEntity::class,parentColumns=["id"],childColumns=["regimen_id"],onDelete=ForeignKey.RESTRICT)],indices=[Index("regimen_id")])
 data class RegimenRuleLinkEntity(@PrimaryKey val rule_id:Long,val regimen_id:Long)
+val MILESTONE_KINDS = listOf("CUSTOM","STARTED","ROUTE","SURGERY","PAUSED","STOPPED","RESUMED")
+
 @Entity(tableName="milestone")
 data class MilestoneEntity(@PrimaryKey(autoGenerate=true)val id:Long=0,val date:String,val kind:String="CUSTOM",val title:String?=null,val note:String?=null)
 

@@ -25,7 +25,7 @@ const val BACKFILL_MAX_DAYS=731L
     }
     suspend fun medications()=withContext(Dispatchers.IO){db().dao().medications()}
     suspend fun saveMilestone(value:MilestoneEntity)=transaction{dao->
-        LocalDate.parse(value.date);require(value.kind in listOf("CUSTOM","STARTED","ROUTE","SURGERY"))
+        LocalDate.parse(value.date);require(value.kind in MILESTONE_KINDS)
         require(value.kind!="CUSTOM" || !value.title.isNullOrBlank())
         val normalized=value.copy(title=value.title?.trim()?.takeIf{it.isNotEmpty()},note=value.note?.trim()?.takeIf{it.isNotEmpty()})
         val inserted=dao.milestone(normalized)

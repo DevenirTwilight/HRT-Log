@@ -15,7 +15,8 @@ fun RegimenDefinition.therapyStandard():TherapyStandard {
 }
 data class PeriodEvent(val key:String,val kind:EventKind,val at:Instant?,val date:LocalDate,val source:EventSource,
     val displayPeriodKey:String?,val exactRegimenIds:Set<Long>,val dateOnly:Boolean)
-data class PeriodTimeline(val projection:TreatmentPeriodProjection,val events:List<PeriodEvent>,val upcoming:List<PeriodEvent>) {
+data class PeriodTimeline(val projection:TreatmentPeriodProjection,val events:List<PeriodEvent>,val upcoming:List<PeriodEvent>,
+    val importedHistory:List<ImportedHistorySummary> = emptyList()) {
     fun eventsIn(period:DisplayPeriod)=events.filter{it.displayPeriodKey==period.key}
     val unknownEvents get()=events.filter{it.displayPeriodKey==null}
 }
@@ -39,6 +40,7 @@ object PeriodTimelineProjection {
         extra.milestones.forEach{add("milestone:${it.id}",EventKind.MILESTONE,null,LocalDate.parse(it.date),EventSource.Milestone(it))}
         appointments.forEach{add("appointment:${it.id}",EventKind.APPOINTMENT,Instant.ofEpochMilli(it.at_utc),null,EventSource.Appointment(it))}
         val order=compareByDescending<PeriodEvent>{it.date}.thenByDescending{it.at}.thenBy{it.key}
-        return PeriodTimeline(projection,events.sortedWith(order),upcoming.sortedWith(compareBy<PeriodEvent>{it.date}.thenBy{it.at}.thenBy{it.key}))
+        return PeriodTimeline(projection,events.sortedWith(order),upcoming.sortedWith(compareBy<PeriodEvent>{it.date}.thenBy{it.at}.thenBy{it.key}),
+            ImportedHistoryProjection.build(extra.records,projection,now))
     }
 }

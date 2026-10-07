@@ -847,4 +847,16 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="period_frequency_weeks">%1$d prise(s) toutes les %2$d semaine(s)</string>
     <string name="period_frequency_days">%1$d prise(s) tous les %2$d jour(s)</string>
     <string name="period_current_mapping">Correspondance actuelle · versions du schéma : %1$s. Le contexte sauvegardé ci-dessus reste inchangé.</string>
+    <string name="timeline_imported_history">Historique de prises importé</string>
+    <string name="timeline_imported_count">%1$d entrées importées</string>
+    <string name="timeline_imported_context">Il s’agit d’événements enregistrés. Leur espacement ne permet pas de déduire un schéma prescrit. Les détails historiques inconnus restent inconnus.</string>
+    <string name="timeline_imported_unknown_route">Voie inconnue dans l’entrée conservée</string>
+    <string name="timeline_imported_amounts">Quantités enregistrées : %1$s – %2$s</string>
+    <string name="timeline_imported_unknown_amount">Quantité réelle inconnue pour %1$d prises enregistrées</string>
+    <string name="timeline_imported_open_history">Voir ces entrées dans l’historique</string>
+    <string name="timeline_imported_clear_selection">Retirer le filtre des entrées importées</string>
+    <string name="milestone_paused">Traitement mis en pause</string>
+    <string name="milestone_stopped">Traitement arrêté</string>
+    <string name="milestone_resumed">Traitement repris</string>
+    <string name="milestone_history_only">Enregistrez un événement historique et, si souhaité, sa raison ci-dessous. Cela ne modifie pas les horaires de prises ni les rappels actuels.</string>
 </resources>
