@@ -1,5 +1,9 @@
 # 交接说明：工作进度与开发指南
 
+## 最新硬性决定：play已废弃，仅维护full（2026-10-07）
+
+用户再次纠正：**play版本已废弃。以后只维护、测试、构建和交付full，不再生成或签署play APK。** 已移除Gradle play flavor、src/play空实现、CI play任务，release manifest检查只要求full。AGENTS/CLAUDE/REQUIREMENTS/README同步。下文双变体测试与play附件均为历史记录，不是下一步任务；旧公开Release核验清单保持历史事实，不修改公开Release/标签。最新可安装full仍为build9。
+
 ## 最新交付规则与正式签名测试包（2026-10-07）
 
 用户明确日常使用此应用，测试时不能反复卸载正式安装。以后所有交付给用户的 APK（含测试包）统一使用第 7 节现有私有正式密钥；不再交付 CI 的调试签名包。CI 内部自动验证仍可使用调试密钥，不将私钥或密码上传 CI。此决定优先于本文历史交付说明。
@@ -235,7 +239,7 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 
 | 模块 | 内容 |
 |---|---|
-| `app` | 界面（Compose）、ViewModel、导出（CSV/PDF）、应用锁、伪装模式。`src/full`：伪装外壳（计算器、便签）、activity-alias、`DisguiseSection`；`src/play`：空实现 |
+| `app` | 界面（Compose）、ViewModel、导出（CSV/PDF）、应用锁、伪装模式。`src/full`：伪装外壳（计算器、便签）、activity-alias、`DisguiseSection`；只保留full变体 |
 | `core/domain` | 纯 Kotlin：给药规则展开、槽位 key（`wall:<ver>@<local>`）、夏令时规则（跳过的时间取第一个有效时刻，重复的时间取较早的偏移）、迟服和漏服判定 |
 | `core/data` | Room + SQLCipher、`NotesRepository`、SQL 触发器约束（`SchemaGuards`，每次打开数据库都重建）、只追加的库存流水（`SupplyLedger`）、备份（`DataTransfer.kt`，Argon2id + AES-GCM）、Trans Memo / HRT tracker 写入、数据空间（PRIMARY 固定真实数据；旧 DECOY / notes_b.db 仅保留兼容清理，不用于私人便签认证/UI） |
 | `core/reminder` | 精确闹钟、直接启动（Direct Boot）缓存、通知（`NotificationPrefs`）、补药通知（`StockAlerts`）。提醒始终只读真实空间 |
@@ -253,7 +257,7 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 - Robolectric 在无法直连 Maven 的环境里可以离线运行：`-ProbolectricDir=<放 android-all jar 的目录>`（需要 SDK 9、12、15 对应的 jar）。
 - 完整检查（提交前必跑）：
   ```
-  ./gradlew test lintFullDebug lintPlayDebug          # 加上 -ProbolectricDir=... 如需离线
+  ./gradlew test lintFullDebug          # 加上 -ProbolectricDir=... 如需离线
   ./gradlew -PjvmOnly :core:domain:test :pk-engine:test :importer:test   # CI 的 jvm 任务
   ```
   2026-10-06 最新全量结果：202 项单元测试，200 通过、2 项 PDF 写入跳过，0 失败；lint 0 错误（full 63 / play 58 条既有警告）；本次原生与四构建最终结果见 2e。
@@ -407,3 +411,7 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 2026-10-07 build9 full正式签名与下载回查完成，临时签名凭据已清理；顶部交付块已更新。仅CI android最终结果尚待核对，不能称三个CI均成功；无需另造新APK或重复已通过本机测试。
 
 2026-10-07 build9最终完成：CI37645063384三个任务全部success，四构建/manifest/schema检查通过。本机169项应用回归（167通过、2 PDF跳过）/两lint/full release成功；正式full已独立下载核验并交付。临时签名凭据清理，无本轮未完成代码或验证任务、无公开发布；用户真机结果待确认。
+
+### 2o. 废弃play（2026-10-07）
+
+用户要求记住并写入交接。已清理实际构建/CI/空实现/校验脚本，保留full flavor命名使现有full任务与安装兼容，不改schema/版本号/运行时逻辑。本轮不生成新APK；下一步验证Gradle不再提供play任务与full构建，然后保存结果。

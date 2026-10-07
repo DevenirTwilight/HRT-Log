@@ -14,7 +14,7 @@ android {
     // It must never sign a release meant for distribution.
     signingConfigs { getByName("debug") { storeFile = file("debug.keystore"); storePassword = "android"; keyAlias = "androiddebugkey"; keyPassword = "android" } }
     flavorDimensions += "distribution"
-    productFlavors { create("full") { dimension = "distribution" }; create("play") { dimension = "distribution" } }
+    productFlavors { create("full") { dimension = "distribution" } }
     buildTypes { getByName("release") { isMinifyEnabled = true; proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro") } }
     buildFeatures { compose = true }
 }

@@ -30,7 +30,7 @@ jobs:
           packages: 'platform-tools'
       - run: sdkmanager 'platforms;android-37.0' 'build-tools;37.0.0'
       - uses: gradle/actions/setup-gradle@0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d
-      - run: ./gradlew :core:data:testDebugUnitTest :core:reminder:testDebugUnitTest :app:testFullDebugUnitTest :app:testPlayDebugUnitTest lintFullDebug lintPlayDebug :app:assembleFullDebug :app:assemblePlayDebug :app:assembleFullRelease :app:assemblePlayRelease :core:data:assembleDebugAndroidTest :app:assembleFullDebugAndroidTest
+      - run: ./gradlew :core:data:testDebugUnitTest :core:reminder:testDebugUnitTest :app:testFullDebugUnitTest lintFullDebug :app:assembleFullDebug :app:assembleFullRelease :core:data:assembleDebugAndroidTest :app:assembleFullDebugAndroidTest
       - run: python3 scripts/check_release_manifest.py
       - run: git diff --exit-code -- core/data/schemas docs/PLAN.md
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
