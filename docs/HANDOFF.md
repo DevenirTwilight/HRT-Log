@@ -146,6 +146,12 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 - 本地原附件备份在公开仓库外 `/workspace/release-hotfix/prior`；既有正式密钥备份位置仍见第 7 节。本轮临时恢复的密钥/密码/ZIP 在签名完成后删除，不触碰永久私有备份。
 - [只读附件校验 CI 37512727438](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37512727438) 成功：下载回查五个公开附件大小/SHA-256，并核对 source tag；最终本地只读校验也通过。后续发布必须提高 versionCode；版本名回到 0.2.0 不是内部编号或代码回退。
 
+## 2h. 身心状态重新设计（2026-10-07，`REQUIREMENTS.md` 第 15 节）：进行中
+
+- 第 1 步（调研核实，`docs/wellbeing-research.md`）：进行中。
+- 第 2 步（设计文档 `docs/wellbeing-design.md`）：未开始。**写完后停下等用户审核，审核前不写功能代码。**
+- 第 3 步（实现）：未开始。不改浓度模型代码，不发布。
+
 ## 3. 代码结构
 
 | 模块 | 内容 |
