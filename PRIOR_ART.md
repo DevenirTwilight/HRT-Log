@@ -58,7 +58,24 @@
 
 实现 PR 提供来源声明：使用了哪些外部材料，哪些实现是独立的；任何真实复用逐文件列出许可/作者/通知，不写无法证实的“全部原创”。审阅扫描新增源码/资源中的上游路径、copyright、literal文案/fixture/模型参数，重点核对未授权搬入与跨语言逐行翻译；相似度工具只是线索，不是法务结论。图标/字体/医学量表/翻译另有许可，MIT软件许可不覆盖它们。
 
-项目级 LICENSE 是当前缺口：由维护者在历史/作者/依赖审计后选择，记载版权归属和第三方通知；不要让新贡献者以为没有LICENSE也可自动复用。旧移植代码仍在history，不通过新增LICENSE追溯授权他人的作品。本轮不删除旧标签/history或代作者联系许可方。
+项目级 LICENSE（历史记录）：此前为缺口，须由维护者在历史/作者/依赖审计后选择。2026-10-07 已在审计后采用 MIT（根 `LICENSE`，见 [licensing.md](docs/licensing.md)、REQUIREMENTS §24）。旧移植代码仍在history，新增LICENSE不追溯授权他人的作品；不删除旧标签/history，不代作者联系许可方。
+
+## 按项目的 prior art 对照（2026-10-07）
+
+| Feature | Known prior art | What was studied | HRT Log independent design | Relevant docs / commits |
+|---|---|---|---|---|
+| 提醒、包装库存、每日感受记录；导入 | Trans Memo（Chrysalide 协会，未找到公开授权源码） | 官方说明与开发时参考的界面截图；用户自己导出的数据库结构（仅为导入） | 自写导入器与数据模型；致谢如实说明参考过截图；身心状态按核实来源重新设计；不复制代码、文字、图标、配色或插图，不反编译 | licensing.md；REQUIREMENTS §15/§16；docs/wellbeing-design.md；bf7d6d4 |
+| 浓度估算（历史）与 JSON 导入 | Transmtf HRT Tracker（MIT），其 PK 上游 LaoZhong-Mihari/HRT-Recorder-PKcomponent-Test（无 LICENSE） | 早期曾移植其模型（已删除）；导出 JSON 格式；固定提交 8c9abdde 的绘图轴处理 | 模型和校准按原始文献独立重写；导入器只读其 JSON 格式；绘图视窗自写，不用其阈值/Recharts | licensing.md；docs/pk-model.md；design/concentration-context-chart-hotfix.md |
+| 方案版本、替换链、widget、纪念日、备份安全 | Featherline（GPL-3.0） | 行为与模型：medicine/group/log、schedule simulation、widget/quick log、TrackedDate、Argon2/GCM 备份边界 | 只提取需求；自身 Rule/Record 版本、半开区间阶段、自身 PNBAK 校验；不复制代码、算法表达、UI、资源、测试 | design/longitudinal-hrt-record.md；hrt-competitor-matrix-2026-10-07.md；beef98e |
+| 注射部位、多途径、广泛药物 | Mona（AGPL-3.0） | 部位记录、途径覆盖面 | ingredient/form/route/product 分离；注射体积与部位基于自身 Container/SupplyEntry 设计 | design/longitudinal-hrt-record.md II.7–8 |
+| 治疗变更、目标、预约 | Chrysalide PWA（MIT） | treatment changes、objectives、预约提醒 | 自身阶段与里程碑由用户确定；预约扩展为 Visit Pack 提案；未复用其代码 | design/epochs-timeline-p1.md；74175c9、91d4813 |
+| 库存、安全层、多激素 | MyHRT / MyTRT（应用未见公开授权源码；MyHRT security 子仓库为仅供核查的自定义许可） | 官方资料；security 仅记录设计事实 | 加密使用公开标准自写；不复用其任何实现；不标为开源 | hrt-competitor-matrix-2026-10-07.md |
+| 记录、PK 与校准 | Yuuki HRT-Tracker（SwiftUI，MIT）；NoMTF HRT Recorder（Kotlin Compose，未见 LICENSE） | 抽象行为与数据模型（固定提交 a484b24 / 28597d9） | 无复用；HRT Recorder 只作 prior art | hrt-competitor-matrix-2026-10-07.md |
+| 照片与时间线 | TransTracks（GPL-3.0-or-later，已归档） | 时间线与里程碑思路 | source-reference projection 与时间精度自写；不搬照片/UI/备份实现 | design/epochs-timeline-p1.md |
+| 复诊报告 | HRTMe（未见公开源码） | 官方说明中的 GP 报告 | 在自身预约/PDF 上扩展，确定性计数，用户选择内容 | design/longitudinal-hrt-record.md II.5–6 |
+| 化验采样上下文 | Featherline panel 间隔；HRT Log 原有 E2 elapsed | 采样与最近服药间隔的展示方式 | 逐成分最近实际事件、不可变修订、48h 事实窗口、采样前无自校准 | design/lab-context-p1.md；9f5dfaa、2ff40f3 |
+
+以上是研究记录，不是法律意见。上表"What was studied"指当时实际读过的材料；以后新增功能时在此追加一行。
 
 ## P1第一批独立实施（2026-10-07）
 

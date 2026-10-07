@@ -235,3 +235,14 @@
 ## 23. Lab Context第一批（2026-10-07）
 
 用户要求继续，先实现化验上下文冻结/修订、各成分最近实际服药、明确48h回顾窗口、旧化验显式重建与可选未校准估算。详见design/lab-context-p1.md。schema5/build10，仅full、原正式签名；不判读化验/因果、不改PK参数、不公开发布。LabPanel与Visit Pack另批。
+
+## 24. 项目许可证采用 MIT（2026-10-07）
+
+用户决定：在审计历史来源后，对本项目有权授权的当前源码采用 MIT。版权行 "Copyright (c) 2026 DevenirTwilight and HRT Log contributors"，条文不改。主要理由与边界：
+
+- MIT 是当前协作的中立起点，便于他人参与；不承诺永不再讨论。以后可与真正长期参与的贡献者、维护者共同重新考虑；已按 MIT 发布的版本不能撤回；他人贡献带版权后，改许可依赖其同意，是治理决定而非单方决定。不设 CLA；未经单独讨论和明确同意，不要求转让版权。
+- 不追溯历史：Git 历史和原 0.2.0 build 2 中的移植 PK 代码不因 LICENSE 获得授权，licensing.md 来源链保留；不改写历史。官方原文引用、非官方翻译、文献数据、依赖、Gradle wrapper 等按各自条款，列于 THIRD_PARTY_NOTICES.md。
+- 不在 MIT 中加禁止商用/遥测/广告等条件。官方应用免费、无广告/分析/遥测、无 INTERNET 权限，由政策、README、CI 权限检查和发布流程保证。
+- 对外项目：MIT/Apache 可依法复用但优先研究→设计→独立实现；GPL/AGPL（Featherline、Mona）只读取思路、独立实现、不复制；无许可证项目只作 prior art。
+- 公开说明"人主导、AI 实现"（README、docs/AI-DEVELOPMENT.md）：不称 AI 为法律作者，不称维护者手写代码，文档只写"AI development tools / AI coding agents"，不写具体模型或产品名。新增 CONTRIBUTING.md；prior art 记录继续用根目录 PRIOR_ART.md。
+- 本轮不发布、不改标签/签名/APK、不改功能或 UI 代码。

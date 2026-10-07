@@ -40,7 +40,8 @@ CSV/PDF export, app lock and privacy settings are implemented. Full builds also 
 calculator/notes disguise. English, Simplified/Traditional Chinese and French are supported.
 See [`docs/HANDOFF.md`](docs/HANDOFF.md) for verification and remaining work,
 [`docs/REQUIREMENTS.md`](docs/REQUIREMENTS.md) for current requirements, and
-[`docs/licensing.md`](docs/licensing.md) for the unresolved upstream model license.
+[`docs/licensing.md`](docs/licensing.md) for licensing status and the history of the
+removed model port (now rewritten independently from published literature).
 Literature validation and physical-device verification remain incomplete.
 Health information must never be committed; use only synthetic test data.
 
@@ -74,6 +75,24 @@ Public binaries: [0.2.0 release](https://github.com/DevenirTwilight/HRT-Log/rele
 They use a private release key, distinct from the public debug key. Back up your data
 before replacing a debug-signed installation; uninstalling deletes local app data.
 Never commit the private signing key or upload its backup to a public release.
+
+## License
+
+HRT Log is released under the [MIT License](LICENSE) unless otherwise noted.
+Third-party components and historical material may be subject to separate terms; see
+[`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) and [`docs/licensing.md`](docs/licensing.md).
+Older releases and Git history contain material that is not covered by this license.
+
+The official app is free, has no ads, analytics or telemetry, and requests no INTERNET
+permission. These are project policies enforced by review, CI permission checks and the
+release process, not license conditions. Contributions: [`CONTRIBUTING.md`](CONTRIBUTING.md).
+
+## How this project is developed
+
+HRT Log is a human-directed, AI-implemented project. Product requirements, design decisions,
+testing, validation and release decisions are directed by the maintainer, while source code
+and portions of the documentation are primarily produced with AI development tools. See
+[`docs/AI-DEVELOPMENT.md`](docs/AI-DEVELOPMENT.md).
 
 ## Disguise mode
 

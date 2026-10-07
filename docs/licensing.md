@@ -1,6 +1,16 @@
 # 许可状态（浓度模型与校准）
 
-最后更新：2026-10-06
+最后更新：2026-10-07
+
+## 项目许可证：MIT（2026-10-07）
+
+- 根目录新增 `LICENSE`（标准 MIT，未改条文），版权行 "Copyright (c) 2026 DevenirTwilight and HRT Log contributors"。决定与理由见 REQUIREMENTS.md 第 24 节。
+- **覆盖范围**：本项目有权授权的当前源码，包括按文献独立重写的 `pk-engine`、`tools/pk-fit`、`LabFit.kt`，以及应用、core、importer、reminder 等自写代码和自写文档。
+- **不覆盖**（见 `THIRD_PARTY_NOTICES.md`）：依赖库；Gradle wrapper（Apache-2.0）；`symptom-sources.json` 中的官方原文引用；`wellbeing-translations.json` 中这些原文的非官方翻译；`pk-params.json`、`docs/pk-research/` 中的文献数据与引文；未纳入的量表（GENDER-Q、GCLS）。
+- **不追溯**：新增 LICENSE 不能、也没有授权 Git 历史中已删除的移植代码（`Pk.kt`、`Gel.kt`、`Calibration.kt`、`tools/pk-reference/upstream/` 等），也不覆盖原 0.2.0 build 2 附件中的移植部分。下面的来源链和"上游无 LICENSE、未获授权"的事实保持不变；不改写 Git 历史。
+- 当前树已复查（2026-10-07）：未发现移植代码、上游副本或其他 LICENSE/COPYING/SPDX 标记（Gradle wrapper 脚本除外）。HRT tracker 导入器按 Transmtf HRT Tracker（MIT）JSON 导出格式读取字段，凝胶产品编号 1–5 与其导出数据一致，属于为互通读取数据格式，不含其代码。Trans Memo 合成测试库只复现导出文件的表结构，数据为虚构。
+- MIT 是当前协作的中立起点，不承诺永不再讨论；以后若与真正长期参与的贡献者、维护者讨论改变许可证，已按 MIT 发布的版本不能撤回，含他人版权的代码需其同意。不设 CLA。
+- 官方应用免费、无广告/分析/遥测、不申请 INTERNET 权限，由项目政策、README、CI 权限检查和发布流程保证，不写进许可证条款。
 
 ## 当前状态（0.3.0 起）
 

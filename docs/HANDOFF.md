@@ -4,6 +4,10 @@
 
 用户再次纠正：**play版本已废弃。以后只维护、测试、构建和交付full，不再生成或签署play APK。** 已移除Gradle play flavor、src/play空实现、CI play任务，release manifest检查只要求full。AGENTS/CLAUDE/REQUIREMENTS/README同步。下文双变体测试与play附件均为历史记录，不是下一步任务；旧公开Release核验清单保持历史事实，不修改公开Release/标签。最新可安装full为build10。
 
+## 项目许可证 MIT（2026-10-07，REQUIREMENTS §24，已完成）
+
+审计后新增根 `LICENSE`（标准 MIT）、`CONTRIBUTING.md`、`docs/AI-DEVELOPMENT.md`；更新 README（License / AI 开发说明、去掉过时的"上游许可未决"）、`THIRD_PARTY_NOTICES.md`（Gradle wrapper、官方原文引用、非官方翻译、文献数据不属 MIT）、`docs/licensing.md`（覆盖范围与不追溯）、根 `PRIOR_ART.md`（按项目对照表）。当前树未发现移植残留或其他 LICENSE/SPDX（Gradle wrapper 除外）。未发布、未改标签/签名/APK/功能或 UI 代码，无 CLA。下文"根LICENSE未选择"等表述为历史记录。
+
 ## 最新交付规则与正式签名测试包（2026-10-07）
 
 用户明确日常使用此应用，测试时不能反复卸载正式安装。以后所有交付给用户的 APK（含测试包）统一使用第 7 节现有私有正式密钥；不再交付 CI 的调试签名包。CI 内部自动验证仍可使用调试密钥，不将私钥或密码上传 CI。此决定优先于本文历史交付说明。
