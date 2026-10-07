@@ -362,3 +362,7 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 2026-10-07 最终回归进一步完成：按模块/变体合计276项（domain33、pk18、importer12、data42、reminder14、full85、play72），274通过、2 PDF跳过、0失败；并非276个互不重复用例。lint full0错误65警告、play0错误59警告。CI37638118061 device-tests成功：原生data9项（含1→4与3→4）、app23项中正常批次2个重启用例跳过，随后分别启动新进程执行这2项成功；新进程认证/ciphertext保持通过。正式release构建仍运行，尚未签署或上传build7，下一步检查最终android CI、签名与下载回查。
 
 2026-10-07 P1第一批最终完成：功能源码bcc629f的本机276项回归/两变体lint/四构建/测试APK/manifest/schema检查和CI37638118061三个任务全部成功。full/play已使用既有正式证书签署，full上传真实令牌入口并下载回查，临时签名凭据已清理。顶部最新交付列出字节数/哈希与实际边界。无未完成本批代码，无公开Release/标签/根LICENSE变更；后续仍为Lab Context与Visit Pack/事实变化摘要，真机未验证。
+
+### 2m. build8浓度修复（2026-10-07，进行中）
+
+用户反馈上下文缺失与曲线贴轴，已定位旧导入writer只存source标记、新版逐事件读取跳过；图表用95%最大上界撑轴。已读Transmtf ResultChart/chartAxis现存研究checkout，采用独立可切换中心/完整区间，非复制其实现。设计先行concentration-context-chart-hotfix.md/需求§21；下一步可信旧rule上下文、再导入/用户确认修复与图窗缩放合成回归。未读取用户真实健康数据、未改PK参数、尚无build8 APK。
