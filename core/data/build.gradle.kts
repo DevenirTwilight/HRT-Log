@@ -25,3 +25,4 @@ dependencies {
 }
 ksp { arg("room.schemaLocation", "$projectDir/schemas") }
 android.sourceSets.getByName("androidTest").assets.srcDir("$projectDir/schemas")
+android.sourceSets.getByName("test").assets.srcDir("$projectDir/schemas")

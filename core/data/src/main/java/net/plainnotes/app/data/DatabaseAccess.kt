@@ -49,7 +49,7 @@ enum class Space(val file:String,val wrap:String,val alias:String) {
             System.loadLibrary("sqlcipher")
             val db=Room.databaseBuilder(context,NotesDatabase::class.java,space.file)
                 .openHelperFactory(SupportOpenHelperFactory(passphrase))
-                .addCallback(SchemaGuards).build()
+                .addMigrations(*allMigrations()).addCallback(SchemaGuards).build()
             try { db.openHelper.writableDatabase } catch(e:Exception) { db.close(); throw KeyRecoveryRequired(e) }
             // SQLCipher 4.10 retains this array for every WAL connection. Clearing it here
             // makes later concurrent reads fail to decrypt the same database.

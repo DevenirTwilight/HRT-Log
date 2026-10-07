@@ -108,7 +108,7 @@ class TransMemoTest {
         assertEquals(30.0, plan.containers.first { it.productId == 2L }.used, 1e-9) // clamped to capacity
         assertEquals(LocalDate.parse("2026-02-20"), plan.containers.first().openedOn)
         val items = plan.items.associateBy { it.sourceId }
-        assertEquals("OVERALL", items.getValue(1).builtinKey); assertEquals("ENERGY", items.getValue(2).builtinKey); assertEquals("PERIOD_LIKE", items.getValue(3).builtinKey)
+        assertEquals("OVERALL", items.getValue(1).builtinKey); assertEquals("DAY_ENERGY", items.getValue(2).builtinKey); assertEquals("PERIOD_LIKE", items.getValue(3).builtinKey)
         assertFalse(items.getValue(3).enabled); assertEquals("Synthetic custom", items.getValue(4).label); assertNull(items.getValue(4).builtinKey)
         assertEquals(3, plan.scores.size); assertEquals(1, plan.skipped["score_out_of_range"]) // value 0 on a 1-5 scale
         assertEquals(mapOf(LocalDate.parse("2026-03-02") to "Synthetic text A\nSynthetic text B"), plan.notes); assertEquals(2, plan.skipped["empty_note"])

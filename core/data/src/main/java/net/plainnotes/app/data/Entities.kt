@@ -107,6 +107,9 @@ data class ContainerEntity(
     val used_amount: Double,
     val opened_on: String? = null,
     val state: String,
+    /** Optional, user-entered; never evaluated. */
+    val source_note: String? = null,
+    val batch: String? = null,
 )
 
 @Entity(tableName = "supply_transaction", foreignKeys = [ForeignKey(entity = ContainerEntity::class, parentColumns = ["id"], childColumns = ["container_id"], onDelete = ForeignKey.RESTRICT), ForeignKey(entity = RecordEntity::class, parentColumns = ["id"], childColumns = ["dose_record_id"], onDelete = ForeignKey.RESTRICT), ForeignKey(entity = SupplyEntryEntity::class, parentColumns = ["id"], childColumns = ["reversal_of_id"], onDelete = ForeignKey.RESTRICT)], indices = [Index(value = ["operation_id", "container_id", "kind"], unique = true), Index(value = ["reversal_of_id"], unique = true), Index(value = ["container_id"], unique = false), Index(value = ["dose_record_id"], unique = false)])
@@ -143,6 +146,41 @@ data class CheckinItemEntity(
     val custom_label: String? = null,
     val enabled: Boolean,
     val sort_order: Int,
+    /** Item kept from the previous (Trans Memo-style) set, shown under "previous items". */
+    @ColumnInfo(defaultValue = "0") val legacy: Boolean = false,
+)
+
+/** Periodic review following the four aspects of HAS R40 (effects, tolerance, risk factors, satisfaction). All optional. */
+@Entity(tableName = "stage_review")
+data class StageReviewEntity(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val date: String,
+    /** Effect id -> "NOT_YET" | "NOTICED" | "UNSURE", plus optional "<id>:note" entries. */
+    val effects_json: String = "{}",
+    val tolerance_note: String? = null,
+    val risk_note: String? = null,
+    /** "YES" | "NO" | null. */
+    val smoking: String? = null,
+    val systolic: Int? = null,
+    val diastolic: Int? = null,
+    val weight_kg: Double? = null,
+    val satisfaction: Int? = null,
+    val satisfaction_note: String? = null,
+)
+
+/** A symptom group from the bundled official-source catalog noticed on a day; no score. */
+@Entity(tableName = "symptom_check", primaryKeys = ["date", "group_id"])
+data class SymptomCheckEntity(
+    val date: String,
+    val group_id: String,
+    val note: String? = null,
+)
+
+/** Visibility of a stage-review effect item; no row means shown. */
+@Entity(tableName = "review_effect")
+data class ReviewEffectEntity(
+    @PrimaryKey val effect_id: String,
+    val enabled: Boolean,
 )
 
 @Entity(tableName = "checkin_score", primaryKeys = ["date", "item_id"], foreignKeys = [ForeignKey(entity = CheckinItemEntity::class, parentColumns = ["id"], childColumns = ["item_id"], onDelete = ForeignKey.RESTRICT)], indices = [Index(value = ["item_id"], unique = false)])

@@ -10,7 +10,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /** Built-in well-being items, in display order. */
-val CHECKIN_DEFAULTS=listOf("OVERALL","MOOD","EMO_STABILITY","ENERGY","AGGRESSIVENESS","LIBIDO","PAIN","PERIOD_LIKE","APPETITE","SLEEP_QUALITY","SKIN_QUALITY")
+val CHECKIN_DEFAULTS=DAILY_KEYS
 const val BACKFILL_MAX_DAYS=731L
 
 @Singleton class NotesRepository(private val access: DatabaseAccess, private val pinned: Space?) {
@@ -259,11 +259,20 @@ const val BACKFILL_MAX_DAYS=731L
         BackupCodec.encrypt(json.toString().toByteArray(Charsets.UTF_8),password)
     }
     /** Replaces all data with the backup; throws [BackupCodec.WrongPassword] or [BackupCodec.BadFile] without touching anything. */
-    suspend fun restoreBackup(data:ByteArray,password:CharArray)=withContext(Dispatchers.IO) {
+    /**
+     * Restores a backup from this schema or an older one (older ones are upgraded right after the rows are written, with the
+     * same steps as the Room migration). A backup from a newer schema is refused.
+     */
+    suspend fun restoreBackup(data:ByteArray,password:CharArray,today:LocalDate=LocalDate.now())=withContext(Dispatchers.IO) {
         val json=JSONObject(String(BackupCodec.decrypt(data,password),Charsets.UTF_8))
-        val db=db()
-        if(json.optInt("format")!=BackupCodec.FORMAT_VERSION||json.optInt("schema")!=db.openHelper.writableDatabase.version) throw BackupCodec.BadFile("incompatible version")
-        db.withTransaction { RawData.restore(db.openHelper.writableDatabase,json.getJSONObject("tables")) }
+        val db=db(); val current=db.openHelper.writableDatabase.version; val schema=json.optInt("schema")
+        if(json.optInt("format")!=BackupCodec.FORMAT_VERSION||schema<1) throw BackupCodec.BadFile("incompatible version")
+        if(schema>current) throw BackupCodec.NewerBackup()
+        db.withTransaction {
+            val sql=db.openHelper.writableDatabase
+            RawData.restore(sql,json.getJSONObject("tables"))
+            if(schema<2) WellbeingUpgrade.apply(sql,today)
+        }
     }
     /** Irreversibly deletes the database, its key file and Keystore key. */
     fun destroyAll()=access.destroy(space)
@@ -289,10 +298,11 @@ const val BACKFILL_MAX_DAYS=731L
     // --- Stock ---
     suspend fun containers()=withContext(Dispatchers.IO){db().dao().containers()}
     /** Adds [count] containers; the first one is opened right away when nothing is in use. */
-    suspend fun addContainers(medicationId:Long,capacity:Double,count:Int,openFirst:Boolean)=transaction { dao ->
+    suspend fun addContainers(medicationId:Long,capacity:Double,count:Int,openFirst:Boolean,source:String?=null,batch:String?=null)=transaction { dao ->
         require(capacity.isFinite()&&capacity>0&&count in 1..50)
         repeat(count){i-> dao.insertContainer(ContainerEntity(medication_id=medicationId,capacity=capacity,initial_used_amount=0.0,used_amount=0.0,
-            opened_on=if(openFirst&&i==0)LocalDate.now().toString() else null,state=if(openFirst&&i==0)"IN_USE" else "SEALED")) }
+            opened_on=if(openFirst&&i==0)LocalDate.now().toString() else null,state=if(openFirst&&i==0)"IN_USE" else "SEALED",
+            source_note=source?.trim()?.takeIf{it.isNotEmpty()},batch=batch?.trim()?.takeIf{it.isNotEmpty()})) }
     }
     /** Closes the open container(s) of a medication and opens a sealed one (or a new one with [capacity]). */
     suspend fun replaceContainer(medicationId:Long,capacity:Double)=transaction { dao ->
@@ -313,6 +323,16 @@ const val BACKFILL_MAX_DAYS=731L
     suspend fun saveCheckinItem(v:CheckinItemEntity)=transaction { dao -> if(v.id==0L)dao.insertCheckinItem(v.copy(sort_order=(dao.checkinItems().maxOfOrNull{it.sort_order} ?: 0)+1)) else {dao.updateCheckinItem(v);v.id} }
     suspend fun scores(from:LocalDate,to:LocalDate)=withContext(Dispatchers.IO){db().dao().scores(from.toString(),to.toString())}
     suspend fun setScore(date:LocalDate,item:Long,value:Int?)=transaction { dao -> if(value==null)dao.deleteScore(date.toString(),item) else {require(value in 1..5);dao.score(CheckinScoreEntity(date.toString(),item,value))} }
+    // --- Stage reviews, symptom checks, effect visibility (REQUIREMENTS 15) ---
+    suspend fun stageReviews()=withContext(Dispatchers.IO){db().dao().stageReviews()}
+    suspend fun saveStageReview(v:StageReviewEntity)=transaction { dao -> require(v.satisfaction==null||v.satisfaction in 1..5); val id=dao.stageReview(v); if(v.id!=0L)v.id else id }
+    suspend fun deleteStageReview(id:Long)=transaction { it.deleteStageReview(id) }
+    suspend fun symptomChecks(from:LocalDate,to:LocalDate)=withContext(Dispatchers.IO){db().dao().symptomChecks(from.toString(),to.toString())}
+    suspend fun setSymptomCheck(date:LocalDate,group:String,checked:Boolean,note:String?=null)=transaction { dao ->
+        if(checked)dao.symptomCheck(SymptomCheckEntity(date.toString(),group,note?.takeIf{it.isNotBlank()})) else dao.deleteSymptomCheck(date.toString(),group) }
+    suspend fun reviewEffects()=withContext(Dispatchers.IO){db().dao().reviewEffects()}
+    suspend fun setReviewEffect(id:String,enabled:Boolean)=transaction { it.reviewEffect(ReviewEffectEntity(id,enabled)) }
+    suspend fun setContainerInfo(id:Long,source:String?,batch:String?)=transaction { it.setContainerInfo(id,source?.trim()?.takeIf{s->s.isNotEmpty()},batch?.trim()?.takeIf{s->s.isNotEmpty()}) }
     suspend fun notes(from:LocalDate,to:LocalDate)=withContext(Dispatchers.IO){db().dao().notes(from.toString(),to.toString())}
     suspend fun setNote(date:LocalDate,text:String)=transaction { dao -> if(text.isBlank())dao.deleteNote(date.toString()) else dao.note(DayNoteEntity(date.toString(),text)) }
     /** Planned slots in [from, to) for forecasting; reconciles first so past slots carry their final state. */

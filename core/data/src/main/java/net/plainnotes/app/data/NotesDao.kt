@@ -40,6 +40,15 @@ import kotlinx.coroutines.flow.Flow
     @Query("SELECT * FROM checkin_score WHERE date BETWEEN :from AND :to") suspend fun scores(from: String, to: String): List<CheckinScoreEntity>
     @Upsert suspend fun score(value: CheckinScoreEntity)
     @Query("DELETE FROM checkin_score WHERE date = :date AND item_id = :item") suspend fun deleteScore(date: String, item: Long)
+    @Query("SELECT * FROM stage_review ORDER BY date DESC, id DESC") suspend fun stageReviews(): List<StageReviewEntity>
+    @Upsert suspend fun stageReview(value: StageReviewEntity): Long
+    @Query("DELETE FROM stage_review WHERE id = :id") suspend fun deleteStageReview(id: Long)
+    @Query("SELECT * FROM symptom_check WHERE date BETWEEN :from AND :to ORDER BY date") suspend fun symptomChecks(from: String, to: String): List<SymptomCheckEntity>
+    @Upsert suspend fun symptomCheck(value: SymptomCheckEntity)
+    @Query("DELETE FROM symptom_check WHERE date = :date AND group_id = :group") suspend fun deleteSymptomCheck(date: String, group: String)
+    @Query("SELECT * FROM review_effect") suspend fun reviewEffects(): List<ReviewEffectEntity>
+    @Upsert suspend fun reviewEffect(value: ReviewEffectEntity)
+    @Query("UPDATE supply_container SET source_note = :source, batch = :batch WHERE id = :id") suspend fun setContainerInfo(id: Long, source: String?, batch: String?)
     @Query("SELECT * FROM day_note WHERE date BETWEEN :from AND :to") suspend fun notes(from: String, to: String): List<DayNoteEntity>
     @Upsert suspend fun note(value: DayNoteEntity)
     @Query("DELETE FROM day_note WHERE date = :date") suspend fun deleteNote(date: String)

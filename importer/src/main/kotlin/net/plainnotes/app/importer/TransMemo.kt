@@ -53,8 +53,9 @@ object TransMemo {
     val MOLECULES_INFERRED = mapOf("TESTOSTERONE" to "T", "PROGESTERONE" to "P4", "BICALUTAMIDE" to "BICA", "FINASTERIDE" to "FIN", "DUTASTERIDE" to "DUT",
         "ANDROSTANOLONE" to "DHT", "DIHYDROTESTOSTERONE" to "DHT", "CHLORMADINONE_ACETATE" to "CMA", "NOMEGESTROL_ACETATE" to "NOMAC", "TRIPTORELIN" to "TRIP")
     val UNITS = mapOf("MILLIGRAM" to "MG", "PILL" to "TABLET")
-    val WELLBEING_KEYS = mapOf("OVERALL" to "OVERALL", "MOOD" to "MOOD", "EMO_STABILITY" to "EMO_STABILITY", "DYNAMISM" to "ENERGY", "AGGRESSIVENESS" to "AGGRESSIVENESS",
-        "LIBIDO" to "LIBIDO", "PAIN" to "PAIN", "PERIODS" to "PERIOD_LIKE", "APPETITE" to "APPETITE", "SLEEP_QUALITY" to "SLEEP_QUALITY", "SKIN_QUALITY" to "SKIN_QUALITY")
+    /** Trans Memo wellbeing types to HRT Log item keys. Mood, energy and sleep go to the new daily items (same 1-5 concept); the rest to previous items. */
+    val WELLBEING_KEYS = mapOf("OVERALL" to "OVERALL", "MOOD" to "DAY_MOOD", "EMO_STABILITY" to "EMO_STABILITY", "DYNAMISM" to "DAY_ENERGY", "AGGRESSIVENESS" to "AGGRESSIVENESS",
+        "LIBIDO" to "LIBIDO", "PAIN" to "PAIN", "PERIODS" to "PERIOD_LIKE", "APPETITE" to "APPETITE", "SLEEP_QUALITY" to "DAY_SLEEP", "SKIN_QUALITY" to "SKIN_QUALITY")
 
     private fun Map<String, Any?>.long(k: String) = (this[k] as? Number)?.toLong()
     private fun Map<String, Any?>.double(k: String) = (this[k] as? Number)?.toDouble()

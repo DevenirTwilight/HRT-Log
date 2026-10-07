@@ -21,7 +21,8 @@ import javax.crypto.spec.SecretKeySpec
 
 /** Tables in foreign-key order (parents first). Reminder mappings are rebuilt by the scheduler and never exported. */
 internal val DOMAIN_TABLES = listOf("medication", "pk_profile", "schedule_rule", "rule_time", "slot_override", "dose_record", "supply_container", "supply_transaction",
-    "retained_slot", "appointment", "checkin_item", "checkin_score", "day_note", "lab_analyte", "lab_value", "pk_settings")
+    "retained_slot", "appointment", "checkin_item", "checkin_score", "day_note", "lab_analyte", "lab_value", "pk_settings",
+    "stage_review", "symptom_check", "review_effect")
 
 /** Raw-SQL maintenance that has to bypass the append-only ledger triggers: full clear and backup restore. */
 internal object RawData {
@@ -80,6 +81,8 @@ object BackupCodec {
     const val FORMAT_VERSION = 1
     class WrongPassword : Exception()
     class BadFile(msg: String) : Exception(msg)
+    /** The backup was written by a newer version of the app. */
+    class NewerBackup : Exception()
 
     private fun key(password: CharArray, salt: ByteArray): ByteArray {
         val gen = Argon2BytesGenerator()
@@ -155,7 +158,8 @@ internal object TransMemoWriter {
         if (dao.checkinItems().isEmpty()) CHECKIN_DEFAULTS.forEachIndexed { i, k -> dao.insertCheckinItem(CheckinItemEntity(builtin_key = k, enabled = true, sort_order = i)) }
         val items = dao.checkinItems()
         val itemIds = plan.items.associate { it.sourceId to (items.firstOrNull { e -> (it.builtinKey != null && e.builtin_key == it.builtinKey) || (it.label != null && e.custom_label == it.label) }?.id
-            ?: dao.insertCheckinItem(CheckinItemEntity(builtin_key = it.builtinKey, custom_label = it.label, enabled = it.enabled, sort_order = items.size + 1))) }
+            ?: dao.insertCheckinItem(CheckinItemEntity(builtin_key = it.builtinKey, custom_label = it.label, enabled = it.enabled, sort_order = items.size + 1,
+                legacy = it.builtinKey in LEGACY_KEYS))) }
         val scoresHave = if (plan.scores.isEmpty()) emptySet() else dao.scores(plan.scores.minOf { it.date }.toString(), plan.scores.maxOf { it.date }.toString()).map { it.date to it.item_id }.toSet()
         var scores = 0
         plan.scores.forEach { s -> val item = itemIds[s.itemSourceId] ?: return@forEach

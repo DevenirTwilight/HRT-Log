@@ -16,6 +16,9 @@ object SchemaGuards : RoomDatabase.Callback() {
         "appointment" to "NEW.remind_minutes_before>=0 AND length(NEW.at_zone)>0",
         "checkin_score" to "NEW.value BETWEEN 1 AND 5",
         "lab_value" to "(NEW.reference_lower IS NULL OR NEW.reference_upper IS NULL OR NEW.reference_lower<=NEW.reference_upper) AND ((NEW.reference_lower IS NULL AND NEW.reference_upper IS NULL) OR length(NEW.reference_unit)>0)",
+        "stage_review" to "length(NEW.date)=10 AND length(NEW.effects_json)>=2 AND (NEW.smoking IS NULL OR NEW.smoking IN ('YES','NO')) AND (NEW.systolic IS NULL OR (NEW.systolic>0 AND NEW.systolic<1000)) AND (NEW.diastolic IS NULL OR (NEW.diastolic>0 AND NEW.diastolic<1000)) AND (NEW.weight_kg IS NULL OR (NEW.weight_kg>0 AND NEW.weight_kg<=$finite)) AND (NEW.satisfaction IS NULL OR NEW.satisfaction BETWEEN 1 AND 5)",
+        "symptom_check" to "length(NEW.date)=10 AND length(NEW.group_id)>0",
+        "checkin_score" to "NEW.value BETWEEN 1 AND 5 AND length(NEW.date)=10",
         "pk_settings" to "NEW.id=1 AND (NEW.current_weight_kg IS NULL OR (NEW.current_weight_kg>0 AND NEW.current_weight_kg<=$finite))",
     )
     override fun onCreate(db: SupportSQLiteDatabase) = install(db)
