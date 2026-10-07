@@ -54,7 +54,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
                 val profiles=meds.mapNotNull{m->dao.profile(m.id)?.let{m.id to it}}.toMap()
                 val upcoming=(repo.planned(now,now.plus(Duration.ofDays(366)),now)+slots.filter{it.slot.at<now}).distinctBy{it.slot.key}.filter{it.state in net.plainnotes.app.ui.OPEN_STATES}
                 NotesState(meds,slots,dao.appointments(),mutable.value.error,false,schedules,profiles,start,dao.rules().associate{it.id to it.config_snapshot}) to
-                    ExtraState(dao.records(),dao.containers(),repo.checkinItems(),dao.scores("0001-01-01",today.toString()),dao.notes("0001-01-01",today.toString()),upcoming,dao.stageReviews(),dao.symptomChecks("0001-01-01",today.toString()),dao.reviewEffects(),dao.regimens(),dao.regimenLinks(),dao.milestones(),dao.labs(),dao.labContexts())
+                    ExtraState(dao.records(),dao.containers(),repo.checkinItems(),dao.scores("0001-01-01",today.toString()),dao.notes("0001-01-01",today.toString()),upcoming,dao.stageReviews(),dao.symptomChecks("0001-01-01",today.toString()),dao.reviewEffects(),dao.regimens(),dao.regimenLinks(),dao.milestones(),dao.labs(),dao.labContexts(),dao.visitQuestions(),dao.visitPacks())
             }
             ensureActive()
             mutable.value=snapshot.first.copy(error=mutable.value.error);extra.value=snapshot.second;readFailureShown=false
@@ -99,7 +99,8 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
                           /** Open doses for the next year (calendar colours and the stock forecast). */ val upcoming:List<TimelineEntry> = emptyList(),
                           val reviews:List<StageReviewEntity> = emptyList(),val symptoms:List<SymptomCheckEntity> = emptyList(),val effects:List<ReviewEffectEntity> = emptyList(),
                           val regimens:List<RegimenVersionEntity> = emptyList(),val regimenLinks:List<RegimenRuleLinkEntity> = emptyList(),
-                          val milestones:List<MilestoneEntity> = emptyList(),val labs:List<LabValueEntity> = emptyList(),val labContexts:List<LabContextEntity> = emptyList())
+                          val milestones:List<MilestoneEntity> = emptyList(),val labs:List<LabValueEntity> = emptyList(),val labContexts:List<LabContextEntity> = emptyList(),
+                          val visitQuestions:List<VisitQuestionEntity> = emptyList(),val visitPacks:List<VisitPackEntity> = emptyList())
     val extra=MutableStateFlow(ExtraState())
     private fun guarded(block:suspend()->Unit)=viewModelScope.launch{try{block()}catch(e:kotlinx.coroutines.CancellationException){throw e}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}
     fun loadExtra():Job=refresh()
@@ -192,7 +193,8 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     private suspend fun exportData(labels:(CheckinItemEntity)->String,schedules:Map<Long,String>):net.plainnotes.app.export.ExportData {
         val meds=repo.medications();val today=LocalDate.now()
         return net.plainnotes.app.export.ExportData(meds,meds.mapNotNull{m->repo.profile(m.id)?.let{m.id to it}}.toMap(),repo.records(),repo.labs(),repo.checkinItems(),
-            repo.scores(LocalDate.of(1,1,1),today),repo.notes(LocalDate.of(1,1,1),today),schedules,labels,repo.containers(),repo.symptomChecks(LocalDate.of(1,1,1),today),repo.stageReviews(),repo.labContexts())
+            repo.scores(LocalDate.of(1,1,1),today),repo.notes(LocalDate.of(1,1,1),today),schedules,labels,repo.containers(),repo.symptomChecks(LocalDate.of(1,1,1),today),repo.stageReviews(),repo.labContexts(),
+            repo.transaction{it.regimens()},repo.transaction{it.milestones()},repo.appointments())
     }
     fun exportCsv(uri:android.net.Uri,labels:(CheckinItemEntity)->String,schedules:Map<Long,String>)=dataOp {
         val d=repo.transaction{exportData(labels,schedules)};withContext(Dispatchers.IO){app.contentResolver.openOutputStream(uri,"wt")!!.use{net.plainnotes.app.export.CsvExport.write(d,it)}};DataJob.Done(R.string.export_saved)
@@ -234,6 +236,26 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     fun loadOverride(key:String)=viewModelScope.launch{override.value=repo.currentOverride(key)}
     fun changeOverride(s:Slot,o:SlotOverride)=change{repo.override(s,o);override.value=null}
     fun appointment(v:AppointmentEntity)=change{repo.appointment(v)}
+    fun deleteAppointment(id:Long)=change{repo.deleteAppointment(id)}
+    fun setVisitCompleted(id:Long,completed:Boolean)=change{repo.setVisitCompleted(id,completed)}
+    fun saveVisitQuestion(v:VisitQuestionEntity)=change{repo.saveVisitQuestion(v)}
+    fun deleteVisitQuestion(id:Long)=change{repo.deleteVisitQuestion(id)}
+    fun moveVisitQuestion(id:Long,up:Boolean)=change{repo.moveVisitQuestion(id,up)}
+    /** Reads one transaction, writes the PDF, and only then keeps the immutable record of what was exported. */
+    fun exportVisitPack(uri:android.net.Uri,appointmentId:Long,from:LocalDate,to:LocalDate,sections:Set<VisitSection>,context:android.content.Context,
+                        labels:(CheckinItemEntity)->String,schedules:Map<Long,String>,regimenLabels:Map<Long,String>,unknownName:String)=dataOp {
+        require(from<=to && to<=LocalDate.now() && sections.isNotEmpty())
+        val zone=java.time.ZoneId.systemDefault()
+        val (d,spec)=repo.transaction{dao->val d=exportData(labels,schedules);val a=requireNotNull(dao.appointmentById(appointmentId))
+            d to net.plainnotes.app.visit.VisitPackSpec(a,from,to,sections,dao.visitQuestions().filter{it.appointment_id==appointmentId},regimenLabels,unknownName)}
+        val facts=net.plainnotes.app.visit.VisitFacts.build(d,spec.appointment,from,to,zone)
+        val language=context.resources.configuration.locales[0].toLanguageTag()
+        val digest=net.plainnotes.app.visit.VisitDigest.compute(d,spec,facts,language,zone)
+        withContext(Dispatchers.IO){app.contentResolver.openOutputStream(uri,"wt")!!.use{net.plainnotes.app.export.PdfReport.write(context,d,1,null,it,visit=spec,facts=facts,digest=digest)}}
+        mutate{repo.recordVisitPack(VisitPackEntity(appointment_id=appointmentId,generated_utc=Instant.now().toEpochMilli(),zone=zone.id,range_from=from.toString(),range_to=to.toString(),
+            sections=VisitSection.encode(sections),language=language,template_version=net.plainnotes.app.visit.VISIT_TEMPLATE_VERSION,input_digest=digest,facts_json=facts.json().toString()))}
+        refresh().join();DataJob.Done(R.string.export_saved)
+    }
     fun testReminder()=viewModelScope.launch{try{reminders.testReminder()}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}
     fun sync()=viewModelScope.launch{runCatching{reminders.sync()};refresh().join()}
 }

@@ -31,6 +31,7 @@ import java.time.LocalDate
 enum class Destination(val title: Int, val icon: ImageVector, val ready: Boolean) {
     CALENDAR(R.string.calendar, Icons.Outlined.CalendarMonth, true),
     TIMELINE(R.string.timeline, Icons.Outlined.Timeline, true),
+    VISITS(R.string.visits, Icons.AutoMirrored.Outlined.EventNote, true),
     HISTORY(R.string.history, Icons.Outlined.History, true),
     STOCK(R.string.stock, Icons.Outlined.Inventory2, true),
     MEDICATIONS(R.string.medications, Icons.Outlined.Medication, true),
@@ -75,6 +76,7 @@ class UiPrefs(context: Context) {
     val importedLink by model.importedLink.collectAsStateWithLifecycle()
     val notificationSlot by model.notificationSlot.collectAsStateWithLifecycle()
     var destination by rememberSaveable { mutableStateOf(Destination.CALENDAR) }
+    var visitId by rememberSaveable { mutableStateOf<Long?>(null) }
     var concSettings by remember { mutableStateOf(prefs.conc) }
     var highReliability by remember { mutableStateOf(prefs.highReliability) }
     var disclaimer by remember { mutableStateOf(false) }
@@ -111,7 +113,7 @@ class UiPrefs(context: Context) {
 
     LaunchedEffect(notificationSlot) { notificationSlot?.let { s -> completeEntry = state.slots.firstOrNull { it.slot.key == s.key } ?: TimelineEntry(s, net.plainnotes.app.domain.SlotState.PENDING); model.notificationSlot.value = null } }
     LaunchedEffect(Unit) { model.loadExtra() }
-    LaunchedEffect(destination) { if (destination in listOf(Destination.CALENDAR, Destination.HISTORY, Destination.STOCK, Destination.WELLBEING, Destination.TIMELINE)) model.loadExtra() }
+    LaunchedEffect(destination) { if (destination in listOf(Destination.CALENDAR, Destination.HISTORY, Destination.STOCK, Destination.WELLBEING, Destination.TIMELINE, Destination.VISITS)) model.loadExtra() }
     LaunchedEffect(destination, concSettings.calibrate, concSettings.mode) {
         if (destination == Destination.CONCENTRATION || destination == Destination.LABS) {
             model.concentrationSettings(concSettings.calibrate, concSettings.mode); model.loadConcentration()
@@ -136,7 +138,7 @@ class UiPrefs(context: Context) {
                     if (d == Destination.SETTINGS) HorizontalDivider(Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
                     NavigationDrawerItem(label = { Text(stringResource(d.title)) }, icon = { Icon(d.icon, null) }, selected = destination == d,
                         badge = if (!d.ready) ({ Text(stringResource(R.string.soon_badge), style = MaterialTheme.typography.labelSmall) }) else null,
-                        onClick = { destination = d; scope.launch { drawer.close() } }, modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding))
+                        onClick = { destination = d; if (d == Destination.VISITS) visitId = null; scope.launch { drawer.close() } }, modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding))
                 }
             }
         }
@@ -164,6 +166,7 @@ class UiPrefs(context: Context) {
                         }
                     }
                     Destination.MEDICATIONS -> ExtendedFloatingActionButton(onClick = { model.edit(null) }, icon = { Icon(Icons.Outlined.Add, null) }, text = { Text(stringResource(R.string.add_medication)) })
+                    Destination.VISITS -> if (visitId == null) ExtendedFloatingActionButton(onClick = { appointment = true }, icon = { Icon(Icons.Outlined.Add, null) }, text = { Text(stringResource(R.string.appointment)) })
                     Destination.LABS -> ExtendedFloatingActionButton(onClick = { labNew = true }, icon = { Icon(Icons.Outlined.Add, null) }, text = { Text(stringResource(R.string.lab_add)) })
                     else -> {}
                 }
@@ -171,7 +174,8 @@ class UiPrefs(context: Context) {
         ) { pad ->
             when (destination) {
                 Destination.CALENDAR -> CalendarScreen(state, today, { completeEntry = it }, { overrideEntry = it; model.loadOverride(it.slot.key) }, { model.edit(null) },
-                    { model.calendarFrom(null) }, pad, onReview = { destination = Destination.MEDICATIONS }, extra = extra, onStock = { destination = Destination.STOCK })
+                    { model.calendarFrom(null) }, pad, onReview = { destination = Destination.MEDICATIONS }, extra = extra, onStock = { destination = Destination.STOCK },
+                    onAppointment = { visitId = it.id; destination = Destination.VISITS })
                 Destination.MEDICATIONS -> MedicationsScreen(state, { model.edit(null) }, { model.edit(it) }, { archive = it }, pad)
                 Destination.CONCENTRATION -> ConcentrationScreen(state, conc.result, conc.loading, conc.weight, concSettings, { concSettings = it; prefs.conc = it },
                     { model.setWeight(it) }, { model.editById(it) }, { destination = Destination.LABS }, pad,extra.records,state.profiles,model::confirmHistoricalContext,{destination=Destination.HISTORY})
@@ -187,9 +191,10 @@ class UiPrefs(context: Context) {
                 Destination.TIMELINE -> LongitudinalScreen(state,extra,model::saveMilestone,model::deleteMilestone,{kind->destination=when(kind){
                     net.plainnotes.app.timeline.EventKind.LAB->Destination.LABS
                     net.plainnotes.app.timeline.EventKind.SYMPTOM,net.plainnotes.app.timeline.EventKind.WELLBEING,net.plainnotes.app.timeline.EventKind.REVIEW->Destination.WELLBEING
-                    net.plainnotes.app.timeline.EventKind.APPOINTMENT->Destination.CALENDAR
+                    net.plainnotes.app.timeline.EventKind.APPOINTMENT->Destination.VISITS
                     else->Destination.HISTORY
-                }},pad)
+                }},pad){visitId=it;destination=Destination.VISITS}
+                Destination.VISITS -> VisitsScreen(state, extra, model, visitId, { visitId = it }, { appointment = true }, pad)
                 Destination.HISTORY -> HistoryScreen(state, extra.records, { editRecord = it }, { deleteRecord = it }, pad, onAdd = { manual = true }, onBatch = { batch = true }, onLink = model::prepareImportedLink,onConfirmMissed={model.confirmMissed(it.id)})
                 Destination.STOCK -> StockScreen(state, extra.containers, extra.records, { m -> model.replaceContainer(m.id, m.container_capacity) }, { c, m -> adjustStock = c to m }, { addStock = it }, pad,onInfo={packageInfo=it})
                 Destination.WELLBEING -> WellbeingHub(state,extra,model,region,{manageItems=true},pad)

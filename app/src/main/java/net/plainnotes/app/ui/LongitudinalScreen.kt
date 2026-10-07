@@ -25,7 +25,7 @@ import net.plainnotes.app.timeline.*
 import java.time.*
 
 @Composable fun LongitudinalScreen(state:NotesState,extra:NotesViewModel.ExtraState,onSave:(MilestoneEntity)->Unit,
-    onDelete:(Long)->Unit,onOpen:(EventKind)->Unit,contentPadding:PaddingValues) {
+    onDelete:(Long)->Unit,onOpen:(EventKind)->Unit,contentPadding:PaddingValues,onAppointment:(Long)->Unit={}) {
     var stages by rememberSaveable{mutableStateOf(false)}
     var days by rememberSaveable{mutableIntStateOf(90)}
     var kind by rememberSaveable{mutableStateOf<EventKind?>(null)}
@@ -83,7 +83,7 @@ import java.time.*
         } else {
             if(events.isEmpty())item{Text(stringResource(R.string.timeline_empty))}
             items(events,key={it.key}){event->
-                EventCard(event,epochs,versions,extra,onOpen,{edit=it},{remove=it},::select)
+                EventCard(event,epochs,versions,extra,{kind->(event.source as? EventSource.Appointment)?.let{onAppointment(it.value.id)} ?: onOpen(kind)},{edit=it},{remove=it},::select)
             }
         }
     }

@@ -102,11 +102,11 @@ fun Instant.toLocalHere(): LocalDateTime = atZone(ZoneId.systemDefault()).toLoca
 
 val APPOINTMENT_TYPES = listOf("ENDO", "GP", "LAB", "PSY", "SURGERY", "OTHER")
 
-@Composable fun AppointmentDialog(onDismiss: () -> Unit, onSave: (AppointmentEntity) -> Unit) {
-    var time by remember { mutableStateOf(Instant.now().plusSeconds(86400).toLocalHere().withMinute(0)) }
-    var type by remember { mutableStateOf("ENDO") }
-    var location by remember { mutableStateOf("") }; var practitioner by remember { mutableStateOf("") }; var note by remember { mutableStateOf("") }
-    var reminder by remember { mutableStateOf("60") }
+@Composable fun AppointmentDialog(onDismiss: () -> Unit, initial: AppointmentEntity? = null, onSave: (AppointmentEntity) -> Unit) {
+    var time by remember { mutableStateOf(initial?.let { Instant.ofEpochMilli(it.at_utc).toLocalHere() } ?: Instant.now().plusSeconds(86400).toLocalHere().withMinute(0)) }
+    var type by remember { mutableStateOf(initial?.type?.takeIf { it in APPOINTMENT_TYPES } ?: if (initial == null) "ENDO" else "OTHER") }
+    var location by remember { mutableStateOf(initial?.location.orEmpty()) }; var practitioner by remember { mutableStateOf(initial?.practitioner.orEmpty()) }; var note by remember { mutableStateOf(initial?.note.orEmpty()) }
+    var reminder by remember { mutableStateOf(initial?.remind_minutes_before?.toString() ?: "60") }
     val reminderV = reminder.toIntOrNull()?.takeIf { it >= 0 }
     AlertDialog(onDismissRequest = onDismiss, icon = { Icon(Icons.AutoMirrored.Outlined.EventNote, null) }, title = { Text(stringResource(R.string.appointment)) },
         text = { Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -118,7 +118,7 @@ val APPOINTMENT_TYPES = listOf("ENDO", "GP", "LAB", "PSY", "SURGERY", "OTHER")
             NumberField(reminder, { reminder = it }, stringResource(R.string.reminder_before), suffix = stringResource(R.string.minutes_unit), decimal = false, isError = reminderV == null)
         } },
         confirmButton = { Button(enabled = reminderV != null, onClick = {
-            onSave(AppointmentEntity(type = type, at_utc = time.toInstantHere().toEpochMilli(), at_zone = ZoneId.systemDefault().id, location = location.ifBlank { null },
+            onSave(AppointmentEntity(id = initial?.id ?: 0, completed_utc = initial?.completed_utc, type = type, at_utc = time.toInstantHere().toEpochMilli(), at_zone = ZoneId.systemDefault().id, location = location.ifBlank { null },
                 practitioner = practitioner.ifBlank { null }, note = note.ifBlank { null }, remind_minutes_before = reminderV!!))
         }) { Text(stringResource(R.string.save)) } },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } })

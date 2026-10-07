@@ -48,7 +48,8 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
 @OptIn(ExperimentalLayoutApi::class)
 @Composable fun CalendarScreen(state: NotesState, today: LocalDate, onComplete: (TimelineEntry) -> Unit, onChange: (TimelineEntry) -> Unit,
                                onAddMedication: () -> Unit, onResetStart: () -> Unit, contentPadding: PaddingValues, onReview: () -> Unit = {},
-                               extra: NotesViewModel.ExtraState = NotesViewModel.ExtraState(), onStock: () -> Unit = {}, initialView: CalView = CalView.MONTH) {
+                               extra: NotesViewModel.ExtraState = NotesViewModel.ExtraState(), onStock: () -> Unit = {}, initialView: CalView = CalView.MONTH,
+                               onAppointment: (AppointmentEntity) -> Unit = {}) {
     val zone = ZoneId.systemDefault()
     val meds = state.medications.associateBy { it.id }
     var view by rememberSaveable { mutableStateOf(initialView) }
@@ -100,7 +101,7 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
             if (dayRecords.isEmpty() && dayOpen.isEmpty() && dayAppts.isEmpty()) item { Text(stringResource(R.string.calendar_day_empty), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(start = 4.dp)) }
             items(dayOpen, key = { it.slot.key }) { e -> DoseCard(e, state.ruleSnapshots[e.slot.ruleId]?.let{MedicationSnapshot.decode(it,e.slot.medicationId)?.medication(e.slot.medicationId)} ?: meds[e.slot.medicationId], { onComplete(e) }, { onChange(e) }) }
             items(dayRecords, key = { "r${it.id}" }) { r -> RecordLine(r, MedicationSnapshot.decode(r.config_snapshot,r.medication_id)?.medication(r.medication_id)) }
-            items(dayAppts, key = { "a${it.id}" }) { AppointmentCard(it) }
+            items(dayAppts, key = { "a${it.id}" }) { AppointmentCard(it) { onAppointment(it) } }
         }
         item(key = "stock") { StockForecast(state.medications.filter { it.active }, runOut, upcoming, today, zone, onStock) }
     }
@@ -358,9 +359,9 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
     }
 }
 
-@Composable private fun AppointmentCard(a: AppointmentEntity) {
+@Composable private fun AppointmentCard(a: AppointmentEntity, onClick: () -> Unit) {
     val c = MaterialTheme.colorScheme
-    Card(Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = c.secondaryContainer)) {
+    Card(onClick, Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = c.secondaryContainer)) {
         Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
             Icon(Icons.AutoMirrored.Outlined.EventNote, null, tint = c.onSecondaryContainer)
             Spacer(Modifier.width(14.dp))
