@@ -4,13 +4,13 @@
 
 用户明确日常使用此应用，测试时不能反复卸载正式安装。以后所有交付给用户的 APK（含测试包）统一使用第 7 节现有私有正式密钥；不再交付 CI 的调试签名包。CI 内部自动验证仍可使用调试密钥，不将私钥或密码上传 CI。此决定优先于本文历史交付说明。
 
-### 当前最新交付：P1 build 7 full（2026-10-07，full已签署/下载回查；play及最终构建收尾中）
+### 当前最新交付：P1 build 7（2026-10-07，已完成）
 
 - 功能源码 `bcc629f`；分支 `claude/new-session-1959qb`；公开0.2.0/build5 Release与标签未改。schema4、versionCode7、versionName0.2.0。
 - 本批：冻结的方案版本、组合治疗阶段、统一时间线/筛选、明确用户里程碑；提醒/名称不切临床阶段，旧规则回推标记、日期观察候选/未知、未确认与漏服区分、计划默认隐藏、四语/精简模式。只连接已保存事实，不判断因果/化验正常与否；设计 `design/epochs-timeline-p1.md`，独立来源记录 `PRIOR_ART.md`。
-- 最终源码本机单元276项（按模块/变体计，274通过、2 PDF跳过、0失败）；lint full0错误65警告/play0错误59警告。CI [37638118061](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37638118061) JVM/device-tests已成功，android仍运行。原生data9项含1→4和3→4；app23项中2个重启用例分开新进程执行成功。未做OEM真机验证。
+- 最终源码本机单元276项（按模块/变体计，274通过、2 PDF跳过、0失败）；lint full0错误65警告/play0错误59警告。CI [37638118061](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37638118061) jvm/android/device-tests全部成功。原生data9项含1→4和3→4；app23项中2个重启用例分开新进程执行成功。未做OEM真机验证。
 - 正式签名full：`/workspace/HRT-Log-build7-full-signed.apk`，23,198,939 bytes，SHA256 `670869f429ec923af37937c09d9d86eb33ae352b2b3ca475e3bdb02f7faefb2c`。同一正式证书、非调试、16KB对齐、无INTERNET、包名/版本已核验；tmpfiles真实令牌下载入口下载回查一致，临时链接失效需重新上传同一包，不交付工作区预览路径。
-- 剩余：play release R8仍在运行，尚未签署；本机四构建和最终android CI尚未全部结束。签名临时目录 `/workspace/tooling/p1-signing` 仍存在供play签署，完成后立即删除；凭据不得进仓库/CI。不能把这一条称为全部验证完成。
+- 正式签名play：`/workspace/HRT-Log-build7-play-signed.apk`，23,128,971 bytes，SHA256 `31066cef128ea1c58eb955c7bae93d6b7e838267af0a6f6a111053fe0310dccc`。两个变体均为同一正式证书/versionCode7，两个release/debug及测试APK构建、release manifest与schema无漂移检查成功；`/workspace/HRT-Log-build7-SHA256SUMS.txt`保存校验值。签名临时克隆/ZIP/私钥/密码已全部删除，原私有备份未改。
 - 后续批次仍是Lab Context、Appointment/Visit Pack与事实变化摘要；本批没有实现这些，也没有新增历史模型bundle、复方强度或包装单位。加密备份包含新表，现有CSV/PDF未扩展阶段/里程碑专属导出。root LICENSE仍未选择。
 
 ### 上一阶段：P0 build 6（2026-10-07，已完成）
@@ -62,6 +62,7 @@
 | M6 应用锁、隐蔽通知、精简模式、多语言、对比度 | 完成 |
 | M7 伪装模式（仅 full 变体） | 新私人便签实现与本地完整/原生/进程重启验证完成，见 2e；待 OEM 真机复核 |
 | 日历改版（日/周/月/年视图、库存预计） | 完成 |
+| P1方案版本、治疗阶段、统一时间线、用户里程碑 | build7完成/正式签名测试交付，未替换公开Release |
 | 版本 | 公开 Release 为 0.2.0 build 5（§14 修复，正式签名，标签指向 462da22），见 2g |
 
 ## 2. 当前任务（`docs/REQUIREMENTS.md` 第 4 节）的进度
@@ -359,3 +360,5 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 2026-10-07 最终源码bcc629f本机：domain33、pk18、importer12、data42、reminder14通过，app full85项（84通过、1 PDF跳过）通过；play和lint/四构建继续运行。合成中文时间线截图已人工查看，显示年月日/时区/阶段/化验/里程碑正常。最终CI37638118061的JVM成功，android/device-tests仍运行；不要把取消的中间CI37637945178当最终结果。正式签名凭据已确认private并在仓库外恢复，尚未签署；交付后立即清理。
 
 2026-10-07 最终回归进一步完成：按模块/变体合计276项（domain33、pk18、importer12、data42、reminder14、full85、play72），274通过、2 PDF跳过、0失败；并非276个互不重复用例。lint full0错误65警告、play0错误59警告。CI37638118061 device-tests成功：原生data9项（含1→4与3→4）、app23项中正常批次2个重启用例跳过，随后分别启动新进程执行这2项成功；新进程认证/ciphertext保持通过。正式release构建仍运行，尚未签署或上传build7，下一步检查最终android CI、签名与下载回查。
+
+2026-10-07 P1第一批最终完成：功能源码bcc629f的本机276项回归/两变体lint/四构建/测试APK/manifest/schema检查和CI37638118061三个任务全部成功。full/play已使用既有正式证书签署，full上传真实令牌入口并下载回查，临时签名凭据已清理。顶部最新交付列出字节数/哈希与实际边界。无未完成本批代码，无公开Release/标签/根LICENSE变更；后续仍为Lab Context与Visit Pack/事实变化摘要，真机未验证。
