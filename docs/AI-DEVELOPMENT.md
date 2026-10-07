@@ -9,7 +9,10 @@ and portions of the documentation are primarily produced with AI development too
 - Sets product requirements and priorities, and records them with dates in
   [`REQUIREMENTS.md`](REQUIREMENTS.md).
 - Reviews and approves designs before implementation, and decides what is out of scope.
-- Uses the app daily, tests builds on real devices and reports problems.
+- Decides how features should behave and which trade-offs to make, and keeps asking for
+  changes until the result is acceptable.
+- Uses the app daily, finds problems in real use, tests builds on real devices, gives
+  debugging feedback and accepts or rejects the result.
 - Decides what is released, when, and under which signature. The official signing key is
   held privately by the maintainer and is never given to CI.
 - Makes licensing and governance decisions.
@@ -24,6 +27,8 @@ and portions of the documentation are primarily produced with AI development too
 
 ## What this document does not claim
 
+- It does not claim the project was created autonomously by AI: goals, requirements,
+  acceptance criteria and many specific behaviours come from the maintainer.
 - It does not claim that an AI tool is the legal author or copyright holder of anything.
 - It does not claim that the maintainer wrote the code by hand.
 - Copyright in AI-assisted output depends on jurisdiction and on the human contribution
