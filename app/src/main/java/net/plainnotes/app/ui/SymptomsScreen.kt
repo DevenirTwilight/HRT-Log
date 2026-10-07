@@ -89,10 +89,10 @@ fun GroupNames.localized(locale:Locale):String=when(locale.language){"fr"->fr;"z
 }
 
 @Composable fun RegionSection(value:String?,onValue:(String?)->Unit) {
-    SectionCard(stringResource(R.string.wb_region)) {
+    val options=listOf(null to R.string.wb_region_unset,"CN" to R.string.wb_region_cn,"HK" to R.string.wb_region_hk,"TW" to R.string.wb_region_tw,"FR" to R.string.wb_region_fr,"OTHER" to R.string.wb_region_other)
+    SectionCard(null) {
+        DropdownField(stringResource(R.string.wb_region),options,options.firstOrNull{it.first==value} ?: options.first(),
+            {stringResource(it.second)},{onValue(it.first)})
         Text(stringResource(R.string.wb_region_help),style=MaterialTheme.typography.bodySmall)
-        listOf(null to R.string.wb_region_unset,"CN" to R.string.wb_region_cn,"HK" to R.string.wb_region_hk,"TW" to R.string.wb_region_tw,"FR" to R.string.wb_region_fr,"OTHER" to R.string.wb_region_other).forEach{(key,label)->
-            Row {RadioButton(value==key,{onValue(key)});Text(stringResource(label),Modifier.padding(top=12.dp))}
-        }
     }
 }
