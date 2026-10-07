@@ -75,7 +75,7 @@ class HistoricalContextTest {
         val snapshot=MedicationSnapshot.encode(sl,profile)
         val native=record("{}").copy(rule_version_id=10)
         val imported=record("{\"source\":\"hrttracker\"}").copy(id=2,origin="IMPORT_HT",taken_utc=now.minusSeconds(13*3600).toEpochMilli())
-        val repaired=imported.copy(config_snapshot=HistoricalContext.confirmed(imported.config_snapshot,snapshot,"USER_CONFIRMED",now.toEpochMilli())!!)
+        val repaired=imported.copy(config_snapshot=HistoricalContext.confirmed(imported.config_snapshot,snapshot,"USER_CONFIRMED",now))
         val future=net.plainnotes.app.domain.TimelineEntry(
             net.plainnotes.app.domain.Slot("wall:1@future",1,10,now.plusSeconds(11*3600),now.plusSeconds(11*3600),java.time.ZoneId.of("UTC"),2.0,15,120,now.minusSeconds(86400)),
             net.plainnotes.app.domain.SlotState.PENDING)
