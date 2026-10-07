@@ -249,7 +249,9 @@ private data class StoryBlock(val key:String,val period:DisplayPeriod?=null,val 
                     formatDose(amounts.min(),m.unit),formatDose(amounts.max(),m.unit)),style=MaterialTheme.typography.bodySmall)
                 val missing=rows.count{it.taken_utc!=null && it.actual_dose==null}
                 if(missing>0)Text(stringResource(R.string.timeline_imported_unknown_amount,missing),style=MaterialTheme.typography.bodySmall)
-                rows.groupingBy{it.status}.eachCount().toSortedMap().forEach{(status,count)->Text(choiceLabel(status)+" · $count",style=MaterialTheme.typography.bodySmall)}
+                // IMPORT_HT uses ON_TIME as a storage category, even without a planned time.
+                // Counts here describe records, never an inferred adherence classification.
+                Text(stringResource(R.string.timeline_imported_count,rows.size),style=MaterialTheme.typography.bodySmall)
             }}
         }
     },confirmButton={TextButton(onClick=onHistory){Text(stringResource(R.string.timeline_imported_open_history))}},

@@ -4,9 +4,14 @@
 
 用户再次纠正：**play版本已废弃。以后只维护、测试、构建和交付full，不再生成或签署play APK。** 已移除Gradle play flavor、src/play空实现、CI play任务，release manifest检查只要求full。AGENTS/CLAUDE/REQUIREMENTS/README同步。下文双变体测试与play附件均为历史记录，不是下一步任务；旧公开Release核验清单保持历史事实，不修改公开Release/标签。最新交付full为build12（见下文交付与下载边界）。
 
-## 当前工作：build13导入时间线修复（2026-10-07，源码已实现，验证中）
+## 当前工作：build13导入时间线修复（2026-10-07，最后语义回归中）
 
-用户要求修复导入内容不体现在Timeline，并再实现一批；用户反馈TalkBack没问题。根因：导入仅实际records，没有可信方案时Timeline不读取它们；refresh已读取records。设计见design/imported-timeline-history-p1.md、需求§28。本批：只读按时期/未知区导入摘要，用户填写暂停/停用/恢复历史里程碑，不自动修改方案/提醒、不推断旧频率。保持schema6表结构、旧key/Context1/VisitPack1/PK，full/build13原签名。源码已实现：按时期/未知区/Upcoming聚合两类导入，不造方案；详情只读冻结药物/剂量/状态，按源ID打开History，默认all并可清除筛选；records加入remember依赖。PAUSED/STOPPED/RESUMED共用allowlist，onOpen/restore校验同步、UI/PDF四语。schema6、build13。首轮data回归通过；完整轮新增跨层测试因Robolectric错误启动正式Application的receiver权限失败，已改测试application=android.app.Application隔离数据库（不是修改正式manifest）。最终完整测试/lint/release/native测试APK构建正在/workspace/tooling/build13-final-checks.log运行，不能把初轮失败写成全部通过。增加了两项原生导入摘要/简单模式验收，尚未执行。验证进展：旧来源History界面测试最初只查到屏幕上的药物筛选chip（原行在屏幕外），已补独立source tag并真实滚动断言；本机261项（app120/data58/domain39/pk18/importer12/reminder14）260通过/1既有PDF跳过。正在继续lint/release构建；UI截图图形模式最后调整需再跑app单元（初次legacy图形截图为空白，不能称已视觉验收）。源码tags与UI验证修正本次提交；CI新提交需等待最终结论。原生测试APK编译发现新增测试wildcard导入同时带入多个模块R，已显式导入app.R修正；正式APK功能源码未变，原生测试/最终构建仍需重跑。尚无新APK。稳定slot身份和完整停用状态仍未实现。
+用户反馈导入内容不在Timeline，要求再实现一批；TalkBack为用户反馈通过。需求§28、设计design/imported-timeline-history-p1.md。功能4ad2ac4、History source滚动1e8b208、原生R引用b803007；已快进保留另一会话按钮审计9a2a9d6（只文档/测试，不擅自做§29待审核UI修正）。
+
+- 只读导入摘要按时期/unknown/Upcoming归属，两种导入均保留实际时刻与冻结上下文、不猜历史schedule。详情药物/剂量/源ID，打开精确History记录并默认all；records参与remember刷新。没有恢复隐藏记录/重写ledger/补猜途径。
+- PAUSED/STOPPED/RESUMED为用户填写日期及可选原因的历史里程碑，UI/PDF四语、写库/restore共享allowlist、onOpen旧trigger更新。不是当前提醒开关，不改历史方案；完整药物停用状态/自动切时期及未来slot身份仍未实现。schema6表结构/原Context1/VisitPack1/签名/PK保持。
+- 合并审计后的完整本机任务成功1m46s（/workspace/tooling/build13-delivery-checks.log），app132项含12可选BUTTON_AUDIT跳过；普通回归总261项260通过/1既有PDF跳过。两个原生测试APK/full debug+release/lint/manifest完成；原生执行CI37704996550仍待结论。中文native graphics合成截图imported_timeline_overview.png已看，摘要可见、无裁切。初轮测试环境Application、屏幕外source断言和原生R歧义修正的失败日志留在tooling，不冒充所有轮都通过。
+- 最终审阅再纠正：HT无计划时刻时内部ON_TIME不能解释为准时，摘要改为各药物记录数量，不解读依从性；原status保持。新增UI防止准时文案误显断言，这个最后源码变更须重跑app回归/lint/APK及等待新CI，当前unsigned不应先交付。尚未签署build13、尚无新下载。
 
 ## 待用户审核：按钮大小一致性（2026-10-07，另一会话并行）
 

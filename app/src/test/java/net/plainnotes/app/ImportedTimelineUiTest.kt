@@ -33,6 +33,7 @@ class ImportedTimelineUiTest {
         java.io.File("build/screenshots/imported_timeline_overview.png").outputStream().use{bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG,100,it)}
         ui.onNodeWithTag("timeline:import-history:IMPORT_HT:unknown:false").performClick()
         ui.onNodeWithText("Synthetic frozen import").assertIsDisplayed()
+        ui.onAllNodesWithText(ui.activity.getString(R.string.status_on_time),substring=true).assertCountEquals(0)
         ui.onNodeWithText(ui.activity.getString(R.string.timeline_imported_open_history)).performClick()
         ui.runOnIdle{assertEquals(listOf(71L),selected)}
     }
