@@ -6,7 +6,12 @@
 
 ## 当前进行中：Visit Pack 第一批 build 11（2026-10-07）
 
-接手基线 `95b82bc`；本会话开发分支为环境指定的 `ccr-5165d4ec-vof9xq`（与 `claude/new-session-1959qb` 同基线，未推送到后者）。需求 REQUIREMENTS §25，设计 [visit-pack-p1](design/visit-pack-p1.md)：schema6（appointment.completed_utc、visit_question、visit_pack）、复诊导航页与预约详情、问题清单、按区间/勾选生成PDF与不可变生成记录、确定性事实摘要。工具链：本会话新装 Android SDK 于 `/opt/android-sdk`（platform 37、build-tools 37），JDK 21 系统自带；`local.properties` 已指向它（不提交）。状态：设计已写，代码尚未开始。
+接手基线 `95b82bc`；本会话开发分支为环境指定的 `ccr-5165d4ec-vof9xq`（与 `claude/new-session-1959qb` 同基线，未推送到后者）。需求 REQUIREMENTS §25，设计 [visit-pack-p1](design/visit-pack-p1.md)，合成验证 [visit-pack-verification](visit-pack-verification.md)。
+
+- 已提交：数据层 `618af21`（schema6：appointment.completed_utc、visit_question、visit_pack 不可改触发器、5→6迁移、备份校验与schema1–5恢复）；应用层（“复诊”导航页、预约编辑/删除/确认就诊、问题清单、资料包对话框、按勾选输出的PDF、事实摘要 `visit/VisitPack.kt`、SHA-256校验码与生成记录）。versionCode 11。
+- 已通过：JVM三模块；core:data 55项（新增VisitPackDataTest 4项）；app VisitPackTest 4项与TranslationsTest；对话框合成截图已查看。原生MigrationBaselineTest新增5→6，WellbeingAndroidTest加入资料包PDF分页——需CI设备任务执行。
+- 进行中：完整本机检查（data/reminder/app单元、lint、full debug/release、两个测试APK）；然后CI、正式签名build11与下载回查。
+- 本会话工具链：Android SDK 装在 `/opt/android-sdk`；Maven Central 经代理返回429，本机用 `~/.gradle/init.d/mirror.gradle.kts` 改走 Google 的 Maven Central 镜像（含 Robolectric 下载），不改仓库。
 
 ## 项目许可证 MIT（2026-10-07，REQUIREMENTS §24，已完成）
 

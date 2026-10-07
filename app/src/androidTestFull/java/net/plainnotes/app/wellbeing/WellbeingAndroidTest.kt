@@ -41,4 +41,16 @@ class WellbeingAndroidTest {
         val file=java.io.File(context.cacheDir,"synthetic-summary.pdf")
         try{file.writeBytes(bytes);android.os.ParcelFileDescriptor.open(file,android.os.ParcelFileDescriptor.MODE_READ_ONLY).use{fd->android.graphics.pdf.PdfRenderer(fd).use{renderer->assertTrue(renderer.pageCount>2);renderer.openPage(renderer.pageCount-1).use{assertTrue(it.width>0)}}}}finally{file.delete()}
     }
+        // Visit pack: same native writer, only chosen parts, long question list paginates.
+        val visit=net.plainnotes.app.data.AppointmentEntity(1,"ENDO",System.currentTimeMillis(),"UTC",practitioner="Synthetic clinic",remind_minutes_before=60)
+        val questions=(1..80).map{net.plainnotes.app.data.VisitQuestionEntity(it.toLong(),1,it,"Synthetic question $it. 合成问题。 Question synthétique.",if(it%2==0)"ASKED" else "OPEN",if(it%3==0)"Synthetic answer" else null)}
+        val spec=net.plainnotes.app.visit.VisitPackSpec(visit,day,day,setOf(net.plainnotes.app.data.VisitSection.FACTS,net.plainnotes.app.data.VisitSection.LABS,net.plainnotes.app.data.VisitSection.QUESTIONS),questions,emptyMap(),"?")
+        val facts=net.plainnotes.app.visit.VisitFacts.build(d,visit,day,day,java.time.ZoneId.systemDefault())
+        val packOut=ByteArrayOutputStream();PdfReport.write(context,d,1,null,packOut,visit=spec,facts=facts,digest="0".repeat(64))
+        val pack=java.io.File(context.cacheDir,"synthetic-visit.pdf")
+        try{pack.writeBytes(packOut.toByteArray());android.os.ParcelFileDescriptor.open(pack,android.os.ParcelFileDescriptor.MODE_READ_ONLY).use{fd->android.graphics.pdf.PdfRenderer(fd).use{renderer->
+            assertTrue(renderer.pageCount>=2)
+            // Reviews were not chosen: the long review note would add many pages if it leaked in.
+            assertTrue(renderer.pageCount<6)}}}finally{pack.delete()}
+    }
 }
