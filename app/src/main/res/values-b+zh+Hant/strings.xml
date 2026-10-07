@@ -130,7 +130,7 @@
 <string name="complete_info">補齊</string>
 <string name="concentration">血藥濃度</string>
 <string name="credits">致謝</string>
-<string name="credits_body">HRT 日誌受到 Chrysalide 協會出品的 Trans Memo 和 Transmtf HRT Tracker 的啟發。HRT 日誌與 Chrysalide、Transmtf 都沒有隸屬或合作關係，也沒有使用 Trans Memo 的任何程式碼、文案或設計。</string>
+<string name="credits_body">HRT 日誌的功能設計參照了 Chrysalide 協會出品的 Trans Memo（開發時參考了它的介面截圖），也參照了 Transmtf HRT Tracker。HRT 日誌沒有使用 Trans Memo 的程式碼，與 Chrysalide、Transmtf 都沒有隸屬或合作關係。</string>
 <string name="day_unit">天</string>
 <string name="days_ago">%1$d 天前</string>
 <string name="days_short">%1$d天</string>

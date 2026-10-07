@@ -152,6 +152,11 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 - 第 2 步（设计文档 `docs/wellbeing-design.md`）：未开始。**写完后停下等用户审核，审核前不写功能代码。**
 - 第 3 步（实现）：未开始。不改浓度模型代码，不发布。
 
+## 2i. 致谢口径更正（2026-10-07，`REQUIREMENTS.md` 第 16 节）：源码完成，Release 未改
+
+- `credits_body` 四语逐字替换为用户给定文字；`docs/licensing.md` 同步。`TranslationsTest` 通过，app 单元测试 61 项 0 失败、1 项跳过。
+- 0.2.0 Release 说明里原本没有 Trans Memo 表述，`gh` 未登录（GH_TOKEN 无效），按指示停下，未改 Release/附件/标签；原文备份 `docs/release-notes/0.2.0-original.md`。等用户决定是否新增致谢段落及更新方式。
+
 ## 3. 代码结构
 
 | 模块 | 内容 |

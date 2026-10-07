@@ -130,7 +130,7 @@
 <string name="complete_info">Compléter</string>
 <string name="concentration">Concentrations estimées</string>
 <string name="credits">Remerciements</string>
-<string name="credits_body">HRT Log s’inspire de Trans Memo, créée par l’association Chrysalide, et de Transmtf HRT Tracker. HRT Log n’a aucun lien d’affiliation ni de partenariat avec Chrysalide ou Transmtf. Elle n’utilise aucun code, texte ni design de Trans Memo.</string>
+<string name="credits_body">Les fonctionnalités de HRT Log s\'inspirent de Trans Memo, créée par l\'association Chrysalide (ses captures d\'écran ont servi de référence pendant le développement), ainsi que de Transmtf HRT Tracker. HRT Log n\'utilise aucun code de Trans Memo et n\'a aucun lien d\'affiliation ni de partenariat avec Chrysalide ou Transmtf.</string>
 <string name="day_unit">jours</string>
 <string name="days_ago">il y a %1$d jours</string>
 <string name="days_short">%1$d j</string>

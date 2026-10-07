@@ -17,7 +17,7 @@
 | 化验校准（EKF） | `Calibration.kt` | Transmtf HRT Tracker `personalModel.ts`（MIT） | 未见说明 | 未核实 |
 | 对照测试数据、上游副本 | `pk-engine/src/test/resources/reference/`、`tools/pk-reference/upstream/` | 同上 | 同上 | 同上 |
 
-本项目的其余部分（提醒、数据、界面、Trans Memo / HRT tracker 导入器等）为原创代码。HRT tracker 导入器只读取其 JSON 导出格式。
+本项目其余部分（提醒、数据、界面、Trans Memo / HRT tracker 导入器等）的代码为本项目自写。功能设计参照过 Chrysalide 协会出品的 Trans Memo（开发时参考了它的界面截图）和 Transmtf HRT Tracker；没有使用 Trans Memo 的代码，与 Chrysalide、Transmtf 都没有隶属或合作关系。Trans Memo 导入器只读取用户自己导出的数据库，HRT tracker 导入器只读取其 JSON 导出格式。
 
 ## 授权请求（历史记录）
 
