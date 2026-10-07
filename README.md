@@ -44,7 +44,7 @@ See [`docs/HANDOFF.md`](docs/HANDOFF.md) for verification and remaining work,
 Literature validation and physical-device verification remain incomplete.
 Health information must never be committed; use only synthetic test data.
 
-The development branch now targets build 7 / database schema 4. New medication
+The development branch now targets build 8 / database schema 4. New medication
 events preserve their formulation inputs, and new symptom observations preserve
 their matched catalogue sources. Missing legacy context remains explicitly unknown.
 An overdue dose without an intake record is shown as unconfirmed until the user
@@ -56,6 +56,13 @@ regimen definitions are frozen independently of reminder versions. Legacy schedu
 marked as reconstructed, and date-only observations may span several stages. See
 [`epochs-timeline-p1.md`](docs/design/epochs-timeline-p1.md). Historical model bundles,
 saved lab context and Visit Packs remain future work.
+
+Build 8 repairs compatible native historical context using its saved rule snapshot.
+Old HRT Tracker imports can recover missing context from the original export, or users
+can explicitly confirm a past formulation for a date range. Existing dose amounts, times
+and inventory remain intact. Concentration charts scale to visible estimates and labs
+by default, with an optional full uncertainty range; this changes display geometry only.
+See [`concentration-context-chart-hotfix.md`](docs/design/concentration-context-chart-hotfix.md).
 
 Public binaries: [0.2.0 release](https://github.com/DevenirTwilight/HRT-Log/releases/tag/v0.2.0).
 They use a private release key, distinct from the public debug key. Back up your data
