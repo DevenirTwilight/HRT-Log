@@ -774,4 +774,5 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="lab_context_save_note">Un nouveau prélèvement enregistre son contexte. Modifier la valeur ou la note le conserve ; choisir une estimation crée une nouvelle version. Seules les prises réelles avant le prélèvement sont utilisées.</string>
     <string name="lab_context_open_end">Sans date de fin</string>
     <string name="lab_context_estimate_partial">Certaines données sont manquantes ou non prises en charge ; cette estimation peut ne pas représenter tous les médicaments enregistrés.</string>
+    <string name="lab_context_schedule_anchor">Point de départ du calendrier : %1$s</string>
 </resources>

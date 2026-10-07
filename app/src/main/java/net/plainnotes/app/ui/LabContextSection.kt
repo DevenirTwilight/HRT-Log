@@ -45,6 +45,9 @@ fun labContextLines(context:Context,row:LabContextEntity):List<String> {
             val m=d.snapshot(regimens.getJSONObject(i).getLong("medication_id"))
             val doses=if(d.times.isEmpty())number(d.dose) else d.times.joinToString(" · "){(time,dose)->"$time: ${number(dose ?: d.dose)}"}
             add("${m?.name ?: unknown} · ${m?.route?.let{context.getString(choiceRes(it))} ?: unknown} · $doses ${m?.unit ?: unknown} · ${context.getString(choiceRes(d.kind))}: ${d.interval}")
+            if(d.kind=="WEEKLY")add(java.time.DayOfWeek.entries.filter{d.weekdays and (1 shl (it.value-1))!=0}.joinToString(" · "){it.getDisplayName(java.time.format.TextStyle.SHORT,locale)})
+            val anchor=d.anchorUtc?.let{date(it,d.zone)} ?: "${d.anchorLocal} · ${d.zone}"
+            add(context.getString(R.string.lab_context_schedule_anchor,anchor))
         }
         add(context.getString(R.string.lab_context_actual_note))
         val actual=o.getJSONArray("actual")

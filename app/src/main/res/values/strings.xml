@@ -774,4 +774,5 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="lab_context_save_note">A new sample captures context automatically. Editing a value or note preserves it; selecting an estimate creates a new version. Only actual intakes before sampling are used.</string>
     <string name="lab_context_open_end">Open-ended</string>
     <string name="lab_context_estimate_partial">Some inputs are missing or unsupported; the estimate may not represent all recorded medication.</string>
+    <string name="lab_context_schedule_anchor">Schedule anchor: %1$s</string>
 </resources>

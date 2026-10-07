@@ -774,4 +774,5 @@
     <string name="lab_context_save_note">新化驗自動儲存上下文。只修改數值或備註會保留原上下文；勾選估算將產生新版本。估算只使用採樣前實際服藥。</string>
     <string name="lab_context_open_end">尚無結束時間</string>
     <string name="lab_context_estimate_partial">部分輸入缺失或不支援，估算可能不包含全部已登記用藥。</string>
+    <string name="lab_context_schedule_anchor">計畫計時起點：%1$s</string>
 </resources>
