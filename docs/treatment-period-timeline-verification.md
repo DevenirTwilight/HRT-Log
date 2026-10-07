@@ -22,7 +22,7 @@
 
 ## 自动验证
 
-所有数据为synthetic。当前检查点，最终构建及原生结果还须补入：
+所有数据为synthetic。最终稳定源码b0dc178已完成全部检查：
 
 | 验证 | 当前证据 |
 |---|---|
@@ -31,10 +31,10 @@
 | Milestone针对性 | saving防双击、事务失败、提交后提醒/refresh失败、STARTED空标题/重复/CRUD、400天可见、source详情、saveable草稿恢复 |
 | 兼容回归 | 旧V1保留2段但V2合并1时期；Context1旧key有效，VisitPack1仍为2次开始/1次结束且digest不变；数据备份roundtrip/validateLinks/旧definition与signature不变 |
 | 本机release首轮 | 两个本机构建并发导致domain.jar读取冲突；失败，不算通过。已改为单一构建进程重跑最终任务 |
-| 最新本机构建/lint | 最终任务进行中，尚未声称通过 |
-| 原生测试 | 新增API35长历史160事件、2倍字体、source按钮语义与准确详情验证；迁移/SQLCipher复用现有原生套件。最新CI37701395265 device-tests已success：data11、app24主项及2重启项另起进程成功（主报告含2既有跳过共26）；包括新增长列表/2倍字体source详情。尚待android构建任务结论 |
+| 最新本机构建/lint | 稳定完整任务7m33s成功：full debug/release、data/app原生测试APK；manifest与schema无漂移通过。lint0错误96警告（主要旧Timeline未用资源/复数候选，基线69） |
+| 原生测试 | 新增API35长历史160事件、2倍字体、source按钮语义与准确详情验证；迁移/SQLCipher复用现有原生套件。最新CI37701395265 device-tests已success：data11、app24主项及2重启项另起进程成功（主报告含2既有跳过共26）；包括新增长列表/2倍字体source详情。android构建任务也已success |
 
-当前CI：[37701395265](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37701395265)，对应功能 `b0dc178`。jvm/device-tests已success；原生日志job113065735012核对data11与app主套件及独立重启进程，android仍进行。先前37700705349在新提交后由分支并发策略取消，不代表原生已通过。未结束时不能标已通过。APK仅在最终release构建成功后用原私有正式证书签署；不交付debug或unsigned包。
+当前CI：[37701395265](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37701395265)，对应功能 `b0dc178`。jvm/android/device-tests全部success；原生日志job113065735012核对data11与app主套件及独立重启进程。先前37700705349在新提交后由分支并发策略取消，不代表原生已通过。本机完整串行重跑成功。正式full已用原私有证书签署并清理临时凭据，APK 23,338,203 bytes、SHA256 `98bb57af464dd1e80acc857b8fe368e8949c537965fe1d59155b59f09b530ca3`；非debug/versionCode12/无INTERNET/16KB验证，临时下载回查一致。不交付debug或unsigned包，不公开发布或改标签。
 
 ## 用户复核
 

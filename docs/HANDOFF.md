@@ -2,32 +2,24 @@
 
 ## 最新硬性决定：play已废弃，仅维护full（2026-10-07）
 
-用户再次纠正：**play版本已废弃。以后只维护、测试、构建和交付full，不再生成或签署play APK。** 已移除Gradle play flavor、src/play空实现、CI play任务，release manifest检查只要求full。AGENTS/CLAUDE/REQUIREMENTS/README同步。下文双变体测试与play附件均为历史记录，不是下一步任务；旧公开Release核验清单保持历史事实，不修改公开Release/标签。最新交付full为build11（见下文交付与下载边界）。
+用户再次纠正：**play版本已废弃。以后只维护、测试、构建和交付full，不再生成或签署play APK。** 已移除Gradle play flavor、src/play空实现、CI play任务，release manifest检查只要求full。AGENTS/CLAUDE/REQUIREMENTS/README同步。下文双变体测试与play附件均为历史记录，不是下一步任务；旧公开Release核验清单保持历史事实，不修改公开Release/标签。最新交付full为build12（见下文交付与下载边界）。
 
-## 进行中：Treatment Period / Timeline 修订（2026-10-07，REQUIREMENTS §27）
+## 当前最新交付：Treatment Period / Timeline build12（2026-10-07，完成）
 
-用户在Phase 1报告后回复“继续”，现按旧歧义保留unknown的有限保证进入实施；未来稳定slot身份另批，不扩展冻结JSON。用户新附件已授权按Scan→Plan→Implement→Verify实施，上一轮“待用户审核”不再是一般开发限制。扫描基线9e55c10，功能仍ecedb19/build11/schema6。完整八项结论与下一步文件/验证计划见[源码扫描](design/treatment-period-timeline-scan.md)。
+指定分支`claude/new-session-1959qb`；功能主体`dbb9688`，长列表/兼容`2c3b68b`，最终功能`b0dc178`。versionCode12/versionName0.2.0/schema6；需求§27，原始[扫描](design/treatment-period-timeline-scan.md)、[设计历史](design/epochs-timeline-p1-revision.md)、[验证与边界](treatment-period-timeline-verification.md)。用户在Phase 1报告后回复“继续”，按旧slot身份保留unknown的有限保证实施；不要求重新批准一般开发。
 
-- 上一步曾**按附件明确停止条件暂停功能实现**：Phase 1“如果第8点无法安全解决，停下并报告，不要偷偷做schema migration”。TimeEntity行ID未保存在冻结定义中，也不跨rule重建保持；旧非均匀剂量快照不能区分提醒移动与剂量分配交换。按钟点排序会误切、按剂量集合会漏切，不能声称全部要求可安全满足。没有证明必须schema7；schema升级也补不回旧历史身份。
-- 建议先明确能否接受旧歧义历史显示“时段对应关系未记录”、保留全部raw changes、只作有限保证，并为未来编辑独立保存操作/slot身份。schema6元数据扩展尚未验证兼容，不应当成已完成。不要继续以排序顺序/数据库返回顺序假造身份。
-- 里程碑保存/可见性问题仍存在，新Timeline/V2尚未实现。LabContext1继续依赖旧epoch key；VisitPack1计数/digest继续沿用原版本边界；不修改冻结事实、PK、库存或真实数据。
-- 本次仅docs：README修正build11/schema6和VisitPack第一批已实现；路线图更新build11、MIT已选及当前修订状态；旧设计标题说明用户已授权与当前卡点。无版本/数据库变动，无新APK；未执行构建/测试，不挪用旧CI作为新版通过证据。
-- 后续先解决上述旧歧义处理范围，然后按附件顺序里程碑→V2→Timeline/History→单视图→兼容→测试→文档。保留full-only、原正式签名、不发布Release/标签。
+- 里程碑事务提交回执后关闭、saving防双击、失败留草稿；提交后提醒/refresh失败与写库失败分开。成功提示并滚动打开准确source；无默认90天隐藏，STARTED空标题与合法重复保留，不从earliest dose推断。saveable序列化/重建回归通过；提交与回执间强杀仍有未知窗口，见验证边界。
+- V2独立投影：相邻提醒/zone/anchor/名称/纯PK设置变更显示合并，原版本/UTC不改；组合治疗标准变化形成精确segment，同日多药/A→B→A做单一日期显示分组、保留中间事实。gap后恢复另开精确时期；missed/late/skipped/unconfirmed/单次实际量偏离不切。无明确停用理由的旧空档只写no active recorded regimen，不推断暂停。
+- 单一Timeline按时期当前置顶/历史逆序，仅LAB/REVIEW/MILESTONE/APPOINTMENT；未来Upcoming、首个方案之前unknown。逐项懒加载长列表、source ID详情、UTC原始变更审计、明确详情显示时区；History保持原执行ledger。四语/simple隐去药物/敏感标题备注；原伪装/锁定入口隔离保留。
+- 非均匀剂量集合相同而slot对应缺失时明确unknown，不拿clock排序造身份，不承诺完整识别历史分配交换；未来稳定身份与独立stop/pause理由实体未实现。编辑器移动clock携带override，repo拒绝无对应信息的破坏性编辑，不静默归零。未扩展冻结JSON或迁移schema。
+- 兼容：V1 TreatmentEpochs/key、RegimenDefinition.signature、clinical_signature/validateLinks、Context1 JSON/PK结果、VisitPack1 facts/digest/旧PDF语义保持；新UI仅只读映射。git差异核验上述源码、PK、schema、PLAN无变化；无原dose/库存ledger重写，无医疗判读/因果/剂量建议。
+- 最终本机稳定源码检查7m33s成功：domain39/pk18/importer12/data57/reminder14/app109＝249项，248通过/1既有Robolectric PDF跳过、0失败；lint full0错误96警告（主要旧Timeline资源未使用及复数候选，build11为69）；full debug/release、两个原生测试APK、manifest/schema检查通过。早期并行构建曾产生domain.jar读取冲突，已单进程完整重跑，不把失败当通过。合成中文截图已查看。
+- 最终CI [37701395265](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37701395265) jvm/android/device-tests全部success。job113065735012日志核对API35 data11（含原生迁移/SQLCipher）、app24主项＋2既有重启项另起进程成功（主报告26含2跳过）；新160事件/2倍字体/source准确详情包含在内。
+- 正式full：`/workspace/HRT-Log-build12-full-signed.apk`，23,338,203 bytes，SHA256 `98bb57af464dd1e80acc857b8fe368e8949c537965fe1d59155b59f09b530ca3`。原证书98:9B:A0…79:B1、v2/v3、16KB对齐、非debug、net.plainnotes.app/versionCode12、无INTERNET核验；可覆盖原正式安装。私有签名仓库核验private，临时clone/ZIP/JKS/密码全部删除，原备份未改。
+- 下载链接已独立下载并核对字节/SHA：https://tmpfiles.org/dl/1791415986.a7e5e1fb7ef9f6c4/w7AElEqKGIsU/hrt-log-build12-full-signed.apk 。临时链接失效重新上传同一个APK，不交workspace预览路径或debug包。未发布GitHub Release、未改标签。
+- 本批代码/自动验证/签名/下载校验已完成；真实覆盖安装、OEM/人工TalkBack仍待用户复核。下一批优先未来slot身份/明确停用理由设计，再考虑时期报告；VisitPack2、adherence摘要、LabPanel、widget等本批未做。
 
-## 上一轮设计审核：阶段/时间线修订与里程碑问题（2026-10-07，REQUIREMENTS §26）
-
-- 设计 [epochs-timeline-p1-revision](design/epochs-timeline-p1-revision.md)：投影时计算的V2治疗标准签名、精确历史与按日期时期显示分离/同日过渡组、不迁移schema6、旧key时刻映射、冻结Lab Context/Visit Pack兼容、ASCII/测试及7组待定项。**未改功能代码。**
-- 里程碑“开始激素治疗保存没反应”根因已用合成探针确认：保存成功，但时间线默认只显示最近90天、阶段视图不列里程碑，旧日期的里程碑被过滤，且没有保存提示。属UI层；最小修复与回归测试列在设计第一部分。探针测试未提交。
-- 前会话提及按钮大小审计，未列入本次附件范围，本轮不处理；如有后续任务另行核对，不把不存在的报告视为完成。
-
-## build12 修订实现检查点（2026-10-07，尚未交付）
-
-- 已写入MilestoneSaving：事务提交回执与提醒/refresh错误分开；保存ID回传、busy防重复、失败留草稿、saveable恢复。Timeline移除默认90天与双视图，成功后滚动并打开该source，四语反馈。
-- 新增domain/TreatmentPeriods与app/timeline/PeriodTimeline：clock无关V2、多药精确组合与同日显示分组；旧V1 builder/signature/Context1/VisitPack1源码未改。主列表仅时期+LAB/REVIEW/MILESTONE/APPOINTMENT，未来事件Upcoming；simple不显示药物/标题/备注；原始变更独立查看。
-- MedicationEditor移动钟点携带override；repository接收显式对应剂量，缺对应信息时拒绝非均匀计划的破坏性编辑；未改schema或冻结JSON。非均匀集合相同的交换仍明确unknown，不声称恢复历史slot身份。
-- versionCode12/versionName0.2.0/schema6。初步domain39项及targeted app11/data7通过；首轮全模块domain39/pk18/importer12/data57/reminder14/app106共246项，0失败、1既有PDF跳过；UI包含400天Started、精确source、失败/busy与saveable恢复。后续追加长列表逐项懒加载、大字体原生source导航、VM保存整合与Context/VisitPack1兼容回归；最新稳定源码b0dc178：补详情时区标注与UTC原始审计显示/旅行回归后，app109/domain39单元通过，共249项0失败1跳过。最终本机full构建尚在进行，最新CI37701395265的jvm/device-tests已success、android仍进行；job113065735012核验原生data11/app24与2重启项独立进程成功，新增160事件/2倍字体详情测试在主套件中。不能提前当成release构建通过。尚需最终回归/lint/full debug-release/schema-manifest/原生迁移SQLCipher和正式签名；不是可交付APK或最终验收结论。私有签名仓库已核验private，临时密钥在/workspace/tooling/build12-signing，签后立即清理，不显示内容。
-
-## 当前最新交付：Visit Pack 第一批 build 11（2026-10-07，已签名）
+## 上一阶段交付：Visit Pack 第一批 build 11（2026-10-07，已签名）
 
 开发分支已按用户指示快进合并回 `claude/new-session-1959qb`（`847df84`），以后只在该分支开发；`ccr-5165d4ec-vof9xq` 仅为本会话临时分支。需求 REQUIREMENTS §25，设计 [visit-pack-p1](design/visit-pack-p1.md)，合成验证 [visit-pack-verification](visit-pack-verification.md)。
 
@@ -46,7 +38,7 @@
 
 用户明确日常使用此应用，测试时不能反复卸载正式安装。以后所有交付给用户的 APK（含测试包）统一使用第 7 节现有私有正式密钥；不再交付 CI 的调试签名包。CI 内部自动验证仍可使用调试密钥，不将私钥或密码上传 CI。此决定优先于本文历史交付说明。
 
-### 当前最新交付：冻结化验上下文 build 10（2026-10-07，已完成）
+### 历史交付：冻结化验上下文 build 10（2026-10-07，已完成）
 
 - 最终功能源码 `a30c850`（主体 `2ff40f3`，防护/回归 `51a4430`），指定分支 `claude/new-session-1959qb`。schema5/versionCode10/versionName0.2.0；只构建、签署与交付full，未改公开Release/标签/根LICENSE。设计先行 `9f5dfaa`，见 [Lab Context设计](design/lab-context-p1.md)、[合成验证步骤](lab-context-verification.md)。
 - 新化验同事务保存冻结上下文：采样时间/时区/项目、阶段和方案版本、每成分最近实际服药（含并列）、时间差/剂量/途径/输入快照、采样前48h迟服/确认漏服/未确认。未知旧导入不使用当前药物配置补猜。编辑结果/备注不重写；修改采样字段或明确重建新增版本，旧版可选择。旧化验升级不自动回填，用户明确重建时标记实际捕获时间和回推方式。排期含星期、计时起点和时区。

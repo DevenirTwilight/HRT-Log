@@ -281,3 +281,5 @@
 附件Phase 1明确：“如果第8点无法安全解决，停下并报告，不要偷偷做schema migration。”本次源码扫描确认跨版本slot身份缺失，旧非均匀剂量无法同时可靠识别提醒移动和剂量分配交换，已按此条件暂停功能实现。详见design/treatment-period-timeline-scan.md；没有自行决定schema7。下一步需明确是否接受旧歧义对应关系保留unknown及有限保证，再评估未来操作身份记录，不能猜旧历史。此次完成扫描及文档状态纠正，未改功能/版本/数据库、未构建新APK。
 
 2026-10-07 用户回复“继续”：按上次报告的保守范围继续实施。旧非均匀剂量若仅交换相同剂量集合，时段对应关系明确未知，不宣称能可靠恢复所有历史分配改变；保留raw changes用于核对。均匀剂量与明确集合/频率/成分/途径变化正常判定，时钟排序不作为身份。第一批保持schema6，旧签名/Context1/VisitPack1不动。未来稳定slot身份/显式操作记录另行设计，当前编辑不得静默丢弃既有dose_override。
+
+2026-10-07 实施完成：build12/schema6，里程碑可靠保存/定位、独立V2时期与重要事件Timeline、长列表/未来区/source详情；原History/V1签名和key/Context1/VisitPack1/PK不改。保持历史slot歧义unknown，未来稳定身份/独立停用理由/VisitPack2另批。249项单元0失败1既有跳过、最终CI37701395265三个任务success，本机full完整构建/正式原证书签名与真实下载SHA回查成功；未发布Release/改标签。具体限制及交付信息见HANDOFF顶部与treatment-period-timeline-verification.md。
