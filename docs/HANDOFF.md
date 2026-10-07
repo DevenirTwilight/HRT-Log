@@ -2,13 +2,13 @@
 
 ## 最新硬性决定：play已废弃，仅维护full（2026-10-07）
 
-用户再次纠正：**play版本已废弃。以后只维护、测试、构建和交付full，不再生成或签署play APK。** 已移除Gradle play flavor、src/play空实现、CI play任务，release manifest检查只要求full。AGENTS/CLAUDE/REQUIREMENTS/README同步。下文双变体测试与play附件均为历史记录，不是下一步任务；旧公开Release核验清单保持历史事实，不修改公开Release/标签。最新可安装full为build10。
+用户再次纠正：**play版本已废弃。以后只维护、测试、构建和交付full，不再生成或签署play APK。** 已移除Gradle play flavor、src/play空实现、CI play任务，release manifest检查只要求full。AGENTS/CLAUDE/REQUIREMENTS/README同步。下文双变体测试与play附件均为历史记录，不是下一步任务；旧公开Release核验清单保持历史事实，不修改公开Release/标签。最新交付full为build11（见下文交付与下载边界）。
 
 ## 待用户审核：阶段/时间线修订与里程碑问题（2026-10-07，REQUIREMENTS §26）
 
-- 设计 [epochs-timeline-p1-revision](design/epochs-timeline-p1-revision.md)：投影时计算的 v2 治疗标准签名、按日期对齐的阶段边界、不迁移数据、阶段列表式时间线、测试计划与 11 个待决定问题。**未改功能代码。**
+- 设计 [epochs-timeline-p1-revision](design/epochs-timeline-p1-revision.md)：投影时计算的V2治疗标准签名、精确历史与按日期时期显示分离/同日过渡组、不迁移schema6、旧key时刻映射、冻结Lab Context/Visit Pack兼容、ASCII/测试及7组待定项。**未改功能代码。**
 - 里程碑“开始激素治疗保存没反应”根因已用合成探针确认：保存成功，但时间线默认只显示最近90天、阶段视图不列里程碑，旧日期的里程碑被过滤，且没有保存提示。属UI层；最小修复与回归测试列在设计第一部分。探针测试未提交。
-- 按钮大小一致性审计（用户第3项）进行中，见下条完成后的 `docs/ui-button-consistency.md`。
+- 前会话提及按钮大小审计，未列入本次附件范围，本轮不处理；如有后续任务另行核对，不把不存在的报告视为完成。
 
 ## 当前最新交付：Visit Pack 第一批 build 11（2026-10-07，已签名）
 
@@ -367,7 +367,7 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 - **真机确认（2026-10-06）**：用户已覆盖安装 build 5，恢复修复备份后显示正常。
 - 以后再发布：提高 versionCode；可沿用同一临时分支+工作流的方法，结束后删除分支和一次性工作流。
 
-### 2j. 产品源码调研（2026-10-07，进行中）
+### 2j. 产品源码调研（2026-10-07，已完成设计，待审核）
 
 已完成 HRT Log 当前源码审计，保存 `docs/hrt-product-research-2026-10-07.md`。基线759ee88，最新功能bf7d6d4；公开APK462da22/build5与最新wellbeing源码区分。发现：已有单药Rule版本/实际快照与包装账本，但PK仍用当前profile解释历史；症状只存date/group/note且PDF从当前目录所有group来源取值；预约已有，Visit Pack应扩展而非从零。项目未发现根LICENSE。
 
@@ -399,7 +399,7 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 
 2026-10-07 P0最终完成：本机完整检查和最终CI三个任务成功；已签署full/play build6并清理临时凭据，full临时下载独立回查一致。顶部最新交付块已列出源码、测试、文件哈希与剩余限制。无未完成P0代码/未提交修改，无公开发布；下一批按design/longitudinal-hrt-record讨论的Epoch与Timeline推进。
 
-### 2l. P1第一批（2026-10-07，进行中）
+### 2l. P1第一批（2026-10-07，已完成设计，待审核）
 
 用户要求下一阶段，启动Epoch/统一时间线与用户里程碑。基线734444a，设计epochs-timeline-p1.md先行，需求§20。计划schema4新增regimen_version/regimen_rule_link/milestone；Epoch为确定性半开区间投影，旧规则回推标记、date-only跨阶段不猜。提醒变化保持周期锚点；不改PK/公开Release。尚未写功能代码，下一步数据层/迁移与合成回归，再四语UI和正式签名build7。
 
@@ -465,6 +465,10 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 
 2026-10-07 build10最终完成：最新源码末轮完整full任务成功、CI三作业success，正式full包签署/版本/证书/对齐/manifest核验及真实下载回查完成，临时凭据已清理。顶部最新交付块记录所有结果与剩余边界。本批无未完成任务，后续Visit Pack/事实摘要另批。
 
-### 阶段修订设计接手复核（2026-10-07，进行中）
+### 阶段修订设计接手复核（2026-10-07，已完成设计，待审核）
 
-用户要求先说明目标，已说明只分析/文档，完成等审核。初始本地6cc7dd6落后；推送拒绝后同步远端ab983c5（build11/schema6/Visit Pack与MIT已完成，已有修订草稿），保留远端全部工作，仅合并设计文档。用户确认STARTED时间线保存、日期超过90天；默认90天过滤与反馈缺失匹配，SQL合成探针验证标题/重复类型合法，未读真实数据。需进一步校正草稿中的日期取整、旧key多对多映射、Lab Context JSON版本与Visit Pack模板兼容，改写旧设计冲突；不启动任何实现/PK/签名任务。
+用户要求先说明目标，已说明只分析/文档，完成等审核。初始本地6cc7dd6落后；推送拒绝后同步远端ab983c5（build11/schema6/Visit Pack与MIT已完成，已有修订草稿），保留远端全部工作，仅合并设计文档。用户确认STARTED时间线保存、日期超过90天；默认90天过滤与反馈缺失匹配，SQL合成探针验证标题/重复类型合法，未读真实数据。这些复核已完成，见后续完成段：固定分组时区/变更日组、旧key多对多时刻映射、Lab Context V1协议保留与Visit Pack模板兼容；旧设计冲突已改写。本次停止等审核，不启动实现/PK/签名任务。
+
+2026-10-07 本次设计接手复核完成：基于远端ab983c5/build11/schema6，不回退MIT/Visit Pack。用户确认时间线+超过90天日期，P0默认日期过滤与反馈问题明确；本轮合成SQL探针合法STARTED/null标题与重复类型，未读真实健康数据、未重新运行旧会话Robolectric探针。修订稿纠正午夜对齐会误归样本、同版本跨多组合阶段、直接换Lab Context key会破坏V1验证等风险；保留存储signature/clinical_signature/validateLinks与完整原数据，另建V2显示投影。旧design/epochs-timeline-p1.md已按用户已确定规则改写，REQ §26追加范围/复现。所有改动仅docs，未改功能/测试源码/版本/schema、未构建APK/跑新实现测试、未签名或发布。下一步必须等用户审核7组待定项，不能因以前“继续”指令跳过本次明确暂停。当前设计提案尚未实施，最新可安装仍build11。
+
+本轮末检：schema6导出建表SQL+guard的内存SQLite STARTED/null标题与重复类型合法；日期谓词复核；文档无冲突标记、代码块配对和git diff --check通过。相对远端接手ab983c5仅四个docs文件修改。旧会话按钮审计不在本次附件范围，本轮未处理；build11交付事实和MIT决定保留。
