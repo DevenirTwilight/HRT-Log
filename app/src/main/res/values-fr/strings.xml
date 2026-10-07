@@ -681,4 +681,5 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="wb_optional_note">Note (facultative)</string>
     <string name="wb_unofficial">Traduction (non officielle)</string>
     <string name="wb_no">Non</string>
+    <string name="backup_newer_version">Cette sauvegarde provient d’une version plus récente de l’application. Mettez l’application à jour avant de la restaurer.</string>
 </resources>

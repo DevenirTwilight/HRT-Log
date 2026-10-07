@@ -681,4 +681,5 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="wb_optional_note">Note (optional)</string>
     <string name="wb_unofficial">Translation (unofficial)</string>
     <string name="wb_no">No</string>
+    <string name="backup_newer_version">This backup was created by a newer app version. Update the app before restoring it.</string>
 </resources>

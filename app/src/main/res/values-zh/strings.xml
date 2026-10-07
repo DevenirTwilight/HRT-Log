@@ -681,4 +681,5 @@
     <string name="wb_optional_note">备注（选填）</string>
     <string name="wb_unofficial">译文（非官方）</string>
     <string name="wb_no">否</string>
+    <string name="backup_newer_version">这份备份来自更新的应用版本，请先更新应用再恢复。</string>
 </resources>

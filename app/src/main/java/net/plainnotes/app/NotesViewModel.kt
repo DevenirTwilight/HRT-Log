@@ -134,6 +134,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     val dataJob=MutableStateFlow<DataJob>(DataJob.Idle)
     fun clearDataJob(){dataJob.value=DataJob.Idle}
     private fun dataOp(block:suspend()->DataJob)=viewModelScope.launch{dataJob.value=DataJob.Working;dataJob.value=try{block()}catch(e:BackupCodec.WrongPassword){DataJob.Failed(R.string.backup_wrong_password)}
+        catch(e:BackupCodec.NewerBackup){DataJob.Failed(R.string.backup_newer_version)}
         catch(e:BackupCodec.BadFile){DataJob.Failed(R.string.backup_bad_file)}catch(e:net.plainnotes.app.importer.InvalidExport){DataJob.Failed(R.string.import_invalid)}catch(e:net.plainnotes.app.importer.HrtTracker.InvalidExport){DataJob.Failed(R.string.ht_invalid)}catch(e:CancellationException){throw e}catch(_:Exception){DataJob.Failed(R.string.operation_error)}}
     private fun tempImport()=java.io.File(app.noBackupFilesDir,"import").apply{mkdirs()}.resolve("transmemo.db")
     fun openTransMemo(uri:android.net.Uri)=dataOp {

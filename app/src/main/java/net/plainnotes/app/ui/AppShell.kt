@@ -63,7 +63,7 @@ class UiPrefs(context: Context) {
     val context = LocalContext.current
     val prefs = remember { UiPrefs(context) }
     var region by remember { mutableStateOf(prefs.region) }
-    var summary by remember { mutableStateOf(false) }
+    var summary by rememberSaveable { mutableStateOf(false) }
     var packageInfo by remember { mutableStateOf<net.plainnotes.app.data.ContainerEntity?>(null) }
     val state by model.state.collectAsStateWithLifecycle()
     val editor by model.editor.collectAsStateWithLifecycle()

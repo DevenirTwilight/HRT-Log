@@ -41,4 +41,16 @@ class WellbeingUiTest {
         ui.onAllNodes(isToggleable()).assertCountEquals(0)
         ui.runOnIdle{assertFalse(changed)}
     }
+    @Test fun optionalReviewStaysEmptyAndHidingAnEffectKeepsItsExistingRecord() {
+        var saved:StageReviewEntity?=null
+        val existing=StageReviewEntity(id=1,date=LocalDate.now().toString(),effects_json="{\"FAT\":\"NOTICED\"}")
+        ui.setContent{MaterialTheme{StageReviewDialog(existing,listOf(existing),emptyList(),listOf(ReviewEffectEntity("FAT",false)),{}, {saved=it})}}
+        ui.onAllNodesWithText(ui.activity.getString(R.string.wb_effect_fat)).assertCountEquals(0)
+        ui.onNodeWithText(ui.activity.getString(R.string.save)).performClick()
+        ui.runOnIdle{
+            assertNotNull(saved);assertNull(saved!!.systolic);assertNull(saved!!.diastolic);assertNull(saved!!.weight_kg);assertNull(saved!!.smoking);assertNull(saved!!.satisfaction)
+            assertEquals("NOTICED",org.json.JSONObject(saved!!.effects_json).getString("FAT"))
+        }
+    }
+
 }

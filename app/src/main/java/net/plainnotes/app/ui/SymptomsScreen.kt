@@ -47,16 +47,17 @@ fun GroupNames.localized(locale:Locale):String=when(locale.language){"fr"->fr;"z
         if(section.isNotEmpty()) SectionCard(null) {
             if(urgent) Text(section.flatMap{it.entries}.filter{it.action.urgent}.map{if(it.action.text.contains("立即"))"立即" else "immédiatement"}.distinct().joinToString(" / "),
                 color=MaterialTheme.colorScheme.error,style=MaterialTheme.typography.titleLarge)
+            // Each source action appears once in this section, instead of repeating a warning for every symptom.
+            section.flatMap{it.entries}.map{it.source to it.action}.distinctBy{it.first.id to it.second.id}.forEach{(source,action)->
+                Text(source.title,style=MaterialTheme.typography.labelSmall);OriginalQuotation(action.text,action.urgent)
+                Text(source.section,style=MaterialTheme.typography.bodySmall)
+            }
             section.forEach { g ->
                 val saved=checks.firstOrNull{it.date==date.toString()&&it.group_id==g.id}
                 Row {
                     Checkbox(saved!=null,{onCheck(date,g.id,it,saved?.note)},Modifier.semantics{contentDescription=context.getString(R.string.wb_symptom_checked)+": "+g.names.localized(locale)})
                     Column(Modifier.weight(1f)){Text(g.names.localized(locale));Text(g.medicationIds.mapNotNull{id->active.firstOrNull{it.id==id}?.name}.joinToString(" · "),style=MaterialTheme.typography.bodySmall)}
                     TextButton(onClick={expanded=if(expanded==g.id)null else g.id}){Text(stringResource(R.string.wb_source))}
-                }
-                // Source actions are always visible, exactly as written; urgency is never inferred from a selection.
-                g.entries.map{it.source to it.action}.distinctBy{it.first.id to it.second.id}.forEach{(source,action)->
-                    Text(source.publisher,style=MaterialTheme.typography.labelSmall);OriginalQuotation(action.text,action.urgent)
                 }
                 if(saved!=null) key(date,g.id) {
                     var note by remember(saved.note){mutableStateOf(saved.note.orEmpty())}
