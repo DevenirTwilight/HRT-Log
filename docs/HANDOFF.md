@@ -392,3 +392,5 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 ### 2n. build9地区候选框（2026-10-07，进行中）
 
 用户要求紧凑地区候选框。RegionSection已替换常驻六行RadioButton，复用DropdownField；仅显示选中地区，点击弹出六项列表，未选择和帮助说明保留。设置持久化键/值与语言独立性不变；versionCode9/schema4。下一步相关现有UI/翻译回归、full/play编译与lint、正式full包签名下载，不改公开Release。无需新增镜像式UI测试。
+
+2026-10-07 build9功能0511922已推送；full91/play78应用回归（167通过、2 PDF跳过、0失败）完成，无新增镜像式测试。CI37645063384 jvm成功，android/device仍进行；本机lint/release尚在构建。私有签名仓库再次确认private，临时恢复在/workspace/tooling/build9-signing；签后须清理。尚无build9可交付APK。
