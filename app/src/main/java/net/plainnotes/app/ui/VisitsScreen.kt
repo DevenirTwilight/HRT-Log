@@ -171,7 +171,7 @@ class VisitExportRequest(val from: LocalDate, val to: LocalDate, val sections: S
                          val schedules: Map<Long, String>, val regimenLabels: Map<Long, String>, val unknownName: String)
 
 @Composable fun VisitPackDialog(a: AppointmentEntity, state: NotesState, extra: NotesViewModel.ExtraState, onDismiss: () -> Unit, onExport: (android.net.Uri, VisitExportRequest) -> Unit) {
-    val context = LocalContext.current; val zone = ZoneId.systemDefault(); val today = LocalDate.now()
+    val context = LocalContext.current; val resources = androidx.compose.ui.platform.LocalResources.current; val zone = ZoneId.systemDefault(); val today = LocalDate.now()
     val range = remember(a, state.appointments) { VisitPlanning.defaultRange(a, state.appointments, today, zone) }
     var from by rememberSaveable { mutableStateOf(range.from.toString()) }; var to by rememberSaveable { mutableStateOf(range.to.toString()) }
     var chosen by rememberSaveable { mutableStateOf(VisitSection.entries.filter { it.defaultOn }.map { it.name }) }
@@ -182,7 +182,7 @@ class VisitExportRequest(val from: LocalDate, val to: LocalDate, val sections: S
     val sections = chosen.map { VisitSection.valueOf(it) }.toSet()
     val valid = from <= to && LocalDate.parse(to) <= today && sections.isNotEmpty()
     val preview = remember(extra, state, from, to, valid) {
-        if (!valid) emptyList() else factLines(context.resources, VisitFacts.build(ExportData(state.medications, state.profiles, extra.records, extra.labs, extra.items, extra.scores, extra.notes,
+        if (!valid) emptyList() else factLines(resources, VisitFacts.build(ExportData(state.medications, state.profiles, extra.records, extra.labs, extra.items, extra.scores, extra.notes,
             schedules, labels, extra.containers, extra.symptoms, extra.reviews, extra.labContexts, extra.regimens, extra.milestones, state.appointments), a, LocalDate.parse(from), LocalDate.parse(to), zone), unknown)
     }
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { uri ->

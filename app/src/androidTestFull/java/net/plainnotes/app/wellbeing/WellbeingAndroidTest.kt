@@ -40,7 +40,6 @@ class WellbeingAndroidTest {
         val bytes=out.toByteArray();assertEquals("%PDF-",String(bytes.copyOfRange(0,5)))
         val file=java.io.File(context.cacheDir,"synthetic-summary.pdf")
         try{file.writeBytes(bytes);android.os.ParcelFileDescriptor.open(file,android.os.ParcelFileDescriptor.MODE_READ_ONLY).use{fd->android.graphics.pdf.PdfRenderer(fd).use{renderer->assertTrue(renderer.pageCount>2);renderer.openPage(renderer.pageCount-1).use{assertTrue(it.width>0)}}}}finally{file.delete()}
-    }
         // Visit pack: same native writer, only chosen parts, long question list paginates.
         val visit=net.plainnotes.app.data.AppointmentEntity(1,"ENDO",System.currentTimeMillis(),"UTC",practitioner="Synthetic clinic",remind_minutes_before=60)
         val questions=(1..80).map{net.plainnotes.app.data.VisitQuestionEntity(it.toLong(),1,it,"Synthetic question $it. 合成问题。 Question synthétique.",if(it%2==0)"ASKED" else "OPEN",if(it%3==0)"Synthetic answer" else null)}

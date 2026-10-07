@@ -818,7 +818,7 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="visit_digest">Check code %1$s (matches the record kept in the app; not a signature)</string>
     <string name="visit_regimen_versions">Plan versions in this period</string>
     <string name="visit_facts_title">Recorded facts in this period</string>
-    <string name="visit_fact_days">Period: %1$d days</string>
+    <string name="visit_fact_days">Days in period: %1$d</string>
     <string name="visit_fact_regimens">Plan versions started: %1$d · ended: %2$d</string>
     <string name="visit_fact_no_intakes">No intake records in this period.</string>
     <string name="visit_fact_medication">%1$s: taken %2$d (late %3$d, imported %4$d) · confirmed missed %5$d · skipped %6$d · unconfirmed %7$d</string>

@@ -818,7 +818,7 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="visit_digest">Code de contrôle %1$s (correspond à l’enregistrement dans l’app ; ce n’est pas une signature)</string>
     <string name="visit_regimen_versions">Versions du traitement sur la période</string>
     <string name="visit_facts_title">Faits enregistrés sur la période</string>
-    <string name="visit_fact_days">Période : %1$d jours</string>
+    <string name="visit_fact_days">Jours dans la période : %1$d</string>
     <string name="visit_fact_regimens">Versions commencées : %1$d · terminées : %2$d</string>
     <string name="visit_fact_no_intakes">Aucune prise enregistrée sur la période.</string>
     <string name="visit_fact_medication">%1$s : prises %2$d (en retard %3$d, importées %4$d) · oublis confirmés %5$d · sautées %6$d · non confirmées %7$d</string>
