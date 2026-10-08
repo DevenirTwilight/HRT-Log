@@ -1,5 +1,9 @@
 # 交接说明：工作进度与开发指南
 
+## 进行中：build15大量历史未识别（build16计划，2026-10-08）
+
+用户反馈仍一堆待识别。已核查同ID部分缺失身份被严格相等拒绝、每日三连续向量条件过严、APP旧记录未使用明确冻结rule、分日时区不采用保存记录zone。需求§32，设计design/history-recognition-coverage.md。计划修正已知字段兼容匹配、有限窗口主要模式、部分已知历史频率未确认时期，保留原数据/保存优先/跨ID保守/闪退回归。用户关于详情缺什么和频率的可选澄清尚待答复；未读取真实健康文件、未实现或交付，最新交付仍build15。仅full和原正式签名，原分支。
+
 ## 当前最新交付：时间线闪退修复 build15（2026-10-08，完成）
 
 - 用户仅覆盖升级build14、没有新增/导入就进入Timeline闪退。合成同日3mg→2mg保存版本已先复现 `IllegalArgumentException: Overlapping recorded regimen`（复现提交db3682f，build15-reproduction.log）；尚未取得用户设备堆栈，不能证明是其唯一原因。先行设计[timeline-overlap-hotfix](design/timeline-overlap-hotfix.md)，需求§31。最终功能282efea；versionCode15/versionName0.2.0/schema6，原分支，仅full。
