@@ -109,10 +109,9 @@ import java.time.*
                             StandardSummary(saved?.let{RegimenDefinition.read(it.definition_json).snapshot(it.medication_id)} ?: observed?.snapshot,span.standard)
                             if(span.standard.kind!="OBSERVED" && span.standard.slotIdentityUnknown)Text(stringResource(R.string.period_slot_unknown),style=MaterialTheme.typography.bodySmall)
                         }
-                        if(standards.any{it.rawVersionIds.any{id->id<0}})Text(stringResource(R.string.period_observed),style=MaterialTheme.typography.bodySmall)
                         if(period.segments.size>1)Text(stringResource(R.string.period_same_day),style=MaterialTheme.typography.bodySmall)
-                        if(standards.any{it.reconstructed && it.rawVersionIds.any{id->id>0}})Text(stringResource(R.string.epoch_reconstructed),style=MaterialTheme.typography.bodySmall)
-                        val sourceRows=record.resolvedRecords.filter{r->r.taken_utc?.let{period.contains(Instant.ofEpochMilli(it))}==true}
+                        if(standards.any{span->extra.regimens.any{it.id in span.rawVersionIds && it.origin=="LEGACY_RULE"}})Text(stringResource(R.string.epoch_reconstructed),style=MaterialTheme.typography.bodySmall)
+                        val sourceRows=record.resolvedRecords.filter{r->(r.taken_utc ?: r.scheduled_utc)?.let{period.contains(Instant.ofEpochMilli(it))}==true}
                         if(sourceRows.isNotEmpty())TextButton(onClick={onImportedHistory(sourceRows.map{it.id})},modifier=Modifier.testTag("period-history:${period.key}")){Text(stringResource(R.string.period_evidence,sourceRows.size))}
                         if(!simple)TextButton(onClick={auditKey=period.key}){Text(stringResource(R.string.period_saved_changes))}
                     }
@@ -134,7 +133,8 @@ import java.time.*
             projection.raw.filter{it.span.from<(period.until ?: Instant.MAX) && (it.span.until?.let{end->end>period.from} ?: true)}.forEach{raw->
                 Text((if(raw.span.id>0)"#${raw.span.id}" else stringResource(R.string.period_observed))+" · "+raw.span.from.toString()+" → "+(raw.span.until?.toString() ?: stringResource(R.string.epoch_ongoing)))
                 val saved=extra.regimens.firstOrNull{it.id==raw.span.id}
-                StandardSummary(saved?.let{RegimenDefinition.read(it.definition_json).snapshot(it.medication_id)} ?: record.observed.firstOrNull{it.interval.span.id==raw.span.id}?.snapshot,raw.standard)
+                StandardSummary(saved?.let{RegimenDefinition.read(it.definition_json).snapshot(it.medication_id)} ?: record.observed.firstOrNull{it.interval.span.id==raw.span.id}?.snapshot,
+                    saved?.let{RegimenDefinition.read(it.definition_json).therapyStandard(normalizeCadence=false)} ?: raw.standard)
             }
         }},confirmButton={TextButton(onClick={auditKey=null}){Text(stringResource(R.string.ok))}})}
     removeId?.let{id->AlertDialog(onDismissRequest={removeId=null},text={Text(stringResource(R.string.milestone_delete_confirm))},
@@ -243,7 +243,6 @@ private data class StoryBlock(val key:String,val period:DisplayPeriod?=null,val 
         LazyColumn(Modifier.heightIn(max=420.dp),verticalArrangement=Arrangement.spacedBy(10.dp)){
             item{
                 Text(importedRange(summary,zone)+" · "+zone.id)
-                Text(if(summary.origin=="IMPORT_HT")"HRT Tracker" else "Trans Memo")
                 Text(stringResource(R.string.timeline_imported_count,summary.records.size))
                 Text(stringResource(R.string.timeline_imported_context),style=MaterialTheme.typography.bodySmall)
             }

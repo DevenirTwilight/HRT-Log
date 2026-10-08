@@ -23,7 +23,7 @@ class ImportedHistoryTimelineTest {
         val rows=listOf(record(1),record(2,"IMPORT_TM"))
         val v=view(rows)
         assertTrue(v.projection.periods.isEmpty());assertTrue(v.events.isEmpty())
-        assertEquals(setOf("IMPORT_HT","IMPORT_TM"),v.importedHistory.map{it.origin}.toSet())
+        assertEquals(setOf("IMPORT_HT","IMPORT_TM"),v.importedHistory.flatMap{it.records}.map{it.origin}.toSet())
         assertTrue(v.importedHistory.all{it.displayPeriodKey==null && !it.future})
         assertEquals(rows.sortedBy{it.id},v.importedHistory.flatMap{it.records}.sortedBy{it.id})
         assertEquals(ZoneId.of("UTC"),v.projection.zone)
@@ -46,12 +46,13 @@ class ImportedHistoryTimelineTest {
         assertEquals(1,v.projection.periods.size);assertTrue(v.importedHistory.isEmpty())
         assertEquals(rows,v.resolvedRecords);assertEquals(versions.map{it.definition_json},v.projection.raw.map{r->versions.single{it.id==r.span.id}.definition_json})
     }
-    @Test fun deletedUndatedAndAppEntriesAreExcludedWhileFutureImportsAreSeparate() {
+    @Test fun deletedAndUndatedAreExcludedButAppHistoryAndFutureRecordsRemain() {
         val future=record(4,at=now.plusSeconds(1))
         val rows=listOf(record(1).copy(deleted_at_utc=now.toEpochMilli()),record(2,"APP"),record(3).copy(taken_utc=null,scheduled_utc=null),future)
         val v=view(rows,listOf(version(1,now.minusSeconds(86400),null)))
-        assertEquals(listOf(future),v.importedHistory.single().records)
-        assertTrue(v.importedHistory.single().future);assertNull(v.importedHistory.single().displayPeriodKey)
+        assertEquals(listOf(future),v.importedHistory.single{it.future}.records)
+        assertEquals(listOf(rows[1]),v.importedHistory.single{!it.future}.records)
+        assertTrue(v.importedHistory.single{it.future}.future);assertNull(v.importedHistory.single{it.future}.displayPeriodKey)
     }
     @Test fun transMemoUnknownDoseAndRouteRemainUnknownNotInferredFromPlan() {
         val saved="""{"snapshot_version":2,"name":"Synthetic incomplete","molecule":"E2","route":null,"unit":"MG","pk_profile":null}"""

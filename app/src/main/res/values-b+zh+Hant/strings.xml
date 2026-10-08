@@ -848,13 +848,13 @@
     <string name="period_frequency_days">每 %2$d 天 %1$d 次</string>
     <string name="period_current_mapping">目前顯示歸屬 · 方案版本：%1$s。上方儲存的上下文保持不變。</string>
     <string name="timeline_imported_history">待識別方案的歷史紀錄</string>
-    <string name="timeline_imported_count">%1$d 筆匯入記錄</string>
+    <string name="timeline_imported_count">%1$d 條記錄</string>
     <string name="timeline_imported_context">這些紀錄尚無足夠穩定的依據識別方案。缺失的歷史資訊仍標為未知。</string>
     <string name="timeline_imported_unknown_route">原記錄途徑未知</string>
     <string name="timeline_imported_amounts">記錄的實際劑量：%1$s – %2$s</string>
     <string name="timeline_imported_unknown_amount">%1$d 筆已服記錄缺少實際劑量</string>
     <string name="timeline_imported_open_history">查看這些原始記錄</string>
-    <string name="timeline_imported_clear_selection">清除匯入記錄篩選</string>
+    <string name="timeline_imported_clear_selection">清除記錄篩選</string>
     <string name="milestone_paused">暫停治療</string>
     <string name="milestone_stopped">停止治療</string>
     <string name="milestone_resumed">恢復治療</string>

@@ -85,4 +85,33 @@ class ImportedHistoryIntegrationTest {
         } finally {db.close()}
     }
 
+    @Test fun actualImportAndAppRecordShareCurrentPeriodAcrossOctoberSixAndRestore()=runBlocking {
+        val context=ApplicationProvider.getApplicationContext<Context>()
+        val db=Room.inMemoryDatabaseBuilder(context,NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build()
+        try {
+            val repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=db})
+            val base=Instant.parse("2026-09-25T01:00:00Z");val cut=Instant.parse("2026-10-06T08:00:00Z")
+            val events=(0..10).flatMap{day->listOf(0,12).map{hour->
+                val time=(base.toEpochMilli()/3600000)+day*24+hour
+                """{"id":"synthetic-continuity-$day-$hour","route":"sublingual","timeH":$time,"doseMG":2,"ester":"E2","extras":{"sublingualTier":2}}"""
+            }}.joinToString(",")
+            val export=HrtTracker.read("""{"meta":{"version":2},"events":[$events]}""")
+            val groups=HrtTracker.preview(export).groups.keys;val plan=HrtTracker.plan(export,null)
+            repo.importHrtTracker(plan,groups.associateWith{null},groups.associateWith{"Synthetic continued regimen"},null,ZoneId.of("Asia/Shanghai"))
+            val medication=repo.medications().single();val firstRecord=repo.records().first()
+            val d=RegimenDefinition(firstRecord.config_snapshot,"EVERY_N_HOURS",12,0,2.0,"UTC",null,cut.toEpochMilli(),emptyList())
+            db.dao().regimen(RegimenVersionEntity(medication_id=medication.id,effective_from_utc=cut.toEpochMilli(),zone="UTC",definition_json=d.json(),clinical_signature=d.signature(),origin="APP",recorded_at_utc=cut.toEpochMilli()))
+            db.dao().record(firstRecord.copy(id=0,origin="APP",source_record_key=null,taken_utc=cut.toEpochMilli(),taken_zone="UTC"))
+            suspend fun view()=PeriodTimelineProjection.build(NotesViewModel.ExtraState(records=repo.records(),regimens=db.dao().regimens()),emptyList(),Instant.parse("2026-10-08T22:00:00Z"))
+            val original=repo.records();val versions=db.dao().regimens();val first=view()
+            assertEquals(1,first.projection.periods.size);assertEquals(1,first.projection.standards.size)
+            assertEquals(original,first.resolvedRecords);assertTrue(first.importedHistory.isEmpty())
+            repo.importHrtTracker(plan,groups.associateWith{medication.id},emptyMap(),null,ZoneId.of("Asia/Shanghai"))
+            assertEquals(original,repo.records());assertEquals(first,view())
+            val password="synthetic-password".toCharArray();repo.restoreBackup(repo.exportBackup(password),password)
+            assertEquals(original,repo.records());assertEquals(versions,db.dao().regimens());assertEquals(first,view())
+            assertTrue(db.dao().rules().isEmpty());assertTrue(db.dao().containers().isEmpty())
+        } finally {db.close()}
+    }
+
 }

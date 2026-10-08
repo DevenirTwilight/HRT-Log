@@ -144,8 +144,13 @@ object ObservedTreatmentHistory {
             }
             pieces.forEach{(a,b)->
                 // Only the immediately next saved boundary can be joined. Never skip an intervening version.
-                val adjacent=medicationVersions.firstOrNull{it.raw.span.from>=b}?.takeIf{it.identity==identity(c.snapshot) && it.raw.span.from.atZone(zone).toLocalDate()==b.atZone(zone).toLocalDate() &&
-                    it.raw.standard.therapySignatureV2()==c.standard.therapySignatureV2()}
+                val adjacent=medicationVersions.firstOrNull{it.raw.span.from>=b}?.takeIf{next->
+                    val shortDailyGap=c.standard.kind=="EVERY_N_DAYS" && c.standard.interval==1 && Duration.between(b,next.raw.span.from)<=Duration.ofDays(1)
+                    val sameDisplayDay=next.raw.span.from.atZone(zone).toLocalDate()==b.atZone(zone).toLocalDate()
+                    next.identity==identity(c.snapshot) && (sameDisplayDay || shortDailyGap) &&
+                        next.raw.standard.therapySignatureV2()==c.standard.therapySignatureV2() &&
+                        candidates.none{other->other.med==c.med && other.from>=b && other.from<next.raw.span.from && other.standard.therapySignatureV2()!=c.standard.therapySignatureV2()}
+                }
                 val end=adjacent?.raw?.span?.from ?: b
                 val evidence=c.facts.filter{it.at>=a && it.at<end}
                 if(evidence.isNotEmpty())clipped+=c.copy(from=a,until=end,facts=evidence)
@@ -158,11 +163,14 @@ object ObservedTreatmentHistory {
         }
         val resolved=observed.flatMap{it.records}.map{it.id}.toMutableSet()
         val byRecord=facts.associateBy{it.row.id}
-        records.filter{r->r.deleted_at_utc==null && r.status in listOf("ON_TIME","LATE") && r.taken_utc!=null && Instant.ofEpochMilli(r.taken_utc!!)<=now}.forEach{r->
+        records.forEach{r->
+            if(r.deleted_at_utc!=null || r.status !in listOf("ON_TIME","LATE","MISSED","SKIPPED"))return@forEach
+            val timestamp=r.taken_utc ?: r.scheduled_utc?.takeIf{r.status in listOf("MISSED","SKIPPED")} ?: return@forEach
+            if(Instant.ofEpochMilli(timestamp)>now)return@forEach
             val m=snapshots[r.id] ?: return@forEach
             val fact=byRecord[r.id];val med=fact?.med ?: r.medication_id
-            val linked=saved.any{s->s.raw.span.medicationId==med && r.taken_utc!!>=s.raw.span.from.toEpochMilli() &&
-                (s.raw.span.until?.let{r.taken_utc!!<it.toEpochMilli()} ?: true) && s.identity?.let{key->
+            val linked=saved.any{s->s.raw.span.medicationId==med && timestamp>=s.raw.span.from.toEpochMilli() &&
+                (s.raw.span.until?.let{timestamp<it.toEpochMilli()} ?: true) && s.identity?.let{key->
                     (m.molecule==null || m.molecule==key.compound) && (m.unit==null || m.unit==key.unit) &&
                     (m.route==null || key.route==null || m.route==key.route) && (m.profile?.ester==null || key.ester==null || m.profile?.ester==key.ester) &&
                     identity(m)?.let{compatible(it,key)}!=false

@@ -25,13 +25,13 @@ class ImportedTimelineUiTest {
     @Test fun importedSummaryOpensFrozenDetailsAndExactHistoryIds() {
         var selected:List<Long>?=null
         ui.setContent{MaterialTheme{LongitudinalScreen(NotesState(loading=false),NotesViewModel.ExtraState(records=listOf(row())),{},{},{},PaddingValues(),onImportedHistory={selected=it})}}
-        ui.onNodeWithTag("timeline:import-history:IMPORT_HT:unknown:false").assertIsDisplayed()
+        ui.onNodeWithTag("timeline:history:unknown:false").assertIsDisplayed()
         val view=ui.activity.window.decorView
         val bitmap=android.graphics.Bitmap.createBitmap(view.width,view.height,android.graphics.Bitmap.Config.ARGB_8888)
         view.draw(android.graphics.Canvas(bitmap))
         java.io.File("build/screenshots").mkdirs()
         java.io.File("build/screenshots/imported_timeline_overview.png").outputStream().use{bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG,100,it)}
-        ui.onNodeWithTag("timeline:import-history:IMPORT_HT:unknown:false").performClick()
+        ui.onNodeWithTag("timeline:history:unknown:false").performClick()
         ui.onNodeWithText("Synthetic frozen import").assertIsDisplayed()
         ui.onAllNodesWithText(ui.activity.getString(R.string.status_on_time),substring=true).assertCountEquals(0)
         ui.onNodeWithText(ui.activity.getString(R.string.timeline_imported_open_history)).performClick()
@@ -40,11 +40,11 @@ class ImportedTimelineUiTest {
     @Test fun importingOrDeletingRecordsRefreshesTheProjectionWithoutChangingRegimens() {
         val extra=mutableStateOf(NotesViewModel.ExtraState())
         ui.setContent{MaterialTheme{LongitudinalScreen(NotesState(loading=false),extra.value,{},{},{},PaddingValues())}}
-        ui.onNodeWithTag("timeline:import-history:IMPORT_HT:unknown:false").assertDoesNotExist()
+        ui.onNodeWithTag("timeline:history:unknown:false").assertDoesNotExist()
         ui.runOnIdle{extra.value=extra.value.copy(records=listOf(row()))}
-        ui.onNodeWithTag("timeline:import-history:IMPORT_HT:unknown:false").assertIsDisplayed()
+        ui.onNodeWithTag("timeline:history:unknown:false").assertIsDisplayed()
         ui.runOnIdle{extra.value=extra.value.copy(records=listOf(row().copy(deleted_at_utc=Instant.now().toEpochMilli())))}
-        ui.onNodeWithTag("timeline:import-history:IMPORT_HT:unknown:false").assertDoesNotExist()
+        ui.onNodeWithTag("timeline:history:unknown:false").assertDoesNotExist()
     }
     @Test fun selectedOriginalHistoryBypassesTheDefaultThirtyDayWindowAndExcludesOtherSources() {
         val selected=row();val other=med.copy(id=2,name="Synthetic excluded source")
@@ -63,7 +63,7 @@ class ImportedTimelineUiTest {
         ui.setContent{MaterialTheme{LongitudinalScreen(NotesState(loading=false),extra,{},{},{},PaddingValues(),onImportedHistory={selected=it})}}
         ui.onNodeWithTag("period-timeline").performScrollToNode(hasText("Synthetic frozen import",substring=true))
         ui.onNodeWithText("Synthetic frozen import",substring=true).assertIsDisplayed()
-        ui.onNodeWithText(ui.activity.getString(R.string.period_observed)).assertIsDisplayed()
+        ui.onNodeWithText(ui.activity.getString(R.string.period_observed)).assertDoesNotExist()
         ui.onNodeWithText(ui.activity.getString(R.string.timeline_imported_history)).assertDoesNotExist()
         ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag("period-history:${period.key}"))
         ui.onNodeWithTag("period-history:${period.key}").performClick()
@@ -115,6 +115,40 @@ class ImportedTimelineUiTest {
         ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag(tag))
         ui.onNodeWithTag(tag).performClick()
         ui.runOnIdle{org.junit.Assert.assertEquals(rows.map{it.id},opened)}
+    }
+
+    @Test fun sameRegimenAcrossOctoberSixHasOneOrdinaryPeriodAndAllSources() {
+        val base=java.time.Instant.parse("2026-09-25T01:00:00Z")
+        val cut=java.time.Instant.parse("2026-10-06T08:00:00Z")
+        val med=MedicationEntity(1,"Synthetic joined regimen","E2","SUBLINGUAL","MG",2.0,40.0,site_rotation=false,notifications_on=false,active=true,sort_order=0)
+        val json=MedicationSnapshot.encode(med,ProfileEntity(1,"E2","sublingual"))
+        val before=(0..10).flatMap{day->listOf(0,12).mapIndexed{slot,h->RecordEntity(day*2+slot+1L,1,
+            taken_utc=base.plusSeconds((day*24+h)*3600L).toEpochMilli(),taken_zone="Asia/Shanghai",actual_dose=2.0,status="ON_TIME",origin="IMPORT_HT",
+            source_record_key="ht:synthetic:joined:$day:$h",revision=1,config_snapshot=json)}}
+        val after=before.first().copy(id=101,taken_utc=cut.toEpochMilli(),taken_zone="UTC",origin="APP",source_record_key=null)
+        val d=RegimenDefinition(json,"EVERY_N_HOURS",12,0,2.0,"UTC",null,cut.toEpochMilli(),emptyList())
+        val version=RegimenVersionEntity(1,1,cut.toEpochMilli(),null,"UTC",d.json(),d.signature(),"APP",cut.toEpochMilli())
+        val extra=NotesViewModel.ExtraState(records=before+after,regimens=listOf(version))
+        val projection=net.plainnotes.app.timeline.PeriodTimelineProjection.build(extra,emptyList())
+        org.junit.Assert.assertEquals(1,projection.projection.periods.size)
+        var opened:List<Long>?=null
+        ui.setContent{MaterialTheme{LongitudinalScreen(NotesState(loading=false),extra,{},{},{},PaddingValues(),onImportedHistory={opened=it})}}
+        ui.onNodeWithText("Synthetic joined regimen",substring=true).assertIsDisplayed()
+        ui.onNodeWithText(ui.activity.getString(R.string.period_past)).assertDoesNotExist()
+        ui.onNodeWithText(ui.activity.getString(R.string.period_observed)).assertDoesNotExist()
+        ui.onNodeWithText(ui.activity.getString(R.string.epoch_reconstructed)).assertDoesNotExist()
+        val tag="period-history:${projection.projection.periods.single().key}"
+        ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag(tag))
+        ui.onNodeWithTag(tag).performClick()
+        ui.runOnIdle{org.junit.Assert.assertEquals((before+after).map{it.id},opened)}
+    }
+
+    @Test fun importedAndAppHistoryHaveTheSameUnplannedTimestampPresentation() {
+        val first=row();val other=first.copy(id=72,origin="APP",source_record_key=null)
+        ui.setContent{MaterialTheme{HistoryScreen(NotesState(medications=listOf(med),loading=false),listOf(first,other),{},{},PaddingValues(),selectedRecordIds=setOf(71,72))}}
+        ui.onNodeWithTag("history-records").performScrollToNode(hasTestTag("history-record:71"))
+        ui.onNodeWithText(ui.activity.getString(R.string.history_imported_short)).assertDoesNotExist()
+        ui.onAllNodesWithText(ui.activity.getString(R.string.history_unscheduled_short)).assertCountEquals(2)
     }
 
 }

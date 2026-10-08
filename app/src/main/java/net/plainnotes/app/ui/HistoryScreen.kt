@@ -193,13 +193,12 @@ fun routeIcon(route: String?): ImageVector = when (route) {
             Spacer(Modifier.width(8.dp))
             Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Chip(formatTime(r.at()))
-                if (r.origin.startsWith("IMPORT_")) Chip(stringResource(R.string.history_imported_short))
                 when (r.status) {
                     "LATE" -> StatusPill(stringResource(R.string.status_late), c.tertiaryContainer, c.onTertiaryContainer, null)
                     "MISSED" -> StatusPill(stringResource(if(r.unconfirmed)R.string.status_unconfirmed else R.string.status_missed), if(r.unconfirmed)c.surfaceContainerHigh else c.errorContainer, c.onSurface, null)
                     "SKIPPED" -> StatusPill(stringResource(R.string.status_skipped), c.surfaceContainerHighest, c.onSurfaceVariant, null)
-                    // Source identity stays visible even after an explicit association.
-                    else -> if (r.scheduled_utc == null && !r.origin.startsWith("IMPORT_")) Chip(stringResource(R.string.history_unscheduled_short))
+                    // An unplanned timestamp has the same presentation for every record source.
+                    else -> if (r.scheduled_utc == null) Chip(stringResource(R.string.history_unscheduled_short))
                 }
             }
         }
