@@ -1,6 +1,6 @@
 # 交接说明：工作进度与开发指南
 
-## 进行中：停用期保留 + 时期分段原因 build 20（2026-10-08，REQUIREMENTS §36a）
+## 当前最新交付：停用期保留 + 时期分段原因 build 20（2026-10-08，REQUIREMENTS §36a，完成）
 
 用户反馈 build 19 后 10-06 前后仍是两个时期，且没有导入新建的药物条目。因此第 2 条（条目 ID）不是原因；同一条目的酯型缺失/一致各组合在 build 19 已是一段（合成测试）。原因仍不明，可能是另一种药物在 10-06 开始/结束、或导入那段被识别成不同剂量/频率（如多数天只记了一次、频率无法识别）。未读取用户数据。build 20 在时期卡片上显示“与上一时期相比”的原因（按药物），请用户安装后告诉我 10-06 那张卡片上写的原因。
 
@@ -8,7 +8,9 @@
 - `TreatmentPeriods`：保存版本（正 ID）结束后若有空白即为停用，不再按 30 天规则合并；新增 `stops`（停用起止）和 `changes(period)`（分段原因）。记录空白（负 ID）仍按 < 30 天合并。
 - 时期卡片：停用行 `period-stop:<药物>:<时间>`“X 在应用中停用：起 – 止/至今”，以及“与上一时期相比”原因（非精简模式），四语。
 - 调整 build 19 的两个域测试：短空白合并的用例改为记录片段（负 ID）；导入片段用负 ID。
-- versionCode 20。本机全量检查通过（0 失败；lint、full debug/release、测试 APK、manifest 通过）。待做：CI → 原正式签名 → 交付。
+- versionCode 20。本机全量检查通过（0 失败；lint、full debug/release、测试 APK、manifest 通过）。CI [37782741194](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37782741194)（d063437）jvm、device-tests success，android 任务的构建/测试/lint/manifest/schema 步骤 success（交付时仅剩缓存保存步骤）。
+- 交付：`hrt-log-build20-full-signed.apk`，23,424,219 bytes，SHA256 `6e1c93eecff6dc21f67e832ec9a93ce5e900f12fd0914c81d6652fd878015408`；原证书、v2/v3、16KB 对齐、versionCode 20、无 INTERNET；签名材料已删除；通过会话文件发送。覆盖安装，无 schema 变化。
+- 下一步：请用户看 10-06 那张时期卡片“与上一时期相比”写的原因（只需原因文字和药物名），据此修正。
 
 ## 上一交付（build 19）：10-06 前后同一方案合并（2026-10-08，REQUIREMENTS §36，完成）
 
