@@ -1,15 +1,17 @@
 # 交接说明：工作进度与开发指南
 
-## 进行中：历史识别覆盖修复 build16（2026-10-08，功能与完整验证完成，待签署交付）
+## 当前最新交付：历史识别覆盖修复 build16（2026-10-08，完成）
 
 - 用户确认药物/舌下途径/实际量正确，主要每天两次、偶尔漏记。需求§32与先行设计a505c94，design/history-recognition-coverage.md。原分支，仅full，versionCode16/schema6/原正式证书。
 - 已实现有限七天支持完整向量与部分漏记日；三次完整向量、匹配观察日≥2/3、观察自然日≥2/3、至少两个连续间隔。较大完整向量优先，按同类模式先合并证据，避免重叠窗口单/双次反复拆段；持续剂量/频率变化仍区分。记录zone分日。已保存同ID已知字段兼容关联，未知仍未知；仅APP明确冻结rule补缺，IMPORT不借用规则/当前配置。至少三个日期的已知剂量、频率不确定历史作为明确OBSERVED部分已知时期，不伪造每日处方。
 - 原RecordEntity/版本/快照/剂量/revision/库存/提醒/PK/V1/Context1/VisitPack1不写改。build15紧邻边界与降级回归保留。
 - 应用完整回归已成功（tooling/build16-final-app-tests.log），163登记/150通过/13既有跳过/0失败。识别26项含双次零星漏记、剂量改变与双次→单次→双次、未知长空白、稀疏不假定每日、同ID未知与已知冲突、APP冻结rule/IMPORT不借用、记录时区；新增真实JSON导入→Room→重导入/加密恢复，Compose Native Graphics时期内频率与确切源记录入口。前轮发现窗口拆段已修正重跑；两项测试对未知空白时期的断言修正为检查空标准集合，保留业务断言。
 - 完整本机full任务8m12s成功：304登记/291通过/13既有跳过/0失败，lint0错误99警告，full debug/release与两个测试APK成功；manifest/schema/PLAN无漂移检查通过。最终功能CI [37752990023](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37752990023)，源码1093755，三个任务全部success；API35数据11、应用主套件28项，两个重启项另起进程各OK。详见history-recognition-coverage-verification.md。
-- 下一步仅原私有正式证书签署、校验证书/对齐/包属性、上传与独立下载哈希回查。尚未交付build16，最新交付仍build15；未读取用户真实健康数据或进行用户OEM/人工TalkBack新验收。签名备份仓库已再次确认private。
+- 正式full `/workspace/HRT-Log-build16-full-signed.apk`，23,366,875 bytes，SHA256 `cde9aa7d02e4fa8fa6ae974a75ff2236ee9cfeb46f834f65ad099c1943e55351`。原证书SHA256 `989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1`、v2/v3、ZIP及8个native库16KB对齐、非debug、net.plainnotes.app/build16/无INTERNET确认，release mapping含修正识别路径；可覆盖原正式安装，无需卸载、清数据或重导入。签名备份确认private，临时clone/ZIP/JKS/密码finally删除，保留的仅不含凭据clone日志；原备份不改。
+- 下载：https://tmpfiles.org/dl/1791450597.a5df8a0216c4f16e/wNAugkgg3YGT/hrt-log-build16-full-signed.apk 。独立真实下载与本地大小/SHA一致；临时链接失效重传同一build16，不交工作区Android预览路径。tooling/build16-final-metadata.json、build16-delivery.json、build16-unit-results.json、build16-final-build-checks.log、build16-ci-device.log保留结果。APK/密钥不入仓库，未发布Release/修改标签。
+- 本批完成，无待完成的构建/签名/交付动作。尚未读取用户真实健康数据、未做用户OEM覆盖安装或人工TalkBack新验收；模式识别不保证所有历史字段或频率可恢复，稀少/无上下文仍待识别。人工持久化确认/编辑、完整启停状态仍是后续工作，未实施§29按钮修改。
 
-## 当前最新交付：时间线闪退修复 build15（2026-10-08，完成）
+## 上一交付：时间线闪退修复 build15（2026-10-08，完成）
 
 - 用户仅覆盖升级build14、没有新增/导入就进入Timeline闪退。合成同日3mg→2mg保存版本已先复现 `IllegalArgumentException: Overlapping recorded regimen`（复现提交db3682f，build15-reproduction.log）；尚未取得用户设备堆栈，不能证明是其唯一原因。先行设计[timeline-overlap-hotfix](design/timeline-overlap-hotfix.md)，需求§31。最终功能282efea；versionCode15/versionName0.2.0/schema6，原分支，仅full。
 - 原bug：裁剪后的历史区间寻找同日相同标准，跳过中间不匹配保存版本并延伸进其区间。修正为先找紧邻的下一个保存边界，再判断是否可归并，不跨过任何保存版本，不放宽domain不重叠校验。`projectHistory`仅对非法新增识别投影明确降级：保存方案与原始记录入口保留、四语提示识别不可用。不回退整个功能、不写库、不改原始记录/库存/提醒/V1签名/Context1/VisitPack1/PK/schema。

@@ -19,4 +19,4 @@
 
 前轮编译遇跨模块可空字段智能转换限制，改为显式可空访问后重跑。扩展测试发现窗口交错拆段，改为同模式先合并；UI测试对“空白时期”原本错误假定没有时期，改为检查空标准集合，保留未知覆盖断言，最终全部通过。
 
-最终功能CI [37752990023](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37752990023)，源码1093755，jvm/android/device-tests三个任务全部success；API35数据11、应用主套件28项通过，另两个重启用例独立进程各OK。正式签名交付待完成。不声称用户OEM覆盖安装、真实历史全量识别或人工TalkBack新验收。识别是只读记录模式，尚无人工持久化确认/编辑或完整药物生命周期状态机。
+最终功能CI [37752990023](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37752990023)，源码1093755，jvm/android/device-tests三个任务全部success；API35数据11、应用主套件28项通过，另两个重启用例独立进程各OK。正式full已签署：23,366,875 bytes，SHA256 `cde9aa7d02e4fa8fa6ae974a75ff2236ee9cfeb46f834f65ad099c1943e55351`；沿用原证书，v2/v3、16KB ZIP及8个native库对齐、build16/非debug/无INTERNET验证。私有备份确认private，临时签名目录及其中ZIP/JKS/密码finally删除。真实下载与本地字节数及SHA一致：https://tmpfiles.org/dl/1791450597.a5df8a0216c4f16e/wNAugkgg3YGT/hrt-log-build16-full-signed.apk 。没有改公开Release/标签。不声称用户OEM覆盖安装、真实历史全量识别或人工TalkBack新验收。识别是只读记录模式，尚无人工持久化确认/编辑或完整药物生命周期状态机。
