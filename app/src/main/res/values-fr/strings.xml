@@ -907,4 +907,7 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="period_change_identity">substance ou unité différente</string>
     <string name="period_change_gap">30 jours ou plus sans prise</string>
     <string name="period_change_unjoined">même traitement, non fusionné (merci de le signaler)</string>
+    <string name="period_menu">Plus</string>
+    <string name="period_copy_diagnostics">Copier le diagnostic de fusion</string>
+    <string name="period_diagnostics_copied">Diagnostic copié</string>
 </resources>

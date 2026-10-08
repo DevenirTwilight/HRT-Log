@@ -16,6 +16,7 @@ import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import androidx.compose.material.icons.outlined.MoreVert
 import net.plainnotes.app.R
 import net.plainnotes.app.NotesState
 import net.plainnotes.app.NotesViewModel
@@ -154,6 +155,22 @@ import java.time.*
                         val sourceRows=record.resolvedRecords.filter{r->(r.taken_utc ?: r.scheduled_utc)?.let{period.contains(Instant.ofEpochMilli(it))}==true}
                         if(sourceRows.isNotEmpty())TextButton(onClick={onImportedHistory(sourceRows.map{it.id})},modifier=Modifier.testTag("period-history:${period.key}")){Text(stringResource(R.string.period_evidence,sourceRows.size))}
                         if(!simple)TextButton(onClick={auditKey=period.key}){Text(stringResource(R.string.period_saved_changes))}
+                        // §36b: the exact join checks against the previous period, as plain text for a report.
+                        if(!simple)Box(Modifier.fillMaxWidth(),contentAlignment=androidx.compose.ui.Alignment.CenterEnd) {
+                            var menu by remember{mutableStateOf(false)}
+                            val context=androidx.compose.ui.platform.LocalContext.current
+                            IconButton(onClick={menu=true},modifier=Modifier.testTag("period-menu:${period.key}")){
+                                Icon(androidx.compose.material.icons.Icons.Outlined.MoreVert,stringResource(R.string.period_menu))}
+                            DropdownMenu(expanded=menu,onDismissRequest={menu=false}) {
+                                DropdownMenuItem(text={Text(stringResource(R.string.period_copy_diagnostics))},modifier=Modifier.testTag("period-diagnostics:${period.key}"),onClick={
+                                    menu=false
+                                    val version=androidx.core.content.pm.PackageInfoCompat.getLongVersionCode(context.packageManager.getPackageInfo(context.packageName,0)).toInt()
+                                    val text=MergeDiagnostics.text(record,extra,period,version)
+                                    context.getSystemService(android.content.ClipboardManager::class.java)?.setPrimaryClip(android.content.ClipData.newPlainText("HRT Log",text))
+                                    android.widget.Toast.makeText(context,context.getString(R.string.period_diagnostics_copied),android.widget.Toast.LENGTH_SHORT).show()
+                                })
+                            }
+                        }
                     }
                 }
                 block.key=="upcoming"->SectionCard(stringResource(R.string.period_upcoming)){Text(stringResource(R.string.period_future_note),style=MaterialTheme.typography.bodySmall)}

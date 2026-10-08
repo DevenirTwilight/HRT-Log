@@ -74,7 +74,7 @@ object ObservedTreatmentHistory {
         facts.groupBy{it.med to it.identity}.toList().sortedBy{it.first.toString()}.forEach{(key,rows)->
             val days=rows.groupBy{it.date}.toSortedMap().map{Day(it.key,it.value)}
             // REQUIREMENTS §35a: one segmentation rule for every source; short deviations stay inside a period.
-            val segments=SustainedPatterns.segment(days.map{day->LoggedDay(day.date,day.facts.distinctBy{it.at to it.row.actual_dose}.map{it.row.actual_dose!!}.sorted())})
+            val segments=SustainedPatterns.segment(days.map{day->LoggedDay(day.date,day.facts.distinctBy{it.at to it.row.actual_dose}.map{Math.round(it.row.actual_dose!!*1_000_000.0)/1_000_000.0}.sorted())})
             val firstFact=days.associate{it.date to it.facts.minBy{f->f.at}}
             segments.forEachIndexed{i,segment->
                 val next=segments.getOrNull(i+1)

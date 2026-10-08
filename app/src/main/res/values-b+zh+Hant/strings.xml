@@ -907,4 +907,7 @@
     <string name="period_change_identity">成分或單位不同</string>
     <string name="period_change_gap">中間 30 天以上沒有紀錄</string>
     <string name="period_change_unjoined">標準相同但未合併（請回報）</string>
+    <string name="period_menu">更多</string>
+    <string name="period_copy_diagnostics">複製合併診斷</string>
+    <string name="period_diagnostics_copied">診斷已複製</string>
 </resources>

@@ -34,8 +34,19 @@ data class TreatmentStop(val medicationId:Long,val from:Instant,val until:Instan
 /** Why a display period differs from the previous one, per medicine (lane ID). */
 enum class ChangeKind{STARTED,ENDED,STOPPED,DOSE,FREQUENCY,FREQUENCY_UNKNOWN,ROUTE,ESTER,FORMULATION,IDENTITY,GAP,UNJOINED}
 data class PeriodChange(val medicationId:Long,val kinds:Set<ChangeKind>)
+/** One join condition and whether it held; [detail] shows both sides. */
+data class JoinCheck(val name:String,val passed:Boolean,val detail:String)
 data class TreatmentPeriodProjection(val zone:ZoneId,val raw:List<RawTreatmentInterval>,val standards:List<TreatmentStandardSpan>,
-    val segments:List<ClinicalSegment>,val periods:List<DisplayPeriod>,val stops:List<TreatmentStop> = emptyList()) {
+    val segments:List<ClinicalSegment>,val periods:List<DisplayPeriod>,val stops:List<TreatmentStop> = emptyList(),
+    /** The standard each raw part is compared with: a saved correction replaced within a day takes its replacement's. */
+    val effective:Map<Long,TherapyStandard> = emptyMap()) {
+    /** Every join check between the end of [a] and the start of [b], exactly as [TreatmentPeriods.build] decides (diagnostics). */
+    fun joinChecks(a:TreatmentStandardSpan,b:TreatmentStandardSpan):List<JoinCheck> {
+        val byId=raw.associateBy{it.span.id}
+        val last=byId.getValue(a.rawVersionIds.last());val first=byId.getValue(b.rawVersionIds.first())
+        return listOf(JoinCheck("same_lane",a.medicationId==b.medicationId,"${a.medicationId} / ${b.medicationId}"))+
+            TreatmentPeriods.joinChecks(a.standard,a.until,last,first,effective[first.span.id] ?: first.standard)
+    }
     /** REQUIREMENTS §36: what changed at the start of [period] compared with the end of the previous one. */
     fun changes(period:DisplayPeriod):List<PeriodChange> {
         val i=periods.indexOf(period);if(i<=0)return emptyList()
@@ -62,7 +73,7 @@ data class TreatmentPeriodProjection(val zone:ZoneId,val raw:List<RawTreatmentIn
             if(differs(x.formulation,y.formulation))add(ChangeKind.FORMULATION)
             if((x.kind=="OBSERVED")!=(y.kind=="OBSERVED"))add(ChangeKind.FREQUENCY_UNKNOWN)
             else if(x.kind!=y.kind || x.interval!=y.interval || x.weeklyCount!=y.weeklyCount)add(ChangeKind.FREQUENCY)
-            if(x.doses.sorted()!=y.doses.sorted())add(ChangeKind.DOSE)
+            if(TreatmentPeriods.doseKey(x.doses)!=TreatmentPeriods.doseKey(y.doses))add(ChangeKind.DOSE)
         }
         if(kinds.isNotEmpty())return kinds
         val gap=b.until?.let{Duration.between(it,a.from)}
@@ -83,7 +94,34 @@ object TreatmentPeriods {
     }
     /** Same standard whatever its source: identity compatible, same cadence and the same doses per dosing day. */
     fun sameStandard(a:TherapyStandard,b:TherapyStandard)=compatibleIdentity(a,b) && a.kind==b.kind && a.interval==b.interval &&
-        a.weeklyCount==b.weeklyCount && a.doses.sorted()==b.doses.sorted()
+        a.weeklyCount==b.weeklyCount && doseKey(a.doses)==doseKey(b.doses)
+    /** Doses compared to a millionth, so float noise in an import (2.0000000001) is the same dose shown on the card. */
+    fun doseKey(doses:List<Double>)=doses.map{Math.round(it*1_000_000.0)/1_000_000.0}.sorted()
+    /** §36a: a saved plan ended and resumed within a day is not a stop period. */
+    val MIN_STOP:Duration=Duration.ofDays(1)
+    /** A saved version replaced within an hour of being saved is a correction (build 15 same-day changes stay real). */
+    val CORRECTION:Duration=Duration.ofHours(1)
+
+    /** The join conditions, in order; two consecutive parts of one lane join only when all pass. */
+    fun joinChecks(prev:TherapyStandard,prevUntil:Instant?,prevLast:RawTreatmentInterval,next:RawTreatmentInterval,nextStandard:TherapyStandard):List<JoinCheck> {
+        val a=prev;val b=nextStandard;val sameEntry=prevLast.span.medicationId==next.span.medicationId
+        fun known(x:String?,y:String?)=x==y || (sameEntry && (x==null || y==null))
+        fun loose(x:String?,y:String?)=x==null || y==null || x==y
+        val gap=prevUntil?.let{Duration.between(it,next.span.from)}
+        return listOf(
+            JoinCheck("no_overlap",gap!=null && !gap.isNegative,"$prevUntil / ${next.span.from}"),
+            JoinCheck("compound",known(a.compound,b.compound) && (a.compound!=null || b.compound!=null || sameEntry),"${a.compound} / ${b.compound}"),
+            JoinCheck("unit",known(a.unit,b.unit) && (a.unit!=null || b.unit!=null || sameEntry),"${a.unit} / ${b.unit}"),
+            JoinCheck("route",loose(a.route,b.route),"${a.route} / ${b.route}"),
+            JoinCheck("ester",loose(a.ester,b.ester),"${a.ester} / ${b.ester}"),
+            JoinCheck("formulation",loose(a.formulation,b.formulation),"${a.formulation} / ${b.formulation}"),
+            JoinCheck("frequency_kind",a.kind==b.kind,"${a.kind} / ${b.kind}"),
+            JoinCheck("interval",a.interval==b.interval,"${a.interval} / ${b.interval}"),
+            JoinCheck("weekly_count",a.weeklyCount==b.weeklyCount,"${a.weeklyCount} / ${b.weeklyCount}"),
+            JoinCheck("doses",doseKey(a.doses)==doseKey(b.doses),"${a.doses} / ${b.doses}"),
+            JoinCheck("gap_under_30_days",gap!=null && gap<JOIN_GAP,"${gap?.toMillis()} ms"),
+            JoinCheck("not_stopped_in_app",!(prevLast.span.id>0 && gap!=null && gap>=MIN_STOP),"last part ${prevLast.span.id}, gap ${gap?.toMillis()} ms"))
+    }
     /** A gap shorter than this between two parts with the same standard does not end the period (same as SustainedPatterns.GAP_DAYS). */
     val JOIN_GAP:Duration=Duration.ofDays(SustainedPatterns.GAP_DAYS.toLong())
 
@@ -111,26 +149,34 @@ object TreatmentPeriods {
         require(raw.map{it.span.id}.distinct().size==raw.size)
         require(raw.all{it.span.until==null || it.span.until>it.span.from})
         val lane=lanes(raw)
+        val effective=mutableMapOf<Long,TherapyStandard>()
         val standards=raw.groupBy{lane.getValue(it.span.medicationId)}.toSortedMap().flatMap{(med,rows)->
             val result=mutableListOf<TreatmentStandardSpan>()
             var currentIds=mutableListOf<Long>()
             var last:RawTreatmentInterval?=null
-            rows.sortedWith(compareBy({it.span.from},{it.span.id})).forEach{r->
+            val sorted=rows.sortedWith(compareBy({it.span.from},{it.span.id}))
+            // A saved version replaced within an hour (a correction made right after saving) takes its replacement's standard.
+            for(i in sorted.indices.reversed()) {
+                val r=sorted[i];val next=sorted.getOrNull(i+1);val end=r.span.until
+                val correction=r.span.id>0 && end!=null && next!=null && Duration.between(r.span.from,end)<CORRECTION &&
+                    !next.span.from.isBefore(end) && Duration.between(end,next.span.from)<CORRECTION
+                effective[r.span.id]=if(correction)effective.getValue(next!!.span.id) else r.standard
+            }
+            sorted.forEach{r->
                 val prev=result.lastOrNull()
                 require(prev==null || prev.until!=null && prev.until<=r.span.from){"Overlapping recorded regimen"}
-                // §36: parts with the same standard continue one period across a short gap, whatever their source.
-                // A saved plan ended in the app is an explicit stop: the stop is kept even when the same standard resumes.
-                val gap=prev?.until?.let{Duration.between(it,r.span.from)}
-                val stopped=gap!=null && !gap.isZero && last!=null && last!!.span.id>0
-                if(prev!=null && gap!=null && !stopped && sameStandard(prev.standard,r.standard) && gap<JOIN_GAP) {
+                // §36/36a: parts with the same standard continue one period across a short gap whatever their source,
+                // except after a plan stopped in the app for a day or more.
+                val standardHere=effective.getValue(r.span.id)
+                if(prev!=null && last!=null && joinChecks(prev.standard,prev.until,last!!,r,standardHere).all{it.passed}) {
                     currentIds.add(r.span.id)
                     fun pick(a:String?,b:String?)=b ?: a
-                    val standard=r.standard.copy(compound=pick(prev.standard.compound,r.standard.compound),ester=pick(prev.standard.ester,r.standard.ester),
-                        route=pick(prev.standard.route,r.standard.route),formulation=pick(prev.standard.formulation,r.standard.formulation))
+                    val standard=standardHere.copy(compound=pick(prev.standard.compound,standardHere.compound),ester=pick(prev.standard.ester,standardHere.ester),
+                        route=pick(prev.standard.route,standardHere.route),unit=pick(prev.standard.unit,standardHere.unit),formulation=pick(prev.standard.formulation,standardHere.formulation))
                     result[result.lastIndex]=prev.copy(until=r.span.until,standard=standard,reconstructed=prev.reconstructed||r.span.reconstructed)
                 } else {
                     currentIds=mutableListOf(r.span.id)
-                    result+=TreatmentStandardSpan("standard-v2:$med:${r.span.from.toEpochMilli()}:${r.span.id}",med,r.span.from,r.span.until,currentIds,r.standard,r.span.reconstructed)
+                    result+=TreatmentStandardSpan("standard-v2:$med:${r.span.from.toEpochMilli()}:${r.span.id}",med,r.span.from,r.span.until,currentIds,standardHere,r.span.reconstructed)
                 }
                 last=r
             };result.map{it.copy(rawVersionIds=it.rawVersionIds.toList())}
@@ -150,8 +196,8 @@ object TreatmentPeriods {
             val end=span.until ?: return@mapIndexedNotNull null
             if(lastById.getValue(span.rawVersionIds.last()).span.id<=0)return@mapIndexedNotNull null
             val next=list.getOrNull(i+1)
-            if(next!=null && next.from==end)null else TreatmentStop(med,end,next?.from)
+            if(next!=null && Duration.between(end,next.from)<MIN_STOP)null else TreatmentStop(med,end,next?.from)
         }}}
-        return TreatmentPeriodProjection(zone,raw,standards,segments,periods,stops)
+        return TreatmentPeriodProjection(zone,raw,standards,segments,periods,stops,effective)
     }
 }

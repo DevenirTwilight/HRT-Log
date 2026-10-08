@@ -189,4 +189,18 @@ class ImportedTimelineUiTest {
         ui.onNodeWithTag(tag).assertTextContains(med.name,substring=true)
         ui.onAllNodesWithText(ui.activity.getString(R.string.period_change_header)).assertCountEquals(2)
     }
+    @Test fun periodMenuCopiesMergeDiagnostics() {
+        val zone=java.time.ZoneId.systemDefault()
+        val start=java.time.LocalDate.now().minusDays(80);fun at(d:Long)=start.plusDays(d).atStartOfDay(zone).toInstant().toEpochMilli()
+        val json=MedicationSnapshot.encode(med,ProfileEntity(1,"E2","sublingual"))
+        val d=RegimenDefinition(json,"EVERY_N_DAYS",1,0,2.0,zone.id,start.toString(),null,listOf("08:00:00" to null,"20:00:00" to null))
+        val versions=listOf(RegimenVersionEntity(1,1,at(0),at(30),zone.id,d.json(),d.signature(),"APP",at(0)),RegimenVersionEntity(2,1,at(51),null,zone.id,d.json(),d.signature(),"APP",at(51)))
+        ui.setContent{MaterialTheme{LongitudinalScreen(NotesState(medications=listOf(med),loading=false),NotesViewModel.ExtraState(regimens=versions),{},{},{},PaddingValues())}}
+        val key=net.plainnotes.app.timeline.PeriodTimelineProjection.build(NotesViewModel.ExtraState(regimens=versions),emptyList()).projection.periods.first().key
+        ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag("period-menu:$key"))
+        ui.onNodeWithTag("period-menu:$key").performClick()
+        ui.onNodeWithTag("period-diagnostics:$key").performClick()
+        val clip=ui.activity.getSystemService(android.content.ClipboardManager::class.java).primaryClip!!.getItemAt(0).text.toString()
+        assertTrue(clip,clip.startsWith("HRT Log merge diagnostics v1"))
+    }
 }

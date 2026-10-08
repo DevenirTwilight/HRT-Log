@@ -907,4 +907,7 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="period_change_identity">different ingredient or unit</string>
     <string name="period_change_gap">30 days or more without records</string>
     <string name="period_change_unjoined">same standard, not joined (please report)</string>
+    <string name="period_menu">More</string>
+    <string name="period_copy_diagnostics">Copy merge diagnostics</string>
+    <string name="period_diagnostics_copied">Diagnostics copied</string>
 </resources>

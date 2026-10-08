@@ -82,4 +82,21 @@ class SameCardSplitTest {
         val id=save(base,at("2026-10-06","12:00"));importHistory(id,"2.0000000001")
         assertOnePeriod("float noise")
     }
+    @Test fun aRealStopOfTwoDaysStaysSplitAndTheDiagnosticsSayWhy()=runBlocking {
+        val id=save(base,at("2026-10-06","12:00"));importHistory(id)
+        save(base.copy(id=id,active=false),at("2026-10-08","12:00"))
+        save(base.copy(id=id,active=true),at("2026-10-10","12:00"))
+        val v=view();val extra=NotesViewModel.ExtraState(records=repo.records(),regimens=db.dao().regimens(),historyPeriods=repo.historyPeriods())
+        assertEquals(1,v.projection.stops.size)
+        val resumed=v.projection.periods.last()
+        val text=net.plainnotes.app.timeline.MergeDiagnostics.text(v,extra,resumed,21)
+        assertTrue(text,text.contains("NOT JOINED, first failing check = not_stopped_in_app"))
+        assertTrue(text,text.contains("source=app_saved_plan origin=APP"))
+        assertTrue(text,text.contains("stop_in_app medication_id=$id"))
+        // The 10-06 boundary itself joined: diagnostics of the first period with a plan has nothing failing before it.
+        val first=net.plainnotes.app.timeline.MergeDiagnostics.text(v,extra,v.projection.periods.first(),21)
+        assertTrue(first,first.contains("recognized_pending sources=[IMPORT_HT]") && !first.contains("NOT JOINED"))
+        // No intake details: no source keys, record IDs or notes.
+        assertFalse(text.contains("ht:") || text.contains("synthetic-split") || text.contains("record"))
+    }
 }
