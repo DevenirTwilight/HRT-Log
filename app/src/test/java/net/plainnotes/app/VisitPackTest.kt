@@ -48,6 +48,18 @@ class VisitPackTest {
         VisitPlanning.defaultRange(target,listOf(visit(3,"2026-04-15",false),target),today,zone).let{assertNull(it.previous);assertEquals(today.minusDays(89),it.from)}
     }
 
+    @Test fun importedOnTimeWithoutScheduledTimeIsNotCountedAsOnTime() {
+        // REQUIREMENTS §35a: imports store ON_TIME, but without an original scheduled time that is not "on time".
+        val imported=taken(1,"2026-03-10","08:00",origin="IMPORT_HT")
+        val scheduled=notTaken(2,"2026-03-10","20:00","ON_TIME").copy(taken_utc=at("2026-03-10","20:05"),taken_zone=zone.id,actual_dose=2.0)
+        val unscheduledApp=taken(3,"2026-03-11","08:00")
+        assertNull(imported.scheduled_utc);assertEquals("ON_TIME",imported.status)
+        assertEquals(listOf(1,0,0,0),net.plainnotes.app.visit.scheduledCounts(listOf(imported,scheduled,unscheduledApp)))
+        assertEquals(listOf(0,0,0,0),net.plainnotes.app.visit.scheduledCounts(listOf(imported)))
+        val f=VisitFacts.build(data(listOf(imported,scheduled,unscheduledApp)),target,LocalDate.of(2026,3,1),LocalDate.of(2026,3,31),zone)
+        assertEquals(3,f.medications.single().taken);assertFalse(f.json().toString().contains("\"imported\""))
+    }
+
     @Test fun factsAttributeByActualOrScheduledTimeAndKeepUnconfirmedSeparate() {
         val d=data(listOf(taken(1,"2026-03-01","00:00"),taken(2,"2026-03-31","23:59","LATE"),taken(3,"2026-04-01","00:00"),taken(4,"2026-03-10","08:00",origin="IMPORT_HT"),
             taken(5,"2026-03-11","08:00",deleted=true),taken(6,"2026-02-28","23:59"),
@@ -56,7 +68,8 @@ class VisitPackTest {
         assertEquals(31L,f.days);assertEquals(0,f.regimenStarted);assertEquals(0,f.regimenEnded)
         val m=f.medications.single()
         assertEquals("Synthetic name at the time",m.name)
-        assertEquals(listOf(3,1,1,1,1,1),listOf(m.taken,m.late,m.imported,m.confirmedMissed,m.skipped,m.unconfirmed))
+        // Record 2 is LATE without an original scheduled time, so it is taken but not counted as late; the import is not counted apart.
+        assertEquals(listOf(3,0,1,1,1),listOf(m.taken,m.late,m.confirmedMissed,m.skipped,m.unconfirmed))
         assertEquals(1,f.labs);assertEquals(listOf("E2"),f.analytes);assertEquals(1,f.symptomDays);assertEquals(2,f.symptomGroups)
         assertEquals(0,f.reviews);assertEquals(1,f.noteDays);assertEquals(1,f.otherAppointments);assertEquals(1,f.milestones)
         val april=VisitFacts.build(d,target,LocalDate.of(2026,4,1),LocalDate.of(2026,5,21),zone)

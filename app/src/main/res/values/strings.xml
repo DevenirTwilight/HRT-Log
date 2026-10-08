@@ -10,7 +10,7 @@
 <string name="delete">Archive medication</string>
 <string name="complete">Record intake</string>
 <string name="reschedule">Change</string>
-<string name="manual">Unscheduled intake</string>
+<string name="manual">Manually logged intake</string>
 <string name="appointment">Appointment</string>
 <string name="name">Name</string>
 <string name="molecule">Molecule</string>
@@ -408,7 +408,7 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="import_tm">Import from Trans Memo</string>
 <string name="import_tm_desc">Read a database file you exported from Trans Memo</string>
 <string name="needs_review">To confirm</string>
-<string name="report_adherence_line_v2">on time %1$d, late %2$d, missed %3$d, skipped %4$d, imported %5$d</string>
+<string name="report_adherence_line_v2">on time %1$d, late %2$d, missed %3$d, skipped %4$d (scheduled doses only)</string>
 <string name="report_col_date">Date</string>
 <string name="report_col_range">Report range</string>
 <string name="report_col_since_dose">After E2 dose</string>
@@ -821,7 +821,7 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="visit_fact_days">Days in period: %1$d</string>
     <string name="visit_fact_regimens">Plan versions started: %1$d · ended: %2$d</string>
     <string name="visit_fact_no_intakes">No intake records in this period.</string>
-    <string name="visit_fact_medication">%1$s: taken %2$d (late %3$d, imported %4$d) · confirmed missed %5$d · skipped %6$d · unconfirmed %7$d</string>
+    <string name="visit_fact_medication">%1$s: taken %2$d (late %3$d) · confirmed missed %4$d · skipped %5$d · unconfirmed %6$d</string>
     <string name="visit_fact_unconfirmed_note">Unconfirmed means nothing was entered; it is not counted as missed.</string>
     <string name="visit_fact_labs">Lab results: %1$d</string>
     <string name="visit_fact_symptoms">Days with symptom notes: %1$d · different symptoms: %2$d</string>

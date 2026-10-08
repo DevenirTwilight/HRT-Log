@@ -10,7 +10,7 @@
 <string name="delete">停用并归档</string>
 <string name="complete">完成服药</string>
 <string name="reschedule">改期</string>
-<string name="manual">计划外服药</string>
+<string name="manual">手动记录服药</string>
 <string name="appointment">就诊预约</string>
 <string name="name">名称</string>
 <string name="molecule">分子</string>
@@ -408,7 +408,7 @@
 <string name="import_tm">从 Trans Memo 导入</string>
 <string name="import_tm_desc">读取你从 Trans Memo 导出的数据库文件</string>
 <string name="needs_review">待确认</string>
-<string name="report_adherence_line_v2">按时 %1$d，迟服 %2$d，漏服 %3$d，跳过 %4$d，导入 %5$d</string>
+<string name="report_adherence_line_v2">按时 %1$d，迟服 %2$d，漏服 %3$d，跳过 %4$d（仅统计有原定时间的记录）</string>
 <string name="report_col_date">日期</string>
 <string name="report_col_range">化验单参考范围</string>
 <string name="report_col_since_dose">距 E2 用药</string>
@@ -821,7 +821,7 @@
     <string name="visit_fact_days">区间：%1$d 天</string>
     <string name="visit_fact_regimens">开始的方案版本：%1$d · 结束的：%2$d</string>
     <string name="visit_fact_no_intakes">本区间没有服药记录。</string>
-    <string name="visit_fact_medication">%1$s：已服 %2$d（迟服 %3$d，导入 %4$d）· 确认漏服 %5$d · 跳过 %6$d · 未确认 %7$d</string>
+    <string name="visit_fact_medication">%1$s：已服 %2$d（迟服 %3$d）· 确认漏服 %4$d · 跳过 %5$d · 未确认 %6$d</string>
     <string name="visit_fact_unconfirmed_note">未确认表示没有登记，不计为漏服。</string>
     <string name="visit_fact_labs">化验结果：%1$d</string>
     <string name="visit_fact_symptoms">有症状记录的天数：%1$d · 不同症状：%2$d</string>
