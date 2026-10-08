@@ -36,7 +36,10 @@ object ObservedTreatmentHistory {
             val at=Instant.ofEpochMilli(timestamp);if(at>now)return@mapNotNull null
             val snapshot=MedicationSnapshot.decode(r.config_snapshot,r.medication_id) ?: return@mapNotNull null
             val key=identity(snapshot) ?: return@mapNotNull null
-            val canonical=idsByIdentity[key]?.singleOrNull() ?: r.medication_id
+            // Missing route/ester/product is not proof that two different medication IDs are equivalent.
+            val identifiable=key.route!=null && (key.compound!="E2" || key.ester!=null) &&
+                (key.route !in listOf("GEL","PATCH") || key.formulation!=null)
+            val canonical=if(identifiable)idsByIdentity[key]?.singleOrNull() ?: r.medication_id else r.medication_id
             Fact(r,at,canonical,key,snapshot)
         }
         val candidates=mutableListOf<Candidate>()

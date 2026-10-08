@@ -91,4 +91,13 @@ class ObservedTreatmentHistoryTest {
         assertEquals(1,view(rows).observed.size)
     }
 
+    @Test fun missingHistoricalIdentityDoesNotMergeDifferentMedicationIds() {
+        val unknown=MedicationSnapshot.encode(med.copy(route=null),null)
+        val d=RegimenDefinition(unknown,"EVERY_N_DAYS",1,0,2.0,"UTC","2025-01-01",null,listOf("08:00:00" to null))
+        val v=saved(100,medId=9).copy(definition_json=d.json(),clinical_signature=d.signature())
+        val history=view((0..3).map{row(it,json=unknown)},listOf(v))
+        assertEquals(1L,history.observed.single().interval.span.medicationId)
+        assertNull(history.observed.single().snapshot.route)
+    }
+
 }
