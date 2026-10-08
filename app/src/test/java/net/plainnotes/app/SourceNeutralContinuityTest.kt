@@ -56,8 +56,10 @@ class SourceNeutralContinuityTest {
         assertEquals(2,view(rows(),listOf(saved(daily().copy(dose=3.0)))).projection.standards.size)
         assertEquals(2,view(rows(),listOf(saved(hours(36)))).projection.standards.size)
     }
-    @Test fun longUnknownGapAndAnInterveningSavedChangePreventJoining() {
-        assertEquals(2,view(rows(),listOf(saved(hours(),cut.plusSeconds(3*86400L)))).projection.standards.size)
+    @Test fun thirtyDayGapAndAnInterveningSavedChangePreventJoining() {
+        // REQUIREMENTS §36: a gap under 30 days with the same standard no longer splits; 30 days still does.
+        assertEquals(1,view(rows(),listOf(saved(hours(),cut.plusSeconds(3*86400L)))).projection.standards.size)
+        assertEquals(2,view(rows(),listOf(saved(hours(),cut.plusSeconds(31*86400L)))).projection.standards.size)
         val first=saved(daily().copy(dose=3.0),until=cut.plusSeconds(3600))
         val second=saved(hours(),from=cut.plusSeconds(3600),id=2)
         val v=view(rows(),listOf(first,second))
