@@ -1,6 +1,17 @@
 # 交接说明：工作进度与开发指南
 
-## 当前最新交付：用户诊断查明的原因修复 build 22（2026-10-08，REQUIREMENTS §36c，完成）
+## 进行中：build 23（10-06 修复 + 时期编辑，2026-10-08，REQUIREMENTS §37，用户已定直接实现）
+
+已完成并推送（每步先测试）：
+- 设计与决定：docs/design/timeline-manual-editing.md、REQUIREMENTS §37。
+- A 14 天规则用于保存版本：失败测试先提交（UserDiagnosticRegressionTest，含版本内有记录的情形）；`TreatmentPeriods` 新增 `SpanKind`/`sourceId`/`absorbed`；卡片注明“曾短暂保存为……（约 N 小时）”；记录按合并后的标准判断。两个旧域测试的 A→B→A 改为记录片段（负 ID），另加保存版本被并入的断言。
+- B 导入核对表：`ScheduleRecognition` 预填频率和时间，标注“由导入记录推定”；与识别频率不一致时保存前确认（ImportReviewScheduleTest）。
+- C schema 8：`history_period_revision.kind/group_key`、迁移 7→8、触发器谓词、备份校验；`editTimeline`/`undoTimelineEdit`；同药用户行不可重叠（HistoryPeriodDataTest 9 项，含 schema 7 备份恢复）。设备迁移测试 MigrationBaselineTest 改到 8 并新增 v7 用例（只在 CI 跑）。
+- D 投影：用户行 > 已确认 > 保存 > 识别；保存版本被裁剪成片段（`SAVED_PIECE_BASE`），用户 PERIOD 边界固定、FILL 可接续、DELETED/STOP 范围无方案（TimelineEditProjectionTest 5 项）。
+
+待做：E 界面（卡片菜单：编辑/拆开/与下一段合并（选标准）/删除/恢复/撤销/诊断；顶部“新建时期”；停用期编辑；并入短版本的单独修改/删除；四语）→ 进程重建/备份恢复测试 → 全量检查、CI → 签名交付 build 23。
+
+## 上一交付（build 22）：用户诊断查明的原因修复（2026-10-08，REQUIREMENTS §36c，完成）
 
 **10-06 分段的真正原因（用户 build 21 诊断确认）：** 10-06 14:32:04Z 方案保存为每 11 天（每天两次 2 mg），15:36:20Z 改为每 1 天；该版本（LEGACY_RULE，id 1）持续 64 分钟，超过 build 21 的 1 小时更正窗口，合并检查 `interval: FAIL (1 / 11)`。前一段是用户已确认的开放时期（2026-02-26 起，Europe/Paris），其余各项全部通过。不是导入、条目 ID、酯型或停用造成的。
 

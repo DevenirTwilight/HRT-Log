@@ -10,8 +10,14 @@ data class ObservedTreatment(val interval:RawTreatmentInterval,val snapshot:Medi
 data class ConfirmedPeriodInput(val spanId:Long,val periodKey:String,val medicationId:Long,val from:Instant,val until:Instant?,val standard:TherapyStandard,val snapshot:MedicationSnapshot?)
 /** Which interval covers a taken record: a saved or confirmed one ([interval]), or only an unconfirmed candidate ([pending]). */
 data class RecordCoverage(val interval:RawTreatmentInterval?,val pending:Boolean)
+/** A user edit as input (REQUIREMENTS §37b): PERIOD/FILL carry a standard, DELETED/STOP only block their range. */
+data class UserEditInput(val spanId:Long,val periodKey:String,val groupKey:String?,val kind:String,val medicationId:Long,val from:Instant,val until:Instant?,
+                         val standard:TherapyStandard?,val snapshot:MedicationSnapshot?)
 data class HistoricalTreatmentProjection(val observed:List<ObservedTreatment>,val resolvedRecordIds:Set<Long>,
-    val confirmed:List<RawTreatmentInterval> = emptyList(),val coverage:Map<Long,RecordCoverage> = emptyMap())
+    val confirmed:List<RawTreatmentInterval> = emptyList(),val coverage:Map<Long,RecordCoverage> = emptyMap(),
+    /** Saved plan versions as shown: cut where a user edit lies over them. */
+    val saved:List<RawTreatmentInterval> = emptyList(),
+    val user:List<RawTreatmentInterval> = emptyList(),val userStops:List<TreatmentStop> = emptyList())
 
 object ObservedTreatmentHistory {
     private data class Identity(val compound:String,val route:String?,val unit:String,val ester:String?,val formulation:String?)
@@ -39,21 +45,31 @@ object ObservedTreatmentHistory {
     /** The same entry, or another entry whose saved identity is compatible with a known identity. */
     private fun related(s:Saved,med:Long,key:Identity?)=s.raw.span.medicationId==med || (key!=null && s.identity!=null && compatible(s.identity,key))
     const val CONFIRMED_SPAN_BASE=-1_000_000_000L
-    fun isConfirmedSpan(id:Long)=id<=CONFIRMED_SPAN_BASE
+    /** §37b display-only IDs: user edits, and the later pieces of a saved version cut by a user edit. */
+    const val USER_SPAN_BASE=-2_000_000_000L
+    const val SAVED_PIECE_BASE=-3_000_000_000L
+    fun isConfirmedSpan(id:Long)=id<=CONFIRMED_SPAN_BASE && id>USER_SPAN_BASE
+    fun isUserSpan(id:Long)=id<=USER_SPAN_BASE && id>SAVED_PIECE_BASE
+    private fun cut(pieces:List<Pair<Instant,Instant>>,f:Instant,u:Instant)=pieces.flatMap{(a,b)->if(f>=b || u<=a)listOf(a to b) else buildList{if(a<f)add(a to f);if(u<b)add(u to b)}}
     private fun identity(s:TherapyStandard)=s.compound?.let{c->s.unit?.let{u->Identity(c,s.route,u,s.ester,s.formulation)}}
     fun build(records:List<RecordEntity>,versions:List<RegimenVersionEntity>,zone:ZoneId,now:Instant,ruleSnapshots:Map<Long,String> = emptyMap(),
-              confirmedPeriods:List<ConfirmedPeriodInput> = emptyList()):HistoricalTreatmentProjection {
-        val real=versions.map{v->val d=RegimenDefinition.read(v.definition_json)
-            Saved(RawTreatmentInterval(v.span(),d.therapyStandard()),d.snapshot(v.medication_id)?.let(::identity))}
+              confirmedPeriods:List<ConfirmedPeriodInput> = emptyList(),userEdits:List<UserEditInput> = emptyList()):HistoricalTreatmentProjection {
+        // REQUIREMENTS §37b: user edits come first; everything under them is cut away for display only.
+        val userRanges=userEdits.groupBy{it.medicationId}.mapValues{(_,rows)->rows.map{it.from to (it.until ?: Instant.MAX)}}
+        fun underUser(med:Long,pieces:List<Pair<Instant,Instant>>)=userRanges[med].orEmpty().fold(pieces){p,(f,u)->cut(p,f,u)}.filter{(a,b)->a<b}
+        val real=versions.flatMap{v->val d=RegimenDefinition.read(v.definition_json);val span=v.span();val id=d.snapshot(v.medication_id)?.let(::identity)
+            underUser(v.medication_id,listOf(span.from to (span.until ?: Instant.MAX))).mapIndexed{i,(a,b)->
+                Saved(RawTreatmentInterval(span.copy(id=if(i==0)v.id else SAVED_PIECE_BASE-v.id*100-i,from=a,until=b.takeIf{it!=Instant.MAX}),d.therapyStandard(),SpanKind.SAVED,v.id),id)}}
+        val user=userEdits.filter{it.standard!=null}.map{e->
+            Saved(RawTreatmentInterval(RegimenSpan(e.spanId,e.medicationId,e.from,e.until,false),e.standard!!,if(e.kind==HistoryPeriods.FILL)SpanKind.FILL else SpanKind.USER,e.spanId),identity(e.standard))}
         // Confirmed past periods count as saved history, but a saved prescription always wins where they meet,
         // including one saved on another medication entry for the same medicine (REQUIREMENTS §36).
         val confirmedSaved=confirmedPeriods.flatMap{c->
-            var pieces=listOf(c.from to (c.until ?: Instant.MAX))
-            real.filter{related(it,c.medicationId,identity(c.standard))}.forEach{s->val f=s.raw.span.from;val u=s.raw.span.until ?: Instant.MAX
-                pieces=pieces.flatMap{(a,b)->if(f>=b || u<=a)listOf(a to b) else buildList{if(a<f)add(a to f);if(u<b)add(u to b)}}}
+            var pieces=underUser(c.medicationId,listOf(c.from to (c.until ?: Instant.MAX)))
+            real.filter{related(it,c.medicationId,identity(c.standard))}.forEach{s->pieces=cut(pieces,s.raw.span.from,s.raw.span.until ?: Instant.MAX)}
             pieces.filter{(a,b)->a<b}.mapIndexed{i,(a,b)->Saved(RawTreatmentInterval(RegimenSpan(c.spanId-i,c.medicationId,a,b.takeIf{it!=Instant.MAX},true),c.standard,SpanKind.CONFIRMED,c.spanId),identity(c.standard))}
         }
-        val saved=real+confirmedSaved
+        val saved=real+user+confirmedSaved
         val idsByIdentity=saved.filter{it.identity!=null}.groupBy{it.identity!!}.mapValues{(_,rows)->rows.map{it.raw.span.medicationId}.distinct()}
         val snapshots=records.associate{r->r.id to MedicationSnapshot.decode(HistoricalContext.resolved(r,ruleSnapshots),r.medication_id)}
         val facts=records.mapNotNull{r->
@@ -96,7 +112,7 @@ object ObservedTreatmentHistory {
         // Saved prescriptions take precedence, without modifying a single stored version or record.
         val clipped=mutableListOf<Candidate>()
         candidates.sortedWith(compareBy({it.med},{it.from})).forEach{c->
-            var pieces=listOf(c.from to c.until)
+            var pieces=underUser(c.med,listOf(c.from to c.until))
             val candidateIdentity=identity(c.standard)
             val medicationVersions=saved.filter{related(it,c.med,candidateIdentity)}.sortedBy{it.raw.span.from}
             medicationVersions.forEach{s->
@@ -145,6 +161,7 @@ object ObservedTreatmentHistory {
             if(linked!=null)resolved+=r.id
             if(r.status in listOf("ON_TIME","LATE"))coverage[r.id]=RecordCoverage(linked?.raw,linked==null && r.id in pendingIds)
         }
-        return HistoricalTreatmentProjection(observed,resolved,confirmedSaved.map{it.raw},coverage)
+        return HistoricalTreatmentProjection(observed,resolved,confirmedSaved.map{it.raw},coverage,real.map{it.raw},user.map{it.raw},
+            userEdits.filter{it.kind==HistoryPeriods.STOP}.map{TreatmentStop(it.medicationId,it.from,it.until)})
     }
 }

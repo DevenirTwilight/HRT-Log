@@ -141,7 +141,7 @@ class ObservedTreatmentHistoryTest {
         val confirmed=net.plainnotes.app.domain.RawTreatmentInterval(version.span(),RegimenDefinition.read(version.definition_json).therapyStandard())
         val wrong=ObservedTreatment(confirmed.copy(span=net.plainnotes.app.domain.RegimenSpan(-1,1,start,start.plusSeconds(86400),true)),
             MedicationSnapshot.decode(snapshot,1)!!,listOf(row(0)))
-        val result=projectHistory(listOf(confirmed),HistoricalTreatmentProjection(listOf(wrong),setOf(1)),ZoneId.of("UTC"))
+        val result=projectHistory(HistoricalTreatmentProjection(listOf(wrong),setOf(1),saved=listOf(confirmed)),ZoneId.of("UTC"))
         assertTrue(result.unavailable);assertTrue(result.historical.observed.isEmpty());assertTrue(result.historical.resolvedRecordIds.isEmpty())
         assertEquals(listOf(confirmed),result.projection.raw)
         assertEquals(version.definition_json,saved(0).definition_json)
