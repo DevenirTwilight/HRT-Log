@@ -29,7 +29,6 @@ object ObservedTreatmentHistory {
         val at get()=facts.minOf{it.at}
         val unambiguous get()=facts.map{it.at to it.row.actual_dose}.distinct().size==facts.size
     }
-    private data class Run(val first:Day,var last:Day,val interval:Int,val doses:List<Double>)
     private data class Candidate(val med:Long,val from:Instant,val until:Instant,val standard:TherapyStandard,val snapshot:MedicationSnapshot,val facts:List<Fact>)
 
     fun build(records:List<RecordEntity>,versions:List<RegimenVersionEntity>,zone:ZoneId,now:Instant,ruleSnapshots:Map<Long,String> = emptyMap()):HistoricalTreatmentProjection {
@@ -55,80 +54,24 @@ object ObservedTreatmentHistory {
         val candidates=mutableListOf<Candidate>()
         facts.groupBy{it.med to it.identity}.toList().sortedBy{it.first.toString()}.forEach{(key,rows)->
             val days=rows.groupBy{it.date}.toSortedMap().map{Day(it.key,it.value)}
-            val seeds=mutableListOf<Run>()
-            // A supported complete pattern can include partially logged days. Missing records are not a new regimen.
-            for(i in days.indices)for(j in i+2..minOf(i+6,days.lastIndex)) {
-                val window=days.subList(i,j+1)
-                if(java.time.temporal.ChronoUnit.DAYS.between(window.first().date,window.last().date)>6)break
-                val span=java.time.temporal.ChronoUnit.DAYS.between(window.first().date,window.last().date)+1
-                if(window.size*3<span*2 || window.zipWithNext().count{(a,b)->java.time.temporal.ChronoUnit.DAYS.between(a.date,b.date)==1L}<2)continue
-                val supported=window.filter{it.unambiguous}.groupBy{it.doses}.filterValues{it.size>=3}.keys
-                val maximal=supported.filter{dose->supported.none{other->other!=dose && subset(dose,other)}}
-                maximal.forEach{dose->
-                    val fitting=window.filter{it.unambiguous && subset(it.doses,dose)}
-                    if(fitting.size*3>=window.size*2)seeds+=Run(fitting.first(),fitting.last(),1,dose)
-                }
-            }
-            // Sparse regular histories retain the four-occurrence requirement.
-            for(i in 0 until (days.size-3).coerceAtLeast(0)) {
-                val window=days.subList(i,i+4);val a=window.first()
-                val gap=java.time.temporal.ChronoUnit.DAYS.between(a.date,window[1].date).toInt()
-                if(gap in 2..365 && window.all{it.unambiguous && it.doses==a.doses} &&
-                    window.zipWithNext().all{(b,c)->java.time.temporal.ChronoUnit.DAYS.between(b.date,c.date)==gap.toLong()})
-                    seeds+=Run(a,window.last(),gap,a.doses)
-            }
-            // Merge evidence for each pattern before ordering changes. Window overlaps must not alternate
-            // a partial-dose pattern and its supported complete pattern into spurious short periods.
-            val merged=seeds.groupBy{it.interval to it.doses}.values.flatMap{pattern->
-                val chunks=mutableListOf<Run>()
-                pattern.sortedBy{it.first.date}.forEach{seed->val previous=chunks.lastOrNull()
-                    if(previous!=null && java.time.temporal.ChronoUnit.DAYS.between(previous.last.date,seed.first.date)<=3L*seed.interval) {
-                        if(seed.last.date>previous.last.date)previous.last=seed.last
-                    } else chunks+=seed.copy()
-                };chunks
-            }.sortedWith(compareBy({it.first.date},{it.interval},{-it.doses.size}))
-            val runs=mutableListOf<Run>()
-            merged.forEach{run->
-                val previous=runs.lastOrNull()
-                val within=days.filter{it.date>=run.first.date && it.date<=run.last.date}
-                val first=when {
-                    previous==null->run.first
-                    run.interval==1 && previous.interval==1 && run.doses!=previous.doses && subset(run.doses,previous.doses)-> {
-                        val lastComplete=days.lastOrNull{it.date>=previous.first.date && it.date<=previous.last.date && it.unambiguous && it.doses==previous.doses}
-                        within.firstOrNull{lastComplete==null || it.date>lastComplete.date}
-                    }
-                    run.interval==1 && previous.interval==1 && subset(previous.doses,run.doses)->within.firstOrNull{it.unambiguous && it.doses==run.doses}
-                    else->run.first
-                }
-                if(first!=null)runs+=run.copy(first=first)
-            }
-            runs.forEachIndexed{i,run->
-                val next=runs.getOrNull(i+1)
-                val from=run.first.at
-                val coveredEnd=run.last.date.plusDays(run.interval.toLong()).atStartOfDay(run.last.facts.first().row.taken_zone?.let{runCatching{ZoneId.of(it)}.getOrNull()} ?: zone).toInstant()
-                val end=minOf(coveredEnd,next?.first?.at ?: Instant.MAX)
+            // REQUIREMENTS §35a: one segmentation rule for every source; short deviations stay inside a period.
+            val segments=SustainedPatterns.segment(days.map{day->LoggedDay(day.date,day.facts.distinctBy{it.at to it.row.actual_dose}.map{it.row.actual_dose!!}.sorted())})
+            val firstFact=days.associate{it.date to it.facts.minBy{f->f.at}}
+            segments.forEachIndexed{i,segment->
+                val next=segments.getOrNull(i+1)
+                val from=firstFact.getValue(segment.first).at
+                val lastFact=days.single{it.date==segment.last}.facts.maxBy{it.at}
+                val dateZone=lastFact.row.taken_zone?.let{runCatching{ZoneId.of(it)}.getOrNull()} ?: zone
+                val coveredEnd=segment.last.plusDays(maxOf(segment.interval,1).toLong()).atStartOfDay(dateZone).toInstant()
+                // Adjacent segments of one block meet at the next segment's first record; a 30-day gap ends at coverage.
+                val joined=next!=null && java.time.temporal.ChronoUnit.DAYS.between(segment.last,next.first)-1<SustainedPatterns.GAP_DAYS
+                val end=if(joined)firstFact.getValue(next!!.first).at else coveredEnd
                 if(end<=from)return@forEachIndexed
                 val evidence=rows.filter{it.at>=from && it.at<end}
                 val id=key.second
-                candidates+=Candidate(key.first,from,end,TherapyStandard(id.compound,id.ester,id.route,id.unit,id.formulation,"EVERY_N_DAYS",run.interval,0,run.doses),
-                    run.first.facts.first().snapshot,evidence)
-            }
-            // Partial known history is still a treatment period; do not invent a cadence when execution varies.
-            val remaining=days.filter{day->day.facts.any{fact->candidates.none{c->c.med==fact.med && c.snapshot.let(::identity)==fact.identity && fact.at>=c.from && fact.at<c.until}}}
-            val gaps=days.zipWithNext().map{(a,b)->java.time.temporal.ChronoUnit.DAYS.between(a.date,b.date)}.filter{it>0}.sorted()
-            val gapLimit=maxOf(3L,(gaps.getOrNull(gaps.size/2) ?: 1L)*3).coerceAtMost(30L)
-            val episodes=mutableListOf<MutableList<Day>>()
-            remaining.forEach{day->val prev=episodes.lastOrNull()
-                if(prev==null || java.time.temporal.ChronoUnit.DAYS.between(prev.last().date,day.date)>gapLimit ||
-                    candidates.any{c->c.med==key.first && c.from>prev.last().at && c.from<=day.at})episodes+=mutableListOf(day) else prev+=day
-            }
-            episodes.filter{episode->episode.count{it.unambiguous}>=3}.forEach{episode->
-                val evidence=episode.flatMap{it.facts};val first=evidence.minBy{it.at};val last=evidence.maxBy{it.at}
-                val dateZone=last.row.taken_zone?.let{runCatching{ZoneId.of(it)}.getOrNull()} ?: zone
-                val until=last.date.plusDays(1).atStartOfDay(dateZone).toInstant()
-                val id=key.second
-                candidates+=Candidate(key.first,first.at,until,TherapyStandard(id.compound,id.ester,id.route,id.unit,id.formulation,
-                    "OBSERVED",0,0,evidence.map{it.row.actual_dose!!}.distinct().sorted()),first.snapshot,evidence)
+                val standard=if(segment.frequencyKnown)TherapyStandard(id.compound,id.ester,id.route,id.unit,id.formulation,"EVERY_N_DAYS",segment.interval,0,segment.doses)
+                    else TherapyStandard(id.compound,id.ester,id.route,id.unit,id.formulation,"OBSERVED",0,0,segment.doses)
+                candidates+=Candidate(key.first,from,end,standard,firstFact.getValue(segment.first).snapshot,evidence)
             }
         }
         // Saved prescriptions take precedence, without modifying a single stored version or record.

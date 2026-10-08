@@ -20,7 +20,8 @@ class ObservedTreatmentHistoryTest {
         return RegimenVersionEntity(id,medId,from.toEpochMilli(),null,"UTC",d.json(),d.signature(),"APP",from.toEpochMilli())
     }
     @Test fun recognizesOldDoseChangesWithoutSeparateImportedCardsOrPersistedVersions() {
-        val rows=(0..4).map{row(it)}+(5..9).map{row(it,3.0)}
+        // §35a: each dose held for at least 14 days is a real change.
+        val rows=(0..19).map{row(it)}+(20..39).map{row(it,3.0)}
         val v=view(rows)
         assertEquals(listOf(2.0,3.0),v.observed.map{it.interval.standard.doses.single()})
         assertEquals(2,v.projection.standards.size);assertEquals(rows.map{it.id}.toSet(),v.resolvedRecords.map{it.id}.toSet())
@@ -44,7 +45,7 @@ class ObservedTreatmentHistoryTest {
     @Test fun multiDoseDailyDistributionAndSustainedIntervalChangesAreRecognized() {
         val twice=(0..4).flatMap{d->listOf(row(d,1.0,d*2+1L),row(d,2.0,d*2+2L).let{it.copy(taken_utc=it.taken_utc!!+12*3600000)})}
         assertEquals(listOf(1.0,2.0),view(twice).observed.single().interval.standard.doses)
-        val rows=(0..4).map{row(it)}+listOf(6,8,10,12,14).map{row(it)}
+        val rows=(0..19).map{row(it)}+(20..60 step 2).map{row(it)}
         assertEquals(listOf(1,2),view(rows).observed.map{it.interval.standard.interval})
     }
     @Test fun longGapsHaveUnknownCoverageNotInferredStoppingOrOngoingTherapy() {
@@ -82,7 +83,8 @@ class ObservedTreatmentHistoryTest {
     }
     @Test fun preservedExactDuplicatesAreNotEvidenceForDoublingTheRecognizedDose() {
         val rows=(0..4).flatMap{d->listOf(row(d,id=d*2+1L),row(d,id=d*2+2L))}
-        assertTrue(view(rows).observed.isEmpty());assertEquals(rows.size,view(rows).importedHistory.single().records.size)
+        // Same time and dose twice is one dose: the recognised standard is once daily, never doubled.
+        assertEquals(listOf(2.0),view(rows).observed.single().interval.standard.doses)
     }
 
     @Test fun purePkTierChangesDoNotSplitTheObservedClinicalPattern() {
@@ -158,9 +160,9 @@ class ObservedTreatmentHistoryTest {
         assertTrue(v.importedHistory.isEmpty());assertEquals(original,rows)
     }
     @Test fun sustainedTwiceToOnceDailyChangeSurvivesPartialLogging() {
-        val rows=(0..20).flatMap{d->buildList {
+        val rows=(0..45).flatMap{d->buildList {
             add(row(d,id=d*2+1L))
-            if(d<10 && d%3!=1)add(row(d,id=d*2+2L).let{it.copy(taken_utc=it.taken_utc!!+10*3600000)})
+            if(d<20 && d%3!=1)add(row(d,id=d*2+2L).let{it.copy(taken_utc=it.taken_utc!!+10*3600000)})
         }}
         val v=view(rows)
         assertEquals(listOf(listOf(2.0,2.0),listOf(2.0)),v.observed.map{it.interval.standard.doses})
@@ -200,10 +202,10 @@ class ObservedTreatmentHistoryTest {
     }
 
     @Test fun twiceDailyDoseChangesAndFrequencyReturnsAreNotCollapsedByMissingEntries() {
-        val rows=(0..29).flatMap{d->buildList {
-            val dose=if(d<10)2.0 else 3.0
+        val rows=(0..59).flatMap{d->buildList {
+            val dose=if(d<20)2.0 else 3.0
             add(row(d,dose,d*2+1L))
-            if((d<10 || d>=20) && d%3!=1)add(row(d,dose,d*2+2L).let{it.copy(taken_utc=it.taken_utc!!+10*3600000)})
+            if((d<20 || d>=40) && d%3!=1)add(row(d,dose,d*2+2L).let{it.copy(taken_utc=it.taken_utc!!+10*3600000)})
         }}
         val v=view(rows)
         assertEquals(listOf(listOf(2.0,2.0),listOf(3.0),listOf(3.0,3.0)),v.observed.map{it.interval.standard.doses})

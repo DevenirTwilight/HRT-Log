@@ -43,7 +43,7 @@ class ImportedHistoryIntegrationTest {
         val db=Room.inMemoryDatabaseBuilder(context,NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build()
         try {
             val repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=db})
-            val events=(0..9).joinToString(","){day->"""{"id":"synthetic-period-$day","route":"sublingual","timeH":${480000+day*24},"doseMG":${if(day<5)2 else 3},"ester":"E2","extras":{"sublingualTier":2}}"""}
+            val events=(0..39).joinToString(","){day->"""{"id":"synthetic-period-$day","route":"sublingual","timeH":${480000+day*24},"doseMG":${if(day<20)2 else 3},"ester":"E2","extras":{"sublingualTier":2}}"""}
             val export=HrtTracker.read("""{"meta":{"version":2},"events":[$events],"labResults":[{"id":"synthetic-lab-period","timeH":480048,"concValue":150,"unit":"pg/ml"}]}""")
             val groups=HrtTracker.preview(export).groups.keys
             val plan=HrtTracker.plan(export,null)
