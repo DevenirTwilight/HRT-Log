@@ -1,13 +1,14 @@
 # 交接说明：工作进度与开发指南
 
-## 进行中：相同方案跨导入边界合并 build17（2026-10-08，功能与应用回归完成）
+## 进行中：相同方案跨导入边界合并 build17（2026-10-08，功能与完整验证完成，待签署交付）
 
 - 用户反馈10月6日相同方案仍拆段，要求导入取消特殊标记。需求§33、先行设计d70dea7，design/source-neutral-treatment-continuity.md。原分支，仅full/原正式签名/schema6/versionCode17。
 - 显示适配归一等价频率：12h→每天双次、24h整数倍→N天、每周七天interval1→每天，36h/不完整星期/不同每次剂量分布不误合并。原冻结定义/clinical_signature与V1/Context1/VisitPack1不改；保存版本审计用原频率表达。
 - 历史与紧邻下一个相同保存标准可跨最多24h每日终点间隙连接，解决记录zone自然日与保存任意UTC起点分段。不跨任何中间保存版本或观察到的不同模式，不桥接长空白。已知身份唯一跨ID匹配保守规则不放宽。
 - 普通时期移除识别来源提示；混合历史不会触发误报旧方案重建徽标。History取消导入来源徽标，所有无计划时刻实际记录同样显示未排程。未匹配记录统一APP/HT/TM入口、取消origin分桶与工具名、四语计数/筛选文字去导入限定。有保存方案覆盖的MISSED/SKIPPED使用原计划时间关联并可打开原始IDs，不伪造服药时间/剂量。
 - 最终应用完整回归成功（tooling/build17-final-app-tests.log）：172登记/159通过/13既有跳过/0失败。新SourceNeutralContinuityTest6项覆盖合成10月6日/跨zone/12hvs双次/全周/真实变化/长空白/保存边界/混合来源与原始数据不改；真实JSON→Room→当前方案与APP记录→重导入/加密恢复同一个时期；Compose Native Graphics同一普通时期无来源标记、原始IDs和History一致性。新增集成测试字段名编译问题已修正后完整重跑。
-- 下一步完整full六模块测试/lint/debug/release/两个测试APK、manifest/schema、最终源码CI/API35新入口回归，再原正式证书签署/下载SHA回查。尚未交付build17，最新仍build16；不读取用户真实健康数据，不声称已验证其具体数据或OEM/TalkBack新验收。
+- 最终本机full完整任务9m2s成功：313登记/300通过/13既有跳过/0失败，lint0错误99警告；full debug/release及两个测试APK、manifest/schema/PLAN无漂移检查通过。最终功能CI [37756924266](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37756924266)，源码2ba5860，jvm/android/device-tests全部success；API35数据11、应用主套件29、另两个独立进程重启用例各OK。详见source-neutral-treatment-continuity-verification.md。
+- 下一步仅原私有正式证书签署/包属性/16KB对齐验证、上传与真实下载SHA回查。签名备份已再次确认private；尚未交付build17，最新仍build16。不读取用户真实健康数据，不声称已验证其具体数据或OEM/TalkBack新验收。
 
 ## 当前最新交付：历史识别覆盖修复 build16（2026-10-08，完成）
 
