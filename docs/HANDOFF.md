@@ -1,5 +1,13 @@
 # 交接说明：工作进度与开发指南
 
+## 最新反馈：build17计划归属问题未完成，按用户要求暂停实现（2026-10-08）
+
+用户反馈导入徽标变成“计划外”，提出自动识别计划；明确要求先别做，只整理交给其他会话。需求§34。详细独立交接：[imported-history-plan-association-handoff.md](imported-history-plan-association-handoff.md)。本轮仅read-only核查/文档，不改应用/数据库、不构建或签署新APK。最新交付仍build17。
+
+确认：HistoryScreen以scheduled_utc为空显示“计划外”，HT Writer不写计划字段；ObservedTreatmentHistory只是只读负ID时期投影，resolvedRecordIds不建立持久规则/槽关联。现有手工linkImported仅链接已有同药物/同日未完成槽，不识别过去计划。build17测试还明确要求导入与APP无计划时刻都出现计划外，验证的是不满足用户目标的业务期望；此前“已修复”限于显示合并，不能声称完整解决。未读取用户真实数据。
+
+下一会话先区分计划未知、历史频率识别、推定/确认计划、明确额外服药与槽关联，提出可验证设计，不能只隐藏/换标签或把所有记录改APP/回填当前规则。保留原来源事实/库存/冻结上下文、短边界与同日不重叠回归、重复导入/恢复；若落库须设计迁移/可撤销/歧义保护，不自动启动提醒或伪造准时/漏服。用户目前只授权整理移交，未授权本轮继续实施新算法。
+
 ## 当前最新交付：相同方案跨导入边界合并 build17（2026-10-08，完成）
 
 - 用户反馈10月6日相同方案仍拆段，要求导入取消特殊标记。需求§33、先行设计d70dea7，design/source-neutral-treatment-continuity.md。原分支，仅full/原正式签名/schema6/versionCode17。
