@@ -1,5 +1,9 @@
 # 交接说明：工作进度与开发指南
 
+## 待用户审核：历史记录按时期归属设计（2026-10-08，REQUIREMENTS §35）
+
+设计 [history-period-attribution](design/history-period-attribution.md)：schema7 新增只追加的 `history_period_revision`（用户确认的过去时期，含撤销）和 `record_annotation`（用户明确的“额外”）；记录归属与“额外/剂量不同/方案未知”标签在 core/domain 实时投影，不落库；“长期变化”列出 O1–O4 四种判定方案及参数，阈值待用户定；确认页与 History 草图、四语文案、迁移与备份兼容、测试计划，以及 10 个待决定问题。确认 `ImportedTimelineUiTest:151` 期待“计划外”×2 是错误预期，设计里给出改法。**本轮只写设计，未改代码、未构建 APK；最新交付仍是 build17。**
+
 ## 最新反馈：build17计划归属问题未完成，按用户要求暂停实现（2026-10-08）
 
 用户反馈导入徽标变成“计划外”，提出自动识别计划；明确要求先别做，只整理交给其他会话。需求§34。详细独立交接：[imported-history-plan-association-handoff.md](imported-history-plan-association-handoff.md)。本轮仅read-only核查/文档，不改应用/数据库、不构建或签署新APK。最新交付仍build17。
