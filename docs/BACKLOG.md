@@ -1,0 +1,47 @@
+# HRT Log：当前实现与后续 Backlog
+
+核对日期：2026-10-08。起始 HEAD `5441e6efac2a9dcb3b38c0a3fb2b85b4d3c2880e`，开发分支 `claude/new-session-1959qb`，Build 25 / 0.2.0 / schema 9。状态基于源码和测试；研究中的优先级不构成实施授权。当前本轮范围只包括 REQUIREMENTS §41 的 UI 修复、回归和文档。
+
+状态：**完成并测试**、**已编码/设备待验收**、**确认缺陷**、**已批准未实现**、**候选/需决策**。P0=数据或严重操作障碍，P1=下一独立迭代建议，P2=后置扩展；这是工作排序，不是医学重要性。
+
+## 已完成的底座
+
+| 功能 | 当前证据 | 验收边界 |
+| --- | --- | --- |
+| Room + SQLCipher、Keystore 和加密备份 | `core/data/src/main/java/net/plainnotes/app/data/NotesDatabase.kt`（schema 9）、`DatabaseAccess.kt`、`BackupValidation.kt` / `NotesRepository` 备份恢复、迁移/备份回滚测试 | 不重建或清空用户库；旧备份兼容继续是门槛 |
+| 用药、规则、改期/跳过、提醒、历史 | `NotesRepository.kt`、`ScheduleEngine.kt`、`core/reminder` 及对应测试 | Direct Boot、Doze、权限撤销/OEM 可靠性仍需真实设备 |
+| 日/周/月/年日历、库存账本与提醒基础 | `CalendarScreen.kt`、`CalendarModel.kt`、`SupplyLedger.kt`、库存/提醒测试 | UI 大字号本轮修复；预测口径见候选表 |
+| 健康状态、化验、冻结采样上下文 | `LabsScreen.kt`、`LabContext.kt`、`LabContextTest`、`LabEstimate.kt` | Lab Context 完成不等于 LabPanel 已完成 |
+| 文献 PK 引擎、LabFit 与不确定性区间 | `pk-engine/Engine.kt`、`LabFit.kt`、`FittedModels.kt`、`LiteratureValidationTest`、`EngineTest`、`LabFitTest` | 已实现且有文献数值验证，不是临床验证；支持范围/缺失说明保留 |
+| HRT Tracker/Trans Memo 导入、CSV/PDF | `importer`、`app/export/Exports.kt`、导入/导出测试 | 不猜未知字段；普通 PDF/Visit Pack 不等于专用纵向报告 |
+| 私密笔记、独立加密库、锁定/伪装 | `app/disguise/privatenotes`、锁定/重启/隔离测试 | 启动器/OEM、Keystore、应用锁真实设备验收独立保留 |
+| 四语与主题 | 四套 `strings.xml`、`TranslationsTest`、`NotesTheme.kt` | 英/简中/繁中/法；本轮审计覆盖新增宽度/主题条件 |
+| Build 24 回收站、Build 25 时期编辑 | `Trash.kt`、`TimelineEdits.kt`、`TimelineV2Migration.kt`、V2/Flow/PeriodStability、API35 迁移测试 | 已有编码、功能 CI 和原签名交付证据；具体用户数据/真机覆盖安装仍待验收 |
+
+## 候选缺口逐项核对
+
+| 项目 / 状态 | 代码或测试证据 | 真实缺口 | 规格/授权 | 兼容风险 | 建议优先级 | 可独立验收的最小单元 |
+| --- | --- | --- | --- | --- | --- | --- |
+| LabPanel / 部分实现，扩展待决策 | `LabValueEntity`、`LabContextEntity`、`LabsScreen.LabDialog`；`NotesRepository.saveLab` 能存项目代码；`LabContextTest` | 单结果编辑、孕酮检测方法、上下文已完成；无同次采样分组实体、面板编辑/自定义项目管理。不能因 `analyte` 表存在就称 UI 已完成 | `lab-context-p1.md` 明确将面板/自定义项目另批；尚未批准立即开发 | 新实体/分组关系需迁移；保留旧独立结果、单位原值和冻结上下文 | P1 候选 | 先明确同次采样键/时区/编辑规则，再做只读同次采样分组，旧结果保持可单独打开 |
+| Visit Pack 2 / 第一批完成，第二批待决策 | `VisitsScreen.kt`、`VisitPack.kt`、`VisitPackEntity`、`VisitPackDataTest`、`PdfReport` 原生测试 | 预约中已有医生文本、问题清单、生成 PDF/事实预览/不可变摘要；无结构化医生档案、清单模板、应用内 PDF 文件留存/预览。现有 PDF 仅存到用户选择的 SAF 地址，元数据不等于 PDF 文件 | `visit-pack-p1.md` 明确排除上述第二批；需确定文件留存/删除和模板内容 | PDF 隐私、加密附件/容量/备份策略；旧生成记录不可覆盖 | P1 候选 | 确定存储规格后，已有 PDF 的本地导入/只读预览；与新生成流程分开验收 |
+| 历史专用报告 / 部分实现 | `CsvExport.write`、`PdfReport`、`VisitSection.MILESTONES/REGIMEN`、`ExportTest`/原生 PDF 测试 | 普通 CSV 与 Visit Pack 已有方案版本/里程碑部分；尚无时期/阶段专用 CSV、纵向报告入口与选择范围。不是“完全没有历史导出” | 纵向设计有方向，无已批准的字段/边界/精度规格 | 不应从当前药物配置重解释过去；报告应标清系统/用户、精确时间/日期级事实 | P1，下一独立单元建议 | 只读时期/阶段/里程碑 CSV：先确认列、时区、精确边界和来源，不增加 PDF 或 schema |
+| 库存预测 / 两种基础口径已实现 | `SupplyLedger.kt`、`StockScreen.dailyUse/stockSummary`、`CalendarModel.forecast`、`CalendarModelTest` | 真实消耗有账本/冲销；库存页按当前方案平均，日历按展开的已保存待服槽逐次扣减；未统一口径说明，没有观察消耗速率和假设未来情景 | 两种口径统一有设计方向；观察窗口/情景保存未定 | 不改账本事实；预测范围/未覆盖的未来不能冒充完整预估 | P1 口径说明，P2 情景 | 明确标注并测试现有两种算法的口径/有限预测范围，保持计算行为不变 |
+| 注射记录 / 部分实现 | `ProfileEntity`、`RecordEntity.site`、`MedicationEditor` 注射剂量说明、`siteFor`/轮换建议、CSV `site` | 注射途径/酯型 PK、实际部位存储和基础轮换存在；缺结构化药瓶浓度、抽取体积/换算依据、部位历史可视化 | 完整量纲/部位产品规格未定 | mg、mL、酯/有效成分误换算风险；历史录入值与换算依据须冻结 | P1 规格，P2 实施 | 首先确定并测试用户输入 mg/mL 与 mL 的纯换算边界；不自动推断未知浓度 |
+| 药物版本 / 冻结快照底座完成，完整 Revision 未实现 | `MedicationSnapshot` v2、`RegimenVersionEntity`、`RegimenDefinition`、快照/版本不变性测试 | 当前药物仍可变；记录/规则/方案有冻结快照。无独立完整 MedicationRevision 链、复方成分表、包装自身量纲 | 研究/纵向设计候选；完整实体和更正 UX 待批准 | 高：旧快照不能被当前值补写，引用、库存单位和备份需正式迁移 | P1 设计，后续分批 | 写独立规格，先新增只读修订来源展示，不能将当前实体当历史版本 |
+| PK 历史可复现 / 部分已冻结 | `LabEstimate.capture` 冻结 `calculator_version=1`、完整 `parameter_document`、体重/输入修订/原值/结果区间；`LabContextTest` | 冻结化验估算结果已可回看；非化验历史曲线仍使用当前引擎/当前体重。缺算法可执行 bundle、完整来源版本键及选择历史模型的系统 | Lab Context 规格刻意不承诺完整 bundle；V1 当前体重是明确决定，不能视作本轮缺陷 | 高：未来算法/参数升级重算的可比性、引擎分发/兼容版本、存储预算 | P1 设计门槛 | 先定义版本和来源标识及回放验收；不改变现有临床模型或重算冻结结果 |
+| Widget / 未实现候选 | Manifest 无 AppWidgetProvider，源码无桌面组件；纵向设计只有概念 | Today/Quick Log/隐私与伪装安全组件均未落地 | 需确定锁定时内容、点击解锁和缓存策略 | 高隐私：桌面泄露、解锁授权、重复记录、过期缓存 | P2 | 只读锁定安全 Today 组件原型，默认无健康内容；先验收隐私再做写入 |
+| 暂停/停药 / 基础动作存在，独立状态候选 | 药物 `active`、`NotesRepository` 停用关闭规则/方案、历史 PAUSED/STOPPED/RESUMED 里程碑；`TimelineV2Test` 结束规则 | 能停用药物/停止提醒并写用户历史事件；无独立状态+原因实体及显式与时期关系。历史里程碑不自动改方案 | 独立状态的生效时间、原因/恢复、回溯更正规则待决策 | 高：状态不能制造未发生的停药/补记事实或悄悄结束用户时期 | P1 设计 | 确认规则后先只读区分现有“当前停用”和“历史事件”，不自动联动 |
+| 扩展 / 尚未实现候选 | `RuleKind` 仅 days/hours/weekly；`Engine.Curve` 无 T；Manifest/依赖无 Health Connect/Wear OS | 无多阶段 CyclePlan、额外途径/植入模型、T PK、Health Connect、Wear OS；已有一般记录/注射/凝胶/贴片不能算这些扩展已完成 | 概念/长期候选，不在本轮授权内；模型需独立文献与验证 | 新规则/迁移、模型错误、额外权限和设备隐私/同步边界 | P2 或更后 | 每次只选一个经过决策的单元；模型研究先行，集成先明确数据最小化/离线边界 |
+
+## 缺陷、已批准工作和设备验收
+
+- **确认缺陷、本轮已授权修复**：库存操作 0/11dp 宽、日期时间文字裁切、复诊操作不等高、频率选项截断、日历数字/标题及时间选择器 AM/PM 裁切；结果与覆盖条件以 [UI 审计](ui-button-consistency.md) 最新章节为准。
+- **已批准未实现的大型功能**：本轮核对没有找到可将上表任何完整大型功能直接列入这一栏的最新明确授权。早期 M1/研究评分不是新的开发指令；不扩张范围。
+- **设备待验收**：本轮 UI 的真实字体/输入法/日期时间输入、滚动与 TalkBack；Build 25 实际用户数据覆盖安装和旧删除恢复；OEM 提醒/Direct Boot/权限变化；应用锁/启动器。Robolectric/API35 模拟器不能替代这些验收。
+- **旧非均匀 slot identity**：`RegimenDefinition` 保存不同时刻剂量；未知身份标记和覆盖、改期/跳过现有测试继续检查。稳定业务身份和旧数据如何对齐是未定产品/迁移问题；未复现的数据一致性错误不按猜测重写引擎。若新场景能复现错误，再单列 P0 缺陷与失败用例。
+
+## 用户需决定与下一轮建议
+
+建议先决定专用 CSV 的字段、时期/阶段的范围与来源、时区和日期精度，然后只实现该导出单元。它复用现有只读投影，能独立验收，无 schema 或临床计算改动。
+
+后续分别决定：面板如何识别同次采样/更正；自定义分析物单位；PDF 留存是否加密及是否进备份；注射 mg/mL 与包装单位；暂停/恢复是否联动当前方案；历史 PK bundle 的算法/参数/体重版本政策；小组件锁定隐私边界。不要合并成一次“大版本”授权。

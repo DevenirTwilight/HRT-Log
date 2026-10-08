@@ -1,7 +1,10 @@
 # HRT Log / Plain Notes
 
 Native offline Android log and reminder app. Package: `net.plainnotes.app`.
-Implementation baseline: [`docs/PLAN.md`](docs/PLAN.md), reviewed at `bd2a6bd`.
+Current baseline: Build **25** / **0.2.0**, database schema **9**.
+Current work and verification: [`docs/HANDOFF.md`](docs/HANDOFF.md);
+feature status and unapproved candidates: [`docs/BACKLOG.md`](docs/BACKLOG.md).
+[`docs/PLAN.md`](docs/PLAN.md) retains the historical architecture decisions.
 No INTERNET permission, accounts, analytics or advertising SDKs.
 
 ## Build
@@ -20,8 +23,8 @@ python3 scripts/check_release_manifest.py
 
 `local.properties` sets `sdk.dir` locally and is ignored. The JVM-only setting excludes
 Android modules and does not require an SDK. Only the full variant is maintained;
-the play variant has been retired. Release APKs are unsigned; use your own
-signing setup outside source control. Gradle verifies the distribution checksum.
+the play variant has been retired. Local release builds are unsigned; delivery uses
+the existing official signing identity outside source control. Gradle verifies the distribution checksum.
 
 Builds delivered to the product owner, including test builds, use the existing private
 official signing key so they can replace the installed official app without uninstalling.
@@ -42,10 +45,19 @@ See [`docs/HANDOFF.md`](docs/HANDOFF.md) for verification and remaining work,
 [`docs/REQUIREMENTS.md`](docs/REQUIREMENTS.md) for current requirements, and
 [`docs/licensing.md`](docs/licensing.md) for licensing status and the history of the
 removed model port (now rewritten independently from published literature).
-Literature validation and physical-device verification remain incomplete.
+Published-literature parameter and engine validation tests are implemented.
+This is not clinical validation. Physical-device acceptance remains separate.
 Health information must never be committed; use only synthetic test data.
 
-The development branch now targets build 12 / database schema 6. New medication
+Build 24 adds trash/restore; Build 25 implements explicit historical-period creation,
+editing, deletion, overlap handling and legacy projection compatibility. These have
+passing functional CI and a prior official-signature delivery record. Current UI
+repairs keep Build 25/schema 9 and are not a new APK delivery. See
+[`timeline design`](docs/design/timeline-editing-v2.md) and the current handoff.
+
+### Historical implementation notes
+
+The following Build 8–17 notes describe earlier increments, not the current baseline. New medication
 events preserve their formulation inputs, and new symptom observations preserve
 their matched catalogue sources. Missing legacy context remains explicitly unknown.
 An overdue dose without an intake record is shown as unconfirmed until the user

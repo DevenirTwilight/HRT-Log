@@ -3,11 +3,11 @@
 > 2026-10-07最新决定：play版本已废弃，仅保留full。本文任何双变体描述为历史规格，后续构建/CI/交付遵循REQUIREMENTS与HANDOFF顶部。
 
 
-> 当前实施（2026-10-07）：主体功能已实现，进度见 `HANDOFF.md`；下方是原 M1 前规划，不是当前完成度声明。P0 修订见 `design/history-integrity-p0.md`，覆盖旧规划中将自动未登记视为确认漏服的语义。数据库现为 schema 5（3→4新增方案版本/关联/里程碑，4→5新增冻结化验上下文修订；旧规则仅以存储快照回推，旧化验不自动补上下文）；新用药快照保存 PK 输入配置，旧快照缺失不按当前配置补猜；症状来源冻结。仍按当前体重计算，不声称保存历史模型参数包。备份采用有界读取与事务内全量校验，PNBAK1 算法未改。P1阶段/时间线设计见 `design/epochs-timeline-p1.md`；组合阶段是确定性区间投影，日期观察可有多个候选阶段，不推断因果。
-
-> 状态：**M1 前架构审查修订稿，尚未写任何应用代码**。2026-10-05 按《HRT_Log_项目会话转移包》更新；已确认决策见第 9 节，实施前验证项见第 10 节。计划经用户确认后再开始 M1。
+> 当前实施（2026-10-08）：Build 25 / 0.2.0 / schema 9；当前完成度、测试和设备边界见 [HANDOFF](HANDOFF.md)，统一后续清单见 [BACKLOG](BACKLOG.md)。full 是唯一维护变体。Room/SQLCipher、规则/提醒、库存、文献 PK/LabFit、导入/导出、Lab Context/Visit Pack 第一批、回收站和可编辑历史时期均已有源码与测试。Lab Context 估算已冻结完整参数文档、输入和结果；完整可执行历史模型 bundle 仍是候选。当前体重政策按原 V1 决定保留。
 >
-> 参考源码：`TransmtfTeam/Transmtf-HRT-Tracker`，固定在提交 `8c9abdde`（2026-09-15）。下文所有 PK 参数都以**该提交的代码**为准，不以其文档为准，原因见 4.6。
+> **以下为 2026-10-05 M1 前架构规划历史档案，不代表当前尚未开发。** 保留原决定和取舍以便追溯；过时的双变体、旧 PK 移植、Argon2id 备份方案和里程碑状态不得作为当前实现指令。实际独立文献引擎及许可边界见 [licensing](licensing.md)，PNBAK1 现有算法/兼容性不变。后续开发以最新 REQUIREMENTS、设计、实际源码与可执行测试为依据。
+>
+> 历史参考源码：`TransmtfTeam/Transmtf-HRT-Tracker`，固定提交 `8c9abdde`（2026-09-15）。下文的历史 PK 表和移植计划是当时的研究依据，已被独立文献实现取代，不能恢复旧模型端口。
 
 ---
 
@@ -17,11 +17,10 @@
 
 ```
 HRT-Log/
-├── app/                 Android 应用：Compose UI、导航、Hilt 装配、构建变体 full / play
+├── app/                 Android 应用：Compose UI、导航、Hilt 装配、仅 full 变体
 │   └── src/
 │       ├── main/        共用界面与功能
-│       ├── full/        伪装模式（计算器/笔记外壳、activity-alias、暗门）
-│       └── play/        伪装模式的空实现（no-op）
+│       └── full/        伪装模式（计算器/笔记外壳、activity-alias、暗门）
 ├── core/
 │   ├── domain/          纯 Kotlin：领域模型、给药规则展开、迟服/漏服判定、库存计算、单位换算
 │   ├── data/            Room + SQLCipher、DAO、Repository、密钥管理、DataStore 设置
