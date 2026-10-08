@@ -144,7 +144,8 @@ import java.time.*
                             val confirmedRow=span.rawVersionIds.filter(ObservedTreatmentHistory::isConfirmedSpan).firstNotNullOfOrNull{id->
                                 confirmedRow(extra.historyPeriods,id)}
                             StandardSummary(saved?.let{RegimenDefinition.read(it.definition_json).snapshot(it.medication_id)} ?: confirmedRow?.let{MedicationSnapshot.decode(it.identity_json,it.medication_id)} ?: observed?.snapshot,span.standard)
-                            Text(stringResource(if(span.rawVersionIds.any{userEditRow(extra.historyPeriods,it)!=null})R.string.period_user_edited else R.string.period_system_source),style=MaterialTheme.typography.labelMedium)
+                            if(span.rawVersionIds.none{userEditRow(extra.historyPeriods,it)!=null} && observed!=null)
+                                Text(stringResource(R.string.period_inferred),style=MaterialTheme.typography.bodySmall)
                             if(span.standard.kind!="OBSERVED" && span.standard.slotIdentityUnknown)Text(stringResource(R.string.period_slot_unknown),style=MaterialTheme.typography.bodySmall)
                         }
                         // §37a: short saved versions shown inside this period, with what they actually said.
@@ -176,16 +177,10 @@ import java.time.*
                         if(period.segments.size>1)Text(stringResource(R.string.period_same_day),style=MaterialTheme.typography.bodySmall)
                         if(standards.any{span->extra.regimens.any{it.id in span.rawVersionIds && it.origin=="LEGACY_RULE"}})Text(stringResource(R.string.epoch_reconstructed),style=MaterialTheme.typography.bodySmall)
                         val sourceRows=record.resolvedRecords.filter{r->(r.taken_utc ?: r.scheduled_utc)?.let{period.contains(Instant.ofEpochMilli(it))}==true}
-                        if(sourceRows.isNotEmpty())TextButton(onClick={onImportedHistory(sourceRows.map{it.id})},modifier=Modifier.testTag("period-history:${period.key}")){Text(stringResource(R.string.period_evidence,sourceRows.size))}
-                        if(!simple)TextButton(onClick={auditKey=period.key}){Text(stringResource(R.string.period_saved_changes))}
-                        // §37b: every period can be edited, whatever made it; §36b diagnostics stay (hidden in simple mode).
+                        // Details remain available without occupying every card. Editing semantics are unchanged.
                         val meds=TimelineEdits.medicationsIn(projection,period);val range=TimelineEdits.rangeOf(period,zone)
-                        val mine=TimelineEdits.userRowsIn(extra.historyPeriods,period,zone)
-                        val edited=mine.filter{it.kind==HistoryPeriods.PERIOD}
-                        if(edited.isNotEmpty())Text(stringResource(R.string.period_user_edited),style=MaterialTheme.typography.labelMedium,color=MaterialTheme.colorScheme.primary)
                         Box(Modifier.fillMaxWidth(),contentAlignment=androidx.compose.ui.Alignment.CenterEnd) {
                             var menu by remember{mutableStateOf(false)}
-                            val context=androidx.compose.ui.platform.LocalContext.current
                             IconButton(onClick={menu=true},modifier=Modifier.testTag("period-menu:${period.key}")){
                                 Icon(androidx.compose.material.icons.Icons.Outlined.MoreVert,stringResource(R.string.period_menu))}
                             DropdownMenu(expanded=menu,onDismissRequest={menu=false}) {
@@ -194,12 +189,8 @@ import java.time.*
                                 item(R.string.period_menu_edit,"period-edit-any"){val m=meds.firstOrNull()
                                     editPeriod(R.string.period_edit_title_edit,meds,m,range,m?.let{TimelineEdits.standardOf(projection,period,it)},range,exact=period.from to period.until)}
                                 if(meds.isNotEmpty())item(R.string.period_menu_delete,"period-delete"){deleteFor=period}
-                                if(!simple)item(R.string.period_copy_diagnostics,"period-diagnostics"){
-                                    val version=androidx.core.content.pm.PackageInfoCompat.getLongVersionCode(context.packageManager.getPackageInfo(context.packageName,0)).toInt()
-                                    val text=MergeDiagnostics.text(record,extra,period,version)
-                                    context.getSystemService(android.content.ClipboardManager::class.java)?.setPrimaryClip(android.content.ClipData.newPlainText("HRT Log",text))
-                                    android.widget.Toast.makeText(context,context.getString(R.string.period_diagnostics_copied),android.widget.Toast.LENGTH_SHORT).show()
-                                }
+                                if(sourceRows.isNotEmpty())item(R.string.period_records,"period-history"){onImportedHistory(sourceRows.map{it.id})}
+                                if(!simple)item(R.string.period_saved_changes,"period-details"){auditKey=period.key}
                             }
                         }
                     }
@@ -229,7 +220,9 @@ import java.time.*
     audit?.let{period->AlertDialog(onDismissRequest={auditKey=null},title={Text(stringResource(R.string.period_saved_changes))},
         text={Column(Modifier.verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(8.dp)) {
             projection.raw.filter{it.span.from<(period.until ?: Instant.MAX) && (it.span.until?.let{end->end>period.from} ?: true)}.forEach{raw->
-                Text((if(raw.span.id>0)"#${raw.span.id}" else stringResource(R.string.period_observed))+" · "+raw.span.from.toString()+" → "+(raw.span.until?.toString() ?: stringResource(R.string.epoch_ongoing)))
+                Text(formatDate(raw.span.from.atZone(zone).toLocalDate())+" · "+formatTime(raw.span.from.atZone(zone).toLocalTime())+" → "+
+                    (raw.span.until?.atZone(zone)?.let{formatDate(it.toLocalDate())+" · "+formatTime(it.toLocalTime())} ?: stringResource(R.string.epoch_ongoing)))
+                if(record.observed.any{it.interval.span.id==raw.span.id})Text(stringResource(R.string.period_inferred),style=MaterialTheme.typography.bodySmall)
                 val saved=extra.regimens.firstOrNull{it.id==raw.span.id}
                 StandardSummary(saved?.let{RegimenDefinition.read(it.definition_json).snapshot(it.medication_id)} ?: record.observed.firstOrNull{it.interval.span.id==raw.span.id}?.snapshot,
                     saved?.let{RegimenDefinition.read(it.definition_json).therapyStandard(normalizeCadence=false)} ?: raw.standard)
@@ -269,7 +262,6 @@ import java.time.*
             when(val s=event.source) {
                 is EventSource.Lab->{val v=s.value;Text(displayNumber(v.value)+" "+v.unit);listOfNotNull(v.laboratory,v.note).forEach{Text(it)}
                     LabContextSection(v,extra.labContexts.filter{it.lab_id==v.id},null)
-                    if(event.at!=null)Text(stringResource(R.string.period_current_mapping,event.exactRegimenIds.sorted().joinToString(", ").ifEmpty{"—"}),style=MaterialTheme.typography.bodySmall)
                 }
                 is EventSource.Review->{val v=s.value
                     val effects=org.json.JSONObject(v.effects_json)

@@ -841,12 +841,11 @@
     <string name="period_future_note">未來事件獨立顯示，不歸入已發生的治療時期。</string>
     <string name="period_slot_unknown">未記錄劑量時段的對應關係，無法區分移動提醒與交換時段劑量。</string>
     <string name="period_same_day">當天記錄了多次變化。摘要顯示當天最終記錄的方案，精確變化仍可查看。</string>
-    <string name="period_saved_changes">查看方案依據與變化</string>
+    <string name="period_saved_changes">方案詳情</string>
     <string name="period_unknown_note">這些事件沒有可證實治療標準的方案記錄。</string>
     <string name="period_frequency_hours">每 %2$d 小時 %1$d 次</string>
     <string name="period_frequency_weeks">每 %2$d 週 %1$d 次</string>
     <string name="period_frequency_days">每 %2$d 天 %1$d 次</string>
-    <string name="period_current_mapping">目前顯示歸屬 · 方案版本：%1$s。上方儲存的上下文保持不變。</string>
     <string name="timeline_imported_history">待識別方案的歷史紀錄</string>
     <string name="timeline_imported_count">%1$d 條記錄</string>
     <string name="timeline_imported_context">這些紀錄尚無足夠穩定的依據識別方案。缺失的歷史資訊仍標為未知。</string>
@@ -860,7 +859,6 @@
     <string name="milestone_resumed">恢復治療</string>
     <string name="milestone_history_only">記錄歷史事件，可在下方備註中填寫原因。不會改變目前用藥方案或提醒。</string>
     <string name="period_observed">從實際紀錄識別，非已確認處方。日期表示觀察涵蓋範圍，不是已確認的開始或停藥日期。</string>
-    <string name="period_evidence">查看 %1$d 筆原始紀錄</string>
     <string name="period_recognition_unavailable">歷史方案暫無法識別，已儲存方案和原始紀錄仍可查看。</string>
     <string name="period_frequency_unconfirmed">顯示實際紀錄中的劑量，服藥頻率尚未確認。</string>
     <string name="history_extra_inferred">額外（推斷）</string>
@@ -908,8 +906,6 @@
     <string name="period_change_gap">中間 30 天以上沒有紀錄</string>
     <string name="period_change_unjoined">標準相同但未合併（請回報）</string>
     <string name="period_menu">更多</string>
-    <string name="period_copy_diagnostics">複製合併診斷</string>
-    <string name="period_diagnostics_copied">診斷已複製</string>
     <string name="period_short_saved">%1$s 曾短暫儲存為：%2$s（約 %3$s）</string>
     <plurals name="period_duration_hours"><item quantity="other">%d 小時</item></plurals>
     <plurals name="period_duration_days"><item quantity="other">%d 天</item></plurals>
@@ -978,4 +974,6 @@
     <string name="picker_hour">小時</string>
     <string name="picker_minute">分鐘</string>
     <string name="picker_date">日期（YYYY-MM-DD）</string>
+    <string name="period_records">查看用藥紀錄</string>
+    <string name="period_inferred">由用藥紀錄推定</string>
 </resources>

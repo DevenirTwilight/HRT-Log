@@ -65,8 +65,11 @@ class TimelineAndroidTest {
         ui.onNodeWithText(ui.activity.getString(R.string.period_current)).assertIsDisplayed()
         ui.onNodeWithText(ui.activity.getString(R.string.period_recognition_unavailable)).assertDoesNotExist()
         val audit=ui.activity.getString(R.string.period_saved_changes)
-        ui.onNodeWithTag("period-timeline").performScrollToNode(hasText(audit))
-        ui.onAllNodesWithText(audit).onFirst().performClick()
+        val key=net.plainnotes.app.timeline.PeriodTimelineProjection.build(extra,emptyList()).projection.periods.last{it.finalStandardSpanKeys.isNotEmpty()}.key
+        ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag("period-menu:$key"))
+        ui.onNodeWithText(audit).assertDoesNotExist()
+        ui.onNodeWithTag("period-menu:$key").performClick()
+        ui.onNodeWithTag("period-details:$key").performClick()
         // The original 3 mg version stays auditable (§37a also notes it on the card while it is shown inside the period).
         ui.onNode(hasText("3 mg",substring=true) and hasAnyAncestor(isDialog())).assertIsDisplayed()
     }
@@ -91,7 +94,8 @@ class TimelineAndroidTest {
         ui.onAllNodesWithText("Synthetic partial logging",substring=true).onFirst().assertExists()
         ui.onNodeWithText(ui.activity.getString(R.string.timeline_imported_history)).assertDoesNotExist()
         val tag="period-history:${projection.projection.periods.first{it.finalStandardSpanKeys.isNotEmpty()}.key}"
-        ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag(tag))
+        ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag(tag.replace("period-history:","period-menu:")))
+        ui.onNodeWithTag(tag.replace("period-history:","period-menu:")).performClick()
         ui.onNodeWithTag(tag).performClick()
         ui.runOnIdle{org.junit.Assert.assertEquals(rows.map{it.id},opened)}
     }
@@ -117,7 +121,8 @@ class TimelineAndroidTest {
         ui.onNodeWithText(ui.activity.getString(R.string.period_observed)).assertDoesNotExist()
         ui.onNodeWithText(ui.activity.getString(R.string.epoch_reconstructed)).assertDoesNotExist()
         val tag="period-history:${projection.projection.periods.single().key}"
-        ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag(tag))
+        ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag(tag.replace("period-history:","period-menu:")))
+        ui.onNodeWithTag(tag.replace("period-history:","period-menu:")).performClick()
         ui.onNodeWithTag(tag).performClick()
         ui.runOnIdle{org.junit.Assert.assertEquals((before+after).map{it.id},opened)}
     }

@@ -841,12 +841,11 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="period_future_note">Future events are separate from recorded treatment periods.</string>
     <string name="period_slot_unknown">Dose slot correspondence was not recorded. Reminder moves and dose swaps cannot be distinguished.</string>
     <string name="period_same_day">Several changes were recorded this day. The summary shows the final recorded standard; exact changes remain available.</string>
-    <string name="period_saved_changes">View plan evidence and changes</string>
+    <string name="period_saved_changes">Plan details</string>
     <string name="period_unknown_note">No recorded regimen establishes the treatment standard for these events.</string>
     <string name="period_frequency_hours">%1$d dose(s) every %2$d hour(s)</string>
     <string name="period_frequency_weeks">%1$d dose(s) every %2$d week(s)</string>
     <string name="period_frequency_days">%1$d dose(s) every %2$d day(s)</string>
-    <string name="period_current_mapping">Current display mapping · regimen versions: %1$s. The saved context above is unchanged.</string>
     <string name="timeline_imported_history">History awaiting regimen recognition</string>
     <string name="timeline_imported_count">%1$d records</string>
     <string name="timeline_imported_context">There is not enough stable evidence to recognize a regimen for these records. Unknown historical details remain unknown.</string>
@@ -860,7 +859,6 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="milestone_resumed">Treatment resumed</string>
     <string name="milestone_history_only">Record a historical event and optionally its reason below. This does not change current medication schedules or reminders.</string>
     <string name="period_observed">Recognized from actual records; not a confirmed prescription. Dates describe observed coverage, not a confirmed start or stop.</string>
-    <string name="period_evidence">View %1$d source records</string>
     <string name="period_recognition_unavailable">Historical regimen recognition is temporarily unavailable. Saved plans and original records remain available.</string>
     <string name="period_frequency_unconfirmed">Recorded amounts shown; dosing frequency is unconfirmed.</string>
     <string name="history_extra_inferred">Extra (inferred)</string>
@@ -908,8 +906,6 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="period_change_gap">30 days or more without records</string>
     <string name="period_change_unjoined">same standard, not joined (please report)</string>
     <string name="period_menu">More</string>
-    <string name="period_copy_diagnostics">Copy merge diagnostics</string>
-    <string name="period_diagnostics_copied">Diagnostics copied</string>
     <string name="period_short_saved">On %1$s this was briefly saved as %2$s (about %3$s)</string>
     <plurals name="period_duration_hours"><item quantity="one">%d hour</item><item quantity="other">%d hours</item></plurals>
     <plurals name="period_duration_days"><item quantity="one">%d day</item><item quantity="other">%d days</item></plurals>
@@ -978,4 +974,6 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="picker_hour">Hour</string>
     <string name="picker_minute">Minute</string>
     <string name="picker_date">Date (YYYY-MM-DD)</string>
+    <string name="period_records">View medication records</string>
+    <string name="period_inferred">Inferred from medication records</string>
 </resources>

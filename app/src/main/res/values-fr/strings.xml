@@ -841,12 +841,11 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="period_future_note">Les événements futurs restent séparés des périodes enregistrées.</string>
     <string name="period_slot_unknown">La correspondance des créneaux de dose est inconnue : déplacement de rappel et échange de doses sont indiscernables.</string>
     <string name="period_same_day">Plusieurs changements ce jour. Le résumé montre le dernier schéma enregistré ; les changements exacts restent consultables.</string>
-    <string name="period_saved_changes">Voir les sources et les changements</string>
+    <string name="period_saved_changes">Détails du traitement</string>
     <string name="period_unknown_note">Aucun schéma enregistré ne définit le traitement pour ces événements.</string>
     <string name="period_frequency_hours">%1$d prise(s) toutes les %2$d heure(s)</string>
     <string name="period_frequency_weeks">%1$d prise(s) toutes les %2$d semaine(s)</string>
     <string name="period_frequency_days">%1$d prise(s) tous les %2$d jour(s)</string>
-    <string name="period_current_mapping">Correspondance actuelle · versions du schéma : %1$s. Le contexte sauvegardé ci-dessus reste inchangé.</string>
     <string name="timeline_imported_history">Historique en attente d’identification du schéma</string>
     <string name="timeline_imported_count">%1$d entrées</string>
     <string name="timeline_imported_context">Ces enregistrements ne fournissent pas encore assez de données stables pour identifier un schéma. Les détails historiques inconnus restent inconnus.</string>
@@ -860,7 +859,6 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="milestone_resumed">Traitement repris</string>
     <string name="milestone_history_only">Enregistrez un événement historique et, si souhaité, sa raison ci-dessous. Cela ne modifie pas les horaires de prises ni les rappels actuels.</string>
     <string name="period_observed">Identifié à partir des prises réelles ; ordonnance non confirmée. Les dates indiquent la période observée, pas un début ou un arrêt confirmé.</string>
-    <string name="period_evidence">Voir %1$d enregistrements sources</string>
     <string name="period_recognition_unavailable">L’identification des schémas historiques est temporairement indisponible. Les schémas enregistrés et les prises originales restent accessibles.</string>
     <string name="period_frequency_unconfirmed">Quantités enregistrées affichées ; fréquence des prises non confirmée.</string>
     <string name="history_extra_inferred">En plus (déduit)</string>
@@ -908,8 +906,6 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="period_change_gap">30 jours ou plus sans prise</string>
     <string name="period_change_unjoined">même traitement, non fusionné (merci de le signaler)</string>
     <string name="period_menu">Plus</string>
-    <string name="period_copy_diagnostics">Copier le diagnostic de fusion</string>
-    <string name="period_diagnostics_copied">Diagnostic copié</string>
     <string name="period_short_saved">Le %1$s, brièvement enregistré comme %2$s (environ %3$s)</string>
     <plurals name="period_duration_hours"><item quantity="one">%d heure</item><item quantity="other">%d heures</item></plurals>
     <plurals name="period_duration_days"><item quantity="one">%d jour</item><item quantity="other">%d jours</item></plurals>
@@ -978,4 +974,6 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="picker_hour">Heure</string>
     <string name="picker_minute">Minute</string>
     <string name="picker_date">Date (AAAA-MM-JJ)</string>
+    <string name="period_records">Voir les prises</string>
+    <string name="period_inferred">Déduit des prises enregistrées</string>
 </resources>

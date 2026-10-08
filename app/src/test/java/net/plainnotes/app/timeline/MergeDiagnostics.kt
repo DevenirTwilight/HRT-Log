@@ -6,8 +6,7 @@ import net.plainnotes.app.data.HistoryPeriods
 import java.time.Instant
 
 /**
- * REQUIREMENTS §36b: plain text explaining why a period did or did not join the previous one, for the user to paste
- * into a report. Only structure: sources, medication IDs, standards, exact bounds and every join check. No intake
+ * REQUIREMENTS §36b: plain text explaining why a period did or did not join the previous one, for regression tests. Not shipped in the production UI. Only structure: sources, medication IDs, standards, exact bounds and every join check. No intake
  * details, doses taken, notes or names.
  */
 object MergeDiagnostics {

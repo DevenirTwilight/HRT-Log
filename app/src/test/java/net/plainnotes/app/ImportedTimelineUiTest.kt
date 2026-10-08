@@ -65,7 +65,8 @@ class ImportedTimelineUiTest {
         ui.onNodeWithText("Synthetic frozen import",substring=true).assertIsDisplayed()
         ui.onNodeWithText(ui.activity.getString(R.string.period_observed)).assertDoesNotExist()
         ui.onNodeWithText(ui.activity.getString(R.string.timeline_imported_history)).assertDoesNotExist()
-        ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag("period-history:${period.key}"))
+        ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag("period-menu:${period.key}"))
+        ui.onNodeWithTag("period-menu:${period.key}").performClick()
         ui.onNodeWithTag("period-history:${period.key}").performClick()
         ui.runOnIdle{assertEquals(rows.map{it.id},selected)}
         val view=ui.activity.window.decorView
@@ -89,8 +90,11 @@ class ImportedTimelineUiTest {
         ui.onNodeWithText(ui.activity.getString(R.string.period_current)).assertIsDisplayed()
         ui.onNodeWithText(ui.activity.getString(R.string.period_recognition_unavailable)).assertDoesNotExist()
         val audit=ui.activity.getString(R.string.period_saved_changes)
-        ui.onNodeWithTag("period-timeline").performScrollToNode(hasText(audit))
-        ui.onAllNodesWithText(audit).onFirst().performClick()
+        val key=net.plainnotes.app.timeline.PeriodTimelineProjection.build(extra,emptyList()).projection.periods.last{it.finalStandardSpanKeys.isNotEmpty()}.key
+        ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag("period-menu:$key"))
+        ui.onNodeWithText(audit).assertDoesNotExist()
+        ui.onNodeWithTag("period-menu:$key").performClick()
+        ui.onNodeWithTag("period-details:$key").performClick()
         // The original 3 mg version stays auditable (§37a also notes it on the card while it is shown inside the period).
         ui.onNode(hasText("3 mg",substring=true) and hasAnyAncestor(isDialog())).assertIsDisplayed()
     }
@@ -113,7 +117,8 @@ class ImportedTimelineUiTest {
         ui.onNodeWithText(ui.activity.getString(R.string.timeline_imported_history)).assertDoesNotExist()
         ui.onNodeWithText(ui.activity.getString(R.string.period_frequency_days,2,1)).assertIsDisplayed()
         val tag="period-history:${projection.projection.periods.first{it.finalStandardSpanKeys.isNotEmpty()}.key}"
-        ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag(tag))
+        ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag(tag.replace("period-history:","period-menu:")))
+        ui.onNodeWithTag(tag.replace("period-history:","period-menu:")).performClick()
         ui.onNodeWithTag(tag).performClick()
         ui.runOnIdle{org.junit.Assert.assertEquals(rows.map{it.id},opened)}
     }
@@ -139,7 +144,8 @@ class ImportedTimelineUiTest {
         ui.onNodeWithText(ui.activity.getString(R.string.period_observed)).assertDoesNotExist()
         ui.onNodeWithText(ui.activity.getString(R.string.epoch_reconstructed)).assertDoesNotExist()
         val tag="period-history:${projection.projection.periods.single().key}"
-        ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag(tag))
+        ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag(tag.replace("period-history:","period-menu:")))
+        ui.onNodeWithTag(tag.replace("period-history:","period-menu:")).performClick()
         ui.onNodeWithTag(tag).performClick()
         ui.runOnIdle{org.junit.Assert.assertEquals((before+after).map{it.id},opened)}
     }
@@ -188,7 +194,7 @@ class ImportedTimelineUiTest {
         ui.onNodeWithTag(tag).assertTextContains(med.name,substring=true)
         ui.onAllNodesWithText(ui.activity.getString(R.string.period_change_header)).assertCountEquals(2)
     }
-    @Test fun periodMenuCopiesMergeDiagnostics() {
+    @Test fun periodMenuHasNoProductionDiagnosticsAndKeepsEditDeleteAndDetails() {
         val zone=java.time.ZoneId.systemDefault()
         val start=java.time.LocalDate.now().minusDays(80);fun at(d:Long)=start.plusDays(d).atStartOfDay(zone).toInstant().toEpochMilli()
         val json=MedicationSnapshot.encode(med,ProfileEntity(1,"E2","sublingual"))
@@ -198,8 +204,11 @@ class ImportedTimelineUiTest {
         val key=net.plainnotes.app.timeline.PeriodTimelineProjection.build(NotesViewModel.ExtraState(regimens=versions),emptyList()).projection.periods.first().key
         ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag("period-menu:$key"))
         ui.onNodeWithTag("period-menu:$key").performClick()
-        ui.onNodeWithTag("period-diagnostics:$key").performClick()
-        val clip=ui.activity.getSystemService(android.content.ClipboardManager::class.java).primaryClip!!.getItemAt(0).text.toString()
-        assertTrue(clip,clip.startsWith("HRT Log merge diagnostics v3"))
+        ui.onNodeWithTag("period-diagnostics:$key").assertDoesNotExist()
+        ui.onNodeWithTag("period-edit-any:$key").assertExists()
+        ui.onNodeWithTag("period-delete:$key").assertExists()
+        ui.onNodeWithTag("period-details:$key").performClick()
+        ui.onNodeWithText("#1",substring=true).assertDoesNotExist()
+        ui.onNodeWithText(ui.activity.getString(R.string.period_user_edited)).assertDoesNotExist()
     }
 }

@@ -161,4 +161,52 @@ class ButtonLayoutRegressionTest(private val locale:String,private val width:Int
         cancel.config[SemanticsActions.OnClick].action!!.invoke();settle();assertFalse(open)
     }
 
+    @Test fun timelineDetailsAreOnlyInTheMenuAndAllRecordsRemainAccessible() {
+        val ctx=rule.activity
+        val zone=ZoneId.systemDefault();val start=LocalDate.now(zone).minusDays(60)
+        val med=MedicationEntity(id=1,name="Synthetic medication",molecule="E2",route="SUBLINGUAL",unit="MG",dose_per_intake=2.0,container_capacity=30.0,
+            site_rotation=false,notifications_on=false,active=true,sort_order=0)
+        val identity=MedicationSnapshot.encode(med,ProfileEntity(1,"E2","sublingual"))
+        val rows=(0..20).map{day->RecordEntity(id=day+1L,medication_id=1,taken_utc=start.plusDays(day.toLong()).atStartOfDay(zone).plusHours(8).toInstant().toEpochMilli(),
+            taken_zone=zone.id,actual_dose=2.0,status="ON_TIME",origin="APP",revision=1,config_snapshot=identity)}
+        val standard=net.plainnotes.app.domain.TherapyStandard("E2","E2","SUBLINGUAL","MG",null,"EVERY_N_DAYS",1,0,listOf(2.0))
+        val user=HistoryPeriodEntity(id=1,period_key="synthetic-user",revision=1,state=HistoryPeriods.CONFIRMED,medication_id=1,
+            identity_json=identity,standard_json=HistoryPeriods.standardJson(standard),from_date=start.toString(),until_date=start.plusDays(22).toString(),zone=zone.id,
+            evidence_json="{}",origin=HistoryPeriods.USER_ORIGIN,created_utc=Instant.now().toEpochMilli(),kind=HistoryPeriods.PERIOD)
+        var extra by mutableStateOf(net.plainnotes.app.NotesViewModel.ExtraState(records=rows,historyPeriods=listOf(user)))
+        var selected:List<Long>?=null
+        rule.setContent{NotesTheme(if(dark)ThemeMode.DARK else ThemeMode.LIGHT){Surface{
+            LongitudinalScreen(NotesState(medications=listOf(med),loading=false),extra,{},{},{},PaddingValues(),onImportedHistory={selected=it})
+        }}}
+        val key=net.plainnotes.app.timeline.PeriodTimelineProjection.build(extra,emptyList()).projection.periods.single{it.finalStandardSpanKeys.isNotEmpty()}.key
+        rule.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag("period-menu:$key"))
+        rule.onNodeWithTag("period-history:$key").assertDoesNotExist()
+        rule.onNodeWithText(ctx.getString(R.string.period_saved_changes)).assertDoesNotExist()
+        rule.onNodeWithText(ctx.getString(R.string.period_user_edited)).assertDoesNotExist()
+        rule.onNodeWithText(ctx.getString(R.string.period_inferred)).assertDoesNotExist()
+        rule.onNodeWithTag("period-menu:$key").performClick()
+        rule.onNodeWithTag("period-diagnostics:$key").assertDoesNotExist()
+        rule.onNodeWithTag("period-edit-any:$key").assertExists()
+        rule.onNodeWithTag("period-delete:$key").assertExists()
+        rule.onNodeWithTag("period-details:$key").assertExists()
+        val records=rule.onNodeWithTag("period-history:$key").assertTextContains(ctx.getString(R.string.period_records))
+        val node=records.fetchSemanticsNode();val results=mutableListOf<TextLayoutResult>()
+        rule.onAllNodes(SemanticsMatcher.keyIsDefined(SemanticsProperties.Text),useUnmergedTree=true).fetchSemanticsNodes().filter{n->
+            n.config[SemanticsProperties.Text].any{it.text==ctx.getString(R.string.period_records)}}.forEach{n->
+            n.config.getOrNull(SemanticsActions.GetTextLayoutResult)?.action?.invoke(results)
+        }
+        assertTrue(results.isNotEmpty());results.forEach{r->
+            val last=r.lineCount-1;val d=ctx.resources.displayMetrics.density
+            assertFalse("Menu text clipped: ${r.layoutInput.text} size=${r.size} bottom=${r.getLineBottom(last)}",r.isLineEllipsized(last) ||
+                r.getLineEnd(last,visibleEnd=false)<r.layoutInput.text.length || r.getLineBottom(last)-r.size.height>2*d ||
+                (0..last).maxOf{r.getLineRight(it)-r.getLineLeft(it)}-r.size.width>d)
+        }
+        assertTrue(node.boundsInRoot.height>=48*ctx.resources.displayMetrics.density-1)
+        records.performClick();rule.runOnIdle{assertEquals(rows.map{it.id},selected);extra=extra.copy(historyPeriods=emptyList())}
+        // Automatic recognition is still explicitly qualified, never presented as a user statement.
+        rule.onNodeWithTag("period-timeline").performScrollToNode(hasText(ctx.getString(R.string.period_inferred)))
+        rule.onNodeWithText(ctx.getString(R.string.period_inferred)).assertIsDisplayed()
+        assertTrue(Destination.entries.contains(Destination.VISITS));assertEquals(R.string.visits,Destination.VISITS.title);assertTrue(Destination.VISITS.ready)
+    }
+
 }

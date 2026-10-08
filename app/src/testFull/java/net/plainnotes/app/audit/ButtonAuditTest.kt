@@ -148,6 +148,10 @@ class ButtonAuditTest(private val locale: String, private val scale: Float, priv
             check(n.config[SemanticsActions.OnClick].action?.invoke()==true){"Click failed: $wanted"}
             Unit
         }
+        fun periodMenu() {
+            val n=roots().flatMap{all(it.semanticsOwner.rootSemanticsNode)}.first{it.config.getOrNull(SemanticsProperties.TestTag)?.startsWith("period-menu:")==true && it.boundsInRoot.height>0}
+            check(n.config[SemanticsActions.OnClick].action?.invoke()==true)
+        }
         val padding = PaddingValues()
         return listOf(
             Case("settings") { SettingsScreen(Appearance(ThemeMode.SYSTEM, false), {}, false, {}, {}, {}, padding) {
@@ -164,6 +168,8 @@ class ButtonAuditTest(private val locale: String, private val scale: Float, priv
             Case("concentration") { val r = remember { conc() }; ConcentrationScreen(s, r, false, 62.0, ConcSettings(false, true, net.plainnotes.app.pk.CalibrationMode.RETROSPECTIVE), {}, {}, {}, {}, padding, records(), profiles) },
             Case("labs") { LabsScreen(labs, listOf(now.minusSeconds(86400 + 5 * 3600)), {}, {}, padding) },
             Case("timeline") { LongitudinalScreen(s, x, {}, {}, {}, padding) },
+            Case("timeline_menu", {periodMenu()}) { LongitudinalScreen(s, x, {}, {}, {}, padding) },
+            Case("timeline_details", {periodMenu();idle();click(R.string.period_saved_changes).invoke()}) { LongitudinalScreen(s, x, {}, {}, {}, padding) },
             Case("visits_list") { val st by m.state.collectAsState(); val ex by m.extra.collectAsState(); VisitsScreen(st, ex, m, null, {}, {}, padding) },
             Case("visit_detail") { val st by m.state.collectAsState(); val ex by m.extra.collectAsState(); VisitsScreen(st, ex, m, st.appointments.firstOrNull { it.completed_utc == null }?.id, {}, {}, padding) },
             Case("visit_question_dialog", click(R.string.visit_question_add)) { val st by m.state.collectAsState(); val ex by m.extra.collectAsState(); VisitsScreen(st, ex, m, st.appointments.firstOrNull { it.completed_utc == null }?.id, {}, {}, padding) },
