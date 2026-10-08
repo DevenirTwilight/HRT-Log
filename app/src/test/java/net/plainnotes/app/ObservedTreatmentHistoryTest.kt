@@ -100,4 +100,14 @@ class ObservedTreatmentHistoryTest {
         assertNull(history.observed.single().snapshot.route)
     }
 
+    @Test fun sameDaySavedDoseChangesMustNotBeBridgedByObservedHistory() {
+        val cut=start.plusSeconds(4*86400L)
+        val morning=saved(4,3.0,id=1).copy(effective_until_utc=cut.plusSeconds(4*3600).toEpochMilli())
+        val afternoon=saved(4,2.0,id=2).copy(effective_from_utc=cut.plusSeconds(4*3600).toEpochMilli())
+        val rows=(0..7).map{row(it)}
+        val v=view(rows,listOf(morning,afternoon))
+        assertEquals(cut,v.observed.single().interval.span.until)
+        assertEquals(listOf(1L,2L),v.projection.raw.filter{it.span.id>0}.map{it.span.id})
+    }
+
 }

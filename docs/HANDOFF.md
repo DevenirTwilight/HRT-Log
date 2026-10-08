@@ -1,5 +1,9 @@
 # 交接说明：工作进度与开发指南
 
+## 进行中：build14时间线闪退（build15计划，2026-10-08）
+
+用户仅覆盖升级、无新增或导入即Timeline闪退。合成同日3mg→2mg已复现IllegalArgumentException: Overlapping recorded regimen（build15-reproduction.log，先失败测试）。尚无用户堆栈，不认定唯一原因；设计design/timeline-overlap-hotfix.md、需求§31。准备修正只桥接紧邻保存版本，非法识别投影透明降级保护合法历史，保留原始数据/识别功能；未完成修复或交付。仅full、正式原签名、原分支，禁止卸载清数据或修改Release/标签。
+
 ## 当前最新交付：历史方案自动识别 build14（2026-10-08，完成）
 
 - 用户明确纠正：从历史实际服药识别过去方案变化、补齐治疗时期，不接受build13只增加导入历史栏目。需求§30；先行设计b8b506c；功能ba333fd、最终身份保护8d630af。分支claude/new-session-1959qb；versionCode14/versionName0.2.0/schema6，仅full。
