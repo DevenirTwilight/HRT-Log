@@ -223,4 +223,19 @@ class ObservedTreatmentHistoryTest {
         assertTrue(v.importedHistory.isEmpty())
     }
 
+
+    // REQUIREMENTS §35a: a new pattern must hold for 14 calendar days before it becomes a new period.
+    private fun twice(day:Int,dose:Double=1.0,extra:Int=0)=(0 until 2+extra).map{k->row(day,dose,day*10L+k+1).let{r->r.copy(taken_utc=r.taken_utc!!+k*5*3600000L)}}
+    @Test fun aFewDaysWithAThirdDoseStayInTheTwiceDailyPeriod() {
+        val rows=(0..40).flatMap{d->twice(d,extra=if(d in 10..12)1 else 0)}
+        val v=view(rows)
+        assertEquals(1,v.observed.size)
+        assertEquals(listOf(1.0,1.0),v.observed.single().interval.standard.doses)
+        assertEquals(rows.map{it.id}.toSet(),v.observed.single().records.map{it.id}.toSet())
+    }
+    @Test fun aShortLoggingGapDoesNotSplitTheSamePattern() {
+        val rows=(0..20).flatMap{twice(it)}+(27..50).flatMap{twice(it)}
+        assertEquals(1,view(rows).observed.size)
+    }
 }
+
