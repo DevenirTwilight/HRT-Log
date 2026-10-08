@@ -44,8 +44,20 @@ class UserDiagnosticRegressionTest {
         val text=MergeDiagnostics.text(v,NotesViewModel.ExtraState(records=rows,regimens=versions,historyPeriods=listOf(confirmed)),v.projection.periods.single(),22)
         assertTrue(text,text.contains("compared_as (correction)") && text.contains("records_inside=0"))
     }
-    @Test fun aDoseTakenUnderTheShortPlanKeepsItAsARealChange() {
-        val v=view(records(true))
-        assertEquals(2,v.projection.periods.size)
+    @Test fun evenWithADoseLoggedUnderTheShortPlanTheFourteenDayRuleKeepsOnePeriod() {
+        // REQUIREMENTS §37a: a saved version shorter than 14 days between parts with the same standard joins them.
+        val rows=records(true);val v=view(rows)
+        assertEquals(v.projection.raw.map{"${it.span.id} ${it.span.from}..${it.span.until} ${it.standard.interval}"}.toString(),1,v.projection.periods.size)
+        rows.forEach{assertEquals(v.projection.periods.single().key,v.projection.periodAt(Instant.ofEpochMilli(it.taken_utc!!))?.key)}
+        // Every record, including the one under the every-11-days version, is judged by the merged twice-daily standard.
+        val labels=HistoryLabels.build(rows,v,emptyList(),zone)
+        assertTrue(labels.toString(),labels.isEmpty() || labels.keys.all{id->rows.single{it.id==id}.taken_utc!!.let{t->Instant.ofEpochMilli(t).atZone(zone).toLocalDate()==LocalDate.of(2026,10,6)}})
+        assertEquals(net.plainnotes.app.domain.TherapyStandard("E2","E2","SUBLINGUAL","MG",null,"EVERY_N_DAYS",11,0,listOf(2.0,2.0)),v.projection.absorbed[1L])
+        assertEquals(1,v.coverage[rows.single{it.taken_utc==v1From.plusSeconds(600).toEpochMilli()}.id]?.interval?.standard?.interval)
+    }
+    @Test fun aShortVersionBetweenDifferentStandardsOrAtTheEndStaysVisible() {
+        val endOnly=listOf(version(1,v1From,v2From,1),version(2,v2From,null,11))
+        val v=PeriodTimelineProjection.build(NotesViewModel.ExtraState(records=records(false),regimens=endOnly,historyPeriods=listOf(confirmed)),emptyList(),now)
+        assertTrue(v.projection.absorbed.isEmpty());assertEquals(2,v.projection.periods.size)
     }
 }

@@ -39,7 +39,9 @@ data class JoinCheck(val name:String,val passed:Boolean,val detail:String)
 data class TreatmentPeriodProjection(val zone:ZoneId,val raw:List<RawTreatmentInterval>,val standards:List<TreatmentStandardSpan>,
     val segments:List<ClinicalSegment>,val periods:List<DisplayPeriod>,val stops:List<TreatmentStop> = emptyList(),
     /** The standard each raw part is compared with: a saved correction replaced within a day takes its replacement's. */
-    val effective:Map<Long,TherapyStandard> = emptyMap()) {
+    val effective:Map<Long,TherapyStandard> = emptyMap(),
+    /** §37a: saved versions shorter than 14 days joined into the parts around them, with their own (shown) standard. */
+    val absorbed:Map<Long,TherapyStandard> = emptyMap()) {
     /** Every join check between the end of [a] and the start of [b], exactly as [TreatmentPeriods.build] decides (diagnostics). */
     fun joinChecks(a:TreatmentStandardSpan,b:TreatmentStandardSpan):List<JoinCheck> {
         val byId=raw.associateBy{it.span.id}
