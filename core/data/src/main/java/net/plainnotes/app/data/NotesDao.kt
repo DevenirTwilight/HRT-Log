@@ -37,6 +37,7 @@ import kotlinx.coroutines.flow.Flow
     @Update suspend fun updateOverride(value: OverrideEntity)
     @Query("DELETE FROM slot_override WHERE slot_key = :key") suspend fun deleteOverride(key: String)
     @Query("SELECT * FROM dose_record WHERE deleted_at_utc IS NULL") suspend fun records(): List<RecordEntity>
+    @Query("SELECT * FROM dose_record WHERE deleted_at_utc IS NOT NULL") suspend fun deletedRecords(): List<RecordEntity>
     @Insert suspend fun record(value: RecordEntity): Long
     @Update suspend fun updateRecord(value: RecordEntity)
     @Query("SELECT * FROM retained_slot") suspend fun retained(): List<RetainedEntity>

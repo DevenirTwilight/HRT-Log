@@ -144,13 +144,13 @@ import java.time.*
                             val observed=record.observed.firstOrNull{it.interval.span.id in span.rawVersionIds}
                             val saved=extra.regimens.firstOrNull{it.id in span.rawVersionIds}
                             val confirmedRow=span.rawVersionIds.filter(ObservedTreatmentHistory::isConfirmedSpan).firstNotNullOfOrNull{id->
-                                record.confirmedHistory.firstOrNull{it.id==(ObservedTreatmentHistory.CONFIRMED_SPAN_BASE-id)/100}}
+                                confirmedRow(extra.historyPeriods,id)}
                             StandardSummary(saved?.let{RegimenDefinition.read(it.definition_json).snapshot(it.medication_id)} ?: confirmedRow?.let{MedicationSnapshot.decode(it.identity_json,it.medication_id)} ?: observed?.snapshot,span.standard)
                             // REQUIREMENTS §35a: recognised periods stay "to confirm" until the user confirms them.
                             if(confirmedRow!=null) {
                                 Text(stringResource(if(saved!=null)R.string.period_partly_confirmed else R.string.period_confirmed_by_user),style=MaterialTheme.typography.labelMedium,color=MaterialTheme.colorScheme.primary)
                                 val rowZone=ZoneId.of(confirmedRow.zone);val rows=extra.records.filter{r->r.taken_utc!=null && r.deleted_at_utc==null &&
-                                    record.coverage[r.id]?.interval?.span?.id?.let{id->ObservedTreatmentHistory.isConfirmedSpan(id) && (ObservedTreatmentHistory.CONFIRMED_SPAN_BASE-id)/100==confirmedRow.id}==true}
+                                    record.coverage[r.id]?.interval?.span?.id?.let{id->confirmedRow(extra.historyPeriods,id)?.period_key==confirmedRow.period_key}==true}
                                 val next=record.confirmedHistory.filter{it.medication_id==confirmedRow.medication_id && it.from_date>confirmedRow.from_date}.minByOrNull{it.from_date}
                                     ?.takeIf{HistoryPeriods.readStandard(it.standard_json)==HistoryPeriods.readStandard(confirmedRow.standard_json)}
                                 TextButton(onClick={periodDraft=PeriodDraft(confirmedRow.period_key,confirmedRow.medication_id,MedicationSnapshot.decode(confirmedRow.identity_json,confirmedRow.medication_id),
@@ -199,7 +199,6 @@ import java.time.*
                         val mine=TimelineEdits.userRowsIn(extra.historyPeriods,period,zone)
                         val deleted=mine.filter{it.kind==HistoryPeriods.DELETED};val edited=mine.filter{it.kind!=HistoryPeriods.DELETED}
                         val stop=projection.stops.firstOrNull{it.from>=period.from && (period.until==null || it.from<period.until)}
-                        if(deleted.isNotEmpty())Text(stringResource(R.string.period_deleted),style=MaterialTheme.typography.labelMedium,color=MaterialTheme.colorScheme.error)
                         if(edited.isNotEmpty())Text(stringResource(R.string.period_user_edited),style=MaterialTheme.typography.labelMedium,color=MaterialTheme.colorScheme.primary)
                         Box(Modifier.fillMaxWidth(),contentAlignment=androidx.compose.ui.Alignment.CenterEnd) {
                             var menu by remember{mutableStateOf(false)}
@@ -219,8 +218,8 @@ import java.time.*
                                     editPeriod(R.string.period_edit_title_merge,all,m,target,a ?: b,target,a to b)}
                                 if(meds.isNotEmpty())item(R.string.period_menu_delete,"period-delete"){deleteFor=period}
                                 if(stop!=null)item(R.string.period_menu_edit_stop,"period-stop-edit"){stopFor=stop}
-                                deleted.firstOrNull()?.group_key?.let{g->item(R.string.period_menu_restore,"period-restore"){timelineActions.undo(g)}}
-                                edited.firstOrNull()?.group_key?.let{g->item(R.string.period_menu_undo,"period-undo"){timelineActions.undo(g)}}
+                                // §39: a correction is deleted into the recycle bin (restore it there).
+                                edited.firstOrNull()?.group_key?.let{g->item(R.string.period_menu_delete_correction,"period-undo"){timelineActions.deleteCorrection(g)}}
                                 if(!simple)item(R.string.period_copy_diagnostics,"period-diagnostics"){
                                     val version=androidx.core.content.pm.PackageInfoCompat.getLongVersionCode(context.packageManager.getPackageInfo(context.packageName,0)).toInt()
                                     val text=MergeDiagnostics.text(record,extra,period,version)
@@ -248,12 +247,12 @@ import java.time.*
     splitFor?.let{period->val range=TimelineEdits.rangeOf(period,zone)
         DatePickerModal(range.from.plusDays(1),{splitFor=null}){day->splitFor=null;apply(TimelineEdits.split(extra.historyPeriods,projection,period,day,::identity))}}
     deleteFor?.let{period->AlertDialog(onDismissRequest={deleteFor=null},text={Text(stringResource(R.string.period_delete_confirm))},modifier=Modifier.testTag("period-delete-dialog"),
-        confirmButton={Button(onClick={deleteFor=null;apply(TimelineEdits.delete(extra.historyPeriods,projection,period,::identity))}){Text(stringResource(R.string.period_menu_delete))}},
+        confirmButton={Button(onClick={deleteFor=null;TimelineEdits.delete(extra.historyPeriods,projection,period,::identity)?.let{timelineActions.delete(it.replace,it.rows)}}){Text(stringResource(R.string.period_menu_delete))}},
         dismissButton={TextButton(onClick={deleteFor=null}){Text(stringResource(R.string.cancel))}})}
     shortDelete?.let{r->AlertDialog(onDismissRequest={shortDelete=null},text={Text(stringResource(R.string.period_delete_confirm))},modifier=Modifier.testTag("period-short-delete-dialog"),
         confirmButton={Button(onClick={shortDelete=null;val range=TimelineEdits.daysOf(r.span.from,r.span.until,zone)
-            apply(TimelineEdits.Edit(TimelineEdits.touched(extra.historyPeriods,r.span.medicationId,range),listOf(TimelineEditRow(HistoryPeriods.DELETED,r.span.medicationId,null,
-                range.from,range.until,zone,identity(r.span.medicationId),exactFromUtc=r.span.from.toEpochMilli(),exactUntilUtc=r.span.until?.toEpochMilli()))))}){Text(stringResource(R.string.period_menu_delete))}},
+            timelineActions.delete(TimelineEdits.touched(extra.historyPeriods,r.span.medicationId,range),listOf(TimelineEditRow(HistoryPeriods.DELETED,r.span.medicationId,null,
+                range.from,range.until,zone,identity(r.span.medicationId),exactFromUtc=r.span.from.toEpochMilli(),exactUntilUtc=r.span.until?.toEpochMilli())))}){Text(stringResource(R.string.period_menu_delete))}},
         dismissButton={TextButton(onClick={shortDelete=null}){Text(stringResource(R.string.cancel))}})}
     stopFor?.let{stop->StopEditDialog(TimelineEdits.Range(stop.from.atZone(zone).toLocalDate(),stop.until?.atZone(zone)?.toLocalDate()),{r->
         val med=projection.raw.firstOrNull{it.span.medicationId==stop.medicationId}?.span?.medicationId ?: stop.medicationId
@@ -333,7 +332,7 @@ import java.time.*
     EventKind.SYMPTOM->R.string.wb_symptoms;EventKind.WELLBEING->R.string.wellbeing;EventKind.REVIEW->R.string.wb_reviews
     EventKind.APPOINTMENT->R.string.appointment;EventKind.MILESTONE->R.string.milestone;EventKind.PLANNED->R.string.timeline_planned
 })
-@Composable private fun milestoneKindLabel(kind:String)=stringResource(when(kind){"STARTED"->R.string.milestone_started;"ROUTE"->R.string.milestone_route;"SURGERY"->R.string.appt_surgery;"PAUSED"->R.string.milestone_paused;"STOPPED"->R.string.milestone_stopped;"RESUMED"->R.string.milestone_resumed;else->R.string.milestone_custom})
+@Composable internal fun milestoneKindLabel(kind:String)=stringResource(when(kind){"STARTED"->R.string.milestone_started;"ROUTE"->R.string.milestone_route;"SURGERY"->R.string.appt_surgery;"PAUSED"->R.string.milestone_paused;"STOPPED"->R.string.milestone_stopped;"RESUMED"->R.string.milestone_resumed;else->R.string.milestone_custom})
 @Composable private fun MilestoneDialog(initial:MilestoneEntity,saveState:MilestoneSaveState,onDismiss:()->Unit,onSave:(MilestoneEntity)->Unit) {
     var dateText by rememberSaveable(initial.id){mutableStateOf(initial.date)};val date=LocalDate.parse(dateText);var kind by rememberSaveable(initial.id){mutableStateOf(initial.kind)}
     var title by rememberSaveable(initial.id){mutableStateOf(initial.title.orEmpty())};var note by rememberSaveable(initial.id){mutableStateOf(initial.note.orEmpty())};var pick by remember{mutableStateOf(false)}

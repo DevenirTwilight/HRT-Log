@@ -72,20 +72,23 @@ fun userEditInputs(rows:List<HistoryPeriodEntity>):List<UserEditInput> = History
     runCatching {
         val zone=ZoneId.of(row.zone)
         val exact=HistoryPeriods.exactBounds(row)
-        UserEditInput(ObservedTreatmentHistory.USER_SPAN_BASE-row.id*100,row.period_key,row.group_key,row.kind,row.medication_id,
+        UserEditInput(ObservedTreatmentHistory.USER_SPAN_BASE-HistoryPeriods.stableId(rows,row.period_key)*100,row.period_key,row.group_key,row.kind,row.medication_id,
             exact?.first?.let(Instant::ofEpochMilli) ?: LocalDate.parse(row.from_date).atStartOfDay(zone).toInstant(),
             if(exact!=null)exact.second?.let(Instant::ofEpochMilli) else row.until_date?.let{LocalDate.parse(it).atStartOfDay(zone).toInstant()},
             if(row.kind in listOf(HistoryPeriods.PERIOD,HistoryPeriods.FILL))HistoryPeriods.readStandard(row.standard_json) else null,MedicationSnapshot.decode(row.identity_json,row.medication_id))
     }.getOrNull()
 }
 /** The user edit row behind a display span ID, if any. */
-fun userEditRow(rows:List<HistoryPeriodEntity>,spanId:Long)=if(ObservedTreatmentHistory.isUserSpan(spanId))HistoryPeriods.userEdits(rows).firstOrNull{ObservedTreatmentHistory.USER_SPAN_BASE-it.id*100==spanId} else null
+fun userEditRow(rows:List<HistoryPeriodEntity>,spanId:Long)=if(ObservedTreatmentHistory.isUserSpan(spanId))HistoryPeriods.userEdits(rows).firstOrNull{ObservedTreatmentHistory.USER_SPAN_BASE-HistoryPeriods.stableId(rows,it.period_key)*100==spanId} else null
+/** The confirmed period behind a display span ID (pieces of one period share its base). */
+fun confirmedRow(rows:List<HistoryPeriodEntity>,spanId:Long)=if(ObservedTreatmentHistory.isConfirmedSpan(spanId))HistoryPeriods.confirmed(rows).firstOrNull{
+    val base=ObservedTreatmentHistory.CONFIRMED_SPAN_BASE-HistoryPeriods.stableId(rows,it.period_key)*100;spanId<=base && spanId>base-100} else null
 
 /** Current confirmed past periods as projection inputs; span IDs are display-only negatives, never stored or frozen. */
 fun confirmedPeriodInputs(rows:List<HistoryPeriodEntity>):List<ConfirmedPeriodInput> = HistoryPeriods.confirmed(rows).sortedBy{it.id}.mapNotNull{row->
     runCatching {
         val zone=ZoneId.of(row.zone)
-        ConfirmedPeriodInput(ObservedTreatmentHistory.CONFIRMED_SPAN_BASE-row.id*100,row.period_key,row.medication_id,
+        ConfirmedPeriodInput(ObservedTreatmentHistory.CONFIRMED_SPAN_BASE-HistoryPeriods.stableId(rows,row.period_key)*100,row.period_key,row.medication_id,
             LocalDate.parse(row.from_date).atStartOfDay(zone).toInstant(),row.until_date?.let{LocalDate.parse(it).atStartOfDay(zone).toInstant()},
             HistoryPeriods.readStandard(row.standard_json),MedicationSnapshot.decode(row.identity_json,row.medication_id))
     }.getOrNull()

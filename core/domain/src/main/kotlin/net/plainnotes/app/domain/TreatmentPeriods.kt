@@ -168,8 +168,8 @@ object TreatmentPeriods {
     val SUSTAIN:Duration=Duration.ofDays(SustainedPatterns.SUSTAIN_DAYS.toLong())
 
     /**
-     * [userGaps]: ranges the user deleted or stopped. Their bounds start display periods even where no plan is shown
-     * (§37b), and no part joins across one (§38: a deleted day must never sit inside a plan with no parts).
+     * [userGaps]: ranges the user deleted or stopped. No part joins across one (§38: a deleted day must never sit inside a
+     * plan with no parts). Deleted content is in the recycle bin, not shown as its own period (§39).
      */
     fun build(raw:List<RawTreatmentInterval>,zone:ZoneId,withRecords:Set<Long>?=null,userStops:List<TreatmentStop> = emptyList(),
               userGaps:List<UserGap> = emptyList()):TreatmentPeriodProjection {
@@ -220,7 +220,7 @@ object TreatmentPeriods {
             };result.map{it.copy(rawVersionIds=it.rawVersionIds.toList())}
         }
         val starts=standards.groupBy{it.from};val ends=standards.filter{it.until!=null}.groupBy{it.until!!}
-        val boundaries=(starts.keys+ends.keys+userGaps.flatMap{listOfNotNull(it.from,it.until)}).distinct().sorted();val active=mutableMapOf<Long,TreatmentStandardSpan>()
+        val boundaries=(starts.keys+ends.keys).sorted();val active=mutableMapOf<Long,TreatmentStandardSpan>()
         val segments=boundaries.mapIndexed{i,start->
             ends[start].orEmpty().forEach{active.remove(it.medicationId)}
             starts[start].orEmpty().forEach{active[it.medicationId]=it}

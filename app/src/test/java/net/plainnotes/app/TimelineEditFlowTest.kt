@@ -56,7 +56,7 @@ class TimelineEditFlowTest {
         assertEquals(2,plans(view()).size)
         // Delete the first part: its records show regimen unknown; restore brings it back.
         val v=view();val del=apply(TimelineEdits.delete(repo.historyPeriods(),v.projection,plans(v).first(),{json}))
-        val deleted=view();assertTrue(deleted.projection.periodAt(at(5))!!.finalStandardSpanKeys.isEmpty())
+        val deleted=view();assertTrue(deleted.projection.periodAt(at(5))?.finalStandardSpanKeys.isNullOrEmpty()) // §39: no card for deleted days
         val labels=HistoryLabels.build(repo.records(),deleted,emptyList(),zone)
         assertEquals(setOf(net.plainnotes.app.domain.RecordLabel.REGIMEN_UNKNOWN),labels[repo.records().first{it.taken_utc==at(5,8).toEpochMilli()}.id])
         repo.undoTimelineEdit(del);assertEquals(2,plans(view()).size)

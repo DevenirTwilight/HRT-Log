@@ -16,9 +16,16 @@
 - 防回归 `PeriodStabilityTest`（CI 必跑，写入 CLAUDE.md 为交付门槛）：黄金数据（用户诊断结构）、4 组历史 × 15 种非治疗操作（设剩余库存、加包装、换包装、丢弃包装、包装容量、有效期、药物名称、每日备注、提醒时间、提醒提前量与迟服阈值、通知开关、语言与地区、设备时区、备份导出恢复、进程重启，以及全部连续执行）前后完全一致、操作顺序无关、巴黎夏令时与跨午夜、整天删除不留空方案而精确删除不切整天。
 - 未覆盖：显示设置/精简/伪装模式只在界面层，不进入时期计算（测试以语言、时区代替）；覆盖安装升级由迁移测试覆盖（CI 模拟器）。
 
-**用户数据：** 那条整天删除仍在用户库里（只追加，不会自动撤销）。build 24 中 10-06 会显示为“已删除”的无方案段；在该卡片 ⋮ 菜单点“恢复”即可回到一段。第二步回收站会把它移入回收站。
+**用户数据：** 那条整天删除仍在用户库里（只追加，不会自动撤销）。升级到 build 24（schema 9）后它自动进入 设置 › 回收站；在那里点“恢复”即可让 10-06 回到一段。
 
-### 第二步：回收站和彻底删除（进行中）
+### 第二步：回收站和彻底删除（REQUIREMENTS §39，代码完成、本机全绿，待 CI 和交付）
+
+- 数据层（23cdf4d）：schema 9 `trash_item`（kind/ref/item_date/deleted_utc/payload_json/state）；迁移 8→9 与旧备份恢复都会 backfill（软删除记录、生效的 DELETED 组）；`purge_permit` 只给彻底删除用户自建时期行开口。`Trash.kt` 快照类（里程碑、化验+上下文、预约+问题+资料包、回顾、症状、评分、备注）恢复时按原主键重插；引用类（记录、时期、修正）。`NotesRepository.trash/deletePeriod/deleteCorrection/restoreTrash/purgeTrash`；被引用的记录、覆盖系统方案的删除 → 永久隐藏（HIDDEN）。
+- 界面：设置 › 回收站（`RecycleBin.kt`），恢复/彻底删除/清空，二次确认写“无法恢复”、真删或永久隐藏、旧备份仍含；精简模式隐藏药名剂量。时期卡片“删除”“删除这一段”“删除我的修改”进回收站；“已删除（可恢复）”卡片与“恢复”菜单取消。
+- 时期显示 ID 改用该 period_key 最小行 id（`HistoryPeriods.stableId`），恢复后时期完全一致。
+- 测试：TrashDataTest 5、RecycleBinUiTest 2、PeriodStabilityTest 加回收站操作（里程碑删/恢复/彻底删、化验、备注/评分、服药记录删/恢复、时期删/恢复），MigrationBaselineTest v8→9（CI 模拟器）。
+- 本机：app 220（13 既有跳过）/data 72/reminder 14/domain 58/pk 18/importer 12，0 失败；lint、debug/release、manifest 通过。versionCode 24。
+- 下一步：推送 → CI 三个 job 全绿 → 原签名交付 build 24。
 
 ## 上一交付（build 23）（10-06 修复 + 时期编辑，2026-10-08，REQUIREMENTS §37，完成）
 

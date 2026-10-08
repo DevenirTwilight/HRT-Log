@@ -55,7 +55,7 @@ class TimelineEditUiTest {
         var edits:List<TimelineEditRow>?=null
         val key=PeriodTimelineProjection.build(extra,emptyList()).projection.periods.first().key
         ui.setContent{MaterialTheme{CompositionLocalProvider(LocalSimpleMode provides true){
-            LongitudinalScreen(state,extra,{},{},{},PaddingValues(),timelineActions=TimelineActions({_,rows->edits=rows}))}}}
+            LongitudinalScreen(state,extra,{},{},{},PaddingValues(),timelineActions=TimelineActions(delete={_,rows->edits=rows}))}}}
         ui.onNodeWithTag("timeline-new-period").assertExists()
         ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag("period-menu:$key"))
         ui.onNodeWithTag("period-menu:$key").performClick()

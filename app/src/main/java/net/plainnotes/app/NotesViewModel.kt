@@ -57,7 +57,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
                 val profiles=meds.mapNotNull{m->dao.profile(m.id)?.let{m.id to it}}.toMap()
                 val upcoming=(repo.planned(now,now.plus(Duration.ofDays(366)),now)+slots.filter{it.slot.at<now}).distinctBy{it.slot.key}.filter{it.state in net.plainnotes.app.ui.OPEN_STATES}
                 NotesState(meds,slots,dao.appointments(),mutable.value.error,false,schedules,profiles,start,dao.rules().associate{it.id to it.config_snapshot}) to
-                    ExtraState(dao.records(),dao.containers(),repo.checkinItems(),dao.scores("0001-01-01",today.toString()),dao.notes("0001-01-01",today.toString()),upcoming,dao.stageReviews(),dao.symptomChecks("0001-01-01",today.toString()),dao.reviewEffects(),dao.regimens(),dao.regimenLinks(),dao.milestones(),dao.labs(),dao.labContexts(),dao.visitQuestions(),dao.visitPacks(),dao.historyPeriods(),dao.annotations())
+                    ExtraState(dao.records(),dao.containers(),repo.checkinItems(),dao.scores("0001-01-01",today.toString()),dao.notes("0001-01-01",today.toString()),upcoming,dao.stageReviews(),dao.symptomChecks("0001-01-01",today.toString()),dao.reviewEffects(),dao.regimens(),dao.regimenLinks(),dao.milestones(),dao.labs(),dao.labContexts(),dao.visitQuestions(),dao.visitPacks(),dao.historyPeriods(),dao.annotations(),dao.trash().filter{it.state==Trash.TRASHED},dao.deletedRecords())
             }
             ensureActive()
             mutable.value=snapshot.first.copy(error=mutable.value.error);extra.value=snapshot.second;refreshRevision++;readFailureShown=false
@@ -105,7 +105,9 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
                           val regimens:List<RegimenVersionEntity> = emptyList(),val regimenLinks:List<RegimenRuleLinkEntity> = emptyList(),
                           val milestones:List<MilestoneEntity> = emptyList(),val labs:List<LabValueEntity> = emptyList(),val labContexts:List<LabContextEntity> = emptyList(),
                           val visitQuestions:List<VisitQuestionEntity> = emptyList(),val visitPacks:List<VisitPackEntity> = emptyList(),
-                          val historyPeriods:List<HistoryPeriodEntity> = emptyList(),val annotations:List<RecordAnnotationEntity> = emptyList())
+                          val historyPeriods:List<HistoryPeriodEntity> = emptyList(),val annotations:List<RecordAnnotationEntity> = emptyList(),
+                          /** §39 recycle bin (only items that can still be restored). */ val trash:List<TrashItemEntity> = emptyList(),
+                          val trashedRecords:List<RecordEntity> = emptyList())
     val extra=MutableStateFlow(ExtraState())
     private fun guarded(block:suspend()->Unit)=viewModelScope.launch{try{block()}catch(e:kotlinx.coroutines.CancellationException){throw e}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}
     fun loadExtra():Job=refresh()
@@ -260,6 +262,22 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     /** REQUIREMENTS §37b timeline edits; past periods only, never reminders. */
     fun editTimeline(replace:List<String>,rows:List<TimelineEditRow>)=change{repo.editTimeline(replace,rows)}
     fun undoTimelineEdit(group:String)=change{repo.undoTimelineEdit(group)}
+    // §39 recycle bin
+    fun deletePeriod(replace:List<String>,rows:List<TimelineEditRow>)=change{repo.deletePeriod(replace,rows)}
+    fun deleteCorrection(group:String)=change{repo.deleteCorrection(group)}
+    fun restoreTrash(id:Long)=change{repo.restoreTrash(id)}
+    fun purgeTrash(item:TrashItemEntity)=change{repo.purgeTrash(item.id,systemUnderneath(item))}
+    fun emptyTrash()=change{extra.value.trash.forEach{repo.purgeTrash(it.id,systemUnderneath(it))}}
+    /** Whether plans the system made lie under a period deletion; then purging hides it for good instead of removing it. */
+    private fun systemUnderneath(item:TrashItemEntity):Boolean {
+        if(item.kind!=Trash.PERIOD)return true
+        val e=extra.value;val rows=e.historyPeriods.filter{it.group_key==item.ref}
+        val without=e.copy(historyPeriods=e.historyPeriods.filter{it.group_key!=item.ref})
+        val p=net.plainnotes.app.timeline.PeriodTimelineProjection.build(without,mutable.value.appointments,ruleSnapshots=mutable.value.ruleSnapshots).projection
+        return rows.any{r->val z=java.time.ZoneId.of(r.zone);val from=LocalDate.parse(r.from_date).atStartOfDay(z).toInstant();val until=r.until_date?.let{LocalDate.parse(it).atStartOfDay(z).toInstant()} ?: Instant.MAX
+            p.raw.any{it.span.medicationId==r.medication_id && it.kind!=net.plainnotes.app.domain.SpanKind.USER && it.kind!=net.plainnotes.app.domain.SpanKind.FILL &&
+                it.span.from<until && (it.span.until ?: Instant.MAX)>from}}
+    }
     fun confirmHistoryPeriod(key:String?,medicationId:Long,standard:TherapyStandard,from:LocalDate,until:LocalDate?,zone:ZoneId,identity:String,evidence:String)=
         change{repo.confirmHistoryPeriod(key,medicationId,standard,from,until,zone,identity,evidence)}
     fun revokeHistoryPeriod(key:String)=change{repo.revokeHistoryPeriod(key)}

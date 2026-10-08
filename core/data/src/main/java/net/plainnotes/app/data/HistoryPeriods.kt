@@ -55,6 +55,8 @@ object HistoryPeriods {
         return from to until
     }
     /** Latest revision of every period; revoked periods are returned too so the caller can show them as unconfirmed again. */
+    /** §39: a display identity that does not change when the period gets a new revision (edit, revoke, restore). */
+    fun stableId(rows:List<HistoryPeriodEntity>,key:String)=rows.filter{it.period_key==key}.minOf{it.id}
     fun latest(rows:List<HistoryPeriodEntity>)=rows.groupBy{it.period_key}.values.map{it.maxBy{r->r.revision}}
 
     fun confirmed(rows:List<HistoryPeriodEntity>)=latest(rows).filter{it.state==CONFIRMED && it.kind==CONFIRMED}

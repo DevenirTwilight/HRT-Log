@@ -18,7 +18,7 @@ object MergeDiagnostics {
     fun text(timeline:PeriodTimeline,extra:ExtraState,period:DisplayPeriod,versionCode:Int):String {
         val p=timeline.projection;val index=p.periods.indexOf(period);val previous=p.periods.getOrNull(index-1)
         val observed=timeline.observed.associateBy{it.interval.span.id}
-        val confirmedRows=timeline.confirmedHistory.associateBy{ObservedTreatmentHistory.CONFIRMED_SPAN_BASE-it.id*100}
+        val confirmedRows=timeline.confirmedHistory.associateBy{ObservedTreatmentHistory.CONFIRMED_SPAN_BASE-HistoryPeriods.stableId(extra.historyPeriods,it.period_key)*100}
         val inside=recordsInside(extra.regimens,extra.records)
         fun source(r:RawTreatmentInterval):String {
             val id=r.span.id

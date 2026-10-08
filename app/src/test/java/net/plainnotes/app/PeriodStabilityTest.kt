@@ -34,8 +34,9 @@ class PeriodStabilityTest {
     private val base=MedicationEntity(name="Synthetic E2",molecule="E2",route="SUBLINGUAL",unit="MG",dose_per_intake=2.0,container_capacity=60.0,expiry_days_after_open=90,
         soon_alert_minutes=15,late_after_minutes=60,site_rotation=false,notifications_on=true,active=true,sort_order=0)
     private fun open(){db=Room.databaseBuilder(context,NotesDatabase::class.java,name).allowMainThreadQueries().addCallback(SchemaGuards).build();repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=db})}
+    private val originalZone=TimeZone.getDefault();private val originalLocale=Locale.getDefault()
     @Before fun start(){TimeZone.setDefault(TimeZone.getTimeZone(paris));context.deleteDatabase(name);open()}
-    @After fun stop(){db.close();context.deleteDatabase(name);Locale.setDefault(Locale.ROOT)}
+    @After fun stop(){db.close();context.deleteDatabase(name);Locale.setDefault(originalLocale);TimeZone.setDefault(originalZone)}
 
     // ---- what must not change ----
     data class Snapshot(val periods:List<Triple<String,Instant,Instant?>>,val standards:List<List<TherapyStandard>>,val recordPeriods:Map<Long,String?>,val labels:Map<Long,Set<net.plainnotes.app.domain.RecordLabel>>)
@@ -123,6 +124,20 @@ class PeriodStabilityTest {
         "device time zone" to {TimeZone.setDefault(TimeZone.getTimeZone("Asia/Shanghai"))},
         "backup export and restore" to {val pwd="synthetic-pass".toCharArray();repo.restoreBackup(repo.exportBackup(pwd),pwd)},
         "process restart" to {db.close();open()},
+        // §39 recycle bin: deleting and restoring, or deleting for good, content that is not a treatment fact.
+        "bin: milestone delete and restore" to {repo.saveMilestone(MilestoneEntity(date="2026-07-01",title="Synthetic"));repo.deleteMilestone(db.dao().milestones().last().id);repo.restoreTrash(repo.trash().first().id)},
+        "bin: milestone delete for good" to {repo.saveMilestone(MilestoneEntity(date="2026-07-02",title="Synthetic"));repo.deleteMilestone(db.dao().milestones().last().id);repo.purgeTrash(repo.trash().first().id)},
+        "bin: lab delete, restore, delete for good" to {repo.saveLab(LabValueEntity(analyte_code="E2",value=100.0,unit="pg/mL",sampled_utc=at("2026-07-03","09:00").toEpochMilli(),sampled_zone=paris.id))
+            val lab=db.dao().labs().last().id;repo.deleteLab(lab);repo.restoreTrash(repo.trash().first().id);repo.deleteLab(lab);repo.purgeTrash(repo.trash().first().id)},
+        "bin: day note and score" to {val item=repo.checkinItems().first().id;repo.setNote(LocalDate.parse("2026-07-04"),"n");repo.setScore(LocalDate.parse("2026-07-04"),item,3)
+            repo.setNote(LocalDate.parse("2026-07-04"),"");repo.setScore(LocalDate.parse("2026-07-04"),item,null);repo.trash().forEach{repo.restoreTrash(it.id)}
+            repo.setNote(LocalDate.parse("2026-07-04"),"");repo.trash().forEach{repo.purgeTrash(it.id)}},
+        "bin: intake delete and restore" to {val r=repo.records().filter{it.taken_utc!=null}.maxBy{it.taken_utc!!};repo.deleteRecord(r.id);repo.restoreTrash(repo.trash().first{it.kind==Trash.RECORD}.id)},
+        "bin: period delete and restore" to {
+            val v=PeriodTimelineProjection.build(NotesViewModel.ExtraState(records=repo.records(),regimens=db.dao().regimens(),historyPeriods=repo.historyPeriods()),emptyList(),now)
+            val p=v.projection.periods.first{it.finalStandardSpanKeys.isNotEmpty()}
+            TimelineEdits.delete(repo.historyPeriods(),v.projection,p,{"{}"})?.let{repo.deletePeriod(it.replace,it.rows)}
+            repo.restoreTrash(repo.trash().first{it.kind==Trash.PERIOD}.id)},
     )
 
     private fun run(dataset:suspend ()->Unit,ops:List<suspend ()->Unit>):Snapshot=runBlocking {

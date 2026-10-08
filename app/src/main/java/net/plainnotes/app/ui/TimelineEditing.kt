@@ -20,7 +20,9 @@ import net.plainnotes.app.timeline.TimelineEdits
 import java.time.LocalDate
 
 /** Callbacks for timeline edits (REQUIREMENTS §37b): append one edit, or undo one by its group key. */
-class TimelineActions(val edit:(List<String>,List<TimelineEditRow>)->Unit={_,_->},val undo:(String)->Unit={})
+class TimelineActions(val edit:(List<String>,List<TimelineEditRow>)->Unit={_,_->},val undo:(String)->Unit={},
+                      /** §39: deletions and removed corrections go to the recycle bin. */
+                      val delete:(List<String>,List<TimelineEditRow>)->Unit={_,_->},val deleteCorrection:(String)->Unit={})
 
 /** What the period editor opens with. [merge] holds the standards of the two periods being merged. */
 data class PeriodEditRequest(val title:Int,val medications:List<Long>,val medicationId:Long?,val range:TimelineEdits.Range,val standard:TherapyStandard?,
