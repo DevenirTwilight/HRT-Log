@@ -1,6 +1,6 @@
 # 交接说明：工作进度与开发指南
 
-## 进行中：build 23（10-06 修复 + 时期编辑，2026-10-08，REQUIREMENTS §37，用户已定直接实现）
+## 当前最新交付：build 23（10-06 修复 + 时期编辑，2026-10-08，REQUIREMENTS §37，完成）
 
 已完成并推送（每步先测试）：
 - 设计与决定：docs/design/timeline-manual-editing.md、REQUIREMENTS §37。
@@ -12,7 +12,9 @@
 - E 界面：卡片 ⋮ 菜单（编辑、在某天拆开、与下一段合并（标准不同必须选前段/后段/自填）、删除、恢复、撤销我的修改、编辑停用期、复制合并诊断（精简模式隐藏））；时间线顶部“新建时期”；并入的短版本可“单独修改/删除这一段”；被删和停用的范围作为单独的无方案卡片显示，便于恢复；同药重叠在对话框里拦下（TimelineEditUiTest、TimelineEditFlowTest：含重新打开数据库与备份恢复）。
 - “已删除”的含义：只是不再把这段当作任何方案（卡片无方案、History 显示方案未知、资料包计入方案未知）；记录、库存、浓度估算都不受影响；可恢复。
 - 本机全量检查通过：app 213（13 既有跳过）/data 67/reminder 14/domain 58/pk 18/importer 12，0 失败；lint、release、manifest 通过；versionCode 23。
-- 待做：CI → 原正式签名 → 交付。真机未验证：所有编辑对话框和日期选择（Robolectric 下时间线页打开带输入框的对话框不空闲，对话框单测）、导入核对表提示、旧安装 7→8 覆盖升级（迁移只在 CI 模拟器测试）。
+- CI [37814987833](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37814987833)（b784f65）jvm/android/device-tests 全部 success（含模拟器上 7→8 迁移）。
+- 交付：`hrt-log-build23-full-signed.apk`，23,473,371 bytes，SHA256 `ef5ad85ef6edb71a6c49bbbfb2a6ef144540cc7014771575bfc0f87bc43ba809`；原证书、v2/v3、16KB 对齐、versionCode 23、无 INTERNET；签名前确认备份 private，签名材料已删除；会话文件发送。覆盖安装自动迁移到 schema 8。
+- 真机未验证：所有编辑对话框和日期选择（Robolectric 下时间线页打开带输入框的对话框不空闲，对话框单测）、导入核对表提示、旧安装 7→8 覆盖升级（迁移只在 CI 模拟器测试）。
 
 ## 上一交付（build 22）：用户诊断查明的原因修复（2026-10-08，REQUIREMENTS §36c，完成）
 
