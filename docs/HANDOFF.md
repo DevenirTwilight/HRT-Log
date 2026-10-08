@@ -27,7 +27,7 @@
 - (B) 把导入记录改挂到应用条目，保留来源 key、冻结快照、revision +1。会改动记录行。
 - 推荐 (A)。build 19 显示层已不依赖条目合并。
 
-versionCode 19。待做：全量本机检查 → CI → 原正式签名 build 19 → 交付。
+versionCode 19。本机全量检查通过：app 186（13 既有跳过）/data 64/reminder 14/domain 57/pk 18/importer 12，0 失败；lint、full debug/release、测试 APK、manifest 通过。待做：CI → 原正式签名 build 19 → 交付。
 
 ## 上一交付：历史记录按时期归属 build 18（2026-10-08，REQUIREMENTS §35/§35a，完成）
 
