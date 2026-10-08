@@ -88,3 +88,9 @@
 ## Lab Context 第一批实施（2026-10-07）
 
 设计先于代码提交9f5dfaa，见[采样上下文设计](docs/design/lab-context-p1.md)。自身schema5追加不可变修订；逐成分并列最近实际事件、半开区间阶段快照、48h事实窗口、显式回推、采样前无自校准的可选参数/结果快照。UI与CSV/PDF独立实现，未纳入竞品源代码/文字/布局/模型参数。不是完整历史模型bundle或LabPanel，实施与验收状态见HANDOFF 2q。
+
+## 2026-10-08：从实际历史识别过去时期
+
+| Feature | Prior art | HRT Log reason | Independent design | Relevant commits/docs |
+|---|---|---|---|---|
+| 自动历史时期识别 | 通用时间序列分段与来源投影；用户对build13的明确纠正 | 实际导入记录缺少保存方案版本，过去治疗时期未呈现 | 自写每日剂量多重集/重复日期间隔识别；观察与处方区分，保存版本优先、未知保留、精确source IDs；不引入任何竞品算法或实现 | 设计先行b8b506c；实现ba333fd、身份保护8d630af；[设计](docs/design/imported-treatment-periods.md) |

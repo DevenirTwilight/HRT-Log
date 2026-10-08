@@ -79,6 +79,13 @@ an inferred prescription or treatment start, and imports without planned times a
 not labelled on time. User-entered pause, stop and resume milestones can retain a
 historical date and reason; they do not change current schedules or rewrite regimens.
 See [`imported timeline verification`](docs/imported-timeline-verification.md).
+Build 14 supersedes the separate-history approach for recognizable records: stable
+actual dose distributions and repeated intervals reconstruct past treatment periods.
+Observed patterns are explicitly distinguished from saved prescriptions; matching
+adjacent standards merge into the same period. Existing imports are reprojected
+automatically. Uncertain records remain available for review, and long gaps do not
+imply stopping treatment. Stored records, reminders, stock and frozen lab contexts
+are unchanged. See [`independent design`](docs/design/imported-treatment-periods.md).
 
 
 Build 8 repairs compatible native historical context using its saved rule snapshot.

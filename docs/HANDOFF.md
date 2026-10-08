@@ -1,15 +1,22 @@
-<!-- 当前任务：2026-10-08 -->
-## 进行中：历史记录自动补齐治疗时期（build14计划）
-
-用户明确要求从历史实际服药识别过去方案变化，不接受build13单独导入历史栏目。需求§30，设计design/imported-treatment-periods.md。已核查HT导入有唯一PK身份默认匹配但不建任何过去版本；TM亦无历史版本。已实现ObservedTreatmentHistory只读观察模式识别与V2时期归并，保存版本优先、不改真实记录/库存/提醒/Context1。负投影ID不会进入化验版本映射。识别源记录入口在时期卡片内；未识别记录保留待识别入口。第二轮full应用回归通过（尚有末轮tier/文案改动待重跑），合成真实导入/重导入/备份恢复和Compose截图已验证；首轮孤立异常+漏记拆分失败已修。完整full检查/构建正在运行；增加缺失身份不得跨药物ID归并的保护后仍须最终重跑，CI须核验最后功能提交。尚未签名交付；build13仍是上一交付。仅full、既有正式签名、原分支；不得改公开Release/标签。
-
 # 交接说明：工作进度与开发指南
+
+## 当前最新交付：历史方案自动识别 build14（2026-10-08，完成）
+
+- 用户明确纠正：从历史实际服药识别过去方案变化、补齐治疗时期，不接受build13只增加导入历史栏目。需求§30；先行设计b8b506c；功能ba333fd、最终身份保护8d630af。分支claude/new-session-1959qb；versionCode14/versionName0.2.0/schema6，仅full。
+- 自写ObservedTreatmentHistory：冻结药物身份、每日剂量分布、重复日期间隔识别。每日模式至少三个稳定日期，稀疏间隔至少四次一致记录；单次异常/短缺口不直接切时期，完全重复记录不作为双倍分布依据，tier不切临床标准。稳定剂量/频率/途径变化形成过去时期；保存版本优先，已知身份唯一匹配可跨重复药物ID只读归并，相邻相同V2标准合并。不从当前可变药物补未知字段，不跨長空白假定持续治疗。
+- 识别模式和保存处方明确区分，来源IDs在时期卡片内可打开确切历史。旧导入及未被保存版本覆盖的应用内实际历史自动投影，无需重导；只有未识别导入留下待识别入口。原始记录/IDs/剂量/时间/快照/revision、库存、提醒、V1签名/阶段键、Context1与Visit Pack1不变，无schema变更。负投影ID不写库或引用到化验版本映射。
+- 最终本机完整检查3m24s成功（初次完整构建7m7s），288登记用例：275通过、0失败、13跳过（1既有PDF限制、12按需按钮审计）。domain39/pk18/importer12/data58/reminder14/app147；lint0错误99警告；full debug/release和两个原生测试APK成功，manifest无INTERNET/身份/入口与schema无漂移检查通过。包含合成JSON→Room→两个过去时期/化验归属、重导入、加密恢复、异常/间隔/途径/身份/重复保护及Native Graphics Compose来源导航；合成截图已检查。末轮身份保护已在最终13项识别测试核验，非仅前一版结果。
+- 最终源码8d630af CI [37738614825](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37738614825) jvm/android/device-tests全部success。API35数据11通过，应用主套件完成（两个重启测试主套件跳过后各独立进程通过）；无用户OEM/TalkBack人工新验收，不声称读取用户真实数据。
+- 正式APK `/workspace/HRT-Log-build14-full-signed.apk`，23,362,779 bytes，SHA256 `f6f5deb0e6dc7fdde4b6c05bc90e850528eee8e49da95d3f9ae7a75e777ebc29`。原正式证书 `989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1`、v2/v3、ZIP和8个native库16KB对齐、非debug、包名及build14、无INTERNET核对；R8 mapping确认新识别逻辑包含在release中。可覆盖原正式安装，未新建密钥；私有备份确认private，临时clone/ZIP/JKS/密码均finally删除。
+- 手机直接下载：https://tmpfiles.org/dl/1791442357.eeedfeefdbecffe4/wrAsgNem7a04/hrt-log-build14-full-signed.apk 。真实下载与本地大小/SHA一致；临时链接会失效，届时重传同一正式APK，不交工作区预览链接。元数据/tooling日志为build14-final-metadata.json、build14-delivery.json、build14-final-source-checks.log、build14-unit-results.json。APK/密钥不入仓库；未改公开Release/标签。
+- 已完成本批功能/验证/交付；只读识别不是处方恢复或药物启停状态机。模式不稳定、缺失剂量/上下文、稀疏少于四次或长空白仍不能自动补全；历史修订会重新投影，未实现识别模式人工持久化确认/编辑。复杂周期/不规则按需模式、完整生命周期等后续需单独设计，不谎称全部方案都能识别。详见[设计](design/imported-treatment-periods.md)、[验证](imported-treatment-periods-verification.md)。
+
 
 ## 最新硬性决定：play已废弃，仅维护full（2026-10-07）
 
-用户再次纠正：**play版本已废弃。以后只维护、测试、构建和交付full，不再生成或签署play APK。** 已移除Gradle play flavor、src/play空实现、CI play任务，release manifest检查只要求full。AGENTS/CLAUDE/REQUIREMENTS/README同步。下文双变体测试与play附件均为历史记录，不是下一步任务；旧公开Release核验清单保持历史事实，不修改公开Release/标签。最新交付full为build13（见下文交付与下载边界）。
+用户再次纠正：**play版本已废弃。以后只维护、测试、构建和交付full，不再生成或签署play APK。** 已移除Gradle play flavor、src/play空实现、CI play任务，release manifest检查只要求full。AGENTS/CLAUDE/REQUIREMENTS/README同步。下文双变体测试与play附件均为历史记录，不是下一步任务；旧公开Release核验清单保持历史事实，不修改公开Release/标签。最新交付full为build14（见下文交付与下载边界）。
 
-## 当前最新交付：导入时间线与历史治疗事件 build13（2026-10-08，完成）
+## 上一交付：导入时间线与历史治疗事件 build13（2026-10-08，完成）
 
 分支`claude/new-session-1959qb`；功能4ad2ac4、History source滚动1e8b208、原生资源b803007、最后语义修正b44588f。已快进保留另一会话9a2a9d6按钮审计（只文档/测试，§29待审核UI修正没有实施）。versionCode13/versionName0.2.0/schema6；需求§28、[设计](design/imported-timeline-history-p1.md)、[验证与边界](imported-timeline-verification.md)。
 
