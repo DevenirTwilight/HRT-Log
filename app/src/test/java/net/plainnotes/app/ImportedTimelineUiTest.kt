@@ -54,4 +54,25 @@ class ImportedTimelineUiTest {
         ui.onNodeWithTag("history-record:71").assertIsDisplayed()
         ui.onNodeWithTag("history-record:72").assertDoesNotExist()
     }
+    @Test fun recognizedHistoryIsInsideTreatmentPeriodAndOpensItsOriginalRecords() {
+        val base=Instant.parse("2025-01-01T08:00:00Z")
+        val rows=(0..4).map{day->row().copy(id=day+1L,taken_utc=base.plusSeconds(day*86400L).toEpochMilli(),source_record_key="ht:synthetic:$day")}
+        var selected:List<Long>?=null
+        val extra=NotesViewModel.ExtraState(records=rows)
+        val period=net.plainnotes.app.timeline.PeriodTimelineProjection.build(extra,emptyList()).projection.periods.first()
+        ui.setContent{MaterialTheme{LongitudinalScreen(NotesState(loading=false),extra,{},{},{},PaddingValues(),onImportedHistory={selected=it})}}
+        ui.onNodeWithTag("period-timeline").performScrollToNode(hasText("Synthetic frozen import",substring=true))
+        ui.onNodeWithText("Synthetic frozen import",substring=true).assertIsDisplayed()
+        ui.onNodeWithText(ui.activity.getString(R.string.period_observed)).assertIsDisplayed()
+        ui.onNodeWithText(ui.activity.getString(R.string.timeline_imported_history)).assertDoesNotExist()
+        ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag("period-history:${period.key}"))
+        ui.onNodeWithTag("period-history:${period.key}").performClick()
+        ui.runOnIdle{assertEquals(rows.map{it.id},selected)}
+        val view=ui.activity.window.decorView
+        val bitmap=android.graphics.Bitmap.createBitmap(view.width,view.height,android.graphics.Bitmap.Config.ARGB_8888)
+        view.draw(android.graphics.Canvas(bitmap))
+        java.io.File("build/screenshots").mkdirs()
+        java.io.File("build/screenshots/recognized_treatment_period.png").outputStream().use{bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG,100,it)}
+    }
+
 }

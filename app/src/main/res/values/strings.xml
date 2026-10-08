@@ -834,22 +834,22 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="milestone_saving">Saving…</string>
     <string name="milestone_saved">Milestone saved</string>
     <string name="milestone_saved_refresh_failed">Milestone saved. Refresh could not finish; do not save it again.</string>
-    <string name="period_timeline_intro">Treatment periods and important events. Individual doses are in History.</string>
+    <string name="period_timeline_intro">Treatment periods from saved plans and stable patterns in actual history. Individual doses are in History.</string>
     <string name="period_current">Current period</string>
     <string name="period_past">Past period</string>
     <string name="period_upcoming">Upcoming</string>
     <string name="period_future_note">Future events are separate from recorded treatment periods.</string>
     <string name="period_slot_unknown">Dose slot correspondence was not recorded. Reminder moves and dose swaps cannot be distinguished.</string>
     <string name="period_same_day">Several changes were recorded this day. The summary shows the final recorded standard; exact changes remain available.</string>
-    <string name="period_saved_changes">Recorded plan changes</string>
+    <string name="period_saved_changes">View plan evidence and changes</string>
     <string name="period_unknown_note">No recorded regimen establishes the treatment standard for these events.</string>
     <string name="period_frequency_hours">%1$d dose(s) every %2$d hour(s)</string>
     <string name="period_frequency_weeks">%1$d dose(s) every %2$d week(s)</string>
     <string name="period_frequency_days">%1$d dose(s) every %2$d day(s)</string>
     <string name="period_current_mapping">Current display mapping · regimen versions: %1$s. The saved context above is unchanged.</string>
-    <string name="timeline_imported_history">Imported medication history</string>
+    <string name="timeline_imported_history">History awaiting regimen recognition</string>
     <string name="timeline_imported_count">%1$d imported records</string>
-    <string name="timeline_imported_context">These are recorded events. Their spacing does not establish a prescribed regimen. Unknown historical details remain unknown.</string>
+    <string name="timeline_imported_context">There is not enough stable evidence to recognize a regimen for these records. Unknown historical details remain unknown.</string>
     <string name="timeline_imported_unknown_route">Route unknown in saved record</string>
     <string name="timeline_imported_amounts">Recorded amounts: %1$s – %2$s</string>
     <string name="timeline_imported_unknown_amount">Actual amount unknown in %1$d taken records</string>
@@ -859,4 +859,6 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="milestone_stopped">Treatment stopped</string>
     <string name="milestone_resumed">Treatment resumed</string>
     <string name="milestone_history_only">Record a historical event and optionally its reason below. This does not change current medication schedules or reminders.</string>
+    <string name="period_observed">Recognized from actual records; not a confirmed prescription. Dates describe observed coverage, not a confirmed start or stop.</string>
+    <string name="period_evidence">View %1$d source records</string>
 </resources>

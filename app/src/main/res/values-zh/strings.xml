@@ -834,22 +834,22 @@
     <string name="milestone_saving">正在保存…</string>
     <string name="milestone_saved">里程碑已保存</string>
     <string name="milestone_saved_refresh_failed">里程碑已保存，但刷新未完成；请勿重复保存。</string>
-    <string name="period_timeline_intro">治疗时期与重要事件。每一次服药请在历史中查看。</string>
+    <string name="period_timeline_intro">已保存方案和稳定历史记录共同组成治疗时期。每一次服药请在历史中查看。</string>
     <string name="period_current">当前时期</string>
     <string name="period_past">过去时期</string>
     <string name="period_upcoming">即将发生</string>
     <string name="period_future_note">未来事件独立显示，不归入已发生的治疗时期。</string>
     <string name="period_slot_unknown">未记录剂量时段的对应关系，无法区分移动提醒与交换时段剂量。</string>
     <string name="period_same_day">当天记录了多次变化。摘要显示当天最终记录的方案，精确变化仍可查看。</string>
-    <string name="period_saved_changes">查看原始方案变化</string>
+    <string name="period_saved_changes">查看方案依据与变化</string>
     <string name="period_unknown_note">这些事件没有可证实治疗标准的方案记录。</string>
     <string name="period_frequency_hours">每 %2$d 小时 %1$d 次</string>
     <string name="period_frequency_weeks">每 %2$d 周 %1$d 次</string>
     <string name="period_frequency_days">每 %2$d 天 %1$d 次</string>
     <string name="period_current_mapping">当前显示归属 · 方案版本：%1$s。上方保存的上下文保持不变。</string>
-    <string name="timeline_imported_history">导入用药历史</string>
+    <string name="timeline_imported_history">待识别方案的历史记录</string>
     <string name="timeline_imported_count">%1$d 条导入记录</string>
-    <string name="timeline_imported_context">这些是已记录的事件，不能从记录间隔推断用药方案。缺失的历史信息仍标为未知。</string>
+    <string name="timeline_imported_context">这些记录尚无足够稳定的依据识别方案。缺失的历史信息仍标为未知。</string>
     <string name="timeline_imported_unknown_route">原记录途径未知</string>
     <string name="timeline_imported_amounts">记录的实际剂量：%1$s – %2$s</string>
     <string name="timeline_imported_unknown_amount">%1$d 条已服记录缺少实际剂量</string>
@@ -859,4 +859,6 @@
     <string name="milestone_stopped">停止治疗</string>
     <string name="milestone_resumed">恢复治疗</string>
     <string name="milestone_history_only">记录历史事件，可在下方备注中填写原因。不会改变当前用药方案或提醒。</string>
+    <string name="period_observed">从实际记录识别，非已确认处方。日期表示观察覆盖范围，不是已确认的开始或停药日期。</string>
+    <string name="period_evidence">查看 %1$d 条原始记录</string>
 </resources>

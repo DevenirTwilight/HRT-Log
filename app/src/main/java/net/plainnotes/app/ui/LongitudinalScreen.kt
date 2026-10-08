@@ -97,17 +97,22 @@ import java.time.*
                 event!=null->Surface(modifier=Modifier.padding(start=12.dp),shape=MaterialTheme.shapes.medium,tonalElevation=1.dp){EventRow(event,::open)}
                 period!=null->{
                     val current=period.contains(now)
-                    SectionCard(stringResource(if(current)R.string.period_current else R.string.period_past)) {
+                    val standards=projection.standards.filter{it.key in period.finalStandardSpanKeys}
+                    SectionCard(stringResource(if(standards.isEmpty())R.string.timeline_epoch_unknown else if(current)R.string.period_current else R.string.period_past)) {
                         val end=period.until?.minusNanos(1)?.atZone(zone)?.toLocalDate()
                         Text(formatDate(period.from.atZone(zone).toLocalDate())+" → "+(end?.let{formatDate(it)} ?: stringResource(R.string.epoch_ongoing)))
-                        val standards=projection.standards.filter{it.key in period.finalStandardSpanKeys}
                         if(standards.isEmpty())Text(stringResource(R.string.epoch_no_plan))
                         if(!simple)standards.forEach{span->
-                            StandardSummary(extra.regimens.first{it.id==span.rawVersionIds.first()},span.standard)
+                            val observed=record.observed.firstOrNull{it.interval.span.id in span.rawVersionIds}
+                            val saved=extra.regimens.firstOrNull{it.id in span.rawVersionIds}
+                            StandardSummary(saved?.let{RegimenDefinition.read(it.definition_json).snapshot(it.medication_id)} ?: observed?.snapshot,span.standard)
                             if(span.standard.slotIdentityUnknown)Text(stringResource(R.string.period_slot_unknown),style=MaterialTheme.typography.bodySmall)
                         }
+                        if(standards.any{it.rawVersionIds.any{id->id<0}})Text(stringResource(R.string.period_observed),style=MaterialTheme.typography.bodySmall)
                         if(period.segments.size>1)Text(stringResource(R.string.period_same_day),style=MaterialTheme.typography.bodySmall)
-                        if(standards.any{it.reconstructed})Text(stringResource(R.string.epoch_reconstructed),style=MaterialTheme.typography.bodySmall)
+                        if(standards.any{it.reconstructed && it.rawVersionIds.any{id->id>0}})Text(stringResource(R.string.epoch_reconstructed),style=MaterialTheme.typography.bodySmall)
+                        val sourceRows=record.resolvedRecords.filter{r->r.taken_utc?.let{period.contains(Instant.ofEpochMilli(it))}==true}
+                        if(sourceRows.isNotEmpty())TextButton(onClick={onImportedHistory(sourceRows.map{it.id})},modifier=Modifier.testTag("period-history:${period.key}")){Text(stringResource(R.string.period_evidence,sourceRows.size))}
                         if(!simple)TextButton(onClick={auditKey=period.key}){Text(stringResource(R.string.period_saved_changes))}
                     }
                 }
@@ -126,8 +131,9 @@ import java.time.*
     audit?.let{period->AlertDialog(onDismissRequest={auditKey=null},title={Text(stringResource(R.string.period_saved_changes))},
         text={Column(Modifier.verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(8.dp)) {
             projection.raw.filter{it.span.from<(period.until ?: Instant.MAX) && (it.span.until?.let{end->end>period.from} ?: true)}.forEach{raw->
-                Text("#${raw.span.id} · "+raw.span.from.toString()+" → "+(raw.span.until?.toString() ?: stringResource(R.string.epoch_ongoing)))
-                StandardSummary(extra.regimens.first{it.id==raw.span.id},raw.standard)
+                Text((if(raw.span.id>0)"#${raw.span.id}" else stringResource(R.string.period_observed))+" · "+raw.span.from.toString()+" → "+(raw.span.until?.toString() ?: stringResource(R.string.epoch_ongoing)))
+                val saved=extra.regimens.firstOrNull{it.id==raw.span.id}
+                StandardSummary(saved?.let{RegimenDefinition.read(it.definition_json).snapshot(it.medication_id)} ?: record.observed.firstOrNull{it.interval.span.id==raw.span.id}?.snapshot,raw.standard)
             }
         }},confirmButton={TextButton(onClick={auditKey=null}){Text(stringResource(R.string.ok))}})}
     removeId?.let{id->AlertDialog(onDismissRequest={removeId=null},text={Text(stringResource(R.string.milestone_delete_confirm))},
@@ -135,8 +141,7 @@ import java.time.*
         dismissButton={TextButton(onClick={removeId=null}){Text(stringResource(R.string.cancel))}})}
 }
 
-@Composable private fun StandardSummary(version:RegimenVersionEntity,standard:TherapyStandard) {
-    val m=remember(version.definition_json){RegimenDefinition.read(version.definition_json).snapshot(version.medication_id)}
+@Composable private fun StandardSummary(m:MedicationSnapshot?,standard:TherapyStandard) {
     Text(listOfNotNull(m?.name,m?.route?.let{choiceLabel(it)},standard.ester?.takeIf{it!=standard.compound}?.let{choiceLabel(it)},
         standard.doses.distinct().map{formatDose(it,standard.unit)}.joinToString(" / ")).joinToString(" · "),style=MaterialTheme.typography.bodyMedium)
     Text(stringResource(when(standard.kind){"EVERY_N_HOURS"->R.string.period_frequency_hours;"WEEKLY"->R.string.period_frequency_weeks;else->R.string.period_frequency_days},

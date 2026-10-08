@@ -16,7 +16,8 @@ fun RegimenDefinition.therapyStandard():TherapyStandard {
 data class PeriodEvent(val key:String,val kind:EventKind,val at:Instant?,val date:LocalDate,val source:EventSource,
     val displayPeriodKey:String?,val exactRegimenIds:Set<Long>,val dateOnly:Boolean)
 data class PeriodTimeline(val projection:TreatmentPeriodProjection,val events:List<PeriodEvent>,val upcoming:List<PeriodEvent>,
-    val importedHistory:List<ImportedHistorySummary> = emptyList()) {
+    val importedHistory:List<ImportedHistorySummary> = emptyList(),val observed:List<ObservedTreatment> = emptyList(),
+    val resolvedRecords:List<RecordEntity> = emptyList()) {
     fun eventsIn(period:DisplayPeriod)=events.filter{it.displayPeriodKey==period.key}
     val unknownEvents get()=events.filter{it.displayPeriodKey==null}
 }
@@ -25,14 +26,15 @@ object PeriodTimelineProjection {
         val ordered=extra.regimens.sortedWith(compareBy({it.effective_from_utc},{it.id}))
         // Deterministic display policy: changing the device zone must not regroup historical transitions.
         val zone=displayZone ?: ordered.firstOrNull()?.let{ZoneId.of(it.zone)} ?: ZoneId.of("UTC")
-        val projection=TreatmentPeriods.build(ordered.map{RawTreatmentInterval(it.span(),RegimenDefinition.read(it.definition_json).therapyStandard())},zone)
+        val historical=ObservedTreatmentHistory.build(extra.records,ordered,zone,now)
+        val projection=TreatmentPeriods.build(ordered.map{RawTreatmentInterval(it.span(),RegimenDefinition.read(it.definition_json).therapyStandard())}+historical.observed.map{it.interval},zone)
         val today=now.atZone(zone).toLocalDate();val events=mutableListOf<PeriodEvent>();val upcoming=mutableListOf<PeriodEvent>()
         fun add(key:String,kind:EventKind,at:Instant?,day:LocalDate?,source:EventSource) {
             val date=day ?: requireNotNull(at).atZone(zone).toLocalDate()
             val future=if(at!=null)at>now else date>today
             val period=if(future)null else if(at!=null)projection.periodAt(at) else projection.periodOn(date)
             val event=PeriodEvent(key,kind,at,date,source,period?.key,
-                if(at!=null && !future)projection.exactAt(at).map{it.span.id}.toSet() else emptySet(),at==null)
+                if(at!=null && !future)projection.exactAt(at).filter{it.span.id>0}.map{it.span.id}.toSet() else emptySet(),at==null)
             if(future)upcoming+=event else events+=event
         }
         extra.labs.forEach{add("lab:${it.id}",EventKind.LAB,Instant.ofEpochMilli(it.sampled_utc),null,EventSource.Lab(it))}
@@ -41,6 +43,7 @@ object PeriodTimelineProjection {
         appointments.forEach{add("appointment:${it.id}",EventKind.APPOINTMENT,Instant.ofEpochMilli(it.at_utc),null,EventSource.Appointment(it))}
         val order=compareByDescending<PeriodEvent>{it.date}.thenByDescending{it.at}.thenBy{it.key}
         return PeriodTimeline(projection,events.sortedWith(order),upcoming.sortedWith(compareBy<PeriodEvent>{it.date}.thenBy{it.at}.thenBy{it.key}),
-            ImportedHistoryProjection.build(extra.records,projection,now))
+            ImportedHistoryProjection.build(extra.records.filter{it.id !in historical.resolvedRecordIds},projection,now),historical.observed,
+            extra.records.filter{it.id in historical.resolvedRecordIds})
     }
 }

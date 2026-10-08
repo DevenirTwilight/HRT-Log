@@ -834,22 +834,22 @@
     <string name="milestone_saving">正在儲存…</string>
     <string name="milestone_saved">里程碑已儲存</string>
     <string name="milestone_saved_refresh_failed">里程碑已儲存，但重新整理未完成；請勿重複儲存。</string>
-    <string name="period_timeline_intro">治療時期與重要事件。每一次服藥請在歷史中查看。</string>
+    <string name="period_timeline_intro">已儲存方案和穩定歷史紀錄共同組成治療時期。每一次服藥請在歷史中查看。</string>
     <string name="period_current">目前時期</string>
     <string name="period_past">過去時期</string>
     <string name="period_upcoming">即將發生</string>
     <string name="period_future_note">未來事件獨立顯示，不歸入已發生的治療時期。</string>
     <string name="period_slot_unknown">未記錄劑量時段的對應關係，無法區分移動提醒與交換時段劑量。</string>
     <string name="period_same_day">當天記錄了多次變化。摘要顯示當天最終記錄的方案，精確變化仍可查看。</string>
-    <string name="period_saved_changes">查看原始方案變化</string>
+    <string name="period_saved_changes">查看方案依據與變化</string>
     <string name="period_unknown_note">這些事件沒有可證實治療標準的方案記錄。</string>
     <string name="period_frequency_hours">每 %2$d 小時 %1$d 次</string>
     <string name="period_frequency_weeks">每 %2$d 週 %1$d 次</string>
     <string name="period_frequency_days">每 %2$d 天 %1$d 次</string>
     <string name="period_current_mapping">目前顯示歸屬 · 方案版本：%1$s。上方儲存的上下文保持不變。</string>
-    <string name="timeline_imported_history">匯入用藥歷史</string>
+    <string name="timeline_imported_history">待識別方案的歷史紀錄</string>
     <string name="timeline_imported_count">%1$d 筆匯入記錄</string>
-    <string name="timeline_imported_context">這些是已記錄的事件，不能從記錄間隔推斷用藥方案。缺失的歷史資訊仍標為未知。</string>
+    <string name="timeline_imported_context">這些紀錄尚無足夠穩定的依據識別方案。缺失的歷史資訊仍標為未知。</string>
     <string name="timeline_imported_unknown_route">原記錄途徑未知</string>
     <string name="timeline_imported_amounts">記錄的實際劑量：%1$s – %2$s</string>
     <string name="timeline_imported_unknown_amount">%1$d 筆已服記錄缺少實際劑量</string>
@@ -859,4 +859,6 @@
     <string name="milestone_stopped">停止治療</string>
     <string name="milestone_resumed">恢復治療</string>
     <string name="milestone_history_only">記錄歷史事件，可在下方備註中填寫原因。不會改變目前用藥方案或提醒。</string>
+    <string name="period_observed">從實際紀錄識別，非已確認處方。日期表示觀察涵蓋範圍，不是已確認的開始或停藥日期。</string>
+    <string name="period_evidence">查看 %1$d 筆原始紀錄</string>
 </resources>

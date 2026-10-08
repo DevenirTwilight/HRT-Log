@@ -834,22 +834,22 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="milestone_saving">Enregistrement…</string>
     <string name="milestone_saved">Jalon enregistré</string>
     <string name="milestone_saved_refresh_failed">Jalon enregistré. Actualisation inachevée ; ne le sauvegardez pas à nouveau.</string>
-    <string name="period_timeline_intro">Périodes de traitement et événements importants. Les prises individuelles sont dans Historique.</string>
+    <string name="period_timeline_intro">Les périodes réunissent les schémas enregistrés et les tendances stables des prises réelles. Chaque prise figure dans Historique.</string>
     <string name="period_current">Période actuelle</string>
     <string name="period_past">Période passée</string>
     <string name="period_upcoming">À venir</string>
     <string name="period_future_note">Les événements futurs restent séparés des périodes enregistrées.</string>
     <string name="period_slot_unknown">La correspondance des créneaux de dose est inconnue : déplacement de rappel et échange de doses sont indiscernables.</string>
     <string name="period_same_day">Plusieurs changements ce jour. Le résumé montre le dernier schéma enregistré ; les changements exacts restent consultables.</string>
-    <string name="period_saved_changes">Changements enregistrés</string>
+    <string name="period_saved_changes">Voir les sources et les changements</string>
     <string name="period_unknown_note">Aucun schéma enregistré ne définit le traitement pour ces événements.</string>
     <string name="period_frequency_hours">%1$d prise(s) toutes les %2$d heure(s)</string>
     <string name="period_frequency_weeks">%1$d prise(s) toutes les %2$d semaine(s)</string>
     <string name="period_frequency_days">%1$d prise(s) tous les %2$d jour(s)</string>
     <string name="period_current_mapping">Correspondance actuelle · versions du schéma : %1$s. Le contexte sauvegardé ci-dessus reste inchangé.</string>
-    <string name="timeline_imported_history">Historique de prises importé</string>
+    <string name="timeline_imported_history">Historique en attente d’identification du schéma</string>
     <string name="timeline_imported_count">%1$d entrées importées</string>
-    <string name="timeline_imported_context">Il s’agit d’événements enregistrés. Leur espacement ne permet pas de déduire un schéma prescrit. Les détails historiques inconnus restent inconnus.</string>
+    <string name="timeline_imported_context">Ces enregistrements ne fournissent pas encore assez de données stables pour identifier un schéma. Les détails historiques inconnus restent inconnus.</string>
     <string name="timeline_imported_unknown_route">Voie inconnue dans l’entrée conservée</string>
     <string name="timeline_imported_amounts">Quantités enregistrées : %1$s – %2$s</string>
     <string name="timeline_imported_unknown_amount">Quantité réelle inconnue pour %1$d prises enregistrées</string>
@@ -859,4 +859,6 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="milestone_stopped">Traitement arrêté</string>
     <string name="milestone_resumed">Traitement repris</string>
     <string name="milestone_history_only">Enregistrez un événement historique et, si souhaité, sa raison ci-dessous. Cela ne modifie pas les horaires de prises ni les rappels actuels.</string>
+    <string name="period_observed">Identifié à partir des prises réelles ; ordonnance non confirmée. Les dates indiquent la période observée, pas un début ou un arrêt confirmé.</string>
+    <string name="period_evidence">Voir %1$d enregistrements sources</string>
 </resources>
