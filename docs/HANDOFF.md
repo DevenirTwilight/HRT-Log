@@ -1,5 +1,15 @@
 # 交接说明：工作进度与开发指南
 
+## 进行中：按钮/大字体与 Backlog 核对（2026-10-08，REQUIREMENTS §41）
+
+起始 HEAD `5441e6efac2a9dcb3b38c0a3fb2b85b4d3c2880e`，分支 claude/new-session-1959qb，工作区干净，与远端一致。Build 25/schema 9 已实现并已有正式签名交付记录，不能重新开发。
+- [x] 核对源码、数据库实体/迁移、Actions 与现有按钮审计。审计默认 4 语言 × 字号 1/1.3/2，仅 411dp/浅色，发现不失败；旧文档的 49 页面说法需重新按当前 case 数核对。
+- [x] 基线重跑 12 种组合：库存按钮仍出现 0dp/11dp 宽、16 行文字，日历双位数字裁切；截图已复核。日期按钮与复诊操作仍有拥挤/不等高，继续补查编辑器与其他选项。基线产物在仓库外 /workspace/tooling/ui-audit-before。
+- [ ] 自适应布局修复与常规断言回归，审计扩大窄屏/主题并对比前后。
+- [ ] 时间线/冻结数据/迁移回归，证据驱动的统一 Backlog 与现状文档。
+- [ ] 最终全量测试、lint/debug/release、原生 CI 与结果报告。本轮保持 Build 25/schema 9，不签名交付、不上传公开 APK、不改 PK、Release 或标签。
+
+
 ## 已交付：build 25 重建时期编辑体系（2026-10-08，REQUIREMENTS §40，设计 docs/design/timeline-editing-v2.md）
 
 接手基线 28011d5；功能源码 52b092a，build 25 已完成并交付，原正式签名 full，可覆盖安装，schema 仍为 9。
