@@ -151,12 +151,12 @@ object PdfReport {
         d.medications.filter { m -> inRange.any { it.medication_id == m.id } }.forEach { m ->
             val r = inRange.filter { it.medication_id == m.id && it.scheduled_utc != null }
             val onTime = r.count { it.status == "ON_TIME" }; val late = r.count { it.status == "LATE" }; val missed = r.count { it.status == "MISSED" && !it.unconfirmed }; val skipped = r.count { it.status == "SKIPPED" }
-            val free = inRange.filter { it.medication_id == m.id && it.scheduled_utc == null && it.status in listOf("ON_TIME", "LATE") }
             val imported = inRange.count { it.medication_id == m.id && it.origin.startsWith("IMPORT_") && it.status in listOf("ON_TIME", "LATE") }
             if(r.any{it.unconfirmed})text(context.getString(R.string.unconfirmed_count,r.count{it.unconfirmed}),body)
-            text("• ${m.name}: " + context.getString(R.string.report_adherence_line_v2, onTime, late, missed, skipped, free.size, imported), body, 2f)
-            val counts = net.plainnotes.app.visit.labelCounts(free.map { it.id }, labels)
-            if (counts.any { it > 0 }) text(context.getString(R.string.visit_fact_labels, counts[0], counts[1], counts[2], counts[3]), body, 2f)
+            text("• ${m.name}: " + context.getString(R.string.report_adherence_line_v2, onTime, late, missed, skipped, imported), body, 2f)
+            // REQUIREMENTS §35a: records matching their period are not counted separately; no count is based on a missing scheduled time.
+            val counts = net.plainnotes.app.visit.labelCounts(inRange.filter { it.medication_id == m.id && it.status in listOf("ON_TIME", "LATE") }.map { it.id }, labels)
+            if (counts.any { it > 0 }) text(context.getString(R.string.visit_fact_labels, counts[0], counts[1], counts[2], counts[3], counts[4]), body, 2f)
         }
         y += 8f
         }

@@ -408,7 +408,7 @@
 <string name="import_tm">从 Trans Memo 导入</string>
 <string name="import_tm_desc">读取你从 Trans Memo 导出的数据库文件</string>
 <string name="needs_review">待确认</string>
-<string name="report_adherence_line_v2">按时 %1$d，迟服 %2$d，漏服 %3$d，跳过 %4$d，无原定时间 %5$d，导入 %6$d</string>
+<string name="report_adherence_line_v2">按时 %1$d，迟服 %2$d，漏服 %3$d，跳过 %4$d，导入 %5$d</string>
 <string name="report_col_date">日期</string>
 <string name="report_col_range">化验单参考范围</string>
 <string name="report_col_since_dose">距 E2 用药</string>
@@ -889,6 +889,6 @@
     <string name="period_merge_next">与下一个时期合并</string>
     <string name="period_mergeable">与前一时期标准相同，可合并</string>
     <string name="period_frequency_required">确认前请填写频率。</string>
-    <string name="visit_fact_labels">由记录推定：额外（推断）%1$d · 额外 %2$d · 剂量与当期不同 %3$d · 方案未知 %4$d</string>
+    <string name="visit_fact_labels">由记录推定：额外（推断）%1$d · 额外（用户标记）%2$d · 剂量与当期不同 %3$d · 方案未知 %4$d · 待确认时期 %5$d</string>
     <string name="lab_context_confirmed_period">采样时所属过去时期（由记录推定，已确认）：%1$s – %2$s</string>
 </resources>

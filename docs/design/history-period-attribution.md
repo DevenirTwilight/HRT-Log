@@ -222,5 +222,5 @@
 - 分段：`core/domain` `SustainedPatterns`（O1，14 天/30 天，减频规则）；标签：`PeriodAttribution`，应用层 `HistoryLabels` 用记录自身时区的自然日。
 - 已确认时期作为只读投影加入时间线（负 ID 区间 `CONFIRMED_SPAN_BASE`），不写 `regimen_version`，不生成提醒。
 - 化验上下文：新建或重建时，若有已确认时期包含采样日（时期时区），写入可选 `confirmed_periods`（origin `OBSERVED_USER_CONFIRMED`）；没有则不写该键，旧上下文照常校验。
-- Visit Pack 模板版本 2：`facts_json` 每种药物增加 `labels`（`basis: inferred_from_records`），PDF 增加"由记录推定"计数行；PDF 服药行把"计划外"改为"无原定时间"（只是事实计数，不作判断）。已保存的旧 Visit Pack 记录不变。
+- Visit Pack 模板版本 2：`facts_json` 每种药物增加 `labels`（`basis: inferred_from_records`），PDF 与资料包按五个标签计数（额外（推断）、额外（用户标记）、剂量与当期不同、方案未知、待确认时期），符合当期标准的记录不计数；PDF 服药行去掉以有无原定时间为依据的计数（用户 2026-10-08 审核要求）。已保存的旧 Visit Pack 记录不变。
 - Robolectric 下时间线页面打开带输入框的对话框后无法空闲，界面测试分为：时间线入口（有限推进 looper）与 `HistoryPeriodDialogTest`（对话框本身）。
