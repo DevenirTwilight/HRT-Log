@@ -1,5 +1,9 @@
 # 交接说明：工作进度与开发指南
 
+## 进行中：相同方案跨导入边界合并 build17（2026-10-08）
+
+用户反馈10月6日相同方案仍拆段，要求导入取消特殊标记。需求§33、设计design/source-neutral-treatment-continuity.md。已核查按schedule kind严格比较与记录zone终点/保存任意起点短间隙、来源徽标/分桶/识别标记问题；计划仅显示适配归一频率与最多24h每日边界连接，保留紧邻保存优先与真实变化/长空白。统一APP和导入未匹配入口、History无来源徽标，原始来源保留不写库。尚未实现/验证/交付，最新包仍build16；仅full/原正式签名/原分支/schema6。
+
 ## 当前最新交付：历史识别覆盖修复 build16（2026-10-08，完成）
 
 - 用户确认药物/舌下途径/实际量正确，主要每天两次、偶尔漏记。需求§32与先行设计a505c94，design/history-recognition-coverage.md。原分支，仅full，versionCode16/schema6/原正式证书。
