@@ -1,13 +1,15 @@
 # 交接说明：工作进度与开发指南
 
-## 进行中：用户诊断查明的原因修复 build 22（2026-10-08，REQUIREMENTS §36c）
+## 当前最新交付：用户诊断查明的原因修复 build 22（2026-10-08，REQUIREMENTS §36c，完成）
 
 **10-06 分段的真正原因（用户 build 21 诊断确认）：** 10-06 14:32:04Z 方案保存为每 11 天（每天两次 2 mg），15:36:20Z 改为每 1 天；该版本（LEGACY_RULE，id 1）持续 64 分钟，超过 build 21 的 1 小时更正窗口，合并检查 `interval: FAIL (1 / 11)`。前一段是用户已确认的开放时期（2026-02-26 起，Europe/Paris），其余各项全部通过。不是导入、条目 ID、酯型或停用造成的。
 
 - 失败测试先提交（`UserDiagnosticRegressionTest`，按诊断中的时间戳、来源和标准重建，记录为合成数据）。
 - 修复：保存版本持续 < 1 天、1 天内被替换、且时间范围内没有任何记录 → 视为更正；有记录的短版本仍是真实变化。`TreatmentPeriods.build(..., withRecords)`，app 层 `recordsInside` 计算。没有记录信息时仍用 1 小时窗口（域层旧测试）。
 - 诊断 v2：保存版本显示 `records_inside=N`。
-- versionCode 22。本机全量检查通过（app 198/13 既有跳过，data 64，reminder 14，domain 58，pk 18，importer 12，0 失败；lint、release、manifest 通过）。待做：CI → 签名交付 → 请用户确认 10-06 合并为一个时期。
+- versionCode 22。本机全量检查通过（app 198/13 既有跳过，data 64，reminder 14，domain 58，pk 18，importer 12，0 失败；lint、release、manifest 通过）。CI [37807908061](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37807908061)（843b96e）全部 success。
+- 交付：`hrt-log-build22-full-signed.apk`，SHA256 `c277827d76fe2a6dec422e8efbd0acd1658b8f9cf0e0c95c5ef914e55b8b4050`；原证书、v2/v3、16KB 对齐、versionCode 22、无 INTERNET；签名前确认备份 private，签名材料已删除；会话文件发送。覆盖安装，无 schema 变化。
+- 待用户：确认 10-06 前后合并为一个时期；手动编辑时间线设计（docs/design/timeline-manual-editing.md）待审核。
 
 ## 上一交付（build 21）：合并诊断 + 卡片相同却分段的修复（2026-10-08，REQUIREMENTS §36b，完成）
 
