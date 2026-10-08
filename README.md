@@ -72,6 +72,14 @@ Old milestones are visible without a 90-day limit and saving has commit feedback
 Future events appear separately. Legacy nonuniform dose-slot correspondence remains
 explicitly unknown; no stop or treatment start is inferred from intake history.
 See [`verification and limits`](docs/treatment-period-timeline-verification.md).
+Build 13 shows grouped HRT Tracker and Trans Memo intake history in the Timeline,
+including older records without a saved regimen. Details use frozen record context
+and open the corresponding original History entries. Intake spacing never becomes
+an inferred prescription or treatment start, and imports without planned times are
+not labelled on time. User-entered pause, stop and resume milestones can retain a
+historical date and reason; they do not change current schedules or rewrite regimens.
+See [`imported timeline verification`](docs/imported-timeline-verification.md).
+
 
 Build 8 repairs compatible native historical context using its saved rule snapshot.
 Old HRT Tracker imports can recover missing context from the original export, or users

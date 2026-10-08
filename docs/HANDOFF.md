@@ -2,23 +2,26 @@
 
 ## 最新硬性决定：play已废弃，仅维护full（2026-10-07）
 
-用户再次纠正：**play版本已废弃。以后只维护、测试、构建和交付full，不再生成或签署play APK。** 已移除Gradle play flavor、src/play空实现、CI play任务，release manifest检查只要求full。AGENTS/CLAUDE/REQUIREMENTS/README同步。下文双变体测试与play附件均为历史记录，不是下一步任务；旧公开Release核验清单保持历史事实，不修改公开Release/标签。最新交付full为build12（见下文交付与下载边界）。
+用户再次纠正：**play版本已废弃。以后只维护、测试、构建和交付full，不再生成或签署play APK。** 已移除Gradle play flavor、src/play空实现、CI play任务，release manifest检查只要求full。AGENTS/CLAUDE/REQUIREMENTS/README同步。下文双变体测试与play附件均为历史记录，不是下一步任务；旧公开Release核验清单保持历史事实，不修改公开Release/标签。最新交付full为build13（见下文交付与下载边界）。
 
-## 当前工作：build13导入时间线修复（2026-10-07，最后语义回归中）
+## 当前最新交付：导入时间线与历史治疗事件 build13（2026-10-08，完成）
 
-用户反馈导入内容不在Timeline，要求再实现一批；TalkBack为用户反馈通过。需求§28、设计design/imported-timeline-history-p1.md。功能4ad2ac4、History source滚动1e8b208、原生R引用b803007；已快进保留另一会话按钮审计9a2a9d6（只文档/测试，不擅自做§29待审核UI修正）。
+分支`claude/new-session-1959qb`；功能4ad2ac4、History source滚动1e8b208、原生资源b803007、最后语义修正b44588f。已快进保留另一会话9a2a9d6按钮审计（只文档/测试，§29待审核UI修正没有实施）。versionCode13/versionName0.2.0/schema6；需求§28、[设计](design/imported-timeline-history-p1.md)、[验证与边界](imported-timeline-verification.md)。
 
-- 只读导入摘要按时期/unknown/Upcoming归属，两种导入均保留实际时刻与冻结上下文、不猜历史schedule。详情药物/剂量/源ID，打开精确History记录并默认all；records参与remember刷新。没有恢复隐藏记录/重写ledger/补猜途径。
-- PAUSED/STOPPED/RESUMED为用户填写日期及可选原因的历史里程碑，UI/PDF四语、写库/restore共享allowlist、onOpen旧trigger更新。不是当前提醒开关，不改历史方案；完整药物停用状态/自动切时期及未来slot身份仍未实现。schema6表结构/原Context1/VisitPack1/签名/PK保持。
-- 合并审计后的完整本机任务成功1m46s（/workspace/tooling/build13-delivery-checks.log），app132项含12可选BUTTON_AUDIT跳过；普通回归总261项260通过/1既有PDF跳过。两个原生测试APK/full debug+release/lint/manifest完成；原生执行CI37704996550仍待结论。中文native graphics合成截图imported_timeline_overview.png已看，摘要可见、无裁切。初轮测试环境Application、屏幕外source断言和原生R歧义修正的失败日志留在tooling，不冒充所有轮都通过。
-- 最终审阅再纠正：HT无计划时刻时内部ON_TIME不能解释为准时，摘要改为各药物记录数量，不解读依从性；原status保持。新增UI防止准时文案误显断言，这个最后源码变更须重跑app回归/lint/APK及等待新CI，当前unsigned不应先交付。尚未签署build13、尚无新下载。
+- 根因：导入只有实际records/化验/预约，缺少可信历史schedule时不创建regimen_version；原Timeline不读取records。现在按已有时期/unknown/Upcoming聚合IMPORT_HT与IMPORT_TM，覆盖全部已保存日期，records加入remember刷新。详情只读冻结药物/已知实际剂量/记录数量；不以HT内部ON_TIME类别推断准时，原状态不改。按确切ID打开History，默认all，可清除选择。
+- PAUSED/STOPPED/RESUMED：用户填写的日期级历史里程碑，可选原因，可靠保存/编辑/删除、UI/PDF四语；写库/restore同一allowlist、onOpen旧trigger更新。不是当前提醒开关；不自动改写历史方案、推断停药或Started HRT。完整药物停用状态/自动切时期、未来slot身份仍待设计。
+- 最终本机完整检查成功3m14s（/workspace/tooling/build13-final-build-checks.log），273登记用例：260通过、0失败，1既有Robolectric PDF与12显式选择才运行的按钮审计跳过；普通回归即261项。domain39/pk18/importer12/data58/reminder14/app132。lint full0错误98警告（build12为96，新增两项计数复数候选）。full debug/release、两个原生测试APK、manifest/schema检查通过；V1签名/RegimenHistory、Context1、VisitPack1、PK、schema/PLAN差异核验无变更。中文native graphics合成Timeline截图已查看，旧摘要可见无裁切。
+- 最终CI [37705351828](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37705351828)，源码b44588f，jvm/android/device-tests全部success。API35原生data11通过；app主套件26通过、2重启项主套件跳过后独立进程各1通过，含新增导入摘要/简单模式与既有大字体长Timeline。用户反馈TalkBack通过来自build12真机反馈，不冒充本批新界面已做人工TalkBack或所有OEM升级验收。
+- 正式full：`/workspace/HRT-Log-build13-full-signed.apk`，23,362,779 bytes，SHA256 `547a29cca9dca8e4c243a48e2569088c04f2d84d2097f4e130cf7e2f45698f29`。原证书SHA256 `989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1`，v2/v3、ZIP及8个native库16KB对齐、非debug、net.plainnotes.app/build13、无INTERNET确认。可覆盖原正式安装；私有签名备份未改，临时clone/ZIP/JKS/密码已finally清理。
+- 手机直接下载：https://tmpfiles.org/dl/1791418569.be045a694f6333c4/wsAolDN95gpY/hrt-log-build13-full-signed.apk 。独立真实下载与本地大小/SHA逐项一致；临时链接会过期，失效时重传同一APK，不给工作区大文件预览路径。元数据/下载日志在tooling/build13-final-metadata.json、build13-delivery.json；APK/密钥不进源码。
+- 本批完成，无未提交功能。过程日志保留：最初Robolectric正式Application启动权限、屏幕外source断言与原生R引用错误均已修正；最后压缩构建会话中断后确认daemon闲置，串行重跑成功，不冒充每一轮都通过。没有读取真实健康数据、发布Release或改标签。
 
 ## 待用户审核：按钮大小一致性（2026-10-07，另一会话并行）
 
 **待办：按钮大小一致性（REQUIREMENTS §29）**——审计结果与建议修复方案见 [ui-button-consistency](ui-button-consistency.md)，证据截图在 `docs/ui-audit/`，审计测试 `app/src/testFull/.../audit/ButtonAuditTest.kt`（仅在 `BUTTON_AUDIT=1` 时运行）。等用户审核后再改界面。严重项：库存卡三按钮、日期/时间按钮截断、复诊页编辑/删除行、编辑药物频率截断、设置主题/对比度两行不一致。
 审计基于 `ab983c5`（早于本分支的 build 12–13 时间线重写），只记录、未改界面；修复前需按当前代码重新核对行号，可用同一审计测试重跑。
 
-## 当前最新交付：Treatment Period / Timeline build12（2026-10-07，完成）
+## 上一阶段交付：Treatment Period / Timeline build12（2026-10-07，完成）
 
 指定分支`claude/new-session-1959qb`；功能主体`dbb9688`，长列表/兼容`2c3b68b`，最终功能`b0dc178`。versionCode12/versionName0.2.0/schema6；需求§27，原始[扫描](design/treatment-period-timeline-scan.md)、[设计历史](design/epochs-timeline-p1-revision.md)、[验证与边界](treatment-period-timeline-verification.md)。用户在Phase 1报告后回复“继续”，按旧slot身份保留unknown的有限保证实施；不要求重新批准一般开发。
 
