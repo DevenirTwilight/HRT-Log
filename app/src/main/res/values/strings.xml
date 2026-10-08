@@ -861,4 +861,5 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="milestone_history_only">Record a historical event and optionally its reason below. This does not change current medication schedules or reminders.</string>
     <string name="period_observed">Recognized from actual records; not a confirmed prescription. Dates describe observed coverage, not a confirmed start or stop.</string>
     <string name="period_evidence">View %1$d source records</string>
+    <string name="period_recognition_unavailable">Historical regimen recognition is temporarily unavailable. Saved plans and original records remain available.</string>
 </resources>

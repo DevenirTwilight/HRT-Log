@@ -28,6 +28,7 @@ object ObservedTreatmentHistory {
     fun build(records:List<RecordEntity>,versions:List<RegimenVersionEntity>,zone:ZoneId,now:Instant):HistoricalTreatmentProjection {
         val saved=versions.map{v->val d=RegimenDefinition.read(v.definition_json)
             Saved(RawTreatmentInterval(v.span(),d.therapyStandard()),d.snapshot(v.medication_id)?.let(::identity))}
+        val savedByMedication=saved.groupBy{it.raw.span.medicationId}.mapValues{(_,rows)->rows.sortedBy{it.raw.span.from}}
         val idsByIdentity=saved.filter{it.identity!=null}.groupBy{it.identity!!}.mapValues{(_,rows)->rows.map{it.raw.span.medicationId}.distinct()}
         val facts=records.mapNotNull{r->
             val timestamp=r.taken_utc ?: return@mapNotNull null
@@ -74,16 +75,16 @@ object ObservedTreatmentHistory {
         val clipped=mutableListOf<Candidate>()
         candidates.sortedWith(compareBy({it.med},{it.from})).forEach{c->
             var pieces=listOf(c.from to c.until)
-            saved.filter{it.raw.span.medicationId==c.med}.sortedBy{it.raw.span.from}.forEach{s->
+            val medicationVersions=savedByMedication[c.med].orEmpty()
+            medicationVersions.forEach{s->
                 val from=s.raw.span.from;val until=s.raw.span.until ?: Instant.MAX
                 pieces=pieces.flatMap{(a,b)->if(from>=b || until<=a)listOf(a to b) else buildList {
                     if(a<from)add(a to from);if(until<b)add(until to b)
                 }}
             }
             pieces.forEach{(a,b)->
-                // Join a matching saved plan beginning later on the next covered civil day.
-                val adjacent=saved.singleOrNull{it.raw.span.medicationId==c.med && it.identity==identity(c.snapshot) &&
-                    it.raw.span.from>=b && it.raw.span.from.atZone(zone).toLocalDate()==b.atZone(zone).toLocalDate() &&
+                // Only the immediately next saved boundary can be joined. Never skip an intervening version.
+                val adjacent=medicationVersions.firstOrNull{it.raw.span.from>=b}?.takeIf{it.identity==identity(c.snapshot) && it.raw.span.from.atZone(zone).toLocalDate()==b.atZone(zone).toLocalDate() &&
                     it.raw.standard.therapySignatureV2()==c.standard.therapySignatureV2()}
                 val end=adjacent?.raw?.span?.from ?: b
                 val evidence=c.facts.filter{it.at>=a && it.at<end}

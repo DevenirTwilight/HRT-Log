@@ -861,4 +861,5 @@
     <string name="milestone_history_only">记录历史事件，可在下方备注中填写原因。不会改变当前用药方案或提醒。</string>
     <string name="period_observed">从实际记录识别，非已确认处方。日期表示观察覆盖范围，不是已确认的开始或停药日期。</string>
     <string name="period_evidence">查看 %1$d 条原始记录</string>
+    <string name="period_recognition_unavailable">历史方案暂无法识别，已保存方案和原始记录仍可查看。</string>
 </resources>

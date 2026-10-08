@@ -75,4 +75,23 @@ class ImportedTimelineUiTest {
         java.io.File("build/screenshots/recognized_treatment_period.png").outputStream().use{bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG,100,it)}
     }
 
+    @Test fun timelineEntryWithSameDaySavedChangesAndExistingImportedHistoryDoesNotCrash() {
+        val base=Instant.parse("2025-01-01T08:00:00Z");val cut=base.plusSeconds(4*86400L)
+        val json=MedicationSnapshot.encode(med,ProfileEntity(1,"E2","sublingual"))
+        fun version(id:Long,from:Instant,until:Instant?,dose:Double):RegimenVersionEntity {
+            val d=RegimenDefinition(json,"EVERY_N_DAYS",1,0,dose,"UTC","2025-01-01",null,listOf("08:00:00" to null))
+            return RegimenVersionEntity(id,1,from.toEpochMilli(),until?.toEpochMilli(),"UTC",d.json(),d.signature(),"APP",from.toEpochMilli())
+        }
+        val extra=NotesViewModel.ExtraState(records=(0..7).map{day->row().copy(id=day+1L,taken_utc=base.plusSeconds(day*86400L).toEpochMilli(),source_record_key="ht:synthetic:$day")},
+            regimens=listOf(version(1,cut,cut.plusSeconds(4*3600),3.0),version(2,cut.plusSeconds(4*3600),null,2.0)))
+        ui.setContent{MaterialTheme{LongitudinalScreen(NotesState(loading=false),extra,{},{},{},PaddingValues())}}
+        ui.onNodeWithTag("period-timeline").assertIsDisplayed()
+        ui.onNodeWithText(ui.activity.getString(R.string.period_current)).assertIsDisplayed()
+        ui.onNodeWithText(ui.activity.getString(R.string.period_recognition_unavailable)).assertDoesNotExist()
+        val audit=ui.activity.getString(R.string.period_saved_changes)
+        ui.onNodeWithTag("period-timeline").performScrollToNode(hasText(audit))
+        ui.onAllNodesWithText(audit).onFirst().performClick()
+        ui.onNodeWithText("3 mg",substring=true).assertIsDisplayed()
+    }
+
 }

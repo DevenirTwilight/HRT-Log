@@ -50,4 +50,24 @@ class TimelineAndroidTest {
         ui.onNodeWithText("Synthetic private import").assertDoesNotExist()
         ui.onNodeWithText(ui.activity.getString(R.string.timeline_imported_open_history)).assertIsDisplayed()
     }
+    @Test fun sameDaySavedChangesWithExistingImportedHistoryCanOpenTimeline() {
+        val base=java.time.Instant.parse("2025-01-01T08:00:00Z");val cut=base.plusSeconds(4*86400L)
+        val med=MedicationEntity(1,"Synthetic native history","E2","SUBLINGUAL","MG",2.0,40.0,site_rotation=false,notifications_on=false,active=true,sort_order=0)
+        val json=MedicationSnapshot.encode(med,ProfileEntity(1,"E2","sublingual"))
+        fun version(id:Long,from:java.time.Instant,until:java.time.Instant?,dose:Double):RegimenVersionEntity {
+            val d=RegimenDefinition(json,"EVERY_N_DAYS",1,0,dose,"UTC","2025-01-01",null,listOf("08:00:00" to null))
+            return RegimenVersionEntity(id,1,from.toEpochMilli(),until?.toEpochMilli(),"UTC",d.json(),d.signature(),"APP",from.toEpochMilli())
+        }
+        val rows=(0..7).map{day->RecordEntity(day+1L,1,taken_utc=base.plusSeconds(day*86400L).toEpochMilli(),taken_zone="UTC",actual_dose=2.0,status="ON_TIME",origin="IMPORT_HT",source_record_key="ht:synthetic:$day",revision=1,config_snapshot=json)}
+        val extra=NotesViewModel.ExtraState(records=rows,regimens=listOf(version(1,cut,cut.plusSeconds(4*3600),3.0),version(2,cut.plusSeconds(4*3600),null,2.0)))
+        ui.setContent{MaterialTheme{LongitudinalScreen(NotesState(loading=false),extra,{},{},{},PaddingValues())}}
+        ui.onNodeWithTag("period-timeline").assertIsDisplayed()
+        ui.onNodeWithText(ui.activity.getString(R.string.period_current)).assertIsDisplayed()
+        ui.onNodeWithText(ui.activity.getString(R.string.period_recognition_unavailable)).assertDoesNotExist()
+        val audit=ui.activity.getString(R.string.period_saved_changes)
+        ui.onNodeWithTag("period-timeline").performScrollToNode(hasText(audit))
+        ui.onAllNodesWithText(audit).onFirst().performClick()
+        ui.onNodeWithText("3 mg",substring=true).assertIsDisplayed()
+    }
+
 }

@@ -110,4 +110,39 @@ class ObservedTreatmentHistoryTest {
         assertEquals(listOf(1L,2L),v.projection.raw.filter{it.span.id>0}.map{it.span.id})
     }
 
+    @Test fun earliestIncompatibleSavedBoundaryPreventsASameDayJoin() {
+        val cut=start.plusSeconds(4*86400L)
+        val first=saved(4,3.0,id=1).copy(effective_until_utc=cut.plusSeconds(2*3600).toEpochMilli())
+        val next=saved(4,2.0,id=2).copy(effective_from_utc=cut.plusSeconds(2*3600).toEpochMilli())
+        val v=view((0..3).map{row(it)},listOf(first,next))
+        assertEquals(cut.atZone(ZoneId.of("UTC")).toLocalDate().atStartOfDay(ZoneId.of("UTC")).toInstant(),v.observed.single().interval.span.until)
+        assertFalse(v.recognitionUnavailable)
+    }
+    @Test fun variedSameDayVersionBoundariesNeverOverlapRecognizedHistory() {
+        val rows=(0..7).map{row(it)}
+        val originals=rows.map{it.copy()}
+        for(hour in 0..7)for(doses in listOf(listOf(3.0,2.0),listOf(2.0,3.0,2.0),listOf(3.0,4.0,2.0),listOf(2.0,2.0))) {
+            val base=start.plusSeconds(4*86400L+hour*3600)
+            val versions=doses.mapIndexed{i,d->saved(4,d,i+1L).copy(effective_from_utc=base.plusSeconds(i*3600L).toEpochMilli(),
+                effective_until_utc=if(i==doses.lastIndex)null else base.plusSeconds((i+1)*3600L).toEpochMilli())}
+            val v=view(rows,versions)
+            assertFalse(v.recognitionUnavailable)
+            v.observed.forEach{o->versions.forEach{saved->
+                assertFalse(o.interval.span.from<(saved.effective_until_utc?.let(Instant::ofEpochMilli) ?: Instant.MAX) &&
+                    Instant.ofEpochMilli(saved.effective_from_utc)<o.interval.span.until!!)
+            }}
+            assertEquals(originals,rows)
+        }
+    }
+    @Test fun invalidDerivedIntervalFallsBackWithoutPretendingSourcesWereRecognized() {
+        val version=saved(0)
+        val confirmed=net.plainnotes.app.domain.RawTreatmentInterval(version.span(),RegimenDefinition.read(version.definition_json).therapyStandard())
+        val wrong=ObservedTreatment(confirmed.copy(span=net.plainnotes.app.domain.RegimenSpan(-1,1,start,start.plusSeconds(86400),true)),
+            MedicationSnapshot.decode(snapshot,1)!!,listOf(row(0)))
+        val result=projectHistory(listOf(confirmed),HistoricalTreatmentProjection(listOf(wrong),setOf(1)),ZoneId.of("UTC"))
+        assertTrue(result.unavailable);assertTrue(result.historical.observed.isEmpty());assertTrue(result.historical.resolvedRecordIds.isEmpty())
+        assertEquals(listOf(confirmed),result.projection.raw)
+        assertEquals(version.definition_json,saved(0).definition_json)
+    }
+
 }

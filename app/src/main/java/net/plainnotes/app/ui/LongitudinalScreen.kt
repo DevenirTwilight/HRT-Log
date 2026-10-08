@@ -75,6 +75,7 @@ import java.time.*
         item(key="intro") {
             Text(stringResource(R.string.period_timeline_intro),style=MaterialTheme.typography.bodySmall)
             Text(stringResource(R.string.timeline_zone,zone.id),style=MaterialTheme.typography.labelSmall)
+            if(record.recognitionUnavailable)Text(stringResource(R.string.period_recognition_unavailable),modifier=Modifier.semantics{liveRegion=LiveRegionMode.Polite},style=MaterialTheme.typography.bodySmall)
             feedback?.let{Text(stringResource(it),modifier=Modifier.semantics{liveRegion=LiveRegionMode.Polite})}
         }
         item(key="actions") {

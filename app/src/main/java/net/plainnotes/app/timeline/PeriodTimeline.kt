@@ -17,17 +17,27 @@ data class PeriodEvent(val key:String,val kind:EventKind,val at:Instant?,val dat
     val displayPeriodKey:String?,val exactRegimenIds:Set<Long>,val dateOnly:Boolean)
 data class PeriodTimeline(val projection:TreatmentPeriodProjection,val events:List<PeriodEvent>,val upcoming:List<PeriodEvent>,
     val importedHistory:List<ImportedHistorySummary> = emptyList(),val observed:List<ObservedTreatment> = emptyList(),
-    val resolvedRecords:List<RecordEntity> = emptyList()) {
+    val resolvedRecords:List<RecordEntity> = emptyList(),val recognitionUnavailable:Boolean = false) {
     fun eventsIn(period:DisplayPeriod)=events.filter{it.displayPeriodKey==period.key}
     val unknownEvents get()=events.filter{it.displayPeriodKey==null}
 }
+/** Invalid derived intervals must not take the confirmed plans and original history off screen. */
+internal data class PeriodHistory(val projection:TreatmentPeriodProjection,val historical:HistoricalTreatmentProjection,val unavailable:Boolean)
+internal fun projectHistory(confirmed:List<RawTreatmentInterval>,historical:HistoricalTreatmentProjection,zone:ZoneId):PeriodHistory =
+    try {
+        PeriodHistory(TreatmentPeriods.build(confirmed+historical.observed.map{it.interval},zone),historical,false)
+    } catch (_:IllegalArgumentException) {
+        PeriodHistory(TreatmentPeriods.build(confirmed,zone),HistoricalTreatmentProjection(emptyList(),emptySet()),true)
+    }
+
 object PeriodTimelineProjection {
     fun build(extra:ExtraState,appointments:List<AppointmentEntity>,now:Instant=Instant.now(),displayZone:ZoneId?=null):PeriodTimeline {
         val ordered=extra.regimens.sortedWith(compareBy({it.effective_from_utc},{it.id}))
         // Deterministic display policy: changing the device zone must not regroup historical transitions.
         val zone=displayZone ?: ordered.firstOrNull()?.let{ZoneId.of(it.zone)} ?: ZoneId.of("UTC")
-        val historical=ObservedTreatmentHistory.build(extra.records,ordered,zone,now)
-        val projection=TreatmentPeriods.build(ordered.map{RawTreatmentInterval(it.span(),RegimenDefinition.read(it.definition_json).therapyStandard())}+historical.observed.map{it.interval},zone)
+        val confirmed=ordered.map{RawTreatmentInterval(it.span(),RegimenDefinition.read(it.definition_json).therapyStandard())}
+        val result=projectHistory(confirmed,ObservedTreatmentHistory.build(extra.records,ordered,zone,now),zone)
+        val historical=result.historical;val projection=result.projection
         val today=now.atZone(zone).toLocalDate();val events=mutableListOf<PeriodEvent>();val upcoming=mutableListOf<PeriodEvent>()
         fun add(key:String,kind:EventKind,at:Instant?,day:LocalDate?,source:EventSource) {
             val date=day ?: requireNotNull(at).atZone(zone).toLocalDate()
@@ -44,6 +54,6 @@ object PeriodTimelineProjection {
         val order=compareByDescending<PeriodEvent>{it.date}.thenByDescending{it.at}.thenBy{it.key}
         return PeriodTimeline(projection,events.sortedWith(order),upcoming.sortedWith(compareBy<PeriodEvent>{it.date}.thenBy{it.at}.thenBy{it.key}),
             ImportedHistoryProjection.build(extra.records.filter{it.id !in historical.resolvedRecordIds},projection,now),historical.observed,
-            extra.records.filter{it.id in historical.resolvedRecordIds})
+            extra.records.filter{it.id in historical.resolvedRecordIds},result.unavailable)
     }
 }
