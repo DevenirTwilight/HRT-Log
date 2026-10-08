@@ -70,4 +70,27 @@ class TimelineAndroidTest {
         ui.onNodeWithText("3 mg",substring=true).assertIsDisplayed()
     }
 
+    @Test fun twiceDailyWithPartialDaysAppearsInsideOnePeriodAndOpensAllOriginalRows() {
+        val base=java.time.Instant.parse("2025-01-01T08:00:00Z")
+        val medication=MedicationEntity(1,"Synthetic partial logging","E2","SUBLINGUAL","MG",2.0,40.0,site_rotation=false,notifications_on=false,active=true,sort_order=0)
+        val json=MedicationSnapshot.encode(medication,ProfileEntity(1,"E2","sublingual"))
+        val rows=(0..20).flatMap{day->(if(day%3==1)listOf(0) else listOf(0,10)).mapIndexed{slot,hour->
+            RecordEntity(day*2+slot+1L,1,taken_utc=base.plusSeconds((day*24+hour)*3600L).toEpochMilli(),taken_zone="UTC",actual_dose=2.0,
+                status="ON_TIME",origin="IMPORT_HT",source_record_key="ht:synthetic:partial:$day:$slot",revision=1,config_snapshot=json)
+        }}
+        val extra=NotesViewModel.ExtraState(records=rows)
+        val projection=net.plainnotes.app.timeline.PeriodTimelineProjection.build(extra,emptyList())
+        org.junit.Assert.assertEquals(1,projection.projection.standards.size)
+        var opened:List<Long>?=null
+        ui.setContent{MaterialTheme{LongitudinalScreen(NotesState(loading=false),extra,{},{},{},PaddingValues(),onImportedHistory={opened=it})}}
+        ui.onNodeWithTag("period-timeline").performScrollToNode(hasText("Synthetic partial logging",substring=true))
+        ui.onNodeWithText("Synthetic partial logging",substring=true).assertIsDisplayed()
+        ui.onNodeWithText(ui.activity.getString(R.string.timeline_imported_history)).assertDoesNotExist()
+        ui.onNodeWithText(ui.activity.getString(R.string.period_frequency_days,2,1)).assertIsDisplayed()
+        val tag="period-history:${projection.projection.periods.first{it.finalStandardSpanKeys.isNotEmpty()}.key}"
+        ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag(tag))
+        ui.onNodeWithTag(tag).performClick()
+        ui.runOnIdle{org.junit.Assert.assertEquals(rows.map{it.id},opened)}
+    }
+
 }

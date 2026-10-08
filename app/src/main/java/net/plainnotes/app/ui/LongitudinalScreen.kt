@@ -29,7 +29,7 @@ import java.time.*
     saveState:MilestoneSaveState=MilestoneSaveState(),onSaveHandled:()->Unit={},onImportedHistory:(List<Long>)->Unit={onOpen(EventKind.DOSE)}) {
     var now by remember{mutableStateOf(Instant.now())}
     LaunchedEffect(Unit){while(true){kotlinx.coroutines.delay(60_000);now=Instant.now()}}
-    val record=remember(extra.records,extra.regimens,extra.labs,extra.reviews,extra.milestones,state.appointments,now){PeriodTimelineProjection.build(extra,state.appointments,now)}
+    val record=remember(extra.records,extra.regimens,extra.labs,extra.reviews,extra.milestones,state.appointments,state.ruleSnapshots,now){PeriodTimelineProjection.build(extra,state.appointments,now,ruleSnapshots=state.ruleSnapshots)}
     val projection=record.projection;val zone=projection.zone;val simple=LocalSimpleMode.current
     val list=rememberLazyListState()
     var edit by rememberSaveable(stateSaver=milestoneSaver){mutableStateOf<MilestoneEntity?>(null)}
@@ -107,7 +107,7 @@ import java.time.*
                             val observed=record.observed.firstOrNull{it.interval.span.id in span.rawVersionIds}
                             val saved=extra.regimens.firstOrNull{it.id in span.rawVersionIds}
                             StandardSummary(saved?.let{RegimenDefinition.read(it.definition_json).snapshot(it.medication_id)} ?: observed?.snapshot,span.standard)
-                            if(span.standard.slotIdentityUnknown)Text(stringResource(R.string.period_slot_unknown),style=MaterialTheme.typography.bodySmall)
+                            if(span.standard.kind!="OBSERVED" && span.standard.slotIdentityUnknown)Text(stringResource(R.string.period_slot_unknown),style=MaterialTheme.typography.bodySmall)
                         }
                         if(standards.any{it.rawVersionIds.any{id->id<0}})Text(stringResource(R.string.period_observed),style=MaterialTheme.typography.bodySmall)
                         if(period.segments.size>1)Text(stringResource(R.string.period_same_day),style=MaterialTheme.typography.bodySmall)
@@ -145,7 +145,8 @@ import java.time.*
 @Composable private fun StandardSummary(m:MedicationSnapshot?,standard:TherapyStandard) {
     Text(listOfNotNull(m?.name,m?.route?.let{choiceLabel(it)},standard.ester?.takeIf{it!=standard.compound}?.let{choiceLabel(it)},
         standard.doses.distinct().map{formatDose(it,standard.unit)}.joinToString(" / ")).joinToString(" · "),style=MaterialTheme.typography.bodyMedium)
-    Text(stringResource(when(standard.kind){"EVERY_N_HOURS"->R.string.period_frequency_hours;"WEEKLY"->R.string.period_frequency_weeks;else->R.string.period_frequency_days},
+    if(standard.kind=="OBSERVED")Text(stringResource(R.string.period_frequency_unconfirmed),style=MaterialTheme.typography.bodySmall)
+    else Text(stringResource(when(standard.kind){"EVERY_N_HOURS"->R.string.period_frequency_hours;"WEEKLY"->R.string.period_frequency_weeks;else->R.string.period_frequency_days},
         if(standard.kind=="WEEKLY")standard.weeklyCount*standard.doses.size else standard.doses.size,standard.interval),style=MaterialTheme.typography.bodySmall)
     m?.profile?.gel_product_id?.let{Text(gelProductLabel(it),style=MaterialTheme.typography.bodySmall)}
     m?.profile?.patch_release_ug_day?.let{Text(displayNumber(it)+" µg/24h",style=MaterialTheme.typography.bodySmall)}

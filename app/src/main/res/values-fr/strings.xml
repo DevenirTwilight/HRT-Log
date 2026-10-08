@@ -862,4 +862,5 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="period_observed">Identifié à partir des prises réelles ; ordonnance non confirmée. Les dates indiquent la période observée, pas un début ou un arrêt confirmé.</string>
     <string name="period_evidence">Voir %1$d enregistrements sources</string>
     <string name="period_recognition_unavailable">L’identification des schémas historiques est temporairement indisponible. Les schémas enregistrés et les prises originales restent accessibles.</string>
+    <string name="period_frequency_unconfirmed">Quantités enregistrées affichées ; fréquence des prises non confirmée.</string>
 </resources>

@@ -61,4 +61,28 @@ class ImportedHistoryIntegrationTest {
         } finally {db.close()}
     }
 
+    @Test fun twiceDailyWithOccasionalMissingEntriesIsOnePeriodAfterImportReimportAndRestore()=runBlocking {
+        val context=ApplicationProvider.getApplicationContext<Context>()
+        val db=Room.inMemoryDatabaseBuilder(context,NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build()
+        try {
+            val repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=db})
+            val events=(0..20).flatMap{day->(if(day%3==1)listOf(0) else listOf(0,10)).map{hour->
+                """{"id":"synthetic-partial-$day-$hour","route":"sublingual","timeH":${480008+day*24+hour},"doseMG":2,"ester":"E2","extras":{"sublingualTier":2}}"""
+            }}.joinToString(",")
+            val export=HrtTracker.read("""{"meta":{"version":2},"events":[$events]}""")
+            val groups=HrtTracker.preview(export).groups.keys;val plan=HrtTracker.plan(export,null)
+            repo.importHrtTracker(plan,groups.associateWith{null},groups.associateWith{"Synthetic twice daily"},null,ZoneId.of("UTC"))
+            suspend fun view()=PeriodTimelineProjection.build(NotesViewModel.ExtraState(records=repo.records(),regimens=db.dao().regimens()),emptyList(),Instant.parse("2026-10-08T12:00:00Z"))
+            val original=repo.records();val first=view()
+            assertEquals(1,first.observed.size);assertTrue(first.importedHistory.isEmpty())
+            assertEquals(listOf(2.0,2.0),first.projection.standards.single().standard.doses)
+            assertEquals(original.map{it.id}.toSet(),first.resolvedRecords.map{it.id}.toSet())
+            repo.importHrtTracker(plan,groups.associateWith{repo.medications().single().id},emptyMap(),null,ZoneId.of("UTC"))
+            assertEquals(original,repo.records());assertEquals(first,view())
+            val password="synthetic-password".toCharArray();repo.restoreBackup(repo.exportBackup(password),password)
+            assertEquals(original,repo.records());assertEquals(first,view())
+            assertTrue(db.dao().regimens().isEmpty());assertTrue(db.dao().rules().isEmpty());assertTrue(db.dao().containers().isEmpty())
+        } finally {db.close()}
+    }
+
 }

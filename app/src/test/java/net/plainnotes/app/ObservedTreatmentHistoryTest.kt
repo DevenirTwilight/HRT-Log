@@ -145,4 +145,82 @@ class ObservedTreatmentHistoryTest {
         assertEquals(version.definition_json,saved(0).definition_json)
     }
 
+    @Test fun twiceDailyWithPartialDaysAndNoThreeConsecutiveCompleteDaysStaysOnePattern() {
+        val rows=(0..20).flatMap{d->buildList {
+            add(row(d,id=d*2+1L))
+            if(d%3!=1)add(row(d,id=d*2+2L).let{it.copy(taken_utc=it.taken_utc!!+10*3600000)})
+        }}
+        val original=rows.map{it.copy()};val v=view(rows)
+        assertFalse(v.recognitionUnavailable);assertEquals(1,v.observed.size)
+        assertEquals(listOf(2.0,2.0),v.observed.single().interval.standard.doses)
+        assertEquals(1,v.observed.single().interval.standard.interval)
+        assertEquals(rows.map{it.id}.toSet(),v.resolvedRecords.map{it.id}.toSet())
+        assertTrue(v.importedHistory.isEmpty());assertEquals(original,rows)
+    }
+    @Test fun sustainedTwiceToOnceDailyChangeSurvivesPartialLogging() {
+        val rows=(0..20).flatMap{d->buildList {
+            add(row(d,id=d*2+1L))
+            if(d<10 && d%3!=1)add(row(d,id=d*2+2L).let{it.copy(taken_utc=it.taken_utc!!+10*3600000)})
+        }}
+        val v=view(rows)
+        assertEquals(listOf(listOf(2.0,2.0),listOf(2.0)),v.observed.map{it.interval.standard.doses})
+        assertTrue(v.importedHistory.isEmpty());assertFalse(v.recognitionUnavailable)
+    }
+    @Test fun variableHistoryGetsAnExplicitlyUnconfirmedCadenceInsteadOfInventedDailySchedule() {
+        val rows=(0..5).map{row(it,dose=it+1.0)}
+        val v=view(rows)
+        assertEquals("OBSERVED",v.observed.single().interval.standard.kind)
+        assertEquals(0,v.observed.single().interval.standard.interval)
+        assertTrue(v.importedHistory.isEmpty());assertEquals(rows,v.resolvedRecords)
+    }
+    @Test fun sameMedicationUnknownFieldsCanBelongToSavedPeriodButKnownConflictsCannot() {
+        val missing=row(1,json=snapshot.replace("\"route\":\"SUBLINGUAL\"","\"route\":null"))
+        val conflict=row(2,json=snapshot.replace("SUBLINGUAL","ORAL"))
+        val rows=listOf(missing,conflict);val v=view(rows,listOf(saved(0)))
+        assertEquals(listOf(missing),v.resolvedRecords)
+        assertEquals(listOf(conflict),v.importedHistory.single().records)
+        assertNull(MedicationSnapshot.decode(v.resolvedRecords.single().config_snapshot,1)!!.route)
+        assertEquals(rows,listOf(missing,conflict))
+    }
+    @Test fun explicitAppRuleCanSupplyFrozenContextButImportCannotBorrowIt() {
+        val appRows=(0..3).map{row(it,json="{}").copy(origin="APP",rule_version_id=71)}
+        val app=ObservedTreatmentHistory.build(appRows,emptyList(),ZoneId.of("UTC"),now,mapOf(71L to snapshot))
+        assertEquals(appRows,app.observed.single().records)
+        val imported=appRows.map{it.copy(origin="IMPORT_HT")}
+        assertTrue(ObservedTreatmentHistory.build(imported,emptyList(),ZoneId.of("UTC"),now,mapOf(71L to snapshot)).observed.isEmpty())
+        assertTrue(appRows.all{it.config_snapshot=="{}"})
+    }
+    @Test fun groupingUsesRecordedZoneForTwiceDailyDosesAcrossUtcMidnight() {
+        val base=Instant.parse("2025-01-01T01:00:00Z")
+        val rows=(0..5).flatMap{d->listOf(1L,15L).mapIndexed{slot,h->row(d,id=d*2+slot+1L).copy(
+            taken_utc=base.plusSeconds((d*24+h-1)*3600L).toEpochMilli(),taken_zone="Asia/Shanghai")}}
+        val v=view(rows)
+        assertEquals(listOf(2.0,2.0),v.observed.single().interval.standard.doses)
+        assertTrue(v.importedHistory.isEmpty())
+    }
+
+    @Test fun twiceDailyDoseChangesAndFrequencyReturnsAreNotCollapsedByMissingEntries() {
+        val rows=(0..29).flatMap{d->buildList {
+            val dose=if(d<10)2.0 else 3.0
+            add(row(d,dose,d*2+1L))
+            if((d<10 || d>=20) && d%3!=1)add(row(d,dose,d*2+2L).let{it.copy(taken_utc=it.taken_utc!!+10*3600000)})
+        }}
+        val v=view(rows)
+        assertEquals(listOf(listOf(2.0,2.0),listOf(3.0),listOf(3.0,3.0)),v.observed.map{it.interval.standard.doses})
+        assertFalse(v.recognitionUnavailable);assertTrue(v.importedHistory.isEmpty())
+    }
+    @Test fun supportedPartialDaysDoNotEraseUnknownLongGapsOrKnownUnitConflicts() {
+        val rows=(0..6).map{row(it)}+(60..66).map{row(it)}
+        val v=view(rows)
+        assertEquals(2,v.observed.size);assertTrue(v.projection.periodAt(start.plusSeconds(30*86400L))!!.finalStandardSpanKeys.isEmpty())
+        val conflict=row(1,json=snapshot.replace("\"unit\":\"MG\"","\"unit\":\"ML\""))
+        assertTrue(view(listOf(conflict),listOf(saved(0))).resolvedRecords.isEmpty())
+    }
+
+    @Test fun irregularSparseDatesWithOneAdjacentPairDoNotBecomeADailyPrescription() {
+        val v=view(listOf(0,2,4,5,8,10,12).map{row(it)})
+        assertTrue(v.observed.all{it.interval.standard.kind=="OBSERVED"})
+        assertTrue(v.importedHistory.isEmpty())
+    }
+
 }

@@ -32,9 +32,10 @@ class ImportedHistoryTimelineTest {
         val cut=now.minusSeconds(86400)
         val after=record(2,at=cut.plusSeconds(10)).copy(scheduled_utc=cut.minusSeconds(3600).toEpochMilli())
         val v=view(listOf(record(1),after),listOf(version(1,cut,null)))
-        assertEquals(2,v.importedHistory.size)
+        assertEquals(1,v.importedHistory.size)
+        assertEquals(listOf(after),v.resolvedRecords)
         assertNull(v.importedHistory.single{it.records.single().id==1L}.displayPeriodKey)
-        assertEquals(v.projection.periods.single().key,v.importedHistory.single{it.records.single().id==2L}.displayPeriodKey)
+        assertEquals(after.config_snapshot,v.resolvedRecords.single().config_snapshot)
         assertTrue(v.events.isEmpty()) // no individual dose cards
     }
     @Test fun clockOnlyVersionsRemainOneSummaryAndOriginalSourcesSurvive() {
@@ -42,8 +43,8 @@ class ImportedHistoryTimelineTest {
         val versions=listOf(version(1,cut.minusSeconds(86400),cut),version(2,cut,null,"20:00:00"))
         val rows=listOf(record(1,at=cut.minusSeconds(10)),record(2,at=cut.plusSeconds(10)))
         val v=view(rows,versions)
-        assertEquals(1,v.projection.periods.size);assertEquals(1,v.importedHistory.size)
-        assertEquals(rows,v.importedHistory.single().records);assertEquals(versions.map{it.definition_json},v.projection.raw.map{r->versions.single{it.id==r.span.id}.definition_json})
+        assertEquals(1,v.projection.periods.size);assertTrue(v.importedHistory.isEmpty())
+        assertEquals(rows,v.resolvedRecords);assertEquals(versions.map{it.definition_json},v.projection.raw.map{r->versions.single{it.id==r.span.id}.definition_json})
     }
     @Test fun deletedUndatedAndAppEntriesAreExcludedWhileFutureImportsAreSeparate() {
         val future=record(4,at=now.plusSeconds(1))
@@ -56,7 +57,8 @@ class ImportedHistoryTimelineTest {
         val saved="""{"snapshot_version":2,"name":"Synthetic incomplete","molecule":"E2","route":null,"unit":"MG","pk_profile":null}"""
         val row=record(1,"IMPORT_TM",now.minusSeconds(60)).copy(actual_dose=null,config_snapshot=saved)
         val v=view(listOf(row),listOf(version(1,now.minusSeconds(86400),null)))
-        val preserved=v.importedHistory.single().records.single()
+        val preserved=v.resolvedRecords.single()
+        assertTrue(v.importedHistory.isEmpty())
         assertNull(preserved.actual_dose);assertNull(MedicationSnapshot.decode(preserved.config_snapshot,1)!!.route)
         assertEquals(saved,preserved.config_snapshot)
     }

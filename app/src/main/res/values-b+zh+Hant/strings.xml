@@ -862,4 +862,5 @@
     <string name="period_observed">從實際紀錄識別，非已確認處方。日期表示觀察涵蓋範圍，不是已確認的開始或停藥日期。</string>
     <string name="period_evidence">查看 %1$d 筆原始紀錄</string>
     <string name="period_recognition_unavailable">歷史方案暫無法識別，已儲存方案和原始紀錄仍可查看。</string>
+    <string name="period_frequency_unconfirmed">顯示實際紀錄中的劑量，服藥頻率尚未確認。</string>
 </resources>

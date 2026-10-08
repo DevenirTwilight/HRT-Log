@@ -862,4 +862,5 @@
     <string name="period_observed">从实际记录识别，非已确认处方。日期表示观察覆盖范围，不是已确认的开始或停药日期。</string>
     <string name="period_evidence">查看 %1$d 条原始记录</string>
     <string name="period_recognition_unavailable">历史方案暂无法识别，已保存方案和原始记录仍可查看。</string>
+    <string name="period_frequency_unconfirmed">显示实际记录中的剂量，服药频率尚未确认。</string>
 </resources>

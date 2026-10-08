@@ -31,12 +31,12 @@ internal fun projectHistory(confirmed:List<RawTreatmentInterval>,historical:Hist
     }
 
 object PeriodTimelineProjection {
-    fun build(extra:ExtraState,appointments:List<AppointmentEntity>,now:Instant=Instant.now(),displayZone:ZoneId?=null):PeriodTimeline {
+    fun build(extra:ExtraState,appointments:List<AppointmentEntity>,now:Instant=Instant.now(),displayZone:ZoneId?=null,ruleSnapshots:Map<Long,String> = emptyMap()):PeriodTimeline {
         val ordered=extra.regimens.sortedWith(compareBy({it.effective_from_utc},{it.id}))
         // Deterministic display policy: changing the device zone must not regroup historical transitions.
         val zone=displayZone ?: ordered.firstOrNull()?.let{ZoneId.of(it.zone)} ?: ZoneId.of("UTC")
         val confirmed=ordered.map{RawTreatmentInterval(it.span(),RegimenDefinition.read(it.definition_json).therapyStandard())}
-        val result=projectHistory(confirmed,ObservedTreatmentHistory.build(extra.records,ordered,zone,now),zone)
+        val result=projectHistory(confirmed,ObservedTreatmentHistory.build(extra.records,ordered,zone,now,ruleSnapshots),zone)
         val historical=result.historical;val projection=result.projection
         val today=now.atZone(zone).toLocalDate();val events=mutableListOf<PeriodEvent>();val upcoming=mutableListOf<PeriodEvent>()
         fun add(key:String,kind:EventKind,at:Instant?,day:LocalDate?,source:EventSource) {
