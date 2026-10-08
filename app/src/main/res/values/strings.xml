@@ -889,7 +889,7 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="period_merge_next">Merge with the next period</string>
     <string name="period_mergeable">Same standard as the previous period; they can be merged</string>
     <string name="period_frequency_required">Choose a frequency before confirming.</string>
-    <string name="visit_fact_labels">Inferred from records: extra (inferred) %1$d · extra (marked by you) %2$d · dose differs from period %3$d · regimen unknown %4$d · period to confirm %5$d</string>
+    <string name="visit_fact_labels">Inferred from records: extra (inferred) %1$d · extra (marked by you) %2$d · dose differs from period %3$d · regimen unknown %4$d</string>
     <string name="lab_context_confirmed_period">Past period at sampling (inferred from records, confirmed): %1$s – %2$s</string>
     <string name="period_partly_confirmed">Part of this period was inferred from records and confirmed by you</string>
     <string name="period_partly_pending">Part of this period was inferred from records and is to confirm</string>
@@ -965,4 +965,14 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="trash_kind_period">Period</string>
     <string name="trash_kind_correction">My change to a period</string>
     <string name="close">Close</string>
+
+    <string name="period_system_source">System identified</string>
+    <string name="period_overlap_title">These periods overlap</string>
+    <string name="period_overlap_trash">Will move to the recycle bin</string>
+    <string name="period_overlap_shorten">Will shorten to %1$s – %2$s</string>
+    <string name="period_overlap_split">Will split into %1$s – %2$s and %3$s – %4$s</string>
+    <string name="period_overlap_accept">Automatically shorten</string>
+    <string name="period_overlap_cancel">Do not shorten</string>
+    <string name="period_overlap_cancelled">Change the neighbouring period first, or adjust these dates.</string>
+    <string name="period_restore_overlap">These dates already have another period. Edit or delete it before restoring.</string>
 </resources>

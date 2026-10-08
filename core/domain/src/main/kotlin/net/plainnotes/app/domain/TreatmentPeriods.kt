@@ -148,7 +148,7 @@ object TreatmentPeriods {
      * Medication entries that never overlap in time and whose every part is identity-compatible form one lane, so history
      * stored on an import-created entry and the app's own entry can continue each other. Overlapping entries stay apart.
      */
-    private fun lanes(raw:List<RawTreatmentInterval>):Map<Long,Long> {
+    fun medicationLanes(raw:List<RawTreatmentInterval>):Map<Long,Long> {
         val groups=raw.groupBy{it.span.medicationId}.toSortedMap().map{(id,rows)->mutableListOf(id) to rows.toMutableList()}.toMutableList()
         fun overlap(x:RawTreatmentInterval,y:RawTreatmentInterval)=x.span.from<(y.span.until ?: Instant.MAX) && y.span.from<(x.span.until ?: Instant.MAX)
         var merged=true
@@ -172,10 +172,10 @@ object TreatmentPeriods {
      * plan with no parts). Deleted content is in the recycle bin, not shown as its own period (§39).
      */
     fun build(raw:List<RawTreatmentInterval>,zone:ZoneId,withRecords:Set<Long>?=null,userStops:List<TreatmentStop> = emptyList(),
-              userGaps:List<UserGap> = emptyList()):TreatmentPeriodProjection {
+              userGaps:List<UserGap> = emptyList(),protectUserBoundaries:Boolean=true):TreatmentPeriodProjection {
         require(raw.map{it.span.id}.distinct().size==raw.size)
         require(raw.all{it.span.until==null || it.span.until>it.span.from})
-        val lane=lanes(raw)
+        val lane=medicationLanes(raw)
         val effective=mutableMapOf<Long,TherapyStandard>();val absorbed=mutableMapOf<Long,TherapyStandard>()
         val standards=raw.groupBy{lane.getValue(it.span.medicationId)}.toSortedMap().flatMap{(med,rows)->
             val result=mutableListOf<TreatmentStandardSpan>()
@@ -227,7 +227,11 @@ object TreatmentPeriods {
             val identities=active.values.map{it.key}.toSortedSet()
             ClinicalSegment("clinical-v2:${start.toEpochMilli()}:${identities.joinToString(",")}",start,boundaries.getOrNull(i+1),identities)
         }
-        val groups=segments.groupBy{it.from.atZone(zone).toLocalDate()}.values.toList()
+        val fixed=if(protectUserBoundaries)raw.filter{it.kind==SpanKind.USER}.flatMap{listOfNotNull(it.span.from,it.span.until)}.toSet() else emptySet()
+        val groups=mutableListOf<MutableList<ClinicalSegment>>()
+        segments.forEach{s->val prev=groups.lastOrNull()?.lastOrNull()
+            if(prev!=null && prev.from.atZone(zone).toLocalDate()==s.from.atZone(zone).toLocalDate() && s.from !in fixed)groups.last().add(s)
+            else groups.add(mutableListOf(s))}
         val periods=groups.mapIndexed{i,parts->DisplayPeriod("period-v2:${zone.id}:${parts.first().key}",parts.first().from,groups.getOrNull(i+1)?.first()?.from,parts)}
         val lastById=raw.associateBy{it.span.id}
         val stops=standards.groupBy{it.medicationId}.flatMap{(med,spans)->spans.sortedBy{it.from}.let{list->list.mapIndexedNotNull{i,span->

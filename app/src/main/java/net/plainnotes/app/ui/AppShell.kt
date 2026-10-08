@@ -202,7 +202,7 @@ class UiPrefs(context: Context) {
                     net.plainnotes.app.timeline.EventKind.APPOINTMENT->Destination.VISITS
                     else->Destination.HISTORY
                 }},pad,onAppointment={visitId=it;destination=Destination.VISITS},saveState=milestoneSave,onSaveHandled=model::clearMilestoneSave,onImportedHistory={importedRecordIds=it.toSet();destination=Destination.HISTORY},
-                    periodActions=PeriodActions(model::confirmHistoryPeriod,model::revokeHistoryPeriod,model::splitHistoryPeriod,model::mergeHistoryPeriods),timelineActions=TimelineActions(model::editTimeline,model::undoTimelineEdit,model::deletePeriod,model::deleteCorrection))
+                    timelineActions=TimelineActions(model::editTimeline,model::deletePeriod))
                 Destination.VISITS -> VisitsScreen(state, extra, model, visitId, { visitId = it }, { appointment = true }, pad)
                 Destination.HISTORY -> HistoryScreen(state, extra.records, { editRecord = it }, { deleteRecord = it }, pad, onAdd = { manual = true }, onBatch = { batch = true }, onConfirmMissed={model.confirmMissed(it.id)},selectedRecordIds=importedRecordIds,labels=historyLabels,onExtra={r,on->model.setExtra(r.id,on)},onClearSelection={importedRecordIds=null})
                 Destination.STOCK -> StockScreen(state, extra.containers, extra.records, { m -> model.replaceContainer(m.id, m.container_capacity) }, { c, m -> adjustStock = c to m }, { addStock = it }, pad,onInfo={packageInfo=it})

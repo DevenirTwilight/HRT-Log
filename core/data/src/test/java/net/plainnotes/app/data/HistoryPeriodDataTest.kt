@@ -60,18 +60,23 @@ class HistoryPeriodDataTest {
         assertThrows(IllegalArgumentException::class.java){runBlocking{repo.mergeHistoryPeriods(HistoryPeriods.confirmed(repo.historyPeriods()).first{it.period_key!=other}.period_key,other)}}
         Unit
     }
-    @Test fun labContextCarriesTheConfirmedPeriodOnlyWhenItContainsTheSample()=runBlocking {
-        val id=medication();val key=confirm(id)
+    @Test fun labContextCarriesUserPeriodSourceAndValidatesItsBounds()=runBlocking {
+        val id=medication()
+        repo.editTimeline(emptyList(),listOf(TimelineEditRow(HistoryPeriods.PERIOD,id,twice,d0,d0.plusDays(120),zone,"{}")))
         fun lab(day:LocalDate)=LabValueEntity(analyte_code="E2",value=120.0,unit="pg/mL",sampled_utc=day.atTime(9,0).atZone(zone).toInstant().toEpochMilli(),sampled_zone=zone.id)
         repo.saveLab(lab(d0.plusDays(30)));repo.saveLab(lab(d0.plusDays(200)))
         val contexts=repo.labContexts().sortedBy{it.lab_id}.map{LabContext.validate(it.context_json)}
-        val periods=contexts[0].getJSONArray("confirmed_periods")
-        assertEquals(1,periods.length());assertEquals(key,periods.getJSONObject(0).getString("period_key"))
-        assertEquals(HistoryPeriods.ORIGIN,periods.getJSONObject(0).getString("origin"))
-        assertFalse(contexts[1].has("confirmed_periods"))
-        // A context naming a period that does not contain the sample is rejected.
-        val bad=JSONObject(repo.labContexts().minBy{it.lab_id}.context_json);bad.getJSONArray("confirmed_periods").getJSONObject(0).put("from_date",d0.plusDays(40).toString())
+        assertEquals("USER_EDIT",contexts[0].getString("period_source"))
+        assertEquals(1,contexts[0].getJSONArray("user_periods").length())
+        assertEquals("SYSTEM",contexts[1].getString("period_source"));assertFalse(contexts[1].has("user_periods"))
+        val bad=JSONObject(repo.labContexts().minBy{it.lab_id}.context_json)
+        bad.getJSONArray("user_periods").getJSONObject(0).put("from_utc",lab(d0.plusDays(40)).sampled_utc)
         try{LabContext.validate(bad.toString());fail()}catch(_:IllegalArgumentException){}
+        // Frozen old metadata remains readable and is not rewritten by any edit.
+        val frozen=repo.labContexts()
+        val key=HistoryPeriods.userEdits(repo.historyPeriods()).single().period_key
+        repo.editTimeline(listOf(key),listOf(TimelineEditRow(HistoryPeriods.PERIOD,id,twice.copy(doses=listOf(2.0)),d0,d0.plusDays(120),zone,"{}")))
+        assertEquals(frozen,repo.labContexts())
     }
 
     @Test fun extraAnnotationIsSeparateFromTheRecord()=runBlocking {
@@ -127,7 +132,7 @@ class HistoryPeriodDataTest {
     @Test fun overlapIsRefusedForTheSameMedicineOnly()=runBlocking {
         val a=medication();val b=db.dao().insertMedication(med.copy(name="Synthetic CPA",molecule="CPA",route=null))
         repo.editTimeline(emptyList(),listOf(row(HistoryPeriods.PERIOD,a,d0,d0.plusDays(30))))
-        try{repo.editTimeline(emptyList(),listOf(row(HistoryPeriods.STOP,a,d0.plusDays(10),d0.plusDays(20))));fail()}catch(_:IllegalArgumentException){}
+        try{repo.editTimeline(emptyList(),listOf(row(HistoryPeriods.PERIOD,a,d0.plusDays(10),d0.plusDays(20))));fail()}catch(_:IllegalArgumentException){}
         repo.editTimeline(emptyList(),listOf(row(HistoryPeriods.PERIOD,b,d0.plusDays(10),d0.plusDays(20),twice.copy(compound="CPA",ester=null,route=null))))
         // Confirmed periods and user edits are different layers: a user edit may lie over a confirmed period.
         confirm(a,from=d0,until=d0.plusDays(60))

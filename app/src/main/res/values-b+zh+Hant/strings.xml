@@ -889,7 +889,7 @@
     <string name="period_merge_next">與下一個時期合併</string>
     <string name="period_mergeable">與前一時期標準相同，可合併</string>
     <string name="period_frequency_required">確認前請填寫頻率。</string>
-    <string name="visit_fact_labels">由紀錄推定：額外（推斷）%1$d · 額外（使用者標記）%2$d · 劑量與當期不同 %3$d · 方案未知 %4$d · 待確認時期 %5$d</string>
+    <string name="visit_fact_labels">由紀錄推定：額外（推斷）%1$d · 額外（使用者標記）%2$d · 劑量與當期不同 %3$d · 方案未知 %4$d</string>
     <string name="lab_context_confirmed_period">採樣時所屬過去時期（由紀錄推定，已確認）：%1$s – %2$s</string>
     <string name="period_partly_confirmed">其中一部分由紀錄推定，已確認</string>
     <string name="period_partly_pending">其中一部分由紀錄推定，待確認</string>
@@ -965,4 +965,14 @@
     <string name="trash_kind_period">時期</string>
     <string name="trash_kind_correction">我對時期的修改</string>
     <string name="close">關閉</string>
+
+    <string name="period_system_source">系統識別</string>
+    <string name="period_overlap_title">時期日期重疊</string>
+    <string name="period_overlap_trash">將被移進回收站</string>
+    <string name="period_overlap_shorten">將縮短為 %1$s 至 %2$s</string>
+    <string name="period_overlap_split">將分成 %1$s 至 %2$s 和 %3$s 至 %4$s</string>
+    <string name="period_overlap_accept">自動縮短</string>
+    <string name="period_overlap_cancel">不縮短</string>
+    <string name="period_overlap_cancelled">請先修改相鄰時期，或調整這裡的日期。</string>
+    <string name="period_restore_overlap">這段日期已有其他時期，先修改或刪除那段再恢復。</string>
 </resources>

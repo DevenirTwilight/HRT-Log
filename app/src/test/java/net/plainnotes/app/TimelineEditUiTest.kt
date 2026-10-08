@@ -35,20 +35,19 @@ class TimelineEditUiTest {
     private val state=NotesState(medications=listOf(med),loading=false)
     private val twice=TherapyStandard("E2","E2","SUBLINGUAL","MG",null,"EVERY_N_DAYS",1,0,listOf(2.0,2.0))
 
-    @Test fun mergingDifferentStandardsCannotBeSavedUntilOneIsChosen() {
-        var saved:TherapyStandard?=null
-        val request=PeriodEditRequest(R.string.period_edit_title_merge,listOf(1L),1L,TimelineEdits.Range(start,start.plusDays(60)),twice,null,merge=twice to twice.copy(doses=listOf(3.0,3.0)))
-        ui.setContent{MaterialTheme{PeriodEditDialog(request,state,{_,_,_->false},{_,s,_->saved=s}){}}}
-        ui.onNodeWithTag("period-edit-save").assertIsNotEnabled()
-        ui.onNodeWithTag("merge-choice:next").performClick()
+    @Test fun overlapPreviewRequiresAChoiceAndCancelReturnsToTheForm() {
+        var saves=0
+        val request=PeriodEditRequest(R.string.period_edit_title_create,listOf(1L),1L,TimelineEdits.Range(start,start.plusDays(10)),twice,null)
+        ui.setContent{MaterialTheme{PeriodEditDialog(request,state,{_,_,_->true},{_,_,_->saves++},{})}}
         ui.onNodeWithTag("period-edit-save").assertIsEnabled().performClick()
-        ui.runOnIdle{assertEquals(listOf(3.0,3.0),saved!!.doses);assertEquals(1,saved!!.interval)}
-    }
-
-    @Test fun overlapWithTheSameMedicineIsShownAndBlocksSaving() {
-        val request=PeriodEditRequest(R.string.period_edit_title_create,listOf(1L),1L,TimelineEdits.Range(start,start.plusDays(10)),null,null)
-        ui.setContent{MaterialTheme{PeriodEditDialog(request,state,{_,_,_->true},{_,_,_->}){}}}
-        ui.onNodeWithTag("period-overlap").assertExists();ui.onNodeWithTag("period-edit-save").assertIsNotEnabled()
+        ui.onNodeWithTag("period-overlap-preview").assertExists()
+        ui.runOnIdle{assertEquals(0,saves)}
+        ui.onNodeWithTag("period-overlap-cancel").performClick()
+        ui.onNodeWithTag("period-edit-dialog").assertExists()
+        ui.runOnIdle{assertEquals(0,saves)}
+        ui.onNodeWithTag("period-edit-save").performClick()
+        ui.onNodeWithTag("period-overlap-accept").performClick()
+        ui.runOnIdle{assertEquals(1,saves)}
     }
 
     @Test fun cardMenuDeletesThroughTheRepositoryRowsAndSimpleModeCanStillEdit() {
@@ -60,7 +59,7 @@ class TimelineEditUiTest {
         ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag("period-menu:$key"))
         ui.onNodeWithTag("period-menu:$key").performClick()
         ui.onNodeWithTag("period-edit-any:$key").assertExists()
-        ui.onNodeWithTag("period-merge:$key").assertExists()
+        ui.onNodeWithTag("period-merge:$key").assertDoesNotExist()
         ui.onNodeWithTag("period-diagnostics:$key").assertDoesNotExist()
         ui.onNodeWithTag("period-delete:$key").performClick()
         ui.onNodeWithTag("period-delete-dialog").assertExists()

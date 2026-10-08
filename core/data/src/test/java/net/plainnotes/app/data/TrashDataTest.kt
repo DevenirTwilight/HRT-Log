@@ -97,11 +97,17 @@ class TrashDataTest {
         assertEquals(listOf(HistoryPeriods.DELETED),HistoryPeriods.userEdits(repo.historyPeriods()).map{it.kind});assertTrue(repo.trash().isEmpty())
         // A correction: deleted into the bin, restored, then purged with its revisions.
         val fix=repo.editTimeline(emptyList(),listOf(row(HistoryPeriods.PERIOD,60,70)))
-        repo.deleteCorrection(fix);assertTrue(HistoryPeriods.userEdits(repo.historyPeriods()).none{it.group_key==fix})
+        deleteLegacyCorrection(fix);assertTrue(HistoryPeriods.userEdits(repo.historyPeriods()).none{it.group_key==fix})
         repo.restoreTrash(only().id);assertTrue(HistoryPeriods.userEdits(repo.historyPeriods()).any{it.group_key==fix})
-        repo.deleteCorrection(fix);assertTrue(repo.purgeTrash(only().id));assertTrue(repo.historyPeriods().none{it.group_key==fix})
+        deleteLegacyCorrection(fix);assertTrue(repo.purgeTrash(only().id));assertTrue(repo.historyPeriods().none{it.group_key==fix})
         try{db.openHelper.writableDatabase.execSQL("DELETE FROM history_period_revision");fail()}catch(_:Exception){}
         assertNotNull(created)
+    }
+
+    private suspend fun deleteLegacyCorrection(group:String) {
+        val day=HistoryPeriods.userEdits(repo.historyPeriods()).filter{it.group_key==group}.minOf{it.from_date}
+        repo.undoTimelineEdit(group)
+        Trash.insert(db.openHelper.writableDatabase,Trash.CORRECTION,group,day,org.json.JSONObject(),Instant.now().toEpochMilli())
     }
 
     @Test fun binSurvivesBackupAndOlderBackupsFillIt()=runBlocking {

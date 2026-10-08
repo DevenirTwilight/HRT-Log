@@ -65,7 +65,7 @@ class PeriodMergeAcrossImportTest {
         val labels=HistoryLabels.build(c.records,view,emptyList(),zone)
         c.after.forEach{assertNull("$label: app record $it",labels[it])}
         c.before.forEach{id->
-            if(before==Before.PENDING)assertEquals("$label: imported $id",setOf(RecordLabel.PENDING_PERIOD),labels[id])
+            if(before==Before.PENDING)assertNull("$label: imported $id",labels[id])
             else assertNull("$label: imported $id",labels[id])
         }
     }

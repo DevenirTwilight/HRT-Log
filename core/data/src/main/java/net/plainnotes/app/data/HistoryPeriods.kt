@@ -10,7 +10,9 @@ import java.time.ZoneId
 data class TimelineEditRow(val kind:String,val medicationId:Long,val standard:TherapyStandard?,val from:LocalDate,val until:LocalDate?,val zone:ZoneId,
                            val identityJson:String,val note:String="",
                            /** §38: exact bounds inside [from, until) for an edit narrower than whole days (a short saved version). */
-                           val exactFromUtc:Long?=null,val exactUntilUtc:Long?=null)
+                           val exactFromUtc:Long?=null,val exactUntilUtc:Long?=null,
+                           /** Additional migration evidence; never replaces the append-only revision history. */
+                           val evidenceJson:String="{}",val replaces:List<String>?=null,val trash:Boolean=false)
 
 /** JSON forms and state of confirmed past periods. */
 object HistoryPeriods {
@@ -53,6 +55,30 @@ object HistoryPeriods {
         val from=e.getLong("exact_from_utc");val until=if(e.isNull("exact_until_utc"))null else e.getLong("exact_until_utc")
         require(row.kind in USER_KINDS && from>=dayFrom && (dayUntil==null || from<dayUntil) && (until==null || until>from) && (until==null || dayUntil==null || until<=dayUntil) && (until!=null || dayUntil==null))
         return from to until
+    }
+    /** Actual therapy transitions only. Clock-time and reminder edits do not end a user period. */
+    fun subsequentPlanChanges(versions:List<RegimenVersionEntity>,med:Long,stated:Long):List<Long> {
+        val sorted=versions.filter{it.medication_id==med}.sortedWith(compareBy({it.effective_from_utc},{it.id}))
+        return sorted.flatMapIndexed{i,v->
+            val previous=sorted.getOrNull(i-1);val next=sorted.getOrNull(i+1)
+            val standard=RegimenDefinition.read(v.definition_json).therapyStandard()
+            val continues=previous!=null && previous.effective_until_utc==v.effective_from_utc &&
+                net.plainnotes.app.domain.TreatmentPeriods.sameStandard(RegimenDefinition.read(previous.definition_json).therapyStandard(),standard)
+            val continued=next!=null && v.effective_until_utc==next.effective_from_utc &&
+                net.plainnotes.app.domain.TreatmentPeriods.sameStandard(standard,RegimenDefinition.read(next.definition_json).therapyStandard())
+            listOfNotNull(v.effective_from_utc.takeIf{!continues && (v.recorded_at_utc ?: it)>stated},v.effective_until_utc?.takeIf{!continued && it>stated})
+        }
+    }
+    /** §40: open user periods stop at a subsequent saved plan start or stop. */
+    fun effectiveBounds(row:HistoryPeriodEntity,versions:List<RegimenVersionEntity>):Pair<Long,Long?> {
+        val zone=ZoneId.of(row.zone);val exact=exactBounds(row)
+        val from=exact?.first ?: LocalDate.parse(row.from_date).atStartOfDay(zone).toInstant().toEpochMilli()
+        val until=if(exact!=null)exact.second else row.until_date?.let{LocalDate.parse(it).atStartOfDay(zone).toInstant().toEpochMilli()}
+        val evidence=JSONObject(row.evidence_json)
+        if(row.kind!=PERIOD || until!=null || !evidence.has("stated_utc"))return from to until
+        val stated=evidence.getLong("stated_utc")
+        val changes=subsequentPlanChanges(versions,row.medication_id,stated)
+        return from to changes.filter{it>stated && it>from}.minOrNull()
     }
     /** Latest revision of every period; revoked periods are returned too so the caller can show them as unconfirmed again. */
     /** §39: a display identity that does not change when the period gets a new revision (edit, revoke, restore). */

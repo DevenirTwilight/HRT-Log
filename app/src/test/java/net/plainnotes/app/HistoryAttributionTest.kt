@@ -40,7 +40,8 @@ class HistoryAttributionTest {
     @Test fun mixedSourcesAcrossOctoberSixAreOnePendingPeriodUntilConfirmed() {
         val view=PeriodTimelineProjection.build(NotesViewModel.ExtraState(records=records),emptyList(),now)
         assertEquals(1,view.observed.size);assertEquals(listOf(2.0,2.0),view.observed.single().interval.standard.doses)
-        assertEquals(records.map{it.id}.toSet(),labels().filterValues{it==setOf(PENDING_PERIOD)}.keys)
+        assertTrue(labels().values.none{PENDING_PERIOD in it})
+        assertEquals(labels(listOf(period(1))),labels())
     }
 
     @Test fun confirmedPeriodLabelsEachRecord() {
@@ -57,7 +58,7 @@ class HistoryAttributionTest {
 
     @Test fun revokingReturnsToPendingAndConfirmingAgainGivesTheSameLabels() {
         val first=labels(listOf(period(1)))
-        assertTrue(labels(listOf(period(1),period(2,HistoryPeriods.REVOKED))).values.all{it==setOf(PENDING_PERIOD)})
+        assertEquals(first,labels(listOf(period(1),period(2,HistoryPeriods.REVOKED))))
         assertEquals(first,labels(listOf(period(1),period(2,HistoryPeriods.REVOKED),period(3))))
         // Records themselves are never changed.
         assertTrue(records.all{it.scheduled_utc==null && it.revision==1})
@@ -66,10 +67,10 @@ class HistoryAttributionTest {
     @Test fun visitPackCountsOnlyTheNewLabels() {
         val ids=records.map{it.id}
         // Normal imported and app records within the confirmed period are not counted at all.
-        assertEquals(listOf(1,0,1,0,0),net.plainnotes.app.visit.labelCounts(ids,labels(listOf(period(1)))))
+        assertEquals(listOf(1,0,1,0),net.plainnotes.app.visit.labelCounts(ids,labels(listOf(period(1)))))
         val marked=records.first{it.taken_utc==at(5,8)}.id
-        assertEquals(listOf(0,1,1,0,0),net.plainnotes.app.visit.labelCounts(ids,labels(listOf(period(1)),listOf(RecordAnnotationEntity(marked,HistoryPeriods.EXTRA,1L)))))
-        assertEquals(listOf(0,0,0,0,ids.size),net.plainnotes.app.visit.labelCounts(ids,labels()))
-        assertEquals(2,net.plainnotes.app.visit.VISIT_TEMPLATE_VERSION)
+        assertEquals(listOf(0,1,1,0),net.plainnotes.app.visit.labelCounts(ids,labels(listOf(period(1)),listOf(RecordAnnotationEntity(marked,HistoryPeriods.EXTRA,1L)))))
+        assertEquals(listOf(1,0,1,0),net.plainnotes.app.visit.labelCounts(ids,labels()))
+        assertEquals(3,net.plainnotes.app.visit.VISIT_TEMPLATE_VERSION)
     }
 }

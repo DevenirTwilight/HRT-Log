@@ -5,21 +5,6 @@ import net.plainnotes.app.data.*
 import net.plainnotes.app.domain.*
 import java.time.*
 
-/** UI-only adapter; storage signatures, context v1 and Visit Pack template 1 keep their own builders. */
-fun RegimenDefinition.therapyStandard(normalizeCadence:Boolean=true):TherapyStandard {
-    val m=snapshot(0)
-    val product=when(m?.route){"GEL"->m.profile?.gel_product_id?.let{"gel:$it"};"PATCH"->m.profile?.patch_release_ug_day?.let{"patch:$it"};else->null}
-    val standard=TherapyStandard(m?.molecule,m?.profile?.ester,m?.route,m?.unit,product,kind,interval,
-        if(kind=="WEEKLY")Integer.bitCount(weekdays) else 0,
-        if(kind=="EVERY_N_HOURS")listOf(dose) else times.map{it.second ?: dose})
-    if(!normalizeCadence)return standard
-    return when {
-        kind=="EVERY_N_HOURS" && interval<=24 && 24%interval==0->standard.copy(kind="EVERY_N_DAYS",interval=1,doses=List(24/interval){dose})
-        kind=="EVERY_N_HOURS" && interval%24==0->standard.copy(kind="EVERY_N_DAYS",interval=interval/24)
-        kind=="WEEKLY" && interval==1 && weekdays==127->standard.copy(kind="EVERY_N_DAYS",interval=1,weeklyCount=0)
-        else->standard
-    }
-}
 data class PeriodEvent(val key:String,val kind:EventKind,val at:Instant?,val date:LocalDate,val source:EventSource,
     val displayPeriodKey:String?,val exactRegimenIds:Set<Long>,val dateOnly:Boolean)
 data class PeriodTimeline(val projection:TreatmentPeriodProjection,val events:List<PeriodEvent>,val upcoming:List<PeriodEvent>,
@@ -31,11 +16,11 @@ data class PeriodTimeline(val projection:TreatmentPeriodProjection,val events:Li
 }
 /** Invalid derived intervals must not take the confirmed plans and original history off screen. */
 internal data class PeriodHistory(val projection:TreatmentPeriodProjection,val historical:HistoricalTreatmentProjection,val unavailable:Boolean)
-internal fun projectHistory(historical:HistoricalTreatmentProjection,zone:ZoneId,withRecords:Set<Long>?=null):PeriodHistory =
+internal fun projectHistory(historical:HistoricalTreatmentProjection,zone:ZoneId,withRecords:Set<Long>?=null,legacy:Boolean=false):PeriodHistory =
     try {
-        PeriodHistory(TreatmentPeriods.build(historical.saved+historical.user+historical.confirmed+historical.observed.map{it.interval},zone,withRecords,historical.userStops,historical.markers),historical,false)
+        PeriodHistory(TreatmentPeriods.build(historical.saved+historical.user+historical.confirmed+historical.observed.map{it.interval},zone,withRecords,historical.userStops,historical.markers,protectUserBoundaries=!legacy),historical,false)
     } catch (_:IllegalArgumentException) {
-        PeriodHistory(TreatmentPeriods.build(historical.saved+historical.user,zone,withRecords,historical.userStops,historical.markers),
+        PeriodHistory(TreatmentPeriods.build(historical.saved+historical.user,zone,withRecords,historical.userStops,historical.markers,protectUserBoundaries=!legacy),
             HistoricalTreatmentProjection(emptyList(),emptySet(),saved=historical.saved,user=historical.user,userStops=historical.userStops,markers=historical.markers),true)
     }
 
@@ -64,7 +49,11 @@ internal fun mergedCoverage(projection:TreatmentPeriodProjection,historical:Hist
     val observedOf=historical.observed.flatMap{o->o.records.map{it.id to o.interval.span.id}}.toMap()
     // §36c/37a: a corrected or absorbed saved version is judged by the standard it is shown with.
     fun shown(c:RecordCoverage)=c.interval?.let{i->projection.effective[i.span.id]?.takeIf{it!=i.standard}?.let{RecordCoverage(i.copy(standard=it),false)}} ?: c
-    return historical.coverage.mapValues{(id,c)->shown(if(c.pending)observedOf[id]?.let(remap::get)?.let{RecordCoverage(it,false)} ?: c else c)}
+    return historical.coverage.mapValues{(id,c)->
+        val result=shown(if(c.pending)observedOf[id]?.let(remap::get)?.let{RecordCoverage(it,false)} ?: c else c)
+        result.interval?.let{i->projection.standards.firstOrNull{i.span.id in it.rawVersionIds}?.let{s->
+            RecordCoverage(i.copy(span=i.span.copy(id=s.rawVersionIds.first()),standard=s.standard),false)}} ?: result
+    }
 }
 
 /** Active user edits as projection inputs (REQUIREMENTS §37b); span IDs are display-only negatives. */
@@ -75,7 +64,7 @@ fun userEditInputs(rows:List<HistoryPeriodEntity>):List<UserEditInput> = History
         UserEditInput(ObservedTreatmentHistory.USER_SPAN_BASE-HistoryPeriods.stableId(rows,row.period_key)*100,row.period_key,row.group_key,row.kind,row.medication_id,
             exact?.first?.let(Instant::ofEpochMilli) ?: LocalDate.parse(row.from_date).atStartOfDay(zone).toInstant(),
             if(exact!=null)exact.second?.let(Instant::ofEpochMilli) else row.until_date?.let{LocalDate.parse(it).atStartOfDay(zone).toInstant()},
-            if(row.kind in listOf(HistoryPeriods.PERIOD,HistoryPeriods.FILL))HistoryPeriods.readStandard(row.standard_json) else null,MedicationSnapshot.decode(row.identity_json,row.medication_id))
+            if(row.kind in listOf(HistoryPeriods.PERIOD,HistoryPeriods.FILL))HistoryPeriods.readStandard(row.standard_json) else null,MedicationSnapshot.decode(row.identity_json,row.medication_id),org.json.JSONObject(row.evidence_json).let{if(it.has("stated_utc"))it.getLong("stated_utc") else null})
     }.getOrNull()
 }
 /** The user edit row behind a display span ID, if any. */
@@ -95,13 +84,13 @@ fun confirmedPeriodInputs(rows:List<HistoryPeriodEntity>):List<ConfirmedPeriodIn
 }
 
 object PeriodTimelineProjection {
-    fun build(extra:ExtraState,appointments:List<AppointmentEntity>,now:Instant=Instant.now(),displayZone:ZoneId?=null,ruleSnapshots:Map<Long,String> = emptyMap()):PeriodTimeline {
+    fun build(extra:ExtraState,appointments:List<AppointmentEntity>,now:Instant=Instant.now(),displayZone:ZoneId?=null,ruleSnapshots:Map<Long,String> = emptyMap(),legacy:Boolean=false):PeriodTimeline {
         val ordered=extra.regimens.sortedWith(compareBy({it.effective_from_utc},{it.id}))
         // Deterministic display policy: changing the device zone must not regroup historical transitions.
         val zone=displayZone ?: ordered.firstOrNull()?.let{ZoneId.of(it.zone)} ?: ZoneId.of("UTC")
         val inside=recordsInside(ordered,extra.records).filterValues{it>0}.keys
         val result=projectHistory(ObservedTreatmentHistory.build(extra.records,ordered,zone,now,ruleSnapshots,confirmedPeriodInputs(extra.historyPeriods),
-            userEditInputs(extra.historyPeriods)),zone,inside)
+            userEditInputs(extra.historyPeriods),legacy),zone,inside,legacy)
         val historical=result.historical;val projection=result.projection
         val today=now.atZone(zone).toLocalDate();val events=mutableListOf<PeriodEvent>();val upcoming=mutableListOf<PeriodEvent>()
         fun add(key:String,kind:EventKind,at:Instant?,day:LocalDate?,source:EventSource) {

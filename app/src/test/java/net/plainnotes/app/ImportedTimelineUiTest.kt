@@ -157,25 +157,23 @@ class ImportedTimelineUiTest {
         ui.onAllNodesWithText(ui.activity.getString(R.string.history_regimen_unknown)).assertCountEquals(2)
     }
 
-    @Test fun recognisedPeriodIsPendingUntilTheUserConfirmsIt() {
+    @Test fun recognisedPeriodIsEffectiveAndUsesTheUniversalMenu() {
         val base=Instant.now().minusSeconds(60*86400L).truncatedTo(java.time.temporal.ChronoUnit.DAYS)
         val json=MedicationSnapshot.encode(med,ProfileEntity(1,"E2","sublingual"))
         val rows=(0..29).flatMap{day->listOf(8,20).mapIndexed{slot,h->RecordEntity(day*2+slot+1L,1,taken_utc=base.plusSeconds((day*24+h)*3600L).toEpochMilli(),taken_zone="UTC",
-            actual_dose=2.0,status="ON_TIME",origin="IMPORT_HT",source_record_key="ht:synthetic:pending:$day:$h",revision=1,config_snapshot=json)}}
+            actual_dose=2.0,status="ON_TIME",origin="IMPORT_HT",source_record_key="ht:synthetic:effective:$day:$h",revision=1,config_snapshot=json)}}
         val extra=NotesViewModel.ExtraState(records=rows)
-        val span=net.plainnotes.app.timeline.PeriodTimelineProjection.build(extra,emptyList()).observed.single().interval.span.id
-        var confirmed:net.plainnotes.app.domain.TherapyStandard?=null;var from:java.time.LocalDate?=null
-        ui.setContent{MaterialTheme{LongitudinalScreen(NotesState(loading=false),extra,{},{},{},PaddingValues(),
-            periodActions=PeriodActions(confirm={key,_,standard,f,_,_,_,evidence->assertNull(key);assertTrue(evidence.contains("sustained-patterns-v1"));confirmed=standard;from=f}))}}
-        ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag("period-confirm:$span"))
-        ui.onNodeWithText(ui.activity.getString(R.string.period_pending)).assertExists()
-        ui.onNodeWithTag("period-confirm:$span").performClick()
-        // The dialog's own behaviour is in HistoryPeriodDialogTest; this screen relayouts forever under Robolectric once a dialog with text fields is open.
-        ui.mainClock.autoAdvance=false
-        val looper=org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper())
-        repeat(4){ui.mainClock.advanceTimeBy(500);var n=0;while(!looper.isIdle && n++<500)looper.runOneTask()}
-        val dialog=org.robolectric.shadows.ShadowDialog.getLatestDialog();assertTrue(dialog!=null && dialog.isShowing);dialog.dismiss()
-        assertNull(confirmed);assertNull(from)
+        val v=net.plainnotes.app.timeline.PeriodTimelineProjection.build(extra,emptyList())
+        assertTrue(net.plainnotes.app.timeline.HistoryLabels.build(rows,v,emptyList(),java.time.ZoneId.of("UTC")).isEmpty())
+        val key=v.projection.periods.first().key
+        ui.setContent{MaterialTheme{LongitudinalScreen(NotesState(medications=listOf(med),loading=false),extra,{},{},{},PaddingValues())}}
+        ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag("period-menu:$key"))
+        ui.onNodeWithText(ui.activity.getString(R.string.period_pending)).assertDoesNotExist()
+        ui.onNodeWithTag("period-menu:$key").performClick()
+        ui.onNodeWithTag("period-edit-any:$key").assertExists()
+        ui.onNodeWithTag("period-split:$key").assertDoesNotExist()
+        ui.onNodeWithTag("period-merge:$key").assertDoesNotExist()
+        ui.onNodeWithTag("period-undo:$key").assertDoesNotExist()
     }
 
     @Test fun stoppedPlanShowsItsStopDatesAndWhyPeriodsDiffer() {

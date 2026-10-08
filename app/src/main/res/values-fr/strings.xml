@@ -889,7 +889,7 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="period_merge_next">Fusionner avec la période suivante</string>
     <string name="period_mergeable">Même traitement que la période précédente ; elles peuvent être fusionnées</string>
     <string name="period_frequency_required">Indiquez une fréquence avant de confirmer.</string>
-    <string name="visit_fact_labels">Déduit des prises : en plus (déduit) %1$d · en plus (indiqué par vous) %2$d · dose différente de la période %3$d · traitement inconnu %4$d · période à confirmer %5$d</string>
+    <string name="visit_fact_labels">Déduit des prises : en plus (déduit) %1$d · en plus (indiqué par vous) %2$d · dose différente de la période %3$d · traitement inconnu %4$d</string>
     <string name="lab_context_confirmed_period">Période passée au prélèvement (déduite des prises, confirmée) : %1$s – %2$s</string>
     <string name="period_partly_confirmed">Une partie de cette période est déduite des prises et confirmée</string>
     <string name="period_partly_pending">Une partie de cette période est déduite des prises et reste à confirmer</string>
@@ -965,4 +965,14 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="trash_kind_period">Période</string>
     <string name="trash_kind_correction">Ma modification d’une période</string>
     <string name="close">Fermer</string>
+
+    <string name="period_system_source">Identifié par le système</string>
+    <string name="period_overlap_title">Ces périodes se chevauchent</string>
+    <string name="period_overlap_trash">Sera déplacée dans la corbeille</string>
+    <string name="period_overlap_shorten">Sera raccourcie du %1$s au %2$s</string>
+    <string name="period_overlap_split">Sera divisée du %1$s au %2$s et du %3$s au %4$s</string>
+    <string name="period_overlap_accept">Raccourcir automatiquement</string>
+    <string name="period_overlap_cancel">Ne pas raccourcir</string>
+    <string name="period_overlap_cancelled">Modifiez d’abord la période voisine ou ajustez ces dates.</string>
+    <string name="period_restore_overlap">Ces dates ont déjà une autre période. Modifiez-la ou supprimez-la avant de restaurer.</string>
 </resources>

@@ -12,7 +12,7 @@ data class ConfirmedPeriodInput(val spanId:Long,val periodKey:String,val medicat
 data class RecordCoverage(val interval:RawTreatmentInterval?,val pending:Boolean)
 /** A user edit as input (REQUIREMENTS §37b): PERIOD/FILL carry a standard, DELETED/STOP only block their range. */
 data class UserEditInput(val spanId:Long,val periodKey:String,val groupKey:String?,val kind:String,val medicationId:Long,val from:Instant,val until:Instant?,
-                         val standard:TherapyStandard?,val snapshot:MedicationSnapshot?)
+                         val standard:TherapyStandard?,val snapshot:MedicationSnapshot?,val statedUtc:Long?=null)
 data class HistoricalTreatmentProjection(val observed:List<ObservedTreatment>,val resolvedRecordIds:Set<Long>,
     val confirmed:List<RawTreatmentInterval> = emptyList(),val coverage:Map<Long,RecordCoverage> = emptyMap(),
     /** Saved plan versions as shown: cut where a user edit lies over them. */
@@ -55,14 +55,32 @@ object ObservedTreatmentHistory {
     private fun cut(pieces:List<Pair<Instant,Instant>>,f:Instant,u:Instant)=pieces.flatMap{(a,b)->if(f>=b || u<=a)listOf(a to b) else buildList{if(a<f)add(a to f);if(u<b)add(u to b)}}
     private fun identity(s:TherapyStandard)=s.compound?.let{c->s.unit?.let{u->Identity(c,s.route,u,s.ester,s.formulation)}}
     fun build(records:List<RecordEntity>,versions:List<RegimenVersionEntity>,zone:ZoneId,now:Instant,ruleSnapshots:Map<Long,String> = emptyMap(),
-              confirmedPeriods:List<ConfirmedPeriodInput> = emptyList(),userEdits:List<UserEditInput> = emptyList()):HistoricalTreatmentProjection {
+              confirmedPeriods:List<ConfirmedPeriodInput> = emptyList(),userEdits:List<UserEditInput> = emptyList(),legacy:Boolean=false):HistoricalTreatmentProjection {
+        val effectiveEdits=if(legacy)userEdits else userEdits.map{e->
+            if(e.kind!=HistoryPeriods.PERIOD || e.until!=null || e.statedUtc==null)e else {
+                val changes=HistoryPeriods.subsequentPlanChanges(versions,e.medicationId,e.statedUtc)
+                val end=changes.filter{it>e.statedUtc && it>e.from.toEpochMilli()}.minOrNull()?.let(Instant::ofEpochMilli)
+                e.copy(until=end)
+            }
+        }
+        // Decide lanes from the unedited treatment facts, before overlays remove their evidence.
+        val lane=if(legacy || effectiveEdits.isEmpty())emptyMap() else TreatmentPeriods.medicationLanes(
+            build(records,versions,zone,now,ruleSnapshots,confirmedPeriods,emptyList(),true).let{h->h.saved+h.confirmed+h.observed.map{it.interval}})
+        fun laneOf(m:Long)=lane[m] ?: m
+        val positive=effectiveEdits.filter{it.standard!=null}
+        val overlays=effectiveEdits.flatMap{e->
+            if(legacy || e.standard!=null)listOf(e) else {
+                val pieces=positive.filter{laneOf(it.medicationId)==laneOf(e.medicationId)}.fold(listOf(e.from to (e.until ?: Instant.MAX))){p,s->cut(p,s.from,s.until ?: Instant.MAX)}
+                pieces.map{(a,b)->e.copy(from=a,until=b.takeIf{it!=Instant.MAX})}
+            }
+        }
         // REQUIREMENTS §37b: user edits come first; everything under them is cut away for display only.
-        val userRanges=userEdits.groupBy{it.medicationId}.mapValues{(_,rows)->rows.map{it.from to (it.until ?: Instant.MAX)}}
-        fun underUser(med:Long,pieces:List<Pair<Instant,Instant>>)=userRanges[med].orEmpty().fold(pieces){p,(f,u)->cut(p,f,u)}.filter{(a,b)->a<b}
+        val userRanges=overlays.groupBy{laneOf(it.medicationId)}.mapValues{(_,rows)->rows.map{it.from to (it.until ?: Instant.MAX)}}
+        fun underUser(med:Long,pieces:List<Pair<Instant,Instant>>)=userRanges[laneOf(med)].orEmpty().fold(pieces){p,(f,u)->cut(p,f,u)}.filter{(a,b)->a<b}
         val real=versions.flatMap{v->val d=RegimenDefinition.read(v.definition_json);val span=v.span();val id=d.snapshot(v.medication_id)?.let(::identity)
             underUser(v.medication_id,listOf(span.from to (span.until ?: Instant.MAX))).mapIndexed{i,(a,b)->
                 Saved(RawTreatmentInterval(span.copy(id=if(i==0)v.id else SAVED_PIECE_BASE-v.id*100-i,from=a,until=b.takeIf{it!=Instant.MAX}),d.therapyStandard(),SpanKind.SAVED,v.id),id)}}
-        val user=userEdits.filter{it.standard!=null}.map{e->
+        val user=overlays.filter{it.standard!=null}.map{e->
             Saved(RawTreatmentInterval(RegimenSpan(e.spanId,e.medicationId,e.from,e.until,false),e.standard!!,if(e.kind==HistoryPeriods.FILL)SpanKind.FILL else SpanKind.USER,e.spanId),identity(e.standard))}
         // Confirmed past periods count as saved history, but a saved prescription always wins where they meet,
         // including one saved on another medication entry for the same medicine (REQUIREMENTS §36).
@@ -159,12 +177,13 @@ object ObservedTreatmentHistory {
                     identity(m)?.let{compatible(it,key)}!=false
                 }==true
             // Its own entry first; otherwise a saved or confirmed part of the same medicine on another entry (§36).
-            val linked=saved.firstOrNull{s->s.raw.span.medicationId==med && covers(s)} ?: saved.firstOrNull{s->related(s,med,recordIdentity) && covers(s)}
+            val effectiveSaved=if(legacy)saved else saved+observed.map{Saved(it.interval,identity(it.interval.standard))}
+            val linked=effectiveSaved.firstOrNull{s->s.raw.span.medicationId==med && covers(s)} ?: effectiveSaved.firstOrNull{s->related(s,med,recordIdentity) && covers(s)}
             if(linked!=null)resolved+=r.id
-            if(r.status in listOf("ON_TIME","LATE"))coverage[r.id]=RecordCoverage(linked?.raw,linked==null && r.id in pendingIds)
+            if(r.status in listOf("ON_TIME","LATE"))coverage[r.id]=RecordCoverage(linked?.raw,legacy && linked==null && r.id in pendingIds)
         }
         return HistoricalTreatmentProjection(observed,resolved,confirmedSaved.map{it.raw},coverage,real.map{it.raw},user.map{it.raw},
-            userEdits.filter{it.kind==HistoryPeriods.STOP}.map{TreatmentStop(it.medicationId,it.from,it.until)},
-            userEdits.filter{it.standard==null}.map{UserGap(it.medicationId,it.from,it.until,it.kind)})
+            overlays.filter{it.kind==HistoryPeriods.STOP}.map{TreatmentStop(it.medicationId,it.from,it.until)},
+            overlays.filter{it.standard==null}.map{UserGap(it.medicationId,it.from,it.until,it.kind)})
     }
 }

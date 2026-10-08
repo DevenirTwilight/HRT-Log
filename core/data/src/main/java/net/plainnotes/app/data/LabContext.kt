@@ -36,7 +36,14 @@ object LabContext {
             .put("nearby",JSONArray(nearby.sortedBy{it.id}.map{JSONObject().put("id",it.id).put("revision",it.revision).put("status",it.status).put("origin",it.origin)
                 .put("time_utc",if(it.status=="LATE")it.taken_utc else it.scheduled_utc)}))
             .put("estimate",estimate?.let(::JSONObject) ?: JSONObject.NULL)
-            .apply{confirmedPeriods(at,historyPeriods)?.let{put("confirmed_periods",it)}}.toString().also{validate(it)}
+            .apply {
+                val users=HistoryPeriods.userEdits(historyPeriods).filter{it.kind==HistoryPeriods.PERIOD && HistoryPeriods.effectiveBounds(it,regimens).let{(a,b)->at>=a && (b==null || at<b)}}
+                put("period_source",if(users.isEmpty())"SYSTEM" else "USER_EDIT")
+                if(users.isNotEmpty())put("user_periods",JSONArray(users.sortedBy{it.period_key}.map{p->
+                    val (a,b)=HistoryPeriods.effectiveBounds(p,regimens)
+                    JSONObject().put("period_key",p.period_key).put("revision",p.revision).put("medication_id",p.medication_id)
+                        .put("from_utc",a).put("until_utc",b ?: JSONObject.NULL).put("standard",JSONObject(p.standard_json))}))
+            }.toString().also{validate(it)}
     }
     /** REQUIREMENTS §35a item 9: optional, only when a past period confirmed by the user contains the sample day; "由记录推定，已确认". */
     private fun confirmedPeriods(at:Long,rows:List<HistoryPeriodEntity>):JSONArray? {
@@ -93,6 +100,16 @@ object LabContext {
                 until?.let{require(java.time.LocalDate.parse(it)>java.time.LocalDate.parse(p.getString("from_date")))}
                 require(covers(p.getString("from_date"),until,p.getString("zone"),at));HistoryPeriods.readStandard(p.getJSONObject("standard").toString())
             }
+        }
+        if(o.has("period_source")) {
+            val source=o.getString("period_source");require(source in listOf("SYSTEM","USER_EDIT"))
+            val users=o.optJSONArray("user_periods")
+            require((source=="USER_EDIT")== (users!=null && users.length()>0))
+            users?.let{a->val keys=mutableSetOf<String>();for(i in 0 until a.length()) {
+                val p=a.getJSONObject(i);val key=p.getString("period_key");java.util.UUID.fromString(key);require(keys.add(key))
+                require(p.getInt("revision")>0 && p.getLong("medication_id")>0 && at>=p.getLong("from_utc") && (p.isNull("until_utc") || at<p.getLong("until_utc")))
+                HistoryPeriods.readStandard(p.getJSONObject("standard").toString())
+            }}
         }
         require(o.has("estimate") && (o.isNull("estimate") || o.get("estimate") is JSONObject))
         o.optJSONObject("estimate")?.let{e->

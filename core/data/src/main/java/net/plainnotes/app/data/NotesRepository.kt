@@ -45,64 +45,69 @@ const val BACKFILL_MAX_DAYS=731L
         val all=dao.historyPeriods()
         val previous=all.filter{it.period_key==row.period_key}.maxByOrNull{it.revision}
         require(row.revision==(previous?.revision ?: 0)+1 && (previous==null || previous.medication_id==row.medication_id))
-        if(row.state==HistoryPeriods.CONFIRMED) {
-            val from=LocalDate.parse(row.from_date);val until=row.until_date?.let(LocalDate::parse)
+        if(row.state==HistoryPeriods.CONFIRMED && row.kind !in listOf(HistoryPeriods.DELETED,HistoryPeriods.STOP)) {
+            val versions=dao.regimens();val (from,until)=periodBounds(row,versions)
             // Two confirmed periods of one medication never overlap.
             // Two confirmed periods of one medication never overlap; nor do two user edits (§37b rule c, same medicine only).
-            val peers=if(row.kind==HistoryPeriods.CONFIRMED)HistoryPeriods.confirmed(all) else HistoryPeriods.userEdits(all)
+            val peers=if(row.kind==HistoryPeriods.CONFIRMED)HistoryPeriods.confirmed(all) else HistoryPeriods.userEdits(all).filter{it.kind in listOf(HistoryPeriods.PERIOD,HistoryPeriods.FILL)}
             require(peers.none{other->other.period_key!=row.period_key && other.medication_id==row.medication_id &&
-                (until==null || LocalDate.parse(other.from_date)<until) && (other.until_date==null || from<LocalDate.parse(other.until_date))}){"Overlapping period"}
+                periodBounds(other,versions).let{(a,b)->a<(until ?: Instant.MAX) && from<(b ?: Instant.MAX)}}){"Overlapping period"}
         }
         return dao.insertHistoryPeriod(row.copy(id=0))
     }
+    private fun periodBounds(row:HistoryPeriodEntity,versions:List<RegimenVersionEntity> = emptyList()):Pair<Instant,Instant?> {
+        if(row.kind==HistoryPeriods.PERIOD)return HistoryPeriods.effectiveBounds(row,versions).let{(a,b)->Instant.ofEpochMilli(a) to b?.let(Instant::ofEpochMilli)}
+        val exact=HistoryPeriods.exactBounds(row);val zone=ZoneId.of(row.zone)
+        return (exact?.first?.let(Instant::ofEpochMilli) ?: LocalDate.parse(row.from_date).atStartOfDay(zone).toInstant()) to
+            (if(exact!=null)exact.second?.let(Instant::ofEpochMilli) else row.until_date?.let{LocalDate.parse(it).atStartOfDay(zone).toInstant()})
+    }
     private fun current(all:List<HistoryPeriodEntity>,key:String)=requireNotNull(all.filter{it.period_key==key}.maxByOrNull{it.revision})
-    /** Confirms a new period, or a new revision of an existing one (edit, or re-confirm after a revocation). */
-    suspend fun confirmHistoryPeriod(periodKey:String?,medicationId:Long,standard:net.plainnotes.app.domain.TherapyStandard,from:LocalDate,until:LocalDate?,
-                                     zone:ZoneId,identityJson:String,evidenceJson:String,now:Instant=Instant.now())=transaction { dao ->
-        val key=periodKey ?: java.util.UUID.randomUUID().toString()
-        val revision=(dao.historyPeriods().filter{it.period_key==key}.maxOfOrNull{it.revision} ?: 0)+1
-        appendPeriod(dao,HistoryPeriodEntity(period_key=key,revision=revision,state=HistoryPeriods.CONFIRMED,medication_id=medicationId,identity_json=identityJson,
-            standard_json=HistoryPeriods.standardJson(standard),from_date=from.toString(),until_date=until?.toString(),zone=zone.id,evidence_json=evidenceJson,created_utc=now.toEpochMilli()));key
-    }
-    /** Back to unconfirmed. Nothing is deleted. */
-    suspend fun revokeHistoryPeriod(periodKey:String,now:Instant=Instant.now())=transaction { dao ->
-        val c=current(dao.historyPeriods(),periodKey);require(c.state==HistoryPeriods.CONFIRMED)
-        appendPeriod(dao,c.copy(id=0,revision=c.revision+1,state=HistoryPeriods.REVOKED,created_utc=now.toEpochMilli()))
-    }
-    /** Splits a confirmed period at [day]: the first part keeps its key, the second part becomes a new confirmed period. */
-    suspend fun splitHistoryPeriod(periodKey:String,day:LocalDate,now:Instant=Instant.now())=transaction { dao ->
-        val c=current(dao.historyPeriods(),periodKey);require(c.state==HistoryPeriods.CONFIRMED)
-        require(day>LocalDate.parse(c.from_date) && (c.until_date==null || day<LocalDate.parse(c.until_date)))
-        appendPeriod(dao,c.copy(id=0,revision=c.revision+1,until_date=day.toString(),created_utc=now.toEpochMilli()))
-        val key=java.util.UUID.randomUUID().toString()
-        appendPeriod(dao,c.copy(id=0,period_key=key,revision=1,from_date=day.toString(),created_utc=now.toEpochMilli()));key
-    }
-    /** Merges two confirmed periods of the same medication and standard; the second is revoked, the first extended over both. */
-    suspend fun mergeHistoryPeriods(firstKey:String,secondKey:String,now:Instant=Instant.now())=transaction { dao ->
-        val all=dao.historyPeriods();val a=current(all,firstKey);val b=current(all,secondKey)
-        require(a.state==HistoryPeriods.CONFIRMED && b.state==HistoryPeriods.CONFIRMED && a.medication_id==b.medication_id && firstKey!=secondKey)
-        require(HistoryPeriods.readStandard(a.standard_json)==HistoryPeriods.readStandard(b.standard_json)){"Different standards"}
-        require(LocalDate.parse(a.from_date)<LocalDate.parse(b.from_date))
-        appendPeriod(dao,b.copy(id=0,revision=b.revision+1,state=HistoryPeriods.REVOKED,created_utc=now.toEpochMilli()))
-        appendPeriod(dao,a.copy(id=0,revision=a.revision+1,until_date=b.until_date,created_utc=now.toEpochMilli()))
-    }
     /**
      * One timeline edit (REQUIREMENTS §37b): revokes the user edits in [replace], then appends [rows] under one new group
      * key. Records, saved plan versions and confirmed periods are never written. Returns the group key.
      */
     suspend fun editTimeline(replace:List<String>,rows:List<TimelineEditRow>,now:Instant=Instant.now()):String=transaction { dao ->
         require(rows.isNotEmpty())
+        // A newly deleted range removes older user periods too. A later user edit may cover an older deletion.
+        val implicit=HistoryPeriods.userEdits(dao.historyPeriods()).filter{u->u.kind==HistoryPeriods.PERIOD && u.period_key !in replace && rows.any{r->
+            if(r.kind!=HistoryPeriods.DELETED || r.medicationId!=u.medication_id)false else {
+                val zone=r.zone;val a=r.exactFromUtc?.let(Instant::ofEpochMilli) ?: r.from.atStartOfDay(zone).toInstant()
+                val b=if(r.exactFromUtc!=null)r.exactUntilUtc?.let(Instant::ofEpochMilli) else r.until?.atStartOfDay(zone)?.toInstant()
+                val (x,y)=periodBounds(u,dao.regimens());a<(y ?: Instant.MAX) && x<(b ?: Instant.MAX)
+            }
+        }}
+        val survivors=implicit.flatMap{u->
+            var pieces=listOf(periodBounds(u,dao.regimens()))
+            rows.filter{it.kind==HistoryPeriods.DELETED && it.medicationId==u.medication_id}.forEach{r->
+                val a=r.exactFromUtc?.let(Instant::ofEpochMilli) ?: r.from.atStartOfDay(r.zone).toInstant()
+                val b=(if(r.exactFromUtc!=null)r.exactUntilUtc?.let(Instant::ofEpochMilli) else r.until?.atStartOfDay(r.zone)?.toInstant()) ?: Instant.MAX
+                pieces=pieces.flatMap{(x,y)->val end=y ?: Instant.MAX;if(a>=end || b<=x)listOf(x to y) else buildList{if(x<a)add(x to a);if(b<end)add(b to y)}}
+            }
+            pieces.map{(a,b)->val z=ZoneId.of(u.zone);val from=a.atZone(z).toLocalDate();val until=b?.atZone(z)?.let{if(it.toLocalTime()==LocalTime.MIDNIGHT)it.toLocalDate() else it.toLocalDate().plusDays(1)}
+                TimelineEditRow(HistoryPeriods.PERIOD,u.medication_id,HistoryPeriods.readStandard(u.standard_json),from,until,z,u.identity_json,
+                    exactFromUtc=a.toEpochMilli(),exactUntilUtc=b?.toEpochMilli(),evidenceJson=u.evidence_json)}
+        }
+        val replacementKeys=(replace+implicit.map{it.period_key}).distinct()
         val group=java.util.UUID.randomUUID().toString()
-        replace.distinct().forEach{key->val c=current(dao.historyPeriods(),key);require(c.kind in HistoryPeriods.USER_KINDS)
+        replacementKeys.forEach{key->val c=current(dao.historyPeriods(),key);require(c.kind in HistoryPeriods.USER_KINDS)
             if(c.state==HistoryPeriods.CONFIRMED)appendPeriod(dao,c.copy(id=0,revision=c.revision+1,state=HistoryPeriods.REVOKED,created_utc=now.toEpochMilli()))}
-        rows.forEach{r->
+        (survivors+rows).forEach{r->
             require(r.kind in HistoryPeriods.USER_KINDS && (r.standard!=null)==(r.kind in listOf(HistoryPeriods.PERIOD,HistoryPeriods.FILL)))
-            val evidence=org.json.JSONObject().put("replaces",org.json.JSONArray(replace.distinct())).put("note",r.note)
+            val evidence=org.json.JSONObject(r.evidenceJson).put("replaces",org.json.JSONArray(r.replaces ?: replacementKeys)).put("note",r.note)
+            if(r.kind==HistoryPeriods.PERIOD && !evidence.has("stated_utc"))evidence.put("stated_utc",now.toEpochMilli())
             r.exactFromUtc?.let{evidence.put("exact_from_utc",it).put("exact_until_utc",r.exactUntilUtc ?: org.json.JSONObject.NULL)}
+            val rowGroup=if(r.trash)java.util.UUID.randomUUID().toString() else group
             appendPeriod(dao,HistoryPeriodEntity(period_key=java.util.UUID.randomUUID().toString(),revision=1,state=HistoryPeriods.CONFIRMED,medication_id=r.medicationId,
                 identity_json=r.identityJson,standard_json=r.standard?.let(HistoryPeriods::standardJson) ?: "{}",from_date=r.from.toString(),until_date=r.until?.toString(),
-                zone=r.zone.id,evidence_json=evidence.toString(),origin=HistoryPeriods.USER_ORIGIN,created_utc=now.toEpochMilli(),kind=r.kind,group_key=group))
+                zone=r.zone.id,evidence_json=evidence.toString(),origin=HistoryPeriods.USER_ORIGIN,created_utc=now.toEpochMilli(),kind=r.kind,group_key=rowGroup))
+            if(r.trash)Trash.insert(sql(),Trash.PERIOD,rowGroup,r.from.toString(),org.json.JSONObject(),now.toEpochMilli())
         };group
+    }
+    /** §40: convert a build-24 display atomically; old revisions and trash references remain intact. */
+    suspend fun migrateTimeline(replace:List<String>,rows:List<TimelineEditRow>,now:Instant=Instant.now())=transaction { dao ->
+        replace.distinct().forEach{key->val c=current(dao.historyPeriods(),key)
+            if(c.state==HistoryPeriods.CONFIRMED)appendPeriod(dao,c.copy(id=0,revision=c.revision+1,state=HistoryPeriods.REVOKED,created_utc=now.toEpochMilli()))}
+        if(rows.isNotEmpty())editTimeline(emptyList(),rows,now)
     }
     /** Undoes one edit: its rows are revoked and the user edits it replaced come back. Nothing is deleted. */
     suspend fun undoTimelineEdit(group:String,now:Instant=Instant.now())=transaction { dao ->
@@ -120,13 +125,8 @@ const val BACKFILL_MAX_DAYS=731L
     suspend fun trash()=withContext(Dispatchers.IO){db().dao().trash().filter{it.state==Trash.TRASHED}}
     /** Deleting a period: the deletion edit goes to the bin, so it can be restored or purged. */
     suspend fun deletePeriod(replace:List<String>,rows:List<TimelineEditRow>,now:Instant=Instant.now())=transaction { _ ->
-        val group=editTimeline(replace,rows,now)
-        Trash.insert(sql(),Trash.PERIOD,group,rows.minOf{it.from}.toString(),org.json.JSONObject(),now.toEpochMilli());group
-    }
-    /** Deleting the user's own correction: it is undone and kept in the bin. */
-    suspend fun deleteCorrection(group:String,now:Instant=Instant.now())=transaction { dao ->
-        val day=HistoryPeriods.userEdits(dao.historyPeriods()).filter{it.group_key==group}.minOfOrNull{it.from_date} ?: error("Nothing to delete")
-        undoTimelineEdit(group,now);Trash.insert(sql(),Trash.CORRECTION,group,day,org.json.JSONObject(),now.toEpochMilli())
+        val group=editTimeline(replace,rows.map{it.copy(trash=it.kind==HistoryPeriods.DELETED)},now)
+        val latest=sql().query("SELECT ref FROM trash_item WHERE kind='PERIOD' AND deleted_utc=? ORDER BY id DESC LIMIT 1",arrayOf(now.toEpochMilli())).use{if(it.moveToFirst())it.getString(0) else group};latest
     }
     private fun trashItem(dao:NotesDao,id:Long)=sql().query("SELECT * FROM trash_item WHERE id=?",arrayOf(id)).use{c->require(c.moveToFirst()){"No such item"}
         TrashItemEntity(c.getLong(0),c.getString(1),c.getString(2),c.getString(3),c.getLong(4),c.getString(5),c.getString(6))}
@@ -146,7 +146,25 @@ const val BACKFILL_MAX_DAYS=731L
             Trash.RECORD->{val r=requireNotNull(dao.recordById(t.ref.toLong()));require(r.deleted_at_utc!=null)
                 val back=r.copy(deleted_at_utc=null,revision=r.revision+1);dao.updateRecord(back)
                 if(back.status in listOf("ON_TIME","LATE"))SupplyLedger.allocate(dao,dao.recordById(back.id)!!)}
-            Trash.PERIOD->undoTimelineEdit(t.ref,now)
+            Trash.PERIOD->{
+                val all=dao.historyPeriods();val deleted=HistoryPeriods.userEdits(all).filter{it.group_key==t.ref}
+                val users=HistoryPeriods.userEdits(all).filter{it.kind==HistoryPeriods.PERIOD && it.group_key!=t.ref};val versions=dao.regimens()
+                if(deleted.any{d->val (a,b)=periodBounds(d,versions);users.any{u->(u.medication_id==d.medication_id) && periodBounds(u,versions).let{(x,y)->a<(y ?: Instant.MAX) && x<(b ?: Instant.MAX)}}})throw PeriodRestoreConflict()
+                if(deleted.any{JSONObject(it.evidence_json).has("restore_rows")}) {
+                    val back=deleted.flatMap{d->JSONObject(d.evidence_json).optJSONArray("restore_rows")?.let{a->(0 until a.length()).map(a::getJSONObject)}.orEmpty()}
+                    deleted.forEach{d->appendPeriod(dao,d.copy(id=0,revision=d.revision+1,state=HistoryPeriods.REVOKED,created_utc=now.toEpochMilli()))}
+                    back.forEach{p->
+                        val a=Instant.ofEpochMilli(p.getLong("from_utc"));val b=if(p.isNull("until_utc"))null else Instant.ofEpochMilli(p.getLong("until_utc"))
+                        val original=current(dao.historyPeriods(),p.getString("period_key"));require(original.state==HistoryPeriods.REVOKED)
+                        val zone=ZoneId.of(original.zone);val from=a.atZone(zone).toLocalDate()
+                        val until=b?.atZone(zone)?.let{if(it.toLocalTime()==LocalTime.MIDNIGHT)it.toLocalDate() else it.toLocalDate().plusDays(1)}
+                        val oldBounds=periodBounds(original,versions)
+                        val restored=if(oldBounds==(a to b))original else original.copy(from_date=from.toString(),until_date=until?.toString(),
+                            evidence_json=JSONObject(original.evidence_json).put("exact_from_utc",a.toEpochMilli()).put("exact_until_utc",b?.toEpochMilli() ?: JSONObject.NULL).toString())
+                        appendPeriod(dao,restored.copy(id=0,revision=original.revision+1,state=HistoryPeriods.CONFIRMED,created_utc=now.toEpochMilli()))
+                    }
+                } else undoTimelineEdit(t.ref,now)
+            }
             Trash.CORRECTION->{
                 val all=dao.historyPeriods();val keys=all.filter{it.group_key==t.ref}.map{it.period_key}.distinct()
                 val replaced=all.filter{it.group_key==t.ref}.flatMap{r->org.json.JSONObject(r.evidence_json).optJSONArray("replaces")?.let{a->(0 until a.length()).map(a::getString)}.orEmpty()}.distinct()

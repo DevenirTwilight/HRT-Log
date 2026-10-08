@@ -33,6 +33,7 @@ fun labContextLines(context:Context,row:LabContextEntity):List<String> {
         val origin=context.getString(when(row.origin){"AT_ENTRY"->R.string.lab_context_at_entry;"SAMPLE_CHANGED"->R.string.lab_context_sample_changed;else->R.string.lab_context_reconstructed})
         add(context.getString(R.string.lab_context_captured,row.revision,date(row.captured_utc),origin))
         add(context.getString(R.string.lab_context_sample,date(o.getLong("sampled_utc")),o.getString("analyte_code")))
+        if(o.has("period_source"))add(context.getString(if(o.getString("period_source")=="USER_EDIT")R.string.period_user_edited else R.string.period_system_source))
         val epoch=o.getJSONObject("epoch")
         if(epoch.getBoolean("unknown"))add(context.getString(R.string.lab_context_epoch_unknown)) else {
             add(context.getString(R.string.lab_context_epoch,date(epoch.getLong("from")),if(epoch.isNull("until"))context.getString(R.string.lab_context_open_end) else date(epoch.getLong("until"))))

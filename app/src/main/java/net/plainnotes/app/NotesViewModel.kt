@@ -54,6 +54,10 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
                     r.medication_id to ScheduleSummary(RuleKind.valueOf(r.kind),r.interval,DayOfWeek.entries.filter{r.weekday_mask and (1 shl (it.value-1))!=0}.toSet(),
                         times.map{LocalTime.parse(it.local_time)},r.dose_snapshot,times.map{it.dose_override})
                 }
+                val conversion=net.plainnotes.app.timeline.TimelineV2Migration.plan(
+                    ExtraState(records=dao.records(),regimens=dao.regimens(),historyPeriods=dao.historyPeriods()),now,
+                    dao.rules().associate{it.id to it.config_snapshot})
+                conversion?.let{repo.migrateTimeline(it.replace,it.rows,now)}
                 val profiles=meds.mapNotNull{m->dao.profile(m.id)?.let{m.id to it}}.toMap()
                 val upcoming=(repo.planned(now,now.plus(Duration.ofDays(366)),now)+slots.filter{it.slot.at<now}).distinctBy{it.slot.key}.filter{it.state in net.plainnotes.app.ui.OPEN_STATES}
                 NotesState(meds,slots,dao.appointments(),mutable.value.error,false,schedules,profiles,start,dao.rules().associate{it.id to it.config_snapshot}) to
@@ -109,7 +113,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
                           /** §39 recycle bin (only items that can still be restored). */ val trash:List<TrashItemEntity> = emptyList(),
                           val trashedRecords:List<RecordEntity> = emptyList())
     val extra=MutableStateFlow(ExtraState())
-    private fun guarded(block:suspend()->Unit)=viewModelScope.launch{try{block()}catch(e:kotlinx.coroutines.CancellationException){throw e}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}
+    private fun guarded(block:suspend()->Unit)=viewModelScope.launch{try{block()}catch(e:kotlinx.coroutines.CancellationException){throw e}catch(e:Exception){mutable.value=mutable.value.copy(error=if(e is PeriodRestoreConflict)R.string.period_restore_overlap else R.string.operation_error)}}
     fun loadExtra():Job=refresh()
     private fun mutateExtra(block:suspend()->Unit)=change(block)
     data class ImportedLink(val record:RecordEntity,val candidates:List<TimelineEntry>)
@@ -261,10 +265,8 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     fun setExtra(recordId:Long,extra:Boolean)=change{repo.setExtra(recordId,extra)}
     /** REQUIREMENTS §37b timeline edits; past periods only, never reminders. */
     fun editTimeline(replace:List<String>,rows:List<TimelineEditRow>)=change{repo.editTimeline(replace,rows)}
-    fun undoTimelineEdit(group:String)=change{repo.undoTimelineEdit(group)}
     // §39 recycle bin
     fun deletePeriod(replace:List<String>,rows:List<TimelineEditRow>)=change{repo.deletePeriod(replace,rows)}
-    fun deleteCorrection(group:String)=change{repo.deleteCorrection(group)}
     fun restoreTrash(id:Long)=change{repo.restoreTrash(id)}
     fun purgeTrash(item:TrashItemEntity)=change{repo.purgeTrash(item.id,systemUnderneath(item))}
     fun emptyTrash()=change{extra.value.trash.forEach{repo.purgeTrash(it.id,systemUnderneath(it))}}
@@ -278,11 +280,6 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
             p.raw.any{it.span.medicationId==r.medication_id && it.kind!=net.plainnotes.app.domain.SpanKind.USER && it.kind!=net.plainnotes.app.domain.SpanKind.FILL &&
                 it.span.from<until && (it.span.until ?: Instant.MAX)>from}}
     }
-    fun confirmHistoryPeriod(key:String?,medicationId:Long,standard:TherapyStandard,from:LocalDate,until:LocalDate?,zone:ZoneId,identity:String,evidence:String)=
-        change{repo.confirmHistoryPeriod(key,medicationId,standard,from,until,zone,identity,evidence)}
-    fun revokeHistoryPeriod(key:String)=change{repo.revokeHistoryPeriod(key)}
-    fun splitHistoryPeriod(key:String,day:LocalDate)=change{repo.splitHistoryPeriod(key,day)}
-    fun mergeHistoryPeriods(first:String,second:String)=change{repo.mergeHistoryPeriods(first,second)}
     fun loadOverride(key:String)=viewModelScope.launch{override.value=repo.currentOverride(key)}
     fun changeOverride(s:Slot,o:SlotOverride)=change{repo.override(s,o);override.value=null}
     fun appointment(v:AppointmentEntity)=change{repo.appointment(v)}
@@ -307,6 +304,6 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
             sections=VisitSection.encode(sections),language=language,template_version=net.plainnotes.app.visit.VISIT_TEMPLATE_VERSION,input_digest=digest,facts_json=facts.json().toString()))}
         refresh().join();DataJob.Done(R.string.export_saved)
     }
-    fun testReminder()=viewModelScope.launch{try{reminders.testReminder()}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}
+    fun testReminder()=viewModelScope.launch{try{reminders.testReminder()}catch(e:Exception){mutable.value=mutable.value.copy(error=if(e is PeriodRestoreConflict)R.string.period_restore_overlap else R.string.operation_error)}}
     fun sync()=viewModelScope.launch{runCatching{reminders.sync()};refresh().join()}
 }

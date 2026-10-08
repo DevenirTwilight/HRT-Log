@@ -41,7 +41,8 @@ class PeriodStabilityTest {
     // ---- what must not change ----
     data class Snapshot(val periods:List<Triple<String,Instant,Instant?>>,val standards:List<List<TherapyStandard>>,val recordPeriods:Map<Long,String?>,val labels:Map<Long,Set<net.plainnotes.app.domain.RecordLabel>>)
     private suspend fun snapshot():Snapshot {
-        val extra=NotesViewModel.ExtraState(records=repo.records(),regimens=db.dao().regimens(),historyPeriods=repo.historyPeriods(),annotations=repo.annotations())
+        var extra=NotesViewModel.ExtraState(records=repo.records(),regimens=db.dao().regimens(),historyPeriods=repo.historyPeriods(),annotations=repo.annotations())
+        TimelineV2Migration.plan(extra,now)?.let{repo.migrateTimeline(it.replace,it.rows,now);extra=extra.copy(historyPeriods=repo.historyPeriods())}
         val v=PeriodTimelineProjection.build(extra,emptyList(),now)
         val p=v.projection;val taken=extra.records.filter{it.deleted_at_utc==null && it.status in listOf("ON_TIME","LATE") && it.taken_utc!=null}
         return Snapshot(p.periods.map{Triple(it.key,it.from,it.until)},p.periods.map{d->p.standards.filter{it.key in d.finalStandardSpanKeys}.map{it.standard}.sortedBy{it.toString()}},
@@ -96,7 +97,17 @@ class PeriodStabilityTest {
         val first=v.projection.periods.first{it.finalStandardSpanKeys.isNotEmpty()};val r=TimelineEdits.rangeOf(first,paris)
         repo.editTimeline(emptyList(),listOf(TimelineEditRow(HistoryPeriods.PERIOD,med,standard,r.from,r.until,paris,"{}")))
     }
-    private val datasets:List<Pair<String,suspend ()->Unit>> = listOf("golden" to {golden()},"history only" to {historyOnly()},"dose change" to {doseChange()},"DST and edits" to {dstAndEdits()})
+    private val datasets:List<Pair<String,suspend ()->Unit>> = listOf("golden" to {golden()},"history only" to {historyOnly()},"dose change" to {doseChange()},"DST and edits" to {dstAndEdits()},"edited period" to {editedHistory()})
+
+    /** §40: a fixed user override stays fixed after all the same real non-treatment paths. */
+    private suspend fun editedHistory() {
+        doseChange()
+        val e=NotesViewModel.ExtraState(records=repo.records(),regimens=db.dao().regimens(),historyPeriods=repo.historyPeriods())
+        val p=PeriodTimelineProjection.build(e,emptyList(),now).projection
+        val edit=TimelineEdits.saveV2(e.historyPeriods,p,med,standard.copy(doses=listOf(4.0,4.0)),
+            TimelineEdits.Range(LocalDate.parse("2026-06-10"),LocalDate.parse("2026-07-01")),MedicationSnapshot.encode(base.copy(id=med),ProfileEntity(med,"E2","sublingual",sl_tier=2)))
+        repo.editTimeline(edit.replace,edit.rows,t)
+    }
 
     // ---- non-treatment operations (REQUIREMENTS §38 item 2) ----
     private var tick=0L
@@ -142,7 +153,7 @@ class PeriodStabilityTest {
 
     private fun run(dataset:suspend ()->Unit,ops:List<suspend ()->Unit>):Snapshot=runBlocking {
         context.deleteDatabase(name);db.close();open();TimeZone.setDefault(TimeZone.getTimeZone(paris));Locale.setDefault(Locale.ROOT)
-        dataset();ops.forEach{it()};TimeZone.setDefault(TimeZone.getTimeZone(paris));snapshot()
+        dataset();snapshot();ops.forEach{it()};TimeZone.setDefault(TimeZone.getTimeZone(paris));snapshot()
     }
 
     @Test fun goldenDiagnosticsStructureIsOnePeriodWithEveryRecordInIt()=runBlocking {

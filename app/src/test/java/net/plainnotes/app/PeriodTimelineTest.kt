@@ -83,7 +83,7 @@ class PeriodTimelineTest {
         assertEquals("epoch:${cut.toEpochMilli()}:2",LabContext.validate(context).getJSONObject("epoch").getString("key"))
         assertEquals(context,LabContext.build(lab,emptyList(),versions,emptyMap()))
         assertEquals(digest,VisitDigest.compute(d,spec,VisitFacts.build(d,appointment,from,to,zone),"en",zone))
-        assertEquals(original,versions.map{it.definition_json to it.clinical_signature});assertEquals(2,VISIT_TEMPLATE_VERSION)
+        assertEquals(original,versions.map{it.definition_json to it.clinical_signature});assertEquals(3,VISIT_TEMPLATE_VERSION)
     }
 
 }

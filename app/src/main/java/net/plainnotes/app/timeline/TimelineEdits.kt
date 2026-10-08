@@ -15,12 +15,7 @@ object TimelineEdits {
     data class Edit(val replace:List<String>,val rows:List<TimelineEditRow>)
 
     /** The days a display period covers; a period shorter than a day still covers its whole day. */
-    fun rangeOf(period:DisplayPeriod,zone:ZoneId):Range {
-        val from=period.from.atZone(zone).toLocalDate()
-        // A period ending during a day leaves that day to the next period; a period within one day keeps its day.
-        val until=period.until?.let{u->u.atZone(zone).toLocalDate().let{d->if(d<=from)from.plusDays(1) else d}}
-        return Range(from,until)
-    }
+    fun rangeOf(period:DisplayPeriod,zone:ZoneId):Range=daysOf(period.from,period.until,zone)
     private fun overlaps(a:Instant,b:Instant?,c:Instant,d:Instant?)=a<(d ?: Instant.MAX) && c<(b ?: Instant.MAX)
 
     /** Medicines with a plan part inside [period] (entry IDs as stored, not lanes). */
@@ -61,6 +56,71 @@ object TimelineEdits {
         return Range(a,until?.let{u->u.atZone(zone).let{z->if(z.toLocalTime()==LocalTime.MIDNIGHT)z.toLocalDate() else z.toLocalDate().plusDays(1)}.let{if(it<=a)a.plusDays(1) else it}})
     }
 
+
+    private fun restoration(r:HistoryPeriodEntity,from:Instant,until:Instant?)=org.json.JSONObject()
+        .put("period_key",r.period_key).put("medication_id",r.medication_id).put("from_utc",from.toEpochMilli()).put("until_utc",until?.toEpochMilli() ?: org.json.JSONObject.NULL)
+        .put("standard",org.json.JSONObject(r.standard_json)).put("identity",org.json.JSONObject(r.identity_json))
+    private fun restoreEvidence(rows:List<org.json.JSONObject>)=org.json.JSONObject().put("restore_rows",org.json.JSONArray(rows)).toString()
+
+    /** §40: the exact remaining pieces after an overlay, never rounded to the display day. */
+    private fun subtract(a:Instant,b:Instant?,f:Instant,u:Instant?):List<Pair<Instant,Instant?>> {
+        val end=b ?: Instant.MAX;val last=u ?: Instant.MAX
+        return if(f>=end || last<=a)listOf(a to b) else buildList {
+            if(a<f)add(a to f);if(last<end)add(last to b)
+        }
+    }
+    data class OverlapChange(val from:Instant,val until:Instant?,val remaining:List<Pair<Instant,Instant?>>)
+    private fun lane(p:TreatmentPeriodProjection,med:Long)=TreatmentPeriods.medicationLanes(p.raw)[med] ?: med
+    /** Shown standards outside the editing target, for the selected medicine only. */
+    private fun peers(p:TreatmentPeriodProjection,med:Long,target:Pair<Instant,Instant?>?)=
+        p.standards.filter{it.medicationId==lane(p,med)}.flatMap{s->
+            (target?.let{(a,b)->subtract(s.from,s.until,a,b)} ?: listOf(s.from to s.until)).map{(a,b)->s.copy(from=a,until=b)}}
+    fun overlapChanges(p:TreatmentPeriodProjection,med:Long,range:Range,target:Range?,exactTarget:Pair<Instant,Instant?>?=null,exactNew:Pair<Instant,Instant?>?=null):List<OverlapChange> {
+        val (f,u)=exactNew ?: range.instants(p.zone)
+        return peers(p,med,exactTarget ?: target?.instants(p.zone)).filter{overlaps(it.from,it.until,f,u)}.map{s->OverlapChange(s.from,s.until,subtract(s.from,s.until,f,u))}
+    }
+    private fun rowAt(kind:String,med:Long,s:TherapyStandard?,from:Instant,until:Instant?,zone:ZoneId,identity:String,replaces:List<String>?=null,trash:Boolean=false):TimelineEditRow {
+        val dates=daysOf(from,until,zone)
+        return TimelineEditRow(kind,med,s,dates.from,dates.until,zone,identity,exactFromUtc=from.toEpochMilli(),exactUntilUtc=until?.toEpochMilli(),replaces=replaces,trash=trash)
+    }
+    /**
+     * §40: call only after the overlap preview was accepted. Target leftovers expose the system; affected neighbours
+     * become fixed user periods, fully covered neighbours each get their own recycle-bin item.
+     */
+    fun saveV2(rows:List<HistoryPeriodEntity>,p:TreatmentPeriodProjection,med:Long,standard:TherapyStandard,range:Range,identity:String,
+               target:Range?=null,exactTarget:Pair<Instant,Instant?>?=null,exactNew:Pair<Instant,Instant?>?=null):Edit {
+        val zone=p.zone;val (f,u)=exactNew ?: range.instants(zone);val t=exactTarget ?: target?.instants(zone)
+        val sameLane=TreatmentPeriods.medicationLanes(p.raw)
+        val users=HistoryPeriods.userEdits(rows).filter{it.kind==HistoryPeriods.PERIOD && (sameLane[it.medication_id] ?: it.medication_id)==lane(p,med)}
+        fun bounds(row:HistoryPeriodEntity):Pair<Instant,Instant?> {
+            val shown=p.raw.firstOrNull{userEditRow(rows,it.span.id)?.period_key==row.period_key}
+            if(shown!=null)return shown.span.from to shown.span.until
+            val exact=HistoryPeriods.exactBounds(row);return if(exact!=null)Instant.ofEpochMilli(exact.first) to exact.second?.let(Instant::ofEpochMilli)
+                else Range(LocalDate.parse(row.from_date),row.until_date?.let(LocalDate::parse)).instants(ZoneId.of(row.zone))
+        }
+        val replaced=users.filter{r->val (a,b)=bounds(r);overlaps(a,b,f,u) || t?.let{(x,y)->overlaps(a,b,x,y)}==true}
+        val out=mutableListOf<TimelineEditRow>()
+        // Only outside the target survives from its old user revision. A shorter replacement re-exposes system facts.
+        replaced.forEach{r->val (a,b)=bounds(r);var parts=listOf(a to b)
+            t?.let{(x,y)->parts=parts.flatMap{(c,d)->subtract(c,d,x,y)}}
+            parts=parts.flatMap{(c,d)->subtract(c,d,f,u)}
+            parts.forEach{(c,d)->out+=rowAt(HistoryPeriods.PERIOD,r.medication_id,HistoryPeriods.readStandard(r.standard_json),c,d,zone,r.identity_json,replaces=emptyList())}}
+        peers(p,med,t).filter{overlaps(it.from,it.until,f,u)}.forEach{s->
+            val remains=subtract(s.from,s.until,f,u)
+            if(remains.isEmpty()) {
+                val keys=replaced.filter{r->val (a,b)=bounds(r);a>=s.from && (b ?: Instant.MAX)<=(s.until ?: Instant.MAX)}.map{it.period_key}
+                val back=replaced.filter{it.period_key in keys}.map{row->val (a,b)=bounds(row);restoration(row,a,b)}
+                out+=rowAt(HistoryPeriods.DELETED,med,null,s.from,s.until,zone,identity,keys,true).copy(evidenceJson=restoreEvidence(back))
+            } else {
+                // Existing user remainders were emitted above; save only the system neighbour's remaining pieces.
+                val source=p.raw.filter{it.span.id in s.rawVersionIds}
+                if(source.none{it.kind==SpanKind.USER})remains.forEach{(a,b)->out+=rowAt(HistoryPeriods.PERIOD,med,s.standard,a,b,zone,identity,replaces=emptyList())}
+            }
+        }
+        out+=rowAt(HistoryPeriods.PERIOD,med,standard,f,u,zone,identity,replaces=emptyList())
+        return Edit(replaced.map{it.period_key},out)
+    }
+
     /** Splits each medicine of [period] at [day]; both halves keep the shown standard and their own bounds. */
     fun split(rows:List<HistoryPeriodEntity>,p:TreatmentPeriodProjection,period:DisplayPeriod,day:LocalDate,identity:(Long)->String):Edit? {
         val range=rangeOf(period,p.zone);if(day<=range.from || (range.until!=null && day>=range.until))return null
@@ -71,8 +131,25 @@ object TimelineEdits {
 
     /** Marks every medicine of [period] (or [only]) as deleted over the period's days; records are never touched. */
     fun delete(rows:List<HistoryPeriodEntity>,p:TreatmentPeriodProjection,period:DisplayPeriod,identity:(Long)->String,only:Long?=null):Edit? {
-        val range=rangeOf(period,p.zone);val meds=(only?.let(::listOf) ?: medicationsIn(p,period));if(meds.isEmpty())return null
-        return Edit(meds.flatMap{touched(rows,it,range)}.distinct(),meds.map{TimelineEditRow(HistoryPeriods.DELETED,it,null,range.from,range.until,p.zone,identity(it))})
+        val meds=only?.let(::listOf) ?: medicationsIn(p,period)
+        if(meds.isEmpty())return null
+        val out=mutableListOf<TimelineEditRow>();val replaced=mutableListOf<String>()
+        meds.forEach{m->
+            val users=HistoryPeriods.userEdits(rows).filter{it.kind==HistoryPeriods.PERIOD && it.medication_id==m}.filter{row->
+                val exact=HistoryPeriods.exactBounds(row);val (a,b)=if(exact!=null)Instant.ofEpochMilli(exact.first) to exact.second?.let(Instant::ofEpochMilli)
+                    else Range(LocalDate.parse(row.from_date),row.until_date?.let(LocalDate::parse)).instants(ZoneId.of(row.zone))
+                if(!overlaps(a,b,period.from,period.until))false else {
+                    replaced+=row.period_key
+                    subtract(a,b,period.from,period.until).forEach{(f,u)->out+=rowAt(HistoryPeriods.PERIOD,m,HistoryPeriods.readStandard(row.standard_json),f,u,p.zone,row.identity_json,replaces=emptyList())}
+                    true
+                }
+            }
+            val back=users.map{row->
+                val shown=p.raw.firstOrNull{userEditRow(rows,it.span.id)?.period_key==row.period_key}
+                restoration(row,maxOf(shown?.span?.from ?: period.from,period.from),listOfNotNull(shown?.span?.until,period.until).minOrNull())}
+            out+=rowAt(HistoryPeriods.DELETED,m,null,period.from,period.until,p.zone,identity(m),users.map{it.period_key}).copy(evidenceJson=restoreEvidence(back))
+        }
+        return Edit(replaced,out)
     }
 
     /**
