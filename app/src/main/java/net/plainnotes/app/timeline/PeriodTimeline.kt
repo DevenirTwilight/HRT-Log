@@ -38,6 +38,27 @@ internal fun projectHistory(confirmed:List<RawTreatmentInterval>,historical:Hist
         PeriodHistory(TreatmentPeriods.build(confirmed,zone),HistoricalTreatmentProjection(emptyList(),emptySet()),true)
     }
 
+/**
+ * REQUIREMENTS §36: a recognised part lying between confirmed or saved parts of one merged period (for example the
+ * hours between a confirmed period ending on 10-06 and a plan saved at noon) is judged by the part before it.
+ * A recognised part at either end of a period stays "to confirm".
+ */
+internal fun mergedCoverage(projection:TreatmentPeriodProjection,historical:HistoricalTreatmentProjection):Map<Long,RecordCoverage> {
+    val rawById=projection.raw.associateBy{it.span.id}
+    val remap=mutableMapOf<Long,RawTreatmentInterval>()
+    projection.standards.forEach{span->
+        val members=span.rawVersionIds.mapNotNull(rawById::get).sortedBy{it.span.from}
+        val anchors=members.filter{it.span.id>0 || ObservedTreatmentHistory.isConfirmedSpan(it.span.id)}
+        members.filter{it !in anchors}.forEach{m->
+            val before=anchors.lastOrNull{it.span.from<m.span.from}
+            if(before!=null && anchors.any{it.span.from>m.span.from})remap[m.span.id]=before
+        }
+    }
+    if(remap.isEmpty())return historical.coverage
+    val observedOf=historical.observed.flatMap{o->o.records.map{it.id to o.interval.span.id}}.toMap()
+    return historical.coverage.mapValues{(id,c)->if(c.pending)observedOf[id]?.let(remap::get)?.let{RecordCoverage(it,false)} ?: c else c}
+}
+
 /** Current confirmed past periods as projection inputs; span IDs are display-only negatives, never stored or frozen. */
 fun confirmedPeriodInputs(rows:List<HistoryPeriodEntity>):List<ConfirmedPeriodInput> = HistoryPeriods.confirmed(rows).sortedBy{it.id}.mapNotNull{row->
     runCatching {
@@ -72,6 +93,6 @@ object PeriodTimelineProjection {
         val order=compareByDescending<PeriodEvent>{it.date}.thenByDescending{it.at}.thenBy{it.key}
         return PeriodTimeline(projection,events.sortedWith(order),upcoming.sortedWith(compareBy<PeriodEvent>{it.date}.thenBy{it.at}.thenBy{it.key}),
             ImportedHistoryProjection.build(extra.records.filter{it.id !in historical.resolvedRecordIds},projection,now),historical.observed,
-            extra.records.filter{it.id in historical.resolvedRecordIds},result.unavailable,historical.coverage,HistoryPeriods.confirmed(extra.historyPeriods))
+            extra.records.filter{it.id in historical.resolvedRecordIds},result.unavailable,mergedCoverage(projection,historical),HistoryPeriods.confirmed(extra.historyPeriods))
     }
 }

@@ -28,9 +28,10 @@ class PeriodMergeAcrossImportTest {
 
     private class Case(val records:List<RecordEntity>,val extra:NotesViewModel.ExtraState,val before:List<Long>,val after:List<Long>)
 
-    private fun case(entry:Entry,esters:Esters,before:Before,appCadence:String="EVERY_N_DAYS"):Case {
+    private fun case(entry:Entry,esters:Esters,before:Before,appCadence:String="EVERY_N_DAYS",appDose:Double=2.0,appRoute:String="SUBLINGUAL"):Case {
         val htMed=if(entry==Entry.SAME)appMed else 2L
-        val htJson=snapshot(htMed,esters.imported);val appJson=snapshot(appMed,esters.app)
+        val htJson=snapshot(htMed,esters.imported)
+        val appJson=MedicationSnapshot.encode(med(appMed,"Synthetic app E2").copy(route=appRoute,dose_per_intake=appDose),esters.app?.let{ProfileEntity(appMed,it,appRoute.lowercase(),sl_tier=2)})
         var id=1L
         // HRT Tracker history twice daily until the boundary morning, with occasional single logs.
         val ht=generateSequence(day0){it.plusDays(1)}.takeWhile{it<=boundary}.flatMap{d->
@@ -38,12 +39,12 @@ class PeriodMergeAcrossImportTest {
             hours.map{h->RecordEntity(id++,htMed,taken_utc=at(d,h),taken_zone=zone.id,actual_dose=2.0,status="ON_TIME",origin="IMPORT_HT",
                 source_record_key="ht:synthetic:merge:$d:$h",revision=1,config_snapshot=htJson)}
         }.toList()
-        val definition=if(appCadence=="EVERY_N_HOURS")RegimenDefinition(appJson,"EVERY_N_HOURS",12,0,2.0,zone.id,null,cut.toEpochMilli(),emptyList())
-            else RegimenDefinition(appJson,"EVERY_N_DAYS",1,0,2.0,zone.id,boundary.toString(),null,listOf("08:00:00" to null,"20:00:00" to null))
+        val definition=if(appCadence=="EVERY_N_HOURS")RegimenDefinition(appJson,"EVERY_N_HOURS",12,0,appDose,zone.id,null,cut.toEpochMilli(),emptyList())
+            else RegimenDefinition(appJson,"EVERY_N_DAYS",1,0,appDose,zone.id,boundary.toString(),null,listOf("08:00:00" to null,"20:00:00" to null))
         val version=RegimenVersionEntity(1,appMed,cut.toEpochMilli(),null,zone.id,definition.json(),definition.signature(),"APP",cut.toEpochMilli())
         val app=generateSequence(boundary){it.plusDays(1)}.takeWhile{it<LocalDate.of(2026,10,20)}.flatMap{d->
-            listOf(8,20).filter{h->at(d,h)>=cut.toEpochMilli()}.map{h->RecordEntity(id++,appMed,scheduled_utc=at(d,h),scheduled_zone=zone.id,planned_dose=2.0,
-                taken_utc=at(d,h)+300_000,taken_zone=zone.id,actual_dose=2.0,status="ON_TIME",origin="APP",revision=1,config_snapshot=appJson)}
+            listOf(8,20).filter{h->at(d,h)>=cut.toEpochMilli()}.map{h->RecordEntity(id++,appMed,scheduled_utc=at(d,h),scheduled_zone=zone.id,planned_dose=appDose,
+                taken_utc=at(d,h)+300_000,taken_zone=zone.id,actual_dose=appDose,status="ON_TIME",origin="APP",revision=1,config_snapshot=appJson)}
         }.toList()
         val standard=net.plainnotes.app.domain.TherapyStandard("E2",esters.imported,"SUBLINGUAL","MG",null,"EVERY_N_DAYS",1,0,listOf(2.0,2.0))
         val periods=if(before==Before.PENDING)emptyList() else listOf(HistoryPeriodEntity(1,"00000000-0000-4000-8000-000000000019",1,HistoryPeriods.CONFIRMED,htMed,htJson,
@@ -56,6 +57,9 @@ class PeriodMergeAcrossImportTest {
         val view=PeriodTimelineProjection.build(c.extra,emptyList(),now)
         assertEquals("$label: one period",1,view.projection.periods.size)
         val period=view.projection.periods.single()
+        val ids=view.projection.standards.single().rawVersionIds
+        assertTrue("$label: saved plan in the period",1L in ids)
+        if(before!=Before.PENDING)assertTrue("$label: confirmed part in the period",ids.any(ObservedTreatmentHistory::isConfirmedSpan))
         // Every record, from either source, belongs to that one period.
         c.records.forEach{r->assertEquals("$label: record ${r.id}",period.key,view.projection.periodAt(Instant.ofEpochMilli(r.taken_utc!!))?.key)}
         val labels=HistoryLabels.build(c.records,view,emptyList(),zone)
@@ -77,5 +81,20 @@ class PeriodMergeAcrossImportTest {
 
     @Test fun twelveHourlyAppPlanEqualsTwiceDailyHistory() {
         for(before in Before.entries)check(case(Entry.IMPORT_CREATED,Esters.SAME,before,"EVERY_N_HOURS"),before,"12h/$before")
+    }
+
+    @Test fun realChangesAtTheBoundaryStillStartANewPeriod() {
+        for(before in Before.entries)for(entry in Entry.entries) {
+            for((name,changed) in listOf("dose" to case(entry,Esters.SAME,before,appDose=3.0),"route" to case(entry,Esters.SAME,before,appRoute="ORAL"))) {
+                val view=PeriodTimelineProjection.build(changed.extra,emptyList(),now)
+                fun periodOf(id:Long)=view.projection.periodAt(Instant.ofEpochMilli(changed.records.single{it.id==id}.taken_utc!!))!!.key
+                val label="$name/$entry/$before"
+                assertTrue(label,view.projection.periods.size>=2)
+                assertNotEquals(label,periodOf(changed.before.first()),periodOf(changed.after.last()))
+                assertEquals(label,setOf(view.projection.periods.last().key),changed.after.drop(2).map(::periodOf).toSet())
+                // Same entry: the plan cuts at noon; another entry with another route may overlap for the rest of 10-06.
+                if(entry==Entry.SAME || name=="dose")assertEquals(label,2,view.projection.periods.size)
+            }
+        }
     }
 }

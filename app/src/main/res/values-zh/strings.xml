@@ -891,4 +891,6 @@
     <string name="period_frequency_required">确认前请填写频率。</string>
     <string name="visit_fact_labels">由记录推定：额外（推断）%1$d · 额外（用户标记）%2$d · 剂量与当期不同 %3$d · 方案未知 %4$d · 待确认时期 %5$d</string>
     <string name="lab_context_confirmed_period">采样时所属过去时期（由记录推定，已确认）：%1$s – %2$s</string>
+    <string name="period_partly_confirmed">其中一部分由记录推定，已确认</string>
+    <string name="period_partly_pending">其中一部分由记录推定，待确认</string>
 </resources>

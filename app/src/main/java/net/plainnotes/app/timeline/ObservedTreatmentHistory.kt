@@ -36,6 +36,8 @@ object ObservedTreatmentHistory {
     }
     private data class Candidate(val med:Long,val from:Instant,val until:Instant,val standard:TherapyStandard,val snapshot:MedicationSnapshot,val facts:List<Fact>)
 
+    /** The same entry, or another entry whose saved identity is compatible with a known identity. */
+    private fun related(s:Saved,med:Long,key:Identity?)=s.raw.span.medicationId==med || (key!=null && s.identity!=null && compatible(s.identity,key))
     const val CONFIRMED_SPAN_BASE=-1_000_000_000L
     fun isConfirmedSpan(id:Long)=id<=CONFIRMED_SPAN_BASE
     private fun identity(s:TherapyStandard)=s.compound?.let{c->s.unit?.let{u->Identity(c,s.route,u,s.ester,s.formulation)}}
@@ -43,16 +45,15 @@ object ObservedTreatmentHistory {
               confirmedPeriods:List<ConfirmedPeriodInput> = emptyList()):HistoricalTreatmentProjection {
         val real=versions.map{v->val d=RegimenDefinition.read(v.definition_json)
             Saved(RawTreatmentInterval(v.span(),d.therapyStandard()),d.snapshot(v.medication_id)?.let(::identity))}
-        // Confirmed past periods count as saved history, but a saved prescription always wins where they meet.
-        val realByMedication=real.groupBy{it.raw.span.medicationId}
+        // Confirmed past periods count as saved history, but a saved prescription always wins where they meet,
+        // including one saved on another medication entry for the same medicine (REQUIREMENTS §36).
         val confirmedSaved=confirmedPeriods.flatMap{c->
             var pieces=listOf(c.from to (c.until ?: Instant.MAX))
-            realByMedication[c.medicationId].orEmpty().forEach{s->val f=s.raw.span.from;val u=s.raw.span.until ?: Instant.MAX
+            real.filter{related(it,c.medicationId,identity(c.standard))}.forEach{s->val f=s.raw.span.from;val u=s.raw.span.until ?: Instant.MAX
                 pieces=pieces.flatMap{(a,b)->if(f>=b || u<=a)listOf(a to b) else buildList{if(a<f)add(a to f);if(u<b)add(u to b)}}}
             pieces.filter{(a,b)->a<b}.mapIndexed{i,(a,b)->Saved(RawTreatmentInterval(RegimenSpan(c.spanId-i,c.medicationId,a,b.takeIf{it!=Instant.MAX},true),c.standard),identity(c.standard))}
         }
         val saved=real+confirmedSaved
-        val savedByMedication=saved.groupBy{it.raw.span.medicationId}.mapValues{(_,rows)->rows.sortedBy{it.raw.span.from}}
         val idsByIdentity=saved.filter{it.identity!=null}.groupBy{it.identity!!}.mapValues{(_,rows)->rows.map{it.raw.span.medicationId}.distinct()}
         val snapshots=records.associate{r->r.id to MedicationSnapshot.decode(HistoricalContext.resolved(r,ruleSnapshots),r.medication_id)}
         val facts=records.mapNotNull{r->
@@ -96,7 +97,8 @@ object ObservedTreatmentHistory {
         val clipped=mutableListOf<Candidate>()
         candidates.sortedWith(compareBy({it.med},{it.from})).forEach{c->
             var pieces=listOf(c.from to c.until)
-            val medicationVersions=savedByMedication[c.med].orEmpty()
+            val candidateIdentity=identity(c.standard)
+            val medicationVersions=saved.filter{related(it,c.med,candidateIdentity)}.sortedBy{it.raw.span.from}
             medicationVersions.forEach{s->
                 val from=s.raw.span.from;val until=s.raw.span.until ?: Instant.MAX
                 pieces=pieces.flatMap{(a,b)->if(from>=b || until<=a)listOf(a to b) else buildList {
@@ -108,7 +110,7 @@ object ObservedTreatmentHistory {
                 val adjacent=medicationVersions.firstOrNull{it.raw.span.from>=b}?.takeIf{next->
                     val shortDailyGap=c.standard.kind=="EVERY_N_DAYS" && c.standard.interval==1 && Duration.between(b,next.raw.span.from)<=Duration.ofDays(1)
                     val sameDisplayDay=next.raw.span.from.atZone(zone).toLocalDate()==b.atZone(zone).toLocalDate()
-                    next.identity==identity(c.snapshot) && (sameDisplayDay || shortDailyGap) &&
+                    next.identity!=null && candidateIdentity!=null && compatible(next.identity,candidateIdentity) && (sameDisplayDay || shortDailyGap) &&
                         next.raw.standard.therapySignatureV2()==c.standard.therapySignatureV2() &&
                         candidates.none{other->other.med==c.med && other.from>=b && other.from<next.raw.span.from && other.standard.therapySignatureV2()!=c.standard.therapySignatureV2()}
                 }
@@ -131,12 +133,15 @@ object ObservedTreatmentHistory {
             if(Instant.ofEpochMilli(timestamp)>now)return@forEach
             val m=snapshots[r.id] ?: return@forEach
             val fact=byRecord[r.id];val med=fact?.med ?: r.medication_id
-            val linked=saved.firstOrNull{s->s.raw.span.medicationId==med && timestamp>=s.raw.span.from.toEpochMilli() &&
+            val recordIdentity=identity(m)
+            fun covers(s:Saved)=timestamp>=s.raw.span.from.toEpochMilli() &&
                 (s.raw.span.until?.let{timestamp<it.toEpochMilli()} ?: true) && s.identity?.let{key->
                     (m.molecule==null || m.molecule==key.compound) && (m.unit==null || m.unit==key.unit) &&
                     (m.route==null || key.route==null || m.route==key.route) && (m.profile?.ester==null || key.ester==null || m.profile?.ester==key.ester) &&
                     identity(m)?.let{compatible(it,key)}!=false
-                }==true}
+                }==true
+            // Its own entry first; otherwise a saved or confirmed part of the same medicine on another entry (§36).
+            val linked=saved.firstOrNull{s->s.raw.span.medicationId==med && covers(s)} ?: saved.firstOrNull{s->related(s,med,recordIdentity) && covers(s)}
             if(linked!=null)resolved+=r.id
             if(r.status in listOf("ON_TIME","LATE"))coverage[r.id]=RecordCoverage(linked?.raw,linked==null && r.id in pendingIds)
         }

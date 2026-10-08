@@ -891,4 +891,6 @@
     <string name="period_frequency_required">確認前請填寫頻率。</string>
     <string name="visit_fact_labels">由紀錄推定：額外（推斷）%1$d · 額外（使用者標記）%2$d · 劑量與當期不同 %3$d · 方案未知 %4$d · 待確認時期 %5$d</string>
     <string name="lab_context_confirmed_period">採樣時所屬過去時期（由紀錄推定，已確認）：%1$s – %2$s</string>
+    <string name="period_partly_confirmed">其中一部分由紀錄推定，已確認</string>
+    <string name="period_partly_pending">其中一部分由紀錄推定，待確認</string>
 </resources>

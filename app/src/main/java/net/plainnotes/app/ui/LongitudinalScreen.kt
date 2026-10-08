@@ -113,7 +113,7 @@ import java.time.*
                             StandardSummary(saved?.let{RegimenDefinition.read(it.definition_json).snapshot(it.medication_id)} ?: confirmedRow?.let{MedicationSnapshot.decode(it.identity_json,it.medication_id)} ?: observed?.snapshot,span.standard)
                             // REQUIREMENTS §35a: recognised periods stay "to confirm" until the user confirms them.
                             if(confirmedRow!=null) {
-                                Text(stringResource(R.string.period_confirmed_by_user),style=MaterialTheme.typography.labelMedium,color=MaterialTheme.colorScheme.primary)
+                                Text(stringResource(if(saved!=null)R.string.period_partly_confirmed else R.string.period_confirmed_by_user),style=MaterialTheme.typography.labelMedium,color=MaterialTheme.colorScheme.primary)
                                 val rowZone=ZoneId.of(confirmedRow.zone);val rows=extra.records.filter{r->r.taken_utc!=null && r.deleted_at_utc==null &&
                                     record.coverage[r.id]?.interval?.span?.id?.let{id->ObservedTreatmentHistory.isConfirmedSpan(id) && (ObservedTreatmentHistory.CONFIRMED_SPAN_BASE-id)/100==confirmedRow.id}==true}
                                 val next=record.confirmedHistory.filter{it.medication_id==confirmedRow.medication_id && it.from_date>confirmedRow.from_date}.minByOrNull{it.from_date}
@@ -123,7 +123,7 @@ import java.time.*
                                     rowZone,rows.map{it.id},rows.map{Instant.ofEpochMilli(it.taken_utc!!).atZone(rowZone).toLocalDate()}.distinct().size) to next?.period_key},
                                     modifier=Modifier.testTag("period-edit:${confirmedRow.period_key}")){Text(stringResource(R.string.period_edit))}
                             } else if(observed!=null) {
-                                Text(stringResource(R.string.period_pending),style=MaterialTheme.typography.labelMedium,color=MaterialTheme.colorScheme.tertiary)
+                                Text(stringResource(if(saved!=null)R.string.period_partly_pending else R.string.period_pending),style=MaterialTheme.typography.labelMedium,color=MaterialTheme.colorScheme.tertiary)
                                 val obsZone=observed.records.firstOrNull()?.taken_zone?.let{runCatching{ZoneId.of(it)}.getOrNull()} ?: zone
                                 if(record.confirmedHistory.any{it.medication_id==observed.interval.span.medicationId && it.until_date!=null &&
                                         HistoryPeriods.readStandard(it.standard_json)==observed.interval.standard.copy(kind="EVERY_N_DAYS")})
