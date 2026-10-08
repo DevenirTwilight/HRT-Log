@@ -137,7 +137,7 @@ class HistoryPeriodDataTest {
         // Confirmed periods and user edits are different layers: a user edit may lie over a confirmed period.
         confirm(a,from=d0,until=d0.plusDays(60))
         assertEquals(2,HistoryPeriods.userEdits(repo.historyPeriods()).size);assertEquals(1,HistoryPeriods.confirmed(repo.historyPeriods()).size)
-        try{repo.editTimeline(emptyList(),listOf(row(HistoryPeriods.DELETED,a,d0,d0.plusDays(5),twice)));fail()}catch(_:IllegalArgumentException){}
+        try{repo.editTimeline(emptyList(),listOf(TimelineEditRow(HistoryPeriods.DELETED,a,twice,d0,d0.plusDays(5),zone,"{}")));fail()}catch(_:IllegalArgumentException){}
     }
 
     @Test fun userEditsSurviveBackupRestoreAndSchemaSevenBackupsStillRestore()=runBlocking {

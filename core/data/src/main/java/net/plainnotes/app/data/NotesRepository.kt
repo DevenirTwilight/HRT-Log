@@ -130,6 +130,23 @@ const val BACKFILL_MAX_DAYS=731L
     }
     private fun trashItem(dao:NotesDao,id:Long)=sql().query("SELECT * FROM trash_item WHERE id=?",arrayOf(id)).use{c->require(c.moveToFirst()){"No such item"}
         TrashItemEntity(c.getLong(0),c.getString(1),c.getString(2),c.getString(3),c.getLong(4),c.getString(5),c.getString(6))}
+    /** Legacy recycle-bin operations still name pre-conversion keys. Retire their migration-only descendants. */
+    private suspend fun retireMigratedDescendants(dao:NotesDao,keys:Set<String>,now:Instant) {
+        HistoryPeriods.userEdits(dao.historyPeriods()).filter{r->JSONObject(r.evidence_json).optJSONArray("migrated_from")?.let{a->(0 until a.length()).any{a.getString(it) in keys}}==true}.forEach{r->
+            appendPeriod(dao,r.copy(id=0,revision=r.revision+1,state=HistoryPeriods.REVOKED,created_utc=now.toEpochMilli()))
+        }
+    }
+    private suspend fun restoreLegacyBackground(dao:NotesDao,deleted:List<HistoryPeriodEntity>,now:Instant) {
+        val all=dao.historyPeriods()
+        val keys=HistoryPeriods.userEdits(all).flatMap{r->JSONObject(r.evidence_json).optJSONArray("migrated_from")?.let{a->(0 until a.length()).map(a::getString)}.orEmpty()}.distinct().filter{k->
+            val source=all.filter{it.period_key==k && it.state==HistoryPeriods.CONFIRMED}.maxByOrNull{it.revision}
+            source!=null && deleted.any{d->source.medication_id==d.medication_id && periodBounds(source).let{(a,b)->periodBounds(d).let{(x,y)->a<=x && (b ?: Instant.MAX)>=(y ?: Instant.MAX)}}}
+        }.toSet()
+        retireMigratedDescendants(dao,keys,now)
+        keys.forEach{k->val rows=dao.historyPeriods().filter{it.period_key==k};val last=rows.maxBy{it.revision}
+            if(last.state==HistoryPeriods.REVOKED)rows.filter{it.state==HistoryPeriods.CONFIRMED}.maxByOrNull{it.revision}?.let{r->
+                appendPeriod(dao,r.copy(id=0,revision=last.revision+1,created_utc=now.toEpochMilli()))}}
+    }
     /** Puts an item back exactly as it was. A daily value that was re-entered meanwhile goes to the bin in its place. */
     suspend fun restoreTrash(id:Long,now:Instant=Instant.now())=transaction { dao ->
         val t=trashItem(dao,id);require(t.state==Trash.TRASHED)
@@ -163,11 +180,16 @@ const val BACKFILL_MAX_DAYS=731L
                             evidence_json=JSONObject(original.evidence_json).put("exact_from_utc",a.toEpochMilli()).put("exact_until_utc",b?.toEpochMilli() ?: JSONObject.NULL).toString())
                         appendPeriod(dao,restored.copy(id=0,revision=original.revision+1,state=HistoryPeriods.CONFIRMED,created_utc=now.toEpochMilli()))
                     }
-                } else undoTimelineEdit(t.ref,now)
+                } else {restoreLegacyBackground(dao,deleted,now);undoTimelineEdit(t.ref,now)}
             }
             Trash.CORRECTION->{
                 val all=dao.historyPeriods();val keys=all.filter{it.group_key==t.ref}.map{it.period_key}.distinct()
                 val replaced=all.filter{it.group_key==t.ref}.flatMap{r->org.json.JSONObject(r.evidence_json).optJSONArray("replaces")?.let{a->(0 until a.length()).map(a::getString)}.orEmpty()}.distinct()
+                val permitted=HistoryPeriods.userEdits(all).filter{u->u.period_key in replaced || JSONObject(u.evidence_json).optJSONArray("migrated_from")?.let{a->(0 until a.length()).any{a.getString(it) in replaced}}==true}.map{it.period_key}.toSet()
+                val restoring=keys.mapNotNull{k->all.filter{it.period_key==k && it.state==HistoryPeriods.CONFIRMED}.maxByOrNull{it.revision}}.filter{it.kind in listOf(HistoryPeriods.PERIOD,HistoryPeriods.FILL)}
+                if(restoring.any{r->val (a,b)=periodBounds(r,dao.regimens());HistoryPeriods.userEdits(all).any{u->u.kind==HistoryPeriods.PERIOD && u.period_key !in permitted && u.medication_id==r.medication_id &&
+                    periodBounds(u,dao.regimens()).let{(x,y)->a<(y ?: Instant.MAX) && x<(b ?: Instant.MAX)}}})throw PeriodRestoreConflict()
+                retireMigratedDescendants(dao,replaced.toSet(),now)
                 replaced.forEach{key->current(dao.historyPeriods(),key).takeIf{it.state==HistoryPeriods.CONFIRMED}?.let{appendPeriod(dao,it.copy(id=0,revision=it.revision+1,state=HistoryPeriods.REVOKED,created_utc=now.toEpochMilli()))}}
                 keys.forEach{key->val rows=dao.historyPeriods().filter{it.period_key==key};val last=rows.maxBy{it.revision}
                     if(last.state==HistoryPeriods.REVOKED)rows.filter{it.state==HistoryPeriods.CONFIRMED}.maxByOrNull{it.revision}?.let{appendPeriod(dao,it.copy(id=0,revision=last.revision+1,created_utc=now.toEpochMilli()))}}

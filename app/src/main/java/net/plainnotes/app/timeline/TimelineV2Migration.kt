@@ -20,12 +20,13 @@ object TimelineV2Migration {
             val parts=old.raw.filter{it.span.id in s.rawVersionIds}
             val userPart=parts.first{it.kind in listOf(SpanKind.CONFIRMED,SpanKind.FILL,SpanKind.USER)}
             val med=userPart.span.medicationId
-            val source=active.firstOrNull{it.medication_id==med} ?: error("Missing migration source")
+            val source=userEditRow(extra.historyPeriods,userPart.span.id) ?: confirmedRow(extra.historyPeriods,userPart.span.id) ?: error("Missing migration source")
+            val sourceKeys=parts.mapNotNull{part->userEditRow(extra.historyPeriods,part.span.id)?.period_key ?: confirmedRow(extra.historyPeriods,part.span.id)?.period_key}.distinct()
             val end=s.until?.takeIf{it<=now};val dates=TimelineEdits.daysOf(s.from,end,old.zone)
             val short=JSONArray(parts.filter{it.span.id in old.absorbed || old.effective[it.span.id]!=it.standard}.map{r->
                 JSONObject().put("source_id",r.sourceId).put("from_utc",r.span.from.toEpochMilli()).put("until_utc",r.span.until?.toEpochMilli()).put("standard",JSONObject(HistoryPeriods.standardJson(r.standard)))})
             TimelineEditRow(HistoryPeriods.PERIOD,med,s.standard,dates.from,dates.until,old.zone,source.identity_json,
-                exactFromUtc=s.from.toEpochMilli(),exactUntilUtc=end?.toEpochMilli(),evidenceJson=JSONObject().put("stated_utc",now.toEpochMilli()).put("short_saved",short).put("migration",25).toString())
+                exactFromUtc=s.from.toEpochMilli(),exactUntilUtc=end?.toEpochMilli(),evidenceJson=JSONObject().put("stated_utc",now.toEpochMilli()).put("short_saved",short).put("migration",25).put("migrated_from",JSONArray(sourceKeys)).toString())
         }
         return Conversion(active.map{it.period_key},rows)
     }

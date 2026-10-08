@@ -151,7 +151,8 @@ import java.time.*
                             userEditRow(extra.historyPeriods,part.span.id)?.let{row->org.json.JSONObject(row.evidence_json).optJSONArray("short_saved")?.let{a->
                                 (0 until a.length()).map{index->val e=a.getJSONObject(index);val id=e.getLong("source_id")
                                     RawTreatmentInterval(RegimenSpan(id,row.medication_id,Instant.ofEpochMilli(e.getLong("from_utc")),if(e.isNull("until_utc"))null else Instant.ofEpochMilli(e.getLong("until_utc")),false),
-                                        HistoryPeriods.readStandard(e.getJSONObject("standard").toString()),SpanKind.SAVED,id)}
+                                        extra.regimens.firstOrNull{it.id==id}?.let{RegimenDefinition.read(it.definition_json).therapyStandard()}
+                                            ?: HistoryPeriods.readStandard(e.getJSONObject("standard").toString()),SpanKind.SAVED,id)}
                             }}.orEmpty()
                         }
                         (projection.raw.filter{r->r.kind==SpanKind.SAVED && projection.effective[r.span.id]?.let{it!=r.standard}==true}+migratedShort).distinctBy{it.sourceId}.filter{r->

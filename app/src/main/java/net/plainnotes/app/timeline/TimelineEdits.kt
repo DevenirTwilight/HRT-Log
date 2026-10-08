@@ -20,7 +20,8 @@ object TimelineEdits {
 
     /** Medicines with a plan part inside [period] (entry IDs as stored, not lanes). */
     fun medicationsIn(p:TreatmentPeriodProjection,period:DisplayPeriod)=
-        p.raw.filter{overlaps(it.span.from,it.span.until,period.from,period.until)}.map{it.span.medicationId}.distinct().sorted()
+        (p.raw.filter{overlaps(it.span.from,it.span.until,period.from,period.until)}.map{it.span.medicationId}+
+            p.stops.filter{overlaps(it.from,it.until,period.from,period.until)}.map{it.medicationId}).distinct().sorted()
 
     /** The standard shown for [med] in [period]: its standard span there, or null when it has none. */
     fun standardOf(p:TreatmentPeriodProjection,period:DisplayPeriod,med:Long):TherapyStandard? {
@@ -121,13 +122,6 @@ object TimelineEdits {
         return Edit(replaced.map{it.period_key},out)
     }
 
-    /** Splits each medicine of [period] at [day]; both halves keep the shown standard and their own bounds. */
-    fun split(rows:List<HistoryPeriodEntity>,p:TreatmentPeriodProjection,period:DisplayPeriod,day:LocalDate,identity:(Long)->String):Edit? {
-        val range=rangeOf(period,p.zone);if(day<=range.from || (range.until!=null && day>=range.until))return null
-        val meds=medicationsIn(p,period).mapNotNull{m->standardOf(p,period,m)?.let{m to it}};if(meds.isEmpty())return null
-        return Edit(meds.flatMap{(m,_)->touched(rows,m,range)}.distinct(),meds.flatMap{(m,s)->listOf(
-            TimelineEditRow(HistoryPeriods.PERIOD,m,s,range.from,day,p.zone,identity(m)),TimelineEditRow(HistoryPeriods.PERIOD,m,s,day,range.until,p.zone,identity(m)))})
-    }
 
     /** Marks every medicine of [period] (or [only]) as deleted over the period's days; records are never touched. */
     fun delete(rows:List<HistoryPeriodEntity>,p:TreatmentPeriodProjection,period:DisplayPeriod,identity:(Long)->String,only:Long?=null):Edit? {
@@ -152,20 +146,6 @@ object TimelineEdits {
         return Edit(replaced,out)
     }
 
-    /**
-     * Moves a stop: the new stop range, plus fills where the old stop no longer applies (the plan before continues up to
-     * the new start, the plan after starts at the new end).
-     */
-    fun moveStop(rows:List<HistoryPeriodEntity>,p:TreatmentPeriodProjection,stop:TreatmentStop,med:Long,new:Range,identity:String):Edit {
-        val zone=p.zone;val old=Range(stop.from.atZone(zone).toLocalDate(),stop.until?.atZone(zone)?.toLocalDate())
-        val before=p.standards.filter{it.medicationId==stop.medicationId && it.until?.let{u->u<=stop.from}==true}.maxByOrNull{it.until!!}?.standard
-        val after=stop.until?.let{u->p.standards.filter{it.medicationId==stop.medicationId && it.from>=u}.minByOrNull{it.from}?.standard}
-        val out=mutableListOf(TimelineEditRow(HistoryPeriods.STOP,med,null,new.from,new.until,zone,identity))
-        if(new.from>old.from && before!=null)out+=TimelineEditRow(HistoryPeriods.FILL,med,before,old.from,new.from,zone,identity)
-        if(old.until!=null && new.until!=null && new.until<old.until && after!=null)out+=TimelineEditRow(HistoryPeriods.FILL,med,after,new.until,old.until,zone,identity)
-        val covered=Range(minOf(old.from,new.from),if(old.until==null || new.until==null)null else maxOf(old.until,new.until))
-        return Edit(touched(rows,med,covered),out)
-    }
 
     /** User edit rows shown in [period] (their group can be undone; a DELETED one can be restored). */
     fun userRowsIn(rows:List<HistoryPeriodEntity>,period:DisplayPeriod,zone:ZoneId)=HistoryPeriods.userEdits(rows).filter{r->

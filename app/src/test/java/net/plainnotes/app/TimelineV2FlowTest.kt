@@ -88,5 +88,18 @@ class TimelineV2FlowTest {
         assertEquals(old.standards.map{it.standard},view().projection.standards.map{it.standard})
         val pwd="synthetic-only".toCharArray();val backup=repo.exportBackup(pwd)
         repo.restoreBackup(backup,pwd);assertNull(TimelineV2Migration.plan(extra(),now))
+    }    @Test fun legacyDeletionRestoresItsConvertedConfirmedBackground()=runBlocking {
+        repo.confirmHistoryPeriod(null,med,standard,d0.minusDays(30),null,zone,identity,"{}",now)
+        val original=PeriodTimelineProjection.build(extra(),emptyList(),now,legacy=true).projection
+        val group=repo.editTimeline(emptyList(),listOf(TimelineEditRow(HistoryPeriods.DELETED,med,null,d0.plusDays(10),d0.plusDays(11),zone,identity)),now)
+        Trash.insert(db.openHelper.writableDatabase,Trash.PERIOD,group,d0.plusDays(10).toString(),org.json.JSONObject(),now.toEpochMilli())
+        TimelineV2Migration.plan(extra(),now)!!.let{repo.migrateTimeline(it.replace,it.rows,now)}
+        assertTrue(view().projection.periodAt(at(10).plusSeconds(3600))!!.finalStandardSpanKeys.isEmpty())
+        repo.restoreTrash(repo.trash().single().id,now)
+        TimelineV2Migration.plan(extra(),now)?.let{repo.migrateTimeline(it.replace,it.rows,now)}
+        assertEquals(original.periods.map{it.from to it.until},view().projection.periods.map{it.from to it.until})
+        assertEquals(original.standards.map{it.standard},view().projection.standards.map{it.standard})
+        assertTrue(repo.trash().isEmpty());assertFalse(TimelineV2Migration.needed(repo.historyPeriods()))
     }
+
 }

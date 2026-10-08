@@ -22,7 +22,9 @@ data class TherapyStandard(val compound:String?,val ester:String?,val route:Stri
 enum class SpanKind{SAVED,CONFIRMED,OBSERVED,USER,FILL}
 /** [sourceId] is the stored row a display piece came from (a saved version cut by a user edit keeps its version ID there). */
 data class RawTreatmentInterval(val span:RegimenSpan,val standard:TherapyStandard,
-    val kind:SpanKind=if(span.id>0)SpanKind.SAVED else SpanKind.OBSERVED,val sourceId:Long=span.id)
+    val kind:SpanKind=if(span.id>0)SpanKind.SAVED else SpanKind.OBSERVED,val sourceId:Long=span.id,
+    /** Migration retains build-24 grouping of exact changes within a civil day. New edits fix their boundaries. */
+    val legacyDayGrouping:Boolean=false)
 data class TreatmentStandardSpan(val key:String,val medicationId:Long,val from:Instant,val until:Instant?,
     val rawVersionIds:List<Long>,val standard:TherapyStandard,val reconstructed:Boolean)
 data class ClinicalSegment(val key:String,val from:Instant,val until:Instant?,val standardSpanKeys:Set<String>) {
@@ -227,7 +229,7 @@ object TreatmentPeriods {
             val identities=active.values.map{it.key}.toSortedSet()
             ClinicalSegment("clinical-v2:${start.toEpochMilli()}:${identities.joinToString(",")}",start,boundaries.getOrNull(i+1),identities)
         }
-        val fixed=if(protectUserBoundaries)raw.filter{it.kind==SpanKind.USER}.flatMap{listOfNotNull(it.span.from,it.span.until)}.toSet() else emptySet()
+        val fixed=if(protectUserBoundaries)raw.filter{it.kind==SpanKind.USER && !it.legacyDayGrouping}.flatMap{listOfNotNull(it.span.from,it.span.until)}.toSet() else emptySet()
         val groups=mutableListOf<MutableList<ClinicalSegment>>()
         segments.forEach{s->val prev=groups.lastOrNull()?.lastOrNull()
             if(prev!=null && prev.from.atZone(zone).toLocalDate()==s.from.atZone(zone).toLocalDate() && s.from !in fixed)groups.last().add(s)

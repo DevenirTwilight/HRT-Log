@@ -12,7 +12,7 @@ data class ConfirmedPeriodInput(val spanId:Long,val periodKey:String,val medicat
 data class RecordCoverage(val interval:RawTreatmentInterval?,val pending:Boolean)
 /** A user edit as input (REQUIREMENTS §37b): PERIOD/FILL carry a standard, DELETED/STOP only block their range. */
 data class UserEditInput(val spanId:Long,val periodKey:String,val groupKey:String?,val kind:String,val medicationId:Long,val from:Instant,val until:Instant?,
-                         val standard:TherapyStandard?,val snapshot:MedicationSnapshot?,val statedUtc:Long?=null)
+                         val standard:TherapyStandard?,val snapshot:MedicationSnapshot?,val statedUtc:Long?=null,val legacyDayGrouping:Boolean=false)
 data class HistoricalTreatmentProjection(val observed:List<ObservedTreatment>,val resolvedRecordIds:Set<Long>,
     val confirmed:List<RawTreatmentInterval> = emptyList(),val coverage:Map<Long,RecordCoverage> = emptyMap(),
     /** Saved plan versions as shown: cut where a user edit lies over them. */
@@ -81,7 +81,7 @@ object ObservedTreatmentHistory {
             underUser(v.medication_id,listOf(span.from to (span.until ?: Instant.MAX))).mapIndexed{i,(a,b)->
                 Saved(RawTreatmentInterval(span.copy(id=if(i==0)v.id else SAVED_PIECE_BASE-v.id*100-i,from=a,until=b.takeIf{it!=Instant.MAX}),d.therapyStandard(),SpanKind.SAVED,v.id),id)}}
         val user=overlays.filter{it.standard!=null}.map{e->
-            Saved(RawTreatmentInterval(RegimenSpan(e.spanId,e.medicationId,e.from,e.until,false),e.standard!!,if(e.kind==HistoryPeriods.FILL)SpanKind.FILL else SpanKind.USER,e.spanId),identity(e.standard))}
+            Saved(RawTreatmentInterval(RegimenSpan(e.spanId,e.medicationId,e.from,e.until,false),e.standard!!,if(e.kind==HistoryPeriods.FILL)SpanKind.FILL else SpanKind.USER,e.spanId,e.legacyDayGrouping),identity(e.standard))}
         // Confirmed past periods count as saved history, but a saved prescription always wins where they meet,
         // including one saved on another medication entry for the same medicine (REQUIREMENTS §36).
         val confirmedSaved=confirmedPeriods.flatMap{c->

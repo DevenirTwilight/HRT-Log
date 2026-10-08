@@ -61,5 +61,20 @@ class TimelineV2Test {
         assertEquals(old.projection.standards.map{it.standard},v.projection.standards.map{it.standard})
         assertFalse(TimelineV2Migration.needed(newRows))
         assertNull(TimelineV2Migration.plan(extra.copy(historyPeriods=newRows),now))
+    }    @Test fun migrationKeepsSeveralExactChangesInOneCivilDayOnOneCard() {
+        val different=definition.copy(dose=3.0)
+        val v=version(1,20).copy(effective_from_utc=at(20).plusSeconds(12*3600).toEpochMilli(),definition_json=different.json(),clinical_signature=different.signature())
+        val oldRow=row(1,20,null,HistoryPeriods.CONFIRMED,null)
+        val extra=NotesViewModel.ExtraState(records=records().filter{it.taken_utc!!>=at(20).toEpochMilli()},regimens=listOf(v),historyPeriods=listOf(oldRow))
+        val old=PeriodTimelineProjection.build(extra,emptyList(),now,legacy=true)
+        assertEquals(1,old.projection.periods.size);assertEquals(2,old.projection.periods.single().segments.size)
+        val conversion=TimelineV2Migration.plan(extra,now)!!
+        val rows=conversion.rows.mapIndexed{i,e->row(i+2L,20,null).copy(from_date=e.from.toString(),until_date=e.until?.toString(),standard_json=HistoryPeriods.standardJson(e.standard!!),
+            evidence_json=JSONObject(e.evidenceJson).put("exact_from_utc",e.exactFromUtc).put("exact_until_utc",e.exactUntilUtc ?: JSONObject.NULL).toString())}
+        val rebuilt=PeriodTimelineProjection.build(extra.copy(historyPeriods=rows),emptyList(),now)
+        assertEquals(old.projection.periods.map{it.from to it.until},rebuilt.projection.periods.map{it.from to it.until})
+        assertEquals(old.projection.standards.map{it.standard},rebuilt.projection.standards.map{it.standard})
+        assertEquals(HistoryLabels.build(extra.records,old,emptyList(),zone),HistoryLabels.build(extra.records,rebuilt,emptyList(),zone))
     }
+
 }

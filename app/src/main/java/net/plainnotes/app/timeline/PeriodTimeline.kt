@@ -64,7 +64,7 @@ fun userEditInputs(rows:List<HistoryPeriodEntity>):List<UserEditInput> = History
         UserEditInput(ObservedTreatmentHistory.USER_SPAN_BASE-HistoryPeriods.stableId(rows,row.period_key)*100,row.period_key,row.group_key,row.kind,row.medication_id,
             exact?.first?.let(Instant::ofEpochMilli) ?: LocalDate.parse(row.from_date).atStartOfDay(zone).toInstant(),
             if(exact!=null)exact.second?.let(Instant::ofEpochMilli) else row.until_date?.let{LocalDate.parse(it).atStartOfDay(zone).toInstant()},
-            if(row.kind in listOf(HistoryPeriods.PERIOD,HistoryPeriods.FILL))HistoryPeriods.readStandard(row.standard_json) else null,MedicationSnapshot.decode(row.identity_json,row.medication_id),org.json.JSONObject(row.evidence_json).let{if(it.has("stated_utc"))it.getLong("stated_utc") else null})
+            if(row.kind in listOf(HistoryPeriods.PERIOD,HistoryPeriods.FILL))HistoryPeriods.readStandard(row.standard_json) else null,MedicationSnapshot.decode(row.identity_json,row.medication_id),org.json.JSONObject(row.evidence_json).let{if(it.has("stated_utc"))it.getLong("stated_utc") else null},org.json.JSONObject(row.evidence_json).optInt("migration")==25)
     }.getOrNull()
 }
 /** The user edit row behind a display span ID, if any. */
