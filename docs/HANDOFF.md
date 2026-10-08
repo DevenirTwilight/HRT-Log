@@ -7,7 +7,7 @@
 - 失败测试先提交（`UserDiagnosticRegressionTest`，按诊断中的时间戳、来源和标准重建，记录为合成数据）。
 - 修复：保存版本持续 < 1 天、1 天内被替换、且时间范围内没有任何记录 → 视为更正；有记录的短版本仍是真实变化。`TreatmentPeriods.build(..., withRecords)`，app 层 `recordsInside` 计算。没有记录信息时仍用 1 小时窗口（域层旧测试）。
 - 诊断 v2：保存版本显示 `records_inside=N`。
-- versionCode 22。待做：全量检查 → CI → 签名交付 → 请用户确认 10-06 合并为一个时期。
+- versionCode 22。本机全量检查通过（app 198/13 既有跳过，data 64，reminder 14，domain 58，pk 18，importer 12，0 失败；lint、release、manifest 通过）。待做：CI → 签名交付 → 请用户确认 10-06 合并为一个时期。
 
 ## 上一交付（build 21）：合并诊断 + 卡片相同却分段的修复（2026-10-08，REQUIREMENTS §36b，完成）
 
