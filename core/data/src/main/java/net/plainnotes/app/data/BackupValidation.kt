@@ -99,6 +99,13 @@ internal object BackupValidation {
                 t("from_date"),if(c.isNull(c.getColumnIndexOrThrow("until_date")))null else t("until_date"),t("zone"),t("evidence_json"),t("origin"),n("created_utc"),
                 t("kind"),if(c.isNull(c.getColumnIndexOrThrow("group_key")))null else t("group_key")))
         }}
+        // §39 recycle bin: snapshot payloads parse and only name domain tables; references point at what they hide.
+        db.query("SELECT kind,ref,payload_json FROM trash_item").use{c->while(c.moveToNext()){
+            val kind=c.getString(0);val ref=c.getString(1);val payload=org.json.JSONObject(c.getString(2))
+            if(kind in Trash.SNAPSHOT_KINDS){val order=payload.getJSONArray("order");require(order.length()>0);for(i in 0 until order.length())require(order.getString(i) in DOMAIN_TABLES && payload.getJSONObject("tables").getJSONArray(order.getString(i)).length()>=0)}
+            when(kind){"RECORD"->db.query("SELECT 1 FROM dose_record WHERE id=? AND deleted_at_utc IS NOT NULL",arrayOf(ref.toLong())).use{require(it.moveToFirst()){"Invalid trash reference"}}
+                "PERIOD","CORRECTION"->db.query("SELECT 1 FROM history_period_revision WHERE group_key=?",arrayOf(ref)).use{require(it.moveToFirst()){"Invalid trash reference"}}}
+        }}
         fun rejectIf(sql: String) = db.query(sql).use { require(!it.moveToFirst()) { "Invalid restored state" } }
         rejectIf("SELECT 1 FROM supply_transaction t JOIN supply_container c ON c.id=t.container_id LEFT JOIN dose_record d ON d.id=t.dose_record_id WHERE t.used_delta=0 OR t.operation_id='' OR t.kind NOT IN ('ADJUST','CONSUME','REVERSE') OR (t.kind='ADJUST' AND (t.dose_record_id IS NOT NULL OR t.reversal_of_id IS NOT NULL)) OR (t.kind='CONSUME' AND (t.used_delta<=0 OR t.reversal_of_id IS NOT NULL OR t.dose_record_id IS NULL OR t.dose_revision IS NULL OR t.dose_revision<1 OR t.dose_revision>d.revision)) OR (t.dose_record_id IS NOT NULL AND d.medication_id!=c.medication_id) LIMIT 1")
         rejectIf("SELECT 1 FROM supply_transaction t LEFT JOIN supply_transaction original ON original.id=t.reversal_of_id WHERE t.kind='REVERSE' AND (original.id IS NULL OR original.kind!='CONSUME' OR t.dose_record_id IS NULL OR t.dose_revision IS NULL OR t.dose_revision<original.dose_revision OR original.container_id!=t.container_id OR original.dose_record_id!=t.dose_record_id OR t.used_delta!=-original.used_delta) LIMIT 1")

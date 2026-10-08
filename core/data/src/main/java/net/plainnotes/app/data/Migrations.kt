@@ -63,4 +63,12 @@ val migration7To8 = object : Migration(7,8) {
         db.execSQL("ALTER TABLE history_period_revision ADD COLUMN group_key TEXT")
     }
 }
-fun allMigrations(today: () -> LocalDate = LocalDate::now): Array<Migration> = arrayOf(migration1To2(today), migration2To3, migration3To4, migration4To5, migration5To6, migration6To7, migration7To8)
+/** REQUIREMENTS §39: the recycle bin; existing soft-deleted records and build 23 deleted periods move into it. */
+val migration8To9 = object : Migration(8,9) {
+    override fun migrate(db:SupportSQLiteDatabase) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS trash_item (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, kind TEXT NOT NULL, ref TEXT NOT NULL, item_date TEXT NOT NULL, deleted_utc INTEGER NOT NULL, payload_json TEXT NOT NULL, state TEXT NOT NULL)")
+        db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_trash_item_kind_ref ON trash_item(kind,ref)")
+        Trash.backfill(db)
+    }
+}
+fun allMigrations(today: () -> LocalDate = LocalDate::now): Array<Migration> = arrayOf(migration1To2(today), migration2To3, migration3To4, migration4To5, migration5To6, migration6To7, migration7To8, migration8To9)

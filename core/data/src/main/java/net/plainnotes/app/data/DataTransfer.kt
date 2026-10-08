@@ -22,7 +22,7 @@ import javax.crypto.spec.SecretKeySpec
 /** Tables in foreign-key order (parents first). Reminder mappings are rebuilt by the scheduler and never exported. */
 internal val DOMAIN_TABLES = listOf("medication", "pk_profile", "schedule_rule", "rule_time", "slot_override", "dose_record", "supply_container", "supply_transaction",
     "retained_slot", "appointment", "checkin_item", "checkin_score", "day_note", "lab_analyte", "lab_value", "pk_settings",
-    "stage_review", "symptom_check", "review_effect", "regimen_version", "regimen_rule_link", "milestone", "lab_context_revision", "visit_question", "visit_pack", "history_period_revision", "record_annotation")
+    "stage_review", "symptom_check", "review_effect", "regimen_version", "regimen_rule_link", "milestone", "lab_context_revision", "visit_question", "visit_pack", "history_period_revision", "record_annotation", "trash_item")
 
 /** Raw-SQL maintenance that has to bypass the append-only ledger triggers: full clear and backup restore. */
 internal object RawData {
@@ -56,7 +56,7 @@ internal object RawData {
         return tables
     }
     /** Replaces all data with [tables]; the container cache is recomputed from the ledger afterwards. */
-    fun restore(db: SupportSQLiteDatabase, tables: JSONObject,upgradeRegimens:Boolean=false) = unguarded(db) {
+    fun restore(db: SupportSQLiteDatabase, tables: JSONObject,upgradeRegimens:Boolean=false,backfillTrash:Boolean=false) = unguarded(db) {
         BackupValidation.validateTables(db,tables)
         (DOMAIN_TABLES + "reminder_mapping").reversed().forEach { db.execSQL("DELETE FROM $it") }
         DOMAIN_TABLES.forEach { t ->
@@ -75,6 +75,7 @@ internal object RawData {
         }
         db.execSQL("UPDATE supply_container SET used_amount = initial_used_amount + COALESCE((SELECT SUM(used_delta) FROM supply_transaction WHERE container_id = supply_container.id), 0)")
         if(upgradeRegimens)RegimenHistory.seed(db)
+        if(backfillTrash)Trash.backfill(db)
         BackupValidation.validateState(db)
     }
 }

@@ -15,7 +15,7 @@ class MigrationBaselineTest {
             db.execSQL("INSERT INTO checkin_item (id,builtin_key,custom_label,enabled,sort_order) VALUES (1,'MOOD',NULL,1,0),(2,'PAIN',NULL,1,1),(3,'APPETITE',NULL,1,2)")
             db.execSQL("INSERT INTO checkin_score (date,item_id,value) VALUES ('2026-02-10',1,4),('2026-02-09',2,2),('2025-01-01',3,3)")
         }
-        helper.runMigrationsAndValidate("migration-baseline",8,true,*allMigrations{LocalDate.of(2026,2,10)}).use{db->
+        helper.runMigrationsAndValidate("migration-baseline",9,true,*allMigrations{LocalDate.of(2026,2,10)}).use{db->
             SchemaGuards.install(db)
             db.query("SELECT builtin_key FROM checkin_item WHERE id=1").use{assertTrue(it.moveToFirst());assertEquals("DAY_MOOD",it.getString(0))}
             db.query("SELECT value FROM checkin_score WHERE item_id=1").use{assertTrue(it.moveToFirst());assertEquals(4,it.getInt(0))}
@@ -34,7 +34,7 @@ class MigrationBaselineTest {
                 db.execSQL("INSERT INTO rule_time (rule_id,local_time,dose_override) VALUES (?,'20:00:00',NULL)",arrayOf(id))
             }
         }
-        helper.runMigrationsAndValidate("migration-regimens",8,true,migration3To4,migration4To5,migration5To6,migration6To7,migration7To8).use{db->
+        helper.runMigrationsAndValidate("migration-regimens",9,true,migration3To4,migration4To5,migration5To6,migration6To7,migration7To8,migration8To9).use{db->
             SchemaGuards.install(db);RegimenHistory.validateLinks(db)
             db.query("SELECT definition_json,effective_from_utc,effective_until_utc,origin,recorded_at_utc FROM regimen_version ORDER BY effective_from_utc").use{c->
                 assertEquals(2,c.count);assertTrue(c.moveToFirst());val frozen=RegimenDefinition.read(c.getString(0))
@@ -50,7 +50,7 @@ class MigrationBaselineTest {
             db.execSQL("INSERT INTO lab_analyte(code,canonical_unit) VALUES ('E2','pg/mL')")
             db.execSQL("INSERT INTO lab_value(id,analyte_code,value,unit,sampled_utc,sampled_zone) VALUES (1,'E2',120,'pg/mL',1000,'UTC')")
         }
-        helper.runMigrationsAndValidate("migration-lab-context",8,true,migration4To5,migration5To6,migration6To7,migration7To8).use{db->
+        helper.runMigrationsAndValidate("migration-lab-context",9,true,migration4To5,migration5To6,migration6To7,migration7To8,migration8To9).use{db->
             SchemaGuards.install(db)
             db.query("SELECT value,sampled_utc FROM lab_value WHERE id=1").use{assertTrue(it.moveToFirst());assertEquals(120.0,it.getDouble(0),0.0);assertEquals(1000L,it.getLong(1))}
             db.query("SELECT * FROM lab_context_revision").use{assertEquals(0,it.count)}
@@ -61,7 +61,7 @@ class MigrationBaselineTest {
         helper.createDatabase("migration-visits",5).use{db->
             db.execSQL("INSERT INTO appointment(id,type,at_utc,at_zone,location,practitioner,note,remind_minutes_before) VALUES (1,'ENDO',1000,'UTC','Synthetic place','Synthetic clinic','Synthetic note',60)")
         }
-        helper.runMigrationsAndValidate("migration-visits",8,true,migration5To6,migration6To7,migration7To8).use{db->
+        helper.runMigrationsAndValidate("migration-visits",9,true,migration5To6,migration6To7,migration7To8,migration8To9).use{db->
             SchemaGuards.install(db)
             db.query("SELECT type,at_utc,practitioner,note,completed_utc FROM appointment WHERE id=1").use{assertTrue(it.moveToFirst());assertEquals("ENDO",it.getString(0));assertEquals(1000L,it.getLong(1))
                 assertEquals("Synthetic clinic",it.getString(2));assertEquals("Synthetic note",it.getString(3));assertTrue(it.isNull(4))}
@@ -76,7 +76,7 @@ class MigrationBaselineTest {
             db.execSQL("INSERT INTO medication (id,name,molecule,route,unit,dose_per_intake,container_capacity,site_rotation,notifications_on,active,sort_order) VALUES (1,'Synthetic','E2','SUBLINGUAL','MG',1,30,0,0,1,0)")
             db.execSQL("INSERT INTO dose_record (id,medication_id,taken_utc,taken_zone,actual_dose,status,origin,source_record_key,revision,config_snapshot) VALUES (1,1,1000,'UTC',1,'ON_TIME','IMPORT_HT','ht:synthetic:1',1,'{}')")
         }
-        helper.runMigrationsAndValidate("migration-history-periods",8,true,migration6To7,migration7To8).use{db->
+        helper.runMigrationsAndValidate("migration-history-periods",9,true,migration6To7,migration7To8,migration8To9).use{db->
             SchemaGuards.install(db)
             db.query("SELECT actual_dose,origin,taken_utc FROM dose_record WHERE id=1").use{assertTrue(it.moveToFirst());assertEquals(1.0,it.getDouble(0),0.0);assertEquals("IMPORT_HT",it.getString(1));assertEquals(1000L,it.getLong(2))}
             db.query("SELECT * FROM history_period_revision").use{assertEquals(0,it.count)}
@@ -89,11 +89,25 @@ class MigrationBaselineTest {
             db.execSQL("INSERT INTO medication (id,name,molecule,route,unit,dose_per_intake,container_capacity,site_rotation,notifications_on,active,sort_order) VALUES (1,'Synthetic','E2','SUBLINGUAL','MG',1,30,0,0,1,0)")
             db.execSQL("INSERT INTO history_period_revision (period_key,revision,state,medication_id,identity_json,standard_json,from_date,until_date,zone,evidence_json,origin,created_utc) VALUES ('00000000-0000-4000-8000-000000000007',1,'CONFIRMED',1,'{}','{\"version\":1}','2026-01-01',NULL,'UTC','{}','OBSERVED_USER_CONFIRMED',1)")
         }
-        helper.runMigrationsAndValidate("migration-user-edits",8,true,migration7To8).use{db->
+        helper.runMigrationsAndValidate("migration-user-edits",9,true,migration7To8,migration8To9).use{db->
             SchemaGuards.install(db)
             db.query("SELECT kind,group_key,state FROM history_period_revision").use{assertTrue(it.moveToFirst());assertEquals("CONFIRMED",it.getString(0));assertTrue(it.isNull(1));assertEquals("CONFIRMED",it.getString(2))}
             db.execSQL("INSERT INTO history_period_revision (period_key,revision,state,medication_id,identity_json,standard_json,from_date,until_date,zone,evidence_json,origin,created_utc,kind,group_key) VALUES ('00000000-0000-4000-8000-000000000008',1,'CONFIRMED',1,'{}','{}','2026-02-01','2026-02-10','UTC','{}','USER_EDIT',2,'DELETED','00000000-0000-4000-8000-000000000009')")
             try{db.execSQL("UPDATE history_period_revision SET kind='PERIOD'");fail()}catch(_:Exception){}
+        }
+    }
+    @Test fun exportedV8MovesDeletedRecordsAndPeriodsIntoTheBin() {
+        // REQUIREMENTS §39: build 23 "deleted" periods and soft-deleted records are in the bin after the upgrade.
+        helper.createDatabase("migration-trash",8).use{db->
+            db.execSQL("INSERT INTO medication (id,name,molecule,route,unit,dose_per_intake,container_capacity,site_rotation,notifications_on,active,sort_order) VALUES (1,'Synthetic','E2','SUBLINGUAL','MG',1,30,0,0,1,0)")
+            db.execSQL("INSERT INTO dose_record (id,medication_id,taken_utc,taken_zone,actual_dose,status,origin,source_record_key,revision,config_snapshot,deleted_at_utc) VALUES (1,1,1000,'UTC',1,'ON_TIME','IMPORT_HT','ht:synthetic:1',2,'{}',2000)")
+            db.execSQL("INSERT INTO history_period_revision (period_key,revision,state,medication_id,identity_json,standard_json,from_date,until_date,zone,evidence_json,origin,created_utc,kind,group_key) VALUES ('00000000-0000-4000-8000-000000000008',1,'CONFIRMED',1,'{}','{}','2026-10-06','2026-10-07','Europe/Paris','{}','USER_EDIT',3000,'DELETED','00000000-0000-4000-8000-000000000009')")
+        }
+        helper.runMigrationsAndValidate("migration-trash",9,true,migration8To9).use{db->
+            SchemaGuards.install(db)
+            db.query("SELECT kind,ref,state FROM trash_item ORDER BY kind").use{c->
+                assertTrue(c.moveToFirst());assertEquals("PERIOD",c.getString(0));assertEquals("00000000-0000-4000-8000-000000000009",c.getString(1));assertEquals("TRASHED",c.getString(2))
+                assertTrue(c.moveToNext());assertEquals("RECORD",c.getString(0));assertEquals("1",c.getString(1))}
         }
     }
 }

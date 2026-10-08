@@ -31,7 +31,11 @@ const val BACKFILL_MAX_DAYS=731L
         val inserted=dao.milestone(normalized)
         normalized.copy(id=if(value.id==0L)inserted else value.id)
     }
-    suspend fun deleteMilestone(id:Long)=transaction{it.deleteMilestone(id)}
+    /** §39: into the recycle bin (restorable); see [Trash]. */
+    suspend fun deleteMilestone(id:Long,now:Instant=Instant.now())=transaction{dao->
+        val rows=Trash.rows(sql(),"milestone","id=?",arrayOf(id));if(rows.length()==0)return@transaction
+        Trash.insert(sql(),Trash.MILESTONE,"$id",rows.getJSONObject(0).getString("date"),Trash.payload("milestone" to rows),now.toEpochMilli());dao.deleteMilestone(id)}
+    private fun sql()=db().openHelper.writableDatabase
     suspend fun appointments()=withContext(Dispatchers.IO){db().dao().appointments()}
     // --- Confirmed past periods and record annotations (REQUIREMENTS §35/35a). Append-only; records are never changed. ---
     suspend fun historyPeriods()=withContext(Dispatchers.IO){db().dao().historyPeriods()}
@@ -111,6 +115,76 @@ const val BACKFILL_MAX_DAYS=731L
             if(last.state==HistoryPeriods.REVOKED)rows.filter{it.state==HistoryPeriods.CONFIRMED}.maxByOrNull{it.revision}?.let{
                 appendPeriod(dao,it.copy(id=0,revision=last.revision+1,created_utc=now.toEpochMilli()))}
         }
+    }
+    // --- Recycle bin (REQUIREMENTS §39) ---
+    suspend fun trash()=withContext(Dispatchers.IO){db().dao().trash().filter{it.state==Trash.TRASHED}}
+    /** Deleting a period: the deletion edit goes to the bin, so it can be restored or purged. */
+    suspend fun deletePeriod(replace:List<String>,rows:List<TimelineEditRow>,now:Instant=Instant.now())=transaction { _ ->
+        val group=editTimeline(replace,rows,now)
+        Trash.insert(sql(),Trash.PERIOD,group,rows.minOf{it.from}.toString(),org.json.JSONObject(),now.toEpochMilli());group
+    }
+    /** Deleting the user's own correction: it is undone and kept in the bin. */
+    suspend fun deleteCorrection(group:String,now:Instant=Instant.now())=transaction { dao ->
+        val day=HistoryPeriods.userEdits(dao.historyPeriods()).filter{it.group_key==group}.minOfOrNull{it.from_date} ?: error("Nothing to delete")
+        undoTimelineEdit(group,now);Trash.insert(sql(),Trash.CORRECTION,group,day,org.json.JSONObject(),now.toEpochMilli())
+    }
+    private fun trashItem(dao:NotesDao,id:Long)=sql().query("SELECT * FROM trash_item WHERE id=?",arrayOf(id)).use{c->require(c.moveToFirst()){"No such item"}
+        TrashItemEntity(c.getLong(0),c.getString(1),c.getString(2),c.getString(3),c.getLong(4),c.getString(5),c.getString(6))}
+    /** Puts an item back exactly as it was. A daily value that was re-entered meanwhile goes to the bin in its place. */
+    suspend fun restoreTrash(id:Long,now:Instant=Instant.now())=transaction { dao ->
+        val t=trashItem(dao,id);require(t.state==Trash.TRASHED)
+        when(t.kind) {
+            in Trash.SNAPSHOT_KINDS->{
+                val payload=org.json.JSONObject(t.payload_json);val row=payload.getJSONObject("tables").let{tb->tb.getJSONArray(payload.getJSONArray("order").getString(0)).getJSONObject(0)}
+                when(t.kind) {
+                    Trash.SCORE->setScore(LocalDate.parse(row.getString("date")),row.getLong("item_id"),null,now)
+                    Trash.NOTE->setNote(LocalDate.parse(row.getString("date")),"",now)
+                    Trash.SYMPTOM->if(dao.symptomChecks(row.getString("date"),row.getString("date")).any{it.group_id==row.getString("group_id")})setSymptomCheck(LocalDate.parse(row.getString("date")),row.getString("group_id"),false)
+                }
+                Trash.reinsert(sql(),payload)
+            }
+            Trash.RECORD->{val r=requireNotNull(dao.recordById(t.ref.toLong()));require(r.deleted_at_utc!=null)
+                val back=r.copy(deleted_at_utc=null,revision=r.revision+1);dao.updateRecord(back)
+                if(back.status in listOf("ON_TIME","LATE"))SupplyLedger.allocate(dao,dao.recordById(back.id)!!)}
+            Trash.PERIOD->undoTimelineEdit(t.ref,now)
+            Trash.CORRECTION->{
+                val all=dao.historyPeriods();val keys=all.filter{it.group_key==t.ref}.map{it.period_key}.distinct()
+                val replaced=all.filter{it.group_key==t.ref}.flatMap{r->org.json.JSONObject(r.evidence_json).optJSONArray("replaces")?.let{a->(0 until a.length()).map(a::getString)}.orEmpty()}.distinct()
+                replaced.forEach{key->current(dao.historyPeriods(),key).takeIf{it.state==HistoryPeriods.CONFIRMED}?.let{appendPeriod(dao,it.copy(id=0,revision=it.revision+1,state=HistoryPeriods.REVOKED,created_utc=now.toEpochMilli()))}}
+                keys.forEach{key->val rows=dao.historyPeriods().filter{it.period_key==key};val last=rows.maxBy{it.revision}
+                    if(last.state==HistoryPeriods.REVOKED)rows.filter{it.state==HistoryPeriods.CONFIRMED}.maxByOrNull{it.revision}?.let{appendPeriod(dao,it.copy(id=0,revision=last.revision+1,created_utc=now.toEpochMilli()))}}
+            }
+        }
+        sql().execSQL("DELETE FROM trash_item WHERE id=?",arrayOf(id))
+    }
+    private fun purgeKeys(keys:Collection<String>) {
+        if(keys.isEmpty())return
+        keys.forEach{sql().execSQL("INSERT OR IGNORE INTO purge_permit(period_key) VALUES (?)",arrayOf(it))}
+        keys.forEach{sql().execSQL("DELETE FROM history_period_revision WHERE period_key=?",arrayOf(it))}
+        sql().execSQL("DELETE FROM purge_permit")
+    }
+    /**
+     * Deletes an item for good. The user's own content is removed from the database. A record still in the stock
+     * ledger, or a period deletion over plans the system made ([systemUnderneath]), is hidden for good instead.
+     * Returns true when it was really removed, false when it was hidden.
+     */
+    suspend fun purgeTrash(id:Long,systemUnderneath:Boolean=true):Boolean=transaction { dao ->
+        val t=trashItem(dao,id);require(t.state==Trash.TRASHED)
+        val removed=when(t.kind) {
+            in Trash.SNAPSHOT_KINDS->true
+            Trash.RECORD->{val rid=t.ref.toLong()
+                val inLedger=sql().query("SELECT 1 FROM supply_transaction WHERE dose_record_id=? LIMIT 1",arrayOf(rid)).use{it.moveToFirst()}
+                if(inLedger)false else {sql().execSQL("DELETE FROM record_annotation WHERE record_id=?",arrayOf(rid));sql().execSQL("DELETE FROM dose_record WHERE id=?",arrayOf(rid));true}}
+            Trash.PERIOD->{val all=dao.historyPeriods();val group=all.filter{it.group_key==t.ref}
+                val replaced=group.flatMap{r->org.json.JSONObject(r.evidence_json).optJSONArray("replaces")?.let{a->(0 until a.length()).map(a::getString)}.orEmpty()}
+                    .filter{k->all.any{it.period_key==k && it.kind in HistoryPeriods.USER_KINDS}}
+                purgeKeys(replaced.distinct())
+                if(systemUnderneath)false else {purgeKeys(group.map{it.period_key}.distinct());true}}
+            Trash.CORRECTION->{purgeKeys(dao.historyPeriods().filter{it.group_key==t.ref}.map{it.period_key}.distinct());true}
+            else->error("Unknown kind")
+        }
+        if(removed)sql().execSQL("DELETE FROM trash_item WHERE id=?",arrayOf(id)) else sql().execSQL("UPDATE trash_item SET state='HIDDEN' WHERE id=?",arrayOf(id))
+        removed
     }
     /** The user's own "extra dose" statement on a taken record. */
     suspend fun setExtra(recordId:Long,extra:Boolean,now:Instant=Instant.now())=transaction { dao ->
@@ -381,7 +455,13 @@ const val BACKFILL_MAX_DAYS=731L
         val old=requireNotNull(dao.appointmentById(id));dao.updateAppointment(old.copy(completed_utc=if(completed)now.toEpochMilli() else null))
     }
     /** Also removes the appointment's questions and visit-pack records; files already exported are not touched. */
-    suspend fun deleteAppointment(id:Long)=transaction { dao -> dao.deleteVisitQuestions(id);dao.deleteVisitPacks(id);dao.deleteAppointment(id) }
+    /** §39: the appointment goes to the bin with its questions and generated visit packs, and comes back with them. */
+    suspend fun deleteAppointment(id:Long,now:Instant=Instant.now())=transaction { dao ->
+        val a=Trash.rows(sql(),"appointment","id=?",arrayOf(id));if(a.length()==0)return@transaction
+        val day=java.time.Instant.ofEpochMilli(a.getJSONObject(0).getLong("at_utc")).atZone(ZoneId.of(a.getJSONObject(0).getString("at_zone"))).toLocalDate().toString()
+        Trash.insert(sql(),Trash.APPOINTMENT,"$id",day,Trash.payload("appointment" to a,"visit_question" to Trash.rows(sql(),"visit_question","appointment_id=? ORDER BY id",arrayOf(id)),
+            "visit_pack" to Trash.rows(sql(),"visit_pack","appointment_id=? ORDER BY id",arrayOf(id))),now.toEpochMilli())
+        dao.deleteVisitQuestions(id);dao.deleteVisitPacks(id);dao.deleteAppointment(id) }
     suspend fun visitQuestions()=withContext(Dispatchers.IO){db().dao().visitQuestions()}
     suspend fun saveVisitQuestion(value:VisitQuestionEntity)=transaction { dao ->
         val text=value.text.trim();require(text.isNotEmpty() && value.status in listOf("OPEN","ASKED"))
@@ -435,11 +515,11 @@ const val BACKFILL_MAX_DAYS=731L
         if(json.optInt("format")!=BackupCodec.FORMAT_VERSION||schema<1) throw BackupCodec.BadFile("incompatible version")
         if(schema>current) throw BackupCodec.NewerBackup()
         val tables=json.getJSONObject("tables")
-        val required=DOMAIN_TABLES.filterNot{(schema<2 && it in listOf("stage_review","symptom_check","review_effect")) || (schema<4 && it in listOf("regimen_version","regimen_rule_link","milestone")) || (schema<5 && it=="lab_context_revision") || (schema<6 && it in listOf("visit_question","visit_pack")) || (schema<7 && it in listOf("history_period_revision","record_annotation"))}
+        val required=DOMAIN_TABLES.filterNot{(schema<2 && it in listOf("stage_review","symptom_check","review_effect")) || (schema<4 && it in listOf("regimen_version","regimen_rule_link","milestone")) || (schema<5 && it=="lab_context_revision") || (schema<6 && it in listOf("visit_question","visit_pack")) || (schema<7 && it in listOf("history_period_revision","record_annotation")) || (schema<9 && it=="trash_item")}
         require(required.all{tables.has(it)}) { "Incomplete backup" }
         db.withTransaction {
             val sql=db.openHelper.writableDatabase
-            RawData.restore(sql,tables,upgradeRegimens=schema<4)
+            RawData.restore(sql,tables,upgradeRegimens=schema<4,backfillTrash=schema<9)
             if(schema<2) WellbeingUpgrade.apply(sql,today)
         }
     }
@@ -462,6 +542,9 @@ const val BACKFILL_MAX_DAYS=731L
         val r=requireNotNull(dao.recordById(id));require(r.status in listOf("ON_TIME","LATE"))
         SupplyLedger.reverse(dao,id)
         dao.updateRecord(r.copy(deleted_at_utc=now.toEpochMilli(),revision=r.revision+1))
+        val day=Instant.ofEpochMilli(r.taken_utc ?: r.scheduled_utc ?: now.toEpochMilli()).atZone(r.taken_zone?.let{z->runCatching{ZoneId.of(z)}.getOrNull()} ?: ZoneId.systemDefault()).toLocalDate()
+        sql().execSQL("DELETE FROM trash_item WHERE kind='RECORD' AND ref=?",arrayOf("$id"))
+        Trash.insert(sql(),Trash.RECORD,"$id",day.toString(),org.json.JSONObject(),now.toEpochMilli())
     }
 
     // --- Stock ---
@@ -495,7 +578,10 @@ const val BACKFILL_MAX_DAYS=731L
         ids.forEachIndexed{i,id->dao.updateCheckinItem(items.getValue(id).copy(sort_order=i))}
     }
     suspend fun scores(from:LocalDate,to:LocalDate)=withContext(Dispatchers.IO){db().dao().scores(from.toString(),to.toString())}
-    suspend fun setScore(date:LocalDate,item:Long,value:Int?)=transaction { dao -> if(value==null)dao.deleteScore(date.toString(),item) else {require(value in 1..5);dao.score(CheckinScoreEntity(date.toString(),item,value))} }
+    suspend fun setScore(date:LocalDate,item:Long,value:Int?,now:Instant=Instant.now())=transaction { dao -> if(value==null){
+            val rows=Trash.rows(sql(),"checkin_score","date=? AND item_id=?",arrayOf(date.toString(),item))
+            if(rows.length()>0)Trash.insert(sql(),Trash.SCORE,"$date|$item@${now.toEpochMilli()}",date.toString(),Trash.payload("checkin_score" to rows),now.toEpochMilli())
+            dao.deleteScore(date.toString(),item)} else {require(value in 1..5);dao.score(CheckinScoreEntity(date.toString(),item,value))} }
     // --- Stage reviews, symptom checks, effect visibility (REQUIREMENTS 15) ---
     suspend fun stageReviews()=withContext(Dispatchers.IO){db().dao().stageReviews()}
     suspend fun saveStageReview(v:StageReviewEntity)=transaction { dao ->
@@ -507,7 +593,9 @@ const val BACKFILL_MAX_DAYS=731L
         effects.keys().forEach{key->val value=effects.get(key);require(value is String && (key.endsWith(":note")||value in listOf("NOT_YET","NOTICED","UNSURE")))}
         val id=dao.stageReview(v);if(v.id!=0L)v.id else id
     }
-    suspend fun deleteStageReview(id:Long)=transaction { it.deleteStageReview(id) }
+    suspend fun deleteStageReview(id:Long,now:Instant=Instant.now())=transaction { dao ->
+        val rows=Trash.rows(sql(),"stage_review","id=?",arrayOf(id));if(rows.length()==0)return@transaction
+        Trash.insert(sql(),Trash.REVIEW,"$id",rows.getJSONObject(0).getString("date"),Trash.payload("stage_review" to rows),now.toEpochMilli());dao.deleteStageReview(id) }
     suspend fun symptomChecks(from:LocalDate,to:LocalDate)=withContext(Dispatchers.IO){db().dao().symptomChecks(from.toString(),to.toString())}
     suspend fun setSymptomCheck(date:LocalDate,group:String,checked:Boolean,note:String?=null,
         contextProvider:((List<MedicationEntity>,Map<Long,ProfileEntity>)->String?)?=null)=transaction { dao ->
@@ -516,7 +604,11 @@ const val BACKFILL_MAX_DAYS=731L
             val meds=dao.medications()
             val context=if(previous!=null)previous.context_snapshot else contextProvider?.invoke(meds,meds.mapNotNull{m->dao.profile(m.id)?.let{m.id to it}}.toMap())
             dao.symptomCheck(SymptomCheckEntity(date.toString(),group,note?.takeIf{it.isNotBlank()},context))
-        } else dao.deleteSymptomCheck(date.toString(),group)
+        } else {
+            val rows=Trash.rows(sql(),"symptom_check","date=? AND group_id=?",arrayOf(date.toString(),group))
+            if(rows.length()>0)Trash.insert(sql(),Trash.SYMPTOM,"$date|$group@${Instant.now().toEpochMilli()}",date.toString(),Trash.payload("symptom_check" to rows),Instant.now().toEpochMilli())
+            dao.deleteSymptomCheck(date.toString(),group)
+        }
     }
     suspend fun confirmMissed(id:Long)=transaction { dao ->
         val r=requireNotNull(dao.recordById(id));require(r.unconfirmed && r.deleted_at_utc==null)
@@ -526,7 +618,10 @@ const val BACKFILL_MAX_DAYS=731L
     suspend fun setReviewEffect(id:String,enabled:Boolean)=transaction { it.reviewEffect(ReviewEffectEntity(id,enabled)) }
     suspend fun setContainerInfo(id:Long,source:String?,batch:String?)=transaction { it.setContainerInfo(id,source?.trim()?.takeIf{s->s.isNotEmpty()},batch?.trim()?.takeIf{s->s.isNotEmpty()}) }
     suspend fun notes(from:LocalDate,to:LocalDate)=withContext(Dispatchers.IO){db().dao().notes(from.toString(),to.toString())}
-    suspend fun setNote(date:LocalDate,text:String)=transaction { dao -> if(text.isBlank())dao.deleteNote(date.toString()) else dao.note(DayNoteEntity(date.toString(),text)) }
+    suspend fun setNote(date:LocalDate,text:String,now:Instant=Instant.now())=transaction { dao -> if(text.isBlank()){
+            val rows=Trash.rows(sql(),"day_note","date=?",arrayOf(date.toString()))
+            if(rows.length()>0)Trash.insert(sql(),Trash.NOTE,"$date@${now.toEpochMilli()}",date.toString(),Trash.payload("day_note" to rows),now.toEpochMilli())
+            dao.deleteNote(date.toString())} else dao.note(DayNoteEntity(date.toString(),text)) }
     /** Planned slots in [from, to) for forecasting; reconciles first so past slots carry their final state. */
     suspend fun planned(from:Instant,to:Instant,now:Instant=Instant.now(),zone:ZoneId=ZoneId.systemDefault())=transaction { dao -> timeline(dao,now,from,to,zone) }
     suspend fun labs()=withContext(Dispatchers.IO){db().dao().labs()}
@@ -551,7 +646,12 @@ const val BACKFILL_MAX_DAYS=731L
         val lab=requireNotNull(dao.labs().singleOrNull{it.id==id})
         captureLab(dao,lab,"RECONSTRUCTED",now,estimate(dao,lab))
     }
-    suspend fun deleteLab(id:Long)=transaction { it.deleteLab(id) }
+    /** §39: the sample goes to the bin with its frozen contexts and comes back with them unchanged. */
+    suspend fun deleteLab(id:Long,now:Instant=Instant.now())=transaction { dao ->
+        val lab=Trash.rows(sql(),"lab_value","id=?",arrayOf(id));if(lab.length()==0)return@transaction
+        val l=lab.getJSONObject(0);val day=Instant.ofEpochMilli(l.getLong("sampled_utc")).atZone(ZoneId.of(l.getString("sampled_zone"))).toLocalDate().toString()
+        Trash.insert(sql(),Trash.LAB,"$id",day,Trash.payload("lab_value" to lab,"lab_context_revision" to Trash.rows(sql(),"lab_context_revision","lab_id=? ORDER BY revision",arrayOf(id))),now.toEpochMilli())
+        dao.deleteLab(id) }
     /** Body weight is a single current PK parameter (no history in V1). */
     suspend fun weight()=withContext(Dispatchers.IO){db().dao().pkSettings()?.current_weight_kg}
     suspend fun setWeight(kg:Double)=transaction { require(kg.isFinite() && kg>0 && kg<1000); it.pkSettings(PkSettingsEntity(1,kg)) }

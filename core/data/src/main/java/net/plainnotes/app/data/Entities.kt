@@ -294,6 +294,10 @@ data class HistoryPeriodEntity(@PrimaryKey(autoGenerate=true)val id:Long=0,val p
     /** Rows written by one edit share a key so the edit is undone as a whole. */
     val group_key:String?=null)
 
+/** REQUIREMENTS §39: one item in the recycle bin (see [Trash]). */
+@Entity(tableName="trash_item",indices=[Index(value=["kind","ref"],unique=true)])
+data class TrashItemEntity(@PrimaryKey(autoGenerate=true)val id:Long=0,val kind:String,val ref:String,val item_date:String,val deleted_utc:Long,val payload_json:String,val state:String)
+
 /** The user's own statement about a record (only EXTRA for now). The dose record itself is never changed. */
 @Entity(tableName="record_annotation",primaryKeys=["record_id","kind"],foreignKeys=[ForeignKey(entity=RecordEntity::class,parentColumns=["id"],childColumns=["record_id"],onDelete=ForeignKey.RESTRICT)])
 data class RecordAnnotationEntity(val record_id:Long,val kind:String,val created_utc:Long)

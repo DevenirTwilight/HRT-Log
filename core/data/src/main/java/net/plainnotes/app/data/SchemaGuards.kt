@@ -21,6 +21,7 @@ object SchemaGuards : RoomDatabase.Callback() {
         "appointment" to "NEW.remind_minutes_before>=0 AND length(NEW.at_zone)>0 AND (NEW.completed_utc IS NULL OR NEW.completed_utc>0)",
         "history_period_revision" to "NEW.revision>=1 AND NEW.state IN ('CONFIRMED','REVOKED') AND ((NEW.kind='CONFIRMED' AND NEW.origin='OBSERVED_USER_CONFIRMED') OR (NEW.kind IN ('PERIOD','FILL','DELETED','STOP') AND NEW.origin='USER_EDIT')) AND (NEW.group_key IS NULL OR length(NEW.group_key)=36) AND length(NEW.period_key)=36 AND length(NEW.from_date)=10 AND (NEW.until_date IS NULL OR (length(NEW.until_date)=10 AND NEW.until_date>NEW.from_date)) AND length(NEW.zone)>0 AND length(NEW.standard_json)>=2 AND length(NEW.identity_json)>=2 AND length(NEW.evidence_json)>=2 AND NEW.created_utc>0 AND (NEW.revision=1 OR EXISTS (SELECT 1 FROM history_period_revision p WHERE p.period_key=NEW.period_key AND p.revision=NEW.revision-1 AND p.medication_id=NEW.medication_id))",
         "record_annotation" to "NEW.kind IN ('EXTRA') AND NEW.created_utc>0",
+        "trash_item" to "NEW.kind IN ('MILESTONE','LAB','APPOINTMENT','REVIEW','SYMPTOM','SCORE','NOTE','RECORD','PERIOD','CORRECTION') AND NEW.state IN ('TRASHED','HIDDEN') AND NEW.deleted_utc>0 AND length(NEW.ref)>0 AND length(NEW.item_date)=10 AND length(NEW.payload_json)>=2",
         "visit_question" to "length(trim(NEW.text))>0 AND NEW.status IN ('OPEN','ASKED') AND NEW.sort_order>=0",
         "visit_pack" to "NEW.generated_utc>0 AND length(NEW.zone)>0 AND length(NEW.range_from)=10 AND length(NEW.range_to)=10 AND NEW.range_from<=NEW.range_to AND length(NEW.sections)>0 AND length(NEW.language)>0 AND NEW.template_version>=1 AND length(NEW.input_digest)=64 AND NEW.input_digest NOT GLOB '*[^0-9a-f]*' AND length(NEW.facts_json)>=2",
         "checkin_score" to "NEW.value BETWEEN 1 AND 5",
@@ -49,7 +50,10 @@ object SchemaGuards : RoomDatabase.Callback() {
             operations.forEach { op -> db.execSQL("DROP TRIGGER IF EXISTS guard_${table}_${op.lowercase()}"); db.execSQL("CREATE TRIGGER guard_${table}_${op.lowercase()} BEFORE $op ON $table BEGIN SELECT CASE WHEN COALESCE(($predicate),0)=0 THEN RAISE(ABORT,'Invalid $table') END; END") }
         }
         db.execSQL("CREATE TRIGGER IF NOT EXISTS immutable_history_period_update BEFORE UPDATE ON history_period_revision BEGIN SELECT RAISE(ABORT,'Append-only history period'); END")
-        db.execSQL("CREATE TRIGGER IF NOT EXISTS immutable_history_period_delete BEFORE DELETE ON history_period_revision BEGIN SELECT RAISE(ABORT,'Append-only history period'); END")
+        // §39: only an explicit purge of the user's own rows may remove them, through a permit written in the same transaction.
+        db.execSQL("CREATE TABLE IF NOT EXISTS purge_permit (period_key TEXT PRIMARY KEY NOT NULL)")
+        db.execSQL("DROP TRIGGER IF EXISTS immutable_history_period_delete")
+        db.execSQL("CREATE TRIGGER immutable_history_period_delete BEFORE DELETE ON history_period_revision WHEN NOT EXISTS (SELECT 1 FROM purge_permit p WHERE p.period_key=OLD.period_key) BEGIN SELECT RAISE(ABORT,'Append-only history period'); END")
         db.execSQL("CREATE TRIGGER IF NOT EXISTS immutable_visit_pack_update BEFORE UPDATE ON visit_pack BEGIN SELECT RAISE(ABORT,'Frozen visit pack'); END")
         db.execSQL("CREATE TRIGGER IF NOT EXISTS immutable_lab_context_update BEFORE UPDATE ON lab_context_revision BEGIN SELECT RAISE(ABORT,'Frozen lab context'); END")
         val frozen=listOf("id","medication_id","effective_from_utc","zone","definition_json","clinical_signature","origin","recorded_at_utc").joinToString(" AND "){"NEW.$it IS OLD.$it"}

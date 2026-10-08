@@ -3,6 +3,7 @@ import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 @Dao interface NotesDao {
     @Query("SELECT * FROM history_period_revision ORDER BY period_key,revision") suspend fun historyPeriods():List<HistoryPeriodEntity>
+    @Query("SELECT * FROM trash_item ORDER BY deleted_utc DESC,id DESC") suspend fun trash():List<TrashItemEntity>
     @Insert suspend fun insertHistoryPeriod(value:HistoryPeriodEntity):Long
     @Query("SELECT * FROM record_annotation ORDER BY record_id,kind") suspend fun annotations():List<RecordAnnotationEntity>
     @Insert(onConflict=OnConflictStrategy.IGNORE) suspend fun insertAnnotation(value:RecordAnnotationEntity)
