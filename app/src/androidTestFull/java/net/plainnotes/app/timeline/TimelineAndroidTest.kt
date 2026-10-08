@@ -83,10 +83,12 @@ class TimelineAndroidTest {
         org.junit.Assert.assertEquals(1,projection.projection.standards.size)
         var opened:List<Long>?=null
         ui.setContent{MaterialTheme{LongitudinalScreen(NotesState(loading=false),extra,{},{},{},PaddingValues(),onImportedHistory={opened=it})}}
-        ui.onNodeWithTag("period-timeline").performScrollToNode(hasText("Synthetic partial logging",substring=true))
-        ui.onNodeWithText("Synthetic partial logging",substring=true).assertIsDisplayed()
+        // The name also appears in the "compared with the previous period" line of the later empty card, so scroll to the frequency.
+        val frequency=ui.activity.getString(R.string.period_frequency_days,2,1)
+        ui.onNodeWithTag("period-timeline").performScrollToNode(hasText(frequency))
+        ui.onNodeWithText(frequency).assertIsDisplayed()
+        ui.onAllNodesWithText("Synthetic partial logging",substring=true).onFirst().assertExists()
         ui.onNodeWithText(ui.activity.getString(R.string.timeline_imported_history)).assertDoesNotExist()
-        ui.onNodeWithText(ui.activity.getString(R.string.period_frequency_days,2,1)).assertIsDisplayed()
         val tag="period-history:${projection.projection.periods.first{it.finalStandardSpanKeys.isNotEmpty()}.key}"
         ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag(tag))
         ui.onNodeWithTag(tag).performClick()
