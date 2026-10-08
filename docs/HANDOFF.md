@@ -1,12 +1,13 @@
 # 交接说明：工作进度与开发指南
 
-## 进行中：历史识别覆盖修复 build16（2026-10-08，功能与应用回归完成）
+## 进行中：历史识别覆盖修复 build16（2026-10-08，功能与完整验证完成，待签署交付）
 
 - 用户确认药物/舌下途径/实际量正确，主要每天两次、偶尔漏记。需求§32与先行设计a505c94，design/history-recognition-coverage.md。原分支，仅full，versionCode16/schema6/原正式证书。
 - 已实现有限七天支持完整向量与部分漏记日；三次完整向量、匹配观察日≥2/3、观察自然日≥2/3、至少两个连续间隔。较大完整向量优先，按同类模式先合并证据，避免重叠窗口单/双次反复拆段；持续剂量/频率变化仍区分。记录zone分日。已保存同ID已知字段兼容关联，未知仍未知；仅APP明确冻结rule补缺，IMPORT不借用规则/当前配置。至少三个日期的已知剂量、频率不确定历史作为明确OBSERVED部分已知时期，不伪造每日处方。
 - 原RecordEntity/版本/快照/剂量/revision/库存/提醒/PK/V1/Context1/VisitPack1不写改。build15紧邻边界与降级回归保留。
 - 应用完整回归已成功（tooling/build16-final-app-tests.log），163登记/150通过/13既有跳过/0失败。识别26项含双次零星漏记、剂量改变与双次→单次→双次、未知长空白、稀疏不假定每日、同ID未知与已知冲突、APP冻结rule/IMPORT不借用、记录时区；新增真实JSON导入→Room→重导入/加密恢复，Compose Native Graphics时期内频率与确切源记录入口。前轮发现窗口拆段已修正重跑；两项测试对未知空白时期的断言修正为检查空标准集合，保留业务断言。
-- 下一步：完整full六模块回归/lint/release/debug及测试APK、manifest/schema、最终功能CI/API35新增入口测试。全部成功再原私有证书签署、真实链接回查与交付。尚未交付build16，最新交付仍build15；未读取用户真实健康数据或进行用户OEM/人工TalkBack新验收。
+- 完整本机full任务8m12s成功：304登记/291通过/13既有跳过/0失败，lint0错误99警告，full debug/release与两个测试APK成功；manifest/schema/PLAN无漂移检查通过。最终功能CI [37752990023](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37752990023)，源码1093755，三个任务全部success；API35数据11、应用主套件28项，两个重启项另起进程各OK。详见history-recognition-coverage-verification.md。
+- 下一步仅原私有正式证书签署、校验证书/对齐/包属性、上传与独立下载哈希回查。尚未交付build16，最新交付仍build15；未读取用户真实健康数据或进行用户OEM/人工TalkBack新验收。签名备份仓库已再次确认private。
 
 ## 当前最新交付：时间线闪退修复 build15（2026-10-08，完成）
 
