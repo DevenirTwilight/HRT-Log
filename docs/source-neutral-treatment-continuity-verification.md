@@ -17,4 +17,4 @@
 
 build17-final-build-checks.log完整full任务9m2s成功；domain39/pk18/importer12/data58/reminder14/app172，共313登记/300通过/13既有跳过/0失败（PDF1/按需按钮审计12）。lint0错误99警告，full debug/release与两个Android测试APK成功；manifest身份/入口/无INTERNET、schema/PLAN无漂移通过。新增集成测试字段名编译错误修正后完整重跑。
 
-最终功能CI [37756924266](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37756924266)，源码2ba5860，jvm/android/device-tests三个任务success；API35数据11、应用主套件29项，另两个重启用例分别独立进程各OK。正式签名与下载回查待完成。用户具体数据/OEM覆盖安装和人工TalkBack新验收未验证；部分未知字段/无稳定频率不冒充确认处方，完整人工确认/药物启停状态仍后续。没有修改公开Release或标签。
+最终功能CI [37756924266](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37756924266)，源码2ba5860，jvm/android/device-tests三个任务success；API35数据11、应用主套件29项，另两个重启用例分别独立进程各OK。正式full已沿用原证书签署：23,366,875 bytes，SHA256 `7b3e4a1c90f5433afeea3aec986c93e158797e8377f1c6523778c85fc81ba558`。v2/v3、ZIP与8个native库16KB对齐、build17/net.plainnotes.app/非debug/无INTERNET验证；私有备份确认private，临时签名目录及其中ZIP/JKS/密码finally删除。实际下载大小/SHA与本地一致：https://tmpfiles.org/dl/1791452746.930fb6c101b361df/wGAHgt6b0pBF/hrt-log-build17-full-signed.apk 。用户具体数据/OEM覆盖安装和人工TalkBack新验收未验证；部分未知字段/无稳定频率不冒充确认处方，完整人工确认/药物启停状态仍后续。没有修改公开Release或标签。

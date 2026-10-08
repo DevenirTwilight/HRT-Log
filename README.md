@@ -87,6 +87,12 @@ automatically. Uncertain records remain available for review, and long gaps do n
 imply stopping treatment. Stored records, reminders, stock and frozen lab contexts
 are unchanged. See [`independent design`](docs/design/imported-treatment-periods.md).
 
+Build 17 uses the same presentation for imported and native records, without import
+badges or source-specific history buckets. Equivalent cadence expressions and short
+matching date boundaries join the same treatment period; actual changes and long
+unknown gaps remain distinct. Original source facts and saved definitions are retained,
+with prescription and record evidence available in the audit detail. See
+[`continuity verification`](docs/source-neutral-treatment-continuity-verification.md).
 
 Build 8 repairs compatible native historical context using its saved rule snapshot.
 Old HRT Tracker imports can recover missing context from the original export, or users

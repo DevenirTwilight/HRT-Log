@@ -1,6 +1,6 @@
 # 交接说明：工作进度与开发指南
 
-## 进行中：相同方案跨导入边界合并 build17（2026-10-08，功能与完整验证完成，待签署交付）
+## 当前最新交付：相同方案跨导入边界合并 build17（2026-10-08，完成）
 
 - 用户反馈10月6日相同方案仍拆段，要求导入取消特殊标记。需求§33、先行设计d70dea7，design/source-neutral-treatment-continuity.md。原分支，仅full/原正式签名/schema6/versionCode17。
 - 显示适配归一等价频率：12h→每天双次、24h整数倍→N天、每周七天interval1→每天，36h/不完整星期/不同每次剂量分布不误合并。原冻结定义/clinical_signature与V1/Context1/VisitPack1不改；保存版本审计用原频率表达。
@@ -8,9 +8,11 @@
 - 普通时期移除识别来源提示；混合历史不会触发误报旧方案重建徽标。History取消导入来源徽标，所有无计划时刻实际记录同样显示未排程。未匹配记录统一APP/HT/TM入口、取消origin分桶与工具名、四语计数/筛选文字去导入限定。有保存方案覆盖的MISSED/SKIPPED使用原计划时间关联并可打开原始IDs，不伪造服药时间/剂量。
 - 最终应用完整回归成功（tooling/build17-final-app-tests.log）：172登记/159通过/13既有跳过/0失败。新SourceNeutralContinuityTest6项覆盖合成10月6日/跨zone/12hvs双次/全周/真实变化/长空白/保存边界/混合来源与原始数据不改；真实JSON→Room→当前方案与APP记录→重导入/加密恢复同一个时期；Compose Native Graphics同一普通时期无来源标记、原始IDs和History一致性。新增集成测试字段名编译问题已修正后完整重跑。
 - 最终本机full完整任务9m2s成功：313登记/300通过/13既有跳过/0失败，lint0错误99警告；full debug/release及两个测试APK、manifest/schema/PLAN无漂移检查通过。最终功能CI [37756924266](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37756924266)，源码2ba5860，jvm/android/device-tests全部success；API35数据11、应用主套件29、另两个独立进程重启用例各OK。详见source-neutral-treatment-continuity-verification.md。
-- 下一步仅原私有正式证书签署/包属性/16KB对齐验证、上传与真实下载SHA回查。签名备份已再次确认private；尚未交付build17，最新仍build16。不读取用户真实健康数据，不声称已验证其具体数据或OEM/TalkBack新验收。
+- 正式full `/workspace/HRT-Log-build17-full-signed.apk`，23,366,875 bytes，SHA256 `7b3e4a1c90f5433afeea3aec986c93e158797e8377f1c6523778c85fc81ba558`。既有正式证书SHA256 `989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1`、v2/v3、ZIP和8个native库16KB对齐、非debug、net.plainnotes.app/build17/无INTERNET确认；release mapping含修正识别逻辑。支持原正式安装直接覆盖，已有数据自动重投影，不用卸载/清数据/重导。
+- 下载：https://tmpfiles.org/dl/1791452746.930fb6c101b361df/wGAHgt6b0pBF/hrt-log-build17-full-signed.apk 。独立下载大小/SHA与本地一致；临时链接失效重传同一build17，不提供Android无法预览的工作区路径。签名备份确认private，临时clone/ZIP/JKS/密码finally删除，仅留不含凭据clone日志，原备份不改。元数据/tooling：build17-final-metadata.json、build17-delivery.json、build17-unit-results.json、build17-final-build-checks.log、build17-ci-device.log。
+- 本批实现/完整验证/签名/回查/交付已完成，无待执行交付动作；原始来源仍保留数据库与备份，未改库存/提醒/PK/V1/Context1/VisitPack1/schema。APK/密钥不进仓库，不发布Release/修改标签。用户实际数据与OEM覆盖安装、人工TalkBack新验收未验证，不声称已核查其具体数据。未知身份/无稳定频率或长空白不编造方案；持久化人工确认、完整生命周期仍后续，§29按钮审计未改界面。
 
-## 当前最新交付：历史识别覆盖修复 build16（2026-10-08，完成）
+## 上一交付：历史识别覆盖修复 build16（2026-10-08，完成）
 
 - 用户确认药物/舌下途径/实际量正确，主要每天两次、偶尔漏记。需求§32与先行设计a505c94，design/history-recognition-coverage.md。原分支，仅full，versionCode16/schema6/原正式证书。
 - 已实现有限七天支持完整向量与部分漏记日；三次完整向量、匹配观察日≥2/3、观察自然日≥2/3、至少两个连续间隔。较大完整向量优先，按同类模式先合并证据，避免重叠窗口单/双次反复拆段；持续剂量/频率变化仍区分。记录zone分日。已保存同ID已知字段兼容关联，未知仍未知；仅APP明确冻结rule补缺，IMPORT不借用规则/当前配置。至少三个日期的已知剂量、频率不确定历史作为明确OBSERVED部分已知时期，不伪造每日处方。
