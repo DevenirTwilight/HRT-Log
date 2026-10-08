@@ -893,4 +893,18 @@
     <string name="lab_context_confirmed_period">採樣時所屬過去時期（由紀錄推定，已確認）：%1$s – %2$s</string>
     <string name="period_partly_confirmed">其中一部分由紀錄推定，已確認</string>
     <string name="period_partly_pending">其中一部分由紀錄推定，待確認</string>
+    <string name="period_stopped">%1$s 在應用程式中停用：%2$s – %3$s</string>
+    <string name="period_change_header">與上一時期相比：</string>
+    <string name="period_change_started">開始</string>
+    <string name="period_change_ended">不再有紀錄或方案</string>
+    <string name="period_change_stopped">在應用程式中停用</string>
+    <string name="period_change_dose">每次劑量不同</string>
+    <string name="period_change_frequency">頻率不同</string>
+    <string name="period_change_frequency_unknown">其中一段無法從紀錄確定頻率</string>
+    <string name="period_change_route">途徑不同</string>
+    <string name="period_change_ester">酯型不同</string>
+    <string name="period_change_formulation">製劑不同</string>
+    <string name="period_change_identity">成分或單位不同</string>
+    <string name="period_change_gap">中間 30 天以上沒有紀錄</string>
+    <string name="period_change_unjoined">標準相同但未合併（請回報）</string>
 </resources>

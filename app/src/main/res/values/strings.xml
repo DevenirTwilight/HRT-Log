@@ -893,4 +893,18 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="lab_context_confirmed_period">Past period at sampling (inferred from records, confirmed): %1$s – %2$s</string>
     <string name="period_partly_confirmed">Part of this period was inferred from records and confirmed by you</string>
     <string name="period_partly_pending">Part of this period was inferred from records and is to confirm</string>
+    <string name="period_stopped">%1$s stopped in the app: %2$s – %3$s</string>
+    <string name="period_change_header">Compared with the previous period:</string>
+    <string name="period_change_started">started</string>
+    <string name="period_change_ended">no longer recorded or planned</string>
+    <string name="period_change_stopped">stopped in the app</string>
+    <string name="period_change_dose">different dose</string>
+    <string name="period_change_frequency">different frequency</string>
+    <string name="period_change_frequency_unknown">frequency could not be recognised from the records on one side</string>
+    <string name="period_change_route">different route</string>
+    <string name="period_change_ester">different ester</string>
+    <string name="period_change_formulation">different product</string>
+    <string name="period_change_identity">different ingredient or unit</string>
+    <string name="period_change_gap">30 days or more without records</string>
+    <string name="period_change_unjoined">same standard, not joined (please report)</string>
 </resources>

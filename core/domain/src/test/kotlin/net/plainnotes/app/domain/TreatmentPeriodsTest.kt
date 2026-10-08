@@ -19,21 +19,39 @@ class TreatmentPeriodsTest {
         val before=TreatmentPeriods.build(listOf(raw(1,a,null)),zone)
         assertEquals(before.periods.single().key,view.periods.single().key)
     }
-    @Test fun sameStandardAcrossAShortGapIsOnePeriodButThirtyDaysSplit() {
-        // REQUIREMENTS §36: a gap shorter than 30 days with the same standard does not end the period.
-        val view=TreatmentPeriods.build(listOf(raw(1,a,b),raw(2,c,null)),zone)
-        assertEquals(1,view.periods.size);assertEquals(listOf(1L,2L),view.standards.single().rawVersionIds)
-        assertTrue(view.exactAt(b).isEmpty()) // no actual-history input exists in this builder
+    @Test fun recordGapUnderThirtyDaysJoinsButAStopSavedInTheAppIsKept() {
+        // REQUIREMENTS §36 (revised): negative IDs are recorded or recognised parts, positive IDs are plans saved in the app.
+        val joined=TreatmentPeriods.build(listOf(raw(-1,a,b),raw(-2,c,null)),zone)
+        assertEquals(1,joined.periods.size);assertEquals(listOf(-1L,-2L),joined.standards.single().rawVersionIds)
+        assertTrue(joined.exactAt(b).isEmpty());assertTrue(joined.stops.isEmpty())
         val later=b.plus(Duration.ofDays(30))
-        val split=TreatmentPeriods.build(listOf(raw(1,a,b),raw(2,later,null)),zone)
+        val split=TreatmentPeriods.build(listOf(raw(-1,a,b),raw(-2,later,null)),zone)
         assertEquals(3,split.periods.size);assertTrue(split.segments[1].standardSpanKeys.isEmpty())
-        assertEquals(1,TreatmentPeriods.build(listOf(raw(1,a,b),raw(2,later.minusSeconds(1),null)),zone).periods.size)
+        assertEquals(listOf(PeriodChange(1,setOf(ChangeKind.ENDED))),split.changes(split.periods[1]))
+        assertEquals(1,TreatmentPeriods.build(listOf(raw(-1,a,b),raw(-2,later.minusSeconds(1),null)),zone).periods.size)
+        // Stopped in the app for three weeks, then resumed with the same standard: two parts and the stop in between.
+        val resume=b.plus(Duration.ofDays(21))
+        val paused=TreatmentPeriods.build(listOf(raw(1,a,b),raw(2,resume,null)),zone)
+        assertEquals(3,paused.periods.size);assertEquals(2,paused.standards.size)
+        assertEquals(listOf(TreatmentStop(1,b,resume)),paused.stops)
+        assertEquals(listOf(PeriodChange(1,setOf(ChangeKind.STOPPED))),paused.changes(paused.periods[1]))
+        assertEquals(listOf(PeriodChange(1,setOf(ChangeKind.STARTED))),paused.changes(paused.periods[2]))
+        // Saved versions that meet exactly are not a stop; a plan ended for good is an open stop.
+        assertTrue(TreatmentPeriods.build(listOf(raw(1,a,b),raw(2,b,null)),zone).stops.isEmpty())
+        assertEquals(listOf(TreatmentStop(1,b,null)),TreatmentPeriods.build(listOf(raw(1,a,b)),zone).stops)
+    }
+    @Test fun changesNameEachMedicineAndWhatDiffers() {
+        val view=TreatmentPeriods.build(listOf(raw(-1,a,b),raw(2,b,null,standard.copy(doses=listOf(2.0,2.0),route="SUBLINGUAL")),raw(-3,a,b,standard.copy(compound="CPA"),med=2)),zone)
+        assertEquals(listOf(PeriodChange(1,setOf(ChangeKind.ROUTE,ChangeKind.DOSE)),PeriodChange(2,setOf(ChangeKind.ENDED))),view.changes(view.periods[1]))
+        val unknown=TreatmentPeriods.build(listOf(raw(-1,a,b,standard.copy(kind="OBSERVED",interval=0)),raw(2,b,null)),zone)
+        assertEquals(setOf(ChangeKind.FREQUENCY_UNKNOWN),unknown.changes(unknown.periods[1]).single().kinds)
+        assertTrue(view.changes(view.periods[0]).isEmpty())
     }
     @Test fun differentMedicationEntriesOfTheSameMedicineContinueEachOther() {
         // Import-created entry before, the app's own entry after; missing ester on one side is compatible.
         val imported=standard.copy(ester=null)
-        val view=TreatmentPeriods.build(listOf(raw(1,a,b,imported,med=2),raw(2,b.plusSeconds(3600),null,med=1)),zone)
-        assertEquals(1,view.periods.size);assertEquals(listOf(1L,2L),view.standards.single().rawVersionIds);assertEquals("EV",view.standards.single().standard.ester)
+        val view=TreatmentPeriods.build(listOf(raw(-1,a,b,imported,med=2),raw(2,b.plusSeconds(3600),null,med=1)),zone)
+        assertEquals(1,view.periods.size);assertEquals(listOf(-1L,2L),view.standards.single().rawVersionIds);assertEquals("EV",view.standards.single().standard.ester)
         // Entries used at the same time stay separate; a different medicine never joins.
         assertEquals(2,TreatmentPeriods.build(listOf(raw(1,a,c,med=2),raw(2,b,null,med=1)),zone).standards.size)
         assertEquals(2,TreatmentPeriods.build(listOf(raw(1,a,b,standard.copy(compound="CPA"),med=2),raw(2,b,null,med=1)),zone).periods.size)

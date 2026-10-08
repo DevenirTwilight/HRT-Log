@@ -29,8 +29,46 @@ data class DisplayPeriod(val key:String,val from:Instant,val until:Instant?,val 
     val finalStandardSpanKeys get()=segments.last().standardSpanKeys
     fun contains(at:Instant)=at>=from && (until==null || at<until)
 }
+/** A plan explicitly ended in the app (saved version with an end) before the next part of the same medicine, or for good. */
+data class TreatmentStop(val medicationId:Long,val from:Instant,val until:Instant?)
+/** Why a display period differs from the previous one, per medicine (lane ID). */
+enum class ChangeKind{STARTED,ENDED,STOPPED,DOSE,FREQUENCY,FREQUENCY_UNKNOWN,ROUTE,ESTER,FORMULATION,IDENTITY,GAP,UNJOINED}
+data class PeriodChange(val medicationId:Long,val kinds:Set<ChangeKind>)
 data class TreatmentPeriodProjection(val zone:ZoneId,val raw:List<RawTreatmentInterval>,val standards:List<TreatmentStandardSpan>,
-    val segments:List<ClinicalSegment>,val periods:List<DisplayPeriod>) {
+    val segments:List<ClinicalSegment>,val periods:List<DisplayPeriod>,val stops:List<TreatmentStop> = emptyList()) {
+    /** REQUIREMENTS §36: what changed at the start of [period] compared with the end of the previous one. */
+    fun changes(period:DisplayPeriod):List<PeriodChange> {
+        val i=periods.indexOf(period);if(i<=0)return emptyList()
+        val before=standards.filter{it.key in periods[i-1].finalStandardSpanKeys}.associateBy{it.medicationId}
+        val after=standards.filter{it.key in period.segments.first().standardSpanKeys}.associateBy{it.medicationId}
+        return (before.keys+after.keys).sorted().mapNotNull{m->
+            val b=before[m];val a=after[m]
+            when {
+                b==null && a==null->null
+                b==null->PeriodChange(m,setOf(ChangeKind.STARTED))
+                a==null->PeriodChange(m,setOf(if(stops.any{it.medicationId==m && it.from==b.until})ChangeKind.STOPPED else ChangeKind.ENDED))
+                a.key==b.key->null
+                else->PeriodChange(m,difference(b,a))
+            }
+        }
+    }
+    private fun difference(b:TreatmentStandardSpan,a:TreatmentStandardSpan):Set<ChangeKind> {
+        val x=b.standard;val y=a.standard
+        fun differs(p:String?,q:String?)=p!=null && q!=null && p!=q
+        val kinds=buildSet {
+            if(x.compound!=y.compound || x.unit!=y.unit)add(ChangeKind.IDENTITY)
+            if(differs(x.route,y.route))add(ChangeKind.ROUTE)
+            if(differs(x.ester,y.ester))add(ChangeKind.ESTER)
+            if(differs(x.formulation,y.formulation))add(ChangeKind.FORMULATION)
+            if((x.kind=="OBSERVED")!=(y.kind=="OBSERVED"))add(ChangeKind.FREQUENCY_UNKNOWN)
+            else if(x.kind!=y.kind || x.interval!=y.interval || x.weeklyCount!=y.weeklyCount)add(ChangeKind.FREQUENCY)
+            if(x.doses.sorted()!=y.doses.sorted())add(ChangeKind.DOSE)
+        }
+        if(kinds.isNotEmpty())return kinds
+        val gap=b.until?.let{Duration.between(it,a.from)}
+        return setOf(if(stops.any{it.medicationId==b.medicationId && it.from==b.until})ChangeKind.STOPPED
+            else if(gap!=null && gap>=TreatmentPeriods.JOIN_GAP)ChangeKind.GAP else ChangeKind.UNJOINED)
+    }
     fun exactAt(at:Instant)=raw.filter{at>=it.span.from && (it.span.until==null || at<it.span.until)}
     fun periodAt(at:Instant)=periods.singleOrNull{it.contains(at)}
     /** Date-only facts belong to the display day, not a fabricated sampledAt. */
@@ -76,11 +114,15 @@ object TreatmentPeriods {
         val standards=raw.groupBy{lane.getValue(it.span.medicationId)}.toSortedMap().flatMap{(med,rows)->
             val result=mutableListOf<TreatmentStandardSpan>()
             var currentIds=mutableListOf<Long>()
+            var last:RawTreatmentInterval?=null
             rows.sortedWith(compareBy({it.span.from},{it.span.id})).forEach{r->
                 val prev=result.lastOrNull()
                 require(prev==null || prev.until!=null && prev.until<=r.span.from){"Overlapping recorded regimen"}
                 // §36: parts with the same standard continue one period across a short gap, whatever their source.
-                if(prev!=null && sameStandard(prev.standard,r.standard) && Duration.between(prev.until,r.span.from)<JOIN_GAP) {
+                // A saved plan ended in the app is an explicit stop: the stop is kept even when the same standard resumes.
+                val gap=prev?.until?.let{Duration.between(it,r.span.from)}
+                val stopped=gap!=null && !gap.isZero && last!=null && last!!.span.id>0
+                if(prev!=null && gap!=null && !stopped && sameStandard(prev.standard,r.standard) && gap<JOIN_GAP) {
                     currentIds.add(r.span.id)
                     fun pick(a:String?,b:String?)=b ?: a
                     val standard=r.standard.copy(compound=pick(prev.standard.compound,r.standard.compound),ester=pick(prev.standard.ester,r.standard.ester),
@@ -90,6 +132,7 @@ object TreatmentPeriods {
                     currentIds=mutableListOf(r.span.id)
                     result+=TreatmentStandardSpan("standard-v2:$med:${r.span.from.toEpochMilli()}:${r.span.id}",med,r.span.from,r.span.until,currentIds,r.standard,r.span.reconstructed)
                 }
+                last=r
             };result.map{it.copy(rawVersionIds=it.rawVersionIds.toList())}
         }
         val starts=standards.groupBy{it.from};val ends=standards.filter{it.until!=null}.groupBy{it.until!!}
@@ -102,6 +145,13 @@ object TreatmentPeriods {
         }
         val groups=segments.groupBy{it.from.atZone(zone).toLocalDate()}.values.toList()
         val periods=groups.mapIndexed{i,parts->DisplayPeriod("period-v2:${zone.id}:${parts.first().key}",parts.first().from,groups.getOrNull(i+1)?.first()?.from,parts)}
-        return TreatmentPeriodProjection(zone,raw,standards,segments,periods)
+        val lastById=raw.associateBy{it.span.id}
+        val stops=standards.groupBy{it.medicationId}.flatMap{(med,spans)->spans.sortedBy{it.from}.let{list->list.mapIndexedNotNull{i,span->
+            val end=span.until ?: return@mapIndexedNotNull null
+            if(lastById.getValue(span.rawVersionIds.last()).span.id<=0)return@mapIndexedNotNull null
+            val next=list.getOrNull(i+1)
+            if(next!=null && next.from==end)null else TreatmentStop(med,end,next?.from)
+        }}}
+        return TreatmentPeriodProjection(zone,raw,standards,segments,periods,stops)
     }
 }

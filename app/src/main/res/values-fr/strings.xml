@@ -893,4 +893,18 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="lab_context_confirmed_period">Période passée au prélèvement (déduite des prises, confirmée) : %1$s – %2$s</string>
     <string name="period_partly_confirmed">Une partie de cette période est déduite des prises et confirmée</string>
     <string name="period_partly_pending">Une partie de cette période est déduite des prises et reste à confirmer</string>
+    <string name="period_stopped">%1$s arrêté dans l’app : %2$s – %3$s</string>
+    <string name="period_change_header">Par rapport à la période précédente :</string>
+    <string name="period_change_started">début</string>
+    <string name="period_change_ended">plus de prises ni de traitement</string>
+    <string name="period_change_stopped">arrêté dans l’app</string>
+    <string name="period_change_dose">dose différente</string>
+    <string name="period_change_frequency">fréquence différente</string>
+    <string name="period_change_frequency_unknown">fréquence non reconnue dans les prises d’un côté</string>
+    <string name="period_change_route">voie différente</string>
+    <string name="period_change_ester">ester différent</string>
+    <string name="period_change_formulation">produit différent</string>
+    <string name="period_change_identity">substance ou unité différente</string>
+    <string name="period_change_gap">30 jours ou plus sans prise</string>
+    <string name="period_change_unjoined">même traitement, non fusionné (merci de le signaler)</string>
 </resources>

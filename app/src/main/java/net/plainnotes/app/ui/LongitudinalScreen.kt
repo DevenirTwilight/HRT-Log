@@ -105,6 +105,20 @@ import java.time.*
                         val end=period.until?.minusNanos(1)?.atZone(zone)?.toLocalDate()
                         Text(formatDate(period.from.atZone(zone).toLocalDate())+" → "+(end?.let{formatDate(it)} ?: stringResource(R.string.epoch_ongoing)))
                         if(standards.isEmpty())Text(stringResource(R.string.epoch_no_plan))
+                        // REQUIREMENTS §36: explicit stops and why this period differs from the previous one.
+                        if(!simple) {
+                            fun medName(id:Long)=state.medications.firstOrNull{it.id==id}?.name ?: projection.standards.firstOrNull{it.medicationId==id}?.standard?.compound ?: "—"
+                            @Composable fun day(at:Instant)=formatDate(at.atZone(zone).toLocalDate())
+                            projection.stops.filter{it.from>=period.from && (period.until==null || it.from<period.until)}.forEach{stop->
+                                Text(stringResource(R.string.period_stopped,medName(stop.medicationId),day(stop.from),stop.until?.let{day(it)} ?: stringResource(R.string.epoch_ongoing)),
+                                    style=MaterialTheme.typography.bodySmall,modifier=Modifier.testTag("period-stop:${stop.medicationId}:${stop.from.toEpochMilli()}"))
+                            }
+                            val changes=projection.changes(period)
+                            if(changes.isNotEmpty()) {
+                                Text(stringResource(R.string.period_change_header),style=MaterialTheme.typography.labelMedium)
+                                changes.forEach{c->Text(medName(c.medicationId)+" · "+c.kinds.sortedBy{it.ordinal}.map{stringResource(changeRes(it))}.joinToString(" · "),style=MaterialTheme.typography.bodySmall)}
+                            }
+                        }
                         if(!simple)standards.forEach{span->
                             val observed=record.observed.firstOrNull{it.interval.span.id in span.rawVersionIds}
                             val saved=extra.regimens.firstOrNull{it.id in span.rawVersionIds}
@@ -289,4 +303,19 @@ private data class StoryBlock(val key:String,val period:DisplayPeriod?=null,val 
         }
     },confirmButton={TextButton(onClick=onHistory){Text(stringResource(R.string.timeline_imported_open_history))}},
         dismissButton={TextButton(onClick=onDismiss){Text(stringResource(R.string.ok))}})
+}
+
+private fun changeRes(kind:net.plainnotes.app.domain.ChangeKind)=when(kind) {
+    net.plainnotes.app.domain.ChangeKind.STARTED->R.string.period_change_started
+    net.plainnotes.app.domain.ChangeKind.ENDED->R.string.period_change_ended
+    net.plainnotes.app.domain.ChangeKind.STOPPED->R.string.period_change_stopped
+    net.plainnotes.app.domain.ChangeKind.DOSE->R.string.period_change_dose
+    net.plainnotes.app.domain.ChangeKind.FREQUENCY->R.string.period_change_frequency
+    net.plainnotes.app.domain.ChangeKind.FREQUENCY_UNKNOWN->R.string.period_change_frequency_unknown
+    net.plainnotes.app.domain.ChangeKind.ROUTE->R.string.period_change_route
+    net.plainnotes.app.domain.ChangeKind.ESTER->R.string.period_change_ester
+    net.plainnotes.app.domain.ChangeKind.FORMULATION->R.string.period_change_formulation
+    net.plainnotes.app.domain.ChangeKind.IDENTITY->R.string.period_change_identity
+    net.plainnotes.app.domain.ChangeKind.GAP->R.string.period_change_gap
+    net.plainnotes.app.domain.ChangeKind.UNJOINED->R.string.period_change_unjoined
 }

@@ -177,4 +177,16 @@ class ImportedTimelineUiTest {
         assertNull(confirmed);assertNull(from)
     }
 
+    @Test fun stoppedPlanShowsItsStopDatesAndWhyPeriodsDiffer() {
+        val zone=java.time.ZoneId.systemDefault()
+        val start=java.time.LocalDate.now().minusDays(80);fun at(d:Long)=start.plusDays(d).atStartOfDay(zone).toInstant().toEpochMilli()
+        val json=MedicationSnapshot.encode(med,ProfileEntity(1,"E2","sublingual"))
+        val d=RegimenDefinition(json,"EVERY_N_DAYS",1,0,2.0,zone.id,start.toString(),null,listOf("08:00:00" to null,"20:00:00" to null))
+        val versions=listOf(RegimenVersionEntity(1,1,at(0),at(30),zone.id,d.json(),d.signature(),"APP",at(0)),RegimenVersionEntity(2,1,at(51),null,zone.id,d.json(),d.signature(),"APP",at(51)))
+        ui.setContent{MaterialTheme{LongitudinalScreen(NotesState(medications=listOf(med),loading=false),NotesViewModel.ExtraState(regimens=versions),{},{},{},PaddingValues())}}
+        val tag="period-stop:1:${at(30)}"
+        ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag(tag))
+        ui.onNodeWithTag(tag).assertTextContains(med.name,substring=true)
+        ui.onAllNodesWithText(ui.activity.getString(R.string.period_change_header)).assertCountEquals(2)
+    }
 }

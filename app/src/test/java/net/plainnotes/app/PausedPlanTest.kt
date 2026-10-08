@@ -30,6 +30,8 @@ class PausedPlanTest {
         assertEquals(3,view.projection.periods.size)
         val stop=view.projection.periods[1]
         assertEquals(at(30,0),stop.from);assertEquals(at(51,0),stop.until);assertTrue(stop.finalStandardSpanKeys.isEmpty())
+        assertEquals(listOf(net.plainnotes.app.domain.TreatmentStop(1,at(30,0),at(51,0))),view.projection.stops)
+        assertEquals(listOf(net.plainnotes.app.domain.PeriodChange(1,setOf(net.plainnotes.app.domain.ChangeKind.STOPPED))),view.projection.changes(stop))
     }
 
     @Test fun threeWeeksWithoutRecordsIsOnePeriod() {
