@@ -130,7 +130,9 @@ object TimelineEdits {
         val out=mutableListOf<TimelineEditRow>();val replaced=mutableListOf<String>()
         meds.forEach{m->
             val users=HistoryPeriods.userEdits(rows).filter{it.kind==HistoryPeriods.PERIOD && it.medication_id==m}.filter{row->
-                val exact=HistoryPeriods.exactBounds(row);val (a,b)=if(exact!=null)Instant.ofEpochMilli(exact.first) to exact.second?.let(Instant::ofEpochMilli)
+                val shown=p.raw.firstOrNull{userEditRow(rows,it.span.id)?.period_key==row.period_key}
+                val exact=HistoryPeriods.exactBounds(row);val (a,b)=shown?.let{it.span.from to it.span.until}
+                    ?: if(exact!=null)Instant.ofEpochMilli(exact.first) to exact.second?.let(Instant::ofEpochMilli)
                     else Range(LocalDate.parse(row.from_date),row.until_date?.let(LocalDate::parse)).instants(ZoneId.of(row.zone))
                 if(!overlaps(a,b,period.from,period.until))false else {
                     replaced+=row.period_key

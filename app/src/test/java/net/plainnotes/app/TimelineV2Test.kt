@@ -61,7 +61,8 @@ class TimelineV2Test {
         assertEquals(old.projection.standards.map{it.standard},v.projection.standards.map{it.standard})
         assertFalse(TimelineV2Migration.needed(newRows))
         assertNull(TimelineV2Migration.plan(extra.copy(historyPeriods=newRows),now))
-    }    @Test fun migrationKeepsSeveralExactChangesInOneCivilDayOnOneCard() {
+    }
+    @Test fun migrationKeepsSeveralExactChangesInOneCivilDayOnOneCard() {
         val different=definition.copy(dose=3.0)
         val v=version(1,20).copy(effective_from_utc=at(20).plusSeconds(12*3600).toEpochMilli(),definition_json=different.json(),clinical_signature=different.signature())
         val oldRow=row(1,20,null,HistoryPeriods.CONFIRMED,null)
@@ -75,6 +76,17 @@ class TimelineV2Test {
         assertEquals(old.projection.periods.map{it.from to it.until},rebuilt.projection.periods.map{it.from to it.until})
         assertEquals(old.projection.standards.map{it.standard},rebuilt.projection.standards.map{it.standard})
         assertEquals(HistoryLabels.build(extra.records,old,emptyList(),zone),HistoryLabels.build(extra.records,rebuilt,emptyList(),zone))
+    }
+
+    @Test fun deletingAnOngoingPeriodDoesNotExtendItPastTheSavedChange() {
+        val rows=listOf(row(1,0,null,stated=30))
+        val versions=listOf(version(1,10,50),version(2,50).let{v->val d=definition.copy(interval=2);v.copy(definition_json=d.json(),clinical_signature=d.signature())})
+        val p=view(rows,versions).projection
+        val target=p.periodAt(at(20))!!
+        val edit=TimelineEdits.delete(rows,p,target,{identity})!!
+        assertEquals(at(50),target.until)
+        assertTrue(edit.rows.none{it.kind==HistoryPeriods.PERIOD})
+        assertEquals(at(50).toEpochMilli(),edit.rows.single().exactUntilUtc)
     }
 
 }
