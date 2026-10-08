@@ -2,7 +2,14 @@
 
 ## 进行中：历史记录按时期归属 build 18（2026-10-08，REQUIREMENTS §35/§35a，已批复）
 
-设计 [history-period-attribution](design/history-period-attribution.md)：schema7 新增只追加的 `history_period_revision`（用户确认的过去时期，含撤销）和 `record_annotation`（用户明确的“额外”）；记录归属与“额外/剂量不同/方案未知”标签在 core/domain 实时投影，不落库；“长期变化”列出 O1–O4 四种判定方案及参数，阈值待用户定；确认页与 History 草图、四语文案、迁移与备份兼容、测试计划，以及 10 个待决定问题。确认 `ImportedTimelineUiTest:151` 期待“计划外”×2 是错误预期，设计里给出改法。用户已批复（§35a：O1 14 天、空白 30 天，其余按建议）。顺序：决定入档（已完成）→ 失败测试复现短期偏差切时期 → schema7/确认页/新标签 → 全量测试、CI → 原正式签名 build18。另一会话已停止；本会话在 86ce231 之上开发。最新交付仍是 build17。
+设计 [history-period-attribution](design/history-period-attribution.md)：schema7 新增只追加的 `history_period_revision`（用户确认的过去时期，含撤销）和 `record_annotation`（用户明确的“额外”）；记录归属与“额外/剂量不同/方案未知”标签在 core/domain 实时投影，不落库；“长期变化”列出 O1–O4 四种判定方案及参数，阈值待用户定；确认页与 History 草图、四语文案、迁移与备份兼容、测试计划，以及 10 个待决定问题。确认 `ImportedTimelineUiTest:151` 期待“计划外”×2 是错误预期，设计里给出改法。用户已批复（§35a：O1 14 天、空白 30 天，其余按建议）。另一会话已停止；本会话在 86ce231 之上开发。最新交付仍是 build17。
+
+进度（每步推送）：
+- 完成：决定入档 0ac37cf；失败复现测试 5ddbb41；`SustainedPatterns` 分段修正 88c211d；schema7 数据层 93920e9（`history_period_revision`/`record_annotation`、迁移、触发器、备份校验、仓库确认/修改/撤销/拆分/合并/额外标记）。
+- 完成：界面（History 标签替代“计划外”、移除手动关联槽位菜单、“标为额外服药”、手动添加的“这是额外服药”开关、时间线“待确认/由记录推定，用户已确认/可合并”、`HistoryPeriodDialog` 确认/修改/在某天拆开/与下一段合并/撤销）。
+- 完成：化验上下文新建/重建时可选 `confirmed_periods`（只在已确认时期包含采样日时写入；旧上下文不变、仍可校验）；Visit Pack/PDF 模板版本 2，按记录标签计数“由记录推定”，PDF 服药行去掉“计划外”改为“无原定时间”；versionCode 18。
+- 新测试：HistoryAttributionTest（混合 HT+APP 跨 10/6 一个待确认时期、确认后逐条标签、用户额外与推断额外区分、撤销/重确认幂等）、HistoryPeriodDialogTest、ImportedTimelineUiTest 修正为“方案未知”且新增待确认→确认入口、HistoryPeriodDataTest 化验上下文。
+- 待做：全量本机检查（进行中）→ 提交推送 → CI 三个任务绿 → 原正式签名 build18 → 交付与本文件更新。
 
 ## 最新反馈：build17计划归属问题未完成，按用户要求暂停实现（2026-10-08）
 
