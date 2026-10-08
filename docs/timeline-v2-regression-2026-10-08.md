@@ -19,4 +19,4 @@
 
 旧规则的稳定业务 slot identity、无法识别的旧非均匀剂量如何人工对齐，是待决定的产品/迁移规则。未发现可复现缺陷时不重写周期或数据库。真实用户数据库、正式覆盖安装和 OEM 行为未在此测试，仍列入设备验收；所有测试数据均为合成。
 
-运行结果及对应 CI 见 [HANDOFF](HANDOFF.md) 最新章节；常规 CI 包含上述 JVM/Android 单测，API35 模拟器运行实际迁移测试，不等于真机验收。
+本轮 V2单测6、Flow6、PeriodStability5、旧TimelineEditFlow4、data72全部通过；[CI 37849334335](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37849334335)（297daca）三个任务success，API35迁移/加密存储14项通过，报告已下载核对。运行结果及边界见 [HANDOFF](HANDOFF.md) 最新章节；常规 CI 包含上述 JVM/Android 单测，API35 模拟器运行实际迁移测试，不等于真机验收。

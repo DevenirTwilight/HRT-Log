@@ -21,7 +21,7 @@
 
 共同14个case的修复前基线有362条文字裁切/隐藏信号（含Robolectric/只读文字误报，**不是362个独立缺陷**）；修复后相同四语/三字号/411dp范围信号为0。真实严重例子是库存第三按钮0dp、AM/PM与日历双位数字不完整、窄屏记录正文和单位标题被挤压、长确认与取消重叠。新增加的320dp条件没有修复前全矩阵基线，不伪造前后对比。
 
-[机器汇总](ui-audit/2026-10-08-summary.json) 保存每个配置的48 case覆盖数、信号计数、预期省略和共同范围对比。合成数据修复后截图：[库存](ui-audit/2026-10-08-stock-after.png)、[日历](ui-audit/2026-10-08-calendar-after.png)、[时间](ui-audit/2026-10-08-time-after.png)、[窄屏日期](ui-audit/2026-10-08-narrow-date-after.png)、[资料包按钮](ui-audit/2026-10-08-visit-actions-after.png)。功能源码 `069e61d`；Build 25、schema9，不包含新正式签名交付。
+[机器汇总](ui-audit/2026-10-08-summary.json) 保存每个配置的48 case覆盖数、信号计数、预期省略和共同范围对比。合成数据修复后截图：[库存](ui-audit/2026-10-08-stock-after.png)、[日历](ui-audit/2026-10-08-calendar-after.png)、[时间](ui-audit/2026-10-08-time-after.png)、[窄屏日期](ui-audit/2026-10-08-narrow-date-after.png)、[资料包按钮](ui-audit/2026-10-08-visit-actions-after.png)。功能源码 `069e61d`；完整 [CI 37849334335](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37849334335)（297daca）jvm/android/device-tests均success，CI常规UI48项也已下载报告核对。Build 25、schema9，不包含新正式签名交付。
 
 局限：API35原生Robolectric窗口高1800dp，不是实机。真实短屏/输入法弹出、系统字体、TalkBack、应用锁启用后依赖Keystore的选项、HRT Tracker完整向导和所有时期编辑状态仍需补充设备验收；未将这些称为已通过。日期窄屏输入仍需用户确认真实IME体验。
 

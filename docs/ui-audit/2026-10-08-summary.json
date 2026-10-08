@@ -360,5 +360,62 @@
       "common_case_signals": {}
     }
   ],
-  "rendered_cases": 1152
+  "rendered_cases": 1152,
+  "verification": {
+    "ci_commit": "297daca2677ff97e3b58309ca20e8bde4ebd4b70",
+    "ci_run": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/37849334335",
+    "jobs": {
+      "jvm": "success",
+      "android": "success",
+      "device-tests": "success"
+    },
+    "app_unit": {
+      "registered": 279,
+      "skipped": 13,
+      "failed": 0
+    },
+    "ui_regression": {
+      "passed": 48,
+      "failed": 0
+    },
+    "data_unit": {
+      "passed": 72,
+      "failed": 0
+    },
+    "reminder_unit": {
+      "passed": 14,
+      "failed": 0
+    },
+    "domain_unit": {
+      "passed": 58,
+      "failed": 0
+    },
+    "pk_unit": {
+      "passed": 18,
+      "failed": 0
+    },
+    "importer_unit": {
+      "passed": 12,
+      "failed": 0
+    },
+    "lint": {
+      "errors": 0,
+      "warnings": 132
+    },
+    "device_data": {
+      "passed": 14,
+      "failed": 0
+    },
+    "device_app": {
+      "registered": 29,
+      "passed": 27,
+      "skipped": 2,
+      "failed": 0
+    },
+    "restart_script_phases_passed": 2,
+    "unit_artifact_files": 129,
+    "device_artifact_files": 19,
+    "artifacts_contain_apk": false,
+    "physical_device_acceptance": false
+  }
 }

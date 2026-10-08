@@ -1,6 +1,6 @@
 # 交接说明：工作进度与开发指南
 
-## 进行中：按钮/大字体与 Backlog 核对（2026-10-08，REQUIREMENTS §41）
+## 完成：按钮/大字体、历史回归与 Backlog 核对（2026-10-08，REQUIREMENTS §41）
 
 起始 HEAD `5441e6efac2a9dcb3b38c0a3fb2b85b4d3c2880e`，分支 claude/new-session-1959qb，工作区干净，与远端一致。Build 25/schema 9 已实现并已有正式签名交付记录，不能重新开发。
 - [x] 核对源码、数据库实体/迁移、Actions 与现有按钮审计。审计默认 4 语言 × 字号 1/1.3/2，仅 411dp/浅色，发现不失败；当前实际 48 case，旧文档 49 页已纠正。
@@ -13,10 +13,12 @@
 - 审计环境问题已处理：首次完整矩阵原生内存退出，Bitmap及时回收、按语言分批；窄屏点击 helper 无限等Robolectric looper，改直接语义动作/有界帧；最终8次分批Gradle全部成功。关闭空闲编译守护进程释放内存，不以命令启动当通过。
 - [x] 源码/测试逐项核对后建立 [BACKLOG](BACKLOG.md)（10类候选逐项状态、证据、规格、风险、优先级、最小验收单元）及 [V2 回归说明](timeline-v2-regression-2026-10-08.md)。未发现需重写周期或数据库的可复现缺陷；旧非均匀 slot 稳定身份不冒充已决定规格。
 - [x] README、PLAN、Roadmap、UI 审计现状入口同步到 Build 25/schema 9；旧研究/M1 规划明确历史档案，PK 文献实现/LabFit、完整化验参数快照、Visit Pack 第一批和部位记录不再误写为零实现。
-- [x] 全量时间线/旧备份单测通过（V2/Flow/PeriodStability见上），data72全通过；API35正式SQLite迁移待当前CI核对，未改Schema。
+- [x] 全量时间线/旧备份单测通过（V2/Flow/PeriodStability见上），data72全通过；API35正式SQLite迁移/加密存储14项通过，未改Schema。
 - [x] 本机最终 Android 全量检查 4m15s成功：单测/lint、full Debug/Release、data/app instrumentation APK构建；manifest无INTERNET。JVM domain58/pk18/importer12全部通过（源码未变，Gradle复用已通过结果）。
 - [x] 发现旧 Actions 自动上传 APK，按本轮不上传公开 APK 约束移除 APK artifact 路径，仅保留测试/lint报告，并删除本轮 a1b5093/d7f8696/77bf0b9/069e61d CI 的 build-results产物（仅本轮新产生的产物，设备报告保留）。后续报告产物不含 APK。
-- [ ] 原生 CI最终核对与结果报告（当前 [37848782323](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37848782323)，08132bd；本机所有检查已通过）。上一正式交付源码为52b092a，尚不包含本轮 UI 修复；本轮保持 Build 25/schema 9，不签名交付、不上传公开 APK、不改 PK、Release 或标签。
+- [x] 最终功能/流程 CI [37849334335](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37849334335)（297daca）：jvm/android/device-tests三项success。报告回查：app279/13跳过/0失败，data72、reminder14、UI48/0失败；lint0错误/132警告。API35 data14/0失败，app29登记/27通过/2常规跳过，重启prepare/verify两阶段由独立脚本各1项另行通过；不把常规跳过当已执行。JVM domain58/pk18/importer12通过。
+- [x] 下载并检查CI报告：build-results129文件、device-test-results19文件，均无APK。终端访问Azure报告下载被拒，GitHub连接器成功取回后解包核对；这不是测试失败。中途checkpoint推送取消了旧CI，最终上述完整CI成功。
+- 末尾提交只更新验证结果文档，功能源码/工作流与已通过的297daca一致。上一正式交付源码为52b092a，尚不包含本轮 UI 修复；本轮保持 Build 25/schema 9，不签名交付、不上传公开 APK、不改 PK、Release 或标签。
 
 
 ## 已交付：build 25 重建时期编辑体系（2026-10-08，REQUIREMENTS §40，设计 docs/design/timeline-editing-v2.md）
