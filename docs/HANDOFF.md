@@ -13,7 +13,7 @@
 - [x] 删除“至今”时期用当前投影实际边界，防止已在方案变化处结束的用户时期删除后出现向后的残段；失败用例先复现，修复后 TimelineV2Test 6 + TimelineV2FlowTest 5 全部通过。
 - [x] 最新功能源码 52b092a：全量 404 登记/391 通过/13 既有跳过/0 失败；lint、full debug/release、两个 Android test APK、合并 release manifest、schema/PLAN 检查全部通过。8 个 .so 的 ELF LOAD 对齐 ≥16KB。验证细节见 docs/timeline-editing-v2-verification.md。
 - [x] 最终功能 CI [37838271727](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37838271727)（52b092a）：jvm/android/device-tests 三项 success，含 API 35 数据库迁移、原生界面/PDF/重启测试和 PeriodStabilityTest。
-- [x] 原正式签名交付：hrt-log-build25-full-signed.apk，23,510,235 bytes，SHA256 `1397ca198fc8841788238a29976139e4bd917520513475d362a0bdf11ee3ed64`；原证书、v2/v3、ZIP 16KB 和 8 个 .so ELF 16KB 对齐，versionCode 25、非 debug、无 INTERNET。下载回查 SHA 一致；签名材料已删除。当前下载：https://tmpfiles.org/dl/1791491704.e09db4f30408ea2d/wEAPgQ5Gqgoz/hrt-log-build25-full-signed.apk（临时链接会过期，不是公开 Release；APK 未提交源码）。
+- [x] 原正式签名交付：hrt-log-build25-full-signed.apk，23,510,235 bytes，SHA256 `1397ca198fc8841788238a29976139e4bd917520513475d362a0bdf11ee3ed64`；原证书、v2/v3、ZIP 16KB 和 8 个 .so ELF 16KB 对齐，versionCode 25、非 debug、无 INTERNET。下载回查 SHA 一致；签名材料已删除。当前下载：https://tmpfiles.org/wEAPgQ5Gqgoz/hrt-log-build25-full-signed.apk（下载页点击 Download；临时文件会过期，页面生成的直接文件地址仅短时有效；不是公开 Release，APK 未提交源码）。
 
 阶段中发现并修复：较早的删除标记可以被较晚用户时期覆盖，但新删除必须裁剪已有用户时期；恢复用原时期键追加修订，保持显示身份；旧确认格式先转换后才进行非治疗操作不变性检查。构建环境已安装 JDK 21 和 Android SDK 37（仓库外）；本机日志在 /workspace/tooling，未读取真实健康数据。签名备份仓库已再次确认 private，签名材料已清理（/workspace/tooling/build25-signing 不再存在）；APK 留在源码仓库外 /workspace/tooling/deliveries。
 
