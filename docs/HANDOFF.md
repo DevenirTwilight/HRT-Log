@@ -13,7 +13,9 @@
 - [x] 源码/测试逐项核对后建立 [BACKLOG](BACKLOG.md)（10类候选逐项状态、证据、规格、风险、优先级、最小验收单元）及 [V2 回归说明](timeline-v2-regression-2026-10-08.md)。未发现需重写周期或数据库的可复现缺陷；旧非均匀 slot 稳定身份不冒充已决定规格。
 - [x] README、PLAN、Roadmap、UI 审计现状入口同步到 Build 25/schema 9；旧研究/M1 规划明确历史档案，PK 文献实现/LabFit、完整化验参数快照、Visit Pack 第一批和部位记录不再误写为零实现。
 - [ ] 全量时间线/旧备份/迁移回归结果待最终测试与 API35 CI。
-- [ ] 最终全量测试、lint/debug/release、原生 CI 与结果报告。本轮保持 Build 25/schema 9，不签名交付、不上传公开 APK、不改 PK、Release 或标签。
+- [x] 本机最终 Android 全量检查 4m15s成功：单测/lint、full Debug/Release、data/app instrumentation APK构建；manifest无INTERNET。JVM domain58/pk18/importer12全部通过（源码未变，Gradle复用已通过结果）。
+- [x] 发现旧 Actions 自动上传 APK，按本轮不上传公开 APK 约束移除 APK artifact 路径，仅保留测试/lint报告，并删除本轮 a1b5093/d7f8696/77bf0b9/069e61d CI 的 build-results产物（仅本轮新产生的产物，设备报告保留）。后续报告产物不含 APK。
+- [ ] 最终 UI 审计、原生 CI 与结果报告。上一正式交付源码为52b092a，尚不包含本轮 UI 修复；本轮保持 Build 25/schema 9，不签名交付、不上传公开 APK、不改 PK、Release 或标签。
 
 
 ## 已交付：build 25 重建时期编辑体系（2026-10-08，REQUIREMENTS §40，设计 docs/design/timeline-editing-v2.md）

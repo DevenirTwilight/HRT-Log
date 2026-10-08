@@ -38,8 +38,11 @@ jobs:
         with:
           name: build-results
           path: |
-            app/build/outputs/apk/
+            app/build/reports/tests/
+            app/build/reports/lint-results-*
             core/*/build/reports/tests/
+            pk-engine/build/reports/tests/
+            importer/build/reports/tests/
   device-tests:
     runs-on: ubuntu-latest
     steps:
