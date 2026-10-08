@@ -143,12 +143,38 @@ class ImportedTimelineUiTest {
         ui.runOnIdle{org.junit.Assert.assertEquals((before+after).map{it.id},opened)}
     }
 
-    @Test fun importedAndAppHistoryHaveTheSameUnplannedTimestampPresentation() {
+    @Test fun importedAndAppHistoryWithoutAPeriodShowRegimenUnknownNotUnscheduled() {
+        // REQUIREMENTS §35a: a missing scheduled time no longer means "unscheduled"; both sources are judged by their period.
         val first=row();val other=first.copy(id=72,origin="APP",source_record_key=null)
-        ui.setContent{MaterialTheme{HistoryScreen(NotesState(medications=listOf(med),loading=false),listOf(first,other),{},{},PaddingValues(),selectedRecordIds=setOf(71,72))}}
+        val extra=NotesViewModel.ExtraState(records=listOf(first,other))
+        val labels=net.plainnotes.app.timeline.HistoryLabels.build(extra.records,net.plainnotes.app.timeline.PeriodTimelineProjection.build(extra,emptyList()),emptyList(),java.time.ZoneId.of("UTC"))
+        org.junit.Assert.assertEquals(mapOf(71L to setOf(net.plainnotes.app.domain.RecordLabel.REGIMEN_UNKNOWN),72L to setOf(net.plainnotes.app.domain.RecordLabel.REGIMEN_UNKNOWN)),labels)
+        ui.setContent{MaterialTheme{HistoryScreen(NotesState(medications=listOf(med),loading=false),listOf(first,other),{},{},PaddingValues(),selectedRecordIds=setOf(71,72),labels=labels)}}
         ui.onNodeWithTag("history-records").performScrollToNode(hasTestTag("history-record:71"))
         ui.onNodeWithText(ui.activity.getString(R.string.history_imported_short)).assertDoesNotExist()
-        ui.onAllNodesWithText(ui.activity.getString(R.string.history_unscheduled_short)).assertCountEquals(2)
+        ui.onNodeWithText(ui.activity.getString(R.string.history_unscheduled_short)).assertDoesNotExist()
+        ui.onAllNodesWithText(ui.activity.getString(R.string.history_regimen_unknown)).assertCountEquals(2)
+    }
+
+    @Test fun recognisedPeriodIsPendingUntilTheUserConfirmsIt() {
+        val base=Instant.now().minusSeconds(60*86400L).truncatedTo(java.time.temporal.ChronoUnit.DAYS)
+        val json=MedicationSnapshot.encode(med,ProfileEntity(1,"E2","sublingual"))
+        val rows=(0..29).flatMap{day->listOf(8,20).mapIndexed{slot,h->RecordEntity(day*2+slot+1L,1,taken_utc=base.plusSeconds((day*24+h)*3600L).toEpochMilli(),taken_zone="UTC",
+            actual_dose=2.0,status="ON_TIME",origin="IMPORT_HT",source_record_key="ht:synthetic:pending:$day:$h",revision=1,config_snapshot=json)}}
+        val extra=NotesViewModel.ExtraState(records=rows)
+        val span=net.plainnotes.app.timeline.PeriodTimelineProjection.build(extra,emptyList()).observed.single().interval.span.id
+        var confirmed:net.plainnotes.app.domain.TherapyStandard?=null;var from:java.time.LocalDate?=null
+        ui.setContent{MaterialTheme{LongitudinalScreen(NotesState(loading=false),extra,{},{},{},PaddingValues(),
+            periodActions=PeriodActions(confirm={key,_,standard,f,_,_,_,evidence->assertNull(key);assertTrue(evidence.contains("sustained-patterns-v1"));confirmed=standard;from=f}))}}
+        ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag("period-confirm:$span"))
+        ui.onNodeWithText(ui.activity.getString(R.string.period_pending)).assertExists()
+        ui.onNodeWithTag("period-confirm:$span").performClick()
+        // The dialog's own behaviour is in HistoryPeriodDialogTest; this screen relayouts forever under Robolectric once a dialog with text fields is open.
+        ui.mainClock.autoAdvance=false
+        val looper=org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper())
+        repeat(4){ui.mainClock.advanceTimeBy(500);var n=0;while(!looper.isIdle && n++<500)looper.runOneTask()}
+        val dialog=org.robolectric.shadows.ShadowDialog.getLatestDialog();assertTrue(dialog!=null && dialog.isShowing);dialog.dismiss()
+        assertNull(confirmed);assertNull(from)
     }
 
 }

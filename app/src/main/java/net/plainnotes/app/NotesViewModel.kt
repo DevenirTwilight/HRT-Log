@@ -214,14 +214,19 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     fun exportCsv(uri:android.net.Uri,labels:(CheckinItemEntity)->String,schedules:Map<Long,String>)=dataOp {
         val d=repo.transaction{exportData(labels,schedules)};withContext(Dispatchers.IO){app.contentResolver.openOutputStream(uri,"wt")!!.use{net.plainnotes.app.export.CsvExport.write(d,it)}};DataJob.Done(R.string.export_saved)
     }
+    /** Record labels by confirmed or saved period (REQUIREMENTS §35a); same projection as History. */
+    private fun recordLabels():Map<Long,Set<net.plainnotes.app.domain.RecordLabel>> = runCatching{
+        val e=extra.value;val s=mutable.value
+        net.plainnotes.app.timeline.HistoryLabels.build(e.records,net.plainnotes.app.timeline.PeriodTimelineProjection.build(e,s.appointments,ruleSnapshots=s.ruleSnapshots),e.annotations,java.time.ZoneId.systemDefault())
+    }.getOrDefault(emptyMap())
     fun exportSummary(uri:android.net.Uri,from:LocalDate,to:LocalDate,context:android.content.Context,labels:(CheckinItemEntity)->String,schedules:Map<Long,String>)=dataOp {
         val d=repo.transaction{exportData(labels,schedules)}
-        withContext(Dispatchers.IO){app.contentResolver.openOutputStream(uri,"wt")!!.use{net.plainnotes.app.export.PdfReport.write(context,d,1,null,it,from to to)}}
+        withContext(Dispatchers.IO){app.contentResolver.openOutputStream(uri,"wt")!!.use{net.plainnotes.app.export.PdfReport.write(context,d,1,null,it,from to to,labels=recordLabels())}}
         DataJob.Done(R.string.export_saved)
     }
     fun exportPdf(uri:android.net.Uri,days:Int,includeChart:Boolean,context:android.content.Context,labels:(CheckinItemEntity)->String,schedules:Map<Long,String>)=dataOp {
         val d=repo.transaction{exportData(labels,schedules)};val c=if(includeChart)conc.value.result else null
-        withContext(Dispatchers.IO){app.contentResolver.openOutputStream(uri,"wt")!!.use{net.plainnotes.app.export.PdfReport.write(context,d,days,c,it)}};DataJob.Done(R.string.export_saved)
+        withContext(Dispatchers.IO){app.contentResolver.openOutputStream(uri,"wt")!!.use{net.plainnotes.app.export.PdfReport.write(context,d,days,c,it,labels=recordLabels())}};DataJob.Done(R.string.export_saved)
     }
     /** Deletes everything: database, key, reminders cache and preferences. The caller restarts the UI. */
     /** Legacy empty HRT database is retained across upgrade and erased only after explicit confirmation. */
@@ -269,10 +274,11 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         val zone=java.time.ZoneId.systemDefault()
         val (d,spec)=repo.transaction{dao->val d=exportData(labels,schedules);val a=requireNotNull(dao.appointmentById(appointmentId))
             d to net.plainnotes.app.visit.VisitPackSpec(a,from,to,sections,dao.visitQuestions().filter{it.appointment_id==appointmentId},regimenLabels,unknownName)}
-        val facts=net.plainnotes.app.visit.VisitFacts.build(d,spec.appointment,from,to,zone)
+        val recordLabels=recordLabels()
+        val facts=net.plainnotes.app.visit.VisitFacts.build(d,spec.appointment,from,to,zone,recordLabels)
         val language=context.resources.configuration.locales[0].toLanguageTag()
         val digest=net.plainnotes.app.visit.VisitDigest.compute(d,spec,facts,language,zone)
-        withContext(Dispatchers.IO){app.contentResolver.openOutputStream(uri,"wt")!!.use{net.plainnotes.app.export.PdfReport.write(context,d,1,null,it,visit=spec,facts=facts,digest=digest)}}
+        withContext(Dispatchers.IO){app.contentResolver.openOutputStream(uri,"wt")!!.use{net.plainnotes.app.export.PdfReport.write(context,d,1,null,it,visit=spec,facts=facts,digest=digest,labels=recordLabels)}}
         mutate{repo.recordVisitPack(VisitPackEntity(appointment_id=appointmentId,generated_utc=Instant.now().toEpochMilli(),zone=zone.id,range_from=from.toString(),range_to=to.toString(),
             sections=VisitSection.encode(sections),language=language,template_version=net.plainnotes.app.visit.VISIT_TEMPLATE_VERSION,input_digest=digest,facts_json=facts.json().toString()))}
         refresh().join();DataJob.Done(R.string.export_saved)

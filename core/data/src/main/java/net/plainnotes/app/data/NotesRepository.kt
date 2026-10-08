@@ -502,7 +502,7 @@ const val BACKFILL_MAX_DAYS=731L
     private suspend fun captureLab(dao:NotesDao,lab:LabValueEntity,origin:String,now:Instant,estimate:String?) {
         val old=dao.labContexts().filter{it.lab_id==lab.id}.maxByOrNull{it.revision}
         val captured=maxOf(now.toEpochMilli(),old?.captured_utc ?: Long.MIN_VALUE)
-        val json=LabContext.build(lab,dao.records(),dao.regimens(),dao.rules().associate{it.id to it.config_snapshot},estimate)
+        val json=LabContext.build(lab,dao.records(),dao.regimens(),dao.rules().associate{it.id to it.config_snapshot},estimate,dao.historyPeriods())
         dao.labContext(LabContextEntity(lab_id=lab.id,revision=(old?.revision ?: 0)+1,captured_utc=captured,origin=origin,context_json=json))
     }
     suspend fun saveLab(value:LabValueEntity,now:Instant=Instant.now(),recapture:Boolean=false,estimate:suspend(NotesDao,LabValueEntity)->String?={_,_->null})=transaction { dao ->

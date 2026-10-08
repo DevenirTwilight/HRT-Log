@@ -408,7 +408,7 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="import_tm">Import from Trans Memo</string>
 <string name="import_tm_desc">Read a database file you exported from Trans Memo</string>
 <string name="needs_review">To confirm</string>
-<string name="report_adherence_line">on time %1$d, late %2$d, missed %3$d, skipped %4$d, unscheduled %5$d, imported %6$d</string>
+<string name="report_adherence_line_v2">on time %1$d, late %2$d, missed %3$d, skipped %4$d, no scheduled time %5$d, imported %6$d</string>
 <string name="report_col_date">Date</string>
 <string name="report_col_range">Report range</string>
 <string name="report_col_since_dose">After E2 dose</string>

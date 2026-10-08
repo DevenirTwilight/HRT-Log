@@ -60,6 +60,20 @@ class HistoryPeriodDataTest {
         assertThrows(IllegalArgumentException::class.java){runBlocking{repo.mergeHistoryPeriods(HistoryPeriods.confirmed(repo.historyPeriods()).first{it.period_key!=other}.period_key,other)}}
         Unit
     }
+    @Test fun labContextCarriesTheConfirmedPeriodOnlyWhenItContainsTheSample()=runBlocking {
+        val id=medication();val key=confirm(id)
+        fun lab(day:LocalDate)=LabValueEntity(analyte_code="E2",value=120.0,unit="pg/mL",sampled_utc=day.atTime(9,0).atZone(zone).toInstant().toEpochMilli(),sampled_zone=zone.id)
+        repo.saveLab(lab(d0.plusDays(30)));repo.saveLab(lab(d0.plusDays(200)))
+        val contexts=repo.labContexts().sortedBy{it.lab_id}.map{LabContext.validate(it.context_json)}
+        val periods=contexts[0].getJSONArray("confirmed_periods")
+        assertEquals(1,periods.length());assertEquals(key,periods.getJSONObject(0).getString("period_key"))
+        assertEquals(HistoryPeriods.ORIGIN,periods.getJSONObject(0).getString("origin"))
+        assertFalse(contexts[1].has("confirmed_periods"))
+        // A context naming a period that does not contain the sample is rejected.
+        val bad=JSONObject(repo.labContexts().minBy{it.lab_id}.context_json);bad.getJSONArray("confirmed_periods").getJSONObject(0).put("from_date",d0.plusDays(40).toString())
+        try{LabContext.validate(bad.toString());fail()}catch(_:IllegalArgumentException){}
+    }
+
     @Test fun extraAnnotationIsSeparateFromTheRecord()=runBlocking {
         val id=medication();val r=record(id);val before=db.dao().recordById(r)
         repo.setExtra(r,true);repo.setExtra(r,true)

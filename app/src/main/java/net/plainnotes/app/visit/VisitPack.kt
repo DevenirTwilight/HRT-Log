@@ -10,7 +10,16 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 
-const val VISIT_TEMPLATE_VERSION = 1
+/** 2: per-record labels from confirmed periods instead of "unscheduled" (REQUIREMENTS §35a item 10). Saved packs keep their own version. */
+const val VISIT_TEMPLATE_VERSION = 2
+
+/** Extra (inferred), extra (marked by the user), dose differs, regimen unknown; a record awaiting a confirmed period counts as regimen unknown. */
+fun labelCounts(ids: List<Long>, labels: Map<Long, Set<net.plainnotes.app.domain.RecordLabel>>): List<Int> {
+    val l = ids.mapNotNull { labels[it] }
+    fun n(vararg k: net.plainnotes.app.domain.RecordLabel) = l.count { set -> k.any { it in set } }
+    return listOf(n(net.plainnotes.app.domain.RecordLabel.EXTRA_INFERRED), n(net.plainnotes.app.domain.RecordLabel.EXTRA_USER), n(net.plainnotes.app.domain.RecordLabel.DOSE_DIFFERS),
+        n(net.plainnotes.app.domain.RecordLabel.REGIMEN_UNKNOWN, net.plainnotes.app.domain.RecordLabel.PENDING_PERIOD))
+}
 
 /** Default review window: from the last visit the user confirmed as completed; never inferred from time passing. */
 data class VisitRange(val from: LocalDate, val to: LocalDate, val previous: AppointmentEntity?)
@@ -25,19 +34,23 @@ object VisitPlanning {
     }
 }
 
-data class MedicationFacts(val medicationId: Long, val name: String?, val taken: Int, val late: Int, val imported: Int, val confirmedMissed: Int, val skipped: Int, val unconfirmed: Int)
+data class MedicationFacts(val medicationId: Long, val name: String?, val taken: Int, val late: Int, val imported: Int, val confirmedMissed: Int, val skipped: Int, val unconfirmed: Int,
+                           val labels: List<Int> = listOf(0, 0, 0, 0))
 
 /** Counts of saved facts in an inclusive date range. No score, percentage, trend or judgement. */
 data class VisitFacts(val days: Long, val regimenStarted: Int, val regimenEnded: Int, val medications: List<MedicationFacts>, val labs: Int, val analytes: List<String>,
                       val symptomDays: Int, val symptomGroups: Int, val reviews: Int, val dailyDays: Int, val noteDays: Int, val otherAppointments: Int, val milestones: Int) {
     fun json(): JSONObject = JSONObject().put("days", days).put("regimen_started", regimenStarted).put("regimen_ended", regimenEnded)
         .put("medications", org.json.JSONArray(medications.map { JSONObject().put("medication_id", it.medicationId).put("taken", it.taken).put("late", it.late).put("imported", it.imported)
-            .put("confirmed_missed", it.confirmedMissed).put("skipped", it.skipped).put("unconfirmed", it.unconfirmed) }))
+            .put("confirmed_missed", it.confirmedMissed).put("skipped", it.skipped).put("unconfirmed", it.unconfirmed)
+            .put("labels", JSONObject().put("basis", "inferred_from_records").put("extra_inferred", it.labels[0]).put("extra_user", it.labels[1])
+                .put("dose_differs", it.labels[2]).put("regimen_unknown", it.labels[3])) }))
         .put("labs", labs).put("symptom_days", symptomDays).put("symptom_groups", symptomGroups).put("reviews", reviews).put("daily_days", dailyDays)
         .put("note_days", noteDays).put("other_appointments", otherAppointments).put("milestones", milestones)
 
     companion object {
-        fun build(d: ExportData, target: AppointmentEntity, from: LocalDate, to: LocalDate, zone: ZoneId): VisitFacts {
+        fun build(d: ExportData, target: AppointmentEntity, from: LocalDate, to: LocalDate, zone: ZoneId,
+                  labels: Map<Long, Set<net.plainnotes.app.domain.RecordLabel>> = emptyMap()): VisitFacts {
             require(from <= to)
             val start = from.atStartOfDay(zone).toInstant().toEpochMilli(); val end = to.plusDays(1).atStartOfDay(zone).toInstant().toEpochMilli()
             fun inside(ms: Long?) = ms != null && ms >= start && ms < end
@@ -51,7 +64,8 @@ data class VisitFacts(val days: Long, val regimenStarted: Int, val regimenEnded:
                 val latest = rows.maxByOrNull { it.taken_utc ?: it.scheduled_utc ?: 0 }
                 MedicationFacts(id, latest?.let { MedicationSnapshot.decode(it.config_snapshot, id)?.name } ?: names[id],
                     rows.count { it.status in listOf("ON_TIME", "LATE") }, rows.count { it.status == "LATE" }, rows.count { it.status in listOf("ON_TIME", "LATE") && it.origin.startsWith("IMPORT_") },
-                    rows.count { it.status == "MISSED" && !it.unconfirmed }, rows.count { it.status == "SKIPPED" }, rows.count { it.unconfirmed })
+                    rows.count { it.status == "MISSED" && !it.unconfirmed }, rows.count { it.status == "SKIPPED" }, rows.count { it.unconfirmed },
+                    labelCounts(rows.filter { it.status in listOf("ON_TIME", "LATE") }.map { it.id }, labels))
             }.sortedBy { it.medicationId }
             val labs = d.labs.filter { inside(it.sampled_utc) }
             val symptoms = d.symptoms.filter { day(it.date) }
@@ -68,7 +82,8 @@ fun factLines(res: Resources, f: VisitFacts, unknownName: String): List<String> 
     add(res.getString(R.string.visit_fact_days, f.days))
     add(res.getString(R.string.visit_fact_regimens, f.regimenStarted, f.regimenEnded))
     if (f.medications.isEmpty()) add(res.getString(R.string.visit_fact_no_intakes))
-    f.medications.forEach { m -> add(res.getString(R.string.visit_fact_medication, m.name ?: unknownName, m.taken, m.late, m.imported, m.confirmedMissed, m.skipped, m.unconfirmed)) }
+    f.medications.forEach { m -> add(res.getString(R.string.visit_fact_medication, m.name ?: unknownName, m.taken, m.late, m.imported, m.confirmedMissed, m.skipped, m.unconfirmed))
+        if (m.labels.any { it > 0 }) add(res.getString(R.string.visit_fact_labels, m.labels[0], m.labels[1], m.labels[2], m.labels[3])) }
     add(res.getString(R.string.visit_fact_unconfirmed_note))
     add(res.getString(R.string.visit_fact_labs, f.labs) + if (f.analytes.isEmpty()) "" else " · " + f.analytes.joinToString(", "))
     add(res.getString(R.string.visit_fact_symptoms, f.symptomDays, f.symptomGroups))

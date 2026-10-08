@@ -408,7 +408,7 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="import_tm">Importer depuis Trans Memo</string>
 <string name="import_tm_desc">Lire un fichier de base exporté depuis Trans Memo</string>
 <string name="needs_review">À confirmer</string>
-<string name="report_adherence_line">à l’heure %1$d, en retard %2$d, oubliées %3$d, sautées %4$d, hors planning %5$d, importées %6$d</string>
+<string name="report_adherence_line_v2">à l’heure %1$d, en retard %2$d, oubliées %3$d, sautées %4$d, sans heure prévue %5$d, importées %6$d</string>
 <string name="report_col_date">Date</string>
 <string name="report_col_range">Intervalle du compte rendu</string>
 <string name="report_col_since_dose">Après prise d\'E2</string>

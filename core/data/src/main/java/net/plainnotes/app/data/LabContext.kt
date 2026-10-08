@@ -10,7 +10,7 @@ import java.time.ZoneId
 object LabContext {
     const val WINDOW_HOURS=48
     const val MAX_BYTES=1_048_576
-    fun build(lab:LabValueEntity,records:List<RecordEntity>,regimens:List<RegimenVersionEntity>,rules:Map<Long,String>,estimate:String?=null):String {
+    fun build(lab:LabValueEntity,records:List<RecordEntity>,regimens:List<RegimenVersionEntity>,rules:Map<Long,String>,estimate:String?=null,historyPeriods:List<HistoryPeriodEntity> =emptyList()):String {
         val at=lab.sampled_utc
         val epoch=TreatmentEpochs.build(regimens.map{it.span()}).singleOrNull{it.contains(Instant.ofEpochMilli(at))}
         val active=regimens.filter{it.id in epoch?.regimenIds.orEmpty()}
@@ -35,7 +35,19 @@ object LabContext {
             .put("actual",doses).put("window_hours",WINDOW_HOURS).put("counts",counts)
             .put("nearby",JSONArray(nearby.sortedBy{it.id}.map{JSONObject().put("id",it.id).put("revision",it.revision).put("status",it.status).put("origin",it.origin)
                 .put("time_utc",if(it.status=="LATE")it.taken_utc else it.scheduled_utc)}))
-            .put("estimate",estimate?.let(::JSONObject) ?: JSONObject.NULL).toString().also{validate(it)}
+            .put("estimate",estimate?.let(::JSONObject) ?: JSONObject.NULL)
+            .apply{confirmedPeriods(at,historyPeriods)?.let{put("confirmed_periods",it)}}.toString().also{validate(it)}
+    }
+    /** REQUIREMENTS §35a item 9: optional, only when a past period confirmed by the user contains the sample day; "由记录推定，已确认". */
+    private fun confirmedPeriods(at:Long,rows:List<HistoryPeriodEntity>):JSONArray? {
+        val hits=HistoryPeriods.confirmed(rows).filter{covers(it.from_date,it.until_date,it.zone,at)}.sortedBy{it.period_key}
+        return if(hits.isEmpty())null else JSONArray(hits.map{JSONObject().put("period_key",it.period_key).put("revision",it.revision).put("medication_id",it.medication_id)
+            .put("from_date",it.from_date).put("until_date",it.until_date ?: JSONObject.NULL).put("zone",it.zone).put("origin",it.origin)
+            .put("standard",JSONObject(it.standard_json))})
+    }
+    private fun covers(from:String,until:String?,zone:String,at:Long):Boolean {
+        val day=Instant.ofEpochMilli(at).atZone(ZoneId.of(zone)).toLocalDate()
+        return day>=java.time.LocalDate.parse(from) && (until==null || day<java.time.LocalDate.parse(until))
     }
     fun validate(json:String):JSONObject {
         require(json.toByteArray(Charsets.UTF_8).size<=MAX_BYTES)
@@ -72,6 +84,16 @@ object LabContext {
             when(r.getString("status")){"LATE"->{require(r.getString("origin")!="AUTO_MISSED");late++};"MISSED"->if(r.getString("origin")=="AUTO_MISSED")unknown++ else missed++;else->error("Invalid nearby event")}
         }
         val counts=o.getJSONObject("counts");require(counts.getInt("late")==late && counts.getInt("missed")==missed && counts.getInt("unconfirmed")==unknown)
+        if(o.has("confirmed_periods")) {
+            val periods=o.getJSONArray("confirmed_periods");require(periods.length()>0);val keys=mutableSetOf<String>()
+            for(i in 0 until periods.length()) {
+                val p=periods.getJSONObject(i);val key=p.getString("period_key");java.util.UUID.fromString(key);require(keys.add(key))
+                require(p.getInt("revision")>=1 && p.getLong("medication_id")>0 && p.getString("origin")==HistoryPeriods.ORIGIN)
+                val until=if(p.isNull("until_date"))null else p.getString("until_date")
+                until?.let{require(java.time.LocalDate.parse(it)>java.time.LocalDate.parse(p.getString("from_date")))}
+                require(covers(p.getString("from_date"),until,p.getString("zone"),at));HistoryPeriods.readStandard(p.getJSONObject("standard").toString())
+            }
+        }
         require(o.has("estimate") && (o.isNull("estimate") || o.get("estimate") is JSONObject))
         o.optJSONObject("estimate")?.let{e->
             require(e.getInt("version")==1 && e.get("calibrated")==false && e.getLong("sampled_utc")==at && e.getInt("calculator_version")==1)

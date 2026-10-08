@@ -76,7 +76,8 @@ object PdfReport {
 
     /** [visit] limits the output to the chosen parts; parts that are not chosen never appear. */
     fun write(context: Context, d: ExportData, days: Int, conc: ConcentrationResult?, out: OutputStream, period0:Pair<LocalDate,LocalDate>?=null,
-              visit: net.plainnotes.app.visit.VisitPackSpec? = null, facts: net.plainnotes.app.visit.VisitFacts? = null, digest: String? = null) {
+              visit: net.plainnotes.app.visit.VisitPackSpec? = null, facts: net.plainnotes.app.visit.VisitFacts? = null, digest: String? = null,
+              labels: Map<Long, Set<net.plainnotes.app.domain.RecordLabel>> = emptyMap()) {
         val period = visit?.let { it.from to it.to } ?: period0
         fun on(section: VisitSection) = visit == null || section in visit.sections
         val zone = ZoneId.systemDefault()
@@ -153,7 +154,9 @@ object PdfReport {
             val free = inRange.filter { it.medication_id == m.id && it.scheduled_utc == null && it.status in listOf("ON_TIME", "LATE") }
             val imported = inRange.count { it.medication_id == m.id && it.origin.startsWith("IMPORT_") && it.status in listOf("ON_TIME", "LATE") }
             if(r.any{it.unconfirmed})text(context.getString(R.string.unconfirmed_count,r.count{it.unconfirmed}),body)
-            text("• ${m.name}: " + context.getString(R.string.report_adherence_line, onTime, late, missed, skipped, free.count { !it.origin.startsWith("IMPORT_") }, imported), body, 2f)
+            text("• ${m.name}: " + context.getString(R.string.report_adherence_line_v2, onTime, late, missed, skipped, free.size, imported), body, 2f)
+            val counts = net.plainnotes.app.visit.labelCounts(free.map { it.id }, labels)
+            if (counts.any { it > 0 }) text(context.getString(R.string.visit_fact_labels, counts[0], counts[1], counts[2], counts[3]), body, 2f)
         }
         y += 8f
         }

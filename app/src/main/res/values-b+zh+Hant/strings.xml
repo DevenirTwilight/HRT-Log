@@ -408,7 +408,7 @@
 <string name="import_tm">從 Trans Memo 匯入</string>
 <string name="import_tm_desc">讀取你從 Trans Memo 匯出的資料庫檔案</string>
 <string name="needs_review">待確認</string>
-<string name="report_adherence_line">按時 %1$d，遲服 %2$d，漏服 %3$d，跳過 %4$d，計畫外 %5$d，匯入 %6$d</string>
+<string name="report_adherence_line_v2">按時 %1$d，遲服 %2$d，漏服 %3$d，跳過 %4$d，無原定時間 %5$d，匯入 %6$d</string>
 <string name="report_col_date">日期</string>
 <string name="report_col_range">檢驗報告參考範圍</string>
 <string name="report_col_since_dose">距 E2 用藥</string>

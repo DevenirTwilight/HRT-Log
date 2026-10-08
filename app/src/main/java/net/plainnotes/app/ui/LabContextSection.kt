@@ -38,6 +38,13 @@ fun labContextLines(context:Context,row:LabContextEntity):List<String> {
             add(context.getString(R.string.lab_context_epoch,date(epoch.getLong("from")),if(epoch.isNull("until"))context.getString(R.string.lab_context_open_end) else date(epoch.getLong("until"))))
             if(epoch.getBoolean("reconstructed"))add(context.getString(R.string.lab_context_legacy_regimen))
         }
+        o.optJSONArray("confirmed_periods")?.let{periods->for(i in 0 until periods.length()) {
+            val p=periods.getJSONObject(i);val s=p.getJSONObject("standard");val day=DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(locale)
+            val last=if(p.isNull("until_date"))context.getString(R.string.lab_context_open_end) else java.time.LocalDate.parse(p.getString("until_date")).minusDays(1).format(day)
+            add(context.getString(R.string.lab_context_confirmed_period,java.time.LocalDate.parse(p.getString("from_date")).format(day),last))
+            val doses=s.getJSONArray("doses").let{a->(0 until a.length()).joinToString(" + "){number(a.getDouble(it))}}
+            add("${choice(s,"route")} · $doses ${text(s,"unit")} · ${context.getString(choiceRes(s.getString("kind")))}: ${s.getInt("interval")}")
+        }}
         val regimens=o.getJSONArray("regimens")
         if(regimens.length()==0 && !epoch.getBoolean("unknown"))add(context.getString(R.string.lab_context_no_regimen))
         for(i in 0 until regimens.length()) {
