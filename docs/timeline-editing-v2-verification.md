@@ -16,6 +16,10 @@
 | lintFullDebug、full debug/release、data/app Android test APK 构建 | 全部通过 |
 | 合并 release manifest、schema/PLAN 无意外变更 | 通过；包名和入口身份正确，无 INTERNET |
 
+最终功能 CI：[37838271727](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37838271727)，jvm/android/device-tests 全部 success。之后提交仅补充验证/交接文档，安装包来自上述功能源码。
+
+正式签名 full APK：23,510,235 bytes，SHA256 `1397ca198fc8841788238a29976139e4bd917520513475d362a0bdf11ee3ed64`。原证书 SHA256 `989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1`；v2/v3、ZIP 和 8 个原生库 ELF LOAD 16KB 对齐核验通过。独立下载回查 SHA 一致，临时私钥/密码/备份 clone 已清理。
+
 ## 业务回归
 
 - `TimelineV2Test` 6：系统识别直接生效、相同标准保留用户边界、至今在随后实际治疗变化处结束、build 24 显示边界/标准/同日卡片数/标签保留、转换幂等，以及删除已因方案变化结束的时期不能再向后留下用户残段。最后一项先以失败测试复现，再修复。

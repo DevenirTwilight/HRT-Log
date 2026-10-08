@@ -1,20 +1,21 @@
 # 交接说明：工作进度与开发指南
 
-## 进行中：build 25 重建时期编辑体系（2026-10-08，REQUIREMENTS §40，设计 docs/design/timeline-editing-v2.md）
+## 已交付：build 25 重建时期编辑体系（2026-10-08，REQUIREMENTS §40，设计 docs/design/timeline-editing-v2.md）
 
-接手基线 28011d5；当前正在本会话实现，尚未交付 build 25。
+接手基线 28011d5；功能源码 52b092a，build 25 已完成并交付，原正式签名 full，可覆盖安装，schema 仍为 9。
 - [x] 投影：用户时期优先、实际治疗变化结束“至今”、旧行转换（按 build 24 投影；不升 schema）。提醒时刻变化不算治疗变化。
 - [x] 原子重叠处理：邻段缩短/拆分成为用户时期，完全覆盖的独立进回收站；恢复冲突在事务内拒绝。
 - [x] 统一新建/编辑/删除表单，移除确认、拆开、合并、修正删除与停用专用入口；四语重叠预览和精简模式字段隐藏。
 - [x] 系统识别直接生效；新资料包模板 3 去掉待确认计数；新化验上下文 period_source=SYSTEM/USER_EDIT，旧冻结上下文保持兼容。
 - [x] 阶段验证：TimelineV2Test 4、TimelineV2FlowTest 4、PeriodStabilityTest 5，13 项全部通过；稳定性测试增加第五组“编辑过的时期”，原黄金数据、删除/恢复、顺序、夏令时等断言保留。旧确认操作只保留在测试夹具中，用于生产旧格式数据，不在应用代码中提供。
 - [x] 补充兼容回归：同日精确变化保留 build 24 的卡片数、标准与标签；旧删除回收站经转换后仍能恢复，旧修正恢复检查用户重叠。移除生产代码剩余拆开/停用专用工具，只在测试夹具保留。
-- [x] 全量应用/data 回归：app 230（13 既有跳过）、data 72，0 失败；TimelineV2Test 5、TimelineV2FlowTest 5、PeriodStabilityTest 5 全部通过。
+- [x] 全量应用/data 回归：app 230（13 既有跳过）、data 72，0 失败；TimelineV2Test 6、TimelineV2FlowTest 5、PeriodStabilityTest 5 全部通过。
 - [x] 删除“至今”时期用当前投影实际边界，防止已在方案变化处结束的用户时期删除后出现向后的残段；失败用例先复现，修复后 TimelineV2Test 6 + TimelineV2FlowTest 5 全部通过。
 - [x] 最新功能源码 52b092a：全量 404 登记/391 通过/13 既有跳过/0 失败；lint、full debug/release、两个 Android test APK、合并 release manifest、schema/PLAN 检查全部通过。8 个 .so 的 ELF LOAD 对齐 ≥16KB。验证细节见 docs/timeline-editing-v2-verification.md。
-- [ ] 最终 CI [37838271727](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37838271727)：jvm/device-tests 已 success，android 仍进行。原签名交付尚未完成，最新可安装仍 build 24。
+- [x] 最终功能 CI [37838271727](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37838271727)（52b092a）：jvm/android/device-tests 三项 success，含 API 35 数据库迁移、原生界面/PDF/重启测试和 PeriodStabilityTest。
+- [x] 原正式签名交付：hrt-log-build25-full-signed.apk，23,510,235 bytes，SHA256 `1397ca198fc8841788238a29976139e4bd917520513475d362a0bdf11ee3ed64`；原证书、v2/v3、ZIP 16KB 和 8 个 .so ELF 16KB 对齐，versionCode 25、非 debug、无 INTERNET。下载回查 SHA 一致；签名材料已删除。当前下载：https://tmpfiles.org/dl/1791491704.e09db4f30408ea2d/wEAPgQ5Gqgoz/hrt-log-build25-full-signed.apk（临时链接会过期，不是公开 Release；APK 未提交源码）。
 
-阶段中发现并修复：较早的删除标记可以被较晚用户时期覆盖，但新删除必须裁剪已有用户时期；恢复用原时期键追加修订，保持显示身份；旧确认格式先转换后才进行非治疗操作不变性检查。构建环境已安装 JDK 21 和 Android SDK 37（仓库外）；本机日志在 /workspace/tooling，未读取真实健康数据。签名备份仓库已再次确认 private，临时材料在 /workspace/tooling/build25-signing，签名后必须清理。
+阶段中发现并修复：较早的删除标记可以被较晚用户时期覆盖，但新删除必须裁剪已有用户时期；恢复用原时期键追加修订，保持显示身份；旧确认格式先转换后才进行非治疗操作不变性检查。构建环境已安装 JDK 21 和 Android SDK 37（仓库外）；本机日志在 /workspace/tooling，未读取真实健康数据。签名备份仓库已再次确认 private，签名材料已清理（/workspace/tooling/build25-signing 不再存在）；APK 留在源码仓库外 /workspace/tooling/deliveries。
 
 ## 已交付：build 24（2026-10-08，REQUIREMENTS §38；第二版提示分两步：先修回归，再做回收站）
 
