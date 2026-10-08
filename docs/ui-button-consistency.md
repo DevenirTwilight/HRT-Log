@@ -9,7 +9,29 @@
 
 可选审计仍只报告而不因发现失败；`BUTTON_AUDIT=1` 时禁止 Gradle 复用旧测试结果。可用 `BUTTON_AUDIT_LOCALES`、`BUTTON_AUDIT_SCALES`、`BUTTON_AUDIT_WIDTHS`、`BUTTON_AUDIT_THEMES=LIGHT,DARK,HIGH` 和 `BUTTON_AUDIT_CASES` 选择矩阵；错误 case 名直接失败。产物目录为 `app/build/button-audit/<语言>_<字号>_<宽度>_<主题>/`。
 
-初次完整矩阵因原生截图内存导致 Gradle daemon 退出；已回收截图 Bitmap，并改为按单个配置独立运行。最终结果将在本节补齐。Robolectric 的 `hasVisualOverflow`/隐藏字符有边界及横向滚动误报，验收采用每行实际几何、可见控制触控范围与截图复核。合成长药名的可横向滚动筛选不是丢失操作。
+初次完整矩阵因原生截图内存导致 Gradle daemon 退出；已回收截图 Bitmap，并改为按单个配置独立运行。最终审计结果见下表与机器可读汇总。Robolectric 的 `hasVisualOverflow`/隐藏字符有边界及横向滚动误报，验收采用每行实际几何、可见控制触控范围与截图复核。合成长药名的可横向滚动筛选不是丢失操作。
+
+### 修复后验收结果
+
+| 条件 | 配置数 × case | 结果 |
+| --- | --- | --- |
+| 411dp / 浅色 / 四语 / 字号1、1.3、2 | 12 × 48 = 576 | 裁切、越窗、重叠、零尺寸、动作或测量失败信号均为0 |
+| 320dp / 四语 / 字号2 / 浅色、深色、高对比度 | 12 × 48 = 576 | 严重信号0；12条私密笔记标题省略号属于可点击打开全文的预览设计 |
+| 常规回归门槛 | 48测试（四语 × 320/411dp × 浅/深色 × 3类测试） | 全通过：库存/日期时间/日历/设置/历史正文；12/24h输入与非法值、日期非法值与闰日；资料包确认取消不重叠、等尺寸 |
+
+共同14个case的修复前基线有362条文字裁切/隐藏信号（含Robolectric/只读文字误报，**不是362个独立缺陷**）；修复后相同四语/三字号/411dp范围信号为0。真实严重例子是库存第三按钮0dp、AM/PM与日历双位数字不完整、窄屏记录正文和单位标题被挤压、长确认与取消重叠。新增加的320dp条件没有修复前全矩阵基线，不伪造前后对比。
+
+[机器汇总](ui-audit/2026-10-08-summary.json) 保存每个配置的48 case覆盖数、信号计数、预期省略和共同范围对比。合成数据修复后截图：[库存](ui-audit/2026-10-08-stock-after.png)、[日历](ui-audit/2026-10-08-calendar-after.png)、[时间](ui-audit/2026-10-08-time-after.png)、[窄屏日期](ui-audit/2026-10-08-narrow-date-after.png)、[资料包按钮](ui-audit/2026-10-08-visit-actions-after.png)。功能源码 `069e61d`；Build 25、schema9，不包含新正式签名交付。
+
+局限：API35原生Robolectric窗口高1800dp，不是实机。真实短屏/输入法弹出、系统字体、TalkBack、应用锁启用后依赖Keystore的选项、HRT Tracker完整向导和所有时期编辑状态仍需补充设备验收；未将这些称为已通过。日期窄屏输入仍需用户确认真实IME体验。
+
+### 本轮修改文件
+
+- 新增 `app/src/main/java/net/plainnotes/app/ui/AdaptiveControls.kt`；修改 UI：`CalendarScreen.kt`、`Components.kt`、`ConcentrationScreen.kt`、`DataSection.kt`、`Dialogs.kt`、`HistoricalContextDialog.kt`、`HistoryScreen.kt`、`LongitudinalScreen.kt`、`MedicationEditor.kt`、`SettingsScreen.kt`、`StockScreen.kt`、`SummaryExportDialog.kt`、`VisitsScreen.kt`（均在 `app/src/main/java/net/plainnotes/app/ui/`）。
+- `app/src/main/res/values/strings.xml`、`values-zh/strings.xml`、`values-b+zh+Hant/strings.xml`、`values-fr/strings.xml`：日期/时/分输入标签。
+- `app/src/testFull/java/net/plainnotes/app/audit/ButtonLayoutRegressionTest.kt`（新增）、`ButtonAuditTest.kt`、`app/src/test/java/net/plainnotes/app/TimelineV2FlowTest.kt`；`app/build.gradle.kts` 禁止审计复用旧结果。
+- `.github/workflows/android.yml`：构建照常验证，产物改测试/lint报告，不公开上传APK；本轮此前自动生成的4个build-results已移除，设备报告保留。
+- 文档：`README.md`、`docs/REQUIREMENTS.md`、`HANDOFF.md`、`PLAN.md`、`hrt-roadmap-2026-10-07.md`、本文件；新增 `BACKLOG.md`、`timeline-v2-regression-2026-10-08.md`；5张合成证据截图及1份JSON汇总在 `docs/ui-audit/`。
 
 ## 2026-10-07 历史审计（修复前档案）
 

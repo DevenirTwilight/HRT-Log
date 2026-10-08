@@ -9,13 +9,14 @@
 - [x] 常规 UI 回归 32 项 + TimelineV2FlowTest 6 项全通过（/workspace/tooling/ui-controls-check.log）。四语/320和411dp/浅深色字号2，以及时间输入12/24小时有效/无效值；Flow 增加15张冻结事实/账本/提醒相关表逐步不变性检查。
 - [x] 第二批窄屏复现修复：320dp 下日期选择器 360dp 最小宽导致越窗，改为严格 ISO 日期输入（无效日期禁确认、闰日回归）；日历/历史记录正文被状态标签压到零宽，改内容换行；浓度单位标题、历史上下文/摘要导出的确认取消重叠已修复。新增资料包按钮不重叠/等尺寸回归。
 - [x] 本机全量单测：app 279（13 跳过，含可选审计默认12配置）、data72、reminder14，0失败；新增常规 UI48、V2单测6、V2Flow6、PeriodStability5、旧TimelineEditFlow4均通过。新增夹具漏填origin/revision曾编译失败，已修正后全量通过。Lint 0错误/132警告（未做无关告警清理）。
-- [ ] 审计完整48case × 4语 × 3字号第一轮已跑完；后补修复的对话框/历史/时间线需重测，320dp/深色/高对比度矩阵待跑。可选审计不因发现自动失败，需查报告/截图；第一次全矩阵原生内存退出，已回收 Bitmap 并按语言分批。320dp 下旧审计点击 helper 无限等 Robolectric looper，已改直接语义动作和有界帧推进，未冒称设备缺陷。
+- [x] 最终 UI审计：24配置×48case=1152次渲染，411dp四语/字号1、1.3、2/浅色576，320dp四语/字号2/浅深高对比度576；严重裁切/越窗/重叠/零尺寸/动作失败均0，仅12条私密标题预期省略。共同14case基线362条裁切/隐藏信号（含误报），最终相同范围0。机器汇总和5张合成截图已入docs/ui-audit，详见 [修复说明](ui-button-consistency.md)。
+- 审计环境问题已处理：首次完整矩阵原生内存退出，Bitmap及时回收、按语言分批；窄屏点击 helper 无限等Robolectric looper，改直接语义动作/有界帧；最终8次分批Gradle全部成功。关闭空闲编译守护进程释放内存，不以命令启动当通过。
 - [x] 源码/测试逐项核对后建立 [BACKLOG](BACKLOG.md)（10类候选逐项状态、证据、规格、风险、优先级、最小验收单元）及 [V2 回归说明](timeline-v2-regression-2026-10-08.md)。未发现需重写周期或数据库的可复现缺陷；旧非均匀 slot 稳定身份不冒充已决定规格。
 - [x] README、PLAN、Roadmap、UI 审计现状入口同步到 Build 25/schema 9；旧研究/M1 规划明确历史档案，PK 文献实现/LabFit、完整化验参数快照、Visit Pack 第一批和部位记录不再误写为零实现。
-- [ ] 全量时间线/旧备份/迁移回归结果待最终测试与 API35 CI。
+- [x] 全量时间线/旧备份单测通过（V2/Flow/PeriodStability见上），data72全通过；API35正式SQLite迁移待当前CI核对，未改Schema。
 - [x] 本机最终 Android 全量检查 4m15s成功：单测/lint、full Debug/Release、data/app instrumentation APK构建；manifest无INTERNET。JVM domain58/pk18/importer12全部通过（源码未变，Gradle复用已通过结果）。
 - [x] 发现旧 Actions 自动上传 APK，按本轮不上传公开 APK 约束移除 APK artifact 路径，仅保留测试/lint报告，并删除本轮 a1b5093/d7f8696/77bf0b9/069e61d CI 的 build-results产物（仅本轮新产生的产物，设备报告保留）。后续报告产物不含 APK。
-- [ ] 最终 UI 审计、原生 CI 与结果报告。上一正式交付源码为52b092a，尚不包含本轮 UI 修复；本轮保持 Build 25/schema 9，不签名交付、不上传公开 APK、不改 PK、Release 或标签。
+- [ ] 原生 CI最终核对与结果报告（当前 [37848782323](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37848782323)，08132bd；本机所有检查已通过）。上一正式交付源码为52b092a，尚不包含本轮 UI 修复；本轮保持 Build 25/schema 9，不签名交付、不上传公开 APK、不改 PK、Release 或标签。
 
 
 ## 已交付：build 25 重建时期编辑体系（2026-10-08，REQUIREMENTS §40，设计 docs/design/timeline-editing-v2.md）

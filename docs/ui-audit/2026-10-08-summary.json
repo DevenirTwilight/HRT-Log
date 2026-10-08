@@ -1,0 +1,364 @@
+{
+  "baseline_commit": "5441e6efac2a9dcb3b38c0a3fb2b85b4d3c2880e",
+  "ui_code_commit": "069e61d08520d93ca3f7f3e8d6deb7dff15c23d0",
+  "sdk": 35,
+  "height_dp": 1800,
+  "cases_per_config": 48,
+  "before_common_cases": [
+    "batch_add_dialog",
+    "calendar_month",
+    "calendar_week",
+    "concentration",
+    "editor_dialog",
+    "editor_screen",
+    "historical_context_dialog",
+    "history",
+    "intake_dialog",
+    "pdf_options_dialog",
+    "settings",
+    "stock",
+    "time_picker",
+    "visit_detail"
+  ],
+  "before_signals": {
+    "row": 670,
+    "truncated": 362
+  },
+  "before_truncated_by_case": {
+    "calendar_month": 152,
+    "calendar_week": 96,
+    "stock": 9,
+    "intake_dialog": 4,
+    "time_picker": 2,
+    "history": 93,
+    "editor_screen": 3,
+    "editor_dialog": 3
+  },
+  "configs": [
+    {
+      "locale": "en",
+      "font_scale": 1.0,
+      "width_dp": 411,
+      "theme": "LIGHT",
+      "signals": {
+        "coverage": 48,
+        "row": 131
+      },
+      "severe_findings": 0,
+      "intentional_preview_ellipsis": 0,
+      "common_case_signals": {}
+    },
+    {
+      "locale": "en",
+      "font_scale": 1.3,
+      "width_dp": 411,
+      "theme": "LIGHT",
+      "signals": {
+        "coverage": 48,
+        "row": 142
+      },
+      "severe_findings": 0,
+      "intentional_preview_ellipsis": 0,
+      "common_case_signals": {}
+    },
+    {
+      "locale": "en",
+      "font_scale": 2.0,
+      "width_dp": 411,
+      "theme": "LIGHT",
+      "signals": {
+        "coverage": 48,
+        "row": 140
+      },
+      "severe_findings": 0,
+      "intentional_preview_ellipsis": 0,
+      "common_case_signals": {}
+    },
+    {
+      "locale": "en",
+      "font_scale": 2.0,
+      "width_dp": 320,
+      "theme": "LIGHT",
+      "signals": {
+        "coverage": 48,
+        "row": 134,
+        "truncated": 1
+      },
+      "severe_findings": 0,
+      "intentional_preview_ellipsis": 1,
+      "common_case_signals": {}
+    },
+    {
+      "locale": "en",
+      "font_scale": 2.0,
+      "width_dp": 320,
+      "theme": "DARK",
+      "signals": {
+        "coverage": 48,
+        "row": 134,
+        "truncated": 1
+      },
+      "severe_findings": 0,
+      "intentional_preview_ellipsis": 1,
+      "common_case_signals": {}
+    },
+    {
+      "locale": "en",
+      "font_scale": 2.0,
+      "width_dp": 320,
+      "theme": "HIGH",
+      "signals": {
+        "coverage": 48,
+        "row": 134,
+        "truncated": 1
+      },
+      "severe_findings": 0,
+      "intentional_preview_ellipsis": 1,
+      "common_case_signals": {}
+    },
+    {
+      "locale": "zh-rCN",
+      "font_scale": 1.0,
+      "width_dp": 411,
+      "theme": "LIGHT",
+      "signals": {
+        "coverage": 48,
+        "row": 140
+      },
+      "severe_findings": 0,
+      "intentional_preview_ellipsis": 0,
+      "common_case_signals": {}
+    },
+    {
+      "locale": "zh-rCN",
+      "font_scale": 1.3,
+      "width_dp": 411,
+      "theme": "LIGHT",
+      "signals": {
+        "coverage": 48,
+        "row": 142
+      },
+      "severe_findings": 0,
+      "intentional_preview_ellipsis": 0,
+      "common_case_signals": {}
+    },
+    {
+      "locale": "zh-rCN",
+      "font_scale": 2.0,
+      "width_dp": 411,
+      "theme": "LIGHT",
+      "signals": {
+        "coverage": 48,
+        "row": 141
+      },
+      "severe_findings": 0,
+      "intentional_preview_ellipsis": 0,
+      "common_case_signals": {}
+    },
+    {
+      "locale": "zh-rCN",
+      "font_scale": 2.0,
+      "width_dp": 320,
+      "theme": "LIGHT",
+      "signals": {
+        "coverage": 48,
+        "row": 127,
+        "truncated": 1
+      },
+      "severe_findings": 0,
+      "intentional_preview_ellipsis": 1,
+      "common_case_signals": {}
+    },
+    {
+      "locale": "zh-rCN",
+      "font_scale": 2.0,
+      "width_dp": 320,
+      "theme": "DARK",
+      "signals": {
+        "coverage": 48,
+        "row": 127,
+        "truncated": 1
+      },
+      "severe_findings": 0,
+      "intentional_preview_ellipsis": 1,
+      "common_case_signals": {}
+    },
+    {
+      "locale": "zh-rCN",
+      "font_scale": 2.0,
+      "width_dp": 320,
+      "theme": "HIGH",
+      "signals": {
+        "coverage": 48,
+        "row": 127,
+        "truncated": 1
+      },
+      "severe_findings": 0,
+      "intentional_preview_ellipsis": 1,
+      "common_case_signals": {}
+    },
+    {
+      "locale": "zh-rTW",
+      "font_scale": 1.0,
+      "width_dp": 411,
+      "theme": "LIGHT",
+      "signals": {
+        "coverage": 48,
+        "row": 135
+      },
+      "severe_findings": 0,
+      "intentional_preview_ellipsis": 0,
+      "common_case_signals": {}
+    },
+    {
+      "locale": "zh-rTW",
+      "font_scale": 1.3,
+      "width_dp": 411,
+      "theme": "LIGHT",
+      "signals": {
+        "coverage": 48,
+        "row": 132
+      },
+      "severe_findings": 0,
+      "intentional_preview_ellipsis": 0,
+      "common_case_signals": {}
+    },
+    {
+      "locale": "zh-rTW",
+      "font_scale": 2.0,
+      "width_dp": 411,
+      "theme": "LIGHT",
+      "signals": {
+        "coverage": 48,
+        "row": 131
+      },
+      "severe_findings": 0,
+      "intentional_preview_ellipsis": 0,
+      "common_case_signals": {}
+    },
+    {
+      "locale": "zh-rTW",
+      "font_scale": 2.0,
+      "width_dp": 320,
+      "theme": "LIGHT",
+      "signals": {
+        "coverage": 48,
+        "row": 125,
+        "truncated": 1
+      },
+      "severe_findings": 0,
+      "intentional_preview_ellipsis": 1,
+      "common_case_signals": {}
+    },
+    {
+      "locale": "zh-rTW",
+      "font_scale": 2.0,
+      "width_dp": 320,
+      "theme": "DARK",
+      "signals": {
+        "coverage": 48,
+        "row": 125,
+        "truncated": 1
+      },
+      "severe_findings": 0,
+      "intentional_preview_ellipsis": 1,
+      "common_case_signals": {}
+    },
+    {
+      "locale": "zh-rTW",
+      "font_scale": 2.0,
+      "width_dp": 320,
+      "theme": "HIGH",
+      "signals": {
+        "coverage": 48,
+        "row": 125,
+        "truncated": 1
+      },
+      "severe_findings": 0,
+      "intentional_preview_ellipsis": 1,
+      "common_case_signals": {}
+    },
+    {
+      "locale": "fr-rFR",
+      "font_scale": 1.0,
+      "width_dp": 411,
+      "theme": "LIGHT",
+      "signals": {
+        "coverage": 48,
+        "row": 139
+      },
+      "severe_findings": 0,
+      "intentional_preview_ellipsis": 0,
+      "common_case_signals": {}
+    },
+    {
+      "locale": "fr-rFR",
+      "font_scale": 1.3,
+      "width_dp": 411,
+      "theme": "LIGHT",
+      "signals": {
+        "coverage": 48,
+        "row": 149
+      },
+      "severe_findings": 0,
+      "intentional_preview_ellipsis": 0,
+      "common_case_signals": {}
+    },
+    {
+      "locale": "fr-rFR",
+      "font_scale": 2.0,
+      "width_dp": 411,
+      "theme": "LIGHT",
+      "signals": {
+        "coverage": 48,
+        "row": 148
+      },
+      "severe_findings": 0,
+      "intentional_preview_ellipsis": 0,
+      "common_case_signals": {}
+    },
+    {
+      "locale": "fr-rFR",
+      "font_scale": 2.0,
+      "width_dp": 320,
+      "theme": "LIGHT",
+      "signals": {
+        "coverage": 48,
+        "row": 120,
+        "truncated": 1
+      },
+      "severe_findings": 0,
+      "intentional_preview_ellipsis": 1,
+      "common_case_signals": {}
+    },
+    {
+      "locale": "fr-rFR",
+      "font_scale": 2.0,
+      "width_dp": 320,
+      "theme": "DARK",
+      "signals": {
+        "coverage": 48,
+        "row": 120,
+        "truncated": 1
+      },
+      "severe_findings": 0,
+      "intentional_preview_ellipsis": 1,
+      "common_case_signals": {}
+    },
+    {
+      "locale": "fr-rFR",
+      "font_scale": 2.0,
+      "width_dp": 320,
+      "theme": "HIGH",
+      "signals": {
+        "coverage": 48,
+        "row": 120,
+        "truncated": 1
+      },
+      "severe_findings": 0,
+      "intentional_preview_ellipsis": 1,
+      "common_case_signals": {}
+    }
+  ],
+  "rendered_cases": 1152
+}
