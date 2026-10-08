@@ -1,10 +1,17 @@
 # 交接说明：工作进度与开发指南
 
-## 进行中：build14时间线闪退（build15计划，2026-10-08）
+## 当前最新交付：时间线闪退修复 build15（2026-10-08，完成）
 
-用户仅覆盖升级、无新增或导入即Timeline闪退。合成同日3mg→2mg已复现IllegalArgumentException: Overlapping recorded regimen（build15-reproduction.log，先失败测试）。尚无用户堆栈，不认定唯一原因；设计design/timeline-overlap-hotfix.md、需求§31。已修正为只桥接紧邻保存版本；新增projectHistory仅对非法新增识别投影透明降级，保留合法保存方案/原始记录入口并显示四语提示，不放宽domain校验、不写库。第二轮full应用152登记/139通过/13既有跳过，0失败；17项识别测试含32组合边界测试、非法投影降级，Native Graphics Compose入口/原始3mg版本审计通过。首轮入口测试选择两个同名按钮失败已修测试选择器，并补API35原生同一入口回归。完整full构建/lint/CI和正式签名交付仍待完成，build14不可当修复包。仅full、正式原签名、原分支，禁止卸载清数据或修改Release/标签。
+- 用户仅覆盖升级build14、没有新增/导入就进入Timeline闪退。合成同日3mg→2mg保存版本已先复现 `IllegalArgumentException: Overlapping recorded regimen`（复现提交db3682f，build15-reproduction.log）；尚未取得用户设备堆栈，不能证明是其唯一原因。先行设计[timeline-overlap-hotfix](design/timeline-overlap-hotfix.md)，需求§31。最终功能282efea；versionCode15/versionName0.2.0/schema6，原分支，仅full。
+- 原bug：裁剪后的历史区间寻找同日相同标准，跳过中间不匹配保存版本并延伸进其区间。修正为先找紧邻的下一个保存边界，再判断是否可归并，不跨过任何保存版本，不放宽domain不重叠校验。`projectHistory`仅对非法新增识别投影明确降级：保存方案与原始记录入口保留、四语提示识别不可用。不回退整个功能、不写库、不改原始记录/库存/提醒/V1签名/Context1/VisitPack1/PK/schema。
+- 回归：同日保存剂量变化、下一边界不匹配、32种同日版本组合、非法识别区间透明降级；Native Graphics Compose和API35新增入口→审计原始3mg版本测试通过。首轮Compose测试因同名按钮多节点选择错误失败，已修选择器并完整重跑，不是仅去掉断言。17项识别测试通过，原始记录不改写。
+- 最终本机完整full任务7m55s成功（build15-final-build-checks.log）：293登记/280通过/0失败/13跳过（PDF1、按需按钮审计12），domain39/pk18/importer12/data58/reminder14/app152；lint0错误99警告。full debug/release和两个测试APK全部成功；manifest身份/入口/无INTERNET与schema无漂移检查通过。无中途改码后的未验证包。
+- 最终功能CI [37748102641](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37748102641)，源码282efea，jvm/android/device-tests全部success。API35 data11、app主套件29登记（两重启项主套件跳过后各独立进程通过），新增同日方案闪退回归纳入原生套件。不能冒充用户真实设备或人工TalkBack新验收。
+- 正式full `/workspace/HRT-Log-build15-full-signed.apk`，23,362,779 bytes，SHA256 `7e1b679d82f401dac7430cc0baea596379333651beabaac25115963ef55ede8a`。既有证书SHA256 `989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1`、v2/v3、ZIP及8个native库16KB对齐、非debug、net.plainnotes.app/build15、无INTERNET确认；R8 mapping包含修正识别及projectHistory。可覆盖原正式安装，无需卸载或重新导入。私有签名备份确认private，临时clone/ZIP/JKS/密码finally删除，原备份不变。
+- 下载：https://tmpfiles.org/dl/1791447918.2212bf821054db6f/wqAbgilkWak8/hrt-log-build15-full-signed.apk 。独立实际下载大小/SHA与本地一致；链接临时，失效重传同一build15，不交工作区预览路径。元数据/log在tooling/build15-final-metadata.json、build15-delivery.json、build15-unit-results.json、build15-final-build-checks.log。APK/密钥不进仓库；没有发布Release或修改标签。
+- 本批已完成；用户实际数据/手机覆盖后是否仍闪退需其反馈，若仍出现须获取不含健康内容的异常类型与堆栈继续定位，不重复要求重导/清数据。历史模式识别仍有build14说明的证据/复杂周期限制，人工持久确认/编辑与完整启停状态仍待后续；按钮审计§29没有实施。详细[验证](timeline-overlap-verification.md)。
 
-## 当前最新交付：历史方案自动识别 build14（2026-10-08，完成）
+## 上一交付：历史方案自动识别 build14（2026-10-08，完成）
 
 - 用户明确纠正：从历史实际服药识别过去方案变化、补齐治疗时期，不接受build13只增加导入历史栏目。需求§30；先行设计b8b506c；功能ba333fd、最终身份保护8d630af。分支claude/new-session-1959qb；versionCode14/versionName0.2.0/schema6，仅full。
 - 自写ObservedTreatmentHistory：冻结药物身份、每日剂量分布、重复日期间隔识别。每日模式至少三个稳定日期，稀疏间隔至少四次一致记录；单次异常/短缺口不直接切时期，完全重复记录不作为双倍分布依据，tier不切临床标准。稳定剂量/频率/途径变化形成过去时期；保存版本优先，已知身份唯一匹配可跨重复药物ID只读归并，相邻相同V2标准合并。不从当前可变药物补未知字段，不跨長空白假定持续治疗。
@@ -18,7 +25,7 @@
 
 ## 最新硬性决定：play已废弃，仅维护full（2026-10-07）
 
-用户再次纠正：**play版本已废弃。以后只维护、测试、构建和交付full，不再生成或签署play APK。** 已移除Gradle play flavor、src/play空实现、CI play任务，release manifest检查只要求full。AGENTS/CLAUDE/REQUIREMENTS/README同步。下文双变体测试与play附件均为历史记录，不是下一步任务；旧公开Release核验清单保持历史事实，不修改公开Release/标签。最新交付full为build14（见下文交付与下载边界）。
+用户再次纠正：**play版本已废弃。以后只维护、测试、构建和交付full，不再生成或签署play APK。** 已移除Gradle play flavor、src/play空实现、CI play任务，release manifest检查只要求full。AGENTS/CLAUDE/REQUIREMENTS/README同步。下文双变体测试与play附件均为历史记录，不是下一步任务；旧公开Release核验清单保持历史事实，不修改公开Release/标签。最新交付full为build15（见下文交付与下载边界）。
 
 ## 上一交付：导入时间线与历史治疗事件 build13（2026-10-08，完成）
 
