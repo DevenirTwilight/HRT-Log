@@ -1,6 +1,6 @@
 # 交接说明：工作进度与开发指南
 
-## 进行中：历史记录按时期归属 build 18（2026-10-08，REQUIREMENTS §35/§35a，已批复）
+## 当前最新交付：历史记录按时期归属 build 18（2026-10-08，REQUIREMENTS §35/§35a，完成）
 
 设计 [history-period-attribution](design/history-period-attribution.md)：schema7 新增只追加的 `history_period_revision`（用户确认的过去时期，含撤销）和 `record_annotation`（用户明确的“额外”）；记录归属与“额外/剂量不同/方案未知”标签在 core/domain 实时投影，不落库；“长期变化”列出 O1–O4 四种判定方案及参数，阈值待用户定；确认页与 History 草图、四语文案、迁移与备份兼容、测试计划，以及 10 个待决定问题。确认 `ImportedTimelineUiTest:151` 期待“计划外”×2 是错误预期，设计里给出改法。用户已批复（§35a：O1 14 天、空白 30 天，其余按建议）。另一会话已停止；本会话在 86ce231 之上开发。最新交付仍是 build17。
 
@@ -10,7 +10,10 @@
 - 完成：化验上下文新建/重建时可选 `confirmed_periods`（只在已确认时期包含采样日时写入；旧上下文不变、仍可校验）；Visit Pack/PDF 模板版本 2，按记录标签计数“由记录推定”，PDF/资料包计数只用五个新标签（额外推断/额外用户标记/剂量与当期不同/方案未知/待确认时期），符合当期的不计数，不再有任何按有无原定时间的计数，也不再单独统计“导入”；按时/迟服/漏服/跳过只统计有原定时间的记录（`scheduledCounts`）；“计划外服药”菜单与标题改为“手动记录服药”（用户审核要求，§35a 补充、补充二）；versionCode 18。
 - 新测试：HistoryAttributionTest（混合 HT+APP 跨 10/6 一个待确认时期、确认后逐条标签、用户额外与推断额外区分、撤销/重确认幂等）、HistoryPeriodDialogTest、ImportedTimelineUiTest 修正为“方案未知”且新增待确认→确认入口、HistoryPeriodDataTest 化验上下文。
 - 本机全量检查通过（2026-10-08）：app 183（13 既有跳过）/data 64/reminder 14/domain 56/pk 18/importer 12，0 失败；lint、full debug/release、两个测试 APK、manifest 检查通过；schema 7.json 无漂移。
-- 待做：CI 三个任务绿 → 原正式签名 build18 → 交付与本文件更新。
+- CI [37766479449](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37766479449)（源码 55354d9，与签名所用构建代码相同）jvm/android/device-tests 全部 success。
+- 正式 full `hrt-log-build18-full-signed.apk`，23,399,643 bytes，SHA256 `8fb97ac88c44025fe4431d94053f606fd1a62e59382a912a19f73a9d70380448`。原正式证书 SHA256 `989ba045…79b1`、v2/v3、ZIP 与 8 个 native 库 16KB 对齐、非 debug、net.plainnotes.app/versionCode 18/无 INTERNET 已确认。可直接覆盖原正式安装，schema 6→7 自动迁移，无需卸载、清数据或重导入；已识别的时期显示“待确认”，需用户确认后才影响 History 标签和资料包。
+- 交付：tmpfiles.org 连接被重置（不可达），改为通过会话文件直接发送给用户。签名备份 clone、ZIP、JKS、密码均已删除；另发现并删除了早先会话遗留的备份 clone `/home/user/-`（含签名 ZIP）。APK/密钥不进仓库，未改 Release/标签、PK 模型。
+- 未验证：用户真实数据、OEM 覆盖安装、真机上确认对话框交互（Robolectric 下时间线页打开对话框后不空闲，已拆分测试）。
 
 ## 最新反馈：build17计划归属问题未完成，按用户要求暂停实现（2026-10-08）
 
