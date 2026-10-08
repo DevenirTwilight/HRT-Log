@@ -39,19 +39,24 @@ class ButtonLayoutRegressionTest(private val locale:String,private val width:Int
     @Test fun criticalControlsRemainReadableAndClickable() {
         val ctx=rule.activity
         android.provider.Settings.System.putString(ctx.contentResolver,android.provider.Settings.System.TIME_12_24,"12")
-        val med=MedicationEntity(id=1,name="Synthetic",molecule="E2",unit="MG",dose_per_intake=2.0,container_capacity=30.0,site_rotation=false,notifications_on=false,active=true,sort_order=0)
+        val med=MedicationEntity(id=1,name="Medication synthétique",molecule="E2",unit="MG",dose_per_intake=2.0,container_capacity=30.0,site_rotation=false,notifications_on=false,active=true,sort_order=0)
         val boxes=listOf(ContainerEntity(1,1,30.0,0.0,10.0,"2026-10-01","IN_USE"))
         val state=NotesState(medications=listOf(med),loading=false)
+        val taken=LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        val records=listOf(RecordEntity(id=1,medication_id=1,taken_utc=taken,taken_zone=ZoneId.systemDefault().id,actual_dose=2.0,status="LATE",origin="APP",revision=1,
+            config_snapshot=MedicationSnapshot.encode(med,ProfileEntity(1,"EV","oral"))))
+        val extra=net.plainnotes.app.NotesViewModel.ExtraState(records=records)
         var page by mutableIntStateOf(0);var clicks=0
         rule.setContent { NotesTheme(if(dark)ThemeMode.DARK else ThemeMode.LIGHT){Surface {
             when(page){
                 0->StockScreen(state,boxes,emptyList(),{clicks++},{_,_->clicks++},{clicks++},PaddingValues())
                 1->Column(Modifier.fillMaxWidth().padding(16.dp)){DateTimeRow(LocalDateTime.of(2026,10,28,23,46),{})}
-                2->CalendarScreen(state,LocalDate.of(2026,10,28),{},{},{},{},PaddingValues())
+                2->CalendarScreen(state,LocalDate.of(2026,10,28),{},{},{},{},PaddingValues(),extra=extra)
                 3->SettingsScreen(Appearance(ThemeMode.SYSTEM,false),{},false,{},{},{},PaddingValues())
+                4->HistoryScreen(state,records,{},{},PaddingValues())
             }
         }}}
-        repeat(4){p->
+        repeat(5){p->
             rule.runOnIdle{page=p};rule.waitForIdle()
             rule.onAllNodes(SemanticsMatcher.keyIsDefined(SemanticsProperties.Text),useUnmergedTree=true).fetchSemanticsNodes().forEach{n->
                 val results=mutableListOf<TextLayoutResult>();n.config.getOrNull(SemanticsActions.GetTextLayoutResult)?.action?.invoke(results)
@@ -87,9 +92,14 @@ class ButtonLayoutRegressionTest(private val locale:String,private val width:Int
         var is24 by mutableStateOf(false)
         var open by mutableStateOf(false)
         var picked:LocalTime?=null
+        var pickedDate:LocalDate?=null
+        var calendar by mutableStateOf(false)
         android.provider.Settings.System.putString(ctx.contentResolver,android.provider.Settings.System.TIME_12_24,"12")
         rule.setContent{NotesTheme(if(dark)ThemeMode.DARK else ThemeMode.LIGHT){
-            key(is24){if(open)TimePickerModal(LocalTime.of(23,46),{open=false},{picked=it})}
+            key(is24,calendar){if(open){
+                if(calendar)DatePickerModal(LocalDate.of(2026,10,28),{open=false},{pickedDate=it})
+                else TimePickerModal(LocalTime.of(23,46),{open=false},{picked=it})
+            }}
         }}
         // Dialog text-input IME animations do not settle under Robolectric; use manual frames.
         rule.mainClock.autoAdvance=false
@@ -120,6 +130,35 @@ class ButtonLayoutRegressionTest(private val locale:String,private val width:Int
         replace(hour,"24");disabled()
         replace(hour,"0");replace(minute,"05");confirm()
         assertEquals(LocalTime.of(0,5),picked)
+        calendar=true;open=true;settle()
+        val date=ctx.getString(R.string.picker_date)
+        replace(date,"2026-02-30");disabled()
+        replace(date,"2024-02-29");confirm()
+        assertEquals(LocalDate.of(2024,2,29),pickedDate)
+    }
+
+    @Test fun visitPackLongConfirmationDoesNotOverlapCancel() {
+        val ctx=rule.activity
+        var open by mutableStateOf(false)
+        rule.setContent{NotesTheme(if(dark)ThemeMode.DARK else ThemeMode.LIGHT){
+            if(open)VisitPackDialog(AppointmentEntity(id=1,type="ENDO",at_utc=Instant.now().toEpochMilli(),at_zone="UTC",remind_minutes_before=60),
+                NotesState(loading=false),net.plainnotes.app.NotesViewModel.ExtraState(),{open=false}){_,_->}
+        }}
+        rule.mainClock.autoAdvance=false
+        fun settle(){val l=org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper());repeat(4){rule.mainClock.advanceTimeBy(500);var n=0;while(!l.isIdle && n++<500)l.runOneTask()}}
+        open=true;settle()
+        val roots=mutableListOf<androidx.compose.ui.platform.ViewRootForTest>()
+        fun walk(v:android.view.View){if(v is androidx.compose.ui.platform.ViewRootForTest)roots+=v;if(v is android.view.ViewGroup)repeat(v.childCount){walk(v.getChildAt(it))}}
+        org.robolectric.shadows.ShadowDialog.getShownDialogs().filter{it.isShowing}.forEach{it.window?.decorView?.let(::walk)}
+        fun all(n:SemanticsNode):List<SemanticsNode> = listOf(n)+n.children.flatMap(::all)
+        val nodes=roots.flatMap{all(it.semanticsOwner.rootSemanticsNode)}
+        fun control(res:Int)=nodes.single{it.config.getOrNull(SemanticsProperties.Role)==Role.Button && it.config.getOrNull(SemanticsProperties.Text)?.any{t->t.text==ctx.getString(res)}==true}
+        val export=control(R.string.export_pdf);val cancel=control(R.string.cancel)
+        val a=export.boundsInRoot;val b=cancel.boundsInRoot
+        assertFalse("PDF confirmation overlaps cancel",minOf(a.right,b.right)>maxOf(a.left,b.left) && minOf(a.bottom,b.bottom)>maxOf(a.top,b.top))
+        assertTrue("PDF action group widths differ",kotlin.math.abs(a.width-b.width)<=1f)
+        assertTrue("PDF action group heights differ",kotlin.math.abs(a.height-b.height)<=1f)
+        cancel.config[SemanticsActions.OnClick].action!!.invoke();settle();assertFalse(open)
     }
 
 }

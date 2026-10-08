@@ -174,14 +174,14 @@ fun routeIcon(route: String?): ImageVector = when (route) {
     val historyProfile=context?.profile
     val route = context?.route
     Box {
-        Row(Modifier.fillMaxWidth().testTag("history-record:${r.id}").clickable(enabled = r.status != "SKIPPED") { menu = true }.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+        FlowRow(Modifier.fillMaxWidth().testTag("history-record:${r.id}").clickable(enabled=r.status!="SKIPPED"){menu=true}.padding(16.dp),verticalArrangement=Arrangement.spacedBy(8.dp),itemVerticalAlignment=Alignment.CenterVertically) {
             val injection = route == "INJECTION"
             Box(Modifier.size(52.dp).clip(RoundedCornerShape(16.dp)).background(if (injection) c.primaryContainer else c.surfaceContainerHigh)
                 .border(1.dp, c.outlineVariant.copy(alpha = 0.6f), RoundedCornerShape(16.dp)), contentAlignment = Alignment.Center) {
                 Icon(routeIcon(route), null, tint = if (taken) c.primary else c.onSurfaceVariant)
             }
             Spacer(Modifier.width(14.dp))
-            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+            Column(Modifier.weight(1f).widthIn(min=120.dp),verticalArrangement=Arrangement.spacedBy(3.dp)) {
                 Text(if (simple) choiceLabel(historyMed?.molecule ?: "OTHER") else historyMed?.name ?: stringResource(R.string.history_context_unknown), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
                 val sub = listOfNotNull(route?.let { choiceLabel(it) }, historyProfile?.ester?.takeIf { it != "E2" && !simple }?.let { choiceLabel(it) }, r.site?.let { siteLabel(it) })
                 if (sub.isNotEmpty()) Text(sub.joinToString(" · "), style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant)

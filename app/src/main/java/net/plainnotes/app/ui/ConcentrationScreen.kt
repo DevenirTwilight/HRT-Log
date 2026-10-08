@@ -122,13 +122,8 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
                 }
                 FlagNotes(result.flags[Curve.E2].orEmpty())
                 Text(stringResource(R.string.pk_chart_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(stringResource(R.string.pk_unit), Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
-                    SingleChoiceSegmentedButtonRow {
-                        SegmentedButton(!settings.pmol, { onSettings(ConcSettings(false, settings.calibrate, settings.mode)) }, SegmentedButtonDefaults.itemShape(0, 2)) { Text("pg/mL") }
-                        SegmentedButton(settings.pmol, { onSettings(ConcSettings(true, settings.calibrate, settings.mode)) }, SegmentedButtonDefaults.itemShape(1, 2)) { Text("pmol/L") }
-                    }
-                }
+                Text(stringResource(R.string.pk_unit),style=MaterialTheme.typography.bodyMedium)
+                AdaptiveChoice(listOf("pg/mL","pmol/L"),if(settings.pmol)1 else 0,{onSettings(ConcSettings(it==1,settings.calibrate,settings.mode))})
             }
         } else if (loading) Box(Modifier.fillMaxWidth().padding(32.dp), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
         else if (result != null && result.simulatedMedications.isNotEmpty() && result.others.isEmpty())

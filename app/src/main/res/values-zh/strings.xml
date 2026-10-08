@@ -977,4 +977,5 @@
     <string name="period_restore_overlap">这段日期已有其他时期，先修改或删除那段再恢复。</string>
     <string name="picker_hour">小时</string>
     <string name="picker_minute">分钟</string>
+    <string name="picker_date">日期（YYYY-MM-DD）</string>
 </resources>

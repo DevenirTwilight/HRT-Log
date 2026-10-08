@@ -977,4 +977,5 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="period_restore_overlap">These dates already have another period. Edit or delete it before restoring.</string>
     <string name="picker_hour">Hour</string>
     <string name="picker_minute">Minute</string>
+    <string name="picker_date">Date (YYYY-MM-DD)</string>
 </resources>

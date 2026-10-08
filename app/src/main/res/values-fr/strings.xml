@@ -977,4 +977,5 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="period_restore_overlap">Ces dates ont déjà une autre période. Modifiez-la ou supprimez-la avant de restaurer.</string>
     <string name="picker_hour">Heure</string>
     <string name="picker_minute">Minute</string>
+    <string name="picker_date">Date (AAAA-MM-JJ)</string>
 </resources>

@@ -49,7 +49,12 @@ import java.time.*
             }
             Text(stringResource(R.string.history_context_repair_count,selected.size),style=MaterialTheme.typography.bodySmall)
             if(!compatible)Text(stringResource(R.string.history_context_conflict),color=MaterialTheme.colorScheme.error)
-        }},confirmButton={Button(enabled=valid,onClick={onConfirm(candidate,profile,from,to)}){Text(stringResource(R.string.history_context_confirm))}},
-        dismissButton={TextButton(onClick=onDismiss){Text(stringResource(R.string.cancel))}})
+        }},confirmButton={
+            val actions=listOf(stringResource(R.string.history_context_confirm),stringResource(R.string.cancel))
+            AdaptiveActions(actions,contentInset=48.dp){i,mod->
+                if(i==0)Button(enabled=valid,onClick={onConfirm(candidate,profile,from,to)},modifier=mod){Text(actions[i])}
+                else TextButton(onClick=onDismiss,modifier=mod){Text(actions[i])}
+            }
+        })
     if(pick>0)DatePickerModal(if(pick==1)from else to,{pick=0}){if(pick==1)from=it else to=it;pick=0}
 }

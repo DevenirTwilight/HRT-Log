@@ -261,10 +261,10 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
         else -> Triple(c.surfaceContainerHighest, c.onSurfaceVariant, R.string.status_skipped)
     }
     Surface(color = c.surfaceContainerLow, shape = MaterialTheme.shapes.large, modifier = Modifier.fillMaxWidth()) {
-        Row(Modifier.padding(horizontal = 16.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically) {
-            Text(formatTime(Instant.ofEpochMilli(r.taken_utc ?: r.scheduled_utc ?: 0)), style = MaterialTheme.typography.titleMedium, modifier = Modifier.width(64.dp))
-            Column(Modifier.weight(1f)) {
-                if (!LocalSimpleMode.current) Text(med?.name ?: stringResource(R.string.history_context_unknown), style = MaterialTheme.typography.bodyLarge, maxLines = 1)
+        FlowRow(Modifier.padding(horizontal=16.dp,vertical=12.dp),horizontalArrangement=Arrangement.spacedBy(8.dp),verticalArrangement=Arrangement.spacedBy(8.dp),itemVerticalAlignment=Alignment.CenterVertically) {
+            Text(formatTime(Instant.ofEpochMilli(r.taken_utc ?: r.scheduled_utc ?: 0)),style=MaterialTheme.typography.titleMedium)
+            Column(Modifier.weight(1f).widthIn(min=120.dp)) {
+                if (!LocalSimpleMode.current) Text(med?.name ?: stringResource(R.string.history_context_unknown), style = MaterialTheme.typography.bodyLarge)
                 (r.actual_dose ?: r.planned_dose)?.let { Text(formatDose(it, med?.unit), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant) }
             }
             StatusPill(stringResource(label), bg, fg, if (r.status in listOf("ON_TIME", "LATE")) Icons.Rounded.Check else null)

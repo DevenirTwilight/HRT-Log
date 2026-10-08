@@ -25,12 +25,25 @@ private fun Long.pickerDate() = Instant.ofEpochMilli(this).atZone(ZoneOffset.UTC
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable fun DatePickerModal(initial: LocalDate, onDismiss: () -> Unit, onPick: (LocalDate) -> Unit) {
-    val state = rememberDatePickerState(initialSelectedDateMillis = initial.pickerMillis())
-    DatePickerDialog(onDismissRequest = onDismiss,
-        confirmButton = { TextButton(onClick = { state.selectedDateMillis?.let { onPick(it.pickerDate()) }; onDismiss() }) { Text(stringResource(R.string.ok)) } },
-        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } }) { DatePicker(state,headline={
-            state.selectedDateMillis?.let{Text(formatDate(it.pickerDate()),Modifier.padding(horizontal=24.dp,vertical=12.dp),style=MaterialTheme.typography.headlineLarge)}
-        }) }
+    BoxWithConstraints {
+        // Material's calendar has a 360dp minimum width; use validated date input on narrower windows.
+        if(maxWidth<360.dp) {
+            var value by remember{mutableStateOf(initial.toString())}
+            val date=runCatching{LocalDate.parse(value)}.getOrNull()
+            AlertDialog(onDismissRequest=onDismiss,
+                text={OutlinedTextField(value,{value=it},label={Text(stringResource(R.string.picker_date))},singleLine=true,
+                    isError=date==null,modifier=Modifier.fillMaxWidth())},
+                confirmButton={TextButton(enabled=date!=null,onClick={date?.let(onPick);onDismiss()}){Text(stringResource(R.string.ok))}},
+                dismissButton={TextButton(onClick=onDismiss){Text(stringResource(R.string.cancel))}})
+        } else {
+            val state=rememberDatePickerState(initialSelectedDateMillis=initial.pickerMillis())
+            DatePickerDialog(onDismissRequest=onDismiss,
+                confirmButton={TextButton(onClick={state.selectedDateMillis?.let{onPick(it.pickerDate())};onDismiss()}){Text(stringResource(R.string.ok))}},
+                dismissButton={TextButton(onClick=onDismiss){Text(stringResource(R.string.cancel))}}){DatePicker(state,headline={
+                    state.selectedDateMillis?.let{Text(formatDate(it.pickerDate()),Modifier.padding(horizontal=24.dp,vertical=12.dp),style=MaterialTheme.typography.headlineLarge)}
+                })}
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

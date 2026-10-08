@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import net.plainnotes.app.NotesViewModel
 import net.plainnotes.app.NotesState
 import net.plainnotes.app.R
@@ -22,6 +23,12 @@ import java.time.LocalDate
         TextButton(onClick={pick=1}){Text(stringResource(R.string.batch_from)+": "+from)}
         TextButton(onClick={pick=2}){Text(stringResource(R.string.batch_to)+": "+to)}
         Text(stringResource(R.string.wb_summary_footer))
-    }},confirmButton={Button(enabled=from<=to,onClick={launcher.launchPicker("notes-summary-${LocalDate.now()}.pdf")}){Text(stringResource(R.string.export_pdf))}},dismissButton={TextButton(onClick=onDismiss){Text(stringResource(R.string.cancel))}})
+    }},confirmButton={
+        val actions=listOf(stringResource(R.string.export_pdf),stringResource(R.string.cancel))
+        AdaptiveActions(actions,contentInset=48.dp){i,mod->
+            if(i==0)Button(enabled=from<=to,onClick={launcher.launchPicker("notes-summary-${LocalDate.now()}.pdf")},modifier=mod){Text(actions[i])}
+            else TextButton(onClick=onDismiss,modifier=mod){Text(actions[i])}
+        }
+    })
     if(pick!=0)DatePickerModal(LocalDate.parse(if(pick==1)from else to),{pick=0}){if(it<=LocalDate.now()){if(pick==1)from=it.toString()else to=it.toString()};pick=0}
 }

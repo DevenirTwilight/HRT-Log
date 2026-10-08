@@ -140,7 +140,14 @@ class ButtonAuditTest(private val locale: String, private val scale: Float, priv
 
     private fun cases(m: NotesViewModel): List<Case> {
         val s = state(); val x = extra(); val c = act
-        fun click(res: Int) = { val n = rule.onAllNodesWithText(c.getString(res), substring = false).onFirst(); runCatching { n.performScrollTo() }; n.performClick(); Unit }
+        fun click(res:Int) = {
+            // Direct semantics avoids an unbounded Robolectric idle wait after a dialog opens.
+            val wanted=c.getString(res)
+            val n=roots().flatMap{all(it.semanticsOwner.rootSemanticsNode)}.first{it.config.contains(SemanticsActions.OnClick) &&
+                it.config.getOrNull(SemanticsProperties.Text)?.any{t->t.text==wanted}==true}
+            check(n.config[SemanticsActions.OnClick].action?.invoke()==true){"Click failed: $wanted"}
+            Unit
+        }
         val padding = PaddingValues()
         return listOf(
             Case("settings") { SettingsScreen(Appearance(ThemeMode.SYSTEM, false), {}, false, {}, {}, {}, padding) {
