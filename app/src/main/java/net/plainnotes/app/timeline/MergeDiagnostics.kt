@@ -81,7 +81,8 @@ object MergeDiagnostics {
                     }
                     a!=null->add("[join] medication $lane: plan ends; after: "+(p.userGaps.filter{it.medicationId==lane && it.from<=period.from && (it.until ?: Instant.MAX)>period.from}
                         .map{"user ${it.kind} ${time(it.from)}..${time(it.until)}"}.ifEmpty{p.stops.filter{it.medicationId==lane && it.from<=period.from}.map{"stop ${time(it.from)}..${time(it.until)}"}}.ifEmpty{listOf("no plan or records")}).joinToString("; "))
-                    b!=null->add("[join] medication $lane: plan starts (${b.key}); before: "+(p.userGaps.filter{it.medicationId==lane && it.until==period.from}.map{"user ${it.kind} ${time(it.from)}..${time(it.until)}"}.ifEmpty{listOf("no plan")}).joinToString("; "))
+                    b!=null->add("[join] medication $lane: plan starts (${b.key}); before: "+(p.userGaps.filter{it.medicationId==lane && it.until==period.from}.map{"user ${it.kind} ${time(it.from)}..${time(it.until)}"}
+                        .ifEmpty{p.stops.filter{it.medicationId==lane && it.until==period.from}.map{"stopped in app ${time(it.from)}..${time(it.until)}"}}.ifEmpty{listOf("no plan")}).joinToString("; "))
                 }
             }
         }.joinToString("\n")
