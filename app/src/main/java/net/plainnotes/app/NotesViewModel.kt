@@ -257,6 +257,9 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     }
     fun manual(id:Long,t:Instant,d:Double,site:String?=null,extra:Boolean=false)=change{repo.unscheduled(id,t,d,site,extra)}
     fun setExtra(recordId:Long,extra:Boolean)=change{repo.setExtra(recordId,extra)}
+    /** REQUIREMENTS §37b timeline edits; past periods only, never reminders. */
+    fun editTimeline(replace:List<String>,rows:List<TimelineEditRow>)=change{repo.editTimeline(replace,rows)}
+    fun undoTimelineEdit(group:String)=change{repo.undoTimelineEdit(group)}
     fun confirmHistoryPeriod(key:String?,medicationId:Long,standard:TherapyStandard,from:LocalDate,until:LocalDate?,zone:ZoneId,identity:String,evidence:String)=
         change{repo.confirmHistoryPeriod(key,medicationId,standard,from,until,zone,identity,evidence)}
     fun revokeHistoryPeriod(key:String)=change{repo.revokeHistoryPeriod(key)}

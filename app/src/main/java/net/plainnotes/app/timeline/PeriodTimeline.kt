@@ -33,10 +33,10 @@ data class PeriodTimeline(val projection:TreatmentPeriodProjection,val events:Li
 internal data class PeriodHistory(val projection:TreatmentPeriodProjection,val historical:HistoricalTreatmentProjection,val unavailable:Boolean)
 internal fun projectHistory(historical:HistoricalTreatmentProjection,zone:ZoneId,withRecords:Set<Long>?=null):PeriodHistory =
     try {
-        PeriodHistory(TreatmentPeriods.build(historical.saved+historical.user+historical.confirmed+historical.observed.map{it.interval},zone,withRecords,historical.userStops),historical,false)
+        PeriodHistory(TreatmentPeriods.build(historical.saved+historical.user+historical.confirmed+historical.observed.map{it.interval},zone,withRecords,historical.userStops,historical.markers),historical,false)
     } catch (_:IllegalArgumentException) {
-        PeriodHistory(TreatmentPeriods.build(historical.saved+historical.user,zone,withRecords,historical.userStops),
-            HistoricalTreatmentProjection(emptyList(),emptySet(),saved=historical.saved,user=historical.user,userStops=historical.userStops),true)
+        PeriodHistory(TreatmentPeriods.build(historical.saved+historical.user,zone,withRecords,historical.userStops,historical.markers),
+            HistoricalTreatmentProjection(emptyList(),emptySet(),saved=historical.saved,user=historical.user,userStops=historical.userStops,markers=historical.markers),true)
     }
 
 /** Saved plan versions with at least one record (taken, missed or skipped) of their medication inside their span. */

@@ -3,7 +3,7 @@ android {
     namespace = "net.plainnotes.app"
     compileSdk = 37
     buildToolsVersion = "37.0.0"
-    defaultConfig { minSdk = 26; applicationId = "net.plainnotes.app"; targetSdk = 37; versionCode = 22; versionName = "0.2.0"; testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner" }
+    defaultConfig { minSdk = 26; applicationId = "net.plainnotes.app"; targetSdk = 37; versionCode = 23; versionName = "0.2.0"; testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner" }
     compileOptions { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }
     testOptions {
         unitTests.isIncludeAndroidResources = true

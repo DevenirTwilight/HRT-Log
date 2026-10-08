@@ -29,7 +29,7 @@ import java.time.*
 @Composable fun LongitudinalScreen(state:NotesState,extra:NotesViewModel.ExtraState,onSave:(MilestoneEntity)->Unit,
     onDelete:(Long)->Unit,onOpen:(EventKind)->Unit,contentPadding:PaddingValues,onAppointment:(Long)->Unit={},
     saveState:MilestoneSaveState=MilestoneSaveState(),onSaveHandled:()->Unit={},onImportedHistory:(List<Long>)->Unit={onOpen(EventKind.DOSE)},
-    periodActions:PeriodActions=PeriodActions()) {
+    periodActions:PeriodActions=PeriodActions(),timelineActions:TimelineActions=TimelineActions()) {
     var periodDraft by remember{mutableStateOf<Pair<PeriodDraft,String?>?>(null)}
     var now by remember{mutableStateOf(Instant.now())}
     LaunchedEffect(Unit){while(true){kotlinx.coroutines.delay(60_000);now=Instant.now()}}
@@ -43,6 +43,17 @@ import java.time.*
     var auditKey by rememberSaveable{mutableStateOf<String?>(null)}
     var focusKey by rememberSaveable{mutableStateOf<String?>(null)}
     var feedback by rememberSaveable{mutableStateOf<Int?>(null)}
+    // §37b timeline edits
+    var editRequest by remember{mutableStateOf<Pair<PeriodEditRequest,(Long,TherapyStandard,TimelineEdits.Range)->Unit>?>(null)}
+    var splitFor by remember{mutableStateOf<DisplayPeriod?>(null)}
+    var deleteFor by remember{mutableStateOf<DisplayPeriod?>(null)}
+    var stopFor by remember{mutableStateOf<TreatmentStop?>(null)}
+    fun identity(med:Long)=state.medications.firstOrNull{it.id==med}?.let{MedicationSnapshot.encode(it,state.profiles[med])} ?: "{}"
+    fun apply(edit:TimelineEdits.Edit?){edit?.let{timelineActions.edit(it.replace,it.rows)}}
+    fun editPeriod(title:Int,meds:List<Long>,med:Long?,range:TimelineEdits.Range,standard:TherapyStandard?,target:TimelineEdits.Range?,merge:Pair<TherapyStandard?,TherapyStandard?>?=null) {
+        editRequest=PeriodEditRequest(title,meds.ifEmpty{state.medications.map{it.id}},med,range,standard,target,listOfNotNull(target),merge) to {m,std,r->
+            apply(TimelineEdits.period(extra.historyPeriods,m,std,r,zone,identity(m),listOfNotNull(target)))}
+    }
     val periods=projection.periods.filter{it.from<=Instant.now()}.asReversed()
     val blocks=buildList<StoryBlock> {
         if(record.upcoming.isNotEmpty() || record.importedHistory.any{it.future}){
@@ -83,7 +94,12 @@ import java.time.*
             feedback?.let{Text(stringResource(it),modifier=Modifier.semantics{liveRegion=LiveRegionMode.Polite})}
         }
         item(key="actions") {
-            FilledTonalButton(onClick={onSaveHandled();edit=MilestoneEntity(date=LocalDate.now(zone).toString())},enabled=!saveState.saving){Text(stringResource(R.string.milestone_add))}
+            Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+                FilledTonalButton(onClick={onSaveHandled();edit=MilestoneEntity(date=LocalDate.now(zone).toString())},enabled=!saveState.saving){Text(stringResource(R.string.milestone_add))}
+                // §37b: a past period the import missed, or any period the user wants to state.
+                OutlinedButton(onClick={editPeriod(R.string.period_edit_title_create,emptyList(),null,TimelineEdits.Range(LocalDate.now(zone).minusDays(30),LocalDate.now(zone)),null,null)},
+                    enabled=state.medications.isNotEmpty(),modifier=Modifier.testTag("timeline-new-period")){Text(stringResource(R.string.timeline_new_period))}
+            }
         }
         items(blocks,key={it.key}){block->
             val event=block.event;val period=block.period
@@ -160,26 +176,55 @@ import java.time.*
                                 stringResource(R.string.period_frequency_days,r.standard.doses.size,r.standard.interval)
                             Text(stringResource(R.string.period_short_saved,formatDate(r.span.from.atZone(zone).toLocalDate()),what,length),
                                 style=MaterialTheme.typography.bodySmall,modifier=Modifier.testTag("period-short:${r.span.id}"))
+                            // It can be taken out, changed or deleted on its own (§37b); days are the smallest unit of an edit.
+                            val shortRange=TimelineEdits.Range(r.span.from.atZone(zone).toLocalDate(),(r.span.until ?: r.span.from).atZone(zone).toLocalDate().let{d->if(d<=r.span.from.atZone(zone).toLocalDate())d.plusDays(1) else d})
+                            Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+                                TextButton(onClick={editPeriod(R.string.period_edit_title_edit,listOf(r.span.medicationId),r.span.medicationId,shortRange,r.standard,shortRange)},
+                                    modifier=Modifier.testTag("period-short-edit:${r.span.id}")){Text(stringResource(R.string.period_short_edit))}
+                                TextButton(onClick={apply(TimelineEdits.Edit(TimelineEdits.touched(extra.historyPeriods,r.span.medicationId,shortRange),
+                                    listOf(TimelineEditRow(HistoryPeriods.DELETED,r.span.medicationId,null,shortRange.from,shortRange.until,zone,identity(r.span.medicationId)))))},
+                                    modifier=Modifier.testTag("period-short-delete:${r.span.id}")){Text(stringResource(R.string.period_short_delete))}
+                            }
                         }
                         if(period.segments.size>1)Text(stringResource(R.string.period_same_day),style=MaterialTheme.typography.bodySmall)
                         if(standards.any{span->extra.regimens.any{it.id in span.rawVersionIds && it.origin=="LEGACY_RULE"}})Text(stringResource(R.string.epoch_reconstructed),style=MaterialTheme.typography.bodySmall)
                         val sourceRows=record.resolvedRecords.filter{r->(r.taken_utc ?: r.scheduled_utc)?.let{period.contains(Instant.ofEpochMilli(it))}==true}
                         if(sourceRows.isNotEmpty())TextButton(onClick={onImportedHistory(sourceRows.map{it.id})},modifier=Modifier.testTag("period-history:${period.key}")){Text(stringResource(R.string.period_evidence,sourceRows.size))}
                         if(!simple)TextButton(onClick={auditKey=period.key}){Text(stringResource(R.string.period_saved_changes))}
-                        // §36b: the exact join checks against the previous period, as plain text for a report.
-                        if(!simple)Box(Modifier.fillMaxWidth(),contentAlignment=androidx.compose.ui.Alignment.CenterEnd) {
+                        // §37b: every period can be edited, whatever made it; §36b diagnostics stay (hidden in simple mode).
+                        val meds=TimelineEdits.medicationsIn(projection,period);val range=TimelineEdits.rangeOf(period,zone)
+                        val next=projection.periods.getOrNull(projection.periods.indexOf(period)+1)?.takeIf{it.from<=now}
+                        val mine=TimelineEdits.userRowsIn(extra.historyPeriods,period,zone)
+                        val deleted=mine.filter{it.kind==HistoryPeriods.DELETED};val edited=mine.filter{it.kind!=HistoryPeriods.DELETED}
+                        val stop=projection.stops.firstOrNull{it.from>=period.from && (period.until==null || it.from<period.until)}
+                        if(deleted.isNotEmpty())Text(stringResource(R.string.period_deleted),style=MaterialTheme.typography.labelMedium,color=MaterialTheme.colorScheme.error)
+                        if(edited.isNotEmpty())Text(stringResource(R.string.period_user_edited),style=MaterialTheme.typography.labelMedium,color=MaterialTheme.colorScheme.primary)
+                        Box(Modifier.fillMaxWidth(),contentAlignment=androidx.compose.ui.Alignment.CenterEnd) {
                             var menu by remember{mutableStateOf(false)}
                             val context=androidx.compose.ui.platform.LocalContext.current
                             IconButton(onClick={menu=true},modifier=Modifier.testTag("period-menu:${period.key}")){
                                 Icon(androidx.compose.material.icons.Icons.Outlined.MoreVert,stringResource(R.string.period_menu))}
                             DropdownMenu(expanded=menu,onDismissRequest={menu=false}) {
-                                DropdownMenuItem(text={Text(stringResource(R.string.period_copy_diagnostics))},modifier=Modifier.testTag("period-diagnostics:${period.key}"),onClick={
-                                    menu=false
+                                @Composable fun item(text:Int,tag:String,action:()->Unit)=DropdownMenuItem(text={Text(stringResource(text))},
+                                    modifier=Modifier.testTag("$tag:${period.key}"),onClick={menu=false;action()})
+                                item(R.string.period_menu_edit,"period-edit-any"){val m=meds.firstOrNull()
+                                    editPeriod(R.string.period_edit_title_edit,meds,m,range,m?.let{TimelineEdits.standardOf(projection,period,it)},range)}
+                                if(meds.isNotEmpty())item(R.string.period_menu_split,"period-split"){splitFor=period}
+                                if(next!=null)item(R.string.period_menu_merge_next,"period-merge"){
+                                    val nextMeds=TimelineEdits.medicationsIn(projection,next);val all=(meds+nextMeds).distinct()
+                                    val m=all.firstOrNull();val target=TimelineEdits.Range(range.from,TimelineEdits.rangeOf(next,zone).until)
+                                    val a=m?.let{TimelineEdits.standardOf(projection,period,it)};val b=m?.let{TimelineEdits.standardOf(projection,next,it)}
+                                    editPeriod(R.string.period_edit_title_merge,all,m,target,a ?: b,target,a to b)}
+                                if(meds.isNotEmpty())item(R.string.period_menu_delete,"period-delete"){deleteFor=period}
+                                if(stop!=null)item(R.string.period_menu_edit_stop,"period-stop-edit"){stopFor=stop}
+                                deleted.firstOrNull()?.group_key?.let{g->item(R.string.period_menu_restore,"period-restore"){timelineActions.undo(g)}}
+                                edited.firstOrNull()?.group_key?.let{g->item(R.string.period_menu_undo,"period-undo"){timelineActions.undo(g)}}
+                                if(!simple)item(R.string.period_copy_diagnostics,"period-diagnostics"){
                                     val version=androidx.core.content.pm.PackageInfoCompat.getLongVersionCode(context.packageManager.getPackageInfo(context.packageName,0)).toInt()
                                     val text=MergeDiagnostics.text(record,extra,period,version)
                                     context.getSystemService(android.content.ClipboardManager::class.java)?.setPrimaryClip(android.content.ClipData.newPlainText("HRT Log",text))
                                     android.widget.Toast.makeText(context,context.getString(R.string.period_diagnostics_copied),android.widget.Toast.LENGTH_SHORT).show()
-                                })
+                                }
                             }
                         }
                     }
@@ -197,6 +242,15 @@ import java.time.*
     }
     val audit=periods.firstOrNull{it.key==auditKey}
     periodDraft?.let{(draft,next)->HistoryPeriodDialog(draft,next,periodActions){periodDraft=null}}
+    editRequest?.let{(request,save)->PeriodEditDialog(request,state,{m,r,t->TimelineEdits.conflicts(projection,m,r,t)},save){editRequest=null}}
+    splitFor?.let{period->val range=TimelineEdits.rangeOf(period,zone)
+        DatePickerModal(range.from.plusDays(1),{splitFor=null}){day->splitFor=null;apply(TimelineEdits.split(extra.historyPeriods,projection,period,day,::identity))}}
+    deleteFor?.let{period->AlertDialog(onDismissRequest={deleteFor=null},text={Text(stringResource(R.string.period_delete_confirm))},modifier=Modifier.testTag("period-delete-dialog"),
+        confirmButton={Button(onClick={deleteFor=null;apply(TimelineEdits.delete(extra.historyPeriods,projection,period,::identity))}){Text(stringResource(R.string.period_menu_delete))}},
+        dismissButton={TextButton(onClick={deleteFor=null}){Text(stringResource(R.string.cancel))}})}
+    stopFor?.let{stop->StopEditDialog(TimelineEdits.Range(stop.from.atZone(zone).toLocalDate(),stop.until?.atZone(zone)?.toLocalDate()),{r->
+        val med=projection.raw.firstOrNull{it.span.medicationId==stop.medicationId}?.span?.medicationId ?: stop.medicationId
+        apply(TimelineEdits.moveStop(extra.historyPeriods,projection,stop,med,r,identity(med)))}){stopFor=null}}
     audit?.let{period->AlertDialog(onDismissRequest={auditKey=null},title={Text(stringResource(R.string.period_saved_changes))},
         text={Column(Modifier.verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(8.dp)) {
             projection.raw.filter{it.span.from<(period.until ?: Instant.MAX) && (it.span.until?.let{end->end>period.from} ?: true)}.forEach{raw->

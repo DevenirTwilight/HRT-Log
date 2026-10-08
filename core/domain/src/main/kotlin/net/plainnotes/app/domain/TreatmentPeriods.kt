@@ -161,7 +161,9 @@ object TreatmentPeriods {
     /** §37a: a saved version shorter than this between parts with the same standard joins them. */
     val SUSTAIN:Duration=Duration.ofDays(SustainedPatterns.SUSTAIN_DAYS.toLong())
 
-    fun build(raw:List<RawTreatmentInterval>,zone:ZoneId,withRecords:Set<Long>?=null,userStops:List<TreatmentStop> = emptyList()):TreatmentPeriodProjection {
+    /** [markers]: ranges the user deleted or stopped; their bounds start display periods even where no plan is shown (§37b). */
+    fun build(raw:List<RawTreatmentInterval>,zone:ZoneId,withRecords:Set<Long>?=null,userStops:List<TreatmentStop> = emptyList(),
+              markers:List<Pair<Instant,Instant?>> = emptyList()):TreatmentPeriodProjection {
         require(raw.map{it.span.id}.distinct().size==raw.size)
         require(raw.all{it.span.until==null || it.span.until>it.span.from})
         val lane=lanes(raw)
@@ -208,7 +210,7 @@ object TreatmentPeriods {
             };result.map{it.copy(rawVersionIds=it.rawVersionIds.toList())}
         }
         val starts=standards.groupBy{it.from};val ends=standards.filter{it.until!=null}.groupBy{it.until!!}
-        val boundaries=(starts.keys+ends.keys).sorted();val active=mutableMapOf<Long,TreatmentStandardSpan>()
+        val boundaries=(starts.keys+ends.keys+markers.flatMap{listOfNotNull(it.first,it.second)}).distinct().sorted();val active=mutableMapOf<Long,TreatmentStandardSpan>()
         val segments=boundaries.mapIndexed{i,start->
             ends[start].orEmpty().forEach{active.remove(it.medicationId)}
             starts[start].orEmpty().forEach{active[it.medicationId]=it}

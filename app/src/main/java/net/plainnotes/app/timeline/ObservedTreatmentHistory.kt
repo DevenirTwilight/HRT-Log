@@ -17,7 +17,9 @@ data class HistoricalTreatmentProjection(val observed:List<ObservedTreatment>,va
     val confirmed:List<RawTreatmentInterval> = emptyList(),val coverage:Map<Long,RecordCoverage> = emptyMap(),
     /** Saved plan versions as shown: cut where a user edit lies over them. */
     val saved:List<RawTreatmentInterval> = emptyList(),
-    val user:List<RawTreatmentInterval> = emptyList(),val userStops:List<TreatmentStop> = emptyList())
+    val user:List<RawTreatmentInterval> = emptyList(),val userStops:List<TreatmentStop> = emptyList(),
+    /** Ranges the user deleted or stopped; shown as their own periods so they can be restored or edited. */
+    val markers:List<Pair<Instant,Instant?>> = emptyList())
 
 object ObservedTreatmentHistory {
     private data class Identity(val compound:String,val route:String?,val unit:String,val ester:String?,val formulation:String?)
@@ -162,6 +164,7 @@ object ObservedTreatmentHistory {
             if(r.status in listOf("ON_TIME","LATE"))coverage[r.id]=RecordCoverage(linked?.raw,linked==null && r.id in pendingIds)
         }
         return HistoricalTreatmentProjection(observed,resolved,confirmedSaved.map{it.raw},coverage,real.map{it.raw},user.map{it.raw},
-            userEdits.filter{it.kind==HistoryPeriods.STOP}.map{TreatmentStop(it.medicationId,it.from,it.until)})
+            userEdits.filter{it.kind==HistoryPeriods.STOP}.map{TreatmentStop(it.medicationId,it.from,it.until)},
+            userEdits.filter{it.standard==null}.map{it.from to it.until})
     }
 }
