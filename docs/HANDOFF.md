@@ -15,7 +15,7 @@
 
 实现：`TreatmentPeriods.joinChecks`（合并与诊断共用：no_overlap、compound、unit、route、ester、formulation、frequency_kind、interval、weekly_count、doses、gap_under_30_days、not_stopped_in_app，诊断另加 same_lane），`effective`（更正后的比较标准），`MergeDiagnostics.text`，卡片 ⋮ 菜单“复制合并诊断”（`period-menu:`/`period-diagnostics:`，精简模式隐藏，四语）。
 手动编辑时间线：设计文档 docs/design/timeline-manual-editing.md，待审核，未实现。
-versionCode 21。待做：全量检查 → CI → 签名交付；请用户复制 10-06 那张卡片的诊断文字发回。
+versionCode 21。本机全量检查通过（0 失败，lint、release、manifest 通过）。待做：CI → 签名交付；请用户复制 10-06 那张卡片的诊断文字发回。
 
 ## 上一交付（build 20）：停用期保留 + 时期分段原因（2026-10-08，REQUIREMENTS §36a，完成）
 
