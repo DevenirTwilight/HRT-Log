@@ -9,7 +9,10 @@
 - C schema 8：`history_period_revision.kind/group_key`、迁移 7→8、触发器谓词、备份校验；`editTimeline`/`undoTimelineEdit`；同药用户行不可重叠（HistoryPeriodDataTest 9 项，含 schema 7 备份恢复）。设备迁移测试 MigrationBaselineTest 改到 8 并新增 v7 用例（只在 CI 跑）。
 - D 投影：用户行 > 已确认 > 保存 > 识别；保存版本被裁剪成片段（`SAVED_PIECE_BASE`），用户 PERIOD 边界固定、FILL 可接续、DELETED/STOP 范围无方案（TimelineEditProjectionTest 5 项）。
 
-待做：E 界面（卡片菜单：编辑/拆开/与下一段合并（选标准）/删除/恢复/撤销/诊断；顶部“新建时期”；停用期编辑；并入短版本的单独修改/删除；四语）→ 进程重建/备份恢复测试 → 全量检查、CI → 签名交付 build 23。
+- E 界面：卡片 ⋮ 菜单（编辑、在某天拆开、与下一段合并（标准不同必须选前段/后段/自填）、删除、恢复、撤销我的修改、编辑停用期、复制合并诊断（精简模式隐藏））；时间线顶部“新建时期”；并入的短版本可“单独修改/删除这一段”；被删和停用的范围作为单独的无方案卡片显示，便于恢复；同药重叠在对话框里拦下（TimelineEditUiTest、TimelineEditFlowTest：含重新打开数据库与备份恢复）。
+- “已删除”的含义：只是不再把这段当作任何方案（卡片无方案、History 显示方案未知、资料包计入方案未知）；记录、库存、浓度估算都不受影响；可恢复。
+- 本机全量检查通过：app 213（13 既有跳过）/data 67/reminder 14/domain 58/pk 18/importer 12，0 失败；lint、release、manifest 通过；versionCode 23。
+- 待做：CI → 原正式签名 → 交付。真机未验证：所有编辑对话框和日期选择（Robolectric 下时间线页打开带输入框的对话框不空闲，对话框单测）、导入核对表提示、旧安装 7→8 覆盖升级（迁移只在 CI 模拟器测试）。
 
 ## 上一交付（build 22）：用户诊断查明的原因修复（2026-10-08，REQUIREMENTS §36c，完成）
 
