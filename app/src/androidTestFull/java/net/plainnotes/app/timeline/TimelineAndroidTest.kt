@@ -67,7 +67,8 @@ class TimelineAndroidTest {
         val audit=ui.activity.getString(R.string.period_saved_changes)
         ui.onNodeWithTag("period-timeline").performScrollToNode(hasText(audit))
         ui.onAllNodesWithText(audit).onFirst().performClick()
-        ui.onNodeWithText("3 mg",substring=true).assertIsDisplayed()
+        // The original 3 mg version stays auditable (§37a also notes it on the card while it is shown inside the period).
+        ui.onNode(hasText("3 mg",substring=true) and hasAnyAncestor(isDialog())).assertIsDisplayed()
     }
 
     @Test fun twiceDailyWithPartialDaysAppearsInsideOnePeriodAndOpensAllOriginalRows() {

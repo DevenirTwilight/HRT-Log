@@ -18,7 +18,11 @@ data class TherapyStandard(val compound:String?,val ester:String?,val route:Stri
         return MessageDigest.getInstance("SHA-256").digest(canonical.toByteArray(Charsets.UTF_8)).joinToString(""){"%02x".format(it)}
     }
 }
-data class RawTreatmentInterval(val span:RegimenSpan,val standard:TherapyStandard)
+/** Where a part comes from; decides priority, stops and whether its bounds are fixed (REQUIREMENTS §37). */
+enum class SpanKind{SAVED,CONFIRMED,OBSERVED,USER,FILL}
+/** [sourceId] is the stored row a display piece came from (a saved version cut by a user edit keeps its version ID there). */
+data class RawTreatmentInterval(val span:RegimenSpan,val standard:TherapyStandard,
+    val kind:SpanKind=if(span.id>0)SpanKind.SAVED else SpanKind.OBSERVED,val sourceId:Long=span.id)
 data class TreatmentStandardSpan(val key:String,val medicationId:Long,val from:Instant,val until:Instant?,
     val rawVersionIds:List<Long>,val standard:TherapyStandard,val reconstructed:Boolean)
 data class ClinicalSegment(val key:String,val from:Instant,val until:Instant?,val standardSpanKeys:Set<String>) {
@@ -46,8 +50,9 @@ data class TreatmentPeriodProjection(val zone:ZoneId,val raw:List<RawTreatmentIn
     fun joinChecks(a:TreatmentStandardSpan,b:TreatmentStandardSpan):List<JoinCheck> {
         val byId=raw.associateBy{it.span.id}
         val last=byId.getValue(a.rawVersionIds.last());val first=byId.getValue(b.rawVersionIds.first())
+        val explicit=a.until!=null && stops.any{it.medicationId==a.medicationId && it.from>=a.until && it.from<=b.from && last.kind!=SpanKind.SAVED}
         return listOf(JoinCheck("same_lane",a.medicationId==b.medicationId,"${a.medicationId} / ${b.medicationId}"))+
-            TreatmentPeriods.joinChecks(a.standard,a.until,last,first,effective[first.span.id] ?: first.standard)
+            TreatmentPeriods.joinChecks(a.standard,a.until,last,first,effective[first.span.id] ?: first.standard,explicit)
     }
     /** REQUIREMENTS §36: what changed at the start of [period] compared with the end of the previous one. */
     fun changes(period:DisplayPeriod):List<PeriodChange> {
@@ -108,7 +113,8 @@ object TreatmentPeriods {
     val CORRECTION:Duration=Duration.ofHours(1)
 
     /** The join conditions, in order; two consecutive parts of one lane join only when all pass. */
-    fun joinChecks(prev:TherapyStandard,prevUntil:Instant?,prevLast:RawTreatmentInterval,next:RawTreatmentInterval,nextStandard:TherapyStandard):List<JoinCheck> {
+    fun joinChecks(prev:TherapyStandard,prevUntil:Instant?,prevLast:RawTreatmentInterval,next:RawTreatmentInterval,nextStandard:TherapyStandard,
+                   explicitStop:Boolean=false):List<JoinCheck> {
         val a=prev;val b=nextStandard;val sameEntry=prevLast.span.medicationId==next.span.medicationId
         fun known(x:String?,y:String?)=x==y || (sameEntry && (x==null || y==null))
         fun loose(x:String?,y:String?)=x==null || y==null || x==y
@@ -125,7 +131,9 @@ object TreatmentPeriods {
             JoinCheck("weekly_count",a.weeklyCount==b.weeklyCount,"${a.weeklyCount} / ${b.weeklyCount}"),
             JoinCheck("doses",doseKey(a.doses)==doseKey(b.doses),"${a.doses} / ${b.doses}"),
             JoinCheck("gap_under_30_days",gap!=null && gap<JOIN_GAP,"${gap?.toMillis()} ms"),
-            JoinCheck("not_stopped_in_app",!(prevLast.span.id>0 && gap!=null && gap>=MIN_STOP),"last part ${prevLast.span.id}, gap ${gap?.toMillis()} ms"))
+            JoinCheck("not_stopped_in_app",!(prevLast.kind==SpanKind.SAVED && gap!=null && gap>=MIN_STOP),"last part ${prevLast.span.id} ${prevLast.kind}, gap ${gap?.toMillis()} ms"),
+            JoinCheck("no_stop_set_by_user",!explicitStop,"$explicitStop"),
+            JoinCheck("not_a_user_boundary",prevLast.kind!=SpanKind.USER && next.kind!=SpanKind.USER,"${prevLast.kind} / ${next.kind}"))
     }
     /** A gap shorter than this between two parts with the same standard does not end the period (same as SustainedPatterns.GAP_DAYS). */
     val JOIN_GAP:Duration=Duration.ofDays(SustainedPatterns.GAP_DAYS.toLong())
@@ -150,11 +158,14 @@ object TreatmentPeriods {
         return groups.flatMap{(ids,_)->ids.map{it to ids.min()}}.toMap()
     }
 
-    fun build(raw:List<RawTreatmentInterval>,zone:ZoneId,withRecords:Set<Long>?=null):TreatmentPeriodProjection {
+    /** §37a: a saved version shorter than this between parts with the same standard joins them. */
+    val SUSTAIN:Duration=Duration.ofDays(SustainedPatterns.SUSTAIN_DAYS.toLong())
+
+    fun build(raw:List<RawTreatmentInterval>,zone:ZoneId,withRecords:Set<Long>?=null,userStops:List<TreatmentStop> = emptyList()):TreatmentPeriodProjection {
         require(raw.map{it.span.id}.distinct().size==raw.size)
         require(raw.all{it.span.until==null || it.span.until>it.span.from})
         val lane=lanes(raw)
-        val effective=mutableMapOf<Long,TherapyStandard>()
+        val effective=mutableMapOf<Long,TherapyStandard>();val absorbed=mutableMapOf<Long,TherapyStandard>()
         val standards=raw.groupBy{lane.getValue(it.span.medicationId)}.toSortedMap().flatMap{(med,rows)->
             val result=mutableListOf<TreatmentStandardSpan>()
             var currentIds=mutableListOf<Long>()
@@ -164,17 +175,26 @@ object TreatmentPeriods {
             for(i in sorted.indices.reversed()) {
                 val r=sorted[i];val next=sorted.getOrNull(i+1);val end=r.span.until
                 val window=if(withRecords==null)CORRECTION else MIN_STOP
-                val correction=r.span.id>0 && end!=null && next!=null && Duration.between(r.span.from,end)<window &&
-                    !next.span.from.isBefore(end) && Duration.between(end,next.span.from)<window && withRecords?.contains(r.span.id)!=true
+                val correction=r.kind==SpanKind.SAVED && end!=null && next!=null && Duration.between(r.span.from,end)<window &&
+                    !next.span.from.isBefore(end) && Duration.between(end,next.span.from)<window && withRecords?.contains(r.sourceId)!=true
                 effective[r.span.id]=if(correction)effective.getValue(next!!.span.id) else r.standard
             }
-            sorted.forEach{r->
+            fun stopBetween(from:Instant?,to:Instant)=from!=null && userStops.any{lane[it.medicationId]==med && it.from>=from && it.from<=to}
+            sorted.forEachIndexed{i,r->
                 val prev=result.lastOrNull()
                 require(prev==null || prev.until!=null && prev.until<=r.span.from){"Overlapping recorded regimen"}
                 // §36/36a: parts with the same standard continue one period across a short gap whatever their source,
-                // except after a plan stopped in the app for a day or more.
-                val standardHere=effective.getValue(r.span.id)
-                if(prev!=null && last!=null && joinChecks(prev.standard,prev.until,last!!,r,standardHere).all{it.passed}) {
+                // except after a plan stopped in the app for a day or more, or a stop the user set.
+                var standardHere=effective.getValue(r.span.id)
+                // §37a: a saved version shorter than 14 days between parts with the same standard is shown inside them.
+                val next=sorted.getOrNull(i+1);val end=r.span.until
+                if(r.kind==SpanKind.SAVED && end!=null && next!=null && prev!=null && last!=null && Duration.between(r.span.from,end)<SUSTAIN &&
+                    !sameStandard(prev.standard,standardHere) && sameStandard(prev.standard,effective.getValue(next.span.id)) &&
+                    joinChecks(prev.standard,prev.until,last!!,r,prev.standard,stopBetween(prev.until,r.span.from)).all{it.passed} &&
+                    joinChecks(prev.standard,end,r,next,effective.getValue(next.span.id),stopBetween(end,next.span.from)).all{it.passed}) {
+                    absorbed[r.span.id]=r.standard;standardHere=prev.standard;effective[r.span.id]=prev.standard
+                }
+                if(prev!=null && last!=null && joinChecks(prev.standard,prev.until,last!!,r,standardHere,stopBetween(prev.until,r.span.from)).all{it.passed}) {
                     currentIds.add(r.span.id)
                     fun pick(a:String?,b:String?)=b ?: a
                     val standard=standardHere.copy(compound=pick(prev.standard.compound,standardHere.compound),ester=pick(prev.standard.ester,standardHere.ester),
@@ -200,10 +220,13 @@ object TreatmentPeriods {
         val lastById=raw.associateBy{it.span.id}
         val stops=standards.groupBy{it.medicationId}.flatMap{(med,spans)->spans.sortedBy{it.from}.let{list->list.mapIndexedNotNull{i,span->
             val end=span.until ?: return@mapIndexedNotNull null
-            if(lastById.getValue(span.rawVersionIds.last()).span.id<=0)return@mapIndexedNotNull null
+            if(lastById.getValue(span.rawVersionIds.last()).kind!=SpanKind.SAVED)return@mapIndexedNotNull null
             val next=list.getOrNull(i+1)
             if(next!=null && Duration.between(end,next.from)<MIN_STOP)null else TreatmentStop(med,end,next?.from)
         }}}
-        return TreatmentPeriodProjection(zone,raw,standards,segments,periods,stops,effective)
+        // Stops the user set (REQUIREMENTS §37b) replace a derived stop starting at the same instant.
+        val explicit=userStops.map{it.copy(medicationId=lane[it.medicationId] ?: it.medicationId)}
+        val allStops=(explicit+stops.filter{d->explicit.none{it.medicationId==d.medicationId && it.from==d.from}}).sortedWith(compareBy({it.from},{it.medicationId}))
+        return TreatmentPeriodProjection(zone,raw,standards,segments,periods,allStops,effective,absorbed)
     }
 }

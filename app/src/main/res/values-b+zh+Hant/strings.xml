@@ -910,4 +910,7 @@
     <string name="period_menu">更多</string>
     <string name="period_copy_diagnostics">複製合併診斷</string>
     <string name="period_diagnostics_copied">診斷已複製</string>
+    <string name="period_short_saved">%1$s 曾短暫儲存為：%2$s（約 %3$s）</string>
+    <plurals name="period_duration_hours"><item quantity="other">%d 小時</item></plurals>
+    <plurals name="period_duration_days"><item quantity="other">%d 天</item></plurals>
 </resources>

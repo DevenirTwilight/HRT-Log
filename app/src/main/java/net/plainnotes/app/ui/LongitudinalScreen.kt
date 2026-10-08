@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
@@ -149,6 +150,16 @@ import java.time.*
                                     modifier=Modifier.testTag("period-confirm:${observed.interval.span.id}")){Text(stringResource(R.string.period_confirm))}
                             }
                             if(span.standard.kind!="OBSERVED" && span.standard.slotIdentityUnknown)Text(stringResource(R.string.period_slot_unknown),style=MaterialTheme.typography.bodySmall)
+                        }
+                        // §37a: short saved versions shown inside this period, with what they actually said.
+                        projection.raw.filter{r->r.kind==SpanKind.SAVED && r.span.from>=period.from && (period.until==null || r.span.from<period.until) &&
+                            projection.effective[r.span.id]?.let{it!=r.standard}==true}.forEach{r->
+                            val hours=java.time.Duration.between(r.span.from,r.span.until ?: r.span.from).toHours().coerceAtLeast(1)
+                            val length=if(hours<48)pluralStringResource(R.plurals.period_duration_hours,hours.toInt(),hours.toInt()) else pluralStringResource(R.plurals.period_duration_days,(hours/24).toInt(),(hours/24).toInt())
+                            val what=(if(simple)"" else r.standard.doses.distinct().map{formatDose(it,r.standard.unit)}.joinToString(" / ")+" · ")+
+                                stringResource(R.string.period_frequency_days,r.standard.doses.size,r.standard.interval)
+                            Text(stringResource(R.string.period_short_saved,formatDate(r.span.from.atZone(zone).toLocalDate()),what,length),
+                                style=MaterialTheme.typography.bodySmall,modifier=Modifier.testTag("period-short:${r.span.id}"))
                         }
                         if(period.segments.size>1)Text(stringResource(R.string.period_same_day),style=MaterialTheme.typography.bodySmall)
                         if(standards.any{span->extra.regimens.any{it.id in span.rawVersionIds && it.origin=="LEGACY_RULE"}})Text(stringResource(R.string.epoch_reconstructed),style=MaterialTheme.typography.bodySmall)

@@ -910,4 +910,7 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="period_menu">More</string>
     <string name="period_copy_diagnostics">Copy merge diagnostics</string>
     <string name="period_diagnostics_copied">Diagnostics copied</string>
+    <string name="period_short_saved">On %1$s this was briefly saved as %2$s (about %3$s)</string>
+    <plurals name="period_duration_hours"><item quantity="one">%d hour</item><item quantity="other">%d hours</item></plurals>
+    <plurals name="period_duration_days"><item quantity="one">%d day</item><item quantity="other">%d days</item></plurals>
 </resources>

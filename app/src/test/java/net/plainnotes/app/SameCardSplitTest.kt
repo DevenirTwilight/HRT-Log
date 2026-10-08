@@ -91,7 +91,7 @@ class SameCardSplitTest {
         val resumed=v.projection.periods.last()
         val text=net.plainnotes.app.timeline.MergeDiagnostics.text(v,extra,resumed,21)
         assertTrue(text,text.contains("NOT JOINED, first failing check = not_stopped_in_app"))
-        assertTrue(text,text.contains("source=app_saved_plan origin=APP"))
+        assertTrue(text,text.contains("source=app_saved_plan version=") && text.contains("origin=APP"))
         assertTrue(text,text.contains("stop_in_app medication_id=$id"))
         // The 10-06 boundary itself joined: diagnostics of the first period with a plan has nothing failing before it.
         val first=net.plainnotes.app.timeline.MergeDiagnostics.text(v,extra,v.projection.periods.first(),21)

@@ -22,7 +22,8 @@ object MergeDiagnostics {
         fun source(r:RawTreatmentInterval):String {
             val id=r.span.id
             return when {
-                id>0->extra.regimens.firstOrNull{it.id==id}.let{v->"app_saved_plan origin=${v?.origin} zone=${v?.zone} records_inside=${inside[id] ?: 0}"}
+                r.kind==SpanKind.SAVED->extra.regimens.firstOrNull{it.id==r.sourceId}.let{v->"app_saved_plan version=${r.sourceId} origin=${v?.origin} zone=${v?.zone} records_inside=${inside[r.sourceId] ?: 0}"}
+                r.kind==SpanKind.USER || r.kind==SpanKind.FILL->"user_edit kind=${r.kind}"
                 ObservedTreatmentHistory.isConfirmedSpan(id)->confirmedRows.entries.firstOrNull{(base,_)->id<=base && id>base-100}?.value
                     .let{row->"confirmed period_key=${row?.period_key} revision=${row?.revision} from_date=${row?.from_date} until_date=${row?.until_date} zone=${row?.zone}"}
                 else->observed[id].let{o->"recognized_pending sources=${o?.records?.map{it.origin}?.distinct()?.sorted()} zones=${o?.records?.mapNotNull{it.taken_zone}?.distinct()?.sorted()}"}
@@ -36,7 +37,7 @@ object MergeDiagnostics {
                 add("  part id=${r.span.id} medication_id=${r.span.medicationId} source=${source(r)}")
                 add("    from=${time(r.span.from)} until=${time(r.span.until)}")
                 add("    standard: ${standard(r.standard)}")
-                p.effective[r.span.id]?.takeIf{it!=r.standard}?.let{add("    compared_as (correction): ${standard(it)}")}
+                p.effective[r.span.id]?.takeIf{it!=r.standard}?.let{add("    compared_as (${if(r.span.id in p.absorbed)"shorter than 14 days, joined" else "correction"}): ${standard(it)}")}
             }
             p.stops.filter{it.from>=d.from && (d.until==null || it.from<d.until)}.forEach{add("  stop_in_app medication_id=${it.medicationId} from=${time(it.from)} until=${time(it.until)}")}
         }

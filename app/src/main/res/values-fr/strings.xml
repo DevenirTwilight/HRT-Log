@@ -910,4 +910,7 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="period_menu">Plus</string>
     <string name="period_copy_diagnostics">Copier le diagnostic de fusion</string>
     <string name="period_diagnostics_copied">Diagnostic copié</string>
+    <string name="period_short_saved">Le %1$s, brièvement enregistré comme %2$s (environ %3$s)</string>
+    <plurals name="period_duration_hours"><item quantity="one">%d heure</item><item quantity="other">%d heures</item></plurals>
+    <plurals name="period_duration_days"><item quantity="one">%d jour</item><item quantity="other">%d jours</item></plurals>
 </resources>

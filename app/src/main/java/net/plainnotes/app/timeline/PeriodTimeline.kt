@@ -54,15 +54,16 @@ internal fun mergedCoverage(projection:TreatmentPeriodProjection,historical:Hist
     val remap=mutableMapOf<Long,RawTreatmentInterval>()
     projection.standards.forEach{span->
         val members=span.rawVersionIds.mapNotNull(rawById::get).sortedBy{it.span.from}
-        val anchors=members.filter{it.span.id>0 || ObservedTreatmentHistory.isConfirmedSpan(it.span.id)}
+        val anchors=members.filter{it.kind!=SpanKind.OBSERVED}
         members.filter{it !in anchors}.forEach{m->
             val before=anchors.lastOrNull{it.span.from<m.span.from}
             if(before!=null && anchors.any{it.span.from>m.span.from})remap[m.span.id]=before
         }
     }
-    if(remap.isEmpty())return historical.coverage
     val observedOf=historical.observed.flatMap{o->o.records.map{it.id to o.interval.span.id}}.toMap()
-    return historical.coverage.mapValues{(id,c)->if(c.pending)observedOf[id]?.let(remap::get)?.let{RecordCoverage(it,false)} ?: c else c}
+    // §36c/37a: a corrected or absorbed saved version is judged by the standard it is shown with.
+    fun shown(c:RecordCoverage)=c.interval?.let{i->projection.effective[i.span.id]?.takeIf{it!=i.standard}?.let{RecordCoverage(i.copy(standard=it),false)}} ?: c
+    return historical.coverage.mapValues{(id,c)->shown(if(c.pending)observedOf[id]?.let(remap::get)?.let{RecordCoverage(it,false)} ?: c else c)}
 }
 
 /** Current confirmed past periods as projection inputs; span IDs are display-only negatives, never stored or frozen. */
@@ -90,7 +91,7 @@ object PeriodTimelineProjection {
             val future=if(at!=null)at>now else date>today
             val period=if(future)null else if(at!=null)projection.periodAt(at) else projection.periodOn(date)
             val event=PeriodEvent(key,kind,at,date,source,period?.key,
-                if(at!=null && !future)projection.exactAt(at).filter{it.span.id>0}.map{it.span.id}.toSet() else emptySet(),at==null)
+                if(at!=null && !future)projection.exactAt(at).filter{it.kind==SpanKind.SAVED}.map{it.sourceId}.toSet() else emptySet(),at==null)
             if(future)upcoming+=event else events+=event
         }
         extra.labs.forEach{add("lab:${it.id}",EventKind.LAB,Instant.ofEpochMilli(it.sampled_utc),null,EventSource.Lab(it))}

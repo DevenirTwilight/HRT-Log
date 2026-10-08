@@ -72,19 +72,24 @@ class TreatmentPeriodsTest {
     }
     @Test fun sameDayMultiMedicationChangesAndABAHaveOneDisplayTransitionAndAllExactFacts() {
         val afternoon=b.plusSeconds(7*3600);val evening=b.plusSeconds(12*3600)
-        val view=TreatmentPeriods.build(listOf(raw(1,a,b),raw(2,b,evening,standard.copy(doses=listOf(3.0))),raw(3,evening,null),
+        // Recorded parts (negative IDs): every exact change stays a segment.
+        val view=TreatmentPeriods.build(listOf(raw(-1,a,b),raw(-2,b,evening,standard.copy(doses=listOf(3.0))),raw(-3,evening,null),
             raw(4,a,afternoon,med=2),raw(5,afternoon,null,standard.copy(doses=listOf(4.0)),2)),zone)
         assertEquals(2,view.periods.size);assertEquals(3,view.periods.last().segments.size)
-        assertEquals(setOf(2L,4L),view.exactAt(b.plusSeconds(3600)).map{it.span.id}.toSet())
-        assertEquals(setOf(3L,5L),view.exactAt(evening).map{it.span.id}.toSet())
+        assertEquals(setOf(-2L,4L),view.exactAt(b.plusSeconds(3600)).map{it.span.id}.toSet())
+        assertEquals(setOf(-3L,5L),view.exactAt(evening).map{it.span.id}.toSet())
         assertEquals(view.periods.last(),view.periodOn(b.atZone(zone).toLocalDate()))
+        // §37a: the same A→B→A as saved plan versions, B shorter than 14 days, is shown inside A; the exact facts remain.
+        val saved=TreatmentPeriods.build(listOf(raw(1,a,b),raw(2,b,evening,standard.copy(doses=listOf(3.0))),raw(3,evening,null)),zone)
+        assertEquals(1,saved.periods.size);assertEquals(listOf(3.0),saved.absorbed.getValue(2).doses)
+        assertEquals(setOf(2L),saved.exactAt(b.plusSeconds(3600)).map{it.span.id}.toSet())
     }
     @Test fun monthBoundaryDSTAndZonePolicyUseExactInstants() {
         val berlin=ZoneId.of("Europe/Berlin")
         val from=Instant.parse("2026-03-28T23:00:00Z");val cut=Instant.parse("2026-03-29T13:00:00Z");val next=Instant.parse("2026-03-31T22:00:00Z")
-        val view=TreatmentPeriods.build(listOf(raw(1,from,cut),raw(2,cut,next,standard.copy(doses=listOf(3.0))),raw(3,next,null)),berlin)
+        val view=TreatmentPeriods.build(listOf(raw(-1,from,cut),raw(-2,cut,next,standard.copy(doses=listOf(3.0))),raw(-3,next,null)),berlin)
         assertEquals(2,view.periods.size);assertEquals(from,view.periods.first().from)
-        assertEquals(1L,view.exactAt(cut.minusNanos(1)).single().span.id);assertEquals(2L,view.exactAt(cut).single().span.id)
+        assertEquals(-1L,view.exactAt(cut.minusNanos(1)).single().span.id);assertEquals(-2L,view.exactAt(cut).single().span.id)
         assertEquals(LocalDate.of(2026,4,1),view.periods.last().from.atZone(berlin).toLocalDate())
     }
     @Test fun additionReplacementAndStoppingOneOfTwoMedicationPlansChangeTheCombination() {

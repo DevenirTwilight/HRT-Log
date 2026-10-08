@@ -51,7 +51,7 @@ object ObservedTreatmentHistory {
             var pieces=listOf(c.from to (c.until ?: Instant.MAX))
             real.filter{related(it,c.medicationId,identity(c.standard))}.forEach{s->val f=s.raw.span.from;val u=s.raw.span.until ?: Instant.MAX
                 pieces=pieces.flatMap{(a,b)->if(f>=b || u<=a)listOf(a to b) else buildList{if(a<f)add(a to f);if(u<b)add(u to b)}}}
-            pieces.filter{(a,b)->a<b}.mapIndexed{i,(a,b)->Saved(RawTreatmentInterval(RegimenSpan(c.spanId-i,c.medicationId,a,b.takeIf{it!=Instant.MAX},true),c.standard),identity(c.standard))}
+            pieces.filter{(a,b)->a<b}.mapIndexed{i,(a,b)->Saved(RawTreatmentInterval(RegimenSpan(c.spanId-i,c.medicationId,a,b.takeIf{it!=Instant.MAX},true),c.standard,SpanKind.CONFIRMED,c.spanId),identity(c.standard))}
         }
         val saved=real+confirmedSaved
         val idsByIdentity=saved.filter{it.identity!=null}.groupBy{it.identity!!}.mapValues{(_,rows)->rows.map{it.raw.span.medicationId}.distinct()}
