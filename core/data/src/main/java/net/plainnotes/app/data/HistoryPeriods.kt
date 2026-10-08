@@ -6,12 +6,23 @@ import org.json.JSONObject
 import java.time.LocalDate
 import java.time.ZoneId
 
+/** One row of a timeline edit (REQUIREMENTS §37b); [standard] only for PERIOD and FILL; [until] is exclusive. */
+data class TimelineEditRow(val kind:String,val medicationId:Long,val standard:TherapyStandard?,val from:LocalDate,val until:LocalDate?,val zone:ZoneId,
+                           val identityJson:String,val note:String="")
+
 /** JSON forms and state of confirmed past periods. */
 object HistoryPeriods {
     const val ORIGIN="OBSERVED_USER_CONFIRMED"
     const val CONFIRMED="CONFIRMED"
     const val REVOKED="REVOKED"
     const val EXTRA="EXTRA"
+    /** §37b user edits (origin USER_EDIT): fixed-bounds period, joinable fill, deleted range, stop set by the user. */
+    const val USER_ORIGIN="USER_EDIT"
+    const val PERIOD="PERIOD"
+    const val FILL="FILL"
+    const val DELETED="DELETED"
+    const val STOP="STOP"
+    val USER_KINDS=listOf(PERIOD,FILL,DELETED,STOP)
 
     fun standardJson(s:TherapyStandard):String=JSONObject().put("version",1).put("compound",s.compound ?: JSONObject.NULL).put("ester",s.ester ?: JSONObject.NULL)
         .put("route",s.route ?: JSONObject.NULL).put("unit",s.unit ?: JSONObject.NULL).put("formulation",s.formulation ?: JSONObject.NULL)
@@ -32,12 +43,16 @@ object HistoryPeriods {
     /** Latest revision of every period; revoked periods are returned too so the caller can show them as unconfirmed again. */
     fun latest(rows:List<HistoryPeriodEntity>)=rows.groupBy{it.period_key}.values.map{it.maxBy{r->r.revision}}
 
-    fun confirmed(rows:List<HistoryPeriodEntity>)=latest(rows).filter{it.state==CONFIRMED}
+    fun confirmed(rows:List<HistoryPeriodEntity>)=latest(rows).filter{it.state==CONFIRMED && it.kind==CONFIRMED}
+    /** Active user edits (REQUIREMENTS §37b), highest priority on the timeline. */
+    fun userEdits(rows:List<HistoryPeriodEntity>)=latest(rows).filter{it.state==CONFIRMED && it.kind in USER_KINDS}
 
     fun validate(row:HistoryPeriodEntity) {
-        require(row.state in listOf(CONFIRMED,REVOKED) && row.origin==ORIGIN && row.revision>=1)
-        java.util.UUID.fromString(row.period_key);ZoneId.of(row.zone)
+        require(row.state in listOf(CONFIRMED,REVOKED) && row.revision>=1)
+        require(if(row.kind==CONFIRMED)row.origin==ORIGIN else row.kind in USER_KINDS && row.origin==USER_ORIGIN)
+        java.util.UUID.fromString(row.period_key);row.group_key?.let{java.util.UUID.fromString(it)};ZoneId.of(row.zone)
         val from=LocalDate.parse(row.from_date);row.until_date?.let{require(LocalDate.parse(it)>from)}
-        readStandard(row.standard_json);JSONObject(row.identity_json);JSONObject(row.evidence_json)
+        if(row.kind in listOf(DELETED,STOP))require(JSONObject(row.standard_json).length()==0) else readStandard(row.standard_json)
+        JSONObject(row.identity_json);JSONObject(row.evidence_json)
     }
 }

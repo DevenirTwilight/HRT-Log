@@ -44,8 +44,10 @@ const val BACKFILL_MAX_DAYS=731L
         if(row.state==HistoryPeriods.CONFIRMED) {
             val from=LocalDate.parse(row.from_date);val until=row.until_date?.let(LocalDate::parse)
             // Two confirmed periods of one medication never overlap.
-            require(HistoryPeriods.confirmed(all).none{other->other.period_key!=row.period_key && other.medication_id==row.medication_id &&
-                (until==null || LocalDate.parse(other.from_date)<until) && (other.until_date==null || from<LocalDate.parse(other.until_date))}){"Overlapping confirmed period"}
+            // Two confirmed periods of one medication never overlap; nor do two user edits (§37b rule c, same medicine only).
+            val peers=if(row.kind==HistoryPeriods.CONFIRMED)HistoryPeriods.confirmed(all) else HistoryPeriods.userEdits(all)
+            require(peers.none{other->other.period_key!=row.period_key && other.medication_id==row.medication_id &&
+                (until==null || LocalDate.parse(other.from_date)<until) && (other.until_date==null || from<LocalDate.parse(other.until_date))}){"Overlapping period"}
         }
         return dao.insertHistoryPeriod(row.copy(id=0))
     }
@@ -79,6 +81,35 @@ const val BACKFILL_MAX_DAYS=731L
         require(LocalDate.parse(a.from_date)<LocalDate.parse(b.from_date))
         appendPeriod(dao,b.copy(id=0,revision=b.revision+1,state=HistoryPeriods.REVOKED,created_utc=now.toEpochMilli()))
         appendPeriod(dao,a.copy(id=0,revision=a.revision+1,until_date=b.until_date,created_utc=now.toEpochMilli()))
+    }
+    /**
+     * One timeline edit (REQUIREMENTS §37b): revokes the user edits in [replace], then appends [rows] under one new group
+     * key. Records, saved plan versions and confirmed periods are never written. Returns the group key.
+     */
+    suspend fun editTimeline(replace:List<String>,rows:List<TimelineEditRow>,now:Instant=Instant.now()):String=transaction { dao ->
+        require(rows.isNotEmpty())
+        val group=java.util.UUID.randomUUID().toString()
+        replace.distinct().forEach{key->val c=current(dao.historyPeriods(),key);require(c.kind in HistoryPeriods.USER_KINDS)
+            if(c.state==HistoryPeriods.CONFIRMED)appendPeriod(dao,c.copy(id=0,revision=c.revision+1,state=HistoryPeriods.REVOKED,created_utc=now.toEpochMilli()))}
+        rows.forEach{r->
+            require(r.kind in HistoryPeriods.USER_KINDS && (r.standard!=null)==(r.kind in listOf(HistoryPeriods.PERIOD,HistoryPeriods.FILL)))
+            val evidence=org.json.JSONObject().put("replaces",org.json.JSONArray(replace.distinct())).put("note",r.note)
+            appendPeriod(dao,HistoryPeriodEntity(period_key=java.util.UUID.randomUUID().toString(),revision=1,state=HistoryPeriods.CONFIRMED,medication_id=r.medicationId,
+                identity_json=r.identityJson,standard_json=r.standard?.let(HistoryPeriods::standardJson) ?: "{}",from_date=r.from.toString(),until_date=r.until?.toString(),
+                zone=r.zone.id,evidence_json=evidence.toString(),origin=HistoryPeriods.USER_ORIGIN,created_utc=now.toEpochMilli(),kind=r.kind,group_key=group))
+        };group
+    }
+    /** Undoes one edit: its rows are revoked and the user edits it replaced come back. Nothing is deleted. */
+    suspend fun undoTimelineEdit(group:String,now:Instant=Instant.now())=transaction { dao ->
+        val all=dao.historyPeriods()
+        val active=HistoryPeriods.userEdits(all).filter{it.group_key==group};require(active.isNotEmpty()){"Nothing to undo"}
+        val replaced=active.flatMap{r->org.json.JSONObject(r.evidence_json).optJSONArray("replaces")?.let{a->(0 until a.length()).map(a::getString)}.orEmpty()}.distinct()
+        active.forEach{appendPeriod(dao,it.copy(id=0,revision=it.revision+1,state=HistoryPeriods.REVOKED,created_utc=now.toEpochMilli()))}
+        replaced.forEach{key->
+            val rows=dao.historyPeriods().filter{it.period_key==key};val last=rows.maxBy{it.revision}
+            if(last.state==HistoryPeriods.REVOKED)rows.filter{it.state==HistoryPeriods.CONFIRMED}.maxByOrNull{it.revision}?.let{
+                appendPeriod(dao,it.copy(id=0,revision=last.revision+1,created_utc=now.toEpochMilli()))}
+        }
     }
     /** The user's own "extra dose" statement on a taken record. */
     suspend fun setExtra(recordId:Long,extra:Boolean,now:Instant=Instant.now())=transaction { dao ->

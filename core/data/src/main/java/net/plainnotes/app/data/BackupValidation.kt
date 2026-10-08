@@ -96,7 +96,8 @@ internal object BackupValidation {
             fun t(k:String)=c.getString(c.getColumnIndexOrThrow(k))
             fun n(k:String)=c.getLong(c.getColumnIndexOrThrow(k))
             HistoryPeriods.validate(HistoryPeriodEntity(n("id"),t("period_key"),n("revision").toInt(),t("state"),n("medication_id"),t("identity_json"),t("standard_json"),
-                t("from_date"),if(c.isNull(c.getColumnIndexOrThrow("until_date")))null else t("until_date"),t("zone"),t("evidence_json"),t("origin"),n("created_utc")))
+                t("from_date"),if(c.isNull(c.getColumnIndexOrThrow("until_date")))null else t("until_date"),t("zone"),t("evidence_json"),t("origin"),n("created_utc"),
+                t("kind"),if(c.isNull(c.getColumnIndexOrThrow("group_key")))null else t("group_key")))
         }}
         fun rejectIf(sql: String) = db.query(sql).use { require(!it.moveToFirst()) { "Invalid restored state" } }
         rejectIf("SELECT 1 FROM supply_transaction t JOIN supply_container c ON c.id=t.container_id LEFT JOIN dose_record d ON d.id=t.dose_record_id WHERE t.used_delta=0 OR t.operation_id='' OR t.kind NOT IN ('ADJUST','CONSUME','REVERSE') OR (t.kind='ADJUST' AND (t.dose_record_id IS NOT NULL OR t.reversal_of_id IS NOT NULL)) OR (t.kind='CONSUME' AND (t.used_delta<=0 OR t.reversal_of_id IS NOT NULL OR t.dose_record_id IS NULL OR t.dose_revision IS NULL OR t.dose_revision<1 OR t.dose_revision>d.revision)) OR (t.dose_record_id IS NOT NULL AND d.medication_id!=c.medication_id) LIMIT 1")

@@ -56,4 +56,11 @@ val migration6To7 = object : Migration(6,7) {
         db.execSQL("CREATE TABLE IF NOT EXISTS record_annotation (record_id INTEGER NOT NULL, kind TEXT NOT NULL, created_utc INTEGER NOT NULL, PRIMARY KEY(record_id, kind), FOREIGN KEY(record_id) REFERENCES dose_record(id) ON UPDATE NO ACTION ON DELETE RESTRICT)")
     }
 }
-fun allMigrations(today: () -> LocalDate = LocalDate::now): Array<Migration> = arrayOf(migration1To2(today), migration2To3, migration3To4, migration4To5, migration5To6, migration6To7)
+/** REQUIREMENTS §37b: user edits of the timeline share the append-only period table. Existing rows are confirmed periods. */
+val migration7To8 = object : Migration(7,8) {
+    override fun migrate(db:SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE history_period_revision ADD COLUMN kind TEXT NOT NULL DEFAULT 'CONFIRMED'")
+        db.execSQL("ALTER TABLE history_period_revision ADD COLUMN group_key TEXT")
+    }
+}
+fun allMigrations(today: () -> LocalDate = LocalDate::now): Array<Migration> = arrayOf(migration1To2(today), migration2To3, migration3To4, migration4To5, migration5To6, migration6To7, migration7To8)

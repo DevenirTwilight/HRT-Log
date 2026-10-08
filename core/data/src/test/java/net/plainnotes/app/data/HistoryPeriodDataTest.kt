@@ -98,4 +98,58 @@ class HistoryPeriodDataTest {
         repo.restoreBackup(old,pwd);assertTrue(repo.historyPeriods().isEmpty());assertTrue(repo.annotations().isEmpty());assertEquals(1,repo.records().size)
         try{repo.restoreBackup(tamper{it.getJSONObject("tables").remove("record_annotation")},pwd);fail()}catch(_:Exception){}
     }
+
+    // --- REQUIREMENTS §37b user edits ---
+    private fun row(kind:String,id:Long,from:LocalDate,until:LocalDate?,standard:TherapyStandard?=twice)=TimelineEditRow(kind,id,standard.takeIf{kind in listOf(HistoryPeriods.PERIOD,HistoryPeriods.FILL)},from,until,zone,"{}")
+
+    @Test fun userEditsAreAppendOnlyUndoableAndNeverTouchRecordsOrPlans()=runBlocking {
+        val id=medication();val r=record(id);val before=db.dao().recordById(r)
+        val created=repo.editTimeline(emptyList(),listOf(row(HistoryPeriods.PERIOD,id,d0,d0.plusDays(30))))
+        assertEquals(1,HistoryPeriods.userEdits(repo.historyPeriods()).size)
+        // Editing replaces the period; undoing the edit brings the replaced one back.
+        val key=HistoryPeriods.userEdits(repo.historyPeriods()).single().period_key
+        val edited=repo.editTimeline(listOf(key),listOf(row(HistoryPeriods.PERIOD,id,d0,d0.plusDays(40),twice.copy(interval=2,doses=listOf(1.0)))))
+        assertEquals(listOf(d0.plusDays(40).toString()),HistoryPeriods.userEdits(repo.historyPeriods()).map{it.until_date})
+        repo.undoTimelineEdit(edited)
+        assertEquals(listOf(key),HistoryPeriods.userEdits(repo.historyPeriods()).map{it.period_key})
+        // Delete and restore.
+        val deleted=repo.editTimeline(listOf(key),listOf(row(HistoryPeriods.DELETED,id,d0,d0.plusDays(30))))
+        assertEquals(listOf(HistoryPeriods.DELETED),HistoryPeriods.userEdits(repo.historyPeriods()).map{it.kind})
+        repo.undoTimelineEdit(deleted)
+        assertEquals(listOf(HistoryPeriods.PERIOD),HistoryPeriods.userEdits(repo.historyPeriods()).map{it.kind})
+        repo.undoTimelineEdit(created);assertTrue(HistoryPeriods.userEdits(repo.historyPeriods()).isEmpty())
+        // Every step is a new row; records, rules and plan versions are untouched.
+        assertTrue(repo.historyPeriods().size>=8);assertEquals(before,db.dao().recordById(r));assertTrue(db.dao().regimens().isEmpty());assertTrue(db.dao().rules().isEmpty())
+        try{db.openHelper.writableDatabase.execSQL("DELETE FROM history_period_revision");fail()}catch(_:Exception){}
+        try{repo.undoTimelineEdit(created);fail()}catch(_:Exception){}
+    }
+
+    @Test fun overlapIsRefusedForTheSameMedicineOnly()=runBlocking {
+        val a=medication();val b=db.dao().insertMedication(med.copy(name="Synthetic CPA",molecule="CPA",route=null))
+        repo.editTimeline(emptyList(),listOf(row(HistoryPeriods.PERIOD,a,d0,d0.plusDays(30))))
+        try{repo.editTimeline(emptyList(),listOf(row(HistoryPeriods.STOP,a,d0.plusDays(10),d0.plusDays(20))));fail()}catch(_:IllegalArgumentException){}
+        repo.editTimeline(emptyList(),listOf(row(HistoryPeriods.PERIOD,b,d0.plusDays(10),d0.plusDays(20),twice.copy(compound="CPA",ester=null,route=null))))
+        // Confirmed periods and user edits are different layers: a user edit may lie over a confirmed period.
+        confirm(a,from=d0,until=d0.plusDays(60))
+        assertEquals(2,HistoryPeriods.userEdits(repo.historyPeriods()).size);assertEquals(1,HistoryPeriods.confirmed(repo.historyPeriods()).size)
+        try{repo.editTimeline(emptyList(),listOf(row(HistoryPeriods.DELETED,a,d0,d0.plusDays(5),twice)));fail()}catch(_:IllegalArgumentException){}
+    }
+
+    @Test fun userEditsSurviveBackupRestoreAndSchemaSevenBackupsStillRestore()=runBlocking {
+        val id=medication();record(id);confirm(id)
+        repo.editTimeline(emptyList(),listOf(row(HistoryPeriods.STOP,id,d0.plusDays(200),d0.plusDays(210))))
+        val periods=repo.historyPeriods();val pwd="synthetic-pass".toCharArray();val backup=repo.exportBackup(pwd)
+        repo.restoreBackup(backup,pwd);assertEquals(periods,repo.historyPeriods())
+        fun tamper(edit:(JSONObject)->Unit)=BackupCodec.encrypt(JSONObject(String(BackupCodec.decrypt(backup,pwd))).also(edit).toString().toByteArray(),pwd)
+        // A schema 7 backup has no kind or group_key: its rows are confirmed periods.
+        val v7=tamper{o->o.put("schema",7);val rows=o.getJSONObject("tables").getJSONArray("history_period_revision")
+            val keep=org.json.JSONArray();for(i in 0 until rows.length())rows.getJSONObject(i).let{if(it.getString("kind")=="CONFIRMED"){it.remove("kind");it.remove("group_key");keep.put(it)}}
+            o.getJSONObject("tables").put("history_period_revision",keep)}
+        repo.restoreBackup(v7,pwd)
+        assertEquals(1,HistoryPeriods.confirmed(repo.historyPeriods()).size);assertTrue(HistoryPeriods.userEdits(repo.historyPeriods()).isEmpty())
+        // A user edit with a standard on a DELETED row, or an unknown kind, is rejected.
+        listOf<(JSONObject)->Unit>({it.getJSONObject("tables").getJSONArray("history_period_revision").let{a->(0 until a.length()).map(a::getJSONObject).first{r->r.getString("kind")=="STOP"}.put("kind","MAYBE")}},
+            {it.getJSONObject("tables").getJSONArray("history_period_revision").let{a->(0 until a.length()).map(a::getJSONObject).first{r->r.getString("kind")=="STOP"}.put("origin","OBSERVED_USER_CONFIRMED")}})
+            .forEach{edit->try{repo.restoreBackup(tamper(edit),pwd);fail()}catch(_:Exception){}}
+    }
 }

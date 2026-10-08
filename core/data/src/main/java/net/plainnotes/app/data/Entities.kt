@@ -288,7 +288,11 @@ data class LabContextEntity(@PrimaryKey(autoGenerate=true)val id:Long=0,val lab_
     indices=[Index(value=["period_key","revision"],unique=true),Index("medication_id")])
 data class HistoryPeriodEntity(@PrimaryKey(autoGenerate=true)val id:Long=0,val period_key:String,val revision:Int,val state:String,val medication_id:Long,
     val identity_json:String,val standard_json:String,val from_date:String,val until_date:String?,val zone:String,val evidence_json:String,
-    val origin:String=HistoryPeriods.ORIGIN,val created_utc:Long)
+    val origin:String=HistoryPeriods.ORIGIN,val created_utc:Long,
+    /** REQUIREMENTS §37b (schema 8): CONFIRMED, PERIOD, FILL, DELETED or STOP. */
+    @androidx.room.ColumnInfo(defaultValue="CONFIRMED") val kind:String=HistoryPeriods.CONFIRMED,
+    /** Rows written by one edit share a key so the edit is undone as a whole. */
+    val group_key:String?=null)
 
 /** The user's own statement about a record (only EXTRA for now). The dose record itself is never changed. */
 @Entity(tableName="record_annotation",primaryKeys=["record_id","kind"],foreignKeys=[ForeignKey(entity=RecordEntity::class,parentColumns=["id"],childColumns=["record_id"],onDelete=ForeignKey.RESTRICT)])
