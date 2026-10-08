@@ -1,0 +1,585 @@
+{
+  "production_sha": "6bb8fac2e46cc931f955e19a5f2a003a20b5c21e",
+  "audit_tool": "includes WindowInspector popup roots; test-only change after production commit",
+  "configs": [
+    {
+      "locale": "en",
+      "scale": 1.0,
+      "width": 320,
+      "theme": "LIGHT",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "en",
+      "scale": 1.0,
+      "width": 320,
+      "theme": "DARK",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "en",
+      "scale": 1.0,
+      "width": 320,
+      "theme": "HIGH",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "en",
+      "scale": 1.0,
+      "width": 411,
+      "theme": "LIGHT",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "en",
+      "scale": 1.0,
+      "width": 411,
+      "theme": "DARK",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "en",
+      "scale": 1.0,
+      "width": 411,
+      "theme": "HIGH",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "en",
+      "scale": 1.3,
+      "width": 320,
+      "theme": "LIGHT",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "en",
+      "scale": 1.3,
+      "width": 320,
+      "theme": "DARK",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "en",
+      "scale": 1.3,
+      "width": 320,
+      "theme": "HIGH",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "en",
+      "scale": 1.3,
+      "width": 411,
+      "theme": "LIGHT",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "en",
+      "scale": 1.3,
+      "width": 411,
+      "theme": "DARK",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "en",
+      "scale": 1.3,
+      "width": 411,
+      "theme": "HIGH",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "en",
+      "scale": 2.0,
+      "width": 320,
+      "theme": "LIGHT",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "en",
+      "scale": 2.0,
+      "width": 320,
+      "theme": "DARK",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "en",
+      "scale": 2.0,
+      "width": 320,
+      "theme": "HIGH",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "en",
+      "scale": 2.0,
+      "width": 411,
+      "theme": "LIGHT",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "en",
+      "scale": 2.0,
+      "width": 411,
+      "theme": "DARK",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "en",
+      "scale": 2.0,
+      "width": 411,
+      "theme": "HIGH",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rCN",
+      "scale": 1.0,
+      "width": 320,
+      "theme": "LIGHT",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rCN",
+      "scale": 1.0,
+      "width": 320,
+      "theme": "DARK",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rCN",
+      "scale": 1.0,
+      "width": 320,
+      "theme": "HIGH",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rCN",
+      "scale": 1.0,
+      "width": 411,
+      "theme": "LIGHT",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rCN",
+      "scale": 1.0,
+      "width": 411,
+      "theme": "DARK",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rCN",
+      "scale": 1.0,
+      "width": 411,
+      "theme": "HIGH",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rCN",
+      "scale": 1.3,
+      "width": 320,
+      "theme": "LIGHT",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rCN",
+      "scale": 1.3,
+      "width": 320,
+      "theme": "DARK",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rCN",
+      "scale": 1.3,
+      "width": 320,
+      "theme": "HIGH",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rCN",
+      "scale": 1.3,
+      "width": 411,
+      "theme": "LIGHT",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rCN",
+      "scale": 1.3,
+      "width": 411,
+      "theme": "DARK",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rCN",
+      "scale": 1.3,
+      "width": 411,
+      "theme": "HIGH",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rCN",
+      "scale": 2.0,
+      "width": 320,
+      "theme": "LIGHT",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rCN",
+      "scale": 2.0,
+      "width": 320,
+      "theme": "DARK",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rCN",
+      "scale": 2.0,
+      "width": 320,
+      "theme": "HIGH",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rCN",
+      "scale": 2.0,
+      "width": 411,
+      "theme": "LIGHT",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rCN",
+      "scale": 2.0,
+      "width": 411,
+      "theme": "DARK",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rCN",
+      "scale": 2.0,
+      "width": 411,
+      "theme": "HIGH",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rTW",
+      "scale": 1.0,
+      "width": 320,
+      "theme": "LIGHT",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rTW",
+      "scale": 1.0,
+      "width": 320,
+      "theme": "DARK",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rTW",
+      "scale": 1.0,
+      "width": 320,
+      "theme": "HIGH",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rTW",
+      "scale": 1.0,
+      "width": 411,
+      "theme": "LIGHT",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rTW",
+      "scale": 1.0,
+      "width": 411,
+      "theme": "DARK",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rTW",
+      "scale": 1.0,
+      "width": 411,
+      "theme": "HIGH",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rTW",
+      "scale": 1.3,
+      "width": 320,
+      "theme": "LIGHT",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rTW",
+      "scale": 1.3,
+      "width": 320,
+      "theme": "DARK",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rTW",
+      "scale": 1.3,
+      "width": 320,
+      "theme": "HIGH",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rTW",
+      "scale": 1.3,
+      "width": 411,
+      "theme": "LIGHT",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rTW",
+      "scale": 1.3,
+      "width": 411,
+      "theme": "DARK",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rTW",
+      "scale": 1.3,
+      "width": 411,
+      "theme": "HIGH",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rTW",
+      "scale": 2.0,
+      "width": 320,
+      "theme": "LIGHT",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rTW",
+      "scale": 2.0,
+      "width": 320,
+      "theme": "DARK",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rTW",
+      "scale": 2.0,
+      "width": 320,
+      "theme": "HIGH",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rTW",
+      "scale": 2.0,
+      "width": 411,
+      "theme": "LIGHT",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rTW",
+      "scale": 2.0,
+      "width": 411,
+      "theme": "DARK",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "zh-rTW",
+      "scale": 2.0,
+      "width": 411,
+      "theme": "HIGH",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "fr-rFR",
+      "scale": 1.0,
+      "width": 320,
+      "theme": "LIGHT",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "fr-rFR",
+      "scale": 1.0,
+      "width": 320,
+      "theme": "DARK",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "fr-rFR",
+      "scale": 1.0,
+      "width": 320,
+      "theme": "HIGH",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "fr-rFR",
+      "scale": 1.0,
+      "width": 411,
+      "theme": "LIGHT",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "fr-rFR",
+      "scale": 1.0,
+      "width": 411,
+      "theme": "DARK",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "fr-rFR",
+      "scale": 1.0,
+      "width": 411,
+      "theme": "HIGH",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "fr-rFR",
+      "scale": 1.3,
+      "width": 320,
+      "theme": "LIGHT",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "fr-rFR",
+      "scale": 1.3,
+      "width": 320,
+      "theme": "DARK",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "fr-rFR",
+      "scale": 1.3,
+      "width": 320,
+      "theme": "HIGH",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "fr-rFR",
+      "scale": 1.3,
+      "width": 411,
+      "theme": "LIGHT",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "fr-rFR",
+      "scale": 1.3,
+      "width": 411,
+      "theme": "DARK",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "fr-rFR",
+      "scale": 1.3,
+      "width": 411,
+      "theme": "HIGH",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "fr-rFR",
+      "scale": 2.0,
+      "width": 320,
+      "theme": "LIGHT",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "fr-rFR",
+      "scale": 2.0,
+      "width": 320,
+      "theme": "DARK",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "fr-rFR",
+      "scale": 2.0,
+      "width": 320,
+      "theme": "HIGH",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "fr-rFR",
+      "scale": 2.0,
+      "width": 411,
+      "theme": "LIGHT",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "fr-rFR",
+      "scale": 2.0,
+      "width": 411,
+      "theme": "DARK",
+      "cases": 3,
+      "findings": []
+    },
+    {
+      "locale": "fr-rFR",
+      "scale": 2.0,
+      "width": 411,
+      "theme": "HIGH",
+      "cases": 3,
+      "findings": []
+    }
+  ],
+  "renders": 216,
+  "findings": 0,
+  "note": "Synthetic Robolectric API35; not physical-device acceptance. Each details dialog PNG verified present."
+}

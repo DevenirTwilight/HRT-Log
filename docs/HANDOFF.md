@@ -7,7 +7,9 @@
 - [x] [医疗档案长期设计](design/medical-records-roadmap.md) 完整写入定位、五类功能、独立附件安全门槛、阶段 A–E 与非目标；Roadmap/BACKLOG 同步。**规划中，未实施**；没有模块/Schema/复诊数据变更。
 - [x] 修改前诊断与稳定性基线通过（UserDiagnosticRegressionTest、SameCardSplitTest、PeriodStabilityTest）。
 - [x] 时间线源码精简与入口测试已写，聚焦回归通过；诊断移至测试源码，更多菜单保留用药记录和方案详情、去内部 ID，去重复编辑标记，保留简洁推断说明。首轮两条旧 UI 断言因旧长推断文案出现而失败，已改简洁新文案；ImportedTimelineUiTest 11 与 TimelineEditUiTest 2 通过。新菜单四语/320和411dp/浅深色字号2共16项通过，法文 didOverflowHeight 曾给出小数像素误报，采用与原布局回归一致的实际行边界断言后通过；仍断言无省略/遗漏/越边界和48dp触控。全部历史诊断生成器原测试保留。
-- [ ] 待四语大字体/窄屏菜单回归、审计和 full 构建/lint/CI；不签名、发布或上传 APK。
+- [x] 本机最终全量 app295（282通过/13既有或可选跳过）、data72、reminder14，0失败；常规布局64项（新增菜单16），时期V2/Flow/稳定性和冻结事实通过。Full Debug/Release、两个测试APK、manifest无INTERNET成功；Lint0错误/131警告。JVM检查也完成，未改domain/pk/importer代码。
+- [x] 专项审计72配置×3case=216渲染，严重信号0。首次发现审计工具漏掉Popup窗口导致详情action_failed，不算通过；补WindowInspector根/截图采集后四语言全矩阵重跑成功，校验每配置详情截图存在。合成前后图和JSON已入仓库，见 [验收说明](timeline-ui-cleanup-verification.md)。当前可选审计50case；上一轮48case/1152渲染是历史证据，不改写。
+- [ ] 最新完整GitHub CI（含API35迁移/SQLCipher/原生PDF/时间线/伪装重启）尚待核对；此前6bb8fac JVM通过，其android/device仍运行，不声明已全绿。新提交只补审计工具和证据，不改变应用源码。不签名、发布或上传APK；真机仍待验收。
 
 ## 完成：按钮/大字体、历史回归与 Backlog 核对（2026-10-08，REQUIREMENTS §41）
 

@@ -240,6 +240,7 @@ class ButtonAuditTest(private val locale: String, private val scale: Float, priv
             try { File(out, file).outputStream().use { b.compress(Bitmap.CompressFormat.PNG, 100, it) } } finally { b.recycle() }
         }
         save(act.window.decorView, "$name.png")
+        android.view.inspector.WindowInspector.getGlobalWindowViews().filter{it.isShown && it!==act.window.decorView}.forEachIndexed{i,v->save(v,"${name}__window$i.png")}
         ShadowDialog.getLatestDialog()?.takeIf { it.isShowing }?.window?.decorView?.let { save(it, "${name}__dialog.png") }
     }
 
@@ -250,10 +251,12 @@ class ButtonAuditTest(private val locale: String, private val scale: Float, priv
     /** Compose roots of the activity and of every shown dialog, read without waiting for idle (dialog text fields never idle under Robolectric). */
     private fun roots(): List<androidx.compose.ui.platform.ViewRootForTest> {
         val views = mutableListOf<android.view.View>(act.window.decorView)
+        // DropdownMenu is a separate Popup window, not a Dialog or an activity child.
+        views += android.view.inspector.WindowInspector.getGlobalWindowViews().filter{it.isShown}
         ShadowDialog.getShownDialogs().filter { it.isShowing }.mapNotNullTo(views) { it.window?.decorView }
         val found = mutableListOf<androidx.compose.ui.platform.ViewRootForTest>()
         fun walk(v: android.view.View) { if (v is androidx.compose.ui.platform.ViewRootForTest) found += v; if (v is android.view.ViewGroup) for (i in 0 until v.childCount) walk(v.getChildAt(i)) }
-        views.forEach(::walk); return found
+        views.distinct().forEach(::walk); return found.distinct()
     }
     private fun all(n: SemanticsNode): List<SemanticsNode> = listOf(n) + n.children.flatMap(::all)
     private fun isControl(n: SemanticsNode) = n.config.contains(SemanticsActions.OnClick) || n.config.contains(SemanticsProperties.ToggleableState) || n.config.contains(SemanticsProperties.Selected)
