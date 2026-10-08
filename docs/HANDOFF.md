@@ -8,7 +8,7 @@
 - `TreatmentPeriods`：保存版本（正 ID）结束后若有空白即为停用，不再按 30 天规则合并；新增 `stops`（停用起止）和 `changes(period)`（分段原因）。记录空白（负 ID）仍按 < 30 天合并。
 - 时期卡片：停用行 `period-stop:<药物>:<时间>`“X 在应用中停用：起 – 止/至今”，以及“与上一时期相比”原因（非精简模式），四语。
 - 调整 build 19 的两个域测试：短空白合并的用例改为记录片段（负 ID）；导入片段用负 ID。
-- versionCode 20。待做：全量本机检查 → CI → 原正式签名 → 交付。
+- versionCode 20。本机全量检查通过（0 失败；lint、full debug/release、测试 APK、manifest 通过）。待做：CI → 原正式签名 → 交付。
 
 ## 上一交付（build 19）：10-06 前后同一方案合并（2026-10-08，REQUIREMENTS §36，完成）
 
