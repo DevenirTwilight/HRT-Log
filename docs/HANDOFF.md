@@ -1,6 +1,6 @@
 # 交接说明：工作进度与开发指南
 
-## 进行中：10-06 前后同一方案合并 build 19（2026-10-08，REQUIREMENTS §36）
+## 当前最新交付：10-06 前后同一方案合并 build 19（2026-10-08，REQUIREMENTS §36，完成）
 
 用户反馈：build 18 时间线仍在 10-06 前后分成两个时期；前一段原为“待确认”，确认后仍不合并。开工时分支最新 94fa348，无其他会话改代码。
 
@@ -27,9 +27,11 @@
 - (B) 把导入记录改挂到应用条目，保留来源 key、冻结快照、revision +1。会改动记录行。
 - 推荐 (A)。build 19 显示层已不依赖条目合并。
 
-versionCode 19。本机全量检查通过：app 186（13 既有跳过）/data 64/reminder 14/domain 57/pk 18/importer 12，0 失败；lint、full debug/release、测试 APK、manifest 通过。待做：CI → 原正式签名 build 19 → 交付。
+versionCode 19。本机全量检查通过：app 186（13 既有跳过）/data 64/reminder 14/domain 57/pk 18/importer 12，0 失败；lint、full debug/release、测试 APK、manifest 通过。CI [37770387069](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37770387069)（16d291d，与签名构建代码相同）全部 success。
 
-## 上一交付：历史记录按时期归属 build 18（2026-10-08，REQUIREMENTS §35/§35a，完成）
+交付：正式 full `hrt-log-build19-full-signed.apk`，23,416,027 bytes，SHA256 `ae1e6aa9bcddd37adaf86d22fd14e090516925ed8a413da5f0a4dbf20140ab1d`；原证书 `989ba045…79b1`、v2/v3、16KB 对齐（8 个 native 库）、非 debug、versionCode 19、无 INTERNET。签名前确认备份仓库 private；临时 clone/ZIP/JKS/密码已删除。tmpfiles.org 连接被重置，通过会话文件直接发送。覆盖安装即可，无 schema 变化。待用户：告知是否有导入新建的药物条目（名称和大致记录数），并决定条目合并方案 A/B；真机上确认显示是否合并为一个时期。
+
+## 上一交付（build 18）：历史记录按时期归属（2026-10-08，REQUIREMENTS §35/§35a，完成）
 
 设计 [history-period-attribution](design/history-period-attribution.md)：schema7 新增只追加的 `history_period_revision`（用户确认的过去时期，含撤销）和 `record_annotation`（用户明确的“额外”）；记录归属与“额外/剂量不同/方案未知”标签在 core/domain 实时投影，不落库；“长期变化”列出 O1–O4 四种判定方案及参数，阈值待用户定；确认页与 History 草图、四语文案、迁移与备份兼容、测试计划，以及 10 个待决定问题。确认 `ImportedTimelineUiTest:151` 期待“计划外”×2 是错误预期，设计里给出改法。用户已批复（§35a：O1 14 天、空白 30 天，其余按建议）。另一会话已停止；本会话在 86ce231 之上开发。最新交付仍是 build17。
 
