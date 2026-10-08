@@ -1,6 +1,6 @@
 # 交接说明：工作进度与开发指南
 
-## 进行中：build 24（2026-10-08，REQUIREMENTS §38；第二版提示分两步：先修回归，再做回收站）
+## 已交付：build 24（2026-10-08，REQUIREMENTS §38；第二版提示分两步：先修回归，再做回收站）
 
 ### 第一步：时期稳定性回归（已完成、全绿、单独提交）
 
@@ -18,14 +18,17 @@
 
 **用户数据：** 那条整天删除仍在用户库里（只追加，不会自动撤销）。升级到 build 24（schema 9）后它自动进入 设置 › 回收站；在那里点“恢复”即可让 10-06 回到一段。
 
-### 第二步：回收站和彻底删除（REQUIREMENTS §39，代码完成、本机全绿，待 CI 和交付）
+### 第二步：回收站和彻底删除（REQUIREMENTS §39，完成）
 
 - 数据层（23cdf4d）：schema 9 `trash_item`（kind/ref/item_date/deleted_utc/payload_json/state）；迁移 8→9 与旧备份恢复都会 backfill（软删除记录、生效的 DELETED 组）；`purge_permit` 只给彻底删除用户自建时期行开口。`Trash.kt` 快照类（里程碑、化验+上下文、预约+问题+资料包、回顾、症状、评分、备注）恢复时按原主键重插；引用类（记录、时期、修正）。`NotesRepository.trash/deletePeriod/deleteCorrection/restoreTrash/purgeTrash`；被引用的记录、覆盖系统方案的删除 → 永久隐藏（HIDDEN）。
 - 界面：设置 › 回收站（`RecycleBin.kt`），恢复/彻底删除/清空，二次确认写“无法恢复”、真删或永久隐藏、旧备份仍含；精简模式隐藏药名剂量。时期卡片“删除”“删除这一段”“删除我的修改”进回收站；“已删除（可恢复）”卡片与“恢复”菜单取消。
 - 时期显示 ID 改用该 period_key 最小行 id（`HistoryPeriods.stableId`），恢复后时期完全一致。
 - 测试：TrashDataTest 5、RecycleBinUiTest 2、PeriodStabilityTest 加回收站操作（里程碑删/恢复/彻底删、化验、备注/评分、服药记录删/恢复、时期删/恢复），MigrationBaselineTest v8→9（CI 模拟器）。
 - 本机：app 220（13 既有跳过）/data 72/reminder 14/domain 58/pk 18/importer 12，0 失败；lint、debug/release、manifest 通过。versionCode 24。
-- 下一步：推送 → CI 三个 job 全绿 → 原签名交付 build 24。
+- CI [37824386424](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37824386424)（da4031c）jvm/android/device-tests 全部 success（含模拟器 8→9 迁移、PeriodStabilityTest）。
+- 交付：`hrt-log-build24-full-signed.apk`，23,506,139 bytes，SHA256 `47186ba227c54d4002f7fca09ba1b52e9f684faf321e60b40a8b0caaf678b076`；原证书、v2/v3、8 个 .so 16KB 对齐、versionCode 24、非 debug、无 INTERNET；签名前确认备份 private，签名材料已删除；会话文件发送。覆盖安装自动迁移到 schema 9。
+- 真机未验证：回收站对话框的滚动和二次确认、旧安装 8→9 覆盖升级（只在 CI 模拟器测试）、用户那条 10-06 整天删除进回收站后恢复（合成数据已测）。
+- 待用户：在 设置 › 回收站 恢复 10-06 那条删除，确认合并为一段。
 
 ## 上一交付（build 23）（10-06 修复 + 时期编辑，2026-10-08，REQUIREMENTS §37，完成）
 
