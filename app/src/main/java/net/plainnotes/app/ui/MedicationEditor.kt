@@ -10,6 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -54,9 +55,12 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
     var active by remember { mutableStateOf(m?.active ?: true) }
     var notifications by remember { mutableStateOf(m?.notifications_on ?: true) }
     var siteRotation by remember { mutableStateOf(m?.site_rotation ?: false) }
+    // §37a: on the import review sheet, the schedule recognised from the imported records is the prefill.
+    val recognized = edit.recognized?.takeIf { review != null && edit.rule == null }
     var kind by remember { mutableStateOf(edit.rule?.kind?.let(RuleKind::valueOf) ?: RuleKind.EVERY_N_DAYS) }
-    var interval by remember { mutableStateOf(edit.rule?.interval?.toString() ?: if (review != null && prefill?.optBoolean("daily") != true) "" else "1") }
-    val times = remember { mutableStateListOf<LocalTime>().apply { addAll(edit.times.map { LocalTime.parse(it.local_time) }.sorted().ifEmpty { prefillTimes.ifEmpty { listOf(LocalTime.of(9, 0)) } }) } }
+    var interval by remember { mutableStateOf(edit.rule?.interval?.toString() ?: recognized?.interval?.toString() ?: if (review != null && prefill?.optBoolean("daily") != true) "" else "1") }
+    val times = remember { mutableStateListOf<LocalTime>().apply { addAll(edit.times.map { LocalTime.parse(it.local_time) }.sorted().ifEmpty { recognized?.times ?: prefillTimes.ifEmpty { listOf(LocalTime.of(9, 0)) } }) } }
+    var confirmMismatch by remember { mutableStateOf(false) }
     val timeDoses = remember { mutableStateListOf<Double?>().apply { addAll(if(edit.times.isEmpty()) times.map{null} else edit.times.sortedBy{it.local_time}.map{it.dose_override}) } }
     val weekdays = remember { mutableStateListOf<DayOfWeek>().apply { edit.rule?.let { r -> addAll(DayOfWeek.entries.filter { r.weekday_mask and (1 shl (it.value - 1)) != 0 }) } } }
     // PK inputs (estradiol only)
@@ -78,18 +82,28 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
     val valid = (!isE2 || route in E2_ROUTES) && name.isNotBlank() && doseV != null && capV != null && expV != -1 && soonV != null && lateV != null && intervalV != null &&
         (kind == RuleKind.EVERY_N_HOURS || times.isNotEmpty()) && (kind != RuleKind.WEEKLY || weekdays.isNotEmpty())
 
+    fun save() {
+        if (valid) onSave(MedicationDraft(
+            MedicationEntity(m?.id ?: 0, name.trim(), molecule, if (isE2) route else null, unit, doseV!!, capV!!, expV, soonV, lateV, siteRotation, if (siteRotation) "LR" else null, notifications, active, m?.sort_order ?: 0, null),
+            if (isE2) ester else null, kind, intervalV!!, times.toList(), weekdays.toSet(),
+            if (isE2) ProfileEntity(m?.id ?: 0, ester, "", slTier.takeIf { route == "SUBLINGUAL" }, gelProduct.takeIf { route == "GEL" }, gelSite.takeIf { route == "GEL" },
+                resolvedArea.takeIf { route == "GEL" }, patchRate.toDoubleOrNull()?.takeIf { route == "PATCH" && it > 0 }) else null,
+            resizeContainers = resize, timeDoses = timeDoses.toList()))
+    }
+    if (confirmMismatch && recognized != null) AlertDialog(onDismissRequest = { confirmMismatch = false }, modifier = Modifier.testTag("schedule-mismatch"),
+        text = { Text(stringResource(R.string.review_schedule_mismatch, stringResource(R.string.period_frequency_days, recognized.times.size, recognized.interval),
+            if (kind == RuleKind.EVERY_N_DAYS) stringResource(R.string.period_frequency_days, times.size, intervalV ?: 0) else choiceLabel(kind.name) + " " + interval)) },
+        confirmButton = { Button(onClick = { confirmMismatch = false; save() }) { Text(stringResource(R.string.review_schedule_save_anyway)) } },
+        dismissButton = { TextButton(onClick = { confirmMismatch = false }) { Text(stringResource(R.string.review_schedule_back)) } })
     val body: @Composable () -> Unit = {
         Scaffold(topBar = {
             TopAppBar(title = { Text(stringResource(if (m == null) R.string.add_medication else R.string.edit_medication)) },
                 navigationIcon = { IconButton(onClick = onDismiss) { Icon(Icons.Outlined.Close, stringResource(R.string.cancel)) } },
                 actions = { TextButton(onClick = {
                     tried = true
-                    if (valid) onSave(MedicationDraft(
-                        MedicationEntity(m?.id ?: 0, name.trim(), molecule, if (isE2) route else null, unit, doseV!!, capV!!, expV, soonV, lateV, siteRotation, if (siteRotation) "LR" else null, notifications, active, m?.sort_order ?: 0, null),
-                        if (isE2) ester else null, kind, intervalV!!, times.toList(), weekdays.toSet(),
-                        if (isE2) ProfileEntity(m?.id ?: 0, ester, "", slTier.takeIf { route == "SUBLINGUAL" }, gelProduct.takeIf { route == "GEL" }, gelSite.takeIf { route == "GEL" },
-                            resolvedArea.takeIf { route == "GEL" }, patchRate.toDoubleOrNull()?.takeIf { route == "PATCH" && it > 0 }) else null,
-                        resizeContainers = resize, timeDoses = timeDoses.toList()))
+                    // §37a: a schedule clearly different from the imported records needs an explicit confirmation.
+                    val differs = recognized != null && (kind != RuleKind.EVERY_N_DAYS || intervalV != recognized.interval || times.size != recognized.times.size)
+                    if (valid && differs) confirmMismatch = true else save()
                 }) { Text(stringResource(R.string.save)) } })
         }) { pad ->
             Column(Modifier.padding(pad).fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -133,6 +147,8 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
                         Text(stringResource(if (route == "PATCH") R.string.pk_unit_patch else R.string.pk_unit_mg), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
                 }
                 SectionCard(stringResource(R.string.section_schedule)) {
+                    recognized?.let { r -> Text(stringResource(R.string.review_schedule_recognized, stringResource(R.string.period_frequency_days, r.times.size, r.interval)),
+                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.tertiary, modifier = Modifier.testTag("schedule-recognized")) }
                     SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
                         RuleKind.entries.forEachIndexed { i, k ->
                             SegmentedButton(selected = kind == k, onClick = { kind = k }, shape = SegmentedButtonDefaults.itemShape(i, RuleKind.entries.size)) {

@@ -913,4 +913,8 @@
     <string name="period_short_saved">%1$s 曾短暫儲存為：%2$s（約 %3$s）</string>
     <plurals name="period_duration_hours"><item quantity="other">%d 小時</item></plurals>
     <plurals name="period_duration_days"><item quantity="other">%d 天</item></plurals>
+    <string name="review_schedule_recognized">由匯入紀錄推定：%1$s，請核對。</string>
+    <string name="review_schedule_mismatch">匯入紀錄顯示%1$s，但你要儲存的是%2$s。仍然儲存嗎？</string>
+    <string name="review_schedule_save_anyway">仍然儲存</string>
+    <string name="review_schedule_back">返回修改</string>
 </resources>

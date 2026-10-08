@@ -913,4 +913,8 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="period_short_saved">Le %1$s, brièvement enregistré comme %2$s (environ %3$s)</string>
     <plurals name="period_duration_hours"><item quantity="one">%d heure</item><item quantity="other">%d heures</item></plurals>
     <plurals name="period_duration_days"><item quantity="one">%d jour</item><item quantity="other">%d jours</item></plurals>
+    <string name="review_schedule_recognized">Déduit des prises importées : %1$s. Merci de vérifier.</string>
+    <string name="review_schedule_mismatch">Les prises importées indiquent %1$s, mais vous enregistrez %2$s. Enregistrer quand même ?</string>
+    <string name="review_schedule_save_anyway">Enregistrer quand même</string>
+    <string name="review_schedule_back">Revenir</string>
 </resources>

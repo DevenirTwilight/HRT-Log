@@ -17,7 +17,9 @@ import net.plainnotes.app.pk.CalibrationMode
 data class ScheduleSummary(val kind:RuleKind,val interval:Int,val weekdays:Set<DayOfWeek>,val times:List<LocalTime>,val dose:Double?=null,val timeDoses:List<Double?> = emptyList())
 data class NotesState(val medications:List<MedicationEntity> = emptyList(),val slots:List<TimelineEntry> = emptyList(),val appointments:List<AppointmentEntity> = emptyList(),val error:Int?=null,val loading:Boolean=true,
                       val schedules:Map<Long,ScheduleSummary> = emptyMap(),val profiles:Map<Long,ProfileEntity> = emptyMap(),val calendarStart:LocalDate=LocalDate.now(),val ruleSnapshots:Map<Long,String> = emptyMap())
-data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEntity?,val rule:RuleEntity?,val times:List<TimeEntity>)
+/** [recognized]: schedule recognised from imported history, offered on the import review sheet (REQUIREMENTS §37a). */
+data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEntity?,val rule:RuleEntity?,val times:List<TimeEntity>,
+                          val recognized:net.plainnotes.app.timeline.RecognizedSchedule?=null)
 @HiltViewModel class NotesViewModel @Inject constructor(repository:NotesRepository,private val reminders:ReminderCoordinator,
     @dagger.hilt.android.qualifiers.ApplicationContext private val app:android.content.Context):ViewModel() {
     // One activity owns one data space; an old activity must never follow a shell switch.
@@ -67,7 +69,8 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     fun edit(m:MedicationEntity?)=viewModelScope.launch {try {
         val r=m?.let{repo.rules().lastOrNull{r->r.medication_id==it.id&&r.effective_until_utc==null}}
         val t=if(r==null)emptyList()else repo.transaction{it.times(r.id)}
-        editor.value=EditMedication(m,m?.let{repo.profile(it.id)},r,t)
+        val recognized=if(m?.needs_review!=null && r==null)net.plainnotes.app.timeline.ScheduleRecognition.of(extra.value.records.filter{it.medication_id==m.id},java.time.ZoneId.systemDefault()) else null
+        editor.value=EditMedication(m,m?.let{repo.profile(it.id)},r,t,recognized)
     }catch(e:CancellationException){throw e}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)} }
     fun closeEditor(){editor.value=null}
     fun save(d:net.plainnotes.app.ui.MedicationDraft)=change {repo.saveMedication(d.medication,d.ester,d.kind,d.interval,d.times,d.weekdays,pk=d.pk,resizeContainers=d.resizeContainers,timeDoses=d.timeDoses);editor.value=null}
