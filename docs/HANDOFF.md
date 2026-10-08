@@ -1,6 +1,6 @@
 # 交接说明：工作进度与开发指南
 
-## 进行中：合并诊断 + 卡片相同却分段的修复 build 21（2026-10-08，REQUIREMENTS §36b）
+## 当前最新交付：合并诊断 + 卡片相同却分段的修复 build 21（2026-10-08，REQUIREMENTS §36b，完成）
 
 用户：build 20 下只有一种药，10-06 两张卡片药名/剂量/单位/频率相同仍分段（原因行用户未填写）。要求加“复制合并诊断”并逐项验证可能原因。
 
@@ -15,7 +15,9 @@
 
 实现：`TreatmentPeriods.joinChecks`（合并与诊断共用：no_overlap、compound、unit、route、ester、formulation、frequency_kind、interval、weekly_count、doses、gap_under_30_days、not_stopped_in_app，诊断另加 same_lane），`effective`（更正后的比较标准），`MergeDiagnostics.text`，卡片 ⋮ 菜单“复制合并诊断”（`period-menu:`/`period-diagnostics:`，精简模式隐藏，四语）。
 手动编辑时间线：设计文档 docs/design/timeline-manual-editing.md，待审核，未实现。
-versionCode 21。本机全量检查通过（0 失败，lint、release、manifest 通过）。待做：CI → 签名交付；请用户复制 10-06 那张卡片的诊断文字发回。
+versionCode 21。本机全量检查通过（0 失败，lint、release、manifest 通过）。首次 CI 37787162220 的设备测试失败：`TimelineAndroidTest` 按药名滚动，新增的“与上一时期相比”行（在后面的空白卡片上）也含药名，滚动停在那里。改为按频率文字滚动（5529b62），CI [37802706968](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37802706968) 全部 success。应用代码自 2b38f3a 未变，签名用的就是该构建。
+- 交付：`hrt-log-build21-full-signed.apk`，SHA256 `f3b196f779cda1618d8f8f1fa969f9b314a773649878bc7453b55dd830799978`；原证书、v2/v3、16KB 对齐、versionCode 21、无 INTERNET；签名前确认备份 private，签名材料已删除；会话文件发送。覆盖安装，无 schema 变化。
+- 下一步：用户在 10-06 那张卡片 ⋮ → 复制合并诊断，粘贴发回；手动编辑时间线设计待审核。
 
 ## 上一交付（build 20）：停用期保留 + 时期分段原因（2026-10-08，REQUIREMENTS §36a，完成）
 
