@@ -97,6 +97,7 @@ class SameCardSplitTest {
         val first=net.plainnotes.app.timeline.MergeDiagnostics.text(v,extra,v.projection.periods.first(),21)
         assertTrue(first,first.contains("recognized_pending sources=[IMPORT_HT]") && !first.contains("NOT JOINED"))
         // No intake details: no source keys, record IDs or notes.
-        assertFalse(text.contains("ht:") || text.contains("synthetic-split") || text.contains("record"))
+        // Only a count of records per saved version is shown, never which records.
+        assertFalse(text.contains("ht:") || text.contains("synthetic-split") || text.contains("record_id") || text.contains("source_record_key") || text.contains("taken_utc"))
     }
 }

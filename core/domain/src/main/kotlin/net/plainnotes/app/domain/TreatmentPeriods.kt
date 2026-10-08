@@ -99,7 +99,10 @@ object TreatmentPeriods {
     fun doseKey(doses:List<Double>)=doses.map{Math.round(it*1_000_000.0)/1_000_000.0}.sorted()
     /** §36a: a saved plan ended and resumed within a day is not a stop period. */
     val MIN_STOP:Duration=Duration.ofDays(1)
-    /** A saved version replaced within an hour of being saved is a correction (build 15 same-day changes stay real). */
+    /**
+     * §36c: a saved version that lasted under a day, was replaced within a day and has no record inside it is a correction
+     * (a plan fixed after saving). Without record information, only versions replaced within an hour count.
+     */
     val CORRECTION:Duration=Duration.ofHours(1)
 
     /** The join conditions, in order; two consecutive parts of one lane join only when all pass. */
@@ -145,7 +148,7 @@ object TreatmentPeriods {
         return groups.flatMap{(ids,_)->ids.map{it to ids.min()}}.toMap()
     }
 
-    fun build(raw:List<RawTreatmentInterval>,zone:ZoneId):TreatmentPeriodProjection {
+    fun build(raw:List<RawTreatmentInterval>,zone:ZoneId,withRecords:Set<Long>?=null):TreatmentPeriodProjection {
         require(raw.map{it.span.id}.distinct().size==raw.size)
         require(raw.all{it.span.until==null || it.span.until>it.span.from})
         val lane=lanes(raw)
@@ -155,11 +158,12 @@ object TreatmentPeriods {
             var currentIds=mutableListOf<Long>()
             var last:RawTreatmentInterval?=null
             val sorted=rows.sortedWith(compareBy({it.span.from},{it.span.id}))
-            // A saved version replaced within an hour (a correction made right after saving) takes its replacement's standard.
+            // A correction (see CORRECTION) is compared with the standard of the version that replaced it.
             for(i in sorted.indices.reversed()) {
                 val r=sorted[i];val next=sorted.getOrNull(i+1);val end=r.span.until
-                val correction=r.span.id>0 && end!=null && next!=null && Duration.between(r.span.from,end)<CORRECTION &&
-                    !next.span.from.isBefore(end) && Duration.between(end,next.span.from)<CORRECTION
+                val window=if(withRecords==null)CORRECTION else MIN_STOP
+                val correction=r.span.id>0 && end!=null && next!=null && Duration.between(r.span.from,end)<window &&
+                    !next.span.from.isBefore(end) && Duration.between(end,next.span.from)<window && withRecords?.contains(r.span.id)!=true
                 effective[r.span.id]=if(correction)effective.getValue(next!!.span.id) else r.standard
             }
             sorted.forEach{r->

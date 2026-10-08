@@ -31,12 +31,18 @@ data class PeriodTimeline(val projection:TreatmentPeriodProjection,val events:Li
 }
 /** Invalid derived intervals must not take the confirmed plans and original history off screen. */
 internal data class PeriodHistory(val projection:TreatmentPeriodProjection,val historical:HistoricalTreatmentProjection,val unavailable:Boolean)
-internal fun projectHistory(confirmed:List<RawTreatmentInterval>,historical:HistoricalTreatmentProjection,zone:ZoneId):PeriodHistory =
+internal fun projectHistory(confirmed:List<RawTreatmentInterval>,historical:HistoricalTreatmentProjection,zone:ZoneId,withRecords:Set<Long>?=null):PeriodHistory =
     try {
-        PeriodHistory(TreatmentPeriods.build(confirmed+historical.confirmed+historical.observed.map{it.interval},zone),historical,false)
+        PeriodHistory(TreatmentPeriods.build(confirmed+historical.confirmed+historical.observed.map{it.interval},zone,withRecords),historical,false)
     } catch (_:IllegalArgumentException) {
-        PeriodHistory(TreatmentPeriods.build(confirmed,zone),HistoricalTreatmentProjection(emptyList(),emptySet()),true)
+        PeriodHistory(TreatmentPeriods.build(confirmed,zone,withRecords),HistoricalTreatmentProjection(emptyList(),emptySet()),true)
     }
+
+/** Saved plan versions with at least one record (taken, missed or skipped) of their medication inside their span. */
+fun recordsInside(versions:List<RegimenVersionEntity>,records:List<RecordEntity>):Map<Long,Int> = versions.associate{v->
+    v.id to records.count{r->r.deleted_at_utc==null && r.medication_id==v.medication_id &&
+        (r.taken_utc ?: r.scheduled_utc)?.let{t->t>=v.effective_from_utc && (v.effective_until_utc?.let{u->t<u} ?: true)}==true}
+}
 
 /**
  * REQUIREMENTS §36: a recognised part lying between confirmed or saved parts of one merged period (for example the
@@ -75,7 +81,8 @@ object PeriodTimelineProjection {
         // Deterministic display policy: changing the device zone must not regroup historical transitions.
         val zone=displayZone ?: ordered.firstOrNull()?.let{ZoneId.of(it.zone)} ?: ZoneId.of("UTC")
         val confirmed=ordered.map{RawTreatmentInterval(it.span(),RegimenDefinition.read(it.definition_json).therapyStandard())}
-        val result=projectHistory(confirmed,ObservedTreatmentHistory.build(extra.records,ordered,zone,now,ruleSnapshots,confirmedPeriodInputs(extra.historyPeriods)),zone)
+        val inside=recordsInside(ordered,extra.records).filterValues{it>0}.keys
+        val result=projectHistory(confirmed,ObservedTreatmentHistory.build(extra.records,ordered,zone,now,ruleSnapshots,confirmedPeriodInputs(extra.historyPeriods)),zone,inside)
         val historical=result.historical;val projection=result.projection
         val today=now.atZone(zone).toLocalDate();val events=mutableListOf<PeriodEvent>();val upcoming=mutableListOf<PeriodEvent>()
         fun add(key:String,kind:EventKind,at:Instant?,day:LocalDate?,source:EventSource) {

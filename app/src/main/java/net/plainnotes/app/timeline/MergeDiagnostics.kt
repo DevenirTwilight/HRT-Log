@@ -18,10 +18,11 @@ object MergeDiagnostics {
         val p=timeline.projection;val index=p.periods.indexOf(period);val previous=p.periods.getOrNull(index-1)
         val observed=timeline.observed.associateBy{it.interval.span.id}
         val confirmedRows=timeline.confirmedHistory.associateBy{ObservedTreatmentHistory.CONFIRMED_SPAN_BASE-it.id*100}
+        val inside=recordsInside(extra.regimens,extra.records)
         fun source(r:RawTreatmentInterval):String {
             val id=r.span.id
             return when {
-                id>0->extra.regimens.firstOrNull{it.id==id}.let{v->"app_saved_plan origin=${v?.origin} zone=${v?.zone}"}
+                id>0->extra.regimens.firstOrNull{it.id==id}.let{v->"app_saved_plan origin=${v?.origin} zone=${v?.zone} records_inside=${inside[id] ?: 0}"}
                 ObservedTreatmentHistory.isConfirmedSpan(id)->confirmedRows.entries.firstOrNull{(base,_)->id<=base && id>base-100}?.value
                     .let{row->"confirmed period_key=${row?.period_key} revision=${row?.revision} from_date=${row?.from_date} until_date=${row?.until_date} zone=${row?.zone}"}
                 else->observed[id].let{o->"recognized_pending sources=${o?.records?.map{it.origin}?.distinct()?.sorted()} zones=${o?.records?.mapNotNull{it.taken_zone}?.distinct()?.sorted()}"}
@@ -40,7 +41,7 @@ object MergeDiagnostics {
             p.stops.filter{it.from>=d.from && (d.until==null || it.from<d.until)}.forEach{add("  stop_in_app medication_id=${it.medicationId} from=${time(it.from)} until=${time(it.until)}")}
         }
         return buildList {
-            add("HRT Log merge diagnostics v1 · versionCode=$versionCode · display_zone=${p.zone.id} · period ${index+1}/${p.periods.size}")
+            add("HRT Log merge diagnostics v2 · versionCode=$versionCode · display_zone=${p.zone.id} · period ${index+1}/${p.periods.size}")
             addAll(describe("previous",previous));addAll(describe("this",period))
             val starting=p.standards.filter{it.key in period.segments.first().standardSpanKeys && it.from==period.segments.first().from}
             if(starting.isEmpty())add("[join] no plan part starts at this period's start")

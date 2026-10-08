@@ -201,6 +201,6 @@ class ImportedTimelineUiTest {
         ui.onNodeWithTag("period-menu:$key").performClick()
         ui.onNodeWithTag("period-diagnostics:$key").performClick()
         val clip=ui.activity.getSystemService(android.content.ClipboardManager::class.java).primaryClip!!.getItemAt(0).text.toString()
-        assertTrue(clip,clip.startsWith("HRT Log merge diagnostics v1"))
+        assertTrue(clip,clip.startsWith("HRT Log merge diagnostics v2"))
     }
 }
