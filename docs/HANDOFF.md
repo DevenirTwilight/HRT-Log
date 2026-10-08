@@ -9,9 +9,10 @@
 - [x] 系统识别直接生效；新资料包模板 3 去掉待确认计数；新化验上下文 period_source=SYSTEM/USER_EDIT，旧冻结上下文保持兼容。
 - [x] 阶段验证：TimelineV2Test 4、TimelineV2FlowTest 4、PeriodStabilityTest 5，13 项全部通过；稳定性测试增加第五组“编辑过的时期”，原黄金数据、删除/恢复、顺序、夏令时等断言保留。旧确认操作只保留在测试夹具中，用于生产旧格式数据，不在应用代码中提供。
 - [x] 补充兼容回归：同日精确变化保留 build 24 的卡片数、标准与标签；旧删除回收站经转换后仍能恢复，旧修正恢复检查用户重叠。移除生产代码剩余拆开/停用专用工具，只在测试夹具保留。
-- [x] 全量应用/data 回归：app 229（13 既有跳过）、data 72，0 失败；TimelineV2Test 5、TimelineV2FlowTest 5、PeriodStabilityTest 5 全部通过。
+- [x] 全量应用/data 回归：app 230（13 既有跳过）、data 72，0 失败；TimelineV2Test 5、TimelineV2FlowTest 5、PeriodStabilityTest 5 全部通过。
 - [x] 删除“至今”时期用当前投影实际边界，防止已在方案变化处结束的用户时期删除后出现向后的残段；失败用例先复现，修复后 TimelineV2Test 6 + TimelineV2FlowTest 5 全部通过。
-- [ ] 最新源码 lint/full 构建、最终 CI、原签名交付。初次完整本机构建进到 release R8 时 Gradle daemon 消失；将单独限并发重跑。首阶段 CI 的 jvm/device 成功，android 的旧无效输入用例已修正，等待本次提交新 CI。尚未签名，最新可安装仍 build 24。
+- [x] 最新功能源码 52b092a：全量 404 登记/391 通过/13 既有跳过/0 失败；lint、full debug/release、两个 Android test APK、合并 release manifest、schema/PLAN 检查全部通过。8 个 .so 的 ELF LOAD 对齐 ≥16KB。验证细节见 docs/timeline-editing-v2-verification.md。
+- [ ] 最终 CI [37838271727](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37838271727)：jvm/device-tests 已 success，android 仍进行。原签名交付尚未完成，最新可安装仍 build 24。
 
 阶段中发现并修复：较早的删除标记可以被较晚用户时期覆盖，但新删除必须裁剪已有用户时期；恢复用原时期键追加修订，保持显示身份；旧确认格式先转换后才进行非治疗操作不变性检查。构建环境已安装 JDK 21 和 Android SDK 37（仓库外）；本机日志在 /workspace/tooling，未读取真实健康数据。签名备份仓库已再次确认 private，临时材料在 /workspace/tooling/build25-signing，签名后必须清理。
 
