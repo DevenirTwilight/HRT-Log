@@ -150,9 +150,11 @@ val APPOINTMENT_TYPES = listOf("ENDO", "GP", "LAB", "PSY", "SURGERY", "OTHER")
         text = { Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             if (meds.size > 1) DropdownField(stringResource(R.string.medication), meds, chosen, { it.name }, { chosen = it; dose = inputNumber(it.dose_per_intake); times = timesFor(it) })
             else chosen?.let { Text(it.name, style = MaterialTheme.typography.titleMedium) }
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                OutlinedButton(onClick = { pickFrom = true }, Modifier.weight(1f)) { Column { Text(stringResource(R.string.batch_from), style = MaterialTheme.typography.labelSmall); Text(formatShortDate(from)) } }
-                OutlinedButton(onClick = { pickTo = true }, Modifier.weight(1f)) { Column { Text(stringResource(R.string.batch_to), style = MaterialTheme.typography.labelSmall); Text(formatShortDate(to)) } }
+            AdaptiveActions(listOf(formatShortDate(from),formatShortDate(to))) { i,mod ->
+                OutlinedButton(onClick={if(i==0)pickFrom=true else pickTo=true},modifier=mod){Column{
+                    Text(stringResource(if(i==0)R.string.batch_from else R.string.batch_to),style=MaterialTheme.typography.labelSmall)
+                    Text(formatShortDate(if(i==0)from else to))
+                }}
             }
             if (!rangeOk) Text(stringResource(R.string.batch_range_error), color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
             Text(stringResource(R.string.batch_times), style = MaterialTheme.typography.labelLarge)

@@ -89,9 +89,9 @@ import java.time.*
                 a.practitioner?.let { Text(stringResource(R.string.practitioner) + ": " + it) }
                 a.location?.let { Text(stringResource(R.string.location) + ": " + it) }
                 a.note?.let { Text(it) }
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    OutlinedButton(onClick = { edit = true }) { Icon(Icons.Outlined.Edit, null); Spacer(Modifier.width(6.dp)); Text(stringResource(R.string.edit)) }
-                    TextButton(onClick = { remove = true }) { Text(stringResource(R.string.visit_delete)) }
+                AdaptiveActions(listOf(stringResource(R.string.edit),stringResource(R.string.visit_delete))) { i,mod ->
+                    if(i==0)OutlinedButton(onClick={edit=true},modifier=mod){Icon(Icons.Outlined.Edit,null);Spacer(Modifier.width(6.dp));Text(stringResource(R.string.edit))}
+                    else TextButton(onClick={remove=true},modifier=mod){Text(stringResource(R.string.visit_delete))}
                 }
             }
         }
@@ -209,7 +209,12 @@ class VisitExportRequest(val from: LocalDate, val to: LocalDate, val sections: S
             }
             Text(stringResource(R.string.visit_pdf_note), style = MaterialTheme.typography.bodySmall)
         }
-    }, confirmButton = { Button(enabled = valid, onClick = { launcher.launchPicker("notes-visit-${to}.pdf") }) { Text(stringResource(R.string.export_pdf)) } },
-        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } })
+    }, confirmButton = {
+        val actions=listOf(stringResource(R.string.export_pdf),stringResource(R.string.cancel))
+        AdaptiveActions(actions,contentInset=48.dp) { i,mod ->
+            if(i==0)Button(enabled=valid,onClick={launcher.launchPicker("notes-visit-${to}.pdf")},modifier=mod){Text(actions[i])}
+            else TextButton(onClick=onDismiss,modifier=mod){Text(actions[i])}
+        }
+    })
     if (pick != 0) DatePickerModal(LocalDate.parse(if (pick == 1) from else to), { pick = 0 }) { if (it <= today) { if (pick == 1) from = it.toString() else to = it.toString() }; pick = 0 }
 }

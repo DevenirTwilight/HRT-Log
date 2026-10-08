@@ -95,11 +95,11 @@ private fun RecordEntity.at(): Instant = Instant.ofEpochMilli(taken_utc ?: sched
                 Icon(Icons.Outlined.MonitorHeart, null, tint = c.primary); Spacer(Modifier.width(12.dp))
                 Text(stringResource(R.string.history_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
             }
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                OutlinedButton(onClick = onBatch, enabled = canAdd, contentPadding = PaddingValues(horizontal = 14.dp)) {
+            AdaptiveActions(listOf(stringResource(R.string.batch_add),stringResource(R.string.history_add))) { i,mod ->
+                if(i==0)OutlinedButton(onClick = onBatch, enabled = canAdd, modifier=mod) {
                     Icon(Icons.Outlined.Layers, null, Modifier.size(18.dp)); Spacer(Modifier.width(6.dp)); Text(stringResource(R.string.batch_add))
                 }
-                Button(onClick = onAdd, enabled = canAdd, contentPadding = PaddingValues(horizontal = 14.dp)) {
+                else Button(onClick = onAdd, enabled = canAdd, modifier=mod) {
                     Icon(Icons.Outlined.Add, null, Modifier.size(18.dp)); Spacer(Modifier.width(6.dp)); Text(stringResource(R.string.history_add))
                 }
             }
@@ -149,7 +149,7 @@ fun routeIcon(route: String?): ImageVector = when (route) {
         if (total > 0) Row(Modifier.fillMaxWidth().height(12.dp).clip(MaterialTheme.shapes.small)) {
             parts.filter { it.first > 0 }.forEach { (n, col) -> Box(Modifier.weight(n.toFloat()).fillMaxHeight().background(col)) }
         }
-        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Count(stringResource(R.string.status_on_time), a.onTime, c.primary); Count(stringResource(R.string.status_late), a.late, c.tertiary)
             Count(stringResource(R.string.status_missed), a.missed, c.error); Count(stringResource(R.string.status_skipped), a.skipped, c.outline)
         }
@@ -182,7 +182,7 @@ fun routeIcon(route: String?): ImageVector = when (route) {
             }
             Spacer(Modifier.width(14.dp))
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
-                Text(if (simple) choiceLabel(historyMed?.molecule ?: "OTHER") else historyMed?.name ?: stringResource(R.string.history_context_unknown), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, maxLines = 1)
+                Text(if (simple) choiceLabel(historyMed?.molecule ?: "OTHER") else historyMed?.name ?: stringResource(R.string.history_context_unknown), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
                 val sub = listOfNotNull(route?.let { choiceLabel(it) }, historyProfile?.ester?.takeIf { it != "E2" && !simple }?.let { choiceLabel(it) }, r.site?.let { siteLabel(it) })
                 if (sub.isNotEmpty()) Text(sub.joinToString(" · "), style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant)
                 val dose = r.actual_dose ?: r.planned_dose
@@ -250,8 +250,13 @@ fun suggestSite(records: List<RecordEntity>, medicationId: Long): String =
                 }
             }
         }
-    }, confirmButton = { Button(enabled = selected != null, onClick = { selected?.let(onConfirm) }) { Text(stringResource(R.string.import_link)) } },
-        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } })
+    }, confirmButton = {
+        val actions=listOf(stringResource(R.string.import_link),stringResource(R.string.cancel))
+        AdaptiveActions(actions,contentInset=48.dp) { i,mod ->
+            if(i==0)Button(enabled=selected!=null,onClick={selected?.let(onConfirm)},modifier=mod){Text(actions[i])}
+            else TextButton(onClick=onDismiss,modifier=mod){Text(actions[i])}
+        }
+    })
 }
 
 fun recordLabelText(label: RecordLabel) = when (label) {

@@ -8,7 +8,9 @@ android {
     testOptions {
         unitTests.isIncludeAndroidResources = true
         // Optional: -ProbolectricDir=<dir with android-all jars> runs Robolectric offline (sandboxes without direct Maven access).
-        unitTests.all { t -> providers.gradleProperty("robolectricDir").orNull?.let { t.systemProperty("robolectric.offline", "true"); t.systemProperty("robolectric.dependency.dir", it) } }
+        unitTests.all { t ->
+            if(System.getenv("BUTTON_AUDIT")=="1")t.outputs.upToDateWhen { false }
+            providers.gradleProperty("robolectricDir").orNull?.let { t.systemProperty("robolectric.offline", "true"); t.systemProperty("robolectric.dependency.dir", it) } }
     }
     // Debug-only key kept in the repo so every build (local or CI) signs debug APKs the same way and installs over the last one.
     // It must never sign a release meant for distribution.

@@ -28,27 +28,45 @@ private fun Long.pickerDate() = Instant.ofEpochMilli(this).atZone(ZoneOffset.UTC
     val state = rememberDatePickerState(initialSelectedDateMillis = initial.pickerMillis())
     DatePickerDialog(onDismissRequest = onDismiss,
         confirmButton = { TextButton(onClick = { state.selectedDateMillis?.let { onPick(it.pickerDate()) }; onDismiss() }) { Text(stringResource(R.string.ok)) } },
-        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } }) { DatePicker(state) }
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } }) { DatePicker(state,headline={
+            state.selectedDateMillis?.let{Text(formatDate(it.pickerDate()),Modifier.padding(horizontal=24.dp,vertical=12.dp),style=MaterialTheme.typography.headlineLarge)}
+        }) }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable fun TimePickerModal(initial: LocalTime, onDismiss: () -> Unit, onPick: (LocalTime) -> Unit) {
-    val state = rememberTimePickerState(initial.hour, initial.minute, DateFormat.is24HourFormat(LocalContext.current))
-    AlertDialog(onDismissRequest = onDismiss,
-        confirmButton = { TextButton(onClick = { onPick(LocalTime.of(state.hour, state.minute)); onDismiss() }) { Text(stringResource(R.string.ok)) } },
-        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } },
-        text = { Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) { TimePicker(state) } })
+    val is24=DateFormat.is24HourFormat(LocalContext.current)
+    val state=rememberTimePickerState(initial.hour,initial.minute,is24)
+    val periods=java.text.DateFormatSymbols(currentLocale()).amPmStrings.toList()
+    val measure=androidx.compose.ui.text.rememberTextMeasurer();val density=androidx.compose.ui.platform.LocalDensity.current
+    val periodWidth=periods.maxOf{with(density){measure.measure(androidx.compose.ui.text.AnnotatedString(it),MaterialTheme.typography.labelLarge,softWrap=false).size.width.toDp()}}
+    var hour by remember{mutableStateOf((if(is24)initial.hour else (initial.hour%12).let{if(it==0)12 else it}).toString())}
+    var minute by remember{mutableStateOf(initial.minute.toString().padStart(2,'0'))}
+    var pm by remember{mutableStateOf(initial.hour>=12)}
+    BoxWithConstraints {
+        // Material's dial needs 328dp plus dialog padding; its AM/PM cell has 32dp of label space.
+        val inputMode=maxWidth<376.dp || (!is24 && periodWidth>32.dp)
+        val h=hour.toIntOrNull()?.takeIf{it in if(is24)0..23 else 1..12};val m=minute.toIntOrNull()?.takeIf{it in 0..59}
+        val selected=if(inputMode){if(h!=null && m!=null)LocalTime.of(if(is24)h else h%12+if(pm)12 else 0,m) else null} else LocalTime.of(state.hour,state.minute)
+        AlertDialog(onDismissRequest=onDismiss,
+            confirmButton={TextButton(enabled=selected!=null,onClick={selected?.let(onPick);onDismiss()}){Text(stringResource(R.string.ok))}},
+            dismissButton={TextButton(onClick=onDismiss){Text(stringResource(R.string.cancel))}},
+            text={if(inputMode)Column(verticalArrangement=Arrangement.spacedBy(12.dp)) {
+                NumberField(hour,{hour=it},stringResource(R.string.picker_hour),decimal=false,isError=h==null)
+                NumberField(minute,{minute=it},stringResource(R.string.picker_minute),decimal=false,isError=m==null)
+                if(!is24)AdaptiveChoice(periods,if(pm)1 else 0,{pm=it==1})
+            } else Box(Modifier.fillMaxWidth(),contentAlignment=Alignment.Center){TimePicker(state)}})
+    }
 }
 
 /** Date and time chosen with pickers; the value is a local wall time in the device zone. */
 @Composable fun DateTimeRow(value: LocalDateTime, onChange: (LocalDateTime) -> Unit, modifier: Modifier = Modifier) {
     var pickDate by remember { mutableStateOf(false) }; var pickTime by remember { mutableStateOf(false) }
-    Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        OutlinedButton(onClick = { pickDate = true }, Modifier.weight(1.4f)) {
-            Icon(Icons.Outlined.CalendarMonth, null, Modifier.size(18.dp)); Spacer(Modifier.width(6.dp)); Text(formatShortDate(value.toLocalDate()), maxLines = 1)
-        }
-        OutlinedButton(onClick = { pickTime = true }, Modifier.weight(1f)) {
-            Icon(Icons.Outlined.Schedule, null, Modifier.size(18.dp)); Spacer(Modifier.width(6.dp)); Text(formatTime(value.toLocalTime()), maxLines = 1)
+    val labels=listOf(formatShortDate(value.toLocalDate()),formatTime(value.toLocalTime()))
+    AdaptiveActions(labels,modifier) { i,mod ->
+        OutlinedButton(onClick={if(i==0)pickDate=true else pickTime=true},modifier=mod) {
+            Icon(if(i==0)Icons.Outlined.CalendarMonth else Icons.Outlined.Schedule,null,Modifier.size(18.dp))
+            Spacer(Modifier.width(6.dp));Text(labels[i])
         }
     }
     if (pickDate) DatePickerModal(value.toLocalDate(), { pickDate = false }) { onChange(value.with(it)) }

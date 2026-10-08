@@ -975,4 +975,6 @@
     <string name="period_overlap_cancel">不缩短</string>
     <string name="period_overlap_cancelled">请先修改相邻时期，或调整这里的日期。</string>
     <string name="period_restore_overlap">这段日期已有其他时期，先修改或删除那段再恢复。</string>
+    <string name="picker_hour">小时</string>
+    <string name="picker_minute">分钟</string>
 </resources>

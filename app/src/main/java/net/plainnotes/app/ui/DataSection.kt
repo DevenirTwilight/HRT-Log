@@ -66,8 +66,8 @@ import java.time.LocalDate
     if (pdfOptions) AlertDialog(onDismissRequest = { pdfOptions = false }, icon = { Icon(Icons.Outlined.PictureAsPdf, null) }, title = { Text(stringResource(R.string.export_pdf)) },
         text = { Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(stringResource(R.string.report_period_label), style = MaterialTheme.typography.labelLarge)
-            SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) { listOf(30, 90, 180, 365).forEachIndexed { i, d ->
-                SegmentedButton(pdfChoice.first == d, { pdfChoice = d to pdfChoice.second }, SegmentedButtonDefaults.itemShape(i, 4)) { Text(stringResource(R.string.days_short, d)) } } }
+            val ranges=listOf(30,90,180,365)
+            AdaptiveChoice(ranges.map{stringResource(R.string.days_short,it)},ranges.indexOf(pdfChoice.first),{pdfChoice=ranges[it] to pdfChoice.second})
             SwitchRow(stringResource(R.string.report_include_chart), pdfChoice.second, stringResource(R.string.report_include_chart_desc)) { pdfChoice = pdfChoice.first to it }
         } },
         confirmButton = { Button(onClick = { pdfOptions = false; if (pdfChoice.second) model.loadConcentration(); pdfLauncher.launchPicker("notes-report-${LocalDate.now()}.pdf") }) { Text(stringResource(R.string.export_action)) } },

@@ -101,14 +101,9 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
             var rangeDays by remember { mutableIntStateOf(14) }
             var fullBand by remember { mutableStateOf(false) }
             SectionCard(null) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(stringResource(R.string.pk_chart_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
-                    SingleChoiceSegmentedButtonRow {
-                        listOf(7, 14, 60).forEachIndexed { i, d ->
-                            SegmentedButton(rangeDays == d, { rangeDays = d }, SegmentedButtonDefaults.itemShape(i, 3)) { Text(stringResource(R.string.days_short, d)) }
-                        }
-                    }
-                }
+                Text(stringResource(R.string.pk_chart_title),style=MaterialTheme.typography.titleMedium)
+                val ranges=listOf(7,14,60)
+                AdaptiveChoice(ranges.map{stringResource(R.string.days_short,it)},ranges.indexOf(rangeDays),{rangeDays=ranges[it]})
                 val data = ChartData(result.timeH, DoubleArray(result.e2.size) { result.e2[it] * factor },
                     result.bandInner?.let { (l, h) -> DoubleArray(l.size) { l[it] * factor } to DoubleArray(h.size) { h[it] * factor } },
                     result.bandOuter?.let { (l, h) -> DoubleArray(l.size) { l[it] * factor } to DoubleArray(h.size) { h[it] * factor } },
@@ -185,10 +180,8 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
             }
             if (m.postDoseObservationCount < 3) Text(stringResource(R.string.calib_few), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Text(stringResource(R.string.calib_mode), style = MaterialTheme.typography.labelLarge)
-            SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
-                SegmentedButton(settings.mode == CalibrationMode.RETROSPECTIVE, { onSettings(ConcSettings(settings.pmol, settings.calibrate, CalibrationMode.RETROSPECTIVE)) }, SegmentedButtonDefaults.itemShape(0, 2)) { Text(stringResource(R.string.calib_retro)) }
-                SegmentedButton(settings.mode == CalibrationMode.CAUSAL, { onSettings(ConcSettings(settings.pmol, settings.calibrate, CalibrationMode.CAUSAL)) }, SegmentedButtonDefaults.itemShape(1, 2)) { Text(stringResource(R.string.calib_causal)) }
-            }
+            AdaptiveChoice(listOf(stringResource(R.string.calib_retro),stringResource(R.string.calib_causal)),if(settings.mode==CalibrationMode.RETROSPECTIVE)0 else 1,
+                {onSettings(ConcSettings(settings.pmol,settings.calibrate,if(it==0)CalibrationMode.RETROSPECTIVE else CalibrationMode.CAUSAL))})
             Text(stringResource(if (settings.mode == CalibrationMode.RETROSPECTIVE) R.string.calib_retro_desc else R.string.calib_causal_desc), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         OutlinedButton(onClick = onOpenLabs) { Icon(Icons.Outlined.Science, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.calib_manage_labs)) }
@@ -260,9 +253,8 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
         }
         val b: BandedCurve = result.others.getValue(selected)
         val data = ChartData(b.timeH, b.center, b.p25 to b.p75, b.p5 to b.p95, result.nowH, unit = selected.unit,includeBandsInScale=fullBand)
-        SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
-            listOf(7, 14, 60).forEachIndexed { i, d -> SegmentedButton(rangeDays == d, { rangeDays = d }, SegmentedButtonDefaults.itemShape(i, 3)) { Text(stringResource(R.string.days_short, d)) } }
-        }
+        val ranges=listOf(7,14,60)
+        AdaptiveChoice(ranges.map{stringResource(R.string.days_short,it)},ranges.indexOf(rangeDays),{rangeDays=ranges[it]})
         val loc = currentLocale()
         val nf = remember(loc) { java.text.NumberFormat.getNumberInstance(loc).apply { maximumFractionDigits = 1; isGroupingUsed = false } }
         key(selected, rangeDays) {

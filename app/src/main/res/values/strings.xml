@@ -975,4 +975,6 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="period_overlap_cancel">Do not shorten</string>
     <string name="period_overlap_cancelled">Change the neighbouring period first, or adjust these dates.</string>
     <string name="period_restore_overlap">These dates already have another period. Edit or delete it before restoring.</string>
+    <string name="picker_hour">Hour</string>
+    <string name="picker_minute">Minute</string>
 </resources>

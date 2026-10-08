@@ -52,22 +52,28 @@ import java.time.*
  */
 @RunWith(ParameterizedRobolectricTestRunner::class) @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @Config(sdk = [35], application = android.app.Application::class)
-class ButtonAuditTest(private val locale: String, private val scale: Float) {
+class ButtonAuditTest(private val locale: String, private val scale: Float, private val width:Int,private val theme:String) {
     companion object {
-        @JvmStatic @ParameterizedRobolectricTestRunner.Parameters(name = "{0}@{1}")
-        fun params() = listOf("en", "zh-rCN", "zh-rTW", "fr-rFR").flatMap { l -> listOf(1.0f, 1.3f, 2.0f).map { arrayOf<Any>(l, it) } }
+        @JvmStatic @ParameterizedRobolectricTestRunner.Parameters(name = "{0}@{1}/{2}dp/{3}")
+        fun params():List<Array<Any>> {
+            val widths=(System.getenv("BUTTON_AUDIT_WIDTHS") ?: "411").split(',').map{it.toInt()}
+            val themes=(System.getenv("BUTTON_AUDIT_THEMES") ?: "LIGHT").split(',').also{require(it.all{t->t in listOf("LIGHT","DARK","HIGH")})}
+            val locales=(System.getenv("BUTTON_AUDIT_LOCALES") ?: "en,zh-rCN,zh-rTW,fr-rFR").split(',')
+            val scales=(System.getenv("BUTTON_AUDIT_SCALES") ?: "1,1.3,2").split(',').map{it.toFloat()}
+            return locales.flatMap{l->scales.flatMap{s->widths.flatMap{w->themes.map{t->arrayOf<Any>(l,s,w,t)}}}}
+        }
     }
     private val setup = TestRule { base, _ -> object : org.junit.runners.model.Statement() {
         override fun evaluate() {
             Assume.assumeTrue(System.getenv("BUTTON_AUDIT") == "1")
-            RuntimeEnvironment.setQualifiers("$locale-w411dp-h1800dp-xxhdpi"); RuntimeEnvironment.setFontScale(scale); base.evaluate()
+            RuntimeEnvironment.setQualifiers("$locale-w${width}dp-h1800dp-xxhdpi"); RuntimeEnvironment.setFontScale(scale); base.evaluate()
         }
     } }
     private val rule = createAndroidComposeRule<ComponentActivity>()
     @get:Rule val chain: RuleChain = RuleChain.outerRule(setup).around(rule)
 
     private val zone = ZoneId.systemDefault(); private val now = Instant.now(); private val today = LocalDate.now()
-    private val tag get() = "${locale}_${scale}"
+    private val tag get() = "${locale}_${scale}_${width}_${theme}"
     private val out get() = File("build/button-audit/$tag").apply { mkdirs() }
     private val report = mutableListOf<JSONObject>()
 
@@ -201,22 +207,24 @@ class ButtonAuditTest(private val locale: String, private val scale: Float) {
         val m = model()
         // Let the view model read its synthetic database before screens that observe it.
         repeat(200) { if (m.state.value.appointments.size < 2 || m.extra.value.visitQuestions.isEmpty()) { val l = shadowOf(android.os.Looper.getMainLooper()); var n = 0; while (!l.isIdle && n++ < 500) l.runOneTask(); Thread.sleep(10) } }
-        rule.setContent { NotesTheme(ThemeMode.LIGHT) { Surface { current?.let { c -> key(c.name) { c.content() } } } } }
+        rule.setContent { NotesTheme(if(theme=="DARK")ThemeMode.DARK else ThemeMode.LIGHT,contrast=if(theme=="HIGH")Contrast.HIGH else Contrast.STANDARD) { Surface { current?.let { c -> key(c.name) { c.content() } } } } }
         val only = System.getenv("BUTTON_AUDIT_CASES")?.split(',')?.toSet()
-        cases(m).filter { only == null || it.name in only }.forEach { case ->
+        val cases=cases(m)
+        require(only==null || only.all{name->cases.any{it.name==name}}){"Unknown BUTTON_AUDIT_CASES: $only"}
+        cases.filter { only == null || it.name in only }.forEach { case ->
             current = case; idle()
             runCatching { case.then?.invoke(); idle() }.onFailure { report += JSONObject().put("case", case.name).put("kind", "action_failed").put("detail", it.toString().take(200)) }
             runCatching { measure(case.name); shoot(case.name) }.onFailure { report += JSONObject().put("case", case.name).put("kind", "measure_failed").put("detail", it.toString().take(300)) }
             current = null; idle()
         }
-        File(out, if (only == null) "report.jsonl" else "report-extra.jsonl").writeText(report.joinToString("\n") { it.put("locale", locale).put("scale", scale.toDouble()).toString() } + "\n")
+        File(out, if (only == null) "report.jsonl" else "report-extra.jsonl").writeText(report.joinToString("\n") { it.put("locale", locale).put("scale", scale.toDouble()).put("width",width).put("theme",theme).toString() } + "\n")
     }
 
     private fun shoot(name: String) {
         fun save(view: android.view.View, file: String) {
             if (view.width <= 0 || view.height <= 0) return
             val b = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888); b.eraseColor(android.graphics.Color.WHITE); view.draw(android.graphics.Canvas(b))
-            File(out, file).outputStream().use { b.compress(Bitmap.CompressFormat.PNG, 100, it) }
+            try { File(out, file).outputStream().use { b.compress(Bitmap.CompressFormat.PNG, 100, it) } } finally { b.recycle() }
         }
         save(act.window.decorView, "$name.png")
         ShadowDialog.getLatestDialog()?.takeIf { it.isShowing }?.window?.decorView?.let { save(it, "${name}__dialog.png") }
@@ -268,6 +276,17 @@ class ButtonAuditTest(private val locale: String, private val scale: Float) {
             val rootW = root(n).size.width; val left = n.positionInRoot.x; val right = left + n.size.width
             if ((right > rootW + 1 || left < -1) && !scrollsHorizontally(n)) report += JSONObject().put("case", case).put("kind", "overflow").put("label", label(n).take(60))
                 .put("right_dp", dp(right)).put("window_dp", dp(rootW.toFloat()))
+        }
+        report += JSONObject().put("case",case).put("kind","coverage").put("controls",interactive.size)
+        interactive.filter{!scrollsHorizontally(it) && it.positionInRoot.y>=0 && it.positionInRoot.y<root(it).size.height}.forEach { n ->
+            if(n.size.width<=0 || n.size.height<=0) report += JSONObject().put("case",case).put("kind","collapsed").put("label",label(n))
+        }
+        interactive.filter{it.config.getOrNull(SemanticsProperties.Role) in listOf(Role.Button,Role.RadioButton)}.groupBy{it.parent?.id}.values.forEach { group ->
+            group.forEachIndexed { i,a -> group.drop(i+1).forEach { b ->
+                val ar=a.boundsInRoot;val br=b.boundsInRoot
+                if(minOf(ar.right,br.right)-maxOf(ar.left,br.left)>d && minOf(ar.bottom,br.bottom)-maxOf(ar.top,br.top)>d)
+                    report += JSONObject().put("case",case).put("kind","overlap").put("labels",listOf(label(a),label(b)).joinToString(" | "))
+            }}
         }
         // Rows: labelled controls sharing a parent whose vertical spans overlap.
         interactive.filter { label(it).isNotBlank() && it.size.height > 0 }.groupBy { it.parent?.id }.values.forEach { group ->

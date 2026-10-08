@@ -63,9 +63,9 @@ fun stockSummary(m: MedicationEntity, containers: List<ContainerEntity>, s: Sche
             Column(verticalArrangement=Arrangement.spacedBy(6.dp)) {
                 StockCard(m,sum,unallocated,{onReplace(m)},{sum.open?.let{onAdjust(it,m)}},{onAdd(m)})
                 containers.filter{it.medication_id==m.id}.sortedByDescending{it.id}.forEach{box->
-                    Row(verticalAlignment=Alignment.CenterVertically){
-                        Text(listOfNotNull("#${box.id} · ${formatDose(box.capacity,m.unit)}",box.source_note,box.batch).joinToString(" · "),Modifier.weight(1f),style=MaterialTheme.typography.bodySmall)
-                        TextButton(onClick={onInfo(box)}){Text(stringResource(R.string.wb_package_info))}
+                    Column {
+                        Text(listOfNotNull("#${box.id} · ${formatDose(box.capacity,m.unit)}",box.source_note,box.batch).joinToString(" · "),style=MaterialTheme.typography.bodySmall)
+                        TextButton(onClick={onInfo(box)},modifier=Modifier.heightIn(min=48.dp)){Text(stringResource(R.string.wb_package_info))}
                     }
                 }
             }
@@ -102,11 +102,12 @@ fun stockSummary(m: MedicationEntity, containers: List<ContainerEntity>, s: Sche
         } else Text(stringResource(R.string.stock_none_open), style = MaterialTheme.typography.bodySmall, color = c.error)
         if (s.sealedCount > 0) Text(stringResource(R.string.stock_sealed, s.sealedCount), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
         if (unallocated > 0) Text(stringResource(R.string.stock_unallocated, formatDose(unallocated, m.unit)), style = MaterialTheme.typography.bodySmall, color = c.tertiary)
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            FilledTonalButton(onClick = onReplace) { Text(stringResource(R.string.stock_replace)) }
-            if (s.open != null) OutlinedButton(onClick = onAdjust) { Text(stringResource(R.string.stock_adjust)) }
-            TextButton(onClick = onAdd) { Text(stringResource(R.string.stock_add)) }
-        }
+        val actions=listOf(R.string.stock_replace)+ (if(s.open!=null)listOf(R.string.stock_adjust) else emptyList())+R.string.stock_add
+        AdaptiveActions(actions.map{stringResource(it)},contentInset=48.dp) { i,mod -> when(actions[i]) {
+            R.string.stock_replace->FilledTonalButton(onClick=onReplace,modifier=mod){Text(stringResource(actions[i]))}
+            R.string.stock_adjust->OutlinedButton(onClick=onAdjust,modifier=mod){Text(stringResource(actions[i]))}
+            else->TextButton(onClick=onAdd,modifier=mod){Text(stringResource(actions[i]))}
+        }}
     }
 }
 

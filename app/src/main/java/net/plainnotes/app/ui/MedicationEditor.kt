@@ -149,13 +149,8 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
                 SectionCard(stringResource(R.string.section_schedule)) {
                     recognized?.let { r -> Text(stringResource(R.string.review_schedule_recognized, stringResource(R.string.period_frequency_days, r.times.size, r.interval)),
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.tertiary, modifier = Modifier.testTag("schedule-recognized")) }
-                    SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
-                        RuleKind.entries.forEachIndexed { i, k ->
-                            SegmentedButton(selected = kind == k, onClick = { kind = k }, shape = SegmentedButtonDefaults.itemShape(i, RuleKind.entries.size)) {
-                                Text(stringResource(when (k) { RuleKind.EVERY_N_DAYS -> R.string.kind_days; RuleKind.EVERY_N_HOURS -> R.string.kind_hours; RuleKind.WEEKLY -> R.string.kind_weekly }), maxLines = 1)
-                            }
-                        }
-                    }
+                    AdaptiveChoice(RuleKind.entries.map{k->stringResource(when(k){RuleKind.EVERY_N_DAYS->R.string.kind_days;RuleKind.EVERY_N_HOURS->R.string.kind_hours;RuleKind.WEEKLY->R.string.kind_weekly})},
+                        RuleKind.entries.indexOf(kind),{kind=RuleKind.entries[it]})
                     NumberField(interval, { interval = it }, stringResource(when (kind) { RuleKind.EVERY_N_DAYS -> R.string.interval_days; RuleKind.EVERY_N_HOURS -> R.string.interval_hours; RuleKind.WEEKLY -> R.string.interval_weeks }),
                         decimal = false, isError = tried && intervalV == null)
                     // An interval above one day is easy to type by accident (e.g. "11" for "1"), so say plainly what it means.

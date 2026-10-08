@@ -83,23 +83,13 @@ class Appearance(val mode: ThemeMode, val dynamic: Boolean, val contrast: Contra
             if (reliabilityInfo) Text(stringResource(R.string.reliability_limits), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         SectionCard(stringResource(R.string.appearance)) {
-            Text(stringResource(R.string.theme), style = MaterialTheme.typography.labelLarge)
-            SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
-                ThemeMode.entries.forEachIndexed { i, m ->
-                    SegmentedButton(appearance.mode == m, { onAppearance(Appearance(m, appearance.dynamic, appearance.contrast)) }, SegmentedButtonDefaults.itemShape(i, 3)) {
-                        Text(stringResource(when (m) { ThemeMode.SYSTEM -> R.string.theme_system; ThemeMode.LIGHT -> R.string.theme_light; ThemeMode.DARK -> R.string.theme_dark }))
-                    }
-                }
-            }
-            if (Build.VERSION.SDK_INT >= 31) SwitchRow(stringResource(R.string.dynamic_color), appearance.dynamic, stringResource(R.string.dynamic_color_desc)) { onAppearance(Appearance(appearance.mode, it, appearance.contrast)) }
-            Text(stringResource(R.string.contrast), style = MaterialTheme.typography.labelLarge)
-            SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
-                Contrast.entries.forEachIndexed { i, c ->
-                    SegmentedButton(appearance.contrast == c, { onAppearance(Appearance(appearance.mode, appearance.dynamic, c)) }, SegmentedButtonDefaults.itemShape(i, 3)) {
-                        Text(stringResource(when (c) { Contrast.STANDARD -> R.string.contrast_low; Contrast.MEDIUM -> R.string.contrast_medium; Contrast.HIGH -> R.string.contrast_high }))
-                    }
-                }
-            }
+            val themes=ThemeMode.entries.map{m->stringResource(when(m){ThemeMode.SYSTEM->R.string.theme_system;ThemeMode.LIGHT->R.string.theme_light;ThemeMode.DARK->R.string.theme_dark})}
+            val contrasts=Contrast.entries.map{c->stringResource(when(c){Contrast.STANDARD->R.string.contrast_low;Contrast.MEDIUM->R.string.contrast_medium;Contrast.HIGH->R.string.contrast_high})}
+            Text(stringResource(R.string.theme),style=MaterialTheme.typography.labelLarge)
+            AdaptiveChoice(themes,ThemeMode.entries.indexOf(appearance.mode),{onAppearance(Appearance(ThemeMode.entries[it],appearance.dynamic,appearance.contrast))},groupLabels=themes+contrasts)
+            if(Build.VERSION.SDK_INT>=31)SwitchRow(stringResource(R.string.dynamic_color),appearance.dynamic,stringResource(R.string.dynamic_color_desc)){onAppearance(Appearance(appearance.mode,it,appearance.contrast))}
+            Text(stringResource(R.string.contrast),style=MaterialTheme.typography.labelLarge)
+            AdaptiveChoice(contrasts,Contrast.entries.indexOf(appearance.contrast),{onAppearance(Appearance(appearance.mode,appearance.dynamic,Contrast.entries[it]))},groupLabels=themes+contrasts)
         }
         SectionCard(stringResource(R.string.wellbeing)) {
             SwitchRow(stringResource(R.string.wb_prompt_setting), wellbeingPrompt, stringResource(R.string.wb_prompt_setting_desc)) { onWellbeingPrompt(it) }

@@ -102,4 +102,29 @@ class TimelineV2FlowTest {
         assertTrue(repo.trash().isEmpty());assertFalse(TimelineV2Migration.needed(repo.historyPeriods()))
     }
 
+    @Test fun timelineEditsDoNotRewriteFrozenFactsStockOrReminderMappings()=runBlocking {
+        db.dao().profile(ProfileEntity(med,"E2","sublingual",sl_tier=2))
+        repo.addContainers(med,60.0,1,true)
+        repo.unscheduled(med,at(49).plusSeconds(3600),2.0)
+        repo.setWeight(62.0)
+        repo.saveLab(LabValueEntity(analyte_code="E2",value=120.0,unit="pg/mL",sampled_utc=at(50).toEpochMilli(),sampled_zone=zone.id),now,
+            estimate={dao,lab->net.plainnotes.app.conc.LabEstimate.capture(dao,lab)})
+        val context=repo.labContexts().single()
+        assertTrue(org.json.JSONObject(context.context_json).getJSONObject("estimate").has("parameter_document"))
+        val appointment=repo.saveAppointment(AppointmentEntity(type="ENDO",at_utc=at(100).toEpochMilli(),at_zone=zone.id,remind_minutes_before=60))
+        repo.recordVisitPack(VisitPackEntity(appointment_id=appointment,generated_utc=now.toEpochMilli(),zone=zone.id,range_from=d0.toString(),range_to=d0.plusDays(90).toString(),
+            sections="FACTS",language="en",template_version=3,input_digest="a".repeat(64),facts_json="{\"intakes\":181}"))
+        db.dao().mapping(ReminderMappingEntity("synthetic-reminder","synthetic-generation","synthetic-identity",at(151).toEpochMilli(),false))
+        val protected=listOf("medication","pk_profile","schedule_rule","rule_time","dose_record","supply_container","supply_transaction","regimen_version","regimen_rule_link",
+            "lab_value","lab_context_revision","appointment","visit_pack","reminder_mapping","pk_settings")
+        fun frozen()=protected.associateWith{table->Trash.rows(db.openHelper.writableDatabase,table,"1=1 ORDER BY rowid",emptyArray()).toString()}
+        val original=frozen()
+        save(20,40);assertEquals(original,frozen())
+        save(25,35,range(20,40));assertEquals(original,frozen())
+        val current=view();val own=current.projection.periodAt(at(30))!!
+        val del=TimelineEdits.delete(repo.historyPeriods(),current.projection,own,{identity})!!
+        repo.deletePeriod(del.replace,del.rows,now);assertEquals(original,frozen())
+        repo.restoreTrash(repo.trash().single().id,now);assertEquals(original,frozen())
+    }
+
 }

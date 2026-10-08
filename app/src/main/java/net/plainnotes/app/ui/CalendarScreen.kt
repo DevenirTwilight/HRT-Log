@@ -79,9 +79,7 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
             Surface(shape = MaterialTheme.shapes.extraLarge, color = MaterialTheme.colorScheme.surfaceContainerLow, modifier = Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     PeriodBar(view, selected, today, { select(it) })
-                    SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
-                        CalView.entries.forEachIndexed { i, v -> SegmentedButton(view == v, { view = v }, SegmentedButtonDefaults.itemShape(i, CalView.entries.size), icon = {}) { Text(stringResource(v.label)) } }
-                    }
+                    AdaptiveChoice(CalView.entries.map{stringResource(it.label)},CalView.entries.indexOf(view),{view=CalView.entries[it]},selectionIcon=false)
                     when (view) {
                         CalView.MONTH -> MonthGrid(YearMonth.from(selected), infos, today, selected) { select(it) }
                         CalView.WEEK -> WeekStrip(selected, infos, today, extra.records, upcoming, runOut, zone) { select(it) }
@@ -115,11 +113,13 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
         CalView.YEAR -> selected.year.toString()
     }
     fun step(n: Long) = when (view) { CalView.DAY -> selected.plusDays(n); CalView.WEEK -> selected.plusWeeks(n); CalView.MONTH -> selected.plusMonths(n); CalView.YEAR -> selected.plusYears(n) }
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        IconButton(onClick = { onSelect(step(-1)) }) { Icon(Icons.AutoMirrored.Outlined.KeyboardArrowLeft, stringResource(R.string.calendar_previous)) }
-        Text(title, Modifier.weight(1f), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center, maxLines = 1)
-        if (selected != today) TextButton(onClick = { onSelect(today) }) { Text(stringResource(R.string.today)) }
-        IconButton(onClick = { onSelect(step(1)) }) { Icon(Icons.AutoMirrored.Outlined.KeyboardArrowRight, stringResource(R.string.calendar_next)) }
+    Column {
+        Row(verticalAlignment=Alignment.CenterVertically) {
+            IconButton(onClick={onSelect(step(-1))}){Icon(Icons.AutoMirrored.Outlined.KeyboardArrowLeft,stringResource(R.string.calendar_previous))}
+            Text(title,Modifier.weight(1f),style=MaterialTheme.typography.titleMedium,fontWeight=FontWeight.SemiBold,textAlign=TextAlign.Center)
+            IconButton(onClick={onSelect(step(1))}){Icon(Icons.AutoMirrored.Outlined.KeyboardArrowRight,stringResource(R.string.calendar_next))}
+        }
+        if(selected!=today)TextButton(onClick={onSelect(today)}){Text(stringResource(R.string.today))}
     }
 }
 
@@ -153,7 +153,7 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                 (0 until 7).forEach { d ->
                     val date = start.plusDays(w * 7L + d)
-                    DayCell(date, infos[date], date == today, date == selected, YearMonth.from(date) == month, Modifier.weight(1f).height(54.dp)) { onSelect(date) }
+                    DayCell(date, infos[date], date == today, date == selected, YearMonth.from(date) == month, Modifier.weight(1f).heightIn(min=54.dp)) { onSelect(date) }
                 }
             }
         }
@@ -165,15 +165,15 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
     val (bg, fg) = kindColors(info?.kind ?: DayKind.NONE)
     Box(modifier.clip(RoundedCornerShape(12.dp)).background(bg).then(if (isSelected) Modifier.border(2.dp, c.primary, RoundedCornerShape(12.dp)) else Modifier)
         .clickable(onClick = onClick).alpha(if (inMonth) 1f else 0.4f).padding(4.dp)) {
-        Box(Modifier.align(Alignment.TopCenter).size(26.dp).clip(CircleShape).background(if (isToday) c.primary else Color.Transparent), contentAlignment = Alignment.Center) {
-            Text(date.dayOfMonth.toString(), style = MaterialTheme.typography.bodyMedium, fontWeight = if (isToday) FontWeight.Bold else FontWeight.Normal, color = if (isToday) c.onPrimary else fg)
-        }
-        Row(Modifier.align(Alignment.BottomCenter), horizontalArrangement = Arrangement.spacedBy(2.dp), verticalAlignment = Alignment.CenterVertically) {
+        Column(horizontalAlignment=Alignment.CenterHorizontally,verticalArrangement=Arrangement.spacedBy(4.dp)) {
+        CalendarDateBadge(date.dayOfMonth,isToday,fg)
+        Row(Modifier.heightIn(min=12.dp), horizontalArrangement = Arrangement.spacedBy(2.dp), verticalAlignment = Alignment.CenterVertically) {
             if (info != null) {
                 if (info.runOut.isNotEmpty()) Icon(Icons.Outlined.Inventory2, null, Modifier.size(12.dp), tint = c.error)
                 else repeat(minOf(info.open, 3)) { Box(Modifier.size(5.dp).clip(CircleShape).background(if (info.short > 0) c.error else c.primary)) }
                 if (info.appointments > 0) Box(Modifier.size(5.dp).clip(RoundedCornerShape(1.dp)).background(c.secondary))
             }
+        }
         }
     }
 }
@@ -192,12 +192,10 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
                 .then(if (date == selected) Modifier.border(2.dp, c.primary, RoundedCornerShape(12.dp)) else Modifier).clickable { onSelect(date) }.padding(vertical = 6.dp),
                 horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(3.dp)) {
                 Text(weekdayShort(date.dayOfWeek), style = MaterialTheme.typography.labelSmall, color = fg)
-                Box(Modifier.size(26.dp).clip(CircleShape).background(if (date == today) c.primary else Color.Transparent), contentAlignment = Alignment.Center) {
-                    Text(date.dayOfMonth.toString(), style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold, color = if (date == today) c.onPrimary else fg)
-                }
+                CalendarDateBadge(date.dayOfMonth,date==today,fg)
                 marks.sortedBy { it.first }.take(5).forEach { (t, st) ->
                     val col = when (st) { "ON_TIME", "LATE" -> c.primary; "MISSED" -> c.error; "SKIPPED" -> c.outline; "SHORT" -> c.error; else -> c.onSurfaceVariant }
-                    Text(formatTime(t), style = MaterialTheme.typography.labelSmall, color = col, maxLines = 1)
+                    Text(formatTime(t), style = MaterialTheme.typography.labelSmall, color = col)
                 }
                 if (info?.runOut?.isNotEmpty() == true) Icon(Icons.Outlined.Inventory2, null, Modifier.size(14.dp), tint = c.error)
             }
@@ -370,6 +368,25 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
                 Text(listOfNotNull(formatTime(Instant.ofEpochMilli(a.at_utc)), a.practitioner?.takeIf { it.isNotBlank() }, a.location?.takeIf { it.isNotBlank() }).joinToString(" · "),
                     style = MaterialTheme.typography.bodyMedium, color = c.onSecondaryContainer)
             }
+        }
+    }
+}
+
+/** A seven-column grid keeps both digits visible, and lets the date badge grow vertically with text. */
+@Composable private fun CalendarDateBadge(day:Int,today:Boolean,foreground:Color) {
+    val measure=androidx.compose.ui.text.rememberTextMeasurer()
+    val density=androidx.compose.ui.platform.LocalDensity.current
+    val style=MaterialTheme.typography.bodyMedium
+    BoxWithConstraints(contentAlignment=Alignment.Center) {
+        val available=with(density){maxWidth.toPx()}-2f
+        // Android 14+ scales different sp sizes nonlinearly; measure candidates instead of assuming a linear ratio.
+        var fitted=style
+        repeat(20) {
+            if(measure.measure(androidx.compose.ui.text.AnnotatedString("88"),fitted.copy(fontWeight=FontWeight.Bold),softWrap=false).size.width>available)
+                fitted=fitted.copy(fontSize=fitted.fontSize*0.95f)
+        }
+        Box(Modifier.sizeIn(minWidth=26.dp,minHeight=26.dp).clip(CircleShape).background(if(today)MaterialTheme.colorScheme.primary else Color.Transparent),contentAlignment=Alignment.Center){
+            Text(day.toString(),style=fitted,softWrap=false,maxLines=1,fontWeight=if(today)FontWeight.Bold else FontWeight.Normal,color=if(today)MaterialTheme.colorScheme.onPrimary else foreground)
         }
     }
 }

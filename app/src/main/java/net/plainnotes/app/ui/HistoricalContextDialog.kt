@@ -35,9 +35,8 @@ import java.time.*
         text={Column(Modifier.verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(10.dp)) {
             Text(m.name,style=MaterialTheme.typography.titleSmall)
             Text(stringResource(R.string.history_context_repair_note),style=MaterialTheme.typography.bodySmall)
-            Row(horizontalArrangement=Arrangement.spacedBy(6.dp)) {
-                OutlinedButton(onClick={pick=1},modifier=Modifier.weight(1f)){Text(formatDate(from))}
-                OutlinedButton(onClick={pick=2},modifier=Modifier.weight(1f)){Text(formatDate(to))}
+            AdaptiveActions(listOf(formatDate(from),formatDate(to))) { i,mod ->
+                OutlinedButton(onClick={pick=i+1},modifier=mod){Text(formatDate(if(i==0)from else to))}
             }
             DropdownField(stringResource(R.string.molecule),listOf("E2","CPA","SPI","P4"),molecule,{choiceLabel(it)},{molecule=it;if(it!="E2"){route="ORAL";unit="MG"}})
             DropdownField(stringResource(R.string.route),if(molecule=="E2")E2_ROUTES else listOf("ORAL"),route,{choiceLabel(it)},{route=it;ester=estersFor(it).first();if(it=="PATCH")unit="PATCH"})

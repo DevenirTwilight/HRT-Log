@@ -94,11 +94,12 @@ import java.time.*
             feedback?.let{Text(stringResource(it),modifier=Modifier.semantics{liveRegion=LiveRegionMode.Polite})}
         }
         item(key="actions") {
-            Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
-                FilledTonalButton(onClick={onSaveHandled();edit=MilestoneEntity(date=LocalDate.now(zone).toString())},enabled=!saveState.saving){Text(stringResource(R.string.milestone_add))}
+            val labels=listOf(stringResource(R.string.milestone_add),stringResource(R.string.timeline_new_period))
+            AdaptiveActions(labels,contentInset=48.dp) { i,mod ->
+                if(i==0)FilledTonalButton(onClick={onSaveHandled();edit=MilestoneEntity(date=LocalDate.now(zone).toString())},enabled=!saveState.saving,modifier=mod){Text(labels[i])}
                 // §37b: a past period the import missed, or any period the user wants to state.
-                OutlinedButton(onClick={editPeriod(R.string.period_edit_title_create,emptyList(),null,TimelineEdits.Range(LocalDate.now(zone).minusDays(30),LocalDate.now(zone)),null,null)},
-                    enabled=state.medications.isNotEmpty(),modifier=Modifier.testTag("timeline-new-period")){Text(stringResource(R.string.timeline_new_period))}
+                else OutlinedButton(onClick={editPeriod(R.string.period_edit_title_create,emptyList(),null,TimelineEdits.Range(LocalDate.now(zone).minusDays(30),LocalDate.now(zone)),null,null)},
+                    enabled=state.medications.isNotEmpty(),modifier=mod.testTag("timeline-new-period")){Text(labels[i])}
             }
         }
         items(blocks,key={it.key}){block->
