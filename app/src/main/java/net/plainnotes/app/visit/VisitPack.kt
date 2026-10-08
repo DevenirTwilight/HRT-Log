@@ -19,10 +19,6 @@ fun labelCounts(ids: List<Long>, labels: Map<Long, Set<net.plainnotes.app.domain
     return listOf(net.plainnotes.app.domain.RecordLabel.EXTRA_INFERRED, net.plainnotes.app.domain.RecordLabel.EXTRA_USER, net.plainnotes.app.domain.RecordLabel.DOSE_DIFFERS,
         net.plainnotes.app.domain.RecordLabel.REGIMEN_UNKNOWN, net.plainnotes.app.domain.RecordLabel.PENDING_PERIOD).map { k -> l.count { k in it } }
 }
-    fun n(vararg k: net.plainnotes.app.domain.RecordLabel) = l.count { set -> k.any { it in set } }
-    return listOf(n(net.plainnotes.app.domain.RecordLabel.EXTRA_INFERRED), n(net.plainnotes.app.domain.RecordLabel.EXTRA_USER), n(net.plainnotes.app.domain.RecordLabel.DOSE_DIFFERS),
-        n(net.plainnotes.app.domain.RecordLabel.REGIMEN_UNKNOWN, net.plainnotes.app.domain.RecordLabel.PENDING_PERIOD))
-}
 
 /** Default review window: from the last visit the user confirmed as completed; never inferred from time passing. */
 data class VisitRange(val from: LocalDate, val to: LocalDate, val previous: AppointmentEntity?)
