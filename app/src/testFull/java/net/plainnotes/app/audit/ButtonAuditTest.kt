@@ -163,7 +163,7 @@ class ButtonAuditTest(private val locale: String, private val scale: Float) {
             Case("editor_dialog") { MedicationEditor(EditMedication(null, null, null, emptyList()), {}) {} },
             Case("intake_dialog") { IntakeDialog(c.getString(R.string.complete), meds[2], 1.5, now, {}, "LEFT_ARM") { _, _, _ -> } },
             Case("override_dialog") { OverrideDialog(s.slots[4], meds[0], SlotOverride(s.slots[4].slot.key), {}) {} },
-            Case("manual_intake_dialog") { ManualIntakeDialog(meds, { "LEFT_ARM" }, {}) { _, _, _, _ -> } },
+            Case("manual_intake_dialog") { ManualIntakeDialog(meds, { "LEFT_ARM" }, {}) { _, _, _, _, _ -> } },
             Case("appointment_dialog") { AppointmentDialog({}, appt) {} },
             Case("batch_add_dialog") { BatchAddDialog(meds, { listOf(LocalTime.of(8, 0), LocalTime.of(20, 0)) }, {}) { _, _, _, _, _ -> } },
             Case("add_stock_dialog") { AddStockDialog(meds[0], {}) { _, _, _, _, _ -> } },

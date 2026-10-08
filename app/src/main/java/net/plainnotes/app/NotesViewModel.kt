@@ -55,7 +55,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
                 val profiles=meds.mapNotNull{m->dao.profile(m.id)?.let{m.id to it}}.toMap()
                 val upcoming=(repo.planned(now,now.plus(Duration.ofDays(366)),now)+slots.filter{it.slot.at<now}).distinctBy{it.slot.key}.filter{it.state in net.plainnotes.app.ui.OPEN_STATES}
                 NotesState(meds,slots,dao.appointments(),mutable.value.error,false,schedules,profiles,start,dao.rules().associate{it.id to it.config_snapshot}) to
-                    ExtraState(dao.records(),dao.containers(),repo.checkinItems(),dao.scores("0001-01-01",today.toString()),dao.notes("0001-01-01",today.toString()),upcoming,dao.stageReviews(),dao.symptomChecks("0001-01-01",today.toString()),dao.reviewEffects(),dao.regimens(),dao.regimenLinks(),dao.milestones(),dao.labs(),dao.labContexts(),dao.visitQuestions(),dao.visitPacks())
+                    ExtraState(dao.records(),dao.containers(),repo.checkinItems(),dao.scores("0001-01-01",today.toString()),dao.notes("0001-01-01",today.toString()),upcoming,dao.stageReviews(),dao.symptomChecks("0001-01-01",today.toString()),dao.reviewEffects(),dao.regimens(),dao.regimenLinks(),dao.milestones(),dao.labs(),dao.labContexts(),dao.visitQuestions(),dao.visitPacks(),dao.historyPeriods(),dao.annotations())
             }
             ensureActive()
             mutable.value=snapshot.first.copy(error=mutable.value.error);extra.value=snapshot.second;refreshRevision++;readFailureShown=false
@@ -101,7 +101,8 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
                           val reviews:List<StageReviewEntity> = emptyList(),val symptoms:List<SymptomCheckEntity> = emptyList(),val effects:List<ReviewEffectEntity> = emptyList(),
                           val regimens:List<RegimenVersionEntity> = emptyList(),val regimenLinks:List<RegimenRuleLinkEntity> = emptyList(),
                           val milestones:List<MilestoneEntity> = emptyList(),val labs:List<LabValueEntity> = emptyList(),val labContexts:List<LabContextEntity> = emptyList(),
-                          val visitQuestions:List<VisitQuestionEntity> = emptyList(),val visitPacks:List<VisitPackEntity> = emptyList())
+                          val visitQuestions:List<VisitQuestionEntity> = emptyList(),val visitPacks:List<VisitPackEntity> = emptyList(),
+                          val historyPeriods:List<HistoryPeriodEntity> = emptyList(),val annotations:List<RecordAnnotationEntity> = emptyList())
     val extra=MutableStateFlow(ExtraState())
     private fun guarded(block:suspend()->Unit)=viewModelScope.launch{try{block()}catch(e:kotlinx.coroutines.CancellationException){throw e}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)}}
     fun loadExtra():Job=refresh()
@@ -246,7 +247,13 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         try { val n=mutate{repo.backfill(id,from,to,times,d)}; refresh().join(); onDone(n) }
         catch(e:CancellationException){throw e}catch(_:Exception){ mutable.value=mutable.value.copy(error=R.string.operation_error) }
     }
-    fun manual(id:Long,t:Instant,d:Double,site:String?=null)=change{repo.unscheduled(id,t,d,site)}
+    fun manual(id:Long,t:Instant,d:Double,site:String?=null,extra:Boolean=false)=change{repo.unscheduled(id,t,d,site,extra)}
+    fun setExtra(recordId:Long,extra:Boolean)=change{repo.setExtra(recordId,extra)}
+    fun confirmHistoryPeriod(key:String?,medicationId:Long,standard:TherapyStandard,from:LocalDate,until:LocalDate?,zone:ZoneId,identity:String,evidence:String)=
+        change{repo.confirmHistoryPeriod(key,medicationId,standard,from,until,zone,identity,evidence)}
+    fun revokeHistoryPeriod(key:String)=change{repo.revokeHistoryPeriod(key)}
+    fun splitHistoryPeriod(key:String,day:LocalDate)=change{repo.splitHistoryPeriod(key,day)}
+    fun mergeHistoryPeriods(first:String,second:String)=change{repo.mergeHistoryPeriods(first,second)}
     fun loadOverride(key:String)=viewModelScope.launch{override.value=repo.currentOverride(key)}
     fun changeOverride(s:Slot,o:SlotOverride)=change{repo.override(s,o);override.value=null}
     fun appointment(v:AppointmentEntity)=change{repo.appointment(v)}

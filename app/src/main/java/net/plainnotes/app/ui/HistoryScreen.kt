@@ -1,6 +1,8 @@
 @file:OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 package net.plainnotes.app.ui
 
+import net.plainnotes.app.domain.RecordLabel
+
 import androidx.compose.ui.platform.testTag
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -51,7 +53,8 @@ fun adherence(records: List<RecordEntity>) = records.filter { it.slot_key != nul
 private fun RecordEntity.at(): Instant = Instant.ofEpochMilli(taken_utc ?: scheduled_utc ?: 0)
 
 @Composable fun HistoryScreen(state: NotesState, records: List<RecordEntity>, onEdit: (RecordEntity) -> Unit, onDelete: (RecordEntity) -> Unit, contentPadding: PaddingValues,
-                              onAdd: () -> Unit = {}, onBatch: () -> Unit = {}, onLink: (RecordEntity) -> Unit = {}, onConfirmMissed:(RecordEntity)->Unit = {},selectedRecordIds:Set<Long>?=null,onClearSelection:()->Unit={}) {
+                              onAdd: () -> Unit = {}, onBatch: () -> Unit = {}, onConfirmMissed:(RecordEntity)->Unit = {},selectedRecordIds:Set<Long>?=null,onClearSelection:()->Unit={},
+                              labels: Map<Long, Set<RecordLabel>> = emptyMap(), onExtra: (RecordEntity, Boolean) -> Unit = { _, _ -> }) {
     val meds = state.medications.associateBy { it.id }
     var medFilter by rememberSaveable(selectedRecordIds) { mutableStateOf<Long?>(null) }
     var days by rememberSaveable(selectedRecordIds) { mutableIntStateOf(if(selectedRecordIds==null)30 else 0) }
@@ -80,7 +83,7 @@ private fun RecordEntity.at(): Instant = Instant.ofEpochMilli(taken_utc ?: sched
         }
         item { AdherenceCard(adherence(shown)) }
         if (shown.isEmpty()) item { EmptyState(Icons.Outlined.History, stringResource(R.string.history_empty_title), stringResource(R.string.history_empty_body)) }
-        byDay.forEach { (day, list) -> item(key = day.toString()) { DayCard(day, list, meds, state.profiles, onEdit, onDelete, onLink,onConfirmMissed) } }
+        byDay.forEach { (day, list) -> item(key = day.toString()) { DayCard(day, list, meds, state.profiles, onEdit, onDelete, onConfirmMissed, labels, onExtra) } }
     }
 }
 
@@ -105,7 +108,7 @@ private fun RecordEntity.at(): Instant = Instant.ofEpochMilli(taken_utc ?: sched
 }
 
 @Composable private fun DayCard(day: LocalDate, list: List<RecordEntity>, meds: Map<Long, MedicationEntity>, profiles: Map<Long, ProfileEntity>,
-                                onEdit: (RecordEntity) -> Unit, onDelete: (RecordEntity) -> Unit, onLink: (RecordEntity) -> Unit,onConfirmMissed:(RecordEntity)->Unit) {
+                                onEdit: (RecordEntity) -> Unit, onDelete: (RecordEntity) -> Unit, onConfirmMissed:(RecordEntity)->Unit, labels: Map<Long, Set<RecordLabel>>, onExtra: (RecordEntity, Boolean) -> Unit) {
     val c = MaterialTheme.colorScheme
     Surface(shape = MaterialTheme.shapes.extraLarge, color = c.surfaceContainerLow, modifier = Modifier.fillMaxWidth()) {
         Column {
@@ -115,7 +118,7 @@ private fun RecordEntity.at(): Instant = Instant.ofEpochMilli(taken_utc ?: sched
             }
             list.forEachIndexed { i, r ->
                 if (i > 0) HorizontalDivider(Modifier.padding(horizontal = 16.dp), color = c.outlineVariant.copy(alpha = 0.5f))
-                RecordRow(r, meds[r.medication_id], profiles[r.medication_id], { onEdit(r) }, { onDelete(r) }, { onLink(r) },{onConfirmMissed(r)})
+                RecordRow(r, meds[r.medication_id], profiles[r.medication_id], { onEdit(r) }, { onDelete(r) }, {onConfirmMissed(r)}, labels[r.id].orEmpty()) { onExtra(r, it) }
             }
         }
     }
@@ -160,7 +163,8 @@ fun routeIcon(route: String?): ImageVector = when (route) {
     }
 }
 
-@Composable private fun RecordRow(r: RecordEntity, med: MedicationEntity?, profile: ProfileEntity?, onEdit: () -> Unit, onDelete: () -> Unit, onLink: () -> Unit,onConfirmMissed:()->Unit) {
+@Composable private fun RecordRow(r: RecordEntity, med: MedicationEntity?, profile: ProfileEntity?, onEdit: () -> Unit, onDelete: () -> Unit, onConfirmMissed:()->Unit,
+                                  labels: Set<RecordLabel>, onExtra: (Boolean) -> Unit) {
     val c = MaterialTheme.colorScheme
     var menu by remember { mutableStateOf(false) }
     val simple = LocalSimpleMode.current
@@ -197,14 +201,17 @@ fun routeIcon(route: String?): ImageVector = when (route) {
                     "LATE" -> StatusPill(stringResource(R.string.status_late), c.tertiaryContainer, c.onTertiaryContainer, null)
                     "MISSED" -> StatusPill(stringResource(if(r.unconfirmed)R.string.status_unconfirmed else R.string.status_missed), if(r.unconfirmed)c.surfaceContainerHigh else c.errorContainer, c.onSurface, null)
                     "SKIPPED" -> StatusPill(stringResource(R.string.status_skipped), c.surfaceContainerHighest, c.onSurfaceVariant, null)
-                    // An unplanned timestamp has the same presentation for every record source.
-                    else -> if (r.scheduled_utc == null) Chip(stringResource(R.string.history_unscheduled_short))
+                    // REQUIREMENTS §35: no automatic "unplanned"; labels come from the confirmed or saved period, for every source.
+                    else -> labels.sortedBy { it.ordinal }.forEach { Chip(stringResource(recordLabelText(it))) }
                 }
             }
         }
         DropdownMenu(menu, { menu = false }) {
             if(r.unconfirmed)DropdownMenuItem(text={Text(stringResource(R.string.confirm_missed))},onClick={menu=false;onConfirmMissed()})
-            if (taken && r.origin.startsWith("IMPORT_") && r.slot_key == null && r.scheduled_utc == null) DropdownMenuItem(text = { Text(stringResource(R.string.import_link)) }, onClick = { menu = false; onLink() })
+            if (taken && r.scheduled_utc == null) {
+                val marked = RecordLabel.EXTRA_USER in labels
+                DropdownMenuItem(text = { Text(stringResource(if (marked) R.string.history_unmark_extra else R.string.history_mark_extra)) }, onClick = { menu = false; onExtra(!marked) })
+            }
             DropdownMenuItem(text = { Text(stringResource(if (r.status == "MISSED") R.string.history_backfill else R.string.edit)) }, leadingIcon = { Icon(Icons.Outlined.Edit, null) }, onClick = { menu = false; onEdit() })
             if (taken) DropdownMenuItem(text = { Text(stringResource(R.string.remove)) }, leadingIcon = { Icon(Icons.Outlined.Delete, null) }, onClick = { menu = false; onDelete() })
         }
@@ -245,4 +252,12 @@ fun suggestSite(records: List<RecordEntity>, medicationId: Long): String =
         }
     }, confirmButton = { Button(enabled = selected != null, onClick = { selected?.let(onConfirm) }) { Text(stringResource(R.string.import_link)) } },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } })
+}
+
+fun recordLabelText(label: RecordLabel) = when (label) {
+    RecordLabel.EXTRA_INFERRED -> R.string.history_extra_inferred
+    RecordLabel.EXTRA_USER -> R.string.history_extra_user
+    RecordLabel.DOSE_DIFFERS -> R.string.history_dose_differs
+    RecordLabel.REGIMEN_UNKNOWN -> R.string.history_regimen_unknown
+    RecordLabel.PENDING_PERIOD -> R.string.history_pending_period
 }

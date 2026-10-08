@@ -26,10 +26,12 @@ import java.time.*
 
 @Composable fun LongitudinalScreen(state:NotesState,extra:NotesViewModel.ExtraState,onSave:(MilestoneEntity)->Unit,
     onDelete:(Long)->Unit,onOpen:(EventKind)->Unit,contentPadding:PaddingValues,onAppointment:(Long)->Unit={},
-    saveState:MilestoneSaveState=MilestoneSaveState(),onSaveHandled:()->Unit={},onImportedHistory:(List<Long>)->Unit={onOpen(EventKind.DOSE)}) {
+    saveState:MilestoneSaveState=MilestoneSaveState(),onSaveHandled:()->Unit={},onImportedHistory:(List<Long>)->Unit={onOpen(EventKind.DOSE)},
+    periodActions:PeriodActions=PeriodActions()) {
+    var periodDraft by remember{mutableStateOf<Pair<PeriodDraft,String?>?>(null)}
     var now by remember{mutableStateOf(Instant.now())}
     LaunchedEffect(Unit){while(true){kotlinx.coroutines.delay(60_000);now=Instant.now()}}
-    val record=remember(extra.records,extra.regimens,extra.labs,extra.reviews,extra.milestones,state.appointments,state.ruleSnapshots,now){PeriodTimelineProjection.build(extra,state.appointments,now,ruleSnapshots=state.ruleSnapshots)}
+    val record=remember(extra.records,extra.regimens,extra.labs,extra.reviews,extra.milestones,extra.historyPeriods,state.appointments,state.ruleSnapshots,now){PeriodTimelineProjection.build(extra,state.appointments,now,ruleSnapshots=state.ruleSnapshots)}
     val projection=record.projection;val zone=projection.zone;val simple=LocalSimpleMode.current
     val list=rememberLazyListState()
     var edit by rememberSaveable(stateSaver=milestoneSaver){mutableStateOf<MilestoneEntity?>(null)}
@@ -106,7 +108,31 @@ import java.time.*
                         if(!simple)standards.forEach{span->
                             val observed=record.observed.firstOrNull{it.interval.span.id in span.rawVersionIds}
                             val saved=extra.regimens.firstOrNull{it.id in span.rawVersionIds}
-                            StandardSummary(saved?.let{RegimenDefinition.read(it.definition_json).snapshot(it.medication_id)} ?: observed?.snapshot,span.standard)
+                            val confirmedRow=span.rawVersionIds.filter(ObservedTreatmentHistory::isConfirmedSpan).firstNotNullOfOrNull{id->
+                                record.confirmedHistory.firstOrNull{it.id==(ObservedTreatmentHistory.CONFIRMED_SPAN_BASE-id)/100}}
+                            StandardSummary(saved?.let{RegimenDefinition.read(it.definition_json).snapshot(it.medication_id)} ?: confirmedRow?.let{MedicationSnapshot.decode(it.identity_json,it.medication_id)} ?: observed?.snapshot,span.standard)
+                            // REQUIREMENTS §35a: recognised periods stay "to confirm" until the user confirms them.
+                            if(confirmedRow!=null) {
+                                Text(stringResource(R.string.period_confirmed_by_user),style=MaterialTheme.typography.labelMedium,color=MaterialTheme.colorScheme.primary)
+                                val rowZone=ZoneId.of(confirmedRow.zone);val rows=extra.records.filter{r->r.taken_utc!=null && r.deleted_at_utc==null &&
+                                    record.coverage[r.id]?.interval?.span?.id?.let{id->ObservedTreatmentHistory.isConfirmedSpan(id) && (ObservedTreatmentHistory.CONFIRMED_SPAN_BASE-id)/100==confirmedRow.id}==true}
+                                val next=record.confirmedHistory.filter{it.medication_id==confirmedRow.medication_id && it.from_date>confirmedRow.from_date}.minByOrNull{it.from_date}
+                                    ?.takeIf{HistoryPeriods.readStandard(it.standard_json)==HistoryPeriods.readStandard(confirmedRow.standard_json)}
+                                TextButton(onClick={periodDraft=PeriodDraft(confirmedRow.period_key,confirmedRow.medication_id,MedicationSnapshot.decode(confirmedRow.identity_json,confirmedRow.medication_id),
+                                    confirmedRow.identity_json,HistoryPeriods.readStandard(confirmedRow.standard_json),LocalDate.parse(confirmedRow.from_date),confirmedRow.until_date?.let{LocalDate.parse(it).minusDays(1)},
+                                    rowZone,rows.map{it.id},rows.map{Instant.ofEpochMilli(it.taken_utc!!).atZone(rowZone).toLocalDate()}.distinct().size) to next?.period_key},
+                                    modifier=Modifier.testTag("period-edit:${confirmedRow.period_key}")){Text(stringResource(R.string.period_edit))}
+                            } else if(observed!=null) {
+                                Text(stringResource(R.string.period_pending),style=MaterialTheme.typography.labelMedium,color=MaterialTheme.colorScheme.tertiary)
+                                val obsZone=observed.records.firstOrNull()?.taken_zone?.let{runCatching{ZoneId.of(it)}.getOrNull()} ?: zone
+                                if(record.confirmedHistory.any{it.medication_id==observed.interval.span.medicationId && it.until_date!=null &&
+                                        HistoryPeriods.readStandard(it.standard_json)==observed.interval.standard.copy(kind="EVERY_N_DAYS")})
+                                    Text(stringResource(R.string.period_mergeable),style=MaterialTheme.typography.bodySmall)
+                                TextButton(onClick={periodDraft=PeriodDraft(null,observed.interval.span.medicationId,observed.snapshot,observed.records.firstOrNull()?.config_snapshot?.takeIf{runCatching{org.json.JSONObject(it)}.isSuccess} ?: "{}",
+                                    observed.interval.standard,observed.interval.span.from.atZone(obsZone).toLocalDate(),observed.interval.span.until?.minusNanos(1)?.atZone(obsZone)?.toLocalDate(),
+                                    obsZone,observed.records.map{it.id},observed.records.mapNotNull{r->r.taken_utc?.let{Instant.ofEpochMilli(it).atZone(obsZone).toLocalDate()}}.distinct().size) to null},
+                                    modifier=Modifier.testTag("period-confirm:${observed.interval.span.id}")){Text(stringResource(R.string.period_confirm))}
+                            }
                             if(span.standard.kind!="OBSERVED" && span.standard.slotIdentityUnknown)Text(stringResource(R.string.period_slot_unknown),style=MaterialTheme.typography.bodySmall)
                         }
                         if(period.segments.size>1)Text(stringResource(R.string.period_same_day),style=MaterialTheme.typography.bodySmall)
@@ -128,6 +154,7 @@ import java.time.*
         ImportedHistoryDialog(summary,zone,{importKey=null}){onImportedHistory(summary.records.map{it.id});importKey=null}
     }
     val audit=periods.firstOrNull{it.key==auditKey}
+    periodDraft?.let{(draft,next)->HistoryPeriodDialog(draft,next,periodActions){periodDraft=null}}
     audit?.let{period->AlertDialog(onDismissRequest={auditKey=null},title={Text(stringResource(R.string.period_saved_changes))},
         text={Column(Modifier.verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(8.dp)) {
             projection.raw.filter{it.span.from<(period.until ?: Instant.MAX) && (it.span.until?.let{end->end>period.from} ?: true)}.forEach{raw->

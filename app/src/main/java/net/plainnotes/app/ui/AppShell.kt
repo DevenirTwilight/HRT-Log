@@ -73,6 +73,10 @@ class UiPrefs(context: Context) {
     val override by model.override.collectAsStateWithLifecycle()
     val conc by model.conc.collectAsStateWithLifecycle()
     val extra by model.extra.collectAsStateWithLifecycle()
+    // Same projection as the timeline, so History labels and periods always agree (REQUIREMENTS §35).
+    val historyLabels = remember(extra, state.appointments, state.ruleSnapshots) {
+        runCatching { net.plainnotes.app.timeline.HistoryLabels.build(extra.records, net.plainnotes.app.timeline.PeriodTimelineProjection.build(extra, state.appointments, ruleSnapshots = state.ruleSnapshots), extra.annotations, java.time.ZoneId.systemDefault()) }.getOrDefault(emptyMap())
+    }
     val milestoneSave by model.milestoneSave.collectAsStateWithLifecycle()
     val importedLink by model.importedLink.collectAsStateWithLifecycle()
     val notificationSlot by model.notificationSlot.collectAsStateWithLifecycle()
@@ -196,9 +200,10 @@ class UiPrefs(context: Context) {
                     net.plainnotes.app.timeline.EventKind.SYMPTOM,net.plainnotes.app.timeline.EventKind.WELLBEING,net.plainnotes.app.timeline.EventKind.REVIEW->Destination.WELLBEING
                     net.plainnotes.app.timeline.EventKind.APPOINTMENT->Destination.VISITS
                     else->Destination.HISTORY
-                }},pad,onAppointment={visitId=it;destination=Destination.VISITS},saveState=milestoneSave,onSaveHandled=model::clearMilestoneSave,onImportedHistory={importedRecordIds=it.toSet();destination=Destination.HISTORY})
+                }},pad,onAppointment={visitId=it;destination=Destination.VISITS},saveState=milestoneSave,onSaveHandled=model::clearMilestoneSave,onImportedHistory={importedRecordIds=it.toSet();destination=Destination.HISTORY},
+                    periodActions=PeriodActions(model::confirmHistoryPeriod,model::revokeHistoryPeriod,model::splitHistoryPeriod,model::mergeHistoryPeriods))
                 Destination.VISITS -> VisitsScreen(state, extra, model, visitId, { visitId = it }, { appointment = true }, pad)
-                Destination.HISTORY -> HistoryScreen(state, extra.records, { editRecord = it }, { deleteRecord = it }, pad, onAdd = { manual = true }, onBatch = { batch = true }, onLink = model::prepareImportedLink,onConfirmMissed={model.confirmMissed(it.id)},selectedRecordIds=importedRecordIds,onClearSelection={importedRecordIds=null})
+                Destination.HISTORY -> HistoryScreen(state, extra.records, { editRecord = it }, { deleteRecord = it }, pad, onAdd = { manual = true }, onBatch = { batch = true }, onConfirmMissed={model.confirmMissed(it.id)},selectedRecordIds=importedRecordIds,labels=historyLabels,onExtra={r,on->model.setExtra(r.id,on)},onClearSelection={importedRecordIds=null})
                 Destination.STOCK -> StockScreen(state, extra.containers, extra.records, { m -> model.replaceContainer(m.id, m.container_capacity) }, { c, m -> adjustStock = c to m }, { addStock = it }, pad,onInfo={packageInfo=it})
                 Destination.WELLBEING -> WellbeingHub(state,extra,model,region,{manageItems=true},pad)
                 else -> ComingSoonScreen(destination.icon, stringResource(destination.title), pad)
@@ -229,7 +234,7 @@ class UiPrefs(context: Context) {
     }, { batch = false }) { id, from, to, times, d -> batch = false; model.backfill(id, from, to, times, d) { batchDone = it } }
     val batchText = batchDone?.let { stringResource(R.string.batch_done, it) }
     LaunchedEffect(batchText) { batchText?.let { snackbar.showSnackbar(it); batchDone = null } }
-    if (manual) ManualIntakeDialog(state.medications.filter { it.active }, ::siteFor, { manual = false }) { id, t, d, site -> model.manual(id, t, d, site); manual = false; afterIntake() }
+    if (manual) ManualIntakeDialog(state.medications.filter { it.active }, ::siteFor, { manual = false }) { id, t, d, site, extraDose -> model.manual(id, t, d, site, extraDose); manual = false; afterIntake() }
     if (appointment) AppointmentDialog({ appointment = false }) { model.appointment(it); appointment = false }
     if (labNew || labEdit != null) LabDialog(labEdit, { labNew = false; labEdit = null }, { model.saveLab(it); labNew = false; labEdit = null },onSaveWithEstimate={v,estimate->model.saveLab(v,estimate);labNew=false;labEdit=null})
     if (pickStart) DatePickerModal(state.calendarStart, { pickStart = false }) { model.calendarFrom(it) }

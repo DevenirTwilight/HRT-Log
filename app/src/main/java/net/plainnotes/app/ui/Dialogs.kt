@@ -1,5 +1,7 @@
 package net.plainnotes.app.ui
 
+import androidx.compose.foundation.selection.toggleable
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -80,8 +82,9 @@ fun Instant.toLocalHere(): LocalDateTime = atZone(ZoneId.systemDefault()).toLoca
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) { SITES.forEach { s -> FilterChip(site == s, { onChange(s) }, label = { Text(siteLabel(s)) }) } }
 }
 
-@Composable fun ManualIntakeDialog(meds: List<MedicationEntity>, siteFor: (MedicationEntity) -> String?, onDismiss: () -> Unit, onSave: (Long, Instant, Double, String?) -> Unit) {
+@Composable fun ManualIntakeDialog(meds: List<MedicationEntity>, siteFor: (MedicationEntity) -> String?, onDismiss: () -> Unit, onSave: (Long, Instant, Double, String?, Boolean) -> Unit) {
     var chosen by remember { mutableStateOf(meds.firstOrNull()) }
+    var extraDose by remember { mutableStateOf(false) }
     var time by remember { mutableStateOf(Instant.now().toLocalHere()) }
     var dose by remember { mutableStateOf(chosen?.dose_per_intake?.let(::inputNumber) ?: "") }
     var site by remember(chosen) { mutableStateOf(chosen?.let(siteFor)) }
@@ -95,8 +98,12 @@ fun Instant.toLocalHere(): LocalDateTime = atZone(ZoneId.systemDefault()).toLoca
             if (future) Text(stringResource(R.string.future_time_warning), color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
             NumberField(dose, { dose = it }, stringResource(R.string.actual_dose), suffix = chosen?.let { unitLabel(it.unit) }, isError = doseV == null)
             chosen?.let(siteFor)?.let { sug -> SitePicker(site, sug) { site = it } }
+            // Optional and off by default: only the user's own statement makes a dose "extra" without inference.
+            Row(Modifier.fillMaxWidth().toggleable(extraDose, role = androidx.compose.ui.semantics.Role.Checkbox) { extraDose = it }, verticalAlignment = Alignment.CenterVertically) {
+                Checkbox(extraDose, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.manual_extra_dose))
+            }
         } },
-        confirmButton = { Button(enabled = chosen != null && doseV != null && !future, onClick = { onSave(chosen!!.id, time.toInstantHere(), doseV!!, site) }) { Text(stringResource(R.string.save)) } },
+        confirmButton = { Button(enabled = chosen != null && doseV != null && !future, onClick = { onSave(chosen!!.id, time.toInstantHere(), doseV!!, site, extraDose) }) { Text(stringResource(R.string.save)) } },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } })
 }
 

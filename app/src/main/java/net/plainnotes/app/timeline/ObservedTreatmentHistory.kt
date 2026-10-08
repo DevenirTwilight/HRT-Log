@@ -6,7 +6,12 @@ import java.time.*
 
 /** Read-only evidence, never a prescription, reminder rule or frozen regimen/context ID. */
 data class ObservedTreatment(val interval:RawTreatmentInterval,val snapshot:MedicationSnapshot,val records:List<RecordEntity>)
-data class HistoricalTreatmentProjection(val observed:List<ObservedTreatment>,val resolvedRecordIds:Set<Long>)
+/** A confirmed past period as input: its own span ID (negative, display only), dates resolved to instants. */
+data class ConfirmedPeriodInput(val spanId:Long,val periodKey:String,val medicationId:Long,val from:Instant,val until:Instant?,val standard:TherapyStandard,val snapshot:MedicationSnapshot?)
+/** Which interval covers a taken record: a saved or confirmed one ([interval]), or only an unconfirmed candidate ([pending]). */
+data class RecordCoverage(val interval:RawTreatmentInterval?,val pending:Boolean)
+data class HistoricalTreatmentProjection(val observed:List<ObservedTreatment>,val resolvedRecordIds:Set<Long>,
+    val confirmed:List<RawTreatmentInterval> = emptyList(),val coverage:Map<Long,RecordCoverage> = emptyMap())
 
 object ObservedTreatmentHistory {
     private data class Identity(val compound:String,val route:String?,val unit:String,val ester:String?,val formulation:String?)
@@ -31,9 +36,22 @@ object ObservedTreatmentHistory {
     }
     private data class Candidate(val med:Long,val from:Instant,val until:Instant,val standard:TherapyStandard,val snapshot:MedicationSnapshot,val facts:List<Fact>)
 
-    fun build(records:List<RecordEntity>,versions:List<RegimenVersionEntity>,zone:ZoneId,now:Instant,ruleSnapshots:Map<Long,String> = emptyMap()):HistoricalTreatmentProjection {
-        val saved=versions.map{v->val d=RegimenDefinition.read(v.definition_json)
+    const val CONFIRMED_SPAN_BASE=-1_000_000_000L
+    fun isConfirmedSpan(id:Long)=id<=CONFIRMED_SPAN_BASE
+    private fun identity(s:TherapyStandard)=s.compound?.let{c->s.unit?.let{u->Identity(c,s.route,u,s.ester,s.formulation)}}
+    fun build(records:List<RecordEntity>,versions:List<RegimenVersionEntity>,zone:ZoneId,now:Instant,ruleSnapshots:Map<Long,String> = emptyMap(),
+              confirmedPeriods:List<ConfirmedPeriodInput> = emptyList()):HistoricalTreatmentProjection {
+        val real=versions.map{v->val d=RegimenDefinition.read(v.definition_json)
             Saved(RawTreatmentInterval(v.span(),d.therapyStandard()),d.snapshot(v.medication_id)?.let(::identity))}
+        // Confirmed past periods count as saved history, but a saved prescription always wins where they meet.
+        val realByMedication=real.groupBy{it.raw.span.medicationId}
+        val confirmedSaved=confirmedPeriods.flatMap{c->
+            var pieces=listOf(c.from to (c.until ?: Instant.MAX))
+            realByMedication[c.medicationId].orEmpty().forEach{s->val f=s.raw.span.from;val u=s.raw.span.until ?: Instant.MAX
+                pieces=pieces.flatMap{(a,b)->if(f>=b || u<=a)listOf(a to b) else buildList{if(a<f)add(a to f);if(u<b)add(u to b)}}}
+            pieces.filter{(a,b)->a<b}.mapIndexed{i,(a,b)->Saved(RawTreatmentInterval(RegimenSpan(c.spanId-i,c.medicationId,a,b.takeIf{it!=Instant.MAX},true),c.standard),identity(c.standard))}
+        }
+        val saved=real+confirmedSaved
         val savedByMedication=saved.groupBy{it.raw.span.medicationId}.mapValues{(_,rows)->rows.sortedBy{it.raw.span.from}}
         val idsByIdentity=saved.filter{it.identity!=null}.groupBy{it.identity!!}.mapValues{(_,rows)->rows.map{it.raw.span.medicationId}.distinct()}
         val snapshots=records.associate{r->r.id to MedicationSnapshot.decode(HistoricalContext.resolved(r,ruleSnapshots),r.medication_id)}
@@ -105,6 +123,7 @@ object ObservedTreatmentHistory {
             ObservedTreatment(RawTreatmentInterval(RegimenSpan(-1L-i,c.med,c.from,c.until,true),c.standard),c.snapshot,c.facts.map{it.row}.sortedWith(compareBy({it.taken_utc},{it.id})))
         }
         val resolved=observed.flatMap{it.records}.map{it.id}.toMutableSet()
+        val pendingIds=resolved.toSet();val coverage=mutableMapOf<Long,RecordCoverage>()
         val byRecord=facts.associateBy{it.row.id}
         records.forEach{r->
             if(r.deleted_at_utc!=null || r.status !in listOf("ON_TIME","LATE","MISSED","SKIPPED"))return@forEach
@@ -112,14 +131,15 @@ object ObservedTreatmentHistory {
             if(Instant.ofEpochMilli(timestamp)>now)return@forEach
             val m=snapshots[r.id] ?: return@forEach
             val fact=byRecord[r.id];val med=fact?.med ?: r.medication_id
-            val linked=saved.any{s->s.raw.span.medicationId==med && timestamp>=s.raw.span.from.toEpochMilli() &&
+            val linked=saved.firstOrNull{s->s.raw.span.medicationId==med && timestamp>=s.raw.span.from.toEpochMilli() &&
                 (s.raw.span.until?.let{timestamp<it.toEpochMilli()} ?: true) && s.identity?.let{key->
                     (m.molecule==null || m.molecule==key.compound) && (m.unit==null || m.unit==key.unit) &&
                     (m.route==null || key.route==null || m.route==key.route) && (m.profile?.ester==null || key.ester==null || m.profile?.ester==key.ester) &&
                     identity(m)?.let{compatible(it,key)}!=false
                 }==true}
-            if(linked)resolved+=r.id
+            if(linked!=null)resolved+=r.id
+            if(r.status in listOf("ON_TIME","LATE"))coverage[r.id]=RecordCoverage(linked?.raw,linked==null && r.id in pendingIds)
         }
-        return HistoricalTreatmentProjection(observed,resolved)
+        return HistoricalTreatmentProjection(observed,resolved,confirmedSaved.map{it.raw},coverage)
     }
 }
