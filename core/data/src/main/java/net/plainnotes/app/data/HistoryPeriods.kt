@@ -8,7 +8,9 @@ import java.time.ZoneId
 
 /** One row of a timeline edit (REQUIREMENTS §37b); [standard] only for PERIOD and FILL; [until] is exclusive. */
 data class TimelineEditRow(val kind:String,val medicationId:Long,val standard:TherapyStandard?,val from:LocalDate,val until:LocalDate?,val zone:ZoneId,
-                           val identityJson:String,val note:String="")
+                           val identityJson:String,val note:String="",
+                           /** §38: exact bounds inside [from, until) for an edit narrower than whole days (a short saved version). */
+                           val exactFromUtc:Long?=null,val exactUntilUtc:Long?=null)
 
 /** JSON forms and state of confirmed past periods. */
 object HistoryPeriods {
@@ -40,6 +42,18 @@ object HistoryPeriods {
         return TherapyStandard(compound,text("ester"),text("route"),unit,text("formulation"),kind,interval,o.getInt("weekly_count").also{require(it==0)},doses)
     }
 
+    /**
+     * §38: optional exact bounds kept in evidence_json (no schema change). They must lie inside the row's own days, so
+     * the dates stay the authority for overlap checks.
+     */
+    fun exactBounds(row:HistoryPeriodEntity):Pair<Long,Long?>? {
+        val e=JSONObject(row.evidence_json);if(!e.has("exact_from_utc"))return null
+        val zone=ZoneId.of(row.zone);val dayFrom=LocalDate.parse(row.from_date).atStartOfDay(zone).toInstant().toEpochMilli()
+        val dayUntil=row.until_date?.let{LocalDate.parse(it).atStartOfDay(zone).toInstant().toEpochMilli()}
+        val from=e.getLong("exact_from_utc");val until=if(e.isNull("exact_until_utc"))null else e.getLong("exact_until_utc")
+        require(row.kind in USER_KINDS && from>=dayFrom && (dayUntil==null || from<dayUntil) && (until==null || until>from) && (until==null || dayUntil==null || until<=dayUntil) && (until!=null || dayUntil==null))
+        return from to until
+    }
     /** Latest revision of every period; revoked periods are returned too so the caller can show them as unconfirmed again. */
     fun latest(rows:List<HistoryPeriodEntity>)=rows.groupBy{it.period_key}.values.map{it.maxBy{r->r.revision}}
 
@@ -53,6 +67,6 @@ object HistoryPeriods {
         java.util.UUID.fromString(row.period_key);row.group_key?.let{java.util.UUID.fromString(it)};ZoneId.of(row.zone)
         val from=LocalDate.parse(row.from_date);row.until_date?.let{require(LocalDate.parse(it)>from)}
         if(row.kind in listOf(DELETED,STOP))require(JSONObject(row.standard_json).length()==0) else readStandard(row.standard_json)
-        JSONObject(row.identity_json);JSONObject(row.evidence_json)
+        JSONObject(row.identity_json);exactBounds(row)
     }
 }

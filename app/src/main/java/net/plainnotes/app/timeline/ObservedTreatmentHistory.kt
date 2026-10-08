@@ -19,7 +19,7 @@ data class HistoricalTreatmentProjection(val observed:List<ObservedTreatment>,va
     val saved:List<RawTreatmentInterval> = emptyList(),
     val user:List<RawTreatmentInterval> = emptyList(),val userStops:List<TreatmentStop> = emptyList(),
     /** Ranges the user deleted or stopped; shown as their own periods so they can be restored or edited. */
-    val markers:List<Pair<Instant,Instant?>> = emptyList())
+    val markers:List<UserGap> = emptyList())
 
 object ObservedTreatmentHistory {
     private data class Identity(val compound:String,val route:String?,val unit:String,val ester:String?,val formulation:String?)
@@ -165,6 +165,6 @@ object ObservedTreatmentHistory {
         }
         return HistoricalTreatmentProjection(observed,resolved,confirmedSaved.map{it.raw},coverage,real.map{it.raw},user.map{it.raw},
             userEdits.filter{it.kind==HistoryPeriods.STOP}.map{TreatmentStop(it.medicationId,it.from,it.until)},
-            userEdits.filter{it.standard==null}.map{it.from to it.until})
+            userEdits.filter{it.standard==null}.map{UserGap(it.medicationId,it.from,it.until,it.kind)})
     }
 }

@@ -50,8 +50,16 @@ object TimelineEdits {
         }
     }
 
-    fun period(rows:List<HistoryPeriodEntity>,med:Long,standard:TherapyStandard,range:Range,zone:ZoneId,identity:String,also:List<Range> = emptyList())=
-        Edit((listOf(range)+also).flatMap{touched(rows,med,it)}.distinct(),listOf(TimelineEditRow(HistoryPeriods.PERIOD,med,standard,range.from,range.until,zone,identity)))
+    /** [exact]: exact bounds inside [range] (§38), for an edit of one short saved version. */
+    fun period(rows:List<HistoryPeriodEntity>,med:Long,standard:TherapyStandard,range:Range,zone:ZoneId,identity:String,also:List<Range> = emptyList(),
+               exact:Pair<Instant,Instant?>?=null)=
+        Edit((listOf(range)+also).flatMap{touched(rows,med,it)}.distinct(),listOf(TimelineEditRow(HistoryPeriods.PERIOD,med,standard,range.from,range.until,zone,identity,
+            exactFromUtc=exact?.first?.toEpochMilli(),exactUntilUtc=exact?.second?.toEpochMilli())))
+    /** §38: the days an exact part lies in, for the dates of an exact edit. */
+    fun daysOf(from:Instant,until:Instant?,zone:ZoneId):Range {
+        val a=from.atZone(zone).toLocalDate()
+        return Range(a,until?.let{u->u.atZone(zone).let{z->if(z.toLocalTime()==LocalTime.MIDNIGHT)z.toLocalDate() else z.toLocalDate().plusDays(1)}.let{if(it<=a)a.plusDays(1) else it}})
+    }
 
     /** Splits each medicine of [period] at [day]; both halves keep the shown standard and their own bounds. */
     fun split(rows:List<HistoryPeriodEntity>,p:TreatmentPeriodProjection,period:DisplayPeriod,day:LocalDate,identity:(Long)->String):Edit? {

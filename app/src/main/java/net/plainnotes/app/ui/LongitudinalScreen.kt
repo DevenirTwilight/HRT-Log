@@ -48,11 +48,14 @@ import java.time.*
     var splitFor by remember{mutableStateOf<DisplayPeriod?>(null)}
     var deleteFor by remember{mutableStateOf<DisplayPeriod?>(null)}
     var stopFor by remember{mutableStateOf<TreatmentStop?>(null)}
+    var shortDelete by remember{mutableStateOf<RawTreatmentInterval?>(null)}
     fun identity(med:Long)=state.medications.firstOrNull{it.id==med}?.let{MedicationSnapshot.encode(it,state.profiles[med])} ?: "{}"
     fun apply(edit:TimelineEdits.Edit?){edit?.let{timelineActions.edit(it.replace,it.rows)}}
-    fun editPeriod(title:Int,meds:List<Long>,med:Long?,range:TimelineEdits.Range,standard:TherapyStandard?,target:TimelineEdits.Range?,merge:Pair<TherapyStandard?,TherapyStandard?>?=null) {
+    fun editPeriod(title:Int,meds:List<Long>,med:Long?,range:TimelineEdits.Range,standard:TherapyStandard?,target:TimelineEdits.Range?,merge:Pair<TherapyStandard?,TherapyStandard?>?=null,
+                   exact:Pair<Instant,Instant?>?=null) {
         editRequest=PeriodEditRequest(title,meds.ifEmpty{state.medications.map{it.id}},med,range,standard,target,listOfNotNull(target),merge) to {m,std,r->
-            apply(TimelineEdits.period(extra.historyPeriods,m,std,r,zone,identity(m),listOfNotNull(target)))}
+            // §38: kept dates mean the exact part; changed dates mean whole days.
+            apply(TimelineEdits.period(extra.historyPeriods,m,std,r,zone,identity(m),listOfNotNull(target),exact?.takeIf{r==range}))}
     }
     val periods=projection.periods.filter{it.from<=Instant.now()}.asReversed()
     val blocks=buildList<StoryBlock> {
@@ -177,13 +180,12 @@ import java.time.*
                             Text(stringResource(R.string.period_short_saved,formatDate(r.span.from.atZone(zone).toLocalDate()),what,length),
                                 style=MaterialTheme.typography.bodySmall,modifier=Modifier.testTag("period-short:${r.span.id}"))
                             // It can be taken out, changed or deleted on its own (§37b); days are the smallest unit of an edit.
-                            val shortRange=TimelineEdits.Range(r.span.from.atZone(zone).toLocalDate(),(r.span.until ?: r.span.from).atZone(zone).toLocalDate().let{d->if(d<=r.span.from.atZone(zone).toLocalDate())d.plusDays(1) else d})
+                            // §38: these act on exactly this version's time, never on the whole day, and deleting asks first.
+                            val shortRange=TimelineEdits.daysOf(r.span.from,r.span.until,zone)
                             Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
-                                TextButton(onClick={editPeriod(R.string.period_edit_title_edit,listOf(r.span.medicationId),r.span.medicationId,shortRange,r.standard,shortRange)},
+                                TextButton(onClick={editPeriod(R.string.period_edit_title_edit,listOf(r.span.medicationId),r.span.medicationId,shortRange,r.standard,shortRange,exact=r.span.from to r.span.until)},
                                     modifier=Modifier.testTag("period-short-edit:${r.span.id}")){Text(stringResource(R.string.period_short_edit))}
-                                TextButton(onClick={apply(TimelineEdits.Edit(TimelineEdits.touched(extra.historyPeriods,r.span.medicationId,shortRange),
-                                    listOf(TimelineEditRow(HistoryPeriods.DELETED,r.span.medicationId,null,shortRange.from,shortRange.until,zone,identity(r.span.medicationId)))))},
-                                    modifier=Modifier.testTag("period-short-delete:${r.span.id}")){Text(stringResource(R.string.period_short_delete))}
+                                TextButton(onClick={shortDelete=r},modifier=Modifier.testTag("period-short-delete:${r.span.id}")){Text(stringResource(R.string.period_short_delete))}
                             }
                         }
                         if(period.segments.size>1)Text(stringResource(R.string.period_same_day),style=MaterialTheme.typography.bodySmall)
@@ -248,6 +250,11 @@ import java.time.*
     deleteFor?.let{period->AlertDialog(onDismissRequest={deleteFor=null},text={Text(stringResource(R.string.period_delete_confirm))},modifier=Modifier.testTag("period-delete-dialog"),
         confirmButton={Button(onClick={deleteFor=null;apply(TimelineEdits.delete(extra.historyPeriods,projection,period,::identity))}){Text(stringResource(R.string.period_menu_delete))}},
         dismissButton={TextButton(onClick={deleteFor=null}){Text(stringResource(R.string.cancel))}})}
+    shortDelete?.let{r->AlertDialog(onDismissRequest={shortDelete=null},text={Text(stringResource(R.string.period_delete_confirm))},modifier=Modifier.testTag("period-short-delete-dialog"),
+        confirmButton={Button(onClick={shortDelete=null;val range=TimelineEdits.daysOf(r.span.from,r.span.until,zone)
+            apply(TimelineEdits.Edit(TimelineEdits.touched(extra.historyPeriods,r.span.medicationId,range),listOf(TimelineEditRow(HistoryPeriods.DELETED,r.span.medicationId,null,
+                range.from,range.until,zone,identity(r.span.medicationId),exactFromUtc=r.span.from.toEpochMilli(),exactUntilUtc=r.span.until?.toEpochMilli()))))}){Text(stringResource(R.string.period_menu_delete))}},
+        dismissButton={TextButton(onClick={shortDelete=null}){Text(stringResource(R.string.cancel))}})}
     stopFor?.let{stop->StopEditDialog(TimelineEdits.Range(stop.from.atZone(zone).toLocalDate(),stop.until?.atZone(zone)?.toLocalDate()),{r->
         val med=projection.raw.firstOrNull{it.span.medicationId==stop.medicationId}?.span?.medicationId ?: stop.medicationId
         apply(TimelineEdits.moveStop(extra.historyPeriods,projection,stop,med,r,identity(med)))}){stopFor=null}}

@@ -38,6 +38,8 @@ data class TreatmentStop(val medicationId:Long,val from:Instant,val until:Instan
 /** Why a display period differs from the previous one, per medicine (lane ID). */
 enum class ChangeKind{STARTED,ENDED,STOPPED,DOSE,FREQUENCY,FREQUENCY_UNKNOWN,ROUTE,ESTER,FORMULATION,IDENTITY,GAP,UNJOINED}
 data class PeriodChange(val medicationId:Long,val kinds:Set<ChangeKind>)
+/** A range the user deleted or stopped for one medicine (§37b): no plan is shown there and nothing joins across it. */
+data class UserGap(val medicationId:Long,val from:Instant,val until:Instant?,val kind:String)
 /** One join condition and whether it held; [detail] shows both sides. */
 data class JoinCheck(val name:String,val passed:Boolean,val detail:String)
 data class TreatmentPeriodProjection(val zone:ZoneId,val raw:List<RawTreatmentInterval>,val standards:List<TreatmentStandardSpan>,
@@ -45,12 +47,16 @@ data class TreatmentPeriodProjection(val zone:ZoneId,val raw:List<RawTreatmentIn
     /** The standard each raw part is compared with: a saved correction replaced within a day takes its replacement's. */
     val effective:Map<Long,TherapyStandard> = emptyMap(),
     /** §37a: saved versions shorter than 14 days joined into the parts around them, with their own (shown) standard. */
-    val absorbed:Map<Long,TherapyStandard> = emptyMap()) {
+    val absorbed:Map<Long,TherapyStandard> = emptyMap(),
+    /** §37b/§38 user deletions and stops, by lane. */
+    val userGaps:List<UserGap> = emptyList()) {
+    /** User gaps of [lane] touching the stretch between two parts. */
+    fun gapsBetween(lane:Long,from:Instant?,to:Instant)=if(from==null)emptyList() else userGaps.filter{it.medicationId==lane && it.from<maxOf(to,from.plusMillis(1)) && (it.until ?: Instant.MAX)>from}
     /** Every join check between the end of [a] and the start of [b], exactly as [TreatmentPeriods.build] decides (diagnostics). */
     fun joinChecks(a:TreatmentStandardSpan,b:TreatmentStandardSpan):List<JoinCheck> {
         val byId=raw.associateBy{it.span.id}
         val last=byId.getValue(a.rawVersionIds.last());val first=byId.getValue(b.rawVersionIds.first())
-        val explicit=a.until!=null && stops.any{it.medicationId==a.medicationId && it.from>=a.until && it.from<=b.from && last.kind!=SpanKind.SAVED}
+        val explicit=gapsBetween(a.medicationId,a.until,b.from).isNotEmpty()
         return listOf(JoinCheck("same_lane",a.medicationId==b.medicationId,"${a.medicationId} / ${b.medicationId}"))+
             TreatmentPeriods.joinChecks(a.standard,a.until,last,first,effective[first.span.id] ?: first.standard,explicit)
     }
@@ -132,7 +138,7 @@ object TreatmentPeriods {
             JoinCheck("doses",doseKey(a.doses)==doseKey(b.doses),"${a.doses} / ${b.doses}"),
             JoinCheck("gap_under_30_days",gap!=null && gap<JOIN_GAP,"${gap?.toMillis()} ms"),
             JoinCheck("not_stopped_in_app",!(prevLast.kind==SpanKind.SAVED && gap!=null && gap>=MIN_STOP),"last part ${prevLast.span.id} ${prevLast.kind}, gap ${gap?.toMillis()} ms"),
-            JoinCheck("no_stop_set_by_user",!explicitStop,"$explicitStop"),
+            JoinCheck("no_user_deletion_or_stop_between",!explicitStop,"$explicitStop"),
             JoinCheck("not_a_user_boundary",prevLast.kind!=SpanKind.USER && next.kind!=SpanKind.USER,"${prevLast.kind} / ${next.kind}"))
     }
     /** A gap shorter than this between two parts with the same standard does not end the period (same as SustainedPatterns.GAP_DAYS). */
@@ -161,9 +167,12 @@ object TreatmentPeriods {
     /** §37a: a saved version shorter than this between parts with the same standard joins them. */
     val SUSTAIN:Duration=Duration.ofDays(SustainedPatterns.SUSTAIN_DAYS.toLong())
 
-    /** [markers]: ranges the user deleted or stopped; their bounds start display periods even where no plan is shown (§37b). */
+    /**
+     * [userGaps]: ranges the user deleted or stopped. Their bounds start display periods even where no plan is shown
+     * (§37b), and no part joins across one (§38: a deleted day must never sit inside a plan with no parts).
+     */
     fun build(raw:List<RawTreatmentInterval>,zone:ZoneId,withRecords:Set<Long>?=null,userStops:List<TreatmentStop> = emptyList(),
-              markers:List<Pair<Instant,Instant?>> = emptyList()):TreatmentPeriodProjection {
+              userGaps:List<UserGap> = emptyList()):TreatmentPeriodProjection {
         require(raw.map{it.span.id}.distinct().size==raw.size)
         require(raw.all{it.span.until==null || it.span.until>it.span.from})
         val lane=lanes(raw)
@@ -181,7 +190,8 @@ object TreatmentPeriods {
                     !next.span.from.isBefore(end) && Duration.between(end,next.span.from)<window && withRecords?.contains(r.sourceId)!=true
                 effective[r.span.id]=if(correction)effective.getValue(next!!.span.id) else r.standard
             }
-            fun stopBetween(from:Instant?,to:Instant)=from!=null && userStops.any{lane[it.medicationId]==med && it.from>=from && it.from<=to}
+            fun stopBetween(from:Instant?,to:Instant)=from!=null && (userStops.any{lane[it.medicationId]==med && it.from>=from && it.from<=to} ||
+                userGaps.any{lane[it.medicationId]==med && it.from<maxOf(to,from.plusMillis(1)) && (it.until ?: Instant.MAX)>from})
             sorted.forEachIndexed{i,r->
                 val prev=result.lastOrNull()
                 require(prev==null || prev.until!=null && prev.until<=r.span.from){"Overlapping recorded regimen"}
@@ -210,7 +220,7 @@ object TreatmentPeriods {
             };result.map{it.copy(rawVersionIds=it.rawVersionIds.toList())}
         }
         val starts=standards.groupBy{it.from};val ends=standards.filter{it.until!=null}.groupBy{it.until!!}
-        val boundaries=(starts.keys+ends.keys+markers.flatMap{listOfNotNull(it.first,it.second)}).distinct().sorted();val active=mutableMapOf<Long,TreatmentStandardSpan>()
+        val boundaries=(starts.keys+ends.keys+userGaps.flatMap{listOfNotNull(it.from,it.until)}).distinct().sorted();val active=mutableMapOf<Long,TreatmentStandardSpan>()
         val segments=boundaries.mapIndexed{i,start->
             ends[start].orEmpty().forEach{active.remove(it.medicationId)}
             starts[start].orEmpty().forEach{active[it.medicationId]=it}
@@ -229,6 +239,7 @@ object TreatmentPeriods {
         // Stops the user set (REQUIREMENTS §37b) replace a derived stop starting at the same instant.
         val explicit=userStops.map{it.copy(medicationId=lane[it.medicationId] ?: it.medicationId)}
         val allStops=(explicit+stops.filter{d->explicit.none{it.medicationId==d.medicationId && it.from==d.from}}).sortedWith(compareBy({it.from},{it.medicationId}))
-        return TreatmentPeriodProjection(zone,raw,standards,segments,periods,allStops,effective,absorbed)
+        return TreatmentPeriodProjection(zone,raw,standards,segments,periods,allStops,effective,absorbed,
+            userGaps.map{it.copy(medicationId=lane[it.medicationId] ?: it.medicationId)})
     }
 }

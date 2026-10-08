@@ -94,6 +94,7 @@ const val BACKFILL_MAX_DAYS=731L
         rows.forEach{r->
             require(r.kind in HistoryPeriods.USER_KINDS && (r.standard!=null)==(r.kind in listOf(HistoryPeriods.PERIOD,HistoryPeriods.FILL)))
             val evidence=org.json.JSONObject().put("replaces",org.json.JSONArray(replace.distinct())).put("note",r.note)
+            r.exactFromUtc?.let{evidence.put("exact_from_utc",it).put("exact_until_utc",r.exactUntilUtc ?: org.json.JSONObject.NULL)}
             appendPeriod(dao,HistoryPeriodEntity(period_key=java.util.UUID.randomUUID().toString(),revision=1,state=HistoryPeriods.CONFIRMED,medication_id=r.medicationId,
                 identity_json=r.identityJson,standard_json=r.standard?.let(HistoryPeriods::standardJson) ?: "{}",from_date=r.from.toString(),until_date=r.until?.toString(),
                 zone=r.zone.id,evidence_json=evidence.toString(),origin=HistoryPeriods.USER_ORIGIN,created_utc=now.toEpochMilli(),kind=r.kind,group_key=group))

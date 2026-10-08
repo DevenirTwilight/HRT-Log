@@ -71,8 +71,10 @@ internal fun mergedCoverage(projection:TreatmentPeriodProjection,historical:Hist
 fun userEditInputs(rows:List<HistoryPeriodEntity>):List<UserEditInput> = HistoryPeriods.userEdits(rows).sortedBy{it.id}.mapNotNull{row->
     runCatching {
         val zone=ZoneId.of(row.zone)
+        val exact=HistoryPeriods.exactBounds(row)
         UserEditInput(ObservedTreatmentHistory.USER_SPAN_BASE-row.id*100,row.period_key,row.group_key,row.kind,row.medication_id,
-            LocalDate.parse(row.from_date).atStartOfDay(zone).toInstant(),row.until_date?.let{LocalDate.parse(it).atStartOfDay(zone).toInstant()},
+            exact?.first?.let(Instant::ofEpochMilli) ?: LocalDate.parse(row.from_date).atStartOfDay(zone).toInstant(),
+            if(exact!=null)exact.second?.let(Instant::ofEpochMilli) else row.until_date?.let{LocalDate.parse(it).atStartOfDay(zone).toInstant()},
             if(row.kind in listOf(HistoryPeriods.PERIOD,HistoryPeriods.FILL))HistoryPeriods.readStandard(row.standard_json) else null,MedicationSnapshot.decode(row.identity_json,row.medication_id))
     }.getOrNull()
 }
