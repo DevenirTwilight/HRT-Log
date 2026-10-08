@@ -9,7 +9,8 @@
 - 完成：界面（History 标签替代“计划外”、移除手动关联槽位菜单、“标为额外服药”、手动添加的“这是额外服药”开关、时间线“待确认/由记录推定，用户已确认/可合并”、`HistoryPeriodDialog` 确认/修改/在某天拆开/与下一段合并/撤销）。
 - 完成：化验上下文新建/重建时可选 `confirmed_periods`（只在已确认时期包含采样日时写入；旧上下文不变、仍可校验）；Visit Pack/PDF 模板版本 2，按记录标签计数“由记录推定”，PDF/资料包计数只用五个新标签（额外推断/额外用户标记/剂量与当期不同/方案未知/待确认时期），符合当期的不计数，不再有任何按有无原定时间的计数，也不再单独统计“导入”；按时/迟服/漏服/跳过只统计有原定时间的记录（`scheduledCounts`）；“计划外服药”菜单与标题改为“手动记录服药”（用户审核要求，§35a 补充、补充二）；versionCode 18。
 - 新测试：HistoryAttributionTest（混合 HT+APP 跨 10/6 一个待确认时期、确认后逐条标签、用户额外与推断额外区分、撤销/重确认幂等）、HistoryPeriodDialogTest、ImportedTimelineUiTest 修正为“方案未知”且新增待确认→确认入口、HistoryPeriodDataTest 化验上下文。
-- 待做：全量本机检查（进行中）→ 提交推送 → CI 三个任务绿 → 原正式签名 build18 → 交付与本文件更新。
+- 本机全量检查通过（2026-10-08）：app 183（13 既有跳过）/data 64/reminder 14/domain 56/pk 18/importer 12，0 失败；lint、full debug/release、两个测试 APK、manifest 检查通过；schema 7.json 无漂移。
+- 待做：CI 三个任务绿 → 原正式签名 build18 → 交付与本文件更新。
 
 ## 最新反馈：build17计划归属问题未完成，按用户要求暂停实现（2026-10-08）
 
