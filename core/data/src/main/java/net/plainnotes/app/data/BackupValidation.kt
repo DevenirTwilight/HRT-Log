@@ -71,10 +71,10 @@ internal object BackupValidation {
                         else -> false
                     }) { "Invalid column type" }
                     if (v is String) when (key) {
-                        "date", "opened_on", "anchor_local", "range_from", "range_to" -> LocalDate.parse(v)
+                        "date", "opened_on", "anchor_local", "range_from", "range_to", "from_date", "until_date" -> LocalDate.parse(v)
                         "local_time" -> { require(v.length == 8); LocalTime.parse(v) }
                         "anchor_zone", "effective_zone", "scheduled_zone", "taken_zone", "at_zone", "created_zone", "sampled_zone", "rescheduled_zone", "zone" -> ZoneId.of(v)
-                        "config_snapshot", "effects_json", "context_snapshot", "definition_json", "facts_json" -> { BackupLimits.checkJson(v); JSONObject(v) }
+                        "config_snapshot", "effects_json", "context_snapshot", "definition_json", "facts_json", "standard_json", "identity_json", "evidence_json" -> { BackupLimits.checkJson(v); JSONObject(v) }
                         "sections" -> VisitSection.parse(v)
                     }
                 }
@@ -92,6 +92,12 @@ internal object BackupValidation {
         }}
         db.query("SELECT r.id FROM schedule_rule r LEFT JOIN regimen_rule_link l ON l.rule_id=r.id WHERE l.rule_id IS NULL LIMIT 1").use{require(!it.moveToFirst()){"Missing regimen link"}}
         RegimenHistory.validateLinks(db)
+        db.query("SELECT * FROM history_period_revision").use{c->while(c.moveToNext()) {
+            fun t(k:String)=c.getString(c.getColumnIndexOrThrow(k))
+            fun n(k:String)=c.getLong(c.getColumnIndexOrThrow(k))
+            HistoryPeriods.validate(HistoryPeriodEntity(n("id"),t("period_key"),n("revision").toInt(),t("state"),n("medication_id"),t("identity_json"),t("standard_json"),
+                t("from_date"),if(c.isNull(c.getColumnIndexOrThrow("until_date")))null else t("until_date"),t("zone"),t("evidence_json"),t("origin"),n("created_utc")))
+        }}
         fun rejectIf(sql: String) = db.query(sql).use { require(!it.moveToFirst()) { "Invalid restored state" } }
         rejectIf("SELECT 1 FROM supply_transaction t JOIN supply_container c ON c.id=t.container_id LEFT JOIN dose_record d ON d.id=t.dose_record_id WHERE t.used_delta=0 OR t.operation_id='' OR t.kind NOT IN ('ADJUST','CONSUME','REVERSE') OR (t.kind='ADJUST' AND (t.dose_record_id IS NOT NULL OR t.reversal_of_id IS NOT NULL)) OR (t.kind='CONSUME' AND (t.used_delta<=0 OR t.reversal_of_id IS NOT NULL OR t.dose_record_id IS NULL OR t.dose_revision IS NULL OR t.dose_revision<1 OR t.dose_revision>d.revision)) OR (t.dose_record_id IS NOT NULL AND d.medication_id!=c.medication_id) LIMIT 1")
         rejectIf("SELECT 1 FROM supply_transaction t LEFT JOIN supply_transaction original ON original.id=t.reversal_of_id WHERE t.kind='REVERSE' AND (original.id IS NULL OR original.kind!='CONSUME' OR t.dose_record_id IS NULL OR t.dose_revision IS NULL OR t.dose_revision<original.dose_revision OR original.container_id!=t.container_id OR original.dose_record_id!=t.dose_record_id OR t.used_delta!=-original.used_delta) LIMIT 1")

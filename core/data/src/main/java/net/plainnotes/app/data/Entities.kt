@@ -279,3 +279,17 @@ data class MilestoneEntity(@PrimaryKey(autoGenerate=true)val id:Long=0,val date:
 
 @Entity(tableName="lab_context_revision",foreignKeys=[ForeignKey(entity=LabValueEntity::class,parentColumns=["id"],childColumns=["lab_id"],onDelete=ForeignKey.CASCADE)],indices=[Index(value=["lab_id","revision"],unique=true)])
 data class LabContextEntity(@PrimaryKey(autoGenerate=true)val id:Long=0,val lab_id:Long,val revision:Int,val captured_utc:Long,val origin:String,val context_json:String)
+
+/**
+ * A past period inferred from records and confirmed by the user (REQUIREMENTS §35/35a). Append-only: an edit or a
+ * revocation is a new revision of the same period_key. Never a reminder rule, slot or frozen regimen version.
+ */
+@Entity(tableName="history_period_revision",foreignKeys=[ForeignKey(entity=MedicationEntity::class,parentColumns=["id"],childColumns=["medication_id"],onDelete=ForeignKey.RESTRICT)],
+    indices=[Index(value=["period_key","revision"],unique=true),Index("medication_id")])
+data class HistoryPeriodEntity(@PrimaryKey(autoGenerate=true)val id:Long=0,val period_key:String,val revision:Int,val state:String,val medication_id:Long,
+    val identity_json:String,val standard_json:String,val from_date:String,val until_date:String?,val zone:String,val evidence_json:String,
+    val origin:String=HistoryPeriods.ORIGIN,val created_utc:Long)
+
+/** The user's own statement about a record (only EXTRA for now). The dose record itself is never changed. */
+@Entity(tableName="record_annotation",primaryKeys=["record_id","kind"],foreignKeys=[ForeignKey(entity=RecordEntity::class,parentColumns=["id"],childColumns=["record_id"],onDelete=ForeignKey.RESTRICT)])
+data class RecordAnnotationEntity(val record_id:Long,val kind:String,val created_utc:Long)

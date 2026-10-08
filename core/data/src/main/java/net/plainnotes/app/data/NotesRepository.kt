@@ -33,6 +33,58 @@ const val BACKFILL_MAX_DAYS=731L
     }
     suspend fun deleteMilestone(id:Long)=transaction{it.deleteMilestone(id)}
     suspend fun appointments()=withContext(Dispatchers.IO){db().dao().appointments()}
+    // --- Confirmed past periods and record annotations (REQUIREMENTS §35/35a). Append-only; records are never changed. ---
+    suspend fun historyPeriods()=withContext(Dispatchers.IO){db().dao().historyPeriods()}
+    suspend fun annotations()=withContext(Dispatchers.IO){db().dao().annotations()}
+    private suspend fun appendPeriod(dao:NotesDao,row:HistoryPeriodEntity):Long {
+        HistoryPeriods.validate(row);requireNotNull(dao.medication(row.medication_id))
+        val all=dao.historyPeriods()
+        val previous=all.filter{it.period_key==row.period_key}.maxByOrNull{it.revision}
+        require(row.revision==(previous?.revision ?: 0)+1 && (previous==null || previous.medication_id==row.medication_id))
+        if(row.state==HistoryPeriods.CONFIRMED) {
+            val from=LocalDate.parse(row.from_date);val until=row.until_date?.let(LocalDate::parse)
+            // Two confirmed periods of one medication never overlap.
+            require(HistoryPeriods.confirmed(all).none{other->other.period_key!=row.period_key && other.medication_id==row.medication_id &&
+                (until==null || LocalDate.parse(other.from_date)<until) && (other.until_date==null || from<LocalDate.parse(other.until_date))}){"Overlapping confirmed period"}
+        }
+        return dao.insertHistoryPeriod(row.copy(id=0))
+    }
+    private fun current(all:List<HistoryPeriodEntity>,key:String)=requireNotNull(all.filter{it.period_key==key}.maxByOrNull{it.revision})
+    /** Confirms a new period, or a new revision of an existing one (edit, or re-confirm after a revocation). */
+    suspend fun confirmHistoryPeriod(periodKey:String?,medicationId:Long,standard:net.plainnotes.app.domain.TherapyStandard,from:LocalDate,until:LocalDate?,
+                                     zone:ZoneId,identityJson:String,evidenceJson:String,now:Instant=Instant.now())=transaction { dao ->
+        val key=periodKey ?: java.util.UUID.randomUUID().toString()
+        val revision=(dao.historyPeriods().filter{it.period_key==key}.maxOfOrNull{it.revision} ?: 0)+1
+        appendPeriod(dao,HistoryPeriodEntity(period_key=key,revision=revision,state=HistoryPeriods.CONFIRMED,medication_id=medicationId,identity_json=identityJson,
+            standard_json=HistoryPeriods.standardJson(standard),from_date=from.toString(),until_date=until?.toString(),zone=zone.id,evidence_json=evidenceJson,created_utc=now.toEpochMilli()));key
+    }
+    /** Back to unconfirmed. Nothing is deleted. */
+    suspend fun revokeHistoryPeriod(periodKey:String,now:Instant=Instant.now())=transaction { dao ->
+        val c=current(dao.historyPeriods(),periodKey);require(c.state==HistoryPeriods.CONFIRMED)
+        appendPeriod(dao,c.copy(id=0,revision=c.revision+1,state=HistoryPeriods.REVOKED,created_utc=now.toEpochMilli()))
+    }
+    /** Splits a confirmed period at [day]: the first part keeps its key, the second part becomes a new confirmed period. */
+    suspend fun splitHistoryPeriod(periodKey:String,day:LocalDate,now:Instant=Instant.now())=transaction { dao ->
+        val c=current(dao.historyPeriods(),periodKey);require(c.state==HistoryPeriods.CONFIRMED)
+        require(day>LocalDate.parse(c.from_date) && (c.until_date==null || day<LocalDate.parse(c.until_date)))
+        appendPeriod(dao,c.copy(id=0,revision=c.revision+1,until_date=day.toString(),created_utc=now.toEpochMilli()))
+        val key=java.util.UUID.randomUUID().toString()
+        appendPeriod(dao,c.copy(id=0,period_key=key,revision=1,from_date=day.toString(),created_utc=now.toEpochMilli()));key
+    }
+    /** Merges two confirmed periods of the same medication and standard; the second is revoked, the first extended over both. */
+    suspend fun mergeHistoryPeriods(firstKey:String,secondKey:String,now:Instant=Instant.now())=transaction { dao ->
+        val all=dao.historyPeriods();val a=current(all,firstKey);val b=current(all,secondKey)
+        require(a.state==HistoryPeriods.CONFIRMED && b.state==HistoryPeriods.CONFIRMED && a.medication_id==b.medication_id && firstKey!=secondKey)
+        require(HistoryPeriods.readStandard(a.standard_json)==HistoryPeriods.readStandard(b.standard_json)){"Different standards"}
+        require(LocalDate.parse(a.from_date)<LocalDate.parse(b.from_date))
+        appendPeriod(dao,b.copy(id=0,revision=b.revision+1,state=HistoryPeriods.REVOKED,created_utc=now.toEpochMilli()))
+        appendPeriod(dao,a.copy(id=0,revision=a.revision+1,until_date=b.until_date,created_utc=now.toEpochMilli()))
+    }
+    /** The user's own "extra dose" statement on a taken record. */
+    suspend fun setExtra(recordId:Long,extra:Boolean,now:Instant=Instant.now())=transaction { dao ->
+        val r=requireNotNull(dao.recordById(recordId));require(r.deleted_at_utc==null && r.status in listOf("ON_TIME","LATE"))
+        if(extra)dao.insertAnnotation(RecordAnnotationEntity(recordId,HistoryPeriods.EXTRA,now.toEpochMilli())) else dao.deleteAnnotation(recordId,HistoryPeriods.EXTRA)
+    }
     suspend fun profile(id:Long)=withContext(Dispatchers.IO){db().dao().profile(id)}
     suspend fun rules()=withContext(Dispatchers.IO){db().dao().rules()}
     private suspend fun ruleModels(dao:NotesDao)=dao.rules().map { r ->
@@ -261,12 +313,13 @@ const val BACKFILL_MAX_DAYS=731L
         }
         added
     }
-    suspend fun unscheduled(id:Long,taken:Instant,dose:Double,site:String?=null)=transaction { dao ->
+    suspend fun unscheduled(id:Long,taken:Instant,dose:Double,site:String?=null,extra:Boolean=false)=transaction { dao ->
         require(dose.isFinite()&&dose>0);val m=dao.medication(id)
         val snap=MedicationSnapshot.encode(m,dao.profile(id))
         val rid=dao.record(RecordEntity(medication_id=id,taken_utc=taken.toEpochMilli(),taken_zone=ZoneId.systemDefault().id,actual_dose=dose,unallocated_supply_amount=dose,site=site?.takeIf{it.isNotBlank()},
             status="ON_TIME",origin="APP",revision=1,config_snapshot=snap))
         SupplyLedger.allocate(dao,dao.recordById(rid)!!)
+        if(extra)dao.insertAnnotation(RecordAnnotationEntity(rid,HistoryPeriods.EXTRA,System.currentTimeMillis()))
     }
     suspend fun override(slot:Slot,value:SlotOverride,now:Instant=Instant.now())=transaction { dao ->
         require(slot.key==value.key)
@@ -350,7 +403,7 @@ const val BACKFILL_MAX_DAYS=731L
         if(json.optInt("format")!=BackupCodec.FORMAT_VERSION||schema<1) throw BackupCodec.BadFile("incompatible version")
         if(schema>current) throw BackupCodec.NewerBackup()
         val tables=json.getJSONObject("tables")
-        val required=DOMAIN_TABLES.filterNot{(schema<2 && it in listOf("stage_review","symptom_check","review_effect")) || (schema<4 && it in listOf("regimen_version","regimen_rule_link","milestone")) || (schema<5 && it=="lab_context_revision") || (schema<6 && it in listOf("visit_question","visit_pack"))}
+        val required=DOMAIN_TABLES.filterNot{(schema<2 && it in listOf("stage_review","symptom_check","review_effect")) || (schema<4 && it in listOf("regimen_version","regimen_rule_link","milestone")) || (schema<5 && it=="lab_context_revision") || (schema<6 && it in listOf("visit_question","visit_pack")) || (schema<7 && it in listOf("history_period_revision","record_annotation"))}
         require(required.all{tables.has(it)}) { "Incomplete backup" }
         db.withTransaction {
             val sql=db.openHelper.writableDatabase

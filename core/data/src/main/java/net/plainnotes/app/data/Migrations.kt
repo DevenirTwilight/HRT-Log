@@ -48,4 +48,12 @@ val migration5To6 = object : Migration(5,6) {
         db.execSQL("CREATE INDEX IF NOT EXISTS index_visit_pack_appointment_id ON visit_pack(appointment_id)")
     }
 }
-fun allMigrations(today: () -> LocalDate = LocalDate::now): Array<Migration> = arrayOf(migration1To2(today), migration2To3, migration3To4, migration4To5, migration5To6)
+val migration6To7 = object : Migration(6,7) {
+    override fun migrate(db:SupportSQLiteDatabase) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS history_period_revision (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, period_key TEXT NOT NULL, revision INTEGER NOT NULL, state TEXT NOT NULL, medication_id INTEGER NOT NULL, identity_json TEXT NOT NULL, standard_json TEXT NOT NULL, from_date TEXT NOT NULL, until_date TEXT, zone TEXT NOT NULL, evidence_json TEXT NOT NULL, origin TEXT NOT NULL, created_utc INTEGER NOT NULL, FOREIGN KEY(medication_id) REFERENCES medication(id) ON UPDATE NO ACTION ON DELETE RESTRICT)")
+        db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_history_period_revision_period_key_revision ON history_period_revision(period_key,revision)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS index_history_period_revision_medication_id ON history_period_revision(medication_id)")
+        db.execSQL("CREATE TABLE IF NOT EXISTS record_annotation (record_id INTEGER NOT NULL, kind TEXT NOT NULL, created_utc INTEGER NOT NULL, PRIMARY KEY(record_id, kind), FOREIGN KEY(record_id) REFERENCES dose_record(id) ON UPDATE NO ACTION ON DELETE RESTRICT)")
+    }
+}
+fun allMigrations(today: () -> LocalDate = LocalDate::now): Array<Migration> = arrayOf(migration1To2(today), migration2To3, migration3To4, migration4To5, migration5To6, migration6To7)

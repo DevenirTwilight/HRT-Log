@@ -1,0 +1,87 @@
+package net.plainnotes.app.data
+
+import android.content.Context
+import androidx.room.Room
+import androidx.test.core.app.ApplicationProvider
+import kotlinx.coroutines.runBlocking
+import net.plainnotes.app.domain.TherapyStandard
+import org.json.JSONObject
+import org.junit.*
+import org.junit.Assert.*
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
+import java.time.*
+
+/** REQUIREMENTS §35/35a: confirmed past periods are append-only and never touch records, rules or regimen versions. */
+@RunWith(RobolectricTestRunner::class) @Config(sdk=[28])
+class HistoryPeriodDataTest {
+    private lateinit var db:NotesDatabase;private lateinit var repo:NotesRepository
+    private val zone=ZoneId.of("Europe/Paris");private val d0=LocalDate.of(2026,6,10)
+    private val twice=TherapyStandard("E2","E2","SUBLINGUAL","MG",null,"EVERY_N_DAYS",1,0,listOf(1.0,1.0))
+    private val med=MedicationEntity(name="Synthetic E2",molecule="E2",route="SUBLINGUAL",unit="MG",dose_per_intake=1.0,container_capacity=30.0,site_rotation=false,notifications_on=false,active=true,sort_order=0)
+    @Before fun open(){val c=ApplicationProvider.getApplicationContext<Context>();db=Room.inMemoryDatabaseBuilder(c,NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build();repo=NotesRepository(object:DatabaseAccess(c){override fun get(space:Space)=db})}
+    @After fun close()=db.close()
+    private suspend fun medication()=db.dao().insertMedication(med)
+    private suspend fun record(id:Long):Long=db.dao().record(RecordEntity(medication_id=id,taken_utc=d0.atTime(8,0).atZone(zone).toInstant().toEpochMilli(),taken_zone=zone.id,actual_dose=1.0,status="ON_TIME",origin="IMPORT_HT",source_record_key="ht:synthetic:1",revision=1,config_snapshot="{}"))
+    private suspend fun confirm(id:Long,from:LocalDate=d0,until:LocalDate?=d0.plusDays(120),key:String?=null,standard:TherapyStandard=twice)=
+        repo.confirmHistoryPeriod(key,id,standard,from,until,zone,"{}","""{"source_records":[1]}""",Instant.parse("2026-10-08T10:00:00Z"))
+
+    @Test fun confirmEditRevokeReconfirmIsAppendOnlyAndLeavesRecordsAlone()=runBlocking {
+        val id=medication();val r=record(id);val before=db.dao().recordById(r)
+        val key=confirm(id)
+        confirm(id,from=d0.plusDays(1),key=key)
+        repo.revokeHistoryPeriod(key)
+        assertTrue(HistoryPeriods.confirmed(repo.historyPeriods()).isEmpty())
+        confirm(id,key=key)
+        assertEquals(listOf(1,2,3,4),repo.historyPeriods().map{it.revision})
+        assertEquals(listOf("CONFIRMED","CONFIRMED","REVOKED","CONFIRMED"),repo.historyPeriods().map{it.state})
+        assertEquals(before,db.dao().recordById(r));assertTrue(db.dao().rules().isEmpty());assertTrue(db.dao().regimens().isEmpty())
+        try{db.openHelper.writableDatabase.execSQL("UPDATE history_period_revision SET from_date='2026-01-01'");fail()}catch(_:Exception){}
+        try{db.openHelper.writableDatabase.execSQL("DELETE FROM history_period_revision");fail()}catch(_:Exception){}
+    }
+    @Test fun splitAndMergeKeepOneConfirmedCoverage()=runBlocking {
+        val id=medication();val key=confirm(id)
+        val second=repo.splitHistoryPeriod(key,d0.plusDays(40))
+        val now=HistoryPeriods.confirmed(repo.historyPeriods()).sortedBy{it.from_date}
+        assertEquals(listOf(d0.toString(),d0.plusDays(40).toString()),now.map{it.from_date});assertEquals(d0.plusDays(40).toString(),now.first().until_date)
+        repo.mergeHistoryPeriods(key,second)
+        val merged=HistoryPeriods.confirmed(repo.historyPeriods()).single()
+        assertEquals(key,merged.period_key);assertEquals(d0.plusDays(120).toString(),merged.until_date)
+    }
+    @Test fun invalidPeriodsAreRejected()=runBlocking {
+        val id=medication();confirm(id)
+        // Overlap with another confirmed period of the same medication.
+        assertThrows(IllegalArgumentException::class.java){runBlocking{confirm(id,from=d0.plusDays(30),until=d0.plusDays(200))}}
+        assertThrows(IllegalArgumentException::class.java){runBlocking{confirm(id,from=d0.plusDays(300),until=d0.plusDays(300))}}
+        // Unknown frequency cannot be confirmed.
+        assertThrows(IllegalArgumentException::class.java){runBlocking{confirm(id,from=d0.plusDays(300),until=null,standard=twice.copy(kind="OBSERVED",interval=0))}}
+        val other=confirm(id,from=d0.plusDays(300),until=null,standard=twice.copy(doses=listOf(2.0,2.0)))
+        assertThrows(IllegalArgumentException::class.java){runBlocking{repo.mergeHistoryPeriods(HistoryPeriods.confirmed(repo.historyPeriods()).first{it.period_key!=other}.period_key,other)}}
+        Unit
+    }
+    @Test fun extraAnnotationIsSeparateFromTheRecord()=runBlocking {
+        val id=medication();val r=record(id);val before=db.dao().recordById(r)
+        repo.setExtra(r,true);repo.setExtra(r,true)
+        assertEquals(listOf(r),repo.annotations().map{it.record_id})
+        repo.setExtra(r,false);assertTrue(repo.annotations().isEmpty());assertEquals(before,db.dao().recordById(r))
+        repo.unscheduled(id,Instant.parse("2026-06-11T08:00:00Z"),1.0,extra=true)
+        assertEquals(1,repo.annotations().size)
+    }
+    @Test fun backupRoundTripOldSchemaAndMalformedRowsRollBack()=runBlocking {
+        val id=medication();val r=record(id);confirm(id);repo.setExtra(r,true)
+        val periods=repo.historyPeriods();val notes=repo.annotations()
+        val pwd="synthetic-pass".toCharArray();val backup=repo.exportBackup(pwd)
+        repo.restoreBackup(backup,pwd);assertEquals(periods,repo.historyPeriods());assertEquals(notes,repo.annotations())
+        fun tamper(edit:(JSONObject)->Unit)=BackupCodec.encrypt(JSONObject(String(BackupCodec.decrypt(backup,pwd))).also(edit).toString().toByteArray(),pwd)
+        listOf<(JSONObject)->Unit>(
+            {it.getJSONObject("tables").getJSONArray("history_period_revision").getJSONObject(0).put("state","MAYBE")},
+            {it.getJSONObject("tables").getJSONArray("history_period_revision").getJSONObject(0).put("standard_json","""{"version":1,"kind":"OBSERVED"}""")},
+            {it.getJSONObject("tables").getJSONArray("history_period_revision").getJSONObject(0).put("revision",2)},
+            {it.getJSONObject("tables").getJSONArray("record_annotation").getJSONObject(0).put("kind","MISSED")},
+        ).forEach{edit->try{repo.restoreBackup(tamper(edit),pwd);fail()}catch(_:Exception){};assertEquals(periods,repo.historyPeriods())}
+        val old=tamper{o->o.put("schema",6);o.getJSONObject("tables").apply{remove("history_period_revision");remove("record_annotation")}}
+        repo.restoreBackup(old,pwd);assertTrue(repo.historyPeriods().isEmpty());assertTrue(repo.annotations().isEmpty());assertEquals(1,repo.records().size)
+        try{repo.restoreBackup(tamper{it.getJSONObject("tables").remove("record_annotation")},pwd);fail()}catch(_:Exception){}
+    }
+}

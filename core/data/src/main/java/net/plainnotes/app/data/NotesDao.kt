@@ -2,6 +2,11 @@ package net.plainnotes.app.data
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 @Dao interface NotesDao {
+    @Query("SELECT * FROM history_period_revision ORDER BY period_key,revision") suspend fun historyPeriods():List<HistoryPeriodEntity>
+    @Insert suspend fun insertHistoryPeriod(value:HistoryPeriodEntity):Long
+    @Query("SELECT * FROM record_annotation ORDER BY record_id,kind") suspend fun annotations():List<RecordAnnotationEntity>
+    @Insert(onConflict=OnConflictStrategy.IGNORE) suspend fun insertAnnotation(value:RecordAnnotationEntity)
+    @Query("DELETE FROM record_annotation WHERE record_id=:record AND kind=:kind") suspend fun deleteAnnotation(record:Long,kind:String)
     @Query("SELECT * FROM lab_context_revision ORDER BY lab_id,revision") suspend fun labContexts():List<LabContextEntity>
     @Insert suspend fun labContext(value:LabContextEntity):Long
 
