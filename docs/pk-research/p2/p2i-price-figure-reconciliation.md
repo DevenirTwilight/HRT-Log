@@ -52,7 +52,7 @@ mean_j T(C_j−b_j) = T(mean_j C_j)−24·mean_j b_j ≤ T(mean_j C_j)。
 ## 4. 对HRT Log新模型和区间的具体影响
 
 - 原P2-E固定的当前HRT核：1mg、按Price图相同标称采样时刻增量AUC约**367.54**；Featherline数学参考在条件80kg约**2026.50**。前者相对Table1和图都偏小；后者相对Table1较近而相对原图更大。两个目标不是未经校准可以相互替换的临床准确性标准。不得为某一模型调参数后把已见Price原图改成“外部盲测”。
-- 不能直接把218?（不存在的来源值）或2109作为唯一拟合锚点。继续区分**AUTHOR_TABLE_AUC、FIGURE_DIGITIZED_APPROX_AUC、SCENARIO_ONLY**；并记录为何相互不一致。
+- 不能把未经原作者原始记录核实的图像估值或Table1的2109单独选作唯一拟合锚点。继续区分**AUTHOR_TABLE_AUC、FIGURE_DIGITIZED_APPROX_AUC、SCENARIO_ONLY**；并记录为何相互不一致。
 - 讨论慢尾时，同时保留口服/舌下、RIA/LC-MS/MS、绝经/跨性别人群、体重、时间网格、baseline/方法定义等差异。尽量索取Price官方各时点均值与n/SD、0h真实均值和个体AUC算法；无法获取时才向通讯作者询问具体一致性问题。
 - 图像读数误差不是药代人体参数分布，不构成HRT Log P5–P95真实90%覆盖率的证据；不改用户已经拿到的APK和既有冻结结果。
 
