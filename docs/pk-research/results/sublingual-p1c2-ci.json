@@ -1,0 +1,95 @@
+{
+  "jvm": {
+    "artifact_id": 11621784974,
+    "files": 21,
+    "apk": false,
+    "reports": {},
+    "counts_tests_failures_errors_skipped": {
+      "core/domain": [
+        58,
+        0,
+        0,
+        0
+      ],
+      "pk-engine": [
+        58,
+        0,
+        0,
+        0
+      ],
+      "importer": [
+        12,
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "device": {
+    "artifact_id": 11623147665,
+    "files": 25,
+    "apk": false,
+    "reports": {
+      "core/data/build/reports/androidTests/connected/debug/index.html": {
+        "tests": 14,
+        "failures": 0,
+        "skipped": 0
+      },
+      "app/build/reports/androidTests/connected/debug/flavors/full/index.html": {
+        "tests": 64,
+        "failures": 0,
+        "skipped": 2
+      }
+    }
+  },
+  "build": {
+    "artifact_id": 11623187726,
+    "files": 223,
+    "apk": false,
+    "reports": {
+      "app/build/reports/tests/testFullDebugUnitTest/index.html": {
+        "tests": 398,
+        "failures": 0,
+        "skipped": 13
+      },
+      "core/data/build/reports/tests/testDebugUnitTest/index.html": {
+        "tests": 72,
+        "failures": 0,
+        "skipped": 0
+      },
+      "core/reminder/build/reports/tests/testDebugUnitTest/index.html": {
+        "tests": 14,
+        "failures": 0,
+        "skipped": 0
+      },
+      "pk-engine/build/reports/tests/test/index.html": {
+        "tests": 40,
+        "failures": 0,
+        "skipped": 0
+      }
+    },
+    "lint": {
+      "Error": 0,
+      "Warning": 131
+    },
+    "after_matches_local": true,
+    "software_acceptance": true,
+    "clinical_accuracy_established": false,
+    "unchanged_errors": {
+      "population_cases": 0,
+      "synthetic_fits": 0.0,
+      "prior_band_46min": 0.0,
+      "history_cases": 0,
+      "causal": 1.447233444196172e-10
+    }
+  },
+  "run_id": 37943163077,
+  "production_commit": "aa3edd0700fc5e2aababfcc722eba7103adee5dd",
+  "all_jobs_success": true,
+  "synthetic_only": true,
+  "restart_prepare_verify": [
+    1,
+    1
+  ],
+  "physical_device_validation": false
+}

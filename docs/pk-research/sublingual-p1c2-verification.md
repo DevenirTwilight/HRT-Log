@@ -41,3 +41,27 @@ P2人口模型和严格结果获知时间未实施；人体外部准确性未确
 沿用p1c1_performance.kt临时复制helper，旧95199ab detached树与当前生产工作树，同Java21/Gradle/主机、2预热5测量、每批4次完整Calculator查询。旧中位0.069379281s、新0.037286096s、观测变化-46.26%；小样本/GC限制，不作稳定速度或临床准确性推断。逐次耗时与heap_delta_bytes_not_peak在独立performance-before/after JSON；堆差不是峰值，不据此断言无泄漏。新增处置计算为每次已有fit中线性集合构造，不增加每网格拟合；诊断复用最终fit，取消传播保持。
 
 命令：`P1C1_PERF_OUTPUT=<输出> P1C1_PERF_COMMIT=<源码标签> ./gradlew :app:testFullDebugUnitTest --tests '*P1c1PerformanceTest' --rerun --no-parallel --max-workers=2`。旧1/1通过31s、新1/1通过3s（含构建时间不可当计算比率）；helper运行后删除、detached树清理，未留下env依赖测试或额外长期分支。
+
+## 最终本地完整验收
+
+实际命令：`./gradlew :core:data:testDebugUnitTest --rerun :core:reminder:testDebugUnitTest --rerun :app:testFullDebugUnitTest --rerun lintFullDebug :app:assembleFullDebug :app:assembleFullRelease :core:data:assembleDebugAndroidTest :app:assembleFullDebugAndroidTest --no-parallel --max-workers=2`。7m11s成功，data72/reminder14全部通过；app398（385通过/13既有可选跳过/0失败），新增14全部通过。Lint XML0错误131既有警告，Full Debug/Release及两模块测试APK构建成功。release manifest身份/入口/no-INTERNET检查成功，git diff --check通过。没有APK交付或实际本地设备运行。
+
+旧P0/A/B/C1只读重放实际命令均与README显式命令相同、输出`/workspace/tooling/pk-p1c2/replay-*`，P0算术误差4.77e-10、A/B/C1软件验收true、临床准确性均false。当前C2对照与Python13再通过；人口/合成拟合/先验/资格案例误差0、C1原显示误差1.4472334442e-10。全部旧机器文件无修改。
+
+## CI进行中
+
+生产SHA aa3edd0700fc5e2aababfcc722eba7103adee5dd，[CI37943163077](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37943163077)。JVM成功，artifact11621784974下载回查XML：PK58/domain58/importer12零失败/跳过，21文件无APK。Android/device-tests尚在运行，最终日志/报告计数另补。没有真实设备验收，不把instrumentation编译当原生通过。
+
+### API35实际验收完成
+
+device-tests success，artifact11623147665下载25文件、无APK。HTML：data14/14（MigrationBaseline7/EncryptionIntegration7），app64（62通过/2常规跳过/0失败）；OutlierDispositionAndroidTest3/3包括实际全warning保留、部分子集oracle及历史未来状态非干涉。独立重启prepare/verify各`OK (1 test)`。日志Finished66含重启，主HTML64应分开报告；不是实机验收。Android主job仍在运行，最终综合结论另补。
+
+## 最终CI综合验收：全部通过
+
+生产源码 **aa3edd0700fc5e2aababfcc722eba7103adee5dd**，[CI37943163077](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37943163077)三个job success。Android主步骤7m38s，完整app398（385通过/13跳过/0失败）、data72/reminder14；PK聚焦40/40，Python13/13；Lint XML0错误131既有警告、Full构建/no-INTERNET manifest/Schema检查通过。JVM PK58/domain58/importer12和API35 data14/14、app64（62通过/2常规跳过）、重启各1通过前述日志与报告均已核验。
+
+下载build artifact11623187726（223文件），另jvm21/device25，全部无APK。真实Kotlin/app after与本地归档完全一致；当前人口/合成正常拟合/先验/历史资格误差0，C1原显示差1.447e-10。旧四阶段只读对照software true、clinical false；新C2亦software true/clinical false，不能将徽章当人体科学验收。CI独立机器摘要sublingual-p1c2-ci.json保存任务/产物ID和计数。
+
+最后仅文档/机器验收追溯记录提交，生产/Kotlin测试仍与上述全绿SHA一致；文档SHA触发的新CI若尚在排队不能宣称完成。远端/最终SHA在最终报告给出，无发布或签名操作。
+
+P0证据研究及P1-A/B/C1/C2工程修复已完成，当前已知全异常集合矛盾已修。尚未确立人体外部准确性、研究异质性/结构误差的完整区间及严格结果获知时间；真实设备未验收。下一建议为P2先完成独立外部验证和受限候选规格，避免凭复杂度或匹配另一应用替换模型；结果获知字段另案产品与历史兼容决策，不在本轮实施。
