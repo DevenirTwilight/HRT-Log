@@ -8,15 +8,19 @@
       "label": "A",
       "source_commit": "622e84ee927a2ebd7afc6d102c8a0af74b47799e",
       "resource_shrink": null,
+      "resource_shrink_note": "source default",
       "abi_filter": [],
       "minify": true,
       "status": "building",
-      "apk": null
+      "apk": null,
+      "original_gradle_sha256": "a2964e07757c4e257eae877a4ceb35650cc9337cd8f1164508d291fcf6c17500",
+      "experimental_gradle_sha256": "a2964e07757c4e257eae877a4ceb35650cc9337cd8f1164508d291fcf6c17500"
     },
     {
       "label": "B",
       "source_commit": "622e84ee927a2ebd7afc6d102c8a0af74b47799e",
       "resource_shrink": true,
+      "resource_shrink_note": "explicit true",
       "abi_filter": [],
       "minify": true,
       "status": "pending",
@@ -26,6 +30,7 @@
       "label": "C",
       "source_commit": "622e84ee927a2ebd7afc6d102c8a0af74b47799e",
       "resource_shrink": null,
+      "resource_shrink_note": "source default",
       "abi_filter": [
         "arm64-v8a"
       ],
@@ -37,6 +42,7 @@
       "label": "D",
       "source_commit": "622e84ee927a2ebd7afc6d102c8a0af74b47799e",
       "resource_shrink": true,
+      "resource_shrink_note": "explicit true",
       "abi_filter": [
         "arm64-v8a"
       ],
@@ -46,6 +52,8 @@
     }
   ],
   "status": "in_progress",
+  "java_home": "/tmp/hrt-apk-experiment/jdk/jdk-21.0.12.1+1",
+  "gradle_executable": "/tmp/hrt-apk-experiment/gradle-9.3.1/bin/gradle",
   "tools": {
     "jdk": "Temurin 21.0.12.1+1",
     "gradle": "9.3.1",
@@ -88,8 +96,64 @@
       "tests": 3,
       "exit_code": 0
     },
-    "android": "in_progress",
+    "android": {
+      "status": "incomplete_after_environment_oom",
+      "completed_modules": {
+        "core/data": {
+          "tests": 72,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "core/reminder": {
+          "tests": 14,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "app": {
+          "tests": 0,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "app_result": "not_completed",
+      "lint_result": "not_completed"
+    },
     "release_runtime": "not_verified",
     "arm64_device": "not_verified"
-  }
+  },
+  "prior_attempts": [
+    {
+      "status": "failed",
+      "reason": "wrapper direct network refused",
+      "exit_code": 1
+    },
+    {
+      "status": "failed",
+      "reason": "preinstalled JRE lacked Java compiler",
+      "exit_code": 1
+    },
+    {
+      "status": "failed",
+      "reason": "new JDK did not trust proxy CA",
+      "exit_code": 1
+    },
+    {
+      "status": "failed",
+      "reason": "parallel release/Android workload: daemon exit, cgroup OOM",
+      "exit_code": 1
+    },
+    {
+      "status": "failed",
+      "reason": "Robolectric test JVM lacked download proxy",
+      "exit_code": 1
+    },
+    {
+      "status": "failed",
+      "reason": "combined Android tests/lint: daemon exit, second cgroup OOM",
+      "exit_code": 1
+    }
+  ]
 }
