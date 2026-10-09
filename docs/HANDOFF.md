@@ -1,3 +1,9 @@
+# P2-K：停止Doll单一训练点独大；Featherline正反证据同口径研究（2026-10-09）
+
+新增[P2-K细致理论与公平验证审查](pk-research/p2/p2k-featherline-hrt-balanced-evidence.md)，[复算工具](../tools/pk-research/p2k_model_balance.py)与6项测试。Price1997三剂量独立已见出版AUC更贴近Featherline80kg（1mg 2026.5对人体2109、HRT 367.5；0.5mg 1013.3对970、HRT183.8；0.25mg 506.6对825、HRT91.9）；同六人交叉，不是三队列。Price原图1h≈450，Featherline≈481更接近，HRT≈144来自Doll训练；但Price2–4h Featherline可能高估、Doll单剂1mg/1h观察总144而Featherline增量≈481，两个模型均不能再现Rosano20→40min早期强加速。Price Figure1与Table1 AUC冲突未解决；未知原组基线使图上MAE排名反转。不预设哪软件正确，不掩盖Feather支持性证据，也不因拟合Doll训练点称HRT已验证。正式参数、P1、历史、APK及P2冻结协议不动。
+
+---
+
 ## P2-J 新证据约束（2026-10-09）
 
 [完整科学方法和推导](pk-research/p2/p2j-price-figure-baseline-consistency.md)、[研究脚本](../tools/pk-research/p2j_price_baseline_audit.py)、8项回归测试。由Price1997原版图已见1–24h人工估读，若Figure是原值均值，0h真实基线b≥0，则在同网格同人梯形面积中AUC_adj=1557.5−23.5b。此条件下Table1报告的2109不可仅靠调整基线得到；人工高端情景1760.5（设0h为0、非严格误差界限），尚差348.5。尚未验证Figure实际预处理、每人真实采样时间和作者AUC规则；不称发表错误。旧冻结人群模型与软件未改。

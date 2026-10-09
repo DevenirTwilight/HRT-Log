@@ -1,5 +1,10 @@
 # P2-A/B 舌下人口模型研究（已完成隔离研究，未投产）
 
+## P2-K 公平比较 HRT Log 和 Featherline（2026-10-09）
+
+用户指出 P2 项目过度依赖最初 Doll 训练点，现以[正反证据对称评估与方法依据](p2k-featherline-hrt-balanced-evidence.md)、[独立可重算公平比较脚本](../../../tools/pk-research/p2k_model_balance.py)和6项测试纠偏。Price1997 同六人三SL剂量已公布的基线扣除AUC上，Featherline 80kg在三个剂量均比HRT当前核更接近；1h浓度也更贴近Price原图。然而 Featherline对Doll 1h≈144预测≈481、Price2–4h可能高估，HRT对Doll是训练点吻合；双方都无法解释Rosano20→40min的4.23倍群体浓度增加。Price Figure1与Table1仍存在来源内未解释差异；图上9点MAE排序会随未经核实的基线假设翻转。**支持性证据须明确承认，但不能称模型临床准确、95%覆盖验证或正式替换已批准。**
+
+
 ## P2-J：Price原图积分及非负基线的代数一致性审查（2026-10-09）
 
 [完整理论和来源审计](p2j-price-figure-baseline-consistency.md)、[标准库复算程序](../../../tools/pk-research/p2j_price_baseline_audit.py)和8项数学测试。沿用P2-I已暴露的人工群体估读，若Figure为同源未扣基线均值，扣除未知非负基线b后AUC0–24=1557.5−23.5b，无法达到Table1的2109；人工较高读数情景即使b=0也只有1760.5，差348.5。**这一结论依赖来源口径和图像估读前提，不能认定论文错误。**旧P2冻结、正式模型及APK保持不变。
