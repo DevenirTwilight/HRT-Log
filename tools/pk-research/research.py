@@ -52,8 +52,13 @@ def micro_jacobian():
         rows.append(row)
     return {'parameters':['f_m','F_m','F_g','V_L'],'synthetic_times_h':[.25,.5,1,1.5,3,6,12,24],'rank':rank(rows),'columns':4,'jacobian':rows,'tolerance':1e-7,'human_data':False}
 
-def profiles(catalog, settings):
-    record=next(r for r in catalog['records'] if r['id']=='doll_sl_peak')
+def profiles(catalog, settings, excluded_studies=()):
+    training=[r for r in catalog['records'] if r['used_in_fitting'] and r['study_id'] not in excluded_studies]
+    if not training:
+        return []  # No synthetic/preset/exposed observation substituted for missing humans.
+    if len(training)!=1 or training[0]['id']!='doll_sl_peak':
+        raise ValueError('Only the frozen single training record is supported')
+    record=training[0]
     target=m.pg_ml(record['value'],record['unit'])
     bounds=settings['amplitude_bounds'];starts=settings['amplitude_starts'];result=[]
     for baseline in settings['baseline_pg_ml']:
@@ -159,7 +164,7 @@ def run(directory, output):
     holds=[{'hold_minutes':h,'hrt_two_mg_46min':2*m.current(46/60,params,h),'candidate_hold_transform':'unsupported','human_validated':False} for h in settings['hold_minutes']]
     micro_sets=[(.1,1,.03,160),(.2,.5,.03375,160),(.2,.25,.016875,80)]
     mk=[m.from_micro(*g) for g in micro_sets]
-    ident={'human_train_observations':1,'A_nominal_dim':2,'B_nominal_effective_dim':5,'human_jacobian_rank_max':1,'delete_Doll_training':'not_estimable_no_training_observations','delete_exposed_study':'fits unchanged by construction; comparisons of remaining studies unchanged; no aggregate ranking','micro_sets':[dict(zip(['f_m','F_m','F_g','V_L'],x)) for x in micro_sets],'synthetic_equivalence_max_error':max(abs(mk[0](t)-k(t)) for t in settings['times_h'] for k in mk[1:]),'micro_jacobian':micro_jacobian(),'flip_flop':{'pairs':[[100,.1,1],[10,1,.1]],'max_error':max(abs(100*m.q(t,.1,1)-10*m.q(t,1,.1)) for t in settings['times_h']),'synthetic_only':True},'parameter_uncertainty':'not_estimable','measurement_error':'not_estimable_heterogeneous_assays_unknown_statistics','study_heterogeneity':'not_estimable_seven_sparse_nonmatched_studies','structural_error':'not_estimable_no_matched_trajectory'}
+    ident={'human_train_observations':1,'A_nominal_dim':2,'B_nominal_effective_dim':5,'human_jacobian_rank_max':1,'delete_Doll_training':'not_estimable_no_training_observations' if not profiles(catalog,settings,excluded_studies=('Doll2022',)) else 'unexpected_fit_after_deletion','delete_exposed_study':'fits unchanged by construction; comparisons of remaining studies unchanged; no aggregate ranking','micro_sets':[dict(zip(['f_m','F_m','F_g','V_L'],x)) for x in micro_sets],'synthetic_equivalence_max_error':max(abs(mk[0](t)-k(t)) for t in settings['times_h'] for k in mk[1:]),'micro_jacobian':micro_jacobian(),'flip_flop':{'pairs':[[100,.1,1],[10,1,.1]],'max_error':max(abs(100*m.q(t,.1,1)-10*m.q(t,1,.1)) for t in settings['times_h']),'synthetic_only':True},'parameter_uncertainty':'not_estimable','measurement_error':'not_estimable_heterogeneous_assays_unknown_statistics','study_heterogeneity':'not_estimable_seven_sparse_nonmatched_studies','structural_error':'not_estimable_no_matched_trajectory'}
     result={'code_revision':revision(),'protocol_freeze_commit':'9051875','protocol_sha256':lock['protocol_sha256'],'dataset_sha256':lock['dataset_sha256'],'params_sha256':catalog['production_params_sha256'],'code_sha256':{name:guard.digest(Path(__file__).parent/name) for name in ['models.py','research.py','check_protocol.py','test_research.py']},'seed':settings['seed'],'study_ids':[s['id'] for s in catalog['studies']],'train_ids':split['roles']['TRAIN'],'validation_ids':split['roles']['LOCKED_EXTERNAL'],'design_exposed_ids':split['roles']['DESIGN_EXPOSED'],'previously_seen':split['previously_seen'],'synthetic_only':False,'human_observations':'only evidence-catalog.records; generated points separately tagged synthetic','software_validation_passed':None,'software_validation_note':'Run unittest and engineering checks; this scientific CLI alone cannot certify CI. See verification.md.','external_validation_status':'external_validation_insufficient','clinical_accuracy_established':False,'model_replacement_approved':False,'canonical_profile_ids':canon,'profiles_count':len(ps),'profiles':profile_rows,'study_comparisons':rows,'synthetic_model_points':math_points,'model_internal_metrics':{name:metrics(k) for name,k in kernels.items()},'synthetic_repeated_dose_results':repeat,'history_sensitivity':histories,'weight_sensitivity':weights,'hold_sensitivity':holds,'identifiability':ident,'not_comparable_record_ids':[r['id'] for r in catalog['records'] if r['comparison_status']=='qualitative_no_error'],'protocol_deviations':[],'conclusion':'NUMERICALLY_VALID_ONLY; conditional exposed points cannot select a clinically accurate replacement'}
     (output/'analysis.json').write_text(json.dumps(result,ensure_ascii=False,indent=2,allow_nan=False)+'\n')
     (output/'candidate-parameters.json').write_text(json.dumps([{'id':p['id'],'fixed':p['fixed'],'amplitude':p['fit'].get('amplitude'),'baseline_assumption':p['baseline_pg_ml'],'status':p['fit']['status']} for p in ps],indent=2)+'\n')
@@ -170,7 +175,7 @@ def run(directory, output):
         if row['baseline_assumption_pg_ml'] in (0,24):text.append(f"| {row['study_id']} | {row['model']} | {row['baseline_assumption_pg_ml']} | {row['observed']:.3f} {row['observed_unit']} | {row['predicted']:.3f} | {row['signed_error']:.3f} |")
     text+=['','All scenarios/negative results: analysis.json (339 profiles). Canonical settings fixed before fitting. Human data are only sourced catalog records; model metrics are synthetic.','',f"Protocol {lock['protocol_sha256']}; dataset {lock['dataset_sha256']}; code {revision()}."]
     (output/'report.md').write_text('\n'.join(text)+'\n')
-    manifest={f.name:guard.digest(f) for f in output.iterdir() if f.is_file()}
+    manifest={f.name:guard.digest(f) for f in sorted(output.iterdir()) if f.is_file()}
     (output/'output-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
     print(json.dumps({'output':str(output),'profiles':len(ps),'external_validation_status':result['external_validation_status'],'clinical_accuracy_established':False}))
 

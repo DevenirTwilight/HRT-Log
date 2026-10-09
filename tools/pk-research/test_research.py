@@ -212,6 +212,12 @@ class ReportContractTest(unittest.TestCase):
             self.assertEqual(p['actually_fitted_parameter_count'],1)
     def test_deleting_only_train_study_does_not_manufacture_an_estimate(self):
         self.assertEqual(self.result['identifiability']['delete_Doll_training'],'not_estimable_no_training_observations')
+        data=json.loads((P2/'evidence-catalog.json').read_text())
+        settings=json.loads((P2/'experiment-settings.json').read_text())
+        self.assertEqual(self.research.profiles(data,settings,excluded_studies=('Doll2022',)),[])
+        full=self.research.profiles(data,settings)
+        exposed_removed=self.research.profiles(data,settings,excluded_studies=('Pines1998','Yaish2023','Burnier1981'))
+        self.assertEqual([p['fit'] for p in full],[p['fit'] for p in exposed_removed])
         for p in self.result['profiles']:self.assertEqual(p['human_train_record_ids'],['doll_sl_peak'])
     def test_external_perturbation_cannot_change_fitted_parameters(self):
         import copy
@@ -223,6 +229,7 @@ class ReportContractTest(unittest.TestCase):
         self.assertEqual([p['fit'] for p in a],[p['fit'] for p in b])
     def test_result_hashes_and_overwrite_refusal(self):
         manifest=json.loads((self.path/'output-manifest.json').read_text())
+        self.assertEqual(list(manifest),sorted(manifest))
         for name,sha in manifest.items():self.assertEqual(guard.digest(self.path/name),sha)
         with self.assertRaises(ValueError):self.research.run(P2,self.path)
     def test_same_inputs_repeat_identically(self):
