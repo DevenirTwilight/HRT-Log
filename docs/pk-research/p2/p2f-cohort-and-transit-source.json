@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-09",
+  "label": "P2-F research-only, previously exposed",
+  "locked_external": false,
+  "production_change": false,
+  "studies": [
+    {
+      "id": "Yager2022_TransPrEP",
+      "DOI": "10.1089/AID.2022.0044",
+      "PMID": "35815468",
+      "PMCID": "PMC9910105",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9910105/",
+      "trial": "NCT03652623",
+      "TW_enrolled": 26,
+      "TW_with_serum_PK": 25,
+      "oral_sublingual_combined_n": 13,
+      "route": "oral and sublingual PO/SL pooled",
+      "assay": "LC-MS/MS",
+      "dosing": "existing stable chronic hormone treatment",
+      "times_h": [
+        0,
+        1,
+        2,
+        4,
+        6,
+        8,
+        24
+      ],
+      "AUC_last_baseline_geo_mean": 1531,
+      "AUC_last_on_PrEP_geo_mean": 1434,
+      "Cmax_baseline_geo_mean": 191,
+      "Cmax_on_PrEP_geo_mean": 161,
+      "auc_unit": "pg h/mL",
+      "cmax_unit": "pg/mL",
+      "baseline_subtracted": false,
+      "baseline_handling": "Not described as subtracting endogenous predose level; observed chronic dosing concentrations",
+      "participant_level_routes_public": false
+    },
+    {
+      "id": "Abdelmawla2023",
+      "DOI": "10.25677/3ygcx-1ac37",
+      "url": "https://digitalcollections.cuanschutz.edu/works/publication-dissertation/3ygcx-1ac37",
+      "source_type": "Colorado Anschutz MS thesis institutional abstract",
+      "same_cohort_as": "Yager2022_TransPrEP",
+      "transwomen_enrolled": 26,
+      "oral_sublingual_pooled_apparent_half_life_h": 28.4,
+      "full_pdf_verified": false,
+      "limitation": "Not SL-only physical clearance; oral/SL merged, observational/model-dependent apparent PK"
+    },
+    {
+      "id": "Rosano1997_PK25",
+      "DOI": "10.1161/01.cir.96.9.2837",
+      "source": "docs/pk-research/p2/p2e-source-metrics.json",
+      "n": 25,
+      "unit": "pmol/L",
+      "route": "1mg SL",
+      "baseline_unknown": true,
+      "means_by_minute": {
+        "10": 234,
+        "20": 468,
+        "40": 1980,
+        "60": 2124
+      },
+      "status": "previously seen; structural sensitivity only"
+    }
+  ],
+  "cohort_independence": "Yager article and Abdelmawla thesis reanalyze the same TransPrEP trial; count as one source cohort",
+  "scientific_status": {
+    "external_validation_insufficient": true,
+    "clinical_accuracy_established": false,
+    "model_replacement_approved": false
+  }
+}

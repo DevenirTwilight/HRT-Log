@@ -1,5 +1,10 @@
 # P2-A/B 舌下人口模型研究（已完成隔离研究，未投产）
 
+## P2-F：LC-MS/MS口服/舌下混合队列与单gamma输入可辨识性（2026-10-09）
+
+新增[理论说明、数据限制与数学反例](p2f-transprep-and-transit-theory.md)、[原始来源及共享队列审计](p2f-cohort-and-transit-source.json)、[纯数学复算脚本](../../../tools/pk-research/p2f_transit_audit.py)及5项测试。Yager2022 TransPrEP n13口服/舌下合并组LC-MS/MS，2023 Abdelmawla人口PK论文是同一试验再分析，28.4h是合并途径的**模型依赖表观值**，不是纯舌下真实消除常数。Rosano既有组均值10/20/40/60min给更高阶gamma的严格结构约束，但基线未知令参数不可辨识。既有P2/A/B与正式人口/签名APK不变；外部独立验证仍不足。
+
+
 ## 新增 P2-E：Price 1997 与 Rosano 1997 正文药代数字（2026-10-09）
 
 [完整科学理论、原始值及否决备选方案的解释](p2e-primary-source-upgrade.md)；[最小机器证据](p2e-source-metrics.json)；[可运行源匹配 AUC 和早期上界审计](../../../tools/pk-research/p2e_price_rosano.py)。
