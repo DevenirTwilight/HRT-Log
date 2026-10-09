@@ -1,0 +1,20 @@
+{
+  "source_commit": "b9a5393a7435accd3afe02407b38709a0e40f179",
+  "cases": [
+    {
+      "original_observations": 1,
+      "population_pg_ml": 277.76798707874434,
+      "baseline_pg_ml": 500,
+      "calibrated_pg_ml": 777.7679870787443,
+      "id": "old_treatment_lab"
+    },
+    {
+      "original_observations": 1,
+      "population_pg_ml": 277.76798707874434,
+      "baseline_pg_ml": 220,
+      "calibrated_pg_ml": 497.76798707874434,
+      "id": "unknown_context_lab"
+    }
+  ],
+  "synthetic_only": true
+}

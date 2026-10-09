@@ -13,6 +13,7 @@ def validate(engine,calculator,eligibility):
     errors=[]
     for old,new in zip(original['population_cases'],engine['population_cases']):
         assert old['id']==new['id'] and old['events']==new['events'] and old['time_h']==new['time_h']
+        assert len(new['time_h'])==len(new['concentration_pg_ml'])==len(old['concentration_pg_ml'])==13
         errors += [abs(a-b) for a,b in zip(old['concentration_pg_ml'],new['concentration_pg_ml'])]
     assert len(engine['population_cases'])==9 and max(errors)<1e-6
     assert original['synthetic_fits']==engine['synthetic_fits']
@@ -38,11 +39,14 @@ def run(engine_path,calculator_path,eligibility_path,output):
     assert sha(ROOT/'pk-engine/src/main/resources/pk-params.json')==PARAM_HASH
     error=validate(inputs['engine'],inputs['calculator'],inputs['eligibility'])
     p0=json.loads((ROOT/'docs/pk-research/results/sublingual-p0-calculator.json').read_text())
-    rows=inputs['eligibility']['cases'];by_id={r['id']:r for r in rows}
+    rows=inputs['eligibility']['cases']
+    actual_before=json.loads((ROOT/'docs/pk-research/results/sublingual-p1b-before.json').read_text())
+    assert actual_before['source_commit']=='b9a5393a7435accd3afe02407b38709a0e40f179' and actual_before['synthetic_only']
+    assert [r['baseline_pg_ml'] for r in actual_before['cases']]==[500,220]
     report=dict(synthetic_only=True,software_eligibility_acceptance=True,clinical_accuracy_established=False,
         parameter_hash=PARAM_HASH,calculator_version=2,labfit_algorithm_version=2,population_max_absolute_error=error,
-        source_hashes={k:sha(p) for k,p in paths.items()},script_sha256=sha(__file__),
-        before=dict(case_A=p0['history_window_false_baseline'],case_B=p0['missing_context_false_baseline']),
+        source_hashes={k:sha(p) for k,p in paths.items()},script_sha256=sha(__file__),before_sha256=sha(ROOT/'docs/pk-research/results/sublingual-p1b-before.json'),before_generator_sha256=sha(ROOT/'tools/pk-audit/legacy_p1b_baseline.kt'),
+        before=dict(case_A=p0['history_window_false_baseline'],case_B=p0['missing_context_false_baseline'],actual_p1a=actual_before),
         after=inputs['eligibility'],unresolved=['P1-C causal historical interpolation/unrestricted summary','P1-C all-outlier bookkeeping',
             'Explicit pre-treatment user confirmation/persistence absent','P2 population model/external clinical accuracy not established',
             'Omitted non-SL and unknown exposure conservatively excluded; no universal 180-day zero-residual claim'])
@@ -53,7 +57,7 @@ def run(engine_path,calculator_path,eligibility_path,output):
           f'人口曲线9组×13点与P1-A最大差异{error:.12g}；人口参数hash `{PARAM_HASH}`未变。P1-A拟合/先验带数值逐字段相同。','',
           '| 情景 | 人口pg/mL | 门控后pg/mL | 合格/实际拟合/原观测 | 基线 |','| --- | --- | --- | --- | --- |']
     text += [f"| {r['id']} | {r['population_pg_ml']:.8f} | {r['gated_pg_ml']:.8f} | {r['eligible_count']}/{r['fit_count']}/{r['original_observations']} | {r['baseline_pg_ml']} |" for r in rows]
-    text += ['', '案例A旧500假基线/current777.767987 → 当前人口277.767987且不拟合；案例B旧220假基线 → 基线未知且不拟合，观测均保留。原始精确旧数字见只读P0 JSON与本报告before字段。','',
+    text += ['', '案例A旧500假基线/current777.767987 → 当前人口277.767987且不拟合；案例B旧220假基线/current497.767987 → 当前277.767987、基线未知且不拟合，观测均保留。原始精确旧数字见只读P0 JSON、起始b9a独立工作树重跑的sublingual-p1b-before.json及本报告before字段。','',
              '资格逐条状态、原因、证据记录及残余log上界见eligibility JSON。COMPLETE仅指已保存模型输入，不是现实全部治疗史。时间窗不是治疗开始；生产不生成确认治疗前基线。',
              '非SL窗口前暴露/未知给药无法由固定SL上界证明，保守不纳入；混合缺一不可把其余剂量冒充全部观测。',
              f"10000条证据×1000化验资格索引计时{inputs['eligibility']['resource_test']['seconds']:.6f}s（当前runner，非跨设备性能承诺）；无逐化验数据库查询。残余预算/取消及3000实际记录回归由Kotlin测试验证。",'',

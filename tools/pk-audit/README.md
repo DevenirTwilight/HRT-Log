@@ -63,3 +63,5 @@ python3 -m unittest discover -s tools/pk-audit -p 'test_*.py'
 ```
 
 P1-B脚本检查实际Kotlin的资格/观测计数、两个修复反例、三个合格正例及部分合格子集；人口曲线/P1-A拟合/先验带与保存基线比对。新报告与engine/calculator/eligibility机器输入独立命名`sublingual-p1b-*`。9项Python含两项资格报告/反例污染检测；不能通过删除原始观测或添加假基线使报告通过。工程成功与科学临床准确性标志分开。
+
+起始b9a的实际双假基线重跑方法见P1-B验收记录及`legacy_p1b_baseline.kt`。该生成器只复制进旧detached工作树的测试目录运行，输出P1-B独立before JSON；不要把它放进正式应用/当前测试集。

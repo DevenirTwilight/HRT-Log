@@ -11,7 +11,9 @@
     "calculator": "6dff8cf4e3aadf6a27c97ad5bb361a67ece6164061c73470bdc0fe333db7c122",
     "eligibility": "f04bb73d75efdcb7746b8db93de659e3c65ea391e72778a1b108519d62bc097f"
   },
-  "script_sha256": "ddf0407fa03ee05b613735f6dd019ffec7e4e12fefcf1533d67f3c5a35da636f",
+  "script_sha256": "52c9b6acca552eec8aa24cd1e066a178472dba9c3d622e11027f88974fcfc716",
+  "before_sha256": "cc9ef74e8f3572a889b99833c98b7392c183cb99fb5c249aacba5edf812e0af1",
+  "before_generator_sha256": "f587ea33113899be9b8a4d0d4e1dfa8449d5206672cecc9aea2f850f8b42f13c",
   "before": {
     "case_A": {
       "used_doses": 1,
@@ -27,6 +29,26 @@
       "false_baseline_pg_ml": 220,
       "warning_present": true,
       "skipped": 1
+    },
+    "actual_p1a": {
+      "source_commit": "b9a5393a7435accd3afe02407b38709a0e40f179",
+      "cases": [
+        {
+          "original_observations": 1,
+          "population_pg_ml": 277.76798707874434,
+          "baseline_pg_ml": 500,
+          "calibrated_pg_ml": 777.7679870787443,
+          "id": "old_treatment_lab"
+        },
+        {
+          "original_observations": 1,
+          "population_pg_ml": 277.76798707874434,
+          "baseline_pg_ml": 220,
+          "calibrated_pg_ml": 497.76798707874434,
+          "id": "unknown_context_lab"
+        }
+      ],
+      "synthetic_only": true
     }
   },
   "after": {
