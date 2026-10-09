@@ -1,3 +1,18 @@
+# APK 体积 P0 审计检查点（2026-10-09）
+
+本轮仅 fullRelease 体积审计及 2×2 隔离实验，不实施正式构建优化、不签名或发布。
+起始及固定源码 `622e84ee927a2ebd7afc6d102c8a0af74b47799e`，分支 `claude/new-session-1959qb`；新克隆初始干净，已 `git fetch origin`。
+源码确认 R8=true、无显式资源压缩/ABI过滤，Build25/0.2.0；正式 Gradle/PK/Schema/历史/加密参数不改。
+已加入 `scripts/apk_size_audit.py`：修正 assets 中 baseline profile 被误归类的问题，记录全部条目、全部本机库与SQLCipher识别。
+`python3 -m unittest discover -s scripts -p 'test_apk_size_audit.py' -v`：3项通过，包含两个合成ZIP（stored/deflated）、CRC损坏和非ZIP反例。
+本地无预置Android SDK/Gradle缓存；JDK21已存在。首次wrapper下载因Java未使用HTTP代理失败（退出1），经继承代理下载Gradle9.3.1并核对官方wrapper SHA成功。
+正在 `/tmp/hrt-apk-experiment` 安装与CI同版SDK37.0/BuildTools37.0.0，并运行代理配置下的A基线构建；尚无APK实测数值。
+完整日志暂存 `/tmp/hrt-apk-experiment`，最终报告会保存失败/成功状态与证据；不得将历史signed23555291bytes计作新A。
+待完成：四组构建/ZIP及manifest核验、资源静态风险与差分、可执行现有测试、报告JSON/Markdown；release及设备功能未验证。
+本检查点提交只涉及审计脚本/合成测试/交接；旧交接与P2研究保留如下。
+
+---
+
 # P2-O 双吸收输入长尾歧义与不可辨识性（2026-10-09）
 
 [正式研究说明](pk-research/p2/p2o-tail-structural-nonidentifiability.md)、[机器网格和伦理状态](pk-research/p2/p2o-slow-tail-parameter-scan.json)、[研究独立数学程序](../tools/pk-research/p2o_slow_tail_scan.py)与10项单元测试。固定P2-N非负Erlang输入＋慢一阶输入＋中央消除，不用Doll144定标。完整扫描11088组（包含ks=ke等速462组），以Rosano40/20组均值、Price人工2/1与4/1的明示非统计容差筛选，在Price假定0pg/mL基线时75组满足而归一化q6给药前增量差6.89倍，AUC/H1差2.20–3.29h；两组早期指标互差≤0.83%的参数仍在q6谷差4.60倍，反映真实长尾可辨识性不足而非经过人体验证的模型赢家。明确保存Price本身Figure/Table AUC矛盾、Rosano未知基线、协方差缺失和统计对象区别。生产模型、P1、旧冻结、APK不动。
