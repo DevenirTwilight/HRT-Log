@@ -1,3 +1,9 @@
+# P2-M 跨研究舌下 E2 曲线形状及辨识性（2026-10-09）
+
+[原始来源与理论研究](pk-research/p2/p2m-cross-study-mechanistic-curves.md)、[固定试验网格](pk-research/p2/p2m-study-shape-design.json)、[独立可运行数学程序](../tools/pk-research/p2m_cross_study_shape.py)，10项研究测试。未让Doll单点决定形状。Rosano n25 10/20/40/60min与Kom n10 15/30min的公开群体值分别提示快上升但未知协方差；同形状gamma模型研究级独立幅度、Rosano未知基线假设导致最优候选n3→n8，且跨Price人工1→2h时衰减不一致。不改变旧P2冻结、正式模型、P1、用户记录或APK，外部临床验证不足。
+
+---
+
 ## P2-L 最新证据：Yaish 90min＋Kariyawasam2025＋Bar-On2026（2026-10-09）
 
 [理论论证与逐来源限制](pk-research/p2/p2l-repeated-dose-new-cohorts.md)、[来源元数据](pk-research/p2/p2l-repeated-dose-source-audit.json)、[两冻结核q6h公平模拟](../tools/pk-research/p2l_repeated_dose_audit.py)及9项测试。Yaish早已纳入P0，不是新独立人体研究；0.5mg q6h口径90min median1721pmol/L、6月晨低谷mean204.5pmol/L。固定人口核+合成30pg/mL基线、120剂严格q6h情景，HRT低谷/90min≈33/96.5pg/mL，Featherline80kg≈94.8/303pg/mL，两方各有明显限制，不能以Doll单点或Price单AUC独断模型准确。Kariyawasam2025 286总/263表完整/38SL，免疫检测与排除极端采样使其不适合拟合完整峰谷；Bar-On2026安全生物标志物试验30人（15SL），2024中期同研究，不可叠加为PK或声称临床VTE风险增幅。旧冻结实验、所有生产PK/UI/签名APK与历史均未改。

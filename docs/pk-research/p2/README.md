@@ -1,5 +1,10 @@
 # P2-A/B 舌下人口模型研究（已完成隔离研究，未投产）
 
+## P2-M 跨研究曲线（2026-10-09）
+
+新增[完整数学方法与原文来源限制](p2m-cross-study-mechanistic-curves.md)、[固定网格/队列身份](p2m-study-shape-design.json)、[双研究共享形状压力测试](../../../tools/pk-research/p2m_cross_study_shape.py)与10项测试。不再以Doll144作为本轮形状校准点。Rosano与Kom早期群体浓度上升显著陡于HRT/Featherline默认正核；探索性共用gamma结构在未知Rosano基线0→225pmol/L时从n3/k1.25→n8/k8.5跳变，前者1–2h继续增加、后者急速衰减，都难跨到Price人工1–2h曲线。这是不可辨识性和不完全可迁移性的证据，不是新模型赢家或统计上证明已有模型错误。保持旧冻结及全部生产/历史/APK不变。
+
+
 ## P2-L：正规分次给药场景、公平模型压力测试与2025/2026新研究（2026-10-09）
 
 [完整科学推导、文献与局限](p2l-repeated-dose-new-cohorts.md)、[最小来源元数据](p2l-repeated-dose-source-audit.json)、[固定HRT/Featherline q6h数学计算](../../../tools/pk-research/p2l_repeated_dose_audit.py)及9项回归。Yaish2023已见同一人群0.5mg SL四次/日：90min median1721pmol/L[IQR1000–2432]、6月晨间谷mean204.5±63.3pmol/L，不能拿不同统计量计算个体峰谷比。假设30pg/mL基线、严格q6h持续120剂、Featherline80kg（**非真实人群输入**）：HRT低谷/90min总值33.07/96.48pg/mL，Featherline94.83/302.96；人体观察mean55.71/median468.81。Kariyawasam2025全研究286，基线表完整263中38SL，免疫法且排除极早/谷异常观察；E1/E2平均比值6.88≠2340/613。Bar-On2026凝血研究30人15SL，free protein S下降为生物标志物，不等于VTE风险、不是PK人体外测；2024会议为该队列中期，去重。临床独立PK准确性仍不足，P2-C未授权，生产和签名APK不变。

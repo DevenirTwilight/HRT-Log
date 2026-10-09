@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "phase": "P2-M",
+  "date": "2026-10-09",
+  "scope": "EXPOSED_SHARED_SHAPE_HYPOTHESIS_NOT_POPULATION_FIT",
+  "cohorts": [
+    {
+      "id": "Rosano1997_PK25",
+      "source": "docs/pk-research/p2/p2e-source-metrics.json",
+      "dose_mg": 1,
+      "n": 25,
+      "assay": "unverified PK25",
+      "t_minutes": [
+        10,
+        20,
+        40,
+        60
+      ],
+      "baseline": "UNKNOWN",
+      "dispersion": "SD"
+    },
+    {
+      "id": "Komesaroff1998",
+      "source": "docs/pk-research/p2/p2d-komesaroff-table1.json",
+      "dose_mg": 2,
+      "n": 10,
+      "assay": "RIA",
+      "t_minutes": [
+        0,
+        15,
+        30
+      ],
+      "baseline_pmol_l": 89.4,
+      "dispersion": "SEM"
+    },
+    {
+      "id": "Price1997",
+      "source": "docs/pk-research/p2/p2i-price-figure-points.json",
+      "dose_mg": 1,
+      "n": 6,
+      "assay": "extraction RIA",
+      "role": "EXPLORATORY_1H_TO_2H_TRANSFER_ONLY; manual image; Table1 AUC discrepancy"
+    },
+    {
+      "id": "Doll2022",
+      "dose_mg": 1,
+      "n": 10,
+      "assay": "LC-MS/MS",
+      "role": "PREVIOUSLY_SEEN_TRAIN_ANCHOR_NOT_USED_TO_FIT_SHARED_SHAPE"
+    },
+    {
+      "id": "Yaish2023",
+      "role": "PREVIOUSLY_SEEN_REPEAT_DOSING; median 90min is not same statistic as mean predose"
+    }
+  ],
+  "family": "common n,k gamma-shaped early concentration with each early-study separate effective amplitude; unknown Rosano baseline nuisance",
+  "orders": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "k_per_h_grid": {
+    "min": 0.25,
+    "max": 12,
+    "step": 0.25
+  },
+  "Rosano_baseline_pmol_l": [
+    0,
+    25,
+    50,
+    75,
+    100,
+    125,
+    150,
+    175,
+    200,
+    225
+  ],
+  "baseline_caps": [
+    0,
+    50,
+    100,
+    150,
+    200,
+    225
+  ],
+  "statistical_warning": "Mean marginal SE-scaled squared discrepancies only; repeated measurements covariance unknown. Score is NOT likelihood, chi square, uncertainty or clinical validation.",
+  "decisions": {
+    "fresh_locked_external_count": 0,
+    "clinical_accuracy_established": false,
+    "production_replacement_authorized": false
+  }
+}
