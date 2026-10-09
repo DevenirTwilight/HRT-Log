@@ -28301,7 +28301,7 @@
     },
     {
       "file": "android-app-only.log",
-      "sha256": "0f3fd98278ca0cec71b3117e6bf7aacc2d5b343264392a08f2a726e591f05bed"
+      "sha256": "864051cf5235932e28dbd5a2989cc96f9243ddbaa6561a5434196b7f889c76c4"
     },
     {
       "file": "python-audit-tests.log",
@@ -28360,6 +28360,10 @@
       "sha256": "5c2c39cc99d5c44a406c00fd82654522ba93e8f495d09bcb8776c36e9c6d240a"
     },
     {
+      "file": "A-resources.log",
+      "sha256": "316510b52b72b6637b2899e005ec29b19a0be572bf9fa5f8cefe31401f77e507"
+    },
+    {
       "file": "A-zipalign.log",
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
@@ -28382,6 +28386,10 @@
     {
       "file": "B-packaged-manifest.log",
       "sha256": "5c2c39cc99d5c44a406c00fd82654522ba93e8f495d09bcb8776c36e9c6d240a"
+    },
+    {
+      "file": "B-resources.log",
+      "sha256": "7311dc451a8116fe03c6c8e82862424a8ca5ff107052e88df63e3c64c9f21013"
     },
     {
       "file": "B-zipalign.log",
@@ -28408,6 +28416,10 @@
       "sha256": "5c2c39cc99d5c44a406c00fd82654522ba93e8f495d09bcb8776c36e9c6d240a"
     },
     {
+      "file": "C-resources.log",
+      "sha256": "316510b52b72b6637b2899e005ec29b19a0be572bf9fa5f8cefe31401f77e507"
+    },
+    {
       "file": "C-zipalign.log",
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
@@ -28432,8 +28444,16 @@
       "sha256": "5c2c39cc99d5c44a406c00fd82654522ba93e8f495d09bcb8776c36e9c6d240a"
     },
     {
+      "file": "D-resources.log",
+      "sha256": "7311dc451a8116fe03c6c8e82862424a8ca5ff107052e88df63e3c64c9f21013"
+    },
+    {
       "file": "D-zipalign.log",
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "test-summary.json",
+      "sha256": "304b1d6884dc0ab5348e70848425d899420ffb698ee928d2ec7ea0eb5ce90343"
     }
   ]
 }

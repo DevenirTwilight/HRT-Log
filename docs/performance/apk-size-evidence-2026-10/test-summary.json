@@ -1,0 +1,64 @@
+{
+  "source_commit": "622e84ee927a2ebd7afc6d102c8a0af74b47799e",
+  "jvm_android_xml_counts": {
+    "core/domain": {
+      "tests": 58,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "pk-engine": {
+      "tests": 58,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "importer": {
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/data": {
+      "tests": 72,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/reminder": {
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "app": {
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "python_pk_audit": {
+    "tests": 13,
+    "exit_code": 0
+  },
+  "python_pk_research": {
+    "tests": 126,
+    "exit_code": 0
+  },
+  "apk_audit_synthetic": {
+    "tests": 3,
+    "exit_code": 0
+  },
+  "release_runtime": "not_verified",
+  "arm64_device": "not_executed",
+  "app_unit_command": {
+    "status": "not_completed"
+  },
+  "lint_command": {
+    "status": "not_completed"
+  },
+  "period_stability": {
+    "status": "not_completed"
+  }
+}

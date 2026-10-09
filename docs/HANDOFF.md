@@ -4,6 +4,8 @@
 
 四组CRC/Manifest/无INTERNET/关键资源/三个命名JSON/本机库SHA/ZIP16KiB核验通过；A八项ELF对齐检查，B/C/D保留库字节一致。三个代表字符串四语值一致，仍不替代功能验收。正式app/core/pk-engine/importer及Gradle相对固定源码无差异，版本/Schema/PK/历史/加密参数不动。未签名、未发布或交付APK，未接触用户健康数据、设备、密钥。ARM64配置不兼容32位ARM或x86，保留正式universal默认。
 
+四组完整测量与首批证据已提交7a866ca；本轮后续只补测试证据/验收设计。复现命令见报告，脚本需干净仓库、完整固定SHA、新输出目录。资源表原始输出现已归档，release验收设计按入口/四语/PDF/数据库迁移/备份/锁/通知逐项列明。
+
 现有回归：domain58/pk58/importer12/data72/reminder14、Python审计13/隔离研究126、APK合成测试3均通过；app单元测试与独立lint收尾中，最终状态见报告。release instrumentation、ARM64设备及压缩release的伪装/私人便签/四语/PDF/数据库迁移/备份/锁/通知未验证。已记录JRE/代理CA/测试依赖代理和两次OOM前置失败，最终四组串行构建成功。以下APK段落是历史检查点，当前以本段及最终报告为准；远端P2研究原样保留。
 
 ---

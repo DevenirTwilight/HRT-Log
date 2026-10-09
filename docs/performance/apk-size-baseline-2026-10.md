@@ -90,6 +90,21 @@ Python旧PK审计13、固定源码隔离研究126、APK脚本3项（两个stored
 
 保留正式full默认配置。本轮只交测量、工具和报告；如果选择ARM64分发，保留universal兼容渠道并确认目标设备实际支持arm64 ABI。资源压缩收益约1.35%，应先通过release-equivalent的伪装/私有便签/四语/PDF/数据库/迁移/备份/锁/通知测试；在临时测试区保留R8与资源标志、使用CI内部测试签名和纯合成数据，A/B在干净x86_64环境，C/D另用ARM64环境，不涉及现有用户安装或官方密钥。任何正式资源压缩/ABI发行改变另需用户授权，不能将D直接提交生产。
 
+## 待执行的 Release 功能验收设计
+
+使用同一固定源码、相同R8/资源/ABI标志，临时内部测试签名及全合成数据；A/B用干净x86_64测试环境，C/D单独ARM64环境。每项四包执行同样断言，按包独立记录，不根据debug结果填通过。
+
+| 路径 | 触发及断言 |
+|---|---|
+| 普通/计算器/便签入口 | 逐一切换alias、退出并重启；核对图标/标签与实际入口，私人便签只从授权入口可见 |
+| 四语及动态资源 | 切换英文/简中/繁中/法文，遍历设置、伪装和便签；断言无Resources.NotFoundException，文本/字体及图标正确 |
+| PDF及命名JSON | 合成日志生成PDF，核对文本/图表/语言；运行使用三JSON的症状、PK和翻译路径 |
+| 数据库/迁移/备份 | 合成旧Schema测试fixture迁到9；SQLCipher新建/重开/读写；既有Argon2id/AES-GCM备份往返及错误密码拒绝，参数和格式不改 |
+| 锁与通知 | 合成数据下启用安全锁、后台返回及重启，断言授权前隐藏；核验提醒调度/权限拒绝/通知展示 |
+| PeriodStability/PK | 保留原数值和回归快照，复制现有关键断言到release测试宿主，确认资源裁剪不影响按名读取 |
+
+此表是待执行计划，无设备结果；缺相应环境则继续标未验证，不操作用户现有安装或真实数据。
+
 ## 复现与交付
 
 执行前保证工作区干净、准备相同JDK/SDK；设置JAVA_HOME及系统信任库，继承代理。下面参数适用于本次专用实验目录，换目录时保留JDK位于输出父目录内的安全约束。
@@ -332,4 +347,3 @@ Caution: ZIP component sizes do not measure Android runtime RAM usage, installed
 | `lib/arm64-v8a/libsqlcipher.so` | 5187544 | 5187544 | True |
 
 Caution: ZIP component sizes do not measure Android runtime RAM usage, installed storage expansion, cold-start time or clinical/functional correctness.
-
