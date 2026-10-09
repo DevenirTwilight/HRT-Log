@@ -30,3 +30,7 @@ node_modules/
 
 # Kotlin compilation caches
 .kotlin/
+
+# Python research-tool caches
+__pycache__/
+*.pyc

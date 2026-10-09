@@ -83,3 +83,9 @@ Hi! I'm building an open-source Android HRT tracking app. Its concentration mode
 | GENDER-Q | © 2024 McMaster University and Brigham and Women's Hospital；非营利研究和临床免费但须向 McMaster 申请；PROM 电子平台提供方属商业许可对象（https://qportfolio.org/copyright-information/ ） | **候选，未获授权**。不得复制任何题目。 |
 | GCLS | Jones et al. 2019（DOI 10.1080/15532739.2018.1453425）；作者写 "freely available for use"，翻译须联系作者；文章 CC BY-NC-ND 4.0；嵌入应用、修改未说明 | **候选，未获授权**。不得复制任何题目。 |
 | PHQ-9 / GAD-7 | 计分筛查量表 | 不采用（算分即构成筛查判断，PHQ-9 涉及自伤问题）。 |
+
+## 2026-10-09：舌下P0测试端公开参数比较
+
+Featherline固定提交374ecbd7c74e3edea1ba2070a243c402141e41b2，仓库LICENSE已核对为GPLv3；其参数/模型的上游来源说明仍保留，不能宣称上游授权问题已经解决。本轮只保存必要公开数值、固定来源和证据哈希，独立推导/实现通用一阶ODE算式；未复制其源码、LICENSE全文或上游源码，也未链接其实现或并入生产模块。详情见pk-research/sublingual-v2.md。
+
+文献仅引用必要统计摘要和原创核对记录，不再分发论文正文/图像/表格/个体数据；全文获取等级、检测法、统计类型和来源逐条标记。Cortez全文为CC BY4.0，其余取得摘要或阅读原文不等于获得全文再分发授权。规划中的新模型需重新审查来源/许可，不能把本轮数字比较当源码移植授权。

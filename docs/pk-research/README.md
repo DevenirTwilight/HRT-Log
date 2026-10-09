@@ -8,4 +8,6 @@
 | `estradiol_oral_sl_im.*` | 戊酸雌二醇和 17β-雌二醇口服、舌下、戊酸雌二醇肌注 | 完成 |
 | `spironolactone_progesterone.*` | 螺内酯（含坎利酮）、口服微粒化孕酮 | 完成 |
 
-下一步：据此写 `docs/pk-model.md`、`pk-engine/src/main/resources/pk-params.json`，以及"移植模型参数 vs 文献参数"对照表，交用户审核。
+以上为历史M4a调研记录；文献引擎与参数已经实现，不再是待编写任务。
+
+2026-10-09最新入口：[舌下P0科学审查](sublingual-v2.md)、[校准审计](sublingual-calibration-audit.md)、[P1规划（未实施）](sublingual-p1-design.md)、[自动对照](results/sublingual-p0-report.md)、[复现工具](../../tools/pk-audit/README.md)。独立来源数据在pk-engine/src/test/resources/sublingual-literature-validation.json；训练、外部、定性分组严格分开。科学外部验证未确立，不以旧拟合测试作为临床准确性证明。

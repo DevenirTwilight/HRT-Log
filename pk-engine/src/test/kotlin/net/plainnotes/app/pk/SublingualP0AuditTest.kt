@@ -47,7 +47,7 @@ class SublingualP0AuditTest {
         assertEquals(direct[3], curve(listOf(event().copy(weightKG = 60.0)), times)[3], 1e-9)
     }
 
-    @Test fun repeatedDosesSuperposeAndRemainStableForTwoYears() {
+    @Test fun repeatedDosesSuperposeAndRemainStableForLongHistories() {
         for (tau in listOf(6.0, 12.0, 24.0)) {
             val events = (0 until 1460).filter { it % 5 != 0 }.map { event("d$it", (it - 1459) * tau) }
             val actual = curve(events.reversed(), times)
