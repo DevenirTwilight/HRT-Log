@@ -6,9 +6,9 @@
 已加入 `scripts/apk_size_audit.py`：修正 assets 中 baseline profile 被误归类的问题，记录全部条目、全部本机库与SQLCipher识别。
 `python3 -m unittest discover -s scripts -p 'test_apk_size_audit.py' -v`：3项通过，包含两个合成ZIP（stored/deflated）、CRC损坏和非ZIP反例。
 本地无预置Android SDK/Gradle缓存；JDK21已存在。首次wrapper下载因Java未使用HTTP代理失败（退出1），经继承代理下载Gradle9.3.1并核对官方wrapper SHA成功。
-正在 `/tmp/hrt-apk-experiment` 安装与CI同版SDK37.0/BuildTools37.0.0，并运行代理配置下的A基线构建；尚无APK实测数值。
+SDK37.0/BuildTools37.0.0已装好；完整Temurin JDK21.0.12.1+1已下载并核对SHA。固定源码的首轮A因新JDK未信任环境代理CA而失败，保留日志；现以系统Java信任库重跑，TLS校验保持启用。尚无APK实测数值。
 完整日志暂存 `/tmp/hrt-apk-experiment`，最终报告会保存失败/成功状态与证据；不得将历史signed23555291bytes计作新A。
-补充：代理构建已到任务配置，失败因预置Java21只有JRE、缺少javac；正在仓库外补完整JDK21，失败日志保留。隔离执行脚本已加入，四组只改资源压缩与ABI，任一失败会保存部分结果并停止。远端追加12ed18d（仅P2研究/交接），首次push被拒绝；未强推，待保留两边文档后同步。
+补充：代理构建已到任务配置，失败因预置Java21只有JRE、缺少javac；正在仓库外补完整JDK21，失败日志保留。隔离执行脚本已加入，四组只改资源压缩与ABI，任一失败会保存部分结果并停止。远端追加12ed18d（仅P2研究/交接），首次push被拒绝；已完整保留两边交接与研究内容，合并fc107d4并推送成功，未强推。
 待完成：四组构建/ZIP及manifest核验、资源静态风险与差分、可执行现有测试、报告JSON/Markdown；release及设备功能未验证。
 本检查点提交只涉及审计脚本/合成测试/交接；旧交接与P2研究保留如下。
 
