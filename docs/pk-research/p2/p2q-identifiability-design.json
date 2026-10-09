@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "phase": "P2-Q",
+  "date": "2026-10-09",
+  "purpose": "Synthetic, model-on-model identifiability analysis. NO human measured accuracy and NO dose advice.",
+  "prior_source_identity": "P2-O previously exposed Price1997/Rosano1997 constrained candidate grid; no Doll anchor",
+  "screening": {
+    "price_assumed_predose_pg_ml": 0,
+    "expected_candidates": 75,
+    "source_path": "docs/pk-research/p2/p2o-slow-tail-parameter-scan.json"
+  },
+  "synthetic_latent_concentration": {
+    "baseline_pg_ml": 30,
+    "one_hour_increment_pg_ml": 150,
+    "units_warning": "Artificial dimensioned numbers only, NOT observed in any paper, person or app"
+  },
+  "draw_schedules_h": {
+    "early": [
+      0.25,
+      0.5,
+      1,
+      2,
+      4
+    ],
+    "early_and_late": [
+      0.25,
+      0.5,
+      1,
+      2,
+      4,
+      6,
+      8,
+      12,
+      24
+    ],
+    "predose_and_late": [
+      0,
+      0.25,
+      0.5,
+      1,
+      2,
+      4,
+      6,
+      8,
+      12,
+      24
+    ]
+  },
+  "error_scenarios": [
+    {
+      "id": "idealized_precision_only",
+      "absolute_floor_pg_ml": 1,
+      "proportional_fraction": 0.02
+    },
+    {
+      "id": "small_error_illustration",
+      "absolute_floor_pg_ml": 5,
+      "proportional_fraction": 0.1
+    },
+    {
+      "id": "large_error_illustration",
+      "absolute_floor_pg_ml": 15,
+      "proportional_fraction": 0.25
+    }
+  ],
+  "toy_ordered_pair_mismatch_squared_cutoff": 9,
+  "error_scale_rule": "sigma_i=sqrt(sigma_abs^2+(sigma_prop*truth_i)^2), frozen to synthetic truth. Profile b>=0, A>=0 with weighted least squares; mismatch is NOT likelihood or calibrated chi-square.",
+  "synthetic_family_benchmark": {
+    "train_times_h": [
+      0.25,
+      0.5,
+      1,
+      2,
+      4
+    ],
+    "test_times_h": [
+      6,
+      8,
+      12,
+      24
+    ],
+    "replicates_per_truth_per_error": 40,
+    "random_seed": 20261009,
+    "truths": [
+      "one_input",
+      "transit_only",
+      "dual_slow_input"
+    ],
+    "families": {
+      "one_input": {
+        "n_fast": [
+          1
+        ],
+        "k_fast_h": [
+          1.8,
+          3,
+          5
+        ],
+        "k_elim_h": [
+          0.4,
+          0.85
+        ],
+        "slow_effective_weight": [
+          0
+        ],
+        "k_slow_h": [
+          0.2
+        ]
+      },
+      "transit_only": {
+        "n_fast": [
+          3,
+          5,
+          6
+        ],
+        "k_fast_h": [
+          5,
+          8,
+          10
+        ],
+        "k_elim_h": [
+          0.4,
+          0.85
+        ],
+        "slow_effective_weight": [
+          0
+        ],
+        "k_slow_h": [
+          0.2
+        ]
+      },
+      "dual_slow_input": {
+        "source": "P2-O accepted75 with slow effective weight >0"
+      }
+    },
+    "heuristic_complexity_penalty": "Train SSE + (shape_dim-2)*ln(n_training_points); for comparison only, NOT true AIC/BIC/Bayes factor, and candidate grids were hand-selected after data exposure",
+    "test_metric": "Mean squared error against synthetic latent (noise-free) holdout, weighted by synthetic fixed truth sigma; neither clinical external validation nor CV on real humans"
+  },
+  "exact_nonidentifiabilities": [
+    "Bioavailability F and apparent volume V only enter as F/V without IV dose or other constraints",
+    "At slow_weight=0, slow input rate k_slow drops out exactly",
+    "If sampled at only two times and gain/baseline both free, distinct shapes can interpolate two values wherever positive fit exists"
+  ],
+  "real_data_validation": {
+    "fresh_locked_external_sets": 0,
+    "clinical_accuracy_established": false,
+    "p5_p95_empirical_coverage_established": false,
+    "P2C_replacement_authorized": false
+  }
+}
