@@ -1,0 +1,41 @@
+{
+  "input": {
+    "dose_mg": 2,
+    "route": "sublingual",
+    "tier": 2,
+    "weight_kg": 80,
+    "sample_after_dose_h": 100,
+    "sample_pg_ml": 200
+  },
+  "source_commit": "95199ab19867a72e93a3ba5a6fae2c7320075577",
+  "application": {
+    "claimed_excluded": ["l1"],
+    "actual_post_count": 1,
+    "sample_age_h": 1,
+    "candidate_count": 1,
+    "eligible": true,
+    "covariance": [
+      0.06697646966989096,
+      0,
+      0,
+      0
+    ],
+    "dose_age_h": 101,
+    "log_amplitude": 9.210617529599556,
+    "raw_count": 1,
+    "log_rate": 0
+  },
+  "engine": {
+    "claimed_excluded": ["tail"],
+    "actual_post_count": 1,
+    "covariance": [
+      0.06697646966989096,
+      0,
+      0,
+      0
+    ],
+    "log_amplitude": 9.210617529599556,
+    "log_rate": 0
+  },
+  "synthetic_only": true
+}
