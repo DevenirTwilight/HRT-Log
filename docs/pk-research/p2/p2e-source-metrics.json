@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "revision_label": "P2-E 2026-10-09",
+  "old_protocol_modified": false,
+  "evidence_role": "PREVIOUSLY_EXPOSED_EXPLORATORY_ONLY",
+  "locked_external": false,
+  "Price1997": {
+    "PMID": "9052581",
+    "DOI": "10.1016/S0029-7844(96)00513-3",
+    "url": "https://www.academia.edu/122086991/Single_Dose_Pharmacokinetics_of_Sublingual_Versus_Oral_Administration_of_Micronized_17%CE%B2_Estradiol",
+    "source": "public full-text mirror; OCR layout interleaves E2 and E1, results prose used for check; authoritative publisher PDF still to verify",
+    "n": 6,
+    "study": "5 regimens each subject crossed over weekly",
+    "assay": "extraction radioimmunoassay",
+    "subtracted_pretreatment_baseline": true,
+    "sampling_hours": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      6,
+      8,
+      12,
+      18,
+      24
+    ],
+    "auc_method": "trapezoid of subject postdose minus baseline",
+    "cmax_type": "mean of individual sampled maxima, not max of pooled mean",
+    "dispersion": "SD",
+    "sublingual_E2": [
+      {
+        "dose_mg": 1,
+        "cmax_mean_pg_ml": 451,
+        "cmax_sd_pg_ml": 162,
+        "auc0_24_mean_pg_h_ml": 2109,
+        "auc0_24_sd_pg_h_ml": 1031
+      },
+      {
+        "dose_mg": 0.5,
+        "cmax_mean_pg_ml": 245,
+        "cmax_sd_pg_ml": 115,
+        "auc0_24_mean_pg_h_ml": 970,
+        "auc0_24_sd_pg_h_ml": 440
+      },
+      {
+        "dose_mg": 0.25,
+        "cmax_mean_pg_ml": 294,
+        "cmax_sd_pg_ml": 131,
+        "auc0_24_mean_pg_h_ml": 825,
+        "auc0_24_sd_pg_h_ml": 401
+      }
+    ]
+  },
+  "Rosano1997": {
+    "PMID": "9386146",
+    "DOI": "10.1161/01.cir.96.9.2837",
+    "url": "https://www.researchgate.net/publication/13844185_Short-term_Anti-Ischemic_Effect_of_17_-Estradiol_in_Postmenopausal_Women_With_Coronary_Artery_Disease",
+    "source": "coauthor uploaded complete paper; Methods and Results",
+    "n_PK": 25,
+    "n_separate_cardiac_intervention": 9,
+    "n_separate_cardiac_placebo": 7,
+    "warning": "Do not borrow baseline 64 ± 24 pmol/L from separate n=9 interventional cohort",
+    "baseline_mean_pmol_l": null,
+    "dose_mg": 1,
+    "route": "sublingual",
+    "analyte": "E2",
+    "dispersion": "SD (paper statistical rule)",
+    "points": [
+      {
+        "minutes": 10,
+        "mean_pmol_l": 234,
+        "sd_pmol_l": 56
+      },
+      {
+        "minutes": 20,
+        "mean_pmol_l": 468,
+        "sd_pmol_l": 115
+      },
+      {
+        "minutes": 40,
+        "mean_pmol_l": 1980,
+        "sd_pmol_l": 456
+      },
+      {
+        "minutes": 60,
+        "mean_pmol_l": 2124,
+        "sd_pmol_l": 568
+      }
+    ]
+  },
+  "interpretation": {
+    "price_auc_not_doll_auc": true,
+    "rosano_covariance_unknown": true,
+    "rosano_assay_detail_unknown": true,
+    "feather_weight80_only_conditional": true,
+    "clinical_accuracy_established": false,
+    "model_replacement_authorized": false
+  }
+}
