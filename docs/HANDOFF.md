@@ -1,3 +1,9 @@
+## P2-I 人体文献来源内在一致性审查（2026-10-09）
+
+已写入[Price原图Figure1和Table1 AUC不一致的详细数学审计](pk-research/p2/p2i-price-figure-reconciliation.md)、[图像坐标/人为敏感性与独立同源重绘读数](pk-research/p2/p2i-price-figure-points.json)、[纯数学审计/8测试](../tools/pk-research/p2i_price_figure_audit.py)。Price1997 1mg SL作者Table1报告个体基线扣除AUC0–24 2109±1031，而印刷343页Figure1组均值人工约1567.5、Wikimedia同图另一WebPlotDigitizer版约1557.5，人工设限1390–1785.5pg·h/mL（并非统计CI，0h数值**人为敏感性**）；按同样个体/时间权重的梯形法具有平均线性，单凭个体先算再平均不能解释差异，必须继续核对图是否已扣基线、每时样本/时间、原作者AUC实际处理，**不能断言论文有错**。所有数据已见不构成新盲测，Price源码PDF不入公开仓库。研究不改HRT正式模型、历史、APK、P1、旧P2协议。科学结论：UNRESOLVED_PUBLICATION_GRAPH_TABLE_RECONCILIATION。
+
+---
+
 # P2-H 三份原始PDF到手：原文核验+关键双室半衰期差异（2026-10-09）
 
 详见[完整数学及科学根据](pk-research/p2/p2h-original-pdfs-half-life-audit.md)、[文件SHA/来源层级JSON](pk-research/p2/p2h-primary-pdf-audit.json)与[条件计算及6单测](../tools/pk-research/p2h_eigenvalue_audit.py)。Price1997原版PDF6页Figure1/Table1已核验，不再只靠转录；2023 Abdelmawla完整68页论文已经审读，第21页Table3的Vc=1258L、Vp=62261L、CL=1550L/h、Q=1930L/h、Ka=.632/h；原文28.4h数值等于ln2*(Vc+Vp)/CL，但**标准两室模型慢特征根条件半衰期约50.5h，不可当真实人体或纯SL消除半衰期**。同TransPrEP队列原n14共189点，排除2人后168点，两名缺失24h以0h补，论文作者明确没有逐人PO/SL辨别数据，VPC早期过估计晚期低估计，残差变异48.8%。Doll用户给的6页是ScienceDirect网站打印，不是完整学术论文PDF；还需要真实原版全文/分时LC-MS/MS。研究源数据未进Git、独立LOCKED_EXTERNAL仍0，正式参数、算法、用户历史和已签APK不改。

@@ -1,5 +1,10 @@
 # P2-A/B 舌下人口模型研究（已完成隔离研究，未投产）
 
+## P2-I：Price 原版Figure1 vs Table1 AUC内部一致性（2026-10-09）
+
+新增[完整数值重建与理论分析](p2i-price-figure-reconciliation.md)、[原PDF坐标读数及宽泛手动范围](p2i-price-figure-points.json)、[研究程序](../../../tools/pk-research/p2i_price_figure_audit.py)与8项纯数学回归测试。1mg SL作者Table1基线扣除人均AUC=2109±1031，原图人工约1567.5，Wikimedia同图独立数字化约1557.5 pg·h/mL；两组图像读数是同一个队列且非作者原始记录。手工上下范围1390–1785.5（非置信区间），提示尚未解释的图表一致性问题，不能据此宣布原文错误。不同来源估计量不能混用；正式参数、P1、APK和原P2冻结协议均不变。
+
+
 ## P2-H：已审核上传的原版Price论文和68页TransPrEP建模论文（2026-10-09）
 
 [详细原文核查与双室数学推导](p2h-original-pdfs-half-life-audit.md)、[PDF SHA-256/精确页面/来源状态](p2h-primary-pdf-audit.json)、[独立数值审计](../../../tools/pk-research/p2h_eigenvalue_audit.py)和6项测试。Price1997 Table1及Figure1在原版6页PDF直接确认；Abdelmawla论文已取得68页全文，表明n14初始189观测→n12/168最终观测，两名受试者缺失24h由0h假设补入，研究数据没法区分PO/SL；Table3参数的28.4h恰好等于ln2×(Vc+Vp)/CL，而若额外假设标准两室中央清除系统，其慢根对应50.5h（只是条件数学值，不是临床实测）。Doll这次6页为ScienceDirect网页打印**并非完整研究PDF**。科学来源已升级，但独立外部模型验证仍不足；不改生产、APK或旧冻结研究。

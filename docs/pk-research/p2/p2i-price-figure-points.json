@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "purpose": "VISUAL_MANUAL_EXPLORATORY_DIGITIZATION_NOT_AUTHOR_DATA",
+  "original_pdf_sha256": "40ecaf3a36b6481bbf2e9fc074066700f141ae3a51959b5bf6138cd920deb70a",
+  "source": "Owner-uploaded original Price et al 1997 print page 343 Figure 1 E2 solid 1mg SL curve",
+  "render_dpi": 300,
+  "render_page_1indexed": 4,
+  "figure_crop_original_300dpi_pixels": [
+    280,
+    130,
+    1130,
+    1040
+  ],
+  "axis_notes": "Broken Y axis; separately calibrate upper approx 300-500 pg/mL and lower 0-180 pg/mL",
+  "figure_series": "1mg SL group mean curve, approximate pg/mL",
+  "units": {
+    "time": "h",
+    "concentration": "pg/mL"
+  },
+  "plot_points": [
+    {
+      "t": 0,
+      "central": 20,
+      "lo": 0,
+      "hi": 50,
+      "kind": "UNPLOTTED_PREDOSE_SENSITIVITY_ONLY"
+    },
+    {
+      "t": 1,
+      "central": 450,
+      "lo": 435,
+      "hi": 465,
+      "x": 102,
+      "y": 65
+    },
+    {
+      "t": 2,
+      "central": 225,
+      "lo": 190,
+      "hi": 255,
+      "x": 132,
+      "y": 163
+    },
+    {
+      "t": 3,
+      "central": 116,
+      "lo": 106,
+      "hi": 130,
+      "x": 162,
+      "y": 427
+    },
+    {
+      "t": 4,
+      "central": 85,
+      "lo": 78,
+      "hi": 95,
+      "x": 192,
+      "y": 537
+    },
+    {
+      "t": 6,
+      "central": 56,
+      "lo": 50,
+      "hi": 64,
+      "x": 251,
+      "y": 640
+    },
+    {
+      "t": 8,
+      "central": 45,
+      "lo": 39,
+      "hi": 52,
+      "x": 310,
+      "y": 678
+    },
+    {
+      "t": 12,
+      "central": 34,
+      "lo": 29,
+      "hi": 41,
+      "x": 430,
+      "y": 716
+    },
+    {
+      "t": 18,
+      "central": 25,
+      "lo": 20,
+      "hi": 31,
+      "x": 607,
+      "y": 750
+    },
+    {
+      "t": 24,
+      "central": 24,
+      "lo": 20,
+      "hi": 31,
+      "x": 785,
+      "y": 752
+    }
+  ],
+  "wikimedia_2019_redraw": {
+    "url": "https://commons.wikimedia.org/wiki/File:Estradiol_levels_with_oral_versus_sublingual_estradiol_in_postmenopausal_women.png",
+    "author": "Medgirl131",
+    "method": "WebPlotDigitizer, Plotly, 2018 first publication and 2019 update",
+    "independent_human_evidence": false,
+    "numeric_points_by_visual_reading": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        450
+      ],
+      [
+        2,
+        215
+      ],
+      [
+        3,
+        116
+      ],
+      [
+        4,
+        85
+      ],
+      [
+        6,
+        57
+      ],
+      [
+        8,
+        45
+      ],
+      [
+        12,
+        35
+      ],
+      [
+        18,
+        25
+      ],
+      [
+        24,
+        25
+      ]
+    ],
+    "error_note": "Separate digitization of same underlying Price figure, NOT original subject data; time zero is artificial zero in public redraw."
+  },
+  "table1_mean_subject_level_baseline_subtracted_auc0_24": 2109,
+  "table1_sd": 1031,
+  "methodology": "Manual approximate 300dpi figure read with generous point-sensitivity bands; no author original numbers, no patient data.",
+  "reporting_status": "UNRESOLVED_PUBLICATION_GRAPH_TABLE_RECONCILIATION",
+  "clinical_accuracy_established": false,
+  "comparability_cautions": [
+    "Figure 1 time-zero concentration unplotted, modeled as hypothetical 0-50 pg/mL for sensitivity only.",
+    "Figure y axis is broken; error bars are marginal SD, not individual samples or a CI on area.",
+    "Published individual subject AUCs are predose-baseline-subtracted; reconstruction of group mean concentration from figure is not directly the same statistical estimand.",
+    "Numerically integrating participant-level AUC and averaging is linear if identical time weights and missingness; differences need provenance.",
+    "Neither manual nor Wikimedia points are a new blind cohort or authorized raw subject data."
+  ]
+}
