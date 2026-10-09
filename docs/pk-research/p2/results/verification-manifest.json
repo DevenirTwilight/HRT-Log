@@ -1,0 +1,25 @@
+{
+  "scope": "Final research/engineering records; science-only output-manifest remains unchanged",
+  "files": {
+    "analysis.json": "89c425a116439e09ad22e3e14eb0945061e7b9f4a5c8448effa51d59cc41a9e1",
+    "candidate-parameters.json": "bccabd4c0d9c33ebf689a87fce43948f51db77d7efab22f8d76197b4f8ce7ea7",
+    "ci-388ef0f-android.log": "5875ace8c49b821f00ee1130d436c1fa999884b6ff92d9ba8326affc91546b78",
+    "ci-388ef0f-device.log": "c78c80f31d5acee4f6f5c4c07c803df3320dd889e5ef6e0e30cfd39f53878349",
+    "ci-388ef0f-jvm.log": "a94ea9aa39dd0be671863dffa5a89df8a5b75710342231a28ee94581cf5f7f1c",
+    "ci-388ef0f.json": "d57467677ac53c977a0f838d57b319be2c4f2438b519d77be55a819362d96e69",
+    "ci-af3767e-android.log": "8733ef2046009c898fd1fbd5fc199123c4e2ff085d995236765b0ee437c6fba7",
+    "ci-af3767e-device.log": "4448641494432d8b31c7742dff7d7692d2f26164ab8bbd77541bd28944ebec26",
+    "ci-af3767e-jvm.log": "14abc408a3540aeb21dcfb61f679b3cb4d0121dbef7d25c62507c38bc920fb49",
+    "ci-af3767e.json": "5fedcc1b75fe9e536b146c55a41a9e553010e67ec20d2c4bfc2dff18e9c8f39e",
+    "engineering-local.json": "3af78fa0e17db3d014d8b32c3a2499d69ef712dc03dd7993b937866f2910e722",
+    "local-logs/android.log": "6b993be7844efbe001cc7a169caa3ce440a5b8c64f24d9bf84db044f2a5a4fa7",
+    "local-logs/jvm.log": "4b3ef6d946c2ec1ab1cc4300267120e8139c56823b017fb503eca5c693bbfeb6",
+    "local-logs/manifest.log": "b9e049869410aea0d6a294bf3e0b522b6496147775538947e10480476c4331ae",
+    "local-logs/math.log": "d024467389af943069baadc4fdd1f5623b50f3d2eee359a92bfe0885d9143b16",
+    "local-logs/old-python.log": "c07f43eb2f5e6fe3dd56fa8e0da78256d8484dd66f7ebeeeb45154f9e965eeff",
+    "output-manifest.json": "b3335c80e036c347934aedc29a888ef15423218629dfee0ae5469b191d841455",
+    "performance-af3767e.json": "5df84bfaae89c5645dc970bda3e1f702414bec7c6e230b418582d6ddbaae0fe4",
+    "report.md": "d8a9b36ccd0e5d6768ca5b257598a76a13983df36e64da3a80d21b527d06c35a",
+    "study-comparisons.csv": "89e2e9f0cb852d3fc617b31975f7837520982188c2e9cc84a45c07521b7666f0"
+  }
+}

@@ -1,0 +1,4 @@
+2026-10-09T16:04:08.2917950Z BUILD SUCCESSFUL in 40s
+2026-10-09T16:04:11.1969247Z Ran 32 tests in 2.469s
+2026-10-09T16:04:11.7427084Z {"output": "/tmp/hrt-p2-ci", "profiles": 339, "external_validation_status": "external_validation_insufficient", "clinical_accuracy_established": false}
+2026-10-09T16:04:32.2545419Z BUILD SUCCESSFUL in 13s

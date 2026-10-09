@@ -7,6 +7,8 @@ feature status and unapproved candidates: [`docs/BACKLOG.md`](docs/BACKLOG.md).
 [`docs/PLAN.md`](docs/PLAN.md) retains the historical architecture decisions.
 No INTERNET permission, accounts, analytics or advertising SDKs.
 
+Sublingual PK: P0/P1 engineering fixes completed; [P2-A/B research](docs/pk-research/p2/README.md) is isolated from the app. Evidence/protocol were committed before fitting; constrained prototypes and conditional comparisons do **not** establish clinical accuracy. Production parameters remain unchanged; P2-C is unimplemented and needs separate authorization.
+
 ## Build
 
 JDK **21**, Gradle wrapper **9.3.1**, Android SDK platform **37.0**, build-tools **37.0.0**.

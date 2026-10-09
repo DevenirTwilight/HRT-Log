@@ -1,0 +1,78 @@
+{
+  "scope": "Actual local engineering acceptance, not human validation",
+  "software_validation_passed": true,
+  "clinical_accuracy_established": false,
+  "synthetic_tests_only": true,
+  "suites": {
+    "pk-engine": {
+      "tests": 58,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 58
+    },
+    "core/domain": {
+      "tests": 58,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 58
+    },
+    "importer": {
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 12
+    },
+    "core/data": {
+      "tests": 72,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 72
+    },
+    "core/reminder": {
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 14
+    },
+    "app": {
+      "tests": 398,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 13,
+      "passed": 385
+    }
+  },
+  "lint": {
+    "errors": 0,
+    "warnings": 131
+  },
+  "python_research": {
+    "tests": 32,
+    "passed": 32,
+    "failed": 0,
+    "skipped": 0
+  },
+  "python_existing_audit": {
+    "tests": 13,
+    "passed": 13,
+    "failed": 0,
+    "skipped": 0
+  },
+  "full_debug": "passed",
+  "full_release": "passed",
+  "instrumentation_compilation": "passed_not_device_execution",
+  "manifest_check": "passed",
+  "jvm_duration": "8s",
+  "android_duration": "7m33s",
+  "all_android_tasks": 444,
+  "local_device_execution": "not_available_no_emulator",
+  "protocol_deviations": [],
+  "locked_baseline_file_count": 164,
+  "local_gradle_source_sha": "af3767e2c6b5b78b235dbf08ba2594f45d10ba89",
+  "local_research_source_sha": "388ef0fc36dccf3299ff2aac62be94a8914a1f59"
+}

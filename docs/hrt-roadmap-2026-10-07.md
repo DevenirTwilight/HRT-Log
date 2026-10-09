@@ -1,3 +1,13 @@
+# 最新状态：P2-A/B研究完成，外部科学证据不足（2026-10-09，§50）
+
+P0和P1-A/B/C1/C2已完成；本轮完成拟合前证据/协议冻结、隔离A经验核/B约束双途径原型、339固定情景与按研究条件比较。**正式人口核及个人校准未替换**。`external_validation_insufficient`、`clinical_accuracy_established=false`；没有锁定盲法外测，不选赢家。Cortez本轮全文、Yaish缓存全文重核，其他五项仅摘要。
+
+[统一研究入口](pk-research/p2/README.md)、[协议](pk-research/p2/validation-protocol.md)、[科学结论/P2-C门槛](pk-research/p2/model-selection.md)、[验收](pk-research/p2/verification.md)。生产仍Build25/Schema9/算法2/Calculator2/旧冻结1/2；P0/P1旧文件只读。严格结果获知时间历史回放另案，未实现。
+
+下一最小研究任务：合法取得可比密集早期及12/24h人体采样、实际给药史/基线/检测/统计，按独立研究冻结外测。P2-C科学验收与版本/历史兼容需另授权；本轮未投产，不改版本/数据/PDF/签名，不发APK/Release/PR。
+
+## 以下为以前阶段的历史交接，不代表当前未完成状态
+
 # 最新状态：P1-C2已完成并通过本地/API35 CI验收（2026-10-09，§49）
 
 起始95199ab19867a72e93a3ba5a6fae2c7320075577，初始干净/远端一致。真实旧engine/application均actual=1、claimed excluded=1，正确断言红灯；before机器证据和独立旧生成器保留。

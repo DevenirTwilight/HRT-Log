@@ -1,0 +1,13 @@
+2026-10-09T16:04:18.4940595Z The process '/usr/local/lib/android/sdk/platform-tools/adb' failed with exit code 1
+2026-10-09T16:04:20.5106025Z The process '/usr/local/lib/android/sdk/platform-tools/adb' failed with exit code 1
+2026-10-09T16:06:11.2703655Z Finished 14 tests on emulator-5554 - 15
+2026-10-09T16:06:11.8447234Z BUILD SUCCESSFUL in 1m 32s
+2026-10-09T16:08:07.4281992Z net.plainnotes.app.disguise.ProcessRestartAndroidTest > prepare[emulator-5554 - 15] [33mSKIPPED [0m
+2026-10-09T16:08:07.4284896Z net.plainnotes.app.disguise.ProcessRestartAndroidTest > verifyFreshProcess[emulator-5554 - 15] [33mSKIPPED [0m
+2026-10-09T16:09:55.4291051Z Finished 66 tests on emulator-5554 - 15
+2026-10-09T16:09:55.5314133Z BUILD SUCCESSFUL in 3m 43s
+2026-10-09T16:10:00.5613357Z net.plainnotes.app.disguise.ProcessRestartAndroidTest:.
+2026-10-09T16:10:00.5614699Z OK (1 test)
+2026-10-09T16:10:04.4430516Z net.plainnotes.app.disguise.ProcessRestartAndroidTest:.
+2026-10-09T16:10:04.4431367Z OK (1 test)
+2026-10-09T16:10:22.5498010Z BUILD SUCCESSFUL in 10s

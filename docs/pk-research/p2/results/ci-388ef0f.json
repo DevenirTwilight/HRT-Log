@@ -1,0 +1,153 @@
+{
+  "run_id": 37956265064,
+  "source_sha": "388ef0fc36dccf3299ff2aac62be94a8914a1f59",
+  "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/37956265064",
+  "jobs": {
+    "jvm": "success",
+    "android": "success",
+    "device-tests": "success"
+  },
+  "software_validation_passed": true,
+  "clinical_accuracy_established": false,
+  "external_validation_status": "external_validation_insufficient",
+  "new_python_tests": 32,
+  "old_python_tests": 13,
+  "downloaded_artifacts": [
+    {
+      "name": "device-test-results",
+      "id": 11628846191,
+      "file_count": 25,
+      "sha256": "f654a22e3c215ef25f3fe5a021888db88f1f85c373aa0a07760b60b777783cee",
+      "apk_count": 0,
+      "digest_matches_github": true
+    },
+    {
+      "name": "jvm-test-results",
+      "id": 11628820288,
+      "file_count": 21,
+      "sha256": "41f8ed6949fdee1466d90bfbe148a13f05a3845baac678e15d00c9f7966000f4",
+      "apk_count": 0,
+      "digest_matches_github": true
+    },
+    {
+      "name": "p2-research-results",
+      "id": 11628590488,
+      "file_count": 5,
+      "sha256": "c5cd4ef7199bc69f306c9df3e3967ff065a167adb4d18c71fee72ced9dfd968a",
+      "apk_count": 0,
+      "digest_matches_github": true
+    },
+    {
+      "name": "build-results",
+      "id": 11628367941,
+      "file_count": 224,
+      "sha256": "ef7a6be2a7fc9ff85d2350202200105df2df8369a16053f3c52cc5ba3ed37a18",
+      "apk_count": 0,
+      "digest_matches_github": true
+    }
+  ],
+  "suites": {
+    "app": {
+      "tests": 398,
+      "failures": 0,
+      "skipped": 13,
+      "passed": 385
+    },
+    "core/data": {
+      "tests": 72,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 72
+    },
+    "core/reminder": {
+      "tests": 14,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 14
+    },
+    "pk-engine": {
+      "tests": 40,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 40
+    },
+    "pk-engine_jvm": {
+      "tests": 58,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/domain_jvm": {
+      "tests": 58,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "importer_jvm": {
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "device": {
+    "app": {
+      "tests": 64,
+      "failures": 0,
+      "skipped": 2,
+      "passed": 62
+    },
+    "data": {
+      "tests": 14,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 14
+    },
+    "migrations": {
+      "tests": 7,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 7
+    },
+    "sqlcipher": {
+      "tests": 7,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 7
+    },
+    "independent_restart": {
+      "successful_one_test_runs": 2
+    }
+  },
+  "lint": {
+    "errors": 0,
+    "warnings": 131
+  },
+  "emulator": "API35 x86_64, not a real device",
+  "full_debug": "success",
+  "full_release": "success",
+  "manifest_check": "success",
+  "research_core_files": {
+    "report.md": {
+      "byte_identical": true,
+      "sha256": "d8a9b36ccd0e5d6768ca5b257598a76a13983df36e64da3a80d21b527d06c35a"
+    },
+    "study-comparisons.csv": {
+      "byte_identical": true,
+      "sha256": "89e2e9f0cb852d3fc617b31975f7837520982188c2e9cc84a45c07521b7666f0"
+    },
+    "candidate-parameters.json": {
+      "byte_identical": true,
+      "sha256": "bccabd4c0d9c33ebf689a87fce43948f51db77d7efab22f8d76197b4f8ce7ea7"
+    },
+    "analysis.json": {
+      "byte_identical": true,
+      "sha256": "89c425a116439e09ad22e3e14eb0945061e7b9f4a5c8448effa51d59cc41a9e1"
+    },
+    "output-manifest.json": {
+      "byte_identical": true,
+      "sha256": "b3335c80e036c347934aedc29a888ef15423218629dfee0ae5469b191d841455"
+    }
+  },
+  "code_and_params_unchanged_in_production": true
+}

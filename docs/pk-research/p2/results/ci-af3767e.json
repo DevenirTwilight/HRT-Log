@@ -1,0 +1,115 @@
+{
+  "run_id": 37953301790,
+  "source_sha": "af3767e2c6b5b78b235dbf08ba2594f45d10ba89",
+  "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/37953301790",
+  "jobs": {
+    "jvm": "success",
+    "android": "success",
+    "device-tests": "success"
+  },
+  "research_tests": 32,
+  "old_python_tests": 13,
+  "synthetic_only": true,
+  "clinical_accuracy_established": false,
+  "downloaded_artifacts": [
+    {
+      "name": "jvm",
+      "id": 11626652624,
+      "files": 21,
+      "archive_sha256": "46fc90e925fe2b1cfa5add07dec568eed5bda1f758864fe9c9e9c1f870e5f10c",
+      "apk_count": 0
+    },
+    {
+      "name": "build",
+      "id": 11626459185,
+      "files": 225,
+      "archive_sha256": "674e2f84b619ee4250460f728eef1ec8b71a786aa66288007bdd9318989a111b",
+      "apk_count": 0
+    },
+    {
+      "name": "device",
+      "id": 11627187542,
+      "files": 25,
+      "archive_sha256": "8ffa227c2b8bcb051d2281e5a3d219b62af29858c8f50e80489b76c144858f49",
+      "apk_count": 0
+    },
+    {
+      "name": "research",
+      "id": 11626532988,
+      "files": 5,
+      "archive_sha256": "af9d91415178fa96423e139bc51ca46539190eb5f95843956aec44b513ff9c8b",
+      "apk_count": 0
+    }
+  ],
+  "html_reports": {
+    "build/pk-engine/build/reports/tests/test/index.html": {
+      "tests": 40,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 40
+    },
+    "build/app/build/reports/tests/testFullDebugUnitTest/index.html": {
+      "tests": 398,
+      "failures": 0,
+      "skipped": 13,
+      "passed": 385
+    },
+    "build/core/reminder/build/reports/tests/testDebugUnitTest/index.html": {
+      "tests": 14,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 14
+    },
+    "build/core/data/build/reports/tests/testDebugUnitTest/index.html": {
+      "tests": 72,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 72
+    },
+    "device/app/build/reports/androidTests/connected/debug/flavors/full/index.html": {
+      "tests": 64,
+      "failures": 0,
+      "skipped": 2,
+      "passed": 62
+    },
+    "device/core/data/build/reports/androidTests/connected/debug/index.html": {
+      "tests": 14,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 14
+    }
+  },
+  "jvm_xml": {
+    "pk-engine": {
+      "tests": 58,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/domain": {
+      "tests": 58,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "importer": {
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "independent_restart": {
+    "prepare": 1,
+    "verifyFreshProcess": 1,
+    "failed": 0,
+    "evidence": "device-selected.log and original successful job logs: each OK (1 test); main app report skips these two intentionally"
+  },
+  "research_comparison": {
+    "core_four_files_byte_identical": true,
+    "manifest_semantically_identical": true,
+    "manifest_order_only_difference": "Pre-refinement directory ordering; sorted in ff23d33; no scientific difference"
+  },
+  "emulator": "API35 x86_64, not real device",
+  "environment_note": "Initial adb boot probes exit1, retried successfully; no failing tests."
+}

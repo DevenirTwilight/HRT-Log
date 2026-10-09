@@ -1,0 +1,641 @@
+Picked up JAVA_TOOL_OPTIONS: -Dhttp.proxyHost=proxy -Dhttp.proxyPort=8080 -Dhttps.proxyHost=proxy -Dhttps.proxyPort=8080
+
+> Configure project :app
+WARNING: The option setting 'android.builtInKotlin=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+WARNING: The option setting 'android.newDsl=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+
+> Task :importer:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:domain:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:domain:processResources NO-SOURCE
+> Task :importer:processResources NO-SOURCE
+> Task :core:data:preBuild UP-TO-DATE
+> Task :core:data:preDebugBuild UP-TO-DATE
+> Task :core:data:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:data:generateDebugResources
+> Task :core:data:packageDebugResources
+> Task :core:data:processDebugNavigationResources
+> Task :core:data:parseDebugLocalResources
+> Task :core:data:generateDebugRFile
+> Task :core:data:javaPreCompileDebug
+> Task :core:data:generateDebugUnitTestAssets UP-TO-DATE
+> Task :core:data:generateDebugAssets UP-TO-DATE
+> Task :core:data:mergeDebugAssets
+> Task :core:data:preDebugUnitTestBuild UP-TO-DATE
+> Task :core:domain:compileKotlin
+> Task :core:data:mergeDebugUnitTestAssets
+> Task :core:domain:compileJava NO-SOURCE
+> Task :core:domain:classes UP-TO-DATE
+> Task :core:domain:jar
+> Task :core:data:writeDebugAarMetadata
+> Task :core:data:checkDebugUnitTestAarMetadata
+> Task :core:data:mapDebugSourceSetPaths
+> Task :core:data:compileDebugLibraryResources
+> Task :core:data:mapDebugUnitTestSourceSetPaths
+> Task :core:data:generateDebugUnitTestResources
+> Task :importer:compileKotlin
+> Task :importer:compileJava NO-SOURCE
+> Task :importer:classes UP-TO-DATE
+> Task :importer:jar
+> Task :core:data:mergeDebugUnitTestResources
+> Task :core:data:extractDeepLinksDebug
+> Task :core:data:processDebugManifest
+> Task :core:data:processDebugUnitTestManifest
+> Task :core:data:processDebugUnitTestResources
+> Task :core:data:packageDebugUnitTestForUnitTest
+> Task :core:data:generateDebugUnitTestConfig
+> Task :core:data:javaPreCompileDebugUnitTest
+> Task :core:reminder:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:reminder:preBuild UP-TO-DATE
+> Task :core:reminder:preDebugBuild UP-TO-DATE
+> Task :core:reminder:generateDebugResources
+> Task :core:reminder:packageDebugResources
+> Task :core:reminder:processDebugNavigationResources
+> Task :core:reminder:parseDebugLocalResources
+> Task :core:reminder:generateDebugRFile
+> Task :core:reminder:javaPreCompileDebug
+> Task :core:reminder:preDebugUnitTestBuild UP-TO-DATE
+> Task :core:reminder:writeDebugAarMetadata
+> Task :core:reminder:checkDebugUnitTestAarMetadata
+> Task :core:reminder:mapDebugSourceSetPaths
+> Task :core:reminder:compileDebugLibraryResources
+> Task :core:reminder:mapDebugUnitTestSourceSetPaths
+> Task :core:reminder:generateDebugUnitTestResources
+> Task :core:reminder:mergeDebugUnitTestResources
+> Task :core:reminder:extractDeepLinksDebug
+> Task :core:reminder:processDebugManifest
+> Task :core:reminder:processDebugUnitTestManifest
+> Task :core:reminder:processDebugUnitTestResources
+> Task :core:reminder:javaPreCompileDebugUnitTest
+> Task :core:reminder:generateDebugUnitTestAssets UP-TO-DATE
+> Task :core:reminder:generateDebugAssets UP-TO-DATE
+> Task :core:reminder:mergeDebugAssets
+> Task :core:reminder:mergeDebugUnitTestAssets
+> Task :core:reminder:packageDebugUnitTestForUnitTest
+> Task :core:reminder:generateDebugUnitTestConfig
+> Task :pk-engine:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :pk-engine:compileKotlin
+> Task :pk-engine:compileJava NO-SOURCE
+> Task :pk-engine:processResources
+> Task :pk-engine:classes
+> Task :pk-engine:jar
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preFullDebugBuild UP-TO-DATE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:generateFullDebugResources
+> Task :app:packageFullDebugResources
+> Task :core:ui:preBuild UP-TO-DATE
+> Task :core:ui:preDebugBuild UP-TO-DATE
+> Task :core:ui:processDebugNavigationResources
+> Task :app:processFullDebugNavigationResources
+> Task :app:parseFullDebugLocalResources
+> Task :app:generateFullDebugRFile
+> Task :core:ui:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:ui:generateDebugResources
+> Task :core:ui:packageDebugResources
+> Task :core:ui:parseDebugLocalResources
+> Task :core:ui:generateDebugRFile
+> Task :core:ui:compileDebugKotlin
+> Task :core:ui:javaPreCompileDebug
+> Task :core:ui:compileDebugJavaWithJavac NO-SOURCE
+> Task :core:ui:bundleLibCompileToJarDebug
+> Task :app:javaPreCompileFullDebug
+> Task :core:ui:bundleLibRuntimeToJarDebug
+> Task :core:ui:processDebugJavaRes
+> Task :core:ui:createFullJarDebug
+> Task :core:ui:writeDebugAarMetadata
+> Task :app:checkFullDebugAarMetadata
+> Task :app:mapFullDebugSourceSetPaths
+> Task :app:compileFullDebugNavigationResources
+
+> Task :app:mergeFullDebugResources
+/workspace/HRT-Log/app/src/main/res/values/strings.xml:220:0: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log/app/src/main/res/values-fr/strings.xml:220:0: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log/app/src/main/res/values-b+zh+Hant/strings.xml:559:0: Multiple substitutions specified in non-positional format of string resource string/legend_band_inner. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log/app/src/main/res/values-b+zh+Hant/strings.xml:192:0: Multiple substitutions specified in non-positional format of string resource string/legend_band_outer. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log/app/src/main/res/values-b+zh+Hant/strings.xml:220:0: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log/app/src/main/res/values-zh/strings.xml:559:0: Multiple substitutions specified in non-positional format of string resource string/legend_band_inner. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log/app/src/main/res/values-zh/strings.xml:192:0: Multiple substitutions specified in non-positional format of string resource string/legend_band_outer. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log/app/src/main/res/values-zh/strings.xml:220:0: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+
+> Task :app:createFullDebugCompatibleScreenManifests
+> Task :app:extractDeepLinksFullDebug
+> Task :core:ui:extractDeepLinksDebug
+> Task :core:ui:processDebugManifest
+> Task :app:processFullDebugMainManifest
+> Task :app:processFullDebugManifest
+> Task :app:processFullDebugManifestForPackage
+> Task :core:ui:mapDebugSourceSetPaths
+> Task :core:ui:compileDebugLibraryResources
+> Task :app:processFullDebugResources
+> Task :app:generateFullDebugAssets UP-TO-DATE
+> Task :core:ui:generateDebugAssets UP-TO-DATE
+> Task :core:ui:mergeDebugAssets
+> Task :app:mergeFullDebugAssets
+> Task :app:preFullDebugUnitTestBuild UP-TO-DATE
+> Task :app:packageFullDebugUnitTestForUnitTest
+
+> Task :app:processFullDebugUnitTestManifest
+/workspace/HRT-Log/app/src/full/AndroidManifest.xml Warning:
+	meta-data#androidx.work.WorkManagerInitializer was tagged at AndroidManifest.xml:0 to remove other declarations but no other declaration present
+
+> Task :app:generateFullDebugUnitTestConfig
+> Task :app:javaPreCompileFullDebugUnitTest
+> Task :core:data:checkDebugAarMetadata
+> Task :core:data:mergeDebugJniLibFolders
+> Task :core:data:mergeDebugNativeLibs NO-SOURCE
+> Task :core:data:stripDebugDebugSymbols NO-SOURCE
+> Task :core:data:copyDebugJniLibsProjectAndLocalJars
+> Task :core:data:extractDeepLinksForAarDebug
+> Task :core:data:prepareDebugArtProfile
+> Task :core:data:prepareLintJarForPublish
+> Task :core:reminder:checkDebugAarMetadata
+> Task :core:reminder:mergeDebugJniLibFolders
+> Task :core:reminder:mergeDebugNativeLibs NO-SOURCE
+> Task :core:reminder:stripDebugDebugSymbols NO-SOURCE
+> Task :core:reminder:copyDebugJniLibsProjectAndLocalJars
+> Task :core:reminder:extractDeepLinksForAarDebug
+> Task :core:reminder:prepareDebugArtProfile
+> Task :core:reminder:prepareLintJarForPublish
+> Task :core:ui:checkDebugAarMetadata
+> Task :core:ui:mergeDebugJniLibFolders
+> Task :core:ui:mergeDebugNativeLibs NO-SOURCE
+> Task :core:ui:stripDebugDebugSymbols NO-SOURCE
+> Task :core:ui:copyDebugJniLibsProjectAndLocalJars
+> Task :core:ui:extractDebugAnnotations
+> Task :core:ui:extractDeepLinksForAarDebug
+> Task :core:ui:mergeDebugGeneratedProguardFiles
+> Task :core:ui:mergeDebugConsumerProguardFiles
+> Task :core:ui:prepareDebugArtProfile
+> Task :core:ui:prepareLintJarForPublish
+> Task :core:ui:mergeDebugJavaResource
+> Task :core:ui:syncDebugLibJars
+> Task :core:ui:bundleDebugLocalLintAar
+> Task :app:preFullDebugAndroidTestBuild SKIPPED
+> Task :core:data:writeDebugLintModelMetadata
+> Task :core:reminder:writeDebugLintModelMetadata
+> Task :core:ui:writeDebugLintModelMetadata
+> Task :app:extractProguardFiles
+> Task :core:data:extractProguardFiles
+> Task :core:reminder:extractProguardFiles
+> Task :core:ui:extractProguardFiles
+> Task :core:ui:generateDebugLintModel
+> Task :core:data:kspDebugKotlin
+
+> Task :core:data:compileDebugKotlin
+w: file:///workspace/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt:32:58 This annotation is currently applied to the value parameter only, but in the future it will also be applied to field.
+- To opt in to applying to both value parameter and field, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+w: file:///workspace/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/WellbeingUpgrade.kt:25:108 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/WellbeingUpgrade.kt:35:120 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/WellbeingUpgrade.kt:36:97 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/WellbeingUpgrade.kt:40:135 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+
+> Task :core:data:compileDebugJavaWithJavac
+> Task :core:data:transformDebugClassesWithAsm
+> Task :core:data:bundleLibRuntimeToJarDebug
+> Task :core:data:processDebugJavaRes
+> Task :core:data:bundleLibCompileToJarDebug
+> Task :core:data:kspDebugUnitTestKotlin
+> Task :core:data:compileDebugUnitTestKotlin
+> Task :core:data:createFullJarDebug
+> Task :core:data:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :core:data:hiltAggregateDepsDebugUnitTest
+> Task :core:data:hiltJavaCompileDebugUnitTest NO-SOURCE
+> Task :core:data:processDebugUnitTestJavaRes
+> Task :core:data:transformDebugUnitTestClassesWithAsm
+> Task :core:ui:lintAnalyzeDebug
+
+> Task :core:data:testDebugUnitTest
+Picked up JAVA_TOOL_OPTIONS: -Dhttp.proxyHost=proxy -Dhttp.proxyPort=8080 -Dhttps.proxyHost=proxy -Dhttps.proxyPort=8080
+
+> Task :core:data:extractDebugAnnotations
+> Task :core:data:mergeDebugGeneratedProguardFiles
+> Task :core:data:mergeDebugConsumerProguardFiles
+> Task :core:data:mergeDebugJavaResource
+> Task :core:data:syncDebugLibJars
+> Task :core:data:bundleDebugLocalLintAar
+> Task :core:data:generateDebugLintModel
+> Task :core:reminder:kspDebugKotlin
+
+> Task :core:reminder:compileDebugKotlin
+w: file:///workspace/HRT-Log/core/reminder/src/main/java/net/plainnotes/app/reminder/ReminderCoordinator.kt:24:58 This annotation is currently applied to the value parameter only, but in the future it will also be applied to field.
+- To opt in to applying to both value parameter and field, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+
+> Task :core:reminder:compileDebugJavaWithJavac
+> Task :core:reminder:bundleLibRuntimeToJarDebug
+> Task :core:reminder:bundleLibCompileToJarDebug
+> Task :core:reminder:kspDebugUnitTestKotlin
+
+> Task :core:reminder:compileDebugUnitTestKotlin
+w: file:///workspace/HRT-Log/core/reminder/src/test/java/net/plainnotes/app/reminder/ExactAlarmTest.kt:26:253 'val nextScheduledAlarm: ShadowAlarmManager.ScheduledAlarm?' is deprecated. Deprecated in Java.
+w: file:///workspace/HRT-Log/core/reminder/src/test/java/net/plainnotes/app/reminder/ExactAlarmTest.kt:28:347 'val nextScheduledAlarm: ShadowAlarmManager.ScheduledAlarm?' is deprecated. Deprecated in Java.
+w: file:///workspace/HRT-Log/core/reminder/src/test/java/net/plainnotes/app/reminder/LockedBootAlarmTest.kt:29:161 'val nextScheduledAlarm: ShadowAlarmManager.ScheduledAlarm?' is deprecated. Deprecated in Java.
+
+> Task :core:reminder:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :core:reminder:processDebugJavaRes
+> Task :core:reminder:processDebugUnitTestJavaRes
+
+> Task :core:reminder:testDebugUnitTest
+Picked up JAVA_TOOL_OPTIONS: -Dhttp.proxyHost=proxy -Dhttp.proxyPort=8080 -Dhttps.proxyHost=proxy -Dhttps.proxyPort=8080
+
+> Task :app:kspFullDebugKotlin
+> Task :core:data:lintAnalyzeDebug
+> Task :core:reminder:createFullJarDebug
+> Task :core:reminder:extractDebugAnnotations
+> Task :core:reminder:mergeDebugGeneratedProguardFiles
+> Task :core:reminder:mergeDebugConsumerProguardFiles
+> Task :core:reminder:mergeDebugJavaResource
+> Task :core:reminder:syncDebugLibJars
+> Task :core:reminder:bundleDebugLocalLintAar
+> Task :core:reminder:generateDebugLintModel
+
+> Task :app:compileFullDebugKotlin
+w: file:///workspace/HRT-Log/app/src/main/java/net/plainnotes/app/NotesViewModel.kt:24:5 This annotation is currently applied to the value parameter only, but in the future it will also be applied to field.
+- To opt in to applying to both value parameter and field, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+w: file:///workspace/HRT-Log/app/src/main/java/net/plainnotes/app/ui/AppShell.kt:210:17 'when' is exhaustive so 'else' is redundant here.
+
+> Task :core:reminder:lintAnalyzeDebug
+> Task :app:compileFullDebugJavaWithJavac
+> Task :core:data:preDebugAndroidTestBuild UP-TO-DATE
+> Task :app:hiltAggregateDepsFullDebug
+> Task :core:data:generateDebugAndroidTestLintModel
+> Task :app:hiltJavaCompileFullDebug
+> Task :app:processFullDebugJavaRes
+> Task :app:bundleFullDebugClassesToCompileJar
+> Task :app:transformFullDebugClassesWithAsm
+> Task :app:bundleFullDebugClassesToRuntimeJar
+> Task :app:generateFullDebugAndroidTestLintModel
+> Task :app:generateFullDebugLintReportModel
+> Task :app:generateFullDebugUnitTestLintModel
+> Task :app:kspFullDebugUnitTestKotlin
+
+> Task :app:compileFullDebugUnitTestKotlin
+w: file:///workspace/HRT-Log/app/src/test/java/net/plainnotes/app/OutlierDispositionTest.kt:31:59 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type 'File?'.
+
+> Task :app:compileFullDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :app:hiltAggregateDepsFullDebugUnitTest
+> Task :app:hiltJavaCompileFullDebugUnitTest NO-SOURCE
+> Task :app:processFullDebugUnitTestJavaRes
+> Task :app:transformFullDebugUnitTestClassesWithAsm
+
+> Task :app:testFullDebugUnitTest
+Picked up JAVA_TOOL_OPTIONS: -Dhttp.proxyHost=proxy -Dhttp.proxyPort=8080 -Dhttps.proxyHost=proxy -Dhttps.proxyPort=8080
+
+> Task :app:lintAnalyzeFullDebug
+> Task :app:lintAnalyzeFullDebugAndroidTest
+> Task :core:data:generateDebugUnitTestLintModel
+> Task :core:data:lintAnalyzeDebugAndroidTest
+> Task :core:data:lintAnalyzeDebugUnitTest
+> Task :core:reminder:preDebugAndroidTestBuild UP-TO-DATE
+> Task :core:reminder:generateDebugAndroidTestLintModel
+> Task :core:reminder:generateDebugUnitTestLintModel
+> Task :core:reminder:lintAnalyzeDebugAndroidTest
+> Task :core:reminder:lintAnalyzeDebugUnitTest
+> Task :core:ui:preDebugAndroidTestBuild UP-TO-DATE
+> Task :core:ui:generateDebugAndroidTestLintModel
+> Task :core:ui:preDebugUnitTestBuild UP-TO-DATE
+> Task :core:ui:generateDebugUnitTestLintModel
+> Task :core:ui:lintAnalyzeDebugAndroidTest
+> Task :core:ui:lintAnalyzeDebugUnitTest
+> Task :app:mergeFullDebugNativeDebugMetadata NO-SOURCE
+> Task :app:compressFullDebugAssets
+> Task :app:checkFullDebugDuplicateClasses
+> Task :app:desugarFullDebugFileDependencies
+> Task :app:lintAnalyzeFullDebugUnitTest
+> Task :app:mergeExtDexFullDebug
+
+> Task :app:lintReportFullDebug
+Wrote HTML report to file:///workspace/HRT-Log/app/build/reports/lint-results-fullDebug.html
+
+> Task :app:dexBuilderFullDebug
+> Task :app:lintFullDebug
+> Task :app:mergeFullDebugGlobalSynthetics
+> Task :core:reminder:bundleLibRuntimeToDirDebug
+> Task :core:data:bundleLibRuntimeToDirDebug
+> Task :core:ui:bundleLibRuntimeToDirDebug
+> Task :app:mergeLibDexFullDebug
+> Task :app:mergeFullDebugJavaResource
+> Task :app:mergeFullDebugJniLibFolders
+> Task :core:data:copyDebugJniLibsProjectOnly
+> Task :core:reminder:copyDebugJniLibsProjectOnly
+> Task :core:ui:copyDebugJniLibsProjectOnly
+> Task :app:mergeProjectDexFullDebug
+> Task :app:validateSigningFullDebug
+> Task :app:writeFullDebugAppMetadata
+> Task :app:writeFullDebugSigningConfigVersions
+> Task :app:preFullReleaseBuild UP-TO-DATE
+> Task :app:mergeFullDebugNativeLibs
+> Task :app:mergeFullReleaseJniLibFolders
+> Task :core:data:preReleaseBuild UP-TO-DATE
+> Task :core:data:mergeReleaseJniLibFolders
+> Task :core:data:mergeReleaseNativeLibs NO-SOURCE
+> Task :core:data:copyReleaseJniLibsProjectOnly
+> Task :core:reminder:preReleaseBuild UP-TO-DATE
+> Task :core:reminder:mergeReleaseJniLibFolders
+> Task :core:reminder:mergeReleaseNativeLibs NO-SOURCE
+> Task :core:reminder:copyReleaseJniLibsProjectOnly
+> Task :core:ui:preReleaseBuild UP-TO-DATE
+> Task :core:ui:mergeReleaseJniLibFolders
+> Task :core:ui:mergeReleaseNativeLibs NO-SOURCE
+> Task :core:ui:copyReleaseJniLibsProjectOnly
+
+> Task :app:stripFullDebugDebugSymbols
+Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libsqlcipher.so. Run with --info option to learn more.
+
+> Task :app:mergeFullReleaseNativeLibs
+
+> Task :app:stripFullReleaseDebugSymbols
+Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libsqlcipher.so. Run with --info option to learn more.
+
+> Task :app:extractFullReleaseNativeSymbolTables
+> Task :app:mergeFullReleaseNativeDebugMetadata NO-SOURCE
+> Task :core:data:generateReleaseResources
+> Task :core:data:packageReleaseResources
+> Task :core:data:processReleaseNavigationResources
+> Task :core:data:parseReleaseLocalResources
+> Task :core:data:generateReleaseRFile
+> Task :app:packageFullDebug
+> Task :app:createFullDebugApkListingFileRedirect
+> Task :app:assembleFullDebug
+> Task :core:data:javaPreCompileRelease
+> Task :core:reminder:generateReleaseResources
+> Task :core:reminder:packageReleaseResources
+> Task :core:reminder:processReleaseNavigationResources
+> Task :core:reminder:parseReleaseLocalResources
+> Task :core:reminder:generateReleaseRFile
+> Task :core:reminder:javaPreCompileRelease
+> Task :core:ui:generateReleaseResources
+> Task :core:ui:packageReleaseResources
+> Task :core:ui:processReleaseNavigationResources
+> Task :core:ui:parseReleaseLocalResources
+> Task :core:ui:generateReleaseRFile
+> Task :core:ui:compileReleaseKotlin
+> Task :core:ui:javaPreCompileRelease
+> Task :core:ui:compileReleaseJavaWithJavac NO-SOURCE
+> Task :core:ui:mergeReleaseGeneratedProguardFiles
+> Task :core:ui:exportReleaseConsumerProguardFiles
+> Task :app:checkFullReleaseDuplicateClasses
+> Task :core:data:prepareReleaseArtProfile
+> Task :core:reminder:prepareReleaseArtProfile
+> Task :core:ui:prepareReleaseArtProfile
+> Task :app:mergeFullReleaseArtProfile
+> Task :app:buildKotlinToolingMetadata
+> Task :app:generateFullReleaseResources
+> Task :app:packageFullReleaseResources
+> Task :app:processFullReleaseNavigationResources
+> Task :app:parseFullReleaseLocalResources
+> Task :app:generateFullReleaseRFile
+> Task :core:ui:bundleLibCompileToJarRelease
+> Task :app:javaPreCompileFullRelease
+> Task :core:ui:bundleLibRuntimeToJarRelease
+> Task :core:ui:processReleaseJavaRes
+> Task :core:ui:createFullJarRelease
+> Task :core:data:writeReleaseAarMetadata
+> Task :core:reminder:writeReleaseAarMetadata
+> Task :core:ui:writeReleaseAarMetadata
+> Task :app:checkFullReleaseAarMetadata
+> Task :app:mapFullReleaseSourceSetPaths
+> Task :app:compileFullReleaseNavigationResources
+
+> Task :app:mergeFullReleaseResources
+/workspace/HRT-Log/app/src/main/res/values/strings.xml:220:0: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log/app/src/main/res/values-fr/strings.xml:220:0: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log/app/src/main/res/values-b+zh+Hant/strings.xml:559:0: Multiple substitutions specified in non-positional format of string resource string/legend_band_inner. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log/app/src/main/res/values-b+zh+Hant/strings.xml:192:0: Multiple substitutions specified in non-positional format of string resource string/legend_band_outer. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log/app/src/main/res/values-b+zh+Hant/strings.xml:220:0: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log/app/src/main/res/values-zh/strings.xml:559:0: Multiple substitutions specified in non-positional format of string resource string/legend_band_inner. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log/app/src/main/res/values-zh/strings.xml:192:0: Multiple substitutions specified in non-positional format of string resource string/legend_band_outer. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log/app/src/main/res/values-zh/strings.xml:220:0: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+
+> Task :app:createFullReleaseCompatibleScreenManifests
+> Task :app:extractDeepLinksFullRelease
+> Task :core:data:extractDeepLinksRelease
+> Task :core:data:processReleaseManifest
+> Task :core:reminder:extractDeepLinksRelease
+> Task :core:reminder:processReleaseManifest
+> Task :core:ui:extractDeepLinksRelease
+> Task :core:ui:processReleaseManifest
+> Task :app:processFullReleaseMainManifest
+> Task :app:processFullReleaseManifest
+> Task :app:processFullReleaseManifestForPackage
+> Task :core:data:mapReleaseSourceSetPaths
+> Task :core:data:compileReleaseLibraryResources
+> Task :core:reminder:mapReleaseSourceSetPaths
+> Task :core:reminder:compileReleaseLibraryResources
+> Task :core:ui:mapReleaseSourceSetPaths
+> Task :core:ui:compileReleaseLibraryResources
+> Task :app:processFullReleaseResources
+> Task :app:mergeFullReleaseStartupProfile
+> Task :app:generateFullReleaseAssets UP-TO-DATE
+> Task :core:data:generateReleaseAssets UP-TO-DATE
+> Task :core:data:mergeReleaseAssets
+> Task :core:reminder:generateReleaseAssets UP-TO-DATE
+> Task :core:reminder:mergeReleaseAssets
+> Task :core:ui:generateReleaseAssets UP-TO-DATE
+> Task :core:ui:mergeReleaseAssets
+> Task :app:mergeFullReleaseAssets
+> Task :app:compressFullReleaseAssets
+> Task :app:extractFullReleaseVersionControlInfo
+> Task :core:ui:generateReleaseLintModel
+> Task :core:reminder:checkReleaseAarMetadata
+> Task :core:reminder:stripReleaseDebugSymbols NO-SOURCE
+> Task :core:reminder:copyReleaseJniLibsProjectAndLocalJars
+> Task :core:reminder:extractDeepLinksForAarRelease
+> Task :core:data:checkReleaseAarMetadata
+> Task :core:data:stripReleaseDebugSymbols NO-SOURCE
+> Task :core:data:copyReleaseJniLibsProjectAndLocalJars
+> Task :core:data:extractDeepLinksForAarRelease
+> Task :core:ui:checkReleaseAarMetadata
+> Task :core:ui:stripReleaseDebugSymbols NO-SOURCE
+> Task :core:ui:copyReleaseJniLibsProjectAndLocalJars
+> Task :core:ui:extractDeepLinksForAarRelease
+> Task :core:ui:extractReleaseAnnotations
+> Task :core:ui:mergeReleaseConsumerProguardFiles
+> Task :core:ui:mergeReleaseJavaResource
+> Task :core:ui:syncReleaseLibJars
+> Task :core:ui:bundleReleaseLocalLintAar
+> Task :core:data:writeReleaseLintModelMetadata
+> Task :core:reminder:writeReleaseLintModelMetadata
+> Task :core:ui:lintVitalAnalyzeRelease
+> Task :core:ui:writeReleaseLintModelMetadata
+> Task :core:ui:generateReleaseLintVitalModel
+> Task :app:optimizeFullReleaseResources
+> Task :app:collectFullReleaseDependencies
+> Task :app:sdkFullReleaseDependencyData
+> Task :app:writeFullReleaseAppMetadata
+> Task :app:writeFullReleaseSigningConfigVersions
+> Task :core:data:generateDebugAndroidTestResources
+> Task :core:data:packageDebugAndroidTestResources
+> Task :core:data:processDebugAndroidTestNavigationResources
+> Task :core:data:parseDebugAndroidTestLocalResources
+> Task :core:data:generateDebugAndroidTestRFile
+> Task :core:data:kspDebugAndroidTestKotlin
+> Task :core:data:compileDebugAndroidTestKotlin
+> Task :core:data:javaPreCompileDebugAndroidTest
+> Task :core:data:compileDebugAndroidTestJavaWithJavac NO-SOURCE
+> Task :core:data:generateDebugAndroidTestAssets UP-TO-DATE
+> Task :core:data:mergeDebugAndroidTestAssets
+> Task :core:data:compressDebugAndroidTestAssets
+> Task :core:data:desugarDebugAndroidTestFileDependencies
+> Task :core:data:hiltAggregateDepsDebugAndroidTest
+> Task :core:data:hiltJavaCompileDebugAndroidTest NO-SOURCE
+> Task :core:data:checkDebugAndroidTestAarMetadata
+> Task :core:data:mapDebugAndroidTestSourceSetPaths
+> Task :core:data:compileDebugAndroidTestNavigationResources
+> Task :core:data:mergeDebugAndroidTestResources
+> Task :core:data:processDebugAndroidTestManifest
+> Task :core:data:processDebugAndroidTestResources
+> Task :core:data:transformDebugAndroidTestClassesWithAsm
+> Task :core:data:dexBuilderDebugAndroidTest
+> Task :core:data:mergeDebugAndroidTestGlobalSynthetics
+> Task :core:data:processDebugAndroidTestJavaRes
+> Task :core:data:mergeDebugAndroidTestJavaResource
+> Task :core:data:checkDebugAndroidTestDuplicateClasses
+> Task :core:data:mergeExtDexDebugAndroidTest
+> Task :core:data:mergeLibDexDebugAndroidTest
+> Task :core:data:mergeProjectDexDebugAndroidTest
+> Task :core:data:mergeDebugAndroidTestJniLibFolders
+> Task :core:data:mergeDebugAndroidTestNativeLibs
+> Task :core:data:kspReleaseKotlin
+
+> Task :core:data:stripDebugAndroidTestDebugSymbols
+Unable to strip the following libraries, packaging them as they are: libsqlcipher.so. Run with --info option to learn more.
+
+> Task :core:data:validateSigningDebugAndroidTest
+> Task :core:data:writeDebugAndroidTestSigningConfigVersions
+> Task :core:data:packageDebugAndroidTest
+> Task :core:data:createDebugAndroidTestApkListingFileRedirect
+> Task :core:data:assembleDebugAndroidTest
+> Task :app:generateFullDebugAndroidTestResources
+> Task :app:packageFullDebugAndroidTestResources
+> Task :app:processFullDebugAndroidTestNavigationResources
+> Task :app:parseFullDebugAndroidTestLocalResources
+> Task :app:generateFullDebugAndroidTestRFile
+> Task :app:kspFullDebugAndroidTestKotlin
+
+> Task :core:data:compileReleaseKotlin
+w: file:///workspace/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt:32:58 This annotation is currently applied to the value parameter only, but in the future it will also be applied to field.
+- To opt in to applying to both value parameter and field, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+w: file:///workspace/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/WellbeingUpgrade.kt:25:108 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/WellbeingUpgrade.kt:35:120 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/WellbeingUpgrade.kt:36:97 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/WellbeingUpgrade.kt:40:135 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+
+> Task :core:data:compileReleaseJavaWithJavac
+> Task :core:data:transformReleaseClassesWithAsm
+> Task :core:data:bundleLibCompileToJarRelease
+> Task :app:compileFullDebugAndroidTestKotlin
+> Task :core:data:mergeReleaseGeneratedProguardFiles
+> Task :core:data:exportReleaseConsumerProguardFiles
+> Task :core:data:bundleLibRuntimeToJarRelease
+> Task :core:data:processReleaseJavaRes
+> Task :core:data:createFullJarRelease
+> Task :core:data:generateReleaseLintModel
+> Task :core:data:extractReleaseAnnotations
+> Task :core:data:mergeReleaseConsumerProguardFiles
+> Task :core:data:mergeReleaseJavaResource
+> Task :core:data:syncReleaseLibJars
+> Task :core:data:bundleReleaseLocalLintAar
+> Task :core:reminder:kspReleaseKotlin
+
+> Task :core:reminder:compileReleaseKotlin
+w: file:///workspace/HRT-Log/core/reminder/src/main/java/net/plainnotes/app/reminder/ReminderCoordinator.kt:24:58 This annotation is currently applied to the value parameter only, but in the future it will also be applied to field.
+- To opt in to applying to both value parameter and field, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+
+> Task :core:reminder:compileReleaseJavaWithJavac
+> Task :core:reminder:mergeReleaseGeneratedProguardFiles
+> Task :core:reminder:exportReleaseConsumerProguardFiles
+> Task :core:reminder:bundleLibCompileToJarRelease
+> Task :core:data:lintVitalAnalyzeRelease
+> Task :core:reminder:bundleLibRuntimeToJarRelease
+> Task :core:reminder:processReleaseJavaRes
+> Task :core:reminder:createFullJarRelease
+> Task :core:reminder:generateReleaseLintModel
+> Task :core:reminder:extractReleaseAnnotations
+> Task :core:reminder:mergeReleaseConsumerProguardFiles
+> Task :core:reminder:mergeReleaseJavaResource
+> Task :core:reminder:syncReleaseLibJars
+> Task :core:reminder:bundleReleaseLocalLintAar
+> Task :core:reminder:lintVitalAnalyzeRelease
+> Task :core:data:generateReleaseLintVitalModel
+> Task :core:reminder:generateReleaseLintVitalModel
+> Task :app:javaPreCompileFullDebugAndroidTest
+> Task :app:compileFullDebugAndroidTestJavaWithJavac NO-SOURCE
+> Task :app:generateFullDebugAndroidTestAssets UP-TO-DATE
+> Task :app:mergeFullDebugAndroidTestAssets
+> Task :app:compressFullDebugAndroidTestAssets
+> Task :app:checkFullDebugAndroidTestDuplicateClasses
+> Task :app:desugarFullDebugAndroidTestFileDependencies
+> Task :app:mergeExtDexFullDebugAndroidTest
+> Task :app:hiltAggregateDepsFullDebugAndroidTest
+> Task :app:hiltJavaCompileFullDebugAndroidTest NO-SOURCE
+> Task :app:checkFullDebugAndroidTestAarMetadata
+> Task :app:mapFullDebugAndroidTestSourceSetPaths
+> Task :app:compileFullDebugAndroidTestNavigationResources
+> Task :app:mergeFullDebugAndroidTestResources
+> Task :app:processFullDebugAndroidTestManifest
+> Task :app:processFullDebugAndroidTestResources
+> Task :app:transformFullDebugAndroidTestClassesWithAsm
+> Task :app:dexBuilderFullDebugAndroidTest
+> Task :app:mergeFullDebugAndroidTestGlobalSynthetics
+> Task :app:processFullDebugAndroidTestJavaRes
+> Task :app:mergeFullDebugAndroidTestJavaResource
+> Task :app:mergeLibDexFullDebugAndroidTest
+> Task :app:mergeProjectDexFullDebugAndroidTest
+> Task :app:mergeFullDebugAndroidTestJniLibFolders
+> Task :app:mergeFullDebugAndroidTestNativeLibs NO-SOURCE
+> Task :app:stripFullDebugAndroidTestDebugSymbols NO-SOURCE
+> Task :app:validateSigningFullDebugAndroidTest
+> Task :app:writeFullDebugAndroidTestSigningConfigVersions
+> Task :app:packageFullDebugAndroidTest
+> Task :app:createFullDebugAndroidTestApkListingFileRedirect
+> Task :app:assembleFullDebugAndroidTest
+> Task :app:kspFullReleaseKotlin
+
+> Task :app:compileFullReleaseKotlin
+w: file:///workspace/HRT-Log/app/src/main/java/net/plainnotes/app/NotesViewModel.kt:24:5 This annotation is currently applied to the value parameter only, but in the future it will also be applied to field.
+- To opt in to applying to both value parameter and field, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+w: file:///workspace/HRT-Log/app/src/main/java/net/plainnotes/app/ui/AppShell.kt:210:17 'when' is exhaustive so 'else' is redundant here.
+
+> Task :app:compileFullReleaseJavaWithJavac
+> Task :app:hiltAggregateDepsFullRelease
+> Task :app:hiltJavaCompileFullRelease
+> Task :app:processFullReleaseJavaRes
+> Task :app:transformFullReleaseClassesWithAsm
+> Task :app:mergeFullReleaseJavaResource
+> Task :app:mergeFullReleaseGeneratedProguardFiles
+> Task :app:generateFullReleaseLintVitalReportModel
+> Task :app:expandFullReleaseArtProfileWildcards
+> Task :app:lintVitalAnalyzeFullRelease
+> Task :app:lintVitalReportFullRelease
+> Task :app:lintVitalFullRelease
+> Task :app:minifyFullReleaseWithR8
+> Task :app:compileFullReleaseArtProfile
+> Task :app:packageFullRelease
+> Task :app:createFullReleaseApkListingFileRedirect
+> Task :app:assembleFullRelease
+
+BUILD SUCCESSFUL in 7m 33s
+444 actionable tasks: 444 executed
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.3.1/userguide/configuration_cache_enabling.html

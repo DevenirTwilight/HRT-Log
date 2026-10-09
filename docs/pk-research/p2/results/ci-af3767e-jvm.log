@@ -1,0 +1,7 @@
+2026-10-09T15:40:57.9977507Z > Task :core:domain:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-10-09T15:40:58.4039399Z > Task :pk-engine:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-10-09T15:41:14.8969875Z > Task :importer:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-10-09T15:41:20.4984909Z BUILD SUCCESSFUL in 33s
+2026-10-09T15:41:22.6905926Z Ran 32 tests in 1.721s
+2026-10-09T15:41:23.1047574Z {"output": "/tmp/hrt-p2-ci", "profiles": 339, "external_validation_status": "external_validation_insufficient", "clinical_accuracy_established": false}
+2026-10-09T15:41:51.4956804Z BUILD SUCCESSFUL in 18s

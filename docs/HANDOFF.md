@@ -1,3 +1,19 @@
+# 最新状态：P2-A/B隔离研究与本地/API35 CI验收完成（2026-10-09，§50）
+
+起始e89579a02da3c92a9e4976baea729af9d532437e，既有claude/new-session-1959qb，初始干净/远端一致。Gate A拟合前冻结90518758449f7d52bc213ef2f2cfe48aa9754a57已先推送；候选实现138b981、报告契约af3767e、真实删训练/manifest排序ff23d33、初值实际搜索388ef0f依序提交。科学协议无偏离。
+
+[研究统一入口](pk-research/p2/README.md)/[验收](pk-research/p2/verification.md)：Cortez fresh全文、Yaish P0全文重核（fresh入口受限），其余五研究仅摘要；TRAIN1/DESIGN_EXPOSED3/LOCKED_EXTERNAL0/QUALITATIVE3/NOT_COMPARABLE0。七研究不是十三项独立研究；339预定形状/基线情景各只拟合幅度一项，保留全部负结果。A gamma2/B约束双途径仅研究；微参数四列Jacobian秩2、三组不同微参数同轨迹；单个人体目标支持秩至多1。**external_validation_insufficient / clinical_accuracy_established=false**，无赢家/生产替换。
+
+本地JVM PK58/domain58/importer12；data72/reminder14；app398（385通过/13既有跳过）；旧Python13/新32、Lint0错误131警告、Full Debug/Release/instrumentation编译/manifest全部通过。旧P0/P1四阶段只读重放通过，九个Kotlin人口场景117点误差最大4.767e-10pg/mL，2mg46min仍278.8647796/Featherline80kg914.262352，不用作候选拟合目标。
+
+最终研究源码388ef0fc36dccf3299ff2aac62be94a8914a1f59的[CI37956265064](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37956265064) jvm/android/device-tests全success，四份产物及实际日志已下载：21/224/25/5文件均无APK；研究五文件与本地逐字节一致。API35 data14（迁移7、加密7）、app64（62通过/2常规跳过）、独立重启各1通过，模拟器不等于实机。前两轮af/ff完整CI也success；af产物计数另保存。最后研究报告/项目文档提交不改源码，新触发CI需另查。
+
+正式JSON参数SHA仍b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b；生产及P0P1旧文件164项hash锁定，另检查全部app/core/pk-engine/importer/Gradle/旧工具git diff为零。Build25/Schema9/算法2/Calculator2/旧冻结1/2、历史/备份/PDF/签名/权限不变，不发APK/Release/PR。全文原件不进Git/CI，所有计算测试合成。
+
+下一最小独立研究单元：合法获取Price/Doll完整、可比人体时序/实际给药史/基线/检测/统计，新增真正锁定外测（含早期及12/24h）。P2-C只有科学门槛和版本/个人校准/历史兼容书面提案，**未实施、需独立授权**；严格结果获知时间历史回放也另案未实施。P0/P1-A/B/C1/C2已完成，不再列为现存未修工程缺陷。
+
+## 下方为以前阶段历史检查点，不代表最新未完成状态
+
 # 最新检查点：P2初值真实参与一维独立求解（2026-10-09）
 
 ff23d33的CI37954537326三个任务已实际success，等待下载核对，生产仍完全不变。提交前进一步审查发现原凸全界搜索的start只是标签；现让各预定初值按目标梯度实际缩小首个括号、保存initial_bracket，多初值真正参与不同搜索，32项回归再通过。解析幅度/曲线/所有科学协议、形状/基线/参数界与角色不改；不是修改生产校准。

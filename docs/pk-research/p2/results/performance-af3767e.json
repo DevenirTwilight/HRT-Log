@@ -1,0 +1,72 @@
+{
+  "code_revision": "af3767e2c6b5b78b235dbf08ba2594f45d10ba89",
+  "python": "3.12.14",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "scope": "Research kernels only, same-host timings; no Android speed/clinical claim",
+  "protocol_sha256": "457530bfbe002dce0682f01f0f80d8eba020b54d4bda84efd56e684abaf9007f",
+  "dataset_sha256": "02750c38f1f99002c7d8294d17ac65c502460ab419e21a1a337b222eb9e42e4e",
+  "params_sha256": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b",
+  "benchmarks": [
+    {
+      "model": "HRT_current",
+      "evaluations_per_run": 4800,
+      "repetitions": 5,
+      "seconds": [
+        0.00938731399946846,
+        0.01326094099204056,
+        0.010642726003425196,
+        0.010207888000877574,
+        0.009270398004446179
+      ],
+      "median_seconds": 0.010207888000877574,
+      "checksum": 78521.7476012588
+    },
+    {
+      "model": "Featherline_80kg",
+      "evaluations_per_run": 4800,
+      "repetitions": 5,
+      "seconds": [
+        0.00960246499744244,
+        0.03676694400201086,
+        0.00546960299834609,
+        0.00586321899027098,
+        0.006445890991017222
+      ],
+      "median_seconds": 0.006445890991017222,
+      "checksum": 416588.57658618834
+    },
+    {
+      "model": "A",
+      "evaluations_per_run": 4800,
+      "repetitions": 5,
+      "seconds": [
+        0.0007374160049948841,
+        0.0007048970001051202,
+        0.0007587290019728243,
+        0.0007239870028570294,
+        0.0007212019991129637
+      ],
+      "median_seconds": 0.0007239870028570294,
+      "checksum": 78286.35348885166
+    },
+    {
+      "model": "B",
+      "evaluations_per_run": 4800,
+      "repetitions": 5,
+      "seconds": [
+        0.008970433002104983,
+        0.004677211996749975,
+        0.006118384990259074,
+        0.010556715991697274,
+        0.004883305009570904
+      ],
+      "median_seconds": 0.006118384990259074,
+      "checksum": 104916.77900466057
+    }
+  ],
+  "population_reference": {
+    "kotlin_p0_scenarios": 9,
+    "time_point_count": 117,
+    "max_absolute_error_pg_ml": 4.767457539855968e-10
+  }
+}
