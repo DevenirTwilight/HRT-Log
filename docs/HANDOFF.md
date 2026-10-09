@@ -1,8 +1,14 @@
 # 交接说明：工作进度与开发指南
 
-## 进行中：最新测试 APK（2026-10-09，REQUIREMENTS §43）
+## 已制作：最新 full 测试 APK（2026-10-09，REQUIREMENTS §43）
 
-接手 4c8f433b0c0420889f3dc69809a8a0aec445066c，工作区干净，与远端一致。用户明确要求制作测试APK，覆盖此前本轮不签名交付的范围限制；仅full，保持Build25/schema9，不发布Release/PR或公开上传。d876cec完整CI已通过，最新HEAD仅文档变动，应用代码一致。已确认原签名备份仓库仍Private且可访问；下一步在仓库外临时恢复签名、构建/签署、证书/版本/16KB/manifest核验、清理凭据并提供文件。
+接手 4c8f433b0c0420889f3dc69809a8a0aec445066c，工作区干净、与远端一致。用户明确要求制作测试APK，覆盖此前不签名交付的范围限制；应用/构建源码与全绿CI d876cec 相同，后续仅文档变化。
+- [x] `assembleFullRelease` 最新构建成功（10s），保持 Build25/0.2.0/schema9；包含上一轮按钮/大字体修复及本轮时间线精简，医疗档案仍规划中、未实施。
+- [x] 确认原签名备份仓库仍Private，从其原备份在源码仓库外临时恢复；使用现有签名脚本核验原证书，不生成新身份。临时目录用受限 TemporaryDirectory 自动清理，JKS/密码/ZIP均未留存或进入源码。
+- [x] 文件 `/workspace/tooling/deliveries/hrt-log-build25-full-ui-test.apk`，23,510,235 bytes；SHA256 `ceb1912ced4e6d01892f67e50d1abf51c14583ed62bc699c9c84b89731dcf438`。原证书 `989ba045…79b1`、v2/v3、非debug、net.plainnotes.app、无INTERNET、ZIP与8个native库ELF LOAD ≥16KB全部通过。APK资源包含新用药记录/推断文案，无正式诊断文案。
+- 文件留在共享工作区，通过会话文件链接提供；不上传公网、不创建Release/PR，不提交APK或签名凭据。旁边 `.apk.sha256` 提供校验。沿用原正式签名，可覆盖原正式安装；同为versionCode25，不自动升号。未做真实设备安装/覆盖升级验收，不能把制作和静态核验当作设备验收。
+- 构建/签名/manifest/包信息日志及验证JSON在源码仓库外 `/workspace/tooling/latest-test-apk-*`；完整相关单测、UI审计、迁移/原生PDF/重启CI通过记录见下节。未改数据库、历史事实、PK或复诊导航。当前制作无剩余阻塞。
+
 
 ## 完成：时间线精简与医疗档案规划（2026-10-08 决定；2026-10-09 回查，REQUIREMENTS §42）
 
