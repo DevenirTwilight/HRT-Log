@@ -1,0 +1,35 @@
+{
+  "id": "Komesaroff1998_Table1_E2_2mg",
+  "doi": "10.1210/jcem.83.7.4945",
+  "source": "https://www.researchgate.net/publication/13622477_A_Novel_Nongenomic_Action_of_Estrogen_on_the_Cardiovascular_System",
+  "journal_source": "https://academic.oup.com/jcem/article-abstract/83/7/2313/2865266",
+  "location": "p.2314 Table 1 and Methods",
+  "evidence_level": "author_uploaded_full_text_table_transcription",
+  "n": 10,
+  "population": "healthy nonsmoking nonobese men 20-45",
+  "formulation": "Estrace 2mg sublingual",
+  "assay": "radioimmunoassay",
+  "reported_dispersion": "SEM",
+  "already_exposed": true,
+  "locked_external": false,
+  "observations": [
+    {
+      "minutes": 0,
+      "mean_pmol_l": 89.4,
+      "sem_pmol_l": 9
+    },
+    {
+      "minutes": 15,
+      "mean_pmol_l": 486.6,
+      "sem_pmol_l": 218
+    },
+    {
+      "minutes": 30,
+      "mean_pmol_l": 1969,
+      "sem_pmol_l": 302
+    }
+  ],
+  "paired_covariance_available": false,
+  "individual_curves_available": false,
+  "clinical_accuracy_established": false
+}
