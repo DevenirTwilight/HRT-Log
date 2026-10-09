@@ -90,6 +90,7 @@ class ResearchMathTest(unittest.TestCase):
         for unit in [.001,1,100]:
             result=m.amplitude_fit(unit,unit*350,[.001,1e6],[.001,1,1000,1e6])
             self.assertEqual(result['amplitude'],350)
+            self.assertGreater(len({tuple(t['initial_bracket']) for t in result['starts']}),1)
             for trial in result['starts']:self.assertAlmostEqual(trial['solution'],350,delta=1e-9)
     def test_boundary_failure_is_reported(self):
         result=m.amplitude_fit(.001,1e7,[.001,1e6],[1])

@@ -171,8 +171,8 @@ def ode_oracle(t, kam, kag, ke, gm, gg, steps=20000):
 def amplitude_fit(unit_prediction, target, bounds, starts):
     """Convex one-parameter LS; closed form plus independent log-space search.
 
-    Each preset start brackets the whole bounded domain, rather than claiming
-    multi-start identifies a missing rate. Return start/solution/residuals.
+    Each preset start sets an initial bracket using the signed derivative of
+    the one-dimensional objective. This does not identify a missing rate.
     """
     positive(unit_prediction,target,*bounds)
     lo,hi=bounds
@@ -184,7 +184,16 @@ def amplitude_fit(unit_prediction, target, bounds, starts):
     trials=[]
     for start in starts:
         positive(start)
+        if not lo <= start <= hi:
+            raise ValueError('Start outside prespecified bounds')
         left,right=math.log(lo),math.log(hi)
+        # The objective decreases until unit_prediction*amplitude == target.
+        # Unlike a cosmetic start label, this changes the actual search bracket.
+        if unit_prediction*start < target:
+            left=math.log(start)
+        elif unit_prediction*start > target:
+            right=math.log(start)
+        initial_bracket=[math.exp(left),math.exp(right)]
         # independent ternary minimization of unimodal squared prediction error
         for _ in range(160):
             a=(2*left+right)/3;b=(left+2*right)/3
@@ -193,5 +202,5 @@ def amplitude_fit(unit_prediction, target, bounds, starts):
             if fa < fb:right=b
             else:left=a
         answer=math.exp((left+right)/2)
-        trials.append({'start':start,'solution':answer,'squared_error':(unit_prediction*answer-target)**2})
+        trials.append({'start':start,'initial_bracket':initial_bracket,'solution':answer,'squared_error':(unit_prediction*answer-target)**2})
     return {'status':'conditional_fit_only','amplitude':analytic,'residual_squared':(analytic*unit_prediction-target)**2,'at_boundary':analytic==lo or analytic==hi,'starts':trials}
