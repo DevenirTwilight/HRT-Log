@@ -28329,7 +28329,15 @@
     },
     {
       "file": "android-lint-only.log",
-      "sha256": "b7c6346bc89f3319def055fe4c650516ddb5811e47de43d4402205a01f8f06ff"
+      "sha256": "0f3fd98278ca0cec71b3117e6bf7aacc2d5b343264392a08f2a726e591f05bed"
+    },
+    {
+      "file": "android-lint-interrupted.log",
+      "sha256": "ade60b3368f85a024a95d01813fa7b08f5bf729cab971cc2d13d1e3e3c967575"
+    },
+    {
+      "file": "android-lint-interrupted.log.json",
+      "sha256": "f0f118e3609c04c2e1451afecf31ffbb51e50d3af8d8239c6b5b0d69a034ef7f"
     },
     {
       "file": "python-audit-tests.log",

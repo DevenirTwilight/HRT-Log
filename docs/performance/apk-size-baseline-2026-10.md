@@ -69,9 +69,9 @@ C−A：删除其他三个ABI的6项本机库，native −14,254,236bytes，容�
 | core/reminder | 14 | 0 | 0 | 0 |
 | app | 399 | 0 | 0 | 13 |
 
-Python旧PK审计13、固定源码隔离研究126、APK脚本3项（两个stored/deflated合成ZIP、CRC损坏、非ZIP反例）均通过。应用单元命令退出0，399登记/386通过/13既有跳过，PeriodStability5全部通过；六模块合计613登记/600通过/13跳过。独立lint仍进行中；没有把未完成或缺失XML计作通过。
+Python旧PK审计13、固定源码隔离研究126、APK脚本3项（两个stored/deflated合成ZIP、CRC损坏、非ZIP反例）均通过。应用单元命令退出0，399登记/386通过/13既有跳过，PeriodStability5全部通过；六模块合计613登记/600通过/13跳过。lint结果及退出码见JSON；没有把未完成或缺失XML计作通过。
 
-本轮没有运行release instrumentation、ARM64设备、x86_64模拟器或用户手机。正常/计算器/便签入口、私人便签隔离、四语、PDF、SQLCipher迁移、安全锁及通知的**压缩release运行时验收均未验证**。原有debug回归不替代B/D验收。APK字节统计不测应用RAM、安装展开或冷启动。
+本地未运行release instrumentation、ARM64设备、x86_64模拟器或用户手机；推送触发的既有CI不作为本轮B/D设备验收。正常/计算器/便签入口、私人便签隔离、四语、PDF、SQLCipher迁移、安全锁及通知的**压缩release运行时验收均未验证**。原有debug回归不替代B/D验收。APK字节统计不测应用RAM、安装展开或冷启动。
 
 ## 前置失败与恢复
 
