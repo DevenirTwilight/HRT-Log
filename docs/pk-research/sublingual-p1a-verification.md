@@ -1,6 +1,6 @@
 # P1-A：舌下 E2 校准数值稳定性方案与验收
 
-2026-10-09；起始2761ed95c49e1ae74f0accd46aaf66bb87254040，Build25/schema9。状态：生产修复已实施；本地数值/单测/lint/构建已通过，CI设备验收继续确认。P0原始证据、数据及结果只读保留；不重新拟合人口参数，不匹配竞品。
+2026-10-09；起始2761ed95c49e1ae74f0accd46aaf66bb87254040，Build25/schema9。状态：生产修复已实施；本地数值/单测/lint/构建已通过，CI API35设备与完整检查已通过并回查。P0原始证据、数据及结果只读保留；不重新拟合人口参数，不匹配竞品。
 
 ## 编码前方案选择
 
@@ -19,7 +19,7 @@
 
 个人拟合状态只在内存，每次从当前记录/化验重新拟合；没有持久化u/v，不复用旧值。prefs仅开关/模式不改。使用运行时算法版本2辨别新策略；新冻结结果沿已有calculator_version字段写2，estimate JSON的version仍1、字段形状不变；校验同时接受旧1和新2，未知版本仍拒绝。无新表/字段/Schema/备份格式，无迁移或批量重捕获。
 
-旧LabContext/历史PDF保存的数值/输入/参数/版本原样展示、备份恢复；不会调用新算法重算旧快照。这里只标记新计算，不承诺完整历史可执行bundle。若以后需要改变JSON形状/持久化模型，必须另案设计，不混入本次。
+旧LabContext/历史PDF保存的数值/输入/参数/版本原样展示、备份恢复；不会调用新算法重算旧快照。这里只标记新计算，不承诺完整历史可执行bundle。若以后需要改变JSON形状/持久化模型，必须另案设计，不混入本次。较旧应用的validator仅接受calculator_version1，因此不承诺新版本备份可向旧版应用降级恢复；代码回滚校准行为时须保留读取1/2的兼容校验，不能回滚它而使新冻结资料不可读。新应用读取旧备份已测试。
 
 ## 实施与验收计划
 
@@ -27,7 +27,7 @@
 
 区间只表示固定核下的参数分布，不包含观测噪声、研究间异质性或结构不确定性的全部范围；不叫临床可信区间。保留/增加四语准确说明及尚存历史完整性、因果边界和离群问题警告，不做无关UI重设计。
 
-输出新的P1-A JSON/CSV/可读报告及命令/数值误差/性能，不覆盖docs/pk-research/results/sublingual-p0-*。实际结果将在本轮完成后补入。
+新的P1-A JSON/CSV/可读报告及命令/数值误差/性能已保存，不覆盖docs/pk-research/results/sublingual-p0-*。
 
 ## 已运行的实际验收
 
@@ -60,7 +60,7 @@ python3 scripts/check_release_manifest.py
 | 输入rate=.9 | 29254.275557153393 | 278.8647796057063 |
 | 输入rate=1 | 278.8647796057063 | 278.8647796057063 |
 | 输入rate=1.1 | 0 | 278.8647796057063 |
-| 无化验p5–p95（seed20261006、200次） | 0–152714.8058637828 | 98.82246992729839–692.8536038998915 |
+| 无化验p5–p95（seed20261006、200次） | 0–152714.8058637828 | 98.82246992729898–692.8536038998615 |
 | 应用当前值（15min网格插值） | 277.76798707874434 | 277.76798707874434 |
 | 合成当时化验400、应用校准开启 | 398.42655303749905 | 368.3183698246684 |
 
@@ -79,3 +79,51 @@ MC按照协方差的Cholesky分解抽样；纯SL第二维严格0，不产生负�
 P1-B待实施：针对每条化验的历史覆盖/冻结配置门控，不把窗口首剂当治疗开始，不完整资料不能当基线或拟合事实；保留原始记录、说明拒绝原因和无迁移回归。之后再修因果插值/摘要及全离群标识。当前仍复现500/220假基线、未来化验污染应用插值/摘要、离群集合与采用不一致；四语警告保留。P1-A不等于整个个人校准可靠。P2新人口核仍规划/未实施，外部人体验证未确立。
 
 完整Android命令实际BUILD SUCCESSFUL（5m32s）：lint0错误/131警告，Full Debug/Release及两个instrumentation APK编译通过；合并Release Manifest身份/入口/no INTERNET检查通过。没有更换签名身份、交付APK或发布版本。本地没有可用Android模拟器，不能把AndroidTest编译作为设备通过；实际API35由CI执行，结果待回查。
+
+源码/测试/工具提交0cae6162e5ba5845903164c96e01aec92f31ee79；审计CSV LF与实际浮点误差修正提交4fc513f48e75e6341dfeafddf56bbab531959395。本轮全部35个变更文件均在开发分支，名单可由`git diff --name-only 2761ed95c49e1ae74f0accd46aaf66bb87254040 4fc513f48e75e6341dfeafddf56bbab531959395`获取；未改生产参数、数据库Schema/迁移或旧P0结果文件。初始文档检查点16e6cc1的CI及被新提交替代的0cae616 CI已取消，不计作通过；最终源码CI以4fc513f的运行与实际产物为准。
+
+## 本轮文件清单
+
+- `.github/workflows/android.yml`
+- `app/src/main/java/net/plainnotes/app/conc/ConcentrationCalculator.kt`
+- `app/src/main/java/net/plainnotes/app/conc/LabEstimate.kt`
+- `app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt`
+- `app/src/main/res/values-b+zh+Hant/strings.xml`
+- `app/src/main/res/values-fr/strings.xml`
+- `app/src/main/res/values-zh/strings.xml`
+- `app/src/main/res/values/strings.xml`
+- `app/src/test/java/net/plainnotes/app/LabEstimateTest.kt`
+- `app/src/test/java/net/plainnotes/app/SublingualCalibrationAuditTest.kt`
+- `core/data/src/main/java/net/plainnotes/app/data/LabContext.kt`
+- `docs/BACKLOG.md`
+- `docs/HANDOFF.md`
+- `docs/REQUIREMENTS.md`
+- `docs/hrt-roadmap-2026-10-07.md`
+- `docs/pk-model.md`
+- `docs/pk-research/results/sublingual-p1a-calculator.json`
+- `docs/pk-research/results/sublingual-p1a-curves.csv`
+- `docs/pk-research/results/sublingual-p1a-engine.json`
+- `docs/pk-research/results/sublingual-p1a-report.json`
+- `docs/pk-research/results/sublingual-p1a-report.md`
+- `docs/pk-research/results/sublingual-p1a-stability.json`
+- `docs/pk-research/sublingual-calibration-audit.md`
+- `docs/pk-research/sublingual-p1-design.md`
+- `docs/pk-research/sublingual-p1a-verification.md`
+- `pk-engine/src/main/kotlin/net/plainnotes/app/pk/Engine.kt`
+- `pk-engine/src/main/kotlin/net/plainnotes/app/pk/FittedModels.kt`
+- `pk-engine/src/main/kotlin/net/plainnotes/app/pk/LabFit.kt`
+- `pk-engine/src/test/kotlin/net/plainnotes/app/pk/SublingualP0AuditTest.kt`
+- `pk-engine/src/test/kotlin/net/plainnotes/app/pk/SublingualP1ATest.kt`
+- `pk-engine/src/test/resources/non-sl-calibration-v1.json`
+- `tools/pk-audit/README.md`
+- `tools/pk-audit/legacy_non_sl_baseline.kt`
+- `tools/pk-audit/sublingual_p1a_compare.py`
+- `tools/pk-audit/test_sublingual_p1a.py`
+
+## CI全绿及产物已回查
+
+源码4fc513f的[CI37912745994](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37912745994)：jvm和device-tests成功。实际下载device-test-results（artifact11608900281，21文件、0 APK）回查HTML：data14/14通过（MigrationBaseline7、EncryptionIntegration7），app53项/51通过/2常规跳过/0失败；独立重启日志prepare/verify各`OK (1 test)`。Settings锁启用24/24、Timeline6/6、Wellbeing2/2及其他原生隐私测试无失败。模拟器API35/x86_64，不冒充真机。Android完整任务也已success（主体BUILD SUCCESSFUL 9m29s），全运行三个job均success。实际下载build-results（artifact11607902449，199文件、0 APK）：app349/336通过/13跳过、data72、reminder14均0失败；聚焦PK18（P0复用8+P1A10）全部通过，JVM job另跑完整PK36/域58/importer12。Lint0错误/131警告、Full Debug/Release、两测试APK编译、release manifest、Schema/PLAN差异检查均success。7项Python及P0只读重放/P1-A数学验收成功。
+
+CI实际engine/calculator JSON与入库本地JSON完全相同，参数hash不变、population_max_absolute_error=7.167955118347891e-11，numerical_acceptance=true、clinical_accuracy_established=false。CI计时新中位.045045126s来自不同主机，不能与旧本地.047623099s推断性能改善；审计脚本原“同主机”注释已修正为环境可能不同，仅独立本地验收具有同机条件。旧P0原始结果未覆盖。
+
+末尾补充仅文档、报告说明及研究脚本性能注释，不修改生产代码或Kotlin测试；生产/测试与全绿4fc513f相同。修正脚本后7项Python再次通过，并以已下载的CI输入重新生成独立报告验收，数值判断不变。所有必需测试已实际运行；未做真实设备/真实健康数据验收，不发布APK/Release/PR。

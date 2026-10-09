@@ -64,7 +64,7 @@ def run(engine, calculator, stability, output):
                 calculator_before=data['old_calculator'],calculator_after=data['calculator'],candidate_A_fast_only=candidate,
                 performance=dict(before_seconds=old_perf['seconds'],after_seconds=perf['seconds'],
                                  before_median=statistics.median(old_perf['seconds']),after_median=statistics.median(perf['seconds']),
-                                 caveat='Same host, separate JVMs; illustrative warm microbenchmark, not a general speed guarantee.'),
+                                 caveat='Stored legacy timings are from the local baseline. New timings use the current runner; CI is a different host. Only the local verification documents same-host execution; do not infer a cross-host speedup.'),
                 unresolved=['180-day history false baseline','missing frozen context false baseline',
                             'causal interpolation/summary future labs','all-outlier IDs versus actual fit'],
                 uncertainty='Assumed parameter distribution only; not full predictive, structural, measurement or study uncertainty.')
@@ -83,7 +83,7 @@ def run(engine, calculator, stability, output):
     text += [f"| {f['id']} | {f['amplitude']:.10f} | {f['rate']} | {f['covariance'][0]:.10f} |" for f in new['synthetic_fits']]
     text += ['', '## 应用实际路径',json.dumps(report['calculator_after'],ensure_ascii=False,indent=2),'',
              '## 性能（120事件、2881网格点、200抽样、2热身、5次；不含断言）',
-             f"旧中位 {report['performance']['before_median']:.6f}s，新中位 {report['performance']['after_median']:.6f}s。纯SL复用固定人口核。不同JVM、同主机；不保证一般性能比例。",'',
+             f"旧中位 {report['performance']['before_median']:.6f}s，新中位 {report['performance']['after_median']:.6f}s。纯SL复用固定人口核。不同JVM；旧计时来自本地，新计时来自当前runner（CI为另一主机）。同机条件仅在本地验收记录确证，不推断跨环境速度比例。",'',
              '## 尚未修复',*['- '+x for x in report['unresolved']],'',
              'P0文献与外部误差报告仍为原始基线；新人口未变，外部误差也没有改善。数学正确、数值稳定与人体准确性为三个独立判断。',
              '全部输入/脚本哈希、拟合协方差、候选A与旧拟合结果见配套JSON。命令/测试计数见独立P1-A验收记录。']

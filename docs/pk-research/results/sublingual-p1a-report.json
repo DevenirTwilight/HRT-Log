@@ -13,7 +13,7 @@
     "non_sl_baseline": "5fb17dfd8b7d81de878963d0236eaad7026149890f24fdf2d48cb5aa1a52c600",
     "parameters": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b"
   },
-  "script_sha256": "dc95d392cfc76ddf4e1c56b384b5629546e771336a964ecc32db35d158e5c13d",
+  "script_sha256": "39cafaa6df6aefaf10b5c8215dd9f6a143e57d317c3e7556872cc4c091c321b6",
   "population_max_absolute_error": 7.167955118347891e-11,
   "population_cases": 9,
   "population_time_points": 117,
@@ -271,7 +271,7 @@
     ],
     "before_median": 0.047623099,
     "after_median": 0.009952708,
-    "caveat": "Same host, separate JVMs; illustrative warm microbenchmark, not a general speed guarantee."
+    "caveat": "Stored legacy timings are from the local baseline. New timings use the current runner; CI is a different host. Only the local verification documents same-host execution; do not infer a cross-host speedup."
   },
   "unresolved": [
     "180-day history false baseline",

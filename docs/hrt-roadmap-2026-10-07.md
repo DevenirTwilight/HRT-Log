@@ -2,9 +2,9 @@
 
 2026-10-07原研究建议。后续用户已授权更新：P0 build6完成；P1第一批方案版本/阶段/时间线/轻量里程碑进入build7交付，具体边界见 [P1设计](design/epochs-timeline-p1.md) 与 [交接](HANDOFF.md)。下表是研究时评分，不代表全部功能已经获准或实现。依据[现状](hrt-product-research-2026-10-07.md)、[81项竞品矩阵](hrt-competitor-matrix-2026-10-07.md)、[独立设计](design/longitudinal-hrt-record.md)。这是专家判断排序，不是实测用户研究，不用精确加权总分伪装客观性。
 
-## 当前核对入口（2026-10-08，Build 25 / schema 9）
+## 当前核对入口（2026-10-09，Build 25 / schema 9）
 
-以 [BACKLOG](BACKLOG.md) 为统一现状表，以 [HANDOFF](HANDOFF.md) 为实际验证/交付记录。Build 24 回收站和 Build 25 显式时期编辑已完成；文献 PK、LabFit、不确定性区间、Lab Context 参数/结果冻结和 Visit Pack 第一批均已实现。§41的UI工作、§42时间线精简及§44设置按钮已完成；当前§45只授权PK研究/测试/审计与规划，不批准下表大型候选或新生产模型立即实施。
+以 [BACKLOG](BACKLOG.md) 为统一现状表，以 [HANDOFF](HANDOFF.md) 为实际验证/交付记录。Build 24 回收站和 Build 25 显式时期编辑已完成；文献 PK、LabFit、不确定性区间、Lab Context 参数/结果冻结和 Visit Pack 第一批均已实现。§41的UI工作、§42时间线精简及§44设置按钮已完成；§45的PK研究已完成；当前§46已授权并实施P1-A校准数值修复，不批准下表大型候选或新人口模型立即实施。
 
 ## 药代长期方向更新（2026-10-09）
 
