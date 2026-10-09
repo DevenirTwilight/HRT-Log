@@ -13,6 +13,7 @@ import shutil
 import subprocess
 import sys
 import urllib.parse
+import zipfile
 
 from apk_size_audit import inspect, markdown
 
@@ -79,6 +80,7 @@ def main():
                     'abi_filter': ['arm64-v8a'] if arm64 else [], 'minify': True, 'status': 'pending', 'apk': None}
         evidence['scenarios'].append(scenario)
     save()
+    baseline_native = None
     try:
         for scenario in evidence['scenarios']:
             label = scenario['label']
@@ -116,6 +118,22 @@ def main():
             target = out / f'{label}.apk'
             shutil.copy2(apk, target)
             scenario['apk'] = inspect(target)
+            with zipfile.ZipFile(target) as archive:
+                scenario['native_sha256'] = {m['name']: hashlib.sha256(archive.read(m['name'])).hexdigest() for m in scenario['apk']['native_libraries']}
+                scenario['named_java_resources'] = {}
+                for source in ('pk-engine/src/main/resources/pk-params.json', 'app/src/main/resources/symptom-sources.json', 'app/src/main/resources/wellbeing-translations.json'):
+                    name = Path(source).name
+                    original_sha = hashlib.sha256((tree / source).read_bytes()).hexdigest()
+                    packaged_sha = hashlib.sha256(archive.read(name)).hexdigest()
+                    scenario['named_java_resources'][name] = {'source_sha256': original_sha, 'packaged_sha256': packaged_sha, 'matches': original_sha == packaged_sha}
+                    if original_sha != packaged_sha:
+                        raise RuntimeError(f'{label}: named Java resource changed: {name}')
+            if baseline_native is None:
+                baseline_native = scenario['native_sha256']
+            expected_native = {name: digest for name, digest in baseline_native.items() if not scenario['abi_filter'] or name.startswith('lib/arm64-v8a/')}
+            if scenario['native_sha256'] != expected_native:
+                scenario['status'] = 'native_failed'
+                raise RuntimeError(f'{label}: native library lost, added, or changed unexpectedly')
             if scenario['abi_filter'] and scenario['apk']['abis'] != ['arm64-v8a']:
                 scenario['status'] = 'abi_failed'
                 raise RuntimeError(f'{label}: unexpected ABI list')
