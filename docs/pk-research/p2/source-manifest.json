@@ -1,0 +1,348 @@
+{
+  "schema_version": 1,
+  "acquisition_policy": "No full text redistributed. HTTP success alone does not establish full-text access. Cached P0 source explicitly identified. URLs/hashes are retrieval evidence, not portable article copies.",
+  "requests": [
+    {
+      "study_id": "Doll2022",
+      "requested_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:34781041%20AND%20SRC:MED&format=json&resultType=core",
+      "access_date": "2026-10-09",
+      "http_status": 200,
+      "final_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:34781041%20AND%20SRC:MED&format=json&resultType=core",
+      "sha256": "1573f7f48a84b85bc13c9dfd736624a010f95354753ce177fa8068df169d78ca",
+      "bytes": 6479,
+      "content_level": "primary_metadata_and_abstract",
+      "full_text_urls": {
+        "fullTextUrl": [
+          {
+            "availability": "Subscription required",
+            "availabilityCode": "S",
+            "documentStyle": "doi",
+            "site": "DOI",
+            "url": "https://doi.org/10.1016/j.eprac.2021.11.081"
+          }
+        ]
+      },
+      "pmcid": null
+    },
+    {
+      "study_id": "Price1997",
+      "requested_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:9052581%20AND%20SRC:MED&format=json&resultType=core",
+      "access_date": "2026-10-09",
+      "http_status": 200,
+      "final_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:9052581%20AND%20SRC:MED&format=json&resultType=core",
+      "sha256": "a03578590c74f69dcdc9644a0f24aa88121208b203150e2ab03d831ad7b4223f",
+      "bytes": 5654,
+      "content_level": "primary_metadata_and_abstract",
+      "full_text_urls": {
+        "fullTextUrl": [
+          {
+            "availability": "Subscription required",
+            "availabilityCode": "S",
+            "documentStyle": "doi",
+            "site": "DOI",
+            "url": "https://doi.org/10.1016/S0029-7844(96)00513-3"
+          }
+        ]
+      },
+      "pmcid": null
+    },
+    {
+      "study_id": "Casper1981",
+      "requested_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:7454177%20AND%20SRC:MED&format=json&resultType=core",
+      "access_date": "2026-10-09",
+      "http_status": 200,
+      "final_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:7454177%20AND%20SRC:MED&format=json&resultType=core",
+      "sha256": "f932eb430e8a94a974aabf0d4b8d4a3f134b9c369f0be1bcacd50e6449717f90",
+      "bytes": 3497,
+      "content_level": "primary_metadata_and_abstract",
+      "full_text_urls": {
+        "fullTextUrl": [
+          {
+            "availability": "Free",
+            "availabilityCode": "F",
+            "documentStyle": "abs",
+            "site": "intl.greenjournal.org",
+            "url": "http://intl.greenjournal.org/cgi/content/abstract/57/1/62"
+          }
+        ]
+      },
+      "pmcid": null
+    },
+    {
+      "study_id": "Pines1998",
+      "requested_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:9689200%20AND%20SRC:MED&format=json&resultType=core",
+      "access_date": "2026-10-09",
+      "http_status": 200,
+      "final_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:9689200%20AND%20SRC:MED&format=json&resultType=core",
+      "sha256": "62187f2b50f5322ecde57665acf138d51e77d03f5cc51fbb6cfa88772d166d6e",
+      "bytes": 7337,
+      "content_level": "primary_metadata_and_abstract",
+      "full_text_urls": {
+        "fullTextUrl": [
+          {
+            "availability": "Free",
+            "availabilityCode": "F",
+            "documentStyle": "doi",
+            "site": "OpenAlex",
+            "url": "https://doi.org/10.1097/00042192-199805020-00004"
+          }
+        ]
+      },
+      "pmcid": null
+    },
+    {
+      "study_id": "Cortez2024",
+      "requested_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:38962490%20AND%20SRC:MED&format=json&resultType=core",
+      "access_date": "2026-10-09",
+      "http_status": 200,
+      "final_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:38962490%20AND%20SRC:MED&format=json&resultType=core",
+      "sha256": "0d8bb3d81743f2f43a476e4e91bc2efd8e935e3195c644f2ea2ac7463123a688",
+      "bytes": 8072,
+      "content_level": "primary_metadata_and_abstract",
+      "full_text_urls": {
+        "fullTextUrl": [
+          {
+            "availability": "Subscription required",
+            "availabilityCode": "S",
+            "documentStyle": "doi",
+            "site": "DOI",
+            "url": "https://doi.org/10.1210/jendso/bvae108"
+          },
+          {
+            "availability": "Open access",
+            "availabilityCode": "OA",
+            "documentStyle": "html",
+            "site": "Europe_PMC",
+            "url": "https://europepmc.org/articles/PMC11220669"
+          },
+          {
+            "availability": "Open access",
+            "availabilityCode": "OA",
+            "documentStyle": "pdf",
+            "site": "Europe_PMC",
+            "url": "https://europepmc.org/articles/PMC11220669?pdf=render"
+          }
+        ]
+      },
+      "pmcid": "PMC11220669"
+    },
+    {
+      "study_id": "Yaish2023",
+      "requested_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:38130980%20AND%20SRC:MED&format=json&resultType=core",
+      "access_date": "2026-10-09",
+      "http_status": 200,
+      "final_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:38130980%20AND%20SRC:MED&format=json&resultType=core",
+      "sha256": "0967bb0275aaa4533c73e3ba8765b18e5e6557db769d08cad3e466e00ee5dd88",
+      "bytes": 7388,
+      "content_level": "primary_metadata_and_abstract",
+      "full_text_urls": {
+        "fullTextUrl": [
+          {
+            "availability": "Subscription required",
+            "availabilityCode": "S",
+            "documentStyle": "doi",
+            "site": "DOI",
+            "url": "https://doi.org/10.1089/trgh.2023.0022"
+          },
+          {
+            "availability": "Free",
+            "availabilityCode": "F",
+            "documentStyle": "html",
+            "site": "Europe_PMC",
+            "url": "https://europepmc.org/articles/PMC10732161"
+          },
+          {
+            "availability": "Free",
+            "availabilityCode": "F",
+            "documentStyle": "pdf",
+            "site": "Europe_PMC",
+            "url": "https://europepmc.org/articles/PMC10732161?pdf=render"
+          },
+          {
+            "availability": "Free",
+            "availabilityCode": "F",
+            "documentStyle": "doi",
+            "site": "DOI",
+            "url": "https://doi.org/10.1089/trgh.2023.0022"
+          }
+        ]
+      },
+      "pmcid": "PMC10732161"
+    },
+    {
+      "study_id": "Burnier1981",
+      "requested_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:6786097%20AND%20SRC:MED&format=json&resultType=core",
+      "access_date": "2026-10-09",
+      "http_status": 200,
+      "final_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:6786097%20AND%20SRC:MED&format=json&resultType=core",
+      "sha256": "722e65fa1af9b8e772f34690a19fd5c8b4c3d2212b607bba1ab57179a49215a9",
+      "bytes": 5152,
+      "content_level": "primary_metadata_and_abstract",
+      "full_text_urls": {
+        "fullTextUrl": [
+          {
+            "availability": "Subscription required",
+            "availabilityCode": "S",
+            "documentStyle": "doi",
+            "site": "DOI",
+            "url": "https://doi.org/10.1016/0002-9378(81)90101-0"
+          }
+        ]
+      },
+      "pmcid": null
+    },
+    {
+      "study_id": "Cortez2024-full",
+      "requested_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11220669/fullTextXML",
+      "access_date": "2026-10-09T15:26:03.341425+00:00",
+      "content_level": "primary_full_text_xml",
+      "http_status": 200,
+      "final_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11220669/fullTextXML",
+      "sha256": "111ba9fddd6ff4fea9c84ecac0a1d3da6fca48cdf24157bbd1cad9d45d07308b",
+      "bytes": 76622
+    },
+    {
+      "study_id": "Yaish2023-full",
+      "requested_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10732161/",
+      "access_date": "2026-10-09T15:26:03.341917+00:00",
+      "content_level": "browser_challenge_not_article",
+      "http_status": 200,
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10732161/",
+      "sha256": "15837c498d16f93f3d7ac813a4e9b73cb109cbe790c4a7412b60202dbe2a07dc",
+      "bytes": 21312
+    },
+    {
+      "study_id": "Pines1998-crossref",
+      "requested_url": "https://api.crossref.org/works/10.1097/00042192-199805020-00004",
+      "access_date": "2026-10-09T15:26:03.342297+00:00",
+      "content_level": "bibliographic_metadata",
+      "http_status": 200,
+      "final_url": "https://api.crossref.org/works/10.1097/00042192-199805020-00004",
+      "sha256": "7b69128e45a324be6eaf8de5aee442047ab831879fa1ef08464c2500bd621c8d",
+      "bytes": 2777
+    },
+    {
+      "study_id": "Pines1998-old-doi",
+      "requested_url": "https://api.crossref.org/works/10.1097/00042192-199822010-00004",
+      "access_date": "2026-10-09T15:26:03.342557+00:00",
+      "content_level": "bibliographic_metadata",
+      "http_status": 200,
+      "final_url": "https://api.crossref.org/works/10.1097/00042192-199822010-00004",
+      "sha256": "950e24e58de4c5f5018329fe093ab3bc6877fece805520eeffb6dd654af809e6",
+      "bytes": 2586
+    },
+    {
+      "study_id": "related-search",
+      "requested_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=%22sublingual%22%20AND%20%22estradiol%22%20AND%20%22pharmacokinetics%22&format=json&resultType=core&pageSize=100",
+      "access_date": "2026-10-09T15:26:03.342830+00:00",
+      "content_level": "search_metadata_and_abstracts",
+      "http_status": 200,
+      "final_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=%22sublingual%22%20AND%20%22estradiol%22%20AND%20%22pharmacokinetics%22&format=json&resultType=core&pageSize=100",
+      "sha256": "3dca401a78363ad2d0a00cf48f329bf5956a9f8b3f7f040133940e64a1c4f27d",
+      "bytes": 694759
+    },
+    {
+      "study_id": "Doll2022-publisher",
+      "requested_url": "https://doi.org/10.1016/j.eprac.2021.11.081",
+      "access_date": "2026-10-09T15:26:04.490629+00:00",
+      "content_level": "not_obtained",
+      "http_status": null,
+      "error": "URLError"
+    },
+    {
+      "study_id": "Price1997-publisher",
+      "requested_url": "https://doi.org/10.1016/s0029-7844(96)00513-3",
+      "access_date": "2026-10-09T15:26:04.652067+00:00",
+      "content_level": "not_obtained",
+      "http_status": 402,
+      "error": "HTTPError"
+    },
+    {
+      "study_id": "Casper1981-publisher",
+      "requested_url": "https://pubmed.ncbi.nlm.nih.gov/7454177/",
+      "access_date": "2026-10-09T15:26:04.861609+00:00",
+      "content_level": "browser_challenge_not_article",
+      "http_status": 203,
+      "final_url": "https://pubmed.ncbi.nlm.nih.gov/7454177/",
+      "sha256": "3c52af86d6e01e7383bdb289c51b21595285df2323761addf56a79bf531435d0",
+      "bytes": 5590
+    },
+    {
+      "study_id": "Pines1998-publisher",
+      "requested_url": "https://doi.org/10.1097/00042192-199805020-00004",
+      "access_date": "2026-10-09T15:26:04.962402+00:00",
+      "content_level": "publisher_abstract_only",
+      "http_status": 200,
+      "final_url": "https://www.ovid.com/jnls/menopausejournal/abstract/00042192-199805020-00004~the-effects-of-sublingual-estradiol-on-left-ventricular?redirectionsource=fulltextview",
+      "sha256": "7537c13b7aa4090ad5df3a7811dd5487f5d448fe263b7f7f52c085c0d82cf6ed",
+      "bytes": 158728
+    },
+    {
+      "study_id": "Burnier1981-publisher",
+      "requested_url": "https://doi.org/10.1016/0002-9378(81)90101-0",
+      "access_date": "2026-10-09T15:26:05.589429+00:00",
+      "content_level": "not_obtained",
+      "http_status": null,
+      "error": "URLError"
+    },
+    {
+      "study_id": "Yaish2023-epmc",
+      "requested_url": "https://europepmc.org/articles/PMC10732161",
+      "http_status": 403,
+      "error": "HTTPError",
+      "access_date": "2026-10-09",
+      "content_level": "not_obtained"
+    },
+    {
+      "study_id": "Yaish2023-xml",
+      "requested_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10732161/fullTextXML",
+      "http_status": 500,
+      "error": "HTTPError",
+      "access_date": "2026-10-09",
+      "content_level": "not_obtained"
+    },
+    {
+      "study_id": "Yaish2023",
+      "requested_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10732161/",
+      "access_date": "2026-10-09",
+      "acquired_during": "P0",
+      "content_level": "primary_full_text_html_cached_and_rechecked",
+      "sha256": "112c2d1bad753555e9cb21321ca6e0e623d8e342b70ab1fd130064be0d52e135",
+      "bytes": 183999,
+      "http_status": null,
+      "not_redistributed": true
+    }
+  ],
+  "search_screening": {
+    "query": "\"sublingual\" AND \"estradiol\" AND \"pharmacokinetics\"",
+    "screened_results": 100,
+    "total_hits": 304,
+    "additional_records": [
+      {
+        "id": "PMC7208646",
+        "decision": "Doll conference precursor, possible same cohort; not independent"
+      },
+      {
+        "id": "35077906",
+        "decision": "commentary, not new human sampling"
+      },
+      {
+        "id": "PMC10555031",
+        "decision": "conference report, history/assay insufficient for locked external"
+      },
+      {
+        "id": "35815468",
+        "decision": "adolescent mixed-regimen cohort; full route-specific history/baseline not obtained; no quantitative inclusion"
+      },
+      {
+        "id": "35943868",
+        "decision": "antiretroviral PK, no additional matched E2 SL validation acquired"
+      },
+      {
+        "id": "39771574",
+        "decision": "different compound SPT-07A, not E2"
+      }
+    ],
+    "limitations": "Focused first-page screen, not exhaustive systematic review; additional records are screened exclusions, not new validation studies."
+  }
+}

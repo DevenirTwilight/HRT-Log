@@ -1,3 +1,11 @@
+# 最新交接：P2-A Gate A拟合前证据/协议冻结（2026-10-09，§50）
+
+起始e89579a02da3c92a9e4976baea729af9d532437e，既有分支/远端一致、初始干净。七项人体研究已重新核对，Cortez fresh全文、Yaish P0全文重核，其他五项仍仅摘要；Pines双DOI同题作者，保留别名。按研究TRAIN1/DESIGN_EXPOSED3/LOCKED_EXTERNAL0/QUALITATIVE3；独立外测不足。
+
+[冻结协议](pk-research/p2/validation-protocol.md)、证据/分割/全部数值假设/生产基线及SHA已保存。`python3 tools/pk-research/check_protocol.py`通过。**尚未实现候选或进行候选拟合/评估**；本检查点提交推送后才做Gate B/C。保持当前生产参数及P0/P1证据只读；P1各项已修，不能重列未完成。P2-C未授权，外部临床准确性未确立。
+
+## 以下为先前阶段历史记录
+
 # 最新状态：P1-C2已完成并通过本地/API35 CI验收（2026-10-09，§49）
 
 起始95199ab19867a72e93a3ba5a6fae2c7320075577，初始干净/远端一致。真实旧engine/application均actual=1、claimed excluded=1，正确断言红灯；before机器证据和独立旧生成器保留。

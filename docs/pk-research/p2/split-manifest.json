@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "unit": "study_id",
+  "roles": {
+    "TRAIN": [
+      "Doll2022"
+    ],
+    "DESIGN_EXPOSED": [
+      "Pines1998",
+      "Yaish2023",
+      "Burnier1981"
+    ],
+    "LOCKED_EXTERNAL": [],
+    "QUALITATIVE": [
+      "Price1997",
+      "Casper1981",
+      "Cortez2024"
+    ],
+    "NOT_COMPARABLE": []
+  },
+  "synthetic": "Separate experiments only; zero independent human studies",
+  "train_record_ids": [
+    "doll_sl_peak"
+  ],
+  "previously_seen": [
+    "Doll2022",
+    "Pines1998",
+    "Yaish2023",
+    "Burnier1981",
+    "Price1997",
+    "Casper1981",
+    "Cortez2024"
+  ],
+  "gate_a_status": "external_validation_insufficient",
+  "reason": "Zero unexposed locked studies and no two matched external studies with reliable history, baseline and assay. Continue conditional one-amplitude fits and numerical sensitivity only."
+}

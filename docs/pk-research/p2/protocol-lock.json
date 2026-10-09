@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "phase": "PRE_FIT",
+  "start_sha": "e89579a02da3c92a9e4976baea729af9d532437e",
+  "protocol_sha256": "457530bfbe002dce0682f01f0f80d8eba020b54d4bda84efd56e684abaf9007f",
+  "dataset_sha256": "02750c38f1f99002c7d8294d17ac65c502460ab419e21a1a337b222eb9e42e4e",
+  "files": {
+    "validation-protocol.md": "457530bfbe002dce0682f01f0f80d8eba020b54d4bda84efd56e684abaf9007f",
+    "experiment-settings.json": "8da393bcf40648611be7f4ce509a712569b6a9647ca67c467e7b315329885aeb",
+    "evidence-catalog.json": "02750c38f1f99002c7d8294d17ac65c502460ab419e21a1a337b222eb9e42e4e",
+    "source-manifest.json": "5e11999133ed3fdb90930cc653b147e553a64dc9a23e3f143bee7a55de55abcd",
+    "split-manifest.json": "8c9b5dde84ae9729d18fd5dbbe6dfade19b433c17975347e6daaf239485af67b",
+    "production-baseline.json": "52915c411eb4dd2b1975740494e320ad3a90efe1f7570bc96525b3556f85e2d0"
+  },
+  "protocol_deviations": []
+}
