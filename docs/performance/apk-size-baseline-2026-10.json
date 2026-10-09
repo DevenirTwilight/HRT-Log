@@ -28152,10 +28152,10 @@
         "skipped": 0
       },
       "app": {
-        "tests": 0,
+        "tests": 399,
         "failures": 0,
         "errors": 0,
-        "skipped": 0
+        "skipped": 13
       }
     },
     "python_pk_audit": {
@@ -28173,13 +28173,33 @@
     "release_runtime": "not_verified",
     "arm64_device": "not_executed",
     "app_unit_command": {
-      "status": "not_completed"
+      "command": [
+        "/tmp/hrt-apk-experiment/gradle-9.3.1/bin/gradle",
+        "-Dhttps.proxyHost=proxy",
+        "-Dhttps.proxyPort=8080",
+        "-Dhttp.proxyHost=proxy",
+        "-Dhttp.proxyPort=8080",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=2",
+        "--console=plain",
+        ":app:testFullDebugUnitTest"
+      ],
+      "cwd": "/tmp/hrt-apk-experiment/test-worktree",
+      "exit_code": 0
     },
     "lint_command": {
       "status": "not_completed"
     },
     "period_stability": {
-      "status": "not_completed"
+      "name": "net.plainnotes.app.PeriodStabilityTest",
+      "tests": "5",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-09T22:30:24.553Z",
+      "hostname": "6480f0c75f42",
+      "time": "76.768"
     }
   },
   "native_elf_alignment": [
@@ -28301,7 +28321,15 @@
     },
     {
       "file": "android-app-only.log",
-      "sha256": "864051cf5235932e28dbd5a2989cc96f9243ddbaa6561a5434196b7f889c76c4"
+      "sha256": "01f27f6898c7bab6b252d0fa754f64eb78161c06bd08b482d07ddd1e37f5ebfe"
+    },
+    {
+      "file": "android-app-only.log.json",
+      "sha256": "bdc25d99ea38502ef3ea237933a178654361e7fe05e51985bb5a74741c528797"
+    },
+    {
+      "file": "android-lint-only.log",
+      "sha256": "b7c6346bc89f3319def055fe4c650516ddb5811e47de43d4402205a01f8f06ff"
     },
     {
       "file": "python-audit-tests.log",
@@ -28338,6 +28366,10 @@
     {
       "file": "conditions.gradle",
       "sha256": "81501ee81926384c6b7afd82becd6a7ba7384906cbdee2329d53aef43c949ecd"
+    },
+    {
+      "file": "TEST-net.plainnotes.app.PeriodStabilityTest.xml",
+      "sha256": "93b35c0bc67abb65e35f2f522b84bbe577fde72651361f0a5f5d63002de89a76"
     },
     {
       "file": "A-build.log",
@@ -28453,7 +28485,7 @@
     },
     {
       "file": "test-summary.json",
-      "sha256": "304b1d6884dc0ab5348e70848425d899420ffb698ee928d2ec7ea0eb5ce90343"
+      "sha256": "23ddda97142c5bb4cf7a208898b175594594a36c7e798074b27080c300ce9b06"
     }
   ]
 }

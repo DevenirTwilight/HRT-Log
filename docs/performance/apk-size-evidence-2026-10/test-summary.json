@@ -32,10 +32,10 @@
       "skipped": 0
     },
     "app": {
-      "tests": 0,
+      "tests": 399,
       "failures": 0,
       "errors": 0,
-      "skipped": 0
+      "skipped": 13
     }
   },
   "python_pk_audit": {
@@ -53,12 +53,32 @@
   "release_runtime": "not_verified",
   "arm64_device": "not_executed",
   "app_unit_command": {
-    "status": "not_completed"
+    "command": [
+      "/tmp/hrt-apk-experiment/gradle-9.3.1/bin/gradle",
+      "-Dhttps.proxyHost=proxy",
+      "-Dhttps.proxyPort=8080",
+      "-Dhttp.proxyHost=proxy",
+      "-Dhttp.proxyPort=8080",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=2",
+      "--console=plain",
+      ":app:testFullDebugUnitTest"
+    ],
+    "cwd": "/tmp/hrt-apk-experiment/test-worktree",
+    "exit_code": 0
   },
   "lint_command": {
     "status": "not_completed"
   },
   "period_stability": {
-    "status": "not_completed"
+    "name": "net.plainnotes.app.PeriodStabilityTest",
+    "tests": "5",
+    "skipped": "0",
+    "failures": "0",
+    "errors": "0",
+    "timestamp": "2026-10-09T22:30:24.553Z",
+    "hostname": "6480f0c75f42",
+    "time": "76.768"
   }
 }
