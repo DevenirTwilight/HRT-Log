@@ -1,5 +1,10 @@
 # P2-A/B 舌下人口模型研究（已完成隔离研究，未投产）
 
+## P2-J：Price原图积分及非负基线的代数一致性审查（2026-10-09）
+
+[完整理论和来源审计](p2j-price-figure-baseline-consistency.md)、[标准库复算程序](../../../tools/pk-research/p2j_price_baseline_audit.py)和8项数学测试。沿用P2-I已暴露的人工群体估读，若Figure为同源未扣基线均值，扣除未知非负基线b后AUC0–24=1557.5−23.5b，无法达到Table1的2109；人工较高读数情景即使b=0也只有1760.5，差348.5。**这一结论依赖来源口径和图像估读前提，不能认定论文错误。**旧P2冻结、正式模型及APK保持不变。
+
+
 ## P2-I：Price 原版Figure1 vs Table1 AUC内部一致性（2026-10-09）
 
 新增[完整数值重建与理论分析](p2i-price-figure-reconciliation.md)、[原PDF坐标读数及宽泛手动范围](p2i-price-figure-points.json)、[研究程序](../../../tools/pk-research/p2i_price_figure_audit.py)与8项纯数学回归测试。1mg SL作者Table1基线扣除人均AUC=2109±1031，原图人工约1567.5，Wikimedia同图独立数字化约1557.5 pg·h/mL；两组图像读数是同一个队列且非作者原始记录。手工上下范围1390–1785.5（非置信区间），提示尚未解释的图表一致性问题，不能据此宣布原文错误。不同来源估计量不能混用；正式参数、P1、APK和原P2冻结协议均不变。

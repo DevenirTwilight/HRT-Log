@@ -1,3 +1,9 @@
+## P2-J 新证据约束（2026-10-09）
+
+[完整科学方法和推导](pk-research/p2/p2j-price-figure-baseline-consistency.md)、[研究脚本](../tools/pk-research/p2j_price_baseline_audit.py)、8项回归测试。由Price1997原版图已见1–24h人工估读，若Figure是原值均值，0h真实基线b≥0，则在同网格同人梯形面积中AUC_adj=1557.5−23.5b。此条件下Table1报告的2109不可仅靠调整基线得到；人工高端情景1760.5（设0h为0、非严格误差界限），尚差348.5。尚未验证Figure实际预处理、每人真实采样时间和作者AUC规则；不称发表错误。旧冻结人群模型与软件未改。
+
+---
+
 ## P2-I 人体文献来源内在一致性审查（2026-10-09）
 
 已写入[Price原图Figure1和Table1 AUC不一致的详细数学审计](pk-research/p2/p2i-price-figure-reconciliation.md)、[图像坐标/人为敏感性与独立同源重绘读数](pk-research/p2/p2i-price-figure-points.json)、[纯数学审计/8测试](../tools/pk-research/p2i_price_figure_audit.py)。Price1997 1mg SL作者Table1报告个体基线扣除AUC0–24 2109±1031，而印刷343页Figure1组均值人工约1567.5、Wikimedia同图另一WebPlotDigitizer版约1557.5，人工设限1390–1785.5pg·h/mL（并非统计CI，0h数值**人为敏感性**）；按同样个体/时间权重的梯形法具有平均线性，单凭个体先算再平均不能解释差异，必须继续核对图是否已扣基线、每时样本/时间、原作者AUC实际处理，**不能断言论文有错**。所有数据已见不构成新盲测，Price源码PDF不入公开仓库。研究不改HRT正式模型、历史、APK、P1、旧P2协议。科学结论：UNRESOLVED_PUBLICATION_GRAPH_TABLE_RECONCILIATION。
