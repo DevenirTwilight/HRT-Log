@@ -39,7 +39,9 @@
       "email_contact_source": "PubMed correspondence metadata",
       "public_contact": "Jsarvaideo@mcw.edu",
       "priority": "P0",
-      "blocking": "No verified time-by-time SL E2 values or absolute measured AUC0-8; request group time-course before patient-level data"
+      "blocking": "No verified time-by-time SL E2 values or absolute measured AUC0-8; request group time-course before patient-level data",
+      "uploaded_pdf_is_webpage_print_not_publisher_fulltext": true,
+      "uploaded_pdf_sha256": "44aaeffb4d3279c723c592d96b87350fbd74ad2d83fcead471eef2ef6c208246"
     },
     {
       "id": "Yager2022_TransPrEP",
@@ -85,11 +87,15 @@
       "dose_context": "CHRONIC_REPEATED",
       "source_role": "DESIGN_EXPOSED",
       "same_underlying_participants_as": "Yager2022_TransPrEP",
-      "full_text_checked": false,
+      "full_text_checked": true,
       "individual_time_series_available": false,
       "reuse_permission": "UNVERIFIED",
       "priority": "P1",
-      "blocking": "Same TransPrEP cohort; pooled model-specific apparent half-life is NOT pure SL elimination, thesis PDF/model equation remains unverified"
+      "blocking": "Same TransPrEP cohort; pooled model-specific apparent half-life is NOT pure SL elimination, thesis PDF/model equation remains unverified",
+      "original_pdf_sha256": "dcf1e89122f700f9132b3de2c36d72dd0ebede022b96ed427b11efc7747573d0",
+      "route_disambiguation_available_to_thesis_author": false,
+      "model_table3_two_compartment_present": true,
+      "conditional_terminal_eigenvalue_half_life_h": 50.51679872718722
     },
     {
       "id": "Price1997",
@@ -133,7 +139,11 @@
         "sampled_point_csv_checked": false,
         "calibration_error_checked": false,
         "validation_role": "DESIGN_EXPOSED"
-      }
+      },
+      "original_journal_pdf_checked": true,
+      "original_journal_pdf_sha256": "40ecaf3a36b6481bbf2e9fc074066700f141ae3a51959b5bf6138cd920deb70a",
+      "figure1_original_pdf_page": 4,
+      "figure1_digitization_verified": false
     },
     {
       "id": "Rosano1997_PK25",

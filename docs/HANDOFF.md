@@ -1,3 +1,9 @@
+# P2-H 三份原始PDF到手：原文核验+关键双室半衰期差异（2026-10-09）
+
+详见[完整数学及科学根据](pk-research/p2/p2h-original-pdfs-half-life-audit.md)、[文件SHA/来源层级JSON](pk-research/p2/p2h-primary-pdf-audit.json)与[条件计算及6单测](../tools/pk-research/p2h_eigenvalue_audit.py)。Price1997原版PDF6页Figure1/Table1已核验，不再只靠转录；2023 Abdelmawla完整68页论文已经审读，第21页Table3的Vc=1258L、Vp=62261L、CL=1550L/h、Q=1930L/h、Ka=.632/h；原文28.4h数值等于ln2*(Vc+Vp)/CL，但**标准两室模型慢特征根条件半衰期约50.5h，不可当真实人体或纯SL消除半衰期**。同TransPrEP队列原n14共189点，排除2人后168点，两名缺失24h以0h补，论文作者明确没有逐人PO/SL辨别数据，VPC早期过估计晚期低估计，残差变异48.8%。Doll用户给的6页是ScienceDirect网站打印，不是完整学术论文PDF；还需要真实原版全文/分时LC-MS/MS。研究源数据未进Git、独立LOCKED_EXTERNAL仍0，正式参数、算法、用户历史和已签APK不改。
+
+---
+
 # P2-G 原始人类时序取数门槛（2026-10-09）
 
 [科学理论和作者询问草稿](pk-research/p2/p2g-data-acquisition-theory.md)、[来源元数据/差缺](pk-research/p2/p2g-data-acquisition-registry.json)、[研究取数前置检查](../tools/pk-research/p2g_readiness.py)已新增，仅公开论文元数据+纯合成单测；没有下载/入库个体健康数据。下一重点向Doll团队索取单剂SL/PO分开的0–8h LC-MS/MS逐时汇总、绝对AUC/基线；向TransPrEP团队请求其n13的SL/PO分组、0–24h慢性实际给药、数据许可；Price官方PDF逐格核查。Doll 2020 N5子集≠第二独立队列；Yager2022与Abdelmawla2023共享NCT03652623，不能重复计数；所有来源已见，不能重新命名LOCKED_EXTERNAL。未收到合法可比较的纯舌下独立人体新时序，继续标external_validation_insufficient。原正式核、P1、旧P2冻结、Schema、APP及已交付APK未改；作者邮件只有草稿，没有发送。

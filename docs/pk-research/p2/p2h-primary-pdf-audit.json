@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "phase": "P2-H",
+  "review_date": "2026-10-09",
+  "science_status": "PRIMARY_PDF_AUDIT; not new independent locked validation",
+  "pdf_sources": [
+    {
+      "id": "Abdelmawla2023",
+      "pdf": "CUHSLETD_M238.pdf",
+      "sha256": "dcf1e89122f700f9132b3de2c36d72dd0ebede022b96ed427b11efc7747573d0",
+      "pages": 68,
+      "classification": "PRIMARY_THESIS_FULLTEXT_VERIFIED",
+      "population_pk_table_page_printed": 21,
+      "discussion_page_printed": 47,
+      "limitations_page_printed": 50,
+      "cohort": "NCT03652623 same as Yager2022",
+      "oral_or_sublingual_individually_disambiguated": false,
+      "initial_pool_n": 14,
+      "final_cohort_n": 12,
+      "initial_observations": 189,
+      "final_observations": 168,
+      "missing_24h_replaced_by_predose_for_n": 2,
+      "table3": {
+        "ka_per_h": 0.632,
+        "vc_over_f_l": 1258,
+        "vp_over_f_l": 62261,
+        "cl_over_f_l_per_h": 1550,
+        "q_over_f_l_per_h": 1930,
+        "residual_stdev": 0.488,
+        "between_subject_variability_on_cl_percent": 29.2,
+        "author_reported_half_life_h": 28.4
+      },
+      "vpc_5_50_95_present": true,
+      "vpc_early_over_late_under": true
+    },
+    {
+      "id": "Price1997",
+      "pdf": "Single_Dose_Pharmacokinetics_of_Sublingu(1).pdf",
+      "sha256": "40ecaf3a36b6481bbf2e9fc074066700f141ae3a51959b5bf6138cd920deb70a",
+      "pages": 6,
+      "classification": "PRIMARY_ORIGINAL_JOURNAL_PDF_VERIFIED",
+      "table1_pdf_page": 3,
+      "figure1_e2_pdf_page": 4,
+      "n_crossover": 6,
+      "assay": "extraction RIA",
+      "samples_hours": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        6,
+        8,
+        12,
+        18,
+        24
+      ],
+      "figure1_data_points_digitized": false,
+      "dose1mg_sl": {
+        "cmax_mean_pg_ml": 451,
+        "cmax_sd_pg_ml": 162,
+        "auc0_24_baseline_sub_mean_pg_h_ml": 2109,
+        "auc0_24_sd_pg_h_ml": 1031,
+        "reported_terminal_half_life_mean_h": 18,
+        "reported_terminal_half_life_sd_h": 2.5
+      },
+      "publication_table_not_misread_as_estrone": true
+    },
+    {
+      "id": "Doll2022",
+      "pdf": "Pharmacokinetics of Sublingual Versus Oral Estradiol in Transgender Women - ScienceDirect.pdf",
+      "sha256": "44aaeffb4d3279c723c592d96b87350fbd74ad2d83fcead471eef2ef6c208246",
+      "pages": 6,
+      "classification": "PUBLISHER_WEBPAGE_PRINT_NOT_FULLTEXT",
+      "full_methods_tables_figures_available": false,
+      "training_one_h_sl_pg_ml": 144,
+      "auc0_8_sl_vs_po_ratio": 1.8,
+      "absolute_auc0_8_unreported_in_this_file": true
+    },
+    {
+      "id": "Yager2022",
+      "pdf": "aid.2022.0044.pdf",
+      "sha256": null,
+      "pages": 5,
+      "classification": "PRIMARY_ARTICLE_PREVIOUSLY_UPLOADED",
+      "po_sl_pooled_n": 13,
+      "same_trial_as_thesis": true
+    }
+  ],
+  "conditional_math": {
+    "assumption": "STANDARD_LINEAR_TWO_COMPARTMENT_CENTRAL_CLEARANCE_WITH_FIRST_ORDER_INPUT",
+    "half_life_simple_total_h": 28.40517145934656,
+    "half_life_terminal_eigenmode_h": 50.51679872718722,
+    "fast_distribution_half_life_h": 0.2490134621296807,
+    "absorption_half_life_h": 1.096751867974597,
+    "math_terminal_is_human_terminal_estimate": false
+  },
+  "evidence_role": "EXPOSED_PRIMARY_SOURCE_VERIFICATION_ONLY",
+  "locked_external_new": 0,
+  "clinical_accuracy_established": false,
+  "production_model_change_approved": false
+}
