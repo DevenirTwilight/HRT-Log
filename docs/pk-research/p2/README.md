@@ -1,5 +1,10 @@
 # P2-A/B 舌下人口模型研究（已完成隔离研究，未投产）
 
+## P2-G：优先获取合法、独立的人体分时数据（2026-10-09）
+
+[完整来源审计、数学/统计理由、取证优先级和作者询问草稿](p2g-data-acquisition-theory.md)；[可核对的最小研究元数据](p2g-data-acquisition-registry.json)；[许可、共享队列和外测资格核查程序](../../../tools/pk-research/p2g_readiness.py)。重点为Doll LC-MS/MS七时点绝对数据、TransPrEP口服/舌下分组和重复用药史、Price正版时序与基线；未知数据不补造，研究作者联系草稿未发送。Yager与Abdelmawla同NCT03652623只算1个队列，P2-G新增可锁定的人体独立数据仍为0；不启动P2-C，也不改已交付APK。
+
+
 ## P2-F：LC-MS/MS口服/舌下混合队列与单gamma输入可辨识性（2026-10-09）
 
 新增[理论说明、数据限制与数学反例](p2f-transprep-and-transit-theory.md)、[原始来源及共享队列审计](p2f-cohort-and-transit-source.json)、[纯数学复算脚本](../../../tools/pk-research/p2f_transit_audit.py)及5项测试。Yager2022 TransPrEP n13口服/舌下合并组LC-MS/MS，2023 Abdelmawla人口PK论文是同一试验再分析，28.4h是合并途径的**模型依赖表观值**，不是纯舌下真实消除常数。Rosano既有组均值10/20/40/60min给更高阶gamma的严格结构约束，但基线未知令参数不可辨识。既有P2/A/B与正式人口/签名APK不变；外部独立验证仍不足。

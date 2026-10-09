@@ -1,3 +1,9 @@
+# P2-G 原始人类时序取数门槛（2026-10-09）
+
+[科学理论和作者询问草稿](pk-research/p2/p2g-data-acquisition-theory.md)、[来源元数据/差缺](pk-research/p2/p2g-data-acquisition-registry.json)、[研究取数前置检查](../tools/pk-research/p2g_readiness.py)已新增，仅公开论文元数据+纯合成单测；没有下载/入库个体健康数据。下一重点向Doll团队索取单剂SL/PO分开的0–8h LC-MS/MS逐时汇总、绝对AUC/基线；向TransPrEP团队请求其n13的SL/PO分组、0–24h慢性实际给药、数据许可；Price官方PDF逐格核查。Doll 2020 N5子集≠第二独立队列；Yager2022与Abdelmawla2023共享NCT03652623，不能重复计数；所有来源已见，不能重新命名LOCKED_EXTERNAL。未收到合法可比较的纯舌下独立人体新时序，继续标external_validation_insufficient。原正式核、P1、旧P2冻结、Schema、APP及已交付APK未改；作者邮件只有草稿，没有发送。
+
+---
+
 # 原官方签名 APK 已私有交付（2026-10-09）
 
 [详细交付/安全安装/P1验收记录](delivery/full-apk-owner-test-2026-10.md)。本地起始f73a7e7、远端核实7ba1f6e；成品输入5133a6155635314e0b5621ebe520d7c5601ccd3a，继续原开发分支。用户明确确认隔壁私有签名备份和Google Drive私有交付，核实private后沿用原证书；临时凭据已删除。正式fullRelease Build25/0.2.0/Schema9，23555291bytes，SHA256 6cda87754a06a73362cd983aa374f31176f6b710816177d5d043f15c4b56df71，v2/v3/16KB ZIP及8 ELF对齐通过；Drive仅owner，独立下载哈希/签名一致。私有下载地址只在用户交付消息，不入公开仓库。
