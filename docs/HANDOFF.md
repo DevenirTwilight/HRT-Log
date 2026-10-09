@@ -6,7 +6,7 @@
 - [x] `assembleFullRelease` 最新构建成功（10s），保持 Build25/0.2.0/schema9；包含上一轮按钮/大字体修复及本轮时间线精简，医疗档案仍规划中、未实施。
 - [x] 确认原签名备份仓库仍Private，从其原备份在源码仓库外临时恢复；使用现有签名脚本核验原证书，不生成新身份。临时目录用受限 TemporaryDirectory 自动清理，JKS/密码/ZIP均未留存或进入源码。
 - [x] 文件 `/workspace/tooling/deliveries/hrt-log-build25-full-ui-test.apk`，23,510,235 bytes；SHA256 `ceb1912ced4e6d01892f67e50d1abf51c14583ed62bc699c9c84b89731dcf438`。原证书 `989ba045…79b1`、v2/v3、非debug、net.plainnotes.app、无INTERNET、ZIP与8个native库ELF LOAD ≥16KB全部通过。APK资源包含新用药记录/推断文案，无正式诊断文案。
-- 文件留在共享工作区，通过会话文件链接提供；不上传公网、不创建Release/PR，不提交APK或签名凭据。旁边 `.apk.sha256` 提供校验。沿用原正式签名，可覆盖原正式安装；同为versionCode25，不自动升号。未做真实设备安装/覆盖升级验收，不能把制作和静态核验当作设备验收。
+- 初次工作区文件链接用户无法打开；已改为临时浏览器下载交付：https://tmpfiles.org/w6AQg1vSYgQh/hrt-log-build25-full-ui-test.apk（页面点击 Download；链接会过期）。同一APK独立下载回查23,510,235 bytes及SHA256一致，不把仅本地路径当交付。未创建GitHub Release/PR，不提交APK或签名凭据。旁边 `.apk.sha256` 提供本地校验。沿用原正式签名，可覆盖原正式安装；同为versionCode25，不自动升号。未做真实设备安装/覆盖升级验收，不能把制作和静态核验当作设备验收。
 - 构建/签名/manifest/包信息日志及验证JSON在源码仓库外 `/workspace/tooling/latest-test-apk-*`；完整相关单测、UI审计、迁移/原生PDF/重启CI通过记录见下节。未改数据库、历史事实、PK或复诊导航。当前制作无剩余阻塞。
 
 
