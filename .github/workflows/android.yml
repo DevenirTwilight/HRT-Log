@@ -31,12 +31,13 @@ jobs:
       - run: sdkmanager 'platforms;android-37.0' 'build-tools;37.0.0'
       - uses: gradle/actions/setup-gradle@0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d
       - run: ./gradlew :core:data:testDebugUnitTest :core:reminder:testDebugUnitTest :app:testFullDebugUnitTest lintFullDebug :app:assembleFullDebug :app:assembleFullRelease :core:data:assembleDebugAndroidTest :app:assembleFullDebugAndroidTest
-      - name: Sublingual P0 baseline replay and P1-A numerical acceptance
+      - name: Sublingual P0/P1-A immutable replay and P1-B qualification acceptance
         run: |
           python3 -m unittest discover -s tools/pk-audit -p 'test_*.py'
-          ./gradlew -PjvmOnly :pk-engine:test --tests '*SublingualP0AuditTest' --tests '*SublingualP1ATest' --rerun-tasks --no-parallel --max-workers=2
+          ./gradlew -PjvmOnly :pk-engine:test --tests '*SublingualP0AuditTest' --tests '*SublingualP1ATest' --tests '*BaselineEligibilityTest' --rerun-tasks --no-parallel --max-workers=2
           python3 tools/pk-audit/sublingual_compare.py --engine docs/pk-research/results/sublingual-p0-engine.json --calculator docs/pk-research/results/sublingual-p0-calculator.json --output app/build/reports/pk-p0-comparison
-          python3 tools/pk-audit/sublingual_p1a_compare.py --output app/build/reports/pk-p1a-comparison
+          python3 tools/pk-audit/sublingual_p1a_compare.py --engine docs/pk-research/results/sublingual-p1a-engine.json --calculator docs/pk-research/results/sublingual-p1a-calculator.json --stability docs/pk-research/results/sublingual-p1a-stability.json --output app/build/reports/pk-p1a-comparison
+          python3 tools/pk-audit/sublingual_p1b_compare.py --output app/build/reports/pk-p1b-comparison
       - run: python3 scripts/check_release_manifest.py
       - run: git diff --exit-code -- core/data/schemas docs/PLAN.md
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -51,6 +52,9 @@ jobs:
             pk-engine/build/reports/pk-p1a/
             app/build/reports/pk-p1a/
             app/build/reports/pk-p1a-comparison/
+            pk-engine/build/reports/pk-p1b/
+            app/build/reports/pk-p1b/
+            app/build/reports/pk-p1b-comparison/
             app/build/reports/lint-results-*
             core/*/build/reports/tests/
             pk-engine/build/reports/tests/

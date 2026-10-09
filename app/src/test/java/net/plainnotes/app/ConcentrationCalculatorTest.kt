@@ -25,7 +25,7 @@ class ConcentrationCalculatorTest {
     private fun compute(meds:List<MedicationEntity>,profiles:Map<Long,ProfileEntity>,records:List<RecordEntity>,planned:List<TimelineEntry>,
         labs:List<LabValueEntity>,weight:Double?,now:Instant,calibrate:Boolean=true):ConcentrationResult = ConcentrationCalculator.compute(
             meds,profiles,records.map{r->r.copy(config_snapshot=MedicationSnapshot.encode(meds.single{it.id==r.medication_id},profiles[r.medication_id]))},
-            planned,labs,weight,now,calibrate)
+            planned,labs,weight,now,calibrate,historyRead=net.plainnotes.app.conc.HistoryRead(true,ConcentrationCalculator.hours(now)))
 
     @Test fun missingInputsAreReportedNotDefaulted() {
         val gel = med(1, "GEL"); val patch = med(2, "PATCH", "PATCH"); val sl = med(3, "SUBLINGUAL", "TABLET")

@@ -18,7 +18,7 @@ class SublingualCalibrationAuditTest {
     companion object {
         private val findings = JSONObject()
         @JvmStatic @AfterClass fun report() {
-            val file = File("build/reports/pk-p1a/calculator-audit.json")
+            val file = File("build/reports/pk-p1b/calculator-audit.json")
             file.parentFile!!.mkdirs(); file.writeText(findings.toString(2) + "\n")
         }
     }
@@ -32,7 +32,7 @@ class SublingualCalibrationAuditTest {
         LabValueEntity(id, "E2", value, unit, now.minusSeconds(secondsAgo).toEpochMilli(), "Europe/Paris")
     private fun compute(records: List<RecordEntity>, labs: List<LabValueEntity> = emptyList(), calibrate: Boolean = true,
                         mode: CalibrationMode = CalibrationMode.RETROSPECTIVE, currentM: MedicationEntity = m, currentP: ProfileEntity = p): ConcentrationResult =
-        ConcentrationCalculator.compute(listOf(currentM), mapOf(1L to currentP), records, emptyList(), labs, 80.0, now, calibrate, mode)
+        ConcentrationCalculator.compute(listOf(currentM), mapOf(1L to currentP), records, emptyList(), labs, 80.0, now, calibrate, mode,historyRead=net.plainnotes.app.conc.HistoryRead(true,ConcentrationCalculator.hours(now)))
 
     @Test fun actualCalculatorSingleDoseAndCalibrationSwitch() {
         val records = listOf(record(1, 46 * 60))
@@ -52,50 +52,51 @@ class SublingualCalibrationAuditTest {
             .put("calibrated_amplitude", kotlin.math.exp(on.calibration!!.model.logAmplitude)).put("calibrated_rate", kotlin.math.exp(on.calibration!!.model.logRate)))
     }
 
-    @Test fun characterizeOldOnTreatmentLabBecomesFalseBaselineAfter180DayCutoff() {
+    @Test fun oldOnTreatmentLabIsExcludedWithoutFabricatingBaseline() {
         val oldRecord = record(1, 201 * 86400L)
         val recent = record(2, 46 * 60)
         val oldLab = lab(1, 200 * 86400L, 500.0)
         val result = compute(listOf(oldRecord, recent), listOf(oldLab))
         val population = compute(listOf(oldRecord, recent), calibrate = false)
         assertEquals(1, result.usedDoses) // oldRecord was supplied but discarded in the calculator
-        assertEquals(500.0, result.calibration!!.model.baselinePGmL!!, 1e-9)
-        assertEquals(population.currentPgMl!! + 500, result.currentPgMl!!, 1e-7)
+        assertNull(result.calibration)
+        assertFalse(result.labEligibility.single().eligible)
+        assertEquals(net.plainnotes.app.conc.BaselineEligibility.NOT_PRE_TREATMENT,result.labEligibility.single().baseline)
+        assertEquals(1,result.labs.size)
+        assertEquals(population.currentPgMl!!, result.currentPgMl!!, 1e-7)
         val allEvents = listOf(oldRecord, recent).map { DoseEvent("r${it.id}", Route.SUBLINGUAL, ConcentrationCalculator.hours(it.taken_utc!!), 2.0, Ester.E2, 80.0) }
         val untruncated = LabFit.fit(allEvents, listOf(LabResult("old", ConcentrationCalculator.hours(oldLab.sampled_utc), 500.0, LabUnit.PG_ML)))
         assertNull(untruncated.baselinePGmL)
         findings.put("history_window_false_baseline", JSONObject().put("history_days", 180).put("lab_age_days", 200)
-            .put("provided_record_age_days", 201).put("used_doses", result.usedDoses).put("false_baseline_pg_ml", 500)
-            .put("population_current_pg_ml", population.currentPgMl).put("wrong_calibrated_current_pg_ml", result.currentPgMl)
+            .put("provided_record_age_days", 201).put("used_doses", result.usedDoses).put("baseline_pg_ml", JSONObject.NULL)
+            .put("population_current_pg_ml", population.currentPgMl).put("gated_current_pg_ml", result.currentPgMl)
             .put("untruncated_baseline", JSONObject.NULL))
     }
 
-    @Test fun characterizeMissingHistoricalContextStillPermitsFalseBaselineFit() {
+    @Test fun missingHistoricalContextExcludesAffectedLabWithoutBaseline() {
         val recent = record(2, 46 * 60)
         val unknown = record(1, 12 * 3600, snapshot = "{}")
         val result = compute(listOf(unknown, recent), listOf(lab(1, 6 * 3600, 220.0)))
         assertTrue(result.missing.any { it.input == MissingInput.HISTORICAL_CONTEXT })
         assertEquals(1, result.skippedDoses)
-        assertEquals(220.0, result.calibration!!.model.baselinePGmL!!, 1e-9)
-        findings.put("missing_context_false_baseline", JSONObject().put("skipped", 1).put("warning_present", true).put("false_baseline_pg_ml", 220))
+        assertNull(result.calibration)
+        assertFalse(result.labEligibility.single().eligible)
+        assertEquals(compute(listOf(unknown,recent),calibrate=false).currentPgMl!!,result.currentPgMl!!,1e-9)
+        findings.put("missing_context_false_baseline", JSONObject().put("skipped", 1).put("warning_present", true).put("baseline_pg_ml", JSONObject.NULL))
     }
 
-    @Test fun characterizeCausalInterpolationLeaksAcrossFutureLabBoundary() {
-        val records = listOf(record(1, 46 * 60))
-        val futureLab = lab(1, -5 * 60, 400.0)
-        val population = compute(records, mode = CalibrationMode.CAUSAL)
-        val causal = compute(records, listOf(futureLab), mode = CalibrationMode.CAUSAL)
-        val i = causal.timeH.indexOfFirst { it > causal.nowH }
-        assertTrue(causal.timeH[i - 1] < causal.nowH)
-        assertTrue(ConcentrationCalculator.hours(futureLab.sampled_utc) in causal.nowH..causal.timeH[i])
-        assertEquals(population.e2[i - 1], causal.e2[i - 1], 1e-8) // exact earlier grid value is correctly causal
-        assertTrue("Confirmed interpolation defect: endpoint after future lab contaminates a time before the lab",
-            abs(causal.currentPgMl!! - population.currentPgMl!!) > 1)
-        assertEquals("Summary uses unrestricted fit even when requested mode is causal",
-            1, causal.calibration!!.model.postDoseObservationCount)
-        findings.put("causal_interpolation_leak", JSONObject().put("sample_after_now_min", 5)
-            .put("earlier_grid_uses_future_lab", false).put("population_current_pg_ml", population.currentPgMl)
-            .put("current_with_future_lab_pg_ml", causal.currentPgMl).put("causal_summary_future_observations", 1))
+    @Test fun characterizeCausalInterpolationStillLeaksAtHistoricalLabBoundary() {
+        val records=listOf(record(1,46*60))
+        val observed=lab(1,25*60,400.0)
+        val population=compute(records,mode=CalibrationMode.CAUSAL)
+        val causal=compute(records,listOf(observed),mode=CalibrationMode.CAUSAL)
+        val beforeSample=ConcentrationCalculator.hours(now.minusSeconds(30*60))
+        val actual=Pk.interpolate(causal.timeH,causal.e2,beforeSample)
+        val original=Pk.interpolate(population.timeH,population.e2,beforeSample)
+        assertTrue(abs(actual!!-original!!)>1)
+        assertEquals(1,causal.calibration!!.model.postDoseObservationCount)
+        findings.put("causal_interpolation_leak",JSONObject().put("sample_age_min",25).put("evaluation_age_min",30)
+            .put("population_historical_pg_ml",original).put("with_later_lab_historical_pg_ml",actual).put("still_unfixed",true))
     }
 
     @Test fun sampledUtcFrozenRouteAndActualDoseWinAcrossDstAndCurrentConfigurationChanges() {

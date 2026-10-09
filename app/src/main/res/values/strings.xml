@@ -979,4 +979,21 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="calib_safety_limits">Calibration remains experimental: incomplete history, unknown past configuration, causal boundaries and outlier handling can mislead. Numerical stability does not establish personal accuracy.</string>
 <string name="calib_rate_fixed">Fixed model rate</string>
 <string name="calib_rate_non_sl">Non-sublingual model rate</string>
+<string name="calib_history_counts">History gate: %1$d eligible, %2$d not used. Observations are retained; outlier handling is separate.</string>
+<string name="calib_history_population">No eligible labs: showing the population model and parameter uncertainty, without a lab-derived baseline.</string>
+<string name="calib_history_details">Review calibration eligibility</string>
+<string name="calib_history_eligible">History gate passed; used only when calibration is on. Outlier handling may still apply.</string>
+<string name="calib_history_excluded">Not used for calibration; original observation retained.</string>
+<string name="calib_history_scope">Saved-history read coverage is not established.</string>
+<string name="calib_history_window">Sampling falls outside the simulated history window.</string>
+<string name="calib_history_future">History read does not reach this sampling time.</string>
+<string name="calib_history_context">A potentially relevant dose has unknown frozen configuration.</string>
+<string name="calib_history_dose">A relevant actual dose is unknown.</string>
+<string name="calib_history_time">A potentially relevant actual administration time is unknown.</string>
+<string name="calib_history_unmodelled">A relevant exposure cannot be modelled.</string>
+<string name="calib_history_omitted">An earlier exposure is omitted and its contribution cannot be bounded sufficiently.</string>
+<string name="calib_history_no_start">No evidence establishes treatment status at sampling; this is not a confirmed pre-treatment baseline.</string>
+<string name="calib_history_resource">The history review exceeds the calculation budget; needs review.</string>
+<string name="calib_history_done">Close</string>
+<string name="calib_history_not_fitted">Personal calibration is off or unavailable; the original observations remain visible.</string>
 </resources>

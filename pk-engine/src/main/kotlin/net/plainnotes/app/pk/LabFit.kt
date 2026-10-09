@@ -20,7 +20,7 @@ data class LabFitModel(
     val logAmplitude: Double = 0.0,
     val logRate: Double = 0.0,
     val cov: DoubleArray = doubleArrayOf(LabFit.PRIOR_SD_AMPLITUDE_DEFAULT.let { it * it }, 0.0, 0.0, LabFit.PRIOR_SD_RATE * LabFit.PRIOR_SD_RATE),
-    /** Endogenous estradiol from labs taken before the first recorded dose (pg/mL), added to the curve. */
+    /** Estradiol baseline from independently confirmed pre-treatment lab IDs only (pg/mL), added to the curve. */
     val baselinePGmL: Double? = null,
     val postDoseObservationCount: Int = 0,
     /** Labs left out as outliers (more than 4-fold off the fitted curve). */
@@ -75,11 +75,12 @@ object LabFit {
     }
 
     /** Fit using labs up to [untilH] (inclusive). */
-    fun fit(events: List<DoseEvent>, labs: List<LabResult>, untilH: Double = Double.POSITIVE_INFINITY): LabFitModel {
+    fun fit(events: List<DoseEvent>, labs: List<LabResult>, untilH: Double = Double.POSITIVE_INFINITY, confirmedBaselineLabIds: Set<String> = emptySet()): LabFitModel {
         val sdA = priorSdAmplitude(events)
-        val firstDose = events.minOfOrNull { it.timeH } ?: return LabFitModel(priorSdAmplitude = sdA)
+        val firstDose = events.filter { it.route != Route.PATCH_REMOVE && (Engine.choose(it) as? ModelChoice.Use)?.parts?.any { part -> part.first == Curve.E2 } == true }.minOfOrNull { it.timeH } ?: return LabFitModel(priorSdAmplitude = sdA)
         val used = labs.filter { it.timeH <= untilH }.sortedBy { it.timeH }
-        val baselineLabs = used.filter { it.timeH < firstDose }
+        // Caller must independently confirm pre-treatment status; event-list start is not evidence.
+        val baselineLabs = used.filter { it.id in confirmedBaselineLabIds && it.timeH < firstDose && it.concValue > 0 }
         val baseline = baselineLabs.takeIf { it.isNotEmpty() }?.map { toPgMl(it.concValue, it.unit) }?.average()
         var post = used.filter { it.timeH >= firstDose && it.concValue > 0 }
         var model = solve(events, post, baseline ?: 0.0, sdA)
@@ -176,23 +177,23 @@ object LabFit {
     }
 
     /** Diagnostics for the most recent lab against the fit from the labs before it. */
-    fun lastDiagnostics(events: List<DoseEvent>, labs: List<LabResult>): LabDiagnostics? {
+    fun lastDiagnostics(events: List<DoseEvent>, labs: List<LabResult>, confirmedBaselineLabIds: Set<String> = emptySet()): LabDiagnostics? {
         val sorted = labs.sortedBy { it.timeH }
         val last = sorted.lastOrNull() ?: return null
         if (events.isEmpty()) return null
-        val before = fit(events, sorted.dropLast(1), last.timeH - 1e-6)
+        val before = fit(events, sorted.dropLast(1), last.timeH - 1e-6, confirmedBaselineLabIds)
         val pred = e2At(events, doubleArrayOf(last.timeH), before.logAmplitude, before.logRate)[0] + (before.baselinePGmL ?: 0.0)
         val obs = toPgMl(last.concValue, last.unit)
         val res = ln(obs) - ln(pred + 1e-9)
-        return LabDiagnostics(pred, obs, res, abs(res) > OUTLIER_LOG, fit(events, sorted).convergenceScore)
+        return LabDiagnostics(pred, obs, res, abs(res) > OUTLIER_LOG, fit(events, sorted, confirmedBaselineLabIds = confirmedBaselineLabIds).convergenceScore)
     }
 
     /**
      * Monte Carlo bands for every curve. Estradiol uses parameter uncertainty only (not predictive error or structural uncertainty), other curves
      * use their model's between-person variability. Fixed seed so the bands do not flicker between redraws.
      */
-    fun bands(events: List<DoseEvent>, grid: DoubleArray, labs: List<LabResult>, mode: CalibrationMode, samples: Int = SAMPLES): Map<Curve, BandedCurve> {
-        val fits = segmentFits(events, labs, mode, grid)
+    fun bands(events: List<DoseEvent>, grid: DoubleArray, labs: List<LabResult>, mode: CalibrationMode, samples: Int = SAMPLES, confirmedBaselineLabIds: Set<String> = emptySet()): Map<Curve, BandedCurve> {
+        val fits = segmentFits(events, labs, mode, grid, confirmedBaselineLabIds)
         val base = Engine.simulate(events, grid = grid) ?: return emptyMap()
         val fixedPopulation = base.curves[Curve.E2]?.takeIf { !rateAdjustable(events) }
         val center = HashMap<Curve, DoubleArray>()
@@ -229,11 +230,11 @@ object LabFit {
     }
 
     /** Fits that apply on each part of the grid: one for retrospective mode, one per lab interval for causal mode. */
-    private fun segmentFits(events: List<DoseEvent>, labs: List<LabResult>, mode: CalibrationMode, grid: DoubleArray): List<Pair<Double, LabFitModel>> {
+    private fun segmentFits(events: List<DoseEvent>, labs: List<LabResult>, mode: CalibrationMode, grid: DoubleArray, confirmedBaselineLabIds: Set<String>): List<Pair<Double, LabFitModel>> {
         if (labs.isEmpty()) return listOf(Double.NEGATIVE_INFINITY to fit(events, emptyList()))
-        if (mode == CalibrationMode.RETROSPECTIVE) return listOf(Double.NEGATIVE_INFINITY to fit(events, labs))
+        if (mode == CalibrationMode.RETROSPECTIVE) return listOf(Double.NEGATIVE_INFINITY to fit(events, labs, confirmedBaselineLabIds = confirmedBaselineLabIds))
         val times = labs.map { it.timeH }.distinct().sorted()
-        return listOf(Double.NEGATIVE_INFINITY to fit(events, emptyList())) + times.map { t -> t to fit(events, labs, t) }
+        return listOf(Double.NEGATIVE_INFINITY to fit(events, emptyList())) + times.map { t -> t to fit(events, labs, t, confirmedBaselineLabIds) }
     }
 
     /** Estradiol curve where each grid point uses the fit of its segment; baseline added. */

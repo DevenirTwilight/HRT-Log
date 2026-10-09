@@ -1,6 +1,9 @@
 package net.plainnotes.app.ui
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import net.plainnotes.app.conc.EligibilityReason
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -152,13 +155,14 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
     if (editWeight) WeightDialog(weight, { editWeight = false }) { onWeight(it); editWeight = false }
 }
 
-@Composable private fun CalibrationCard(result: ConcentrationResult?, settings: ConcSettings, onSettings: (ConcSettings) -> Unit, onOpenLabs: () -> Unit, fmt: (Double) -> String, unit: String) {
+@Composable internal fun CalibrationCard(result: ConcentrationResult?, settings: ConcSettings, onSettings: (ConcSettings) -> Unit, onOpenLabs: () -> Unit, fmt: (Double) -> String, unit: String) {
     SectionCard(stringResource(R.string.calib_title)) {
         Text(stringResource(R.string.calib_intro), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Text(stringResource(R.string.calib_safety_limits), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         SwitchRow(stringResource(R.string.calib_enable), settings.calibrate) { onSettings(ConcSettings(settings.pmol, it, settings.mode)) }
+        CalibrationEligibilitySection(result,fmt,unit)
         val s = result?.calibration
-        if (s == null) Text(stringResource(R.string.calib_no_labs), style = MaterialTheme.typography.bodyMedium)
+        if (s == null) Text(stringResource(if (result?.labEligibility?.isNotEmpty()==true) R.string.calib_history_not_fitted else R.string.calib_no_labs), style = MaterialTheme.typography.bodyMedium)
         else {
             val m = s.model
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -175,11 +179,12 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
                 if (d.isOutlier) Text(stringResource(R.string.calib_outlier), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
             }
             if (m.postDoseObservationCount < 3) Text(stringResource(R.string.calib_few), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Text(stringResource(R.string.calib_mode), style = MaterialTheme.typography.labelLarge)
-            AdaptiveChoice(listOf(stringResource(R.string.calib_retro),stringResource(R.string.calib_causal)),if(settings.mode==CalibrationMode.RETROSPECTIVE)0 else 1,
-                {onSettings(ConcSettings(settings.pmol,settings.calibrate,if(it==0)CalibrationMode.RETROSPECTIVE else CalibrationMode.CAUSAL))})
-            Text(stringResource(if (settings.mode == CalibrationMode.RETROSPECTIVE) R.string.calib_retro_desc else R.string.calib_causal_desc), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+
         }
+        Text(stringResource(R.string.calib_mode), style = MaterialTheme.typography.labelLarge)
+        AdaptiveChoice(listOf(stringResource(R.string.calib_retro),stringResource(R.string.calib_causal)),if(settings.mode==CalibrationMode.RETROSPECTIVE)0 else 1,
+            {onSettings(ConcSettings(settings.pmol,settings.calibrate,if(it==0)CalibrationMode.RETROSPECTIVE else CalibrationMode.CAUSAL))})
+        Text(stringResource(if (settings.mode == CalibrationMode.RETROSPECTIVE) R.string.calib_retro_desc else R.string.calib_causal_desc), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         OutlinedButton(onClick = onOpenLabs) { Icon(Icons.Outlined.Science, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.calib_manage_labs)) }
     }
 }
@@ -322,4 +327,36 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
         text = { Text(stringResource(R.string.pk_disclaimer_body)) },
         confirmButton = { Button(onClick = onAccept) { Text(stringResource(R.string.pk_disclaimer_accept)) } },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } })
+}
+
+
+/** Original chart observations are unchanged; every history decision is available without logging facts. */
+@Composable internal fun CalibrationEligibilitySection(result: ConcentrationResult?, fmt: (Double)->String, unit: String) {
+    val rows=result?.labEligibility.orEmpty()
+    if(rows.isEmpty())return
+    var details by remember{mutableStateOf(false)}
+    Text(stringResource(R.string.calib_history_counts,rows.count{it.eligible},rows.count{!it.eligible}),style=MaterialTheme.typography.bodySmall)
+    if(rows.none{it.eligible} && result?.e2?.isNotEmpty()==true)Text(stringResource(R.string.calib_history_population),style=MaterialTheme.typography.bodySmall)
+    OutlinedButton(onClick={details=true}){Text(stringResource(R.string.calib_history_details))}
+    if(details)AlertDialog(onDismissRequest={details=false},title={Text(stringResource(R.string.calib_history_details))},
+        text={LazyColumn(Modifier.heightIn(max=420.dp),verticalArrangement=Arrangement.spacedBy(12.dp)){
+            itemsIndexed(rows){index,row->Column{
+                val at=java.time.Instant.ofEpochMilli((row.sampleH*3_600_000).toLong()).atZone(java.time.ZoneId.systemDefault())
+                Text(at.format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
+                result?.labs?.getOrNull(index)?.let{Text(fmt(it.second)+" "+unit)}
+                Text(stringResource(if(row.eligible)R.string.calib_history_eligible else R.string.calib_history_excluded))
+                row.reasons.forEach{reason->Text(stringResource(when(reason){
+                    EligibilityReason.READ_SCOPE_UNKNOWN->R.string.calib_history_scope
+                    EligibilityReason.SAMPLE_OUTSIDE_WINDOW->R.string.calib_history_window
+                    EligibilityReason.READ_END_BEFORE_SAMPLE->R.string.calib_history_future
+                    EligibilityReason.UNKNOWN_CONTEXT->R.string.calib_history_context
+                    EligibilityReason.UNKNOWN_DOSE->R.string.calib_history_dose
+                    EligibilityReason.UNKNOWN_TIME->R.string.calib_history_time
+                    EligibilityReason.UNMODELLED_EXPOSURE->R.string.calib_history_unmodelled
+                    EligibilityReason.OMITTED_EXPOSURE->R.string.calib_history_omitted
+                    EligibilityReason.NO_TREATMENT_EVIDENCE->R.string.calib_history_no_start
+                    EligibilityReason.RESOURCE_LIMIT->R.string.calib_history_resource
+                }),style=MaterialTheme.typography.bodySmall)}
+            }}
+        }},confirmButton={TextButton(onClick={details=false}){Text(stringResource(R.string.calib_history_done))}})
 }

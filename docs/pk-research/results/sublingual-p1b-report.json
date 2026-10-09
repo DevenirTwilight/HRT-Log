@@ -1,0 +1,223 @@
+{
+  "synthetic_only": true,
+  "software_eligibility_acceptance": true,
+  "clinical_accuracy_established": false,
+  "parameter_hash": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b",
+  "calculator_version": 2,
+  "labfit_algorithm_version": 2,
+  "population_max_absolute_error": 0.0,
+  "source_hashes": {
+    "engine": "de5d2cb58a036194ce528f68036cd8f453663b355065f53af1d7c4f43435ddfa",
+    "calculator": "6dff8cf4e3aadf6a27c97ad5bb361a67ece6164061c73470bdc0fe333db7c122",
+    "eligibility": "f04bb73d75efdcb7746b8db93de659e3c65ea391e72778a1b108519d62bc097f"
+  },
+  "script_sha256": "ddf0407fa03ee05b613735f6dd019ffec7e4e12fefcf1533d67f3c5a35da636f",
+  "before": {
+    "case_A": {
+      "used_doses": 1,
+      "population_current_pg_ml": 277.76798707874434,
+      "false_baseline_pg_ml": 500,
+      "history_days": 180,
+      "untruncated_baseline": null,
+      "lab_age_days": 200,
+      "provided_record_age_days": 201,
+      "wrong_calibrated_current_pg_ml": 777.7679870787443
+    },
+    "case_B": {
+      "false_baseline_pg_ml": 220,
+      "warning_present": true,
+      "skipped": 1
+    }
+  },
+  "after": {
+    "resource_test": {
+      "seconds": 0.007330305,
+      "labs": 1000,
+      "eligible": 1000,
+      "facts": 10000
+    },
+    "labfit_algorithm_version": 2,
+    "cases": [
+      {
+        "original_observations": 1,
+        "population_pg_ml": 277.76798707874434,
+        "baseline_pg_ml": null,
+        "amplitude": null,
+        "rate": null,
+        "eligible_count": 0,
+        "gated_pg_ml": 277.76798707874434,
+        "fit_count": 0,
+        "decisions": [
+          {
+            "coverage": "INCOMPLETE",
+            "fit": "EXCLUDED",
+            "omitted_log_fraction_bound": null,
+            "reasons": [
+              "SAMPLE_OUTSIDE_WINDOW",
+              "OMITTED_EXPOSURE"
+            ],
+            "baseline_eligibility": "NOT_PRE_TREATMENT",
+            "frozen": "KNOWN",
+            "lab_id": 1,
+            "evidence_record_ids": [
+              1
+            ]
+          }
+        ],
+        "id": "old_treatment_lab"
+      },
+      {
+        "original_observations": 1,
+        "population_pg_ml": 277.76798707874434,
+        "baseline_pg_ml": null,
+        "amplitude": null,
+        "rate": null,
+        "eligible_count": 0,
+        "gated_pg_ml": 277.76798707874434,
+        "fit_count": 0,
+        "decisions": [
+          {
+            "coverage": "UNKNOWN",
+            "fit": "NEEDS_REVIEW",
+            "omitted_log_fraction_bound": null,
+            "reasons": [
+              "UNKNOWN_CONTEXT",
+              "NO_TREATMENT_EVIDENCE"
+            ],
+            "baseline_eligibility": "UNKNOWN",
+            "frozen": "INCOMPLETE",
+            "lab_id": 1,
+            "evidence_record_ids": [
+              1
+            ]
+          }
+        ],
+        "id": "unknown_context_lab"
+      },
+      {
+        "original_observations": 1,
+        "population_pg_ml": 277.76798707874434,
+        "baseline_pg_ml": null,
+        "amplitude": 1.3259928679983342,
+        "rate": 1,
+        "eligible_count": 1,
+        "gated_pg_ml": 368.3183698246684,
+        "fit_count": 1,
+        "decisions": [
+          {
+            "coverage": "COMPLETE",
+            "fit": "ELIGIBLE",
+            "omitted_log_fraction_bound": null,
+            "reasons": [],
+            "baseline_eligibility": "NOT_PRE_TREATMENT",
+            "frozen": "KNOWN",
+            "lab_id": 1,
+            "evidence_record_ids": [
+              1
+            ]
+          }
+        ],
+        "id": "eligible_single_sl"
+      },
+      {
+        "original_observations": 1,
+        "population_pg_ml": 298.84739091538495,
+        "baseline_pg_ml": null,
+        "amplitude": 1.2557758277233388,
+        "rate": 0.9954128818638115,
+        "eligible_count": 1,
+        "gated_pg_ml": 375.4179659326125,
+        "fit_count": 1,
+        "decisions": [
+          {
+            "coverage": "COMPLETE",
+            "fit": "ELIGIBLE",
+            "omitted_log_fraction_bound": null,
+            "reasons": [],
+            "baseline_eligibility": "NOT_PRE_TREATMENT",
+            "frozen": "KNOWN",
+            "lab_id": 1,
+            "evidence_record_ids": [
+              2
+            ]
+          }
+        ],
+        "id": "eligible_mixed"
+      },
+      {
+        "original_observations": 2,
+        "population_pg_ml": 279.03729363865665,
+        "baseline_pg_ml": null,
+        "amplitude": 1.7786546309717362,
+        "rate": 1,
+        "eligible_count": 1,
+        "gated_pg_ml": 496.31097454421683,
+        "fit_count": 1,
+        "decisions": [
+          {
+            "coverage": "COMPLETE",
+            "fit": "ELIGIBLE",
+            "omitted_log_fraction_bound": null,
+            "reasons": [],
+            "baseline_eligibility": "NOT_PRE_TREATMENT",
+            "frozen": "KNOWN",
+            "lab_id": 1,
+            "evidence_record_ids": [
+              1
+            ]
+          },
+          {
+            "coverage": "INCOMPLETE",
+            "fit": "EXCLUDED",
+            "omitted_log_fraction_bound": null,
+            "reasons": [
+              "UNKNOWN_CONTEXT"
+            ],
+            "baseline_eligibility": "NOT_PRE_TREATMENT",
+            "frozen": "INCOMPLETE",
+            "lab_id": 2,
+            "evidence_record_ids": [
+              1,
+              2
+            ]
+          }
+        ],
+        "id": "partial_eligibility"
+      },
+      {
+        "original_observations": 1,
+        "population_pg_ml": 277.76798707874434,
+        "baseline_pg_ml": null,
+        "amplitude": 1.3259928679983342,
+        "rate": 1,
+        "eligible_count": 1,
+        "gated_pg_ml": 368.3183698246684,
+        "fit_count": 1,
+        "decisions": [
+          {
+            "coverage": "COMPLETE",
+            "fit": "ELIGIBLE",
+            "omitted_log_fraction_bound": -245.995652819179,
+            "reasons": [],
+            "baseline_eligibility": "NOT_PRE_TREATMENT",
+            "frozen": "KNOWN",
+            "lab_id": 1,
+            "evidence_record_ids": [
+              1
+            ]
+          }
+        ],
+        "id": "bounded_old_sl"
+      }
+    ],
+    "synthetic_only": true,
+    "calculator_version": 2
+  },
+  "unresolved": [
+    "P1-C causal historical interpolation/unrestricted summary",
+    "P1-C all-outlier bookkeeping",
+    "Explicit pre-treatment user confirmation/persistence absent",
+    "P2 population model/external clinical accuracy not established",
+    "Omitted non-SL and unknown exposure conservatively excluded; no universal 180-day zero-residual claim"
+  ]
+}

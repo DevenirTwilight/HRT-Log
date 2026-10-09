@@ -1,0 +1,160 @@
+{
+  "resource_test": {
+    "seconds": 0.007330305,
+    "labs": 1000,
+    "eligible": 1000,
+    "facts": 10000
+  },
+  "labfit_algorithm_version": 2,
+  "cases": [
+    {
+      "original_observations": 1,
+      "population_pg_ml": 277.76798707874434,
+      "baseline_pg_ml": null,
+      "amplitude": null,
+      "rate": null,
+      "eligible_count": 0,
+      "gated_pg_ml": 277.76798707874434,
+      "fit_count": 0,
+      "decisions": [{
+        "coverage": "INCOMPLETE",
+        "fit": "EXCLUDED",
+        "omitted_log_fraction_bound": null,
+        "reasons": [
+          "SAMPLE_OUTSIDE_WINDOW",
+          "OMITTED_EXPOSURE"
+        ],
+        "baseline_eligibility": "NOT_PRE_TREATMENT",
+        "frozen": "KNOWN",
+        "lab_id": 1,
+        "evidence_record_ids": [1]
+      }],
+      "id": "old_treatment_lab"
+    },
+    {
+      "original_observations": 1,
+      "population_pg_ml": 277.76798707874434,
+      "baseline_pg_ml": null,
+      "amplitude": null,
+      "rate": null,
+      "eligible_count": 0,
+      "gated_pg_ml": 277.76798707874434,
+      "fit_count": 0,
+      "decisions": [{
+        "coverage": "UNKNOWN",
+        "fit": "NEEDS_REVIEW",
+        "omitted_log_fraction_bound": null,
+        "reasons": [
+          "UNKNOWN_CONTEXT",
+          "NO_TREATMENT_EVIDENCE"
+        ],
+        "baseline_eligibility": "UNKNOWN",
+        "frozen": "INCOMPLETE",
+        "lab_id": 1,
+        "evidence_record_ids": [1]
+      }],
+      "id": "unknown_context_lab"
+    },
+    {
+      "original_observations": 1,
+      "population_pg_ml": 277.76798707874434,
+      "baseline_pg_ml": null,
+      "amplitude": 1.3259928679983342,
+      "rate": 1,
+      "eligible_count": 1,
+      "gated_pg_ml": 368.3183698246684,
+      "fit_count": 1,
+      "decisions": [{
+        "coverage": "COMPLETE",
+        "fit": "ELIGIBLE",
+        "omitted_log_fraction_bound": null,
+        "reasons": [],
+        "baseline_eligibility": "NOT_PRE_TREATMENT",
+        "frozen": "KNOWN",
+        "lab_id": 1,
+        "evidence_record_ids": [1]
+      }],
+      "id": "eligible_single_sl"
+    },
+    {
+      "original_observations": 1,
+      "population_pg_ml": 298.84739091538495,
+      "baseline_pg_ml": null,
+      "amplitude": 1.2557758277233388,
+      "rate": 0.9954128818638115,
+      "eligible_count": 1,
+      "gated_pg_ml": 375.4179659326125,
+      "fit_count": 1,
+      "decisions": [{
+        "coverage": "COMPLETE",
+        "fit": "ELIGIBLE",
+        "omitted_log_fraction_bound": null,
+        "reasons": [],
+        "baseline_eligibility": "NOT_PRE_TREATMENT",
+        "frozen": "KNOWN",
+        "lab_id": 1,
+        "evidence_record_ids": [2]
+      }],
+      "id": "eligible_mixed"
+    },
+    {
+      "original_observations": 2,
+      "population_pg_ml": 279.03729363865665,
+      "baseline_pg_ml": null,
+      "amplitude": 1.7786546309717362,
+      "rate": 1,
+      "eligible_count": 1,
+      "gated_pg_ml": 496.31097454421683,
+      "fit_count": 1,
+      "decisions": [
+        {
+          "coverage": "COMPLETE",
+          "fit": "ELIGIBLE",
+          "omitted_log_fraction_bound": null,
+          "reasons": [],
+          "baseline_eligibility": "NOT_PRE_TREATMENT",
+          "frozen": "KNOWN",
+          "lab_id": 1,
+          "evidence_record_ids": [1]
+        },
+        {
+          "coverage": "INCOMPLETE",
+          "fit": "EXCLUDED",
+          "omitted_log_fraction_bound": null,
+          "reasons": ["UNKNOWN_CONTEXT"],
+          "baseline_eligibility": "NOT_PRE_TREATMENT",
+          "frozen": "INCOMPLETE",
+          "lab_id": 2,
+          "evidence_record_ids": [
+            1,
+            2
+          ]
+        }
+      ],
+      "id": "partial_eligibility"
+    },
+    {
+      "original_observations": 1,
+      "population_pg_ml": 277.76798707874434,
+      "baseline_pg_ml": null,
+      "amplitude": 1.3259928679983342,
+      "rate": 1,
+      "eligible_count": 1,
+      "gated_pg_ml": 368.3183698246684,
+      "fit_count": 1,
+      "decisions": [{
+        "coverage": "COMPLETE",
+        "fit": "ELIGIBLE",
+        "omitted_log_fraction_bound": -245.995652819179,
+        "reasons": [],
+        "baseline_eligibility": "NOT_PRE_TREATMENT",
+        "frozen": "KNOWN",
+        "lab_id": 1,
+        "evidence_record_ids": [1]
+      }],
+      "id": "bounded_old_sl"
+    }
+  ],
+  "synthetic_only": true,
+  "calculator_version": 2
+}

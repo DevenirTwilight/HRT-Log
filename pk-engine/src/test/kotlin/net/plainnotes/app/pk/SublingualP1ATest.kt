@@ -69,11 +69,11 @@ class SublingualP1ATest {
             val labs = listOf(LabResult("baseline",-1.0,20.0,LabUnit.PG_ML)) + listOf(.5,1.0,3.0).mapIndexed { i,t ->
                 LabResult("l$i",t,20+factor*slAt(events.single(),t),LabUnit.PG_ML)
             }
-            val fit = LabFit.fit(events,labs)
+            val fit = LabFit.fit(events,labs,confirmedBaselineLabIds=setOf("baseline"))
             assertEquals(20.0,fit.baselinePGmL!!,0.0)
             assertTrue(fit.logAmplitude.isFinite() && fit.cov[0]>0 && fit.cov[0].isFinite())
             assertEquals(0.0,fit.logRate,0.0)
-            ordered(LabFit.bands(events,grid,labs,CalibrationMode.RETROSPECTIVE).getValue(Curve.E2))
+            ordered(LabFit.bands(events,grid,labs,CalibrationMode.RETROSPECTIVE,confirmedBaselineLabIds=setOf("baseline")).getValue(Curve.E2))
         }
         val large = LabFit.fit(events,listOf(LabResult("large",1.0,slAt(events.single(),1.0)*1e4,LabUnit.PG_ML)))
         assertTrue(exp(large.logAmplitude)>20, "No concentration or new amplitude ceiling was used to fix the defect")
@@ -184,6 +184,6 @@ class SublingualP1ATest {
         assertTrue(seconds.all{it<20})
         val out=JSONObject().put("algorithm_version",LabFit.ALGORITHM_VERSION).put("synthetic_only",true)
             .put("performance",JSONObject().put("events",120).put("grid_points",2881).put("samples",200).put("warmups",2).put("seconds",JSONArray(seconds)))
-        val file=File("build/reports/pk-p1a/stability.json");file.parentFile.mkdirs();file.writeText(out.toString(2)+"\n")
+        val file=File("build/reports/pk-p1b/stability.json");file.parentFile.mkdirs();file.writeText(out.toString(2)+"\n")
     }
 }

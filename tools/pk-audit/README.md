@@ -11,10 +11,10 @@
 ./gradlew :app:testFullDebugUnitTest --tests '*SublingualCalibrationAuditTest' --tests '*ConcentrationCalculatorTest' --tests '*LabEstimateTest' --no-parallel --max-workers=2
 python3 -m unittest discover -s tools/pk-audit -p 'test_*.py'
 python3 tools/pk-audit/sublingual_compare.py --engine docs/pk-research/results/sublingual-p0-engine.json --calculator docs/pk-research/results/sublingual-p0-calculator.json --output /tmp/hrt-sl-p0
-python3 tools/pk-audit/sublingual_p1a_compare.py
+python3 tools/pk-audit/sublingual_p1a_compare.py --engine docs/pk-research/results/sublingual-p1a-engine.json --calculator docs/pk-research/results/sublingual-p1a-calculator.json --stability docs/pk-research/results/sublingual-p1a-stability.json --output /tmp/hrt-sl-p1a
 ```
 
-当前Gradle输出写入`pk-engine/build/reports/pk-p1a/`和`app/build/reports/pk-p1a/`，含engine-outputs/calculator-audit/stability JSON。P1-A报告写入`docs/pk-research/results/sublingual-p1a-*`。P0原始输出与报告只读保留，用显式输入路径重放旧结果，不以新测试覆盖旧证据。新数值/单参数验收见`sublingual-p1a-verification.md`；P0尚未修复的问题仍保留特征化断言。
+历史P1-A Gradle输出曾写入`pk-engine/build/reports/pk-p1a/`和`app/build/reports/pk-p1a/`（当前输出改为pk-p1b，见末节），含engine-outputs/calculator-audit/stability JSON。P1-A报告写入`docs/pk-research/results/sublingual-p1a-*`。P0原始输出与报告只读保留，用显式输入路径重放旧结果，不以新测试覆盖旧证据。新数值/单参数验收见`sublingual-p1a-verification.md`；P0尚未修复的问题仍保留特征化断言。
 
 ## 没有 SDK 时重算已保存研究输入
 
@@ -48,3 +48,18 @@ PK_BASELINE_OUTPUT=/tmp/non-sl-v1.json ./gradlew -PjvmOnly :pk-engine:test --tes
 提交的`non-sl-calibration-v1.json`来自本轮实际旧版执行（原执行路径/workspace/tooling/pk-p1a/old-tree）；生成器独立编写，无第三方源码。比较五途径的幅度、速率、协方差、未校准/先验/后验中心与分位数，容差1e-9。计时采用同主机独立JVM、120事件、2881网格点、200样本、2热身、5次，记录每次秒数；它是局部微基准，不是跨设备性能承诺。原计时不含断言，新计时也不含。
 
 独立Python还比较方案A归一化核的交点极限与r=1等价性；A仅研究，生产选择B。7项Python测试必须通过；P1-A报告`numerical_acceptance`与`clinical_accuracy_established`分开标记。CI生成新报告并保留旧P0重放，全部合成数据。
+
+## P1-B：资格门控与旧证据只读重放
+
+当前测试输出写`pk-p1b`目录。不要使用P0/P1-A默认输出去覆盖旧机器证据；明确传入已保存基线并输出到build或/tmp：
+
+```sh
+./gradlew -PjvmOnly :pk-engine:test :core:domain:test :importer:test --rerun-tasks --no-parallel --max-workers=2
+./gradlew :app:testFullDebugUnitTest --no-parallel --max-workers=2
+python3 tools/pk-audit/sublingual_compare.py --engine docs/pk-research/results/sublingual-p0-engine.json --calculator docs/pk-research/results/sublingual-p0-calculator.json --output /tmp/hrt-p0-replay
+python3 tools/pk-audit/sublingual_p1a_compare.py --engine docs/pk-research/results/sublingual-p1a-engine.json --calculator docs/pk-research/results/sublingual-p1a-calculator.json --stability docs/pk-research/results/sublingual-p1a-stability.json --output /tmp/hrt-p1a-replay
+python3 tools/pk-audit/sublingual_p1b_compare.py
+python3 -m unittest discover -s tools/pk-audit -p 'test_*.py'
+```
+
+P1-B脚本检查实际Kotlin的资格/观测计数、两个修复反例、三个合格正例及部分合格子集；人口曲线/P1-A拟合/先验带与保存基线比对。新报告与engine/calculator/eligibility机器输入独立命名`sublingual-p1b-*`。9项Python含两项资格报告/反例污染检测；不能通过删除原始观测或添加假基线使报告通过。工程成功与科学临床准确性标志分开。

@@ -979,4 +979,21 @@
 <string name="calib_safety_limits">校准仍为实验功能：历史不完整、过去配置未知、因果边界及离群处理问题可能误导。数值稳定不代表个人预测准确。</string>
 <string name="calib_rate_fixed">模型速率固定</string>
 <string name="calib_rate_non_sl">非舌下模型速率</string>
+<string name="calib_history_counts">历史门控：%1$d 条合格，%2$d 条未纳入。观测仍保留；离群处理另行判断。</string>
+<string name="calib_history_population">没有合格化验：显示人口模型及参数不确定性，不添加化验推断的基线。</string>
+<string name="calib_history_details">查看校准资格</string>
+<string name="calib_history_eligible">通过历史门控；仅开启校准时使用，仍可能受离群处理影响。</string>
+<string name="calib_history_excluded">未纳入校准，原始观测保留。</string>
+<string name="calib_history_scope">无法确认已保存历史的读取覆盖。</string>
+<string name="calib_history_window">采样时间位于模拟历史窗口之外。</string>
+<string name="calib_history_future">历史读取尚未覆盖该采样时刻。</string>
+<string name="calib_history_context">可能相关的给药缺少冻结配置。</string>
+<string name="calib_history_dose">相关实际剂量未知。</string>
+<string name="calib_history_time">可能相关的实际服药时间未知。</string>
+<string name="calib_history_unmodelled">相关暴露无法建模。</string>
+<string name="calib_history_omitted">更早的暴露未进入模拟，无法充分约束其贡献。</string>
+<string name="calib_history_no_start">无法确证采样时的治疗状态；不是已确认的治疗前基线。</string>
+<string name="calib_history_resource">历史核对超过计算预算，需要审查。</string>
+<string name="calib_history_done">关闭</string>
+<string name="calib_history_not_fitted">个人校准已关闭或不可用，原始观测仍保留。</string>
 </resources>

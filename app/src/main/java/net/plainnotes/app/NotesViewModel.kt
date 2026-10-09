@@ -97,7 +97,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         }
         val (meds,profiles,records,labs,weight,planned,snapshots)=inputs
         val settings=concSettings
-        val result=withContext(Dispatchers.Default){ConcentrationCalculator.compute(meds,profiles,records,planned,labs,weight,now,settings.first,settings.second,snapshots)}
+        val result=withContext(Dispatchers.Default){ConcentrationCalculator.compute(meds,profiles,records,planned,labs,weight,now,settings.first,settings.second,snapshots,net.plainnotes.app.conc.HistoryRead(true,ConcentrationCalculator.hours(now)),checkCancelled={ensureActive()})}
         val doseTimes=records.filter{MedicationSnapshot.decode(it.config_snapshot,it.medication_id)?.molecule=="E2" && it.deleted_at_utc==null && it.status in listOf("ON_TIME","LATE") && it.taken_utc!=null}.map{Instant.ofEpochMilli(it.taken_utc!!)}.sorted()
         ensureActive();conc.value=ConcState(false,result,weight,labs,doseTimes)
     }catch(e:CancellationException){throw e}catch(e:Exception){conc.value=conc.value.copy(loading=false);readFailure(e)} }.also{concJob=it} }

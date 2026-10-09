@@ -1,10 +1,12 @@
-# 当前交接：P1-B历史完整性门控（2026-10-09，§47）
+# 当前交接：P1-B历史资格门控（2026-10-09，§47）
 
-起始b9a5393a7435accd3afe02407b38709a0e40f179，与远端一致、初始干净；Build25/schema9。附件已明确授权实施，不是纯审计；P1-C/P2不实施。
+起始b9a5393a7435accd3afe02407b38709a0e40f179，远端一致、初始干净；Build25/schema9。生产实施/本地完整回归通过，API35 CI待回查。
 
-- 已核实DAO全量读取、Calculator内180天截断和冻结capture独立无校准路径。基线无真实确认字段，不从first event/epoch自动推断。生产链路与保守资格/误差/资源规则先写入[设计](pk-research/sublingual-p1b-design.md)。
-- 下一步：纯资格层和显式基线API，接入统一合格子集及四语逐条说明，转换P0错误断言/补正例/资源/兼容回归，完整本地及API35 CI。
-- 不改人口参数、P1-A算法2/固定完整SL、新旧冻结格式或保存值。P0/P1-A证据只读，新P1-B结果独立。P1-C仍未修，P2仍研究，临床准确性未确立。
+- 真实DAO全量读取，180天截断在Calculator。新增逐条纯资格层，以保存冻结证据判覆盖/配置/基线/拟合资格；未知不当零，首条可见剂量不当治疗开始。LabFit仅接受显式确认基线ID，生产无确认入口故不自动使用。
+- 两个500/220假基线被阻止，原始化验保留；纯SL、混合真实口服+SL、可证明遗漏SL残余均可实际校准，部分资格使用一致子集。四语原因/原值详情，模式、开关、管理入口保留。
+- 本地PK40/domain58/importer12/data72/reminder14/app367（354通过/13跳过）、Python9无失败；Lint0错误/132警告，Full Debug/Release及测试APK编译通过。最后资格13重跑/Android测试重新编译通过。设备尚不能以编译当通过。
+- 人口参数hash、算法2/固定完整SL、calculator2/envelope1/旧1兼容、schema9、冻结估算/PDF/备份格式均未变；P0/P1-A证据只读，新P1-B结果独立。
+- [设计](pk-research/sublingual-p1b-design.md)、[验收](pk-research/sublingual-p1b-verification.md)、[机器报告](pk-research/results/sublingual-p1b-report.md)。下一独立P1-C因果插值/历史摘要，然后全离群一致性；均未授权实施。P2人口模型仍研究，人体外部准确性未确立。明确治疗前确认/持久化、非SL残余证明及有界大库读取另案。
 
 ## 下方为保留的P1-A及更早交接
 

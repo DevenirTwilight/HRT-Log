@@ -56,6 +56,7 @@ class ConcentrationResult(
     val models: Map<Curve, Set<FittedModel>> = emptyMap(),
     /** Medications with doses but no curve, and why (no reliable literature). */
     val unsupported: Map<Long, Unsupported> = emptyMap(),
+    val labEligibility: List<LabEligibility> = emptyList(),
 )
 
 object ConcentrationCalculator {
@@ -101,7 +102,7 @@ object ConcentrationCalculator {
 
     fun compute(
         medications: List<MedicationEntity>, profiles: Map<Long, ProfileEntity>, records: List<RecordEntity>, planned: List<TimelineEntry>,
-        labs: List<LabValueEntity>, weightKg: Double?, now: Instant, calibrate: Boolean = true, mode: CalibrationMode = CalibrationMode.RETROSPECTIVE, plannedSnapshots: Map<Long,String> = emptyMap(),
+        labs: List<LabValueEntity>, weightKg: Double?, now: Instant, calibrate: Boolean = true, mode: CalibrationMode = CalibrationMode.RETROSPECTIVE, plannedSnapshots: Map<Long,String> = emptyMap(), historyRead: HistoryRead = HistoryRead(), checkCancelled: () -> Unit = {},
     ): ConcentrationResult {
         val nowH = hours(now)
         val missing = mutableListOf<Missing>()
@@ -112,6 +113,7 @@ object ConcentrationCalculator {
         val labPoints = e2Labs.map { hours(it.sampled_utc) to LabFit.toPgMl(it.value, if (it.unit == "pmol/L") LabUnit.PMOL_L else LabUnit.PG_ML) }
         data class Raw(val med: MedicationEntity, val profile: ProfileEntity?, val timeH: Double, val dose: Double, val id: String)
         val raw = mutableListOf<Raw>()
+        val evidence = mutableListOf<ExposureEvidence>()
         var skipped = 0
         val historyStart = nowH - HISTORY_DAYS * 24
         fun context(json:String,id:Long):Pair<MedicationEntity,ProfileEntity?>? {
@@ -136,13 +138,32 @@ object ConcentrationCalculator {
             raw+=Raw(m,p,t,dose,id)
         }
         for (r in records) {
+            checkCancelled()
             if(r.status !in listOf("ON_TIME","LATE") || r.deleted_at_utc!=null)continue
-            val t=r.taken_utc ?: continue
-            if(hours(t)<historyStart)continue
+            val t=r.taken_utc
             val saved=context(HistoricalContext.resolved(r,plannedSnapshots),r.medication_id)
             // Import sources without route data cannot inherit the app's oral-model assumption.
             val c=if(r.origin.startsWith("IMPORT_") && saved!=null && simulated(saved.first) && saved.first.route==null) null else saved
-            add(c,hours(t),r.actual_dose,"r${r.id}",r.medication_id,true)
+            val actualDose=r.actual_dose
+            val ingredient=saved?.first?.molecule ?: MedicationSnapshot.decode(r.config_snapshot,r.medication_id)?.molecule
+            val timestamp=t?.let(::hours)
+            val included=timestamp!=null && timestamp>=historyStart
+            val problem=when {
+                timestamp==null -> EligibilityReason.UNKNOWN_TIME
+                c==null -> EligibilityReason.UNKNOWN_CONTEXT
+                ingredient!="E2" -> null
+                actualDose==null || !actualDose.isFinite() || actualDose<=0 -> EligibilityReason.UNKNOWN_DOSE
+                missingFor(c.first,c.second).isNotEmpty() || c.first.route != when(c.second?.pk_route){"oral"->"ORAL";"sublingual"->"SUBLINGUAL";"gel"->"GEL";"injection"->"INJECTION";"patchApply"->"PATCH";else->null} -> EligibilityReason.UNKNOWN_CONTEXT
+                else -> null
+            }
+            val historicalEvent=if(problem==null && ingredient=="E2") runCatching {
+                val route=Route.of(c!!.second!!.pk_route);val ester=Ester.valueOf(c.second!!.ester)
+                DoseEvent("r${r.id}",route,timestamp!!,actualDose!!,ester,weightKg ?: 70.0,extras(c.second,if(route==Route.PATCH_APPLY)actualDose else 1.0,"r${r.id}"))
+            }.getOrNull() else null
+            val supported=historicalEvent?.let { (Engine.choose(it) as? net.plainnotes.app.pk.ModelChoice.Use)?.parts?.any { part -> part.first==Curve.E2 } == true } == true
+            evidence+=ExposureEvidence(r.id,timestamp,ingredient,historicalEvent.takeIf{supported},included,
+                problem ?: if(ingredient=="E2" && !supported)EligibilityReason.UNMODELLED_EXPOSURE else null)
+            if(included) add(c,timestamp!!,r.actual_dose,"r${r.id}",r.medication_id,true)
         }
         val used = raw.size
         val horizon = nowH + FORECAST_DAYS * 24
@@ -175,18 +196,20 @@ object ConcentrationCalculator {
                 }
             }
         }
+        val eligibility=CalibrationEligibility.evaluate(e2Labs.map { it.id to hours(it.sampled_utc) },evidence,historyStart,historyRead,checkCancelled)
         if (events.isEmpty())
-            return ConcentrationResult(missing.distinct(), DoubleArray(0), DoubleArray(0), null, null, nowH, null, labPoints, null, used, skipped, active)
+            return ConcentrationResult(missing.distinct(), DoubleArray(0), DoubleArray(0), null, null, nowH, null, labPoints, null, used, skipped, active, labEligibility=eligibility)
         val grid = Engine.gridFor(events, horizon)
         val base = Engine.simulate(events, grid = grid)!!
         val unsupported = base.unsupported.mapNotNull { (id, why) -> medOfEvent[id]?.let { it to why } }.toMap()
-        val labResults = if (calibrate) e2Labs.map { LabResult("l${it.id}", hours(it.sampled_utc), it.value, if (it.unit == "pmol/L") LabUnit.PMOL_L else LabUnit.PG_ML) } else emptyList()
+        val qualifiedIds=eligibility.filter { it.eligible }.map { it.labId }.toSet()
+        val labResults = if (calibrate) e2Labs.filter { it.id in qualifiedIds }.map { LabResult("l${it.id}", hours(it.sampled_utc), it.value, if (it.unit == "pmol/L") LabUnit.PMOL_L else LabUnit.PG_ML) } else emptyList()
         val bands = LabFit.bands(events, grid, labResults, mode)
         val summary = if (labResults.isNotEmpty() && base.curves.containsKey(Curve.E2))
             CalibrationSummary(LabFit.fit(events, labResults), LabFit.lastDiagnostics(events, labResults), labResults.size) else null
         val e2 = bands[Curve.E2]
         return ConcentrationResult(missing.distinct(), grid, e2?.center ?: DoubleArray(grid.size), e2?.let { it.p25 to it.p75 }, e2?.let { it.p5 to it.p95 },
             nowH, e2?.let { Pk.interpolate(grid, it.center, nowH) }, labPoints, summary, used, skipped, active,
-            bands.filterKeys { it != Curve.E2 }, base.flags, base.models, unsupported)
+            bands.filterKeys { it != Curve.E2 }, base.flags, base.models, unsupported, eligibility)
     }
 }

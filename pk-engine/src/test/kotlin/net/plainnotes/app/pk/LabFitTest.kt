@@ -19,10 +19,10 @@ class LabFitTest {
         assertTrue(m.convergenceScore > 0.5)
     }
 
-    @Test fun noLabsKeepsThePriorAndBaselineComesFromPreDoseLabs() {
+    @Test fun noLabsKeepsPriorAndBaselineRequiresExplicitConfirmation() {
         val none = LabFit.fit(events, emptyList())
         assertEquals(0.0, none.logAmplitude); assertEquals(0.0, none.convergenceScore, 1e-9)
-        val m = LabFit.fit(events, listOf(lab("b1", 900.0, 20.0), lab("b2", 950.0, 30.0), lab("p", 1300.0, truth(1.0, 1.0, 1300.0) + 25.0)))
+        val m = LabFit.fit(events, listOf(lab("b1", 900.0, 20.0), lab("b2", 950.0, 30.0), lab("p", 1300.0, truth(1.0, 1.0, 1300.0) + 25.0)), confirmedBaselineLabIds=setOf("b1","b2"))
         assertEquals(25.0, m.baselinePGmL!!, 1e-9); assertEquals(1, m.postDoseObservationCount)
     }
 

@@ -979,4 +979,21 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="calib_safety_limits">La calibration reste expérimentale : historique incomplet, configuration passée inconnue, limites causales et valeurs aberrantes peuvent induire en erreur. La stabilité numérique ne prouve pas la précision individuelle.</string>
 <string name="calib_rate_fixed">Vitesse du modèle fixe</string>
 <string name="calib_rate_non_sl">Vitesse hors voie sublinguale</string>
+<string name="calib_history_counts">Historique : %1$d admissibles, %2$d non utilisées. Les observations restent conservées ; les valeurs aberrantes sont traitées séparément.</string>
+<string name="calib_history_population">Aucune analyse admissible : modèle de population et incertitude des paramètres, sans niveau de base déduit des analyses.</string>
+<string name="calib_history_details">Voir l’admissibilité des analyses</string>
+<string name="calib_history_eligible">Historique admissible ; utilisation seulement si la calibration est activée. Le traitement des valeurs aberrantes reste applicable.</string>
+<string name="calib_history_excluded">Non utilisée pour la calibration ; observation originale conservée.</string>
+<string name="calib_history_scope">La couverture de lecture de l’historique enregistré est inconnue.</string>
+<string name="calib_history_window">Prélèvement hors de la fenêtre simulée.</string>
+<string name="calib_history_future">La lecture de l’historique ne couvre pas ce prélèvement.</string>
+<string name="calib_history_context">Une prise potentiellement pertinente manque de configuration figée.</string>
+<string name="calib_history_dose">Une dose réelle pertinente est inconnue.</string>
+<string name="calib_history_time">Une heure réelle de prise potentiellement pertinente est inconnue.</string>
+<string name="calib_history_unmodelled">Une exposition pertinente ne peut être modélisée.</string>
+<string name="calib_history_omitted">Une exposition antérieure est omise et sa contribution ne peut être suffisamment bornée.</string>
+<string name="calib_history_no_start">Le statut thérapeutique au prélèvement est inconnu ; ce n’est pas un niveau de base prétraitement confirmé.</string>
+<string name="calib_history_resource">La vérification dépasse le budget de calcul ; examen nécessaire.</string>
+<string name="calib_history_done">Fermer</string>
+<string name="calib_history_not_fitted">Calibration personnelle désactivée ou indisponible ; les observations originales restent visibles.</string>
 </resources>

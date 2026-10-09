@@ -979,4 +979,21 @@
 <string name="calib_safety_limits">校準仍為實驗功能：歷史不完整、過去配置未知、因果邊界及離群處理問題可能誤導。數值穩定不代表個人預測準確。</string>
 <string name="calib_rate_fixed">模型速率固定</string>
 <string name="calib_rate_non_sl">非舌下模型速率</string>
+<string name="calib_history_counts">歷史門控：%1$d 條合格，%2$d 條未納入。觀測仍保留；離群處理另行判斷。</string>
+<string name="calib_history_population">沒有合格檢驗：顯示人口模型及參數不確定性，不加入檢驗推斷的基線。</string>
+<string name="calib_history_details">查看校準資格</string>
+<string name="calib_history_eligible">通過歷史門控；僅開啟校準時使用，仍可能受離群處理影響。</string>
+<string name="calib_history_excluded">未納入校準，原始觀測保留。</string>
+<string name="calib_history_scope">無法確認已保存歷史的讀取覆蓋。</string>
+<string name="calib_history_window">採樣時間位於模擬歷史視窗之外。</string>
+<string name="calib_history_future">歷史讀取尚未覆蓋該採樣時刻。</string>
+<string name="calib_history_context">可能相關的給藥缺少凍結配置。</string>
+<string name="calib_history_dose">相關實際劑量未知。</string>
+<string name="calib_history_time">可能相關的實際服藥時間未知。</string>
+<string name="calib_history_unmodelled">相關暴露無法建模。</string>
+<string name="calib_history_omitted">更早的暴露未進入模擬，無法充分約束其貢獻。</string>
+<string name="calib_history_no_start">無法確證採樣時的治療狀態；不是已確認的治療前基線。</string>
+<string name="calib_history_resource">歷史核對超過計算預算，需要審查。</string>
+<string name="calib_history_done">關閉</string>
+<string name="calib_history_not_fitted">個人校準已關閉或不可用，原始觀測仍保留。</string>
 </resources>
