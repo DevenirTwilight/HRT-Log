@@ -13,9 +13,18 @@ object ChartViewport {
         }
         return (points+cuts).distinctBy{it.first}.sortedBy{it.first}
     }
+    /** One range per fit prefix; no viewport/NOW cut ever uses endpoints from different models. */
+    fun segments(x:DoubleArray, breaks:DoubleArray):List<IntRange> {
+        if(x.isEmpty())return emptyList()
+        val starts=(listOf(0)+breaks.map { at -> val i=java.util.Arrays.binarySearch(x,at);if(i>=0)i else -i-1 }+x.size).distinct().sorted()
+        return starts.zipWithNext().mapNotNull{(a,b)->if(a<b)a until b else null}
+    }
+    fun segmentSamples(x:DoubleArray,y:DoubleArray,start:Double,end:Double,split:Double?=null,breaks:DoubleArray=doubleArrayOf()):List<List<Pair<Double,Double>>> =
+        segments(x,breaks).map{r->samples(x.copyOfRange(r.first,r.last+1),y.copyOfRange(r.first,r.last+1),start,end,split)}
+
     fun top(data:ChartData,start:Double,end:Double):Double {
-        val curve=samples(data.x,data.y,start,end).maxOfOrNull{it.second} ?: 0.0
-        val upper=if(data.includeBandsInScale)data.band95?.let{samples(data.x,it.second,start,end).maxOfOrNull{p->p.second}} ?: 0.0 else 0.0
+        val curve=segmentSamples(data.x,data.y,start,end,breaks=data.breaks).flatten().maxOfOrNull{it.second} ?: 0.0
+        val upper=if(data.includeBandsInScale)data.band95?.let{segmentSamples(data.x,it.second,start,end,breaks=data.breaks).flatten().maxOfOrNull{p->p.second}} ?: 0.0 else 0.0
         val dots=data.points.filter{it.first in start..end && it.second.isFinite()}.maxOfOrNull{it.second} ?: 0.0
         val ref=data.range?.second?.takeIf{it.isFinite()} ?: 0.0
         val peak=maxOf(curve,upper,dots,ref)

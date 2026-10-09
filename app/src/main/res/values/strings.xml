@@ -102,7 +102,7 @@
 <string name="calib_amplitude">Level factor</string>
 <string name="calib_baseline">Pre-treatment baseline: %1$s %2$s (added to the curve)</string>
 <string name="calib_causal">Causal</string>
-<string name="calib_causal_desc">Causal fitting limits labs at grid points. Known interpolation and summary limitations can still use later labs; strict past-only prediction is not yet guaranteed.</string>
+<string name="calib_causal_desc">At each queried time, uses only history-qualified labs sampled by that instant. Forecasts use no samples dated after this session.</string>
 <string name="calib_clearance">Model rate factor</string>
 <string name="calib_convergence">Convergence</string>
 <string name="calib_enable">Calibrate with my E2 labs</string>
@@ -115,7 +115,7 @@
 <string name="calib_no_labs">No E2 lab results yet. Add one to personalise the curve.</string>
 <string name="calib_outlier">The latest lab differs greatly from the model. Outlier flags do not always mean exclusion. Check value, unit and sampling time.</string>
 <string name="calib_retro">Retrospective</string>
-<string name="calib_retro_desc">The parameters learned from all labs apply to the whole curve (default).</string>
+<string name="calib_retro_desc">Later eligible labs can reinterpret the earlier curve; this is retrospective reconstruction, not a prediction available then.</string>
 <string name="calib_title">Lab calibration</string>
 <string name="change_dose">Change the dose</string>
 <string name="change_time">Change the time</string>
@@ -976,10 +976,10 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="picker_date">Date (YYYY-MM-DD)</string>
     <string name="period_records">View medication records</string>
     <string name="period_inferred">Inferred from medication records</string>
-<string name="calib_safety_limits">Calibration remains experimental: incomplete history, unknown past configuration, causal boundaries and outlier handling can mislead. Numerical stability does not establish personal accuracy.</string>
+<string name="calib_safety_limits">Calibration remains experimental: incomplete recorded history, unknown past configuration and unresolved outlier bookkeeping can mislead. Numerical stability does not establish personal accuracy.</string>
 <string name="calib_rate_fixed">Fixed model rate</string>
 <string name="calib_rate_non_sl">Non-sublingual model rate</string>
-<string name="calib_history_counts">History gate: %1$d eligible, %2$d not used. Observations are retained; outlier handling is separate.</string>
+<string name="calib_history_counts">Eligible at query: %1$d · Not used: %2$d</string>
 <string name="calib_history_population">No eligible labs: showing the population model and parameter uncertainty, without a lab-derived baseline.</string>
 <string name="calib_history_details">Review calibration eligibility</string>
 <string name="calib_history_eligible">History gate passed; used only when calibration is on. Outlier handling may still apply.</string>
@@ -996,4 +996,8 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="calib_history_resource">The history review exceeds the calculation budget; needs review.</string>
 <string name="calib_history_done">Close</string>
 <string name="calib_history_not_fitted">Personal calibration is off or unavailable; the original observations remain visible.</string>
+<string name="calib_time_pending">History-qualified, but sampled after this query: not yet used here.</string>
+<string name="calib_sample_time_semantics">Causal reconstruction uses sampling time, not when the result became known. Later eligible labs can reinterpret earlier curves in retrospective mode.</string>
+<string name="calib_evaluation_time">Summary evaluated at %1$s, using sampling-time availability.</string>
+<string name="calib_no_available_sample">No eligible sample is available for calibration at this query, or calibration is off. Original observations are retained.</string>
 </resources>

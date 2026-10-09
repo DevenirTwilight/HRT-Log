@@ -18,7 +18,7 @@ class SublingualCalibrationAuditTest {
     companion object {
         private val findings = JSONObject()
         @JvmStatic @AfterClass fun report() {
-            val file = File("build/reports/pk-p1b/calculator-audit.json")
+            val file = File("build/reports/pk-p1c1/calculator-audit.json")
             file.parentFile!!.mkdirs(); file.writeText(findings.toString(2) + "\n")
         }
     }
@@ -85,18 +85,19 @@ class SublingualCalibrationAuditTest {
         findings.put("missing_context_false_baseline", JSONObject().put("skipped", 1).put("warning_present", true).put("baseline_pg_ml", JSONObject.NULL))
     }
 
-    @Test fun characterizeCausalInterpolationStillLeaksAtHistoricalLabBoundary() {
+    @Test fun causalHistoricalBoundaryUsesQueryPrefix() {
         val records=listOf(record(1,46*60))
         val observed=lab(1,25*60,400.0)
         val population=compute(records,mode=CalibrationMode.CAUSAL)
         val causal=compute(records,listOf(observed),mode=CalibrationMode.CAUSAL)
         val beforeSample=ConcentrationCalculator.hours(now.minusSeconds(30*60))
-        val actual=Pk.interpolate(causal.timeH,causal.e2,beforeSample)
-        val original=Pk.interpolate(population.timeH,population.e2,beforeSample)
-        assertTrue(abs(actual!!-original!!)>1)
+        val actual=causal.evaluateAt(beforeSample)!!.center
+        val original=population.evaluateAt(beforeSample)!!.center
+        assertEquals(original,actual,1e-7)
+        assertNull(causal.evaluateAt(beforeSample)!!.calibration)
         assertEquals(1,causal.calibration!!.model.postDoseObservationCount)
         findings.put("causal_interpolation_leak",JSONObject().put("sample_age_min",25).put("evaluation_age_min",30)
-            .put("population_historical_pg_ml",original).put("with_later_lab_historical_pg_ml",actual).put("still_unfixed",true))
+            .put("population_historical_pg_ml",original).put("with_later_lab_historical_pg_ml",actual).put("still_unfixed",false))
     }
 
     @Test fun sampledUtcFrozenRouteAndActualDoseWinAcrossDstAndCurrentConfigurationChanges() {

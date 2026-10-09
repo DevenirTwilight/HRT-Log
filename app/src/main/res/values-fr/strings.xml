@@ -102,7 +102,7 @@
 <string name="calib_amplitude">Facteur de niveau</string>
 <string name="calib_baseline">Niveau de base avant traitement : %1$s %2$s (ajouté à la courbe)</string>
 <string name="calib_causal">Causal</string>
-<string name="calib_causal_desc">L’ajustement causal limite les analyses aux points de grille. Des limites connues de l’interpolation et du résumé peuvent encore utiliser des analyses ultérieures ; la prédiction strictement passée n’est pas garantie.</string>
+<string name="calib_causal_desc">À chaque instant interrogé, utilise uniquement les analyses admissibles prélevées au plus tard à cet instant. Les prévisions excluent les prélèvements datés après cette session.</string>
 <string name="calib_clearance">Facteur de vitesse du modèle</string>
 <string name="calib_convergence">Convergence</string>
 <string name="calib_enable">Calibrer avec mes analyses d\'E2</string>
@@ -115,7 +115,7 @@
 <string name="calib_no_labs">Aucune analyse d\'E2 pour l\'instant. Ajoutez-en une pour personnaliser la courbe.</string>
 <string name="calib_outlier">La dernière analyse diffère fortement du modèle. Un signalement aberrant ne garantit pas une exclusion. Vérifiez la valeur, l’unité et le prélèvement.</string>
 <string name="calib_retro">Rétrospectif</string>
-<string name="calib_retro_desc">Les paramètres appris de toutes les analyses s\'appliquent à toute la courbe (par défaut).</string>
+<string name="calib_retro_desc">Les analyses admissibles ultérieures peuvent réinterpréter la courbe passée : une reconstruction rétrospective, pas une prédiction disponible à cette époque.</string>
 <string name="calib_title">Calibration par analyses</string>
 <string name="change_dose">Modifier la dose</string>
 <string name="change_time">Modifier l\'heure</string>
@@ -976,10 +976,10 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="picker_date">Date (AAAA-MM-JJ)</string>
     <string name="period_records">Voir les prises</string>
     <string name="period_inferred">Déduit des prises enregistrées</string>
-<string name="calib_safety_limits">La calibration reste expérimentale : historique incomplet, configuration passée inconnue, limites causales et valeurs aberrantes peuvent induire en erreur. La stabilité numérique ne prouve pas la précision individuelle.</string>
+<string name="calib_safety_limits">La calibration reste expérimentale : historique non enregistré, configuration passée inconnue et comptage des valeurs aberrantes non résolu peuvent induire en erreur. La stabilité numérique ne prouve pas la précision individuelle.</string>
 <string name="calib_rate_fixed">Vitesse du modèle fixe</string>
 <string name="calib_rate_non_sl">Vitesse hors voie sublinguale</string>
-<string name="calib_history_counts">Historique : %1$d admissibles, %2$d non utilisées. Les observations restent conservées ; les valeurs aberrantes sont traitées séparément.</string>
+<string name="calib_history_counts">Admissibles à cet instant : %1$d · Non utilisés : %2$d</string>
 <string name="calib_history_population">Aucune analyse admissible : modèle de population et incertitude des paramètres, sans niveau de base déduit des analyses.</string>
 <string name="calib_history_details">Voir l’admissibilité des analyses</string>
 <string name="calib_history_eligible">Historique admissible ; utilisation seulement si la calibration est activée. Le traitement des valeurs aberrantes reste applicable.</string>
@@ -996,4 +996,8 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="calib_history_resource">La vérification dépasse le budget de calcul ; examen nécessaire.</string>
 <string name="calib_history_done">Fermer</string>
 <string name="calib_history_not_fitted">Calibration personnelle désactivée ou indisponible ; les observations originales restent visibles.</string>
+<string name="calib_time_pending">Historique admissible, mais prélèvement après cet instant : pas encore utilisé ici.</string>
+<string name="calib_sample_time_semantics">La reconstruction causale suit le moment du prélèvement, pas celui où le résultat a été connu. Le mode rétrospectif peut réinterpréter le passé avec des résultats admissibles ultérieurs.</string>
+<string name="calib_evaluation_time">Résumé évalué à %1$s, selon la disponibilité au moment du prélèvement.</string>
+<string name="calib_no_available_sample">Aucun prélèvement admissible disponible pour cet instant, ou calibration désactivée. Les observations originales sont conservées.</string>
 </resources>

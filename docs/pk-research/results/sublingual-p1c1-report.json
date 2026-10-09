@@ -1,0 +1,230 @@
+{
+  "synthetic_only": true,
+  "sampling_time_noninterference_acceptance": true,
+  "clinical_accuracy_established": false,
+  "calculator_version": 2,
+  "labfit_algorithm_version": 2,
+  "parameter_hash": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b",
+  "source_hashes": {
+    "before": "f301a233ff941b5bf577f82aabfed22fd8d2edfc9d74abb999ee8034ce124b22",
+    "after": "2f939bbb60e206b3faea0187369f9d666b1046836657157903b243e848e830f8",
+    "engine": "de5d2cb58a036194ce528f68036cd8f453663b355065f53af1d7c4f43435ddfa",
+    "calculator": "a0bf4674a5e8ab7c5ae855fef244e4e46487919bbaaa86a44d28e92e4581a8d3",
+    "eligibility": "aabdf90584ec3ffa6524db190aa35bbaa453d1ba21fc195a2d0ac250c916f898"
+  },
+  "script_sha256": "41a768d97477cc9f3916d72ce202f4bed9ce5e2f5a4e233204044b391dab4855",
+  "production_source_hashes": {
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/LabFit.kt": "8a2727e10732f61e6910f1a9673361abd5b0e7a0ee361ee5095181528f6e73c1",
+    "app/src/main/java/net/plainnotes/app/conc/ConcentrationCalculator.kt": "97918c78fa780a24a730556f425c492599b4933cc803b6d27f8d535bcdf7f70f",
+    "app/src/main/java/net/plainnotes/app/conc/CalibrationEligibility.kt": "f764ef63f2665d1c4040f2ecb9e1274eb32937383d1b4715b1e8490530ed3153",
+    "app/src/main/java/net/plainnotes/app/ui/ConcChart.kt": "51d0f88bf158113f9a08415a7498043930055096194b7f0f967e7bcb59b26c06",
+    "app/src/main/java/net/plainnotes/app/ui/ChartViewport.kt": "b9821126c3bf98bb8c71d85f06fc7ec282b73006cd2a1a1b164a2c737bc08c14",
+    "app/src/main/java/net/plainnotes/app/export/Exports.kt": "90ac95a11d9514a0273ca341fd677686565b381f22afac23ff3dc4364949e7b5"
+  },
+  "population_error": 0,
+  "fit_error": 0.0,
+  "prior_error": 0.0,
+  "eligibility_case_error": 0,
+  "unchanged_no_lab_display_error": 1.447233444196172e-10,
+  "before": {
+    "source_commit": "d45a67a4f5309f1e951b2dfe69e9295fa42234cb",
+    "dose": "2026-10-24T23:54:00Z",
+    "seconds": 0.205593682,
+    "cases": [
+      {
+        "values_center_p5_p25_p75_p95": [
+          277.76820206209067,
+          98.43387118965944,
+          188.39797797974677,
+          420.87037488986357,
+          690.1291017087852
+        ],
+        "qualified_count": 0,
+        "covariance": null,
+        "id": "none",
+        "post_count": 0,
+        "log_amplitude": null,
+        "raw_count": 0,
+        "summary_count": 0,
+        "diagnostic_observed": null
+      },
+      {
+        "values_center_p5_p25_p75_p95": [
+          286.3654044452519,
+          111.09867725055624,
+          199.96024370006322,
+          422.83378386475533,
+          676.3960822896657
+        ],
+        "qualified_count": 1,
+        "covariance": [
+          0.0669764696633626,
+          0,
+          0,
+          0
+        ],
+        "id": "future400",
+        "post_count": 1,
+        "log_amplitude": 0.26662695519252766,
+        "raw_count": 1,
+        "summary_count": 1,
+        "diagnostic_observed": 400
+      },
+      {
+        "values_center_p5_p25_p75_p95": [
+          312.80364230757635,
+          127.39016839851462,
+          222.01701059911832,
+          454.93031896694185,
+          716.8256943837143
+        ],
+        "qualified_count": 1,
+        "covariance": [
+          0.06697646966324453,
+          0,
+          0,
+          0
+        ],
+        "id": "future800",
+        "post_count": 1,
+        "log_amplitude": 0.8087924734175811,
+        "raw_count": 1,
+        "summary_count": 1,
+        "diagnostic_observed": 800
+      },
+      {
+        "values_center_p5_p25_p75_p95": [
+          285.42199380034674,
+          113.36629324858805,
+          200.56207856428833,
+          419.62463657909393,
+          669.4202197608105
+        ],
+        "qualified_count": 2,
+        "covariance": [
+          0.037581214179008955,
+          0,
+          0,
+          0
+        ],
+        "id": "same_time_two",
+        "post_count": 2,
+        "log_amplitude": 0.24060897950549537,
+        "raw_count": 2,
+        "summary_count": 2,
+        "diagnostic_observed": 350
+      }
+    ],
+    "synthetic_only": true,
+    "now": "2026-10-25T01:10:00Z",
+    "query": "2026-10-25T00:40:00Z",
+    "sample": "2026-10-25T00:45:00Z"
+  },
+  "after": {
+    "dose": "2026-10-24T23:54:00Z",
+    "seconds": 0.032675397,
+    "cases": [
+      {
+        "values_center_p5_p25_p75_p95": [
+          277.76820206203246,
+          98.43387118963881,
+          188.39797797970726,
+          420.8703748897754,
+          690.1291017086405
+        ],
+        "qualified_count": 0,
+        "after_sample_count": 0,
+        "id": "none",
+        "post_count": 0,
+        "after_sample_values": [
+          281.5760663454282,
+          99.78327986779881,
+          190.98068516536526,
+          426.6399959500156,
+          699.5899324942374
+        ],
+        "raw_count": 0,
+        "summary_count": 0,
+        "diagnostic_observed": null
+      },
+      {
+        "values_center_p5_p25_p75_p95": [
+          277.76820206203246,
+          98.43387118963881,
+          188.39797797970726,
+          420.8703748897754,
+          690.1291017086405
+        ],
+        "qualified_count": 1,
+        "after_sample_count": 1,
+        "id": "future400",
+        "post_count": 0,
+        "after_sample_values": [
+          367.6125698233689,
+          226.52632744801966,
+          306.6900602066328,
+          446.28881140977006,
+          562.1567396535158
+        ],
+        "raw_count": 1,
+        "summary_count": 0,
+        "diagnostic_observed": null
+      },
+      {
+        "values_center_p5_p25_p75_p95": [
+          277.76820206203246,
+          98.43387118963881,
+          188.39797797970726,
+          420.8703748897754,
+          690.1291017086405
+        ],
+        "qualified_count": 1,
+        "after_sample_count": 1,
+        "id": "future800",
+        "post_count": 0,
+        "after_sample_values": [
+          632.193237163214,
+          389.56342630212,
+          527.4231565612745,
+          767.4948887911555,
+          966.7560856401088
+        ],
+        "raw_count": 1,
+        "summary_count": 0,
+        "diagnostic_observed": null
+      },
+      {
+        "values_center_p5_p25_p75_p95": [
+          277.76820206203246,
+          98.43387118963881,
+          188.39797797970726,
+          420.8703748897754,
+          690.1291017086405
+        ],
+        "qualified_count": 2,
+        "after_sample_count": 2,
+        "id": "same_time_two",
+        "post_count": 0,
+        "after_sample_values": [
+          358.1713877255176,
+          249.21949471408558,
+          312.7129226543597,
+          414.17326971392527,
+          492.34579488606227
+        ],
+        "raw_count": 2,
+        "summary_count": 0,
+        "diagnostic_observed": null
+      }
+    ],
+    "synthetic_only": true,
+    "now": "2026-10-25T01:10:00Z",
+    "query": "2026-10-25T00:40:00Z",
+    "sample": "2026-10-25T00:45:00Z"
+  },
+  "unresolved": [
+    "P1-C2 all-outlier bookkeeping",
+    "No result-known timestamp: reconstruction is by sampling time",
+    "P2 population/external clinical accuracy not established"
+  ]
+}

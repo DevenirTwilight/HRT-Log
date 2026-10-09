@@ -21,6 +21,9 @@ import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.ensureActive
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -41,6 +44,9 @@ class ChartData(
     val range: Pair<Double, Double>? = null,
     val unit: String = "",
     val includeBandsInScale:Boolean = false,
+    val breaks:DoubleArray = doubleArrayOf(),
+    /** Optional query-local model evaluation. Invoked on Default, outside Canvas, with cancellation. */
+    val readAt:((Double,()->Unit)->Double?)? = null,
 )
 
 private fun niceStep(span: Double, target: Int): Double {
@@ -63,6 +69,15 @@ private fun niceStep(span: Double, target: Int): Double {
     var start by remember(initialStart,initialEnd,minX,maxX) { mutableDoubleStateOf(max(minX, initialStart)) }
     var end by remember(initialStart,initialEnd,minX,maxX) { mutableDoubleStateOf(min(maxX, initialEnd)) }
     var tapX by remember(data) { mutableStateOf<Double?>(null) }
+    var tapValue by remember(data) { mutableStateOf<Pair<Double,Double>?>(null) }
+    LaunchedEffect(data,tapX) {
+        tapValue=null
+        tapX?.let { tx ->
+            val value=if(data.readAt!=null)withContext(Dispatchers.Default){data.readAt.invoke(tx){ensureActive()}} else null
+            value?.let{tapValue=tx to it}
+        }
+    }
+    fun valueAtTap(tx:Double):Double? = if(data.readAt==null)net.plainnotes.app.pk.Pk.interpolate(data.x,data.y,tx) else tapValue?.takeIf{it.first==tx}?.second
     val density = LocalDensity.current
     val locale = androidx.compose.ui.platform.LocalConfiguration.current.locales[0]
     val h24 = android.text.format.DateFormat.is24HourFormat(androidx.compose.ui.platform.LocalContext.current)
@@ -103,33 +118,36 @@ private fun niceStep(span: Double, target: Int): Double {
             data.range?.let { (lo, hi) -> drawRect(rangeColor.copy(alpha = 0.10f), Offset(leftPad, py(hi)), androidx.compose.ui.geometry.Size(w, py(lo) - py(hi))) }
             drawTimeAxis(measurer, labelStyle, start, end, ::px, size.height - bottomPad, grid, hourFmt, dayFmt)
             clipRectSafe(leftPad, topPad, size.width, topPad+h) {
-                fun bandPath(b: Pair<DoubleArray, DoubleArray>): Path = Path().apply {
+                fun bandPath(b: Pair<DoubleArray, DoubleArray>, indices:IntRange): Path = Path().apply {
                     var first = true
-                    for (i in data.x.indices) { if (data.x[i] < start - 48 || data.x[i] > end + 48) continue; val p = Offset(px(data.x[i]), py(b.second[i])); if (first) { moveTo(p.x, p.y); first = false } else lineTo(p.x, p.y) }
-                    for (i in data.x.indices.reversed()) { if (data.x[i] < start - 48 || data.x[i] > end + 48) continue; lineTo(px(data.x[i]), py(b.first[i])) }
+                    for (i in indices) { if (data.x[i] < start - 48 || data.x[i] > end + 48) continue; val p = Offset(px(data.x[i]), py(b.second[i])); if (first) { moveTo(p.x, p.y); first = false } else lineTo(p.x, p.y) }
+                    for (i in indices.reversed()) { if (data.x[i] < start - 48 || data.x[i] > end + 48) continue; lineTo(px(data.x[i]), py(b.first[i])) }
                     close()
                 }
-                data.band95?.let { drawPath(bandPath(it), band.copy(alpha = 0.10f)) }
-                data.band68?.let { drawPath(bandPath(it), band.copy(alpha = 0.16f)) }
+                ChartViewport.segments(data.x,data.breaks).forEach { range -> data.band95?.let { drawPath(bandPath(it,range), band.copy(alpha = 0.10f)) } }
+                ChartViewport.segments(data.x,data.breaks).forEach { range -> data.band68?.let { drawPath(bandPath(it,range), band.copy(alpha = 0.16f)) } }
                 val solid = Path(); val dashed = Path(); var sStarted = false; var dStarted = false
-                for ((x,y) in ChartViewport.samples(data.x,data.y,start,end,data.splitX)) {
+                for (segment in ChartViewport.segmentSamples(data.x,data.y,start,end,data.splitX,data.breaks)) {
+                  sStarted=false;dStarted=false
+                  for ((x,y) in segment) {
                     val p = Offset(px(x), py(y))
                     if(data.splitX==null || x<=data.splitX){if(!sStarted){solid.moveTo(p.x,p.y);sStarted=true}else solid.lineTo(p.x,p.y)}
                     if(data.splitX!=null && x>=data.splitX){if(!dStarted){dashed.moveTo(p.x,p.y);dStarted=true}else dashed.lineTo(p.x,p.y)}
+                }
                 }
                 drawPath(solid, line, style = Stroke(width = 2.5.dp.toPx(), cap = StrokeCap.Round, join = StrokeJoin.Round))
                 drawPath(dashed, line.copy(alpha = 0.75f), style = Stroke(width = 2.dp.toPx(), cap = StrokeCap.Round, pathEffect = PathEffect.dashPathEffect(floatArrayOf(14f, 10f))))
                 data.splitX?.takeIf { it in start..end }?.let { drawLine(nowColor.copy(alpha = 0.7f), Offset(px(it), topPad), Offset(px(it), topPad + h), 1.5f, pathEffect = PathEffect.dashPathEffect(floatArrayOf(4f, 6f))) }
                 data.points.forEach { (x, y) -> if (x in start..end) { drawCircle(Color.White, 6.dp.toPx(), Offset(px(x), py(y))); drawCircle(labColor, 4.5.dp.toPx(), Offset(px(x), py(y))) } }
                 tapX?.let { tx ->
-                    net.plainnotes.app.pk.Pk.interpolate(data.x, data.y, tx)?.let { ty ->
+                    valueAtTap(tx)?.let { ty ->
                         drawLine(textColor.copy(alpha = 0.5f), Offset(px(tx), topPad), Offset(px(tx), topPad + h), 1f)
                         drawCircle(line, 5.dp.toPx(), Offset(px(tx), py(ty)))
                     }
                 }
             }
         }
-        tapX?.let { tx -> net.plainnotes.app.pk.Pk.interpolate(data.x, data.y, tx)?.let { ty ->
+        tapX?.let { tx -> valueAtTap(tx)?.let { ty ->
             Surface(color = c.inverseSurface, contentColor = c.inverseOnSurface, shape = MaterialTheme.shapes.small, modifier = Modifier.padding(start = 52.dp, top = 4.dp)) {
                 val time = Instant.ofEpochMilli((tx * 3_600_000).toLong())
                 Text("${formatDateTime(time)}  ·  ${valueLabel(ty)} ${data.unit}", Modifier.padding(horizontal = 8.dp, vertical = 4.dp), style = MaterialTheme.typography.labelMedium)

@@ -1,0 +1,102 @@
+{
+  "dose": "2026-10-24T23:54:00Z",
+  "seconds": 0.032675397,
+  "cases": [
+    {
+      "values_center_p5_p25_p75_p95": [
+        277.76820206203246,
+        98.43387118963881,
+        188.39797797970726,
+        420.8703748897754,
+        690.1291017086405
+      ],
+      "qualified_count": 0,
+      "after_sample_count": 0,
+      "id": "none",
+      "post_count": 0,
+      "after_sample_values": [
+        281.5760663454282,
+        99.78327986779881,
+        190.98068516536526,
+        426.6399959500156,
+        699.5899324942374
+      ],
+      "raw_count": 0,
+      "summary_count": 0,
+      "diagnostic_observed": null
+    },
+    {
+      "values_center_p5_p25_p75_p95": [
+        277.76820206203246,
+        98.43387118963881,
+        188.39797797970726,
+        420.8703748897754,
+        690.1291017086405
+      ],
+      "qualified_count": 1,
+      "after_sample_count": 1,
+      "id": "future400",
+      "post_count": 0,
+      "after_sample_values": [
+        367.6125698233689,
+        226.52632744801966,
+        306.6900602066328,
+        446.28881140977006,
+        562.1567396535158
+      ],
+      "raw_count": 1,
+      "summary_count": 0,
+      "diagnostic_observed": null
+    },
+    {
+      "values_center_p5_p25_p75_p95": [
+        277.76820206203246,
+        98.43387118963881,
+        188.39797797970726,
+        420.8703748897754,
+        690.1291017086405
+      ],
+      "qualified_count": 1,
+      "after_sample_count": 1,
+      "id": "future800",
+      "post_count": 0,
+      "after_sample_values": [
+        632.193237163214,
+        389.56342630212,
+        527.4231565612745,
+        767.4948887911555,
+        966.7560856401088
+      ],
+      "raw_count": 1,
+      "summary_count": 0,
+      "diagnostic_observed": null
+    },
+    {
+      "values_center_p5_p25_p75_p95": [
+        277.76820206203246,
+        98.43387118963881,
+        188.39797797970726,
+        420.8703748897754,
+        690.1291017086405
+      ],
+      "qualified_count": 2,
+      "after_sample_count": 2,
+      "id": "same_time_two",
+      "post_count": 0,
+      "after_sample_values": [
+        358.1713877255176,
+        249.21949471408558,
+        312.7129226543597,
+        414.17326971392527,
+        492.34579488606227
+      ],
+      "raw_count": 2,
+      "summary_count": 0,
+      "diagnostic_observed": null
+    }
+  ],
+  "synthetic_only": true,
+  "now": "2026-10-25T01:10:00Z",
+  "query": "2026-10-25T00:40:00Z",
+  "sample": "2026-10-25T00:45:00Z"
+}

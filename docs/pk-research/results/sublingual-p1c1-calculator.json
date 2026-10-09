@@ -1,0 +1,42 @@
+{
+  "causal_interpolation_leak": {
+    "sample_age_min": 25,
+    "evaluation_age_min": 30,
+    "with_later_lab_historical_pg_ml": 157.34652476746737,
+    "still_unfixed": false,
+    "population_historical_pg_ml": 157.34652476746737
+  },
+  "single_dose": {
+    "actual_calculator_off_pg_ml": 277.76798707874434,
+    "synthetic_400_pg_ml_lab_on": 368.3183698246684,
+    "direct_engine_46min_pg_ml": 278.86477960569,
+    "calibrated_rate": 1,
+    "calibrated_amplitude": 1.3259928679983342
+  },
+  "time_and_frozen_route": {
+    "sample_zone_label_does_not_shift_epoch": true,
+    "uses_taken_not_scheduled": true,
+    "actual_dose_revision_applied": true,
+    "dst_fold_actual_elapsed_min": 46,
+    "current_oral_EV_does_not_overwrite_historical_E2_SL": true
+  },
+  "missing_context_false_baseline": {
+    "baseline_pg_ml": null,
+    "warning_present": true,
+    "skipped": 1
+  },
+  "history_window_false_baseline": {
+    "used_doses": 1,
+    "baseline_pg_ml": null,
+    "population_current_pg_ml": 277.76798707874434,
+    "gated_current_pg_ml": 277.76798707874434,
+    "history_days": 180,
+    "untruncated_baseline": null,
+    "lab_age_days": 200,
+    "provided_record_age_days": 201
+  },
+  "filters_and_units": {
+    "skipped_deleted_missed_contribute": false,
+    "pg_ml_pmol_l_equivalent": true
+  }
+}

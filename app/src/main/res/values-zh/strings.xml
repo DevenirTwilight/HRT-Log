@@ -102,7 +102,7 @@
 <string name="calib_amplitude">整体幅度系数</string>
 <string name="calib_baseline">用药前基线：%1$s %2$s（已叠加到曲线上）</string>
 <string name="calib_causal">因果</string>
-<string name="calib_causal_desc">因果拟合在网格点限制化验时间；已知的插值和摘要问题仍可能使用后来化验，尚不能保证严格的过去时点预测。</string>
+<string name="calib_causal_desc">每个查询时刻只使用此前或此时采样且历史合格的化验；未来预测不使用晚于本次会话的采样。</string>
 <string name="calib_clearance">模型速率系数</string>
 <string name="calib_convergence">收敛度</string>
 <string name="calib_enable">用我的 E2 化验校准</string>
@@ -115,7 +115,7 @@
 <string name="calib_no_labs">还没有 E2 化验结果。添加后即可让曲线贴近你本人。</string>
 <string name="calib_outlier">最近一次化验与模型差异很大。离群标记不一定代表实际排除。请核对数值、单位和采样时间。</string>
 <string name="calib_retro">回溯</string>
-<string name="calib_retro_desc">用全部化验学到的参数作用于整条曲线（默认）。</string>
+<string name="calib_retro_desc">后来合格的化验可重新解释早期曲线；这是回顾式重建，不代表当时已经能作出的预测。</string>
 <string name="calib_title">化验校准</string>
 <string name="change_dose">修改剂量</string>
 <string name="change_time">修改时间</string>
@@ -976,10 +976,10 @@
     <string name="picker_date">日期（YYYY-MM-DD）</string>
     <string name="period_records">查看用药记录</string>
     <string name="period_inferred">由用药记录推定</string>
-<string name="calib_safety_limits">校准仍为实验功能：历史不完整、过去配置未知、因果边界及离群处理问题可能误导。数值稳定不代表个人预测准确。</string>
+<string name="calib_safety_limits">校准仍为实验功能：未记录的历史、过去配置未知及尚未修复的离群计数问题可能误导。数值稳定不代表个人预测准确。</string>
 <string name="calib_rate_fixed">模型速率固定</string>
 <string name="calib_rate_non_sl">非舌下模型速率</string>
-<string name="calib_history_counts">历史门控：%1$d 条合格，%2$d 条未纳入。观测仍保留；离群处理另行判断。</string>
+<string name="calib_history_counts">查询时可用：%1$d · 未纳入：%2$d</string>
 <string name="calib_history_population">没有合格化验：显示人口模型及参数不确定性，不添加化验推断的基线。</string>
 <string name="calib_history_details">查看校准资格</string>
 <string name="calib_history_eligible">通过历史门控；仅开启校准时使用，仍可能受离群处理影响。</string>
@@ -996,4 +996,8 @@
 <string name="calib_history_resource">历史核对超过计算预算，需要审查。</string>
 <string name="calib_history_done">关闭</string>
 <string name="calib_history_not_fitted">个人校准已关闭或不可用，原始观测仍保留。</string>
+<string name="calib_time_pending">历史资格合格，但采样晚于查询时刻：此时尚不使用。</string>
+<string name="calib_sample_time_semantics">因果重建按采样时间截止，不代表当时已经获知结果；回顾式可用后来合格的化验重新解释早期曲线。</string>
+<string name="calib_evaluation_time">摘要评估时刻：%1$s，按采样时间判定可用性。</string>
+<string name="calib_no_available_sample">此查询时刻尚无可用的合格采样，或校准已关闭；原始观测保留。</string>
 </resources>

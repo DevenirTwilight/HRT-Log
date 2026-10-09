@@ -33,8 +33,8 @@ object CalibrationEligibility {
             .mapValues { (_, rows) -> rows.minBy { it.timeH ?: Double.NEGATIVE_INFINITY } }
         val omitted = related.filter { !it.included && it.event != null }.sortedBy { it.timeH }
         val includedSl = related.filter { it.included && it.event?.route == Route.SUBLINGUAL }
-        val residualBudget = (omitted.size.toLong() + includedSl.size) * samples.size <= MAX_RESIDUAL_WORK
-        return samples.map { (id, time) ->
+        var residualWork = 0L
+        val decisions = samples.sortedWith(compareBy<Pair<Long,Double>> { it.second }.thenBy { it.first }).map { (id, time) ->
             checkCancelled()
             val reasons = linkedSetOf<EligibilityReason>(); val evidence = linkedSetOf<Long>()
             val baseline = if (firstKnown?.timeH?.let { it <= time } == true) BaselineEligibility.NOT_PRE_TREATMENT else BaselineEligibility.UNKNOWN
@@ -50,8 +50,10 @@ object CalibrationEligibility {
             if (baseline == BaselineEligibility.UNKNOWN) reasons += EligibilityReason.NO_TREATMENT_EVIDENCE
             var logFraction: Double? = null
             if (omitted.firstOrNull()?.timeH?.let { it <= time } == true) {
-                if (!residualBudget) reasons += EligibilityReason.RESOURCE_LIMIT
+                val cost = omitted.size.toLong() + includedSl.size
+                if (residualWork + cost > MAX_RESIDUAL_WORK) reasons += EligibilityReason.RESOURCE_LIMIT
                 else {
+                    residualWork += cost
                     val relevantOmitted = omitted.takeWhile { it.timeH!! <= time }
                     if (relevantOmitted.any { it.event!!.route != Route.SUBLINGUAL }) reasons += EligibilityReason.OMITTED_EXPOSURE
                     else {
@@ -68,6 +70,8 @@ object CalibrationEligibility {
             if (!read.completeSavedRead && frozen == FrozenCoverage.KNOWN) frozen = FrozenCoverage.UNKNOWN
             LabEligibility(id,time,coverage,frozen,baseline,when { reasons.isEmpty() -> FitEligibility.ELIGIBLE; unknown -> FitEligibility.NEEDS_REVIEW; else -> FitEligibility.EXCLUDED },reasons,evidence,fromH,read.throughH,logFraction)
         }
+        val byId = decisions.associateBy { it.labId }
+        return samples.map { byId.getValue(it.first) }
     }
 
     private fun concentration(e: DoseEvent, time: Double): Double {

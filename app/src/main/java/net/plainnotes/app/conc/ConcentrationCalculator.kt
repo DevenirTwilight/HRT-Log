@@ -34,6 +34,8 @@ data class Missing(val medicationId: Long?, val input: MissingInput)
 
 class CalibrationSummary(val model: LabFitModel, val diagnostics: LabDiagnostics?, val labCount: Int)
 
+data class ConcentrationEvaluation(val timeH: Double, val center: Double, val p5: Double, val p25: Double, val p75: Double, val p95: Double, val calibration: CalibrationSummary?)
+
 class ConcentrationResult(
     val missing: List<Missing>,
     val timeH: DoubleArray,
@@ -57,7 +59,15 @@ class ConcentrationResult(
     /** Medications with doses but no curve, and why (no reliable literature). */
     val unsupported: Map<Long, Unsupported> = emptyMap(),
     val labEligibility: List<LabEligibility> = emptyList(),
-)
+    val evaluationH: Double = nowH,
+    val mode: CalibrationMode = CalibrationMode.RETROSPECTIVE,
+    /** Graph must never connect points across these fit-change boundaries. */
+    val calibrationBreaks: DoubleArray = doubleArrayOf(),
+    val currentEvaluation: ConcentrationEvaluation? = null,
+    private val evaluator: ((Double, () -> Unit) -> ConcentrationEvaluation?)? = null,
+) {
+    fun evaluateAt(hour:Double, checkCancelled:()->Unit = {}):ConcentrationEvaluation? = evaluator?.invoke(hour,checkCancelled)
+}
 
 object ConcentrationCalculator {
     /** Existing snapshot metadata: v2 changes SL calibration/parameter bands, not population parameters. */
@@ -102,7 +112,7 @@ object ConcentrationCalculator {
 
     fun compute(
         medications: List<MedicationEntity>, profiles: Map<Long, ProfileEntity>, records: List<RecordEntity>, planned: List<TimelineEntry>,
-        labs: List<LabValueEntity>, weightKg: Double?, now: Instant, calibrate: Boolean = true, mode: CalibrationMode = CalibrationMode.RETROSPECTIVE, plannedSnapshots: Map<Long,String> = emptyMap(), historyRead: HistoryRead = HistoryRead(), checkCancelled: () -> Unit = {},
+        labs: List<LabValueEntity>, weightKg: Double?, now: Instant, calibrate: Boolean = true, mode: CalibrationMode = CalibrationMode.RETROSPECTIVE, plannedSnapshots: Map<Long,String> = emptyMap(), historyRead: HistoryRead = HistoryRead(), checkCancelled: () -> Unit = {}, evaluationTime: Instant = now,
     ): ConcentrationResult {
         val nowH = hours(now)
         val missing = mutableListOf<Missing>()
@@ -198,18 +208,37 @@ object ConcentrationCalculator {
         }
         val eligibility=CalibrationEligibility.evaluate(e2Labs.map { it.id to hours(it.sampled_utc) },evidence,historyStart,historyRead,checkCancelled)
         if (events.isEmpty())
-            return ConcentrationResult(missing.distinct(), DoubleArray(0), DoubleArray(0), null, null, nowH, null, labPoints, null, used, skipped, active, labEligibility=eligibility)
+            return ConcentrationResult(missing.distinct(), DoubleArray(0), DoubleArray(0), null, null, nowH, null, labPoints, null, used, skipped, active, labEligibility=eligibility,evaluationH=hours(evaluationTime),mode=mode)
         val grid = Engine.gridFor(events, horizon)
         val base = Engine.simulate(events, grid = grid)!!
         val unsupported = base.unsupported.mapNotNull { (id, why) -> medOfEvent[id]?.let { it to why } }.toMap()
         val qualifiedIds=eligibility.filter { it.eligible }.map { it.labId }.toSet()
         val labResults = if (calibrate) e2Labs.filter { it.id in qualifiedIds }.map { LabResult("l${it.id}", hours(it.sampled_utc), it.value, if (it.unit == "pmol/L") LabUnit.PMOL_L else LabUnit.PG_ML) } else emptyList()
-        val bands = LabFit.bands(events, grid, labResults, mode)
-        val summary = if (labResults.isNotEmpty() && base.curves.containsKey(Curve.E2))
-            CalibrationSummary(LabFit.fit(events, labResults), LabFit.lastDiagnostics(events, labResults), labResults.size) else null
+        val availableThrough = minOf(nowH,historyRead.throughH.takeIf{it.isFinite()} ?: nowH)
+        val usableLabs = labResults.filter { it.timeH <= availableThrough }
+        val immutableEvents = events.toList()
+        val bands = LabFit.bands(immutableEvents, grid, usableLabs, mode,checkCancelled=checkCancelled)
+        val evaluationH = hours(evaluationTime)
+        val evaluator: (Double,()->Unit)->ConcentrationEvaluation? = { time,cancel ->
+            if (mode == CalibrationMode.CAUSAL && calibrate) {
+                LabFit.evaluateAt(immutableEvents,grid,usableLabs,time,mode,availableThrough,checkCancelled=cancel)?.let { v ->
+                    ConcentrationEvaluation(time,v.center,v.p5,v.p25,v.p75,v.p95,
+                        if(v.labCount==0)null else CalibrationSummary(v.model,v.diagnostics,v.labCount))
+                }
+            } else {
+                cancel()
+                bands[Curve.E2]?.let { b ->
+                    fun v(a:DoubleArray)=Pk.interpolate(grid,a,time)!!
+                    ConcentrationEvaluation(time,v(b.center),v(b.p5),v(b.p25),v(b.p75),v(b.p95),
+                        if(usableLabs.isEmpty())null else CalibrationSummary(LabFit.fit(immutableEvents,usableLabs),LabFit.lastDiagnostics(immutableEvents,usableLabs),usableLabs.size))
+                }
+            }
+        }
+        val current = evaluator(evaluationH,checkCancelled)
         val e2 = bands[Curve.E2]
         return ConcentrationResult(missing.distinct(), grid, e2?.center ?: DoubleArray(grid.size), e2?.let { it.p25 to it.p75 }, e2?.let { it.p5 to it.p95 },
-            nowH, e2?.let { Pk.interpolate(grid, it.center, nowH) }, labPoints, summary, used, skipped, active,
-            bands.filterKeys { it != Curve.E2 }, base.flags, base.models, unsupported, eligibility)
+            nowH, current?.center, labPoints, current?.calibration, used, skipped, active,
+            bands.filterKeys { it != Curve.E2 }, base.flags, base.models, unsupported, eligibility,evaluationH,mode,
+            if(mode==CalibrationMode.CAUSAL)usableLabs.map{it.timeH}.distinct().sorted().toDoubleArray() else doubleArrayOf(),current,evaluator)
     }
 }

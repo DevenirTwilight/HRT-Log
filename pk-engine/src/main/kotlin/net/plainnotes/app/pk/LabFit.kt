@@ -39,6 +39,10 @@ data class LabDiagnostics(val predictedPGmL: Double, val observedPGmL: Double, v
 /** Curve with its 5 %–95 % and 25 %–75 % bands (Monte Carlo). */
 class BandedCurve(val timeH: DoubleArray, val center: DoubleArray, val p5: DoubleArray, val p25: DoubleArray, val p75: DoubleArray, val p95: DoubleArray)
 
+/** Query-specific center, quantiles and fit, from one sample-time prefix. */
+data class LabEvaluation(val timeH: Double, val center: Double, val p5: Double, val p25: Double, val p75: Double, val p95: Double,
+    val model: LabFitModel, val diagnostics: LabDiagnostics?, val labCount: Int)
+
 object LabFit {
     /** Version 1 scaled all E2 rates; version 2 fixes entire SL events and estimates their amplitude only. */
     const val ALGORITHM_VERSION = 2
@@ -78,7 +82,7 @@ object LabFit {
     fun fit(events: List<DoseEvent>, labs: List<LabResult>, untilH: Double = Double.POSITIVE_INFINITY, confirmedBaselineLabIds: Set<String> = emptySet()): LabFitModel {
         val sdA = priorSdAmplitude(events)
         val firstDose = events.filter { it.route != Route.PATCH_REMOVE && (Engine.choose(it) as? ModelChoice.Use)?.parts?.any { part -> part.first == Curve.E2 } == true }.minOfOrNull { it.timeH } ?: return LabFitModel(priorSdAmplitude = sdA)
-        val used = labs.filter { it.timeH <= untilH }.sortedBy { it.timeH }
+        val used = labs.filter { it.timeH <= untilH }.sortedWith(compareBy<LabResult> { it.timeH }.thenBy { it.id })
         // Caller must independently confirm pre-treatment status; event-list start is not evidence.
         val baselineLabs = used.filter { it.id in confirmedBaselineLabIds && it.timeH < firstDose && it.concValue > 0 }
         val baseline = baselineLabs.takeIf { it.isNotEmpty() }?.map { toPgMl(it.concValue, it.unit) }?.average()
@@ -178,10 +182,10 @@ object LabFit {
 
     /** Diagnostics for the most recent lab against the fit from the labs before it. */
     fun lastDiagnostics(events: List<DoseEvent>, labs: List<LabResult>, confirmedBaselineLabIds: Set<String> = emptySet()): LabDiagnostics? {
-        val sorted = labs.sortedBy { it.timeH }
+        val sorted = labs.sortedWith(compareBy<LabResult> { it.timeH }.thenBy { it.id })
         val last = sorted.lastOrNull() ?: return null
         if (events.isEmpty()) return null
-        val before = fit(events, sorted.dropLast(1), last.timeH - 1e-6, confirmedBaselineLabIds)
+        val before = fit(events, sorted.filter { it.timeH < last.timeH }, last.timeH, confirmedBaselineLabIds)
         val pred = e2At(events, doubleArrayOf(last.timeH), before.logAmplitude, before.logRate)[0] + (before.baselinePGmL ?: 0.0)
         val obs = toPgMl(last.concValue, last.unit)
         val res = ln(obs) - ln(pred + 1e-9)
@@ -192,8 +196,13 @@ object LabFit {
      * Monte Carlo bands for every curve. Estradiol uses parameter uncertainty only (not predictive error or structural uncertainty), other curves
      * use their model's between-person variability. Fixed seed so the bands do not flicker between redraws.
      */
-    fun bands(events: List<DoseEvent>, grid: DoubleArray, labs: List<LabResult>, mode: CalibrationMode, samples: Int = SAMPLES, confirmedBaselineLabIds: Set<String> = emptySet()): Map<Curve, BandedCurve> {
-        val fits = segmentFits(events, labs, mode, grid, confirmedBaselineLabIds)
+    fun bands(events: List<DoseEvent>, grid: DoubleArray, labs: List<LabResult>, mode: CalibrationMode, samples: Int = SAMPLES, confirmedBaselineLabIds: Set<String> = emptySet(), checkCancelled: () -> Unit = {}): Map<Curve, BandedCurve> =
+        bandsWithFit(events,grid,labs,mode,samples,confirmedBaselineLabIds,checkCancelled,null)
+
+    private fun bandsWithFit(events: List<DoseEvent>, grid: DoubleArray, labs: List<LabResult>, mode: CalibrationMode, samples: Int, confirmedBaselineLabIds: Set<String>, checkCancelled: () -> Unit, fixedFit: LabFitModel?): Map<Curve, BandedCurve> {
+        require(samples > 0 && grid.all { it.isFinite() } && (1 until grid.size).all { grid[it-1] <= grid[it] })
+        checkCancelled()
+        val fits = fixedFit?.let { listOf(Double.NEGATIVE_INFINITY to it) } ?: segmentFits(events, labs, mode, grid, confirmedBaselineLabIds, checkCancelled)
         val base = Engine.simulate(events, grid = grid) ?: return emptyMap()
         val fixedPopulation = base.curves[Curve.E2]?.takeIf { !rateAdjustable(events) }
         val center = HashMap<Curve, DoubleArray>()
@@ -204,6 +213,7 @@ object LabFit {
         // Non-estradiol curves are sampled from their own events only (estradiol is handled by the lab fit).
         val otherEvents = events.filter { e -> (Engine.choose(e) as? ModelChoice.Use)?.parts?.any { it.first != Curve.E2 } == true }
         for (k in 0 until samples) {
+            checkCancelled()
             val z = DoubleArray(4) { rnd.nextGaussian() }
             // Estradiol: correlated draw from each segment's posterior.
             val e2 = e2Curve(events, grid, fits, fixedPopulation) { m ->
@@ -229,12 +239,38 @@ object LabFit {
         }
     }
 
+    /** P1-C1: caller supplies history-qualified labs. Sample-time availability is enforced here too.
+     * Two bracketing population-grid points use ONE query-specific fit; never interpolate two causal fits.
+     * Preserves the existing population interpolation error; outside the grid evaluates the requested point.
+     * Only 1/2 points are sampled, not 200 complete long-history curves. */
+    fun evaluateAt(events: List<DoseEvent>, populationGrid: DoubleArray, qualifiedLabs: List<LabResult>, timeH: Double,
+        mode: CalibrationMode, availableThroughH: Double, samples: Int = SAMPLES, checkCancelled: () -> Unit = {}): LabEvaluation? {
+        require(timeH.isFinite() && availableThroughH.isFinite() && populationGrid.all { it.isFinite() } && (1 until populationGrid.size).all { populationGrid[it-1] <= populationGrid[it] })
+        checkCancelled()
+        val cutoff = if (mode == CalibrationMode.CAUSAL) min(timeH,availableThroughH) else availableThroughH
+        val prefix = qualifiedLabs.filter { it.timeH <= cutoff }.sortedWith(compareBy<LabResult> { it.timeH }.thenBy { it.id })
+        val model = fit(events,prefix)
+        val points = queryBracket(populationGrid,timeH)
+        val b = bandsWithFit(events,points,prefix,CalibrationMode.RETROSPECTIVE,samples,emptySet(),checkCancelled,model)[Curve.E2] ?: return null
+        fun value(a:DoubleArray) = Pk.interpolate(points,a,timeH)!!
+        checkCancelled()
+        return LabEvaluation(timeH,value(b.center),value(b.p5),value(b.p25),value(b.p75),value(b.p95),model,lastDiagnostics(events,prefix),prefix.size)
+    }
+
+    fun queryBracket(grid: DoubleArray, timeH: Double): DoubleArray {
+        if (grid.isEmpty() || timeH < grid.first() || timeH > grid.last()) return doubleArrayOf(timeH)
+        val i = lowerBound(grid,timeH)
+        return if (grid[i] == timeH) doubleArrayOf(timeH) else doubleArrayOf(grid[i-1],grid[i])
+    }
+    private fun lowerBound(a:DoubleArray,x:Double):Int { var lo=0;var hi=a.size
+        while(lo<hi){val m=(lo+hi) ushr 1;if(a[m]<x)lo=m+1 else hi=m};return lo }
+
     /** Fits that apply on each part of the grid: one for retrospective mode, one per lab interval for causal mode. */
-    private fun segmentFits(events: List<DoseEvent>, labs: List<LabResult>, mode: CalibrationMode, grid: DoubleArray, confirmedBaselineLabIds: Set<String>): List<Pair<Double, LabFitModel>> {
+    private fun segmentFits(events: List<DoseEvent>, labs: List<LabResult>, mode: CalibrationMode, grid: DoubleArray, confirmedBaselineLabIds: Set<String>, checkCancelled: () -> Unit): List<Pair<Double, LabFitModel>> {
         if (labs.isEmpty()) return listOf(Double.NEGATIVE_INFINITY to fit(events, emptyList()))
         if (mode == CalibrationMode.RETROSPECTIVE) return listOf(Double.NEGATIVE_INFINITY to fit(events, labs, confirmedBaselineLabIds = confirmedBaselineLabIds))
         val times = labs.map { it.timeH }.distinct().sorted()
-        return listOf(Double.NEGATIVE_INFINITY to fit(events, emptyList())) + times.map { t -> t to fit(events, labs, t, confirmedBaselineLabIds) }
+        return listOf(Double.NEGATIVE_INFINITY to fit(events, emptyList())) + times.filter { it <= (grid.lastOrNull() ?: Double.NEGATIVE_INFINITY) }.map { t -> checkCancelled(); t to fit(events, labs, t, confirmedBaselineLabIds) }
     }
 
     /** Estradiol curve where each grid point uses the fit of its segment; baseline added. */
@@ -243,9 +279,11 @@ object LabFit {
         fits.forEachIndexed { idx, (from, m) ->
             val to = fits.getOrNull(idx + 1)?.first ?: Double.POSITIVE_INFINITY
             val (u, v) = param(m)
-            val curve = fixedPopulation?.let { population -> DoubleArray(grid.size) { population[it] * exp(u) } }
-                ?: e2At(events, grid, u, v)
-            for (i in grid.indices) if (grid[i] >= from && grid[i] < to) out[i] = curve[i] + (m.baselinePGmL ?: 0.0)
+            val first = lowerBound(grid, from); val last = lowerBound(grid, to)
+            if (first == last) return@forEachIndexed
+            val curve = if (fixedPopulation != null) DoubleArray(last-first) { fixedPopulation[first+it] * exp(u) }
+                else e2At(events, grid.copyOfRange(first,last), u, v)
+            for (i in first until last) out[i] = curve[i-first] + (m.baselinePGmL ?: 0.0)
         }
         return out
     }

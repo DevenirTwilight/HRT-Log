@@ -157,7 +157,7 @@ class SublingualP0AuditTest {
                 .put("excluded_ids", JSONArray(fit.excludedLabIds.toList())).put("observations", fit.postDoseObservationCount))
         }
         out.put("synthetic_fits", fits)
-        val file = File("build/reports/pk-p1b/engine-outputs.json"); file.parentFile.mkdirs(); file.writeText(out.toString(2) + "\n")
+        val file = File("build/reports/pk-p1c1/engine-outputs.json"); file.parentFile.mkdirs(); file.writeText(out.toString(2) + "\n")
         assertTrue(file.length() > 1000)
     }
 }

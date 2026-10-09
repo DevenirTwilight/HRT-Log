@@ -58,10 +58,25 @@ PK_BASELINE_OUTPUT=/tmp/non-sl-v1.json ./gradlew -PjvmOnly :pk-engine:test --tes
 ./gradlew :app:testFullDebugUnitTest --no-parallel --max-workers=2
 python3 tools/pk-audit/sublingual_compare.py --engine docs/pk-research/results/sublingual-p0-engine.json --calculator docs/pk-research/results/sublingual-p0-calculator.json --output /tmp/hrt-p0-replay
 python3 tools/pk-audit/sublingual_p1a_compare.py --engine docs/pk-research/results/sublingual-p1a-engine.json --calculator docs/pk-research/results/sublingual-p1a-calculator.json --stability docs/pk-research/results/sublingual-p1a-stability.json --output /tmp/hrt-p1a-replay
-python3 tools/pk-audit/sublingual_p1b_compare.py
+python3 tools/pk-audit/sublingual_p1b_compare.py --engine docs/pk-research/results/sublingual-p1b-engine.json --calculator docs/pk-research/results/sublingual-p1b-calculator.json --eligibility docs/pk-research/results/sublingual-p1b-eligibility.json --output /tmp/hrt-p1b-replay
 python3 -m unittest discover -s tools/pk-audit -p 'test_*.py'
 ```
 
 P1-B脚本检查实际Kotlin的资格/观测计数、两个修复反例、三个合格正例及部分合格子集；人口曲线/P1-A拟合/先验带与保存基线比对。新报告与engine/calculator/eligibility机器输入独立命名`sublingual-p1b-*`。9项Python含两项资格报告/反例污染检测；不能通过删除原始观测或添加假基线使报告通过。工程成功与科学临床准确性标志分开。
 
 起始b9a的实际双假基线重跑方法见P1-B验收记录及`legacy_p1b_baseline.kt`。该生成器只复制进旧detached工作树的测试目录运行，输出P1-B独立before JSON；不要把它放进正式应用/当前测试集。
+
+## P1-C1：同采样前缀的查询及旧证据重放
+
+当前Gradle生成路径为app/pk-engine的`build/reports/pk-p1c1`，不覆盖任何旧P0/P1-A/P1-B机器结果。
+
+```sh
+./gradlew -PjvmOnly :core:domain:test :pk-engine:test :importer:test --rerun-tasks --no-parallel --max-workers=2
+./gradlew :app:testFullDebugUnitTest --rerun --no-parallel --max-workers=2
+python3 tools/pk-audit/sublingual_p1c1_compare.py
+python3 -m unittest discover -s tools/pk-audit -p 'test_*.py'
+```
+
+11项Python。旧三轮均显式传保存输入并用/tmp或build输出（以上命令），只读重放其历史结论，不把旧C1错误标志视作当前未修。新报告检查实际P1-B合格未来400/800/同时间增删输入：历史中心/四条分位数/摘要诊断不变，采样后生效；人体现有准确性仍false。旧生成器`legacy_p1c1_baseline.kt`仅复制到d45a67a detached树的app测试，环境`P1C1_BEFORE_OUTPUT`指定独立before JSON。
+
+同机旧/新`p1c1_performance.kt`仅临时复制为app测试运行，环境`P1C1_PERF_OUTPUT`及`P1C1_PERF_COMMIT`指定输出/源码标签；2热身、5次、每批4个相同完整Calculator调用，不将临时测试留下进入完整app套件。heap delta受GC影响、不是峰值。复现/完整命令/失败修正及结果见P1-C1验收文档。

@@ -135,7 +135,8 @@ class CalibrationEligibilityTest {
         val facts=(0 until 3000).map{ i-> val t=if(i<1500)-5000.0 else -1.0
             ExposureEvidence(i.toLong(),t,"E2",DoseEvent("$i",Route.SUBLINGUAL,t,2.0,Ester.E2,80.0),i>=1500) }
         val results=CalibrationEligibility.evaluate((0 until 100).map{it.toLong() to 0.0},facts,-4320.0,HistoryRead(true,0.0))
-        assertTrue(results.all{EligibilityReason.RESOURCE_LIMIT in it.reasons && !it.eligible && it.fit==FitEligibility.NEEDS_REVIEW})
+        assertTrue(results.any{EligibilityReason.RESOURCE_LIMIT in it.reasons && !it.eligible && it.fit==FitEligibility.NEEDS_REVIEW})
+        val early=results.minBy{it.sampleH};assertTrue(early.eligible) // Future labs cannot consume an earlier query's budget.
     }
     @Test fun exportActualP1bQualificationAndNumericalCases() {
         val cases=linkedMapOf(
@@ -167,7 +168,7 @@ class CalibrationEligibilityTest {
         assertEquals(1000,outcomes.count{it.eligible})
         val out=org.json.JSONObject().put("synthetic_only",true).put("calculator_version",2).put("labfit_algorithm_version",2)
             .put("cases",rows).put("resource_test",org.json.JSONObject().put("facts",10000).put("labs",1000).put("seconds",seconds).put("eligible",1000))
-        val file=java.io.File("build/reports/pk-p1b/eligibility-audit.json");file.parentFile!!.mkdirs();file.writeText(out.toString(2)+"\n")
+        val file=java.io.File("build/reports/pk-p1c1/eligibility-audit.json");file.parentFile!!.mkdirs();file.writeText(out.toString(2)+"\n")
     }
 
 }

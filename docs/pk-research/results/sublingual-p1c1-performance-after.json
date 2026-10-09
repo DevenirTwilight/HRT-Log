@@ -1,0 +1,22 @@
+{
+  "source_commit": "P1-C1-final-production-working-tree",
+  "seconds": [
+    0.048867986,
+    0.08017977,
+    0.034783174,
+    0.063535758,
+    0.078420669
+  ],
+  "cases_per_batch": 4,
+  "heap_delta_bytes_not_peak": [
+    -14155776,
+    59768832,
+    -14684720,
+    -14675408,
+    -14709736
+  ],
+  "synthetic_only": true,
+  "warmups": 2,
+  "java_version": "21.0.12.1",
+  "repetitions": 5
+}

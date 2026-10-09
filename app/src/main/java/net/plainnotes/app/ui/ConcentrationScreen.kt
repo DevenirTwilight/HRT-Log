@@ -110,7 +110,7 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
                 val data = ChartData(result.timeH, DoubleArray(result.e2.size) { result.e2[it] * factor },
                     result.bandInner?.let { (l, h) -> DoubleArray(l.size) { l[it] * factor } to DoubleArray(h.size) { h[it] * factor } },
                     result.bandOuter?.let { (l, h) -> DoubleArray(l.size) { l[it] * factor } to DoubleArray(h.size) { h[it] * factor } },
-                    result.nowH, result.labs.map { it.first to it.second * factor }, unit = unit,includeBandsInScale=fullBand)
+                    result.nowH, result.labs.map { it.first to it.second * factor }, unit = unit,includeBandsInScale=fullBand,breaks=result.calibrationBreaks,readAt={hour,cancel->result.evaluateAt(hour,cancel)?.center?.times(factor)})
                 key(rangeDays) {
                     ConcChart(data, result.nowH - rangeDays * 24 * 0.75, result.nowH + rangeDays * 24 * 0.25, Modifier.fillMaxWidth().height(260.dp)) { if(it>=10)it.roundToInt().toString() else chartNumber.format(it) }
                 }
@@ -158,11 +158,13 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
 @Composable internal fun CalibrationCard(result: ConcentrationResult?, settings: ConcSettings, onSettings: (ConcSettings) -> Unit, onOpenLabs: () -> Unit, fmt: (Double) -> String, unit: String) {
     SectionCard(stringResource(R.string.calib_title)) {
         Text(stringResource(R.string.calib_intro), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(stringResource(R.string.calib_sample_time_semantics), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Text(stringResource(R.string.calib_safety_limits), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         SwitchRow(stringResource(R.string.calib_enable), settings.calibrate) { onSettings(ConcSettings(settings.pmol, it, settings.mode)) }
         CalibrationEligibilitySection(result,fmt,unit)
+        result?.let { Text(stringResource(R.string.calib_evaluation_time,formatDateTime(java.time.Instant.ofEpochMilli(kotlin.math.round(it.evaluationH*3_600_000).toLong()))),style=MaterialTheme.typography.bodySmall) }
         val s = result?.calibration
-        if (s == null) Text(stringResource(if (result?.labEligibility?.isNotEmpty()==true) R.string.calib_history_not_fitted else R.string.calib_no_labs), style = MaterialTheme.typography.bodyMedium)
+        if (s == null) Text(stringResource(if (settings.mode==CalibrationMode.CAUSAL) R.string.calib_no_available_sample else if (result?.labEligibility?.isNotEmpty()==true) R.string.calib_history_not_fitted else R.string.calib_no_labs), style = MaterialTheme.typography.bodyMedium)
         else {
             val m = s.model
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -333,18 +335,20 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
 /** Original chart observations are unchanged; every history decision is available without logging facts. */
 @Composable internal fun CalibrationEligibilitySection(result: ConcentrationResult?, fmt: (Double)->String, unit: String) {
     val rows=result?.labEligibility.orEmpty()
-    if(rows.isEmpty())return
+    if(rows.isEmpty() && result?.models?.containsKey(Curve.E2)!=true)return
     var details by remember{mutableStateOf(false)}
-    Text(stringResource(R.string.calib_history_counts,rows.count{it.eligible},rows.count{!it.eligible}),style=MaterialTheme.typography.bodySmall)
-    if(rows.none{it.eligible} && result?.e2?.isNotEmpty()==true)Text(stringResource(R.string.calib_history_population),style=MaterialTheme.typography.bodySmall)
-    OutlinedButton(onClick={details=true}){Text(stringResource(R.string.calib_history_details))}
+    val cutoff=if(result?.mode==CalibrationMode.CAUSAL)minOf(result.evaluationH,result.nowH) else result?.nowH ?: Double.POSITIVE_INFINITY
+    val available=rows.filter{it.sampleH<=cutoff}
+    Text(stringResource(R.string.calib_history_counts,available.count{it.eligible},available.count{!it.eligible}),style=MaterialTheme.typography.bodySmall)
+    if(available.none{it.eligible} && result?.e2?.isNotEmpty()==true)Text(stringResource(R.string.calib_history_population),style=MaterialTheme.typography.bodySmall)
+    if(rows.isNotEmpty())OutlinedButton(onClick={details=true}){Text(stringResource(R.string.calib_history_details))}
     if(details)AlertDialog(onDismissRequest={details=false},title={Text(stringResource(R.string.calib_history_details))},
         text={LazyColumn(Modifier.heightIn(max=420.dp),verticalArrangement=Arrangement.spacedBy(12.dp)){
             itemsIndexed(rows){index,row->Column{
                 val at=java.time.Instant.ofEpochMilli((row.sampleH*3_600_000).toLong()).atZone(java.time.ZoneId.systemDefault())
                 Text(at.format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
                 result?.labs?.getOrNull(index)?.let{Text(fmt(it.second)+" "+unit)}
-                Text(stringResource(if(row.eligible)R.string.calib_history_eligible else R.string.calib_history_excluded))
+                Text(stringResource(if(row.eligible && row.sampleH>cutoff)R.string.calib_time_pending else if(row.eligible)R.string.calib_history_eligible else R.string.calib_history_excluded))
                 row.reasons.forEach{reason->Text(stringResource(when(reason){
                     EligibilityReason.READ_SCOPE_UNKNOWN->R.string.calib_history_scope
                     EligibilityReason.SAMPLE_OUTSIDE_WINDOW->R.string.calib_history_window

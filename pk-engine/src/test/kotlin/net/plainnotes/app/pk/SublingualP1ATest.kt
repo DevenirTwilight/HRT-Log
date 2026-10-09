@@ -184,6 +184,6 @@ class SublingualP1ATest {
         assertTrue(seconds.all{it<20})
         val out=JSONObject().put("algorithm_version",LabFit.ALGORITHM_VERSION).put("synthetic_only",true)
             .put("performance",JSONObject().put("events",120).put("grid_points",2881).put("samples",200).put("warmups",2).put("seconds",JSONArray(seconds)))
-        val file=File("build/reports/pk-p1b/stability.json");file.parentFile.mkdirs();file.writeText(out.toString(2)+"\n")
+        val file=File("build/reports/pk-p1c1/stability.json");file.parentFile.mkdirs();file.writeText(out.toString(2)+"\n")
     }
 }

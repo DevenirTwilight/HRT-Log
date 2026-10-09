@@ -1,0 +1,22 @@
+{
+  "source_commit": "d45a67a4f5309f1e951b2dfe69e9295fa42234cb",
+  "seconds": [
+    0.055506761,
+    0.047573086,
+    0.052806405,
+    0.043983714,
+    0.040826036
+  ],
+  "cases_per_batch": 4,
+  "heap_delta_bytes_not_peak": [
+    -521400,
+    -2344,
+    -96064,
+    -95520,
+    -173056
+  ],
+  "synthetic_only": true,
+  "warmups": 2,
+  "java_version": "21.0.12.1",
+  "repetitions": 5
+}
