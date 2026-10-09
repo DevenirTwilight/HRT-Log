@@ -28189,7 +28189,23 @@
       "exit_code": 0
     },
     "lint_command": {
-      "status": "not_completed"
+      "command": [
+        "/tmp/hrt-apk-experiment/gradle-9.3.1/bin/gradle",
+        "-Dhttps.proxyHost=proxy",
+        "-Dhttps.proxyPort=8080",
+        "-Dhttp.proxyHost=proxy",
+        "-Dhttp.proxyPort=8080",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=2",
+        "--console=plain",
+        "lintFullDebug"
+      ],
+      "cwd": "/tmp/hrt-apk-experiment/test-worktree",
+      "exit_code": 0
+    },
+    "lint_issues_by_severity": {
+      "Warning": 131
     },
     "period_stability": {
       "name": "net.plainnotes.app.PeriodStabilityTest",
@@ -28329,7 +28345,11 @@
     },
     {
       "file": "android-lint-only.log",
-      "sha256": "0f3fd98278ca0cec71b3117e6bf7aacc2d5b343264392a08f2a726e591f05bed"
+      "sha256": "5dc339358e1737d6ec9ec8068730bbf975c96772d09874a55846298ea9d0e441"
+    },
+    {
+      "file": "android-lint-only.log.json",
+      "sha256": "bc3cfdd081aa3d301a18b1be8df87b48545afae100f9a4833d970a93909218d3"
     },
     {
       "file": "android-lint-interrupted.log",
@@ -28378,6 +28398,10 @@
     {
       "file": "TEST-net.plainnotes.app.PeriodStabilityTest.xml",
       "sha256": "93b35c0bc67abb65e35f2f522b84bbe577fde72651361f0a5f5d63002de89a76"
+    },
+    {
+      "file": "lint-results-fullDebug.xml",
+      "sha256": "9b33818c8d1ff4675b39793845ca49cf61db711ed9b5e5ef59f3124d2ab7f636"
     },
     {
       "file": "A-build.log",
@@ -28493,7 +28517,7 @@
     },
     {
       "file": "test-summary.json",
-      "sha256": "23ddda97142c5bb4cf7a208898b175594594a36c7e798074b27080c300ce9b06"
+      "sha256": "d6ae21c2b277ae65b6e887e96b7f2ca1022e50c03f07e28fc99fc169fd2159c4"
     }
   ]
 }

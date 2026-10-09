@@ -1,0 +1,16 @@
+{
+  "command": [
+    "/tmp/hrt-apk-experiment/gradle-9.3.1/bin/gradle",
+    "-Dhttps.proxyHost=proxy",
+    "-Dhttps.proxyPort=8080",
+    "-Dhttp.proxyHost=proxy",
+    "-Dhttp.proxyPort=8080",
+    "--no-daemon",
+    "--no-parallel",
+    "--max-workers=2",
+    "--console=plain",
+    "lintFullDebug"
+  ],
+  "cwd": "/tmp/hrt-apk-experiment/test-worktree",
+  "exit_code": 0
+}
