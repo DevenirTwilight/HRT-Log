@@ -8,6 +8,7 @@
 本地无预置Android SDK/Gradle缓存；JDK21已存在。首次wrapper下载因Java未使用HTTP代理失败（退出1），经继承代理下载Gradle9.3.1并核对官方wrapper SHA成功。
 正在 `/tmp/hrt-apk-experiment` 安装与CI同版SDK37.0/BuildTools37.0.0，并运行代理配置下的A基线构建；尚无APK实测数值。
 完整日志暂存 `/tmp/hrt-apk-experiment`，最终报告会保存失败/成功状态与证据；不得将历史signed23555291bytes计作新A。
+补充：代理构建已到任务配置，失败因预置Java21只有JRE、缺少javac；正在仓库外补完整JDK21，失败日志保留。隔离执行脚本已加入，四组只改资源压缩与ABI，任一失败会保存部分结果并停止。远端追加12ed18d（仅P2研究/交接），首次push被拒绝；未强推，待保留两边文档后同步。
 待完成：四组构建/ZIP及manifest核验、资源静态风险与差分、可执行现有测试、报告JSON/Markdown；release及设备功能未验证。
 本检查点提交只涉及审计脚本/合成测试/交接；旧交接与P2研究保留如下。
 

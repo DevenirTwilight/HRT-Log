@@ -61,6 +61,7 @@ def inspect(path: Path, top: int = 15) -> dict:
             members.append({'name': f.filename, 'category': group,
                             'compressed_bytes': f.compress_size,
                             'uncompressed_bytes': f.file_size,
+                            'crc32': f'{f.CRC:08x}',
                             'compression_method': f.compress_type})
     names = [m['name'] for m in members]
     if len(names) != len(set(names)):
