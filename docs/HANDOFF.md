@@ -1,6 +1,6 @@
 # 交接说明：工作进度与开发指南
 
-## 进行中：时间线精简与医疗档案规划（2026-10-08，REQUIREMENTS §42）
+## 完成：时间线精简与医疗档案规划（2026-10-08 决定；2026-10-09 回查，REQUIREMENTS §42）
 
 接手 b40b7706561f84d7491b066d82bc3e85cec26298，分支与远端一致、工作区干净；Build 25/schema 9。上一轮 UI 修复已完成，不重复实施。
 - [x] 最新决定已写入 REQUIREMENTS §42：复诊独立侧边栏、现有功能及日历预约入口全部保留，撤销旧合并导航决定。
@@ -9,7 +9,9 @@
 - [x] 时间线源码精简与入口测试已写，聚焦回归通过；诊断移至测试源码，更多菜单保留用药记录和方案详情、去内部 ID，去重复编辑标记，保留简洁推断说明。首轮两条旧 UI 断言因旧长推断文案出现而失败，已改简洁新文案；ImportedTimelineUiTest 11 与 TimelineEditUiTest 2 通过。新菜单四语/320和411dp/浅深色字号2共16项通过，法文 didOverflowHeight 曾给出小数像素误报，采用与原布局回归一致的实际行边界断言后通过；仍断言无省略/遗漏/越边界和48dp触控。全部历史诊断生成器原测试保留。
 - [x] 本机最终全量 app295（282通过/13既有或可选跳过）、data72、reminder14，0失败；常规布局64项（新增菜单16），时期V2/Flow/稳定性和冻结事实通过。Full Debug/Release、两个测试APK、manifest无INTERNET成功；Lint0错误/131警告。JVM检查也完成，未改domain/pk/importer代码。
 - [x] 专项审计72配置×3case=216渲染，严重信号0。首次发现审计工具漏掉Popup窗口导致详情action_failed，不算通过；补WindowInspector根/截图采集后四语言全矩阵重跑成功，校验每配置详情截图存在。合成前后图和JSON已入仓库，见 [验收说明](timeline-ui-cleanup-verification.md)。当前可选审计50case；上一轮48case/1152渲染是历史证据，不改写。
-- [ ] 最新完整GitHub CI（含API35迁移/SQLCipher/原生PDF/时间线/伪装重启）尚待核对；此前6bb8fac JVM通过，其android/device仍运行，不声明已全绿。新提交只补审计工具和证据，不改变应用源码。不签名、发布或上传APK；真机仍待验收。
+- [x] 最新完整 CI [37853041992](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37853041992)（d876cec71940c591ac2337644f08c936c135e4b8）：jvm/android/device-tests 全部success。下载报告回查：app295/13跳过/0失败，data72、reminder14全部通过，Lint0错误/131警告；API35 data14（迁移/SQLCipher）通过，app29登记/27通过/2常规跳过，独立重启prepare/verify各1项另行通过。原生时间线6项和原生PDF回归通过，不能把常规跳过当已执行。
+- [x] CI build-results128文件、device-test-results19文件均不含APK；检查manifest和Schema/PLAN步骤success。本机JVM domain58/pk18/importer12检查成功（源码未变，复用已通过测试）；CI JVM重新验证success。早期checkpoint CI被后续提交取消，不算失败或最终证据。
+- 本轮完整完成并推送，末尾仅更新验证结果文档，应用与审计代码和已通过d876cec相同。Build25/schema9，无迁移、无历史事实/复诊/导航/PK/签名变更，不发布Release/PR/公开APK；真机覆盖安装、短屏/IME/字体/TalkBack与正式签名交付仍未做。医疗档案方向已真实写入GitHub，规划中、未实施；下一轮需先独立设计/授权一个阶段，不能从长期路线图自行启动全部功能。
 
 ## 完成：按钮/大字体、历史回归与 Backlog 核对（2026-10-08，REQUIREMENTS §41）
 

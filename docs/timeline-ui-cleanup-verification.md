@@ -37,6 +37,6 @@
 
 ## 仍需区分的验证
 
-本机没有 Android 模拟器；原生 Schema 迁移、SQLCipher、原生 PDF 和时间线入口测试通过 GitHub API35 模拟器 CI 执行，当前结果见 HANDOFF。模拟器不等于真实设备；覆盖安装、实际设备字体/短屏/IME/TalkBack及正式签名交付仍未做。本轮仅构建验证，不能把 debug 或未签名 Release 包当覆盖安装交付。
+本机没有 Android 模拟器。最终 [CI 37853041992](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37853041992)（d876cec71940c591ac2337644f08c936c135e4b8）jvm/android/device-tests 全部成功，2026-10-09 下载报告回查与本机结果一致：app295/13跳过/0失败、data72、reminder14、Lint0错误/131警告；API35 data14（迁移/SQLCipher）全部通过，app29登记/27通过/2常规跳过，原生时间线6项和PDF回归通过。独立重启prepare/verify各1项另行通过；两份报告产物共147文件，无APK。JVM domain58/pk18/importer12本机检查成功（未变源码复用测试），CI重新验证成功。Schema/PLAN、manifest检查步骤也成功。末尾只更新验证结果文档，与该已通过提交应用/审计代码相同。模拟器不等于真实设备；覆盖安装、实际设备字体/短屏/IME/TalkBack及正式签名交付仍未做。本轮仅构建验证，不能把 debug 或未签名 Release 包当覆盖安装交付。
 
 [医疗档案设计](design/medical-records-roadmap.md) 已独立提交推送；方向为规划中、未实施，现有复诊入口和功能继续保留，附件开发另行设计/授权。
