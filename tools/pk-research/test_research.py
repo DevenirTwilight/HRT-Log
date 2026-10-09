@@ -70,13 +70,14 @@ class ResearchMathTest(unittest.TestCase):
                 for dose in [1,2,4,10]:
                     scaled=[(h,dose) for h,_ in events]
                     self.assertAlmostEqual(m.population(kernel,scaled,at),total*dose/2,delta=1e-9)
-    def test_frozen_history_has_no_current_profile_dependency(self):
-        events=[(0,2),(12,1)]
+    def test_unsorted_history_is_read_only_and_uses_actual_doses(self):
+        events=[(12,1),(0,2),(-6,.5)]
+        saved=events.copy()
         kernel=m.Gamma(350,1)
         result=m.population(kernel,events,13)
-        alternate_current_profile={'route':'oral','dose':4}
-        self.assertEqual(result,m.population(kernel,events,13))
-        self.assertEqual(alternate_current_profile['route'],'oral')
+        self.assertEqual(events,saved)
+        self.assertEqual(result,m.population(kernel,sorted(events),13))
+        self.assertAlmostEqual(result,1*kernel(1)+2*kernel(13)+.5*kernel(19))
     def test_distinct_microscopic_sets_same_trajectory(self):
         groups=[(.1,1,.03,160),(.2,.5,.03375,160),(.2,.25,.016875,80)]
         kernels=[m.from_micro(*g) for g in groups]
@@ -165,5 +166,80 @@ class EvidenceGuardTest(unittest.TestCase):
         for name in baseline['files']:
             if name.endswith('.kt'):
                 self.assertNotIn('tools/pk-research',(guard.ROOT/name).read_text())
+
+
+class ReportContractTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        import research
+        import contextlib
+        import io
+        cls.research=research
+        cls.directory=tempfile.TemporaryDirectory()
+        cls.path=Path(cls.directory.name)/'outputs'
+        with contextlib.redirect_stdout(io.StringIO()):research.run(P2,cls.path)
+        cls.result=json.loads((cls.path/'analysis.json').read_text())
+    @classmethod
+    def tearDownClass(cls):cls.directory.cleanup()
+    def test_canonical_settings_are_preregistered_not_selected_by_external_error(self):
+        self.assertEqual(self.result['canonical_profile_ids'],['A-b0-k1','B-b0-4-0.32-0.41-0.1'])
+        self.assertEqual(self.result['profiles_count'],339)
+        self.assertEqual(len(self.result['profiles']),339)
+    def test_fixed_observation_not_true_model_peak_and_heterogeneous_errors(self):
+        for row in self.result['study_comparisons']:
+            self.assertFalse(row['blind_external'])
+            self.assertEqual(row['comparison_status'],'conditional')
+            if row['record_id'] in ['pines_60min','doll_sl_peak']:self.assertEqual(row['time_h'],1)
+            if row['record_id']=='yaish_90min':self.assertEqual(row['time_h'],1.5)
+            if row['record_id']=='burnier_1h_fold':self.assertEqual(row['observed_unit'],'fold')
+        self.assertNotIn('overall_human_score',self.result)
+    def test_no_human_estimate_or_false_software_clinical_success(self):
+        r=self.result
+        self.assertEqual(r['external_validation_status'],'external_validation_insufficient')
+        self.assertFalse(r['clinical_accuracy_established'])
+        self.assertFalse(r['model_replacement_approved'])
+        self.assertIsNone(r['software_validation_passed'])
+        self.assertEqual(r['validation_ids'],[])
+        self.assertEqual(r['identifiability']['human_train_observations'],1)
+        for row in r['synthetic_model_points']:self.assertTrue(row['synthetic_only'])
+    def test_micro_rank_and_flat_shape_profiles_do_not_identify_micro_parameters(self):
+        self.assertEqual(self.result['identifiability']['micro_jacobian']['rank'],2)
+        self.assertEqual(self.result['identifiability']['micro_jacobian']['columns'],4)
+        self.assertEqual(self.result['identifiability']['synthetic_equivalence_max_error'],0)
+        for p in self.result['profiles']:
+            self.assertLess(p['fit']['residual_squared'],1e-18)
+            self.assertEqual(p['single_observation_jacobian_rank'],1)
+            self.assertEqual(p['actually_fitted_parameter_count'],1)
+    def test_deleting_only_train_study_does_not_manufacture_an_estimate(self):
+        self.assertEqual(self.result['identifiability']['delete_Doll_training'],'not_estimable_no_training_observations')
+        for p in self.result['profiles']:self.assertEqual(p['human_train_record_ids'],['doll_sl_peak'])
+    def test_external_perturbation_cannot_change_fitted_parameters(self):
+        import copy
+        data=json.loads((P2/'evidence-catalog.json').read_text());other=copy.deepcopy(data)
+        for r in other['records']:
+            if r['study_id']!='Doll2022' and isinstance(r['value'],(int,float)):r['value']*=10
+        settings=json.loads((P2/'experiment-settings.json').read_text())
+        a=self.research.profiles(data,settings);b=self.research.profiles(other,settings)
+        self.assertEqual([p['fit'] for p in a],[p['fit'] for p in b])
+    def test_result_hashes_and_overwrite_refusal(self):
+        manifest=json.loads((self.path/'output-manifest.json').read_text())
+        for name,sha in manifest.items():self.assertEqual(guard.digest(self.path/name),sha)
+        with self.assertRaises(ValueError):self.research.run(P2,self.path)
+    def test_same_inputs_repeat_identically(self):
+        import contextlib
+        import io
+        second=Path(self.directory.name)/'repeat'
+        with contextlib.redirect_stdout(io.StringIO()):self.research.run(P2,second)
+        for file in self.path.iterdir():self.assertEqual(file.read_bytes(),(second/file.name).read_bytes())
+    def test_existing_kotlin_p0_entire_population_cases_not_just_46min(self):
+        params=json.loads((guard.ROOT/'pk-engine/src/main/resources/pk-params.json').read_text())
+        old=json.loads((guard.ROOT/'docs/pk-research/results/sublingual-p0-engine.json').read_text())
+        count=0
+        for case in old['population_cases']:
+            events=[(e['time_h'],e['dose_mg']) for e in case['events']]
+            for t,expected in zip(case['time_h'],case['concentration_pg_ml']):
+                actual=math.fsum(e['dose_mg']*(m.current(t-e['time_h'],params) if e['route']=='sublingual' else m.fitted(t-e['time_h'],params['models']['E2_ORAL'])) for e in case['events'] if e['time_h']<=t)
+                self.assertAlmostEqual(actual,expected,delta=max(1e-9,expected*1e-6));count+=1
+        self.assertGreaterEqual(count,52)
 
 if __name__=='__main__':unittest.main()
