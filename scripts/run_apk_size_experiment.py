@@ -53,7 +53,7 @@ def main():
     common += ['--no-daemon', '--console=plain', '--no-parallel', '--max-workers=2']
     evidence = {'source_commit': commit, 'task': ':app:assembleFullRelease',
                 'sdk_root': str(args.sdk.resolve()), 'signing': 'unsigned; no official credentials',
-                'scenarios': [], 'status': 'in_progress', 'java_tool_options': os.environ.get('JAVA_TOOL_OPTIONS', ''),
+                'scenarios': [], 'status': 'in_progress', 'java_home': os.environ.get('JAVA_HOME'),
                 'gradle_executable': args.gradle}
 
     def save():

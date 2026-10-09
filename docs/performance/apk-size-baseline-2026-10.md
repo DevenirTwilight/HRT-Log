@@ -30,7 +30,8 @@
 1. 预置 wrapper Java下载没有使用HTTP代理：Connection refused，退出1。
 2. 通过代理配置运行Gradle后，预置Java缺JAVA_COMPILER：退出1。
 3. 下载完整JDK后首轮固定A构建因代理CA未被新JDK信任：PKIX错误，退出1；该轮B/C/D未执行，没有伪造APK或数字。
-4. 系统信任库下重新开独立实验目录，日志和退出码保留；最终状态将在这里补齐。
+4. 系统信任库下重新开独立实验目录，A运行到R8时Gradle daemon退出（退出1）；cgroup上限8GiB，memory.events记录oom=1/oom_kill=1、峰值超过8GiB。此前同时运行release和Android测试，触发环境内存限制。该轮B/C/D未执行。只调整任务调度为串行，保持R8/Gradle源码与所有场景参数一致；等待既有测试结束后再启动全新四组目录，不删除失败日志。
+5. Android测试首次4个Robolectric测试类因测试JVM未继承代理而依赖获取失败（reminder当轮6项/4失败，非业务断言失败）；系统信任库+测试JVM代理下重跑，失败原XML保留。
 
 ## 功能验收边界与下一步
 

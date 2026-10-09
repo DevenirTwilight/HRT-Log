@@ -11,6 +11,7 @@ SDK37.0/BuildTools37.0.0已装好；完整Temurin JDK21.0.12.1+1已下载并核�
 补充：代理构建已到任务配置，失败因预置Java21只有JRE、缺少javac；正在仓库外补完整JDK21，失败日志保留。隔离执行脚本已加入，四组只改资源压缩与ABI，任一失败会保存部分结果并停止。远端追加12ed18d（仅P2研究/交接），首次push被拒绝；已完整保留两边交接与研究内容，合并fc107d4并推送成功，未强推。
 静态资源风险和工具链证据已存 `docs/performance/apk-size-baseline-2026-10.md`，目前明确标记实验进行中；系统信任库下固定A和JVM回归已重跑，独立Python审计/研究回归进行中。
 本轮固定源码JVM XML核对domain58/pk58/importer12=128项全部通过；Python审计13/隔离研究126均通过。Android单元/lint在独立test-worktree运行；JSON检查点保存四组真实pending/building状态，无臆测数据。
+新进展：A在R8阶段Gradle daemon退出，cgroup证据8GiB上限/oom_kill=1；此前并行Android测试触发资源限制。四组脚本已停止（B/C/D未执行），没有APK成品。改为串行调度，保持R8和同一构建配置；等Android测试结束后再决定重启完整四组。首次reminder测试因Robolectric进程无下载代理（6项/4失败）已保留日志/原XML，代理传播后正在重跑，不计为通过。
 待完成：四组构建/ZIP及manifest核验、资源静态风险与差分、可执行现有测试、报告JSON/Markdown；release及设备功能未验证。
 本检查点提交只涉及审计脚本/合成测试/交接；旧交接与P2研究保留如下。
 
