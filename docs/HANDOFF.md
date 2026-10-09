@@ -1,3 +1,9 @@
+# P2-O 双吸收输入长尾歧义与不可辨识性（2026-10-09）
+
+[正式研究说明](pk-research/p2/p2o-tail-structural-nonidentifiability.md)、[机器网格和伦理状态](pk-research/p2/p2o-slow-tail-parameter-scan.json)、[研究独立数学程序](../tools/pk-research/p2o_slow_tail_scan.py)与10项单元测试。固定P2-N非负Erlang输入＋慢一阶输入＋中央消除，不用Doll144定标。完整扫描11088组（包含ks=ke等速462组），以Rosano40/20组均值、Price人工2/1与4/1的明示非统计容差筛选，在Price假定0pg/mL基线时75组满足而归一化q6给药前增量差6.89倍，AUC/H1差2.20–3.29h；两组早期指标互差≤0.83%的参数仍在q6谷差4.60倍，反映真实长尾可辨识性不足而非经过人体验证的模型赢家。明确保存Price本身Figure/Table AUC矛盾、Rosano未知基线、协方差缺失和统计对象区别。生产模型、P1、旧冻结、APK不动。
+
+---
+
 # P2-N 双输入中央室卷积研究（2026-10-09）
 
 [完整来源、机制和负结果](pk-research/p2/p2n-transit-convolution-cross-study.md)、[显式候选参数](pk-research/p2/p2n-transit-convolution-design.json)、[独立可运行数值核](../tools/pk-research/p2n_transit_convolution.py)及10项测试。确认快Erlang n阶段输入经中央室一阶消除后浓度起始上升∝t^n，不能把输入阶数等同旧经验浓度gamma的阶数。HRT与Featherline早期上升较缓，受限快慢输入模型可同时接近Rosano早期4.23倍和Price1–4h下降的部分形状，但Kom15–30min及24h AUC和重复给药又提出冲突。绝不根据已见结果声称参数验证/选赢家，Doll144未用于定标，新盲化人体外测0，旧P2实验/正式模型/P1/历史/APK不动。

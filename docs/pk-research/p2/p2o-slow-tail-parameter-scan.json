@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "phase": "P2-O",
+  "date": "2026-10-09",
+  "purpose": "ASSUMPTION-SENSITIVE STRUCTURAL IDENTIFIABILITY TEST, NOT a human population PK fit",
+  "evidence_status": "ALL_STUDIES_ALREADY_EXPOSED; model candidates deliberately selected after seeing them",
+  "math_reference": "tools/pk-research/p2n_transit_convolution.py",
+  "candidates": {
+    "n_fast": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "k_fast_per_h": [
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "k_elim_per_h": [
+      0.25,
+      0.4,
+      0.55,
+      0.7,
+      0.85,
+      1
+    ],
+    "k_slow_per_h": [
+      0.05,
+      0.1,
+      0.2,
+      0.4
+    ],
+    "effective_slow_weight": [
+      0,
+      0.05,
+      0.1,
+      0.2,
+      0.3,
+      0.4,
+      0.5
+    ]
+  },
+  "expected_evaluated_combinations": 11088,
+  "acceptance": {
+    "metric_rosano_raw40over20": 4.230769230769231,
+    "tolerance_rosano_relative": 0.1,
+    "price_manual_1h_pg_ml": 450,
+    "price_manual_2h_pg_ml": 225,
+    "price_manual_4h_pg_ml": 85,
+    "hypothetical_price_baselines_pg_ml": [
+      0,
+      25,
+      50
+    ],
+    "tolerance_price_2h_to_1h_relative": 0.15,
+    "tolerance_price_4h_to_1h_relative": 0.25,
+    "interpretation": "All relative cutoffs are analyst-chosen exploratory filters, NOT author uncertainty bounds, statistical CIs, proof of population prediction accuracy, or pre-registered thresholds"
+  },
+  "repeated_event_scenario": {
+    "each_dose_mg": 0.5,
+    "period_h": 6,
+    "preceding_events": 120,
+    "meaning": "dimensionless accumulated concentration increase at hypothetical next predose, relative to ONE 1mg single dose at t=1h; no total pg/mL or baseline",
+    "actual_dosing_history_known": false
+  },
+  "shared_source_ids": [
+    "Rosano1997_PK25",
+    "Price1997_cross_over_n6",
+    "Komesaroff1998_n10"
+  ],
+  "P2O_Doll_trained_or_targeted": false,
+  "author_table_auc_conflict_resolved": false,
+  "external_human_90_percent_interval_coverage": false,
+  "production_replacement_approved": false
+}

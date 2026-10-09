@@ -1,5 +1,10 @@
 # P2-A/B 舌下人口模型研究（已完成隔离研究，未投产）
 
+## P2-O：真正跨研究的长尾辨识性／重复给药歧义（2026-10-09）
+
+[完整来源与数学推导](p2o-tail-structural-nonidentifiability.md)、[11,088组参数网格](p2o-slow-tail-parameter-scan.json)、[标准库扫描/质量守恒AUC](../../../tools/pk-research/p2o_slow_tail_scan.py)及10项测试。按Rosano早期增长与Price人工2/1、4/1条件性指标、明示人工窗口筛选，b=0时75组满足，24h AUC/H1=2.20–3.29h、q6给药前累积增量/H1跨6.89倍；Price假设基线25/50（非实测）分别97/62组。甚至两组早期比率最大相差仅0.83%的参数，q6谷浓度可以相差**4.60倍**，其kslow=.05或.40/h，真实中央消除相同。严格质量守恒AUC∞=1/(ke*h1)排除了图像数值积分伪象。全部属于已见研究后探索性扫描，Doll144不用于定标，P2-C不准投产，历史/签名APK/个人参数完全不变。
+
+
 ## P2-N：快慢双输入与中央室卷积的跨研究候选曲线（2026-10-09）
 
 [P2-N机制推导及跨时间来源比较](p2n-transit-convolution-cross-study.md)、[五条非临床假设曲线和源身份](p2n-transit-convolution-design.json)、[稳定的多级输入-消除卷积程序](../../../tools/pk-research/p2n_transit_convolution.py)、[10项数值与科学状态测试](../../../tools/pk-research/test_p2n_transit_convolution.py)。新关键区别：n级吸收**输入**经中央室消除后C(t)早期∝t^n，而旧直接经验gamma**浓度**早期∝t^(n−1)；不能混淆两种上界。归一化不使用Doll144。六级输入+30%有效慢输入案例的Rosano20/40比≈4.31、Price2h/1h≈0.56、4h/1h≈0.175，提示多输入曲线数学上可以跨时段接近；但离散24h AUC/1h≈2.535h，低于Price图≈3.46h和原Table1≈4.68h，Kom早期比也偏高。模型参数是已见数据后的探索例子，不是生理分室实证、临床预测或投产许可。全部生产模型/签名APK/历史不变。
