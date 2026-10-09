@@ -1,4 +1,4 @@
-# 舌下 E2 P0 可复现对照（仅测试/研究）
+# 舌下 E2 P0/P1-A 可复现对照（仅测试/研究）
 
 不写生产参数，不执行旧`tools/pk-fit/fit.py`（它会覆写已发布参数）。Python仅标准库；与Featherline对照是公开数字加独立通用ODE算式，不含其源码。原始人体证据必须来自手工核实的JSON，不能由模型生成。
 
@@ -10,10 +10,11 @@
 ./gradlew -PjvmOnly :core:domain:test :pk-engine:test :importer:test --rerun-tasks --no-parallel --max-workers=2
 ./gradlew :app:testFullDebugUnitTest --tests '*SublingualCalibrationAuditTest' --tests '*ConcentrationCalculatorTest' --tests '*LabEstimateTest' --no-parallel --max-workers=2
 python3 -m unittest discover -s tools/pk-audit -p 'test_*.py'
-python3 tools/pk-audit/sublingual_compare.py
+python3 tools/pk-audit/sublingual_compare.py --engine docs/pk-research/results/sublingual-p0-engine.json --calculator docs/pk-research/results/sublingual-p0-calculator.json --output /tmp/hrt-sl-p0
+python3 tools/pk-audit/sublingual_p1a_compare.py
 ```
 
-Gradle输出：`pk-engine/build/reports/pk-p0/engine-outputs.json`、`app/build/reports/pk-p0/calculator-audit.json`。对照输出：`docs/pk-research/results/sublingual-p0-report.{json,md}`和`...-curves.csv`。测试运行写入build，研究脚本写入output目录，不碰正式数据。
+当前Gradle输出写入`pk-engine/build/reports/pk-p1a/`和`app/build/reports/pk-p1a/`，含engine-outputs/calculator-audit/stability JSON。P1-A报告写入`docs/pk-research/results/sublingual-p1a-*`。P0原始输出与报告只读保留，用显式输入路径重放旧结果，不以新测试覆盖旧证据。新数值/单参数验收见`sublingual-p1a-verification.md`；P0尚未修复的问题仍保留特征化断言。
 
 ## 没有 SDK 时重算已保存研究输入
 
@@ -32,3 +33,18 @@ python3 tools/pk-audit/sublingual_compare.py --engine docs/pk-research/results/s
 - CLI成功仅表示算术一致/文件完整；结果明确`scientific_acceptance: NOT established`。不能据此宣称任一模型临床准确。
 
 CI在Android单测后执行上述Python测试、PK审计和对照，上传build下研究报告，不上传APK或个人健康数据。
+
+## 旧版非舌下黄金夹具与性能基线
+
+实际在旧提交执行，不是从新实现生成预期结果。临时detached工作树仅供基线测试，不建立长期开发分支；路径自行选择：
+
+```sh
+git worktree add --detach /tmp/hrt-p1a-legacy 2761ed95c49e1ae74f0accd46aaf66bb87254040
+cp tools/pk-audit/legacy_non_sl_baseline.kt /tmp/hrt-p1a-legacy/pk-engine/src/test/kotlin/net/plainnotes/app/pk/NonSlBaseline.kt
+cd /tmp/hrt-p1a-legacy
+PK_BASELINE_OUTPUT=/tmp/non-sl-v1.json ./gradlew -PjvmOnly :pk-engine:test --tests '*NonSlBaseline' --rerun-tasks --no-parallel --max-workers=2
+```
+
+提交的`non-sl-calibration-v1.json`来自本轮实际旧版执行（原执行路径/workspace/tooling/pk-p1a/old-tree）；生成器独立编写，无第三方源码。比较五途径的幅度、速率、协方差、未校准/先验/后验中心与分位数，容差1e-9。计时采用同主机独立JVM、120事件、2881网格点、200样本、2热身、5次，记录每次秒数；它是局部微基准，不是跨设备性能承诺。原计时不含断言，新计时也不含。
+
+独立Python还比较方案A归一化核的交点极限与r=1等价性；A仅研究，生产选择B。7项Python测试必须通过；P1-A报告`numerical_acceptance`与`clinical_accuracy_established`分开标记。CI生成新报告并保留旧P0重放，全部合成数据。

@@ -1,0 +1,17 @@
+{
+  "performance": {
+    "seconds": [
+      0.010271801,
+      0.013290786,
+      0.009614107,
+      0.00909397,
+      0.009952708
+    ],
+    "warmups": 2,
+    "grid_points": 2881,
+    "events": 120,
+    "samples": 200
+  },
+  "algorithm_version": 2,
+  "synthetic_only": true
+}

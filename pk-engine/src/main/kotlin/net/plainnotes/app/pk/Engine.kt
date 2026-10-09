@@ -135,7 +135,7 @@ object Engine {
         val curves = HashMap<Curve, DoubleArray>(); val flags = HashMap<Curve, MutableSet<CurveFlag>>()
         val used = HashMap<Curve, MutableSet<FittedModel>>(); val unsupported = LinkedHashMap<String, Unsupported>()
         // Bolus contributions grouped by (curve, model, absorption rate) so each group shares running sums.
-        data class Key(val curve: Curve, val model: FittedModel, val ka: Double)
+        data class Key(val curve: Curve, val model: FittedModel, val ka: Double, val fixedRate: Boolean)
         val bolus = LinkedHashMap<Key, MutableList<Pair<Double, Double>>>()   // (time, effective mg)
         for (e in sorted) {
             when (val c = choose(e)) {
@@ -151,7 +151,7 @@ object Engine {
                         for (i in t.indices) arr[i] += infusion(model, t[i] - e.timeH, rate * share, wear, s)
                     } else {
                         val w = model.refWeightKg?.let { it / e.weightKG } ?: 1.0
-                        bolus.getOrPut(Key(curve, model, model.kaAt(e.doseMG))) { mutableListOf() } += e.timeH to e.doseMG * share * w
+                        bolus.getOrPut(Key(curve, model, model.kaAt(e.doseMG), e.route == Route.SUBLINGUAL && curve == Curve.E2)) { mutableListOf() } += e.timeH to e.doseMG * share * w
                     }
                 }
             }
@@ -162,7 +162,9 @@ object Engine {
             for ((a0, lam0) in key.model.terms) {
                 // Keep each term's AUC when the absorption rate differs from the fitted one (dose-dependent absorption).
                 val a = if (ka == key.model.ka) a0 else a0 * (1 / lam0 - 1 / key.model.ka) / (1 / lam0 - 1 / ka)
-                val lam = lam0 * s.rate
+                // Keep the entire SL event fixed, including its swallowed E2_ORAL part.
+                // A genuine oral event using that same model still retains rate calibration.
+                val lam = lam0 * if (key.fixedRate || key.model.key == "E2_SL") 1.0 else s.rate
                 runningSum(t, doses, lam, a * s.amplitude, arr)
                 runningSum(t, doses, ka, -a * s.amplitude, arr)
             }

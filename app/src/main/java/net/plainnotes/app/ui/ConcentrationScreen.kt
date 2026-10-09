@@ -155,6 +155,7 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
 @Composable private fun CalibrationCard(result: ConcentrationResult?, settings: ConcSettings, onSettings: (ConcSettings) -> Unit, onOpenLabs: () -> Unit, fmt: (Double) -> String, unit: String) {
     SectionCard(stringResource(R.string.calib_title)) {
         Text(stringResource(R.string.calib_intro), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(stringResource(R.string.calib_safety_limits), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         SwitchRow(stringResource(R.string.calib_enable), settings.calibrate) { onSettings(ConcSettings(settings.pmol, it, settings.mode)) }
         val s = result?.calibration
         if (s == null) Text(stringResource(R.string.calib_no_labs), style = MaterialTheme.typography.bodyMedium)
@@ -166,7 +167,7 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
             }
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Metric(stringResource(R.string.calib_amplitude), "×" + displayNumber(kotlin.math.exp(m.logAmplitude), 2), Modifier.weight(1f))
-                Metric(stringResource(R.string.calib_clearance), "×" + displayNumber(kotlin.math.exp(m.logRate), 2), Modifier.weight(1f))
+                Metric(stringResource(if (!m.rateAdjustable) R.string.calib_rate_fixed else if (result.models[Curve.E2]?.any { it.key == "E2_SL" } == true) R.string.calib_rate_non_sl else R.string.calib_clearance), "×" + displayNumber(kotlin.math.exp(m.logRate), 2), Modifier.weight(1f))
             }
             m.baselinePGmL?.let { Text(stringResource(R.string.calib_baseline, fmt(it), unit), style = MaterialTheme.typography.bodySmall) }
             s.diagnostics?.takeIf { m.postDoseObservationCount > 0 }?.let { d ->

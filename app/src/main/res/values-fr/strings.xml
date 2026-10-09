@@ -102,18 +102,18 @@
 <string name="calib_amplitude">Facteur de niveau</string>
 <string name="calib_baseline">Niveau de base avant traitement : %1$s %2$s (ajouté à la courbe)</string>
 <string name="calib_causal">Causal</string>
-<string name="calib_causal_desc">Chaque point n\'utilise que les analyses disponibles à ce moment ; une nouvelle analyse ne modifie pas le passé.</string>
-<string name="calib_clearance">Facteur d\'élimination</string>
+<string name="calib_causal_desc">L’ajustement causal limite les analyses aux points de grille. Des limites connues de l’interpolation et du résumé peuvent encore utiliser des analyses ultérieures ; la prédiction strictement passée n’est pas garantie.</string>
+<string name="calib_clearance">Facteur de vitesse du modèle</string>
 <string name="calib_convergence">Convergence</string>
 <string name="calib_enable">Calibrer avec mes analyses d\'E2</string>
 <string name="calib_few">Peu d\'analyses pour l\'instant : l\'a priori de population domine encore. Des analyses à différents moments après une prise rendent l\'ajustement plus fiable.</string>
-<string name="calib_intro">Ajuste le modèle d’estradiol à vos résultats E2 : un facteur de niveau et un facteur d’élimination, ajustés avec un a priori tiré de la variabilité publiée. Cela ne change que l’estimation, jamais le traitement.</string>
+<string name="calib_intro">Ajuste l’amplitude selon les analyses E2. La forme sublinguale reste fixe ; les autres voies peuvent ajuster un facteur de vitesse du modèle. Les a priori sont des hypothèses, pas une physiologie personnelle validée. Aucun traitement n’est modifié.</string>
 <string name="calib_labs">Analyses utilisées</string>
 <string name="calib_last">Dernière analyse : mesuré %1$s, attendu par le modèle %2$s %3$s</string>
 <string name="calib_manage_labs">Gérer les analyses</string>
 <string name="calib_mode">Mode de calibration</string>
 <string name="calib_no_labs">Aucune analyse d\'E2 pour l\'instant. Ajoutez-en une pour personnaliser la courbe.</string>
-<string name="calib_outlier">La dernière analyse s\'écarte beaucoup du modèle et a reçu moins de poids. Vérifiez la valeur, l\'unité et l\'heure.</string>
+<string name="calib_outlier">La dernière analyse diffère fortement du modèle. Un signalement aberrant ne garantit pas une exclusion. Vérifiez la valeur, l’unité et le prélèvement.</string>
 <string name="calib_retro">Rétrospectif</string>
 <string name="calib_retro_desc">Les paramètres appris de toutes les analyses s\'appliquent à toute la courbe (par défaut).</string>
 <string name="calib_title">Calibration par analyses</string>
@@ -217,7 +217,7 @@
 <string name="patch_release">Débit nominal</string>
 <string name="patch_release_hint">Indiqué sur la boîte, p. ex. 50 ou 100 µg/jour</string>
 <string name="per_intake">%1$s par prise</string>
-<string name="pk_assumptions">Les modèles utilisent des moyennes de population. Ils ne tiennent compte ni de l’âge, ni de la fonction hépatique, ni de la SHBG, ni des autres médicaments, ni des métabolites de l’estradiol. Les zones ombrées montrent l’écart entre personnes (5–95 % et 25–75 %), resserré par vos analyses si la calibration est activée.</string>
+<string name="pk_assumptions">Les modèles omettent âge, fonction hépatique, SHBG, interactions et métabolites. Les bandes E2 montrent uniquement l’incertitude supposée des paramètres (5–95 % et 25–75 %), sans erreur de mesure, hétérogénéité des études ni erreur du modèle. Ces intervalles ne sont pas validés cliniquement.</string>
 <string name="pk_basis_calibrated">Calibré avec vos analyses · d\'après %1$d prises enregistrées</string>
 <string name="pk_basis_population">Estimation de population · d\'après %1$d prises enregistrées</string>
 <string name="pk_chart_hint">Pincez pour zoomer, faites glisser pour déplacer, touchez pour lire une valeur.</string>
@@ -976,4 +976,7 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="picker_date">Date (AAAA-MM-JJ)</string>
     <string name="period_records">Voir les prises</string>
     <string name="period_inferred">Déduit des prises enregistrées</string>
+<string name="calib_safety_limits">La calibration reste expérimentale : historique incomplet, configuration passée inconnue, limites causales et valeurs aberrantes peuvent induire en erreur. La stabilité numérique ne prouve pas la précision individuelle.</string>
+<string name="calib_rate_fixed">Vitesse du modèle fixe</string>
+<string name="calib_rate_non_sl">Vitesse hors voie sublinguale</string>
 </resources>

@@ -62,7 +62,8 @@ class FittedModel(
         val w = refWeightKg?.let { it / weightKg } ?: 1.0
         var sum = 0.0
         for ((a, lam0) in terms) {
-            val lam = lam0 * rateScale
+            // P1-A: the SL kernel has no supported individual rate parameter.
+            val lam = lam0 * if (key == "E2_SL") 1.0 else rateScale
             // Keep each term's AUC when the absorption rate differs from the fitted one (dose-dependent absorption).
             val aa = if (kd == ka) a else a * (1 / lam0 - 1 / ka) / (1 / lam0 - 1 / kd)
             sum += aa * (exp(-lam * tau) - exp(-kd * tau))

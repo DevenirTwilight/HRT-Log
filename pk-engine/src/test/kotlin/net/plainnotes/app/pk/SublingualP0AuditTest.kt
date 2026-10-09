@@ -76,15 +76,23 @@ class SublingualP0AuditTest {
         }
     }
 
-    @Test fun characterizeNearEqualRateCalibrationClippingAndExplodingPriorBand() {
+    @Test fun fixedSublingualRateAndAmplitudeOnlyPriorBandAreStable() {
         val events = listOf(event())
-        val pop = curve(events, doubleArrayOf(46.0 / 60))[0]
-        assertTrue(curve(events, doubleArrayOf(46.0 / 60), rate = .9)[0] > 90 * pop,
-            "Confirmed defect: changing rate by -10% changes empirical peak amplitude by ~100x")
-        assertEquals(0.0, curve(events, doubleArrayOf(46.0 / 60), rate = 1.1)[0],
-            "Confirmed defect: faster lambda crosses ka; huge negative term is clamped to zero")
-        val band = LabFit.bands(events, doubleArrayOf(46.0 / 60), emptyList(), CalibrationMode.RETROSPECTIVE).getValue(Curve.E2)
-        assertEquals(0.0, band.p5[0]); assertTrue(band.p95[0] > 100 * pop)
+        val grid = doubleArrayOf(46.0 / 60)
+        val population = curve(events, grid)[0]
+        for (rate in listOf(.9, 1.0, 1.1, 1.0005 / .9995, .001, 1000.0))
+            assertEquals(population, curve(events, grid, rate)[0], 1e-9)
+        val band = LabFit.bands(events, grid, emptyList(), CalibrationMode.RETROSPECTIVE).getValue(Curve.E2)
+        assertTrue(band.p5[0] > 0 && band.p95[0].isFinite())
+        // Quantiles of an independently generated log-amplitude prior; no arbitrary concentration ceiling.
+        val random = java.util.Random(20261006L)
+        val sd = sqrt(ln(1 + .6 * .6))
+        val draws = DoubleArray(LabFit.SAMPLES) {
+            val z = DoubleArray(4) { random.nextGaussian() }
+            population * exp(sd * z[0])
+        }.sorted()
+        assertEquals(draws[(.05 * (draws.size - 1)).toInt()], band.p5[0], 1e-6)
+        assertEquals(draws[(.95 * (draws.size - 1)).toInt()], band.p95[0], 1e-6)
     }
 
     @Test fun causalFitsDoNotUseFutureLabsAtExactGridPoints() {
@@ -123,7 +131,7 @@ class SublingualP0AuditTest {
             "yaish_regular_q6h_0.5mg" to (0 until 240).map { event("y$it", -it * 6.0, .5) },
         )
         val fine = DoubleArray(4801) { it * .005 }
-        val out = JSONObject().put("schema_version", 1).put("synthetic_only", true).put("engine_version_label", PkParams.version)
+        val out = JSONObject().put("schema_version", 1).put("synthetic_only", true).put("engine_version_label", PkParams.version).put("calibration_algorithm_version", LabFit.ALGORITHM_VERSION)
         val results = JSONArray()
         for ((name, events) in cases) {
             val y = curve(events, fine); val peak = y.indices.maxBy { y[it] }
@@ -145,11 +153,11 @@ class SublingualP0AuditTest {
             val labs = ts.mapIndexed { i, t -> LabResult("synthetic$i", t, stableSl(t) * 1.5, LabUnit.PG_ML) }
             val fit = LabFit.fit(listOf(event()), labs)
             fits.put(JSONObject().put("id", name).put("amplitude", exp(fit.logAmplitude)).put("rate", exp(fit.logRate))
-                .put("covariance", JSONArray(fit.cov.toList())).put("correlation", fit.cov[1] / sqrt(fit.cov[0] * fit.cov[3]))
+                .put("covariance", JSONArray(fit.cov.toList())).put("correlation", if (fit.cov[3] > 0) fit.cov[1] / sqrt(fit.cov[0] * fit.cov[3]) else 0.0)
                 .put("excluded_ids", JSONArray(fit.excludedLabIds.toList())).put("observations", fit.postDoseObservationCount))
         }
         out.put("synthetic_fits", fits)
-        val file = File("build/reports/pk-p0/engine-outputs.json"); file.parentFile.mkdirs(); file.writeText(out.toString(2) + "\n")
+        val file = File("build/reports/pk-p1a/engine-outputs.json"); file.parentFile.mkdirs(); file.writeText(out.toString(2) + "\n")
         assertTrue(file.length() > 1000)
     }
 }

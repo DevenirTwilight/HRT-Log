@@ -1,0 +1,283 @@
+{
+  "numerical_acceptance": true,
+  "clinical_accuracy_established": false,
+  "synthetic_only": true,
+  "algorithm_version": 2,
+  "parameter_hash": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b",
+  "input_hashes": {
+    "old_engine": "86b5d0496211309ff06a50214abf710a96fa2b4f18c0483a21ce952095cda9bd",
+    "old_calculator": "e3749dc36d9c0274993e42cd5c27c898b764ff238a81b87aa005746004e60575",
+    "engine": "de5d2cb58a036194ce528f68036cd8f453663b355065f53af1d7c4f43435ddfa",
+    "calculator": "15b6f9147dd36bab276658021f89372c9d22b815111c3c9a8ab116c2cd1e59dc",
+    "stability": "06d1b204fffb73208b00303d2bc7b692dea37800f859a1f76d50b2c9073bebf5",
+    "non_sl_baseline": "5fb17dfd8b7d81de878963d0236eaad7026149890f24fdf2d48cb5aa1a52c600",
+    "parameters": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b"
+  },
+  "script_sha256": "f686ae11ad87455dbe3843fc9db25b906e1a819724572a69b50007481ccdb929",
+  "population_max_absolute_error": 7.167955118347891e-11,
+  "population_cases": 9,
+  "population_time_points": 117,
+  "rate_sensitivity": [
+    {
+      "rate_factor": 0.5,
+      "before_pg_ml": 170144.30401042107,
+      "after_pg_ml": 278.8647796057063
+    },
+    {
+      "rate_factor": 0.9,
+      "before_pg_ml": 29254.275557153393,
+      "after_pg_ml": 278.8647796057063
+    },
+    {
+      "rate_factor": 0.999,
+      "before_pg_ml": 557.765815537493,
+      "after_pg_ml": 278.8647796057063
+    },
+    {
+      "rate_factor": 1,
+      "before_pg_ml": 278.8647796057063,
+      "after_pg_ml": 278.8647796057063
+    },
+    {
+      "rate_factor": 1.001,
+      "before_pg_ml": 0.1773790206659367,
+      "after_pg_ml": 278.8647796057063
+    },
+    {
+      "rate_factor": 1.01,
+      "before_pg_ml": 0,
+      "after_pg_ml": 278.8647796057063
+    },
+    {
+      "rate_factor": 1.1,
+      "before_pg_ml": 0,
+      "after_pg_ml": 278.8647796057063
+    }
+  ],
+  "prior_band_before": {
+    "p5": 0,
+    "center": 278.8647796057063,
+    "p95": 152714.8058637828
+  },
+  "prior_band_after": {
+    "p5": 98.82246992729898,
+    "center": 278.8647796057063,
+    "p95": 692.8536038998615
+  },
+  "fits_before": [
+    {
+      "amplitude": 1.0000027604941257,
+      "correlation": 0.8844081418738012,
+      "rate": 0.9995000475024934,
+      "observations": 1,
+      "covariance": [
+        0.307482239172478,
+        0.00044574634687312,
+        0.00044574634687312,
+        8.261332198203298e-07
+      ],
+      "id": "one_lab",
+      "excluded_ids": []
+    },
+    {
+      "amplitude": 1.000002760499833,
+      "correlation": 0.9565865471670842,
+      "rate": 0.9995000467340239,
+      "observations": 3,
+      "covariance": [
+        0.30748223916621553,
+        0.0004457472453275772,
+        0.0004457472453275772,
+        7.061691859773891e-07
+      ],
+      "id": "same_phase",
+      "excluded_ids": []
+    },
+    {
+      "amplitude": 1.0000036762405506,
+      "correlation": 0.9565864048376829,
+      "rate": 0.9995001273871185,
+      "observations": 3,
+      "covariance": [
+        0.3074812531061673,
+        0.00044562601227585684,
+        0.00044562601227585684,
+        7.057875878972059e-07
+      ],
+      "id": "different_times",
+      "excluded_ids": []
+    }
+  ],
+  "fits_after": [
+    {
+      "amplitude": 1.3732037278881175,
+      "correlation": 0,
+      "rate": 1,
+      "observations": 1,
+      "covariance": [
+        0.06697646966334536,
+        0,
+        0,
+        0
+      ],
+      "id": "one_lab",
+      "excluded_ids": []
+    },
+    {
+      "amplitude": 1.4492182809266647,
+      "correlation": 0,
+      "rate": 1,
+      "observations": 3,
+      "covariance": [
+        0.02611821099511124,
+        0,
+        0,
+        0
+      ],
+      "id": "same_phase",
+      "excluded_ids": []
+    },
+    {
+      "amplitude": 1.4492182809251541,
+      "correlation": 0,
+      "rate": 1,
+      "observations": 3,
+      "covariance": [
+        0.026118210995175146,
+        0,
+        0,
+        0
+      ],
+      "id": "different_times",
+      "excluded_ids": []
+    }
+  ],
+  "calculator_before": {
+    "causal_interpolation_leak": {
+      "population_current_pg_ml": 277.76798707874434,
+      "sample_after_now_min": 5,
+      "earlier_grid_uses_future_lab": false,
+      "current_with_future_lab_pg_ml": 289.1998247378571,
+      "causal_summary_future_observations": 1
+    },
+    "single_dose": {
+      "actual_calculator_off_pg_ml": 277.76798707874434,
+      "synthetic_400_pg_ml_lab_on": 398.42655303749905,
+      "direct_engine_46min_pg_ml": 278.86477960569,
+      "calibrated_rate": 0.9995655795850356,
+      "calibrated_amplitude": 1.000002290377117
+    },
+    "time_and_frozen_route": {
+      "sample_zone_label_does_not_shift_epoch": true,
+      "uses_taken_not_scheduled": true,
+      "actual_dose_revision_applied": true,
+      "dst_fold_actual_elapsed_min": 46,
+      "current_oral_EV_does_not_overwrite_historical_E2_SL": true
+    },
+    "missing_context_false_baseline": {
+      "false_baseline_pg_ml": 220,
+      "warning_present": true,
+      "skipped": 1
+    },
+    "history_window_false_baseline": {
+      "used_doses": 1,
+      "population_current_pg_ml": 277.76798707874434,
+      "false_baseline_pg_ml": 500,
+      "history_days": 180,
+      "untruncated_baseline": null,
+      "lab_age_days": 200,
+      "provided_record_age_days": 201,
+      "wrong_calibrated_current_pg_ml": 777.7679870787443
+    },
+    "filters_and_units": {
+      "skipped_deleted_missed_contribute": false,
+      "pg_ml_pmol_l_equivalent": true
+    }
+  },
+  "calculator_after": {
+    "causal_interpolation_leak": {
+      "population_current_pg_ml": 277.76798707874434,
+      "sample_after_now_min": 5,
+      "earlier_grid_uses_future_lab": false,
+      "current_with_future_lab_pg_ml": 286.36702173659074,
+      "causal_summary_future_observations": 1
+    },
+    "single_dose": {
+      "actual_calculator_off_pg_ml": 277.76798707874434,
+      "synthetic_400_pg_ml_lab_on": 368.3183698246684,
+      "direct_engine_46min_pg_ml": 278.86477960569,
+      "calibrated_rate": 1,
+      "calibrated_amplitude": 1.3259928679983342
+    },
+    "time_and_frozen_route": {
+      "sample_zone_label_does_not_shift_epoch": true,
+      "uses_taken_not_scheduled": true,
+      "actual_dose_revision_applied": true,
+      "dst_fold_actual_elapsed_min": 46,
+      "current_oral_EV_does_not_overwrite_historical_E2_SL": true
+    },
+    "missing_context_false_baseline": {
+      "false_baseline_pg_ml": 220,
+      "warning_present": true,
+      "skipped": 1
+    },
+    "history_window_false_baseline": {
+      "used_doses": 1,
+      "population_current_pg_ml": 277.76798707874434,
+      "false_baseline_pg_ml": 500,
+      "history_days": 180,
+      "untruncated_baseline": null,
+      "lab_age_days": 200,
+      "provided_record_age_days": 201,
+      "wrong_calibrated_current_pg_ml": 777.7679870787443
+    },
+    "filters_and_units": {
+      "skipped_deleted_missed_contribute": false,
+      "pg_ml_pmol_l_equivalent": true
+    }
+  },
+  "candidate_A_fast_only": [
+    {
+      "rate": 0.9,
+      "fast_only_pg_ml": 289.78936834401605
+    },
+    {
+      "rate": 1,
+      "fast_only_pg_ml": 278.82675261014083
+    },
+    {
+      "rate": 1.001000500250125,
+      "fast_only_pg_ml": 278.7198826789875
+    },
+    {
+      "rate": 1.1,
+      "fast_only_pg_ml": 268.41014951225173
+    }
+  ],
+  "performance": {
+    "before_seconds": [
+      0.059832783,
+      0.052206631,
+      0.047623099,
+      0.046612811,
+      0.044218641
+    ],
+    "after_seconds": [
+      0.010271801,
+      0.013290786,
+      0.009614107,
+      0.00909397,
+      0.009952708
+    ],
+    "before_median": 0.047623099,
+    "after_median": 0.009952708,
+    "caveat": "Same host, separate JVMs; illustrative warm microbenchmark, not a general speed guarantee."
+  },
+  "unresolved": [
+    "180-day history false baseline",
+    "missing frozen context false baseline",
+    "causal interpolation/summary future labs",
+    "all-outlier IDs versus actual fit"
+  ],
+  "uncertainty": "Assumed parameter distribution only; not full predictive, structural, measurement or study uncertainty."
+}

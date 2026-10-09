@@ -29,7 +29,7 @@ class LabEstimateTest {
             db.dao().record(RecordEntity(medication_id=id,taken_utc=at.minusSeconds(3600).toEpochMilli(),taken_zone="UTC",actual_dose=2.0,status="ON_TIME",origin="APP",revision=1,config_snapshot=snapshot))
             val lab=LabValueEntity(analyte_code="E2",value=120.0,unit="pg/mL",sampled_utc=at.toEpochMilli(),sampled_zone="UTC")
             val original=JSONObject(LabEstimate.capture(db.dao(),lab))
-            assertFalse(original.getBoolean("calibrated"));assertTrue(original.getJSONObject("parameter_document").has("models"))
+            assertEquals(2,original.getInt("calculator_version"));assertFalse(original.getBoolean("calibrated"));assertTrue(original.getJSONObject("parameter_document").has("models"))
             assertEquals(1,original.getJSONArray("inputs").length());assertTrue(original.getJSONArray("values").getJSONObject(0).getDouble("value")>0)
             db.dao().record(RecordEntity(medication_id=id,taken_utc=at.plusSeconds(3600).toEpochMilli(),taken_zone="UTC",actual_dose=200.0,status="ON_TIME",origin="APP",revision=1,config_snapshot=snapshot))
             val other=JSONObject(LabEstimate.capture(db.dao(),lab.copy(value=12_000.0)))
@@ -42,7 +42,18 @@ class LabEstimateTest {
             malformed.getJSONObject("estimate").getJSONArray("values").getJSONObject(0).put("unit","MG")
             assertThrows(IllegalArgumentException::class.java){LabContext.validate(malformed.toString())}
             assertEquals(2,LabContext.validate(saved.context_json).getJSONObject("estimate").getJSONArray("inputs").length())
-            val password="synthetic-pass".toCharArray();val backup=repo.exportBackup(password);repo.restoreBackup(backup,password);assertEquals(saved,repo.labContexts().single())
+            // Existing version counter changes; the envelope and immutable legacy JSON do not.
+            val legacyBackup=JSONObject(String(BackupCodec.decrypt(repo.exportBackup("legacy-synthetic-pass".toCharArray()),"legacy-synthetic-pass".toCharArray())))
+            val legacyRow=legacyBackup.getJSONObject("tables").getJSONArray("lab_context_revision").getJSONObject(0)
+            val legacyJson=JSONObject(legacyRow.getString("context_json"));legacyJson.getJSONObject("estimate").put("calculator_version",1)
+            legacyJson.getJSONObject("estimate").getJSONArray("values").getJSONObject(0).put("p5",0.0).put("p95",152714.8058637828)
+            val legacyBytes=legacyJson.toString();legacyRow.put("context_json",legacyBytes)
+            repo.restoreBackup(BackupCodec.encrypt(legacyBackup.toString().toByteArray(),"legacy-synthetic-pass".toCharArray()),"legacy-synthetic-pass".toCharArray())
+            assertEquals(legacyBytes,repo.labContexts().single().context_json)
+            assertEquals(1,LabContext.validate(legacyBytes).getJSONObject("estimate").getInt("calculator_version"))
+            val unknown=JSONObject(legacyBytes);unknown.getJSONObject("estimate").put("calculator_version",3)
+            assertThrows(IllegalArgumentException::class.java){LabContext.validate(unknown.toString())}
+            val password="synthetic-pass".toCharArray();val backup=repo.exportBackup(password);repo.restoreBackup(backup,password);assertEquals(legacyBytes,repo.labContexts().single().context_json)
         } finally { db.close() }
     }
 }

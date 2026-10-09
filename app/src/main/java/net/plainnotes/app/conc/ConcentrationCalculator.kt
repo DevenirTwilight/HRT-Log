@@ -59,6 +59,8 @@ class ConcentrationResult(
 )
 
 object ConcentrationCalculator {
+    /** Existing snapshot metadata: v2 changes SL calibration/parameter bands, not population parameters. */
+    const val VERSION = 2
     const val FORECAST_DAYS = 30L
     const val HISTORY_DAYS = 180L
     const val E2_CODE = "E2"

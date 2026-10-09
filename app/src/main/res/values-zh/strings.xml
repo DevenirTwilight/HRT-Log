@@ -102,18 +102,18 @@
 <string name="calib_amplitude">整体幅度系数</string>
 <string name="calib_baseline">用药前基线：%1$s %2$s（已叠加到曲线上）</string>
 <string name="calib_causal">因果</string>
-<string name="calib_causal_desc">每个时间点只使用此前的化验，新的化验不会改动过去的曲线。</string>
-<string name="calib_clearance">清除速率系数</string>
+<string name="calib_causal_desc">因果拟合在网格点限制化验时间；已知的插值和摘要问题仍可能使用后来化验，尚不能保证严格的过去时点预测。</string>
+<string name="calib_clearance">模型速率系数</string>
 <string name="calib_convergence">收敛度</string>
 <string name="calib_enable">用我的 E2 化验校准</string>
 <string name="calib_few">化验还比较少，结果仍主要由群体先验决定。在服药后的不同时间点多做几次化验，拟合会更可靠。</string>
-<string name="calib_intro">根据你自己的 E2 化验结果调整雌二醇模型：拟合一个整体幅度系数和一个清除速率系数，先验来自文献中的个体差异。它只改变估算曲线，不涉及任何用药调整。</string>
+<string name="calib_intro">按 E2 化验调整暴露幅度。舌下曲线形状固定；其他途径可调整模型速率系数。先验是模型假设，并非已验证的个人生理参数。估算不会改变用药。</string>
 <string name="calib_labs">参与校准的化验</string>
 <string name="calib_last">最近一次化验：实测 %1$s，模型预期 %2$s %3$s</string>
 <string name="calib_manage_labs">管理化验结果</string>
 <string name="calib_mode">校准模式</string>
 <string name="calib_no_labs">还没有 E2 化验结果。添加后即可让曲线贴近你本人。</string>
-<string name="calib_outlier">最近一次化验与模型差异很大，已降低它的权重。请核对数值、单位和采样时间。</string>
+<string name="calib_outlier">最近一次化验与模型差异很大。离群标记不一定代表实际排除。请核对数值、单位和采样时间。</string>
 <string name="calib_retro">回溯</string>
 <string name="calib_retro_desc">用全部化验学到的参数作用于整条曲线（默认）。</string>
 <string name="calib_title">化验校准</string>
@@ -217,7 +217,7 @@
 <string name="patch_release">标称释放量</string>
 <string name="patch_release_hint">见包装，例如 50 或 100 µg/天</string>
 <string name="per_intake">每次 %1$s</string>
-<string name="pk_assumptions">模型使用群体平均值，没有考虑年龄、肝功能、SHBG、合并用药以及雌二醇的代谢产物。阴影表示人与人之间的差异范围（5%–95% 和 25%–75%），开启校准后会按你的化验结果收窄。</string>
+<string name="pk_assumptions">人口模型未考虑年龄、肝功能、SHBG、相互作用及代谢产物。E2 阴影仅表示假定参数的不确定性（5%–95% 和 25%–75%），不包括测量误差、研究间异质性或模型误差；不是经过临床验证的区间。</string>
 <string name="pk_basis_calibrated">已按化验校准 · 基于 %1$d 次服药记录</string>
 <string name="pk_basis_population">群体估算 · 基于 %1$d 次服药记录</string>
 <string name="pk_chart_hint">双指缩放，拖动平移，点按查看数值。</string>
@@ -976,4 +976,7 @@
     <string name="picker_date">日期（YYYY-MM-DD）</string>
     <string name="period_records">查看用药记录</string>
     <string name="period_inferred">由用药记录推定</string>
+<string name="calib_safety_limits">校准仍为实验功能：历史不完整、过去配置未知、因果边界及离群处理问题可能误导。数值稳定不代表个人预测准确。</string>
+<string name="calib_rate_fixed">模型速率固定</string>
+<string name="calib_rate_non_sl">非舌下模型速率</string>
 </resources>

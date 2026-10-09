@@ -11,8 +11,9 @@ import kotlin.math.sqrt
 enum class CalibrationMode { RETROSPECTIVE, CAUSAL }
 
 /**
- * Personal adjustment learned from estradiol labs (docs/pk-model.md, "化验校准"). Two factors apply to every
- * estradiol model: amplitude e^[logAmplitude] and elimination rate e^[logRate]. [cov] is the posterior covariance of
+ * Personal adjustment learned from estradiol labs (docs/pk-model.md, "化验校准"). Shared amplitude applies to estradiol events: amplitude e^[logAmplitude]; rate e^[logRate] applies only to non-SL events.
+ * Pure SL fits have fixed logRate=0 and a zero second covariance dimension. Neither factor is a validated physiological clearance.
+ * [cov] is the posterior covariance of
  * (logAmplitude, logRate) as [[a, b], [b, d]].
  */
 data class LabFitModel(
@@ -25,6 +26,8 @@ data class LabFitModel(
     /** Labs left out as outliers (more than 4-fold off the fitted curve). */
     val excludedLabIds: Set<String> = emptySet(),
     val priorSdAmplitude: Double = LabFit.PRIOR_SD_AMPLITUDE_DEFAULT,
+    val rateAdjustable: Boolean = true,
+    val algorithmVersion: Int = LabFit.ALGORITHM_VERSION,
 ) {
     /** 0 = labs taught nothing yet, 1 = amplitude fully determined by labs. */
     val convergenceScore: Double get() = (1 - cov[0] / (priorSdAmplitude * priorSdAmplitude)).coerceIn(0.0, 1.0)
@@ -37,9 +40,17 @@ data class LabDiagnostics(val predictedPGmL: Double, val observedPGmL: Double, v
 class BandedCurve(val timeH: DoubleArray, val center: DoubleArray, val p5: DoubleArray, val p25: DoubleArray, val p75: DoubleArray, val p95: DoubleArray)
 
 object LabFit {
+    /** Version 1 scaled all E2 rates; version 2 fixes entire SL events and estimates their amplitude only. */
+    const val ALGORITHM_VERSION = 2
+
+    fun rateAdjustable(events: List<DoseEvent>): Boolean = events.any { e ->
+        e.route != Route.SUBLINGUAL && e.route != Route.PATCH_REMOVE &&
+            (Engine.choose(e) as? ModelChoice.Use)?.parts?.any { it.first == Curve.E2 } == true
+    }
+
     /** Within-person variability of a lab around the curve: Zhang 2024 intra-individual CV of E2 Cmax 29.9 %. */
     val SIGMA_LAB = sqrt(ln(1 + 0.299 * 0.299))
-    /** Prior spread of the personal clearance factor: half-life CV 29 % (Zhang 2024). */
+    /** Assumed non-SL model-rate spread: half-life CV 29 % (oral EV, Zhang 2024); not a validated physiological clearance prior. */
     val PRIOR_SD_RATE = sqrt(ln(1 + 0.29 * 0.29))
     val PRIOR_SD_AMPLITUDE_DEFAULT = sqrt(ln(1 + 0.48 * 0.48))
     /** A lab more than 4-fold away from the fitted curve is treated as an outlier. */
@@ -51,6 +62,7 @@ object LabFit {
 
     /** Prior spread of the amplitude: the largest between-person CV among the estradiol models in use. */
     fun priorSdAmplitude(events: List<DoseEvent>): Double {
+        if (events.isEmpty()) return PRIOR_SD_AMPLITUDE_DEFAULT
         val r = Engine.simulate(events, grid = doubleArrayOf(events.minOf { it.timeH })) ?: return PRIOR_SD_AMPLITUDE_DEFAULT
         return r.models[Curve.E2]?.maxOfOrNull { sdOf(it.cv) } ?: PRIOR_SD_AMPLITUDE_DEFAULT
     }
@@ -80,6 +92,7 @@ object LabFit {
 
     /** Maximum a posteriori (u, v) by damped Gauss–Newton; covariance from the Laplace approximation. */
     private fun solve(events: List<DoseEvent>, labs: List<LabResult>, baseline: Double, sdA: Double): LabFitModel {
+        if (!rateAdjustable(events)) return solveAmplitude(events, labs, baseline, sdA)
         val prior = doubleArrayOf(sdA * sdA, 0.0, 0.0, PRIOR_SD_RATE * PRIOR_SD_RATE)
         if (labs.isEmpty()) return LabFitModel(cov = prior, priorSdAmplitude = sdA)
         val times = labs.map { it.timeH }.toDoubleArray()
@@ -113,6 +126,55 @@ object LabFit {
         return LabFitModel(u.coerceIn(-3.0, 3.0), v.coerceIn(-2.0, 2.0), cov, priorSdAmplitude = sdA)
     }
 
+    /** One-dimensional MAP. No rate prior or latent rate draw for a pure SL history.
+     * Backtracking ensures the objective decreases; covariance is evaluated at the returned mode.
+     * No concentration cap, forced zero, or interval clipping is used. */
+    private fun solveAmplitude(events: List<DoseEvent>, labs: List<LabResult>, baseline: Double, sdA: Double): LabFitModel {
+        val priorVariance = sdA * sdA
+        fun model(u: Double, variance: Double) = LabFitModel(logAmplitude = u,
+            cov = doubleArrayOf(variance, 0.0, 0.0, 0.0), priorSdAmplitude = sdA, rateAdjustable = false)
+        if (labs.isEmpty()) return model(0.0, priorVariance)
+        val population = e2At(events, labs.map { it.timeH }.toDoubleArray(), 0.0, 0.0)
+        val observations = labs.map { ln(toPgMl(it.concValue, it.unit)) }
+        val noiseVariance = SIGMA_LAB * SIGMA_LAB
+        fun objective(u: Double): Double {
+            var loss = u * u / priorVariance
+            for (i in observations.indices) {
+                val residual = observations[i] - ln(population[i] * exp(u) + baseline + 1e-9)
+                loss += residual * residual / noiseVariance
+            }
+            return loss / 2
+        }
+        fun derivatives(u: Double): Pair<Double, Double> {
+            var gradient = -u / priorVariance
+            var information = 1 / priorVariance
+            for (i in observations.indices) {
+                val mu = population[i] * exp(u)
+                val total = mu + baseline + 1e-9
+                val derivative = mu / total
+                gradient += derivative * (observations[i] - ln(total)) / noiseVariance
+                information += derivative * derivative / noiseVariance
+            }
+            return gradient to information
+        }
+        var u = 0.0
+        for (iteration in 0 until 100) {
+            val (gradient, information) = derivatives(u)
+            // A step bound is numerical damping, not a bound on the parameter or concentration.
+            var step = (gradient / information).coerceIn(-1.0, 1.0)
+            if (abs(step) < 1e-9) break
+            val loss = objective(u)
+            var accepted = false
+            for (attempt in 0 until 40) {
+                val next = u + step
+                if (objective(next) < loss) { u = next; accepted = true; break }
+                step *= 0.5
+            }
+            if (!accepted) break
+        }
+        return model(u, 1 / derivatives(u).second)
+    }
+
     /** Diagnostics for the most recent lab against the fit from the labs before it. */
     fun lastDiagnostics(events: List<DoseEvent>, labs: List<LabResult>): LabDiagnostics? {
         val sorted = labs.sortedBy { it.timeH }
@@ -126,14 +188,15 @@ object LabFit {
     }
 
     /**
-     * Monte Carlo bands for every curve. Estradiol uses the lab fit (or the prior when there is none), other curves
+     * Monte Carlo bands for every curve. Estradiol uses parameter uncertainty only (not predictive error or structural uncertainty), other curves
      * use their model's between-person variability. Fixed seed so the bands do not flicker between redraws.
      */
     fun bands(events: List<DoseEvent>, grid: DoubleArray, labs: List<LabResult>, mode: CalibrationMode, samples: Int = SAMPLES): Map<Curve, BandedCurve> {
         val fits = segmentFits(events, labs, mode, grid)
         val base = Engine.simulate(events, grid = grid) ?: return emptyMap()
+        val fixedPopulation = base.curves[Curve.E2]?.takeIf { !rateAdjustable(events) }
         val center = HashMap<Curve, DoubleArray>()
-        for ((curve, arr) in base.curves) center[curve] = if (curve == Curve.E2) e2Curve(events, grid, fits) { it.logAmplitude to it.logRate } else arr
+        for ((curve, arr) in base.curves) center[curve] = if (curve == Curve.E2) e2Curve(events, grid, fits, fixedPopulation) { it.logAmplitude to it.logRate } else arr
         val draws = HashMap<Curve, Array<DoubleArray>>()
         base.curves.keys.forEach { draws[it] = Array(grid.size) { DoubleArray(samples) } }
         val rnd = Random(20261006L)
@@ -142,7 +205,7 @@ object LabFit {
         for (k in 0 until samples) {
             val z = DoubleArray(4) { rnd.nextGaussian() }
             // Estradiol: correlated draw from each segment's posterior.
-            val e2 = e2Curve(events, grid, fits) { m ->
+            val e2 = e2Curve(events, grid, fits, fixedPopulation) { m ->
                 val l0 = sqrt(max(m.cov[0], 0.0)); val l1 = if (l0 > 0) m.cov[1] / l0 else 0.0; val l2 = sqrt(max(m.cov[3] - l1 * l1, 0.0))
                 (m.logAmplitude + l0 * z[0]) to (m.logRate + l1 * z[0] + l2 * z[1])
             }
@@ -174,12 +237,13 @@ object LabFit {
     }
 
     /** Estradiol curve where each grid point uses the fit of its segment; baseline added. */
-    private fun e2Curve(events: List<DoseEvent>, grid: DoubleArray, fits: List<Pair<Double, LabFitModel>>, param: (LabFitModel) -> Pair<Double, Double>): DoubleArray {
+    private fun e2Curve(events: List<DoseEvent>, grid: DoubleArray, fits: List<Pair<Double, LabFitModel>>, fixedPopulation: DoubleArray?, param: (LabFitModel) -> Pair<Double, Double>): DoubleArray {
         val out = DoubleArray(grid.size)
         fits.forEachIndexed { idx, (from, m) ->
             val to = fits.getOrNull(idx + 1)?.first ?: Double.POSITIVE_INFINITY
             val (u, v) = param(m)
-            val curve = e2At(events, grid, u, v)
+            val curve = fixedPopulation?.let { population -> DoubleArray(grid.size) { population[it] * exp(u) } }
+                ?: e2At(events, grid, u, v)
             for (i in grid.indices) if (grid[i] >= from && grid[i] < to) out[i] = curve[i] + (m.baselinePGmL ?: 0.0)
         }
         return out

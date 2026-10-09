@@ -102,18 +102,18 @@
 <string name="calib_amplitude">Level factor</string>
 <string name="calib_baseline">Pre-treatment baseline: %1$s %2$s (added to the curve)</string>
 <string name="calib_causal">Causal</string>
-<string name="calib_causal_desc">Each point only uses labs taken up to that time, so new labs never change the past.</string>
-<string name="calib_clearance">Clearance factor</string>
+<string name="calib_causal_desc">Causal fitting limits labs at grid points. Known interpolation and summary limitations can still use later labs; strict past-only prediction is not yet guaranteed.</string>
+<string name="calib_clearance">Model rate factor</string>
 <string name="calib_convergence">Convergence</string>
 <string name="calib_enable">Calibrate with my E2 labs</string>
 <string name="calib_few">Few labs so far: the population prior still dominates. More labs at different times after a dose make the fit more reliable.</string>
-<string name="calib_intro">Adjusts the estradiol model to your own E2 results: one level factor and one clearance factor, fitted with a prior from the literature variability. It only changes the estimate, never the treatment.</string>
+<string name="calib_intro">Uses E2 labs to adjust exposure amplitude. Sublingual curve shape stays fixed; other routes may adjust a model rate factor. Priors are assumptions, not validated personal physiology. Estimates never change treatment.</string>
 <string name="calib_labs">Labs used</string>
 <string name="calib_last">Latest lab: measured %1$s, model expected %2$s %3$s</string>
 <string name="calib_manage_labs">Manage lab results</string>
 <string name="calib_mode">Calibration mode</string>
 <string name="calib_no_labs">No E2 lab results yet. Add one to personalise the curve.</string>
-<string name="calib_outlier">The latest lab differs a lot from the model and was given less weight. Check the value, unit and time.</string>
+<string name="calib_outlier">The latest lab differs greatly from the model. Outlier flags do not always mean exclusion. Check value, unit and sampling time.</string>
 <string name="calib_retro">Retrospective</string>
 <string name="calib_retro_desc">The parameters learned from all labs apply to the whole curve (default).</string>
 <string name="calib_title">Lab calibration</string>
@@ -217,7 +217,7 @@
 <string name="patch_release">Nominal release rate</string>
 <string name="patch_release_hint">From the box, e.g. 50 or 100 µg/day</string>
 <string name="per_intake">%1$s per intake</string>
-<string name="pk_assumptions">The models use population averages. They do not model age, liver function, SHBG, other medications or the metabolites of estradiol. The shaded bands show the spread between people (5–95% and 25–75%), narrowed by your labs when calibration is on.</string>
+<string name="pk_assumptions">Population models omit age, liver function, SHBG, interactions and metabolites. E2 shading shows assumed parameter uncertainty (5–95% and 25–75%), not measurement error, study heterogeneity or model error. These are not clinically validated intervals.</string>
 <string name="pk_basis_calibrated">Calibrated with your labs · based on %1$d recorded doses</string>
 <string name="pk_basis_population">Population estimate · based on %1$d recorded doses</string>
 <string name="pk_chart_hint">Pinch to zoom, drag to move, tap to read a value.</string>
@@ -976,4 +976,7 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="picker_date">Date (YYYY-MM-DD)</string>
     <string name="period_records">View medication records</string>
     <string name="period_inferred">Inferred from medication records</string>
+<string name="calib_safety_limits">Calibration remains experimental: incomplete history, unknown past configuration, causal boundaries and outlier handling can mislead. Numerical stability does not establish personal accuracy.</string>
+<string name="calib_rate_fixed">Fixed model rate</string>
+<string name="calib_rate_non_sl">Non-sublingual model rate</string>
 </resources>

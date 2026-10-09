@@ -19,7 +19,7 @@ object LabEstimate {
         add(Curve.E2,r.currentPgMl,r.bandOuter?.first?.let{Pk.interpolate(r.timeH,it,r.nowH)},r.bandOuter?.second?.let{Pk.interpolate(r.timeH,it,r.nowH)})
         r.others.forEach{(curve,b)->add(curve,Pk.interpolate(b.timeH,b.center,r.nowH),Pk.interpolate(b.timeH,b.p5,r.nowH),Pk.interpolate(b.timeH,b.p95,r.nowH))}
         val parameters=PkParams::class.java.getResourceAsStream("/pk-params.json")!!.bufferedReader().use{JSONObject(it.readText())}
-        return JSONObject().put("version",1).put("sampled_utc",lab.sampled_utc).put("calibrated",false).put("calculator_version",1)
+        return JSONObject().put("version",1).put("sampled_utc",lab.sampled_utc).put("calibrated",false).put("calculator_version",ConcentrationCalculator.VERSION)
             .put("used_doses",r.usedDoses).put("skipped_doses",r.skippedDoses).put("weight_kg_at_capture",weight ?: JSONObject.NULL)
             .put("values",values).put("parameter_document",parameters).put("missing",JSONArray(r.missing.map{it.input.name}.distinct()))
             .put("unsupported",JSONArray(r.unsupported.values.map{it.name}.distinct()))

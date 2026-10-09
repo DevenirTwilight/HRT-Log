@@ -1,6 +1,18 @@
+# 当前交接：P1-A数值稳定性修复（2026-10-09）
+
+起始2761ed95c49e1ae74f0accd46aaf66bb87254040，分支claude/new-session-1959qb，Build25/0.2.0/schema9。§46当前授权，其他历史任务不再实施。
+
+- 采用B：完整SL固定速率、仅幅度；纯SL一维MAP/零速率协方差，混合仅非SL沿用二维调速率。参数JSON/来源不变，未校准278.8647796不变，先验带约98.82–692.85；不是临床区间。
+- 算法2；新的冻结estimate calculator_version=2、旧1可读，不改envelope version1/Schema/备份结构；无旧个人参数复用、旧冻结数据/PDF不重算。旧非SL五途径黄金数值回归及冻结备份测试已加入。
+- 本地PK36/域58/importer12/data72/reminder14/app349（336通过、13跳过）及Python7均0失败；lint0错误/131警告、Full Debug/Release和instrumentation APK编译通过。API35迁移/原生CI执行待确认。首次备份测试夹具密码过短已修复，最终结果以后续验收记录为准。
+- P0证据和原始结果保留；新报告[结果](pk-research/results/sublingual-p1a-report.md)、[验收](pk-research/sublingual-p1a-verification.md)。四语准确说明区间含义及仍存在的历史/因果/离群缺陷，不做其他UI重设计。
+- 下一轮**P1-B历史覆盖完整性门控**：针对180天截断和缺冻结上下文，不完整不可当治疗前基线；之后独立修因果边界/摘要和离群记录一致性。均待单独实施，原反例继续运行。P2新人口模型仍研究，独立人体准确性未确立。
+
+## 下方为按日期保留的历史交接
+
 # 交接说明：工作进度与开发指南
 
-## 进行中：P1-A 舌下校准数值稳定性（2026-10-09，REQUIREMENTS §46）
+## 历史检查点16e6cc1：P1-A方案审查（当前结果见顶部）
 
 起始2761ed95c49e1ae74f0accd46aaf66bb87254040，现有分支/远端一致、工作区干净，Build25/schema9。
 - [x] 已阅读P0文档、Engine/FittedModels/LabFit、审计/校准/冻结/备份测试；全量PK26重新执行通过（4s），独立复现r0.9=29254.28、r1.1=0、先验带0–152714.81。

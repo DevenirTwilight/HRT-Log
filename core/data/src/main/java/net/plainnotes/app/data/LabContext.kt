@@ -113,7 +113,7 @@ object LabContext {
         }
         require(o.has("estimate") && (o.isNull("estimate") || o.get("estimate") is JSONObject))
         o.optJSONObject("estimate")?.let{e->
-            require(e.getInt("version")==1 && e.get("calibrated")==false && e.getLong("sampled_utc")==at && e.getInt("calculator_version")==1)
+            require(e.getInt("version")==1 && e.get("calibrated")==false && e.getLong("sampled_utc")==at && e.getInt("calculator_version") in 1..2)
             require(e.getInt("used_doses")>=0 && e.getInt("skipped_doses")>=0)
             if(!e.isNull("weight_kg_at_capture"))require(e.getDouble("weight_kg_at_capture").let{it.isFinite() && it>0})
             val units=mapOf("E2" to "pg/mL","CPA" to "ng/mL","SPIRONOLACTONE" to "ng/mL","CANRENONE" to "ng/mL","PROGESTERONE" to "ng/mL")
