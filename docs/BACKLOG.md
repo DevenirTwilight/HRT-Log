@@ -2,13 +2,13 @@
 
 起始 `d45a67a4f5309f1e951b2dfe69e9295fa42234cb`。采用局部同前缀插值：查询仅使用P1-B合格且采样时间≤min(查询时刻,会话读取NOW)的化验；中心、四分位、摘要、诊断一致。图表及新生成动态PK PDF图在拟合断点断线；旧PDF/冻结估算不重算。四语注明按采样时间重建，不是严格当时已知回放。
 
-本地PK48/domain58/importer12/data72/reminder14通过；完整app384项（371通过/13既有跳过），最终渲染聚焦20项（19通过/1跳过），Lint0错误/131警告、Full Debug/Release及instrumentation编译通过；Python11通过。API35最终CI待运行，不冒充实机。详见 [P1-C1验收](pk-research/sublingual-p1c1-verification.md)。
+本地PK48/domain58/importer12/data72/reminder14通过；完整app384项（371通过/13既有跳过），最终渲染聚焦20项（19通过/1跳过），Lint0错误/131警告、Full Debug/Release及instrumentation编译通过；Python11通过。生产源码`47f53eec993a61b066713b9ca4f5e06e95e61eeb`的[CI37933171917](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37933171917)三个任务全success，日志和三份报告已下载：JVM PK48/domain58/importer12；Android app384（371通过/13跳过）、data72/reminder14/聚焦PK30、Python11；Lint0错误131警告、Full构建/manifest通过；API35 data14/14、app61（59通过/2常规跳过）、独立重启各1通过。20/216/24文件均无APK，机器输出与本地一致（计时除外）。这是模拟器，不是实机。详见 [P1-C1验收](pk-research/sublingual-p1c1-verification.md)。
 
 人口参数、P1-A固定SL/算法2、P1-B历史门控、Calculator2/旧冻结1/2、Build25/schema9不变。P0研究完成；人体外部准确性未确立。**下一独立P1-C2：全离群排除标记与实际拟合集合一致性**，尚未实施；P2人口模型仍研究，结果获知时间及其历史语义另行设计。保留旧研究证据，后续不再把已修因果插值列为现存缺陷。
 
 # HRT Log：当前实现与后续 Backlog
 
-最新PK迭代：2026-10-09，REQUIREMENTS §47，P1-B起始 `b9a5393a7435accd3afe02407b38709a0e40f179`。逐条历史资格门控已实施，本地及API35 CI37922137125通过并回查；P1-A完整舌下固定速率/仅幅度保留。P0研究完成、临床准确性未确立；P1-C因果边界/摘要及全离群一致性待独立授权，P2人口模型未实施。§41/42/44既有成果不变。以下历史核对基线保留。
+历史P1-B检查点：2026-10-09，REQUIREMENTS §47，P1-B起始 `b9a5393a7435accd3afe02407b38709a0e40f179`。逐条历史资格门控已实施，本地及API35 CI37922137125通过并回查；P1-A完整舌下固定速率/仅幅度保留。P0研究完成、临床准确性未确立；P1-C因果边界/摘要及全离群一致性待独立授权，P2人口模型未实施。§41/42/44既有成果不变。以下历史核对基线保留。
 
 历史核对日期：2026-10-08。起始 HEAD `5441e6efac2a9dcb3b38c0a3fb2b85b4d3c2880e`，开发分支 `claude/new-session-1959qb`，Build 25 / 0.2.0 / schema 9。状态基于源码和测试；研究中的优先级不构成实施授权。当时范围为 REQUIREMENTS §41 的 UI 修复、回归和文档；当前范围以最新需求为准。
 

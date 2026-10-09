@@ -1,0 +1,87 @@
+{
+  "jvm": {
+    "files": 20,
+    "contains_apk": false,
+    "reports": {},
+    "counts": {
+      "pk-engine": [
+        48,
+        0,
+        0,
+        0
+      ],
+      "domain": [
+        58,
+        0,
+        0,
+        0
+      ],
+      "importer": [
+        12,
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "build": {
+    "files": 216,
+    "contains_apk": false,
+    "reports": {
+      "app/build/reports/tests/testFullDebugUnitTest/index.html": {
+        "tests": 384,
+        "failures": 0,
+        "skipped": 13
+      },
+      "core/data/build/reports/tests/testDebugUnitTest/index.html": {
+        "tests": 72,
+        "failures": 0,
+        "skipped": 0
+      },
+      "core/reminder/build/reports/tests/testDebugUnitTest/index.html": {
+        "tests": 14,
+        "failures": 0,
+        "skipped": 0
+      },
+      "pk-engine/build/reports/tests/test/index.html": {
+        "tests": 30,
+        "failures": 0,
+        "skipped": 0
+      }
+    },
+    "lint": {
+      "Error": 0,
+      "Warning": 131
+    },
+    "causal_after_matches_local_except_seconds": true,
+    "noninterference": true,
+    "clinical_accuracy": false
+  },
+  "device": {
+    "files": 24,
+    "contains_apk": false,
+    "reports": {
+      "core/data/build/reports/androidTests/connected/debug/index.html": {
+        "tests": 14,
+        "failures": 0,
+        "skipped": 0
+      },
+      "app/build/reports/androidTests/connected/debug/flavors/full/index.html": {
+        "tests": 61,
+        "failures": 0,
+        "skipped": 2
+      }
+    }
+  },
+  "production_commit": "47f53eec993a61b066713b9ca4f5e06e95e61eeb",
+  "run_id": 37933171917,
+  "all_jobs_success": true,
+  "synthetic_only": true,
+  "engine_calculator_exact_match": true,
+  "eligibility_cases_match": true,
+  "restart_prepare_verify_passed": [
+    1,
+    1
+  ],
+  "physical_device_validation": false
+}

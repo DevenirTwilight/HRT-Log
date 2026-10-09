@@ -44,3 +44,38 @@ ChartViewport/ConcChart及新生成普通PDF动态图只在同拟合段连接中
 ## CI
 
 生产推送后核对，当前本地无模拟器；instrumentation编译不当设备通过。无APK上传、Release、PR、正式签名变更。
+
+## 独立旧复现与性能重跑命令
+
+以下helper只在临时detached树运行，输出路径由环境指定，运行完删除临时测试；不提交到生产test目录。旧复现命令实际在起始树运行（旧树JAVA_HOME/SDK/Gradle同上）：
+
+```sh
+git worktree add --detach /workspace/tooling/pk-p1c1/repro d45a67a4f5309f1e951b2dfe69e9295fa42234cb
+cp tools/pk-audit/legacy_p1c1_baseline.kt /workspace/tooling/pk-p1c1/repro/app/src/test/java/net/plainnotes/app/P1c1BeforeTest.kt
+cd /workspace/tooling/pk-p1c1/repro
+P1C1_BEFORE_OUTPUT=/workspace/tooling/pk-p1c1/before-reproduced.json ./gradlew :app:testFullDebugUnitTest --tests '*P1c1BeforeTest' --rerun --no-parallel --max-workers=2
+```
+
+性能helper同法复制`p1c1_performance.kt`为`P1c1PerformanceTest.kt`，旧/当前树分别运行：
+
+```sh
+P1C1_PERF_OUTPUT=/workspace/tooling/pk-p1c1/performance.json P1C1_PERF_COMMIT=<对应源码标签> ./gradlew :app:testFullDebugUnitTest --tests '*P1c1PerformanceTest' --rerun --no-parallel --max-workers=2
+```
+
+实际旧1/1 25s、新1/1 16s，生产未留下临时测试，detached树已清理。旧/新输入相同，性能JSON逐次耗时及非峰值堆差只作有限样本观测。正式MC固定种子20261006；新回归覆盖1/2/40/200抽样和多个历史时刻，固定种子独立oracle复算，并未引入可配置随机种子或宣称临床不确定性验证。
+
+P1-B允许未来400：读取完整至NOW，实际剂量有合法冻结配置，化验发生在该剂量后、读取截止前，纯SL早于窗口残余可证明/不存在未知基线；它相对查询未来而非相对读取未来。查询时间门控与历史资格是独立条件，不更改资格来让案例通过。
+
+### 已回查的CI JVM/API35
+
+生产源码47f53eec993a61b066713b9ca4f5e06e95e61eeb，[CI37933171917](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37933171917)。JVM成功，artifact11616973214/20文件，XML独立计数PK48/domain58/importer12零失败/跳过。API35 device-tests成功，artifact11616469137/24文件，数据库14（MigrationBaseline7、EncryptionIntegration7）全部通过；app61/59通过2常规跳过零失败，CausalTimeAndroidTest4/4。独立重启prepare/verify各`OK (1 test)`。日志Finished63包含重启测试，HTML正式主套件61，不能混用。两份报告均无APK；真实设备仍未验收。Android主job尚在运行，最终状态另补。
+
+### 最终CI与报告回查：全部通过
+
+CI37933171917三个任务success；生产代码与测试SHA **47f53eec993a61b066713b9ca4f5e06e95e61eeb**。Android主步骤8m28s成功，Python11/11，PK聚焦30/30；旧三阶段只读对照及新因果非干涉software=true，clinical=false。Full Debug/Release和两份测试APK构建、no-INTERNET manifest/Schema差异检查成功，未上传APK。
+
+下载build artifact11617427993（216文件），HTML主报告app384/371通过13既有跳过0失败，data72/72、reminder14/14；lint XML0错误131警告。新四語UI4/4、因果应用13/13、PK8/8及API35新增4/4可独立查阅。JVM/XML artifact20、device artifact24前述计数再次确认，无APK。
+
+实际engine/calculator JSON与本地入库完全相同；资格六案例相同（资源计时不比较）；causal-after仅seconds不同，五值/计数/资格/原始点/后采样数组一致。保存独立CI摘要`sublingual-p1c1-ci.json`，不覆盖旧机器证据。最后仅文档记录提交，不改变全绿生产代码/Kotlin测试；该文档提交触发的新CI若排队，不宣称其已经通过。
+
+未解决P1-C2全离群一致性、结果获知时间及人体外部准确性，详见最新Backlog；无真实设备验收。P1-C1可交付的数学/软件范围完成，不声称所有个人校准问题已修复。
