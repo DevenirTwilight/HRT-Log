@@ -10,7 +10,16 @@
     "passed": 48,
     "failed": 0
   },
-  "native_lock_enabled_matrix": "CI; not covered by this Robolectric audit",
+  "native_lock_enabled_matrix": {
+    "ci_run": 37899986371,
+    "tested_sha": "47926387c5397fc38f31e653a5dc9b2ef843dccf",
+    "tests": 24,
+    "passed": 24,
+    "failed": 0,
+    "skipped": 0,
+    "environment": "API35 emulator; real AndroidKeyStore PIN; controlled 320/411dp viewport",
+    "physical_device_verified": false
+  },
   "configs": [
     {
       "locale": "en",
@@ -590,5 +599,27 @@
     }
   ],
   "renders": 144,
-  "signals": 0
+  "signals": 0,
+  "final_ci": {
+    "conclusion": "success",
+    "app": {
+      "tests": 343,
+      "passed": 330,
+      "skipped": 13,
+      "failed": 0
+    },
+    "data_unit_passed": 72,
+    "reminder_unit_passed": 14,
+    "data_instrumentation_passed": 14,
+    "app_instrumentation": {
+      "tests": 53,
+      "passed": 51,
+      "skipped": 2,
+      "failed": 0
+    },
+    "restart_prepare_passed": 1,
+    "restart_verify_passed": 1,
+    "lint_errors": 0,
+    "lint_warnings": 131
+  }
 }

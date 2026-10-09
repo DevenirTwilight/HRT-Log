@@ -48,3 +48,22 @@ UiPrefs、AppLock、原保存键和值不变；设置回调仍保留其他外观
 首轮原生CI37898203318新增24项在渲染前失败：用于语言矩阵的Context包装失去ActivityResultRegistryOwner。真实setPin已成功，按钮尚未被验证；夹具显式提供真实测试Activity作为RegistryOwner，重新编译成功。最终原生矩阵结果以HANDOFF为准；不将首轮失败隐藏或当作已通过。
 
 第二轮37899069366新增24项均完成按钮三组断言，但末尾锁开关assertIsOn误选文字标签而失败：SwitchRow并不合并文字与Switch语义。测试标记PrivacySection的宿主区域，改为检查区域内真实首个Switch；产品SwitchRow和锁行为不改，须再次原生执行后才能宣布24项通过。
+
+## 最终CI验收（完成）
+
+[37899986371](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37899986371)，测试源码47926387c5397fc38f31e653a5dc9b2ef843dccf：JVM、Android、device-tests全success。后续验收提交只修改文档和结果汇总。
+
+| 检查 | 实际结果 |
+|---|---|
+| 应用单测 | 343登记，330通过，13跳过，0失败；交互48、原布局64、PeriodStability5和V2/Flow均通过 |
+| data/reminder单测 | 72/14全部通过 |
+| JVM | domain、pk-engine、importer三个test任务成功 |
+| 原生锁启用按钮矩阵 | 24/24通过，0失败/跳过；四语、320/411、字号1/1.3/2，真实PIN与全部三组选项/保存/密码密文检查 |
+| 原生应用其他回归 | 合计53登记，51通过，2常规跳过；重启prepare/verify由独立脚本各1项另行通过 |
+| 原生迁移/SQLCipher | data14/14通过 |
+| Lint、构建与边界 | 0错误/131既有警告；Full Debug/Release、data/app测试APK成功，manifest无INTERNET，Schema/PLAN无diff |
+| 专项布局审计 | 四语72配置/144渲染，严重信号0；锁关闭，不能替代上述锁启用24项 |
+
+已下载并解析CI报告：build-results176文件、device-test-results21文件，均无APK。原生报告明确SettingsButtonsAndroidTest24项全通过；失败的前两轮夹具问题不改变本轮最终结果，也不当成未修应用缺陷。
+
+没有真机字体、短屏/IME/TalkBack验收，没有新正式签名APK交付。Build25/schema9，数据库、PK、历史、复诊、UiPrefs和AppLock源码均未改变；其他8处AdaptiveChoice保留原行为，后续修复需独立授权范围。
