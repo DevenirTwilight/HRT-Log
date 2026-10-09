@@ -46,7 +46,7 @@ class SettingsButtonsAndroidTest(private val locale:String,private val width:Int
         val density=ui.activity.resources.displayMetrics.widthPixels/width.toFloat()
         ui.setContent{CompositionLocalProvider(LocalActivityResultRegistryOwner provides ui.activity,LocalContext provides localized,LocalConfiguration provides configuration,LocalDensity provides Density(density,scale)){
             NotesTheme(ThemeMode.LIGHT,contrast=appearance.contrast){Surface(Modifier.fillMaxSize().testTag("settings-viewport")){
-                SettingsScreen(appearance,{appearance=it;prefs.appearance=it},false,{},{},{},PaddingValues()){PrivacySection(1,false){}}
+                SettingsScreen(appearance,{appearance=it;prefs.appearance=it},false,{},{},{},PaddingValues()){Column(Modifier.testTag("privacy-section")){PrivacySection(1,false){}}}
             }}
         }}
         assertEquals(width.toFloat(),ui.onNodeWithTag("settings-viewport").fetchSemanticsNode().size.width/density,1f)
@@ -76,7 +76,8 @@ class SettingsButtonsAndroidTest(private val locale:String,private val width:Int
         group(listOf(R.string.theme_system,R.string.theme_light,R.string.theme_dark)){assertEquals(ThemeMode.entries[it],UiPrefs(ctx).appearance.mode);assertTrue(UiPrefs(ctx).appearance.dynamic)}
         group(listOf(R.string.contrast_low,R.string.contrast_medium,R.string.contrast_high)){assertEquals(Contrast.entries[it],UiPrefs(ctx).appearance.contrast);assertEquals(ThemeMode.DARK,UiPrefs(ctx).appearance.mode)}
         group(listOf(R.string.lock_after_now,R.string.lock_after_30s,R.string.lock_after_5m)){assertEquals(listOf(0L,30_000L,300_000L)[it],UiPrefs(ctx).lockAfterMillis)}
-        ui.onNodeWithText(localized.getString(R.string.lock_enable)).performScrollTo().assertIsOn()
+        // SwitchRow has separate label and switch semantics; test the real first switch in the privacy section.
+        ui.onAllNodes(isToggleable() and hasAnyAncestor(hasTestTag("privacy-section"))).onFirst().performScrollTo().assertIsOn()
         ui.onNodeWithText(localized.getString(R.string.lock_change_pin)).assertHasClickAction()
         assertTrue(AppLock(ctx).matches("8642"));assertArrayEquals(before,File(ctx.noBackupFilesDir,"lock.bin").readBytes())
     }

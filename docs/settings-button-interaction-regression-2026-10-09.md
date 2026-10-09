@@ -46,3 +46,5 @@ UiPrefs、AppLock、原保存键和值不变；设置回调仍保留其他外观
 完整app343登记/330通过/13跳过/0失败，原历史与稳定性回归通过；Lint0错误/131警告，Full Debug/Release与测试APK、manifest无INTERNET通过（4m48s，settings-buttons-full.log）。设置/伪装设置对话框72配置×2case=144渲染，裁切、重叠、越窗、零尺寸、动作失败及测量失败均0，见 [机器汇总](ui-audit/2026-10-09-settings-button-summary.json) 与 [合成设置截图](ui-audit/2026-10-09-settings-buttons.png)。审计锁关闭；真实锁启用矩阵必须看原生CI，不能混算。
 
 首轮原生CI37898203318新增24项在渲染前失败：用于语言矩阵的Context包装失去ActivityResultRegistryOwner。真实setPin已成功，按钮尚未被验证；夹具显式提供真实测试Activity作为RegistryOwner，重新编译成功。最终原生矩阵结果以HANDOFF为准；不将首轮失败隐藏或当作已通过。
+
+第二轮37899069366新增24项均完成按钮三组断言，但末尾锁开关assertIsOn误选文字标签而失败：SwitchRow并不合并文字与Switch语义。测试标记PrivacySection的宿主区域，改为检查区域内真实首个Switch；产品SwitchRow和锁行为不改，须再次原生执行后才能宣布24项通过。

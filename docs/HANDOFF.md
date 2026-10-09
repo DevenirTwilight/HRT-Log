@@ -8,7 +8,7 @@
 - [x] 本机聚焦SettingsButtonInteractionTest48+原ButtonLayoutRegressionTest64全部通过；包含四语、320/411、字号1/1.3/2、浅深色、控件类型/三个选项/唯一选中/每项点击/保存/文字/等尺寸/触控。新增24项SettingsButtonsAndroidTest已编译，真实Keystore setPin/验证、启用锁后测试三组及PIN密文不变，非伪造enabled夹具；本机无模拟器，须CI原生执行，尚不声明通过。
 - [x] 本机完整app343（330通过/13可选或既有跳过）、0失败；Lint0错误/131警告，Full Debug/Release、instrumentation APK、manifest无INTERNET全部通过（4m48s）。源码数据库/PK/历史/复诊及UiPrefs/AppLock不变。
 - [x] 设置与伪装设置对话框专项审计四语×320/411×字号1/1.3/2×浅深高对比度=72配置/144渲染，严重信号0；不把锁关闭的Robolectric审计当作锁启用验收。机器汇总及合成截图入docs/ui-audit，详见 [交互核对与验收](settings-button-interaction-regression-2026-10-09.md)。其他8处AdaptiveChoice同类机制已逐项报告，代码未动。
-- [ ] 最终原生CI待核对。首轮37898203318：JVM通过，新增24原生测试因localized Context丢ActivityResultRegistryOwner，在设置渲染前失败（真实setPin已成功），不是按钮断言失败；显式提供真实测试Activity作为RegistryOwner，重新编译APK成功，待推送后重跑。不能宣称真实锁矩阵通过。较早夹具Configuration.locale参数遮蔽编译错误也已修正。
+- [ ] 最终原生CI待核对。首轮37898203318：JVM通过，新增24原生测试因localized Context丢ActivityResultRegistryOwner，在设置渲染前失败（真实setPin已成功），不是按钮断言失败；显式提供真实测试Activity作为RegistryOwner，重新编译APK成功，519e0ad的24项已完成三组选项/持久化断言，但末尾assertIsOn误选文字标签（SwitchRow文字与Switch语义独立）而失败；改为测试夹具标记的隐私区域内真实首个Switch，重跑。不能宣称真实锁矩阵通过。较早夹具Configuration.locale参数遮蔽编译错误也已修正。
 - 不改DB/PK/历史/复诊、版本或签名，不制作新APK；前一个ceb1912c测试包不含本轮设置修复。
 
 ## 已制作：最新 full 测试 APK（2026-10-09，REQUIREMENTS §43）
