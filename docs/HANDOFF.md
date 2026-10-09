@@ -1,3 +1,13 @@
+# APK 体积 P0：四组实测完成（2026-10-09）
+
+[完整报告](performance/apk-size-baseline-2026-10.md)、[逐条机器证据](performance/apk-size-baseline-2026-10.json)、[构建/核验日志](performance/apk-size-evidence-2026-10/)。固定源码622e84ee927a2ebd7afc6d102c8a0af74b47799e，同JDK21/Gradle9.3.1/SDK37，四组full unsigned、R8始终开启；A默认universal 23,506,758bytes，B资源裁剪universal 23,189,359，C默认arm64 9,201,627，D裁剪arm64 8,884,228。相对A分别减少1.350246%/60.855397%/62.205643%，交互项0bytes。主要体积为SQLCipher多ABI；不按jar虚构依赖贡献。
+
+四组CRC/Manifest/无INTERNET/关键资源/三个命名JSON/本机库SHA/ZIP16KiB核验通过；A八项ELF对齐检查，B/C/D保留库字节一致。三个代表字符串四语值一致，仍不替代功能验收。正式app/core/pk-engine/importer及Gradle相对固定源码无差异，版本/Schema/PK/历史/加密参数不动。未签名、未发布或交付APK，未接触用户健康数据、设备、密钥。ARM64配置不兼容32位ARM或x86，保留正式universal默认。
+
+现有回归：domain58/pk58/importer12/data72/reminder14、Python审计13/隔离研究126、APK合成测试3均通过；app单元测试与独立lint收尾中，最终状态见报告。release instrumentation、ARM64设备及压缩release的伪装/私人便签/四语/PDF/数据库迁移/备份/锁/通知未验证。已记录JRE/代理CA/测试依赖代理和两次OOM前置失败，最终四组串行构建成功。以下APK段落是历史检查点，当前以本段及最终报告为准；远端P2研究原样保留。
+
+---
+
 ## P2-Q勘误：P2-O/P2-P严格不同曲线及未知基线（2026-10-09）
 
 [完整去重与P2-P重算附录](pk-research/p2/p2q-baseline-canonicalization-audit.md)。P2-O包含w=0且kslow变化但曲线相同的行；Price人为基线0/25/50，原接受参数75/97/62，严格不同曲线75/88/56。P2-P当b25/50原始无序配对4656/1891实际唯一曲线配对3828/1540。按旧delta0.02重排晚期时钟得到6+12/6+10/6+10，尚余1006/1951/1248对。Price真实基线仍未知，模型真值/误差纯合成，没有独立人体模型验收，不能投产。原P2-Q主75来自b0故无重复且历史报告不覆盖。

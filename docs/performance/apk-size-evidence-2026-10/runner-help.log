@@ -1,0 +1,19 @@
+usage: run_apk_size_experiment.py [-h] --commit COMMIT --out OUT --sdk SDK
+                                  [--gradle GRADLE] [--http-proxy]
+                                  [--stop-idle-kotlin-daemon]
+
+Build four unsigned fullRelease packages in detached, external worktrees.
+Never signs, installs, uploads, changes production Gradle, or cleans user
+data. Stops on the first build/manifest/ABI failure and persists partial
+evidence.
+
+options:
+  -h, --help            show this help message and exit
+  --commit COMMIT       Full pinned Git commit SHA
+  --out OUT
+  --sdk SDK
+  --gradle GRADLE
+  --http-proxy          Use inherited HTTPS_PROXY for Java network requests
+  --stop-idle-kotlin-daemon
+                        For a dedicated small-memory environment, stop the
+                        experiment-local idle compiler when R8 starts

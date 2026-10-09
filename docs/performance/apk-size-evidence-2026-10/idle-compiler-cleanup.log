@@ -1,0 +1,3 @@
+{"scenario": "B", "phase": "Kotlin compilation complete; R8 started", "stopped_task_owned_idle_compilers": ["3218"]}
+{"scenario": "C", "phase": "Kotlin compilation complete; R8 started", "stopped_task_owned_idle_compilers": ["3519"]}
+{"scenario": "D", "phase": "Kotlin compilation complete; R8 started", "stopped_task_owned_idle_compilers": ["3770"]}

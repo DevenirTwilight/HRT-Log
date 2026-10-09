@@ -1,0 +1,267 @@
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.3.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :app
+WARNING: The option setting 'android.builtInKotlin=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+WARNING: The option setting 'android.newDsl=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+w: file:///tmp/hrt-apk-experiment/pinned-serial/worktree-D/app/build.gradle.kts:2:1: 'fun Project.android(configure: Action<BaseAppModuleExtension>): Unit' is deprecated. Replaced by com.android.build.api.dsl.ApplicationExtension.
+This class is not used for the public extensions in AGP when android.newDsl=true, which is the default in AGP 9.0, and will be removed in AGP 10.0.
+w: file:///tmp/hrt-apk-experiment/pinned-serial/worktree-D/app/build.gradle.kts:40:1: 'fun Project.android(configure: Action<BaseAppModuleExtension>): Unit' is deprecated. Replaced by com.android.build.api.dsl.ApplicationExtension.
+This class is not used for the public extensions in AGP when android.newDsl=true, which is the default in AGP 9.0, and will be removed in AGP 10.0.
+APK_SIZE_BUILD_CONDITIONS={"minify":true,"shrinkResources":true,"abiFilters":["arm64-v8a"],"signingConfig":null,"flavors":["full"],"buildTools":"37.0.0","compileSdk":"android-37.0"}
+Warning: SDK processing. This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+
+> Task :importer:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:domain:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:domain:processResources NO-SOURCE
+> Task :importer:processResources NO-SOURCE
+> Task :pk-engine:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :pk-engine:compileKotlin
+> Task :pk-engine:compileJava NO-SOURCE
+> Task :core:domain:compileKotlin
+> Task :pk-engine:processResources
+> Task :core:domain:compileJava NO-SOURCE
+> Task :core:domain:classes UP-TO-DATE
+> Task :core:domain:jar
+> Task :pk-engine:classes
+> Task :pk-engine:jar
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preFullReleaseBuild UP-TO-DATE
+> Task :app:mergeFullReleaseJniLibFolders
+> Task :core:data:preBuild UP-TO-DATE
+> Task :core:data:preReleaseBuild UP-TO-DATE
+> Task :core:data:mergeReleaseJniLibFolders
+> Task :core:data:mergeReleaseNativeLibs NO-SOURCE
+> Task :core:data:copyReleaseJniLibsProjectOnly
+> Task :core:reminder:preBuild UP-TO-DATE
+> Task :core:reminder:preReleaseBuild UP-TO-DATE
+> Task :core:reminder:mergeReleaseJniLibFolders
+> Task :core:reminder:mergeReleaseNativeLibs NO-SOURCE
+> Task :core:reminder:copyReleaseJniLibsProjectOnly
+> Task :core:ui:preBuild UP-TO-DATE
+> Task :core:ui:preReleaseBuild UP-TO-DATE
+> Task :core:ui:mergeReleaseJniLibFolders
+> Task :core:ui:mergeReleaseNativeLibs NO-SOURCE
+> Task :core:ui:copyReleaseJniLibsProjectOnly
+> Task :core:data:generateReleaseResources
+> Task :core:data:packageReleaseResources
+> Task :core:data:processReleaseNavigationResources
+> Task :core:data:parseReleaseLocalResources
+> Task :core:data:generateReleaseRFile
+> Task :core:data:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:data:javaPreCompileRelease
+> Task :core:reminder:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:reminder:generateReleaseResources
+> Task :core:reminder:packageReleaseResources
+> Task :core:reminder:processReleaseNavigationResources
+> Task :core:reminder:parseReleaseLocalResources
+> Task :core:reminder:generateReleaseRFile
+> Task :core:reminder:javaPreCompileRelease
+> Task :core:ui:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:ui:generateReleaseResources
+> Task :core:ui:packageReleaseResources
+> Task :core:ui:processReleaseNavigationResources
+> Task :core:ui:parseReleaseLocalResources
+> Task :core:ui:generateReleaseRFile
+> Task :core:ui:compileReleaseKotlin
+> Task :core:ui:javaPreCompileRelease
+> Task :core:ui:compileReleaseJavaWithJavac NO-SOURCE
+> Task :core:ui:mergeReleaseGeneratedProguardFiles
+> Task :core:ui:exportReleaseConsumerProguardFiles
+> Task :app:checkFullReleaseDuplicateClasses
+> Task :core:data:prepareReleaseArtProfile
+> Task :core:reminder:prepareReleaseArtProfile
+> Task :core:ui:prepareReleaseArtProfile
+> Task :importer:compileKotlin
+> Task :app:mergeFullReleaseArtProfile
+> Task :importer:compileJava NO-SOURCE
+> Task :importer:classes UP-TO-DATE
+> Task :importer:jar
+> Task :app:mergeFullReleaseNativeLibs
+
+> Task :app:stripFullReleaseDebugSymbols
+Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libsqlcipher.so. Run with --info option to learn more.
+
+> Task :app:extractFullReleaseNativeSymbolTables
+> Task :app:mergeFullReleaseNativeDebugMetadata NO-SOURCE
+> Task :app:buildKotlinToolingMetadata
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:generateFullReleaseResources
+> Task :app:packageFullReleaseResources
+> Task :app:processFullReleaseNavigationResources
+> Task :app:parseFullReleaseLocalResources
+> Task :app:generateFullReleaseRFile
+> Task :core:ui:bundleLibCompileToJarRelease
+> Task :app:javaPreCompileFullRelease
+> Task :core:ui:bundleLibRuntimeToJarRelease
+> Task :core:ui:processReleaseJavaRes
+> Task :core:ui:createFullJarRelease
+> Task :core:data:writeReleaseAarMetadata
+> Task :core:reminder:writeReleaseAarMetadata
+> Task :core:ui:writeReleaseAarMetadata
+> Task :app:checkFullReleaseAarMetadata
+> Task :app:mapFullReleaseSourceSetPaths
+> Task :app:compileFullReleaseNavigationResources
+
+> Task :app:mergeFullReleaseResources
+/tmp/hrt-apk-experiment/pinned-serial/worktree-D/app/src/main/res/values/strings.xml:220:0: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+/tmp/hrt-apk-experiment/pinned-serial/worktree-D/app/src/main/res/values-fr/strings.xml:220:0: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+/tmp/hrt-apk-experiment/pinned-serial/worktree-D/app/src/main/res/values-b+zh+Hant/strings.xml:559:0: Multiple substitutions specified in non-positional format of string resource string/legend_band_inner. Did you mean to add the formatted="false" attribute?
+/tmp/hrt-apk-experiment/pinned-serial/worktree-D/app/src/main/res/values-b+zh+Hant/strings.xml:192:0: Multiple substitutions specified in non-positional format of string resource string/legend_band_outer. Did you mean to add the formatted="false" attribute?
+/tmp/hrt-apk-experiment/pinned-serial/worktree-D/app/src/main/res/values-b+zh+Hant/strings.xml:220:0: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+/tmp/hrt-apk-experiment/pinned-serial/worktree-D/app/src/main/res/values-zh/strings.xml:559:0: Multiple substitutions specified in non-positional format of string resource string/legend_band_inner. Did you mean to add the formatted="false" attribute?
+/tmp/hrt-apk-experiment/pinned-serial/worktree-D/app/src/main/res/values-zh/strings.xml:192:0: Multiple substitutions specified in non-positional format of string resource string/legend_band_outer. Did you mean to add the formatted="false" attribute?
+/tmp/hrt-apk-experiment/pinned-serial/worktree-D/app/src/main/res/values-zh/strings.xml:220:0: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+
+> Task :app:createFullReleaseCompatibleScreenManifests
+> Task :app:extractDeepLinksFullRelease
+> Task :core:data:extractDeepLinksRelease
+> Task :core:data:processReleaseManifest
+> Task :core:reminder:extractDeepLinksRelease
+> Task :core:reminder:processReleaseManifest
+> Task :core:ui:extractDeepLinksRelease
+> Task :core:ui:processReleaseManifest
+> Task :app:processFullReleaseMainManifest
+> Task :app:processFullReleaseManifest
+> Task :app:processFullReleaseManifestForPackage
+> Task :core:data:mapReleaseSourceSetPaths
+> Task :core:data:compileReleaseLibraryResources
+> Task :core:reminder:mapReleaseSourceSetPaths
+> Task :core:reminder:compileReleaseLibraryResources
+> Task :core:ui:mapReleaseSourceSetPaths
+> Task :core:ui:compileReleaseLibraryResources
+> Task :app:processFullReleaseResources
+> Task :app:extractProguardFiles
+> Task :app:mergeFullReleaseStartupProfile
+> Task :app:generateFullReleaseAssets UP-TO-DATE
+> Task :core:data:generateReleaseAssets UP-TO-DATE
+> Task :core:data:mergeReleaseAssets
+> Task :core:reminder:generateReleaseAssets UP-TO-DATE
+> Task :core:reminder:mergeReleaseAssets
+> Task :core:ui:generateReleaseAssets UP-TO-DATE
+> Task :core:ui:mergeReleaseAssets
+> Task :app:mergeFullReleaseAssets
+> Task :app:compressFullReleaseAssets
+> Task :app:extractFullReleaseVersionControlInfo
+> Task :core:data:extractProguardFiles
+> Task :core:data:prepareLintJarForPublish
+> Task :core:reminder:extractProguardFiles
+> Task :core:reminder:prepareLintJarForPublish
+> Task :core:ui:extractProguardFiles
+> Task :core:ui:generateReleaseLintModel
+> Task :core:ui:prepareLintJarForPublish
+> Task :core:reminder:checkReleaseAarMetadata
+> Task :core:reminder:stripReleaseDebugSymbols NO-SOURCE
+> Task :core:reminder:copyReleaseJniLibsProjectAndLocalJars
+> Task :core:reminder:extractDeepLinksForAarRelease
+> Task :core:data:checkReleaseAarMetadata
+> Task :core:data:stripReleaseDebugSymbols NO-SOURCE
+> Task :core:data:copyReleaseJniLibsProjectAndLocalJars
+> Task :core:data:extractDeepLinksForAarRelease
+> Task :core:ui:checkReleaseAarMetadata
+> Task :core:ui:stripReleaseDebugSymbols NO-SOURCE
+> Task :core:ui:copyReleaseJniLibsProjectAndLocalJars
+> Task :core:ui:extractDeepLinksForAarRelease
+> Task :core:ui:extractReleaseAnnotations
+> Task :core:ui:mergeReleaseConsumerProguardFiles
+> Task :core:ui:mergeReleaseJavaResource
+> Task :core:ui:syncReleaseLibJars
+> Task :core:ui:bundleReleaseLocalLintAar
+> Task :core:data:writeReleaseLintModelMetadata
+> Task :core:reminder:writeReleaseLintModelMetadata
+> Task :core:data:kspReleaseKotlin
+> Task :core:ui:lintVitalAnalyzeRelease
+> Task :core:ui:writeReleaseLintModelMetadata
+> Task :core:ui:generateReleaseLintVitalModel
+> Task :app:collectFullReleaseDependencies
+> Task :app:sdkFullReleaseDependencyData
+> Task :app:writeFullReleaseAppMetadata
+> Task :app:writeFullReleaseSigningConfigVersions
+> Task :core:data:compileReleaseKotlin
+w: file:///tmp/hrt-apk-experiment/pinned-serial/worktree-D/core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt:32:58 This annotation is currently applied to the value parameter only, but in the future it will also be applied to field.
+- To opt in to applying to both value parameter and field, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+w: file:///tmp/hrt-apk-experiment/pinned-serial/worktree-D/core/data/src/main/java/net/plainnotes/app/data/WellbeingUpgrade.kt:25:108 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///tmp/hrt-apk-experiment/pinned-serial/worktree-D/core/data/src/main/java/net/plainnotes/app/data/WellbeingUpgrade.kt:35:120 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///tmp/hrt-apk-experiment/pinned-serial/worktree-D/core/data/src/main/java/net/plainnotes/app/data/WellbeingUpgrade.kt:36:97 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///tmp/hrt-apk-experiment/pinned-serial/worktree-D/core/data/src/main/java/net/plainnotes/app/data/WellbeingUpgrade.kt:40:135 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+
+> Task :core:data:compileReleaseJavaWithJavac
+> Task :core:data:processReleaseJavaRes
+> Task :core:data:generateReleaseLintModel
+> Task :core:data:extractReleaseAnnotations
+> Task :core:data:mergeReleaseJavaResource
+> Task :core:data:transformReleaseClassesWithAsm
+> Task :core:data:bundleLibCompileToJarRelease
+> Task :core:reminder:kspReleaseKotlin
+
+> Task :core:reminder:compileReleaseKotlin
+w: file:///tmp/hrt-apk-experiment/pinned-serial/worktree-D/core/reminder/src/main/java/net/plainnotes/app/reminder/ReminderCoordinator.kt:24:58 This annotation is currently applied to the value parameter only, but in the future it will also be applied to field.
+- To opt in to applying to both value parameter and field, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+
+> Task :core:reminder:compileReleaseJavaWithJavac
+> Task :core:reminder:mergeReleaseGeneratedProguardFiles
+> Task :core:reminder:exportReleaseConsumerProguardFiles
+> Task :core:data:mergeReleaseGeneratedProguardFiles
+> Task :core:data:exportReleaseConsumerProguardFiles
+> Task :core:reminder:bundleLibCompileToJarRelease
+> Task :core:data:lintVitalAnalyzeRelease
+> Task :app:kspFullReleaseKotlin
+> Task :core:reminder:bundleLibRuntimeToJarRelease
+> Task :core:reminder:processReleaseJavaRes
+> Task :core:reminder:createFullJarRelease
+> Task :core:data:bundleLibRuntimeToJarRelease
+> Task :core:data:createFullJarRelease
+> Task :core:reminder:generateReleaseLintModel
+> Task :core:reminder:extractReleaseAnnotations
+> Task :core:reminder:mergeReleaseConsumerProguardFiles
+> Task :core:reminder:mergeReleaseJavaResource
+> Task :core:reminder:syncReleaseLibJars
+> Task :core:reminder:bundleReleaseLocalLintAar
+> Task :core:data:mergeReleaseConsumerProguardFiles
+> Task :core:data:syncReleaseLibJars
+> Task :core:data:bundleReleaseLocalLintAar
+> Task :core:reminder:lintVitalAnalyzeRelease
+> Task :core:data:generateReleaseLintVitalModel
+> Task :core:reminder:generateReleaseLintVitalModel
+> Task :app:compileFullReleaseKotlin
+w: file:///tmp/hrt-apk-experiment/pinned-serial/worktree-D/app/src/main/java/net/plainnotes/app/NotesViewModel.kt:24:5 This annotation is currently applied to the value parameter only, but in the future it will also be applied to field.
+- To opt in to applying to both value parameter and field, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+w: file:///tmp/hrt-apk-experiment/pinned-serial/worktree-D/app/src/main/java/net/plainnotes/app/ui/AppShell.kt:210:17 'when' is exhaustive so 'else' is redundant here.
+
+> Task :app:compileFullReleaseJavaWithJavac
+> Task :app:hiltAggregateDepsFullRelease
+> Task :app:hiltJavaCompileFullRelease
+> Task :app:processFullReleaseJavaRes
+> Task :app:transformFullReleaseClassesWithAsm
+> Task :app:mergeFullReleaseJavaResource
+> Task :app:mergeFullReleaseGeneratedProguardFiles
+> Task :app:expandFullReleaseArtProfileWildcards
+> Task :app:generateFullReleaseLintVitalReportModel
+> Task :app:minifyFullReleaseWithR8
+> Task :app:lintVitalAnalyzeFullRelease
+> Task :app:lintVitalReportFullRelease
+> Task :app:lintVitalFullRelease
+> Task :app:convertShrunkResourcesToBinaryFullRelease
+> Task :app:compileFullReleaseArtProfile
+> Task :app:optimizeFullReleaseResources
+> Task :app:packageFullRelease
+> Task :app:createFullReleaseApkListingFileRedirect
+> Task :app:assembleFullRelease
+
+BUILD SUCCESSFUL in 9m
+172 actionable tasks: 172 executed
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.3.1/userguide/configuration_cache_enabling.html

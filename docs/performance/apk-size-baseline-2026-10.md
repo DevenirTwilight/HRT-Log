@@ -1,40 +1,335 @@
 # fullRelease APK 体积 P0 审计（2026-10）
 
-状态：A/B已实测，C/D仍构建中；不可计算未完成组的收益。生产 Gradle/PK/Schema/版本/加密参数未更改。只审计 full，未签名、安装或发布。
+四组同源码 unsigned Release 已完成构建及静态审计。最大收益来自 ABI 分发；资源压缩收益较小。正式 Gradle、版本、Schema、PK、历史与加密参数没有修改。**release 功能和 ARM64 设备运行未验证，不据此启用生产默认。**
 
-## 固定源码与构建条件
+## 实测 2×2 结果
 
-- 仓库 `DevenirTwilight/HRT-Log`，实验固定 `622e84ee927a2ebd7afc6d102c8a0af74b47799e`；初始新克隆干净并重新 fetch。审计文档提交与后续 P2 研究提交不进入实验源码。
-- Gradle 9.3.1，下载 ZIP SHA256 `b266d5ff6b90eada6dc3b20cb090e3731302e553a27c5d3e4df1f0d76beaff06`（与 wrapper 属性一致）；AGP 9.1.1，Kotlin 2.2.20。
-- 完整 Temurin JDK 21.0.12.1+1，下载包 SHA256 `ce79869e1307ed8ee1e2baa86a412b1eb5b75d10a01006d788a6f968bcfaee94`；原预置 Java 只有 JRE，不能作为成功构建环境。
-- Android platform 37.0 / build-tools 37.0.0，与 README/CI 一致。代理通过继承的 HTTPS_PROXY 显式传给 Java；新 JDK 使用 `/etc/ssl/certs/java/cacerts` 系统信任库，保持 TLS 验证。
-- 包名 `net.plainnotes.app`、Build25/0.2.0、Schema9，task `:app:assembleFullRelease`。原始 `app/build.gradle.kts` SHA256 `a2964e07757c4e257eae877a4ceb35650cc9337cd8f1164508d291fcf6c17500`。
-- A=源码默认资源压缩/无ABI过滤；B=true/无ABI过滤；C=源码默认/arm64-v8a；D=true/arm64-v8a。R8全部保持true，所有实验 unsigned。独立 detached worktree 和构建输出，正式 Gradle 文件不改。
+| 指标 | A 默认/universal | B shrink/universal | C 默认/arm64 | D shrink/arm64 |
+|---|---:|---:|---:|---:|
+| APK bytes | 23,506,758 | 23,189,359 | 9,201,627 | 8,884,228 |
+| MB（10^6） | 23.506758 | 23.189359 | 9.201627 | 8.884228 |
+| MiB（2^20） | 22.417791 | 22.115096 | 8.775355 | 8.472660 |
+| native libs 压缩 MB | 19.451876 | 19.451876 | 5.197640 | 5.197640 |
+| DEX 压缩 MB | 2.263882 | 2.264136 | 2.263882 | 2.264136 |
+| Android resources 压缩 MB | 1.556379 | 1.246786 | 1.556379 | 1.246786 |
+| ZIP结构/对齐等开销 MB | 0.114790 | 0.106746 | 0.063895 | 0.055851 |
 
-## 已观察的静态风险
+差值采用“新−旧”，负数为减少；所有百分比以 A 的实际 bytes 为分母。
 
-| 项目 | 证据 | 判断与边界 |
-|---|---|---|
-| 资源名动态查找 | 搜索 app/main、app/full、core、pk-engine、importer 生产 Kotlin，未发现 getIdentifier/Class.forName | 只说明这次搜索没有匹配；不覆盖依赖内部实现或运行时行为 |
-| 伪装 launcher | app/src/full/.../Disguise.kt 动态 setComponentEnabledSetting；两个 alias 默认 disabled | 图标/标签直接 R 引用且 Manifest 显式声明；必须确认 B/D 实际保留并做 release 入口验证 |
-| 普通/计算器/便签图标 | app main/full Manifest 及对应 mipmap-anydpi-v26、drawable | 静态可追踪，不代表不同启动器/OEM验收已通过 |
-| 四语 | values、values-zh、values-b+zh+Hant、values-fr；locales_config=en-US/fr-FR/zh-CN/zh-TW | 没有新增语言过滤；仍需压缩后资源表及 release 四语验证 |
-| Java resources 按文件名加载 | FittedModels.kt 的 /pk-params.json；SymptomCatalog/SourceTranslations 的两个 JSON；LabEstimate.kt | 区别于 Android res；需逐APK确认文件保留且内容不变，不能仅凭没有 getIdentifier 排除风险 |
-| SQLCipher | DatabaseAccess.kt System.loadLibrary("sqlcipher")；ProGuard keep SQLCipher类 | arm64必须保留libsqlcipher.so与其他基线arm64本机库；构建不替代数据库打开/迁移验收 |
-| 加密备份 | DataTransfer.kt Argon2id 32MiB/3轮/并行1与AES-GCM128位tag | 参数不动，不以移除Bouncy Castle或降低KDF换体积 |
+| 差值 | bytes | % of A |
+|---|---:|---:|
+| B-A | -317,399 | -1.350246% |
+| C-A | -14,305,131 | -60.855397% |
+| D-A | -14,622,530 | -62.205643% |
+| D-C-B+A | +0 | +0.000000% |
 
-未发现需要新增 keep 规则的生产动态 Android 资源名证据；不添加宽泛 keep 来掩盖失败。Compose Icons、Bouncy Castle 的依赖 jar 大小不能计作 APK 内占用；DEX 归因需要实际 R8/打包分析证据，本次不凭构建期 jar 推断。
+## 构建条件与身份
 
-## 构建前置失败与恢复
+- 固定源码 `622e84ee927a2ebd7afc6d102c8a0af74b47799e`，初始 fetch 后工作区干净。后续远端 P2 研究和审计文档提交原样保留，不进入四个 APK。
+- Temurin JDK21.0.12.1+1；Gradle9.3.1，AGP9.1.1，Kotlin2.2.20，SDK37.0 revision2，Build Tools37.0.0；全部仅 `:app:assembleFullRelease`，独立临时worktree与输出。
+- JDK包SHA256 `ce79869e1307ed8ee1e2baa86a412b1eb5b75d10a01006d788a6f968bcfaee94`；Gradle分发SHA256 `b266d5ff6b90eada6dc3b20cb090e3731302e553a27c5d3e4df1f0d76beaff06` 与wrapper配置一致。
+- 四组始终R8=true、full-only、signingConfig=null；A/C实际shrinkResources=false，B/D=true；A/B实际ABI过滤空，C/D=[arm64-v8a]。Gradle模型实际输出与每组命令/退出码/修改文件SHA均在JSON和日志。
+- 包名net.plainnotes.app，Build25/0.2.0，minSdk26/targetSdk37，Schema9。继承HTTP代理，使用系统Java CA信任库，TLS校验开启。
+- 8GiB构建环境：串行Release；Kotlin编译完成、R8开始后终止本任务独立JDK的空闲编译进程。所有场景采用相同调度，不改变源码/优化级别。
 
-1. 预置 wrapper Java下载没有使用HTTP代理：Connection refused，退出1。
-2. 通过代理配置运行Gradle后，预置Java缺JAVA_COMPILER：退出1。
-3. 下载完整JDK后首轮固定A构建因代理CA未被新JDK信任：PKIX错误，退出1；该轮B/C/D未执行，没有伪造APK或数字。
-4. 系统信任库下重新开独立实验目录，A运行到R8时Gradle daemon退出（退出1）；cgroup上限8GiB，memory.events记录oom=1/oom_kill=1、峰值超过8GiB。此前同时运行release和Android测试，触发环境内存限制。该轮B/C/D未执行。只调整任务调度为串行，保持R8/Gradle源码与所有场景参数一致；等待既有测试结束后再启动全新四组目录，不删除失败日志。
-5. Android测试首次4个Robolectric测试类因测试JVM未继承代理而依赖获取失败（reminder当轮6项/4失败，非业务断言失败）；系统信任库+测试JVM代理下重跑，失败原XML保留。
+| APK | SHA256 | 构建退出 | ABI/原生库 |
+|---|---|---:|---|
+| A | `0d0d6853504624fbf668d0f9f6837d80397515b6ddb586e3ccbc8064828c65c4` | 0 | arm64-v8a, armeabi-v7a, x86, x86_64 / 8 |
+| B | `f018bb132c2f5eee4ea89e350e5227f84851ddbf6a5aec5da3fdacbd00b4e844` | 0 | arm64-v8a, armeabi-v7a, x86, x86_64 / 8 |
+| C | `1a0f84e598e3ceebef892927539fe8c8b49bed58941a3dcc7728ff34cea8a217` | 0 | arm64-v8a / 2 |
+| D | `44919e2fb6c666658685cfd755b3ca9e1a8fb065e6eb5c91ed6d5c4197e74965` | 0 | arm64-v8a / 2 |
 
-## 功能验收边界与下一步
+## 条目解释与证据边界
 
-A=23,506,758bytes（23.506758MB、SHA256 0d0d6853504624fbf668d0f9f6837d80397515b6ddb586e3ccbc8064828c65c4），CRC/Manifest/关键资源和Java JSON保留检查通过，ZIP16KiB对齐检查退出0；本机库19,451,876bytes，其中SQLCipher19,414,484bytes、其他本机库37,392bytes，DEX2,263,882bytes，Android resources1,556,379bytes，ZIP结构/对齐等开销114,790bytes。B=23,189,359bytes，B−A=−317,399bytes（−1.3502457%），res/从362条变292条、逻辑资源名2493→2030，资源表−287,484bytes、res/−22,109bytes、DEX+254bytes、profile−16bytes、ZIP开销−8,044bytes。B本机库全SHA/三个JSON/关键图标不变，zipalign16KiB退出0。C/D尚未完成，ABI收益及交互项未测得；release资源/设备功能未验证。原有debug及设备测试即便通过，也不能替代B/D的资源压缩release验收。arm64需ARM64环境；本环境没有 `/dev/kvm`，未操作真实手机。
+A本机库19,451,876bytes，占APK 82.7501%；SQLCipher19,414,484bytes，其他37,392bytes。SQLCipher归因来自实际 `lib/<abi>/libsqlcipher.so`，不是构建期jar。A的DEX压缩2,263,882bytes，不对Bouncy Castle/Compose Icons虚构单库贡献；跨库R8优化与压缩不能按jar大小拆分。
 
-先取得四个同源码unsigned APK并按条目解释差分，再讨论正式资源压缩与ARM64发行方案。方案另需用户授权；本轮不修改生产默认。历史signed Build25的23,555,291bytes与SHA仅沿用附件/既有交付记录作规模参考，本轮未取得该APK，不算同等A/B。未获取/反编译/复制Featherline二进制、资源或源码。
+B−A：resources.arsc −287,484bytes，res/ −22,109bytes，DEX +254bytes，profile −16bytes，容器开销 −8,044bytes。DEX小幅增加是实测现象，未进一步归因到具体类。res/ 362→292条，逻辑资源名2493→2030；路径已被AAPT缩短，JSON保存按ZIP条目及逻辑资源名的完整差分。未验证每个被删除资源的运行时安全性。
+
+C−A：删除其他三个ABI的6项本机库，native −14,254,236bytes，容器开销 −50,895bytes；其他组件大小不变。原生库比对包含完整SHA集合，arm64 SQLCipher与graphics.path均未改变。D的同类差分与交互项以表格和JSON实测为准。
+
+四组CRC、合并Manifest检查、打包Manifest/权限/资源表、关键图标与locale XML、三个命名Java JSON源码SHA一致性、ZIP16KiB对齐均通过。A的8项ELF LOAD段p_align均16384；其他包保留库的字节SHA一致，因此对应ELF内容相同。静态检查不替代SQLCipher打开/迁移、设备或功能验证。ZIP开销包含元数据、对齐和其他字节；这些包未签名，不能把该差值全称签名开销。
+
+四组打包权限一致，未含INTERNET；实际权限见证据目录。历史signed Build25的23,555,291bytes/SHA仅来自附件与既有交付记录，本轮未取该包，仅作规模背景，不计其与新A差值为优化。没有获取/反编译/复制Featherline APK、源码或资产，8,985,589bytes arm64参考不作为同等A/B或架构评价。
+
+## 资源与兼容性风险
+
+- 生产Kotlin搜索未发现getIdentifier/Class.forName；不覆盖依赖内部实现。Disguise.kt动态切换两个默认disabled的launcher alias，图标/标签使用直接R引用且在Manifest声明。四包中普通/计算器/便签图标及其前景/单色资源均静态保留。
+- values、values-zh、values-b+zh+Hant、values-fr：已核对四APK中settings/shell_calc/private_notes三个代表性字符串的四语值与源码一致，locales_config及关键图标静态保留；不覆盖所有字符串或运行时路径，最终四语交互/字体和启动器运行未验证。
+- `/pk-params.json`、`/symptom-sources.json`、`/wellbeing-translations.json`按文件名加载，四APK内容与固定源码完整SHA一致。没有添加宽泛keep。
+- SQLCipher及加密备份实现不动，Argon2id/AES-GCM参数、旧冻结/备份、PK/P2不改。体积与软件回归不是医学准确度证据。
+
+## 实际测试与未验证事项
+
+| 模块 | 登记 | 失败 | 错误 | 跳过 |
+|---|---:|---:|---:|---:|
+| core/domain | 58 | 0 | 0 | 0 |
+| pk-engine | 58 | 0 | 0 | 0 |
+| importer | 12 | 0 | 0 | 0 |
+| core/data | 72 | 0 | 0 | 0 |
+| core/reminder | 14 | 0 | 0 | 0 |
+| app | 0 | 0 | 0 | 0 |
+
+Python旧PK审计13、固定源码隔离研究126、APK脚本3项（两个stored/deflated合成ZIP、CRC损坏、非ZIP反例）均通过。应用单元/lint命令最终状态与PeriodStability精确结果见JSON；没有把未完成或缺失XML计作通过。
+
+本轮没有运行release instrumentation、ARM64设备、x86_64模拟器或用户手机。正常/计算器/便签入口、私人便签隔离、四语、PDF、SQLCipher迁移、安全锁及通知的**压缩release运行时验收均未验证**。原有debug回归不替代B/D验收。APK字节统计不测应用RAM、安装展开或冷启动。
+
+## 前置失败与恢复
+
+1. wrapper下载未使用HTTP代理，Connection refused（退出1）；使用同一官方Gradle分发并验SHA恢复。
+2. 预置Java只有JRE、缺javac（退出1）；换到已验SHA的完整JDK21。
+3. 新JDK没有代理CA，首轮A PKIX失败（退出1），B/C/D未跑；系统CA恢复，TLS未关闭。
+4. 并行Release/Android任务时R8 daemon退出；随后联合Android test/lint又退出，cgroup两次OOM kill。失败日志保留；改串行并回收本任务空闲编译进程，最终四组成功。
+5. 首次reminder6项/4失败是Robolectric依赖下载无代理；测试JVM传播代理后data72/reminder14通过。app/lint是否完成以最终命令和XML为准，不隐藏原失败。
+
+## 建议与发行兼容性
+
+| 产物配置 | 64位ARM Android | 32位ARM Android | x86/x86_64 Android | 本轮运行时状态 |
+|---|---|---|---|---|
+| A/B universal full | ABI支持 | ABI支持 | ABI支持 | 未验证release功能 |
+| C/D arm64 full | ABI支持 | 不支持 | 不支持 | 未执行ARM64运行 |
+
+保留正式full默认配置。本轮只交测量、工具和报告；如果选择ARM64分发，保留universal兼容渠道并确认目标设备实际支持arm64 ABI。资源压缩收益约1.35%，应先通过release-equivalent的伪装/私有便签/四语/PDF/数据库/迁移/备份/锁/通知测试；在临时测试区保留R8与资源标志、使用CI内部测试签名和纯合成数据，A/B在干净x86_64环境，C/D另用ARM64环境，不涉及现有用户安装或官方密钥。任何正式资源压缩/ABI发行改变另需用户授权，不能将D直接提交生产。
+
+## 复现与交付
+
+执行前保证工作区干净、准备相同JDK/SDK；设置JAVA_HOME及系统信任库，继承代理。下面参数适用于本次专用实验目录，换目录时保留JDK位于输出父目录内的安全约束。
+
+```bash
+export JAVA_HOME=/tmp/hrt-apk-experiment/jdk/jdk-21.0.12.1+1
+export PATH="$JAVA_HOME/bin:$PATH"
+export JAVA_TOOL_OPTIONS="-Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts"
+python3 scripts/run_apk_size_experiment.py \
+  --commit 622e84ee927a2ebd7afc6d102c8a0af74b47799e \
+  --out /tmp/hrt-apk-experiment/new-round \
+  --sdk /tmp/hrt-apk-experiment/android-sdk \
+  --gradle /tmp/hrt-apk-experiment/gradle-9.3.1/bin/gradle \
+  --http-proxy --stop-idle-kotlin-daemon
+python3 scripts/apk_size_audit.py /tmp/hrt-apk-experiment/new-round/{A,B,C,D}.apk \
+  --out /tmp/hrt-apk-experiment/new-round/size-report
+```
+
+每次使用新目录，旧失败不覆盖。现有测试命令、工具身份、每组日志/退出码/SHA、全部条目/本机库、逻辑资源名差分均在[机器报告](apk-size-baseline-2026-10.json)及[证据目录](apk-size-evidence-2026-10/)。APK只在仓库外 `/tmp/hrt-apk-experiment/pinned-serial/`，不签名、安装、交付或上传；临时环境删除后需要按固定条件重建。正式生产目录git diff为空。
+
+## 各 APK 完整 ZIP 统计
+
+以下包括按ABI汇总、全部本机库原始/压缩大小及每包前15条；profiles单独归类。
+
+# APK size audit
+
+All packages are compared using their actual byte size; all comparisons require matching source revision, release mode and build tools.
+
+## Summary
+
+| APK | Size (MB decimal) | vs first APK | SHA256 prefix |
+|---|---:|---:|---|
+| `A.apk` | 23.507 | +0.000 MB (+0.00%) | `0d0d68535046` |
+| `B.apk` | 23.189 | -0.317 MB (-1.35%) | `f018bb132c2f` |
+| `C.apk` | 9.202 | -14.305 MB (-60.86%) | `1a0f84e598e3` |
+| `D.apk` | 8.884 | -14.623 MB (-62.21%) | `44919e2fb6c6` |
+
+## A.apk
+
+- Total: 23,506,758 B (23.507 MB)
+- SHA256: `0d0d6853504624fbf668d0f9f6837d80397515b6ddb586e3ccbc8064828c65c4`
+- ZIP file entries: 476
+
+| Package component | Compressed (MB) | Uncompressed (MB) | Entries |
+|---|---:|---:|---:|
+| `lib/x86_64` | 5.757 | 5.757 | 2 |
+| `lib/arm64-v8a` | 5.198 | 5.198 | 2 |
+| `lib/x86` | 4.933 | 4.933 | 2 |
+| `lib/armeabi-v7a` | 3.565 | 3.565 | 2 |
+| `dex` | 2.264 | 4.513 | 1 |
+| `resources.arsc` | 1.405 | 1.405 | 1 |
+| `res/` | 0.151 | 0.251 | 362 |
+| `other` | 0.074 | 0.448 | 8 |
+| `META-INF/` | 0.023 | 0.064 | 86 |
+| `kotlin/` | 0.012 | 0.051 | 8 |
+| `profiles` | 0.011 | 0.011 | 2 |
+| ZIP metadata, alignment and other overhead | 0.115 | — | — |
+
+**Largest entries by ZIP compressed size**
+
+| Member | Compressed MB | Raw MB |
+|---|---:|---:|
+| `lib/x86_64/libsqlcipher.so` | 5.746 | 5.746 |
+| `lib/arm64-v8a/libsqlcipher.so` | 5.188 | 5.188 |
+| `lib/x86/libsqlcipher.so` | 4.923 | 4.923 |
+| `lib/armeabi-v7a/libsqlcipher.so` | 3.557 | 3.557 |
+| `classes.dex` | 2.264 | 4.513 |
+| `resources.arsc` | 1.405 | 1.405 |
+| `pk-params.json` | 0.040 | 0.259 |
+| `lib/x86_64/libandroidx.graphics.path.so` | 0.011 | 0.011 |
+| `lib/arm64-v8a/libandroidx.graphics.path.so` | 0.010 | 0.010 |
+| `assets/dexopt/baseline.prof` | 0.010 | 0.010 |
+| `lib/x86/libandroidx.graphics.path.so` | 0.009 | 0.009 |
+| `wellbeing-translations.json` | 0.008 | 0.035 |
+| `lib/armeabi-v7a/libandroidx.graphics.path.so` | 0.007 | 0.007 |
+| `symptom-sources.json` | 0.007 | 0.039 |
+| `org/bouncycastle/x509/CertPathReviewerMessages.properties` | 0.007 | 0.047 |
+
+**Native libraries (all entries)**
+
+| Member | Compressed bytes | Raw bytes | SQLCipher |
+|---|---:|---:|---|
+| `lib/arm64-v8a/libandroidx.graphics.path.so` | 10096 | 10096 | False |
+| `lib/arm64-v8a/libsqlcipher.so` | 5187544 | 5187544 | True |
+| `lib/armeabi-v7a/libandroidx.graphics.path.so` | 7252 | 7252 | False |
+| `lib/armeabi-v7a/libsqlcipher.so` | 3557424 | 3557424 | True |
+| `lib/x86/libandroidx.graphics.path.so` | 9284 | 9284 | False |
+| `lib/x86/libsqlcipher.so` | 4923492 | 4923492 | True |
+| `lib/x86_64/libandroidx.graphics.path.so` | 10760 | 10760 | False |
+| `lib/x86_64/libsqlcipher.so` | 5746024 | 5746024 | True |
+
+Caution: ZIP component sizes do not measure Android runtime RAM usage, installed storage expansion, cold-start time or clinical/functional correctness.
+
+## B.apk
+
+- Total: 23,189,359 B (23.189 MB)
+- SHA256: `f018bb132c2f5eee4ea89e350e5227f84851ddbf6a5aec5da3fdacbd00b4e844`
+- ZIP file entries: 406
+
+| Package component | Compressed (MB) | Uncompressed (MB) | Entries |
+|---|---:|---:|---:|
+| `lib/x86_64` | 5.757 | 5.757 | 2 |
+| `lib/arm64-v8a` | 5.198 | 5.198 | 2 |
+| `lib/x86` | 4.933 | 4.933 | 2 |
+| `lib/armeabi-v7a` | 3.565 | 3.565 | 2 |
+| `dex` | 2.264 | 4.514 | 1 |
+| `resources.arsc` | 1.118 | 1.118 | 1 |
+| `res/` | 0.129 | 0.208 | 292 |
+| `other` | 0.074 | 0.448 | 8 |
+| `META-INF/` | 0.023 | 0.064 | 86 |
+| `kotlin/` | 0.012 | 0.051 | 8 |
+| `profiles` | 0.011 | 0.011 | 2 |
+| ZIP metadata, alignment and other overhead | 0.107 | — | — |
+
+**Largest entries by ZIP compressed size**
+
+| Member | Compressed MB | Raw MB |
+|---|---:|---:|
+| `lib/x86_64/libsqlcipher.so` | 5.746 | 5.746 |
+| `lib/arm64-v8a/libsqlcipher.so` | 5.188 | 5.188 |
+| `lib/x86/libsqlcipher.so` | 4.923 | 4.923 |
+| `lib/armeabi-v7a/libsqlcipher.so` | 3.557 | 3.557 |
+| `classes.dex` | 2.264 | 4.514 |
+| `resources.arsc` | 1.118 | 1.118 |
+| `pk-params.json` | 0.040 | 0.259 |
+| `lib/x86_64/libandroidx.graphics.path.so` | 0.011 | 0.011 |
+| `lib/arm64-v8a/libandroidx.graphics.path.so` | 0.010 | 0.010 |
+| `assets/dexopt/baseline.prof` | 0.010 | 0.010 |
+| `lib/x86/libandroidx.graphics.path.so` | 0.009 | 0.009 |
+| `wellbeing-translations.json` | 0.008 | 0.035 |
+| `lib/armeabi-v7a/libandroidx.graphics.path.so` | 0.007 | 0.007 |
+| `symptom-sources.json` | 0.007 | 0.039 |
+| `org/bouncycastle/x509/CertPathReviewerMessages.properties` | 0.007 | 0.047 |
+
+**Native libraries (all entries)**
+
+| Member | Compressed bytes | Raw bytes | SQLCipher |
+|---|---:|---:|---|
+| `lib/arm64-v8a/libandroidx.graphics.path.so` | 10096 | 10096 | False |
+| `lib/arm64-v8a/libsqlcipher.so` | 5187544 | 5187544 | True |
+| `lib/armeabi-v7a/libandroidx.graphics.path.so` | 7252 | 7252 | False |
+| `lib/armeabi-v7a/libsqlcipher.so` | 3557424 | 3557424 | True |
+| `lib/x86/libandroidx.graphics.path.so` | 9284 | 9284 | False |
+| `lib/x86/libsqlcipher.so` | 4923492 | 4923492 | True |
+| `lib/x86_64/libandroidx.graphics.path.so` | 10760 | 10760 | False |
+| `lib/x86_64/libsqlcipher.so` | 5746024 | 5746024 | True |
+
+Caution: ZIP component sizes do not measure Android runtime RAM usage, installed storage expansion, cold-start time or clinical/functional correctness.
+
+## C.apk
+
+- Total: 9,201,627 B (9.202 MB)
+- SHA256: `1a0f84e598e3ceebef892927539fe8c8b49bed58941a3dcc7728ff34cea8a217`
+- ZIP file entries: 470
+
+| Package component | Compressed (MB) | Uncompressed (MB) | Entries |
+|---|---:|---:|---:|
+| `lib/arm64-v8a` | 5.198 | 5.198 | 2 |
+| `dex` | 2.264 | 4.513 | 1 |
+| `resources.arsc` | 1.405 | 1.405 | 1 |
+| `res/` | 0.151 | 0.251 | 362 |
+| `other` | 0.074 | 0.448 | 8 |
+| `META-INF/` | 0.023 | 0.064 | 86 |
+| `kotlin/` | 0.012 | 0.051 | 8 |
+| `profiles` | 0.011 | 0.011 | 2 |
+| ZIP metadata, alignment and other overhead | 0.064 | — | — |
+
+**Largest entries by ZIP compressed size**
+
+| Member | Compressed MB | Raw MB |
+|---|---:|---:|
+| `lib/arm64-v8a/libsqlcipher.so` | 5.188 | 5.188 |
+| `classes.dex` | 2.264 | 4.513 |
+| `resources.arsc` | 1.405 | 1.405 |
+| `pk-params.json` | 0.040 | 0.259 |
+| `lib/arm64-v8a/libandroidx.graphics.path.so` | 0.010 | 0.010 |
+| `assets/dexopt/baseline.prof` | 0.010 | 0.010 |
+| `wellbeing-translations.json` | 0.008 | 0.035 |
+| `symptom-sources.json` | 0.007 | 0.039 |
+| `org/bouncycastle/x509/CertPathReviewerMessages.properties` | 0.007 | 0.047 |
+| `org/bouncycastle/x509/CertPathReviewerMessages_de.properties` | 0.007 | 0.050 |
+| `kotlin/kotlin.kotlin_builtins` | 0.005 | 0.029 |
+| `META-INF/androidx/annotation/annotation/LICENSE.txt` | 0.004 | 0.010 |
+| `META-INF/androidx/collection/collection-ktx/LICENSE.txt` | 0.004 | 0.010 |
+| `META-INF/androidx/collection/collection/LICENSE.txt` | 0.004 | 0.010 |
+| `META-INF/androidx/lifecycle/lifecycle-common-java8/LICENSE.txt` | 0.004 | 0.010 |
+
+**Native libraries (all entries)**
+
+| Member | Compressed bytes | Raw bytes | SQLCipher |
+|---|---:|---:|---|
+| `lib/arm64-v8a/libandroidx.graphics.path.so` | 10096 | 10096 | False |
+| `lib/arm64-v8a/libsqlcipher.so` | 5187544 | 5187544 | True |
+
+Caution: ZIP component sizes do not measure Android runtime RAM usage, installed storage expansion, cold-start time or clinical/functional correctness.
+
+## D.apk
+
+- Total: 8,884,228 B (8.884 MB)
+- SHA256: `44919e2fb6c666658685cfd755b3ca9e1a8fb065e6eb5c91ed6d5c4197e74965`
+- ZIP file entries: 400
+
+| Package component | Compressed (MB) | Uncompressed (MB) | Entries |
+|---|---:|---:|---:|
+| `lib/arm64-v8a` | 5.198 | 5.198 | 2 |
+| `dex` | 2.264 | 4.514 | 1 |
+| `resources.arsc` | 1.118 | 1.118 | 1 |
+| `res/` | 0.129 | 0.208 | 292 |
+| `other` | 0.074 | 0.448 | 8 |
+| `META-INF/` | 0.023 | 0.064 | 86 |
+| `kotlin/` | 0.012 | 0.051 | 8 |
+| `profiles` | 0.011 | 0.011 | 2 |
+| ZIP metadata, alignment and other overhead | 0.056 | — | — |
+
+**Largest entries by ZIP compressed size**
+
+| Member | Compressed MB | Raw MB |
+|---|---:|---:|
+| `lib/arm64-v8a/libsqlcipher.so` | 5.188 | 5.188 |
+| `classes.dex` | 2.264 | 4.514 |
+| `resources.arsc` | 1.118 | 1.118 |
+| `pk-params.json` | 0.040 | 0.259 |
+| `lib/arm64-v8a/libandroidx.graphics.path.so` | 0.010 | 0.010 |
+| `assets/dexopt/baseline.prof` | 0.010 | 0.010 |
+| `wellbeing-translations.json` | 0.008 | 0.035 |
+| `symptom-sources.json` | 0.007 | 0.039 |
+| `org/bouncycastle/x509/CertPathReviewerMessages.properties` | 0.007 | 0.047 |
+| `org/bouncycastle/x509/CertPathReviewerMessages_de.properties` | 0.007 | 0.050 |
+| `kotlin/kotlin.kotlin_builtins` | 0.005 | 0.029 |
+| `META-INF/androidx/annotation/annotation/LICENSE.txt` | 0.004 | 0.010 |
+| `META-INF/androidx/collection/collection-ktx/LICENSE.txt` | 0.004 | 0.010 |
+| `META-INF/androidx/collection/collection/LICENSE.txt` | 0.004 | 0.010 |
+| `META-INF/androidx/lifecycle/lifecycle-common-java8/LICENSE.txt` | 0.004 | 0.010 |
+
+**Native libraries (all entries)**
+
+| Member | Compressed bytes | Raw bytes | SQLCipher |
+|---|---:|---:|---|
+| `lib/arm64-v8a/libandroidx.graphics.path.so` | 10096 | 10096 | False |
+| `lib/arm64-v8a/libsqlcipher.so` | 5187544 | 5187544 | True |
+
+Caution: ZIP component sizes do not measure Android runtime RAM usage, installed storage expansion, cold-start time or clinical/functional correctness.
+

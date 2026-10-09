@@ -1,0 +1,11 @@
+gradle.projectsEvaluated {
+    def android = gradle.rootProject.project(':app').extensions.getByName('android')
+    def release = android.buildTypes.getByName('release')
+    println('APK_SIZE_BUILD_CONDITIONS=' + groovy.json.JsonOutput.toJson([
+        minify: release.minifyEnabled, shrinkResources: release.shrinkResources,
+        abiFilters: android.defaultConfig.ndk.abiFilters.toList().sort(),
+        signingConfig: release.signingConfig?.name,
+        flavors: android.productFlavors.collect { it.name }.sort(),
+        buildTools: android.buildToolsVersion, compileSdk: android.compileSdkVersion
+    ]))
+}
