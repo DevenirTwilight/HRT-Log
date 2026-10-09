@@ -22,6 +22,7 @@ SDK37.0/BuildTools37.0.0已装好；完整Temurin JDK21.0.12.1+1已下载并核�
 实验脚本补充逐APK校验三个按文件名读取的Java资源SHA与源码一致；比较完整原生库SHA集合，B保持A全部库，C/D仅保留A的完整arm64库集合，意外丢失/增加/改变即停止。数据72/reminder14已全部通过，app与lint仍运行。
 脚本同时检查最终APK权限（无INTERNET）和资源表中普通/计算器/便签的全部关键图标及locale XML，缺失则失败；这仍只证明静态保留，不代表release设备功能通过。
 补充：Android联合单元/lint又触及8GiB（oom_kill累计2），app与lint未完成，无通过结果。数据72/reminder14的XML完整通过。已结束本任务遗留Kotlin编译与孤立测试进程，启动全新pinned-serial目录单独四组release；如独立运行仍失败，将按停止条件交付失败记录。
+串行A实际Gradle模型确认minify=true/shrinkResources=false/ABI=[]/signing=null/flavor=[full]/SDK37.0/BT37.0.0，已进入R8。8GiB环境下结束本任务已完成编译的空闲Kotlin进程，为R8释放内存；同样调度应用于所有场景，未降低R8或改源码。执行脚本增加可选--stop-idle-kotlin-daemon，只匹配实验目录内独立JDK的编译进程，不操作系统共享JDK；源码/配置条件相同。
 待完成：四组构建/ZIP及manifest核验、资源静态风险与差分、可执行现有测试、报告JSON/Markdown；release及设备功能未验证。
 本检查点提交只涉及审计脚本/合成测试/交接；旧交接与P2研究保留如下。
 

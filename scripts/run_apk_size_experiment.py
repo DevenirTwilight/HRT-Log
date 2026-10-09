@@ -10,18 +10,40 @@ import json
 import os
 from pathlib import Path
 import shutil
+import signal
 import subprocess
 import sys
+import time
 import urllib.parse
 import zipfile
 
 from apk_size_audit import inspect, markdown
 
 
-def run(command, cwd, log):
+def run(command, cwd, log, idle_compiler_java=None):
     with log.open('w') as stream:
-        result = subprocess.run(command, cwd=cwd, stdout=stream, stderr=subprocess.STDOUT)
-    return {'command': list(map(str, command)), 'exit_code': result.returncode, 'log': log.name}
+        process = subprocess.Popen(command, cwd=cwd, stdout=stream, stderr=subprocess.STDOUT)
+        cleaned = False
+        while process.poll() is None:
+            if idle_compiler_java and not cleaned and '> Task :app:minifyFullReleaseWithR8' in log.read_text():
+                # All Kotlin inputs of R8 are already compiled at this DAG boundary.
+                # Match the experiment-local JDK, never the machine's shared JDK.
+                stopped = []
+                for proc in Path('/proc').iterdir():
+                    if not proc.name.isdigit():
+                        continue
+                    try:
+                        args = (proc / 'cmdline').read_bytes().split(b'\0')
+                        if args[0].decode() == str(idle_compiler_java) and b'KotlinCompileDaemon' in b' '.join(args):
+                            os.kill(int(proc.name), signal.SIGTERM)
+                            stopped.append(proc.name)
+                    except (FileNotFoundError, PermissionError, ProcessLookupError):
+                        continue
+                stream.write('\nAPK_SIZE_IDLE_COMPILER_CLEANUP=' + json.dumps(stopped) + '\n')
+                stream.flush()
+                cleaned = True
+            time.sleep(1)
+    return {'command': list(map(str, command)), 'exit_code': process.returncode, 'log': log.name}
 
 
 def main():
@@ -31,11 +53,20 @@ def main():
     parser.add_argument('--sdk', type=Path, required=True)
     parser.add_argument('--gradle', default='./gradlew')
     parser.add_argument('--http-proxy', action='store_true', help='Use inherited HTTPS_PROXY for Java network requests')
+    parser.add_argument('--stop-idle-kotlin-daemon', action='store_true', help='For a dedicated small-memory environment, stop the experiment-local idle compiler when R8 starts')
     args = parser.parse_args()
     repo = Path(subprocess.check_output(['git', 'rev-parse', '--show-toplevel'], text=True).strip()).resolve()
     out = args.out.resolve()
     if out == repo or repo in out.parents:
         parser.error('APK experiment output must be outside the source repository')
+    compiler_java = None
+    if args.stop_idle_kotlin_daemon:
+        if 'JAVA_HOME' not in os.environ:
+            parser.error('Memory cleanup requires JAVA_HOME to select an experiment-local JDK')
+        jdk = Path(os.environ['JAVA_HOME']).resolve()
+        if out.parent not in jdk.parents or not Path('/proc').is_dir():
+            parser.error('Memory cleanup requires Linux and a dedicated JDK under the experiment parent directory')
+        compiler_java = jdk / 'bin/java'
     commit = subprocess.check_output(['git', 'rev-parse', args.commit + '^{commit}'], cwd=repo, text=True).strip()
     if args.commit != commit:
         parser.error('--commit must be the complete SHA')
@@ -69,6 +100,7 @@ def main():
                 'sdk_root': str(args.sdk.resolve()), 'signing': 'unsigned; no official credentials',
                 'scenarios': [], 'status': 'in_progress', 'java_home': os.environ.get('JAVA_HOME'),
                 'gradle_executable': args.gradle}
+    evidence['stop_experiment_local_idle_compiler_at_r8'] = args.stop_idle_kotlin_daemon
 
     def save():
         (out / 'experiment.json').write_text(json.dumps(evidence, ensure_ascii=False, indent=2) + '\n')
@@ -100,7 +132,7 @@ def main():
             scenario['experimental_gradle_sha256'] = hashlib.sha256(build_file.read_bytes()).hexdigest()
             scenario['status'] = 'building'
             save()
-            scenario['build'] = run([args.gradle, *common, ':app:assembleFullRelease'], tree, out / f'{label}-build.log')
+            scenario['build'] = run([args.gradle, *common, ':app:assembleFullRelease'], tree, out / f'{label}-build.log', compiler_java)
             if scenario['build']['exit_code']:
                 scenario['status'] = 'build_failed'
                 raise RuntimeError(f'{label}: fullRelease build failed')
@@ -168,6 +200,9 @@ def main():
         (out / 'size-report.md').write_text(markdown(reports))
         evidence['status'] = 'four_builds_completed; release_functionality_unverified'
     except Exception as error:
+        if scenario['status'] in ('pending', 'building'):
+            scenario['status'] = 'validation_or_execution_failed'
+        scenario['error'] = str(error)
         evidence['status'] = 'stopped'
         evidence['error'] = str(error)
         raise
