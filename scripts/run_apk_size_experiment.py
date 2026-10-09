@@ -43,6 +43,19 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
     if (out / 'experiment.json').exists():
         parser.error('Use a new output directory; existing evidence will not be overwritten')
+    conditions = out / 'conditions.gradle'
+    conditions.write_text('''gradle.projectsEvaluated {
+    def android = gradle.rootProject.project(':app').extensions.getByName('android')
+    def release = android.buildTypes.getByName('release')
+    println('APK_SIZE_BUILD_CONDITIONS=' + groovy.json.JsonOutput.toJson([
+        minify: release.minifyEnabled, shrinkResources: release.shrinkResources,
+        abiFilters: android.defaultConfig.ndk.abiFilters.toList().sort(),
+        signingConfig: release.signingConfig?.name,
+        flavors: android.productFlavors.collect { it.name }.sort(),
+        buildTools: android.buildToolsVersion, compileSdk: android.compileSdkVersion
+    ]))
+}
+''')
     common = []
     if args.http_proxy:
         proxy = urllib.parse.urlparse(os.environ['HTTPS_PROXY'])
@@ -50,7 +63,7 @@ def main():
             parser.error('Expected a credential-free inherited proxy URL with port')
         for scheme in ('http', 'https'):
             common += [f'-D{scheme}.proxyHost={proxy.hostname}', f'-D{scheme}.proxyPort={proxy.port}']
-    common += ['--no-daemon', '--console=plain', '--no-parallel', '--max-workers=2']
+    common += ['--no-daemon', '--console=plain', '--no-parallel', '--max-workers=2', '-I', str(conditions)]
     evidence = {'source_commit': commit, 'task': ':app:assembleFullRelease',
                 'sdk_root': str(args.sdk.resolve()), 'signing': 'unsigned; no official credentials',
                 'scenarios': [], 'status': 'in_progress', 'java_home': os.environ.get('JAVA_HOME'),
@@ -89,6 +102,16 @@ def main():
             if scenario['build']['exit_code']:
                 scenario['status'] = 'build_failed'
                 raise RuntimeError(f'{label}: fullRelease build failed')
+            condition_lines = [line.split('=', 1)[1] for line in (out / f'{label}-build.log').read_text().splitlines() if line.startswith('APK_SIZE_BUILD_CONDITIONS=')]
+            if len(condition_lines) != 1:
+                raise RuntimeError(f'{label}: missing unambiguous effective build conditions')
+            scenario['effective_conditions'] = json.loads(condition_lines[0])
+            actual = scenario['effective_conditions']
+            if not actual['minify'] or actual['abiFilters'] != scenario['abi_filter'] or actual['signingConfig'] is not None or actual['flavors'] != ['full']:
+                scenario['status'] = 'conditions_failed'
+                raise RuntimeError(f'{label}: unexpected effective build conditions')
+            if scenario['resource_shrink'] and not actual['shrinkResources']:
+                raise RuntimeError(f'{label}: resource shrinking not enabled')
             apk = tree / 'app/build/outputs/apk/full/release/app-full-release-unsigned.apk'
             target = out / f'{label}.apk'
             shutil.copy2(apk, target)
