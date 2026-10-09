@@ -1,3 +1,9 @@
+# P2-Q 跨研究药代的未知基线、幅度、误差和简繁模型稳健性（2026-10-09）
+
+[完整研究报告](pk-research/p2/p2q-unknown-baseline-gain-noise-identifiability.md)、[冻结假设配置](pk-research/p2/p2q-identifiability-design.json)、[精确数值核查点](pk-research/p2/p2q-summary-checkpoints.json)、[独立Python程序](../tools/pk-research/p2q_identifiability.py)、13项回归。严格结构不可辨识F/V、w=0的ks、一阶ka/ke交换；P2-O先前已见75候选，模拟b30、A150、三种绝对＋比例假设测量误差，不接触用户个人数据。理想误差时未知b/A令仅早期有向未辨别比较1249/5550（已知两者527），加晚期＋给药前降294；大误差条件全部5550无法辨别。M0一阶/M1单transit/M2双输入合成真值竞争说明简洁正则有时可避免过拟合，有时会错过真实慢尾。所有指标都是已见来源后、固定合成DGP、非χ²、非真实人体后验/覆盖率。Doll144没参加拟合，正式HRT/校准/历史/P2冻结/签名APK不改。
+
+---
+
 # APK 体积 P0 审计检查点（2026-10-09）
 
 本轮仅 fullRelease 体积审计及 2×2 隔离实验，不实施正式构建优化、不签名或发布。

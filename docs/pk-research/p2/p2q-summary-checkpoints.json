@@ -1,0 +1,82 @@
+{
+  "phase": "P2-Q",
+  "date": "2026-10-09",
+  "role": "ALL_SYNTHETIC_AND_DESIGN_EXPOSED_NO_CLINICAL_VALIDATION",
+  "population_synthetic": {
+    "baseline_pg_ml": 30,
+    "one_hour_increment_pg_ml": 150,
+    "patient_observation": false
+  },
+  "previously_exposed_P2O_models": 75,
+  "ordered_different_pair_comparisons": 5550,
+  "profiled_nuisance_results": [
+    {
+      "sigma_abs_pg_ml": 1,
+      "sigma_proportional": 0.02,
+      "early_unresolved": {
+        "baseline_and_gain_known": 527,
+        "only_gain_unknown": 654,
+        "both_unknown": 1249
+      },
+      "early_plus_late_unresolved": {
+        "baseline_and_gain_known": 143,
+        "only_gain_unknown": 178,
+        "both_unknown": 372
+      },
+      "plus_predose_unresolved_both_unknown": 294,
+      "late_severe_trough_2x_pairs_unresolved_both_unknown": 74
+    },
+    {
+      "sigma_abs_pg_ml": 5,
+      "sigma_proportional": 0.1,
+      "early_unresolved_both_unknown": 5534,
+      "early_plus_late_unresolved_both_unknown": 5521
+    },
+    {
+      "sigma_abs_pg_ml": 15,
+      "sigma_proportional": 0.25,
+      "early_plus_late_unresolved_both_unknown": 5550
+    }
+  ],
+  "unknown_b_and_gain_are_analytically_profiled_with_nonnegative_WLS": true,
+  "toy_weighted_SSE_cutoff_not_chi_square_or_confidence_interval": 9,
+  "exact_symmetries": [
+    "only effective gain D*F/V not individual F,V",
+    "at w=0 slow rate is absent",
+    "first-order ka/ke interchangeable after free gain normalization"
+  ],
+  "synthetic_family_noise_test": {
+    "n_replications_per_truth_scenario": 40,
+    "candidate_family_grid_sizes": {
+      "one_input": 6,
+      "transit_only": 18,
+      "dual_slow_input": 75
+    },
+    "ideal_precision_dual_truth": {
+      "unpenalized_dual_selected": 40,
+      "heuristic_penalized_dual_selected": 37
+    },
+    "large_error_dual_truth": {
+      "unpenalized_dual_selected": 20,
+      "heuristic_penalized_dual_selected": 0,
+      "median_oracle_late_mse_no_penalty": 0.695226309018841,
+      "median_oracle_late_mse_penalty": 1.2936783021822282
+    },
+    "small_error_simple_truth": {
+      "unpenalized_simple_selected": 26,
+      "heuristic_penalized_simple_selected": 37,
+      "median_oracle_late_mse_no_penalty": 7.266303337872886,
+      "median_oracle_late_mse_penalty": 3.402253329756104
+    }
+  },
+  "provenance": [
+    "docs/pk-research/p2/p2o-slow-tail-parameter-scan.json",
+    "tools/pk-research/p2n_transit_convolution.py",
+    "tools/pk-research/p2o_slow_tail_scan.py"
+  ],
+  "Doll144_used_for_refit": false,
+  "independent_locked_human_sets_added": 0,
+  "clinical_accuracy_established": false,
+  "p5_p95_empirical_90pct_coverage_established": false,
+  "P2C_production_replacement_authorized": false
+}

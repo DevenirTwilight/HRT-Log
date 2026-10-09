@@ -1,5 +1,10 @@
 # P2-A/B 舌下人口模型研究（已完成隔离研究，未投产）
 
+## P2-Q：未知基线、有效幅度与检测误差的跨研究可辨识性审计（2026-10-09）
+
+[完整科学/数学报告](p2q-unknown-baseline-gain-noise-identifiability.md)、[合成实验配置](p2q-identifiability-design.json)、[结构化核查指标](p2q-summary-checkpoints.json)、[独立可复现程序](../../../tools/pk-research/p2q_identifiability.py)与[13项测试](../../../tools/pk-research/test_p2q_identifiability.py)。严格证明F/V同变比不可辨识、w=0时ks消失、一阶吸收/清除可互换；按P2-O已见75候选做模拟，假定合成b=30pg/mL、1h增量A=150pg/mL、不同假设测定误差。极理想σabs=1/比例2%、仅早期点，已知b/A仍有527/5550个有向模型比较未分辨，未知b/A则1249；加入晚期和给药前点降至294。误差增大至假设绝对15pg/mL/比例25%时5550/5550皆无法区分；**不是临床真实精度或显著性检验**。最简、单transit、双输入合成真值各40次/误差情景：简单惩罚降低某些过拟合，也能错误淘汰真实双输入。无Doll144定标、无人类独立锁定验证、正式PK/隐私/签名APK不变。
+
+
 ## P2-P：新采样时点对长尾辨识的条件性研究（2026-10-09）
 
 [源数据、方法、全面敏感性与验收报告](p2p-conditional-sampling-info.md)、[固定场景配置](p2p-conditional-sampling-design.json)、[双模型条件辨识扫描](../../../tools/pk-research/p2p_conditional_sampling.py)、[10项研究回归](../../../tools/pk-research/test_p2p_conditional_sampling.py)。**不以Doll144作任何幅度定标**，完全复用P2-O的75/97/62已见数学候选；b=0、delta=0.02假设下，24h一时点2775对中2467对不能区分，8h一时点1318对，6+12h两点1006对（其中36对q6谷差仍≥2x），若人为b=25/50，最佳两晚期时点变6+10h。delta不是人类测量噪声/CI，未知实际基线、1h增量、LLOQ会进一步降低可辨识性，不能发个人验血时点建议或正式人体模型预测精度声称。仅研究文件；正式生产模型、P1、历史、P2-A/B、APK都未动。
