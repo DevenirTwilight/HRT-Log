@@ -6,7 +6,10 @@
 - [x] 修正测试中文主题/语言同名选择器后，在原代码重跑48组合，40项因纵排RadioButton交互失败，8项通过（411dp/字号1仍能横排）。初版44失败含选择器歧义，不能当作44个真实回归；最终基线为40。
 - [x] 新增AdaptiveButtonChoice：放得下仍Material分段按钮，放不下等宽等高纵排OutlinedButton，选中色/勾选/边框/点击反馈和Selected语义保留，内容测量高度、至少48dp。主题/对比度共享测量标签；锁定时间保持0/30秒/5分钟和原prefs写法。原AdaptiveChoice不改，其他页面行为不变。
 - [x] 本机聚焦SettingsButtonInteractionTest48+原ButtonLayoutRegressionTest64全部通过；包含四语、320/411、字号1/1.3/2、浅深色、控件类型/三个选项/唯一选中/每项点击/保存/文字/等尺寸/触控。新增24项SettingsButtonsAndroidTest已编译，真实Keystore setPin/验证、启用锁后测试三组及PIN密文不变，非伪造enabled夹具；本机无模拟器，须CI原生执行，尚不声明通过。
-- [ ] 待完整单测/lint/debugrelease构建、设置专项审计、其他8个AdaptiveChoice核对表和最终CI。新增原生夹具曾Configuration.locale遮蔽构造参数导致编译错误，已明确接收者修正并编译通过。不改DB/PK/历史/复诊、版本或签名，不制作新APK。
+- [x] 本机完整app343（330通过/13可选或既有跳过）、0失败；Lint0错误/131警告，Full Debug/Release、instrumentation APK、manifest无INTERNET全部通过（4m48s）。源码数据库/PK/历史/复诊及UiPrefs/AppLock不变。
+- [x] 设置与伪装设置对话框专项审计四语×320/411×字号1/1.3/2×浅深高对比度=72配置/144渲染，严重信号0；不把锁关闭的Robolectric审计当作锁启用验收。机器汇总及合成截图入docs/ui-audit，详见 [交互核对与验收](settings-button-interaction-regression-2026-10-09.md)。其他8处AdaptiveChoice同类机制已逐项报告，代码未动。
+- [ ] 最终原生CI待核对。首轮37898203318：JVM通过，新增24原生测试因localized Context丢ActivityResultRegistryOwner，在设置渲染前失败（真实setPin已成功），不是按钮断言失败；显式提供真实测试Activity作为RegistryOwner，重新编译APK成功，待推送后重跑。不能宣称真实锁矩阵通过。较早夹具Configuration.locale参数遮蔽编译错误也已修正。
+- 不改DB/PK/历史/复诊、版本或签名，不制作新APK；前一个ceb1912c测试包不含本轮设置修复。
 
 ## 已制作：最新 full 测试 APK（2026-10-09，REQUIREMENTS §43）
 

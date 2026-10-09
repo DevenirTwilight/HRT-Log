@@ -3,6 +3,7 @@ package net.plainnotes.app.settings
 import android.content.res.Configuration
 import android.os.LocaleList
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivityResultRegistryOwner
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
@@ -43,7 +44,7 @@ class SettingsButtonsAndroidTest(private val locale:String,private val width:Int
         val prefs=UiPrefs(ctx);prefs.appearance=Appearance(ThemeMode.SYSTEM,true,Contrast.STANDARD)
         var appearance by mutableStateOf(prefs.appearance)
         val density=ui.activity.resources.displayMetrics.widthPixels/width.toFloat()
-        ui.setContent{CompositionLocalProvider(LocalContext provides localized,LocalConfiguration provides configuration,LocalDensity provides Density(density,scale)){
+        ui.setContent{CompositionLocalProvider(LocalActivityResultRegistryOwner provides ui.activity,LocalContext provides localized,LocalConfiguration provides configuration,LocalDensity provides Density(density,scale)){
             NotesTheme(ThemeMode.LIGHT,contrast=appearance.contrast){Surface(Modifier.fillMaxSize().testTag("settings-viewport")){
                 SettingsScreen(appearance,{appearance=it;prefs.appearance=it},false,{},{},{},PaddingValues()){PrivacySection(1,false){}}
             }}
