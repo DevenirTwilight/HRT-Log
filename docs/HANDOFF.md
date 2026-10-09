@@ -1,3 +1,9 @@
+## P2-Q勘误：P2-O/P2-P严格不同曲线及未知基线（2026-10-09）
+
+[完整去重与P2-P重算附录](pk-research/p2/p2q-baseline-canonicalization-audit.md)。P2-O包含w=0且kslow变化但曲线相同的行；Price人为基线0/25/50，原接受参数75/97/62，严格不同曲线75/88/56。P2-P当b25/50原始无序配对4656/1891实际唯一曲线配对3828/1540。按旧delta0.02重排晚期时钟得到6+12/6+10/6+10，尚余1006/1951/1248对。Price真实基线仍未知，模型真值/误差纯合成，没有独立人体模型验收，不能投产。原P2-Q主75来自b0故无重复且历史报告不覆盖。
+
+---
+
 # P2-Q 跨研究药代的未知基线、幅度、误差和简繁模型稳健性（2026-10-09）
 
 [完整研究报告](pk-research/p2/p2q-unknown-baseline-gain-noise-identifiability.md)、[冻结假设配置](pk-research/p2/p2q-identifiability-design.json)、[精确数值核查点](pk-research/p2/p2q-summary-checkpoints.json)、[独立Python程序](../tools/pk-research/p2q_identifiability.py)、13项回归。严格结构不可辨识F/V、w=0的ks、一阶ka/ke交换；P2-O先前已见75候选，模拟b30、A150、三种绝对＋比例假设测量误差，不接触用户个人数据。理想误差时未知b/A令仅早期有向未辨别比较1249/5550（已知两者527），加晚期＋给药前降294；大误差条件全部5550无法辨别。M0一阶/M1单transit/M2双输入合成真值竞争说明简洁正则有时可避免过拟合，有时会错过真实慢尾。所有指标都是已见来源后、固定合成DGP、非χ²、非真实人体后验/覆盖率。Doll144没参加拟合，正式HRT/校准/历史/P2冻结/签名APK不改。

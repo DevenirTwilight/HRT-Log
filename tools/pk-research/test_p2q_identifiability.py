@@ -103,4 +103,30 @@ class IdentifiabilityTests(unittest.TestCase):
         self.assertFalse(z['production_change_authorized'])
         self.assertTrue(z['source_assay_errors_are_hypothetical'])
 
+
+    def test_Price_baseline_grid_exact_duplicate_counts(self):
+        rows=self.result['canonical_P2O_P2P_baseline_audit']['distinct_curves_by_baseline']
+        self.assertEqual([(x['raw_parameter_rows'],x['distinct_canonical_curves']) for x in rows],
+                         [(75,75),(97,88),(62,56)])
+        self.assertEqual([x['pure_fast_only_curves'] for x in rows],[0,3,2])
+        self.assertEqual([x['dual_input_curves'] for x in rows],[75,85,54])
+
+    def test_unique_curve_pair_counts_and_late_pair_design(self):
+        rows=self.result['canonical_P2O_P2P_baseline_audit']['distinct_curves_by_baseline']
+        self.assertEqual([x['unique_unordered_curve_pairs'] for x in rows],[2775,3828,1540])
+        self.assertEqual([x['best_two_samples_ge_6h_under_P2P_toy_delta_0_02']['times_h']
+                          for x in rows],[[6,12],[6,10],[6,10]])
+        self.assertEqual([x['best_two_samples_ge_6h_under_P2P_toy_delta_0_02']['remaining_unique_curve_pairs']
+                          for x in rows],[1006,1951,1248])
+
+    def test_exact_zero_weight_symmetry_and_baseline_intersection(self):
+        d=self.result['canonical_P2O_P2P_baseline_audit']['identical_curve_parameter_overlap_by_baseline']
+        self.assertEqual(d['all_three_Price_baseline_hypotheses'],0)
+        self.assertEqual(d['0_vs_25'],33)
+        c={'n_fast':5,'k_fast_h':8.,'k_elim_h':.85,'k_slow_h':.05,'slow_effective_weight':0.}
+        other=dict(c,k_slow_h=.4)
+        self.assertEqual(p.canonical_shape_key(c),p.canonical_shape_key(other))
+        for t in (.25,1,2,4,12):
+            self.assertAlmostEqual(p.normalized_case(c,t),p.normalized_case(other,t),places=12)
+
 if __name__=='__main__':unittest.main()
