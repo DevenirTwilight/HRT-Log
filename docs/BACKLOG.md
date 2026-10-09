@@ -101,3 +101,10 @@ P0**完成研究并测试，不是模型科学验证通过**：[证据](pk-resea
 P1-B已实施逐条历史资格门控，未确认治疗前的化验不自动生成基线；原始点全部保留，bands/摘要/diagnostics共享合格子集。验收见 [P1-B记录](pk-research/sublingual-p1b-verification.md)。P1-C因果插值/摘要和全离群标识一致性仍未修复、待独立授权；P2人口模型仍研究，人体外部准确性未确立。
 
 未来候选：明确的用户治疗前确认及持久化语义；非SL特定的有界历史加载与残余误差预算。均未实施，不把数据库首条记录、导入开始或180天范围当现实治疗开始。现有DAO仍全量读取，新资格残余计算有资源预算，不承诺任意规模历史读取不会耗尽内存。
+
+
+## Owner APK delivery follow-up (2026-10-09)
+
+Current task: controlled official-signature fullRelease and private file delivery; physical-device upgrade/data-preservation acceptance remains separate. Do not block packaging on PK research or UI redesign.
+
+Unapproved independent proposals: separate full-axis scaling from actual outer-band visibility; show calculator version next to legacy frozen estimates. Existing switch only changes the axis. Neither proposal implemented here; do not rewrite old snapshots. Strict result-availability time replay remains a separate product/compatibility decision, not P1 engineering completion.

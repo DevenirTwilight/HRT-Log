@@ -34,6 +34,9 @@ CI debug artifacts are for automated checks, not delivery. Use
 `bash scripts/sign_local_apk.sh BUILD_TOOLS_DIR UNSIGNED_APK KEYSTORE PASSWORD_FILE OUTPUT_APK`
 to sign a release APK locally and verify the existing official certificate. Keep all
 credentials and delivered APKs outside this repository; never upload private keys to CI.
+Owner-only APK delivery and separate signing/device acceptance states are recorded in
+[`docs/delivery/full-apk-owner-test-2026-10.md`](docs/delivery/full-apk-owner-test-2026-10.md).
+Private download links and signing credentials are deliberately absent from public docs.
 AGP 9.1.1 uses external Kotlin 2.2.20 with the documented legacy DSL opt-outs;
 these fixed versions are tested together, not automatically upgraded.
 
@@ -50,8 +53,8 @@ removed model port (now rewritten independently from published literature).
 Published-literature parameter and engine validation tests are implemented.
 This is not clinical validation. Physical-device acceptance remains separate.
 The [sublingual E2 P0 audit](docs/pk-research/sublingual-v2.md) adds independently
-sourced study summaries and reproducible test comparisons. It identifies unresolved
-calibration defects; production parameters remain unchanged and external scientific
+sourced study summaries and reproducible test comparisons. It records the original
+calibration defects subsequently addressed by P1-A/B/C1/C2; production parameters remain unchanged and external scientific
 validation is not established. See the [execution record](docs/pk-research/sublingual-p0-verification.md).
 Health information must never be committed; use only synthetic test data.
 

@@ -1,0 +1,288 @@
+{
+  "source_sha": "5133a6155635314e0b5621ebe520d7c5601ccd3a",
+  "branch": "claude/new-session-1959qb",
+  "built_utc": "2026-10-09T18:26:49.747729+00:00",
+  "variant": "fullRelease",
+  "applicationId": "net.plainnotes.app",
+  "versionCode": 25,
+  "versionName": "0.2.0",
+  "minSdk": 26,
+  "targetSdk": 37,
+  "filename": "hrt-log-build25-full-official-test-5133a61.apk",
+  "bytes": 23555291,
+  "apk_sha256": "6cda87754a06a73362cd983aa374f31176f6b710816177d5d043f15c4b56df71",
+  "unsigned_bytes": 23506758,
+  "unsigned_sha256": "916656a4740543ccb87c9cecfa7b091e0e21c43bee2fe6575927ee9a3b85d841",
+  "certificate_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
+  "v2_verified": true,
+  "v3_verified": true,
+  "zipalign_16kb_verified": true,
+  "native_elf_load_alignment": {
+    "lib/arm64-v8a/libandroidx.graphics.path.so": [
+      16384,
+      16384,
+      16384
+    ],
+    "lib/arm64-v8a/libsqlcipher.so": [
+      16384,
+      16384,
+      16384
+    ],
+    "lib/armeabi-v7a/libandroidx.graphics.path.so": [
+      16384,
+      16384,
+      16384
+    ],
+    "lib/armeabi-v7a/libsqlcipher.so": [
+      16384,
+      16384,
+      16384
+    ],
+    "lib/x86/libandroidx.graphics.path.so": [
+      16384,
+      16384,
+      16384
+    ],
+    "lib/x86/libsqlcipher.so": [
+      16384,
+      16384,
+      16384
+    ],
+    "lib/x86_64/libandroidx.graphics.path.so": [
+      16384,
+      16384,
+      16384
+    ],
+    "lib/x86_64/libsqlcipher.so": [
+      16384,
+      16384,
+      16384
+    ]
+  },
+  "legacy_release_certificate_matches": true,
+  "device_certificate_and_version": "not_verified_on_user_device",
+  "physical_device_acceptance": "not_verified_on_user_device",
+  "population_parameters_sha256": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b",
+  "status": {
+    "built": true,
+    "officially_signed": true,
+    "artifact_delivered": true,
+    "installable_same_signature": "conditional_on_device_certificate_version_sdk_abi",
+    "installed_on_user_device": "not_verified",
+    "user_data_preserved": "not_verified",
+    "smoke_test_passed": "API35_debug_emulator_only",
+    "p1a_numeric_regression_passed": true,
+    "new_snapshot_verified": "synthetic_tests",
+    "legacy_snapshot_unchanged": "synthetic_backup_tests",
+    "physical_device_acceptance": "not_verified"
+  },
+  "installation": [
+    "Export encrypted backup within the old app to your own safe location; keep its password private.",
+    "Confirm installed certificate and versionCode <=25, Android >=26 and ABI compatibility; install as Update only.",
+    "Never uninstall, clear storage or force downgrade. Stop on signature/version conflicts."
+  ],
+  "uncertainty_note": "P1-A repairs numerical instability, not clinical coverage. Legacy Calculator1 snapshots retain their original stored values. Full-band toggle only changes axis scaling.",
+  "drive_download_sha256_verified": true,
+  "drive_visibility": "private_owner_only",
+  "local_tests": {
+    "core/domain": {
+      "tests": 58,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "pk-engine": {
+      "tests": 58,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "importer": {
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/data": {
+      "tests": 72,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/reminder": {
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "app": {
+      "tests": 399,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 13
+    }
+  },
+  "python_tests": {
+    "pk-research": 41,
+    "pk-audit": 13,
+    "failures": 0
+  },
+  "lint": {
+    "errors": 0,
+    "warnings": 131
+  },
+  "ci": {
+    "build_source_run_id": 37972293625,
+    "source_sha": "5133a6155635314e0b5621ebe520d7c5601ccd3a",
+    "jvm": "success",
+    "device-tests": "success",
+    "android": "success",
+    "overall": "success"
+  },
+  "local_full_build": "success (378 executed tasks, 8m25s)",
+  "release_manifest": "passed; allowBackup=false; no INTERNET; normal/disguise entries validated",
+  "ci_device_counts": {
+    "data": {
+      "tests": 14,
+      "passed": 14,
+      "failures": 0,
+      "skipped": 0
+    },
+    "app": {
+      "tests": 64,
+      "passed": 62,
+      "failures": 0,
+      "skipped": 2
+    },
+    "restart_prepare": 1,
+    "restart_verify": 1
+  },
+  "temporary_signing_materials_removed": true,
+  "ci_artifact_checks": {
+    "jvm": {
+      "artifact_id": 11638115511,
+      "sha256": "a2f8d986a926289a50e7a7134d74730f602ba3dfd8374fbface7fb06bd8b129d",
+      "files": 21,
+      "stats": {
+        "domain": {
+          "tests": 58,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "pk-engine": {
+          "tests": 58,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "importer": {
+          "tests": 12,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "device": {
+      "artifact_id": 11636718050,
+      "sha256": "218d4c073bc5e0955c959a537315ec21be9c0b3dd48b72bbaa67af4e1568a7a3",
+      "files": 25,
+      "stats": {
+        "core/data/build/reports/androidTests/connected/debug/index.html": [
+          {
+            "tests": "14"
+          },
+          {
+            "failures": "0"
+          },
+          {
+            "skipped": "0"
+          },
+          {
+            "duration": "6.119s"
+          }
+        ],
+        "app/build/reports/androidTests/connected/debug/flavors/full/index.html": [
+          {
+            "tests": "64"
+          },
+          {
+            "failures": "0"
+          },
+          {
+            "skipped": "2"
+          },
+          {
+            "duration": "2m37.07s"
+          }
+        ]
+      }
+    },
+    "android": {
+      "artifact_id": 11638227309,
+      "sha256": "80651565c0144fe56b9e0ca12f2ef3724738725a590a961525d5f62cc32f7dcd",
+      "files": 222,
+      "stats": {
+        "app/build/reports/tests/testFullDebugUnitTest/index.html": [
+          {
+            "tests": "399"
+          },
+          {
+            "failures": "0"
+          },
+          {
+            "skipped": "13"
+          },
+          {
+            "duration": "3m14.35s"
+          }
+        ],
+        "core/data/build/reports/tests/testDebugUnitTest/index.html": [
+          {
+            "tests": "72"
+          },
+          {
+            "failures": "0"
+          },
+          {
+            "skipped": "0"
+          },
+          {
+            "duration": "39.270s"
+          }
+        ],
+        "core/reminder/build/reports/tests/testDebugUnitTest/index.html": [
+          {
+            "tests": "14"
+          },
+          {
+            "failures": "0"
+          },
+          {
+            "skipped": "0"
+          },
+          {
+            "duration": "12.290s"
+          }
+        ],
+        "app/build/reports/tests/testFullDebugUnitTest/net.plainnotes.app.ChartViewportTest/index.html": [
+          {
+            "tests": "3"
+          },
+          {
+            "failures": "0"
+          },
+          {
+            "skipped": "0"
+          },
+          {
+            "duration": "0.063s"
+          }
+        ]
+      },
+      "lint_errors": 0,
+      "lint_warnings": 131
+    }
+  }
+}

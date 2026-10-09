@@ -1,3 +1,15 @@
+# 原官方签名 APK 已私有交付（2026-10-09）
+
+[详细交付/安全安装/P1验收记录](delivery/full-apk-owner-test-2026-10.md)。本地起始f73a7e7、远端核实7ba1f6e；成品输入5133a6155635314e0b5621ebe520d7c5601ccd3a，继续原开发分支。用户明确确认隔壁私有签名备份和Google Drive私有交付，核实private后沿用原证书；临时凭据已删除。正式fullRelease Build25/0.2.0/Schema9，23555291bytes，SHA256 6cda87754a06a73362cd983aa374f31176f6b710816177d5d043f15c4b56df71，v2/v3/16KB ZIP及8 ELF对齐通过；Drive仅owner，独立下载哈希/签名一致。私有下载地址只在用户交付消息，不入公开仓库。
+
+本地全部重跑：JVM128，data72/reminder14/app399（386通过13既有跳过），Python41+13，lint0错误131警告，Full Debug/Release、manifest通过。PeriodStability5/ChartViewport3/LabEstimate1通过；仅新增7/14/60天缩放/断点/读数不变性测试，无生产PK/UI/Schema/权限/历史改动。P1-A典型合成新区间98.82247–692.85360、旧0–152714.80586保持原证据；新Calculator2与旧冻结Calculator1不能混淆，不自动重写旧PDF/快照。
+
+源码5133a61的CI37972293625三个job全部success；Android222文件按digest下载，app399/386通过13跳过/data72/reminder14/lint0错误131警告，图表新断言通过；JVM21/device25工件已按digest下载验真，API35 data14/app64（62通过2跳过）、重启各1通过。用户本人手机未连接、未安装、未验收；设备证书/版本/数据保留未知，先用户自行加密备份、仅匹配证书/非降级更新；禁止卸载/清数据。Google Drive正式文件交付已完成，不等于实机验收。后续文档commit不改变APK源码身份。
+
+下一步用户完成安全升级清单；最后仅文档提交触发CI需另查，不混淆源码run。P2-C/严格结果获知时间/区间显隐与旧版本提示仍为独立未实施/待决策，不在本轮实施。
+
+---
+
 # APK 所有者非公开交付：预检检查点（2026-10-09）
 
 本地起始 f73a7e7f4603a456d8735454608dfd5af1ab44ca；工作区干净，远端核实后快进到 7ba1f6e3b0a9d7373df365512e4fa406da842701，继续现有开发分支。最新任务优先交付原官方签名 fullRelease，不开展 P2-C 或 UI 重设计。
