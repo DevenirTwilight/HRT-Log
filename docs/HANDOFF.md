@@ -1,3 +1,9 @@
+# P2-E 完整原始 AUC 与早期时序证据已追加（2026-10-09）
+
+[Price/Rosano 新全文级证据、数学解释与替代模型取舍](pk-research/p2/p2e-primary-source-upgrade.md) 已归档，[机器来源](pk-research/p2/p2e-source-metrics.json) 与[独立复算工具/测试](../tools/pk-research/p2e_price_rosano.py) 同步提交。Price n6 0.25/0.5/1mg 舌下 RIA Table1 与 Results 相互核对；1mg AUC0–24=2109±1031 pg·h/mL(SD)、**给药前已扣基线**，原采样 0/1/2/3/4/6/8/12/18/24h、梯形法。模型旧核同网格 AUC≈367.54 vs Featherline条件80kg≈2026.50，连续积分分别≈392.61与≈2082.95；不可混用两种 estimand。Rosano 1997 独立PK队列 n25，**不是9+7心血管试验参与者**；10/20/40/60min均值234/468/1980/2124pmol/L，±为SD，n25基线未知；C40−2C20=1044pmol/L、配对SE保守上界137.2仅在同n25且SD正确时有效；未证明独特延迟机制。严守新研究数据已见/非LOCKED_EXTERNAL、研究工具与正式模型隔离、旧协议不可改写；P2-C仍未授权。未来研究必须继续记录理论、统计假设、来源与模型不可辨识性。
+
+---
+
 # 最新研究：P2-D 30 分钟 E2 正文证据与结构约束（2026-10-09）
 
 新增[完整理论解释](pk-research/p2/p2d-komesaroff-onset-theory.md)、[证据JSON](pk-research/p2/p2d-komesaroff-table1.json)和标准库[数学压力测试](../tools/pk-research/onset_bound.py)。作者上传的 Komesaroff 1998 全文 p.2314 原表核对 n=10、2mg Estrace、RIA、均值±SEM，0/15/30min 均值89.4/486.6/1969 pmol/L；新增30min。中心增量比R≈4.732超过正权重零延迟一阶核/gamma2的数学上界2，证明现有**模型族对这些均值存在条件性形状限制**，不是统计显著排除或真实延迟估计。数据已见不能作为未见LOCKED_EXTERNAL；研究工具仅条件模拟，无外部准确性/模型上线批准。原P2冻结与正式生产、P1/Schema/快照不变。后续需密集时间序列、配对协方差/检测细节，再另冻协议研究受限lag/transit。完整命令和局限性见附录。

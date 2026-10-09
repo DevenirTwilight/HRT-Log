@@ -1,5 +1,12 @@
 # P2-A/B 舌下人口模型研究（已完成隔离研究，未投产）
 
+## 新增 P2-E：Price 1997 与 Rosano 1997 正文药代数字（2026-10-09）
+
+[完整科学理论、原始值及否决备选方案的解释](p2e-primary-source-upgrade.md)；[最小机器证据](p2e-source-metrics.json)；[可运行源匹配 AUC 和早期上界审计](../../../tools/pk-research/p2e_price_rosano.py)。
+
+Price 1997 n=6 同人交叉，原作者 Table1 E2（均值±SD）1mg SL Cmax451±162 pg/mL、AUC0–24 2109±1031 pg·h/mL。原文 AUC 按0/1/2/3/4/6/8/12/18/24h梯形法且给药前基线已扣除；当前HRT按同网格1mg模型值约367.54，Featherline仅条件80kg约2026.50。Rosano 1997 另外一组 n=25（**并非该论文主要心血管试验 n9+n7**）有1mg SL 的10/20/40/60min E2均值234/468/1980/2124 pmol/L，研究通用统计为 SD；其前剂基线未知，不能借用另一组的数据。40min−2×20min=1044 pmol/L 超过零延迟正一阶核条件性增长限制，协方差未知只能作条件统计敏感性计算。详见理论附录、单位/分析方法与限制。旧 P2-A/B 冻结证据保持只读；新数据已见，不能冒充 LOCKED_EXTERNAL；临床外部验证不足、未投产。
+
+
 ## 2026-10-09：全文新核对的 30min E2 与早期上界
 
 新增 [Komesaroff1998 研究证据、数学定理及四模型条件对照](p2d-komesaroff-onset-theory.md)、[最小原始表格数值](p2d-komesaroff-table1.json)。作者上传全文 p.2314 Table 1：2mg Estrace SL、n=10、RIA、0/15/30min，均值±SEM；30min 1969±302pmol/L。报告群体中心增量30/15≈4.732，而所有正权重、零延迟一阶核或gamma2满足≤2的早期比率上界；统计排除/机制辨识均未成立，不能加入生产延迟参数。附有[可执行独立数学压力检查](../../../tools/pk-research/onset_bound.py)及四项测试。冻结P2-A/B、模型参数和P1各工程修复保持不变，外部独立验证仍不足。
