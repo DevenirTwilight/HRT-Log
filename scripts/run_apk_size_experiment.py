@@ -53,7 +53,8 @@ def main():
     common += ['--no-daemon', '--console=plain', '--no-parallel', '--max-workers=2']
     evidence = {'source_commit': commit, 'task': ':app:assembleFullRelease',
                 'sdk_root': str(args.sdk.resolve()), 'signing': 'unsigned; no official credentials',
-                'scenarios': [], 'status': 'in_progress'}
+                'scenarios': [], 'status': 'in_progress', 'java_tool_options': os.environ.get('JAVA_TOOL_OPTIONS', ''),
+                'gradle_executable': args.gradle}
 
     def save():
         (out / 'experiment.json').write_text(json.dumps(evidence, ensure_ascii=False, indent=2) + '\n')
@@ -64,6 +65,7 @@ def main():
                     'resource_shrink_note': 'source default' if shrink is None else 'explicit true',
                     'abi_filter': ['arm64-v8a'] if arm64 else [], 'minify': True, 'status': 'pending', 'apk': None}
         evidence['scenarios'].append(scenario)
+    save()
     try:
         for scenario in evidence['scenarios']:
             label = scenario['label']
@@ -81,6 +83,8 @@ def main():
             if additions:
                 build_file.write_bytes(original + ('\n// Isolated size experiment only.\nandroid {\n' + '\n'.join(additions) + '\n}\n').encode())
             scenario['experimental_gradle_sha256'] = hashlib.sha256(build_file.read_bytes()).hexdigest()
+            scenario['status'] = 'building'
+            save()
             scenario['build'] = run([args.gradle, *common, ':app:assembleFullRelease'], tree, out / f'{label}-build.log')
             if scenario['build']['exit_code']:
                 scenario['status'] = 'build_failed'
