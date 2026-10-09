@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "phase": "P2-P",
+  "date": "2026-10-09",
+  "source_branch_reference": "622e84ee927a2ebd7afc6d102c8a0af74b47799e",
+  "use_case": "conditional design-of-experiments for distinguishing previously EXPOSED model-generated tails; not a patient monitoring schedule",
+  "pipeline": "Reproduce P2-O selected candidates exactly from existing configuration, evaluate model-generated H(t)/H(1h) and q6 accumulation. Use pairwise comparisons only; no new fit or tuning to Doll.",
+  "baseline_cases_price_pg_ml": [
+    0,
+    25,
+    50
+  ],
+  "candidate_times_h": [
+    4,
+    6,
+    8,
+    10,
+    12,
+    16,
+    18,
+    24
+  ],
+  "toy_pairwise_separation_threshold_over_one_hour_increment": [
+    0.01,
+    0.02,
+    0.05
+  ],
+  "primary_toy_threshold_over_one_hour_increment": 0.02,
+  "severe_trough_divergence_factor": 2,
+  "late_only_min_hour": 6,
+  "selected_report_sets_h": [
+    [
+      4,
+      10
+    ],
+    [
+      6,
+      12
+    ],
+    [
+      6,
+      10
+    ],
+    [
+      8,
+      12
+    ],
+    [
+      8,
+      24
+    ],
+    [
+      10,
+      24
+    ]
+  ],
+  "unknown_actual_assay_precision": true,
+  "known_one_hour_scale_and_predose_baseline_ASSUMED": true,
+  "absolute_signal_vs_pair_distance": "Same H(1h)=1 for every candidate; separation of 0.02 means the two normalized mean predictions differ by >0.02, NOT ±0.02 measurement error, NOT 95% CI.",
+  "source_identity": "All Price and Rosano points were previously inspected; no LOCKED_EXTERNAL. Price 4h already among earlier screening constraints.",
+  "literature_context": [
+    {
+      "title": "ICH M15 Model-informed Drug Development",
+      "url": "https://database.ich.org/sites/default/files/ICH_M15_Step4_Final_Guideline_2026_0129.pdf",
+      "role": "risk-proportionate evidence planning / evaluation, not approval of these computations"
+    },
+    {
+      "title": "A pragmatic approach to the design of population pharmacokinetic studies",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2750978/",
+      "role": "Fisher-information/D-optimal and randomized informative blocks differ from this heuristic pairwise ranking"
+    }
+  ],
+  "limitations": [
+    "No human paired covariance/measurement-variance model",
+    "No reliable real assay lower limit of quantification here",
+    "Unknown true subject-level dose histories and study baseline",
+    "No fitted random-effect population parameter distribution",
+    "Grid and filter thresholds depend on earlier-exposed study aggregates"
+  ],
+  "independent_external_validation_count": 0,
+  "clinical_accuracy_established": false,
+  "human_90pct_coverage_established": false,
+  "production_model_replacement_authorized": false
+}

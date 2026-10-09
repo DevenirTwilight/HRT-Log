@@ -1,5 +1,10 @@
 # P2-A/B 舌下人口模型研究（已完成隔离研究，未投产）
 
+## P2-P：新采样时点对长尾辨识的条件性研究（2026-10-09）
+
+[源数据、方法、全面敏感性与验收报告](p2p-conditional-sampling-info.md)、[固定场景配置](p2p-conditional-sampling-design.json)、[双模型条件辨识扫描](../../../tools/pk-research/p2p_conditional_sampling.py)、[10项研究回归](../../../tools/pk-research/test_p2p_conditional_sampling.py)。**不以Doll144作任何幅度定标**，完全复用P2-O的75/97/62已见数学候选；b=0、delta=0.02假设下，24h一时点2775对中2467对不能区分，8h一时点1318对，6+12h两点1006对（其中36对q6谷差仍≥2x），若人为b=25/50，最佳两晚期时点变6+10h。delta不是人类测量噪声/CI，未知实际基线、1h增量、LLOQ会进一步降低可辨识性，不能发个人验血时点建议或正式人体模型预测精度声称。仅研究文件；正式生产模型、P1、历史、P2-A/B、APK都未动。
+
+
 ## P2-O：真正跨研究的长尾辨识性／重复给药歧义（2026-10-09）
 
 [完整来源与数学推导](p2o-tail-structural-nonidentifiability.md)、[11,088组参数网格](p2o-slow-tail-parameter-scan.json)、[标准库扫描/质量守恒AUC](../../../tools/pk-research/p2o_slow_tail_scan.py)及10项测试。按Rosano早期增长与Price人工2/1、4/1条件性指标、明示人工窗口筛选，b=0时75组满足，24h AUC/H1=2.20–3.29h、q6给药前累积增量/H1跨6.89倍；Price假设基线25/50（非实测）分别97/62组。甚至两组早期比率最大相差仅0.83%的参数，q6谷浓度可以相差**4.60倍**，其kslow=.05或.40/h，真实中央消除相同。严格质量守恒AUC∞=1/(ke*h1)排除了图像数值积分伪象。全部属于已见研究后探索性扫描，Doll144不用于定标，P2-C不准投产，历史/签名APK/个人参数完全不变。
