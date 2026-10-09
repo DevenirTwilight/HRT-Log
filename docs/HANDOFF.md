@@ -31,7 +31,8 @@ SDK37.0/BuildTools37.0.0已装好；完整Temurin JDK21.0.12.1+1已下载并核�
 串行A实际Gradle模型确认minify=true/shrinkResources=false/ABI=[]/signing=null/flavor=[full]/SDK37.0/BT37.0.0，已进入R8。8GiB环境下结束本任务已完成编译的空闲Kotlin进程，为R8释放内存；同样调度应用于所有场景，未降低R8或改源码。执行脚本增加可选--stop-idle-kotlin-daemon，只匹配实验目录内独立JDK的编译进程，不操作系统共享JDK；源码/配置条件相同。
 用户附件范围与安全边界已追加REQUIREMENTS §53（2026-10-09），不把隔离实验当正式构建优化/发布许可。
 串行A成功（8m14s）：23,506,758bytes，SHA0d0d6853504624fbf668d0f9f6837d80397515b6ddb586e3ccbc8064828c65c4；CRC/Manifest/四ABI8本机库/关键资源/3 JSON源码SHA一致，zipalign16KiB退出0。A本机库19,451,876bytes（SQLCipher19,414,484、其他37,392）、DEX2,263,882、Android resources1,556,379、容器开销114,790。B正在独立构建；C/D未执行，不能填收益。
-待完成：B/C/D构建与差分、全部release验证、报告收尾；四组构建/ZIP及manifest核验、资源静态风险与差分、可执行现有测试、报告JSON/Markdown；release及设备功能未验证。
+B成功（7m41s）：23,189,359bytes；B−A=−317,399bytes（−1.3502457%）。8本机库完整SHA/三个JSON与A/源码一致、关键图标保留、Manifest/CRC/ZIP16KiB通过；资源表−287,484/res−22,109/DEX+254/profile−16/ZIP开销−8,044bytes。C构建中，D未执行；release功能仍未验证。
+待完成：C/D构建与差分、全部release验证、报告收尾；四组构建/ZIP及manifest核验、资源静态风险与差分、可执行现有测试、报告JSON/Markdown；release及设备功能未验证。
 本检查点提交只涉及审计脚本/合成测试/交接；旧交接与P2研究保留如下。
 
 ---
