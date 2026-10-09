@@ -1,0 +1,94 @@
+{
+  "source_commit": "d45a67a4f5309f1e951b2dfe69e9295fa42234cb",
+  "dose": "2026-10-24T23:54:00Z",
+  "seconds": 0.205593682,
+  "cases": [
+    {
+      "values_center_p5_p25_p75_p95": [
+        277.76820206209067,
+        98.43387118965944,
+        188.39797797974677,
+        420.87037488986357,
+        690.1291017087852
+      ],
+      "qualified_count": 0,
+      "covariance": null,
+      "id": "none",
+      "post_count": 0,
+      "log_amplitude": null,
+      "raw_count": 0,
+      "summary_count": 0,
+      "diagnostic_observed": null
+    },
+    {
+      "values_center_p5_p25_p75_p95": [
+        286.3654044452519,
+        111.09867725055624,
+        199.96024370006322,
+        422.83378386475533,
+        676.3960822896657
+      ],
+      "qualified_count": 1,
+      "covariance": [
+        0.0669764696633626,
+        0,
+        0,
+        0
+      ],
+      "id": "future400",
+      "post_count": 1,
+      "log_amplitude": 0.26662695519252766,
+      "raw_count": 1,
+      "summary_count": 1,
+      "diagnostic_observed": 400
+    },
+    {
+      "values_center_p5_p25_p75_p95": [
+        312.80364230757635,
+        127.39016839851462,
+        222.01701059911832,
+        454.93031896694185,
+        716.8256943837143
+      ],
+      "qualified_count": 1,
+      "covariance": [
+        0.06697646966324453,
+        0,
+        0,
+        0
+      ],
+      "id": "future800",
+      "post_count": 1,
+      "log_amplitude": 0.8087924734175811,
+      "raw_count": 1,
+      "summary_count": 1,
+      "diagnostic_observed": 800
+    },
+    {
+      "values_center_p5_p25_p75_p95": [
+        285.42199380034674,
+        113.36629324858805,
+        200.56207856428833,
+        419.62463657909393,
+        669.4202197608105
+      ],
+      "qualified_count": 2,
+      "covariance": [
+        0.037581214179008955,
+        0,
+        0,
+        0
+      ],
+      "id": "same_time_two",
+      "post_count": 2,
+      "log_amplitude": 0.24060897950549537,
+      "raw_count": 2,
+      "summary_count": 2,
+      "diagnostic_observed": 350
+    }
+  ],
+  "synthetic_only": true,
+  "now": "2026-10-25T01:10:00Z",
+  "query": "2026-10-25T00:40:00Z",
+  "sample": "2026-10-25T00:45:00Z"
+}
