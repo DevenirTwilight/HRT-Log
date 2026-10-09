@@ -37,11 +37,9 @@ val LocalSimpleMode = compositionLocalOf { false }
         if (lockOn) {
             if (bioAvailable) SwitchRow(stringResource(R.string.lock_biometric), bio) { bio = it; lock.biometric = it }
             Text(stringResource(R.string.lock_after), style = MaterialTheme.typography.labelLarge)
-            SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
-                listOf(0L to R.string.lock_after_now, 30_000L to R.string.lock_after_30s, 300_000L to R.string.lock_after_5m).forEachIndexed { i, (ms, label) ->
-                    SegmentedButton(after == ms, { after = ms; prefs.lockAfterMillis = ms }, SegmentedButtonDefaults.itemShape(i, 3)) { Text(stringResource(label)) }
-                }
-            }
+            val times=listOf(0L,30_000L,300_000L)
+            val labels=listOf(R.string.lock_after_now,R.string.lock_after_30s,R.string.lock_after_5m).map{stringResource(it)}
+            AdaptiveButtonChoice(labels,times.indexOf(after),{i->after=times[i];prefs.lockAfterMillis=times[i]})
             TextButton(onClick = { setPin = true }) { Text(stringResource(R.string.lock_change_pin)) }
         }
         HorizontalDivider()

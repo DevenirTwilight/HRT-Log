@@ -2,7 +2,11 @@
 
 ## 进行中：设置按钮交互回归（2026-10-09，REQUIREMENTS §44）
 
-起始329adeb92b2a2f2e58f61b6d367decc6c6004eef，分支/远端一致、工作区干净。确认主题/对比度的AdaptiveChoice在空间不足时改Radio列表，违反用户交互要求；锁启用时离开后锁定时间仍固定横排，存在大字体挤压风险。只修这三组，新增保持按钮外观的内容适应布局，其他AdaptiveChoice只核查。下一步：失败回归、按钮布局修复、四语/320和411/多字号交互与真实Keystore启用锁的原生测试、构建/lint/CI和证据同步。不改保存逻辑、数据/PK/复诊、版本或签名。
+起始329adeb92b2a2f2e58f61b6d367decc6c6004eef，分支/远端一致、工作区干净。只修设置三组，不改其他页面或存储逻辑。
+- [x] 修正测试中文主题/语言同名选择器后，在原代码重跑48组合，40项因纵排RadioButton交互失败，8项通过（411dp/字号1仍能横排）。初版44失败含选择器歧义，不能当作44个真实回归；最终基线为40。
+- [x] 新增AdaptiveButtonChoice：放得下仍Material分段按钮，放不下等宽等高纵排OutlinedButton，选中色/勾选/边框/点击反馈和Selected语义保留，内容测量高度、至少48dp。主题/对比度共享测量标签；锁定时间保持0/30秒/5分钟和原prefs写法。原AdaptiveChoice不改，其他页面行为不变。
+- [x] 本机聚焦SettingsButtonInteractionTest48+原ButtonLayoutRegressionTest64全部通过；包含四语、320/411、字号1/1.3/2、浅深色、控件类型/三个选项/唯一选中/每项点击/保存/文字/等尺寸/触控。新增24项SettingsButtonsAndroidTest已编译，真实Keystore setPin/验证、启用锁后测试三组及PIN密文不变，非伪造enabled夹具；本机无模拟器，须CI原生执行，尚不声明通过。
+- [ ] 待完整单测/lint/debugrelease构建、设置专项审计、其他8个AdaptiveChoice核对表和最终CI。新增原生夹具曾Configuration.locale遮蔽构造参数导致编译错误，已明确接收者修正并编译通过。不改DB/PK/历史/复诊、版本或签名，不制作新APK。
 
 ## 已制作：最新 full 测试 APK（2026-10-09，REQUIREMENTS §43）
 

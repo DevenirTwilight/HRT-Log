@@ -86,10 +86,10 @@ class Appearance(val mode: ThemeMode, val dynamic: Boolean, val contrast: Contra
             val themes=ThemeMode.entries.map{m->stringResource(when(m){ThemeMode.SYSTEM->R.string.theme_system;ThemeMode.LIGHT->R.string.theme_light;ThemeMode.DARK->R.string.theme_dark})}
             val contrasts=Contrast.entries.map{c->stringResource(when(c){Contrast.STANDARD->R.string.contrast_low;Contrast.MEDIUM->R.string.contrast_medium;Contrast.HIGH->R.string.contrast_high})}
             Text(stringResource(R.string.theme),style=MaterialTheme.typography.labelLarge)
-            AdaptiveChoice(themes,ThemeMode.entries.indexOf(appearance.mode),{onAppearance(Appearance(ThemeMode.entries[it],appearance.dynamic,appearance.contrast))},groupLabels=themes+contrasts)
+            AdaptiveButtonChoice(themes,ThemeMode.entries.indexOf(appearance.mode),{onAppearance(Appearance(ThemeMode.entries[it],appearance.dynamic,appearance.contrast))},groupLabels=themes+contrasts)
             if(Build.VERSION.SDK_INT>=31)SwitchRow(stringResource(R.string.dynamic_color),appearance.dynamic,stringResource(R.string.dynamic_color_desc)){onAppearance(Appearance(appearance.mode,it,appearance.contrast))}
             Text(stringResource(R.string.contrast),style=MaterialTheme.typography.labelLarge)
-            AdaptiveChoice(contrasts,Contrast.entries.indexOf(appearance.contrast),{onAppearance(Appearance(appearance.mode,appearance.dynamic,Contrast.entries[it]))},groupLabels=themes+contrasts)
+            AdaptiveButtonChoice(contrasts,Contrast.entries.indexOf(appearance.contrast),{onAppearance(Appearance(appearance.mode,appearance.dynamic,Contrast.entries[it]))},groupLabels=themes+contrasts)
         }
         SectionCard(stringResource(R.string.wellbeing)) {
             SwitchRow(stringResource(R.string.wb_prompt_setting), wellbeingPrompt, stringResource(R.string.wb_prompt_setting_desc)) { onWellbeingPrompt(it) }
