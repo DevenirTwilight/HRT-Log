@@ -1,3 +1,9 @@
+# P2-N 双输入中央室卷积研究（2026-10-09）
+
+[完整来源、机制和负结果](pk-research/p2/p2n-transit-convolution-cross-study.md)、[显式候选参数](pk-research/p2/p2n-transit-convolution-design.json)、[独立可运行数值核](../tools/pk-research/p2n_transit_convolution.py)及10项测试。确认快Erlang n阶段输入经中央室一阶消除后浓度起始上升∝t^n，不能把输入阶数等同旧经验浓度gamma的阶数。HRT与Featherline早期上升较缓，受限快慢输入模型可同时接近Rosano早期4.23倍和Price1–4h下降的部分形状，但Kom15–30min及24h AUC和重复给药又提出冲突。绝不根据已见结果声称参数验证/选赢家，Doll144未用于定标，新盲化人体外测0，旧P2实验/正式模型/P1/历史/APK不动。
+
+---
+
 # P2-M 跨研究舌下 E2 曲线形状及辨识性（2026-10-09）
 
 [原始来源与理论研究](pk-research/p2/p2m-cross-study-mechanistic-curves.md)、[固定试验网格](pk-research/p2/p2m-study-shape-design.json)、[独立可运行数学程序](../tools/pk-research/p2m_cross_study_shape.py)，10项研究测试。未让Doll单点决定形状。Rosano n25 10/20/40/60min与Kom n10 15/30min的公开群体值分别提示快上升但未知协方差；同形状gamma模型研究级独立幅度、Rosano未知基线假设导致最优候选n3→n8，且跨Price人工1→2h时衰减不一致。不改变旧P2冻结、正式模型、P1、用户记录或APK，外部临床验证不足。

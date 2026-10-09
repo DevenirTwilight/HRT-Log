@@ -1,5 +1,10 @@
 # P2-A/B 舌下人口模型研究（已完成隔离研究，未投产）
 
+## P2-N：快慢双输入与中央室卷积的跨研究候选曲线（2026-10-09）
+
+[P2-N机制推导及跨时间来源比较](p2n-transit-convolution-cross-study.md)、[五条非临床假设曲线和源身份](p2n-transit-convolution-design.json)、[稳定的多级输入-消除卷积程序](../../../tools/pk-research/p2n_transit_convolution.py)、[10项数值与科学状态测试](../../../tools/pk-research/test_p2n_transit_convolution.py)。新关键区别：n级吸收**输入**经中央室消除后C(t)早期∝t^n，而旧直接经验gamma**浓度**早期∝t^(n−1)；不能混淆两种上界。归一化不使用Doll144。六级输入+30%有效慢输入案例的Rosano20/40比≈4.31、Price2h/1h≈0.56、4h/1h≈0.175，提示多输入曲线数学上可以跨时段接近；但离散24h AUC/1h≈2.535h，低于Price图≈3.46h和原Table1≈4.68h，Kom早期比也偏高。模型参数是已见数据后的探索例子，不是生理分室实证、临床预测或投产许可。全部生产模型/签名APK/历史不变。
+
+
 ## P2-M 跨研究曲线（2026-10-09）
 
 新增[完整数学方法与原文来源限制](p2m-cross-study-mechanistic-curves.md)、[固定网格/队列身份](p2m-study-shape-design.json)、[双研究共享形状压力测试](../../../tools/pk-research/p2m_cross_study_shape.py)与10项测试。不再以Doll144作为本轮形状校准点。Rosano与Kom早期群体浓度上升显著陡于HRT/Featherline默认正核；探索性共用gamma结构在未知Rosano基线0→225pmol/L时从n3/k1.25→n8/k8.5跳变，前者1–2h继续增加、后者急速衰减，都难跨到Price人工1–2h曲线。这是不可辨识性和不完全可迁移性的证据，不是新模型赢家或统计上证明已有模型错误。保持旧冻结及全部生产/历史/APK不变。

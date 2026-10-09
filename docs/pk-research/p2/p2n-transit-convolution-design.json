@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "phase": "P2-N",
+  "date": "2026-10-09",
+  "status": "EXPOSED_PARAMETER_EXAMPLES_NO_CLINICAL_FIT",
+  "research_question": "Can a positive fast Erlang transit input plus a slow first-order input, each passed through one positive elimination compartment, represent early rise and subsequent decline without requiring Doll 1h to set amplitude?",
+  "mechanism": "positive Erlang(n,kfast) input + nonnegative effective slow first-order input, same central elimination ke",
+  "response_definition": "g_n(t)=integral_0^t ErlangPDF_n,kfast(u)*exp[-ke*(t-u)]du. h(t)=(1-slow_weight)g_n(t)+slow_weight*g_1(t,kslow,ke). h(1h)=1 by normalization.",
+  "priors_note": "All shapes chosen after exposure to Rosano/Komesaroff/Price literature; examples are NOT preregistered, independent, or external validation. They are not PK estimates.",
+  "models": [
+    {
+      "id": "first_order_plus_slow",
+      "n_fast": 1,
+      "k_fast_h": 1.8,
+      "k_elim_h": 0.41,
+      "slow_effective_weight": 0.1,
+      "k_slow_h": 0.2
+    },
+    {
+      "id": "transit3_plus_slow",
+      "n_fast": 3,
+      "k_fast_h": 5,
+      "k_elim_h": 0.41,
+      "slow_effective_weight": 0.1,
+      "k_slow_h": 0.2
+    },
+    {
+      "id": "transit5_fast_only",
+      "n_fast": 5,
+      "k_fast_h": 8,
+      "k_elim_h": 0.8,
+      "slow_effective_weight": 0,
+      "k_slow_h": 0.2
+    },
+    {
+      "id": "transit5_slow10pct",
+      "n_fast": 5,
+      "k_fast_h": 8,
+      "k_elim_h": 0.8,
+      "slow_effective_weight": 0.1,
+      "k_slow_h": 0.2
+    },
+    {
+      "id": "transit6_slow30pct",
+      "n_fast": 6,
+      "k_fast_h": 10,
+      "k_elim_h": 0.8,
+      "slow_effective_weight": 0.3,
+      "k_slow_h": 0.2
+    }
+  ],
+  "sources": [
+    {
+      "id": "Rosano1997_PK25",
+      "reference": "docs/pk-research/p2/p2e-source-metrics.json",
+      "observable": "40/20min raw group mean total E2 = 1980/468=4.2308; baseline of these 25 unknown"
+    },
+    {
+      "id": "Komesaroff1998_n10",
+      "reference": "docs/pk-research/p2/p2d-komesaroff-table1.json",
+      "observable": "baseline-subtracted group mean 30/15=(1969-89.4)/(486.6-89.4)=4.732; 15min SEM 218"
+    },
+    {
+      "id": "Price1997_crossover_n6",
+      "reference": "docs/pk-research/p2/p2i-price-figure-points.json",
+      "observable": "1mg SL printed Figure1 1h=450,2h=225,3h=116,4h=85 approx group points; figure-derived area conflicts with Table1 baseline-subtracted 2109 ±1031"
+    },
+    {
+      "id": "Yaish2023",
+      "reference": "docs/pk-research/p2/p2l-repeated-dose-source-audit.json",
+      "observable": "q6h 0.5mg repeated; mean predose and 90min median not joint individual time series"
+    }
+  ],
+  "price_auc_discrete_hours": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    6,
+    8,
+    12,
+    18,
+    24
+  ],
+  "repeat_scenario": {
+    "each_dose_mg": 0.5,
+    "interval_hours": 6,
+    "prior_dose_count": 24,
+    "hypothetical_only": true,
+    "all_outputs_normalized_to_single_1mg_one_hour_increase": true,
+    "not_an_actual_history": true
+  },
+  "validation": {
+    "independent_locked_human_studies": 0,
+    "clinical_accuracy_established": false,
+    "uncertainty_90pct_coverage_established": false,
+    "production_replacement_authorized": false
+  }
+}
