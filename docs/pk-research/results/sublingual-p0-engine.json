@@ -1,0 +1,2284 @@
+{
+  "schema_version": 1,
+  "synthetic_fits": [
+    {
+      "amplitude": 1.0000027604941257,
+      "correlation": 0.8844081418738012,
+      "rate": 0.9995000475024934,
+      "observations": 1,
+      "covariance": [
+        0.307482239172478,
+        4.4574634687312E-4,
+        4.4574634687312E-4,
+        8.261332198203298E-7
+      ],
+      "id": "one_lab",
+      "excluded_ids": []
+    },
+    {
+      "amplitude": 1.000002760499833,
+      "correlation": 0.9565865471670842,
+      "rate": 0.9995000467340239,
+      "observations": 3,
+      "covariance": [
+        0.30748223916621553,
+        4.457472453275772E-4,
+        4.457472453275772E-4,
+        7.061691859773891E-7
+      ],
+      "id": "same_phase",
+      "excluded_ids": []
+    },
+    {
+      "amplitude": 1.0000036762405506,
+      "correlation": 0.9565864048376829,
+      "rate": 0.9995001273871185,
+      "observations": 3,
+      "covariance": [
+        0.3074812531061673,
+        4.4562601227585684E-4,
+        4.4562601227585684E-4,
+        7.057875878972059E-7
+      ],
+      "id": "different_times",
+      "excluded_ids": []
+    }
+  ],
+  "synthetic_only": true,
+  "engine_version_label": "0.1.0-literature-draft",
+  "rate_sensitivity": [
+    {
+      "c_46min_pg_ml": 170144.30401042107,
+      "rate_factor": 0.5
+    },
+    {
+      "c_46min_pg_ml": 29254.275557153393,
+      "rate_factor": 0.9
+    },
+    {
+      "c_46min_pg_ml": 557.765815537493,
+      "rate_factor": 0.999
+    },
+    {
+      "c_46min_pg_ml": 278.8647796057063,
+      "rate_factor": 1
+    },
+    {
+      "c_46min_pg_ml": 0.1773790206659367,
+      "rate_factor": 1.001
+    },
+    {
+      "c_46min_pg_ml": 0,
+      "rate_factor": 1.01
+    },
+    {
+      "c_46min_pg_ml": 0,
+      "rate_factor": 1.1
+    }
+  ],
+  "population_cases": [
+    {
+      "pre_current_dose_pg_ml": 0,
+      "post_stop_48h_pg_ml": 0.020186933465780446,
+      "cmax_0_24_pg_ml": 288.04761285680024,
+      "tmax_0_24_h": 1,
+      "auc0_8_pg_h_ml": 781.2951991903259,
+      "time_h": [
+        0.25,
+        0.5,
+        0.75,
+        0.7666666666666667,
+        1,
+        1.5,
+        2,
+        3,
+        4,
+        6,
+        8,
+        12,
+        24
+      ],
+      "id": "single_2mg",
+      "events": [{
+        "dose_mg": 2,
+        "route": "sublingual",
+        "time_h": 0
+      }],
+      "concentration_pg_ml": [
+        152.4375856634444,
+        237.4418522936429,
+        277.38679454077635,
+        278.8647796055317,
+        288.04761285231825,
+        262.08675359450626,
+        211.97878069904303,
+        117.03160281032781,
+        57.47042051313871,
+        11.771071008319517,
+        2.2292093230707115,
+        0.17251403350640568,
+        0.0661168329695442
+      ],
+      "auc0_24_pg_h_ml": 785.2176413171536
+    },
+    {
+      "pre_current_dose_pg_ml": 0,
+      "post_stop_48h_pg_ml": 0.010093466732890223,
+      "cmax_0_24_pg_ml": 144.02380642840012,
+      "tmax_0_24_h": 1,
+      "auc0_8_pg_h_ml": 390.64759959516294,
+      "time_h": [
+        0.25,
+        0.5,
+        0.75,
+        0.7666666666666667,
+        1,
+        1.5,
+        2,
+        3,
+        4,
+        6,
+        8,
+        12,
+        24
+      ],
+      "id": "single_1mg",
+      "events": [{
+        "dose_mg": 1,
+        "route": "sublingual",
+        "time_h": 0
+      }],
+      "concentration_pg_ml": [
+        76.2187928317222,
+        118.72092614682145,
+        138.69339727038818,
+        139.43238980276584,
+        144.02380642615913,
+        131.04337679725313,
+        105.98939034952151,
+        58.515801405163906,
+        28.735210256569356,
+        5.885535504159758,
+        1.1146046615353558,
+        0.08625701675320284,
+        0.0330584164847721
+      ],
+      "auc0_24_pg_h_ml": 392.6088206585768
+    },
+    {
+      "pre_current_dose_pg_ml": 0,
+      "post_stop_48h_pg_ml": 0.04037386693156089,
+      "cmax_0_24_pg_ml": 576.0952257136005,
+      "tmax_0_24_h": 1,
+      "auc0_8_pg_h_ml": 1562.5903983806518,
+      "time_h": [
+        0.25,
+        0.5,
+        0.75,
+        0.7666666666666667,
+        1,
+        1.5,
+        2,
+        3,
+        4,
+        6,
+        8,
+        12,
+        24
+      ],
+      "id": "single_4mg",
+      "events": [{
+        "dose_mg": 4,
+        "route": "sublingual",
+        "time_h": 0
+      }],
+      "concentration_pg_ml": [
+        304.8751713268888,
+        474.8837045872858,
+        554.7735890815527,
+        557.7295592110634,
+        576.0952257046365,
+        524.1735071890125,
+        423.95756139808606,
+        234.06320562065562,
+        114.94084102627743,
+        23.542142016639033,
+        4.458418646141423,
+        0.34502806701281136,
+        0.1322336659390884
+      ],
+      "auc0_24_pg_h_ml": 1570.4352826343072
+    },
+    {
+      "pre_current_dose_pg_ml": 0.09515250955379673,
+      "post_stop_48h_pg_ml": 0.029035676700226044,
+      "cmax_0_24_pg_ml": 288.1381958864463,
+      "tmax_0_24_h": 1,
+      "auc0_8_pg_h_ml": 781.9241960002716,
+      "time_h": [
+        0.25,
+        0.5,
+        0.75,
+        0.7666666666666667,
+        1,
+        1.5,
+        2,
+        3,
+        4,
+        6,
+        8,
+        12,
+        24
+      ],
+      "id": "daily_2mg",
+      "events": [
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": 0
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -24
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -48
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -72
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -96
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -120
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -144
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -168
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -192
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -216
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -240
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -264
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -288
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -312
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -336
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -360
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -384
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -408
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -432
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -456
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -480
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -504
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -528
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -552
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -576
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -600
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -624
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -648
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -672
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -696
+        }
+      ],
+      "concentration_pg_ml": [
+        152.53157530550735,
+        237.53469282123018,
+        277.47849957503274,
+        278.95640942136157,
+        288.1381958818479,
+        262.175132549931,
+        212.06500793951213,
+        117.11367942508338,
+        57.54854312339963,
+        11.841841717922577,
+        2.293315126155544,
+        0.2251077861180853,
+        0.0951525096697702
+      ],
+      "auc0_24_pg_h_ml": 786.5551492615008
+    },
+    {
+      "pre_current_dose_pg_ml": 0.3202602957496881,
+      "post_stop_48h_pg_ml": 0.04506470736492979,
+      "cmax_0_24_pg_ml": 288.3216401659578,
+      "tmax_0_24_h": 1,
+      "auc0_8_pg_h_ml": 783.111419562404,
+      "time_h": [
+        0.25,
+        0.5,
+        0.75,
+        0.7666666666666667,
+        1,
+        1.5,
+        2,
+        3,
+        4,
+        6,
+        8,
+        12,
+        24
+      ],
+      "id": "twice_daily_2mg",
+      "events": [
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": 0
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -12
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -24
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -36
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -48
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -60
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -72
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -84
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -96
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -108
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -120
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -132
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -144
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -156
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -168
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -180
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -192
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -204
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -216
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -228
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -240
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -252
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -264
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -276
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -288
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -300
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -312
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -324
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -336
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -348
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -360
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -372
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -384
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -396
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -408
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -420
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -432
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -444
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -456
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -468
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -480
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -492
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -504
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -516
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -528
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -540
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -552
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -564
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -576
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -588
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -600
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -612
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -624
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -636
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -648
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -660
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -672
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -684
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -696
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -708
+        }
+      ],
+      "concentration_pg_ml": [
+        152.74311784877546,
+        237.73507704725776,
+        277.669647016013,
+        279.146999411804,
+        288.32164016112654,
+        262.34659487959823,
+        212.22764657934394,
+        117.26399216955951,
+        57.690034005788405,
+        11.969484186814672,
+        2.4090586130955978,
+        0.32026029578785503,
+        0.14774626228145213
+      ],
+      "auc0_24_pg_h_ml": 789.0245186768672
+    },
+    {
+      "pre_current_dose_pg_ml": 0.19030501910759345,
+      "post_stop_48h_pg_ml": 0.05807135340045209,
+      "cmax_0_24_pg_ml": 576.2763917728926,
+      "tmax_0_24_h": 1,
+      "auc0_8_pg_h_ml": 1563.8483920005433,
+      "time_h": [
+        0.25,
+        0.5,
+        0.75,
+        0.7666666666666667,
+        1,
+        1.5,
+        2,
+        3,
+        4,
+        6,
+        8,
+        12,
+        24
+      ],
+      "id": "daily_4mg",
+      "events": [
+        {
+          "dose_mg": 4,
+          "route": "sublingual",
+          "time_h": 0
+        },
+        {
+          "dose_mg": 4,
+          "route": "sublingual",
+          "time_h": -24
+        },
+        {
+          "dose_mg": 4,
+          "route": "sublingual",
+          "time_h": -48
+        },
+        {
+          "dose_mg": 4,
+          "route": "sublingual",
+          "time_h": -72
+        },
+        {
+          "dose_mg": 4,
+          "route": "sublingual",
+          "time_h": -96
+        },
+        {
+          "dose_mg": 4,
+          "route": "sublingual",
+          "time_h": -120
+        },
+        {
+          "dose_mg": 4,
+          "route": "sublingual",
+          "time_h": -144
+        },
+        {
+          "dose_mg": 4,
+          "route": "sublingual",
+          "time_h": -168
+        },
+        {
+          "dose_mg": 4,
+          "route": "sublingual",
+          "time_h": -192
+        },
+        {
+          "dose_mg": 4,
+          "route": "sublingual",
+          "time_h": -216
+        },
+        {
+          "dose_mg": 4,
+          "route": "sublingual",
+          "time_h": -240
+        },
+        {
+          "dose_mg": 4,
+          "route": "sublingual",
+          "time_h": -264
+        },
+        {
+          "dose_mg": 4,
+          "route": "sublingual",
+          "time_h": -288
+        },
+        {
+          "dose_mg": 4,
+          "route": "sublingual",
+          "time_h": -312
+        },
+        {
+          "dose_mg": 4,
+          "route": "sublingual",
+          "time_h": -336
+        },
+        {
+          "dose_mg": 4,
+          "route": "sublingual",
+          "time_h": -360
+        },
+        {
+          "dose_mg": 4,
+          "route": "sublingual",
+          "time_h": -384
+        },
+        {
+          "dose_mg": 4,
+          "route": "sublingual",
+          "time_h": -408
+        },
+        {
+          "dose_mg": 4,
+          "route": "sublingual",
+          "time_h": -432
+        },
+        {
+          "dose_mg": 4,
+          "route": "sublingual",
+          "time_h": -456
+        },
+        {
+          "dose_mg": 4,
+          "route": "sublingual",
+          "time_h": -480
+        },
+        {
+          "dose_mg": 4,
+          "route": "sublingual",
+          "time_h": -504
+        },
+        {
+          "dose_mg": 4,
+          "route": "sublingual",
+          "time_h": -528
+        },
+        {
+          "dose_mg": 4,
+          "route": "sublingual",
+          "time_h": -552
+        },
+        {
+          "dose_mg": 4,
+          "route": "sublingual",
+          "time_h": -576
+        },
+        {
+          "dose_mg": 4,
+          "route": "sublingual",
+          "time_h": -600
+        },
+        {
+          "dose_mg": 4,
+          "route": "sublingual",
+          "time_h": -624
+        },
+        {
+          "dose_mg": 4,
+          "route": "sublingual",
+          "time_h": -648
+        },
+        {
+          "dose_mg": 4,
+          "route": "sublingual",
+          "time_h": -672
+        },
+        {
+          "dose_mg": 4,
+          "route": "sublingual",
+          "time_h": -696
+        }
+      ],
+      "concentration_pg_ml": [
+        305.0631506110147,
+        475.06938564246036,
+        554.9569991500655,
+        557.9128188427231,
+        576.2763917636958,
+        524.350265099862,
+        424.13001587902426,
+        234.22735885016675,
+        115.09708624679926,
+        23.683683435845154,
+        4.586630252311088,
+        0.4502155722361706,
+        0.1903050193395404
+      ],
+      "auc0_24_pg_h_ml": 1573.1102985230016
+    },
+    {
+      "pre_current_dose_pg_ml": 11.771071008298826,
+      "post_stop_48h_pg_ml": 0.035185809230748585,
+      "cmax_0_24_pg_ml": 293.20518904520577,
+      "tmax_0_24_h": 0.985,
+      "auc0_8_pg_h_ml": 795.8368921919168,
+      "time_h": [
+        0.25,
+        0.5,
+        0.75,
+        0.7666666666666667,
+        1,
+        1.5,
+        2,
+        3,
+        4,
+        6,
+        8,
+        12,
+        24
+      ],
+      "id": "prior_2mg_6h",
+      "events": [
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": 0
+        },
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": -6
+        }
+      ],
+      "concentration_pg_ml": [
+        162.01154402451155,
+        245.22107671468873,
+        283.70312192414565,
+        285.09387352877206,
+        293.17385489193504,
+        265.4630470217058,
+        214.20799002210347,
+        118.02711095804669,
+        57.94863827284871,
+        11.943585041825227,
+        2.344211458799815,
+        0.26107774388986166,
+        0.11531407582862864
+      ],
+      "auc0_24_pg_h_ml": 800.96119508556
+    },
+    {
+      "pre_current_dose_pg_ml": 27.4569613392232,
+      "post_stop_48h_pg_ml": 2.5750377549310737,
+      "cmax_0_24_pg_ml": 314.19219411636004,
+      "tmax_0_24_h": 0.995,
+      "auc0_8_pg_h_ml": 962.8555874580179,
+      "time_h": [
+        0.25,
+        0.5,
+        0.75,
+        0.7666666666666667,
+        1,
+        1.5,
+        2,
+        3,
+        4,
+        6,
+        8,
+        12,
+        24
+      ],
+      "id": "prior_oral_2mg_24h",
+      "events": [
+        {
+          "dose_mg": 2,
+          "route": "sublingual",
+          "time_h": 0
+        },
+        {
+          "dose_mg": 2,
+          "route": "oral",
+          "time_h": -24
+        }
+      ],
+      "concentration_pg_ml": [
+        179.5600179315079,
+        264.2336290781386,
+        303.8517598549952,
+        305.30809342104476,
+        314.1895801461069,
+        287.5940386718139,
+        236.8662506423716,
+        140.7229582759901,
+        80.02181651104183,
+        32.201892723671335,
+        20.736834168222515,
+        15.357254173304288,
+        8.449425186758441
+      ],
+      "auc0_24_pg_h_ml": 1171.338537221079
+    },
+    {
+      "pre_current_dose_pg_ml": 3.0724361206621786,
+      "post_stop_48h_pg_ml": 0.019636924781359456,
+      "cmax_0_24_pg_ml": 73.41718391893204,
+      "tmax_0_24_h": 0.985,
+      "auc0_8_pg_h_ml": 199.74139635423862,
+      "time_h": [
+        0.25,
+        0.5,
+        0.75,
+        0.7666666666666667,
+        1,
+        1.5,
+        2,
+        3,
+        4,
+        6,
+        8,
+        12,
+        24
+      ],
+      "id": "yaish_regular_q6h_0.5mg",
+      "events": [
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": 0
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -6
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -12
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -18
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -24
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -30
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -36
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -42
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -48
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -54
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -60
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -66
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -72
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -78
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -84
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -90
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -96
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -102
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -108
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -114
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -120
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -126
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -132
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -138
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -144
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -150
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -156
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -162
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -168
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -174
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -180
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -186
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -192
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -198
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -204
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -210
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -216
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -222
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -228
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -234
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -240
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -246
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -252
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -258
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -264
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -270
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -276
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -282
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -288
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -294
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -300
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -306
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -312
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -318
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -324
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -330
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -336
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -342
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -348
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -354
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -360
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -366
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -372
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -378
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -384
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -390
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -396
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -402
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -408
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -414
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -420
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -426
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -432
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -438
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -444
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -450
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -456
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -462
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -468
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -474
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -480
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -486
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -492
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -498
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -504
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -510
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -516
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -522
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -528
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -534
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -540
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -546
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -552
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -558
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -564
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -570
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -576
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -582
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -588
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -594
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -600
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -606
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -612
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -618
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -624
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -630
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -636
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -642
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -648
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -654
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -660
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -666
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -672
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -678
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -684
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -690
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -696
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -702
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -708
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -714
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -720
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -726
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -732
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -738
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -744
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -750
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -756
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -762
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -768
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -774
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -780
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -786
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -792
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -798
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -804
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -810
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -816
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -822
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -828
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -834
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -840
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -846
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -852
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -858
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -864
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -870
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -876
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -882
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -888
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -894
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -900
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -906
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -912
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -918
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -924
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -930
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -936
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -942
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -948
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -954
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -960
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -966
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -972
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -978
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -984
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -990
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -996
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1002
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1008
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1014
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1020
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1026
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1032
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1038
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1044
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1050
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1056
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1062
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1068
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1074
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1080
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1086
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1092
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1098
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1104
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1110
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1116
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1122
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1128
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1134
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1140
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1146
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1152
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1158
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1164
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1170
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1176
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1182
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1188
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1194
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1200
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1206
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1212
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1218
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1224
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1230
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1236
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1242
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1248
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1254
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1260
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1266
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1272
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1278
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1284
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1290
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1296
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1302
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1308
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1314
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1320
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1326
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1332
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1338
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1344
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1350
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1356
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1362
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1368
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1374
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1380
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1386
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1392
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1398
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1404
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1410
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1416
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1422
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1428
+        },
+        {
+          "dose_mg": 0.5,
+          "route": "sublingual",
+          "time_h": -1434
+        }
+      ],
+      "concentration_pg_ml": [
+        40.628264406836635,
+        61.42697152594917,
+        71.04429880610154,
+        71.39178942586831,
+        73.40919264288475,
+        66.47680021245013,
+        53.65917629811456,
+        29.607685152820828,
+        14.582821053972461,
+        3.0724361206506963,
+        0.6644811233546221,
+        0.12966836857089034,
+        0.06439893259842468
+      ],
+      "auc0_24_pg_h_ml": 201.8901007572388
+    }
+  ],
+  "prior_band_46min": {
+    "p5": 0,
+    "center": 278.8647796057063,
+    "p95": 152714.8058637828
+  }
+}

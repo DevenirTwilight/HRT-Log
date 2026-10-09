@@ -4,9 +4,11 @@
 
 起始8d94c67cfc346386ca05df417a00bda34641bdee，现有开发分支/远端一致、工作区干净；Build25/schema9。只做研究、测试端对照与技术审计，不替换生产模型/参数或校准、历史事实。
 - [x] 已读取最新需求、交接、许可、Engine/FittedModels/LabFit、Calculator、原研究及测试入口；E2_SL吞咽项0.002407991来自拟合，约1/h下降与含服档外推需独立证据。
-- [x] 核实7项原始研究：Cortez全文XML、Yaish全文HTML，其余5项仅原始摘要；必要统计/来源哈希入sublingual-literature-validation.json，A/B/C分组。Featherline374ecbd公开参数及GPLv3核对，只独立数学计算，不复制源码。直接2mg/46min算278.8648/914.2624；待实际Kotlin验证。研究说明docs/pk-research/sublingual-v2.md已写。
+- [x] 核实7项原始研究：Cortez全文XML、Yaish全文HTML，其余5项仅原始摘要；必要统计/来源哈希入sublingual-literature-validation.json，A/B/C分组。Featherline374ecbd公开参数及GPLv3核对，只独立数学计算，不复制源码。直接2mg/46min算278.8648/914.2624；实际Kotlin/应用验证见下。研究说明docs/pk-research/sublingual-v2.md已写。
 - 已确认旧拟合217.0269口服AUC是Activella模型按Doll的8h浓度缩放后积分，并非Doll实测绝对AUC；吞咽0.24%和约1/h不能当已测生理比例/清除。独立Pines、Yaish固定时刻数值可比较但不能称真实Cmax；Cortez6.2是研究期间均量而非准确六月剂量。
-- [ ] 独立复现各给药/化验情形，测试实际Kotlin与测试端对照，生成误差和数值报告；验证180天历史截断、因果时间泄漏等。
+- [x] 新增PK8项+Calculator6项+Python5项全通过，实际Kotlin与稳定独立算式最大差4.77e-10pg/mL；9种合成历史、13时点、Cmax/Tmax/AUC/谷/停药报告入docs/pk-research/results。单次2mg/46min：直接278.86478，应用插值277.767987，Featherline80kg914.262352；合成400化验开启398.426553、关闭保持人口值。
+- [x] 复现严重缺陷但按P0边界不修生产：速率0.9→29254、1.1→0、默认区间0–152715；180天截断导致旧500化验假基线，缺快照旧220化验也假基线；因果当前插值使用NOW+5min化验、摘要也使用未来化验；全离群标识与实际采用不一致。详见sublingual-calibration-audit.md。原PK参数/历史快照完全不变，现有症状仍在，不能说测试绿灯=已修。
+- [x] 测试工具/保存Kotlin合成输入/来源/CSV/机器报告已入库；CI增加研究算术步骤及报告artifact，不上传APK。待完成P1规格及全量回归。
 - [ ] 科学结论/P1最小规格、Backlog/Roadmap及最终测试结果入库；不把旧模型文献目标拟合通过当独立外部验证通过。
 
 ## 完成：设置按钮交互回归（2026-10-09，REQUIREMENTS §44）
