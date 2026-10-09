@@ -1,6 +1,6 @@
 # 交接说明：工作进度与开发指南
 
-## 舌下雌二醇科学审查 P0：研究完成，最终CI待回查（2026-10-09，REQUIREMENTS §45）
+## 完成：舌下雌二醇科学审查 P0（科学外部验证未确立）（2026-10-09，REQUIREMENTS §45）
 
 起始8d94c67cfc346386ca05df417a00bda34641bdee，现有开发分支/远端一致、工作区干净；Build25/schema9。只做研究、测试端对照与技术审计，不替换生产模型/参数或校准、历史事实。
 - [x] 已读取最新需求、交接、许可、Engine/FittedModels/LabFit、Calculator、原研究及测试入口；E2_SL吞咽项0.002407991来自拟合，约1/h下降与含服档外推需独立证据。
@@ -8,10 +8,12 @@
 - 已确认旧拟合217.0269口服AUC是Activella模型按Doll的8h浓度缩放后积分，并非Doll实测绝对AUC；吞咽0.24%和约1/h不能当已测生理比例/清除。独立Pines、Yaish固定时刻数值可比较但不能称真实Cmax；Cortez6.2是研究期间均量而非准确六月剂量。
 - [x] 新增PK8项+Calculator6项+Python5项全通过，实际Kotlin与稳定独立算式最大差4.77e-10pg/mL；9种合成历史、13时点、Cmax/Tmax/AUC/谷/停药报告入docs/pk-research/results。单次2mg/46min：直接278.86478，应用插值277.767987，Featherline80kg914.262352；合成400化验开启398.426553、关闭保持人口值。
 - [x] 复现严重缺陷但按P0边界不修生产：速率0.9→29254、1.1→0、默认区间0–152715；180天截断导致旧500化验假基线，缺快照旧220化验也假基线；因果当前插值使用NOW+5min化验、摘要也使用未来化验；全离群标识与实际采用不一致。详见sublingual-calibration-audit.md。原PK参数/历史快照完全不变，现有症状仍在，不能说测试绿灯=已修。
-- [x] 测试工具/保存Kotlin合成输入/来源/CSV/机器报告已入库；CI增加研究算术步骤及报告artifact，不上传APK。待完成P1规格及全量回归。
+- [x] 测试工具/保存Kotlin合成输入/来源/CSV/机器报告已入库；CI增加研究算术步骤及报告artifact，不上传APK。P1规格及全量回归已完成，结果见下。
 - [x] 科学结论/P1规格、Backlog/Roadmap和pk-model误导说明已同步；P1规划未实施，建议下一单元为历史覆盖门控。两途径与经验核优缺点/ODE/可辨识性/基线/旧口服关系/资源与回放验收已写，需单独授权。
 - [x] 本机完整JVM重新执行：domain58、PK26（原18+新8）、importer12，0失败/跳过，12s。Android：data72、reminder14、app349（336通过/13既有可选跳过）、0失败；Lint0错误/131既有警告，1m49s。Python5/5，已保存输入离线重放成功。没有实机验证。
-- [ ] 最终源码CI jvm/android/device-tests及研究artifact待回查；不把启动成功或普通测试绿灯当科学外部验证通过。
+- [x] 最终源码991987c573881fca554b0e9df4d26c2aef426d82的[CI37905173240](https://github.com/DevenirTwilight/HRT-Log/actions/runs/37905173240) jvm/android/device-tests全部success；JVM全量PK实际执行，Android完整主步骤10m22s，Python5+PK聚焦8及研究对照步骤success，Full Debug/Release/测试APK/manifest/Schema无差异检查通过。
+- [x] 下载回查build-results188文件、device-test-results21文件，均无APK。app349/336通过/13跳过/0失败，data72/reminder14/聚焦PK8全通过；Lint0错误/131警告；API35 data14迁移/SQLCipher全通过，app53/51通过/2常规跳过/0失败，独立重启prepare/verify各1通过。CI研究JSON与本地入库JSON完全相同，不把数值一致和CI绿灯当科学外部验证通过。
+- [x] 完整命令/版本/输入哈希/证据缺口/CI回查已入sublingual-p0-verification.md。末尾提交仅文档，代码/测试与全绿991987c相同；正式模型/校准缺陷仍在，P1未实施，下一轮须独立授权。没有真实设备/个人真实化验验收，无数据迁移、历史覆盖或发布。
 
 ## 完成：设置按钮交互回归（2026-10-09，REQUIREMENTS §44）
 

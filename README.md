@@ -47,6 +47,10 @@ See [`docs/HANDOFF.md`](docs/HANDOFF.md) for verification and remaining work,
 removed model port (now rewritten independently from published literature).
 Published-literature parameter and engine validation tests are implemented.
 This is not clinical validation. Physical-device acceptance remains separate.
+The [sublingual E2 P0 audit](docs/pk-research/sublingual-v2.md) adds independently
+sourced study summaries and reproducible test comparisons. It identifies unresolved
+calibration defects; production parameters remain unchanged and external scientific
+validation is not established. See the [execution record](docs/pk-research/sublingual-p0-verification.md).
 Health information must never be committed; use only synthetic test data.
 
 Build 24 adds trash/restore; Build 25 implements explicit historical-period creation,

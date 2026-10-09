@@ -45,6 +45,6 @@ Gauss–Newton/Laplace协方差含先验，非完全由化验识别；当前无�
 
 ## 复现与验收
 
-命令和原始合成输出见 [工具说明](../../tools/pk-audit/README.md)。新增PK8项、Calculator6项、Python5项；已有Calculator/LabEstimate及全部PK测试一起通过。完整测试结果待本轮最后检查后写入HANDOFF。
+命令和原始合成输出见 [工具说明](../../tools/pk-audit/README.md)。新增PK8项、Calculator6项、Python5项；已有Calculator/LabEstimate及全部PK测试一起通过。完整本机/CI执行及产物回查见[验收记录](sublingual-p0-verification.md)和HANDOFF；科学验证状态仍为未确立。
 
 严重计算缺陷的优先级与后续规格见 [P1设计](sublingual-p1-design.md)。未授权修复正式校准；无数据迁移、历史事实修改或新模型投产。科研外部验证未通过不能用普通测试绿灯替代。
