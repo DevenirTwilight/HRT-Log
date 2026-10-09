@@ -3,7 +3,7 @@
   "created": "2026-10-09",
   "project": "HRT Log P2-G",
   "policy": "PUBLICATION_METADATA_ONLY; never infer unavailable patient data",
-  "input_status": "NO_PERMITTED_INDEPENDENT_SL_E2_TIMESERIES_READY",
+  "input_status": "PUBLIC_GROUP_FIGURE_APPROXIMATIONS_EXIST; NO_NEW_LOCKED_INDEPENDENT_VERIFIED_SL_TIME_SERIES",
   "prior_protocol_protection": "P2-A/B prefit protocol and source cohort roles remain frozen. These new research records were examined by the team; not a newly blind holdout.",
   "studies": [
     {
@@ -123,7 +123,17 @@
       "source_role": "DESIGN_EXPOSED",
       "reuse_permission": "UNVERIFIED",
       "priority": "P0",
-      "blocking": "Need official page/table verification and per-time group mean E2; same six persons across 0.25,0.5,1mg doses; unknown paired covariance"
+      "blocking": "Need official page/table verification and per-time group mean E2; same six persons across 0.25,0.5,1mg doses; unknown paired covariance",
+      "public_digitized_figure": {
+        "url": "https://commons.wikimedia.org/wiki/File:Estradiol_levels_with_oral_versus_sublingual_estradiol_in_postmenopausal_women.png",
+        "source": "Price 1997 Fig; uploader WebPlotDigitizer+Plotly recreation published in 2018",
+        "licence": "CC BY-SA 4.0 for re-created work; original source rights separate",
+        "quality": "THIRD_PARTY_FIGURE_DIGITIZED",
+        "represents": "GROUP_TIME_COURSE_NOT_INDIVIDUAL_RECORDS",
+        "sampled_point_csv_checked": false,
+        "calibration_error_checked": false,
+        "validation_role": "DESIGN_EXPOSED"
+      }
     },
     {
       "id": "Rosano1997_PK25",
@@ -156,5 +166,12 @@
     "locked_fully_usable_independent_human_sl_cohorts": 0,
     "clinical_accuracy_established": false,
     "production_model_replacement_authorized": false
+  },
+  "public_data_access_correction": {
+    "date": "2026-10-09",
+    "reason": "Public approximate digitized group curves do exist; lack of official raw time series is not proof none are publicly retrievable",
+    "burnier_percent_change_figure": "https://commons.wikimedia.org/wiki/File:Estrogen_and_gonadotropin_levels_with_0.5_mg_sublingual_estradiol_in_postmenopausal_women.png",
+    "no_new_independent_human_dataset_added": true,
+    "Doll_and_TransPrEP_supplements_exhaustively_checked": false
   }
 }

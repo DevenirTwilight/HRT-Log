@@ -1,5 +1,20 @@
 # P2-G：数据获取路线、来源审计与进入药代建模前的科学门槛
 
+## 后续公开资料更正（2026-10-09）：先核对已公开图表，再联系研究者
+
+此前的表述只应理解为：尚未取得原作者提供的完整逐人或官方时点浓度数值表，不等于已经证明这些研究没有公开的图像或补充材料。
+
+**Price 1997：第三方公开数字化的 24h 时间—浓度曲线已存在。** Wikimedia Commons 上传者2018年说明从原论文图像以 WebPlotDigitizer 和 Plotly 重建了不同舌下/口服剂量的24h曲线。链接：https://commons.wikimedia.org/wiki/File:Estradiol_levels_with_oral_versus_sublingual_estradiol_in_postmenopausal_women.png 。图像由作者标记CC BY-SA 4.0，但对图像的许可不能自动保证底层原期刊图表的全部再利用权。网页未核实提供原六名受试者个体数据、源点CSV、误差范围或官方逐时均值/方差。状态：THIRD_PARTY_FIGURE_DIGITIZED / DESIGN_EXPOSED / NOT_INDIVIDUAL_DATA。
+
+**Burnier 1981：另有公开的11小时相对变化图。** 链接：https://commons.wikimedia.org/wiki/File:Estrogen_and_gonadotropin_levels_with_0.5_mg_sublingual_estradiol_in_postmenopausal_women.png 。该图是约11小时 E2/E1/LH/FSH 相对基线百分比变化，不是独立绝对pg/mL观测；不能擅自从相对变化补出缺失的绝对基线。
+
+**Doll 2022：** ScienceDirect论文页面在检索索引里包含比PubMed摘要更多的内容，包括设计和基线（约24±8pg/mL）；出版社全文/附件的直接网页读取受限，未核查出可供直接下载的完整个体CSV，因此不能说已经证明没有公开任何更多数据。 https://www.sciencedirect.com/science/article/pii/S1530891X21013744
+
+**TransPrEP/Yager 2022：** PMC存有正文 https://pmc.ncbi.nlm.nih.gov/articles/PMC9910105/ ，但此次页面出现浏览器验证，临床试验登记接口也未完整读取，未穷尽核实补充附件/IPD声明；不得写成研究方拒绝公开。
+
+**修正后的科学顺序：** 第一，逐个检查官方全文、正文图与附件、上述两个公开数字化曲线；第二，若合法、记录许可、坐标校准、量化误差和图像版本，才将数字化点作为探索性群体平均曲线，检验与Price作者已报告基线扣除AUC0–24等指标的一致性；第三，继续搜索注册数据库与公共研究数据仓库的准确数据链接；第四，仅为缺失的LC-MS/MS逐时统计、受试者配对方差、准确剂量时刻及许可向作者询问。已见图表不能重新变成新的LOCKED_EXTERNAL，正式模型仍不替换。
+
+
 日期 2026-10-09。**阶段目标不是增加药代参数或发布新模型，而是取得能在样本、时间和单位上准确对应的真实舌下 E2 数据。** 本附录依据可查原论文及现有P2-A至P2-F，保留所有限制。新增 registry 和审计工具只使用公开来源元数据，不导入任何人的用药/化验记录。
 
 ## 1. 为何这是下一个最小有价值的研究单元

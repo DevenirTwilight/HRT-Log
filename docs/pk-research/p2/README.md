@@ -1,5 +1,8 @@
 # P2-A/B 舌下人口模型研究（已完成隔离研究，未投产）
 
+**P2-G公开图纠正：**Price1997和Burnier1981已经存在第三方公开数字化图；图像不是人体原始个体曲线，详情见[p2g访问勘误](p2g-data-acquisition-theory.md)。先审查图/附件，再考虑联系作者。
+
+
 ## P2-G：优先获取合法、独立的人体分时数据（2026-10-09）
 
 [完整来源审计、数学/统计理由、取证优先级和作者询问草稿](p2g-data-acquisition-theory.md)；[可核对的最小研究元数据](p2g-data-acquisition-registry.json)；[许可、共享队列和外测资格核查程序](../../../tools/pk-research/p2g_readiness.py)。重点为Doll LC-MS/MS七时点绝对数据、TransPrEP口服/舌下分组和重复用药史、Price正版时序与基线；未知数据不补造，研究作者联系草稿未发送。Yager与Abdelmawla同NCT03652623只算1个队列，P2-G新增可锁定的人体独立数据仍为0；不启动P2-C，也不改已交付APK。
