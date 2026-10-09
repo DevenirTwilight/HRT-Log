@@ -73,7 +73,7 @@ def run(engine, calculator, stability, output):
     for key in ['engine','calculator','stability']:
         shutil.copyfile(paths[key],out/f'sublingual-p1a-{key}.json')
     with (out/'sublingual-p1a-curves.csv').open('w',newline='') as f:
-        w=csv.writer(f);w.writerow(['case','time_h','old_population_pg_ml','new_population_pg_ml','absolute_error']);w.writerows(rows)
+        w=csv.writer(f,lineterminator="\n");w.writerow(['case','time_h','old_population_pg_ml','new_population_pg_ml','absolute_error']);w.writerows(rows)
     text=['# P1-A 数值验收报告','', '纯合成数据；采用B，仅幅度校准。不是人体外部准确性验收。',
           f"人口曲线 {len(new['population_cases'])} 组×13时刻，指标/时间点最大误差 {max(errors):.12g}。人口参数SHA256 `{PARAM_HASH}`未变。",'',
           '| 速率倍率输入（新策略忽略SL速率） | 旧pg/mL | 新pg/mL |','| --- | --- | --- |']
