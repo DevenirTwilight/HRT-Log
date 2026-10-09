@@ -145,9 +145,21 @@ def main():
             scenario['permissions'] = run([aapt, 'dump', 'permissions', str(target)], tree, out / f'{label}-permissions.log')
             scenario['badging'] = run([aapt, 'dump', 'badging', str(target)], tree, out / f'{label}-badging.log')
             scenario['packaged_manifest'] = run([aapt, 'dump', 'xmltree', str(target), '--file', 'AndroidManifest.xml'], tree, out / f'{label}-packaged-manifest.log')
-            if any(scenario[k]['exit_code'] for k in ('manifest', 'permissions', 'badging', 'packaged_manifest')):
+            scenario['resources'] = run([aapt, 'dump', 'resources', str(target)], tree, out / f'{label}-resources.log')
+            if any(scenario[k]['exit_code'] for k in ('manifest', 'permissions', 'badging', 'packaged_manifest', 'resources')):
                 scenario['status'] = 'manifest_failed'
                 raise RuntimeError(f'{label}: manifest inspection failed')
+            if 'android.permission.INTERNET' in (out / f'{label}-permissions.log').read_text():
+                raise RuntimeError(f'{label}: unexpected INTERNET permission in packaged APK')
+            critical = ['mipmap/ic_launcher', 'mipmap/ic_shell_calc', 'mipmap/ic_shell_notes',
+                        'drawable/ic_launcher_foreground', 'drawable/ic_launcher_monochrome',
+                        'drawable/ic_shell_calc_fg', 'drawable/ic_shell_calc_mono',
+                        'drawable/ic_shell_notes_fg', 'drawable/ic_shell_notes_mono', 'xml/locales_config']
+            resource_table = (out / f'{label}-resources.log').read_text()
+            scenario['critical_resource_names_present'] = {name: name in resource_table for name in critical}
+            if not all(scenario['critical_resource_names_present'].values()):
+                scenario['status'] = 'resource_failed'
+                raise RuntimeError(f'{label}: required launcher/locale resource name missing')
             scenario['status'] = 'build_and_static_checks_passed; release_functionality_unverified'
             save()
             print(f'{label}: {scenario["apk"]["size_bytes"]} bytes', flush=True)

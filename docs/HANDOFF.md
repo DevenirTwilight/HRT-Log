@@ -20,6 +20,7 @@ SDK37.0/BuildTools37.0.0已装好；完整Temurin JDK21.0.12.1+1已下载并核�
 新进展：A在R8阶段Gradle daemon退出，cgroup证据8GiB上限/oom_kill=1；此前并行Android测试触发资源限制。四组脚本已停止（B/C/D未执行），没有APK成品。改为串行调度，保持R8和同一构建配置；等Android测试结束后再决定重启完整四组。首次reminder测试因Robolectric进程无下载代理（6项/4失败）已保留日志/原XML，代理传播后正在重跑，不计为通过。
 实验脚本已加只读Gradle模型输出，四组将记录实际R8/资源压缩/ABI/full flavor/unsigned条件，不仅根据源码推断默认值。
 实验脚本补充逐APK校验三个按文件名读取的Java资源SHA与源码一致；比较完整原生库SHA集合，B保持A全部库，C/D仅保留A的完整arm64库集合，意外丢失/增加/改变即停止。数据72/reminder14已全部通过，app与lint仍运行。
+脚本同时检查最终APK权限（无INTERNET）和资源表中普通/计算器/便签的全部关键图标及locale XML，缺失则失败；这仍只证明静态保留，不代表release设备功能通过。
 待完成：四组构建/ZIP及manifest核验、资源静态风险与差分、可执行现有测试、报告JSON/Markdown；release及设备功能未验证。
 本检查点提交只涉及审计脚本/合成测试/交接；旧交接与P2研究保留如下。
 
