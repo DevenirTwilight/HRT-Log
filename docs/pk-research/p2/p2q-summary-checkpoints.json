@@ -78,5 +78,59 @@
   "independent_locked_human_sets_added": 0,
   "clinical_accuracy_established": false,
   "p5_p95_empirical_90pct_coverage_established": false,
-  "P2C_production_replacement_authorized": false
+  "P2C_production_replacement_authorized": false,
+  "source_baseline_canonicalization_correction": {
+    "zero_slow_weight_makes_slow_rate_irrelevant": true,
+    "raw_accepted_rows": {
+      "0": 75,
+      "25": 97,
+      "50": 62
+    },
+    "unique_curves": {
+      "0": 75,
+      "25": 88,
+      "50": 56
+    },
+    "raw_unordered_pairs": {
+      "0": 2775,
+      "25": 4656,
+      "50": 1891
+    },
+    "unique_curve_pairs": {
+      "0": 2775,
+      "25": 3828,
+      "50": 1540
+    },
+    "best_ge_6h_two_time_sets_delta_0_02": {
+      "0": {
+        "times": [
+          6,
+          12
+        ],
+        "unresolved_unique_pairs": 1006
+      },
+      "25": {
+        "times": [
+          6,
+          10
+        ],
+        "unresolved_unique_pairs": 1951
+      },
+      "50": {
+        "times": [
+          6,
+          10
+        ],
+        "unresolved_unique_pairs": 1248
+      }
+    },
+    "zero_weight_single_input_unique_models": {
+      "0": 0,
+      "25": 3,
+      "50": 2
+    },
+    "all_three_baseline_scenarios_have_common_canonical_candidate": false,
+    "status": "EXPOSED_HYPOTHETICAL_PRICE_BASELINE_NOT_MEASURED",
+    "program": "tools/pk-research/p2q_identifiability.py::baseline_grid_deduplication_and_sampling"
+  }
 }

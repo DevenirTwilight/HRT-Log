@@ -184,6 +184,72 @@ def family_robustness(cfg,cases):
     return output
 
 
+
+def canonical_shape_key(case):
+    """Zero effective slow weight makes k_slow disappear from predictions."""
+    return (case['n_fast'],case['k_fast_h'],case['k_elim_h'],
+            case['slow_effective_weight'],
+            None if case['slow_effective_weight']==0 else case['k_slow_h'])
+
+
+def baseline_grid_deduplication_and_sampling():
+    """Re-evaluate unique P2-O curve counts and P2-P's SAME delta=0.02 toy design.
+
+    All model groups are exposed; NOT a clinical trial, CI, or assay-precision
+    estimate. Does not mutate historical P2-O/P2-P research outputs.
+    """
+    prior=json.loads(SCAN.read_text())
+    pools={str(b):{} for b in prior['acceptance']['hypothetical_price_baselines_pg_ml']}
+    raw={label:0 for label in pools}
+    total=0
+    for case in scan.scan_inputs(prior):
+        total+=1
+        metrics=scan.raw_case_metrics(case)
+        for label in pools:
+            if scan.accept(metrics,float(label),prior['acceptance']):
+                raw[label]+=1
+                pools[label].setdefault(canonical_shape_key(case),case)
+    if total!=prior['expected_evaluated_combinations']:
+        raise ValueError('P2-O grid changed')
+    time_grid=[4,6,8,10,12,16,18,24]
+    results=[]
+    sets={label:set(pool) for label,pool in pools.items()}
+    for label,pool in pools.items():
+        cases=list(pool.values())
+        profiles=[[normalized_case(c,t) for t in time_grid] for c in cases]
+        choices=[]
+        for i,t1 in enumerate(time_grid):
+            if t1<6:continue
+            for j in range(i+1,len(time_grid)):
+                t2=time_grid[j]
+                ambiguous=sum(1 for x,y in itertools.combinations(profiles,2)
+                       if abs(x[i]-y[i])<=.02 and abs(x[j]-y[j])<=.02)
+                choices.append(((t1,t2),ambiguous))
+        best=min(choices,key=lambda it:(it[1],it[0]))
+        n=len(cases)
+        results.append({
+            'Price_baseline_HYPOTHETICAL_pg_ml':float(label),
+            'raw_parameter_rows':raw[label],
+            'distinct_canonical_curves':n,
+            'exact_duplicate_rows':raw[label]-n,
+            'pure_fast_only_curves':sum(c['slow_effective_weight']==0 for c in cases),
+            'dual_input_curves':sum(c['slow_effective_weight']>0 for c in cases),
+            'raw_unordered_pairs_P2P':raw[label]*(raw[label]-1)//2,
+            'unique_unordered_curve_pairs':n*(n-1)//2,
+            'best_two_samples_ge_6h_under_P2P_toy_delta_0_02':{
+                'times_h':list(best[0]),'remaining_unique_curve_pairs':best[1]}})
+    labels=list(sets)
+    overlaps={a+'_vs_'+b:len(sets[a]&sets[b])
+              for a,b in itertools.combinations(labels,2)}
+    overlaps['all_three_Price_baseline_hypotheses']=len(set.intersection(*sets.values()))
+    return {'evidence_role':'PREVIOUSLY_EXPOSED_GRID_EXACT_DUPLICATE_AUDIT',
+            'P2P_delta_is_NOT_measured_assay_precision':True,
+            'no_independent_human_validation_added':True,
+            'distinct_curves_by_baseline':results,
+            'identical_curve_parameter_overlap_by_baseline':overlaps,
+            'clinical_model_selection_authorized':False}
+
+
 def evaluate(cfg):
     cases=selected_exposed_cases(cfg)
     out={'phase':'P2-Q','source_status':'EXPOSED_STUDIES_AND_SYNTHETIC_MEASUREMENTS_ONLY',
@@ -198,6 +264,7 @@ def evaluate(cfg):
         'actual_human_prediction_coverage_established':False,
         'production_change_authorized':False,
         'uncertain_nuisance_survey':equivalence_survey(cfg,cases),
+        'canonical_P2O_P2P_baseline_audit':baseline_grid_deduplication_and_sampling(),
         'synthetic_holdout_family_comparison':family_robustness(cfg,cases)}
     return out
 
