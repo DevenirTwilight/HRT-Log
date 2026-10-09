@@ -114,6 +114,6 @@ class CausalTimeBoundaryTest {
    val r=compute(ls);val a=at(r);val post=at(r,t0.plusSeconds(301))
    rows.put(JSONObject().put("id",id).put("values_center_p5_p25_p75_p95",JSONArray(values(a).toList())).put("qualified_count",r.labEligibility.count{it.eligible}).put("raw_count",r.labs.size).put("summary_count",a.calibration?.labCount ?:0).put("post_count",a.calibration?.model?.postDoseObservationCount ?:0).put("diagnostic_observed",a.calibration?.diagnostics?.observedPGmL ?:JSONObject.NULL).put("after_sample_values",JSONArray(values(post).toList())).put("after_sample_count",post.calibration?.labCount ?:0))
   }
-  val file=File("build/reports/pk-p1c1/causal-after.json");file.parentFile!!.mkdirs();file.writeText(JSONObject().put("synthetic_only",true).put("now",now.toString()).put("query",t0.toString()).put("dose",t0.minusSeconds(46*60).toString()).put("sample",t0.plusSeconds(300).toString()).put("cases",rows).put("seconds",(System.nanoTime()-start)/1e9).toString(2)+"\n")
+  val file=File("build/reports/pk-p1c2/causal-after.json");file.parentFile!!.mkdirs();file.writeText(JSONObject().put("synthetic_only",true).put("now",now.toString()).put("query",t0.toString()).put("dose",t0.minusSeconds(46*60).toString()).put("sample",t0.plusSeconds(300).toString()).put("cases",rows).put("seconds",(System.nanoTime()-start)/1e9).toString(2)+"\n")
  }
 }

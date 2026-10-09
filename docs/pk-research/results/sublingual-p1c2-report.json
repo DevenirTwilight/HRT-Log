@@ -1,0 +1,35 @@
+{
+  "synthetic_only": true,
+  "software_acceptance": true,
+  "clinical_accuracy_established": false,
+  "parameter_hash": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b",
+  "algorithm_version": 2,
+  "calculator_version": 2,
+  "source_hashes": {
+    "before": "813501a30abbdf2a26df7226c04e569068af62d6e785dedb9ed31bc559164f82",
+    "engine": "6faf57e784b9cfcc246e7242aa172f3d953d0e6ddbb0a94ec348ad487f5f6bce",
+    "app": "ce6c9ad150c8033060b142dc028eca9bf4bff53551793fdfc04920b00ea30cf0",
+    "population": "de5d2cb58a036194ce528f68036cd8f453663b355065f53af1d7c4f43435ddfa",
+    "calculator": "a0bf4674a5e8ab7c5ae855fef244e4e46487919bbaaa86a44d28e92e4581a8d3",
+    "eligibility": "cad4489572a30531550f3a50000f93418a8399d62a034bf24d2adc845882f310",
+    "causal": "e4f70b2909cac4112e600102b169728cd12c6134127b7405f6970aa5609f42e9"
+  },
+  "script_hash": "3f139646a8456cf021a063aa295fb2ac439c7619555cabbf5d6b4526ba2f20d3",
+  "unchanged_errors": {
+    "population_cases": 0,
+    "synthetic_fits": 0.0,
+    "prior_band_46min": 0.0,
+    "history_cases": 0,
+    "causal": 1.447233444196172e-10
+  },
+  "policy": "all-warning: retain all, excluded empty; partial: existing one-pass removal/refit",
+  "unresolved": [
+    "No result-known timestamp",
+    "P2 population/clinical external accuracy unestablished"
+  ],
+  "production_source_hashes": {
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/LabFit.kt": "c26b79e8ab337f5be094545dc604167a1b25d6069799d01b2aa1c02c83cb9d4d",
+    "app/src/main/java/net/plainnotes/app/conc/ConcentrationCalculator.kt": "9a0ca71e55a49b05b614d247773a0c694716ce92f7272f79c5644a39e45e417e",
+    "app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt": "f21a68d40192c2e8c413d934bde69d17c16b3e0219a1092577ee425b1f24f58b"
+  }
+}

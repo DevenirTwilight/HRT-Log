@@ -10,6 +10,10 @@ import kotlin.math.sqrt
 
 enum class CalibrationMode { RETROSPECTIVE, CAUSAL }
 
+/** Not in the post-dose screening set; distinct from automatic residual exclusion. */
+enum class LabNotFittedReason { INVALID_TIME, INVALID_CONCENTRATION, UNCONFIRMED_PRE_TREATMENT, NO_E2_EVENTS, DUPLICATE_ID }
+
+
 /**
  * Personal adjustment learned from estradiol labs (docs/pk-model.md, "化验校准"). Shared amplitude applies to estradiol events: amplitude e^[logAmplitude]; rate e^[logRate] applies only to non-SL events.
  * Pure SL fits have fixed logRate=0 and a zero second covariance dimension. Neither factor is a validated physiological clearance.
@@ -23,18 +27,26 @@ data class LabFitModel(
     /** Estradiol baseline from independently confirmed pre-treatment lab IDs only (pg/mL), added to the curve. */
     val baselinePGmL: Double? = null,
     val postDoseObservationCount: Int = 0,
-    /** Labs left out as outliers (more than 4-fold off the fitted curve). */
+    /** IDs actually removed by one-pass residual screening; never contains a used observation. */
     val excludedLabIds: Set<String> = emptySet(),
     val priorSdAmplitude: Double = LabFit.PRIOR_SD_AMPLITUDE_DEFAULT,
     val rateAdjustable: Boolean = true,
     val algorithmVersion: Int = LabFit.ALGORITHM_VERSION,
+    /** Legal post-dose candidates C; final U and X partition C. IDs are internal, not UI labels. */
+    val candidateLabIds: Set<String> = emptySet(),
+    val usedLabIds: Set<String> = emptySet(),
+    /** First-pass residual warnings; may overlap either U or X. Not a verdict on a lab's truth. */
+    val warningLabIds: Set<String> = emptySet(),
+    val baselineLabIds: Set<String> = emptySet(),
+    val ignoredLabReasons: Map<String, LabNotFittedReason> = emptyMap(),
 ) {
     /** 0 = labs taught nothing yet, 1 = amplitude fully determined by labs. */
     val convergenceScore: Double get() = (1 - cov[0] / (priorSdAmplitude * priorSdAmplitude)).coerceIn(0.0, 1.0)
 }
 
 /** How the most recent lab compares with the prediction made from the labs before it. */
-data class LabDiagnostics(val predictedPGmL: Double, val observedPGmL: Double, val residualLog: Double, val isOutlier: Boolean, val convergenceScore: Double)
+data class LabDiagnostics(val predictedPGmL: Double, val observedPGmL: Double, val residualLog: Double, val isOutlier: Boolean, val convergenceScore: Double,
+    val labId: String? = null, val usedInFit: Boolean = false, val excludedFromFit: Boolean = false)
 
 /** Curve with its 5 %–95 % and 25 %–75 % bands (Monte Carlo). */
 class BandedCurve(val timeH: DoubleArray, val center: DoubleArray, val p5: DoubleArray, val p25: DoubleArray, val p75: DoubleArray, val p95: DoubleArray)
@@ -57,7 +69,7 @@ object LabFit {
     /** Assumed non-SL model-rate spread: half-life CV 29 % (oral EV, Zhang 2024); not a validated physiological clearance prior. */
     val PRIOR_SD_RATE = sqrt(ln(1 + 0.29 * 0.29))
     val PRIOR_SD_AMPLITUDE_DEFAULT = sqrt(ln(1 + 0.48 * 0.48))
-    /** A lab more than 4-fold away from the fitted curve is treated as an outlier. */
+    /** Engineering residual warning threshold, not an externally validated diagnostic standard. */
     val OUTLIER_LOG = ln(4.0)
     const val SAMPLES = 200
 
@@ -81,18 +93,46 @@ object LabFit {
     /** Fit using labs up to [untilH] (inclusive). */
     fun fit(events: List<DoseEvent>, labs: List<LabResult>, untilH: Double = Double.POSITIVE_INFINITY, confirmedBaselineLabIds: Set<String> = emptySet()): LabFitModel {
         val sdA = priorSdAmplitude(events)
-        val firstDose = events.filter { it.route != Route.PATCH_REMOVE && (Engine.choose(it) as? ModelChoice.Use)?.parts?.any { part -> part.first == Curve.E2 } == true }.minOfOrNull { it.timeH } ?: return LabFitModel(priorSdAmplitude = sdA)
-        val used = labs.filter { it.timeH <= untilH }.sortedWith(compareBy<LabResult> { it.timeH }.thenBy { it.id })
-        // Caller must independently confirm pre-treatment status; event-list start is not evidence.
-        val baselineLabs = used.filter { it.id in confirmedBaselineLabIds && it.timeH < firstDose && it.concValue > 0 }
-        val baseline = baselineLabs.takeIf { it.isNotEmpty() }?.map { toPgMl(it.concValue, it.unit) }?.average()
-        var post = used.filter { it.timeH >= firstDose && it.concValue > 0 }
+        val available = labs.filter { !it.timeH.isFinite() || it.timeH <= untilH }
+            .sortedWith(compareBy<LabResult> { it.timeH }.thenBy { it.id })
+        val duplicateIds = available.groupingBy { it.id }.eachCount().filterValues { it > 1 }.keys
+        val ignored = linkedMapOf<String, LabNotFittedReason>()
+        val legal = available.filter { l ->
+            val reason = when {
+                l.id in duplicateIds -> LabNotFittedReason.DUPLICATE_ID
+                !l.timeH.isFinite() -> LabNotFittedReason.INVALID_TIME
+                !validConcentration(l) -> LabNotFittedReason.INVALID_CONCENTRATION
+                else -> null
+            }
+            if (reason != null) ignored[l.id] = reason
+            reason == null
+        }
+        val firstDose = events.filter { it.route != Route.PATCH_REMOVE && (Engine.choose(it) as? ModelChoice.Use)?.parts?.any { part -> part.first == Curve.E2 } == true }.minOfOrNull { it.timeH }
+            ?: return LabFitModel(priorSdAmplitude = sdA, ignoredLabReasons = ignored + legal.associate { it.id to LabNotFittedReason.NO_E2_EVENTS })
+        val baselineLabs = legal.filter { it.id in confirmedBaselineLabIds && it.timeH < firstDose }
+        // Sum scaled terms so several large finite observations cannot overflow the baseline average.
+        val baseline = baselineLabs.takeIf { it.isNotEmpty() }?.sumOf { toPgMl(it.concValue, it.unit) / baselineLabs.size }
+        legal.filter { it.timeH < firstDose && it.id !in confirmedBaselineLabIds }
+            .forEach { ignored[it.id] = LabNotFittedReason.UNCONFIRMED_PRE_TREATMENT }
+        val candidates = legal.filter { it.timeH >= firstDose }
+        var post = candidates
         var model = solve(events, post, baseline ?: 0.0, sdA)
-        // One pass of outlier removal: drop labs more than 4-fold off the fitted curve, then refit.
         val pred = e2At(events, post.map { it.timeH }.toDoubleArray(), model.logAmplitude, model.logRate)
-        val outliers = post.filterIndexed { i, l -> abs(ln(toPgMl(l.concValue, l.unit)) - ln(pred[i] + (baseline ?: 0.0) + 1e-9)) > OUTLIER_LOG }.map { it.id }.toSet()
-        if (outliers.isNotEmpty() && outliers.size < post.size) { post = post.filter { it.id !in outliers }; model = solve(events, post, baseline ?: 0.0, sdA) }
-        return model.copy(baselinePGmL = baseline, postDoseObservationCount = post.size, excludedLabIds = outliers)
+        val warnings = post.filterIndexed { i, l -> residualWarning(toPgMl(l.concValue,l.unit),pred[i]+(baseline ?: 0.0)) }.map { it.id }.toSet()
+        // Preserve the existing all-warning fallback: keep every candidate and warn, never claim removal.
+        val excluded = if (warnings.isNotEmpty() && warnings.size < post.size) warnings else emptySet()
+        if (excluded.isNotEmpty()) { post = post.filter { it.id !in excluded }; model = solve(events, post, baseline ?: 0.0, sdA) }
+        return model.copy(baselinePGmL = baseline, postDoseObservationCount = post.size, excludedLabIds = excluded,
+            candidateLabIds = candidates.map { it.id }.toSet(), usedLabIds = post.map { it.id }.toSet(), warningLabIds = warnings,
+            baselineLabIds = baselineLabs.map { it.id }.toSet(), ignoredLabReasons = ignored)
+    }
+
+    private fun validConcentration(l: LabResult): Boolean = l.concValue.isFinite() && l.concValue > 0 && toPgMl(l.concValue,l.unit).let { it.isFinite() && it > 0 }
+
+    /** Exact existing >ln(4) rule, with its 1e-9 log floor. Equality is not a warning. */
+    fun residualWarning(observedPGmL: Double, predictedPGmL: Double): Boolean {
+        require(observedPGmL.isFinite() && observedPGmL > 0 && predictedPGmL.isFinite() && predictedPGmL >= 0)
+        return abs(ln(observedPGmL) - ln(predictedPGmL + 1e-9)) > OUTLIER_LOG
     }
 
     /** Maximum a posteriori (u, v) by damped Gauss–Newton; covariance from the Laplace approximation. */
@@ -181,15 +221,17 @@ object LabFit {
     }
 
     /** Diagnostics for the most recent lab against the fit from the labs before it. */
-    fun lastDiagnostics(events: List<DoseEvent>, labs: List<LabResult>, confirmedBaselineLabIds: Set<String> = emptySet()): LabDiagnostics? {
-        val sorted = labs.sortedWith(compareBy<LabResult> { it.timeH }.thenBy { it.id })
+    fun lastDiagnostics(events: List<DoseEvent>, labs: List<LabResult>, confirmedBaselineLabIds: Set<String> = emptySet(), currentFit: LabFitModel? = null): LabDiagnostics? {
+        val sorted = labs.filter { it.timeH.isFinite() && validConcentration(it) }.sortedWith(compareBy<LabResult> { it.timeH }.thenBy { it.id })
         val last = sorted.lastOrNull() ?: return null
         if (events.isEmpty()) return null
         val before = fit(events, sorted.filter { it.timeH < last.timeH }, last.timeH, confirmedBaselineLabIds)
         val pred = e2At(events, doubleArrayOf(last.timeH), before.logAmplitude, before.logRate)[0] + (before.baselinePGmL ?: 0.0)
         val obs = toPgMl(last.concValue, last.unit)
         val res = ln(obs) - ln(pred + 1e-9)
-        return LabDiagnostics(pred, obs, res, abs(res) > OUTLIER_LOG, fit(events, sorted, confirmedBaselineLabIds = confirmedBaselineLabIds).convergenceScore)
+        val finalFit = currentFit ?: fit(events, labs, confirmedBaselineLabIds = confirmedBaselineLabIds)
+        return LabDiagnostics(pred, obs, res, abs(res) > OUTLIER_LOG, finalFit.convergenceScore,
+            last.id, last.id in finalFit.usedLabIds, last.id in finalFit.excludedLabIds)
     }
 
     /**
@@ -254,7 +296,7 @@ object LabFit {
         val b = bandsWithFit(events,points,prefix,CalibrationMode.RETROSPECTIVE,samples,emptySet(),checkCancelled,model)[Curve.E2] ?: return null
         fun value(a:DoubleArray) = Pk.interpolate(points,a,timeH)!!
         checkCancelled()
-        return LabEvaluation(timeH,value(b.center),value(b.p5),value(b.p25),value(b.p75),value(b.p95),model,lastDiagnostics(events,prefix),prefix.size)
+        return LabEvaluation(timeH,value(b.center),value(b.p5),value(b.p25),value(b.p75),value(b.p95),model,lastDiagnostics(events,prefix,currentFit=model),prefix.size)
     }
 
     fun queryBracket(grid: DoubleArray, timeH: Double): DoubleArray {

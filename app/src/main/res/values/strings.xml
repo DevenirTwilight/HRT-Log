@@ -976,7 +976,7 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="picker_date">Date (YYYY-MM-DD)</string>
     <string name="period_records">View medication records</string>
     <string name="period_inferred">Inferred from medication records</string>
-<string name="calib_safety_limits">Calibration remains experimental: incomplete recorded history, unknown past configuration and unresolved outlier bookkeeping can mislead. Numerical stability does not establish personal accuracy.</string>
+<string name="calib_safety_limits">Calibration remains experimental: unrecorded exposure or unknown past configuration can mislead. Model residual warnings do not prove a lab error; numerical stability does not establish individual accuracy.</string>
 <string name="calib_rate_fixed">Fixed model rate</string>
 <string name="calib_rate_non_sl">Non-sublingual model rate</string>
 <string name="calib_history_counts">Eligible at query: %1$d · Not used: %2$d</string>
@@ -1000,4 +1000,20 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="calib_sample_time_semantics">Causal reconstruction uses sampling time, not when the result became known. Later eligible labs can reinterpret earlier curves in retrospective mode.</string>
 <string name="calib_evaluation_time">Summary evaluated at %1$s, using sampling-time availability.</string>
 <string name="calib_no_available_sample">No eligible sample is available for calibration at this query, or calibration is off. Original observations are retained.</string>
+<string name="calib_fit_counts">Available now: %1$d · Used in fit: %2$d · Automatically excluded: %3$d</string>
+<string name="calib_warning_used">Large model residuals; these observations still participate in calibration. This does not establish a lab error.</string>
+<string name="calib_residual_warning">Large residual against the screening model; not a verdict on the observation.</string>
+<string name="calib_fit_used">Participates in this fit</string>
+<string name="calib_fit_excluded">Automatically excluded from this fit</string>
+<string name="calib_fit_baseline">Confirmed baseline observation</string>
+<string name="calib_fit_not_candidate">Not a post-dose fit candidate</string>
+<string name="calib_history_total">Historically eligible in the loaded records: %1$d (including later samples)</string>
+<string name="calib_fit_invalid_value">Invalid concentration: a finite positive value is required</string>
+<string name="calib_fit_invalid_time">Invalid sampling time</string>
+<string name="calib_fit_unconfirmed">Pre-treatment status has not been confirmed</string>
+<string name="calib_fit_no_exposure">No modelled estradiol exposure</string>
+<string name="calib_fit_duplicate">Conflicting observation identifiers; not fitted</string>
+<string name="calib_last_used">Latest observation: participates in the fit</string>
+<string name="calib_last_excluded">Latest observation: automatically excluded from the fit</string>
+<string name="calib_last_not_used">Latest observation: not a fit candidate</string>
 </resources>

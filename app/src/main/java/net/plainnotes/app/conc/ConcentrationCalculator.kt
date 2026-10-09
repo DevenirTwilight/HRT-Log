@@ -34,7 +34,7 @@ data class Missing(val medicationId: Long?, val input: MissingInput)
 
 class CalibrationSummary(val model: LabFitModel, val diagnostics: LabDiagnostics?, val labCount: Int)
 
-data class ConcentrationEvaluation(val timeH: Double, val center: Double, val p5: Double, val p25: Double, val p75: Double, val p95: Double, val calibration: CalibrationSummary?)
+data class ConcentrationEvaluation(val timeH: Double, val center: Double, val p5: Double, val p25: Double, val p75: Double, val p95: Double, val calibration: CalibrationSummary?, val fitDisposition: LabFitModel? = calibration?.model)
 
 class ConcentrationResult(
     val missing: List<Missing>,
@@ -223,14 +223,16 @@ object ConcentrationCalculator {
             if (mode == CalibrationMode.CAUSAL && calibrate) {
                 LabFit.evaluateAt(immutableEvents,grid,usableLabs,time,mode,availableThrough,checkCancelled=cancel)?.let { v ->
                     ConcentrationEvaluation(time,v.center,v.p5,v.p25,v.p75,v.p95,
-                        if(v.labCount==0)null else CalibrationSummary(v.model,v.diagnostics,v.labCount))
+                        if(v.model.usedLabIds.isEmpty() && v.model.baselineLabIds.isEmpty())null else CalibrationSummary(v.model,v.diagnostics,v.labCount),v.model)
                 }
             } else {
                 cancel()
                 bands[Curve.E2]?.let { b ->
                     fun v(a:DoubleArray)=Pk.interpolate(grid,a,time)!!
-                    ConcentrationEvaluation(time,v(b.center),v(b.p5),v(b.p25),v(b.p75),v(b.p95),
-                        if(usableLabs.isEmpty())null else CalibrationSummary(LabFit.fit(immutableEvents,usableLabs),LabFit.lastDiagnostics(immutableEvents,usableLabs),usableLabs.size))
+                    val fit=if(usableLabs.isEmpty())null else LabFit.fit(immutableEvents,usableLabs)
+                    val summary=fit?.takeIf { it.usedLabIds.isNotEmpty() || it.baselineLabIds.isNotEmpty() }?.let {
+                        CalibrationSummary(it,LabFit.lastDiagnostics(immutableEvents,usableLabs,currentFit=it),usableLabs.size) }
+                    ConcentrationEvaluation(time,v(b.center),v(b.p5),v(b.p25),v(b.p75),v(b.p95),summary,fit)
                 }
             }
         }

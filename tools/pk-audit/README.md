@@ -80,3 +80,15 @@ python3 -m unittest discover -s tools/pk-audit -p 'test_*.py'
 11项Python。旧三轮均显式传保存输入并用/tmp或build输出（以上命令），只读重放其历史结论，不把旧C1错误标志视作当前未修。新报告检查实际P1-B合格未来400/800/同时间增删输入：历史中心/四条分位数/摘要诊断不变，采样后生效；人体现有准确性仍false。旧生成器`legacy_p1c1_baseline.kt`仅复制到d45a67a detached树的app测试，环境`P1C1_BEFORE_OUTPUT`指定独立before JSON。
 
 同机旧/新`p1c1_performance.kt`仅临时复制为app测试运行，环境`P1C1_PERF_OUTPUT`及`P1C1_PERF_COMMIT`指定输出/源码标签；2热身、5次、每批4个相同完整Calculator调用，不将临时测试留下进入完整app套件。heap delta受GC影响、不是峰值。复现/完整命令/失败修正及结果见P1-C1验收文档。
+
+## P1-C2：实际拟合集合与警告（只读旧证据）
+
+当前Kotlin报告统一写`pk-p1c2`；新增`LabDispositionTest`/`OutlierDispositionTest`产生实际集合与子集oracle输入输出。`sublingual_p1c2_compare.py`验证C/U/X、全warning保留、部分子集MAP/cov/center/分位、应用资格/原始点、旧人口/A/B/C1不变。Python13项包括篡改集合或关停校准不得伪通过。
+
+```sh
+python3 tools/pk-audit/sublingual_p1c2_compare.py
+python3 -m unittest discover -s tools/pk-audit -p 'test_*.py'
+python3 tools/pk-audit/sublingual_p1c1_compare.py --after docs/pk-research/results/sublingual-p1c1-after.json --engine docs/pk-research/results/sublingual-p1c1-engine.json --calculator docs/pk-research/results/sublingual-p1c1-calculator.json --eligibility docs/pk-research/results/sublingual-p1c1-eligibility.json --output /tmp/hrt-p1c1-replay
+```
+
+P0/A/B旧显式命令同上，禁止用默认输出覆盖旧档案。新C2工具默认才写独立C2结果。旧复现helper必须只在起始95199ab临时运行，生成器/环境/完整命令见C2验收；不留下env依赖测试进入完整套件。工程集合验收不代表临床外部准确性。

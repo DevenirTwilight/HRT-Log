@@ -168,7 +168,7 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
         else {
             val m = s.model
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                Metric(stringResource(R.string.calib_labs), s.labCount.toString(), Modifier.weight(1f))
+                Metric(stringResource(R.string.calib_labs), m.postDoseObservationCount.toString(), Modifier.weight(1f))
                 Metric(stringResource(R.string.calib_convergence), "${((s.diagnostics?.convergenceScore ?: 0.0) * 100).roundToInt()}%", Modifier.weight(1f))
             }
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -179,7 +179,10 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
             s.diagnostics?.takeIf { m.postDoseObservationCount > 0 }?.let { d ->
                 Text(stringResource(R.string.calib_last, fmt(d.observedPGmL), fmt(d.predictedPGmL), unit), style = MaterialTheme.typography.bodySmall)
                 if (d.isOutlier) Text(stringResource(R.string.calib_outlier), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
+                Text(stringResource(if(d.excludedFromFit)R.string.calib_last_excluded else if(d.usedInFit)R.string.calib_last_used else R.string.calib_last_not_used),style=MaterialTheme.typography.bodySmall)
             }
+            Text(stringResource(R.string.calib_fit_counts,s.labCount,m.postDoseObservationCount,m.excludedLabIds.size),style=MaterialTheme.typography.bodySmall)
+            if(m.warningLabIds.any { it in m.usedLabIds })Text(stringResource(R.string.calib_warning_used),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.error)
             if (m.postDoseObservationCount < 3) Text(stringResource(R.string.calib_few), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
         }
@@ -187,7 +190,7 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
         AdaptiveChoice(listOf(stringResource(R.string.calib_retro),stringResource(R.string.calib_causal)),if(settings.mode==CalibrationMode.RETROSPECTIVE)0 else 1,
             {onSettings(ConcSettings(settings.pmol,settings.calibrate,if(it==0)CalibrationMode.RETROSPECTIVE else CalibrationMode.CAUSAL))})
         Text(stringResource(if (settings.mode == CalibrationMode.RETROSPECTIVE) R.string.calib_retro_desc else R.string.calib_causal_desc), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        OutlinedButton(onClick = onOpenLabs) { Icon(Icons.Outlined.Science, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.calib_manage_labs)) }
+        OutlinedButton(onClick = onOpenLabs,modifier=Modifier.heightIn(min=48.dp)) { Icon(Icons.Outlined.Science, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.calib_manage_labs)) }
     }
 }
 
@@ -341,14 +344,33 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
     val available=rows.filter{it.sampleH<=cutoff}
     Text(stringResource(R.string.calib_history_counts,available.count{it.eligible},available.count{!it.eligible}),style=MaterialTheme.typography.bodySmall)
     if(available.none{it.eligible} && result?.e2?.isNotEmpty()==true)Text(stringResource(R.string.calib_history_population),style=MaterialTheme.typography.bodySmall)
-    if(rows.isNotEmpty())OutlinedButton(onClick={details=true}){Text(stringResource(R.string.calib_history_details))}
+    if(rows.isNotEmpty())OutlinedButton(onClick={details=true},modifier=Modifier.heightIn(min=48.dp)){Text(stringResource(R.string.calib_history_details))}
     if(details)AlertDialog(onDismissRequest={details=false},title={Text(stringResource(R.string.calib_history_details))},
         text={LazyColumn(Modifier.heightIn(max=420.dp),verticalArrangement=Arrangement.spacedBy(12.dp)){
+            item { Text(stringResource(R.string.calib_history_total,rows.count { it.eligible }),style=MaterialTheme.typography.bodySmall) }
             itemsIndexed(rows){index,row->Column{
                 val at=java.time.Instant.ofEpochMilli((row.sampleH*3_600_000).toLong()).atZone(java.time.ZoneId.systemDefault())
                 Text(at.format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
                 result?.labs?.getOrNull(index)?.let{Text(fmt(it.second)+" "+unit)}
                 Text(stringResource(if(row.eligible && row.sampleH>cutoff)R.string.calib_time_pending else if(row.eligible)R.string.calib_history_eligible else R.string.calib_history_excluded))
+                val fit=result?.currentEvaluation?.fitDisposition ?: result?.calibration?.model
+                if(row.eligible && row.sampleH<=cutoff && fit!=null){
+                    val id="l${row.labId}"
+                    if(id in fit.warningLabIds)Text(stringResource(R.string.calib_residual_warning),style=MaterialTheme.typography.bodySmall)
+                    Text(stringResource(when {
+                        id in fit.usedLabIds -> R.string.calib_fit_used
+                        id in fit.excludedLabIds -> R.string.calib_fit_excluded
+                        id in fit.baselineLabIds -> R.string.calib_fit_baseline
+                        else -> when(fit.ignoredLabReasons[id]) {
+                            net.plainnotes.app.pk.LabNotFittedReason.INVALID_CONCENTRATION -> R.string.calib_fit_invalid_value
+                            net.plainnotes.app.pk.LabNotFittedReason.INVALID_TIME -> R.string.calib_fit_invalid_time
+                            net.plainnotes.app.pk.LabNotFittedReason.UNCONFIRMED_PRE_TREATMENT -> R.string.calib_fit_unconfirmed
+                            net.plainnotes.app.pk.LabNotFittedReason.NO_E2_EVENTS -> R.string.calib_fit_no_exposure
+                            net.plainnotes.app.pk.LabNotFittedReason.DUPLICATE_ID -> R.string.calib_fit_duplicate
+                            null -> R.string.calib_fit_not_candidate
+                        }
+                    }),style=MaterialTheme.typography.bodySmall)
+                }
                 row.reasons.forEach{reason->Text(stringResource(when(reason){
                     EligibilityReason.READ_SCOPE_UNKNOWN->R.string.calib_history_scope
                     EligibilityReason.SAMPLE_OUTSIDE_WINDOW->R.string.calib_history_window

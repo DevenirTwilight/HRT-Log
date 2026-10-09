@@ -976,7 +976,7 @@
     <string name="picker_date">日期（YYYY-MM-DD）</string>
     <string name="period_records">查看用藥紀錄</string>
     <string name="period_inferred">由用藥紀錄推定</string>
-<string name="calib_safety_limits">校準仍為實驗功能：未記錄的歷史、過去配置未知及尚未修復的離群計數問題可能誤導。數值穩定不代表個人預測準確。</string>
+<string name="calib_safety_limits">校準仍為實驗性：未記錄的暴露或未知歷史配置可能誤導。模型殘差警告不能證明化驗錯誤；數值穩定不等於個體預測準確。</string>
 <string name="calib_rate_fixed">模型速率固定</string>
 <string name="calib_rate_non_sl">非舌下模型速率</string>
 <string name="calib_history_counts">查詢時可用：%1$d · 未納入：%2$d</string>
@@ -1000,4 +1000,20 @@
 <string name="calib_sample_time_semantics">因果重建按採樣時間截止，不代表當時已經得知結果；回顧式可用後來合格的化驗重新解釋早期曲線。</string>
 <string name="calib_evaluation_time">摘要評估時刻：%1$s，按採樣時間判定可用性。</string>
 <string name="calib_no_available_sample">此查詢時刻尚無可用的合格採樣，或校準已關閉；原始觀測保留。</string>
+<string name="calib_fit_counts">目前可用：%1$d · 實際參與：%2$d · 自動排除：%3$d</string>
+<string name="calib_warning_used">與模型偏差較大；這些觀測仍參與校準。這不能證明化驗錯誤。</string>
+<string name="calib_residual_warning">首輪模型殘差較大；不代表觀測事實錯誤。</string>
+<string name="calib_fit_used">實際參與本次擬合</string>
+<string name="calib_fit_excluded">已自動排除，未參與本次擬合</string>
+<string name="calib_fit_baseline">已明確確認的基線觀測</string>
+<string name="calib_fit_not_candidate">不是劑量後擬合候選</string>
+<string name="calib_history_total">已載入記錄中歷史資格合格：%1$d（含較晚採樣）</string>
+<string name="calib_fit_invalid_value">濃度無效：須為有限正數</string>
+<string name="calib_fit_invalid_time">採樣時間無效</string>
+<string name="calib_fit_unconfirmed">尚未明確確認治療前狀態</string>
+<string name="calib_fit_no_exposure">沒有可建模的雌二醇暴露</string>
+<string name="calib_fit_duplicate">觀測識別衝突；未擬合</string>
+<string name="calib_last_used">最近觀測：實際參與擬合</string>
+<string name="calib_last_excluded">最近觀測：已自動排除，未參與擬合</string>
+<string name="calib_last_not_used">最近觀測：不是擬合候選</string>
 </resources>

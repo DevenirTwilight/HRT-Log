@@ -109,13 +109,15 @@ class SublingualP0AuditTest {
         assertTrue(abs(retro.center[1] - pop.center[1]) > 1)
     }
 
-    @Test fun characterizeExcludedIdCanStillBeIncludedWhenEveryLabIsFlagged() {
+    @Test fun allWarningFallbackKeepsObservationWithoutClaimingExclusion() {
         val events = listOf(event())
         val labs = listOf(LabResult("far-tail", 100.0, 200.0, LabUnit.PG_ML))
         val fit = LabFit.fit(events, labs)
-        assertTrue("far-tail" in fit.excludedLabIds)
+        assertTrue(fit.excludedLabIds.isEmpty())
+        assertEquals(setOf("far-tail"),fit.usedLabIds)
+        assertEquals(setOf("far-tail"),fit.warningLabIds)
         assertEquals(1, fit.postDoseObservationCount,
-            "Confirmed bookkeeping defect: all-outlier guard keeps observation but reports its ID excluded")
+            "All-warning fallback uses observation and reports warning, not exclusion")
     }
 
     @Test fun generateActualKotlinPopulationAndCalibrationAuditOutputs() {
@@ -157,7 +159,7 @@ class SublingualP0AuditTest {
                 .put("excluded_ids", JSONArray(fit.excludedLabIds.toList())).put("observations", fit.postDoseObservationCount))
         }
         out.put("synthetic_fits", fits)
-        val file = File("build/reports/pk-p1c1/engine-outputs.json"); file.parentFile.mkdirs(); file.writeText(out.toString(2) + "\n")
+        val file = File("build/reports/pk-p1c2/engine-outputs.json"); file.parentFile.mkdirs(); file.writeText(out.toString(2) + "\n")
         assertTrue(file.length() > 1000)
     }
 }

@@ -976,7 +976,7 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="picker_date">Date (AAAA-MM-JJ)</string>
     <string name="period_records">Voir les prises</string>
     <string name="period_inferred">Déduit des prises enregistrées</string>
-<string name="calib_safety_limits">La calibration reste expérimentale : historique non enregistré, configuration passée inconnue et comptage des valeurs aberrantes non résolu peuvent induire en erreur. La stabilité numérique ne prouve pas la précision individuelle.</string>
+<string name="calib_safety_limits">La calibration reste expérimentale : des expositions non enregistrées ou une configuration passée inconnue peuvent induire en erreur. Un résidu important ne prouve pas une erreur de laboratoire ; la stabilité numérique ne garantit pas la précision individuelle.</string>
 <string name="calib_rate_fixed">Vitesse du modèle fixe</string>
 <string name="calib_rate_non_sl">Vitesse hors voie sublinguale</string>
 <string name="calib_history_counts">Admissibles à cet instant : %1$d · Non utilisés : %2$d</string>
@@ -1000,4 +1000,20 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="calib_sample_time_semantics">La reconstruction causale suit le moment du prélèvement, pas celui où le résultat a été connu. Le mode rétrospectif peut réinterpréter le passé avec des résultats admissibles ultérieurs.</string>
 <string name="calib_evaluation_time">Résumé évalué à %1$s, selon la disponibilité au moment du prélèvement.</string>
 <string name="calib_no_available_sample">Aucun prélèvement admissible disponible pour cet instant, ou calibration désactivée. Les observations originales sont conservées.</string>
+<string name="calib_fit_counts">Disponibles maintenant : %1$d · Utilisées : %2$d · Exclues automatiquement : %3$d</string>
+<string name="calib_warning_used">Écart important avec le modèle ; ces observations participent toujours à la calibration. Cela ne prouve pas une erreur de laboratoire.</string>
+<string name="calib_residual_warning">Résidu important au premier ajustement ; cela ne juge pas la validité de l’observation.</string>
+<string name="calib_fit_used">Participe à cet ajustement</string>
+<string name="calib_fit_excluded">Exclue automatiquement de cet ajustement</string>
+<string name="calib_fit_baseline">Observation de base explicitement confirmée</string>
+<string name="calib_fit_not_candidate">Ne fait pas partie des observations après dose</string>
+<string name="calib_history_total">Historiquement admissibles parmi les données chargées : %1$d (prélèvements ultérieurs inclus)</string>
+<string name="calib_fit_invalid_value">Concentration invalide : une valeur positive et finie est nécessaire</string>
+<string name="calib_fit_invalid_time">Heure de prélèvement invalide</string>
+<string name="calib_fit_unconfirmed">Le statut avant traitement reste non confirmé</string>
+<string name="calib_fit_no_exposure">Aucune exposition à l’estradiol modélisable</string>
+<string name="calib_fit_duplicate">Identifiants contradictoires ; observation non ajustée</string>
+<string name="calib_last_used">Dernière observation : participe à l’ajustement</string>
+<string name="calib_last_excluded">Dernière observation : exclue automatiquement de l’ajustement</string>
+<string name="calib_last_not_used">Dernière observation : ne fait pas partie des observations ajustées</string>
 </resources>

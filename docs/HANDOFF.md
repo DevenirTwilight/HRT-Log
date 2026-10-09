@@ -1,3 +1,13 @@
+# 最新状态：P1-C2生产已实施，最终验收进行中（2026-10-09，§49）
+
+起始95199ab19867a72e93a3ba5a6fae2c7320075577，初始干净/远端一致。真实旧engine/application均actual=1、claimed excluded=1，正确断言红灯；before机器证据和独立旧生成器保留。
+
+全异常保留拟合、独立warning、真实excluded为空；部分异常维持一次实际移除/重拟合。LabFitModel统一candidate/used/excluded/warning/baseline/ignored原因，postDoseObservationCount=used.size；summary及最新诊断/现有只读详情消费同一结果，isOutlier是留出预测残差，不偷换为排除。原始点和P1-B资格不变，C1未来前缀不泄漏，主卡真实参与数量与可用数量分别说明。四语详情不暴露主键、不增持久化交互。
+
+本地JVM PK58/domain58/importer12通过；新应用/UI14通过，四语320/411dp、font1/1.3/2、浅深共48组合，实际展开/管理点击/完整字形与48dp目标检查；Python13通过。最终完整Android/lint/full构建与API35 CI待核对，P1-C2暂不标完成。参见[设计](pk-research/sublingual-p1c2-design.md)和[验收](pk-research/sublingual-p1c2-verification.md)。
+
+人口参数/算法2/Calculator2/Build25/schema9/旧冻结1/2/备份/历史PDF不变。P0研究、P1-A/B/C1已完成；P2人口模型和严格结果获知时间仍另案，临床准确性未确立，模型残差不能证明化验错误。下方保留以前阶段历史记录。
+
 # 当前交接：P1-C2复现与设计检查点（2026-10-09，§49）
 
 起始95199ab19867a72e93a3ba5a6fae2c7320075577，既有分支/远端一致、初始干净。旧代码实际1/1复现：2mg SL/tier2，100h后200pg/mL；engine actual_count=1/excluded=tail，应用P1-B合格、时间可用、actual_count=1/excluded=l1。before JSON及独立旧生成器已保存。正确断言旧代码实际1项失败（Kept observation cannot be excluded），5s；旧复现1项通过5s，均非模拟器。

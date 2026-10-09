@@ -18,7 +18,7 @@ class SublingualCalibrationAuditTest {
     companion object {
         private val findings = JSONObject()
         @JvmStatic @AfterClass fun report() {
-            val file = File("build/reports/pk-p1c1/calculator-audit.json")
+            val file = File("build/reports/pk-p1c2/calculator-audit.json")
             file.parentFile!!.mkdirs(); file.writeText(findings.toString(2) + "\n")
         }
     }

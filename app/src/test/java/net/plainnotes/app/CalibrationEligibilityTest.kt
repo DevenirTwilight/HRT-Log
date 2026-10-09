@@ -168,7 +168,7 @@ class CalibrationEligibilityTest {
         assertEquals(1000,outcomes.count{it.eligible})
         val out=org.json.JSONObject().put("synthetic_only",true).put("calculator_version",2).put("labfit_algorithm_version",2)
             .put("cases",rows).put("resource_test",org.json.JSONObject().put("facts",10000).put("labs",1000).put("seconds",seconds).put("eligible",1000))
-        val file=java.io.File("build/reports/pk-p1c1/eligibility-audit.json");file.parentFile!!.mkdirs();file.writeText(out.toString(2)+"\n")
+        val file=java.io.File("build/reports/pk-p1c2/eligibility-audit.json");file.parentFile!!.mkdirs();file.writeText(out.toString(2)+"\n")
     }
 
 }
