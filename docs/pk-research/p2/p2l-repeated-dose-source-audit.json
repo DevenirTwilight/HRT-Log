@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "phase": "P2-L",
+  "date": "2026-10-09",
+  "role": "ALL_PUBLISHED_AGGREGATES_DESIGN_EXPOSED_NO_LOCKED_EXTERNAL",
+  "conversion_pmol_per_pg_ml": 3.671,
+  "studies": [
+    {
+      "id": "Yaish2023",
+      "cohort": "Yaish2023_pilot_TelAviv",
+      "original_publication": "https://pubmed.ncbi.nlm.nih.gov/38130980/",
+      "conference": "https://academic.oup.com/jes/article/7/Supplement_1/bvad114.2080/7291742",
+      "doi": "10.1089/trgh.2023.0022",
+      "total_enrolled": 22,
+      "route": "SL alone 0.5mg x4/day approximately q6h versus PO 2mg/day+CPA",
+      "assay": "Siemens Immulite chemiluminescence immunoassay",
+      "sampling": "morning basal/trough and a single 90-min post-dose summary, not dense 24h time-series",
+      "trough_6mo_e2_mean_pmol_l": 204.5,
+      "trough_6mo_e2_sd_pmol_l": 63.3,
+      "postdose_90min_median_pmol_l": 1721,
+      "postdose_90min_iqr_pmol_l": [
+        1000,
+        2432
+      ],
+      "postdose_90min_statistic": "median + IQR, NOT mean + SD",
+      "trough_n_reconciled": false,
+      "postdose_n_reconciled": false,
+      "pilot_status": "PREVIOUSLY_SEEN in Yaish P0/P2-A; 2023 abstract + journal paper same cohort"
+    },
+    {
+      "id": "Kariyawasam2025",
+      "cohort": "Toronto_chart_2019_2021",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12180117/",
+      "doi": "10.1089/trgh.2023.0138",
+      "paper_first_online_2024_issue_2025": true,
+      "total_eligible_patients": 286,
+      "table3_complete_baseline_n": 263,
+      "table3_sublingual_n": 38,
+      "route": "multiple doses and timings; low <=2mg daily, mid >2-4mg, high >4mg",
+      "assay": "Abbott chemiluminescent microparticle immunoassay or Roche ECLIA",
+      "table4_last_visit_mean_e2_pmol_l": 613,
+      "table4_last_visit_mean_e1_pmol_l": 2340,
+      "table4_reported_mean_e1_over_e2_ratio": 6.88,
+      "mean_ratio_not_ratio_of_means": true,
+      "early_definition": "<2h",
+      "mid_definition": "2h to 24h OR timing unknown, default to mid",
+      "trough_definition": ">=24h (not q6h actual pre-dose trough)",
+      "early_and_trough_extremes_excluded_in_E2_E1_analysis": true,
+      "modeled_analyte_e1_available_in_hrt": false,
+      "status": "NEW_OBSERVATIONAL_POPULATION_NOT_TIMED_SL_PK_CURVE"
+    },
+    {
+      "id": "BarOn2026",
+      "cohort": "BarOn_coagulation_30_TelAviv",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42665010/",
+      "doi": "10.1055/a-2945-4864",
+      "date_published": "2026-09-10",
+      "design": "nonrandomized 6-month, 15 SL 0.5mg x4/day, 15 PO 2mg+CPA",
+      "outcome": "hemostasis/protein S biomarkers, NOT estradiol concentration-time series or clinical VTE incidence",
+      "free_protein_S_sl_median_change_percent": -22,
+      "free_protein_S_oral_median_change_percent": -4.2,
+      "free_protein_S_sl_6month_median_percent": 77,
+      "free_protein_S_oral_6month_median_percent": 106,
+      "thrombotic_events_observed": 0,
+      "overlap": "2024 Bar-On abstract is interim same research program; overlap with 2023 Yaish pilot PARTICIPANT-LEVEL UNVERIFIED",
+      "status": "SAFETY_BIOMARKER_CONTEXT_NOT_PK_EXTERNAL_VALIDATION"
+    },
+    {
+      "id": "BarOn2024_interim",
+      "cohort": "BarOn_coagulation_30_TelAviv",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11454788/",
+      "doi": "10.1210/jendso/bvae163.1629",
+      "enrolled_at_interim": 27,
+      "completed_at_interim": 17,
+      "reported_before_2026": true,
+      "status": "NOT_AN_INDEPENDENT_COHORT_FROM_BarOn2026"
+    }
+  ],
+  "model_simulation": {
+    "description": "FROZEN models; 0.5mg SL q6h previous 120 doses plus next dose; baseline 30 pg/mL synthetic not a real Yaish baseline; Featherline uses fixed 80kg, no observed weight match",
+    "dose_mg": 0.5,
+    "interval_h": 6,
+    "previous_doses": 120,
+    "postdose_reading_h": 1.5,
+    "assumed_baseline_pg_ml": 30,
+    "weight_for_featherline_kg": 80,
+    "assay_calibration_performed": false,
+    "clinical_statistic_alignment": false
+  },
+  "gates": {
+    "new_independent_blinded_pk_validation_sets": 0,
+    "clinical_accuracy_established": false,
+    "estimable_human_90percent_coverage": false,
+    "production_model_change_authorized": false
+  }
+}

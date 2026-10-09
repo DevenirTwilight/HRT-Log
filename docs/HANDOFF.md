@@ -1,3 +1,9 @@
+## P2-L 最新证据：Yaish 90min＋Kariyawasam2025＋Bar-On2026（2026-10-09）
+
+[理论论证与逐来源限制](pk-research/p2/p2l-repeated-dose-new-cohorts.md)、[来源元数据](pk-research/p2/p2l-repeated-dose-source-audit.json)、[两冻结核q6h公平模拟](../tools/pk-research/p2l_repeated_dose_audit.py)及9项测试。Yaish早已纳入P0，不是新独立人体研究；0.5mg q6h口径90min median1721pmol/L、6月晨低谷mean204.5pmol/L。固定人口核+合成30pg/mL基线、120剂严格q6h情景，HRT低谷/90min≈33/96.5pg/mL，Featherline80kg≈94.8/303pg/mL，两方各有明显限制，不能以Doll单点或Price单AUC独断模型准确。Kariyawasam2025 286总/263表完整/38SL，免疫检测与排除极端采样使其不适合拟合完整峰谷；Bar-On2026安全生物标志物试验30人（15SL），2024中期同研究，不可叠加为PK或声称临床VTE风险增幅。旧冻结实验、所有生产PK/UI/签名APK与历史均未改。
+
+---
+
 # P2-K：停止Doll单一训练点独大；Featherline正反证据同口径研究（2026-10-09）
 
 新增[P2-K细致理论与公平验证审查](pk-research/p2/p2k-featherline-hrt-balanced-evidence.md)，[复算工具](../tools/pk-research/p2k_model_balance.py)与6项测试。Price1997三剂量独立已见出版AUC更贴近Featherline80kg（1mg 2026.5对人体2109、HRT 367.5；0.5mg 1013.3对970、HRT183.8；0.25mg 506.6对825、HRT91.9）；同六人交叉，不是三队列。Price原图1h≈450，Featherline≈481更接近，HRT≈144来自Doll训练；但Price2–4h Featherline可能高估、Doll单剂1mg/1h观察总144而Featherline增量≈481，两个模型均不能再现Rosano20→40min早期强加速。Price Figure1与Table1 AUC冲突未解决；未知原组基线使图上MAE排名反转。不预设哪软件正确，不掩盖Feather支持性证据，也不因拟合Doll训练点称HRT已验证。正式参数、P1、历史、APK及P2冻结协议不动。

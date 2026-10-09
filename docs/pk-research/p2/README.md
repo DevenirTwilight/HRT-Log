@@ -1,5 +1,10 @@
 # P2-A/B 舌下人口模型研究（已完成隔离研究，未投产）
 
+## P2-L：正规分次给药场景、公平模型压力测试与2025/2026新研究（2026-10-09）
+
+[完整科学推导、文献与局限](p2l-repeated-dose-new-cohorts.md)、[最小来源元数据](p2l-repeated-dose-source-audit.json)、[固定HRT/Featherline q6h数学计算](../../../tools/pk-research/p2l_repeated_dose_audit.py)及9项回归。Yaish2023已见同一人群0.5mg SL四次/日：90min median1721pmol/L[IQR1000–2432]、6月晨间谷mean204.5±63.3pmol/L，不能拿不同统计量计算个体峰谷比。假设30pg/mL基线、严格q6h持续120剂、Featherline80kg（**非真实人群输入**）：HRT低谷/90min总值33.07/96.48pg/mL，Featherline94.83/302.96；人体观察mean55.71/median468.81。Kariyawasam2025全研究286，基线表完整263中38SL，免疫法且排除极早/谷异常观察；E1/E2平均比值6.88≠2340/613。Bar-On2026凝血研究30人15SL，free protein S下降为生物标志物，不等于VTE风险、不是PK人体外测；2024会议为该队列中期，去重。临床独立PK准确性仍不足，P2-C未授权，生产和签名APK不变。
+
+
 ## P2-K 公平比较 HRT Log 和 Featherline（2026-10-09）
 
 用户指出 P2 项目过度依赖最初 Doll 训练点，现以[正反证据对称评估与方法依据](p2k-featherline-hrt-balanced-evidence.md)、[独立可重算公平比较脚本](../../../tools/pk-research/p2k_model_balance.py)和6项测试纠偏。Price1997 同六人三SL剂量已公布的基线扣除AUC上，Featherline 80kg在三个剂量均比HRT当前核更接近；1h浓度也更贴近Price原图。然而 Featherline对Doll 1h≈144预测≈481、Price2–4h可能高估，HRT对Doll是训练点吻合；双方都无法解释Rosano20→40min的4.23倍群体浓度增加。Price Figure1与Table1仍存在来源内未解释差异；图上9点MAE排序会随未经核实的基线假设翻转。**支持性证据须明确承认，但不能称模型临床准确、95%覆盖验证或正式替换已批准。**
