@@ -1,3 +1,9 @@
+# 最新研究：P2-D 30 分钟 E2 正文证据与结构约束（2026-10-09）
+
+新增[完整理论解释](pk-research/p2/p2d-komesaroff-onset-theory.md)、[证据JSON](pk-research/p2/p2d-komesaroff-table1.json)和标准库[数学压力测试](../tools/pk-research/onset_bound.py)。作者上传的 Komesaroff 1998 全文 p.2314 原表核对 n=10、2mg Estrace、RIA、均值±SEM，0/15/30min 均值89.4/486.6/1969 pmol/L；新增30min。中心增量比R≈4.732超过正权重零延迟一阶核/gamma2的数学上界2，证明现有**模型族对这些均值存在条件性形状限制**，不是统计显著排除或真实延迟估计。数据已见不能作为未见LOCKED_EXTERNAL；研究工具仅条件模拟，无外部准确性/模型上线批准。原P2冻结与正式生产、P1/Schema/快照不变。后续需密集时间序列、配对协方差/检测细节，再另冻协议研究受限lag/transit。完整命令和局限性见附录。
+
+---
+
 # P2-D 新增人体证据与理论解释已归档（2026-10-09）
 
 [理论附录及原始来源逐项理由](pk-research/p2/p2d-evidence-theory.md) 已写入仓库，[P2 研究入口](pk-research/p2/README.md) 已建立链接。新增 Fiet1982、Hoon1993、Fridriksdóttir1996、Komesaroff1998、Fisman1999 与 NCT05428215 的公开摘要/登记线索；可能的研究重叠、普通片剂与环糊精制剂差别、基线/采样时点/检测差异、经验核及双途径结构不可辨识性均有依据与限制。Doll2020 初报不作为独立于 Doll2022 的受试者证据。本轮不增加外部锁定验证集，不改 P2-A/B 冻结协议、研究输入或生产模型。仍为 external_validation_insufficient，不授权 P2-C。
