@@ -1,6 +1,6 @@
 # fullRelease APK 体积 P0 审计（2026-10）
 
-状态：实验进行中，尚无可报告的 APK 实测值。生产 Gradle/PK/Schema/版本/加密参数未更改。只审计 full，未签名、安装或发布。
+状态：A已实测，B/C/D仍构建中；不可计算未完成组的收益。生产 Gradle/PK/Schema/版本/加密参数未更改。只审计 full，未签名、安装或发布。
 
 ## 固定源码与构建条件
 
@@ -35,6 +35,6 @@
 
 ## 功能验收边界与下一步
 
-目前所有APK/节省/交互项均未测得；release资源/设备功能未验证。原有debug及设备测试即便通过，也不能替代B/D的资源压缩release验收。arm64需ARM64环境；本环境没有 `/dev/kvm`，未操作真实手机。
+A=23,506,758bytes（23.506758MB、SHA256 0d0d6853504624fbf668d0f9f6837d80397515b6ddb586e3ccbc8064828c65c4），CRC/Manifest/关键资源和Java JSON保留检查通过，ZIP16KiB对齐检查退出0；本机库19,451,876bytes，其中SQLCipher19,414,484bytes、其他本机库37,392bytes，DEX2,263,882bytes，Android resources1,556,379bytes，ZIP结构/对齐等开销114,790bytes。B/C/D尚未完成，节省及交互项未测得；release资源/设备功能未验证。原有debug及设备测试即便通过，也不能替代B/D的资源压缩release验收。arm64需ARM64环境；本环境没有 `/dev/kvm`，未操作真实手机。
 
 先取得四个同源码unsigned APK并按条目解释差分，再讨论正式资源压缩与ARM64发行方案。方案另需用户授权；本轮不修改生产默认。历史signed Build25的23,555,291bytes与SHA仅沿用附件/既有交付记录作规模参考，本轮未取得该APK，不算同等A/B。未获取/反编译/复制Featherline二进制、资源或源码。
