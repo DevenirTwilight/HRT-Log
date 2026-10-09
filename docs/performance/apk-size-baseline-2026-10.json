@@ -1,0 +1,95 @@
+{
+  "source_commit": "622e84ee927a2ebd7afc6d102c8a0af74b47799e",
+  "task": ":app:assembleFullRelease",
+  "sdk_root": "/tmp/hrt-apk-experiment/android-sdk",
+  "signing": "unsigned; no official credentials",
+  "scenarios": [
+    {
+      "label": "A",
+      "source_commit": "622e84ee927a2ebd7afc6d102c8a0af74b47799e",
+      "resource_shrink": null,
+      "abi_filter": [],
+      "minify": true,
+      "status": "building",
+      "apk": null
+    },
+    {
+      "label": "B",
+      "source_commit": "622e84ee927a2ebd7afc6d102c8a0af74b47799e",
+      "resource_shrink": true,
+      "abi_filter": [],
+      "minify": true,
+      "status": "pending",
+      "apk": null
+    },
+    {
+      "label": "C",
+      "source_commit": "622e84ee927a2ebd7afc6d102c8a0af74b47799e",
+      "resource_shrink": null,
+      "abi_filter": [
+        "arm64-v8a"
+      ],
+      "minify": true,
+      "status": "pending",
+      "apk": null
+    },
+    {
+      "label": "D",
+      "source_commit": "622e84ee927a2ebd7afc6d102c8a0af74b47799e",
+      "resource_shrink": true,
+      "abi_filter": [
+        "arm64-v8a"
+      ],
+      "minify": true,
+      "status": "pending",
+      "apk": null
+    }
+  ],
+  "status": "in_progress",
+  "tools": {
+    "jdk": "Temurin 21.0.12.1+1",
+    "gradle": "9.3.1",
+    "agp": "9.1.1",
+    "kotlin": "2.2.20",
+    "android_platform": "37.0 revision 2",
+    "build_tools": "37.0.0",
+    "tls_truststore": "/etc/ssl/certs/java/cacerts"
+  },
+  "tests": {
+    "jvm": {
+      "core/domain": {
+        "tests": 58,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "pk-engine": {
+        "tests": 58,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "importer": {
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "python_pk_audit": {
+      "tests": 13,
+      "exit_code": 0
+    },
+    "python_pk_research": {
+      "tests": 126,
+      "exit_code": 0
+    },
+    "audit_script": {
+      "tests": 3,
+      "exit_code": 0
+    },
+    "android": "in_progress",
+    "release_runtime": "not_verified",
+    "arm64_device": "not_verified"
+  }
+}
