@@ -22,10 +22,13 @@
 def scenario = startParameter.projectProperties.get('hrtAcceptanceScenario')
 def mode = startParameter.projectProperties.get('hrtAcceptanceMode') ?: 'exact'
 if (scenario == null) return
-if (!(scenario in ['A', 'B', 'C', 'D'])) throw new GradleException("hrtAcceptanceScenario must be A, B, C or D")
+if (!(scenario in ['A', 'B', 'C', 'D', 'E'])) throw new GradleException("hrtAcceptanceScenario must be A, B, C, D or E")
 if (!(mode in ['exact', 'functional'])) throw new GradleException("hrtAcceptanceMode must be exact or functional")
 def shrink = scenario in ['B', 'D']
 def arm64 = scenario in ['C', 'D']
+// E (2026-10-10): A plus compressed native libraries (packaging.jniLibs.useLegacyPackaging = true, i.e.
+// extractNativeLibs=true): universal ABIs kept, libraries deflated in the APK and extracted at install.
+def compressedNative = scenario == 'E'
 
 allprojects { p ->
     p.plugins.withId('com.android.application') {
@@ -41,6 +44,7 @@ allprojects { p ->
             bt.testProguardFile(new File(acceptanceDir, 'test-apk.pro'))
         }
         if (arm64) { android.defaultConfig.ndk.abiFilters.clear(); android.defaultConfig.ndk.abiFilters.add('arm64-v8a') }
+        if (compressedNative) android.packaging.jniLibs.useLegacyPackaging = true
         def androidTest = android.sourceSets.getByName('androidTest')
         androidTest.java.srcDir(p.file('src/releaseAcceptanceTest/exact'))
         androidTest.assets.srcDir(new File(generated, 'assets'))
@@ -82,7 +86,7 @@ allprojects { p ->
                     def r = android.buildTypes.getByName('release')
                     println "HRT_ACCEPTANCE_CONDITIONS scenario=${scenario} mode=${mode} minify=${r.minifyEnabled} shrinkResources=${r.shrinkResources} " +
                         "abiFilters=${android.defaultConfig.ndk.abiFilters.toList().sort()} testBuildType=${android.testBuildType} " +
-                        "signing=${r.signingConfig?.name} proguard=${r.proguardFiles.collect { it.name }}"
+                        "signing=${r.signingConfig?.name} proguard=${r.proguardFiles.collect { it.name }} useLegacyPackaging=${android.packaging.jniLibs.useLegacyPackaging}"
                 }
             }
         }

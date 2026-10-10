@@ -20,6 +20,7 @@ object AcceptanceSupport {
     val scenario: String get() = condition.getString("scenario")
     val shrunk: Boolean get() = condition.getBoolean("resource_shrink")
     val arm64Only: Boolean get() = condition.getJSONArray("abi_filter").length() > 0
+    val compressedNative: Boolean get() = condition.optBoolean("compressed_native", false)
 
     fun asset(name: String) = instrumentation.context.assets.open(name).bufferedReader().use { it.readText() }
 

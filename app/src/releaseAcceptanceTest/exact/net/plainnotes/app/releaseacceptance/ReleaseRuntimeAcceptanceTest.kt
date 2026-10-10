@@ -96,6 +96,15 @@ class ReleaseRuntimeAcceptanceTest {
             maps.all { path -> abiDir.getValue(processAbi).any { path.contains("lib/$it/") } })
         if (AcceptanceSupport.arm64Only) assertEquals(listOf("lib/arm64-v8a/libandroidx.graphics.path.so", "lib/arm64-v8a/libsqlcipher.so"), apkLibs)
         else assertEquals(8, apkLibs.size)
+        // Scenario E stores native libraries deflated; the installer must extract them and SQLCipher must load from there.
+        val methods = ZipFile(info.sourceDir).use { zip -> zip.entries().toList().filter { it.name.startsWith("lib/") }.associate { it.name to it.method } }
+        evidence("native-packaging", JSONObject().put("compressed_native_expected", AcceptanceSupport.compressedNative)
+            .put("entry_methods", JSONObject(methods.mapValues { if (it.value == java.util.zip.ZipEntry.DEFLATED) "DEFLATED" else "STORED" }))
+            .put("extracted_files", JSONArray(File(info.nativeLibraryDir ?: "").list()?.sorted() ?: emptyList<String>())).put("mapped_sqlcipher", JSONArray(maps)))
+        if (AcceptanceSupport.compressedNative) {
+            assertTrue("E: every lib/ entry must be deflated: $methods", methods.values.all { it == java.util.zip.ZipEntry.DEFLATED })
+            assertTrue("E: SQLCipher must load from the extracted native library dir: $maps", maps.all { it.startsWith(info.nativeLibraryDir) })
+        } else assertTrue("A-D keep native libraries stored: $methods", methods.values.all { it == java.util.zip.ZipEntry.STORED })
     }
 
     @Test fun sqlcipherCreatesReopensRejectsWrongKeyAndKeepsIntegrity() {
