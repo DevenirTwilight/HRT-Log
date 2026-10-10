@@ -1,0 +1,2469 @@
+{
+  "phase": "P2-X",
+  "date": "2026-10-10",
+  "status": "NONCLINICAL_CONDITIONAL_ENSEMBLE",
+  "input_studies": [
+    "Rosano1997_PK25",
+    "Komesaroff1998_n10",
+    "Price1997_figure1"
+  ],
+  "independent_unseen_complete_SL_PK": 0,
+  "Doll_used": false,
+  "production_model_untouched": true,
+  "cross_study_biological_amplitude_not_shared": true,
+  "pseudo_loss_definition": "mean across 3 study-specific generalized squared residuals / number of times, each with manual min(SEorReadWidth, 15% model discrepancy floor) and within-source rho=0 ASSUMED",
+  "note_error_floor": "Code uses maximum of nominal uncertainty and 15% of y, not minimum; this prose supersedes typo",
+  "baseline_grid_not_empirical_prior": true,
+  "no_valid_confidence_intervals_or_clinical_prediction_intervals": true,
+  "no_human_clinical_parameters_identified": true,
+  "cortez_group_E2_means": {
+    "once": {
+      "dose_per_day_mg": 6.2,
+      "baseline_before_therapy_pg_ml": 25.8,
+      "six_month_trough_mean_pg_ml": 95.3,
+      "reported_plus_minus": 10.5
+    },
+    "twice": {
+      "dose_per_day_mg": 6.2,
+      "baseline_before_therapy_pg_ml": 23.4,
+      "six_month_trough_mean_pg_ml": 79.4,
+      "reported_plus_minus": 11.6
+    }
+  },
+  "cortez_SD_SE_ambiguity": "Table3 caption mean(SD) versus Fig3 caption mean(SE), confirm with authors before inferential use",
+  "yaish_group_mean_vs_median_not_paired": true,
+  "fig_and_table_AUC_same_six_participants_not_independent": true,
+  "source_urls": {
+    "price": "https://pubmed.ncbi.nlm.nih.gov/9052581/",
+    "rosano": "https://doi.org/10.1161/01.cir.96.9.2837",
+    "komesaroff": "https://doi.org/10.1210/jcem.83.7.4945",
+    "cortez": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11220669/",
+    "yaish": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10732161/"
+  },
+  "design": {
+    "rosano_baseline_capped_pmol_l": [
+      100.0,
+      225.0
+    ],
+    "price_baseline_fixed_pg_ml": [
+      0.0,
+      6.0,
+      12.0,
+      18.0,
+      24.0
+    ],
+    "n_input_stages": [
+      4,
+      6,
+      8,
+      10
+    ],
+    "assumed_rho": 0,
+    "assumed_model_error_fraction": 0.15,
+    "local_optimizers_each": 2,
+    "normalized_to_h1h": true
+  },
+  "summary": {
+    "best": {
+      "rosano_baseline_cap_pmol_l": 225.0,
+      "price_fixed_baseline_pg_ml": 24.0,
+      "n_fast": 10,
+      "score": 0.03348696307362355,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 107.18515137704625,
+          "amplitude_at_1h": 2044.190769095772,
+          "pseudo_loss": 0.003441736206886058
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.51990849657265,
+          "amplitude_at_1h": 3617.518115164913,
+          "pseudo_loss": 0.011471359037538232
+        },
+        "Price1997_figure1": {
+          "baseline": 24.0,
+          "amplitude_at_1h": 434.8357220077087,
+          "pseudo_loss": 0.08554779397644638
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 10,
+        "k_fast_per_h": 16.33057668138752,
+        "k_elim_per_h": 1.3823250064791872,
+        "k_slow_per_h": 0.2616420808381402,
+        "effective_slow_weight": 0.5311770316375933
+      },
+      "relative_1mg_peak_time_h": 0.86,
+      "normalized_increment_auc_0_24_h": 2.1967399140334516,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.0998356318105866,
+        "12": 0.017063180747183496,
+        "24": 0.0007080944535687233
+      },
+      "normalized_curve": {
+        "0.25": 0.09896392290807818,
+        "0.5": 0.523468732217862,
+        "1": 1.0,
+        "2": 0.417126368058965,
+        "4": 0.1445976827100983,
+        "6": 0.07922205475571546,
+        "8": 0.046537594325514874,
+        "12": 0.016324428940983113,
+        "24": 0.0007067671260269512
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 955.2209865818878,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 1153.7790134181123,
+      "conditional_gain_ratio_twice_over_once": 0.06687509615822387,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    "slices": {
+      "additive_pseudoloss_0.03": {
+        "count": 4,
+        "min_score": 0.03348696307362355,
+        "q6": {
+          "min": 0.09949813376325677,
+          "median": 0.10016593370090605,
+          "max": 0.10169433670916965
+        },
+        "q12": {
+          "min": 0.016707764586228774,
+          "median": 0.01762384657620055,
+          "max": 0.019570217834732184
+        },
+        "q24": {
+          "min": 0.0006641542730855463,
+          "median": 0.0007846314038478799,
+          "max": 0.0010806716708431246
+        },
+        "q24_fold_max_min": 1.6271395286256465,
+        "auc0_24_per_1h": {
+          "min": 2.1913686633936997,
+          "median": 2.1950210663961114,
+          "max": 2.2056579487436014
+        },
+        "peak_time_h": {
+          "min": 0.86,
+          "median": 0.88,
+          "max": 0.9
+        },
+        "required_cortez_gain_ratio": {
+          "min": 0.06405954385375887,
+          "median": 0.07159590132319468,
+          "max": 0.0889879752077902
+        },
+        "source_baseline_grid_values": [
+          24.0
+        ],
+        "included_orders": [
+          8,
+          10
+        ],
+        "interpretation": "Analyst-set pseudo-loss slice of sampled fits, NOT confidence set, CI, posterior, coverage, or exhaustive parameter region."
+      },
+      "additive_pseudoloss_0.1": {
+        "count": 15,
+        "min_score": 0.03348696307362355,
+        "q6": {
+          "min": 0.09949813376325677,
+          "median": 0.14105106328662775,
+          "max": 0.4338331127656228
+        },
+        "q12": {
+          "min": 0.016707764586228774,
+          "median": 0.03344528572166302,
+          "max": 0.18012259102008377
+        },
+        "q24": {
+          "min": 0.0006641542730855463,
+          "median": 0.0029782601709176185,
+          "max": 0.06299386364896951
+        },
+        "q24_fold_max_min": 94.8482396361178,
+        "auc0_24_per_1h": {
+          "min": 2.1913686633936997,
+          "median": 2.406402047958421,
+          "max": 3.4538333398997896
+        },
+        "peak_time_h": {
+          "min": 0.86,
+          "median": 0.9,
+          "max": 0.98
+        },
+        "required_cortez_gain_ratio": {
+          "min": 0.06405954385375887,
+          "median": 0.14350298708386522,
+          "max": 0.5635899999289421
+        },
+        "source_baseline_grid_values": [
+          0.0,
+          6.0,
+          12.0,
+          18.0,
+          24.0
+        ],
+        "included_orders": [
+          6,
+          8,
+          10
+        ],
+        "interpretation": "Analyst-set pseudo-loss slice of sampled fits, NOT confidence set, CI, posterior, coverage, or exhaustive parameter region."
+      },
+      "additive_pseudoloss_0.3": {
+        "count": 32,
+        "min_score": 0.03348696307362355,
+        "q6": {
+          "min": 0.09949813376325677,
+          "median": 0.18626024820847017,
+          "max": 0.4414507831551017
+        },
+        "q12": {
+          "min": 0.016707764586228774,
+          "median": 0.05626552886875359,
+          "max": 0.18420767905645716
+        },
+        "q24": {
+          "min": 0.0006641542730855463,
+          "median": 0.00923995951914399,
+          "max": 0.06467050628913065
+        },
+        "q24_fold_max_min": 97.3727173186474,
+        "auc0_24_per_1h": {
+          "min": 2.1913686633936997,
+          "median": 2.7266294477623854,
+          "max": 3.4993861416144405
+        },
+        "peak_time_h": {
+          "min": 0.84,
+          "median": 0.9,
+          "max": 1.1
+        },
+        "required_cortez_gain_ratio": {
+          "min": 0.06405954385375887,
+          "median": 0.272615460113525,
+          "max": 0.5657593608578841
+        },
+        "source_baseline_grid_values": [
+          0.0,
+          6.0,
+          12.0,
+          18.0,
+          24.0
+        ],
+        "included_orders": [
+          4,
+          6,
+          8,
+          10
+        ],
+        "interpretation": "Analyst-set pseudo-loss slice of sampled fits, NOT confidence set, CI, posterior, coverage, or exhaustive parameter region."
+      }
+    },
+    "total_fit_count": 40,
+    "global_best_loss": 0.03348696307362355
+  },
+  "rows": [
+    {
+      "rosano_baseline_cap_pmol_l": 100.0,
+      "price_fixed_baseline_pg_ml": 0.0,
+      "n_fast": 4,
+      "score": 0.3723163626777679,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 100.0,
+          "amplitude_at_1h": 2129.287590971344,
+          "pseudo_loss": 0.7576614623378622
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.24411745645632,
+          "amplitude_at_1h": 4042.399570699005,
+          "pseudo_loss": 0.023224606406542017
+        },
+        "Price1997_figure1": {
+          "baseline": 0.0,
+          "amplitude_at_1h": 409.8219722639409,
+          "pseudo_loss": 0.33606301928889937
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 4,
+        "k_fast_per_h": 4.916096547243819,
+        "k_elim_per_h": 1.2843665706511889,
+        "k_slow_per_h": 0.05570811846231341,
+        "effective_slow_weight": 0.6724915583822282
+      },
+      "relative_1mg_peak_time_h": 1.1,
+      "normalized_increment_auc_0_24_h": 3.733992660314467,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.4546980356839928,
+        "12": 0.18852334881173888,
+        "24": 0.0638775709868651
+      },
+      "normalized_curve": {
+        "0.25": 0.11177111378354061,
+        "0.5": 0.4587091658829975,
+        "1": 1.0,
+        "2": 0.6081227821653539,
+        "4": 0.18043548052903768,
+        "6": 0.1312163110695003,
+        "8": 0.11506695142404341,
+        "12": 0.09190992557270063,
+        "24": 0.047101165652028605
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 1530.2722364691542,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 578.7277635308458,
+      "conditional_gain_ratio_twice_over_once": 0.5460299513055804,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 100.0,
+      "price_fixed_baseline_pg_ml": 0.0,
+      "n_fast": 6,
+      "score": 0.320817721945691,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 100.0,
+          "amplitude_at_1h": 2223.935195131908,
+          "pseudo_loss": 0.47230273075222795
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.49772017245206,
+          "amplitude_at_1h": 4086.2214574083387,
+          "pseudo_loss": 0.007714910725909448
+        },
+        "Price1997_figure1": {
+          "baseline": 0.0,
+          "amplitude_at_1h": 439.3192636856651,
+          "pseudo_loss": 0.48243552435893566
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 6,
+        "k_fast_per_h": 8.633998558065501,
+        "k_elim_per_h": 1.3152602051823752,
+        "k_slow_per_h": 0.0722137082622716,
+        "effective_slow_weight": 0.6881019509284958
+      },
+      "relative_1mg_peak_time_h": 0.98,
+      "normalized_increment_auc_0_24_h": 3.431982183138875,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.38341947720901337,
+        "12": 0.15020556025518336,
+        "24": 0.04445611707421655
+      },
+      "normalized_curve": {
+        "0.25": 0.08934896866597858,
+        "0.5": 0.4628623073156231,
+        "1": 1.0,
+        "2": 0.4769757031811776,
+        "4": 0.1766665779539126,
+        "6": 0.13582439284769476,
+        "8": 0.11632769692752155,
+        "12": 0.08706038795821555,
+        "24": 0.03659936286114432
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 1507.735885678892,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 601.2641143211081,
+      "conditional_gain_ratio_twice_over_once": 0.4769564607705548,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 100.0,
+      "price_fixed_baseline_pg_ml": 0.0,
+      "n_fast": 8,
+      "score": 0.38234766668579656,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 100.0,
+          "amplitude_at_1h": 2192.9215440877915,
+          "pseudo_loss": 0.2951550624953497
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.62782575965196,
+          "amplitude_at_1h": 3867.34155389635,
+          "pseudo_loss": 0.03910524416713244
+        },
+        "Price1997_figure1": {
+          "baseline": 0.0,
+          "amplitude_at_1h": 434.5909267100972,
+          "pseudo_loss": 0.8127826933949076
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 8,
+        "k_fast_per_h": 12.536389632324193,
+        "k_elim_per_h": 1.3528347464485044,
+        "k_slow_per_h": 0.08151560252966171,
+        "effective_slow_weight": 0.7065813757306624
+      },
+      "relative_1mg_peak_time_h": 0.9,
+      "normalized_increment_auc_0_24_h": 3.4010211901115346,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.37079056966240737,
+        "12": 0.14053959250315956,
+        "24": 0.03840258603486085
+      },
+      "normalized_curve": {
+        "0.25": 0.08387986838696375,
+        "0.5": 0.49209889916539523,
+        "1": 1.0,
+        "2": 0.43420060294571294,
+        "4": 0.18412213264810837,
+        "6": 0.14407483264972937,
+        "8": 0.12157567126942644,
+        "12": 0.08769793871113654,
+        "24": 0.03297361108231956
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 1478.0529507712495,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 630.9470492287505,
+      "conditional_gain_ratio_twice_over_once": 0.4403469563936798,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 100.0,
+      "price_fixed_baseline_pg_ml": 0.0,
+      "n_fast": 10,
+      "score": 0.45592961204015253,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 100.0,
+          "amplitude_at_1h": 2150.237320831259,
+          "pseudo_loss": 0.2192276869707497
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.67562762418422,
+          "amplitude_at_1h": 3717.812983991939,
+          "pseudo_loss": 0.05590017969273092
+        },
+        "Price1997_figure1": {
+          "baseline": 0.0,
+          "amplitude_at_1h": 424.01802569086027,
+          "pseudo_loss": 1.0926609694569769
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 10,
+        "k_fast_per_h": 16.321725195276112,
+        "k_elim_per_h": 1.4048492775747714,
+        "k_slow_per_h": 0.08780595356804581,
+        "effective_slow_weight": 0.7218725585686595
+      },
+      "relative_1mg_peak_time_h": 0.86,
+      "normalized_increment_auc_0_24_h": 3.432473358713434,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.36990075151061386,
+        "12": 0.13705331752878036,
+        "24": 0.03543107874554025
+      },
+      "normalized_curve": {
+        "0.25": 0.08336671918908181,
+        "0.5": 0.5127914743771043,
+        "1": 1.0,
+        "2": 0.4185635757905206,
+        "4": 0.19247724015744866,
+        "6": 0.15192159797232663,
+        "8": 0.1268781500344244,
+        "12": 0.08926900439176584,
+        "24": 0.031124057753413575
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 1455.4305767981464,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 653.5694232018536,
+      "conditional_gain_ratio_twice_over_once": 0.4166084176416862,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 100.0,
+      "price_fixed_baseline_pg_ml": 6.0,
+      "n_fast": 4,
+      "score": 0.35766058869649137,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 100.0,
+          "amplitude_at_1h": 2129.033023193049,
+          "pseudo_loss": 0.7460317967754702
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.23925486856496,
+          "amplitude_at_1h": 4048.423989727001,
+          "pseudo_loss": 0.02478976895416274
+        },
+        "Price1997_figure1": {
+          "baseline": 6.0,
+          "amplitude_at_1h": 406.9770323133055,
+          "pseudo_loss": 0.30216020035984104
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 4,
+        "k_fast_per_h": 4.862164841022281,
+        "k_elim_per_h": 1.339219160002943,
+        "k_slow_per_h": 0.07065916162236373,
+        "effective_slow_weight": 0.6189208819878199
+      },
+      "relative_1mg_peak_time_h": 1.1,
+      "normalized_increment_auc_0_24_h": 3.409284559873493,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.34097775543017206,
+        "12": 0.13398540679530727,
+        "24": 0.040178182200017065
+      },
+      "normalized_curve": {
+        "0.25": 0.1120456454084582,
+        "0.5": 0.45779318530038865,
+        "1": 1.0,
+        "2": 0.5964226291746758,
+        "4": 0.16777162819794791,
+        "6": 0.11930562983261393,
+        "8": 0.10177193528185924,
+        "12": 0.07659853995253832,
+        "24": 0.03280754443298226
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 1387.500512488888,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 721.499487511112,
+      "conditional_gain_ratio_twice_over_once": 0.4832434795809494,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 100.0,
+      "price_fixed_baseline_pg_ml": 6.0,
+      "n_fast": 6,
+      "score": 0.28564075434018726,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 100.0,
+          "amplitude_at_1h": 2215.678380939835,
+          "pseudo_loss": 0.3984959397251443
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.45592930099347,
+          "amplitude_at_1h": 4104.761256714319,
+          "pseudo_loss": 0.0025896772714563516
+        },
+        "Price1997_figure1": {
+          "baseline": 6.0,
+          "amplitude_at_1h": 438.1398300805586,
+          "pseudo_loss": 0.455836646023961
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 6,
+        "k_fast_per_h": 8.503111483164297,
+        "k_elim_per_h": 1.39139192573599,
+        "k_slow_per_h": 0.09391473990829563,
+        "effective_slow_weight": 0.6450707353823973
+      },
+      "relative_1mg_peak_time_h": 0.98,
+      "normalized_increment_auc_0_24_h": 3.1018192190607725,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.28822048851423543,
+        "12": 0.1041536254975853,
+        "24": 0.025488353527329862
+      },
+      "normalized_curve": {
+        "0.25": 0.0922470328343589,
+        "0.5": 0.4596288117234538,
+        "1": 1.0,
+        "2": 0.46377771553418323,
+        "4": 0.1668858799647745,
+        "6": 0.12478069300062858,
+        "8": 0.1025758888360728,
+        "12": 0.07040675734000867,
+        "24": 0.022812501443557245
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 1359.030545579898,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 749.969454420102,
+      "conditional_gain_ratio_twice_over_once": 0.39436703779859406,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 100.0,
+      "price_fixed_baseline_pg_ml": 6.0,
+      "n_fast": 8,
+      "score": 0.32212258244580244,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 100.0,
+          "amplitude_at_1h": 2178.8420888882365,
+          "pseudo_loss": 0.19402539219503026
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.5678021072443,
+          "amplitude_at_1h": 3884.318874511505,
+          "pseudo_loss": 0.021885232670833504
+        },
+        "Price1997_figure1": {
+          "baseline": 6.0,
+          "amplitude_at_1h": 435.3500875605102,
+          "pseudo_loss": 0.7504571224715435
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 8,
+        "k_fast_per_h": 12.383523002636746,
+        "k_elim_per_h": 1.422262305676016,
+        "k_slow_per_h": 0.10664564701349728,
+        "effective_slow_weight": 0.6669328886897236
+      },
+      "relative_1mg_peak_time_h": 0.9,
+      "normalized_increment_auc_0_24_h": 3.050114152990543,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.27788295613868186,
+        "12": 0.09568715409702194,
+        "24": 0.02082083838174495
+      },
+      "normalized_curve": {
+        "0.25": 0.08828034537982284,
+        "0.5": 0.4886818294200731,
+        "1": 1.0,
+        "2": 0.42236193750473555,
+        "4": 0.17502208392247215,
+        "6": 0.13173440471399642,
+        "8": 0.10586855975161878,
+        "12": 0.06907588564865208,
+        "24": 0.019210476697852325
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 1327.8674635739844,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 781.1325364260156,
+      "conditional_gain_ratio_twice_over_once": 0.35065318907350107,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 100.0,
+      "price_fixed_baseline_pg_ml": 6.0,
+      "n_fast": 10,
+      "score": 0.375027056859694,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 100.0,
+          "amplitude_at_1h": 2132.3062338065333,
+          "pseudo_loss": 0.11930069489975732
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.61130460069374,
+          "amplitude_at_1h": 3727.5696690765762,
+          "pseudo_loss": 0.03392316711941328
+        },
+        "Price1997_figure1": {
+          "baseline": 6.0,
+          "amplitude_at_1h": 427.16570068801684,
+          "pseudo_loss": 0.9718573085599114
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 10,
+        "k_fast_per_h": 16.175063970119435,
+        "k_elim_per_h": 1.4618270432938856,
+        "k_slow_per_h": 0.11498895418329207,
+        "effective_slow_weight": 0.6825014597462569
+      },
+      "relative_1mg_peak_time_h": 0.86,
+      "normalized_increment_auc_0_24_h": 3.059694541887884,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.27577132790572945,
+        "12": 0.09193589015602738,
+        "24": 0.018481881263584056
+      },
+      "normalized_curve": {
+        "0.25": 0.08838097089258301,
+        "0.5": 0.5102097507369758,
+        "1": 1.0,
+        "2": 0.40903115148998326,
+        "4": 0.18293782664896935,
+        "6": 0.13771958222220093,
+        "8": 0.10901503162324426,
+        "12": 0.06880374759597149,
+        "24": 0.017311820174182133
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 1306.9965628768387,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 802.0034371231613,
+      "conditional_gain_ratio_twice_over_once": 0.3239621768003832,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 100.0,
+      "price_fixed_baseline_pg_ml": 12.0,
+      "n_fast": 4,
+      "score": 0.3357673527677046,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 100.0,
+          "amplitude_at_1h": 2121.395628669686,
+          "pseudo_loss": 0.7330476078630549
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.2258937442743,
+          "amplitude_at_1h": 4042.0948192736514,
+          "pseudo_loss": 0.02939012685918632
+        },
+        "Price1997_figure1": {
+          "baseline": 12.0,
+          "amplitude_at_1h": 404.5789900665746,
+          "pseudo_loss": 0.24486432358087265
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 4,
+        "k_fast_per_h": 4.806619059308817,
+        "k_elim_per_h": 1.3989923325655373,
+        "k_slow_per_h": 0.09342978110767963,
+        "effective_slow_weight": 0.5590579896592153
+      },
+      "relative_1mg_peak_time_h": 1.1,
+      "normalized_increment_auc_0_24_h": 3.0762279364460143,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.24639535402770243,
+        "12": 0.08889920346210212,
+        "24": 0.021851029191598117
+      },
+      "normalized_curve": {
+        "0.25": 0.11344147622756931,
+        "0.5": 0.4578540475988973,
+        "1": 1.0,
+        "2": 0.5852432883702058,
+        "4": 0.15562463089771103,
+        "6": 0.10674572594559367,
+        "8": 0.08718894563218839,
+        "12": 0.05992687173031843,
+        "24": 0.019530179705551903
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 1244.5771917419113,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 864.4228082580887,
+      "conditional_gain_ratio_twice_over_once": 0.39610219184635437,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 100.0,
+      "price_fixed_baseline_pg_ml": 12.0,
+      "n_fast": 6,
+      "score": 0.22094083143586105,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 100.0,
+          "amplitude_at_1h": 2193.781916780577,
+          "pseudo_loss": 0.3316036383242173
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.40527284450921,
+          "amplitude_at_1h": 4089.4710856851602,
+          "pseudo_loss": 2.37447062166384e-05
+        },
+        "Price1997_figure1": {
+          "baseline": 12.0,
+          "amplitude_at_1h": 438.7706401617153,
+          "pseudo_loss": 0.33119511127714923
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 6,
+        "k_fast_per_h": 8.413175161204599,
+        "k_elim_per_h": 1.4496724638691592,
+        "k_slow_per_h": 0.12662567327529836,
+        "effective_slow_weight": 0.5961018749224474
+      },
+      "relative_1mg_peak_time_h": 0.98,
+      "normalized_increment_auc_0_24_h": 2.7655693270946156,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.20835585240539994,
+        "12": 0.06613903311200356,
+        "24": 0.011874178273858279
+      },
+      "normalized_curve": {
+        "0.25": 0.09669469462431558,
+        "0.5": 0.45979219631268,
+        "1": 1.0,
+        "2": 0.4548789402065301,
+        "4": 0.15732744993756098,
+        "6": 0.11127826991102469,
+        "8": 0.08578485385861268,
+        "12": 0.05166655305776702,
+        "24": 0.011305619171391194
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 1213.4506240609087,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 895.5493759390913,
+      "conditional_gain_ratio_twice_over_once": 0.28932032306145417,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 100.0,
+      "price_fixed_baseline_pg_ml": 12.0,
+      "n_fast": 8,
+      "score": 0.2209318037350119,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 100.0,
+          "amplitude_at_1h": 2151.772790843872,
+          "pseudo_loss": 0.11575301642661091
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.50564569661073,
+          "amplitude_at_1h": 3863.225243296273,
+          "pseudo_loss": 0.008976483176741558
+        },
+        "Price1997_figure1": {
+          "baseline": 12.0,
+          "amplitude_at_1h": 438.9170412748508,
+          "pseudo_loss": 0.5380659116016833
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 8,
+        "k_fast_per_h": 12.3068263405763,
+        "k_elim_per_h": 1.4597484768866635,
+        "k_slow_per_h": 0.14430389579903463,
+        "effective_slow_weight": 0.6199819196568799
+      },
+      "relative_1mg_peak_time_h": 0.9,
+      "normalized_increment_auc_0_24_h": 2.6995647972513623,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.19954658264831704,
+        "12": 0.05890783647224602,
+        "24": 0.008858372887440284
+      },
+      "normalized_curve": {
+        "0.25": 0.09384836012020155,
+        "0.5": 0.48979648483457433,
+        "1": 1.0,
+        "2": 0.4171821867298674,
+        "4": 0.1652330128554658,
+        "6": 0.11585596490855435,
+        "8": 0.08638236201058407,
+        "12": 0.048481596186182946,
+        "24": 0.008580871792047223
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 1184.8849935393105,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 924.1150064606895,
+      "conditional_gain_ratio_twice_over_once": 0.24233386179082933,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 100.0,
+      "price_fixed_baseline_pg_ml": 12.0,
+      "n_fast": 10,
+      "score": 0.24755167918261423,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 100.0,
+          "amplitude_at_1h": 2102.260407615364,
+          "pseudo_loss": 0.04364411233893524
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.550505511448,
+          "amplitude_at_1h": 3693.8380542119794,
+          "pseudo_loss": 0.01777061479434101
+        },
+        "Price1997_figure1": {
+          "baseline": 12.0,
+          "amplitude_at_1h": 433.3580528097239,
+          "pseudo_loss": 0.6812403104145665
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 10,
+        "k_fast_per_h": 16.137704995402895,
+        "k_elim_per_h": 1.4805412646726865,
+        "k_slow_per_h": 0.15558233417422548,
+        "effective_slow_weight": 0.6353363017104471
+      },
+      "relative_1mg_peak_time_h": 0.86,
+      "normalized_increment_auc_0_24_h": 2.6956918354314854,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.1967470488110602,
+        "12": 0.05538545239929742,
+        "24": 0.0074155833425183565
+      },
+      "normalized_curve": {
+        "0.25": 0.09429931956915615,
+        "0.5": 0.5134557253345118,
+        "1": 1.0,
+        "2": 0.4068252079218552,
+        "4": 0.1721318465691167,
+        "6": 0.11958530731456947,
+        "8": 0.08727003168392758,
+        "12": 0.046823504553960456,
+        "24": 0.007238368481242655
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 1168.1997647776593,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 940.8002352223407,
+      "conditional_gain_ratio_twice_over_once": 0.21576591077733256,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 100.0,
+      "price_fixed_baseline_pg_ml": 18.0,
+      "n_fast": 4,
+      "score": 0.31167950136057204,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 100.0,
+          "amplitude_at_1h": 2105.5392443832475,
+          "pseudo_loss": 0.7288419683347181
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.20753562187878,
+          "amplitude_at_1h": 4016.898721923269,
+          "pseudo_loss": 0.03645106791905752
+        },
+        "Price1997_figure1": {
+          "baseline": 18.0,
+          "amplitude_at_1h": 401.5880184700168,
+          "pseudo_loss": 0.16974546782794053
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 4,
+        "k_fast_per_h": 4.776327583621766,
+        "k_elim_per_h": 1.4387896388041628,
+        "k_slow_per_h": 0.12752994254728542,
+        "effective_slow_weight": 0.49502147626017395
+      },
+      "relative_1mg_peak_time_h": 1.1,
+      "normalized_increment_auc_0_24_h": 2.753694098273408,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.1717914436501673,
+        "12": 0.05407178321224355,
+        "24": 0.009621546150847695
+      },
+      "normalized_curve": {
+        "0.25": 0.11585808561336079,
+        "0.5": 0.4597850077862013,
+        "1": 1.0,
+        "2": 0.5765728336898985,
+        "4": 0.14414544372354363,
+        "6": 0.0925628692275172,
+        "8": 0.07064673245939948,
+        "12": 0.0423675776010206,
+        "24": 0.009170738104002525
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 1105.8505563981976,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 1003.1494436018024,
+      "conditional_gain_ratio_twice_over_once": 0.28675261902986243,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 100.0,
+      "price_fixed_baseline_pg_ml": 18.0,
+      "n_fast": 6,
+      "score": 0.14168901527529565,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 100.0,
+          "amplitude_at_1h": 2163.8123400516524,
+          "pseudo_loss": 0.29867891894343196
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.36286379647925,
+          "amplitude_at_1h": 4040.7730331964694,
+          "pseudo_loss": 0.001210586052687982
+        },
+        "Price1997_figure1": {
+          "baseline": 18.0,
+          "amplitude_at_1h": 438.40779610951034,
+          "pseudo_loss": 0.125177540829767
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 6,
+        "k_fast_per_h": 8.403481412471699,
+        "k_elim_per_h": 1.4604705194150505,
+        "k_slow_per_h": 0.17165309871185405,
+        "effective_slow_weight": 0.5433375984024347
+      },
+      "relative_1mg_peak_time_h": 0.98,
+      "normalized_increment_auc_0_24_h": 2.467113987015577,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.14702993856758592,
+        "12": 0.03847941554420497,
+        "24": 0.004350551954000752
+      },
+      "normalized_curve": {
+        "0.25": 0.10141558584940068,
+        "0.5": 0.4638634965726021,
+        "1": 1.0,
+        "2": 0.4525300775206814,
+        "4": 0.14695927372624212,
+        "6": 0.09481202879733243,
+        "8": 0.0667527714995269,
+        "12": 0.033574278184707186,
+        "24": 0.004279856333021515
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 1081.6020057984463,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 1027.3979942015537,
+      "conditional_gain_ratio_twice_over_once": 0.18220030951926583,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 100.0,
+      "price_fixed_baseline_pg_ml": 18.0,
+      "n_fast": 8,
+      "score": 0.10488143428800407,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 100.0,
+          "amplitude_at_1h": 2121.739623435221,
+          "pseudo_loss": 0.08191589932398327
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.45902170320915,
+          "amplitude_at_1h": 3818.4962639045825,
+          "pseudo_loss": 0.002878654538983675
+        },
+        "Price1997_figure1": {
+          "baseline": 18.0,
+          "amplitude_at_1h": 440.8219749486367,
+          "pseudo_loss": 0.22984974900104527
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 8,
+        "k_fast_per_h": 12.319905658272578,
+        "k_elim_per_h": 1.4496384466250545,
+        "k_slow_per_h": 0.19377518306471336,
+        "effective_slow_weight": 0.5699014723612454
+      },
+      "relative_1mg_peak_time_h": 0.9,
+      "normalized_increment_auc_0_24_h": 2.406402047958421,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.14105106328662775,
+        "12": 0.03344528572166302,
+        "24": 0.0029782601709176185
+      },
+      "normalized_curve": {
+        "0.25": 0.09889770789571636,
+        "0.5": 0.49418153566535233,
+        "1": 1.0,
+        "2": 0.4187890779906644,
+        "4": 0.15372720095658937,
+        "6": 0.09714893477237367,
+        "8": 0.06554086221581251,
+        "12": 0.03017588900777228,
+        "24": 0.002949800438795456
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 1060.7949033014752,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 1048.2050966985248,
+      "conditional_gain_ratio_twice_over_once": 0.14350298708386522,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 100.0,
+      "price_fixed_baseline_pg_ml": 18.0,
+      "n_fast": 10,
+      "score": 0.10790303926913107,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 100.0,
+          "amplitude_at_1h": 2072.3956910539528,
+          "pseudo_loss": 0.01059138687154878
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.50778267539594,
+          "amplitude_at_1h": 3643.0027798029164,
+          "pseudo_loss": 0.009332000890190192
+        },
+        "Price1997_figure1": {
+          "baseline": 18.0,
+          "amplitude_at_1h": 436.92108616482267,
+          "pseudo_loss": 0.30378573004565423
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 10,
+        "k_fast_per_h": 16.193415979085415,
+        "k_elim_per_h": 1.4555612755110896,
+        "k_slow_per_h": 0.2073393143756696,
+        "effective_slow_weight": 0.5861988628441387
+      },
+      "relative_1mg_peak_time_h": 0.86,
+      "normalized_increment_auc_0_24_h": 2.4035874819081973,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.13914393821662904,
+        "12": 0.03100919266096402,
+        "24": 0.0023783560099443616
+      },
+      "normalized_curve": {
+        "0.25": 0.09933380808994187,
+        "0.5": 0.5194661945119453,
+        "1": 1.0,
+        "2": 0.41046649353330245,
+        "4": 0.15937950233040654,
+        "6": 0.09919734325322226,
+        "8": 0.06519415037191031,
+        "12": 0.028433266640859066,
+        "24": 0.0023619438711595508
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 1050.1780532875007,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 1058.8219467124993,
+      "conditional_gain_ratio_twice_over_once": 0.12360032773644367,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 100.0,
+      "price_fixed_baseline_pg_ml": 24.0,
+      "n_fast": 4,
+      "score": 0.31730691739018524,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 100.0,
+          "amplitude_at_1h": 2091.5774268811974,
+          "pseudo_loss": 0.7342829928794717
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.19540706746618,
+          "amplitude_at_1h": 3989.8420627812197,
+          "pseudo_loss": 0.04160475240628183
+        },
+        "Price1997_figure1": {
+          "baseline": 24.0,
+          "amplitude_at_1h": 396.07853367205985,
+          "pseudo_loss": 0.17603300688480217
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 4,
+        "k_fast_per_h": 4.782892124979685,
+        "k_elim_per_h": 1.4375780828550602,
+        "k_slow_per_h": 0.1729702730779557,
+        "effective_slow_weight": 0.4302710792169481
+      },
+      "relative_1mg_peak_time_h": 1.1,
+      "normalized_increment_auc_0_24_h": 2.4789368767979854,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.11743120062082528,
+        "12": 0.03032530279493462,
+        "24": 0.0033808411105639815
+      },
+      "normalized_curve": {
+        "0.25": 0.11778964717478584,
+        "0.5": 0.462254514819113,
+        "1": 1.0,
+        "2": 0.5719460147032729,
+        "4": 0.13232059487510095,
+        "6": 0.07636399818260588,
+        "8": 0.0530572617791556,
+        "12": 0.02652024832706532,
+        "24": 0.003327612648583203
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 981.8536832277417,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 1127.1463167722582,
+      "conditional_gain_ratio_twice_over_once": 0.17966059466620668,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 100.0,
+      "price_fixed_baseline_pg_ml": 24.0,
+      "n_fast": 6,
+      "score": 0.10694639357877543,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 100.0,
+          "amplitude_at_1h": 2141.598466044495,
+          "pseudo_loss": 0.2937587944058636
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.33999706632179,
+          "amplitude_at_1h": 3996.15780254014,
+          "pseudo_loss": 0.0032094426184237444
+        },
+        "Price1997_figure1": {
+          "baseline": 24.0,
+          "amplitude_at_1h": 434.129003656307,
+          "pseudo_loss": 0.023870943712038923
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 6,
+        "k_fast_per_h": 8.442506014907703,
+        "k_elim_per_h": 1.4320044379634138,
+        "k_slow_per_h": 0.2249514752563691,
+        "effective_slow_weight": 0.4909015000840863
+      },
+      "relative_1mg_peak_time_h": 0.98,
+      "normalized_increment_auc_0_24_h": 2.239111293840802,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.1038443057408566,
+        "12": 0.021203999497826684,
+        "24": 0.001336005570286411
+      },
+      "normalized_curve": {
+        "0.25": 0.10451909094393728,
+        "0.5": 0.4681781051574895,
+        "1": 1.0,
+        "2": 0.45398823721191744,
+        "4": 0.13488915768706417,
+        "6": 0.07714181715929144,
+        "8": 0.04868630398527103,
+        "12": 0.019778154690282844,
+        "24": 0.0013299643615290997
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 972.063155070692,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 1136.9368449293079,
+      "conditional_gain_ratio_twice_over_once": 0.10153685365176135,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 100.0,
+      "price_fixed_baseline_pg_ml": 24.0,
+      "n_fast": 8,
+      "score": 0.04581601665129708,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 100.0,
+          "amplitude_at_1h": 2101.7954617333476,
+          "pseudo_loss": 0.07675753012254526
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.43445461402649,
+          "amplitude_at_1h": 3782.733458638479,
+          "pseudo_loss": 0.0009956275765225639
+        },
+        "Price1997_figure1": {
+          "baseline": 24.0,
+          "amplitude_at_1h": 437.9150432528128,
+          "pseudo_loss": 0.05969489225482342
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 8,
+        "k_fast_per_h": 12.373831668322383,
+        "k_elim_per_h": 1.4098368443532372,
+        "k_slow_per_h": 0.25012591657848426,
+        "effective_slow_weight": 0.5208549288611282
+      },
+      "relative_1mg_peak_time_h": 0.9,
+      "normalized_increment_auc_0_24_h": 2.1913686633936997,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.1004962355912255,
+        "12": 0.01818451240521761,
+        "24": 0.0008611683541270363
+      },
+      "normalized_curve": {
+        "0.25": 0.10196755034377343,
+        "0.5": 0.4980694445956656,
+        "1": 1.0,
+        "2": 0.4226829308063357,
+        "4": 0.14045181721469935,
+        "6": 0.07825730989190426,
+        "8": 0.04704151990389303,
+        "12": 0.01728053373859975,
+        "24": 0.0008590401722833892
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 959.6333030129106,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 1149.3666969870894,
+      "conditional_gain_ratio_twice_over_once": 0.0763167064881655,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 100.0,
+      "price_fixed_baseline_pg_ml": 24.0,
+      "n_fast": 10,
+      "score": 0.03392468836151121,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 100.0,
+          "amplitude_at_1h": 2053.6374950761124,
+          "pseudo_loss": 0.0036790403477560017
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.48564197322139,
+          "amplitude_at_1h": 3606.113434880573,
+          "pseudo_loss": 0.0059669621602897105
+        },
+        "Price1997_figure1": {
+          "baseline": 24.0,
+          "amplitude_at_1h": 435.00982716188406,
+          "pseudo_loss": 0.09212806257648791
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 10,
+        "k_fast_per_h": 16.278181127697266,
+        "k_elim_per_h": 1.4074241773224643,
+        "k_slow_per_h": 0.26537853665282324,
+        "effective_slow_weight": 0.5387401387787566
+      },
+      "relative_1mg_peak_time_h": 0.86,
+      "normalized_increment_auc_0_24_h": 2.1933022187587707,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.09949813376325677,
+        "12": 0.016707764586228774,
+        "24": 0.0006641542730855463
+      },
+      "normalized_curve": {
+        "0.25": 0.10232369949219955,
+        "0.5": 0.5241241783492672,
+        "1": 1.0,
+        "2": 0.41533915171613967,
+        "4": 0.14508718568332535,
+        "6": 0.0793909871156002,
+        "8": 0.0463384719182145,
+        "12": 0.01601611619704734,
+        "24": 0.0006630160941254235
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 954.1080190960297,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 1154.8919809039703,
+      "conditional_gain_ratio_twice_over_once": 0.06405954385375887,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 225.0,
+      "price_fixed_baseline_pg_ml": 0.0,
+      "n_fast": 4,
+      "score": 0.35289097933172675,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 123.387225490302,
+          "amplitude_at_1h": 2067.63825245653,
+          "pseudo_loss": 0.7119431417982318
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.28242612388175,
+          "amplitude_at_1h": 4082.0823075821377,
+          "pseudo_loss": 0.012835528637707832
+        },
+        "Price1997_figure1": {
+          "baseline": 0.0,
+          "amplitude_at_1h": 404.7122308185156,
+          "pseudo_loss": 0.3338942675592407
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 4,
+        "k_fast_per_h": 5.0065036366256255,
+        "k_elim_per_h": 1.1752109576872862,
+        "k_slow_per_h": 0.05009814265787825,
+        "effective_slow_weight": 0.6689452658988747
+      },
+      "relative_1mg_peak_time_h": 1.12,
+      "normalized_increment_auc_0_24_h": 3.7776300393154436,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.4818935077489091,
+        "12": 0.20306890290666174,
+        "24": 0.07190008233804374
+      },
+      "normalized_curve": {
+        "0.25": 0.10728576790734833,
+        "0.5": 0.455985635052127,
+        "1": 1.0,
+        "2": 0.6250878550237301,
+        "4": 0.18474972129792755,
+        "6": 0.12847893885112752,
+        "8": 0.11254394364914999,
+        "12": 0.09175566343482626,
+        "24": 0.05029514247144496
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 1528.85308041839,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 580.1469195816101,
+      "conditional_gain_ratio_twice_over_once": 0.5705834666432599,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 225.0,
+      "price_fixed_baseline_pg_ml": 0.0,
+      "n_fast": 6,
+      "score": 0.15509955215825885,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 166.47186447416962,
+          "amplitude_at_1h": 2058.664040927889,
+          "pseudo_loss": 0.23709717078112708
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.7006660051467,
+          "amplitude_at_1h": 4126.683994001886,
+          "pseudo_loss": 0.06572465323452586
+        },
+        "Price1997_figure1": {
+          "baseline": 0.0,
+          "amplitude_at_1h": 438.1143910687023,
+          "pseudo_loss": 0.16247683245912364
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 6,
+        "k_fast_per_h": 9.055764152060757,
+        "k_elim_per_h": 1.008729529704006,
+        "k_slow_per_h": 0.05118229449383912,
+        "effective_slow_weight": 0.6595519897288447
+      },
+      "relative_1mg_peak_time_h": 0.98,
+      "normalized_increment_auc_0_24_h": 3.4993861416144405,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.4414507831551017,
+        "12": 0.18420767905645716,
+        "24": 0.06467050628913065
+      },
+      "normalized_curve": {
+        "0.25": 0.07329655511165727,
+        "0.5": 0.4623632416838341,
+        "1": 1.0,
+        "2": 0.5272404672429664,
+        "4": 0.17873546405446336,
+        "6": 0.12175511837144563,
+        "8": 0.10464327264391267,
+        "12": 0.08454523417821445,
+        "24": 0.045737056743590146
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 1533.1314285476662,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 575.8685714523338,
+      "conditional_gain_ratio_twice_over_once": 0.5657593608578841,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 225.0,
+      "price_fixed_baseline_pg_ml": 0.0,
+      "n_fast": 8,
+      "score": 0.13181079087552597,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 183.21542128483824,
+          "amplitude_at_1h": 1995.9245204343101,
+          "pseudo_loss": 0.04030278831557224
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.9732700558751,
+          "amplitude_at_1h": 3813.8374359415034,
+          "pseudo_loss": 0.21269711303539943
+        },
+        "Price1997_figure1": {
+          "baseline": 0.0,
+          "amplitude_at_1h": 444.262726330092,
+          "pseudo_loss": 0.14243247127560626
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 8,
+        "k_fast_per_h": 13.338585397144797,
+        "k_elim_per_h": 0.9461482105774807,
+        "k_slow_per_h": 0.05166645972007171,
+        "effective_slow_weight": 0.6551641590341148
+      },
+      "relative_1mg_peak_time_h": 0.9,
+      "normalized_increment_auc_0_24_h": 3.4538333398997896,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.4338331127656228,
+        "12": 0.18012259102008377,
+        "24": 0.06299386364896951
+      },
+      "normalized_curve": {
+        "0.25": 0.05899275594947893,
+        "0.5": 0.5028196446065073,
+        "1": 1.0,
+        "2": 0.4989041758965581,
+        "4": 0.17997865383971443,
+        "6": 0.12162040268044928,
+        "8": 0.1035476412123412,
+        "12": 0.08324144484071287,
+        "24": 0.04476434323615304
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 1534.4094158736477,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 574.5905841263523,
+      "conditional_gain_ratio_twice_over_once": 0.5635899999289421,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 225.0,
+      "price_fixed_baseline_pg_ml": 0.0,
+      "n_fast": 10,
+      "score": 0.1631383452416776,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 192.43476788454743,
+          "amplitude_at_1h": 1923.6338800609021,
+          "pseudo_loss": 0.0016405791685343786
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 90.15633728037946,
+          "amplitude_at_1h": 3472.119634069149,
+          "pseudo_loss": 0.34642194758527545
+        },
+        "Price1997_figure1": {
+          "baseline": 0.0,
+          "amplitude_at_1h": 443.14153695651754,
+          "pseudo_loss": 0.14135250897122298
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 10,
+        "k_fast_per_h": 17.734501027821004,
+        "k_elim_per_h": 0.9164501690833835,
+        "k_slow_per_h": 0.05190550670116635,
+        "effective_slow_weight": 0.651339714400942
+      },
+      "relative_1mg_peak_time_h": 0.84,
+      "normalized_increment_auc_0_24_h": 3.4735556000552457,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.434199924416681,
+        "12": 0.17978116239093597,
+        "24": 0.06275412042774045
+      },
+      "normalized_curve": {
+        "0.25": 0.05078273997989772,
+        "0.5": 0.5523095880636524,
+        "1": 1.0,
+        "2": 0.4917849402069576,
+        "4": 0.18248429361725174,
+        "6": 0.12277446164742033,
+        "8": 0.10399591819245073,
+        "12": 0.08336542755586158,
+        "24": 0.04469786710256706
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 1539.2767673124001,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 569.7232326875999,
+      "conditional_gain_ratio_twice_over_once": 0.562511338380026,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 225.0,
+      "price_fixed_baseline_pg_ml": 6.0,
+      "n_fast": 4,
+      "score": 0.3390694453294278,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 124.09336264934355,
+          "amplitude_at_1h": 2069.444536049875,
+          "pseudo_loss": 0.7040836323198982
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.28634639405377,
+          "amplitude_at_1h": 4092.3915738258634,
+          "pseudo_loss": 0.011959415626696945
+        },
+        "Price1997_figure1": {
+          "baseline": 6.0,
+          "amplitude_at_1h": 401.25687019397964,
+          "pseudo_loss": 0.30116528804168813
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 4,
+        "k_fast_per_h": 4.972637959638211,
+        "k_elim_per_h": 1.2098043059723977,
+        "k_slow_per_h": 0.06298011422835104,
+        "effective_slow_weight": 0.6109304656077037
+      },
+      "relative_1mg_peak_time_h": 1.12,
+      "normalized_increment_auc_0_24_h": 3.4565811682663967,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.36013279488719663,
+        "12": 0.14483639878287385,
+        "24": 0.04628407594661453
+      },
+      "normalized_curve": {
+        "0.25": 0.10667296133859643,
+        "0.5": 0.45500568260265783,
+        "1": 1.0,
+        "2": 0.6142925673693439,
+        "4": 0.17160005291928437,
+        "6": 0.11604014266832931,
+        "8": 0.09917024943024055,
+        "12": 0.07681487240976703,
+        "24": 0.03607501934573704
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 1386.976941150024,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 722.023058849976,
+      "conditional_gain_ratio_twice_over_once": 0.5149761281225279,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 225.0,
+      "price_fixed_baseline_pg_ml": 6.0,
+      "n_fast": 6,
+      "score": 0.14644403451349838,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 166.56254307713587,
+          "amplitude_at_1h": 2059.348446157069,
+          "pseudo_loss": 0.23280250344530815
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.70221623135431,
+          "amplitude_at_1h": 4130.04229254527,
+          "pseudo_loss": 0.06635541655755656
+        },
+        "Price1997_figure1": {
+          "baseline": 6.0,
+          "amplitude_at_1h": 434.6273625695608,
+          "pseudo_loss": 0.14017418353763045
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 6,
+        "k_fast_per_h": 9.020141172126612,
+        "k_elim_per_h": 1.0376934692464796,
+        "k_slow_per_h": 0.06533236582680738,
+        "effective_slow_weight": 0.6011003936204211
+      },
+      "relative_1mg_peak_time_h": 0.98,
+      "normalized_increment_auc_0_24_h": 3.1984820616595546,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.32842298176356854,
+        "12": 0.13002617113188472,
+        "24": 0.040754416181093205
+      },
+      "normalized_curve": {
+        "0.25": 0.0731254925858033,
+        "0.5": 0.46200971989424966,
+        "1": 1.0,
+        "2": 0.5151536945411722,
+        "4": 0.166839898824718,
+        "6": 0.11054505351562607,
+        "8": 0.09250402334074206,
+        "12": 0.07066404859156479,
+        "24": 0.03225848448118714
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 1390.1478226851434,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 718.8521773148566,
+      "conditional_gain_ratio_twice_over_once": 0.5050997110810472,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 225.0,
+      "price_fixed_baseline_pg_ml": 6.0,
+      "n_fast": 8,
+      "score": 0.12573813789398403,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 182.94092775837578,
+          "amplitude_at_1h": 1995.7857991234134,
+          "pseudo_loss": 0.03798184695150009
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.97196513390975,
+          "amplitude_at_1h": 3813.880492404678,
+          "pseudo_loss": 0.21183648936163516
+        },
+        "Price1997_figure1": {
+          "baseline": 6.0,
+          "amplitude_at_1h": 440.5562855791132,
+          "pseudo_loss": 0.1273960773688168
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 8,
+        "k_fast_per_h": 13.294146333372476,
+        "k_elim_per_h": 0.9748574564223598,
+        "k_slow_per_h": 0.06655377705846031,
+        "effective_slow_weight": 0.5966671642673793
+      },
+      "relative_1mg_peak_time_h": 0.9,
+      "normalized_increment_auc_0_24_h": 3.15653935337183,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.3220623495009228,
+        "12": 0.12645636523211856,
+        "24": 0.039234991475028826
+      },
+      "normalized_curve": {
+        "0.25": 0.05908537904298165,
+        "0.5": 0.5028094640920029,
+        "1": 1.0,
+        "2": 0.48652020125321127,
+        "4": 0.1684284039602466,
+        "6": 0.11079600725622142,
+        "8": 0.09177300816545293,
+        "12": 0.06956805743633776,
+        "24": 0.03129209237507984
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 1390.6332528057892,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 718.3667471942108,
+      "conditional_gain_ratio_twice_over_once": 0.4999954889193542,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 225.0,
+      "price_fixed_baseline_pg_ml": 6.0,
+      "n_fast": 10,
+      "score": 0.1588256528770016,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 192.00832149153766,
+          "amplitude_at_1h": 1922.9272338976775,
+          "pseudo_loss": 0.0024216178682663365
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 90.15306745718875,
+          "amplitude_at_1h": 3472.6943489650425,
+          "pseudo_loss": 0.3438181271834509
+        },
+        "Price1997_figure1": {
+          "baseline": 6.0,
+          "amplitude_at_1h": 439.27368888288726,
+          "pseudo_loss": 0.13023721357928753
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 10,
+        "k_fast_per_h": 17.675336627223306,
+        "k_elim_per_h": 0.9453655690728313,
+        "k_slow_per_h": 0.06724752634102497,
+        "effective_slow_weight": 0.5927031323107816
+      },
+      "relative_1mg_peak_time_h": 0.84,
+      "normalized_increment_auc_0_24_h": 3.1756925435082204,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.3219070070456598,
+        "12": 0.12580302148443576,
+        "24": 0.03880652840390354
+      },
+      "normalized_curve": {
+        "0.25": 0.05101867432598933,
+        "0.5": 0.5522295627994132,
+        "1": 1.0,
+        "2": 0.4792866113624988,
+        "4": 0.17103928136149307,
+        "6": 0.11208694662799205,
+        "8": 0.0923313874845272,
+        "12": 0.06968071409295439,
+        "24": 0.031080091210558727
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 1394.998178344735,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 714.0018216552651,
+      "conditional_gain_ratio_twice_over_once": 0.4971036351945965,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 225.0,
+      "price_fixed_baseline_pg_ml": 12.0,
+      "n_fast": 4,
+      "score": 0.32260063646685017,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 122.29517358739736,
+          "amplitude_at_1h": 2072.452852591006,
+          "pseudo_loss": 0.7008215875945076
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.27864205492158,
+          "amplitude_at_1h": 4090.3977053852173,
+          "pseudo_loss": 0.013713237005293163
+        },
+        "Price1997_figure1": {
+          "baseline": 12.0,
+          "amplitude_at_1h": 398.864088657549,
+          "pseudo_loss": 0.25326708480074983
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 4,
+        "k_fast_per_h": 4.9231411170438095,
+        "k_elim_per_h": 1.2633935207362277,
+        "k_slow_per_h": 0.0837537300662314,
+        "effective_slow_weight": 0.5461572866719323
+      },
+      "relative_1mg_peak_time_h": 1.1,
+      "normalized_increment_auc_0_24_h": 3.1217583348013602,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.25732843849684894,
+        "12": 0.09580883677769356,
+        "24": 0.025671614294253974
+      },
+      "normalized_curve": {
+        "0.25": 0.10739921928521491,
+        "0.5": 0.45489426150432605,
+        "1": 1.0,
+        "2": 0.6015134221433706,
+        "4": 0.15824818038834537,
+        "6": 0.1035559733827254,
+        "8": 0.08516350316317167,
+        "12": 0.06074068641025974,
+        "24": 0.022232216632542504
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 1245.1572932196523,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 863.8427067803477,
+      "conditional_gain_ratio_twice_over_once": 0.4317982021114684,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 225.0,
+      "price_fixed_baseline_pg_ml": 12.0,
+      "n_fast": 6,
+      "score": 0.13170587883887563,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 163.10400111828335,
+          "amplitude_at_1h": 2065.019304947828,
+          "pseudo_loss": 0.23136034399123276
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.6785393402289,
+          "amplitude_at_1h": 4133.89844109663,
+          "pseudo_loss": 0.05700716389014663
+        },
+        "Price1997_figure1": {
+          "baseline": 12.0,
+          "amplitude_at_1h": 432.5135567770574,
+          "pseudo_loss": 0.10675012863524752
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 6,
+        "k_fast_per_h": 8.940271683485772,
+        "k_elim_per_h": 1.092054668906148,
+        "k_slow_per_h": 0.09001601293581857,
+        "effective_slow_weight": 0.5390070802199933
+      },
+      "relative_1mg_peak_time_h": 0.98,
+      "normalized_increment_auc_0_24_h": 2.8790097142022377,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.23263075699810787,
+        "12": 0.08395198871030936,
+        "24": 0.021277612954031834
+      },
+      "normalized_curve": {
+        "0.25": 0.07476471812706785,
+        "0.5": 0.4612235354771631,
+        "1": 1.0,
+        "2": 0.4997947775412029,
+        "4": 0.15490451843846803,
+        "6": 0.09976442037305003,
+        "8": 0.07999318212942469,
+        "12": 0.05544998194367202,
+        "24": 0.018824712522708044
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 1245.2107314853092,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 863.7892685146908,
+      "conditional_gain_ratio_twice_over_once": 0.4084370533290281,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 225.0,
+      "price_fixed_baseline_pg_ml": 12.0,
+      "n_fast": 8,
+      "score": 0.11115974928618345,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 178.1351109733929,
+          "amplitude_at_1h": 2003.7045891342998,
+          "pseudo_loss": 0.037201170962356964
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.93332164108624,
+          "amplitude_at_1h": 3828.608604516088,
+          "pseudo_loss": 0.18698351563523533
+        },
+        "Price1997_figure1": {
+          "baseline": 12.0,
+          "amplitude_at_1h": 438.2524715251771,
+          "pseudo_loss": 0.1092945612609581
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 8,
+        "k_fast_per_h": 13.168765045719967,
+        "k_elim_per_h": 1.035207204008955,
+        "k_slow_per_h": 0.09413851267693957,
+        "effective_slow_weight": 0.5373186436898519
+      },
+      "relative_1mg_peak_time_h": 0.9,
+      "normalized_increment_auc_0_24_h": 2.8354889244601176,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.2267648513783718,
+        "12": 0.0802888438626867,
+        "24": 0.019605843741902034
+      },
+      "normalized_curve": {
+        "0.25": 0.06162599524344109,
+        "0.5": 0.5007118342619281,
+        "1": 1.0,
+        "2": 0.46954343247790264,
+        "4": 0.15704665966860104,
+        "6": 0.10084129203615505,
+        "8": 0.07984554440686598,
+        "12": 0.054347520518845796,
+        "24": 0.017558581588744782
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 1242.6600291269128,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 866.3399708730872,
+      "conditional_gain_ratio_twice_over_once": 0.3935170472495978,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 225.0,
+      "price_fixed_baseline_pg_ml": 12.0,
+      "n_fast": 10,
+      "score": 0.14425615877488948,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 186.150453165037,
+          "amplitude_at_1h": 1933.8923680109233,
+          "pseudo_loss": 0.003879927275556437
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 90.10114963196936,
+          "amplitude_at_1h": 3506.7375008416952,
+          "pseudo_loss": 0.30348907234627204
+        },
+        "Price1997_figure1": {
+          "baseline": 12.0,
+          "amplitude_at_1h": 436.75128054805026,
+          "pseudo_loss": 0.12539947670283993
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 10,
+        "k_fast_per_h": 17.47516636039208,
+        "k_elim_per_h": 1.012978192073073,
+        "k_slow_per_h": 0.09727353625959885,
+        "effective_slow_weight": 0.5359285473572057
+      },
+      "relative_1mg_peak_time_h": 0.84,
+      "normalized_increment_auc_0_24_h": 2.848705724938136,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.22544370477121514,
+        "12": 0.07876187516391978,
+        "24": 0.01869085520461201
+      },
+      "normalized_curve": {
+        "0.25": 0.05439311528514326,
+        "0.5": 0.5469941111485117,
+        "1": 1.0,
+        "2": 0.460895565215509,
+        "4": 0.15996939995735662,
+        "6": 0.10275049689184236,
+        "8": 0.08076905139105454,
+        "12": 0.05425421032244835,
+        "24": 0.016880596973967668
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 1244.1758732712926,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 864.8241267287074,
+      "conditional_gain_ratio_twice_over_once": 0.3824250603406983,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 225.0,
+      "price_fixed_baseline_pg_ml": 18.0,
+      "n_fast": 4,
+      "score": 0.3064755230255433,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 116.09033708514282,
+          "amplitude_at_1h": 2076.4047906331516,
+          "pseudo_loss": 0.7076629011899367
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.25123078451901,
+          "amplitude_at_1h": 4062.5212291004173,
+          "pseudo_loss": 0.021037587341001668
+        },
+        "Price1997_figure1": {
+          "baseline": 18.0,
+          "amplitude_at_1h": 397.3903458831283,
+          "pseudo_loss": 0.19072608054569157
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 4,
+        "k_fast_per_h": 4.859287649218484,
+        "k_elim_per_h": 1.3384466510135553,
+        "k_slow_per_h": 0.11847800491483909,
+        "effective_slow_weight": 0.4813436780605626
+      },
+      "relative_1mg_peak_time_h": 1.1,
+      "normalized_increment_auc_0_24_h": 2.783511135409267,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.17577344760588015,
+        "12": 0.05714560533820977,
+        "24": 0.011108364446319538
+      },
+      "normalized_curve": {
+        "0.25": 0.11057726269022806,
+        "0.5": 0.45677273833889226,
+        "1": 1.0,
+        "2": 0.5872939766987756,
+        "4": 0.14521298963495563,
+        "6": 0.0905572804398467,
+        "8": 0.06979924742142857,
+        "12": 0.04335685085717097,
+        "24": 0.010461600399911803
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 1106.1404528698279,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 1002.8595471301721,
+      "conditional_gain_ratio_twice_over_once": 0.31325679505421106,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 225.0,
+      "price_fixed_baseline_pg_ml": 18.0,
+      "n_fast": 6,
+      "score": 0.10693469492438505,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 149.67016641143513,
+          "amplitude_at_1h": 2081.8954603774732,
+          "pseudo_loss": 0.24029054727286878
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.58816059032752,
+          "amplitude_at_1h": 4124.372788625359,
+          "pseudo_loss": 0.02722332750678656
+        },
+        "Price1997_figure1": {
+          "baseline": 18.0,
+          "amplitude_at_1h": 432.4408569370847,
+          "pseudo_loss": 0.05329020999349979
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 6,
+        "k_fast_per_h": 8.769479678643199,
+        "k_elim_per_h": 1.2007599593919438,
+        "k_slow_per_h": 0.13793670952520257,
+        "effective_slow_weight": 0.489458786204062
+      },
+      "relative_1mg_peak_time_h": 0.98,
+      "normalized_increment_auc_0_24_h": 2.542185110902268,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.1563828472437188,
+        "12": 0.04673989421677807,
+        "24": 0.007496846139665972
+      },
+      "normalized_curve": {
+        "0.25": 0.08160761403969634,
+        "0.5": 0.4606656856104901,
+        "1": 1.0,
+        "2": 0.4799518125832601,
+        "4": 0.143931318091495,
+        "6": 0.08921437620826893,
+        "8": 0.0658925034111676,
+        "12": 0.037810804853597266,
+        "24": 0.007223221656330868
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 1099.3447078512745,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 1009.6552921487255,
+      "conditional_gain_ratio_twice_over_once": 0.2584783011971876,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 225.0,
+      "price_fixed_baseline_pg_ml": 18.0,
+      "n_fast": 8,
+      "score": 0.07517298188608514,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 154.36682840390745,
+          "amplitude_at_1h": 2039.2737196241594,
+          "pseudo_loss": 0.04598746648090454
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.75003557221208,
+          "amplitude_at_1h": 3867.288992892808,
+          "pseudo_loss": 0.08706196598646831
+        },
+        "Price1997_figure1": {
+          "baseline": 18.0,
+          "amplitude_at_1h": 438.46945531382374,
+          "pseudo_loss": 0.09246951319088256
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 8,
+        "k_fast_per_h": 12.79748494900687,
+        "k_elim_per_h": 1.1959236056084726,
+        "k_slow_per_h": 0.15702366173112284,
+        "effective_slow_weight": 0.5081950854757262
+      },
+      "relative_1mg_peak_time_h": 0.9,
+      "normalized_increment_auc_0_24_h": 2.4762511037950183,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.1495942221818821,
+        "12": 0.04131265635855191,
+        "24": 0.005448807572469503
+      },
+      "normalized_curve": {
+        "0.25": 0.0744530547729198,
+        "0.5": 0.49407953295747564,
+        "1": 1.0,
+        "2": 0.44332636910299106,
+        "4": 0.14818441321216197,
+        "6": 0.09217890660856887,
+        "8": 0.06586571539418674,
+        "12": 0.035035968858631514,
+        "24": 0.005323021303585906
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 1085.7604727012565,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 1023.2395272987435,
+      "conditional_gain_ratio_twice_over_once": 0.21254533058605066,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 225.0,
+      "price_fixed_baseline_pg_ml": 18.0,
+      "n_fast": 10,
+      "score": 0.09283110714197557,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 144.27255338690566,
+          "amplitude_at_1h": 2006.852842891876,
+          "pseudo_loss": 0.007475118840986409
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.75815951021194,
+          "amplitude_at_1h": 3656.9468396210796,
+          "pseudo_loss": 0.09081486406320101
+        },
+        "Price1997_figure1": {
+          "baseline": 18.0,
+          "amplitude_at_1h": 436.7688632505053,
+          "pseudo_loss": 0.18020333852173928
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 10,
+        "k_fast_per_h": 16.648067228165026,
+        "k_elim_per_h": 1.2652427422793704,
+        "k_slow_per_h": 0.1804007436385261,
+        "effective_slow_weight": 0.5382395291965313
+      },
+      "relative_1mg_peak_time_h": 0.86,
+      "normalized_increment_auc_0_24_h": 2.4500039776398665,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.14480551205921205,
+        "12": 0.036273131854987865,
+        "24": 0.003734441277694798
+      },
+      "normalized_curve": {
+        "0.25": 0.07808756745711591,
+        "0.5": 0.5226085057500324,
+        "1": 1.0,
+        "2": 0.42607247600102127,
+        "4": 0.15435469773162047,
+        "6": 0.0962440200538651,
+        "8": 0.06618894507853643,
+        "12": 0.032110081795769345,
+        "24": 0.003685249049474271
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 1070.085452272981,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 1038.914547727019,
+      "conditional_gain_ratio_twice_over_once": 0.1659104717726117,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 225.0,
+      "price_fixed_baseline_pg_ml": 24.0,
+      "n_fast": 4,
+      "score": 0.3159997578262789,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 108.9761035505112,
+          "amplitude_at_1h": 2077.972643375428,
+          "pseudo_loss": 0.7216632481189402
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.22109546183489,
+          "amplitude_at_1h": 4020.63849506458,
+          "pseudo_loss": 0.031151630778877965
+        },
+        "Price1997_figure1": {
+          "baseline": 24.0,
+          "amplitude_at_1h": 393.82327360456236,
+          "pseudo_loss": 0.19518439458101863
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 4,
+        "k_fast_per_h": 4.823494901966071,
+        "k_elim_per_h": 1.386161946561453,
+        "k_slow_per_h": 0.1672232389280152,
+        "effective_slow_weight": 0.42032762034775234
+      },
+      "relative_1mg_peak_time_h": 1.1,
+      "normalized_increment_auc_0_24_h": 2.4906318294661176,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.11811829077843156,
+        "12": 0.0311897860134673,
+        "24": 0.0036960437684197783
+      },
+      "normalized_curve": {
+        "0.25": 0.11449008699862481,
+        "0.5": 0.46005555821215893,
+        "1": 1.0,
+        "2": 0.5772120466871651,
+        "4": 0.1326631787551482,
+        "6": 0.0754928435745569,
+        "8": 0.05281552334125592,
+        "12": 0.026996866786807204,
+        "24": 0.0036292466100330697
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 980.8687804240666,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 1128.1312195759333,
+      "conditional_gain_ratio_twice_over_once": 0.19096682534471615,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 225.0,
+      "price_fixed_baseline_pg_ml": 24.0,
+      "n_fast": 6,
+      "score": 0.09666113750122174,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 129.98865713182957,
+          "amplitude_at_1h": 2098.7407134735445,
+          "pseudo_loss": 0.26063097712552485
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.46832482630828,
+          "amplitude_at_1h": 4070.874596703094,
+          "pseudo_loss": 0.003836453247964805
+        },
+        "Price1997_figure1": {
+          "baseline": 24.0,
+          "amplitude_at_1h": 430.6023649799525,
+          "pseudo_loss": 0.025515982130175585
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 6,
+        "k_fast_per_h": 8.62110796512553,
+        "k_elim_per_h": 1.2985506829199953,
+        "k_slow_per_h": 0.20533966238037618,
+        "effective_slow_weight": 0.45532081569673855
+      },
+      "relative_1mg_peak_time_h": 0.98,
+      "normalized_increment_auc_0_24_h": 2.2646659840055623,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.10565099180493151,
+        "12": 0.023483001645222212,
+        "24": 0.0018413720872012796
+      },
+      "normalized_curve": {
+        "0.25": 0.09202101253119908,
+        "0.5": 0.4638090546643392,
+        "1": 1.0,
+        "2": 0.4665194404263169,
+        "4": 0.13341817911337037,
+        "6": 0.07531825783678128,
+        "8": 0.04897041423986587,
+        "12": 0.021484951937212615,
+        "24": 0.0018280407909171956
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 975.1705286024463,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 1133.8294713975538,
+      "conditional_gain_ratio_twice_over_once": 0.12636335994339992,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 225.0,
+      "price_fixed_baseline_pg_ml": 24.0,
+      "n_fast": 8,
+      "score": 0.04090347614412098,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 122.8187305380835,
+          "amplitude_at_1h": 2071.1562454465075,
+          "pseudo_loss": 0.06275325762607291
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.54194059550969,
+          "amplitude_at_1h": 3827.111413892855,
+          "pseudo_loss": 0.015879511545884697
+        },
+        "Price1997_figure1": {
+          "baseline": 24.0,
+          "amplitude_at_1h": 436.67348527183003,
+          "pseudo_loss": 0.04407765926040534
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 8,
+        "k_fast_per_h": 12.524025029853417,
+        "k_elim_per_h": 1.3225176797677027,
+        "k_slow_per_h": 0.23663332787223557,
+        "effective_slow_weight": 0.49490662123950746
+      },
+      "relative_1mg_peak_time_h": 0.9,
+      "normalized_increment_auc_0_24_h": 2.2056579487436014,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.10169433670916965,
+        "12": 0.019570217834732184,
+        "24": 0.0010806716708431246
+      },
+      "normalized_curve": {
+        "0.25": 0.09172010961283626,
+        "0.5": 0.49536472414015026,
+        "1": 1.0,
+        "2": 0.4299574401881867,
+        "4": 0.1389296037795217,
+        "6": 0.07739287834896351,
+        "8": 0.047562922757547456,
+        "12": 0.01842638193705827,
+        "24": 0.0010769797821233826
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 963.1523437953839,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 1145.8476562046162,
+      "conditional_gain_ratio_twice_over_once": 0.0889879752077902,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    },
+    {
+      "rosano_baseline_cap_pmol_l": 225.0,
+      "price_fixed_baseline_pg_ml": 24.0,
+      "n_fast": 10,
+      "score": 0.03348696307362355,
+      "fit": {
+        "Rosano1997_PK25": {
+          "baseline": 107.18515137704625,
+          "amplitude_at_1h": 2044.190769095772,
+          "pseudo_loss": 0.003441736206886058
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.51990849657265,
+          "amplitude_at_1h": 3617.518115164913,
+          "pseudo_loss": 0.011471359037538232
+        },
+        "Price1997_figure1": {
+          "baseline": 24.0,
+          "amplitude_at_1h": 434.8357220077087,
+          "pseudo_loss": 0.08554779397644638
+        }
+      },
+      "parameter": {
+        "family": "M2",
+        "n_fast": 10,
+        "k_fast_per_h": 16.33057668138752,
+        "k_elim_per_h": 1.3823250064791872,
+        "k_slow_per_h": 0.2616420808381402,
+        "effective_slow_weight": 0.5311770316375933
+      },
+      "relative_1mg_peak_time_h": 0.86,
+      "normalized_increment_auc_0_24_h": 2.1967399140334516,
+      "trough_index_per_1mg_q6_q12_q24": {
+        "6": 0.0998356318105866,
+        "12": 0.017063180747183496,
+        "24": 0.0007080944535687233
+      },
+      "normalized_curve": {
+        "0.25": 0.09896392290807818,
+        "0.5": 0.523468732217862,
+        "1": 1.0,
+        "2": 0.417126368058965,
+        "4": 0.1445976827100983,
+        "6": 0.07922205475571546,
+        "8": 0.046537594325514874,
+        "12": 0.016324428940983113,
+        "24": 0.0007067671260269512
+      },
+      "price_model_baseline_subtracted_auc_pg_h_ml": 955.2209865818878,
+      "price_table_auc_reported_pg_h_ml": 2109,
+      "price_auc_difference_table_minus_model_pg_h_ml": 1153.7790134181123,
+      "conditional_gain_ratio_twice_over_once": 0.06687509615822387,
+      "optimizer_reported_success": true,
+      "local_multistart_only_not_global": true
+    }
+  ]
+}

@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "phase": "P2-V",
+  "scope": "research-only, exploratory retrospective cross-study fit",
+  "Doll_data_used": false,
+  "model_parameters_are_not_estimated_individual_population_PK": true,
+  "input_data": "docs/pk-research/p2/p2u-observed-aggregates.json",
+  "model_form": "C_study(t) = baseline_study + A_study * h(t)/h(1h)",
+  "concentration_from_dose_history_requires_explicit_study_amp_per_mg_and_verified_scope": true,
+  "independent_clinical_accuracy_proven": false,
+  "production_replacement_authorized": false,
+  "primary_default_search": {
+    "M0": {
+      "family": "M0",
+      "n_fast": 1,
+      "k_fast_per_h": 0.5675575752930232,
+      "k_elim_per_h": 0.5175575752930232,
+      "k_slow_per_h": null,
+      "effective_slow_weight": 0.0
+    },
+    "M1": {
+      "family": "M1",
+      "n_fast": 8,
+      "k_fast_per_h": 14.424207816930702,
+      "k_elim_per_h": 0.5006048829941504,
+      "k_slow_per_h": null,
+      "effective_slow_weight": 0.0
+    },
+    "M2": {
+      "family": "M2",
+      "n_fast": 8,
+      "k_fast_per_h": 12.52860184652404,
+      "k_elim_per_h": 1.3205143102855312,
+      "k_slow_per_h": 0.23352691574436912,
+      "effective_slow_weight": 0.4960174991339771
+    }
+  },
+  "expanded_order_search": {
+    "M0": {
+      "score": 4.186762247234725,
+      "parameters": {
+        "family": "M0",
+        "n_fast": 1,
+        "k_fast_per_h": 0.5675575752930232,
+        "k_elim_per_h": 0.5175575752930232,
+        "k_slow_per_h": null,
+        "effective_slow_weight": 0.0
+      },
+      "observed_study_anchors": {
+        "Rosano1997_PK25": {
+          "baseline": 0.0,
+          "amplitude_at_observed_dose_1h": 1124.2126230764777,
+          "dose_mg": 1,
+          "unit": "pmol/L"
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 88.72622802176635,
+          "amplitude_at_observed_dose_1h": 2169.0857610525727,
+          "dose_mg": 2,
+          "unit": "pmol/L"
+        },
+        "Price1997_figure1": {
+          "baseline": 24.0,
+          "amplitude_at_observed_dose_1h": 101.15955597863457,
+          "dose_mg": 1,
+          "unit": "pg/mL"
+        }
+      },
+      "dimensionless_q6_hypothetical_0p5mg_index": 0.21633443839206432
+    },
+    "M1": {
+      "score": 0.5930991605685234,
+      "parameters": {
+        "family": "M1",
+        "n_fast": 8,
+        "k_fast_per_h": 14.424207816930702,
+        "k_elim_per_h": 0.5006048829941504,
+        "k_slow_per_h": null,
+        "effective_slow_weight": 0.0
+      },
+      "observed_study_anchors": {
+        "Rosano1997_PK25": {
+          "baseline": 220.27369327147784,
+          "amplitude_at_observed_dose_1h": 1923.506572626748,
+          "dose_mg": 1,
+          "unit": "pmol/L"
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 90.28817160603276,
+          "amplitude_at_observed_dose_1h": 3644.5749783750457,
+          "dose_mg": 2,
+          "unit": "pmol/L"
+        },
+        "Price1997_figure1": {
+          "baseline": 24.0,
+          "amplitude_at_observed_dose_1h": 308.47544485764786,
+          "dose_mg": 1,
+          "unit": "pg/mL"
+        }
+      },
+      "dimensionless_q6_hypothetical_0p5mg_index": 0.04452242311109612
+    },
+    "M2": {
+      "score": 0.03321662659382562,
+      "parameters": {
+        "family": "M2",
+        "n_fast": 9,
+        "k_fast_per_h": 14.440199238807665,
+        "k_elim_per_h": 1.3518070625675727,
+        "k_slow_per_h": 0.249970121099137,
+        "effective_slow_weight": 0.5139380956563052
+      },
+      "observed_study_anchors": {
+        "Rosano1997_PK25": {
+          "baseline": 115.3494258223116,
+          "amplitude_at_observed_dose_1h": 2057.086337757327,
+          "dose_mg": 1,
+          "unit": "pmol/L"
+        },
+        "Komesaroff1998_n10": {
+          "baseline": 89.53815507982118,
+          "amplitude_at_observed_dose_1h": 3713.2000201176174,
+          "dose_mg": 2,
+          "unit": "pmol/L"
+        },
+        "Price1997_figure1": {
+          "baseline": 24.0,
+          "amplitude_at_observed_dose_1h": 436.3038462642318,
+          "dose_mg": 1,
+          "unit": "pg/mL"
+        }
+      },
+      "dimensionless_q6_hypothetical_0p5mg_index": 0.050304395860161104
+    }
+  },
+  "price_figure_and_table1_auc_disagreement_unresolved": true,
+  "uncertainty_not_derived_from_subject_level_data": true
+}

@@ -1,0 +1,72 @@
+[
+  {
+    "criterion": "M2 research kernel is reproducible, tests and Debug startup verified",
+    "id": "E1",
+    "kind": "engineering",
+    "notes": "Engineering code run; not individual model accuracy",
+    "status": "previously_passed_see_CI_log"
+  },
+  {
+    "criterion": "Legacy production model, personal record data and release remain unchanged",
+    "id": "E2",
+    "kind": "engineering",
+    "notes": "Integration into new release requires fresh validation",
+    "status": "previously_passed_in_research_PR"
+  },
+  {
+    "criterion": "Training/evaluation data have no historical researcher exposure",
+    "id": "R1",
+    "kind": "research",
+    "notes": "Price was used/seen in earlier studies; P2-AG retrospective holdout is not blinded",
+    "status": "failed"
+  },
+  {
+    "criterion": "One model dominates competitor across predefined nuisance/read intervals",
+    "id": "R2",
+    "kind": "research",
+    "notes": "Preference flips by Rosano baseline cap and Price baseline",
+    "status": "failed"
+  },
+  {
+    "criterion": "Price Figure 1 and Table 1 AUC reproducible on same basis",
+    "id": "R3",
+    "kind": "research",
+    "notes": "Author table 2109 vs 1mg manually redigitized raw b0 1550.5664",
+    "status": "failed"
+  },
+  {
+    "criterion": "Late-time tail robustness demonstrated under joint ke,ks nuisance freedom",
+    "id": "R4",
+    "kind": "research",
+    "notes": "Nominal refined grid median 24h trough index spread 37.58x",
+    "status": "failed"
+  },
+  {
+    "criterion": "Independent subject-level human concentrations validate absolute individual pg/mL",
+    "id": "R5",
+    "kind": "research",
+    "notes": "Available P2 material only supports aggregate and synthetic conditions",
+    "status": "missing"
+  },
+  {
+    "criterion": "Prospectively specified baseline, assay, dose-clock, and external evaluation protocol",
+    "id": "R6",
+    "kind": "research",
+    "notes": "Requires independent data; arbitrary bounds are not clinical thresholds",
+    "status": "missing"
+  },
+  {
+    "criterion": "Experimental UI labels dimensionless shape, manual/verified input, consent, candidate limitations",
+    "id": "P1",
+    "kind": "product",
+    "notes": "No personalized pg/mL, automatic dose recommendation or promoted release",
+    "status": "eligible_for_review"
+  },
+  {
+    "criterion": "Replace default numerical clinical concentrations with M2",
+    "id": "P2",
+    "kind": "product",
+    "notes": "R1-R6 must be resolved, and official model must be assessed independently",
+    "status": "blocked"
+  }
+]

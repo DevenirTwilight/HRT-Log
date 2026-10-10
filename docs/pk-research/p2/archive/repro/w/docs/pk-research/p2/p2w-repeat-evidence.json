@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "phase": "P2-W",
+  "date": "2026-10-10",
+  "purpose": "Published cohort summaries for cross-study repeat-dose sensitivity, not direct individual likelihood",
+  "Doll_used": false,
+  "cohorts": {
+    "Cortez2024_once_SL": {
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11220669/",
+      "doi": "10.1210/jendso/bvae108",
+      "cohort_id": "NCT05010707_once_SL",
+      "n_randomized": 13,
+      "schedule_label": "once daily sublingual, actual per-person schedules/doses unavailable",
+      "nominal_interval_h_for_math_only": 24,
+      "six_month_mean_daily_mg": 6.2,
+      "six_month_mean_E2_pg_ml": 95.3,
+      "baseline_mean_E2_pg_ml": 25.8,
+      "six_month_reported_parenthetical": 10.5,
+      "assay": "serum estradiol immunoassay",
+      "time": "fasting, before morning dose",
+      "limitations": ["titrated 2-10 mg/day", "study mean dose not individual administration dose", "pretreatment baseline not proven on-treatment undosed endogenous background", "n completing each analysis visit not verified", "parenthetical dispersion type needs checking against article figure/table"]
+    },
+    "Cortez2024_twice_SL": {
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11220669/",
+      "doi": "10.1210/jendso/bvae108",
+      "cohort_id": "NCT05010707_twice_SL",
+      "n_randomized": 14,
+      "schedule_label": "twice daily sublingual, actual per-person schedules/doses unavailable",
+      "nominal_interval_h_for_math_only": 12,
+      "six_month_mean_daily_mg": 6.2,
+      "six_month_mean_E2_pg_ml": 79.4,
+      "baseline_mean_E2_pg_ml": 23.4,
+      "six_month_reported_parenthetical": 11.6,
+      "assay": "serum estradiol immunoassay",
+      "time": "fasting, before morning dose",
+      "limitations": ["titrated 4-12 mg/day", "separate cohort from once-daily arm", "per-person elapsed hours from previous dose unknown", "on-treatment baseline unknown", "statistically significant regimen difference not established"]
+    },
+    "Yaish2023_q6_SL": {
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10732161/",
+      "doi": "10.1089/trgh.2023.0022",
+      "cohort_id": "Yaish2023_pilot_TelAviv",
+      "n_total_all_arms": 22,
+      "schedule_label": "0.5 mg sublingual four times a day, roughly six-hour intervals",
+      "nominal_interval_h_for_math_only": 6,
+      "nominal_single_dose_mg": 0.5,
+      "trough_mean_pmol_l": 204.5,
+      "trough_sd_pmol_l": 63.3,
+      "ninety_min_median_pmol_l": 1721,
+      "ninety_min_IQR_pmol_l": [1000,2432],
+      "pmol_per_pg_ml": 3.671,
+      "assay": "Siemens Immulite 2000 chemiluminescence immunoassay",
+      "limitations": ["trough mean and 90-min median different estimands", "unknown exact corresponding subjects/timepoints", "n and paired covariance not verified", "real previous dose times missing", "not interchangeable with study-level 1h amplitude from Price"]
+    }
+  },
+  "not_individual_PK_dataset": true,
+  "no_external_locked_validation": true
+}

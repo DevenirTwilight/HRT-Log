@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "phase": "P2-AH",
+  "is_clinical_validation": false,
+  "input": {
+    "origin": "P2-U frozen manual figure digitization; 1mg sublingual E2; 6 postmenopausal participants",
+    "grid_hours": [
+      0.0,
+      1.0,
+      2.0,
+      3.0,
+      4.0,
+      6.0,
+      8.0,
+      12.0,
+      18.0,
+      24.0
+    ],
+    "digitized_figure_1_y_pg_ml_at_1_to_24h": [
+      450.0,
+      225.0,
+      116.0,
+      85.0,
+      56.0,
+      45.0,
+      34.0,
+      25.0,
+      24.0
+    ],
+    "manual_read_widths_not_probabilistic_errors_pg_ml": [
+      15.0,
+      32.5,
+      12.0,
+      8.5,
+      7.0,
+      6.5,
+      6.0,
+      5.5,
+      5.5
+    ],
+    "source_article": "https://doi.org/10.1016/S0029-7844(96)00513-3",
+    "full_text_transcription": "https://www.academia.edu/122086991/Single_Dose_Pharmacokinetics_of_Sublingual_Versus_Oral_Administration_of_Micronized_17%CE%B2_Estradiol",
+    "method_confirmed": "predose corrected before PK computation; table AUC0-24; trapezoid; same 0,1,2,3,4,6,8,12,18,24h grid"
+  },
+  "trapezoid_weights_hours": [
+    0.5,
+    1.0,
+    1.0,
+    1.0,
+    1.5,
+    2.0,
+    3.0,
+    5.0,
+    6.0,
+    3.0
+  ],
+  "auc_digitized_raw_1_24_pg_h_ml": 1332.5,
+  "maximum_simultaneous_auc_read_width_perturbation_pg_h_ml": 185.25,
+  "required_auc_0_1_to_match_table_if_raw_later_points_frozen_and_zero_baseline": 776.5,
+  "actual_trapezoid_0_1_if_0h_zero_and_1h_450": 225,
+  "scenarios": [
+    {
+      "assumed_predose_pg_ml": 0.0,
+      "observed_figure_raw_auc_0_24_pg_h_ml": 1557.5,
+      "figure_baseline_corrected_auc_0_24_pg_h_ml": 1557.5,
+      "reported_table_baseline_corrected_auc_0_24_pg_h_ml": 2109,
+      "reported_minus_digitized_pg_h_ml": 551.5,
+      "reported_to_digitized_ratio": 1.3540931,
+      "read_width_based_upper_auc_0_24": 1742.75,
+      "reported_minus_upper_read_width": 366.25,
+      "last_sample_excess_pg_ml": 24.0
+    },
+    {
+      "assumed_predose_pg_ml": 6.0,
+      "observed_figure_raw_auc_0_24_pg_h_ml": 1560.5,
+      "figure_baseline_corrected_auc_0_24_pg_h_ml": 1416.5,
+      "reported_table_baseline_corrected_auc_0_24_pg_h_ml": 2109,
+      "reported_minus_digitized_pg_h_ml": 692.5,
+      "reported_to_digitized_ratio": 1.48888104,
+      "read_width_based_upper_auc_0_24": 1601.75,
+      "reported_minus_upper_read_width": 507.25,
+      "last_sample_excess_pg_ml": 18.0
+    },
+    {
+      "assumed_predose_pg_ml": 12.0,
+      "observed_figure_raw_auc_0_24_pg_h_ml": 1563.5,
+      "figure_baseline_corrected_auc_0_24_pg_h_ml": 1275.5,
+      "reported_table_baseline_corrected_auc_0_24_pg_h_ml": 2109,
+      "reported_minus_digitized_pg_h_ml": 833.5,
+      "reported_to_digitized_ratio": 1.65346923,
+      "read_width_based_upper_auc_0_24": 1460.75,
+      "reported_minus_upper_read_width": 648.25,
+      "last_sample_excess_pg_ml": 12.0
+    },
+    {
+      "assumed_predose_pg_ml": 18.0,
+      "observed_figure_raw_auc_0_24_pg_h_ml": 1566.5,
+      "figure_baseline_corrected_auc_0_24_pg_h_ml": 1134.5,
+      "reported_table_baseline_corrected_auc_0_24_pg_h_ml": 2109,
+      "reported_minus_digitized_pg_h_ml": 974.5,
+      "reported_to_digitized_ratio": 1.85896871,
+      "read_width_based_upper_auc_0_24": 1319.75,
+      "reported_minus_upper_read_width": 789.25,
+      "last_sample_excess_pg_ml": 6.0
+    },
+    {
+      "assumed_predose_pg_ml": 24.0,
+      "observed_figure_raw_auc_0_24_pg_h_ml": 1569.5,
+      "figure_baseline_corrected_auc_0_24_pg_h_ml": 993.5,
+      "reported_table_baseline_corrected_auc_0_24_pg_h_ml": 2109,
+      "reported_minus_digitized_pg_h_ml": 1115.5,
+      "reported_to_digitized_ratio": 2.12279819,
+      "read_width_based_upper_auc_0_24": 1178.75,
+      "reported_minus_upper_read_width": 930.25,
+      "last_sample_excess_pg_ml": 0.0
+    }
+  ],
+  "baseline_sensitive_apparent_half_life": [
+    {
+      "assumed_predose_pg_ml": 0,
+      "apparent_8_24_h": 17.6427014211831
+    },
+    {
+      "assumed_predose_pg_ml": 6,
+      "apparent_8_24_h": 14.34363674141862
+    },
+    {
+      "assumed_predose_pg_ml": 12,
+      "apparent_8_24_h": 10.9631720977373
+    },
+    {
+      "assumed_predose_pg_ml": 18,
+      "apparent_8_24_h": 7.373526729893922
+    },
+    {
+      "assumed_predose_pg_ml": 21,
+      "apparent_8_24_h": 5.333333333333334
+    },
+    {
+      "assumed_predose_pg_ml": 22,
+      "apparent_8_24_h": 4.540859561869192
+    },
+    {
+      "assumed_predose_pg_ml": 23,
+      "apparent_8_24_h": 3.5879011874812066
+    },
+    {
+      "assumed_predose_pg_ml": 23.5,
+      "apparent_8_24_h": 2.9486213303792987
+    },
+    {
+      "assumed_predose_pg_ml": 24,
+      "apparent_8_24_h": null
+    }
+  ],
+  "mean_auc_commutation_demonstration": {
+    "per_subject_auc": [
+      155.0,
+      127.5,
+      135.0
+    ],
+    "arithmetic_mean_of_individual_aucs": 139.16666666666666,
+    "auc_of_mean_curve": 139.16666666666669
+  },
+  "interpretation_guardrails": [
+    "The paper explicitly describes 0h baseline subtraction, AUC0-24, trapezoid; AUC0-inf extrapolation is not an explanation.",
+    "Figure values and interval widths are historical analyst digitizations, not the original six individuals.",
+    "AUC of an arithmetic mean equals arithmetic mean of individual trapezoidal AUCs on a shared grid; simple noncommutation is not an explanation.",
+    "AUC discrepancy remains unresolved; do not force-fit 2109 as an additional pseudo-point.",
+    "Mean-curve late apparent half-life is baseline-sensitive and not an individual systemic clearance estimate.",
+    "No patient exposure or PK efficacy inference supported."
+  ]
+}

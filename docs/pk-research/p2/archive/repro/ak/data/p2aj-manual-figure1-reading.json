@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "study": "Price et al. 1997; Obstet Gynecol 89(3):340-345; doi:10.1016/S0029-7844(96)00513-3",
+  "research_stage": "P2-AJ",
+  "figure": "Figure 1, estradiol, 1 mg SL, mean curve",
+  "source_pdf_sha256": "40ecaf3a36b6481bbf2e9fc074066700f141ae3a51959b5bf6138cd920deb70a",
+  "source_crop_sha256": "25ff6138da10a0a7a68d0de36b045c32528d715cf128f61cf3f9794a3aa02db0",
+  "source_crop_size_px": [1085, 1175],
+  "citation": "User supplied six-page scan; journal page 343 is PDF page 4. Crop is previously generated from this file. No new human PK measurements.",
+  "axis_calibration": {
+    "lower": {"y_pixel_at_0": 841, "y_pixel_at_180": 207, "units": "pg/mL"},
+    "upper": {"y_pixel_at_300": 136, "y_pixel_at_500": 49, "units": "pg/mL"},
+    "axis_break": "Use upper mapping for 1-2 h markers and lower mapping for 3-24 h. Never interpolate visually across the broken y-axis.",
+    "horizontal": {"x_pixel_at_1h": 222, "x_pixel_at_24h": 905}
+  },
+  "point_reading": [
+    {"hour": 1, "x_px": 222, "y_px": 70, "panel": "upper", "visual_window_pg_ml": 20, "visibility": "clear high marker"},
+    {"hour": 2, "x_px": 252, "y_px": 170, "panel": "upper", "visual_window_pg_ml": 40, "visibility": "ambiguous center near axis break/SD bars; biggest subjective window"},
+    {"hour": 3, "x_px": 282, "y_px": 433, "panel": "lower", "visual_window_pg_ml": 12, "visibility": "solid line marker"},
+    {"hour": 4, "x_px": 311, "y_px": 539, "panel": "lower", "visual_window_pg_ml": 10, "visibility": "solid line marker"},
+    {"hour": 6, "x_px": 371, "y_px": 643, "panel": "lower", "visual_window_pg_ml": 8, "visibility": "solid line marker"},
+    {"hour": 8, "x_px": 430, "y_px": 686, "panel": "lower", "visual_window_pg_ml": 8, "visibility": "solid line marker"},
+    {"hour": 12, "x_px": 549, "y_px": 720, "panel": "lower", "visual_window_pg_ml": 8, "visibility": "solid line marker"},
+    {"hour": 18, "x_px": 727, "y_px": 757, "panel": "lower", "visual_window_pg_ml": 8, "visibility": "solid line marker; low values overlap other dosing traces"},
+    {"hour": 24, "x_px": 905, "y_px": 755, "panel": "lower", "visual_window_pg_ml": 8, "visibility": "solid line marker; low values overlap other dosing traces"}
+  ],
+  "bound_semantics": "Visual reading stress windows are manually selected and intentionally generous, NOT statistical CI/SD/SEM, NOT bounds certified by independent raters. They are not the vertical standard-deviation error bars shown in the original figure.",
+  "baseline_predose": "NOT READ FROM FIGURE; conditional nonnegative mean baseline b. t=0 increment is defined as zero for the author's baseline-subtraction method.",
+  "table1_1mg_sl": {"cmax_mean_pg_ml": 451, "cmax_sd_pg_ml": 162, "auc0_24_mean_pg_h_ml": 2109, "auc_sd_pg_h_ml": 1031},
+  "previous_p2u_approximate_pg_ml": [450, 225, 116, 85, 56, 45, 34, 25, 24],
+  "other_sublingual_doses": "1h approximately 245 for 0.5mg and 294 for 0.25mg (as reported Cmax), but their 2-24h line styles and overlapping error bars require separate tracing; NOT presented as independent fully digitized curves.",
+  "research_disposition": "Previously published data were already exposed in model development; no blinded held-out validation; no clinical personal concentration predictions."
+}

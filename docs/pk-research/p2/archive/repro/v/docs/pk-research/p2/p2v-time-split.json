@@ -1,0 +1,140 @@
+{
+  "stage": "P2-V",
+  "scope": "retrospective time-block stress, not external validation",
+  "Price_late_points_held_out_of_fitting": true,
+  "late_recalibration_prohibited": true,
+  "results": {
+    "M0": {
+      "trained_on": [
+        "Rosano: all",
+        "Komesaroff: all",
+        "Price Figure manual: 1,2,3,4h"
+      ],
+      "evaluated_at_h": [
+        6.0,
+        8.0,
+        12.0,
+        18.0,
+        24.0
+      ],
+      "source_previously_seen_NOT_BLIND": true,
+      "training_pseudo_loss_equal_source": 4.584837550201623,
+      "late_no_refit_pseudo_loss": 25.27793939951251,
+      "late_if_reprofited_invalid_optimistic_pseudo_loss": 1.302193381249281,
+      "early_fixed_Price_nuisance": {
+        "baseline": 0.0,
+        "amplitude": 282.84195443715487
+      },
+      "late_predictions_pg_ml": [
+        19.622360489677753,
+        4.400921858259989,
+        0.18724820979991008,
+        0.0013500272378693414,
+        8.714496066583629e-06
+      ],
+      "late_manual_observations_pg_ml": [
+        56.0,
+        45.0,
+        34.0,
+        25.0,
+        24.0
+      ],
+      "parameters": {
+        "family": "M0",
+        "n_fast": 1,
+        "k_fast_per_h": 0.9177242031436318,
+        "k_elim_per_h": 0.8677242031436317,
+        "k_slow_per_h": null,
+        "effective_slow_weight": 0.0
+      }
+    },
+    "M1": {
+      "trained_on": [
+        "Rosano: all",
+        "Komesaroff: all",
+        "Price Figure manual: 1,2,3,4h"
+      ],
+      "evaluated_at_h": [
+        6.0,
+        8.0,
+        12.0,
+        18.0,
+        24.0
+      ],
+      "source_previously_seen_NOT_BLIND": true,
+      "training_pseudo_loss_equal_source": 0.2696005216204415,
+      "late_no_refit_pseudo_loss": 3.0650709531931337,
+      "late_if_reprofited_invalid_optimistic_pseudo_loss": 1.2127871092271594,
+      "early_fixed_Price_nuisance": {
+        "baseline": 24.0,
+        "amplitude": 397.3789926282035
+      },
+      "late_predictions_pg_ml": [
+        36.3244514109755,
+        26.98314301738066,
+        24.17477810662182,
+        24.002478600104432,
+        24.000035150045942
+      ],
+      "late_manual_observations_pg_ml": [
+        56.0,
+        45.0,
+        34.0,
+        25.0,
+        24.0
+      ],
+      "parameters": {
+        "family": "M1",
+        "n_fast": 7,
+        "k_fast_per_h": 11.913637197812305,
+        "k_elim_per_h": 0.7093038800727173,
+        "k_slow_per_h": null,
+        "effective_slow_weight": 0.0
+      }
+    },
+    "M2": {
+      "trained_on": [
+        "Rosano: all",
+        "Komesaroff: all",
+        "Price Figure manual: 1,2,3,4h"
+      ],
+      "evaluated_at_h": [
+        6.0,
+        8.0,
+        12.0,
+        18.0,
+        24.0
+      ],
+      "source_previously_seen_NOT_BLIND": true,
+      "training_pseudo_loss_equal_source": 0.040513108571044405,
+      "late_no_refit_pseudo_loss": 0.16196511523233198,
+      "late_if_reprofited_invalid_optimistic_pseudo_loss": 0.09376175815877999,
+      "early_fixed_Price_nuisance": {
+        "baseline": 24.0,
+        "amplitude": 433.4550670271996
+      },
+      "late_predictions_pg_ml": [
+        54.58065218115133,
+        41.38002557502431,
+        29.792923401810835,
+        25.118974485753085,
+        24.216153514999068
+      ],
+      "late_manual_observations_pg_ml": [
+        56.0,
+        45.0,
+        34.0,
+        25.0,
+        24.0
+      ],
+      "parameters": {
+        "family": "M2",
+        "n_fast": 8,
+        "k_fast_per_h": 12.522286217404435,
+        "k_elim_per_h": 1.2861377686072746,
+        "k_slow_per_h": 0.27402982156229555,
+        "effective_slow_weight": 0.4783331319262088
+      }
+    }
+  }
+}

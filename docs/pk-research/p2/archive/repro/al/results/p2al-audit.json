@@ -1,0 +1,271 @@
+{
+  "anchor_rule": "b+(new_re_read_1h-b)*(p_old(t)-b)/(450-b)",
+  "assumptions_and_limitations": [
+    "All sources previously encountered in M2 development; this is not prospective blind test.",
+    "No individual subject PK profiles and no full assay covariance.",
+    "P2-AJ visual reading widths are subjective artificial bounds; worse unknown digitization errors can change result.",
+    "This analysis compares specific P2-AG M1/M2 early-source fits, not the official legacy concentration estimator.",
+    "Price 1h observation is used to calibrate each model; no unsupervised absolute concentration transport.",
+    "The 10 baseline scenarios are sensitivity assumptions, not 10 independent trials or people.",
+    "Refined grid spreads conditional on chosen candidate family, fixed fast component, metric and error scenario.",
+    "Research shape denominators are model-specific; do not interchange absolute scale or pg/mL."
+  ],
+  "decision_gates": [
+    {
+      "criterion": "M2 research kernel is reproducible, tests and Debug startup verified",
+      "id": "E1",
+      "kind": "engineering",
+      "notes": "Engineering code run; not individual model accuracy",
+      "status": "previously_passed_see_CI_log"
+    },
+    {
+      "criterion": "Legacy production model, personal record data and release remain unchanged",
+      "id": "E2",
+      "kind": "engineering",
+      "notes": "Integration into new release requires fresh validation",
+      "status": "previously_passed_in_research_PR"
+    },
+    {
+      "criterion": "Training/evaluation data have no historical researcher exposure",
+      "id": "R1",
+      "kind": "research",
+      "notes": "Price was used/seen in earlier studies; P2-AG retrospective holdout is not blinded",
+      "status": "failed"
+    },
+    {
+      "criterion": "One model dominates competitor across predefined nuisance/read intervals",
+      "id": "R2",
+      "kind": "research",
+      "notes": "Preference flips by Rosano baseline cap and Price baseline",
+      "status": "failed"
+    },
+    {
+      "criterion": "Price Figure 1 and Table 1 AUC reproducible on same basis",
+      "id": "R3",
+      "kind": "research",
+      "notes": "Author table 2109 vs 1mg manually redigitized raw b0 1550.5664",
+      "status": "failed"
+    },
+    {
+      "criterion": "Late-time tail robustness demonstrated under joint ke,ks nuisance freedom",
+      "id": "R4",
+      "kind": "research",
+      "notes": "Nominal refined grid median 24h trough index spread 37.58x",
+      "status": "failed"
+    },
+    {
+      "criterion": "Independent subject-level human concentrations validate absolute individual pg/mL",
+      "id": "R5",
+      "kind": "research",
+      "notes": "Available P2 material only supports aggregate and synthetic conditions",
+      "status": "missing"
+    },
+    {
+      "criterion": "Prospectively specified baseline, assay, dose-clock, and external evaluation protocol",
+      "id": "R6",
+      "kind": "research",
+      "notes": "Requires independent data; arbitrary bounds are not clinical thresholds",
+      "status": "missing"
+    },
+    {
+      "criterion": "Experimental UI labels dimensionless shape, manual/verified input, consent, candidate limitations",
+      "id": "P1",
+      "kind": "product",
+      "notes": "No personalized pg/mL, automatic dose recommendation or promoted release",
+      "status": "eligible_for_review"
+    },
+    {
+      "criterion": "Replace default numerical clinical concentrations with M2",
+      "id": "P2",
+      "kind": "product",
+      "notes": "R1-R6 must be resolved, and official model must be assessed independently",
+      "status": "blocked"
+    }
+  ],
+  "heldout_times_h": [
+    2,
+    3,
+    4,
+    6,
+    8,
+    12,
+    18,
+    24
+  ],
+  "historical_selection_leakage": true,
+  "identifiability": {
+    "P2_AF_refined_auc08_median_span_ratio": 1.2891987508961766,
+    "P2_AF_refined_q24_all15_gt2": true,
+    "P2_AF_refined_q24_gt5_count": 13,
+    "P2_AF_refined_q24_median_span_ratio": 37.57778154923879,
+    "P2_AF_refined_q24_per_candidate_ratios": [
+      32.494951964572344,
+      37.57778154923879,
+      260.4239808611017,
+      484.27621334788535,
+      458.5542283680542,
+      2.5685246470107703,
+      4.529110695241,
+      8.886823230758278,
+      9.45825783164963,
+      29.62868885953433,
+      31.09755135977707,
+      39.815202103396814,
+      237.3395708250659,
+      384.76367292695124,
+      484.7975014169752
+    ]
+  },
+  "kind": "retrospective_conditional_decision_audit",
+  "n_scenarios": 10,
+  "new_price_anchor_source": "P2-AJ manually redigitized Price Figure 1 1mg SL",
+  "original_price_anchor_pg_ml": 450.0,
+  "phase": "P2-AL",
+  "price_auc": {
+    "P2_AJ_raw_b0_trapezoid": 1550.5664,
+    "low_dose_intervals_not_resolved_to_point_truth": true,
+    "minimum_gap_even_under_subjective_upward_windows_b0": 319.4336,
+    "published_table1_auc": 2109
+  },
+  "scenario_scores": [
+    {
+      "assumed_price_baseline_pg_ml": 0,
+      "center_delta_mse_m2_minus_m1": 1011.0242520314662,
+      "interval_delta_mse_max": 1790.0948197275634,
+      "interval_delta_mse_min": 155.62406576863987,
+      "interval_max_anchor_at_pg_ml": 431.72414,
+      "interval_min_anchor_at_pg_ml": 471.72414,
+      "interval_rank_result": "M1_all_reading_corners",
+      "m1_rmse_conditional_pg_ml": 43.16207279349165,
+      "m2_rmse_conditional_pg_ml": 53.60959596809268,
+      "price_1h_anchor_re_digitized_pg_ml": 451.72414,
+      "rosano_baseline_cap_pmol_l": 100
+    },
+    {
+      "assumed_price_baseline_pg_ml": 6,
+      "center_delta_mse_m2_minus_m1": 922.7034222088835,
+      "interval_delta_mse_max": 1693.6850094067822,
+      "interval_delta_mse_min": 75.39221644425726,
+      "interval_max_anchor_at_pg_ml": 431.72414,
+      "interval_min_anchor_at_pg_ml": 471.72414,
+      "interval_rank_result": "M1_all_reading_corners",
+      "m1_rmse_conditional_pg_ml": 37.99491976924466,
+      "m2_rmse_conditional_pg_ml": 48.64480805266089,
+      "price_1h_anchor_re_digitized_pg_ml": 451.72414,
+      "rosano_baseline_cap_pmol_l": 100
+    },
+    {
+      "assumed_price_baseline_pg_ml": 12,
+      "center_delta_mse_m2_minus_m1": 836.398869758387,
+      "interval_delta_mse_max": 1599.2914764580871,
+      "interval_delta_mse_min": -2.8233555080416863,
+      "interval_max_anchor_at_pg_ml": 431.72414,
+      "interval_min_anchor_at_pg_ml": 471.72414,
+      "interval_rank_result": "undetermined_by_intervals",
+      "m1_rmse_conditional_pg_ml": 32.9671694835673,
+      "m2_rmse_conditional_pg_ml": 43.85468200222911,
+      "price_1h_anchor_re_digitized_pg_ml": 451.72414,
+      "rosano_baseline_cap_pmol_l": 100
+    },
+    {
+      "assumed_price_baseline_pg_ml": 18,
+      "center_delta_mse_m2_minus_m1": 752.1105946799772,
+      "interval_delta_mse_max": 1506.9142208814808,
+      "interval_delta_mse_min": -79.0226500882514,
+      "interval_max_anchor_at_pg_ml": 431.72414,
+      "interval_min_anchor_at_pg_ml": 471.72414,
+      "interval_rank_result": "undetermined_by_intervals",
+      "m1_rmse_conditional_pg_ml": 28.153606061948953,
+      "m2_rmse_conditional_pg_ml": 39.30313128710467,
+      "price_1h_anchor_re_digitized_pg_ml": 451.72414,
+      "rosano_baseline_cap_pmol_l": 100
+    },
+    {
+      "assumed_price_baseline_pg_ml": 24,
+      "center_delta_mse_m2_minus_m1": 669.838596973654,
+      "interval_delta_mse_max": 1416.5532426769582,
+      "interval_delta_mse_min": -153.20566729637838,
+      "interval_max_anchor_at_pg_ml": 431.72414,
+      "interval_min_anchor_at_pg_ml": 471.72414,
+      "interval_rank_result": "undetermined_by_intervals",
+      "m1_rmse_conditional_pg_ml": 23.68517975170999,
+      "m2_rmse_conditional_pg_ml": 35.08313464963567,
+      "price_1h_anchor_re_digitized_pg_ml": 451.72414,
+      "rosano_baseline_cap_pmol_l": 100
+    },
+    {
+      "assumed_price_baseline_pg_ml": 0,
+      "center_delta_mse_m2_minus_m1": -1074.777824346686,
+      "interval_delta_mse_max": -818.9800734276977,
+      "interval_delta_mse_min": -1349.866798413332,
+      "interval_max_anchor_at_pg_ml": 431.72414,
+      "interval_min_anchor_at_pg_ml": 471.72414,
+      "interval_rank_result": "M2_all_reading_corners",
+      "m1_rmse_conditional_pg_ml": 62.839149206045136,
+      "m2_rmse_conditional_pg_ml": 53.60952199556453,
+      "price_1h_anchor_re_digitized_pg_ml": 451.72414,
+      "rosano_baseline_cap_pmol_l": 225
+    },
+    {
+      "assumed_price_baseline_pg_ml": 6,
+      "center_delta_mse_m2_minus_m1": -988.2531397145854,
+      "interval_delta_mse_max": -738.5909433397817,
+      "interval_delta_mse_min": -1257.2065592370463,
+      "interval_max_anchor_at_pg_ml": 431.72414,
+      "interval_min_anchor_at_pg_ml": 471.72414,
+      "interval_rank_result": "M2_all_reading_corners",
+      "m1_rmse_conditional_pg_ml": 57.91859074709753,
+      "m2_rmse_conditional_pg_ml": 48.64473264820341,
+      "price_1h_anchor_re_digitized_pg_ml": 451.72414,
+      "rosano_baseline_cap_pmol_l": 225
+    },
+    {
+      "assumed_price_baseline_pg_ml": 12,
+      "center_delta_mse_m2_minus_m1": -903.6735777257081,
+      "interval_delta_mse_max": -660.1469358950872,
+      "interval_delta_mse_min": -1166.491442703988,
+      "interval_max_anchor_at_pg_ml": 431.72414,
+      "interval_min_anchor_at_pg_ml": 471.72414,
+      "interval_rank_result": "M2_all_reading_corners",
+      "m1_rmse_conditional_pg_ml": 53.16859935331488,
+      "m2_rmse_conditional_pg_ml": 43.854604997281726,
+      "price_1h_anchor_re_digitized_pg_ml": 451.72414,
+      "rosano_baseline_cap_pmol_l": 225
+    },
+    {
+      "assumed_price_baseline_pg_ml": 18,
+      "center_delta_mse_m2_minus_m1": -821.0391383800511,
+      "interval_delta_mse_max": -578.126953675629,
+      "interval_delta_mse_min": -1077.7214488141472,
+      "interval_max_anchor_at_pg_ml": 471.72414,
+      "interval_min_anchor_at_pg_ml": 471.72414,
+      "interval_rank_result": "M2_all_reading_corners",
+      "m1_rmse_conditional_pg_ml": 48.63917230103972,
+      "m2_rmse_conditional_pg_ml": 39.30305260091357,
+      "price_1h_anchor_re_digitized_pg_ml": 451.72414,
+      "rosano_baseline_cap_pmol_l": 225
+    },
+    {
+      "assumed_price_baseline_pg_ml": 24,
+      "center_delta_mse_m2_minus_m1": -740.3498216776154,
+      "interval_delta_mse_max": -497.9086671499165,
+      "interval_delta_mse_min": -990.8965775675285,
+      "interval_max_anchor_at_pg_ml": 471.72414,
+      "interval_min_anchor_at_pg_ml": 471.72414,
+      "interval_rank_result": "M2_all_reading_corners",
+      "m1_rmse_conditional_pg_ml": 44.39786626562719,
+      "m2_rmse_conditional_pg_ml": 35.0830544175233,
+      "price_1h_anchor_re_digitized_pg_ml": 451.72414,
+      "rosano_baseline_cap_pmol_l": 225
+    }
+  ],
+  "scope": "Engineering-only opt-in research visualization may proceed with safeguards; no clinical replacement approval; neither M1 nor M2 is established accurate for patients.",
+  "shape_source": "P2-AG selected early-only fit; shape and candidate completely frozen",
+  "uncertainty_rule": "independent subjective P2-AJ windows at 1h and 2..24h, not CI, not probability",
+  "winner_rule": "extrema of MSE(M2)-MSE(M1) over rectangle; positive entire interval=M1, negative entire=M2",
+  "wins": {
+    "M1_all_reading_corners": 2,
+    "M2_all_reading_corners": 5,
+    "undetermined_by_intervals": 3
+  }
+}

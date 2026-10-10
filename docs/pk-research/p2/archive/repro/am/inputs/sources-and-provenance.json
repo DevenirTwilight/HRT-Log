@@ -1,0 +1,39 @@
+{
+  "all_prospective_study_proposals_are_not_approved_clinical_protocols": true,
+  "kind": "source_provenance_non_exhaustive",
+  "phase": "P2-AM",
+  "real_independent_patient_count": 0,
+  "sources": [
+    {
+      "file": "inputs/p2x-conditional-ensemble-results.json",
+      "not_independent_human_validation": true,
+      "ref": "P2-X",
+      "use": "frozen 40 study-fitted candidates; preregistered 15 near-optimal condition candidates selected by existing best+0.1 threshold"
+    },
+    {
+      "file": "inputs/p2al-gates.json",
+      "not_independent_human_validation": true,
+      "ref": "P2-AL",
+      "use": "previous product/research gate status; these gates are not automatically upgraded"
+    },
+    {
+      "doi": "10.1016/j.eprac.2021.11.081",
+      "not_independent_human_validation": true,
+      "ref": "Doll et al 2022",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34781041/",
+      "use": "PK study timing baseline+1/2/3/4/6/8 h; method details; this source was previously seen by team"
+    },
+    {
+      "not_independent_human_validation": true,
+      "ref": "Krasowski et al assay bias study 2022",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8859944/",
+      "use": "assay-method non-interchangeability caveat"
+    },
+    {
+      "not_independent_human_validation": true,
+      "ref": "Clinical Chemistry laboratory monitoring review 2025",
+      "url": "https://academic.oup.com/clinchem/article/71/3/358/8006615",
+      "use": "clinical lab assay and timing caution, not a source of subject-level external validation"
+    }
+  ]
+}
