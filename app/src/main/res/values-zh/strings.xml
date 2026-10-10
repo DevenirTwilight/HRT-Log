@@ -1016,4 +1016,15 @@
 <string name="calib_last_used">最近观测：实际参与拟合</string>
 <string name="calib_last_excluded">最近观测：已自动排除，未参与拟合</string>
 <string name="calib_last_not_used">最近观测：不是拟合候选</string>
+<string name="pk_research_compare_title">舌下给药实验模型对比</string>
+<string name="pk_research_compare_warning">仅供研究：曲线为相对形状，不是血药浓度（pg/mL）或临床置信区间。实验模型未考虑含服时间和吞咽比例。正式 E2 估算不受影响。</string>
+<string name="pk_research_compare_open">查看研究模型对比</string>
+<string name="pk_research_compare_close">收起研究模型对比</string>
+<string name="pk_research_compare_baseline">Price 图线的假设背景值（pg/mL），并非你的背景值：</string>
+<string name="pk_research_compare_empty">没有符合条件的近期舌下给药历史记录，无法生成研究对比。</string>
+<string name="pk_research_compare_scenario">实验参数：%1$s；此假设背景分组包含 %2$d 套候选。</string>
+<string name="pk_research_compare_unit">相对曲线</string>
+<string name="pk_research_compare_old">主色线：旧版舌下给药分量</string>
+<string name="pk_research_compare_new">次色线：实验 M2 模型</string>
+<string name="pk_research_compare_method">使用 %1$d 条有效历史舌下记录；另有 %2$d 条更早记录被 30 天截断窗口排除。仅展示最近 48 小时。两条曲线分别按各自单次 1mg 给药后 1 小时的响应归一化。不含未来计划、其他途径、化验或个人背景拟合。</string>
 </resources>
