@@ -1016,4 +1016,15 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="calib_last_used">Dernière observation : participe à l’ajustement</string>
 <string name="calib_last_excluded">Dernière observation : exclue automatiquement de l’ajustement</string>
 <string name="calib_last_not_used">Dernière observation : ne fait pas partie des observations ajustées</string>
+<string name="pk_research_compare_title">Comparaison expérimentale des profils sublinguaux</string>
+<string name="pk_research_compare_warning">Recherche uniquement : profils relatifs, ni concentrations sanguines (pg/mL) ni intervalles cliniques. Le modèle expérimental ne prend pas en compte la durée sublinguale ni la fraction avalée. L’estimation officielle d’E2 reste inchangée.</string>
+<string name="pk_research_compare_open">Afficher la comparaison de recherche</string>
+<string name="pk_research_compare_close">Masquer la comparaison de recherche</string>
+<string name="pk_research_compare_baseline">Valeur de fond hypothétique de la figure de Price (pg/mL), pas votre valeur :</string>
+<string name="pk_research_compare_empty">Aucune prise sublinguale historique récente éligible pour cette comparaison.</string>
+<string name="pk_research_compare_scenario">Candidat expérimental : %1$s ; %2$d candidats dans ce scénario de fond hypothétique.</string>
+<string name="pk_research_compare_unit">profil relatif</string>
+<string name="pk_research_compare_old">Courbe principale : composante sublinguale actuelle</string>
+<string name="pk_research_compare_new">Courbe secondaire : modèle M2 expérimental</string>
+<string name="pk_research_compare_method">%1$d prises sublinguales historiques valides ; %2$d prises plus anciennes omises après une fenêtre de 30 jours. Dernières 48 h uniquement. Chaque courbe est normalisée séparément à sa propre réponse à 1 h après 1 mg. Sans prises prévues, autres voies, analyses ni ajustement individuel du fond.</string>
 </resources>
