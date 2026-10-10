@@ -1,0 +1,1512 @@
+{
+ "report": "P1 ARM64 Release runtime and compatibility acceptance",
+ "date": "2026-10-10",
+ "status_legend": {
+  "PASS": "actually executed and passed",
+  "FAIL": "actually executed and failed",
+  "BLOCKED": "environment cannot provide it",
+  "NOT_RUN": "not executed"
+ },
+ "identity": {
+  "production_source": "identical to P0 fixed source 622e84ee927a2ebd7afc6d102c8a0af74b47799e and to d0284a4 (git diff empty for app/core/pk-engine/importer/Gradle)",
+  "harness_commit": "c387b10b45b1f01ff9a3fcc6166826cbd85c139a",
+  "workflow": ".github/workflows/release-acceptance.yml",
+  "authoritative_run": 38043594012,
+  "toolchain": {
+   "jdk": "Temurin 21 (GitHub setup-java)",
+   "gradle": "9.3.1 (wrapper)",
+   "agp": "9.1.1",
+   "kotlin": "2.2.20",
+   "compileSdk": "37.0",
+   "buildTools": "37.0.0"
+  },
+  "signing": "repository public debug test key (CN=Android Debug, SHA-256 fc58f907…def13b); never the private release key",
+  "runs": [
+   {
+    "run": 38037216069,
+    "sha": "46f6e0c",
+    "outcome": "harness: runner NoClassDefFoundError androidx.tracing.Trace; probes did not run"
+   },
+   {
+    "run": 38038170385,
+    "sha": "7609bbe",
+    "outcome": "harness gaps (androidx.collection keep, maps parsing, cache-only test reminder); arm64 probes recorded"
+   },
+   {
+    "run": 38039805628,
+    "sha": "2e1c287",
+    "outcome": "188 functional PASS; reboot recovery PASS; macOS accel-check reported HVF usable"
+   },
+   {
+    "run": 38041739528,
+    "sha": "00e4174",
+    "outcome": "189 functional PASS; arm64-v8a emulator on macos-15: HVF error HV_UNSUPPORTED (C/D/A)"
+   },
+   {
+    "run": 38043594012,
+    "sha": "c387b10",
+    "outcome": "authoritative: A/B 221 PASS/1 FAIL/3 phase-gated skips; C/D x86_64 install refused as expected; arm64 TCG jobs pending at report time"
+   }
+  ],
+  "repo_ci_android_and_domain_checks": {
+   "46f6e0c": "success (38037216050)",
+   "7609bbe": "success (38038170448)"
+  }
+ },
+ "environments": {
+  "x86_64": {
+   "host": "GitHub ubuntu-latest with /dev/kvm",
+   "image": "system-images;android-35;default;x86_64",
+   "abilist": "x86_64",
+   "api": 35,
+   "native_bridge": "0"
+  },
+  "arm64_hardware": {
+   "status": "BLOCKED",
+   "evidence": [
+    "ubuntu-24.04-arm: /dev/kvm absent; Google publishes no linux-aarch64 emulator (only linux x64, darwin x64/aarch64, windows x64)",
+    "macos-15 (Apple M1 Virtual): emulator -accel-check exit 0 but every arm64-v8a launch failed: HVF error: HV_UNSUPPORTED / failed to initialize HVF (run 38041739528, C/D/A)",
+    "this container: x86_64, no /dev/kvm"
+   ]
+  },
+  "arm64_software_cpu": {
+   "status": "NOT_RUN (pending at report time)",
+   "run": 38043594012,
+   "note": "arm64-v8a image with -accel off (QEMU TCG) on macos-15; genuine arm64 userspace but not hardware; would not replace a real device"
+  }
+ },
+ "scenarios_summary": {
+  "A": {
+   "x86_64": "exact 5/6 PASS, functional 221 PASS/1 FAIL, restart/denied/reboot phases PASS",
+   "fail": "locale UI walkthrough: drawer Settings unreachable (pre-existing, see findings)"
+  },
+  "B": {
+   "x86_64": "identical to A; resource-shrunk strings: 1004/1075 present per locale, all value-equal, 71 removed, referenced-and-removed only import_link_help/import_link_empty (unreachable dialog)",
+   "fail": "same single UI walkthrough failure as A"
+  },
+  "C": {
+   "x86_64": "PASS: INSTALL_FAILED_NO_MATCHING_ABIS (arm64-only refused, nothing installed)",
+   "arm64_runtime": "BLOCKED (hardware) / pending (software CPU)"
+  },
+  "D": {
+   "x86_64": "PASS: INSTALL_FAILED_NO_MATCHING_ABIS",
+   "arm64_runtime": "BLOCKED (hardware) / pending (software CPU)"
+  }
+ },
+ "findings": [
+  {
+   "id": "F1",
+   "type": "pre-existing UI defect, not release/ABI/shrink related",
+   "detail": "Navigation drawer Column (app/src/main/java/net/plainnotes/app/ui/AppShell.kt:136) has no vertical scroll; on a 320x640 screen Settings/About are below the bottom edge and unreachable from the drawer. Reproduced identically in A and B exact and functional.",
+   "minimal_fix_proposal": "Modifier.verticalScroll(rememberScrollState()) on that Column; needs user authorization (production UI change)"
+  },
+  {
+   "id": "F2",
+   "type": "pre-existing unreachable code",
+   "detail": "ImportedPlanDialog opens only after NotesViewModel.prepareImportedLink, which has no production caller; R8 removes it and B/D resource shrinking then removes import_link_help/import_link_empty. Not a shrinking regression."
+  },
+  {
+   "id": "F3",
+   "type": "compatibility (expected)",
+   "detail": "arm64-only APK is refused by Package Manager on devices without arm64-v8a (verified on x86_64). Same for 32-bit-only ARM devices by construction (not executed)."
+  },
+  {
+   "id": "F4",
+   "type": "test harness",
+   "detail": "Release instrumentation needs test-support-keep.pro (androidx.tracing, concurrent futures, kotlin stdlib) because AGP strips app-shipped libraries from the test APK; exact mode is therefore production R8 plus those keeps."
+  }
+ ],
+ "raw": {
+  "workflow": ".github/workflows/release-acceptance.yml",
+  "run_id": 38043594012,
+  "source_sha": "c387b10b45b1f01ff9a3fcc6166826cbd85c139a",
+  "scenarios": {
+   "A": {
+    "built_from": "c387b10b45b1f01ff9a3fcc6166826cbd85c139a",
+    "apks": {
+     "exact/app.apk": "49ce3f4caa7ba7d477048f3e2f1281c496789a6f70782c8651e01e14351540b1",
+     "exact/test.apk": "b54b02afed82161150d62f4c28a787c11189ec1c37e0c194c3cb8ea00f466e1c",
+     "functional/app.apk": "0929fc67603e2d54db13b3304d29ac09d14e026fc38713772c552e179bc903ea",
+     "functional/test.apk": "504caf14fbc730ba147e17c8b2fa9861e00c3028ac739e73e40a954700ceb0ab"
+    },
+    "apk_bytes": {
+     "exact/app.apk": 24079312,
+     "exact/test.apk": 979348,
+     "functional/app.apk": 32062053,
+     "functional/test.apk": 1228118
+    },
+    "conditions_exact": "scenario=A mode=exact minify=true shrinkResources=false abiFilters=[] testBuildType=release signing=debug proguard=[test-support-keep.pro, proguard-android-optimize.txt-9.1.1, proguard-rules.pro]",
+    "conditions_functional": "scenario=A mode=functional minify=true shrinkResources=false abiFilters=[] testBuildType=release signing=debug proguard=[test-support-keep.pro, functional-keep.pro, proguard-android-optimize.txt-9.1.1, proguard-rules.pro]",
+    "device-x86_64-api35": {
+     "device": {
+      "ro.product.cpu.abi": "x86_64",
+      "ro.product.cpu.abilist": "x86_64",
+      "ro.build.version.sdk": "35",
+      "ro.build.version.release": "15",
+      "ro.build.fingerprint": "Android/sdk_phone64_x86_64/emu64x:15/AE3A.240806.019/12368160:userdebug/test-keys",
+      "ro.kernel.qemu": "1",
+      "ro.boot.qemu": "1",
+      "ro.dalvik.vm.native.bridge": "0",
+      "ro.product.model": "Android SDK built for x86_64",
+      "ro.hardware": "ranchu",
+      "uname_m": "x86_64"
+     },
+     "abi_note": "universal package",
+     "status": "FAIL",
+     "phases": [
+      {
+       "name": "install-exact-app",
+       "status": "PASS",
+       "exit_code": 0
+      },
+      {
+       "name": "install-exact-test",
+       "status": "PASS",
+       "exit_code": 0
+      },
+      {
+       "name": "exact-runtime",
+       "status": "FAIL",
+       "exit_code": 0,
+       "counts": {
+        "PASS": 5,
+        "FAIL": 1
+       },
+       "runner_ok": false,
+       "not_passed": [
+        "net.plainnotes.app.releaseacceptance.ReleaseRuntimeAcceptanceTest#mainEntryStartsAndShowsTranslatedNavigationInAllFourLocales: FAIL"
+       ]
+      },
+      {
+       "name": "cold-restarts-exact-main-launcher",
+       "status": "PASS",
+       "attempts": [
+        {
+         "exit_code": 0,
+         "pid": true,
+         "status_ok": true
+        },
+        {
+         "exit_code": 0,
+         "pid": true,
+         "status_ok": true
+        },
+        {
+         "exit_code": 0,
+         "pid": true,
+         "status_ok": true
+        }
+       ]
+      },
+      {
+       "name": "install-functional-app",
+       "status": "PASS",
+       "exit_code": 0
+      },
+      {
+       "name": "install-functional-test",
+       "status": "PASS",
+       "exit_code": 0
+      },
+      {
+       "name": "functional-all",
+       "status": "FAIL",
+       "exit_code": 0,
+       "counts": {
+        "PASS": 221,
+        "ASSUMPTION_SKIPPED": 3,
+        "FAIL": 1
+       },
+       "runner_ok": false,
+       "not_passed": [
+        "net.plainnotes.app.disguise.ProcessRestartAndroidTest#prepare: ASSUMPTION_SKIPPED",
+        "net.plainnotes.app.disguise.ProcessRestartAndroidTest#verifyFreshProcess: ASSUMPTION_SKIPPED",
+        "net.plainnotes.app.releaseacceptance.ReleaseRuntimeAcceptanceTest#mainEntryStartsAndShowsTranslatedNavigationInAllFourLocales: FAIL",
+        "net.plainnotes.app.releaseacceptance.ReminderLifecycleAcceptanceTest#scheduleBeforeReboot: ASSUMPTION_SKIPPED"
+       ]
+      },
+      {
+       "name": "process-restart-prepare",
+       "status": "PASS",
+       "exit_code": 0,
+       "counts": {
+        "PASS": 1
+       },
+       "runner_ok": true,
+       "not_passed": []
+      },
+      {
+       "name": "process-restart-verify",
+       "status": "PASS",
+       "exit_code": 0,
+       "counts": {
+        "PASS": 1
+       },
+       "runner_ok": true,
+       "not_passed": []
+      },
+      {
+       "name": "reminder-permission-denied",
+       "status": "PASS",
+       "exit_code": 0,
+       "counts": {
+        "PASS": 1
+       },
+       "runner_ok": true,
+       "not_passed": []
+      },
+      {
+       "name": "cold-restarts-functional-main-launcher",
+       "status": "PASS",
+       "attempts": [
+        {
+         "exit_code": 0,
+         "pid": true,
+         "status_ok": true
+        },
+        {
+         "exit_code": 0,
+         "pid": true,
+         "status_ok": true
+        },
+        {
+         "exit_code": 0,
+         "pid": true,
+         "status_ok": true
+        }
+       ]
+      },
+      {
+       "name": "reboot-prepare",
+       "status": "PASS",
+       "exit_code": 0,
+       "counts": {
+        "PASS": 1
+       },
+       "runner_ok": true,
+       "not_passed": []
+      },
+      {
+       "name": "reboot-reminder-recovery",
+       "status": "PASS",
+       "notification_after_reboot": true
+      }
+     ],
+     "sqlcipher_native_loads": {
+      "exact-runtime": [
+       "Load /data/app/~~lr1GpJB86aEcxMB0S7f48Q==/net.plainnotes.app-ZS6f5cPKTHskXxuqnnxjyQ==/base.apk!/lib/x86_64/libsqlcipher.so using ns clns-7 from class loader (caller=/data/app/~~lr1GpJB86aEcxMB0S7f48Q==/net.plainnotes.app-ZS6f5cPKTHskXxuqnnxjyQ==/base.apk): ok"
+      ],
+      "restarts-exact-main-launcher": [
+       "Load /data/app/~~lr1GpJB86aEcxMB0S7f48Q==/net.plainnotes.app-ZS6f5cPKTHskXxuqnnxjyQ==/base.apk!/lib/x86_64/libsqlcipher.so using ns clns-7 from class loader (caller=/data/app/~~lr1GpJB86aEcxMB0S7f48Q==/net.plainnotes.app-ZS6f5cPKTHskXxuqnnxjyQ==/base.apk): ok",
+       "Load /data/app/~~lr1GpJB86aEcxMB0S7f48Q==/net.plainnotes.app-ZS6f5cPKTHskXxuqnnxjyQ==/base.apk!/lib/x86_64/libsqlcipher.so using ns clns-7 from class loader (caller=/data/app/~~lr1GpJB86aEcxMB0S7f48Q==/net.plainnotes.app-ZS6f5cPKTHskXxuqnnxjyQ==/base.apk): ok",
+       "Load /data/app/~~lr1GpJB86aEcxMB0S7f48Q==/net.plainnotes.app-ZS6f5cPKTHskXxuqnnxjyQ==/base.apk!/lib/x86_64/libsqlcipher.so using ns clns-7 from class loader (caller=/data/app/~~lr1GpJB86aEcxMB0S7f48Q==/net.plainnotes.app-ZS6f5cPKTHskXxuqnnxjyQ==/base.apk): ok"
+      ],
+      "functional-all": [
+       "Load /data/app/~~8s4ikH_ql8pc-1el2x3JPw==/net.plainnotes.app-ZrZlAEMVSePFCZ4funlxaQ==/base.apk!/lib/x86_64/libsqlcipher.so using ns clns-7 from class loader (caller=/data/app/~~8s4ikH_ql8pc-1el2x3JPw==/net.plainnotes.app-ZrZlAEMVSePFCZ4funlxaQ==/base.apk!classes2.dex): ok"
+      ],
+      "process-restart-prepare": [
+       "Load /data/app/~~8s4ikH_ql8pc-1el2x3JPw==/net.plainnotes.app-ZrZlAEMVSePFCZ4funlxaQ==/base.apk!/lib/x86_64/libsqlcipher.so using ns clns-7 from class loader (caller=/data/app/~~8s4ikH_ql8pc-1el2x3JPw==/net.plainnotes.app-ZrZlAEMVSePFCZ4funlxaQ==/base.apk!classes2.dex): ok"
+      ],
+      "process-restart-verify": [
+       "Load /data/app/~~8s4ikH_ql8pc-1el2x3JPw==/net.plainnotes.app-ZrZlAEMVSePFCZ4funlxaQ==/base.apk!/lib/x86_64/libsqlcipher.so using ns clns-7 from class loader (caller=/data/app/~~8s4ikH_ql8pc-1el2x3JPw==/net.plainnotes.app-ZrZlAEMVSePFCZ4funlxaQ==/base.apk!classes2.dex): ok"
+      ],
+      "reminder-permission-denied": [
+       "Load /data/app/~~8s4ikH_ql8pc-1el2x3JPw==/net.plainnotes.app-ZrZlAEMVSePFCZ4funlxaQ==/base.apk!/lib/x86_64/libsqlcipher.so using ns clns-7 from class loader (caller=/data/app/~~8s4ikH_ql8pc-1el2x3JPw==/net.plainnotes.app-ZrZlAEMVSePFCZ4funlxaQ==/base.apk!classes2.dex): ok"
+      ],
+      "restarts-functional-main-launcher": [
+       "Load /data/app/~~8s4ikH_ql8pc-1el2x3JPw==/net.plainnotes.app-ZrZlAEMVSePFCZ4funlxaQ==/base.apk!/lib/x86_64/libsqlcipher.so using ns clns-7 from class loader (caller=/data/app/~~8s4ikH_ql8pc-1el2x3JPw==/net.plainnotes.app-ZrZlAEMVSePFCZ4funlxaQ==/base.apk!classes2.dex): ok",
+       "Load /data/app/~~8s4ikH_ql8pc-1el2x3JPw==/net.plainnotes.app-ZrZlAEMVSePFCZ4funlxaQ==/base.apk!/lib/x86_64/libsqlcipher.so using ns clns-7 from class loader (caller=/data/app/~~8s4ikH_ql8pc-1el2x3JPw==/net.plainnotes.app-ZrZlAEMVSePFCZ4funlxaQ==/base.apk!classes2.dex): ok",
+       "Load /data/app/~~8s4ikH_ql8pc-1el2x3JPw==/net.plainnotes.app-ZrZlAEMVSePFCZ4funlxaQ==/base.apk!/lib/x86_64/libsqlcipher.so using ns clns-7 from class loader (caller=/data/app/~~8s4ikH_ql8pc-1el2x3JPw==/net.plainnotes.app-ZrZlAEMVSePFCZ4funlxaQ==/base.apk!classes2.dex): ok"
+      ],
+      "reboot-prepare": [
+       "Load /data/app/~~8s4ikH_ql8pc-1el2x3JPw==/net.plainnotes.app-ZrZlAEMVSePFCZ4funlxaQ==/base.apk!/lib/x86_64/libsqlcipher.so using ns clns-7 from class loader (caller=/data/app/~~8s4ikH_ql8pc-1el2x3JPw==/net.plainnotes.app-ZrZlAEMVSePFCZ4funlxaQ==/base.apk!classes2.dex): ok"
+      ],
+      "after-reboot": [
+       "Load /data/app/~~8s4ikH_ql8pc-1el2x3JPw==/net.plainnotes.app-ZrZlAEMVSePFCZ4funlxaQ==/base.apk!/lib/x86_64/libsqlcipher.so using ns clns-7 from class loader (caller=/data/app/~~8s4ikH_ql8pc-1el2x3JPw==/net.plainnotes.app-ZrZlAEMVSePFCZ4funlxaQ==/base.apk!classes2.dex): ok"
+      ]
+     },
+     "evidence": {
+      "exact/launchers": {
+       "net.plainnotes.app.CalculatorLauncher": {
+        "icon": "ic_shell_calc",
+        "label": "Calculator",
+        "enabled": false,
+        "icon_size": "72x72"
+       },
+       "net.plainnotes.app.Launcher": {
+        "icon": "ic_launcher",
+        "label": "HRT Log",
+        "enabled": true,
+        "icon_size": "72x72"
+       },
+       "net.plainnotes.app.NotesLauncher": {
+        "icon": "ic_shell_notes",
+        "label": "Notes",
+        "enabled": false,
+        "icon_size": "72x72"
+       },
+       "visible_launchers": [
+        "net.plainnotes.app.Launcher"
+       ]
+      },
+      "exact/named-json": {
+       "pk-params.json": {
+        "apk": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b",
+        "class_loader": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b",
+        "expected": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b"
+       },
+       "symptom-sources.json": {
+        "apk": "51b2059cb7ff3157c29685cad998693a1565b9f6c555a12f3eac00b49527a47e",
+        "class_loader": "51b2059cb7ff3157c29685cad998693a1565b9f6c555a12f3eac00b49527a47e",
+        "expected": "51b2059cb7ff3157c29685cad998693a1565b9f6c555a12f3eac00b49527a47e"
+       },
+       "wellbeing-translations.json": {
+        "apk": "291f586a21c8f83a98301a9beb3031051201c5c4ca8f14e7143017cd13086b22",
+        "class_loader": "291f586a21c8f83a98301a9beb3031051201c5c4ca8f14e7143017cd13086b22",
+        "expected": "291f586a21c8f83a98301a9beb3031051201c5c4ca8f14e7143017cd13086b22"
+       }
+      },
+      "exact/native-abi": {
+       "supported_abis": [
+        "x86_64"
+       ],
+       "process_is_64bit": true,
+       "os_arch": "x86_64",
+       "process_abi": "x86_64",
+       "source_dir": "/data/app/~~lr1GpJB86aEcxMB0S7f48Q==/net.plainnotes.app-ZS6f5cPKTHskXxuqnnxjyQ==/base.apk",
+       "native_library_dir": "/data/app/~~lr1GpJB86aEcxMB0S7f48Q==/net.plainnotes.app-ZS6f5cPKTHskXxuqnnxjyQ==/lib/x86_64",
+       "mapped_native": [
+        "lib/x86_64/libsqlcipher.so"
+       ],
+       "apk_native_entries": [
+        "lib/arm64-v8a/libandroidx.graphics.path.so",
+        "lib/arm64-v8a/libsqlcipher.so",
+        "lib/armeabi-v7a/libandroidx.graphics.path.so",
+        "lib/armeabi-v7a/libsqlcipher.so",
+        "lib/x86/libandroidx.graphics.path.so",
+        "lib/x86/libsqlcipher.so",
+        "lib/x86_64/libandroidx.graphics.path.so",
+        "lib/x86_64/libsqlcipher.so"
+       ],
+       "scenario": "A",
+       "device": "unknown Android SDK built for x86_64 API 35 Android/sdk_phone64_x86_64/emu64x:15/AE3A.240806.019/12368160:userdebug/test-keys"
+      },
+      "exact/sqlcipher": {
+       "cipher_version": "4.10.0 community",
+       "cipher_provider": "openssl",
+       "reopen_cycles": 5,
+       "wrong_key_error": "net.zetetic.database.sqlcipher.SQLiteNotADatabaseException",
+       "rows": 500,
+       "mapped": [
+        "lib/x86_64/libsqlcipher.so"
+       ]
+      },
+      "exact/strings": {
+       "en": {
+        "source_strings": 1075,
+        "value_checked": 1075,
+        "missing": [],
+        "mismatched": [],
+        "missing_count": 0
+       },
+       "zh-CN": {
+        "source_strings": 1075,
+        "value_checked": 1075,
+        "missing": [],
+        "mismatched": [],
+        "missing_count": 0
+       },
+       "zh-TW": {
+        "source_strings": 1075,
+        "value_checked": 1075,
+        "missing": [],
+        "mismatched": [],
+        "missing_count": 0
+       },
+       "fr": {
+        "source_strings": 1075,
+        "value_checked": 1075,
+        "missing": [],
+        "mismatched": [],
+        "missing_count": 0
+       }
+      },
+      "functional/app-database": {
+       "schema_versions": [
+        9,
+        9,
+        9
+       ],
+       "plaintext_header": false,
+       "reopen_cycles": 3
+      },
+      "functional/backup": {
+       "legacy_fixture_sha256": "1ca7ac6463dee42aa9ad4af2a43ad17825f6f8cfa7c7ea05b2aa62f62f519d40",
+       "legacy_schema": 1,
+       "restored_schema": 9,
+       "layout": "PNBAK1|salt16|nonce12|AES-GCM ciphertext+tag16",
+       "fresh_size": 37916,
+       "round_trip_tables": 28
+      },
+      "functional/launchers": {
+       "net.plainnotes.app.CalculatorLauncher": {
+        "icon": "ic_shell_calc",
+        "label": "Calculator",
+        "enabled": false,
+        "icon_size": "72x72"
+       },
+       "net.plainnotes.app.Launcher": {
+        "icon": "ic_launcher",
+        "label": "HRT Log",
+        "enabled": true,
+        "icon_size": "72x72"
+       },
+       "net.plainnotes.app.NotesLauncher": {
+        "icon": "ic_shell_notes",
+        "label": "Notes",
+        "enabled": false,
+        "icon_size": "72x72"
+       },
+       "visible_launchers": [
+        "net.plainnotes.app.Launcher"
+       ]
+      },
+      "functional/migration": {
+       "from": 1,
+       "to": 9,
+       "wrong_key_error": "net.zetetic.database.sqlcipher.SQLiteNotADatabaseException"
+      },
+      "functional/named-json": {
+       "pk-params.json": {
+        "apk": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b",
+        "class_loader": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b",
+        "expected": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b"
+       },
+       "symptom-sources.json": {
+        "apk": "51b2059cb7ff3157c29685cad998693a1565b9f6c555a12f3eac00b49527a47e",
+        "class_loader": "51b2059cb7ff3157c29685cad998693a1565b9f6c555a12f3eac00b49527a47e",
+        "expected": "51b2059cb7ff3157c29685cad998693a1565b9f6c555a12f3eac00b49527a47e"
+       },
+       "wellbeing-translations.json": {
+        "apk": "291f586a21c8f83a98301a9beb3031051201c5c4ca8f14e7143017cd13086b22",
+        "class_loader": "291f586a21c8f83a98301a9beb3031051201c5c4ca8f14e7143017cd13086b22",
+        "expected": "291f586a21c8f83a98301a9beb3031051201c5c4ca8f14e7143017cd13086b22"
+       }
+      },
+      "functional/native-abi": {
+       "supported_abis": [
+        "x86_64"
+       ],
+       "process_is_64bit": true,
+       "os_arch": "x86_64",
+       "process_abi": "x86_64",
+       "source_dir": "/data/app/~~8s4ikH_ql8pc-1el2x3JPw==/net.plainnotes.app-ZrZlAEMVSePFCZ4funlxaQ==/base.apk",
+       "native_library_dir": "/data/app/~~8s4ikH_ql8pc-1el2x3JPw==/net.plainnotes.app-ZrZlAEMVSePFCZ4funlxaQ==/lib/x86_64",
+       "mapped_native": [
+        "lib/x86_64/libsqlcipher.so"
+       ],
+       "apk_native_entries": [
+        "lib/arm64-v8a/libandroidx.graphics.path.so",
+        "lib/arm64-v8a/libsqlcipher.so",
+        "lib/armeabi-v7a/libandroidx.graphics.path.so",
+        "lib/armeabi-v7a/libsqlcipher.so",
+        "lib/x86/libandroidx.graphics.path.so",
+        "lib/x86/libsqlcipher.so",
+        "lib/x86_64/libandroidx.graphics.path.so",
+        "lib/x86_64/libsqlcipher.so"
+       ],
+       "scenario": "A",
+       "apk_lib_data_ranges": {
+        "lib/arm64-v8a/libandroidx.graphics.path.so": "10780672-10790767",
+        "lib/arm64-v8a/libsqlcipher.so": "10797056-15984599",
+        "lib/armeabi-v7a/libandroidx.graphics.path.so": "15990784-15998035",
+        "lib/armeabi-v7a/libsqlcipher.so": "16007168-19564591",
+        "lib/x86/libandroidx.graphics.path.so": "19578880-19588163",
+        "lib/x86/libsqlcipher.so": "19595264-24518755",
+        "lib/x86_64/libandroidx.graphics.path.so": "24526848-24537607",
+        "lib/x86_64/libsqlcipher.so": "24543232-30289255"
+       },
+       "raw_maps": [
+        "75521466f000-755214b8d000 r-xp 01768000 fe:2b 32773                      /data/app/~~8s4ikH_ql8pc-1el2x3JPw==/net.plainnotes.app-ZrZlAEMVSePFCZ4funlxaQ==/base.apk",
+        "755214b90000-755214be8000 r--p 01c85000 fe:2b 32773                      /data/app/~~8s4ikH_ql8pc-1el2x3JPw==/net.plainnotes.app-ZrZlAEMVSePFCZ4funlxaQ==/base.apk",
+        "755214beb000-755214bf2000 rw-p 01cdc000 fe:2b 32773                      /data/app/~~8s4ikH_ql8pc-1el2x3JPw==/net.plainnotes.app-ZrZlAEMVSePFCZ4funlxaQ==/base.apk",
+        "755215f02000-75521605a000 r--s 01d30000 fe:2b 32773                      /data/app/~~8s4ikH_ql8pc-1el2x3JPw==/net.plainnotes.app-ZrZlAEMVSePFCZ4funlxaQ==/base.apk",
+        "75556a629000-75556a64b000 r--s 00106000 fe:2b 32783                      /data/app/~~efQT3eYmHwoVy5KsQqBMkw==/net.plainnotes.app.test-z3XkhwCF3y4SNokvE5Sb6g==/base.apk",
+        "75556c75a000-75556c764000 r--s 01e8a000 fe:2b 32773                      /data/app/~~8s4ikH_ql8pc-1el2x3JPw==/net.plainnotes.app-ZrZlAEMVSePFCZ4funlxaQ==/base.apk",
+        "755571663000-755571665000 r--s 0012a000 fe:2b 32783                      /data/app/~~efQT3eYmHwoVy5KsQqBMkw==/net.plainnotes.app.test-z3XkhwCF3y4SNokvE5Sb6g==/base.apk"
+       ],
+       "device": "unknown Android SDK built for x86_64 API 35 Android/sdk_phone64_x86_64/emu64x:15/AE3A.240806.019/12368160:userdebug/test-keys"
+      },
+      "functional/pdf": {
+       "en": {
+        "bytes": 109752,
+        "pages": 1,
+        "inked_pixels_page1": 13920
+       },
+       "zh-CN": {
+        "bytes": 174390,
+        "pages": 1,
+        "inked_pixels_page1": 12954
+       },
+       "zh-TW": {
+        "bytes": 196386,
+        "pages": 1,
+        "inked_pixels_page1": 13701
+       },
+       "fr": {
+        "bytes": 139897,
+        "pages": 1,
+        "inked_pixels_page1": 16370
+       },
+       "zone": "UTC"
+      },
+      "functional/reminder-granted": {
+       "permission_granted": true,
+       "posted": true,
+       "exact_allowed": false
+      },
+      "functional/reminder-lifecycle": {
+       "created": 3,
+       "cancelled_remaining": 0,
+       "rescheduled": 3,
+       "generation_changed": true,
+       "notification_posted": true
+      },
+      "functional/sqlcipher": {
+       "cipher_version": "4.10.0 community",
+       "cipher_provider": "openssl",
+       "reopen_cycles": 5,
+       "wrong_key_error": "net.zetetic.database.sqlcipher.SQLiteNotADatabaseException",
+       "rows": 500,
+       "mapped": [
+        "lib/x86_64/libsqlcipher.so"
+       ]
+      },
+      "functional/strings": {
+       "en": {
+        "source_strings": 1075,
+        "value_checked": 1075,
+        "missing": [],
+        "mismatched": [],
+        "missing_count": 0
+       },
+       "zh-CN": {
+        "source_strings": 1075,
+        "value_checked": 1075,
+        "missing": [],
+        "mismatched": [],
+        "missing_count": 0
+       },
+       "zh-TW": {
+        "source_strings": 1075,
+        "value_checked": 1075,
+        "missing": [],
+        "mismatched": [],
+        "missing_count": 0
+       },
+       "fr": {
+        "source_strings": 1075,
+        "value_checked": 1075,
+        "missing": [],
+        "mismatched": [],
+        "missing_count": 0
+       }
+      },
+      "reminder-denied/reminder-denied": {
+       "permission_granted": false,
+       "posted": false,
+       "exact_allowed": false
+      }
+     }
+    }
+   },
+   "B": {
+    "built_from": "c387b10b45b1f01ff9a3fcc6166826cbd85c139a",
+    "apks": {
+     "exact/app.apk": "fabf0690a65a45510ad86d58af874cdc8277485fb4a36b7cdc764f531f18e861",
+     "exact/test.apk": "f4d39c11302d79d13402fc2d4be1eb3038e8ca4eac10bb5fee7deac52f7077eb",
+     "functional/app.apk": "cec6bbc2c6ee1904d3c5da8bdf6bac52b97d89f0441da539aded32a1a43dcecc",
+     "functional/test.apk": "dc278c1b689d0f27de730ef65be11fe92c442e7d8dd98e8e4da8397a2cc8577f"
+    },
+    "apk_bytes": {
+     "exact/app.apk": 23761913,
+     "exact/test.apk": 979348,
+     "functional/app.apk": 32000927,
+     "functional/test.apk": 1228118
+    },
+    "conditions_exact": "scenario=B mode=exact minify=true shrinkResources=true abiFilters=[] testBuildType=release signing=debug proguard=[test-support-keep.pro, proguard-android-optimize.txt-9.1.1, proguard-rules.pro]",
+    "conditions_functional": "scenario=B mode=functional minify=true shrinkResources=true abiFilters=[] testBuildType=release signing=debug proguard=[test-support-keep.pro, functional-keep.pro, proguard-android-optimize.txt-9.1.1, proguard-rules.pro]",
+    "device-x86_64-api35": {
+     "device": {
+      "ro.product.cpu.abi": "x86_64",
+      "ro.product.cpu.abilist": "x86_64",
+      "ro.build.version.sdk": "35",
+      "ro.build.version.release": "15",
+      "ro.build.fingerprint": "Android/sdk_phone64_x86_64/emu64x:15/AE3A.240806.019/12368160:userdebug/test-keys",
+      "ro.kernel.qemu": "1",
+      "ro.boot.qemu": "1",
+      "ro.dalvik.vm.native.bridge": "0",
+      "ro.product.model": "Android SDK built for x86_64",
+      "ro.hardware": "ranchu",
+      "uname_m": "x86_64"
+     },
+     "abi_note": "universal package",
+     "status": "FAIL",
+     "phases": [
+      {
+       "name": "install-exact-app",
+       "status": "PASS",
+       "exit_code": 0
+      },
+      {
+       "name": "install-exact-test",
+       "status": "PASS",
+       "exit_code": 0
+      },
+      {
+       "name": "exact-runtime",
+       "status": "FAIL",
+       "exit_code": 0,
+       "counts": {
+        "PASS": 5,
+        "FAIL": 1
+       },
+       "runner_ok": false,
+       "not_passed": [
+        "net.plainnotes.app.releaseacceptance.ReleaseRuntimeAcceptanceTest#mainEntryStartsAndShowsTranslatedNavigationInAllFourLocales: FAIL"
+       ]
+      },
+      {
+       "name": "cold-restarts-exact-main-launcher",
+       "status": "PASS",
+       "attempts": [
+        {
+         "exit_code": 0,
+         "pid": true,
+         "status_ok": true
+        },
+        {
+         "exit_code": 0,
+         "pid": true,
+         "status_ok": true
+        },
+        {
+         "exit_code": 0,
+         "pid": true,
+         "status_ok": true
+        }
+       ]
+      },
+      {
+       "name": "install-functional-app",
+       "status": "PASS",
+       "exit_code": 0
+      },
+      {
+       "name": "install-functional-test",
+       "status": "PASS",
+       "exit_code": 0
+      },
+      {
+       "name": "functional-all",
+       "status": "FAIL",
+       "exit_code": 0,
+       "counts": {
+        "PASS": 221,
+        "ASSUMPTION_SKIPPED": 3,
+        "FAIL": 1
+       },
+       "runner_ok": false,
+       "not_passed": [
+        "net.plainnotes.app.disguise.ProcessRestartAndroidTest#prepare: ASSUMPTION_SKIPPED",
+        "net.plainnotes.app.disguise.ProcessRestartAndroidTest#verifyFreshProcess: ASSUMPTION_SKIPPED",
+        "net.plainnotes.app.releaseacceptance.ReleaseRuntimeAcceptanceTest#mainEntryStartsAndShowsTranslatedNavigationInAllFourLocales: FAIL",
+        "net.plainnotes.app.releaseacceptance.ReminderLifecycleAcceptanceTest#scheduleBeforeReboot: ASSUMPTION_SKIPPED"
+       ]
+      },
+      {
+       "name": "process-restart-prepare",
+       "status": "PASS",
+       "exit_code": 0,
+       "counts": {
+        "PASS": 1
+       },
+       "runner_ok": true,
+       "not_passed": []
+      },
+      {
+       "name": "process-restart-verify",
+       "status": "PASS",
+       "exit_code": 0,
+       "counts": {
+        "PASS": 1
+       },
+       "runner_ok": true,
+       "not_passed": []
+      },
+      {
+       "name": "reminder-permission-denied",
+       "status": "PASS",
+       "exit_code": 0,
+       "counts": {
+        "PASS": 1
+       },
+       "runner_ok": true,
+       "not_passed": []
+      },
+      {
+       "name": "cold-restarts-functional-main-launcher",
+       "status": "PASS",
+       "attempts": [
+        {
+         "exit_code": 0,
+         "pid": true,
+         "status_ok": true
+        },
+        {
+         "exit_code": 0,
+         "pid": true,
+         "status_ok": true
+        },
+        {
+         "exit_code": 0,
+         "pid": true,
+         "status_ok": true
+        }
+       ]
+      },
+      {
+       "name": "reboot-prepare",
+       "status": "PASS",
+       "exit_code": 0,
+       "counts": {
+        "PASS": 1
+       },
+       "runner_ok": true,
+       "not_passed": []
+      },
+      {
+       "name": "reboot-reminder-recovery",
+       "status": "PASS",
+       "notification_after_reboot": true
+      }
+     ],
+     "sqlcipher_native_loads": {
+      "exact-runtime": [
+       "Load /data/app/~~j9eFET39mGynbqlOYOTijA==/net.plainnotes.app-1onYPYdXatEVEQgJQs9lPA==/base.apk!/lib/x86_64/libsqlcipher.so using ns clns-7 from class loader (caller=/data/app/~~j9eFET39mGynbqlOYOTijA==/net.plainnotes.app-1onYPYdXatEVEQgJQs9lPA==/base.apk): ok"
+      ],
+      "restarts-exact-main-launcher": [
+       "Load /data/app/~~j9eFET39mGynbqlOYOTijA==/net.plainnotes.app-1onYPYdXatEVEQgJQs9lPA==/base.apk!/lib/x86_64/libsqlcipher.so using ns clns-7 from class loader (caller=/data/app/~~j9eFET39mGynbqlOYOTijA==/net.plainnotes.app-1onYPYdXatEVEQgJQs9lPA==/base.apk): ok",
+       "Load /data/app/~~j9eFET39mGynbqlOYOTijA==/net.plainnotes.app-1onYPYdXatEVEQgJQs9lPA==/base.apk!/lib/x86_64/libsqlcipher.so using ns clns-7 from class loader (caller=/data/app/~~j9eFET39mGynbqlOYOTijA==/net.plainnotes.app-1onYPYdXatEVEQgJQs9lPA==/base.apk): ok",
+       "Load /data/app/~~j9eFET39mGynbqlOYOTijA==/net.plainnotes.app-1onYPYdXatEVEQgJQs9lPA==/base.apk!/lib/x86_64/libsqlcipher.so using ns clns-7 from class loader (caller=/data/app/~~j9eFET39mGynbqlOYOTijA==/net.plainnotes.app-1onYPYdXatEVEQgJQs9lPA==/base.apk): ok"
+      ],
+      "functional-all": [
+       "Load /data/app/~~HfCXZFLCwqmw1p75e2H2ag==/net.plainnotes.app-VnLVWyUkBhCa7cBPCtGBkA==/base.apk!/lib/x86_64/libsqlcipher.so using ns clns-7 from class loader (caller=/data/app/~~HfCXZFLCwqmw1p75e2H2ag==/net.plainnotes.app-VnLVWyUkBhCa7cBPCtGBkA==/base.apk!classes2.dex): ok"
+      ],
+      "process-restart-prepare": [
+       "Load /data/app/~~HfCXZFLCwqmw1p75e2H2ag==/net.plainnotes.app-VnLVWyUkBhCa7cBPCtGBkA==/base.apk!/lib/x86_64/libsqlcipher.so using ns clns-7 from class loader (caller=/data/app/~~HfCXZFLCwqmw1p75e2H2ag==/net.plainnotes.app-VnLVWyUkBhCa7cBPCtGBkA==/base.apk!classes2.dex): ok"
+      ],
+      "process-restart-verify": [
+       "Load /data/app/~~HfCXZFLCwqmw1p75e2H2ag==/net.plainnotes.app-VnLVWyUkBhCa7cBPCtGBkA==/base.apk!/lib/x86_64/libsqlcipher.so using ns clns-7 from class loader (caller=/data/app/~~HfCXZFLCwqmw1p75e2H2ag==/net.plainnotes.app-VnLVWyUkBhCa7cBPCtGBkA==/base.apk!classes2.dex): ok"
+      ],
+      "reminder-permission-denied": [
+       "Load /data/app/~~HfCXZFLCwqmw1p75e2H2ag==/net.plainnotes.app-VnLVWyUkBhCa7cBPCtGBkA==/base.apk!/lib/x86_64/libsqlcipher.so using ns clns-7 from class loader (caller=/data/app/~~HfCXZFLCwqmw1p75e2H2ag==/net.plainnotes.app-VnLVWyUkBhCa7cBPCtGBkA==/base.apk!classes2.dex): ok"
+      ],
+      "restarts-functional-main-launcher": [
+       "Load /data/app/~~HfCXZFLCwqmw1p75e2H2ag==/net.plainnotes.app-VnLVWyUkBhCa7cBPCtGBkA==/base.apk!/lib/x86_64/libsqlcipher.so using ns clns-7 from class loader (caller=/data/app/~~HfCXZFLCwqmw1p75e2H2ag==/net.plainnotes.app-VnLVWyUkBhCa7cBPCtGBkA==/base.apk!classes2.dex): ok",
+       "Load /data/app/~~HfCXZFLCwqmw1p75e2H2ag==/net.plainnotes.app-VnLVWyUkBhCa7cBPCtGBkA==/base.apk!/lib/x86_64/libsqlcipher.so using ns clns-7 from class loader (caller=/data/app/~~HfCXZFLCwqmw1p75e2H2ag==/net.plainnotes.app-VnLVWyUkBhCa7cBPCtGBkA==/base.apk!classes2.dex): ok",
+       "Load /data/app/~~HfCXZFLCwqmw1p75e2H2ag==/net.plainnotes.app-VnLVWyUkBhCa7cBPCtGBkA==/base.apk!/lib/x86_64/libsqlcipher.so using ns clns-7 from class loader (caller=/data/app/~~HfCXZFLCwqmw1p75e2H2ag==/net.plainnotes.app-VnLVWyUkBhCa7cBPCtGBkA==/base.apk!classes2.dex): ok"
+      ],
+      "reboot-prepare": [
+       "Load /data/app/~~HfCXZFLCwqmw1p75e2H2ag==/net.plainnotes.app-VnLVWyUkBhCa7cBPCtGBkA==/base.apk!/lib/x86_64/libsqlcipher.so using ns clns-7 from class loader (caller=/data/app/~~HfCXZFLCwqmw1p75e2H2ag==/net.plainnotes.app-VnLVWyUkBhCa7cBPCtGBkA==/base.apk!classes2.dex): ok"
+      ],
+      "after-reboot": [
+       "Load /data/app/~~HfCXZFLCwqmw1p75e2H2ag==/net.plainnotes.app-VnLVWyUkBhCa7cBPCtGBkA==/base.apk!/lib/x86_64/libsqlcipher.so using ns clns-7 from class loader (caller=/data/app/~~HfCXZFLCwqmw1p75e2H2ag==/net.plainnotes.app-VnLVWyUkBhCa7cBPCtGBkA==/base.apk!classes2.dex): ok"
+      ]
+     },
+     "evidence": {
+      "exact/launchers": {
+       "net.plainnotes.app.CalculatorLauncher": {
+        "icon": "ic_shell_calc",
+        "label": "Calculator",
+        "enabled": false,
+        "icon_size": "72x72"
+       },
+       "net.plainnotes.app.Launcher": {
+        "icon": "ic_launcher",
+        "label": "HRT Log",
+        "enabled": true,
+        "icon_size": "72x72"
+       },
+       "net.plainnotes.app.NotesLauncher": {
+        "icon": "ic_shell_notes",
+        "label": "Notes",
+        "enabled": false,
+        "icon_size": "72x72"
+       },
+       "visible_launchers": [
+        "net.plainnotes.app.Launcher"
+       ]
+      },
+      "exact/named-json": {
+       "pk-params.json": {
+        "apk": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b",
+        "class_loader": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b",
+        "expected": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b"
+       },
+       "symptom-sources.json": {
+        "apk": "51b2059cb7ff3157c29685cad998693a1565b9f6c555a12f3eac00b49527a47e",
+        "class_loader": "51b2059cb7ff3157c29685cad998693a1565b9f6c555a12f3eac00b49527a47e",
+        "expected": "51b2059cb7ff3157c29685cad998693a1565b9f6c555a12f3eac00b49527a47e"
+       },
+       "wellbeing-translations.json": {
+        "apk": "291f586a21c8f83a98301a9beb3031051201c5c4ca8f14e7143017cd13086b22",
+        "class_loader": "291f586a21c8f83a98301a9beb3031051201c5c4ca8f14e7143017cd13086b22",
+        "expected": "291f586a21c8f83a98301a9beb3031051201c5c4ca8f14e7143017cd13086b22"
+       }
+      },
+      "exact/native-abi": {
+       "supported_abis": [
+        "x86_64"
+       ],
+       "process_is_64bit": true,
+       "os_arch": "x86_64",
+       "process_abi": "x86_64",
+       "source_dir": "/data/app/~~j9eFET39mGynbqlOYOTijA==/net.plainnotes.app-1onYPYdXatEVEQgJQs9lPA==/base.apk",
+       "native_library_dir": "/data/app/~~j9eFET39mGynbqlOYOTijA==/net.plainnotes.app-1onYPYdXatEVEQgJQs9lPA==/lib/x86_64",
+       "mapped_native": [
+        "lib/x86_64/libsqlcipher.so"
+       ],
+       "apk_native_entries": [
+        "lib/arm64-v8a/libandroidx.graphics.path.so",
+        "lib/arm64-v8a/libsqlcipher.so",
+        "lib/armeabi-v7a/libandroidx.graphics.path.so",
+        "lib/armeabi-v7a/libsqlcipher.so",
+        "lib/x86/libandroidx.graphics.path.so",
+        "lib/x86/libsqlcipher.so",
+        "lib/x86_64/libandroidx.graphics.path.so",
+        "lib/x86_64/libsqlcipher.so"
+       ],
+       "scenario": "B",
+       "device": "unknown Android SDK built for x86_64 API 35 Android/sdk_phone64_x86_64/emu64x:15/AE3A.240806.019/12368160:userdebug/test-keys"
+      },
+      "exact/sqlcipher": {
+       "cipher_version": "4.10.0 community",
+       "cipher_provider": "openssl",
+       "reopen_cycles": 5,
+       "wrong_key_error": "net.zetetic.database.sqlcipher.SQLiteNotADatabaseException",
+       "rows": 500,
+       "mapped": [
+        "lib/x86_64/libsqlcipher.so"
+       ]
+      },
+      "exact/strings": {
+       "en": {
+        "source_strings": 1075,
+        "value_checked": 1004,
+        "missing": [
+         "calendar_back_today",
+         "calendar_showing_from",
+         "epoch_number",
+         "epoch_view",
+         "epochs",
+         "epochs_empty",
+         "history_imported_short",
+         "history_next",
+         "history_planned_at",
+         "history_planned_dose",
+         "history_taken_at",
+         "history_unscheduled",
+         "history_unscheduled_short",
+         "import_link_empty",
+         "import_link_help",
+         "lab_since_dose",
+         "language_desc",
+         "language_open",
+         "nothing_planned_body",
+         "nothing_planned_title",
+         "period_confirm",
+         "period_confirm_intro",
+         "period_confirmed_by_user",
+         "period_deleted",
+         "period_edit",
+         "period_edit_title_merge",
+         "period_evidence_summary",
+         "period_frequency_required",
+         "period_menu_delete_correction",
+         "period_menu_edit_stop",
+         "period_menu_merge_next",
+         "period_menu_restore",
+         "period_menu_split",
+         "period_menu_undo",
+         "period_merge_choose",
+         "period_merge_custom",
+         "period_merge_next",
+         "period_merge_use_next",
+         "period_merge_use_previous",
+         "period_mergeable",
+         "period_observed",
+         "period_overlap_error",
+         "period_partly_confirmed",
+         "period_partly_pending",
+         "period_pending",
+         "period_revoke",
+         "period_revoke_note",
+         "period_short_delete",
+         "period_short_edit",
+         "period_split",
+         "period_stop_from",
+         "period_stop_last",
+         "timeline_all_epochs",
+         "timeline_all_time",
+         "timeline_all_types",
+         "timeline_days",
+         "timeline_details",
+         "timeline_empty",
+         "timeline_epoch_uncertain",
+         "timeline_filters",
+         "timeline_global_filter",
+         "timeline_intro",
+         "timeline_late",
+         "timeline_less",
+         "timeline_open",
+         "timeline_other_plan",
+         "timeline_planned_note",
+         "timeline_show_planned",
+         "timeline_time_unknown",
+         "timeline_unconfirmed_count",
+         "timeline_unconfirmed_note"
+        ],
+        "mismatched": [],
+        "missing_count": 71
+       },
+       "zh-CN": {
+        "source_strings": 1075,
+        "value_checked": 1004,
+        "missing": [
+         "calendar_back_today",
+         "calendar_showing_from",
+         "epoch_number",
+         "epoch_view",
+         "epochs",
+         "epochs_empty",
+         "history_imported_short",
+         "history_next",
+         "history_planned_at",
+         "history_planned_dose",
+         "history_taken_at",
+         "history_unscheduled",
+         "history_unscheduled_short",
+         "import_link_empty",
+         "import_link_help",
+         "lab_since_dose",
+         "language_desc",
+         "language_open",
+         "nothing_planned_body",
+         "nothing_planned_title",
+         "period_confirm",
+         "period_confirm_intro",
+         "period_confirmed_by_user",
+         "period_deleted",
+         "period_edit",
+         "period_edit_title_merge",
+         "period_evidence_summary",
+         "period_frequency_required",
+         "period_menu_delete_correction",
+         "period_menu_edit_stop",
+         "period_menu_merge_next",
+         "period_menu_restore",
+         "period_menu_split",
+         "period_menu_undo",
+         "period_merge_choose",
+         "period_merge_custom",
+         "period_merge_next",
+         "period_merge_use_next",
+         "period_merge_use_previous",
+         "period_mergeable",
+         "period_observed",
+         "period_overlap_error",
+         "period_partly_confirmed",
+         "period_partly_pending",
+         "period_pending",
+         "period_revoke",
+         "period_revoke_note",
+         "period_short_delete",
+         "period_short_edit",
+         "period_split",
+         "period_stop_from",
+         "period_stop_last",
+         "timeline_all_epochs",
+         "timeline_all_time",
+         "timeline_all_types",
+         "timeline_days",
+         "timeline_details",
+         "timeline_empty",
+         "timeline_epoch_uncertain",
+         "timeline_filters",
+         "timeline_global_filter",
+         "timeline_intro",
+         "timeline_late",
+         "timeline_less",
+         "timeline_open",
+         "timeline_other_plan",
+         "timeline_planned_note",
+         "timeline_show_planned",
+         "timeline_time_unknown",
+         "timeline_unconfirmed_count",
+         "timeline_unconfirmed_note"
+        ],
+        "mismatched": [],
+        "missing_count": 71
+       },
+       "zh-TW": {
+        "source_strings": 1075,
+        "value_checked": 1004,
+        "missing": [
+         "calendar_back_today",
+         "calendar_showing_from",
+         "epoch_number",
+         "epoch_view",
+         "epochs",
+         "epochs_empty",
+         "history_imported_short",
+         "history_next",
+         "history_planned_at",
+         "history_planned_dose",
+         "history_taken_at",
+         "history_unscheduled",
+         "history_unscheduled_short",
+         "import_link_empty",
+         "import_link_help",
+         "lab_since_dose",
+         "language_desc",
+         "language_open",
+         "nothing_planned_body",
+         "nothing_planned_title",
+         "period_confirm",
+         "period_confirm_intro",
+         "period_confirmed_by_user",
+         "period_deleted",
+         "period_edit",
+         "period_edit_title_merge",
+         "period_evidence_summary",
+         "period_frequency_required",
+         "period_menu_delete_correction",
+         "period_menu_edit_stop",
+         "period_menu_merge_next",
+         "period_menu_restore",
+         "period_menu_split",
+         "period_menu_undo",
+         "period_merge_choose",
+         "period_merge_custom",
+         "period_merge_next",
+         "period_merge_use_next",
+         "period_merge_use_previous",
+         "period_mergeable",
+         "period_observed",
+         "period_overlap_error",
+         "period_partly_confirmed",
+         "period_partly_pending",
+         "period_pending",
+         "period_revoke",
+         "period_revoke_note",
+         "period_short_delete",
+         "period_short_edit",
+         "period_split",
+         "period_stop_from",
+         "period_stop_last",
+         "timeline_all_epochs",
+         "timeline_all_time",
+         "timeline_all_types",
+         "timeline_days",
+         "timeline_details",
+         "timeline_empty",
+         "timeline_epoch_uncertain",
+         "timeline_filters",
+         "timeline_global_filter",
+         "timeline_intro",
+         "timeline_late",
+         "timeline_less",
+         "timeline_open",
+         "timeline_other_plan",
+         "timeline_planned_note",
+         "timeline_show_planned",
+         "timeline_time_unknown",
+         "timeline_unconfirmed_count",
+         "timeline_unconfirmed_note"
+        ],
+        "mismatched": [],
+        "missing_count": 71
+       },
+       "fr": {
+        "source_strings": 1075,
+        "value_checked": 1004,
+        "missing": [
+         "calendar_back_today",
+         "calendar_showing_from",
+         "epoch_number",
+         "epoch_view",
+         "epochs",
+         "epochs_empty",
+         "history_imported_short",
+         "history_next",
+         "history_planned_at",
+         "history_planned_dose",
+         "history_taken_at",
+         "history_unscheduled",
+         "history_unscheduled_short",
+         "import_link_empty",
+         "import_link_help",
+         "lab_since_dose",
+         "language_desc",
+         "language_open",
+         "nothing_planned_body",
+         "nothing_planned_title",
+         "period_confirm",
+         "period_confirm_intro",
+         "period_confirmed_by_user",
+         "period_deleted",
+         "period_edit",
+         "period_edit_title_merge",
+         "period_evidence_summary",
+         "period_frequency_required",
+         "period_menu_delete_correction",
+         "period_menu_edit_stop",
+         "period_menu_merge_next",
+         "period_menu_restore",
+         "period_menu_split",
+         "period_menu_undo",
+         "period_merge_choose",
+         "period_merge_custom",
+         "period_merge_next",
+         "period_merge_use_next",
+         "period_merge_use_previous",
+         "period_mergeable",
+         "period_observed",
+         "period_overlap_error",
+         "period_partly_confirmed",
+         "period_partly_pending",
+         "period_pending",
+         "period_revoke",
+         "period_revoke_note",
+         "period_short_delete",
+         "period_short_edit",
+         "period_split",
+         "period_stop_from",
+         "period_stop_last",
+         "timeline_all_epochs",
+         "timeline_all_time",
+         "timeline_all_types",
+         "timeline_days",
+         "timeline_details",
+         "timeline_empty",
+         "timeline_epoch_uncertain",
+         "timeline_filters",
+         "timeline_global_filter",
+         "timeline_intro",
+         "timeline_late",
+         "timeline_less",
+         "timeline_open",
+         "timeline_other_plan",
+         "timeline_planned_note",
+         "timeline_show_planned",
+         "timeline_time_unknown",
+         "timeline_unconfirmed_count",
+         "timeline_unconfirmed_note"
+        ],
+        "mismatched": [],
+        "missing_count": 71
+       }
+      },
+      "functional/app-database": {
+       "schema_versions": [
+        9,
+        9,
+        9
+       ],
+       "plaintext_header": false,
+       "reopen_cycles": 3
+      },
+      "functional/backup": {
+       "legacy_fixture_sha256": "1ca7ac6463dee42aa9ad4af2a43ad17825f6f8cfa7c7ea05b2aa62f62f519d40",
+       "legacy_schema": 1,
+       "restored_schema": 9,
+       "layout": "PNBAK1|salt16|nonce12|AES-GCM ciphertext+tag16",
+       "fresh_size": 37916,
+       "round_trip_tables": 28
+      },
+      "functional/launchers": {
+       "net.plainnotes.app.CalculatorLauncher": {
+        "icon": "ic_shell_calc",
+        "label": "Calculator",
+        "enabled": false,
+        "icon_size": "72x72"
+       },
+       "net.plainnotes.app.Launcher": {
+        "icon": "ic_launcher",
+        "label": "HRT Log",
+        "enabled": true,
+        "icon_size": "72x72"
+       },
+       "net.plainnotes.app.NotesLauncher": {
+        "icon": "ic_shell_notes",
+        "label": "Notes",
+        "enabled": false,
+        "icon_size": "72x72"
+       },
+       "visible_launchers": [
+        "net.plainnotes.app.Launcher"
+       ]
+      },
+      "functional/migration": {
+       "from": 1,
+       "to": 9,
+       "wrong_key_error": "net.zetetic.database.sqlcipher.SQLiteNotADatabaseException"
+      },
+      "functional/named-json": {
+       "pk-params.json": {
+        "apk": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b",
+        "class_loader": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b",
+        "expected": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b"
+       },
+       "symptom-sources.json": {
+        "apk": "51b2059cb7ff3157c29685cad998693a1565b9f6c555a12f3eac00b49527a47e",
+        "class_loader": "51b2059cb7ff3157c29685cad998693a1565b9f6c555a12f3eac00b49527a47e",
+        "expected": "51b2059cb7ff3157c29685cad998693a1565b9f6c555a12f3eac00b49527a47e"
+       },
+       "wellbeing-translations.json": {
+        "apk": "291f586a21c8f83a98301a9beb3031051201c5c4ca8f14e7143017cd13086b22",
+        "class_loader": "291f586a21c8f83a98301a9beb3031051201c5c4ca8f14e7143017cd13086b22",
+        "expected": "291f586a21c8f83a98301a9beb3031051201c5c4ca8f14e7143017cd13086b22"
+       }
+      },
+      "functional/native-abi": {
+       "supported_abis": [
+        "x86_64"
+       ],
+       "process_is_64bit": true,
+       "os_arch": "x86_64",
+       "process_abi": "x86_64",
+       "source_dir": "/data/app/~~HfCXZFLCwqmw1p75e2H2ag==/net.plainnotes.app-VnLVWyUkBhCa7cBPCtGBkA==/base.apk",
+       "native_library_dir": "/data/app/~~HfCXZFLCwqmw1p75e2H2ag==/net.plainnotes.app-VnLVWyUkBhCa7cBPCtGBkA==/lib/x86_64",
+       "mapped_native": [
+        "lib/x86_64/libsqlcipher.so"
+       ],
+       "apk_native_entries": [
+        "lib/arm64-v8a/libandroidx.graphics.path.so",
+        "lib/arm64-v8a/libsqlcipher.so",
+        "lib/armeabi-v7a/libandroidx.graphics.path.so",
+        "lib/armeabi-v7a/libsqlcipher.so",
+        "lib/x86/libandroidx.graphics.path.so",
+        "lib/x86/libsqlcipher.so",
+        "lib/x86_64/libandroidx.graphics.path.so",
+        "lib/x86_64/libsqlcipher.so"
+       ],
+       "scenario": "B",
+       "apk_lib_data_ranges": {
+        "lib/arm64-v8a/libandroidx.graphics.path.so": "10780672-10790767",
+        "lib/arm64-v8a/libsqlcipher.so": "10797056-15984599",
+        "lib/armeabi-v7a/libandroidx.graphics.path.so": "15990784-15998035",
+        "lib/armeabi-v7a/libsqlcipher.so": "16007168-19564591",
+        "lib/x86/libandroidx.graphics.path.so": "19578880-19588163",
+        "lib/x86/libsqlcipher.so": "19595264-24518755",
+        "lib/x86_64/libandroidx.graphics.path.so": "24526848-24537607",
+        "lib/x86_64/libsqlcipher.so": "24543232-30289255"
+       },
+       "raw_maps": [
+        "71071fe7a000-710720398000 r-xp 01768000 fe:2b 32773                      /data/app/~~HfCXZFLCwqmw1p75e2H2ag==/net.plainnotes.app-VnLVWyUkBhCa7cBPCtGBkA==/base.apk",
+        "71072039b000-7107203f3000 r--p 01c85000 fe:2b 32773                      /data/app/~~HfCXZFLCwqmw1p75e2H2ag==/net.plainnotes.app-VnLVWyUkBhCa7cBPCtGBkA==/base.apk",
+        "7107203f6000-7107203fd000 rw-p 01cdc000 fe:2b 32773                      /data/app/~~HfCXZFLCwqmw1p75e2H2ag==/net.plainnotes.app-VnLVWyUkBhCa7cBPCtGBkA==/base.apk",
+        "7107264b4000-710726600000 r--s 01d2e000 fe:2b 32773                      /data/app/~~HfCXZFLCwqmw1p75e2H2ag==/net.plainnotes.app-VnLVWyUkBhCa7cBPCtGBkA==/base.apk",
+        "710a694e2000-710a69504000 r--s 00106000 fe:2b 32783                      /data/app/~~dKrDuIPU5TNhYBtS6IgJxg==/net.plainnotes.app.test-nyMy0JGabvxh-ZahOk-7Yg==/base.apk",
+        "710a76bc8000-710a76bd1000 r--s 01e7c000 fe:2b 32773                      /data/app/~~HfCXZFLCwqmw1p75e2H2ag==/net.plainnotes.app-VnLVWyUkBhCa7cBPCtGBkA==/base.apk",
+        "710a76ffc000-710a76ffe000 r--s 0012a000 fe:2b 32783                      /data/app/~~dKrDuIPU5TNhYBtS6IgJxg==/net.plainnotes.app.test-nyMy0JGabvxh-ZahOk-7Yg==/base.apk"
+       ],
+       "device": "unknown Android SDK built for x86_64 API 35 Android/sdk_phone64_x86_64/emu64x:15/AE3A.240806.019/12368160:userdebug/test-keys"
+      },
+      "functional/pdf": {
+       "en": {
+        "bytes": 109752,
+        "pages": 1,
+        "inked_pixels_page1": 13920
+       },
+       "zh-CN": {
+        "bytes": 174390,
+        "pages": 1,
+        "inked_pixels_page1": 12954
+       },
+       "zh-TW": {
+        "bytes": 196386,
+        "pages": 1,
+        "inked_pixels_page1": 13701
+       },
+       "fr": {
+        "bytes": 139897,
+        "pages": 1,
+        "inked_pixels_page1": 16370
+       },
+       "zone": "UTC"
+      },
+      "functional/reminder-granted": {
+       "permission_granted": true,
+       "posted": true,
+       "exact_allowed": false
+      },
+      "functional/reminder-lifecycle": {
+       "created": 3,
+       "cancelled_remaining": 0,
+       "rescheduled": 3,
+       "generation_changed": true,
+       "notification_posted": true
+      },
+      "functional/sqlcipher": {
+       "cipher_version": "4.10.0 community",
+       "cipher_provider": "openssl",
+       "reopen_cycles": 5,
+       "wrong_key_error": "net.zetetic.database.sqlcipher.SQLiteNotADatabaseException",
+       "rows": 500,
+       "mapped": [
+        "lib/x86_64/libsqlcipher.so"
+       ]
+      },
+      "functional/strings": {
+       "en": {
+        "source_strings": 1075,
+        "value_checked": 1075,
+        "missing": [],
+        "mismatched": [],
+        "missing_count": 0
+       },
+       "zh-CN": {
+        "source_strings": 1075,
+        "value_checked": 1075,
+        "missing": [],
+        "mismatched": [],
+        "missing_count": 0
+       },
+       "zh-TW": {
+        "source_strings": 1075,
+        "value_checked": 1075,
+        "missing": [],
+        "mismatched": [],
+        "missing_count": 0
+       },
+       "fr": {
+        "source_strings": 1075,
+        "value_checked": 1075,
+        "missing": [],
+        "mismatched": [],
+        "missing_count": 0
+       }
+      },
+      "reminder-denied/reminder-denied": {
+       "permission_granted": false,
+       "posted": false,
+       "exact_allowed": false
+      }
+     }
+    }
+   },
+   "C": {
+    "built_from": "c387b10b45b1f01ff9a3fcc6166826cbd85c139a",
+    "apks": {
+     "exact/app.apk": "52e47da8c475fb8e0ebee62d9a52090a711dfcab1f7349163e2efad4f0e474c4",
+     "exact/test.apk": "d46899e56a7454f4e35f8750d7d4893459c9e6e361cd842af006f203290c8922",
+     "functional/app.apk": "d7f5ee6f2b2791232943d9807c7ad6b9f51c54942bcc39b215df64dd42bd0986",
+     "functional/test.apk": "07cdc51ce8e78b65bbf847781eca3b8465b0be61d3bbffbcbb6d40685b16d4d7"
+    },
+    "apk_bytes": {
+     "exact/app.apk": 9774181,
+     "exact/test.apk": 979356,
+     "functional/app.apk": 17756922,
+     "functional/test.apk": 1228126
+    },
+    "conditions_exact": "scenario=C mode=exact minify=true shrinkResources=false abiFilters=[arm64-v8a] testBuildType=release signing=debug proguard=[test-support-keep.pro, proguard-android-optimize.txt-9.1.1, proguard-rules.pro]",
+    "conditions_functional": "scenario=C mode=functional minify=true shrinkResources=false abiFilters=[arm64-v8a] testBuildType=release signing=debug proguard=[test-support-keep.pro, functional-keep.pro, proguard-android-optimize.txt-9.1.1, proguard-rules.pro]",
+    "device-x86_64-api35": {
+     "device": {
+      "ro.product.cpu.abi": "x86_64",
+      "ro.product.cpu.abilist": "x86_64",
+      "ro.build.version.sdk": "35",
+      "ro.build.version.release": "15",
+      "ro.build.fingerprint": "Android/sdk_phone64_x86_64/emu64x:15/AE3A.240806.019/12368160:userdebug/test-keys",
+      "ro.kernel.qemu": "1",
+      "ro.boot.qemu": "1",
+      "ro.dalvik.vm.native.bridge": "0",
+      "ro.product.model": "Android SDK built for x86_64",
+      "ro.hardware": "ranchu",
+      "uname_m": "x86_64"
+     },
+     "abi_note": "ARM64-only package on a non-ARM64 device",
+     "status": "PARTIAL",
+     "phases": [
+      {
+       "name": "arm64-package-refused-on-non-arm64-device",
+       "status": "PASS",
+       "exit_code": 1,
+       "expectation": "Package Manager refuses an arm64-only APK on a device without arm64-v8a"
+      },
+      {
+       "name": "runtime-on-arm64",
+       "status": "BLOCKED",
+       "reason": "Device ABIs ['x86_64']; no ARM64 runtime available in this job."
+      }
+     ],
+     "sqlcipher_native_loads": null
+    }
+   },
+   "D": {
+    "built_from": "c387b10b45b1f01ff9a3fcc6166826cbd85c139a",
+    "apks": {
+     "exact/app.apk": "79e3d679b7401edca386b7b0d78fad8ec7f332d6b0d5476a4166e9fa08f382a9",
+     "exact/test.apk": "8101615b84b46ffdf74bb7bf8d1cd05026246436e6cf9920743db685cf4b245e",
+     "functional/app.apk": "d367748edf5fb02a3608457ab5d89dcbf31117a9717c52ea10d9b49cc1ed55a2",
+     "functional/test.apk": "c914f2e350cd155a252b9ed174a4fa3ab9e8d0d194c2a02b15395034fce0780c"
+    },
+    "apk_bytes": {
+     "exact/app.apk": 9456782,
+     "exact/test.apk": 979360,
+     "functional/app.apk": 17695796,
+     "functional/test.apk": 1228130
+    },
+    "conditions_exact": "scenario=D mode=exact minify=true shrinkResources=true abiFilters=[arm64-v8a] testBuildType=release signing=debug proguard=[test-support-keep.pro, proguard-android-optimize.txt-9.1.1, proguard-rules.pro]",
+    "conditions_functional": "scenario=D mode=functional minify=true shrinkResources=true abiFilters=[arm64-v8a] testBuildType=release signing=debug proguard=[test-support-keep.pro, functional-keep.pro, proguard-android-optimize.txt-9.1.1, proguard-rules.pro]",
+    "device-x86_64-api35": {
+     "device": {
+      "ro.product.cpu.abi": "x86_64",
+      "ro.product.cpu.abilist": "x86_64",
+      "ro.build.version.sdk": "35",
+      "ro.build.version.release": "15",
+      "ro.build.fingerprint": "Android/sdk_phone64_x86_64/emu64x:15/AE3A.240806.019/12368160:userdebug/test-keys",
+      "ro.kernel.qemu": "1",
+      "ro.boot.qemu": "1",
+      "ro.dalvik.vm.native.bridge": "0",
+      "ro.product.model": "Android SDK built for x86_64",
+      "ro.hardware": "ranchu",
+      "uname_m": "x86_64"
+     },
+     "abi_note": "ARM64-only package on a non-ARM64 device",
+     "status": "PARTIAL",
+     "phases": [
+      {
+       "name": "arm64-package-refused-on-non-arm64-device",
+       "status": "PASS",
+       "exit_code": 1,
+       "expectation": "Package Manager refuses an arm64-only APK on a device without arm64-v8a"
+      },
+      {
+       "name": "runtime-on-arm64",
+       "status": "BLOCKED",
+       "reason": "Device ABIs ['x86_64']; no ARM64 runtime available in this job."
+      }
+     ],
+     "sqlcipher_native_loads": null
+    }
+   }
+  },
+  "arm64_probes": {
+   "macos-15": "runner=macos-15\nDarwin sjc22-bt145-a2d05e77-9dba-4d2f-8cd3-66a8306b74b5-D64BF3354D4B.local 24.6.0 Darwin Kernel Version 24.6.0: Tue Jul 21 20:51:34 PDT 2026; root:xnu-11417.140.69.711.44~1/RELEASE_ARM64_VMAPPLE arm64\nmachine=arm64\nhv_support=sysctl: unknown oid 'kern.hv_support'\nApple M1 (Virtual)\n1\nrepository_download_exit=0\nemulator_archive linux x64 emulator-linux_x64-16489710.zip\nemulator_archive macosx x64 emulator-darwin_x64-16489710.zip\nemulator_archive macosx aarch64 emulator-darwin_aarch64-16489710.zip\nemulator_archive windows x64 emulator-windows_x64-16489710.zip\naccel:\n0\nHypervisor.Framework OS X Version 15.7\naccel\naccel_check_exit=0\n",
+   "ubuntu-24.04-arm": "runner=ubuntu-24.04-arm\nLinux runnervmy3dvn 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:12:01 UTC 2026 aarch64 aarch64 aarch64 GNU/Linux\nmachine=aarch64\nkvm=absent\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm jscvt fcma lrcpc dcpop sha3 sm3 sm4 asimddp sha512 sve asimdfhm uscat ilrcpc flagm sb paca pacg dcpodp sve2 sveaes svebitperm svesha3 svesm4 flagm2 frint svei8mm svebf16 i8mm bf16\nkvm\nrepository_download_exit=0\nemulator_archive linux x64 emulator-linux_x64-16489710.zip\nemulator_archive macosx x64 emulator-darwin_x64-16489710.zip\nemulator_archive macosx aarch64 emulator-darwin_aarch64-16489710.zip\nemulator_archive windows x64 emulator-windows_x64-16489710.zip\n"
+  }
+ }
+}

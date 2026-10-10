@@ -1,22 +1,14 @@
-# P1 ARM64 Release 运行时验收：进行中检查点（2026-10-10）
+# P1 ARM64 Release 运行时验收（2026-10-10）
 
-起点 `d0284a4`（远端 `claude/new-session-1959qb` 与本会话分支 `ccr-cc5c185b-ueth6t` 均指向它，已 fetch 核实）。需求记入 REQUIREMENTS §54。本容器 x86_64、**无 /dev/kvm**，不能本地运行任何 Android 模拟器；设备验收改由 GitHub Actions 新增的独立工作流 `.github/workflows/release-acceptance.yml` 执行（x86_64 KVM 模拟器 API35；另有 ubuntu-24.04-arm / macos-15 ARM64 虚拟化探测，未证实前 C/D 的 ARM64 运行一律 BLOCKED）。
+[完整报告](performance/p1-release-acceptance-2026-10.md)、[机器结果](performance/p1-release-acceptance-2026-10.json)；需求 REQUIREMENTS §54。生产源码与 P0 固定源码 622e84e 及 d0284a4 无差异（app/core/pk-engine/importer/Gradle diff 为空）；版本/Schema 9/PK/备份格式/签名未动，未生成正式包、未接触私钥/用户设备/真实数据。
 
-新增（只用于验收，生产 Gradle/源码不改）：
-- `scripts/release-acceptance/acceptance.init.gradle`：仅 `-I` 时生效；按 A/B/C/D 设置 shrinkResources/arm64 过滤，R8 不变，release 用仓库公开 debug 测试密钥签名，testBuildType=release。`exact` 模式无额外 keep（应用 dex 即该场景生产 R8 输出）；`functional` 模式加 `functional-keep.pro` 以便进程内调用应用类，单独报告。
-- `scripts/release-acceptance/generate_expectations.py`：从源码 XML 生成四语字符串、引用资源、三个命名 JSON SHA；functional 时把 31 个 JVM 测试（含 PeriodStabilityTest，146 项）仅去掉 Robolectric runner 注解后移植到设备运行，断言与黄金数据逐字不变。
-- `app/src/releaseAcceptanceTest/`：exact（SQLCipher 实际映射 ABI、加密读写/重开/错误密钥/完整性、APK 内命名 JSON、四语字符串、入口别名图标、UI 冷启动+四语导航）与 functional（应用数据库重开、加密 Schema1→9 迁移、旧 v1 备份恢复/往返/错误密码/损坏、四语 PDF 渲染、提醒允许/拒绝/重启恢复）。
-- `scripts/release-acceptance/run_device_acceptance.py`：仅限模拟器（qemu 属性校验），逐阶段记录命令/退出码/逐测试结果/logcat 崩溃。
+新增仅验收用工具：`scripts/release-acceptance/`（init 脚本只在 `-I` 时生效：A/B/C/D 与 P0 相同的裁剪/ABI，R8 开启，仓库公开测试密钥签名，testBuildType=release；exact 只加 test-support-keep，functional 再加 functional-keep 与 Compose 测试宿主）、`app/src/releaseAcceptanceTest/`（exact/functional 测试，28 个 JVM 测试文件（148 项）只去 Robolectric 注解后在设备运行）、`run_device_acceptance.py`（只允许模拟器）、`summarize.py`、工作流 `.github/workflows/release-acceptance.yml`。
 
-CI 进展（工作流 release-acceptance.yml）：
-- run 38037216069（46f6e0c）：所有 instrumentation 在 AndroidJUnitRunner.onCreate 崩溃（NoClassDefFoundError androidx.tracing.Trace：AGP 把应用已含的库从测试 APK 剔除，而 R8 已从应用删掉该类）→ 测试工具问题，非应用缺陷；新增 `test-support-keep.pro`。macOS/arm64 探测因 setup-android 不支持而未执行。
-- run 38038170385（7609bbe）：A/B x86_64 API35 模拟器：exact 冷启动×3 PASS；functional 171 通过/50 失败/3 跳过；进程重启 prepare/verify、通知拒绝、reboot-prepare PASS。失败根因：48 项 Compose 测试需 androidx.collection（测试 keep 不足）；SQLCipher 断言按 maps 文件名匹配，但从 APK 直接加载时 maps 只显示 base.apk（logcat nativeloader 已证实 `base.apk!/lib/x86_64/libsqlcipher.so … ok`）；B exact 缺 71 个字符串，其中源码引用的仅 import_link_help/import_link_empty——只被 ImportedPlanDialog 使用，而其入口 prepareImportedLink 无生产调用方（仅单测），属既有不可达代码被 R8 删除，非裁剪回归；重启提醒用的“测试提醒”只在缓存，开机后按数据库重建会正常丢弃→改为真实合成用药计划。C/D：x86_64 上安装被 INSTALL_FAILED_NO_MATCHING_ABIS 拒绝（PASS，符合预期），ARM64 运行 BLOCKED。
-- ARM64 探测：ubuntu-24.04-arm 无 /dev/kvm，且 Google 不发布 Linux aarch64 模拟器；macos-15 为 “Apple M1 (Virtual)”，无 kern.hv_support → GitHub 托管 runner 上无法运行真实 ARM64 Android（下一轮再用 emulator -accel-check 复核）。
+权威运行 38043594012（c387b10）：x86_64 API35 模拟器 A/B 各 exact 5/6、functional 221 PASS/1 FAIL/3 阶段跳过（单独运行均 PASS），冷启动×3、进程重启伪装隔离、通知拒绝、重启后提醒恢复均 PASS。SQLCipher 实际加载 `lib/x86_64`（maps 偏移 + nativeloader 双证据）、加密读写/重开/错误密钥/完整性、Schema1→9 加密迁移、v1 旧备份恢复与往返、四语 PDF、四语字符串、入口别名图标、三个命名 JSON、PeriodStability 5/5 等 148 项移植测试均 PASS。B 资源裁剪无运行时回归（71 个字符串被移除，源码引用的仅不可达 ImportedPlanDialog 的 2 个）。唯一 FAIL：导航抽屉 Column（AppShell.kt:136）不可滚动，320×640 屏上“设置/关于”不可达——既有 UI 问题，未修，待授权（建议 verticalScroll）。
 
-- run 38039805628（2e1c287）：A functional 188 通过；重启后提醒恢复 PASS（开机后应用未打开，SystemReceiver 由加密库重建并发出通知）；DisguiseFlow 16 项全部 PASS。剩余为测试工具问题（Compose 宿主 Activity、ZIP 中央目录偏移 +42/+46 写错、空状态无 FAB）。macos-15 的 emulator -accel-check 报告 Hypervisor.Framework 可用。
-- run 38041739528（00e4174）：x86_64 A/B exact 5/6、functional 189 通过；SQLCipher 原生库映射核对（maps 偏移→APK 条目）通过；B 字符串核对通过。macOS arm64-v8a 模拟器 C/D/A 均因 `HVF error: HV_UNSUPPORTED`（嵌套虚拟化不可用，accel-check 为假阳性）未能启动 → 硬件加速 ARM64 BLOCKED。下一轮改用 `-accel off`（QEMU TCG 软件 CPU，真实 arm64 Android 用户态，但非硬件、非手机）跑精简子集。
+C/D：x86_64 上 INSTALL_FAILED_NO_MATCHING_ABIS（预期 PASS）；**真实 ARM64 运行 BLOCKED**：本容器无 KVM，ubuntu-24.04-arm 无 /dev/kvm 且无 linux-aarch64 模拟器，macos-15 arm64-v8a 模拟器 `HVF error: HV_UNSUPPORTED`（accel-check 假阳性）。macOS `-accel off` 软件 CPU 作业在报告时仍运行，结果待补（即使通过也非硬件）。结论：不建议现在正式采用 ARM64 发行；默认保留 Universal。
 
-下一步：推送修正→第 5 次运行→下载工件→写 `docs/performance/p1-release-acceptance-2026-10.md/.json`。
+下一步：读取 38043594012 的 arm64-scenario 工件补报告；在无真实数据的 ARM64 测试设备/自托管 ARM64+KVM 上跑 C；决定是否修 F1；测试机验证正式签名 universal↔arm64 覆盖升级。CI 历次运行与根因见报告 JSON `identity.runs`。
 
 ---
 
