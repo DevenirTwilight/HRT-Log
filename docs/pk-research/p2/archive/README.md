@@ -51,7 +51,7 @@
 - [PR #2 — Android M2 实验页面集成](https://github.com/DevenirTwilight/HRT-Log/pull/2)：可选的相对曲线研究页面，与正式 pg/mL 浓度页面分开；以 PR 的实时状态为准，**本归档不声称已发布**。
 - [生产旧模型参数](../../../../pk-engine/src/main/resources/pk-params.json)和 [正式 Engine](../../../../pk-engine/src/main/kotlin/net/plainnotes/app/pk/Engine.kt)。原有冻结文件在本次归档中均保持原样。
 
-## 重要的科研限制
+\n## 逐阶段科研源码及计算结果\n\n除完整报告外，已把先前独立 ZIP 中**184 个经过筛选的 Python、CSV、JSON 文件**收入 [repro/](repro/README.md)。它们只供科研重现与源数据溯源，不进入 Android 构建；具体纳入/排除及每文件 SHA-256 见 [清单](repro/SELECTION-MANIFEST.json)。原始期刊图片和逐人健康数据没有上传。\n\n## 重要的科研限制
 
 - 现有研究已经充分说明：**旧模型并非有临床准确度证书**；M2 在已见的某些曲线上形状拟合较好，但不能用再拟合评价当作独立人体外测。
 - Price Figure 1 和 Table 1 的 AUC 差异仍未解决；长尾/谷值的不确定性可能远超过冻结 15 候选的范围。

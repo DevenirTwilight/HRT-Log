@@ -1,0 +1,437 @@
+{
+  "arms": {
+    "0.25mg_SL": {
+      "center_vs_table_gap_pg_h_ml": 59.5,
+      "critical_nonnegative_baseline_upper_feasibility_pg_ml": 15.893617,
+      "dose_mg": 0.25,
+      "scenario_results": [
+        {
+          "assumed_baseline_pg_ml": 0,
+          "center_raw_subtracted_auc_pg_h_ml": 765.5,
+          "lower_raw_subtracted_auc_pg_h_ml": 488.5,
+          "positive_upper_margin_above_table_pg_h_ml": 373.5,
+          "table_auc_within_conditional_visual_envelope": true,
+          "upper_raw_subtracted_auc_pg_h_ml": 1198.5,
+          "witness_curve_at_table_if_feasible": [
+            296.3275,
+            132.1338,
+            77.9155,
+            50.6972,
+            25.6401,
+            18.3225,
+            12.4789,
+            8.531,
+            7.5831
+          ]
+        },
+        {
+          "assumed_baseline_pg_ml": 4,
+          "center_raw_subtracted_auc_pg_h_ml": 671.5,
+          "lower_raw_subtracted_auc_pg_h_ml": 394.5,
+          "positive_upper_margin_above_table_pg_h_ml": 279.5,
+          "table_auc_within_conditional_visual_envelope": true,
+          "upper_raw_subtracted_auc_pg_h_ml": 1104.5,
+          "witness_curve_at_table_if_feasible": [
+            302.2852,
+            146.6972,
+            88.507,
+            57.3169,
+            30.0092,
+            21.7648,
+            15.1268,
+            10.9141,
+            9.7014
+          ]
+        },
+        {
+          "assumed_baseline_pg_ml": 6,
+          "center_raw_subtracted_auc_pg_h_ml": 624.5,
+          "lower_raw_subtracted_auc_pg_h_ml": 347.5,
+          "positive_upper_margin_above_table_pg_h_ml": 232.5,
+          "table_auc_within_conditional_visual_envelope": true,
+          "upper_raw_subtracted_auc_pg_h_ml": 1057.5,
+          "witness_curve_at_table_if_feasible": [
+            305.2641,
+            153.9789,
+            93.8028,
+            60.6268,
+            32.1937,
+            23.4859,
+            16.4507,
+            12.1056,
+            10.7606
+          ]
+        },
+        {
+          "assumed_baseline_pg_ml": 8,
+          "center_raw_subtracted_auc_pg_h_ml": 577.5,
+          "lower_raw_subtracted_auc_pg_h_ml": 300.5,
+          "positive_upper_margin_above_table_pg_h_ml": 185.5,
+          "table_auc_within_conditional_visual_envelope": true,
+          "upper_raw_subtracted_auc_pg_h_ml": 1010.5,
+          "witness_curve_at_table_if_feasible": [
+            308.243,
+            161.2606,
+            99.0986,
+            63.9366,
+            34.3782,
+            25.207,
+            17.7746,
+            13.2972,
+            11.8197
+          ]
+        },
+        {
+          "assumed_baseline_pg_ml": 12,
+          "center_raw_subtracted_auc_pg_h_ml": 483.5,
+          "lower_raw_subtracted_auc_pg_h_ml": 206.5,
+          "positive_upper_margin_above_table_pg_h_ml": 91.5,
+          "table_auc_within_conditional_visual_envelope": true,
+          "upper_raw_subtracted_auc_pg_h_ml": 916.5,
+          "witness_curve_at_table_if_feasible": [
+            314.2007,
+            175.8239,
+            109.6901,
+            70.5563,
+            38.7472,
+            28.6493,
+            20.4225,
+            15.6803,
+            13.938
+          ]
+        },
+        {
+          "assumed_baseline_pg_ml": 16,
+          "center_raw_subtracted_auc_pg_h_ml": 389.5,
+          "lower_raw_subtracted_auc_pg_h_ml": 112.5,
+          "positive_upper_margin_above_table_pg_h_ml": -2.5,
+          "table_auc_within_conditional_visual_envelope": false,
+          "upper_raw_subtracted_auc_pg_h_ml": 822.5,
+          "witness_curve_at_table_if_feasible": null
+        },
+        {
+          "assumed_baseline_pg_ml": 20,
+          "center_raw_subtracted_auc_pg_h_ml": 295.5,
+          "lower_raw_subtracted_auc_pg_h_ml": 18.5,
+          "positive_upper_margin_above_table_pg_h_ml": -96.5,
+          "table_auc_within_conditional_visual_envelope": false,
+          "upper_raw_subtracted_auc_pg_h_ml": 728.5,
+          "witness_curve_at_table_if_feasible": null
+        },
+        {
+          "assumed_baseline_pg_ml": 24,
+          "center_raw_subtracted_auc_pg_h_ml": 201.5,
+          "lower_raw_subtracted_auc_pg_h_ml": -75.5,
+          "positive_upper_margin_above_table_pg_h_ml": -190.5,
+          "table_auc_within_conditional_visual_envelope": false,
+          "upper_raw_subtracted_auc_pg_h_ml": 634.5,
+          "witness_curve_at_table_if_feasible": null
+        }
+      ],
+      "table_auc0_24_pg_h_ml": 825,
+      "table_cmax_mean_pg_ml": 294,
+      "table_over_center_auc_ratio": 1.077727,
+      "underlying_points_with_visibility": [
+        {
+          "center": 295,
+          "high": 320,
+          "hour": 1,
+          "low": 275,
+          "visibility": "partially resolved upper-zone marker at axis break; Table Cmax only sanity check"
+        },
+        {
+          "center": 143,
+          "high": 190,
+          "hour": 2,
+          "low": 80,
+          "visibility": "strongly overlapped: SL line styles and SD bars"
+        },
+        {
+          "center": 65,
+          "high": 120,
+          "hour": 3,
+          "low": 40,
+          "visibility": "occluded by 0.5mg SL and solid line; central number particularly speculative"
+        },
+        {
+          "center": 45,
+          "high": 77,
+          "hour": 4,
+          "low": 27,
+          "visibility": "line-style ambiguous near 0.5mg SL"
+        },
+        {
+          "center": 22,
+          "high": 43,
+          "hour": 6,
+          "low": 10,
+          "visibility": "dash-dot and oral dotted trace near 20pg/mL"
+        },
+        {
+          "center": 15,
+          "high": 32,
+          "hour": 8,
+          "low": 6,
+          "visibility": "overlapping lower curves"
+        },
+        {
+          "center": 11,
+          "high": 23,
+          "hour": 12,
+          "low": 3,
+          "visibility": "near RIA detection limit and oral route curves"
+        },
+        {
+          "center": 6,
+          "high": 18,
+          "hour": 18,
+          "low": 0,
+          "visibility": "at/near low assay range; multiple routes unresolved"
+        },
+        {
+          "center": 5,
+          "high": 16,
+          "hour": 24,
+          "low": 0,
+          "visibility": "at/near low assay range; multiple routes unresolved"
+        }
+      ],
+      "visual_conditional_auc_zero_baseline": {
+        "center": 765.5,
+        "high": 1198.5,
+        "low": 488.5
+      }
+    },
+    "0.5mg_SL": {
+      "center_vs_table_gap_pg_h_ml": 138.0,
+      "critical_nonnegative_baseline_upper_feasibility_pg_ml": 7.87234,
+      "dose_mg": 0.5,
+      "scenario_results": [
+        {
+          "assumed_baseline_pg_ml": 0,
+          "center_raw_subtracted_auc_pg_h_ml": 832.0,
+          "lower_raw_subtracted_auc_pg_h_ml": 626.5,
+          "positive_upper_margin_above_table_pg_h_ml": 185.0,
+          "table_auc_within_conditional_visual_envelope": true,
+          "upper_raw_subtracted_auc_pg_h_ml": 1155.0,
+          "witness_curve_at_table_if_feasible": [
+            255.9981,
+            148.4957,
+            75.9981,
+            51.2488,
+            35.3491,
+            29.3491,
+            22.0993,
+            17.3491,
+            13.0993
+          ]
+        },
+        {
+          "assumed_baseline_pg_ml": 4,
+          "center_raw_subtracted_auc_pg_h_ml": 738.0,
+          "lower_raw_subtracted_auc_pg_h_ml": 532.5,
+          "positive_upper_margin_above_table_pg_h_ml": 91.0,
+          "table_auc_within_conditional_visual_envelope": true,
+          "upper_raw_subtracted_auc_pg_h_ml": 1061.0,
+          "witness_curve_at_table_if_feasible": [
+            263.1126,
+            164.5033,
+            83.1126,
+            55.6954,
+            38.7285,
+            32.7285,
+            24.5894,
+            20.7285,
+            15.5894
+          ]
+        },
+        {
+          "assumed_baseline_pg_ml": 6,
+          "center_raw_subtracted_auc_pg_h_ml": 691.0,
+          "lower_raw_subtracted_auc_pg_h_ml": 485.5,
+          "positive_upper_margin_above_table_pg_h_ml": 44.0,
+          "table_auc_within_conditional_visual_envelope": true,
+          "upper_raw_subtracted_auc_pg_h_ml": 1014.0,
+          "witness_curve_at_table_if_feasible": [
+            266.6698,
+            172.5071,
+            86.6698,
+            57.9186,
+            40.4182,
+            34.4182,
+            25.8344,
+            22.4182,
+            16.8344
+          ]
+        },
+        {
+          "assumed_baseline_pg_ml": 8,
+          "center_raw_subtracted_auc_pg_h_ml": 644.0,
+          "lower_raw_subtracted_auc_pg_h_ml": 438.5,
+          "positive_upper_margin_above_table_pg_h_ml": -3.0,
+          "table_auc_within_conditional_visual_envelope": false,
+          "upper_raw_subtracted_auc_pg_h_ml": 967.0,
+          "witness_curve_at_table_if_feasible": null
+        },
+        {
+          "assumed_baseline_pg_ml": 12,
+          "center_raw_subtracted_auc_pg_h_ml": 550.0,
+          "lower_raw_subtracted_auc_pg_h_ml": 344.5,
+          "positive_upper_margin_above_table_pg_h_ml": -97.0,
+          "table_auc_within_conditional_visual_envelope": false,
+          "upper_raw_subtracted_auc_pg_h_ml": 873.0,
+          "witness_curve_at_table_if_feasible": null
+        },
+        {
+          "assumed_baseline_pg_ml": 16,
+          "center_raw_subtracted_auc_pg_h_ml": 456.0,
+          "lower_raw_subtracted_auc_pg_h_ml": 250.5,
+          "positive_upper_margin_above_table_pg_h_ml": -191.0,
+          "table_auc_within_conditional_visual_envelope": false,
+          "upper_raw_subtracted_auc_pg_h_ml": 779.0,
+          "witness_curve_at_table_if_feasible": null
+        },
+        {
+          "assumed_baseline_pg_ml": 20,
+          "center_raw_subtracted_auc_pg_h_ml": 362.0,
+          "lower_raw_subtracted_auc_pg_h_ml": 156.5,
+          "positive_upper_margin_above_table_pg_h_ml": -285.0,
+          "table_auc_within_conditional_visual_envelope": false,
+          "upper_raw_subtracted_auc_pg_h_ml": 685.0,
+          "witness_curve_at_table_if_feasible": null
+        },
+        {
+          "assumed_baseline_pg_ml": 24,
+          "center_raw_subtracted_auc_pg_h_ml": 268.0,
+          "lower_raw_subtracted_auc_pg_h_ml": 62.5,
+          "positive_upper_margin_above_table_pg_h_ml": -379.0,
+          "table_auc_within_conditional_visual_envelope": false,
+          "upper_raw_subtracted_auc_pg_h_ml": 591.0,
+          "witness_curve_at_table_if_feasible": null
+        }
+      ],
+      "table_auc0_24_pg_h_ml": 970,
+      "table_cmax_mean_pg_ml": 245,
+      "table_over_center_auc_ratio": 1.165865,
+      "underlying_points_with_visibility": [
+        {
+          "center": 250,
+          "high": 270,
+          "hour": 1,
+          "low": 230,
+          "visibility": "partially resolved upper-zone center near break; Table Cmax only sanity check, not measurement input"
+        },
+        {
+          "center": 123,
+          "high": 180,
+          "hour": 2,
+          "low": 90,
+          "visibility": "strongly overlapped: two SL lines, 1mg solid and SD bars"
+        },
+        {
+          "center": 65,
+          "high": 90,
+          "hour": 3,
+          "low": 50,
+          "visibility": "overlapped in lower zone; line-style ambiguous"
+        },
+        {
+          "center": 44,
+          "high": 60,
+          "hour": 4,
+          "low": 35,
+          "visibility": "dash/dash-dot near each other"
+        },
+        {
+          "center": 30,
+          "high": 42,
+          "hour": 6,
+          "low": 23,
+          "visibility": "partially resolved marker and dashes"
+        },
+        {
+          "center": 25,
+          "high": 36,
+          "hour": 8,
+          "low": 17,
+          "visibility": "dashed and dotted lines intersect"
+        },
+        {
+          "center": 20,
+          "high": 27,
+          "hour": 12,
+          "low": 13,
+          "visibility": "dashed marker near dotted oral trace"
+        },
+        {
+          "center": 11,
+          "high": 24,
+          "hour": 18,
+          "low": 5,
+          "visibility": "overlaps oral baseline-level trajectories"
+        },
+        {
+          "center": 9,
+          "high": 18,
+          "hour": 24,
+          "low": 4,
+          "visibility": "overlaps low-range dashed traces"
+        }
+      ],
+      "visual_conditional_auc_zero_baseline": {
+        "center": 832.0,
+        "high": 1155.0,
+        "low": 626.5
+      }
+    }
+  },
+  "baseline_coefficient_h": 23.5,
+  "baseline_scenarios_pg_ml": [
+    0,
+    4,
+    6,
+    8,
+    12,
+    16,
+    20,
+    24
+  ],
+  "limitations": [
+    "Visual intervals are subjective and not certified bounds or intervals from independent readers.",
+    "Missing raw subject-level concentrations and predose baselines; Table 1 AUC is not a blinded independent comparator.",
+    "AUC compatibility conditional on manual envelopes does not validate the figure or the paper.",
+    "No verification of dose proportionality, bioavailability, terminal elimination or individual exposure."
+  ],
+  "one_mg_reference": {
+    "digitized_auc_zero_baseline_pg_h_ml": 1550.5664,
+    "generous_scan_window_auc_upper_zero_baseline_pg_h_ml": 1789.5664,
+    "table_above_subjective_1mg_upper_at_b0_pg_h_ml": 319.4336,
+    "table_auc0_24_pg_h_ml": 2109
+  },
+  "phase": "P2-AK",
+  "postdose_trapezoid_weights_h": [
+    1.0,
+    1.0,
+    1.0,
+    1.5,
+    2.0,
+    3.0,
+    5.0,
+    6.0,
+    3.0
+  ],
+  "schema_version": 1,
+  "source_json_sha256": "cfd23725cbd68cd59cd6e71e665d94b561433a5e0d931035c2bd827d2a0d4e9c",
+  "trapezoid_time_h": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    6,
+    8,
+    12,
+    18,
+    24
+  ]
+}

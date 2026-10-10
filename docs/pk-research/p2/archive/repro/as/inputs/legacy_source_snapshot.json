@@ -1,0 +1,27 @@
+{
+  "snapshot": "HRT Log production E2_SL and E2_ORAL verified 2026-10-10",
+  "repository": "DevenirTwilight/HRT-Log",
+  "ref": "claude/new-session-1959qb",
+  "base_sha": "f69d892d47ca64250db7b35eb95c5e1d0f8a01d8",
+  "source_files": [
+    {"path":"pk-engine/src/main/resources/pk-params.json", "git_blob_sha1":"f0ce49f09da31286f538affd9977ff36c26e272d"},
+    {"path":"pk-engine/src/main/kotlin/net/plainnotes/app/pk/Engine.kt", "git_blob_sha1":"460e5d89464837738cbd92bf804b876400610bea"},
+    {"path":"pk-engine/src/main/kotlin/net/plainnotes/app/pk/FittedModels.kt", "git_blob_sha1":"99ed28ab1ae9f6512345917b5b737b18af10455a"}
+  ],
+  "parameter_version": "0.1.0-literature-draft",
+  "E2_SL": {
+    "ka_per_h":1.0005,
+    "terms":[{"A_per_mg":391432.56698842294,"lambda_per_h":0.9995}],
+    "swallowed_share":0.0024079912862392887,
+    "swallowed_model":"E2_ORAL",
+    "tier_minutes":[2,5,10,15],
+    "default_tier":2,
+    "calibrated_hours":8,
+    "checks":{"tmax_h":1,"cmax_1mg":144.02380642618826,"auc0_8":390.6484170483408,"c_at_24h_1mg":0.03305841648477258}
+  },
+  "E2_ORAL": {
+    "ka_per_h":0.31109807764375685,
+    "terms":[{"A_per_mg":45.13254431413082,"lambda_per_h":0.049510512897138946}]
+  },
+  "warning": "Targeted verified parameter transcription, not a complete pk-params.json or a Kotlin compiler execution. FittedModels.response uses the same exponential terms; Engine.sublingual adds E2_SL and swallowed E2_ORAL and applies hold-time tier scaling."
+}

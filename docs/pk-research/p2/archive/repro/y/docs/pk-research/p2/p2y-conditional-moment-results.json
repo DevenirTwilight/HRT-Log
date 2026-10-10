@@ -1,0 +1,949 @@
+{
+  "phase": "P2-Y",
+  "input_source": "P2-X exposed previously fitted parameter grid",
+  "historical_data_not_new_blind_external_validation": true,
+  "yaish_newly_used_fulltext_mean_SD": {
+    "pre_mean_pmol_L": 204.5,
+    "pre_sd_pmol_L": 63.5,
+    "post_90_mean_pmol_L": 1994.0,
+    "post_90_sd_pmol_L": 1457.0,
+    "post_90_median_pmol_L": 1721.0,
+    "post_90_iqr_pmol_L": [
+      1000.0,
+      2432.0
+    ],
+    "dose_mg": 0.5,
+    "interval_h": 6.0,
+    "post_after_h": 1.5,
+    "unit_pmol_per_pg": 3.671
+  },
+  "yaish_mean_difference_pmol_L": 1789.5,
+  "price_original_pdf_method": {
+    "fig_18h_pg_ml": 25.0,
+    "fig_24h_pg_ml": 24.0,
+    "table_half_life_mean_h": 18.0,
+    "table_half_life_sd_h": 2.5,
+    "assay_sensitivity_pg_ml": 8.0,
+    "e2_interassay_cv": 0.125,
+    "two_terminal_points_reported": true
+  },
+  "price_half_life_sensitivity_examples": [
+    {
+      "assumed_baseline_pg_ml": 0.0,
+      "half_life_h": 101.87848811003349
+    },
+    {
+      "assumed_baseline_pg_ml": 10.0,
+      "half_life_h": 60.27989549827968
+    },
+    {
+      "assumed_baseline_pg_ml": 15.0,
+      "half_life_h": 39.47288087376348
+    },
+    {
+      "assumed_baseline_pg_ml": 18.0,
+      "half_life_h": 26.979336633611517
+    },
+    {
+      "assumed_baseline_pg_ml": 20.0,
+      "half_life_h": 18.637702317032335
+    },
+    {
+      "assumed_baseline_pg_ml": 22.0,
+      "half_life_h": 10.257067748108728
+    },
+    {
+      "assumed_baseline_pg_ml": 23.0,
+      "half_life_h": 6.0
+    },
+    {
+      "assumed_baseline_pg_ml": 23.5,
+      "half_life_h": 3.785578521428744
+    },
+    {
+      "assumed_baseline_pg_ml": 23.8,
+      "half_life_h": 2.3211168434072453
+    },
+    {
+      "assumed_baseline_pg_ml": 24.0,
+      "half_life_h": null
+    }
+  ],
+  "conditional_assumptions": [
+    "Yaish pre and 90min published mean applied to same people",
+    "q6h regular with exact 90min draw",
+    "stationary nonnegative mean basal contribution",
+    "linear effective group gain unchanged during two draws",
+    "no omitted earlier doses",
+    "no independent corrections for immunoassay biases",
+    "asymptotic doses 300"
+  ],
+  "ensemble_total": {
+    "count": 40,
+    "nonnegative_baseline_feasible_count": 0,
+    "infeasible_count": 40,
+    "mean_baseline_required_pmol_L_range": [
+      -970.6024430771192,
+      -45.50394059617474
+    ],
+    "q24_range_eligible": null,
+    "price_assumptions_eligible": []
+  },
+  "ensemble_near_best_loss_0p1": {
+    "count": 15,
+    "nonnegative_baseline_feasible_count": 0,
+    "infeasible_count": 15,
+    "mean_baseline_required_pmol_L_range": [
+      -935.8195560724889,
+      -61.39049781790226
+    ],
+    "q24_range_eligible": null,
+    "price_assumptions_eligible": []
+  },
+  "numerical_scenarios": [
+    {
+      "row_id": 0,
+      "score": 0.3723163626777679,
+      "within_loss_tolerance": false,
+      "price_assumed_baseline_pg_ml": 0.0,
+      "rosano_baseline_cap_pmol_L": 100.0,
+      "n_fast": 4,
+      "q24": 0.0638775709868651,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -756.6562964497648,
+        "gain_required_pmol_L_per_mg": 4227.6685669157,
+        "gain_required_pg_ml_per_mg": 1151.6394897618359,
+        "S_pre": 0.4546980356839928,
+        "S_post": 1.3012639249800555,
+        "delta_shape": 0.8465658892960627,
+        "pre_to_rise_shape_ratio": 0.5371088552387621,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 1,
+      "score": 0.320817721945691,
+      "within_loss_tolerance": false,
+      "price_assumed_baseline_pg_ml": 0.0,
+      "rosano_baseline_cap_pmol_L": 100.0,
+      "n_fast": 6,
+      "q24": 0.04445611707421655,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -776.901074633945,
+        "gain_required_pmol_L_per_mg": 5119.203029422285,
+        "gain_required_pg_ml_per_mg": 1394.498237380083,
+        "S_pre": 0.38341947720901337,
+        "S_post": 1.0825517404597442,
+        "delta_shape": 0.6991322632507309,
+        "pre_to_rise_shape_ratio": 0.5484219472668036,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 2,
+      "score": 0.38234766668579656,
+      "within_loss_tolerance": false,
+      "price_assumed_baseline_pg_ml": 0.0,
+      "rosano_baseline_cap_pmol_L": 100.0,
+      "n_fast": 8,
+      "q24": 0.03840258603486085,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -858.5555985129183,
+        "gain_required_pmol_L_per_mg": 5733.994796473899,
+        "gain_required_pg_ml_per_mg": 1561.970797187115,
+        "S_pre": 0.37079056966240737,
+        "S_post": 0.9949627440426307,
+        "delta_shape": 0.6241721743802233,
+        "pre_to_rise_shape_ratio": 0.5940517454668446,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 3,
+      "score": 0.45592961204015253,
+      "within_loss_tolerance": false,
+      "price_assumed_baseline_pg_ml": 0.0,
+      "rosano_baseline_cap_pmol_L": 100.0,
+      "n_fast": 10,
+      "q24": 0.03543107874554025,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -919.2647405607586,
+        "gain_required_pmol_L_per_mg": 6076.033833245746,
+        "gain_required_pg_ml_per_mg": 1655.1440569996585,
+        "S_pre": 0.36990075151061386,
+        "S_post": 0.9589363129021705,
+        "delta_shape": 0.5890355613915567,
+        "pre_to_rise_shape_ratio": 0.6279769435936065,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 4,
+      "score": 0.35766058869649137,
+      "within_loss_tolerance": false,
+      "price_assumed_baseline_pg_ml": 6.0,
+      "rosano_baseline_cap_pmol_L": 100.0,
+      "n_fast": 4,
+      "q24": 0.040178182200017065,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -518.234676849759,
+        "gain_required_pmol_L_per_mg": 4239.189597209757,
+        "gain_required_pg_ml_per_mg": 1154.7778799263845,
+        "S_pre": 0.340977755430172,
+        "S_post": 1.1852428957191803,
+        "delta_shape": 0.8442651402890082,
+        "pre_to_rise_shape_ratio": 0.4038752036042241,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 5,
+      "score": 0.28564075434018726,
+      "within_loss_tolerance": false,
+      "price_assumed_baseline_pg_ml": 6.0,
+      "rosano_baseline_cap_pmol_L": 100.0,
+      "n_fast": 6,
+      "q24": 0.025488353527329862,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -538.2666368885496,
+        "gain_required_pmol_L_per_mg": 5154.155700154979,
+        "gain_required_pg_ml_per_mg": 1404.019531505034,
+        "S_pre": 0.28822048851423543,
+        "S_post": 0.9826116183538683,
+        "delta_shape": 0.6943911298396329,
+        "pre_to_rise_shape_ratio": 0.4150693695940484,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 6,
+      "score": 0.32212258244580244,
+      "within_loss_tolerance": false,
+      "price_assumed_baseline_pg_ml": 6.0,
+      "rosano_baseline_cap_pmol_L": 100.0,
+      "n_fast": 8,
+      "q24": 0.02082083838174495,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -600.3043145979054,
+        "gain_required_pmol_L_per_mg": 5792.39781943485,
+        "gain_required_pg_ml_per_mg": 1577.8800924638656,
+        "S_pre": 0.27788295613868186,
+        "S_post": 0.8957617882851234,
+        "delta_shape": 0.6178788321464416,
+        "pre_to_rise_shape_ratio": 0.4497369737903914,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 7,
+      "score": 0.375027056859694,
+      "within_loss_tolerance": false,
+      "price_assumed_baseline_pg_ml": 6.0,
+      "rosano_baseline_cap_pmol_L": 100.0,
+      "n_fast": 10,
+      "q24": 0.018481881263584056,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -640.9524994988902,
+        "gain_required_pmol_L_per_mg": 6131.547510174099,
+        "gain_required_pg_ml_per_mg": 1670.266278990493,
+        "S_pre": 0.27577132790572945,
+        "S_post": 0.8594738914202993,
+        "delta_shape": 0.5837025635145698,
+        "pre_to_rise_shape_ratio": 0.47245180189935193,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 8,
+      "score": 0.3357673527677046,
+      "within_loss_tolerance": false,
+      "price_assumed_baseline_pg_ml": 12.0,
+      "rosano_baseline_cap_pmol_L": 100.0,
+      "n_fast": 4,
+      "q24": 0.021851029191598117,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -319.2017545482464,
+        "gain_required_pmol_L_per_mg": 4250.906082339249,
+        "gain_required_pg_ml_per_mg": 1157.969513031667,
+        "S_pre": 0.24639535402770243,
+        "S_post": 1.0883335033717352,
+        "delta_shape": 0.8419381493440328,
+        "pre_to_rise_shape_ratio": 0.29265255912168003,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 9,
+      "score": 0.22094083143586105,
+      "within_loss_tolerance": false,
+      "price_assumed_baseline_pg_ml": 12.0,
+      "rosano_baseline_cap_pmol_L": 100.0,
+      "n_fast": 6,
+      "q24": 0.011874178273858279,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -334.3020716357199,
+        "gain_required_pmol_L_per_mg": 5171.940844621611,
+        "gain_required_pg_ml_per_mg": 1408.8642998152034,
+        "S_pre": 0.20835585240539994,
+        "S_post": 0.9003591269056995,
+        "delta_shape": 0.6920032745002995,
+        "pre_to_rise_shape_ratio": 0.30109084751926235,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 10,
+      "score": 0.2209318037350119,
+      "within_loss_tolerance": false,
+      "price_assumed_baseline_pg_ml": 12.0,
+      "rosano_baseline_cap_pmol_L": 100.0,
+      "n_fast": 8,
+      "q24": 0.008858372887440284,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -374.0804695456799,
+        "gain_required_pmol_L_per_mg": 5798.951421437029,
+        "gain_required_pg_ml_per_mg": 1579.6653286398882,
+        "S_pre": 0.19954658264831704,
+        "S_post": 0.8167271278705933,
+        "delta_shape": 0.6171805452222763,
+        "pre_to_rise_shape_ratio": 0.32331962533986025,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 11,
+      "score": 0.24755167918261423,
+      "within_loss_tolerance": false,
+      "price_assumed_baseline_pg_ml": 12.0,
+      "rosano_baseline_cap_pmol_L": 100.0,
+      "n_fast": 10,
+      "q24": 0.0074155833425183565,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -396.6987925399212,
+        "gain_required_pmol_L_per_mg": 6111.388162343044,
+        "gain_required_pg_ml_per_mg": 1664.7747650076394,
+        "S_pre": 0.1967470488110602,
+        "S_post": 0.7823750444361732,
+        "delta_shape": 0.585627995625113,
+        "pre_to_rise_shape_ratio": 0.3359590905503891,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 12,
+      "score": 0.31167950136057204,
+      "within_loss_tolerance": false,
+      "price_assumed_baseline_pg_ml": 18.0,
+      "rosano_baseline_cap_pmol_L": 100.0,
+      "n_fast": 4,
+      "q24": 0.009621546150847695,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -161.41358423252507,
+        "gain_required_pmol_L_per_mg": 4259.974495326604,
+        "gain_required_pg_ml_per_mg": 1160.439797146991,
+        "S_pre": 0.1717914436501673,
+        "S_post": 1.0119373186844745,
+        "delta_shape": 0.8401458750343072,
+        "pre_to_rise_shape_ratio": 0.20447811356944678,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 13,
+      "score": 0.14168901527529565,
+      "within_loss_tolerance": false,
+      "price_assumed_baseline_pg_ml": 18.0,
+      "rosano_baseline_cap_pmol_L": 100.0,
+      "n_fast": 6,
+      "q24": 0.004350551954000752,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -174.78589756677758,
+        "gain_required_pmol_L_per_mg": 5159.301585267676,
+        "gain_required_pg_ml_per_mg": 1405.4212980843574,
+        "S_pre": 0.14702993856758592,
+        "S_post": 0.8407284830023194,
+        "delta_shape": 0.6936985444347334,
+        "pre_to_rise_shape_ratio": 0.21195076701133142,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 14,
+      "score": 0.10488143428800407,
+      "within_loss_tolerance": true,
+      "price_assumed_baseline_pg_ml": 18.0,
+      "rosano_baseline_cap_pmol_L": 100.0,
+      "n_fast": 8,
+      "q24": 0.0029782601709176185,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -200.59444156667996,
+        "gain_required_pmol_L_per_mg": 5743.94027421819,
+        "gain_required_pg_ml_per_mg": 1564.6799984250042,
+        "S_pre": 0.14105106328662775,
+        "S_post": 0.7641425003728428,
+        "delta_shape": 0.6230914370862151,
+        "pre_to_rise_shape_ratio": 0.22637297656701869,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 15,
+      "score": 0.10790303926913107,
+      "within_loss_tolerance": true,
+      "price_assumed_baseline_pg_ml": 18.0,
+      "rosano_baseline_cap_pmol_L": 100.0,
+      "n_fast": 10,
+      "q24": 0.0023783560099443616,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -214.397819718398,
+        "gain_required_pmol_L_per_mg": 6021.071777718818,
+        "gain_required_pg_ml_per_mg": 1640.1720996237589,
+        "S_pre": 0.13914393821662904,
+        "S_post": 0.733556383729106,
+        "delta_shape": 0.594412445512477,
+        "pre_to_rise_shape_ratio": 0.23408651562916907,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 16,
+      "score": 0.31730691739018524,
+      "within_loss_tolerance": false,
+      "price_assumed_baseline_pg_ml": 24.0,
+      "rosano_baseline_cap_pmol_L": 100.0,
+      "n_fast": 4,
+      "q24": 0.0033808411105639815,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -45.50394059617474,
+        "gain_required_pmol_L_per_mg": 4257.879324650948,
+        "gain_required_pg_ml_per_mg": 1159.869061468523,
+        "S_pre": 0.11743120062082528,
+        "S_post": 0.9579904854458828,
+        "delta_shape": 0.8405592848250576,
+        "pre_to_rise_shape_ratio": 0.1397060299503631,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 17,
+      "score": 0.10694639357877543,
+      "within_loss_tolerance": true,
+      "price_assumed_baseline_pg_ml": 24.0,
+      "rosano_baseline_cap_pmol_L": 100.0,
+      "n_fast": 6,
+      "q24": 0.001336005570286411,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -61.39049781790226,
+        "gain_required_pmol_L_per_mg": 5120.945167305213,
+        "gain_required_pg_ml_per_mg": 1394.9728050409187,
+        "S_pre": 0.1038443057408566,
+        "S_post": 0.8027387252418121,
+        "delta_shape": 0.6988944195009555,
+        "pre_to_rise_shape_ratio": 0.1485836813735134,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 18,
+      "score": 0.04581601665129708,
+      "within_loss_tolerance": true,
+      "price_assumed_baseline_pg_ml": 24.0,
+      "rosano_baseline_cap_pmol_L": 100.0,
+      "n_fast": 8,
+      "q24": 0.0008611683541270363,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -79.91142609763602,
+        "gain_required_pmol_L_per_mg": 5660.140888351214,
+        "gain_required_pg_ml_per_mg": 1541.8525982977974,
+        "S_pre": 0.1004962355912255,
+        "S_post": 0.7328126514892324,
+        "delta_shape": 0.6323164158980068,
+        "pre_to_rise_shape_ratio": 0.15893345968015424,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 19,
+      "score": 0.03392468836151121,
+      "within_loss_tolerance": true,
+      "price_assumed_baseline_pg_ml": 24.0,
+      "rosano_baseline_cap_pmol_L": 100.0,
+      "n_fast": 10,
+      "q24": 0.0006641542730855463,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -89.39595865915038,
+        "gain_required_pmol_L_per_mg": 5907.567258667156,
+        "gain_required_pg_ml_per_mg": 1609.2528626170408,
+        "S_pre": 0.09949813376325677,
+        "S_post": 0.7053312700257597,
+        "delta_shape": 0.6058331362625029,
+        "pre_to_rise_shape_ratio": 0.1642335616983238,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 20,
+      "score": 0.35289097933172675,
+      "within_loss_tolerance": false,
+      "price_assumed_baseline_pg_ml": 0.0,
+      "rosano_baseline_cap_pmol_L": 225.0,
+      "n_fast": 4,
+      "q24": 0.07190008233804374,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -803.2455815437036,
+        "gain_required_pmol_L_per_mg": 4182.440997187246,
+        "gain_required_pg_ml_per_mg": 1139.3192582912682,
+        "S_pre": 0.4818935077489091,
+        "S_post": 1.3376138878826471,
+        "delta_shape": 0.8557203801337381,
+        "pre_to_rise_shape_ratio": 0.5631436611029357,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 21,
+      "score": 0.15509955215825885,
+      "within_loss_tolerance": false,
+      "price_assumed_baseline_pg_ml": 0.0,
+      "rosano_baseline_cap_pmol_L": 225.0,
+      "n_fast": 6,
+      "q24": 0.06467050628913065,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -871.0190715898543,
+        "gain_required_pmol_L_per_mg": 4872.656760977931,
+        "gain_required_pg_ml_per_mg": 1327.3377175096518,
+        "S_pre": 0.44145078315510167,
+        "S_post": 1.1759576806369803,
+        "delta_shape": 0.7345068974818786,
+        "pre_to_rise_shape_ratio": 0.6010165250571973,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 22,
+      "score": 0.13181079087552597,
+      "within_loss_tolerance": true,
+      "price_assumed_baseline_pg_ml": 0.0,
+      "rosano_baseline_cap_pmol_L": 225.0,
+      "n_fast": 8,
+      "q24": 0.06299386364896951,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -935.8195560724889,
+        "gain_required_pmol_L_per_mg": 5256.950299635351,
+        "gain_required_pg_ml_per_mg": 1432.0213292387227,
+        "S_pre": 0.4338331127656228,
+        "S_post": 1.1146460929165398,
+        "delta_shape": 0.6808129801509171,
+        "pre_to_rise_shape_ratio": 0.6372280279812735,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 23,
+      "score": 0.1631383452416776,
+      "within_loss_tolerance": false,
+      "price_assumed_baseline_pg_ml": 0.0,
+      "rosano_baseline_cap_pmol_L": 225.0,
+      "n_fast": 10,
+      "q24": 0.06275412042774045,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -970.6024430771192,
+        "gain_required_pmol_L_per_mg": 5412.725230921179,
+        "gain_required_pg_ml_per_mg": 1474.4552522258728,
+        "S_pre": 0.43419992441668104,
+        "S_post": 1.0954195221812804,
+        "delta_shape": 0.6612195977645994,
+        "pre_to_rise_shape_ratio": 0.6566652378190104,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 24,
+      "score": 0.3390694453294278,
+      "within_loss_tolerance": false,
+      "price_assumed_baseline_pg_ml": 6.0,
+      "rosano_baseline_cap_pmol_L": 225.0,
+      "n_fast": 4,
+      "q24": 0.04628407594661453,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -550.2910288596133,
+        "gain_required_pmol_L_per_mg": 4191.737267893275,
+        "gain_required_pg_ml_per_mg": 1141.8516120657248,
+        "S_pre": 0.3601327948871966,
+        "S_post": 1.2139553918837802,
+        "delta_shape": 0.8538225969965836,
+        "pre_to_rise_shape_ratio": 0.4217887839394318,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 25,
+      "score": 0.14644403451349838,
+      "within_loss_tolerance": false,
+      "price_assumed_baseline_pg_ml": 6.0,
+      "rosano_baseline_cap_pmol_L": 225.0,
+      "n_fast": 6,
+      "q24": 0.040754416181093205,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -600.6834055592694,
+        "gain_required_pmol_L_per_mg": 4903.331680600358,
+        "gain_required_pg_ml_per_mg": 1335.6937293926335,
+        "S_pre": 0.3284229817635685,
+        "S_post": 1.0583348525350338,
+        "delta_shape": 0.7299118707714654,
+        "pre_to_rise_shape_ratio": 0.44994881562406785,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 26,
+      "score": 0.12573813789398403,
+      "within_loss_tolerance": true,
+      "price_assumed_baseline_pg_ml": 6.0,
+      "rosano_baseline_cap_pmol_L": 225.0,
+      "n_fast": 8,
+      "q24": 0.039234991475028826,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -649.2874866957749,
+        "gain_required_pmol_L_per_mg": 5302.0012306240005,
+        "gain_required_pg_ml_per_mg": 1444.2934433734679,
+        "S_pre": 0.32206234950092283,
+        "S_post": 0.9970904840339625,
+        "delta_shape": 0.6750281345330397,
+        "pre_to_rise_shape_ratio": 0.4771095203664571,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 27,
+      "score": 0.1588256528770016,
+      "within_loss_tolerance": false,
+      "price_assumed_baseline_pg_ml": 6.0,
+      "rosano_baseline_cap_pmol_L": 225.0,
+      "n_fast": 10,
+      "q24": 0.03880652840390354,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -675.0718401712586,
+        "gain_required_pmol_L_per_mg": 5464.75734246132,
+        "gain_required_pg_ml_per_mg": 1488.629077216377,
+        "S_pre": 0.3219070070456598,
+        "S_post": 0.9768308720434828,
+        "delta_shape": 0.6549238649978231,
+        "pre_to_rise_shape_ratio": 0.49151821188670497,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 28,
+      "score": 0.32260063646685017,
+      "within_loss_tolerance": false,
+      "price_assumed_baseline_pg_ml": 12.0,
+      "rosano_baseline_cap_pmol_L": 225.0,
+      "n_fast": 4,
+      "q24": 0.025671614294253974,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -336.80440902946646,
+        "gain_required_pmol_L_per_mg": 4207.109110764645,
+        "gain_required_pg_ml_per_mg": 1146.0389841363785,
+        "S_pre": 0.25732843849684894,
+        "S_post": 1.1080313572403835,
+        "delta_shape": 0.8507029187435345,
+        "pre_to_rise_shape_ratio": 0.30248919196952584,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 29,
+      "score": 0.13170587883887563,
+      "within_loss_tolerance": true,
+      "price_assumed_baseline_pg_ml": 12.0,
+      "rosano_baseline_cap_pmol_L": 225.0,
+      "n_fast": 6,
+      "q24": 0.021277612954031834,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -371.14406965858166,
+        "gain_required_pmol_L_per_mg": 4948.993650596802,
+        "gain_required_pg_ml_per_mg": 1348.1322938155276,
+        "S_pre": 0.23263075699810787,
+        "S_post": 0.9558080840832631,
+        "delta_shape": 0.7231773270851553,
+        "pre_to_rise_shape_ratio": 0.3216787201221468,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 30,
+      "score": 0.11115974928618345,
+      "within_loss_tolerance": true,
+      "price_assumed_baseline_pg_ml": 12.0,
+      "rosano_baseline_cap_pmol_L": 225.0,
+      "n_fast": 8,
+      "q24": 0.019605843741902034,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -405.3814481382668,
+        "gain_required_pmol_L_per_mg": 5378.9768955034415,
+        "gain_required_pg_ml_per_mg": 1465.2620254708368,
+        "S_pre": 0.2267648513783718,
+        "S_post": 0.8921330188809812,
+        "delta_shape": 0.6653681675026094,
+        "pre_to_rise_shape_ratio": 0.3408110914435691,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 31,
+      "score": 0.14425615877488948,
+      "within_loss_tolerance": false,
+      "price_assumed_baseline_pg_ml": 12.0,
+      "rosano_baseline_cap_pmol_L": 225.0,
+      "n_fast": 10,
+      "q24": 0.01869085520461201,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -422.88328643861814,
+        "gain_required_pmol_L_per_mg": 5565.764518244583,
+        "gain_required_pg_ml_per_mg": 1516.1439711916598,
+        "S_pre": 0.22544370477121514,
+        "S_post": 0.8684820489677821,
+        "delta_shape": 0.643038344196567,
+        "pre_to_rise_shape_ratio": 0.35059138666589446,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 32,
+      "score": 0.3064755230255433,
+      "within_loss_tolerance": false,
+      "price_assumed_baseline_pg_ml": 18.0,
+      "rosano_baseline_cap_pmol_L": 225.0,
+      "n_fast": 4,
+      "q24": 0.011108364446319538,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -167.18298473951603,
+        "gain_required_pmol_L_per_mg": 4229.114121638041,
+        "gain_required_pg_ml_per_mg": 1152.0332665862275,
+        "S_pre": 0.17577344760588015,
+        "S_post": 1.0220499719702225,
+        "delta_shape": 0.8462765243643424,
+        "pre_to_rise_shape_ratio": 0.20770214291115732,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 33,
+      "score": 0.10693469492438505,
+      "within_loss_tolerance": true,
+      "price_assumed_baseline_pg_ml": 18.0,
+      "rosano_baseline_cap_pmol_L": 225.0,
+      "n_fast": 6,
+      "q24": 0.007496846139665972,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -187.79287022723128,
+        "gain_required_pmol_L_per_mg": 5017.083102673691,
+        "gain_required_pg_ml_per_mg": 1366.680224100706,
+        "S_pre": 0.1563828472437188,
+        "S_post": 0.8697455575589392,
+        "delta_shape": 0.7133627103152205,
+        "pre_to_rise_shape_ratio": 0.2192192624907691,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 34,
+      "score": 0.07517298188608514,
+      "within_loss_tolerance": true,
+      "price_assumed_baseline_pg_ml": 18.0,
+      "rosano_baseline_cap_pmol_L": 225.0,
+      "n_fast": 8,
+      "q24": 0.005448807572469503,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -209.2554986548176,
+        "gain_required_pmol_L_per_mg": 5531.704267986482,
+        "gain_required_pg_ml_per_mg": 1506.8657771687501,
+        "S_pre": 0.1495942221818821,
+        "S_post": 0.7965919333054997,
+        "delta_shape": 0.6469977111236176,
+        "pre_to_rise_shape_ratio": 0.23121290788198803,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 35,
+      "score": 0.09283110714197557,
+      "within_loss_tolerance": true,
+      "price_assumed_baseline_pg_ml": 18.0,
+      "rosano_baseline_cap_pmol_L": 225.0,
+      "n_fast": 10,
+      "q24": 0.003734441277694798,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -218.36667123678546,
+        "gain_required_pmol_L_per_mg": 5840.477551211892,
+        "gain_required_pg_ml_per_mg": 1590.9772681045745,
+        "S_pre": 0.14480551205921205,
+        "S_post": 0.7575978682694268,
+        "delta_shape": 0.6127923562102147,
+        "pre_to_rise_shape_ratio": 0.23630437062687087,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 36,
+      "score": 0.3159997578262789,
+      "within_loss_tolerance": false,
+      "price_assumed_baseline_pg_ml": 24.0,
+      "rosano_baseline_cap_pmol_L": 225.0,
+      "n_fast": 4,
+      "q24": 0.0036960437684197783,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -46.00305062616172,
+        "gain_required_pmol_L_per_mg": 4241.562402829887,
+        "gain_required_pg_ml_per_mg": 1155.4242448460602,
+        "S_pre": 0.11811829077843156,
+        "S_post": 0.9619111340977144,
+        "delta_shape": 0.843792843319283,
+        "pre_to_rise_shape_ratio": 0.13998494027726277,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 37,
+      "score": 0.09666113750122174,
+      "within_loss_tolerance": true,
+      "price_assumed_baseline_pg_ml": 24.0,
+      "rosano_baseline_cap_pmol_L": 225.0,
+      "n_fast": 6,
+      "q24": 0.0018413720872012796,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -62.51217189593859,
+        "gain_required_pmol_L_per_mg": 5054.607956524174,
+        "gain_required_pg_ml_per_mg": 1376.9021946402002,
+        "S_pre": 0.10565099180493151,
+        "S_post": 0.8137177757738937,
+        "delta_shape": 0.7080667839689622,
+        "pre_to_rise_shape_ratio": 0.14921049002287712,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 38,
+      "score": 0.04090347614412098,
+      "within_loss_tolerance": true,
+      "price_assumed_baseline_pg_ml": 24.0,
+      "rosano_baseline_cap_pmol_L": 225.0,
+      "n_fast": 8,
+      "q24": 0.0010806716708431246,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -80.0642085649551,
+        "gain_required_pmol_L_per_mg": 5596.461273527266,
+        "gain_required_pg_ml_per_mg": 1524.5059312250794,
+        "S_pre": 0.10169433670916965,
+        "S_post": 0.7412055966064929,
+        "delta_shape": 0.6395112598973233,
+        "pre_to_rise_shape_ratio": 0.15901883686222693,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    },
+    {
+      "row_id": 39,
+      "score": 0.03348696307362355,
+      "within_loss_tolerance": true,
+      "price_assumed_baseline_pg_ml": 24.0,
+      "rosano_baseline_cap_pmol_L": 225.0,
+      "n_fast": 10,
+      "q24": 0.0007080944535687233,
+      "yaish": {
+        "physically_feasible_with_nonnegative_baseline": false,
+        "baseline_required_pmol_L": -89.36239312000896,
+        "gain_required_pmol_L_per_mg": 5886.924092943892,
+        "gain_required_pg_ml_per_mg": 1603.6295540571757,
+        "S_pre": 0.0998356318105866,
+        "S_post": 0.7077931905448354,
+        "delta_shape": 0.6079575587342487,
+        "pre_to_rise_shape_ratio": 0.16421480476111144,
+        "pre_to_rise_observed_ratio": 0.11427773120983514,
+        "post_paired_assumption_not_individual_prediction": true
+      }
+    }
+  ],
+  "Doll_used": false,
+  "production_parameters_changed": false,
+  "independent_external_validation": false,
+  "model_approved_for_clinical_prediction": false
+}

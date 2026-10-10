@@ -1,0 +1,247 @@
+{
+  "access_checks": [
+    {
+      "bytes_obtained": false,
+      "result": "403_in_research_web",
+      "url": "https://osf.io/tcruw/"
+    },
+    {
+      "bytes_obtained": false,
+      "result": "tool_fetch_error",
+      "url": "https://api.osf.io/v2/nodes/tcruw/"
+    },
+    {
+      "bytes_obtained": false,
+      "result": "publication_DOI_only_no_dataset_rows_inspected",
+      "url": "https://doi.org/10.17605/OSF.IO/VNC54"
+    },
+    {
+      "bytes_obtained": false,
+      "result": "javascript_cookie_holding_page",
+      "url": "https://www.isrctn.com/ISRCTN15726488"
+    },
+    {
+      "bytes_obtained": false,
+      "result": "registration_PDF_web_text_accessible",
+      "url": "https://www.isrctn.com/pdf/ISRCTN15726488"
+    },
+    {
+      "bytes_obtained": false,
+      "result": "tool_fetch_error",
+      "url": "https://clinicaltrials.gov/api/v2/studies/NCT05428215"
+    }
+  ],
+  "audit_date": "2026-10-10",
+  "candidate_assessments": [
+    {
+      "blockers": [
+        "no_verified_original_dataset_bytes",
+        "no_verified_subject_level_serum_E2_series",
+        "no_verified_actual_dose_time_history",
+        "not_confirmed_new_to_all_model_development",
+        "independent_cohort_not_verified"
+      ],
+      "external_score_eligible": false,
+      "family": "price-1997",
+      "id": "PRICE1997",
+      "independence": "not_independent",
+      "ipd_bytes_verified": false,
+      "ipd_claim": "not_verified",
+      "repository_url": null,
+      "route": "SL_E2",
+      "sample_size": 6,
+      "small_sample_caution": false,
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/9052581/"
+    },
+    {
+      "blockers": [
+        "no_verified_original_dataset_bytes",
+        "no_verified_subject_level_serum_E2_series",
+        "no_verified_actual_dose_time_history",
+        "not_confirmed_new_to_all_model_development",
+        "independent_cohort_not_verified"
+      ],
+      "external_score_eligible": false,
+      "family": "doll-nct04036500",
+      "id": "DOLL2022",
+      "independence": "not_independent",
+      "ipd_bytes_verified": false,
+      "ipd_claim": "not_verified",
+      "repository_url": null,
+      "route": "SL_E2",
+      "sample_size": 10,
+      "small_sample_caution": false,
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/34781041/"
+    },
+    {
+      "blockers": [
+        "no_verified_original_dataset_bytes",
+        "no_verified_subject_level_serum_E2_series",
+        "no_verified_actual_dose_time_history",
+        "not_verified_dense_post_dose_series",
+        "not_confirmed_new_to_all_model_development",
+        "independent_cohort_not_verified"
+      ],
+      "external_score_eligible": false,
+      "family": "burnier-1981",
+      "id": "BURNIER1981",
+      "independence": "not_independent",
+      "ipd_bytes_verified": false,
+      "ipd_claim": "not_verified",
+      "repository_url": null,
+      "route": "SL_E2",
+      "sample_size": 10,
+      "small_sample_caution": false,
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/6786097/"
+    },
+    {
+      "blockers": [
+        "no_verified_original_dataset_bytes",
+        "no_verified_subject_level_serum_E2_series",
+        "no_verified_actual_dose_time_history",
+        "not_verified_dense_post_dose_series",
+        "not_confirmed_new_to_all_model_development",
+        "independent_cohort_not_verified"
+      ],
+      "external_score_eligible": false,
+      "family": "tav-yaish-isrctn15726488",
+      "id": "YAISH2023",
+      "independence": "not_independent",
+      "ipd_bytes_verified": false,
+      "ipd_claim": "declared_available_repository",
+      "repository_url": "https://doi.org/10.17605/OSF.IO/VNC54",
+      "route": "SL_E2",
+      "sample_size": 22,
+      "small_sample_caution": false,
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10732161/"
+    },
+    {
+      "blockers": [
+        "no_verified_original_dataset_bytes",
+        "no_verified_subject_level_serum_E2_series",
+        "no_verified_actual_dose_time_history",
+        "not_verified_dense_post_dose_series",
+        "not_confirmed_new_to_all_model_development",
+        "independent_cohort_not_verified"
+      ],
+      "external_score_eligible": false,
+      "family": "tav-nct07145281",
+      "id": "TLV_NCT07145281",
+      "independence": "unresolved",
+      "ipd_bytes_verified": false,
+      "ipd_claim": "declared_available_repository",
+      "repository_url": "https://doi.org/10.17605/OSF.IO/TCRUW",
+      "route": "SL_E2",
+      "sample_size": 30,
+      "small_sample_caution": false,
+      "source_url": "https://clinicaltrials.gov/study/NCT07145281"
+    },
+    {
+      "blockers": [
+        "no_verified_original_dataset_bytes",
+        "no_verified_subject_level_serum_E2_series",
+        "no_verified_actual_dose_time_history",
+        "independent_cohort_not_verified",
+        "sample_size_below_exploratory_minimum_5"
+      ],
+      "external_score_eligible": false,
+      "family": "maine-nct05428215",
+      "id": "MAINE_NCT05428215",
+      "independence": "unresolved",
+      "ipd_bytes_verified": false,
+      "ipd_claim": "not_shared_per_registry",
+      "repository_url": null,
+      "route": "SL_E2",
+      "sample_size": 2,
+      "small_sample_caution": true,
+      "source_url": "https://clinicaltrials.gov/study/NCT05428215"
+    },
+    {
+      "blockers": [
+        "no_verified_original_dataset_bytes",
+        "no_verified_subject_level_serum_E2_series",
+        "no_verified_actual_dose_time_history",
+        "not_verified_dense_post_dose_series",
+        "independent_cohort_not_verified"
+      ],
+      "external_score_eligible": false,
+      "family": "fiet-1982",
+      "id": "FIET1982",
+      "independence": "unresolved",
+      "ipd_bytes_verified": false,
+      "ipd_claim": "not_verified",
+      "repository_url": null,
+      "route": "SL_E2",
+      "sample_size": 8,
+      "small_sample_caution": false,
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/6812348/"
+    },
+    {
+      "blockers": [
+        "no_verified_original_dataset_bytes",
+        "no_verified_subject_level_serum_E2_series",
+        "no_verified_actual_dose_time_history",
+        "not_verified_dense_post_dose_series",
+        "route_or_formulation_not_directly_comparable",
+        "independent_cohort_not_verified",
+        "sample_size_below_exploratory_minimum_5"
+      ],
+      "external_score_eligible": false,
+      "family": "hp-beta-cyclodextrin-1993",
+      "id": "CYCLODEXTRIN1993",
+      "independence": "unresolved",
+      "ipd_bytes_verified": false,
+      "ipd_claim": "not_verified",
+      "repository_url": null,
+      "route": "SL_E2_DIFFERENT_FORMULATION",
+      "sample_size": null,
+      "small_sample_caution": true,
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/8300895/"
+    }
+  ],
+  "declared_repository_count": 2,
+  "distinct_research_families_not_proof_of_independence": 8,
+  "exposure_counts": {
+    "known_exposed": 4,
+    "not_listed_in_frozen_seven": 3,
+    "unknown": 1
+  },
+  "external_validation_eligible_count": 0,
+  "family_members": {
+    "burnier-1981": [
+      "BURNIER1981"
+    ],
+    "doll-nct04036500": [
+      "DOLL2022"
+    ],
+    "fiet-1982": [
+      "FIET1982"
+    ],
+    "hp-beta-cyclodextrin-1993": [
+      "CYCLODEXTRIN1993"
+    ],
+    "maine-nct05428215": [
+      "MAINE_NCT05428215"
+    ],
+    "price-1997": [
+      "PRICE1997"
+    ],
+    "tav-nct07145281": [
+      "TLV_NCT07145281"
+    ],
+    "tav-yaish-isrctn15726488": [
+      "YAISH2023"
+    ]
+  },
+  "guardrails": [
+    "DOI_or_registry_IPD_claim_is_not_downloaded_data",
+    "prior_exposure_is_study_family_not_abstract_or_paper",
+    "missing_sampling_clock_is_not_approximated",
+    "intervention_or_formulation_differences_not_automatically_pooled",
+    "no_real_patient_level_records_in_package"
+  ],
+  "model_accuracy_claim": "NOT_EVALUATED",
+  "project": "HRT Log P2-AO",
+  "record_count": 8,
+  "verified_original_dataset_count": 0
+}

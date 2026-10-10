@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "phase": "P2-T",
+  "as_of": "2026-10-10",
+  "scope": "RESEARCH_METADATA_ONLY_NO_INDIVIDUAL_HUMAN_DATA_OBTAINED",
+  "rules": {
+    "registered_ipd_sharing_is_not_retrieved_ipd": true,
+    "published_summary_is_not_subject_level_data": true,
+    "preliminary_and_final_reports_share_cohort_id": true,
+    "historically_seen_data_never_becomes_unseen_holdout": true,
+    "production_model_unchanged": true
+  },
+  "sources": [
+    {
+      "id": "DOLL_2020_PRELIMINARY",
+      "cohort_id": "NCT04036500",
+      "report_type": "conference_interim",
+      "n_reported": 5,
+      "reported_e2_peak_pg_ml": 178,
+      "timepoints_min": [0, 60, 120, 180, 240, 360, 480],
+      "actual_pure_sl_subject_series_retrieved": false,
+      "source_role": "EXPOSED_SAME_COHORT",
+      "sources": ["https://pmc.ncbi.nlm.nih.gov/articles/PMC7208646/"],
+      "notes": "Preliminary n=5 in same trial, never independent from Doll2022. The ±47 dispersion definition must not be guessed."
+    },
+    {
+      "id": "DOLL_2022_FINAL",
+      "cohort_id": "NCT04036500",
+      "report_type": "journal_final",
+      "n_reported": 10,
+      "registry_enrolled_n": 11,
+      "reported_e2_peak_pg_ml": 144,
+      "timepoints_min": [0, 60, 120, 180, 240, 360, 480],
+      "actual_pure_sl_subject_series_retrieved": false,
+      "source_role": "EXPOSED_TRAINING_ANCHOR",
+      "ipd_sharing_statement": "YES_ON_DIRECT_PI_CONTACT",
+      "ipd_sharing_access_verified_from_registry_mirror": true,
+      "data_request_sent": false,
+      "sources": ["https://pubmed.ncbi.nlm.nih.gov/34781041/", "https://clinicaltrials.gov/study/NCT04036500", "https://ichgcp.net/clinical-trials-registry/NCT04036500"],
+      "notes": "Registry updated 2025-04-11: IPD supporting publications planned for PI contact, after publication +3 months. This is a request route, NOT verification that IPD exists, is downloadable, or will be shared. 11 registry enrollment vs n10 publication are different denominators."
+    },
+    {
+      "id": "PRICE_1997",
+      "cohort_id": "PRICE1997_CROSSOVER6",
+      "report_type": "journal_original_pdf_seen",
+      "n_reported": 6,
+      "timepoints_min": [0, 60, 120, 180, 240, 360, 480, 720, 1080, 1440],
+      "actual_pure_sl_subject_series_retrieved": false,
+      "source_role": "EXPOSED_AGGREGATE",
+      "sources": ["https://pubmed.ncbi.nlm.nih.gov/9052581/"],
+      "notes": "Same six participants across multiple doses: no independent cohorts. Published Table1 and manually reconstructed Figure1 AUC do not reconcile under previously tested assumptions."
+    },
+    {
+      "id": "ROSANO_1997_PK25",
+      "cohort_id": "ROSANO1997_PK25",
+      "report_type": "journal_aggregate",
+      "n_reported": 25,
+      "timepoints_min": [10, 20, 40, 60],
+      "actual_pure_sl_subject_series_retrieved": false,
+      "source_role": "EXPOSED_AGGREGATE",
+      "sources": ["https://pubmed.ncbi.nlm.nih.gov/9386146/"],
+      "notes": "Predose baseline for this PK25 group absent; do not use separate coronary arm baseline. Early growth can constrain simple positive impulse kernels conditionally."
+    },
+    {
+      "id": "KOMESAROFF_1998",
+      "cohort_id": "KOMESAROFF1998_PK10",
+      "report_type": "journal_aggregate",
+      "n_reported": 10,
+      "timepoints_min": [0, 15, 30],
+      "actual_pure_sl_subject_series_retrieved": false,
+      "source_role": "EXPOSED_AGGREGATE",
+      "sources": ["https://doi.org/10.1210/jcem.83.7.4945"],
+      "notes": "Reported mean ± SEM, not SD; no late concentration curve."
+    },
+    {
+      "id": "CORTEZ_2024_TREAT",
+      "cohort_id": "NCT05010707",
+      "report_type": "journal_trial_aggregate",
+      "n_reported": 39,
+      "route_arm_n": {"SL_once_daily": 13, "SL_twice_daily": 14, "transdermal": 12},
+      "timepoints_min": [],
+      "actual_pure_sl_subject_series_retrieved": false,
+      "source_role": "EXPOSED_CHRONIC_TROUGH_CONTEXT",
+      "samples_type": "visits_predose_morning_not_serial_single_dose",
+      "sources": ["https://pmc.ncbi.nlm.nih.gov/articles/PMC11220669/", "https://clinicaltrials.gov/study/NCT05010707"],
+      "notes": "Independent prospective trial with predose lab visits, but not a controlled time-resolved 0-24h single-dose PK cohort. Actual prior dose clock and interval precision still need verification."
+    },
+    {
+      "id": "NCT05428215_TERMINATED",
+      "cohort_id": "NCT05428215",
+      "report_type": "trial_registry_no_results_posted",
+      "n_reported": 2,
+      "timepoints_min": [],
+      "planned_sampling_min": [0, 60, 120, 240, 360, 480],
+      "actual_pure_sl_subject_series_retrieved": false,
+      "source_role": "UNAVAILABLE_RESEARCH_LEAD",
+      "sources": ["https://clinicaltrials.gov/study/NCT05428215"],
+      "notes": "Terminated in 2023 owing to inadequate recruitment, actual enrollment 2; planned samples cannot be counted as measured results."
+    },
+    {
+      "id": "YAISH_2023",
+      "cohort_id": "YAISH2023_COHORT",
+      "report_type": "journal_trial_aggregate",
+      "n_reported": 22,
+      "timepoints_min": [],
+      "actual_pure_sl_subject_series_retrieved": false,
+      "source_role": "EXPOSED_CHRONIC_MIXED_STATISTICS",
+      "sources": ["https://pmc.ncbi.nlm.nih.gov/articles/PMC10732161/"],
+      "notes": "SL 90-minute median and morning predose mean are different estimands and not subject-matched time series. Overlap with later study not independently ruled out."
+    },
+    {
+      "id": "NCT07145281_OSF_CLAIM",
+      "cohort_id": "NCT07145281",
+      "report_type": "trial_registry_with_claimed_osf_ipd",
+      "n_reported": 30,
+      "timepoints_min": [],
+      "actual_pure_sl_subject_series_retrieved": false,
+      "source_role": "NOT_PK_CHRONIC_HEMOSTASIS",
+      "osf_claimed": "https://doi.org/10.17605/OSF.IO/TCRUW",
+      "osf_file_list_verified": false,
+      "sources": ["https://clinicaltrials.gov/study/NCT07145281"],
+      "notes": "Trial explicitly states data available on OSF; file list was inaccessible during this investigation, so do not claim fetched IPD, timing metadata, or usable PK series. Potential overlap with Yaish remains unresolved."
+    },
+    {
+      "id": "YAGER_2022_TRANSPREP",
+      "cohort_id": "NCT03652623",
+      "report_type": "journal_aggregate",
+      "n_reported": 13,
+      "timepoints_min": [0, 60, 120, 240, 360, 480, 1440],
+      "actual_pure_sl_subject_series_retrieved": false,
+      "route_confirmed_pure_sl": false,
+      "source_role": "EXPOSED_ROUTE_POOLED",
+      "sources": ["https://pmc.ncbi.nlm.nih.gov/articles/PMC9910105/"],
+      "notes": "PO and SL pooled; same underlying trial as Abdelmawla thesis."
+    },
+    {
+      "id": "ABDELMAWLA_2023_THESIS",
+      "cohort_id": "NCT03652623",
+      "report_type": "thesis_model_reanalysis",
+      "n_reported": 12,
+      "timepoints_min": [],
+      "actual_pure_sl_subject_series_retrieved": false,
+      "route_confirmed_pure_sl": false,
+      "source_role": "EXPOSED_SAME_COHORT_PO_SL_POOLED",
+      "sources": ["https://digitalcollections.cuanschutz.edu/works/publication-dissertation/3ygcx-1ac37"],
+      "notes": "Same trial as Yager, not a fresh cohort; prior modeling report 28.4h is not an observed pure SL terminal half-life."
+    }
+  ],
+  "new_true_external_locked_full_sl_pk_cohorts": 0,
+  "production_upgrade_authorized": false,
+  "acquisition_priority": ["DOLL_2022_FINAL", "ROSANO_1997_PK25", "PRICE_1997", "KOMESAROFF_1998", "CORTEZ_2024_TREAT", "NCT07145281_OSF_CLAIM"]
+}

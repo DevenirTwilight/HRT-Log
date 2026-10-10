@@ -1,0 +1,204 @@
+{
+  "as_of": "2026-10-10",
+  "distinct_named_cohort_ids": 9,
+  "early_and_late_same_report_count": 0,
+  "human_90pct_interval_coverage_validated": false,
+  "locked_unseen_external_full_sl_pk_cohorts": 0,
+  "model_accuracy_established": false,
+  "model_upgrade_authorized": false,
+  "multi_report_cohorts": {
+    "NCT03652623": [
+      "YAGER_2022_TRANSPREP",
+      "ABDELMAWLA_2023_THESIS"
+    ],
+    "NCT04036500": [
+      "DOLL_2020_PRELIMINARY",
+      "DOLL_2022_FINAL"
+    ]
+  },
+  "osf_file_lists_confirmed": [],
+  "phase": "P2-T",
+  "registered_ipd_contact_leads": [
+    "DOLL_2022_FINAL"
+  ],
+  "report_time_coverage": [
+    {
+      "cohort_id": "NCT04036500",
+      "has_0min_sampling": true,
+      "has_1_to_4h_samples": true,
+      "has_postdose_early_under_60min": false,
+      "has_sample_at_or_after_12h": false,
+      "id": "DOLL_2020_PRELIMINARY",
+      "published_or_documented_times_min": [
+        0,
+        60,
+        120,
+        180,
+        240,
+        360,
+        480
+      ],
+      "same_report_early_and_late": false,
+      "subject_series_retrieved": false,
+      "usable_unseen_external_holdout": false
+    },
+    {
+      "cohort_id": "NCT04036500",
+      "has_0min_sampling": true,
+      "has_1_to_4h_samples": true,
+      "has_postdose_early_under_60min": false,
+      "has_sample_at_or_after_12h": false,
+      "id": "DOLL_2022_FINAL",
+      "published_or_documented_times_min": [
+        0,
+        60,
+        120,
+        180,
+        240,
+        360,
+        480
+      ],
+      "same_report_early_and_late": false,
+      "subject_series_retrieved": false,
+      "usable_unseen_external_holdout": false
+    },
+    {
+      "cohort_id": "PRICE1997_CROSSOVER6",
+      "has_0min_sampling": true,
+      "has_1_to_4h_samples": true,
+      "has_postdose_early_under_60min": false,
+      "has_sample_at_or_after_12h": true,
+      "id": "PRICE_1997",
+      "published_or_documented_times_min": [
+        0,
+        60,
+        120,
+        180,
+        240,
+        360,
+        480,
+        720,
+        1080,
+        1440
+      ],
+      "same_report_early_and_late": false,
+      "subject_series_retrieved": false,
+      "usable_unseen_external_holdout": false
+    },
+    {
+      "cohort_id": "ROSANO1997_PK25",
+      "has_0min_sampling": false,
+      "has_1_to_4h_samples": true,
+      "has_postdose_early_under_60min": true,
+      "has_sample_at_or_after_12h": false,
+      "id": "ROSANO_1997_PK25",
+      "published_or_documented_times_min": [
+        10,
+        20,
+        40,
+        60
+      ],
+      "same_report_early_and_late": false,
+      "subject_series_retrieved": false,
+      "usable_unseen_external_holdout": false
+    },
+    {
+      "cohort_id": "KOMESAROFF1998_PK10",
+      "has_0min_sampling": true,
+      "has_1_to_4h_samples": false,
+      "has_postdose_early_under_60min": true,
+      "has_sample_at_or_after_12h": false,
+      "id": "KOMESAROFF_1998",
+      "published_or_documented_times_min": [
+        0,
+        15,
+        30
+      ],
+      "same_report_early_and_late": false,
+      "subject_series_retrieved": false,
+      "usable_unseen_external_holdout": false
+    },
+    {
+      "cohort_id": "NCT05010707",
+      "has_0min_sampling": false,
+      "has_1_to_4h_samples": false,
+      "has_postdose_early_under_60min": false,
+      "has_sample_at_or_after_12h": false,
+      "id": "CORTEZ_2024_TREAT",
+      "published_or_documented_times_min": [],
+      "same_report_early_and_late": false,
+      "subject_series_retrieved": false,
+      "usable_unseen_external_holdout": false
+    },
+    {
+      "cohort_id": "NCT05428215",
+      "has_0min_sampling": false,
+      "has_1_to_4h_samples": false,
+      "has_postdose_early_under_60min": false,
+      "has_sample_at_or_after_12h": false,
+      "id": "NCT05428215_TERMINATED",
+      "published_or_documented_times_min": [],
+      "same_report_early_and_late": false,
+      "subject_series_retrieved": false,
+      "usable_unseen_external_holdout": false
+    },
+    {
+      "cohort_id": "YAISH2023_COHORT",
+      "has_0min_sampling": false,
+      "has_1_to_4h_samples": false,
+      "has_postdose_early_under_60min": false,
+      "has_sample_at_or_after_12h": false,
+      "id": "YAISH_2023",
+      "published_or_documented_times_min": [],
+      "same_report_early_and_late": false,
+      "subject_series_retrieved": false,
+      "usable_unseen_external_holdout": false
+    },
+    {
+      "cohort_id": "NCT07145281",
+      "has_0min_sampling": false,
+      "has_1_to_4h_samples": false,
+      "has_postdose_early_under_60min": false,
+      "has_sample_at_or_after_12h": false,
+      "id": "NCT07145281_OSF_CLAIM",
+      "published_or_documented_times_min": [],
+      "same_report_early_and_late": false,
+      "subject_series_retrieved": false,
+      "usable_unseen_external_holdout": false
+    },
+    {
+      "cohort_id": "NCT03652623",
+      "has_0min_sampling": true,
+      "has_1_to_4h_samples": true,
+      "has_postdose_early_under_60min": false,
+      "has_sample_at_or_after_12h": true,
+      "id": "YAGER_2022_TRANSPREP",
+      "published_or_documented_times_min": [
+        0,
+        60,
+        120,
+        240,
+        360,
+        480,
+        1440
+      ],
+      "same_report_early_and_late": false,
+      "subject_series_retrieved": false,
+      "usable_unseen_external_holdout": false
+    },
+    {
+      "cohort_id": "NCT03652623",
+      "has_0min_sampling": false,
+      "has_1_to_4h_samples": false,
+      "has_postdose_early_under_60min": false,
+      "has_sample_at_or_after_12h": false,
+      "id": "ABDELMAWLA_2023_THESIS",
+      "published_or_documented_times_min": [],
+      "same_report_early_and_late": false,
+      "subject_series_retrieved": false,
+      "usable_unseen_external_holdout": false
+    }
+  ],
+  "reports": 11,
+  "retrieved_qualified_pure_sl_subject_series": 0
+}

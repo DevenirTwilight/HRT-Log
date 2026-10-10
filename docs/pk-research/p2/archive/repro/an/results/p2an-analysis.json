@@ -1,0 +1,316 @@
+{
+  "assay_affine_and_nonlinearity": {
+    "NOTE": "All transforms are intentionally hypothetical. Constant offset or linear scaling cancels only if shared across baseline, anchor and evaluation samples.",
+    "affine_assay_ratios": [
+      0.5999999999999999,
+      0.30000000000000004,
+      0.09999999999999999
+    ],
+    "anchor_pg_ml": 225.0,
+    "baseline_pg_ml": 25.0,
+    "followups_pg_ml": [
+      145.0,
+      85.0,
+      45.0
+    ],
+    "max_affine_abs_delta": 1.1102230246251565e-16,
+    "max_nonlinear_abs_delta": 0.04485981308411224,
+    "max_time_variable_abs_delta": 0.040000000000000036,
+    "nonlinear_assay_ratios": [
+      0.5551401869158877,
+      0.26074766355140183,
+      0.08317757009345793
+    ],
+    "original_ratios": [
+      0.6,
+      0.3,
+      0.1
+    ],
+    "time_variable_plus8pg_ratios": [
+      0.64,
+      0.34,
+      0.14
+    ]
+  },
+  "covariance": {
+    "correlation_r2_r4_delta": 0.2968297964288087,
+    "correlation_r2_r4_monte_carlo": 0.29594826770993987,
+    "covariance_delta_approx": [
+      [
+        0.00095,
+        0.0002875,
+        0.00026250000000000004
+      ],
+      [
+        0.0002875,
+        0.0009875,
+        0.0004125
+      ],
+      [
+        0.00026250000000000004,
+        0.0004125,
+        0.0011375
+      ]
+    ],
+    "covariance_monte_carlo": [
+      [
+        0.0009569576138065615,
+        0.0002892381846584492,
+        0.00025844619365306685
+      ],
+      [
+        0.0002892381846584492,
+        0.0009981296290130575,
+        0.000411723491742306
+      ],
+      [
+        0.00025844619365306685,
+        0.000411723491742306,
+        0.0011387115898897227
+      ]
+    ],
+    "delta_assumptions": "Independent additive approximately Gaussian raw concentration errors; same baseline and anchor reused for all ratios. Not an observed assay covariance matrix.",
+    "expected_ratio": [
+      0.6,
+      0.3,
+      0.1
+    ],
+    "max_elementwise_relative_covariance_delta_mc": 0.015443071797840723,
+    "monte_carlo_valid_samples": 75000,
+    "scenario": {
+      "anchor": 225.0,
+      "baseline": 25.0,
+      "followup": [
+        145.0,
+        85.0,
+        45.0
+      ],
+      "sd_anchor": 5.0,
+      "sd_base": 5.0,
+      "sd_followup": [
+        5.0,
+        5.0,
+        5.0
+      ]
+    }
+  },
+  "gates": {
+    "absolute_pgml": "BLOCKED",
+    "external_human_shape": "NO_EXTERNAL_DATA",
+    "long_tail": "BLOCKED",
+    "missingness_mechanism": "DEMONSTRATED_NOT_IDENTIFIED",
+    "production_replacement": "NOT_AUTHORIZED",
+    "synthetic_math": "RUNNABLE"
+  },
+  "is_clinical_validation": false,
+  "missingness": {
+    "complete": {
+      "INVALID_independent_point_bootstrap_95_percent_ILLUSTRATIVE": [
+        0.003589072882902275,
+        0.009295919139932343
+      ],
+      "excluded_subjects": 0,
+      "mechanism": "complete",
+      "paired_subject_cluster_bootstrap_95_percent_ILLUSTRATIVE": [
+        0.00584179983167653,
+        0.007053116681476105
+      ],
+      "partial_identification_no_imputation": {
+        "assumptions": "Pointwise absolute-error triangle inequality, fixed positive model predictions, no assumptions about missing true observations; bounds are arithmetic not probabilistic.",
+        "full_schedule_delta_lower": 0.0064421083358898535,
+        "full_schedule_delta_upper": 0.0064421083358898535,
+        "identifies_sign": "A_better",
+        "missing_evaluations": 0,
+        "observed_evaluations": 600
+      },
+      "points_weighted_delta": 0.0064421083358898535,
+      "retained_by_time": {
+        "2.0": 120,
+        "3.0": 120,
+        "4.0": 120,
+        "6.0": 120,
+        "8.0": 120
+      },
+      "scored_points": 600,
+      "stratified_subject_cluster_bootstrap_95_percent_ILLUSTRATIVE": [
+        0.005839993007237588,
+        0.007045844056702595
+      ],
+      "subjects": 120,
+      "subjects_equal_weight_delta_mockB_minus_mockA": 0.0064421083358898535
+    },
+    "drop_late_evaluations": {
+      "INVALID_independent_point_bootstrap_95_percent_ILLUSTRATIVE": [
+        -0.013991971590127227,
+        -0.009011797945031597
+      ],
+      "excluded_subjects": 0,
+      "mechanism": "drop_late_evaluations",
+      "paired_subject_cluster_bootstrap_95_percent_ILLUSTRATIVE": [
+        -0.015225026021243973,
+        -0.009581039875012966
+      ],
+      "partial_identification_no_imputation": {
+        "assumptions": "Pointwise absolute-error triangle inequality, fixed positive model predictions, no assumptions about missing true observations; bounds are arithmetic not probabilistic.",
+        "full_schedule_delta_lower": -0.026350157543531386,
+        "full_schedule_delta_upper": 0.011016509123135277,
+        "identifies_sign": "UNDETERMINED",
+        "missing_evaluations": 203,
+        "observed_evaluations": 397
+      },
+      "points_weighted_delta": -0.011587139864279174,
+      "retained_by_time": {
+        "2.0": 120,
+        "3.0": 120,
+        "4.0": 120,
+        "6.0": 23,
+        "8.0": 14
+      },
+      "scored_points": 397,
+      "stratified_subject_cluster_bootstrap_95_percent_ILLUSTRATIVE": [
+        -0.015204749687114162,
+        -0.009692456142695902
+      ],
+      "subjects": 120,
+      "subjects_equal_weight_delta_mockB_minus_mockA": -0.012496060150388505
+    },
+    "mcar": {
+      "INVALID_independent_point_bootstrap_95_percent_ILLUSTRATIVE": [
+        0.002817092736895994,
+        0.0103419224324587
+      ],
+      "excluded_subjects": 8,
+      "mechanism": "mcar",
+      "paired_subject_cluster_bootstrap_95_percent_ILLUSTRATIVE": [
+        0.003586534103399177,
+        0.009025224107157703
+      ],
+      "partial_identification_no_imputation": {
+        "assumptions": "Pointwise absolute-error triangle inequality, fixed positive model predictions, no assumptions about missing true observations; bounds are arithmetic not probabilistic.",
+        "full_schedule_delta_lower": -0.009972196986198728,
+        "full_schedule_delta_upper": 0.01849446968046795,
+        "identifies_sign": "UNDETERMINED",
+        "missing_evaluations": 225,
+        "observed_evaluations": 375
+      },
+      "points_weighted_delta": 0.006552689681642264,
+      "retained_by_time": {
+        "2.0": 76,
+        "3.0": 76,
+        "4.0": 72,
+        "6.0": 65,
+        "8.0": 78
+      },
+      "scored_points": 367,
+      "stratified_subject_cluster_bootstrap_95_percent_ILLUSTRATIVE": [
+        0.0036720764718649887,
+        0.008947043320357626
+      ],
+      "subjects": 112,
+      "subjects_equal_weight_delta_mockB_minus_mockA": 0.006321352013615903
+    },
+    "signal_dependent_mnar": {
+      "INVALID_independent_point_bootstrap_95_percent_ILLUSTRATIVE": [
+        -0.015032626331387052,
+        -0.009927894506436007
+      ],
+      "excluded_subjects": 1,
+      "mechanism": "signal_dependent_mnar",
+      "paired_subject_cluster_bootstrap_95_percent_ILLUSTRATIVE": [
+        -0.016174643190915813,
+        -0.010365444022854296
+      ],
+      "partial_identification_no_imputation": {
+        "assumptions": "Pointwise absolute-error triangle inequality, fixed positive model predictions, no assumptions about missing true observations; bounds are arithmetic not probabilistic.",
+        "full_schedule_delta_lower": -0.02821770650850553,
+        "full_schedule_delta_upper": 0.013348960158161135,
+        "identifies_sign": "UNDETERMINED",
+        "missing_evaluations": 244,
+        "observed_evaluations": 356
+      },
+      "points_weighted_delta": -0.012508799732685403,
+      "retained_by_time": {
+        "2.0": 110,
+        "3.0": 107,
+        "4.0": 109,
+        "6.0": 12,
+        "8.0": 17
+      },
+      "scored_points": 355,
+      "stratified_subject_cluster_bootstrap_95_percent_ILLUSTRATIVE": [
+        -0.01619607656580225,
+        -0.010254977521707653
+      ],
+      "subjects": 119,
+      "subjects_equal_weight_delta_mockB_minus_mockA": -0.013325456061633593
+    }
+  },
+  "model_names": "MOCK_A / MOCK_B are made-up demonstration functions, NOT real Legacy/M2 engines",
+  "not_for": [
+    "medical decisions",
+    "individual pg/mL prediction",
+    "P2-X model ranking",
+    "clinical uncertainty quantification"
+  ],
+  "origin": "SYNTHETIC_ONLY",
+  "p2am_reference_replayed": {
+    "IMPORTANT": "These demo prediction functions are NOT HRT Log production engines.",
+    "absolute_pgml_gate": "BLOCKED: no pre-locked uncalibrated individual serum concentration model",
+    "clinical_validation": false,
+    "origin": "SYNTHETIC",
+    "paired_delta_m2_demo_minus_legacy_demo": -0.03717862313282677,
+    "scored_samples": 40,
+    "subjects": 8
+  },
+  "phase": "P2-AN",
+  "weak_anchor_denominator_sensitivity": {
+    "note": "Fully hypothetical independent Gaussian errors of 5 pg/mL on baseline, anchor and evaluation. `passes_p2am_3sigma_rule` describes the UNOBSERVED true signal only. Actual P2-AM gate applies to each noisy OBSERVED denominator; conditional gate percentiles and retention are shown separately. Not real instrument calibration or clinical CI.",
+    "scenarios": {
+      "200": {
+        "accepted_ratio_2_5_percentile": 0.3897293992860398,
+        "accepted_ratio_97_5_percentile": 0.5099933994251384,
+        "accepted_ratio_abs_gt2_fraction": 0.0,
+        "accepted_ratio_gt2_fraction": 0.0,
+        "accepted_ratio_median": 0.45009540406036824,
+        "crossed_or_zero_denominator_fraction": 0.0,
+        "denominator_true_pg_ml": 200.0,
+        "n_accepted": 100000,
+        "observed_gate_ratio_2_5_percentile": 0.3897293992860398,
+        "observed_gate_ratio_97_5_percentile": 0.5099933994251384,
+        "observed_p2am_quality_gate_retention_fraction": 1.0,
+        "passes_p2am_3sigma_rule": true,
+        "signal_to_joint_sd": 28.2842712474619
+      },
+      "23": {
+        "accepted_ratio_2_5_percentile": -0.22449176594854314,
+        "accepted_ratio_97_5_percentile": 1.078689746688213,
+        "accepted_ratio_abs_gt2_fraction": 0.0022310485928386343,
+        "accepted_ratio_gt2_fraction": 0.0014806959270857302,
+        "accepted_ratio_median": 0.45093163249483953,
+        "crossed_or_zero_denominator_fraction": 0.00047,
+        "denominator_true_pg_ml": 23.0,
+        "n_accepted": 99953,
+        "observed_gate_ratio_2_5_percentile": -0.0021463213328879196,
+        "observed_gate_ratio_97_5_percentile": 0.91209130586303,
+        "observed_p2am_quality_gate_retention_fraction": 0.59969,
+        "passes_p2am_3sigma_rule": true,
+        "signal_to_joint_sd": 3.2526911934581184
+      },
+      "35": {
+        "accepted_ratio_2_5_percentile": 0.0685235305880855,
+        "accepted_ratio_97_5_percentile": 0.8155635637646154,
+        "accepted_ratio_abs_gt2_fraction": 0.0,
+        "accepted_ratio_gt2_fraction": 0.0,
+        "accepted_ratio_median": 0.4505450365940739,
+        "crossed_or_zero_denominator_fraction": 0.0,
+        "denominator_true_pg_ml": 35.0,
+        "n_accepted": 100000,
+        "observed_gate_ratio_2_5_percentile": 0.08134464667118105,
+        "observed_gate_ratio_97_5_percentile": 0.8077519192376481,
+        "observed_p2am_quality_gate_retention_fraction": 0.97416,
+        "passes_p2am_3sigma_rule": true,
+        "signal_to_joint_sd": 4.949747468305833
+      }
+    }
+  }
+}

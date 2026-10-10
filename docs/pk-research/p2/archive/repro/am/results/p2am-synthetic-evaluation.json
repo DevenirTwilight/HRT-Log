@@ -1,0 +1,724 @@
+{
+  "absolute_pgml_gate": "BLOCKED: no pre-locked uncalibrated individual serum concentration model",
+  "by_assay": {
+    "IMMUNOASSAY": {
+      "n_subjects": 4,
+      "paired_delta_mean": -0.03592765553073393
+    },
+    "LC-MS/MS": {
+      "n_subjects": 4,
+      "paired_delta_mean": -0.038429590734919604
+    }
+  },
+  "by_window": {
+    "early_1to8": {
+      "mean_delta_mae_m2_minus_legacy": -0.03491397995466188,
+      "n_subjects": 8
+    },
+    "late_8to24": {
+      "mean_delta_mae_m2_minus_legacy": -0.0405755879000741,
+      "n_subjects": 8
+    }
+  },
+  "is_clinical_validation": false,
+  "limitations": [
+    "Calibration uses one observed subject anchor; NOT fully prospective uncalibrated personal prediction.",
+    "Baseline is presumed constant for this descriptive single-dose experiment; not established clinically.",
+    "No confidence, p-value, treatment decision or clinical replacement approval is produced.",
+    "Only single-dose verified E2 SL events supported; future repeated-dose track must be independently pre-registered.",
+    "Participant IDs are in result: never share unredacted output from human data."
+  ],
+  "mean_mae_legacy": 0.05573250811476597,
+  "mean_mae_m2": 0.018553884981939196,
+  "metric": "subject equally weighted MAE of post-anchor baseline-subtracted response normalized by the same-subject measured baseline-to-anchor increment",
+  "n_scored_samples": 40,
+  "n_studies": 2,
+  "n_subjects": 8,
+  "one_anchor_is_calibration_NOT_scored": true,
+  "origin": "SYNTHETIC",
+  "paired_mae_delta_m2_minus_legacy": -0.03717862313282677,
+  "participants": [
+    {
+      "assay_method": "LC-MS/MS",
+      "mean_mae_legacy": 0.0513081106233243,
+      "mean_mae_m2": 0.01632413075513351,
+      "models": {
+        "LEGACY_LOCKED": {
+          "mae": 0.0513081106233243,
+          "mse": 0.004158517960718979,
+          "points": [
+            {
+              "abs_error": 0.026804339760769125,
+              "observed_normalized_increment": 1.0769478043480487,
+              "predicted_normalized_increment": 1.1037521441088178,
+              "time_hour": 2.0
+            },
+            {
+              "abs_error": 0.09414148424071567,
+              "observed_normalized_increment": 0.6668466233345725,
+              "predicted_normalized_increment": 0.7609881075752881,
+              "time_hour": 4.0
+            },
+            {
+              "abs_error": 0.103250378200034,
+              "observed_normalized_increment": 0.1793525198523139,
+              "predicted_normalized_increment": 0.2826028980523479,
+              "time_hour": 8.0
+            },
+            {
+              "abs_error": 0.019899037544449882,
+              "observed_normalized_increment": 0.05947634647635036,
+              "predicted_normalized_increment": 0.07937538402080024,
+              "time_hour": 12.0
+            },
+            {
+              "abs_error": 0.012445313370652836,
+              "observed_normalized_increment": 0.012445313370652836,
+              "predicted_normalized_increment": 0.0,
+              "time_hour": 24.0
+            }
+          ],
+          "rmse": 0.06448657194113344
+        },
+        "M2_LOCKED": {
+          "mae": 0.01632413075513351,
+          "mse": 0.00037186289558322676,
+          "points": [
+            {
+              "abs_error": 0.009595101291182129,
+              "observed_normalized_increment": 1.0769478043480487,
+              "predicted_normalized_increment": 1.0865429056392308,
+              "time_hour": 2.0
+            },
+            {
+              "abs_error": 0.02653177146358987,
+              "observed_normalized_increment": 0.6668466233345725,
+              "predicted_normalized_increment": 0.6933783947981623,
+              "time_hour": 4.0
+            },
+            {
+              "abs_error": 0.030711017794302797,
+              "observed_normalized_increment": 0.1793525198523139,
+              "predicted_normalized_increment": 0.1486415020580111,
+              "time_hour": 8.0
+            },
+            {
+              "abs_error": 0.00505879143677667,
+              "observed_normalized_increment": 0.05947634647635036,
+              "predicted_normalized_increment": 0.05441755503957369,
+              "time_hour": 12.0
+            },
+            {
+              "abs_error": 0.009723971789816082,
+              "observed_normalized_increment": 0.012445313370652836,
+              "predicted_normalized_increment": 0.002721341580836755,
+              "time_hour": 24.0
+            }
+          ],
+          "rmse": 0.019283746928002006
+        }
+      },
+      "n_scored": 5,
+      "paired_mae_delta_m2_minus_legacy": -0.03498397986819079,
+      "study_code": "DEMO_CENTER_A",
+      "subject_code": "DEMO_PERSON_001"
+    },
+    {
+      "assay_method": "IMMUNOASSAY",
+      "mean_mae_legacy": 0.03789347227603557,
+      "mean_mae_m2": 0.012543685759406604,
+      "models": {
+        "LEGACY_LOCKED": {
+          "mae": 0.03789347227603557,
+          "mse": 0.0023425290422154827,
+          "points": [
+            {
+              "abs_error": 0.002719602909611041,
+              "observed_normalized_increment": 1.071372427418748,
+              "predicted_normalized_increment": 1.074092030328359,
+              "time_hour": 2.0
+            },
+            {
+              "abs_error": 0.04140888814132759,
+              "observed_normalized_increment": 0.6656442202727868,
+              "predicted_normalized_increment": 0.7070531084141144,
+              "time_hour": 4.0
+            },
+            {
+              "abs_error": 0.004406599532243982,
+              "observed_normalized_increment": 0.17516903341787857,
+              "predicted_normalized_increment": 0.17076243388563458,
+              "time_hour": 8.0
+            },
+            {
+              "abs_error": 0.0659838168827012,
+              "observed_normalized_increment": 0.0659838168827012,
+              "predicted_normalized_increment": 0.0,
+              "time_hour": 12.0
+            },
+            {
+              "abs_error": 0.074948453914294,
+              "observed_normalized_increment": 0.017867014309106106,
+              "predicted_normalized_increment": 0.0928154682234001,
+              "time_hour": 24.0
+            }
+          ],
+          "rmse": 0.04839968018711986
+        },
+        "M2_LOCKED": {
+          "mae": 0.012543685759406604,
+          "mse": 0.000291109944482668,
+          "points": [
+            {
+              "abs_error": 0.00971205685023624,
+              "observed_normalized_increment": 1.071372427418748,
+              "predicted_normalized_increment": 1.0810844842689842,
+              "time_hour": 2.0
+            },
+            {
+              "abs_error": 0.014703798591079842,
+              "observed_normalized_increment": 0.6656442202727868,
+              "predicted_normalized_increment": 0.6803480188638666,
+              "time_hour": 4.0
+            },
+            {
+              "abs_error": 0.033561395576868214,
+              "observed_normalized_increment": 0.17516903341787857,
+              "predicted_normalized_increment": 0.14160763784101035,
+              "time_hour": 8.0
+            },
+            {
+              "abs_error": 0.0004448001274200697,
+              "observed_normalized_increment": 0.0659838168827012,
+              "predicted_normalized_increment": 0.06553901675528113,
+              "time_hour": 12.0
+            },
+            {
+              "abs_error": 0.004296377651428653,
+              "observed_normalized_increment": 0.017867014309106106,
+              "predicted_normalized_increment": 0.013570636657677453,
+              "time_hour": 24.0
+            }
+          ],
+          "rmse": 0.017061944334766422
+        }
+      },
+      "n_scored": 5,
+      "paired_mae_delta_m2_minus_legacy": -0.02534978651662896,
+      "study_code": "DEMO_CENTER_A",
+      "subject_code": "DEMO_PERSON_002"
+    },
+    {
+      "assay_method": "LC-MS/MS",
+      "mean_mae_legacy": 0.06945632530366812,
+      "mean_mae_m2": 0.009766711556876957,
+      "models": {
+        "LEGACY_LOCKED": {
+          "mae": 0.06945632530366812,
+          "mse": 0.005944862547416442,
+          "points": [
+            {
+              "abs_error": 0.022491778470250523,
+              "observed_normalized_increment": 1.0711483243992959,
+              "predicted_normalized_increment": 1.0486565459290453,
+              "time_hour": 2.0
+            },
+            {
+              "abs_error": 0.043059209186412484,
+              "observed_normalized_increment": 0.6736890754397433,
+              "predicted_normalized_increment": 0.6306298662533308,
+              "time_hour": 4.0
+            },
+            {
+              "abs_error": 0.1016682876447847,
+              "observed_normalized_increment": 0.16986895150449619,
+              "predicted_normalized_increment": 0.06820066385971149,
+              "time_hour": 8.0
+            },
+            {
+              "abs_error": 0.06982385927168824,
+              "observed_normalized_increment": 0.06982385927168824,
+              "predicted_normalized_increment": 0.0,
+              "time_hour": 12.0
+            },
+            {
+              "abs_error": 0.11023849194520464,
+              "observed_normalized_increment": 0.02368904455838496,
+              "predicted_normalized_increment": 0.1339275365035896,
+              "time_hour": 24.0
+            }
+          ],
+          "rmse": 0.07710293475229359
+        },
+        "M2_LOCKED": {
+          "mae": 0.009766711556876957,
+          "mse": 0.00020463643133084155,
+          "points": [
+            {
+              "abs_error": 0.003916740826741538,
+              "observed_normalized_increment": 1.0711483243992959,
+              "predicted_normalized_increment": 1.0750650652260374,
+              "time_hour": 2.0
+            },
+            {
+              "abs_error": 0.006843592438118717,
+              "observed_normalized_increment": 0.6736890754397433,
+              "predicted_normalized_increment": 0.6668454830016246,
+              "time_hour": 4.0
+            },
+            {
+              "abs_error": 0.030304783460835594,
+              "observed_normalized_increment": 0.16986895150449619,
+              "predicted_normalized_increment": 0.1395641680436606,
+              "time_hour": 8.0
+            },
+            {
+              "abs_error": 0.006379446134572531,
+              "observed_normalized_increment": 0.06982385927168824,
+              "predicted_normalized_increment": 0.07620330540626077,
+              "time_hour": 12.0
+            },
+            {
+              "abs_error": 0.0013889949241164025,
+              "observed_normalized_increment": 0.02368904455838496,
+              "predicted_normalized_increment": 0.02507803948250136,
+              "time_hour": 24.0
+            }
+          ],
+          "rmse": 0.014305119060351841
+        }
+      },
+      "n_scored": 5,
+      "paired_mae_delta_m2_minus_legacy": -0.05968961374679116,
+      "study_code": "DEMO_CENTER_A",
+      "subject_code": "DEMO_PERSON_003"
+    },
+    {
+      "assay_method": "IMMUNOASSAY",
+      "mean_mae_legacy": 0.06696577358963704,
+      "mean_mae_m2": 0.017655705799924766,
+      "models": {
+        "LEGACY_LOCKED": {
+          "mae": 0.06696577358963704,
+          "mse": 0.005685904172328461,
+          "points": [
+            {
+              "abs_error": 0.030008933805773186,
+              "observed_normalized_increment": 1.0760462820038865,
+              "predicted_normalized_increment": 1.0460373481981133,
+              "time_hour": 2.0
+            },
+            {
+              "abs_error": 0.09728939417619054,
+              "observed_normalized_increment": 0.6832185497858404,
+              "predicted_normalized_increment": 0.5859291556096499,
+              "time_hour": 4.0
+            },
+            {
+              "abs_error": 0.1186514473088286,
+              "observed_normalized_increment": 0.16817125862881496,
+              "predicted_normalized_increment": 0.04951981131998637,
+              "time_hour": 8.0
+            },
+            {
+              "abs_error": 0.04020598813065494,
+              "observed_normalized_increment": 0.06785354110996082,
+              "predicted_normalized_increment": 0.027647552979305882,
+              "time_hour": 12.0
+            },
+            {
+              "abs_error": 0.04867310452673791,
+              "observed_normalized_increment": 0.024793300421022967,
+              "predicted_normalized_increment": 0.07346640494776088,
+              "time_hour": 24.0
+            }
+          ],
+          "rmse": 0.07540493466828588
+        },
+        "M2_LOCKED": {
+          "mae": 0.017655705799924766,
+          "mse": 0.00038050141623131156,
+          "points": [
+            {
+              "abs_error": 0.006678745335197966,
+              "observed_normalized_increment": 1.0760462820038865,
+              "predicted_normalized_increment": 1.0693675366686886,
+              "time_hour": 2.0
+            },
+            {
+              "abs_error": 0.02837904148672654,
+              "observed_normalized_increment": 0.6832185497858404,
+              "predicted_normalized_increment": 0.6548395082991139,
+              "time_hour": 4.0
+            },
+            {
+              "abs_error": 0.0254377592424824,
+              "observed_normalized_increment": 0.16817125862881496,
+              "predicted_normalized_increment": 0.14273349938633256,
+              "time_hour": 8.0
+            },
+            {
+              "abs_error": 0.01701437319215446,
+              "observed_normalized_increment": 0.06785354110996082,
+              "predicted_normalized_increment": 0.08486791430211528,
+              "time_hour": 12.0
+            },
+            {
+              "abs_error": 0.010768609743062468,
+              "observed_normalized_increment": 0.024793300421022967,
+              "predicted_normalized_increment": 0.035561910164085435,
+              "time_hour": 24.0
+            }
+          ],
+          "rmse": 0.01950644550478922
+        }
+      },
+      "n_scored": 5,
+      "paired_mae_delta_m2_minus_legacy": -0.049310067789712274,
+      "study_code": "DEMO_CENTER_A",
+      "subject_code": "DEMO_PERSON_004"
+    },
+    {
+      "assay_method": "LC-MS/MS",
+      "mean_mae_legacy": 0.04221986272498686,
+      "mean_mae_m2": 0.025558564390169774,
+      "models": {
+        "LEGACY_LOCKED": {
+          "mae": 0.04221986272498686,
+          "mse": 0.0031673913308687732,
+          "points": [
+            {
+              "abs_error": 0.006433226111310253,
+              "observed_normalized_increment": 1.0813450887230842,
+              "predicted_normalized_increment": 1.074911862611774,
+              "time_hour": 2.0
+            },
+            {
+              "abs_error": 0.06166358796716753,
+              "observed_normalized_increment": 0.6856789243410597,
+              "predicted_normalized_increment": 0.6240153363738922,
+              "time_hour": 4.0
+            },
+            {
+              "abs_error": 0.016092764351368027,
+              "observed_normalized_increment": 0.17131171227440883,
+              "predicted_normalized_increment": 0.1552189479230408,
+              "time_hour": 8.0
+            },
+            {
+              "abs_error": 0.10635681782738585,
+              "observed_normalized_increment": 0.06225147597075787,
+              "predicted_normalized_increment": 0.1686082937981437,
+              "time_hour": 12.0
+            },
+            {
+              "abs_error": 0.020552917367702647,
+              "observed_normalized_increment": 0.020552917367702647,
+              "predicted_normalized_increment": 0.0,
+              "time_hour": 24.0
+            }
+          ],
+          "rmse": 0.05627958182919249
+        },
+        "M2_LOCKED": {
+          "mae": 0.025558564390169774,
+          "mse": 0.00071641918129962,
+          "points": [
+            {
+              "abs_error": 0.016528566593592364,
+              "observed_normalized_increment": 1.0813450887230842,
+              "predicted_normalized_increment": 1.0648165221294918,
+              "time_hour": 2.0
+            },
+            {
+              "abs_error": 0.03961306926852337,
+              "observed_normalized_increment": 0.6856789243410597,
+              "predicted_normalized_increment": 0.6460658550725363,
+              "time_hour": 4.0
+            },
+            {
+              "abs_error": 0.02066738705143828,
+              "observed_normalized_increment": 0.17131171227440883,
+              "predicted_normalized_increment": 0.15064432522297055,
+              "time_hour": 8.0
+            },
+            {
+              "abs_error": 0.02803083298713959,
+              "observed_normalized_increment": 0.06225147597075787,
+              "predicted_normalized_increment": 0.09028230895789746,
+              "time_hour": 12.0
+            },
+            {
+              "abs_error": 0.022952966050155264,
+              "observed_normalized_increment": 0.020552917367702647,
+              "predicted_normalized_increment": 0.04350588341785791,
+              "time_hour": 24.0
+            }
+          ],
+          "rmse": 0.026766007944772414
+        }
+      },
+      "n_scored": 5,
+      "paired_mae_delta_m2_minus_legacy": -0.016661298334817085,
+      "study_code": "DEMO_CENTER_B",
+      "subject_code": "DEMO_PERSON_005"
+    },
+    {
+      "assay_method": "IMMUNOASSAY",
+      "mean_mae_legacy": 0.07120374964861663,
+      "mean_mae_m2": 0.02752245643161191,
+      "models": {
+        "LEGACY_LOCKED": {
+          "mae": 0.07120374964861663,
+          "mse": 0.008177583740279415,
+          "points": [
+            {
+              "abs_error": 0.026744569751808056,
+              "observed_normalized_increment": 1.0822988953859796,
+              "predicted_normalized_increment": 1.1090434651377876,
+              "time_hour": 2.0
+            },
+            {
+              "abs_error": 0.04071940244194194,
+              "observed_normalized_increment": 0.679443175761523,
+              "predicted_normalized_increment": 0.720162578203465,
+              "time_hour": 4.0
+            },
+            {
+              "abs_error": 0.11532166925778889,
+              "observed_normalized_increment": 0.17611195130133586,
+              "predicted_normalized_increment": 0.29143362055912475,
+              "time_hour": 8.0
+            },
+            {
+              "abs_error": 0.1580680576144755,
+              "observed_normalized_increment": 0.05829008012048677,
+              "predicted_normalized_increment": 0.2163581377349623,
+              "time_hour": 12.0
+            },
+            {
+              "abs_error": 0.015165049177068745,
+              "observed_normalized_increment": 0.015165049177068745,
+              "predicted_normalized_increment": 0.0,
+              "time_hour": 24.0
+            }
+          ],
+          "rmse": 0.09042999358774396
+        },
+        "M2_LOCKED": {
+          "mae": 0.02752245643161191,
+          "mse": 0.0008372874234199783,
+          "points": [
+            {
+              "abs_error": 0.02020798084849562,
+              "observed_normalized_increment": 1.0822988953859796,
+              "predicted_normalized_increment": 1.062090914537484,
+              "time_hour": 2.0
+            },
+            {
+              "abs_error": 0.037598857906755656,
+              "observed_normalized_increment": 0.679443175761523,
+              "predicted_normalized_increment": 0.6418443178547674,
+              "time_hour": 4.0
+            },
+            {
+              "abs_error": 0.01392293156075744,
+              "observed_normalized_increment": 0.17611195130133586,
+              "predicted_normalized_increment": 0.16218901974057842,
+              "time_hour": 8.0
+            },
+            {
+              "abs_error": 0.03332842815647333,
+              "observed_normalized_increment": 0.05829008012048677,
+              "predicted_normalized_increment": 0.0916185082769601,
+              "time_hour": 12.0
+            },
+            {
+              "abs_error": 0.03255408368557751,
+              "observed_normalized_increment": 0.015165049177068745,
+              "predicted_normalized_increment": 0.04771913286264625,
+              "time_hour": 24.0
+            }
+          ],
+          "rmse": 0.028935919259978217
+        }
+      },
+      "n_scored": 5,
+      "paired_mae_delta_m2_minus_legacy": -0.043681293217004716,
+      "study_code": "DEMO_CENTER_B",
+      "subject_code": "DEMO_PERSON_006"
+    },
+    {
+      "assay_method": "LC-MS/MS",
+      "mean_mae_legacy": 0.06445939536909448,
+      "mean_mae_m2": 0.022075924379215083,
+      "models": {
+        "LEGACY_LOCKED": {
+          "mae": 0.06445939536909448,
+          "mse": 0.005815848123580049,
+          "points": [
+            {
+              "abs_error": 0.031239764156510086,
+              "observed_normalized_increment": 1.0784384757764363,
+              "predicted_normalized_increment": 1.1096782399329463,
+              "time_hour": 2.0
+            },
+            {
+              "abs_error": 0.0940092573478617,
+              "observed_normalized_increment": 0.6707698920275811,
+              "predicted_normalized_increment": 0.7647791493754428,
+              "time_hour": 4.0
+            },
+            {
+              "abs_error": 0.1252215838205461,
+              "observed_normalized_increment": 0.1781871333925919,
+              "predicted_normalized_increment": 0.303408717213138,
+              "time_hour": 8.0
+            },
+            {
+              "abs_error": 0.05833659327139129,
+              "observed_normalized_increment": 0.05932903163317835,
+              "predicted_normalized_increment": 0.11766562490456964,
+              "time_hour": 12.0
+            },
+            {
+              "abs_error": 0.013489778249163193,
+              "observed_normalized_increment": 0.013489778249163193,
+              "predicted_normalized_increment": 0.0,
+              "time_hour": 24.0
+            }
+          ],
+          "rmse": 0.07626170810819836
+        },
+        "M2_LOCKED": {
+          "mae": 0.022075924379215083,
+          "mse": 0.0006152311154384596,
+          "points": [
+            {
+              "abs_error": 0.01679834061376373,
+              "observed_normalized_increment": 1.0784384757764363,
+              "predicted_normalized_increment": 1.0616401351626725,
+              "time_hour": 2.0
+            },
+            {
+              "abs_error": 0.027860254095644743,
+              "observed_normalized_increment": 0.6707698920275811,
+              "predicted_normalized_increment": 0.6429096379319363,
+              "time_hour": 4.0
+            },
+            {
+              "abs_error": 0.002468421929742254,
+              "observed_normalized_increment": 0.1781871333925919,
+              "predicted_normalized_increment": 0.17571871146284965,
+              "time_hour": 8.0
+            },
+            {
+              "abs_error": 0.02925581440607186,
+              "observed_normalized_increment": 0.05932903163317835,
+              "predicted_normalized_increment": 0.08858484603925021,
+              "time_hour": 12.0
+            },
+            {
+              "abs_error": 0.033996790850852825,
+              "observed_normalized_increment": 0.013489778249163193,
+              "predicted_normalized_increment": 0.047486569100016016,
+              "time_hour": 24.0
+            }
+          ],
+          "rmse": 0.024803852834558982
+        }
+      },
+      "n_scored": 5,
+      "paired_mae_delta_m2_minus_legacy": -0.04238347098987939,
+      "study_code": "DEMO_CENTER_B",
+      "subject_code": "DEMO_PERSON_007"
+    },
+    {
+      "assay_method": "IMMUNOASSAY",
+      "mean_mae_legacy": 0.042353375382764756,
+      "mean_mae_m2": 0.01698390078317497,
+      "models": {
+        "LEGACY_LOCKED": {
+          "mae": 0.042353375382764756,
+          "mse": 0.002208624986516402,
+          "points": [
+            {
+              "abs_error": 0.009430358877924538,
+              "observed_normalized_increment": 1.0735558284256885,
+              "predicted_normalized_increment": 1.082986187303613,
+              "time_hour": 2.0
+            },
+            {
+              "abs_error": 0.0594461489135103,
+              "observed_normalized_increment": 0.6674629471738651,
+              "predicted_normalized_increment": 0.7269090960873754,
+              "time_hour": 4.0
+            },
+            {
+              "abs_error": 0.02915910916815123,
+              "observed_normalized_increment": 0.17595267996693492,
+              "predicted_normalized_increment": 0.20511178913508615,
+              "time_hour": 8.0
+            },
+            {
+              "abs_error": 0.06403135570794892,
+              "observed_normalized_increment": 0.06403135570794892,
+              "predicted_normalized_increment": 0.0,
+              "time_hour": 12.0
+            },
+            {
+              "abs_error": 0.0496999042462888,
+              "observed_normalized_increment": 0.016677105584078807,
+              "predicted_normalized_increment": 0.06637700983036761,
+              "time_hour": 24.0
+            }
+          ],
+          "rmse": 0.04699601032552021
+        },
+        "M2_LOCKED": {
+          "mae": 0.01698390078317497,
+          "mse": 0.0003178463881911842,
+          "points": [
+            {
+              "abs_error": 0.00995192817264412,
+              "observed_normalized_increment": 1.0735558284256885,
+              "predicted_normalized_increment": 1.0636039002530444,
+              "time_hour": 2.0
+            },
+            {
+              "abs_error": 0.018203176061586723,
+              "observed_normalized_increment": 0.6674629471738651,
+              "predicted_normalized_increment": 0.6492597711122784,
+              "time_hour": 4.0
+            },
+            {
+              "abs_error": 0.013249548170638725,
+              "observed_normalized_increment": 0.17595267996693492,
+              "predicted_normalized_increment": 0.18920222813757365,
+              "time_hour": 8.0
+            },
+            {
+              "abs_error": 0.017484618122643736,
+              "observed_normalized_increment": 0.06403135570794892,
+              "predicted_normalized_increment": 0.08151597383059266,
+              "time_hour": 12.0
+            },
+            {
+              "abs_error": 0.026030233388361534,
+              "observed_normalized_increment": 0.016677105584078807,
+              "predicted_normalized_increment": 0.04270733897244034,
+              "time_hour": 24.0
+            }
+          ],
+          "rmse": 0.017828246918617216
+        }
+      },
+      "n_scored": 5,
+      "paired_mae_delta_m2_minus_legacy": -0.025369474599589787,
+      "study_code": "DEMO_CENTER_B",
+      "subject_code": "DEMO_PERSON_008"
+    }
+  ],
+  "phase": "P2-AM",
+  "synthetic_only": true
+}
