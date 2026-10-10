@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "phase": "P2-R",
+  "policy_proposal_date": "2026-10-10",
+  "proposed_internal_not_regulatory": true,
+  "context_of_use": "research-only explanation of E2 concentration, not prescription/clinical dose optimization",
+  "model_families": [
+    "M0_ONE_INPUT",
+    "M1_TRANSIT",
+    "M2_DUAL_INPUT"
+  ],
+  "gate_hierarchy": [
+    "G0_EXPLORATORY",
+    "G1_DATA_QUALIFIED",
+    "G2_IDENTIFIABILITY_AND_FROZEN_PROTOCOL",
+    "G3_TRUE_EXTERNAL_REVIEW",
+    "G4_SEPARATE_PRODUCT_RELEASE"
+  ],
+  "min_independently_enrolled_heldout_cohorts_for_review": 2,
+  "note": "Two is an INTERNAL minimum to request expert review, NOT an ICH/FDA number or sufficient guarantee of power; justified prospective sample-size calculation still required",
+  "provisional_improvement_threshold": 0.1,
+  "provisional_max_heldout_guardrail_degradation": 0.05,
+  "threshold_warning": "10% and 5% are provisional internal engineering screening rules, NOT regulatory thresholds or assay QC tolerances, and must be set before external data access with a prospective risk/power argument",
+  "required_data_fields": [
+    "subject_level_E2_series",
+    "verified_SL_route",
+    "actual_dose_and_sampling_timestamps",
+    "baseline_and_prior_doses_recorded",
+    "early_and_late_measured_samples",
+    "assay_QC_and_LLOQ_traceable",
+    "endogenous_E2_handling",
+    "BLQ_missing_outliers_predeclared",
+    "cross_assay_bridge_or_separate_strata"
+  ],
+  "required_locked_protocol_fields": [
+    "written_context_and_model_risk",
+    "timestamped_lock_before_access",
+    "code_and_input_checksums",
+    "primary_estimands_and_hierarchical_scoring",
+    "uncertainty_and_assay_error_model",
+    "BLQ_missingness_outlier_rules",
+    "power_and_precision_justification",
+    "independent_access_and_cohort_dedup_audit"
+  ],
+  "R1_M0_to_M1": [
+    "early_peak_prepost_data",
+    "M0_baseline_gain_noise_timing_sensitivity_not_sufficient",
+    "M1_transit_profile_or_functional_identifiability"
+  ],
+  "R2_M1_to_M2": [
+    "true_single_dose_late_tail",
+    "separate_real_repeated_dose_history_and_trough",
+    "slow_input_vs_disposition_or_baseline_confounders_tested",
+    "uncertainty_of_late_functionals_stable"
+  ],
+  "metric_rules": "At each distinct heldout cohort, compare frozen simpler and complex models on participant-level paired metrics. M1 primary is prespecified early time/peak score; M2 primary is separately reported late AUC and true repeated predose. Use cluster-aware uncertainty; require positive lower benefit bound and <=5% degradation guardrails. No future observation leakage.",
+  "interval_rule": "No clinical 90% coverage claim until independent subject-level empirical coverage, interval width, time/dose/assay subgroup results and uncertainty assessed; otherwise label parameters-only or hide band.",
+  "ICH_M10_boundary": "M10 ±15% accuracy and CV<=15% (LLOQ ±20%/CV<=20%) for chromatography QC are not PK model prediction acceptance criteria. E2 is endogenous, QC/assay bridge/BLQ require separate assessment.",
+  "review_does_not_authorize_deployment": true
+}
