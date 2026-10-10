@@ -64,6 +64,43 @@ class ResearchSublingualV01Test {
         assertTrue(values.minimum > 0.0)
     }
 
+    @Test fun analyticTotalAucConservesUnitInputMass() {
+        // Independent trapezoidal integration checks the Erlang/Bateman conservation law.
+        val step = 0.05
+        val lastIndex = 4800 // 240 hours: includes the longest candidate slow tail.
+        for (candidate in ResearchSublingualV01.candidates) {
+            var area = 0.5 * (ResearchSublingualV01.relativeIncrement(0.0, candidate) +
+                ResearchSublingualV01.relativeIncrement(lastIndex * step, candidate))
+            for (i in 1 until lastIndex) {
+                area += ResearchSublingualV01.relativeIncrement(i * step, candidate)
+            }
+            area *= step
+            assertEquals(ResearchSublingualV01.aucInfinityRelativeHours(candidate), area, 0.002,
+                "AUC mass conservation for ${candidate.id}")
+        }
+    }
+
+    @Test fun priceBaselineStratificationMustNotImplyPopulationWeights() {
+        val event = listOf(ExperimentalDose(atHour = 0.0, mg = 1.0))
+        val strata = ResearchSublingualV01.spreadByAssumedPriceBaseline(24.0, event)
+        assertEquals(listOf(0.0, 6.0, 12.0, 18.0, 24.0), strata.map { it.assumedPriceBaselinePgMl })
+        assertEquals(listOf(1, 1, 2, 5, 6), strata.map { it.candidateCount })
+        assertEquals(15, strata.sumOf { it.candidateCount })
+        for (stratum in strata) {
+            assertTrue(stratum.maximum >= stratum.minimum)
+            assertTrue(stratum.minimum >= 0.0)
+        }
+        // Near-zero late concentration depends materially on the unobserved baseline.
+        assertTrue(strata.first().minimum > strata.last().maximum * 20.0)
+    }
+
+    @Test fun assumptionSlowInputIsNotTheCentralEliminationRate() {
+        val slowest = ResearchSublingualV01.candidates.first { it.id == "p2x-22" }
+        assertTrue(slowest.slowRatePerHour < slowest.eliminationRatePerHour)
+        assertTrue(ResearchSublingualV01.aucInfinityRelativeHours(slowest) > 4.0)
+        assertTrue(ResearchSublingualV01.aucInfinityRelativeHours(model) < 2.5)
+    }
+
     @Test fun explicitStudyAnchorAndInputGuards() {
         val anchor = ExperimentalStudyAnchor("Price1997 Figure1 study-only", "pg/mL", 24.0, 434.8357220077087)
         assertEquals(24.0 + 434.8357220077087,
