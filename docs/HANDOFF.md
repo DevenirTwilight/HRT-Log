@@ -1,4 +1,4 @@
-# M2 实验药代模型集成（2026-10-10，Draft PR #2 待审，入口阻塞）
+# M2 实验药代模型集成（2026-10-10，Draft PR #2 待审；入口已按 PD-2026-10-10-M2-ENTRY 接线，A–F 全部通过）
 
 分支 `ccr-8cffa954-5gedc0`（基于 `f69d892`，未动 `claude/new-session-1959qb`）。要求见 REQUIREMENTS §55；审计、实现、验收与 APK 体积见 `docs/design/experimental-m2-integration.md`。
 - [x] 阶段 A 审计：历史线性；研究分支 17 个新文件原样导入（blob 一致）。用户上传的离线研究包核对：计算核与 PR #1 逐字节一致；P2-AF/AG/AJ/AK 结论只用于页面标注。
@@ -10,6 +10,9 @@
 
 - [x] CI `83f8b09`：jvm / android / device-tests 全部成功。release-acceptance 首次在构建步骤失败（Debug 专用测试编进 Release 测试 APK，研究分支原有问题），`2f109f1` 移到 `androidTestFullDebug` 后本地 F 场景 exact/functional 可构建；已重新触发 run 38067123854，结果待记录。
 - [x] Draft PR：https://github.com/DevenirTwilight/HRT-Log/pull/2（base `claude/new-session-1959qb`，不合并、不发布）。下一步：记录 2f109f1 及之后的 CI / release-acceptance 结果；等负责人对入口做协议决定。
+- [x] 产品负责人授权方案 1（REQUIREMENTS §56）：`070a0ea` 只接线 `AppShell.kt` 三处导航；登记 `PD-2026-10-10-M2-ENTRY`（`pk_relevant: true`，仅导航）；`check_protocol.py` 写死精确哈希例外，并加负向测试。基线、协议锁、参数和证据都没改。
+- [x] 接线后：本地 app 421 / data 72 / reminder 14 / Python 176 通过，lint 0 错误；universal 包 12,759,479 字节（比基线 +51,560），原生库逐字节相同。CI（`cfc494d`）全绿。Release 验收 A–F（run 38069953239）全部通过，F 的字符串、SQLCipher、四个 ABI、迁移和备份证据都已核对，详见设计文档。
+- 剩余：等负责人审阅 Draft PR #2；不合并、不发布。
 ---
 
 # 正式配置改为“压缩原生库 + 资源裁剪”（2026-10-10，已验收并交付）

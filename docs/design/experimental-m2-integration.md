@@ -182,3 +182,13 @@ A、C、D、E 通过；B 和 F 只有 `exact-runtime` 中的 `everyReferencedStr
 - app 421 项：408 通过、13 项原有跳过、0 失败；PeriodStability 5/5，`DrawerScrollUiTest` 2/2。
 - core:data 72、core:reminder 14；Python 研究测试 176 项。
 - lint 0 错误、131 警告（与基线相同）；Debug/Release 构建、两项 Release 检查、P2 校验均通过。
+
+### 接线后 Release 验收 A–F（run 38069953239，`cfc494d`，2026-10-10）
+
+A、B、C、D、E、F **全部通过**（arm64 场景按工作流默认跳过；两个 arm64 虚拟化探测成功）。同一提交的 android.yml（push 与 pull_request 各一次）中 jvm / android / device-tests 全部成功。
+
+F（当前正式配置：资源裁剪 + 压缩原生库，universal）逐项证据：
+- 13 个阶段全部 PASS：exact-runtime（6 项 OK）、functional-all（225 项 OK）、两次冷启动、进程重启、拒绝提醒权限、重启后提醒恢复。
+- 字符串：functional 1124/1124 条四种语言都与源码一致，无缺失、无不一致。exact 1053 条核对一致，其余 71 条是原有的未引用字符串，被裁剪属预期；`xpk_*` 全部存在。上次失败的 `xpk_axis_max` 已解决。
+- SQLCipher 4.10.0 community（openssl）：从解压后的 `lib/x86_64/libsqlcipher.so` 加载，重开 5 次、500 行，错误密钥会被拒绝。数据库 schema 9 无明文头；从 1 迁移到 9 正常；旧版备份（schema 1）能恢复为 9，28 张表往返一致。
+- 原生库：四个 ABI 的 `libsqlcipher.so` 与 `libandroidx.graphics.path.so` 均为 DEFLATED。
