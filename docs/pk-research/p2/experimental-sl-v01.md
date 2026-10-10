@@ -74,3 +74,14 @@ For CI or a checked-out repository with Gradle wrapper:
 ```
 
 Do not add an Android settings switch, automatic clinical amplitude calibration, personalized percentile labels, migration, or release integration without a distinct approval and test cycle.
+
+## Additional audit: structural AUC, tail, and scenario imbalances
+
+See [P2-AB model-integrity audit](p2ab-v01-kernel-integrity.md) for exact provenance checks and quantitative caveats:
+
+- The 15 Kotlin parameter rows match the archived P2-X 40-row result to floating-point precision.
+- `aucInfinityRelativeHours(candidate)` gives an analytic dimensionless-shape AUC in hours, using `AUC∞ = 1/(ke*h(1))`; it does **not** give actual estradiol pg·h/mL.
+- The normalised model AUC∞ ranges 2.1948–4.3202 h, but the share beyond 24 h ranges ~0.11%–20.05%. The extremely large late-trough fold ratio does not characterize the whole AUC.
+- `spreadByAssumedPriceBaseline(atHour, doses)` returns descriptive ranges and counts **separately for each artificial Price baseline**; counts are 1, 1, 2, 5, 6 for assumed baselines 0, 6, 12, 18, 24 pg/mL. Never weight these as if they were patient frequencies or probabilities.
+- `slowRatePerHour` controls a possible absorption-limited late tail; it is **not** measured systemic E2 clearance. `slowWeight` is a fitted input-mixture weight, **not** an established swallowed dose fraction.
+
