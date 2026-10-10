@@ -28,7 +28,7 @@ import java.util.Locale
 import java.util.zip.ZipFile
 
 /**
- * Runs against the scenario's production R8 output (mode=exact: no extra keep rules). It only uses framework APIs,
+ * Runs against the scenario's production R8 output plus only test-support-keep.pro (mode=exact). It only uses framework APIs,
  * SQLCipher (kept by app/proguard-rules.pro), resources looked up by name and the UI through UiAutomator, so
  * nothing here depends on how R8 renamed the app's own code. Synthetic data only.
  */

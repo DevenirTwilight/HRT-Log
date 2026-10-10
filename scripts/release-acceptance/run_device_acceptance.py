@@ -18,7 +18,7 @@ PKG = 'net.plainnotes.app'
 TEST_PKG = 'net.plainnotes.app.test'
 RUNNER = f'{TEST_PKG}/androidx.test.runner.AndroidJUnitRunner'
 MEDIA = f'/sdcard/Android/media/{PKG}/p1-acceptance'
-CRASH = re.compile(r'FATAL EXCEPTION|Resources\$NotFoundException|UnsatisfiedLinkError|ANR in ' + re.escape(PKG) + r'|Process: ' + re.escape(PKG))
+CRASH = re.compile(r'FATAL EXCEPTION|Resources\$NotFoundException|UnsatisfiedLinkError|NoClassDefFoundError|ANR in ' + re.escape(PKG) + r'|Process: ' + re.escape(PKG))
 
 
 def adb(*args, timeout=900, check=False):
@@ -72,9 +72,17 @@ class Run:
         return entry
 
     def logcat_crashes(self, label):
+        """Crash markers attributed to this app only: lines from its own PIDs, or AndroidRuntime/ActivityManager lines naming it."""
         text = adb('logcat', '-d', '-v', 'threadtime').stdout
         (self.out / f'logcat-{label}.txt').write_text(text)
-        hits = [l for l in text.splitlines() if CRASH.search(l) and (PKG in l or 'FATAL' in l or 'NotFound' in l)]
+        pids = set(re.findall(r'Start proc (\d+):' + re.escape(PKG) + r'[/:\s]', text)) | set(re.findall(r'Process: ' + re.escape(PKG) + r', PID: (\d+)', text))
+        hits = []
+        for line in text.splitlines():
+            parts = line.split()
+            pid = parts[2] if len(parts) > 2 else ''
+            if not CRASH.search(line): continue
+            if pid in pids or f'Process: {PKG},' in line or f'ANR in {PKG}' in line or (PKG in line and 'NotFoundException' in line):
+                hits.append(line)
         adb('logcat', '-c')
         return hits[:50]
 

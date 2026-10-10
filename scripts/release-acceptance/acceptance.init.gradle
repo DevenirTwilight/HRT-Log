@@ -12,7 +12,8 @@
 // instrumented. It is NOT the private release certificate and can never upgrade a real install.
 //
 // Modes:
-//   exact      - no extra keep rules: the app dex is the production R8 output for this scenario.
+//   exact      - only test-support-keep.pro (library classes the instrumentation runner resolves from the app;
+//                see that file). App code, resources and native libraries are otherwise the scenario's R8 output.
 //                Only tests that touch framework APIs, SQLCipher (kept by app/proguard-rules.pro) and resources by
 //                name are run against it.
 //   functional - adds scripts/release-acceptance/functional-keep.pro (keeps the project's own classes so that
@@ -35,6 +36,7 @@ allprojects { p ->
         android.buildTypes.getByName('release') { bt ->
             bt.signingConfig = android.signingConfigs.getByName('debug')
             if (shrink) bt.shrinkResources = true
+            bt.proguardFile(new File(acceptanceDir, 'test-support-keep.pro'))
             if (mode == 'functional') bt.proguardFile(new File(acceptanceDir, 'functional-keep.pro'))
             bt.testProguardFile(new File(acceptanceDir, 'test-apk.pro'))
         }
