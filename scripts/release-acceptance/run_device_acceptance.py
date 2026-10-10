@@ -152,6 +152,7 @@ def main():
     a.add_argument('--functional-app'); a.add_argument('--functional-test')
     a.add_argument('--out', required=True)
     a.add_argument('--skip-reboot', action='store_true')
+    a.add_argument('--functional-classes', help='comma-separated classes instead of the whole instrumentation set (slow software-CPU emulators)')
     args = a.parse_args()
     run = Run(args.out, args.scenario)
     adb('wait-for-device', timeout=600)
@@ -163,6 +164,7 @@ def main():
         run.phase('device-guard', 'BLOCKED', reason='Not an emulator; refusing to install or uninstall anything.'); return 2
     abis = dev['ro.product.cpu.abilist'].split(',')
     arm64_only = args.scenario in 'CD'
+    run.result['cpu_accel'] = adb('shell', 'getprop', 'ro.boot.qemu.cpu_accel').stdout.strip() or None
     run.result['abi_note'] = ('ARM64-only package on an ARM64 device' if arm64_only and 'arm64-v8a' in abis and dev['uname_m'] == 'aarch64'
                               else 'ARM64-only package on a non-ARM64 device' if arm64_only else 'universal package')
     for pkg in (TEST_PKG, PKG): adb('uninstall', pkg)
@@ -189,7 +191,9 @@ def main():
         if not install(run, 'functional-app', args.functional_app)[0] or not install(run, 'functional-test', args.functional_test)[0]: run.save(); return 1
         # Whole instrumentation set: existing androidTest + androidTestFull suites, ported JVM suites (PeriodStability etc.),
         # the release acceptance classes. Restart phases skip themselves without their argument; they run below.
-        run.instrument('functional-all', ['-e', 'hrtNotificationPhase', 'granted'])
+        if args.functional_classes:
+            run.instrument('functional-subset', ['-e', 'class', args.functional_classes, '-e', 'hrtNotificationPhase', 'granted'])
+        else: run.instrument('functional-all', ['-e', 'hrtNotificationPhase', 'granted'])
         run.pull_evidence('functional')
         # Disguise/private notes across a real process death (same orchestration as scripts/run_disguise_restart.py).
         klass = 'net.plainnotes.app.disguise.ProcessRestartAndroidTest'

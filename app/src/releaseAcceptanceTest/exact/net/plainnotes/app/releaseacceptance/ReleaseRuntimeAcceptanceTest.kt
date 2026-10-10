@@ -230,13 +230,17 @@ class ReleaseRuntimeAcceptanceTest {
                 app.startActivity(app.packageManager.getLaunchIntentForPackage(pkg)!!.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
                 require(device.wait(Until.hasObject(By.pkg(pkg).depth(0)), 20_000), "app window", tag)
                 require(device.wait(Until.hasObject(By.desc(text("menu", key))), 20_000), "navigation menu '${text("menu", key)}'", tag)
-                // Without an active medication the calendar shows its empty-state action ("add medication") instead of the "add" FAB.
+                // Calendar first screen: the localized navigation button proves the translated shell rendered.
                 val calendarAction = listOf("add_medication", "add").map { text(it, key) }.firstOrNull { device.hasObject(By.text(it)) }
-                require(calendarAction != null, "calendar action '${text("add_medication", key)}' or '${text("add", key)}'", tag)
                 device.findObject(By.desc(text("menu", key))).click()
-                require(device.wait(Until.hasObject(By.text(text("settings", key))), 10_000), "drawer entry '${text("settings", key)}'", tag)
-                device.findObject(By.text(text("settings", key))).click()
-                require(device.wait(Until.gone(By.text(calendarAction!!)), 10_000) && device.hasObject(By.text(text("settings", key))), "settings screen", tag)
+                require(device.wait(Until.hasObject(By.text(text("calendar", key))), 10_000), "drawer entry '${text("calendar", key)}'", tag)
+                // The drawer scrolls on small screens; Settings may be below the fold.
+                val settingsEntry = device.findObject(By.text(text("settings", key)))
+                    ?: device.findObject(By.scrollable(true))?.scrollUntil(androidx.test.uiautomator.Direction.DOWN, Until.findObject(By.text(text("settings", key))))
+                require(settingsEntry != null, "drawer entry '${text("settings", key)}'", tag)
+                settingsEntry!!.click()
+                // "Estimated levels" only exists as a drawer entry, so its disappearance means the drawer closed onto Settings.
+                require(device.wait(Until.gone(By.text(text("concentration", key))), 10_000) && device.wait(Until.hasObject(By.text(text("settings", key))), 10_000), "settings screen", tag)
                 out.put(tag, JSONObject().put("calendar_action", calendarAction).put("settings", text("settings", key)).put("result", "shown"))
                 device.pressBack()
             }

@@ -67,10 +67,11 @@ jobs:
           path: ${{ runner.temp }}/p1/result/
 
   arm64-scenario:
-    # Apple-silicon runner: the arm64-v8a system image runs natively under Hypervisor.framework, so the app's
-    # arm64 SQLCipher is what executes (no translation). The probe job records the accelerator check.
+    # Apple-silicon runner, arm64-v8a system image. Run 38041739528 showed HVF is unavailable to nested guests
+    # (HV_UNSUPPORTED although -accel-check passes), so the guest CPU is software-emulated (QEMU TCG, -accel off):
+    # a genuine arm64 Android userspace executing the app's arm64 SQLCipher, but not hardware and not a phone.
     runs-on: macos-15
-    timeout-minutes: 180
+    timeout-minutes: 340
     strategy:
       fail-fast: false
       matrix:
@@ -112,7 +113,9 @@ jobs:
           api-level: 35
           arch: arm64-v8a
           disable-animations: true
-          script: python3 scripts/release-acceptance/run_device_acceptance.py --scenario ${{ matrix.scenario }} --exact-app "$RUNNER_TEMP/p1/apk/exact/app.apk" --exact-test "$RUNNER_TEMP/p1/apk/exact/test.apk" --functional-app "$RUNNER_TEMP/p1/apk/functional/app.apk" --functional-test "$RUNNER_TEMP/p1/apk/functional/test.apk" --out "$RUNNER_TEMP/p1/result/device-arm64-api35"
+          emulator-boot-timeout: 3600
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -accel off
+          script: python3 scripts/release-acceptance/run_device_acceptance.py --scenario ${{ matrix.scenario }} --exact-app "$RUNNER_TEMP/p1/apk/exact/app.apk" --exact-test "$RUNNER_TEMP/p1/apk/exact/test.apk" --functional-app "$RUNNER_TEMP/p1/apk/functional/app.apk" --functional-test "$RUNNER_TEMP/p1/apk/functional/test.apk" --out "$RUNNER_TEMP/p1/result/device-arm64-api35-tcg" --skip-reboot --functional-classes net.plainnotes.app.releaseacceptance.ReleaseFunctionalAcceptanceTest,net.plainnotes.app.releaseacceptance.ReminderLifecycleAcceptanceTest,net.plainnotes.app.PeriodStabilityTest,net.plainnotes.app.LabEstimateTest,net.plainnotes.app.ConcentrationCalculatorTest,net.plainnotes.app.disguise.PrivateStorageAndroidTest,net.plainnotes.app.disguise.DisguiseFlowAndroidTest
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:

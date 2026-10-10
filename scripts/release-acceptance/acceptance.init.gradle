@@ -51,9 +51,13 @@ allprojects { p ->
             androidTest.assets.srcDir(p.rootProject.file('core/data/src/test/resources')) // backup/v1-synthetic.pnbak
         }
         p.dependencies.add('androidTestImplementation', 'androidx.test.uiautomator:uiautomator:2.3.0')
-        // Debug builds get the Compose test host activity from debugImplementation(ui-test-manifest); release tests need it in the test APK.
-        p.dependencies.add('androidTestImplementation', p.dependencies.platform('androidx.compose:compose-bom:2025.10.00'))
-        p.dependencies.add('androidTestImplementation', 'androidx.compose.ui:ui-test-manifest')
+        if (mode == 'functional') {
+            // Debug builds get the Compose test host activity (androidx.activity.ComponentActivity, not exported) from
+            // debugImplementation(ui-test-manifest); it must run in the app's process, so the functional release app gets
+            // it the same way. Never in mode=exact, whose app manifest stays the production one.
+            p.dependencies.add('releaseImplementation', p.dependencies.platform('androidx.compose:compose-bom:2025.10.00'))
+            p.dependencies.add('releaseImplementation', 'androidx.compose.ui:ui-test-manifest')
+        }
         p.dependencies.add('androidTestImplementation', 'androidx.room:room-runtime:2.8.3')
         p.dependencies.add('androidTestImplementation', 'net.zetetic:sqlcipher-android:4.10.0')
         p.dependencies.add('androidTestImplementation', 'androidx.sqlite:sqlite:2.6.1')

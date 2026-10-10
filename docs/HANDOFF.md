@@ -13,7 +13,10 @@ CI 进展（工作流 release-acceptance.yml）：
 - run 38038170385（7609bbe）：A/B x86_64 API35 模拟器：exact 冷启动×3 PASS；functional 171 通过/50 失败/3 跳过；进程重启 prepare/verify、通知拒绝、reboot-prepare PASS。失败根因：48 项 Compose 测试需 androidx.collection（测试 keep 不足）；SQLCipher 断言按 maps 文件名匹配，但从 APK 直接加载时 maps 只显示 base.apk（logcat nativeloader 已证实 `base.apk!/lib/x86_64/libsqlcipher.so … ok`）；B exact 缺 71 个字符串，其中源码引用的仅 import_link_help/import_link_empty——只被 ImportedPlanDialog 使用，而其入口 prepareImportedLink 无生产调用方（仅单测），属既有不可达代码被 R8 删除，非裁剪回归；重启提醒用的“测试提醒”只在缓存，开机后按数据库重建会正常丢弃→改为真实合成用药计划。C/D：x86_64 上安装被 INSTALL_FAILED_NO_MATCHING_ABIS 拒绝（PASS，符合预期），ARM64 运行 BLOCKED。
 - ARM64 探测：ubuntu-24.04-arm 无 /dev/kvm，且 Google 不发布 Linux aarch64 模拟器；macos-15 为 “Apple M1 (Virtual)”，无 kern.hv_support → GitHub 托管 runner 上无法运行真实 ARM64 Android（下一轮再用 emulator -accel-check 复核）。
 
-下一步：推送修正→第 3 次运行→下载工件→写 `docs/performance/p1-release-acceptance-2026-10.md/.json`。
+- run 38039805628（2e1c287）：A functional 188 通过；重启后提醒恢复 PASS（开机后应用未打开，SystemReceiver 由加密库重建并发出通知）；DisguiseFlow 16 项全部 PASS。剩余为测试工具问题（Compose 宿主 Activity、ZIP 中央目录偏移 +42/+46 写错、空状态无 FAB）。macos-15 的 emulator -accel-check 报告 Hypervisor.Framework 可用。
+- run 38041739528（00e4174）：x86_64 A/B exact 5/6、functional 189 通过；SQLCipher 原生库映射核对（maps 偏移→APK 条目）通过；B 字符串核对通过。macOS arm64-v8a 模拟器 C/D/A 均因 `HVF error: HV_UNSUPPORTED`（嵌套虚拟化不可用，accel-check 为假阳性）未能启动 → 硬件加速 ARM64 BLOCKED。下一轮改用 `-accel off`（QEMU TCG 软件 CPU，真实 arm64 Android 用户态，但非硬件、非手机）跑精简子集。
+
+下一步：推送修正→第 5 次运行→下载工件→写 `docs/performance/p1-release-acceptance-2026-10.md/.json`。
 
 ---
 
