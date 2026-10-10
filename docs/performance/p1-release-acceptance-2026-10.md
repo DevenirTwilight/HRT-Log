@@ -68,7 +68,7 @@ functional 全集：A/B 各 225 项 = 221 PASS + 1 FAIL + 3 项按阶段跳过�
 
 ## 5. 失败、阻塞与未验证
 
-- **F1（FAIL，既有 UI 问题）**：导航抽屉 `Column`（`app/src/main/java/net/plainnotes/app/ui/AppShell.kt:136`）不可滚动；在 320×640 屏幕上“设置/关于”位于屏幕外，无法从抽屉进入。窗口层级证据见运行工件 `ui-failure-en.xml`（可见项止于“Lab results”，无可滚动节点）。与 Release/R8/ABI/裁剪无关，debug 同一布局；现有 SettingsButtons 测试直接打开设置页，因此未覆盖。最小修复：给该 Column 加 `verticalScroll(rememberScrollState())`。属生产 UI 改动，**本轮未改，待授权**。由于该项在 en 处中止，**UI 层面的四语导航遍历未完成**；四语资源已由字符串、SettingsButtons（中英）和 PDF（四语）覆盖。
+- **F1（FAIL，既有 UI 问题；2026-10-10 用户授权后已修复：抽屉加 verticalScroll，回归测试 DrawerScrollUiTest，见 HANDOFF）**：导航抽屉 `Column`（`app/src/main/java/net/plainnotes/app/ui/AppShell.kt:136`）不可滚动；在 320×640 屏幕上“设置/关于”位于屏幕外，无法从抽屉进入。窗口层级证据见运行工件 `ui-failure-en.xml`（可见项止于“Lab results”，无可滚动节点）。与 Release/R8/ABI/裁剪无关，debug 同一布局；现有 SettingsButtons 测试直接打开设置页，因此未覆盖。最小修复：给该 Column 加 `verticalScroll(rememberScrollState())`。属生产 UI 改动，**本轮未改，待授权**。由于该项在 en 处中止，**UI 层面的四语导航遍历未完成**；四语资源已由字符串、SettingsButtons（中英）和 PDF（四语）覆盖。
 - **F2（观察）**：`ImportedPlanDialog` 只在 `NotesViewModel.prepareImportedLink` 后打开，而该函数无生产调用方（仅 DataRefreshTest）；R8 删除后 B/D 资源裁剪随之移除 `import_link_help`/`import_link_empty`。不是裁剪回归；测试中对这两项作了带理由的白名单。
 - **BLOCKED**：C/D 全部运行时功能（见第 3 节）；D 的资源裁剪运行时。
 - **NOT_RUN**：ARM64 软件 CPU 运行（待出结果）；伪装入口经设置界面实际切换启动器别名（功能测试以代码路径覆盖，exact 只核对别名元数据）；生物识别（模拟器无法真实验证）；系统文件选择器返回、经 SAF 的 CSV/PDF/备份导入导出（编码与 PDF 渲染已测，选择器 UI 未测）；32 位 ARM / x86 真机安装行为；正式签名覆盖升级；用户手机。

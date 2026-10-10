@@ -4,6 +4,8 @@ import net.plainnotes.app.data.MedicationSnapshot
 import androidx.core.content.edit
 import android.content.Context
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.*
 import androidx.compose.material.icons.outlined.*
@@ -14,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -133,21 +136,7 @@ class UiPrefs(context: Context) {
     CompositionLocalProvider(LocalSimpleMode provides (simpleMode && state.medications.count { it.active } <= 1)) {
     ModalNavigationDrawer(drawerState = drawer, drawerContent = {
         ModalDrawerSheet {
-            Column(Modifier.padding(horizontal = 12.dp)) {
-                Row(Modifier.padding(horizontal = 16.dp, vertical = 24.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Surface(shape = MaterialTheme.shapes.medium, color = MaterialTheme.colorScheme.primary) {
-                        Icon(Icons.Outlined.EventAvailable, null, Modifier.padding(8.dp).size(24.dp), tint = MaterialTheme.colorScheme.onPrimary)
-                    }
-                    Spacer(Modifier.width(12.dp))
-                    Text(stringResource(R.string.app_name), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
-                }
-                Destination.entries.forEach { d ->
-                    if (d == Destination.SETTINGS) HorizontalDivider(Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
-                    NavigationDrawerItem(label = { Text(stringResource(d.title)) }, icon = { Icon(d.icon, null) }, selected = destination == d,
-                        badge = if (!d.ready) ({ Text(stringResource(R.string.soon_badge), style = MaterialTheme.typography.labelSmall) }) else null,
-                        onClick = { destination = d; if (d == Destination.VISITS) visitId = null; scope.launch { drawer.close() } }, modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding))
-                }
-            }
+            DrawerContent(destination) { d -> destination = d; if (d == Destination.VISITS) visitId = null; scope.launch { drawer.close() } }
         }
     }) {
         Scaffold(
@@ -244,5 +233,24 @@ class UiPrefs(context: Context) {
         AlertDialog(onDismissRequest = { archive = null }, icon = { Icon(Icons.Outlined.Archive, null) }, title = { Text(m.name) }, text = { Text(stringResource(R.string.delete_confirm)) },
             confirmButton = { Button(onClick = { model.delete(m.id); archive = null }) { Text(stringResource(R.string.yes)) } },
             dismissButton = { TextButton(onClick = { archive = null }) { Text(stringResource(R.string.cancel)) } })
+    }
+}
+
+/** Drawer entries scroll so Settings and About stay reachable on short screens and with large font scales. */
+@Composable internal fun DrawerContent(selected: Destination, onSelect: (Destination) -> Unit) {
+    Column(Modifier.verticalScroll(rememberScrollState()).padding(horizontal = 12.dp).testTag("drawer-content")) {
+        Row(Modifier.padding(horizontal = 16.dp, vertical = 24.dp), verticalAlignment = Alignment.CenterVertically) {
+            Surface(shape = MaterialTheme.shapes.medium, color = MaterialTheme.colorScheme.primary) {
+                Icon(Icons.Outlined.EventAvailable, null, Modifier.padding(8.dp).size(24.dp), tint = MaterialTheme.colorScheme.onPrimary)
+            }
+            Spacer(Modifier.width(12.dp))
+            Text(stringResource(R.string.app_name), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
+        }
+        Destination.entries.forEach { d ->
+            if (d == Destination.SETTINGS) HorizontalDivider(Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
+            NavigationDrawerItem(label = { Text(stringResource(d.title)) }, icon = { Icon(d.icon, null) }, selected = selected == d,
+                badge = if (!d.ready) ({ Text(stringResource(R.string.soon_badge), style = MaterialTheme.typography.labelSmall) }) else null,
+                onClick = { onSelect(d) }, modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding))
+        }
     }
 }

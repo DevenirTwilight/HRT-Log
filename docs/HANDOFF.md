@@ -1,3 +1,9 @@
+# F1 修复：导航抽屉可滚动（2026-10-10）
+
+用户要求修复 P1 发现的 F1。`AppShell.kt` 抽屉内容抽成 `DrawerContent`（行为不变：同样的条目/分隔线/选中/点击后关闭抽屉，VISITS 仍清空 visitId），外层 Column 加 `verticalScroll(rememberScrollState())`。新增 `app/src/test/java/net/plainnotes/app/DrawerScrollUiTest.kt`（Robolectric w320dp-h480dp，普通与 fontScale 2.0）：滚动到并点击“设置”“关于”。本地：修复后 2/2 通过；临时去掉 verticalScroll 后 2/2 失败（no parent layout with a Scroll SemanticsAction），已恢复；PeriodStability 5/5 通过。未改数据库/PK/版本/权限/签名，不出新 APK（已交付的 ARM64 包不含此修复）。全量 app 单测/lint/设备测试以推送后的 CI 为准；另手动触发 release-acceptance 复核四语抽屉遍历。
+
+---
+
 # ARM64 正式签名 APK 已私有交付（2026-10-10）
 
 用户在 P1 报告后明确要求“给我apk”，并选择“正式签名 ARM64 (C)”。源码 e5447de（生产代码与 P0 622e84e 相同），只以仓库外临时 init 脚本加 arm64-v8a ABI 过滤（R8 开启、无资源裁剪、无任何验收 keep），Build25/0.2.0/Schema9 不变。未签名包 9,201,627 bytes（与 P0 C 同大小；SHA 4db99166… 与 P0 C 的 1a0f84e5… 不同，原生库 SHA bc857466… 与 P0 ARM64 库一致）。核实签名仓库仍为 Private 后，用 scripts/sign_local_apk.sh 在受限临时目录签名，证书 989ba045…79b1 校验通过，临时凭据已删除。成品 `hrt-log-build25-full-arm64-official-e5447de.apk` 9,251,584 bytes，SHA-256 `80268747c4b5ee500e5916b51d34aa24ea7b52e1aa444e1d4f6cf9a8fbe02dff`；v2/v3、16KB zipalign 通过，native-code 仅 arm64-v8a，权限与 P0 C 相同（无 INTERNET）。经会话私有文件发送给用户，未入 Git、未建 Release、未上传公开 CI。
