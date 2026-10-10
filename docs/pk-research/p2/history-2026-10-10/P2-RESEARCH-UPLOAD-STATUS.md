@@ -1,6 +1,6 @@
 # HRT Log — original research materials: actual GitHub archive status
 
-**Updated 2026-10-10 after remote Git blob verification.** Research results must be *actually committed* to the repository, not merely uploaded to the conversation or summarized. [Binding project archive policy](../../RESEARCH_ARCHIVAL_POLICY.md).
+**Updated 2026-10-10 after remote Git blob verification.** Research results must be *actually committed* to the repository, not merely uploaded to the conversation or summarized. [Binding project archive policy](../RESEARCH_ARCHIVAL_POLICY.md).
 
 ### Recovered original phase archives
 
