@@ -65,8 +65,6 @@ class ConcentrationResult(
     val calibrationBreaks: DoubleArray = doubleArrayOf(),
     val currentEvaluation: ConcentrationEvaluation? = null,
     private val evaluator: ((Double, () -> Unit) -> ConcentrationEvaluation?)? = null,
-    /** Validated historical E2 SL events only. Research preview reads these in memory; no DB change. */
-    val researchSublingualHistory: List<DoseEvent> = emptyList(),
 ) {
     fun evaluateAt(hour:Double, checkCancelled:()->Unit = {}):ConcentrationEvaluation? = evaluator?.invoke(hour,checkCancelled)
 }
@@ -243,7 +241,6 @@ object ConcentrationCalculator {
         return ConcentrationResult(missing.distinct(), grid, e2?.center ?: DoubleArray(grid.size), e2?.let { it.p25 to it.p75 }, e2?.let { it.p5 to it.p95 },
             nowH, current?.center, labPoints, current?.calibration, used, skipped, active,
             bands.filterKeys { it != Curve.E2 }, base.flags, base.models, unsupported, eligibility,evaluationH,mode,
-            if(mode==CalibrationMode.CAUSAL)usableLabs.map{it.timeH}.distinct().sorted().toDoubleArray() else doubleArrayOf(),current,evaluator,
-            events.filter { it.id.startsWith("r") && it.route == Route.SUBLINGUAL && it.ester == Ester.E2 && it.timeH <= nowH })
+            if(mode==CalibrationMode.CAUSAL)usableLabs.map{it.timeH}.distinct().sorted().toDoubleArray() else doubleArrayOf(),current,evaluator)
     }
 }
