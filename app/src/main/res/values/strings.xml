@@ -1016,15 +1016,4 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="calib_last_used">Latest observation: participates in the fit</string>
 <string name="calib_last_excluded">Latest observation: automatically excluded from the fit</string>
 <string name="calib_last_not_used">Latest observation: not a fit candidate</string>
-<string name="pk_research_compare_title">Experimental sublingual shape comparison</string>
-<string name="pk_research_compare_warning">Research only: relative shapes, NOT blood levels (pg/mL) or clinical confidence intervals. The experimental model ignores hold time and swallowed fraction. The official E2 estimate is unchanged.</string>
-<string name="pk_research_compare_open">Show research comparison</string>
-<string name="pk_research_compare_close">Hide research comparison</string>
-<string name="pk_research_compare_baseline">Hypothetical Price figure baseline (pg/mL), NOT your baseline:</string>
-<string name="pk_research_compare_empty">No eligible recent historical sublingual doses for this research view.</string>
-<string name="pk_research_compare_scenario">Experimental candidate: %1$s; %2$d candidates in this artificial baseline scenario.</string>
-<string name="pk_research_compare_unit">relative shape</string>
-<string name="pk_research_compare_old">Primary line: existing SL component</string>
-<string name="pk_research_compare_new">Secondary line: experimental M2</string>
-<string name="pk_research_compare_method">%1$d valid historical SL doses used; %2$d earlier doses outside the 30-day lookback omitted. Last 48h only. Each curve normalized to its own single 1mg response at 1h. No planned doses, other routes, labs or fitted personal baseline.</string>
 </resources>
