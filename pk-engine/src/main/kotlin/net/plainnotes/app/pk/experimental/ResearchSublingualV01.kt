@@ -46,6 +46,20 @@ data class ExploratoryModelSpread(val minimum: Double, val median: Double, val m
     init { require(minimum.isFinite() && median.isFinite() && maximum.isFinite()) }
 }
 
+/** Descriptive range within ONE hypothetical Price baseline stratum. Not a clinical interval. */
+data class ExperimentalBaselineStratum(
+    val assumedPriceBaselinePgMl: Double,
+    val candidateCount: Int,
+    val minimum: Double,
+    val maximum: Double,
+) {
+    init {
+        require(assumedPriceBaselinePgMl.isFinite() && assumedPriceBaselinePgMl >= 0.0)
+        require(candidateCount > 0)
+        require(minimum.isFinite() && maximum.isFinite() && minimum <= maximum)
+    }
+}
+
 /** A deliberate, explicit, study-specific amplitude — NEVER an individual prediction. */
 data class ExperimentalStudyAnchor(
     val studyId: String,
@@ -128,6 +142,18 @@ object ResearchSublingualV01 {
         return result
     }
 
+    /** Analytic area of h(t)/h(1) from zero to infinity, expressed in hours.
+     * Both unit-mass input paths have area 1/k_elim before 1h normalization.
+     * This is a mathematical integral, NOT a measured systemic exposure or human AUC.
+     */
+    fun aucInfinityRelativeHours(candidate: ExperimentalCandidate): Double {
+        val hOne = raw(1.0, candidate)
+        require(hOne.isFinite() && hOne > 0.0)
+        val area = 1.0 / (candidate.eliminationRatePerHour * hOne)
+        require(area.isFinite() && area > 0.0)
+        return area
+    }
+
     /** Sum of dose-mg-weighted normalized shape increments, NOT pg/mL. */
     fun relativeHistory(atHour: Double, doses: List<ExperimentalDose>, candidate: ExperimentalCandidate): Double {
         require(atHour.isFinite() && doses.size <= 10_000)
@@ -144,6 +170,15 @@ object ResearchSublingualV01 {
         val values = candidates.map { relativeHistory(atHour, doses, it) }.sorted()
         return ExploratoryModelSpread(values.first(), values[values.size / 2], values.last())
     }
+
+    /** Prevent the arbitrary 15-row grid median from hiding Price-baseline sensitivity.
+     * These strata are NOT weighted by any real baseline probability distribution.
+     */
+    fun spreadByAssumedPriceBaseline(atHour: Double, doses: List<ExperimentalDose>): List<ExperimentalBaselineStratum> =
+        candidates.groupBy { it.assumedPriceBaselinePgMl }.toSortedMap().map { (baseline, models) ->
+            val values = models.map { relativeHistory(atHour, doses, it) }
+            ExperimentalBaselineStratum(baseline, models.size, values.min(), values.max())
+        }
 
     /** Explicit study-only reconstruction with caller-controlled anchor and units. */
     fun studyScenario(
