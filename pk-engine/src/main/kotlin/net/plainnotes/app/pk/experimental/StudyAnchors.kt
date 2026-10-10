@@ -47,6 +47,7 @@ object PriceFigure1997 {
     const val TABLE1_AUC_0_24_SD = 1031.0
     /** Table 1, 1 mg SL Cmax mean ± SD (pg/mL). */
     const val TABLE1_CMAX = 451.0
+    const val TABLE1_CMAX_SD = 162.0
 
     /** Frozen-rule amplitude: the candidate's 1 mg, 1 h increment above its assumed background, pg/mL. */
     fun amplitude(candidate: ExperimentalCandidate): Double {
@@ -108,4 +109,17 @@ object StudyAnchors {
     /** C(t) = B + A · relativeHistory(t) for a verified anchor; null for any study without one. */
     fun scenario(studyId: String, atHour: Double, doses: List<ExperimentalDose>, candidate: ExperimentalCandidate): Double? =
         anchor(studyId, candidate)?.let { ResearchSublingualV01.studyScenario(atHour, doses, candidate, it) }
+
+    /**
+     * Scenario curves of every frozen candidate, each with ITS OWN anchor (background and amplitude), on [grid].
+     * Returns (minimum, maximum) per time point, or null without a verified anchor. A scenario range, not a confidence interval.
+     */
+    fun scenarioRange(studyId: String, grid: DoubleArray, doses: List<ExperimentalDose>): Pair<DoubleArray, DoubleArray>? {
+        if (studyId != PriceFigure1997.STUDY_ID) return null
+        val curves = ResearchSublingualV01.coherentCandidateSeries(grid.toList(), doses).map { series ->
+            val anchor = anchor(studyId, ResearchSublingualV01.candidates.single { it.id == series.candidateId })!!
+            DoubleArray(grid.size) { anchor.background + anchor.oneMgIncrementAtOneHour * series.relativeValues[it] }
+        }
+        return DoubleArray(grid.size) { i -> curves.minOf { it[i] } } to DoubleArray(grid.size) { i -> curves.maxOf { it[i] } }
+    }
 }

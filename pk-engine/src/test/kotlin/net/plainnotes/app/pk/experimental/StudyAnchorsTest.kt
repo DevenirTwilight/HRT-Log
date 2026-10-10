@@ -58,4 +58,16 @@ class StudyAnchorsTest {
             assertTrue(abs(model - PriceFigure1997.TABLE1_AUC_0_24) / PriceFigure1997.TABLE1_AUC_0_24 > 0.2, "${c.id} $model")
         }
     }
+
+    @Test fun scenarioRangeUsesEachCandidatesOwnAnchor() {
+        val doses = listOf(ExperimentalDose(0.0, 1.0), ExperimentalDose(8.0, 0.5))
+        val grid = DoubleArray(97) { it * 0.25 }
+        val (lo, hi) = StudyAnchors.scenarioRange(PriceFigure1997.STUDY_ID, grid, doses)!!
+        for (c in ExperimentalSlModelView.candidates) grid.indices.forEach {
+            val v = StudyAnchors.scenario(PriceFigure1997.STUDY_ID, grid[it], doses, c)!!
+            assertTrue(lo[it] - 1e-9 <= v && v <= hi[it] + 1e-9)
+        }
+        assertNull(StudyAnchors.scenarioRange("Doll2022_1mg_1h", grid, doses))
+    }
 }
+

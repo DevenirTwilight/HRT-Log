@@ -7,8 +7,9 @@ import kotlinx.coroutines.runBlocking
 import net.plainnotes.app.conc.experimental.SlExclusion
 import net.plainnotes.app.data.*
 import net.plainnotes.app.domain.RuleKind
-import net.plainnotes.app.experimental.ExperimentalPkState
-import net.plainnotes.app.experimental.experimentalPkState
+import net.plainnotes.app.experimental.ComparisonUiState
+import net.plainnotes.app.experimental.ComparisonWindow
+import net.plainnotes.app.experimental.comparisonUiState
 import net.plainnotes.app.pk.experimental.ExperimentalSlModelView
 import net.plainnotes.app.reminder.ReminderCoordinator
 import org.junit.*
@@ -50,7 +51,7 @@ class ExperimentalPkDataPathTest {
     }
     @After fun cleanup(){ androidx.lifecycle.ViewModelStore().apply{put("model",model);clear()};db.close() }
 
-    private fun state(candidate:String=first)=experimentalPkState(model.extra.value.records,model.state.value.ruleSnapshots,now,candidate)
+    private fun state(candidate:String=first)=comparisonUiState(model.extra.value.records,model.state.value.ruleSnapshots,now,ComparisonWindow.H24,null,candidate)
 
     @Test fun pageReadsEligibleHistoryThroughTheAppDataPathWithoutWriting() {
         val sl=save(medication("Synthetic SL E2","SUBLINGUAL"),ProfileEntity(0,"E2","sublingual",sl_tier=2))
@@ -72,21 +73,21 @@ class ExperimentalPkDataPathTest {
 
         fun allRows()=runBlocking{db.dao().records()+db.dao().deletedRecords()}
         val before=allRows()
-        val ready=state() as ExperimentalPkState.Ready
-        assertEquals(3,ready.view.consideredDoses)
-        assertEquals(1,ready.audit.excluded[SlExclusion.NOT_SUBLINGUAL_E2])
-        assertTrue(ready.view.m2Relative.all{it.isFinite() && it>=0.0} && ready.view.m2Relative.max()>0.0)
+        val ready=state() as ComparisonUiState.Ready
+        assertEquals(3,ready.snapshot.result.doses.size)
+        assertEquals(1,ready.snapshot.audit.excluded[SlExclusion.NOT_SUBLINGUAL_E2])
+        assertTrue(ready.snapshot.result.m2.all{it.isFinite() && it>=0.0} && ready.snapshot.result.m2.max()>0.0)
         // Every candidate reads the same records; nothing in the database changes.
-        ExperimentalSlModelView.candidates.forEach{assertTrue(state(it.id) is ExperimentalPkState.Ready)}
+        ExperimentalSlModelView.candidates.forEach{assertTrue(state(it.id) is ComparisonUiState.Ready)}
         assertEquals(before,allRows())
 
         // The user later changes the sublingual tier of the current medication: old doses keep their frozen tier.
         save(model.state.value.medications.single{it.id==sl},ProfileEntity(sl,"E2","sublingual",sl_tier=3))
         model.loadExtra()
         await{runBlocking{db.dao().profile(sl)}?.sl_tier==3 && model.extra.value.records.size==4}
-        val after=state() as ExperimentalPkState.Ready
-        assertArrayEquals(ready.view.legacyRelative,after.view.legacyRelative,0.0)
-        assertArrayEquals(ready.view.m2Relative,after.view.m2Relative,0.0)
+        val after=state() as ComparisonUiState.Ready
+        assertArrayEquals(ready.snapshot.result.legacy,after.snapshot.result.legacy,0.0)
+        assertArrayEquals(ready.snapshot.result.m2,after.snapshot.result.m2,0.0)
         assertEquals(before.map{it.config_snapshot},allRows().map{it.config_snapshot})
     }
 }
