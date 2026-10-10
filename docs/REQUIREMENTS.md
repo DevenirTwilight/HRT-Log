@@ -539,3 +539,4 @@ P1-A 数值病态修复与旧冻结 Calculator1 的异常区间必须区分；�
 
 2026-10-10 用户要求修复 F1：导航抽屉必须可滚动，短屏与大字号下“设置/关于”都可从抽屉进入；以 DrawerScrollUiTest 作回归。
 2026-10-10 用户决定：冻结 P2 协议锁定的生产文件若因与 PK 无关的 UI 修复而变化，只能在 docs/pk-research/p2/protocol-deviations.json 追加逐文件、旧/新哈希精确匹配的偏差记录；PK、浓度/化验显示、数据、资源与旧证据文件永不豁免；不得改写 production-baseline.json、protocol-lock.json 或协议正文。
+2026-10-10 用户：如不推荐仅 ARM64，则交付 Universal；已交付含 F1 修复的 Universal 正式签名包，默认发行仍为 Universal。

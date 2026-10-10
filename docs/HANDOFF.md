@@ -1,3 +1,9 @@
+# Universal 正式签名 APK（含 F1 修复）已私有交付（2026-10-10）
+
+用户要求带 F1 修复的新包，并决定“若不推荐只给 arm64 就给 universal”；按建议交付 Universal。源码 b6262c3，按现有生产配置构建（R8，无资源裁剪、无 ABI 过滤、无验收 keep），Build25/0.2.0/Schema9。未签名 23,506,758 bytes（SHA cec373c4…），签名仓库确认 Private 后用 sign_local_apk.sh 在受限临时目录签名，证书 989ba045…79b1 校验通过、临时凭据已删。成品 `hrt-log-build25-full-universal-official-b6262c3.apk` 23,555,291 bytes，SHA-256 `b1c36345e344e39ca69220613937087ca22d051aba22b9831b06bc7e76152765`；v2/v3、16KB zipalign 通过，四 ABI，权限与 P0 A 相同（无 INTERNET），dex 含 drawer-content。会话私有文件发送，未入 Git/Release/公开 CI。用户手机现装 ARM64 包，arm64→universal 同证书同版本覆盖未实测：先加密备份，只接受“更新”，禁止卸载清数据。
+
+---
+
 # F1 修复：导航抽屉可滚动（2026-10-10）
 
 用户要求修复 P1 发现的 F1。`AppShell.kt` 抽屉内容抽成 `DrawerContent`（行为不变：同样的条目/分隔线/选中/点击后关闭抽屉，VISITS 仍清空 visitId），外层 Column 加 `verticalScroll(rememberScrollState())`。新增 `app/src/test/java/net/plainnotes/app/DrawerScrollUiTest.kt`（Robolectric w320dp-h480dp，普通与 fontScale 2.0）：滚动到并点击“设置”“关于”。本地：修复后 2/2 通过；临时去掉 verticalScroll 后 2/2 失败（no parent layout with a Scroll SemanticsAction），已恢复；PeriodStability 5/5 通过。未改数据库/PK/版本/权限/签名，不出新 APK（已交付的 ARM64 包不含此修复）。CI 38048308989：android（app 单测/lint）与 device-tests success；release-acceptance 38048312640 的 x86_64 A/B 全阶段 success（四语抽屉遍历已通过）。jvm 作业的“冻结 P2 研究”步骤因 production-baseline.json 锁定 AppShell.kt 哈希而失败；按用户选择新增追加式 `docs/pk-research/p2/protocol-deviations.json`（PD-2026-10-10-F1，旧→新哈希），`check_protocol.py` 只对其中登记、且属于 app/.../ui/ 非 Conc/Lab/Chart 文件的精确哈希变化放行；production-baseline.json、protocol-lock.json、协议正文未改。研究回归 168 项通过。
