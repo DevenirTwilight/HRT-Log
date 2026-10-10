@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "phase": "P2-R",
+  "date": "2026-10-10",
+  "evidence_status": "ALL_EXPOSED_OR_AGGREGATE; 0 locked external complete human sublingual PK series",
+  "cohorts": [
+    {
+      "id": "Rosano1997_PK25",
+      "cohort_id": "Rosano1997_PK25",
+      "n": 25,
+      "role": "EXPOSED_AGGREGATE",
+      "route": "SL",
+      "issue": "n25 predose unknown; 10/20/40/60 min means and SD; no individual time curves",
+      "source": "docs/pk-research/p2/p2e-source-metrics.json"
+    },
+    {
+      "id": "Komesaroff1998_n10",
+      "cohort_id": "Komesaroff1998_n10",
+      "n": 10,
+      "role": "EXPOSED_AGGREGATE",
+      "route": "SL",
+      "issue": "0/15/30 min means SEM, RIA; no late curve",
+      "source": "docs/pk-research/p2/p2d-komesaroff-table1.json"
+    },
+    {
+      "id": "Price1997_n6",
+      "cohort_id": "Price1997_n6",
+      "n": 6,
+      "role": "EXPOSED_ORIGINAL_PDF_CONFLICT",
+      "route": "SL",
+      "issue": "one crossover cohort; manually digitized Figure1 versus Table1 AUC unresolved; predose unknown",
+      "source": "docs/pk-research/p2/p2j-price-figure-baseline-consistency.md"
+    },
+    {
+      "id": "Doll2022_n10",
+      "cohort_id": "Doll2022_n10",
+      "n": 10,
+      "role": "EXPOSED_TRAINING_ANCHOR",
+      "route": "SL/PO crossover",
+      "issue": "1h 144 pg/mL previously used as anchor; user PDF webpage print not full journal PDF",
+      "source": "docs/pk-research/p2/p2h-original-pdfs-half-life-audit.md"
+    },
+    {
+      "id": "Yaish2023",
+      "cohort_id": "Yaish2023_trial",
+      "n": 22,
+      "role": "EXPOSED_AGGREGATE",
+      "route": "SL/PO comparison",
+      "issue": "90min median and predose mean not paired individual PK; abstract/final same trial",
+      "source": "docs/pk-research/p2/p2l-repeated-dose-source-audit.json"
+    },
+    {
+      "id": "Yager2022",
+      "cohort_id": "NCT03652623",
+      "n": 13,
+      "role": "EXPOSED_POOLED_ROUTE",
+      "route": "PO/SL pooled",
+      "issue": "same cohort as Abdelmawla; cannot isolate pure SL",
+      "source": "docs/pk-research/p2/p2h-original-pdfs-half-life-audit.md"
+    },
+    {
+      "id": "Abdelmawla2023",
+      "cohort_id": "NCT03652623",
+      "n": 12,
+      "role": "EXPOSED_SAME_TRIAL_MODEL",
+      "route": "PO/SL pooled",
+      "issue": "24h predose substitution for two; not an independent PK study",
+      "source": "docs/pk-research/p2/p2h-original-pdfs-half-life-audit.md"
+    },
+    {
+      "id": "Kariyawasam2025",
+      "cohort_id": "Toronto2019_2021",
+      "n": 286,
+      "sublingual_baseline_table_n": 38,
+      "role": "EXPOSED_OBSERVATIONAL",
+      "route": "heterogeneous",
+      "issue": "unknown sampling times; observational E1/E2, no dense isolated SL curve",
+      "source": "docs/pk-research/p2/p2l-repeated-dose-source-audit.json"
+    },
+    {
+      "id": "BarOn2026",
+      "cohort_id": "BarOn2026_30",
+      "n": 30,
+      "role": "NON_PK_CONTEXT",
+      "route": "SL vs PO",
+      "issue": "protein S/hemostasis, not E2 PK; 2024 interim duplicate",
+      "source": "docs/pk-research/p2/p2l-repeated-dose-source-audit.json"
+    }
+  ],
+  "external_locked_pure_SL_cohort_count": 0,
+  "external_90pct_interval_coverage_validated": false,
+  "model_upgrade_authorized": false,
+  "distinct_named_cohort_ids": 8,
+  "possible_cross_study_participant_overlap_not_resolved": [
+    "Yaish2023",
+    "BarOn2026"
+  ]
+}
