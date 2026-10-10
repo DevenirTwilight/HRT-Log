@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="xpk_title">实验药代模型</string>
+    <string name="xpk_warning">实验模型仅用于研究相对曲线形状。尚不能准确预测个人血清雌二醇浓度，不应用于自行调整给药剂量。</string>
+    <string name="xpk_mode_legacy">旧版模型 Legacy PK</string>
+    <string name="xpk_mode_m2">实验模型 Experimental M2</string>
+    <string name="xpk_mode_comparison">模型对比 Model comparison</string>
+    <string name="xpk_unit">相对响应（无量纲）</string>
+    <string name="xpk_axis_start">48 小时前</string>
+    <string name="xpk_axis_middle">24 小时前</string>
+    <string name="xpk_axis_now">现在</string>
+    <string name="xpk_axis_max">纵轴上限：%1$s</string>
+    <string name="xpk_chart_description">过去 48 小时的相对响应：%1$s</string>
+    <string name="xpk_legend_legacy">旧版模型：除以它自己在 1 mg 给药后 1 小时的响应（采用最近一条记录的含服档）</string>
+    <string name="xpk_legend_m2">实验模型 M2，候选 %1$s：除以该候选自己在 1 mg 给药后 1 小时的响应</string>
+    <string name="xpk_legend_range" formatted="false">浅色带：15 个冻结 M2 候选的取值范围。它只是已探索参数集合的情景范围，不是 95% 置信区间，并且低估了长尾的不确定性。</string>
+    <string name="xpk_legend_tail">阴影：距最近一次给药超过 8 小时。这段长尾的形状高度不确定。</string>
+    <string name="xpk_scale_note">两条曲线各自归一化。高度相同不代表血药水平相同，两条曲线都不是浓度单位。正式浓度页面不受影响。</string>
+    <string name="xpk_candidate_title">M2 候选</string>
+    <string name="xpk_candidate_label">候选 ID</string>
+    <string name="xpk_candidate_order">候选按 ID 排列。排列顺序和默认选择都不代表准确度高低。</string>
+    <string name="xpk_candidate_rates">转运级数 %1$s · 快输入 %2$s /小时 · 消除 %3$s /小时 · 慢输入 %4$s /小时 · 慢输入占比 %5$s</string>
+    <string name="xpk_candidate_price">重建 Price 1997 时假设的背景值：%1$s（该论文的单位）。这只是针对该研究的敏感性假设，不是你的基线，此处不能修改。</string>
+    <string name="xpk_candidate_rosano">拟合时使用的 Rosano 1997 基线上限：%1$s（该论文的单位）。</string>
+    <string name="xpk_inputs_title">输入与假设</string>
+    <string name="xpk_inputs_window">时间范围：过去 48 小时，不做预测，不含计划给药。窗口前 30 天内的给药会叠加计入，更早的不计入。</string>
+    <string name="xpk_inputs_used">计入的舌下雌二醇给药：%1$d 次 · 未计入的更早给药：%2$d 次</string>
+    <string name="xpk_inputs_excluded">未使用的记录：%1$s</string>
+    <string name="xpk_inputs_none_excluded">未使用的记录：无</string>
+    <string name="xpk_excl_not_taken">未服用（计划、跳过或漏服）%1$d</string>
+    <string name="xpk_excl_deleted">已删除 %1$d</string>
+    <string name="xpk_excl_no_time">无时间 %1$d</string>
+    <string name="xpk_excl_future">未来时间 %1$d</string>
+    <string name="xpk_excl_outside_window">早于 180 天 %1$d</string>
+    <string name="xpk_excl_invalid_dose">剂量无效 %1$d</string>
+    <string name="xpk_excl_no_snapshot">无法确认当时的药物设置 %1$d</string>
+    <string name="xpk_excl_not_sl_e2">不是舌下雌二醇 %1$d</string>
+    <string name="xpk_excl_incomplete">缺少含服档 %1$d</string>
+    <string name="xpk_limits_title">这个页面不能告诉你的事</string>
+    <string name="xpk_limit_calibration">没有按你个人校准，也没有在独立人群中验证。不使用化验结果。</string>
+    <string name="xpk_limit_identifiability">依据现有发表数据，无法区分慢吸收占比和中央消除速率。</string>
+    <string name="xpk_limit_tail">给药后约 8 到 24 小时以后的曲线不可靠。</string>
+    <string name="xpk_limit_comparison">在回顾性的跨研究检验中，M2 并未被证明优于更简单的模型。两条曲线都不是“准确的那条”。</string>
+    <string name="xpk_limit_linearity">多次给药按线性叠加计算；这在真实个体中尚未验证。</string>
+    <string name="xpk_limit_price">Price 1997 的 Figure 1 与 Table 1 之间的面积差异仍未解释。</string>
+    <string name="xpk_empty_title">没有可用于实验模型的记录</string>
+    <string name="xpk_empty_body">只使用已服用、未删除、保存的设置能确认给药途径和含服档的舌下雌二醇（E2）记录，时间在 48 小时窗口及其前 30 天内。口服雌二醇、舌下戊酸雌二醇和其他途径都不会被使用。</string>
+    <string name="xpk_loading">正在计算…</string>
+    <string name="xpk_error">无法用这些记录计算实验模型。</string>
+    <string name="xpk_back">返回浓度页面</string>
+    <string name="xpk_version">模型 %1$s · 仅供研究</string>
+</resources>

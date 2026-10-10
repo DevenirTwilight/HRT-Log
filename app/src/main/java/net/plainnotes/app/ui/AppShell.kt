@@ -40,6 +40,8 @@ enum class Destination(val title: Int, val icon: ImageVector, val ready: Boolean
     MEDICATIONS(R.string.medications, Icons.Outlined.Medication, true),
     WELLBEING(R.string.wellbeing, Icons.Outlined.FavoriteBorder, true),
     CONCENTRATION(R.string.concentration, Icons.AutoMirrored.Outlined.ShowChart, true),
+    // Opt-in research page (REQUIREMENTS §55); reads in-memory records only and never changes the concentration page.
+    EXPERIMENTAL_PK(R.string.xpk_title, Icons.Outlined.Insights, true),
     LABS(R.string.labs, Icons.Outlined.Science, true),
     SETTINGS(R.string.settings, Icons.Outlined.Settings, true),
     ABOUT(R.string.about, Icons.Outlined.Info, true),
@@ -123,7 +125,7 @@ class UiPrefs(context: Context) {
 
     LaunchedEffect(notificationSlot) { notificationSlot?.let { s -> completeEntry = state.slots.firstOrNull { it.slot.key == s.key } ?: TimelineEntry(s, net.plainnotes.app.domain.SlotState.PENDING); model.notificationSlot.value = null } }
     LaunchedEffect(Unit) { model.loadExtra() }
-    LaunchedEffect(destination) { if (destination in listOf(Destination.CALENDAR, Destination.HISTORY, Destination.STOCK, Destination.WELLBEING, Destination.TIMELINE, Destination.VISITS)) model.loadExtra() }
+    LaunchedEffect(destination) { if (destination in listOf(Destination.CALENDAR, Destination.HISTORY, Destination.STOCK, Destination.WELLBEING, Destination.TIMELINE, Destination.VISITS, Destination.EXPERIMENTAL_PK)) model.loadExtra() }
     LaunchedEffect(destination, concSettings.calibrate, concSettings.mode) {
         if (destination == Destination.CONCENTRATION || destination == Destination.LABS) {
             model.concentrationSettings(concSettings.calibrate, concSettings.mode); model.loadConcentration()
@@ -175,6 +177,7 @@ class UiPrefs(context: Context) {
                 Destination.MEDICATIONS -> MedicationsScreen(state, { model.edit(null) }, { model.edit(it) }, { archive = it }, pad)
                 Destination.CONCENTRATION -> ConcentrationScreen(state, conc.result, conc.loading, conc.weight, concSettings, { concSettings = it; prefs.conc = it },
                     { model.setWeight(it) }, { model.editById(it) }, { destination = Destination.LABS }, pad,extra.records,state.profiles,model::confirmHistoricalContext,{destination=Destination.HISTORY})
+                Destination.EXPERIMENTAL_PK -> net.plainnotes.app.experimental.ExperimentalPkScreen(extra.records, state.ruleSnapshots, pad, { destination = Destination.CONCENTRATION })
                 Destination.LABS -> LabsScreen(extra.labs, conc.doseTimes, { labEdit = it; labNew = it == null }, { model.deleteLab(it) }, pad,extra.labContexts,{v,estimate->model.rebuildLabContext(v,estimate)})
                 Destination.SETTINGS -> SettingsScreen(appearance, onAppearance, highReliability, { highReliability = it; prefs.highReliability = it; model.sync() },
                     { model.sync() }, { model.testReminder() }, pad, wellbeingPrompt, { wellbeingPrompt = it; prefs.wellbeingPrompt = it }) {

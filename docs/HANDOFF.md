@@ -1,3 +1,26 @@
+# M2 实验页正式签名 universal APK 已私有交付（2026-10-10）
+
+用户在 A–F 全部通过后要求"给我apk"。源码 `ae30b27`（应用代码与 A–F 全过的 `cfc494d` 完全相同），按现行正式配置构建（R8、资源裁剪、压缩原生库、四 ABI），Build25/0.2.0/Schema9 不变。未签名 12,759,483 bytes（SHA `2f1599dc…`）。核实签名备份仓库仍为 Private 后，用 `scripts/sign_local_apk.sh` 在受限临时目录签名，证书 `989ba045…79b1` 校验通过，临时凭据已删除。成品 `hrt-log-build25-full-universal-compact-m2-official-ae30b27.apk` 12,802,932 bytes，SHA-256 `f17251249ba5b65a4ffd559ae65ebf08a6b28c803fe9c0c037c5b64d318ced17`；v2/v3、16KB zipalign 通过，四 ABI、原生库 DEFLATED，无 INTERNET，权限与前一版相同。通过会话私有文件发送，未入 Git/Release/公开 CI；PR #2 仍为 Draft 未合并。覆盖安装前先导出加密备份，只接受"更新"，不要卸载或清数据。
+
+---
+
+# M2 实验药代模型集成（2026-10-10，Draft PR #2 待审；入口已按 PD-2026-10-10-M2-ENTRY 接线，A–F 全部通过）
+
+分支 `ccr-8cffa954-5gedc0`（基于 `f69d892`，未动 `claude/new-session-1959qb`）。要求见 REQUIREMENTS §55；审计、实现、验收与 APK 体积见 `docs/design/experimental-m2-integration.md`。
+- [x] 阶段 A 审计：历史线性；研究分支 17 个新文件原样导入（blob 一致）。用户上传的离线研究包核对：计算核与 PR #1 逐字节一致；P2-AF/AG/AJ/AK 结论只用于页面标注。
+- [x] 阶段 B：`ExperimentalSlModelView`（pk-engine）、适配器排除计数、`ExperimentalPkScreen` + 四语独立资源、Debug 合成宿主、`scripts/check_experimental_release.py`（CI 已加）。**没有修改任何 P2 锁定文件**。
+- [x] 阶段 C 本地：pk 86、data 72、reminder 14、app 417（404 通过/13 原有跳过/0 失败，PeriodStability 5/5）、Python 172、lint 0 错误、Debug/Release 构建、两项 release 检查通过。Release 未签名 12,725,439 vs 基线 12,707,919（+17,520，仅资源表与元数据；原生库与 dex 内容不变）。
+- [x] CI 9290b8f：jvm、device-tests 成功（模拟器 68 项/2 跳过/0 失败，新 `ExperimentalPkPreviewAndroidTest` 已在报告中确认通过）；android 作业因 lint `StringFormatInvalid`（"95%"）失败，已在 83f8b09 修复，等待复跑。release-acceptance（A–F）已手动触发 run 38063999138。
+- **阻塞（需产品负责人决定）**：正式 App 入口需要改 P2 锁定的 `AppShell.kt`；补丁草案 `docs/design/experimental-m2-entry.patch`，三种处理方式见设计文档"入口"一节。在决定前，Release 中实验页不可达（R8 已移除其代码）。
+- 本地工具都在仓库外（`/home/user/android-sdk`、`/home/user/robolectric`），会话结束即丢失；离线研究包未入库。
+
+- [x] CI `83f8b09`：jvm / android / device-tests 全部成功。release-acceptance 首次在构建步骤失败（Debug 专用测试编进 Release 测试 APK，研究分支原有问题），`2f109f1` 移到 `androidTestFullDebug` 后本地 F 场景 exact/functional 可构建；已重新触发 run 38067123854，结果待记录。
+- [x] Draft PR：https://github.com/DevenirTwilight/HRT-Log/pull/2（base `claude/new-session-1959qb`，不合并、不发布）。下一步：记录 2f109f1 及之后的 CI / release-acceptance 结果；等负责人对入口做协议决定。
+- [x] 产品负责人授权方案 1（REQUIREMENTS §56）：`070a0ea` 只接线 `AppShell.kt` 三处导航；登记 `PD-2026-10-10-M2-ENTRY`（`pk_relevant: true`，仅导航）；`check_protocol.py` 写死精确哈希例外，并加负向测试。基线、协议锁、参数和证据都没改。
+- [x] 接线后：本地 app 421 / data 72 / reminder 14 / Python 176 通过，lint 0 错误；universal 包 12,759,479 字节（比基线 +51,560），原生库逐字节相同。CI（`cfc494d`）全绿。Release 验收 A–F（run 38069953239）全部通过，F 的字符串、SQLCipher、四个 ABI、迁移和备份证据都已核对，详见设计文档。
+- 剩余：等负责人审阅 Draft PR #2；不合并、不发布。
+---
+
 # 正式配置改为“压缩原生库 + 资源裁剪”（2026-10-10，已验收并交付）
 
 用户要求采用第 1 项并加做第 4 项。`app/build.gradle.kts` release：`isShrinkResources = true` + `packaging { jniLibs { useLegacyPackaging = true } }`；R8/签名/版本/Schema/PK 不变。验收工具场景改为显式设置两开关（A–D 含义不随正式默认变化），新增 F（=新正式配置）。本地正式未签名 **12,707,995 bytes**（SHA 155ee43a…，−45.94%），四 ABI、8 库 DEFLATED 且与 P0 字节一致、extractNativeLibs=true、三个命名 JSON SHA 与源码一致、check_release_manifest PASS（无 INTERNET）。CI befd56f：android.yml 三作业 success；release-acceptance 38055084985 中 **F（新正式配置）全部 PASS**（exact 6/6、functional 222+3、重启/拒绝通知/开机提醒恢复，SQLCipher 从解压目录加载，1004/1075 字符串一致），C/D PASS；A/E 失败是验收工具缺陷——init 脚本在插件应用时设置开关，被随后执行的 app/build.gradle.kts 新默认值覆盖（A 实际 shrink=true/legacy=true）；B functional 打包失败发生在同样被覆盖成 F 配置时，F 同配置构建正常，按偶发记录、待复跑确认。已改为 finalizeDsl 设置并在条件不符时直接构建失败。复跑（6fd4df9）：android.yml 38057129027 三作业 success；release-acceptance 38057128973 A–F 六个场景全部 success（B 打包问题未复现）。正式包 `hrt-log-build25-full-universal-compact-official-befd56f.apk`（源码 befd56f，生产代码与 6fd4df9 相同）12,753,780 bytes，SHA-256 `2a34afa0b274155a431a9f1d5f5a3938badfd56290d69e770fff54ba050d347e`，证书 989ba045…79b1，v2/v3、16KB zipalign、四 ABI、extractNativeLibs=true、权限无 INTERNET；签名凭据临时目录已删；会话私有文件发送，未入 Git/Release。未在 ARM64 硬件上实测压缩版；用户手机覆盖前先加密备份、只接受“更新”。

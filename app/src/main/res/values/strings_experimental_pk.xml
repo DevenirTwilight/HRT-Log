@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Opt-in experimental PK page (REQUIREMENTS §55). Kept apart from the P2-frozen strings.xml. Never use concentration units here. -->
+<resources>
+    <string name="xpk_title">Experimental PK model</string>
+    <string name="xpk_warning">The experimental model is only for studying the relative shape of curves. It cannot yet accurately predict your own serum estradiol level and must not be used to adjust your dose yourself.</string>
+    <string name="xpk_mode_legacy">Legacy PK</string>
+    <string name="xpk_mode_m2">Experimental M2</string>
+    <string name="xpk_mode_comparison">Model comparison</string>
+    <string name="xpk_unit">Relative response (dimensionless)</string>
+    <string name="xpk_axis_start">48 h ago</string>
+    <string name="xpk_axis_middle">24 h ago</string>
+    <string name="xpk_axis_now">Now</string>
+    <string name="xpk_axis_max">Top of scale: %1$s</string>
+    <string name="xpk_chart_description">Relative response over the last 48 hours: %1$s</string>
+    <string name="xpk_legend_legacy">Legacy PK: divided by its own response 1 h after 1 mg (sublingual tier of the latest record)</string>
+    <string name="xpk_legend_m2">Experimental M2, candidate %1$s: divided by its own response 1 h after 1 mg</string>
+    <string name="xpk_legend_range" formatted="false">Band: range of the 15 frozen M2 candidates. This is the explored parameter set, not a 95% confidence interval, and it understates the uncertainty of the tail.</string>
+    <string name="xpk_legend_tail">Shaded: more than 8 h since the latest dose. The shape of this tail is highly uncertain.</string>
+    <string name="xpk_scale_note">Each curve is normalized separately. Equal heights do not mean equal blood levels, and neither curve is in concentration units. Your concentration page is unchanged.</string>
+    <string name="xpk_candidate_title">M2 candidate</string>
+    <string name="xpk_candidate_label">Candidate ID</string>
+    <string name="xpk_candidate_order">Candidates are listed by ID. Neither the order nor the default choice ranks accuracy.</string>
+    <string name="xpk_candidate_rates">Transit stages %1$s · fast input %2$s per h · elimination %3$s per h · slow input %4$s per h · slow share %5$s</string>
+    <string name="xpk_candidate_price">Assumed background for reconstructing Price 1997: %1$s in that paper\'s units. A sensitivity assumption about that study only, not your baseline; it cannot be changed here.</string>
+    <string name="xpk_candidate_rosano">Upper limit of the Rosano 1997 baseline used in fitting: %1$s in that paper\'s units.</string>
+    <string name="xpk_inputs_title">Inputs and assumptions</string>
+    <string name="xpk_inputs_window">Window: the last 48 hours, with no forecast and no planned doses. Doses up to 30 days before the window are added up; earlier ones are left out.</string>
+    <string name="xpk_inputs_used">Sublingual estradiol doses used: %1$d · older doses left out: %2$d</string>
+    <string name="xpk_inputs_excluded">Records not used: %1$s</string>
+    <string name="xpk_inputs_none_excluded">Records not used: none</string>
+    <string name="xpk_excl_not_taken">not taken (planned, skipped or missed) %1$d</string>
+    <string name="xpk_excl_deleted">deleted %1$d</string>
+    <string name="xpk_excl_no_time">no time %1$d</string>
+    <string name="xpk_excl_future">in the future %1$d</string>
+    <string name="xpk_excl_outside_window">older than 180 days %1$d</string>
+    <string name="xpk_excl_invalid_dose">invalid dose %1$d</string>
+    <string name="xpk_excl_no_snapshot">settings at the time cannot be confirmed %1$d</string>
+    <string name="xpk_excl_not_sl_e2">not sublingual estradiol %1$d</string>
+    <string name="xpk_excl_incomplete">sublingual tier missing %1$d</string>
+    <string name="xpk_limits_title">What this page cannot tell you</string>
+    <string name="xpk_limit_calibration">It is not calibrated to you and has not been checked against independent people. Lab results are not used.</string>
+    <string name="xpk_limit_identifiability">The share of slow absorption and the elimination rate cannot be told apart with the published data.</string>
+    <string name="xpk_limit_tail">The curve more than about 8 to 24 hours after a dose is not reliable.</string>
+    <string name="xpk_limit_comparison">In retrospective cross-study tests M2 was not shown to do better than a simpler model. Neither curve is the accurate one.</string>
+    <string name="xpk_limit_linearity">Doses are added up linearly; this has not been verified in real individuals.</string>
+    <string name="xpk_limit_price">An area difference between Figure 1 and Table 1 of Price 1997 is still unexplained.</string>
+    <string name="xpk_empty_title">No records the experimental model can use</string>
+    <string name="xpk_empty_body">Only taken, non-deleted sublingual estradiol (E2) doses whose saved settings confirm the route and sublingual tier are used, from the 48-hour window and the 30 days before it. Oral estradiol, sublingual estradiol valerate and other routes are never used.</string>
+    <string name="xpk_loading">Calculating…</string>
+    <string name="xpk_error">The experimental model could not be calculated for these records.</string>
+    <string name="xpk_back">Back to concentration page</string>
+    <string name="xpk_version">Model %1$s · research only</string>
+</resources>

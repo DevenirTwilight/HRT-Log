@@ -1,0 +1,13 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Debug variant only: no access to persistent health records. Not included in release. -->
+    <application>
+        <activity
+            android:name="net.plainnotes.app.debug.ExperimentalSlComparisonActivity"
+            android:exported="true"
+            android:label="PK Research Sandbox" />
+        <activity
+            android:name="net.plainnotes.app.debug.ExperimentalPkPreviewActivity"
+            android:exported="false"
+            android:label="Experimental PK preview" />
+    </application>
+</manifest>
