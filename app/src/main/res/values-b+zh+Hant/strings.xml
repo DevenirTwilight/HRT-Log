@@ -1016,4 +1016,15 @@
 <string name="calib_last_used">最近觀測：實際參與擬合</string>
 <string name="calib_last_excluded">最近觀測：已自動排除，未參與擬合</string>
 <string name="calib_last_not_used">最近觀測：不是擬合候選</string>
+<string name="pk_research_compare_title">舌下給藥實驗模型比較</string>
+<string name="pk_research_compare_warning">僅供研究：曲線為相對形狀，不是血藥濃度（pg/mL）或臨床信賴區間。實驗模型未考慮含服時間和吞嚥比例。正式 E2 估算不受影響。</string>
+<string name="pk_research_compare_open">查看研究模型比較</string>
+<string name="pk_research_compare_close">收起研究模型比較</string>
+<string name="pk_research_compare_baseline">Price 圖線的假設背景值（pg/mL），並非你的背景值：</string>
+<string name="pk_research_compare_empty">沒有符合條件的近期舌下給藥歷史紀錄，無法產生研究比較。</string>
+<string name="pk_research_compare_scenario">實驗參數：%1$s；此假設背景分組包含 %2$d 套候選。</string>
+<string name="pk_research_compare_unit">相對曲線</string>
+<string name="pk_research_compare_old">主色線：舊版舌下給藥分量</string>
+<string name="pk_research_compare_new">次色線：實驗 M2 模型</string>
+<string name="pk_research_compare_method">使用 %1$d 條有效歷史舌下紀錄；另有 %2$d 條較早紀錄被 30 天截斷視窗排除。僅顯示最近 48 小時。兩條曲線分別按各自單次 1mg 給藥後 1 小時的響應正規化。不含未來計畫、其他途徑、檢驗或個人背景擬合。</string>
 </resources>
