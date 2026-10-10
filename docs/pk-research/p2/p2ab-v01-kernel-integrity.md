@@ -78,3 +78,11 @@ The Kotlin function `spreadByAssumedPriceBaseline` returns explicit scenario-spe
 6. An independently timed human SL dataset with baseline, assay, dosing history and early/late measurements remains necessary for prospective validation.
 
 **Status:** exploratory only; no clinical efficacy, individual concentration accuracy, measured coverage or production model upgrade is established.
+
+## Avoid stitched `median` trajectories
+
+Every candidate is normalized to `H(1h)=1` by **construction**, so the pointwise spread at exactly 1 hour is always zero, despite uncertain early and late absorption. This is a *mathematical anchor*, not agreement across 15 independent human predictions.
+
+The rank of candidates changes with time. For example, under a single hypothetical 1 mg dose, the identity of the candidate producing the pointwise median switches from `p2x-18` at 0.5 h to `p2x-34` at 6 h and `p2x-14` at 24 h. Joining pointwise medians would create a curve that is **not a member of the 15 fitted mechanistic candidate trajectories**. Analogous switching happens at the minima and maxima.
+
+Therefore `coherentCandidateSeries(timeHours, doses)` exports each candidate ID and its complete aligned curve without switching parameters between timepoints. The existing pointwise `spread()` remains a descriptive summary **only** and must not be labelled a coherent PK model or an individual expected concentration. The time axis is required to be sorted and finite; series and model spread remain relative and not clinically calibrated.
