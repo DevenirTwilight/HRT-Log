@@ -12,7 +12,8 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import net.plainnotes.app.R
-import net.plainnotes.app.conc.ConcentrationResult
+import net.plainnotes.app.conc.experimental.ResearchHistoricalSlAdapter
+import net.plainnotes.app.data.RecordEntity
 import net.plainnotes.app.pk.experimental.ResearchShapeComparison
 import net.plainnotes.app.pk.experimental.ResearchShapeComparisonV01
 
@@ -21,13 +22,13 @@ import net.plainnotes.app.pk.experimental.ResearchShapeComparisonV01
  * Both displayed traces are separately normalized shapes, NOT pg/mL.
  */
 @Composable
-internal fun ExperimentalSublingualComparison(result: ConcentrationResult) {
-    if (result.researchSublingualHistory.isEmpty()) return
+internal fun ExperimentalSublingualComparison(records: List<RecordEntity>, ruleSnapshots: Map<Long, String>, nowH: Double) {
+    if (records.isEmpty()) return
     var expanded by remember { mutableStateOf(false) }
     var baselineIndex by remember { mutableIntStateOf(2) } // arbitrary initial SCENARIO, not a best fit
     val baselines = ResearchShapeComparisonV01.assumedPriceBaselines
     val resultState by produceState<Pair<Boolean, ResearchShapeComparison?>>(
-        initialValue = false to null, expanded, baselineIndex, result
+        initialValue = false to null, expanded, baselineIndex, records, ruleSnapshots, nowH
     ) {
         value = false to null
         if (expanded) {
@@ -35,7 +36,8 @@ internal fun ExperimentalSublingualComparison(result: ConcentrationResult) {
                 // Do not propagate sensitive event history through logs or network.
                 runCatching {
                     ResearchShapeComparisonV01.compare(
-                        result.researchSublingualHistory, result.nowH, baselines[baselineIndex]
+                        ResearchHistoricalSlAdapter.verifiedEvents(records, ruleSnapshots, nowH),
+                        nowH, baselines[baselineIndex]
                     )
                 }.getOrNull()
             }
