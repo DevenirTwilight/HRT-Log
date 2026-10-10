@@ -7,8 +7,10 @@ import net.plainnotes.app.data.MedicationEntity
 import net.plainnotes.app.data.MedicationSnapshot
 import net.plainnotes.app.data.ProfileEntity
 import net.plainnotes.app.data.RecordEntity
-import net.plainnotes.app.experimental.ExperimentalPkState
-import net.plainnotes.app.experimental.experimentalPkState
+import net.plainnotes.app.experimental.ComparisonUiState
+import net.plainnotes.app.experimental.ComparisonWindow
+import net.plainnotes.app.experimental.comparisonUiState
+import net.plainnotes.app.pk.experimental.ConcentrationModelComparison
 import net.plainnotes.app.pk.experimental.ExperimentalSlModelView
 import org.junit.Assert.*
 import org.junit.Test
@@ -27,6 +29,8 @@ class ExperimentalPkHistoryTest {
     private val gel = sl.copy(id = 4, name = "gel", route = "GEL")
     private val gelProfile = ProfileEntity(4, "E2", "gel", gel_product_id = 1)
     private val first = ExperimentalSlModelView.candidates.first().id
+    private fun experimentalPkState(rows: List<RecordEntity>, rules: Map<Long, String>, at: java.time.Instant, id: String) =
+        comparisonUiState(rows, rules, at, ComparisonWindow.H24, null, id)
 
     private fun record(
         id: Long, hoursAgo: Double, dose: Double? = 1.0, med: MedicationEntity = sl, profile: ProfileEntity? = slProfile,
@@ -71,12 +75,12 @@ class ExperimentalPkHistoryTest {
 
     @Test fun changingCurrentSettingsDoesNotChangeOldResults() {
         val rows = listOf(record(1, 30.0), record(2, 20.0, 0.5), record(3, 3.0))
-        val before = experimentalPkState(rows, emptyMap(), now, first) as ExperimentalPkState.Ready
+        val before = experimentalPkState(rows, emptyMap(), now, first) as ComparisonUiState.Ready
         // The page has no access to current medication settings at all; a later rule version for the same medication is ignored.
         val edited = mapOf(1L to MedicationSnapshot.encode(sl.copy(route = "ORAL", dose_per_intake = 4.0), ProfileEntity(1, "E2", "oral")))
-        val after = experimentalPkState(rows.map { it.copy(rule_version_id = 1L) }, edited, now, first) as ExperimentalPkState.Ready
-        assertArrayEquals(before.view.m2Relative, after.view.m2Relative, 0.0)
-        assertArrayEquals(before.view.legacyRelative, after.view.legacyRelative, 0.0)
+        val after = experimentalPkState(rows.map { it.copy(rule_version_id = 1L) }, edited, now, first) as ComparisonUiState.Ready
+        assertArrayEquals(before.snapshot.result.m2, after.snapshot.result.m2, 0.0)
+        assertArrayEquals(before.snapshot.result.legacy, after.snapshot.result.legacy, 0.0)
     }
 
     @Test fun readingNeverMutatesRecordsOrSnapshots() {
@@ -91,18 +95,22 @@ class ExperimentalPkHistoryTest {
 
     @Test fun pageStateFromRecordsMatchesTheEngineViewAndHandlesEmptyHistory() {
         val rows = listOf(record(1, 10.0), record(2, 4.0, 0.5))
-        val ready = experimentalPkState(rows, emptyMap(), now, first) as ExperimentalPkState.Ready
-        val direct = ExperimentalSlModelView.compute(ResearchHistoricalSlAdapter.verifiedEvents(rows, emptyMap(), nowH), nowH, first)!!
-        assertArrayEquals(direct.m2Relative, ready.view.m2Relative, 0.0)
-        assertEquals(2, ready.view.consideredDoses)
+        val ready = experimentalPkState(rows, emptyMap(), now, first) as ComparisonUiState.Ready
+        val events = ResearchHistoricalSlAdapter.verifiedEvents(rows, emptyMap(), nowH)
+        val direct = ConcentrationModelComparison.compute(events, events.last().timeH, events.last().timeH + 24, events.last().timeH, first)!!
+        assertArrayEquals(direct.m2, ready.snapshot.result.m2, 0.0)
+        assertArrayEquals(direct.legacy, ready.snapshot.result.legacy, 0.0)
+        assertEquals(2, ready.snapshot.result.doses.size)
         val onlyOther = listOf(record(3, 2.0, med = oral, profile = oralProfile), record(4, 2.0, med = slEv, profile = slEvProfile))
-        val empty = experimentalPkState(onlyOther, emptyMap(), now, first) as ExperimentalPkState.Empty
+        val empty = experimentalPkState(onlyOther, emptyMap(), now, first) as ComparisonUiState.Empty
         assertEquals(mapOf(SlExclusion.NOT_SUBLINGUAL_E2 to 2), empty.audit.excluded)
-        assertTrue(experimentalPkState(emptyList(), emptyMap(), now, first) is ExperimentalPkState.Empty)
-        // Qualifying history only older than the 30-day look-back: no view, not a crash.
-        assertTrue(experimentalPkState(listOf(record(5, 40.0 * 24)), emptyMap(), now, first) is ExperimentalPkState.Empty)
+        assertTrue(experimentalPkState(emptyList(), emptyMap(), now, first) is ComparisonUiState.Empty)
+        // A single old dose is still a valid origin: the window starts at that dose, nothing is invented after it.
+        val old = experimentalPkState(listOf(record(5, 40.0 * 24)), emptyMap(), now, first) as ComparisonUiState.Ready
+        assertEquals(1, old.snapshot.result.doses.size)
+        assertEquals(old.snapshot.result.doses.single().first, old.snapshot.result.originHour, 0.0)
         // An unknown candidate id cannot crash the page.
-        assertTrue(experimentalPkState(rows, emptyMap(), now, "unknown") is ExperimentalPkState.Failed)
+        assertTrue(experimentalPkState(rows, emptyMap(), now, "unknown") is ComparisonUiState.Failed)
     }
 
     @Test fun officialConcentrationResultIsUntouchedByTheExperimentalPage() {

@@ -1,3 +1,22 @@
+# P2-AR 统一血药浓度页面与 M2 定量比较（2026-10-10，进行中）
+
+分支 `p2ar/unified-concentration-comparison`（基于 PR #2 头 `cd56688`）。要求见 REQUIREMENTS §57，审计与设计见 `docs/design/p2ar-unified-concentration.md`。
+- [x] Stage A 审计：受保护文件不改；入口路由补丁只提交草案，等负责人批准。Price 1997 幅度可从冻结数据逐个候选重算：40 行与冻结 CSV `Price_model_auc` 一致，相对差 ≤ 7e-16。
+- [x] Stage B 计算层与图表（`d2112b5`）：`ConcentrationModelComparison`（同剂量同网格、1 分钟指标网格、精确读数）、`ModelComparisonChart`（复用 `ChartViewport`，缩放/平移/点击）。
+- [x] Stage C 统一页面（`d5112b8`）：`UnifiedConcentrationScreen`（Legacy 默认/M2/比较）。当前经已批准的"实验药代模型"抽屉入口可达；放进"血药浓度"页需改受保护的 `AppShell.kt`，补丁 `docs/design/p2ar-entry-approval.patch` 待负责人批准，**未应用**。
+- [x] Stage D 研究情景：Price 1997 Figure 1 锚点（逐候选重算，与冻结 CSV 一致）；Doll/Rosano/Komesaroff 拒绝；AUC 冲突照实显示。
+- [x] Stage E 本地：pk 105、data 72、reminder 14、app 426（13 原有跳过，0 失败，PeriodStability 5/5）、Python 176、lint 0 错误、两项 release 检查通过；Release 未签名 12,813,099（比 PR #2 +53,620）。入口补丁在临时工作树验证：app 424/0 失败、Python 178、lint 0；原样（PENDING）会被检查器拒绝。
+- [x] Draft PR #3 https://github.com/DevenirTwilight/HRT-Log/pull/3（base `ccr-8cffa954-5gedc0`，叠在 PR #2 上，不合并）。CI：`98f535b` 的 device-tests 失败（预览测试在"返回"关闭 Activity 后才读取它），`0a3b857` 修复后 jvm / android / device-tests 全部成功。release-acceptance run 38077621827（`1359e32`，应用代码与 `0a3b857` 相同）A–F 六个场景全部 success。
+- 剩余：等负责人决定是否批准 `PD-2026-10-10-P2AR-UNIFIED`；PR #3 不合并、不发布。**阻塞**：入口放进"血药浓度"页需负责人批准 `PD-2026-10-10-P2AR-UNIFIED`（见设计文档批准流程）。
+
+---
+
+# P2-AR 正式签名 universal APK 已私有交付（2026-10-10）
+
+用户要求 APK。源码 `3335f66`：应用代码与 A–F 全过的 `1359e32` 相同，**不含**待批准的 AppShell 入口补丁，所以统一页面仍从"实验药代模型"抽屉进入，"血药浓度"页不变。按现行正式配置构建，Build25/0.2.0/Schema9 不变。未签名 12,813,095 bytes（SHA `1671e500…`）。核实签名备份仓库仍为 Private 后，用 `scripts/sign_local_apk.sh` 签名，证书 `989ba045…79b1` 校验通过；临时凭据和遗留的备份 clone `/home/user/-` 已删除。成品 `hrt-log-build25-full-universal-compact-p2ar-3335f66.apk` 12,856,180 bytes，SHA-256 `a7f066fd826708fba6e3dbc5b19887c18b3b25feccdd41befb9fa3fa06b5d4c8`；v2/v3 通过，四 ABI，无 INTERNET。通过会话私有文件发送，未入 Git/Release。覆盖安装前先导出加密备份，只接受"更新"。
+
+---
+
 # M2 实验页正式签名 universal APK 已私有交付（2026-10-10）
 
 用户在 A–F 全部通过后要求"给我apk"。源码 `ae30b27`（应用代码与 A–F 全过的 `cfc494d` 完全相同），按现行正式配置构建（R8、资源裁剪、压缩原生库、四 ABI），Build25/0.2.0/Schema9 不变。未签名 12,759,483 bytes（SHA `2f1599dc…`）。核实签名备份仓库仍为 Private 后，用 `scripts/sign_local_apk.sh` 在受限临时目录签名，证书 `989ba045…79b1` 校验通过，临时凭据已删除。成品 `hrt-log-build25-full-universal-compact-m2-official-ae30b27.apk` 12,802,932 bytes，SHA-256 `f17251249ba5b65a4ffd559ae65ebf08a6b28c803fe9c0c037c5b64d318ced17`；v2/v3、16KB zipalign 通过，四 ABI、原生库 DEFLATED，无 INTERNET，权限与前一版相同。通过会话私有文件发送，未入 Git/Release/公开 CI；PR #2 仍为 Draft 未合并。覆盖安装前先导出加密备份，只接受"更新"，不要卸载或清数据。
