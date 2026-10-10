@@ -10,7 +10,7 @@ Instead this PR introduces a **separate, default-collapsed section** below the u
 
 ## Exact semantics
 
-1. `ConcentrationCalculator` already reconstructs `DoseEvent` from each recorded dose and its historical medication/profile snapshot, rejecting missing historical route, invalid actual dose, unknown tier and other invalid contexts. Only already accepted `r...`-identified historical **E2 sublingual events with times <= now** are passed in memory to the optional view. Future planned `f...` events, oral E2, EV sublingual, patches, all other compounds and lab samples do not enter the research input.
+1. The **separate** `ResearchHistoricalSlAdapter` reads immutable record snapshots and independently applies the production calculator's public missing-input checks plus stricter historical `ON_TIME/LATE`, undeleted, documented actual-dose, SL/E2/ester/tier, and temporal gates. It does **not** modify `ConcentrationCalculator.kt`, `ConcentrationResult` or historical records. All eligible events are reconstructed as ephemeral `r...`-identified `DoseEvent` values, **only after a user opens the research panel**. Future scheduled events, oral E2, EV sublingual, patches, all other compounds and labs do not enter the research input. This is a separate, testable implementation of the same qualification rules, not a shared production result; future changes to the production eligibility rules must be tested for parity.
 2. The optional model-comparison helper uses a last-**48 hour** display window and up to **30 days of earlier accepted SL E2 history** to include legacy residuals and slow modeled absorption. It explicitly reports the count of doses excluded for being older. It never silently asserts zero concentration outside that truncated history.
 3. The **legacy curve** is calculated with `Engine.simulate` for the filtered recorded SL E2 doses, including the legacy tier-dependent mucosal/swallowed calculation. It is divided by the same engine's response at 1 hour following a **synthetic 1mg SL reference at the latest historical dose's tier**. This factor is used only within this research view; the official engine and clinical chart are not renormalized or updated.
 4. The **M2 curve** uses the *same* recorded dose timestamps and mg amounts in `ResearchSublingualV01.relativeHistory`, normalized by that candidate's own 1mg-at-1h fast+slow response. **M2 does not model hold time, swallowed dose fraction, or measured bioavailability**. Thus the comparison is about conditional timing/shape, not individual serum concentration, equal bioavailability, or calibrated level accuracy.
@@ -23,14 +23,14 @@ Instead this PR introduces a **separate, default-collapsed section** below the u
 - No selection of M2 for production concentration evaluation, prediction percentiles, calibration, symptom guidance, or treatment decisions.
 - No automatic forecast or q6/q12 clock imputation. Only actual **past** doses enter the research panel.
 - No other-route concentration contribution, endogenous background, lab normalization or personalized effective amplitude.
-- No database schema or persisted experimental preference, no new export field, no modified production PK parameter or signing/release configuration.
+- No database schema or persisted experimental preference, no new export field, no modified production PK parameter, **no change to the frozen production `ConcentrationCalculator.kt`**, and no signing/release configuration changes.
 - No inference that 15 candidate rows are independent cohorts or a posterior distribution.
 - The same named research baseline group can contain multiple candidates; the single displayed curve is a representative *according to the exposed-data pseudo-loss criterion*, not a most probable patient response.
 
 ## Verifications
 
 - `ResearchShapeComparisonV01Test`: valid route/analyte, original timestamps, reference normalization, future/planned omission, lookback count, hypothetical baseline group selection and rejection of unsupported input.
-- `ConcentrationCalculatorTest`: actual historical snapshots flow to the preview, planned doses and oral E2 do not, no mutation to the official E2 array.
+- `ResearchHistoricalSlAdapterTest`: historical snapshot qualification, missing/invalid doses, other routes/esters, future and out-of-window records, non-mutating adapter. `ConcentrationCalculatorTest` remains byte-identical to the frozen base.
 - `ChartViewportTest`: the optional second series participates in research autoscaling without changing normal single-series chart behavior.
 - Existing research kernel/source-to-parameter tests still apply.
 - Pending CI and device/emulator checks must complete on the **latest commit**, not be inferred from earlier green commits.
