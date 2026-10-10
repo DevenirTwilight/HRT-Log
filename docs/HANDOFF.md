@@ -1,3 +1,11 @@
+# ARM64 正式签名 APK 已私有交付（2026-10-10）
+
+用户在 P1 报告后明确要求“给我apk”，并选择“正式签名 ARM64 (C)”。源码 e5447de（生产代码与 P0 622e84e 相同），只以仓库外临时 init 脚本加 arm64-v8a ABI 过滤（R8 开启、无资源裁剪、无任何验收 keep），Build25/0.2.0/Schema9 不变。未签名包 9,201,627 bytes（与 P0 C 同大小；SHA 4db99166… 与 P0 C 的 1a0f84e5… 不同，原生库 SHA bc857466… 与 P0 ARM64 库一致）。核实签名仓库仍为 Private 后，用 scripts/sign_local_apk.sh 在受限临时目录签名，证书 989ba045…79b1 校验通过，临时凭据已删除。成品 `hrt-log-build25-full-arm64-official-e5447de.apk` 9,251,584 bytes，SHA-256 `80268747c4b5ee500e5916b51d34aa24ea7b52e1aa444e1d4f6cf9a8fbe02dff`；v2/v3、16KB zipalign 通过，native-code 仅 arm64-v8a，权限与 P0 C 相同（无 INTERNET）。经会话私有文件发送给用户，未入 Git、未建 Release、未上传公开 CI。
+
+**ARM64 未经真机验收**：用户手机即首台验收设备。安装前先在原应用导出加密备份；只接受系统显示“更新”；如提示 ABI 不兼容/签名冲突/降级，立即停止，禁止卸载或清数据。
+
+---
+
 # P1 ARM64 Release 运行时验收（2026-10-10）
 
 [完整报告](performance/p1-release-acceptance-2026-10.md)、[机器结果](performance/p1-release-acceptance-2026-10.json)；需求 REQUIREMENTS §54。生产源码与 P0 固定源码 622e84e 及 d0284a4 无差异（app/core/pk-engine/importer/Gradle diff 为空）；版本/Schema 9/PK/备份格式/签名未动，未生成正式包、未接触私钥/用户设备/真实数据。
