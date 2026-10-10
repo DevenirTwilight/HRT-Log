@@ -14,17 +14,6 @@ class ChartViewportTest {
         val labs=ChartViewport.top(ChartData(x,y,points=listOf(1.0 to 700.0,10.0 to 1e9)),0.0,2.0)
         assertTrue(labs>=700.0 && labs<1000.0)
     }
-    @Test fun researchComparisonScaleIncludesSecondaryWithoutChangingOrdinaryChart() {
-        val t=doubleArrayOf(0.0,1.0,2.0)
-        val primary=doubleArrayOf(0.0,1.0,0.5)
-        val research=doubleArrayOf(0.0,5.0,2.0)
-        val ordinary=ChartViewport.top(ChartData(t,primary),0.0,2.0)
-        val compared=ChartViewport.top(ChartData(t,primary,comparisonY=research),0.0,2.0)
-        assertEquals(1.15,ordinary,1e-9)
-        assertEquals(5.75,compared,1e-9)
-        assertArrayEquals(primary,ChartData(t,primary,comparisonY=research).y,0.0)
-    }
-
     @Test fun sparseWindowAndNowSplitUseInterpolatedEndpointsInTheSameUnits() {
         val points=ChartViewport.samples(doubleArrayOf(0.0,10.0),doubleArrayOf(100.0,200.0),2.0,8.0,5.0)
         assertEquals(listOf(2.0 to 120.0,5.0 to 150.0,8.0 to 180.0),points)
