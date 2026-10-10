@@ -51,8 +51,8 @@ class ReleaseRuntimeAcceptanceTest {
         while (eocd > 0 && u32(eocd) != 0x06054b50L) eocd--
         var at = u32(eocd + 16); val count = u16(eocd + 10); val out = mutableMapOf<String, LongRange>()
         repeat(count) {
-            val size = u32(at + 20); val nameLen = u16(at + 28); val extraLen = u16(at + 30); val commentLen = u16(at + 32); val local = u32(at + 46)
-            val name = ByteArray(nameLen).also { f.seek(at + 46 + 4); f.readFully(it) }.toString(Charsets.UTF_8)
+            val size = u32(at + 20); val nameLen = u16(at + 28); val extraLen = u16(at + 30); val commentLen = u16(at + 32); val local = u32(at + 42)
+            val name = ByteArray(nameLen).also { f.seek(at + 46); f.readFully(it) }.toString(Charsets.UTF_8)
             if (name.startsWith("lib/")) { val data = local + 30 + u16(local + 26) + u16(local + 28); out[name] = data until data + size }
             at += 46 + nameLen + extraLen + commentLen
         }
@@ -87,6 +87,8 @@ class ReleaseRuntimeAcceptanceTest {
             .put("process_is_64bit", Process.is64Bit()).put("os_arch", System.getProperty("os.arch")).put("process_abi", processAbi)
             .put("source_dir", info.sourceDir).put("native_library_dir", info.nativeLibraryDir).put("mapped_native", JSONArray(mappedNativeEntries()))
             .put("apk_native_entries", JSONArray(apkLibs)).put("scenario", AcceptanceSupport.scenario)
+            .put("apk_lib_data_ranges", JSONObject(apkLibRanges(info.sourceDir).mapValues { "${it.value.first}-${it.value.last}" }))
+            .put("raw_maps", JSONArray(File("/proc/self/maps").readLines().filter { it.contains("base.apk") && !it.contains("classes") || it.contains("sqlcipher") }.take(60)))
             .put("device", "${Build.MANUFACTURER} ${Build.MODEL} API ${Build.VERSION.SDK_INT} ${Build.FINGERPRINT}"))
         assertTrue("libsqlcipher.so must be mapped after loadLibrary: ${mappedNativeEntries()}", maps.isNotEmpty())
         val abiDir = mapOf("arm64-v8a" to listOf("arm64-v8a", "arm64"), "x86_64" to listOf("x86_64"), "armeabi-v7a" to listOf("armeabi-v7a", "arm"), "x86" to listOf("x86"))
@@ -228,12 +230,14 @@ class ReleaseRuntimeAcceptanceTest {
                 app.startActivity(app.packageManager.getLaunchIntentForPackage(pkg)!!.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
                 require(device.wait(Until.hasObject(By.pkg(pkg).depth(0)), 20_000), "app window", tag)
                 require(device.wait(Until.hasObject(By.desc(text("menu", key))), 20_000), "navigation menu '${text("menu", key)}'", tag)
-                require(device.hasObject(By.text(text("add", key))), "calendar FAB '${text("add", key)}'", tag)
+                // Without an active medication the calendar shows its empty-state action ("add medication") instead of the "add" FAB.
+                val calendarAction = listOf("add_medication", "add").map { text(it, key) }.firstOrNull { device.hasObject(By.text(it)) }
+                require(calendarAction != null, "calendar action '${text("add_medication", key)}' or '${text("add", key)}'", tag)
                 device.findObject(By.desc(text("menu", key))).click()
                 require(device.wait(Until.hasObject(By.text(text("settings", key))), 10_000), "drawer entry '${text("settings", key)}'", tag)
                 device.findObject(By.text(text("settings", key))).click()
-                require(device.wait(Until.gone(By.text(text("add", key))), 10_000) && device.hasObject(By.text(text("settings", key))), "settings screen", tag)
-                out.put(tag, JSONObject().put("add", text("add", key)).put("settings", text("settings", key)).put("result", "shown"))
+                require(device.wait(Until.gone(By.text(calendarAction!!)), 10_000) && device.hasObject(By.text(text("settings", key))), "settings screen", tag)
+                out.put(tag, JSONObject().put("calendar_action", calendarAction).put("settings", text("settings", key)).put("result", "shown"))
                 device.pressBack()
             }
         } finally { manager.applicationLocales = LocaleList.getEmptyLocaleList(); device.pressHome() }

@@ -29,32 +29,32 @@ def main():
     args = a.parse_args()
     root = Path(args.artifacts)
     summary = {'workflow': '.github/workflows/release-acceptance.yml', 'run_id': int(args.run_id), 'source_sha': args.source_sha, 'scenarios': {}, 'arm64_probes': {}}
-    for s in 'ABCD':
-        d = root / f'p1-acceptance-{s}'
-        if not d.exists(): summary['scenarios'][s] = {'status': 'NOT_RUN', 'reason': 'artifact missing'}; continue
+    for d in sorted(x for x in root.glob('p1-acceptance-*') if x.is_dir()):
+        key = d.name.removeprefix('p1-acceptance-')
         entry = {'built_from': (d / 'source-sha.txt').read_text().strip() if (d / 'source-sha.txt').exists() else None}
         ident = d / 'apk-identity.txt'
         if ident.exists():
-            entry['apks'] = {m.group(2): m.group(1) for m in re.finditer(r'^([0-9a-f]{64})\s+(\S+)$', ident.read_text(), re.M)}
-            entry['apk_bytes'] = {m.group(2): int(m.group(1)) for m in re.finditer(r'\s(\d+)\s+\w+\s+\d+\s+[\d:]+\s+(\S+\.apk)$', ident.read_text(), re.M)}
+            text = ident.read_text()
+            entry['apks'] = {m.group(2): m.group(1) for m in re.finditer(r'^([0-9a-f]{64})\s+(\S+)$', text, re.M)}
+            entry['apk_bytes'] = {m.group(2): int(m.group(1)) for m in re.finditer(r'\s(\d+)\s+\w+\s+\d+\s+[\d:]+\s+(\S+\.apk)$', text, re.M)}
         for mode in ('exact', 'functional'):
             log = d / f'build-{mode}.log'
             if log.exists():
                 m = re.search(r'HRT_ACCEPTANCE_CONDITIONS (.*)', log.read_text())
                 entry[f'conditions_{mode}'] = m.group(1) if m else None
-        res = d / 'device-x86_64-api35' / 'result.json'
-        if res.exists():
-            r = json.loads(res.read_text())
-            entry.update({'device': r.get('device'), 'abi_note': r.get('abi_note'), 'status': r.get('status', 'PARTIAL'), 'phases': phases(r)})
-            ev = d / 'device-x86_64-api35'
+        devices = sorted(d.glob('device-*/result.json'))
+        if not devices: entry['status'] = 'NOT_RUN'
+        for res in devices:
+            r = json.loads(res.read_text()); ev = res.parent
+            dev = {'device': r.get('device'), 'abi_note': r.get('abi_note'), 'status': r.get('status', 'PARTIAL'), 'phases': phases(r),
+                   'sqlcipher_native_loads': r.get('sqlcipher_native_loads')}
             for f in sorted(ev.glob('evidence-*/p1-acceptance/*.json')):
                 data = json.loads(f.read_text())
-                if f.stem == 'strings':
-                    data = {tag: {k: v for k, v in val.items() if k != 'resolved'} for tag, val in data.items()}
-                entry.setdefault('evidence', {})[f'{f.parent.parent.name.removeprefix("evidence-")}/{f.stem}'] = data
-        else: entry['status'] = 'NOT_RUN'
-        summary['scenarios'][s] = entry
-    for d in sorted(root.glob('p1-arm64-probe-*')):
+                if f.stem == 'strings': data = {tag: {k: v for k, v in val.items() if k != 'resolved'} for tag, val in data.items()}
+                dev.setdefault('evidence', {})[f'{f.parent.parent.name.removeprefix("evidence-")}/{f.stem}'] = data
+            entry[res.parent.name] = dev
+        summary['scenarios'][key] = entry
+    for d in sorted(x for x in root.glob('p1-arm64-probe-*') if x.is_dir()):
         texts = [p.read_text() for p in d.glob('*.txt')]
         summary['arm64_probes'][d.name.removeprefix('p1-arm64-probe-')] = texts[0][-6000:] if texts else 'no probe output'
     Path(args.out).write_text(json.dumps(summary, indent=1, ensure_ascii=False))
