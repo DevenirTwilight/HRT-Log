@@ -53,6 +53,34 @@ class ConcentrationCalculatorTest {
         assertTrue(r.models[net.plainnotes.app.pk.Curve.E2]!!.any { it.key == "E2_ORAL" })
     }
 
+    @Test fun experimentalHistoryContainsOnlyVerifiedRecordedSlE2NeverPlans() {
+        val sl = med(1, "SUBLINGUAL")
+        val oral = med(2, "ORAL")
+        val profiles = mapOf(
+            1L to ProfileEntity(1, "E2", "sublingual", sl_tier = 2),
+            2L to ProfileEntity(2, "E2", "oral"),
+        )
+        val rows = listOf(rec(1, 1, 20, 1.0), rec(2, 1, 6, 0.5), rec(3, 2, 4, 2.0))
+        val result = compute(listOf(sl, oral), profiles, rows,
+            listOf(plan(1, 8, 0.5), plan(2, 12, 1.0)), emptyList(), 60.0, now)
+        val history = result.researchSublingualHistory
+        assertEquals(2, history.size)
+        assertEquals(setOf("r1", "r2"), history.map { it.id }.toSet())
+        assertTrue(history.all { it.timeH <= result.nowH && it.route == net.plainnotes.app.pk.Route.SUBLINGUAL && it.ester == net.plainnotes.app.pk.Ester.E2 })
+        val preservedOfficial = result.e2.copyOf()
+        val comparison = net.plainnotes.app.pk.experimental.ResearchShapeComparisonV01.compare(history, result.nowH, 12.0)
+        assertNotNull(comparison)
+        assertEquals(2, comparison!!.consideredRecordedDoses)
+        assertArrayEquals(preservedOfficial, result.e2, 0.0)
+    }
+
+    @Test fun oralOnlyHistoryDoesNotEnterExperimentalComparison() {
+        val oral = med(1, "ORAL")
+        val result = compute(listOf(oral), mapOf(1L to ProfileEntity(1, "E2", "oral")),
+            listOf(rec(1, 1, 3)), emptyList(), emptyList(), 70.0, now)
+        assertTrue(result.researchSublingualHistory.isEmpty())
+    }
+
     @Test fun weightOnlyScalesCyproterone() {
         val oral = med(1, "ORAL"); val cpa = med(2, "ORAL", molecule = "CPA"); val p = mapOf(1L to ProfileEntity(1, "E2", "oral"))
         val recs = listOf(rec(1, 1, 30), rec(2, 1, 6), rec(3, 2, 30), rec(4, 2, 6))
