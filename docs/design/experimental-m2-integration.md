@@ -148,3 +148,37 @@
 ### Release 验收工具发现的问题（已修复）
 
 手动触发的 release-acceptance（run 38063999138，`9290b8f`）A–F 六个场景都在"构建 APK"步骤失败：`compileFullReleaseAndroidTestKotlin` 找不到 Debug 专用的 `ExperimentalPkPreviewActivity` 和从研究分支导入的 `ExperimentalSlComparisonActivity`。原因是这两个模拟器测试放在 `androidTestFull`，它也会编进 Release 测试 APK；研究分支本身就有这个问题，只是当时没有跑 release-acceptance。修复：把两个测试原样移到变体专用的 `androidTestFullDebug`（内容不变）。本地 F 场景 exact 与 functional 两种模式均可构建，Debug 测试 APK 中仍含这两个测试。
+
+## 入口接线：协议偏离 PD-2026-10-10-M2-ENTRY（产品负责人 2026-10-10 授权，REQUIREMENTS §56）
+
+- 实施前核对：`AppShell.kt` 仍为已登记的 F1 状态 `00f2c283…`，与基线 `f69d892` 相同；补丁可干净应用。只应用了三处导航改动（+4/−1）。新 SHA-256 `9f7658e768b0867cac523325d8eeb10fbe57f40e220d0b4d66ba8a05940809ed`。
+- `protocol-deviations.json` 追加（不改旧条目）：`pk_relevant: true`、`category: navigation_wiring_only`、冻结基线 `b8df023f…`、前一状态 `00f2c283…`（F1）、新哈希、具体 diff、原因、授权和检查规则。
+- `check_protocol.py`：新增常量 `APPROVED_PK_DEVIATION`，写死 id、文件、类别和三个哈希。`pk_relevant: true` 的登记必须与它逐字段相同，并且前一状态必须是同一文件已登记的非 PK 状态，否则报错。原来针对普通非 PK UI 文件的规则不变。`production-baseline.json`、`protocol-lock.json`、协议正文、研究数据和参数都没有改动。
+- 新增负向测试（`tools/pk-research/test_research.py`，在临时副本上运行）：
+  - 改动 `ConcentrationCalculator.kt`、`Engine.kt`、`ConcChart.kt`、`ConcentrationScreen.kt`、`pk-params.json`、`FittedModels.kt`、P0/P1 研究结果或 `evidence-catalog.json` 时，无论是否伪造 `pk_relevant` 为 true 或 false 的登记，校验都失败。
+  - `AppShell.kt` 再有任何改动、批准条目的任一字段被改、去掉前一状态登记、或把同样字段套用到其他 UI 文件，校验都失败。
+  - 基线与锁文件哈希不变，且只存在一条 PK 相关登记。
+  - 把检查器临时削弱成"接受任何 pk_relevant=true"后，这些测试会失败（已恢复）。
+- 应用侧：抽屉"实验药代模型 / Experimental PK model"紧跟浓度页之后（`ExperimentalPkNavigationTest`，含中文）；`ExperimentalPkDataPathTest` 用真实 Room 数据库、仓库和 ViewModel 走完整数据路径。结果：读取 3 条合格的舌下 E2 记录；口服被排除；已删除记录在 DAO 层就不会进入页面；整个过程不写数据库；之后把当前药物的含服档改为 3，旧结果不变。
+
+### 接线前最后一次 Release 验收（run 38067123854，`2f109f1`）
+
+A、C、D、E 通过；B 和 F 只有 `exact-runtime` 中的 `everyReferencedStringResolvesWithTheSourceValueInAllFourLocales` 失败（"en: referenced string xpk_axis_max missing"）。B、F 的其余阶段都通过，包括 functional-all、进程重启、拒绝提醒权限、冷启动和重启后提醒恢复。原因：验收工具把源码里引用过的字符串都视为必须存在；未接线时 R8 删掉了不可达的实验页代码，资源裁剪随后把 `xpk_*` 字符串换成了空占位，而源码仍然引用它们。这是对"未接线"状态的真实发现，不是偶发失败。接线后这些字符串可达，本地 Release 的资源表中四种语言都有完整值（`aapt2 dump resources` 已核对）。以接线后的提交重新跑 A–F 为准。
+
+### 接线后的 universal APK 体积（同一环境，未签名 fullRelease，真正包含 M2 页面代码）
+
+| | bytes |
+|---|---:|
+| 基线 `f69d892` | 12,707,919 |
+| 接线后（`070a0ea` 的工作树） | 12,759,479 |
+| 差值 | **+51,560（+0.41%）** |
+
+- `classes.dex`：压缩后 +16,355，解压后 +30,688，是实验页、计算核和适配器的代码，没有新依赖。
+- `resources.arsc`：+35,144，只新增 49 条 `xpk_*` 字符串，四种语言（已用 `aapt2` 逐条核对）。
+- 其余：构建元数据和 baseline profile，几十字节。
+- 8 个原生库与基线逐字节相同，仍为 DEFLATED；四个 ABI（arm64-v8a、armeabi-v7a、x86、x86_64）都有 `libsqlcipher.so`；无 INTERNET；Release 清单中没有 Debug 研究页。
+
+本地全量（接线后）：
+- app 421 项：408 通过、13 项原有跳过、0 失败；PeriodStability 5/5，`DrawerScrollUiTest` 2/2。
+- core:data 72、core:reminder 14；Python 研究测试 176 项。
+- lint 0 错误、131 警告（与基线相同）；Debug/Release 构建、两项 Release 检查、P2 校验均通过。
