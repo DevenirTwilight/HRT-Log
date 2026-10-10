@@ -14,7 +14,7 @@
     <string name="xpk_chart_description">Relative response over the last 48 hours: %1$s</string>
     <string name="xpk_legend_legacy">Legacy PK: divided by its own response 1 h after 1 mg (sublingual tier of the latest record)</string>
     <string name="xpk_legend_m2">Experimental M2, candidate %1$s: divided by its own response 1 h after 1 mg</string>
-    <string name="xpk_legend_range">Band: range of the 15 frozen M2 candidates. This is the explored parameter set, not a 95% confidence interval, and it understates the uncertainty of the tail.</string>
+    <string name="xpk_legend_range" formatted="false">Band: range of the 15 frozen M2 candidates. This is the explored parameter set, not a 95% confidence interval, and it understates the uncertainty of the tail.</string>
     <string name="xpk_legend_tail">Shaded: more than 8 h since the latest dose. The shape of this tail is highly uncertain.</string>
     <string name="xpk_scale_note">Each curve is normalized separately. Equal heights do not mean equal blood levels, and neither curve is in concentration units. Your concentration page is unchanged.</string>
     <string name="xpk_candidate_title">M2 candidate</string>

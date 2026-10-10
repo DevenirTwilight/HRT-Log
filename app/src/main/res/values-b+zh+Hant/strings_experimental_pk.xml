@@ -13,7 +13,7 @@
     <string name="xpk_chart_description">過去 48 小時的相對響應：%1$s</string>
     <string name="xpk_legend_legacy">舊版模型：除以它自己在 1 mg 給藥後 1 小時的響應（採用最近一筆紀錄的含服檔）</string>
     <string name="xpk_legend_m2">實驗模型 M2，候選 %1$s：除以該候選自己在 1 mg 給藥後 1 小時的響應</string>
-    <string name="xpk_legend_range">淺色帶：15 個凍結 M2 候選的取值範圍。它只是已探索參數集合的情境範圍，不是 95% 信賴區間，並且低估了長尾的不確定性。</string>
+    <string name="xpk_legend_range" formatted="false">淺色帶：15 個凍結 M2 候選的取值範圍。它只是已探索參數集合的情境範圍，不是 95% 信賴區間，並且低估了長尾的不確定性。</string>
     <string name="xpk_legend_tail">陰影：距最近一次給藥超過 8 小時。這段長尾的形狀高度不確定。</string>
     <string name="xpk_scale_note">兩條曲線各自歸一化。高度相同不代表血藥水平相同，兩條曲線都不是濃度單位。正式濃度頁面不受影響。</string>
     <string name="xpk_candidate_title">M2 候選</string>

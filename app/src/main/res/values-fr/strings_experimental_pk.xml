@@ -13,7 +13,7 @@
     <string name="xpk_chart_description">Réponse relative sur les dernières 48 heures : %1$s</string>
     <string name="xpk_legend_legacy">Legacy PK : divisé par sa propre réponse 1 h après 1 mg (palier sublingual du dernier enregistrement)</string>
     <string name="xpk_legend_m2">Experimental M2, candidat %1$s : divisé par sa propre réponse 1 h après 1 mg</string>
-    <string name="xpk_legend_range">Bande : étendue des 15 candidats M2 figés. C\'est l\'ensemble de paramètres exploré, pas un intervalle de confiance à 95 %, et elle sous-estime l\'incertitude de la queue.</string>
+    <string name="xpk_legend_range" formatted="false">Bande : étendue des 15 candidats M2 figés. C\'est l\'ensemble de paramètres exploré, pas un intervalle de confiance à 95 %, et elle sous-estime l\'incertitude de la queue.</string>
     <string name="xpk_legend_tail">Zone grisée : plus de 8 h depuis la dernière prise. La forme de cette queue est très incertaine.</string>
     <string name="xpk_scale_note">Chaque courbe est normalisée séparément. Des hauteurs égales ne signifient pas des taux sanguins égaux, et aucune courbe n\'est en unité de concentration. Votre page de concentration n\'est pas modifiée.</string>
     <string name="xpk_candidate_title">Candidat M2</string>

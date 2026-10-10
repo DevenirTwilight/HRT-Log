@@ -13,7 +13,7 @@
     <string name="xpk_chart_description">过去 48 小时的相对响应：%1$s</string>
     <string name="xpk_legend_legacy">旧版模型：除以它自己在 1 mg 给药后 1 小时的响应（采用最近一条记录的含服档）</string>
     <string name="xpk_legend_m2">实验模型 M2，候选 %1$s：除以该候选自己在 1 mg 给药后 1 小时的响应</string>
-    <string name="xpk_legend_range">浅色带：15 个冻结 M2 候选的取值范围。它只是已探索参数集合的情景范围，不是 95% 置信区间，并且低估了长尾的不确定性。</string>
+    <string name="xpk_legend_range" formatted="false">浅色带：15 个冻结 M2 候选的取值范围。它只是已探索参数集合的情景范围，不是 95% 置信区间，并且低估了长尾的不确定性。</string>
     <string name="xpk_legend_tail">阴影：距最近一次给药超过 8 小时。这段长尾的形状高度不确定。</string>
     <string name="xpk_scale_note">两条曲线各自归一化。高度相同不代表血药水平相同，两条曲线都不是浓度单位。正式浓度页面不受影响。</string>
     <string name="xpk_candidate_title">M2 候选</string>

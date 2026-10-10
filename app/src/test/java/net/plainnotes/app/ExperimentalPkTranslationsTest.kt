@@ -7,7 +7,7 @@ import org.junit.Test
 
 /** The experimental page keeps its strings outside the P2-frozen strings.xml; they must still be complete in all four languages. */
 class ExperimentalPkTranslationsTest {
-    private val entry = Regex("""<string name="([^"]+)">(.*?)</string>""")
+    private val entry = Regex("""<string name="([^"]+)"[^>]*>(.*?)</string>""")
     private val placeholder = Regex("""%\d+\$[sd]""")
     private fun read(file: File) = entry.findAll(file.readText()).associate { it.groupValues[1] to placeholder.findAll(it.groupValues[2]).map { m -> m.value }.sorted().toList() }
 

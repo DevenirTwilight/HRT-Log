@@ -95,3 +95,52 @@
 2. **P2-AG**：M2 训练伪损失接近零，但跨研究留出外推并未优于更简单的 M1。→ 页面不得暗示 Experimental M2 比 Legacy PK 更准确；两者只是不同的形状假设。
 3. **P2-AJ / P2-AK**：Price 1997 Figure 1 重新读图后 1 mg 组 0–24 h 面积约 1550.6 pg·h/mL，Table 1 为 2109，差异仍未解释；低剂量组有大量遮挡，只能用区间。→ 不强行拟合 2109；Price 背景（0/6/12/18/24 pg/mL）只作为候选的"论文重建敏感性假设"显示，不能编辑，不代表用户本人背景。
 4. 冻结候选、计算核和参数**一律不改**；以上结论只影响页面上的标注和说明文字。
+
+## 阶段 B：独立集成（已实施）
+
+全部为新增文件，另外只改了本分支自己新增的适配器、Debug 清单和 CI 的一个检查步骤；**没有修改任何 P2 锁定文件**（`check_protocol.py` 通过）。
+
+| 文件 | 作用 |
+|---|---|
+| `pk-engine/.../experimental/ExperimentalSlModelView.kt` | 页面的只读计算入口。旧模型曲线直接取自 `ResearchShapeComparisonV01.compare`（同一归一化）；M2 用 `ResearchSublingualV01.coherentCandidateSeries`，按用户选择的候选 ID 取一条，另给出 15 个候选的逐点范围；窗口为过去 48 小时、无预测；窗口前 30 天回看并报告被截掉的条数；距最近一次给药 > 8 小时的点标为长尾。 |
+| `app/.../conc/experimental/ResearchHistoricalSlAdapter.kt` | 新增 `audit()`：按"第一个不满足的条件"统计排除原因（未服用、删除、无时间、未来、超出 180 天、剂量无效、无法确认快照、不是舌下 E2、缺含服档）。哪些记录合格与原实现完全相同，`verifiedEvents` 改为调用它。 |
+| `app/.../experimental/ExperimentalPkScreen.kt` | 实验页：常驻警示；Legacy PK（默认）/ Experimental M2 / Model comparison 三种显示；自绘 Canvas（不复用、不改 `ConcChart`）；15 个候选以 ID 芯片排列并显示速率、Price 背景假设（论文单位，不可编辑）、Rosano 上限；输入与排除计数；不能做什么的说明；"返回浓度页面"。只读内存中的记录与不可变规则快照，不访问数据库，不写任何东西，选择只保存在界面状态里。 |
+| `app/src/main/res/values*/strings_experimental_pk.xml` | 四种语言 49 条文字，放在独立文件里，避免改动被锁定的 `strings.xml`；不含任何浓度单位。 |
+| `app/src/debug/.../ExperimentalPkPreviewActivity.kt` + Debug 清单 | 只在 Debug 包中，用合成记录承载真实页面，供模拟器测试；`exported=false`。 |
+| `scripts/check_experimental_release.py`（CI `android` 作业新增一步） | Release 合并清单无 Debug 研究页、无 INTERNET；Release APK 四个 ABI、每个 ABI 都有 `libsqlcipher.so`、原生库仍为 DEFLATED、dex 中不含 Debug 宿主类。 |
+
+### 入口（阻塞，未应用）
+
+`docs/design/experimental-m2-entry.patch` 是对 `AppShell.kt` 的 3 处改动草案：导航抽屉新增 "Experimental PK model"，进入时加载记录，页面上的"返回浓度页面"回到原浓度页。它会改变被锁文件的哈希，按现行协议不能在本分支应用。可选的处理方式（需要产品负责人决定）：
+
+1. **登记一条明确标注为与药代相关的协议偏离**：在 `protocol-deviations.json` 追加 `AppShell.kt` 的精确旧/新哈希，并由负责人授权修改 `check_protocol.py`，允许"`pk_relevant: true`、只新增导航项、不改任何 PK 计算"的单独类别。这会扩大豁免范围，所以只能由负责人决定。
+2. **P2 研究结束后重新冻结**：按新的协议版本生成新的基线，再接入口。
+3. **维持现状**：实验页只在 Debug 包可见（Release 中无入口，R8 会移除未引用代码）。
+
+## 阶段 C：工程验收（本地，2026-10-10）
+
+环境：本会话容器，JDK 21、Gradle 9.3.1、Android SDK 37 / Build-Tools 37.0.0（仓库外安装）、Robolectric 运行时 jar 用 `-ProbolectricDir` 离线提供（SHA-1 与 Maven Central 一致）。Maven Central 有 429 限流，只对网络失败重试，测试失败不重试。
+
+| 检查 | 结果 |
+|---|---|
+| `:pk-engine:test`（含研究测试 16 项、新视图测试 12 项） | 86 通过 / 0 跳过 / 0 失败 |
+| `:core:data:testDebugUnitTest` | 72 / 0 / 0 |
+| `:core:reminder:testDebugUnitTest` | 14 / 0 / 0 |
+| `:app:testFullDebugUnitTest` | 417 项：404 通过 / 13 跳过（原有）/ 0 失败；`PeriodStabilityTest` 5/5、`ConcentrationCalculatorTest` 6/6、新测试 Experimental* 13 项与研究适配器 3 项全部通过 |
+| Python `tools/pk-research`（含 P2-X 源到核复现） | 172 通过 |
+| `check_protocol.py` | 通过（未改任何锁定文件） |
+| `lintFullDebug` | 0 错误 / 132 警告（基线 131；新增 1 条是 `xpk_title` 未使用，它只被未应用的入口补丁引用） |
+| `assembleFullDebug`、`assembleFullRelease`、两个 instrumentation APK | 成功 |
+| `check_release_manifest.py`、`check_experimental_release.py` | 通过：无 INTERNET、Release 清单无 Debug 研究页、四个 ABI、每个 ABI 都有 `libsqlcipher.so`、原生库 DEFLATED |
+
+首次 lint 发现 `xpk_legend_range` 中的 "95%" 被当作格式串（`StringFormatInvalid`），已在四种语言中加 `formatted="false"` 修复，未放宽任何 lint 规则。
+
+### APK 体积（同一环境、未签名 fullRelease）
+
+| | bytes |
+|---|---:|
+| 基线 `f69d892` | 12,707,919 |
+| 本分支 | 12,725,439 |
+| 差值 | **+17,520（+0.138%）** |
+
+逐项比较：8 个原生库字节完全相同；`classes.dex` 解压后大小相同（R8 移除了 Release 中没有入口、不可达的实验页代码，dex 中找不到相关类名）；`resources.arsc` +17,444（四种语言 49 条新字符串，资源裁剪保守保留）；`META-INF/version-control-info.textproto` +74（构建元数据）。压缩策略、ABI、SQLCipher 都未改变。入口接线后，dex 预计会增加实验页与计算核的代码（纯 Kotlin，无新依赖）。
