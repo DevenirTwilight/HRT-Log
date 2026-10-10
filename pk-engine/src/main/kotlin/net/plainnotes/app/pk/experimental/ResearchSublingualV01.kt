@@ -60,6 +60,14 @@ data class ExperimentalBaselineStratum(
     }
 }
 
+/** A coherent whole time-series from ONE frozen candidate; not a patient trajectory. */
+data class ExperimentalCandidateSeries(val candidateId: String, val relativeValues: List<Double>) {
+    init {
+        require(candidateId.isNotBlank())
+        require(relativeValues.all { it.isFinite() && it >= 0.0 })
+    }
+}
+
 /** A deliberate, explicit, study-specific amplitude — NEVER an individual prediction. */
 data class ExperimentalStudyAnchor(
     val studyId: String,
@@ -179,6 +187,17 @@ object ResearchSublingualV01 {
             val values = models.map { relativeHistory(atHour, doses, it) }
             ExperimentalBaselineStratum(baseline, models.size, values.min(), values.max())
         }
+
+    /** Each series uses ONE consistent candidate across the whole time axis.
+     * Do not join pointwise min/median/max into a purported model trajectory.
+     */
+    fun coherentCandidateSeries(timeHours: List<Double>, doses: List<ExperimentalDose>): List<ExperimentalCandidateSeries> {
+        require(timeHours.size <= 4096 && timeHours.all { it.isFinite() })
+        require(timeHours.zipWithNext().all { (earlier, later) -> earlier <= later })
+        return candidates.map { candidate ->
+            ExperimentalCandidateSeries(candidate.id, timeHours.map { t -> relativeHistory(t, doses, candidate) })
+        }
+    }
 
     /** Explicit study-only reconstruction with caller-controlled anchor and units. */
     fun studyScenario(
