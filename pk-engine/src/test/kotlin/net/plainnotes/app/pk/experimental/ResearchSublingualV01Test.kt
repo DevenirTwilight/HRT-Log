@@ -1,0 +1,138 @@
+package net.plainnotes.app.pk.experimental
+
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
+
+class ResearchSublingualV01Test {
+    private val model = ResearchSublingualV01.candidates.last()
+
+    @Test fun frozenNearOptimalCandidateSetHasExpectedProvenance() {
+        val all = ResearchSublingualV01.candidates
+        assertEquals(15, all.size)
+        assertEquals(15, all.map { it.id }.toSet().size)
+        assertTrue(all.all { it.exposedDataPseudoLoss <= 0.03348696307362355 + 0.1000000001 })
+        assertFalse(ResearchSublingualV01.productionEnabled)
+        assertFalse(ResearchSublingualV01.humanCoverageValidated)
+        assertFalse(ResearchSublingualV01.individualPredictionValidated)
+    }
+
+    @Test fun allCandidatesAreFiniteNormalizedAndNonnegative() {
+        for (c in ResearchSublingualV01.candidates) {
+            assertEquals(0.0, ResearchSublingualV01.relativeIncrement(0.0, c))
+            assertEquals(1.0, ResearchSublingualV01.relativeIncrement(1.0, c), 1e-12)
+            for (t in listOf(1e-3, 0.1, 0.33, 0.5, 1.5, 4.0, 12.0, 24.0, 120.0)) {
+                val value = ResearchSublingualV01.relativeIncrement(t, c)
+                assertTrue(value.isFinite() && value >= 0.0)
+            }
+        }
+    }
+
+    @Test fun p2xReferencePointsAgreeWithPythonResearchKernel() {
+        // From p2x-39 Python normalized_curve (scanned candidate, NOT clinical truth).
+        val references = mapOf(
+            0.25 to 0.09896392290807818,
+            0.5 to 0.523468732217862,
+            1.0 to 1.0,
+            2.0 to 0.417126368058965,
+            4.0 to 0.1445976827100983,
+            6.0 to 0.07922205475571546,
+            12.0 to 0.016324428940983113,
+            24.0 to 0.0007067671260269512,
+        )
+        references.forEach { (t, expected) ->
+            assertEquals(expected, ResearchSublingualV01.relativeIncrement(t, model), 1e-9, "time=$t")
+        }
+    }
+
+    @Test fun noBackdatingOrInventedDoseSchedule() {
+        val events = listOf(ExperimentalDose(0.0, 1.0), ExperimentalDose(2.0, 0.5))
+        assertEquals(0.0, ResearchSublingualV01.relativeHistory(-1.0, events, model))
+        assertEquals(1.0, ResearchSublingualV01.relativeHistory(1.0, events, model), 1e-12)
+        val expected = ResearchSublingualV01.relativeIncrement(3.0, model) +
+            0.5 * ResearchSublingualV01.relativeIncrement(1.0, model)
+        assertEquals(expected, ResearchSublingualV01.relativeHistory(3.0, events, model), 1e-12)
+    }
+
+    @Test fun multiModelSpreadIsDescriptiveNotClinicalCoverage() {
+        val values = ResearchSublingualV01.spread(24.0, listOf(ExperimentalDose(0.0, 1.0)))
+        assertTrue(values.minimum <= values.median)
+        assertTrue(values.median <= values.maximum)
+        assertTrue(values.maximum > values.minimum)
+        assertTrue(values.minimum > 0.0)
+    }
+
+    @Test fun analyticTotalAucConservesUnitInputMass() {
+        // Independent trapezoidal integration checks the Erlang/Bateman conservation law.
+        val step = 0.05
+        val lastIndex = 4800 // 240 hours: includes the longest candidate slow tail.
+        for (candidate in ResearchSublingualV01.candidates) {
+            var area = 0.5 * (ResearchSublingualV01.relativeIncrement(0.0, candidate) +
+                ResearchSublingualV01.relativeIncrement(lastIndex * step, candidate))
+            for (i in 1 until lastIndex) {
+                area += ResearchSublingualV01.relativeIncrement(i * step, candidate)
+            }
+            area *= step
+            assertEquals(ResearchSublingualV01.aucInfinityRelativeHours(candidate), area, 0.002,
+                "AUC mass conservation for ${candidate.id}")
+        }
+    }
+
+    @Test fun priceBaselineStratificationMustNotImplyPopulationWeights() {
+        val event = listOf(ExperimentalDose(atHour = 0.0, mg = 1.0))
+        val strata = ResearchSublingualV01.spreadByAssumedPriceBaseline(24.0, event)
+        assertEquals(listOf(0.0, 6.0, 12.0, 18.0, 24.0), strata.map { it.assumedPriceBaselinePgMl })
+        assertEquals(listOf(1, 1, 2, 5, 6), strata.map { it.candidateCount })
+        assertEquals(15, strata.sumOf { it.candidateCount })
+        for (stratum in strata) {
+            assertTrue(stratum.maximum >= stratum.minimum)
+            assertTrue(stratum.minimum >= 0.0)
+        }
+        // Near-zero late concentration depends materially on the unobserved baseline.
+        assertTrue(strata.first().minimum > strata.last().maximum * 20.0)
+    }
+
+    @Test fun candidateSeriesKeepsOneModelIdentityAcrossTheTimeAxis() {
+        val axis = listOf(0.25, 0.5, 1.0, 2.0, 6.0, 24.0)
+        val doses = listOf(ExperimentalDose(0.0, 1.0))
+        val series = ResearchSublingualV01.coherentCandidateSeries(axis, doses)
+        assertEquals(15, series.size)
+        assertEquals(15, series.map { it.candidateId }.toSet().size)
+        for ((index, candidate) in ResearchSublingualV01.candidates.withIndex()) {
+            assertEquals(candidate.id, series[index].candidateId)
+            for ((j, t) in axis.withIndex()) {
+                assertEquals(ResearchSublingualV01.relativeHistory(t, doses, candidate),
+                    series[index].relativeValues[j], 1e-12)
+            }
+            // All curves cross 1.0 exactly by design; not independent human agreement.
+            assertEquals(1.0, series[index].relativeValues[2], 1e-12)
+        }
+        assertThrows(IllegalArgumentException::class.java) {
+            ResearchSublingualV01.coherentCandidateSeries(listOf(1.0, 0.5), doses)
+        }
+        assertThrows(IllegalArgumentException::class.java) {
+            ResearchSublingualV01.coherentCandidateSeries(listOf(Double.NaN), doses)
+        }
+    }
+
+    @Test fun assumptionSlowInputIsNotTheCentralEliminationRate() {
+        val slowest = ResearchSublingualV01.candidates.first { it.id == "p2x-22" }
+        assertTrue(slowest.slowRatePerHour < slowest.eliminationRatePerHour)
+        assertTrue(ResearchSublingualV01.aucInfinityRelativeHours(slowest) > 4.0)
+        assertTrue(ResearchSublingualV01.aucInfinityRelativeHours(model) < 2.5)
+    }
+
+    @Test fun explicitStudyAnchorAndInputGuards() {
+        val anchor = ExperimentalStudyAnchor("Price1997 Figure1 study-only", "pg/mL", 24.0, 434.8357220077087)
+        assertEquals(24.0 + 434.8357220077087,
+            ResearchSublingualV01.studyScenario(1.0, listOf(ExperimentalDose(0.0, 1.0)), model, anchor), 1e-9)
+        assertThrows(IllegalArgumentException::class.java) { ResearchSublingualV01.relativeIncrement(Double.NaN, model) }
+        assertThrows(IllegalArgumentException::class.java) { ResearchSublingualV01.relativeIncrement(-1.0, model) }
+        assertThrows(IllegalArgumentException::class.java) { ExperimentalDose(Double.POSITIVE_INFINITY, 1.0) }
+        assertThrows(IllegalArgumentException::class.java) { ExperimentalDose(0.0, 0.0) }
+        assertThrows(IllegalArgumentException::class.java) { ExperimentalStudyAnchor("", "pg/mL", 0.0, 1.0) }
+        assertThrows(IllegalArgumentException::class.java) { ExperimentalStudyAnchor("study", "pg/mL", -1.0, 1.0) }
+    }
+}
