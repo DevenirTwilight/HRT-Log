@@ -1527,5 +1527,31 @@
    "other ARM64 devices",
    "automated assertions on hardware"
   ]
+ },
+ "scenario_E_compressed_native": {
+  "date": "2026-10-10",
+  "definition": "A + packaging.jniLibs.useLegacyPackaging=true (extractNativeLibs=true), universal ABIs, R8 on, no resource shrink",
+  "unsigned_bytes": {
+   "A": 23506758,
+   "E": 13025314,
+   "delta": -10481444,
+   "delta_percent": -44.59,
+   "source": "b6262c3"
+  },
+  "native_libs_identical_to_P0": true,
+  "run": 38052673701,
+  "harness_sha": "7d1bea6",
+  "x86_64_api35": {
+   "exact": "6/6 PASS",
+   "functional": "222 PASS + 3 phase-gated (PASS in their phases)",
+   "phases": "all PASS incl. cold restarts, process restart, notification denied, reboot reminder recovery",
+   "lib_entries": "all DEFLATED",
+   "sqlcipher_loaded_from": "extracted nativeLibraryDir lib/x86_64"
+  },
+  "not_verified": [
+   "ARM64 hardware",
+   "official-signed over-install to E"
+  ],
+  "production_config_changed": false
  }
 }

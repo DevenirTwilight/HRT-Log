@@ -108,3 +108,19 @@ python3 scripts/release-acceptance/run_device_acceptance.py --scenario C --exact
 3. 决定是否修复 F1（抽屉可滚动）；修复后 UI 四语遍历应可完成。
 4. 在测试机上验证正式签名下 universal↔arm64 覆盖升级与数据保留。
 5. 获得授权后才改发行配置（`splits.abi`）与发布资产脚本；资源裁剪单独决定。
+
+## 10. 追加实验 E：Universal + 压缩原生库（2026-10-10）
+
+用户要求实测“保留 Universal、压缩原生库”。E = A + `packaging.jniLibs.useLegacyPackaging = true`（manifest `extractNativeLibs=true`），R8 开启、无资源裁剪、四 ABI 全保留；只经验收 init 脚本生效，**正式配置未改**。
+
+| 项 | A（现行） | E | 差值 |
+|---|---:|---:|---:|
+| 未签名 APK（源码 b6262c3，仅加该开关） | 23,506,758 | **13,025,314** | −10,481,444（−44.59%） |
+| 原生库在 APK 中 | 19.45 MB 未压缩 | 约 8.9 MB deflate | |
+| 安装后占用估算（APK + 本机 ABI 解压库） | 约 23.5 MB | 约 13.0 + 5.2（arm64）≈ 18.2 MB | 约 −5 MB |
+
+8 个原生库解压后 SHA-256 与 P0 完全一致；ZIP 完整；`resources.arsc` 仍按系统要求未压缩。
+
+运行 [38052673701](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38052673701)（源码 7d1bea6，x86_64 API 35）：E **全部 PASS**——exact 6/6、functional 222/222（另 3 项按阶段单独运行均 PASS），冷启动×3、进程重启、通知拒绝、重启后提醒恢复均 PASS；四语字符串 1075/1075；PeriodStability 5/5、DisguiseFlow 16/16。新断言证实全部 `lib/` 条目为 DEFLATED，且 SQLCipher 从解压目录加载（nativeloader：`/lib/x86_64/libsqlcipher.so … ok`）。同一运行中 A（含 F1 修复）也全部通过。
+
+代价与未验证：首次安装需解压原生库（稍慢）；E 在 ARM64 硬件上未测（Android 解压机制与架构无关，但未实证）；正式签名下现有安装→E 的覆盖升级未测。建议：若采纳，改正式 Gradle 一行（`packaging { jniLibs { useLegacyPackaging = true } }`），出正式包后在测试机或用户手机按“备份→只接受更新”流程确认。
