@@ -1,6 +1,6 @@
 # P2-R 模型升级证据审核（2026-10-10）
 
-[完整框架与科学来源](pk-research/p2/p2r-cross-study-evidence-upgrade-gates.md)、[已见9文档/8队列来源登记](pk-research/p2/p2r-cohort-evidence-ledger.json)、[内部门槛建议](pk-research/p2/p2r-upgrade-policy.json)、[拒绝自动放行的程序](../tools/pk-research/p2r_evidence_gate.py)和14项测试。G0可研究→G1原始个体SL/时间/分析法→G2参数识别与评价封存→G3至少2真独立外测供人工审查→G4另外的软件发布门槛。官方ICH M15/M10/FDA指南不是本项目“10%/5%/2个队列”的法定数值来源。雌二醇是内源物，RIA/免疫法/LC-MS/MS桥接、BLQ、前剂历史必须单列；所有现有人体来源已见、路线混合或数据不全，LOCKED_EXTERNAL=0，P5/P95无人体验证。仅研究，正式模型/私人数据/已签APK和冻结历史不动。
+[完整框架与科学来源](pk-research/p2/p2r-cross-study-evidence-upgrade-gates.md)、[已见9条记录/8个命名队列ID（可能重叠）来源登记](pk-research/p2/p2r-cohort-evidence-ledger.json)、[内部门槛建议](pk-research/p2/p2r-upgrade-policy.json)、[拒绝自动放行的程序](../tools/pk-research/p2r_evidence_gate.py)和14项测试。G0可研究→G1原始个体SL/时间/分析法→G2参数识别与评价封存→G3至少2真独立外测供人工审查→G4另外的软件发布门槛。官方ICH M15/M10/FDA指南不是本项目“10%/5%/2个队列”的法定数值来源。雌二醇是内源物，RIA/免疫法/LC-MS/MS桥接、BLQ、前剂历史必须单列；所有现有人体来源已见、路线混合或数据不全，LOCKED_EXTERNAL=0，P5/P95无人体验证。仅研究，正式模型/私人数据/已签APK和冻结历史不动。
 
 ---
 

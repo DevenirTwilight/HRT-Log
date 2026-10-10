@@ -12,7 +12,7 @@ ICH M15 2026最终版要求先明确问题、用途(context of use)、错误决�
 
 ## 二、当前真实研究身份与不足
 
-见 p2r-cohort-evidence-ledger.json，9条发表/论文报告对应8个实际队列。Rosano1997独立PK n25仅10/20/40/60min汇总且该n25基线未知；Komesaroff1998 n10仅0/15/30min RIA均值±SEM；Price1997同六人交叉，不是三剂量三个独立队列，其原版Figure1人工面积和Table1正式AUC仍存在P2-I/J未解决差异；Doll2022 1h144旧训练锚点且用户PDF只是出版社节选网页打印；Yaish2023 q6h晨间mean与90min median不能构成逐人峰谷曲线；Yager2022与Abdelmawla2023**同一个NCT03652623**，PO/SL混合且部分24h以0h代替；Kariyawasam2025的286是全研究总数，SL基线表38而非286个规范SL PK序列；Bar-On2026研究凝血指标，不是E2时间曲线。所有这些证据已有使用、暴露或不满足路线/时钟要求，**完整纯SL、个体实际时钟且独立未开封的外部人体数据集为0**。
+见 p2r-cohort-evidence-ledger.json，9条发表/论文报告对应8个不同的已命名队列ID（Yaish2023与Bar-On2026潜在受试者重叠未核实，因此不保证有8组完全互不重叠的参与者）。Rosano1997独立PK n25仅10/20/40/60min汇总且该n25基线未知；Komesaroff1998 n10仅0/15/30min RIA均值±SEM；Price1997同六人交叉，不是三剂量三个独立队列，其原版Figure1人工面积和Table1正式AUC仍存在P2-I/J未解决差异；Doll2022 1h144旧训练锚点且用户PDF只是出版社节选网页打印；Yaish2023 q6h晨间mean与90min median不能构成逐人峰谷曲线；Yager2022与Abdelmawla2023**同一个NCT03652623**，PO/SL混合且部分24h以0h代替；Kariyawasam2025的286是全研究总数，SL基线表38而非286个规范SL PK序列；Bar-On2026研究凝血指标，不是E2时间曲线。所有这些证据已有使用、暴露或不满足路线/时钟要求，**完整纯SL、个体实际时钟且独立未开封的外部人体数据集为0**。
 
 ## 三、分级准入：模型复杂度必须对应新证据而非训练误差降低
 

@@ -87,8 +87,12 @@
       "source": "docs/pk-research/p2/p2l-repeated-dose-source-audit.json"
     }
   ],
-  "unique_cohort_count": 8,
   "external_locked_pure_SL_cohort_count": 0,
   "external_90pct_interval_coverage_validated": false,
-  "model_upgrade_authorized": false
+  "model_upgrade_authorized": false,
+  "distinct_named_cohort_ids": 8,
+  "possible_cross_study_participant_overlap_not_resolved": [
+    "Yaish2023",
+    "BarOn2026"
+  ]
 }

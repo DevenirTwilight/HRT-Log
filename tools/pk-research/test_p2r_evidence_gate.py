@@ -38,7 +38,7 @@ class EvidenceGate(unittest.TestCase):
  def check(self,p):return g.evaluate(self.ledger,self.policy,p)
  def test_real_sources_zero_unseen_and_cohort_dedup(self):
     now=g.current_state(self.ledger)
-    self.assertEqual((now["source_reports"],now["unique_human_cohorts"]), (9,8))
+    self.assertEqual((now["source_reports"],now["distinct_named_cohort_ids"]), (9,8))
     self.assertEqual(now["unseen_verified_heldout_PK_cohorts"],0)
     self.assertFalse(now["production_release_authorized"])
  def test_mock_complete_transit_never_automatically_approved(self):

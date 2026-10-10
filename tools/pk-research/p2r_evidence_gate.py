@@ -105,7 +105,7 @@ def evaluate(ledger,policy,packet):
 def current_state(ledger):
     return {"phase":"P2-R","status":"G0_EXPLORATORY_ONLY",
       "source_reports":len(ledger["cohorts"]),
-      "unique_human_cohorts":len({x["cohort_id"] for x in ledger["cohorts"]}),
+      "distinct_named_cohort_ids":len({x["cohort_id"] for x in ledger["cohorts"]}),
       "unseen_verified_heldout_PK_cohorts":0,
       "M0_M1_M2_can_be_researched":True,
       "P5_P95_coverage_established":False,"production_release_authorized":False}
