@@ -144,3 +144,7 @@
 | 差值 | **+17,520（+0.138%）** |
 
 逐项比较：8 个原生库字节完全相同；`classes.dex` 解压后大小相同（R8 移除了 Release 中没有入口、不可达的实验页代码，dex 中找不到相关类名）；`resources.arsc` +17,444（四种语言 49 条新字符串，资源裁剪保守保留）；`META-INF/version-control-info.textproto` +74（构建元数据）。压缩策略、ABI、SQLCipher 都未改变。入口接线后，dex 预计会增加实验页与计算核的代码（纯 Kotlin，无新依赖）。
+
+### Release 验收工具发现的问题（已修复）
+
+手动触发的 release-acceptance（run 38063999138，`9290b8f`）A–F 六个场景都在"构建 APK"步骤失败：`compileFullReleaseAndroidTestKotlin` 找不到 Debug 专用的 `ExperimentalPkPreviewActivity` 和从研究分支导入的 `ExperimentalSlComparisonActivity`。原因是这两个模拟器测试放在 `androidTestFull`，它也会编进 Release 测试 APK；研究分支本身就有这个问题，只是当时没有跑 release-acceptance。修复：把两个测试原样移到变体专用的 `androidTestFullDebug`（内容不变）。本地 F 场景 exact 与 functional 两种模式均可构建，Debug 测试 APK 中仍含这两个测试。
