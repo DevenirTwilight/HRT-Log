@@ -1,0 +1,250 @@
+From d2a3b703b828e9feaee8e5cb7eecd6a9f299cfdb Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sat, 10 Oct 2026 18:44:02 +0000
+Subject: [PATCH] feat(app): show the model choice on the concentration page
+ (PD-2026-10-10-P2AR-UNIFIED, pending approval)
+
+Routes Destination.CONCENTRATION through UnifiedConcentrationScreen with the
+unchanged ConcentrationScreen as the default Legacy PK content, removes the
+separate experimental drawer entry, and registers the exact AppShell.kt hash.
+check_protocol.py rejects any PK-relevant deviation whose authorized_by is
+empty or PENDING, so this bundle fails CI until the owner records approval.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01ThtAJibEauf4YaLWkSEnRK
+---
+ .../java/net/plainnotes/app/ui/AppShell.kt    | 11 +++--
+ .../app/ExperimentalPkNavigationTest.kt       | 25 +++++------
+ docs/pk-research/p2/protocol-deviations.json  | 14 ++++++
+ tools/pk-research/check_protocol.py           | 43 +++++++++++++------
+ tools/pk-research/test_research.py            | 27 +++++++++---
+ 5 files changed, 80 insertions(+), 40 deletions(-)
+
+diff --git a/app/src/main/java/net/plainnotes/app/ui/AppShell.kt b/app/src/main/java/net/plainnotes/app/ui/AppShell.kt
+index 5afa6de..9b2d8e7 100644
+--- a/app/src/main/java/net/plainnotes/app/ui/AppShell.kt
++++ b/app/src/main/java/net/plainnotes/app/ui/AppShell.kt
+@@ -40,8 +40,6 @@ enum class Destination(val title: Int, val icon: ImageVector, val ready: Boolean
+     MEDICATIONS(R.string.medications, Icons.Outlined.Medication, true),
+     WELLBEING(R.string.wellbeing, Icons.Outlined.FavoriteBorder, true),
+     CONCENTRATION(R.string.concentration, Icons.AutoMirrored.Outlined.ShowChart, true),
+-    // Opt-in research page (REQUIREMENTS §55); reads in-memory records only and never changes the concentration page.
+-    EXPERIMENTAL_PK(R.string.xpk_title, Icons.Outlined.Insights, true),
+     LABS(R.string.labs, Icons.Outlined.Science, true),
+     SETTINGS(R.string.settings, Icons.Outlined.Settings, true),
+     ABOUT(R.string.about, Icons.Outlined.Info, true),
+@@ -125,7 +123,7 @@ class UiPrefs(context: Context) {
+ 
+     LaunchedEffect(notificationSlot) { notificationSlot?.let { s -> completeEntry = state.slots.firstOrNull { it.slot.key == s.key } ?: TimelineEntry(s, net.plainnotes.app.domain.SlotState.PENDING); model.notificationSlot.value = null } }
+     LaunchedEffect(Unit) { model.loadExtra() }
+-    LaunchedEffect(destination) { if (destination in listOf(Destination.CALENDAR, Destination.HISTORY, Destination.STOCK, Destination.WELLBEING, Destination.TIMELINE, Destination.VISITS, Destination.EXPERIMENTAL_PK)) model.loadExtra() }
++    LaunchedEffect(destination) { if (destination in listOf(Destination.CALENDAR, Destination.HISTORY, Destination.STOCK, Destination.WELLBEING, Destination.TIMELINE, Destination.VISITS, Destination.CONCENTRATION)) model.loadExtra() }
+     LaunchedEffect(destination, concSettings.calibrate, concSettings.mode) {
+         if (destination == Destination.CONCENTRATION || destination == Destination.LABS) {
+             model.concentrationSettings(concSettings.calibrate, concSettings.mode); model.loadConcentration()
+@@ -175,9 +173,10 @@ class UiPrefs(context: Context) {
+                     { model.calendarFrom(null) }, pad, onReview = { destination = Destination.MEDICATIONS }, extra = extra, onStock = { destination = Destination.STOCK },
+                     onAppointment = { visitId = it.id; destination = Destination.VISITS })
+                 Destination.MEDICATIONS -> MedicationsScreen(state, { model.edit(null) }, { model.edit(it) }, { archive = it }, pad)
+-                Destination.CONCENTRATION -> ConcentrationScreen(state, conc.result, conc.loading, conc.weight, concSettings, { concSettings = it; prefs.conc = it },
+-                    { model.setWeight(it) }, { model.editById(it) }, { destination = Destination.LABS }, pad,extra.records,state.profiles,model::confirmHistoricalContext,{destination=Destination.HISTORY})
+-                Destination.EXPERIMENTAL_PK -> net.plainnotes.app.experimental.ExperimentalPkScreen(extra.records, state.ruleSnapshots, pad, { destination = Destination.CONCENTRATION })
++                // Model choice on the concentration page (REQUIREMENTS §57). Legacy PK is the default and is the unchanged official screen.
++                Destination.CONCENTRATION -> net.plainnotes.app.experimental.UnifiedConcentrationScreen(extra.records, state.ruleSnapshots, pad, legacyContent = { inner ->
++                    ConcentrationScreen(state, conc.result, conc.loading, conc.weight, concSettings, { concSettings = it; prefs.conc = it },
++                        { model.setWeight(it) }, { model.editById(it) }, { destination = Destination.LABS }, inner,extra.records,state.profiles,model::confirmHistoricalContext,{destination=Destination.HISTORY}) })
+                 Destination.LABS -> LabsScreen(extra.labs, conc.doseTimes, { labEdit = it; labNew = it == null }, { model.deleteLab(it) }, pad,extra.labContexts,{v,estimate->model.rebuildLabContext(v,estimate)})
+                 Destination.SETTINGS -> SettingsScreen(appearance, onAppearance, highReliability, { highReliability = it; prefs.highReliability = it; model.sync() },
+                     { model.sync() }, { model.testReminder() }, pad, wellbeingPrompt, { wellbeingPrompt = it; prefs.wellbeingPrompt = it }) {
+diff --git a/app/src/test/java/net/plainnotes/app/ExperimentalPkNavigationTest.kt b/app/src/test/java/net/plainnotes/app/ExperimentalPkNavigationTest.kt
+index 82ed670..841a383 100644
+--- a/app/src/test/java/net/plainnotes/app/ExperimentalPkNavigationTest.kt
++++ b/app/src/test/java/net/plainnotes/app/ExperimentalPkNavigationTest.kt
+@@ -6,30 +6,25 @@ import androidx.compose.ui.test.*
+ import androidx.compose.ui.test.junit4.createAndroidComposeRule
+ import net.plainnotes.app.ui.Destination
+ import net.plainnotes.app.ui.DrawerContent
+-import org.junit.Assert.assertEquals
++import org.junit.Assert.*
+ import org.junit.Rule
+ import org.junit.Test
+ import org.junit.runner.RunWith
+ import org.robolectric.RobolectricTestRunner
+ import org.robolectric.annotation.Config
+ 
+-/** The approved navigation entry (PD-2026-10-10-M2-ENTRY): one clearly labelled drawer item, next to the concentration page. */
++/** PD-2026-10-10-P2AR-UNIFIED: model choice lives on the concentration page; there is no separate experimental drawer entry. */
+ @RunWith(RobolectricTestRunner::class) @Config(sdk=[35],application=android.app.Application::class,qualifiers="w320dp-h480dp")
+ class ExperimentalPkNavigationTest {
+     @get:Rule val ui=createAndroidComposeRule<ComponentActivity>()
+-    private fun opens(expectedLabel:String) {
++    @Test fun drawerHasNoSeparateExperimentalEntryAndKeepsTheConcentrationPage() {
++        assertTrue(Destination.entries.none { it.name == "EXPERIMENTAL_PK" })
+         val chosen=mutableListOf<Destination>()
+-        ui.setContent{MaterialTheme{DrawerContent(Destination.CONCENTRATION){chosen+=it}}}
+-        assertEquals(expectedLabel,ui.activity.getString(R.string.xpk_title))
+-        ui.onNodeWithTag("drawer-content").performScrollToNode(hasText(expectedLabel))
+-        ui.onNodeWithText(expectedLabel).assertIsDisplayed().performClick()
+-        ui.runOnIdle{assertEquals(listOf(Destination.EXPERIMENTAL_PK),chosen)}
+-    }
+-    @Test fun drawerShowsTheExperimentalPkModelEntry()=opens("Experimental PK model")
+-    @Test @Config(qualifiers="zh-w320dp-h480dp") fun chineseDrawerLabelIsExperimentalPkModel()=opens("实验药代模型")
+-    @Test fun entryFollowsTheConcentrationPageAndTheOfficialPageStaysFirst() {
+-        val order=Destination.entries
+-        assertEquals(order.indexOf(Destination.CONCENTRATION)+1,order.indexOf(Destination.EXPERIMENTAL_PK))
+-        assertEquals(R.string.xpk_title,Destination.EXPERIMENTAL_PK.title)
++        ui.setContent{MaterialTheme{DrawerContent(Destination.CALENDAR){chosen+=it}}}
++        val label=ui.activity.getString(R.string.concentration)
++        ui.onNodeWithTag("drawer-content").performScrollToNode(hasText(label))
++        ui.onNodeWithText(label).performClick()
++        ui.runOnIdle{assertEquals(listOf(Destination.CONCENTRATION),chosen)}
++        ui.onAllNodes(hasText(ui.activity.getString(R.string.xpk_title))).assertCountEquals(0)
+     }
+ }
+diff --git a/docs/pk-research/p2/protocol-deviations.json b/docs/pk-research/p2/protocol-deviations.json
+index 8217f2b..a37d0ab 100644
+--- a/docs/pk-research/p2/protocol-deviations.json
++++ b/docs/pk-research/p2/protocol-deviations.json
+@@ -25,6 +25,20 @@
+    "diff": "diff --git a/app/src/main/java/net/plainnotes/app/ui/AppShell.kt b/app/src/main/java/net/plainnotes/app/ui/AppShell.kt\nindex 5b20ecc..5afa6de 100644\n--- a/app/src/main/java/net/plainnotes/app/ui/AppShell.kt\n+++ b/app/src/main/java/net/plainnotes/app/ui/AppShell.kt\n@@ -42,0 +43,2 @@ enum class Destination(val title: Int, val icon: ImageVector, val ready: Boolean\n+    // Opt-in research page (REQUIREMENTS §55); reads in-memory records only and never changes the concentration page.\n+    EXPERIMENTAL_PK(R.string.xpk_title, Icons.Outlined.Insights, true),\n@@ -126 +128 @@ class UiPrefs(context: Context) {\n-    LaunchedEffect(destination) { if (destination in listOf(Destination.CALENDAR, Destination.HISTORY, Destination.STOCK, Destination.WELLBEING, Destination.TIMELINE, Destination.VISITS)) model.loadExtra() }\n+    LaunchedEffect(destination) { if (destination in listOf(Destination.CALENDAR, Destination.HISTORY, Destination.STOCK, Destination.WELLBEING, Destination.TIMELINE, Destination.VISITS, Destination.EXPERIMENTAL_PK)) model.loadExtra() }\n@@ -177,0 +180 @@ class UiPrefs(context: Context) {\n+                Destination.EXPERIMENTAL_PK -> net.plainnotes.app.experimental.ExperimentalPkScreen(extra.records, state.ruleSnapshots, pad, { destination = Destination.CONCENTRATION })\n",
+    "authorized_by": "product owner, 2026-10-10: chose option 1 — a strictly scoped product-integration deviation for exactly the three AppShell.kt navigation hunks of docs/design/experimental-m2-entry.patch, recorded as pk_relevant=true; not a general waiver of the P2 freeze, not clinical validation of M2, not approval to replace the legacy model.",
+    "checker_rule": "tools/pk-research/check_protocol.py APPROVED_PK_DEVIATION: exact id, file, category and baseline/previous/new SHA-256; previous must be a registered non-PK state of the same file."
++  },
++  {
++   "id": "PD-2026-10-10-P2AR-UNIFIED",
++   "date": "2026-10-10",
++   "file": "app/src/main/java/net/plainnotes/app/ui/AppShell.kt",
++   "category": "navigation_wiring_only",
++   "pk_relevant": true,
++   "baseline_sha256": "b8df023f82e9fae4906d7f14b48095cb182030f8b73137cfa04d74f7e027cf84",
++   "previous_sha256": "9f7658e768b0867cac523325d8eeb10fbe57f40e220d0b4d66ba8a05940809ed",
++   "new_sha256": "2af141f964771fa891709f95feeb4aa0c8e4dac96557ec18eb4f8984f96616c1",
++   "reason": "P2-AR (REQUIREMENTS §57): the concentration destination renders UnifiedConcentrationScreen with the unchanged official ConcentrationScreen as its default Legacy PK content; the separate experimental drawer entry is removed and records load on the concentration page. Navigation wiring only: no PK model, parameter, calculator, chart, ConcentrationScreen, record or evidence file changes.",
++   "diff": "diff --git a/app/src/main/java/net/plainnotes/app/ui/AppShell.kt b/app/src/main/java/net/plainnotes/app/ui/AppShell.kt\nindex 5afa6de..9b2d8e7 100644\n--- a/app/src/main/java/net/plainnotes/app/ui/AppShell.kt\n+++ b/app/src/main/java/net/plainnotes/app/ui/AppShell.kt\n@@ -43,2 +42,0 @@ enum class Destination(val title: Int, val icon: ImageVector, val ready: Boolean\n-    // Opt-in research page (REQUIREMENTS §55); reads in-memory records only and never changes the concentration page.\n-    EXPERIMENTAL_PK(R.string.xpk_title, Icons.Outlined.Insights, true),\n@@ -128 +126 @@ class UiPrefs(context: Context) {\n-    LaunchedEffect(destination) { if (destination in listOf(Destination.CALENDAR, Destination.HISTORY, Destination.STOCK, Destination.WELLBEING, Destination.TIMELINE, Destination.VISITS, Destination.EXPERIMENTAL_PK)) model.loadExtra() }\n+    LaunchedEffect(destination) { if (destination in listOf(Destination.CALENDAR, Destination.HISTORY, Destination.STOCK, Destination.WELLBEING, Destination.TIMELINE, Destination.VISITS, Destination.CONCENTRATION)) model.loadExtra() }\n@@ -178,3 +176,4 @@ class UiPrefs(context: Context) {\n-                Destination.CONCENTRATION -> ConcentrationScreen(state, conc.result, conc.loading, conc.weight, concSettings, { concSettings = it; prefs.conc = it },\n-                    { model.setWeight(it) }, { model.editById(it) }, { destination = Destination.LABS }, pad,extra.records,state.profiles,model::confirmHistoricalContext,{destination=Destination.HISTORY})\n-                Destination.EXPERIMENTAL_PK -> net.plainnotes.app.experimental.ExperimentalPkScreen(extra.records, state.ruleSnapshots, pad, { destination = Destination.CONCENTRATION })\n+                // Model choice on the concentration page (REQUIREMENTS §57). Legacy PK is the default and is the unchanged official screen.\n+                Destination.CONCENTRATION -> net.plainnotes.app.experimental.UnifiedConcentrationScreen(extra.records, state.ruleSnapshots, pad, legacyContent = { inner ->\n+                    ConcentrationScreen(state, conc.result, conc.loading, conc.weight, concSettings, { concSettings = it; prefs.conc = it },\n+                        { model.setWeight(it) }, { model.editById(it) }, { destination = Destination.LABS }, inner,extra.records,state.profiles,model::confirmHistoricalContext,{destination=Destination.HISTORY}) })\n",
++   "authorized_by": "PENDING — requires explicit product-owner approval before this bundle is applied",
++   "checker_rule": "tools/pk-research/check_protocol.py APPROVED_PK_DEVIATIONS: exact id, file, category and baseline/previous/new SHA-256; previous must be another registered state of the same file."
+   }
+  ]
+ }
+diff --git a/tools/pk-research/check_protocol.py b/tools/pk-research/check_protocol.py
+index e8f8fb7..d7c5b2b 100644
+--- a/tools/pk-research/check_protocol.py
++++ b/tools/pk-research/check_protocol.py
+@@ -11,16 +11,27 @@ def digest(path):
+ # Only plain UI files may be waived; PK, concentration/lab display, data, resources and old evidence stay strictly locked.
+ WAIVABLE_PREFIX = 'app/src/main/java/net/plainnotes/app/ui/'
+ NEVER_WAIVABLE = ('Conc', 'Lab', 'Chart')
+-# The ONLY PK-relevant deviation the product owner has approved (2026-10-10, REQUIREMENTS §56): the navigation entry of the
+-# opt-in experimental M2 page in AppShell.kt. Exact file and exact hashes; not a category other files or later edits can use.
+-APPROVED_PK_DEVIATION = {
+-    'id': 'PD-2026-10-10-M2-ENTRY',
+-    'file': 'app/src/main/java/net/plainnotes/app/ui/AppShell.kt',
+-    'category': 'navigation_wiring_only',
+-    'baseline_sha256': 'b8df023f82e9fae4906d7f14b48095cb182030f8b73137cfa04d74f7e027cf84',
+-    'previous_sha256': '00f2c2838abc1e6982e0736a4493d871203362d3c2a37f430fd62168a0c51c02',
+-    'new_sha256': '9f7658e768b0867cac523325d8eeb10fbe57f40e220d0b4d66ba8a05940809ed',
+-}
++# The ONLY PK-relevant deviations the product owner has approved, each for exactly one file state of AppShell.kt:
++# PD-2026-10-10-M2-ENTRY (REQUIREMENTS §56) and PD-2026-10-10-P2AR-UNIFIED (REQUIREMENTS §57). Exact file and hashes;
++# not a category other files or later edits can use.
++APPROVED_PK_DEVIATIONS = (
++    {
++        'id': 'PD-2026-10-10-M2-ENTRY',
++        'file': 'app/src/main/java/net/plainnotes/app/ui/AppShell.kt',
++        'category': 'navigation_wiring_only',
++        'baseline_sha256': 'b8df023f82e9fae4906d7f14b48095cb182030f8b73137cfa04d74f7e027cf84',
++        'previous_sha256': '00f2c2838abc1e6982e0736a4493d871203362d3c2a37f430fd62168a0c51c02',
++        'new_sha256': '9f7658e768b0867cac523325d8eeb10fbe57f40e220d0b4d66ba8a05940809ed',
++    },
++    {
++        'id': 'PD-2026-10-10-P2AR-UNIFIED',
++        'file': 'app/src/main/java/net/plainnotes/app/ui/AppShell.kt',
++        'category': 'navigation_wiring_only',
++        'baseline_sha256': 'b8df023f82e9fae4906d7f14b48095cb182030f8b73137cfa04d74f7e027cf84',
++        'previous_sha256': '9f7658e768b0867cac523325d8eeb10fbe57f40e220d0b4d66ba8a05940809ed',
++        'new_sha256': '2af141f964771fa891709f95feeb4aa0c8e4dac96557ec18eb4f8984f96616c1',
++    },
++)
+ def waiver(directory, name, expected, actual):
+     path = directory / 'protocol-deviations.json'
+     if not path.exists():
+@@ -30,10 +41,14 @@ def waiver(directory, name, expected, actual):
+         if d['file'] != name:
+             continue
+         if d.get('pk_relevant') is True:
+-            # Every field must equal the single approved entry, and it must extend a registered non-PK state of the file.
+-            if any(d.get(k) != v for k, v in APPROVED_PK_DEVIATION.items()) or not any(
+-                    e is not d and e['file'] == name and e.get('pk_relevant') is False and e['new_sha256'] == d['previous_sha256'] for e in deviations):
+-                raise ValueError('PK-relevant deviation is not the approved M2 navigation entry: ' + name)
++            # Every field must equal one approved entry, and it must extend another registered state of the same file.
++            if not any(all(d.get(k) == v for k, v in approved.items()) for approved in APPROVED_PK_DEVIATIONS) or not any(
++                    e is not d and e['file'] == name and e['new_sha256'] == d['previous_sha256'] and (e.get('pk_relevant') is False or
++                    any(all(e.get(k) == v for k, v in approved.items()) for approved in APPROVED_PK_DEVIATIONS)) for e in deviations):
++                raise ValueError('PK-relevant deviation is not an approved navigation entry: ' + name)
++            # The registry entry must carry the owner's recorded approval; a drafted bundle fails until it does.
++            if not str(d.get('authorized_by', '')).strip() or str(d['authorized_by']).lstrip().upper().startswith('PENDING'):
++                raise ValueError('PK-relevant deviation has no recorded product-owner approval: ' + d['id'])
+         else:
+             leaf = name.rsplit('/', 1)[-1]
+             if not name.startswith(WAIVABLE_PREFIX) or any(word in leaf for word in NEVER_WAIVABLE) or d.get('pk_relevant') is not False:
+diff --git a/tools/pk-research/test_research.py b/tools/pk-research/test_research.py
+index 794fec2..c0affae 100644
+--- a/tools/pk-research/test_research.py
++++ b/tools/pk-research/test_research.py
+@@ -158,7 +158,7 @@ class EvidenceGuardTest(unittest.TestCase):
+         with tempfile.TemporaryDirectory() as directory:
+             root,p2=self._production_copy(directory);guard.check(p2,root)
+     def test_pk_core_chart_parameters_and_evidence_stay_locked_despite_the_m2_entry(self):
+-        approved=guard.APPROVED_PK_DEVIATION
++        approved=guard.APPROVED_PK_DEVIATIONS[-1]
+         for name in ['app/src/main/java/net/plainnotes/app/conc/ConcentrationCalculator.kt','pk-engine/src/main/kotlin/net/plainnotes/app/pk/Engine.kt',
+                      'app/src/main/java/net/plainnotes/app/ui/ConcChart.kt','app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt',
+                      'pk-engine/src/main/resources/pk-params.json','pk-engine/src/main/kotlin/net/plainnotes/app/pk/FittedModels.kt',
+@@ -178,7 +178,7 @@ class EvidenceGuardTest(unittest.TestCase):
+             (p2/'evidence-catalog.json').write_text((p2/'evidence-catalog.json').read_text()+' ')
+             with self.assertRaises(ValueError):guard.check(p2,root)
+     def test_m2_entry_is_exact_and_cannot_be_extended(self):
+-        shell=guard.APPROVED_PK_DEVIATION['file']
++        shell=guard.APPROVED_PK_DEVIATIONS[-1]['file']
+         # Any further change to AppShell.kt is outside the approval.
+         with tempfile.TemporaryDirectory() as directory:
+             root,p2=self._production_copy(directory)
+@@ -205,15 +205,32 @@ class EvidenceGuardTest(unittest.TestCase):
+                 root,p2=self._production_copy(directory)
+                 baseline=json.loads((p2/'production-baseline.json').read_text())['files'][other]
+                 with open(root/other,'ab') as f:f.write(b'\n')
+-                self._add_deviation(p2,dict(guard.APPROVED_PK_DEVIATION,file=other,pk_relevant=True,baseline_sha256=baseline,new_sha256=guard.digest(root/other)))
++                self._add_deviation(p2,dict(guard.APPROVED_PK_DEVIATIONS[-1],file=other,pk_relevant=True,baseline_sha256=baseline,new_sha256=guard.digest(root/other)))
+                 with self.assertRaises(ValueError,msg=other):guard.check(p2,root)
+     def test_baseline_and_lock_are_untouched_by_the_m2_entry(self):
+         lock=json.loads((P2/'protocol-lock.json').read_text())
+         self.assertEqual(lock['files']['production-baseline.json'],guard.digest(P2/'production-baseline.json'))
+         baseline=json.loads((P2/'production-baseline.json').read_text())['files']
+-        self.assertEqual(baseline[guard.APPROVED_PK_DEVIATION['file']],guard.APPROVED_PK_DEVIATION['baseline_sha256'])
++        for approved in guard.APPROVED_PK_DEVIATIONS:
++            self.assertEqual(baseline[approved['file']],approved['baseline_sha256'])
+         pk=[d for d in json.loads((P2/'protocol-deviations.json').read_text())['deviations'] if d.get('pk_relevant') is not False]
+-        self.assertEqual([d['id'] for d in pk],['PD-2026-10-10-M2-ENTRY'])
++        self.assertEqual([d['id'] for d in pk],['PD-2026-10-10-M2-ENTRY','PD-2026-10-10-P2AR-UNIFIED'])
++    def test_removing_a_middle_link_breaks_the_chain(self):
++        with tempfile.TemporaryDirectory() as directory:
++            root,p2=self._production_copy(directory)
++            data=json.loads((p2/'protocol-deviations.json').read_text())
++            data['deviations']=[d for d in data['deviations'] if d.get('id')!='PD-2026-10-10-M2-ENTRY']
++            (p2/'protocol-deviations.json').write_text(json.dumps(data))
++            with self.assertRaises(ValueError):guard.check(p2,root)
++    def test_pk_deviation_without_recorded_approval_fails(self):
++        for value in ('PENDING — requires explicit product-owner approval', '', '  pending'):
++            with tempfile.TemporaryDirectory() as directory:
++                root,p2=self._production_copy(directory)
++                data=json.loads((p2/'protocol-deviations.json').read_text())
++                for d in data['deviations']:
++                    if d.get('id')=='PD-2026-10-10-P2AR-UNIFIED':d['authorized_by']=value
++                (p2/'protocol-deviations.json').write_text(json.dumps(data))
++                with self.assertRaises(ValueError):guard.check(p2,root)
+     def test_forged_protocol_sha_fails(self):
+         with tempfile.TemporaryDirectory() as directory:
+             p=Path(directory)
+-- 
+2.43.0
+

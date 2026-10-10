@@ -62,6 +62,24 @@
 - **当前可用入口**：已批准的"实验药代模型"抽屉项，`ExperimentalPkScreen` 现在承载统一页面；没有正式页嵌入时，Legacy 以相对曲线显示，并注明正式估算在浓度页。
 - **放进"血药浓度"页面需要改 `AppShell.kt`（受保护）**：完整的待批准补丁见 `docs/design/p2ar-entry-approval.patch`，未应用。
 
+### 待批准的受保护改动（`docs/design/p2ar-entry-approval.patch`，未应用）
+
+只涉及 5 个文件，在 `f0affd1` 上 `git apply --check` 通过：
+
+| 文件 | 改动 |
+|---|---|
+| `app/.../ui/AppShell.kt` | 删 `EXPERIMENTAL_PK` 枚举和路由；`CONCENTRATION` 进 loadExtra 列表；`CONCENTRATION` 路由改为 `UnifiedConcentrationScreen(..., legacyContent = { ConcentrationScreen(原参数, inner, ...) })`。哈希 `9f7658e7…` → `2af141f964771fa891709f95feeb4aa0c8e4dac96557ec18eb4f8984f96616c1` |
+| `docs/pk-research/p2/protocol-deviations.json` | 追加 `PD-2026-10-10-P2AR-UNIFIED`（`pk_relevant: true`，`navigation_wiring_only`，previous = M2-ENTRY 的 new），`authorized_by` 为 `PENDING` |
+| `tools/pk-research/check_protocol.py` | 单个 `APPROVED_PK_DEVIATION` 改为两条精确条目的元组；链规则：previous 必须是同文件另一条已登记状态（非 PK 或已批准 PK）；**新增：`authorized_by` 为空或以 PENDING 开头的 PK 登记一律拒绝** |
+| `tools/pk-research/test_research.py` | 新增"删掉中间一环则断链""未记录批准则失败"负向测试 |
+| `app/src/test/.../ExperimentalPkNavigationTest.kt` | 断言不再有独立抽屉入口 |
+
+`production-baseline.json`、`protocol-lock.json`、ConcentrationScreen/ConcChart/ChartViewport 等永不可豁免文件都不改。
+
+**验证（临时把 authorized_by 换成测试占位）**：Python 178 项通过；app 单测 424 项（13 项原有跳过，0 失败，PeriodStability 5/5，导航测试 1/1）；lint 0 错误；Release 与 Debug androidTest 均可构建，Release 未签名 12,811,131 bytes。原样（PENDING）时 `check_protocol.py` 失败，这是故意的：没有记录批准就进不了 CI。
+
+**批准流程**：负责人明确批准后，`git apply docs/design/p2ar-entry-approval.patch`，把该条 `authorized_by` 改为批准原话和日期，在 REQUIREMENTS 记录决定，再跑全套测试与 A–F。
+
 ## Stage D：文献锚定研究情景
 
 - **证据核查**：
@@ -78,3 +96,24 @@
   - Rosano 1997：只有 0–1 h，基线未知。
   - Komesaroff 1998：只有 0–30 min，1 h 幅度只能外推。
 - **不能用作个人浓度预测的原因**：组均值来自 6 人的读图；背景是论文重建假设；没有个人校准或外部验证；8 h 以后的形状不可辨识；剂量线性没有在个人身上验证；不用化验值；Legacy 的 pg/mL 不会被借给 M2。
+
+## Stage E：回归、体积与交付
+
+本地（当前分支，未应用入口补丁）：
+
+- pk-engine 105/105；core:data 72/72；core:reminder 14/14。
+- app 单测 426 项，0 失败；13 项是原有跳过。PeriodStabilityTest 5/5。比较页 UI 测试 11/11，覆盖模式切换、窗口、缩放、平移、点击读数、指标、候选、研究情景、排除项。
+- Room 路径：`ExperimentalPkDataPathTest`、`ExperimentalPkHistoryTest` 通过，只读，不改记录或快照。
+- Python 研究回归 176/176；`check_protocol.py` 通过，受保护文件哈希未变。
+- lint 0 错误；`check_release_manifest.py`、`check_experimental_release.py` 通过：无 INTERNET，四个 ABI，8 个原生库压缩存放，每个 ABI 都有 SQLCipher，Release 中没有调试宿主。
+- Debug androidTest APK 可以构建。修复了 `click` 缺少 import 的编译错误：该文件只在 androidTest 编译时才会报错，此前本地没有编到。
+- 模拟器仪器测试和 A–F 由 CI 运行，本地没有模拟器。
+- Release 未签名包体积：
+
+| 版本 | 字节数 | 与本版差 |
+|---|---|---|
+| 本版 | 12,813,099 | — |
+| PR #2 已接线 | 12,759,479 | 本版 +53,620 |
+| 基线 `f69d892` | 12,707,919 | 本版 +105,180 |
+
+  构成：lib 9,028,859，dex 2,300,860，resources.arsc 1,186,152，res 128,882，其他 119,995。新增大小来自比较页代码和四种语言的字符串，没有新增依赖、权限或服务。

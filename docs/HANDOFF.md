@@ -5,7 +5,8 @@
 - [x] Stage B 计算层与图表（`d2112b5`）：`ConcentrationModelComparison`（同剂量同网格、1 分钟指标网格、精确读数）、`ModelComparisonChart`（复用 `ChartViewport`，缩放/平移/点击）。
 - [x] Stage C 统一页面（`d5112b8`）：`UnifiedConcentrationScreen`（Legacy 默认/M2/比较）。当前经已批准的"实验药代模型"抽屉入口可达；放进"血药浓度"页需改受保护的 `AppShell.kt`，补丁 `docs/design/p2ar-entry-approval.patch` 待负责人批准，**未应用**。
 - [x] Stage D 研究情景：Price 1997 Figure 1 锚点（逐候选重算，与冻结 CSV 一致）；Doll/Rosano/Komesaroff 拒绝；AUC 冲突照实显示。
-- [ ] Stage E：全量回归、APK 体积、推送、Draft PR、A–F。
+- [x] Stage E 本地：pk 105、data 72、reminder 14、app 426（13 原有跳过，0 失败，PeriodStability 5/5）、Python 176、lint 0 错误、两项 release 检查通过；Release 未签名 12,813,099（比 PR #2 +53,620）。入口补丁在临时工作树验证：app 424/0 失败、Python 178、lint 0；原样（PENDING）会被检查器拒绝。
+- [ ] CI、Draft PR、release-acceptance A–F 结果待记录。**阻塞**：入口放进"血药浓度"页需负责人批准 `PD-2026-10-10-P2AR-UNIFIED`（见设计文档批准流程）。
 
 ---
 
