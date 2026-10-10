@@ -132,6 +132,9 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
         else if (result != null && result.simulatedMedications.isNotEmpty() && result.others.isEmpty())
             EmptyState(Icons.AutoMirrored.Outlined.ShowChart, stringResource(R.string.pk_no_doses_title), stringResource(R.string.pk_no_doses_body))
 
+        // Separate opt-in research preview. Never alters the real E2 chart, fit, or persistence.
+        if (result != null) ExperimentalSublingualComparison(result)
+
         if (result != null && result.others.isNotEmpty()) OtherCurvesCard(result)
 
         CalibrationCard(result, settings, onSettings, onOpenLabs, ::fmt, unit)
