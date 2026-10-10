@@ -30,7 +30,8 @@ data class ResearchShapeComparison(
 
 /**
  * Research-only comparison of SHAPES, never absolute concentrations.
- * Only already validated DoseEvents from historical records may be passed by callers.
+ * Inputs are EITHER independently qualified historic DoseEvents, OR explicitly labelled
+ * synthetic manual events in the DEBUG-only sandbox. Never fetch or infer user records.
  * No planned doses, laboratory values, patient amplitude, or API side effects.
  */
 object ResearchShapeComparisonV01 {
@@ -47,8 +48,8 @@ object ResearchShapeComparisonV01 {
         require(asOfHour.isFinite())
         require(assumedPriceBaselinePgMl in assumedPriceBaselines)
         require(verifiedRecordedEvents.size <= 10_000)
-        // Eligibility was established by the production historical-context pipeline.
-        // Route filter ALSO protects this research view against other medicines and EV.
+        // Caller must establish historical eligibility, or use explicitly synthetic debug inputs.
+        // Our route filter additionally protects against other medicines and EV.
         val history = verifiedRecordedEvents.filter {
             it.timeH.isFinite() && it.timeH <= asOfHour && it.route == Route.SUBLINGUAL &&
                 it.ester == Ester.E2 && it.doseMG.isFinite() && it.doseMG > 0.0
