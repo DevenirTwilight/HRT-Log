@@ -1,11 +1,21 @@
-# P2 upload/import status — verified GitHub tree (2026-10-10)
+# HRT Log — original research materials: actual GitHub archive status
 
-**Nineteen actual phase-specific research ZIP files are now committed to this branch:** [source packages](source-packages/README.md). **17 are exact original uploaded ZIPs**, **2 (AJ/AK) are copyright-aware sanitized copies** excluding a scanned original journal figure. These files contain the archived phase-specific Python sources, results, test scripts and figures; they are not represented solely by document summaries or hashes.
+**Updated 2026-10-10 after remote Git blob verification.** Research results must be *actually committed* to the repository, not merely uploaded to the conversation or summarized. [Binding project archive policy](../../RESEARCH_ARCHIVAL_POLICY.md).
 
-The user-uploaded full original Markdown reports for **P2-AN, AO, AP, AQ, AS** have also replaced their short GitHub summaries. Previously archived S–Z and AD–AM Markdown reports remain available in [reports](reports/).
+### Recovered original phase archives
 
-**Still absent as complete standalone ZIPs:** P2-S, P2-AP, P2-AQ, P2-AS, P2-AT (five phases from the 24-package original ledger). The uploaded AP/AQ/AS reports are present, but do not substitute for original source ZIPs. Original P2-AA/P2-AR past-stage archives are not verified; recent analytic backfills are in the preceding PR. P2-C remains HOLD.
+**23 of 24** historical ZIP phases in `ARCHIVE_MANIFEST.md` have actual corresponding ZIP blobs under [source-packages](source-packages/). **21 original ZIPs are byte-identical to user uploads** (S–Z, AD–AI, AL–AO, AP, AQ, AS); **two AJ/AK ZIPs are redistributable copies** excluding a scanned copyrighted Figure 1, with preserved source code/results and explicit disclosure.
 
-**Import ≠ merge ≠ clinical validation.** This Git tree is on `research/p2-original-reports-and-source-handoff-20261010`, layered over draft PR #5, which is layered over draft PR #4. Until merged these imports are *on a GitHub branch*, not on the default branch. The source packages may be downloaded and reproduced but provide no approved personal PK model calibration or model substitution. No production engine, DB schema, model parameters, release APK or patient-level OSF Excel was changed.
+Actual user-provided phase ZIPs **now committed**: S, T, U, V, W, X, Y, Z, AD, AE, AF, AG, AH, AI, AJ (sanitized), AK (sanitized), AL, AM, AN, AO, AP, AQ, AS. The original historical source files are inside those ZIPs; they have not all been unpacked into separate top-level Git paths.
 
-To verify ZIPs, use `sha256sum` on downloads and the values in `ARCHIVE_MANIFEST.md`; refer to `source-packages/README.md` for AJ/AK exclusions and altered SHA-256.
+### Missing original / new reconstruction
+
+**P2-AT original ZIP is lost.** Historical metadata: SHA-256 `a636beee77525043a69a8393d88d03b20d9ee14adf2e29c6995960b192b4c14a`, 390,066 bytes. Its preserved historic summary remains [here](reports/p2-at.md). A **new self-contained calculation reconstruction** was independently implemented from archived P2-AS/P2-X inputs with **8/8 tests passed** and committed [here](reconstructed/). Never identify the reconstruction as the original.
+
+### Engineering / clinical gate
+
+This phase import is on `research/p2-original-reports-and-source-handoff-20261010` (draft PR #7), stacked on PR #5, stacked on PR #4; **not merged**. No APK, production E2_SL parameters, Kotlin engine, database schema, personal medical records or raw OSF patient workbooks have been changed. Scientifically, new/independent person-level absolute E2 accuracy and long-tail validation remain unproven. P2-C is HOLD.
+
+### Research integrity
+
+Tests for newly supplied S/AP/AQ/AS: AP 9/9, AQ 32/32, AS 49/49; S 10/11 in *isolated* ZIP, with one missing GitHub P2-D/P2-E dependency causing an error rather than a numerical model failure. The original S ZIP is preserved exactly and must be tested again in a checked-out repository. Reconstruction P2-AT 8/8. Do not claim fresh Android integration CI was run from this commit without checking GitHub Actions.
