@@ -27,7 +27,10 @@ object ChartViewport {
         val upper=if(data.includeBandsInScale)data.band95?.let{segmentSamples(data.x,it.second,start,end,breaks=data.breaks).flatten().maxOfOrNull{p->p.second}} ?: 0.0 else 0.0
         val dots=data.points.filter{it.first in start..end && it.second.isFinite()}.maxOfOrNull{it.second} ?: 0.0
         val ref=data.range?.second?.takeIf{it.isFinite()} ?: 0.0
-        val peak=maxOf(curve,upper,dots,ref)
+        val secondary=data.comparisonY?.takeIf{it.size==data.x.size}?.let{y->
+            segmentSamples(data.x,y,start,end,breaks=data.breaks).flatten().maxOfOrNull{it.second}
+        } ?: 0.0
+        val peak=maxOf(curve,upper,dots,ref,secondary)
         return if(peak>0)peak*1.15 else 1.0
     }
 }
