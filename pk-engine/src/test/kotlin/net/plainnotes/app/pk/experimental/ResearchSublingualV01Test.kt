@@ -94,6 +94,29 @@ class ResearchSublingualV01Test {
         assertTrue(strata.first().minimum > strata.last().maximum * 20.0)
     }
 
+    @Test fun candidateSeriesKeepsOneModelIdentityAcrossTheTimeAxis() {
+        val axis = listOf(0.25, 0.5, 1.0, 2.0, 6.0, 24.0)
+        val doses = listOf(ExperimentalDose(0.0, 1.0))
+        val series = ResearchSublingualV01.coherentCandidateSeries(axis, doses)
+        assertEquals(15, series.size)
+        assertEquals(15, series.map { it.candidateId }.toSet().size)
+        for ((index, candidate) in ResearchSublingualV01.candidates.withIndex()) {
+            assertEquals(candidate.id, series[index].candidateId)
+            for ((j, t) in axis.withIndex()) {
+                assertEquals(ResearchSublingualV01.relativeHistory(t, doses, candidate),
+                    series[index].relativeValues[j], 1e-12)
+            }
+            // All curves cross 1.0 exactly by design; not independent human agreement.
+            assertEquals(1.0, series[index].relativeValues[2], 1e-12)
+        }
+        assertThrows(IllegalArgumentException::class.java) {
+            ResearchSublingualV01.coherentCandidateSeries(listOf(1.0, 0.5), doses)
+        }
+        assertThrows(IllegalArgumentException::class.java) {
+            ResearchSublingualV01.coherentCandidateSeries(listOf(Double.NaN), doses)
+        }
+    }
+
     @Test fun assumptionSlowInputIsNotTheCentralEliminationRate() {
         val slowest = ResearchSublingualV01.candidates.first { it.id == "p2x-22" }
         assertTrue(slowest.slowRatePerHour < slowest.eliminationRatePerHour)
