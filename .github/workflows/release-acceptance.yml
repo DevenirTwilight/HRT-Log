@@ -87,7 +87,7 @@ jobs:
               grep -m1 -i 'Features' /proc/cpuinfo; ls /sys/module | grep -i kvm || echo "no kvm module listed"
             fi
             if [ "$(uname -s)" = Darwin ]; then
-              echo "hv_support=$(sysctl -n kern.hv_support 2>&1)"; sysctl -n machdep.cpu.brand_string
+              echo "hv_support=$(sysctl -n kern.hv_support 2>&1)"; sysctl -n machdep.cpu.brand_string; sysctl -n kern.hv_vmm_present 2>&1
             fi
             curl -fsSL https://dl.google.com/android/repository/repository2-3.xml -o repo.xml; echo "repository_download_exit=$?"
             python3 - <<'PY'
@@ -100,6 +100,11 @@ jobs:
                   os_=re.search(r'<host-os>(.*?)</host-os>', a); arch=re.search(r'<host-arch>(.*?)</host-arch>', a); url=re.search(r'<url>(.*?)</url>', a)
                   print('emulator_archive', os_.group(1) if os_ else '?', arch.group(1) if arch else 'unspecified', url.group(1) if url else '?')
           PY
+            if [ "$(uname -s)" = Darwin ]; then
+              # Ask the published Apple-silicon emulator itself whether it can use Hypervisor.framework here.
+              curl -fsSL -o emu.zip https://dl.google.com/android/repository/$(python3 -c "import re;x=open('repo.xml').read();b=re.search(r'<remotePackage path=\"emulator\">.*?</remotePackage>',x,re.S).group(0);print(re.search(r'(emulator-darwin_aarch64-\d+\.zip)',b).group(1))")
+              unzip -q emu.zip -d emu; ./emu/emulator/emulator -accel-check; echo "accel_check_exit=$?"
+            fi
           } 2>&1 | tee "$OUT/probe-${{ matrix.runner }}.txt"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()

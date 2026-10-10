@@ -12,3 +12,4 @@
 -keep class androidx.core.** { *; }
 -keep class dagger.** { *; }
 -keep class androidx.test.** { *; }
+-keep class androidx.collection.** { *; }

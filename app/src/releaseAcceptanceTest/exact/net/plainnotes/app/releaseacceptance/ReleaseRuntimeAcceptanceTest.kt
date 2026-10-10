@@ -43,9 +43,39 @@ class ReleaseRuntimeAcceptanceTest {
         listOf("", "-wal", "-shm", "-journal").forEach { File(dbFile.path + it).delete() }
     }
 
-    /** Which native library file the process actually mapped, read from the kernel, not from the APK listing. */
-    private fun mappedSqlcipher(): List<String> = File("/proc/self/maps").readLines()
-        .filter { it.contains("libsqlcipher.so") }.map { it.substring(it.indexOf('/')) }.distinct()
+    /** Data range of every lib/ entry inside the installed APK, from the ZIP central directory. */
+    private fun apkLibRanges(apk: String): Map<String, LongRange> = java.io.RandomAccessFile(apk, "r").use { f ->
+        fun u16(at: Long): Int { f.seek(at); return f.read() or (f.read() shl 8) }
+        fun u32(at: Long): Long { f.seek(at); return (f.read().toLong() or (f.read().toLong() shl 8) or (f.read().toLong() shl 16) or (f.read().toLong() shl 24)) }
+        var eocd = f.length() - 22
+        while (eocd > 0 && u32(eocd) != 0x06054b50L) eocd--
+        var at = u32(eocd + 16); val count = u16(eocd + 10); val out = mutableMapOf<String, LongRange>()
+        repeat(count) {
+            val size = u32(at + 20); val nameLen = u16(at + 28); val extraLen = u16(at + 30); val commentLen = u16(at + 32); val local = u32(at + 46)
+            val name = ByteArray(nameLen).also { f.seek(at + 46 + 4); f.readFully(it) }.toString(Charsets.UTF_8)
+            if (name.startsWith("lib/")) { val data = local + 30 + u16(local + 26) + u16(local + 28); out[name] = data until data + size }
+            at += 46 + nameLen + extraLen + commentLen
+        }
+        out
+    }
+
+    /**
+     * Which native library the process actually mapped, read from the kernel: either an extracted lib*.so path, or a
+     * mapping of base.apk whose file offset falls inside one lib/ entry (libraries loaded directly from the APK).
+     */
+    private fun mappedNativeEntries(): List<String> {
+        val info = app.applicationInfo; val ranges = apkLibRanges(info.sourceDir); val found = sortedSetOf<String>()
+        File("/proc/self/maps").readLines().forEach { line ->
+            val parts = line.trim().split(Regex("\\s+")); if (parts.size < 6) return@forEach
+            val path = parts.drop(5).joinToString(" "); val offset = parts[2].toLong(16)
+            when {
+                path == info.sourceDir -> ranges.filterValues { offset in it }.keys.forEach { found += it }
+                path.startsWith(info.nativeLibraryDir ?: "\u0000") -> found += path
+            }
+        }
+        return found.toList()
+    }
+    private fun mappedSqlcipher() = mappedNativeEntries().filter { it.endsWith("libsqlcipher.so") }
 
     @Test fun nativeSqlcipherIsLoadedFromTheInstalledApkForThisProcessAbi() {
         System.loadLibrary("sqlcipher")
@@ -55,16 +85,13 @@ class ReleaseRuntimeAcceptanceTest {
         val apkLibs = ZipFile(info.sourceDir).use { zip -> zip.entries().toList().map { it.name }.filter { it.startsWith("lib/") }.sorted() }
         evidence("native-abi", JSONObject().put("supported_abis", JSONArray(Build.SUPPORTED_ABIS.toList()))
             .put("process_is_64bit", Process.is64Bit()).put("os_arch", System.getProperty("os.arch")).put("process_abi", processAbi)
-            .put("source_dir", info.sourceDir).put("native_library_dir", info.nativeLibraryDir).put("mapped_sqlcipher", JSONArray(maps))
+            .put("source_dir", info.sourceDir).put("native_library_dir", info.nativeLibraryDir).put("mapped_native", JSONArray(mappedNativeEntries()))
             .put("apk_native_entries", JSONArray(apkLibs)).put("scenario", AcceptanceSupport.scenario)
             .put("device", "${Build.MANUFACTURER} ${Build.MODEL} API ${Build.VERSION.SDK_INT} ${Build.FINGERPRINT}"))
-        assertTrue("libsqlcipher.so must be mapped after loadLibrary: $maps", maps.isNotEmpty())
-        // Mapped either from the app's extracted lib dir or directly from its base.apk (uncompressed, page aligned).
-        assertTrue("SQLCipher must come from the app under test, not the test APK: $maps",
-            maps.all { it.startsWith(info.nativeLibraryDir) || it.startsWith(info.sourceDir + "!/lib/") })
-        val abiDir = mapOf("arm64-v8a" to listOf("arm64", "arm64-v8a"), "x86_64" to listOf("x86_64"), "armeabi-v7a" to listOf("arm", "armeabi-v7a"), "x86" to listOf("x86"))
-        assertTrue("Mapped library must match the process ABI $processAbi: $maps",
-            maps.all { path -> abiDir.getValue(processAbi).any { path.contains("/lib/$it/") } })
+        assertTrue("libsqlcipher.so must be mapped after loadLibrary: ${mappedNativeEntries()}", maps.isNotEmpty())
+        val abiDir = mapOf("arm64-v8a" to listOf("arm64-v8a", "arm64"), "x86_64" to listOf("x86_64"), "armeabi-v7a" to listOf("armeabi-v7a", "arm"), "x86" to listOf("x86"))
+        assertTrue("Mapped SQLCipher must be the process ABI $processAbi copy: $maps",
+            maps.all { path -> abiDir.getValue(processAbi).any { path.contains("lib/$it/") } })
         if (AcceptanceSupport.arm64Only) assertEquals(listOf("lib/arm64-v8a/libandroidx.graphics.path.so", "lib/arm64-v8a/libsqlcipher.so"), apkLibs)
         else assertEquals(8, apkLibs.size)
     }
@@ -123,6 +150,14 @@ class ReleaseRuntimeAcceptanceTest {
 
     private fun localized(tag: String) = app.createConfigurationContext(Configuration(app.resources.configuration).apply { setLocales(LocaleList.forLanguageTags(tag)) })
 
+    /**
+     * Strings named only inside code R8 proves unreachable may legitimately be removed by resource shrinking.
+     * import_link_help / import_link_empty: only ImportedPlanDialog uses them, and it opens only after
+     * NotesViewModel.prepareImportedLink, which has no production caller (only DataRefreshTest); confirmed by grep
+     * on d0284a4 and by both strings being present in the same scenario's functional build where app code is kept.
+     */
+    private val unreachableOnly = setOf("import_link_help", "import_link_empty")
+
     @Test fun everyReferencedStringResolvesWithTheSourceValueInAllFourLocales() {
         val strings = expected.getJSONObject("strings")
         val referenced = expected.getJSONObject("referenced_in_source").getJSONArray("string").let { a -> (0 until a.length()).map { a.getString(it) }.toSet() }
@@ -132,7 +167,7 @@ class ReleaseRuntimeAcceptanceTest {
             val missing = mutableListOf<String>(); val mismatched = mutableListOf<String>(); val dump = JSONObject(); var checked = 0
             for (name in want.keys()) {
                 val id = res.getIdentifier(name, "string", pkg)
-                if (id == 0) { missing += name; if (name in referenced) problems += "$tag: referenced string $name missing"; continue }
+                if (id == 0) { missing += name; if (name in referenced && name !in unreachableOnly) problems += "$tag: referenced string $name missing"; continue }
                 val actual = res.getString(id); dump.put(name, actual)
                 if (!want.isNull(name)) { checked++; if (actual != want.getString(name)) { mismatched += name; problems += "$tag: $name value differs" } }
             }
@@ -174,6 +209,13 @@ class ReleaseRuntimeAcceptanceTest {
 
     private fun text(key: String, locale: String) = expected.getJSONObject("strings").getJSONObject(locale).getString(key)
 
+    private fun require(condition: Boolean, what: String, tag: String) {
+        if (condition) return
+        val dir = File(app.externalMediaDirs.first(), "p1-acceptance").apply { mkdirs() }
+        runCatching { File(dir, "ui-failure-$tag.xml").outputStream().use { device.dumpWindowHierarchy(it) } }
+        fail("$tag: $what (window hierarchy saved as ui-failure-$tag.xml)")
+    }
+
     /** Cold start through the real launcher alias, then each app language via the framework per-app locale API. */
     @Test fun mainEntryStartsAndShowsTranslatedNavigationInAllFourLocales() {
         val manager = app.getSystemService(LocaleManager::class.java)
@@ -184,12 +226,13 @@ class ReleaseRuntimeAcceptanceTest {
                 manager.applicationLocales = LocaleList.forLanguageTags(tag)
                 device.pressHome()
                 app.startActivity(app.packageManager.getLaunchIntentForPackage(pkg)!!.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
-                assertTrue("$tag: app window", device.wait(Until.hasObject(By.pkg(pkg).depth(0)), 20_000))
-                assertTrue("$tag: FAB '${text("add", key)}'", device.wait(Until.hasObject(By.text(text("add", key))), 20_000))
+                require(device.wait(Until.hasObject(By.pkg(pkg).depth(0)), 20_000), "app window", tag)
+                require(device.wait(Until.hasObject(By.desc(text("menu", key))), 20_000), "navigation menu '${text("menu", key)}'", tag)
+                require(device.hasObject(By.text(text("add", key))), "calendar FAB '${text("add", key)}'", tag)
                 device.findObject(By.desc(text("menu", key))).click()
-                assertTrue("$tag: drawer settings", device.wait(Until.hasObject(By.text(text("settings", key))), 10_000))
+                require(device.wait(Until.hasObject(By.text(text("settings", key))), 10_000), "drawer entry '${text("settings", key)}'", tag)
                 device.findObject(By.text(text("settings", key))).click()
-                assertTrue("$tag: settings screen title", device.wait(Until.hasObject(By.text(text("settings", key))), 10_000))
+                require(device.wait(Until.gone(By.text(text("add", key))), 10_000) && device.hasObject(By.text(text("settings", key))), "settings screen", tag)
                 out.put(tag, JSONObject().put("add", text("add", key)).put("settings", text("settings", key)).put("result", "shown"))
                 device.pressBack()
             }

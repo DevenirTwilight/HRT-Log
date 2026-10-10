@@ -8,7 +8,12 @@
 - `app/src/releaseAcceptanceTest/`：exact（SQLCipher 实际映射 ABI、加密读写/重开/错误密钥/完整性、APK 内命名 JSON、四语字符串、入口别名图标、UI 冷启动+四语导航）与 functional（应用数据库重开、加密 Schema1→9 迁移、旧 v1 备份恢复/往返/错误密码/损坏、四语 PDF 渲染、提醒允许/拒绝/重启恢复）。
 - `scripts/release-acceptance/run_device_acceptance.py`：仅限模拟器（qemu 属性校验），逐阶段记录命令/退出码/逐测试结果/logcat 崩溃。
 
-本地状态：依赖下载受 Maven Central 429 限流反复中断，编译验证进行中；尚无任何设备结果。下一步：编译通过→推送触发工作流→下载工件→写 `docs/performance/p1-release-acceptance-2026-10.md/.json`。
+CI 进展（工作流 release-acceptance.yml）：
+- run 38037216069（46f6e0c）：所有 instrumentation 在 AndroidJUnitRunner.onCreate 崩溃（NoClassDefFoundError androidx.tracing.Trace：AGP 把应用已含的库从测试 APK 剔除，而 R8 已从应用删掉该类）→ 测试工具问题，非应用缺陷；新增 `test-support-keep.pro`。macOS/arm64 探测因 setup-android 不支持而未执行。
+- run 38038170385（7609bbe）：A/B x86_64 API35 模拟器：exact 冷启动×3 PASS；functional 171 通过/50 失败/3 跳过；进程重启 prepare/verify、通知拒绝、reboot-prepare PASS。失败根因：48 项 Compose 测试需 androidx.collection（测试 keep 不足）；SQLCipher 断言按 maps 文件名匹配，但从 APK 直接加载时 maps 只显示 base.apk（logcat nativeloader 已证实 `base.apk!/lib/x86_64/libsqlcipher.so … ok`）；B exact 缺 71 个字符串，其中源码引用的仅 import_link_help/import_link_empty——只被 ImportedPlanDialog 使用，而其入口 prepareImportedLink 无生产调用方（仅单测），属既有不可达代码被 R8 删除，非裁剪回归；重启提醒用的“测试提醒”只在缓存，开机后按数据库重建会正常丢弃→改为真实合成用药计划。C/D：x86_64 上安装被 INSTALL_FAILED_NO_MATCHING_ABIS 拒绝（PASS，符合预期），ARM64 运行 BLOCKED。
+- ARM64 探测：ubuntu-24.04-arm 无 /dev/kvm，且 Google 不发布 Linux aarch64 模拟器；macos-15 为 “Apple M1 (Virtual)”，无 kern.hv_support → GitHub 托管 runner 上无法运行真实 ARM64 Android（下一轮再用 emulator -accel-check 复核）。
+
+下一步：推送修正→第 3 次运行→下载工件→写 `docs/performance/p1-release-acceptance-2026-10.md/.json`。
 
 ---
 

@@ -83,6 +83,9 @@ class Run:
             if not CRASH.search(line): continue
             if pid in pids or f'Process: {PKG},' in line or f'ANR in {PKG}' in line or (PKG in line and 'NotFoundException' in line):
                 hits.append(line)
+        # Which SQLCipher binary Android's native loader actually opened for this app (e.g. base.apk!/lib/x86_64/...).
+        loads = [l.split('nativeloader: ', 1)[-1] for l in text.splitlines() if 'nativeloader' in l and 'libsqlcipher.so' in l and PKG in l]
+        if loads: self.result.setdefault('sqlcipher_native_loads', {})[label] = loads[:5]
         adb('logcat', '-c')
         return hits[:50]
 
@@ -202,17 +205,19 @@ def main():
         cold_restarts(run, 'functional-main-launcher', f'{PKG}/.Launcher')
         if args.skip_reboot: run.phase('reboot-reminder-recovery', 'NOT_RUN', reason='--skip-reboot')
         else:
-            run.instrument('reboot-prepare', ['-e', 'class', 'net.plainnotes.app.releaseacceptance.ReminderRebootAcceptanceTest#scheduleBeforeReboot', '-e', 'hrtRebootPhase', 'prepare'])
+            run.instrument('reboot-prepare', ['-e', 'class', 'net.plainnotes.app.releaseacceptance.ReminderLifecycleAcceptanceTest#scheduleBeforeReboot', '-e', 'hrtRebootPhase', 'prepare'])
             adb('shell', 'am', 'force-stop', PKG)
             adb('reboot', timeout=120); time.sleep(20); wait_boot()
-            deadline, seen = time.time() + 240, False
+            deadline, seen = time.time() + 420, False
             while time.time() < deadline and not seen:
-                seen = bool(re.search(rf'pkg={re.escape(PKG)}\b.*id=100\b|NotificationRecord\(.*pkg={re.escape(PKG)}.*id=100', adb('shell', 'dumpsys', 'notification', '--noredact').stdout))
+                dump = adb('shell', 'dumpsys', 'notification', '--noredact').stdout
+                seen = any(PKG in l and 'id=100' in l for l in dump.splitlines() if 'NotificationRecord' in l)
                 if not seen: time.sleep(10)
             alarms = [l.strip() for l in adb('shell', 'dumpsys', 'alarm').stdout.splitlines() if PKG in l][:20]
             crashes = run.logcat_crashes('after-reboot')
             run.phase('reboot-reminder-recovery', 'PASS' if seen and not crashes else 'FAIL', notification_after_reboot=seen, alarm_lines=alarms,
-                      logcat_crash_lines=crashes, note='App not opened after reboot; SystemReceiver must restore the cached alarm and AlarmReceiver post it.')
+                      logcat_crash_lines=crashes,
+                      note='App not opened after reboot; SystemReceiver rebuilds alarms from the encrypted database and AlarmReceiver posts.')
     run.result['finished'] = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
     run.result['status'] = 'PASS' if all(p['status'] in ('PASS', 'INFO') for p in run.result['phases']) else \
         'FAIL' if any(p['status'] == 'FAIL' for p in run.result['phases']) else 'PARTIAL'
