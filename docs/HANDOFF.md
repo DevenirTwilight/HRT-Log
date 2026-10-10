@@ -1,6 +1,6 @@
 # 正式配置改为“压缩原生库 + 资源裁剪”（2026-10-10，验收中）
 
-用户要求采用第 1 项并加做第 4 项。`app/build.gradle.kts` release：`isShrinkResources = true` + `packaging { jniLibs { useLegacyPackaging = true } }`；R8/签名/版本/Schema/PK 不变。验收工具场景改为显式设置两开关（A–D 含义不随正式默认变化），新增 F（=新正式配置）。本地正式未签名 **12,707,995 bytes**（SHA 155ee43a…，−45.94%），四 ABI、8 库 DEFLATED 且与 P0 字节一致、extractNativeLibs=true、三个命名 JSON SHA 与源码一致、check_release_manifest PASS（无 INTERNET）。下一步：CI（android.yml + release-acceptance A–F）全绿后出 Universal 正式签名包。
+用户要求采用第 1 项并加做第 4 项。`app/build.gradle.kts` release：`isShrinkResources = true` + `packaging { jniLibs { useLegacyPackaging = true } }`；R8/签名/版本/Schema/PK 不变。验收工具场景改为显式设置两开关（A–D 含义不随正式默认变化），新增 F（=新正式配置）。本地正式未签名 **12,707,995 bytes**（SHA 155ee43a…，−45.94%），四 ABI、8 库 DEFLATED 且与 P0 字节一致、extractNativeLibs=true、三个命名 JSON SHA 与源码一致、check_release_manifest PASS（无 INTERNET）。CI befd56f：android.yml 三作业 success；release-acceptance 38055084985 中 **F（新正式配置）全部 PASS**（exact 6/6、functional 222+3、重启/拒绝通知/开机提醒恢复，SQLCipher 从解压目录加载，1004/1075 字符串一致），C/D PASS；A/E 失败是验收工具缺陷——init 脚本在插件应用时设置开关，被随后执行的 app/build.gradle.kts 新默认值覆盖（A 实际 shrink=true/legacy=true）；B functional 打包失败发生在同样被覆盖成 F 配置时，F 同配置构建正常，按偶发记录、待复跑确认。已改为 finalizeDsl 设置并在条件不符时直接构建失败。下一步：复跑全绿后出 Universal 正式签名包。
 
 ---
 

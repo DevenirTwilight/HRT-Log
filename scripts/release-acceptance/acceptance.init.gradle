@@ -40,13 +40,18 @@ allprojects { p ->
         android.testBuildType = 'release'
         android.buildTypes.getByName('release') { bt ->
             bt.signingConfig = android.signingConfigs.getByName('debug')
-            bt.shrinkResources = shrink
             bt.proguardFile(new File(acceptanceDir, 'test-support-keep.pro'))
             if (mode == 'functional') bt.proguardFile(new File(acceptanceDir, 'functional-keep.pro'))
             bt.testProguardFile(new File(acceptanceDir, 'test-apk.pro'))
         }
-        if (arm64) { android.defaultConfig.ndk.abiFilters.clear(); android.defaultConfig.ndk.abiFilters.add('arm64-v8a') }
-        android.packaging.jniLibs.useLegacyPackaging = compressedNative
+        // finalizeDsl runs after app/build.gradle.kts, so the scenario wins over the production defaults
+        // (since 2026-10-10 production itself shrinks resources and compresses native libraries).
+        p.extensions.getByName('androidComponents').finalizeDsl { dsl ->
+            dsl.buildTypes.getByName('release').shrinkResources = shrink
+            dsl.packaging.jniLibs.useLegacyPackaging = compressedNative
+            dsl.defaultConfig.ndk.abiFilters.clear()
+            if (arm64) dsl.defaultConfig.ndk.abiFilters.add('arm64-v8a')
+        }
         def androidTest = android.sourceSets.getByName('androidTest')
         androidTest.java.srcDir(p.file('src/releaseAcceptanceTest/exact'))
         androidTest.assets.srcDir(new File(generated, 'assets'))
@@ -86,6 +91,9 @@ allprojects { p ->
             p.tasks.register('printReleaseAcceptanceConditions') {
                 doLast {
                     def r = android.buildTypes.getByName('release')
+                    def abis = android.defaultConfig.ndk.abiFilters.toList().sort()
+                    if (r.shrinkResources != shrink || android.packaging.jniLibs.useLegacyPackaging != compressedNative || abis != (arm64 ? ['arm64-v8a'] : []))
+                        throw new GradleException("Scenario ${scenario} not applied: shrink=${r.shrinkResources} legacy=${android.packaging.jniLibs.useLegacyPackaging} abi=${abis}")
                     println "HRT_ACCEPTANCE_CONDITIONS scenario=${scenario} mode=${mode} minify=${r.minifyEnabled} shrinkResources=${r.shrinkResources} " +
                         "abiFilters=${android.defaultConfig.ndk.abiFilters.toList().sort()} testBuildType=${android.testBuildType} " +
                         "signing=${r.signingConfig?.name} proguard=${r.proguardFiles.collect { it.name }} useLegacyPackaging=${android.packaging.jniLibs.useLegacyPackaging}"
