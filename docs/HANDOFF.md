@@ -1,6 +1,6 @@
 # F1 修复：导航抽屉可滚动（2026-10-10）
 
-用户要求修复 P1 发现的 F1。`AppShell.kt` 抽屉内容抽成 `DrawerContent`（行为不变：同样的条目/分隔线/选中/点击后关闭抽屉，VISITS 仍清空 visitId），外层 Column 加 `verticalScroll(rememberScrollState())`。新增 `app/src/test/java/net/plainnotes/app/DrawerScrollUiTest.kt`（Robolectric w320dp-h480dp，普通与 fontScale 2.0）：滚动到并点击“设置”“关于”。本地：修复后 2/2 通过；临时去掉 verticalScroll 后 2/2 失败（no parent layout with a Scroll SemanticsAction），已恢复；PeriodStability 5/5 通过。未改数据库/PK/版本/权限/签名，不出新 APK（已交付的 ARM64 包不含此修复）。全量 app 单测/lint/设备测试以推送后的 CI 为准；另手动触发 release-acceptance 复核四语抽屉遍历。
+用户要求修复 P1 发现的 F1。`AppShell.kt` 抽屉内容抽成 `DrawerContent`（行为不变：同样的条目/分隔线/选中/点击后关闭抽屉，VISITS 仍清空 visitId），外层 Column 加 `verticalScroll(rememberScrollState())`。新增 `app/src/test/java/net/plainnotes/app/DrawerScrollUiTest.kt`（Robolectric w320dp-h480dp，普通与 fontScale 2.0）：滚动到并点击“设置”“关于”。本地：修复后 2/2 通过；临时去掉 verticalScroll 后 2/2 失败（no parent layout with a Scroll SemanticsAction），已恢复；PeriodStability 5/5 通过。未改数据库/PK/版本/权限/签名，不出新 APK（已交付的 ARM64 包不含此修复）。CI 38048308989：android（app 单测/lint）与 device-tests success；release-acceptance 38048312640 的 x86_64 A/B 全阶段 success（四语抽屉遍历已通过）。jvm 作业的“冻结 P2 研究”步骤因 production-baseline.json 锁定 AppShell.kt 哈希而失败；按用户选择新增追加式 `docs/pk-research/p2/protocol-deviations.json`（PD-2026-10-10-F1，旧→新哈希），`check_protocol.py` 只对其中登记、且属于 app/.../ui/ 非 Conc/Lab/Chart 文件的精确哈希变化放行；production-baseline.json、protocol-lock.json、协议正文未改。研究回归 168 项通过。
 
 ---
 

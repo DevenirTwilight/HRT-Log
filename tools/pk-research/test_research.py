@@ -121,6 +121,28 @@ class EvidenceGuardTest(unittest.TestCase):
                 data=json.loads((p/'evidence-catalog.json').read_text());data['records'][0][key]=value
                 (p/'evidence-catalog.json').write_text(json.dumps(data))
                 with self.assertRaises(ValueError):guard.check(p)
+    def _copy(self,directory):
+        p=Path(directory)
+        for f in P2.glob('*'):
+            if f.is_file():shutil.copy(f,p/f.name)
+        return p
+    def test_deviation_must_match_both_hashes_exactly(self):
+        with tempfile.TemporaryDirectory() as directory:
+            p=self._copy(directory);data=json.loads((p/'protocol-deviations.json').read_text())
+            data['deviations'][0]['new_sha256']='0'*64;(p/'protocol-deviations.json').write_text(json.dumps(data))
+            with self.assertRaises(ValueError):guard.check(p)
+        with tempfile.TemporaryDirectory() as directory:
+            p=self._copy(directory);(p/'protocol-deviations.json').unlink()
+            with self.assertRaises(ValueError):guard.check(p)
+    def test_pk_or_non_ui_files_can_never_be_waived(self):
+        baseline=json.loads((P2/'production-baseline.json').read_text())['files']
+        for name in ['pk-engine/src/main/resources/pk-params.json','app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt','core/data/src/main/java/net/plainnotes/app/data/Migrations.kt']:
+            if name not in baseline: continue
+            with tempfile.TemporaryDirectory() as directory:
+                p=self._copy(directory);data=json.loads((p/'protocol-deviations.json').read_text())
+                data['deviations'].append({'file':name,'baseline_sha256':baseline[name],'new_sha256':'1'*64,'pk_relevant':False})
+                (p/'protocol-deviations.json').write_text(json.dumps(data))
+                with self.assertRaises(ValueError):guard.waiver(p,name,baseline[name],'1'*64)
     def test_forged_protocol_sha_fails(self):
         with tempfile.TemporaryDirectory() as directory:
             p=Path(directory)
