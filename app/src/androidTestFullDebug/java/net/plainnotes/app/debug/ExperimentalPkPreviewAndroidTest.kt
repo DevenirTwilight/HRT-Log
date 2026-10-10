@@ -32,7 +32,9 @@ class ExperimentalPkPreviewAndroidTest {
         ui.onNodeWithTag("xpk-coverage-mixed").assertExists()
         assertEquals(0, ui.onAllNodes(hasText("pg/mL", substring = true, ignoreCase = true)).fetchSemanticsNodes().size)
         ui.onNodeWithTag("experimental-pk").performScrollToNode(hasTestTag("xpk-back"))
+        // Capture the activity first: once Back finishes it, the rule can no longer hand it out.
+        val activity = ui.activity
         ui.onNodeWithTag("xpk-back").performClick()
-        ui.waitUntil(10_000) { ui.activity.isFinishing }
+        ui.waitUntil(10_000) { activity.isFinishing || activity.isDestroyed }
     }
 }
