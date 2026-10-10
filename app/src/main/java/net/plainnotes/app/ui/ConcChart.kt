@@ -47,6 +47,8 @@ class ChartData(
     val breaks:DoubleArray = doubleArrayOf(),
     /** Optional query-local model evaluation. Invoked on Default, outside Canvas, with cancellation. */
     val readAt:((Double,()->Unit)->Double?)? = null,
+    /** Optional research-only secondary dimensionless shape; do not supply with clinical bands. */
+    val comparisonY: DoubleArray? = null,
 )
 
 private fun niceStep(span: Double, target: Int): Double {
@@ -137,6 +139,18 @@ private fun niceStep(span: Double, target: Int): Double {
                 }
                 drawPath(solid, line, style = Stroke(width = 2.5.dp.toPx(), cap = StrokeCap.Round, join = StrokeJoin.Round))
                 drawPath(dashed, line.copy(alpha = 0.75f), style = Stroke(width = 2.dp.toPx(), cap = StrokeCap.Round, pathEffect = PathEffect.dashPathEffect(floatArrayOf(14f, 10f))))
+                data.comparisonY?.takeIf { it.size == data.x.size }?.let { alternate ->
+                    val alternatePath = Path()
+                    for (segment in ChartViewport.segmentSamples(data.x,alternate,start,end,breaks=data.breaks)) {
+                        var first = true
+                        for ((x,y) in segment) {
+                            val p = Offset(px(x), py(y))
+                            if (first) { alternatePath.moveTo(p.x,p.y); first=false }
+                            else alternatePath.lineTo(p.x,p.y)
+                        }
+                    }
+                    drawPath(alternatePath, c.secondary, style = Stroke(width = 2.dp.toPx(), cap = StrokeCap.Round, join = StrokeJoin.Round))
+                }
                 data.splitX?.takeIf { it in start..end }?.let { drawLine(nowColor.copy(alpha = 0.7f), Offset(px(it), topPad), Offset(px(it), topPad + h), 1.5f, pathEffect = PathEffect.dashPathEffect(floatArrayOf(4f, 6f))) }
                 data.points.forEach { (x, y) -> if (x in start..end) { drawCircle(Color.White, 6.dp.toPx(), Offset(px(x), py(y))); drawCircle(labColor, 4.5.dp.toPx(), Offset(px(x), py(y))) } }
                 tapX?.let { tx ->
