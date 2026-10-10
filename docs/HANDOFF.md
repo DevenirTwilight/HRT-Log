@@ -1,3 +1,11 @@
+# P2-AR 统一血药浓度页面与 M2 定量比较（2026-10-10，进行中）
+
+分支 `p2ar/unified-concentration-comparison`（基于 PR #2 头 `cd56688`）。要求见 REQUIREMENTS §57，审计与设计见 `docs/design/p2ar-unified-concentration.md`。
+- [x] Stage A 审计：受保护文件不改；入口路由补丁只提交草案，等负责人批准。Price 1997 幅度可从冻结数据逐个候选重算：40 行与冻结 CSV `Price_model_auc` 一致，相对差 ≤ 7e-16。
+- [ ] Stage B 计算层与图表；[ ] Stage C 统一页面；[ ] Stage D 文献锚定情景；[ ] Stage E 回归与交付。
+
+---
+
 # M2 实验页正式签名 universal APK 已私有交付（2026-10-10）
 
 用户在 A–F 全部通过后要求"给我apk"。源码 `ae30b27`（应用代码与 A–F 全过的 `cfc494d` 完全相同），按现行正式配置构建（R8、资源裁剪、压缩原生库、四 ABI），Build25/0.2.0/Schema9 不变。未签名 12,759,483 bytes（SHA `2f1599dc…`）。核实签名备份仓库仍为 Private 后，用 `scripts/sign_local_apk.sh` 在受限临时目录签名，证书 `989ba045…79b1` 校验通过，临时凭据已删除。成品 `hrt-log-build25-full-universal-compact-m2-official-ae30b27.apk` 12,802,932 bytes，SHA-256 `f17251249ba5b65a4ffd559ae65ebf08a6b28c803fe9c0c037c5b64d318ced17`；v2/v3、16KB zipalign 通过，四 ABI、原生库 DEFLATED，无 INTERNET，权限与前一版相同。通过会话私有文件发送，未入 Git/Release/公开 CI；PR #2 仍为 Draft 未合并。覆盖安装前先导出加密备份，只接受"更新"，不要卸载或清数据。
