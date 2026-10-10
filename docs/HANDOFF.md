@@ -1,4 +1,4 @@
-# M2 实验药代模型集成（2026-10-10，Draft PR 待审，入口阻塞）
+# M2 实验药代模型集成（2026-10-10，Draft PR #2 待审，入口阻塞）
 
 分支 `ccr-8cffa954-5gedc0`（基于 `f69d892`，未动 `claude/new-session-1959qb`）。要求见 REQUIREMENTS §55；审计、实现、验收与 APK 体积见 `docs/design/experimental-m2-integration.md`。
 - [x] 阶段 A 审计：历史线性；研究分支 17 个新文件原样导入（blob 一致）。用户上传的离线研究包核对：计算核与 PR #1 逐字节一致；P2-AF/AG/AJ/AK 结论只用于页面标注。
@@ -8,6 +8,8 @@
 - **阻塞（需产品负责人决定）**：正式 App 入口需要改 P2 锁定的 `AppShell.kt`；补丁草案 `docs/design/experimental-m2-entry.patch`，三种处理方式见设计文档"入口"一节。在决定前，Release 中实验页不可达（R8 已移除其代码）。
 - 本地工具都在仓库外（`/home/user/android-sdk`、`/home/user/robolectric`），会话结束即丢失；离线研究包未入库。
 
+- [x] CI `83f8b09`：jvm / android / device-tests 全部成功。release-acceptance 首次在构建步骤失败（Debug 专用测试编进 Release 测试 APK，研究分支原有问题），`2f109f1` 移到 `androidTestFullDebug` 后本地 F 场景 exact/functional 可构建；已重新触发 run 38067123854，结果待记录。
+- [x] Draft PR：https://github.com/DevenirTwilight/HRT-Log/pull/2（base `claude/new-session-1959qb`，不合并、不发布）。下一步：记录 2f109f1 及之后的 CI / release-acceptance 结果；等负责人对入口做协议决定。
 ---
 
 # 正式配置改为“压缩原生库 + 资源裁剪”（2026-10-10，已验收并交付）
