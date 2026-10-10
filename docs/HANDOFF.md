@@ -1,12 +1,12 @@
-# M2 实验药代模型集成（2026-10-10，进行中）
+# M2 实验药代模型集成（2026-10-10，Draft PR 待审，入口阻塞）
 
-分支 `ccr-8cffa954-5gedc0`（基于 `f69d892`，不动 `claude/new-session-1959qb`）。要求见 REQUIREMENTS §55，审计与设计见 `docs/design/experimental-m2-integration.md`。
-- [x] 阶段 A 审计：浅克隆导致的"forced update"已核实为假象，历史线性；研究分支净差异只有 17 个新文件。**阻塞**：`app/src/main` 现有文件全部被 P2 哈希锁定，正式 App 的入口（`AppShell.kt` 导航项）需要产品负责人做协议决定；本分支不改任何被锁文件。
-- [x] 研究文件原样导入（17 个，逐个核对 blob 一致），`check_protocol.py` 通过，Python 研究测试 172 项通过。
-- [ ] 阶段 B：计算入口、适配器排除计数、独立页面与四语资源、测试。
-- [ ] 阶段 C：本地 JVM/Android 单测/lint/Debug/Release、APK 体积对比；CI。
-- [ ] 阶段 D：Draft PR。
-- 本地 Android SDK 装在仓库外 `/home/user/android-sdk`（会话结束即丢失）。用户上传的研究材料包只在会话临时目录，未入库。
+分支 `ccr-8cffa954-5gedc0`（基于 `f69d892`，未动 `claude/new-session-1959qb`）。要求见 REQUIREMENTS §55；审计、实现、验收与 APK 体积见 `docs/design/experimental-m2-integration.md`。
+- [x] 阶段 A 审计：历史线性；研究分支 17 个新文件原样导入（blob 一致）。用户上传的离线研究包核对：计算核与 PR #1 逐字节一致；P2-AF/AG/AJ/AK 结论只用于页面标注。
+- [x] 阶段 B：`ExperimentalSlModelView`（pk-engine）、适配器排除计数、`ExperimentalPkScreen` + 四语独立资源、Debug 合成宿主、`scripts/check_experimental_release.py`（CI 已加）。**没有修改任何 P2 锁定文件**。
+- [x] 阶段 C 本地：pk 86、data 72、reminder 14、app 417（404 通过/13 原有跳过/0 失败，PeriodStability 5/5）、Python 172、lint 0 错误、Debug/Release 构建、两项 release 检查通过。Release 未签名 12,725,439 vs 基线 12,707,919（+17,520，仅资源表与元数据；原生库与 dex 内容不变）。
+- [x] CI 9290b8f：jvm、device-tests 成功（模拟器 68 项/2 跳过/0 失败，新 `ExperimentalPkPreviewAndroidTest` 已在报告中确认通过）；android 作业因 lint `StringFormatInvalid`（"95%"）失败，已在 83f8b09 修复，等待复跑。release-acceptance（A–F）已手动触发 run 38063999138。
+- **阻塞（需产品负责人决定）**：正式 App 入口需要改 P2 锁定的 `AppShell.kt`；补丁草案 `docs/design/experimental-m2-entry.patch`，三种处理方式见设计文档"入口"一节。在决定前，Release 中实验页不可达（R8 已移除其代码）。
+- 本地工具都在仓库外（`/home/user/android-sdk`、`/home/user/robolectric`），会话结束即丢失；离线研究包未入库。
 
 ---
 
