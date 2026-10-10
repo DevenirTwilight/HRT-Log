@@ -11,16 +11,33 @@ def digest(path):
 # Only plain UI files may be waived; PK, concentration/lab display, data, resources and old evidence stay strictly locked.
 WAIVABLE_PREFIX = 'app/src/main/java/net/plainnotes/app/ui/'
 NEVER_WAIVABLE = ('Conc', 'Lab', 'Chart')
+# The ONLY PK-relevant deviation the product owner has approved (2026-10-10, REQUIREMENTS §56): the navigation entry of the
+# opt-in experimental M2 page in AppShell.kt. Exact file and exact hashes; not a category other files or later edits can use.
+APPROVED_PK_DEVIATION = {
+    'id': 'PD-2026-10-10-M2-ENTRY',
+    'file': 'app/src/main/java/net/plainnotes/app/ui/AppShell.kt',
+    'category': 'navigation_wiring_only',
+    'baseline_sha256': 'b8df023f82e9fae4906d7f14b48095cb182030f8b73137cfa04d74f7e027cf84',
+    'previous_sha256': '00f2c2838abc1e6982e0736a4493d871203362d3c2a37f430fd62168a0c51c02',
+    'new_sha256': '9f7658e768b0867cac523325d8eeb10fbe57f40e220d0b4d66ba8a05940809ed',
+}
 def waiver(directory, name, expected, actual):
     path = directory / 'protocol-deviations.json'
     if not path.exists():
         return None
-    for d in json.loads(path.read_text())['deviations']:
+    deviations = json.loads(path.read_text())['deviations']
+    for d in deviations:
         if d['file'] != name:
             continue
-        leaf = name.rsplit('/', 1)[-1]
-        if not name.startswith(WAIVABLE_PREFIX) or any(word in leaf for word in NEVER_WAIVABLE) or d.get('pk_relevant') is not False:
-            raise ValueError('Deviation not allowed for PK-relevant or non-UI file: ' + name)
+        if d.get('pk_relevant') is True:
+            # Every field must equal the single approved entry, and it must extend a registered non-PK state of the file.
+            if any(d.get(k) != v for k, v in APPROVED_PK_DEVIATION.items()) or not any(
+                    e is not d and e['file'] == name and e.get('pk_relevant') is False and e['new_sha256'] == d['previous_sha256'] for e in deviations):
+                raise ValueError('PK-relevant deviation is not the approved M2 navigation entry: ' + name)
+        else:
+            leaf = name.rsplit('/', 1)[-1]
+            if not name.startswith(WAIVABLE_PREFIX) or any(word in leaf for word in NEVER_WAIVABLE) or d.get('pk_relevant') is not False:
+                raise ValueError('Deviation not allowed for PK-relevant or non-UI file: ' + name)
         if d['baseline_sha256'] == expected and d['new_sha256'] == actual:
             return d
     return None

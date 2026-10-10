@@ -143,6 +143,77 @@ class EvidenceGuardTest(unittest.TestCase):
                 data['deviations'].append({'file':name,'baseline_sha256':baseline[name],'new_sha256':'1'*64,'pk_relevant':False})
                 (p/'protocol-deviations.json').write_text(json.dumps(data))
                 with self.assertRaises(ValueError):guard.waiver(p,name,baseline[name],'1'*64)
+    def _production_copy(self,directory):
+        """Temporary repository root holding the P2 directory and every hash-locked production file."""
+        root=Path(directory);p2=root/'docs/pk-research/p2';p2.mkdir(parents=True)
+        for f in P2.glob('*'):
+            if f.is_file():shutil.copy(f,p2/f.name)
+        for name in json.loads((P2/'production-baseline.json').read_text())['files']:
+            (root/name).parent.mkdir(parents=True,exist_ok=True);shutil.copy(guard.ROOT/name,root/name)
+        return root,p2
+    def _add_deviation(self,p2,entry):
+        data=json.loads((p2/'protocol-deviations.json').read_text());data['deviations'].append(entry)
+        (p2/'protocol-deviations.json').write_text(json.dumps(data))
+    def test_approved_m2_entry_passes_on_an_exact_copy(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root,p2=self._production_copy(directory);guard.check(p2,root)
+    def test_pk_core_chart_parameters_and_evidence_stay_locked_despite_the_m2_entry(self):
+        approved=guard.APPROVED_PK_DEVIATION
+        for name in ['app/src/main/java/net/plainnotes/app/conc/ConcentrationCalculator.kt','pk-engine/src/main/kotlin/net/plainnotes/app/pk/Engine.kt',
+                     'app/src/main/java/net/plainnotes/app/ui/ConcChart.kt','app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt',
+                     'pk-engine/src/main/resources/pk-params.json','pk-engine/src/main/kotlin/net/plainnotes/app/pk/FittedModels.kt',
+                     'docs/pk-research/results/sublingual-p0-report.json','docs/pk-research/results/sublingual-p1c2-report.md']:
+            for forged in [None,'pk_relevant_true','pk_relevant_false']:
+                with tempfile.TemporaryDirectory() as directory:
+                    root,p2=self._production_copy(directory)
+                    baseline=json.loads((p2/'production-baseline.json').read_text())['files'][name]
+                    with open(root/name,'ab') as f:f.write(b'\n')
+                    if forged:
+                        entry=dict(approved,file=name,new_sha256=guard.digest(root/name),baseline_sha256=baseline,pk_relevant=forged=='pk_relevant_true')
+                        self._add_deviation(p2,entry)
+                    with self.assertRaises(ValueError,msg=f'{name} {forged}'):guard.check(p2,root)
+        # Frozen evidence inputs inside the P2 directory are still covered by the lock.
+        with tempfile.TemporaryDirectory() as directory:
+            root,p2=self._production_copy(directory)
+            (p2/'evidence-catalog.json').write_text((p2/'evidence-catalog.json').read_text()+' ')
+            with self.assertRaises(ValueError):guard.check(p2,root)
+    def test_m2_entry_is_exact_and_cannot_be_extended(self):
+        shell=guard.APPROVED_PK_DEVIATION['file']
+        # Any further change to AppShell.kt is outside the approval.
+        with tempfile.TemporaryDirectory() as directory:
+            root,p2=self._production_copy(directory)
+            with open(root/shell,'ab') as f:f.write(b'\n')
+            with self.assertRaises(ValueError):guard.check(p2,root)
+        # Altering any field of the registered entry, or dropping the registered previous state, is rejected.
+        for key,value in [('category','pk_ui'),('id','PD-other'),('new_sha256','1'*64),('previous_sha256','2'*64),('baseline_sha256','3'*64)]:
+            with tempfile.TemporaryDirectory() as directory:
+                root,p2=self._production_copy(directory)
+                data=json.loads((p2/'protocol-deviations.json').read_text())
+                for d in data['deviations']:
+                    if d.get('pk_relevant') is True:d[key]=value
+                (p2/'protocol-deviations.json').write_text(json.dumps(data))
+                with self.assertRaises(ValueError,msg=key):guard.check(p2,root)
+        with tempfile.TemporaryDirectory() as directory:
+            root,p2=self._production_copy(directory)
+            data=json.loads((p2/'protocol-deviations.json').read_text())
+            data['deviations']=[d for d in data['deviations'] if d.get('pk_relevant') is True]
+            (p2/'protocol-deviations.json').write_text(json.dumps(data))
+            with self.assertRaises(ValueError):guard.check(p2,root)
+        # The same approved fields reused for another UI file are rejected, even with matching hashes.
+        for other in ['app/src/main/java/net/plainnotes/app/ui/SettingsScreen.kt','app/src/main/java/net/plainnotes/app/ui/HistoryScreen.kt']:
+            with tempfile.TemporaryDirectory() as directory:
+                root,p2=self._production_copy(directory)
+                baseline=json.loads((p2/'production-baseline.json').read_text())['files'][other]
+                with open(root/other,'ab') as f:f.write(b'\n')
+                self._add_deviation(p2,dict(guard.APPROVED_PK_DEVIATION,file=other,pk_relevant=True,baseline_sha256=baseline,new_sha256=guard.digest(root/other)))
+                with self.assertRaises(ValueError,msg=other):guard.check(p2,root)
+    def test_baseline_and_lock_are_untouched_by_the_m2_entry(self):
+        lock=json.loads((P2/'protocol-lock.json').read_text())
+        self.assertEqual(lock['files']['production-baseline.json'],guard.digest(P2/'production-baseline.json'))
+        baseline=json.loads((P2/'production-baseline.json').read_text())['files']
+        self.assertEqual(baseline[guard.APPROVED_PK_DEVIATION['file']],guard.APPROVED_PK_DEVIATION['baseline_sha256'])
+        pk=[d for d in json.loads((P2/'protocol-deviations.json').read_text())['deviations'] if d.get('pk_relevant') is not False]
+        self.assertEqual([d['id'] for d in pk],['PD-2026-10-10-M2-ENTRY'])
     def test_forged_protocol_sha_fails(self):
         with tempfile.TemporaryDirectory() as directory:
             p=Path(directory)

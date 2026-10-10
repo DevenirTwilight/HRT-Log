@@ -11,6 +11,20 @@
    "reason": "P1 release acceptance finding F1: navigation drawer made scrollable (DrawerContent + verticalScroll) so Settings/About are reachable on short screens. Navigation UI only; no PK model, parameter, history, data or estimate code touched.",
    "authorized_by": "product owner, 2026-10-10 (chose: append deviation record and let the guard read it)",
    "commit": "d892e9b"
+  },
+  {
+   "id": "PD-2026-10-10-M2-ENTRY",
+   "date": "2026-10-10",
+   "file": "app/src/main/java/net/plainnotes/app/ui/AppShell.kt",
+   "category": "navigation_wiring_only",
+   "pk_relevant": true,
+   "baseline_sha256": "b8df023f82e9fae4906d7f14b48095cb182030f8b73137cfa04d74f7e027cf84",
+   "previous_sha256": "00f2c2838abc1e6982e0736a4493d871203362d3c2a37f430fd62168a0c51c02",
+   "new_sha256": "9f7658e768b0867cac523325d8eeb10fbe57f40e220d0b4d66ba8a05940809ed",
+   "reason": "Formal app entry for the opt-in experimental M2 sublingual E2 page (REQUIREMENTS §55/§56). Three navigation hunks only: a drawer destination labelled 'Experimental PK model', loading in-memory records when it opens, and routing to ExperimentalPkScreen with a back action to the concentration page. PK-relevant because it exposes a research PK view in the release app; it changes no PK model, parameter, calculator, chart, concentration page, record, snapshot, lab value or research evidence. M2 shows dimensionless relative responses only and does not replace the legacy pg/mL estimate.",
+   "diff": "diff --git a/app/src/main/java/net/plainnotes/app/ui/AppShell.kt b/app/src/main/java/net/plainnotes/app/ui/AppShell.kt\nindex 5b20ecc..5afa6de 100644\n--- a/app/src/main/java/net/plainnotes/app/ui/AppShell.kt\n+++ b/app/src/main/java/net/plainnotes/app/ui/AppShell.kt\n@@ -42,0 +43,2 @@ enum class Destination(val title: Int, val icon: ImageVector, val ready: Boolean\n+    // Opt-in research page (REQUIREMENTS §55); reads in-memory records only and never changes the concentration page.\n+    EXPERIMENTAL_PK(R.string.xpk_title, Icons.Outlined.Insights, true),\n@@ -126 +128 @@ class UiPrefs(context: Context) {\n-    LaunchedEffect(destination) { if (destination in listOf(Destination.CALENDAR, Destination.HISTORY, Destination.STOCK, Destination.WELLBEING, Destination.TIMELINE, Destination.VISITS)) model.loadExtra() }\n+    LaunchedEffect(destination) { if (destination in listOf(Destination.CALENDAR, Destination.HISTORY, Destination.STOCK, Destination.WELLBEING, Destination.TIMELINE, Destination.VISITS, Destination.EXPERIMENTAL_PK)) model.loadExtra() }\n@@ -177,0 +180 @@ class UiPrefs(context: Context) {\n+                Destination.EXPERIMENTAL_PK -> net.plainnotes.app.experimental.ExperimentalPkScreen(extra.records, state.ruleSnapshots, pad, { destination = Destination.CONCENTRATION })\n",
+   "authorized_by": "product owner, 2026-10-10: chose option 1 — a strictly scoped product-integration deviation for exactly the three AppShell.kt navigation hunks of docs/design/experimental-m2-entry.patch, recorded as pk_relevant=true; not a general waiver of the P2 freeze, not clinical validation of M2, not approval to replace the legacy model.",
+   "checker_rule": "tools/pk-research/check_protocol.py APPROVED_PK_DEVIATION: exact id, file, category and baseline/previous/new SHA-256; previous must be a registered non-PK state of the same file."
   }
  ]
 }
