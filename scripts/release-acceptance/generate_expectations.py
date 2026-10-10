@@ -116,7 +116,7 @@ def main():
     try: dirty = bool(subprocess.check_output(['git', 'status', '--porcelain'], cwd=root, text=True).strip())
     except Exception: dirty = None
     (out / 'assets/acceptance-condition.json').write_text(json.dumps({'scenario': args.scenario, 'mode': args.mode, 'source_sha': sha,
-        'worktree_dirty': dirty, 'resource_shrink': args.scenario in 'BD', 'abi_filter': ['arm64-v8a'] if args.scenario in 'CD' else [], 'compressed_native': args.scenario == 'E'}, indent=1))
+        'worktree_dirty': dirty, 'resource_shrink': args.scenario in 'BDF', 'abi_filter': ['arm64-v8a'] if args.scenario in 'CD' else [], 'compressed_native': args.scenario in 'EF'}, indent=1))
     ported = out / 'ported'
     if ported.exists():
         for f in sorted(ported.rglob('*.kt')): f.unlink()

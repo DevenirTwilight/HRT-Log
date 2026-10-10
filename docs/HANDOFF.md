@@ -1,3 +1,9 @@
+# 正式配置改为“压缩原生库 + 资源裁剪”（2026-10-10，验收中）
+
+用户要求采用第 1 项并加做第 4 项。`app/build.gradle.kts` release：`isShrinkResources = true` + `packaging { jniLibs { useLegacyPackaging = true } }`；R8/签名/版本/Schema/PK 不变。验收工具场景改为显式设置两开关（A–D 含义不随正式默认变化），新增 F（=新正式配置）。本地正式未签名 **12,707,995 bytes**（SHA 155ee43a…，−45.94%），四 ABI、8 库 DEFLATED 且与 P0 字节一致、extractNativeLibs=true、三个命名 JSON SHA 与源码一致、check_release_manifest PASS（无 INTERNET）。下一步：CI（android.yml + release-acceptance A–F）全绿后出 Universal 正式签名包。
+
+---
+
 # 体积实验 E：Universal + 压缩原生库（2026-10-10，x86_64 验收完成）
 
 用户要求实测“压缩原生库、保留 Universal”。验收工具新增场景 E（A + `packaging.jniLibs.useLegacyPackaging=true`，即 extractNativeLibs=true），exact 测试对 E 断言全部 lib/ 条目为 DEFLATED 且 SQLCipher 从解压目录加载，对 A–D 断言 STORED。源码 b6262c3 本地仅加该开关的未签名包 **13,025,314 bytes**（A 23,506,758，−10,481,444，−44.59%），四 ABI 8 个原生库解压后 SHA 与 P0 一致，manifest extractNativeLibs=true，ZIP 完整。正式配置未改。macOS arm64 软件 CPU 作业运行 60 分钟仍未启动完成（38043594012 C/A 失败），改为仅手动触发（arm64_tcg=true）。结果（运行 38052673701，7d1bea6）：E 在 x86_64 API35 全部 PASS（exact 6/6、functional 222/222+3 阶段项、重启/拒绝通知/开机提醒恢复），lib/ 全为 DEFLATED，SQLCipher 从解压目录加载；同轮 A（含 F1）全部通过。详见 P1 报告第 10 节。下一步：由用户决定是否把一行 `useLegacyPackaging = true` 写入正式配置并出正式包；ARM64 硬件与正式签名覆盖升级到 E 未测。

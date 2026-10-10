@@ -17,7 +17,10 @@ android {
     signingConfigs { getByName("debug") { storeFile = file("debug.keystore"); storePassword = "android"; keyAlias = "androiddebugkey"; keyPassword = "android" } }
     flavorDimensions += "distribution"
     productFlavors { create("full") { dimension = "distribution" } }
-    buildTypes { getByName("release") { isMinifyEnabled = true; proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro") } }
+    // 2026-10-10 (REQUIREMENTS §54, P1 scenario F): unused resources are removed and native libraries are stored deflated
+    // (extracted at install), keeping every ABI: universal APK ~23.5 MB -> ~12.7 MB. Verified by release acceptance.
+    buildTypes { getByName("release") { isMinifyEnabled = true; isShrinkResources = true; proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro") } }
+    packaging { jniLibs { useLegacyPackaging = true } }
     buildFeatures { compose = true }
 }
 kotlin { compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17) } }

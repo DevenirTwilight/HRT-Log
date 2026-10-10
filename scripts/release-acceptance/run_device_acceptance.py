@@ -147,7 +147,7 @@ def cold_restarts(run, label, entry, count=3):
 
 def main():
     a = argparse.ArgumentParser()
-    a.add_argument('--scenario', required=True, choices='ABCDE')
+    a.add_argument('--scenario', required=True, choices='ABCDEF')
     a.add_argument('--exact-app', required=True); a.add_argument('--exact-test', required=True)
     a.add_argument('--functional-app'); a.add_argument('--functional-test')
     a.add_argument('--out', required=True)

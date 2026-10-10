@@ -22,13 +22,15 @@
 def scenario = startParameter.projectProperties.get('hrtAcceptanceScenario')
 def mode = startParameter.projectProperties.get('hrtAcceptanceMode') ?: 'exact'
 if (scenario == null) return
-if (!(scenario in ['A', 'B', 'C', 'D', 'E'])) throw new GradleException("hrtAcceptanceScenario must be A, B, C, D or E")
+if (!(scenario in ['A', 'B', 'C', 'D', 'E', 'F'])) throw new GradleException("hrtAcceptanceScenario must be A-F")
 if (!(mode in ['exact', 'functional'])) throw new GradleException("hrtAcceptanceMode must be exact or functional")
-def shrink = scenario in ['B', 'D']
+def shrink = scenario in ['B', 'D', 'F']
 def arm64 = scenario in ['C', 'D']
 // E (2026-10-10): A plus compressed native libraries (packaging.jniLibs.useLegacyPackaging = true, i.e.
 // extractNativeLibs=true): universal ABIs kept, libraries deflated in the APK and extracted at install.
-def compressedNative = scenario == 'E'
+// F (2026-10-10): B + compressed native libraries = the production release configuration adopted on 2026-10-10.
+// Every scenario sets both switches explicitly, so A-D keep their P0 meaning whatever the production default is.
+def compressedNative = scenario in ['E', 'F']
 
 allprojects { p ->
     p.plugins.withId('com.android.application') {
@@ -38,13 +40,13 @@ allprojects { p ->
         android.testBuildType = 'release'
         android.buildTypes.getByName('release') { bt ->
             bt.signingConfig = android.signingConfigs.getByName('debug')
-            if (shrink) bt.shrinkResources = true
+            bt.shrinkResources = shrink
             bt.proguardFile(new File(acceptanceDir, 'test-support-keep.pro'))
             if (mode == 'functional') bt.proguardFile(new File(acceptanceDir, 'functional-keep.pro'))
             bt.testProguardFile(new File(acceptanceDir, 'test-apk.pro'))
         }
         if (arm64) { android.defaultConfig.ndk.abiFilters.clear(); android.defaultConfig.ndk.abiFilters.add('arm64-v8a') }
-        if (compressedNative) android.packaging.jniLibs.useLegacyPackaging = true
+        android.packaging.jniLibs.useLegacyPackaging = compressedNative
         def androidTest = android.sourceSets.getByName('androidTest')
         androidTest.java.srcDir(p.file('src/releaseAcceptanceTest/exact'))
         androidTest.assets.srcDir(new File(generated, 'assets'))
