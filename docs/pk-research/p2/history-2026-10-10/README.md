@@ -1,6 +1,6 @@
 # HRT Log 舌下 E2 药代研究进展总档案（P2-R → P2-AT）
 
-**归档日期：2026-10-10。** 本目录用于让研究进度在 GitHub 中按阶段阅读、审查和延续。它不是药物使用说明、人体预测准确性认证，也不授权替换正式 `pg/mL` 模型。
+**归档日期：2026-10-10；同日另行补研 P2-AA、P2-AR，并补录 P2-C 准入审查。** 本目录用于让研究进度在 GitHub 中按阶段阅读、审查和延续。它不是药物使用说明、人体预测准确性认证，也不授权替换正式 `pg/mL` 模型。
 
 ## 从哪里开始
 
@@ -9,6 +9,8 @@
 3. [本地独立科研包清单和 SHA-256](ARCHIVE_MANIFEST.md)：完整可重复研究包的来源记录，**不是声明这些 ZIP 已上传 GitHub**。
 4. [原始 P2-R 研究及证据门槛](../p2r-cross-study-evidence-upgrade-gates.md)；[P2 AB/AC 原版源到核复算](reports/p2-ac.md)。
 5. [正在评审的 PR #2](https://github.com/DevenirTwilight/HRT-Log/pull/2)：M2 实验页面工程集成；这与科学放行是两条独立工作流。
+
+**早期 P2-C 原本属于生产替换闸门，仍未实施**：参阅 [P2-C 准入审查补录](reports/p2-c.md)。本轮恢复缺号的研究方向，完成了 [P2-AA 预测函数量与跨研究误差补研](reports/p2-aa.md) 和 [P2-AR 真实 90min 配对测量信息量补研](reports/p2-ar.md)。两份是 **2026-10-10 新补做的解析研究**，不是当时原始报告；未读取个体原始 OSF Excel，未产生新人体外部验证。可执行复算：[Python 程序](../../../../tools/pk-research/p2_missing_stages_reanalysis.py) 与 [单测](../../../../tools/pk-research/test_p2_missing_stages.py)。
 
 ## 逐阶段完整索引
 
@@ -23,7 +25,7 @@
 | **X** | [40 组候选 / 15 套近优 M2](reports/p2-x.md) | 完整报告；实际 Kotlin 核另见 PR #1/#2 |
 | **Y** | [跨研究限制与新候选](reports/p2-y.md) | 完整报告 |
 | **Z** | [未知给药时钟与鲁棒性](reports/p2-z.md) | 完整报告 |
-| **AA** | [编号核验说明](P2-AA-AND-AR-STATUS.md) | **本次未找到独立编号为 AA 的可核验完成报告**；不可虚构 |
+| **AA** | [预测函数量与跨研究误差分解（新补研）](reports/p2-aa.md) | 从历史提案恢复方向；完成解析与已见组级 Legacy RMSE 复算，非原始历史成果 |
 | **AB** | [M2 Kotlin 核数学不变量](reports/p2-ab.md) | 完整文档，来源 PR #2 |
 | **AC** | [P2-X 到 Kotlin 源码一致性](reports/p2-ac.md) | 完整文档，来源 PR #2 |
 | **AD** | [基线与长尾可辨识性](reports/p2-ad.md) | 完整报告 |
@@ -40,11 +42,11 @@
 | **AO** | [公开人体数据来源发现](reports/p2-ao.md) | 安全摘要；数据共享声明不能当文件已取得 |
 | **AP** | [OSF 官方网页/API访问记录](reports/p2-ap.md) | 安全摘要；**历史性访问受阻**，已由 AQ 更新 |
 | **AQ** | [VNC54 / TCRUW 实际 Excel 审计](reports/p2-aq.md) | 脱敏聚合摘要；实际读取个体 E2，但没有合格全时程外测 |
-| **AR** | [编号核验说明](P2-AA-AND-AR-STATUS.md) | **曾提出研究设想，本次未找到已完成的独立交付记录** |
+| **AR** | [90min 真实配对数据可辨识性（新补研）](reports/p2-ar.md) | 完成解析性相容条件和合成反例；未重新拟合真实个体；与工程 PR #3 分开 |
 | **AS** | [正式 Legacy E2_SL 参数与人体曲线审计](reports/p2-as.md) | 安全摘要；验证旧计算核≠临床准确 |
 | **AT** | [正式 Legacy 与 M2 的直接形状对比](reports/p2-at.md) | 研究结论摘要；M2 在已见组级数据上拟合更好，尚非独立胜利 |
 
-说明：此表保留 **每个编号的可核查状态**，未把空缺的 AA/AR 或前期企划误写为已完成。P2-D–Q 等更早的研究继续在仓库既有 `docs/pk-research/p2/` 中，不因本目录而废弃。
+说明：本表区分**历史已完成研究**与 **2026-10-10 新补研**。AA/AR 的原始历史完成档案仍未找回，不将新研究伪称为历史交付；C 属于仍未实施的投产闸门。P2-D–Q 等更早的研究继续在仓库既有 `docs/pk-research/p2/` 中，不因本目录而废弃。
 
 ## 当前关键科研判断
 
@@ -60,7 +62,7 @@
 - 正式开发基线 `claude/new-session-1959qb` 记录 SHA `f69d892d47ca64250db7b35eb95c5e1d0f8a01d8`。
 - [PR #1](https://github.com/DevenirTwilight/HRT-Log/pull/1)：早期实验模型 v0.1，Draft。
 - [PR #2](https://github.com/DevenirTwilight/HRT-Log/pull/2)：集成 M2 实验页及受审的 `AppShell.kt` 导航接线偏离 `PD-2026-10-10-M2-ENTRY`，Draft。审计时 PR head `cd56688e36c4dccaceab4be814773c562ef862cc`。Release A–F 曾通过并记录，**最新一轮设备 CI 曾出现失败，应以 PR 实时结果重新核对**，不能把早期绿灯当新提交绿灯。
-- 本总档案是**文档专用独立分支**；没有改动 `Engine.kt`、`pk-params.json`、数据库、APK、P2 原始锁定协议或 PR #1/#2。
+- 本总档案的原 PR #4 是**文档专用独立分支**；新补研位于其上方的独立分支，额外包含只读 Python 研究复算与测试，未改动 `Engine.kt`、`pk-params.json`、数据库、APK、P2 原始锁定协议或 PR #1/#2。
 
 ## 内容收录边界
 
