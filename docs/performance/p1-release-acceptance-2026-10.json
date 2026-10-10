@@ -1508,5 +1508,24 @@
    "macos-15": "runner=macos-15\nDarwin sjc22-bt145-a2d05e77-9dba-4d2f-8cd3-66a8306b74b5-D64BF3354D4B.local 24.6.0 Darwin Kernel Version 24.6.0: Tue Jul 21 20:51:34 PDT 2026; root:xnu-11417.140.69.711.44~1/RELEASE_ARM64_VMAPPLE arm64\nmachine=arm64\nhv_support=sysctl: unknown oid 'kern.hv_support'\nApple M1 (Virtual)\n1\nrepository_download_exit=0\nemulator_archive linux x64 emulator-linux_x64-16489710.zip\nemulator_archive macosx x64 emulator-darwin_x64-16489710.zip\nemulator_archive macosx aarch64 emulator-darwin_aarch64-16489710.zip\nemulator_archive windows x64 emulator-windows_x64-16489710.zip\naccel:\n0\nHypervisor.Framework OS X Version 15.7\naccel\naccel_check_exit=0\n",
    "ubuntu-24.04-arm": "runner=ubuntu-24.04-arm\nLinux runnervmy3dvn 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:12:01 UTC 2026 aarch64 aarch64 aarch64 GNU/Linux\nmachine=aarch64\nkvm=absent\nFeatures\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm jscvt fcma lrcpc dcpop sha3 sm3 sm4 asimddp sha512 sve asimdfhm uscat ilrcpc flagm sb paca pacg dcpodp sve2 sveaes svebitperm svesha3 svesm4 flagm2 frint svei8mm svebf16 i8mm bf16\nkvm\nrepository_download_exit=0\nemulator_archive linux x64 emulator-linux_x64-16489710.zip\nemulator_archive macosx x64 emulator-darwin_x64-16489710.zip\nemulator_archive macosx aarch64 emulator-darwin_aarch64-16489710.zip\nemulator_archive windows x64 emulator-windows_x64-16489710.zip\n"
   }
+ },
+ "user_device_check": {
+  "date": "2026-10-10",
+  "apk_sha256": "80268747c4b5ee500e5916b51d34aa24ea7b52e1aa444e1d4f6cf9a8fbe02dff",
+  "scenario": "C official signed",
+  "status": "PASS (manual, user-reported, single device; model/OS not recorded)",
+  "checked": [
+   "unlock",
+   "existing records/stock/labs present after over-install from universal",
+   "reminder fired",
+   "disguise entry",
+   "encrypted backup export"
+  ],
+  "not_covered": [
+   "D",
+   "arm64->universal reinstall",
+   "other ARM64 devices",
+   "automated assertions on hardware"
+  ]
  }
 }
