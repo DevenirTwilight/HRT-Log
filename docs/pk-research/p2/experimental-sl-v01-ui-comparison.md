@@ -1,40 +1,53 @@
-# Experimental sublingual shape comparison — opt-in UI and data boundaries
+# Experimental SL PK v0.1 — DEBUG-only sandbox (not production UI)
 
-**Scope:** HRT Log `research/experimental-sl-v01` (Draft PR #1). This is an exploratory engineering feature; it does not establish a new clinical estradiol exposure predictor.
+**Status:** Research-only, Draft PR #1. No individual E2 concentration accuracy or clinical validation claim.
 
-## Why the research chart cannot simply overlay the ordinary chart
+## Protocol and production safety
 
-The production concentration page shows modeled estradiol in **pg/mL** with existing lab fitting and Monte Carlo bands. Experimental M2 shapes are *dimensionless* and normalized by construction to `h(1 hour)=1`. Any automatic conversion of those M2 relative shapes into personal pg/mL would require unsupported assumptions about the individual effective dose gain, baseline, assay, swallowed fraction and body weight. A clinical concentration comparison would therefore be misleading.
+The P2 frozen research protocol hashes the existing `ConcentrationCalculator.kt`, `ConcentrationScreen.kt`, `ConcChart.kt`, `ChartViewport.kt`, app string resources and other production files (see `production-baseline.json`). The first UI implementation attempted to add a research panel to the existing concentration page; GitHub CI correctly rejected modifications to these frozen files.
 
-Instead this PR introduces a **separate, default-collapsed section** below the unchanged official E2 chart. It is shown only when verified sublingual E2 history exists; opening the panel explicitly triggers a local research comparison. No back-end, server, network or persistence is used.
+We **did not weaken, disable or update the protocol hashes**. All those files, and `ConcentrationCalculatorTest.kt`, have been restored byte-for-byte to the branch baseline. A research UI embedded in the production page is therefore **not authorized on this P2-isolated research branch**. It will require a separate reviewed engineering/protocol decision in the future.
 
-## Exact semantics
+## What was implemented instead
 
-1. The **separate** `ResearchHistoricalSlAdapter` reads immutable record snapshots and independently applies the production calculator's public missing-input checks plus stricter historical `ON_TIME/LATE`, undeleted, documented actual-dose, SL/E2/ester/tier, and temporal gates. It does **not** modify `ConcentrationCalculator.kt`, `ConcentrationResult` or historical records. All eligible events are reconstructed as ephemeral `r...`-identified `DoseEvent` values, **only after a user opens the research panel**. Future scheduled events, oral E2, EV sublingual, patches, all other compounds and labs do not enter the research input. This is a separate, testable implementation of the same qualification rules, not a shared production result; future changes to the production eligibility rules must be tested for parity.
-2. The optional model-comparison helper uses a last-**48 hour** display window and up to **30 days of earlier accepted SL E2 history** to include legacy residuals and slow modeled absorption. It explicitly reports the count of doses excluded for being older. It never silently asserts zero concentration outside that truncated history.
-3. The **legacy curve** is calculated with `Engine.simulate` for the filtered recorded SL E2 doses, including the legacy tier-dependent mucosal/swallowed calculation. It is divided by the same engine's response at 1 hour following a **synthetic 1mg SL reference at the latest historical dose's tier**. This factor is used only within this research view; the official engine and clinical chart are not renormalized or updated.
-4. The **M2 curve** uses the *same* recorded dose timestamps and mg amounts in `ResearchSublingualV01.relativeHistory`, normalized by that candidate's own 1mg-at-1h fast+slow response. **M2 does not model hold time, swallowed dose fraction, or measured bioavailability**. Thus the comparison is about conditional timing/shape, not individual serum concentration, equal bioavailability, or calibrated level accuracy.
-5. The researcher manually selects one of **five hypothetical Price Figure 1 baselines: 0, 6, 12, 18, 24 pg/mL**, a study-level *assumption*, not a user baseline. One identifiable candidate (minimum exposed-data pseudoloss, then ID) from that stratum is rendered as a **coherent full curve**. The app names the candidate ID and number of candidate rows in the group; these row counts are not human frequencies or probabilities.
-6. Both curves use the **same dimensionless axis** but separate 1h reference factors. The legacy curve retains the chart's original primary color; the experimental M2 line uses the secondary color. The ordinary `ConcChart` remains unchanged when optional `comparisonY=null`. A shared research viewport includes both curves in its scale to avoid clipping.
-7. All four supported translations (EN, FR, simplified and traditional Chinese) label the panel explicitly as nonclinical.
+A separate **Debug-variant-only** experimental Android Activity is registered exclusively through:
+- `app/src/debug/AndroidManifest.xml`
+- `app/src/debug/java/net/plainnotes/app/debug/ExperimentalSlComparisonActivity.kt`
 
-## What this implementation deliberately does not do
+Run it after installing the **debug APK**:
 
-- No selection of M2 for production concentration evaluation, prediction percentiles, calibration, symptom guidance, or treatment decisions.
-- No automatic forecast or q6/q12 clock imputation. Only actual **past** doses enter the research panel.
-- No other-route concentration contribution, endogenous background, lab normalization or personalized effective amplitude.
-- No database schema or persisted experimental preference, no new export field, no modified production PK parameter, **no change to the frozen production `ConcentrationCalculator.kt`**, and no signing/release configuration changes.
-- No inference that 15 candidate rows are independent cohorts or a posterior distribution.
-- The same named research baseline group can contain multiple candidates; the single displayed curve is a representative *according to the exposed-data pseudo-loss criterion*, not a most probable patient response.
+```sh
+adb shell am start -n net.plainnotes.app/.debug.ExperimentalSlComparisonActivity
+```
 
-## Verifications
+There is no production navigation entry and no corresponding release manifest activity. The exported component exists **only in Debug builds** and has no route to the personal HRT database or saved records.
 
-- `ResearchShapeComparisonV01Test`: valid route/analyte, original timestamps, reference normalization, future/planned omission, lookback count, hypothetical baseline group selection and rejection of unsupported input.
-- `ResearchHistoricalSlAdapterTest`: historical snapshot qualification, missing/invalid doses, other routes/esters, future and out-of-window records, non-mutating adapter. `ConcentrationCalculatorTest` remains byte-identical to the frozen base.
-- `ChartViewportTest`: the optional second series participates in research autoscaling without changing normal single-series chart behavior.
-- Existing research kernel/source-to-parameter tests still apply.
-- Pending CI and device/emulator checks must complete on the **latest commit**, not be inferred from earlier green commits.
+This screen:
+- Accepts explicit, manually typed **hypothetical** administration events `hour:mg`, e.g. `0:0.5, 6:0.5, 12:0.5, 18:0.5`; reference time defaults to hour 48.
+- Builds `DoseEvent` entirely in memory and uses the independent `ResearchShapeComparisonV01` helper for old-vs-experimental models. These are **synthetic sandbox events**, not real or verified patient records.
+- Allows switching Price's hypothetical Figure 1 baseline among 0, 6, 12, 18 and 24 pg/mL. This assumption selects a frozen M2 candidate according to exposed-data pseudo-loss, not the user's measured baseline.
+- Shows both models on the same **dimensionless shape scale** for the last 48 hours. Each is separately normalized by its own 1mg-at-1h response. These are NOT pg/mL, validated clinical intervals, or individual concentration forecasts.
+- Does not read, save, export or transmit any personal medical history; no network access or database writes.
+- Displays a persistent research-only warning in the debug screen, including that M2 does not model individual holding time and swallowed fraction.
 
-## Explicit uncertainties requiring separate future work
+## The optional future historical adapter
 
-Price Figure 1 digitization versus Table 1 AUC, missing true study baseline, assay-platform comparability, dose-timing uncertainty, slow tail identifiability, and lack of prospectively locked independently timed individual SL PK curves all remain unresolved. This experimental preview is **not** an estimate of an individual concentration or proof of superior precision versus the current engine.
+A new, separate `ResearchHistoricalSlAdapter` is provided under `app/src/main/java/net/plainnotes/app/conc/experimental/`, with independent regression tests. It reads historical medication snapshots using the existing public qualification APIs and filters to historic, valid, recorded E2 sublingual events. **It is not wired into any production view or into the debug manual-input sandbox**. It makes it possible to evaluate future safe integration without changing the current frozen `ConcentrationCalculator`. Parity with the official eligibility rules is a separate future gate.
+
+## Shared research kernel and limitations
+
+The helper `ResearchShapeComparisonV01.compare` can compare an explicitly supplied `DoseEvent` scenario, whether already independently qualified historical events or clearly labelled **synthetic debug inputs**. It does not fetch personal records or assume a routine q6h dosing schedule. The legacy branch calls the production `Engine` in isolation for sublingual E2 events and normalizes the output against a one-mg one-hour reference of the latest input's hold-time tier; it does **not** modify production output. The experimental M2 branch uses the same timestamps/mg and normalizes against each candidate's 1mg/1h response. Its shape cannot be interpreted as a blood concentration without unsupported patient-specific gain and background.
+
+The comparator deliberately truncates additional input history older than 30 days before its 48-hour display window, reports omitted counts, and rejects non-E2 SL events (oral E2 and sublingual EV). Debug screen input is limited to 128 artificial events; underlying research helper enforces a separate 10,000-event safety cap.
+
+## Verification and acceptance
+
+- `pk-engine/.../ResearchShapeComparisonV01Test.kt`: six JVM tests on route filtering, reference normalization, future event omission, baseline scenario selection, history truncation and malformed inputs.
+- `app/.../ResearchHistoricalSlAdapterTest.kt`: three tests on snapshot history qualification, future/out-of-window rejection and immutable inputs.
+- All protected production files remain unmodified in the current diff; the P2 frozen hash guard must pass.
+- The Debug-only Activity must compile in `fullDebug` and **must not exist in the merged `fullRelease` manifest**.
+- Full Android + simulator CI on the latest commit is the acceptance check; do not infer from earlier successful commits.
+
+## Outstanding scientific questions
+
+The unresolved Price figure/Table 1 AUC discrepancy, group-level measurement and assay biases, actual dose-clock uncertainty, model tail non-identifiability, and lack of prospective individual holdout data remain open. A debug research graph is useful for investigating mathematical behavior, **not** a clinical estimate or authorization for therapy decisions.
