@@ -1,0 +1,81 @@
+// P1 release acceptance only. Apply with:
+//   ./gradlew -I scripts/release-acceptance/acceptance.init.gradle -PhrtAcceptanceScenario=A|B|C|D -PhrtAcceptanceMode=exact|functional ...
+// Without -I nothing here runs; the production build files stay untouched.
+//
+// Scenario flags mirror the P0 size experiment exactly:
+//   A universal, default resources   B universal + shrinkResources
+//   C arm64-v8a only                  D arm64-v8a only + shrinkResources
+// R8 (isMinifyEnabled=true, proguard-android-optimize + app rules) is never changed.
+//
+// Signing: the release variant is signed with the repository's public debug test key (app/debug.keystore,
+// "must never sign a release meant for distribution"), so the APK can be installed on a disposable emulator and
+// instrumented. It is NOT the private release certificate and can never upgrade a real install.
+//
+// Modes:
+//   exact      - no extra keep rules: the app dex is the production R8 output for this scenario.
+//                Only tests that touch framework APIs, SQLCipher (kept by app/proguard-rules.pro) and resources by
+//                name are run against it.
+//   functional - adds scripts/release-acceptance/functional-keep.pro (keeps the project's own classes so that
+//                in-process tests can call them). Libraries, resources and native libraries are still processed
+//                exactly as in the scenario. Reported separately as "R8 + test keep rules", never as byte-exact.
+def scenario = startParameter.projectProperties.get('hrtAcceptanceScenario')
+def mode = startParameter.projectProperties.get('hrtAcceptanceMode') ?: 'exact'
+if (scenario == null) return
+if (!(scenario in ['A', 'B', 'C', 'D'])) throw new GradleException("hrtAcceptanceScenario must be A, B, C or D")
+if (!(mode in ['exact', 'functional'])) throw new GradleException("hrtAcceptanceMode must be exact or functional")
+def shrink = scenario in ['B', 'D']
+def arm64 = scenario in ['C', 'D']
+
+allprojects { p ->
+    p.plugins.withId('com.android.application') {
+        def acceptanceDir = p.rootProject.file('scripts/release-acceptance')
+        def generated = p.layout.buildDirectory.dir('release-acceptance').get().asFile
+        def android = p.extensions.getByName('android')
+        android.testBuildType = 'release'
+        android.buildTypes.getByName('release') { bt ->
+            bt.signingConfig = android.signingConfigs.getByName('debug')
+            if (shrink) bt.shrinkResources = true
+            if (mode == 'functional') bt.proguardFile(new File(acceptanceDir, 'functional-keep.pro'))
+            bt.testProguardFile(new File(acceptanceDir, 'test-apk.pro'))
+        }
+        if (arm64) { android.defaultConfig.ndk.abiFilters.clear(); android.defaultConfig.ndk.abiFilters.add('arm64-v8a') }
+        def androidTest = android.sourceSets.getByName('androidTest')
+        androidTest.java.srcDir(p.file('src/releaseAcceptanceTest/exact'))
+        androidTest.assets.srcDir(new File(generated, 'assets'))
+        if (mode == 'functional') {
+            androidTest.java.srcDir(p.file('src/releaseAcceptanceTest/functional'))
+            androidTest.java.srcDir(new File(generated, 'ported'))
+            androidTest.assets.srcDir(p.rootProject.file('core/data/schemas'))
+            androidTest.assets.srcDir(p.rootProject.file('core/data/src/test/resources')) // backup/v1-synthetic.pnbak
+        }
+        p.dependencies.add('androidTestImplementation', 'androidx.test.uiautomator:uiautomator:2.3.0')
+        p.dependencies.add('androidTestImplementation', 'androidx.room:room-runtime:2.8.3')
+        p.dependencies.add('androidTestImplementation', 'net.zetetic:sqlcipher-android:4.10.0')
+        p.dependencies.add('androidTestImplementation', 'androidx.sqlite:sqlite:2.6.1')
+
+        def prepare = p.tasks.register('prepareReleaseAcceptance', Exec) {
+            def condition = new File(generated, 'assets/acceptance-condition.json')
+            outputs.dir(generated)
+            inputs.dir(p.file('src/main/res')); inputs.dir(p.file('src/full/res'))
+            inputs.dir(p.file('src/test/java'))
+            inputs.file(new File(acceptanceDir, 'generate_expectations.py'))
+            inputs.property('scenario', scenario); inputs.property('mode', mode)
+            commandLine 'python3', new File(acceptanceDir, 'generate_expectations.py').path,
+                '--root', p.rootProject.projectDir.path, '--out', generated.path,
+                '--scenario', scenario, '--mode', mode
+        }
+        p.tasks.matching { it.name.startsWith('generateFullReleaseAndroidTest') || it.name.startsWith('mergeFullReleaseAndroidTest') ||
+            it.name == 'compileFullReleaseAndroidTestKotlin' || it.name.startsWith('kspFullReleaseAndroidTest') }.configureEach { it.dependsOn(prepare) }
+        // Record the configuration Gradle actually resolved, not what this script intended.
+        p.afterEvaluate {
+            p.tasks.register('printReleaseAcceptanceConditions') {
+                doLast {
+                    def r = android.buildTypes.getByName('release')
+                    println "HRT_ACCEPTANCE_CONDITIONS scenario=${scenario} mode=${mode} minify=${r.minifyEnabled} shrinkResources=${r.shrinkResources} " +
+                        "abiFilters=${android.defaultConfig.ndk.abiFilters.toList().sort()} testBuildType=${android.testBuildType} " +
+                        "signing=${r.signingConfig?.name} proguard=${r.proguardFiles.collect { it.name }}"
+                }
+            }
+        }
+    }
+}

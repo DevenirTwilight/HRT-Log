@@ -1,3 +1,17 @@
+# P1 ARM64 Release 运行时验收：进行中检查点（2026-10-10）
+
+起点 `d0284a4`（远端 `claude/new-session-1959qb` 与本会话分支 `ccr-cc5c185b-ueth6t` 均指向它，已 fetch 核实）。需求记入 REQUIREMENTS §54。本容器 x86_64、**无 /dev/kvm**，不能本地运行任何 Android 模拟器；设备验收改由 GitHub Actions 新增的独立工作流 `.github/workflows/release-acceptance.yml` 执行（x86_64 KVM 模拟器 API35；另有 ubuntu-24.04-arm / macos-15 ARM64 虚拟化探测，未证实前 C/D 的 ARM64 运行一律 BLOCKED）。
+
+新增（只用于验收，生产 Gradle/源码不改）：
+- `scripts/release-acceptance/acceptance.init.gradle`：仅 `-I` 时生效；按 A/B/C/D 设置 shrinkResources/arm64 过滤，R8 不变，release 用仓库公开 debug 测试密钥签名，testBuildType=release。`exact` 模式无额外 keep（应用 dex 即该场景生产 R8 输出）；`functional` 模式加 `functional-keep.pro` 以便进程内调用应用类，单独报告。
+- `scripts/release-acceptance/generate_expectations.py`：从源码 XML 生成四语字符串、引用资源、三个命名 JSON SHA；functional 时把 31 个 JVM 测试（含 PeriodStabilityTest，146 项）仅去掉 Robolectric runner 注解后移植到设备运行，断言与黄金数据逐字不变。
+- `app/src/releaseAcceptanceTest/`：exact（SQLCipher 实际映射 ABI、加密读写/重开/错误密钥/完整性、APK 内命名 JSON、四语字符串、入口别名图标、UI 冷启动+四语导航）与 functional（应用数据库重开、加密 Schema1→9 迁移、旧 v1 备份恢复/往返/错误密码/损坏、四语 PDF 渲染、提醒允许/拒绝/重启恢复）。
+- `scripts/release-acceptance/run_device_acceptance.py`：仅限模拟器（qemu 属性校验），逐阶段记录命令/退出码/逐测试结果/logcat 崩溃。
+
+本地状态：依赖下载受 Maven Central 429 限流反复中断，编译验证进行中；尚无任何设备结果。下一步：编译通过→推送触发工作流→下载工件→写 `docs/performance/p1-release-acceptance-2026-10.md/.json`。
+
+---
+
 # APK 体积 P0：四组实测完成（2026-10-09）
 
 [完整报告](performance/apk-size-baseline-2026-10.md)、[逐条机器证据](performance/apk-size-baseline-2026-10.json)、[构建/核验日志](performance/apk-size-evidence-2026-10/)。固定源码622e84ee927a2ebd7afc6d102c8a0af74b47799e，同JDK21/Gradle9.3.1/SDK37，四组full unsigned、R8始终开启；A默认universal 23,506,758bytes，B资源裁剪universal 23,189,359，C默认arm64 9,201,627，D裁剪arm64 8,884,228。相对A分别减少1.350246%/60.855397%/62.205643%，交互项0bytes。主要体积为SQLCipher多ABI；不按jar虚构依赖贡献。
