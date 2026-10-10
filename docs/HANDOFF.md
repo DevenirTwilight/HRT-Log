@@ -1,3 +1,15 @@
+# M2 实验药代模型集成（2026-10-10，进行中）
+
+分支 `ccr-8cffa954-5gedc0`（基于 `f69d892`，不动 `claude/new-session-1959qb`）。要求见 REQUIREMENTS §55，审计与设计见 `docs/design/experimental-m2-integration.md`。
+- [x] 阶段 A 审计：浅克隆导致的"forced update"已核实为假象，历史线性；研究分支净差异只有 17 个新文件。**阻塞**：`app/src/main` 现有文件全部被 P2 哈希锁定，正式 App 的入口（`AppShell.kt` 导航项）需要产品负责人做协议决定；本分支不改任何被锁文件。
+- [x] 研究文件原样导入（17 个，逐个核对 blob 一致），`check_protocol.py` 通过，Python 研究测试 172 项通过。
+- [ ] 阶段 B：计算入口、适配器排除计数、独立页面与四语资源、测试。
+- [ ] 阶段 C：本地 JVM/Android 单测/lint/Debug/Release、APK 体积对比；CI。
+- [ ] 阶段 D：Draft PR。
+- 本地 Android SDK 装在仓库外 `/home/user/android-sdk`（会话结束即丢失）。用户上传的研究材料包只在会话临时目录，未入库。
+
+---
+
 # 正式配置改为“压缩原生库 + 资源裁剪”（2026-10-10，已验收并交付）
 
 用户要求采用第 1 项并加做第 4 项。`app/build.gradle.kts` release：`isShrinkResources = true` + `packaging { jniLibs { useLegacyPackaging = true } }`；R8/签名/版本/Schema/PK 不变。验收工具场景改为显式设置两开关（A–D 含义不随正式默认变化），新增 F（=新正式配置）。本地正式未签名 **12,707,995 bytes**（SHA 155ee43a…，−45.94%），四 ABI、8 库 DEFLATED 且与 P0 字节一致、extractNativeLibs=true、三个命名 JSON SHA 与源码一致、check_release_manifest PASS（无 INTERNET）。CI befd56f：android.yml 三作业 success；release-acceptance 38055084985 中 **F（新正式配置）全部 PASS**（exact 6/6、functional 222+3、重启/拒绝通知/开机提醒恢复，SQLCipher 从解压目录加载，1004/1075 字符串一致），C/D PASS；A/E 失败是验收工具缺陷——init 脚本在插件应用时设置开关，被随后执行的 app/build.gradle.kts 新默认值覆盖（A 实际 shrink=true/legacy=true）；B functional 打包失败发生在同样被覆盖成 F 配置时，F 同配置构建正常，按偶发记录、待复跑确认。已改为 finalizeDsl 设置并在条件不符时直接构建失败。复跑（6fd4df9）：android.yml 38057129027 三作业 success；release-acceptance 38057128973 A–F 六个场景全部 success（B 打包问题未复现）。正式包 `hrt-log-build25-full-universal-compact-official-befd56f.apk`（源码 befd56f，生产代码与 6fd4df9 相同）12,753,780 bytes，SHA-256 `2a34afa0b274155a431a9f1d5f5a3938badfd56290d69e770fff54ba050d347e`，证书 989ba045…79b1，v2/v3、16KB zipalign、四 ABI、extractNativeLibs=true、权限无 INTERNET；签名凭据临时目录已删；会话私有文件发送，未入 Git/Release。未在 ARM64 硬件上实测压缩版；用户手机覆盖前先加密备份、只接受“更新”。

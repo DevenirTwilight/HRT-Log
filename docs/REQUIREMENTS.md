@@ -542,3 +542,12 @@ P1-A 数值病态修复与旧冻结 Calculator1 的异常区间必须区分；�
 2026-10-10 用户：如不推荐仅 ARM64，则交付 Universal；已交付含 F1 修复的 Universal 正式签名包，默认发行仍为 Universal。
 
 2026-10-10 用户决定：正式 fullRelease 采用“压缩原生库（packaging.jniLibs.useLegacyPackaging=true）+ 资源裁剪（isShrinkResources=true）”，继续发 Universal（四 ABI）。R8、签名、版本号、Schema 9、PK 不变。验收以 P1 场景 F 为准；本机未签名 12,707,995 bytes（原 23,506,758）。
+
+## 55. M2 舌下 E2 实验药代模型作为可选实验功能集成（2026-10-10）
+
+- 用户要求把研究分支（PR #1，`c0b9b6c`）已测试的 M2 模型整合成正式 App 里由用户主动打开的实验页：Legacy PK（默认，行为不变）/ Experimental M2 / Model comparison；单位只能是"相对响应（无量纲）"，**禁止标 pg/mL**，不得复用旧模型幅度、背景或个人校准伪造绝对浓度；常驻警示"实验模型仅用于研究相对曲线形状。尚不能准确预测个人血清雌二醇浓度，不应用于自行调整给药剂量。"
+- 15 个候选不得标为"最准确"；候选范围只能称"已探索参数集合的情景范围"，不是 95% 置信区间；Price 背景只是论文重建敏感性假设，不是个人基线。
+- 只读历史：仅已执行、未删除、给药时冻结快照确认为舌下游离 E2、剂量有限正数、时间在历史窗口内的记录；排除口服 E2、舌下 EV、其他途径、计划/跳过/漏服/删除/未来/无快照/非法剂量。不修改任何记录、快照、化验、数据库、加密参数。
+- 必须保留 APK 压缩方案（资源裁剪 + 压缩原生库 + 四 ABI + SQLCipher）、签名、applicationId、Release 配置；不新增网络权限、后台服务或大型依赖。
+- P2 冻结协议：不得绕过/删除检查、不得重写 production-baseline.json、不得通过扩大豁免让 CI 变绿；若正式接入与冻结冲突，停止修改相应文件并上报。独立集成分支、独立 Draft PR，不合并、不发布 APK、不 force push。
+- 用户同时提供离线研究材料包（P2-X、P2-AF～AK 等）；结论（长尾不可辨识、M2 跨研究外推未优于 M1、Price AUC 差异未解）只用于页面标注，不改冻结候选。详见 `docs/design/experimental-m2-integration.md`。
