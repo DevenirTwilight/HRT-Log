@@ -2,7 +2,10 @@
 
 分支 `p2ar/unified-concentration-comparison`（基于 PR #2 头 `cd56688`）。要求见 REQUIREMENTS §57，审计与设计见 `docs/design/p2ar-unified-concentration.md`。
 - [x] Stage A 审计：受保护文件不改；入口路由补丁只提交草案，等负责人批准。Price 1997 幅度可从冻结数据逐个候选重算：40 行与冻结 CSV `Price_model_auc` 一致，相对差 ≤ 7e-16。
-- [ ] Stage B 计算层与图表；[ ] Stage C 统一页面；[ ] Stage D 文献锚定情景；[ ] Stage E 回归与交付。
+- [x] Stage B 计算层与图表（`d2112b5`）：`ConcentrationModelComparison`（同剂量同网格、1 分钟指标网格、精确读数）、`ModelComparisonChart`（复用 `ChartViewport`，缩放/平移/点击）。
+- [x] Stage C 统一页面（`d5112b8`）：`UnifiedConcentrationScreen`（Legacy 默认/M2/比较）。当前经已批准的"实验药代模型"抽屉入口可达；放进"血药浓度"页需改受保护的 `AppShell.kt`，补丁 `docs/design/p2ar-entry-approval.patch` 待负责人批准，**未应用**。
+- [x] Stage D 研究情景：Price 1997 Figure 1 锚点（逐候选重算，与冻结 CSV 一致）；Doll/Rosano/Komesaroff 拒绝；AUC 冲突照实显示。
+- [ ] Stage E：全量回归、APK 体积、推送、Draft PR、A–F。
 
 ---
 
