@@ -1553,5 +1553,21 @@
    "official-signed over-install to E"
   ],
   "production_config_changed": false
+ },
+ "production_adoption": {
+  "date": "2026-10-10",
+  "config": "scenario F: isShrinkResources=true + packaging.jniLibs.useLegacyPackaging=true, universal",
+  "build_commit": "befd56f",
+  "harness_fix": "6fd4df9",
+  "acceptance_run": 38057128973,
+  "repo_ci_run": 38057129027,
+  "all_scenarios": "A-F success",
+  "unsigned_bytes": 12707995,
+  "signed_bytes": 12753780,
+  "signed_sha256": "2a34afa0b274155a431a9f1d5f5a3938badfd56290d69e770fff54ba050d347e",
+  "not_verified": [
+   "ARM64 hardware with compressed libs",
+   "official over-install on user device"
+  ]
  }
 }

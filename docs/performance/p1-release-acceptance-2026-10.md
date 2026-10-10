@@ -124,3 +124,7 @@ python3 scripts/release-acceptance/run_device_acceptance.py --scenario C --exact
 运行 [38052673701](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38052673701)（源码 7d1bea6，x86_64 API 35）：E **全部 PASS**——exact 6/6、functional 222/222（另 3 项按阶段单独运行均 PASS），冷启动×3、进程重启、通知拒绝、重启后提醒恢复均 PASS；四语字符串 1075/1075；PeriodStability 5/5、DisguiseFlow 16/16。新断言证实全部 `lib/` 条目为 DEFLATED，且 SQLCipher 从解压目录加载（nativeloader：`/lib/x86_64/libsqlcipher.so … ok`）。同一运行中 A（含 F1 修复）也全部通过。
 
 代价与未验证：首次安装需解压原生库（稍慢）；E 在 ARM64 硬件上未测（Android 解压机制与架构无关，但未实证）；正式签名下现有安装→E 的覆盖升级未测。建议：若采纳，改正式 Gradle 一行（`packaging { jniLibs { useLegacyPackaging = true } }`），出正式包后在测试机或用户手机按“备份→只接受更新”流程确认。
+
+## 11. 正式采用（2026-10-10）
+
+用户决定正式 fullRelease 采用场景 F（资源裁剪 + 压缩原生库，Universal）。`app/build.gradle.kts` 已改（befd56f）；验收工具改为在 finalizeDsl 中显式设置各场景开关并在不符时构建失败（6fd4df9）。运行 [38057128973](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38057128973) A–F 全部 success，仓库 CI 38057129027 全部 success。正式未签名 12,707,995 bytes（原 23,506,758，−45.94%）；正式签名包 12,753,780 bytes，已私有交付。ARM64 硬件上的压缩版与覆盖升级仍待用户实机确认。
