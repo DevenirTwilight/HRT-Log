@@ -6,7 +6,8 @@
 - [x] Stage C 统一页面（`d5112b8`）：`UnifiedConcentrationScreen`（Legacy 默认/M2/比较）。当前经已批准的"实验药代模型"抽屉入口可达；放进"血药浓度"页需改受保护的 `AppShell.kt`，补丁 `docs/design/p2ar-entry-approval.patch` 待负责人批准，**未应用**。
 - [x] Stage D 研究情景：Price 1997 Figure 1 锚点（逐候选重算，与冻结 CSV 一致）；Doll/Rosano/Komesaroff 拒绝；AUC 冲突照实显示。
 - [x] Stage E 本地：pk 105、data 72、reminder 14、app 426（13 原有跳过，0 失败，PeriodStability 5/5）、Python 176、lint 0 错误、两项 release 检查通过；Release 未签名 12,813,099（比 PR #2 +53,620）。入口补丁在临时工作树验证：app 424/0 失败、Python 178、lint 0；原样（PENDING）会被检查器拒绝。
-- [x] Draft PR #3 https://github.com/DevenirTwilight/HRT-Log/pull/3（base `ccr-8cffa954-5gedc0`，叠在 PR #2 上，不合并）。头 `1359e32`：android.yml run 38077601938/38077623248、release-acceptance run 38077621827 已触发，结果待记录。**阻塞**：入口放进"血药浓度"页需负责人批准 `PD-2026-10-10-P2AR-UNIFIED`（见设计文档批准流程）。
+- [x] Draft PR #3 https://github.com/DevenirTwilight/HRT-Log/pull/3（base `ccr-8cffa954-5gedc0`，叠在 PR #2 上，不合并）。CI：`98f535b` 的 device-tests 失败（预览测试在"返回"关闭 Activity 后才读取它），`0a3b857` 修复后 jvm / android / device-tests 全部成功。release-acceptance run 38077621827（`1359e32`，应用代码与 `0a3b857` 相同）A–F 六个场景全部 success。
+- 剩余：等负责人决定是否批准 `PD-2026-10-10-P2AR-UNIFIED`；PR #3 不合并、不发布。**阻塞**：入口放进"血药浓度"页需负责人批准 `PD-2026-10-10-P2AR-UNIFIED`（见设计文档批准流程）。
 
 ---
 
