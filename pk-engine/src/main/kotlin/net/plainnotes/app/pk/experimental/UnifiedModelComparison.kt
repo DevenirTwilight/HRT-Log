@@ -12,7 +12,9 @@ enum class ResearchModel { M2, M1, LEGACY }
 /** Shared, explicit calibration. Never inferred from personal labs or dosage. */
 data class CommonCalibration(val backgroundPgMl: Double, val amplitudePgMl: Double) {
     init { require(backgroundPgMl.isFinite() && backgroundPgMl >= 0 && amplitudePgMl.isFinite() && amplitudePgMl > 0) }
-    fun concentration(response: Double): Double = (backgroundPgMl + amplitudePgMl * response).also { require(it.isFinite() && it >= 0) }
+    fun concentration(response: Double): Double = (backgroundPgMl + amplitudePgMl * response).also {
+        require(it.isFinite() && it >= 0 && (it * Pk.PMOL_PER_PG).isFinite())
+    }
 }
 
 class UnifiedComparison(
@@ -37,7 +39,9 @@ object UnifiedModelComparison {
 
     private fun convert(m: ModelMetrics, display: ResearchDisplay, c: CommonCalibration): ModelMetrics {
         if (display == ResearchDisplay.RELATIVE) return m
-        fun area(h: Double, hours: Double) = c.backgroundPgMl * hours + c.amplitudePgMl * h
+        fun area(h: Double, hours: Double) = (c.backgroundPgMl * hours + c.amplitudePgMl * h).also {
+            require(it.isFinite() && it >= 0 && (it * Pk.PMOL_PER_PG).isFinite())
+        }
         return ModelMetrics(c.concentration(m.peak), m.peakHoursAfterOrigin,
             area(m.auc0to4, 4.0), area(m.auc0to8, 8.0), area(m.auc0to24, 24.0),
             c.concentration(m.at8h), c.concentration(m.at12h), c.concentration(m.at24h), m.singleDoseTmaxHours)

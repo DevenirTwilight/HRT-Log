@@ -88,6 +88,9 @@ class UnifiedModelComparisonTest {
             if (!v.isFinite()) assertThrows(IllegalArgumentException::class.java){UnifiedModelComparison.valuesAt(run(),v)}
         }
         assertThrows(IllegalArgumentException::class.java){CommonCalibration(25.0,0.0)}
+        // Finite inputs can still overflow integration or a subsequent pmol/L conversion.
+        assertThrows(IllegalArgumentException::class.java){run(c=CommonCalibration(1e307,1.0))}
+        assertThrows(IllegalArgumentException::class.java){CommonCalibration(0.0,Double.MAX_VALUE/2).concentration(1.0)}
         assertThrows(IllegalArgumentException::class.java){UnifiedModelComparison.compute(listOf(dose()),t,t+24,t,"unknown","unknown",ResearchDisplay.RELATIVE)}
     }
 }
