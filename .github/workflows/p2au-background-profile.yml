@@ -1,0 +1,49 @@
+name: P2-AU background profile reproducibility
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/p2au-background-profile.yml'
+      - 'tools/pk-research/p2au_background_profile.py'
+      - 'tools/pk-research/test_p2au_background_profile.py'
+      - 'docs/pk-research/p2/p2au-background-profile/**'
+  push:
+    paths:
+      - '.github/workflows/p2au-background-profile.yml'
+      - 'tools/pk-research/p2au_background_profile.py'
+      - 'tools/pk-research/test_p2au_background_profile.py'
+      - 'docs/pk-research/p2/p2au-background-profile/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  frozen-aggregate-guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run P2-AU no-patient-data algebra and frozen baseline checks
+        run: python -m unittest discover -s tools/pk-research -p 'test_p2au_background_profile.py' -v
+      - name: Verify published result contains only aggregate data and clinical gates
+        run: |
+          python - <<'PYBLOCK'
+          import json
+          from pathlib import Path
+          base=Path('docs/pk-research/p2/p2au-background-profile')
+          d=json.loads((base/'p2au-aggregates.json').read_text())
+          assert d['paired_unique_people']==11 and d['paired_visits']==20
+          assert d['frozen_m2_candidate_count']==15
+          assert d['independent_human_external_pk_validation'] is False
+          assert d['production_replacement_authorized'] is False
+          assert len(d['scenarios'])==5
+          assert all(p.suffix in {'.md','.json'} for p in base.iterdir())
+          assert not list(Path('docs/pk-research/p2').rglob('*.xlsx'))
+          for k in ('individual_measurements','patient_id','subject_id','visit_rows','pre_post_ratios'):
+              assert k not in d
+          print('P2-AU aggregate-only and nonclinical gates PASS')
+          PYBLOCK
