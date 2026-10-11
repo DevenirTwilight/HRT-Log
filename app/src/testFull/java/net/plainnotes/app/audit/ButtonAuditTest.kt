@@ -165,6 +165,18 @@ class ButtonAuditTest(private val locale: String, private val scale: Float, priv
             Case("wellbeing_daily") { WellbeingHub(s, x, m, "FR", {}, padding) },
             Case("wellbeing_symptoms", click(R.string.wb_symptoms)) { WellbeingHub(s, x, m, "FR", {}, padding) },
             Case("wellbeing_reviews", click(R.string.wb_reviews)) { WellbeingHub(s, x, m, "FR", {}, padding) },
+            Case("concentration_unified", {
+                val deadline=System.nanoTime()+30_000_000_000L
+                while(roots().flatMap { all(it.semanticsOwner.rootSemanticsNode) }.none { it.config.getOrNull(SemanticsProperties.TestTag)=="unified-chart" }) {
+                    check(System.nanoTime()<deadline){"Unified synthetic curve did not load"};idle();Thread.sleep(10)
+                }
+            }) {
+                val medication=meds[0].copy(molecule="E2",route="SUBLINGUAL",dose_per_intake=1.0)
+                val record=RecordEntity(999,1,taken_utc=now.minusSeconds(3*3600).toEpochMilli(),taken_zone=zone.id,actual_dose=1.0,
+                    status="ON_TIME",origin="APP",revision=1,config_snapshot=MedicationSnapshot.encode(medication,ProfileEntity(1,"E2","sublingual",sl_tier=2)))
+                net.plainnotes.app.experimental.UnifiedConcentrationScreen(listOf(record),emptyMap(),labs,padding,
+                    legacyContent={pad -> val r=remember { conc() };ConcentrationScreen(s,r,false,62.0,ConcSettings(false,true,net.plainnotes.app.pk.CalibrationMode.RETROSPECTIVE),{},{},{},{},pad,records(),profiles)},now={now})
+            },
             Case("concentration") { val r = remember { conc() }; ConcentrationScreen(s, r, false, 62.0, ConcSettings(false, true, net.plainnotes.app.pk.CalibrationMode.RETROSPECTIVE), {}, {}, {}, {}, padding, records(), profiles) },
             Case("labs") { LabsScreen(labs, listOf(now.minusSeconds(86400 + 5 * 3600)), {}, {}, padding) },
             Case("timeline") { LongitudinalScreen(s, x, {}, {}, {}, padding) },
