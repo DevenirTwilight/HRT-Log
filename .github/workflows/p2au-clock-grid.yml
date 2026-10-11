@@ -1,0 +1,50 @@
+name: P2-AU reproducible clock-grid public tests
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/p2au-clock-grid.yml'
+      - 'tools/pk-research/p2au_clock_grid_audit.py'
+      - 'tools/pk-research/test_p2au_clock_grid_audit.py'
+      - 'docs/pk-research/p2/p2au-clock-grid/**'
+  push:
+    paths:
+      - '.github/workflows/p2au-clock-grid.yml'
+      - 'tools/pk-research/p2au_clock_grid_audit.py'
+      - 'tools/pk-research/test_p2au_clock_grid_audit.py'
+      - 'docs/pk-research/p2/p2au-clock-grid/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  nonpersonal-reproducibility:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test source model kernels against public synthetic fixtures
+        run: python -m unittest discover -s tools/pk-research -p 'test_p2ar_real_visit_audit.py' -v
+      - name: Test grid design and aggregate privacy/structure
+        run: python -m unittest discover -s tools/pk-research -p 'test_p2au_clock_grid_audit.py' -v
+      - name: Validate public aggregate without medical rows
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('docs/pk-research/p2/p2au-clock-grid/aggregate.json')
+          a=json.loads(p.read_text(encoding='utf-8'))
+          assert a['clock_grid_size']==64 and a['n_pair_visits']==20 and a['n_distinct_people']==11
+          assert len(a['m2_per_candidate_clock_summaries'])==15
+          assert a['schedule_weighting_or_patient_prior'] is False
+          assert a['external_human_validation'] is False
+          assert a['model_replacement_authorized'] is False
+          assert {x.suffix for x in p.parent.iterdir()} <= {'.md','.json'}
+          for k in ('patient_id','subject_id','participant_id','individual_measurements','raw_measurements'):
+              assert k not in a
+          print('PASS: 64 clock scenarios, frozen 15 parameters, private rows excluded')
+          PY
