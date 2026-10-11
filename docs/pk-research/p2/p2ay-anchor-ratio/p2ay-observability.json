@@ -1,0 +1,252 @@
+{
+  "analytical_sd_scenarios_pgml": [
+    1,
+    3,
+    10
+  ],
+  "constant_baseline_known_actual_clocks_assumed": true,
+  "date": "2026-10-11",
+  "frozen_aw_json_sha256": "ecb62798eb785d2c4ae6aca48a2dd5a2b0a6b4f65fd4b7fe8ed875271819df90",
+  "individual_absolute_prediction_validated": false,
+  "measurement_assumes_independent_equal_sd_samples": true,
+  "model_only_not_human_observation": true,
+  "no_laboratory_LLOQ_or_replicate_variances_inferred": true,
+  "no_model_uncertainty_probability_coverage_claim": true,
+  "no_new_locked_external_human_cohorts": 0,
+  "one_hour_increment_scenarios_pgml": [
+    50,
+    150,
+    450
+  ],
+  "phase": "P2-AY",
+  "production_replacement_gate": "P2-C_HOLD",
+  "ratio_denominator_requires_reliable_measured_increase": true,
+  "rows": [
+    {
+      "A150_min_absolute_gap_pgml_milli": 63704,
+      "delta_method_worst_sd_factor_micro": 1374400,
+      "legacy_ratio_micro": 529210,
+      "m2_max_ratio_micro": 104519,
+      "m2_min_ratio_micro": 58993,
+      "maximum_model_gap_micro": 470217,
+      "minimum_A1h_increment_pgml_milli_for_2sd": {
+        "1": 6472,
+        "3": 19417,
+        "10": 64725
+      },
+      "minimum_model_gap_micro": 424691,
+      "passes_artificial_2sd_rule": {
+        "A150_sd1": true,
+        "A150_sd10": true,
+        "A150_sd3": true,
+        "A450_sd1": true,
+        "A450_sd10": true,
+        "A450_sd3": true,
+        "A50_sd1": true,
+        "A50_sd10": false,
+        "A50_sd3": true
+      },
+      "time_h": "0.25"
+    },
+    {
+      "A150_min_absolute_gap_pgml_milli": 45029,
+      "delta_method_worst_sd_factor_micro": 1307807,
+      "legacy_ratio_micro": 824315,
+      "m2_max_ratio_micro": 524124,
+      "m2_min_ratio_micro": 460666,
+      "maximum_model_gap_micro": 363649,
+      "minimum_A1h_increment_pgml_milli_for_2sd": {
+        "1": 8713,
+        "3": 26140,
+        "10": 87132
+      },
+      "minimum_model_gap_micro": 300190,
+      "passes_artificial_2sd_rule": {
+        "A150_sd1": true,
+        "A150_sd10": true,
+        "A150_sd3": true,
+        "A450_sd1": true,
+        "A450_sd10": true,
+        "A450_sd3": true,
+        "A50_sd1": true,
+        "A50_sd10": false,
+        "A50_sd3": true
+      },
+      "time_h": "0.5"
+    },
+    {
+      "A150_min_absolute_gap_pgml_milli": 0,
+      "delta_method_worst_sd_factor_micro": null,
+      "legacy_ratio_micro": 1000000,
+      "m2_max_ratio_micro": 1000000,
+      "m2_min_ratio_micro": 1000000,
+      "maximum_model_gap_micro": 0,
+      "minimum_A1h_increment_pgml_milli_for_2sd": {
+        "1": null,
+        "3": null,
+        "10": null
+      },
+      "minimum_model_gap_micro": 0,
+      "passes_artificial_2sd_rule": {},
+      "time_h": "1"
+    },
+    {
+      "A150_min_absolute_gap_pgml_milli": 35418,
+      "delta_method_worst_sd_factor_micro": 1269375,
+      "legacy_ratio_micro": 735916,
+      "m2_max_ratio_micro": 499795,
+      "m2_min_ratio_micro": 410466,
+      "maximum_model_gap_micro": 325449,
+      "minimum_A1h_increment_pgml_milli_for_2sd": {
+        "1": 10752,
+        "3": 32256,
+        "10": 107519
+      },
+      "minimum_model_gap_micro": 236121,
+      "passes_artificial_2sd_rule": {
+        "A150_sd1": true,
+        "A150_sd10": true,
+        "A150_sd3": true,
+        "A450_sd1": true,
+        "A450_sd10": true,
+        "A450_sd3": true,
+        "A50_sd1": true,
+        "A50_sd10": false,
+        "A50_sd3": true
+      },
+      "time_h": "2"
+    },
+    {
+      "A150_min_absolute_gap_pgml_milli": 2931,
+      "delta_method_worst_sd_factor_micro": 1329949,
+      "legacy_ratio_micro": 199517,
+      "m2_max_ratio_micro": 179979,
+      "m2_min_ratio_micro": 133418,
+      "maximum_model_gap_micro": 66099,
+      "minimum_A1h_increment_pgml_milli_for_2sd": {
+        "1": 136137,
+        "3": 408410,
+        "10": 1361367
+      },
+      "minimum_model_gap_micro": 19538,
+      "passes_artificial_2sd_rule": {
+        "A150_sd1": true,
+        "A150_sd10": false,
+        "A150_sd3": false,
+        "A450_sd1": true,
+        "A450_sd10": false,
+        "A450_sd3": true,
+        "A50_sd1": false,
+        "A50_sd10": false,
+        "A50_sd3": false
+      },
+      "time_h": "4"
+    },
+    {
+      "A150_min_absolute_gap_pgml_milli": 5168,
+      "delta_method_worst_sd_factor_micro": 1386221,
+      "legacy_ratio_micro": 40865,
+      "m2_max_ratio_micro": 121620,
+      "m2_min_ratio_micro": 75318,
+      "maximum_model_gap_micro": 80755,
+      "minimum_A1h_increment_pgml_milli_for_2sd": {
+        "1": 80470,
+        "3": 241409,
+        "10": 804697
+      },
+      "minimum_model_gap_micro": 34453,
+      "passes_artificial_2sd_rule": {
+        "A150_sd1": true,
+        "A150_sd10": false,
+        "A150_sd3": false,
+        "A450_sd1": true,
+        "A450_sd10": false,
+        "A450_sd3": true,
+        "A50_sd1": false,
+        "A50_sd10": false,
+        "A50_sd3": false
+      },
+      "time_h": "6"
+    },
+    {
+      "A150_min_absolute_gap_pgml_milli": 5790,
+      "delta_method_worst_sd_factor_micro": 1408773,
+      "legacy_ratio_micro": 7739,
+      "m2_max_ratio_micro": 103548,
+      "m2_min_ratio_micro": 46338,
+      "maximum_model_gap_micro": 95809,
+      "minimum_A1h_increment_pgml_milli_for_2sd": {
+        "1": 72994,
+        "3": 218983,
+        "10": 729945
+      },
+      "minimum_model_gap_micro": 38599,
+      "passes_artificial_2sd_rule": {
+        "A150_sd1": true,
+        "A150_sd10": false,
+        "A150_sd3": false,
+        "A450_sd1": true,
+        "A450_sd10": false,
+        "A450_sd3": true,
+        "A50_sd1": false,
+        "A50_sd10": false,
+        "A50_sd3": false
+      },
+      "time_h": "8"
+    },
+    {
+      "A150_min_absolute_gap_pgml_milli": 2313,
+      "delta_method_worst_sd_factor_micro": 1413790,
+      "legacy_ratio_micro": 599,
+      "m2_max_ratio_micro": 83241,
+      "m2_min_ratio_micro": 16016,
+      "maximum_model_gap_micro": 82643,
+      "minimum_A1h_increment_pgml_milli_for_2sd": {
+        "1": 183404,
+        "3": 550213,
+        "10": 1834042
+      },
+      "minimum_model_gap_micro": 15417,
+      "passes_artificial_2sd_rule": {
+        "A150_sd1": false,
+        "A150_sd10": false,
+        "A150_sd3": false,
+        "A450_sd1": true,
+        "A450_sd10": false,
+        "A450_sd3": false,
+        "A50_sd1": false,
+        "A50_sd10": false,
+        "A50_sd3": false
+      },
+      "time_h": "12"
+    },
+    {
+      "A150_min_absolute_gap_pgml_milli": 65,
+      "delta_method_worst_sd_factor_micro": 1414051,
+      "legacy_ratio_micro": 230,
+      "m2_max_ratio_micro": 44764,
+      "m2_min_ratio_micro": 663,
+      "maximum_model_gap_micro": 44535,
+      "minimum_A1h_increment_pgml_milli_for_2sd": {
+        "1": 6524152,
+        "3": 19572457,
+        "10": 65241523
+      },
+      "minimum_model_gap_micro": 433,
+      "passes_artificial_2sd_rule": {
+        "A150_sd1": false,
+        "A150_sd10": false,
+        "A150_sd3": false,
+        "A450_sd1": false,
+        "A450_sd10": false,
+        "A450_sd3": false,
+        "A50_sd1": false,
+        "A50_sd10": false,
+        "A50_sd3": false
+      },
+      "time_h": "24"
+    }
+  ],
+  "source_phase": "P2-AW",
+  "two_sd_rule_is_analyst_stress_not_clinical_power": true
+}
