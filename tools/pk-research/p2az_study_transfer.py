@@ -11,6 +11,7 @@ No person-level PK data, no production or prescription calculations.
 from __future__ import annotations
 
 import argparse
+import base64
 import itertools
 import json
 import math
@@ -255,9 +256,9 @@ def main():
     args.output.parent.mkdir(parents=True,exist_ok=True)
     args.output.write_text(json.dumps(data,ensure_ascii=False,sort_keys=True,indent=2,allow_nan=False)+"\n",encoding="utf-8")
     if args.emit:
-        print("P2AZ_RESULT_BEGIN")
-        print(json.dumps(data,ensure_ascii=False,sort_keys=True,separators=(",",":"),allow_nan=False))
-        print("P2AZ_RESULT_END")
+        print("P2AZ_RESULT_B64_BEGIN")
+        print(base64.b64encode(args.output.read_bytes()).decode("ascii"))
+        print("P2AZ_RESULT_B64_END")
     print("P2-AZ: 18 source/baseline scenarios, 54 study-deletion folds; not blinded; P2-C HOLD")
 
 
