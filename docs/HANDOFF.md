@@ -14,7 +14,20 @@
 
 ---
 
-# P2-AW（2026-10-11）——已冻结 Legacy/M2 的理论采样辨识与数据取得门槛
+# P2-AW（2026-10-11）
+# P2-AZ（2026-10-11）——正式 Legacy / 新单输入 M1 / 新双输入 M2 真实跨研究留一重选
+
+**阶段真实 GitHub 入库：** [PR #17](https://github.com/DevenirTwilight/HRT-Log/pull/17)（分支 `research/p2-az-retrospective-study-transfer-20261011`，本段更新时仍 Draft、尚未合并默认分支）；交付实物：[完整中文报告](pk-research/p2/p2az-retrospective-transfer/P2-AZ-REPORT.md)、[机器实验设计](pk-research/p2/p2az-retrospective-transfer/p2az-design.json)、[实际54折逐折结果](pk-research/p2/p2az-retrospective-transfer/p2az-results.json)、[运行说明](pk-research/p2/p2az-retrospective-transfer/README.md)、`tools/pk-research/p2az_study_transfer.py` 与 `test_p2az_study_transfer.py`、独立自动化逐字节复核 `.github/workflows/p2az-study-transfer.yml`。归档在 Draft PR 不等于已合并/正式投产，后续 CI 实际结果务必另查。
+
+- **和P2-AT不同的科学增量**：独立构造32个单输入M1网格和216个快慢双输入M2网格，对 Price1997、Rosano1997 PK25、Komesaroff1998 **3个组级、已经公开且早被研究者见过的来源**做三折按来源整体留出：每折仅从另两个研究的归一化群体均值选择候选，再评估被留出整个研究的组均值曲线。正式 Legacy 从P2-AS原始ZIP固定读出，零重拟合；另列P2-X历史15候选的重新排序，仅作**候选池上游已经见过三个研究**的污染对照，不冒充干净LOSO。
+- **真实执行的计算结果**：2套Price图像重读（同一批6人，非两项独立人体来源）× Price背景0/12/24 pg/mL×Rosano背景0/100/200 pmol/L=18种**假设**；每种再留出三研究，54个高度相关而非独立外测折。新 M2 网格相对于正式 Legacy 形状MSE有 **54/54** 个情景更低；相对于M1有**48/54** 更低，**并非全部更好**。M1对Legacy有42/54更低。Rosano被留出、Price和Rosano假设背景均0、旧Price图时，M1误差0.007438，M2误差0.0153833，公开保存这个非M2胜出反例。
+- **复杂度负面核查**：训练仅剩两研究；把训练形状MSE加上任意惩罚 `λ×名义形状参数数` 做**人为敏感性**，λ=0选择M2 54/54；λ=0.002选择M2 22、M1 32；λ=0.01选择M1 54；λ=0.05选固定Legacy48、M1六。**这些λ非AIC/BIC/AICc/统计似然或正式放行阈值**；仅3研究、各研究重复点未知协方差，不能推显著性或有效AICc。
+- **数据处理校正**：P2-AJ原刊人工读图Price 18h≈23.85，在假设背景24下扣除增量可以为−0.15 pg/mL，这是接近零的读图/测量波动可产生的数，不得强行截断为0；研究首次CI因此报错，已修正保留数值并重跑，失败记录应保存。
+- **不能越界**：新网格设计之前研究者已见全部三研究，**回顾性研究来源留一 ≠ 真正事前盲法的未来个体外部预测验证**；留出研究使用自己的群体浓度锚点归一化，不考核给定剂量个人 pg/mL、背景、长尾和重复给药的绝对预测。结论支持新双输入家族在已知跨研究组级形状上的迁移优势，**不等于冻结的15套正式可部署M2已证明临床预测更准**。P2-C **HOLD**；没有新独立人的全时程序列、没有个人医疗文件入库，APK/生产Kotlin/PK参数/数据库/签名/用药建议不变。PR#14/#15/#16 独立保留，不能以本次PR替代其交接或合并。
+
+---
+
+——已冻结 Legacy/M2 的理论采样辨识与数据取得门槛
 
 **P2-AW 已合并确认（2026-10-11）：** [PR #13](https://github.com/DevenirTwilight/HRT-Log/pull/13) 已成功合并至默认分支，研究源提交 `ef9ce96b251ff34e01852c84489f01bdf3391475`，合并提交 `0f73d4c3d98bcc6468622c8341d95230bcdf7395`。最新提交对应的 [P2-AW 专项 CI #38132525102](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38132525102) **Success**（20/20 数学回归、源/原 ZIP 哈希核验、新 JSON 逐字节重算及公开资料隐私门槛）；[Android/JVM/设备 CI #38132525105](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38132525105) **三作业全部 Success**。初始 Python 跨版本 JSON 末位失败的原因、修复和失败记录见本阶段正文；未忽略/关闭原测试。此归档成功不改变 P2-C HOLD 或独立人体外部验证为零的判断。
 
