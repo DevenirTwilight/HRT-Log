@@ -1,0 +1,35 @@
+name: P2-AX public-metadata and synthetic evidence contract
+
+on:
+  push:
+    paths:
+      - 'tools/pk-research/p2ax_evidence_contract.py'
+      - 'tools/pk-research/test_p2ax_evidence_contract.py'
+      - 'docs/pk-research/p2/p2ax-evidence-contract/**'
+      - '.github/workflows/p2ax-evidence-contract.yml'
+  pull_request:
+    paths:
+      - 'tools/pk-research/p2ax_evidence_contract.py'
+      - 'tools/pk-research/test_p2ax_evidence_contract.py'
+      - 'docs/pk-research/p2/p2ax-evidence-contract/**'
+      - '.github/workflows/p2ax-evidence-contract.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  metadata-and-synthetic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reproducible P2-AX audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          python --version
+          python -m unittest discover -s tools/pk-research -p 'test_p2ax_evidence_contract.py' -v
+          python tools/pk-research/p2ax_evidence_contract.py \
+            --registry docs/pk-research/p2/p2ax-evidence-contract/p2ax-source-registry.json \
+            --output /tmp/p2ax-results-ci.json
+          cmp docs/pk-research/p2/p2ax-evidence-contract/p2ax-gate-results.json /tmp/p2ax-results-ci.json
+          test "$(grep -c '"decision": "HOLD"' /tmp/p2ax-results-ci.json)" -eq 9
