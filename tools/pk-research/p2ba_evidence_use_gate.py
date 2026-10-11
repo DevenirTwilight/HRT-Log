@@ -8,6 +8,7 @@ Uses public P2-AZ exposed source findings, pinned to Git BLOB SHA-1.
 from __future__ import annotations
 
 import argparse
+import base64
 import hashlib
 import json
 import math
@@ -182,12 +183,17 @@ def summarize(data):
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument("--out",type=Path,required=True)
+    p.add_argument("--emit",action="store_true",help="print lossless base64 archive candidate")
     args=p.parse_args()
     if args.out.exists():
         p.error("refusing overwrite")
     data=summarize(load_source())
     args.out.parent.mkdir(parents=True,exist_ok=True)
     args.out.write_text(json.dumps(data,indent=2,sort_keys=True,ensure_ascii=False,allow_nan=False)+chr(10),encoding="utf-8")
+    if args.emit:
+        print("P2BA_RESULT_B64_BEGIN")
+        print(base64.b64encode(args.out.read_bytes()).decode("ascii"))
+        print("P2BA_RESULT_B64_END")
     print("P2-BA: 3 true groups; 18 sensitivity scenarios; experimental normalized curves allowed; personal M2 pg/mL blocked")
 
 
