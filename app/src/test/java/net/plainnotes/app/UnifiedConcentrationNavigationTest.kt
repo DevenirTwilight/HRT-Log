@@ -43,7 +43,7 @@ class UnifiedConcentrationNavigationTest {
             ui.onNodeWithTag("model-LEGACY").performClick()
             ui.onNodeWithTag("concentration-legacy").assertExists()
             open(Destination.LABS)
-            ui.onNodeWithText(context.getString(R.string.lab_add)).assertExists()
+            ui.onNodeWithText(context.getString(R.string.labs_empty_title)).assertExists()
             open(Destination.CONCENTRATION)
             ui.onNodeWithTag("model-M2").assertIsSelected()
             assertEquals(emptyList<RecordEntity>(),runBlocking{db.dao().records()})

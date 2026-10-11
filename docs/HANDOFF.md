@@ -4,7 +4,7 @@
 
 已复用PR3只读适配/共享图表和PR1固定核/来源测试，新增AZ32版M1、共同B/A/研究单剂隔离的计算层与M2优先统一页，四语资源。当前不接线，所有保护文件仍原样；首轮JVM XML确认domain58/pk113/importer12均0失败/0跳过，M1独立Python32×13参考、P2-X来源4项通过；UI/真实Room只读路径/PeriodStability正运行，未宣称Android通过。旧实验宿主/路由不导入，单一debug合成数据宿主用于设备仪器测试。新增四语键/占位符及化验观察与研究分离回归；图表视窗、模型/单位/假设采用保存状态。首轮Android因委托状态smart cast编译失败，已修正取值并保留android-initial.log，正重跑；不能写通过。两处导航补丁和旧/新SHA已准备但未应用。科研Python256项通过；第二轮Android主代码通过，恢复测试导入错用新版Compose API，已按现有LongitudinalUiTest改为junit4.StateRestorationTester。修复异步点击读数在切换模式/时间时的旧状态显示及空时间风险，仍待UI重跑。首轮实际16项中14通过：PeriodStability5/5、Room只读1/1、adapter3/3、四语1/1、UI4/5；另两项是测试错误：assertTextContains默认要求整段相同而非子串，以及pmol换算1e-14舍入却用列表全等。修正为完整B/A文字匹配和1e-12数值精度（记录顺序/时刻/值仍断言），保留失败日志。工具链独立恢复到/workspace/hrt-unified-tools，同JDK21.0.12.1/Gradle9.3.1/SDK37，串行且Kotlin进程内编译避免旧OOM。
 
-最新复跑Androidfocused11/11通过（UI5、Room只读1、adapter3、化验1、四语1），0失败/跳过；此前PeriodStability5/5通过。受保护文件之外的组件已完成并独立提交。PR #19 Draft已建立；已应用两处已授权最小导航及精确SHA偏离，独立提交中；保护负向7/7通过：任意字节/授权字段/链历史/其他内核图表参数修改均拒绝。新增双曲线选择（M2+M1或M2+Legacy）和匹配颜色图例，下一轮全回归验证。待完成：全回归、设备CI、Debug/unsigned Release/lint/三基线体积、完整验收及PR状态更新。当前不能称集成完成或M2个人预测投产；不签名发布，不接触真实数据/密钥。旧记录如下保留。
+最新复跑Androidfocused11/11通过（UI5、Room只读1、adapter3、化验1、四语1），0失败/跳过；此前PeriodStability5/5通过。受保护文件之外的组件已完成并独立提交。PR #19 Draft已建立；已应用两处已授权最小导航及精确SHA偏离，独立提交4909b71；保护负向7/7通过：任意字节/授权字段/链历史/其他内核图表参数修改均拒绝。新增双曲线选择（M2+M1或M2+Legacy）和匹配颜色图例，下一轮全回归验证。全量domain/pk/importer/data/reminder/app回归已开始（full-tests.log），导航测试用化验空页唯一标题确认目标页，避免与FAB/空态两个合法添加按钮混淆。待完成：全回归、设备CI、Debug/unsigned Release/lint/三基线体积、完整验收及PR状态更新。当前不能称集成完成或M2个人预测投产；不签名发布，不接触真实数据/密钥。旧记录如下保留。
 
 ---
 
