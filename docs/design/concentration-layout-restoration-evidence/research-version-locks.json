@@ -1,0 +1,15 @@
+{
+  "source_commit": "425a7ab0c75c625c070a17b116cc4f99aa79ff0d",
+  "m2_version": "p2x-m2-research-v0.1",
+  "m2_selected_candidate": "p2x-14",
+  "m1_version": "p2az-m1-grid-v1",
+  "m1_selected_candidate": "p2az-m1-00",
+  "calibration": "common-1mg-1h-v1, artificial B=25/A=100 pg/mL",
+  "files": {
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchSublingualV01.kt": "55c62670dac37d9c44a370ea10406d66c21654ba330b7e967c61840a101ec527",
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchM1Catalog.kt": "82ffdd2f627742dfc2648da95e69d547f14d198f5c91214fbeca73e38d888f5d",
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/UnifiedModelComparison.kt": "bdb5364170b6b7d17079247c90e98ce14cd3133b336479cf075ac1326dcb0b93",
+    "docs/pk-research/p2/protocol-lock.json": "8b7d87abc8a04a2f1b920f8b7a4728ea3423ebdde19587a215649e12399e6d8c",
+    "docs/pk-research/p2/evidence-catalog.json": "02750c38f1f99002c7d8294d17ac65c502460ab419e21a1a337b222eb9e42e4e"
+  }
+}

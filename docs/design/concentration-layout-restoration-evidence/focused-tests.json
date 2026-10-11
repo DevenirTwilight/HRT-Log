@@ -1,0 +1,59 @@
+{
+  "source_commit": "425a7ab0c75c625c070a17b116cc4f99aa79ff0d",
+  "suites": [
+    {
+      "suite": "net.plainnotes.app.UnifiedConcentrationDataPathTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "net.plainnotes.app.UnifiedConcentrationNavigationTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "net.plainnotes.app.audit.ButtonAuditTest",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "net.plainnotes.app.ConcentrationPreviewTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "net.plainnotes.app.UnifiedConcentrationUiTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "net.plainnotes.app.UnifiedConcentrationTranslationsTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "net.plainnotes.app.UnifiedConcentrationObservationTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "total": 29,
+  "protocol_negative_tests": {
+    "total": 9,
+    "passed": 9
+  }
+}

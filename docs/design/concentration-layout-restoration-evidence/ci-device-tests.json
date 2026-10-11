@@ -1,0 +1,27 @@
+{
+  "source_commit": "425a7ab0c75c625c070a17b116cc4f99aa79ff0d",
+  "run_id": 38165696135,
+  "artifact_id": 11712785378,
+  "artifact_sha256": "c7899b2a067928e30e5d2cf3a31c19ae221482ef24efeaf2cb06dd0c28168719",
+  "reports": [
+    {
+      "path": "core/data/build/reports/androidTests/connected/debug/index.html",
+      "tests": 14,
+      "failures": 0,
+      "skipped": 0
+    },
+    {
+      "path": "app/build/reports/androidTests/connected/debug/flavors/full/index.html",
+      "tests": 67,
+      "failures": 0,
+      "skipped": 2
+    },
+    {
+      "path": "app/build/reports/androidTests/connected/debug/flavors/full/net.plainnotes.app.debug.UnifiedConcentrationAndroidTest.html",
+      "tests": 3,
+      "failures": 0,
+      "skipped": 0
+    }
+  ],
+  "note": "HTML reports, not JUnit XML. App 67 includes 2 pre-existing process-restart tests skipped by ordinary instrumentation; dedicated restart harness must be verified separately."
+}

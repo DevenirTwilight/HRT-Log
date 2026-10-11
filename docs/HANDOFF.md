@@ -1,3 +1,13 @@
+# 原血药浓度UI恢复：仅增加模型选择（2026-10-11）
+
+最新明确指令“我要恢复原ui，只增加选模型功能”覆盖前两轮重排设计；当前源码425a7ab0c75c625c070a17b116cc4f99aa79ff0d直接复用原ConcentrationScreen和原ConcChart。保留原卡片、日历时间轴、化验、校准、参数与历史修复；只增加选择和科研假设标注。无新参数表单/指标分区/实验入口，M2优先研究情景，M1候选可选，Legacy原计算保留；其他途径无合格SL历史时退回Legacy。完整记录见[本轮验收](design/concentration-layout-restoration-2026-10.md)、REQUIREMENTS §60和精确UI偏离授权。冻结生产核/参数/协议基线不变。本轮425a7ab CI38165696135三任务全成功；本地29项/32张四语截图、Debug/Release/仪器构建/lint均通过（本地16m24s退出0，lint0错误172警告）。完整420项app CI有13项原有跳过，设备67项有2项原有跳过，实际限制已在报告逐项记录；不沿用旧059原型或001补跑冒称新测试成功。
+
+正式签名交接：§7已记录隔壁私有备份，应先读该节，不能要求用户重复提交密钥。用户已明确授权原正式签名与私有交付。此前反馈前APK为12,815,220B、SHA256 b53ad1d70a114a5538b7af455a05f2d94996cdf484c94be99cdefb09a4f52ccb，不是修复版。本修复正式签名包12,782,452B、SHA256 `2bdfc370499c409cf8c916ba5db35c5a53b1dcc35d21081005e4b332f41896b8`，沿用989ba045…原证书；v2/v3、ZIP CRC、16KB对齐及私有上传后独立接收哈希/签名通过，shared=false/owner-only。相比原交付包减少32,768B；unsigned12,736,319B，比原统一UI源码减少32,508B。临时凭据已清除，私钥/密码/私有链接不入公开仓库。
+
+以下保留之前统一工程交接，当前UI呈现以本段及§60为准；M2个人绝对临床预测没有自动放行。
+
+---
+
 # 统一血药浓度工程交接（2026-10-11）
 
 状态：`BRANCH_COMMITTED / PR_OPEN`；分支 `feature/unified-concentration-20261011`，PR [#19](https://github.com/DevenirTwilight/HRT-Log/pull/19) 已转为Ready for review供工程合并审查。默认基线f53726ff，未merge研究分支、未合并到默认、未发布APK。最终应用源码001869b0c508c74b40bae0e6c6c85573e9c10cd6的[CI38147885981](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38147885981) JVM/Android/device三任务全成功；真实artifact已下载SHA校验。三套unsigned fullRelease已实际重建/CRC/SHA/manifest/未签名核验：默认12,707,919B、旧PR312,812,823B、统一12,768,827B；相对旧PR3-43,996B，相对默认+60,908B，构建配置哈希/四ABI原生payload完全一致。后续交接检查点7f320aa的CI38149469317三任务也通过，最后仅追加文档及审计结果。
