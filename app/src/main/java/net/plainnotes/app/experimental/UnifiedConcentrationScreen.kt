@@ -29,6 +29,8 @@ import java.time.Instant
     pad: PaddingValues, legacyContent: @Composable (PaddingValues) -> Unit, now: () -> Instant = Instant::now) {
     var model by rememberSaveable { mutableStateOf(ResearchModel.M2) }
     var overlay by rememberSaveable { mutableStateOf(false) }
+    var compareM1 by rememberSaveable { mutableStateOf(true) }
+    var compareLegacy by rememberSaveable { mutableStateOf(true) }
     var historical by rememberSaveable { mutableStateOf(false) }
     var display by rememberSaveable { mutableStateOf(ResearchDisplay.CONDITIONAL) }
     var pmol by rememberSaveable { mutableStateOf(false) }
@@ -66,6 +68,12 @@ import java.time.Instant
             ResearchModel.entries.forEach { m -> FilterChip(model == m, { model = m; historical = m == ResearchModel.LEGACY && !overlay },
                 label = { Text(m.name) }, modifier = Modifier.testTag("model-${m.name}")) }
             FilterChip(overlay, { overlay = !overlay; historical = false }, label = { Text(stringResource(R.string.uc_overlay)) }, modifier = Modifier.testTag("model-overlay"))
+        }
+        if (overlay) Row(Modifier.horizontalScroll(rememberScrollState()).padding(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            FilterChip(compareM1, { compareM1 = !compareM1 }, enabled = compareLegacy,
+                label = { Text("M2 + M1") }, modifier = Modifier.testTag("compare-M1"))
+            FilterChip(compareLegacy, { compareLegacy = !compareLegacy }, enabled = compareM1,
+                label = { Text("M2 + Legacy") }, modifier = Modifier.testTag("compare-LEGACY"))
         }
         if (historical) {
             Text(stringResource(R.string.uc_legacy_note), Modifier.padding(horizontal = 16.dp).testTag("legacy-unverified"), style = MaterialTheme.typography.bodySmall)
@@ -117,7 +125,8 @@ import java.time.Instant
             snap?.let { s ->
                 val r = s.result; val factor = r.factor(pmol)
                 val unit = if (display == ResearchDisplay.RELATIVE) stringResource(R.string.uc_relative_unit) else if (pmol) "pmol/L" else "pg/mL"
-                val active = if (overlay) ResearchModel.entries.toList() else listOf(model)
+                val active = if (overlay) listOf(ResearchModel.M2) + (if (compareM1) listOf(ResearchModel.M1) else emptyList()) +
+                    (if (compareLegacy) listOf(ResearchModel.LEGACY) else emptyList()) else listOf(model)
                 if (display != ResearchDisplay.RELATIVE) Text(stringResource(R.string.uc_calibration, fmt(r.calibration.backgroundPgMl), fmt(r.calibration.amplitudePgMl)), modifier = Modifier.testTag("common-calibration"))
                 if (display == ResearchDisplay.STUDY) {
                     Text(stringResource(R.string.uc_price_protocol), modifier = Modifier.testTag("study-not-personal"))
@@ -127,12 +136,14 @@ import java.time.Instant
                 val points = if (display == ResearchDisplay.STUDY) PriceFigure1997.hours.indices.map { Triple(PriceFigure1997.hours[it], PriceFigure1997.means[it] * factor, PriceFigure1997.readWidths[it] * factor) }
                     else researchObservationPoints(labs, display, pmol)
                 ModelComparisonChart(ComparisonChartData(r.base.timeHours,
-                    active.map { ComparisonSeries(r.series.getValue(it).map { y -> y * factor }.toDoubleArray(), modelColors.getValue(it)) },
+                    active.map { ComparisonSeries(r.series.getValue(it).map { y -> y * factor }.toDoubleArray(), modelColors.getValue(it), dashed = it == ResearchModel.LEGACY) },
                     band = if (ResearchModel.M2 in active) r.m2Range.first.map { it * factor }.toDoubleArray() to r.m2Range.second.map { it * factor }.toDoubleArray() else null,
                     bandColor = modelColors.getValue(ResearchModel.M2), longTail = r.base.longTail, doses = r.base.doses, points = points,
                     axisOrigin = if (window.relative || display == ResearchDisplay.STUDY) r.base.originHour else null,
                     description = stringResource(R.string.uc_chart_description, active.joinToString { it.name }, unit)), hour, { hour = it }, ::fmt, tag = "unified-chart")
-                Text(active.joinToString(" · ") { it.name }, modifier = Modifier.testTag("curve-legend"))
+                Row(Modifier.horizontalScroll(rememberScrollState()).testTag("curve-legend"), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    active.forEach { Text(it.name, color = modelColors.getValue(it)) }
+                }
                 if (display != ResearchDisplay.RELATIVE) Text(stringResource(if (display == ResearchDisplay.STUDY) R.string.uc_study_points else R.string.uc_lab_points), style = MaterialTheme.typography.bodySmall)
                 Text(stringResource(R.string.uc_range_tail), style = MaterialTheme.typography.bodySmall, modifier = Modifier.testTag("tail-warning"))
                 val tapped by produceState<Triple<UnifiedComparison, Double, Map<ResearchModel, Double>>?>(null, r, hour) {
@@ -145,8 +156,8 @@ import java.time.Instant
                         Text("${fmt(hour!! - r.base.originHour)} h", modifier = Modifier.testTag("readout-time"))
                         active.forEach { m -> Text("${m.name}: ${fmt(readout.getValue(m) * factor)} $unit", modifier = Modifier.testTag("readout-${m.name}")) }
                         if (overlay) {
-                            Text("M2 − M1: ${fmt((readout.getValue(ResearchModel.M2) - readout.getValue(ResearchModel.M1)) * factor)} $unit", modifier = Modifier.testTag("difference-M1"))
-                            Text("M2 − Legacy: ${fmt((readout.getValue(ResearchModel.M2) - readout.getValue(ResearchModel.LEGACY)) * factor)} $unit", modifier = Modifier.testTag("difference-LEGACY"))
+                            if (ResearchModel.M1 in active) Text("M2 − M1: ${fmt((readout.getValue(ResearchModel.M2) - readout.getValue(ResearchModel.M1)) * factor)} $unit", modifier = Modifier.testTag("difference-M1"))
+                            if (ResearchModel.LEGACY in active) Text("M2 − Legacy: ${fmt((readout.getValue(ResearchModel.M2) - readout.getValue(ResearchModel.LEGACY)) * factor)} $unit", modifier = Modifier.testTag("difference-LEGACY"))
                         }
                     }
                 }

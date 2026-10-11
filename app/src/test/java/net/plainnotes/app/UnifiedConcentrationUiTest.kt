@@ -62,6 +62,17 @@ class UnifiedConcentrationUiTest {
         assertEquals(shown*3.671,converted,0.004)
         ui.onNodeWithTag("tail-warning").assertExists()
     }
+    @Test fun twoCurveSelectionUsesSameCalibrationAndExactPairwiseDifference() {
+        show();await("unified-chart");click("model-overlay");click("compare-LEGACY");tap()
+        await("readout-M1");ui.onAllNodesWithTag("readout-LEGACY").assertCountEquals(0)
+        ui.onAllNodesWithTag("difference-LEGACY").assertCountEquals(0);ui.onNodeWithTag("difference-M1").assertExists()
+        val m2=read("readout-M2").substringAfter(": ").substringBefore(" pg/mL").toDouble()
+        val m1=read("readout-M1").substringAfter(": ").substringBefore(" pg/mL").toDouble()
+        val difference=read("difference-M1").substringAfter(": ").substringBefore(" pg/mL").toDouble()
+        assertEquals(m2-m1,difference,0.0011) // Three independently rounded display values, each to .001 pg/mL.
+        click("compare-LEGACY");click("compare-M1");ui.onNodeWithTag("readout-LEGACY").assertExists()
+        ui.onAllNodesWithTag("readout-M1").assertCountEquals(0)
+    }
     @Test fun zoomAndPanChangeTapCoordinateAndRestoreSelection() {
         val restore=StateRestorationTester(ui);restore.setContent { content() };await("unified-chart")
         ui.onNodeWithTag("unified-chart").performScrollTo().performTouchInput {
