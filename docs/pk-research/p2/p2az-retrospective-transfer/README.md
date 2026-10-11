@@ -6,7 +6,7 @@ This phase actually reselects **32 one-input vs 216 dual-input** *new finite-gri
 - [Frozen study/source/baseline design](p2az-design.json)
 - [All 54 model selections and held-out scores](p2az-results.json)
 - [Reproduction script](../../../../tools/pk-research/p2az_study_transfer.py)
-- [12 synthetic/source isolation tests](../../../../tools/pk-research/test_p2az_study_transfer.py)
+- [13 synthetic/source isolation tests](../../../../tools/pk-research/test_p2az_study_transfer.py)
 - [GitHub Actions exact JSON replay](../../../../.github/workflows/p2az-study-transfer.yml)
 
 Run from repository root:
