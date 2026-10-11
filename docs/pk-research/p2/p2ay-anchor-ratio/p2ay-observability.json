@@ -30,9 +30,9 @@
       "m2_min_ratio_micro": 58993,
       "maximum_model_gap_micro": 470217,
       "minimum_A1h_increment_pgml_milli_for_2sd": {
-        "1": 6472,
-        "3": 19417,
-        "10": 64725
+        "sd1": 6472,
+        "sd10": 64725,
+        "sd3": 19417
       },
       "minimum_model_gap_micro": 424691,
       "passes_artificial_2sd_rule": {
@@ -56,9 +56,9 @@
       "m2_min_ratio_micro": 460666,
       "maximum_model_gap_micro": 363649,
       "minimum_A1h_increment_pgml_milli_for_2sd": {
-        "1": 8713,
-        "3": 26140,
-        "10": 87132
+        "sd1": 8713,
+        "sd10": 87132,
+        "sd3": 26140
       },
       "minimum_model_gap_micro": 300190,
       "passes_artificial_2sd_rule": {
@@ -82,9 +82,9 @@
       "m2_min_ratio_micro": 1000000,
       "maximum_model_gap_micro": 0,
       "minimum_A1h_increment_pgml_milli_for_2sd": {
-        "1": null,
-        "3": null,
-        "10": null
+        "sd1": null,
+        "sd10": null,
+        "sd3": null
       },
       "minimum_model_gap_micro": 0,
       "passes_artificial_2sd_rule": {},
@@ -98,9 +98,9 @@
       "m2_min_ratio_micro": 410466,
       "maximum_model_gap_micro": 325449,
       "minimum_A1h_increment_pgml_milli_for_2sd": {
-        "1": 10752,
-        "3": 32256,
-        "10": 107519
+        "sd1": 10752,
+        "sd10": 107519,
+        "sd3": 32256
       },
       "minimum_model_gap_micro": 236121,
       "passes_artificial_2sd_rule": {
@@ -124,9 +124,9 @@
       "m2_min_ratio_micro": 133418,
       "maximum_model_gap_micro": 66099,
       "minimum_A1h_increment_pgml_milli_for_2sd": {
-        "1": 136137,
-        "3": 408410,
-        "10": 1361367
+        "sd1": 136137,
+        "sd10": 1361367,
+        "sd3": 408410
       },
       "minimum_model_gap_micro": 19538,
       "passes_artificial_2sd_rule": {
@@ -150,9 +150,9 @@
       "m2_min_ratio_micro": 75318,
       "maximum_model_gap_micro": 80755,
       "minimum_A1h_increment_pgml_milli_for_2sd": {
-        "1": 80470,
-        "3": 241409,
-        "10": 804697
+        "sd1": 80470,
+        "sd10": 804697,
+        "sd3": 241409
       },
       "minimum_model_gap_micro": 34453,
       "passes_artificial_2sd_rule": {
@@ -176,9 +176,9 @@
       "m2_min_ratio_micro": 46338,
       "maximum_model_gap_micro": 95809,
       "minimum_A1h_increment_pgml_milli_for_2sd": {
-        "1": 72994,
-        "3": 218983,
-        "10": 729945
+        "sd1": 72994,
+        "sd10": 729945,
+        "sd3": 218983
       },
       "minimum_model_gap_micro": 38599,
       "passes_artificial_2sd_rule": {
@@ -202,9 +202,9 @@
       "m2_min_ratio_micro": 16016,
       "maximum_model_gap_micro": 82643,
       "minimum_A1h_increment_pgml_milli_for_2sd": {
-        "1": 183404,
-        "3": 550213,
-        "10": 1834042
+        "sd1": 183404,
+        "sd10": 1834042,
+        "sd3": 550213
       },
       "minimum_model_gap_micro": 15417,
       "passes_artificial_2sd_rule": {
@@ -228,9 +228,9 @@
       "m2_min_ratio_micro": 663,
       "maximum_model_gap_micro": 44535,
       "minimum_A1h_increment_pgml_milli_for_2sd": {
-        "1": 6524152,
-        "3": 19572457,
-        "10": 65241523
+        "sd1": 6524152,
+        "sd10": 65241523,
+        "sd3": 19572457
       },
       "minimum_model_gap_micro": 433,
       "passes_artificial_2sd_rule": {
