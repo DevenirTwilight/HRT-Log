@@ -24,7 +24,7 @@
     <string name="uc_empty">Aucune dose E2 sublinguale admissible. Les autres voies et médicaments restent dans la vue historique Legacy.</string>
     <string name="uc_relative_unit">Réponse relative (sans dimension)</string>
     <string name="uc_calibration">B=%1$s, A=%2$s pg/mL communs · H(1 h)=1 pour une dose de 1 mg</string>
-    <string name="uc_price_protocol">Price 1997 Figure 1 : six femmes ménopausées, E2 micronisé sublingual, dose unique 1 mg. Ni votre historique ni une prédiction personnelle. B est une hypothèse figée ; A=450−B commun, moyenne de groupe lue à 1 h. Protocole commun distinct des ajustements pondérés P2-X originaux.</string>
+    <string name="uc_price_protocol">Price 1997 Figure 1 : six femmes ménopausées, E2 micronisé sublingual, dose unique 1 mg. Ni votre historique ni une prédiction personnelle. B est une hypothèse figée ; A=450−B commun, moyenne de groupe lue à 1 h. Protocole commun distinct des ajustements pondérés P2-X originaux. Legacy utilise le niveau 2 supposé (10 min), pas une durée de maintien vérifiée dans Price.</string>
     <string name="uc_price_conflict">Trapèzes de la figure avec valeur prédose supposée nulle : %1$s pg·h/mL ; Table 1 après soustraction prédose : %2$s ±1031 pg·h/mL. Écart non résolu, sans ajustement forcé.</string>
     <string name="uc_chart_description">Graphique commun : %1$s ; %2$s</string>
     <string name="uc_study_points">Points : moyennes publiées lues manuellement ; barres : incertitude de lecture, pas écart-type ni analyses personnelles.</string>

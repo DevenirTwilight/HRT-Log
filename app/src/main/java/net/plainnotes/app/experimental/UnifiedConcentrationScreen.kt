@@ -109,7 +109,7 @@ import java.time.Instant
                 Text("$name: n=${c.transitStages}; kf=${fmt(c.fastRatePerHour)} /h; ke=${fmt(c.eliminationRatePerHour)} /h; ks=${fmt(c.slowRatePerHour)} /h; w=${fmt(c.slowWeight)}", style = MaterialTheme.typography.bodySmall)
             }
             Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                ComparisonWindow.entries.forEach { w -> FilterChip(window == w, { window = w; hour = null }, label = { Text(if (w.relative) "0–${w.hours.toInt()} h" else stringResource(R.string.uc_calendar)) }, modifier = Modifier.testTag("window-${w.name}")) }
+                ComparisonWindow.entries.forEach { w -> FilterChip(window == w, { window = w; hour = null }, label = { Text(if (w.relative || display == ResearchDisplay.STUDY) "0–${w.hours.toInt()} h" else stringResource(R.string.uc_calendar)) }, modifier = Modifier.testTag("window-${w.name}")) }
             }
             if (display != ResearchDisplay.STUDY && audit?.events?.isNotEmpty() == true) {
                 DropdownField(stringResource(R.string.uc_origin), audit!!.events.indices.toList().reversed(), (originIndex ?: audit!!.events.lastIndex).coerceIn(0, audit!!.events.lastIndex),
@@ -170,7 +170,7 @@ import java.time.Instant
                         Text("8/12/24 h: ${fmt(metrics.at8h * factor)} / ${fmt(metrics.at12h * factor)} / ${fmt(metrics.at24h * factor)} $unit")
                     }
                 }
-                Text(stringResource(R.string.uc_coverage, r.base.doses.size, r.base.omittedOlderDoses, s.audit.excluded.values.sum()), style = MaterialTheme.typography.bodySmall)
+                if (display != ResearchDisplay.STUDY) Text(stringResource(R.string.uc_coverage, r.base.doses.size, r.base.omittedOlderDoses, s.audit.excluded.values.sum()), style = MaterialTheme.typography.bodySmall, modifier = Modifier.testTag("history-coverage"))
             }
             Spacer(Modifier.height(16.dp))
         }

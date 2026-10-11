@@ -93,6 +93,8 @@ class UnifiedConcentrationUiTest {
         click("display-STUDY");await("study-not-personal");ui.onNodeWithTag("chart-unit").assertTextEquals("pg/mL")
         ui.onAllNodesWithText(ui.activity.getString(R.string.uc_lab_points)).assertCountEquals(0)
         ui.onNodeWithTag("common-calibration").assertTextEquals(ui.activity.getString(R.string.uc_calibration,"18.000","432.000"))
+        ui.onAllNodesWithTag("history-coverage").assertCountEquals(0)
+        ui.onNodeWithTag("window-CALENDAR_7D").assert(hasText("0–168 h"))
     }
     @Test fun invalidCalibrationDoesNotLeaveOldValidCurveVisible() {
         show();await("unified-chart");ui.onNodeWithTag("amplitude").performScrollTo().performTextReplacement("NaN")

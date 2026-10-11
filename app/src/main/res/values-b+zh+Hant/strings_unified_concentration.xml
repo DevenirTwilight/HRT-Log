@@ -24,7 +24,7 @@
     <string name="uc_empty">沒有符合條件的已服用舌下 E2 記錄。其他藥物及途徑仍可在 Legacy 歷史檢視查看。</string>
     <string name="uc_relative_unit">相對響應（無量綱）</string>
     <string name="uc_calibration">共同 B=%1$s、A=%2$s pg/mL · 單次 1 mg 的 H(1 h)=1</string>
-    <string name="uc_price_protocol">Price 1997 Figure 1：6 名停經後女性，微粒化舌下 E2、單次 1 mg。不是個人歷史或預測。B 為選定候選的凍結研究假設；共同 A=450−B，來自手工讀圖的 1 h 群體均值。此共同比較協議不是每個候選原有 P2-X 加權幅度擬合。</string>
+    <string name="uc_price_protocol">Price 1997 Figure 1：6 名停經後女性，微粒化舌下 E2、單次 1 mg。不是個人歷史或預測。B 為選定候選的凍結研究假設；共同 A=450−B，來自手工讀圖的 1 h 群體均值。此共同比較協議不是每個候選原有 P2-X 加權幅度擬合。 Legacy使用假設的第2檔（10分鐘），並非Price研究已核實的含服時長。</string>
     <string name="uc_price_conflict">讀圖並假設給藥前為零的梯形面積：%1$s pg·h/mL；Table 1 扣給藥前均值：%2$s ±1031 pg·h/mL。差異未解決，不調整參數強行吻合。</string>
     <string name="uc_chart_description">共同模型圖表：%1$s；%2$s</string>
     <string name="uc_study_points">圓點：手工讀圖的發表群體均值；誤差線：讀圖寬度，不是研究 SD 或個人化驗。</string>

@@ -24,7 +24,7 @@
     <string name="uc_empty">No eligible recorded sublingual E2 doses. Other compounds/routes remain available in Legacy historical view.</string>
     <string name="uc_relative_unit">Relative response (dimensionless)</string>
     <string name="uc_calibration">Common B=%1$s, A=%2$s pg/mL · H(1 h)=1 for one 1 mg dose</string>
-    <string name="uc_price_protocol">Price 1997 Figure 1: six postmenopausal women, micronized SL E2, one 1 mg dose. Not your history or personal prediction. B is the selected candidate’s frozen study assumption; common A=450−B from the manually read 1 h group mean. This shared comparison protocol is not each candidate’s original weighted P2-X amplitude fit.</string>
+    <string name="uc_price_protocol">Price 1997 Figure 1: six postmenopausal women, micronized SL E2, one 1 mg dose. Not your history or personal prediction. B is the selected candidate’s frozen study assumption; common A=450−B from the manually read 1 h group mean. This shared comparison protocol is not each candidate’s original weighted P2-X amplitude fit. Legacy uses assumed tier 2 (10 min), not a verified Price hold-time observation.</string>
     <string name="uc_price_conflict">Figure trapezoid with assumed zero predose: %1$s pg·h/mL; Table 1 predose-subtracted mean: %2$s ±1031 pg·h/mL. The discrepancy remains unresolved; parameters are not changed to force agreement.</string>
     <string name="uc_chart_description">Shared model chart: %1$s; %2$s</string>
     <string name="uc_study_points">Dots: manually read published group means; bars: reading widths, not study SD or personal labs.</string>
