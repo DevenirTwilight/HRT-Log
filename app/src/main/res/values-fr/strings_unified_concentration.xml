@@ -32,7 +32,7 @@
     <string name="uc_range_tail" formatted="false">Bande : étendue de 15 candidats, pas un intervalle humain à 90 %. Queue grisée après 8 h très incertaine, surtout 8–24 h. La forme rétrospective M2 ne valide pas la précision individuelle et ne dépasse pas toujours M1.</string>
     <string name="uc_readout">Lecture exacte du modèle</string>
     <string name="uc_tap">Toucher le graphique pour comparer le même instant.</string>
-    <string name="uc_metrics_note">Mesures sur 0–24 h après origine, incluant les doses enregistrées voisines sauf en mode isolé. AUC totale B+A×H intégrée à pas de 1 minute ; unité commune. Aucune dose future inventée.</string>
+    <string name="uc_metrics_note">Mesures sur 0–24 h après l’origine. Les prises antérieures et ultérieures enregistrées sont incluses sauf en mode dose unique. L’AUC intègre H en mode relatif et B+A×H dans les scénarios de concentration, par pas de 1 minute ; les concentrations et AUC utilisent l’unité sélectionnée. Aucune prise future n’est inventée.</string>
     <string name="uc_peak">Pic %1$s %2$s à +%3$s h</string>
     <string name="uc_auc">AUC 0–4 / 0–8 / 0–24 h : %1$s / %2$s / %3$s %4$s</string>
     <string name="uc_coverage">%1$d doses utilisées ; %2$d hors des 30 jours précédents ; %3$d exclues par audit.</string>

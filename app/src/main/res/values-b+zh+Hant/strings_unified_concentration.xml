@@ -32,7 +32,7 @@
     <string name="uc_range_tail" formatted="false">陰影帶：15 套已探索候選範圍，不是人體 90% 信賴或預測區間。給藥後超過 8 h 的灰色長尾高度不確定，尤其 8–24 h。M2 回顧性形狀證據不證明個人絕對準確性，也並非總優於 M1。</string>
     <string name="uc_readout">精確模型讀數</string>
     <string name="uc_tap">點擊圖表比較同一時刻。</string>
-    <string name="uc_metrics_note">指標視窗為起點後 0–24 h，包含視窗內已記錄的前後劑量（單劑模式除外）。AUC 用 1 分鐘網格積分總 B+A×H；濃度及面積使用所選單位，不虛構未來服藥。</string>
+    <string name="uc_metrics_note">指標為原點後0–24小時，除單劑模式外包含視窗內已記錄的前後給藥。AUC在相對模式積分H，在濃度情景積分B+A×H，步長1分鐘；濃度和AUC使用所選單位。不虛構未來給藥。</string>
     <string name="uc_peak">峰值 %1$s %2$s；峰時 +%3$s h</string>
     <string name="uc_auc">AUC 0–4 / 0–8 / 0–24 h：%1$s / %2$s / %3$s %4$s</string>
     <string name="uc_coverage">使用 %1$d 次劑量；超出 30 天回看省略 %2$d；歷史審核排除 %3$d。</string>
