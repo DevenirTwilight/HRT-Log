@@ -1,0 +1,68 @@
+[
+  {
+    "apk": "default-unsigned.apk",
+    "package": "net.plainnotes.app",
+    "version_code": 25,
+    "version_name": "0.2.0",
+    "min_sdk": 26,
+    "target_sdk": 37,
+    "permissions": [
+      "android.permission.RECEIVE_BOOT_COMPLETED",
+      "android.permission.SCHEDULE_EXACT_ALARM",
+      "android.permission.POST_NOTIFICATIONS",
+      "android.permission.USE_BIOMETRIC",
+      "android.permission.USE_FINGERPRINT",
+      "android.permission.WAKE_LOCK",
+      "android.permission.ACCESS_NETWORK_STATE",
+      "android.permission.FOREGROUND_SERVICE",
+      "net.plainnotes.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+    ],
+    "unsigned": true,
+    "apksigner_expected_exit": 1,
+    "apksigner_output": "DOES NOT VERIFY\nERROR: Missing META-INF/MANIFEST.MF"
+  },
+  {
+    "apk": "old-pr3-unsigned.apk",
+    "package": "net.plainnotes.app",
+    "version_code": 25,
+    "version_name": "0.2.0",
+    "min_sdk": 26,
+    "target_sdk": 37,
+    "permissions": [
+      "android.permission.RECEIVE_BOOT_COMPLETED",
+      "android.permission.SCHEDULE_EXACT_ALARM",
+      "android.permission.POST_NOTIFICATIONS",
+      "android.permission.USE_BIOMETRIC",
+      "android.permission.USE_FINGERPRINT",
+      "android.permission.WAKE_LOCK",
+      "android.permission.ACCESS_NETWORK_STATE",
+      "android.permission.FOREGROUND_SERVICE",
+      "net.plainnotes.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+    ],
+    "unsigned": true,
+    "apksigner_expected_exit": 1,
+    "apksigner_output": "DOES NOT VERIFY\nERROR: Missing META-INF/MANIFEST.MF"
+  },
+  {
+    "apk": "unified-unsigned.apk",
+    "package": "net.plainnotes.app",
+    "version_code": 25,
+    "version_name": "0.2.0",
+    "min_sdk": 26,
+    "target_sdk": 37,
+    "permissions": [
+      "android.permission.RECEIVE_BOOT_COMPLETED",
+      "android.permission.SCHEDULE_EXACT_ALARM",
+      "android.permission.POST_NOTIFICATIONS",
+      "android.permission.USE_BIOMETRIC",
+      "android.permission.USE_FINGERPRINT",
+      "android.permission.WAKE_LOCK",
+      "android.permission.ACCESS_NETWORK_STATE",
+      "android.permission.FOREGROUND_SERVICE",
+      "net.plainnotes.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+    ],
+    "unsigned": true,
+    "apksigner_expected_exit": 1,
+    "apksigner_output": "DOES NOT VERIFY\nERROR: Missing META-INF/MANIFEST.MF"
+  }
+]

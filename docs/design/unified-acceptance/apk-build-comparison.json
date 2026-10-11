@@ -1,0 +1,41 @@
+{
+  "toolchain": {
+    "jdk": "Temurin21.0.12.1+1",
+    "gradle": "9.3.1",
+    "agp": "9.1.1",
+    "kotlin": "2.2.20",
+    "compile_sdk": "37",
+    "build_tools": "37.0.0",
+    "kotlin_compiler_execution_strategy": "in-process",
+    "max_workers": 2,
+    "parallel": false
+  },
+  "variant": "fullRelease universal 4ABI, minify+resource shrinking, compressed native libraries, unsigned",
+  "source_revisions": {
+    "default": "f53726ff6fa52fc5c78806a1576fdb80fcf29987",
+    "old_pr3": "4b264187b08f23ae4ef88a10715e29500d60ce29",
+    "unified_application": "001869b0c508c74b40bae0e6c6c85573e9c10cd6"
+  },
+  "identical_build_configuration_sha256_file": "build-configuration-hashes.json",
+  "native_payload_crc_and_sizes_identical": true,
+  "apks": [
+    {
+      "filename": "default-unsigned.apk",
+      "size_bytes": 12707919,
+      "sha256": "463f0b045135226fd49f077938182077b79472cd4345e4abd9cc8c3cdb46efd0"
+    },
+    {
+      "filename": "old-pr3-unsigned.apk",
+      "size_bytes": 12812823,
+      "sha256": "107c03b40c7a61eabb09d8aaf7298a6a8035c7f92460b3718a16dbd43f574f74"
+    },
+    {
+      "filename": "unified-unsigned.apk",
+      "size_bytes": 12768827,
+      "sha256": "50cbc3bee87381f0e1d9b5e8422c9f70606cdb1cd45f272feb820a5bc3de6936"
+    }
+  ],
+  "unified_vs_default_bytes": 60908,
+  "unified_vs_old_pr3_bytes": -43996,
+  "note": "Default has no experiment page; its delta measures added unified features. PR3 comparison measures consolidation against the actual old experiment implementation, not a deletion from default."
+}

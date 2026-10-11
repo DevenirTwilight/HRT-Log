@@ -1,5 +1,6 @@
 Baseline: f53726ff6fa52fc5c78806a1576fdb80fcf29987
-Source checkpoint: 9aa5bc29bf2a44a191d6498b6a1af728077746d4
+Validated application/test/workflow source: 001869b0c508c74b40bae0e6c6c85573e9c10cd6
+Final staged delivery list (final commit SHA available from PR head/git log):
 M	.github/workflows/android.yml
 A	app/src/androidTestFullDebug/java/net/plainnotes/app/debug/UnifiedConcentrationAndroidTest.kt
 A	app/src/debug/AndroidManifest.xml
@@ -22,9 +23,30 @@ A	app/src/test/java/net/plainnotes/app/UnifiedConcentrationUiTest.kt
 M	app/src/testFull/java/net/plainnotes/app/audit/ButtonAuditTest.kt
 M	docs/HANDOFF.md
 M	docs/REQUIREMENTS.md
+A	docs/design/unified-acceptance/apk-build-comparison.json
+A	docs/design/unified-acceptance/apk-manifest-signature-audit.json
+A	docs/design/unified-acceptance/apk-size-audit.json
+A	docs/design/unified-acceptance/apk-size-audit.md
+A	docs/design/unified-acceptance/build-configuration-hashes.json
+A	docs/design/unified-acceptance/ci-final-results.json
+A	docs/design/unified-acceptance/device-final-results.json
+A	docs/design/unified-acceptance/device-functional-checkpoint.json
+A	docs/design/unified-acceptance/final-app-test-results.json
+A	docs/design/unified-acceptance/final-observation-test-results.json
 A	docs/design/unified-acceptance/focused-test-results.json
 A	docs/design/unified-acceptance/full-test-results.json
+A	docs/design/unified-acceptance/implementation-history.md
+A	docs/design/unified-acceptance/local-gradle-execution.json
+A	docs/design/unified-acceptance/modified-files.txt
+A	docs/design/unified-acceptance/protected-file-hashes.json
+A	docs/design/unified-acceptance/python-verification.json
+A	docs/design/unified-acceptance/research-replay-metadata.json
 A	docs/design/unified-acceptance/source-resource-audit.json
+A	docs/design/unified-acceptance/unified-device-performance.json
+A	docs/design/unified-acceptance/validated-source-trees.json
+A	docs/design/unified-acceptance/visual-audit.json
+A	docs/design/unified-acceptance/visual/fr-rFR-font2-unified.png
+A	docs/design/unified-acceptance/visual/zh-rTW-font2-unified.png
 A	docs/design/unified-concentration-2026-10.md
 A	docs/design/unified-concentration-pr-audit-2026-10.json
 A	docs/design/unified-model-inputs/m1-candidates.json
@@ -56,7 +78,9 @@ A	pk-engine/src/test/kotlin/net/plainnotes/app/pk/experimental/UnifiedComparison
 A	pk-engine/src/test/kotlin/net/plainnotes/app/pk/experimental/UnifiedModelComparisonTest.kt
 A	pk-engine/src/test/resources/unified-m1-python-reference.json
 A	scripts/check_unified_concentration.py
+A	scripts/collect_unified_device_performance.py
 A	scripts/generate_unified_model_reference.py
+A	scripts/test_collect_unified_device_performance.py
 M	tools/pk-research/check_protocol.py
 A	tools/pk-research/p2x_reproduce_standalone.py
 M	tools/pk-research/research.py

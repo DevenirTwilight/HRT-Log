@@ -186,5 +186,33 @@
     "cwd": "/workspace/HRT-Log",
     "exit_code": 0,
     "log_name": "final-observation-guard-builds.log"
+  },
+  {
+    "command": [
+      "/workspace/hrt-unified-tools/gradle-9.3.1/bin/gradle",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=2",
+      "--console=plain",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      ":app:assembleFullRelease"
+    ],
+    "cwd": "/tmp/hrt-unified/baseline",
+    "exit_code": 0,
+    "log_name": "apk-default-build.log"
+  },
+  {
+    "command": [
+      "/workspace/hrt-unified-tools/gradle-9.3.1/bin/gradle",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=2",
+      "--console=plain",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      ":app:assembleFullRelease"
+    ],
+    "cwd": "/tmp/hrt-unified/pr3",
+    "exit_code": 0,
+    "log_name": "apk-old-pr3-build.log"
   }
 ]

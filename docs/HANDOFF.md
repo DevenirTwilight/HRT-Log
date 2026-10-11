@@ -1,6 +1,6 @@
 # 统一血药浓度工程交接（2026-10-11）
 
-状态：`BRANCH_COMMITTED / PR_OPEN`；分支 `feature/unified-concentration-20261011`，PR [#19](https://github.com/DevenirTwilight/HRT-Log/pull/19) 当前Draft。默认基线f53726ff，未merge研究分支、未合并到默认、未发布APK。最终应用源码001869b0c508c74b40bae0e6c6c85573e9c10cd6的[CI38147885981](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38147885981) JVM/Android/device三任务全成功；真实artifact已下载SHA校验。APK默认/旧PR3同环境构建仍在执行，不能填写旧会话大小或宣称体积已验收。
+状态：`BRANCH_COMMITTED / PR_OPEN`；分支 `feature/unified-concentration-20261011`，PR [#19](https://github.com/DevenirTwilight/HRT-Log/pull/19) 已完成工程验收，可转Ready供合并审查。默认基线f53726ff，未merge研究分支、未合并到默认、未发布APK。最终应用源码001869b0c508c74b40bae0e6c6c85573e9c10cd6的[CI38147885981](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38147885981) JVM/Android/device三任务全成功；真实artifact已下载SHA校验。三套unsigned fullRelease已实际重建/CRC/SHA/manifest/未签名核验：默认12,707,919B、旧PR312,812,823B、统一12,768,827B；相对旧PR3-43,996B，相对默认+60,908B，构建配置哈希/四ABI原生payload完全一致。后续交接检查点7f320aa的CI38149469317三任务也通过，最后仅追加文档及审计结果。
 
 已实际接线：唯一CONCENTRATION入口打开UnifiedConcentrationScreen，M2优先带明确假设的研究展示；M1/P2-AZ32显式候选、Legacy同页原历史视图。共同B+A×H/Price群体单1mg/相对三模式，双/三曲线、同单位/时间轴、精确点击、缩放平移、峰值/AUC、真实历史与独立化验层。M2=固定P2-X15（p2x-m2-research-v0.1，默认p2x-14）；M1=p2az-m1-grid-v1（非P2-V，非唯一赢家）；Legacy=0.1.0-literature-draft。条件默认B25/A100为人为示例；Price默认B18/A432为共同研究假设，保留Fig1557.5与Table2109±1031 AUC差异；转换3.671。15范围非人体90%区间，不拼中位模型。参数/源数据12项SHA锁定。
 
@@ -12,7 +12,7 @@
 
 报告与证据：[架构/验收](design/unified-concentration-2026-10.md)、[PR实况](design/unified-concentration-pr-audit-2026-10.json)、[最终CI](design/unified-acceptance/ci-final-results.json)、[设备/PSS](design/unified-acceptance/device-final-results.json)、[完整修改清单](design/unified-acceptance/modified-files.txt)。[阶段原始记录](design/unified-acceptance/implementation-history.md)保留失败/修复过程，旧科研交接全文如下。REQUIREMENTS §59已登记实施与用途边界。
 
-剩余工程收尾：两基线APK构建/三包CRC与签名及manifest核验、实际体积/源码资源差值、最终文档commit与PR ready状态。M2个人绝对pg/mL生产替换仍不批准：需合法独立未见完整人体序列/剂型含服时钟assay元数据、预锁定绝对标定/唯一版本及公平验证、重复给药与8–24h尾部验证；这不阻塞当前研究页面整合。
+工程收尾完成：三包源码/资源/APK差值、全部验收附件和最终报告已入库；PR可审查，未自动合并/发布。M2个人绝对pg/mL生产替换仍不批准：需合法独立未见完整人体序列/剂型含服时钟assay元数据、预锁定绝对标定/唯一版本及公平验证、重复给药与8–24h尾部验证；这不阻塞当前研究页面整合。
 
 ---
 

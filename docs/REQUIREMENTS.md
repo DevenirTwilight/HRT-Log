@@ -555,4 +555,4 @@ P1-A 数值病态修复与旧冻结 Calculator1 的异常区间必须区分；�
 
 本次指令授权最小导航接线到统一页及删除冗余入口；必须依既有精确哈希偏离机制登记AppShell旧/新SHA、原因、授权和diff，保留协议锁/原生产基线/历史偏离。其他保护文件尤其Engine、ConcentrationCalculator、ConcentrationScreen、ConcChart、ChartViewport、pk-params.json不改；检查器不得被泛化或关闭，必须新旧变异拒绝测试。若实际流程仍需额外授权，则独立待批准补丁且不能称正式接线完成。代码/UI/数值/兼容/设备/Debug/unsigned Release/lint/体积均按实测记录；只合成测试，不接触用户数据/密钥，不签名发布APK。个人M2绝对pg/mL生产替换证据门槛独立保留，不能阻塞已授权界面及条件情景实现。
 
-2026-10-11 实施记录（PR #19，尚未合并）：非保护组件检查点 d3a6533；统一导航独立提交 4909b71，PD-2026-10-11-UNIFIED-CONCENTRATION 只允许AppShell两处接线的精确SHA，保留F1链和冻结协议。M2研究条件展示默认；M1/AZ32手动候选及双/三曲线可选。个人M2绝对浓度引擎仍未替换，Legacy/其他途径/数据字段保留。完整测试、构建和体积结果以后续验收报告为准。
+2026-10-11 实施记录（PR #19，尚未合并）：非保护组件检查点 d3a6533；统一导航独立提交 4909b71，PD-2026-10-11-UNIFIED-CONCENTRATION 只允许AppShell两处接线的精确SHA，保留F1链和冻结协议。M2研究条件展示默认；M1/AZ32手动候选及双/三曲线可选。个人M2绝对浓度引擎仍未替换，Legacy/其他途径/数据字段保留。源码001869b的JVM/Android/device CI全部通过；四语视觉补跑和原生PDF/重启harness已补足原有跳过，最终Debug/unsigned Release/仪器/lint通过。三包同配置核验完成：默认12,707,919B、旧PR312,812,823B、统一12,768,827B（旧PR3相比-43,996B、默认相比+60,908B）。完整真实结果/限制/文件清单见docs/design/unified-concentration-2026-10.md及unified-acceptance；后续仅文档提交，应用源码树与被测提交一致。
