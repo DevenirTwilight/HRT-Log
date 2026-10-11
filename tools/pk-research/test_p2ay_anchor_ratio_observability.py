@@ -39,7 +39,7 @@ class P2AYTests(unittest.TestCase):
         self.assertEqual(self.source["frozen_m2_count"], 15)
 
     def test_zero_gap_at_one_hour_is_not_evidence(self):
-        row = next(r for r in self.output["rows"] if r["time_h"] == 1)
+        row = next(r for r in self.output["rows"] if r["time_h"] == "1")
         self.assertEqual(row["minimum_model_gap_micro"], 0)
         self.assertIsNone(row["delta_method_worst_sd_factor_micro"])
         self.assertEqual(row["passes_artificial_2sd_rule"], {})
@@ -77,15 +77,15 @@ class P2AYTests(unittest.TestCase):
         self.assertAlmostEqual(envelope_gap(.8,.4,.6),.2)
 
     def test_insufficient_amplitude_rejected_by_rule(self):
-        a=next(r for r in self.output["rows"] if r["time_h"]==24)
+        a=next(r for r in self.output["rows"] if r["time_h"]=="24")
         self.assertFalse(a["passes_artificial_2sd_rule"]["A450_sd1"])
 
     def test_early_late_gap_numerics(self):
         a={r["time_h"]:r for r in self.output["rows"]}
-        self.assertGreater(a[.25]["minimum_model_gap_micro"], 400000)
-        self.assertGreater(a[8]["minimum_model_gap_micro"], 35000)
-        self.assertLess(a[24]["minimum_model_gap_micro"], 500)
-        self.assertGreater(a[24]["minimum_A1h_increment_pgml_milli_for_2sd"]["3"],10000000)
+        self.assertGreater(a["0.25"]["minimum_model_gap_micro"], 400000)
+        self.assertGreater(a["8"]["minimum_model_gap_micro"], 35000)
+        self.assertLess(a["24"]["minimum_model_gap_micro"], 500)
+        self.assertGreater(a["24"]["minimum_A1h_increment_pgml_milli_for_2sd"]["3"],10000000)
 
     def test_machine_result_exact(self):
         self.assertEqual(self.output, json.loads(RESULT.read_text(encoding="utf-8")))
