@@ -26,6 +26,8 @@
 
 **科学结果和严格限制：** 在本轮审查的 12 条元数据记录中，严格的连续形状、8h 以上尾部、冻结后未见外部预测、个人绝对 pg/mL 外测的**可用数据门槛均为 0/12**；这只是这些来源的本轮**资料可用性**，**不代表不存在对应观测**，更不能推导模型正确或错误。特别区分“论文计划抽血的时间表”“已经可下载实际浓度值”“模型调参后才接触的新受试者”；只有在独立数据到手前冻结参数、时钟、背景、误差与幅度标定才可进行外部判别。本阶段不读取私人真人逐人行，不动生产 Legacy / M2 模型、SQLite、APK、签名或临床准入闸门；P2-C **HOLD**。
 
+**归档与验收最终状态（2026-10-11）：** [PR #12](https://github.com/DevenirTwilight/HRT-Log/pull/12) 已合并到默认分支 `claude/new-session-1959qb`，合并 SHA `a82f95c59076a89bbc64b7dc03443eb7fa8b7efe`；研究源提交 `a8a61d8437e83d4e871776249263a5db41aa9ba4`。原始非敏感科研元数据、可执行程序、14 项自动测试、复算 JSON、全文报告、README 与专用 GitHub Actions 均已入库；[P2-AV 专项 CI #38130454121](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38130454121) **Success**；[Android/JVM/设备 CI #38130454153](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38130454153) **全部 Success**。保留“12 份公开资料、8 个队列”作为本阶段特定样本，不是全球研究的穷尽性统计；没有新的个人 PK 外部验证，P2-C 保持 HOLD。
+
 **下一工作门槛：** 若要评估真实晚期预测，优先依法获得 Doll 分路 0–8h LC-MS/MS 组级表、TREAT 分路按给药时钟标记的 1/6 月谷值信息或 TransPrEP 的纯 SL 分组，且另找真正未接触的多时点队列。读者不得把反复使用已见 TREAT/Yaish 资料改叫 independent blind external。任何新的研究必须在同一任务更新本 `HANDOFF.md` 并真正推送源码、测试、报告、机器结果。
 
 ---
