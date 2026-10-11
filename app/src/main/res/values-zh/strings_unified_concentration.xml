@@ -29,7 +29,7 @@
     <string name="uc_chart_description">共同模型图表：%1$s；%2$s</string>
     <string name="uc_study_points">圆点：手工读图的发表群体均值；误差线：读图宽度，不是研究 SD 或个人化验。</string>
     <string name="uc_lab_points">条件模式圆点：真实化验观测，与假设模型曲线分开，不用于拟合 B/A。相对模式不混入浓度点。</string>
-    <string name="uc_range_tail" formatted="false">阴影带：15 套已探索候选范围，不是人体 90% 置信或预测区间。给药后超过 8 h 的灰色长尾高度不确定，尤其 8–24 h。M2 回顾性形状证据不证明个人绝对准确性，也并非总优于 M1。</string>
+    <string name="uc_range_tail" formatted="false">带状区域为所探索15套候选的范围，不是人体90%置信区间或预测区间。阴影表示没有此前合格给药，或距最近给药超过8小时；8–24小时尾部高度不确定。M2回顾性形状证据不证明个人绝对浓度准确性，也不表示M2总优于M1。</string>
     <string name="uc_readout">精确模型读数</string>
     <string name="uc_tap">点击图表比较同一时刻。</string>
     <string name="uc_metrics_note">指标为原点后0–24小时，除单剂模式外包含窗口内已记录的前后给药。AUC在相对模式积分H，在浓度情景积分B+A×H，步长1分钟；浓度和AUC使用所选单位。不虚构未来给药。</string>

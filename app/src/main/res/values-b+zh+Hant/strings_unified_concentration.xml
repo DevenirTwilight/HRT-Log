@@ -29,7 +29,7 @@
     <string name="uc_chart_description">共同模型圖表：%1$s；%2$s</string>
     <string name="uc_study_points">圓點：手工讀圖的發表群體均值；誤差線：讀圖寬度，不是研究 SD 或個人化驗。</string>
     <string name="uc_lab_points">條件模式圓點：真實化驗觀測，與假設模型曲線分開，不用於擬合 B/A。相對模式不混入濃度點。</string>
-    <string name="uc_range_tail" formatted="false">陰影帶：15 套已探索候選範圍，不是人體 90% 信賴或預測區間。給藥後超過 8 h 的灰色長尾高度不確定，尤其 8–24 h。M2 回顧性形狀證據不證明個人絕對準確性，也並非總優於 M1。</string>
+    <string name="uc_range_tail" formatted="false">帶狀區域為所探索15套候選的範圍，不是人體90%信賴區間或預測區間。陰影表示沒有此前合格給藥，或距最近給藥超過8小時；8–24小時尾部高度不確定。M2回顧性形狀證據不證明個人絕對濃度準確性，也不表示M2總優於M1。</string>
     <string name="uc_readout">精確模型讀數</string>
     <string name="uc_tap">點擊圖表比較同一時刻。</string>
     <string name="uc_metrics_note">指標為原點後0–24小時，除單劑模式外包含視窗內已記錄的前後給藥。AUC在相對模式積分H，在濃度情景積分B+A×H，步長1分鐘；濃度和AUC使用所選單位。不虛構未來給藥。</string>

@@ -29,7 +29,7 @@
     <string name="uc_chart_description">Shared model chart: %1$s; %2$s</string>
     <string name="uc_study_points">Dots: manually read published group means; bars: reading widths, not study SD or personal labs.</string>
     <string name="uc_lab_points">Dots in conditional mode: real lab observations, separate from assumed model curves; never used to fit B/A. Relative mode omits concentration dots.</string>
-    <string name="uc_range_tail" formatted="false">Band: explored 15-candidate range, not a 90% human confidence or prediction interval. Shaded &gt;8 h tail: highly uncertain, especially 8–24 h. M2 retrospective shape evidence does not establish personal absolute accuracy; it does not always beat M1.</string>
+    <string name="uc_range_tail" formatted="false">Band: explored 15-candidate range, not a 90% human confidence or prediction interval. Shading: no preceding eligible dose, or more than 8 h since the latest dose; the 8–24 h tail is highly uncertain. M2 retrospective shape evidence does not establish personal absolute accuracy; it does not always beat M1.</string>
     <string name="uc_readout">Exact model readout</string>
     <string name="uc_tap">Tap the chart to compare the same instant.</string>
     <string name="uc_metrics_note">0–24 h metrics after the origin. Recorded earlier/later doses in the window are included unless single-dose selected. AUC integrates H in relative mode and B+A×H in concentration scenarios on a 1-minute grid; concentrations and AUC share the selected unit. No future schedule is invented.</string>
