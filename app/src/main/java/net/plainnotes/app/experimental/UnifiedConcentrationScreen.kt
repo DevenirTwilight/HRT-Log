@@ -82,9 +82,9 @@ import java.time.Instant
         } else Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(horizontal = 16.dp)
             .padding(bottom = pad.calculateBottomPadding()).testTag("unified-concentration"), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Text(stringResource(R.string.uc_research_note), style = MaterialTheme.typography.bodySmall, modifier = Modifier.testTag("research-not-personal"))
-            Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 listOf(ResearchDisplay.CONDITIONAL to R.string.uc_conditional, ResearchDisplay.STUDY to R.string.uc_study, ResearchDisplay.RELATIVE to R.string.uc_relative).forEach { (d, label) ->
-                    FilterChip(display == d, { display = d; hour = null }, label = { Text(stringResource(label)) }, modifier = Modifier.testTag("display-${d.name}"))
+                    FilterChip(display == d, { display = d; hour = null }, label = { Text(stringResource(label)) }, modifier = Modifier.fillMaxWidth().testTag("display-${d.name}"))
                 }
             }
             if (display == ResearchDisplay.CONDITIONAL) {

@@ -16,9 +16,7 @@ class UnifiedConcentrationAndroidTest {
         ui.onNodeWithTag("unified-chart").performScrollTo().performTouchInput { click(center) }
         await("readout-M1");ui.onNodeWithTag("readout-LEGACY").assertExists();ui.onNodeWithTag("difference-M1").assertExists()
         ui.onNodeWithTag("unit-pmol").performScrollTo().performClick();ui.onNodeWithTag("chart-unit").assertTextEquals("pmol/L")
-        // The mode chips have their own horizontal scroller inside the vertical page.
-        // Reveal the row vertically before scrolling the Price chip horizontally.
-        ui.onNodeWithTag("unified-concentration").performScrollToNode(hasTestTag("display-CONDITIONAL"))
+        // Full-width, wrapped mode controls remain reachable on small screens and large fonts.
         ui.onNodeWithTag("display-STUDY").performScrollTo().assertIsDisplayed().performClick()
         ui.onNodeWithTag("display-STUDY").assertIsSelected();await("study-not-personal")
         ui.onNodeWithTag("tail-warning").assertExists()
