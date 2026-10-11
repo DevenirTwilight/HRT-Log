@@ -1,5 +1,8 @@
 # HRT Log — original research materials: actual GitHub archive status
 
+> **2026-10-11 状态覆盖：** 本文后面的“PR#7 尚未合并”是撰写当时的历史记录，后来 [PR #7](https://github.com/DevenirTwilight/HRT-Log/pull/7) 已合并；23 个 ZIP 位于默认分支。21 原始字节一致、AJ/AK 为版权排除复制品、AT 仅非原始重建。现况请看 [历史总索引](../HISTORICAL_RESEARCH_MASTER_INDEX.md)；此页原始审计详情不删除。
+
+
 **Updated 2026-10-10 after remote Git blob verification.** Research results must be *actually committed* to the repository, not merely uploaded to the conversation or summarized. [Binding project archive policy](../RESEARCH_ARCHIVAL_POLICY.md).
 
 ### Recovered original phase archives

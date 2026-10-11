@@ -1,0 +1,426 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-10-11",
+  "repository": "DevenirTwilight/HRT-Log",
+  "default_branch": "claude/new-session-1959qb",
+  "baseline_commit": "5be172fedf262e5c8938103f06e4d77b62275e5a",
+  "purpose": "Research discovery and preservation-status crosswalk, not scientific external validation",
+  "source_of_truth": [
+    "history-2026-10-10/ARCHIVE_MANIFEST.md",
+    "history-2026-10-10/source-packages/README.md",
+    "history-2026-10-10/reconstructed/README.md",
+    "history-2026-10-10/README.md",
+    "RESEARCH_ARCHIVAL_POLICY.md"
+  ],
+  "original_archive_counts": {
+    "historic_independent_zip_phases": 24,
+    "original_byte_identical_merged": 21,
+    "redacted_redistributable_copies_merged": 2,
+    "lost_historical_originals": 1,
+    "distinct_reconstruction_for_lost": 1
+  },
+  "scientific_release_gate": "P2-C HOLD",
+  "records": [
+    {
+      "id": "P2-A/B",
+      "topic": "首批冻结证据/协议、研究候选与评估",
+      "path": "README.md",
+      "category": "NATIVE_UMBRELLA",
+      "archive": null,
+      "detail": "首批研究不是24个后续独立ZIP中的两个原始ZIP；附 evidence-catalog、split、validation-protocol 和 model-selection。"
+    },
+    {
+      "id": "P2-C",
+      "topic": "生产模型替换审批闸门",
+      "path": "history-2026-10-10/reports/p2-c.md",
+      "category": "GATE_HOLD",
+      "archive": null,
+      "detail": "2026-10-10补录审查定义；从未通过，不能视为已替换生产模型。"
+    },
+    {
+      "id": "P2-D",
+      "topic": "人体初证、Komesaroff增长约束",
+      "path": "p2d-evidence-theory.md",
+      "category": "NATIVE_RESEARCH",
+      "archive": null,
+      "detail": null
+    },
+    {
+      "id": "P2-E",
+      "topic": "Price/Rosano原始发表数值",
+      "path": "p2e-primary-source-upgrade.md",
+      "category": "NATIVE_RESEARCH",
+      "archive": null,
+      "detail": null
+    },
+    {
+      "id": "P2-F",
+      "topic": "TransPrEP途径混合与输入阶数",
+      "path": "p2f-transprep-and-transit-theory.md",
+      "category": "NATIVE_RESEARCH",
+      "archive": null,
+      "detail": null
+    },
+    {
+      "id": "P2-G",
+      "topic": "数据获取、授权与队列身份",
+      "path": "p2g-data-acquisition-theory.md",
+      "category": "NATIVE_RESEARCH",
+      "archive": null,
+      "detail": null
+    },
+    {
+      "id": "P2-H",
+      "topic": "原版PDF、两室半衰期口径",
+      "path": "p2h-original-pdfs-half-life-audit.md",
+      "category": "NATIVE_RESEARCH",
+      "archive": null,
+      "detail": null
+    },
+    {
+      "id": "P2-I",
+      "topic": "Price图/表AUC冲突",
+      "path": "p2i-price-figure-reconciliation.md",
+      "category": "NATIVE_RESEARCH",
+      "archive": null,
+      "detail": null
+    },
+    {
+      "id": "P2-J",
+      "topic": "Price基线与积分代数",
+      "path": "p2j-price-figure-baseline-consistency.md",
+      "category": "NATIVE_RESEARCH",
+      "archive": null,
+      "detail": null
+    },
+    {
+      "id": "P2-K",
+      "topic": "Featherline与HRT对称比较",
+      "path": "p2k-featherline-hrt-balanced-evidence.md",
+      "category": "NATIVE_RESEARCH",
+      "archive": null,
+      "detail": null
+    },
+    {
+      "id": "P2-L",
+      "topic": "重复给药与已见队列",
+      "path": "p2l-repeated-dose-new-cohorts.md",
+      "category": "NATIVE_RESEARCH",
+      "archive": null,
+      "detail": null
+    },
+    {
+      "id": "P2-M",
+      "topic": "跨研究早期曲线形状",
+      "path": "p2m-cross-study-mechanistic-curves.md",
+      "category": "NATIVE_RESEARCH",
+      "archive": null,
+      "detail": null
+    },
+    {
+      "id": "P2-N",
+      "topic": "快慢双输入与中央室卷积",
+      "path": "p2n-transit-convolution-cross-study.md",
+      "category": "NATIVE_RESEARCH",
+      "archive": null,
+      "detail": null
+    },
+    {
+      "id": "P2-O",
+      "topic": "慢尾结构不可辨识",
+      "path": "p2o-tail-structural-nonidentifiability.md",
+      "category": "NATIVE_RESEARCH",
+      "archive": null,
+      "detail": null
+    },
+    {
+      "id": "P2-P",
+      "topic": "候选额外采样点辨识条件",
+      "path": "p2p-conditional-sampling-info.md",
+      "category": "NATIVE_RESEARCH",
+      "archive": null,
+      "detail": null
+    },
+    {
+      "id": "P2-Q",
+      "topic": "未知基线/幅度/误差下模型稳健性",
+      "path": "p2q-unknown-baseline-gain-noise-identifiability.md",
+      "category": "NATIVE_RESEARCH",
+      "archive": null,
+      "detail": "注意另有p2q-baseline-canonicalization-audit.md参数去重勘误"
+    },
+    {
+      "id": "P2-R",
+      "topic": "分级证据与模型升级审查门槛",
+      "path": "p2r-cross-study-evidence-upgrade-gates.md",
+      "category": "NATIVE_RESEARCH",
+      "archive": null,
+      "detail": null
+    },
+    {
+      "id": "P2-S",
+      "topic": "早期增长数学上界与测定方法",
+      "path": "history-2026-10-10/reports/p2-s.md",
+      "category": "ORIGINAL_ZIP_MERGED",
+      "archive": "history-2026-10-10/source-packages/P2-S-research-source.zip",
+      "detail": null
+    },
+    {
+      "id": "P2-T",
+      "topic": "原始资料可得性与队列身份",
+      "path": "history-2026-10-10/reports/p2-t.md",
+      "category": "ORIGINAL_ZIP_MERGED",
+      "archive": "history-2026-10-10/source-packages/P2-T-research-source.zip",
+      "detail": null
+    },
+    {
+      "id": "P2-U",
+      "topic": "跨研究群体点共同形状限制",
+      "path": "history-2026-10-10/reports/p2-u.md",
+      "category": "ORIGINAL_ZIP_MERGED",
+      "archive": "history-2026-10-10/source-packages/P2-U-research-source.zip",
+      "detail": null
+    },
+    {
+      "id": "P2-V",
+      "topic": "连续机制模型族",
+      "path": "history-2026-10-10/reports/p2-v.md",
+      "category": "ORIGINAL_ZIP_MERGED",
+      "archive": "history-2026-10-10/source-packages/P2-V-research-source.zip",
+      "detail": null
+    },
+    {
+      "id": "P2-W",
+      "topic": "重复给药与慢尾压力",
+      "path": "history-2026-10-10/reports/p2-w.md",
+      "category": "ORIGINAL_ZIP_MERGED",
+      "archive": "history-2026-10-10/source-packages/P2-W-research-source.zip",
+      "detail": null
+    },
+    {
+      "id": "P2-X",
+      "topic": "40拟合与15个冻结M2候选",
+      "path": "history-2026-10-10/reports/p2-x.md",
+      "category": "ORIGINAL_ZIP_MERGED",
+      "archive": "history-2026-10-10/source-packages/P2-X-research-source.zip",
+      "detail": null
+    },
+    {
+      "id": "P2-Y",
+      "topic": "模型族跨研究反证",
+      "path": "history-2026-10-10/reports/p2-y.md",
+      "category": "ORIGINAL_ZIP_MERGED",
+      "archive": "history-2026-10-10/source-packages/P2-Y-research-source.zip",
+      "detail": null
+    },
+    {
+      "id": "P2-Z",
+      "topic": "未知实际给药时钟",
+      "path": "history-2026-10-10/reports/p2-z.md",
+      "category": "ORIGINAL_ZIP_MERGED",
+      "archive": "history-2026-10-10/source-packages/P2-Z-research-source.zip",
+      "detail": null
+    },
+    {
+      "id": "P2-AA",
+      "topic": "预测函数量与跨研究误差补研",
+      "path": "history-2026-10-10/reports/p2-aa.md",
+      "category": "BACKFILL_NOT_ORIGINAL",
+      "archive": null,
+      "detail": "2026-10-10按旧提案补做，绝非找到原始完成稿"
+    },
+    {
+      "id": "P2-AB",
+      "topic": "Kotlin研究核数学不变量",
+      "path": "history-2026-10-10/reports/p2-ab.md",
+      "category": "ENGINEERING_RECORD_MERGED",
+      "archive": null,
+      "detail": null
+    },
+    {
+      "id": "P2-AC",
+      "topic": "P2-X源到Kotlin一致性",
+      "path": "history-2026-10-10/reports/p2-ac.md",
+      "category": "ENGINEERING_RECORD_MERGED",
+      "archive": null,
+      "detail": null
+    },
+    {
+      "id": "P2-AD",
+      "topic": "背景与长尾辨识",
+      "path": "history-2026-10-10/reports/p2-ad.md",
+      "category": "ORIGINAL_ZIP_MERGED",
+      "archive": "history-2026-10-10/source-packages/P2-AD-research-source.zip",
+      "detail": null
+    },
+    {
+      "id": "P2-AE",
+      "topic": "快慢输入与基线自由度",
+      "path": "history-2026-10-10/reports/p2-ae.md",
+      "category": "ORIGINAL_ZIP_MERGED",
+      "archive": "history-2026-10-10/source-packages/P2-AE-research-source.zip",
+      "detail": null
+    },
+    {
+      "id": "P2-AF",
+      "topic": "慢吸收/消除联合不确定",
+      "path": "history-2026-10-10/reports/p2-af.md",
+      "category": "ORIGINAL_ZIP_MERGED",
+      "archive": "history-2026-10-10/source-packages/P2-AF-research-source.zip",
+      "detail": null
+    },
+    {
+      "id": "P2-AG",
+      "topic": "研究型M1/M2泛化与过拟合",
+      "path": "history-2026-10-10/reports/p2-ag.md",
+      "category": "ORIGINAL_ZIP_MERGED",
+      "archive": "history-2026-10-10/source-packages/P2-AG-research-source.zip",
+      "detail": null
+    },
+    {
+      "id": "P2-AH",
+      "topic": "Price图与表AUC计量口径",
+      "path": "history-2026-10-10/reports/p2-ah.md",
+      "category": "ORIGINAL_ZIP_MERGED",
+      "archive": "history-2026-10-10/source-packages/P2-AH-research-source.zip",
+      "detail": null
+    },
+    {
+      "id": "P2-AI",
+      "topic": "Price图像来源/剂量比例",
+      "path": "history-2026-10-10/reports/p2-ai.md",
+      "category": "ORIGINAL_ZIP_MERGED",
+      "archive": "history-2026-10-10/source-packages/P2-AI-research-source.zip",
+      "detail": null
+    },
+    {
+      "id": "P2-AJ",
+      "topic": "Price原刊1mg图重新取点",
+      "path": "history-2026-10-10/reports/p2-aj.md",
+      "category": "SANITIZED_ZIP_MERGED",
+      "archive": "history-2026-10-10/source-packages/P2-AJ-research-source.zip",
+      "detail": "公开ZIP剔除了版权扫描图，报告与代码仍可公开"
+    },
+    {
+      "id": "P2-AK",
+      "topic": "Price低剂量读图区间",
+      "path": "history-2026-10-10/reports/p2-ak.md",
+      "category": "SANITIZED_ZIP_MERGED",
+      "archive": "history-2026-10-10/source-packages/P2-AK-research-source.zip",
+      "detail": "公开ZIP剔除了版权扫描图，报告与代码仍可公开"
+    },
+    {
+      "id": "P2-AL",
+      "topic": "模型选择条件与准入",
+      "path": "history-2026-10-10/reports/p2-al.md",
+      "category": "ORIGINAL_ZIP_MERGED",
+      "archive": "history-2026-10-10/source-packages/P2-AL-research-source.zip",
+      "detail": null
+    },
+    {
+      "id": "P2-AM",
+      "topic": "独立人体采样钟及验证方案",
+      "path": "history-2026-10-10/reports/p2-am.md",
+      "category": "ORIGINAL_ZIP_MERGED",
+      "archive": "history-2026-10-10/source-packages/P2-AM-research-source.zip",
+      "detail": null
+    },
+    {
+      "id": "P2-AN",
+      "topic": "测定误差/缺测的统计敏感性",
+      "path": "history-2026-10-10/reports/p2-an.md",
+      "category": "ORIGINAL_ZIP_MERGED",
+      "archive": "history-2026-10-10/source-packages/P2-AN-research-source.zip",
+      "detail": null
+    },
+    {
+      "id": "P2-AO",
+      "topic": "独立人体证据搜寻",
+      "path": "history-2026-10-10/reports/p2-ao.md",
+      "category": "ORIGINAL_ZIP_MERGED",
+      "archive": "history-2026-10-10/source-packages/P2-AO-research-source.zip",
+      "detail": null
+    },
+    {
+      "id": "P2-AP",
+      "topic": "OSF早期访问受阻的历史记录",
+      "path": "history-2026-10-10/reports/p2-ap.md",
+      "category": "ORIGINAL_ZIP_MERGED",
+      "archive": "history-2026-10-10/source-packages/P2-AP-research-source.zip",
+      "detail": "访问当时受阻；AQ后来已取得工作簿，禁止把AP的历史状态当当前未取得"
+    },
+    {
+      "id": "P2-AQ",
+      "topic": "后来已获取OSF工作簿的隐私安全审计",
+      "path": "history-2026-10-10/reports/p2-aq.md",
+      "category": "ORIGINAL_ZIP_MERGED",
+      "archive": "history-2026-10-10/source-packages/P2-AQ-research-source.zip",
+      "detail": null
+    },
+    {
+      "id": "P2-AR",
+      "topic": "历史遗失研究方向的解析补研",
+      "path": "history-2026-10-10/reports/p2-ar.md",
+      "category": "BACKFILL_NOT_ORIGINAL",
+      "archive": null,
+      "detail": "2026-10-10按旧提案补做，绝非找到原始完成稿"
+    },
+    {
+      "id": "P2-AS",
+      "topic": "正式Legacy E2_SL数学核审计",
+      "path": "history-2026-10-10/reports/p2-as.md",
+      "category": "ORIGINAL_ZIP_MERGED",
+      "archive": "history-2026-10-10/source-packages/P2-AS-research-source.zip",
+      "detail": null
+    },
+    {
+      "id": "P2-AT",
+      "topic": "正式Legacy与M2归一化形状对照",
+      "path": "history-2026-10-10/reports/p2-at.md",
+      "category": "RECONSTRUCTED_NOT_ORIGINAL",
+      "archive": "history-2026-10-10/reconstructed/P2-AT-RECONSTRUCTED_2026-10-10.zip",
+      "detail": "原始历史390066字节ZIP缺失；仅保留历史摘要及独立重建包"
+    },
+    {
+      "id": "P2-AR-REAL",
+      "topic": "VNC54真实配对访视与未知钟/基线",
+      "path": "p2ar-real/P2-AR-REAL-REPORT.md",
+      "category": "MERGED_PRIVATE_DATA_AGGREGATES_ONLY",
+      "archive": null,
+      "detail": "11人20次配对访视；仅匿名聚合入公开仓库，不能从CI重放原始私人Excel。"
+    },
+    {
+      "id": "P2-AU",
+      "topic": "VNC54背景份额/给药钟敏感性",
+      "path": "p2au-background-profile/P2-AU-REPORT.md",
+      "category": "MERGED_PRIVATE_DATA_AGGREGATES_ONLY",
+      "archive": null,
+      "detail": "PR#11已合并；背景/时钟场景是分析师设定而非实测。"
+    },
+    {
+      "id": "P2-AV",
+      "topic": "外部舌下E2来源去重与可用性准入",
+      "path": "p2av-external-source-gate/P2-AV-REPORT.md",
+      "category": "MERGED_PUBLIC_METADATA",
+      "archive": null,
+      "detail": "PR#12合并；12条公开记录去重8队列，严格完整独立外测0。"
+    },
+    {
+      "id": "P2-AW",
+      "topic": "冻结核采样时点辨识/时钟压力",
+      "path": "p2aw-identifiability-design/P2-AW-REPORT.md",
+      "category": "MERGED_MODEL_ONLY",
+      "archive": null,
+      "detail": "PR#13合并；不是新采到人体血样。"
+    },
+    {
+      "id": "P2-AX",
+      "topic": "独立证据字段契约与阴性对照",
+      "path": null,
+      "external_pr": "https://github.com/DevenirTwilight/HRT-Log/pull/14",
+      "category": "DRAFT_PR_NOT_DEFAULT",
+      "archive": null,
+      "detail": "2026-10-11检查时仍为草稿PR，分支已提交，尚未合并；不要把本阶段计作历史默认分支实物。"
+    }
+  ]
+}

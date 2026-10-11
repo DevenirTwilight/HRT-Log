@@ -1,5 +1,8 @@
 # Mandatory research-result archival / 科研成果必须实际入库
 
+> **归档现况补充（2026-10-11）：** 下方“as of 2026-10-10 尚未合并”是历史检查点，不是当前状态。23/24 历史研究阶段 ZIP 已合并到默认分支，含 21 原件和 AJ/AK 两个版权排除副本，AT 原件遗失并另有复算重建。最新逐阶段判断请看 [历史总索引](HISTORICAL_RESEARCH_MASTER_INDEX.md)。本文件的**强制实物入库政策继续有效**，不因状态修正放松。
+
+
 **Project instruction (effective 2026-10-10):** Every completed HRT Log PK research stage must end in a **real, verifiable GitHub branch/commit and reviewable PR**. Research is **not complete** merely because a ZIP was uploaded to a chat, a report was read, automated tests passed, a summary was written, or a SHA-256 was registered.
 
 ## Required before declaring a phase archived

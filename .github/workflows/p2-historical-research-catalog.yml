@@ -1,0 +1,30 @@
+name: P2 historical research catalog integrity
+
+on:
+  push:
+    paths:
+      - 'docs/pk-research/p2/HISTORICAL_RESEARCH_*'
+      - 'docs/pk-research/p2/history-2026-10-10/**'
+      - 'tools/pk-research/check_historical_research_catalog.py'
+      - 'tools/pk-research/test_historical_research_catalog.py'
+      - '.github/workflows/p2-historical-research-catalog.yml'
+  pull_request:
+    paths:
+      - 'docs/pk-research/p2/HISTORICAL_RESEARCH_*'
+      - 'docs/pk-research/p2/history-2026-10-10/**'
+      - 'tools/pk-research/check_historical_research_catalog.py'
+      - 'tools/pk-research/test_historical_research_catalog.py'
+      - '.github/workflows/p2-historical-research-catalog.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  archive-integrity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check all 23 historical ZIP identities and stage links
+        run: |
+          python tools/pk-research/check_historical_research_catalog.py
+          python -m unittest discover -s tools/pk-research -p 'test_historical_research_catalog.py' -v

@@ -1,5 +1,8 @@
 # P2-A/B 舌下人口模型研究（已完成隔离研究，未投产）
 
+> **2026-10-11 历史研究入口：** [研究总索引、50阶段身份和真正入库状态](HISTORICAL_RESEARCH_MASTER_INDEX.md) · [机器可读研究目录](HISTORICAL_RESEARCH_CATALOG.json)。本文保留旧研究阶段的原始叙述；若当年状态与今日远端入库冲突，以总索引、实际 GitHub Blob 和最新 HANDOFF 为准。
+
+
 ## P2-R：跨研究人体证据整合及M0/M1/M2审查门槛（2026-10-10）
 
 [完整理论与门槛](p2r-cross-study-evidence-upgrade-gates.md)、[9条报告有8个命名队列ID（人群重叠待查）的来源台账](p2r-cohort-evidence-ledger.json)、[不冒充监管要求的内部准入政策](p2r-upgrade-policy.json)、[fail-closed审查程序](../../../tools/pk-research/p2r_evidence_gate.py)及[14项正反测试](../../../tools/pk-research/test_p2r_evidence_gate.py)。以ICH M15 2026用途/风险/独立验证、M10 2023生物分析方法学、FDA人口PK2022评估原则为参考，但内部两独立holdout/改善10%/退化不超5%均属未来新数据开封前必须审阅冻结的**提议**，非官方数值标准。真实完整独立锁定SL人体PK时序仍为0，Price与Doll等均已见或数据不合格，Yager与硕士论文同队列。脚本永不自动认证模型、人体90%覆盖或批准APK。P1、生产E2_SL、P2冻结历史及签名APK不改。

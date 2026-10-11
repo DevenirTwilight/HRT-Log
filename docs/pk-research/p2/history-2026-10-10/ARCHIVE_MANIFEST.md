@@ -1,4 +1,7 @@
-> **2026-10-10 归档状态更新：** 本页下方“ZIP 不在 GitHub 仓库中”属于建立原始哈希台账时的历史状态，现已过时。现在 **23/24 个历史阶段研究 ZIP** 已实际提交到 [source-packages](source-packages/) 的 GitHub 研究分支；其中 P2-AJ、AK 是移除期刊扫描裁剪图的受限再分发版本。**P2-AT 原始 390,066 字节 ZIP 遗失**，但 [新建的可复算研究重建包](reconstructed/) 已另行提交（绝不是原始 ZIP）。规则见 [科研成果强制入库说明](../RESEARCH_ARCHIVAL_POLICY.md)。该分支仍处于草稿 PR，未并入默认分支。
+> **2026-10-10 归档状态更新：**
+> **当前权威状态（截至 2026-10-11）：** [研究全景索引](../HISTORICAL_RESEARCH_MASTER_INDEX.md) 与 [GitHub ZIP 实物索引](source-packages/README.md) 已核对：23/24 个历史阶段 ZIP 真实进入默认分支（21 原件 + AJ/AK 版权排除复制品），P2-AT 原件遗失、另有标注身份的重建包。下文任何“ZIP 不在 GitHub”或“研究分支尚未合并”都是**2026-10-10 的历史快照**，不能代表当前状态。
+
+ 本页下方“ZIP 不在 GitHub 仓库中”属于建立原始哈希台账时的历史状态，现已过时。现在 **23/24 个历史阶段研究 ZIP** 已实际提交到 [source-packages](source-packages/) 的 GitHub 研究分支；其中 P2-AJ、AK 是移除期刊扫描裁剪图的受限再分发版本。**P2-AT 原始 390,066 字节 ZIP 遗失**，但 [新建的可复算研究重建包](reconstructed/) 已另行提交（绝不是原始 ZIP）。规则见 [科研成果强制入库说明](../RESEARCH_ARCHIVAL_POLICY.md)。该分支仍处于草稿 PR，未并入默认分支。
 
 # 独立 P2 研究归档 ZIP 来源与 SHA-256
 

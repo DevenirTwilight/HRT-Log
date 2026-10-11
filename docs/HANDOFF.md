@@ -14,6 +14,18 @@
 
 ---
 
+# 历史药代研究总整理（2026-10-11）——50阶段完整导航与ZIP实物保全检查
+
+**项目归档整理已提交 [PR #15](https://github.com/DevenirTwilight/HRT-Log/pull/15) 的研究文档分支** `docs/p2-historical-research-consolidation-20261011`（当前 Draft，待专项 SHA/结构验证和常规 Android/JVM/设备 CI 才能考虑合并；当前默认分支尚不含此轮新索引）。
+
+- 新增 [历史药代研究总索引](pk-research/p2/HISTORICAL_RESEARCH_MASTER_INDEX.md)、[机器可读50阶段目录](pk-research/p2/HISTORICAL_RESEARCH_CATALOG.json)，合并导航 P2-A/B/C、P2-D–R、P2-S–AT、P2-AR-REAL、P2-AU/AV/AW 与最新 P2-AX 的**分支未合并**状态。显式区分研究型 M1、正式 Legacy、M2；科学 P2-AR 补研、P2-AR-REAL 和工程 PR #3 不能互相替代。
+- **已实际核对历史报告和来源索引**：P2-S–AT逐份报告路径、早期P2-D–R研究文章路径均已远端读取。21个原件ZIP + 两个剔除版权扫描图的 AJ/AK 可再分发副本已通过此前 PR #7 真正入库，合计 23/24 历史阶段；P2-AT 原件无法找回（历史原包 SHA 不变），保存独立 34,698 字节 P2-AT **非原始**重建包；P2-AA/AR 为 2026-10-10 解析补研。
+- 新增 `tools/pk-research/check_historical_research_catalog.py` 与4项元数据/合成回归 + `.github/workflows/p2-historical-research-catalog.yml`，设计为在纯公开 GitHub 检出上核对每个阶段文件、源归档类别、**全部23个ZIP的真实SHA-256**、AT重建SHA及P2-C HOLD；实际 CI 状态必须以专项运行记录为准，未通过之前不可声称全部哈希新验收成功。
+- 为避免误读，旧阶段 README、ARCHIVE_MANIFEST、P2-RESEARCH-UPLOAD-STATUS、MODEL_STATUS 和 RESEARCH_ARCHIVAL_POLICY 顶部均追加带日期的状态覆盖说明；不抹掉其撰写时的原始历史。**此次是旧科研文档目录治理而非 P2 新数学/人体试验；任何旧研究核心数值、原始ZIP、个人Excel及生产PK均不修改**。
+- 后续不得以“已留存报告”替代 ZIP/SHA、原件/版权删除/重建、独立真实人体外测之区分。正式 **P2-C HOLD**，也不修改生产 E2_SL、M2、个人用药、Android、数据库、签名APK、过去研究冻结材料。
+
+---
+
 # P2-AW（2026-10-11）——已冻结 Legacy/M2 的理论采样辨识与数据取得门槛
 
 **P2-AW 已合并确认（2026-10-11）：** [PR #13](https://github.com/DevenirTwilight/HRT-Log/pull/13) 已成功合并至默认分支，研究源提交 `ef9ce96b251ff34e01852c84489f01bdf3391475`，合并提交 `0f73d4c3d98bcc6468622c8341d95230bcdf7395`。最新提交对应的 [P2-AW 专项 CI #38132525102](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38132525102) **Success**（20/20 数学回归、源/原 ZIP 哈希核验、新 JSON 逐字节重算及公开资料隐私门槛）；[Android/JVM/设备 CI #38132525105](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38132525105) **三作业全部 Success**。初始 Python 跨版本 JSON 末位失败的原因、修复和失败记录见本阶段正文；未忽略/关闭原测试。此归档成功不改变 P2-C HOLD 或独立人体外部验证为零的判断。
