@@ -81,6 +81,15 @@ class UnifiedConcentrationDataPathTest {
         assertEquals(3,ready.result.base.doses.size)
         assertEquals(1,ready.audit.excluded[SlExclusion.NOT_SUBLINGUAL_E2])
         assertTrue(ready.result.base.m2.all{it.isFinite() && it>=0.0} && ready.result.base.m2.max()>0.0)
+        // Actual product protocol, not only the retained common-assumption comparison utility.
+        val productBefore=net.plainnotes.app.pk.experimental.ResearchModel.entries.filter { it!=net.plainnotes.app.pk.experimental.ResearchModel.LEGACY }.associateWith { choice ->
+            net.plainnotes.app.experimental.ConcentrationPreview.compute(ready.audit,choice,net.plainnotes.app.conc.ConcentrationCalculator.hours(now))
+        }
+        productBefore.forEach { (choice,p) ->
+            assertEquals(net.plainnotes.app.pk.experimental.ResearchDisplayProtocol.candidate(choice).id,p.candidateId)
+            assertEquals(net.plainnotes.app.pk.experimental.PriceFigure1997.STUDY_ID,p.anchor.studyId)
+            assertEquals(3,ready.audit.events.size)
+        }
         // Every candidate reads the same records; nothing in the database changes.
         ExperimentalSlModelView.candidates.forEach{assertEquals(it.id,state(it.id).result.base.candidate.id)}
         assertEquals(before,allRows())
@@ -92,6 +101,11 @@ class UnifiedConcentrationDataPathTest {
         val after=state()
         assertArrayEquals(ready.result.base.legacy,after.result.base.legacy,0.0)
         assertArrayEquals(ready.result.base.m2,after.result.base.m2,0.0)
+        productBefore.forEach { (choice,p) ->
+            val current=net.plainnotes.app.experimental.ConcentrationPreview.compute(after.audit,choice,net.plainnotes.app.conc.ConcentrationCalculator.hours(now))
+            assertEquals(p.currentPgMl,current.currentPgMl)
+            assertArrayEquals(p.values,current.values,0.0)
+        }
         assertEquals(before.map{it.config_snapshot},allRows().map{it.config_snapshot})
     }
 }

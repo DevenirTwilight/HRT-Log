@@ -15,6 +15,7 @@ import java.time.Instant
 
 /** Debug-only consolidated host. Entirely synthetic; never opens a database or accepts input health records. */
 class UnifiedConcentrationTestActivity : ComponentActivity() {
+    var syntheticLabPgMl by mutableDoubleStateOf(150.0)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val now=Instant.parse("2026-03-10T12:00:00Z")
@@ -23,14 +24,15 @@ class UnifiedConcentrationTestActivity : ComponentActivity() {
         val records=listOf(30L,20L,3L).mapIndexed {i,h -> RecordEntity((i+1).toLong(),1,
             taken_utc=now.toEpochMilli()-h*3600000,taken_zone="UTC",actual_dose=1.0,status="ON_TIME",origin="APP",revision=1,
             config_snapshot=MedicationSnapshot.encode(med,profile)) }
-        val labs=listOf(LabValueEntity(1,"E2",150.0,"pg/mL",now.minusSeconds(2*3600).toEpochMilli(),"UTC"))
         val state=NotesState(medications=listOf(med),profiles=mapOf(1L to profile),loading=false)
-        val result=ConcentrationCalculator.compute(state.medications,state.profiles,records,emptyList(),labs,70.0,now,calibrate=false)
         setContent { MaterialTheme {
             var pmol by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf(false) }
+            var calibrate by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf(false) }
+            val labs=remember(syntheticLabPgMl) { listOf(LabValueEntity(1,"E2",syntheticLabPgMl,"pg/mL",now.minusSeconds(2*3600).toEpochMilli(),"UTC")) }
+            val result=remember(labs,calibrate) { ConcentrationCalculator.compute(state.medications,state.profiles,records,emptyList(),labs,70.0,now,calibrate=calibrate) }
             UnifiedConcentrationScreen(records,emptyMap(),labs,PaddingValues(),{pad,preview,selector ->
-                ConcentrationScreen(state,result,false,70.0,ConcSettings(pmol,false,net.plainnotes.app.pk.CalibrationMode.RETROSPECTIVE),
-                    {pmol=it.pmol},{},{},{},pad,records,state.profiles,preview=preview,modelSelector=selector)
+                ConcentrationScreen(state,result,false,70.0,ConcSettings(pmol,calibrate,net.plainnotes.app.pk.CalibrationMode.RETROSPECTIVE),
+                    {pmol=it.pmol;calibrate=it.calibrate},{},{},{},pad,records,state.profiles,preview=preview,modelSelector=selector)
             },{now})
         } }
     }

@@ -40,8 +40,9 @@
     <string name="uc_scenario_time">顯示時刻：參考給藥後 +%1$s h</string>
     <string name="uc_scenario_only">基於明確假設的曲線，非個人預測或實測濃度。</string>
     <string name="uc_research_settings">模型比較設定</string>
-    <string name="uc_original_scenario">情景估算濃度</string>
-    <string name="uc_original_assumptions">B=25 pg/mL；A=100 pg/mL。人為假設，並非個人實測值。</string>
-    <string name="uc_original_research_note">%1$s 研究候選 %2$s，非經驗證的個人預測。校準/參數仍屬Legacy；未來曲線僅為已有劑量尾部，8–24小時不確定。</string>
+    <string name="uc_original_scenario">舌下E2文獻情景</string>
+    <string name="uc_original_assumptions">Price圖1群體幅度情景，非經驗證的個人或總E2預測。</string>
+    <string name="uc_original_research_note">%1$s · %2$s · %3$s。Price 1997圖1加權幅度：假設B=%4$s，擬合A=%5$s pg/mL（1mg/1h增量）。群體幅度僅映射已記錄舌下E2，排除其他E2途徑。化驗點為實測總E2，不校準這條曲線。下方校準和參數卡片僅作用於Legacy。未來僅已有劑量尾部，8–24h不確定；圖表AUC衝突未解決，不估計含服時長影響。</string>
     <string name="uc_original_tail">研究尾部</string>
+    <string name="uc_original_peaks">單次1mg參考：Cmax %1$s pg/mL，Tmax +%2$s h。最新劑量後24h歷史視窗（含前劑殘留）：峰值%3$s pg/mL，峰時+%4$s h。</string>
 </resources>

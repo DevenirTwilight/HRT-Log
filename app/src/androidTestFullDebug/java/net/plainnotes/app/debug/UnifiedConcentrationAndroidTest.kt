@@ -40,6 +40,43 @@ class UnifiedConcentrationAndroidTest {
             org.junit.Assert.assertTrue(ui.onAllNodesWithText("pmol/L").fetchSemanticsNodes().size>=2)
         }
     }
+    @Test fun literatureAmplitudeHeroAndLegacyCalibrationAreIsolatedOnAndroid() {
+        await("unified-chart")
+        val doses=listOf(-30.0,-20.0,-3.0).map { net.plainnotes.app.pk.experimental.ExperimentalDose(it,1.0) }
+        for(model in listOf(net.plainnotes.app.pk.experimental.ResearchModel.M2,net.plainnotes.app.pk.experimental.ResearchModel.M1)) {
+            ui.onNodeWithTag("model-${model.name}").performScrollTo().performClick();await("unified-chart")
+            val c=net.plainnotes.app.pk.experimental.ResearchDisplayProtocol.candidate(model)
+            val a=net.plainnotes.app.pk.experimental.ResearchDisplayProtocol.anchor(model,c)
+            val value=kotlin.math.round(net.plainnotes.app.pk.experimental.ResearchSublingualV01.studyScenario(0.0,doses,c,a)).toInt().toString()
+            ui.waitUntil(10_000){ui.onAllNodesWithText(value).fetchSemanticsNodes().isNotEmpty()}
+            ui.onNodeWithText(ui.activity.getString(net.plainnotes.app.R.string.calib_enable)).performScrollTo().performClick()
+            ui.runOnUiThread { ui.activity.syntheticLabPgMl=9000.0 }
+            ui.waitForIdle();ui.onNodeWithText(value).assertExists()
+            ui.onNodeWithTag("research-peaks").assertExists()
+            ui.runOnUiThread { ui.activity.syntheticLabPgMl=150.0 }
+        }
+    }
+    @Test fun actualProductPreviewReportsPeakAccuracyAndAndroidPerformance() {
+        val now=600000.0
+        val doses=(0 until 60).map { i -> net.plainnotes.app.pk.DoseEvent("synthetic-$i",net.plainnotes.app.pk.Route.SUBLINGUAL,
+            now-i*12.0,1.0,net.plainnotes.app.pk.Ester.E2,70.0,net.plainnotes.app.pk.DoseExtras(sublingualTier=2.0)) }
+        val before=android.os.Debug.MemoryInfo();android.os.Debug.getMemoryInfo(before)
+        val started=android.os.SystemClock.elapsedRealtimeNanos()
+        val p=net.plainnotes.app.experimental.ConcentrationPreview.compute(
+            net.plainnotes.app.conc.experimental.SlAdapterAudit(doses,emptyMap()),net.plainnotes.app.pk.experimental.ResearchModel.M2,now)
+        val elapsed=(android.os.SystemClock.elapsedRealtimeNanos()-started)/1e6
+        val after=android.os.Debug.MemoryInfo();android.os.Debug.getMemoryInfo(after)
+        org.junit.Assert.assertEquals(net.plainnotes.app.pk.experimental.ResearchDisplayProtocol.m2Id,p.candidateId)
+        org.junit.Assert.assertEquals(p.historyWindowPeak!!.pgMl,p.values.max(),1e-5)
+        org.junit.Assert.assertTrue(p.timeH.size in 5041..12000)
+        val report=org.json.JSONObject().put("fixture","synthetic-60-doses-over-30-days")
+            .put("protocol",net.plainnotes.app.pk.experimental.ResearchDisplayProtocol.version).put("candidate",p.candidateId)
+            .put("chart_points",p.timeH.size).put("compute_ms",elapsed).put("sdk",android.os.Build.VERSION.SDK_INT)
+            .put("process_pss_before_kib",before.totalPss).put("process_pss_after_kib",after.totalPss)
+            .put("history_peak_pgml",p.historyWindowPeak!!.pgMl).put("chart_peak_pgml",p.values.max())
+            .put("measurement_limit","Synthetic Debug emulator process PSS, not hardware/FPS/Release or clinical accuracy")
+        android.util.Log.i("Pr19DisplayPerf","PR19_DISPLAY_PERFORMANCE_JSON="+report.toString())
+    }
     @Test fun thirtyDaySyntheticHistoryReportsAndroidComputeAndProcessMemory() {
         val origin=600_000.0
         val doses=(0 until 60).map { i -> net.plainnotes.app.pk.DoseEvent("synthetic-$i",net.plainnotes.app.pk.Route.SUBLINGUAL,

@@ -2,36 +2,57 @@ package net.plainnotes.app.experimental
 
 import net.plainnotes.app.conc.ConcentrationCalculator
 import net.plainnotes.app.conc.experimental.SlAdapterAudit
+import net.plainnotes.app.pk.Pk
 import net.plainnotes.app.pk.experimental.*
 
-/** Read-only research display. Never a production ConcentrationResult or a personal lab fit. */
+/** Read-only Price group-amplitude mapping to qualified actual SL E2 history, never personal lab calibration. */
 class ConcentrationPreview(val model: ResearchModel, val timeH: DoubleArray, val values: DoubleArray,
-    val currentPgMl: Double?, val candidateId: String, private val exact: ((Double) -> Double)?) {
+    val currentPgMl: Double?, val candidateId: String, private val exact: ((Double) -> Double)?,
+    val anchor: ExperimentalStudyAnchor, val singleDosePeak: ResearchPeak?,
+    /** Latest actual dose → +24 h, includes earlier residuals; not the isolated single-dose Tmax. */
+    val historyWindowPeak: ResearchPeak?, val historyOriginH: Double?) {
     fun valueAt(hour: Double): Double? = exact?.invoke(hour)
     companion object {
-        val assumptions = CommonCalibration(25.0, 100.0)
-        fun pending(model: ResearchModel) = ConcentrationPreview(model, doubleArrayOf(), doubleArrayOf(), null, candidate(model).id, null)
-        private fun candidate(model: ResearchModel) = when (model) {
-            ResearchModel.M2 -> ResearchSublingualV01.candidates.first()
-            ResearchModel.M1 -> ResearchM1Catalog.candidates.first()
-            ResearchModel.LEGACY -> error("Legacy uses the unchanged production result")
-        }
-        fun compute(audit: SlAdapterAudit, model: ResearchModel, nowH: Double): ConcentrationPreview {
+        fun pending(model: ResearchModel) = ConcentrationPreview(model,doubleArrayOf(),doubleArrayOf(),null,
+            ResearchDisplayProtocol.candidate(model).id,null,ResearchDisplayProtocol.anchor(model),null,null,null)
+        fun compute(audit: SlAdapterAudit, model: ResearchModel, nowH: Double,
+                    selected: ExperimentalCandidate = ResearchDisplayProtocol.candidate(model)): ConcentrationPreview {
             require(nowH.isFinite())
-            val selected = candidate(model)
+            require(if(model==ResearchModel.M2) selected in ResearchSublingualV01.candidates
+                else model==ResearchModel.M1 && selected in ResearchM1Catalog.candidates)
             if (audit.events.isEmpty()) return pending(model)
-            val doses = audit.events.map { ExperimentalDose(it.timeH, it.doseMG) }
-            fun exact(hour: Double) = assumptions.concentration(ResearchSublingualV01.relativeHistory(hour, doses, selected))
+            // Defense in depth for callers bypassing the historical adapter. No oral/other-E2 contribution is relabelled SL.
+            require(audit.events.all { it.route==net.plainnotes.app.pk.Route.SUBLINGUAL &&
+                it.ester==net.plainnotes.app.pk.Ester.E2 && it.timeH.isFinite() && it.timeH<=nowH && it.doseMG.isFinite() && it.doseMG>0 })
+            val doses = audit.events.map { ExperimentalDose(it.timeH, it.doseMG) }.sortedBy { it.atHour }
+            val anchor=ResearchDisplayProtocol.anchor(model,selected)
+            fun exact(hour: Double) = ResearchSublingualV01.studyScenario(hour,doses,selected,anchor).also {
+                require(it.isFinite() && it>=0 && (it*Pk.PMOL_PER_PG).isFinite())
+            }
+            val single=ResearchExtrema.maximum(0.0,24.0) { ResearchSublingualV01.studyScenario(it,listOf(ExperimentalDose(0.0,1.0)),selected,anchor) }
             val from = nowH - ConcentrationCalculator.HISTORY_DAYS * 24.0
             val to = nowH + ConcentrationCalculator.FORECAST_DAYS * 24.0
-            // Calendar grid plus dose-local points preserves short SL peaks across the original 7/14/60-day view.
             val times = sortedSetOf<Double>()
             for (i in 0..((to-from).toInt())) times += from + i
             times += nowH
-            val offsets = listOf(0.0, 1.0/60, .05, .1, .2, .35, .5, .75, 1.0, 1.5, 2.0, 3.0, 4.0, 8.0, 12.0, 24.0)
-            doses.forEach { dose -> offsets.forEach { offset -> (dose.atHour+offset).takeIf { it in from..to }?.let { times += it } } }
+            // Dose-local five-minute grid preserves curve shape; exact refined maxima prevent off-grid peak suppression.
+            // After +8 h every supported individual frozen curve is decreasing (catalog conformance test).
+            doses.forEachIndexed { i,dose ->
+                val start=maxOf(from,dose.atHour)
+                val end=minOf(to,dose.atHour+8.0,doses.getOrNull(i+1)?.atHour ?: to)
+                if(end>=start) {
+                    val count=kotlin.math.ceil((end-start)*12).toInt().coerceAtLeast(1)
+                    for(j in 0..count) times += start+(end-start)*j/count
+                    ResearchExtrema.peaks(start,end,stepH=1.0/12,value=::exact).forEach { times+=it.hour }
+                }
+                (dose.atHour+single.hour).takeIf { it in from..to }?.let {times+=it}
+            }
+            val origin=doses.last().atHour
+            val peak=ResearchExtrema.maximum(origin,origin+24.0,value=::exact)
+            times+=peak.hour
             val x=times.toDoubleArray()
-            return ConcentrationPreview(model,x,DoubleArray(x.size){exact(x[it])},exact(nowH),selected.id,::exact)
+            return ConcentrationPreview(model,x,DoubleArray(x.size){exact(x[it])},exact(nowH),selected.id,::exact,
+                anchor,single,peak,origin)
         }
     }
 }

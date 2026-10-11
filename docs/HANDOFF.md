@@ -1,3 +1,13 @@
+# PR #19 标定修复进行中（2026-10-11）
+
+新任务覆盖旧 B25/A100 默认展示。远端 PR19 为 open/unmerged，起点8216f309；原 UI/ConcChart/生产核及所有冻结文件保持字节不变。主调用 AppShell→UnifiedConcentrationScreen→ConcentrationPreview→原 ConcentrationScreen hero/ConcChart；旧 preview 未用 Price anchor/amplitude，first 选择无科学规则。
+
+本轮已独立重算旧参考：p2x-14 人为127.250288、Price468.741741 pg/mL，Tmax0.901225h；Legacy144.023808、Tmax1.000137h。拟冻结 M2 p2x-39，Price B24/A434.835722，Cmax481.924256、Tmax0.854839h；M1 p2az-m1-09 新 Price projection B24/A454.306268，Cmax478.607264、Tmax1.023027h。结果来自 scipy 独立核/加权重拟合/全局括号极值搜索，非硬编码目标。完整47候选结果与源哈希在 docs/design/pr19-calibration-evidence；原 P2-X CSV 与科学核不改，单次和重复给药背景只一次。
+
+非保护新 ResearchDisplayProtocol/ResearchExtrema 与 preview 接线、四语文献范围/Legacy隔离标签及峰值点已实现，第一轮 PK118 与 app 聚焦10项已通过、0失败/跳过（第二次构建4m9s；首次 AUC 积分网格误差失败，随后提高分辨率而未降低断言）。Python 科研269项及来源/四语锁检查通过。新 Room 真实产品路径追加断言待下一轮回归，完整工程**未验收**。详细规则 REQUIREMENTS §61；后续须完成正负回归、性能、全量 JVM/Android/API35、Debug/unsigned Release/lint、APK前后体积与 PR19 更新。旧 unsigned 对照已另存 /workspace/hrt-unified-tools/pr19-before-calibration-unsigned.apk，不签名、不交付本轮 APK。保护检查实际通过；未改守卫/偏离链/基线，无待批准保护改动。旧交接如下，旧测试/签名结果均为历史版本，不能当成本轮结果。
+
+---
+
 # 原血药浓度UI恢复：仅增加模型选择（2026-10-11）
 
 最新明确指令“我要恢复原ui，只增加选模型功能”覆盖前两轮重排设计；当前源码425a7ab0c75c625c070a17b116cc4f99aa79ff0d直接复用原ConcentrationScreen和原ConcChart。保留原卡片、日历时间轴、化验、校准、参数与历史修复；只增加选择和科研假设标注。无新参数表单/指标分区/实验入口，M2优先研究情景，M1候选可选，Legacy原计算保留；其他途径无合格SL历史时退回Legacy。完整记录见[本轮验收](design/concentration-layout-restoration-2026-10.md)、REQUIREMENTS §60和精确UI偏离授权。冻结生产核/参数/协议基线不变。本轮425a7ab CI38165696135三任务全成功；本地29项/32张四语截图、Debug/Release/仪器构建/lint均通过（本地16m24s退出0，lint0错误172警告）。完整420项app CI有13项原有跳过，设备67项有2项原有跳过，实际限制已在报告逐项记录；不沿用旧059原型或001补跑冒称新测试成功。

@@ -1,0 +1,47 @@
+name: PR19 independent literature calibration replay
+on:
+  push:
+    paths:
+      - 'pk-engine/src/**'
+      - 'app/src/**'
+      - 'tools/pk-research/pr19_calibration_reference.py'
+      - 'tools/pk-research/test_pr19_calibration_contract.py'
+      - 'docs/design/pr19-calibration-evidence/**'
+      - '.github/workflows/pr19-calibration.yml'
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  reference:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install numpy==2.3.5 scipy==1.17.0
+      - run: |
+          python tools/pk-research/pr19_calibration_reference.py --out /tmp/pr19-reference.json
+          python - <<'PY'
+          import json, math
+          from pathlib import Path
+          a=json.loads(Path('docs/design/pr19-calibration-evidence/reference.json').read_text())
+          b=json.loads(Path('/tmp/pr19-reference.json').read_text())
+          def compare(a,b):
+              if isinstance(a,dict):
+                  assert a.keys()==b.keys()
+                  for k in a:compare(a[k],b[k])
+              elif isinstance(a,list):
+                  assert len(a)==len(b)
+                  for x,y in zip(a,b):compare(x,y)
+              elif isinstance(a,float):assert math.isclose(a,b,rel_tol=1e-9,abs_tol=1e-7),(a,b)
+              else:assert a==b,(a,b)
+          compare(a,b)
+          PY
+          python -m unittest discover -s tools/pk-research -p 'test_pr19*.py' -v
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: pr19-independent-reference
+          path: /tmp/pr19-reference.json

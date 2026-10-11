@@ -15,6 +15,9 @@ import net.plainnotes.app.conc.ConcentrationCalculator
 import net.plainnotes.app.data.LabValueEntity
 import net.plainnotes.app.data.RecordEntity
 import net.plainnotes.app.pk.experimental.ResearchModel
+import net.plainnotes.app.pk.experimental.ResearchDisplayProtocol
+import net.plainnotes.app.pk.experimental.ResearchSublingualV01
+import net.plainnotes.app.pk.experimental.ResearchM1Catalog
 import java.time.Instant
 
 /** The original screen owns every card, chart and setting. This adds only model selection and a read-only preview. */
@@ -41,8 +44,17 @@ import java.time.Instant
             ResearchModel.entries.forEach { choice -> FilterChip(model == choice,{model=choice},
                 enabled=choice==ResearchModel.LEGACY || available!=false,label={Text(choice.name)},modifier=Modifier.testTag("model-${choice.name}")) }
         }
-        if (displayed != null) Text(stringResource(R.string.uc_original_research_note,model.name,displayed.candidateId),
-            style=MaterialTheme.typography.bodySmall,modifier=Modifier.testTag("research-not-personal"))
+        if (displayed != null) {
+            fun number(v: Double) = java.text.NumberFormat.getNumberInstance().apply { maximumFractionDigits=3 }.format(v)
+            val version = if(model==ResearchModel.M2) ResearchSublingualV01.version else ResearchM1Catalog.version + " / " + ResearchDisplayProtocol.m1ProjectionVersion
+            Text(stringResource(R.string.uc_original_research_note,model.name,displayed.candidateId,version,
+                number(displayed.anchor.background),number(displayed.anchor.oneMgIncrementAtOneHour)),
+                style=MaterialTheme.typography.bodySmall,modifier=Modifier.testTag("research-not-personal"))
+            val single=displayed.singleDosePeak;val history=displayed.historyWindowPeak
+            if(single!=null && history!=null) Text(stringResource(R.string.uc_original_peaks,
+                number(single.pgMl),number(single.hour),number(history.pgMl),number(history.hour-displayed.historyOriginH!!)),
+                style=MaterialTheme.typography.bodySmall,modifier=Modifier.testTag("research-peaks"))
+        }
         else Text(stringResource(R.string.uc_legacy_note),style=MaterialTheme.typography.bodySmall,modifier=Modifier.testTag("concentration-legacy"))
     }
 }
