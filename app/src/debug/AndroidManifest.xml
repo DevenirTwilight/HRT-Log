@@ -1,0 +1,6 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <!-- Synthetic instrumentation host only. No public research sandbox or release entry. -->
+        <activity android:name="net.plainnotes.app.debug.UnifiedConcentrationTestActivity" android:exported="false" />
+    </application>
+</manifest>

@@ -29,3 +29,12 @@ object ExperimentalConcentrationComparison {
         return ComparisonSnapshot(audit, index, result)
     }
 }
+
+/** Personal observations are a separate layer, never calibration inputs or study-cohort points. */
+fun researchObservationPoints(labs: List<net.plainnotes.app.data.LabValueEntity>, display: ResearchDisplay, pmol: Boolean): List<Triple<Double, Double, Double>> {
+    if (display != ResearchDisplay.CONDITIONAL) return emptyList()
+    val factor = if (pmol) net.plainnotes.app.pk.Pk.PMOL_PER_PG else 1.0
+    return labs.filter { it.analyte_code == ConcentrationCalculator.E2_CODE && it.unit in listOf("pg/mL", "pmol/L") && it.value.isFinite() && it.value >= 0 }.map {
+        Triple(ConcentrationCalculator.hours(it.sampled_utc), it.value * (if (it.unit == "pmol/L") 1.0 / net.plainnotes.app.pk.Pk.PMOL_PER_PG else 1.0) * factor, 0.0)
+    }
+}

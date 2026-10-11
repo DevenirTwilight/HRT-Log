@@ -1,0 +1,17 @@
+{
+  "version": "unified-research-parameters-v1",
+  "source_prs": [
+    1,
+    3,
+    17
+  ],
+  "files": {
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchSublingualV01.kt": "55c62670dac37d9c44a370ea10406d66c21654ba330b7e967c61840a101ec527",
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchM1Catalog.kt": "82ffdd2f627742dfc2648da95e69d547f14d198f5c91214fbeca73e38d888f5d",
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/StudyAnchors.kt": "93f746293efa12866bee1e5f740643de217ed64cd93d4a40bb5fc8f8808235c8",
+    "docs/design/unified-model-inputs/m1-candidates.json": "4df0fa815ccfcdba4b260539b8c6f434204e6ae56982c537e78a47f66164764a",
+    "docs/design/unified-model-inputs/p2az-design.json": "521ce6f4d5d2b8f1de8cdc8da5e18aedac5c493cb3611bc72d20c6ed7ace46ca",
+    "docs/pk-research/p2/p2x-frozen-40-candidates.csv": "f13aa0a0b27883fe211ee604c7c1a8a413d4e81d7114da2a5c39057db8df0d1b",
+    "pk-engine/src/main/resources/pk-params.json": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b"
+  }
+}

@@ -20,6 +20,8 @@ jobs:
         run: |
           python3 -m unittest discover -s tools/pk-research -p 'test_*.py'
           python3 tools/pk-research/research.py --output /tmp/hrt-p2-ci
+          python3 scripts/generate_unified_model_reference.py --check
+          python3 scripts/check_unified_concentration.py
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:

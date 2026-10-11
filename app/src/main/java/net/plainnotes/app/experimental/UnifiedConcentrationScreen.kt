@@ -94,6 +94,11 @@ import java.time.Instant
             DropdownField(stringResource(R.string.uc_m1_candidate), ResearchM1Catalog.candidates.map { it.id }, m1Id, { it }, { m1Id = it; hour = null }, modifier = Modifier.testTag("m1-candidate"))
             Text(stringResource(R.string.uc_version, ResearchSublingualV01.version, m2Id, ResearchM1Catalog.version, m1Id), style = MaterialTheme.typography.bodySmall, modifier = Modifier.testTag("model-versions"))
             Text(stringResource(R.string.uc_selection), style = MaterialTheme.typography.bodySmall)
+            val selectedM2 = ResearchSublingualV01.candidates.single { it.id == m2Id }
+            val selectedM1 = ResearchM1Catalog.candidates.single { it.id == m1Id }
+            listOf("M2" to selectedM2, "M1" to selectedM1).forEach { (name, c) ->
+                Text("$name: n=${c.transitStages}; kf=${fmt(c.fastRatePerHour)} /h; ke=${fmt(c.eliminationRatePerHour)} /h; ks=${fmt(c.slowRatePerHour)} /h; w=${fmt(c.slowWeight)}", style = MaterialTheme.typography.bodySmall)
+            }
             Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 ComparisonWindow.entries.forEach { w -> FilterChip(window == w, { window = w; hour = null }, label = { Text(if (w.relative) "0–${w.hours.toInt()} h" else stringResource(R.string.uc_calendar)) }, modifier = Modifier.testTag("window-${w.name}")) }
             }
@@ -120,9 +125,7 @@ import java.time.Instant
                 }
                 Text(unit, modifier = Modifier.testTag("chart-unit"))
                 val points = if (display == ResearchDisplay.STUDY) PriceFigure1997.hours.indices.map { Triple(PriceFigure1997.hours[it], PriceFigure1997.means[it] * factor, PriceFigure1997.readWidths[it] * factor) }
-                    else if (display == ResearchDisplay.CONDITIONAL) labs.filter { it.analyte_code == "E2" && it.unit in listOf("pg/mL", "pmol/L") && it.value.isFinite() && it.value >= 0 }.map {
-                        Triple(ConcentrationCalculator.hours(it.sampled_utc), it.value * (if (it.unit == "pmol/L") 1.0 / net.plainnotes.app.pk.Pk.PMOL_PER_PG else 1.0) * factor, 0.0)
-                    } else emptyList()
+                    else researchObservationPoints(labs, display, pmol)
                 ModelComparisonChart(ComparisonChartData(r.base.timeHours,
                     active.map { ComparisonSeries(r.series.getValue(it).map { y -> y * factor }.toDoubleArray(), modelColors.getValue(it)) },
                     band = if (ResearchModel.M2 in active) r.m2Range.first.map { it * factor }.toDoubleArray() to r.m2Range.second.map { it * factor }.toDoubleArray() else null,
@@ -135,14 +138,15 @@ import java.time.Instant
                 val tapped by produceState<Map<ResearchModel, Double>?>(null, r, hour) {
                     value = hour?.let { h -> withContext(Dispatchers.Default) { runCatching { UnifiedModelComparison.valuesAt(r, h) }.getOrNull() } }
                 }
+                val readout = tapped
                 SectionCard(stringResource(R.string.uc_readout)) {
-                    if (tapped == null) Text(stringResource(R.string.uc_tap))
+                    if (readout == null) Text(stringResource(R.string.uc_tap))
                     else {
                         Text("${fmt(hour!! - r.base.originHour)} h", modifier = Modifier.testTag("readout-time"))
-                        active.forEach { m -> Text("${m.name}: ${fmt(tapped.getValue(m) * factor)} $unit", modifier = Modifier.testTag("readout-${m.name}")) }
+                        active.forEach { m -> Text("${m.name}: ${fmt(readout.getValue(m) * factor)} $unit", modifier = Modifier.testTag("readout-${m.name}")) }
                         if (overlay) {
-                            Text("M2 − M1: ${fmt((tapped.getValue(ResearchModel.M2) - tapped.getValue(ResearchModel.M1)) * factor)} $unit", modifier = Modifier.testTag("difference-M1"))
-                            Text("M2 − Legacy: ${fmt((tapped.getValue(ResearchModel.M2) - tapped.getValue(ResearchModel.LEGACY)) * factor)} $unit", modifier = Modifier.testTag("difference-LEGACY"))
+                            Text("M2 − M1: ${fmt((readout.getValue(ResearchModel.M2) - readout.getValue(ResearchModel.M1)) * factor)} $unit", modifier = Modifier.testTag("difference-M1"))
+                            Text("M2 − Legacy: ${fmt((readout.getValue(ResearchModel.M2) - readout.getValue(ResearchModel.LEGACY)) * factor)} $unit", modifier = Modifier.testTag("difference-LEGACY"))
                         }
                     }
                 }
