@@ -133,12 +133,12 @@ import java.time.Instant
                     axisOrigin = if (window.relative || display == ResearchDisplay.STUDY) r.base.originHour else null,
                     description = stringResource(R.string.uc_chart_description, active.joinToString { it.name }, unit)), hour, { hour = it }, ::fmt, tag = "unified-chart")
                 Text(active.joinToString(" · ") { it.name }, modifier = Modifier.testTag("curve-legend"))
-                Text(stringResource(if (display == ResearchDisplay.STUDY) R.string.uc_study_points else R.string.uc_lab_points), style = MaterialTheme.typography.bodySmall)
+                if (display != ResearchDisplay.RELATIVE) Text(stringResource(if (display == ResearchDisplay.STUDY) R.string.uc_study_points else R.string.uc_lab_points), style = MaterialTheme.typography.bodySmall)
                 Text(stringResource(R.string.uc_range_tail), style = MaterialTheme.typography.bodySmall, modifier = Modifier.testTag("tail-warning"))
-                val tapped by produceState<Map<ResearchModel, Double>?>(null, r, hour) {
-                    value = hour?.let { h -> withContext(Dispatchers.Default) { runCatching { UnifiedModelComparison.valuesAt(r, h) }.getOrNull() } }
+                val tapped by produceState<Triple<UnifiedComparison, Double, Map<ResearchModel, Double>>?>(null, r, hour) {
+                    value = hour?.let { h -> withContext(Dispatchers.Default) { runCatching { Triple(r, h, UnifiedModelComparison.valuesAt(r, h)) }.getOrNull() } }
                 }
-                val readout = tapped
+                val readout = tapped?.takeIf { it.first === r && it.second == hour }?.third
                 SectionCard(stringResource(R.string.uc_readout)) {
                     if (readout == null) Text(stringResource(R.string.uc_tap))
                     else {

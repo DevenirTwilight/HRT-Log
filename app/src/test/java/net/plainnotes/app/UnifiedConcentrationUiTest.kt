@@ -11,7 +11,7 @@ import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.StateRestorationTester
+import androidx.compose.ui.test.junit4.StateRestorationTester
 import net.plainnotes.app.data.*
 import net.plainnotes.app.experimental.*
 import net.plainnotes.app.pk.experimental.*
