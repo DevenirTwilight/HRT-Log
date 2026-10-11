@@ -1,0 +1,18 @@
+{
+  "source_commit": "6c663e0f62e32cdacb1836574781823a9ea76ddc",
+  "run": 38171086963,
+  "artifacts": {
+    "build-results": {
+      "sha256": "6e7a0bd0878898f3d8ef7b74186c88e33cb0b0c6171b0859c08c14661e259d53",
+      "bytes": 396954
+    },
+    "jvm-test-results": {
+      "sha256": "1e786755c9150090edae76803a40d7b4afc2afaa4d56f00d9680bc4401b4c107",
+      "bytes": 27818
+    },
+    "device-test-results": {
+      "sha256": "039ecc0dc63172e6fe0f0a79d8d70da77f377e971942fa54a824b2a3a03a5956",
+      "bytes": 30612
+    }
+  }
+}

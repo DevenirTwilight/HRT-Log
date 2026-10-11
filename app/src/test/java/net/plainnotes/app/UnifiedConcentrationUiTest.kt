@@ -80,7 +80,9 @@ class UnifiedConcentrationUiTest {
         chart.performTouchInput{click(center)}
         ui.waitUntil(10_000){ui.onAllNodes(hasText("  ·  ",substring=true)).fetchSemanticsNodes().any { it.config[androidx.compose.ui.semantics.SemanticsProperties.Text].single().text!=before }}
         chart.performTouchInput{ val small=androidx.compose.ui.geometry.Offset(width*.05f,0f);val far=androidx.compose.ui.geometry.Offset(width*.3f,0f);pinch(center-small,center-far,center+small,center+far) }
+        ui.waitForIdle()
         chart.performTouchInput{click(center)}
+        ui.waitUntil(10_000){ui.onAllNodes(hasText("  ·  ",substring=true)).fetchSemanticsNodes().isNotEmpty()}
         ui.onNode(hasText("  ·  ",substring=true)).assertExists()
     }
     @Test fun selectedModelAndOriginalUnitSurviveRecreation() {

@@ -1,0 +1,53 @@
+{
+  "build-results/pk-engine/build/reports/tests/test/index.html": {
+    "tests": "40",
+    "failures": "0",
+    "skipped": "0",
+    "duration": "1.897s"
+  },
+  "build-results/core/data/build/reports/tests/testDebugUnitTest/index.html": {
+    "tests": "72",
+    "failures": "0",
+    "skipped": "0",
+    "duration": "25.121s"
+  },
+  "build-results/core/reminder/build/reports/tests/testDebugUnitTest/index.html": {
+    "tests": "14",
+    "failures": "0",
+    "skipped": "0",
+    "duration": "8.776s"
+  },
+  "build-results/app/build/reports/tests/testFullDebugUnitTest/index.html": {
+    "tests": "422",
+    "failures": "0",
+    "skipped": "13",
+    "duration": "2m11.23s"
+  },
+  "device-test-results/core/data/build/reports/androidTests/connected/debug/index.html": {
+    "tests": "14",
+    "failures": "0",
+    "skipped": "0",
+    "duration": "3.315s"
+  },
+  "device-test-results/app/build/reports/androidTests/connected/debug/flavors/full/index.html": {
+    "tests": "69",
+    "failures": "0",
+    "skipped": "2",
+    "duration": "2m18.00s"
+  },
+  "JVM domain": {
+    "tests": 58,
+    "failures": 0,
+    "skipped": 0
+  },
+  "JVM pk-engine": {
+    "tests": 118,
+    "failures": 0,
+    "skipped": 0
+  },
+  "JVM importer": {
+    "tests": 12,
+    "failures": 0,
+    "skipped": 0
+  }
+}

@@ -1,6 +1,6 @@
 # PR #19：标定、候选与真实峰值修复
 
-状态：源码检查点 `15f7a0c1e5e4d50e02c9b91310765054b4a4c443` 已提交原分支；完整工程验收仍进行中。原 UI 不重新设计，本轮不签名、不交付、不公开发布 APK。下述数值由独立 Python/SciPy 程序复算，未把用户提供的参考数硬编码进测试或显示。
+状态：应用源码 `6c663e0f62e32cdacb1836574781823a9ea76ddc` 已提交原分支并通过完整CI；本地最终异步测试等待修正后全量/构建验收完成。原 UI 不重新设计，本轮不签名、不交付、不公开发布 APK。下述数值由独立 Python/SciPy 程序复算，未把用户提供的参考数硬编码进测试或显示。
 
 ## 实际 GitHub 状态与依赖
 
@@ -69,12 +69,22 @@ Legacy非严格60.000min，是实际完整SL含微小吞咽口服部分的峰，
 
 Price图梯形（假设0h为0）1557.5，与Table1扣治疗前均值2109±1031仍冲突。M2 frozen1201点梯形955.220987与独立quad955.227114相差0.006127，来自积分分辨率，原冻结参考没有被改写或强制追表。当前M2尾H(8)=0.0465376/H(24)=0.000706767，p2x-14为0.0655409/0.00294980；M1-09 H(24)=1.94424e-12，m1-20=0.000103745，尾部差异很大。冻结15集合跨基线24h约95倍归一化谷值范围仍不是人体90%预测区间。
 
-## 验证与限制（进行中，按真实结果更新）
+## 实际执行验收与限制
 
-- 已完成第一轮PK118/app聚焦10/Python269，均0失败/跳过；四语键/占位符、原source lock和check_protocol通过。
-- 首次数值积分网格未满足0.002 AUC误差要求，保留失败记录；提高分辨率到0.0005h，保持断言后通过。独立SciPy参考使用10秒全局括号+局部优化与quad，Kotlin峰搜索1min/5min交叉测试覆盖全部15+32候选。
-- 显式峰点的模型数据误差测试≤1e-5 pg/mL（pmol/L按3.671同步换算）；图表像素精度和视窗恰截在峰之间的直线边界插值不是此数值保证，原ChartViewport仍插值裁切边界，点击始终真实核。单次1mg、2mg、多次/近邻、候选/背景、NaN/Infinity/负剂量、参数锁与原UI语义已有测试。
-- GitHub独立重放38170102325和源15f7a0c的CI38170102275三任务全部成功。四类真实源代码变异均被执行断言拦截，源码恢复；最终加强后的全量/四语截图/构建/lint、APK大小仍待核验。不能用历史425测试或已签名APK当本轮结果。
+- 应用源码6c663e0f：GitHub Android/JVM/API35 CI [38171086963](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38171086963) 三任务success；独立参考重放 [38171086905](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38171086905) success。JVM domain58/PK118/importer12、Android data72/reminder14均0失败/跳过；app422零失败13跳过（12可选native图审，1既有native PDF）。API35 data14零失败/跳过，app69零失败2既有restart-harness跳过；浓度仪器5/5实际执行通过。归档SHA和解析计数在 evidence/ci-artifact-hashes.json、ci-test-counts.json。
+- 最终本地全量重新执行426，0失败/错误、1既有native PDF跳过；32张**本轮**native PNG，中文/英文/繁中/法文×320/411×字体1/2×原浓度/含选择器页面。磁盘另8张旧图不计本轮。Debug、unsigned Release、AndroidTest编译、lint同一轮成功8m21s；lint0错误172既有警告。最窄中文字体2截图保留原卡片/范围/图表；原时间轴端点裁切属于原布局限制，不宣称已修复。
+- 保留真实失败：首次数值积分网格超过原0.002 AUC误差，改到0.0005h未降低断言后PK118通过；首次本地全426有1缩放后异步读数时序失败，加waitForIdle/waitUntil后专项1及全426通过，原数值/存在性断言保留。详见validation-history.json和local-final-validation.json。
+- Python科研269实际通过，四语占位符/模型source-lock/check_protocol实际通过；源码四类变异均被真实执行断言拦截并逐字节恢复：默认换25/100、候选换first、去精细峰点、化验幅度污染。不是仅源码字符串检测；结果mutations.json保留失败证据。
+- SciPy独立10秒全局括号+局部优化/quad与Kotlin一分钟/五分钟峰收敛覆盖47候选。显式峰点数据误差≤1e-5 pg/mL，pmol/L乘3.671；像素精度、裁切边界直线插值不属于此保证，点击始终真实核。单次1/2mg、重复/近邻、不同候选/背景、非法值、Legacy校准隔离、真Room历史读取且无写回、旋转/恢复/手势均覆盖。
+- 实际product preview设备性能：60剂/30天，10442点，592.292139ms，进程PSS220053→221721KiB；历史窗口峰487.857304697，图表最高点相同。另一旧比较科研基准2001点/2830.620061ms单独归档，不混作产品基准。无物理ARM、FPS、Release运行性能或新原生PDF验收结论；本地无KVM，设备结果来自GitHub API35 x86_64模拟器。
+
+## APK、源码和资源体积
+
+同工具链、本轮unsigned Release与修复前原UI版本对照：12,736,319→12,741,571 B，**+5,252 B（+0.04124%）**。完整ZIP CRC通过，4ABI/8原生库内容逐字节相同，406条ZIP成员不变；apksigner verify预期失败Missing META-INF/MANIFEST.MF，未正式签名。前SHA c145fb953f5c6ae0ab1963fff0bce758f65f8699cc3135f53e7ad9fe7ea39b3a，后SHA91ac845fecaa3e1e0f451b22f9e47064f0de6e59204d5192f735b9bfd321b6fb。原APK来源此前原UI源码425a7ab（起点8216为文档续接、相同应用源码），新应用源码6c663e0f，后续仅测试等待/文档变化；不是同源码重复构建或已签名包比较。
+
+修改生产源码文件集合前5281→后7902 B（+2621），新增PK显示协议/极值源码3869 B；四语修改资源22023→24122 B（+2099）。具体文件/bytes见source-size.json；APK ZIP构成见[apk-size-audit.md](pr19-calibration-evidence/apk-size-audit.md)。本轮没有删除任何组件；旧独立实验页/抽屉入口此前已移除且继续保持不存在，科研比较/证据和Legacy全保留。
+
+全部实际变更文件见[modified-files.txt](pr19-calibration-evidence/modified-files.txt)，与任务起点8216比较；报告本身及交接/需求更新也列入。构建命令保留于validation-commands.txt；所有保护文件、协议链和生产参数相对起点无差异。
 
 ## 工程边界
 

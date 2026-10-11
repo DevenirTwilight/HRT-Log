@@ -1,0 +1,9 @@
+Application source: 6c663e0f62e32cdacb1836574781823a9ea76ddc
+Gradle final: BUTTON_AUDIT=1 BUTTON_AUDIT_CASES=concentration_unified,concentration BUTTON_AUDIT_WIDTHS=320,411 BUTTON_AUDIT_SCALES=1,2 BUTTON_AUDIT_LOCALES=en,zh-rCN,zh-rTW,fr-rFR BUTTON_AUDIT_THEMES=LIGHT python3 /workspace/hrt-unified-tools/run_gradle.py /workspace/HRT-Log /workspace/hrt-unified-tools/calibration-audit/final-verified-build.log :app:testFullDebugUnitTest --rerun :app:assembleFullDebug :app:assembleFullRelease :app:assembleFullDebugAndroidTest :app:lintFullDebug
+python3 tools/pk-research/check_protocol.py
+python3 scripts/check_unified_concentration.py
+python3 scripts/run_pr19_calibration_mutations.py
+Independent reference replay: .github/workflows/pr19-calibration.yml, run38171086905
+Full JVM/data/device: .github/workflows/android.yml, run38171086963
+python3 scripts/apk_size_audit.py /workspace/hrt-unified-tools/pr19-before-calibration-unsigned.apk app/build/outputs/apk/full/release/app-full-release-unsigned.apk --out docs/design/pr19-calibration-evidence/apk-size-audit
+apksigner verify app-full-release-unsigned.apk => expected unsigned failure

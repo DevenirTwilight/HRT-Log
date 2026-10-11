@@ -1,0 +1,14 @@
+{
+  "fixture": "synthetic-60-doses-over-30-days",
+  "sdk": 35,
+  "abis": [
+    "x86_64"
+  ],
+  "chart_points": 2001,
+  "compute_ms": 2830.620061,
+  "process_pss_before_kib": 221701,
+  "process_pss_after_kib": 225305,
+  "native_pss_after_kib": 14888,
+  "dalvik_pss_after_kib": 16762,
+  "measurement_limit": "One Debug emulator execution; process PSS includes UI, instrumentation and other allocations. Not hardware, FPS, Release performance or clinical accuracy."
+}
