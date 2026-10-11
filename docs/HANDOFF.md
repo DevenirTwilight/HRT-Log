@@ -20,7 +20,9 @@
 
 **已执行真实数据计算并仅保存匿名聚合输出**：本地读回 VNC54 XLSX 的 SHA-256 `038a935f699ddadc9f0d843e125e5ee8047132773d1d6485085d6302066867dd`、P2-X 冻结 JSON `7bb08b9e...`、Legacy 快照 `70d95c7e...`；新计算结果另行完整重跑，公开匿名 JSON 两次 **逐字节相同**（SHA-256 `fd64b63d0ee71a3f0571dadceefc3394f10025f68c367b1ebd390a2df4f317a0`）。新增**13/13** 项不含真实个人行的数学/隐私/已见结果一致性单元测试通过。完整结果及公开源码：`docs/pk-research/p2/p2au-background-profile/README.md`、`P2-AU-REPORT.md`、`p2au-aggregates.json`、`tools/pk-research/p2au_background_profile.py`、`test_p2au_background_profile.py`，另建 `.github/workflows/p2au-background-profile.yml` 专项 CI。本阶段真实人的 Excel/给药前后浓度及逐人比值**未公开入库**；CI 仅重测非敏感数学和已公开聚合结果，不宣称重新运行私人行级数据。
 
-**后续验收和限制：** 专项 CI 与 Android/JVM/设备回归必须以该 PR 最新 GitHub 结果为准，提交/PR/合并状态须更新并核对远端。所有 B、时钟均为人为敏感性设定，非真实访视用药/检测误差；新旧个人 pg/mL 预测、8–24h 长尾仍未独立外测，P2-C 继续 **HOLD**，无 APK/数据库/生产 E2_SL 修改。沿用本文顶部“科研成果必须实际入库并更新交接”的强制规则。
+**实际 GitHub 入库和 CI（2026-10-11）：** [PR #11](https://github.com/DevenirTwilight/HRT-Log/pull/11) 已合并进默认分支，合并提交 `f2808a96b302fc7b991d53c8d1f882ff692725fe`；研究源提交 `4694d0fa05ec0e1687d9d7f665c03030659768f8`。专项 GitHub Actions [P2-AU 聚合测试 #38128825130](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38128825130) **Success**；[Android/JVM/模拟器 #38128825135](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38128825135) **全部 Success**。远端文件树已确认 6 份研究与 CI 文件及本交接记录；与本会话中实际运行的私人 Excel 重算必须严格区分，CI 没有私人数据读取权限。
+
+**限制与后续：** 所有 B、时钟均为人为敏感性设定，非真实访视用药/检测误差；新旧个人 pg/mL 预测、8–24h 长尾仍未独立外测，P2-C 继续 **HOLD**，无 APK/数据库/生产 E2_SL 修改。沿用本文顶部“科研成果必须实际入库并更新交接”的强制规则。
 
 ---
 
