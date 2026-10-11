@@ -28,6 +28,18 @@ class UnifiedConcentrationAndroidTest {
         ui.activityRule.scenario.recreate();await("unified-chart")
         ui.onNodeWithTag("model-M1").assertIsSelected();ui.onNodeWithTag("unit-pmol").assertIsSelected()
         ui.onNodeWithTag("amplitude").assert(SemanticsMatcher.expectValue(androidx.compose.ui.semantics.SemanticsProperties.EditableText, androidx.compose.ui.text.AnnotatedString("200")))
+        for ((requested, configuration) in listOf(
+            android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE to android.content.res.Configuration.ORIENTATION_LANDSCAPE,
+            android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT to android.content.res.Configuration.ORIENTATION_PORTRAIT,
+        )) {
+            ui.activityRule.scenario.onActivity { it.requestedOrientation = requested }
+            ui.waitUntil(30_000) { ui.activity.resources.configuration.orientation == configuration }
+            await("unified-chart")
+            ui.onNodeWithTag("model-M1").assertIsSelected()
+            ui.onNodeWithTag("unit-pmol").assertIsSelected()
+            ui.onNodeWithTag("chart-unit").assertTextEquals("pmol/L")
+            ui.onNodeWithTag("amplitude").assert(SemanticsMatcher.expectValue(androidx.compose.ui.semantics.SemanticsProperties.EditableText, androidx.compose.ui.text.AnnotatedString("200")))
+        }
     }
     @Test fun thirtyDaySyntheticHistoryReportsAndroidComputeAndProcessMemory() {
         val origin=600_000.0
