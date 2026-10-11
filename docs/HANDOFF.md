@@ -14,6 +14,18 @@
 
 ---
 
+# P2-AY（2026-10-11）——冻结 Legacy/M2 单时点差异的有量纲可辨识性与共享锚点测量噪声
+
+**实际研究成果入库：** 已提交新研究分支 `research/p2-ay-anchor-ratio-observability-20261011`，评审 [PR #16](https://github.com/DevenirTwilight/HRT-Log/pull/16)（目前 Draft，未合并默认分支；需通过数学专项和常规 Android/JVM/设备 CI 才能审查合并）。GitHub源码、可重算结果、完整中文报告和专门工作流位于 [P2-AY 研究目录](pk-research/p2/p2ay-anchor-ratio/README.md)，不能仅因保存 Markdown 或在聊天报告数值就称默认分支入库。
+
+- **科学增量：** 在字节哈希确认的已合并 P2-AW `p2aw-geometry.json`（SHA256 `ecb62798eb785d2c4ae6aca48a2dd5a2b0a6b4f65fd4b7fe8ed875271819df90`）中读取正式 Legacy 与冻结15套M2的九点形状边际包络；没有重拟合/重选40行和15个候选，也没有使用新个体数据。以 `R(t)=(Yt−Y0)/(Y1h−Y0)` 形式推导共享基线/幅度消去、独立采样等SD的delta近似标准差 `(sigma/A)sqrt(1+R²+(R−1)²)` 与共享0/1h锚点造成不同t之间的**协方差**；不能将不同t归一比例视为相互独立。
+- **纯人工误差情景**：A=50/150/450 pg/mL 是假设**给药后1h扣基线增量**（不是Doll2022 144pg/mL总峰值，也不是个人单位标定），单次标准差sigma=1/3/10 pg/mL是分析师设定，2sigma只作为工程压力门槛，**非LC-MS/MS的真实QC、样本量功效、实验测定限或临床指标**。实际给药/采血时钟准确、恒定背景、单次相同制剂、同一平台且独立采样是额外假设；不能推导个体推荐采血/服药时间。
+- **新计算（全部只为模型内条件判断）**：Legacy与M2包络的最小差异在0.25/2/8/12/24h分别约0.424691/0.236121/0.038599/0.015417/0.000433个1h增量单位；A=150下对应≈63.704/35.418/5.790/2.313/0.065 pg/mL。sigma=3、2sigma人为阈值下，保守区分全部15候选的所需A分别≈19.417/32.256/218.983/550.213/19572.457 pg/mL（只是数理条件阈值，绝非人类需要达到的浓度）。晚期相对尾部倍数大与绝对信号是否测得是两回事；同时P2-AW早期15min优势容易受到±15min假设时钟压力侵蚀。
+- **实际远端文件/验收边界**：`tools/pk-research/p2ay_anchor_ratio_observability.py`、`test_p2ay_anchor_ratio_observability.py`（14项纯合成/冻结来源测试）、`docs/pk-research/p2/p2ay-anchor-ratio/P2-AY-REPORT.md`、`p2ay-observability.json`（整数缩放、可逐字节复算）、`README.md`、`.github/workflows/p2ay-anchor-ratio.yml`。创建此交接时 CI 终态尚待查询，**未获得Success前不得写通过**。
+- **严格边界**：只研究已经暴露的冻结模型；没有新独立人体 SL E2 完整曲线，没有实验室实际误差分布、LOD/LLOQ/BLQ模型，也没有个人 pg/mL 精度验证。**P2-C HOLD**，正式引擎、Kotlin参数、数据库、APK、签名、已记录用药历史及服药计划均不改。同期 PR#14 P2-AX 和 PR#15 历史整理仍应独立核对、合并时不得误写成已部署。
+
+---
+
 # P2-AW（2026-10-11）——已冻结 Legacy/M2 的理论采样辨识与数据取得门槛
 
 **P2-AW 已合并确认（2026-10-11）：** [PR #13](https://github.com/DevenirTwilight/HRT-Log/pull/13) 已成功合并至默认分支，研究源提交 `ef9ce96b251ff34e01852c84489f01bdf3391475`，合并提交 `0f73d4c3d98bcc6468622c8341d95230bcdf7395`。最新提交对应的 [P2-AW 专项 CI #38132525102](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38132525102) **Success**（20/20 数学回归、源/原 ZIP 哈希核验、新 JSON 逐字节重算及公开资料隐私门槛）；[Android/JVM/设备 CI #38132525105](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38132525105) **三作业全部 Success**。初始 Python 跨版本 JSON 末位失败的原因、修复和失败记录见本阶段正文；未忽略/关闭原测试。此归档成功不改变 P2-C HOLD 或独立人体外部验证为零的判断。
