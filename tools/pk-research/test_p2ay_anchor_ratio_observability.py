@@ -85,7 +85,7 @@ class P2AYTests(unittest.TestCase):
         self.assertGreater(a["0.25"]["minimum_model_gap_micro"], 400000)
         self.assertGreater(a["8"]["minimum_model_gap_micro"], 35000)
         self.assertLess(a["24"]["minimum_model_gap_micro"], 500)
-        self.assertGreater(a["24"]["minimum_A1h_increment_pgml_milli_for_2sd"]["3"],10000000)
+        self.assertGreater(a["24"]["minimum_A1h_increment_pgml_milli_for_2sd"]["sd3"],10000000)
 
     def test_machine_result_exact(self):
         self.assertEqual(self.output, json.loads(RESULT.read_text(encoding="utf-8")))
