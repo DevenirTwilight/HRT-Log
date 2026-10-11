@@ -9,42 +9,35 @@ import org.junit.Test
 class UnifiedConcentrationAndroidTest {
     @get:Rule val ui=createAndroidComposeRule<UnifiedConcentrationTestActivity>()
     private fun await(tag:String)=ui.waitUntil(30_000){ui.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty()}
-    @Test fun defaultM2OverlayUnitAndStudyAreDistinct() {
+    @Test fun originalUiAndModelSelectionUseOneChart() {
         ui.onNodeWithTag("model-M2").assertIsSelected();await("unified-chart")
         ui.onNodeWithTag("research-not-personal").assertExists()
-        ui.onNodeWithTag("scenario-concentration-card").assertIsDisplayed()
-        ui.onNodeWithTag("scenario-chart-card").assertExists()
-        ui.onNodeWithTag("research-settings-card").assertExists()
-        ui.onNodeWithTag("model-overlay").performClick()
+        val context=ui.activity
+        for(id in listOf(net.plainnotes.app.R.string.pk_chart_title,net.plainnotes.app.R.string.calib_title,net.plainnotes.app.R.string.pk_model_title))
+            ui.onNodeWithText(context.getString(id)).assertExists()
+        ui.onAllNodesWithTag("model-overlay").assertCountEquals(0)
+        ui.onNodeWithTag("model-M1").performScrollTo().performClick();await("unified-chart")
+        ui.onNodeWithTag("model-M1").assertIsSelected()
+        ui.onNodeWithText("pmol/L").performScrollTo().performClick()
         ui.onNodeWithTag("unified-chart").performScrollTo().performTouchInput { click(center) }
-        await("readout-M1");ui.onNodeWithTag("readout-LEGACY").assertExists();ui.onNodeWithTag("difference-M1").assertExists()
-        val selectedValue = ui.onNodeWithTag("readout-M2").fetchSemanticsNode().config[androidx.compose.ui.semantics.SemanticsProperties.Text]
-            .single().text.substringAfter(": ").substringBefore(" pg/mL")
-        ui.onNodeWithTag("scenario-concentration-value").assertTextEquals(selectedValue)
-        ui.onNodeWithTag("unit-pmol").performScrollTo().performClick();ui.onNodeWithTag("chart-unit").assertTextEquals("pmol/L")
-        // Full-width, wrapped mode controls remain reachable on small screens and large fonts.
-        ui.onNodeWithTag("display-STUDY").performScrollTo().assertIsDisplayed().performClick()
-        ui.onNodeWithTag("display-STUDY").assertIsSelected();await("study-not-personal")
-        ui.onNodeWithTag("tail-warning").assertExists()
+        ui.waitUntil(10_000){ui.onAllNodes(hasText("  ·  ",substring=true)).fetchSemanticsNodes().isNotEmpty()}
+        ui.onNodeWithTag("model-LEGACY").performScrollTo().performClick()
+        ui.onNodeWithText(context.getString(net.plainnotes.app.R.string.pk_current)).assertExists()
     }
-    @Test fun modelAndAssumptionsSurviveActivityRecreation() {
-        await("unified-chart");ui.onNodeWithTag("model-M1").performClick()
-        ui.onNodeWithTag("amplitude").performScrollTo().performTextReplacement("200")
-        ui.onNodeWithTag("unit-pmol").performScrollTo().performClick()
+    @Test fun modelAndOriginalUnitSurviveActivityRecreationAndRotation() {
+        await("unified-chart");ui.onNodeWithTag("model-M1").performScrollTo().performClick();await("unified-chart")
+        ui.onNodeWithText("pmol/L").performScrollTo().performClick()
         ui.activityRule.scenario.recreate();await("unified-chart")
-        ui.onNodeWithTag("model-M1").assertIsSelected();ui.onNodeWithTag("unit-pmol").assertIsSelected()
-        ui.onNodeWithTag("amplitude").assert(SemanticsMatcher.expectValue(androidx.compose.ui.semantics.SemanticsProperties.EditableText, androidx.compose.ui.text.AnnotatedString("200")))
+        ui.onNodeWithTag("model-M1").assertIsSelected()
+        org.junit.Assert.assertTrue(ui.onAllNodesWithText("pmol/L").fetchSemanticsNodes().size>=2)
         for ((requested, configuration) in listOf(
             android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE to android.content.res.Configuration.ORIENTATION_LANDSCAPE,
             android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT to android.content.res.Configuration.ORIENTATION_PORTRAIT,
         )) {
-            ui.activityRule.scenario.onActivity { it.requestedOrientation = requested }
-            ui.waitUntil(30_000) { ui.activity.resources.configuration.orientation == configuration }
-            await("unified-chart")
-            ui.onNodeWithTag("model-M1").assertIsSelected()
-            ui.onNodeWithTag("unit-pmol").assertIsSelected()
-            ui.onNodeWithTag("chart-unit").assertTextEquals("pmol/L")
-            ui.onNodeWithTag("amplitude").assert(SemanticsMatcher.expectValue(androidx.compose.ui.semantics.SemanticsProperties.EditableText, androidx.compose.ui.text.AnnotatedString("200")))
+            ui.activityRule.scenario.onActivity { it.requestedOrientation=requested }
+            ui.waitUntil(30_000){ui.activity.resources.configuration.orientation==configuration}
+            await("unified-chart");ui.onNodeWithTag("model-M1").assertIsSelected()
+            org.junit.Assert.assertTrue(ui.onAllNodesWithText("pmol/L").fetchSemanticsNodes().size>=2)
         }
     }
     @Test fun thirtyDaySyntheticHistoryReportsAndroidComputeAndProcessMemory() {

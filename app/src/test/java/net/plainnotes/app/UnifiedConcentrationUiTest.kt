@@ -1,19 +1,8 @@
 package net.plainnotes.app
 
-import androidx.activity.ComponentActivity
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.SemanticsActions
-import androidx.compose.ui.semantics.SemanticsProperties
-import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.junit4.StateRestorationTester
-import net.plainnotes.app.data.*
-import net.plainnotes.app.experimental.*
+import net.plainnotes.app.debug.UnifiedConcentrationTestActivity
 import net.plainnotes.app.pk.experimental.*
 import org.junit.Assert.*
 import org.junit.Rule
@@ -21,104 +10,62 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
-import java.time.Instant
-import java.util.Locale
 
+/** The real original ConcentrationScreen and ConcChart, not a placeholder Legacy host. */
 @RunWith(RobolectricTestRunner::class) @Config(sdk=[35],application=android.app.Application::class)
 class UnifiedConcentrationUiTest {
-    @get:Rule val ui=createAndroidComposeRule<ComponentActivity>()
-    private val now=Instant.parse("2026-03-10T12:00:00Z")
-    private val med=MedicationEntity(1,"Synthetic SL","E2","SUBLINGUAL","MG",1.0,30.0,null,15,120,false,null,true,true,0)
-    private val profile=ProfileEntity(1,"E2","sublingual",sl_tier=2)
-    private val history=listOf(30L,20L,3L).mapIndexed { i,h -> RecordEntity((i+1).toLong(),1,taken_utc=now.toEpochMilli()-h*3600000,
-        taken_zone="UTC",actual_dose=1.0,status="ON_TIME",origin="APP",revision=1,config_snapshot=MedicationSnapshot.encode(med,profile)) }
-    @androidx.compose.runtime.Composable private fun content() { MaterialTheme { UnifiedConcentrationScreen(history,emptyMap(),emptyList(),PaddingValues(),{Text("LEGACY-CONTENT",Modifier.testTag("official"))},{now}) } }
-    private fun show()=ui.setContent { content() }
-    private fun click(tag:String) { ui.onNodeWithTag(tag).performSemanticsAction(SemanticsActions.OnClick) }
-    private fun await(tag:String)=ui.waitUntil(30_000){ui.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty()}
-    private fun read(tag:String)=ui.onNodeWithTag(tag).fetchSemanticsNode().config.getOrNull(SemanticsProperties.Text)!!.joinToString { it.text }
-    private fun tap() { ui.onNodeWithTag("unified-chart").performScrollTo().performTouchInput { click(center) }; await("readout-M2") }
-    private fun expected()=ExperimentalConcentrationComparison.compute(ExperimentalConcentrationComparison.audit(history,emptyMap(),now),now,ComparisonWindow.H24,null,
-        ResearchSublingualV01.candidates.first().id,ResearchM1Catalog.candidates.first().id,ResearchDisplay.CONDITIONAL,CommonCalibration(25.0,100.0),false)!!
-
-    @Test fun originalCardHierarchyIsRestoredAndHeroUsesTheExactSelectedModel() {
-        show(); await("unified-chart")
-        ui.onNodeWithTag("scenario-concentration-card").assertIsDisplayed()
-        val card = ui.onNodeWithTag("scenario-concentration-card").fetchSemanticsNode()
-        val chart = ui.onNodeWithTag("scenario-chart-card").fetchSemanticsNode()
-        val settings = ui.onNodeWithTag("research-settings-card").fetchSemanticsNode()
-        assertTrue("Concentration card precedes chart", card.positionInRoot.y < chart.positionInRoot.y)
-        assertTrue("Parameter form follows chart", chart.positionInRoot.y < settings.positionInRoot.y)
-        val expected = UnifiedModelComparison.valuesAt(expected().result, net.plainnotes.app.conc.ConcentrationCalculator.hours(now))
-        ui.waitUntil(10_000) { read("scenario-concentration-value") != "—" }
-        assertEquals(expected.getValue(ResearchModel.M2), read("scenario-concentration-value").toDouble(), .00051)
-        click("model-M1")
-        assertEquals(expected.getValue(ResearchModel.M1), read("scenario-concentration-value").toDouble(), .00051)
-        click("model-M2"); tap()
-        ui.waitUntil(10_000) { read("scenario-concentration-value") == read("readout-M2").substringAfter(": ").substringBefore(" pg/mL") }
-        ui.onNodeWithTag("common-calibration").assertExists()
-        ui.onNodeWithText(ui.activity.getString(R.string.uc_scenario_only)).assertExists()
+    @get:Rule val ui=createAndroidComposeRule<UnifiedConcentrationTestActivity>()
+    private fun awaitChart()=ui.waitUntil(30_000){ui.onAllNodesWithTag("unified-chart").fetchSemanticsNodes().isNotEmpty()}
+    private fun text(id:Int)=ui.activity.getString(id)
+    @Test fun originalCardsAndCalendarControlsRemainWithOnlyModelSelectorAdded() {
+        awaitChart();ui.onNodeWithTag("model-M2").assertIsSelected()
+        ui.onNodeWithText(text(R.string.uc_original_scenario)).assertExists()
+        ui.onNodeWithText(text(R.string.pk_chart_title)).assertExists()
+        for(days in listOf(7,14,60)) ui.onNodeWithText(ui.activity.getString(R.string.days_short,days)).assertExists()
+        for(id in listOf(R.string.calib_title,R.string.pk_model_title,R.string.chart_full_band,R.string.pk_chart_hint)) ui.onNodeWithText(text(id)).assertExists()
+        for(tag in listOf("model-overlay","research-settings-card","scenario-concentration-card","display-STUDY","amplitude")) ui.onAllNodesWithTag(tag).assertCountEquals(0)
+        ui.onNodeWithTag("research-not-personal").assertExists()
+        ui.onNodeWithText(text(R.string.uc_original_assumptions)).assertExists()
+        ui.onNodeWithText(text(R.string.legend_band_outer)).assertDoesNotExist()
     }
-
-    @Test fun m2DefaultIsConditionalAndLegacyIsAvailableWithoutChangingHistory() {
-        show();ui.onNodeWithTag("model-M2").assertIsSelected();ui.onNodeWithTag("display-CONDITIONAL").assertIsSelected()
-        await("unified-chart");ui.onNodeWithTag("research-not-personal").assertExists();ui.onNodeWithTag("calibration-source").assertExists()
-        click("model-M1");ui.onNodeWithTag("model-M1").assertIsSelected()
-        click("model-LEGACY");ui.onNodeWithTag("official").assertTextEquals("LEGACY-CONTENT");ui.onNodeWithTag("legacy-unverified").assertExists()
-        click("model-M2");await("unified-chart");assertEquals(3,history.size)
+    @Test fun selectedKernelChangesOriginalHeroAndLegacyRestoresOriginalLabels() {
+        awaitChart()
+        // Synthetic history: doses at -30/-20/-3 h; compute against the same frozen candidates.
+        val doses=listOf(ExperimentalDose(-30.0,1.0),ExperimentalDose(-20.0,1.0),ExperimentalDose(-3.0,1.0))
+        fun expected(c:ExperimentalCandidate)=(25.0+100.0*ResearchSublingualV01.relativeHistory(0.0,doses,c)).let{kotlin.math.round(it).toInt()}.toString()
+        ui.onNodeWithText(expected(ResearchSublingualV01.candidates.first())).assertExists()
+        ui.onNodeWithTag("model-M1").performScrollTo().performClick();awaitChart()
+        ui.waitUntil(10_000){ui.onAllNodesWithText(expected(ResearchM1Catalog.candidates.first())).fetchSemanticsNodes().isNotEmpty()}
+        ui.onNodeWithTag("model-LEGACY").performScrollTo().performClick()
+        ui.onNodeWithText(text(R.string.pk_current)).assertExists()
+        ui.onNodeWithText(text(R.string.uc_original_scenario)).assertDoesNotExist()
+        ui.onNodeWithText(text(R.string.legend_band_outer)).assertExists()
+        ui.onNodeWithTag("concentration-legacy").assertExists()
     }
-    @Test fun overlayExactReadoutAndSharedPmolUnit() {
-        show();await("unified-chart");click("model-overlay");tap()
-        await("readout-M1");await("readout-LEGACY");ui.onNodeWithTag("difference-M1").assertExists()
-        val offset=read("readout-time").removeSuffix(" h").replace(',','.').toDouble()
-        val exact=UnifiedModelComparison.valuesAt(expected().result,expected().result.base.originHour+offset)
-        val shown=read("readout-M2").substringAfter(": ").substringBefore(" pg/mL").replace(',','.').toDouble()
-        // The UI rounds the selected time to .001 h; this tolerance bounds that rounding, not kernel interpolation.
-        assertEquals(exact.getValue(ResearchModel.M2),shown,0.1)
-        click("unit-pmol");ui.onNodeWithTag("chart-unit").assertTextEquals("pmol/L")
-        ui.waitUntil(10_000){read("readout-M2").endsWith("pmol/L")}
-        val converted=read("readout-M2").substringAfter(": ").substringBefore(" pmol/L").replace(',','.').toDouble()
-        assertEquals(shown*3.671,converted,0.004)
-        ui.onNodeWithTag("tail-warning").assertExists()
+    @Test fun originalUnitSwitchConvertsResearchValue() {
+        awaitChart();ui.onNodeWithText("pmol/L").performScrollTo().performClick()
+        val doses=listOf(ExperimentalDose(-30.0,1.0),ExperimentalDose(-20.0,1.0),ExperimentalDose(-3.0,1.0))
+        val expected=kotlin.math.round((25.0+100.0*ResearchSublingualV01.relativeHistory(0.0,doses,ResearchSublingualV01.candidates.first()))*3.671).toInt().toString()
+        ui.onNodeWithText(expected).assertExists()
     }
-    @Test fun twoCurveSelectionUsesSameCalibrationAndExactPairwiseDifference() {
-        show();await("unified-chart");click("model-overlay");click("compare-LEGACY");tap()
-        await("readout-M1");ui.onAllNodesWithTag("readout-LEGACY").assertCountEquals(0)
-        ui.onAllNodesWithTag("difference-LEGACY").assertCountEquals(0);ui.onNodeWithTag("difference-M1").assertExists()
-        val m2=read("readout-M2").substringAfter(": ").substringBefore(" pg/mL").toDouble()
-        val m1=read("readout-M1").substringAfter(": ").substringBefore(" pg/mL").toDouble()
-        val difference=read("difference-M1").substringAfter(": ").substringBefore(" pg/mL").toDouble()
-        assertEquals(m2-m1,difference,0.0011) // Three independently rounded display values, each to .001 pg/mL.
-        click("compare-LEGACY");click("compare-M1");ui.onNodeWithTag("readout-LEGACY").assertExists()
-        ui.onAllNodesWithTag("readout-M1").assertCountEquals(0)
+    @Test fun originalChartTapZoomAndPanRemainOperable() {
+        awaitChart();val chart=ui.onNodeWithTag("unified-chart").performScrollTo()
+        chart.performTouchInput{click(center)}
+        ui.waitUntil(10_000){ui.onAllNodes(hasText("  ·  ",substring=true)).fetchSemanticsNodes().isNotEmpty()}
+        val before=ui.onNode(hasText("  ·  ",substring=true)).fetchSemanticsNode().config[androidx.compose.ui.semantics.SemanticsProperties.Text].single().text
+        chart.performTouchInput{swipeLeft(startX=centerX+width*.25f,endX=centerX-width*.25f)}
+        chart.performTouchInput{click(center)}
+        ui.waitUntil(10_000){ui.onAllNodes(hasText("  ·  ",substring=true)).fetchSemanticsNodes().any { it.config[androidx.compose.ui.semantics.SemanticsProperties.Text].single().text!=before }}
+        chart.performTouchInput{ val small=androidx.compose.ui.geometry.Offset(width*.05f,0f);val far=androidx.compose.ui.geometry.Offset(width*.3f,0f);pinch(center-small,center-far,center+small,center+far) }
+        chart.performTouchInput{click(center)}
+        ui.onNode(hasText("  ·  ",substring=true)).assertExists()
     }
-    @Test fun zoomAndPanChangeTapCoordinateAndRestoreSelection() {
-        val restore=StateRestorationTester(ui);restore.setContent { content() };await("unified-chart")
-        ui.onNodeWithTag("unified-chart").performScrollTo().performTouchInput {
-            val small=androidx.compose.ui.geometry.Offset(width*.05f,0f);val far=androidx.compose.ui.geometry.Offset(width*.35f,0f)
-            pinch(center-small,center-far,center+small,center+far)
-        }
-        tap();val before=read("readout-time")
-        ui.onNodeWithTag("unified-chart").performTouchInput { swipeLeft(startX=centerX+width*.3f,endX=centerX-width*.3f) }
-        tap();ui.waitUntil(10_000){read("readout-time")!=before}
-        val panned=read("readout-time");click("unit-pmol")
-        restore.emulateSavedInstanceStateRestore();await("unified-chart")
-        ui.onNodeWithTag("unit-pmol").assertIsSelected();await("readout-M2");assertEquals(panned,read("readout-time"))
-    }
-    @Test fun relativeAndPriceKeepUnitsAndCohortSeparate() {
-        show();await("unified-chart");click("display-RELATIVE");await("unified-chart")
-        ui.waitUntil(10_000){read("chart-unit")==ui.activity.getString(R.string.uc_relative_unit)}
-        ui.onAllNodesWithTag("common-calibration").assertCountEquals(0)
-        click("display-STUDY");await("study-not-personal");ui.onNodeWithTag("chart-unit").assertTextEquals("pg/mL")
-        ui.onAllNodesWithText(ui.activity.getString(R.string.uc_lab_points)).assertCountEquals(0)
-        ui.onNodeWithTag("common-calibration").assertTextEquals(ui.activity.getString(R.string.uc_calibration,"18.000","432.000"))
-        ui.onAllNodesWithTag("history-coverage").assertCountEquals(0)
-        ui.onNodeWithTag("window-CALENDAR_7D").assert(hasText("0–168 h"))
-    }
-    @Test fun invalidCalibrationDoesNotLeaveOldValidCurveVisible() {
-        show();await("unified-chart");ui.onNodeWithTag("amplitude").performScrollTo().performTextReplacement("NaN")
-        ui.onNodeWithTag("invalid-calibration").assertExists();ui.onAllNodesWithTag("unified-chart").assertCountEquals(0)
-        ui.onNodeWithTag("amplitude").performTextReplacement("0");ui.onAllNodesWithTag("unified-chart").assertCountEquals(0)
-        ui.onNodeWithTag("amplitude").performTextReplacement("200");await("unified-chart")
+    @Test fun selectedModelAndOriginalUnitSurviveRecreation() {
+        awaitChart();ui.onNodeWithTag("model-M1").performScrollTo().performClick();awaitChart()
+        ui.onNodeWithText("pmol/L").performScrollTo().performClick()
+        ui.activityRule.scenario.recreate();awaitChart()
+        ui.onNodeWithTag("model-M1").assertIsSelected()
+        ui.onNodeWithText(text(R.string.uc_original_assumptions)).assertExists()
+        assertTrue(ui.onAllNodesWithText("pmol/L").fetchSemanticsNodes().size>=2)
     }
 }

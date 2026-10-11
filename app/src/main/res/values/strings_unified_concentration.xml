@@ -40,4 +40,8 @@
     <string name="uc_scenario_time">Selected time: +%1$s h after the reference dose</string>
     <string name="uc_scenario_only">Assumption-based curve, not a personal prediction or measured concentration.</string>
     <string name="uc_research_settings">Model comparison settings</string>
+    <string name="uc_original_scenario">Research scenario concentration</string>
+    <string name="uc_original_assumptions">B=25 pg/mL; A=100 pg/mL. Assumptions, not personal measurements.</string>
+    <string name="uc_original_research_note">%1$s research candidate %2$s, not a validated personal prediction. Calibration/parameters remain Legacy. Future line: existing-dose tail only; uncertain at 8–24 h.</string>
+    <string name="uc_original_tail">Research tail</string>
 </resources>

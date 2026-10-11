@@ -40,4 +40,8 @@
     <string name="uc_scenario_time">顯示時刻：參考給藥後 +%1$s h</string>
     <string name="uc_scenario_only">基於明確假設的曲線，非個人預測或實測濃度。</string>
     <string name="uc_research_settings">模型比較設定</string>
+    <string name="uc_original_scenario">情景估算濃度</string>
+    <string name="uc_original_assumptions">B=25 pg/mL；A=100 pg/mL。人為假設，並非個人實測值。</string>
+    <string name="uc_original_research_note">%1$s 研究候選 %2$s，非經驗證的個人預測。校準/參數仍屬Legacy；未來曲線僅為已有劑量尾部，8–24小時不確定。</string>
+    <string name="uc_original_tail">研究尾部</string>
 </resources>

@@ -40,4 +40,8 @@
     <string name="uc_scenario_time">显示时刻：参考给药后 +%1$s h</string>
     <string name="uc_scenario_only">基于明确假设的曲线，非个人预测或实测浓度。</string>
     <string name="uc_research_settings">模型比较设置</string>
+    <string name="uc_original_scenario">情景估算浓度</string>
+    <string name="uc_original_assumptions">B=25 pg/mL；A=100 pg/mL。人为假设，并非个人实测值。</string>
+    <string name="uc_original_research_note">%1$s 研究候选 %2$s，非经验证的个人预测。校准/参数仍属Legacy；未来曲线仅为已有剂量尾部，8–24小时不确定。</string>
+    <string name="uc_original_tail">研究尾部</string>
 </resources>

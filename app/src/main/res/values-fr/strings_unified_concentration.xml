@@ -40,4 +40,8 @@
     <string name="uc_scenario_time">Instant affiché : +%1$s h après la dose de référence</string>
     <string name="uc_scenario_only">Courbe fondée sur des hypothèses, pas une prédiction personnelle ni une mesure.</string>
     <string name="uc_research_settings">Réglages de comparaison des modèles</string>
+    <string name="uc_original_scenario">Concentration du scénario</string>
+    <string name="uc_original_assumptions">B=25 pg/mL ; A=100 pg/mL. Hypothèses, pas des mesures personnelles.</string>
+    <string name="uc_original_research_note">%1$s candidat %2$s, sans validation individuelle. Calibration/paramètres Legacy. Courbe future : queue des prises existantes ; incertitude à 8–24 h.</string>
+    <string name="uc_original_tail">Queue de recherche</string>
 </resources>

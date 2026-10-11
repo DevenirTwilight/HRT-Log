@@ -14,6 +14,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -37,7 +38,7 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
 @Composable fun ConcentrationScreen(state: NotesState, result: ConcentrationResult?, loading: Boolean, weight: Double?, settings: ConcSettings,
                                     onSettings: (ConcSettings) -> Unit, onWeight: (Double) -> Unit, onEditMedication: (Long) -> Unit, onOpenLabs: () -> Unit,
                                     contentPadding: PaddingValues,records:List<net.plainnotes.app.data.RecordEntity> = emptyList(),profiles:Map<Long,net.plainnotes.app.data.ProfileEntity> = emptyMap(),
-                                    onConfirmHistory:(net.plainnotes.app.data.MedicationEntity,net.plainnotes.app.data.ProfileEntity?,java.time.LocalDate,java.time.LocalDate)->Unit={_,_,_,_->},onOpenHistory:()->Unit={}) {
+                                    onConfirmHistory:(net.plainnotes.app.data.MedicationEntity,net.plainnotes.app.data.ProfileEntity?,java.time.LocalDate,java.time.LocalDate)->Unit={_,_,_,_->},onOpenHistory:()->Unit={}, preview:net.plainnotes.app.experimental.ConcentrationPreview?=null, modelSelector:@Composable ()->Unit={}) {
     var repair by remember{mutableStateOf<net.plainnotes.app.data.MedicationEntity?>(null)}
     var editWeight by remember { mutableStateOf(false) }
     val factor = if (settings.pmol) Pk.PMOL_PER_PG else 1.0
@@ -52,6 +53,7 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
                 Text(stringResource(R.string.pk_disclaimer_short), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSecondaryContainer)
             }
         }
+        modelSelector()
         val missing = result?.missing.orEmpty()
         if (missing.any { it.medicationId == null && it.input == MissingInput.WEIGHT }) SectionCard(stringResource(R.string.pk_need_weight_title)) {
             Text(stringResource(R.string.pk_need_weight_body), style = MaterialTheme.typography.bodyMedium)
@@ -86,17 +88,17 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
         }
         if (state.medications.none { it.molecule in listOf("E2", "CPA", "SPI", "P4") }) EmptyState(Icons.AutoMirrored.Outlined.ShowChart, stringResource(R.string.pk_no_e2_title), stringResource(R.string.pk_no_e2_body))
 
-        if (result != null && result.timeH.isNotEmpty() && result.models.containsKey(Curve.E2)) {
+        if (result != null && (preview?.timeH ?: result.timeH).isNotEmpty() && (preview != null || result.models.containsKey(Curve.E2))) {
             ElevatedCard(Modifier.fillMaxWidth(), colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.primaryContainer), elevation = CardDefaults.elevatedCardElevation(0.dp)) {
                 Column(Modifier.padding(20.dp)) {
-                    Text(stringResource(R.string.pk_current), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                    Text(stringResource(if(preview==null) R.string.pk_current else R.string.uc_original_scenario), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onPrimaryContainer)
                     Row(verticalAlignment = Alignment.Bottom) {
-                        Text(result.currentPgMl?.let(::fmt) ?: "—", style = MaterialTheme.typography.displayMedium, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                        Text((if(preview==null) result.currentPgMl else preview.currentPgMl)?.let(::fmt) ?: "—", style = MaterialTheme.typography.displayMedium, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onPrimaryContainer)
                         Spacer(Modifier.width(6.dp))
                         Text(unit, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onPrimaryContainer, modifier = Modifier.padding(bottom = 8.dp))
                     }
                     val calibrated = result.calibration != null
-                    Text(stringResource(if (calibrated) R.string.pk_basis_calibrated else R.string.pk_basis_population, result.usedDoses),
+                    Text(if(preview!=null) stringResource(R.string.uc_original_assumptions) else stringResource(if (calibrated) R.string.pk_basis_calibrated else R.string.pk_basis_population, result.usedDoses),
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onPrimaryContainer)
                     if (result.skippedDoses > 0) Text(stringResource(R.string.pk_skipped_doses, result.skippedDoses), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onPrimaryContainer)
                 }
@@ -107,23 +109,23 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
                 Text(stringResource(R.string.pk_chart_title),style=MaterialTheme.typography.titleMedium)
                 val ranges=listOf(7,14,60)
                 AdaptiveChoice(ranges.map{stringResource(R.string.days_short,it)},ranges.indexOf(rangeDays),{rangeDays=ranges[it]})
-                val data = ChartData(result.timeH, DoubleArray(result.e2.size) { result.e2[it] * factor },
-                    result.bandInner?.let { (l, h) -> DoubleArray(l.size) { l[it] * factor } to DoubleArray(h.size) { h[it] * factor } },
-                    result.bandOuter?.let { (l, h) -> DoubleArray(l.size) { l[it] * factor } to DoubleArray(h.size) { h[it] * factor } },
-                    result.nowH, result.labs.map { it.first to it.second * factor }, unit = unit,includeBandsInScale=fullBand,breaks=result.calibrationBreaks,readAt={hour,cancel->result.evaluateAt(hour,cancel)?.center?.times(factor)})
+                val data = ChartData(preview?.timeH ?: result.timeH, (preview?.values ?: result.e2).let { values -> DoubleArray(values.size) { values[it] * factor } },
+                    result.bandInner?.takeIf { preview==null }?.let { (l, h) -> DoubleArray(l.size) { l[it] * factor } to DoubleArray(h.size) { h[it] * factor } },
+                    result.bandOuter?.takeIf { preview==null }?.let { (l, h) -> DoubleArray(l.size) { l[it] * factor } to DoubleArray(h.size) { h[it] * factor } },
+                    result.nowH, result.labs.map { it.first to it.second * factor }, unit = unit,includeBandsInScale=fullBand,breaks=if(preview==null) result.calibrationBreaks else doubleArrayOf(),readAt={hour,cancel->cancel();(if(preview==null) result.evaluateAt(hour,cancel)?.center else preview.valueAt(hour))?.times(factor)})
                 key(rangeDays) {
-                    ConcChart(data, result.nowH - rangeDays * 24 * 0.75, result.nowH + rangeDays * 24 * 0.25, Modifier.fillMaxWidth().height(260.dp)) { if(it>=10)it.roundToInt().toString() else chartNumber.format(it) }
+                    ConcChart(data, result.nowH - rangeDays * 24 * 0.75, result.nowH + rangeDays * 24 * 0.25, Modifier.fillMaxWidth().height(260.dp).then(if(preview!=null) Modifier.testTag("unified-chart") else Modifier)) { if(it>=10)it.roundToInt().toString() else chartNumber.format(it) }
                 }
                 SwitchRow(stringResource(R.string.chart_full_band),fullBand){fullBand=it}
                 if(!fullBand)Text(stringResource(R.string.chart_scale_note),style=MaterialTheme.typography.bodySmall)
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Legend(stringResource(R.string.legend_recorded), MaterialTheme.colorScheme.primary, dashed = false)
-                    Legend(stringResource(R.string.legend_forecast), MaterialTheme.colorScheme.primary, dashed = true)
+                    Legend(stringResource(if(preview==null) R.string.legend_forecast else R.string.uc_original_tail), MaterialTheme.colorScheme.primary, dashed = true)
                     if (result.labs.isNotEmpty()) Legend(stringResource(R.string.legend_labs), MaterialTheme.colorScheme.tertiary, dot = true)
-                    if (result.bandInner != null) Legend(stringResource(R.string.legend_band_inner), MaterialTheme.colorScheme.primary.copy(alpha = 0.3f), block = true)
-                    if (result.bandOuter != null) Legend(stringResource(R.string.legend_band_outer), MaterialTheme.colorScheme.primary.copy(alpha = 0.15f), block = true)
+                    if (preview==null && result.bandInner != null) Legend(stringResource(R.string.legend_band_inner), MaterialTheme.colorScheme.primary.copy(alpha = 0.3f), block = true)
+                    if (preview==null && result.bandOuter != null) Legend(stringResource(R.string.legend_band_outer), MaterialTheme.colorScheme.primary.copy(alpha = 0.15f), block = true)
                 }
-                FlagNotes(result.flags[Curve.E2].orEmpty())
+                if(preview==null) FlagNotes(result.flags[Curve.E2].orEmpty())
                 Text(stringResource(R.string.pk_chart_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Text(stringResource(R.string.pk_unit),style=MaterialTheme.typography.bodyMedium)
                 AdaptiveChoice(listOf("pg/mL","pmol/L"),if(settings.pmol)1 else 0,{onSettings(ConcSettings(it==1,settings.calibrate,settings.mode))})

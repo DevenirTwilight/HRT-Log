@@ -25,12 +25,12 @@ class UnifiedProtocolTest(unittest.TestCase):
     def test_each_navigation_authorization_field_is_exact(self):
         for key in guard.APPROVED_NAVIGATION:
             with self.subTest(key=key):
-                self.mutate_deviation(lambda data: data['deviations'][-1].__setitem__(key,False if key=='pk_relevant' else 'forged'))
+                self.mutate_deviation(lambda data: next(e for e in data['deviations'] if e['id']==guard.APPROVED_NAVIGATION['id']).__setitem__(key,False if key=='pk_relevant' else 'forged'))
     def test_missing_navigation_entry_or_f1_history_fail(self):
         self.mutate_deviation(lambda data:data['deviations'].pop())
         self.mutate_deviation(lambda data:data['deviations'].pop(0))
     def test_forged_non_pk_appshell_waiver_fails(self):
-        self.mutate_deviation(lambda data:data['deviations'][-1].__setitem__('pk_relevant',False))
+        self.mutate_deviation(lambda data:next(e for e in data['deviations'] if e['id']==guard.APPROVED_NAVIGATION['id']).__setitem__('pk_relevant',False))
     def test_new_replay_records_real_deviation_chain_without_rewriting_freeze(self):
         import research
         import contextlib
@@ -64,6 +64,16 @@ class UnifiedProtocolTest(unittest.TestCase):
         for name,expected in lock['files'].items():self.assertEqual(expected,guard.digest(guard.P2/name))
         baseline=json.loads((guard.P2/'production-baseline.json').read_text())['files']
         for name,expected in baseline.items():
-            if name != guard.APPROVED_NAVIGATION['file']:self.assertEqual(expected,guard.digest(guard.ROOT/name))
+            if name not in {guard.APPROVED_NAVIGATION['file'], *(e['file'] for e in guard.APPROVED_ORIGINAL_UI)}:self.assertEqual(expected,guard.digest(guard.ROOT/name))
+
+    def test_original_ui_authorization_fields_and_hashes_are_exact(self):
+        self.assertEqual(guard.APPROVED_ORIGINAL_UI,json.loads((guard.ROOT/'docs/design/original-concentration-ui-authorization.json').read_text()))
+        for entry in guard.APPROVED_ORIGINAL_UI:
+            for key in entry:
+                with self.subTest(file=entry['file'],key=key):
+                    self.mutate_deviation(lambda data:next(e for e in data['deviations'] if e['id']==entry['id']).__setitem__(key,False if key=='pk_relevant' else 'forged'))
+            with tempfile.TemporaryDirectory() as directory:
+                frozen,production=self.sandbox(directory); file=production/entry['file'];file.write_bytes(file.read_bytes()+b'\n')
+                with self.assertRaises(ValueError):guard.check(frozen,production)
 
 if __name__ == '__main__':unittest.main()
