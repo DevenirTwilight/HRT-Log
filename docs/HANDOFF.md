@@ -1,3 +1,44 @@
+# 2026-10-11 HRT Log P2 研究正式入库与 P2-AU 交接（当前版本，优先于下方旧记录）
+
+> **交接优先级：本节为当前状态，下面从 2026-10-10 起的既往记录是历史快照；其中“PR 尚未合并”“未重新读取 VNC54 真实数据”等表述已被后续工作更新。不要把历史文本当成最新状态。**
+
+## 1. 不可跳过的研究入库要求
+
+用户明确要求：**研究成果必须实际提交到 GitHub**。不能把聊天上传、文件哈希清单、测试通过、PR 草稿或报告摘要当作“完整入库”。
+
+- 每个新阶段至少保存**不含敏感数据的**研究程序、测试、输入来源/哈希、可公开输出、原始或明确标记重建的研究报告，并追加本交接文档。
+- 逐项核验远端 Git tree/blob 是否有实际文件；记录分支、提交 SHA、PR、CI；区别 `GIT_BRANCH_COMMITTED`、`PR_OPEN`、`MERGED_DEFAULT`，**不能把 PR 创建当成默认分支合并**。
+- 需要版权或隐私保护的原始研究图版与个体医疗 Excel 不得公开提交；只保留来源 SHA、匿名汇总和可在授权私有环境复跑的脚本。
+- 实施规则：`docs/pk-research/p2/RESEARCH_ARCHIVAL_POLICY.md`。
+
+## 2. 已正式合并到默认分支的成果（2026-10-11 已实际核对）
+
+默认分支 `claude/new-session-1959qb`：PR [#4](https://github.com/DevenirTwilight/HRT-Log/pull/4)、[#5](https://github.com/DevenirTwilight/HRT-Log/pull/5)、[#7](https://github.com/DevenirTwilight/HRT-Log/pull/7)、[#8](https://github.com/DevenirTwilight/HRT-Log/pull/8)、[#9](https://github.com/DevenirTwilight/HRT-Log/pull/9) 均已合并；P2-AU 工作开始前基线提交为 `02bf9f55e68e78f6048a7e2ac6e818dc4f138bdd`。
+
+- `docs/pk-research/p2/history-2026-10-10/source-packages/`：**24 个台账历史阶段中 23 个研究 ZIP 已有 GitHub 二进制文件**，其中 21 个与上传原包字节一致，P2-AJ/AK 两个为明确排除期刊扫描裁剪图的可分发版本；每个 ZIP 含研究程序与原始报告/计算产物，尚未全部展开为独立 Git 路径。
+- **P2-AT 原始 ZIP（390,066 字节，SHA-256 `a636beee77525043a69a8393d88d03b20d9ee14adf2e29c6995960b192b4c14a`）遗失**。新建的 34,698 字节 `P2-AT-RECONSTRUCTED_2026-10-10.zip` 在 `docs/pk-research/p2/history-2026-10-10/reconstructed/` 单独归档；8 项测试与主要组级数值复算通过。**RECONSTRUCTED_NOT_ORIGINAL**，不可宣称原包已找回。
+- P2-AA 与原科学版 P2-AR 的历史独立完成包未证实；PR #5 保存了**2026-10-10 新补做**的解析研究，P2-C 正式模型迁移准入为 **HOLD**。
+- PR #8：原始 P2-S ZIP 在完整仓库环境的 11/11 自动测试及冻结 JSON 逐字节复算通过（[Actions #38123783828](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38123783828)）。
+- PR #9：使用**真实 VNC54 原始 Excel**私有复核了舌下组 11 名不同受试者、20 次有效给药前/名义后 90min 配对访视（3月9、6月11）；对 Legacy 和冻结 15 套 M2 进行不同**人为设定**给药钟点下的非负背景/正幅度条件相容性审计。公开仅匿名聚合 JSON、13 项不含真人行的测试、程序、报告，源 Excel 不公开。见 `docs/pk-research/p2/p2ar-real/` 和 `tools/pk-research/p2ar_real_visit_audit.py`。真实资料**已见于前期研发**，非未见独立验证。
+
+## 3. 新阶段 P2-AU：64 种假设给药时钟稳健性扩展（进行中）
+
+- PR [#10](https://github.com/DevenirTwilight/HRT-Log/pull/10)，研究分支 `research/p2-au-clock-grid-robustness-20261011`；本交接更新时**已提交研究文件，但 PR 尚未合并**，不得写成默认分支已收录。
+- 研究内容：冻结 Legacy 与 P2-X 原先选定的 15 套 M2；在**64 个预先定义的假设四次/日时钟**（三个日间间隔各取 3/4/5/6h）下，使用 P2-AR 已核对的真实 VNC54 20 次配对结果，计算 `b≥0, G>0` 的无噪声代数条件相容性。仍不使用各人的真实给药/采血分钟记录（原始数据没有提供）。
+- **计算结果**：Legacy 在 63/64 组共用假设时钟下可以让全部 20 次访视满足该宽松条件；M2 冻结 15 套中 **6 套**在至少一个假设时钟可满足全部 20 次访视；单模型对所有 64 钟点均满足的访视，Legacy 16/20，M2 每套 4–13/20。不得将“相容”解释为预测准确率或模型赢输概率。
+- 新文件：`tools/pk-research/p2au_clock_grid_audit.py`、`test_p2au_clock_grid_audit.py`、`docs/pk-research/p2/p2au-clock-grid/{REPORT.md,README.md,aggregate.json}`、`.github/workflows/p2au-clock-grid.yml`；不含原始人级 Excel。
+- 原始五种 P2-AR 时钟的聚合结果 5/5 交叉复算一致；新公开专属 CI [#38127356661](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38127356661) 已成功；本次编辑交接文件时完整 Android/JVM/模拟器 CI [#38127356640](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38127356640) 仍在运行，**合并需另核查最终状态**。
+- **明确科学边界**：VNC54 的 20 次访视并非 20 名独立受试者；给药钟点、过去剂量史、个体背景与幅度及检测误差分布未得到实测约束；这些数据已参与先前研究，不能当新的盲法验证。Legacy 与 M2 对独立人体个体绝对浓度（pg/mL）及 8–24h 长尾的预测准确性均未得到足够证明，不能批准生产参数替换。
+
+## 4. 下一位研究者的具体行动
+
+1. 先核对 PR #10 的最新提交及 **P2-AU 专项、JVM、Android、Device** 全部 CI；如通过，再合并 PR #10 到默认分支，并核验远端源文件、匿名结果、报告和本 HANDOFF。合并后追加一行实际合并提交号；不要保留“仍在 PR”作为最新状态。
+2. 进一步复算 P2-AU 在给药钟点以外对 90min 检测时间、历史给药次数、受试者分组/配对聚类及 `b,G` 共同性假设的敏感度；每一轮都应先冻结条件、运行测试、写报告并**真实 GitHub 入库**。
+3. 优先寻找**未参与拟合/筛选**且有多时点 E2、给药记录、检测方法、基线/个体标定的外部人体数据；公平冻结双方比较方案；**不可**通过任意更改 Price/Doll 基线或选择有利钟点宣称 M2 已验证。
+4. `P2-C = HOLD / NOT_IMPLEMENTED / EXTERNAL_VALIDATION_INSUFFICIENT`；不要修改正式 Legacy `E2_SL`、M2 参数、个人曲线单位、历史记录、SQLite/Schema、APK、签名或发布流程。
+
+---
+
 # 2026-10-10 P2 缺号补研：AA / AR / C（研究分支，未投产）
 
 用户要求知道原先研究方向即可实质补齐。历史会话找回 P2-AA“模型预测功能量与跨研究误差分解”、P2-AR（科学）“Yaish/VNC54 90min 真实配对采样对 M2 参数的条件约束”，P2-C 为仍需独立批准的正式替换阶段。新建报告位于 docs/pk-research/p2/history-2026-10-10/reports/p2-aa.md、p2-ar.md、p2-c.md；状态更正追加于 P2-AA-AND-AR-STATUS.md 和研究 README。它们是 **2026-10-10 补做**，不是丢失的原始历史报告。新增纯标准库只读脚本 tools/pk-research/p2_missing_stages_reanalysis.py 及 test_p2_missing_stages.py；本地等价计算已验证 Price 八点 Legacy RMSE 0.1166490999、Rosano 三点 0.2936275078（来自四位小数已见组级数据）；合成同一 120/350 pmol/L 配对可由不同背景/增益/核响应精确复现，不代表真实患者。OSF 原始逐人 Excel 本轮未读取，真正独立外测仍为 0。PR #3 的 P2-AR 是工程页面，非此次科学分析。P2-C 未通过/未授权；生产 PK、M2 参数、P2 原冻结、历史、Schema、APK 和签名未变；无发布。新分支 research/p2-missing-aa-ar-c-20261010 从 PR #4 文档归档分支派生，审查与合并须明确依赖关系。后续如能合法访问逐人匿名化资料，才可继续完成真实 15 候选逐人约束与独立验证；不得将这些部分写成已完成。
