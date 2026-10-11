@@ -14,8 +14,9 @@
 
 ---
 
-# P2-AW（2026-10-11）
 # P2-AZ（2026-10-11）——正式 Legacy / 新单输入 M1 / 新双输入 M2 真实跨研究留一重选
+
+**已核实专项验收：** [P2-AZ CI #38137307450](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38137307450) **Success**：13/13个源/合成/留出隔离测试通过、18场景54折重新计算、`p2az-results.json` 与新生成的文件逐字节一致。最初一次由于错误截断背景下负增量而失败，失败记录与后来的源码修正均保留；常规 Android/JVM/设备 CI 需以最新运行核对，不能把专项成功混同生产测试。
 
 **阶段真实 GitHub 入库：** [PR #17](https://github.com/DevenirTwilight/HRT-Log/pull/17)（分支 `research/p2-az-retrospective-study-transfer-20261011`，本段更新时仍 Draft、尚未合并默认分支）；交付实物：[完整中文报告](pk-research/p2/p2az-retrospective-transfer/P2-AZ-REPORT.md)、[机器实验设计](pk-research/p2/p2az-retrospective-transfer/p2az-design.json)、[实际54折逐折结果](pk-research/p2/p2az-retrospective-transfer/p2az-results.json)、[运行说明](pk-research/p2/p2az-retrospective-transfer/README.md)、`tools/pk-research/p2az_study_transfer.py` 与 `test_p2az_study_transfer.py`、独立自动化逐字节复核 `.github/workflows/p2az-study-transfer.yml`。归档在 Draft PR 不等于已合并/正式投产，后续 CI 实际结果务必另查。
 
@@ -27,7 +28,7 @@
 
 ---
 
-——已冻结 Legacy/M2 的理论采样辨识与数据取得门槛
+# P2-AW（2026-10-11）——已冻结 Legacy/M2 的理论采样辨识与数据取得门槛
 
 **P2-AW 已合并确认（2026-10-11）：** [PR #13](https://github.com/DevenirTwilight/HRT-Log/pull/13) 已成功合并至默认分支，研究源提交 `ef9ce96b251ff34e01852c84489f01bdf3391475`，合并提交 `0f73d4c3d98bcc6468622c8341d95230bcdf7395`。最新提交对应的 [P2-AW 专项 CI #38132525102](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38132525102) **Success**（20/20 数学回归、源/原 ZIP 哈希核验、新 JSON 逐字节重算及公开资料隐私门槛）；[Android/JVM/设备 CI #38132525105](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38132525105) **三作业全部 Success**。初始 Python 跨版本 JSON 末位失败的原因、修复和失败记录见本阶段正文；未忽略/关闭原测试。此归档成功不改变 P2-C HOLD 或独立人体外部验证为零的判断。
 
