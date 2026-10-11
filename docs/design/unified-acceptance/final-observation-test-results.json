@@ -1,0 +1,11 @@
+{
+  "source_commit": "001869b0c508c74b40bae0e6c6c85573e9c10cd6",
+  "totals": {
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "command_log": "final-observation-guard-builds.log",
+  "scope": "Both pg/mL and pmol/L abnormal finite magnitudes rejected in display only; original labs unchanged"
+}

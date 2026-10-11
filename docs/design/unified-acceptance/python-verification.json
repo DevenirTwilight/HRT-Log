@@ -1,0 +1,36 @@
+{
+  "research_unittest": {
+    "tests": 264,
+    "failures": 0,
+    "seconds": 37.695,
+    "includes_protocol_negative_tests": 8
+  },
+  "pk_audit_unittest": {
+    "tests": 13,
+    "failures": 0
+  },
+  "apk_audit_unittest": {
+    "tests": 3,
+    "failures": 0
+  },
+  "p2x_reference_unittest": {
+    "tests": 4,
+    "failures": 0
+  },
+  "m1_python_reference": {
+    "candidates": 32,
+    "times_per_candidate": 13,
+    "check": "PASS"
+  },
+  "unified_source_and_translations": "PASS",
+  "protocol_guard": "PASS",
+  "research_replay": {
+    "profiles": 339,
+    "clinical_production_approved": false,
+    "metadata_includes_actual_protocol_deviation_chain": true
+  },
+  "device_performance_collection_unittest": {
+    "tests": 3,
+    "failures": 0
+  }
+}

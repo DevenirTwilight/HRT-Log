@@ -1,0 +1,12 @@
+{
+  "app_source_commit": "c6d311840838a724fca8721533fa816cbb2935fb",
+  "command_log": "final-layout-tests-builds.log",
+  "totals": {
+    "tests": 414,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 1
+  },
+  "visual_audit_enabled": true,
+  "remaining_skip": "ExportTest.pdfReportIsWritten: Robolectric has no native PdfDocument; existing actual WellbeingAndroidTest validates summary/visit PdfRenderer pages on API35"
+}

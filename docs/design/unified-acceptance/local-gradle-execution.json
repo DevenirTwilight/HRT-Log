@@ -1,0 +1,190 @@
+[
+  {
+    "command": [
+      "/workspace/hrt-unified-tools/gradle-9.3.1/bin/gradle",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=2",
+      "--console=plain",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      "-PjvmOnly",
+      ":core:domain:test",
+      ":pk-engine:test",
+      ":importer:test"
+    ],
+    "cwd": "/workspace/HRT-Log",
+    "exit_code": 0,
+    "log_name": "jvm-initial.log"
+  },
+  {
+    "command": [
+      "/workspace/hrt-unified-tools/gradle-9.3.1/bin/gradle",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=2",
+      "--console=plain",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      ":app:testFullDebugUnitTest",
+      "--tests",
+      "*UnifiedConcentration*",
+      "--tests",
+      "*ResearchHistoricalSlAdapterTest",
+      "--tests",
+      "*PeriodStabilityTest"
+    ],
+    "cwd": "/workspace/HRT-Log",
+    "exit_code": 1,
+    "log_name": "android-initial.log"
+  },
+  {
+    "command": [
+      "/workspace/hrt-unified-tools/gradle-9.3.1/bin/gradle",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=2",
+      "--console=plain",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      ":app:testFullDebugUnitTest",
+      "--tests",
+      "*UnifiedConcentration*",
+      "--tests",
+      "*ResearchHistoricalSlAdapterTest",
+      "--tests",
+      "*PeriodStabilityTest"
+    ],
+    "cwd": "/workspace/HRT-Log",
+    "exit_code": 1,
+    "log_name": "android-retry1.log"
+  },
+  {
+    "command": [
+      "/workspace/hrt-unified-tools/gradle-9.3.1/bin/gradle",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=2",
+      "--console=plain",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      ":app:testFullDebugUnitTest",
+      "--tests",
+      "*UnifiedConcentration*",
+      "--tests",
+      "*ResearchHistoricalSlAdapterTest",
+      "--tests",
+      "*PeriodStabilityTest"
+    ],
+    "cwd": "/workspace/HRT-Log",
+    "exit_code": 1,
+    "log_name": "android-retry2.log"
+  },
+  {
+    "command": [
+      "/workspace/hrt-unified-tools/gradle-9.3.1/bin/gradle",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=2",
+      "--console=plain",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      ":app:testFullDebugUnitTest",
+      "--tests",
+      "*UnifiedConcentration*",
+      "--tests",
+      "*ResearchHistoricalSlAdapterTest"
+    ],
+    "cwd": "/workspace/HRT-Log",
+    "exit_code": 0,
+    "log_name": "android-focused-final.log"
+  },
+  {
+    "command": [
+      "/workspace/hrt-unified-tools/gradle-9.3.1/bin/gradle",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=2",
+      "--console=plain",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      ":core:domain:test",
+      ":pk-engine:test",
+      ":importer:test",
+      ":core:data:testDebugUnitTest",
+      ":core:reminder:testDebugUnitTest",
+      ":app:testFullDebugUnitTest"
+    ],
+    "cwd": "/workspace/HRT-Log",
+    "exit_code": 0,
+    "log_name": "full-tests.log"
+  },
+  {
+    "command": [
+      "/workspace/hrt-unified-tools/gradle-9.3.1/bin/gradle",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=2",
+      "--console=plain",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      "lintFullDebug",
+      ":app:assembleFullDebug",
+      ":app:assembleFullRelease",
+      ":core:data:assembleDebugAndroidTest",
+      ":app:assembleFullDebugAndroidTest"
+    ],
+    "cwd": "/workspace/HRT-Log",
+    "exit_code": 0,
+    "log_name": "builds-lint.log"
+  },
+  {
+    "command": [
+      "/workspace/hrt-unified-tools/gradle-9.3.1/bin/gradle",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=2",
+      "--console=plain",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      ":app:testFullDebugUnitTest",
+      "lintFullDebug",
+      ":app:assembleFullDebug",
+      ":app:assembleFullRelease",
+      ":app:assembleFullDebugAndroidTest"
+    ],
+    "cwd": "/workspace/HRT-Log",
+    "exit_code": 0,
+    "log_name": "final-app-visual-builds.log"
+  },
+  {
+    "command": [
+      "/workspace/hrt-unified-tools/gradle-9.3.1/bin/gradle",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=2",
+      "--console=plain",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      ":app:testFullDebugUnitTest",
+      "lintFullDebug",
+      ":app:assembleFullDebug",
+      ":app:assembleFullRelease",
+      ":app:assembleFullDebugAndroidTest"
+    ],
+    "cwd": "/workspace/HRT-Log",
+    "exit_code": 0,
+    "log_name": "final-layout-tests-builds.log"
+  },
+  {
+    "command": [
+      "/workspace/hrt-unified-tools/gradle-9.3.1/bin/gradle",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=2",
+      "--console=plain",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      ":app:testFullDebugUnitTest",
+      "--tests",
+      "*UnifiedConcentrationObservationTest",
+      "lintFullDebug",
+      ":app:assembleFullDebug",
+      ":app:assembleFullRelease",
+      ":app:assembleFullDebugAndroidTest"
+    ],
+    "cwd": "/workspace/HRT-Log",
+    "exit_code": 0,
+    "log_name": "final-observation-guard-builds.log"
+  }
+]

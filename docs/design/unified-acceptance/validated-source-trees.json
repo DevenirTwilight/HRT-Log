@@ -1,0 +1,19 @@
+{
+  "source_commit": "001869b0c508c74b40bae0e6c6c85573e9c10cd6",
+  "ci_run_id": 38147885981,
+  "scope_trees": {
+    "app/src/main": "18be517096169785ea6822f4f3268068568e97f4",
+    "app/src/debug": "e337cc2eaea664fce2038cf63632e4b8464c5e6a",
+    "app/src/androidTestFullDebug": "f6b0eee9c44ab16c9bc27e0e45dd7d781860ff4a",
+    "pk-engine/src/main": "b80f1bfc1f256e8a2b070298824503c285d7873f",
+    "core/data/src": "5682829b0345bd315cf3fcedc4181a05b8a6f167",
+    "core/domain/src": "67d6facb754c9956b8affed1a55604744e9b4275",
+    "core/reminder/src": "b0f36b16c5e34e3c48ef5184ccb0a9a1fd68b1e0",
+    "core/ui/src": "dd316e89605ae118b1a35ea47d3a8fec2524a9b7",
+    "importer/src": "6555f28b0c421d3850b0a4546b93f8700ee25dc9",
+    "scripts": "9bff4fe03e36331611e9978555842d10e330d75d",
+    ".github/workflows": "607d67b69be5f8655613586cf0fa51e6f338a71a",
+    "tools/pk-research": "dd9980223b6c766672a1bb8732dfa4ebbb8d8416",
+    "docs/design/unified-model-inputs": "34ded1cff75e8c1c94b45a8fca9f822f5e008b0c"
+  }
+}

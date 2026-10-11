@@ -1,0 +1,20 @@
+{
+  "data": {
+    "tests": 14,
+    "failures": 0,
+    "skipped": 0
+  },
+  "app": {
+    "tests": 67,
+    "failures": 0,
+    "skipped": 2
+  },
+  "source_commit": "c6d311840838a724fca8721533fa816cbb2935fb",
+  "run_id": 38146390026,
+  "device_job_id": 114490594052,
+  "emulator": "API35 x86_64",
+  "process_restart_harness": "prepare and verifyFreshProcess PASS after intentional normal-suite skips",
+  "performance_collection": "INVALID: artifact contains run-as unknown package; functional test PASS does not validate measurement collection",
+  "artifact_id": 11705376885,
+  "artifact_sha256": "e6f5bad956dd14f5587e94210b20b1310ab063c855477821e1ebd83507401543"
+}
