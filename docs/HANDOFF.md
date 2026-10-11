@@ -14,6 +14,18 @@
 
 ---
 
+# P2-AX（2026-10-11）——可执行的人体 PK 外测资料契约与新测法证据
+
+**已实际提交研究分支** `research/p2-ax-data-qualification-20261011`，审查 [PR #14](https://github.com/DevenirTwilight/HRT-Log/pull/14)（Draft，等待完整 CI 后审核合并）。不是自动投产或独立人体临床验证；当前默认分支尚不含本阶段新增文件。研究目录：[`docs/pk-research/p2/p2ax-evidence-contract/`](pk-research/p2/p2ax-evidence-contract/README.md)。
+
+本阶段审查 9 个刻意选择的公开研究/阴性对照示例，而不是 9 个新的人体舌下 E2 独立队列，更不能与 P2-AV 的 12 记录/8 队列累加：包含 Cui 等（2026，PMID 42120349）的 7206 人绝经后 E2 多平台标定研究（不构成普通舌下 E2 药代或跨性别个人基线）；iFACT-3（2025）的密集 E2 药代实为 **口服 EV+CPA**（不能误当 SL）；Fridriksdóttir 1996 / Hoon 1993 为特殊 HPβCD 舌下制剂；Doll、Price、TREAT、VNC54、TransPrEP 仍有预先接触、时钟、逐时数值、剂型或合法数据准入边界。9 项均未达到本阶段严格的可读取全序列、合法数据使用与预锁定独立外测元数据组合门槛；这只是**本次资料可用性**，不是世界范围内人体数据不存在的断言。
+
+实际提交：完整 [P2-AX 中文报告](pk-research/p2/p2ax-evidence-contract/P2-AX-REPORT.md)、9 例元数据 `p2ax-source-registry.json`、确定性 `p2ax-gate-results.json`（9 项 HOLD，0 个可审查完整外测候选）、`tools/pk-research/p2ax_evidence_contract.py`、`test_p2ax_evidence_contract.py`（20 个公共元数据/纯合成测试）、专用 `.github/workflows/p2ax-evidence-contract.yml`。程序把 **事后拟合背景/增益的形状 SSE** 与 **不许事后调整的固定绝对预测误差** 分离；没有读人群医疗 Excel、没有声称观测到新的人体误差。专项 CI 必须成功再写 success，远端 blob/报告/结果应逐项核验。
+
+**下一步**：先通过 P2-AX GitHub 专项回放及正常 Android/JVM/设备 CI，再确认 P2-AX 与 `HANDOFF.md` 均真实在默认分支。随后继续向资料提供者合法请求单次 SL E2 真实 0–8h LC-MS/MS 聚合分时数据、8–24h 尾部与真实时钟；有新的未见独立队列必须先冻结参数/比较方案。**P2-C HOLD，正式 Legacy、M2、安卓 App、SQLite、APK、剂量及签名均不改。**
+
+---
+
 # P2-AW（2026-10-11）——已冻结 Legacy/M2 的理论采样辨识与数据取得门槛
 
 **P2-AW 已合并确认（2026-10-11）：** [PR #13](https://github.com/DevenirTwilight/HRT-Log/pull/13) 已成功合并至默认分支，研究源提交 `ef9ce96b251ff34e01852c84489f01bdf3391475`，合并提交 `0f73d4c3d98bcc6468622c8341d95230bcdf7395`。最新提交对应的 [P2-AW 专项 CI #38132525102](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38132525102) **Success**（20/20 数学回归、源/原 ZIP 哈希核验、新 JSON 逐字节重算及公开资料隐私门槛）；[Android/JVM/设备 CI #38132525105](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38132525105) **三作业全部 Success**。初始 Python 跨版本 JSON 末位失败的原因、修复和失败记录见本阶段正文；未忽略/关闭原测试。此归档成功不改变 P2-C HOLD 或独立人体外部验证为零的判断。
