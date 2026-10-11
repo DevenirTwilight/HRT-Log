@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="uc_overlay">Overlay models</string>
+    <string name="uc_legacy_note">Legacy historical estimate; clinical accuracy is not established. Original algorithm and calibration settings are retained.</string>
+    <string name="uc_common_comparison">Compare under common assumptions</string>
+    <string name="uc_research_note">M2 / M1 research curves. Conditional values are not personal predictions or measured concentrations. Legacy is retained for compatibility, not treated as a verified standard.</string>
+    <string name="uc_conditional">Conditional concentration</string>
+    <string name="uc_study">Price 1997 cohort scenario</string>
+    <string name="uc_relative">Relative shapes</string>
+    <string name="uc_assumptions">C(t) = B + A × H(t). Initial B=25 and A=100 pg/mL are arbitrary examples, editable by you, never your measured baseline or amplitude. The same B/A applies to every model. Labs do not calibrate these curves.</string>
+    <string name="uc_background">Assumed B (pg/mL)</string>
+    <string name="uc_amplitude">Assumed 1 mg / 1 h increment A (pg/mL)</string>
+    <string name="uc_invalid">Enter finite B ≥ 0 and A &gt; 0. NaN and infinity are not supported.</string>
+    <string name="uc_relative_protocol">Each fixed kernel is normalized to its own single 1 mg response at 1 h; identical dose/time reference, dimensionless shape differences only.</string>
+    <string name="uc_m2_candidate">M2 fixed candidate</string>
+    <string name="uc_m1_candidate">M1 / P2-AZ research candidate</string>
+    <string name="uc_version">M2 %1$s · %2$s\nM1 %3$s · %4$s</string>
+    <string name="uc_selection">M2: 15 frozen P2-X candidates. M1: 32 P2-AZ grid candidates, not P2-V. Manual ID selection; first ID/order is not an accuracy ranking or fitted winner. No pointwise median model. Legacy uses saved hold-time tiers; M1/M2 do not estimate hold-time effects.</string>
+    <string name="uc_calendar">Last 7 days</string>
+    <string name="uc_origin">Origin dose</string>
+    <string name="uc_single">Selected single dose</string>
+    <string name="uc_history">Recorded repeated doses</string>
+    <string name="uc_error">Model calculation failed. No values are presented as valid.</string>
+    <string name="uc_empty">No eligible recorded sublingual E2 doses. Other compounds/routes remain available in Legacy historical view.</string>
+    <string name="uc_relative_unit">Relative response (dimensionless)</string>
+    <string name="uc_calibration">Common B=%1$s, A=%2$s pg/mL · H(1 h)=1 for one 1 mg dose</string>
+    <string name="uc_price_protocol">Price 1997 Figure 1: six postmenopausal women, micronized SL E2, one 1 mg dose. Not your history or personal prediction. B is the selected candidate’s frozen study assumption; common A=450−B from the manually read 1 h group mean. This shared comparison protocol is not each candidate’s original weighted P2-X amplitude fit.</string>
+    <string name="uc_price_conflict">Figure trapezoid with assumed zero predose: %1$s pg·h/mL; Table 1 predose-subtracted mean: %2$s ±1031 pg·h/mL. The discrepancy remains unresolved; parameters are not changed to force agreement.</string>
+    <string name="uc_chart_description">Shared model chart: %1$s; %2$s</string>
+    <string name="uc_study_points">Dots: manually read published group means; bars: reading widths, not study SD or personal labs.</string>
+    <string name="uc_lab_points">Dots in conditional mode: real lab observations, separate from assumed model curves; never used to fit B/A. Relative mode omits concentration dots.</string>
+    <string name="uc_range_tail" formatted="false">Band: explored 15-candidate range, not a 90% human confidence or prediction interval. Shaded &gt;8 h tail: highly uncertain, especially 8–24 h. M2 retrospective shape evidence does not establish personal absolute accuracy; it does not always beat M1.</string>
+    <string name="uc_readout">Exact model readout</string>
+    <string name="uc_tap">Tap the chart to compare the same instant.</string>
+    <string name="uc_metrics_note">0–24 h metrics after the origin. Recorded earlier/later doses in the window are included unless single-dose selected. AUC integrates total B+A×H on a 1-minute grid; concentrations and AUC share the selected unit. No future schedule is invented.</string>
+    <string name="uc_peak">Peak %1$s %2$s at +%3$s h</string>
+    <string name="uc_auc">AUC 0–4 / 0–8 / 0–24 h: %1$s / %2$s / %3$s %4$s</string>
+    <string name="uc_coverage">Used %1$d doses; omitted beyond 30-day look-back %2$d; excluded by history audit %3$d.</string>
+</resources>

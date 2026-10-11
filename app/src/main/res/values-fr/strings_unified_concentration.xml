@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="uc_overlay">Superposer</string>
+    <string name="uc_legacy_note">Estimation historique Legacy : précision clinique individuelle non établie. Algorithme et réglages conservés.</string>
+    <string name="uc_common_comparison">Comparer avec les mêmes hypothèses</string>
+    <string name="uc_research_note">Courbes de recherche M2 / M1. Les valeurs conditionnelles ne sont ni des prédictions personnelles ni des mesures. Legacy reste compatible sans servir de référence validée.</string>
+    <string name="uc_conditional">Concentration conditionnelle</string>
+    <string name="uc_study">Scénario de cohorte Price 1997</string>
+    <string name="uc_relative">Formes relatives</string>
+    <string name="uc_assumptions">C(t) = B + A × H(t). B=25 et A=100 pg/mL sont des exemples arbitraires modifiables, jamais vos mesures. B/A identiques pour chaque modèle ; aucun ajustement aux analyses.</string>
+    <string name="uc_background">Fond supposé B (pg/mL)</string>
+    <string name="uc_amplitude">Incrément supposé A à 1 mg / 1 h (pg/mL)</string>
+    <string name="uc_invalid">Saisir B ≥ 0 et A &gt; 0 finis, sans NaN ni infini.</string>
+    <string name="uc_relative_protocol">Chaque noyau fixe est normalisé à sa réponse à 1 h après 1 mg ; référence commune, différences de forme sans dimension.</string>
+    <string name="uc_m2_candidate">Candidat fixe M2</string>
+    <string name="uc_m1_candidate">Candidat M1 / P2-AZ</string>
+    <string name="uc_version">M2 %1$s · %2$s\nM1 %3$s · %4$s</string>
+    <string name="uc_selection">M2 : 15 candidats P2-X figés. M1 : 32 candidats P2-AZ, pas P2-V. Choix manuel par ID, aucun classement de précision ni modèle médian assemblé. Legacy conserve la durée en bouche enregistrée ; M1/M2 ne la modélisent pas.</string>
+    <string name="uc_calendar">7 derniers jours</string>
+    <string name="uc_origin">Dose de référence</string>
+    <string name="uc_single">Dose isolée choisie</string>
+    <string name="uc_history">Doses répétées enregistrées</string>
+    <string name="uc_error">Calcul impossible. Aucune valeur présentée comme valide.</string>
+    <string name="uc_empty">Aucune dose E2 sublinguale admissible. Les autres voies et médicaments restent dans la vue historique Legacy.</string>
+    <string name="uc_relative_unit">Réponse relative (sans dimension)</string>
+    <string name="uc_calibration">B=%1$s, A=%2$s pg/mL communs · H(1 h)=1 pour une dose de 1 mg</string>
+    <string name="uc_price_protocol">Price 1997 Figure 1 : six femmes ménopausées, E2 micronisé sublingual, dose unique 1 mg. Ni votre historique ni une prédiction personnelle. B est une hypothèse figée ; A=450−B commun, moyenne de groupe lue à 1 h. Protocole commun distinct des ajustements pondérés P2-X originaux.</string>
+    <string name="uc_price_conflict">Trapèzes de la figure avec valeur prédose supposée nulle : %1$s pg·h/mL ; Table 1 après soustraction prédose : %2$s ±1031 pg·h/mL. Écart non résolu, sans ajustement forcé.</string>
+    <string name="uc_chart_description">Graphique commun : %1$s ; %2$s</string>
+    <string name="uc_study_points">Points : moyennes publiées lues manuellement ; barres : incertitude de lecture, pas écart-type ni analyses personnelles.</string>
+    <string name="uc_lab_points">Points en mode conditionnel : analyses réelles distinctes des courbes supposées, sans ajustement de B/A. Aucun point de concentration en mode relatif.</string>
+    <string name="uc_range_tail" formatted="false">Bande : étendue de 15 candidats, pas un intervalle humain à 90 %. Queue grisée après 8 h très incertaine, surtout 8–24 h. La forme rétrospective M2 ne valide pas la précision individuelle et ne dépasse pas toujours M1.</string>
+    <string name="uc_readout">Lecture exacte du modèle</string>
+    <string name="uc_tap">Toucher le graphique pour comparer le même instant.</string>
+    <string name="uc_metrics_note">Mesures sur 0–24 h après origine, incluant les doses enregistrées voisines sauf en mode isolé. AUC totale B+A×H intégrée à pas de 1 minute ; unité commune. Aucune dose future inventée.</string>
+    <string name="uc_peak">Pic %1$s %2$s à +%3$s h</string>
+    <string name="uc_auc">AUC 0–4 / 0–8 / 0–24 h : %1$s / %2$s / %3$s %4$s</string>
+    <string name="uc_coverage">%1$d doses utilisées ; %2$d hors des 30 jours précédents ; %3$d exclues par audit.</string>
+</resources>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="uc_overlay">叠加模型</string>
+    <string name="uc_legacy_note">Legacy 历史估算，尚未确立个人临床准确性。保留原算法及校准设置。</string>
+    <string name="uc_common_comparison">查看共同条件比较</string>
+    <string name="uc_research_note">M2 / M1 研究曲线。条件浓度不是个人预测或实测值。Legacy 用于兼容，不被视为已验证标准。</string>
+    <string name="uc_conditional">条件浓度情景</string>
+    <string name="uc_study">Price 1997 文献情景</string>
+    <string name="uc_relative">相对曲线</string>
+    <string name="uc_assumptions">C(t) = B + A × H(t)。初值 B=25、A=100 pg/mL 是人为示例，可自行编辑，绝非个人实测背景或幅度。所有模型使用相同 B/A；化验点不用于标定。</string>
+    <string name="uc_background">假设背景 B（pg/mL）</string>
+    <string name="uc_amplitude">假设 1 mg / 1 h 增量 A（pg/mL）</string>
+    <string name="uc_invalid">请输入有限 B ≥ 0、A &gt; 0；不接受 NaN 或无穷大。</string>
+    <string name="uc_relative_protocol">每个固定核均以自身单次 1 mg 给药后 1 h 响应归一；共同剂量和时点参照，仅比较无量纲形状。</string>
+    <string name="uc_m2_candidate">M2 固定候选</string>
+    <string name="uc_m1_candidate">M1 / P2-AZ 研究候选</string>
+    <string name="uc_version">M2 %1$s · %2$s\nM1 %3$s · %4$s</string>
+    <string name="uc_selection">M2：15 套 P2-X 冻结候选。M1：32 套 P2-AZ 网格候选，不是 P2-V。按 ID 手动选择，首项及顺序不是准确度排序或拟合赢家；不拼接逐点中位模型。Legacy 使用历史含服档位，M1/M2 不估计含服影响。</string>
+    <string name="uc_calendar">最近 7 天</string>
+    <string name="uc_origin">起点剂量</string>
+    <string name="uc_single">选定单次给药</string>
+    <string name="uc_history">真实重复给药历史</string>
+    <string name="uc_error">模型计算失败，不展示为有效结果。</string>
+    <string name="uc_empty">没有符合条件的已服用舌下 E2 记录。其他药物及途径仍可在 Legacy 历史视图查看。</string>
+    <string name="uc_relative_unit">相对响应（无量纲）</string>
+    <string name="uc_calibration">共同 B=%1$s、A=%2$s pg/mL · 单次 1 mg 的 H(1 h)=1</string>
+    <string name="uc_price_protocol">Price 1997 Figure 1：6 名绝经后女性，微粒化舌下 E2、单次 1 mg。不是个人历史或预测。B 为选定候选的冻结研究假设；共同 A=450−B，来自手工读图的 1 h 群体均值。此共同比较协议不是每个候选原有 P2-X 加权幅度拟合。</string>
+    <string name="uc_price_conflict">读图并假设给药前为零的梯形面积：%1$s pg·h/mL；Table 1 扣给药前均值：%2$s ±1031 pg·h/mL。差异未解决，不调整参数强行吻合。</string>
+    <string name="uc_chart_description">共同模型图表：%1$s；%2$s</string>
+    <string name="uc_study_points">圆点：手工读图的发表群体均值；误差线：读图宽度，不是研究 SD 或个人化验。</string>
+    <string name="uc_lab_points">条件模式圆点：真实化验观测，与假设模型曲线分开，不用于拟合 B/A。相对模式不混入浓度点。</string>
+    <string name="uc_range_tail" formatted="false">阴影带：15 套已探索候选范围，不是人体 90% 置信或预测区间。给药后超过 8 h 的灰色长尾高度不确定，尤其 8–24 h。M2 回顾性形状证据不证明个人绝对准确性，也并非总优于 M1。</string>
+    <string name="uc_readout">精确模型读数</string>
+    <string name="uc_tap">点击图表比较同一时刻。</string>
+    <string name="uc_metrics_note">指标窗口为起点后 0–24 h，包含窗口内已记录的前后剂量（单剂模式除外）。AUC 用 1 分钟网格积分总 B+A×H；浓度及面积使用所选单位，不虚构未来服药。</string>
+    <string name="uc_peak">峰值 %1$s %2$s；峰时 +%3$s h</string>
+    <string name="uc_auc">AUC 0–4 / 0–8 / 0–24 h：%1$s / %2$s / %3$s %4$s</string>
+    <string name="uc_coverage">使用 %1$d 次剂量；超出 30 天回看省略 %2$d；历史审计排除 %3$d。</string>
+</resources>

@@ -1,0 +1,100 @@
+{
+  "phase": "P2-AZ",
+  "date": "2026-10-11",
+  "status": "RETROSPECTIVE_EXPOSED_STUDY_GROUP_TRANSFER_NOT_BLIND_VALIDATION",
+  "source_files": [
+    "docs/pk-research/p2/p2e-source-metrics.json",
+    "docs/pk-research/p2/p2d-komesaroff-table1.json",
+    "docs/pk-research/p2/p2i-price-figure-points.json",
+    "docs/pk-research/p2/history-2026-10-10/reports/p2-aj.md",
+    "docs/pk-research/p2/history-2026-10-10/source-packages/P2-AS-research-source.zip"
+  ],
+  "source_context": "Price1997 1mg same six-person crossover cohort; Rosano1997 separate n25 PK group; Komesaroff1998 n10 different population and 2mg RIA; P2-AJ revised manual re-read is same Price cohort, not an independent 4th study.",
+  "cohorts": [
+    "Price1997",
+    "Rosano1997",
+    "Komesaroff1998"
+  ],
+  "figure_versions": [
+    "P2-I",
+    "P2-AJ"
+  ],
+  "price_aj_scan_reading_pgml": {
+    "1": 451.72,
+    "2": 221.84,
+    "3": 115.84,
+    "4": 85.74,
+    "6": 56.21,
+    "8": 44.01,
+    "12": 34.35,
+    "18": 23.85,
+    "24": 24.42
+  },
+  "baseline_assumptions": {
+    "Price1997_pgml": [
+      0,
+      12,
+      24
+    ],
+    "Rosano1997_pmol_l": [
+      0,
+      100,
+      200
+    ],
+    "Komesaroff1998_pmol_l": "Measured 0-min mean 89.4; assumed constant for postdose"
+  },
+  "within_cohort_anchor_h": {
+    "Price1997": 1,
+    "Rosano1997": 1,
+    "Komesaroff1998": 0.5
+  },
+  "scoring": "per-study average unweighted squared residual for normalized baseline-subtracted group means at all times except anchor; then equal weight over two training studies; 0-min Kom is baseline not a scored datum",
+  "study_baseline_not_estimated_from_heldout": true,
+  "no_individual_samples_or_cross_time_covariance": true,
+  "parameter_grid": {
+    "n_fast": [
+      1,
+      3,
+      6,
+      9
+    ],
+    "k_fast_per_h": [
+      4,
+      8,
+      12,
+      16
+    ],
+    "k_elim_per_h": [
+      0.4,
+      1.2
+    ],
+    "slow_k_per_h": [
+      0.08,
+      0.3,
+      0.5
+    ],
+    "effective_slow_weight": [
+      0.25,
+      0.5,
+      0.75
+    ]
+  },
+  "family_definition": {
+    "M1": "w=0, k_s ignored; 32 hand-fixed grid candidates; 3 nominal shape degrees",
+    "M2": "n ∈[3,6,9], all other grid rates, positive w; 216 hand-fixed candidates; 5 nominal shape degrees",
+    "Legacy": "production model frozen; zero trained shape degrees",
+    "FrozenP2X15": "15 candidates were originally selected using all three studies, so re-ranking is contaminated diagnostic only"
+  },
+  "train_penalty_lambda": [
+    0,
+    0.002,
+    0.01,
+    0.05
+  ],
+  "penalty": "ad hoc lambda*nominal shape degrees, not AIC/AICc/BIC/likelihood and not hypothesis-test p-value",
+  "no_prestudy_blinding_possible": true,
+  "new_independent_human_pk_series": 0,
+  "individual_absolute_pgml_prediction_validated": false,
+  "replacing_production_authorized": false,
+  "decision": "P2-C HOLD"
+}

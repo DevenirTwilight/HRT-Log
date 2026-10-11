@@ -2,7 +2,9 @@
 
 新需求REQUIREMENTS §59，分支feature/unified-concentration-20261011，默认fetch=f53726f，初始干净。审计[五PR实况](design/unified-concentration-pr-audit-2026-10.json)、[真实依赖及实施方案](design/unified-concentration-2026-10.md)。PR1/2/3/17/18尚未合并；#3叠#2，#18叠#17。仅按文件复用现有核/共享图表及数据适配，不merge科研分支、不覆盖新归档。M2优先研究展示、M1/AZ32显式候选、Legacy不改、条件共同B/A及单剂Price与个人历史隔离。
 
-待完成：代码、测试、最小AppShell精确协议偏离及负向测试、设备CI/unsigned Debug/Release/lint/三基线体积、验收报告与PR。当前不能称集成完成或M2个人预测投产；不签名发布，不接触真实数据/密钥。旧记录如下保留。
+已复用PR3只读适配/共享图表和PR1固定核/来源测试，新增AZ32版M1、共同B/A/研究单剂隔离的计算层与M2优先统一页，四语资源。当前不接线，所有保护文件仍原样；JVM回归运行中，未宣称通过。旧实验宿主/路由不导入。工具链独立恢复到/workspace/hrt-unified-tools，同JDK21.0.12.1/Gradle9.3.1/SDK37，串行且Kotlin进程内编译避免旧OOM。
+
+待完成：测试、最小AppShell精确协议偏离及负向测试、设备CI/unsigned Debug/Release/lint/三基线体积、验收报告与PR。当前不能称集成完成或M2个人预测投产；不签名发布，不接触真实数据/密钥。旧记录如下保留。
 
 ---
 
