@@ -1,0 +1,33 @@
+name: P2-AY anchor ratio observability research replay
+
+on:
+  push:
+    paths:
+      - 'tools/pk-research/p2ay_anchor_ratio_observability.py'
+      - 'tools/pk-research/test_p2ay_anchor_ratio_observability.py'
+      - 'docs/pk-research/p2/p2ay-anchor-ratio/**'
+      - '.github/workflows/p2ay-anchor-ratio.yml'
+  pull_request:
+    paths:
+      - 'tools/pk-research/p2ay_anchor_ratio_observability.py'
+      - 'tools/pk-research/test_p2ay_anchor_ratio_observability.py'
+      - 'docs/pk-research/p2/p2ay-anchor-ratio/**'
+      - '.github/workflows/p2ay-anchor-ratio.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  model-only-replay:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Freeze, math and deterministic research output
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tools/pk-research -p 'test_p2ay_anchor_ratio_observability.py' -v
+          python tools/pk-research/p2ay_anchor_ratio_observability.py \
+            --frozen-aw docs/pk-research/p2/p2aw-identifiability-design/p2aw-geometry.json \
+            --output /tmp/p2ay-replayed.json
+          cmp docs/pk-research/p2/p2ay-anchor-ratio/p2ay-observability.json /tmp/p2ay-replayed.json
