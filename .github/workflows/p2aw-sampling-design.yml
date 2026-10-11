@@ -1,0 +1,56 @@
+name: P2-AW frozen-model sampling geometry replay
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/p2aw-sampling-design.yml'
+      - 'tools/pk-research/p2aw_sampling_design.py'
+      - 'tools/pk-research/test_p2aw_sampling_design.py'
+      - 'docs/pk-research/p2/p2aw-identifiability-design/**'
+      - 'docs/pk-research/p2/history-2026-10-10/source-packages/P2-AS-research-source.zip'
+  push:
+    paths:
+      - '.github/workflows/p2aw-sampling-design.yml'
+      - 'tools/pk-research/p2aw_sampling_design.py'
+      - 'tools/pk-research/test_p2aw_sampling_design.py'
+      - 'docs/pk-research/p2/p2aw-identifiability-design/**'
+      - 'docs/pk-research/p2/history-2026-10-10/source-packages/P2-AS-research-source.zip'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  mathematical-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Freeze/source verification and 20 public mathematical tests
+        run: python -m unittest discover -s tools/pk-research -p 'test_p2aw_sampling_design.py' -v
+      - name: Independent stdout-free result regeneration and byte-for-byte comparison
+        shell: bash
+        run: |
+          python tools/pk-research/p2aw_sampling_design.py \
+            --archive docs/pk-research/p2/history-2026-10-10/source-packages/P2-AS-research-source.zip \
+            --output "$RUNNER_TEMP/p2aw-recomputed.json"
+          cmp docs/pk-research/p2/p2aw-identifiability-design/p2aw-geometry.json "$RUNNER_TEMP/p2aw-recomputed.json"
+      - name: Privacy and clinical gate
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          folder = Path('docs/pk-research/p2/p2aw-identifiability-design')
+          assert {p.suffix for p in folder.iterdir()} <= {'.md', '.json'}
+          d = json.loads((folder/'p2aw-geometry.json').read_text())
+          assert d['no_personal_data_used'] is True
+          assert d['independent_new_human_PK_series'] == 0
+          assert d['clinical_model_replacement_authorized'] is False
+          assert d['frozen_m2_count'] == 15
+          assert d['baseline_1h_only_with_two_points']['legacy_v_m2_min'] == 0.
+          print('PASS: only archived public model geometry; no private raw data; P2-C HOLD')
+          PY
