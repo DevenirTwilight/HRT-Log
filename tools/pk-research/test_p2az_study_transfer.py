@@ -52,6 +52,15 @@ class P2AZTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             shape_data(self.raw,None,0,5000,self.kom_base,"P2-I")
 
+    def test_negative_tail_increment_is_not_clipped(self):
+        # P2-AJ manual Price18h 23.85 pg/mL minus assumed b=24.
+        # Small negative deltas from uncertainty should not become
+        # fictitious positive or zero observed postdose responses.
+        s=shape_data(self.raw,None,24,0,self.kom_base,"P2-AJ")
+        observed=next(v for t,v in s["Price1997"] if t==18)
+        self.assertLess(observed,0.0)
+        self.assertAlmostEqual(observed,(-0.15)/(451.72-24),places=10)
+
     def test_zero_loss_for_matching_shape(self):
         points=((.25,.25),(.5,.5))
         self.assertAlmostEqual(mse_for_study(points,lambda t:t,1),0.0)
