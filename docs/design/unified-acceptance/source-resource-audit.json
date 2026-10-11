@@ -38,22 +38,22 @@
       "local_worktree_has_changes": false
     },
     "unified_worktree": {
-      "source_sha": "3a8897813b4c097d5e8629a2cd93890927c28a22",
+      "source_sha": "039da947778503951037000513a98ccd46986ea6",
       "source_scope": "app/src/main + pk-engine/src/main; excludes debug/test/research/docs/generated files",
       "kotlin_files": 72,
-      "kotlin_bytes": 666366,
-      "kotlin_lines": 8939,
+      "kotlin_bytes": 667876,
+      "kotlin_lines": 8953,
       "resource_xml_files": 17,
-      "resource_xml_bytes": 333649,
+      "resource_xml_bytes": 334169,
       "comparison_ui_kotlin_files": 3,
-      "comparison_ui_kotlin_bytes": 28777,
+      "comparison_ui_kotlin_bytes": 30086,
       "standalone_experimental_page": false,
       "standalone_experimental_route": false,
       "old_research_resource_files": 0,
       "old_research_resource_keys": 0,
       "unified_resource_files": 4,
       "unified_resource_keys": 144,
-      "local_worktree_has_changes": true
+      "local_worktree_has_changes": false
     }
   }
 }

@@ -109,6 +109,7 @@ jobs:
           script: |
             ./gradlew :core:data:connectedDebugAndroidTest --no-parallel --max-workers=2
             ./gradlew :app:connectedFullDebugAndroidTest --no-parallel --max-workers=2
+            adb exec-out run-as net.plainnotes.app cat cache/unified-device-performance.json > app/build/reports/unified-device-performance.json
             python3 scripts/run_disguise_restart.py
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
@@ -117,3 +118,4 @@ jobs:
           path: |
             core/data/build/reports/androidTests/
             app/build/reports/androidTests/
+            app/build/reports/unified-device-performance.json

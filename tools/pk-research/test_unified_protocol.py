@@ -31,6 +31,18 @@ class UnifiedProtocolTest(unittest.TestCase):
         self.mutate_deviation(lambda data:data['deviations'].pop(0))
     def test_forged_non_pk_appshell_waiver_fails(self):
         self.mutate_deviation(lambda data:data['deviations'][-1].__setitem__('pk_relevant',False))
+    def test_new_replay_records_real_deviation_chain_without_rewriting_freeze(self):
+        import research
+        import contextlib
+        import io
+        with tempfile.TemporaryDirectory() as directory, contextlib.redirect_stdout(io.StringIO()):
+            output=Path(directory)/'result';research.run(guard.P2,output)
+            result=json.loads((output/'analysis.json').read_text())
+            self.assertEqual(json.loads((guard.P2/'protocol-deviations.json').read_text())['deviations'],result['protocol_deviations'])
+            self.assertEqual(guard.digest(guard.P2/'protocol-deviations.json'),result['protocol_deviations_sha256'])
+            self.assertEqual([],json.loads((guard.P2/'protocol-lock.json').read_text())['protocol_deviations'])
+            self.assertFalse(result['clinical_accuracy_established'])
+            self.assertFalse(result['model_replacement_approved'])
     def test_one_extra_appshell_byte_fails(self):
         with tempfile.TemporaryDirectory() as directory:
             frozen,production=self.sandbox(directory); file=production/guard.APPROVED_NAVIGATION['file'];file.write_bytes(file.read_bytes()+b'\n')
