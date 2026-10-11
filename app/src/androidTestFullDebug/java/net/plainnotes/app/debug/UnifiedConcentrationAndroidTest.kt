@@ -60,12 +60,15 @@ class UnifiedConcentrationAndroidTest {
         org.junit.Assert.assertTrue(result.series.values.all { y -> y.all { it.isFinite() && it>=25.0 } })
         org.junit.Assert.assertTrue(before.totalPss>0 && after.totalPss>0)
         val context=androidx.test.core.app.ApplicationProvider.getApplicationContext<android.content.Context>()
-        java.io.File(context.cacheDir,"unified-device-performance.json").writeText(org.json.JSONObject()
+        val report = org.json.JSONObject()
             .put("fixture","synthetic-60-doses-over-30-days").put("sdk",android.os.Build.VERSION.SDK_INT)
-            .put("abis",android.os.Build.SUPPORTED_ABIS.toList()).put("chart_points",result.base.timeHours.size)
+            .put("abis",org.json.JSONArray(android.os.Build.SUPPORTED_ABIS.toList())).put("chart_points",result.base.timeHours.size)
             .put("compute_ms",elapsed).put("process_pss_before_kib",before.totalPss).put("process_pss_after_kib",after.totalPss)
             .put("native_pss_after_kib",after.nativePss).put("dalvik_pss_after_kib",after.dalvikPss)
-            .put("measurement_limit","One Debug emulator execution; process PSS includes UI, instrumentation and other allocations. Not hardware, FPS, Release performance or clinical accuracy.").toString(2)+"\n")
+            .put("measurement_limit","One Debug emulator execution; process PSS includes UI, instrumentation and other allocations. Not hardware, FPS, Release performance or clinical accuracy.")
+        java.io.File(context.cacheDir,"unified-device-performance.json").writeText(report.toString(2)+"\n")
+        // AGP may uninstall the target after connected tests. A dedicated synthetic-only log survives cleanup.
+        android.util.Log.i("UnifiedDevicePerf", "UNIFIED_DEVICE_PERFORMANCE_JSON=" + report.toString())
     }
 
 }
