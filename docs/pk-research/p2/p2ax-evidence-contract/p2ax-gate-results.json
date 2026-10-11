@@ -1,0 +1,148 @@
+{
+  "date": "2026-10-11",
+  "late_tail_candidates": 0,
+  "locked_external_validation_performed": false,
+  "metadata_candidates": 0,
+  "phase": "P2-AX",
+  "production_replacement_gate": "P2-C_HOLD",
+  "reviewed_sources": 9,
+  "sources": [
+    {
+      "blocked_by": [
+        "NO_ACCESSIBLE_SERIAL_E2",
+        "CLOCK_NOT_VERIFIED",
+        "BACKGROUND_HISTORY_UNRESOLVED",
+        "REUSE_NOT_CONFIRMED",
+        "NOT_PRELOCK_BLIND",
+        "COHORT_INDEPENDENCE_NOT_ESTABLISHED"
+      ],
+      "cohort_id": "DOLL_NCT04036500",
+      "decision": "HOLD",
+      "late_tail_candidate": false,
+      "metadata_candidate": false
+    },
+    {
+      "blocked_by": [
+        "NO_ACCESSIBLE_SERIAL_E2",
+        "CLOCK_NOT_VERIFIED",
+        "BACKGROUND_HISTORY_UNRESOLVED",
+        "REUSE_NOT_CONFIRMED",
+        "NOT_PRELOCK_BLIND",
+        "COHORT_INDEPENDENCE_NOT_ESTABLISHED"
+      ],
+      "cohort_id": "PRICE_1997",
+      "decision": "HOLD",
+      "late_tail_candidate": false,
+      "metadata_candidate": false
+    },
+    {
+      "blocked_by": [
+        "NO_ACCESSIBLE_SERIAL_E2",
+        "CLOCK_NOT_VERIFIED",
+        "BACKGROUND_HISTORY_UNRESOLVED",
+        "REUSE_NOT_CONFIRMED",
+        "NOT_PRELOCK_BLIND",
+        "COHORT_INDEPENDENCE_NOT_ESTABLISHED"
+      ],
+      "cohort_id": "TREAT_NCT05010707",
+      "decision": "HOLD",
+      "late_tail_candidate": false,
+      "metadata_candidate": false
+    },
+    {
+      "blocked_by": [
+        "NO_ACCESSIBLE_SERIAL_E2",
+        "CLOCK_NOT_VERIFIED",
+        "BACKGROUND_HISTORY_UNRESOLVED",
+        "REUSE_NOT_CONFIRMED",
+        "NOT_PRELOCK_BLIND",
+        "COHORT_INDEPENDENCE_NOT_ESTABLISHED"
+      ],
+      "cohort_id": "YAISH_VNC54",
+      "decision": "HOLD",
+      "late_tail_candidate": false,
+      "metadata_candidate": false
+    },
+    {
+      "blocked_by": [
+        "FORMULATION_MISMATCH",
+        "NO_ACCESSIBLE_SERIAL_E2",
+        "CLOCK_NOT_VERIFIED",
+        "E2_ASSAY_NOT_TRACEABLE",
+        "BACKGROUND_HISTORY_UNRESOLVED",
+        "REUSE_NOT_CONFIRMED",
+        "NOT_PRELOCK_BLIND",
+        "COHORT_INDEPENDENCE_NOT_ESTABLISHED"
+      ],
+      "cohort_id": "FRIDRIKSDOTTIR_1996",
+      "decision": "HOLD",
+      "late_tail_candidate": false,
+      "metadata_candidate": false
+    },
+    {
+      "blocked_by": [
+        "FORMULATION_MISMATCH",
+        "NO_ACCESSIBLE_SERIAL_E2",
+        "CLOCK_NOT_VERIFIED",
+        "E2_ASSAY_NOT_TRACEABLE",
+        "BACKGROUND_HISTORY_UNRESOLVED",
+        "REUSE_NOT_CONFIRMED",
+        "NOT_PRELOCK_BLIND",
+        "COHORT_INDEPENDENCE_NOT_ESTABLISHED"
+      ],
+      "cohort_id": "HOON_1993",
+      "decision": "HOLD",
+      "late_tail_candidate": false,
+      "metadata_candidate": false
+    },
+    {
+      "blocked_by": [
+        "ROUTE_NOT_SL_E2",
+        "FORMULATION_MISMATCH",
+        "NO_ACCESSIBLE_SERIAL_E2",
+        "CLOCK_NOT_VERIFIED",
+        "BACKGROUND_HISTORY_UNRESOLVED",
+        "REUSE_NOT_CONFIRMED",
+        "NOT_PRELOCK_BLIND",
+        "COHORT_INDEPENDENCE_NOT_ESTABLISHED"
+      ],
+      "cohort_id": "IFACT3_NCT04590417",
+      "decision": "HOLD",
+      "late_tail_candidate": false,
+      "metadata_candidate": false
+    },
+    {
+      "blocked_by": [
+        "ROUTE_NOT_SL_E2",
+        "FORMULATION_MISMATCH",
+        "NO_ACCESSIBLE_SERIAL_E2",
+        "CLOCK_NOT_VERIFIED",
+        "BACKGROUND_HISTORY_UNRESOLVED",
+        "REUSE_NOT_CONFIRMED",
+        "NOT_PRELOCK_BLIND",
+        "COHORT_INDEPENDENCE_NOT_ESTABLISHED"
+      ],
+      "cohort_id": "CUI_2026_E2_ASSAY",
+      "decision": "HOLD",
+      "late_tail_candidate": false,
+      "metadata_candidate": false
+    },
+    {
+      "blocked_by": [
+        "ROUTE_NOT_SL_E2",
+        "FORMULATION_MISMATCH",
+        "NO_ACCESSIBLE_SERIAL_E2",
+        "CLOCK_NOT_VERIFIED",
+        "E2_ASSAY_NOT_TRACEABLE",
+        "BACKGROUND_HISTORY_UNRESOLVED",
+        "REUSE_NOT_CONFIRMED",
+        "NOT_PRELOCK_BLIND",
+        "COHORT_INDEPENDENCE_NOT_ESTABLISHED"
+      ],
+      "cohort_id": "TRANS_PREP_NCT03652623",
+      "decision": "HOLD",
+      "late_tail_candidate": false,
+      "metadata_candidate": false
+    }
+  ]
+}
