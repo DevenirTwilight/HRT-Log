@@ -1,0 +1,367 @@
+{
+  "P2_C_HOLD": true,
+  "all_three_study_wins_m2_legacy_scenarios": 18,
+  "all_three_study_wins_m2_m1_scenarios": 12,
+  "allowed_research_exposure_without_dosing_or_absolute_claims": true,
+  "artificial_penalty_family_choice_counts": {
+    "0": {
+      "Legacy": 0,
+      "M1": 0,
+      "M2": 54
+    },
+    "0.002": {
+      "Legacy": 0,
+      "M1": 32,
+      "M2": 22
+    },
+    "0.01": {
+      "Legacy": 0,
+      "M1": 54,
+      "M2": 0
+    },
+    "0.05": {
+      "Legacy": 48,
+      "M1": 6,
+      "M2": 0
+    }
+  },
+  "complexity_penalties_not_aic_bic_or_bayes": true,
+  "development_exposure_of_all_three_studies": true,
+  "frozen_p2x15_external_performance_unproven": true,
+  "full_documentation_not_automatic_app_integration": true,
+  "human_patient_absolute_predictions_validated": false,
+  "independent_study_count": 3,
+  "model_and_product_use_capabilities": {
+    "convert_m2_to_pgml_using_doll_one_hour": {
+      "allowed": false,
+      "capability": "convert_m2_to_pgml_using_doll_one_hour",
+      "condition": "Doll's population total peak is neither individual above-baseline gain nor route-general calibration",
+      "requires_opt_in": false,
+      "tier": "UNVERIFIED_EXTRAPOLATION",
+      "units": null
+    },
+    "legacy_pgml_historical": {
+      "allowed": true,
+      "capability": "legacy_pgml_historical",
+      "condition": "retain existing production logic unchanged; prominently label historical empirical extrapolation",
+      "requires_opt_in": false,
+      "tier": "EXISTING_LEGACY_ESTIMATE",
+      "units": "pg/mL (legacy algorithm, not externally validated for individuals)"
+    },
+    "legacy_vs_m2_normalized": {
+      "allowed": true,
+      "capability": "legacy_vs_m2_normalized",
+      "condition": "same per-model 1h normalization, separate from legacy absolute concentration",
+      "requires_opt_in": true,
+      "tier": "RESEARCH_ONLY",
+      "units": "dimensionless H(t)/H(1h) for BOTH"
+    },
+    "m2_90pct_prediction_interval": {
+      "allowed": false,
+      "capability": "m2_90pct_prediction_interval",
+      "condition": "15 parameter candidates are not a calibrated clinical prediction distribution",
+      "requires_opt_in": false,
+      "tier": "UNVERIFIED_COVERAGE",
+      "units": null
+    },
+    "m2_absolute_pgml": {
+      "allowed": false,
+      "capability": "m2_absolute_pgml",
+      "condition": "individual baseline, gain, analytical calibration and external assessment absent",
+      "requires_opt_in": false,
+      "tier": "UNVERIFIED_ABSOLUTE",
+      "units": null
+    },
+    "m2_conditional_peak_time": {
+      "allowed": true,
+      "capability": "m2_conditional_peak_time",
+      "condition": "not actual person's Tmax and not dosing or blood-draw advice",
+      "requires_opt_in": true,
+      "tier": "RESEARCH_ONLY",
+      "units": "hours (model-only conditional)"
+    },
+    "m2_default_engine_replacement": {
+      "allowed": false,
+      "capability": "m2_default_engine_replacement",
+      "condition": "no approved independent personal absolute-pg/ml deployment gate",
+      "requires_opt_in": false,
+      "tier": "P2_C_HOLD",
+      "units": null
+    },
+    "m2_dose_recommendation": {
+      "allowed": false,
+      "capability": "m2_dose_recommendation",
+      "condition": "research curve comparisons are not treatment guidance",
+      "requires_opt_in": false,
+      "tier": "CLINICAL_UNAUTHORIZED",
+      "units": null
+    },
+    "m2_normalized_research": {
+      "allowed": true,
+      "capability": "m2_normalized_research",
+      "condition": "show experimental model and 15 frozen candidate shapes, no measured individual scale",
+      "requires_opt_in": true,
+      "tier": "RESEARCH_ONLY",
+      "units": "dimensionless H(t)/H(1h)"
+    },
+    "m2_personal_trough_prediction": {
+      "allowed": false,
+      "capability": "m2_personal_trough_prediction",
+      "condition": "timing, prior dosing, metabolic rate, baseline and late validation insufficient",
+      "requires_opt_in": false,
+      "tier": "UNVERIFIED_TAIL",
+      "units": null
+    }
+  },
+  "no_new_independent_human_PK_cohorts": 0,
+  "observed_group_shapes_not_future_blinded": true,
+  "parameter_source_price_figure_versions_same_subjects": true,
+  "per_study": {
+    "Komesaroff1998": {
+      "FrozenP2X15_over_Legacy": {
+        "max": 0.047635,
+        "median": 0.020659,
+        "min": 0.001396,
+        "wins_sensitivity_scenarios": 18
+      },
+      "M1_over_Legacy": {
+        "max": 0.133499,
+        "median": 0.023108,
+        "min": 0.01583,
+        "wins_sensitivity_scenarios": 18
+      },
+      "M2_over_Legacy": {
+        "max": 0.070805,
+        "median": 0.013956,
+        "min": 0.005705,
+        "wins_sensitivity_scenarios": 18
+      },
+      "M2_over_M1": {
+        "max": 0.881616,
+        "median": 0.246862,
+        "min": 0.10454,
+        "wins_sensitivity_scenarios": 18
+      }
+    },
+    "Price1997": {
+      "FrozenP2X15_over_Legacy": {
+        "max": 0.233182,
+        "median": 0.076048,
+        "min": 0.020037,
+        "wins_sensitivity_scenarios": 18
+      },
+      "M1_over_Legacy": {
+        "max": 1.234898,
+        "median": 1.107759,
+        "min": 0.975329,
+        "wins_sensitivity_scenarios": 6
+      },
+      "M2_over_Legacy": {
+        "max": 0.269619,
+        "median": 0.052689,
+        "min": 0.012835,
+        "wins_sensitivity_scenarios": 18
+      },
+      "M2_over_M1": {
+        "max": 0.275023,
+        "median": 0.047324,
+        "min": 0.010538,
+        "wins_sensitivity_scenarios": 18
+      }
+    },
+    "Rosano1997": {
+      "FrozenP2X15_over_Legacy": {
+        "max": 0.126204,
+        "median": 0.070439,
+        "min": 0.025637,
+        "wins_sensitivity_scenarios": 18
+      },
+      "M1_over_Legacy": {
+        "max": 0.095335,
+        "median": 0.086283,
+        "min": 0.080757,
+        "wins_sensitivity_scenarios": 18
+      },
+      "M2_over_Legacy": {
+        "max": 0.213371,
+        "median": 0.031695,
+        "min": 0.014152,
+        "wins_sensitivity_scenarios": 18
+      },
+      "M2_over_M1": {
+        "max": 2.342728,
+        "median": 0.38451,
+        "min": 0.175241,
+        "wins_sensitivity_scenarios": 12
+      }
+    }
+  },
+  "phase": "P2-BA",
+  "scenario_conditional_checks": [
+    {
+      "m2_better_than_legacy_in_all_three_studies": true,
+      "m2_better_than_m1_in_all_three_studies": false,
+      "m2_worse_or_equal_m1_study_ids": [
+        "Rosano1997"
+      ],
+      "price_baseline_assumed_pgml": 0,
+      "price_figure_same_cohort": "P2-AJ",
+      "rosano_baseline_assumed_pmol_l": 0
+    },
+    {
+      "m2_better_than_legacy_in_all_three_studies": true,
+      "m2_better_than_m1_in_all_three_studies": false,
+      "m2_worse_or_equal_m1_study_ids": [
+        "Rosano1997"
+      ],
+      "price_baseline_assumed_pgml": 0,
+      "price_figure_same_cohort": "P2-AJ",
+      "rosano_baseline_assumed_pmol_l": 100
+    },
+    {
+      "m2_better_than_legacy_in_all_three_studies": true,
+      "m2_better_than_m1_in_all_three_studies": false,
+      "m2_worse_or_equal_m1_study_ids": [
+        "Rosano1997"
+      ],
+      "price_baseline_assumed_pgml": 0,
+      "price_figure_same_cohort": "P2-AJ",
+      "rosano_baseline_assumed_pmol_l": 200
+    },
+    {
+      "m2_better_than_legacy_in_all_three_studies": true,
+      "m2_better_than_m1_in_all_three_studies": true,
+      "m2_worse_or_equal_m1_study_ids": [],
+      "price_baseline_assumed_pgml": 12,
+      "price_figure_same_cohort": "P2-AJ",
+      "rosano_baseline_assumed_pmol_l": 0
+    },
+    {
+      "m2_better_than_legacy_in_all_three_studies": true,
+      "m2_better_than_m1_in_all_three_studies": true,
+      "m2_worse_or_equal_m1_study_ids": [],
+      "price_baseline_assumed_pgml": 12,
+      "price_figure_same_cohort": "P2-AJ",
+      "rosano_baseline_assumed_pmol_l": 100
+    },
+    {
+      "m2_better_than_legacy_in_all_three_studies": true,
+      "m2_better_than_m1_in_all_three_studies": true,
+      "m2_worse_or_equal_m1_study_ids": [],
+      "price_baseline_assumed_pgml": 12,
+      "price_figure_same_cohort": "P2-AJ",
+      "rosano_baseline_assumed_pmol_l": 200
+    },
+    {
+      "m2_better_than_legacy_in_all_three_studies": true,
+      "m2_better_than_m1_in_all_three_studies": true,
+      "m2_worse_or_equal_m1_study_ids": [],
+      "price_baseline_assumed_pgml": 24,
+      "price_figure_same_cohort": "P2-AJ",
+      "rosano_baseline_assumed_pmol_l": 0
+    },
+    {
+      "m2_better_than_legacy_in_all_three_studies": true,
+      "m2_better_than_m1_in_all_three_studies": true,
+      "m2_worse_or_equal_m1_study_ids": [],
+      "price_baseline_assumed_pgml": 24,
+      "price_figure_same_cohort": "P2-AJ",
+      "rosano_baseline_assumed_pmol_l": 100
+    },
+    {
+      "m2_better_than_legacy_in_all_three_studies": true,
+      "m2_better_than_m1_in_all_three_studies": true,
+      "m2_worse_or_equal_m1_study_ids": [],
+      "price_baseline_assumed_pgml": 24,
+      "price_figure_same_cohort": "P2-AJ",
+      "rosano_baseline_assumed_pmol_l": 200
+    },
+    {
+      "m2_better_than_legacy_in_all_three_studies": true,
+      "m2_better_than_m1_in_all_three_studies": false,
+      "m2_worse_or_equal_m1_study_ids": [
+        "Rosano1997"
+      ],
+      "price_baseline_assumed_pgml": 0,
+      "price_figure_same_cohort": "P2-I",
+      "rosano_baseline_assumed_pmol_l": 0
+    },
+    {
+      "m2_better_than_legacy_in_all_three_studies": true,
+      "m2_better_than_m1_in_all_three_studies": false,
+      "m2_worse_or_equal_m1_study_ids": [
+        "Rosano1997"
+      ],
+      "price_baseline_assumed_pgml": 0,
+      "price_figure_same_cohort": "P2-I",
+      "rosano_baseline_assumed_pmol_l": 100
+    },
+    {
+      "m2_better_than_legacy_in_all_three_studies": true,
+      "m2_better_than_m1_in_all_three_studies": false,
+      "m2_worse_or_equal_m1_study_ids": [
+        "Rosano1997"
+      ],
+      "price_baseline_assumed_pgml": 0,
+      "price_figure_same_cohort": "P2-I",
+      "rosano_baseline_assumed_pmol_l": 200
+    },
+    {
+      "m2_better_than_legacy_in_all_three_studies": true,
+      "m2_better_than_m1_in_all_three_studies": true,
+      "m2_worse_or_equal_m1_study_ids": [],
+      "price_baseline_assumed_pgml": 12,
+      "price_figure_same_cohort": "P2-I",
+      "rosano_baseline_assumed_pmol_l": 0
+    },
+    {
+      "m2_better_than_legacy_in_all_three_studies": true,
+      "m2_better_than_m1_in_all_three_studies": true,
+      "m2_worse_or_equal_m1_study_ids": [],
+      "price_baseline_assumed_pgml": 12,
+      "price_figure_same_cohort": "P2-I",
+      "rosano_baseline_assumed_pmol_l": 100
+    },
+    {
+      "m2_better_than_legacy_in_all_three_studies": true,
+      "m2_better_than_m1_in_all_three_studies": true,
+      "m2_worse_or_equal_m1_study_ids": [],
+      "price_baseline_assumed_pgml": 12,
+      "price_figure_same_cohort": "P2-I",
+      "rosano_baseline_assumed_pmol_l": 200
+    },
+    {
+      "m2_better_than_legacy_in_all_three_studies": true,
+      "m2_better_than_m1_in_all_three_studies": true,
+      "m2_worse_or_equal_m1_study_ids": [],
+      "price_baseline_assumed_pgml": 24,
+      "price_figure_same_cohort": "P2-I",
+      "rosano_baseline_assumed_pmol_l": 0
+    },
+    {
+      "m2_better_than_legacy_in_all_three_studies": true,
+      "m2_better_than_m1_in_all_three_studies": true,
+      "m2_worse_or_equal_m1_study_ids": [],
+      "price_baseline_assumed_pgml": 24,
+      "price_figure_same_cohort": "P2-I",
+      "rosano_baseline_assumed_pmol_l": 100
+    },
+    {
+      "m2_better_than_legacy_in_all_three_studies": true,
+      "m2_better_than_m1_in_all_three_studies": true,
+      "m2_worse_or_equal_m1_study_ids": [],
+      "price_baseline_assumed_pgml": 24,
+      "price_figure_same_cohort": "P2-I",
+      "rosano_baseline_assumed_pmol_l": 200
+    }
+  ],
+  "sensitivity_scenarios_per_study": 18,
+  "source_blob_sha1": "38fb3ccc4521f8f0d683d2c755c0370539831ed9",
+  "source_phase": "P2-AZ",
+  "source_units": [
+    "Price1997",
+    "Rosano1997",
+    "Komesaroff1998"
+  ],
+  "study_deletion_evaluations_total_but_not_independent": 54
+}
