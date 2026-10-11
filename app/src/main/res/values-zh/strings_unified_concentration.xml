@@ -36,4 +36,8 @@
     <string name="uc_peak">峰值 %1$s %2$s；峰时 +%3$s h</string>
     <string name="uc_auc">AUC 0–4 / 0–8 / 0–24 h：%1$s / %2$s / %3$s %4$s</string>
     <string name="uc_coverage">使用 %1$d 次剂量；超出 30 天回看省略 %2$d；历史审计排除 %3$d。</string>
+    <string name="uc_scenario_concentration">%1$s 情景浓度</string>
+    <string name="uc_scenario_time">显示时刻：参考给药后 +%1$s h</string>
+    <string name="uc_scenario_only">基于明确假设的曲线，非个人预测或实测浓度。</string>
+    <string name="uc_research_settings">模型比较设置</string>
 </resources>

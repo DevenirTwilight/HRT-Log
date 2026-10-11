@@ -12,9 +12,15 @@ class UnifiedConcentrationAndroidTest {
     @Test fun defaultM2OverlayUnitAndStudyAreDistinct() {
         ui.onNodeWithTag("model-M2").assertIsSelected();await("unified-chart")
         ui.onNodeWithTag("research-not-personal").assertExists()
+        ui.onNodeWithTag("scenario-concentration-card").assertIsDisplayed()
+        ui.onNodeWithTag("scenario-chart-card").assertExists()
+        ui.onNodeWithTag("research-settings-card").assertExists()
         ui.onNodeWithTag("model-overlay").performClick()
         ui.onNodeWithTag("unified-chart").performScrollTo().performTouchInput { click(center) }
         await("readout-M1");ui.onNodeWithTag("readout-LEGACY").assertExists();ui.onNodeWithTag("difference-M1").assertExists()
+        val selectedValue = ui.onNodeWithTag("readout-M2").fetchSemanticsNode().config[androidx.compose.ui.semantics.SemanticsProperties.Text]
+            .single().text.substringAfter(": ").substringBefore(" pg/mL")
+        ui.onNodeWithTag("scenario-concentration-value").assertTextEquals(selectedValue)
         ui.onNodeWithTag("unit-pmol").performScrollTo().performClick();ui.onNodeWithTag("chart-unit").assertTextEquals("pmol/L")
         // Full-width, wrapped mode controls remain reachable on small screens and large fonts.
         ui.onNodeWithTag("display-STUDY").performScrollTo().assertIsDisplayed().performClick()

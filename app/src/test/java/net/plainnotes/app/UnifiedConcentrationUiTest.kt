@@ -41,6 +41,25 @@ class UnifiedConcentrationUiTest {
     private fun expected()=ExperimentalConcentrationComparison.compute(ExperimentalConcentrationComparison.audit(history,emptyMap(),now),now,ComparisonWindow.H24,null,
         ResearchSublingualV01.candidates.first().id,ResearchM1Catalog.candidates.first().id,ResearchDisplay.CONDITIONAL,CommonCalibration(25.0,100.0),false)!!
 
+    @Test fun originalCardHierarchyIsRestoredAndHeroUsesTheExactSelectedModel() {
+        show(); await("unified-chart")
+        ui.onNodeWithTag("scenario-concentration-card").assertIsDisplayed()
+        val card = ui.onNodeWithTag("scenario-concentration-card").fetchSemanticsNode()
+        val chart = ui.onNodeWithTag("scenario-chart-card").fetchSemanticsNode()
+        val settings = ui.onNodeWithTag("research-settings-card").fetchSemanticsNode()
+        assertTrue("Concentration card precedes chart", card.positionInRoot.y < chart.positionInRoot.y)
+        assertTrue("Parameter form follows chart", chart.positionInRoot.y < settings.positionInRoot.y)
+        val expected = UnifiedModelComparison.valuesAt(expected().result, net.plainnotes.app.conc.ConcentrationCalculator.hours(now))
+        ui.waitUntil(10_000) { read("scenario-concentration-value") != "—" }
+        assertEquals(expected.getValue(ResearchModel.M2), read("scenario-concentration-value").toDouble(), .00051)
+        click("model-M1")
+        assertEquals(expected.getValue(ResearchModel.M1), read("scenario-concentration-value").toDouble(), .00051)
+        click("model-M2"); tap()
+        ui.waitUntil(10_000) { read("scenario-concentration-value") == read("readout-M2").substringAfter(": ").substringBefore(" pg/mL") }
+        ui.onNodeWithTag("common-calibration").assertExists()
+        ui.onNodeWithText(ui.activity.getString(R.string.uc_scenario_only)).assertExists()
+    }
+
     @Test fun m2DefaultIsConditionalAndLegacyIsAvailableWithoutChangingHistory() {
         show();ui.onNodeWithTag("model-M2").assertIsSelected();ui.onNodeWithTag("display-CONDITIONAL").assertIsSelected()
         await("unified-chart");ui.onNodeWithTag("research-not-personal").assertExists();ui.onNodeWithTag("calibration-source").assertExists()

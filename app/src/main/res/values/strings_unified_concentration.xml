@@ -36,4 +36,8 @@
     <string name="uc_peak">Peak %1$s %2$s at +%3$s h</string>
     <string name="uc_auc">AUC 0–4 / 0–8 / 0–24 h: %1$s / %2$s / %3$s %4$s</string>
     <string name="uc_coverage">Used %1$d doses; omitted beyond 30-day look-back %2$d; excluded by history audit %3$d.</string>
+    <string name="uc_scenario_concentration">%1$s scenario concentration</string>
+    <string name="uc_scenario_time">Selected time: +%1$s h after the reference dose</string>
+    <string name="uc_scenario_only">Assumption-based curve, not a personal prediction or measured concentration.</string>
+    <string name="uc_research_settings">Model comparison settings</string>
 </resources>

@@ -36,4 +36,8 @@
     <string name="uc_peak">Pic %1$s %2$s à +%3$s h</string>
     <string name="uc_auc">AUC 0–4 / 0–8 / 0–24 h : %1$s / %2$s / %3$s %4$s</string>
     <string name="uc_coverage">%1$d doses utilisées ; %2$d hors des 30 jours précédents ; %3$d exclues par audit.</string>
+    <string name="uc_scenario_concentration">Concentration du scénario %1$s</string>
+    <string name="uc_scenario_time">Instant affiché : +%1$s h après la dose de référence</string>
+    <string name="uc_scenario_only">Courbe fondée sur des hypothèses, pas une prédiction personnelle ni une mesure.</string>
+    <string name="uc_research_settings">Réglages de comparaison des modèles</string>
 </resources>
