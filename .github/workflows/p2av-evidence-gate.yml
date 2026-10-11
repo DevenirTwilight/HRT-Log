@@ -1,0 +1,54 @@
+name: P2-AV evidence provenance and external gate
+
+on:
+  pull_request:
+    paths:
+      - 'tools/pk-research/p2av_external_source_gate.py'
+      - 'tools/pk-research/test_p2av_external_source_gate.py'
+      - 'docs/pk-research/p2/p2av-external-source-gate/**'
+      - '.github/workflows/p2av-evidence-gate.yml'
+  push:
+    paths:
+      - 'tools/pk-research/p2av_external_source_gate.py'
+      - 'tools/pk-research/test_p2av_external_source_gate.py'
+      - 'docs/pk-research/p2/p2av-external-source-gate/**'
+      - '.github/workflows/p2av-evidence-gate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit-public-metadata:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run 14 synthetic and provenance tests
+        run: python -m unittest discover -s tools/pk-research -p 'test_p2av_external_source_gate.py' -v
+      - name: Recompute source eligibility with immutable checked-in inputs
+        shell: bash
+        run: |
+          python tools/pk-research/p2av_external_source_gate.py \
+            --registry docs/pk-research/p2/p2av-external-source-gate/p2av-source-registry.json \
+            --out "$RUNNER_TEMP/p2av-recomputed.json"
+          cmp docs/pk-research/p2/p2av-external-source-gate/p2av-gate-results.json "$RUNNER_TEMP/p2av-recomputed.json"
+      - name: Reject any individual health data artifact
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          folder=Path('docs/pk-research/p2/p2av-external-source-gate')
+          assert {p.suffix.lower() for p in folder.iterdir()} <= {'.md','.json'}
+          d=json.loads((folder/'p2av-gate-results.json').read_text())
+          assert d['unique_canonical_cohorts']==8
+          assert d['publication_records']==12
+          assert d['locked_external_eligible_count']==0
+          assert d['individual_absolute_eligible_count']==0
+          assert d['production_model_replacement_authorized'] is False
+          print('PASS: no raw patient rows; no false clinical validation')
+          PY

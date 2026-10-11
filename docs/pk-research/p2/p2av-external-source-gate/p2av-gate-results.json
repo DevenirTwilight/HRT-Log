@@ -1,0 +1,427 @@
+{
+  "canonical_cohorts": [
+    {
+      "cohort_id": "Burnier1981_n10",
+      "publication_ids": [
+        "Burnier_1981"
+      ]
+    },
+    {
+      "cohort_id": "Komesaroff1998_PK_n10",
+      "publication_ids": [
+        "Komesaroff_1998"
+      ]
+    },
+    {
+      "cohort_id": "NCT03652623",
+      "publication_ids": [
+        "TransPrEP_Abdelmawla_2023",
+        "TransPrEP_Yager_2022"
+      ]
+    },
+    {
+      "cohort_id": "NCT04036500",
+      "publication_ids": [
+        "Doll_article_2022",
+        "Doll_congress_2020"
+      ]
+    },
+    {
+      "cohort_id": "NCT05010707",
+      "publication_ids": [
+        "TREAT_congress_2025",
+        "TREAT_protocol_2023",
+        "TREAT_results_2024"
+      ]
+    },
+    {
+      "cohort_id": "Price1997_n6_crossover",
+      "publication_ids": [
+        "Price_1997"
+      ]
+    },
+    {
+      "cohort_id": "Rosano1997_PK_n25",
+      "publication_ids": [
+        "Rosano_1997"
+      ]
+    },
+    {
+      "cohort_id": "VNC54_YAISH_2023",
+      "publication_ids": [
+        "Yaish_2023_VNC54"
+      ]
+    }
+  ],
+  "claim": "metadata eligibility only; absence of accessible curves is not evidence of biological model failure",
+  "individual_absolute_eligible_count": 0,
+  "locked_external_eligible_count": 0,
+  "long_tail_eligible_count": 0,
+  "new_independent_human_PK_profiles_obtained": 0,
+  "phase": "P2-AV",
+  "production_model_replacement_authorized": false,
+  "publication_records": 12,
+  "schema_version": 1,
+  "scope": "PUBLIC_METADATA_ONLY_NO_PARTICIPANT_VALUES",
+  "serial_shape_eligible_count": 0,
+  "source_rows": [
+    {
+      "actually_available_postdose_times_h": [
+        1
+      ],
+      "blockers": [
+        "LESS_THAN_3_ACCESSIBLE_POSTDOSE_TIMES",
+        "ACTUAL_SAMPLE_CLOCK_UNVERIFIED",
+        "DOSE_HISTORY_UNVERIFIED",
+        "REUSE_AUTHORIZATION_UNVERIFIED",
+        "PREVIOUSLY_EXPOSED_TO_MODEL_DEVELOPMENT",
+        "COHORT_DISJOINTNESS_UNVERIFIED",
+        "NO_ACCESSIBLE_INDIVIDUAL_TIME_SERIES",
+        "BLIND_PROTOCOL_NOT_PRECOMMITTED",
+        "ABSOLUTE_E2_SCALE_NOT_PRECOMMITTED"
+      ],
+      "canonical_cohort_id": "Burnier1981_n10",
+      "individual_absolute_concentration_evaluation_eligible": false,
+      "locked_external_shape_evaluation_eligible": false,
+      "long_tail_evaluation_eligible": false,
+      "planned_postdose_times_h": [
+        1,
+        2,
+        4,
+        6,
+        11,
+        24
+      ],
+      "publication_id": "Burnier_1981",
+      "reported_followup_months_not_dose_hours": [],
+      "serial_shape_evaluation_eligible": false
+    },
+    {
+      "actually_available_postdose_times_h": [
+        1
+      ],
+      "blockers": [
+        "LESS_THAN_3_ACCESSIBLE_POSTDOSE_TIMES",
+        "ACTUAL_SAMPLE_CLOCK_UNVERIFIED",
+        "DOSE_HISTORY_UNVERIFIED",
+        "REUSE_AUTHORIZATION_UNVERIFIED",
+        "PREVIOUSLY_EXPOSED_TO_MODEL_DEVELOPMENT",
+        "COHORT_DISJOINTNESS_UNVERIFIED",
+        "NO_ACCESSIBLE_INDIVIDUAL_TIME_SERIES",
+        "BLIND_PROTOCOL_NOT_PRECOMMITTED",
+        "ABSOLUTE_E2_SCALE_NOT_PRECOMMITTED"
+      ],
+      "canonical_cohort_id": "NCT04036500",
+      "individual_absolute_concentration_evaluation_eligible": false,
+      "locked_external_shape_evaluation_eligible": false,
+      "long_tail_evaluation_eligible": false,
+      "planned_postdose_times_h": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        8
+      ],
+      "publication_id": "Doll_article_2022",
+      "reported_followup_months_not_dose_hours": [],
+      "serial_shape_evaluation_eligible": false
+    },
+    {
+      "actually_available_postdose_times_h": [
+        1
+      ],
+      "blockers": [
+        "LESS_THAN_3_ACCESSIBLE_POSTDOSE_TIMES",
+        "PRE_DOSE_BASELINE_NOT_AVAILABLE",
+        "ACTUAL_SAMPLE_CLOCK_UNVERIFIED",
+        "DOSE_HISTORY_UNVERIFIED",
+        "REUSE_AUTHORIZATION_UNVERIFIED",
+        "PREVIOUSLY_EXPOSED_TO_MODEL_DEVELOPMENT",
+        "COHORT_DISJOINTNESS_UNVERIFIED",
+        "NO_ACCESSIBLE_INDIVIDUAL_TIME_SERIES",
+        "BLIND_PROTOCOL_NOT_PRECOMMITTED",
+        "ABSOLUTE_E2_SCALE_NOT_PRECOMMITTED"
+      ],
+      "canonical_cohort_id": "NCT04036500",
+      "individual_absolute_concentration_evaluation_eligible": false,
+      "locked_external_shape_evaluation_eligible": false,
+      "long_tail_evaluation_eligible": false,
+      "planned_postdose_times_h": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        8
+      ],
+      "publication_id": "Doll_congress_2020",
+      "reported_followup_months_not_dose_hours": [],
+      "serial_shape_evaluation_eligible": false
+    },
+    {
+      "actually_available_postdose_times_h": [
+        0.25,
+        0.5
+      ],
+      "blockers": [
+        "LESS_THAN_3_ACCESSIBLE_POSTDOSE_TIMES",
+        "ACTUAL_SAMPLE_CLOCK_UNVERIFIED",
+        "DOSE_HISTORY_UNVERIFIED",
+        "REUSE_AUTHORIZATION_UNVERIFIED",
+        "PREVIOUSLY_EXPOSED_TO_MODEL_DEVELOPMENT",
+        "COHORT_DISJOINTNESS_UNVERIFIED",
+        "NO_ACCESSIBLE_INDIVIDUAL_TIME_SERIES",
+        "BLIND_PROTOCOL_NOT_PRECOMMITTED",
+        "ABSOLUTE_E2_SCALE_NOT_PRECOMMITTED"
+      ],
+      "canonical_cohort_id": "Komesaroff1998_PK_n10",
+      "individual_absolute_concentration_evaluation_eligible": false,
+      "locked_external_shape_evaluation_eligible": false,
+      "long_tail_evaluation_eligible": false,
+      "planned_postdose_times_h": [
+        0.25,
+        0.5
+      ],
+      "publication_id": "Komesaroff_1998",
+      "reported_followup_months_not_dose_hours": [],
+      "serial_shape_evaluation_eligible": false
+    },
+    {
+      "actually_available_postdose_times_h": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        8,
+        12,
+        18,
+        24
+      ],
+      "blockers": [
+        "ACTUAL_SAMPLE_CLOCK_UNVERIFIED",
+        "DOSE_HISTORY_UNVERIFIED",
+        "REUSE_AUTHORIZATION_UNVERIFIED",
+        "PREVIOUSLY_EXPOSED_TO_MODEL_DEVELOPMENT",
+        "COHORT_DISJOINTNESS_UNVERIFIED",
+        "NO_ACCESSIBLE_INDIVIDUAL_TIME_SERIES",
+        "BLIND_PROTOCOL_NOT_PRECOMMITTED",
+        "ABSOLUTE_E2_SCALE_NOT_PRECOMMITTED"
+      ],
+      "canonical_cohort_id": "Price1997_n6_crossover",
+      "individual_absolute_concentration_evaluation_eligible": false,
+      "locked_external_shape_evaluation_eligible": false,
+      "long_tail_evaluation_eligible": false,
+      "planned_postdose_times_h": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        8,
+        12,
+        18,
+        24
+      ],
+      "publication_id": "Price_1997",
+      "reported_followup_months_not_dose_hours": [],
+      "serial_shape_evaluation_eligible": false
+    },
+    {
+      "actually_available_postdose_times_h": [
+        0.16666666666666666,
+        0.3333333333333333,
+        0.6666666666666666,
+        1
+      ],
+      "blockers": [
+        "PRE_DOSE_BASELINE_NOT_AVAILABLE",
+        "ACTUAL_SAMPLE_CLOCK_UNVERIFIED",
+        "E2_ASSAY_UNVERIFIED",
+        "DOSE_HISTORY_UNVERIFIED",
+        "REUSE_AUTHORIZATION_UNVERIFIED",
+        "PREVIOUSLY_EXPOSED_TO_MODEL_DEVELOPMENT",
+        "COHORT_DISJOINTNESS_UNVERIFIED",
+        "NO_ACCESSIBLE_INDIVIDUAL_TIME_SERIES",
+        "BLIND_PROTOCOL_NOT_PRECOMMITTED",
+        "ABSOLUTE_E2_SCALE_NOT_PRECOMMITTED"
+      ],
+      "canonical_cohort_id": "Rosano1997_PK_n25",
+      "individual_absolute_concentration_evaluation_eligible": false,
+      "locked_external_shape_evaluation_eligible": false,
+      "long_tail_evaluation_eligible": false,
+      "planned_postdose_times_h": [
+        0.16666666666666666,
+        0.3333333333333333,
+        0.6666666666666666,
+        1
+      ],
+      "publication_id": "Rosano_1997",
+      "reported_followup_months_not_dose_hours": [],
+      "serial_shape_evaluation_eligible": false
+    },
+    {
+      "actually_available_postdose_times_h": [],
+      "blockers": [
+        "LESS_THAN_3_ACCESSIBLE_POSTDOSE_TIMES",
+        "PRE_DOSE_BASELINE_NOT_AVAILABLE",
+        "ACTUAL_SAMPLE_CLOCK_UNVERIFIED",
+        "DOSE_HISTORY_UNVERIFIED",
+        "REUSE_AUTHORIZATION_UNVERIFIED",
+        "PREVIOUSLY_EXPOSED_TO_MODEL_DEVELOPMENT",
+        "COHORT_DISJOINTNESS_UNVERIFIED",
+        "NO_ACCESSIBLE_INDIVIDUAL_TIME_SERIES",
+        "BLIND_PROTOCOL_NOT_PRECOMMITTED",
+        "ABSOLUTE_E2_SCALE_NOT_PRECOMMITTED"
+      ],
+      "canonical_cohort_id": "NCT05010707",
+      "individual_absolute_concentration_evaluation_eligible": false,
+      "locked_external_shape_evaluation_eligible": false,
+      "long_tail_evaluation_eligible": false,
+      "planned_postdose_times_h": [],
+      "publication_id": "TREAT_congress_2025",
+      "reported_followup_months_not_dose_hours": [
+        1,
+        6
+      ],
+      "serial_shape_evaluation_eligible": false
+    },
+    {
+      "actually_available_postdose_times_h": [],
+      "blockers": [
+        "LESS_THAN_3_ACCESSIBLE_POSTDOSE_TIMES",
+        "PRE_DOSE_BASELINE_NOT_AVAILABLE",
+        "ACTUAL_SAMPLE_CLOCK_UNVERIFIED",
+        "DOSE_HISTORY_UNVERIFIED",
+        "REUSE_AUTHORIZATION_UNVERIFIED",
+        "PREVIOUSLY_EXPOSED_TO_MODEL_DEVELOPMENT",
+        "COHORT_DISJOINTNESS_UNVERIFIED",
+        "NO_ACCESSIBLE_INDIVIDUAL_TIME_SERIES",
+        "BLIND_PROTOCOL_NOT_PRECOMMITTED",
+        "ABSOLUTE_E2_SCALE_NOT_PRECOMMITTED"
+      ],
+      "canonical_cohort_id": "NCT05010707",
+      "individual_absolute_concentration_evaluation_eligible": false,
+      "locked_external_shape_evaluation_eligible": false,
+      "long_tail_evaluation_eligible": false,
+      "planned_postdose_times_h": [],
+      "publication_id": "TREAT_protocol_2023",
+      "reported_followup_months_not_dose_hours": [
+        1,
+        6
+      ],
+      "serial_shape_evaluation_eligible": false
+    },
+    {
+      "actually_available_postdose_times_h": [],
+      "blockers": [
+        "LESS_THAN_3_ACCESSIBLE_POSTDOSE_TIMES",
+        "ACTUAL_SAMPLE_CLOCK_UNVERIFIED",
+        "DOSE_HISTORY_UNVERIFIED",
+        "REUSE_AUTHORIZATION_UNVERIFIED",
+        "PREVIOUSLY_EXPOSED_TO_MODEL_DEVELOPMENT",
+        "COHORT_DISJOINTNESS_UNVERIFIED",
+        "NO_ACCESSIBLE_INDIVIDUAL_TIME_SERIES",
+        "BLIND_PROTOCOL_NOT_PRECOMMITTED",
+        "ABSOLUTE_E2_SCALE_NOT_PRECOMMITTED"
+      ],
+      "canonical_cohort_id": "NCT05010707",
+      "individual_absolute_concentration_evaluation_eligible": false,
+      "locked_external_shape_evaluation_eligible": false,
+      "long_tail_evaluation_eligible": false,
+      "planned_postdose_times_h": [],
+      "publication_id": "TREAT_results_2024",
+      "reported_followup_months_not_dose_hours": [
+        1,
+        6
+      ],
+      "serial_shape_evaluation_eligible": false
+    },
+    {
+      "actually_available_postdose_times_h": [],
+      "blockers": [
+        "ROUTE_OR_ANALYTE_NOT_SEPARATE_SL_E2",
+        "LESS_THAN_3_ACCESSIBLE_POSTDOSE_TIMES",
+        "PRE_DOSE_BASELINE_NOT_AVAILABLE",
+        "ACTUAL_SAMPLE_CLOCK_UNVERIFIED",
+        "DOSE_HISTORY_UNVERIFIED",
+        "REUSE_AUTHORIZATION_UNVERIFIED",
+        "PREVIOUSLY_EXPOSED_TO_MODEL_DEVELOPMENT",
+        "COHORT_DISJOINTNESS_UNVERIFIED",
+        "NO_ACCESSIBLE_INDIVIDUAL_TIME_SERIES",
+        "BLIND_PROTOCOL_NOT_PRECOMMITTED",
+        "ABSOLUTE_E2_SCALE_NOT_PRECOMMITTED"
+      ],
+      "canonical_cohort_id": "NCT03652623",
+      "individual_absolute_concentration_evaluation_eligible": false,
+      "locked_external_shape_evaluation_eligible": false,
+      "long_tail_evaluation_eligible": false,
+      "planned_postdose_times_h": [],
+      "publication_id": "TransPrEP_Abdelmawla_2023",
+      "reported_followup_months_not_dose_hours": [],
+      "serial_shape_evaluation_eligible": false
+    },
+    {
+      "actually_available_postdose_times_h": [],
+      "blockers": [
+        "ROUTE_OR_ANALYTE_NOT_SEPARATE_SL_E2",
+        "LESS_THAN_3_ACCESSIBLE_POSTDOSE_TIMES",
+        "PRE_DOSE_BASELINE_NOT_AVAILABLE",
+        "ACTUAL_SAMPLE_CLOCK_UNVERIFIED",
+        "DOSE_HISTORY_UNVERIFIED",
+        "REUSE_AUTHORIZATION_UNVERIFIED",
+        "PREVIOUSLY_EXPOSED_TO_MODEL_DEVELOPMENT",
+        "COHORT_DISJOINTNESS_UNVERIFIED",
+        "NO_ACCESSIBLE_INDIVIDUAL_TIME_SERIES",
+        "BLIND_PROTOCOL_NOT_PRECOMMITTED",
+        "ABSOLUTE_E2_SCALE_NOT_PRECOMMITTED"
+      ],
+      "canonical_cohort_id": "NCT03652623",
+      "individual_absolute_concentration_evaluation_eligible": false,
+      "locked_external_shape_evaluation_eligible": false,
+      "long_tail_evaluation_eligible": false,
+      "planned_postdose_times_h": [
+        1,
+        2,
+        4,
+        6,
+        8,
+        24
+      ],
+      "publication_id": "TransPrEP_Yager_2022",
+      "reported_followup_months_not_dose_hours": [],
+      "serial_shape_evaluation_eligible": false
+    },
+    {
+      "actually_available_postdose_times_h": [
+        1.5
+      ],
+      "blockers": [
+        "LESS_THAN_3_ACCESSIBLE_POSTDOSE_TIMES",
+        "ACTUAL_SAMPLE_CLOCK_UNVERIFIED",
+        "DOSE_HISTORY_UNVERIFIED",
+        "REUSE_AUTHORIZATION_UNVERIFIED",
+        "PREVIOUSLY_EXPOSED_TO_MODEL_DEVELOPMENT",
+        "COHORT_DISJOINTNESS_UNVERIFIED",
+        "NO_ACCESSIBLE_INDIVIDUAL_TIME_SERIES",
+        "BLIND_PROTOCOL_NOT_PRECOMMITTED",
+        "ABSOLUTE_E2_SCALE_NOT_PRECOMMITTED"
+      ],
+      "canonical_cohort_id": "VNC54_YAISH_2023",
+      "individual_absolute_concentration_evaluation_eligible": false,
+      "locked_external_shape_evaluation_eligible": false,
+      "long_tail_evaluation_eligible": false,
+      "planned_postdose_times_h": [
+        1.5
+      ],
+      "publication_id": "Yaish_2023_VNC54",
+      "reported_followup_months_not_dose_hours": [
+        3,
+        6
+      ],
+      "serial_shape_evaluation_eligible": false
+    }
+  ],
+  "unique_canonical_cohorts": 8
+}
