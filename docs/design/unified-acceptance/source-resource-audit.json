@@ -1,0 +1,59 @@
+{
+  "build_comparison": "All three use shrinking, compressed native libraries, universal four ABI, unsigned full release, identical locally restored tools. APK values recorded separately after actual builds.",
+  "sources": {
+    "default_f53726f": {
+      "source_sha": "f53726ff6fa52fc5c78806a1576fdb80fcf29987",
+      "source_scope": "app/src/main + pk-engine/src/main; excludes debug/test/research/docs/generated files",
+      "kotlin_files": 61,
+      "kotlin_bytes": 587413,
+      "kotlin_lines": 7668,
+      "resource_xml_files": 13,
+      "resource_xml_bytes": 315781,
+      "comparison_ui_kotlin_files": 0,
+      "comparison_ui_kotlin_bytes": 0,
+      "standalone_experimental_page": false,
+      "standalone_experimental_route": false,
+      "old_research_resource_files": 0,
+      "old_research_resource_keys": 0,
+      "unified_resource_files": 0,
+      "unified_resource_keys": 0,
+      "local_worktree_has_changes": false
+    },
+    "old_pr3_4b26418": {
+      "source_sha": "4b264187b08f23ae4ef88a10715e29500d60ce29",
+      "source_scope": "app/src/main + pk-engine/src/main; excludes debug/test/research/docs/generated files",
+      "kotlin_files": 71,
+      "kotlin_bytes": 672178,
+      "kotlin_lines": 9056,
+      "resource_xml_files": 17,
+      "resource_xml_bytes": 357557,
+      "comparison_ui_kotlin_files": 4,
+      "comparison_ui_kotlin_bytes": 43199,
+      "standalone_experimental_page": true,
+      "standalone_experimental_route": true,
+      "old_research_resource_files": 4,
+      "old_research_resource_keys": 384,
+      "unified_resource_files": 0,
+      "unified_resource_keys": 0,
+      "local_worktree_has_changes": false
+    },
+    "unified_worktree": {
+      "source_sha": "3a8897813b4c097d5e8629a2cd93890927c28a22",
+      "source_scope": "app/src/main + pk-engine/src/main; excludes debug/test/research/docs/generated files",
+      "kotlin_files": 72,
+      "kotlin_bytes": 666366,
+      "kotlin_lines": 8939,
+      "resource_xml_files": 17,
+      "resource_xml_bytes": 333649,
+      "comparison_ui_kotlin_files": 3,
+      "comparison_ui_kotlin_bytes": 28777,
+      "standalone_experimental_page": false,
+      "standalone_experimental_route": false,
+      "old_research_resource_files": 0,
+      "old_research_resource_keys": 0,
+      "unified_resource_files": 4,
+      "unified_resource_keys": 144,
+      "local_worktree_has_changes": true
+    }
+  }
+}

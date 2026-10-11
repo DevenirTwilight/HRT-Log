@@ -25,6 +25,6 @@ class UnifiedConcentrationAndroidTest {
         ui.onNodeWithTag("unit-pmol").performScrollTo().performClick()
         ui.activityRule.scenario.recreate();await("unified-chart")
         ui.onNodeWithTag("model-M1").assertIsSelected();ui.onNodeWithTag("unit-pmol").assertIsSelected()
-        ui.onNodeWithTag("amplitude").assertTextEquals("200")
+        ui.onNodeWithTag("amplitude").assert(SemanticsMatcher.expectValue(androidx.compose.ui.semantics.SemanticsProperties.EditableText, androidx.compose.ui.text.AnnotatedString("200")))
     }
 }

@@ -12,6 +12,11 @@
     "docs/design/unified-model-inputs/m1-candidates.json": "4df0fa815ccfcdba4b260539b8c6f434204e6ae56982c537e78a47f66164764a",
     "docs/design/unified-model-inputs/p2az-design.json": "521ce6f4d5d2b8f1de8cdc8da5e18aedac5c493cb3611bc72d20c6ed7ace46ca",
     "docs/pk-research/p2/p2x-frozen-40-candidates.csv": "f13aa0a0b27883fe211ee604c7c1a8a413d4e81d7114da2a5c39057db8df0d1b",
-    "pk-engine/src/main/resources/pk-params.json": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b"
+    "pk-engine/src/main/resources/pk-params.json": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b",
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/UnifiedModelComparison.kt": "7fb2ecd13513a23aa32e69610d0ed6298fab0df81c16b418710b1e4c68865409",
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ConcentrationModelComparison.kt": "e17a9c943defb7b46247ec8a80a76b9c354512850e7dacb6b978c59256a55719",
+    "tools/pk-research/p2aw_sampling_design.py": "e4e4e9c1eca3aba0aace438a18a1b4e0ce600686e0990e54b958b2d88100129a",
+    "tools/pk-research/p2x_reproduce_standalone.py": "47b54568dcd89376b16c86b8edf07a431fc08bd617bba678c3d2d77f10d54b3e",
+    "pk-engine/src/test/resources/unified-m1-python-reference.json": "11578a67d072aee3f2f7a39dd4362f8e1a24a3527b87b162f8c7b5458f19a1bc"
   }
 }

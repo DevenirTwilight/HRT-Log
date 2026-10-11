@@ -48,7 +48,8 @@ object UnifiedModelComparison {
         val y = grid.map { ResearchSublingualV01.relativeHistory(it, doses, candidate) }
         fun area(end: Int): Double = (1..end).sumOf { (grid[it] - grid[it-1]) * (y[it] + y[it-1]) / 2 }
         val peak = y.indices.maxBy { y[it] }
-        val single = (0..1440).maxBy { ResearchSublingualV01.relativeIncrement(it / 60.0, candidate) } / 60.0
+        // Match the shared M2/Legacy single-dose Tmax search: 0–12 h, one-minute grid.
+        val single = (0..720).maxBy { ResearchSublingualV01.relativeIncrement(it / 60.0, candidate) } / 60.0
         return ModelMetrics(y[peak], grid[peak] - origin, area(240), area(480), area(1440), y[480], y[720], y[1440], single)
     }
 

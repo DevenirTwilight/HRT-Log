@@ -1,0 +1,52 @@
+[
+  {
+    "name": "net.plainnotes.app.UnifiedConcentrationDataPathTest",
+    "tests": "1",
+    "skipped": "0",
+    "failures": "0",
+    "errors": "0",
+    "timestamp": "2026-10-11T13:03:26.404Z",
+    "hostname": "ce55db1be519",
+    "time": "9.596"
+  },
+  {
+    "name": "net.plainnotes.app.UnifiedConcentrationUiTest",
+    "tests": "5",
+    "skipped": "0",
+    "failures": "0",
+    "errors": "0",
+    "timestamp": "2026-10-11T13:02:58.932Z",
+    "hostname": "ce55db1be519",
+    "time": "26.739"
+  },
+  {
+    "name": "net.plainnotes.app.UnifiedConcentrationTranslationsTest",
+    "tests": "1",
+    "skipped": "0",
+    "failures": "0",
+    "errors": "0",
+    "timestamp": "2026-10-11T13:03:36.010Z",
+    "hostname": "ce55db1be519",
+    "time": "0.044"
+  },
+  {
+    "name": "net.plainnotes.app.UnifiedConcentrationObservationTest",
+    "tests": "1",
+    "skipped": "0",
+    "failures": "0",
+    "errors": "0",
+    "timestamp": "2026-10-11T13:02:58.270Z",
+    "hostname": "ce55db1be519",
+    "time": "0.081"
+  },
+  {
+    "name": "net.plainnotes.app.ResearchHistoricalSlAdapterTest",
+    "tests": "3",
+    "skipped": "0",
+    "failures": "0",
+    "errors": "0",
+    "timestamp": "2026-10-11T13:03:26.268Z",
+    "hostname": "ce55db1be519",
+    "time": "0.032"
+  }
+]
