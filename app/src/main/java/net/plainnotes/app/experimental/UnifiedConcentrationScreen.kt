@@ -101,6 +101,7 @@ import java.time.Instant
             DropdownField(stringResource(R.string.uc_m2_candidate), ResearchSublingualV01.candidates.map { it.id }, m2Id, { it }, { m2Id = it; hour = null }, modifier = Modifier.testTag("m2-candidate"))
             DropdownField(stringResource(R.string.uc_m1_candidate), ResearchM1Catalog.candidates.map { it.id }, m1Id, { it }, { m1Id = it; hour = null }, modifier = Modifier.testTag("m1-candidate"))
             Text(stringResource(R.string.uc_version, ResearchSublingualV01.version, m2Id, ResearchM1Catalog.version, m1Id), style = MaterialTheme.typography.bodySmall, modifier = Modifier.testTag("model-versions"))
+            Text("Legacy: ${net.plainnotes.app.pk.PkParams.version}", style = MaterialTheme.typography.bodySmall, modifier = Modifier.testTag("legacy-version"))
             Text(stringResource(R.string.uc_selection), style = MaterialTheme.typography.bodySmall)
             val selectedM2 = ResearchSublingualV01.candidates.single { it.id == m2Id }
             val selectedM1 = ResearchM1Catalog.candidates.single { it.id == m1Id }
