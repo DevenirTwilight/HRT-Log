@@ -102,7 +102,7 @@ def analyze(aw):
         noise_coefficient = max(ratio_noise_factor(v) for v in (old, lo, hi))
         relevant = (t != 1.0 and gap > 0)
         minimum_amplitudes = {
-            str(sd): (scaled(K*sd*noise_coefficient/gap, 1_000)
+            "sd{}".format(sd): (scaled(K*sd*noise_coefficient/gap, 1_000)
                       if relevant else None)
             for sd in ANALYTIC_SD_PG_ML
         }
