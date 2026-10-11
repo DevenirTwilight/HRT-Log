@@ -31,6 +31,15 @@ class ConcentrationPreviewTest {
             for(i in p.timeH.indices) assertEquals(p.valueAt(p.timeH[i])!!,p.values[i],0.0)
         }
     }
+    @Test fun originalChartViewportRetainsTheRefinedModelPeakInBothUnits() {
+        for(model in listOf(ResearchModel.M1,ResearchModel.M2)) {
+            val p=ConcentrationPreview.compute(SlAdapterAudit(listOf(event(now,2.0)),emptyMap()),model,now)
+            for(factor in listOf(1.0,Pk.PMOL_PER_PG)) {
+                val shown=net.plainnotes.app.ui.ChartViewport.samples(p.timeH,DoubleArray(p.values.size){p.values[it]*factor},now,now+4.123,now)
+                assertEquals(p.historyWindowPeak!!.pgMl*factor,shown.maxOf{it.second},1e-5*factor)
+            }
+        }
+    }
     @Test fun doseScalingRepeatedHistoryAndBackgroundOnceDoNotAlterActualEvents() {
         for(model in listOf(ResearchModel.M1,ResearchModel.M2)) {
             val full=ConcentrationPreview.compute(audit,model,now);val b=full.anchor.background

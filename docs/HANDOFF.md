@@ -4,7 +4,7 @@
 
 本轮已独立重算旧参考：p2x-14 人为127.250288、Price468.741741 pg/mL，Tmax0.901225h；Legacy144.023808、Tmax1.000137h。拟冻结 M2 p2x-39，Price B24/A434.835722，Cmax481.924256、Tmax0.854839h；M1 p2az-m1-09 新 Price projection B24/A454.306268，Cmax478.607264、Tmax1.023027h。结果来自 scipy 独立核/加权重拟合/全局括号极值搜索，非硬编码目标。完整47候选结果与源哈希在 docs/design/pr19-calibration-evidence；原 P2-X CSV 与科学核不改，单次和重复给药背景只一次。
 
-非保护新 ResearchDisplayProtocol/ResearchExtrema 与 preview 接线、四语文献范围/Legacy隔离标签及峰值点已实现，第一轮 PK118 与 app 聚焦10项已通过、0失败/跳过（第二次构建4m9s；首次 AUC 积分网格误差失败，随后提高分辨率而未降低断言）。Python 科研269项及来源/四语锁检查通过。新 Room 真实产品路径追加断言待下一轮回归，完整工程**未验收**。详细规则 REQUIREMENTS §61；后续须完成正负回归、性能、全量 JVM/Android/API35、Debug/unsigned Release/lint、APK前后体积与 PR19 更新。旧 unsigned 对照已另存 /workspace/hrt-unified-tools/pr19-before-calibration-unsigned.apk，不签名、不交付本轮 APK。保护检查实际通过；未改守卫/偏离链/基线，无待批准保护改动。旧交接如下，旧测试/签名结果均为历史版本，不能当成本轮结果。
+非保护新 ResearchDisplayProtocol/ResearchExtrema 与 preview 接线、四语文献范围/Legacy隔离标签及峰值点已实现，第一轮 PK118 与 app 聚焦10项已通过、0失败/跳过（第二次构建4m9s；首次 AUC 积分网格误差失败，随后提高分辨率而未降低断言）。Python 科研269项及来源/四语锁检查通过。源码15f7a0c已推送，CI38170102275三任务全部success；独立参考重放38170102325 success。四种实际Kotlin源码变异全部被执行的断言拦截，随后源码逐字节恢复；结果在 pr19-calibration-evidence/mutations.json。新增视窗真实峰测试、研究代表标签、重选后的化验隔离测试已加强，最终全量/四语native截图/构建正在运行，完整工程**未最终验收**。详细规则 REQUIREMENTS §61；后续须完成正负回归、性能、全量 JVM/Android/API35、Debug/unsigned Release/lint、APK前后体积与 PR19 更新。旧 unsigned 对照已另存 /workspace/hrt-unified-tools/pr19-before-calibration-unsigned.apk，不签名、不交付本轮 APK。保护检查实际通过；未改守卫/偏离链/基线，无待批准保护改动。旧交接如下，旧测试/签名结果均为历史版本，不能当成本轮结果。
 
 ---
 

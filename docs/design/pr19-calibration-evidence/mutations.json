@@ -1,0 +1,50 @@
+[
+  {
+    "name": "arbitrary_B25_A100",
+    "mutated_file": "app/src/main/java/net/plainnotes/app/experimental/ConcentrationPreview.kt",
+    "mutant_sha256": "0faa1b70389cc64f996d2a3bb2c0dc8e8cd6e52d7533143dc5825dbd3963d481",
+    "exit_code": 1,
+    "test": "net.plainnotes.app.ConcentrationPreviewTest.defaultProductPreviewUsesRealLiteratureFitInHeroChartAndExactReadout",
+    "tests": "1",
+    "failures": [
+      "java.lang.AssertionError: expected:<24.0> but was:<25.0>"
+    ],
+    "status": "KILLED_BY_EXECUTED_ASSERTION"
+  },
+  {
+    "name": "implicit_first_candidate",
+    "mutated_file": "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchDisplayProtocol.kt",
+    "mutant_sha256": "bf72e46c18742b6361c9ea3842f08f7dfd896989ac064a83c9a1864aecd4b1f0",
+    "exit_code": 1,
+    "test": "net.plainnotes.app.pk.experimental.ResearchDisplayProtocolTest.frozenProductChoiceIsExplicitTraceableAndReproducesTheSelectionRule",
+    "tests": "1",
+    "failures": [
+      "org.opentest4j.AssertionFailedError: expected: <p2x-39> but was: <p2x-14>"
+    ],
+    "status": "KILLED_BY_EXECUTED_ASSERTION"
+  },
+  {
+    "name": "omitted_peak_points",
+    "mutated_file": "app/src/main/java/net/plainnotes/app/experimental/ConcentrationPreview.kt",
+    "mutant_sha256": "3b9014f29249113d73543d64e0a1f806b342994ae9dd30408425c3dad143346b",
+    "exit_code": 1,
+    "test": "net.plainnotes.app.ConcentrationPreviewTest.defaultProductPreviewUsesRealLiteratureFitInHeroChartAndExactReadout",
+    "tests": "1",
+    "failures": [
+      "java.lang.AssertionError: expected:<481.9242561194971> but was:<481.23944736409084>"
+    ],
+    "status": "KILLED_BY_EXECUTED_ASSERTION"
+  },
+  {
+    "name": "lab_amplitude_leakage",
+    "mutated_file": "app/src/main/java/net/plainnotes/app/experimental/UnifiedConcentrationScreen.kt",
+    "mutant_sha256": "4067cdd2de7c2492ca63eb7d5adde0db13397c66fac039b23cd81498a33df6e2",
+    "exit_code": 1,
+    "test": "net.plainnotes.app.UnifiedConcentrationUiTest.legacyCalibrationSwitchAndChangedObservedLabCannotScaleResearchHero",
+    "tests": "1",
+    "failures": [
+      "java.lang.AssertionError: Failed: assertExists.\nReason: Expected exactly '1' node but could not find any node that satisfies: (Text + InputText + EditableText contains '121' (ignoreCase: false))\n"
+    ],
+    "status": "KILLED_BY_EXECUTED_ASSERTION"
+  }
+]

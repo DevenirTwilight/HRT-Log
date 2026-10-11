@@ -17,6 +17,7 @@ object ResearchDisplayProtocol {
     }
     fun anchor(model: ResearchModel, candidate: ExperimentalCandidate = candidate(model)): ExperimentalStudyAnchor {
         require(model != ResearchModel.LEGACY)
+        require(if(model==ResearchModel.M2) candidate in ResearchSublingualV01.candidates else candidate in ResearchM1Catalog.candidates)
         // Only the M1 background changes for this new, explicitly named projection; its shape stays frozen.
         val projected = if(model == ResearchModel.M1) candidate.copy(assumedPriceBaselinePgMl=m1BackgroundPgMl) else candidate
         return PriceFigure1997.anchor(projected)

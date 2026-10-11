@@ -51,6 +51,9 @@ class UnifiedConcentrationAndroidTest {
             ui.waitUntil(10_000){ui.onAllNodesWithText(value).fetchSemanticsNodes().isNotEmpty()}
             ui.onNodeWithText(ui.activity.getString(net.plainnotes.app.R.string.calib_enable)).performScrollTo().performClick()
             ui.runOnUiThread { ui.activity.syntheticLabPgMl=9000.0 }
+            ui.waitForIdle()
+            ui.onNodeWithTag("model-LEGACY").performScrollTo().performClick()
+            ui.onNodeWithTag("model-${model.name}").performScrollTo().performClick();await("unified-chart")
             ui.waitForIdle();ui.onNodeWithText(value).assertExists()
             ui.onNodeWithTag("research-peaks").assertExists()
             ui.runOnUiThread { ui.activity.syntheticLabPgMl=150.0 }

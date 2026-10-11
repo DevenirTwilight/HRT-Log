@@ -62,6 +62,10 @@ class UnifiedConcentrationUiTest {
             ui.onNodeWithText(text(R.string.calib_enable)).performScrollTo().performClick()
             ui.runOnUiThread { ui.activity.syntheticLabPgMl=9000.0 }
             ui.waitForIdle()
+            // Re-enter the research model so a wrongly cached lab dependency cannot hide the leakage.
+            ui.onNodeWithTag("model-LEGACY").performScrollTo().performClick()
+            ui.onNodeWithTag("model-${model.name}").performScrollTo().performClick();awaitChart()
+            ui.waitForIdle()
             ui.onNodeWithText(expected(model)).assertExists()
             ui.onNodeWithTag("research-not-personal").assertExists()
             ui.runOnUiThread { ui.activity.syntheticLabPgMl=150.0 }

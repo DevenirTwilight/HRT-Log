@@ -42,7 +42,7 @@
     <string name="uc_research_settings">模型比较设置</string>
     <string name="uc_original_scenario">舌下E2文献情景</string>
     <string name="uc_original_assumptions">Price图1群体幅度情景，非经验证的个人或总E2预测。</string>
-    <string name="uc_original_research_note">%1$s · %2$s · %3$s。Price 1997图1加权幅度：假设B=%4$s，拟合A=%5$s pg/mL（1mg/1h增量）。群体幅度仅映射已记录舌下E2，排除其他E2途径。化验点为实测总E2，不校准这条曲线。下方校准和参数卡片仅作用于Legacy。未来仅已有剂量尾部，8–24h不确定；图表AUC冲突未解决，不估计含服时长影响。</string>
+    <string name="uc_original_research_note">研究代表，非临床最佳：%1$s · %2$s · %3$s。Price 1997图1加权幅度：假设B=%4$s，拟合A=%5$s pg/mL（1mg/1h增量）。群体幅度仅映射已记录舌下E2，排除其他E2途径。化验点为实测总E2，不校准这条曲线。下方校准和参数卡片仅作用于Legacy。未来仅已有剂量尾部，8–24h不确定；图表AUC冲突未解决，不估计含服时长影响。</string>
     <string name="uc_original_tail">研究尾部</string>
     <string name="uc_original_peaks">单次1mg参考：Cmax %1$s pg/mL，Tmax +%2$s h。最新剂量后24h历史窗口（含前剂残留）：峰值%3$s pg/mL，峰时+%4$s h。</string>
 </resources>
