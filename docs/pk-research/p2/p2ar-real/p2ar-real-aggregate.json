@@ -1,0 +1,260 @@
+{
+  "absolute_pg_ml_prediction_eligible": false,
+  "date": "2026-10-11",
+  "error_perturbations_are_analyst_assumptions_not_confidence_intervals": true,
+  "hypothetical_schedule_results": {
+    "every_6h": {
+      "dose_times_hours_hypothetical": [
+        0,
+        6,
+        12,
+        18
+      ],
+      "hypothetical_postdose_sampling_time_sensitivity": {
+        "1.25": {
+          "legacy_compatible_visits": 16,
+          "m2_candidates_all_20_visits_compatible": 0,
+          "m2_compatible_visits_range": [
+            5,
+            14
+          ]
+        },
+        "1.75": {
+          "legacy_compatible_visits": 16,
+          "m2_candidates_all_20_visits_compatible": 0,
+          "m2_compatible_visits_range": [
+            3,
+            9
+          ]
+        }
+      },
+      "legacy_compatible_visits": 16,
+      "legacy_response_ratio": 0.046218171013517266,
+      "m2_candidates_compatible_with_all_11_people_observed_visits": 0,
+      "m2_candidates_compatible_with_all_20_visits": 0,
+      "m2_compatible_visits_max": 13,
+      "m2_compatible_visits_median": 7,
+      "m2_compatible_visits_min": 4,
+      "m2_frozen_candidate_count": 15,
+      "m2_model_pre_to_post_response_ratio_max": 0.389211531375373,
+      "m2_model_pre_to_post_response_ratio_median": 0.18458738156535684,
+      "m2_model_pre_to_post_response_ratio_min": 0.12936252167176213,
+      "purely_hypothetical_error_perturbations": {
+        "0.1": {
+          "max_compatible_visits": 14,
+          "models_all_20_compatible_if_each_pre_post_can_shift_independently": 0
+        },
+        "0.2": {
+          "max_compatible_visits": 15,
+          "models_all_20_compatible_if_each_pre_post_can_shift_independently": 0
+        }
+      }
+    },
+    "night_gap_10h": {
+      "dose_times_hours_hypothetical": [
+        0,
+        4,
+        9,
+        14
+      ],
+      "hypothetical_postdose_sampling_time_sensitivity": {
+        "1.25": {
+          "legacy_compatible_visits": 20,
+          "m2_candidates_all_20_visits_compatible": 0,
+          "m2_compatible_visits_range": [
+            5,
+            16
+          ]
+        },
+        "1.75": {
+          "legacy_compatible_visits": 20,
+          "m2_candidates_all_20_visits_compatible": 0,
+          "m2_compatible_visits_range": [
+            4,
+            15
+          ]
+        }
+      },
+      "legacy_compatible_visits": 20,
+      "legacy_response_ratio": 0.003416644081041729,
+      "m2_candidates_compatible_with_all_11_people_observed_visits": 0,
+      "m2_candidates_compatible_with_all_20_visits": 0,
+      "m2_compatible_visits_max": 16,
+      "m2_compatible_visits_median": 15,
+      "m2_compatible_visits_min": 4,
+      "m2_frozen_candidate_count": 15,
+      "m2_model_pre_to_post_response_ratio_max": 0.3492049925766275,
+      "m2_model_pre_to_post_response_ratio_median": 0.10017727824349651,
+      "m2_model_pre_to_post_response_ratio_min": 0.05589172561908587,
+      "purely_hypothetical_error_perturbations": {
+        "0.1": {
+          "max_compatible_visits": 16,
+          "models_all_20_compatible_if_each_pre_post_can_shift_independently": 0
+        },
+        "0.2": {
+          "max_compatible_visits": 18,
+          "models_all_20_compatible_if_each_pre_post_can_shift_independently": 0
+        }
+      }
+    },
+    "night_gap_12h": {
+      "dose_times_hours_hypothetical": [
+        0,
+        4,
+        8,
+        12
+      ],
+      "hypothetical_postdose_sampling_time_sensitivity": {
+        "1.25": {
+          "legacy_compatible_visits": 20,
+          "m2_candidates_all_20_visits_compatible": 3,
+          "m2_compatible_visits_range": [
+            5,
+            20
+          ]
+        },
+        "1.75": {
+          "legacy_compatible_visits": 20,
+          "m2_candidates_all_20_visits_compatible": 0,
+          "m2_compatible_visits_range": [
+            4,
+            16
+          ]
+        }
+      },
+      "legacy_compatible_visits": 20,
+      "legacy_response_ratio": 0.002199267428784088,
+      "m2_candidates_compatible_with_all_11_people_observed_visits": 0,
+      "m2_candidates_compatible_with_all_20_visits": 0,
+      "m2_compatible_visits_max": 18,
+      "m2_compatible_visits_median": 15,
+      "m2_compatible_visits_min": 5,
+      "m2_frozen_candidate_count": 15,
+      "m2_model_pre_to_post_response_ratio_max": 0.33754160722142806,
+      "m2_model_pre_to_post_response_ratio_median": 0.07712976647448756,
+      "m2_model_pre_to_post_response_ratio_min": 0.03690584934704563,
+      "purely_hypothetical_error_perturbations": {
+        "0.1": {
+          "max_compatible_visits": 20,
+          "models_all_20_compatible_if_each_pre_post_can_shift_independently": 2
+        },
+        "0.2": {
+          "max_compatible_visits": 20,
+          "models_all_20_compatible_if_each_pre_post_can_shift_independently": 5
+        }
+      }
+    },
+    "night_gap_14h": {
+      "dose_times_hours_hypothetical": [
+        0,
+        3,
+        6,
+        10
+      ],
+      "hypothetical_postdose_sampling_time_sensitivity": {
+        "1.25": {
+          "legacy_compatible_visits": 20,
+          "m2_candidates_all_20_visits_compatible": 6,
+          "m2_compatible_visits_range": [
+            5,
+            20
+          ]
+        },
+        "1.75": {
+          "legacy_compatible_visits": 20,
+          "m2_candidates_all_20_visits_compatible": 2,
+          "m2_compatible_visits_range": [
+            4,
+            20
+          ]
+        }
+      },
+      "legacy_compatible_visits": 20,
+      "legacy_response_ratio": 0.0018879374222789472,
+      "m2_candidates_compatible_with_all_11_people_observed_visits": 5,
+      "m2_candidates_compatible_with_all_20_visits": 5,
+      "m2_compatible_visits_max": 20,
+      "m2_compatible_visits_median": 16,
+      "m2_compatible_visits_min": 5,
+      "m2_frozen_candidate_count": 15,
+      "m2_model_pre_to_post_response_ratio_max": 0.32087551538270126,
+      "m2_model_pre_to_post_response_ratio_median": 0.05598277333618179,
+      "m2_model_pre_to_post_response_ratio_min": 0.02286676746584198,
+      "purely_hypothetical_error_perturbations": {
+        "0.1": {
+          "max_compatible_visits": 20,
+          "models_all_20_compatible_if_each_pre_post_can_shift_independently": 6
+        },
+        "0.2": {
+          "max_compatible_visits": 20,
+          "models_all_20_compatible_if_each_pre_post_can_shift_independently": 6
+        }
+      }
+    },
+    "night_gap_9h": {
+      "dose_times_hours_hypothetical": [
+        0,
+        5,
+        10,
+        15
+      ],
+      "hypothetical_postdose_sampling_time_sensitivity": {
+        "1.25": {
+          "legacy_compatible_visits": 20,
+          "m2_candidates_all_20_visits_compatible": 0,
+          "m2_compatible_visits_range": [
+            5,
+            16
+          ]
+        },
+        "1.75": {
+          "legacy_compatible_visits": 20,
+          "m2_candidates_all_20_visits_compatible": 0,
+          "m2_compatible_visits_range": [
+            4,
+            15
+          ]
+        }
+      },
+      "legacy_compatible_visits": 20,
+      "legacy_response_ratio": 0.005462850034040575,
+      "m2_candidates_compatible_with_all_11_people_observed_visits": 0,
+      "m2_candidates_compatible_with_all_20_visits": 0,
+      "m2_compatible_visits_max": 15,
+      "m2_compatible_visits_median": 14,
+      "m2_compatible_visits_min": 4,
+      "m2_frozen_candidate_count": 15,
+      "m2_model_pre_to_post_response_ratio_max": 0.3597062631773327,
+      "m2_model_pre_to_post_response_ratio_median": 0.11888703606541272,
+      "m2_model_pre_to_post_response_ratio_min": 0.0717803456896969,
+      "purely_hypothetical_error_perturbations": {
+        "0.1": {
+          "max_compatible_visits": 16,
+          "models_all_20_compatible_if_each_pre_post_can_shift_independently": 0
+        },
+        "0.2": {
+          "max_compatible_visits": 16,
+          "models_all_20_compatible_if_each_pre_post_can_shift_independently": 0
+        }
+      }
+    }
+  },
+  "independent_external_clinical_validation": false,
+  "model_candidates_frozen_before_this_audit": 15,
+  "model_production_replacement_authorized": false,
+  "no_experimental_assay_uncertainty_quantified": true,
+  "no_patient_rows_or_identifiers_exported": true,
+  "paired_unique_people": 11,
+  "paired_visits": 20,
+  "paired_visits_month_3": 9,
+  "paired_visits_month_6": 11,
+  "people_with_both_paired_visits": 9,
+  "phase": "P2-AR-REAL",
+  "positive_post_minus_predose_visits": 20,
+  "schedules_are_not_patient_dose_history": true,
+  "schema_version": 1,
+  "source_vnc54_xlsx_sha256": "038a935f699ddadc9f0d843e125e5ee8047132773d1d6485085d6302066867dd",
+  "status": "PRIVATE_REAL_DATA_AUDITED__ONLY_AGGREGATES_PUBLIC",
+  "studies_previously_exposed_to_m2_development": true,
+  "time_post_nominal_h": 1.5
+}

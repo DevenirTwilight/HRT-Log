@@ -32,3 +32,14 @@ P2-AQ 结束时曾提出继续研究“真实 90min 个体浓度对 M2 参数的
 - 只读独立计算：[程序](../../../../tools/pk-research/p2_missing_stages_reanalysis.py) 与 [回归](../../../../tools/pk-research/test_p2_missing_stages.py)。
 
 本次追加不改变冻结 P2-X 参数、发布版本、应用引擎、数据库、个人健康数据或外测样本数（仍为 0）。
+
+
+---
+
+## 2026-10-11：P2-AR 真实个体数据后续研究（不重写历史）
+
+此前 P2-AR 于 2026-10-10 补做的是解析证明与合成反例，当时并未重新读取 OSF Excel。现已从用户授权保存的 VNC54 原始 XLSX（与 P2-AQ 存档 SHA-256 相同）真正重算 11 名不同受试者的 20 次给药前/名义90min后配对访视，在 **五个明确为假设的日内给药时钟** 下，对正式 Legacy 与冻结 P2-X 15 套 M2 进行非负背景/自由增益的条件相容性检查。
+
+完整交付见 [P2-AR 真正读取原始资料的研究报告](../p2ar-real/P2-AR-REAL-REPORT.md)、[仅聚合 JSON](../p2ar-real/p2ar-real-aggregate.json)、[审计源码](../../../../tools/pk-research/p2ar_real_visit_audit.py)和[13 项合成/聚合测试](../../../../tools/pk-research/test_p2ar_real_visit_audit.py)。原始逐人 XLSX/ZIP **没有加入公开 GitHub**，获得授权的持有人可以按 [README](../p2ar-real/README.md) 在私人环境重新生成聚合结果。
+
+该资料此前已被模型开发接触；真实给药钟、慢性剂量史和逐次采样实时时刻缺失。**即使 M2 在已见 Price/Rosano 组曲线拟合更好，也不得从该条件测试认定 Legacy 或 M2 的个人浓度预测更优。** 此阶段标记为 **`REAL_DATA_RETROSPECTIVE_CONDITIONAL_AUDIT`**，独立外部验证仍然为 0，P2-C 继续 HOLD。历史原始 P2-AR ZIP 仍未知，并没有冒充找回。

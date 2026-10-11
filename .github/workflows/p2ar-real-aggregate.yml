@@ -1,0 +1,52 @@
+name: P2-AR real cohort aggregate-only checks
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/p2ar-real-aggregate.yml'
+      - 'tools/pk-research/p2ar_real_visit_audit.py'
+      - 'tools/pk-research/test_p2ar_real_visit_audit.py'
+      - 'docs/pk-research/p2/p2ar-real/**'
+  push:
+    paths:
+      - '.github/workflows/p2ar-real-aggregate.yml'
+      - 'tools/pk-research/p2ar_real_visit_audit.py'
+      - 'tools/pk-research/test_p2ar_real_visit_audit.py'
+      - 'docs/pk-research/p2/p2ar-real/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  privacy-and-synthetic-math:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run research-only synthetic and frozen public-aggregate tests
+        run: python -m unittest discover -s tools/pk-research -p 'test_p2ar_real_visit_audit.py' -v
+      - name: Check aggregate metadata and raw-medical-data exclusion
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path('docs/pk-research/p2/p2ar-real/p2ar-real-aggregate.json')
+          data = json.loads(path.read_text(encoding='utf-8'))
+          assert data['paired_unique_people'] == 11
+          assert data['paired_visits'] == 20
+          assert data['model_candidates_frozen_before_this_audit'] == 15
+          assert data['no_patient_rows_or_identifiers_exported'] is True
+          assert data['independent_external_clinical_validation'] is False
+          assert data['model_production_replacement_authorized'] is False
+          for forbidden in ('patient_id', 'subject_id', 'participant_id', 'individual_measurements', 'raw_measurements'):
+              assert forbidden not in data, forbidden
+          folder = Path('docs/pk-research/p2/p2ar-real')
+          assert {p.suffix.lower() for p in folder.iterdir()} <= {'.md', '.json'}
+          assert not list(Path('docs/pk-research/p2').rglob('vnc54*.xlsx'))
+          assert not list(Path('docs/pk-research/p2').rglob('tcruw*.xlsx'))
+          print('PASS: aggregate provenance, clinical HOLD, no individual records in study directory')
+          PY
