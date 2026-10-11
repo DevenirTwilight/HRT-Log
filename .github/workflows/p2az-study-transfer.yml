@@ -1,0 +1,34 @@
+name: P2-AZ retrospective group-deletion PK research
+
+on:
+  push:
+    paths:
+      - 'docs/pk-research/p2/p2az-retrospective-transfer/**'
+      - 'tools/pk-research/p2az_study_transfer.py'
+      - 'tools/pk-research/test_p2az_study_transfer.py'
+      - '.github/workflows/p2az-study-transfer.yml'
+  pull_request:
+    paths:
+      - 'docs/pk-research/p2/p2az-retrospective-transfer/**'
+      - 'tools/pk-research/p2az_study_transfer.py'
+      - 'tools/pk-research/test_p2az_study_transfer.py'
+      - '.github/workflows/p2az-study-transfer.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  group-deletion-replay:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate original fixed sources and group-deletion logic
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tools/pk-research -p 'test_p2az_study_transfer.py' -v
+          python tools/pk-research/p2az_study_transfer.py --output /tmp/p2az-replayed.json --emit
+          if [ -f docs/pk-research/p2/p2az-retrospective-transfer/p2az-results.json ]; then
+            cmp docs/pk-research/p2/p2az-retrospective-transfer/p2az-results.json /tmp/p2az-replayed.json
+          else
+            echo 'ARCHIVAL_STAGE_BOOTSTRAP: results are in this job log and must be committed before review'
+          fi
