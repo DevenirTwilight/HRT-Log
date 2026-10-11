@@ -14,6 +14,18 @@
 
 ---
 
+# P2-BA（2026-10-11）——三项实际研究单位的证据鲁棒性与模型用途准入
+
+**成果实际入库状态：** GitHub 研究分支 `research/p2-ba-evidence-use-case-20261011`， [PR #18](https://github.com/DevenirTwilight/HRT-Log/pull/18) **叠放在 P2-AZ PR #17**；两个PR都未通过工程正式模型替换闸门，未来合并必须按GitHub实际状态核实。新研究实物：[完整中文报告](pk-research/p2/p2ba-evidence-use/P2-BA-REPORT.md)、[实际计算3队列稳健性/10功能风险结果](pk-research/p2/p2ba-evidence-use/p2ba-results.json)、[源码及15个来源/边界/用例测试](../tools/pk-research/p2ba_evidence_use_gate.py)、[目录与复现](pk-research/p2/p2ba-evidence-use/README.md)、[专用Actions](../.github/workflows/p2ba-evidence-use.yml)。[P2-BA 专项 GitHub CI #38138176150](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38138176150) 已实际 **Success**：15/15组级来源/权限测试通过，并从SHA固定的P2-AZ实数文件重新生成完整 `p2ba-results.json`，与入库JSON逐字节一致；Android/JVM/设备回归仍须分别核对；本阶段**不修改 Android App / APK / PK 参数 / 个人用药记录**。
+
+- **科研新结果：** P2-AZ 54折只涉及 Price1997、Rosano1997 PK25、Komesaroff1998 **三项真正独立的已发表研究单位**，每研究18个图像/人为基线扰动。P2-BA用明确的分组重新计数：新建M2 vs 正式 Legacy **18/18组假设下三项均更低归一化形状MSE**；M2 vs 新建M1只有**12/18**情景三项均更低，Rosano留出仍有6个反例。50多次评分不能冒充50多项独立人体试验/个体患者。
+- **相对Legacy最不利情景**：Price留出 M2/Legacy MSE 最大比 **0.269619**，Rosano **0.213371**，Komesaroff **0.070805**；这全是此前研究者已见公开人群的**研究内观察锚点归一后**的组均值形状对照，既不是未来新人体外测，也不是个人绝对pg/mL准确改善百分比。必须保留冻结P2-X15条候选的上游暴露声明。
+- **用途分级10项**：现有Legacy历史pg/mL可保留但须标明个体外测不足；实验M2的无量纲归一曲线、两个模型相同无量纲同屏对照、条件峰时可以在**主动打开研究功能**时展示；个人M2绝对pg/mL、假冒90%人群预测带、已验证个人长期谷值、替换生产默认引擎、给药指导、用Doll人口总峰粗暴换算个人pg/mL均禁止。新的Python `choose_permission` 研究级能力矩阵实行未知能力fail-closed，但**不代表Android页面已经实装权限检查**，需独立UI工程验收。
+- **依据与结论**：EMA [ICH M15 Step5 2026](https://www.ema.europa.eu/en/ich-m15-guideline-general-principles-model-informed-drug-development-step-2b-scientific-guideline) 的用途/错误决策风险分离，及ICH M10实际分析方法用途/内源性检测要求；此官方框架**不是官方认证HRT Log**。研究级“显示M2形状”无需个人临床预测放行；真实给药建议与默认pg/mL替换仍 `P2-C HOLD`。
+- **研究分支冲突处理备注**：PR#14 P2-AX经专项20/20及三项App回归通过已合并（2026-10-11）。历史整理PR#15虽专项4/4且Android/JVM/设备均绿，但在PR#14合并后与本HANDOFF有文本冲突，原PR自动合并被GitHub拒绝；在解决冲突并重新审查前**不得声称PR#15已合并**。本条记录旨在避免用户以为旧研究索引已经在默认分支。P2-AY PR#16的Android检查出现失败记录，须独立查明再处理。PR#17/18为不同科学工作，不能因一个专项结果通过而取消另一个的工程回归。
+
+---
+
 # P2-AZ（2026-10-11）——正式 Legacy / 新单输入 M1 / 新双输入 M2 真实跨研究留一重选
 
 **已核实专项验收：** [P2-AZ CI #38137307450](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38137307450) **Success**：13/13个源/合成/留出隔离测试通过、18场景54折重新计算、`p2az-results.json` 与新生成的文件逐字节一致。最初一次由于错误截断背景下负增量而失败，失败记录与后来的源码修正均保留；常规 Android/JVM/设备 CI 需以最新运行核对，不能把专项成功混同生产测试。
