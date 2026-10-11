@@ -56,7 +56,7 @@ PERMISSIONS={
 
 
 def blob_sha(data:bytes)->str:
-    return hashlib.sha1(("blob "+str(len(data))+"\\0").encode("ascii")+data).hexdigest()
+    return hashlib.sha1(("blob "+str(len(data))+chr(0)).encode("ascii")+data).hexdigest()
 
 
 def load_source(path=SOURCE):
@@ -187,7 +187,7 @@ def main():
         p.error("refusing overwrite")
     data=summarize(load_source())
     args.out.parent.mkdir(parents=True,exist_ok=True)
-    args.out.write_text(json.dumps(data,indent=2,sort_keys=True,ensure_ascii=False,allow_nan=False)+"\\n",encoding="utf-8")
+    args.out.write_text(json.dumps(data,indent=2,sort_keys=True,ensure_ascii=False,allow_nan=False)+chr(10),encoding="utf-8")
     print("P2-BA: 3 true groups; 18 sensitivity scenarios; experimental normalized curves allowed; personal M2 pg/mL blocked")
 
 
