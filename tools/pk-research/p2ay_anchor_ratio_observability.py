@@ -112,7 +112,7 @@ def analyze(aw):
                 key = "A{}_sd{}".format(amp, sd)
                 indicators[key] = (relevant and gap*amp >= K*sd*noise_coefficient)
         output.append({
-            "time_h": t,
+            "time_h": format(t, "g"),
             "legacy_ratio_micro": scaled(old),
             "m2_min_ratio_micro": scaled(lo),
             "m2_max_ratio_micro": scaled(hi),
