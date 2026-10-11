@@ -1,0 +1,82 @@
+name: P2-S archived research replay
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/p2s-archive-replay.yml'
+      - 'docs/pk-research/p2/history-2026-10-10/source-packages/P2-S-research-source.zip'
+      - 'docs/pk-research/p2/p2e-source-metrics.json'
+      - 'docs/pk-research/p2/p2d-komesaroff-table1.json'
+  push:
+    paths:
+      - '.github/workflows/p2s-archive-replay.yml'
+      - 'docs/pk-research/p2/history-2026-10-10/source-packages/P2-S-research-source.zip'
+      - 'docs/pk-research/p2/p2e-source-metrics.json'
+      - 'docs/pk-research/p2/p2d-komesaroff-table1.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  replay-p2s:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout complete HRT Log repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Verify original ZIP and extract five allowed research files
+        shell: bash
+        run: |
+          python - <<'PY'
+          import hashlib
+          import os
+          from pathlib import Path
+          import stat
+          import zipfile
+
+          root = Path.cwd().resolve()
+          archived = root / 'docs/pk-research/p2/history-2026-10-10/source-packages/P2-S-research-source.zip'
+          expected_sha256 = '05e550d9e274883f8a3bd549af523ad77b8a4b66da7387d250949783efee855a'
+          digest = hashlib.sha256(archived.read_bytes()).hexdigest()
+          if digest != expected_sha256:
+              raise SystemExit(f'P2-S source hash mismatch: {digest}')
+          allowed = {
+              'README-P2S.txt',
+              'docs/pk-research/p2/p2s-early-growth-assay-and-data-readiness.md',
+              'docs/pk-research/p2/p2s-early-growth-checkpoints.json',
+              'tools/pk-research/p2s_early_growth_audit.py',
+              'tools/pk-research/test_p2s_early_growth_audit.py',
+          }
+          with zipfile.ZipFile(archived) as z:
+              infos = z.infolist()
+              if len(infos) != len(allowed) or {v.filename for v in infos} != allowed:
+                  raise SystemExit('Unexpected ZIP contents; refusing extraction')
+              if z.testzip() is not None:
+                  raise SystemExit('ZIP CRC failure')
+              for info in infos:
+                  if info.file_size > 100_000 or stat.S_ISLNK(info.external_attr >> 16):
+                      raise SystemExit('Unsafe size or symbolic link in ZIP')
+                  destination = (root / info.filename).resolve()
+                  if root not in destination.parents or destination.exists():
+                      raise SystemExit(f'Unsafe or existing file: {info.filename}')
+                  destination.parent.mkdir(parents=True, exist_ok=True)
+                  destination.write_bytes(z.read(info.filename))
+          print('P2-S exact historical source ZIP verified and extracted safely')
+          PY
+
+      - name: Run original P2-S tests with existing P2-D and P2-E evidence inputs
+        run: python -m unittest discover -s tools/pk-research -p 'test_p2s_early_growth_audit.py' -v
+
+      - name: Recompute P2-S result and compare with historical checkpoint
+        shell: bash
+        run: |
+          python tools/pk-research/p2s_early_growth_audit.py --out "$RUNNER_TEMP/p2s-recomputed.json"
+          cmp docs/pk-research/p2/p2s-early-growth-checkpoints.json "$RUNNER_TEMP/p2s-recomputed.json"
+          echo 'PASS: P2-S recomputation exactly equals historical frozen JSON'

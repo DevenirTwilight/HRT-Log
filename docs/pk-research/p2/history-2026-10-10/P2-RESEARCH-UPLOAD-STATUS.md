@@ -18,4 +18,4 @@ This phase import is on `research/p2-original-reports-and-source-handoff-2026101
 
 ### Research integrity
 
-Tests for newly supplied S/AP/AQ/AS: AP 9/9, AQ 32/32, AS 49/49; S 10/11 in *isolated* ZIP, with one missing GitHub P2-D/P2-E dependency causing an error rather than a numerical model failure. The original S ZIP is preserved exactly and must be tested again in a checked-out repository. Reconstruction P2-AT 8/8. Do not claim fresh Android integration CI was run from this commit without checking GitHub Actions.
+Tests for newly supplied S/AP/AQ/AS: AP 9/9, AQ 32/32, AS 49/49; S originally showed 10/11 in an *isolated ZIP*, with one missing P2-D/P2-E dependency. **Resolved 2026-10-11:** GitHub Actions [full-repository P2-S archival replay](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38123783828) passed, including ZIP SHA/CRC validation, **11/11 original tests**, and byte-for-byte matching of the regenerated JSON with the archived checkpoint. This is an engineering reproducibility result, not external human PK validation. Reconstruction P2-AT 8/8. Do not claim fresh Android integration CI was run from this commit without checking GitHub Actions.
