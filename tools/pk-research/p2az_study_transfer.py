@@ -83,8 +83,11 @@ def shape_data(raw, kind, price_baseline, ros_baseline, kom_baseline, figure):
         a=next((y-b for t,y in points if abs(t-anchors[study])<1e-12),None)
         if a is None or a <= 0:
             raise ValueError("missing or invalid cohort normalization anchor")
-        if any(not math.isfinite(y) or y-b < 0 for t,y in points):
-            raise ValueError("observed normalized concentrations cannot be negative")
+        if any(not math.isfinite(y) or y < 0 for t,y in points):
+            raise ValueError("raw measured total concentrations must be finite and nonnegative")
+        # Small NEGATIVE baseline-subtracted values are legitimate near the tail:
+        # Price AJ 18h manual read 23.85 minus assumed b=24 is -0.15.
+        # Do NOT clip to zero: doing so biases the shape comparison.
         out[study]=tuple((t,(y-b)/a) for t,y in points if abs(t-anchors[study])>1e-12)
         if not out[study]:
             raise ValueError("only an anchor and no scored time point")
