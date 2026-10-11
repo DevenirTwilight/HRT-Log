@@ -1,0 +1,2923 @@
+{
+  "P2_C_HOLD": true,
+  "aicc_formal_model_comparison_possible": false,
+  "by_heldout_study": {
+    "Komesaroff1998": {
+      "FrozenP2X15_beats_Legacy": 18,
+      "M1_beats_Legacy": 18,
+      "M2_beats_Legacy": 18,
+      "scenarios": 18
+    },
+    "Price1997": {
+      "FrozenP2X15_beats_Legacy": 18,
+      "M1_beats_Legacy": 6,
+      "M2_beats_Legacy": 18,
+      "scenarios": 18
+    },
+    "Rosano1997": {
+      "FrozenP2X15_beats_Legacy": 18,
+      "M1_beats_Legacy": 18,
+      "M2_beats_Legacy": 18,
+      "scenarios": 18
+    }
+  },
+  "clinical_accuracy_established": false,
+  "figure_P2I_and_P2AJ_are_same_six_person_Price_cohort": true,
+  "folds": [
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0035325
+        },
+        "0.002": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0128444
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0128444
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.0131018
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 5.83e-05,
+      "heldout_study": "Price1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 0,
+        "price_figure": "P2-I",
+        "rosano_assumed_baseline_pmol_l": 0
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 4,
+          "heldout_mse": 0.0030551,
+          "train_mean_mse": 0.0008841
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.0131018,
+          "train_mean_mse": 0.1358443
+        },
+        "M1": {
+          "candidate_index": 20,
+          "heldout_mse": 0.0128444,
+          "train_mean_mse": 0.0031098
+        },
+        "M2": {
+          "candidate_index": 214,
+          "heldout_mse": 0.0035325,
+          "train_mean_mse": 0.0009389
+        }
+      },
+      "training_studies": [
+        "Rosano1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0153833
+        },
+        "0.002": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0153833
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.007438
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.0862049
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 0.0015091,
+      "heldout_study": "Rosano1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 0,
+        "price_figure": "P2-I",
+        "rosano_assumed_baseline_pmol_l": 0
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 0,
+          "heldout_mse": 0.0043585,
+          "train_mean_mse": 0.0011745
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.0862049,
+          "train_mean_mse": 0.0992927
+        },
+        "M1": {
+          "candidate_index": 9,
+          "heldout_mse": 0.007438,
+          "train_mean_mse": 0.0060844
+        },
+        "M2": {
+          "candidate_index": 119,
+          "heldout_mse": 0.0153833,
+          "train_mean_mse": 0.0014942
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0025886
+        },
+        "0.002": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0025886
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0042862
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.1854836
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 4.35e-05,
+      "heldout_study": "Komesaroff1998",
+      "scenario": {
+        "price_assumed_baseline_pgml": 0,
+        "price_figure": "P2-I",
+        "rosano_assumed_baseline_pmol_l": 0
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 1,
+          "heldout_mse": 0.000404,
+          "train_mean_mse": 0.002029
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.1854836,
+          "train_mean_mse": 0.0496533
+        },
+        "M1": {
+          "candidate_index": 9,
+          "heldout_mse": 0.0042862,
+          "train_mean_mse": 0.0076603
+        },
+        "M2": {
+          "candidate_index": 209,
+          "heldout_mse": 0.0025886,
+          "train_mean_mse": 0.0017473
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Rosano1997"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0022418
+        },
+        "0.002": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0128444
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0128444
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.0131018
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 5.83e-05,
+      "heldout_study": "Price1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 0,
+        "price_figure": "P2-I",
+        "rosano_assumed_baseline_pmol_l": 100
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 4,
+          "heldout_mse": 0.0030551,
+          "train_mean_mse": 0.0002282
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.0131018,
+          "train_mean_mse": 0.1459253
+        },
+        "M1": {
+          "candidate_index": 20,
+          "heldout_mse": 0.0128444,
+          "train_mean_mse": 0.0028683
+        },
+        "M2": {
+          "candidate_index": 211,
+          "heldout_mse": 0.0022418,
+          "train_mean_mse": 0.0012817
+        }
+      },
+      "training_studies": [
+        "Rosano1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0201238
+        },
+        "0.002": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0201238
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0085899
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.1063669
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 0.0001973,
+      "heldout_study": "Rosano1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 0,
+        "price_figure": "P2-I",
+        "rosano_assumed_baseline_pmol_l": 100
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 0,
+          "heldout_mse": 0.0027269,
+          "train_mean_mse": 0.0011745
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.1063669,
+          "train_mean_mse": 0.0992927
+        },
+        "M1": {
+          "candidate_index": 9,
+          "heldout_mse": 0.0085899,
+          "train_mean_mse": 0.0060844
+        },
+        "M2": {
+          "candidate_index": 119,
+          "heldout_mse": 0.0201238,
+          "train_mean_mse": 0.0014942
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0025886
+        },
+        "0.002": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0025886
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0029362
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.1854836
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 4.35e-05,
+      "heldout_study": "Komesaroff1998",
+      "scenario": {
+        "price_assumed_baseline_pgml": 0,
+        "price_figure": "P2-I",
+        "rosano_assumed_baseline_pmol_l": 100
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 11,
+          "heldout_mse": 0.0038319,
+          "train_mean_mse": 0.0012088
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.1854836,
+          "train_mean_mse": 0.0597343
+        },
+        "M1": {
+          "candidate_index": 20,
+          "heldout_mse": 0.0029362,
+          "train_mean_mse": 0.0078223
+        },
+        "M2": {
+          "candidate_index": 209,
+          "heldout_mse": 0.0025886,
+          "train_mean_mse": 0.0014104
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Rosano1997"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0022418
+        },
+        "0.002": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0128444
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0128444
+        },
+        "0.05": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0128444
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 5.83e-05,
+      "heldout_study": "Price1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 0,
+        "price_figure": "P2-I",
+        "rosano_assumed_baseline_pmol_l": 200
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 1,
+          "heldout_mse": 0.0023449,
+          "train_mean_mse": 0.0008295
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.0131018,
+          "train_mean_mse": 0.1583811
+        },
+        "M1": {
+          "candidate_index": 20,
+          "heldout_mse": 0.0128444,
+          "train_mean_mse": 0.0039286
+        },
+        "M2": {
+          "candidate_index": 211,
+          "heldout_mse": 0.0022418,
+          "train_mean_mse": 0.0026095
+        }
+      },
+      "training_studies": [
+        "Rosano1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0280111
+        },
+        "0.002": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0280111
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0125154
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.1312787
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 0.0004133,
+      "heldout_study": "Rosano1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 0,
+        "price_figure": "P2-I",
+        "rosano_assumed_baseline_pmol_l": 200
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 0,
+          "heldout_mse": 0.0035795,
+          "train_mean_mse": 0.0011745
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.1312787,
+          "train_mean_mse": 0.0992927
+        },
+        "M1": {
+          "candidate_index": 9,
+          "heldout_mse": 0.0125154,
+          "train_mean_mse": 0.0060844
+        },
+        "M2": {
+          "candidate_index": 119,
+          "heldout_mse": 0.0280111,
+          "train_mean_mse": 0.0014942
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0025886
+        },
+        "0.002": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0025886
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0247619
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.1854836
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 4.35e-05,
+      "heldout_study": "Komesaroff1998",
+      "scenario": {
+        "price_assumed_baseline_pgml": 0,
+        "price_figure": "P2-I",
+        "rosano_assumed_baseline_pmol_l": 200
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 5,
+          "heldout_mse": 0.0088356,
+          "train_mean_mse": 0.0008756
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.1854836,
+          "train_mean_mse": 0.0721902
+        },
+        "M1": {
+          "candidate_index": 30,
+          "heldout_mse": 0.0247619,
+          "train_mean_mse": 0.008017
+        },
+        "M2": {
+          "candidate_index": 209,
+          "heldout_mse": 0.0025886,
+          "train_mean_mse": 0.0023655
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Rosano1997"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0014504
+        },
+        "0.002": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0144853
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0144853
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.0130103
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 6.72e-05,
+      "heldout_study": "Price1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 12,
+        "price_figure": "P2-I",
+        "rosano_assumed_baseline_pmol_l": 0
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 4,
+          "heldout_mse": 0.0012072,
+          "train_mean_mse": 0.0008841
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.0130103,
+          "train_mean_mse": 0.1358443
+        },
+        "M1": {
+          "candidate_index": 20,
+          "heldout_mse": 0.0144853,
+          "train_mean_mse": 0.0031098
+        },
+        "M2": {
+          "candidate_index": 214,
+          "heldout_mse": 0.0014504,
+          "train_mean_mse": 0.0009389
+        }
+      },
+      "training_studies": [
+        "Rosano1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0015037
+        },
+        "0.002": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.007438
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.007438
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.0862049
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 0.0015091,
+      "heldout_study": "Rosano1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 12,
+        "price_figure": "P2-I",
+        "rosano_assumed_baseline_pmol_l": 0
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 12,
+          "heldout_mse": 0.0108794,
+          "train_mean_mse": 0.0004096
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.0862049,
+          "train_mean_mse": 0.0992469
+        },
+        "M1": {
+          "candidate_index": 9,
+          "heldout_mse": 0.007438,
+          "train_mean_mse": 0.0045221
+        },
+        "M2": {
+          "candidate_index": 211,
+          "heldout_mse": 0.0015037,
+          "train_mean_mse": 0.0008718
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0010581
+        },
+        "0.002": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0010581
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0042862
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.1854836
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 4.35e-05,
+      "heldout_study": "Komesaroff1998",
+      "scenario": {
+        "price_assumed_baseline_pgml": 12,
+        "price_figure": "P2-I",
+        "rosano_assumed_baseline_pmol_l": 0
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 1,
+          "heldout_mse": 0.000404,
+          "train_mean_mse": 0.0013307
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.1854836,
+          "train_mean_mse": 0.0496076
+        },
+        "M1": {
+          "candidate_index": 9,
+          "heldout_mse": 0.0042862,
+          "train_mean_mse": 0.006098
+        },
+        "M2": {
+          "candidate_index": 211,
+          "heldout_mse": 0.0010581,
+          "train_mean_mse": 0.0010946
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Rosano1997"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0006855
+        },
+        "0.002": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0144853
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0144853
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.0130103
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 6.72e-05,
+      "heldout_study": "Price1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 12,
+        "price_figure": "P2-I",
+        "rosano_assumed_baseline_pmol_l": 100
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 4,
+          "heldout_mse": 0.0012072,
+          "train_mean_mse": 0.0002282
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.0130103,
+          "train_mean_mse": 0.1459253
+        },
+        "M1": {
+          "candidate_index": 20,
+          "heldout_mse": 0.0144853,
+          "train_mean_mse": 0.0028683
+        },
+        "M2": {
+          "candidate_index": 211,
+          "heldout_mse": 0.0006855,
+          "train_mean_mse": 0.0012817
+        }
+      },
+      "training_studies": [
+        "Rosano1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0015053
+        },
+        "0.002": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0085899
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0085899
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.1063669
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 0.0001973,
+      "heldout_study": "Rosano1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 12,
+        "price_figure": "P2-I",
+        "rosano_assumed_baseline_pmol_l": 100
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 12,
+          "heldout_mse": 0.0086989,
+          "train_mean_mse": 0.0004096
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.1063669,
+          "train_mean_mse": 0.0992469
+        },
+        "M1": {
+          "candidate_index": 9,
+          "heldout_mse": 0.0085899,
+          "train_mean_mse": 0.0045221
+        },
+        "M2": {
+          "candidate_index": 211,
+          "heldout_mse": 0.0015053,
+          "train_mean_mse": 0.0008718
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0010581
+        },
+        "0.002": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0010581
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0042862
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.1854836
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 4.35e-05,
+      "heldout_study": "Komesaroff1998",
+      "scenario": {
+        "price_assumed_baseline_pgml": 12,
+        "price_figure": "P2-I",
+        "rosano_assumed_baseline_pmol_l": 100
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 11,
+          "heldout_mse": 0.0038319,
+          "train_mean_mse": 0.0005453
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.1854836,
+          "train_mean_mse": 0.0596886
+        },
+        "M1": {
+          "candidate_index": 9,
+          "heldout_mse": 0.0042862,
+          "train_mean_mse": 0.0066739
+        },
+        "M2": {
+          "candidate_index": 211,
+          "heldout_mse": 0.0010581,
+          "train_mean_mse": 0.0010954
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Rosano1997"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0006855
+        },
+        "0.002": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0144853
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0144853
+        },
+        "0.05": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0144853
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 6.72e-05,
+      "heldout_study": "Price1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 12,
+        "price_figure": "P2-I",
+        "rosano_assumed_baseline_pmol_l": 200
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 1,
+          "heldout_mse": 0.0009483,
+          "train_mean_mse": 0.0008295
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.0130103,
+          "train_mean_mse": 0.1583811
+        },
+        "M1": {
+          "candidate_index": 20,
+          "heldout_mse": 0.0144853,
+          "train_mean_mse": 0.0039286
+        },
+        "M2": {
+          "candidate_index": 211,
+          "heldout_mse": 0.0006855,
+          "train_mean_mse": 0.0026095
+        }
+      },
+      "training_studies": [
+        "Rosano1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0041609
+        },
+        "0.002": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0125154
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0125154
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.1312787
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 0.0004133,
+      "heldout_study": "Rosano1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 12,
+        "price_figure": "P2-I",
+        "rosano_assumed_baseline_pmol_l": 200
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 12,
+          "heldout_mse": 0.0089456,
+          "train_mean_mse": 0.0004096
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.1312787,
+          "train_mean_mse": 0.0992469
+        },
+        "M1": {
+          "candidate_index": 9,
+          "heldout_mse": 0.0125154,
+          "train_mean_mse": 0.0045221
+        },
+        "M2": {
+          "candidate_index": 211,
+          "heldout_mse": 0.0041609,
+          "train_mean_mse": 0.0008718
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0131331
+        },
+        "0.002": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0131331
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0238066
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.1854836
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 4.35e-05,
+      "heldout_study": "Komesaroff1998",
+      "scenario": {
+        "price_assumed_baseline_pgml": 12,
+        "price_figure": "P2-I",
+        "rosano_assumed_baseline_pmol_l": 200
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 11,
+          "heldout_mse": 0.0038319,
+          "train_mean_mse": 0.0005325
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.1854836,
+          "train_mean_mse": 0.0721445
+        },
+        "M1": {
+          "candidate_index": 31,
+          "heldout_mse": 0.0238066,
+          "train_mean_mse": 0.006916
+        },
+        "M2": {
+          "candidate_index": 208,
+          "heldout_mse": 0.0131331,
+          "train_mean_mse": 0.0023655
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Rosano1997"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0004083
+        },
+        "0.002": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.017376
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.017376
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.0140708
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 1.9e-05,
+      "heldout_study": "Price1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 24,
+        "price_figure": "P2-I",
+        "rosano_assumed_baseline_pmol_l": 0
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 4,
+          "heldout_mse": 0.0004124,
+          "train_mean_mse": 0.0008841
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.0140708,
+          "train_mean_mse": 0.1358443
+        },
+        "M1": {
+          "candidate_index": 20,
+          "heldout_mse": 0.017376,
+          "train_mean_mse": 0.0031098
+        },
+        "M2": {
+          "candidate_index": 214,
+          "heldout_mse": 0.0004083,
+          "train_mean_mse": 0.0009389
+        }
+      },
+      "training_studies": [
+        "Rosano1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0014293
+        },
+        "0.002": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.007438
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.007438
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.0862049
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 0.0015091,
+      "heldout_study": "Rosano1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 24,
+        "price_figure": "P2-I",
+        "rosano_assumed_baseline_pmol_l": 0
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 12,
+          "heldout_mse": 0.0108794,
+          "train_mean_mse": 9.29e-05
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.0862049,
+          "train_mean_mse": 0.0997772
+        },
+        "M1": {
+          "candidate_index": 9,
+          "heldout_mse": 0.007438,
+          "train_mean_mse": 0.0034503
+        },
+        "M2": {
+          "candidate_index": 214,
+          "heldout_mse": 0.0014293,
+          "train_mean_mse": 0.0004284
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0010581
+        },
+        "0.002": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0010581
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0042862
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.1854836
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 4.35e-05,
+      "heldout_study": "Komesaroff1998",
+      "scenario": {
+        "price_assumed_baseline_pgml": 24,
+        "price_figure": "P2-I",
+        "rosano_assumed_baseline_pmol_l": 0
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 4,
+          "heldout_mse": 0.000259,
+          "train_mean_mse": 0.0009608
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.1854836,
+          "train_mean_mse": 0.0501379
+        },
+        "M1": {
+          "candidate_index": 9,
+          "heldout_mse": 0.0042862,
+          "train_mean_mse": 0.0050262
+        },
+        "M2": {
+          "candidate_index": 211,
+          "heldout_mse": 0.0010581,
+          "train_mean_mse": 0.0008513
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Rosano1997"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0001988
+        },
+        "0.002": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.017376
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.017376
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.0140708
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 1.9e-05,
+      "heldout_study": "Price1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 24,
+        "price_figure": "P2-I",
+        "rosano_assumed_baseline_pmol_l": 100
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 4,
+          "heldout_mse": 0.0004124,
+          "train_mean_mse": 0.0002282
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.0140708,
+          "train_mean_mse": 0.1459253
+        },
+        "M1": {
+          "candidate_index": 20,
+          "heldout_mse": 0.017376,
+          "train_mean_mse": 0.0028683
+        },
+        "M2": {
+          "candidate_index": 211,
+          "heldout_mse": 0.0001988,
+          "train_mean_mse": 0.0012817
+        }
+      },
+      "training_studies": [
+        "Rosano1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0033029
+        },
+        "0.002": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0085899
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0085899
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.1063669
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 0.0001973,
+      "heldout_study": "Rosano1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 24,
+        "price_figure": "P2-I",
+        "rosano_assumed_baseline_pmol_l": 100
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 12,
+          "heldout_mse": 0.0086989,
+          "train_mean_mse": 9.29e-05
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.1063669,
+          "train_mean_mse": 0.0997772
+        },
+        "M1": {
+          "candidate_index": 9,
+          "heldout_mse": 0.0085899,
+          "train_mean_mse": 0.0034503
+        },
+        "M2": {
+          "candidate_index": 214,
+          "heldout_mse": 0.0033029,
+          "train_mean_mse": 0.0004284
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0010581
+        },
+        "0.002": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0010581
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0042862
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.1854836
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 4.35e-05,
+      "heldout_study": "Komesaroff1998",
+      "scenario": {
+        "price_assumed_baseline_pgml": 24,
+        "price_figure": "P2-I",
+        "rosano_assumed_baseline_pmol_l": 100
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 14,
+          "heldout_mse": 0.0004958,
+          "train_mean_mse": 0.0002951
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.1854836,
+          "train_mean_mse": 0.0602189
+        },
+        "M1": {
+          "candidate_index": 9,
+          "heldout_mse": 0.0042862,
+          "train_mean_mse": 0.0056022
+        },
+        "M2": {
+          "candidate_index": 211,
+          "heldout_mse": 0.0010581,
+          "train_mean_mse": 0.000852
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Rosano1997"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0001988
+        },
+        "0.002": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.017376
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.017376
+        },
+        "0.05": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.017376
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 1.9e-05,
+      "heldout_study": "Price1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 24,
+        "price_figure": "P2-I",
+        "rosano_assumed_baseline_pmol_l": 200
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 1,
+          "heldout_mse": 0.0006302,
+          "train_mean_mse": 0.0008295
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.0140708,
+          "train_mean_mse": 0.1583811
+        },
+        "M1": {
+          "candidate_index": 20,
+          "heldout_mse": 0.017376,
+          "train_mean_mse": 0.0039286
+        },
+        "M2": {
+          "candidate_index": 211,
+          "heldout_mse": 0.0001988,
+          "train_mean_mse": 0.0026095
+        }
+      },
+      "training_studies": [
+        "Rosano1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0080251
+        },
+        "0.002": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0125154
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0125154
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.1312787
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 0.0004133,
+      "heldout_study": "Rosano1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 24,
+        "price_figure": "P2-I",
+        "rosano_assumed_baseline_pmol_l": 200
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 12,
+          "heldout_mse": 0.0089456,
+          "train_mean_mse": 9.29e-05
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.1312787,
+          "train_mean_mse": 0.0997772
+        },
+        "M1": {
+          "candidate_index": 9,
+          "heldout_mse": 0.0125154,
+          "train_mean_mse": 0.0034503
+        },
+        "M2": {
+          "candidate_index": 214,
+          "heldout_mse": 0.0080251,
+          "train_mean_mse": 0.0004284
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0131331
+        },
+        "0.002": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0238066
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0238066
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.1854836
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 4.35e-05,
+      "heldout_study": "Komesaroff1998",
+      "scenario": {
+        "price_assumed_baseline_pgml": 24,
+        "price_figure": "P2-I",
+        "rosano_assumed_baseline_pmol_l": 200
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 11,
+          "heldout_mse": 0.0038319,
+          "train_mean_mse": 0.0004102
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.1854836,
+          "train_mean_mse": 0.0726747
+        },
+        "M1": {
+          "candidate_index": 31,
+          "heldout_mse": 0.0238066,
+          "train_mean_mse": 0.0051955
+        },
+        "M2": {
+          "candidate_index": 208,
+          "heldout_mse": 0.0131331,
+          "train_mean_mse": 0.0019236
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Rosano1997"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0034254
+        },
+        "0.002": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0132714
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0132714
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.0136071
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 8.14e-05,
+      "heldout_study": "Price1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 0,
+        "price_figure": "P2-AJ",
+        "rosano_assumed_baseline_pmol_l": 0
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 4,
+          "heldout_mse": 0.0028226,
+          "train_mean_mse": 0.0008841
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.0136071,
+          "train_mean_mse": 0.1358443
+        },
+        "M1": {
+          "candidate_index": 20,
+          "heldout_mse": 0.0132714,
+          "train_mean_mse": 0.0031098
+        },
+        "M2": {
+          "candidate_index": 214,
+          "heldout_mse": 0.0034254,
+          "train_mean_mse": 0.0009389
+        }
+      },
+      "training_studies": [
+        "Rosano1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0153833
+        },
+        "0.002": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0153833
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.007438
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.0862049
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 0.0015091,
+      "heldout_study": "Rosano1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 0,
+        "price_figure": "P2-AJ",
+        "rosano_assumed_baseline_pmol_l": 0
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 0,
+          "heldout_mse": 0.0043585,
+          "train_mean_mse": 0.0010685
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.0862049,
+          "train_mean_mse": 0.0995454
+        },
+        "M1": {
+          "candidate_index": 9,
+          "heldout_mse": 0.007438,
+          "train_mean_mse": 0.0060729
+        },
+        "M2": {
+          "candidate_index": 119,
+          "heldout_mse": 0.0153833,
+          "train_mean_mse": 0.0015225
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0025886
+        },
+        "0.002": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0025886
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0042862
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.1854836
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 4.35e-05,
+      "heldout_study": "Komesaroff1998",
+      "scenario": {
+        "price_assumed_baseline_pgml": 0,
+        "price_figure": "P2-AJ",
+        "rosano_assumed_baseline_pmol_l": 0
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 1,
+          "heldout_mse": 0.000404,
+          "train_mean_mse": 0.0019136
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.1854836,
+          "train_mean_mse": 0.049906
+        },
+        "M1": {
+          "candidate_index": 9,
+          "heldout_mse": 0.0042862,
+          "train_mean_mse": 0.0076488
+        },
+        "M2": {
+          "candidate_index": 209,
+          "heldout_mse": 0.0025886,
+          "train_mean_mse": 0.0017599
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Rosano1997"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0021135
+        },
+        "0.002": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0132714
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0132714
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.0136071
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 8.14e-05,
+      "heldout_study": "Price1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 0,
+        "price_figure": "P2-AJ",
+        "rosano_assumed_baseline_pmol_l": 100
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 4,
+          "heldout_mse": 0.0028226,
+          "train_mean_mse": 0.0002282
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.0136071,
+          "train_mean_mse": 0.1459253
+        },
+        "M1": {
+          "candidate_index": 20,
+          "heldout_mse": 0.0132714,
+          "train_mean_mse": 0.0028683
+        },
+        "M2": {
+          "candidate_index": 211,
+          "heldout_mse": 0.0021135,
+          "train_mean_mse": 0.0012817
+        }
+      },
+      "training_studies": [
+        "Rosano1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0201238
+        },
+        "0.002": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0201238
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0085899
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.1063669
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 0.0001973,
+      "heldout_study": "Rosano1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 0,
+        "price_figure": "P2-AJ",
+        "rosano_assumed_baseline_pmol_l": 100
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 0,
+          "heldout_mse": 0.0027269,
+          "train_mean_mse": 0.0010685
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.1063669,
+          "train_mean_mse": 0.0995454
+        },
+        "M1": {
+          "candidate_index": 9,
+          "heldout_mse": 0.0085899,
+          "train_mean_mse": 0.0060729
+        },
+        "M2": {
+          "candidate_index": 119,
+          "heldout_mse": 0.0201238,
+          "train_mean_mse": 0.0015225
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0025886
+        },
+        "0.002": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0025886
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0029362
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.1854836
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 4.35e-05,
+      "heldout_study": "Komesaroff1998",
+      "scenario": {
+        "price_assumed_baseline_pgml": 0,
+        "price_figure": "P2-AJ",
+        "rosano_assumed_baseline_pmol_l": 100
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 11,
+          "heldout_mse": 0.0038319,
+          "train_mean_mse": 0.0011125
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.1854836,
+          "train_mean_mse": 0.059987
+        },
+        "M1": {
+          "candidate_index": 20,
+          "heldout_mse": 0.0029362,
+          "train_mean_mse": 0.0080358
+        },
+        "M2": {
+          "candidate_index": 209,
+          "heldout_mse": 0.0025886,
+          "train_mean_mse": 0.001423
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Rosano1997"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0021135
+        },
+        "0.002": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0132714
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0132714
+        },
+        "0.05": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0132714
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 8.14e-05,
+      "heldout_study": "Price1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 0,
+        "price_figure": "P2-AJ",
+        "rosano_assumed_baseline_pmol_l": 200
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 1,
+          "heldout_mse": 0.0021142,
+          "train_mean_mse": 0.0008295
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.0136071,
+          "train_mean_mse": 0.1583811
+        },
+        "M1": {
+          "candidate_index": 20,
+          "heldout_mse": 0.0132714,
+          "train_mean_mse": 0.0039286
+        },
+        "M2": {
+          "candidate_index": 211,
+          "heldout_mse": 0.0021135,
+          "train_mean_mse": 0.0026095
+        }
+      },
+      "training_studies": [
+        "Rosano1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0280111
+        },
+        "0.002": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0280111
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0125154
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.1312787
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 0.0004133,
+      "heldout_study": "Rosano1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 0,
+        "price_figure": "P2-AJ",
+        "rosano_assumed_baseline_pmol_l": 200
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 0,
+          "heldout_mse": 0.0035795,
+          "train_mean_mse": 0.0010685
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.1312787,
+          "train_mean_mse": 0.0995454
+        },
+        "M1": {
+          "candidate_index": 9,
+          "heldout_mse": 0.0125154,
+          "train_mean_mse": 0.0060729
+        },
+        "M2": {
+          "candidate_index": 119,
+          "heldout_mse": 0.0280111,
+          "train_mean_mse": 0.0015225
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0025886
+        },
+        "0.002": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0025886
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0247619
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.1854836
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 4.35e-05,
+      "heldout_study": "Komesaroff1998",
+      "scenario": {
+        "price_assumed_baseline_pgml": 0,
+        "price_figure": "P2-AJ",
+        "rosano_assumed_baseline_pmol_l": 200
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 5,
+          "heldout_mse": 0.0088356,
+          "train_mean_mse": 0.0008872
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.1854836,
+          "train_mean_mse": 0.0724429
+        },
+        "M1": {
+          "candidate_index": 30,
+          "heldout_mse": 0.0247619,
+          "train_mean_mse": 0.0082315
+        },
+        "M2": {
+          "candidate_index": 209,
+          "heldout_mse": 0.0025886,
+          "train_mean_mse": 0.0023781
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Rosano1997"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0014063
+        },
+        "0.002": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0149753
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0149753
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.0135874
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 5.34e-05,
+      "heldout_study": "Price1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 12,
+        "price_figure": "P2-AJ",
+        "rosano_assumed_baseline_pmol_l": 0
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 4,
+          "heldout_mse": 0.0010333,
+          "train_mean_mse": 0.0008841
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.0135874,
+          "train_mean_mse": 0.1358443
+        },
+        "M1": {
+          "candidate_index": 20,
+          "heldout_mse": 0.0149753,
+          "train_mean_mse": 0.0031098
+        },
+        "M2": {
+          "candidate_index": 214,
+          "heldout_mse": 0.0014063,
+          "train_mean_mse": 0.0009389
+        }
+      },
+      "training_studies": [
+        "Rosano1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0015037
+        },
+        "0.002": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.007438
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.007438
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.0862049
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 0.0015091,
+      "heldout_study": "Rosano1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 12,
+        "price_figure": "P2-AJ",
+        "rosano_assumed_baseline_pmol_l": 0
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 12,
+          "heldout_mse": 0.0108794,
+          "train_mean_mse": 0.0003834
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.0862049,
+          "train_mean_mse": 0.0995355
+        },
+        "M1": {
+          "candidate_index": 9,
+          "heldout_mse": 0.007438,
+          "train_mean_mse": 0.0045452
+        },
+        "M2": {
+          "candidate_index": 211,
+          "heldout_mse": 0.0015037,
+          "train_mean_mse": 0.0008378
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0010581
+        },
+        "0.002": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0010581
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0042862
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.1854836
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 4.35e-05,
+      "heldout_study": "Komesaroff1998",
+      "scenario": {
+        "price_assumed_baseline_pgml": 12,
+        "price_figure": "P2-AJ",
+        "rosano_assumed_baseline_pmol_l": 0
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 1,
+          "heldout_mse": 0.000404,
+          "train_mean_mse": 0.0012438
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.1854836,
+          "train_mean_mse": 0.0498962
+        },
+        "M1": {
+          "candidate_index": 9,
+          "heldout_mse": 0.0042862,
+          "train_mean_mse": 0.0061211
+        },
+        "M2": {
+          "candidate_index": 211,
+          "heldout_mse": 0.0010581,
+          "train_mean_mse": 0.0010606
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Rosano1997"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0006175
+        },
+        "0.002": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0149753
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0149753
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.0135874
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 5.34e-05,
+      "heldout_study": "Price1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 12,
+        "price_figure": "P2-AJ",
+        "rosano_assumed_baseline_pmol_l": 100
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 4,
+          "heldout_mse": 0.0010333,
+          "train_mean_mse": 0.0002282
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.0135874,
+          "train_mean_mse": 0.1459253
+        },
+        "M1": {
+          "candidate_index": 20,
+          "heldout_mse": 0.0149753,
+          "train_mean_mse": 0.0028683
+        },
+        "M2": {
+          "candidate_index": 211,
+          "heldout_mse": 0.0006175,
+          "train_mean_mse": 0.0012817
+        }
+      },
+      "training_studies": [
+        "Rosano1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0015053
+        },
+        "0.002": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0085899
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0085899
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.1063669
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 0.0001973,
+      "heldout_study": "Rosano1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 12,
+        "price_figure": "P2-AJ",
+        "rosano_assumed_baseline_pmol_l": 100
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 12,
+          "heldout_mse": 0.0086989,
+          "train_mean_mse": 0.0003834
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.1063669,
+          "train_mean_mse": 0.0995355
+        },
+        "M1": {
+          "candidate_index": 9,
+          "heldout_mse": 0.0085899,
+          "train_mean_mse": 0.0045452
+        },
+        "M2": {
+          "candidate_index": 211,
+          "heldout_mse": 0.0015053,
+          "train_mean_mse": 0.0008378
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0010581
+        },
+        "0.002": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0010581
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0042862
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.1854836
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 4.35e-05,
+      "heldout_study": "Komesaroff1998",
+      "scenario": {
+        "price_assumed_baseline_pgml": 12,
+        "price_figure": "P2-AJ",
+        "rosano_assumed_baseline_pmol_l": 100
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 11,
+          "heldout_mse": 0.0038319,
+          "train_mean_mse": 0.0004778
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.1854836,
+          "train_mean_mse": 0.0599772
+        },
+        "M1": {
+          "candidate_index": 9,
+          "heldout_mse": 0.0042862,
+          "train_mean_mse": 0.0066971
+        },
+        "M2": {
+          "candidate_index": 211,
+          "heldout_mse": 0.0010581,
+          "train_mean_mse": 0.0010614
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Rosano1997"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0006175
+        },
+        "0.002": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0149753
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0149753
+        },
+        "0.05": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0149753
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 5.34e-05,
+      "heldout_study": "Price1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 12,
+        "price_figure": "P2-AJ",
+        "rosano_assumed_baseline_pmol_l": 200
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 1,
+          "heldout_mse": 0.0007744,
+          "train_mean_mse": 0.0008295
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.0135874,
+          "train_mean_mse": 0.1583811
+        },
+        "M1": {
+          "candidate_index": 20,
+          "heldout_mse": 0.0149753,
+          "train_mean_mse": 0.0039286
+        },
+        "M2": {
+          "candidate_index": 211,
+          "heldout_mse": 0.0006175,
+          "train_mean_mse": 0.0026095
+        }
+      },
+      "training_studies": [
+        "Rosano1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0041609
+        },
+        "0.002": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0125154
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0125154
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.1312787
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 0.0004133,
+      "heldout_study": "Rosano1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 12,
+        "price_figure": "P2-AJ",
+        "rosano_assumed_baseline_pmol_l": 200
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 12,
+          "heldout_mse": 0.0089456,
+          "train_mean_mse": 0.0003834
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.1312787,
+          "train_mean_mse": 0.0995355
+        },
+        "M1": {
+          "candidate_index": 9,
+          "heldout_mse": 0.0125154,
+          "train_mean_mse": 0.0045452
+        },
+        "M2": {
+          "candidate_index": 211,
+          "heldout_mse": 0.0041609,
+          "train_mean_mse": 0.0008378
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0131331
+        },
+        "0.002": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0131331
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0238066
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.1854836
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 4.35e-05,
+      "heldout_study": "Komesaroff1998",
+      "scenario": {
+        "price_assumed_baseline_pgml": 12,
+        "price_figure": "P2-AJ",
+        "rosano_assumed_baseline_pmol_l": 200
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 11,
+          "heldout_mse": 0.0038319,
+          "train_mean_mse": 0.000465
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.1854836,
+          "train_mean_mse": 0.072433
+        },
+        "M1": {
+          "candidate_index": 31,
+          "heldout_mse": 0.0238066,
+          "train_mean_mse": 0.0066952
+        },
+        "M2": {
+          "candidate_index": 208,
+          "heldout_mse": 0.0131331,
+          "train_mean_mse": 0.0022431
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Rosano1997"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0004252
+        },
+        "0.002": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0179261
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0179261
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.014718
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 2.56e-05,
+      "heldout_study": "Price1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 24,
+        "price_figure": "P2-AJ",
+        "rosano_assumed_baseline_pmol_l": 0
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 4,
+          "heldout_mse": 0.0002949,
+          "train_mean_mse": 0.0008841
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.014718,
+          "train_mean_mse": 0.1358443
+        },
+        "M1": {
+          "candidate_index": 20,
+          "heldout_mse": 0.0179261,
+          "train_mean_mse": 0.0031098
+        },
+        "M2": {
+          "candidate_index": 214,
+          "heldout_mse": 0.0004252,
+          "train_mean_mse": 0.0009389
+        }
+      },
+      "training_studies": [
+        "Rosano1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0014293
+        },
+        "0.002": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.007438
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.007438
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.0862049
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 0.0015091,
+      "heldout_study": "Rosano1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 24,
+        "price_figure": "P2-AJ",
+        "rosano_assumed_baseline_pmol_l": 0
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 2,
+          "heldout_mse": 0.0102185,
+          "train_mean_mse": 8.49e-05
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.0862049,
+          "train_mean_mse": 0.1001008
+        },
+        "M1": {
+          "candidate_index": 9,
+          "heldout_mse": 0.007438,
+          "train_mean_mse": 0.0035075
+        },
+        "M2": {
+          "candidate_index": 214,
+          "heldout_mse": 0.0014293,
+          "train_mean_mse": 0.0004369
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0010581
+        },
+        "0.002": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0010581
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0042862
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.1854836
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 4.35e-05,
+      "heldout_study": "Komesaroff1998",
+      "scenario": {
+        "price_assumed_baseline_pgml": 24,
+        "price_figure": "P2-AJ",
+        "rosano_assumed_baseline_pmol_l": 0
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 4,
+          "heldout_mse": 0.000259,
+          "train_mean_mse": 0.000902
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.1854836,
+          "train_mean_mse": 0.0504614
+        },
+        "M1": {
+          "candidate_index": 9,
+          "heldout_mse": 0.0042862,
+          "train_mean_mse": 0.0050833
+        },
+        "M2": {
+          "candidate_index": 211,
+          "heldout_mse": 0.0010581,
+          "train_mean_mse": 0.0008463
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Rosano1997"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0001889
+        },
+        "0.002": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0179261
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0179261
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.014718
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 2.56e-05,
+      "heldout_study": "Price1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 24,
+        "price_figure": "P2-AJ",
+        "rosano_assumed_baseline_pmol_l": 100
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 4,
+          "heldout_mse": 0.0002949,
+          "train_mean_mse": 0.0002282
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.014718,
+          "train_mean_mse": 0.1459253
+        },
+        "M1": {
+          "candidate_index": 20,
+          "heldout_mse": 0.0179261,
+          "train_mean_mse": 0.0028683
+        },
+        "M2": {
+          "candidate_index": 211,
+          "heldout_mse": 0.0001889,
+          "train_mean_mse": 0.0012817
+        }
+      },
+      "training_studies": [
+        "Rosano1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0033029
+        },
+        "0.002": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0085899
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0085899
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.1063669
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 0.0001973,
+      "heldout_study": "Rosano1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 24,
+        "price_figure": "P2-AJ",
+        "rosano_assumed_baseline_pmol_l": 100
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 2,
+          "heldout_mse": 0.0086387,
+          "train_mean_mse": 8.49e-05
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.1063669,
+          "train_mean_mse": 0.1001008
+        },
+        "M1": {
+          "candidate_index": 9,
+          "heldout_mse": 0.0085899,
+          "train_mean_mse": 0.0035075
+        },
+        "M2": {
+          "candidate_index": 214,
+          "heldout_mse": 0.0033029,
+          "train_mean_mse": 0.0004369
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0010581
+        },
+        "0.002": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0010581
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0042862
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.1854836
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 4.35e-05,
+      "heldout_study": "Komesaroff1998",
+      "scenario": {
+        "price_assumed_baseline_pgml": 24,
+        "price_figure": "P2-AJ",
+        "rosano_assumed_baseline_pmol_l": 100
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 14,
+          "heldout_mse": 0.0004958,
+          "train_mean_mse": 0.0002386
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.1854836,
+          "train_mean_mse": 0.0605424
+        },
+        "M1": {
+          "candidate_index": 9,
+          "heldout_mse": 0.0042862,
+          "train_mean_mse": 0.0056593
+        },
+        "M2": {
+          "candidate_index": 211,
+          "heldout_mse": 0.0010581,
+          "train_mean_mse": 0.0008471
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Rosano1997"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0001889
+        },
+        "0.002": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0179261
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0179261
+        },
+        "0.05": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0179261
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 2.56e-05,
+      "heldout_study": "Price1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 24,
+        "price_figure": "P2-AJ",
+        "rosano_assumed_baseline_pmol_l": 200
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 1,
+          "heldout_mse": 0.0005107,
+          "train_mean_mse": 0.0008295
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.014718,
+          "train_mean_mse": 0.1583811
+        },
+        "M1": {
+          "candidate_index": 20,
+          "heldout_mse": 0.0179261,
+          "train_mean_mse": 0.0039286
+        },
+        "M2": {
+          "candidate_index": 211,
+          "heldout_mse": 0.0001889,
+          "train_mean_mse": 0.0026095
+        }
+      },
+      "training_studies": [
+        "Rosano1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0080251
+        },
+        "0.002": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0125154
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0125154
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.1312787
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 0.0004133,
+      "heldout_study": "Rosano1997",
+      "scenario": {
+        "price_assumed_baseline_pgml": 24,
+        "price_figure": "P2-AJ",
+        "rosano_assumed_baseline_pmol_l": 200
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 2,
+          "heldout_mse": 0.0095487,
+          "train_mean_mse": 8.49e-05
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.1312787,
+          "train_mean_mse": 0.1001008
+        },
+        "M1": {
+          "candidate_index": 9,
+          "heldout_mse": 0.0125154,
+          "train_mean_mse": 0.0035075
+        },
+        "M2": {
+          "candidate_index": 214,
+          "heldout_mse": 0.0080251,
+          "train_mean_mse": 0.0004369
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Komesaroff1998"
+      ]
+    },
+    {
+      "complexity_penalty_sensitivity": {
+        "0": {
+          "chosen_family": "M2",
+          "heldout_mse": 0.0131331
+        },
+        "0.002": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0238066
+        },
+        "0.01": {
+          "chosen_family": "M1",
+          "heldout_mse": 0.0238066
+        },
+        "0.05": {
+          "chosen_family": "Legacy",
+          "heldout_mse": 0.1854836
+        }
+      },
+      "frozen15_heldout_oracle_mse_CONTAMINATED_NOT_PREDICTIVE": 4.35e-05,
+      "heldout_study": "Komesaroff1998",
+      "scenario": {
+        "price_assumed_baseline_pgml": 24,
+        "price_figure": "P2-AJ",
+        "rosano_assumed_baseline_pmol_l": 200
+      },
+      "scores": {
+        "FrozenP2X15": {
+          "candidate_index": 11,
+          "heldout_mse": 0.0038319,
+          "train_mean_mse": 0.0003703
+        },
+        "Legacy": {
+          "candidate_index": null,
+          "heldout_mse": 0.1854836,
+          "train_mean_mse": 0.0729983
+        },
+        "M1": {
+          "candidate_index": 31,
+          "heldout_mse": 0.0238066,
+          "train_mean_mse": 0.0050044
+        },
+        "M2": {
+          "candidate_index": 208,
+          "heldout_mse": 0.0131331,
+          "train_mean_mse": 0.0018287
+        }
+      },
+      "training_studies": [
+        "Price1997",
+        "Rosano1997"
+      ]
+    }
+  ],
+  "frozen15_candidate_set_was_exposed_to_all_three_studies_UPSTREAM": true,
+  "grid_candidate_counts": {
+    "M1": 32,
+    "M2": 216,
+    "historical_15": 15
+  },
+  "heldout_metrics_use_observed_group_anchor_not_absolute_prediction": true,
+  "independent_human_studies_available_for_retrospective_score": 3,
+  "individual_level_unseen_validation": false,
+  "legacy_is_fixed_production_shape_no_trainable_parameters": true,
+  "mixed_assays_populations_formulations_no_absolute_transfer": true,
+  "n_group_statistical_independence_not_assumed_across_timepoints": true,
+  "new_independent_locked_human_pk_sets": 0,
+  "nominal_shape_parameter_counts": {
+    "Legacy": 0,
+    "M1": 3,
+    "M2": 5
+  },
+  "phase": "P2-AZ",
+  "reselected_shape_grid_trained_only_on_other_two_studies_each_fold": true,
+  "score_is_unweighted_normalized_group_shape_MSE_not_likelihood": true,
+  "source_exposed_previous_design_leakage": true,
+  "source_scenarios": 18,
+  "summary": {
+    "FrozenP2X15_beats_Legacy_count": 54,
+    "FrozenP2X15_evaluated_folds": 54,
+    "M1_beats_Legacy_count": 42,
+    "M1_evaluated_folds": 54,
+    "M2_beats_Legacy_count": 54,
+    "M2_evaluated_folds": 54
+  },
+  "training_groups_per_fold": 2,
+  "two_cohort_training_choice_can_be_unstable": true
+}

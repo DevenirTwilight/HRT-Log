@@ -1,5 +1,9 @@
 # P2-A/B 舌下人口模型研究（已完成隔离研究，未投产）
 
+> **新增2026-10-11 研究阶段：** [P2-AZ 组级跨研究留一重选、复杂度敏感性与绝对验证限制](p2az-retrospective-transfer/P2-AZ-REPORT.md)。从32个M1与216个M2新网格中每折仅用另两项研究选择参数：18条件情景×3组留出，M2对正式Legacy在54/54回顾性归一形状比较中更低，对简单M1在48/54更低。**全部三项来源在建模设计前都已见，54情景高度相关，不是54个外部患者、统计显著性或个人绝对pg/mL验证**；模型复杂度选择依赖主观惩罚，P2-C HOLD。研究代码、54折实数checkpoint及Github测试已于 [PR#17](https://github.com/DevenirTwilight/HRT-Log/pull/17) 提交草稿评审；PR合并前不视为默认分支成果。
+
+
+
 ## P2-R：跨研究人体证据整合及M0/M1/M2审查门槛（2026-10-10）
 
 [完整理论与门槛](p2r-cross-study-evidence-upgrade-gates.md)、[9条报告有8个命名队列ID（人群重叠待查）的来源台账](p2r-cohort-evidence-ledger.json)、[不冒充监管要求的内部准入政策](p2r-upgrade-policy.json)、[fail-closed审查程序](../../../tools/pk-research/p2r_evidence_gate.py)及[14项正反测试](../../../tools/pk-research/test_p2r_evidence_gate.py)。以ICH M15 2026用途/风险/独立验证、M10 2023生物分析方法学、FDA人口PK2022评估原则为参考，但内部两独立holdout/改善10%/退化不超5%均属未来新数据开封前必须审阅冻结的**提议**，非官方数值标准。真实完整独立锁定SL人体PK时序仍为0，Price与Doll等均已见或数据不合格，Yager与硕士论文同队列。脚本永不自动认证模型、人体90%覆盖或批准APK。P1、生产E2_SL、P2冻结历史及签名APK不改。
