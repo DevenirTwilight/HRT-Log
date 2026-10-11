@@ -1,0 +1,34 @@
+name: P2-BA evidence-use and three-study robustness replay
+
+on:
+  push:
+    paths:
+      - 'docs/pk-research/p2/p2ba-evidence-use/**'
+      - 'tools/pk-research/p2ba_evidence_use_gate.py'
+      - 'tools/pk-research/test_p2ba_evidence_use_gate.py'
+      - '.github/workflows/p2ba-evidence-use.yml'
+  pull_request:
+    paths:
+      - 'docs/pk-research/p2/p2ba-evidence-use/**'
+      - 'tools/pk-research/p2ba_evidence_use_gate.py'
+      - 'tools/pk-research/test_p2ba_evidence_use_gate.py'
+      - '.github/workflows/p2ba-evidence-use.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  study-level-gating:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Recompute evidence and capability matrix from frozen P2-AZ
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tools/pk-research -p 'test_p2ba_evidence_use_gate.py' -v
+          python tools/pk-research/p2ba_evidence_use_gate.py --out /tmp/p2ba-replayed.json --emit
+          if [ -f docs/pk-research/p2/p2ba-evidence-use/p2ba-results.json ]; then
+            cmp docs/pk-research/p2/p2ba-evidence-use/p2ba-results.json /tmp/p2ba-replayed.json
+          else
+            echo 'P2BA_BOOTSTRAP: archive CLI-output bytes then enable strict cmp on next commit'
+          fi
