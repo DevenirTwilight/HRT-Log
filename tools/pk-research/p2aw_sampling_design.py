@@ -166,6 +166,22 @@ def rank_combinations(legacy: dict, models: list[dict], extra: int, extended: bo
     return sorted(rows, key=lambda r: (-r['legacy_v_m2_min'], -r['legacy_v_m2_median'], tuple(r['hours'])))
 
 
+def stable_public_numbers(value):
+    """Round model geometry to 9 decimal places for Python/libm portability.
+
+    Differences below 1e-9 in a dimensionless, noise-free geometry are not
+    interpretable experimental information; retain full precision internally
+    for selection and make the published JSON stable across runtimes.
+    """
+    if isinstance(value, dict):
+        return {key: stable_public_numbers(val) for key, val in value.items()}
+    if isinstance(value, list):
+        return [stable_public_numbers(val) for val in value]
+    if isinstance(value, float):
+        return round(value, 9)
+    return value
+
+
 def run_study(p2x: dict, legacy: dict) -> dict:
     models = frozen_candidates(p2x)
     one = ranked_one_extra(legacy, models)
@@ -181,7 +197,7 @@ def run_study(p2x: dict, legacy: dict) -> dict:
     scenarios = ((0., 1.), (0., 1., .25), (0., 1., 2.), (0., 1., 8.), (0., 1., 24.),
                  (0., 1., .25, 2.), (0., 1., 2., 8.), (0., 1., 8., 24.),
                  (0., 1., .25, .5, 2.), (0., 1., .25, 2., 8., 24.))
-    return {
+    return stable_public_numbers({
         'phase': 'P2-AW', 'date': '2026-10-11',
         'status': 'MODEL_BASED_SAMPLING_GEOMETRY_NOT_HUMAN_DATA',
         'p2as_original_zip_sha256': ARCHIVE_SHA256,
@@ -205,7 +221,7 @@ def run_study(p2x: dict, legacy: dict) -> dict:
         'three_extra_best_0_24h': three_full[:8],
         'predeclared_design_scenarios': [profile_schedule(t, legacy, models) for t in scenarios],
         'single_dose_normalized_shape_at_times': late,
-    }
+    })
 
 
 def main() -> None:

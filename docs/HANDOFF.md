@@ -16,9 +16,11 @@
 
 # P2-AW（2026-10-11）——已冻结 Legacy/M2 的理论采样辨识与数据取得门槛
 
+**跨 Python 复算精度规范：** 数学核内部保持 double 浮点全精度，向公开 JSON 输出前所有浮点结果稳定舍入至小数点后 9 位；本地 Python 3.13 最初产生的全精度 JSON 无法与 GitHub Python 3.11 逐字节匹配（在单元测试中被明确检出），已据此修复为可移植的机器结果；不能将 1e-15 的浮点差异解释为科研效果。专项 CI 的实际最终状态须以 GitHub 最新运行结果为准。
+
 **本次是新完成的独立数学/证据设计分析（非新人体样本，非功效预测，非给药建议）。** 已基于 2026-10-10 原始 P2-AS ZIP（SHA-256 `f88b6acdda3e4de27dc1fb0fb8d0b62b2e51ac0b2d85347f3219eb4656662b40`）验证内部冻结 P2-X 40 行/15 个 M2 候选、正式 Legacy 指数核输入文件的 SHA。对单剂、归一化 H(1h)=1 曲线，以同时允许未知常数基线 b 和正浓度幅度 G 的仿射投影相关残差 `d=sqrt(1-rho^2)` 做**仅模型内**网格设计审计。0、1h 两个锚点理论 d=0；加入 15min 时，Legacy vs M2 最难区别候选 d≈0.44583，但人为 ±15min 时钟压力（最差实际 0min）可令其 d=0；2h 单独附加点 d≈0.26306，±15min 最差≈0.22732。在 24h 冻结 M2 归一化单剂尾项跨候选相差约 67.5 倍，但均可能接近实际基线/检测限，不能当个体浓度、人体稳定谷值或模型置信区间。这一理论上的“15min 优于 24h”只针对本文形状区分指标，**不能**取代真实 8–24h 尾部观测的科学价值。15 套 M2 内部仍有难辨识组合。
 
-**实际必须保存到仓库的成果：** `docs/pk-research/p2/p2aw-identifiability-design/P2-AW-REPORT.md`（全文和文献核对、许可/时钟/检测门槛）、`p2aw-geometry.json`（SHA-256 `a919a4999921949b5ef89b6eba0a3de735b9541663395caf3cd82b29bf691a71`）、`README.md`、`tools/pk-research/p2aw_sampling_design.py`、`test_p2aw_sampling_design.py`（20/20 本地通过）、`.github/workflows/p2aw-sampling-design.yml`。独立 CLI 重算与原 JSON 逐字节一致。GitHub 的专项 CI 与 Android/JVM/设备回归必须各自验收后才可在此写最终结果；新 PR 研究提交不是默认分支已合并。
+**实际必须保存到仓库的成果：** `docs/pk-research/p2/p2aw-identifiability-design/P2-AW-REPORT.md`（全文和文献核对、许可/时钟/检测门槛）、`p2aw-geometry.json`（SHA-256 `ecb62798eb785d2c4ae6aca48a2dd5a2b0a6b4f65fd4b7fe8ed875271819df90`）、`README.md`、`tools/pk-research/p2aw_sampling_design.py`、`test_p2aw_sampling_design.py`（20/20 本地通过）、`.github/workflows/p2aw-sampling-design.yml`。独立 CLI 重算与原 JSON 逐字节一致。GitHub 的专项 CI 与 Android/JVM/设备回归必须各自验收后才可在此写最终结果；新 PR 研究提交不是默认分支已合并。
 
 **边界与下一步：** Doll 2022 的实际研究采样设计为 0/1/2/3/4/6/8h、LC-MS/MS+免疫法（不含本次 15/30min 设计点或 12/24h）；Price/Rosano 组级数据既已在开发中接触，不能重新标为盲法外部验证。下一步先核实合法可公开的原作者逐时统计、真实给药零点及采血时钟、方法与 LLOQ、基线处理；未来任何未见独立人群评分要在解锁新数据前冻结方案。没有得到新独立的人体 SL E2 多时点曲线，也没有证明个人 pg/mL 精度；`P2-C HOLD`，不能改变生产引擎、模型参数、历史、APK、签名或用药方式。科研成果实际提交并验证远端、同步更新本文件的强制规则继续优先适用。
 

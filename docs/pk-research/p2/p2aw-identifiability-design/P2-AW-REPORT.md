@@ -76,7 +76,7 @@ P2-AR-REAL / P2-AU 已在 Yaish (VNC54) 11 名参与者、20 次配对访视的�
 
 - 程序：`tools/pk-research/p2aw_sampling_design.py`，仅 Python 标准库；严格复核原始 P2-AS ZIP、内部 P2-X 与 Legacy 三层 SHA-256；拒绝覆盖已有结果。
 - 回归：`tools/pk-research/test_p2aw_sampling_design.py`，20 项非个人数据数学单元测试、冻结参数/批次、边界、时钟扰动、输出逐字节一致检查。
-- 机器结果：`docs/pk-research/p2/p2aw-identifiability-design/p2aw-geometry.json`（确定性输出）。
+- 机器结果：`docs/pk-research/p2/p2aw-identifiability-design/p2aw-geometry.json`（确定性输出；公开浮点字段为小数点后 9 位，SHA-256 `ecb62798eb785d2c4ae6aca48a2dd5a2b0a6b4f65fd4b7fe8ed875271819df90`）。内部模型求解与排序始终采用原始 double 精度。2026-10-11 首次 GitHub 3.11 重算发现 Python 3.13 机器 JSON 浮点末位不同；原版字节比较失败，这是有效的复现门槛反馈，而非模型数值结论被推翻。已增加统一输出舍入并重新跑 CI。
 - 自动化：`.github/workflows/p2aw-sampling-design.yml`，从 GitHub 归档的 P2-AS 原始 ZIP 重算并逐字节对照已提交 JSON；单独的 Android/JVM/模拟器 CI 只确认应用未因研究文档受到破坏。
 
 **本研究结论：** 不可以只凭两点给药前后数据判定候选优劣；增加早期真实时间点在冻结形状上可提高区分 Legacy/M2 的数学能力，但若准确时钟无法验证，其信息量可退化；完整长尾与稳态仍需要测量质量和给药历史。没有获得新独立人体临床外测、未为单一人的绝对 pg/mL 标定、没有验证晚期预测覆盖。**P2-C 仍为 HOLD，生产 E2_SL、Kotlin 引擎、数据库、APK 均不变。**
