@@ -22,6 +22,8 @@
 
 **实际必须保存到仓库的成果：** `docs/pk-research/p2/p2aw-identifiability-design/P2-AW-REPORT.md`（全文和文献核对、许可/时钟/检测门槛）、`p2aw-geometry.json`（SHA-256 `ecb62798eb785d2c4ae6aca48a2dd5a2b0a6b4f65fd4b7fe8ed875271819df90`）、`README.md`、`tools/pk-research/p2aw_sampling_design.py`、`test_p2aw_sampling_design.py`（20/20 本地通过）、`.github/workflows/p2aw-sampling-design.yml`。独立 CLI 重算与原 JSON 逐字节一致。GitHub 的专项 CI 与 Android/JVM/设备回归必须各自验收后才可在此写最终结果；新 PR 研究提交不是默认分支已合并。
 
+**新增潜在人体数据来源线索（仅文献，尚未取得原始曲线）：** P2-AW 资料核查还发现 Fridriksdóttir 1996 PMID8999433（HPβCD E2 特殊舌下复合物，n6、100µg、12h、15min 峰值 568±97 pmol/L）及 Hoon 1993 PMID8300895（HPβCD 0.675mg，n5，最长48h，舌下/口服交叉）。两项均不是普通舌下片，原始逐时表、个体身份去重、检测可比性及再使用授权尚未核实，**不可直接纳入普通片的临床外测**。完整链接和准入边界已补入 P2-AW 报告。来源为公开发表摘要，不是新患者数据。
+
 **边界与下一步：** Doll 2022 的实际研究采样设计为 0/1/2/3/4/6/8h、LC-MS/MS+免疫法（不含本次 15/30min 设计点或 12/24h）；Price/Rosano 组级数据既已在开发中接触，不能重新标为盲法外部验证。下一步先核实合法可公开的原作者逐时统计、真实给药零点及采血时钟、方法与 LLOQ、基线处理；未来任何未见独立人群评分要在解锁新数据前冻结方案。没有得到新独立的人体 SL E2 多时点曲线，也没有证明个人 pg/mL 精度；`P2-C HOLD`，不能改变生产引擎、模型参数、历史、APK、签名或用药方式。科研成果实际提交并验证远端、同步更新本文件的强制规则继续优先适用。
 
 ---
