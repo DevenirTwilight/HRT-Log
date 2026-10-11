@@ -20,6 +20,7 @@ class UnifiedConcentrationObservationTest {
         assertTrue(researchObservationPoints(rows,ResearchDisplay.RELATIVE,false).isEmpty())
         assertTrue(researchObservationPoints(rows,ResearchDisplay.STUDY,false).isEmpty())
         assertTrue(researchObservationPoints(listOf(pg.copy(value=Double.MAX_VALUE)),ResearchDisplay.CONDITIONAL,true).isEmpty())
+        assertTrue(researchObservationPoints(listOf(pg.copy(value=Double.MAX_VALUE)),ResearchDisplay.CONDITIONAL,false).isEmpty())
         assertEquals(100.0,pg.value,0.0);assertEquals(367.1,pmol.value,0.0)
     }
 }

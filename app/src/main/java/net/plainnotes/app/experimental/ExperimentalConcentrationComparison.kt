@@ -36,6 +36,9 @@ fun researchObservationPoints(labs: List<net.plainnotes.app.data.LabValueEntity>
     val factor = if (pmol) net.plainnotes.app.pk.Pk.PMOL_PER_PG else 1.0
     return labs.filter { it.analyte_code == ConcentrationCalculator.E2_CODE && it.unit in listOf("pg/mL", "pmol/L") && it.value.isFinite() && it.value >= 0 }.mapNotNull {
         val concentration = it.value * (if (it.unit == "pmol/L") 1.0 / net.plainnotes.app.pk.Pk.PMOL_PER_PG else 1.0) * factor
-        if (concentration.isFinite()) Triple(ConcentrationCalculator.hours(it.sampled_utc), concentration, 0.0) else null
+        // Keep axis rounding/headroom finite even for corrupt, extreme finite lab values.
+        // This filters only the display layer; the original observation is never rewritten.
+        if (concentration.isFinite() && concentration <= Double.MAX_VALUE / 4.0)
+            Triple(ConcentrationCalculator.hours(it.sampled_utc), concentration, 0.0) else null
     }
 }
