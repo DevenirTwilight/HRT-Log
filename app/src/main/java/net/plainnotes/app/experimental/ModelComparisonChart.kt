@@ -77,14 +77,22 @@ private fun niceStep(span: Double, target: Int): Double {
     var start by rememberSaveable(minX, maxX) { mutableDoubleStateOf(minX) }
     var end by rememberSaveable(minX, maxX) { mutableDoubleStateOf(maxX) }
     val density = LocalDensity.current
-    val leftPad = with(density) { 48.dp.toPx() }; val bottomPad = with(density) { 30.dp.toPx() }; val topPad = with(density) { 10.dp.toPx() }
+    val labelStyle = TextStyle(color = textColor, fontSize = 10.sp)
+    val peakForLabels = (data.series.map { it.values.maxOrNull() ?: 0.0 } +
+        listOf(data.band?.second?.maxOrNull() ?: 0.0) + data.points.map { it.second + it.third }).maxOrNull() ?: 0.0
+    val topForLabels = niceStep(if (peakForLabels > 0) peakForLabels * 1.1 else 1.0, 4).let { step ->
+        ceil((if (peakForLabels > 0) peakForLabels * 1.1 else 1.0) / step) * step
+    }
+    val widestAxisLabel = listOf(0.0, topForLabels, topForLabels / 2).maxOf { measurer.measure(valueLabel(it), labelStyle).size.width }.toFloat()
+    val leftPad = max(with(density) { 48.dp.toPx() }, widestAxisLabel + with(density) { 8.dp.toPx() })
+    val bottomPad = with(density) { 30.dp.toPx() }; val topPad = with(density) { 10.dp.toPx() }
     val locale = androidx.compose.ui.platform.LocalConfiguration.current.locales[0]
     val h24 = android.text.format.DateFormat.is24HourFormat(androidx.compose.ui.platform.LocalContext.current)
     val hourFmt = remember(locale, h24) { DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, if (h24) "Hm" else "hm"), locale) }
     val dayFmt = remember(locale) { DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, "Md"), locale) }
     val minSpan = min(1.0, maxX - minX)
     Canvas(modifier.testTag(tag).semantics { contentDescription = data.description }
-        .pointerInput(minX, maxX) {
+        .pointerInput(minX, maxX, leftPad) {
             detectTransformGestures { centroid, pan, zoom, _ ->
                 val w = size.width - leftPad; if (w <= 0) return@detectTransformGestures
                 val span = end - start
@@ -94,7 +102,7 @@ private fun niceStep(span: Double, target: Int): Double {
                 s = s.coerceIn(minX, maxX - newSpan); start = s; end = s + newSpan
             }
         }
-        .pointerInput(minX, maxX) { detectTapGestures { o -> val w = size.width - leftPad; if (o.x >= leftPad && w > 0) select(start + (end - start) * ((o.x - leftPad) / w).coerceIn(0f, 1f)) } }) {
+        .pointerInput(minX, maxX, leftPad) { detectTapGestures { o -> val w = size.width - leftPad; if (o.x >= leftPad && w > 0) select(start + (end - start) * ((o.x - leftPad) / w).coerceIn(0f, 1f)) } }) {
         val w = size.width - leftPad; val h = size.height - bottomPad - topPad
         if (w <= 0 || h <= 0 || end <= start) return@Canvas
         val visible = data.series.flatMap { s -> ChartViewport.samples(data.x, s.values, start, end).map { it.second } } +
@@ -105,7 +113,6 @@ private fun niceStep(span: Double, target: Int): Double {
         val top = ceil((if (peak > 0) peak * 1.1 else 1.0) / step) * step
         fun px(x: Double) = leftPad + ((x - start) / (end - start) * w).toFloat()
         fun py(y: Double) = topPad + (h - (y / top * h)).toFloat()
-        val labelStyle = TextStyle(color = textColor, fontSize = 10.sp)
         var v = 0.0
         while (v <= top + 1e-9) {
             val yy = py(v)
@@ -164,14 +171,21 @@ private fun niceStep(span: Double, target: Int): Double {
 private fun DrawScope.drawTimeAxis(origin: Double?, start: Double, end: Double, px: (Double) -> Float, y: Float, grid: Color, style: TextStyle,
                                    measurer: androidx.compose.ui.text.TextMeasurer, hourFmt: DateTimeFormatter, dayFmt: DateTimeFormatter) {
     val span = end - start
+    var previousRight = Float.NEGATIVE_INFINITY
+    fun label(x: Float, text: String) {
+        val m = measurer.measure(text, style)
+        val left = axisLabelLeft(x, m.size.width.toFloat(), px(start), px(end), previousRight, 8.dp.toPx()) ?: return
+        drawText(m, topLeft = Offset(left, y + 12f))
+        previousRight = left + m.size.width
+    }
     if (origin != null) {
         val stepH = when { span <= 2 -> 0.25; span <= 4.5 -> 0.5; span <= 9 -> 1.0; span <= 25 -> 4.0; else -> 8.0 }
         var t = ceil((start - origin) / stepH) * stepH
         while (origin + t <= end + 1e-9) {
             val x = px(origin + t)
             drawLine(grid.copy(alpha = 0.5f), Offset(x, 0f), Offset(x, y), 1f)
-            val label = if (stepH < 1) "+%.2gh".format(t) else "+%dh".format(Math.round(t))
-            val m = measurer.measure(label, style); drawText(m, topLeft = Offset(x - m.size.width / 2f, y + 12f))
+            val prefix = if (t >= 0) "+" else ""
+            label(x, prefix + if (stepH < 1) "%.2gh".format(t) else "%dh".format(Math.round(t)))
             t += stepH
         }
         return
@@ -184,8 +198,14 @@ private fun DrawScope.drawTimeAxis(origin: Double?, start: Double, end: Double, 
     while (t <= end) {
         val x = px(t)
         drawLine(grid.copy(alpha = 0.5f), Offset(x, 0f), Offset(x, y), 1f)
-        val m = measurer.measure(Instant.ofEpochMilli((t * 3_600_000).toLong()).atZone(zone).format(fmt), style)
-        drawText(m, topLeft = Offset(x - m.size.width / 2f, y + 12f))
+        label(x, Instant.ofEpochMilli((t * 3_600_000).toLong()).atZone(zone).format(fmt))
         t += stepH
     }
+}
+
+/** Fit axis text to the plot and skip labels that would overlap; tick times and curve coordinates stay unchanged. */
+internal fun axisLabelLeft(center: Float, width: Float, plotLeft: Float, plotRight: Float, previousRight: Float, gap: Float): Float? {
+    if (!center.isFinite() || !width.isFinite() || width < 0 || width > plotRight - plotLeft) return null
+    val left = (center - width / 2).coerceIn(plotLeft, plotRight - width)
+    return left.takeIf { it >= previousRight + gap }
 }

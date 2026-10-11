@@ -65,6 +65,7 @@ import java.time.Instant
     }
     val locale = currentLocale()
     fun fmt(v: Double) = String.format(locale, "%.3f", v)
+    fun chartFmt(v: Double) = String.format(locale, if (v >= 10.0 && v < 1_000_000.0) "%.0f" else "%.3g", v)
     val colors = MaterialTheme.colorScheme
     val modelColors = mapOf(ResearchModel.M2 to colors.primary, ResearchModel.M1 to colors.tertiary, ResearchModel.LEGACY to colors.secondary)
     Column(Modifier.fillMaxSize().padding(top = pad.calculateTopPadding())) {
@@ -145,7 +146,7 @@ import java.time.Instant
                         band = if (ResearchModel.M2 in active) r.m2Range.first.map { it * factor }.toDoubleArray() to r.m2Range.second.map { it * factor }.toDoubleArray() else null,
                         bandColor = modelColors.getValue(ResearchModel.M2), longTail = r.base.longTail, doses = r.base.doses, points = points,
                         axisOrigin = if (window.relative || display == ResearchDisplay.STUDY) r.base.originHour else null,
-                        description = stringResource(R.string.uc_chart_description, active.joinToString { it.name }, unit)), hour, { hour = it }, ::fmt, tag = "unified-chart")
+                        description = stringResource(R.string.uc_chart_description, active.joinToString { it.name }, unit)), hour, { hour = it }, ::chartFmt, tag = "unified-chart")
                     Row(Modifier.horizontalScroll(rememberScrollState()).testTag("curve-legend"), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         active.forEach { Text(it.name, color = modelColors.getValue(it)) }
                     }
