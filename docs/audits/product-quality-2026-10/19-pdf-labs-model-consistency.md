@@ -56,7 +56,7 @@
 | data（含迁移 1→9）/ reminder / app | 72 / 14 / 510，0 失败；61 项跳过 = 13 项原有环境性跳过 + 48 项默认不运行的视觉审计；`PeriodStabilityTest` 5/5 |
 | lint + Debug + Release + 两个 androidTest APK | lint 0 错误；全部构建成功；Release APK 声明 `c41cb4a`、git、干净 |
 | 发布清单（无 INTERNET）/ 模型锁 / Schema 不变 | 全部通过 |
-| GitHub Actions | 推送后记录 |
+| GitHub Actions（`de64f7e`，含 `c41cb4a`） | android.yml push 38273875224 / pull_request 38273880913：jvm、android、device-tests 全部 success。device-tests 中 app 仪器测试 73 项 0 失败（含新增的 `SublingualPdfAndroidTest`，用 Android 原生 PDF 生成四种途径组合的报告）；2 项跳过是进程重启测试，由随后的 `run_disguise_restart.py` 单独运行并通过。校准回放 38273875213 / 38273880892 success |
 
 ## 7. 未验证与后续
 
