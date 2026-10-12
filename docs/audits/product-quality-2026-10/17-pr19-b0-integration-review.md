@@ -118,3 +118,16 @@ python3 -m unittest discover -s tools/pk-research -p 'test_*.py'   # 283 项：2
 - lint 0 错误；Debug 和 Release 构建通过；Release APK 声明 `343a183`、git、干净。
 - `check_release_manifest.py` 通过；`check_unified_concentration.py` 通过。
 - **CI**：`c294f48` 的 android.yml（push 38267754193、pull_request 38267765921）三个作业全部 success。PR #19 自带的校准回放工作流（pr19-calibration.yml）在 `c294f48` 上**失败**：它调用守卫，却没有拉取历史提交，于是按设计以 `HistoricalObjectMissing` 失败（不是静默跳过）。修复提交 `4db4770` 给该工作流加了同样的拉取步骤（本地先用浅克隆复现了失败和修复）。`4db4770` 上四个运行全部 success：android.yml push 38269882411 / pull_request 38269890606，校准回放 push 38269882393 / pull_request 38269890544。
+
+## 9. 对照产品负责人第二份批准逐项核对（2026-10-12）
+
+| 条件 | 证据 |
+|---|---|
+| 历史 164 个文件哈希可复现 | `historical_baseline()` 在 CI jvm 作业与本地均为 164/164；`test_no_frozen_protocol_or_baseline_was_rewritten` 也断言 164 |
+| 43 + 2 个研究文件实时锁定 | 分类不变（43/7/114 + 2）；另加 PR #19 的 10 个 M2 内核/参考数据文件；`test_partition_is_exact…` 按文件名逐一断言，不只看数量 |
+| 受保护显示文件的未授权变化必须失败 | `ConcentrationScreenApprovalChainTest`（未批准修改、哈希篡改、非负责人、短 SHA、无关证据、伪造追加、链条断裂/倒序/清空）与 `test_pk_display_change_without_approval_fails`，每个用例断言失败原因；沙箱未修改时必须先通过 |
+| 偏离链、研究结果、数值合约不变 | 7 条偏离记录按规范化哈希锁定；5/5 研究结果回放逐字节一致；`M2OnlyNumericalContractTest` 3/3；PR #19 校准回放工作流 success |
+| AppShell 正常开发，导航有回归测试 | AppShell 为仅历史文件；`UnifiedConcentrationNavigationTest`（真实导航到唯一浓度入口、无模型选择器）保留，并由 `test_appshell_is_ordinary_and_its_navigation_is_pinned_by_behaviour` 固定其关键断言 |
+| 三次 ConcentrationScreen 变更逐项核实 | 见 §8；`display-approvals.json` 中 `review_status`：§60 对应的 `PD-2026-10-11-ORIGINAL-UI-CONCENTRATIONSCREEN` 为 **HUMAN_REVIEW_REQUIRED**（需求文字晚于代码 23 分钟）；另两条为 VERIFIED_AGAINST_GIT_AND_REQUIREMENTS。测试固定该状态，不能被悄悄改为已核实 |
+| 扫描 PR #19 新增依赖 | 64 个非文档文件逐一归类（§8）；PK 源码目录下的未分类文件直接失败 |
+| 未删除测试、未降低断言 | 改写的测试都换成了等价或更强的检查（见 §8）；变异测试 13/13 与 D-2 手工变异 3/3 证明负向测试能发现违规 |

@@ -20,7 +20,8 @@
     "diff": "+16/-14 lines, display labels/preview wiring only; no calculator, parameter, LabFit or database calls",
     "decision_text_commit": "8216f309c0d883cc7b54bcd391f1351a1dc043ca (2026-10-11T21:16+02:00)"
    },
-   "human_review": "REQUIRED: the §60 text was committed 23 minutes AFTER the code commit 425a7ab (20:53+02:00); content matches the change, but the written record post-dates it. Confirm this was your instruction."
+   "human_review": "REQUIRED: the §60 text was committed 23 minutes AFTER the code commit 425a7ab (20:53+02:00); content matches the change, but the written record post-dates it. Confirm this was your instruction.",
+   "review_status": "HUMAN_REVIEW_REQUIRED"
   },
   {
    "id": "PD-2026-10-12-M2-ONLY-CONCENTRATIONSCREEN",
@@ -40,7 +41,8 @@
     "diff": "+25/-13 lines, labels and display predicates only",
     "decision_text_commit": "644fe93f65fd4301f4d967f03aff67593e23e0f7 (2026-10-12T08:02Z, before the code commit at 08:28Z)"
    },
-   "human_review": "recommended (decision recorded before the change)"
+   "human_review": "recommended (decision recorded before the change)",
+   "review_status": "VERIFIED_AGAINST_GIT_AND_REQUIREMENTS"
   },
   {
    "id": "PD-2026-10-12-M2-ONLY-UNSUPPORTED-EMPTY-STATE",
@@ -60,7 +62,8 @@
     "diff": "+1/-1 line, display predicate only",
     "decision_text_commit": "644fe93f65fd4301f4d967f03aff67593e23e0f7 (before the code commit at 08:30Z)"
    },
-   "human_review": "recommended (decision recorded before the change)"
+   "human_review": "recommended (decision recorded before the change)",
+   "review_status": "VERIFIED_AGAINST_GIT_AND_REQUIREMENTS"
   },
   {
    "id": "D-1：选择方案 B",

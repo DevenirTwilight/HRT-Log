@@ -150,6 +150,10 @@ class ConcentrationScreenApprovalChainTest(unittest.TestCase):
             blob=guard.git_blobs(a['evidence']['commit'],[self.NAME])[self.NAME]
             self.assertEqual(guard.hashlib.sha256(blob).hexdigest(),a['new_sha256'],a['id'])
             self.assertIn('owner_decision',a);self.assertIn('human_review',a)
+        # §60 was written after its code commit: it stays HUMAN_REVIEW_REQUIRED until the owner confirms it (REQUIREMENTS §69 item 2).
+        status={a['id']:a.get('review_status') for a in self.chain(approvals)[:3]}
+        self.assertEqual(status[migrated[0]],'HUMAN_REVIEW_REQUIRED')
+        self.assertTrue(all(s in ('HUMAN_REVIEW_REQUIRED','VERIFIED_AGAINST_GIT_AND_REQUIREMENTS') for s in status.values()))
     def test_unapproved_modification_fails(self):
         self.rejects('last approved state',change_file=lambda f:f.write_bytes(f.read_bytes()+b' '))
     def test_tampered_hash_fails(self):
