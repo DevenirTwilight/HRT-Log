@@ -55,7 +55,7 @@
 
 - 默认分支 CI success（f53726f）；PR #19 CI 7/7 success（aecbd7d）。
 - 本地（`0d99591`，干净克隆，SDK 37）：domain 58、pk-engine 58、importer 12、data 72、reminder 14、app 405（13 项跳过），`PeriodStabilityTest` 5/5，lint 0 错误，Debug/Release 构建、无 INTERNET 检查、研究守卫均通过（审计 13）。
-- CI 38241151594（`6f13c66`）全部 success。
+- CI 38241151594（`6f13c66`）全部 success；加固后 CI 38244330717（`5b2993d`）全部 success。
 - 最近有记录的真机反馈：2026-10-10，ARM64 包，用户手动检查（机型未记录）。
 
 ## 关键文档

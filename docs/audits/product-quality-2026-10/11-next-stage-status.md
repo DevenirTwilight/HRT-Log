@@ -28,7 +28,7 @@ PR：**未创建**。Release / 签名 / 交付：**无**。
 | Gate / 批次 | 状态 | 文档 |
 |---|---|---|
 | G0 / D-13 科研守卫双域 | **WAITING_APPROVAL**（设计 + 依赖闭包 + 实测回放已完成） | 12、`B0-protected-file-matrix.json` |
-| B1 构建侧 | **DONE**（本地全量回归 PASS；`0d99591` 的 CI 待推送后确认） | 13 |
+| B1 构建侧 | **DONE**（本地全量回归 PASS；CI 38244330717 @5b2993d 全部 success） | 13 |
 | B1 关于页 | **WAITING_APPROVAL**（补丁 v2 已验证可编译、测试通过、守卫拦截） | 13 §7 |
 | D-4 versionCode | **WAITING_APPROVAL** | 07 |
 | G1 / D-1 M2 显示 | **WAITING_APPROVAL** | 14 |

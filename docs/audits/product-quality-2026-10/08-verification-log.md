@@ -71,3 +71,4 @@
 | 34 | 干净克隆全量：domain/pk-engine/importer/data/reminder/app 单测、lint、Debug、Release、manifest 检查、P2 守卫 | 全部 PASS；app 405 项/13 跳过 |
 | 35 | `scripts/apk_provenance.py` 读取 Release | origin=git、dirty=false、SHA=0d99591…；apk_sha256 bfa58c96…；unsigned |
 | 36 | 临时应用关于页补丁 v2 + 临时 Robolectric 测试；运行守卫测试 | 测试 1/1 PASS；守卫 FAIL（SettingsScreen.kt 被锁定，符合预期）；已还原 |
+| 37 | GitHub Actions android.yml（加固后代码） | run 38244314171 @1e7b79d：cancelled（被下一次推送按 concurrency 取消）；run 38244330717 @5b2993d：jvm/android/device-tests 全部 success |

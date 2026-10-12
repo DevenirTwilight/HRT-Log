@@ -66,7 +66,8 @@
 | run | 提交 | 结果 |
 |---|---|---|
 | 38241151594 | `6f13c66`（初版 B1） | jvm / android / device-tests 全部 **success**。android 作业日志显示 `:app:verifyReleaseProvenance` 已执行，`assembleFullRelease` 成功。`BuildProvenanceTest` 中与 `GITHUB_SHA` 的等值断言：Actions 会给每个步骤注入 `GITHUB_SHA`，Gradle 测试进程继承该环境，因此**推断**已执行；日志没有直接打印，未下载测试产物核对 |
-| （本提交推送后） | `0d99591` 及文档提交 | 见 `11-next-stage-status.md` / `08` |
+| 38244314171 | `1e7b79d`（含 `0d99591` 代码） | cancelled：被下一次推送按 concurrency 规则取消，不是失败 |
+| 38244330717 | `5b2993d`（代码同 `0d99591`，之后只有文档提交） | jvm / android / device-tests 全部 **success**（11:41–11:55Z） |
 
 ## 7. 关于页补丁 v2（未应用）
 
