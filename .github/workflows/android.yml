@@ -16,6 +16,12 @@ jobs:
           java-version: '21'
       - uses: gradle/actions/setup-gradle@0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d
       - run: ./gradlew -PjvmOnly :core:domain:test :pk-engine:test :importer:test --rerun-tasks --no-parallel --max-workers=2
+      # Two-domain guard (audit B0, D-13): the historical domain reads the frozen baseline commit, the recorded research
+      # run and the F1 deviation commit from git objects. A shallow checkout lacks them; a failed fetch fails the job.
+      - name: Fetch frozen P2 history objects
+        run: |
+          git fetch --no-tags --depth=1 origin e89579a02da3c92a9e4976baea729af9d532437e 388ef0fc36dccf3299ff2aac62be94a8914a1f59 d892e9b7ea9d933687c18b5ca2fd3f605b0d1118
+          for c in e89579a02da3c92a9e4976baea729af9d532437e 388ef0fc36dccf3299ff2aac62be94a8914a1f59 d892e9b7ea9d933687c18b5ca2fd3f605b0d1118; do git cat-file -e "$c^{commit}"; done
       - name: Frozen P2 independent research mathematics
         run: |
           python3 -m unittest discover -s tools/pk-research -p 'test_*.py'
@@ -61,6 +67,13 @@ jobs:
           python3 tools/pk-audit/sublingual_p1c1_compare.py --after docs/pk-research/results/sublingual-p1c1-after.json --engine docs/pk-research/results/sublingual-p1c1-engine.json --calculator docs/pk-research/results/sublingual-p1c1-calculator.json --eligibility docs/pk-research/results/sublingual-p1c1-eligibility.json --output app/build/reports/pk-p1c1-comparison
           python3 tools/pk-audit/sublingual_p1c2_compare.py --output app/build/reports/pk-p1c2-comparison
       - run: python3 scripts/check_release_manifest.py
+      # Audit B1 / D-4: the R8-shrunk Release APK must name exactly this commit from a clean checkout, and the delivery
+      # ledger keeps delivered versionCodes strictly increasing (source, APK and certificate identities kept apart).
+      - name: Release APK source identity and delivery ledger
+        run: |
+          python3 -m unittest discover -s scripts -p 'test_*.py'
+          python3 scripts/delivery_ledger.py check
+          python3 scripts/apk_provenance.py "$ANDROID_HOME/build-tools/37.0.0" app/build/outputs/apk/full/release/app-full-release-unsigned.apk --expect-source-sha "$GITHUB_SHA"
       - run: git diff --exit-code -- core/data/schemas docs/PLAN.md
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()

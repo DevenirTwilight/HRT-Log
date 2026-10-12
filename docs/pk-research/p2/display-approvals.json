@@ -1,0 +1,4 @@
+{
+ "note": "Append-only owner approvals for PK display files (guard-classification.json display_review). Each entry: id, file, approver (must be the product owner), date, scope, previous_sha256, new_sha256, evidence {commit, path} where the cited file at that commit contains the id. The guard verifies the chain and the evidence in git history; reviewers verify that the cited text is the owner's decision.",
+ "approvals": []
+}

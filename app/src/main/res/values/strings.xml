@@ -1016,4 +1016,15 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="calib_last_used">Latest observation: participates in the fit</string>
 <string name="calib_last_excluded">Latest observation: automatically excluded from the fit</string>
 <string name="calib_last_not_used">Latest observation: not a fit candidate</string>
+<string name="about_source_title">Build source</string>
+<string name="about_source_commit">Source commit</string>
+<string name="about_source_time">Commit time (UTC)</string>
+<string name="about_source_origin">How the commit was obtained</string>
+<string name="about_source_origin_git">Read from the project’s git checkout</string>
+<string name="about_source_origin_declared">Declared at build time, not verified</string>
+<string name="about_source_origin_unknown">Unknown: built without git information</string>
+<string name="about_source_dirty">This build contains uncommitted changes and is not an official build.</string>
+<string name="about_source_unknown">Unknown</string>
+<string name="about_source_copy">Copy build source</string>
+<string name="about_source_copied">Copied</string>
 </resources>

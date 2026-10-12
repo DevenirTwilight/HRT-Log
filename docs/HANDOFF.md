@@ -1356,3 +1356,19 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 2026-10-07 本次设计接手复核完成：基于远端ab983c5/build11/schema6，不回退MIT/Visit Pack。用户确认时间线+超过90天日期，P0默认日期过滤与反馈问题明确；本轮合成SQL探针合法STARTED/null标题与重复类型，未读真实健康数据、未重新运行旧会话Robolectric探针。修订稿纠正午夜对齐会误归样本、同版本跨多组合阶段、直接换Lab Context key会破坏V1验证等风险；保留存储signature/clinical_signature/validateLinks与完整原数据，另建V2显示投影。旧design/epochs-timeline-p1.md已按用户已确定规则改写，REQ §26追加范围/复现。所有改动仅docs，未改功能/测试源码/版本/schema、未构建APK/跑新实现测试、未签名或发布。下一步必须等用户审核7组待定项，不能因以前“继续”指令跳过本次明确暂停。当前设计提案尚未实施，最新可安装仍build11。
 
 本轮末检：schema6导出建表SQL+guard的内存SQLite STARTED/null标题与重复类型合法；日期谓词复核；文档无冲突标记、代码块配对和git diff --check通过。相对远端接手ab983c5仅四个docs文件修改。旧会话按钮审计不在本次附件范围，本轮未处理；build11交付事实和MIT决定保留。
+
+---
+
+# 产品质量审计 2026-10（进行中，审计分支 `claude/new-session-sbje5o`）
+
+> 为避免与 PR #19 对本文件顶部的修改冲突，本节追加在文件末尾。
+
+2026-10-12 按用户提交的“全仓库产品质量审计”提示词开始只读审计。**阶段 A（仓库基线）完成**：默认分支 f53726f（PR #14 已合并，CI success）；PR #19 OPEN/CI 全绿/未合并，§59–§66 最新浓度页决定只在该分支；用户手机安装版本 UNKNOWN。本地 JVM 测试 domain 58、pk-engine 58、importer 12 与 P2 研究单测 252 项通过；Android 模块/设备测试因容器无 SDK/KVM 而 BLOCKED。发现本文件顶部 P2-AX 节仍写 PR #14 为 Draft（已过期，未改动原文）。报告目录：`docs/audits/product-quality-2026-10/`（README、08-verification-log）。**阶段 B 完成（2026-10-12）**：用户批准 B/C 并补充要求——默认分支为正式基线，PR #19 为待合并方向，状态分 DEFAULT_IMPLEMENTED/PR_IMPLEMENTED/PLANNED/UNVERIFIED。已写 `01-current-product-inventory.md`（32 项功能矩阵、PR #19 对公共组件影响）与 `02-ui-ux-and-user-journeys.md`（IA 两方案、10 个用户任务、逐页诊断）。主要确认问题：返回键直接退出；库存三种剩余天数口径；日历状态仅靠颜色；PR #19 下 PDF 图表与化验冻结估算仍走 Legacy（待阶段 C 写入 03）。**阶段 C 完成（2026-10-12）**：03（PR #19 的 PDF 图与化验冻结估算仍走 Legacy；绝对 pg/mL 大号数字与 PR #18 能力矩阵 m2_absolute_pgml=false 冲突，需用户决策）、04（明文导入临时文件、无备份提醒、伪装暗码限速弱等）、05（30 s 全量轮询含浓度计算、构建无源码 SHA/版本号不变、协议守卫硬编码）。**阶段 D 完成（2026-10-12）**：06 分级任务（R-00…R-33、批次 B0–B5）、07 决策（D-1…D-14，含手机版本识别方法）、evidence-index。**新发现的最高治理问题**：`production-baseline.json` 锁定 164 个生产文件（含 strings.xml/ViewModel/数据层），非 UI 文件和资源永不豁免，普通产品改动无法通过 CI（05 ARCH-10，D-13）。下一步：等待用户决策 D-13/D-1/D-2/D-4；最推荐的第一项是 B1 构建可追溯。全部审计完成，审计本身不改生产代码、Schema、PK、签名或发布。
+
+**B0-DESIGN + B1（2026-10-12，用户 B1 指令）**：新增 `docs/STATUS.md`（单一事实入口）；`09-p2-guard-decoupling-proposal.md` + `09-p2-guard-file-map.json`（164 个基线哈希可从 e89579a 全部复现；提议 9+34 个文件实时锁定、7 个 PK 显示需批准、114 个仅历史回放；守卫**未修改**，等待 D-13）。B1 构建侧已实现：`BuildConfig.SOURCE_SHA/SOURCE_COMMIT_TIME_UTC/SOURCE_DIRTY`，Release 无 git 时失败，proguard 保留字段，新测试 `BuildProvenanceTest`；本地 app 400/data 72/reminder 14、lint、Debug/Release 构建均通过（详见 10 与 08）。关于页显示补丁 `10-about-source-identity.patch` 已准备、**未应用**：`SettingsScreen.kt` 受 P2 基线锁定，需要用户批准 UI 偏离。versionCode 未改（D-4）。下一步：等待用户回答 D-13、D-1、D-2 及关于页偏离。
+
+**下一阶段任务书 S0/G0/B1/G1/G2（2026-10-12）**：分支 HEAD 不变，CI 38241151594（6f13c66）全部 success。B1 加固提交 `0d99591`（SOURCE_ORIGIN、只认本项目 checkout、未跟踪文件计入 dirty、注入 SHA 必须等于 HEAD、Release 要求 origin=git 且干净、`scripts/apk_provenance.py`）；7 种场景矩阵与干净克隆全量回归通过（app 405/13 跳过，PeriodStability 5/5）。G0：在 388ef0f 回放研究，5/5 结果逐字节一致；发现守卫漏锁 2 个研究测试资源；方案与 12 项负向测试计划见 12 号文档和 `B0-protected-file-matrix.json`，**守卫未修改**。D-1/D-2 方案见 14。关于页补丁 v2 已验证但**未应用**。等待用户回答：D-13、关于页偏离、D-4、D-1、D-2。
+
+**B0 双域守卫（2026-10-12，用户批准 D-13 方案 A 等五项决定，REQUIREMENTS §67）**：提交 `b2ba7f6` 单独实施；新增 `guard-classification.json`（+锁）、`display-approvals.json`、`test_guard_two_domain.py`（21 项）；`check_protocol.py` 改为双域（`waiver()` 原样保留）；CI jvm 作业显式拉取 `e89579a`/`388ef0f`/`d892e9b`。原测试与冻结资料未改。本地 273/273，浅克隆不拉取历史时 11 项 ERROR（失败而非跳过）。CI 38257031094 三个作业全部 success。回滚：revert `b2ba7f6`。下一步：关于页 + 构建版本追踪（D-4 交付清单），然后在 PR #19 分支实施 D-1/D-2。不合并 PR、不签名、不发布。
+
+**B1 + 整合审查（2026-10-12，任务书“B0 完整验收、B1 关于页及构建追踪、PR19 分批实施”）**：B0 独立 CI 结论归档于审计 15（CI_VERIFIED_ON_WORK_BRANCH，未进默认分支）。B1：关于页 `0b7a448`，D-4 交付账本 `47e2716`，修复 `cf3e580`（minSdk 26 的 NewApi 崩溃 + aapt2 解析缺陷）；本地回归通过，CI run 38262091486 三个作业全部 success（审计 16）。PR #19 隔离整合（审计 17，仅临时 worktree，未推送）：PR #19 自带测试断言旧守卫语义，改写前需产品负责人批准；另发现未锁定研究输入 `ResearchSublingualV01.kt` 和未受守卫的 `UnifiedConcentrationScreen.kt`。**D-1/D-2 生产代码尚未开始**。下一步：等待批准 17 §6 的方案，然后在 PR #19 分支依次做整合提交、D-1、D-2。不合并 PR、不签名、不发布；versionCode 仍为 25。

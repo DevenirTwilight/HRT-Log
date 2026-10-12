@@ -1,0 +1,16 @@
+{
+ "policy": "Owner decision D-4 (REQUIREMENTS §67, 2026-10-12): every APK actually delivered to the owner gets a strictly larger versionCode than every earlier delivery, keeps applicationId and the original signing certificate, and is recorded here with its source commit, APK SHA-256 and certificate SHA-256. Append-only; checked by scripts/delivery_ledger.py. Development commits that are never delivered do not bump versionCode. Private download links, keys and passwords never go here.",
+ "application_id": "net.plainnotes.app",
+ "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
+ "pre_policy": {
+  "max_version_code": 25,
+  "note": "Before D-4, several different privately delivered APKs (2026-10-09 to 2026-10-12, e.g. APK 6cda8775…, 2a34afa0…, d9d874e8…) all used versionCode 25 / versionName 0.2.0, so the installed build cannot be told apart by version alone. The public GitHub Release v0.2.0 (2026-10-06) used versionCode 5. Their source and APK hashes stay in the cited records; they are not copied here.",
+  "evidence": [
+   "docs/releases/0.2.0-hotfix.md (public v0.2.0: versionCode 5)",
+   "docs/delivery/full-apk-owner-test-2026-10.json (default branch, source 5133a61, APK 6cda8775…)",
+   "docs/HANDOFF.md on the default branch (build25 universal/arm64/compact deliveries)",
+   "docs/HANDOFF.md on PR #19 branch feature/unified-concentration-20261011 (last: source e98d5e0, APK d9d874e8…)"
+  ]
+ },
+ "deliveries": []
+}
