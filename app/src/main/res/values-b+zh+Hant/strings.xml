@@ -1027,4 +1027,5 @@
 <string name="about_source_unknown">未知</string>
 <string name="about_source_copy">複製建置來源</string>
 <string name="about_source_copied">已複製</string>
+    <string name="export_privacy_notice">此匯出檔案不會由 HRT Log 加密。儲存到你選擇的位置後，其保護取決於該位置的權限與服務提供者。請妥善保管，避免意外分享。加密備份（.pnbak）不屬於此類匯出。</string>
 </resources>

@@ -3,6 +3,9 @@ package net.plainnotes.app.ui
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.Modifier
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -19,7 +22,8 @@ import java.time.LocalDate
     val context=LocalContext.current;val labels=checkinLabels();val schedules=state.medications.associate{it.id to scheduleText(state.schedules[it.id])}
     var from by rememberSaveable{mutableStateOf(LocalDate.now().minusDays(29).toString())};var to by rememberSaveable{mutableStateOf(LocalDate.now().toString())};var pick by remember{mutableIntStateOf(0)}
     val launcher=rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")){uri->if(uri!=null)model.exportSummary(uri,LocalDate.parse(from),LocalDate.parse(to),context,labels,schedules);onDismiss()}
-    AlertDialog(onDismissRequest=onDismiss,title={Text(stringResource(R.string.wb_summary))},text={Column{
+    AlertDialog(onDismissRequest=onDismiss,title={Text(stringResource(R.string.wb_summary))},text={Column(Modifier.verticalScroll(rememberScrollState())){
+        ExportPrivacyNotice()
         TextButton(onClick={pick=1}){Text(stringResource(R.string.batch_from)+": "+from)}
         TextButton(onClick={pick=2}){Text(stringResource(R.string.batch_to)+": "+to)}
         Text(stringResource(R.string.wb_summary_footer))

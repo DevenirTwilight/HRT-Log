@@ -1027,4 +1027,5 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="about_source_unknown">Inconnu</string>
 <string name="about_source_copy">Copier l’origine de la compilation</string>
 <string name="about_source_copied">Copié</string>
+    <string name="export_privacy_notice">HRT Log ne chiffre pas ce fichier exporté. Sa protection dépend ensuite des autorisations et du fournisseur de l’emplacement choisi. Conservez-le avec soin pour éviter un partage involontaire. Les sauvegardes chiffrées (.pnbak) ne sont pas concernées.</string>
 </resources>

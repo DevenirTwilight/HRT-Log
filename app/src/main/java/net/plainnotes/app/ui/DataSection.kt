@@ -35,6 +35,7 @@ import java.time.LocalDate
     var backupPassword by remember { mutableStateOf<CharArray?>(null) }
     var restoreUri by remember { mutableStateOf<android.net.Uri?>(null) }
     var askBackup by remember { mutableStateOf(false) }
+    var csvOptions by remember { mutableStateOf(false) }
     var pdfOptions by remember { mutableStateOf(false) }
     var pdfChoice by remember { mutableStateOf(90 to true) }
     var wipe by remember { mutableStateOf(false) }
@@ -53,7 +54,7 @@ import java.time.LocalDate
         DataRow(Icons.Outlined.MoveToInbox, stringResource(R.string.import_tm), stringResource(R.string.import_tm_desc)) { importLauncher.launchPicker(arrayOf("*/*")) }
         DataRow(Icons.Outlined.Lock, stringResource(R.string.backup_export), stringResource(R.string.backup_export_desc)) { askBackup = true }
         DataRow(Icons.Outlined.SettingsBackupRestore, stringResource(R.string.backup_restore), stringResource(R.string.backup_restore_desc)) { restoreLauncher.launchPicker(arrayOf("*/*")) }
-        DataRow(Icons.Outlined.TableChart, stringResource(R.string.export_csv), stringResource(R.string.export_csv_desc)) { csvLauncher.launchPicker("notes-export-${LocalDate.now()}.zip") }
+        DataRow(Icons.Outlined.TableChart, stringResource(R.string.export_csv), stringResource(R.string.export_csv_desc)) { csvOptions = true }
         DataRow(Icons.Outlined.PictureAsPdf, stringResource(R.string.export_pdf), stringResource(R.string.export_pdf_desc)) { pdfOptions = true }
         HorizontalDivider()
         DataRow(Icons.Outlined.DeleteForever, stringResource(R.string.wipe), stringResource(R.string.wipe_desc), danger = true) { wipe = true }
@@ -63,8 +64,12 @@ import java.time.LocalDate
         askBackup = false; backupPassword = pw; backupLauncher.launchPicker("notes-${LocalDate.now()}.pnbak") }
     restoreUri?.let { uri -> PasswordDialog(stringResource(R.string.backup_restore), stringResource(R.string.backup_restore_warning), confirm = false, { restoreUri = null }) { pw ->
         restoreUri = null; model.restoreBackup(uri, pw) } }
+    if (csvOptions) PlainExportDialog(stringResource(R.string.export_csv),{csvOptions=false}) {
+        csvOptions=false;csvLauncher.launchPicker("notes-export-${LocalDate.now()}.zip")
+    }
     if (pdfOptions) AlertDialog(onDismissRequest = { pdfOptions = false }, icon = { Icon(Icons.Outlined.PictureAsPdf, null) }, title = { Text(stringResource(R.string.export_pdf)) },
-        text = { Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        text = { Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            ExportPrivacyNotice()
             Text(stringResource(R.string.report_period_label), style = MaterialTheme.typography.labelLarge)
             val ranges=listOf(30,90,180,365)
             AdaptiveChoice(ranges.map{stringResource(R.string.days_short,it)},ranges.indexOf(pdfChoice.first),{pdfChoice=ranges[it] to pdfChoice.second})

@@ -33,4 +33,4 @@
 
 ## B2 开发分支（2026-10-12）
 
-`feature/b2-privacy-reliability-20261012` 从最新默认分支 `1e584285cb1e6f7a4b09a3e20585418d35a28735` 创建。B2-A 已实施，独立完整回归/CI 验收中；B/C/D 尚未开始，必须在前一批 CI 全绿后推进。当前不能宣称 B2 全部完成。见[审计21](audits/product-quality-2026-10/21-b2-privacy-reliability.md)。无默认分支合并、签名、交付、版本/Schema/加密格式/PK 变更。
+`feature/b2-privacy-reliability-20261012` 从最新默认分支 `1e584285cb1e6f7a4b09a3e20585418d35a28735` 创建。B2-A COMPLETE：`ed5682e7a5fd6cc0540e42ac15f4dddca23210f9`，CI38291254654三任务与38291254617 reference全绿。本地完整回归/构建也成功。B 已实施 WAITING_CI（四入口+48组布局+变异通过，密码对话框真设备断言待本批CI），C/D 尚未开始；各批前一 CI 全绿后推进。当前不能宣称 B2 全部完成。见[审计21](audits/product-quality-2026-10/21-b2-privacy-reliability.md)。无默认分支合并、签名、交付、版本/Schema/加密格式/PK 变更。

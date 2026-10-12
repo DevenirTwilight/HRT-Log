@@ -1027,4 +1027,5 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="about_source_unknown">Unknown</string>
 <string name="about_source_copy">Copy build source</string>
 <string name="about_source_copied">Copied</string>
+    <string name="export_privacy_notice">This export file is not encrypted by HRT Log. After you save it, protection depends on the permissions and provider of the location you choose. Keep it secure and avoid unintended sharing. Encrypted backups (.pnbak) are different.</string>
 </resources>

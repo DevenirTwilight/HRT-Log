@@ -1,4 +1,4 @@
-> B2 当前交接（2026-10-12）：专用分支 `feature/b2-privacy-reliability-20261012`，起点 `1e584285cb1e6f7a4b09a3e20585418d35a28735`。A 已实施，聚焦14项通过；完整回归和本批 CI 待验收，未开始 B/C/D。下一步先完成 A 的 jvm/android/device-tests/reference，全绿后自动进入 B。实际进程清理由新 instrumentation + `run_import_cleanup_restart.py` 执行。详见[审计21](audits/product-quality-2026-10/21-b2-privacy-reliability.md)。当前环境已有临时 SDK37/JDK21，可本地运行全量 JVM/Robolectric/lint/构建；无 KVM/物理ARM，设备靠 CI。禁止合并、签名或交付。
+> B2 当前交接（2026-10-12）：专用分支 `feature/b2-privacy-reliability-20261012`，起点 `1e584285cb1e6f7a4b09a3e20585418d35a28735`。A COMPLETE，提交 `ed5682e7a5fd6cc0540e42ac15f4dddca23210f9`，CI38291254654 jvm/android/device-tests +38291254617 reference全success；本地全量/构建成功，新清理两进程各1通过。B 已实施 WAITING_CI，聚焦55+移除提示变异完成；密码对话框交互从无法空闲的Robolectric迁到API35实际断言，须本批设备CI通过。普通build仅debugCompileOnly既有Room/sqlite供合成宿主使用。C/D 尚未开始；下一批仍必须在对应CI全绿后推进。详见[审计21](audits/product-quality-2026-10/21-b2-privacy-reliability.md)。临时 SDK37/JDK21 已配置；本地无KVM，物理ARM/TalkBack未验证。禁止合并、签名或交付。
 
 > 最新当前事实（2026-10-12）：PR #19 已合并并通过主线 CI；见 [STATUS](STATUS.md) 和 [审计20](audits/product-quality-2026-10/20-pr19-merge-and-mainline-validation.md)。下文保留历史阶段的“未合并/待批准”叙述，不代表现在。
 
