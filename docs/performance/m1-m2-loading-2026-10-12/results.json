@@ -1,5 +1,5 @@
 {
-  "status": "VERIFIED_SOURCE_APK_BUILDING",
+  "status": "PASS_PRIVATE_OFFICIAL_APK_DELIVERED",
   "production_source_commit": "470b194",
   "baseline_commit": "9a06fc794e82a7ed079ee8011c0fe9ed57f4d46c",
   "fixture": "360 synthetic doses, twice daily over 180 days; no user data",
@@ -13,9 +13,9 @@
   },
   "prepared_comparison_stdout": "PREVIEW_HISTORY_BENCHMARK model=M1 doses=360 points=10443 old_ms=966.060638 prepared_ms=57.069447 max_abs_error=1.1368683772161603E-13\nPREVIEW_HISTORY_BENCHMARK model=M2 doses=360 points=10443 old_ms=1891.754206 prepared_ms=8.36998 max_abs_error=2.8421709430404007E-13\n",
   "limitations": [
-    "Single same-host JVM execution, not physical phone time-to-visible, FPS or clinical validation.",
-    "Full CI passed on production 470b194; this evidence/script/test-output commit does not change production code.",
-    "Local release/lint and official-signed APK delivery in progress."
+    "Single same-host JVM measurement, not physical phone time-to-visible, FPS or clinical validation.",
+    "Production source 470b194 passed full CI; later benchmark/evidence/documentation changes leave the production source tree identical.",
+    "User-device installation and opening speed not measured in this environment."
   ],
   "focused_app_tests": {
     "tests": 22,
@@ -68,5 +68,37 @@
     "bytes": 402448,
     "sha256": "9079b78cc9834c43c755daf847c061d1dc246842d0995465d31da59eb4b3d90a"
   },
-  "ci_artifact_retrieval": "gh direct artifact redirect returned 403; connected GitHub artifact download produced a verified complete ZIP. No policy/proxy bypass."
+  "ci_artifact_retrieval": "gh direct artifact redirect returned 403; connected GitHub artifact download produced a verified complete ZIP. No policy/proxy bypass.",
+  "local_release_lint": {
+    "build": "PASS",
+    "elapsed": "11m32s",
+    "lint_errors": 0,
+    "lint_warnings": 172
+  },
+  "official_apk": {
+    "file_name": "HRT-Log-M1-M2-fast-official.apk",
+    "bytes": 12786548,
+    "sha256": "426bb4686eb2a3c2da3969d0da1fc39cc175d08d9af9b6114d51d205d1cdedcd",
+    "certificate_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
+    "package": "net.plainnotes.app",
+    "versionCode": 25,
+    "versionName": "0.2.0",
+    "zip_crc": "PASS",
+    "original_unsigned_members_identical": "PASS",
+    "signature_and_16kb_alignment": "PASS",
+    "internet_permission": false,
+    "debuggable": false,
+    "signing_temp_cleaned": true
+  },
+  "private_delivery_zip": {
+    "bytes": 11748315,
+    "md5": "f6792c70cd05f2e0dc49af948a5342ea",
+    "sha256": "064e887aa801209aaf9ace22e7f90eeba798945bc6ca6c22515c76ac4051aa6a",
+    "uploaded": true,
+    "shared": false,
+    "permissions": "owner-only",
+    "metadata_size_verified": true,
+    "download_zip_sha256_verified": true,
+    "download_apk_sha256_verified": true
+  }
 }

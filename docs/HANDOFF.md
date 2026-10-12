@@ -1,3 +1,15 @@
+# M1/M2曲线加速修复完成并私下交付（2026-10-12）
+
+实际交付分支 `feature/unified-concentration-20261011`（PR19，未合并默认分支），生产代码470b194；1f198c4仅追加测试计时/复现脚本/证据，生产树与470b194完全相同。原模型/Price参数/完整历史/原UI/Legacy/数据库/版本/签名配置与所有锁定文件不变。完整同机360剂/180天/37442点：M1 5071.596→422.797ms，M2 11747.841→192.701ms，最大逐点差0/1.137e-13 pg/mL；这是JVM计算基准，不是用户手机开页时间或个人临床验证。
+
+47候选数值/边界/慢尾/近等速与121 PK通过；本地22聚焦（8 preview/8原UI/5 PeriodStability/1旧完整compute差分）零失败/错误/跳过。生产470b194的CI38216799690 JVM/Android/device全部success，独立重放38216799684 success；实际build报告ZIP核验，app427零失败/13既有跳过，data72/reminder14通过。最新1f198c4证据提交CI结果保存在性能目录，其状态须按实际元数据区分；不能冒称新增生产实现。fullRelease/lint本地成功11m32s，0错误172既有警告，merged与实际APK均无INTERNET；4ABI/8原生库压缩、冻结pk-params资源SHA、ZIP CRC核验通过。
+
+**本轮新正式修复包** `HRT-Log-M1-M2-fast-official.apk`：12,786,548 B，SHA256 `426bb4686eb2a3c2da3969d0da1fc39cc175d08d9af9b6114d51d205d1cdedcd`；原正式证书989ba045…59379b1，16KB对齐和签名核验通过，包名net.plainnotes.app/0.2.0/build25（未降级）/非debuggable。签前后每个原ZIP成员逐字节相同，临时私有克隆/密钥/密码由TemporaryDirectory自动清理，永久签名备份未改。私下Drive ZIP 11,748,315 B（SHA256 `064e887aa801209aaf9ace22e7f90eeba798945bc6ca6c22515c76ac4051aa6a`），metadata读回只有owner、shared=false；从Drive独立下载回查大小/ZIP SHA/CRC及内含APK SHA全部一致。私有下载链接仅在聊天交付，不写公开源码/CI；APK/私钥/密码/用户健康记录均未入库。用户手机尚未覆盖验证，本环境不能声称真机秒开。
+
+本轮代码/验收/正式签名私下交付已完成，无未完成实现；[性能与复现记录](performance/m1-m2-loading-2026-10-12/README.md)含原XML、同机比较、CI/签署/文件核验证据。下方进行中块保留历史，不代表当前状态。未公开发布或自动合并PR19。
+
+---
+
 # M1/M2加载性能修复已验证，正式包构建中（2026-10-12）
 
 生产代码470b194已推送至实际交付分支 `feature/unified-concentration-20261011`（PR19）；不把未合并分支冒称默认分支。只新增非冻结PreparedResearchHistory并接入ConcentrationPreview：常数预计算、完整旧剂量指数前缀累计、近期原级数求值；不丢弃任何历史、不插值、不降低采样/极值密度。Legacy/原UI/候选/Price幅度/数据库/版本/所有冻结文件保持不变。
