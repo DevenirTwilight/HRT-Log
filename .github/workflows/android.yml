@@ -64,6 +64,13 @@ jobs:
           python3 tools/pk-audit/sublingual_p1c1_compare.py --after docs/pk-research/results/sublingual-p1c1-after.json --engine docs/pk-research/results/sublingual-p1c1-engine.json --calculator docs/pk-research/results/sublingual-p1c1-calculator.json --eligibility docs/pk-research/results/sublingual-p1c1-eligibility.json --output app/build/reports/pk-p1c1-comparison
           python3 tools/pk-audit/sublingual_p1c2_compare.py --output app/build/reports/pk-p1c2-comparison
       - run: python3 scripts/check_release_manifest.py
+      # Audit B1 / D-4: the R8-shrunk Release APK must name exactly this commit from a clean checkout, and the delivery
+      # ledger keeps delivered versionCodes strictly increasing (source, APK and certificate identities kept apart).
+      - name: Release APK source identity and delivery ledger
+        run: |
+          python3 -m unittest discover -s scripts -p 'test_*.py'
+          python3 scripts/delivery_ledger.py check
+          python3 scripts/apk_provenance.py "$ANDROID_HOME/build-tools/37.0.0" app/build/outputs/apk/full/release/app-full-release-unsigned.apk --expect-source-sha "$GITHUB_SHA"
       - run: git diff --exit-code -- core/data/schemas docs/PLAN.md
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
