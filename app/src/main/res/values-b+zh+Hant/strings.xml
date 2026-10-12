@@ -1016,4 +1016,15 @@
 <string name="calib_last_used">最近觀測：實際參與擬合</string>
 <string name="calib_last_excluded">最近觀測：已自動排除，未參與擬合</string>
 <string name="calib_last_not_used">最近觀測：不是擬合候選</string>
+<string name="about_source_title">建置來源</string>
+<string name="about_source_commit">原始碼提交</string>
+<string name="about_source_time">提交時間（UTC）</string>
+<string name="about_source_origin">提交資訊的來源</string>
+<string name="about_source_origin_git">從本專案的 Git 檢出讀取</string>
+<string name="about_source_origin_declared">建置時宣告，未經核驗</string>
+<string name="about_source_origin_unknown">未知：建置時沒有 Git 資訊</string>
+<string name="about_source_dirty">此建置包含未提交的變更，不是正式建置。</string>
+<string name="about_source_unknown">未知</string>
+<string name="about_source_copy">複製建置來源</string>
+<string name="about_source_copied">已複製</string>
 </resources>

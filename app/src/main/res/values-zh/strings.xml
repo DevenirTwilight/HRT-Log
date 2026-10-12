@@ -1016,4 +1016,15 @@
 <string name="calib_last_used">最近观测：实际参与拟合</string>
 <string name="calib_last_excluded">最近观测：已自动排除，未参与拟合</string>
 <string name="calib_last_not_used">最近观测：不是拟合候选</string>
+<string name="about_source_title">构建来源</string>
+<string name="about_source_commit">源码提交</string>
+<string name="about_source_time">提交时间（UTC）</string>
+<string name="about_source_origin">提交信息的来源</string>
+<string name="about_source_origin_git">从本项目的 Git 检出读取</string>
+<string name="about_source_origin_declared">构建时声明，未经核验</string>
+<string name="about_source_origin_unknown">未知：构建时没有 Git 信息</string>
+<string name="about_source_dirty">此构建包含未提交的改动，不是正式构建。</string>
+<string name="about_source_unknown">未知</string>
+<string name="about_source_copy">复制构建来源</string>
+<string name="about_source_copied">已复制</string>
 </resources>

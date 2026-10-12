@@ -1016,4 +1016,15 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="calib_last_used">Dernière observation : participe à l’ajustement</string>
 <string name="calib_last_excluded">Dernière observation : exclue automatiquement de l’ajustement</string>
 <string name="calib_last_not_used">Dernière observation : ne fait pas partie des observations ajustées</string>
+<string name="about_source_title">Origine de la compilation</string>
+<string name="about_source_commit">Commit source</string>
+<string name="about_source_time">Date du commit (UTC)</string>
+<string name="about_source_origin">Provenance du commit</string>
+<string name="about_source_origin_git">Lu dans le dépôt Git du projet</string>
+<string name="about_source_origin_declared">Déclaré à la compilation, non vérifié</string>
+<string name="about_source_origin_unknown">Inconnue : compilé sans informations Git</string>
+<string name="about_source_dirty">Cette compilation contient des modifications non validées et n’est pas une version officielle.</string>
+<string name="about_source_unknown">Inconnu</string>
+<string name="about_source_copy">Copier l’origine de la compilation</string>
+<string name="about_source_copied">Copié</string>
 </resources>
