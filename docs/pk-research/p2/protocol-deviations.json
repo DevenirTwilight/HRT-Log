@@ -76,6 +76,19 @@
    "authorized_by": "product owner, 2026-10-12: M2 single-model integration task, sections 1/3/7/10/12 explicitly authorize M1/Legacy UI retirement, original-page M2 literature-reference display and calibration scope separation; not individual absolute prediction replacement.",
    "reason": "Minimal original-screen labels and display guards; hide old sublingual calibration/parameters for M2, retain other-route compatibility and original chart/controls. No Engine, production calculator, parameters, data, history or frozen input changes.",
    "diff_file": "docs/design/m2-only-ui.patch"
+  },
+  {
+   "id": "PD-2026-10-12-M2-ONLY-UNSUPPORTED-EMPTY-STATE",
+   "date": "2026-10-12",
+   "file": "app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt",
+   "category": "m2_only_research_ui_retirement",
+   "pk_relevant": true,
+   "baseline_sha256": "f21a68d40192c2e8c413d934bde69d17c16b3e0219a1092577ee425b1f24f58b",
+   "previous_sha256": "96c49efeb1f157ddddb6699d28acee323df359abedf81a0a0710b4983f3af6d3",
+   "new_sha256": "584dc8c70aa780cde6ccf6967ce136b89f5994c1137e9889a2e80d43828cc559",
+   "authorized_by": "product owner, 2026-10-12: M2 single-model integration task, sections 1/3/7/10/12 explicitly authorize M1/Legacy UI retirement, original-page M2 literature-reference display and calibration scope separation; not individual absolute prediction replacement.",
+   "reason": "Known recorded but unsupported other-route E2 must retain its unsupported explanation, not masquerade as no recorded doses. One additional original-screen display predicate only; no calculation or data changes.",
+   "diff_file": "docs/design/m2-only-empty-state.patch"
   }
  ],
  "navigation_extension_note": "2026-10-11: exactly one explicitly owner-authorized PK-relevant navigation wiring deviation, validated by the guard and append-only F1 chain. The original note and freeze remain historical and unchanged.",

@@ -122,4 +122,11 @@ class UnifiedConcentrationUiTest {
         awaitTag("research-preview-error");ui.onNodeWithText(text(R.string.m2_reference_title)).assertDoesNotExist()
         ui.onNodeWithText(text(R.string.pk_current)).assertDoesNotExist();noSelector()
     }
+    @Test fun unsupportedSublingualEvIsNotM2OrEmptyRecordedHistory() {
+        awaitChart();ui.runOnUiThread { ui.activity.syntheticSublingualEnabled=false;ui.activity.syntheticExtraRoute="EV" }
+        ui.waitUntil(30_000){ui.onAllNodesWithText(text(R.string.unsupported_sl_ev)).fetchSemanticsNodes().isNotEmpty()}
+        ui.waitForIdle();ui.onNodeWithText(text(R.string.m2_reference_title)).assertDoesNotExist()
+        ui.onNodeWithText(text(R.string.pk_no_doses_title)).assertDoesNotExist();noSelector()
+    }
+
 }

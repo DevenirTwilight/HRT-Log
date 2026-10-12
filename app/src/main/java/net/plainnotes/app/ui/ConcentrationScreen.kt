@@ -136,7 +136,7 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
                 AdaptiveChoice(listOf("pg/mL","pmol/L"),if(settings.pmol)1 else 0,{onSettings(ConcSettings(it==1,settings.calibrate,settings.mode))})
             }
         } else if (loading) Box(Modifier.fillMaxWidth().padding(32.dp), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
-        else if (preview==null && result != null && result.simulatedMedications.isNotEmpty() && result.others.isEmpty())
+        else if (preview==null && result != null && result.usedDoses==0 && result.simulatedMedications.isNotEmpty() && result.others.isEmpty())
             EmptyState(Icons.AutoMirrored.Outlined.ShowChart, stringResource(R.string.pk_no_doses_title), stringResource(R.string.pk_no_doses_body))
 
         if (result != null && result.others.isNotEmpty()) OtherCurvesCard(result)
