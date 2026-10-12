@@ -1,0 +1,72 @@
+{
+  "status": "VERIFIED_SOURCE_APK_BUILDING",
+  "production_source_commit": "470b194",
+  "baseline_commit": "9a06fc794e82a7ed079ee8011c0fe9ed57f4d46c",
+  "fixture": "360 synthetic doses, twice daily over 180 days; no user data",
+  "environment": "managed Linux x86_64, OpenJDK 21.0.12.1, Gradle 9.3.1",
+  "numeric_contract": "same frozen 47 candidates, saturation threshold, complete history, Price anchors, no interpolation or truncation",
+  "pk_tests": {
+    "tests": 121,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "prepared_comparison_stdout": "PREVIEW_HISTORY_BENCHMARK model=M1 doses=360 points=10443 old_ms=966.060638 prepared_ms=57.069447 max_abs_error=1.1368683772161603E-13\nPREVIEW_HISTORY_BENCHMARK model=M2 doses=360 points=10443 old_ms=1891.754206 prepared_ms=8.36998 max_abs_error=2.8421709430404007E-13\n",
+  "limitations": [
+    "Single same-host JVM execution, not physical phone time-to-visible, FPS or clinical validation.",
+    "Full CI passed on production 470b194; this evidence/script/test-output commit does not change production code.",
+    "Local release/lint and official-signed APK delivery in progress."
+  ],
+  "focused_app_tests": {
+    "tests": 22,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "includes": "8 preview, 8 original UI/loading/switch/range, 5 PeriodStability, 1 full differential benchmark"
+  },
+  "complete_preview_comparison_stdout": "COMPLETE_PREVIEW_COMPARISON model=M1 doses=360 before_points=37442 after_points=37442 old_ms=5071.596427 new_ms=422.797392 max_abs_error=0.0\nCOMPLETE_PREVIEW_COMPARISON model=M2 doses=360 before_points=37442 after_points=37442 old_ms=11747.841155 new_ms=192.700882 max_abs_error=1.1368683772161603E-13\n",
+  "complete_preview_comparison": [
+    {
+      "model": "M1",
+      "before_ms": 5071.596427,
+      "after_ms": 422.797392,
+      "points": 37442,
+      "max_absolute_difference_pgml": 0.0
+    },
+    {
+      "model": "M2",
+      "before_ms": 11747.841155,
+      "after_ms": 192.700882,
+      "points": 37442,
+      "max_absolute_difference_pgml": 1.1368683772161603e-13
+    }
+  ],
+  "ci_report_totals": {
+    "app/build/reports/tests/testFullDebugUnitTest/index.html": {
+      "tests": 427,
+      "failures": 0,
+      "skipped": 13
+    },
+    "pk-engine/build/reports/tests/test/index.html": {
+      "tests": 40,
+      "failures": 0,
+      "skipped": 0
+    },
+    "core/reminder/build/reports/tests/testDebugUnitTest/index.html": {
+      "tests": 14,
+      "failures": 0,
+      "skipped": 0
+    },
+    "core/data/build/reports/tests/testDebugUnitTest/index.html": {
+      "tests": 72,
+      "failures": 0,
+      "skipped": 0
+    }
+  },
+  "ci_build_report_artifact": {
+    "id": 11733371194,
+    "bytes": 402448,
+    "sha256": "9079b78cc9834c43c755daf847c061d1dc246842d0995465d31da59eb4b3d90a"
+  },
+  "ci_artifact_retrieval": "gh direct artifact redirect returned 403; connected GitHub artifact download produced a verified complete ZIP. No policy/proxy bypass."
+}

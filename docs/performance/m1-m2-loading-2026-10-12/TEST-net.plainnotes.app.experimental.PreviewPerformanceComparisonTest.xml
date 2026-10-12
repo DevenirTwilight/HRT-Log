@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.experimental.PreviewPerformanceComparisonTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-10-12T07:27:01.763Z" hostname="e1be2d0ad0c2" time="17.855">
+  <properties/>
+  <testcase name="identicalCompletePreviewBeforeAndAfter" classname="net.plainnotes.app.experimental.PreviewPerformanceComparisonTest" time="17.854"/>
+  <system-out><![CDATA[COMPLETE_PREVIEW_COMPARISON model=M1 doses=360 before_points=37442 after_points=37442 old_ms=5071.596427 new_ms=422.797392 max_abs_error=0.0
+COMPLETE_PREVIEW_COMPARISON model=M2 doses=360 before_points=37442 after_points=37442 old_ms=11747.841155 new_ms=192.700882 max_abs_error=1.1368683772161603E-13
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

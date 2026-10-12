@@ -81,7 +81,10 @@ class ConcentrationPreviewTest {
         val history=net.plainnotes.app.conc.experimental.ResearchHistoricalSlAdapter.audit(records,emptyMap(),hour)
         assertEquals(360,history.events.size)
         for(model in listOf(ResearchModel.M1,ResearchModel.M2)) {
+            val start=System.nanoTime()
             val p=ConcentrationPreview.compute(history,model,hour)
+            val elapsedMs=(System.nanoTime()-start)/1e6
+            println("COMPLETE_PREVIEW_BENCHMARK model=$model doses=360 points=${p.timeH.size} compute_ms=$elapsedMs")
             assertNotNull(p.currentPgMl)
             assertTrue(p.currentPgMl!!.isFinite())
             assertTrue(p.timeH.isNotEmpty())

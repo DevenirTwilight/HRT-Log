@@ -1,3 +1,15 @@
+# M1/M2加载性能修复已验证，正式包构建中（2026-10-12）
+
+生产代码470b194已推送至实际交付分支 `feature/unified-concentration-20261011`（PR19）；不把未合并分支冒称默认分支。只新增非冻结PreparedResearchHistory并接入ConcentrationPreview：常数预计算、完整旧剂量指数前缀累计、近期原级数求值；不丢弃任何历史、不插值、不降低采样/极值密度。Legacy/原UI/候选/Price幅度/数据库/版本/所有冻结文件保持不变。
+
+**完整同机对照已通过：** 360剂/180天，每模型37442点，M1旧5071.596ms→422.797ms，M2旧11747.841ms→192.701ms；全旧坐标精确值最大差分别0与1.137e-13 pg/mL，当前值/窗口峰同一容差通过。二次独立新preview测量M1 296.935ms/M2 105.923ms；只记录单次JVM/JIT测量，不能称用户手机开页时间或FPS。47候选/边界/慢尾/近等速对照、全PK121项通过；本地22聚焦（8 preview、8原UI、5 PeriodStability、1真实旧compute差分）零失败/错误/跳过。性能脚本可从固定旧提交生成临时旧preview测试；临时测试源已删，未替换生产核。
+
+[CI38216799690](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38216799690) JVM/Android/device三作业全部success；[独立重放38216799684](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38216799684) success。实际下载CI build报告ZIP核验SHA，app427零失败13既有跳过、data72/reminder14通过；PK40为CI最后聚焦重放覆写的报告，不冒称全量只有40项。gh直接工件重定向403，用已连接GitHub download工具获得完整ZIP，未绕过代理/策略。详细测量、原XML、CI元数据及可复现脚本见 [性能记录](performance/m1-m2-loading-2026-10-12/README.md)。
+
+尚未完成本轮正式APK：本地lint/fullRelease构建运行中，当前没有新签署/上传包；不能将旧包当作此次修复。初始环境JRE无javac导致Android任务配置失败，已下载并核验完整JDK21 SHA、保留系统CA/代理，随后聚焦应用构建成功6m57s。原正式签名私有仓库已再次确认private；尚未恢复私钥。下一步等本地release/lint成功→原证书签署/包名版本权限对齐/ZIP核验→清理临时凭据→私下交付并更新本段。无公开Release、无用户健康数据访问。
+
+---
+
 # M1/M2打开速度修复进行中（2026-10-12）
 
 用户报告M1/M2转圈慢、Legacy秒开。正在已交付代码所在 `feature/unified-concentration-20261011`（PR19）工作，而非默认分支（尚无研究UI）。根因：ConcentrationPreview的每点/极值查询遍历完整历史，每剂重复计算归一化常数与Poisson核。新增独立PreparedResearchHistory：常数预计算、旧剂量指数前缀累积；饱和条件与冻结核完全相同 `(ka-ke)*age>=100`，不丢弃旧残留，近期按原级数求值。尚未完成测试/性能验收，不宣称速度结果；模型source-lock与P2协议守卫已通过。未改任何冻结文件/Legacy/原UI/数据/版本/签名，未生成新APK。下一步全部47候选逐点对照、半年同机基准、实际preview及页面/时期回归与full CI。
