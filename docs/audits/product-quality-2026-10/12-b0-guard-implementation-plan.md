@@ -1,6 +1,6 @@
 # 12 B0 守卫迁移：实施方案、依赖闭包与验证计划
 
-> **状态：`WAITING_FOR_D13_AUTHORIZATION`。** 本文件只是设计和只读验证结果。没有修改 `check_protocol.py`、`test_research.py`、`production-baseline.json`、`protocol-lock.json`、`protocol-deviations.json`、`validation-protocol.md` 或任何研究产物。
+> **状态：已实施（提交 `b2ba7f63784ea965377d39ba83b6c9a86a043475`，2026-10-12）。** 产品负责人于 2026-10-12 批准 D-13 方案 A（REQUIREMENTS §67）。实施结果见本文 §9。`test_research.py`、`production-baseline.json`、`protocol-lock.json`、`protocol-deviations.json`、`validation-protocol.md` 及全部研究产物**未修改**；修改的是 `check_protocol.py`（原 `waiver()` 保留）。
 > 本文件扩展并部分取代 `09-p2-guard-decoupling-proposal.md`；09 保留为历史。逐文件矩阵见 `B0-protected-file-matrix.json`（取代 `09-p2-guard-file-map.json` 作为当前提议）。
 
 核查基准：工作分支 `claude/new-session-sbje5o` @ `0d99591`；默认分支 `f53726f`；时间 2026-10-12 ≈11:40Z。
@@ -94,3 +94,54 @@
 ## 8. 对 PR #19 的影响
 
 见 09 §7，结论不变。建议顺序：先决定 D-1/D-2 → PR #19 修订 → 再实施 B0。
+
+## 9. 实施结果（2026-10-12）
+
+| 项 | 内容 |
+|---|---|
+| 提交 | `b2ba7f63784ea965377d39ba83b6c9a86a043475`（单独一个提交；回滚 = revert 该提交） |
+| 新增 | `docs/pk-research/p2/guard-classification.json`（43/7/114 + 2 个新锁定资源）、`guard-classification-lock.json`、`display-approvals.json`（空的追加式批准链）、`tools/pk-research/test_guard_two_domain.py`（21 项） |
+| 修改 | `tools/pk-research/check_protocol.py`（双域；`waiver()` 原样保留）、`.github/workflows/android.yml`（jvm 作业显式拉取 `e89579a`/`388ef0f`/`d892e9b` 三个提交，拉取失败即作业失败）、`docs/pk-research/p2/README.md`（追加说明）、`docs/REQUIREMENTS.md`（§67） |
+| 未修改 | `production-baseline.json`、`protocol-lock.json`、`validation-protocol.md`、`protocol-deviations.json`、`results/*`、`test_research.py` 及其全部断言 |
+| 与设计的差异 | 依赖扫描只认 **git 跟踪**的文件（本地构建生成的 `app/build/...` 报告不算生产文件）；批准记录的证据为“提交 + 文件中包含批准 id”，守卫离线核验，人工审查核对内容 |
+
+### 实测
+
+| 检查 | 结果 |
+|---|---|
+| 新测试 `test_guard_two_domain.py` | 21/21 PASS |
+| 全部 `tools/pk-research` 测试（原 252 + 新 21） | 273/273 PASS |
+| `tools/pk-audit` 测试 | PASS |
+| 历史基线 | 164/164 从 `e89579a` 复现 |
+| 历史研究回放 | `388ef0f` worktree，5/5 结果逐字节一致；worktree 自动清理 |
+| 当前树重跑研究 | 科学字段与已提交结果一致（仅 `code_revision`/`code_sha256` 不同） |
+| 模拟 CI 浅克隆、**不**拉取历史对象 | 261 项中 11 项 **ERROR**（`HistoricalObjectMissing`），退出码 1：失败，非跳过 |
+| 模拟 CI 浅克隆、拉取三个提交后 | 273/273 PASS；`research.py` 正常 |
+
+### 负向用例及其实际拒绝原因（逐条打印核对，见 08 #39）
+
+| 用例 | 拒绝信息 |
+|---|---|
+| 清空偏离链 / 伪造首条 | Append-only deviation chain was reordered or truncated |
+| F1 记录 new_sha256 改为全 0 | Deviation record does not match git history |
+| F1 记录 baseline 哈希被改 | Deviation baseline hash does not match the frozen baseline |
+| `pk-params.json` 改 1 字节 | Production or old evidence changed |
+| 新锁定的测试资源改 1 字节 | Research input changed |
+| `ConcentrationScreen.kt` 改动、无批准 | PK display file changed without owner approval |
+| 非产品负责人或无法核验的批准 | 拒绝（3 种变体） |
+| 历史提交不存在 | HistoricalObjectMissing |
+| 错误的历史提交（`d892e9b`） | Historical baseline not reproduced at … AppShell.kt |
+| 用当前源码冒充历史源码 | Research tools at <HEAD> are not the ones that produced the recorded results |
+| 结果摘要篡改 / CSV 加换行 | Replayed research differs from recorded results |
+| 分类表被改而锁未更新 | Guard classification changed without its lock |
+| 分类表把研究输入改成仅历史（锁已更新） | Research tooling depends on unlocked production files |
+| 研究分组泄漏 | 原检查拒绝 |
+| 未改动的副本 | 通过 |
+
+### 残留风险
+
+1. 批准链只能离线核验“证据提交中包含批准 id”。证据文本是否真的是产品负责人的决定，仍要靠 PR 审查的人工核对。
+2. 分类锁和分类表在同一仓库，有写权限的人可以同时修改两者。防线是：依赖扫描、计数断言（43/7/114）和代码审查。
+3. 依赖扫描只识别工具源码中**字面量路径**引用的文件；动态拼接的路径扫描不到。当前工具中未发现这种用法。
+4. 历史回放依赖 git 能取到 `388ef0f`。如果历史被改写或远端删除了这些对象，CI 会失败（这是有意设计，不会静默通过）。
+5. CI 每次 push 多运行约 10–15 秒的回放。
