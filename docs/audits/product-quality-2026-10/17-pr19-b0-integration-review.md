@@ -117,4 +117,4 @@ python3 -m unittest discover -s tools/pk-research -p 'test_*.py'   # 283 项：2
 - domain 58、pk-engine 124（含 `M2OnlyNumericalContractTest` 3/3）、importer 12、data 72、reminder 14、app 448（13 项是原有的环境性跳过），0 失败；`PeriodStabilityTest` 5/5。
 - lint 0 错误；Debug 和 Release 构建通过；Release APK 声明 `343a183`、git、干净。
 - `check_release_manifest.py` 通过；`check_unified_concentration.py` 通过。
-- CI 结果见下一次更新。
+- **CI**：`c294f48` 的 android.yml（push 38267754193、pull_request 38267765921）三个作业全部 success。PR #19 自带的校准回放工作流（pr19-calibration.yml）在 `c294f48` 上**失败**：它调用守卫，却没有拉取历史提交，于是按设计以 `HistoricalObjectMissing` 失败（不是静默跳过）。修复提交 `4db4770` 给该工作流加了同样的拉取步骤（本地先用浅克隆复现了失败和修复）。`4db4770` 上四个运行全部 success：android.yml push 38269882411 / pull_request 38269890606，校准回放 push 38269882393 / pull_request 38269890544。
