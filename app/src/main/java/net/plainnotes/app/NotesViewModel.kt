@@ -252,8 +252,11 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         onDone()
     }
     fun setWeight(kg:Double)=change{repo.setWeight(kg)}
-    fun saveLab(v:LabValueEntity,includeEstimate:Boolean=false)=change{repo.saveLab(v,recapture=includeEstimate,estimate={dao,lab->if(includeEstimate)net.plainnotes.app.conc.LabEstimate.capture(dao,lab) else null})}
-    fun rebuildLabContext(v:LabValueEntity,includeEstimate:Boolean=false)=change{repo.rebuildLabContext(v.id,estimate={dao,lab->if(includeEstimate)net.plainnotes.app.conc.LabEstimate.capture(dao,lab) else null})}
+    // D-2 (REQUIREMENTS §67 item 5): a new estimate never stores the retired Legacy sublingual E2 value.
+    private suspend fun newEstimate(dao:net.plainnotes.app.data.NotesDao,lab:LabValueEntity)=
+        net.plainnotes.app.conc.SublingualEstimatePolicy.apply(net.plainnotes.app.conc.LabEstimate.capture(dao,lab))
+    fun saveLab(v:LabValueEntity,includeEstimate:Boolean=false)=change{repo.saveLab(v,recapture=includeEstimate,estimate={dao,lab->if(includeEstimate)newEstimate(dao,lab) else null})}
+    fun rebuildLabContext(v:LabValueEntity,includeEstimate:Boolean=false)=change{repo.rebuildLabContext(v.id,estimate={dao,lab->if(includeEstimate)newEstimate(dao,lab) else null})}
     fun deleteLab(v:LabValueEntity)=change{repo.deleteLab(v.id)}
     fun delete(id:Long)=change{repo.removeMedication(id)}
     fun complete(s:Slot,t:Instant,d:Double,site:String?=null)=change{repo.complete(s,t,d,site)}

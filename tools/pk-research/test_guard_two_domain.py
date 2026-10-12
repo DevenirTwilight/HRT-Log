@@ -65,7 +65,10 @@ class ClassificationTest(unittest.TestCase):
         self.assertEqual(set(cls['display_review_additional']), {kernel + 'ResearchDisplayProtocol.kt', app + 'conc/experimental/ResearchHistoricalSlAdapter.kt',
                                                                 app + 'conc/experimental/ResearchHistoryScope.kt', app + 'experimental/ConcentrationPreview.kt',
                                                                 app + 'experimental/ExperimentalConcentrationComparison.kt', app + 'experimental/ModelComparisonChart.kt',
-                                                                app + 'experimental/UnifiedConcentrationScreen.kt'})
+                                                                app + 'experimental/UnifiedConcentrationScreen.kt',
+                                                                # D-2 (REQUIREMENTS §67 item 5): registered from the empty file, first version owner-approved.
+                                                                app + 'conc/SublingualEstimatePolicy.kt'})
+        self.assertEqual(cls['display_review_additional'][app + 'conc/SublingualEstimatePolicy.kt'], hashlib.sha256(b'').hexdigest())
         # Every registered hash is the reviewed PR #19 state; nothing under the PK source prefixes is unclassified.
         self.assertEqual(guard.unclassified(cls, BASELINE), [])
 

@@ -81,6 +81,8 @@ fun labContextLines(context:Context,row:LabContextEntity):List<String> {
                 if(!v.isNull("p5") && !v.isNull("p95"))add(context.getString(R.string.lab_context_estimate_band,number(v.getDouble("p5")),number(v.getDouble("p95")),v.getString("unit")))
                 val flags=v.getJSONArray("flags");for(j in 0 until flags.length())add(context.getString(when(flags.getString(j)){"EXTRAPOLATED_TIER"->R.string.flag_extrapolated_tier;"EXTRAPOLATED_AFTER_CALIBRATED_HOURS"->R.string.flag_after_8h;"NO_PRODUCT_DATA"->R.string.flag_no_product_data;else->R.string.flag_illustrative}))
             }
+            // D-2: say why there is no E2 value instead of leaving it silently out (frozen v1/v2 estimates keep their E2).
+            if(net.plainnotes.app.conc.SublingualEstimatePolicy.showsUnavailable(e))add(context.getString(R.string.lab_estimate_sl_unavailable))
         }
         add(context.getString(R.string.lab_context_frozen_note))
     }

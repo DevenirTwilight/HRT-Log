@@ -67,4 +67,6 @@
     <string name="m2_research_basis_hide">收起研究依據</string>
     <string name="m2_research_basis_body">%1$s 候選 %2$s（%3$s）。假設背景 B = %4$s pg/mL；1 mg 在 1 小時的幅度 A ≈ %5$s pg/mL，按 Price 1997 圖 1 中 6 名停經後女性的組平均值擬合。該族群與 HRT 使用者不同；個人幅度、背景、劑量線性、重複給藥累積和 8–24 小時尾部都沒有經過獨立驗證。實測化驗單獨列出，從不用於擬合這條曲線。</string>
     <string name="m2_labs_separate_note">實測總 E2，單獨列出，不能與上方情境曲線直接比較。</string>
+    <string name="lab_estimate_sl_unavailable">舌下 E2 個體模型估算暫不可用：舊的舌下預測已退役，M2 只是群體文獻情境，不提供個人數值。</string>
+    <string name="report_mixed_no_total_e2">同時記錄了舌下和其他途徑的 E2，不提供合併的總 E2 估算。</string>
 </resources>

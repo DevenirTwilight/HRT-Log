@@ -106,6 +106,51 @@
    },
    "owner_decision": "REQUIREMENTS §67 item 4 (D-1 option B, 2026-10-12) and §69 item 4 (implement after integration CI).",
    "human_review": "recommended: §67 records the owner decision text of 2026-10-12; check that the diff stays within it (display only)."
+  },
+  {
+   "id": "D-2：选择 D2-2",
+   "file": "app/src/main/java/net/plainnotes/app/conc/SublingualEstimatePolicy.kt",
+   "approver": "DevenirTwilight",
+   "date": "2026-10-12",
+   "scope": "D-2 option D2-2: new PDFs and newly saved lab estimates never carry the retired Legacy sublingual E2 value and say why; other-route-only E2 and other compounds unchanged; mixed routes give no combined total E2; frozen calculator_version 1/2 estimates, saved records and Visit Pack data unchanged; stored JSON format unchanged (E2 entry omitted only).",
+   "previous_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "new_sha256": "11b6204ab7238d26983e809605431b00c0e7e0c25806d90c45fc659e1f158ce8",
+   "evidence": {
+    "commit": "b2ba7f63784ea965377d39ba83b6c9a86a043475",
+    "path": "docs/REQUIREMENTS.md"
+   },
+   "owner_decision": "REQUIREMENTS §67 item 5 (D-2 option D2-2, 2026-10-12) and §69 item 4.",
+   "human_review": "recommended: check that the diff stays within D2-2 and that no persisted format changed."
+  },
+  {
+   "id": "D-2：选择 D2-2",
+   "file": "app/src/main/java/net/plainnotes/app/ui/LabContextSection.kt",
+   "approver": "DevenirTwilight",
+   "date": "2026-10-12",
+   "scope": "D-2 option D2-2: new PDFs and newly saved lab estimates never carry the retired Legacy sublingual E2 value and say why; other-route-only E2 and other compounds unchanged; mixed routes give no combined total E2; frozen calculator_version 1/2 estimates, saved records and Visit Pack data unchanged; stored JSON format unchanged (E2 entry omitted only).",
+   "previous_sha256": "8e2ff360e59c1a31f8e875acd2c14809083c44ed33fd0267d3cd854328e45b26",
+   "new_sha256": "12c78b82295985fc3f5bc46476cd9e163c03b7848206a897b23c983d307fb5aa",
+   "evidence": {
+    "commit": "b2ba7f63784ea965377d39ba83b6c9a86a043475",
+    "path": "docs/REQUIREMENTS.md"
+   },
+   "owner_decision": "REQUIREMENTS §67 item 5 (D-2 option D2-2, 2026-10-12) and §69 item 4.",
+   "human_review": "recommended: check that the diff stays within D2-2 and that no persisted format changed."
+  },
+  {
+   "id": "D-2：选择 D2-2",
+   "file": "app/src/main/java/net/plainnotes/app/export/Exports.kt",
+   "approver": "DevenirTwilight",
+   "date": "2026-10-12",
+   "scope": "D-2 option D2-2: new PDFs and newly saved lab estimates never carry the retired Legacy sublingual E2 value and say why; other-route-only E2 and other compounds unchanged; mixed routes give no combined total E2; frozen calculator_version 1/2 estimates, saved records and Visit Pack data unchanged; stored JSON format unchanged (E2 entry omitted only).",
+   "previous_sha256": "90ac95a11d9514a0273ca341fd677686565b381f22afac23ff3dc4364949e7b5",
+   "new_sha256": "407710c35904da6bede1a8f42b2d64c0491ebdaf641b893c11c9aa4ede2b192b",
+   "evidence": {
+    "commit": "b2ba7f63784ea965377d39ba83b6c9a86a043475",
+    "path": "docs/REQUIREMENTS.md"
+   },
+   "owner_decision": "REQUIREMENTS §67 item 5 (D-2 option D2-2, 2026-10-12) and §69 item 4.",
+   "human_review": "recommended: check that the diff stays within D2-2 and that no persisted format changed."
   }
  ]
 }

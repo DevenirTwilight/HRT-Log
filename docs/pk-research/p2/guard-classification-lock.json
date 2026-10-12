@@ -1,4 +1,3 @@
 {
- "note": "SHA-256 of guard-classification.json; any change to the classification must update this lock in the same reviewed commit.",
- "guard_classification_sha256": "6628356dc05fd536d4c403606315cf1684861b28ea35ba4acc4daa46ad3ae2b4"
+ "guard_classification_sha256": "fd4404bff3c0abebdab7d4e050480d62fd2a082bd0dcded96b7f6fcfaffb2ccb"
 }

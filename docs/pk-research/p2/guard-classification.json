@@ -250,9 +250,10 @@
   "app/src/main/java/net/plainnotes/app/experimental/ConcentrationPreview.kt": "f8f1df2888824be1c492d8e981bc4d96cd1d50bae3402a31553886e9379de9fc",
   "app/src/main/java/net/plainnotes/app/experimental/ExperimentalConcentrationComparison.kt": "b47144bddc3950bd23cf841712c06f21ca0f0b9b72b916206e9612f941af5673",
   "app/src/main/java/net/plainnotes/app/experimental/ModelComparisonChart.kt": "85c7aa6e938023aab78998a7647cfd997b3fa99fc632446909c04cfd2f489468",
-  "app/src/main/java/net/plainnotes/app/experimental/UnifiedConcentrationScreen.kt": "290343e4bfcbb3e3e1f5cf35befae454258654df41ac4da83c8136c5b076b660"
+  "app/src/main/java/net/plainnotes/app/experimental/UnifiedConcentrationScreen.kt": "290343e4bfcbb3e3e1f5cf35befae454258654df41ac4da83c8136c5b076b660",
+  "app/src/main/java/net/plainnotes/app/conc/SublingualEstimatePolicy.kt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
  },
- "additional_decision": "REQUIREMENTS §69 item 3 (2026-10-12): PR #19 M2 kernel, candidates, calibration and reference data are byte-locked research dependencies; its M2 display, display protocol and history adapters need the owner approval chain from the hashes registered here (PR #19 head aecbd7d). Any new tracked file under unclassified_scan prefixes fails until classified.",
+ "additional_decision": "REQUIREMENTS §69 item 3 (2026-10-12): PR #19 M2 kernel, candidates, calibration and reference data are byte-locked research dependencies; its M2 display, display protocol and history adapters need the owner approval chain from the hashes registered here (PR #19 head aecbd7d). Any new tracked file under unclassified_scan prefixes fails until classified. SublingualEstimatePolicy.kt (D-2, REQUIREMENTS §67 item 5) is registered from the empty file, so its whole first version needs an owner approval link.",
  "unclassified_scan": {
   "prefixes": [
    "pk-engine/src/main/",
