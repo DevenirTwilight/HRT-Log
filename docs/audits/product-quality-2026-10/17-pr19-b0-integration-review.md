@@ -1,0 +1,87 @@
+# 17 PR #19 与 B0/B1 的隔离整合审查
+
+时间：2026-10-12。方法：在会话临时 worktree 中，以 PR #19 head `aecbd7da843abd3f4334c0979e8265a72e6c67b5` 为基础建立本地分支 `tmp/integration-pr19-b0`，`git merge --no-ff --no-commit` 审计分支 `47e2716`。
+**没有推送、没有提交合并、没有修改 PR #19 分支或默认分支。** 两个父分支保持原样。
+
+## 1. 结论
+
+| 状态 | 说明 |
+|---|---|
+| **NEEDS_AUTHORIZATION** | 文本冲突只有 1 处，可以无损解决。但 PR #19 自带的 3 个测试文件把**旧守卫语义**写成了断言，与 D-13 已批准的双域规则直接矛盾。要让整合后的分支通过 CI，必须改写这些测试的预期。这属于任务书 §11 的停止条件（“合并方案会丢失……测试”），也触及用户“不得通过修改测试预期掩盖失败”的要求，因此先请示，不擅自改写。 |
+
+D-1/D-2 依赖这次整合：
+- D-2 要改的 `export/Exports.kt` 在旧守卫下**不能豁免**（只有 `ui/` 目录可豁免）。
+- D-1 要改的 `ConcentrationScreen.kt` 在旧守卫下只能继续追加硬编码豁免，而这正是 D-13 要淘汰的机制。
+
+所以 D-1/D-2 的生产代码**尚未开始**。
+
+## 2. 差异范围（CONFIRMED_SOURCE）
+
+| 项 | 数值 |
+|---|---|
+| merge-base | `f53726ff6fa52fc5c78806a1576fdb80fcf29987`（默认分支） |
+| 审计分支相对 merge-base | 45 个文件 |
+| PR #19 相对 merge-base | 235 个文件 |
+| 两边都改的文件 | `.github/workflows/android.yml`、`docs/HANDOFF.md`、`docs/REQUIREMENTS.md`、`tools/pk-research/check_protocol.py` |
+| 直接文本冲突 | 仅 `docs/REQUIREMENTS.md`：两边都在 §58 之后追加。按“PR #19 的 §59–§66 在前、审计的 §67 在后”保留，编号和时间顺序连续，无内容丢失 |
+| 自动合并 | `android.yml`、`HANDOFF.md`、`check_protocol.py` 自动合并成功（需要逐段复核，见 §3） |
+
+## 3. 语义不兼容（TESTED_LOCAL：在合并树上运行 `tools/pk-research` 全部测试）
+
+在合并树上运行：283 项测试，**2 failures、8 errors**。全部源于同一个原因。
+
+1. **B0 的 `check()` 不再调用 `waiver()`。** PR #19 把三段 UI 授权链（`APPROVED_NAVIGATION`、`APPROVED_ORIGINAL_UI`、`APPROVED_M2_ONLY_UI`）硬编码在 `waiver()` 里。合并后这些常量还在，但成了不会执行的代码。
+2. **`ConcentrationScreen.kt` 在 B0 中属于 7 个 PK 显示文件**，需要 `display-approvals.json` 中的产品负责人批准链。当前批准链为空，所以 `check()` 报错：`PK display file changed without owner approval`。这一处导致 8 个 ERROR（含 `test_research`、`test_unified_protocol`、`test_pr19_calibration_contract`、`test_guard_two_domain` 中直接调用 `check()` 的用例）。
+3. **`AppShell.kt` 在 B0 中是仅历史文件**（114 个之一），可以正常开发。PR #19 测试的断言与此冲突：
+   - `test_unified_protocol.test_no_frozen_protocol_or_baseline_was_rewritten`：要求除 AppShell/ConcentrationScreen 外，164 个基线文件都与基线逐字节相同。B1 修改了 `SettingsScreen.kt`、`strings.xml`（D-13 允许的普通开发），因此 FAIL。
+   - `test_unified_protocol.test_one_extra_appshell_byte_fails` 和 `test_each_navigation_authorization_field_is_exact` 等：要求 AppShell 多一个字节或改动授权字段就失败。B0 下 AppShell 已不受锁定，**预计**这些用例在其他错误修好后会失败。这是根据代码推断的，目前被第 2 点和 §3.1 的错误掩盖，**尚未实测**。
+4. `test_guard_two_domain.test_reclassifying_a_research_input_as_history_only_is_caught` 在合并树上 FAIL：错误信息先命中了第 2 点，而不是预期的依赖扫描。这是测试顺序问题；补上批准链后应恢复，需要复测。
+
+### 3.1 补上 3 条显示批准记录后的试验（只在临时 worktree）
+
+按 §6 第 2 步在临时 worktree 中加入 3 条 `ConcentrationScreen.kt` 批准记录后，显示批准链本身**通过**。但依赖扫描暴露出两个新问题，测试仍为 2 FAIL / 8 ERROR：
+
+- **真实的研究输入未锁定**：PR #19 新增的研究工具 `tools/pk-research/m2_only_reference.py` 读取生产文件 `pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchSublingualV01.kt`。该文件不在基线中，也没有实时锁定。整合时必须把它加入 `live_lock_additional`（锁定当前哈希），否则 M2 数值合约所依赖的核可以无声改动。
+- **守卫自引用的误报**：PR #19 把 AppShell 的授权链硬编码在 `check_protocol.py` 里，依赖扫描因此认为守卫本身依赖 AppShell.kt。应把守卫文件排除在扫描之外，或把这些常量移到数据文件。
+- `test_guard_two_domain.test_pk_display_change_without_approval_fails` 的报错先命中了依赖扫描，不是预期的批准链错误。修好上面两项后需要复测。
+
+## 4. 七项必答
+
+| # | 问题 | 结论 |
+|---|---|---|
+| 1 | 直接冲突 | 仅 `docs/REQUIREMENTS.md`，已无损解决（仅在临时 worktree 中） |
+| 2 | 不冲突但语义不兼容 | 见 §3：`waiver()` 硬编码链失效；PR #19 的 3 个测试文件断言旧语义 |
+| 3 | 7 个 display_review 文件是否需要新的批准链 | 需要。PR #19 只改了其中的 `ConcentrationScreen.kt`，哈希链为 `f21a68d4…`（基线）→ `75152ada…`（§60）→ `96c49efe…`（§65）→ `584dc8c7…`（§65 空状态）。D-1 会再加一环，D-2 会给 `Exports.kt`（以及可能的 `LabsScreen.kt`）各开一条链 |
+| 4 | 旧精确偏离记录能否沿 git 对象核验 | 能。PR #19 的 `protocol-deviations.json` 保留 F1 在首位（`commit: "d892e9b"` 为短 SHA，B0 的 `git cat-file` 可以解析，前提是对象已拉取），其余 6 条追加在后。B0 的 `check_deviations()` 校验通过（顺序、基线哈希）。这 6 条没有 `commit` 字段，因此只能核验格式，不能核验 git 历史 |
+| 5 | REQUIREMENTS 是否保留 §59–§67 | 是，按 §59…§66、§67 顺序保留 |
+| 6 | 冻结研究与历史快照是否无字节改变 | 是：`protocol-lock.json`、`production-baseline.json`、`results/*` 在两侧都未改；43 + 2 个实时锁定文件在合并树中通过校验（失败点都在显示批准链） |
+| 7 | PR #18 的 `m2_absolute_pgml=false` 是否被改写 | 否。PR #18 不在这次合并中，PR #19 和审计分支都没有修改它 |
+
+## 5. 新发现的守卫缺口
+
+`experimental/UnifiedConcentrationScreen.kt` 是 PR #19 新增的文件，承载 M2 页面的主要显示逻辑（包括 `asOf = remember(records, ruleSnapshots) { now() }`）。它不在冻结基线里，因此**不属于** 43/7/114 中的任何一类，B0 守卫完全不检查它。依赖扫描只覆盖研究工具对生产文件的引用，不覆盖新增的 UI 文件。
+
+建议在整合时把它加入 `display_review`。这需要修改分类表并更新分类锁，按 D-13 的规则同样要有记录。
+
+## 6. 建议的整合方案（等待批准）
+
+1. 在 PR #19 分支上合并审计分支（merge commit；不改写历史；REQUIREMENTS 按 §4 第 5 条保留）。
+2. 在 `display-approvals.json` 中为 `ConcentrationScreen.kt` 追加 3 条记录，**沿用 PR #19 的偏离 id**。证据指向 `aecbd7d:docs/pk-research/p2/protocol-deviations.json`（该文件含有这些 id 和授权摘录）。人工审查时把每一环对应到 REQUIREMENTS §60、§65。守卫只能核验“证据提交中包含该 id”，不能证明是用户本人批准（HUMAN_REVIEW_REQUIRED）。
+3. 守卫加固：批准记录的证据提交必须是完整 40 位 SHA；`check_protocol.py --required-commits` 列出历史域需要的全部提交，CI 据此拉取，不再手写清单。
+4. 把 `pk-engine/.../experimental/ResearchSublingualV01.kt` 加入 `live_lock_additional`（研究输入，见 §3.1）；依赖扫描排除守卫自身。
+5. 把 `experimental/UnifiedConcentrationScreen.kt`（以及 D-1 新增的 M2 显示文件）加入 `display_review`，重新生成分类锁；同步调整 B0 测试中的 43/7/114 数量断言（会变成 43/8+/114）。
+6. **需要你批准的测试改写**（PR #19 自带测试，均为旧守卫语义）：
+   - `test_no_frozen_protocol_or_baseline_was_rewritten`：从“164 个文件全部不变”改为“43 + 2 个实时锁定文件不变、显示文件只能处于已批准的状态”。
+   - AppShell 相关的 4 个负向用例：AppShell 已是仅历史文件，改为对 `ConcentrationScreen.kt` 执行同样的负向检查（多一个字节、伪造授权字段、删除链条都必须失败）。
+   - `APPROVED_*` 常量与 `docs/design/*-authorization.json` 的一致性测试：保留，作为历史记录核对。
+   - 旧的 `waiver()` 硬编码链：保留代码和记录作为历史，不删除。
+7. 然后再分别提交 D-1、D-2，每次提交都追加对应的批准记录（证据为 REQUIREMENTS §67 中的 “D-1：选择方案 B”/“D-2：选择 D2-2” 原文），并完整回归。
+
+## 7. 复现
+
+```bash
+git worktree add -b tmp/integration-pr19-b0 <dir> aecbd7da843abd3f4334c0979e8265a72e6c67b5
+cd <dir> && git merge --no-ff --no-commit 47e2716      # REQUIREMENTS.md 冲突
+# 解决冲突：保留 HEAD 的 §59–§66，再接 §67
+python3 -m unittest discover -s tools/pk-research -p 'test_*.py'   # 283 项：2 FAIL / 8 ERROR
+```
