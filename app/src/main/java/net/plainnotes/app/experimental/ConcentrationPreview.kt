@@ -27,13 +27,14 @@ class ConcentrationPreview(val model: ResearchModel, val timeH: DoubleArray, val
                 it.ester==net.plainnotes.app.pk.Ester.E2 && it.timeH.isFinite() && it.timeH<=nowH && it.doseMG.isFinite() && it.doseMG>0 })
             val doses = audit.events.map { ExperimentalDose(it.timeH, it.doseMG) }.sortedBy { it.atHour }
             val anchor=ResearchDisplayProtocol.anchor(model,selected)
+            val prepared=PreparedResearchHistory(doses,selected)
             // Repeated extrema/graph queries reuse exactly equal timestamps, never interpolated values.
             // The cache is bounded during construction and released before the exact tap evaluator escapes.
             var constructionCache: MutableMap<Double, Double>? = HashMap()
             fun exact(hour: Double): Double {
                 if(constructionCache != null) checkCancelled()
                 constructionCache?.get(hour)?.let { return it }
-                val value=ResearchSublingualV01.studyScenario(hour,doses,selected,anchor).also {
+                val value=prepared.studyAt(hour,anchor).also {
                     require(it.isFinite() && it>=0 && (it*Pk.PMOL_PER_PG).isFinite())
                 }
                 constructionCache?.let { if(it.size>=50_000) it.clear();it[hour]=value }
