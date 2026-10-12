@@ -9,7 +9,9 @@
 | `0b7a448` | 关于页“构建来源”卡片（`ui/SourceIdentity.kt`、`AboutScreen` 一行接线、四种语言共 11 条字符串、`SourceIdentityUiTest`） | `git revert 0b7a448` |
 | `47e2716` | D-4：`docs/delivery/ledger.json` 和 `scripts/delivery_ledger.py`（含测试）；`apk_provenance.py` 读取包名和版本号，并可要求精确的源码 SHA；CI android 作业检查 Release APK 身份和交付账本 | `git revert 47e2716` |
 
-两个提交都没有修改 Schema、PK 内核或参数、权限、签名、applicationId、versionCode/versionName，也没有改动历史数据。B0 守卫在提交前后都通过：`SettingsScreen.kt`、`strings.xml` 是仅历史文件，没有新增任何豁免。
+| `cf3e580` | 修复两处本轮发现的缺陷：`PackageInfo.longVersionCode` 需要 API 28，而 minSdk 是 26，会让关于页在 Android 8.0/8.1 上崩溃（lint NewApi 错误），改用 `PackageInfoCompat`；`apk_provenance.py` 把 `compileSdkVersionCodename='17'` 误读成包名，改为整词匹配，并用真实 aapt2 输出作测试 | `git revert cf3e580`（须与 0b7a448/47e2716 一起回退） |
+
+这些提交都没有修改 Schema、PK 内核或参数、权限、签名、applicationId、versionCode/versionName，也没有改动历史数据。B0 守卫在提交前后都通过：`SettingsScreen.kt`、`strings.xml` 是仅历史文件，没有新增任何豁免。
 
 ## 2. 关于页（CONFIRMED_SOURCE + TESTED_LOCAL）
 
@@ -52,12 +54,19 @@
 |---|---|
 | `scripts/test_delivery_ledger.py`（8 项：仓库账本通过；递增通过；重复或降低版本号、包名或证书改变、源码不可信、APK 哈希缺失/重复/等于证书、缺字段、源码版本低于已交付版本，都被拒绝） | PASS |
 | `scripts/test_apk_provenance.py`（6 项：只读 app 的 BuildConfig、包名与版本解析、精确 SHA/干净/git 才通过） | PASS |
-| `scripts` 全部测试 | 17/17 PASS |
-| CI：R8 压缩后的 Release APK 必须恰好声明 `GITHUB_SHA` | 等待 CI |
+| `scripts` 全部测试 | 18/18 PASS（含 cf3e580 新增的 aapt2 真实输出用例） |
+| CI：R8 压缩后的 Release APK 必须恰好声明 `GITHUB_SHA` | 本地等价检查通过（见 §4）；CI 结果见 §4 |
 
 ## 4. 全量回归
 
-（运行中，完成后填写真实结果。）
+| 运行 | 结果 |
+|---|---|
+| 第一次全量（提交 `47e2716`，干净树）：`core:data` / `core:reminder` / `app` 单测 + `lintFullDebug` + Debug/Release 构建 | 测试：data 72/0 失败、reminder 14/0、app 411/0（13 项是原有的环境性跳过），`PeriodStabilityTest` 5/5。**lint 失败：1 个 NewApi 错误**（见 `cf3e580`），因此 Release 未构建，BUILD FAILED |
+| 修复后（提交 `cf3e580`，干净树）：`SourceIdentityUiTest` + `PeriodStabilityTest` + `BuildProvenanceTest` + lint + Debug/Release | BUILD SUCCESSFUL；6/6、5/5、4/4；lint **0 错误**，新文件没有警告 |
+| Release APK 身份（`apk_provenance.py --expect-source-sha cf3e580…`） | 通过：`source_sha=cf3e58096039bcaf4765c98ef35243441247302f`、origin=git、dirty=false；包名 `net.plainnotes.app`，versionCode 25 / 0.2.0；unsigned APK sha256 `5f57014e…`（这是**未签名**测试包，不是交付物） |
+| `check_release_manifest.py`（无 INTERNET） / `delivery_ledger.py check` | PASS / PASS（下一次交付至少 26） |
+| B0 守卫 `check_protocol.py` | PASS（普通产品文件改动不触发守卫） |
+| GitHub Actions（`cf3e580`） | run 38262091486，**等待结果** |
 
 ## 5. 未验证与风险
 

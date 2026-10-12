@@ -74,3 +74,7 @@
 | 37 | GitHub Actions android.yml（加固后代码） | run 38244314171 @1e7b79d：cancelled（被下一次推送按 concurrency 取消）；run 38244330717 @5b2993d：jvm/android/device-tests 全部 success |
 | 38 | GitHub Actions android.yml（B0 守卫 `b2ba7f6`） | run 38257031094：jvm / android / device-tests 全部 success；“Fetch frozen P2 history objects”成功；`tools/pk-research` 273 项 OK |
 | 39 | B0 负向用例逐条打印拒绝原因（本地，`test_guard_two_domain.py` 夹具） | 每个用例都因预期原因被拒绝，未改动的副本通过（明细见 12 §9） |
+| 40 | B1 关于页：`SourceIdentityUiTest`、`TranslationsTest`、`ButtonAuditTest`(about) 4 语言 × 3 字号 × 2 宽度 × 浅/深 | 6/6、1/1、48/48，0 条溢出/截断；首轮发现时间在 320dp/2x 下从数字中间断行，已修正后复测 |
+| 41 | 全量回归 @`47e2716` | data 72、reminder 14、app 411（13 跳过）、PeriodStability 5/5 全部通过；**lint NewApi 1 错误**（longVersionCode，minSdk 26）→ BUILD FAILED |
+| 42 | 修复 @`cf3e580` 后：聚焦测试 + lint + Debug/Release + APK 身份 + manifest + 交付账本 | 全部通过；Release APK 声明 cf3e580/git/clean；`apk_provenance` 正则误读包名的缺陷同时修复 |
+| 43 | 隔离整合 PR #19(`aecbd7d`) + 审计分支(`47e2716`)，仅临时 worktree | 1 处文本冲突（REQUIREMENTS）；研究测试 283 项 2 FAIL / 8 ERROR；补 3 条批准记录后显示链通过，但发现未锁定研究输入和守卫自引用误报（17 号报告） |

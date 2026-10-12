@@ -2,7 +2,7 @@
 
 > 只写“现在是什么”。历史过程见 `docs/HANDOFF.md`，需求原文见 `docs/REQUIREMENTS.md`，审计细节见 `docs/audits/product-quality-2026-10/`。
 > 每次合并、交付或做出产品决定时更新本文件。
-> 最后核对：2026-10-12T14:00Z（审计分支 `claude/new-session-sbje5o`；**本文件尚未进入默认分支**）。
+> 最后核对：2026-10-12T14:30Z（审计分支 `claude/new-session-sbje5o`；**本文件尚未进入默认分支**）。
 
 ## 源码与分支
 
@@ -41,10 +41,10 @@
 | ID | 决定 | 状态 |
 |---|---|---|
 | D-13 | 方案 A：双域科研守卫 | **已实施**：`b2ba7f6`，CI 38257031094 全部 success |
-| B1-UI | 关于页显示完整源码 SHA、提交时间、构建来源，可复制；四语言/字号/宽度验证 | 下一批 |
-| D-4 | 今后正式交付递增 versionCode；不改 applicationId、签名证书、Schema；交付清单区分源码 SHA / APK SHA-256 / 证书指纹 | 下一批（只定规则，不签名不发布） |
-| D-1 | 方案 B + 科学边界（保留 M2 条件性情景曲线与 pg/mL，取消醒目的“当前浓度”数字；不改 `m2_absolute_pgml`） | 关于页之后，在 PR #19 分支实施 |
-| D-2 | D2-2：新 PDF / 新化验记录的舌下 E2 个体估算显示“暂不可用”及原因；历史快照不变；需改 Schema 时先另行请示 | 与 D-1 同批 |
+| B1-UI | 关于页显示完整源码 SHA、提交时间、构建来源，可复制；四语言/字号/宽度验证 | **已实施**：`0b7a448`、`cf3e580`（审计 16） |
+| D-4 | 今后正式交付递增 versionCode；不改 applicationId、签名证书、Schema；交付清单区分源码 SHA / APK SHA-256 / 证书指纹 | **规则已实施**：`docs/delivery/ledger.json` + `scripts/delivery_ledger.py`（`47e2716`）；下一次交付 versionCode ≥ 26 |
+| D-1 | 方案 B + 科学边界（保留 M2 条件性情景曲线与 pg/mL，取消醒目的“当前浓度”数字；不改 `m2_absolute_pgml`） | **等待整合批准**（审计 17）；生产代码未开始 |
+| D-2 | D2-2：新 PDF / 新化验记录的舌下 E2 个体估算显示“暂不可用”及原因；历史快照不变；需改 Schema 时先另行请示 | 同上 |
 
 未经再次批准：不合并 PR #19，不签名或发布 APK，不修改历史记录和生产 PK 内核。
 
@@ -52,13 +52,15 @@
 
 - 守卫已改为双域（审计 12 §9）：历史域从 `e89579a` 复现 164/164 哈希并在 `388ef0f` 回放研究；当前域实时锁定 43 个原研究文件 + 2 个研究测试资源，7 个 PK 显示文件需产品负责人批准链（`display-approvals.json`），其余 114 个产品文件正常开发。
 - 缺少历史 git 对象、研究结果不一致、受保护文件未授权变更时守卫失败，不跳过。
-- PR #19 分支仍带旧守卫；在该分支实施 D-1/D-2 时需先合入 B0 并登记显示批准。
+- PR #19 分支仍带旧守卫。隔离整合（审计 17）发现：PR #19 自带测试断言旧守卫语义，需要改写，**等待产品负责人批准**；PR #19 新增的研究输入 `ResearchSublingualV01.kt` 未锁定；新增的 M2 显示文件 `UnifiedConcentrationScreen.kt` 不在守卫范围内。
+- 交付版本：2026-10-09 至 10-12 的多个私下交付 APK 都是 versionCode 25，仅凭版本号无法区分手机上装的是哪一个。
 
 ## 最近的验证证据
 
 - 默认分支 CI success（f53726f）；PR #19 CI 7/7 success（aecbd7d）。
 - 本地（`0d99591`，干净克隆，SDK 37）：domain 58、pk-engine 58、importer 12、data 72、reminder 14、app 405（13 项跳过），`PeriodStabilityTest` 5/5，lint 0 错误，Debug/Release 构建、无 INTERNET 检查、研究守卫均通过（审计 13）。
 - CI 38241151594（`6f13c66`）全部 success；加固后 CI 38244330717（`5b2993d`）全部 success；B0 CI 38257031094（`b2ba7f6`）全部 success（研究测试 273 项）。
+- B1 本地（`47e2716`/`cf3e580`）：data 72、reminder 14、app 411（13 跳过），PeriodStability 5/5，lint 0 错误（修复后），Release APK 声明 cf3e580/git/clean（审计 16 §4）。
 - 最近有记录的真机反馈：2026-10-10，ARM64 包，用户手动检查（机型未记录）。
 
 ## 关键文档

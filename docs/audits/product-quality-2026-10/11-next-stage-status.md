@@ -31,10 +31,10 @@ PR：**未创建**。Release / 签名 / 交付：**无**。
 |---|---|---|
 | G0 / D-13 科研守卫双域 | **DONE**（2026-10-12 批准方案 A；提交 `b2ba7f6`；CI 38257031094 全部 success） | 12 §9 |
 | B1 构建侧 | **DONE**（本地全量回归 PASS；CI 38244330717 @5b2993d 全部 success） | 13 |
-| B1 关于页 | **APPROVED，下一批实施**（B0 后 `SettingsScreen.kt` 为仅历史文件，正常修改，无需偏离） | 13 §7 |
-| D-4 versionCode | **APPROVED**（今后正式交付递增；不改 applicationId / 签名 / Schema） | REQUIREMENTS §67 |
-| G1 / D-1 M2 显示 | **APPROVED 方案 B（附科学边界），排在关于页之后，在 PR #19 分支实施** | 14、REQUIREMENTS §67 |
-| G2 / D-2 PDF / 化验估算 | **APPROVED D2-2，与 D-1 同批** | 14、REQUIREMENTS §67 |
+| B1 关于页 | **已实施**（`0b7a448` + 修复 `cf3e580`；CI 见 16 §4） | 16 |
+| D-4 versionCode | **规则已实施**（`47e2716` 交付账本；本轮无交付，versionCode 仍 25） | 16 §3 |
+| G1 / D-1 M2 显示 | APPROVED 方案 B；**NEEDS_AUTHORIZATION**：先要批准 PR #19 整合中的测试改写（17） | 14、17 |
+| G2 / D-2 PDF / 化验估算 | APPROVED D2-2；同样等待 17 的整合批准 | 14、17 |
 | B2 隐私/备份 | 不再被守卫阻断（相关文件已是仅历史文件）；待排期 | 06 |
 | B3 UX / 无障碍 | 不再被守卫阻断；PK 显示的 7 个文件仍需批准链 | 06 |
 | B4 性能 | 需要设备基准 | 06 |
