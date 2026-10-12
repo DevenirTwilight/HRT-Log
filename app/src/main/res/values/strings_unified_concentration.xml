@@ -42,7 +42,7 @@
     <string name="uc_research_settings">Model comparison settings</string>
     <string name="uc_original_scenario">SL E2 literature scenario</string>
     <string name="uc_original_assumptions">Price Figure 1 group-amplitude scenario, not a validated personal or total E2 prediction.</string>
-    <string name="uc_original_research_note">Research representative, not a clinical winner: %1$s · %2$s · %3$s. Price 1997 Figure 1 weighted amplitude: assumed B=%4$s, fitted A=%5$s pg/mL (1 mg / 1 h). Group amplitude mapped to recorded SL E2 only; other E2 routes excluded. Lab dots are observed total E2 and do not calibrate this curve. Calibration and parameter cards below apply ONLY to Legacy. Recorded-dose tail only, uncertain at 8–24 h; Figure/Table AUC conflict unresolved; hold-time effects not estimated.</string>
+    <string name="uc_original_research_note">Price 1997 Figure 1 research reference: %1$s · %2$s (%3$s). Assumed B=%4$s, fitted A=%5$s pg/mL (1 mg / 1 h increment). Group scenario, not an individual or total E2 prediction. Lab dots are measured total E2, not used to fit M2. Only recorded SL E2 and its residual tail are included; the 8–24 h tail is uncertain.</string>
     <string name="uc_original_tail">Research tail</string>
     <string name="uc_original_peaks">Isolated 1 mg: Cmax %1$s pg/mL at +%2$s h. Latest-dose 24 h history window (including earlier residuals): peak %3$s pg/mL at +%4$s h.</string>
     <string name="uc_preview_loading">Loading recorded sublingual E2 doses and calculating the selected research curve…</string>

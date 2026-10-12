@@ -13,6 +13,9 @@ class UnifiedConcentrationTranslationsTest {
             return (0 until nodes.length).associate { (nodes.item(it) as org.w3c.dom.Element).let { n -> n.getAttribute("name") to n.textContent } }
         }
         val english=strings("values")
+        for(locale in listOf("values","values-zh","values-b+zh+Hant","values-fr")) {
+            assertFalse("Stale calibration instruction in $locale",strings(locale).getValue("uc_original_research_note").contains("Legacy",ignoreCase=true))
+        }
         for(locale in listOf("values-zh","values-b+zh+Hant","values-fr")) {
             val translated=strings(locale);assertEquals(locale,english.keys,translated.keys)
             for((key,text) in english) {

@@ -51,6 +51,8 @@ class UnifiedConcentrationUiTest {
         ui.onNodeWithText(text(R.string.calib_enable)).assertDoesNotExist()
         ui.onNodeWithTag("m2-calibration-unavailable").assertExists()
         ui.onNodeWithText(text(R.string.model_e2_sl)).assertDoesNotExist()
+        val note=ui.onNodeWithTag("research-not-personal").fetchSemanticsNode().config[androidx.compose.ui.semantics.SemanticsProperties.Text].joinToString { it.text }
+        assertFalse("M2 note cannot claim removed Legacy calibration cards",note.contains("Legacy",ignoreCase=true))
     }
     @Test fun originalChartTapZoomAndPanRemainOperable() {
         awaitChart();val chart=ui.onNodeWithTag("unified-chart").performScrollTo()
