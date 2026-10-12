@@ -58,3 +58,16 @@
 | 28 | `python3 -m unittest discover -s tools/pk-research` | 252 项 PASS |
 
 物理设备、模拟器、截图仍为 NOT_RUN/BLOCKED（容器无 KVM）。
+
+# 下一阶段任务书（2026-10-12 11:24Z 起）
+
+| # | 命令 | 结果 |
+|---|---|---|
+| 29 | `git fetch --prune`；PR 列表；CI 作业列表 | 分支/PR 均未变；CI 38241151594 最终 success（jvm/android/device-tests） |
+| 30 | `git worktree add 388ef0f` → `python3 tools/pk-research/research.py --output …`（Python 3.13.16） | 5/5 结果文件与已提交 `docs/pk-research/p2/results/*` 逐字节一致 |
+| 31 | 当前树运行 `research.py` | 只有 `code_revision`、`code_sha256` 不同 |
+| 32 | 扫描 67 个研究/审计/拟合/测试源码，查找对 114 个 HISTORY_ONLY 文件的引用 | 0 处真实引用（2 处假阳性已核实） |
+| 33 | B1 场景矩阵 S1–S7（干净克隆 @0d99591） | 全部符合预期（见 13 §4） |
+| 34 | 干净克隆全量：domain/pk-engine/importer/data/reminder/app 单测、lint、Debug、Release、manifest 检查、P2 守卫 | 全部 PASS；app 405 项/13 跳过 |
+| 35 | `scripts/apk_provenance.py` 读取 Release | origin=git、dirty=false、SHA=0d99591…；apk_sha256 bfa58c96…；unsigned |
+| 36 | 临时应用关于页补丁 v2 + 临时 Robolectric 测试；运行守卫测试 | 测试 1/1 PASS；守卫 FAIL（SettingsScreen.kt 被锁定，符合预期）；已还原 |

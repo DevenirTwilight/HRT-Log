@@ -8,15 +8,14 @@
  import androidx.compose.ui.res.stringResource
  import androidx.compose.ui.unit.dp
  import androidx.core.app.NotificationManagerCompat
-@@ -126,6 +127,14 @@
+@@ -126,6 +127,13 @@
          SectionCard(null) {
              Text(stringResource(R.string.app_name), style = MaterialTheme.typography.headlineSmall)
              Text(stringResource(R.string.version, version), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-+            // Audit B1: source commit of this build (full SHA selectable for exact comparison); no health data.
-+            val source = net.plainnotes.app.BuildConfig.SOURCE_SHA
++            // Audit B1: source commit of this build (selectable full SHA, commit time in UTC); no health data.
 +            androidx.compose.foundation.text.selection.SelectionContainer {
-+                Text(listOfNotNull(source, net.plainnotes.app.BuildConfig.SOURCE_COMMIT_TIME_UTC.takeIf { it != "unknown" },
-+                    "dirty".takeIf { net.plainnotes.app.BuildConfig.SOURCE_DIRTY }).joinToString(" · "),
++                Text(listOfNotNull(net.plainnotes.app.BuildConfig.SOURCE_SHA, net.plainnotes.app.BuildConfig.SOURCE_COMMIT_TIME_UTC.takeIf { it != "unknown" },
++                    net.plainnotes.app.BuildConfig.SOURCE_ORIGIN.takeIf { it != "git" }, "dirty".takeIf { net.plainnotes.app.BuildConfig.SOURCE_DIRTY }).joinToString(" · "),
 +                    style = MaterialTheme.typography.bodySmall.copy(fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace),
 +                    color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.testTag("about-source"))
 +            }

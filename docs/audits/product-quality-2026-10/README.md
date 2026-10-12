@@ -96,4 +96,8 @@ PR #19 描述称 M1 研究核来自 P2-AZ（#17 的内容），而 #17/#18 本�
 | `evidence-index.md` | 阶段 D 完成 |
 | `09-p2-guard-decoupling-proposal.md` + `09-p2-guard-file-map.json` | B0 设计（待 D-13） |
 | `10-build-provenance-implementation.md` + `10-about-source-identity.patch` | B1 构建侧完成；关于页待批准 |
+| `11-next-stage-status.md` | S0 报告 + 决策/批次状态 |
+| `12-b0-guard-implementation-plan.md` + `B0-protected-file-matrix.json` | B0 实施方案、依赖闭包、实测回放（取代 09 的提议）；WAITING_FOR_D13 |
+| `13-b1-build-provenance-verification.md` | B1 加固与验证（取代 10 的验证部分） |
+| `14-m2-display-and-export-decisions.md` | D-1 / D-2 决策材料 |
 | `../../STATUS.md` | 当前状态单一入口 |
