@@ -128,6 +128,13 @@ python3 -m unittest discover -s tools/pk-research -p 'test_*.py'   # 283 项：2
 | 受保护显示文件的未授权变化必须失败 | `ConcentrationScreenApprovalChainTest`（未批准修改、哈希篡改、非负责人、短 SHA、无关证据、伪造追加、链条断裂/倒序/清空）与 `test_pk_display_change_without_approval_fails`，每个用例断言失败原因；沙箱未修改时必须先通过 |
 | 偏离链、研究结果、数值合约不变 | 7 条偏离记录按规范化哈希锁定；5/5 研究结果回放逐字节一致；`M2OnlyNumericalContractTest` 3/3；PR #19 校准回放工作流 success |
 | AppShell 正常开发，导航有回归测试 | AppShell 为仅历史文件；`UnifiedConcentrationNavigationTest`（真实导航到唯一浓度入口、无模型选择器）保留，并由 `test_appshell_is_ordinary_and_its_navigation_is_pinned_by_behaviour` 固定其关键断言 |
-| 三次 ConcentrationScreen 变更逐项核实 | 见 §8；`display-approvals.json` 中 `review_status`：§60 对应的 `PD-2026-10-11-ORIGINAL-UI-CONCENTRATIONSCREEN` 为 **HUMAN_REVIEW_REQUIRED**（需求文字晚于代码 23 分钟）；另两条为 VERIFIED_AGAINST_GIT_AND_REQUIREMENTS。测试固定该状态，不能被悄悄改为已核实 |
+| 三次 ConcentrationScreen 变更逐项核实 | 见 §8；`display-approvals.json` 中 `review_status`：§60 对应的 `PD-2026-10-11-ORIGINAL-UI-CONCENTRATIONSCREEN` 起初为 **HUMAN_REVIEW_REQUIRED**（需求文字晚于代码 23 分钟），2026-10-12 产品负责人事后确认后改为 **OWNER_CONFIRMED**（REQUIREMENTS §72，提交 `0c3843c`；原日期、提交、哈希和时间差保留不变）；另两条为 VERIFIED_AGAINST_GIT_AND_REQUIREMENTS。测试固定该状态，不能被悄悄改为已核实 |
 | 扫描 PR #19 新增依赖 | 64 个非文档文件逐一归类（§8）；PK 源码目录下的未分类文件直接失败 |
 | 未删除测试、未降低断言 | 改写的测试都换成了等价或更强的检查（见 §8）；变异测试 13/13 与 D-2 手工变异 3/3 证明负向测试能发现违规 |
+
+## 10. §60 审批的事后确认（2026-10-12）
+
+产品负责人本人确认：2026-10-11 恢复原浓度 UI、只增加模型选择，是当时提出的要求。处理方式：
+- 先在 REQUIREMENTS §72 记录确认原文（提交 `0c3843c9175ea7788038cd27ece2168cbd7a0630`），再把审批记录的 `review_status` 改为 `OWNER_CONFIRMED`，新增 `owner_confirmation`（日期 2026-10-12，“事后人工核验”，证据指向 `0c3843c`）。
+- 原记录的日期 2026-10-11、证据提交 `425a7ab`、哈希 `f21a68d4… → 75152ada…`、“晚 23 分钟”的说明都原样保留，没有提前批准时间。
+- 守卫新增校验：记录了 `owner_confirmation` 时，必须有日期和完整提交，且该提交的文件中包含审批 id；CI 自动拉取该提交。新增负向测试：短 SHA、无关提交、缺日期都会失败。

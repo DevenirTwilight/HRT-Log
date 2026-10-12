@@ -150,10 +150,17 @@ class ConcentrationScreenApprovalChainTest(unittest.TestCase):
             blob=guard.git_blobs(a['evidence']['commit'],[self.NAME])[self.NAME]
             self.assertEqual(guard.hashlib.sha256(blob).hexdigest(),a['new_sha256'],a['id'])
             self.assertIn('owner_decision',a);self.assertIn('human_review',a)
-        # §60 was written after its code commit: it stays HUMAN_REVIEW_REQUIRED until the owner confirms it (REQUIREMENTS §69 item 2).
+        # §60 was written 23 minutes after its code commit. The owner confirmed it after the fact on 2026-10-12
+        # (REQUIREMENTS §72): OWNER_CONFIRMED with that date, while the original 2026-10-11 record stays as it was.
         status={a['id']:a.get('review_status') for a in self.chain(approvals)[:3]}
-        self.assertEqual(status[migrated[0]],'HUMAN_REVIEW_REQUIRED')
-        self.assertTrue(all(s in ('HUMAN_REVIEW_REQUIRED','VERIFIED_AGAINST_GIT_AND_REQUIREMENTS') for s in status.values()))
+        self.assertEqual(status[migrated[0]],'OWNER_CONFIRMED')
+        self.assertTrue(all(s in ('OWNER_CONFIRMED','VERIFIED_AGAINST_GIT_AND_REQUIREMENTS') for s in status.values()))
+        first=self.chain(approvals)[0]
+        self.assertEqual((first['date'],first['evidence']['commit'][:7]),('2026-10-11','425a7ab'))
+        self.assertEqual(first['owner_confirmation']['date'],'2026-10-12')
+        self.assertIn('23 minutes',first['human_review'])
+        text=guard.git_blobs(first['owner_confirmation']['evidence']['commit'],['docs/REQUIREMENTS.md'])['docs/REQUIREMENTS.md'].decode()
+        self.assertIn(first['id'],text);self.assertIn('OWNER_CONFIRMED',text)
     def test_unapproved_modification_fails(self):
         self.rejects('last approved state',change_file=lambda f:f.write_bytes(f.read_bytes()+b' '))
     def test_tampered_hash_fails(self):
@@ -169,6 +176,12 @@ class ConcentrationScreenApprovalChainTest(unittest.TestCase):
         def add(a):
             last=self.chain(a)[-1]; a.append(dict(last,id='PD-FORGED-NEXT',previous_sha256=last['new_sha256'],new_sha256='2'*64))
         self.rejects('not verifiable',change_approvals=add)
+    def test_forged_owner_confirmation_fails(self):
+        def confirm(a,**evidence): self.chain(a)[0]['owner_confirmation']['evidence'].update(evidence)
+        self.rejects('full commit',change_approvals=lambda a:confirm(a,commit='0c3843c'))
+        # A commit whose REQUIREMENTS does not contain this id (the frozen start commit) cannot confirm it.
+        self.rejects('Owner confirmation not verifiable',change_approvals=lambda a:confirm(a,commit='e89579a02da3c92a9e4976baea729af9d532437e'))
+        self.rejects('full commit',change_approvals=lambda a:self.chain(a)[0]['owner_confirmation'].pop('date'))
     def test_broken_chain_fails(self):
         self.rejects('Broken approval chain',change_approvals=lambda a:a.remove(self.chain(a)[1]))
         self.rejects('Broken approval chain',change_approvals=lambda a:a.reverse())

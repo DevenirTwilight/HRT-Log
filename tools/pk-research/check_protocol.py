@@ -127,6 +127,16 @@ def check_display(directory, name, expected, actual):
         text = git_blobs(evidence.get('commit', ''), [evidence.get('path', 'docs/REQUIREMENTS.md')]).get(evidence.get('path', 'docs/REQUIREMENTS.md'))
         if text is None or a['id'].encode() not in text:
             raise ValueError('Approval evidence not verifiable in git history: ' + a['id'])
+        # A later owner confirmation is optional, but when recorded it must be verifiable in git the same way.
+        confirmation = a.get('owner_confirmation')
+        if confirmation is not None:
+            commit = confirmation.get('evidence', {}).get('commit', '')
+            if not re.fullmatch(r'[0-9a-f]{40}', commit) or not confirmation.get('date'):
+                raise ValueError('Owner confirmation must name a date and a full commit: ' + a['id'])
+            path_ = confirmation['evidence'].get('path', 'docs/REQUIREMENTS.md')
+            text = git_blobs(commit, [path_])[path_]
+            if text is None or a['id'].encode() not in text:
+                raise ValueError('Owner confirmation not verifiable in git history: ' + a['id'])
         previous = a['new_sha256']
     if previous != actual:
         raise ValueError('PK display file differs from its last approved state: ' + name)
@@ -189,7 +199,9 @@ def required_commits(directory=P2):
                 if re.fullmatch(r'[0-9a-f]{40}', d.get('commit', ''))}
     path = directory / 'display-approvals.json'
     if path.exists():
-        commits |= {a['evidence']['commit'] for a in json.loads(path.read_text())['approvals']}
+        approvals = json.loads(path.read_text())['approvals']
+        commits |= {a['evidence']['commit'] for a in approvals}
+        commits |= {a['owner_confirmation']['evidence']['commit'] for a in approvals if 'owner_confirmation' in a}
     return sorted(commits)
 
 def historical_baseline(directory=P2, start_sha=None):

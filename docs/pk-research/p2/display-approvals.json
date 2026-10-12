@@ -21,7 +21,17 @@
     "decision_text_commit": "8216f309c0d883cc7b54bcd391f1351a1dc043ca (2026-10-11T21:16+02:00)"
    },
    "human_review": "REQUIRED: the §60 text was committed 23 minutes AFTER the code commit 425a7ab (20:53+02:00); content matches the change, but the written record post-dates it. Confirm this was your instruction.",
-   "review_status": "HUMAN_REVIEW_REQUIRED"
+   "review_status": "OWNER_CONFIRMED",
+   "owner_confirmation": {
+    "date": "2026-10-12",
+    "kind": "post-hoc human verification by the product owner (事后人工核验)",
+    "statement": "2026-10-11 恢复原浓度 UI、只增加模型选择功能，确实是产品负责人当时向开发代理提出的要求。",
+    "evidence": {
+     "commit": "0c3843c9175ea7788038cd27ece2168cbd7a0630",
+     "path": "docs/REQUIREMENTS.md"
+    },
+    "unchanged": "Approval date 2026-10-11, code commit 425a7ab, requirement-text commit 8216f30 (23 minutes after the code), hashes and chain are kept as recorded; this confirmation does not backdate the approval."
+   }
   },
   {
    "id": "PD-2026-10-12-M2-ONLY-CONCENTRATIONSCREEN",
