@@ -1,3 +1,9 @@
+# APK下载备用通道（2026-10-12）
+
+用户反馈聊天本地路径一直远程读取，原APK内容不变。将正式签名修复APK压缩成ZIP（11,748,222 B，MD5 47085116b86437e3134fd519303a5d9f），通过已连接Google Drive插件上传到用户My Drive；读取元数据确认文件尺寸与仅owner权限，无公开分享。私有下载链接https://drive.google.com/file/d/1bZt_ypgVFbSSEvfwmAKOHP16iYpFZHZZ/view?usp=drivesdk 。解压得到同一APK，SHA256仍9797e6bdca066b723794ee0728269571e479a1c657493d31151bdee5fd55b0ca；用户侧下载是否成功尚未确认。不改APK源码或公开Release。
+
+---
+
 # PR #19 修复 APK 私下交付（2026-10-12）
 
 用户最新要求“给我吧，apk”授权本轮私下交付，沿用已有必须正式签名的安装包偏好，覆盖上一工程审计期间不交付限制。未改源码/参数/发布配置，签署已验收应用源码6c663e0f对应unsigned Release（文档/测试等待头5cfa6929）。确认现有备份仓库仍private，恢复原密钥在源码外；签名脚本核对正式证书989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1与16KB对齐通过。临时私有克隆、ZIP/密钥/密码副本全部删除，永久备份未改。包名net.plainnotes.app，0.2.0/build25，未降versionCode；私下附件HRT-Log-PR19-calibration-fixed-official.apk，12786548字节，SHA256 9797e6bdca066b723794ee0728269571e479a1c657493d31151bdee5fd55b0ca。完整ZIP CRC通过，不公开上传Release/仓库/CI。原正式证书支持覆盖升级；本轮没有实际用户设备安装验收，不能宣称已验证所有OEM。研究模型仍非个人临床预测。下方保留前阶段状态。
