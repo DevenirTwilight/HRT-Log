@@ -20,20 +20,25 @@ class UnifiedConcentrationAndroidTest {
     @Test fun m2AndOriginalUnitSurviveRecreationAndRotation() {
         await("unified-chart");ui.onNodeWithText("pmol/L").performScrollTo().performClick()
         ui.activityRule.scenario.recreate();await("unified-chart");noSelector()
-        org.junit.Assert.assertTrue(ui.onAllNodesWithText("pmol/L").fetchSemanticsNodes().size>=2)
+        ui.onNode(hasText("pmol/L") and isSelected()).assertExists()  // D-1: no hero unit label; the selection survives
         for((requested,configuration) in listOf(android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE to android.content.res.Configuration.ORIENTATION_LANDSCAPE,
                 android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT to android.content.res.Configuration.ORIENTATION_PORTRAIT)) {
             ui.activityRule.scenario.onActivity { it.requestedOrientation=requested }
             ui.waitUntil(30_000){ui.activity.resources.configuration.orientation==configuration};await("unified-chart");noSelector()
-            org.junit.Assert.assertTrue(ui.onAllNodesWithText("pmol/L").fetchSemanticsNodes().size>=2)
+            ui.onNode(hasText("pmol/L") and isSelected()).assertExists()  // D-1: no hero unit label; the selection survives
         }
     }
     @Test fun observedLabsCannotCalibrateM2OnAndroid() {
         await("unified-chart")
         val value=kotlin.math.round(ResearchSublingualV01.studyScenario(0.0,listOf(-30.0,-20.0,-3.0).map{ExperimentalDose(it,1.0)},ResearchDisplayProtocol.candidate(ResearchModel.M2),ResearchDisplayProtocol.anchor(ResearchModel.M2))).toInt().toString()
-        ui.onNodeWithText(value).assertExists()
+        // D-1: no on-screen current number; the scenario is read from the preview the screen was given.
+        fun scenario()=ui.activity.lastPreview!!.let{p->kotlin.math.round(p.valueAt(p.asOfH!!)!!).toInt().toString()}
+        org.junit.Assert.assertEquals(value,scenario());ui.onAllNodesWithText(value).assertCountEquals(0)
+        val before=ui.activity.lastPreview!!.values.copyOf()
         ui.runOnUiThread { ui.activity.syntheticLabPgMl=9000.0;ui.activity.syntheticHistoryRevision++ }
-        await("unified-chart");ui.waitForIdle();ui.onNodeWithText(value).assertExists()
+        await("unified-chart");ui.waitForIdle();org.junit.Assert.assertEquals(value,scenario())
+        org.junit.Assert.assertArrayEquals(before,ui.activity.lastPreview!!.values,0.0)
+        ui.onNodeWithTag("m2-labs-separate").performScrollTo().assertExists()
         ui.onNodeWithTag("m2-calibration-unavailable").assertExists()
         ui.onNodeWithText(ui.activity.getString(R.string.calib_enable)).assertDoesNotExist()
     }

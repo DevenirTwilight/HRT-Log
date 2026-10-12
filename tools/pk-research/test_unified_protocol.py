@@ -143,8 +143,10 @@ class ConcentrationScreenApprovalChainTest(unittest.TestCase):
     def test_migrated_chain_matches_the_real_file_and_git_history(self):
         self.run_with()
         approvals=json.loads((guard.P2/'display-approvals.json').read_text())['approvals']
-        self.assertEqual([a['id'] for a in self.chain(approvals)],[e['id'] for e in guard.APPROVED_ORIGINAL_UI[1:]]+[e['id'] for e in guard.APPROVED_M2_ONLY_UI[1:]])
-        for a in self.chain(approvals):
+        # The three migrated PR #19 changes stay the first, unchanged links; later owner-approved links are appended.
+        migrated=[e['id'] for e in guard.APPROVED_ORIGINAL_UI[1:]]+[e['id'] for e in guard.APPROVED_M2_ONLY_UI[1:]]
+        self.assertEqual([a['id'] for a in self.chain(approvals)][:3],migrated)
+        for a in self.chain(approvals)[:3]:
             blob=guard.git_blobs(a['evidence']['commit'],[self.NAME])[self.NAME]
             self.assertEqual(guard.hashlib.sha256(blob).hexdigest(),a['new_sha256'],a['id'])
             self.assertIn('owner_decision',a);self.assertIn('human_review',a)

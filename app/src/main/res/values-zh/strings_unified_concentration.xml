@@ -42,13 +42,11 @@
     <string name="uc_research_settings">模型比较设置</string>
     <string name="uc_original_scenario">舌下E2文献情景</string>
     <string name="uc_original_assumptions">Price图1群体幅度情景，非经验证的个人或总E2预测。</string>
-    <string name="uc_original_research_note">Price 1997 图1研究参考：%1$s · %2$s（%3$s）。假设B=%4$s、拟合A=%5$s pg/mL（1mg/1h增量）。群体情景，非个人或总E2预测；化验点为实测总E2，未用于拟合M2。仅含已记录舌下E2及其残留尾部，8–24h尾部不确定。</string>
     <string name="uc_original_tail">研究尾部</string>
     <string name="uc_original_peaks">单次1mg参考：Cmax %1$s pg/mL，Tmax +%2$s h。最新剂量后24h历史窗口（含前剂残留）：峰值%3$s pg/mL，峰时+%4$s h。</string>
     <string name="uc_preview_loading">正在读取舌下E2记录并计算所选研究曲线…</string>
     <string name="uc_preview_failed">研究曲线计算失败，服药记录未改动。可选择Legacy查看原计算结果。</string>
-    <string name="m2_reference_title">M2 文献参考浓度</string>
-    <string name="m2_chart_title">M2 舌下 E2 参考曲线</string>
+    <string name="m2_chart_title">M2 舌下 E2 文献情景曲线（非个人预测）</string>
     <string name="m2_partial_scope">本参考曲线仅含已确认的舌下 E2 记录。另有其他 E2 途径或未知记录，暂不提供合并的总 E2 浓度；其兼容计算和历史仍保留。</string>
     <string name="m2_compatibility_scope">M2 仅适用于舌下游离 E2。其他途径使用原兼容计算及其独立参数与校准。</string>
     <string name="m2_no_qualified_history">暂无可用于 M2 的完整舌下 E2 历史。请补全缺失的历史信息；不会用旧舌下预测代替。</string>
@@ -61,4 +59,12 @@
     <string name="m2_weight_scope">体重保留用于其他兼容药物，不缩放 M2 参考浓度。</string>
     <string name="m2_parameter_scope">M2 使用上方标明的固定候选与 Price Figure 1 标定。以下兼容假设仅涉及其他途径和药物。</string>
     <string name="m2_retry_reference">重试参考计算</string>
+    <string name="m2_scenario_title">舌下 E2 文献情景（不是你的血药浓度）</string>
+    <string name="m2_scenario_body">这条曲线把一项小样本研究（Price 1997，6 名绝经后女性的平均值）的曲线形状和幅度，套用到你记录的舌下雌二醇剂量和时间上。它是条件性文献情景，不是对你个人血药浓度的预测，不能用来判断高低或调整剂量。个人幅度、基线、重复给药和 8–24 小时长尾都没有经过充分验证。</string>
+    <string name="m2_scenario_unit">%1$s（情景值）</string>
+    <string name="m2_scenario_as_of">情景计算于 %1$s</string>
+    <string name="m2_research_basis">研究依据</string>
+    <string name="m2_research_basis_hide">收起研究依据</string>
+    <string name="m2_research_basis_body">%1$s 候选 %2$s（%3$s）。假设背景 B = %4$s pg/mL；1 mg 在 1 小时的幅度 A ≈ %5$s pg/mL，按 Price 1997 图 1 中 6 名绝经后女性的组均值拟合。该人群与 HRT 使用者不同；个人幅度、背景、剂量线性、重复给药累积和 8–24 小时尾部都没有经过独立验证。实测化验单独列出，从不用于拟合这条曲线。</string>
+    <string name="m2_labs_separate_note">实测总 E2，单独列出，不能与上方情景曲线直接比较。</string>
 </resources>

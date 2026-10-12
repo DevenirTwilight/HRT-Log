@@ -61,6 +61,51 @@
     "decision_text_commit": "644fe93f65fd4301f4d967f03aff67593e23e0f7 (before the code commit at 08:30Z)"
    },
    "human_review": "recommended (decision recorded before the change)"
+  },
+  {
+   "id": "D-1：选择方案 B",
+   "file": "app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt",
+   "approver": "DevenirTwilight",
+   "date": "2026-10-12",
+   "scope": "D-1 option B with scientific boundaries: M2 conditional literature scenario curve with pg/mL kept; no prominent current number; every readout marked as scenario value; measured labs listed separately, not drawn on the curve; one plain explanation on top, technical basis collapsible; whole-number pg/mL; one snapshot time base refreshed while the page is open. No M2 parameter, candidate, kernel or result change.",
+   "previous_sha256": "584dc8c70aa780cde6ccf6967ce136b89f5994c1137e9889a2e80d43828cc559",
+   "new_sha256": "7ed4e28f51c2bea6446036d6bd522af177569f712102eb6f2f0bbc3f319d3142",
+   "evidence": {
+    "commit": "b2ba7f63784ea965377d39ba83b6c9a86a043475",
+    "path": "docs/REQUIREMENTS.md"
+   },
+   "owner_decision": "REQUIREMENTS §67 item 4 (D-1 option B, 2026-10-12) and §69 item 4 (implement after integration CI).",
+   "human_review": "recommended: §67 records the owner decision text of 2026-10-12; check that the diff stays within it (display only)."
+  },
+  {
+   "id": "D-1：选择方案 B",
+   "file": "app/src/main/java/net/plainnotes/app/experimental/UnifiedConcentrationScreen.kt",
+   "approver": "DevenirTwilight",
+   "date": "2026-10-12",
+   "scope": "D-1 option B with scientific boundaries: M2 conditional literature scenario curve with pg/mL kept; no prominent current number; every readout marked as scenario value; measured labs listed separately, not drawn on the curve; one plain explanation on top, technical basis collapsible; whole-number pg/mL; one snapshot time base refreshed while the page is open. No M2 parameter, candidate, kernel or result change.",
+   "previous_sha256": "290343e4bfcbb3e3e1f5cf35befae454258654df41ac4da83c8136c5b076b660",
+   "new_sha256": "29c09d46f0b300eeb6ba6abdb030577a6cb70ddbff06f404fe441e9ce807def5",
+   "evidence": {
+    "commit": "b2ba7f63784ea965377d39ba83b6c9a86a043475",
+    "path": "docs/REQUIREMENTS.md"
+   },
+   "owner_decision": "REQUIREMENTS §67 item 4 (D-1 option B, 2026-10-12) and §69 item 4 (implement after integration CI).",
+   "human_review": "recommended: §67 records the owner decision text of 2026-10-12; check that the diff stays within it (display only)."
+  },
+  {
+   "id": "D-1：选择方案 B",
+   "file": "app/src/main/java/net/plainnotes/app/experimental/ConcentrationPreview.kt",
+   "approver": "DevenirTwilight",
+   "date": "2026-10-12",
+   "scope": "D-1 option B with scientific boundaries: M2 conditional literature scenario curve with pg/mL kept; no prominent current number; every readout marked as scenario value; measured labs listed separately, not drawn on the curve; one plain explanation on top, technical basis collapsible; whole-number pg/mL; one snapshot time base refreshed while the page is open. No M2 parameter, candidate, kernel or result change.",
+   "previous_sha256": "f8f1df2888824be1c492d8e981bc4d96cd1d50bae3402a31553886e9379de9fc",
+   "new_sha256": "846017d2f465dc78e9db08d714c91da58031f2b6d24c33e00995a11201afdc16",
+   "evidence": {
+    "commit": "b2ba7f63784ea965377d39ba83b6c9a86a043475",
+    "path": "docs/REQUIREMENTS.md"
+   },
+   "owner_decision": "REQUIREMENTS §67 item 4 (D-1 option B, 2026-10-12) and §69 item 4 (implement after integration CI).",
+   "human_review": "recommended: §67 records the owner decision text of 2026-10-12; check that the diff stays within it (display only)."
   }
  ]
 }

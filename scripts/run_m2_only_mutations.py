@@ -8,6 +8,8 @@ PREVIEW=ROOT/'app/src/main/java/net/plainnotes/app/experimental/ConcentrationPre
 PROTOCOL=ROOT/'pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchDisplayProtocol.kt'
 SCREEN=ROOT/'app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt'
 SCOPE=ROOT/'app/src/main/java/net/plainnotes/app/conc/experimental/ResearchHistoryScope.kt'
+# D-1 moved the scenario assumptions into the collapsible research basis of the unified screen.
+UNIFIED=ROOT/'app/src/main/java/net/plainnotes/app/experimental/UnifiedConcentrationScreen.kt'
 def replace(s,old,new):
     if s.count(old)!=1:raise ValueError('Mutation anchor not unique: '+old)
     return s.replace(old,new)
@@ -23,7 +25,7 @@ def leak_actual_legacy_amplitude(s):
         return PriceFigure1997.anchor(projected).let { it.copy(oneMgIncrementAtOneHour=it.oneMgIncrementAtOneHour*kotlin.math.exp(oldFit.logAmplitude)) }"""
     return replace(s,old,new)
 def claim_total_from_sl_only(s):
-    SCREEN.write_text(replace(SCREEN.read_text(),'stringResource(R.string.uc_original_assumptions)','"Total E2"'))
+    UNIFIED.write_text(replace(UNIFIED.read_text(),'stringResource(R.string.uc_original_assumptions)','"Total E2"'))
     return remove_mixed_scope(s)
 
 CASES=[
@@ -32,14 +34,19 @@ CASES=[
  ('one_hour_as_cmax',PREVIEW,one_hour_peak,':app:testFullDebugUnitTest','net.plainnotes.app.ConcentrationPreviewTest.defaultProductPreviewUsesRealLiteratureFitInHeroChartAndExactReadout'),
  ('legacy_calibration_on_m2',SCREEN,lambda s:replace(s,'if(m2Only && (preview!=null || compatibilityHasSl)) SectionCard','if(false) SectionCard'),':app:testFullDebugUnitTest','net.plainnotes.app.UnifiedConcentrationUiTest.personalLabsCannotScaleM2AndOldCalibrationIsNotPresentedAsM2'),
  ('mixed_routes_without_scope',SCOPE,remove_mixed_scope,':app:testFullDebugUnitTest','net.plainnotes.app.ResearchHistoryScopeTest.mixedScopesRetainOtherRouteAndUnknownFactsWithoutChangingRecords'),
- ('candidate_range_as_human_90',SCREEN,lambda s:replace(s,'stringResource(R.string.uc_original_assumptions)','"15 candidates are a human 90% prediction interval"'),':app:testFullDebugUnitTest','net.plainnotes.app.UnifiedConcentrationUiTest.originalCardsAndCalendarControlsRemainWithoutModelSelector'),
- ('legacy_value_relabelled_m2',SCREEN,lambda s:replace(s,'(if(preview==null) result.currentPgMl else preview.currentPgMl)','result.currentPgMl'),':app:testFullDebugUnitTest','net.plainnotes.app.UnifiedConcentrationUiTest.fixedM2KernelOwnsHeroWithoutOldPredictionFallback'),
+ ('candidate_range_as_human_90',UNIFIED,lambda s:replace(s,'stringResource(R.string.uc_original_assumptions)','"15 candidates are a human 90% prediction interval"'),':app:testFullDebugUnitTest','net.plainnotes.app.UnifiedConcentrationUiTest.originalCardsAndCalendarControlsRemainWithoutModelSelector'),
+ # D-1: the M2 card has no number. Restoring a prominent "current" value (from M2 or Legacy) must be caught.
+ ('m2_current_number_restored',SCREEN,lambda s:replace(s,'Text(stringResource(R.string.m2_scenario_body)','Text(preview.currentPgMl?.let(::fmt) ?: "—", style = MaterialTheme.typography.displayMedium)\n                    Text(stringResource(R.string.m2_scenario_body)'),':app:testFullDebugUnitTest','net.plainnotes.app.UnifiedConcentrationUiTest.m2ShowsNoCurrentNumberAndItsCurveIsTheFixedKernel'),
+ ('labs_on_m2_curve',SCREEN,lambda s:replace(s,'if (preview != null) emptyList() else labs.map','if (false) emptyList() else labs.map'),':app:testFullDebugUnitTest','net.plainnotes.app.M2ScenarioDisplayTest.measuredLabsAreNeverDrawnOnTheScenarioCurve'),
+ ('legacy_time_base_on_m2',SCREEN,lambda s:replace(s,'= preview?.asOfH ?: legacyNowH','= legacyNowH'),':app:testFullDebugUnitTest','net.plainnotes.app.M2ScenarioDisplayTest.scenarioCarriesItsOwnTimeBaseAndTheChartUsesIt'),
+ ('readout_not_marked_scenario',SCREEN,lambda s:replace(s,'if(preview!=null) stringResource(R.string.m2_scenario_unit, unit) else unit','unit'),':app:testFullDebugUnitTest','net.plainnotes.app.UnifiedConcentrationUiTest.originalUnitSwitchConvertsResearchValueAndEveryReadoutIsMarkedScenario'),
+ ('stale_snapshot_time',UNIFIED,lambda s:replace(s,'val asOf = remember(records, ruleSnapshots, tick) { now() }','val asOf = remember(records, ruleSnapshots) { now() }'),':app:testFullDebugUnitTest','net.plainnotes.app.UnifiedConcentrationUiTest.timeBaseStaysConsistentWhileThePageStaysOpen'),
  ('actual_legacy_amplitude_leak',PROTOCOL,leak_actual_legacy_amplitude,':pk-engine:test','net.plainnotes.app.pk.experimental.M2OnlyNumericalContractTest.fixedCandidateHashVersionAndPriceProjectionCannotRegressToExample'),
  ('sl_only_claimed_total_e2',SCOPE,claim_total_from_sl_only,':app:testFullDebugUnitTest','net.plainnotes.app.UnifiedConcentrationUiTest.mixedE2WithoutScopeCannotAppearAsTotal')]
 def main():
     p=argparse.ArgumentParser();p.add_argument('--runner',required=True);p.add_argument('--out',required=True);p.add_argument('--cases',default='');a=p.parse_args()
     output=Path(a.out);output.mkdir(parents=True,exist_ok=True)
-    original={f:f.read_bytes() for f in (PREVIEW,PROTOCOL,SCREEN,SCOPE)}
+    original={f:f.read_bytes() for f in (PREVIEW,PROTOCOL,SCREEN,SCOPE,UNIFIED)}
     results=[]
     try:
         for name,file,mutate,task,test in CASES:

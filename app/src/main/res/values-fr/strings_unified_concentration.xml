@@ -42,13 +42,11 @@
     <string name="uc_research_settings">Réglages de comparaison des modèles</string>
     <string name="uc_original_scenario">Scénario SL E2 de la littérature</string>
     <string name="uc_original_assumptions">Amplitude de groupe de la figure 1 de Price ; aucune prédiction personnelle ou totale d’E2 validée.</string>
-    <string name="uc_original_research_note">Référence de recherche Price 1997, figure 1 : %1$s · %2$s (%3$s). B supposé=%4$s, A ajusté=%5$s pg/mL (incrément 1 mg / 1 h). Scénario de groupe, sans prédiction individuelle ni E2 totale. Les points biologiques sont mesurés, sans ajustement de M2. Prises SL E2 enregistrées et résidus uniquement ; queue incertaine à 8–24 h.</string>
     <string name="uc_original_tail">Queue de recherche</string>
     <string name="uc_original_peaks">Référence isolée 1 mg : Cmax %1$s pg/mL à +%2$s h. Fenêtre de 24 h après la dernière prise (résidus antérieurs inclus) : pic %3$s pg/mL à +%4$s h.</string>
     <string name="uc_preview_loading">Chargement des prises sublinguales d’E2 et calcul de la courbe de recherche sélectionnée…</string>
     <string name="uc_preview_failed">Le calcul de la courbe de recherche a échoué. Vos prises restent inchangées. Sélectionnez Legacy pour afficher le calcul initial.</string>
-    <string name="m2_reference_title">Concentration de référence bibliographique M2</string>
-    <string name="m2_chart_title">Courbe de référence M2 : E2 sublingual</string>
+    <string name="m2_chart_title">Scénario de littérature M2 E2 sublinguale (pas une prédiction personnelle)</string>
     <string name="m2_partial_scope">Cette référence contient uniquement les prises confirmées d’E2 sublingual. D’autres voies ou des données inconnues sont présentes ; la concentration totale combinée est indisponible. Leurs calculs compatibles et leur historique sont conservés.</string>
     <string name="m2_compatibility_scope">M2 s’applique uniquement à l’E2 libre sublingual. Les autres voies utilisent le calcul compatible existant, avec ses propres paramètres et son étalonnage.</string>
     <string name="m2_no_qualified_history">Aucun historique complet d’E2 sublingual n’est disponible pour M2. Complétez les informations manquantes ; aucune ancienne prédiction sublinguale n’est substituée.</string>
@@ -61,4 +59,12 @@
     <string name="m2_weight_scope">Le poids est conservé pour les autres médicaments compatibles ; il ne modifie pas la référence M2.</string>
     <string name="m2_parameter_scope">M2 utilise le candidat fixe et l’ancrage Price Figure 1 indiqués ci-dessus. Les hypothèses compatibles suivantes concernent les autres voies et médicaments.</string>
     <string name="m2_retry_reference">Réessayer le calcul de référence</string>
+    <string name="m2_scenario_title">Scénario de littérature E2 sublinguale (pas votre taux sanguin)</string>
+    <string name="m2_scenario_body">Cette courbe applique la forme et l’amplitude d’une petite étude (Price 1997, moyenne de 6 femmes ménopausées) à vos doses et horaires d’estradiol sublingual enregistrés. C’est un scénario de littérature conditionnel, pas une prédiction de votre propre taux sanguin ; il ne doit servir ni à juger un taux ni à ajuster une dose. L’amplitude individuelle, le niveau de base, la prise répétée et la queue de 8 à 24 h ne sont pas suffisamment validés.</string>
+    <string name="m2_scenario_unit">%1$s · scénario</string>
+    <string name="m2_scenario_as_of">Scénario calculé à %1$s</string>
+    <string name="m2_research_basis">Base de recherche</string>
+    <string name="m2_research_basis_hide">Masquer la base de recherche</string>
+    <string name="m2_research_basis_body">%1$s candidat %2$s (%3$s). Niveau de base supposé B = %4$s pg/mL ; amplitude A ≈ %5$s pg/mL pour 1 mg à 1 h, ajustée sur la moyenne de groupe de la figure 1 de Price 1997 (6 femmes ménopausées). Cette population diffère des personnes sous THS ; l’amplitude individuelle, le niveau de base, la linéarité de dose, l’accumulation en prises répétées et la queue de 8 à 24 h ne sont pas validés de façon indépendante. Les analyses mesurées sont listées à part et ne sont jamais ajustées à cette courbe.</string>
+    <string name="m2_labs_separate_note">E2 total mesuré, listé à part. Non comparable à la courbe de scénario ci-dessus.</string>
 </resources>

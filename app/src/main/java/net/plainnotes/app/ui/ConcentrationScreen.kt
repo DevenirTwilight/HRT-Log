@@ -47,13 +47,18 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
     val chartNumber=remember(chartLocale){java.text.NumberFormat.getNumberInstance(chartLocale).apply{maximumFractionDigits=3;isGroupingUsed=false}}
     fun fmt(v: Double) = (v * factor).roundToInt().toString()
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(contentPadding).padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-        Surface(color = MaterialTheme.colorScheme.secondaryContainer, shape = MaterialTheme.shapes.medium) {
+        // D-1: on the M2 page the scenario card is the one top-level explanation; the population-estimate caveat moves into
+        // the other-medicines card it describes, so two differently worded disclaimers never stack at the top.
+        if (preview == null) Surface(color = MaterialTheme.colorScheme.secondaryContainer, shape = MaterialTheme.shapes.medium) {
             Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
                 Icon(Icons.Outlined.Info, null, tint = MaterialTheme.colorScheme.onSecondaryContainer); Spacer(Modifier.width(10.dp))
                 Text(stringResource(R.string.pk_disclaimer_short), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSecondaryContainer)
             }
         }
-        referenceNotice()
+        // With a ready M2 curve the notice (calculation time, scope, research basis) follows the scenario card's plain
+        // explanation; loading errors and empty-history messages stay at the top.
+        val noticeAfterCard = preview != null && preview.timeH.isNotEmpty()
+        if (!noticeAfterCard) referenceNotice()
         val missing = result?.missing.orEmpty()
         if (missing.any { it.medicationId == null && it.input == MissingInput.WEIGHT }) SectionCard(stringResource(R.string.pk_need_weight_title)) {
             Text(stringResource(R.string.pk_need_weight_body), style = MaterialTheme.typography.bodyMedium)
@@ -92,16 +97,23 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
         val allowE2 = !m2Only || preview!=null || !compatibilityHasSl
         if(m2Only && preview==null && compatibilityHasSl) Text(stringResource(R.string.m2_compatibility_contains_sl),style=MaterialTheme.typography.bodySmall,modifier=Modifier.testTag("m2-unsafe-compatibility"))
         if (allowE2 && result != null && (preview?.timeH ?: result.timeH).isNotEmpty() && (preview != null || result.models.containsKey(Curve.E2))) {
-            ElevatedCard(Modifier.fillMaxWidth(), colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.primaryContainer), elevation = CardDefaults.elevatedCardElevation(0.dp)) {
+            // D-1 (REQUIREMENTS §67 item 4): the M2 card states what the curve is and shows no single "current" number.
+            if(preview!=null) ElevatedCard(Modifier.fillMaxWidth().testTag("m2-scenario-card"), colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.primaryContainer), elevation = CardDefaults.elevatedCardElevation(0.dp)) {
+                Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(stringResource(R.string.m2_scenario_title), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                    Text(stringResource(R.string.m2_scenario_body), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimaryContainer, modifier = Modifier.testTag("research-not-personal"))
+                }
+            }
+            if (preview != null) { if (noticeAfterCard) referenceNotice() } else ElevatedCard(Modifier.fillMaxWidth(), colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.primaryContainer), elevation = CardDefaults.elevatedCardElevation(0.dp)) {
                 Column(Modifier.padding(20.dp)) {
-                    Text(stringResource(if(preview!=null) R.string.m2_reference_title else if(m2Only) R.string.m2_compatibility_current else R.string.pk_current), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                    Text(stringResource(if(m2Only) R.string.m2_compatibility_current else R.string.pk_current), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onPrimaryContainer)
                     Row(verticalAlignment = Alignment.Bottom) {
-                        Text((if(preview==null) result.currentPgMl else preview.currentPgMl)?.let(::fmt) ?: "—", style = MaterialTheme.typography.displayMedium, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                        Text(result.currentPgMl?.let(::fmt) ?: "—", style = MaterialTheme.typography.displayMedium, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onPrimaryContainer)
                         Spacer(Modifier.width(6.dp))
                         Text(unit, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onPrimaryContainer, modifier = Modifier.padding(bottom = 8.dp))
                     }
                     val calibrated = result.calibration != null
-                    Text(if(preview!=null) stringResource(R.string.uc_original_assumptions) else stringResource(if (calibrated) R.string.pk_basis_calibrated else R.string.pk_basis_population, result.usedDoses),
+                    Text(stringResource(if (calibrated) R.string.pk_basis_calibrated else R.string.pk_basis_population, result.usedDoses),
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onPrimaryContainer)
                     if (result.skippedDoses > 0) Text(stringResource(R.string.pk_skipped_doses, result.skippedDoses), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onPrimaryContainer)
                 }
@@ -112,12 +124,15 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
                 Text(stringResource(if(preview!=null) R.string.m2_chart_title else if(m2Only) R.string.m2_compatibility_chart else R.string.pk_chart_title),style=MaterialTheme.typography.titleMedium)
                 val ranges=listOf(7,14,60)
                 AdaptiveChoice(ranges.map{stringResource(R.string.days_short,it)},ranges.indexOf(rangeDays),{rangeDays=ranges[it]})
+                // One time base for the M2 snapshot; measured labs are listed separately, never drawn on the scenario curve.
+                val nowH = m2ChartNowH(preview, result.nowH)
+                val chartUnit = if(preview!=null) stringResource(R.string.m2_scenario_unit, unit) else unit
                 val data = ChartData(preview?.timeH ?: result.timeH, (preview?.values ?: result.e2).let { values -> DoubleArray(values.size) { values[it] * factor } },
                     result.bandInner?.takeIf { preview==null }?.let { (l, h) -> DoubleArray(l.size) { l[it] * factor } to DoubleArray(h.size) { h[it] * factor } },
                     result.bandOuter?.takeIf { preview==null }?.let { (l, h) -> DoubleArray(l.size) { l[it] * factor } to DoubleArray(h.size) { h[it] * factor } },
-                    result.nowH, result.labs.map { it.first to it.second * factor }, unit = unit,includeBandsInScale=fullBand,breaks=if(preview==null) result.calibrationBreaks else doubleArrayOf(),readAt={hour,cancel->cancel();(if(preview==null) result.evaluateAt(hour,cancel)?.center else preview.valueAt(hour))?.times(factor)})
+                    nowH, m2ChartLabs(preview, result.labs, factor), unit = chartUnit,includeBandsInScale=fullBand,breaks=if(preview==null) result.calibrationBreaks else doubleArrayOf(),readAt={hour,cancel->cancel();(if(preview==null) result.evaluateAt(hour,cancel)?.center else preview.valueAt(hour))?.times(factor)})
                 key(rangeDays) {
-                    ConcChart(data, result.nowH - rangeDays * 24 * 0.75, result.nowH + rangeDays * 24 * 0.25, Modifier.fillMaxWidth().height(260.dp).then(if(preview!=null) Modifier.testTag("unified-chart") else Modifier)) { if(it>=10)it.roundToInt().toString() else chartNumber.format(it) }
+                    ConcChart(data, nowH - rangeDays * 24 * 0.75, nowH + rangeDays * 24 * 0.25, Modifier.fillMaxWidth().height(260.dp).then(if(preview!=null) Modifier.testTag("unified-chart") else Modifier)) { if(it>=10)it.roundToInt().toString() else chartNumber.format(it) }
                 }
                 if(preview==null) {
                     SwitchRow(stringResource(R.string.chart_full_band),fullBand){fullBand=it}
@@ -126,7 +141,7 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Legend(stringResource(R.string.legend_recorded), MaterialTheme.colorScheme.primary, dashed = false)
                     Legend(stringResource(if(preview==null) R.string.legend_forecast else R.string.uc_original_tail), MaterialTheme.colorScheme.primary, dashed = true)
-                    if (result.labs.isNotEmpty()) Legend(stringResource(if(preview!=null) R.string.m2_observed_labs else R.string.legend_labs), MaterialTheme.colorScheme.tertiary, dot = true)
+                    if (preview==null && result.labs.isNotEmpty()) Legend(stringResource(R.string.legend_labs), MaterialTheme.colorScheme.tertiary, dot = true)
                     if (preview==null && result.bandInner != null) Legend(stringResource(R.string.legend_band_inner), MaterialTheme.colorScheme.primary.copy(alpha = 0.3f), block = true)
                     if (preview==null && result.bandOuter != null) Legend(stringResource(R.string.legend_band_outer), MaterialTheme.colorScheme.primary.copy(alpha = 0.15f), block = true)
                 }
@@ -135,11 +150,18 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
                 Text(stringResource(R.string.pk_unit),style=MaterialTheme.typography.bodyMedium)
                 AdaptiveChoice(listOf("pg/mL","pmol/L"),if(settings.pmol)1 else 0,{onSettings(ConcSettings(it==1,settings.calibrate,settings.mode))})
             }
+            if(preview!=null && result.labs.isNotEmpty()) SectionCard(stringResource(R.string.m2_observed_labs), Modifier.testTag("m2-labs-separate")) {
+                Text(stringResource(R.string.m2_labs_separate_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                val formatter = remember(chartLocale) { java.time.format.DateTimeFormatter.ofLocalizedDateTime(java.time.format.FormatStyle.SHORT).withLocale(chartLocale).withZone(java.time.ZoneId.systemDefault()) }
+                result.labs.sortedByDescending { it.first }.forEach { (hour, value) ->
+                    Text(formatter.format(java.time.Instant.ofEpochMilli((hour * 3_600_000).toLong())) + " — " + fmt(value) + " " + unit, style = MaterialTheme.typography.bodyMedium)
+                }
+            }
         } else if (loading) Box(Modifier.fillMaxWidth().padding(32.dp), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
         else if (preview==null && result != null && result.usedDoses==0 && result.simulatedMedications.isNotEmpty() && result.others.isEmpty())
             EmptyState(Icons.AutoMirrored.Outlined.ShowChart, stringResource(R.string.pk_no_doses_title), stringResource(R.string.pk_no_doses_body))
 
-        if (result != null && result.others.isNotEmpty()) OtherCurvesCard(result)
+        if (result != null && result.others.isNotEmpty()) OtherCurvesCard(result, populationNote = preview != null)
 
         if(m2Only && (preview!=null || compatibilityHasSl)) SectionCard(stringResource(R.string.calib_title)) {
             Text(stringResource(R.string.m2_calibration_unavailable),style=MaterialTheme.typography.bodySmall,modifier=Modifier.testTag("m2-calibration-unavailable"))
@@ -262,12 +284,13 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
 }
 
 /** CPA, spironolactone, canrenone and progesterone: one chart at a time, each with its own unit and axis. */
-@Composable private fun OtherCurvesCard(result: ConcentrationResult) {
+@Composable private fun OtherCurvesCard(result: ConcentrationResult, populationNote: Boolean = false) {
     val curves = result.others.keys.sortedBy { it.ordinal }
     var selected by remember(curves) { mutableStateOf(curves.first()) }
     var rangeDays by remember { mutableIntStateOf(14) }
     var fullBand by remember { mutableStateOf(false) }
     SectionCard(stringResource(R.string.pk_other_title)) {
+        if (populationNote) Text(stringResource(R.string.pk_disclaimer_short), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             curves.forEach { c -> FilterChip(selected == c, { selected = c }, label = { Text(curveLabel(c)) }) }
         }
@@ -400,3 +423,10 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
             }}
         }},confirmButton={TextButton(onClick={details=false}){Text(stringResource(R.string.calib_history_done))}})
 }
+
+/** D-1: the M2 chart uses its snapshot's own time base, never the separately refreshed Legacy result's. */
+internal fun m2ChartNowH(preview: net.plainnotes.app.experimental.ConcentrationPreview?, legacyNowH: Double) = preview?.asOfH ?: legacyNowH
+
+/** D-1: measured labs are never drawn on the M2 scenario curve (they are listed separately); Legacy keeps its dots. */
+internal fun m2ChartLabs(preview: net.plainnotes.app.experimental.ConcentrationPreview?, labs: List<Pair<Double, Double>>, factor: Double) =
+    if (preview != null) emptyList() else labs.map { it.first to it.second * factor }

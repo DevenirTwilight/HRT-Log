@@ -143,13 +143,13 @@ class CurrentDomainTest(unittest.TestCase):
 
     def test_pk_display_change_without_approval_fails(self):  # N11
         # No chain yet: a baseline display file and a PR #19 display file.
-        for name in ['app/src/main/java/net/plainnotes/app/ui/ConcChart.kt', 'app/src/main/java/net/plainnotes/app/experimental/UnifiedConcentrationScreen.kt']:
+        for name in ['app/src/main/java/net/plainnotes/app/ui/ConcChart.kt', 'app/src/main/java/net/plainnotes/app/experimental/ModelComparisonChart.kt']:
             with self.assertRaises(ValueError) as e: self._check_after(name, lambda f: f.write_bytes(f.read_bytes() + b'\n'))
             self.assertIn('without owner approval', str(e.exception))
-        # Existing chain: one byte beyond the last approved state fails.
-        with self.assertRaises(ValueError) as e:
-            self._check_after('app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt', lambda f: f.write_bytes(f.read_bytes() + b'\n'))
-        self.assertIn('last approved state', str(e.exception))
+        # Existing chain (PR #19 migration, D-1): one byte beyond the last approved state fails.
+        for name in ['app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt', 'app/src/main/java/net/plainnotes/app/experimental/UnifiedConcentrationScreen.kt']:
+            with self.assertRaises(ValueError) as e: self._check_after(name, lambda f: f.write_bytes(f.read_bytes() + b'\n'))
+            self.assertIn('last approved state', str(e.exception))
 
     def test_pr19_display_files_and_m2_kernel_are_protected(self):
         for name in CLS['display_review_additional']:

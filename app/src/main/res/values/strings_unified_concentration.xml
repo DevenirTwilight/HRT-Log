@@ -42,13 +42,11 @@
     <string name="uc_research_settings">Model comparison settings</string>
     <string name="uc_original_scenario">SL E2 literature scenario</string>
     <string name="uc_original_assumptions">Price Figure 1 group-amplitude scenario, not a validated personal or total E2 prediction.</string>
-    <string name="uc_original_research_note">Price 1997 Figure 1 research reference: %1$s · %2$s (%3$s). Assumed B=%4$s, fitted A=%5$s pg/mL (1 mg / 1 h increment). Group scenario, not an individual or total E2 prediction. Lab dots are measured total E2, not used to fit M2. Only recorded SL E2 and its residual tail are included; the 8–24 h tail is uncertain.</string>
     <string name="uc_original_tail">Research tail</string>
     <string name="uc_original_peaks">Isolated 1 mg: Cmax %1$s pg/mL at +%2$s h. Latest-dose 24 h history window (including earlier residuals): peak %3$s pg/mL at +%4$s h.</string>
     <string name="uc_preview_loading">Loading recorded sublingual E2 doses and calculating the selected research curve…</string>
     <string name="uc_preview_failed">The research curve could not be calculated. Your records have not been changed. Select Legacy to view the original calculation.</string>
-    <string name="m2_reference_title">M2 literature reference concentration</string>
-    <string name="m2_chart_title">M2 sublingual E2 reference curve</string>
+    <string name="m2_chart_title">M2 sublingual E2 literature scenario (not a personal prediction)</string>
     <string name="m2_partial_scope">This reference includes only qualified recorded sublingual E2. Other E2 routes or unknown records are present; a combined total E2 concentration is unavailable. Their compatibility calculations and history are retained.</string>
     <string name="m2_compatibility_scope">M2 applies only to sublingual free E2. Other routes use the existing compatibility calculation, with its own parameters and calibration.</string>
     <string name="m2_no_qualified_history">No qualified sublingual E2 history is available for M2. Repair missing historical information; no old sublingual prediction is substituted.</string>
@@ -61,4 +59,12 @@
     <string name="m2_weight_scope">Weight is retained for other compatible medicines; it does not scale the M2 reference.</string>
     <string name="m2_parameter_scope">M2 uses the fixed candidate and Price Figure 1 anchor stated above. The following compatibility assumptions concern other routes and medicines.</string>
     <string name="m2_retry_reference">Retry reference calculation</string>
+    <string name="m2_scenario_title">Sublingual E2 literature scenario (not your blood level)</string>
+    <string name="m2_scenario_body">This curve applies the shape and size of one small study (Price 1997, average of 6 postmenopausal women) to your recorded sublingual estradiol doses and times. It is a conditional literature scenario, not a prediction of your own blood level, and must not be used to judge levels or adjust doses. Individual size, background, repeated dosing and the 8–24 h tail are not adequately validated.</string>
+    <string name="m2_scenario_unit">%1$s · scenario</string>
+    <string name="m2_scenario_as_of">Scenario calculated at %1$s</string>
+    <string name="m2_research_basis">Research basis</string>
+    <string name="m2_research_basis_hide">Hide research basis</string>
+    <string name="m2_research_basis_body">%1$s candidate %2$s (%3$s). Assumed background B = %4$s pg/mL; amplitude A ≈ %5$s pg/mL for 1 mg at 1 h, fitted to the Price 1997 Figure 1 group mean of 6 postmenopausal women. That population differs from people using HRT; individual amplitude, background, dose linearity, repeated-dose accumulation and the 8–24 h tail are not independently validated. Measured labs are listed separately and are never fitted to this curve.</string>
+    <string name="m2_labs_separate_note">Measured total E2, listed separately. Not comparable with the scenario curve above.</string>
 </resources>
