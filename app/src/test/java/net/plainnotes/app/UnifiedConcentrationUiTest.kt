@@ -129,4 +129,12 @@ class UnifiedConcentrationUiTest {
         ui.onNodeWithText(text(R.string.pk_no_doses_title)).assertDoesNotExist();noSelector()
     }
 
+    @Test fun mixedE2WithoutScopeCannotAppearAsTotal() {
+        awaitChart();ui.runOnUiThread { ui.activity.syntheticExtraRoute="ORAL" }
+        awaitChart();ui.waitForIdle()
+        ui.onNodeWithText(text(R.string.m2_partial_scope)).assertExists()
+        ui.onNodeWithText(text(R.string.uc_original_assumptions)).assertExists()
+        ui.onNodeWithText("Total E2").assertDoesNotExist()
+    }
+
 }

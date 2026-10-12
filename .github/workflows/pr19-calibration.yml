@@ -6,6 +6,8 @@ on:
       - 'app/src/**'
       - 'tools/pk-research/pr19_calibration_reference.py'
       - 'tools/pk-research/test_pr19_calibration_contract.py'
+      - 'tools/pk-research/m2_only_reference.py'
+      - 'docs/design/m2-only-evidence/independent-reference.json'
       - 'docs/design/pr19-calibration-evidence/**'
       - '.github/workflows/pr19-calibration.yml'
   pull_request:
@@ -39,9 +41,28 @@ jobs:
               else:assert a==b,(a,b)
           compare(a,b)
           PY
+          python tools/pk-research/m2_only_reference.py --out /tmp/m2-only-reference.json
+          python - <<'PY'
+          import json, math
+          from pathlib import Path
+          a=json.loads(Path('docs/design/m2-only-evidence/independent-reference.json').read_text())
+          b=json.loads(Path('/tmp/m2-only-reference.json').read_text())
+          def compare(a,b):
+              if isinstance(a,dict):
+                  assert a.keys()==b.keys()
+                  for k in a:compare(a[k],b[k])
+              elif isinstance(a,list):
+                  assert len(a)==len(b)
+                  for x,y in zip(a,b):compare(x,y)
+              elif isinstance(a,float):assert math.isclose(a,b,rel_tol=1e-9,abs_tol=1e-7),(a,b)
+              else:assert a==b,(a,b)
+          compare(a,b)
+          PY
           python -m unittest discover -s tools/pk-research -p 'test_pr19*.py' -v
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
           name: pr19-independent-reference
-          path: /tmp/pr19-reference.json
+          path: |
+            /tmp/pr19-reference.json
+            /tmp/m2-only-reference.json
