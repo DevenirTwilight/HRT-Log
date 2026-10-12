@@ -91,3 +91,8 @@ ConcentrationScreen.fullBand只传入ChartData.includeBandsInScale；ChartViewpo
 | physical_device_acceptance | not_verified_on_user_device |
 
 尚未完成：本人手机覆盖安装/锁/伪装/提醒/文件回返/数据保留与图表实际触控；严格化验结果获知时间回放、人体外部准确性和完整结构误差区间仍独立未实施。完整区间显隐/旧快照版本提示仅Backlog候选，不阻断本轮出包或改写历史。
+
+
+## 2026-10-12 源码合并状态补充（不是新交付）
+
+PR #19 已以 `4c88c1c7ecaa8ede67d7a0e432dcfbb7262d1d8f` 合并默认分支，主线 Android/JVM/API35 与独立文献回放 CI 全部成功（38282204769、38282204802；见[审计20](../audits/product-quality-2026-10/20-pr19-merge-and-mainline-validation.md)）。本文件此前APK/签名/下载/设备事实全部保持历史身份；它们不是这次主线的新安装包。本轮没有提取签名材料、正式签名、交付APK或公开发布；交付账本逐字节不变，不新增条目。当前源码仍build25/0.2.0/schema9；未来独立授权的实际交付需原签名及versionCode至少26。物理ARM、用户手机当前安装与该新源码的对应关系仍未验收。

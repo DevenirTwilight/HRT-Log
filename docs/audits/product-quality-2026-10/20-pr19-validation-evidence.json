@@ -1,0 +1,314 @@
+{
+  "date": "2026-10-12",
+  "state": "MERGED_CI_VERIFIED",
+  "repository": "DevenirTwilight/HRT-Log",
+  "pr_url": "https://github.com/DevenirTwilight/HRT-Log/pull/19",
+  "base_sha": "f53726ff6fa52fc5c78806a1576fdb80fcf29987",
+  "approved_attachment_head": "b381d05b5c3f12709a865b34336f28746c3da7fb",
+  "verified_head_sha": "30b802454923d557d80c5e6bdedf6eec96e583be",
+  "merge_sha": "4c88c1c7ecaa8ede67d7a0e432dcfbb7262d1d8f",
+  "merge_method": "merge",
+  "merged_at": "2026-10-12T17:08:10Z",
+  "parents": [
+    "f53726ff6fa52fc5c78806a1576fdb80fcf29987",
+    "30b802454923d557d80c5e6bdedf6eec96e583be"
+  ],
+  "tree_sha": "54970a48e3e1449f009cc82ac8aeb875aa3770d8",
+  "head_tree_equal": true,
+  "source_branch_preserved": true,
+  "branch_policy": {
+    "protected": false,
+    "rulesets": [],
+    "effective_branch_rules": [],
+    "protection_endpoint": "403 Resource not accessible by integration",
+    "allow_merge_commit": true,
+    "delete_branch_on_merge": false
+  },
+  "premerge_checks": [
+    {
+      "name": "jvm",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38280543664/job/114916482347"
+    },
+    {
+      "name": "android",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38280543664/job/114916482289"
+    },
+    {
+      "name": "device-tests",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38280543664/job/114916482047"
+    },
+    {
+      "name": "reference",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38280543634/job/114916481209"
+    },
+    {
+      "name": "device-tests",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38280535241/job/114916455187"
+    },
+    {
+      "name": "android",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38280535241/job/114916455161"
+    },
+    {
+      "name": "jvm",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38280535241/job/114916454752"
+    }
+  ],
+  "mainline_runs": [
+    {
+      "id": 38282204802,
+      "name": "PR19 independent literature calibration replay",
+      "event": "push",
+      "head_sha": "4c88c1c7ecaa8ede67d7a0e432dcfbb7262d1d8f",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38282204802"
+    },
+    {
+      "id": 38282204769,
+      "name": "Android and domain checks",
+      "event": "push",
+      "head_sha": "4c88c1c7ecaa8ede67d7a0e432dcfbb7262d1d8f",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38282204769"
+    }
+  ],
+  "mainline_jobs": [
+    {
+      "id": 114921921365,
+      "name": "device-tests",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 114921921649,
+      "name": "jvm",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 114921922035,
+      "name": "android",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 114921920964,
+      "name": "reference",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "mainline_artifacts": [
+    {
+      "id": 11762450471,
+      "name": "device-test-results",
+      "bytes": 32730,
+      "digest": "sha256:bf17ef27fb55d1a84ca5ea50b96e1ec9cd2229bb14429a9cf51cd3426f47e145"
+    },
+    {
+      "id": 11762205265,
+      "name": "jvm-test-results",
+      "bytes": 29885,
+      "digest": "sha256:8a5a6498902175d109592f124782467352ff6e3e6b9a141b078bca71467053dd"
+    },
+    {
+      "id": 11762030869,
+      "name": "p2-research-results",
+      "bytes": 127379,
+      "digest": "sha256:47ed3e436b6330db6d9e275433e0eb850703d0f4434d20f9eb9477379c97eff0"
+    },
+    {
+      "id": 11761648918,
+      "name": "build-results",
+      "bytes": 558632,
+      "digest": "sha256:636d52420ddfe2c6046ffbdebc5ab6512a28c649220fdeea5f9692183e578cf2"
+    }
+  ],
+  "local_and_downloaded_evidence": {
+    "jvm": {
+      "tests": 194,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "artifact_sha256": "8a5a6498902175d109592f124782467352ff6e3e6b9a141b078bca71467053dd"
+    },
+    "android": {
+      "artifact_id": 11761648918,
+      "artifact_sha256": "636d52420ddfe2c6046ffbdebc5ab6512a28c649220fdeea5f9692183e578cf2",
+      "app": {
+        "tests": 510,
+        "failures": 0,
+        "skipped": 61
+      },
+      "data": {
+        "tests": 72,
+        "failures": 0,
+        "skipped": 0
+      },
+      "reminder": {
+        "tests": 14,
+        "failures": 0,
+        "skipped": 0
+      },
+      "period_stability": {
+        "tests": 5,
+        "failures": 0,
+        "skipped": 0
+      },
+      "frozen_lab": {
+        "tests": 1,
+        "failures": 0,
+        "skipped": 0
+      },
+      "D2_policy": {
+        "tests": 10,
+        "failures": 0,
+        "skipped": 0
+      },
+      "lint_severity": {
+        "Warning": 174
+      },
+      "lint_types": {
+        "ApplySharedPref": 2,
+        "UnusedAttribute": 1,
+        "LocalContextResourcesRead": 1,
+        "ModifierParameter": 1,
+        "MissingQuantity": 2,
+        "PluralsCandidate": 41,
+        "ObsoleteSdkInt": 2,
+        "UnusedResources": 106,
+        "UseKtx": 18
+      }
+    },
+    "device": {
+      "artifact_id": 11762450471,
+      "artifact_sha256": "bf17ef27fb55d1a84ca5ea50b96e1ec9cd2229bb14429a9cf51cd3426f47e145",
+      "data": {
+        "tests": 14,
+        "failures": 0,
+        "skipped": 0
+      },
+      "app_main": {
+        "tests": 71,
+        "failures": 0,
+        "skipped": 2
+      },
+      "independent_restart_passed": 2
+    },
+    "guard": {
+      "source_sha": "4c88c1c7ecaa8ede67d7a0e432dcfbb7262d1d8f",
+      "status": "PASS",
+      "historical_files": 164,
+      "byte_identical_result_files": 5,
+      "live_lock_additional": {
+        "pk-engine/src/test/resources/non-sl-calibration-v1.json": "5fb17dfd8b7d81de878963d0236eaad7026149890f24fdf2d48cb5aa1a52c600",
+        "pk-engine/src/test/resources/sublingual-literature-validation.json": "1470bcdf49df38f8c65072e362a5da06a62022b0f89b9cf85d959046d50b3a97",
+        "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchSublingualV01.kt": "55c62670dac37d9c44a370ea10406d66c21654ba330b7e967c61840a101ec527",
+        "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/PreparedResearchHistory.kt": "9d595566ebe3ae21912c446daa0b999ce5002fa21b96e9cb7fc1b9fdf0eecfca",
+        "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchExtrema.kt": "de68283793249988cc3ead591afd74afed296084d3f06d012486443d71b032e3",
+        "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchM1Catalog.kt": "82ffdd2f627742dfc2648da95e69d547f14d198f5c91214fbeca73e38d888f5d",
+        "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/StudyAnchors.kt": "93f746293efa12866bee1e5f740643de217ed64cd93d4a40bb5fc8f8808235c8",
+        "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/UnifiedModelComparison.kt": "bdb5364170b6b7d17079247c90e98ce14cd3133b336479cf075ac1326dcb0b93",
+        "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ConcentrationModelComparison.kt": "e17a9c943defb7b46247ec8a80a76b9c354512850e7dacb6b978c59256a55719",
+        "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchShapeComparisonV01.kt": "9cdebb2b1377c993833ae592b88f41e5e684867f9a5d6de7a6d357b5daf6dd95",
+        "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ExperimentalSlModelView.kt": "123a64d2e21ebe2de92a0b8f62664ef4bf71db9c750c20f67c4f1a9b2918635e",
+        "pk-engine/src/test/resources/unified-m1-python-reference.json": "11578a67d072aee3f2f7a39dd4362f8e1a24a3527b87b162f8c7b5458f19a1bc"
+      },
+      "protocol_sha256": "457530bfbe002dce0682f01f0f80d8eba020b54d4bda84efd56e684abaf9007f"
+    },
+    "protected": {
+      "head": "30b802454923d557d80c5e6bdedf6eec96e583be",
+      "sha256": {
+        "app/build.gradle.kts": "c95729669b42262fb5464b96700d221a85e04e8e0ad95495c52fd043c2a054a5",
+        "core/data/src/main/java/net/plainnotes/app/data/NotesDatabase.kt": "ef0750ad3cbbe259f4bf6e05163cee4cf19dfff61d647b5c78b13252d1ee6afd",
+        "pk-engine/src/main/resources/pk-params.json": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b",
+        "pk-engine/src/main/kotlin/net/plainnotes/app/pk/Engine.kt": "51ce72f3b4b2c4fbca0185c78a333df9a9e7877daf5d9630e5140a15a686e89e",
+        "pk-engine/src/main/kotlin/net/plainnotes/app/pk/LabFit.kt": "c26b79e8ab337f5be094545dc604167a1b25d6069799d01b2aa1c02c83cb9d4d",
+        "app/src/main/java/net/plainnotes/app/conc/ConcentrationCalculator.kt": "9a0ca71e55a49b05b614d247773a0c694716ce92f7272f79c5644a39e45e417e",
+        "app/src/main/java/net/plainnotes/app/conc/LabEstimate.kt": "476097b3723db41361db379c23a5cb8ae454423c7b89e1b10a7e10fb106f7071",
+        "docs/pk-research/p2/production-baseline.json": "52915c411eb4dd2b1975740494e320ad3a90efe1f7570bc96525b3556f85e2d0",
+        "docs/pk-research/p2/protocol-lock.json": "8b7d87abc8a04a2f1b920f8b7a4728ea3423ebdde19587a215649e12399e6d8c",
+        "docs/pk-research/p2/validation-protocol.md": "457530bfbe002dce0682f01f0f80d8eba020b54d4bda84efd56e684abaf9007f",
+        "docs/pk-research/p2/protocol-deviations.json": "0d944d8767ad5bc0a0935c58e15ec8d31b0b95f98529e28784ab677ba3c82808",
+        "docs/pk-research/p2/guard-classification.json": "fd4404bff3c0abebdab7d4e050480d62fd2a082bd0dcded96b7f6fcfaffb2ccb",
+        "docs/pk-research/p2/guard-classification-lock.json": "f31da526a3fd3f12d2522109e0398924a1776532ad20fd5e7969fac2e0eb0e4c",
+        "docs/pk-research/p2/display-approvals.json": "ad8676881b928c4d6938485bd0dc869a42b688953ff4ff3035c72e8484127c2e",
+        "docs/delivery/ledger.json": "108d3facc7f0dccd660b30d9f645832e2f2e0457fc05fc608e407231fd8c2545",
+        "docs/REQUIREMENTS.md": "7f44f078d9368643833f380cb1ec4d48bcb2d28aabc0bba56a3d89aef229040d"
+      },
+      "tree": "54970a48e3e1449f009cc82ac8aeb875aa3770d8"
+    }
+  },
+  "scientific_gate": {
+    "PR18_head": "68ceac2717b487029d894a76f4185cdf1f890d35",
+    "m2_absolute_pgml_allowed": false,
+    "P2_C_HOLD": true
+  },
+  "approval": {
+    "review_status": "OWNER_CONFIRMED",
+    "owner_confirmation_date": "2026-10-12",
+    "code_commit": "425a7ab0c75c625c070a17b116cc4f99aa79ff0d",
+    "written_decision_commit": "8216f309c0d883cc7b54bcd391f1351a1dc043ca",
+    "posthoc_confirmation_commit": "0c3843c9175ea7788038cd27ece2168cbd7a0630",
+    "archival_delay_minutes": 23
+  },
+  "log_excerpts": {
+    "jvm": [
+      "2026-10-12T17:09:40.6720011Z BUILD SUCCESSFUL in 1m 5s",
+      "2026-10-12T17:10:05.0292292Z Ran 302 tests in 23.100s",
+      "2026-10-12T17:10:05.7285781Z Ran 3 tests in 0.001s",
+      "2026-10-12T17:10:36.8757226Z BUILD SUCCESSFUL in 18s"
+    ],
+    "android": [
+      "2026-10-12T17:21:43.5209250Z BUILD SUCCESSFUL in 12m 56s",
+      "2026-10-12T17:21:45.6898194Z Ran 13 tests in 1.480s",
+      "2026-10-12T17:22:05.7868108Z BUILD SUCCESSFUL in 10s",
+      "2026-10-12T17:22:06.1245264Z PASS fullRelease: HRT Log application identity, correct entry points, no INTERNET (app/build/intermediates/merged_manifests/fullRelease/processFullReleaseManifest/AndroidManifest.xml)",
+      "2026-10-12T17:22:06.2687537Z Ran 21 tests in 0.015s",
+      "2026-10-12T17:22:06.3147271Z delivery ledger OK: 0 recorded deliveries, highest delivered versionCode 25, next delivery needs >= 26",
+      "2026-10-12T17:22:07.5939405Z   \"apk_sha256\": \"f22dab5c4dccbc65feb520bb350abe3419bb1b7b015a5879ac7eafe06d8e976b\",",
+      "2026-10-12T17:22:07.5944435Z     \"SOURCE_DIRTY\": \"false\",",
+      "2026-10-12T17:22:07.5945210Z     \"SOURCE_ORIGIN\": \"git\",",
+      "2026-10-12T17:22:07.5946432Z     \"SOURCE_SHA\": \"4c88c1c7ecaa8ede67d7a0e432dcfbb7262d1d8f\"",
+      "2026-10-12T17:22:26.8868758Z BUILD SUCCESSFUL in 12s"
+    ],
+    "device": [
+      "2026-10-12T17:11:44.7555840Z Starting 14 tests on emulator-5554 - 15",
+      "2026-10-12T17:11:51.9561589Z BUILD SUCCESSFUL in 1m 37s",
+      "2026-10-12T17:13:06.1742204Z Starting 71 tests on emulator-5554 - 15",
+      "2026-10-12T17:16:01.0752728Z BUILD SUCCESSFUL in 4m 8s",
+      "2026-10-12T17:16:06.7608253Z OK (1 test)",
+      "2026-10-12T17:16:10.7236105Z OK (1 test)",
+      "2026-10-12T17:16:30.4309962Z BUILD SUCCESSFUL in 12s"
+    ]
+  },
+  "scope": {
+    "extra_application_fixes": false,
+    "version_code": 25,
+    "version_name": "0.2.0",
+    "room_schema": 9,
+    "backup_format": "PNBAK1",
+    "signed": false,
+    "new_apk_delivered": false,
+    "released": false,
+    "ledger_unchanged": true,
+    "public_release_metadata_unchanged": true,
+    "physical_ARM": "NOT_RUN"
+  }
+}

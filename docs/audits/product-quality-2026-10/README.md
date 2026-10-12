@@ -1,9 +1,11 @@
+> **当前更新（2026-10-12）：PR #19 已以 merge commit `4c88c1c7ecaa8ede67d7a0e432dcfbb7262d1d8f` 合并默认分支，新的主线 CI 全部成功（MERGED_CI_VERIFIED）。B0/B1/D-1/D-2 已完成；以下早期审计基准与风险描述保留为历史，不作为重复实施指令。** 现状见[STATUS](../../STATUS.md)；正式合并、科研保护、测试/跳过及未发布边界见[审计20](20-pr19-merge-and-mainline-validation.md)。
+
 # HRT Log 产品质量审计（2026-10）
 
 > 性质：只读审计文档。本目录不包含任何生产代码、Schema、PK 参数、签名或发布变更。
-> 状态：**阶段 A–D 全部完成（2026-10-12）。** 审计分支 `claude/new-session-sbje5o`，未开 PR、未合并。
+> 历史审计阶段：A–D 于2026-10-12完成，初始审计分支 `claude/new-session-sbje5o`。其后的B0/B1/D-1/D-2已整合并随PR #19进入默认分支；现行状态以顶部更新、STATUS和审计20为准。
 
-## 快速结论
+## 历史审计快速结论（开工基准，见顶部现行状态）
 
 - **优势**：本地优先、多层隐私（SQLCipher + Keystore、Argon2id 锁与备份、伪装、通知中性化、无网络）；历史不可改写（快照、追加修订、数据库触发器、回收站）；时期引擎有稳定性门槛测试；四语完整；PK 证据边界意识强。
 - **最大瓶颈（治理）**：科研冻结守卫锁定了 164 个生产文件（含全部 `strings.xml`、ViewModel、数据层），非 UI 文件和资源“永不豁免”。普通产品改进无法合规通过 CI（05 ARCH-10，决策 D-13）。
@@ -102,5 +104,9 @@ PR #19 描述称 M1 研究核来自 P2-AZ（#17 的内容），而 #17/#18 本�
 | `14-m2-display-and-export-decisions.md` | D-1 / D-2 决策材料 |
 | `15-b0-ci-final-verification.md` | B0 独立 CI 最终结论与专项核验（CI_VERIFIED_ON_WORK_BRANCH） |
 | `16-b1-about-build-identity.md` | B1 关于页 + D-4 交付账本与测试 |
-| `17-pr19-b0-integration-review.md` | PR #19 与 B0/B1 隔离整合审查（NEEDS_AUTHORIZATION） |
+| `17-pr19-b0-integration-review.md` | 历史隔离审查及§69批准后的整合/审批记录；现已合并，见20 |
 | `../../STATUS.md` | 当前状态单一入口 |
+
+| `18-m2-conditional-scenario-ui.md` | D-1 已实施并合并，旧风险和科学边界仍保留 |
+| `19-pdf-labs-model-consistency.md` | D-2 已实施并合并，旧冻结不改写 |
+| `20-pr19-merge-and-mainline-validation.md` + `20-pr19-validation-evidence.json` | PR #19 merge commit 与独立主线验收；MERGED_CI_VERIFIED，未签名/交付/发布 |

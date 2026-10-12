@@ -1,72 +1,32 @@
 # HRT Log 当前状态（单一事实入口）
 
-> 只写“现在是什么”。历史过程见 `docs/HANDOFF.md`，需求原文见 `docs/REQUIREMENTS.md`，审计细节见 `docs/audits/product-quality-2026-10/`。
-> 每次合并、交付或做出产品决定时更新本文件。
-> 最后核对：2026-10-12T14:30Z（审计分支 `claude/new-session-sbje5o`；**本文件尚未进入默认分支**）。
+> 当前应用状态：**MERGED_CI_VERIFIED**（2026-10-12）。历史过程见 HANDOFF，需求原文见 REQUIREMENTS；本轮完整证据见[审计20](audits/product-quality-2026-10/20-pr19-merge-and-mainline-validation.md)。应用验收基线如下，随后文档提交的最新 HEAD 以 Git 为准。
 
-## 源码与分支
+## 已合并的应用基准
 
-| 项 | 值 | 证据 |
-|---|---|---|
-| 默认分支 | `claude/new-session-1959qb` @ `f53726ff6fa52fc5c78806a1576fdb80fcf29987`（Merge PR #14） | `git rev-parse` |
-| 默认分支 CI | Android and domain checks run 38137617053 success | GitHub Actions |
-| 应用版本 | versionCode 25 / versionName 0.2.0 / Room Schema 9 | `app/build.gradle.kts`、`NotesDatabase.kt` |
-| 最新待合并产品方向 | PR #19（M2-only 浓度页）@ `aecbd7da843abd3f4334c0979e8265a72e6c67b5`，OPEN，CI 全绿，**未合并** | GitHub |
-| 公开 Release | 仅 v0.2.0（2026-10-06） | GitHub Releases |
-| 已安装到用户手机的构建 | **UNKNOWN**（识别方法见审计 07 D-14） | — |
-| 构建身份机制（审计分支） | `BuildConfig.SOURCE_SHA/ORIGIN/DIRTY/COMMIT_TIME_UTC`；Release 要求 origin=git 且干净；`scripts/apk_provenance.py` 分别读取源码、APK sha256 和签名证书。**只对今后的构建有效** | 审计 13 |
+- 默认分支：`claude/new-session-1959qb`。
+- PR #19：https://github.com/DevenirTwilight/HRT-Log/pull/19；merge commit `4c88c1c7ecaa8ede67d7a0e432dcfbb7262d1d8f`，2026-10-12 17:08:10 UTC。
+- 父提交：`f53726ff6fa52fc5c78806a1576fdb80fcf29987` + `30b802454923d557d80c5e6bdedf6eec96e583be`。源分支保留；没有 squash/rebase。
+- B0/B1、D-1/D-2 已进入默认分支；本轮没有重新实施或额外应用代码修复。
+- 版本仍 0.2.0/build25、applicationId `net.plainnotes.app`、Room9；备份格式和正式签名政策不变。
 
-## 开放 PR 与依赖
+## 主线验收
 
-| PR | 作用 | 状态 | 依赖 |
-|---|---|---|---|
-| #19 | M2-only 浓度显示 | OPEN | 自带 P2-AZ 输入副本，不依赖 #17 |
-| #18 | P2-BA 能力矩阵（`m2_absolute_pgml=false`） | Draft | 叠在 #17 上 |
-| #17 | P2-AZ 研究 | Draft | — |
-| #16、#15、#10 | 研究/归档 | Draft/OPEN | — |
-| #6、#3、#2、#1 | 早期实验/归档 | Draft | #3 叠在 #2 上 |
+合并提交的 push CI [38282204769](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38282204769)：jvm/android/device-tests 全 success；独立标定回放 [38282204802](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38282204802) reference success。JVM194、科研/守卫302、data72、reminder14、app510（61条件性跳过）、PeriodStability5/5，零失败；API35 data14/app71（两重启方法主套件跳过后分别独立通过）。lint0错误174警告。unsigned Release 来源4c88c1c/git/clean，无INTERNET。
 
-处置建议见审计 07 D-9（未决定）。
+## 已核实的行为与边界
 
-## 已批准、仍然有效的规则
+- B0：历史域164文件及5个结果回放；当前实时锁定43原文件+2研究资源+10新增研究依赖；浓度显示变更受审批链约束，普通产品代码正常开发。
+- B1：关于页完整源码SHA/提交时间/来源可复制；Release限制为干净git来源。
+- D-1：M2条件性文献情景曲线、情景点读、实测化验单独显示、技术依据折叠；没有个人当前浓度大数字。
+- D-2：新PDF/新化验不再静默输出Legacy舌下E2估算；旧calculator1/2、化验、Visit Pack及记录不重写。
+- §60审批OWNER_CONFIRMED：2026-10-12事后确认；原2026-10-11代码与晚23分钟书面记录保留（REQUIREMENTS §72）。
+- P2-C HOLD；PR #18个人绝对pg/mL能力仍false；条件性情景展示没有消除科学证据张力。
 
-- 只维护 full 变体，play 已废弃（CLAUDE.md，2026-10-07）。
-- `PeriodStabilityTest` 是交付门槛（CLAUDE.md，2026-10-08）。
-- P2-C HOLD：不替换生产 PK 引擎（HANDOFF 顶部，2026-10-11）。
-- 研究成果必须实际入库（HANDOFF 顶部）。
-- 浓度页 M2-only 与 APK 私下交付授权：REQUIREMENTS §65–66，**只存在于 PR #19 分支**。
+## 发行与后续
 
-## 2026-10-12 产品负责人决定（REQUIREMENTS §67）
+本轮没有正式签名、交付APK、公开Release或标签更新。公开v0.2.0和既有私下交付是历史产物；新主线源码不是已安装到手机的版本。交付账本不新增条目；下次实际交付需独立授权、原签名和versionCode至少26。
 
-| ID | 决定 | 状态 |
-|---|---|---|
-| D-13 | 方案 A：双域科研守卫 | **已实施**：`b2ba7f6`，CI 38257031094 全部 success |
-| B1-UI | 关于页显示完整源码 SHA、提交时间、构建来源，可复制；四语言/字号/宽度验证 | **已实施**：`0b7a448`、`cf3e580`（审计 16） |
-| D-4 | 今后正式交付递增 versionCode；不改 applicationId、签名证书、Schema；交付清单区分源码 SHA / APK SHA-256 / 证书指纹 | **规则已实施**：`docs/delivery/ledger.json` + `scripts/delivery_ledger.py`（`47e2716`）；下一次交付 versionCode ≥ 26 |
-| D-1 | 方案 B + 科学边界（保留 M2 条件性情景曲线与 pg/mL，取消醒目的“当前浓度”数字；不改 `m2_absolute_pgml`） | **已实施，CI 全绿**（PR #19 分支 `bd20a5e`，审计 18）；整合已完成（`b649679`/`343a183`/`4db4770`，审计 17） |
-| D-2 | D2-2：新 PDF / 新化验记录的舌下 E2 个体估算显示“暂不可用”及原因；历史快照不变；需改 Schema 时先另行请示 | **已实施，CI 全绿**（PR #19 分支 `c41cb4a`，审计 19；无 Schema/格式变更） |
+真实ARM覆盖升级/数据保留/提醒/锁与伪装/M2/PDF/备份验收NOT_RUN。B2隐私改进、B4/B5产品质量、Lab Panel/医疗附件及旧公开包许可处置仍需独立任务，不由本次合并启动。
 
-未经再次批准：不合并 PR #19，不签名或发布 APK，不修改历史记录和生产 PK 内核。
-
-PR #19 head `b381d05` 的 CI 全部 success；合并建议已提交，等待产品负责人确认（建议 merge commit，不要 squash）。
-
-§60 审批（`PD-2026-10-11-ORIGINAL-UI-CONCENTRATIONSCREEN`）：**OWNER_CONFIRMED**，2026-10-12 事后人工核验（REQUIREMENTS §72）；原日期 2026-10-11、提交 `425a7ab`、晚 23 分钟的需求记录均保留。
-
-## 已知阻断 / 守卫现状
-
-- 守卫已改为双域（审计 12 §9）：历史域从 `e89579a` 复现 164/164 哈希并在 `388ef0f` 回放研究；当前域实时锁定 43 个原研究文件 + 2 个研究测试资源，7 个 PK 显示文件需产品负责人批准链（`display-approvals.json`），其余 114 个产品文件正常开发。
-- 缺少历史 git 对象、研究结果不一致、受保护文件未授权变更时守卫失败，不跳过。
-- PR #19 分支仍带旧守卫。隔离整合（审计 17）发现：PR #19 自带测试断言旧守卫语义，需要改写，**等待产品负责人批准**；PR #19 新增的研究输入 `ResearchSublingualV01.kt` 未锁定；新增的 M2 显示文件 `UnifiedConcentrationScreen.kt` 不在守卫范围内。
-- 交付版本：2026-10-09 至 10-12 的多个私下交付 APK 都是 versionCode 25，仅凭版本号无法区分手机上装的是哪一个。
-
-## 最近的验证证据
-
-- 默认分支 CI success（f53726f）；PR #19 CI 7/7 success（aecbd7d）。
-- 本地（`0d99591`，干净克隆，SDK 37）：domain 58、pk-engine 58、importer 12、data 72、reminder 14、app 405（13 项跳过），`PeriodStabilityTest` 5/5，lint 0 错误，Debug/Release 构建、无 INTERNET 检查、研究守卫均通过（审计 13）。
-- CI 38241151594（`6f13c66`）全部 success；加固后 CI 38244330717（`5b2993d`）全部 success；B0 CI 38257031094（`b2ba7f6`）全部 success（研究测试 273 项）。
-- B1 本地（`47e2716`/`cf3e580`）：data 72、reminder 14、app 411（13 跳过），PeriodStability 5/5，lint 0 错误（修复后），Release APK 声明 cf3e580/git/clean（审计 16 §4）。CI 38262091486（`cf3e580`）全部 success。
-- 最近有记录的真机反馈：2026-10-10，ARM64 包，用户手动检查（机型未记录）。
-
-## 关键文档
-
-`CLAUDE.md` · `docs/REQUIREMENTS.md` · `docs/HANDOFF.md`（历史） · `docs/BACKLOG.md`（顶部状态停在 §50） · `docs/audits/product-quality-2026-10/README.md` · `docs/pk-research/p2/README.md` · `docs/licensing.md`
+其他研究PR未关闭或删除；#18依赖#17，合并#19不等于合并#17/#18。历史详情见HANDOFF；本轮SHA/CI与核验见审计20。

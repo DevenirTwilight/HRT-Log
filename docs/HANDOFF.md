@@ -1,3 +1,5 @@
+> 最新当前事实（2026-10-12）：PR #19 已合并并通过主线 CI；见 [STATUS](STATUS.md) 和 [审计20](audits/product-quality-2026-10/20-pr19-merge-and-mainline-validation.md)。下文保留历史阶段的“未合并/待批准”叙述，不代表现在。
+
 # M2-only最终APK已正式签名并私下交付，全部工程成果已保存（2026-10-12）
 
 生产/被测/包内源码SHA e98d5e033e4e9b757be5daefed102bf5900ae29b；后续提交仅文档/证据，生产树不变。PR19仍OPEN，未合并其他研究PR，未创建Release/标签。APK HRT-Log-M2-only-official.apk，12,798,836B，SHA256 d9d874e82001251c4b42214a64a603354b9c47006a6952faaf7faae6d1ea5969，原证书989ba045…59379b1，包名net.plainnotes.app/0.2.0/build25，四ABI、非debuggable/无INTERNET、签名/16KB/CRC、签前后payload与旧native/PK资源校验通过。原私有备份未改，临时签名目录已清理。§66授权私下Drive实际APK已上传，metadata仅owner/shared=false，从Drive独立下载大小/SHA/CRC完全相同；私有URL只在聊天，不入Git。旧速度修复包不是本次交付。
@@ -1380,3 +1382,14 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 **§60 审批事后确认（2026-10-12，REQUIREMENTS §72）**：产品负责人确认 2026-10-11 的“恢复原 UI、只加模型选择”要求。`PD-2026-10-11-ORIGINAL-UI-CONCENTRATIONSCREEN` 改为 OWNER_CONFIRMED，并注明这是 2026-10-12 的事后核验；原提交、时间差、哈希和审批链不变。守卫现在会校验此类确认能在 git 中核实。PR #19 仍未合并，等待产品负责人对合并建议的确认。
 
 **PR #19 最终状态（2026-10-12）**：head `b381d05` 四个 CI 运行全部 success（38278491154、38278499303、38278491180、38278499243）。已向产品负责人提交合并建议：用 merge commit（不要 squash）合并 PR #19；**等待产品负责人确认，尚未合并**。不签名、不发布；任何交付需 versionCode 26 并登记交付账本。
+
+
+## 2026-10-12 PR #19 正式合并与主线验收（MERGED_CI_VERIFIED）
+
+产品负责人本轮明确授权标准merge commit。实际最新head为`30b802454923d557d80c5e6bdedf6eec96e583be`（相对附件b381d05仅文档），base为`f53726ff6fa52fc5c78806a1576fdb80fcf29987`；最新7checks全部success后，以expected_head_sha并发核验合并。GitHub实际merge提交`4c88c1c7ecaa8ede67d7a0e432dcfbb7262d1d8f`，17:08:10 UTC，父提交f53726f+30b8024。树与PR head完全相同，源分支保留，没有squash/rebase/force或额外应用修复。
+
+主线push [38282204769](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38282204769) jvm/android/device-tests全success；独立回放[38282204802](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38282204802) reference success。主线实际产物：JVM194零跳过；data72/reminder14/app510（61条件性跳过）零失败；PeriodStability5/5；API35 data14/app71（两个重启方法另行新进程各通过）；lint0错误174警告。Release为unsigned，SOURCE_SHA=4c88c1c、origin=git、dirty=false，无INTERNET检查成功。先等以上作业全部成功后，另行提交本交接及STATUS/审计20/索引与交付说明，不取消验收。
+
+B0/B1/D-1/D-2已经进入默认分支，不再列为待重复实现；本地再次164/164历史hash、5/5结果逐字节回放、302项科研守卫全部通过。§60/§72 OWNER_CONFIRMED（2026-10-12事后确认），425a7ab、8216f30、0c3843c、23分钟延迟及完整SHA/审批链保留。原PK/参数、calculator1/2/历史化验/Visit Pack/备份没有改写。
+
+本轮未签名、未交付新APK、未公开发布；build25/0.2.0/schema9不变，delivery ledger不增条目，下一次独立交付至少build26且原签名。P2-C HOLD、PR18个人绝对pg/mL能力false与条件性情景的证据张力保留。物理ARM/用户安装版本/真实覆盖升级NOT_RUN或UNKNOWN，模拟器不是实机。B2隐私、B4/B5质量、附件/LabPanel、旧公开包许可处置仍另案。完整元数据/计数/回滚分析见审计20；不因本次合并批准后续任务。
