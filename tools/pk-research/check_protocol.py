@@ -99,7 +99,14 @@ def classification(directory=P2, baseline=None):
         raise ValueError('Guard classification does not partition the frozen baseline exactly')
     if cls['historical']['start_sha'] != baseline['start_sha']:
         raise ValueError('Guard classification names a different historical start commit')
+    # Files added after the freeze (e.g. PR #19's M2 kernel and display) are registered with their reviewed hash.
+    live_extra, display_extra = set(cls['live_lock_additional']), set(cls.get('display_review_additional', {}))
+    if live_extra & display_extra or (live_extra | display_extra) & set(baseline['files']):
+        raise ValueError('Guard classification registers a file twice')
     return cls
+
+def canonical(entry):
+    return hashlib.sha256(json.dumps(entry, sort_keys=True, ensure_ascii=False, separators=(',', ':')).encode()).hexdigest()
 
 def check_display(directory, name, expected, actual):
     """A changed PK display file needs an unbroken owner approval chain whose evidence is in git history."""
@@ -115,6 +122,8 @@ def check_display(directory, name, expected, actual):
         if a['previous_sha256'] != previous:
             raise ValueError('Broken approval chain for ' + name)
         evidence = a['evidence']
+        if not re.fullmatch(r'[0-9a-f]{40}', evidence.get('commit', '')):
+            raise ValueError('Approval evidence must name a full commit: ' + a['id'])
         text = git_blobs(evidence.get('commit', ''), [evidence.get('path', 'docs/REQUIREMENTS.md')]).get(evidence.get('path', 'docs/REQUIREMENTS.md'))
         if text is None or a['id'].encode() not in text:
             raise ValueError('Approval evidence not verifiable in git history: ' + a['id'])
@@ -132,6 +141,11 @@ def check_deviations(directory, baseline, cls):
     ids = [d['id'] for d in deviations]
     if len(ids) != len(set(ids)) or ids[:len(cls['required_deviation_ids'])] != cls['required_deviation_ids']:
         raise ValueError('Append-only deviation chain was reordered or truncated')
+    # Recorded entries are immutable: any field change, removal or reorder of a locked entry fails.
+    by_id = {d['id']: d for d in deviations}
+    for entry_id, expected in cls.get('deviation_entry_sha256', {}).items():
+        if entry_id not in by_id or canonical(by_id[entry_id]) != expected:
+            raise ValueError('Recorded deviation entry was altered or removed: ' + entry_id)
     for d in deviations:
         if d['file'] in baseline['files'] and d['baseline_sha256'] != baseline['files'][d['file']]:
             raise ValueError('Deviation baseline hash does not match the frozen baseline: ' + d['id'])
@@ -142,20 +156,41 @@ def check_deviations(directory, baseline, cls):
 
 def dependency_scan(cls, production_root=ROOT):
     """Production files named by research/audit tooling must stay locked or approval-gated, never history-only."""
-    protected = set(cls['live_lock_baseline']) | set(cls['live_lock_additional']) | set(cls['display_review'])
+    protected = set(cls['live_lock_baseline']) | set(cls['live_lock_additional']) | set(cls['display_review']) | set(cls.get('display_review_additional', {}))
     scan = cls['dependency_scan']; prefixes = tuple(scan['production_prefixes'])
     pattern = re.compile(r"""['"]((?:%s)[A-Za-z0-9_./+-]+\.[A-Za-z0-9]+)['"]""" % '|'.join(map(re.escape, prefixes)))
     # Only tracked sources count; generated build outputs (app/build/...) are not production files.
-    tracked = set(subprocess.run(['git', 'ls-files', '-z'], cwd=ROOT, capture_output=True, check=True).stdout.decode().split('\0'))
+    tracked = tracked_files()
     offenders = set()
     for glob in scan['globs']:
         for tool in sorted(production_root.glob(glob)):
-            if any(tool.name.startswith(x) for x in scan['exclude_prefix']):
+            # The guard itself names files to protect them; that is not a research dependency.
+            if any(tool.name.startswith(x) for x in scan['exclude_prefix']) or str(tool.relative_to(production_root)) in scan.get('exclude_files', []):
                 continue
             for name in pattern.findall(tool.read_text(errors='ignore')):
                 if name in tracked and name not in protected:
                     offenders.add(f'{tool.relative_to(production_root)} -> {name}')
     return sorted(offenders)
+
+def tracked_files():
+    return set(subprocess.run(['git', 'ls-files', '-z'], cwd=ROOT, capture_output=True, check=True).stdout.decode().split('\0')) - {''}
+
+def unclassified(cls, baseline):
+    """Every tracked file under the PK source prefixes must be classified; a new model or display file fails closed."""
+    known = set(baseline['files']) | set(cls['live_lock_additional']) | set(cls.get('display_review_additional', {}))
+    prefixes = tuple(cls['unclassified_scan']['prefixes'])
+    return sorted(f for f in tracked_files() if f.startswith(prefixes) and f not in known)
+
+def required_commits(directory=P2):
+    """Full commits the historical domain reads: start, research run, deviation and approval evidence (for CI fetch)."""
+    cls = classification(directory)
+    commits = {cls['historical']['start_sha'], cls['historical']['research_run_commit']}
+    commits |= {d['commit'] for d in json.loads((directory / 'protocol-deviations.json').read_text())['deviations']
+                if re.fullmatch(r'[0-9a-f]{40}', d.get('commit', ''))}
+    path = directory / 'display-approvals.json'
+    if path.exists():
+        commits |= {a['evidence']['commit'] for a in json.loads(path.read_text())['approvals']}
+    return sorted(commits)
 
 def historical_baseline(directory=P2, start_sha=None):
     """Every frozen baseline hash must be reproduced from the git object at the historical start commit."""
@@ -190,6 +225,15 @@ def check(directory=P2, production_root=ROOT, historical=True):
             raise ValueError('PK display file missing: ' + name)
         if digest(path) != baseline['files'][name]:
             check_display(directory, name, baseline['files'][name], digest(path))
+    for name, registered in cls.get('display_review_additional', {}).items():
+        path = production_root / name
+        if not path.is_file():
+            raise ValueError('PK display file missing: ' + name)
+        if digest(path) != registered:
+            check_display(directory, name, registered, digest(path))
+    missing = unclassified(cls, baseline) if 'unclassified_scan' in cls else []
+    if missing:
+        raise ValueError('Unclassified file under a PK source prefix: ' + ', '.join(missing))
     check_deviations(directory, baseline, cls)
     offenders = dependency_scan(cls, production_root)
     if offenders:
@@ -240,4 +284,7 @@ def compare_results(output, expected_dir, files):
     return len(files)
 
 if __name__ == '__main__':
-    print(json.dumps(check(), indent=2))
+    if sys.argv[1:] == ['--required-commits']:
+        print(' '.join(required_commits()))
+    else:
+        print(json.dumps(check(), indent=2))

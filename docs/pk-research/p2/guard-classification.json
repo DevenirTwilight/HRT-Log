@@ -74,7 +74,17 @@
  ],
  "live_lock_additional": {
   "pk-engine/src/test/resources/non-sl-calibration-v1.json": "5fb17dfd8b7d81de878963d0236eaad7026149890f24fdf2d48cb5aa1a52c600",
-  "pk-engine/src/test/resources/sublingual-literature-validation.json": "1470bcdf49df38f8c65072e362a5da06a62022b0f89b9cf85d959046d50b3a97"
+  "pk-engine/src/test/resources/sublingual-literature-validation.json": "1470bcdf49df38f8c65072e362a5da06a62022b0f89b9cf85d959046d50b3a97",
+  "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchSublingualV01.kt": "55c62670dac37d9c44a370ea10406d66c21654ba330b7e967c61840a101ec527",
+  "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/PreparedResearchHistory.kt": "9d595566ebe3ae21912c446daa0b999ce5002fa21b96e9cb7fc1b9fdf0eecfca",
+  "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchExtrema.kt": "de68283793249988cc3ead591afd74afed296084d3f06d012486443d71b032e3",
+  "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchM1Catalog.kt": "82ffdd2f627742dfc2648da95e69d547f14d198f5c91214fbeca73e38d888f5d",
+  "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/StudyAnchors.kt": "93f746293efa12866bee1e5f740643de217ed64cd93d4a40bb5fc8f8808235c8",
+  "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/UnifiedModelComparison.kt": "bdb5364170b6b7d17079247c90e98ce14cd3133b336479cf075ac1326dcb0b93",
+  "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ConcentrationModelComparison.kt": "e17a9c943defb7b46247ec8a80a76b9c354512850e7dacb6b978c59256a55719",
+  "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchShapeComparisonV01.kt": "9cdebb2b1377c993833ae592b88f41e5e684867f9a5d6de7a6d357b5daf6dd95",
+  "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ExperimentalSlModelView.kt": "123a64d2e21ebe2de92a0b8f62664ef4bf71db9c750c20f67c4f1a9b2918635e",
+  "pk-engine/src/test/resources/unified-m1-python-reference.json": "11578a67d072aee3f2f7a39dd4362f8e1a24a3527b87b162f8c7b5458f19a1bc"
  },
  "display_review": [
   "app/src/main/java/net/plainnotes/app/export/Exports.kt",
@@ -202,12 +212,23 @@
   "importer/src/main/kotlin/net/plainnotes/app/importer/TransMemo.kt"
  ],
  "required_deviation_ids": [
-  "PD-2026-10-10-F1"
+  "PD-2026-10-10-F1",
+  "PD-2026-10-11-UNIFIED-CONCENTRATION",
+  "PD-2026-10-11-ORIGINAL-UI-APPSHELL",
+  "PD-2026-10-11-ORIGINAL-UI-CONCENTRATIONSCREEN",
+  "PD-2026-10-12-M2-ONLY-APPSHELL",
+  "PD-2026-10-12-M2-ONLY-CONCENTRATIONSCREEN",
+  "PD-2026-10-12-M2-ONLY-UNSUPPORTED-EMPTY-STATE"
  ],
  "dependency_scan": {
   "globs": [
-   "tools/pk-research/*.py",
-   "tools/pk-audit/*.py"
+   "scripts/check_unified_concentration.py",
+   "scripts/generate_unified_model_reference.py",
+   "scripts/run_m2_only_mutations.py",
+   "scripts/run_pr19_calibration_mutations.py",
+   "tools/pk-audit/*.py",
+   "tools/pk-fit/*.py",
+   "tools/pk-research/*.py"
   ],
   "exclude_prefix": [
    "test_"
@@ -217,6 +238,37 @@
    "core/",
    "pk-engine/",
    "importer/"
+  ],
+  "exclude_files": [
+   "tools/pk-research/check_protocol.py"
   ]
+ },
+ "display_review_additional": {
+  "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchDisplayProtocol.kt": "0c1c6dee428764a459240a74a4314b653705667839e4c6fd7e6f21d27c226c32",
+  "app/src/main/java/net/plainnotes/app/conc/experimental/ResearchHistoricalSlAdapter.kt": "ca24a838fb5204438c60b0655354c49365c12ef99a437a91334b0c5ab0f6e144",
+  "app/src/main/java/net/plainnotes/app/conc/experimental/ResearchHistoryScope.kt": "25d8f1186c6273ed789be501a70022b58bc85383f0ca898171a93402a2015722",
+  "app/src/main/java/net/plainnotes/app/experimental/ConcentrationPreview.kt": "f8f1df2888824be1c492d8e981bc4d96cd1d50bae3402a31553886e9379de9fc",
+  "app/src/main/java/net/plainnotes/app/experimental/ExperimentalConcentrationComparison.kt": "b47144bddc3950bd23cf841712c06f21ca0f0b9b72b916206e9612f941af5673",
+  "app/src/main/java/net/plainnotes/app/experimental/ModelComparisonChart.kt": "85c7aa6e938023aab78998a7647cfd997b3fa99fc632446909c04cfd2f489468",
+  "app/src/main/java/net/plainnotes/app/experimental/UnifiedConcentrationScreen.kt": "290343e4bfcbb3e3e1f5cf35befae454258654df41ac4da83c8136c5b076b660"
+ },
+ "additional_decision": "REQUIREMENTS §69 item 3 (2026-10-12): PR #19 M2 kernel, candidates, calibration and reference data are byte-locked research dependencies; its M2 display, display protocol and history adapters need the owner approval chain from the hashes registered here (PR #19 head aecbd7d). Any new tracked file under unclassified_scan prefixes fails until classified.",
+ "unclassified_scan": {
+  "prefixes": [
+   "pk-engine/src/main/",
+   "pk-engine/src/test/resources/",
+   "app/src/main/java/net/plainnotes/app/conc/",
+   "app/src/main/java/net/plainnotes/app/experimental/",
+   "app/src/main/java/net/plainnotes/app/export/"
+  ]
+ },
+ "deviation_entry_sha256": {
+  "PD-2026-10-10-F1": "9ef37826cfb9851d469741a19d543c05749aa71ecc82b5f2eadb42a364a89f52",
+  "PD-2026-10-11-UNIFIED-CONCENTRATION": "2c1e7c1801f1a28d49ba4c58b4da02bdf904062eecfb83941591d06395b4bb3d",
+  "PD-2026-10-11-ORIGINAL-UI-APPSHELL": "14bc5bf2576dbf6b68baaed62412c592d939aa72f99c9b9d2506943d3325bca8",
+  "PD-2026-10-11-ORIGINAL-UI-CONCENTRATIONSCREEN": "7edd0fecefe3db56fcbfa6c5d9dfd709d5b0616469290c218f3082a52c6563c8",
+  "PD-2026-10-12-M2-ONLY-APPSHELL": "61108bccdbcb108cbdc4f8bdff2177971c56ddb99f6b5b698f6f906b8026a4c5",
+  "PD-2026-10-12-M2-ONLY-CONCENTRATIONSCREEN": "56bd30ce44926bfbabe917ef37046cd3a65b3dc4c91690dfdc847797ddb26fa8",
+  "PD-2026-10-12-M2-ONLY-UNSUPPORTED-EMPTY-STATE": "c0791f790635b120d0e85e5b10e1d059e70e349fb66d0c7568b5556b39ed0ddf"
  }
 }

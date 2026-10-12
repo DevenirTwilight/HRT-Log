@@ -1,4 +1,66 @@
 {
- "note": "Append-only owner approvals for PK display files (guard-classification.json display_review). Each entry: id, file, approver (must be the product owner), date, scope, previous_sha256, new_sha256, evidence {commit, path} where the cited file at that commit contains the id. The guard verifies the chain and the evidence in git history; reviewers verify that the cited text is the owner's decision.",
- "approvals": []
+ "note": "Append-only owner approvals for PK display files (guard-classification.json display_review). Each entry: id, file, approver (must be the product owner), date, scope, previous_sha256, new_sha256, evidence {commit, path} where the cited file at that commit contains the id. The guard verifies the chain and the evidence in git history; reviewers verify that the cited text is the owner's decision. Migrated entries (REQUIREMENTS §69 item 2) were checked against git blobs, the original deviation records and the cited REQUIREMENTS text; their verification and human_review fields say what is and is not proven.",
+ "approvals": [
+  {
+   "id": "PD-2026-10-11-ORIGINAL-UI-CONCENTRATIONSCREEN",
+   "file": "app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt",
+   "approver": "DevenirTwilight",
+   "date": "2026-10-11",
+   "scope": "Original concentration screen restored; optional model preview feeds only the original hero card and chart, with distinct labels. Display only.",
+   "previous_sha256": "f21a68d40192c2e8c413d934bde69d17c16b3e0219a1092577ee425b1f24f58b",
+   "new_sha256": "75152adac151b25b4658aef19a229c6284bb4694f02d12ac894f5a34d4a15d31",
+   "evidence": {
+    "commit": "425a7ab0c75c625c070a17b116cc4f99aa79ff0d",
+    "path": "docs/pk-research/p2/protocol-deviations.json"
+   },
+   "owner_decision": "REQUIREMENTS §60 (2026-10-11): 我要恢复原ui，只增加选模型功能; authorizes ConcentrationScreen reading the optional preview in the original card/chart only.",
+   "verification": {
+    "git_blob_at_evidence_commit": "75152ada… (matches new_sha256)",
+    "previous_blob": "f21a68d4… = frozen baseline",
+    "diff": "+16/-14 lines, display labels/preview wiring only; no calculator, parameter, LabFit or database calls",
+    "decision_text_commit": "8216f309c0d883cc7b54bcd391f1351a1dc043ca (2026-10-11T21:16+02:00)"
+   },
+   "human_review": "REQUIRED: the §60 text was committed 23 minutes AFTER the code commit 425a7ab (20:53+02:00); content matches the change, but the written record post-dates it. Confirm this was your instruction."
+  },
+  {
+   "id": "PD-2026-10-12-M2-ONLY-CONCENTRATIONSCREEN",
+   "file": "app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt",
+   "approver": "DevenirTwilight",
+   "date": "2026-10-12",
+   "scope": "M2-only literature-reference display on the original page; retire M1/Legacy selection; hide old sublingual calibration/parameter cards for M2. Display only.",
+   "previous_sha256": "75152adac151b25b4658aef19a229c6284bb4694f02d12ac894f5a34d4a15d31",
+   "new_sha256": "96c49efeb1f157ddddb6699d28acee323df359abedf81a0a0710b4983f3af6d3",
+   "evidence": {
+    "commit": "b509acd86a6ffb3a7bfb3eb8e88cb1af5baf0d14",
+    "path": "docs/pk-research/p2/protocol-deviations.json"
+   },
+   "owner_decision": "REQUIREMENTS §65 (2026-10-12): M2 single-model integration; delete three-model selection; minimal original-UI number/label/responsibility wiring explicitly authorized.",
+   "verification": {
+    "git_blob_at_evidence_commit": "96c49efe… (matches new_sha256)",
+    "diff": "+25/-13 lines, labels and display predicates only",
+    "decision_text_commit": "644fe93f65fd4301f4d967f03aff67593e23e0f7 (2026-10-12T08:02Z, before the code commit at 08:28Z)"
+   },
+   "human_review": "recommended (decision recorded before the change)"
+  },
+  {
+   "id": "PD-2026-10-12-M2-ONLY-UNSUPPORTED-EMPTY-STATE",
+   "file": "app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt",
+   "approver": "DevenirTwilight",
+   "date": "2026-10-12",
+   "scope": "Known recorded but unsupported other-route E2 keeps its unsupported explanation instead of showing an empty history. One display predicate.",
+   "previous_sha256": "96c49efeb1f157ddddb6699d28acee323df359abedf81a0a0710b4983f3af6d3",
+   "new_sha256": "584dc8c70aa780cde6ccf6967ce136b89f5994c1137e9889a2e80d43828cc559",
+   "evidence": {
+    "commit": "c1f49e6b2fbb43aaf37597c34cf341b5013ea2fc",
+    "path": "docs/pk-research/p2/protocol-deviations.json"
+   },
+   "owner_decision": "REQUIREMENTS §65 (2026-10-12): 其他途径无安全统一输出时明确分量/总值不可用，未知历史不猜.",
+   "verification": {
+    "git_blob_at_evidence_commit": "584dc8c7… (matches new_sha256)",
+    "diff": "+1/-1 line, display predicate only",
+    "decision_text_commit": "644fe93f65fd4301f4d967f03aff67593e23e0f7 (before the code commit at 08:30Z)"
+   },
+   "human_review": "recommended (decision recorded before the change)"
+  }
+ ]
 }

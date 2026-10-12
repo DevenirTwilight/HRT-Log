@@ -40,7 +40,7 @@ def edit_cls(p, change):
 def production_copy(directory):
     """All locked/classified production files under a temporary root, byte-identical to the working tree."""
     root = Path(directory)
-    for name in list(BASELINE['files']) + list(CLS['live_lock_additional']):
+    for name in list(BASELINE['files']) + list(CLS['live_lock_additional']) + list(CLS.get('display_review_additional', {})):
         target = root / name; target.parent.mkdir(parents=True, exist_ok=True); shutil.copy(ROOT / name, target)
     for glob in CLS['dependency_scan']['globs']:
         for tool in ROOT.glob(glob):
@@ -53,8 +53,40 @@ class ClassificationTest(unittest.TestCase):
         cls = guard.classification()
         self.assertEqual((len(cls['live_lock_baseline']), len(cls['display_review']), len(cls['history_only'])), (43, 7, 114))
         self.assertEqual(len(BASELINE['files']), 164)
+        # Named files, not counts (REQUIREMENTS §69 item 3): research inputs found in B0 plus PR #19's M2 kernel and data.
+        kernel = 'pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/'
         self.assertEqual(set(cls['live_lock_additional']), {'pk-engine/src/test/resources/non-sl-calibration-v1.json',
-                                                           'pk-engine/src/test/resources/sublingual-literature-validation.json'})
+                                                           'pk-engine/src/test/resources/sublingual-literature-validation.json',
+                                                           'pk-engine/src/test/resources/unified-m1-python-reference.json',
+                                                           *(kernel + n + '.kt' for n in ['ResearchSublingualV01', 'PreparedResearchHistory', 'ResearchExtrema',
+                                                             'ResearchM1Catalog', 'StudyAnchors', 'UnifiedModelComparison', 'ConcentrationModelComparison',
+                                                             'ResearchShapeComparisonV01', 'ExperimentalSlModelView'])})
+        app = 'app/src/main/java/net/plainnotes/app/'
+        self.assertEqual(set(cls['display_review_additional']), {kernel + 'ResearchDisplayProtocol.kt', app + 'conc/experimental/ResearchHistoricalSlAdapter.kt',
+                                                                app + 'conc/experimental/ResearchHistoryScope.kt', app + 'experimental/ConcentrationPreview.kt',
+                                                                app + 'experimental/ExperimentalConcentrationComparison.kt', app + 'experimental/ModelComparisonChart.kt',
+                                                                app + 'experimental/UnifiedConcentrationScreen.kt'})
+        # Every registered hash is the reviewed PR #19 state; nothing under the PK source prefixes is unclassified.
+        self.assertEqual(guard.unclassified(cls, BASELINE), [])
+
+    def test_new_file_under_a_pk_prefix_fails_closed(self):
+        name = 'pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/UnclassifiedProbe.kt'
+        with tempfile.TemporaryDirectory() as d:
+            p = copy_p2(d)
+            original = guard.tracked_files
+            guard.tracked_files = lambda: original() | {name}
+            try:
+                with self.assertRaises(ValueError) as e: guard.check(p, historical=False)
+            finally:
+                guard.tracked_files = original
+            self.assertIn('Unclassified file under a PK source prefix', str(e.exception))
+
+    def test_registering_a_file_twice_fails(self):
+        with tempfile.TemporaryDirectory() as d:
+            p = copy_p2(d); name = next(iter(CLS['live_lock_additional']))
+            edit_cls(p, lambda c: c['display_review_additional'].__setitem__(name, '0' * 64))
+            with self.assertRaises(ValueError) as e: guard.check(p, historical=False)
+            self.assertIn('registers a file twice', str(e.exception))
 
     def test_research_inputs_and_evidence_stay_locked(self):
         live = set(CLS['live_lock_baseline'])
@@ -110,9 +142,21 @@ class CurrentDomainTest(unittest.TestCase):
             with self.assertRaises(ValueError): self._check_after(name, lambda f: f.write_bytes(f.read_bytes() + b' '))
 
     def test_pk_display_change_without_approval_fails(self):  # N11
+        # No chain yet: a baseline display file and a PR #19 display file.
+        for name in ['app/src/main/java/net/plainnotes/app/ui/ConcChart.kt', 'app/src/main/java/net/plainnotes/app/experimental/UnifiedConcentrationScreen.kt']:
+            with self.assertRaises(ValueError) as e: self._check_after(name, lambda f: f.write_bytes(f.read_bytes() + b'\n'))
+            self.assertIn('without owner approval', str(e.exception))
+        # Existing chain: one byte beyond the last approved state fails.
         with self.assertRaises(ValueError) as e:
             self._check_after('app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt', lambda f: f.write_bytes(f.read_bytes() + b'\n'))
-        self.assertIn('owner approval', str(e.exception))
+        self.assertIn('last approved state', str(e.exception))
+
+    def test_pr19_display_files_and_m2_kernel_are_protected(self):
+        for name in CLS['display_review_additional']:
+            with self.assertRaises(ValueError): self._check_after(name, lambda f: f.unlink())
+        for name in [n for n in CLS['live_lock_additional'] if '/experimental/' in n]:
+            with self.assertRaises(ValueError) as e: self._check_after(name, lambda f: f.write_bytes(f.read_bytes() + b' '))
+            self.assertIn('Research input changed', str(e.exception))
 
     def test_unverifiable_or_non_owner_approval_fails(self):  # N11
         name = 'app/src/main/java/net/plainnotes/app/ui/ConcChart.kt'
@@ -205,8 +249,11 @@ class CurrentScienceTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             subprocess.run([sys.executable, str(ROOT / 'tools/pk-research/research.py'), '--output', d], cwd=ROOT, capture_output=True, check=True)
             new = json.loads((Path(d) / 'analysis.json').read_text()); old = json.loads((RESULTS / 'analysis.json').read_text())
-            provenance = {'code_revision', 'code_sha256'}
+            # PR #19's research.py also records the deviation chain; that record must equal the current file, not be ignored.
+            provenance = {'code_revision', 'code_sha256', 'protocol_deviations', 'protocol_deviations_sha256'}
             self.assertEqual({k: v for k, v in new.items() if k not in provenance}, {k: v for k, v in old.items() if k not in provenance})
+            self.assertEqual(new['protocol_deviations'], json.loads((P2 / 'protocol-deviations.json').read_text())['deviations'])
+            self.assertEqual(new['protocol_deviations_sha256'], guard.digest(P2 / 'protocol-deviations.json'))
             for f in ['candidate-parameters.json', 'study-comparisons.csv']:
                 self.assertEqual((Path(d) / f).read_bytes(), (RESULTS / f).read_bytes(), f)
 
