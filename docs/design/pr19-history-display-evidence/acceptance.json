@@ -1,0 +1,46 @@
+{
+  "application_source": "f8088b84fb82b9a3561d89224a84c92704d89c11",
+  "local_build": "BUILD SUCCESSFUL in 13m24s",
+  "focused_tests": {
+    "ConcentrationPreviewTest": {
+      "tests": "8",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "timestamp": "2026-10-12T06:51:09.446Z",
+      "time": "28.007"
+    },
+    "UnifiedConcentrationUiTest": {
+      "tests": "8",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "timestamp": "2026-10-12T06:51:37.963Z",
+      "time": "42.812"
+    }
+  },
+  "lint": {
+    "Error": 0,
+    "Warning": 172
+  },
+  "guards": "check_protocol/source-lock/four locales passed",
+  "independent_replay_run": 38214597613,
+  "independent_replay_status": "success",
+  "full_ci_run": 38214597606,
+  "full_ci_status": "running at this checkpoint",
+  "delivery": {
+    "source": "f8088b84fb82b9a3561d89224a84c92704d89c11",
+    "apk_path": "/workspace/attachments/c9099a73-f075-480b-bcac-c91b03fe1408/HRT-Log-PR19-history-display-fixed-official.apk",
+    "apk_bytes": 12790644,
+    "apk_sha256": "88e598984e08afad02f3eaa219aba4b9373df29fd7ad74085c0958bbab21e14a",
+    "zip_path": "/workspace/attachments/c9099a73-f075-480b-bcac-c91b03fe1408/HRT-Log-PR19-history-display-fixed-official.zip",
+    "zip_bytes": 11749371,
+    "zip_md5": "f5e71a28437f6f960a57ea4e6952ff0c",
+    "unsigned_bytes": 12744323,
+    "unsigned_sha256": "847d979b5bc1d08088dd6a1ccd319a09d0a077be6b5a393adcededd720ba6907",
+    "official_certificate_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
+    "temporary_credentials_removed": true,
+    "drive_url": "https://drive.google.com/file/d/1DxtV9AfE7y4tPvus7ljqIACI2KBtlUkg/view?usp=drivesdk",
+    "sharing": "owner-only readback verified"
+  }
+}
