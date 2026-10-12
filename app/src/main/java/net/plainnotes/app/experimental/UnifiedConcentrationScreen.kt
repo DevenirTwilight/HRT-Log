@@ -1,11 +1,15 @@
 package net.plainnotes.app.experimental
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.currentCoroutineContext
@@ -72,15 +76,29 @@ import java.time.Instant
         }
         else if(model == ResearchModel.LEGACY) Text(stringResource(R.string.uc_legacy_note),style=MaterialTheme.typography.bodySmall,modifier=Modifier.testTag("concentration-legacy"))
     }
-    if (model == ResearchModel.LEGACY || displayed != null) legacyContent(pad,displayed,selector)
-    else Column(Modifier.fillMaxSize().padding(pad).padding(16.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
-        selector()
-        if (load == ResearchPreviewLoad.Failed) Text(stringResource(R.string.uc_preview_failed),modifier=Modifier.testTag("research-preview-error"))
-        else {
-            CircularProgressIndicator(Modifier.testTag("research-preview-loading"))
-            Text(stringResource(R.string.uc_preview_loading))
+    // Keep the original renderer at the same composition position during model transitions.
+    // An opaque, semantics-isolated overlay prevents old values/empty-state text being presented as the new model.
+    // Keeping the last ready curve underneath retains the original non-saveable range, band and scroll state.
+    var lastReady by remember { mutableStateOf<ConcentrationPreview?>(null) }
+    SideEffect { if(displayed != null) lastReady=displayed }
+    val busy=model != ResearchModel.LEGACY && displayed == null
+    val rendererPreview=if(model == ResearchModel.LEGACY) null else displayed ?: lastReady ?: ConcentrationPreview.pending(model)
+    Box(Modifier.fillMaxSize()) {
+        Box(if(busy) Modifier.clearAndSetSemantics {} else Modifier) {
+            legacyContent(pad,rendererPreview,selector)
+        }
+        if(busy) Column(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface)
+            .pointerInput(Unit) { detectTapGestures(onTap={}) }.padding(pad).padding(16.dp),
+            verticalArrangement=Arrangement.spacedBy(12.dp)) {
+            selector()
+            if (load == ResearchPreviewLoad.Failed) Text(stringResource(R.string.uc_preview_failed),modifier=Modifier.testTag("research-preview-error"))
+            else {
+                CircularProgressIndicator(Modifier.testTag("research-preview-loading"))
+                Text(stringResource(R.string.uc_preview_loading))
+            }
         }
     }
+
 
 }
 

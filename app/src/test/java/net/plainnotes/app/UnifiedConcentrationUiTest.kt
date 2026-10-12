@@ -100,6 +100,21 @@ class UnifiedConcentrationUiTest {
         ui.onNodeWithTag("model-M2").performScrollTo().performClick();awaitChart()
         ui.onNodeWithText(text(R.string.uc_original_scenario)).assertExists()
     }
+    @Test fun completedModelTransitionRestoresOriginalCardAndRetainsSelectedRange() {
+        awaitChart()
+        val seven=ui.activity.getString(R.string.days_short,7)
+        ui.onNodeWithText(seven).performScrollTo().performClick()
+        ui.onNodeWithText(seven).assertIsSelected()
+        ui.runOnUiThread { ui.activity.previewDelayMillis=1000L }
+        ui.onNodeWithTag("model-M1").performScrollTo().performClick()
+        ui.onNodeWithTag("research-preview-loading").assertExists()
+        ui.onNodeWithText(text(R.string.pk_no_doses_title)).assertDoesNotExist()
+        awaitChart()
+        ui.onNodeWithText(text(R.string.uc_original_scenario)).assertExists()
+        ui.onNodeWithTag("research-peaks").assertExists()
+        ui.onNodeWithText(text(R.string.pk_no_doses_title)).assertDoesNotExist()
+        ui.onNodeWithText(seven).assertIsSelected()
+    }
     @Test fun selectedModelAndOriginalUnitSurviveRecreation() {
         awaitChart();ui.onNodeWithTag("model-M1").performScrollTo().performClick();awaitChart()
         ui.onNodeWithText("pmol/L").performScrollTo().performClick()
