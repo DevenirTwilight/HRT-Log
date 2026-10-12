@@ -1,6 +1,6 @@
 # M2单模型整合、兼容职责与独立验收（2026-10-12）
 
-本轮从PR19 OPEN / b46dbf6增量修改，不合并PR1/2/3/17/18，不覆盖独立研究；默认分支与各PR的真实元数据/初始SHA见m2-only-evidence/start-state.json。上次正式签署包生产470b194，hash426bb468…；本轮明确禁止正式签名/交付/发布。当前文件、源码SHA与全部结果需按本报告最终验收及HANDOFF判定，不能沿用旧CI冒称新任务通过。
+本轮从PR19 OPEN / b46dbf6增量修改，不合并PR1/2/3/17/18，不覆盖独立研究；默认分支与各PR的真实元数据/初始SHA见m2-only-evidence/start-state.json。上次正式签署包生产470b194，hash426bb468…；用户最新“要交付apk”已记§66，授权在完整验收后沿用原正式证书私下交付本轮APK；不公开发布。当前文件、源码SHA与全部结果需按本报告最终验收及HANDOFF判定，不能沿用旧CI冒称新任务通过。
 
 ## 调用链与根因
 
@@ -42,4 +42,4 @@ Engine/PkParams：口服E2/EV、贴片释放与移除、凝胶产品、IM EV、C
 
 本轮用户明确授权原页最小显示接线/校准隔离，真实AppShell/ConcentrationScreen旧新SHA/最小diff保存m2-only-ui-authorization.json及m2-only-ui.patch，追加在旧F1/统一页/原UI链后；检查器仅接受两文件的新精确记录。旧锁/基线/偏离记录完整保留，任意字段伪造/乱序/额外一字节/其他保护文件变化均拒绝；不扩大通用豁免。
 
-实际测试、七种临时真实源码变异、全量/设备/Debug/unsigned Release/lint/体积及GitHub结果进行中，见HANDOFF和本目录最终results.json；未执行或环境不可用必须标NOT_RUN/BLOCKED。本轮没有正式签名/交付/发布，未读取用户健康记录。
+七类错误共九次真实源码变异均由已执行断言击杀，逐项XML/日志判定/恢复SHA在m2-only-evidence/mutations；包含实际Legacy LabFit幅度注入及SL-only伪称Total E2。源码完全恢复后重新全量正向验收。全量/设备/Debug/Release/lint/体积及GitHub最终结果见m2-only-evidence/results.json；未执行或环境不可用标NOT_RUN/BLOCKED。没有读取用户健康记录。

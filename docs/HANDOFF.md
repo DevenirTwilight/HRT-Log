@@ -1,3 +1,11 @@
+# M2-only正向全量及最终源码CI已通过，交付包构建中（2026-10-12）
+
+0da7392源码的本地718项（domain58/PK124/importer12/data72/reminder14/app438）零失败/错误、13已有可选截图/PDF跳过；PeriodStability5项已执行通过，非跳过。271研究/协议Python、13旧生产PK审计、3性能收集器测试和32候选×13时点独立引用通过。九次真实源码变异击杀后已逐字节恢复再执行正向；详细XML与计数在m2-only-evidence/local。
+
+GitHub 38225741209 Android/JVM/设备及38225741048独立233候选参考全部success，真实源码SHA0da7392f25cb009929881f9729ca02ec9e4c25ad。设备84项（14 data+70 app）、零失败，其中2进程阶段在独立脚本各执行1项并PASS；M2六项界面/数学/性能原生测试通过，M2 60剂量10442点38.921ms，图表/实际函数峰完全相等。设备x86_64 API35 Debug，不是假称ARM真机/Release性能。最终本地Debug/仪器包已构建；lint/Release正在运行，尚未签名/上传。APK必须按§66原证书私下Drive交付并下载回查。当前后续证据/文档提交不改变通过验收的生产源码；不宣称后续文档SHA的尚排队CI已通过。
+
+---
+
 # M2-only九次真实源码负面回归已完成（2026-10-12）
 
 7类错误共9次临时真实源码变异均由已执行断言击杀，包括真实Legacy LabFit幅度注入以及舌下分量伪称Total E2；非编译失败。逐项XML及恢复SHA见docs/design/m2-only-evidence/mutations。源码逐字节恢复后正向全量正在执行。3f9cbe9的GitHub Android/JVM/真实API35仪器和独立参考回放均已success，新增更严格UI测试/独立233候选CI回放还需末轮验证。本轮APK明确按§66正式证书私下交付，尚未签名。

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.UnifiedConcentrationNavigationTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-10-12T08:56:49.965Z" hostname="e1be2d0ad0c2" time="2.519">
+  <properties/>
+  <testcase name="onlyOneConcentrationDestinationHasNoModelSelectorAndRetainsLabs" classname="net.plainnotes.app.UnifiedConcentrationNavigationTest" time="2.511"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

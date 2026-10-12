@@ -1,0 +1,3 @@
+device-tests	Run ReactiveCircus/android-emulator-runner@4c44018e59b437e86cdfc41da381398f93ed8808	2026-10-12T08:54:33.5887818Z OK (1 test)
+device-tests	Run ReactiveCircus/android-emulator-runner@4c44018e59b437e86cdfc41da381398f93ed8808	2026-10-12T08:54:37.2654797Z OK (1 test)
+device-tests	Run ReactiveCircus/android-emulator-runner@4c44018e59b437e86cdfc41da381398f93ed8808	2026-10-12T08:54:37.2656353Z PASS: fresh process requires authentication, private ciphertext persists
