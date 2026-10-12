@@ -94,3 +94,6 @@ PR #19 描述称 M1 研究核来自 P2-AZ（#17 的内容），而 #17/#18 本�
 | `06-roadmap-prioritized.md` | 阶段 D 完成 |
 | `07-decisions-needed.md` | 阶段 D 完成 |
 | `evidence-index.md` | 阶段 D 完成 |
+| `09-p2-guard-decoupling-proposal.md` + `09-p2-guard-file-map.json` | B0 设计（待 D-13） |
+| `10-build-provenance-implementation.md` + `10-about-source-identity.patch` | B1 构建侧完成；关于页待批准 |
+| `../../STATUS.md` | 当前状态单一入口 |

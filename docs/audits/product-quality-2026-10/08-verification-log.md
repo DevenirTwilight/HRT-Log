@@ -42,3 +42,19 @@
 | 19 | 读取仓库已提交截图 `docs/ui-audit/calendar_month_days_zh-rCN_2.0.png`、`2026-10-08-stock-after.png` | 前者是修复前的历史记录；后者显示历史包装列表 |
 
 仍然 BLOCKED/NOT_RUN：所有 Android 单测/仪器测试/lint/构建/APK 体积；新截图；TalkBack；物理设备；性能计时；PR #19 交付 APK 的核验。
+
+# S0 / B0-DESIGN / B1（2026-10-12，用户 B1 指令）
+
+| # | 命令 | 结果 |
+|---|---|---|
+| 20 | `git fetch --prune`；GitHub PR 列表 | 默认 f53726f、PR #19 aecbd7d、PR #18 68ceac2、审计分支 d4aadd1，均未变化 |
+| 21 | `git fetch --unshallow`；按 `start_sha` 复现 164 个基线哈希 | 164/164（本地原为浅克隆，补全前 0/164，是“对象缺失”而不是“不一致”） |
+| 22 | 当前树/PR #19 与基线的差异 | 默认分支 1 个（AppShell，已有偏离）；PR #19 2 个 |
+| 23 | 研究工具哈希回溯 | `analysis.json` 的 code_revision 388ef0f 与四个工具文件哈希一致 |
+| 24 | 安装 Android SDK（platform 37、build-tools 37.0.0）+ 仅本会话的 Maven Central 镜像 init 脚本（Central 返回 429） | 成功；仓库文件无变化 |
+| 25 | `:app:testFullDebugUnitTest` | 400 项：1 项 error（Robolectric 下载网络失败）→ 单独重跑 5/5 通过；13 项条件跳过；PeriodStability 5/5；BuildProvenance 3/3 |
+| 26 | `:core:data`/`:core:reminder` 单测、`lintFullDebug`、`assembleFullDebug`、`assembleFullRelease`、`check_release_manifest.py` | 全部 PASS；lint 0 错误 / 131 警告；Release 12,708,171 B（加 keep 规则后） |
+| 27 | 无 `.git` 源码副本：`verifyReleaseProvenance` / Debug BuildConfig / `-PsourceSha` 合法与非法注入 | FAIL（预期）/ unknown / PASS / FAIL（预期） |
+| 28 | `python3 -m unittest discover -s tools/pk-research` | 252 项 PASS |
+
+物理设备、模拟器、截图仍为 NOT_RUN/BLOCKED（容器无 KVM）。

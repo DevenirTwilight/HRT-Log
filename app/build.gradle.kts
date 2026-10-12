@@ -1,9 +1,25 @@
 plugins { alias(libs.plugins.android.app); alias(libs.plugins.kotlin.android); alias(libs.plugins.compose); alias(libs.plugins.ksp); alias(libs.plugins.hilt) }
+
+// Build provenance (audit B1): the exact source commit is compiled into every APK so an installed build can be traced.
+// Override with -PsourceSha=<40 hex> (and optionally -PsourceCommitTimeUtc) only for trusted injection, e.g. a source tarball.
+// The time is the commit time, not the build time, so the same source always produces the same values.
+fun gitOutput(vararg args: String): String? = runCatching {
+    providers.exec { commandLine("git", *args); environment("TZ", "UTC"); isIgnoreExitValue = true }.let { out ->
+        if (out.result.get().exitValue == 0) out.standardOutput.asText.get().trim() else null
+    }
+}.getOrNull()?.takeIf { it.isNotEmpty() }
+val sourceSha: String = providers.gradleProperty("sourceSha").orNull ?: gitOutput("rev-parse", "HEAD") ?: "unknown"
+val sourceCommitTimeUtc: String = providers.gradleProperty("sourceCommitTimeUtc").orNull
+    ?: gitOutput("show", "-s", "--format=%cd", "--date=format-local:%Y-%m-%dT%H:%M:%SZ", "HEAD")?.takeIf { sourceSha != "unknown" } ?: "unknown"
+val sourceDirty: Boolean = providers.gradleProperty("sourceSha").orNull == null && gitOutput("status", "--porcelain", "--untracked-files=no") != null
+require(sourceSha == "unknown" || Regex("[0-9a-f]{40}").matches(sourceSha)) { "sourceSha must be a full 40-character lowercase commit SHA" }
+
 android {
     namespace = "net.plainnotes.app"
     compileSdk = 37
     buildToolsVersion = "37.0.0"
-    defaultConfig { minSdk = 26; applicationId = "net.plainnotes.app"; targetSdk = 37; versionCode = 25; versionName = "0.2.0"; testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner" }
+    defaultConfig { minSdk = 26; applicationId = "net.plainnotes.app"; targetSdk = 37; versionCode = 25; versionName = "0.2.0"; testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "SOURCE_SHA", "\"$sourceSha\""); buildConfigField("String", "SOURCE_COMMIT_TIME_UTC", "\"$sourceCommitTimeUtc\""); buildConfigField("boolean", "SOURCE_DIRTY", sourceDirty.toString()) }
     compileOptions { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }
     testOptions {
         unitTests.isIncludeAndroidResources = true
@@ -21,8 +37,14 @@ android {
     // (extracted at install), keeping every ABI: universal APK ~23.5 MB -> ~12.7 MB. Verified by release acceptance.
     buildTypes { getByName("release") { isMinifyEnabled = true; isShrinkResources = true; proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro") } }
     packaging { jniLibs { useLegacyPackaging = true } }
-    buildFeatures { compose = true }
+    buildFeatures { compose = true; buildConfig = true }
 }
+// A release that cannot name its source commit is not traceable: fail instead of shipping "unknown".
+val verifyReleaseProvenance by tasks.registering {
+    val sha = sourceSha
+    doLast { check(sha != "unknown") { "Release build has no source commit: build from a git checkout or pass -PsourceSha=<40 hex>" } }
+}
+tasks.configureEach { if (name == "preFullReleaseBuild") dependsOn(verifyReleaseProvenance) }
 kotlin { compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17) } }
 dependencies {
     implementation(project(":core:domain")); implementation(project(":pk-engine")); implementation(project(":importer"))
