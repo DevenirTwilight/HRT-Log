@@ -31,6 +31,12 @@ class PackageFieldsTest(unittest.TestCase):
         line = "package: name='net.plainnotes.app' versionCode='26' versionName='0.2.1' platformBuildVersionName='17'\nsdkVersion:'26'"
         self.assertEqual(package_fields(line), {"application_id": "net.plainnotes.app", "version_code": 26, "version_name": "0.2.1"})
 
+    def test_real_aapt2_line_with_codename_suffix(self):
+        # Copied from aapt2 37.0.0 output for this app; "compileSdkVersionCodename" once overwrote the package name.
+        line = ("package: name='net.plainnotes.app' versionCode='25' versionName='0.2.0' platformBuildVersionName='17' "
+                "platformBuildVersionCode='37' compileSdkVersion='37' compileSdkVersionCodename='17'")
+        self.assertEqual(package_fields(line), {"application_id": "net.plainnotes.app", "version_code": 25, "version_name": "0.2.0"})
+
     def test_missing_line_is_not_guessed(self):
         self.assertEqual(package_fields(""), {"application_id": None, "version_code": None, "version_name": None})
 

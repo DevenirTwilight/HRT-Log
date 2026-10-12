@@ -84,7 +84,7 @@ class SourceIdentityUiTest {
         val expected = if (BuildConfig.SOURCE_SHA == "unknown") s(R.string.about_source_unknown) else BuildConfig.SOURCE_SHA
         assertEquals(expected, text("about-source-sha"))
         assertEquals(BuildConfig.SOURCE_DIRTY, ui.onAllNodesWithTag("about-source-dirty", useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty())
-        val code = ui.activity.packageManager.getPackageInfo(ui.activity.packageName, 0).longVersionCode
+        val code = androidx.core.content.pm.PackageInfoCompat.getLongVersionCode(ui.activity.packageManager.getPackageInfo(ui.activity.packageName, 0))
         assertEquals(code, SourceIdentity.current(ui.activity).versionCode)
     }
 }

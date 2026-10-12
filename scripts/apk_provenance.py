@@ -36,7 +36,8 @@ def source_fields(dexdump_xml: str) -> dict:
 def package_fields(badging: str) -> dict:
     """applicationId, versionCode and versionName from the first line of aapt2 dump badging."""
     line = next((l for l in badging.splitlines() if l.startswith("package:")), "")
-    found = dict(re.findall(r"(name|versionCode|versionName)='([^']*)'", line))
+    # Whole attribute names only: compileSdkVersionCodename='17' must not be read as name='17'.
+    found = dict(re.findall(r"(?<![A-Za-z])(name|versionCode|versionName)='([^']*)'", line))
     return {"application_id": found.get("name"), "version_code": int(found["versionCode"]) if found.get("versionCode", "").isdigit() else None,
             "version_name": found.get("versionName")}
 

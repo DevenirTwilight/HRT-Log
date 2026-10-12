@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import androidx.core.content.pm.PackageInfoCompat
 import net.plainnotes.app.BuildConfig
 import net.plainnotes.app.R
 
@@ -35,7 +36,7 @@ data class SourceIdentity(val sha: String, val commitTimeUtc: String, val origin
         fun current(context: Context): SourceIdentity {
             val info = runCatching { context.packageManager.getPackageInfo(context.packageName, 0) }.getOrNull()
             return SourceIdentity(BuildConfig.SOURCE_SHA, BuildConfig.SOURCE_COMMIT_TIME_UTC, BuildConfig.SOURCE_ORIGIN, BuildConfig.SOURCE_DIRTY,
-                info?.versionName ?: "", info?.longVersionCode ?: 0L)
+                info?.versionName ?: "", info?.let(PackageInfoCompat::getLongVersionCode) ?: 0L)
         }
     }
 }
