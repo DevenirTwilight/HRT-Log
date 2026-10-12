@@ -43,3 +43,17 @@ Engine/PkParams：口服E2/EV、贴片释放与移除、凝胶产品、IM EV、C
 本轮用户明确授权原页最小显示接线/校准隔离，真实AppShell/ConcentrationScreen旧新SHA/最小diff保存m2-only-ui-authorization.json及m2-only-ui.patch，追加在旧F1/统一页/原UI链后；检查器仅接受两文件的新精确记录。旧锁/基线/偏离记录完整保留，任意字段伪造/乱序/额外一字节/其他保护文件变化均拒绝；不扩大通用豁免。
 
 七类错误共九次真实源码变异均由已执行断言击杀，逐项XML/日志判定/恢复SHA在m2-only-evidence/mutations；包含实际Legacy LabFit幅度注入及SL-only伪称Total E2。源码完全恢复后重新全量正向验收。全量/设备/Debug/Release/lint/体积及GitHub最终结果见m2-only-evidence/results.json；未执行或环境不可用标NOT_RUN/BLOCKED。没有读取用户健康记录。
+
+## 最终实际验收及交付
+
+APK与最后生产源码均为 `e98d5e033e4e9b757be5daefed102bf5900ae29b`，APK内version-control-info独立读取同一SHA。后续交接证据提交不改变应用/模型源码；完整修改/新增清单见m2-only-evidence/changed-files.txt。本轮没有删除文件：三模型选择器的代码已删除；独立实验页/导航在开工PR19中已不存在，没有伪称再次删除。
+
+最终源码GitHub Android/JVM/设备/lint/Debug/Release为38228359441全部success，独立233候选回放38228359369 success。本地全量718项：domain58、PK124、importer12、data72、reminder14、app438，零失败/错误，13项原可选截图/PDF跳过；PeriodStability5项实际通过。Python研究/协议271、旧生产PK审计13、性能收集器3全部通过。标签修正后28项功能独立回归通过，四语×1/2字号的8项原生截图单独通过且零溢出/截断/重叠发现。曾将两类Robolectric测试混跑36项时1项发生DefaultDispatcher操作View的测试线程异常，失败XML保存，分开28+8重新执行通过，最终全量CI和真实设备也通过；不抹去异常，不声称永久解决混跑harness根因。
+
+API35 x86_64设备84项：主套件82通过、2进程重启方法主套件忽略但分别独立执行通过，零失败。M2六项原生页面/数学/性能通过；60记录10442曲线点计算40.580159ms，历史窗口峰与图表峰均487.8573046969966，过程PSS差2785KiB。它是合成Debug模拟设备结果，不是ARM硬件/Release/FPS或临床精度结论。9次真实源代码变异全部由执行断言击杀，原源逐字节恢复。
+
+本地full Debug、应用/data仪器包、最终Release及lint成功；lint 0 Error、174 Warning（未伪称零warning）。同构建配置unsigned 12,743,143→12,755,451 B（+12,308 B，+0.0966%）；正式签名12,798,836 B。原证书SHA256 989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1，签名APK SHA256 d9d874e82001251c4b42214a64a603354b9c47006a6952faaf7faae6d1ea5969。包名net.plainnotes.app、0.2.0/build25、非debuggable/无INTERNET，四ABI原native字节/PK资源与基线一致，签前后每个原ZIP成员字节一致，签名/16KB对齐/CRC通过。临时私钥/密码由TemporaryDirectory自动清理；永久私有备份未改。
+
+按§66私下Drive交付实际APK（不是旧包或debug签名），metadata仅owner/shared=false；通过独立raw下载回查12,798,836 B、APK SHA和CRC全部一致。私有URL不入公开仓库。没有创建公开Release、标签或合并其他PR。
+
+BLOCKED：本地无/dev/kvm，已由真实GitHub模拟设备替代。NOT_RUN：物理ARM手机、Release装机/FPS/个人覆盖安装现场测试，没有附着设备。正式个人绝对浓度/个人M2化验校准/混合总E2迁移尚未验收；8–24h尾部、Price Figure/Table AUC冲突与M1科学反例保留。当前APK只展示清楚限定的研究参考，不改写旧记录；Legacy必要内部职责保留。

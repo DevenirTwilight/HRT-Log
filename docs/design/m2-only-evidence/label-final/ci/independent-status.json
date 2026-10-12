@@ -1,0 +1,75 @@
+{
+  "conclusion": "success",
+  "databaseId": 38228359369,
+  "headSha": "e98d5e033e4e9b757be5daefed102bf5900ae29b",
+  "jobs": [
+    {
+      "completedAt": "2026-10-12T09:13:20Z",
+      "conclusion": "success",
+      "databaseId": 114741363963,
+      "name": "reference",
+      "startedAt": "2026-10-12T09:12:16Z",
+      "status": "completed",
+      "steps": [
+        {
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "number": 2,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/setup-python@v5",
+          "number": 3,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run python -m pip install numpy==2.3.5 scipy==1.17.0",
+          "number": 4,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run python tools/pk-research/pr19_calibration_reference.py --out /tmp/pr19-reference.json",
+          "number": 5,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "number": 6,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Run actions/setup-python@v5",
+          "number": 11,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "number": 12,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 13,
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38228359369/job/114741363963"
+    }
+  ],
+  "name": "PR19 independent literature calibration replay",
+  "status": "completed",
+  "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38228359369"
+}

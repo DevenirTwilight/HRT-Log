@@ -1,3 +1,15 @@
+# M2-only最终APK已正式签名并私下交付，全部工程成果已保存（2026-10-12）
+
+生产/被测/包内源码SHA e98d5e033e4e9b757be5daefed102bf5900ae29b；后续提交仅文档/证据，生产树不变。PR19仍OPEN，未合并其他研究PR，未创建Release/标签。APK HRT-Log-M2-only-official.apk，12,798,836B，SHA256 d9d874e82001251c4b42214a64a603354b9c47006a6952faaf7faae6d1ea5969，原证书989ba045…59379b1，包名net.plainnotes.app/0.2.0/build25，四ABI、非debuggable/无INTERNET、签名/16KB/CRC、签前后payload与旧native/PK资源校验通过。原私有备份未改，临时签名目录已清理。§66授权私下Drive实际APK已上传，metadata仅owner/shared=false，从Drive独立下载大小/SHA/CRC完全相同；私有URL只在聊天，不入Git。旧速度修复包不是本次交付。
+
+最终源码GitHub38228359441全Android/JVM/设备/lint/Debug/Release成功，38228359369独立233候选回放成功。本地718（13原可选截图/PDF跳过、零失败/错误，PeriodStability5通过），271研究/协议+13旧PK审计+3收集器、9实际变异断言击杀；最后标签功能28及四语1/2字号截图8分开执行全部通过，视觉零溢出/截断发现。混跑36项时1个Robolectric线程异常已保留XML，分开复跑与全量CI/真实设备均通过，未证明永久harness根因。设备API35 x86_64：主套件82通过，2忽略的重启方法在独立进程分别通过；M2六项原生验证通过，60记录10442点40.580ms、曲线峰与实际函数完全相等。最终本地Release/lint成功（0 Error/174 Warning）。unsigned同配置12,743,143→12,755,451B（+12,308B）。
+
+原UI/化验/单位/缩放/点击/历史修复/其他药物保持；只M2 SL游离E2参考，固定p2x-39及原Price B24/A434.835722，个体/总E2未验收。其他E2/未知历史清晰显示仅SL分量及合并总不可用，纯其他途径保留限定兼容曲线/校准；不暗用旧SL值，不改旧记录。M1科研/反例与Legacy非SL/其他药物/旧快照/备份/LabFit职责保留；不删除Engine/PkParams/calculator或放松P2锁。真实两保护文件最小diff与追加授权完整保留。
+
+完整源码/PR/签名包版本核查、候选选择/科学边界、调用链、参数与1/2mg峰/AUC、所有测试/变异/视觉/体积/签名/私下交付及文件清单：docs/design/m2-only-integration-2026-10.md、m2-only-evidence/results.json/changed-files.txt。BLOCKED：本地KVM缺失（真实CI模拟设备已执行）；NOT_RUN：物理ARM/Release设备性能/用户手机实际覆盖安装。正式个人M2绝对浓度/个人化验校准/混合总E2及长尾临床验证未完成，不冒称迁移完成。
+
+---
+
 # 四语过时校准指令已修正，最终标签构建验收中（2026-10-12）
 
 删除M2研究说明中已不存在的Legacy校准卡指令，四语缩短为来源/B/A/群体性质/化验不拟合/已记录SL尾部；保留相同格式参数、模型核和原UI结构。四语源解析及真实M2页面新增回归断言，禁止旧指令再次出现。0da7392全量/设备证据仍对应相同数值/布局，最终标签源将另以本地聚焦+截图+lint/Release及全量GitHub验证，不能冒称旧SHA含新文案。此前未签名Release构建12m35成功，非交付包，禁止沿用；正在重建本轮最终源码的包。§66原证书私下APK交付仍未完成。

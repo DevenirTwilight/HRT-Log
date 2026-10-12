@@ -1,0 +1,19 @@
+{
+  "source_metadata": "repositories {\n  system: GIT\n  local_root_path: \"$PROJECT_DIR\"\n  revision: \"e98d5e033e4e9b757be5daefed102bf5900ae29b\"\n}\n",
+  "signature_preserves_all_payload_bytes": true,
+  "native_abis": [
+    "arm64-v8a",
+    "armeabi-v7a",
+    "x86",
+    "x86_64"
+  ],
+  "native_deflated": true,
+  "native_libraries_identical_to_baseline": true,
+  "pk_resource_hashes_unchanged": {
+    "pk-params.json": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b"
+  },
+  "zip_crc": "PASS",
+  "package_line": "package: name='net.plainnotes.app' versionCode='25' versionName='0.2.0' platformBuildVersionName='17' platformBuildVersionCode='37' compileSdkVersion='37' compileSdkVersionCodename='17'",
+  "debuggable": false,
+  "internet_permission": false
+}

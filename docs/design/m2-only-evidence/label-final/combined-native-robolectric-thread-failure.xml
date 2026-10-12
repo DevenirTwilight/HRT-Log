@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.UnifiedConcentrationUiTest" tests="14" skipped="0" failures="1" errors="0" timestamp="2026-10-12T09:12:49.657Z" hostname="e1be2d0ad0c2" time="113.136">
+  <properties/>
+  <testcase name="unknownHistoryNeverFallsBackToOldSublingualPrediction" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="31.641"/>
+  <testcase name="originalCardsAndCalendarControlsRemainWithoutModelSelector" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="1.255"/>
+  <testcase name="originalUnitSwitchConvertsResearchValue" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="1.648"/>
+  <testcase name="failedM2NeverMasqueradesAsEmptyHistoryAndOtherMedicinesRemainAvailable" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="4.355"/>
+  <testcase name="personalLabsCannotScaleM2AndOldCalibrationIsNotPresentedAsM2" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="1.399"/>
+  <testcase name="fixedM2KernelOwnsHeroWithoutOldPredictionFallback" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="0.92"/>
+  <testcase name="completedHistoryRefreshRetainsOriginalSelectedRange" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="60.982">
+    <failure message="android.view.ViewRootImpl$CalledFromWrongThreadException: Only the original thread that created a view hierarchy can touch its views. Expected: SDK 35 Main Thread @kotlinx.coroutines.test runner#372 Calling: DefaultDispatcher-worker-1 @coroutine#392" type="android.view.ViewRootImpl$CalledFromWrongThreadException">android.view.ViewRootImpl$CalledFromWrongThreadException: Only the original thread that created a view hierarchy can touch its views. Expected: SDK 35 Main Thread @kotlinx.coroutines.test runner#372 Calling: DefaultDispatcher-worker-1 @coroutine#392
+	at android.view.ViewRootImpl.checkThread(ViewRootImpl.java:11023)
+	at android.view.ViewRootImpl.requestLayout(ViewRootImpl.java:2473)
+	at android.view.View.requestLayout(View.java:28020)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at org.robolectric.shadows.ShadowView$ViewReflector$$Reflector21.requestLayout(Unknown Source)
+	at org.robolectric.shadows.ShadowView.requestLayout(ShadowView.java:268)
+	at android.view.View.requestLayout(View.java)
+	at android.view.View.requestLayout(View.java:28020)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at org.robolectric.shadows.ShadowView$ViewReflector$$Reflector21.requestLayout(Unknown Source)
+	at org.robolectric.shadows.ShadowView.requestLayout(ShadowView.java:268)
+	at android.view.View.requestLayout(View.java)
+	at android.view.View.requestLayout(View.java:28020)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at org.robolectric.shadows.ShadowView$ViewReflector$$Reflector21.requestLayout(Unknown Source)
+	at org.robolectric.shadows.ShadowView.requestLayout(ShadowView.java:268)
+	at android.view.View.requestLayout(View.java)
+	at android.view.View.requestLayout(View.java:28020)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at org.robolectric.shadows.ShadowView$ViewReflector$$Reflector21.requestLayout(Unknown Source)
+	at org.robolectric.shadows.ShadowView.requestLayout(ShadowView.java:268)
+	at android.view.View.requestLayout(View.java)
+	at android.view.View.requestLayout(View.java:28020)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at org.robolectric.shadows.ShadowView$ViewReflector$$Reflector21.requestLayout(Unknown Source)
+	at org.robolectric.shadows.ShadowView.requestLayout(ShadowView.java:268)
+	at android.view.View.requestLayout(View.java)
+	at androidx.compose.ui.platform.AndroidComposeView.scheduleMeasureAndLayout(AndroidComposeView.android.kt:1526)
+	at androidx.compose.ui.platform.AndroidComposeView.onRequestMeasure(AndroidComposeView.android.kt:1613)
+	at androidx.compose.ui.node.Owner.onRequestMeasure$default(Owner.kt:171)
+	at androidx.compose.ui.node.LayoutNode.requestRemeasure$ui_release(LayoutNode.kt:1131)
+	at androidx.compose.ui.node.LayoutNode.requestRemeasure$ui_release$default(LayoutNode.kt:1124)
+	at androidx.compose.ui.node.LayoutNode.invalidateMeasurements$ui_release(LayoutNode.kt:1183)
+	at androidx.compose.ui.node.LayoutNode.detach$ui_release(LayoutNode.kt:586)
+	at androidx.compose.ui.node.LayoutNode.onChildRemoved(LayoutNode.kt:367)
+	at androidx.compose.ui.node.LayoutNode.removeAt$ui_release(LayoutNode.kt:342)
+	at androidx.compose.ui.node.UiApplier.remove(UiApplier.android.kt:33)
+	at androidx.compose.runtime.changelist.Operation$RemoveNode.execute(Operation.kt:588)
+	at androidx.compose.runtime.changelist.Operation.executeWithComposeStackTrace(Operation.kt:62)
+	at androidx.compose.runtime.changelist.Operations.executeAndFlushAllPendingOperations(Operations.kt:350)
+	at androidx.compose.runtime.changelist.ChangeList.executeAndFlushAllPendingChanges(ChangeList.kt:90)
+	at androidx.compose.runtime.CompositionImpl.applyChangesInLocked(Composition.kt:1109)
+	at androidx.compose.runtime.CompositionImpl.applyChanges(Composition.kt:1149)
+	at androidx.compose.runtime.Recomposer$runRecomposeAndApplyChanges$2.invokeSuspend$lambda$22(Recomposer.kt:705)
+	at androidx.compose.ui.test.TestMonotonicFrameClock$withFrameNanos$2$1$1.invoke(TestMonotonicFrameClock.jvm.kt:106)
+	at androidx.compose.ui.test.TestMonotonicFrameClock$withFrameNanos$2$1$1.invoke(TestMonotonicFrameClock.jvm.kt:106)
+	at androidx.compose.ui.test.TestMonotonicFrameClock.performFrame$lambda$10(TestMonotonicFrameClock.jvm.kt:151)
+	at androidx.compose.ui.test.FrameDeferringContinuationInterceptor.runWithoutResumingCoroutines(FrameDeferringContinuationInterceptor.jvm.kt:59)
+	at androidx.compose.ui.test.TestMonotonicFrameClock.performFrame(TestMonotonicFrameClock.jvm.kt:133)
+	at androidx.compose.ui.test.TestMonotonicFrameClock.access$performFrame(TestMonotonicFrameClock.jvm.kt:55)
+	at androidx.compose.ui.test.TestMonotonicFrameClock$withFrameNanos$2$1$2.invokeSuspend(TestMonotonicFrameClock.jvm.kt:111)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.internal.DispatchedContinuationKt.resumeCancellableWith(DispatchedContinuation.kt:375)
+	at kotlinx.coroutines.intrinsics.CancellableKt.startCoroutineCancellable(Cancellable.kt:26)
+	at kotlinx.coroutines.CoroutineStart.invoke(CoroutineStart.kt:358)
+	at kotlinx.coroutines.AbstractCoroutine.start(AbstractCoroutine.kt:134)
+	at kotlinx.coroutines.BuildersKt__Builders_commonKt.launch(Builders.common.kt:53)
+	at kotlinx.coroutines.BuildersKt.launch(Unknown Source)
+	at kotlinx.coroutines.BuildersKt__Builders_commonKt.launch$default(Builders.common.kt:44)
+	at kotlinx.coroutines.BuildersKt.launch$default(Unknown Source)
+	at androidx.compose.ui.test.TestMonotonicFrameClock.withFrameNanos(TestMonotonicFrameClock.jvm.kt:109)
+	at androidx.compose.runtime.Recomposer$runRecomposeAndApplyChanges$2.invokeSuspend(Recomposer.kt:598)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at androidx.compose.ui.test.ApplyingContinuationInterceptor$SendApplyContinuation.resumeWith(ApplyingContinuationInterceptor.kt:52)
+	at androidx.compose.ui.test.FrameDeferringContinuationInterceptor$FrameDeferredContinuation.resumeWith(FrameDeferringContinuationInterceptor.jvm.kt:187)
+	at kotlinx.coroutines.DispatchedTaskKt.resume(DispatchedTask.kt:163)
+	at kotlinx.coroutines.DispatchedTaskKt.dispatch(DispatchedTask.kt:152)
+	at kotlinx.coroutines.CancellableContinuationImpl.dispatchResume(CancellableContinuationImpl.kt:470)
+	at kotlinx.coroutines.CancellableContinuationImpl.resumeImpl$kotlinx_coroutines_core(CancellableContinuationImpl.kt:504)
+	at kotlinx.coroutines.CancellableContinuationImpl.resumeImpl$kotlinx_coroutines_core$default(CancellableContinuationImpl.kt:493)
+	at kotlinx.coroutines.CancellableContinuationImpl.resumeWith(CancellableContinuationImpl.kt:359)
+	at androidx.compose.runtime.Recomposer$recompositionRunner$2.invokeSuspend$lambda$2(Recomposer.kt:1149)
+	at androidx.compose.runtime.snapshots.SnapshotKt.advanceGlobalSnapshot(Snapshot.kt:1980)
+	at androidx.compose.runtime.snapshots.SnapshotKt.advanceGlobalSnapshot(Snapshot.kt:1994)
+	at androidx.compose.runtime.snapshots.SnapshotKt.access$advanceGlobalSnapshot(Snapshot.kt:1)
+	at androidx.compose.runtime.snapshots.Snapshot$Companion.sendApplyNotifications(Snapshot.kt:680)
+	at androidx.compose.ui.test.ApplyingContinuationInterceptor$SendApplyContinuation.resumeWith(ApplyingContinuationInterceptor.kt:53)
+	at androidx.compose.ui.test.FrameDeferringContinuationInterceptor$FrameDeferredContinuation.resumeWith(FrameDeferringContinuationInterceptor.jvm.kt:187)
+	at kotlinx.coroutines.internal.DispatchedContinuationKt.resumeCancellableWith(DispatchedContinuation.kt:279)
+	at kotlinx.coroutines.DispatchedCoroutine.afterResume(Builders.common.kt:256)
+	at kotlinx.coroutines.AbstractCoroutine.resumeWith(AbstractCoroutine.kt:101)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:47)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:586)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:829)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:717)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:704)
+</failure>
+  </testcase>
+  <testcase name="originalChartTapZoomAndPanRemainOperable" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="1.94"/>
+  <testcase name="otherRouteOnlyRetainsCompatibilityCurveAndItsScopedCalibration" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="1.061"/>
+  <testcase name="mixedRoutesAreExplicitlyPartialAndNeverTotalE2" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="2.102"/>
+  <testcase name="wrongModelCannotBeRelabelledM2" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="1.31"/>
+  <testcase name="unsupportedSublingualEvIsNotM2OrEmptyRecordedHistory" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="0.985"/>
+  <testcase name="mixedE2WithoutScopeCannotAppearAsTotal" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="0.9"/>
+  <testcase name="fixedM2AndOriginalUnitSurviveRecreation" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="1.017"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

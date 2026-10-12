@@ -1,0 +1,12 @@
+{
+  "channel": "PRIVATE_DRIVE_OWNER_ONLY",
+  "drive_metadata_readback": "PASS",
+  "shared": false,
+  "permission_roles": [
+    "owner"
+  ],
+  "independent_download_sha256": "d9d874e82001251c4b42214a64a603354b9c47006a6952faaf7faae6d1ea5969",
+  "independent_download_bytes": 12798836,
+  "apk_zip_crc": "PASS",
+  "byte_identity_with_signed_artifact": "PASS"
+}
