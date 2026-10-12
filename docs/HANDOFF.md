@@ -1374,3 +1374,5 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 **B1 + 整合审查（2026-10-12，任务书“B0 完整验收、B1 关于页及构建追踪、PR19 分批实施”）**：B0 独立 CI 结论归档于审计 15（CI_VERIFIED_ON_WORK_BRANCH，未进默认分支）。B1：关于页 `0b7a448`，D-4 交付账本 `47e2716`，修复 `cf3e580`（minSdk 26 的 NewApi 崩溃 + aapt2 解析缺陷）；本地回归通过，CI run 38262091486 三个作业全部 success（审计 16）。PR #19 隔离整合（审计 17，仅临时 worktree，未推送）：PR #19 自带测试断言旧守卫语义，改写前需产品负责人批准；另发现未锁定研究输入 `ResearchSublingualV01.kt` 和未受守卫的 `UnifiedConcentrationScreen.kt`。**D-1/D-2 生产代码尚未开始**。下一步：等待批准 17 §6 的方案，然后在 PR #19 分支依次做整合提交、D-1、D-2。不合并 PR、不签名、不发布；versionCode 仍为 25。
 
 **PR #19 整合 + D-1（2026-10-12，REQUIREMENTS §69/§70）**：在 PR #19 分支 `feature/unified-concentration-20261011` 上提交，未改写历史，PR 未合并。整合包括 merge `b649679`、守卫整合 `343a183`、校准回放工作流修复 `4db4770`，CI 全部 success（审计 17 §8）。D-1 提交 `bd20a5e`（审计 18）：本地全量回归通过，13/13 变异测试被杀死，视觉审计 48/48。下一步：D-2（新 PDF 与新化验估算不再静默使用舌下 Legacy，设计见审计 18 之后的 19 号报告）。不签名、不发布；versionCode 仍为 25。
+
+**D-2（2026-10-12，REQUIREMENTS §71）**：PR #19 分支提交 `c41cb4a`（审计 19）。新 PDF 与新化验估算不再静默使用舌下 Legacy；格式与 Schema 不变；本地全量回归通过。D-1 的 CI 已全部 success（审计 18 §5）。PR #19 仍未合并；不签名、不发布；versionCode 仍为 25。下一步由产品负责人决定：审阅 PR #19（含 §60 迁移记录的人工核查项），以及是否合并或交付。

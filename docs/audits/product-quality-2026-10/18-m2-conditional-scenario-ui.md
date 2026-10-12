@@ -59,7 +59,7 @@ PR #18 能力矩阵的 `m2_absolute_pgml=false` 表示：**个人绝对 pg/mL �
 | 第一次 Release 构建 | **被 `verifyReleaseProvenance` 拒绝**：构建开始配置时，本报告还是工作树中的未跟踪文件。这是 B1 的预期行为（有未跟踪文件不允许构建正式包）。把文件移出后在干净树上重跑 |
 | lint + Debug + Release + 两个 androidTest APK（干净树） | lint 0 错误；全部构建成功；Release APK 声明 `bd20a5e`、git、干净 |
 | `check_release_manifest.py`、`check_unified_concentration.py`、`check_protocol.py` | 全部通过 |
-| GitHub Actions | 推送后记录 |
+| GitHub Actions（`aa0d8b2`，含 `bd20a5e`） | android.yml push 38271707042 / pull_request 38271713717：jvm、android、device-tests 全部 success（device-tests 包含适配后的 Android 旋转与化验测试）；校准回放 38271707097 / 38271713719 success |
 
 ## 6. 未验证
 

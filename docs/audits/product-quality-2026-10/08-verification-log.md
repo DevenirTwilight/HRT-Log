@@ -79,3 +79,6 @@
 | 42 | 修复 @`cf3e580` 后：聚焦测试 + lint + Debug/Release + APK 身份 + manifest + 交付账本 | 全部通过；Release APK 声明 cf3e580/git/clean；`apk_provenance` 正则误读包名的缺陷同时修复 |
 | 43 | 隔离整合 PR #19(`aecbd7d`) + 审计分支(`47e2716`)，仅临时 worktree | 1 处文本冲突（REQUIREMENTS）；研究测试 283 项 2 FAIL / 8 ERROR；补 3 条批准记录后显示链通过，但发现未锁定研究输入和守卫自引用误报（17 号报告） |
 | 44 | GitHub Actions @`cf3e580` | run 38262091486：jvm / android / device-tests 全部 success；新步骤 Release APK 身份与交付账本通过 |
+| 45 | PR #19 整合（`b649679`/`343a183`/`c294f48`/`4db4770`） | 本地全量通过；`c294f48` 上 android.yml success、校准回放失败（缺历史对象，按设计失败）；`4db4770` 修复后四个运行全部 success |
+| 46 | D-1 `bd20a5e`（文档 `aa0d8b2`） | 本地全量通过；变异 13/13；视觉审计 48/48；第一次 Release 因未跟踪报告文件被拒（B1 预期行为）；CI 全部 success |
+| 47 | D-2 `c41cb4a` | 本地全量通过（app 510，0 失败）；D-2 测试 10/10；手工变异 3/3；Schema 不变；CI 见 19 §6 |
