@@ -1,0 +1,38 @@
+{
+  "core/domain/build/test-results/test": {
+    "tests": 58,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "pk-engine/build/test-results/test": {
+    "tests": 124,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "importer/build/test-results/test": {
+    "tests": 12,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "core/data/build/test-results/testDebugUnitTest": {
+    "tests": 72,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "core/reminder/build/test-results/testDebugUnitTest": {
+    "tests": 14,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "app/build/test-results/testFullDebugUnitTest": {
+    "tests": 438,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 13
+  }
+}

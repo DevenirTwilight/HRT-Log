@@ -1,0 +1,190 @@
+{
+  "source_commit": "425a7ab0c75c625c070a17b116cc4f99aa79ff0d",
+  "run_id": 38165696135,
+  "artifact_id": 11711694403,
+  "artifact_sha256": "c950169362d38c0bb20fab7e916671441bbf40b222da24e0cee3ed611fa7594c",
+  "suites": [
+    {
+      "path": "core/domain/build/test-results/test/TEST-net.plainnotes.app.domain.PeriodAttributionTest.xml",
+      "suite": "net.plainnotes.app.domain.PeriodAttributionTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "core/domain/build/test-results/test/TEST-net.plainnotes.app.domain.ScheduleTest.xml",
+      "suite": "net.plainnotes.app.domain.ScheduleTest",
+      "tests": 30,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "core/domain/build/test-results/test/TEST-net.plainnotes.app.domain.SustainedPatternsTest.xml",
+      "suite": "net.plainnotes.app.domain.SustainedPatternsTest",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "core/domain/build/test-results/test/TEST-net.plainnotes.app.domain.TreatmentEpochsTest.xml",
+      "suite": "net.plainnotes.app.domain.TreatmentEpochsTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "core/domain/build/test-results/test/TEST-net.plainnotes.app.domain.TreatmentPeriodsTest.xml",
+      "suite": "net.plainnotes.app.domain.TreatmentPeriodsTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "pk-engine/build/test-results/test/TEST-net.plainnotes.app.pk.BaselineEligibilityTest.xml",
+      "suite": "net.plainnotes.app.pk.BaselineEligibilityTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "pk-engine/build/test-results/test/TEST-net.plainnotes.app.pk.CausalEvaluationTest.xml",
+      "suite": "net.plainnotes.app.pk.CausalEvaluationTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "pk-engine/build/test-results/test/TEST-net.plainnotes.app.pk.EngineTest.xml",
+      "suite": "net.plainnotes.app.pk.EngineTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "pk-engine/build/test-results/test/TEST-net.plainnotes.app.pk.LabDispositionTest.xml",
+      "suite": "net.plainnotes.app.pk.LabDispositionTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "pk-engine/build/test-results/test/TEST-net.plainnotes.app.pk.LabFitTest.xml",
+      "suite": "net.plainnotes.app.pk.LabFitTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "pk-engine/build/test-results/test/TEST-net.plainnotes.app.pk.LiteratureValidationTest.xml",
+      "suite": "net.plainnotes.app.pk.LiteratureValidationTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "pk-engine/build/test-results/test/TEST-net.plainnotes.app.pk.SublingualP0AuditTest.xml",
+      "suite": "net.plainnotes.app.pk.SublingualP0AuditTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "pk-engine/build/test-results/test/TEST-net.plainnotes.app.pk.SublingualP1ATest.xml",
+      "suite": "net.plainnotes.app.pk.SublingualP1ATest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "pk-engine/build/test-results/test/TEST-net.plainnotes.app.pk.experimental.ConcentrationModelComparisonTest.xml",
+      "suite": "net.plainnotes.app.pk.experimental.ConcentrationModelComparisonTest",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "pk-engine/build/test-results/test/TEST-net.plainnotes.app.pk.experimental.ExperimentalSlModelViewTest.xml",
+      "suite": "net.plainnotes.app.pk.experimental.ExperimentalSlModelViewTest",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "pk-engine/build/test-results/test/TEST-net.plainnotes.app.pk.experimental.ResearchShapeComparisonV01Test.xml",
+      "suite": "net.plainnotes.app.pk.experimental.ResearchShapeComparisonV01Test",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "pk-engine/build/test-results/test/TEST-net.plainnotes.app.pk.experimental.StudyAnchorsTest.xml",
+      "suite": "net.plainnotes.app.pk.experimental.StudyAnchorsTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "pk-engine/build/test-results/test/TEST-net.plainnotes.app.pk.experimental.ResearchSublingualV01Test.xml",
+      "suite": "net.plainnotes.app.pk.experimental.ResearchSublingualV01Test",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "pk-engine/build/test-results/test/TEST-net.plainnotes.app.pk.experimental.UnifiedComparisonPerformanceTest.xml",
+      "suite": "net.plainnotes.app.pk.experimental.UnifiedComparisonPerformanceTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "pk-engine/build/test-results/test/TEST-net.plainnotes.app.pk.experimental.UnifiedModelComparisonTest.xml",
+      "suite": "net.plainnotes.app.pk.experimental.UnifiedModelComparisonTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "importer/build/test-results/test/TEST-net.plainnotes.app.importer.HrtTrackerTest.xml",
+      "suite": "net.plainnotes.app.importer.HrtTrackerTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "importer/build/test-results/test/TEST-net.plainnotes.app.importer.TransMemoTest.xml",
+      "suite": "net.plainnotes.app.importer.TransMemoTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "totals": {
+    "tests": 184,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  }
+}

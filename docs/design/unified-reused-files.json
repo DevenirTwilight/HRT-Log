@@ -1,0 +1,107 @@
+[
+  {
+    "file": "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/StudyAnchors.kt",
+    "source_commit": "4b264187b08f23ae4ef88a10715e29500d60ce29",
+    "sha256": "93f746293efa12866bee1e5f740643de217ed64cd93d4a40bb5fc8f8808235c8"
+  },
+  {
+    "file": "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchSublingualV01.kt",
+    "source_commit": "4b264187b08f23ae4ef88a10715e29500d60ce29",
+    "sha256": "55c62670dac37d9c44a370ea10406d66c21654ba330b7e967c61840a101ec527"
+  },
+  {
+    "file": "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchShapeComparisonV01.kt",
+    "source_commit": "4b264187b08f23ae4ef88a10715e29500d60ce29",
+    "sha256": "9cdebb2b1377c993833ae592b88f41e5e684867f9a5d6de7a6d357b5daf6dd95"
+  },
+  {
+    "file": "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ExperimentalSlModelView.kt",
+    "source_commit": "4b264187b08f23ae4ef88a10715e29500d60ce29",
+    "sha256": "123a64d2e21ebe2de92a0b8f62664ef4bf71db9c750c20f67c4f1a9b2918635e"
+  },
+  {
+    "file": "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ConcentrationModelComparison.kt",
+    "source_commit": "4b264187b08f23ae4ef88a10715e29500d60ce29",
+    "sha256": "e17a9c943defb7b46247ec8a80a76b9c354512850e7dacb6b978c59256a55719"
+  },
+  {
+    "file": "pk-engine/src/test/kotlin/net/plainnotes/app/pk/experimental/StudyAnchorsTest.kt",
+    "source_commit": "4b264187b08f23ae4ef88a10715e29500d60ce29",
+    "sha256": "c6702ed4019113cd6ff15718087f725e9c15869666d58455f6784889ef829f49"
+  },
+  {
+    "file": "pk-engine/src/test/kotlin/net/plainnotes/app/pk/experimental/ResearchSublingualV01Test.kt",
+    "source_commit": "4b264187b08f23ae4ef88a10715e29500d60ce29",
+    "sha256": "4f78fbd51d377e6d723250497f5ee7fca5b7c490c44206e3f352adb9331e24bb"
+  },
+  {
+    "file": "pk-engine/src/test/kotlin/net/plainnotes/app/pk/experimental/ResearchShapeComparisonV01Test.kt",
+    "source_commit": "4b264187b08f23ae4ef88a10715e29500d60ce29",
+    "sha256": "6a51171873ae5ad28dded4f0e1105c95429dbab1195d2f571800f2d563f5fe10"
+  },
+  {
+    "file": "pk-engine/src/test/kotlin/net/plainnotes/app/pk/experimental/ExperimentalSlModelViewTest.kt",
+    "source_commit": "4b264187b08f23ae4ef88a10715e29500d60ce29",
+    "sha256": "f57b85a92fb9b2adf0c4c73ad8370219acc613702fff4c4b15bb987110c46a05"
+  },
+  {
+    "file": "pk-engine/src/test/kotlin/net/plainnotes/app/pk/experimental/ConcentrationModelComparisonTest.kt",
+    "source_commit": "4b264187b08f23ae4ef88a10715e29500d60ce29",
+    "sha256": "d7ac7f4c069ccae0ed091f0294d350ba2712383905234bab58694f867c920ae2"
+  },
+  {
+    "file": "app/src/main/java/net/plainnotes/app/conc/experimental/ResearchHistoricalSlAdapter.kt",
+    "source_commit": "4b264187b08f23ae4ef88a10715e29500d60ce29",
+    "sha256": "ca24a838fb5204438c60b0655354c49365c12ef99a437a91334b0c5ab0f6e144"
+  },
+  {
+    "file": "app/src/main/java/net/plainnotes/app/experimental/ModelComparisonChart.kt",
+    "source_commit": "4b264187b08f23ae4ef88a10715e29500d60ce29",
+    "sha256": "5375ffae3131229a68e9cb78673f74fd7a85e83774d8a261d989f419fe10dd3e"
+  },
+  {
+    "file": "app/src/test/java/net/plainnotes/app/ResearchHistoricalSlAdapterTest.kt",
+    "source_commit": "4b264187b08f23ae4ef88a10715e29500d60ce29",
+    "sha256": "7d7e6308fb7a02eea3ad236692bc3b12fa931e1c40b83b97734c4d48a5c3f1d6"
+  },
+  {
+    "file": "docs/pk-research/p2/p2x-frozen-40-candidates.csv",
+    "source_commit": "4b264187b08f23ae4ef88a10715e29500d60ce29",
+    "sha256": "f13aa0a0b27883fe211ee604c7c1a8a413d4e81d7114da2a5c39057db8df0d1b"
+  },
+  {
+    "file": "tools/pk-research/p2x_reproduce_standalone.py",
+    "source_commit": "4b264187b08f23ae4ef88a10715e29500d60ce29",
+    "sha256": "47b54568dcd89376b16c86b8edf07a431fc08bd617bba678c3d2d77f10d54b3e"
+  },
+  {
+    "file": "tools/pk-research/test_p2x_source_to_kernel.py",
+    "source_commit": "4b264187b08f23ae4ef88a10715e29500d60ce29",
+    "sha256": "5a5edfff6c325434d954d440b92fdf2ff5a2d8927d4fdf0759634c1f06b50aa9"
+  },
+  {
+    "file": "docs/pk-research/p2/experimental-sl-v01.md",
+    "source_commit": "4b264187b08f23ae4ef88a10715e29500d60ce29",
+    "sha256": "50621b7e08578899c2ddd6718d7ce2a74a5c04e005d37a26a329163c9888209b"
+  },
+  {
+    "file": "docs/pk-research/p2/experimental-sl-v01-ci-acceptance.md",
+    "source_commit": "4b264187b08f23ae4ef88a10715e29500d60ce29",
+    "sha256": "61f77612df4853b8637dd0d19601a26f91bce75a315e3235249721e10c817ba5"
+  },
+  {
+    "file": "docs/pk-research/p2/experimental-sl-v01-ui-comparison.md",
+    "source_commit": "4b264187b08f23ae4ef88a10715e29500d60ce29",
+    "sha256": "7bc51f7b163fe0f3a5c887f0725da23b07effcf2059156c28ace093a35dd7510"
+  },
+  {
+    "file": "docs/pk-research/p2/p2ab-v01-kernel-integrity.md",
+    "source_commit": "4b264187b08f23ae4ef88a10715e29500d60ce29",
+    "sha256": "8e8e6e4a55ee92d75099a260a2999c7186473febc973b460bdd591082580687c"
+  },
+  {
+    "file": "docs/pk-research/p2/p2ac-source-to-kernel-reproduction.md",
+    "source_commit": "4b264187b08f23ae4ef88a10715e29500d60ce29",
+    "sha256": "e11f9d06e0a24efba82b5d673537e14906ac9d12a49f147f8691cb91d5eda861"
+  }
+]

@@ -1,0 +1,20 @@
+{
+  "source_commit": "425a7ab0c75c625c070a17b116cc4f99aa79ff0d",
+  "size_bytes": 12782452,
+  "sha256": "2bdfc370499c409cf8c916ba5db35c5a53b1dcc35d21081005e4b332f41896b8",
+  "certificate_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
+  "apksigner_verification": "Verifies\nVerified using v1 scheme (JAR signing): false\nVerified using v2 scheme (APK Signature Scheme v2): true\nVerified using v3 scheme (APK Signature Scheme v3): true\nVerified using v3.1 scheme (APK Signature Scheme v3.1): false\nVerified using v3.2 scheme (APK Signature Scheme v3.2): false\nVerified using v4 scheme (APK Signature Scheme v4): false\nVerified for SourceStamp: false\nNumber of signers: 1\nV3.0 Signer: certificate DN: CN=HRT Log Release, O=HRT Log\nV3.0 Signer: certificate SHA-256 digest: 989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1\nV3.0 Signer: certificate SHA-1 digest: 3aa9b9e8c54aad778474f6e5f32db4775f390a62\nV3.0 Signer: certificate MD5 digest: 806cd56d792ab75b7cebb5127c55a67d\nV3.0 Signer: key algorithm: RSA\nV3.0 Signer: key size (bits): 4096\nV3.0 Signer: public key SHA-256 digest: 1eaa9e6909fc4216cf5b1fb3d657c0017a22cc2d6aa9c6a2cdb80c261e8149af\nV3.0 Signer: public key SHA-1 digest: 62af3ea56d23033133e6a1aa199295bdc0bd834e\nV3.0 Signer: public key MD5 digest: 346b0e28443271f1fbfe343a2d23a014\n",
+  "credentials_removed_after_signing": true,
+  "unsigned_size_bytes": 12736319,
+  "unsigned_sha256": "c145fb953f5c6ae0ab1963fff0bce758f65f8699cc3135f53e7ad9fe7ea39b3a",
+  "private_delivery": {
+    "shared": false,
+    "permission_roles": [
+      "owner"
+    ],
+    "independent_download_size_bytes": 12782452,
+    "independent_download_sha256": "2bdfc370499c409cf8c916ba5db35c5a53b1dcc35d21081005e4b332f41896b8",
+    "received_signature_verified": true,
+    "received_zipalign_16kb_verified": true
+  }
+}

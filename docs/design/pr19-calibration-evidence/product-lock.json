@@ -1,0 +1,19 @@
+{
+  "M2": {
+    "id": "p2x-39",
+    "runtime_signature": "p2x-39|10|16.33057668138752|1.382325006479187|0.2616420808381402|0.5311770316375933|0.03348696307362355|24.0|225.0",
+    "runtime_parameter_sha256": "76467b35b1d032058e272f600cbd580d0777d82266fe3740613e23f4d81c3a20",
+    "catalog_file": "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchSublingualV01.kt",
+    "catalog_sha256": "55c62670dac37d9c44a370ea10406d66c21654ba330b7e967c61840a101ec527"
+  },
+  "M1": {
+    "id": "p2az-m1-09",
+    "runtime_signature": "p2az-m1-09|3|4.0|1.2|0.2|0.0|0.0|0.0|0.0",
+    "runtime_parameter_sha256": "ad7a7ab74d93fc3c94d18b785a0ecb23f2e690f96427b10ea2243c588c63c24d",
+    "catalog_file": "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchM1Catalog.kt",
+    "catalog_sha256": "82ffdd2f627742dfc2648da95e69d547f14d198f5c91214fbeca73e38d888f5d"
+  },
+  "protocol": "price-figure-weighted-history-v1",
+  "m1_projection": "p2az-m1-price-projection-v1",
+  "m1_assumed_background_pgml": 24.0
+}

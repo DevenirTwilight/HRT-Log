@@ -1,0 +1,50 @@
+{
+  "source_commit": "425a7ab0c75c625c070a17b116cc4f99aa79ff0d",
+  "command": [
+    "/workspace/hrt-unified-tools/gradle-9.3.1/bin/gradle",
+    "--no-daemon",
+    "--no-parallel",
+    "--max-workers=2",
+    "--console=plain",
+    "-Pkotlin.compiler.execution.strategy=in-process",
+    ":app:testFullDebugUnitTest",
+    "--tests",
+    "net.plainnotes.app.UnifiedConcentrationUiTest",
+    "--tests",
+    "net.plainnotes.app.UnifiedConcentrationNavigationTest",
+    "--tests",
+    "net.plainnotes.app.UnifiedConcentrationTranslationsTest",
+    "--tests",
+    "net.plainnotes.app.ConcentrationPreviewTest",
+    "--tests",
+    "net.plainnotes.app.UnifiedConcentrationDataPathTest",
+    "--tests",
+    "net.plainnotes.app.UnifiedConcentrationObservationTest",
+    "--tests",
+    "net.plainnotes.app.audit.ButtonAuditTest",
+    ":app:assembleFullRelease",
+    ":app:assembleFullDebug",
+    ":app:assembleFullDebugAndroidTest",
+    ":app:lintFullDebug"
+  ],
+  "exit_code": 0,
+  "duration": "16m24s",
+  "lint": {
+    "errors": 0,
+    "warnings": 172
+  },
+  "apk_outputs": {
+    "app/build/outputs/apk/full/debug/app-full-debug.apk": {
+      "size_bytes": 36497789,
+      "sha256": "f64215dc783688fb9ece9e214d71f44d90d5c9187efb14176125e95de65d9f37"
+    },
+    "app/build/outputs/apk/full/release/app-full-release-unsigned.apk": {
+      "size_bytes": 12736319,
+      "sha256": "c145fb953f5c6ae0ab1963fff0bce758f65f8699cc3135f53e7ad9fe7ea39b3a"
+    },
+    "app/build/outputs/apk/androidTest/full/debug/app-full-debug-androidTest.apk": {
+      "size_bytes": 1161193,
+      "sha256": "d16184da47887184eed9edc2a8265137b5a8106e886acae95e7e741d4a5196e7"
+    }
+  }
+}

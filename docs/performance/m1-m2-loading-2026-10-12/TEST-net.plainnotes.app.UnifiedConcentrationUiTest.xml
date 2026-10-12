@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.UnifiedConcentrationUiTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-10-12T07:26:33.610Z" hostname="e1be2d0ad0c2" time="27.979">
+  <properties/>
+  <testcase name="legacyCalibrationSwitchAndChangedObservedLabCannotScaleResearchHero" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="11.783"/>
+  <testcase name="originalUnitSwitchConvertsResearchValue" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="0.734"/>
+  <testcase name="completedModelTransitionRestoresOriginalCardAndRetainsSelectedRange" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="1.585"/>
+  <testcase name="originalCardsAndCalendarControlsRemainWithOnlyModelSelectorAdded" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="1.107"/>
+  <testcase name="selectedKernelChangesOriginalHeroAndLegacyRestoresOriginalLabels" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="1.335"/>
+  <testcase name="selectedModelAndOriginalUnitSurviveRecreation" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="1.497"/>
+  <testcase name="originalChartTapZoomAndPanRemainOperable" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="1.142"/>
+  <testcase name="loadingAndCalculationFailureNeverMasqueradeAsNoMedicationRecords" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="2.925"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

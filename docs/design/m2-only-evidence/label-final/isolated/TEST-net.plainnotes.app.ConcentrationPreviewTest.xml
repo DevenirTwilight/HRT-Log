@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.ConcentrationPreviewTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-10-12T09:18:05.863Z" hostname="e1be2d0ad0c2" time="2.108">
+  <properties/>
+  <testcase name="defaultProductPreviewUsesRealLiteratureFitInHeroChartAndExactReadout" classname="net.plainnotes.app.ConcentrationPreviewTest" time="0.196"/>
+  <testcase name="twiceDailySeveralMonthsOfQualifiedHistoryProducesBothResearchPreviews" classname="net.plainnotes.app.ConcentrationPreviewTest" time="1.008"/>
+  <testcase name="offGridPeaksOfDifferentCandidatesAndCloseRepeatedDosesAreRepresented" classname="net.plainnotes.app.ConcentrationPreviewTest" time="0.226"/>
+  <testcase name="doseScalingRepeatedHistoryAndBackgroundOnceDoNotAlterActualEvents" classname="net.plainnotes.app.ConcentrationPreviewTest" time="0.225"/>
+  <testcase name="emptyPendingInvalidTimesDosesAndMixedRoutesCannotInventPersonalConcentrations" classname="net.plainnotes.app.ConcentrationPreviewTest" time="0.262"/>
+  <testcase name="exactReadoutRemainsUsableAfterConstructionCoroutineHasCompleted" classname="net.plainnotes.app.ConcentrationPreviewTest" time="0.06"/>
+  <testcase name="cancelledResearchConstructionStopsBeforeCompletingLongHistory" classname="net.plainnotes.app.ConcentrationPreviewTest" time="0.016"/>
+  <testcase name="originalChartViewportRetainsTheRefinedModelPeakInBothUnits" classname="net.plainnotes.app.ConcentrationPreviewTest" time="0.07"/>
+  <system-out><![CDATA[COMPLETE_PREVIEW_BENCHMARK model=M1 doses=360 points=37442 compute_ms=619.12617
+COMPLETE_PREVIEW_BENCHMARK model=M2 doses=360 points=37442 compute_ms=199.485398
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

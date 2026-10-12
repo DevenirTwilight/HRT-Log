@@ -1,0 +1,11 @@
+{
+  "pk-engine/src/main/kotlin/net/plainnotes/app/pk/Engine.kt": "51ce72f3b4b2c4fbca0185c78a333df9a9e7877daf5d9630e5140a15a686e89e",
+  "app/src/main/java/net/plainnotes/app/conc/ConcentrationCalculator.kt": "9a0ca71e55a49b05b614d247773a0c694716ce92f7272f79c5644a39e45e417e",
+  "app/src/main/java/net/plainnotes/app/ui/ConcChart.kt": "51d0f88bf158113f9a08415a7498043930055096194b7f0f967e7bcb59b26c06",
+  "app/src/main/java/net/plainnotes/app/ui/ChartViewport.kt": "b9821126c3bf98bb8c71d85f06fc7ec282b73006cd2a1a1b164a2c737bc08c14",
+  "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchSublingualV01.kt": "55c62670dac37d9c44a370ea10406d66c21654ba330b7e967c61840a101ec527",
+  "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchM1Catalog.kt": "82ffdd2f627742dfc2648da95e69d547f14d198f5c91214fbeca73e38d888f5d",
+  "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/StudyAnchors.kt": "93f746293efa12866bee1e5f740643de217ed64cd93d4a40bb5fc8f8808235c8",
+  "app/src/main/java/net/plainnotes/app/conc/experimental/ResearchHistoricalSlAdapter.kt": "ca24a838fb5204438c60b0655354c49365c12ef99a437a91334b0c5ab0f6e144",
+  "pk-engine/src/main/resources/pk-params.json": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b"
+}

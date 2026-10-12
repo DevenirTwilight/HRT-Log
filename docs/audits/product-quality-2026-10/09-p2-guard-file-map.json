@@ -1,0 +1,843 @@
+{
+ "source": "docs/pk-research/p2/production-baseline.json",
+ "start_sha": "e89579a02da3c92a9e4976baea729af9d532437e",
+ "verified": "all 164 sha256 reproduce from git object at start_sha (2026-10-12 audit, script in 09 §2)",
+ "files": {
+  "app/src/main/AndroidManifest.xml": {
+   "baseline_sha256": "2281d7ab5fe4ad4a858133728b40b20035cfb7e49b513bb6428994f14fd4c610",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/MainActivity.kt": {
+   "baseline_sha256": "29cffea20ea54d8e57d1aa72eaa686d2ca8fa0f002a009495418a3051a22f916",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/NotesApplication.kt": {
+   "baseline_sha256": "012d7f927ea52a28a68e0d5a218f48409900f2c955ea28ae8e601410471345d2",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/NotesViewModel.kt": {
+   "baseline_sha256": "55346ade65bfd13e5956120a0d50ad318098a93d0a54e65f9ef0bf10c4f4fbae",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/conc/CalibrationEligibility.kt": {
+   "baseline_sha256": "f764ef63f2665d1c4040f2ecb9e1274eb32937383d1b4715b1e8490530ed3153",
+   "proposed_class": "LIVE_LOCK_RESEARCH_INPUT",
+   "reason": "P0–P1 计算器/资格/冻结估算回放直接执行；LabEstimate 决定 calculator_version 冻结语义"
+  },
+  "app/src/main/java/net/plainnotes/app/conc/ConcentrationCalculator.kt": {
+   "baseline_sha256": "9a0ca71e55a49b05b614d247773a0c694716ce92f7272f79c5644a39e45e417e",
+   "proposed_class": "LIVE_LOCK_RESEARCH_INPUT",
+   "reason": "P0–P1 计算器/资格/冻结估算回放直接执行；LabEstimate 决定 calculator_version 冻结语义"
+  },
+  "app/src/main/java/net/plainnotes/app/conc/LabEstimate.kt": {
+   "baseline_sha256": "476097b3723db41361db379c23a5cb8ae454423c7b89e1b10a7e10fb106f7071",
+   "proposed_class": "LIVE_LOCK_RESEARCH_INPUT",
+   "reason": "P0–P1 计算器/资格/冻结估算回放直接执行；LabEstimate 决定 calculator_version 冻结语义"
+  },
+  "app/src/main/java/net/plainnotes/app/export/Exports.kt": {
+   "baseline_sha256": "90ac95a11d9514a0273ca341fd677686565b381f22afac23ff3dc4364949e7b5",
+   "proposed_class": "PK_DISPLAY_REVIEW",
+   "reason": "展示/导出 PK 数值的界面；不再属于研究冻结，但修改需显式产品授权记录 + PK 显示回归"
+  },
+  "app/src/main/java/net/plainnotes/app/export/WellbeingSummary.kt": {
+   "baseline_sha256": "df0d246ba308f43dd869c131b5d781dfba4125ec940df9fd55dcc15ddb1c497b",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/security/AppLock.kt": {
+   "baseline_sha256": "c464a4375e4d936f0e814e3ba2596817c2123e0fcac4848fbc68dd2fc66f9f09",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/security/Session.kt": {
+   "baseline_sha256": "9624adb1f3546fd32aa1e8133df6c8f45d5a30cf5b2a6aefa7ea4b44b7eff6e2",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/security/ShakeDetector.kt": {
+   "baseline_sha256": "b0df6c25a9ca91bb9e9183a9634cdea41d68d85a1e105284009227dbb14013a7",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/security/TaskIdentity.kt": {
+   "baseline_sha256": "7868c4ec163b0039b019ea4b73b8528719b4627a379b6f40509694cdcfe2f3ad",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/symptoms/SourceTranslations.kt": {
+   "baseline_sha256": "484dda06fc1bffd4c5f8f1a384bc212285f05cd40c5a559ac74a94d3f8a3ba93",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/symptoms/SymptomCatalog.kt": {
+   "baseline_sha256": "815d5d499ee5e104244d169d50a9a4648bf8feac1b4ab4b49115371dbb5d0022",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/timeline/HistoryLabels.kt": {
+   "baseline_sha256": "231793a1991e17c245bbaad33c8b960edb25b21cd6198136b4f84501b141d0a5",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/timeline/ImportedHistory.kt": {
+   "baseline_sha256": "083ad48610dfb7247a6c971a45d388c9eb8acd1cd9d93321e137e5d49513eb96",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/timeline/LongitudinalProjection.kt": {
+   "baseline_sha256": "bfa2c9f73c80318dd16663e8cb8c8e722373b9c29956af074d2d313fcb2240a1",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/timeline/MilestoneSaving.kt": {
+   "baseline_sha256": "c34c929a3301b53c9833f83193d2b3623665f7a8e9f8be67ae34edf99741279b",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/timeline/ObservedTreatmentHistory.kt": {
+   "baseline_sha256": "0ff182a0d44f601e70dcc3f36f987292307afdecbb888ee62284bc6d9aa58880",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/timeline/PeriodTimeline.kt": {
+   "baseline_sha256": "365d7f51d39008b89f261da8796570a75e92cc290a9559b7c64d65760783d879",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/timeline/RecognizedSchedule.kt": {
+   "baseline_sha256": "8f432a3fbbd90bd5d7a5175fb197f9c72e91d7d0504054d0afe1197078be40b9",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/timeline/TimelineEdits.kt": {
+   "baseline_sha256": "e2773a9b878019aa46d4e2ff87e8baca7b1f54ec07d8aca7be8d0b7f0bf78262",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/timeline/TimelineV2Migration.kt": {
+   "baseline_sha256": "0bc6037348d63e758a1f7fd301f34f5ae3531349991932d9f1248febed5a83b3",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/ui/AdaptiveControls.kt": {
+   "baseline_sha256": "d8544e5bd0805372275421123e6b3ca73220c22e960f849715743bfad5168ac9",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/ui/AppShell.kt": {
+   "baseline_sha256": "b8df023f82e9fae4906d7f14b48095cb182030f8b73137cfa04d74f7e027cf84",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/ui/CalendarModel.kt": {
+   "baseline_sha256": "dfd8f1944ca41bb6487129bb58c217791e750f87d6c42c7206bc84d464b8cb96",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/ui/CalendarScreen.kt": {
+   "baseline_sha256": "f671be426a36041e7c1393529a5ae5516126fb78da75329612aaf20de22f2bf1",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/ui/ChartViewport.kt": {
+   "baseline_sha256": "b9821126c3bf98bb8c71d85f06fc7ec282b73006cd2a1a1b164a2c737bc08c14",
+   "proposed_class": "PK_DISPLAY_REVIEW",
+   "reason": "展示/导出 PK 数值的界面；不再属于研究冻结，但修改需显式产品授权记录 + PK 显示回归"
+  },
+  "app/src/main/java/net/plainnotes/app/ui/Components.kt": {
+   "baseline_sha256": "c2b9633cfeea346699cc51002f1b1c0a4f10a1f26e8e790561c782e3a580505b",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/ui/ConcChart.kt": {
+   "baseline_sha256": "51d0f88bf158113f9a08415a7498043930055096194b7f0f967e7bcb59b26c06",
+   "proposed_class": "PK_DISPLAY_REVIEW",
+   "reason": "展示/导出 PK 数值的界面；不再属于研究冻结，但修改需显式产品授权记录 + PK 显示回归"
+  },
+  "app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt": {
+   "baseline_sha256": "f21a68d40192c2e8c413d934bde69d17c16b3e0219a1092577ee425b1f24f58b",
+   "proposed_class": "PK_DISPLAY_REVIEW",
+   "reason": "展示/导出 PK 数值的界面；不再属于研究冻结，但修改需显式产品授权记录 + PK 显示回归"
+  },
+  "app/src/main/java/net/plainnotes/app/ui/DataSection.kt": {
+   "baseline_sha256": "1654b31670f36bd98db5d2a15fbbd2a8c7425ec04a25c04b30cca166429a272f",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/ui/Dialogs.kt": {
+   "baseline_sha256": "25ac563301c0b857c8823cf3814e3d91ec0bbbbaea6844efb63e8965d672a3b3",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/ui/Format.kt": {
+   "baseline_sha256": "65976b314180999176603c2d392f7813002f24e923471973d127539977c68f9c",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/ui/HistoricalContextDialog.kt": {
+   "baseline_sha256": "3a921d55fa44200b209d8b4ba81cc0d72651ba3283c5cc8a00a6d9354baff315",
+   "proposed_class": "PK_DISPLAY_REVIEW",
+   "reason": "展示/导出 PK 数值的界面；不再属于研究冻结，但修改需显式产品授权记录 + PK 显示回归"
+  },
+  "app/src/main/java/net/plainnotes/app/ui/HistoryScreen.kt": {
+   "baseline_sha256": "f5eacd97896ac8695e6f39072e56f4d61b4bb4c451f9ae4b607ac58a07a9d305",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/ui/HtImport.kt": {
+   "baseline_sha256": "33e7cea2961bf14b48957db048c511f3f6ee21fefcfce7fe801adffdc5b361c1",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/ui/LabContextSection.kt": {
+   "baseline_sha256": "8e2ff360e59c1a31f8e875acd2c14809083c44ed33fd0267d3cd854328e45b26",
+   "proposed_class": "PK_DISPLAY_REVIEW",
+   "reason": "展示/导出 PK 数值的界面；不再属于研究冻结，但修改需显式产品授权记录 + PK 显示回归"
+  },
+  "app/src/main/java/net/plainnotes/app/ui/LabsScreen.kt": {
+   "baseline_sha256": "11dc6b238b82d38bc87f06128812c6af224217c7381017ceb19ad4f918568ad6",
+   "proposed_class": "PK_DISPLAY_REVIEW",
+   "reason": "展示/导出 PK 数值的界面；不再属于研究冻结，但修改需显式产品授权记录 + PK 显示回归"
+  },
+  "app/src/main/java/net/plainnotes/app/ui/LockScreen.kt": {
+   "baseline_sha256": "7d2184e9f7dbf7cb08c00a3e7bda1fbc63b2acb4363d5becc99fdd60b1a6f759",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/ui/LongitudinalScreen.kt": {
+   "baseline_sha256": "0283a6d7e8ec37fb328c48415417ab18d9e4bf23ca27b0ca0fbdb991ac474638",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/ui/MedicationEditor.kt": {
+   "baseline_sha256": "48ffb6b8d7233ed0196b0698fe07497307cf052ba73c3728fba7f072c13b2dd6",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/ui/MedicationsScreen.kt": {
+   "baseline_sha256": "27f4bb023696a865c77a8bdc707ca8058b8a68651e8bfc185a52cc16764f762c",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/ui/PrivacySection.kt": {
+   "baseline_sha256": "52d3b1da60a3a1c21f82d30c60346656d895e6e8cad4ee714fa65ccff5582cc0",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/ui/RecycleBin.kt": {
+   "baseline_sha256": "89676db2d7203fc51c947c74c8301d0deabfab5477d01e73cf89966b1b7d2489",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/ui/ReviewEffects.kt": {
+   "baseline_sha256": "e1a751caeb7bd9279ef3bdf707615eefcfe896a8b0c7809225309705ecd32965",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/ui/SettingsScreen.kt": {
+   "baseline_sha256": "86fe09b67c18dbf44392d181b7e3d1e7901ca719bddbae6d68a72a8ae421df37",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/ui/StageReviewScreen.kt": {
+   "baseline_sha256": "636f94dde42ccccdd7ea17d093f57dc293ad8be9f4c165ce95387cf6427d1fa2",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/ui/StockScreen.kt": {
+   "baseline_sha256": "6b3ba91f6093e241e3de4956e38a450bcf962e394236508df11d3092f4d7f8a6",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/ui/SummaryExportDialog.kt": {
+   "baseline_sha256": "043f0334306bb30c776de38ef33a8c035ead755b310f16e6a5c7952913e64770",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/ui/SymptomsScreen.kt": {
+   "baseline_sha256": "b0cc4572bf150a766b165f0e4925540ff669832c33b4b32f09d96cbe3df2c3a5",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/ui/TimelineEditing.kt": {
+   "baseline_sha256": "53d05fb822c06ae924cb4e1b47beb120aea5c7e62facbecb2a8228d6516e1c47",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/ui/VisitsScreen.kt": {
+   "baseline_sha256": "7b027b8d48273c6b8ff1c6d7375dc5d6572cae5e5eb1e41b19090800802f94ee",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/ui/WellbeingHub.kt": {
+   "baseline_sha256": "d0c95f6c6e5689163f7966d32cb28391389d09ed264260070972a512f3e51c5f",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/ui/WellbeingScreen.kt": {
+   "baseline_sha256": "c01f1660dc2095fa1ea6f2b9d319adc9583a883ec63093e05482163c5deae3ad",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/java/net/plainnotes/app/visit/VisitPack.kt": {
+   "baseline_sha256": "df7b68137df0445b9cc8f32ff1b6955e3cd895e25c47c207705df588a90a47de",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/res/drawable/ic_launcher_foreground.xml": {
+   "baseline_sha256": "5c0b5af8ddce98370a3d9f26ed48305e6900d0c63ee7c833fe2abe71814b878b",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/res/drawable/ic_launcher_monochrome.xml": {
+   "baseline_sha256": "0aa0492e5234df41684d5fe78fba68e48ef9c8d202f506984f5be8714e9af2d0",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml": {
+   "baseline_sha256": "731b0e27980dcfe9c8367244e152547449332a5467d3ea10212f046f8e44426f",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/res/values/colors.xml": {
+   "baseline_sha256": "f878fb9802124c3c2693e6b17f742f416617cb2cfbe6647090f1f447c16fb3d9",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/res/values/strings.xml": {
+   "baseline_sha256": "2744a95d07aac9bebfc1d76c5f8dba859dd7184a5fee2f00062646a2d086036a",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/res/values/themes.xml": {
+   "baseline_sha256": "611ca89da2b35cb5e3f9958bd57aeeaa6d32b2c6c22da8b0ff6822046ef93bcb",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/res/values-b+zh+Hant/strings.xml": {
+   "baseline_sha256": "991882965127f1da16a386252b1b9c9cea2ce507a4fe3d1b510006f0dcdcb3f3",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/res/values-fr/strings.xml": {
+   "baseline_sha256": "b6324fd2561df9f639118df540af65ffb52ac1c2c19de4aaa6ba60059a3cf7ae",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/res/values-night/colors.xml": {
+   "baseline_sha256": "83665b5d0f63a1316bee89dee0022735dd1398ed7de4c97fb5c8fd3526bc94bf",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/res/values-zh/strings.xml": {
+   "baseline_sha256": "82a6d5e1d962b8ba901e58f235e815d82f88525c116c1c54c76f77ed27db3a07",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/res/xml/backup_rules.xml": {
+   "baseline_sha256": "10652ebc7d3e7f111bcdbaf90dab78746da780cabefec64303f056b12c5cca3c",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/res/xml/data_extraction_rules.xml": {
+   "baseline_sha256": "a3a1bba3da7b602b58a66a39b3eb0b05c4603e639ea7819f060cfbc4442db7a2",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/res/xml/locales_config.xml": {
+   "baseline_sha256": "902eec5dd57910bf71fc51a153eab9a5e87666473ea0fa6547ed0af3f9a0746a",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/resources/symptom-sources.json": {
+   "baseline_sha256": "51b2059cb7ff3157c29685cad998693a1565b9f6c555a12f3eac00b49527a47e",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "app/src/main/resources/wellbeing-translations.json": {
+   "baseline_sha256": "291f586a21c8f83a98301a9beb3031051201c5c4ca8f14e7143017cd13086b22",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/data/schemas/net.plainnotes.app.data.NotesDatabase/1.json": {
+   "baseline_sha256": "959671843b60d6d0845fab42afe89bf1740db83b939a94301729ce3e1b5bf386",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/data/schemas/net.plainnotes.app.data.NotesDatabase/2.json": {
+   "baseline_sha256": "6404aca95d3de0a206c68d9b2373ad742c108a79ce2232c8b5ec7d9719126aa5",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/data/schemas/net.plainnotes.app.data.NotesDatabase/3.json": {
+   "baseline_sha256": "88187929f2112f207b37d3d673daa0262764f05e446ebd480d4eab219c990d48",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/data/schemas/net.plainnotes.app.data.NotesDatabase/4.json": {
+   "baseline_sha256": "0c26fed23b66d0223e2a14927189d068f2df3b2ce1c5b26c7097029f7fe792a3",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/data/schemas/net.plainnotes.app.data.NotesDatabase/5.json": {
+   "baseline_sha256": "f73c28631dc5c22cf90f96a48b4c7ae7f5ac9f3eef3b16c5729592347d2c3f41",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/data/schemas/net.plainnotes.app.data.NotesDatabase/6.json": {
+   "baseline_sha256": "e80c7c2a93070bed32b3bea004a286b4a04f95ddf116a6a160a3fcd46af2dc0d",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/data/schemas/net.plainnotes.app.data.NotesDatabase/7.json": {
+   "baseline_sha256": "f2caf24f3cbef5fb55e9d5411f3b54d5018b35eaa0d6fdeb1f5a7d49b4d81c05",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/data/schemas/net.plainnotes.app.data.NotesDatabase/8.json": {
+   "baseline_sha256": "6ea7635bca4a2a27dfe15e5a8ebaf739d099d37d38bc41ed2593ff4aebb709e1",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/data/schemas/net.plainnotes.app.data.NotesDatabase/9.json": {
+   "baseline_sha256": "e96caa92f3143ac279addb16d56aadf5eb38592a1bdc7f5a7b1ffc96728a8087",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/data/src/main/AndroidManifest.xml": {
+   "baseline_sha256": "571f2735faf5e857752ee057ac8ef63425576a721616c60b86ee5d4c0a2d682f",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/data/src/main/java/net/plainnotes/app/data/BackupValidation.kt": {
+   "baseline_sha256": "48296e79fe3220627b91d9ae4b7002e9794ddbd90bef274f92998e2deaf379ec",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/data/src/main/java/net/plainnotes/app/data/DataTransfer.kt": {
+   "baseline_sha256": "980a2c686273eed84652b5b47eb6166e30ab0a9f4d0b7264023247c7d0053b38",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt": {
+   "baseline_sha256": "6bcabc2a064fb0a1ba07ecbf6fd0fa6be070a8b50a0aea361f2f795131512f23",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/data/src/main/java/net/plainnotes/app/data/DisplayStandard.kt": {
+   "baseline_sha256": "09b3ffc6ece031b7ced1d0d7878d81f6a6b38b684ab5f8893f95a7b67b8fd96d",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/data/src/main/java/net/plainnotes/app/data/Entities.kt": {
+   "baseline_sha256": "c0cc9079ba6b8a1c2819dd1ea1b7fa0b65b61285a78f1176ea72da778781cfa8",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）；但被 ConcentrationCalculator/LabEstimate 直接 import，行为变化须由 P0–P1 回放比较（android.yml）与 PK 测试拦截，修改时 PR 须声明",
+   "indirect_pk_input": true
+  },
+  "core/data/src/main/java/net/plainnotes/app/data/HistoricalContext.kt": {
+   "baseline_sha256": "0cca28b1e824a9d8a471dec3fda1b8aadbabcdd9c5b3e71b455a271dbd339e42",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）；但被 ConcentrationCalculator/LabEstimate 直接 import，行为变化须由 P0–P1 回放比较（android.yml）与 PK 测试拦截，修改时 PR 须声明",
+   "indirect_pk_input": true
+  },
+  "core/data/src/main/java/net/plainnotes/app/data/HistoryPeriods.kt": {
+   "baseline_sha256": "d0bbc1a988aadd54ab070d11fbc47b3373c2e7a06b0b708b464b52ccd06b047e",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/data/src/main/java/net/plainnotes/app/data/HrtTrackerWriter.kt": {
+   "baseline_sha256": "d490ae7c356080d63baf4a3ab5b2ccf4af51f07de1a3ad0e15a04e99705a6169",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/data/src/main/java/net/plainnotes/app/data/LabContext.kt": {
+   "baseline_sha256": "a33f0775e7a94e09353a0a51b90a847c10ade4905b23fc2828b9300a9ae1efc6",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/data/src/main/java/net/plainnotes/app/data/MedicationSnapshot.kt": {
+   "baseline_sha256": "0b3f3839f2dc226b2406023d15ac4f5763f5d5c1d515073b522cb65f73fbc7b4",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）；但被 ConcentrationCalculator/LabEstimate 直接 import，行为变化须由 P0–P1 回放比较（android.yml）与 PK 测试拦截，修改时 PR 须声明",
+   "indirect_pk_input": true
+  },
+  "core/data/src/main/java/net/plainnotes/app/data/Migrations.kt": {
+   "baseline_sha256": "a090e29ee2d35f13fa95ba413a481246d55651fdd7a8ea6f6dbd0ce633e67b0f",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/data/src/main/java/net/plainnotes/app/data/NotesDao.kt": {
+   "baseline_sha256": "ce195049e2cc470b3889a63caa817ce415dd38cfd613e59cc159e1d6da1c05cd",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/data/src/main/java/net/plainnotes/app/data/NotesDatabase.kt": {
+   "baseline_sha256": "ef0750ad3cbbe259f4bf6e05163cee4cf19dfff61d647b5c78b13252d1ee6afd",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt": {
+   "baseline_sha256": "4cf0e27a6d7d7356ae7084fca6778f25d81ec496cb83facff804e07f16925484",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/data/src/main/java/net/plainnotes/app/data/PeriodRestoreConflict.kt": {
+   "baseline_sha256": "923af8984efdf5191ea3265abd65898750f23cb4b9a9a1a35834a89bb71e437c",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/data/src/main/java/net/plainnotes/app/data/RegimenHistory.kt": {
+   "baseline_sha256": "1d6a39e44b6328ef44ec59862e263e7982f33c776d6ba0cd3d9df857f7714716",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/data/src/main/java/net/plainnotes/app/data/SchemaGuards.kt": {
+   "baseline_sha256": "11c7e1ac37da48f13a514b076edc3e0ab90536ce720abb85ea98218d008b6923",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/data/src/main/java/net/plainnotes/app/data/SupplyLedger.kt": {
+   "baseline_sha256": "5bca74def750e6b2b33eeb89b484d48e80659b8863c9ef5ae9523b5db45cf72a",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/data/src/main/java/net/plainnotes/app/data/Trash.kt": {
+   "baseline_sha256": "1c09f7d954dc0e8f490fab01d7105560fd4df7bc61c4302220e551ca8fc77ac3",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/data/src/main/java/net/plainnotes/app/data/WellbeingUpgrade.kt": {
+   "baseline_sha256": "3749619ce0f7b647713cfbb112eaedaa78b7e83cec5194fa0a40f7e7f79eda35",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/domain/src/main/kotlin/net/plainnotes/app/domain/Model.kt": {
+   "baseline_sha256": "e36dc5b51de89b8ee71f5331f67ed30752c042650b205c77b63c0042509ab119",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）；但被 ConcentrationCalculator/LabEstimate 直接 import，行为变化须由 P0–P1 回放比较（android.yml）与 PK 测试拦截，修改时 PR 须声明",
+   "indirect_pk_input": true
+  },
+  "core/domain/src/main/kotlin/net/plainnotes/app/domain/PeriodAttribution.kt": {
+   "baseline_sha256": "c879346fd0b2aa30ce7698672703c43665d46f62668b1b8e0a20023e039be9c0",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/domain/src/main/kotlin/net/plainnotes/app/domain/ReminderState.kt": {
+   "baseline_sha256": "fe00df8eeeedb6c31bb5fe0e1b3002654be0caad4b422c05ca1a67e56d8eec7a",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/domain/src/main/kotlin/net/plainnotes/app/domain/ScheduleEngine.kt": {
+   "baseline_sha256": "382527cd80882649a487926b409af9253b55c48f45d876681fd9fccad4ddcb4f",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/domain/src/main/kotlin/net/plainnotes/app/domain/SustainedPatterns.kt": {
+   "baseline_sha256": "c633f8f7485ef6e974d73aa56598c65be0222e66809d998d6daabe7fae435b4e",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/domain/src/main/kotlin/net/plainnotes/app/domain/TimestampInput.kt": {
+   "baseline_sha256": "659ceb9e714ef6087b64f0be3855ceebcb8f5cb29c995c9e645e7f5837d0e848",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/domain/src/main/kotlin/net/plainnotes/app/domain/TreatmentEpochs.kt": {
+   "baseline_sha256": "4d5da1c85c82b8e1cebb97f366d9ad01847fb0ffea3c2d80fab953df861f3333",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/domain/src/main/kotlin/net/plainnotes/app/domain/TreatmentPeriods.kt": {
+   "baseline_sha256": "821a829fea3d83bf885b09a6f96846f1bba432d726e3ba1c304deae929b7f300",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/reminder/src/main/AndroidManifest.xml": {
+   "baseline_sha256": "d53b6928457db9f8276940da2579cab621a4528bdc049cf8b8224cf7a21edb3e",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/reminder/src/main/java/net/plainnotes/app/reminder/CacheStore.kt": {
+   "baseline_sha256": "ea34f30e826a296d0e9344bdc663d6f2f6356daf04ccf80db5b7803afb86a2b1",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/reminder/src/main/java/net/plainnotes/app/reminder/NotificationPrefs.kt": {
+   "baseline_sha256": "f363a06b83b0a40174661460547630a9a565ef73fc1ea075af1430f65a896b86",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/reminder/src/main/java/net/plainnotes/app/reminder/Receivers.kt": {
+   "baseline_sha256": "657921c24ebbce6982889b1dcd23e3e49d4c9fdd46cd1078631184b4b14543ed",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/reminder/src/main/java/net/plainnotes/app/reminder/ReminderCoordinator.kt": {
+   "baseline_sha256": "23c53add8644d2254bab2aeb5aa0ddde92fe41a54c014ab57db7f263e0483a8f",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/reminder/src/main/java/net/plainnotes/app/reminder/StockAlerts.kt": {
+   "baseline_sha256": "a0b78fabbb08d7322b8adcd991ee4fb406da441db5f554ee324048ae50241f18",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/reminder/src/main/res/values/strings.xml": {
+   "baseline_sha256": "fa9382e0a9f5ef57051995ff5c86a6c0d40ea4cfe0621b6a586ba6ba582e7447",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/reminder/src/main/res/values-b+zh+Hant/strings.xml": {
+   "baseline_sha256": "00ecb877473e89e267dbe7bc0db9c05d4d1353de167013a16977fffdb0f824cd",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/reminder/src/main/res/values-fr/strings.xml": {
+   "baseline_sha256": "cbeebcaf3bf674b213a6ccc3e37b286fd70b2eefe5e812b5b847b26cb2b0dd52",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/reminder/src/main/res/values-zh/strings.xml": {
+   "baseline_sha256": "f27ef08690c4e1f41a869ec3ec2d94660e2626fee18044b4818c8072b976b308",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/ui/src/main/AndroidManifest.xml": {
+   "baseline_sha256": "571f2735faf5e857752ee057ac8ef63425576a721616c60b86ee5d4c0a2d682f",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "core/ui/src/main/java/net/plainnotes/app/ui/NotesTheme.kt": {
+   "baseline_sha256": "653a23ec657817d9b617d17c42cb0c8b9c88a69a4bad0a1c4758dce9470ae065",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "docs/pk-research/results/sublingual-p0-calculator.json": {
+   "baseline_sha256": "e3749dc36d9c0274993e42cd5c27c898b764ff238a81b87aa005746004e60575",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "docs/pk-research/results/sublingual-p0-curves.csv": {
+   "baseline_sha256": "bfc8a5c3c0211e4bb7fa4716e936d500d18c591756d80dd8853abe4e1407d63d",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "docs/pk-research/results/sublingual-p0-engine.json": {
+   "baseline_sha256": "86b5d0496211309ff06a50214abf710a96fa2b4f18c0483a21ce952095cda9bd",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "docs/pk-research/results/sublingual-p0-report.json": {
+   "baseline_sha256": "a6e0db2c315646efee4004cf8dd3e7bbb9a66317c9ae730c2e287966636dabd0",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "docs/pk-research/results/sublingual-p0-report.md": {
+   "baseline_sha256": "684d3d9919383049954bb5f1f5646586b58309609d495388a052ccafe3b10651",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "docs/pk-research/results/sublingual-p1a-calculator.json": {
+   "baseline_sha256": "15b6f9147dd36bab276658021f89372c9d22b815111c3c9a8ab116c2cd1e59dc",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "docs/pk-research/results/sublingual-p1a-curves.csv": {
+   "baseline_sha256": "93f0331e021afd301700627f870a86be068dec22adeca7e3680861ae502ecd28",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "docs/pk-research/results/sublingual-p1a-engine.json": {
+   "baseline_sha256": "de5d2cb58a036194ce528f68036cd8f453663b355065f53af1d7c4f43435ddfa",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "docs/pk-research/results/sublingual-p1a-report.json": {
+   "baseline_sha256": "9d1509c3a42934bbbf0d2e129469b1276ddf7042c0fa5496381577e0ec5401c4",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "docs/pk-research/results/sublingual-p1a-report.md": {
+   "baseline_sha256": "d1d00a94a29a6280f93f9fe79545d696edd20bdd3e8c09da5004dff30c04daa5",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "docs/pk-research/results/sublingual-p1a-stability.json": {
+   "baseline_sha256": "06d1b204fffb73208b00303d2bc7b692dea37800f859a1f76d50b2c9073bebf5",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "docs/pk-research/results/sublingual-p1b-before.json": {
+   "baseline_sha256": "cc9ef74e8f3572a889b99833c98b7392c183cb99fb5c249aacba5edf812e0af1",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "docs/pk-research/results/sublingual-p1b-calculator.json": {
+   "baseline_sha256": "6dff8cf4e3aadf6a27c97ad5bb361a67ece6164061c73470bdc0fe333db7c122",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "docs/pk-research/results/sublingual-p1b-eligibility.json": {
+   "baseline_sha256": "f04bb73d75efdcb7746b8db93de659e3c65ea391e72778a1b108519d62bc097f",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "docs/pk-research/results/sublingual-p1b-engine.json": {
+   "baseline_sha256": "de5d2cb58a036194ce528f68036cd8f453663b355065f53af1d7c4f43435ddfa",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "docs/pk-research/results/sublingual-p1b-report.json": {
+   "baseline_sha256": "2aa9879bca9c855ad6a194ce27308a7e40cda8b55f9b4b17d0613483e53e701b",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "docs/pk-research/results/sublingual-p1b-report.md": {
+   "baseline_sha256": "7042af69f2940698c42b62a43a0924176e5ff40cd52248ed444d614f9217288c",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "docs/pk-research/results/sublingual-p1c1-after.json": {
+   "baseline_sha256": "2f939bbb60e206b3faea0187369f9d666b1046836657157903b243e848e830f8",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "docs/pk-research/results/sublingual-p1c1-before.json": {
+   "baseline_sha256": "f301a233ff941b5bf577f82aabfed22fd8d2edfc9d74abb999ee8034ce124b22",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "docs/pk-research/results/sublingual-p1c1-calculator.json": {
+   "baseline_sha256": "a0bf4674a5e8ab7c5ae855fef244e4e46487919bbaaa86a44d28e92e4581a8d3",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "docs/pk-research/results/sublingual-p1c1-ci.json": {
+   "baseline_sha256": "03c367adc8e2304a0b249af525fc16b71b36ad8e295bfa147cdb1e42edad6ea8",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "docs/pk-research/results/sublingual-p1c1-eligibility.json": {
+   "baseline_sha256": "aabdf90584ec3ffa6524db190aa35bbaa453d1ba21fc195a2d0ac250c916f898",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "docs/pk-research/results/sublingual-p1c1-engine.json": {
+   "baseline_sha256": "de5d2cb58a036194ce528f68036cd8f453663b355065f53af1d7c4f43435ddfa",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "docs/pk-research/results/sublingual-p1c1-performance-after.json": {
+   "baseline_sha256": "f8797f541b05729b1cfeaa3569919255ab36c4f930285cb90b9cabfe408b5cf6",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "docs/pk-research/results/sublingual-p1c1-performance-before.json": {
+   "baseline_sha256": "a93c9c7d49204ff3373e9f241f820d848cf5b6e51b8f2524e514d656f70f3c88",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "docs/pk-research/results/sublingual-p1c1-report.json": {
+   "baseline_sha256": "8d087f1388a4acfa6700c6e5b1b9d89d37861df9f6127f2a72946932884e9a71",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "docs/pk-research/results/sublingual-p1c1-report.md": {
+   "baseline_sha256": "c06ede7eb47c47350c7cd20f0df00c4a776c0839546ffa05de613a509500f117",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "docs/pk-research/results/sublingual-p1c2-after.json": {
+   "baseline_sha256": "9317c529c08fdc04933eb96d0fa5ca8e27c9e417821fac730796c2a6e8692197",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "docs/pk-research/results/sublingual-p1c2-before.json": {
+   "baseline_sha256": "813501a30abbdf2a26df7226c04e569068af62d6e785dedb9ed31bc559164f82",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "docs/pk-research/results/sublingual-p1c2-ci.json": {
+   "baseline_sha256": "b74810334f9b3612c8418c198f6bfcd0ecb31dbc19c4a8d06d7f3e347b78ee4a",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "docs/pk-research/results/sublingual-p1c2-performance-after.json": {
+   "baseline_sha256": "0b952652de3077cea803c2a86a23ec2b812959ce21ef0a41e417d52e2a85d64a",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "docs/pk-research/results/sublingual-p1c2-performance-before.json": {
+   "baseline_sha256": "7d05625ee1aa6bac3f35977e8eceff46fe9d8484c9e31f6c663ed9db1925d97f",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "docs/pk-research/results/sublingual-p1c2-report.json": {
+   "baseline_sha256": "22a6e7f3ec1c48a1631cc70434eaaedf32026b76afd5d596a54d4d025cd197ad",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "docs/pk-research/results/sublingual-p1c2-report.md": {
+   "baseline_sha256": "1a95e89db3e61be867e3a4bc96156c9099d3344685e0d8e995440a214ab58c37",
+   "proposed_class": "LIVE_LOCK_EVIDENCE",
+   "reason": "历史研究结果/报告，追加式证据，当前 CI 仍应逐字节锁定"
+  },
+  "importer/src/main/kotlin/net/plainnotes/app/importer/HrtTracker.kt": {
+   "baseline_sha256": "cb1ac2e5a0a11465ff496135eef670129aa1b6cc250eebaeea2179bf8e15b745",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "importer/src/main/kotlin/net/plainnotes/app/importer/TransMemo.kt": {
+   "baseline_sha256": "71784d6a969efe216df9a712a869b29f49a4ee7a10f3e7ae3708b2e4ebf176e5",
+   "proposed_class": "HISTORY_ONLY",
+   "reason": "研究结论不依赖其当前内容；只需按 start_sha 从 git 回放验证历史字节，当前产品可正常演进（仍受常规测试/Schema 检查）"
+  },
+  "pk-engine/src/main/kotlin/net/plainnotes/app/pk/Engine.kt": {
+   "baseline_sha256": "51ce72f3b4b2c4fbca0185c78a333df9a9e7877daf5d9630e5140a15a686e89e",
+   "proposed_class": "LIVE_LOCK_RESEARCH_INPUT",
+   "reason": "研究脚本直接读取（pk-params.json）或 P0–P1 Kotlin 审计回放直接执行的生产 PK 核"
+  },
+  "pk-engine/src/main/kotlin/net/plainnotes/app/pk/FittedModels.kt": {
+   "baseline_sha256": "9794a2442ebee0b22fe4727dc9dd9e5d872b06fe5d6a29930ca57ac205cab354",
+   "proposed_class": "LIVE_LOCK_RESEARCH_INPUT",
+   "reason": "研究脚本直接读取（pk-params.json）或 P0–P1 Kotlin 审计回放直接执行的生产 PK 核"
+  },
+  "pk-engine/src/main/kotlin/net/plainnotes/app/pk/LabFit.kt": {
+   "baseline_sha256": "c26b79e8ab337f5be094545dc604167a1b25d6069799d01b2aa1c02c83cb9d4d",
+   "proposed_class": "LIVE_LOCK_RESEARCH_INPUT",
+   "reason": "研究脚本直接读取（pk-params.json）或 P0–P1 Kotlin 审计回放直接执行的生产 PK 核"
+  },
+  "pk-engine/src/main/kotlin/net/plainnotes/app/pk/Types.kt": {
+   "baseline_sha256": "2e0fde51c1e94266553861a03d34cd10fcfa823f1eee05b52048308f5b94bb5f",
+   "proposed_class": "LIVE_LOCK_RESEARCH_INPUT",
+   "reason": "研究脚本直接读取（pk-params.json）或 P0–P1 Kotlin 审计回放直接执行的生产 PK 核"
+  },
+  "pk-engine/src/main/kotlin/net/plainnotes/app/pk/Units.kt": {
+   "baseline_sha256": "90853ee84beb663a6c4d0b086fbce5bdfabf0f06eb3a3759b0a1f875d260e6bc",
+   "proposed_class": "LIVE_LOCK_RESEARCH_INPUT",
+   "reason": "研究脚本直接读取（pk-params.json）或 P0–P1 Kotlin 审计回放直接执行的生产 PK 核"
+  },
+  "pk-engine/src/main/resources/pk-params.json": {
+   "baseline_sha256": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b",
+   "proposed_class": "LIVE_LOCK_RESEARCH_INPUT",
+   "reason": "研究脚本直接读取（pk-params.json）或 P0–P1 Kotlin 审计回放直接执行的生产 PK 核"
+  }
+ },
+ "counts": {
+  "HISTORY_ONLY": 114,
+  "LIVE_LOCK_RESEARCH_INPUT": 9,
+  "PK_DISPLAY_REVIEW": 7,
+  "LIVE_LOCK_EVIDENCE": 34
+ },
+ "indirect_pk_inputs": [
+  "core/data/src/main/java/net/plainnotes/app/data/HistoricalContext.kt",
+  "core/data/src/main/java/net/plainnotes/app/data/MedicationSnapshot.kt",
+  "core/data/src/main/java/net/plainnotes/app/data/Entities.kt",
+  "core/domain/src/main/kotlin/net/plainnotes/app/domain/Model.kt"
+ ]
+}

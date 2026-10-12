@@ -1,0 +1,34 @@
+{
+  "before_source": "0598775cd24dada76aa13c34f3d95077f12289cd",
+  "after_source": "425a7ab0c75c625c070a17b116cc4f99aa79ff0d",
+  "files": [
+    {
+      "file": "app/src/main/java/net/plainnotes/app/experimental/UnifiedConcentrationScreen.kt",
+      "before_bytes": 19548,
+      "after_bytes": 2916,
+      "before_lines": 221,
+      "after_lines": 48
+    },
+    {
+      "file": "app/src/main/java/net/plainnotes/app/experimental/ConcentrationPreview.kt",
+      "before_bytes": 0,
+      "after_bytes": 2365,
+      "before_lines": 0,
+      "after_lines": 37
+    },
+    {
+      "file": "app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt",
+      "before_bytes": 32107,
+      "after_bytes": 32874,
+      "before_lines": 388,
+      "after_lines": 390
+    },
+    {
+      "file": "app/src/main/java/net/plainnotes/app/ui/ConcChart.kt",
+      "before_bytes": 11298,
+      "after_bytes": 11298,
+      "before_lines": 178,
+      "after_lines": 178
+    }
+  ]
+}

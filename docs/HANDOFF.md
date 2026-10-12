@@ -1,3 +1,175 @@
+# M2-only最终APK已正式签名并私下交付，全部工程成果已保存（2026-10-12）
+
+生产/被测/包内源码SHA e98d5e033e4e9b757be5daefed102bf5900ae29b；后续提交仅文档/证据，生产树不变。PR19仍OPEN，未合并其他研究PR，未创建Release/标签。APK HRT-Log-M2-only-official.apk，12,798,836B，SHA256 d9d874e82001251c4b42214a64a603354b9c47006a6952faaf7faae6d1ea5969，原证书989ba045…59379b1，包名net.plainnotes.app/0.2.0/build25，四ABI、非debuggable/无INTERNET、签名/16KB/CRC、签前后payload与旧native/PK资源校验通过。原私有备份未改，临时签名目录已清理。§66授权私下Drive实际APK已上传，metadata仅owner/shared=false，从Drive独立下载大小/SHA/CRC完全相同；私有URL只在聊天，不入Git。旧速度修复包不是本次交付。
+
+最终源码GitHub38228359441全Android/JVM/设备/lint/Debug/Release成功，38228359369独立233候选回放成功。本地718（13原可选截图/PDF跳过、零失败/错误，PeriodStability5通过），271研究/协议+13旧PK审计+3收集器、9实际变异断言击杀；最后标签功能28及四语1/2字号截图8分开执行全部通过，视觉零溢出/截断发现。混跑36项时1个Robolectric线程异常已保留XML，分开复跑与全量CI/真实设备均通过，未证明永久harness根因。设备API35 x86_64：主套件82通过，2忽略的重启方法在独立进程分别通过；M2六项原生验证通过，60记录10442点40.580ms、曲线峰与实际函数完全相等。最终本地Release/lint成功（0 Error/174 Warning）。unsigned同配置12,743,143→12,755,451B（+12,308B）。
+
+原UI/化验/单位/缩放/点击/历史修复/其他药物保持；只M2 SL游离E2参考，固定p2x-39及原Price B24/A434.835722，个体/总E2未验收。其他E2/未知历史清晰显示仅SL分量及合并总不可用，纯其他途径保留限定兼容曲线/校准；不暗用旧SL值，不改旧记录。M1科研/反例与Legacy非SL/其他药物/旧快照/备份/LabFit职责保留；不删除Engine/PkParams/calculator或放松P2锁。真实两保护文件最小diff与追加授权完整保留。
+
+完整源码/PR/签名包版本核查、候选选择/科学边界、调用链、参数与1/2mg峰/AUC、所有测试/变异/视觉/体积/签名/私下交付及文件清单：docs/design/m2-only-integration-2026-10.md、m2-only-evidence/results.json/changed-files.txt。BLOCKED：本地KVM缺失（真实CI模拟设备已执行）；NOT_RUN：物理ARM/Release设备性能/用户手机实际覆盖安装。正式个人M2绝对浓度/个人化验校准/混合总E2及长尾临床验证未完成，不冒称迁移完成。
+
+---
+
+# 四语过时校准指令已修正，最终标签构建验收中（2026-10-12）
+
+删除M2研究说明中已不存在的Legacy校准卡指令，四语缩短为来源/B/A/群体性质/化验不拟合/已记录SL尾部；保留相同格式参数、模型核和原UI结构。四语源解析及真实M2页面新增回归断言，禁止旧指令再次出现。0da7392全量/设备证据仍对应相同数值/布局，最终标签源将另以本地聚焦+截图+lint/Release及全量GitHub验证，不能冒称旧SHA含新文案。此前未签名Release构建12m35成功，非交付包，禁止沿用；正在重建本轮最终源码的包。§66原证书私下APK交付仍未完成。
+
+---
+
+# 交付前发现过时四语校准说明，待最后修正（2026-10-12）
+
+现有全量/CI通过针对0da7392生产源码，93bc8d8只保存证据。本地lint/Release仍在R8打包，不能签旧包。最后文案审查发现uc_original_research_note仍说下方校准卡仅Legacy，现页面已隐藏这些旧SL卡片，句子过时。待当前构建结束，执行/workspace/tooling/fix-m2-only-note.py缩短四语说明并加入真实页面及四语不出现过时Legacy校准指令的回归断言，提交推送，再跑相关正向UI/翻译/原始全量CI、lint/最终Release；只签重建后的包。固定参数/数值核/授权SHA/UI结构不变。APK交付仍按§66，尚未签名/上传；不可沿用旧包冒称完成。
+
+---
+
+# M2-only正向全量及最终源码CI已通过，交付包构建中（2026-10-12）
+
+0da7392源码的本地718项（domain58/PK124/importer12/data72/reminder14/app438）零失败/错误、13已有可选截图/PDF跳过；PeriodStability5项已执行通过，非跳过。271研究/协议Python、13旧生产PK审计、3性能收集器测试和32候选×13时点独立引用通过。九次真实源码变异击杀后已逐字节恢复再执行正向；详细XML与计数在m2-only-evidence/local。
+
+GitHub 38225741209 Android/JVM/设备及38225741048独立233候选参考全部success，真实源码SHA0da7392f25cb009929881f9729ca02ec9e4c25ad。设备84项（14 data+70 app）、零失败，其中2进程阶段在独立脚本各执行1项并PASS；M2六项界面/数学/性能原生测试通过，M2 60剂量10442点38.921ms，图表/实际函数峰完全相等。设备x86_64 API35 Debug，不是假称ARM真机/Release性能。最终本地Debug/仪器包已构建；lint/Release正在运行，尚未签名/上传。APK必须按§66原证书私下Drive交付并下载回查。当前后续证据/文档提交不改变通过验收的生产源码；不宣称后续文档SHA的尚排队CI已通过。
+
+---
+
+# M2-only九次真实源码负面回归已完成（2026-10-12）
+
+7类错误共9次临时真实源码变异均由已执行断言击杀，包括真实Legacy LabFit幅度注入以及舌下分量伪称Total E2；非编译失败。逐项XML及恢复SHA见docs/design/m2-only-evidence/mutations。源码逐字节恢复后正向全量正在执行。3f9cbe9的GitHub Android/JVM/真实API35仪器和独立参考回放均已success，新增更严格UI测试/独立233候选CI回放还需末轮验证。本轮APK明确按§66正式证书私下交付，尚未签名。
+
+---
+
+# 最新：用户要求本轮M2-only交付APK（2026-10-12）
+
+执行中用户先问完成时间，随后明确“要交付apk”。§66已登记，覆盖本轮§65禁止签名/交付；继续完整验收后沿用§7原正式证书，私下Drive交付并下载回查，临时凭据清理。不得生成替代签名或公开发布。核心M2-only源已推送c1f49e6，首轮31聚焦/PK124已通过；7真实变异和最终全量/构建/设备尚在执行，不能提前签署或冒称已全部通过。
+
+---
+
+# M2-only补充不支持途径的空状态守卫（2026-10-12）
+
+在b509acd整合后审查发现：仅有已记录SL EV等不支持途径时，旧原页可能同时显示unsupported与“无服药记录”。补充一处usedDoses==0显示谓词与真实UI回归，保留unsupported事实，不套M2。由于上一UI新SHA已提交，**没有改写旧偏离**，而是再追加ConcentrationScreen一条精确旧→新SHA/diff授权链；旧记录全部保留。当前不涉及计算或个人预测迁移。后续七类变异、末轮全量/仪器/设备/构建仍待完成；不正式签名/交付。
+
+---
+
+# M2-only最小整合已编码，独立数值与首轮页面通过（2026-10-12）
+
+§65在PR19增量实施，未合并默认分支。三模型选择状态/按钮移除，仅固定M2 p2x-39；原ConcentrationScreen/ConcChart布局与操作保留。M2下旧SL校准/概率带/参数隐藏，真实化验独立保留；混合/未知历史明确SL分量与总E2不可用，纯其他途径保留独立兼容路径；内部Legacy计算、M1研究、数据/快照不改。M2失败有重试且其他药物继续可见，不冒称无记录；新历史读取重置audit，加载覆盖不暴露旧读数。AppShell与ConcentrationScreen的最小UI变化追加真实授权/SHA链，检查器仍只允许精确两文件与完整旧链。报告docs/design/m2-only-integration-2026-10.md，协议11项拒绝测试通过（最新最终链会复跑）。
+
+独立SciPy全233候选比较（15P2X+2P2V+216AZ）及1/2mg峰值/0–4/8/24AUC/早晚期值已真实保存independent-reference.json。参数runtimeSHA76467b35…8d81c3a20，固定Price B24/A434.835722；第一轮新测试误把已有CSV末位文本SHA与runtimeSHA直接比较，失败XML保留；现按两种真实文本身份精确SHA，数值跨源独立校验，未改原锁/旧数值断言。全PK124/domain58/importer12已通过，首轮原页26项零失败/错误/跳过；随后仅API命名、兼容scope防错与新增5个读写/混合范围用例，末轮31聚焦正在执行，不能冒称已通过。当前未执行七类真实变异、末轮全量/lint/Debug/Release/仪器/设备及体积；须继续完成并更新PR19。
+
+本轮不正式签名、不恢复私钥、不交付/发布APK。已留存上轮unsigned作为同配置体积基线，旧正式包不是本次改造包。
+
+---
+
+# M2单模型整合开始审计（2026-10-12）
+
+最新用户任务§65：移除M1/Legacy普通UI与独立实验入口，保留原浓度页面，M2文献参考情景与个人预测正式替换分开。本轮不正式签名/交付/发布。开工PR19 OPEN，head b46dbf6，默认分支尚未合并该PR；真实PR1/2/3/17/18/19元数据和初始SHA保存docs/design/m2-only-evidence/start-state.json。当前标定已为ResearchDisplayProtocol固定p2x-39/Price加权幅度，非用户提到的旧B25/A100；已有加速PreparedResearchHistory保留。发现原页下方仍无条件展示旧校准/SL参数，将按当前明确授权追加精确UI偏离链实施职责隔离，其他引擎/历史/研究归档不改。下一步完成Legacy依赖/候选证据审计、最小M2-only接线、混合途径/未知上下文保护、全数值及负面变异、全量/设备/构建与PR更新。尚未编码或称验收通过。
+
+---
+
+# M1/M2曲线加速修复完成并私下交付（2026-10-12）
+
+实际交付分支 `feature/unified-concentration-20261011`（PR19，未合并默认分支），生产代码470b194；1f198c4仅追加测试计时/复现脚本/证据，生产树与470b194完全相同。原模型/Price参数/完整历史/原UI/Legacy/数据库/版本/签名配置与所有锁定文件不变。完整同机360剂/180天/37442点：M1 5071.596→422.797ms，M2 11747.841→192.701ms，最大逐点差0/1.137e-13 pg/mL；这是JVM计算基准，不是用户手机开页时间或个人临床验证。
+
+47候选数值/边界/慢尾/近等速与121 PK通过；本地22聚焦（8 preview/8原UI/5 PeriodStability/1旧完整compute差分）零失败/错误/跳过。生产470b194的CI38216799690 JVM/Android/device全部success，独立重放38216799684 success；实际build报告ZIP核验，app427零失败/13既有跳过，data72/reminder14通过。最新1f198c4证据提交CI结果保存在性能目录，其状态须按实际元数据区分；不能冒称新增生产实现。fullRelease/lint本地成功11m32s，0错误172既有警告，merged与实际APK均无INTERNET；4ABI/8原生库压缩、冻结pk-params资源SHA、ZIP CRC核验通过。
+
+**本轮新正式修复包** `HRT-Log-M1-M2-fast-official.apk`：12,786,548 B，SHA256 `426bb4686eb2a3c2da3969d0da1fc39cc175d08d9af9b6114d51d205d1cdedcd`；原正式证书989ba045…59379b1，16KB对齐和签名核验通过，包名net.plainnotes.app/0.2.0/build25（未降级）/非debuggable。签前后每个原ZIP成员逐字节相同，临时私有克隆/密钥/密码由TemporaryDirectory自动清理，永久签名备份未改。私下Drive ZIP 11,748,315 B（SHA256 `064e887aa801209aaf9ace22e7f90eeba798945bc6ca6c22515c76ac4051aa6a`），metadata读回只有owner、shared=false；从Drive独立下载回查大小/ZIP SHA/CRC及内含APK SHA全部一致。私有下载链接仅在聊天交付，不写公开源码/CI；APK/私钥/密码/用户健康记录均未入库。用户手机尚未覆盖验证，本环境不能声称真机秒开。
+
+本轮代码/验收/正式签名私下交付已完成，无未完成实现；[性能与复现记录](performance/m1-m2-loading-2026-10-12/README.md)含原XML、同机比较、CI/签署/文件核验证据。下方进行中块保留历史，不代表当前状态。未公开发布或自动合并PR19。
+
+---
+
+# M1/M2加载性能修复已验证，正式包构建中（2026-10-12）
+
+生产代码470b194已推送至实际交付分支 `feature/unified-concentration-20261011`（PR19）；不把未合并分支冒称默认分支。只新增非冻结PreparedResearchHistory并接入ConcentrationPreview：常数预计算、完整旧剂量指数前缀累计、近期原级数求值；不丢弃任何历史、不插值、不降低采样/极值密度。Legacy/原UI/候选/Price幅度/数据库/版本/所有冻结文件保持不变。
+
+**完整同机对照已通过：** 360剂/180天，每模型37442点，M1旧5071.596ms→422.797ms，M2旧11747.841ms→192.701ms；全旧坐标精确值最大差分别0与1.137e-13 pg/mL，当前值/窗口峰同一容差通过。二次独立新preview测量M1 296.935ms/M2 105.923ms；只记录单次JVM/JIT测量，不能称用户手机开页时间或FPS。47候选/边界/慢尾/近等速对照、全PK121项通过；本地22聚焦（8 preview、8原UI、5 PeriodStability、1真实旧compute差分）零失败/错误/跳过。性能脚本可从固定旧提交生成临时旧preview测试；临时测试源已删，未替换生产核。
+
+[CI38216799690](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38216799690) JVM/Android/device三作业全部success；[独立重放38216799684](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38216799684) success。实际下载CI build报告ZIP核验SHA，app427零失败13既有跳过、data72/reminder14通过；PK40为CI最后聚焦重放覆写的报告，不冒称全量只有40项。gh直接工件重定向403，用已连接GitHub download工具获得完整ZIP，未绕过代理/策略。详细测量、原XML、CI元数据及可复现脚本见 [性能记录](performance/m1-m2-loading-2026-10-12/README.md)。
+
+尚未完成本轮正式APK：本地lint/fullRelease构建运行中，当前没有新签署/上传包；不能将旧包当作此次修复。初始环境JRE无javac导致Android任务配置失败，已下载并核验完整JDK21 SHA、保留系统CA/代理，随后聚焦应用构建成功6m57s。原正式签名私有仓库已再次确认private；尚未恢复私钥。下一步等本地release/lint成功→原证书签署/包名版本权限对齐/ZIP核验→清理临时凭据→私下交付并更新本段。无公开Release、无用户健康数据访问。
+
+---
+
+# M1/M2打开速度修复进行中（2026-10-12）
+
+用户报告M1/M2转圈慢、Legacy秒开。正在已交付代码所在 `feature/unified-concentration-20261011`（PR19）工作，而非默认分支（尚无研究UI）。根因：ConcentrationPreview的每点/极值查询遍历完整历史，每剂重复计算归一化常数与Poisson核。新增独立PreparedResearchHistory：常数预计算、旧剂量指数前缀累积；饱和条件与冻结核完全相同 `(ka-ke)*age>=100`，不丢弃旧残留，近期按原级数求值。尚未完成测试/性能验收，不宣称速度结果；模型source-lock与P2协议守卫已通过。未改任何冻结文件/Legacy/原UI/数据/版本/签名，未生成新APK。下一步全部47候选逐点对照、半年同机基准、实际preview及页面/时期回归与full CI。
+
+---
+
+# M1/M2空页面修复验证包已准备（2026-10-12）
+
+应用源码f8088b84fb82b9a3561d89224a84c92704d89c11，16项聚焦回归（8数学/历史、8原UI/加载/失败/切换/范围保持）实际0失败/错误/跳过；Release/lint成功13m24s，lint0错误/172警告。source-lock/四语/P2守卫和4个PR19科学契约通过；独立重放38214597613 success。全部CI38214597606尚运行，不能称已通过；之前6c的全量与设备结果不冒称本轮。用户设备具体已就绪却显示空的帧没有本地复现，交付为针对状态链与原renderer生命周期的修复验证包，需用户实际覆盖安装后反馈确认。原UI/生产核/历史/协议受保护文件未改，模型与Price版本未变。
+
+沿用原正式证书989ba045…59379b1、16KB签署/校验证书和对齐通过，包名net.plainnotes.app、0.2.0/build25未降级，完整ZIP CRC通过且签前后所有原ZIP成员一致。正式APK 12790644 B，SHA256 88e598984e08afad02f3eaa219aba4b9373df29fd7ad74085c0958bbab21e14a；unsigned 12744323 B（比前次标定unsigned +2752 B）。签名备份仍private，源码外临时私有克隆/密钥/密码全部清理，永久备份未改。私下Drive ZIP 11749371 B、owner-only元数据读回校验，https://drive.google.com/file/d/1DxtV9AfE7y4tPvus7ljqIACI2KBtlUkg/view?usp=drivesdk 。源码提交不含APK、凭据、用户实际健康记录或反编译文件；无公开Release/签名配置变更。详细证据见design/pr19-history-display-evidence/acceptance.json。此前进行中内容保留为历史。
+
+---
+
+# M1/M2页面恢复验收与APK准备（2026-10-12）
+
+用户进一步确认候选与峰值说明存在，但原主卡片/图表不见；这表明不能仅归因于没有合格历史或计算失败。已反编译实际交付包（仅本地自有APK，不提交反编译文件）核查候选、字段/原UI传参，未发现参数版本错包证据；没有复现用户设备已就绪却为空的具体帧，因此不宣称已证实个人根因。a59阶段8数学/7UI共15实际通过、Release及lint成功13m39s；随后继续改进：原renderer维持同一Compose位置，缓存上一次就绪曲线仅作为不透明加载覆盖层下的内部视图以保持原非saveable范围/滚动/概率开关，覆盖层隔离语义与触摸，绝不把旧模型数值呈现成新模型。新增完成后原卡片/图表和7天选择恢复测试；当前16聚焦测试/Release/lint复验中，尚未签署本轮新包。原受保护页面/数学/协议字节不变。用户最新“好了就给apk”明确继续私下正式签名交付，不公开发布。第一次编译在源码更新中途读到旧compute签名导致编译失败，终止后固定源重跑成功；不计作测试通过或数学故障。
+
+---
+
+# PR19 M1/M2“无服药记录”反馈修复进行中（2026-10-12）
+
+用户报告M1/M2无记录、Legacy正常；不采集实际健康数据。使用360条/180天完全合成记录，原计算链M1/M2成功但两模型合计20.602秒（1测试实际通过）；原UI在整个计算等待阶段传空pending而展示“无服药记录”，且runCatching吞计算异常，无法区别计算慢/失败和真正无记录。已实现独立Loading/Ready/Failed显示、取消异常不吞、切换候选取消CPU计算；原UI仅在有完整research结果时渲染，Legacy原布局/核/保护文件不改。构造过程对同一绝对时刻精确函数结果缓存（不插值、不截短历史、不改B/A），最多50000条，交付点击函数前释放；点击读数不依赖已完成协程。新增360条历史、加载/失败不得冒称无记录、取消与完成后点击回归；当前正在执行聚焦测试/Release/lint，尚未验收或交付修复包。需确认用户显示是否自动回Legacy，不能把推断当个人根因已证实。
+
+---
+
+# APK下载备用通道（2026-10-12）
+
+用户反馈聊天本地路径一直远程读取，原APK内容不变。将正式签名修复APK压缩成ZIP（11,748,222 B，MD5 47085116b86437e3134fd519303a5d9f），通过已连接Google Drive插件上传到用户My Drive；读取元数据确认文件尺寸与仅owner权限，无公开分享。私有下载链接https://drive.google.com/file/d/1bZt_ypgVFbSSEvfwmAKOHP16iYpFZHZZ/view?usp=drivesdk 。解压得到同一APK，SHA256仍9797e6bdca066b723794ee0728269571e479a1c657493d31151bdee5fd55b0ca；用户侧下载是否成功尚未确认。不改APK源码或公开Release。
+
+---
+
+# PR #19 修复 APK 私下交付（2026-10-12）
+
+用户最新要求“给我吧，apk”授权本轮私下交付，沿用已有必须正式签名的安装包偏好，覆盖上一工程审计期间不交付限制。未改源码/参数/发布配置，签署已验收应用源码6c663e0f对应unsigned Release（文档/测试等待头5cfa6929）。确认现有备份仓库仍private，恢复原密钥在源码外；签名脚本核对正式证书989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1与16KB对齐通过。临时私有克隆、ZIP/密钥/密码副本全部删除，永久备份未改。包名net.plainnotes.app，0.2.0/build25，未降versionCode；私下附件HRT-Log-PR19-calibration-fixed-official.apk，12786548字节，SHA256 9797e6bdca066b723794ee0728269571e479a1c657493d31151bdee5fd55b0ca。完整ZIP CRC通过，不公开上传Release/仓库/CI。原正式证书支持覆盖升级；本轮没有实际用户设备安装验收，不能宣称已验证所有OEM。研究模型仍非个人临床预测。下方保留前阶段状态。
+
+---
+
+# PR #19 标定修复完成工程验收（2026-10-11）
+
+应用源码6c663e0f62e32cdacb1836574781823a9ea76ddc已推送；原UI及所有受保护文件字节不变。默认M2 p2x-39冻结Price B24/A434.835722；M1 m1-09新Price projection B24/A454.306268；不是个人/总E2预测。最终本地426零失败1原生PDF跳过、32本轮四语截图、Debug/unsigned Release/AndroidTest编译/lint通过（0错误172警告，8m21s）；异步图表测试补等待后保持断言通过。源6c GitHub38171086963三任务success、独立38171086905 success；实际API35浓度5/5、app69零失败2既有跳过，data14通过。四个真实源码变异全部拦截/源码恢复，PK118/Python269/协议守卫和源锁通过。未签名APK12,736,319→12,741,571B，+5252B，4ABI库内容不变；不签名、不交付、不发布。详细计数、失败史、文件清单、参数/来源/独立数值和证据缺口见[最终验收](design/pr19-calibration-fix-2026-10.md)、REQUIREMENTS §61。无新待批准保护补丁；科研显示可审查，个体pg/mL准确性没有放行。下方是逐阶段历史，进行中/旧签名状态不得视为当前状态。
+
+---
+
+# PR #19 标定修复进行中（2026-10-11）
+
+新任务覆盖旧 B25/A100 默认展示。远端 PR19 为 open/unmerged，起点8216f309；原 UI/ConcChart/生产核及所有冻结文件保持字节不变。主调用 AppShell→UnifiedConcentrationScreen→ConcentrationPreview→原 ConcentrationScreen hero/ConcChart；旧 preview 未用 Price anchor/amplitude，first 选择无科学规则。
+
+本轮已独立重算旧参考：p2x-14 人为127.250288、Price468.741741 pg/mL，Tmax0.901225h；Legacy144.023808、Tmax1.000137h。拟冻结 M2 p2x-39，Price B24/A434.835722，Cmax481.924256、Tmax0.854839h；M1 p2az-m1-09 新 Price projection B24/A454.306268，Cmax478.607264、Tmax1.023027h。结果来自 scipy 独立核/加权重拟合/全局括号极值搜索，非硬编码目标。完整47候选结果与源哈希在 docs/design/pr19-calibration-evidence；原 P2-X CSV 与科学核不改，单次和重复给药背景只一次。
+
+非保护新 ResearchDisplayProtocol/ResearchExtrema 与 preview 接线、四语文献范围/Legacy隔离标签及峰值点已实现，第一轮 PK118 与 app 聚焦10项已通过、0失败/跳过（第二次构建4m9s；首次 AUC 积分网格误差失败，随后提高分辨率而未降低断言）。Python 科研269项及来源/四语锁检查通过。源码15f7a0c已推送，CI38170102275三任务全部success；独立参考重放38170102325 success。四种实际Kotlin源码变异全部被执行的断言拦截，随后源码逐字节恢复；结果在 pr19-calibration-evidence/mutations.json。新增视窗真实峰测试、研究代表标签、重选后的化验隔离测试已加强，应用源码6c663e0f已推送，CI38171086963三任务全success、报告ZIP已下载验证SHA，domain58/PK118/importer12/data72/reminder14/app422无失败（app13既有跳过）；API35 data14/app69无失败（app2既有跳过），5浓度仪器项全部通过。新实际preview基准60剂10442点592.292ms、进程PSS220053→221721KiB，非物理/FPS/Release指标。本地启用32native截图的全426有1个缩放后异步读数时序失败与1原生PDF既有跳过；保留断言加等待后专项1通过（2m04s），正在重跑完整426/构建/lint，完整工程**未最终验收**。详细规则 REQUIREMENTS §61；后续须完成正负回归、性能、全量 JVM/Android/API35、Debug/unsigned Release/lint、APK前后体积与 PR19 更新。旧 unsigned 对照已另存 /workspace/hrt-unified-tools/pr19-before-calibration-unsigned.apk，不签名、不交付本轮 APK。保护检查实际通过；未改守卫/偏离链/基线，无待批准保护改动。旧交接如下，旧测试/签名结果均为历史版本，不能当成本轮结果。
+
+---
+
+# 原血药浓度UI恢复：仅增加模型选择（2026-10-11）
+
+最新明确指令“我要恢复原ui，只增加选模型功能”覆盖前两轮重排设计；当前源码425a7ab0c75c625c070a17b116cc4f99aa79ff0d直接复用原ConcentrationScreen和原ConcChart。保留原卡片、日历时间轴、化验、校准、参数与历史修复；只增加选择和科研假设标注。无新参数表单/指标分区/实验入口，M2优先研究情景，M1候选可选，Legacy原计算保留；其他途径无合格SL历史时退回Legacy。完整记录见[本轮验收](design/concentration-layout-restoration-2026-10.md)、REQUIREMENTS §60和精确UI偏离授权。冻结生产核/参数/协议基线不变。本轮425a7ab CI38165696135三任务全成功；本地29项/32张四语截图、Debug/Release/仪器构建/lint均通过（本地16m24s退出0，lint0错误172警告）。完整420项app CI有13项原有跳过，设备67项有2项原有跳过，实际限制已在报告逐项记录；不沿用旧059原型或001补跑冒称新测试成功。
+
+正式签名交接：§7已记录隔壁私有备份，应先读该节，不能要求用户重复提交密钥。用户已明确授权原正式签名与私有交付。此前反馈前APK为12,815,220B、SHA256 b53ad1d70a114a5538b7af455a05f2d94996cdf484c94be99cdefb09a4f52ccb，不是修复版。本修复正式签名包12,782,452B、SHA256 `2bdfc370499c409cf8c916ba5db35c5a53b1dcc35d21081005e4b332f41896b8`，沿用989ba045…原证书；v2/v3、ZIP CRC、16KB对齐及私有上传后独立接收哈希/签名通过，shared=false/owner-only。相比原交付包减少32,768B；unsigned12,736,319B，比原统一UI源码减少32,508B。临时凭据已清除，私钥/密码/私有链接不入公开仓库。
+
+以下保留之前统一工程交接，当前UI呈现以本段及§60为准；M2个人绝对临床预测没有自动放行。
+
+---
+
+# 统一血药浓度工程交接（2026-10-11）
+
+状态：`BRANCH_COMMITTED / PR_OPEN`；分支 `feature/unified-concentration-20261011`，PR [#19](https://github.com/DevenirTwilight/HRT-Log/pull/19) 已转为Ready for review供工程合并审查。默认基线f53726ff，未merge研究分支、未合并到默认、未发布APK。最终应用源码001869b0c508c74b40bae0e6c6c85573e9c10cd6的[CI38147885981](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38147885981) JVM/Android/device三任务全成功；真实artifact已下载SHA校验。三套unsigned fullRelease已实际重建/CRC/SHA/manifest/未签名核验：默认12,707,919B、旧PR312,812,823B、统一12,768,827B；相对旧PR3-43,996B，相对默认+60,908B，构建配置哈希/四ABI原生payload完全一致。后续交接检查点7f320aa的CI38149469317三任务也通过，最后仅追加文档及审计结果。
+
+已实际接线：唯一CONCENTRATION入口打开UnifiedConcentrationScreen，M2优先带明确假设的研究展示；M1/P2-AZ32显式候选、Legacy同页原历史视图。共同B+A×H/Price群体单1mg/相对三模式，双/三曲线、同单位/时间轴、精确点击、缩放平移、峰值/AUC、真实历史与独立化验层。M2=固定P2-X15（p2x-m2-research-v0.1，默认p2x-14）；M1=p2az-m1-grid-v1（非P2-V，非唯一赢家）；Legacy=0.1.0-literature-draft。条件默认B25/A100为人为示例；Price默认B18/A432为共同研究假设，保留Fig1557.5与Table2109±1031 AUC差异；转换3.671。15范围非人体90%区间，不拼中位模型。参数/源数据12项SHA锁定。
+
+保护与兼容：AppShell仅两个已授权导航hunk，独立commit4909b71及PD-2026-10-11-UNIFIED-CONCENTRATION；原F1历史链保留，00f2c283…→699f197d…真实SHA。其它生产核/参数/旧页图表/数据schema不改。check_protocol及8项拒绝/追溯测试通过，无绕过。只读Room→repo→VM→适配路径证明选择不写旧记录/快照；最后异常极值guard仅显示层过滤，不写化验。默认树原无旧实验页，最终不引入PR3的ExperimentalPkScreen/EXPERIMENTAL_PK/旧384资源键/两个预览宿主；保留有用计算、测试、科研报告和原Legacy渲染兼容。
+
+验证：domain58、pk114、importer12、data72、reminder14全通过；CI app414有13原有跳过（12可选视觉诊断+1非原生PDF），本地显式启用视觉后app414、0失败、仅1 PDF跳过，12组合×2页=24 native截图无操作/测量异常。API35 x86_64设备data14/app67无失败；app两个重启方法由独立harness补跑通过，原生PdfRenderer实测摘要/就诊页数。三项统一页设备测试含实际横屏→竖屏、活动重建、模型/单位/A200保持，以及60剂2001点压力测量。科研Python264、PK审计13、APK审计3、P2-X来源4、采集防假绿3均通过；M1独立32×13参考和四语锁通过。最终Debug/unsigned Release/仪器编译和lint通过（0错误、134警告）；最后化验极值专项1/1通过。
+
+最新代码CI单次Debug模拟器60剂测量：计算4.106s，进程PSS前221920KiB/后225421KiB（后约220.14MiB）；包括UI/测试和GC，不能作为曲线自身内存、物理ARM/FPS/Release指标。此前c6d3118的run-as采集错误已明确标无效，改专用合成JSON标签与严格校验后才认可数据。真实物理设备/FPS未测；Release未签名，Debug/仪器沿用项目既有公开测试key，不触及私人key或发布流程。
+
+报告与证据：[架构/验收](design/unified-concentration-2026-10.md)、[PR实况](design/unified-concentration-pr-audit-2026-10.json)、[最终CI](design/unified-acceptance/ci-final-results.json)、[设备/PSS](design/unified-acceptance/device-final-results.json)、[完整修改清单](design/unified-acceptance/modified-files.txt)。[阶段原始记录](design/unified-acceptance/implementation-history.md)保留失败/修复过程，旧科研交接全文如下。REQUIREMENTS §59已登记实施与用途边界。
+
+工程收尾完成：三包源码/资源/APK差值、全部验收附件和最终报告已入库；PR可审查，未自动合并/发布。M2个人绝对pg/mL生产替换仍不批准：需合法独立未见完整人体序列/剂型含服时钟assay元数据、预锁定绝对标定/唯一版本及公平验证、重复给药与8–24h尾部验证；这不阻塞当前研究页面整合。
+
+---
+
 # 必须遵守：HRT Log 科研成果实际入库与交接（2026-10-11）
 
 **用户明确要求：每项已完成的研究必须实际提交 GitHub 并留存可复现证据；不得仅在聊天中报告进展、测试通过、上传附件、登记哈希或创建尚未含真实内容的摘要就声称“已入库”。** 这是后续所有研究（包括 P2 后续阶段）的强制交接要求，不限于本次研究编号。
@@ -1184,3 +1356,27 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 2026-10-07 本次设计接手复核完成：基于远端ab983c5/build11/schema6，不回退MIT/Visit Pack。用户确认时间线+超过90天日期，P0默认日期过滤与反馈问题明确；本轮合成SQL探针合法STARTED/null标题与重复类型，未读真实健康数据、未重新运行旧会话Robolectric探针。修订稿纠正午夜对齐会误归样本、同版本跨多组合阶段、直接换Lab Context key会破坏V1验证等风险；保留存储signature/clinical_signature/validateLinks与完整原数据，另建V2显示投影。旧design/epochs-timeline-p1.md已按用户已确定规则改写，REQ §26追加范围/复现。所有改动仅docs，未改功能/测试源码/版本/schema、未构建APK/跑新实现测试、未签名或发布。下一步必须等用户审核7组待定项，不能因以前“继续”指令跳过本次明确暂停。当前设计提案尚未实施，最新可安装仍build11。
 
 本轮末检：schema6导出建表SQL+guard的内存SQLite STARTED/null标题与重复类型合法；日期谓词复核；文档无冲突标记、代码块配对和git diff --check通过。相对远端接手ab983c5仅四个docs文件修改。旧会话按钮审计不在本次附件范围，本轮未处理；build11交付事实和MIT决定保留。
+
+---
+
+# 产品质量审计 2026-10（进行中，审计分支 `claude/new-session-sbje5o`）
+
+> 为避免与 PR #19 对本文件顶部的修改冲突，本节追加在文件末尾。
+
+2026-10-12 按用户提交的“全仓库产品质量审计”提示词开始只读审计。**阶段 A（仓库基线）完成**：默认分支 f53726f（PR #14 已合并，CI success）；PR #19 OPEN/CI 全绿/未合并，§59–§66 最新浓度页决定只在该分支；用户手机安装版本 UNKNOWN。本地 JVM 测试 domain 58、pk-engine 58、importer 12 与 P2 研究单测 252 项通过；Android 模块/设备测试因容器无 SDK/KVM 而 BLOCKED。发现本文件顶部 P2-AX 节仍写 PR #14 为 Draft（已过期，未改动原文）。报告目录：`docs/audits/product-quality-2026-10/`（README、08-verification-log）。**阶段 B 完成（2026-10-12）**：用户批准 B/C 并补充要求——默认分支为正式基线，PR #19 为待合并方向，状态分 DEFAULT_IMPLEMENTED/PR_IMPLEMENTED/PLANNED/UNVERIFIED。已写 `01-current-product-inventory.md`（32 项功能矩阵、PR #19 对公共组件影响）与 `02-ui-ux-and-user-journeys.md`（IA 两方案、10 个用户任务、逐页诊断）。主要确认问题：返回键直接退出；库存三种剩余天数口径；日历状态仅靠颜色；PR #19 下 PDF 图表与化验冻结估算仍走 Legacy（待阶段 C 写入 03）。**阶段 C 完成（2026-10-12）**：03（PR #19 的 PDF 图与化验冻结估算仍走 Legacy；绝对 pg/mL 大号数字与 PR #18 能力矩阵 m2_absolute_pgml=false 冲突，需用户决策）、04（明文导入临时文件、无备份提醒、伪装暗码限速弱等）、05（30 s 全量轮询含浓度计算、构建无源码 SHA/版本号不变、协议守卫硬编码）。**阶段 D 完成（2026-10-12）**：06 分级任务（R-00…R-33、批次 B0–B5）、07 决策（D-1…D-14，含手机版本识别方法）、evidence-index。**新发现的最高治理问题**：`production-baseline.json` 锁定 164 个生产文件（含 strings.xml/ViewModel/数据层），非 UI 文件和资源永不豁免，普通产品改动无法通过 CI（05 ARCH-10，D-13）。下一步：等待用户决策 D-13/D-1/D-2/D-4；最推荐的第一项是 B1 构建可追溯。全部审计完成，审计本身不改生产代码、Schema、PK、签名或发布。
+
+**B0-DESIGN + B1（2026-10-12，用户 B1 指令）**：新增 `docs/STATUS.md`（单一事实入口）；`09-p2-guard-decoupling-proposal.md` + `09-p2-guard-file-map.json`（164 个基线哈希可从 e89579a 全部复现；提议 9+34 个文件实时锁定、7 个 PK 显示需批准、114 个仅历史回放；守卫**未修改**，等待 D-13）。B1 构建侧已实现：`BuildConfig.SOURCE_SHA/SOURCE_COMMIT_TIME_UTC/SOURCE_DIRTY`，Release 无 git 时失败，proguard 保留字段，新测试 `BuildProvenanceTest`；本地 app 400/data 72/reminder 14、lint、Debug/Release 构建均通过（详见 10 与 08）。关于页显示补丁 `10-about-source-identity.patch` 已准备、**未应用**：`SettingsScreen.kt` 受 P2 基线锁定，需要用户批准 UI 偏离。versionCode 未改（D-4）。下一步：等待用户回答 D-13、D-1、D-2 及关于页偏离。
+
+**下一阶段任务书 S0/G0/B1/G1/G2（2026-10-12）**：分支 HEAD 不变，CI 38241151594（6f13c66）全部 success。B1 加固提交 `0d99591`（SOURCE_ORIGIN、只认本项目 checkout、未跟踪文件计入 dirty、注入 SHA 必须等于 HEAD、Release 要求 origin=git 且干净、`scripts/apk_provenance.py`）；7 种场景矩阵与干净克隆全量回归通过（app 405/13 跳过，PeriodStability 5/5）。G0：在 388ef0f 回放研究，5/5 结果逐字节一致；发现守卫漏锁 2 个研究测试资源；方案与 12 项负向测试计划见 12 号文档和 `B0-protected-file-matrix.json`，**守卫未修改**。D-1/D-2 方案见 14。关于页补丁 v2 已验证但**未应用**。等待用户回答：D-13、关于页偏离、D-4、D-1、D-2。
+
+**B0 双域守卫（2026-10-12，用户批准 D-13 方案 A 等五项决定，REQUIREMENTS §67）**：提交 `b2ba7f6` 单独实施；新增 `guard-classification.json`（+锁）、`display-approvals.json`、`test_guard_two_domain.py`（21 项）；`check_protocol.py` 改为双域（`waiver()` 原样保留）；CI jvm 作业显式拉取 `e89579a`/`388ef0f`/`d892e9b`。原测试与冻结资料未改。本地 273/273，浅克隆不拉取历史时 11 项 ERROR（失败而非跳过）。CI 38257031094 三个作业全部 success。回滚：revert `b2ba7f6`。下一步：关于页 + 构建版本追踪（D-4 交付清单），然后在 PR #19 分支实施 D-1/D-2。不合并 PR、不签名、不发布。
+
+**B1 + 整合审查（2026-10-12，任务书“B0 完整验收、B1 关于页及构建追踪、PR19 分批实施”）**：B0 独立 CI 结论归档于审计 15（CI_VERIFIED_ON_WORK_BRANCH，未进默认分支）。B1：关于页 `0b7a448`，D-4 交付账本 `47e2716`，修复 `cf3e580`（minSdk 26 的 NewApi 崩溃 + aapt2 解析缺陷）；本地回归通过，CI run 38262091486 三个作业全部 success（审计 16）。PR #19 隔离整合（审计 17，仅临时 worktree，未推送）：PR #19 自带测试断言旧守卫语义，改写前需产品负责人批准；另发现未锁定研究输入 `ResearchSublingualV01.kt` 和未受守卫的 `UnifiedConcentrationScreen.kt`。**D-1/D-2 生产代码尚未开始**。下一步：等待批准 17 §6 的方案，然后在 PR #19 分支依次做整合提交、D-1、D-2。不合并 PR、不签名、不发布；versionCode 仍为 25。
+
+**PR #19 整合 + D-1（2026-10-12，REQUIREMENTS §69/§70）**：在 PR #19 分支 `feature/unified-concentration-20261011` 上提交，未改写历史，PR 未合并。整合包括 merge `b649679`、守卫整合 `343a183`、校准回放工作流修复 `4db4770`，CI 全部 success（审计 17 §8）。D-1 提交 `bd20a5e`（审计 18）：本地全量回归通过，13/13 变异测试被杀死，视觉审计 48/48。下一步：D-2（新 PDF 与新化验估算不再静默使用舌下 Legacy，设计见审计 18 之后的 19 号报告）。不签名、不发布；versionCode 仍为 25。
+
+**D-2（2026-10-12，REQUIREMENTS §71）**：PR #19 分支提交 `c41cb4a`（审计 19）。新 PDF 与新化验估算不再静默使用舌下 Legacy；格式与 Schema 不变；本地全量回归通过。D-1 的 CI 已全部 success（审计 18 §5）。PR #19 仍未合并；不签名、不发布；versionCode 仍为 25。下一步由产品负责人决定：审阅 PR #19（含 §60 迁移记录的人工核查项），以及是否合并或交付。
+
+**§60 审批事后确认（2026-10-12，REQUIREMENTS §72）**：产品负责人确认 2026-10-11 的“恢复原 UI、只加模型选择”要求。`PD-2026-10-11-ORIGINAL-UI-CONCENTRATIONSCREEN` 改为 OWNER_CONFIRMED，并注明这是 2026-10-12 的事后核验；原提交、时间差、哈希和审批链不变。守卫现在会校验此类确认能在 git 中核实。PR #19 仍未合并，等待产品负责人对合并建议的确认。
+
+**PR #19 最终状态（2026-10-12）**：head `b381d05` 四个 CI 运行全部 success（38278491154、38278499303、38278491180、38278499243）。已向产品负责人提交合并建议：用 merge commit（不要 squash）合并 PR #19；**等待产品负责人确认，尚未合并**。不签名、不发布；任何交付需 versionCode 26 并登记交付账本。

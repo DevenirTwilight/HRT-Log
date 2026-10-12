@@ -1,0 +1,13 @@
+{
+  "fixture": "synthetic-60-doses-over-30-days",
+  "protocol": "price-figure-weighted-history-v1",
+  "candidate": "p2x-39",
+  "chart_points": 10442,
+  "compute_ms": 592.292139,
+  "sdk": 35,
+  "process_pss_before_kib": 220053,
+  "process_pss_after_kib": 221721,
+  "history_peak_pgml": 487.8573046969966,
+  "chart_peak_pgml": 487.8573046969966,
+  "measurement_limit": "Synthetic Debug emulator process PSS, not hardware/FPS/Release or clinical accuracy"
+}

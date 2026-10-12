@@ -1,0 +1,39 @@
+{
+  "source_commit": "425a7ab0c75c625c070a17b116cc4f99aa79ff0d",
+  "run_id": 38165696135,
+  "artifact_id": 11712631351,
+  "artifact_sha256": "a2ee7d440b4b322c2af15925d82c1a5a59a0fef694ad9a099ff257d50f51d22a",
+  "test_summaries": [
+    {
+      "path": "app/build/reports/tests/testFullDebugUnitTest/index.html",
+      "tests": 420,
+      "failures": 0,
+      "skipped": 13
+    },
+    {
+      "path": "core/data/build/reports/tests/testDebugUnitTest/index.html",
+      "tests": 72,
+      "failures": 0,
+      "skipped": 0
+    },
+    {
+      "path": "core/reminder/build/reports/tests/testDebugUnitTest/index.html",
+      "tests": 14,
+      "failures": 0,
+      "skipped": 0
+    }
+  ],
+  "lint": [
+    {
+      "path": "app/build/reports/lint-results-fullDebug.xml",
+      "errors": 0,
+      "warnings": 172
+    }
+  ],
+  "jobs": {
+    "jvm": "success",
+    "android": "success",
+    "device-tests": "success"
+  },
+  "skips": "App CI skips 12 optional native screenshot cases (covered separately by the 16-case/32-screenshot local matrix), plus the pre-existing native PDF case. Device instrumentation skips 2 pre-existing restart-harness cases."
+}

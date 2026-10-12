@@ -1,0 +1,51 @@
+{
+  "source_commit": "425a7ab0c75c625c070a17b116cc4f99aa79ff0d",
+  "files": {
+    "app/src/main/java/net/plainnotes/app/conc/ConcentrationCalculator.kt": {
+      "frozen_sha256": "9a0ca71e55a49b05b614d247773a0c694716ce92f7272f79c5644a39e45e417e",
+      "current_sha256": "9a0ca71e55a49b05b614d247773a0c694716ce92f7272f79c5644a39e45e417e",
+      "unchanged": true
+    },
+    "app/src/main/java/net/plainnotes/app/ui/AppShell.kt": {
+      "frozen_sha256": "b8df023f82e9fae4906d7f14b48095cb182030f8b73137cfa04d74f7e027cf84",
+      "current_sha256": "68dbf5af8d14e540f96d38bf055ed8c93324209a2a35071d24fc0f33ef17ea1b",
+      "unchanged": false
+    },
+    "app/src/main/java/net/plainnotes/app/ui/ChartViewport.kt": {
+      "frozen_sha256": "b9821126c3bf98bb8c71d85f06fc7ec282b73006cd2a1a1b164a2c737bc08c14",
+      "current_sha256": "b9821126c3bf98bb8c71d85f06fc7ec282b73006cd2a1a1b164a2c737bc08c14",
+      "unchanged": true
+    },
+    "app/src/main/java/net/plainnotes/app/ui/ConcChart.kt": {
+      "frozen_sha256": "51d0f88bf158113f9a08415a7498043930055096194b7f0f967e7bcb59b26c06",
+      "current_sha256": "51d0f88bf158113f9a08415a7498043930055096194b7f0f967e7bcb59b26c06",
+      "unchanged": true
+    },
+    "app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt": {
+      "frozen_sha256": "f21a68d40192c2e8c413d934bde69d17c16b3e0219a1092577ee425b1f24f58b",
+      "current_sha256": "75152adac151b25b4658aef19a229c6284bb4694f02d12ac894f5a34d4a15d31",
+      "unchanged": false
+    },
+    "core/data/src/main/java/net/plainnotes/app/data/Migrations.kt": {
+      "frozen_sha256": "a090e29ee2d35f13fa95ba413a481246d55651fdd7a8ea6f6dbd0ce633e67b0f",
+      "current_sha256": "a090e29ee2d35f13fa95ba413a481246d55651fdd7a8ea6f6dbd0ce633e67b0f",
+      "unchanged": true
+    },
+    "core/domain/src/main/kotlin/net/plainnotes/app/domain/ScheduleEngine.kt": {
+      "frozen_sha256": "382527cd80882649a487926b409af9253b55c48f45d876681fd9fccad4ddcb4f",
+      "current_sha256": "382527cd80882649a487926b409af9253b55c48f45d876681fd9fccad4ddcb4f",
+      "unchanged": true
+    },
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/Engine.kt": {
+      "frozen_sha256": "51ce72f3b4b2c4fbca0185c78a333df9a9e7877daf5d9630e5140a15a686e89e",
+      "current_sha256": "51ce72f3b4b2c4fbca0185c78a333df9a9e7877daf5d9630e5140a15a686e89e",
+      "unchanged": true
+    },
+    "pk-engine/src/main/resources/pk-params.json": {
+      "frozen_sha256": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b",
+      "current_sha256": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b",
+      "unchanged": true
+    }
+  },
+  "changed_ui_authorization": "../original-concentration-ui-authorization.json"
+}

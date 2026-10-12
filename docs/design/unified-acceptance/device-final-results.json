@@ -1,0 +1,22 @@
+{
+  "data": {
+    "tests": 14,
+    "failures": 0,
+    "skipped": 0
+  },
+  "app": {
+    "tests": 67,
+    "failures": 0,
+    "skipped": 2
+  },
+  "source_commit": "001869b0c508c74b40bae0e6c6c85573e9c10cd6",
+  "run_id": 38147885981,
+  "device_job_id": 114494959477,
+  "emulator": "API35 x86_64",
+  "artifact_id": 11705970496,
+  "artifact_sha256": "fa3799f1ac2cbf98447df90cbeb96fd9c81c2ec3752f977fea42748d88e12174",
+  "process_restart_harness": "prepare + verifyFreshProcess PASS after intentional ordinary-suite skips",
+  "rotation": "Landscape and portrait configuration observed; M1, pmol/L and A=200 retained",
+  "performance_collection": "PASS: dedicated synthetic JSON tag validated after AGP cleanup",
+  "native_pdf": "WellbeingAndroidTest.longMultilingualAppointmentSummaryHasValidNativePages PASS: PdfRenderer validates summary and appointment packet pages"
+}

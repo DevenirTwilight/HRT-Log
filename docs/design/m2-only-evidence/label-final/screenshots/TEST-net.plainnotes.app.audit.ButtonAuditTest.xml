@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.audit.ButtonAuditTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-10-12T09:20:15.694Z" hostname="e1be2d0ad0c2" time="28.067">
+  <properties/>
+  <testcase name="audit[en@1/411dp/LIGHT]" classname="net.plainnotes.app.audit.ButtonAuditTest" time="16.771"/>
+  <testcase name="audit[en@2/411dp/LIGHT]" classname="net.plainnotes.app.audit.ButtonAuditTest" time="2.198"/>
+  <testcase name="audit[zh-rCN@1/411dp/LIGHT]" classname="net.plainnotes.app.audit.ButtonAuditTest" time="1.656"/>
+  <testcase name="audit[zh-rCN@2/411dp/LIGHT]" classname="net.plainnotes.app.audit.ButtonAuditTest" time="1.451"/>
+  <testcase name="audit[zh-rTW@1/411dp/LIGHT]" classname="net.plainnotes.app.audit.ButtonAuditTest" time="1.278"/>
+  <testcase name="audit[zh-rTW@2/411dp/LIGHT]" classname="net.plainnotes.app.audit.ButtonAuditTest" time="1.455"/>
+  <testcase name="audit[fr-rFR@1/411dp/LIGHT]" classname="net.plainnotes.app.audit.ButtonAuditTest" time="1.257"/>
+  <testcase name="audit[fr-rFR@2/411dp/LIGHT]" classname="net.plainnotes.app.audit.ButtonAuditTest" time="1.029"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[System.logW: A resource failed to call close. 
+System.logW: A resource failed to call close. 
+System.logW: A resource failed to call close. 
+]]></system-err>
+</testsuite>

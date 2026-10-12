@@ -1,0 +1,146 @@
+[
+  {
+    "mutation": "amplitude_100",
+    "file": "app/src/main/java/net/plainnotes/app/experimental/ConcentrationPreview.kt",
+    "sha256": "fdf43961f8f1cb3957dd9004cb31f7473e0d7abad6c1b75c8bc8c143bb6d9ab3",
+    "task": ":app:testFullDebugUnitTest",
+    "test": "net.plainnotes.app.ConcentrationPreviewTest.defaultProductPreviewUsesRealLiteratureFitInHeroChartAndExactReadout",
+    "exit_code": 1,
+    "tests": 1,
+    "failures": [
+      {
+        "type": "java.lang.AssertionError",
+        "message": "java.lang.AssertionError: expected:<44.471986965691144> but was:<28.707981872882065>"
+      }
+    ],
+    "status": "KILLED_BY_EXECUTED_ASSERTION"
+  },
+  {
+    "mutation": "implicit_first",
+    "file": "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchDisplayProtocol.kt",
+    "sha256": "4ce209185d59746ee088d342817544c9c4cb18767f65f4d59135c288c6b4488e",
+    "task": ":pk-engine:test",
+    "test": "net.plainnotes.app.pk.experimental.M2OnlyNumericalContractTest.fixedCandidateHashVersionAndPriceProjectionCannotRegressToExample",
+    "exit_code": 1,
+    "tests": 1,
+    "failures": [
+      {
+        "type": "org.opentest4j.AssertionFailedError",
+        "message": "org.opentest4j.AssertionFailedError: expected: <p2x-39> but was: <p2x-14>"
+      }
+    ],
+    "status": "KILLED_BY_EXECUTED_ASSERTION"
+  },
+  {
+    "mutation": "one_hour_as_cmax",
+    "file": "app/src/main/java/net/plainnotes/app/experimental/ConcentrationPreview.kt",
+    "sha256": "9cb25673f4fbc386b1ed882ed27d322283f78fab2f0bc50c33d52c95d7b45fac",
+    "task": ":app:testFullDebugUnitTest",
+    "test": "net.plainnotes.app.ConcentrationPreviewTest.defaultProductPreviewUsesRealLiteratureFitInHeroChartAndExactReadout",
+    "exit_code": 1,
+    "tests": 1,
+    "failures": [
+      {
+        "type": "java.lang.AssertionError",
+        "message": "java.lang.AssertionError: expected:<458.83572200770783> but was:<481.9242561194982>"
+      }
+    ],
+    "status": "KILLED_BY_EXECUTED_ASSERTION"
+  },
+  {
+    "mutation": "legacy_calibration_on_m2",
+    "file": "app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt",
+    "sha256": "06ff9afe937893606478ac74b6faaed43dc85458063b8877cc8dd7f928a53163",
+    "task": ":app:testFullDebugUnitTest",
+    "test": "net.plainnotes.app.UnifiedConcentrationUiTest.personalLabsCannotScaleM2AndOldCalibrationIsNotPresentedAsM2",
+    "exit_code": 1,
+    "tests": 1,
+    "failures": [
+      {
+        "type": "java.lang.AssertionError",
+        "message": "java.lang.AssertionError: Failed: assertDoesNotExist.\nReason: Did not expect any node but found '1' node that satisfies: (Text + InputText + EditableText contains 'Calibrate with my E2 labs' (ignoreCase: false))\nNode found:\nNode #20 at (l=32.0, t=1258.0, r=58.0, b=1294.0)px\nText = '[Calibrate with my E2 labs]'\nActions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]\nHas 14 siblings\n"
+      }
+    ],
+    "status": "KILLED_BY_EXECUTED_ASSERTION"
+  },
+  {
+    "mutation": "mixed_routes_without_scope",
+    "file": "app/src/main/java/net/plainnotes/app/conc/experimental/ResearchHistoryScope.kt",
+    "sha256": "65d6f2ec3f53625aa9944a72d0cc901a07a10aeaa062eac182f850e6fb903610",
+    "task": ":app:testFullDebugUnitTest",
+    "test": "net.plainnotes.app.ResearchHistoryScopeTest.mixedScopesRetainOtherRouteAndUnknownFactsWithoutChangingRecords",
+    "exit_code": 1,
+    "tests": 1,
+    "failures": [
+      {
+        "type": "java.lang.AssertionError",
+        "message": "java.lang.AssertionError"
+      }
+    ],
+    "status": "KILLED_BY_EXECUTED_ASSERTION"
+  },
+  {
+    "mutation": "candidate_range_as_human_90",
+    "file": "app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt",
+    "sha256": "4db032ef21ec595ad0d3574b6c66e119f7207256d22fb1bec69db58fa94a94d1",
+    "task": ":app:testFullDebugUnitTest",
+    "test": "net.plainnotes.app.UnifiedConcentrationUiTest.originalCardsAndCalendarControlsRemainWithoutModelSelector",
+    "exit_code": 1,
+    "tests": 1,
+    "failures": [
+      {
+        "type": "java.lang.AssertionError",
+        "message": "java.lang.AssertionError: Failed: assertExists.\nReason: Expected exactly '1' node but could not find any node that satisfies: (Text + InputText + EditableText contains 'Price Figure 1 group-amplitude scenario, not a validated personal or total E2 prediction.' (ignoreCase: false))\n"
+      }
+    ],
+    "status": "KILLED_BY_EXECUTED_ASSERTION"
+  },
+  {
+    "mutation": "legacy_value_relabelled_m2",
+    "file": "app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt",
+    "sha256": "f264bf3fbcafc71987f904bebe875fcab3950a1fd4b4d0c7759b968c2ca18177",
+    "task": ":app:testFullDebugUnitTest",
+    "test": "net.plainnotes.app.UnifiedConcentrationUiTest.fixedM2KernelOwnsHeroWithoutOldPredictionFallback",
+    "exit_code": 1,
+    "tests": 1,
+    "failures": [
+      {
+        "type": "java.lang.AssertionError",
+        "message": "java.lang.AssertionError: Failed: assertExists.\nReason: Expected exactly '1' node but could not find any node that satisfies: (Text + InputText + EditableText contains '121' (ignoreCase: false))\n"
+      }
+    ],
+    "status": "KILLED_BY_EXECUTED_ASSERTION"
+  },
+  {
+    "mutation": "actual_legacy_amplitude_leak",
+    "file": "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchDisplayProtocol.kt",
+    "sha256": "18a91e29cf1810dc6cf8bfcb1a05417d8bc103eb67197dc5abc103bc6ee0fcd6",
+    "task": ":pk-engine:test",
+    "test": "net.plainnotes.app.pk.experimental.M2OnlyNumericalContractTest.fixedCandidateHashVersionAndPriceProjectionCannotRegressToExample",
+    "exit_code": 1,
+    "tests": 1,
+    "failures": [
+      {
+        "type": "org.opentest4j.AssertionFailedError",
+        "message": "org.opentest4j.AssertionFailedError: expected: <434.8357220077087> but was: <11040.013430944173>"
+      }
+    ],
+    "status": "KILLED_BY_EXECUTED_ASSERTION"
+  },
+  {
+    "mutation": "sl_only_claimed_total_e2",
+    "file": "app/src/main/java/net/plainnotes/app/conc/experimental/ResearchHistoryScope.kt",
+    "sha256": "65d6f2ec3f53625aa9944a72d0cc901a07a10aeaa062eac182f850e6fb903610",
+    "task": ":app:testFullDebugUnitTest",
+    "test": "net.plainnotes.app.UnifiedConcentrationUiTest.mixedE2WithoutScopeCannotAppearAsTotal",
+    "exit_code": 1,
+    "tests": 1,
+    "failures": [
+      {
+        "type": "java.lang.AssertionError",
+        "message": "java.lang.AssertionError: Failed: assertExists.\nReason: Expected exactly '1' node but could not find any node that satisfies: (Text + InputText + EditableText contains 'This reference includes only qualified recorded sublingual E2. Other E2 routes or unknown records are present; a combined total E2 concentration is unavailable. Their compatibility calculations and history are retained.' (ignoreCase: false))\n"
+      }
+    ],
+    "status": "KILLED_BY_EXECUTED_ASSERTION"
+  }
+]

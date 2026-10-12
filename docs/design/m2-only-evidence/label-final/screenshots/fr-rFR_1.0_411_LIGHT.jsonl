@@ -1,0 +1,3 @@
+{"case":"concentration_unified","kind":"coverage","controls":7,"locale":"fr-rFR","scale":1,"width":411,"theme":"LIGHT"}
+{"case":"concentration_unified","kind":"row","parent":727,"labels":"7 j | 60 j | 14 j","roles":"RadioButton,RadioButton,RadioButton","heights_dp":"48.0,48.0,48.0","widths_dp":"116.3,116.3,116.3","lines":"1,1,1","top_dp":500.7,"left_dp":"32.0,262.7,147.3","locale":"fr-rFR","scale":1,"width":411,"theme":"LIGHT"}
+{"case":"concentration_unified","kind":"row","parent":749,"labels":"pmol\/L | pg\/mL","roles":"RadioButton,RadioButton","heights_dp":"48.0,48.0","widths_dp":"174.0,174.0","lines":"1,1","top_dp":956.7,"left_dp":"205.0,32.0","locale":"fr-rFR","scale":1,"width":411,"theme":"LIGHT"}

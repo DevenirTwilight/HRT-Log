@@ -1,0 +1,31 @@
+{
+  "app/src/main/java": {
+    "before_changed_files_bytes": 5281,
+    "after_changed_files_bytes": 7902,
+    "delta": 2621,
+    "files": [
+      "app/src/main/java/net/plainnotes/app/experimental/ConcentrationPreview.kt",
+      "app/src/main/java/net/plainnotes/app/experimental/UnifiedConcentrationScreen.kt"
+    ]
+  },
+  "pk-engine/src/main": {
+    "before_changed_files_bytes": 0,
+    "after_changed_files_bytes": 3869,
+    "delta": 3869,
+    "files": [
+      "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchDisplayProtocol.kt",
+      "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchExtrema.kt"
+    ]
+  },
+  "app/src/main/res": {
+    "before_changed_files_bytes": 22023,
+    "after_changed_files_bytes": 24122,
+    "delta": 2099,
+    "files": [
+      "app/src/main/res/values-b+zh+Hant/strings_unified_concentration.xml",
+      "app/src/main/res/values-fr/strings_unified_concentration.xml",
+      "app/src/main/res/values-zh/strings_unified_concentration.xml",
+      "app/src/main/res/values/strings_unified_concentration.xml"
+    ]
+  }
+}

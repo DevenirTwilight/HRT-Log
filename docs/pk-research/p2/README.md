@@ -109,3 +109,19 @@ python3 tools/pk-research/research.py --output /tmp/hrt-p2-new-empty
 ```
 
 输出必须为空目录，不能覆盖旧结果；SHA和完整命令/计数见验收。新输入/假设只能记录新的显式协议偏离，不静默修改冻结文件。研究CLI不自认证软件/临床成功，软件证据单独记录。
+
+## 守卫 v2：双域检查（2026-10-12，产品负责人决定 D-13，REQUIREMENTS §67）
+
+冻结的 `production-baseline.json`、`protocol-lock.json`、`validation-protocol.md`、`protocol-deviations.json` 及全部研究结果**未改动**。`tools/pk-research/check_protocol.py` 改为两个检查域：
+
+- **历史域**：
+  - 164 个基线哈希从 git 对象 `e89579a` 逐一复现（`historical_baseline`）；
+  - 在 `388ef0f` 的隔离 worktree 中重跑 `research.py`，与 `results/` 5 个文件逐字节比较（`replay_research` + `compare_results`）；
+  - 缺少 git 对象时抛出 `HistoricalObjectMissing`，测试失败，不会跳过。
+- **当前域**：
+  - `guard-classification.json`（由 `guard-classification-lock.json` 固定哈希）把 164 个文件划分为三类：43 个实时锁定（研究输入与归档证据）、7 个 PK 显示（改动需要 `display-approvals.json` 中可在 git 历史中核实的产品负责人批准链）、114 个仅历史回放；
+  - 另外实时锁定 2 个新发现的研究测试资源；
+  - 研究/审计工具引用到的、受 git 跟踪的生产文件，不得被归为仅历史；
+  - 追加式偏离链必须按序保留，每条记录与 git 历史一致。
+
+测试见 `tools/pk-research/test_guard_two_domain.py`（21 项，含 12 类负向用例）。CI 的 jvm 作业会先显式拉取三个历史提交。设计与依赖闭包见 `docs/audits/product-quality-2026-10/12-b0-guard-implementation-plan.md`。

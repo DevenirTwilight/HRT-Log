@@ -180,11 +180,15 @@ object PdfReport {
         }
         y += 8f
         }
-        if (conc != null && conc.timeH.isNotEmpty() && conc.models.containsKey(net.plainnotes.app.pk.Curve.E2)) {
-            if (y + 260f > H - 48f) newPage()
-            text(context.getString(R.string.report_conc_title), head)
+        // D-2 (REQUIREMENTS §67 item 5): no retired Legacy sublingual E2 curve or band in a new PDF, and no combined
+        // total E2 for mixed routes; the report says why. Other-route-only E2 keeps its existing chart.
+        val e2Plan = e2ReportPlan(net.plainnotes.app.conc.SublingualEstimatePolicy.pdfE2(conc, d.records))
+        if (e2Plan.drawChart && y + 260f > H - 48f) newPage()
+        if (e2Plan.drawChart || e2Plan.messages.isNotEmpty()) text(context.getString(R.string.report_conc_title), head)
+        e2Plan.messages.forEach { text(context.getString(it), body) }
+        if (e2Plan.drawChart) {
             text(context.getString(R.string.pk_disclaimer_short), small)
-            drawChart(canvas!!, conc, M, y, W - 2 * M, 180f, from.atStartOfDay(zone).toEpochSecond() / 3600.0, conc.nowH)
+            drawChart(canvas!!, conc!!, M, y, W - 2 * M, 180f, from.atStartOfDay(zone).toEpochSecond() / 3600.0, conc.nowH)
             y += 196f
         }
         val scored = d.scores.filter { it.date >= from.toString() && it.date<=to.toString() }
@@ -263,4 +267,13 @@ object PdfReport {
         r.labs.filter { it.first in startH..endH }.forEach { (t, v) -> c.drawCircle(px(t), py(v), 2.8f, Paint().apply { color = Color.rgb(0x8E, 0x4D, 0x35); isAntiAlias = true }) }
         c.drawLine(px(endH), y, px(endH), y + h, Paint().apply { color = Color.GRAY; pathEffect = DashPathEffect(floatArrayOf(3f, 3f), 0f) })
     }
+}
+
+/** D-2: what the concentration section of a new PDF contains for each decision (pure, unit-tested). */
+internal class E2ReportPlan(val drawChart: Boolean, val messages: List<Int>)
+internal fun e2ReportPlan(decision: net.plainnotes.app.conc.SublingualEstimatePolicy.PdfE2) = when (decision) {
+    net.plainnotes.app.conc.SublingualEstimatePolicy.PdfE2.DRAW -> E2ReportPlan(true, emptyList())
+    net.plainnotes.app.conc.SublingualEstimatePolicy.PdfE2.SUBLINGUAL_UNAVAILABLE -> E2ReportPlan(false, listOf(R.string.lab_estimate_sl_unavailable))
+    net.plainnotes.app.conc.SublingualEstimatePolicy.PdfE2.MIXED_UNAVAILABLE -> E2ReportPlan(false, listOf(R.string.lab_estimate_sl_unavailable, R.string.report_mixed_no_total_e2))
+    net.plainnotes.app.conc.SublingualEstimatePolicy.PdfE2.NONE -> E2ReportPlan(false, emptyList())
 }

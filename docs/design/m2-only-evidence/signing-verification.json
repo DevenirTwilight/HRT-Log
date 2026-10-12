@@ -1,0 +1,10 @@
+{
+  "source_commit": "e98d5e033e4e9b757be5daefed102bf5900ae29b",
+  "unsigned_sha256": "75a804b3c383ed311d594d3f50cf532563e8fc087040d3755bba46e54249ef3b",
+  "signed_sha256": "d9d874e82001251c4b42214a64a603354b9c47006a6952faaf7faae6d1ea5969",
+  "signed_bytes": 12798836,
+  "certificate_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
+  "zip_crc": "PASS",
+  "zipalign_16k": "PASS",
+  "temporary_private_material": "CLEANED_BY_TEMPORARY_DIRECTORY"
+}

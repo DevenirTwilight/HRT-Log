@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.ResearchHistoryScopeTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-12T08:56:25.586Z" hostname="e1be2d0ad0c2" time="0.449">
+  <properties/>
+  <testcase name="mixedCompatibilityStillContainsOtherRouteContributionAndM2StaysSlOnly" classname="net.plainnotes.app.ResearchHistoryScopeTest" time="0.448"/>
+  <testcase name="unknownSnapshotsTimesAndMismatchedRoutesNeverProveSafeCompatibility" classname="net.plainnotes.app.ResearchHistoryScopeTest" time="0.0"/>
+  <testcase name="mixedScopesRetainOtherRouteAndUnknownFactsWithoutChangingRecords" classname="net.plainnotes.app.ResearchHistoryScopeTest" time="0.0"/>
+  <testcase name="cancelledDeletedFutureOlderAndOtherCompoundsCannotInventMixedE2Exposure" classname="net.plainnotes.app.ResearchHistoryScopeTest" time="0.0"/>
+  <testcase name="onlyOtherRoutesAreCompatibilityAndSublingualEvIsNeverM2" classname="net.plainnotes.app.ResearchHistoryScopeTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

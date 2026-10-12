@@ -1,0 +1,165 @@
+{
+  "source_commit": "425a7ab0c75c625c070a17b116cc4f99aa79ff0d",
+  "files": [
+    {
+      "path": "app/build/button-audit/en_1.0_320_LIGHT/concentration.png",
+      "bytes": 518910,
+      "sha256": "a1ab6b1853b98f1c27681aa3fc8ffcfcc5ddccab47bbf243018a3fe7a06d8fd7"
+    },
+    {
+      "path": "app/build/button-audit/en_1.0_320_LIGHT/concentration_unified.png",
+      "bytes": 482127,
+      "sha256": "013979e553ec7a69ec1693be637c28a98c3b213e8b4e3e1f6a38a228691d3734"
+    },
+    {
+      "path": "app/build/button-audit/en_1.0_411_LIGHT/concentration.png",
+      "bytes": 573692,
+      "sha256": "fecfd42df1f44cee1b07b2191896808bf759f8a6ecbbacb73dc9ec84906e9ef5"
+    },
+    {
+      "path": "app/build/button-audit/en_1.0_411_LIGHT/concentration_unified.png",
+      "bytes": 504868,
+      "sha256": "74a23e3fbfdfcfd486543ce0b8c80ef9a9005b7da075b211f58d2136c3a79d82"
+    },
+    {
+      "path": "app/build/button-audit/en_2.0_320_LIGHT/concentration.png",
+      "bytes": 452912,
+      "sha256": "003753bb9bd40939ebe3f688debaaf589ec1cf6aed77758a931fd5595788fa0b"
+    },
+    {
+      "path": "app/build/button-audit/en_2.0_320_LIGHT/concentration_unified.png",
+      "bytes": 428069,
+      "sha256": "8e364f23c0c5a8a8b087cc2a3caa20de681a9fda6f493851448f61ebea0d8372"
+    },
+    {
+      "path": "app/build/button-audit/en_2.0_411_LIGHT/concentration.png",
+      "bytes": 559866,
+      "sha256": "a5db36045acf10926fe5ff0637c3be9bcfb31ea4db03c96a97513c12257bbc14"
+    },
+    {
+      "path": "app/build/button-audit/en_2.0_411_LIGHT/concentration_unified.png",
+      "bytes": 476675,
+      "sha256": "1f69de8423d32571d71333767883f3ffb8e81e419f19c9dd32707c169696330e"
+    },
+    {
+      "path": "app/build/button-audit/zh-rCN_1.0_320_LIGHT/concentration.png",
+      "bytes": 660810,
+      "sha256": "2f21e4136e8f05ce77399776d5bf91afd5df1b53ff7e34bb6fac64d02ec83fef"
+    },
+    {
+      "path": "app/build/button-audit/zh-rCN_1.0_320_LIGHT/concentration_unified.png",
+      "bytes": 644964,
+      "sha256": "61b484dbf4685ba928dcc1662be1b64b56e253b0cd169d4f7ee1ecded1fc63a4"
+    },
+    {
+      "path": "app/build/button-audit/zh-rCN_1.0_411_LIGHT/concentration.png",
+      "bytes": 754632,
+      "sha256": "6fd101791088e92f71a3ed8517f7f8540c7c7c7b5195ef21f57d67b86ea6d547"
+    },
+    {
+      "path": "app/build/button-audit/zh-rCN_1.0_411_LIGHT/concentration_unified.png",
+      "bytes": 660791,
+      "sha256": "60caf0da752d5087d791f896d7009981a67b4c23bc9bcd590333a674ccf2cdd7"
+    },
+    {
+      "path": "app/build/button-audit/zh-rCN_2.0_320_LIGHT/concentration.png",
+      "bytes": 502852,
+      "sha256": "afad943ed228ebca4804dfec435e4c8bbebe605ddc4c5b928f860420c7536680"
+    },
+    {
+      "path": "app/build/button-audit/zh-rCN_2.0_320_LIGHT/concentration_unified.png",
+      "bytes": 504426,
+      "sha256": "14a5d6174abc0e388f6e337c3ad14dba7625b6852f9e7a8b428505eb6ba812c8"
+    },
+    {
+      "path": "app/build/button-audit/zh-rCN_2.0_411_LIGHT/concentration.png",
+      "bytes": 784506,
+      "sha256": "51551b01ec19439b2dde4215c9a2958416524016cf4ca9c8740a4a2932d3abbf"
+    },
+    {
+      "path": "app/build/button-audit/zh-rCN_2.0_411_LIGHT/concentration_unified.png",
+      "bytes": 663892,
+      "sha256": "f25321089dbbb961d09ac68da1b7ac57778cacc7ad3b267d9d0b108e1b2d8e37"
+    },
+    {
+      "path": "app/build/button-audit/zh-rTW_1.0_320_LIGHT/concentration.png",
+      "bytes": 683218,
+      "sha256": "918a241b87375bcdfc40d7d7dfee7d5f3e4c1a5d1569b703d62537dac5858576"
+    },
+    {
+      "path": "app/build/button-audit/zh-rTW_1.0_320_LIGHT/concentration_unified.png",
+      "bytes": 669018,
+      "sha256": "705d1679e09dcc8cb4bc12fd11facac81d342c8e0969e09c44e5d2affbdddb81"
+    },
+    {
+      "path": "app/build/button-audit/zh-rTW_1.0_411_LIGHT/concentration.png",
+      "bytes": 779001,
+      "sha256": "d3d79602083f392121a761c3882b29fb574d403cc44b10c7e34916b353f05d2d"
+    },
+    {
+      "path": "app/build/button-audit/zh-rTW_1.0_411_LIGHT/concentration_unified.png",
+      "bytes": 682784,
+      "sha256": "7d9e9730a50cdf33eb2a2e8d45a4587f9e05a0672a1259d722922e17ac0e7b45"
+    },
+    {
+      "path": "app/build/button-audit/zh-rTW_2.0_320_LIGHT/concentration.png",
+      "bytes": 516514,
+      "sha256": "2064bc616afe1234c3bd7e8c8680f3ad4736ae6a999f9c2087a3f21b1f624c43"
+    },
+    {
+      "path": "app/build/button-audit/zh-rTW_2.0_320_LIGHT/concentration_unified.png",
+      "bytes": 520050,
+      "sha256": "79164f4f22c329e2b39837f29fae2ca83bcc9c1d108b50d47e517b9817f05122"
+    },
+    {
+      "path": "app/build/button-audit/zh-rTW_2.0_411_LIGHT/concentration.png",
+      "bytes": 812526,
+      "sha256": "2c6b9dadd706d9c132414a45044d7af67c942eef11210d40cead1ba899e75fc6"
+    },
+    {
+      "path": "app/build/button-audit/zh-rTW_2.0_411_LIGHT/concentration_unified.png",
+      "bytes": 685285,
+      "sha256": "bf32827820efe845a3f19efdea11abea00bb235e67bb1fbaa4eeec0bbd5c8982"
+    },
+    {
+      "path": "app/build/button-audit/fr-rFR_1.0_320_LIGHT/concentration.png",
+      "bytes": 543359,
+      "sha256": "f72a81ca2d673de253e40c5d29404ed4d3b6d6af0c9006db51a56abd828dc07d"
+    },
+    {
+      "path": "app/build/button-audit/fr-rFR_1.0_320_LIGHT/concentration_unified.png",
+      "bytes": 487688,
+      "sha256": "2618c873892640d863d0bf56bf5ce251b87edc96393aefc106fb40755bf8b62e"
+    },
+    {
+      "path": "app/build/button-audit/fr-rFR_1.0_411_LIGHT/concentration.png",
+      "bytes": 588090,
+      "sha256": "101b9627b8ce9944df2e3cc7ebd9d4c1cc57c476ef78610cf4a9a401ec8baee7"
+    },
+    {
+      "path": "app/build/button-audit/fr-rFR_1.0_411_LIGHT/concentration_unified.png",
+      "bytes": 506940,
+      "sha256": "520e30216f31560e874ade433b601ef7f5ad2c79c4efd1e77c2e7edaeef076c5"
+    },
+    {
+      "path": "app/build/button-audit/fr-rFR_2.0_320_LIGHT/concentration.png",
+      "bytes": 456228,
+      "sha256": "a520c5ab4f60c4b21ed32284c42f365f5a402025c3ef3839eedfd207357cd3ff"
+    },
+    {
+      "path": "app/build/button-audit/fr-rFR_2.0_320_LIGHT/concentration_unified.png",
+      "bytes": 420512,
+      "sha256": "044aabd68f87922c70f94ea31baa170f898e7db60bcba4d317f9ca3df84cac24"
+    },
+    {
+      "path": "app/build/button-audit/fr-rFR_2.0_411_LIGHT/concentration.png",
+      "bytes": 554397,
+      "sha256": "3c1168f68b75b3651c65a41f93efb5e1d770d39a935bd83fa5ff4364f28a0325"
+    },
+    {
+      "path": "app/build/button-audit/fr-rFR_2.0_411_LIGHT/concentration_unified.png",
+      "bytes": 497405,
+      "sha256": "67c742f63692937e629272ae4f18a7183f10e11e0e9625956de0ee92bbfc902a"
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "source_commit": "001869b0c508c74b40bae0e6c6c85573e9c10cd6",
+  "run_id": 38147885981,
+  "workflow_url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38147885981",
+  "jobs": {
+    "jvm": "success",
+    "android": "success",
+    "device-tests": "success"
+  },
+  "modules": [
+    {
+      "module": "domain",
+      "tests": 58,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "module": "pk-engine",
+      "tests": 114,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "module": "importer",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "module": "data",
+      "tests": 72,
+      "failures": 0,
+      "skipped": 0
+    },
+    {
+      "module": "reminder",
+      "tests": 14,
+      "failures": 0,
+      "skipped": 0
+    },
+    {
+      "module": "app",
+      "tests": 414,
+      "failures": 0,
+      "skipped": 13
+    }
+  ],
+  "artifacts_verified": [
+    {
+      "id": 11705705253,
+      "name": "jvm-test-results",
+      "sha256": "b4820f63aedcceb990339392f8acd1d9f78b74d01c368cc75c5d8acf73cd9b4e"
+    },
+    {
+      "id": 11706265396,
+      "name": "build-results",
+      "sha256": "0323f140c5eaac93fba04905a6d572ee2806c6a3d9086f32359bc3ff0201af12"
+    },
+    {
+      "id": 11705970496,
+      "name": "device-test-results",
+      "sha256": "fa3799f1ac2cbf98447df90cbeb96fd9c81c2ec3752f977fea42748d88e12174"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "app": {
+    "tests": 438,
+    "failures": 0,
+    "skipped": 13,
+    "duration": "2m24.29s"
+  },
+  "core/data": {
+    "tests": 72,
+    "failures": 0,
+    "skipped": 0,
+    "duration": "28.114s"
+  },
+  "core/reminder": {
+    "tests": 14,
+    "failures": 0,
+    "skipped": 0,
+    "duration": "10.310s"
+  }
+}

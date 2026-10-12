@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.UnifiedConcentrationUiTest" tests="14" skipped="0" failures="0" errors="0" timestamp="2026-10-12T09:17:11.564Z" hostname="e1be2d0ad0c2" time="54.01">
+  <properties/>
+  <testcase name="unknownHistoryNeverFallsBackToOldSublingualPrediction" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="30.865"/>
+  <testcase name="originalCardsAndCalendarControlsRemainWithoutModelSelector" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="0.746"/>
+  <testcase name="originalUnitSwitchConvertsResearchValue" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="1.548"/>
+  <testcase name="failedM2NeverMasqueradesAsEmptyHistoryAndOtherMedicinesRemainAvailable" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="3.413"/>
+  <testcase name="personalLabsCannotScaleM2AndOldCalibrationIsNotPresentedAsM2" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="1.2"/>
+  <testcase name="fixedM2KernelOwnsHeroWithoutOldPredictionFallback" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="0.528"/>
+  <testcase name="completedHistoryRefreshRetainsOriginalSelectedRange" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="2.18"/>
+  <testcase name="originalChartTapZoomAndPanRemainOperable" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="1.498"/>
+  <testcase name="otherRouteOnlyRetainsCompatibilityCurveAndItsScopedCalibration" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="1.584"/>
+  <testcase name="mixedRoutesAreExplicitlyPartialAndNeverTotalE2" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="3.1"/>
+  <testcase name="wrongModelCannotBeRelabelledM2" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="2.334"/>
+  <testcase name="unsupportedSublingualEvIsNotM2OrEmptyRecordedHistory" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="1.067"/>
+  <testcase name="mixedE2WithoutScopeCannotAppearAsTotal" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="0.648"/>
+  <testcase name="fixedM2AndOriginalUnitSurviveRecreation" classname="net.plainnotes.app.UnifiedConcentrationUiTest" time="1.254"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

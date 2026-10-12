@@ -1,0 +1,160 @@
+{
+  "tested_source_commit": "e98d5e033e4e9b757be5daefed102bf5900ae29b",
+  "stage": "COMPLETE_ENGINEERING_AND_PRIVATE_APK_DELIVERY",
+  "local_tests": {
+    "core/domain/build/test-results/test": {
+      "tests": 58,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "pk-engine/build/test-results/test": {
+      "tests": 124,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "importer/build/test-results/test": {
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/data/build/test-results/testDebugUnitTest": {
+      "tests": 72,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/reminder/build/test-results/testDebugUnitTest": {
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "app/build/test-results/testFullDebugUnitTest": {
+      "tests": 438,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 13
+    }
+  },
+  "python_research_protocol": {
+    "tests": 271,
+    "failures": 0,
+    "status": "PASS"
+  },
+  "legacy_production_audit_python": {
+    "tests": 13,
+    "failures": 0,
+    "status": "PASS"
+  },
+  "device_performance_collector": {
+    "tests": 3,
+    "failures": 0,
+    "status": "PASS"
+  },
+  "mutants": {
+    "categories": 7,
+    "executions": 9,
+    "killed_by_executed_assertions": 9,
+    "source_bytes_restored": true
+  },
+  "device": {
+    "sdk": 35,
+    "abi": "x86_64",
+    "core_data_tests": 14,
+    "app_tests": 70,
+    "failures": 0,
+    "junit_skipped": 2,
+    "separate_restart_phases_passed": 2,
+    "m2_native_tests": 6,
+    "display_performance": {
+      "fixture": "synthetic-60-doses-over-30-days",
+      "protocol": "price-figure-weighted-history-v1",
+      "candidate": "p2x-39",
+      "chart_points": 10442,
+      "compute_ms": 40.580159,
+      "sdk": 35,
+      "process_pss_before_kib": 224037,
+      "process_pss_after_kib": 226822,
+      "history_peak_pgml": 487.8573046969966,
+      "chart_peak_pgml": 487.8573046969966,
+      "measurement_limit": "Synthetic Debug emulator process PSS, not hardware/FPS/Release or clinical accuracy"
+    }
+  },
+  "limits": {
+    "local_kvm": "BLOCKED: no /dev/kvm; actual GitHub API35 device jobs executed",
+    "physical_arm_device": "NOT_RUN: no attached physical ARM device",
+    "release_on_device": "NOT_RUN: native CI uses Debug instrumentation; Release build and signing checked separately",
+    "formal_individual_absolute_prediction": "NOT_ACCEPTED: group research reference only, no M2 lab calibration or total mixed-E2 replacement"
+  },
+  "compatible_sources_unchanged": {
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/Engine.kt": "51ce72f3b4b2c4fbca0185c78a333df9a9e7877daf5d9630e5140a15a686e89e",
+    "app/src/main/java/net/plainnotes/app/conc/ConcentrationCalculator.kt": "9a0ca71e55a49b05b614d247773a0c694716ce92f7272f79c5644a39e45e417e",
+    "app/src/main/java/net/plainnotes/app/ui/ConcChart.kt": "51d0f88bf158113f9a08415a7498043930055096194b7f0f967e7bcb59b26c06",
+    "app/src/main/java/net/plainnotes/app/ui/ChartViewport.kt": "b9821126c3bf98bb8c71d85f06fc7ec282b73006cd2a1a1b164a2c737bc08c14",
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchSublingualV01.kt": "55c62670dac37d9c44a370ea10406d66c21654ba330b7e967c61840a101ec527",
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchM1Catalog.kt": "82ffdd2f627742dfc2648da95e69d547f14d198f5c91214fbeca73e38d888f5d",
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/StudyAnchors.kt": "93f746293efa12866bee1e5f740643de217ed64cd93d4a40bb5fc8f8808235c8",
+    "app/src/main/java/net/plainnotes/app/conc/experimental/ResearchHistoricalSlAdapter.kt": "ca24a838fb5204438c60b0655354c49365c12ef99a437a91334b0c5ab0f6e144",
+    "pk-engine/src/main/resources/pk-params.json": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b"
+  },
+  "ci_evidence": "ci/status.json",
+  "parameter_reference": "independent-reference.json",
+  "full_changed_file_list": "changed-files.txt",
+  "apk": {
+    "source_commit": "e98d5e033e4e9b757be5daefed102bf5900ae29b",
+    "unsigned_sha256": "75a804b3c383ed311d594d3f50cf532563e8fc087040d3755bba46e54249ef3b",
+    "signed_sha256": "d9d874e82001251c4b42214a64a603354b9c47006a6952faaf7faae6d1ea5969",
+    "signed_bytes": 12798836,
+    "certificate_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
+    "zip_crc": "PASS",
+    "zipalign_16k": "PASS",
+    "temporary_private_material": "CLEANED_BY_TEMPORARY_DIRECTORY"
+  },
+  "private_delivery_verification": "private-delivery-verification.json",
+  "final_label_ci": "label-final/ci/android-status.json",
+  "final_label_focused": {
+    "tests": 28,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "isolated_native_screenshots": {
+    "tests": 8,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "locales": 4,
+    "font_scales": [
+      1,
+      2
+    ],
+    "measured_overflow_or_truncation_findings": 0
+  },
+  "local_builds": {
+    "full_debug": "PASS",
+    "app_and_data_instrumentation_apk": "PASS",
+    "full_release": "PASS",
+    "lint_full_debug": "PASS",
+    "lint_errors": 0,
+    "lint_warnings": 174
+  },
+  "combined_native_robolectric_failure": {
+    "tests": 36,
+    "failures": 1,
+    "cause_observed": "Compose test frame executed view layout from DefaultDispatcher in mixed native screenshot/non-native Robolectric invocation",
+    "status": "PRESERVED; 28 functional and 8 native screenshot tests separately PASS; final full GitHub suite and real native device suite PASS; permanent mixed-run harness root cause not proven",
+    "evidence": "label-final/combined-native-robolectric-thread-failure.xml"
+  },
+  "apk_size": {
+    "matching_build_configuration": true,
+    "before_source": "470b194 (production source same as starting b46dbf6)",
+    "after_source": "e98d5e033e4e9b757be5daefed102bf5900ae29b",
+    "before_unsigned_bytes": 12743143,
+    "after_unsigned_bytes": 12755451,
+    "delta_bytes": 12308,
+    "delta_percent": 0.09658527727420818
+  }
+}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.pk.experimental.M2OnlyNumericalContractTest" tests="3" skipped="0" failures="1" errors="0" timestamp="2026-10-12T08:21:16.924Z" hostname="e1be2d0ad0c2" time="1.155">
+  <properties/>
+  <testcase name="oneAndTwoMgTruePeaksAllRequestedAreasAndLateValuesMatchIndependentMath()" classname="net.plainnotes.app.pk.experimental.M2OnlyNumericalContractTest" time="1.032"/>
+  <testcase name="fixedCandidateHashVersionAndPriceProjectionCannotRegressToExample()" classname="net.plainnotes.app.pk.experimental.M2OnlyNumericalContractTest" time="0.013">
+    <failure message="org.opentest4j.AssertionFailedError: expected: &lt;baedffcd847287c67a3f39e92eb46f66e784a0fb8782507b8054e3abbb79776f&gt; but was: &lt;76467b35b1d032058e272f600cbd580d0777d82266fe3740613e23f4d81c3a20&gt;" type="org.opentest4j.AssertionFailedError">org.opentest4j.AssertionFailedError: expected: &lt;baedffcd847287c67a3f39e92eb46f66e784a0fb8782507b8054e3abbb79776f&gt; but was: &lt;76467b35b1d032058e272f600cbd580d0777d82266fe3740613e23f4d81c3a20&gt;
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:197)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:182)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:177)
+	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:1145)
+	at net.plainnotes.app.pk.experimental.M2OnlyNumericalContractTest.fixedCandidateHashVersionAndPriceProjectionCannotRegressToExample(M2OnlyNumericalContractTest.kt:16)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+</failure>
+  </testcase>
+  <testcase name="recordedTimestampSuperpositionAddsBackgroundOnceAndNeverInventsDoses()" classname="net.plainnotes.app.pk.experimental.M2OnlyNumericalContractTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

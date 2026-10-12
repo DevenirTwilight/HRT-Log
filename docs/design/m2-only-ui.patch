@@ -1,0 +1,118 @@
+diff --git a/app/src/main/java/net/plainnotes/app/ui/AppShell.kt b/app/src/main/java/net/plainnotes/app/ui/AppShell.kt
+index d4c402a..38eb28e 100644
+--- a/app/src/main/java/net/plainnotes/app/ui/AppShell.kt
++++ b/app/src/main/java/net/plainnotes/app/ui/AppShell.kt
+@@ -174,8 +174,8 @@ class UiPrefs(context: Context) {
+                     onAppointment = { visitId = it.id; destination = Destination.VISITS })
+                 Destination.MEDICATIONS -> MedicationsScreen(state, { model.edit(null) }, { model.edit(it) }, { archive = it }, pad)
+                 Destination.CONCENTRATION -> net.plainnotes.app.experimental.UnifiedConcentrationScreen(extra.records, state.ruleSnapshots, extra.labs, pad,
+-                    legacyContent = { innerPad, preview, selector -> ConcentrationScreen(state, conc.result, conc.loading, conc.weight, concSettings, { concSettings = it; prefs.conc = it },
+-                        { model.setWeight(it) }, { model.editById(it) }, { destination = Destination.LABS }, innerPad,extra.records,state.profiles,model::confirmHistoricalContext,{destination=Destination.HISTORY},preview,selector) })
++                    content = { innerPad, preview, selector -> ConcentrationScreen(state, conc.result, conc.loading, conc.weight, concSettings, { concSettings = it; prefs.conc = it },
++                        { model.setWeight(it) }, { model.editById(it) }, { destination = Destination.LABS }, innerPad,extra.records,state.profiles,model::confirmHistoricalContext,{destination=Destination.HISTORY},preview,selector,m2Only=true) })
+                 Destination.LABS -> LabsScreen(extra.labs, conc.doseTimes, { labEdit = it; labNew = it == null }, { model.deleteLab(it) }, pad,extra.labContexts,{v,estimate->model.rebuildLabContext(v,estimate)})
+                 Destination.SETTINGS -> SettingsScreen(appearance, onAppearance, highReliability, { highReliability = it; prefs.highReliability = it; model.sync() },
+                     { model.sync() }, { model.testReminder() }, pad, wellbeingPrompt, { wellbeingPrompt = it; prefs.wellbeingPrompt = it }) {
+diff --git a/app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt b/app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt
+index cb8a634..b1d1eb7 100644
+--- a/app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt
++++ b/app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt
+@@ -38,7 +38,7 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
+ @Composable fun ConcentrationScreen(state: NotesState, result: ConcentrationResult?, loading: Boolean, weight: Double?, settings: ConcSettings,
+                                     onSettings: (ConcSettings) -> Unit, onWeight: (Double) -> Unit, onEditMedication: (Long) -> Unit, onOpenLabs: () -> Unit,
+                                     contentPadding: PaddingValues,records:List<net.plainnotes.app.data.RecordEntity> = emptyList(),profiles:Map<Long,net.plainnotes.app.data.ProfileEntity> = emptyMap(),
+-                                    onConfirmHistory:(net.plainnotes.app.data.MedicationEntity,net.plainnotes.app.data.ProfileEntity?,java.time.LocalDate,java.time.LocalDate)->Unit={_,_,_,_->},onOpenHistory:()->Unit={}, preview:net.plainnotes.app.experimental.ConcentrationPreview?=null, modelSelector:@Composable ()->Unit={}) {
++                                    onConfirmHistory:(net.plainnotes.app.data.MedicationEntity,net.plainnotes.app.data.ProfileEntity?,java.time.LocalDate,java.time.LocalDate)->Unit={_,_,_,_->},onOpenHistory:()->Unit={}, preview:net.plainnotes.app.experimental.ConcentrationPreview?=null, referenceNotice:@Composable ()->Unit={}, m2Only:Boolean=false) {
+     var repair by remember{mutableStateOf<net.plainnotes.app.data.MedicationEntity?>(null)}
+     var editWeight by remember { mutableStateOf(false) }
+     val factor = if (settings.pmol) Pk.PMOL_PER_PG else 1.0
+@@ -53,7 +53,7 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
+                 Text(stringResource(R.string.pk_disclaimer_short), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSecondaryContainer)
+             }
+         }
+-        modelSelector()
++        referenceNotice()
+         val missing = result?.missing.orEmpty()
+         if (missing.any { it.medicationId == null && it.input == MissingInput.WEIGHT }) SectionCard(stringResource(R.string.pk_need_weight_title)) {
+             Text(stringResource(R.string.pk_need_weight_body), style = MaterialTheme.typography.bodyMedium)
+@@ -88,10 +88,13 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
+         }
+         if (state.medications.none { it.molecule in listOf("E2", "CPA", "SPI", "P4") }) EmptyState(Icons.AutoMirrored.Outlined.ShowChart, stringResource(R.string.pk_no_e2_title), stringResource(R.string.pk_no_e2_body))
+ 
+-        if (result != null && (preview?.timeH ?: result.timeH).isNotEmpty() && (preview != null || result.models.containsKey(Curve.E2))) {
++        val compatibilityHasSl = result?.models?.get(Curve.E2)?.any { it.key=="E2_SL" } == true
++        val allowE2 = !m2Only || preview!=null || !compatibilityHasSl
++        if(m2Only && preview==null && compatibilityHasSl) Text(stringResource(R.string.m2_compatibility_contains_sl),style=MaterialTheme.typography.bodySmall,modifier=Modifier.testTag("m2-unsafe-compatibility"))
++        if (allowE2 && result != null && (preview?.timeH ?: result.timeH).isNotEmpty() && (preview != null || result.models.containsKey(Curve.E2))) {
+             ElevatedCard(Modifier.fillMaxWidth(), colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.primaryContainer), elevation = CardDefaults.elevatedCardElevation(0.dp)) {
+                 Column(Modifier.padding(20.dp)) {
+-                    Text(stringResource(if(preview==null) R.string.pk_current else R.string.uc_original_scenario), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onPrimaryContainer)
++                    Text(stringResource(if(preview!=null) R.string.m2_reference_title else if(m2Only) R.string.m2_compatibility_current else R.string.pk_current), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                     Row(verticalAlignment = Alignment.Bottom) {
+                         Text((if(preview==null) result.currentPgMl else preview.currentPgMl)?.let(::fmt) ?: "—", style = MaterialTheme.typography.displayMedium, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                         Spacer(Modifier.width(6.dp))
+@@ -106,7 +109,7 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
+             var rangeDays by remember { mutableIntStateOf(14) }
+             var fullBand by remember { mutableStateOf(false) }
+             SectionCard(null) {
+-                Text(stringResource(R.string.pk_chart_title),style=MaterialTheme.typography.titleMedium)
++                Text(stringResource(if(preview!=null) R.string.m2_chart_title else if(m2Only) R.string.m2_compatibility_chart else R.string.pk_chart_title),style=MaterialTheme.typography.titleMedium)
+                 val ranges=listOf(7,14,60)
+                 AdaptiveChoice(ranges.map{stringResource(R.string.days_short,it)},ranges.indexOf(rangeDays),{rangeDays=ranges[it]})
+                 val data = ChartData(preview?.timeH ?: result.timeH, (preview?.values ?: result.e2).let { values -> DoubleArray(values.size) { values[it] * factor } },
+@@ -116,12 +119,14 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
+                 key(rangeDays) {
+                     ConcChart(data, result.nowH - rangeDays * 24 * 0.75, result.nowH + rangeDays * 24 * 0.25, Modifier.fillMaxWidth().height(260.dp).then(if(preview!=null) Modifier.testTag("unified-chart") else Modifier)) { if(it>=10)it.roundToInt().toString() else chartNumber.format(it) }
+                 }
+-                SwitchRow(stringResource(R.string.chart_full_band),fullBand){fullBand=it}
+-                if(!fullBand)Text(stringResource(R.string.chart_scale_note),style=MaterialTheme.typography.bodySmall)
++                if(preview==null) {
++                    SwitchRow(stringResource(R.string.chart_full_band),fullBand){fullBand=it}
++                    if(!fullBand)Text(stringResource(R.string.chart_scale_note),style=MaterialTheme.typography.bodySmall)
++                }
+                 FlowRow(horizontalArrangement = Arrangement.spacedBy(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                     Legend(stringResource(R.string.legend_recorded), MaterialTheme.colorScheme.primary, dashed = false)
+                     Legend(stringResource(if(preview==null) R.string.legend_forecast else R.string.uc_original_tail), MaterialTheme.colorScheme.primary, dashed = true)
+-                    if (result.labs.isNotEmpty()) Legend(stringResource(R.string.legend_labs), MaterialTheme.colorScheme.tertiary, dot = true)
++                    if (result.labs.isNotEmpty()) Legend(stringResource(if(preview!=null) R.string.m2_observed_labs else R.string.legend_labs), MaterialTheme.colorScheme.tertiary, dot = true)
+                     if (preview==null && result.bandInner != null) Legend(stringResource(R.string.legend_band_inner), MaterialTheme.colorScheme.primary.copy(alpha = 0.3f), block = true)
+                     if (preview==null && result.bandOuter != null) Legend(stringResource(R.string.legend_band_outer), MaterialTheme.colorScheme.primary.copy(alpha = 0.15f), block = true)
+                 }
+@@ -131,12 +136,18 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
+                 AdaptiveChoice(listOf("pg/mL","pmol/L"),if(settings.pmol)1 else 0,{onSettings(ConcSettings(it==1,settings.calibrate,settings.mode))})
+             }
+         } else if (loading) Box(Modifier.fillMaxWidth().padding(32.dp), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
+-        else if (result != null && result.simulatedMedications.isNotEmpty() && result.others.isEmpty())
++        else if (preview==null && result != null && result.simulatedMedications.isNotEmpty() && result.others.isEmpty())
+             EmptyState(Icons.AutoMirrored.Outlined.ShowChart, stringResource(R.string.pk_no_doses_title), stringResource(R.string.pk_no_doses_body))
+ 
+         if (result != null && result.others.isNotEmpty()) OtherCurvesCard(result)
+ 
+-        CalibrationCard(result, settings, onSettings, onOpenLabs, ::fmt, unit)
++        if(m2Only && (preview!=null || compatibilityHasSl)) SectionCard(stringResource(R.string.calib_title)) {
++            Text(stringResource(R.string.m2_calibration_unavailable),style=MaterialTheme.typography.bodySmall,modifier=Modifier.testTag("m2-calibration-unavailable"))
++            OutlinedButton(onClick=onOpenLabs,modifier=Modifier.heightIn(min=48.dp)) { Text(stringResource(R.string.calib_manage_labs)) }
++        } else {
++            if(m2Only) Text(stringResource(R.string.m2_calibration_compatibility_scope),style=MaterialTheme.typography.bodySmall)
++            CalibrationCard(result, settings, onSettings, onOpenLabs, ::fmt, unit)
++        }
+ 
+         SectionCard(stringResource(R.string.pk_model_title)) {
+             Row(verticalAlignment = Alignment.CenterVertically) {
+@@ -146,12 +157,13 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
+                 }
+                 TextButton(onClick = { editWeight = true }) { Text(stringResource(R.string.edit)) }
+             }
+-            Text(stringResource(R.string.pk_weight_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
++            Text(stringResource(if(m2Only && preview!=null) R.string.m2_weight_scope else R.string.pk_weight_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+             HorizontalDivider()
+-            Text(stringResource(R.string.pk_assumptions), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
++            Text(stringResource(if(m2Only && preview!=null) R.string.m2_parameter_scope else R.string.pk_assumptions), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+             Text(stringResource(R.string.pk_source), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+         }
+-        if (result != null && result.models.isNotEmpty()) ModelsCard(result.models)
++        val visibleModels=if(m2Only) result?.models.orEmpty().filterKeys { preview==null && !compatibilityHasSl || it!=Curve.E2 }.mapValues { (_,models) -> models.filterNot { it.key=="E2_SL" }.toSet() }.filterValues { it.isNotEmpty() } else result?.models.orEmpty()
++        if (visibleModels.isNotEmpty()) ModelsCard(visibleModels)
+     }
+     repair?.let{med->HistoricalContextDialog(med,profiles[med.id],records.map{r->r.copy(config_snapshot=net.plainnotes.app.data.HistoricalContext.resolved(r,state.ruleSnapshots))},{repair=null}){m,p,from,to->onConfirmHistory(m,p,from,to);repair=null}}
+     if (editWeight) WeightDialog(weight, { editWeight = false }) { onWeight(it); editWeight = false }

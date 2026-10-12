@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="uc_overlay">Overlay models</string>
+    <string name="uc_legacy_note">Legacy historical estimate; clinical accuracy is not established. Original algorithm and calibration settings are retained.</string>
+    <string name="uc_common_comparison">Compare under common assumptions</string>
+    <string name="uc_research_note">M2 / M1 research curves. Conditional values are not personal predictions or measured concentrations. Legacy is retained for compatibility, not treated as a verified standard.</string>
+    <string name="uc_conditional">Conditional concentration</string>
+    <string name="uc_study">Price 1997 cohort scenario</string>
+    <string name="uc_relative">Relative shapes</string>
+    <string name="uc_assumptions">C(t) = B + A × H(t). Initial B=25 and A=100 pg/mL are arbitrary examples, editable by you, never your measured baseline or amplitude. The same B/A applies to every model. Labs do not calibrate these curves.</string>
+    <string name="uc_background">Assumed B (pg/mL)</string>
+    <string name="uc_amplitude">Assumed 1 mg / 1 h increment A (pg/mL)</string>
+    <string name="uc_invalid">Enter finite B ≥ 0 and A &gt; 0. NaN and infinity are not supported.</string>
+    <string name="uc_relative_protocol">Each fixed kernel is normalized to its own single 1 mg response at 1 h; identical dose/time reference, dimensionless shape differences only.</string>
+    <string name="uc_m2_candidate">M2 fixed candidate</string>
+    <string name="uc_m1_candidate">M1 / P2-AZ research candidate</string>
+    <string name="uc_version">M2 %1$s · %2$s\nM1 %3$s · %4$s</string>
+    <string name="uc_selection">M2: 15 frozen P2-X candidates. M1: 32 P2-AZ grid candidates, not P2-V. Manual ID selection; first ID/order is not an accuracy ranking or fitted winner. No pointwise median model. Legacy uses saved hold-time tiers; M1/M2 do not estimate hold-time effects.</string>
+    <string name="uc_calendar">Last 7 days</string>
+    <string name="uc_origin">Origin dose</string>
+    <string name="uc_single">Selected single dose</string>
+    <string name="uc_history">Recorded repeated doses</string>
+    <string name="uc_error">Model calculation failed. No values are presented as valid.</string>
+    <string name="uc_empty">No eligible recorded sublingual E2 doses. Other compounds/routes remain available in Legacy historical view.</string>
+    <string name="uc_relative_unit">Relative response (dimensionless)</string>
+    <string name="uc_calibration">Common B=%1$s, A=%2$s pg/mL · H(1 h)=1 for one 1 mg dose</string>
+    <string name="uc_price_protocol">Price 1997 Figure 1: six postmenopausal women, micronized SL E2, one 1 mg dose. Not your history or personal prediction. B is the selected candidate’s frozen study assumption; common A=450−B from the manually read 1 h group mean. This shared comparison protocol is not each candidate’s original weighted P2-X amplitude fit. Legacy uses assumed tier 2 (10 min), not a verified Price hold-time observation.</string>
+    <string name="uc_price_conflict">Figure trapezoid with assumed zero predose: %1$s pg·h/mL; Table 1 predose-subtracted mean: %2$s ±1031 pg·h/mL. The discrepancy remains unresolved; parameters are not changed to force agreement.</string>
+    <string name="uc_chart_description">Shared model chart: %1$s; %2$s</string>
+    <string name="uc_study_points">Dots: manually read published group means; bars: reading widths, not study SD or personal labs.</string>
+    <string name="uc_lab_points">Dots in conditional mode: real lab observations, separate from assumed model curves; never used to fit B/A. Relative mode omits concentration dots.</string>
+    <string name="uc_range_tail" formatted="false">Band: explored 15-candidate range, not a 90% human confidence or prediction interval. Shading: no preceding eligible dose, or more than 8 h since the latest dose; the 8–24 h tail is highly uncertain. M2 retrospective shape evidence does not establish personal absolute accuracy; it does not always beat M1.</string>
+    <string name="uc_readout">Exact model readout</string>
+    <string name="uc_tap">Tap the chart to compare the same instant.</string>
+    <string name="uc_metrics_note">0–24 h metrics after the origin. Recorded earlier/later doses in the window are included unless single-dose selected. AUC integrates H in relative mode and B+A×H in concentration scenarios on a 1-minute grid; concentrations and AUC share the selected unit. No future schedule is invented.</string>
+    <string name="uc_peak">Peak %1$s %2$s at +%3$s h</string>
+    <string name="uc_auc">AUC 0–4 / 0–8 / 0–24 h: %1$s / %2$s / %3$s %4$s</string>
+    <string name="uc_coverage">Used %1$d doses; omitted beyond 30-day look-back %2$d; excluded by history audit %3$d.</string>
+    <string name="uc_scenario_concentration">%1$s scenario concentration</string>
+    <string name="uc_scenario_time">Selected time: +%1$s h after the reference dose</string>
+    <string name="uc_scenario_only">Assumption-based curve, not a personal prediction or measured concentration.</string>
+    <string name="uc_research_settings">Model comparison settings</string>
+    <string name="uc_original_scenario">SL E2 literature scenario</string>
+    <string name="uc_original_assumptions">Price Figure 1 group-amplitude scenario, not a validated personal or total E2 prediction.</string>
+    <string name="uc_original_tail">Research tail</string>
+    <string name="uc_original_peaks">Isolated 1 mg: Cmax %1$s pg/mL at +%2$s h. Latest-dose 24 h history window (including earlier residuals): peak %3$s pg/mL at +%4$s h.</string>
+    <string name="uc_preview_loading">Loading recorded sublingual E2 doses and calculating the selected research curve…</string>
+    <string name="uc_preview_failed">The research curve could not be calculated. Your records have not been changed. Select Legacy to view the original calculation.</string>
+    <string name="m2_chart_title">M2 sublingual E2 literature scenario (not a personal prediction)</string>
+    <string name="m2_partial_scope">This reference includes only qualified recorded sublingual E2. Other E2 routes or unknown records are present; a combined total E2 concentration is unavailable. Their compatibility calculations and history are retained.</string>
+    <string name="m2_compatibility_scope">M2 applies only to sublingual free E2. Other routes use the existing compatibility calculation, with its own parameters and calibration.</string>
+    <string name="m2_no_qualified_history">No qualified sublingual E2 history is available for M2. Repair missing historical information; no old sublingual prediction is substituted.</string>
+    <string name="m2_compatibility_contains_sl">The compatibility result contains a sublingual component. It cannot be shown as M2 or as an isolated other-route result; a combined E2 total is unavailable.</string>
+    <string name="m2_compatibility_current">Other-route E2 · compatibility calculation</string>
+    <string name="m2_compatibility_chart">Other-route E2 curve</string>
+    <string name="m2_observed_labs">Measured labs · not used to fit M2</string>
+    <string name="m2_calibration_unavailable">M2 is a literature reference scenario, without personal lab calibration. Measured labs remain separate observations.</string>
+    <string name="m2_calibration_compatibility_scope">This calibration applies only to the other-route compatibility result, not to M2.</string>
+    <string name="m2_weight_scope">Weight is retained for other compatible medicines; it does not scale the M2 reference.</string>
+    <string name="m2_parameter_scope">M2 uses the fixed candidate and Price Figure 1 anchor stated above. The following compatibility assumptions concern other routes and medicines.</string>
+    <string name="m2_retry_reference">Retry reference calculation</string>
+    <string name="m2_scenario_title">Sublingual E2 literature scenario (not your blood level)</string>
+    <string name="m2_scenario_body">This curve applies the shape and size of one small study (Price 1997, average of 6 postmenopausal women) to your recorded sublingual estradiol doses and times. It is a conditional literature scenario, not a prediction of your own blood level, and must not be used to judge levels or adjust doses. Individual size, background, repeated dosing and the 8–24 h tail are not adequately validated.</string>
+    <string name="m2_scenario_unit">%1$s · scenario</string>
+    <string name="m2_scenario_as_of">Scenario calculated at %1$s</string>
+    <string name="m2_research_basis">Research basis</string>
+    <string name="m2_research_basis_hide">Hide research basis</string>
+    <string name="m2_research_basis_body">%1$s candidate %2$s (%3$s). Assumed background B = %4$s pg/mL; amplitude A ≈ %5$s pg/mL for 1 mg at 1 h, fitted to the Price 1997 Figure 1 group mean of 6 postmenopausal women. That population differs from people using HRT; individual amplitude, background, dose linearity, repeated-dose accumulation and the 8–24 h tail are not independently validated. Measured labs are listed separately and are never fitted to this curve.</string>
+    <string name="m2_labs_separate_note">Measured total E2, listed separately. Not comparable with the scenario curve above.</string>
+    <string name="lab_estimate_sl_unavailable">Individual sublingual E2 model estimate unavailable: the old sublingual prediction has been retired, and M2 is a group literature scenario that does not give personal values.</string>
+    <string name="report_mixed_no_total_e2">Sublingual and other E2 routes are both recorded; no combined total E2 estimate is given.</string>
+</resources>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="uc_overlay">疊加模型</string>
+    <string name="uc_legacy_note">Legacy 歷史估算，尚未確立個人臨床準確性。保留原演算法及校準設定。</string>
+    <string name="uc_common_comparison">檢視共同條件比較</string>
+    <string name="uc_research_note">M2 / M1 研究曲線。條件濃度不是個人預測或實測值。Legacy 用於相容，不被視為已驗證標準。</string>
+    <string name="uc_conditional">條件濃度情景</string>
+    <string name="uc_study">Price 1997 文獻情景</string>
+    <string name="uc_relative">相對曲線</string>
+    <string name="uc_assumptions">C(t) = B + A × H(t)。初值 B=25、A=100 pg/mL 是人為範例，可自行編輯，絕非個人實測背景或幅度。所有模型使用相同 B/A；化驗點不用於標定。</string>
+    <string name="uc_background">假設背景 B（pg/mL）</string>
+    <string name="uc_amplitude">假設 1 mg / 1 h 增量 A（pg/mL）</string>
+    <string name="uc_invalid">請輸入有限 B ≥ 0、A &gt; 0；不接受 NaN 或無窮大。</string>
+    <string name="uc_relative_protocol">每個固定核均以自身單次 1 mg 給藥後 1 h 響應歸一；共同劑量和時點參照，僅比較無量綱形狀。</string>
+    <string name="uc_m2_candidate">M2 固定候選</string>
+    <string name="uc_m1_candidate">M1 / P2-AZ 研究候選</string>
+    <string name="uc_version">M2 %1$s · %2$s\nM1 %3$s · %4$s</string>
+    <string name="uc_selection">M2：15 套 P2-X 凍結候選。M1：32 套 P2-AZ 網格候選，不是 P2-V。按 ID 手動選擇，首項及順序不是準確度排序或擬合贏家；不拼接逐點中位模型。Legacy 使用歷史含服檔位，M1/M2 不估計含服影響。</string>
+    <string name="uc_calendar">最近 7 天</string>
+    <string name="uc_origin">起點劑量</string>
+    <string name="uc_single">選定單次給藥</string>
+    <string name="uc_history">真實重複給藥歷史</string>
+    <string name="uc_error">模型計算失敗，不展示為有效結果。</string>
+    <string name="uc_empty">沒有符合條件的已服用舌下 E2 記錄。其他藥物及途徑仍可在 Legacy 歷史檢視查看。</string>
+    <string name="uc_relative_unit">相對響應（無量綱）</string>
+    <string name="uc_calibration">共同 B=%1$s、A=%2$s pg/mL · 單次 1 mg 的 H(1 h)=1</string>
+    <string name="uc_price_protocol">Price 1997 Figure 1：6 名停經後女性，微粒化舌下 E2、單次 1 mg。不是個人歷史或預測。B 為選定候選的凍結研究假設；共同 A=450−B，來自手工讀圖的 1 h 群體均值。此共同比較協議不是每個候選原有 P2-X 加權幅度擬合。 Legacy使用假設的第2檔（10分鐘），並非Price研究已核實的含服時長。</string>
+    <string name="uc_price_conflict">讀圖並假設給藥前為零的梯形面積：%1$s pg·h/mL；Table 1 扣給藥前均值：%2$s ±1031 pg·h/mL。差異未解決，不調整參數強行吻合。</string>
+    <string name="uc_chart_description">共同模型圖表：%1$s；%2$s</string>
+    <string name="uc_study_points">圓點：手工讀圖的發表群體均值；誤差線：讀圖寬度，不是研究 SD 或個人化驗。</string>
+    <string name="uc_lab_points">條件模式圓點：真實化驗觀測，與假設模型曲線分開，不用於擬合 B/A。相對模式不混入濃度點。</string>
+    <string name="uc_range_tail" formatted="false">帶狀區域為所探索15套候選的範圍，不是人體90%信賴區間或預測區間。陰影表示沒有此前合格給藥，或距最近給藥超過8小時；8–24小時尾部高度不確定。M2回顧性形狀證據不證明個人絕對濃度準確性，也不表示M2總優於M1。</string>
+    <string name="uc_readout">精確模型讀數</string>
+    <string name="uc_tap">點擊圖表比較同一時刻。</string>
+    <string name="uc_metrics_note">指標為原點後0–24小時，除單劑模式外包含視窗內已記錄的前後給藥。AUC在相對模式積分H，在濃度情景積分B+A×H，步長1分鐘；濃度和AUC使用所選單位。不虛構未來給藥。</string>
+    <string name="uc_peak">峰值 %1$s %2$s；峰時 +%3$s h</string>
+    <string name="uc_auc">AUC 0–4 / 0–8 / 0–24 h：%1$s / %2$s / %3$s %4$s</string>
+    <string name="uc_coverage">使用 %1$d 次劑量；超出 30 天回看省略 %2$d；歷史審核排除 %3$d。</string>
+    <string name="uc_scenario_concentration">%1$s 情境濃度</string>
+    <string name="uc_scenario_time">顯示時刻：參考給藥後 +%1$s h</string>
+    <string name="uc_scenario_only">基於明確假設的曲線，非個人預測或實測濃度。</string>
+    <string name="uc_research_settings">模型比較設定</string>
+    <string name="uc_original_scenario">舌下E2文獻情景</string>
+    <string name="uc_original_assumptions">Price圖1群體幅度情景，非經驗證的個人或總E2預測。</string>
+    <string name="uc_original_tail">研究尾部</string>
+    <string name="uc_original_peaks">單次1mg參考：Cmax %1$s pg/mL，Tmax +%2$s h。最新劑量後24h歷史視窗（含前劑殘留）：峰值%3$s pg/mL，峰時+%4$s h。</string>
+    <string name="uc_preview_loading">正在讀取舌下E2記錄並計算所選研究曲線…</string>
+    <string name="uc_preview_failed">研究曲線計算失敗，服藥記錄未改動。可選擇Legacy查看原計算結果。</string>
+    <string name="m2_chart_title">M2 舌下 E2 文獻情境曲線（非個人預測）</string>
+    <string name="m2_partial_scope">本參考曲線僅含已確認的舌下 E2 記錄。另有其他 E2 途徑或未知記錄，暫不提供合併的總 E2 濃度；其相容計算和歷史仍保留。</string>
+    <string name="m2_compatibility_scope">M2 僅適用於舌下游離 E2。其他途徑使用原相容計算及其獨立參數與校準。</string>
+    <string name="m2_no_qualified_history">暫無可用於 M2 的完整舌下 E2 歷史。請補全缺失的歷史資訊；不會用舊舌下預測代替。</string>
+    <string name="m2_compatibility_contains_sl">相容結果含舌下分量，不能顯示為 M2 或其他途徑的獨立結果；暫不提供合併的總 E2 濃度。</string>
+    <string name="m2_compatibility_current">其他途徑 E2 · 相容計算</string>
+    <string name="m2_compatibility_chart">其他途徑 E2 曲線</string>
+    <string name="m2_observed_labs">實際化驗 · 未用於 M2 擬合</string>
+    <string name="m2_calibration_unavailable">M2 為文獻參考情景，未進行個人化驗校準。實際化驗仍作為獨立觀察保留。</string>
+    <string name="m2_calibration_compatibility_scope">此校準僅適用於其他途徑的相容結果，不作用於 M2。</string>
+    <string name="m2_weight_scope">體重保留用於其他相容藥物，不縮放 M2 參考濃度。</string>
+    <string name="m2_parameter_scope">M2 使用上方標明的固定候選與 Price Figure 1 標定。以下相容假設僅涉及其他途徑和藥物。</string>
+    <string name="m2_retry_reference">重試參考計算</string>
+    <string name="m2_scenario_title">舌下 E2 文獻情境（不是你的血中濃度）</string>
+    <string name="m2_scenario_body">這條曲線把一項小樣本研究（Price 1997，6 名停經後女性的平均值）的曲線形狀和幅度，套用到你記錄的舌下雌二醇劑量和時間上。它是條件性文獻情境，不是對你個人血中濃度的預測，不能用來判斷高低或調整劑量。個人幅度、基線、重複給藥和 8–24 小時長尾都沒有經過充分驗證。</string>
+    <string name="m2_scenario_unit">%1$s（情境值）</string>
+    <string name="m2_scenario_as_of">情境計算於 %1$s</string>
+    <string name="m2_research_basis">研究依據</string>
+    <string name="m2_research_basis_hide">收起研究依據</string>
+    <string name="m2_research_basis_body">%1$s 候選 %2$s（%3$s）。假設背景 B = %4$s pg/mL；1 mg 在 1 小時的幅度 A ≈ %5$s pg/mL，按 Price 1997 圖 1 中 6 名停經後女性的組平均值擬合。該族群與 HRT 使用者不同；個人幅度、背景、劑量線性、重複給藥累積和 8–24 小時尾部都沒有經過獨立驗證。實測化驗單獨列出，從不用於擬合這條曲線。</string>
+    <string name="m2_labs_separate_note">實測總 E2，單獨列出，不能與上方情境曲線直接比較。</string>
+    <string name="lab_estimate_sl_unavailable">舌下 E2 個體模型估算暫不可用：舊的舌下預測已退役，M2 只是群體文獻情境，不提供個人數值。</string>
+    <string name="report_mixed_no_total_e2">同時記錄了舌下和其他途徑的 E2，不提供合併的總 E2 估算。</string>
+</resources>

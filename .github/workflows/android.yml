@@ -16,10 +16,21 @@ jobs:
           java-version: '21'
       - uses: gradle/actions/setup-gradle@0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d
       - run: ./gradlew -PjvmOnly :core:domain:test :pk-engine:test :importer:test --rerun-tasks --no-parallel --max-workers=2
+      # Two-domain guard (audit B0, D-13): the historical domain reads the frozen baseline commit, the recorded research
+      # run, deviation commits and display-approval evidence from git objects. A shallow checkout lacks them; the guard
+      # lists what it needs (--required-commits) and a failed fetch fails the job. d892e9b is the F1 record's short SHA.
+      - name: Fetch frozen P2 history objects
+        run: |
+          commits="d892e9b7ea9d933687c18b5ca2fd3f605b0d1118 $(python3 tools/pk-research/check_protocol.py --required-commits)"
+          git fetch --no-tags --depth=1 origin $commits
+          for c in $commits; do git cat-file -e "$c^{commit}"; done
       - name: Frozen P2 independent research mathematics
         run: |
           python3 -m unittest discover -s tools/pk-research -p 'test_*.py'
           python3 tools/pk-research/research.py --output /tmp/hrt-p2-ci
+          python3 scripts/generate_unified_model_reference.py --check
+          python3 scripts/check_unified_concentration.py
+          python3 -m unittest discover -s scripts -p 'test_collect_unified_device_performance.py'
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
@@ -58,6 +69,13 @@ jobs:
           python3 tools/pk-audit/sublingual_p1c1_compare.py --after docs/pk-research/results/sublingual-p1c1-after.json --engine docs/pk-research/results/sublingual-p1c1-engine.json --calculator docs/pk-research/results/sublingual-p1c1-calculator.json --eligibility docs/pk-research/results/sublingual-p1c1-eligibility.json --output app/build/reports/pk-p1c1-comparison
           python3 tools/pk-audit/sublingual_p1c2_compare.py --output app/build/reports/pk-p1c2-comparison
       - run: python3 scripts/check_release_manifest.py
+      # Audit B1 / D-4: the R8-shrunk Release APK must name exactly this commit from a clean checkout, and the delivery
+      # ledger keeps delivered versionCodes strictly increasing (source, APK and certificate identities kept apart).
+      - name: Release APK source identity and delivery ledger
+        run: |
+          python3 -m unittest discover -s scripts -p 'test_*.py'
+          python3 scripts/delivery_ledger.py check
+          python3 scripts/apk_provenance.py "$ANDROID_HOME/build-tools/37.0.0" app/build/outputs/apk/full/release/app-full-release-unsigned.apk --expect-source-sha "$GITHUB_SHA"
       - run: git diff --exit-code -- core/data/schemas docs/PLAN.md
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
@@ -106,7 +124,10 @@ jobs:
           disable-animations: true
           script: |
             ./gradlew :core:data:connectedDebugAndroidTest --no-parallel --max-workers=2
+            adb logcat -G 16M
             ./gradlew :app:connectedFullDebugAndroidTest --no-parallel --max-workers=2
+            python3 scripts/collect_unified_device_performance.py --output app/build/reports/unified-device-performance.json
+            python3 scripts/collect_pr19_display_performance.py
             python3 scripts/run_disguise_restart.py
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
@@ -115,3 +136,5 @@ jobs:
           path: |
             core/data/build/reports/androidTests/
             app/build/reports/androidTests/
+            app/build/reports/unified-device-performance.json
+            app/build/reports/pr19-display-performance.json

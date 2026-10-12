@@ -1,0 +1,56 @@
+[
+  {
+    "module": "domain",
+    "classes": 5,
+    "tests": 58,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "xml_source": "core/domain/build/test-results/test"
+  },
+  {
+    "module": "pk-engine",
+    "classes": 15,
+    "tests": 114,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "xml_source": "pk-engine/build/test-results/test"
+  },
+  {
+    "module": "importer",
+    "classes": 2,
+    "tests": 12,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "xml_source": "importer/build/test-results/test"
+  },
+  {
+    "module": "data",
+    "classes": 16,
+    "tests": 72,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "xml_source": "core/data/build/test-results/testDebugUnitTest"
+  },
+  {
+    "module": "reminder",
+    "classes": 5,
+    "tests": 14,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "xml_source": "core/reminder/build/test-results/testDebugUnitTest"
+  },
+  {
+    "module": "app",
+    "classes": 64,
+    "tests": 414,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 13,
+    "xml_source": "app/build/test-results/testFullDebugUnitTest"
+  }
+]

@@ -127,6 +127,7 @@ class Appearance(val mode: ThemeMode, val dynamic: Boolean, val contrast: Contra
             Text(stringResource(R.string.app_name), style = MaterialTheme.typography.headlineSmall)
             Text(stringResource(R.string.version, version), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
+        SourceIdentitySection(remember { SourceIdentity.current(context) })
         SectionCard(stringResource(R.string.privacy)) { Text(stringResource(R.string.privacy_body), style = MaterialTheme.typography.bodyMedium) }
         SectionCard(stringResource(R.string.credits)) { Text(stringResource(R.string.credits_body), style = MaterialTheme.typography.bodyMedium) }
         SectionCard(stringResource(R.string.chrysalide_title)) {
