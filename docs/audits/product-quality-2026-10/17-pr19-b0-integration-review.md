@@ -138,3 +138,4 @@ python3 -m unittest discover -s tools/pk-research -p 'test_*.py'   # 283 项：2
 - 先在 REQUIREMENTS §72 记录确认原文（提交 `0c3843c9175ea7788038cd27ece2168cbd7a0630`），再把审批记录的 `review_status` 改为 `OWNER_CONFIRMED`，新增 `owner_confirmation`（日期 2026-10-12，“事后人工核验”，证据指向 `0c3843c`）。
 - 原记录的日期 2026-10-11、证据提交 `425a7ab`、哈希 `f21a68d4… → 75152ada…`、“晚 23 分钟”的说明都原样保留，没有提前批准时间。
 - 守卫新增校验：记录了 `owner_confirmation` 时，必须有日期和完整提交，且该提交的文件中包含审批 id；CI 自动拉取该提交。新增负向测试：短 SHA、无关提交、缺日期都会失败。
+- CI（`b381d05`）：android.yml push 38278491154 / pull_request 38278499303，jvm、android、device-tests 全部 success；校准回放 38278491180 / 38278499243 success。

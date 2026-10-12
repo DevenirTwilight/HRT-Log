@@ -48,6 +48,8 @@
 
 未经再次批准：不合并 PR #19，不签名或发布 APK，不修改历史记录和生产 PK 内核。
 
+PR #19 head `b381d05` 的 CI 全部 success；合并建议已提交，等待产品负责人确认（建议 merge commit，不要 squash）。
+
 §60 审批（`PD-2026-10-11-ORIGINAL-UI-CONCENTRATIONSCREEN`）：**OWNER_CONFIRMED**，2026-10-12 事后人工核验（REQUIREMENTS §72）；原日期 2026-10-11、提交 `425a7ab`、晚 23 分钟的需求记录均保留。
 
 ## 已知阻断 / 守卫现状
