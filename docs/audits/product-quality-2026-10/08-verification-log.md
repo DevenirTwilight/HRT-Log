@@ -23,3 +23,22 @@
 | 仪器测试 / 截图 / TalkBack | **BLOCKED** | 无模拟器/设备 |
 | PR #19 私下交付 APK 的 SHA/证书核验 | **NOT_RUN** | 审计不持有 APK，也不访问签名材料 |
 | 用户手机安装版本 | **UNKNOWN** | 需产品负责人提供 |
+
+# 阶段 B–D 补充（2026-10-12）
+
+阶段 B–D 只做源码阅读、git 比较和 GitHub API 读取，**没有运行新的 Android 测试**（仍为 BLOCKED）。
+
+| # | 命令/操作 | 结果 |
+|---|---|---|
+| 10 | `git diff --stat f53726f aecbd7d -- . ':!docs'` 及受保护 UI 文件的完整 diff | PR #19：64 个非文档文件，+5081/−28；`NotesViewModel`/`export`/`LabEstimate`/数据层未改 |
+| 11 | `git show aecbd7d:<M2 源码>`（UnifiedConcentrationScreen、ConcentrationPreview、StudyAnchors、ResearchDisplayProtocol、PreparedResearchHistory、ResearchSublingualV01） | 已阅读，见 03 |
+| 12 | `git show 68ceac2:docs/pk-research/p2/p2ba-evidence-use/p2ba-results.json` | 能力矩阵已提取（`m2_absolute_pgml=false` 等） |
+| 13 | Python 脚本：比较四语 `strings.xml` 键集合 | en/zh/zh-Hant/fr 各 1069 键，缺失 0 |
+| 14 | Python 脚本：解析 `production-baseline.json` | 164 个被锁定的路径 |
+| 15 | `grep` 扫描 `@Ignore`/`assumeTrue` | 只有 `ExportTest`（PdfDocument）和 `ButtonAuditTest`（环境变量开关）是条件跳过 |
+| 16 | `git ls-files` 扫描密钥/数据库/APK/备份扩展名 | 只有 `app/debug.keystore`（标准调试密钥） |
+| 17 | GitHub API `search_repositories user:DevenirTwilight` | `HRT-Log` public，`-` private |
+| 18 | `git merge-base --is-ancestor <PR17 head> <PR19 head>` | 否；PR #19 自带 P2-AZ 输入副本 |
+| 19 | 读取仓库已提交截图 `docs/ui-audit/calendar_month_days_zh-rCN_2.0.png`、`2026-10-08-stock-after.png` | 前者是修复前的历史记录；后者显示历史包装列表 |
+
+仍然 BLOCKED/NOT_RUN：所有 Android 单测/仪器测试/lint/构建/APK 体积；新截图；TalkBack；物理设备；性能计时；PR #19 交付 APK 的核验。

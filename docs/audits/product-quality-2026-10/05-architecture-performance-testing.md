@@ -79,6 +79,24 @@
 - 守卫没有被普遍放宽：未登记的文件仍走原逻辑。但“授权”由修改代码的同一个代理写进守卫本身，属于**自我证明**。每次修改浓度页都要改守卫，维护成本持续上升。
 - 建议：授权记录只放在追加式 JSON 里，并要求附带用户确认的出处（PR 评论链接/提交）。守卫只验证链条完整，不内嵌具体条目。属于治理层面，需决策。
 
+### ARCH-10 [确认，P1，最高优先级治理问题] 科研冻结守卫实际上冻结了整个产品
+
+- **证据**：
+  - `docs/pk-research/p2/production-baseline.json`（start_sha `e89579a0…`，最后修改于 614ed16，2026-10-09）锁定了 **164 个文件**的 SHA-256。按目录：app/src 72、core/data 30、core/reminder 10、core/domain 8、pk-engine 6、core/ui 2、importer 2，外加研究文档 34。
+  - 被锁定的不只是 PK 代码，还包括 `MainActivity.kt`、`NotesViewModel.kt`、`Exports.kt`、`AppLock.kt`、全部 `ui/*.kt`，以及**四种语言的 `strings.xml`、`colors.xml`、`themes.xml`**。
+  - `tools/pk-research/test_research.py:107` 在 CI 的 jvm 作业中对**当前工作树**执行 `guard.check()`。
+  - `check_protocol.py` 只允许为 `app/src/main/java/net/plainnotes/app/ui/` 下、文件名不含 Conc/Lab/Chart 的文件登记偏离。**非 UI 文件和资源文件“永不豁免”**。
+- **后果**：
+  - 自 2026-10-09 起，修改 ViewModel、数据层、提醒、导出或任何翻译字符串的普通产品改动，都会让 CI 失败。
+  - 历史上已经发生：F1 修复导致 CI 失败（HANDOFF）。PR #19 为绕开锁定的 `strings.xml`，把新文案放进单独的 `strings_unified_concentration.xml`，并在守卫里硬编码授权（ARCH-8）。
+  - 06 中的 R-03/R-05/R-08/R-11/R-12 等任务，**在现行规则下无法合规地通过 CI**。
+- **根因**：研究的可复现性本应固定“研究输入在某个提交上的版本”（研究已经记录了 `start_sha`），却实现成了“禁止生产代码继续演进”。
+- **建议（需决策 D-13，不得由代理自行放宽）**：
+  - 只保留真正影响研究结论的锁定：`pk-params.json`、Engine/LabFit、研究数据和协议；
+  - 其他生产文件改为：研究报告引用 `start_sha`，CI 从 git 历史中按该 SHA 取文件复算；
+  - 或者，正式重新冻结一份新基线，并在协议偏离记录里说明理由。
+  - 无论选哪种，都要保留现有的负向测试（伪造 SHA、错序、额外字节必须失败）。
+
 ### ARCH-9 [信息] 默认分支名
 
 默认分支叫 `claude/new-session-1959qb`，是一个会话名而不是 `main`。新接手者（人或 AI）容易误以为它是临时分支。建议改名为 `main`；GitHub 会自动重定向。这会影响 CI 的分支过滤，例如 `release-assets.yml` 写死了这个分支名，需同步修改。

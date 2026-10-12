@@ -1,7 +1,16 @@
-# HRT Log 产品质量审计（2026-10）——阶段 A：仓库基线与版本边界
+# HRT Log 产品质量审计（2026-10）
 
 > 性质：只读审计文档。本目录不包含任何生产代码、Schema、PK 参数、签名或发布变更。
-> 状态：**阶段 A、B、C 完成；阶段 D 进行中。** 未标“完成”的报告不得视为已审计。
+> 状态：**阶段 A–D 全部完成（2026-10-12）。** 审计分支 `claude/new-session-sbje5o`，未开 PR、未合并。
+
+## 快速结论
+
+- **优势**：本地优先、多层隐私（SQLCipher + Keystore、Argon2id 锁与备份、伪装、通知中性化、无网络）；历史不可改写（快照、追加修订、数据库触发器、回收站）；时期引擎有稳定性门槛测试；四语完整；PK 证据边界意识强。
+- **最大瓶颈（治理）**：科研冻结守卫锁定了 164 个生产文件（含全部 `strings.xml`、ViewModel、数据层），非 UI 文件和资源“永不豁免”。普通产品改进无法合规通过 CI（05 ARCH-10，决策 D-13）。
+- **最高产品风险**：PR #19 默认显示由个人历史算出的 M2 绝对 pg/mL 大号数字，与 PR #18 能力矩阵 `m2_absolute_pgml=false` 冲突（03 F-PK-4，D-1）；PDF 图表与化验冻结估算仍走 Legacy，与页面口径不一致（F-PK-1/2）。
+- **P0**：没有经证实的数据/安全/崩溃类 P0；有 1 项合规类 P0 候选（v0.2.0 许可，D-5）。
+- **用户可感知的 P1**：返回键直接退出；没有备份提醒；构建无法追溯到源码（这也是无法确定手机安装版本的原因）；库存三种口径。
+- **最推荐的第一项任务**：B1 构建可追溯（06 §5）。D-13 决定后再做 B0 守卫范围调整，以解锁其余批次。
 
 ## 1. 审计基准
 
@@ -76,12 +85,12 @@ PR #19 描述称 M1 研究核来自 P2-AZ（#17 的内容），而 #17/#18 本�
 | 文件 | 状态 |
 |---|---|
 | `README.md`（本文件） | 阶段 A 完成 |
-| `08-verification-log.md` | 阶段 A 命令记录 |
+| `08-verification-log.md` | A–D 命令记录 |
 | `01-current-product-inventory.md` | 阶段 B 完成 |
 | `02-ui-ux-and-user-journeys.md` | 阶段 B 完成 |
 | `03-pk-evidence-and-display-safety.md` | 阶段 C 完成 |
 | `04-data-security-reliability.md` | 阶段 C 完成 |
 | `05-architecture-performance-testing.md` | 阶段 C 完成 |
-| `06-roadmap-prioritized.md` | 未开始（阶段 D） |
-| `07-decisions-needed.md` | 未开始（阶段 D） |
-| `evidence-index.md` | 未开始 |
+| `06-roadmap-prioritized.md` | 阶段 D 完成 |
+| `07-decisions-needed.md` | 阶段 D 完成 |
+| `evidence-index.md` | 阶段 D 完成 |
