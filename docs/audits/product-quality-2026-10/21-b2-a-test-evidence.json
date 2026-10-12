@@ -1,0 +1,24 @@
+{
+  "fixture": "synthetic only",
+  "before": {
+    "tests": 2,
+    "failures": 2,
+    "expected_assertion": "Plain SQLite copy must be removed before preview is published"
+  },
+  "after_focused": {
+    "tests": 14,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "mutation_disable_finally_cleanup": {
+    "tests": 1,
+    "failures": 1,
+    "expected_assertion": "Plain SQLite copy must be removed before preview is published"
+  },
+  "research_tests": 302,
+  "old_pk_audit_tests": 13,
+  "protected_unchanged": 78,
+  "historical_files": 164,
+  "identical_research_results": 5
+}

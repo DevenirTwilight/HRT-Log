@@ -1,3 +1,5 @@
+> B2 当前交接（2026-10-12）：专用分支 `feature/b2-privacy-reliability-20261012`，起点 `1e584285cb1e6f7a4b09a3e20585418d35a28735`。A 已实施，聚焦14项通过；完整回归和本批 CI 待验收，未开始 B/C/D。下一步先完成 A 的 jvm/android/device-tests/reference，全绿后自动进入 B。实际进程清理由新 instrumentation + `run_import_cleanup_restart.py` 执行。详见[审计21](audits/product-quality-2026-10/21-b2-privacy-reliability.md)。当前环境已有临时 SDK37/JDK21，可本地运行全量 JVM/Robolectric/lint/构建；无 KVM/物理ARM，设备靠 CI。禁止合并、签名或交付。
+
 > 最新当前事实（2026-10-12）：PR #19 已合并并通过主线 CI；见 [STATUS](STATUS.md) 和 [审计20](audits/product-quality-2026-10/20-pr19-merge-and-mainline-validation.md)。下文保留历史阶段的“未合并/待批准”叙述，不代表现在。
 
 # M2-only最终APK已正式签名并私下交付，全部工程成果已保存（2026-10-12）

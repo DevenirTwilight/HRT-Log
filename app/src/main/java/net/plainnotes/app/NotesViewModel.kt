@@ -164,26 +164,31 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         class HtReady(val export:net.plainnotes.app.importer.HrtTracker.Export,val preview:net.plainnotes.app.importer.HrtTracker.Preview):DataJob
         class HtImported(val summary:net.plainnotes.app.data.HtImportSummary):DataJob }
     val dataJob=MutableStateFlow<DataJob>(DataJob.Idle)
-    fun clearDataJob(){dataJob.value=DataJob.Idle}
-    private fun dataOp(block:suspend()->DataJob)=viewModelScope.launch{dataJob.value=DataJob.Working;dataJob.value=try{block()}catch(e:BackupCodec.WrongPassword){DataJob.Failed(R.string.backup_wrong_password)}
+    private var importReadJob:Job?=null
+    fun clearDataJob(){importReadJob?.cancel();importReadJob=null;dataJob.value=DataJob.Idle}
+    private fun dataOp(block:suspend()->DataJob)=viewModelScope.launch{dataJob.value=DataJob.Working;val result=try{block()}catch(e:BackupCodec.WrongPassword){DataJob.Failed(R.string.backup_wrong_password)}
         catch(e:BackupCodec.TooLarge){DataJob.Failed(R.string.backup_too_large)}
         catch(e:BackupCodec.NewerBackup){DataJob.Failed(R.string.backup_newer_version)}
-        catch(e:BackupCodec.BadFile){DataJob.Failed(R.string.backup_bad_file)}catch(e:net.plainnotes.app.importer.InvalidExport){DataJob.Failed(R.string.import_invalid)}catch(e:net.plainnotes.app.importer.HrtTracker.InvalidExport){DataJob.Failed(R.string.ht_invalid)}catch(e:CancellationException){throw e}catch(_:Exception){DataJob.Failed(R.string.operation_error)}}
-    private fun tempImport()=java.io.File(app.noBackupFilesDir,"import").apply{mkdirs()}.resolve("transmemo.db")
-    fun openTransMemo(uri:android.net.Uri)=dataOp {
-        withContext(Dispatchers.IO) {
-            val f=tempImport();app.contentResolver.openInputStream(uri)!!.use{i->f.outputStream().use{i.copyTo(it)}}
-            val export=AndroidSqlSource.open(f).use{net.plainnotes.app.importer.TransMemo.read(it)}
+        catch(e:BackupCodec.BadFile){DataJob.Failed(R.string.backup_bad_file)}catch(e:net.plainnotes.app.importer.InvalidExport){DataJob.Failed(R.string.import_invalid)}catch(e:net.plainnotes.app.importer.HrtTracker.InvalidExport){DataJob.Failed(R.string.ht_invalid)}catch(e:CancellationException){throw e}catch(_:Exception){DataJob.Failed(R.string.operation_error)};ensureActive();dataJob.value=result}
+    private fun importRead(block:suspend()->DataJob):Job {
+        importReadJob?.cancel()
+        return dataOp(block).also{importReadJob=it}
+    }
+    fun openTransMemo(uri:android.net.Uri)=importRead {
+        val export=net.plainnotes.app.privacy.TransMemoImportCopies.read(app.noBackupFilesDir,
+            {app.contentResolver.openInputStream(uri)}) { file ->
+            AndroidSqlSource.open(file).use{net.plainnotes.app.importer.TransMemo.read(it)}
+        }
+        withContext(Dispatchers.Default) {
             DataJob.ImportReady(export,net.plainnotes.app.importer.TransMemo.preview(export,ZoneId.systemDefault()))
         }
     }
     fun runImport(export:net.plainnotes.app.importer.TmExport,choices:net.plainnotes.app.importer.TransMemo.Choices,overwrite:Boolean)=dataOp {
         val plan=withContext(Dispatchers.Default){net.plainnotes.app.importer.TransMemo.plan(export,ZoneId.systemDefault(),choices)}
         val summary=mutate{repo.importTransMemo(plan,overwrite)}
-        withContext(Dispatchers.IO){tempImport().delete()}
         refresh().join();DataJob.Imported(summary)
     }
-    fun openHrtTracker(uri:android.net.Uri)=dataOp {
+    fun openHrtTracker(uri:android.net.Uri)=importRead {
         val limit=32*1024*1024
         val text=withContext(Dispatchers.IO){app.contentResolver.openInputStream(uri)!!.use{ i ->
             val out=java.io.ByteArrayOutputStream();val buf=ByteArray(64*1024)
@@ -198,7 +203,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         val summary=mutate{repo.importHrtTracker(plan,targets,names,if(weight)export.weightKg else null)}
         refresh().join();DataJob.HtImported(summary)
     }
-    fun cancelImport()=viewModelScope.launch{withContext(Dispatchers.IO){tempImport().delete()};dataJob.value=DataJob.Idle}
+    fun cancelImport(){clearDataJob()}
     fun exportBackup(uri:android.net.Uri,password:CharArray)=dataOp {
         val bytes=try{repo.exportBackup(password)}finally{password.fill(' ')}
         withContext(Dispatchers.IO){app.contentResolver.openOutputStream(uri,"wt")!!.use{it.write(bytes)}};DataJob.Done(R.string.backup_saved)

@@ -129,6 +129,7 @@ jobs:
             python3 scripts/collect_unified_device_performance.py --output app/build/reports/unified-device-performance.json
             python3 scripts/collect_pr19_display_performance.py
             python3 scripts/run_disguise_restart.py
+            python3 scripts/run_import_cleanup_restart.py
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:

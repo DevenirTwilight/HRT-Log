@@ -1,3 +1,5 @@
+> 当前产品任务（2026-10-12）：B0/B1/D-1/D-2 已合并；B2 已授权四批顺序实施。A 已实施待独立 CI；B 明文告知、C 备份时间/应用内提醒、D 恢复保护尚未开始。现状以[STATUS](STATUS.md)和[审计21](audits/product-quality-2026-10/21-b2-privacy-reliability.md)为准。P2-C HOLD 与个人绝对 pg/mL 能力 false 不变。
+
 # 最新状态：P2-A/B研究完成，外部科学证据不足（2026-10-09，§50）
 
 P0和P1-A/B/C1/C2已完成；本轮完成拟合前证据/协议冻结、隔离A经验核/B约束双途径原型、339固定情景与按研究条件比较。**正式人口核及个人校准未替换**。`external_validation_insufficient`、`clinical_accuracy_established=false`；没有锁定盲法外测，不选赢家。Cortez本轮全文、Yaish缓存全文重核，其他五项仅摘要。
