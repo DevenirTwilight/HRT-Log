@@ -1,0 +1,1069 @@
+{
+  "default_branch": "claude/new-session-1959qb",
+  "default_sha": "f53726ff6fa52fc5c78806a1576fdb80fcf29987",
+  "pr19_head": "b46dbf6ac1a8391987c61272f65e2f1d23723a63",
+  "prs": [
+    {
+      "baseRefName": "claude/new-session-1959qb",
+      "files": [
+        {
+          "path": "app/src/androidTestFull/java/net/plainnotes/app/debug/ExperimentalSlComparisonAndroidTest.kt",
+          "additions": 26,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/debug/AndroidManifest.xml",
+          "additions": 9,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/debug/java/net/plainnotes/app/debug/ExperimentalSlComparisonActivity.kt",
+          "additions": 163,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/main/java/net/plainnotes/app/conc/experimental/ResearchHistoricalSlAdapter.kt",
+          "additions": 48,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/test/java/net/plainnotes/app/ResearchHistoricalSlAdapterTest.kt",
+          "additions": 71,
+          "deletions": 0
+        },
+        {
+          "path": "docs/pk-research/p2/experimental-sl-v01-ci-acceptance.md",
+          "additions": 39,
+          "deletions": 0
+        },
+        {
+          "path": "docs/pk-research/p2/experimental-sl-v01-ui-comparison.md",
+          "additions": 53,
+          "deletions": 0
+        },
+        {
+          "path": "docs/pk-research/p2/experimental-sl-v01.md",
+          "additions": 87,
+          "deletions": 0
+        },
+        {
+          "path": "docs/pk-research/p2/p2ab-v01-kernel-integrity.md",
+          "additions": 88,
+          "deletions": 0
+        },
+        {
+          "path": "docs/pk-research/p2/p2ac-source-to-kernel-reproduction.md",
+          "additions": 57,
+          "deletions": 0
+        },
+        {
+          "path": "docs/pk-research/p2/p2x-frozen-40-candidates.csv",
+          "additions": 41,
+          "deletions": 0
+        },
+        {
+          "path": "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchShapeComparisonV01.kt",
+          "additions": 81,
+          "deletions": 0
+        },
+        {
+          "path": "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchSublingualV01.kt",
+          "additions": 209,
+          "deletions": 0
+        },
+        {
+          "path": "pk-engine/src/test/kotlin/net/plainnotes/app/pk/experimental/ResearchShapeComparisonV01Test.kt",
+          "additions": 81,
+          "deletions": 0
+        },
+        {
+          "path": "pk-engine/src/test/kotlin/net/plainnotes/app/pk/experimental/ResearchSublingualV01Test.kt",
+          "additions": 138,
+          "deletions": 0
+        },
+        {
+          "path": "tools/pk-research/p2x_reproduce_standalone.py",
+          "additions": 158,
+          "deletions": 0
+        },
+        {
+          "path": "tools/pk-research/test_p2x_source_to_kernel.py",
+          "additions": 69,
+          "deletions": 0
+        }
+      ],
+      "headRefName": "research/experimental-sl-v01",
+      "headRefOid": "c0b9b6c53461610ea8c8460e610f1a1ed9aadf60",
+      "mergeCommit": null,
+      "number": 1,
+      "state": "OPEN",
+      "title": "feat(pk): isolated SL ensemble v0.1 + reproducible P2-X 40-fit evidence (research only)"
+    },
+    {
+      "baseRefName": "claude/new-session-1959qb",
+      "files": [
+        {
+          "path": ".github/workflows/android.yml",
+          "additions": 1,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/androidTestFullDebug/java/net/plainnotes/app/debug/ExperimentalPkPreviewAndroidTest.kt",
+          "additions": 32,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/androidTestFullDebug/java/net/plainnotes/app/debug/ExperimentalSlComparisonAndroidTest.kt",
+          "additions": 26,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/debug/AndroidManifest.xml",
+          "additions": 13,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/debug/java/net/plainnotes/app/debug/ExperimentalPkPreviewActivity.kt",
+          "additions": 40,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/debug/java/net/plainnotes/app/debug/ExperimentalSlComparisonActivity.kt",
+          "additions": 163,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/main/java/net/plainnotes/app/conc/experimental/ResearchHistoricalSlAdapter.kt",
+          "additions": 72,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/main/java/net/plainnotes/app/experimental/ExperimentalPkScreen.kt",
+          "additions": 227,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/main/java/net/plainnotes/app/ui/AppShell.kt",
+          "additions": 4,
+          "deletions": 1
+        },
+        {
+          "path": "app/src/main/res/values-b+zh+Hant/strings_experimental_pk.xml",
+          "additions": 52,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/main/res/values-fr/strings_experimental_pk.xml",
+          "additions": 52,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/main/res/values-zh/strings_experimental_pk.xml",
+          "additions": 52,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/main/res/values/strings_experimental_pk.xml",
+          "additions": 53,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/test/java/net/plainnotes/app/ExperimentalPkDataPathTest.kt",
+          "additions": 92,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/test/java/net/plainnotes/app/ExperimentalPkHistoryTest.kt",
+          "additions": 121,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/test/java/net/plainnotes/app/ExperimentalPkNavigationTest.kt",
+          "additions": 35,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/test/java/net/plainnotes/app/ExperimentalPkScreenUiTest.kt",
+          "additions": 128,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/test/java/net/plainnotes/app/ExperimentalPkTranslationsTest.kt",
+          "additions": 30,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/test/java/net/plainnotes/app/ResearchHistoricalSlAdapterTest.kt",
+          "additions": 71,
+          "deletions": 0
+        },
+        {
+          "path": "docs/HANDOFF.md",
+          "additions": 23,
+          "deletions": 0
+        },
+        {
+          "path": "docs/REQUIREMENTS.md",
+          "additions": 18,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/experimental-m2-entry.patch",
+          "additions": 28,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/experimental-m2-integration.md",
+          "additions": 194,
+          "deletions": 0
+        },
+        {
+          "path": "docs/pk-research/p2/experimental-sl-v01-ci-acceptance.md",
+          "additions": 39,
+          "deletions": 0
+        },
+        {
+          "path": "docs/pk-research/p2/experimental-sl-v01-ui-comparison.md",
+          "additions": 53,
+          "deletions": 0
+        },
+        {
+          "path": "docs/pk-research/p2/experimental-sl-v01.md",
+          "additions": 87,
+          "deletions": 0
+        },
+        {
+          "path": "docs/pk-research/p2/p2ab-v01-kernel-integrity.md",
+          "additions": 88,
+          "deletions": 0
+        },
+        {
+          "path": "docs/pk-research/p2/p2ac-source-to-kernel-reproduction.md",
+          "additions": 57,
+          "deletions": 0
+        },
+        {
+          "path": "docs/pk-research/p2/p2x-frozen-40-candidates.csv",
+          "additions": 41,
+          "deletions": 0
+        },
+        {
+          "path": "docs/pk-research/p2/protocol-deviations.json",
+          "additions": 14,
+          "deletions": 0
+        },
+        {
+          "path": "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ExperimentalSlModelView.kt",
+          "additions": 75,
+          "deletions": 0
+        },
+        {
+          "path": "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchShapeComparisonV01.kt",
+          "additions": 81,
+          "deletions": 0
+        },
+        {
+          "path": "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchSublingualV01.kt",
+          "additions": 209,
+          "deletions": 0
+        },
+        {
+          "path": "pk-engine/src/test/kotlin/net/plainnotes/app/pk/experimental/ExperimentalSlModelViewTest.kt",
+          "additions": 149,
+          "deletions": 0
+        },
+        {
+          "path": "pk-engine/src/test/kotlin/net/plainnotes/app/pk/experimental/ResearchShapeComparisonV01Test.kt",
+          "additions": 81,
+          "deletions": 0
+        },
+        {
+          "path": "pk-engine/src/test/kotlin/net/plainnotes/app/pk/experimental/ResearchSublingualV01Test.kt",
+          "additions": 138,
+          "deletions": 0
+        },
+        {
+          "path": "scripts/check_experimental_release.py",
+          "additions": 40,
+          "deletions": 0
+        },
+        {
+          "path": "tools/pk-research/check_protocol.py",
+          "additions": 21,
+          "deletions": 4
+        },
+        {
+          "path": "tools/pk-research/p2x_reproduce_standalone.py",
+          "additions": 158,
+          "deletions": 0
+        },
+        {
+          "path": "tools/pk-research/test_p2x_source_to_kernel.py",
+          "additions": 69,
+          "deletions": 0
+        },
+        {
+          "path": "tools/pk-research/test_research.py",
+          "additions": 71,
+          "deletions": 0
+        }
+      ],
+      "headRefName": "ccr-8cffa954-5gedc0",
+      "headRefOid": "cd56688e36c4dccaceab4be814773c562ef862cc",
+      "mergeCommit": null,
+      "number": 2,
+      "state": "OPEN",
+      "title": "M2 \u820c\u4e0b E2 \u5b9e\u9a8c\u836f\u4ee3\u6a21\u578b\uff1a\u53ef\u9009\u5b9e\u9a8c\u9875\u4e0e\u9650\u5b9a\u5bfc\u822a\u5165\u53e3\uff08PD-2026-10-10-M2-ENTRY\uff09"
+    },
+    {
+      "baseRefName": "ccr-8cffa954-5gedc0",
+      "files": [
+        {
+          "path": "app/src/androidTestFullDebug/java/net/plainnotes/app/debug/ExperimentalPkPreviewAndroidTest.kt",
+          "additions": 14,
+          "deletions": 6
+        },
+        {
+          "path": "app/src/main/java/net/plainnotes/app/experimental/ExperimentalConcentrationComparison.kt",
+          "additions": 58,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/main/java/net/plainnotes/app/experimental/ExperimentalPkScreen.kt",
+          "additions": 6,
+          "deletions": 214
+        },
+        {
+          "path": "app/src/main/java/net/plainnotes/app/experimental/ModelComparisonChart.kt",
+          "additions": 190,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/main/java/net/plainnotes/app/experimental/UnifiedConcentrationScreen.kt",
+          "additions": 374,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/main/res/values-b+zh+Hant/strings_experimental_pk.xml",
+          "additions": 60,
+          "deletions": 13
+        },
+        {
+          "path": "app/src/main/res/values-fr/strings_experimental_pk.xml",
+          "additions": 60,
+          "deletions": 13
+        },
+        {
+          "path": "app/src/main/res/values-zh/strings_experimental_pk.xml",
+          "additions": 60,
+          "deletions": 13
+        },
+        {
+          "path": "app/src/main/res/values/strings_experimental_pk.xml",
+          "additions": 60,
+          "deletions": 13
+        },
+        {
+          "path": "app/src/test/java/net/plainnotes/app/ExperimentalPkDataPathTest.kt",
+          "additions": 12,
+          "deletions": 11
+        },
+        {
+          "path": "app/src/test/java/net/plainnotes/app/ExperimentalPkHistoryTest.kt",
+          "additions": 23,
+          "deletions": 15
+        },
+        {
+          "path": "app/src/test/java/net/plainnotes/app/ExperimentalPkScreenUiTest.kt",
+          "additions": 119,
+          "deletions": 57
+        },
+        {
+          "path": "app/src/test/java/net/plainnotes/app/ExperimentalPkTranslationsTest.kt",
+          "additions": 20,
+          "deletions": 12
+        },
+        {
+          "path": "docs/HANDOFF.md",
+          "additions": 19,
+          "deletions": 0
+        },
+        {
+          "path": "docs/REQUIREMENTS.md",
+          "additions": 9,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/p2ar-entry-approval.patch",
+          "additions": 250,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/p2ar-unified-concentration.md",
+          "additions": 119,
+          "deletions": 0
+        },
+        {
+          "path": "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ConcentrationModelComparison.kt",
+          "additions": 182,
+          "deletions": 0
+        },
+        {
+          "path": "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/StudyAnchors.kt",
+          "additions": 125,
+          "deletions": 0
+        },
+        {
+          "path": "pk-engine/src/test/kotlin/net/plainnotes/app/pk/experimental/ConcentrationModelComparisonTest.kt",
+          "additions": 163,
+          "deletions": 0
+        },
+        {
+          "path": "pk-engine/src/test/kotlin/net/plainnotes/app/pk/experimental/StudyAnchorsTest.kt",
+          "additions": 73,
+          "deletions": 0
+        }
+      ],
+      "headRefName": "p2ar/unified-concentration-comparison",
+      "headRefOid": "4b264187b08f23ae4ef88a10715e29500d60ce29",
+      "mergeCommit": null,
+      "number": 3,
+      "state": "OPEN",
+      "title": "P2-AR: unified concentration model comparison and Price 1997 study scenario"
+    },
+    {
+      "baseRefName": "claude/new-session-1959qb",
+      "files": [
+        {
+          "path": ".github/workflows/p2az-study-transfer.yml",
+          "additions": 34,
+          "deletions": 0
+        },
+        {
+          "path": "docs/HANDOFF.md",
+          "additions": 14,
+          "deletions": 0
+        },
+        {
+          "path": "docs/pk-research/p2/README.md",
+          "additions": 4,
+          "deletions": 0
+        },
+        {
+          "path": "docs/pk-research/p2/p2az-retrospective-transfer/P2-AZ-REPORT.md",
+          "additions": 107,
+          "deletions": 0
+        },
+        {
+          "path": "docs/pk-research/p2/p2az-retrospective-transfer/README.md",
+          "additions": 20,
+          "deletions": 0
+        },
+        {
+          "path": "docs/pk-research/p2/p2az-retrospective-transfer/p2az-design.json",
+          "additions": 100,
+          "deletions": 0
+        },
+        {
+          "path": "docs/pk-research/p2/p2az-retrospective-transfer/p2az-results.json",
+          "additions": 2923,
+          "deletions": 0
+        },
+        {
+          "path": "tools/pk-research/p2az_study_transfer.py",
+          "additions": 266,
+          "deletions": 0
+        },
+        {
+          "path": "tools/pk-research/test_p2az_study_transfer.py",
+          "additions": 114,
+          "deletions": 0
+        }
+      ],
+      "headRefName": "research/p2-az-retrospective-study-transfer-20261011",
+      "headRefOid": "82c32a7fee993f8937e0f65f66bc0629956c46ce",
+      "mergeCommit": null,
+      "number": 17,
+      "state": "OPEN",
+      "title": "research(pk): P2-AZ retrospective leave-one-study-out model family transfer and complexity audit"
+    },
+    {
+      "baseRefName": "research/p2-az-retrospective-study-transfer-20261011",
+      "files": [
+        {
+          "path": ".github/workflows/p2ba-evidence-use.yml",
+          "additions": 34,
+          "deletions": 0
+        },
+        {
+          "path": "docs/HANDOFF.md",
+          "additions": 12,
+          "deletions": 0
+        },
+        {
+          "path": "docs/pk-research/p2/README.md",
+          "additions": 3,
+          "deletions": 0
+        },
+        {
+          "path": "docs/pk-research/p2/p2ba-evidence-use/P2-BA-REPORT.md",
+          "additions": 77,
+          "deletions": 0
+        },
+        {
+          "path": "docs/pk-research/p2/p2ba-evidence-use/README.md",
+          "additions": 18,
+          "deletions": 0
+        },
+        {
+          "path": "docs/pk-research/p2/p2ba-evidence-use/p2ba-results.json",
+          "additions": 367,
+          "deletions": 0
+        },
+        {
+          "path": "tools/pk-research/p2ba_evidence_use_gate.py",
+          "additions": 201,
+          "deletions": 0
+        },
+        {
+          "path": "tools/pk-research/test_p2ba_evidence_use_gate.py",
+          "additions": 96,
+          "deletions": 0
+        }
+      ],
+      "headRefName": "research/p2-ba-evidence-use-case-20261011",
+      "headRefOid": "68ceac2717b487029d894a76f4185cdf1f890d35",
+      "mergeCommit": null,
+      "number": 18,
+      "state": "OPEN",
+      "title": "research(pk): P2-BA three-study robust evidence and fail-closed model-use capability matrix"
+    },
+    {
+      "baseRefName": "claude/new-session-1959qb",
+      "files": [
+        {
+          "path": ".github/workflows/android.yml",
+          "additions": 8,
+          "deletions": 0
+        },
+        {
+          "path": ".github/workflows/pr19-calibration.yml",
+          "additions": 47,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/androidTestFullDebug/java/net/plainnotes/app/debug/UnifiedConcentrationAndroidTest.kt",
+          "additions": 113,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/debug/AndroidManifest.xml",
+          "additions": 6,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/debug/java/net/plainnotes/app/debug/UnifiedConcentrationTestActivity.kt",
+          "additions": 45,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/main/java/net/plainnotes/app/conc/experimental/ResearchHistoricalSlAdapter.kt",
+          "additions": 72,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/main/java/net/plainnotes/app/experimental/ConcentrationPreview.kt",
+          "additions": 71,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/main/java/net/plainnotes/app/experimental/ExperimentalConcentrationComparison.kt",
+          "additions": 44,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/main/java/net/plainnotes/app/experimental/ModelComparisonChart.kt",
+          "additions": 211,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/main/java/net/plainnotes/app/experimental/UnifiedConcentrationScreen.kt",
+          "additions": 109,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/main/java/net/plainnotes/app/ui/AppShell.kt",
+          "additions": 4,
+          "deletions": 3
+        },
+        {
+          "path": "app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt",
+          "additions": 16,
+          "deletions": 14
+        },
+        {
+          "path": "app/src/main/res/values-b+zh+Hant/strings_unified_concentration.xml",
+          "additions": 50,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/main/res/values-fr/strings_unified_concentration.xml",
+          "additions": 50,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/main/res/values-zh/strings_unified_concentration.xml",
+          "additions": 50,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/main/res/values/strings_unified_concentration.xml",
+          "additions": 50,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/test/java/net/plainnotes/app/ComparisonAxisLayoutTest.kt",
+          "additions": 28,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/test/java/net/plainnotes/app/ConcentrationPreviewTest.kt",
+          "additions": 123,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/test/java/net/plainnotes/app/ResearchHistoricalSlAdapterTest.kt",
+          "additions": 71,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/test/java/net/plainnotes/app/UnifiedConcentrationDataPathTest.kt",
+          "additions": 111,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/test/java/net/plainnotes/app/UnifiedConcentrationNavigationTest.kt",
+          "additions": 55,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/test/java/net/plainnotes/app/UnifiedConcentrationObservationTest.kt",
+          "additions": 26,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/test/java/net/plainnotes/app/UnifiedConcentrationTranslationsTest.kt",
+          "additions": 26,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/test/java/net/plainnotes/app/UnifiedConcentrationUiTest.kt",
+          "additions": 126,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/testFull/java/net/plainnotes/app/audit/ButtonAuditTest.kt",
+          "additions": 12,
+          "deletions": 0
+        },
+        {
+          "path": "docs/HANDOFF.md",
+          "additions": 106,
+          "deletions": 0
+        },
+        {
+          "path": "docs/REQUIREMENTS.md",
+          "additions": 48,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/concentration-layout-restoration-2026-10.md",
+          "additions": 35,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/concentration-layout-restoration-evidence/apk-size-audit.json",
+          "additions": 14086,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/concentration-layout-restoration-evidence/apk-size-audit.md",
+          "additions": 236,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/concentration-layout-restoration-evidence/ci-build-tests.json",
+          "additions": 39,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/concentration-layout-restoration-evidence/ci-device-tests.json",
+          "additions": 27,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/concentration-layout-restoration-evidence/ci-jvm-tests.json",
+          "additions": 190,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/concentration-layout-restoration-evidence/device-performance.json",
+          "additions": 14,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/concentration-layout-restoration-evidence/focused-tests.json",
+          "additions": 59,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/concentration-layout-restoration-evidence/local-build-verification.json",
+          "additions": 50,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/concentration-layout-restoration-evidence/native-screenshots.json",
+          "additions": 165,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/concentration-layout-restoration-evidence/official-apk-verification.json",
+          "additions": 20,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/concentration-layout-restoration-evidence/protected-hashes.json",
+          "additions": 51,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/concentration-layout-restoration-evidence/research-version-locks.json",
+          "additions": 15,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/concentration-layout-restoration-evidence/source-size.json",
+          "additions": 34,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/original-concentration-ui-authorization.json",
+          "additions": 28,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/original-concentration-ui.patch",
+          "additions": 99,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/pr19-calibration-evidence/apk-size-audit.json",
+          "additions": 7044,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/pr19-calibration-evidence/apk-size-audit.md",
+          "additions": 122,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/pr19-calibration-evidence/ci-artifact-hashes.json",
+          "additions": 18,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/pr19-calibration-evidence/ci-test-counts.json",
+          "additions": 53,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/pr19-calibration-evidence/local-final-validation.json",
+          "additions": 82,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/pr19-calibration-evidence/modified-files.txt",
+          "additions": 38,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/pr19-calibration-evidence/mutations.json",
+          "additions": 50,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/pr19-calibration-evidence/p2az-results.json",
+          "additions": 2923,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/pr19-calibration-evidence/pr19-display-performance.json",
+          "additions": 13,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/pr19-calibration-evidence/product-lock.json",
+          "additions": 19,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/pr19-calibration-evidence/reference.json",
+          "additions": 3263,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/pr19-calibration-evidence/source-size.json",
+          "additions": 31,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/pr19-calibration-evidence/unified-device-performance.json",
+          "additions": 14,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/pr19-calibration-evidence/validation-commands.txt",
+          "additions": 9,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/pr19-calibration-evidence/validation-history.json",
+          "additions": 101,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/pr19-calibration-fix-2026-10.md",
+          "additions": 93,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/pr19-history-display-evidence/acceptance.json",
+          "additions": 46,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/unified-acceptance/apk-build-comparison.json",
+          "additions": 41,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/unified-acceptance/apk-manifest-signature-audit.json",
+          "additions": 68,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/unified-acceptance/apk-size-audit.json",
+          "additions": 10565,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/unified-acceptance/apk-size-audit.md",
+          "additions": 179,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/unified-acceptance/build-configuration-hashes.json",
+          "additions": 26,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/unified-acceptance/ci-final-results.json",
+          "additions": 68,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/unified-acceptance/device-final-results.json",
+          "additions": 22,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/unified-acceptance/device-functional-checkpoint.json",
+          "additions": 20,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/unified-acceptance/final-app-test-results.json",
+          "additions": 12,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/unified-acceptance/final-observation-test-results.json",
+          "additions": 11,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/unified-acceptance/focused-test-results.json",
+          "additions": 52,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/unified-acceptance/full-test-results.json",
+          "additions": 56,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/unified-acceptance/implementation-history.md",
+          "additions": 10,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/unified-acceptance/local-gradle-execution.json",
+          "additions": 218,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/unified-acceptance/modified-files.txt",
+          "additions": 88,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/unified-acceptance/protected-file-hashes.json",
+          "additions": 44,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/unified-acceptance/python-verification.json",
+          "additions": 36,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/unified-acceptance/research-replay-metadata.json",
+          "additions": 78,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/unified-acceptance/source-resource-audit.json",
+          "additions": 59,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/unified-acceptance/unified-device-performance.json",
+          "additions": 14,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/unified-acceptance/validated-source-trees.json",
+          "additions": 19,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/unified-acceptance/visual-audit.json",
+          "additions": 1624,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/unified-acceptance/visual/fr-rFR-font2-unified.png",
+          "additions": 0,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/unified-acceptance/visual/zh-rTW-font2-unified.png",
+          "additions": 0,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/unified-concentration-2026-10.md",
+          "additions": 164,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/unified-concentration-pr-audit-2026-10.json",
+          "additions": 197,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/unified-model-inputs/m1-candidates.json",
+          "additions": 264,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/unified-model-inputs/model-source-lock.json",
+          "additions": 22,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/unified-model-inputs/p2az-design.json",
+          "additions": 100,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/unified-navigation-authorization.json",
+          "additions": 13,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/unified-navigation.patch",
+          "additions": 24,
+          "deletions": 0
+        },
+        {
+          "path": "docs/design/unified-reused-files.json",
+          "additions": 107,
+          "deletions": 0
+        },
+        {
+          "path": "docs/performance/m1-m2-loading-2026-10-12/README.md",
+          "additions": 27,
+          "deletions": 0
+        },
+        {
+          "path": "docs/performance/m1-m2-loading-2026-10-12/TEST-net.plainnotes.app.ConcentrationPreviewTest.xml",
+          "additions": 16,
+          "deletions": 0
+        },
+        {
+          "path": "docs/performance/m1-m2-loading-2026-10-12/TEST-net.plainnotes.app.PeriodStabilityTest.xml",
+          "additions": 11,
+          "deletions": 0
+        },
+        {
+          "path": "docs/performance/m1-m2-loading-2026-10-12/TEST-net.plainnotes.app.UnifiedConcentrationUiTest.xml",
+          "additions": 14,
+          "deletions": 0
+        },
+        {
+          "path": "docs/performance/m1-m2-loading-2026-10-12/TEST-net.plainnotes.app.experimental.PreviewPerformanceComparisonTest.xml",
+          "additions": 9,
+          "deletions": 0
+        },
+        {
+          "path": "docs/performance/m1-m2-loading-2026-10-12/ci-results.json",
+          "additions": 1,
+          "deletions": 0
+        },
+        {
+          "path": "docs/performance/m1-m2-loading-2026-10-12/evidence-commit-ci.json",
+          "additions": 1,
+          "deletions": 0
+        },
+        {
+          "path": "docs/performance/m1-m2-loading-2026-10-12/independent-replay-ci.json",
+          "additions": 1,
+          "deletions": 0
+        }
+      ],
+      "headRefName": "feature/unified-concentration-20261011",
+      "headRefOid": "b46dbf6ac1a8391987c61272f65e2f1d23723a63",
+      "mergeCommit": null,
+      "number": 19,
+      "state": "OPEN",
+      "title": "\u4fdd\u7559\u539f\u6d53\u5ea6UI\uff1a\u4fee\u590dM1/M2 Price\u6807\u5b9a\u3001\u51bb\u7ed3\u4ee3\u8868\u9009\u62e9\u4e0e\u771f\u5b9e\u5cf0\u503c"
+    }
+  ],
+  "previous_official_apk": {
+    "production_source": "470b194",
+    "evidence_head": "b46dbf6",
+    "sha256": "426bb4686eb2a3c2da3969d0da1fc39cc175d08d9af9b6114d51d205d1cdedcd"
+  },
+  "initial_file_hashes": {
+    "app/src/main/java/net/plainnotes/app/ui/AppShell.kt": "68dbf5af8d14e540f96d38bf055ed8c93324209a2a35071d24fc0f33ef17ea1b",
+    "app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt": "75152adac151b25b4658aef19a229c6284bb4694f02d12ac894f5a34d4a15d31",
+    "app/src/main/java/net/plainnotes/app/ui/ConcChart.kt": "51d0f88bf158113f9a08415a7498043930055096194b7f0f967e7bcb59b26c06",
+    "app/src/main/java/net/plainnotes/app/ui/ChartViewport.kt": "b9821126c3bf98bb8c71d85f06fc7ec282b73006cd2a1a1b164a2c737bc08c14",
+    "app/src/main/java/net/plainnotes/app/conc/ConcentrationCalculator.kt": "9a0ca71e55a49b05b614d247773a0c694716ce92f7272f79c5644a39e45e417e",
+    "app/src/main/java/net/plainnotes/app/experimental/ConcentrationPreview.kt": "f8f1df2888824be1c492d8e981bc4d96cd1d50bae3402a31553886e9379de9fc",
+    "app/src/main/java/net/plainnotes/app/experimental/UnifiedConcentrationScreen.kt": "63f609c5f07bcd3e055f598ed7948b3f8910da53e2aa813422ab2d26ea6105e5",
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/Engine.kt": "51ce72f3b4b2c4fbca0185c78a333df9a9e7877daf5d9630e5140a15a686e89e",
+    "pk-engine/src/main/resources/pk-params.json": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b"
+  }
+}
