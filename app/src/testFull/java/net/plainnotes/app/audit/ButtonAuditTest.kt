@@ -175,7 +175,7 @@ class ButtonAuditTest(private val locale: String, private val scale: Float, priv
                 val record=RecordEntity(999,1,taken_utc=now.minusSeconds(3*3600).toEpochMilli(),taken_zone=zone.id,actual_dose=1.0,
                     status="ON_TIME",origin="APP",revision=1,config_snapshot=MedicationSnapshot.encode(medication,ProfileEntity(1,"E2","sublingual",sl_tier=2)))
                 net.plainnotes.app.experimental.UnifiedConcentrationScreen(listOf(record),emptyMap(),labs,padding,
-                    legacyContent={pad,preview,selector -> val r=remember { conc() };ConcentrationScreen(s,r,false,62.0,ConcSettings(false,true,net.plainnotes.app.pk.CalibrationMode.RETROSPECTIVE),{},{},{},{},pad,records(),profiles,preview=preview,modelSelector=selector)},now={now})
+                    content={pad,preview,selector -> val r=remember { conc() };ConcentrationScreen(s,r,false,62.0,ConcSettings(false,true,net.plainnotes.app.pk.CalibrationMode.RETROSPECTIVE),{},{},{},{},pad,records(),profiles,preview=preview,referenceNotice=selector,m2Only=true)},now={now})
             },
             Case("concentration") { val r = remember { conc() }; ConcentrationScreen(s, r, false, 62.0, ConcSettings(false, true, net.plainnotes.app.pk.CalibrationMode.RETROSPECTIVE), {}, {}, {}, {}, padding, records(), profiles) },
             Case("labs") { LabsScreen(labs, listOf(now.minusSeconds(86400 + 5 * 3600)), {}, {}, padding) },

@@ -19,7 +19,7 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class) @Config(sdk=[35],application=android.app.Application::class)
 class UnifiedConcentrationNavigationTest {
     @get:Rule val ui=createAndroidComposeRule<ComponentActivity>()
-    @Test fun onlyOneConcentrationDestinationOpensM2AndRetainsLegacyAndLabs() {
+    @Test fun onlyOneConcentrationDestinationHasNoModelSelectorAndRetainsLabs() {
         assertEquals(1,Destination.entries.count{it==Destination.CONCENTRATION})
         assertFalse(Destination.entries.any{it.name.contains("EXPERIMENTAL")})
         val context=ui.activity
@@ -37,15 +37,12 @@ class UnifiedConcentrationNavigationTest {
                 ui.onNodeWithText(context.getString(destination.title)).performClick()
             }
             open(Destination.CONCENTRATION)
-            ui.waitUntil(30_000){ui.onAllNodesWithTag("model-M2").fetchSemanticsNodes().isNotEmpty()}
-            ui.onNodeWithTag("model-M2").assertIsSelected()
-            ui.onNodeWithTag("research-not-personal").assertExists()
-            ui.onNodeWithTag("model-LEGACY").performClick()
-            ui.onNodeWithTag("concentration-legacy").assertExists()
+            ui.waitUntil(30_000){ui.onAllNodesWithTag("m2-no-qualified-history").fetchSemanticsNodes().isNotEmpty()}
+            for(choice in listOf("M1","M2","LEGACY")) ui.onAllNodesWithTag("model-$choice").assertCountEquals(0)
             open(Destination.LABS)
             ui.onNodeWithText(context.getString(R.string.labs_empty_title)).assertExists()
             open(Destination.CONCENTRATION)
-            ui.onNodeWithTag("model-M2").assertIsSelected()
+            ui.waitUntil(30_000){ui.onAllNodesWithTag("m2-no-qualified-history").fetchSemanticsNodes().isNotEmpty()}
             assertEquals(emptyList<RecordEntity>(),runBlocking{db.dao().records()})
         } finally {
             androidx.lifecycle.ViewModelStore().apply{put("model",model);clear()}

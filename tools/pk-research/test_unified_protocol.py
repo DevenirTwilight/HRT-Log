@@ -76,4 +76,18 @@ class UnifiedProtocolTest(unittest.TestCase):
                 frozen,production=self.sandbox(directory); file=production/entry['file'];file.write_bytes(file.read_bytes()+b'\n')
                 with self.assertRaises(ValueError):guard.check(frozen,production)
 
+    def test_m2_only_authorization_is_exact_and_does_not_waive_extra_bytes(self):
+        self.assertEqual(guard.APPROVED_M2_ONLY_UI,json.loads((guard.ROOT/'docs/design/m2-only-ui-authorization.json').read_text()))
+        for entry in guard.APPROVED_M2_ONLY_UI:
+            for key in entry:
+                with self.subTest(file=entry['file'],key=key):
+                    self.mutate_deviation(lambda data:next(e for e in data['deviations'] if e['id']==entry['id']).__setitem__(key,False if key=='pk_relevant' else 'forged'))
+            with tempfile.TemporaryDirectory() as directory:
+                frozen,production=self.sandbox(directory); file=production/entry['file'];file.write_bytes(file.read_bytes()+b'\n')
+                with self.assertRaises(ValueError):guard.check(frozen,production)
+
+    def test_m2_only_chain_cannot_be_reordered_or_delete_original_approval(self):
+        self.mutate_deviation(lambda data:data['deviations'].reverse())
+        self.mutate_deviation(lambda data:data['deviations'].__setitem__(slice(None),[e for e in data['deviations'] if e['id']!=guard.APPROVED_ORIGINAL_UI[-1]['id']]))
+
 if __name__ == '__main__':unittest.main()

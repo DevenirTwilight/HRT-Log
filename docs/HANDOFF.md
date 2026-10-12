@@ -1,3 +1,13 @@
+# M2-only最小整合已编码，独立数值与首轮页面通过（2026-10-12）
+
+§65在PR19增量实施，未合并默认分支。三模型选择状态/按钮移除，仅固定M2 p2x-39；原ConcentrationScreen/ConcChart布局与操作保留。M2下旧SL校准/概率带/参数隐藏，真实化验独立保留；混合/未知历史明确SL分量与总E2不可用，纯其他途径保留独立兼容路径；内部Legacy计算、M1研究、数据/快照不改。M2失败有重试且其他药物继续可见，不冒称无记录；新历史读取重置audit，加载覆盖不暴露旧读数。AppShell与ConcentrationScreen的最小UI变化追加真实授权/SHA链，检查器仍只允许精确两文件与完整旧链。报告docs/design/m2-only-integration-2026-10.md，协议11项拒绝测试通过（最新最终链会复跑）。
+
+独立SciPy全233候选比较（15P2X+2P2V+216AZ）及1/2mg峰值/0–4/8/24AUC/早晚期值已真实保存independent-reference.json。参数runtimeSHA76467b35…8d81c3a20，固定Price B24/A434.835722；第一轮新测试误把已有CSV末位文本SHA与runtimeSHA直接比较，失败XML保留；现按两种真实文本身份精确SHA，数值跨源独立校验，未改原锁/旧数值断言。全PK124/domain58/importer12已通过，首轮原页26项零失败/错误/跳过；随后仅API命名、兼容scope防错与新增5个读写/混合范围用例，末轮31聚焦正在执行，不能冒称已通过。当前未执行七类真实变异、末轮全量/lint/Debug/Release/仪器/设备及体积；须继续完成并更新PR19。
+
+本轮不正式签名、不恢复私钥、不交付/发布APK。已留存上轮unsigned作为同配置体积基线，旧正式包不是本次改造包。
+
+---
+
 # M2单模型整合开始审计（2026-10-12）
 
 最新用户任务§65：移除M1/Legacy普通UI与独立实验入口，保留原浓度页面，M2文献参考情景与个人预测正式替换分开。本轮不正式签名/交付/发布。开工PR19 OPEN，head b46dbf6，默认分支尚未合并该PR；真实PR1/2/3/17/18/19元数据和初始SHA保存docs/design/m2-only-evidence/start-state.json。当前标定已为ResearchDisplayProtocol固定p2x-39/Price加权幅度，非用户提到的旧B25/A100；已有加速PreparedResearchHistory保留。发现原页下方仍无条件展示旧校准/SL参数，将按当前明确授权追加精确UI偏离链实施职责隔离，其他引擎/历史/研究归档不改。下一步完成Legacy依赖/候选证据审计、最小M2-only接线、混合途径/未知上下文保护、全数值及负面变异、全量/设备/构建与PR更新。尚未编码或称验收通过。

@@ -47,4 +47,18 @@
     <string name="uc_original_peaks">Référence isolée 1 mg : Cmax %1$s pg/mL à +%2$s h. Fenêtre de 24 h après la dernière prise (résidus antérieurs inclus) : pic %3$s pg/mL à +%4$s h.</string>
     <string name="uc_preview_loading">Chargement des prises sublinguales d’E2 et calcul de la courbe de recherche sélectionnée…</string>
     <string name="uc_preview_failed">Le calcul de la courbe de recherche a échoué. Vos prises restent inchangées. Sélectionnez Legacy pour afficher le calcul initial.</string>
+    <string name="m2_reference_title">Concentration de référence bibliographique M2</string>
+    <string name="m2_chart_title">Courbe de référence M2 : E2 sublingual</string>
+    <string name="m2_partial_scope">Cette référence contient uniquement les prises confirmées d’E2 sublingual. D’autres voies ou des données inconnues sont présentes ; la concentration totale combinée est indisponible. Leurs calculs compatibles et leur historique sont conservés.</string>
+    <string name="m2_compatibility_scope">M2 s’applique uniquement à l’E2 libre sublingual. Les autres voies utilisent le calcul compatible existant, avec ses propres paramètres et son étalonnage.</string>
+    <string name="m2_no_qualified_history">Aucun historique complet d’E2 sublingual n’est disponible pour M2. Complétez les informations manquantes ; aucune ancienne prédiction sublinguale n’est substituée.</string>
+    <string name="m2_compatibility_contains_sl">Le résultat compatible contient une composante sublinguale. Il ne peut être présenté comme M2 ni comme un résultat isolé des autres voies ; le total combiné d’E2 est indisponible.</string>
+    <string name="m2_compatibility_current">E2 des autres voies · calcul compatible</string>
+    <string name="m2_compatibility_chart">Courbe d’E2 des autres voies</string>
+    <string name="m2_observed_labs">Analyses mesurées · non utilisées pour ajuster M2</string>
+    <string name="m2_calibration_unavailable">M2 est un scénario de référence bibliographique, sans étalonnage individuel par les analyses. Les mesures sont conservées comme observations distinctes.</string>
+    <string name="m2_calibration_compatibility_scope">Cet étalonnage s’applique uniquement au résultat compatible des autres voies, pas à M2.</string>
+    <string name="m2_weight_scope">Le poids est conservé pour les autres médicaments compatibles ; il ne modifie pas la référence M2.</string>
+    <string name="m2_parameter_scope">M2 utilise le candidat fixe et l’ancrage Price Figure 1 indiqués ci-dessus. Les hypothèses compatibles suivantes concernent les autres voies et médicaments.</string>
+    <string name="m2_retry_reference">Réessayer le calcul de référence</string>
 </resources>

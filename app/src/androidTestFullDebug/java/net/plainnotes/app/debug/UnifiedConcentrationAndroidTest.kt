@@ -1,63 +1,50 @@
 package net.plainnotes.app.debug
-
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import net.plainnotes.app.R
+import net.plainnotes.app.pk.experimental.*
 import org.junit.Rule
 import org.junit.Test
-
-/** Real Android UI instrumentation of the shared production component; synthetic fixtures only. */
 class UnifiedConcentrationAndroidTest {
     @get:Rule val ui=createAndroidComposeRule<UnifiedConcentrationTestActivity>()
     private fun await(tag:String)=ui.waitUntil(30_000){ui.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty()}
-    @Test fun originalUiAndModelSelectionUseOneChart() {
-        ui.onNodeWithTag("model-M2").assertIsSelected();await("unified-chart")
-        ui.onNodeWithTag("research-not-personal").assertExists()
-        val context=ui.activity
-        for(id in listOf(net.plainnotes.app.R.string.pk_chart_title,net.plainnotes.app.R.string.calib_title,net.plainnotes.app.R.string.pk_model_title))
-            ui.onNodeWithText(context.getString(id)).assertExists()
-        ui.onAllNodesWithTag("model-overlay").assertCountEquals(0)
-        ui.onNodeWithTag("model-M1").performScrollTo().performClick();await("unified-chart")
-        ui.onNodeWithTag("model-M1").assertIsSelected()
+    private fun noSelector() { for(choice in ResearchModel.entries)ui.onAllNodesWithTag("model-${choice.name}").assertCountEquals(0) }
+    @Test fun originalUiHasOnlyM2ReferenceAndOneChart() {
+        await("unified-chart");noSelector();ui.onNodeWithTag("research-not-personal").assertExists()
+        for(id in listOf(R.string.m2_chart_title,R.string.calib_title,R.string.pk_model_title))ui.onNodeWithText(ui.activity.getString(id)).assertExists()
+        ui.onNodeWithText(ui.activity.getString(R.string.calib_enable)).assertDoesNotExist()
         ui.onNodeWithText("pmol/L").performScrollTo().performClick()
         ui.onNodeWithTag("unified-chart").performScrollTo().performTouchInput { click(center) }
         ui.waitUntil(10_000){ui.onAllNodes(hasText("  ·  ",substring=true)).fetchSemanticsNodes().isNotEmpty()}
-        ui.onNodeWithTag("model-LEGACY").performScrollTo().performClick()
-        ui.onNodeWithText(context.getString(net.plainnotes.app.R.string.pk_current)).assertExists()
     }
-    @Test fun modelAndOriginalUnitSurviveActivityRecreationAndRotation() {
-        await("unified-chart");ui.onNodeWithTag("model-M1").performScrollTo().performClick();await("unified-chart")
-        ui.onNodeWithText("pmol/L").performScrollTo().performClick()
-        ui.activityRule.scenario.recreate();await("unified-chart")
-        ui.onNodeWithTag("model-M1").assertIsSelected()
+    @Test fun m2AndOriginalUnitSurviveRecreationAndRotation() {
+        await("unified-chart");ui.onNodeWithText("pmol/L").performScrollTo().performClick()
+        ui.activityRule.scenario.recreate();await("unified-chart");noSelector()
         org.junit.Assert.assertTrue(ui.onAllNodesWithText("pmol/L").fetchSemanticsNodes().size>=2)
-        for ((requested, configuration) in listOf(
-            android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE to android.content.res.Configuration.ORIENTATION_LANDSCAPE,
-            android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT to android.content.res.Configuration.ORIENTATION_PORTRAIT,
-        )) {
+        for((requested,configuration) in listOf(android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE to android.content.res.Configuration.ORIENTATION_LANDSCAPE,
+                android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT to android.content.res.Configuration.ORIENTATION_PORTRAIT)) {
             ui.activityRule.scenario.onActivity { it.requestedOrientation=requested }
-            ui.waitUntil(30_000){ui.activity.resources.configuration.orientation==configuration}
-            await("unified-chart");ui.onNodeWithTag("model-M1").assertIsSelected()
+            ui.waitUntil(30_000){ui.activity.resources.configuration.orientation==configuration};await("unified-chart");noSelector()
             org.junit.Assert.assertTrue(ui.onAllNodesWithText("pmol/L").fetchSemanticsNodes().size>=2)
         }
     }
-    @Test fun literatureAmplitudeHeroAndLegacyCalibrationAreIsolatedOnAndroid() {
+    @Test fun observedLabsCannotCalibrateM2OnAndroid() {
         await("unified-chart")
-        val doses=listOf(-30.0,-20.0,-3.0).map { net.plainnotes.app.pk.experimental.ExperimentalDose(it,1.0) }
-        for(model in listOf(net.plainnotes.app.pk.experimental.ResearchModel.M2,net.plainnotes.app.pk.experimental.ResearchModel.M1)) {
-            ui.onNodeWithTag("model-${model.name}").performScrollTo().performClick();await("unified-chart")
-            val c=net.plainnotes.app.pk.experimental.ResearchDisplayProtocol.candidate(model)
-            val a=net.plainnotes.app.pk.experimental.ResearchDisplayProtocol.anchor(model,c)
-            val value=kotlin.math.round(net.plainnotes.app.pk.experimental.ResearchSublingualV01.studyScenario(0.0,doses,c,a)).toInt().toString()
-            ui.waitUntil(10_000){ui.onAllNodesWithText(value).fetchSemanticsNodes().isNotEmpty()}
-            ui.onNodeWithText(ui.activity.getString(net.plainnotes.app.R.string.calib_enable)).performScrollTo().performClick()
-            ui.runOnUiThread { ui.activity.syntheticLabPgMl=9000.0 }
-            ui.waitForIdle()
-            ui.onNodeWithTag("model-LEGACY").performScrollTo().performClick()
-            ui.onNodeWithTag("model-${model.name}").performScrollTo().performClick();await("unified-chart")
-            ui.waitForIdle();ui.onNodeWithText(value).assertExists()
-            ui.onNodeWithTag("research-peaks").assertExists()
-            ui.runOnUiThread { ui.activity.syntheticLabPgMl=150.0 }
-        }
+        val value=kotlin.math.round(ResearchSublingualV01.studyScenario(0.0,listOf(-30.0,-20.0,-3.0).map{ExperimentalDose(it,1.0)},ResearchDisplayProtocol.candidate(ResearchModel.M2),ResearchDisplayProtocol.anchor(ResearchModel.M2))).toInt().toString()
+        ui.onNodeWithText(value).assertExists()
+        ui.runOnUiThread { ui.activity.syntheticLabPgMl=9000.0;ui.activity.syntheticHistoryRevision++ }
+        await("unified-chart");ui.waitForIdle();ui.onNodeWithText(value).assertExists()
+        ui.onNodeWithTag("m2-calibration-unavailable").assertExists()
+        ui.onNodeWithText(ui.activity.getString(R.string.calib_enable)).assertDoesNotExist()
+    }
+    @Test fun mixedRoutesArePartialAndOnlyOtherRoutesUseCompatibilityCalibration() {
+        await("unified-chart");ui.runOnUiThread { ui.activity.syntheticExtraRoute="ORAL" }
+        await("m2-partial-scope");await("unified-chart")
+        ui.onNodeWithText(ui.activity.getString(R.string.m2_partial_scope)).assertExists()
+        ui.runOnUiThread { ui.activity.syntheticSublingualEnabled=false }
+        await("e2-compatibility-scope")
+        ui.waitUntil(30_000){ui.onAllNodesWithText(ui.activity.getString(R.string.m2_compatibility_current)).fetchSemanticsNodes().isNotEmpty()}
+        ui.onNodeWithText(ui.activity.getString(R.string.calib_enable)).assertExists();noSelector()
     }
     @Test fun actualProductPreviewReportsPeakAccuracyAndAndroidPerformance() {
         val now=600000.0
@@ -88,8 +75,8 @@ class UnifiedConcentrationAndroidTest {
         val start=android.os.SystemClock.elapsedRealtimeNanos()
         val result=kotlinx.coroutines.runBlocking { kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) {
             net.plainnotes.app.pk.experimental.UnifiedModelComparison.compute(doses,origin-168.0,origin,origin,
-                net.plainnotes.app.pk.experimental.ResearchSublingualV01.candidates.first().id,
-                net.plainnotes.app.pk.experimental.ResearchM1Catalog.candidates.first().id,
+                net.plainnotes.app.pk.experimental.ResearchDisplayProtocol.m2Id,
+                net.plainnotes.app.pk.experimental.ResearchDisplayProtocol.m1Id,
                 net.plainnotes.app.pk.experimental.ResearchDisplay.CONDITIONAL)!!
         } }
         val elapsed=(android.os.SystemClock.elapsedRealtimeNanos()-start)/1_000_000.0
