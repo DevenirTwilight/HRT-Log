@@ -1,7 +1,7 @@
 # HRT Log 产品质量审计（2026-10）——阶段 A：仓库基线与版本边界
 
 > 性质：只读审计文档。本目录不包含任何生产代码、Schema、PK 参数、签名或发布变更。
-> 状态：**阶段 A 完成；阶段 B/C/D 未开始。** 下列 01–07 报告尚未撰写，不得视为已审计。
+> 状态：**阶段 A、B 完成；阶段 C/D 进行中。** 未标“完成”的报告不得视为已审计。
 
 ## 1. 审计基准
 
@@ -77,8 +77,8 @@ PR #19 描述称 M1 研究核来自 P2-AZ（#17 的内容），而 #17/#18 本�
 |---|---|
 | `README.md`（本文件） | 阶段 A 完成 |
 | `08-verification-log.md` | 阶段 A 命令记录 |
-| `01-current-product-inventory.md` | 未开始（阶段 B） |
-| `02-ui-ux-and-user-journeys.md` | 未开始（阶段 B） |
+| `01-current-product-inventory.md` | 阶段 B 完成 |
+| `02-ui-ux-and-user-journeys.md` | 阶段 B 完成 |
 | `03-pk-evidence-and-display-safety.md` | 未开始（阶段 C） |
 | `04-data-security-reliability.md` | 未开始（阶段 C） |
 | `05-architecture-performance-testing.md` | 未开始（阶段 C） |
