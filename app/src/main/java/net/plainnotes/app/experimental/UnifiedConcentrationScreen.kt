@@ -8,6 +8,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import net.plainnotes.app.R
@@ -23,7 +26,12 @@ import java.time.Instant
 /** The original screen owns every card, chart and setting. This adds only model selection and a read-only preview. */
 @Composable fun UnifiedConcentrationScreen(records: List<RecordEntity>, ruleSnapshots: Map<Long,String>, labs: List<LabValueEntity>,
     pad: PaddingValues, legacyContent: @Composable (PaddingValues, ConcentrationPreview?, @Composable () -> Unit) -> Unit,
-    now: () -> Instant = Instant::now) {
+    now: () -> Instant = Instant::now,
+    previewComputer: suspend (net.plainnotes.app.conc.experimental.SlAdapterAudit, ResearchModel, Double) -> ConcentrationPreview =
+        { audit, model, hour ->
+            val context=currentCoroutineContext()
+            ConcentrationPreview.compute(audit,model,hour,checkCancelled={context.ensureActive()})
+        }) {
     var model by rememberSaveable { mutableStateOf(ResearchModel.M2) }
     val asOf = remember(records, ruleSnapshots) { now() }
     val audit by produceState<net.plainnotes.app.conc.experimental.SlAdapterAudit?>(null,records,ruleSnapshots,asOf) {
@@ -31,15 +39,22 @@ import java.time.Instant
     }
     val available=audit?.let { it.events.isNotEmpty() || records.isEmpty() }
     LaunchedEffect(available) { if(available==false) model=ResearchModel.LEGACY }
-    val preview by produceState<ConcentrationPreview?>(null,audit,model,asOf) {
-        value=null
-        if (model != ResearchModel.LEGACY && audit != null) value=withContext(Dispatchers.Default) {
-            runCatching { ConcentrationPreview.compute(audit!!,model,
-                ConcentrationCalculator.hours(asOf)) }.getOrNull()
-        }
+    // New keys create a fresh load state, so a previous model's result/error is never displayed.
+    val load = key(audit,model,asOf) {
+        produceState<ResearchPreviewLoad>(ResearchPreviewLoad.Loading) {
+            if (model != ResearchModel.LEGACY && audit != null) {
+                value = try {
+                    ResearchPreviewLoad.Ready(withContext(Dispatchers.Default) {
+                        previewComputer(audit!!,model,ConcentrationCalculator.hours(asOf))
+                    })
+                } catch (cancelled: CancellationException) { throw cancelled }
+                catch (_: Exception) { ResearchPreviewLoad.Failed }
+            }
+        }.value
     }
-    val displayed = if (model == ResearchModel.LEGACY) null else preview?.takeIf { it.model == model } ?: ConcentrationPreview.pending(model)
-    legacyContent(pad,displayed) {
+    val displayed = (load as? ResearchPreviewLoad.Ready)?.preview?.takeIf { model != ResearchModel.LEGACY && it.model == model }
+    val selector: @Composable () -> Unit = {
+
         Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(8.dp)) {
             ResearchModel.entries.forEach { choice -> FilterChip(model == choice,{model=choice},
                 enabled=choice==ResearchModel.LEGACY || available!=false,label={Text(choice.name)},modifier=Modifier.testTag("model-${choice.name}")) }
@@ -55,6 +70,22 @@ import java.time.Instant
                 number(single.pgMl),number(single.hour),number(history.pgMl),number(history.hour-displayed.historyOriginH!!)),
                 style=MaterialTheme.typography.bodySmall,modifier=Modifier.testTag("research-peaks"))
         }
-        else Text(stringResource(R.string.uc_legacy_note),style=MaterialTheme.typography.bodySmall,modifier=Modifier.testTag("concentration-legacy"))
+        else if(model == ResearchModel.LEGACY) Text(stringResource(R.string.uc_legacy_note),style=MaterialTheme.typography.bodySmall,modifier=Modifier.testTag("concentration-legacy"))
     }
+    if (model == ResearchModel.LEGACY || displayed != null) legacyContent(pad,displayed,selector)
+    else Column(Modifier.fillMaxSize().padding(pad).padding(16.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
+        selector()
+        if (load == ResearchPreviewLoad.Failed) Text(stringResource(R.string.uc_preview_failed),modifier=Modifier.testTag("research-preview-error"))
+        else {
+            CircularProgressIndicator(Modifier.testTag("research-preview-loading"))
+            Text(stringResource(R.string.uc_preview_loading))
+        }
+    }
+
+}
+
+private sealed interface ResearchPreviewLoad {
+    data object Loading : ResearchPreviewLoad
+    data object Failed : ResearchPreviewLoad
+    data class Ready(val preview: ConcentrationPreview) : ResearchPreviewLoad
 }

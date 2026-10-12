@@ -85,6 +85,21 @@ class UnifiedConcentrationUiTest {
         ui.waitUntil(10_000){ui.onAllNodes(hasText("  ·  ",substring=true)).fetchSemanticsNodes().isNotEmpty()}
         ui.onNode(hasText("  ·  ",substring=true)).assertExists()
     }
+    @Test fun loadingAndCalculationFailureNeverMasqueradeAsNoMedicationRecords() {
+        awaitChart()
+        ui.runOnUiThread { ui.activity.previewDelayMillis=2000L;ui.activity.previewFails=true }
+        ui.onNodeWithTag("model-M1").performScrollTo().performClick()
+        ui.onNodeWithTag("research-preview-loading").assertExists()
+        ui.onNodeWithText(text(R.string.pk_no_doses_title)).assertDoesNotExist()
+        ui.waitUntil(10_000){ui.onAllNodesWithTag("research-preview-error").fetchSemanticsNodes().isNotEmpty()}
+        ui.onNodeWithText(text(R.string.pk_no_doses_title)).assertDoesNotExist()
+        ui.onAllNodesWithTag("research-peaks").assertCountEquals(0)
+        ui.onNodeWithTag("model-LEGACY").performClick()
+        ui.onNodeWithText(text(R.string.pk_current)).assertExists()
+        ui.runOnUiThread { ui.activity.previewDelayMillis=0L;ui.activity.previewFails=false }
+        ui.onNodeWithTag("model-M2").performScrollTo().performClick();awaitChart()
+        ui.onNodeWithText(text(R.string.uc_original_scenario)).assertExists()
+    }
     @Test fun selectedModelAndOriginalUnitSurviveRecreation() {
         awaitChart();ui.onNodeWithTag("model-M1").performScrollTo().performClick();awaitChart()
         ui.onNodeWithText("pmol/L").performScrollTo().performClick()

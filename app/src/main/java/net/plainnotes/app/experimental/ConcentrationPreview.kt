@@ -16,7 +16,8 @@ class ConcentrationPreview(val model: ResearchModel, val timeH: DoubleArray, val
         fun pending(model: ResearchModel) = ConcentrationPreview(model,doubleArrayOf(),doubleArrayOf(),null,
             ResearchDisplayProtocol.candidate(model).id,null,ResearchDisplayProtocol.anchor(model),null,null,null)
         fun compute(audit: SlAdapterAudit, model: ResearchModel, nowH: Double,
-                    selected: ExperimentalCandidate = ResearchDisplayProtocol.candidate(model)): ConcentrationPreview {
+                    selected: ExperimentalCandidate = ResearchDisplayProtocol.candidate(model),
+                    checkCancelled: () -> Unit = {}): ConcentrationPreview {
             require(nowH.isFinite())
             require(if(model==ResearchModel.M2) selected in ResearchSublingualV01.candidates
                 else model==ResearchModel.M1 && selected in ResearchM1Catalog.candidates)
@@ -26,8 +27,17 @@ class ConcentrationPreview(val model: ResearchModel, val timeH: DoubleArray, val
                 it.ester==net.plainnotes.app.pk.Ester.E2 && it.timeH.isFinite() && it.timeH<=nowH && it.doseMG.isFinite() && it.doseMG>0 })
             val doses = audit.events.map { ExperimentalDose(it.timeH, it.doseMG) }.sortedBy { it.atHour }
             val anchor=ResearchDisplayProtocol.anchor(model,selected)
-            fun exact(hour: Double) = ResearchSublingualV01.studyScenario(hour,doses,selected,anchor).also {
-                require(it.isFinite() && it>=0 && (it*Pk.PMOL_PER_PG).isFinite())
+            // Repeated extrema/graph queries reuse exactly equal timestamps, never interpolated values.
+            // The cache is bounded during construction and released before the exact tap evaluator escapes.
+            var constructionCache: MutableMap<Double, Double>? = HashMap()
+            fun exact(hour: Double): Double {
+                if(constructionCache != null) checkCancelled()
+                constructionCache?.get(hour)?.let { return it }
+                val value=ResearchSublingualV01.studyScenario(hour,doses,selected,anchor).also {
+                    require(it.isFinite() && it>=0 && (it*Pk.PMOL_PER_PG).isFinite())
+                }
+                constructionCache?.let { if(it.size>=50_000) it.clear();it[hour]=value }
+                return value
             }
             val single=ResearchExtrema.maximum(0.0,24.0) { ResearchSublingualV01.studyScenario(it,listOf(ExperimentalDose(0.0,1.0)),selected,anchor) }
             val from = nowH - ConcentrationCalculator.HISTORY_DAYS * 24.0
@@ -51,7 +61,9 @@ class ConcentrationPreview(val model: ResearchModel, val timeH: DoubleArray, val
             val peak=ResearchExtrema.maximum(origin,origin+24.0,value=::exact)
             times+=peak.hour
             val x=times.toDoubleArray()
-            return ConcentrationPreview(model,x,DoubleArray(x.size){exact(x[it])},exact(nowH),selected.id,::exact,
+            val values=DoubleArray(x.size){exact(x[it])};val current=exact(nowH)
+            constructionCache=null
+            return ConcentrationPreview(model,x,values,current,selected.id,::exact,
                 anchor,single,peak,origin)
         }
     }

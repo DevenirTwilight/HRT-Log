@@ -45,4 +45,6 @@
     <string name="uc_original_research_note">Représentant de recherche, sans supériorité clinique établie : %1$s · %2$s · %3$s. Amplitude pondérée de Price 1997, figure 1 : B supposé=%4$s, A ajusté=%5$s pg/mL (incrément 1 mg / 1 h). Amplitude de groupe appliquée uniquement aux prises SL E2 enregistrées ; autres voies exclues. Les points biologiques sont l’E2 totale observée et ne calibrent pas cette courbe. Les cartes de calibration et paramètres ci-dessous concernent UNIQUEMENT Legacy. Queue des prises enregistrées, incertaine à 8–24 h ; conflit AUC figure/table non résolu ; durée de maintien non estimée.</string>
     <string name="uc_original_tail">Queue de recherche</string>
     <string name="uc_original_peaks">Référence isolée 1 mg : Cmax %1$s pg/mL à +%2$s h. Fenêtre de 24 h après la dernière prise (résidus antérieurs inclus) : pic %3$s pg/mL à +%4$s h.</string>
+    <string name="uc_preview_loading">Chargement des prises sublinguales d’E2 et calcul de la courbe de recherche sélectionnée…</string>
+    <string name="uc_preview_failed">Le calcul de la courbe de recherche a échoué. Vos prises restent inchangées. Sélectionnez Legacy pour afficher le calcul initial.</string>
 </resources>

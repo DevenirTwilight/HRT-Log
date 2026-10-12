@@ -15,6 +15,8 @@ import java.time.Instant
 
 /** Debug-only consolidated host. Entirely synthetic; never opens a database or accepts input health records. */
 class UnifiedConcentrationTestActivity : ComponentActivity() {
+    var previewDelayMillis by mutableLongStateOf(0L)
+    var previewFails by mutableStateOf(false)
     var syntheticLabPgMl by mutableDoubleStateOf(150.0)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +35,11 @@ class UnifiedConcentrationTestActivity : ComponentActivity() {
             UnifiedConcentrationScreen(records,emptyMap(),labs,PaddingValues(),{pad,preview,selector ->
                 ConcentrationScreen(state,result,false,70.0,ConcSettings(pmol,calibrate,net.plainnotes.app.pk.CalibrationMode.RETROSPECTIVE),
                     {pmol=it.pmol;calibrate=it.calibrate},{},{},{},pad,records,state.profiles,preview=preview,modelSelector=selector)
-            },{now})
+            },{now}, previewComputer = { audit,model,hour ->
+                kotlinx.coroutines.delay(previewDelayMillis)
+                check(!previewFails)
+                net.plainnotes.app.experimental.ConcentrationPreview.compute(audit,model,hour)
+            })
         } }
     }
 }
