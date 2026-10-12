@@ -55,7 +55,7 @@
 | `scripts/test_delivery_ledger.py`（8 项：仓库账本通过；递增通过；重复或降低版本号、包名或证书改变、源码不可信、APK 哈希缺失/重复/等于证书、缺字段、源码版本低于已交付版本，都被拒绝） | PASS |
 | `scripts/test_apk_provenance.py`（6 项：只读 app 的 BuildConfig、包名与版本解析、精确 SHA/干净/git 才通过） | PASS |
 | `scripts` 全部测试 | 18/18 PASS（含 cf3e580 新增的 aapt2 真实输出用例） |
-| CI：R8 压缩后的 Release APK 必须恰好声明 `GITHUB_SHA` | 本地等价检查通过（见 §4）；CI 结果见 §4 |
+| CI：R8 压缩后的 Release APK 必须恰好声明 `GITHUB_SHA` | PASS（本地 + CI run 38262091486） |
 
 ## 4. 全量回归
 
@@ -66,7 +66,7 @@
 | Release APK 身份（`apk_provenance.py --expect-source-sha cf3e580…`） | 通过：`source_sha=cf3e58096039bcaf4765c98ef35243441247302f`、origin=git、dirty=false；包名 `net.plainnotes.app`，versionCode 25 / 0.2.0；unsigned APK sha256 `5f57014e…`（这是**未签名**测试包，不是交付物） |
 | `check_release_manifest.py`（无 INTERNET） / `delivery_ledger.py check` | PASS / PASS（下一次交付至少 26） |
 | B0 守卫 `check_protocol.py` | PASS（普通产品文件改动不触发守卫） |
-| GitHub Actions（`cf3e580`） | run 38262091486，**等待结果** |
+| GitHub Actions（`cf3e580`） | run 38262091486：jvm（14:21:39Z）/ android（14:32:05Z）/ device-tests（14:27:50Z）全部 **success**；android 作业的 “Release APK source identity and delivery ledger” 步骤通过（R8 压缩后的 Release APK 恰好声明 `GITHUB_SHA`=cf3e580、git、clean） |
 
 ## 5. 未验证与风险
 

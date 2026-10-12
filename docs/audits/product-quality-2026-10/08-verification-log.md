@@ -78,3 +78,4 @@
 | 41 | 全量回归 @`47e2716` | data 72、reminder 14、app 411（13 跳过）、PeriodStability 5/5 全部通过；**lint NewApi 1 错误**（longVersionCode，minSdk 26）→ BUILD FAILED |
 | 42 | 修复 @`cf3e580` 后：聚焦测试 + lint + Debug/Release + APK 身份 + manifest + 交付账本 | 全部通过；Release APK 声明 cf3e580/git/clean；`apk_provenance` 正则误读包名的缺陷同时修复 |
 | 43 | 隔离整合 PR #19(`aecbd7d`) + 审计分支(`47e2716`)，仅临时 worktree | 1 处文本冲突（REQUIREMENTS）；研究测试 283 项 2 FAIL / 8 ERROR；补 3 条批准记录后显示链通过，但发现未锁定研究输入和守卫自引用误报（17 号报告） |
+| 44 | GitHub Actions @`cf3e580` | run 38262091486：jvm / android / device-tests 全部 success；新步骤 Release APK 身份与交付账本通过 |
