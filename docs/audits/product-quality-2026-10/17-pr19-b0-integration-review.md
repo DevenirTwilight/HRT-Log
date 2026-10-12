@@ -85,3 +85,36 @@ cd <dir> && git merge --no-ff --no-commit 47e2716      # REQUIREMENTS.md 冲突
 # 解决冲突：保留 HEAD 的 §59–§66，再接 §67
 python3 -m unittest discover -s tools/pk-research -p 'test_*.py'   # 283 项：2 FAIL / 8 ERROR
 ```
+
+## 8. 实施结果（2026-10-12，产品负责人按 REQUIREMENTS §69 批准后）
+
+在 PR #19 分支 `feature/unified-concentration-20261011` 上提交，未改写历史，未合并默认分支，PR 未合并：
+
+| 提交 | 内容 |
+|---|---|
+| `b649679` | 保留历史的 merge commit（父提交 `aecbd7d` + `539c52e`）。唯一冲突是 REQUIREMENTS，按 §59–§66、§67–§69 的顺序保留 |
+| `343a183` | 守卫整合：分类、批准记录迁移、测试改写 |
+
+**分类**（实际文件逐个确认，不只看数量）：
+- PR #19 新增的 10 个文件改为实时锁定：M2 内核、候选表、标定、比较代码，以及 `unified-m1-python-reference.json`，其中包括 `ResearchSublingualV01.kt`。
+- 7 个 M2 显示文件需要批准链，起点是 `aecbd7d` 时的哈希：`UnifiedConcentrationScreen.kt`、`ConcentrationPreview.kt`、两个历史适配器、`ResearchDisplayProtocol.kt` 等。
+- 新规则：PK 源码目录下的任何未分类文件都直接失败。
+- 7 条历史偏离记录用规范化哈希锁定，改字段、删除或重排都会失败。
+- 依赖扫描扩展到 `tools/pk-fit` 和 PR #19 的参考/变异脚本，守卫文件自身排除在外。
+
+**批准迁移**（逐项核对）：三次 `ConcentrationScreen.kt` 改动的哈希链 `f21a68d4 → 75152ada → 96c49efe → 584dc8c7`，分别与 git 提交 `425a7ab`、`b509acd`、`c1f49e6` 的文件内容一致。每次 diff 都只涉及显示，没有调用计算、参数、LabFit 或数据库。对应的决定是：
+- `425a7ab` 对应 §60。§60 的文字在代码提交后 23 分钟才写入 `8216f30`，内容与改动一致，但记录晚于改动，**已标为需要人工核查**。
+- `b509acd`、`c1f49e6` 对应 §65，写入时间（`644fe93`）早于代码。
+
+**测试改写**（没有删除任何检查）：
+- AppShell 的字节冻结测试改为两部分：确认它已是普通产品文件；确认真实导航行为由 `UnifiedConcentrationNavigationTest` 固定。
+- “164 个文件全部不变”改为三项检查：锁定文件与冻结哈希一致；显示文件处于最后一次批准的状态；164 个文件仍能从 git 复现。
+- 新增负向用例：未批准修改、哈希篡改、非产品负责人或短 SHA 或无关证据、伪造的追加批准、链条断裂或倒序、未分类新文件、重复登记。**每个用例都断言失败原因**；沙箱在未修改时必须先通过，避免测试因为环境不完整而“误通过”。
+- 整合过程中发现并修正了一个原测试的假阳性：沙箱只复制 164 个文件，导致负向用例总是因为缺少文件而失败。
+
+**本地回归**（`343a183`，干净树）：
+- 研究与守卫测试 301/301，pk-audit 通过，scripts 测试通过。
+- domain 58、pk-engine 124（含 `M2OnlyNumericalContractTest` 3/3）、importer 12、data 72、reminder 14、app 448（13 项是原有的环境性跳过），0 失败；`PeriodStabilityTest` 5/5。
+- lint 0 错误；Debug 和 Release 构建通过；Release APK 声明 `343a183`、git、干净。
+- `check_release_manifest.py` 通过；`check_unified_concentration.py` 通过。
+- CI 结果见下一次更新。
