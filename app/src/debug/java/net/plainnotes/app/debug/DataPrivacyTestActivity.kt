@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.room.Room
 import net.plainnotes.app.NotesViewModel
 import net.plainnotes.app.data.*
@@ -36,7 +37,11 @@ class DataPrivacyTestActivity:ComponentActivity() {
 private class PrivacyFixture(context:Context):ViewModel() {
     private val database=Room.inMemoryDatabaseBuilder(context,NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build().also{it.openHelper.writableDatabase}
     val repository=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=database})
-    val model=NotesViewModel(repository,ReminderCoordinator(context,repository),context)
-    private val children=ViewModelStore().apply{put("synthetic-data-ui",model)}
+    private val children=ViewModelStore()
+    private val owner=object:ViewModelStoreOwner{override val viewModelStore=children}
+    val model=ViewModelProvider(owner,object:ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST") override fun<T:ViewModel> create(modelClass:Class<T>):T=
+            NotesViewModel(repository,ReminderCoordinator(context,repository),context) as T
+    })[NotesViewModel::class.java]
     override fun onCleared(){children.clear();database.close()}
 }

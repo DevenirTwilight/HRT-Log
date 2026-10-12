@@ -36,3 +36,10 @@ A 最终验收：本地 JVM domain58/PK124/importer12、data72/reminder14/app524
 仅 `app/build.gradle.kts` 增加既有Room/sqlite的 debugCompileOnly 编译类型，不新增运行包库或版本变动。初始额外基准78文件中77逐字节不变；这一普通构建文件按精确两行编译依赖差异核对，原版本/签名/生产配置不动。真实55实时研究锁、15显示文件、schema/core-data/备份协议/ledger均保持。历史164/164、独立结果5/5再次通过，科研302/旧PK13通过，原研究守卫不改。
 
 负向：55项合法源码先通过；故意不显示 ExportPrivacyNotice，CSV实际入口1/1因找不到告知节点失败，非环境/超时。已恢复代码，完整回归/CI仍需本提交验收。逐批提交/运行与精确revert待本批绿色后登记；无默认合并、正式签名、交付或上传APK。
+
+
+B 首次提交 `348064c251d7a21338ae7637b4d5394f6e4122da` 的 [38298443443](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38298443443)：jvm/device-tests success，但android FAIL，原因仅为 debug 合成宿主直接 `ViewModelStore.put` 触发 RestrictedApi lint（1错误174警告），不是数据/研究/布局回归。独立 [38298443463](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38298443463) reference success。真实API35密码对话框已通过；首批B不能因此标COMPLETE。改为公开 ViewModelProvider 注册，保留生命周期与所有断言，不加lint忽略、不改门槛；修复提交须重新完整CI。
+
+本地首次全量因cgroup8GiB触发OOM kill（事件计数1）中断，不计业务失败或变异；清理旧Kotlin守护进程/孤立测试worker，CLI改为进程内编译、单worker重跑，577项app（61既有条件跳过）、data72/reminder14全部零失败，随后同一 RestrictedApi lint 错误被捕获。此处保留失败与环境边界，不用旧绿色代替修复提交验收。
+
+B 公开API修复的本地聚焦55项、lint（0错误174警告）及instrumentation完整编译/打包已通过；没有关闭RestrictedApi检查。完整source/CI仍以随后修复提交为准。
