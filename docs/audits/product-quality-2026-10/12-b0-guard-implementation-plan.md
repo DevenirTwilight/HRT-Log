@@ -117,6 +117,7 @@
 | 当前树重跑研究 | 科学字段与已提交结果一致（仅 `code_revision`/`code_sha256` 不同） |
 | 模拟 CI 浅克隆、**不**拉取历史对象 | 261 项中 11 项 **ERROR**（`HistoricalObjectMissing`），退出码 1：失败，非跳过 |
 | 模拟 CI 浅克隆、拉取三个提交后 | 273/273 PASS；`research.py` 正常 |
+| **GitHub Actions run 38257031094 @ `b2ba7f6`** | jvm / android / device-tests 全部 success；jvm 的 “Fetch frozen P2 history objects” 步骤成功拉取三个提交，研究测试 `Ran 273 tests … OK`，`research.py` 正常输出（339 个画像，`clinical_accuracy_established: false`） |
 
 ### 负向用例及其实际拒绝原因（逐条打印核对，见 08 #39）
 

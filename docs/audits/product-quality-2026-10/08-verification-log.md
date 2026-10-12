@@ -72,3 +72,5 @@
 | 35 | `scripts/apk_provenance.py` 读取 Release | origin=git、dirty=false、SHA=0d99591…；apk_sha256 bfa58c96…；unsigned |
 | 36 | 临时应用关于页补丁 v2 + 临时 Robolectric 测试；运行守卫测试 | 测试 1/1 PASS；守卫 FAIL（SettingsScreen.kt 被锁定，符合预期）；已还原 |
 | 37 | GitHub Actions android.yml（加固后代码） | run 38244314171 @1e7b79d：cancelled（被下一次推送按 concurrency 取消）；run 38244330717 @5b2993d：jvm/android/device-tests 全部 success |
+| 38 | GitHub Actions android.yml（B0 守卫 `b2ba7f6`） | run 38257031094：jvm / android / device-tests 全部 success；“Fetch frozen P2 history objects”成功；`tools/pk-research` 273 项 OK |
+| 39 | B0 负向用例逐条打印拒绝原因（本地，`test_guard_two_domain.py` 夹具） | 每个用例都因预期原因被拒绝，未改动的副本通过（明细见 12 §9） |

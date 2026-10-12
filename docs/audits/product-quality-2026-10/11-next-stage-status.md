@@ -21,21 +21,23 @@
 | `0d99591` | B1 加固：`SOURCE_ORIGIN`、本项目 checkout 校验、未跟踪文件计入 dirty、注入 SHA 比对、Release fail-closed、`apk_provenance.py` 及测试 | APPROVED（B1 复核与必要修正） |
 | 下一个文档提交 | 11、12、13、14、`B0-protected-file-matrix.json`、补丁 v2、STATUS / HANDOFF / 08 更新 | 仅文档 |
 
+| `b2ba7f6` | B0 双域守卫（D-13 方案 A） | APPROVED（REQUIREMENTS §67） |
+
 PR：**未创建**。Release / 签名 / 交付：**无**。
 
 ## 3. 决策门与批次状态
 
 | Gate / 批次 | 状态 | 文档 |
 |---|---|---|
-| G0 / D-13 科研守卫双域 | **WAITING_APPROVAL**（设计 + 依赖闭包 + 实测回放已完成） | 12、`B0-protected-file-matrix.json` |
+| G0 / D-13 科研守卫双域 | **DONE**（2026-10-12 批准方案 A；提交 `b2ba7f6`；CI 38257031094 全部 success） | 12 §9 |
 | B1 构建侧 | **DONE**（本地全量回归 PASS；CI 38244330717 @5b2993d 全部 success） | 13 |
-| B1 关于页 | **WAITING_APPROVAL**（补丁 v2 已验证可编译、测试通过、守卫拦截） | 13 §7 |
-| D-4 versionCode | **WAITING_APPROVAL** | 07 |
-| G1 / D-1 M2 显示 | **WAITING_APPROVAL** | 14 |
-| G2 / D-2 PDF / 化验估算 | **WAITING_APPROVAL** | 14 |
-| B2 隐私/备份 | **BLOCKED_BY D-13**（要改的 `NotesViewModel.kt`、`strings.xml` 等被锁定） | 06 |
-| B3 UX / 无障碍 | **BLOCKED_BY D-13**（大部分文件被锁定） | 06 |
-| B4 性能 | **BLOCKED_BY D-13** + 需要设备基准 | 06 |
+| B1 关于页 | **APPROVED，下一批实施**（B0 后 `SettingsScreen.kt` 为仅历史文件，正常修改，无需偏离） | 13 §7 |
+| D-4 versionCode | **APPROVED**（今后正式交付递增；不改 applicationId / 签名 / Schema） | REQUIREMENTS §67 |
+| G1 / D-1 M2 显示 | **APPROVED 方案 B（附科学边界），排在关于页之后，在 PR #19 分支实施** | 14、REQUIREMENTS §67 |
+| G2 / D-2 PDF / 化验估算 | **APPROVED D2-2，与 D-1 同批** | 14、REQUIREMENTS §67 |
+| B2 隐私/备份 | 不再被守卫阻断（相关文件已是仅历史文件）；待排期 | 06 |
+| B3 UX / 无障碍 | 不再被守卫阻断；PK 显示的 7 个文件仍需批准链 | 06 |
+| B4 性能 | 需要设备基准 | 06 |
 | B5 功能扩展 | 后置 | 06 |
 
 ## 4. 本轮新发现
