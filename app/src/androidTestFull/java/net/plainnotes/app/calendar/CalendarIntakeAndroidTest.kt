@@ -43,34 +43,55 @@ class CalendarIntakeAndroidTest {
         ui.waitForIdle()
         if (runCatching { cell(tomorrow).fetchSemanticsNode() }.isFailure) ui.onNodeWithContentDescription(s(R.string.calendar_next)).performClick()
         cell(tomorrow).performClick()
-        ui.waitForIdle()
+        ui.waitUntil(10_000) { cell(tomorrow).fetchSemanticsNode().config.getOrNull(SemanticsProperties.Selected) == true }
         assertEquals(true, cell(tomorrow).fetchSemanticsNode().config.getOrNull(SemanticsProperties.Selected))
         ui.waitUntil(20_000) { runCatching { ui.onNode(hasScrollToIndexAction()).performScrollToNode(hasText(s(R.string.complete))) }.isSuccess }
     }
     private fun complete() = ui.onAllNodes(hasText(s(R.string.complete)) and hasClickAction()).onFirst()
     private fun dialogOpen() = ui.onAllNodes(isDialog()).fetchSemanticsNodes().isNotEmpty()
+    private fun activityFocused(): Boolean { var focused = false; InstrumentationRegistry.getInstrumentation().runOnMainSync { focused = context.hasWindowFocus() }; return focused }
+    /** Opens the intake dialog and waits until its window, not the activity, has input focus, so a real key reaches it. */
+    private fun openIntake() { complete().performClick(); ui.waitUntil(10_000) { dialogOpen() && !activityFocused() } }
+    /** A real system BACK key. If the soft keyboard is up, Android's first Back only hides it; a second press closes the dialog. */
+    private fun systemBack() {
+        val instrumentation = InstrumentationRegistry.getInstrumentation()
+        instrumentation.sendKeyDownUpSync(KeyEvent.KEYCODE_BACK)
+        runCatching { ui.waitUntil(3_000) { !dialogOpen() } }.onFailure { instrumentation.sendKeyDownUpSync(KeyEvent.KEYCODE_BACK) }
+        ui.waitUntil(10_000) { !dialogOpen() }
+    }
+    /** A real system BACK key while the activity window has focus. */
+    private fun activityBack() { ui.waitUntil(10_000) { activityFocused() }; InstrumentationRegistry.getInstrumentation().sendKeyDownUpSync(KeyEvent.KEYCODE_BACK); ui.waitForIdle() }
 
     @Test fun cancelAndSystemBackOnTheIntakeDialogWriteNothing() {
         val before = intakes()
-        complete().performClick(); ui.waitUntil(10_000) { dialogOpen() }
+        openIntake()
         ui.onNodeWithText(s(R.string.cancel)).performClick(); ui.waitUntil(10_000) { !dialogOpen() }
-        complete().performClick(); ui.waitUntil(10_000) { dialogOpen() }
-        InstrumentationRegistry.getInstrumentation().sendKeyDownUpSync(KeyEvent.KEYCODE_BACK); ui.waitUntil(10_000) { !dialogOpen() }
-        ui.onNodeWithContentDescription(s(R.string.calendar_pick_start)).assertExists()  // Back closed only the dialog
         assertEquals(before, intakes())
+        openIntake()
+        systemBack()
+        ui.onNodeWithContentDescription(s(R.string.calendar_pick_start)).assertExists()  // Back closed only the dialog
+        assertEquals("the key reached the dialog, not the activity", 0, context.activityBacks)
+        assertEquals(before, intakes())
+        complete().assertIsDisplayed().assertHasClickAction()  // the calendar is still usable
     }
 
     @Test fun oneSaveThenBackNavigationLeavesExactlyOneIntake() {
         val before = intakes().size
-        complete().performClick(); ui.waitUntil(10_000) { dialogOpen() }
+        openIntake()
         ui.onNodeWithText(s(R.string.save)).performClick(); ui.waitUntil(10_000) { !dialogOpen() }
         ui.waitUntil(20_000) { intakes().size == before + 1 }
-        repeat(2) { ui.runOnUiThread { context.onBackPressedDispatcher.onBackPressed() }; ui.waitForIdle() }
+        val saved = intakes().last()
+        assertTrue("a taken intake of the synthetic dose", saved.status in setOf("ON_TIME", "LATE") && saved.actual_dose == 2.0 && saved.taken_utc != null)
+        repeat(2) { activityBack() }
+        assertEquals("Back on the calendar goes to the activity", 2, context.activityBacks)
         ui.onNodeWithContentDescription(s(R.string.menu)).performClick()
         ui.onNodeWithTag("drawer-content").onChildren().filterToOne(hasText(s(R.string.history))).performClick()
         ui.waitUntil(10_000) { runCatching { ui.onNodeWithTag("drawer-content").assertIsNotDisplayed() }.isSuccess }
-        repeat(2) { ui.runOnUiThread { context.onBackPressedDispatcher.onBackPressed() }; ui.waitForIdle() }
-        ui.onNodeWithContentDescription(s(R.string.calendar_pick_start)).assertExists()
+        ui.onNodeWithContentDescription(s(R.string.calendar_pick_start)).assertDoesNotExist()  // on History
+        activityBack()
+        ui.onNodeWithContentDescription(s(R.string.calendar_pick_start)).assertExists()  // Back from History lands on the calendar
+        assertEquals(2, context.activityBacks)
+        activityBack()
         assertEquals("Back on the calendar reaches the activity; Back from History does not", 3, context.activityBacks)
         assertEquals(before + 1, intakes().size)
     }
