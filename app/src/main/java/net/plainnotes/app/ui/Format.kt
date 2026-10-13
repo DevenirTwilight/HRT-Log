@@ -33,6 +33,8 @@ import java.util.Locale
 @Composable fun formatTime(instant: Instant): String = formatTime(instant.atZone(ZoneId.systemDefault()).toLocalTime())
 @Composable fun formatDate(date: LocalDate): String = date.format(pattern("yMMMdEEE"))
 @Composable fun formatShortDate(date: LocalDate): String = date.format(pattern("MMMdEEE"))
+/** Full spoken date, e.g. for TalkBack names of calendar cells. */
+@Composable fun formatFullDate(date: LocalDate): String = date.format(pattern("yMMMMdEEEE"))
 @Composable fun formatDateTime(instant: Instant): String {
     val z = instant.atZone(ZoneId.systemDefault())
     return formatShortDate(z.toLocalDate()) + " " + formatTime(z.toLocalTime())

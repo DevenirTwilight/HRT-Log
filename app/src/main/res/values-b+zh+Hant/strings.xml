@@ -1043,4 +1043,12 @@
 <string name="restore_backup_failed">目前資料備份失敗，還原尚未開始。</string>
 <string name="restore_backup_saved">目前資料已匯出，還原尚未開始。取代資料前請再次選擇。</string>
 <string name="restore_backup_same_target">請選擇另一個輸出檔案，不能覆寫所選的待還原檔案。</string>
+    <!-- B3-B: calendar date names for TalkBack. -->
+    <string name="calendar_a11y_planned">計畫服藥 %1$d 次</string>
+    <string name="calendar_a11y_not_covered">庫存不足 %1$d 次</string>
+    <string name="calendar_a11y_appointments">預約 %1$d 個</string>
+    <string name="calendar_a11y_short">庫存不足</string>
+    <string name="calendar_a11y_nothing">無記錄</string>
+    <string name="calendar_a11y_open_month">查看本月</string>
+    <string name="calendar_a11y_join">，</string>
 </resources>

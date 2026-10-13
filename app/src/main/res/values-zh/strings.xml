@@ -1043,4 +1043,12 @@
 <string name="restore_backup_failed">当前数据备份失败，恢复尚未开始。</string>
 <string name="restore_backup_saved">当前数据已导出，恢复尚未开始。替换数据前请再次选择。</string>
 <string name="restore_backup_same_target">请选择另一个输出文件，不能覆盖所选的待恢复文件。</string>
+    <!-- B3-B: calendar date names for TalkBack. -->
+    <string name="calendar_a11y_planned">计划服药 %1$d 次</string>
+    <string name="calendar_a11y_not_covered">库存不足 %1$d 次</string>
+    <string name="calendar_a11y_appointments">预约 %1$d 个</string>
+    <string name="calendar_a11y_short">库存不足</string>
+    <string name="calendar_a11y_nothing">无记录</string>
+    <string name="calendar_a11y_open_month">查看本月</string>
+    <string name="calendar_a11y_join">，</string>
 </resources>
