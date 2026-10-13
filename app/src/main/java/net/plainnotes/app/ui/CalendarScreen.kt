@@ -6,6 +6,11 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.*
@@ -55,7 +60,9 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
     var view by rememberSaveable { mutableStateOf(initialView) }
     var selectedText by rememberSaveable { mutableStateOf(state.calendarStart.toString()) }
     val selected = LocalDate.parse(selectedText)
-    LaunchedEffect(state.calendarStart) { selectedText = state.calendarStart.toString() }
+    // Follow a new start date only when it actually changes; recreation (rotation) keeps the user's selected day.
+    var appliedStart by rememberSaveable { mutableStateOf(state.calendarStart.toString()) }
+    LaunchedEffect(state.calendarStart) { val start = state.calendarStart.toString(); if (start != appliedStart) { appliedStart = start; selectedText = start } }
     val upcoming = remember(extra.upcoming) { extra.upcoming }
     val runOut = remember(state.medications, extra.containers, upcoming) { forecast(state.medications, extra.containers, upcoming) }
     val displayedUpcoming = remember(upcoming, state.slots) { (state.slots + upcoming).distinctBy { it.slot.key }.filter { it.state in OPEN_STATES } }
@@ -163,9 +170,11 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
 @Composable private fun DayCell(date: LocalDate, info: DayInfo?, isToday: Boolean, isSelected: Boolean, inMonth: Boolean, modifier: Modifier, onClick: () -> Unit) {
     val c = MaterialTheme.colorScheme
     val (bg, fg) = kindColors(info?.kind ?: DayKind.NONE)
+    val description = dayDescription(date, info, isToday)
     Box(modifier.clip(RoundedCornerShape(12.dp)).background(bg).then(if (isSelected) Modifier.border(2.dp, c.primary, RoundedCornerShape(12.dp)) else Modifier)
-        .clickable(onClick = onClick).alpha(if (inMonth) 1f else 0.4f).padding(4.dp)) {
-        Column(horizontalAlignment=Alignment.CenterHorizontally,verticalArrangement=Arrangement.spacedBy(4.dp)) {
+        .selectable(isSelected, role = Role.Button, onClick = onClick).semantics { contentDescription = description }.alpha(if (inMonth) 1f else 0.4f).padding(4.dp)) {
+        // The digit and dots are decorative here; the cell's name already says them in words.
+        Column(Modifier.clearAndSetSemantics {}, horizontalAlignment=Alignment.CenterHorizontally,verticalArrangement=Arrangement.spacedBy(4.dp)) {
         CalendarDateBadge(date.dayOfMonth,isToday,fg)
         Row(Modifier.heightIn(min=12.dp), horizontalArrangement = Arrangement.spacedBy(2.dp), verticalAlignment = Alignment.CenterVertically) {
             if (info != null) {
@@ -188,8 +197,11 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
                 .map { Instant.ofEpochMilli(it.taken_utc ?: it.scheduled_utc!!) to (if(it.unconfirmed) "UNCONFIRMED" else it.status) } +
                 upcoming.filter { it.slot.at.atZone(zone).toLocalDate() == date }
                     .map { e -> e.slot.at to (if (runOut[e.slot.medicationId]?.firstShort?.let { !e.slot.at.isBefore(it) } == true) "SHORT" else "OPEN") }
+            val doses = marks.sortedBy { it.first }.map { (t, st) -> formatTime(t) + " " + stringResource(markLabel(st)) }
+            val description = dayDescription(date, info, date == today, doses)
             Column(Modifier.weight(1f).heightIn(min = 140.dp).clip(RoundedCornerShape(12.dp)).background(bg)
-                .then(if (date == selected) Modifier.border(2.dp, c.primary, RoundedCornerShape(12.dp)) else Modifier).clickable { onSelect(date) }.padding(vertical = 6.dp),
+                .then(if (date == selected) Modifier.border(2.dp, c.primary, RoundedCornerShape(12.dp)) else Modifier)
+                .selectable(date == selected, role = Role.Button) { onSelect(date) }.clearAndSetSemantics { contentDescription = description }.padding(vertical = 6.dp),
                 horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(3.dp)) {
                 Text(weekdayShort(date.dayOfWeek), style = MaterialTheme.typography.labelSmall, color = fg)
                 CalendarDateBadge(date.dayOfMonth,date==today,fg)
@@ -210,7 +222,10 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 row.forEach { m ->
                     val ym = YearMonth.of(year, m); val start = weekStart(ym.atDay(1))
-                    Column(Modifier.weight(1f).clip(RoundedCornerShape(10.dp)).clickable { onMonth(ym.atDay(1)) }.padding(4.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                    val name = ym.format(java.time.format.DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(currentLocale(), "yMMMM"), currentLocale()))
+                    val openMonth = stringResource(R.string.calendar_a11y_open_month)
+                    Column(Modifier.weight(1f).clip(RoundedCornerShape(10.dp)).clickable(onClickLabel = openMonth, role = Role.Button) { onMonth(ym.atDay(1)) }
+                        .clearAndSetSemantics { contentDescription = name }.padding(4.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                         Text(ym.month.getDisplayName(java.time.format.TextStyle.SHORT, currentLocale()), style = MaterialTheme.typography.labelLarge,
                             color = if (YearMonth.from(today) == ym) c.primary else c.onSurface)
                         val weeks = ((java.time.temporal.ChronoUnit.DAYS.between(start, ym.atEndOfMonth()) / 7) + 1).toInt()
@@ -231,6 +246,34 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
             }
         }
     }
+}
+
+/** Week-strip dose status in words; the strip itself shows it only by colour. */
+private fun markLabel(status: String) = when (status) {
+    "ON_TIME" -> R.string.status_on_time; "LATE" -> R.string.status_late; "MISSED" -> R.string.status_missed; "SKIPPED" -> R.string.status_skipped
+    "UNCONFIRMED" -> R.string.status_unconfirmed; "SHORT" -> R.string.calendar_a11y_short; else -> R.string.status_pending
+}
+
+/** B3-B (R-13): the spoken name of one calendar date: full date, today, the day's state in words, then [doses] if listed. */
+@Composable internal fun dayDescription(date: LocalDate, info: DayInfo?, isToday: Boolean, doses: List<String> = emptyList()): String {
+    val parts = mutableListOf(formatFullDate(date))
+    if (isToday) parts += stringResource(R.string.today)
+    when (info?.kind) {
+        DayKind.TAKEN -> parts += stringResource(R.string.legend_taken)
+        DayKind.PARTIAL -> parts += stringResource(R.string.legend_partial)
+        DayKind.MISSED -> parts += stringResource(R.string.legend_missed)
+        DayKind.UNCONFIRMED -> parts += stringResource(R.string.status_unconfirmed)
+        else -> {}
+    }
+    if (info != null && doses.isEmpty()) {
+        if (info.open > 0) parts += stringResource(R.string.calendar_a11y_planned, info.open)
+        if (info.short > 0) parts += stringResource(R.string.calendar_a11y_not_covered, info.short)
+    }
+    parts += doses
+    if (info != null && info.appointments > 0) parts += stringResource(R.string.calendar_a11y_appointments, info.appointments)
+    if (info?.runOut?.isNotEmpty() == true) parts += stringResource(R.string.legend_runout)
+    if (parts.size == (if (isToday) 2 else 1)) parts += stringResource(R.string.calendar_a11y_nothing)
+    return parts.joinToString(stringResource(R.string.calendar_a11y_join))
 }
 
 @OptIn(ExperimentalLayoutApi::class)

@@ -65,7 +65,7 @@ class UiPrefs(context: Context) {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Composable fun NotesApp(model: NotesViewModel, appearance: Appearance, onAppearance: (Appearance) -> Unit) {
+@Composable fun NotesApp(model: NotesViewModel, appearance: Appearance, onAppearance: (Appearance) -> Unit, backToCalendar: Boolean = true) {
     val context = LocalContext.current
     val prefs = remember { UiPrefs(context) }
     var region by remember { mutableStateOf(prefs.region) }
@@ -133,6 +133,12 @@ class UiPrefs(context: Context) {
     val errorText = state.error?.let { stringResource(it) }
     LaunchedEffect(errorText) { errorText?.let { snackbar.showSnackbar(it); model.clearError() } }
 
+    // B3-A (R-06): Back closes the drawer, then returns from any other top-level page to the calendar. Dialogs and the
+    // visit detail handle Back first (their handlers are newer). On the calendar, in disguise mode (immediate exit to the
+    // shell) and behind the lock Back falls through to MainActivity unchanged.
+    androidx.activity.compose.BackHandler(enabled = backToCalendar && (drawer.isOpen || destination != Destination.CALENDAR)) {
+        if (drawer.isOpen) scope.launch { drawer.close() } else destination = Destination.CALENDAR
+    }
     CompositionLocalProvider(LocalSimpleMode provides (simpleMode && state.medications.count { it.active } <= 1)) {
     ModalNavigationDrawer(drawerState = drawer, drawerContent = {
         ModalDrawerSheet {
@@ -153,7 +159,7 @@ class UiPrefs(context: Context) {
             floatingActionButton = {
                 when (destination) {
                     Destination.CALENDAR -> Box {
-                        ExtendedFloatingActionButton(onClick = { addMenu = true }, icon = { Icon(Icons.Outlined.Add, null) }, text = { Text(stringResource(R.string.add)) })
+                        ExtendedFloatingActionButton(onClick = { addMenu = true }, modifier = Modifier.testTag("calendar-add"), icon = { Icon(Icons.Outlined.Add, null) }, text = { Text(stringResource(R.string.add)) })
                         DropdownMenu(addMenu, { addMenu = false }) {
                             DropdownMenuItem(text = { Text(stringResource(R.string.manual)) }, leadingIcon = { Icon(Icons.Outlined.AddTask, null) }, enabled = state.medications.any { it.active },
                                 onClick = { addMenu = false; manual = true })

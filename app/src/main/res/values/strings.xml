@@ -1043,4 +1043,12 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="restore_backup_failed">The current-data backup failed. Restore has not started.</string>
 <string name="restore_backup_saved">Current data was exported. Restore has not started; choose again before replacing it.</string>
 <string name="restore_backup_same_target">Choose a different output file. The selected restore file must not be overwritten.</string>
+    <!-- B3-B: calendar date names for TalkBack. -->
+    <string name="calendar_a11y_planned">Planned doses: %1$d</string>
+    <string name="calendar_a11y_not_covered">Not covered by stock: %1$d</string>
+    <string name="calendar_a11y_appointments">Appointments: %1$d</string>
+    <string name="calendar_a11y_short">Not covered by stock</string>
+    <string name="calendar_a11y_nothing">Nothing recorded</string>
+    <string name="calendar_a11y_open_month">Show month</string>
+    <string name="calendar_a11y_join">", "</string>
 </resources>

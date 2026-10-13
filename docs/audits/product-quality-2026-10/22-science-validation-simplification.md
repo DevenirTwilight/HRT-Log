@@ -1,4 +1,4 @@
-# 22 科研验证精简工程验收（MERGED_CI_VERIFIED 待合并后默认分支 CI）
+# 22 科研验证精简工程验收（MERGED_CI_VERIFIED）
 
 2026-10-13；独立分支 feature/science-validation-simplification-20261013，起点 1e584285cb1e6f7a4b09a3e20585418d35a28735。B2 PR [20](https://github.com/DevenirTwilight/HRT-Log/pull/20) 开发期间未混入；2026-10-13 产品负责人批准后 PR20 以 `9c3b5d6` 合入默认分支，本分支随后合并默认分支以保留 B2 的设备脚本与测试（REQUIREMENTS §78）。S1–S3 已在 `97236d7` CI 通过；合并 B2 后的最终 CI 全绿，见文末。
 
@@ -81,3 +81,7 @@ S3 CI设计：Android jvm维持domain/PK/importer及32×13数值参考/四语检
 CI（`968783c`）：push Android 38381299493、Science 38381299642；PR Android 38381303849、Science 38381303857，jvm/android/device-tests/science-change-gate/research-deep 全 success。push 运行中 research-deep 实际被触发，证明仅改门控文件即深测。
 
 合并：依据 REQUIREMENTS §79 授权，在本文档提交 CI 全绿且 PR HEAD 未变后以 merge commit 合并；合并 SHA 与默认分支 CI 记录于 HANDOFF。未签名、未交付、未发布。未验证：真实 ARM。
+
+## 合并后验收
+
+PR #21 在 head `0cc22db`（十项检查全 success）以 merge commit `d5dc9e5` 合入默认分支。默认分支 CI：Android 38385723304（jvm、android 含 unsigned Release/Manifest/账本/Schema、device-tests 含 B2 导入清理重启与恢复进程死亡脚本）全 success；Science 38385723291 science-change-gate 与 research-deep（档案 12 秒、两套 SciPy 66 秒）success。科研守卫改造至此结束，不再扩展。
