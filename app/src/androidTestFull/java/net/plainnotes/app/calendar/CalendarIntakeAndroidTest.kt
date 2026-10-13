@@ -37,9 +37,12 @@ class CalendarIntakeAndroidTest {
         return ui.onNode(hasContentDescription(name, substring = true) and hasClickAction())
     }
     private fun selectTomorrow() {
-        // Wait for the synthetic medication to load: the empty-state card above the calendar disappears then and the grid moves.
-        ui.waitUntil(20_000) { ui.onAllNodesWithText("Synthetic Estradiol").fetchSemanticsNodes().isNotEmpty() }
-        ui.waitUntil(20_000) { ui.onAllNodes(hasClickAction() and SemanticsMatcher.keyIsDefined(SemanticsProperties.Selected)).fetchSemanticsNodes().size >= 7 }
+        // Wait for the synthetic medication to load: the "Nothing planned yet" card above the calendar is shown only until
+        // then, and removing it moves the grid. (Today's dose card may already be gone, so the name is no signal.)
+        ui.waitUntil(20_000) {
+            ui.onAllNodes(hasClickAction() and SemanticsMatcher.keyIsDefined(SemanticsProperties.Selected)).fetchSemanticsNodes().size >= 7 &&
+                ui.onAllNodesWithText(s(R.string.empty_title)).fetchSemanticsNodes().isEmpty()
+        }
         ui.waitForIdle()
         if (runCatching { cell(tomorrow).fetchSemanticsNode() }.isFailure) ui.onNodeWithContentDescription(s(R.string.calendar_next)).performClick()
         cell(tomorrow).performClick()
