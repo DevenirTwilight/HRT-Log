@@ -1,3 +1,5 @@
+> B4-D代码验收完成（2026-10-13）：6061ab3完整push/PR Android/Science全success，实际API35旧Schema9与外部force-stop新PID、加密备份/安全恢复通过；报告24已记录实际计数、artifact哈希、首次失败与仅设备重试。库存4mg→2mg/正常2盒→1盒；18数据纠错、20四语320dp/2×UI、即时共享预测刷新通过。现只提交验收文档并等待最终HEAD全部检查，不套用代码HEAD绿色。C任何CONSUME/REVERSE继续拒绝直接作废，后续补偿方案已写，A/B无需新增决定。PR23保持OPEN，无合并/正式签名/交付。下方为历史过程记录。
+
 > B4-D实现/本地回归已完成（2026-10-13）：JVM194、data109/rem17/app763零失败（app61原跳过），Period5、Calendar10、DataRefresh6、四语320dp/2×UI20通过；最后3条VOIDED零有效包装样本18data/20UI通过。lint0错误178警告、fullDebug/两仪器包完成。现提交并等待本HEAD的完整push/PR Android/Science；API35旧Schema9及外部force-stop新PID验证仍待实际结果。PR23保持OPEN，不正式签名/交付。
 
 > B4-D本地验收：data109/reminder17、JVM194、四语320dp/2×原生UI20、DataRefresh6、历史164/5和科研261已通过。真实假盒ADJUST-only库存4mg→2mg/正常2盒→1盒，原行VOIDED保留。首次全app763有既有日历LazyColumn标题断言失败，保留全部断言补滚动后Calendar10通过，完整复跑进行中。仪器包Room类型编译可见性已修正且两包构建通过；API35新PID/旧Schema9仍待CI。PR23不合并，不正式签名或交付。

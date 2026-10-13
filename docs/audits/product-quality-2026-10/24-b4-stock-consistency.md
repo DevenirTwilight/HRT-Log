@@ -1,6 +1,6 @@
 # 24 B4 库存一致性与库存纠错验收
 
-> 最新B4-D：产品负责人已批准VOIDED，ADJUST-only方案待决定项已解决；实施/最终CI进行中，以末节B4-D为准。下列B4-A/B/C及旧待决定说明保留阶段证据，不代表D的验收结果。
+> 最新B4-D：产品负责人已批准VOIDED，ADJUST-only方案待决定项已解决；实现代码CI已全绿，验收文档最终HEAD检查随后执行；以末节B4-D为准。下列B4-A/B/C及旧待决定说明保留阶段证据，不代表D的验收结果。
 
 2026-10-13；分支 `feature/b4-stock-consistency-20261013`，起点默认分支 `bab53d3`（PR #22 合并后 Android 38397467180、Science 38397467156 全绿）。路线图 R-09/D-3、R-14 及产品负责人补充任务“库存核对与纠错”。未合并、未签名、未交付。
 
@@ -86,7 +86,7 @@ B4-C当时只实现无流水撤销并等待决定。产品负责人现已在B4-D
 - 片数与 mg 的换算：数据库没有“每片规格”字段。核对时使用药物的库存单位，并显示折合多少次服药。按片输入需要先增加规格字段（需决定）。
 - 未修改 Schema、备份格式、PK、版本号或签名。B2、B3 行为不变。
 
-## B4-D：误添加包装作废（2026-10-13，实施中）
+## B4-D：误添加包装作废（2026-10-13，代码验收完成）
 
 产品负责人新决定覆盖 B4-C“有ADJUST不可撤销”的限制。起点 `4afa8b058dddc31627185dc5e3bf3b36bb0534a7`，PR23 OPEN；对应两组Android/Science已completed/success，无运行中CI。
 
@@ -96,9 +96,9 @@ B4-C当时只实现无流水撤销并等待决定。产品负责人现已在B4-D
 
 情况C本轮安全限制：任何CONSUME/REVERSE（包括已反转）均不能直接作废。下一阶段设计须针对完整未反转CONSUME追加唯一对应REVERSE，保留原dose_record；再按照现有分配规则把同一实际剂量只分配一次到真实包装，不足部分记录unallocated_supply_amount；多包装/多修订/既有REVERSE逐项幂等，在一个事务里验证每笔实际剂量的分配总量与未分配量守恒，失败回滚所有补偿。不重写/删除原流水，不靠用户重新录入服药。此设计本轮不实施或上线，需专项测试和产品审阅。
 
-实现与本地回归已完成；完整最终HEAD CI/实际API35验证待执行，不套用B4-C绿色。未合并/正式签名/交付。
+实现、本地回归和代码HEAD `6061ab3f0ed2c8843117db3066dcd5b60edde450` 的完整CI/实际API35已通过，详见下表；验收文档提交也必须等待自己的完整最终HEAD检查。未合并/正式签名/交付。
 
-### B4-D 本地证据（最终CI待执行）
+### B4-D 本地证据与保留的首次失败
 
 - 红测2项先失败：旧无流水撤销物理删除，随后读原行为空；旧ADJUST-only撤销报`Package has stock history`。实现后这两项通过。
 - 数据层完整109项、提醒17项通过。新增`VoidedPackageTest`18项涵盖无流水/一条及多条ADJUST、原流水/其他包装不变、重复操作、预测排除、只VOIDED空状态、自动分配/更换包装排除、服药编辑/删除不复活、CONSUME和已REVERSE均拒绝直接作废、原状态恢复、后续库存/实际服药变化拒绝且回滚、失败作废事务回滚、加密备份往返及缺纠错证据拒绝、审计/流水不可变。
@@ -106,10 +106,34 @@ B4-C当时只实现无流水撤销并等待决定。产品负责人现已在B4-D
 - 四语320dp/2倍字号原生绘制20项通过：普通数量排除VOIDED、只VOIDED为空状态、默认隐藏/主动展开高级记录、指定包装与二次确认、取消恢复零提交。实际ViewModel的即时刷新新增回归通过（DataRefreshTest 6项全通过），库存/日历/提醒仍共享B4-A预测。
 - 本地JVM domain58/PK124/importer12通过；历史164/164与5/5、科研261项通过。正式PK/参数、Room9结构JSON、PNBAK1及交付账本未改。
 - 首次全应用763项有1项既有`CalendarCoreFlowTest.pickingADayShowsItsDoses`失败，61原条件跳过：LazyColumn尚未创建“明天”标题，旧测试直接assertExists。保持原选中日期、标题、服药按钮、药名断言，加入用户实际滚动到各目标项后检查；10项聚焦回归通过，完整复跑763项已零失败（61原条件跳过）、lint0错误178警告、fullDebug及两套仪器包完成，失败XML已保存。没有放宽断言/新增skip。
-- 首次新Android仪器包编译因测试源看不到Room类型而失败；新增仅`androidTestCompileOnly`的现有Room/sqlite类型（不新增运行依赖），两个仪器包随后编译成功。API35真实旧Schema9打开和外部强制结束后新PID验证以CI实际结果为准，当前不冒称通过。
+- 首次新Android仪器包编译因测试源看不到Room类型而失败；新增仅`androidTestCompileOnly`的现有Room/sqlite类型（不新增运行依赖），两个仪器包随后编译成功。随后API35旧Schema9打开和外部强制结束后新PID验证已实际通过，见CI证据。
 
 旧备份继续读取；含VOIDED的新备份须由支持该语义的版本恢复，旧二进制不支持此新增状态/纠错证据，不能宣称降级兼容。未改变正式加密格式或结构Schema。若以后已有真实VOIDED数据，回滚界面也必须保留状态读取、查询排除及审计验证；不能直接回退到B4-C并删除/自动重写作废数据。本轮没有交付到用户设备、执行回滚或读取真实数据。
 
 情况C下一阶段影响范围为`SupplyLedger`、`NotesRepository`、状态转换守卫、备份验证及版本化纠错证据；仅在完整补偿/重新分配与每笔实际剂量守恒得到独立测试证明后，才可扩大当前“只ADJUST”门槛。当前安全限制不伪造“已用完/已丢弃”，不让用户直接SQL改库。
 
-最后加强“多条VOIDED、零有效包装”的明确样本：3条VOIDED记录时仓库/预测为未跟踪，日常UI无正常包装或历史包装计数；数据18项与四语UI20项聚焦复跑全部通过。下一步在本次提交的干净检出上执行完整GitHub push/PR检查，实际设备与unsignedRelease以该CI为准。
+最后加强“多条VOIDED、零有效包装”的明确样本：3条VOIDED记录时仓库/预测为未跟踪，日常UI无正常包装或历史包装计数；数据18项与四语UI20项聚焦复跑全部通过。此最终代码样本已在干净检出的GitHub push/PR完整检查通过；实际设备与unsignedRelease证据如下。
+
+### B4-D 代码HEAD完整CI验收
+
+被测源码：`6061ab3f0ed2c8843117db3066dcd5b60edde450`。四个run的head_sha均逐项核对，不套用基线或本地结果。
+
+| 事件 | Android（JVM / Android / API35 device-tests） | Science（gate / research-deep） |
+|---|---|---|
+| push | [38412061193](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38412061193) attempt 2，全success | [38412061245](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38412061245)，两项实际success |
+| PR #23 | [38412065846](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38412065846)，全success | [38412065777](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38412065777)，两项实际success |
+
+- JVM domain58 / PK124 / importer12；Android data109 / reminder17 / app763，均零失败。app61个既有条件跳过如实保留，PeriodStability5、Calendar10、DataRefresh6、四语320dp/2倍字号VOIDED UI20通过。
+- API35 x86_64：data15/15、app92项零失败/8个条件跳过；作废重启两个方法在主套件条件跳过，随后独立运行prepare和verify各`OK (1 test)`，不是将跳过视为通过。旧B2伪装、导入清理、恢复新进程脚本均继续执行通过；B3日历设备回归保留。
+- `MigrationBaselineTest.existingSchemaNineOpensWithExtendedStateGuardsAndRetainsVoided` 在实际API35打开已有v9数据库，包含旧四状态触发器，当前onOpen重装扩展保护后ADJUST-only作废成功；关闭重开仍VOIDED，version仍9。没有结构迁移。
+- 新作废脚本在外部force-stop后断言新PID不同；新进程普通查询为空，后台VOIDED/used=28保持；加密备份恢复仍VOIDED，再安全恢复为原IN_USE/剩2mg。PR设备日志14:24:28/14:24:32两次`OK (1 test)`，最终`PASS: fresh process retains VOIDED, encrypted backup and safe restoration`；push重试设备同样通过。
+- lint0错误178警告；fullDebug、unsigned fullRelease和两仪器APK构建成功。Release来源身份与clean检出、无INTERNET、交付账本、Room结构JSON无diff检查均通过。仅CI构建unsigned APK，未正式签名/发布/交付。
+- Science深验证在两事件均实际执行：历史164/164及5/5、科研261项、双SciPy参考通过，PK正式模型/参数未改。
+- 保留基础设施失败：push attempt1的device在下载Android Emulator时`Error on ZipFile unknown archive`，模拟器尚未启动，测试为NOT_RUN。等待该run结束后仅请求重试失败设备job，未取消运行中的CI。attempt2的JVM/Android展示继承的绿色（开始/结束时间与attempt1相同），设备14:29:39–14:38:41实际重跑成功。
+- 从PR run独立下载三个报告ZIP，SHA256与GitHub artifact digest逐项一致：build-results `a6228d2f85a3704a613fff55796c2617cd9441e868bd91b4c0a238c5ac7d4476`；device-test-results `f18983b54ffbf52bf708fcb1f4467d54390d35c388d8f5cbe054c57a28c8c558`；jvm-test-results `0ea5af580c627ef01c360bc400eb64c6365a6a925113b750ae20bf3bb3b8a8ec`。计数取实际报告，不仅看绿色状态。
+
+### 交付与最终提交边界
+
+A（无流水）与B（仅ADJUST，包括多次）完整实现并验证；C（任何真实消耗/回补关联）保留安全拒绝，补偿方案及失败回滚已写明，未擅自上线。自动恢复会重新检查原状态、流水、同药物包装及服药上下文，后续变化时保守拒绝。A/B本轮无需产品负责人再作决定；C扩大范围需下一阶段专项设计审阅。
+
+REQUIREMENTS §82已加入“所有用户录入/确认的信息都应存在可发现纠错路径；用版本、逻辑作废或补偿保留可追溯性，区分真实事件、误录入和修正”的长期原则。本轮未扩展服药/化验/预约历史重构。真实ARM/真人四语操作NOT_RUN；没有操作真实用户数据库。PR23保持OPEN，不合并默认分支、不正式签名、不发包。验收文档提交后的最终SHA及检查可在PR23实时核对，必须全部完成后才交还验收；文档更新不借用代码HEAD绿色，也不再循环追加记录自身SHA的提交。
