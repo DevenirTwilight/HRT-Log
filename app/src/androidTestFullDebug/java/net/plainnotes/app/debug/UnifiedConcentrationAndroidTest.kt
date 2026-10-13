@@ -1,16 +1,33 @@
 package net.plainnotes.app.debug
 import androidx.compose.ui.test.*
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.junit4.AndroidComposeTestRule
+import androidx.test.ext.junit.rules.ActivityScenarioRule
+import androidx.test.core.app.ApplicationProvider
+import android.content.Intent
+import androidx.compose.runtime.Recomposer
+import org.junit.Before
+import org.junit.After
 import net.plainnotes.app.R
 import net.plainnotes.app.pk.experimental.*
 import org.junit.Rule
 import org.junit.Test
-import kotlinx.coroutines.test.StandardTestDispatcher
-@OptIn(ExperimentalTestApi::class)
 class UnifiedConcentrationAndroidTest {
-    // The default UnconfinedTestDispatcher can resume the test frame/apply loop on a Default worker.
-    // Queue resumptions on the rule's scheduler instead; every original UI/model assertion stays intact.
-    @get:Rule val ui=createAndroidComposeRule<UnifiedConcentrationTestActivity>(effectContext=StandardTestDispatcher())
+    // Keep production's lifecycle/main-thread recomposer instead of Compose's unconfined test loop.
+    @get:Rule val ui = AndroidComposeTestRule(
+        ActivityScenarioRule<UnifiedConcentrationTestActivity>(Intent(
+            ApplicationProvider.getApplicationContext(), UnifiedConcentrationTestActivity::class.java
+        ).putExtra(UnifiedConcentrationTestActivity.REAL_WINDOW_RECOMPOSER, true))
+    ) { rule ->
+        lateinit var activity: UnifiedConcentrationTestActivity
+        rule.scenario.onActivity { activity = it }
+        activity
+    }
+    private val windowIdle = object : IdlingResource {
+        override val isIdleNow: Boolean
+            get() = ui.activity.instrumentationRecomposer?.currentState?.value?.let { it <= Recomposer.State.Idle } ?: true
+    }
+    @Before fun registerRealWindowIdle() { ui.registerIdlingResource(windowIdle) }
+    @After fun unregisterRealWindowIdle() { ui.unregisterIdlingResource(windowIdle) }
     private fun await(tag:String)=ui.waitUntil(30_000){ui.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty()}
     private fun noSelector() { for(choice in ResearchModel.entries)ui.onAllNodesWithTag("model-${choice.name}").assertCountEquals(0) }
     @Test fun originalUiHasOnlyM2ReferenceAndOneChart() {

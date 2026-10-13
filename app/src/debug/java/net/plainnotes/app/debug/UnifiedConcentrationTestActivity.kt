@@ -9,12 +9,16 @@ import net.plainnotes.app.NotesState
 import net.plainnotes.app.ui.*
 import net.plainnotes.app.conc.ConcentrationCalculator
 import androidx.compose.runtime.*
+import androidx.compose.ui.platform.createLifecycleAwareWindowRecomposer
 import net.plainnotes.app.data.*
 import net.plainnotes.app.experimental.UnifiedConcentrationScreen
 import java.time.Instant
 
 /** Debug-only consolidated host. Entirely synthetic; never opens a database or accepts input health records. */
 class UnifiedConcentrationTestActivity : ComponentActivity() {
+    companion object { const val REAL_WINDOW_RECOMPOSER = "synthetic-real-window-recomposer" }
+    var instrumentationRecomposer: Recomposer? = null
+        private set
     var previewDelayMillis by mutableLongStateOf(0L)
     var previewFails by mutableStateOf(false)
     var syntheticHistoryRevision by mutableIntStateOf(0)
@@ -37,7 +41,11 @@ class UnifiedConcentrationTestActivity : ComponentActivity() {
         val baseRecords=listOf(30L,20L,3L).mapIndexed {i,h -> RecordEntity((i+1).toLong(),1,
             taken_utc=now.toEpochMilli()-h*3600000,taken_zone="UTC",actual_dose=1.0,status="ON_TIME",origin="APP",revision=1,
             config_snapshot=MedicationSnapshot.encode(med,profile)) }
-        setContent { AuditTheme(auditDark) {
+        // Opt-in instrumentation uses the same lifecycle/main-thread recomposer as a real window.
+        val parent = if (intent.getBooleanExtra(REAL_WINDOW_RECOMPOSER, false))
+            window.decorView.createLifecycleAwareWindowRecomposer(lifecycle = lifecycle).also { instrumentationRecomposer = it }
+        else null
+        setContent(parent = parent) { AuditTheme(auditDark) {
             val extraMed=med.copy(id=2,name="Synthetic other route",molecule=if(syntheticExtraRoute=="SPI")"SPI" else "E2",
                 route=when(syntheticExtraRoute){"SPI"->"ORAL";"EV"->"SUBLINGUAL";else->syntheticExtraRoute},unit=if(syntheticExtraRoute=="PATCH")"PATCH" else "MG")
             val extraProfile=ProfileEntity(2,if(syntheticExtraRoute=="EV")"EV" else "E2",
