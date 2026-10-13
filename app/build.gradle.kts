@@ -65,6 +65,8 @@ dependencies {
     implementation(project(":core:data")); implementation(project(":core:reminder")); implementation(project(":core:ui"))
     implementation(libs.work); implementation(libs.activity.compose); implementation(libs.lifecycle.compose); implementation(libs.lifecycle.viewmodel)
     implementation(platform(libs.compose.bom)); implementation(libs.compose.ui); implementation(libs.compose.material); implementation(libs.compose.icons); implementation(libs.compose.preview); debugImplementation(libs.compose.tooling)
+    // Existing runtime libraries; only expose their types to the synthetic debug instrumentation host.
+    debugCompileOnly(libs.room.runtime); debugCompileOnly(libs.sqlite)
     implementation(libs.hilt.android); ksp(libs.hilt.compiler)
     testImplementation(libs.room.runtime); testImplementation(libs.room.ktx); testImplementation(libs.sqlite)
     testImplementation(libs.junit4); testImplementation(libs.org.json); testImplementation(libs.robolectric); testImplementation(libs.android.test.core)

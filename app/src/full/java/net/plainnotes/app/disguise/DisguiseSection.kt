@@ -126,10 +126,10 @@ private tailrec fun Context.activity():Activity?=when(this){is Activity->this;is
 @Composable private fun SetupDialog(onDismiss: () -> Unit, backup: suspend (Uri, CharArray) -> Boolean, onEnable: (Disguise.Shell, String, String?) -> Unit) {
     val scope = rememberCoroutineScope()
     var backedUp by remember { mutableStateOf(false) }; var backingUp by remember { mutableStateOf(false) }; var backupFailed by remember { mutableStateOf(false) }
-    var askPassword by remember { mutableStateOf(false) }; var password by remember { mutableStateOf<CharArray?>(null) }
+    var backupUri by remember { mutableStateOf<Uri?>(null) }
+    var awaitingPicker by remember { mutableStateOf(false) }
     val saveLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/octet-stream")) { uri ->
-        val pw = password; password = null
-        if (uri != null && pw != null) { backingUp = true; scope.launch { val ok = backup(uri, pw); backingUp = false; backedUp = ok; backupFailed = !ok } }
+        if(awaitingPicker){awaitingPicker=false;backupUri=uri}
     }
     var shell by remember { mutableStateOf(Disguise.Shell.CALCULATOR) }
     var a by remember { mutableStateOf("") }; var b by remember { mutableStateOf("") }; var alternate by remember { mutableStateOf("") }
@@ -141,7 +141,11 @@ private tailrec fun Context.activity():Activity?=when(this){is Activity->this;is
             when {
                 backedUp -> Text(stringResource(R.string.disguise_backup_done), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
                 backingUp -> LinearProgressIndicator(Modifier.fillMaxWidth())
-                else -> OutlinedButton(onClick = { askPassword = true }) { Text(stringResource(R.string.disguise_backup_action)) }
+                else -> OutlinedButton(onClick = {
+                    awaitingPicker=true
+                    try{saveLauncher.launchPicker("notes-${java.time.LocalDate.now()}.pnbak")}
+                    catch(_:Exception){awaitingPicker=false;backupFailed=true}
+                }) { Text(stringResource(R.string.disguise_backup_action)) }
             }
             if (backupFailed) Text(stringResource(R.string.disguise_backup_failed), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
             Text(stringResource(R.string.disguise_shell), style = MaterialTheme.typography.labelLarge)
@@ -159,6 +163,16 @@ private tailrec fun Context.activity():Activity?=when(this){is Activity->this;is
         } },
         confirmButton = { Button(enabled = backedUp && AppLock.validPin(a) && a == b && alternateOk, onClick = { onEnable(shell, a, alternate.ifEmpty { null }) }) { Text(stringResource(R.string.disguise_enable)) } },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } })
-    if (askPassword) PasswordDialog(stringResource(R.string.backup_export), stringResource(R.string.backup_password_note), confirm = true, { askPassword = false }) { pw ->
-        askPassword = false; password = pw; backupFailed = false; saveLauncher.launchPicker("notes-${java.time.LocalDate.now()}.pnbak") }
+    backupUri?.let { uri -> PasswordDialog(stringResource(R.string.backup_export),stringResource(R.string.backup_password_note),confirm=true,{backupUri=null}) { pw ->
+        if(backupUri!=uri){pw.fill('\u0000')} else {
+            backupUri=null;backupFailed=false;backingUp=true
+            scope.launch {
+                try {backedUp=backup(uri,pw);backupFailed=!backedUp}
+                catch(e:kotlinx.coroutines.CancellationException){throw e}
+                catch(_:Exception){backedUp=false;backupFailed=true}
+                finally{pw.fill('\u0000');backingUp=false}
+            }.invokeOnCompletion{pw.fill('\u0000')}
+        }
+    } }
+
 }

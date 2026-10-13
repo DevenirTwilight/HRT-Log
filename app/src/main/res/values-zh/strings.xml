@@ -1027,4 +1027,20 @@
 <string name="about_source_unknown">未知</string>
 <string name="about_source_copy">复制构建来源</string>
 <string name="about_source_copied">已复制</string>
+    <string name="export_privacy_notice">此导出文件不会由 HRT Log 加密。保存到你选择的位置后，其保护取决于该位置的权限和服务提供方。请妥善保管，避免意外共享。加密备份（.pnbak）不属于此类导出。</string>
+    <string name="backup_history_last">最近一次完成加密备份导出：%1$s</string>
+    <string name="backup_history_never">从未在本设备记录</string>
+    <string name="backup_history_note">这是本设备记录的导出操作时间，不保证文件仍在、已同步或能够恢复。</string>
+    <string name="backup_reminder_title">应用内备份提醒</string>
+    <string name="backup_reminder_note">仅在此页面提示，不发送通知。</string>
+    <string name="backup_reminder_days">每 %1$d 天</string>
+    <string name="backup_reminder_due">可以考虑导出一份新的加密备份。</string>
+<string name="restore_protection_title">恢复前确认</string>
+<string name="restore_protection_note">可以先导出当前数据的加密备份。导出不会开始恢复；也可以选择不备份，直接继续恢复。</string>
+<string name="restore_backup_current">先备份当前数据</string>
+<string name="restore_continue">继续恢复</string>
+<string name="restore_backup_cancelled">未完成当前数据备份，恢复尚未开始。</string>
+<string name="restore_backup_failed">当前数据备份失败，恢复尚未开始。</string>
+<string name="restore_backup_saved">当前数据已导出，恢复尚未开始。替换数据前请再次选择。</string>
+<string name="restore_backup_same_target">请选择另一个输出文件，不能覆盖所选的待恢复文件。</string>
 </resources>

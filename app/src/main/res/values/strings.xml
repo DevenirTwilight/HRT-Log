@@ -1027,4 +1027,20 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="about_source_unknown">Unknown</string>
 <string name="about_source_copy">Copy build source</string>
 <string name="about_source_copied">Copied</string>
+    <string name="export_privacy_notice">This export file is not encrypted by HRT Log. After you save it, protection depends on the permissions and provider of the location you choose. Keep it secure and avoid unintended sharing. Encrypted backups (.pnbak) are different.</string>
+    <string name="backup_history_last">Last completed encrypted backup export: %1$s</string>
+    <string name="backup_history_never">Never recorded on this device</string>
+    <string name="backup_history_note">This is an export operation recorded on this device. It does not confirm that the file still exists, has synced, or can be restored.</string>
+    <string name="backup_reminder_title">In-app backup reminder</string>
+    <string name="backup_reminder_note">Only shown on this page; no notifications.</string>
+    <string name="backup_reminder_days">%1$d days</string>
+    <string name="backup_reminder_due">Consider exporting a new encrypted backup.</string>
+<string name="restore_protection_title">Before restoring</string>
+<string name="restore_protection_note">You can first export an encrypted backup of your current data. Exporting does not start a restore. You may also continue without a new backup.</string>
+<string name="restore_backup_current">Back up current data</string>
+<string name="restore_continue">Continue restore</string>
+<string name="restore_backup_cancelled">No current-data backup was completed. Restore has not started.</string>
+<string name="restore_backup_failed">The current-data backup failed. Restore has not started.</string>
+<string name="restore_backup_saved">Current data was exported. Restore has not started; choose again before replacing it.</string>
+<string name="restore_backup_same_target">Choose a different output file. The selected restore file must not be overwritten.</string>
 </resources>

@@ -1,0 +1,36 @@
+{
+  "before": {
+    "tests": 4,
+    "failures": 4,
+    "expected_reason": "Missing plaintext export notice before SAF"
+  },
+  "focused_after": {
+    "entry_cases": 5,
+    "native_layout_cases": 48,
+    "translations": 2,
+    "failures": 0,
+    "skipped": 0
+  },
+  "mutation_remove_notice": {
+    "tests": 1,
+    "failures": 1,
+    "expected_reason": "Missing plaintext export notice node"
+  },
+  "historical_files": 164,
+  "identical_results": 5,
+  "research_tests": 302,
+  "pk_audit_tests": 13,
+  "extra_baseline": {
+    "unchanged": 77,
+    "reviewed_build_debug_compile_only": 1
+  },
+  "robolectric_password_dialog": "AppNotIdle native and legacy; assertions retained in actual Android instrumentation, pending CI",
+  "native_layout_false_overflow_sample": {
+    "text_width": 362,
+    "paragraph_constraint_width": 816,
+    "actual_row_width": 361.7578,
+    "characters_rendered": 10,
+    "characters_total": 10,
+    "ellipsized": false
+  }
+}

@@ -164,26 +164,32 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         class HtReady(val export:net.plainnotes.app.importer.HrtTracker.Export,val preview:net.plainnotes.app.importer.HrtTracker.Preview):DataJob
         class HtImported(val summary:net.plainnotes.app.data.HtImportSummary):DataJob }
     val dataJob=MutableStateFlow<DataJob>(DataJob.Idle)
-    fun clearDataJob(){dataJob.value=DataJob.Idle}
-    private fun dataOp(block:suspend()->DataJob)=viewModelScope.launch{dataJob.value=DataJob.Working;dataJob.value=try{block()}catch(e:BackupCodec.WrongPassword){DataJob.Failed(R.string.backup_wrong_password)}
+    private var importReadJob:Job?=null
+    fun clearDataJob(){importReadJob?.cancel();importReadJob=null;dataJob.value=DataJob.Idle}
+    private fun dataOp(block:suspend()->DataJob)=viewModelScope.launch{dataJob.value=DataJob.Working;val result=try{block()}catch(e:BackupCodec.WrongPassword){DataJob.Failed(R.string.backup_wrong_password)}
         catch(e:BackupCodec.TooLarge){DataJob.Failed(R.string.backup_too_large)}
         catch(e:BackupCodec.NewerBackup){DataJob.Failed(R.string.backup_newer_version)}
-        catch(e:BackupCodec.BadFile){DataJob.Failed(R.string.backup_bad_file)}catch(e:net.plainnotes.app.importer.InvalidExport){DataJob.Failed(R.string.import_invalid)}catch(e:net.plainnotes.app.importer.HrtTracker.InvalidExport){DataJob.Failed(R.string.ht_invalid)}catch(e:CancellationException){throw e}catch(_:Exception){DataJob.Failed(R.string.operation_error)}}
-    private fun tempImport()=java.io.File(app.noBackupFilesDir,"import").apply{mkdirs()}.resolve("transmemo.db")
-    fun openTransMemo(uri:android.net.Uri)=dataOp {
-        withContext(Dispatchers.IO) {
-            val f=tempImport();app.contentResolver.openInputStream(uri)!!.use{i->f.outputStream().use{i.copyTo(it)}}
-            val export=AndroidSqlSource.open(f).use{net.plainnotes.app.importer.TransMemo.read(it)}
+        catch(e:BackupCodec.BadFile){DataJob.Failed(R.string.backup_bad_file)}catch(e:net.plainnotes.app.importer.InvalidExport){DataJob.Failed(R.string.import_invalid)}catch(e:net.plainnotes.app.importer.HrtTracker.InvalidExport){DataJob.Failed(R.string.ht_invalid)}catch(e:CancellationException){throw e}catch(_:Exception){DataJob.Failed(R.string.operation_error)};ensureActive();dataJob.value=result}
+    private fun importRead(block:suspend()->DataJob):Job {
+        val previous=importReadJob
+        previous?.cancel()
+        return dataOp { previous?.join(); block() }.also{importReadJob=it}
+    }
+    fun openTransMemo(uri:android.net.Uri)=importRead {
+        val export=net.plainnotes.app.privacy.TransMemoImportCopies.read(app.noBackupFilesDir,
+            {app.contentResolver.openInputStream(uri)}) { file ->
+            AndroidSqlSource.open(file).use{net.plainnotes.app.importer.TransMemo.read(it)}
+        }
+        withContext(Dispatchers.Default) {
             DataJob.ImportReady(export,net.plainnotes.app.importer.TransMemo.preview(export,ZoneId.systemDefault()))
         }
     }
     fun runImport(export:net.plainnotes.app.importer.TmExport,choices:net.plainnotes.app.importer.TransMemo.Choices,overwrite:Boolean)=dataOp {
         val plan=withContext(Dispatchers.Default){net.plainnotes.app.importer.TransMemo.plan(export,ZoneId.systemDefault(),choices)}
         val summary=mutate{repo.importTransMemo(plan,overwrite)}
-        withContext(Dispatchers.IO){tempImport().delete()}
         refresh().join();DataJob.Imported(summary)
     }
-    fun openHrtTracker(uri:android.net.Uri)=dataOp {
+    fun openHrtTracker(uri:android.net.Uri)=importRead {
         val limit=32*1024*1024
         val text=withContext(Dispatchers.IO){app.contentResolver.openInputStream(uri)!!.use{ i ->
             val out=java.io.ByteArrayOutputStream();val buf=ByteArray(64*1024)
@@ -198,22 +204,24 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         val summary=mutate{repo.importHrtTracker(plan,targets,names,if(weight)export.weightKg else null)}
         refresh().join();DataJob.HtImported(summary)
     }
-    fun cancelImport()=viewModelScope.launch{withContext(Dispatchers.IO){tempImport().delete()};dataJob.value=DataJob.Idle}
+    fun cancelImport(){clearDataJob()}
+    val backupHistory=net.plainnotes.app.privacy.BackupHistory(app.getSharedPreferences("prefs",android.content.Context.MODE_PRIVATE))
+    private val backupWriter=net.plainnotes.app.privacy.BackupWriter(backupHistory)
     fun exportBackup(uri:android.net.Uri,password:CharArray)=dataOp {
-        val bytes=try{repo.exportBackup(password)}finally{password.fill(' ')}
-        withContext(Dispatchers.IO){app.contentResolver.openOutputStream(uri,"wt")!!.use{it.write(bytes)}};DataJob.Done(R.string.backup_saved)
-    }
-    /** Backup used as a gate (disguise mode): true only once the encrypted file is fully written. */
-    suspend fun backupTo(uri:android.net.Uri,password:CharArray):Boolean=withContext(Dispatchers.IO){
-        runCatching{ val bytes=repo.exportBackup(password); app.contentResolver.openOutputStream(uri,"wt")!!.use{it.write(bytes)} }.isSuccess.also{password.fill(' ')}
-    }
+        backupWriter.write(password,repo::exportBackup){app.contentResolver.openOutputStream(uri,"wt")}
+        DataJob.Done(R.string.backup_saved)
+    }.also{job->job.invokeOnCompletion{password.fill('\u0000')}}
+    /** Main encrypted export used as a gate; cancellation never becomes a success. */
+    suspend fun backupTo(uri:android.net.Uri,password:CharArray):Boolean=try {
+        backupWriter.write(password,repo::exportBackup){app.contentResolver.openOutputStream(uri,"wt")};true
+    }catch(e:CancellationException){throw e}catch(_:Exception){false}finally{password.fill('\u0000')}
     fun restoreBackup(uri:android.net.Uri,password:CharArray)=dataOp {
         try {
             val bytes=withContext(Dispatchers.IO){app.contentResolver.openInputStream(uri)!!.use{BackupLimits.read(it)}}
             mutate{repo.restoreBackup(bytes,password)}
-        }finally{password.fill(' ')}
+        }finally{password.fill('\u0000')}
         refresh().join();DataJob.Done(R.string.backup_restored)
-    }
+    }.also{job->job.invokeOnCompletion{password.fill('\u0000')}}
     private suspend fun exportData(labels:(CheckinItemEntity)->String,schedules:Map<Long,String>):net.plainnotes.app.export.ExportData {
         val meds=repo.medications();val today=LocalDate.now()
         return net.plainnotes.app.export.ExportData(meds,meds.mapNotNull{m->repo.profile(m.id)?.let{m.id to it}}.toMap(),repo.records(),repo.labs(),repo.checkinItems(),
@@ -241,15 +249,19 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     /** Legacy empty HRT database is retained across upgrade and erased only after explicit confirmation. */
     suspend fun destroyLegacyPrivateData()=withContext(Dispatchers.IO){repo.destroy(Space.DECOY)}
     fun wipeAll(onDone:()->Unit)=viewModelScope.launch {
+        dataJob.value=DataJob.Working
+        try {
         withContext(Dispatchers.IO){ mutate{repo.destroyAll()}
             net.plainnotes.app.disguise.Disguise.disable(app); repo.destroy(net.plainnotes.app.data.Space.DECOY)
             app.getSharedPreferences("prefs",android.content.Context.MODE_PRIVATE).edit().clear().commit()
+            backupHistory.clear()
             app.getSharedPreferences("shell_notes",android.content.Context.MODE_PRIVATE).edit().clear().commit()
             net.plainnotes.app.reminder.NotificationPrefs(app).clear(); net.plainnotes.app.security.AppLock(app).disable()
             java.io.File(app.createDeviceProtectedStorageContext().filesDir,"reminders.cache").delete()
             app.getSystemService(android.app.NotificationManager::class.java).cancelAll()
             runCatching{reminders.sync()} }
-        onDone()
+        dataJob.value=DataJob.Idle;onDone()
+        }catch(e:CancellationException){throw e}catch(_:Exception){dataJob.value=DataJob.Failed(R.string.operation_error)}
     }
     fun setWeight(kg:Double)=change{repo.setWeight(kg)}
     // D-2 (REQUIREMENTS §67 item 5): a new estimate never stores the retired Legacy sublingual E2 value.

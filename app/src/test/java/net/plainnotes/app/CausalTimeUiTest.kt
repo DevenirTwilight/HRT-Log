@@ -47,6 +47,9 @@ class CausalTimeUiTest {
   ui.waitUntil(10000){predicted.get()!=null}
   val actual=tapped.get()!!;Assert.assertTrue(actual<ConcentrationCalculator.hours(t0.plusSeconds(300)))
   val formatted="%.3f".format(java.util.Locale.US,predicted.get()!!)
+  // readAt runs on Dispatchers.Default; its AtomicReference is set before the
+  // result returns to Main and Compose publishes the tooltip semantics.
+  ui.waitUntil(10000){ui.onAllNodesWithText(formatted,substring=true).fetchSemanticsNodes().size==1}
   ui.onNodeWithText(formatted,substring=true).assertExists()
   Assert.assertNull(a.evaluateAt(actual)!!.calibration)
   ui.onNodeWithText(ui.activity.getString(R.string.calib_history_counts,0,0)).assertExists()
