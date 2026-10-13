@@ -1,6 +1,6 @@
-# 22 科研验证精简工程验收（CI 待验收）
+# 22 科研验证精简工程验收（COMPLETE_CI_VERIFIED）
 
-2026-10-13；独立分支 feature/science-validation-simplification-20261013，起点 1e584285cb1e6f7a4b09a3e20585418d35a28735。B2 PR [20](https://github.com/DevenirTwilight/HRT-Log/pull/20) 开发期间未混入；2026-10-13 产品负责人批准后 PR20 以 `9c3b5d6` 合入默认分支，本分支随后合并默认分支以保留 B2 的设备脚本与测试（REQUIREMENTS §78）。S1–S3 已在 `97236d7` CI 通过；合并 B2 后的最终 CI 见文末，未全绿前不称 COMPLETE。
+2026-10-13；独立分支 feature/science-validation-simplification-20261013，起点 1e584285cb1e6f7a4b09a3e20585418d35a28735。B2 PR [20](https://github.com/DevenirTwilight/HRT-Log/pull/20) 开发期间未混入；2026-10-13 产品负责人批准后 PR20 以 `9c3b5d6` 合入默认分支，本分支随后合并默认分支以保留 B2 的设备脚本与测试（REQUIREMENTS §78）。S1–S3 已在 `97236d7` CI 通过；合并 B2 后的最终 CI 全绿，见文末。
 
 ## S0 实际调用与迁移
 
@@ -60,3 +60,12 @@ S3 CI设计：Android jvm维持domain/PK/importer及32×13数值参考/四语检
 | Android 主工作流 | — | `97236d7` 运行 38373891829 09:05:56→09:18:10 success；Science validation 38373891825 success |
 
 本地计时为本环境单次结果，不作性能结论。
+
+## 最终 CI（合并 B2 后 head `1d90612`）
+
+| 触发 | 运行 | jvm | android | device-tests | science-change-gate | research-deep |
+|---|---|---|---|---|---|---|
+| push | Android 38377979046 / Science 38377978995 | success | success（09:40:21→09:54:02） | success | success（5 秒） | success（约 1.6 分钟） |
+| PR #21 | Android 38378010351 / Science 38378010352 | success | success（09:40:35→09:50:48） | success | success（6 秒） | success（约 1.6 分钟） |
+
+结论：S0–S4 完成，CI 全绿。2026-10-13 产品负责人回复“我授权，继续”，据此在 CI 全绿后合并 PR #21（REQUIREMENTS §79）。未签名、未交付 APK、未发布 Release。未验证：真实 ARM 设备。

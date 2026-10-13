@@ -1,4 +1,4 @@
-> 2026-10-13 B2 PR #20 经产品负责人批准，已于 `9c3b5d6` 合入默认分支（未签名、未交付）。科研守卫精简分支已合入含 B2 的默认分支，状态见[工程报告22](audits/product-quality-2026-10/22-science-validation-simplification.md)；PR 不合并，签名/交付须另授权。
+> 2026-10-13 B2 PR #20 经产品负责人批准，已于 `9c3b5d6` 合入默认分支（未签名、未交付）。科研守卫精简 PR #21 在 `1d90612` CI 全绿（Android 38377979046/38378010351，Science 38377978995/38378010352），经“我授权，继续”合并；此前该分支已合入含 B2 的默认分支，状态见[工程报告22](audits/product-quality-2026-10/22-science-validation-simplification.md)；签名/交付须另授权。
 
 # HRT Log 当前状态（单一事实入口）
 
