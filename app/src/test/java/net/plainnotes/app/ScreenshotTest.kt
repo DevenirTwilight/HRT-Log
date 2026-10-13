@@ -104,7 +104,7 @@ class ScreenshotTest {
     @Test fun historyScreen() = shoot("history") { HistoryScreen(state(), history(), {}, {}, PaddingValues()) }
     @Test fun stockScreen() = shoot("stock") { StockScreen(state(), listOf(
         ContainerEntity(1, 1, 30.0, 0.0, 22.0, today.minusDays(10).toString(), "IN_USE"), ContainerEntity(2, 1, 30.0, 0.0, 0.0, null, "SEALED"),
-        ContainerEntity(3, 3, 80.0, 0.0, 74.0, today.minusDays(27).toString(), "IN_USE")), history(), {}, { _, _ -> }, {}, PaddingValues()) }
+        ContainerEntity(3, 3, 80.0, 0.0, 74.0, today.minusDays(27).toString(), "IN_USE")), history(), {}, {}, {}, PaddingValues()) }
     @Test fun wellbeingScreen() {
         val items = net.plainnotes.app.data.CHECKIN_DEFAULTS.mapIndexed { i, k -> CheckinItemEntity(i + 1L, k, null, i < 6, i) }
         val scores = (0 until 20).flatMap { d -> (1..3).map { it -> CheckinScoreEntity(today.minusDays(d.toLong()).toString(), it.toLong(), 1 + (d * it + 2) % 5) } }

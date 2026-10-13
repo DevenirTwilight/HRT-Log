@@ -108,7 +108,10 @@ class UiPrefs(context: Context) {
     var editRecord by remember { mutableStateOf<net.plainnotes.app.data.RecordEntity?>(null) }
     var deleteRecord by remember { mutableStateOf<net.plainnotes.app.data.RecordEntity?>(null) }
     var addStock by remember { mutableStateOf<MedicationEntity?>(null) }
-    var adjustStock by remember { mutableStateOf<Pair<net.plainnotes.app.data.ContainerEntity, MedicationEntity>?>(null) }
+    var checkStock by remember { mutableStateOf<MedicationEntity?>(null) }
+    var managePackages by remember { mutableStateOf<MedicationEntity?>(null) }
+    var restorePackage by remember { mutableStateOf<net.plainnotes.app.data.ContainerEntity?>(null) }
+    var undoPackage by remember { mutableStateOf<net.plainnotes.app.data.ContainerEntity?>(null) }
     var manageItems by remember { mutableStateOf(false) }
     var wellbeingPrompt by remember { mutableStateOf(prefs.wellbeingPrompt) }
     var simpleMode by remember { mutableStateOf(prefs.simpleMode) }
@@ -201,7 +204,8 @@ class UiPrefs(context: Context) {
                     timelineActions=TimelineActions(model::editTimeline,model::deletePeriod))
                 Destination.VISITS -> VisitsScreen(state, extra, model, visitId, { visitId = it }, { appointment = true }, pad)
                 Destination.HISTORY -> HistoryScreen(state, extra.records, { editRecord = it }, { deleteRecord = it }, pad, onAdd = { manual = true }, onBatch = { batch = true }, onConfirmMissed={model.confirmMissed(it.id)},selectedRecordIds=importedRecordIds,labels=historyLabels,onExtra={r,on->model.setExtra(r.id,on)},onClearSelection={importedRecordIds=null})
-                Destination.STOCK -> StockScreen(state, extra.containers, extra.records, { m -> model.replaceContainer(m.id, m.container_capacity) }, { c, m -> adjustStock = c to m }, { addStock = it }, pad,onInfo={packageInfo=it})
+                Destination.STOCK -> StockScreen(state, extra.containers, extra.records, { m -> model.replaceContainer(m.id, m.container_capacity) }, { checkStock = it }, { addStock = it }, pad,
+                    onManage = { managePackages = it }, forecasts = extra.stockForecasts)
                 Destination.WELLBEING -> WellbeingHub(state,extra,model,region,{manageItems=true},pad)
                 else -> ComingSoonScreen(destination.icon, stringResource(destination.title), pad)
             }
@@ -221,8 +225,11 @@ class UiPrefs(context: Context) {
         confirmButton = { Button(onClick = { model.deleteRecord(r.id); deleteRecord = null }) { Text(stringResource(R.string.remove)) } },
         dismissButton = { TextButton(onClick = { deleteRecord = null }) { Text(stringResource(R.string.cancel)) } }) }
     addStock?.let { m -> AddStockDialog(m, { addStock = null }) { cap, n, open,source,batch -> model.addContainers(m.id, cap, n, open,source,batch); addStock = null } }
+    checkStock?.let { m -> CheckStockDialog(m, extra.containers, { checkStock = null }) { id, v -> model.correctStock(id, v); checkStock = null } }
+    managePackages?.let { m -> PackagesDialog(m, extra.containers, extra.containersWithConsumption, { managePackages = null }, { packageInfo = it }, voided=extra.voidedContainers, onRestore={ restorePackage = it }, onUndo={ undoPackage = it }) }
+    undoPackage?.let { box -> PackageCorrectionConfirmation(false,{undoPackage=null},label=meds[box.medication_id]?.let{it.name+" · "+packageLabel(box,it)}) { model.removeMistakenContainer(box.id);undoPackage=null } }
+    restorePackage?.let { box -> PackageCorrectionConfirmation(true,{restorePackage=null},label=meds[box.medication_id]?.let{it.name+" · "+packageLabel(box,it)}) { model.restoreVoidedContainer(box.id);restorePackage=null } }
     packageInfo?.let{box->ContainerInfoDialog(box,{packageInfo=null}){source,batch->model.setContainerInfo(box.id,source,batch);packageInfo=null}}
-    adjustStock?.let { (c, m) -> AdjustStockDialog(c, m, { adjustStock = null }) { v -> model.setRemaining(c.id, v); adjustStock = null } }
     if (manageItems) ManageCheckinItemsDialog(extra.items,{manageItems=false},model::saveCheckinItem,extra.effects,model::setReviewEffect,model::reorderItems)
     if(summary) SummaryExportDialog(model,state,{summary=false})
     overrideEntry?.let { e -> if (override?.key == e.slot.key) OverrideDialog(e, meds[e.slot.medicationId], override!!, { overrideEntry = null }) { o -> model.changeOverride(e.slot, o); overrideEntry = null } }

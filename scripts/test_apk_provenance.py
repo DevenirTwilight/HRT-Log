@@ -1,5 +1,9 @@
 import unittest
-from apk_provenance import expect_source, package_fields, source_fields
+import tempfile
+from pathlib import Path
+from unittest.mock import patch
+from types import SimpleNamespace
+from apk_provenance import certificates, expect_source, package_fields, source_fields
 
 DOC = """<api>
 <package name="net.plainnotes.app">
@@ -39,6 +43,18 @@ class PackageFieldsTest(unittest.TestCase):
 
     def test_missing_line_is_not_guessed(self):
         self.assertEqual(package_fields(""), {"application_id": None, "version_code": None, "version_name": None})
+
+
+class CertificatesTest(unittest.TestCase):
+    def test_original_and_sdk37_signer_prefixes_return_only_the_certificate_hash(self):
+        cert = "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1"
+        with tempfile.TemporaryDirectory() as directory:
+            tools = Path(directory)
+            (tools / "apksigner").touch()
+            for prefix in ("Signer #1", "V3.0 Signer:"):
+                with self.subTest(prefix=prefix), patch("apk_provenance.subprocess.run", return_value=SimpleNamespace(
+                        returncode=0, stdout=f"{prefix} certificate SHA-256 digest: {cert}\n")):
+                    self.assertEqual(certificates(tools, tools / "synthetic.apk"), [cert])
 
 
 class ExpectSourceTest(unittest.TestCase):

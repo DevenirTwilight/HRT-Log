@@ -12,32 +12,31 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import net.plainnotes.app.data.ContainerEntity
 import net.plainnotes.app.data.MedicationEntity
-import net.plainnotes.app.domain.SlotState
-import net.plainnotes.app.domain.TimelineEntry
+import net.plainnotes.app.data.StockForecast
+import net.plainnotes.app.data.StockForecasts
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 
-/** Refill reminders: low stock for the coming days' planned doses, and open packages close to their after-opening expiry. */
+/** Refill reminders: low stock by the shared per-dose forecast, and open packages close to their after-opening expiry. */
 object StockAlerts {
-    const val LOW_STOCK_DAYS = 7
+    const val LOW_STOCK_DAYS = StockForecasts.LOW_STOCK_DAYS
     const val EXPIRY_WARNING_DAYS = 3
     enum class Kind { LOW, EXPIRY }
     data class Alert(val medication: MedicationEntity, val kind: Kind)
 
     /**
-     * [upcoming] holds the planned doses of the next [LOW_STOCK_DAYS] days. Untracked stock (no open or sealed package)
-     * never alerts: there is nothing to compare against.
+     * Which alerts are due. Low stock is exactly the shared forecast's [StockForecast.isLow] (B4), the same judgement the
+     * stock page and calendar show; whether a notification is sent is decided here and in [post] (per-medication
+     * notification switch, review state, permission, once a day), never by changing the forecast. Untracked stock never
+     * alerts. The after-opening expiry warning stays independent of quantity.
      */
-    fun due(meds: List<MedicationEntity>, containers: List<ContainerEntity>, upcoming: List<TimelineEntry>, today: LocalDate): List<Alert> =
+    fun due(meds: List<MedicationEntity>, containers: List<ContainerEntity>, forecasts: Map<Long, StockForecast>, today: LocalDate,
+            zone: ZoneId = ZoneId.systemDefault()): List<Alert> =
         meds.filter { it.active && it.notifications_on && it.needs_review == null }.flatMap { m ->
-            val mine = containers.filter { it.medication_id == m.id }
-            val open = mine.filter { it.state == "IN_USE" }; val sealed = mine.filter { it.state == "SEALED" }
+            val open = containers.filter { it.medication_id == m.id && it.state == "IN_USE" }
             val out = ArrayList<Alert>()
-            if (open.isNotEmpty() || sealed.isNotEmpty()) {
-                val remaining = open.sumOf { it.capacity - it.used_amount } + sealed.sumOf { it.capacity }
-                val need = upcoming.filter { it.slot.medicationId == m.id && it.state in setOf(SlotState.PENDING, SlotState.SOON, SlotState.OVERDUE) }.sumOf { it.slot.dose }
-                if (need > 0 && remaining + 1e-9 < need) out += Alert(m, Kind.LOW)
-            }
+            if (StockForecasts.available(m.id,containers)!=null && forecasts[m.id]?.isLow(today, zone) == true) out += Alert(m, Kind.LOW)
             val days = m.expiry_days_after_open
             if (days != null && open.any { c -> c.opened_on?.let { ChronoUnit.DAYS.between(today, LocalDate.parse(it).plusDays(days.toLong())) <= EXPIRY_WARNING_DAYS } == true })
                 out += Alert(m, Kind.EXPIRY)

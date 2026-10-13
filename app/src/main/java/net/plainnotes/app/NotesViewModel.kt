@@ -60,8 +60,9 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
                 conversion?.let{repo.migrateTimeline(it.replace,it.rows,now)}
                 val profiles=meds.mapNotNull{m->dao.profile(m.id)?.let{m.id to it}}.toMap()
                 val upcoming=(repo.planned(now,now.plus(Duration.ofDays(366)),now)+slots.filter{it.slot.at<now}).distinctBy{it.slot.key}.filter{it.state in net.plainnotes.app.ui.OPEN_STATES}
+                val stockForecasts=repo.stockForecasts(now)
                 NotesState(meds,slots,dao.appointments(),mutable.value.error,false,schedules,profiles,start,dao.rules().associate{it.id to it.config_snapshot}) to
-                    ExtraState(dao.records(),dao.containers(),repo.checkinItems(),dao.scores("0001-01-01",today.toString()),dao.notes("0001-01-01",today.toString()),upcoming,dao.stageReviews(),dao.symptomChecks("0001-01-01",today.toString()),dao.reviewEffects(),dao.regimens(),dao.regimenLinks(),dao.milestones(),dao.labs(),dao.labContexts(),dao.visitQuestions(),dao.visitPacks(),dao.historyPeriods(),dao.annotations(),dao.trash().filter{it.state==Trash.TRASHED},dao.deletedRecords())
+                    ExtraState(dao.records(),dao.containers(),repo.checkinItems(),dao.scores("0001-01-01",today.toString()),dao.notes("0001-01-01",today.toString()),upcoming,dao.stageReviews(),dao.symptomChecks("0001-01-01",today.toString()),dao.reviewEffects(),dao.regimens(),dao.regimenLinks(),dao.milestones(),dao.labs(),dao.labContexts(),dao.visitQuestions(),dao.visitPacks(),dao.historyPeriods(),dao.annotations(),dao.trash().filter{it.state==Trash.TRASHED},dao.deletedRecords(),stockForecasts,dao.containersWithLedger().toSet(),dao.voidedContainers(),dao.containersWithConsumption().toSet())
             }
             ensureActive()
             mutable.value=snapshot.first.copy(error=mutable.value.error);extra.value=snapshot.second;refreshRevision++;readFailureShown=false
@@ -104,16 +105,22 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     // History, stock and well-being
     data class ExtraState(val records:List<RecordEntity> = emptyList(),val containers:List<ContainerEntity> = emptyList(),val items:List<CheckinItemEntity> = emptyList(),
                           val scores:List<CheckinScoreEntity> = emptyList(),val notes:List<DayNoteEntity> = emptyList(),
-                          /** Open doses for the next year (calendar colours and the stock forecast). */ val upcoming:List<TimelineEntry> = emptyList(),
+                          /** Open doses for the next year (calendar colours and dose lists). */ val upcoming:List<TimelineEntry> = emptyList(),
                           val reviews:List<StageReviewEntity> = emptyList(),val symptoms:List<SymptomCheckEntity> = emptyList(),val effects:List<ReviewEffectEntity> = emptyList(),
                           val regimens:List<RegimenVersionEntity> = emptyList(),val regimenLinks:List<RegimenRuleLinkEntity> = emptyList(),
                           val milestones:List<MilestoneEntity> = emptyList(),val labs:List<LabValueEntity> = emptyList(),val labContexts:List<LabContextEntity> = emptyList(),
                           val visitQuestions:List<VisitQuestionEntity> = emptyList(),val visitPacks:List<VisitPackEntity> = emptyList(),
                           val historyPeriods:List<HistoryPeriodEntity> = emptyList(),val annotations:List<RecordAnnotationEntity> = emptyList(),
                           /** §39 recycle bin (only items that can still be restored). */ val trash:List<TrashItemEntity> = emptyList(),
-                          val trashedRecords:List<RecordEntity> = emptyList())
+                          val trashedRecords:List<RecordEntity> = emptyList(),
+                          /** B4: the one stock forecast per active medication (stock page, calendar, same rule as reminders). */
+                          val stockForecasts:Map<Long,StockForecast> = emptyMap(),
+                          /** Packages with ledger history; only the others can be undone as added by mistake. */
+                          val containersWithLedger:Set<Long> = emptySet(),
+                          val voidedContainers:List<ContainerEntity> = emptyList(),
+                          val containersWithConsumption:Set<Long> = emptySet())
     val extra=MutableStateFlow(ExtraState())
-    private fun guarded(block:suspend()->Unit)=viewModelScope.launch{try{block()}catch(e:kotlinx.coroutines.CancellationException){throw e}catch(e:Exception){mutable.value=mutable.value.copy(error=if(e is PeriodRestoreConflict)R.string.period_restore_overlap else R.string.operation_error)}}
+    private fun guarded(block:suspend()->Unit)=viewModelScope.launch{try{block()}catch(e:kotlinx.coroutines.CancellationException){throw e}catch(e:Exception){mutable.value=mutable.value.copy(error=when(e){is PeriodRestoreConflict->R.string.period_restore_overlap;is PackageRestoreConflict->R.string.pkg_restore_conflict;is PackageConsumptionConflict->R.string.pkg_undo_locked;else->R.string.operation_error})}}
     fun loadExtra():Job=refresh()
     private fun mutateExtra(block:suspend()->Unit)=change(block)
     data class ImportedLink(val record:RecordEntity,val candidates:List<TimelineEntry>)
@@ -130,6 +137,9 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     fun addContainers(med:Long,capacity:Double,count:Int,open:Boolean,source:String?=null,batch:String?=null)=mutateExtra{repo.addContainers(med,capacity,count,open,source,batch)}
     fun replaceContainer(med:Long,capacity:Double)=mutateExtra{repo.replaceContainer(med,capacity)}
     fun setRemaining(container:Long,remaining:Double)=mutateExtra{repo.setRemaining(container,remaining)}
+    fun correctStock(container:Long,remaining:Double)=mutateExtra{repo.correctStock(container,remaining)}
+    fun removeMistakenContainer(container:Long)=mutateExtra{repo.removeMistakenContainer(container)}
+    fun restoreVoidedContainer(container:Long)=mutateExtra{repo.restoreVoidedContainer(container)}
     fun setScore(date:LocalDate,item:Long,value:Int?)=mutateExtra{repo.setScore(date,item,value)}
     fun setNote(date:LocalDate,text:String)=mutateExtra{repo.setNote(date,text)}
     fun saveCheckinItem(v:CheckinItemEntity)=mutateExtra{repo.saveCheckinItem(v)}
@@ -319,6 +329,6 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
             sections=VisitSection.encode(sections),language=language,template_version=net.plainnotes.app.visit.VISIT_TEMPLATE_VERSION,input_digest=digest,facts_json=facts.json().toString()))}
         refresh().join();DataJob.Done(R.string.export_saved)
     }
-    fun testReminder()=viewModelScope.launch{try{reminders.testReminder()}catch(e:Exception){mutable.value=mutable.value.copy(error=if(e is PeriodRestoreConflict)R.string.period_restore_overlap else R.string.operation_error)}}
+    fun testReminder()=viewModelScope.launch{try{reminders.testReminder()}catch(e:Exception){mutable.value=mutable.value.copy(error=when(e){is PeriodRestoreConflict->R.string.period_restore_overlap;is PackageRestoreConflict->R.string.pkg_restore_conflict;is PackageConsumptionConflict->R.string.pkg_undo_locked;else->R.string.operation_error})}}
     fun sync()=viewModelScope.launch{runCatching{reminders.sync()};refresh().join()}
 }

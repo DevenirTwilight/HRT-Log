@@ -82,8 +82,12 @@ class CalendarCoreFlowTest {
     @Test fun pickingADayShowsItsDoses() {
         show(); selectTomorrow()
         assertEquals(true, cell(tomorrow).fetchSemanticsNode().config.getOrNull(SemanticsProperties.Selected))
+        // LazyColumn need not compose the day header below the calendar grid yet.
+        // Bring each checked list item into view, as the user does on a short viewport.
+        dayList.performScrollToNode(hasText(s(R.string.tomorrow)))
         ui.onNodeWithText(s(R.string.tomorrow)).assertExists()
         awaitDose(); completeButton().assertIsDisplayed()
+        dayList.performScrollToNode(hasText(medName))
         ui.onAllNodesWithText(medName).onFirst().assertIsDisplayed()
     }
 

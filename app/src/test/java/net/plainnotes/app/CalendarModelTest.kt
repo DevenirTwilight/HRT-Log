@@ -18,23 +18,23 @@ class CalendarModelTest {
 
     @Test fun forecastWalksScheduledDoses() {
         val boxes = listOf(ContainerEntity(1, 1, 10.0, 4.0, 4.0, "2026-03-01", "IN_USE"), ContainerEntity(2, 1, 10.0, 0.0, 0.0, null, "SEALED"))
-        val f = forecast(listOf(med), boxes, upcoming).getValue(1)
-        assertEquals(16.0, f.remaining, 1e-9) // 6 left in the open box + 10 sealed = 8 doses
+        val f = StockForecasts.forecastAll(listOf(med), boxes, upcoming).getValue(1)
+        assertEquals(16.0, f.available!!, 1e-9) // 6 left in the open box + 10 sealed = 8 doses
         assertEquals(open(7).slot.at, f.lastCovered); assertEquals(open(8).slot.at, f.firstShort)
-        assertTrue(forecast(listOf(med), listOf(ContainerEntity(3, 1, 100.0, 0.0, 0.0, null, "SEALED")), upcoming).getValue(1).beyondHorizon)
-        assertNull(forecast(listOf(med), emptyList(), upcoming)[1]) // stock not tracked: no guess
-        assertNull(forecast(listOf(med.copy(active = false)), boxes, upcoming)[1])
+        assertEquals(StockForecast.Status.COVERED_THROUGH_WINDOW, StockForecasts.forecastAll(listOf(med), listOf(ContainerEntity(3, 1, 100.0, 0.0, 0.0, null, "SEALED")), upcoming).getValue(1).status)
+        assertEquals(StockForecast.Status.UNTRACKED, StockForecasts.forecastAll(listOf(med), emptyList(), upcoming).getValue(1).status) // stock not tracked: no guess
+        assertNull(StockForecasts.forecastAll(listOf(med.copy(active = false)), boxes, upcoming)[1])
     }
 
     @Test fun eightyFourMilligramsCoversExactlyFortyTwoTwiceDailyDoses() {
         val boxes=listOf(ContainerEntity(1,1,84.0,0.0,0.0,null,"SEALED"))
-        val f=forecast(listOf(med),boxes,(0 until 732).map{open(it)}).getValue(1)
+        val f=StockForecasts.forecastAll(listOf(med),boxes,(0 until 732).map{open(it)}).getValue(1)
         assertEquals(open(41).slot.at,f.lastCovered)
-        assertEquals(21,f.daysLeft(t0.minusSeconds(3600)))
+        assertEquals(21,f.daysUntilShort(t0.atZone(zone).toLocalDate(),zone))
         assertEquals(t0.atZone(zone).toLocalDate().plusDays(21),f.firstShort!!.atZone(zone).toLocalDate())
         // Already completed slots cannot consume stock again.
         val completed=upcoming.take(2).map{TimelineEntry(it.slot,SlotState.ON_TIME)}
-        assertEquals(open(41).slot.at,forecast(listOf(med),boxes,completed+(0 until 732).map{open(it)}.drop(2)).getValue(1).lastCovered!!.minusSeconds(86400))
+        assertEquals(open(41).slot.at,StockForecasts.forecastAll(listOf(med),boxes,completed+(0 until 732).map{open(it)}.drop(2)).getValue(1).lastCovered!!.minusSeconds(86400))
     }
 
     @Test fun dayKindsFromRecordsAndOpenSlots() {
@@ -44,7 +44,7 @@ class CalendarModelTest {
         val records = listOf(rec("2026-03-01", "ON_TIME"), rec("2026-03-01", "LATE"), rec("2026-03-02", "ON_TIME"), rec("2026-03-02", "MISSED"),
             rec("2026-03-03", "MISSED"), rec("2026-03-04", "ON_TIME").copy(deleted_at_utc = 1))
         val boxes = listOf(ContainerEntity(1, 1, 10.0, 4.0, 4.0, "2026-03-01", "IN_USE"))
-        val f = forecast(listOf(med), boxes, upcoming)
+        val f = StockForecasts.forecastAll(listOf(med), boxes, upcoming)
         val days = dayInfos(records, upcoming, emptyList(), f, zone)
         fun kind(d: String) = days[LocalDate.parse(d)]?.kind ?: DayKind.NONE
         assertEquals(DayKind.TAKEN, kind("2026-03-01")); assertEquals(DayKind.PARTIAL, kind("2026-03-02"))

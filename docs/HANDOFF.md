@@ -1,3 +1,26 @@
+> 最终测试修复验收（2026-10-13）：1033a370272f4cdb6c9978cbf0b721f285464100 的Android push38439313884 / PR38439320044三作业全success；Science PR38439320016 gate/deep实际success，push38439314196 gate success/deep依普通测试改动门控skip。独立下载设备报告digest e380699f…10e76b一致：data15/15、app92零失败/8原条件跳过，UnifiedConcentrationAndroidTest六项全部实际通过（11.961s，无跳过）；B2重启/清理/恢复与VOIDED跨新PID/加密备份/安全恢复脚本全通过。直接Standard方案挂起由真实窗口主线程Recomposer及空闲同步修复，原断言与模型不变。实际本地编译3m2s，已纠正先前记录笔误。已交付build26源c725310/原证书/文件哈希不变。此次仅补验收记录；交还条件仍是PR23最终记录HEAD自身检查全部完成通过，不循环追加自身SHA。PR23不合并，无公开Release；用户手机覆盖安装未核验。
+
+> 仪器线程修复更正（2026-10-13）：a8fd4de的Android/JVM/Science完成通过，但两组API35在app 14/92后挂起至45分钟，被作业超时自动结束（CANCELLED，不是通过，也不是SDK NOT_RUN）；data设备15项已通过，不能宣称app完成。实际日志16:43启动92项、16:44后停止推进；直接StandardTestDispatcher方案不适合该Activity启动/测试时钟，已撤换，不盲重试。改为Debug-only合成Activity可选真实生命周期主线程Recomposer，并为该组6项Android仪器测试注册其空闲状态；其余测试默认入口/时钟与全部原断言不变。本地assembleFullDebugAndroidTest已成功（3m2s），等待本HEAD最终完整CI；APK源c725310及已交付签名文件不变，不重建/重签，不涉及生产/PK/Schema/PNBAK1。
+
+> 交付后测试框架修复（2026-10-13）：b965273记录/来源工具HEAD的push Android38429993057全success，PR38430002274在既有UnifiedConcentrationAndroidTest出现CalledFromWrongThreadException，未冒称全绿；其Science PR38430002398 gate/deep实际success、push38429993004按原门控deep skip。栈证据显示Compose1.9.3测试默认UnconfinedTestDispatcher将frame/apply恢复到Default worker；仅该Android仪器测试规则改用StandardTestDispatcher，保留全部6项原断言/模型参数/时限，不改生产APK。两仪器依赖编译及assembleFullDebugAndroidTest成功（2m27s）。已等前轮全部结束，现提交本修复并等待本HEAD完整Android/API35/Science检查；结果以PR23实时CI为准，不借用旧绿色，不盲目重试或取消正常CI。已交付APK源c725310与哈希不变，无重建/重签/新交付。
+
+
+> B4-D正式APK已私下交付（2026-10-13，REQ §83）：0.2.0/build26/full Universal，构建源 `c72531027a4d9782ea0a31dc181acd238e1c83fe`（git/clean），12,901,236B，APK SHA256 `0c6bd9132ab15ca7625f1da19b59c1c9450cf4cb0518b15100e30396c5ed3fa0`，原证书989ba045…59379b1，v2/v3、四ABI/8原生库16KB、非debug/无INTERNET、签名前后代码/资源逐项不变。Drive仅owner/shared=false，独立下载大小/哈希/来源/版本/证书一致，临时签名材料已清理、永久备份未改；私有链接只在聊天，不入Git。源码push/PR Android三任务全success，Science PR gate/deep实际success、push普通交付版本门控成功且deep按规则skip；报告24与机器交付记录已补全。实际ARM覆盖安装/用户已安装版本NOT_RUN/UNKNOWN，先加密备份、仅更新，不卸载清数据。账本首次追加26，后续实际交付至少27。发现SDK37 V3.0 Signer输出的证书解析缺陷，已红绿修复核验工具（8来源+8账本测试），不打包入APK；后续记录/工具提交不是另造APK。PR23保持OPEN未合并，无公开Release/标签。下方阶段记录保留。
+
+> B4-D正式签名/私下交付获授权（2026-10-13，REQ §83）：用户“整完给我个apk，正式签名”。从已全绿461574b构建full Universal，按D-4将build25→26，保持0.2.0/包名/原证书/Room9/PNBAK1/PK；私有签名仓库已核实Private，尚未恢复临时密钥。现提交版本与授权记录，构建干净源码并等待本提交CI后签名/核验/Drive仅owner交付，实际交付后记账。PR23不合并，无公开Release/标签。下方“不签名”是授权前历史。
+
+> B4-D最终验收：READY_FOR_OWNER_REVIEW，生效条件为PR23当前HEAD的push/PR完整检查全绿。代码6061ab3及首轮验收文档e9d9b99的实际检查证据见报告24；e9d9b99 push设备attempt1在SDK安装无输出45分钟后结束取日志，NOT_RUN，只重试设备；最终状态提交新增设备作业45分钟超时，不改变测试集合。交还前必须核对当前HEAD，不借用旧绿色。本轮实现A/B并保留C安全限制，产品负责人无需再决定A/B。PR23保持OPEN；没有默认分支合并、正式签名或APK交付。下方阶段记录保留，不代表当前仍在实施。
+
+> B4-D代码验收完成（2026-10-13）：6061ab3完整push/PR Android/Science全success，实际API35旧Schema9与外部force-stop新PID、加密备份/安全恢复通过；报告24已记录实际计数、artifact哈希、首次失败与仅设备重试。库存4mg→2mg/正常2盒→1盒；18数据纠错、20四语320dp/2×UI、即时共享预测刷新通过。现只提交验收文档并等待最终HEAD全部检查，不套用代码HEAD绿色。C任何CONSUME/REVERSE继续拒绝直接作废，后续补偿方案已写，A/B无需新增决定。PR23保持OPEN，无合并/正式签名/交付。下方为历史过程记录。
+
+> B4-D实现/本地回归已完成（2026-10-13）：JVM194、data109/rem17/app763零失败（app61原跳过），Period5、Calendar10、DataRefresh6、四语320dp/2×UI20通过；最后3条VOIDED零有效包装样本18data/20UI通过。lint0错误178警告、fullDebug/两仪器包完成。现提交并等待本HEAD的完整push/PR Android/Science；API35旧Schema9及外部force-stop新PID验证仍待实际结果。PR23保持OPEN，不正式签名/交付。
+
+> B4-D本地验收：data109/reminder17、JVM194、四语320dp/2×原生UI20、DataRefresh6、历史164/5和科研261已通过。真实假盒ADJUST-only库存4mg→2mg/正常2盒→1盒，原行VOIDED保留。首次全app763有既有日历LazyColumn标题断言失败，保留全部断言补滚动后Calendar10通过，完整复跑进行中。仪器包Room类型编译可见性已修正且两包构建通过；API35新PID/旧Schema9仍待CI。PR23不合并，不正式签名或交付。
+
+> B4-D（2026-10-13）开始：PR23 head4afa8b0全CI已完成成功，无运行中作业。用户已批准VOIDED及最小状态规则调整，必须支持ADJUST-only，默认完全隐藏、高级确认恢复；不改Room9/表结构/PNBAK1、PK/版本/签名。设计与C安全限制/补偿方案写入报告24，红测正在运行。
+
+> 当前（2026-10-13）：PR #22（B3）已于 `bab53d3` 合并，主线 CI 全绿。B4（库存一致性与库存纠错）在 `feature/b4-stock-consistency-20261013`：B4-A 统一逐次扣减预测，B4-B 库存页、日历、提醒接入，B4-C 措辞、核对库存、撤销误添加、包装管理。验收见[审计24](audits/product-quality-2026-10/24-b4-stock-consistency.md)。待产品负责人决定：已有调整流水的误添加包装如何处理。PR 等待审阅，不合并，不签名，不交付。
+
 > 当前（2026-10-13）：B3 PR #22 head 见审计23“最终 CI”；B3-A 返回键回日历、B3-B 日历 TalkBack 语义（四语）、B3-C 旋转/重建保留选中日；设备测试 CalendarIntakeAndroidTest 2/2 在 API35 模拟器实际通过（取消/真实返回键不写记录，保存一次后返回不重复）。状态 READY_FOR_OWNER_REVIEW（以最终提交 CI 全绿为前提），不合并、不签名、不交付；物理 ARM 与真人 TalkBack 为 NOT_RUN；320dp 日期格 34dp 宽按决定不阻断。PR #21 已于 `d5dc9e5` 合并并 MERGED_CI_VERIFIED。下一阶段 B4 库存一致性，未开始。
 
 > 当前（2026-10-13）：B2 PR #20 经产品负责人“给你权限，批准”后，于 head `0cd7afb` 八项检查全绿时以 merge commit `9c3b5d6` 合入默认分支 `claude/new-session-1959qb`；未签名、未交付。科研守卫精简 PR #21：门控自保护修复 `968783c` CI 全绿（Android 38381299493/38381303849，Science 38381299642/38381303857），依 §79 授权以 merge commit 合并；合并后默认分支 CI 通过即为 MERGED_CI_VERIFIED，随后停止扩展科研守卫，下一阶段 B3 导航与无障碍；此前该分支已合入含 B2 的默认分支（B2 设备脚本 run_import_cleanup_restart/run_restore_process_death 仍在 android.yml），S2 正反样本与精简前后对比已写入报告22；合并后完整 CI 与科研 PR 见报告22 §验收。签名/交付须另授权。

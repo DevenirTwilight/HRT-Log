@@ -110,4 +110,29 @@ class MigrationBaselineTest {
                 assertTrue(c.moveToNext());assertEquals("RECORD",c.getString(0));assertEquals("1",c.getString(1))}
         }
     }
+    @Test fun existingSchemaNineOpensWithExtendedStateGuardsAndRetainsVoided() {
+        val name="migration-package-void-nine"
+        helper.createDatabase(name,9).use { raw ->
+            raw.execSQL("INSERT INTO medication (id,name,molecule,route,unit,dose_per_intake,container_capacity,site_rotation,notifications_on,active,sort_order) VALUES (1,'Synthetic','E2','ORAL','MG',2,30,0,1,1,0)")
+            raw.execSQL("INSERT INTO supply_container (id,medication_id,capacity,initial_used_amount,used_amount,opened_on,state) VALUES (1,1,30,0,0,'2026-01-01','IN_USE')")
+            raw.execSQL("CREATE TRIGGER guard_supply_container_update BEFORE UPDATE ON supply_container WHEN NEW.state NOT IN ('SEALED','IN_USE','EMPTY','DISCARDED') BEGIN SELECT RAISE(ABORT,'Old state guard'); END")
+        }
+        val context=InstrumentationRegistry.getInstrumentation().targetContext
+        fun open()=androidx.room.Room.databaseBuilder(context,NotesDatabase::class.java,name).allowMainThreadQueries().addCallback(SchemaGuards).build()
+        val first=open()
+        try { kotlinx.coroutines.runBlocking {
+            val repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=first})
+            repo.correctStock(1,2.0);repo.removeMistakenContainer(1)
+            assertEquals("VOIDED",first.dao().container(1).state)
+            assertEquals(1,first.dao().supplyForContainer(1).size)
+            assertTrue(repo.containers().isEmpty())
+        }} finally {first.close()}
+        val second=open()
+        try { kotlinx.coroutines.runBlocking {
+            assertEquals("VOIDED",second.dao().voidedContainers().single().state)
+            assertTrue(second.dao().containers().isEmpty())
+            assertEquals(9,second.openHelper.writableDatabase.version)
+        }} finally {second.close();context.deleteDatabase(name)}
+    }
+
 }

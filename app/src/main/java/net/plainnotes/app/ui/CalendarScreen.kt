@@ -64,7 +64,8 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
     var appliedStart by rememberSaveable { mutableStateOf(state.calendarStart.toString()) }
     LaunchedEffect(state.calendarStart) { val start = state.calendarStart.toString(); if (start != appliedStart) { appliedStart = start; selectedText = start } }
     val upcoming = remember(extra.upcoming) { extra.upcoming }
-    val runOut = remember(state.medications, extra.containers, upcoming) { forecast(state.medications, extra.containers, upcoming) }
+    // B4: the shared per-dose forecast computed once per refresh (same rule as the stock page and stock reminders).
+    val runOut = extra.stockForecasts
     val displayedUpcoming = remember(upcoming, state.slots) { (state.slots + upcoming).distinctBy { it.slot.key }.filter { it.state in OPEN_STATES } }
     val infos = remember(extra.records, displayedUpcoming, state.appointments, runOut) { dayInfos(extra.records, displayedUpcoming, state.appointments, runOut, zone) }
     fun select(d: LocalDate) { selectedText = d.toString() }
@@ -108,7 +109,7 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
             items(dayRecords, key = { "r${it.id}" }) { r -> RecordLine(r, MedicationSnapshot.decode(r.config_snapshot,r.medication_id)?.medication(r.medication_id)) }
             items(dayAppts, key = { "a${it.id}" }) { AppointmentCard(it) { onAppointment(it) } }
         }
-        item(key = "stock") { StockForecast(state.medications.filter { it.active }, runOut, upcoming, today, zone, onStock) }
+        item(key = "stock") { StockForecastCard(state.medications.filter { it.active }, runOut, today, zone, onStock) }
     }
 }
 
@@ -187,7 +188,7 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
     }
 }
 
-@Composable private fun WeekStrip(selected: LocalDate, infos: Map<LocalDate, DayInfo>, today: LocalDate, records: List<RecordEntity>, upcoming: List<TimelineEntry>, runOut: Map<Long, RunOut>, zone: ZoneId, onSelect: (LocalDate) -> Unit) {
+@Composable private fun WeekStrip(selected: LocalDate, infos: Map<LocalDate, DayInfo>, today: LocalDate, records: List<RecordEntity>, upcoming: List<TimelineEntry>, runOut: Map<Long, net.plainnotes.app.data.StockForecast>, zone: ZoneId, onSelect: (LocalDate) -> Unit) {
     val start = weekStart(selected); val c = MaterialTheme.colorScheme
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
         (0 until 7).forEach { i ->
@@ -315,28 +316,21 @@ private fun markLabel(status: String) = when (status) {
     }
 }
 
-@Composable private fun StockForecast(meds: List<MedicationEntity>, runOut: Map<Long, RunOut>, upcoming: List<TimelineEntry>, today: LocalDate, zone: ZoneId, onStock: () -> Unit) {
+@Composable private fun StockForecastCard(meds: List<MedicationEntity>, forecasts: Map<Long, net.plainnotes.app.data.StockForecast>, today: LocalDate, zone: ZoneId, onStock: () -> Unit) {
     if (meds.isEmpty()) return
     val c = MaterialTheme.colorScheme
     SectionCard(stringResource(R.string.forecast_title)) {
         meds.forEach { m ->
-            val f = runOut[m.id]
+            val f = forecasts[m.id]
+            val status = f?.status ?: net.plainnotes.app.data.StockForecast.Status.UNTRACKED
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(Icons.Outlined.Inventory2, null, tint = c.primary); Spacer(Modifier.width(12.dp))
                 Column(Modifier.weight(1f)) {
                     Text(m.name, style = MaterialTheme.typography.titleSmall)
-                    val hasPlan = upcoming.any { it.slot.medicationId == m.id }
-                    val (text, warn) = when {
-                        f == null -> stringResource(R.string.forecast_untracked) to false
-                        !hasPlan -> stringResource(R.string.forecast_no_plan, formatDose(f.remaining, m.unit)) to false
-                        f.lastCovered == null -> stringResource(R.string.forecast_empty) to true
-                        f.beyondHorizon -> stringResource(R.string.forecast_year, formatDose(f.remaining, m.unit)) to false
-                        else -> { val d = f.lastCovered.atZone(zone).toLocalDate(); val days = f.daysLeft(Instant.now()) ?: 0
-                            stringResource(R.string.forecast_until, formatShortDate(d), days, formatDose(f.remaining, m.unit)) to (days < LOW_STOCK_DAYS) }
-                    }
+                    val (text, warn) = stockForecastText(f, m, today, zone)
                     Text(text, style = MaterialTheme.typography.bodyMedium, color = if (warn) c.error else c.onSurfaceVariant)
                 }
-                if (f == null) TextButton(onClick = onStock) { Text(stringResource(R.string.forecast_add)) }
+                if (status == net.plainnotes.app.data.StockForecast.Status.UNTRACKED) TextButton(onClick = onStock) { Text(stringResource(R.string.forecast_add)) }
             }
         }
         Text(stringResource(R.string.forecast_note), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)

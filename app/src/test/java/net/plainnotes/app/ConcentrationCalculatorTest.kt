@@ -99,33 +99,42 @@ class ConcentrationCalculatorTest {
     }
 }
 
+/** B4: the stock page's days and low label come from the shared per-dose forecast over real Timeline doses. */
 class StockSummaryTest {
     private val m = MedicationEntity(1, "m", "E2", "ORAL", "MG", 2.0, 30.0, 30, 15, 120, false, null, true, true, 0)
-    private val twiceDaily = ScheduleSummary(RuleKind.EVERY_N_DAYS, 1, emptySet(), listOf(java.time.LocalTime.of(8, 0), java.time.LocalTime.of(20, 0)))
+    private val utc = java.time.ZoneId.of("UTC")
+    private val today = java.time.LocalDate.of(2026, 3, 10)
+    private val now = today.atTime(6, 0).atZone(utc).toInstant()
+    private fun rule(times: List<RuleTime>, dose: Double = 2.0, kind: RuleKind = RuleKind.EVERY_N_DAYS, interval: Int = 1, days: Set<java.time.DayOfWeek> = emptySet()) =
+        ScheduleRule(1, 1, kind, interval, today, null, utc, now.minusSeconds(30 * 86400L), null, now.minusSeconds(30 * 86400L), times, days, dose, 15, 120)
+    private val twiceDaily = rule(listOf(RuleTime(java.time.LocalTime.of(8, 0)), RuleTime(java.time.LocalTime.of(20, 0))))
+    private fun summary(m: MedicationEntity, boxes: List<ContainerEntity>, r: ScheduleRule): net.plainnotes.app.ui.StockSummary {
+        val doses = Timeline.build(listOf(r), emptyList(), emptyList(), now, now.plus(java.time.Duration.ofDays(366)), now, utc)
+        return net.plainnotes.app.ui.stockSummary(m, boxes, StockForecasts.forecastAll(listOf(m), boxes, doses)[m.id], today, utc)
+    }
     @Test fun eightyFourMilligramsAtFourADayLastsTwentyOneDays() {
         val boxes=listOf(ContainerEntity(1,1,84.0,0.0,0.0,null,"SEALED"))
-        assertEquals(21,net.plainnotes.app.ui.stockSummary(m,boxes,twiceDaily).daysLeft)
-        // The current schedule's snapshot/overrides, not a stale medication default, determine use.
-        val overridden=twiceDaily.copy(dose=0.178, timeDoses=listOf(2.0,2.0))
-        assertEquals(21,net.plainnotes.app.ui.stockSummary(m.copy(dose_per_intake=0.178),boxes,overridden).daysLeft)
-        assertEquals(21,net.plainnotes.app.ui.stockSummary(m.copy(dose_per_intake=4.0),boxes,
-            ScheduleSummary(RuleKind.EVERY_N_DAYS,1,emptySet(),listOf(java.time.LocalTime.NOON),dose=4.0)).daysLeft)
+        assertEquals(21,summary(m,boxes,twiceDaily).daysLeft)
+        // The current schedule's own doses, not a stale medication default, determine use.
+        assertEquals(21,summary(m.copy(dose_per_intake=0.178),boxes,rule(listOf(RuleTime(java.time.LocalTime.of(8, 0), 2.0), RuleTime(java.time.LocalTime.of(20, 0), 2.0)), dose = 0.178)).daysLeft)
+        assertEquals(21,summary(m.copy(dose_per_intake=4.0),boxes,rule(listOf(RuleTime(java.time.LocalTime.NOON)), dose = 4.0)).daysLeft)
     }
     @Test fun untrackedIsNeverLow() {
-        val s = net.plainnotes.app.ui.stockSummary(m, emptyList(), twiceDaily)
-        assertFalse(s.tracked); assertFalse(s.low)
+        val s = summary(m, emptyList(), twiceDaily)
+        assertFalse(s.tracked); assertFalse(s.low); assertEquals(null, s.daysLeft)
     }
     @Test fun daysLeftCountsOpenAndSealed() {
-        val open = ContainerEntity(1, 1, 30.0, 0.0, 22.0, java.time.LocalDate.now().minusDays(28).toString(), "IN_USE")
+        val open = ContainerEntity(1, 1, 30.0, 0.0, 22.0, today.minusDays(28).toString(), "IN_USE")
         val sealed = ContainerEntity(2, 1, 30.0, 0.0, 0.0, null, "SEALED")
-        val s = net.plainnotes.app.ui.stockSummary(m, listOf(open, sealed), twiceDaily)
-        assertEquals(38.0, s.remaining, 1e-9); assertEquals(9, s.daysLeft); assertTrue(!s.low)
-        assertEquals(java.time.LocalDate.now().plusDays(2), s.expiresOn); assertTrue(s.expiringSoon(java.time.LocalDate.now()))
-        assertTrue(net.plainnotes.app.ui.stockSummary(m, listOf(open), twiceDaily).low)
+        val s = summary(m, listOf(open, sealed), twiceDaily)
+        assertEquals(38.0, s.remaining, 1e-9); assertEquals(9, s.daysLeft); assertTrue(!s.low)   // 19 doses: day0..day8 + day9 08:00
+        assertEquals(today.plusDays(2), s.expiresOn); assertTrue(s.expiringSoon(today))
+        assertTrue(summary(m, listOf(open), twiceDaily).low)
     }
-    @Test fun dailyUseFollowsScheduleKind() {
-        assertEquals(4.0, net.plainnotes.app.ui.dailyUse(m, twiceDaily)!!, 1e-9)
-        assertEquals(2.0 * 3 / 14, net.plainnotes.app.ui.dailyUse(m, ScheduleSummary(RuleKind.WEEKLY, 2, setOf(java.time.DayOfWeek.MONDAY, java.time.DayOfWeek.WEDNESDAY, java.time.DayOfWeek.FRIDAY), listOf(java.time.LocalTime.NOON)))!!, 1e-9)
-        assertEquals(6.0, net.plainnotes.app.ui.dailyUse(m, ScheduleSummary(RuleKind.EVERY_N_HOURS, 8, emptySet(), emptyList()))!!, 1e-9)
+    @Test fun weeklyAndHourlyFollowTheRealDosesNotAnAverage() {
+        val boxes = listOf(ContainerEntity(1, 1, 4.0, 0.0, 0.0, null, "SEALED"))
+        // Mon + Thu: an average (4 mg / 7 days) said 7 days; the doses run out on Thu 19 March, 9 days away.
+        assertEquals(9, summary(m, boxes, rule(listOf(RuleTime(java.time.LocalTime.of(8, 0))), kind = RuleKind.WEEKLY,
+            days = setOf(java.time.DayOfWeek.MONDAY, java.time.DayOfWeek.THURSDAY))).daysLeft)
     }
 }

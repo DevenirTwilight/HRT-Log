@@ -82,8 +82,8 @@ import javax.inject.Singleton
         scheduleCached()
         runCatching {
             val today=java.time.LocalDate.now()
-            val week=repo.planned(now,now.plusSeconds(StockAlerts.LOW_STOCK_DAYS*86400L))
-            StockAlerts.post(context,StockAlerts.due(repo.medications(),repo.containers(),week,today),today)
+            // Same input and rule as the stock page and calendar (B4): the shared forecast over the open-dose window.
+            StockAlerts.post(context,StockAlerts.due(repo.medications(),repo.containers(),repo.stockForecasts(now),today),today)
         }
     }
     private fun scheduleCached() {

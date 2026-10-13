@@ -49,7 +49,8 @@ def certificates(build_tools: Path, apk: Path) -> list:
     out = subprocess.run([str(apksigner), "verify", "--print-certs", str(apk)], capture_output=True, text=True)
     if out.returncode != 0:
         return ["unsigned or invalid signature"]
-    return [line.split(":", 1)[1].strip() for line in out.stdout.splitlines() if "certificate SHA-256 digest" in line]
+    return [line.split("certificate SHA-256 digest:", 1)[1].strip().replace(":", "").lower()
+            for line in out.stdout.splitlines() if "certificate SHA-256 digest:" in line]
 
 
 def main(build_tools: str, apk: str) -> dict:

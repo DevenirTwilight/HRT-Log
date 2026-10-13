@@ -1,0 +1,118 @@
+{
+  "apk": "HRT-Log-build26-B4D-full-official.apk",
+  "package": {
+    "application_id": "net.plainnotes.app",
+    "version_code": 26,
+    "version_name": "0.2.0"
+  },
+  "apk_sha256": "0c6bd9132ab15ca7625f1da19b59c1c9450cf4cb0518b15100e30396c5ed3fa0",
+  "signing_cert_sha256": [
+    "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1"
+  ],
+  "source": {
+    "SOURCE_COMMIT_TIME_UTC": "2026-10-13T15:57:16Z",
+    "SOURCE_DIRTY": "false",
+    "SOURCE_ORIGIN": "git",
+    "SOURCE_SHA": "c72531027a4d9782ea0a31dc181acd238e1c83fe"
+  },
+  "size_bytes": 12901236,
+  "signature_v2": true,
+  "signature_v3": true,
+  "zipalign_16kb": true,
+  "elf_16kb": true,
+  "native_library_count": 8,
+  "abis": [
+    "arm64-v8a",
+    "armeabi-v7a",
+    "x86",
+    "x86_64"
+  ],
+  "debuggable": false,
+  "internet_permission": false,
+  "signed_unsigned_payload_identical": true,
+  "added_signature_entries": [
+    "META-INF/MANIFEST.MF",
+    "META-INF/RELEASE.RSA",
+    "META-INF/RELEASE.SF"
+  ],
+  "temporary_credentials_removed": true,
+  "source_ci": [
+    {
+      "id": 38426465766,
+      "event": "pull_request",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "name": "device-tests",
+          "conclusion": "success"
+        },
+        {
+          "name": "android",
+          "conclusion": "success"
+        },
+        {
+          "name": "jvm",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 38426465277,
+      "event": "pull_request",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "name": "science-change-gate",
+          "conclusion": "success"
+        },
+        {
+          "name": "research-deep",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 38426458127,
+      "event": "push",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "name": "science-change-gate",
+          "conclusion": "success"
+        },
+        {
+          "name": "research-deep",
+          "conclusion": "skipped"
+        }
+      ]
+    },
+    {
+      "id": 38426457889,
+      "event": "push",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "name": "device-tests",
+          "conclusion": "success"
+        },
+        {
+          "name": "jvm",
+          "conclusion": "success"
+        },
+        {
+          "name": "android",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "physical_arm_installation": "NOT_RUN",
+  "drive_readback_verified": true,
+  "drive_owner_only": true,
+  "drive_shared": false,
+  "delivery_time_utc": "2026-10-13T16:22:36.182278Z",
+  "delivery_channel": "google-drive-owner-only",
+  "download_links_in_public_repository": false,
+  "source_build_log": "Local fullRelease BUILD SUCCESSFUL in 11m 57s; clean source c725310",
+  "provenance_tool_sdk37_parser_fix": "New V3.0 Signer: prefix regression failed before fix; 8 provenance and 8 ledger tests passed after fix. Verification helper only; does not change APK payload or its source commit."
+}
