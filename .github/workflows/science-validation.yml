@@ -16,7 +16,7 @@ jobs:
         env:
           GITHUB_EVENT_BEFORE: ${{ github.event.before }}
         run: python3 scripts/science_change_gate.py
-      - name: Test five trigger classes
+      - name: Gate trigger matrix and change-range tests
         run: python3 -m unittest discover -s scripts -p test_science_change_gate.py -v
   research-deep:
     needs: science-change-gate

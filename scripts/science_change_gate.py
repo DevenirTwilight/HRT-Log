@@ -1,7 +1,12 @@
 """Classify changed paths for the always-present science CI gate.
 
-Unknown source/workflow paths fail closed into deep validation. Documentation
-outside scientific evidence and ordinary UI text do not fetch Git history.
+research-deep runs when a change touches the PK engine, concentration/experimental
+app code, research tools, scientific evidence, the science scripts listed below
+(including this gate and its test) or any workflow. Other paths (ordinary UI,
+translations, product docs) do not trigger it; their regressions are caught by
+the routine Android tests. A manual run, a new branch, an unknown event or a
+change range that cannot be resolved runs deep validation; a failing git diff
+fails the job instead of skipping.
 """
 import argparse
 import os
@@ -19,6 +24,10 @@ SCIENCE_PREFIXES = (
 SCIENCE_FILES = {
     'scripts/generate_unified_model_reference.py',
     'scripts/check_unified_concentration.py',
+    'scripts/science_change_gate.py',
+    'scripts/test_science_change_gate.py',
+    'scripts/run_m2_only_mutations.py',
+    'scripts/run_pr19_calibration_mutations.py',
 }
 
 
@@ -27,25 +36,28 @@ def needs_deep(paths):
                or path.startswith('.github/workflows/') for path in paths)
 
 
-def changed_paths():
-    event = os.environ.get('GITHUB_EVENT_NAME')
-    if event == 'workflow_dispatch':
-        return None  # Manual full replay.
+def _has_commit(ref):
+    return subprocess.run(['git', 'rev-parse', '--verify', '--quiet', ref + '^{commit}'],
+                          stdout=subprocess.DEVNULL).returncode == 0
+
+
+def changed_paths(env=None):
+    """Changed paths for this event, or None when the whole tree must be validated."""
+    env = os.environ if env is None else env
+    event = env.get('GITHUB_EVENT_NAME')
     if event == 'pull_request':
-        base = os.environ['GITHUB_BASE_REF']
-        before = f'origin/{base}'
-        spec = f'{before}...HEAD'
+        base = env.get('GITHUB_BASE_REF', '')
+        if not base or not _has_commit(f'origin/{base}'):
+            return None  # Base not resolvable: validate everything.
+        spec = f'origin/{base}...HEAD'  # Changes of the PR since its merge base.
     elif event == 'push':
-        before = os.environ.get('GITHUB_EVENT_BEFORE', '')
-        if not before or set(before) == {'0'}:
-            return None  # New branch: validate the whole tree once.
+        before = env.get('GITHUB_EVENT_BEFORE', '')
+        if not before or set(before) == {'0'} or not _has_commit(before):
+            return None  # New branch, or force push whose old head is gone.
         spec = f'{before}..HEAD'
     else:
-        return None
-    subprocess.run(['git', 'rev-parse', '--verify', spec.split('.')[0]],
-                   check=True, stdout=subprocess.DEVNULL)
+        return None  # workflow_dispatch or unknown event: full replay.
     return subprocess.check_output(['git', 'diff', '--name-only', spec], text=True).splitlines()
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
