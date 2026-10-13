@@ -77,7 +77,7 @@ abstract class PackageHistoryUiContract(private val language: String) {
     @After @Suppress("DEPRECATION") fun restoreHostConfiguration() {
         originalConfiguration?.let { ui.activity.resources.updateConfiguration(it, ui.activity.resources.displayMetrics) }
     }
-    @Composable private fun manage(boxes: List<ContainerEntity>, onDismiss: () -> Unit = {},
+    @Composable private fun Manage(boxes: List<ContainerEntity>, onDismiss: () -> Unit = {},
         onInfo: (ContainerEntity) -> Unit = {}, onUndo: (ContainerEntity) -> Unit = {}, onRestore: (ContainerEntity) -> Unit = {}) {
         state = rememberLazyListState()
         PackagesDialog(med, boxes, emptySet(), onDismiss, onInfo, voided = boxes.filter { it.state == "VOIDED" },
@@ -98,7 +98,7 @@ abstract class PackageHistoryUiContract(private val language: String) {
 
     @Test fun firstPagesAt1_20_21_100_500StartCollapsedAndAreCapped() {
         var count by mutableIntStateOf(1)
-        content { key(count) { manage((1L..count.toLong()).map { box(it) }) } }
+        content { key(count) { Manage((1L..count.toLong()).map { box(it) }) } }
         for (n in listOf(1, 20, 21, 100, 500)) {
             ui.runOnIdle { count = n }
             list().assert(hasScrollToIndexAction())
@@ -125,7 +125,7 @@ abstract class PackageHistoryUiContract(private val language: String) {
     }
 
     @Test fun all500SameDateRowsHaveStableOrderAndNeverComposeTheWholeHistory() {
-        content { manage((1L..500L).map { box(it) }.shuffled(Random(84))) }
+        content { Manage((1L..500L).map { box(it) }.shuffled(Random(84))) }
         toggle("EMPTY")
         var maximum = 0
         for (shown in 20..500 step 20) {
@@ -143,7 +143,7 @@ abstract class PackageHistoryUiContract(private val language: String) {
 
     @Test fun activeGroupsAlsoHaveIndependentTwentyRowBatches() {
         val boxes = (1L..100L).map { box(it, "IN_USE") } + (1001L..1021L).map { box(it, "SEALED") }
-        content { manage(boxes) }
+        content { Manage(boxes) }
         assertEquals(45, state.layoutInfo.totalItemsCount)
         assertEquals(-1, index(80L)); assertEquals(-1, index(1001L))
         more("SEALED"); assertTrue(index(1001L) >= 0); assertEquals(-1, index("more-SEALED"))
@@ -156,7 +156,7 @@ abstract class PackageHistoryUiContract(private val language: String) {
             (1001L..1200L).map { box(it) } + (2001L..2020L).map { box(it, "DISCARDED") } +
             (3001L..3100L).map { box(it, "VOIDED") })
         var undone: Long? = null; var restored: Long? = null
-        content { manage(boxes, onUndo = { chosen -> undone = chosen.id; boxes = boxes.map { if (it.id == chosen.id) it.copy(state = "VOIDED") else it } },
+        content { Manage(boxes, onUndo = { chosen -> undone = chosen.id; boxes = boxes.map { if (it.id == chosen.id) it.copy(state = "VOIDED") else it } },
             onRestore = { chosen -> restored = chosen.id; boxes = boxes.map { if (it.id == chosen.id) it.copy(state = "EMPTY") else it } }) }
         assertEquals(9, state.layoutInfo.totalItemsCount)
         assertEquals(-1, index(3100L)); assertEquals(-1, index(1200L))
@@ -191,7 +191,7 @@ abstract class PackageHistoryUiContract(private val language: String) {
         var open by mutableStateOf(true); var selected by mutableStateOf<ContainerEntity?>(null)
         content {
             Button(onClick = { open = true }, modifier = Modifier.testTag("reopen-packages")) { Text("Synthetic open") }
-            if (open) manage(boxes, onDismiss = { open = false }, onInfo = { selected = it })
+            if (open) Manage(boxes, onDismiss = { open = false }, onInfo = { selected = it })
             selected?.let { ContainerInfoDialog(it, { selected = null }) { _, _ -> selected = null } }
         }
         toggle("EMPTY"); more("EMPTY"); scroll(70L)

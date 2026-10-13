@@ -224,7 +224,7 @@ val CHECKABLE_STATES = setOf("IN_USE", "EMPTY")
                     }
                     if (count < boxes.size) item(key = "more-$status", contentType = "more") {
                         TextButton(onClick = { append(status, boxes.size) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("package-more-$status")) {
-                            Text(stringResource(R.string.pkg_show_more, 20))
+                            Text(stringResource(R.string.pkg_show_more))
                         }
                     }
                 }
@@ -252,7 +252,7 @@ val CHECKABLE_STATES = setOf("IN_USE", "EMPTY")
                 }
                 if (count < hidden.size) item(key = "more-VOIDED", contentType = "more") {
                     TextButton(onClick = { append("VOIDED", hidden.size) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("package-more-VOIDED")) {
-                        Text(stringResource(R.string.pkg_show_more, 20))
+                        Text(stringResource(R.string.pkg_show_more))
                     }
                 }
             }

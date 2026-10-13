@@ -1061,7 +1061,7 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="pkg_opened">ouverte le %1$s</string>
     <string name="pkg_left">reste %1$s</string>
     <string name="pkg_show">Afficher (%1$d)</string>
-    <string name="pkg_show_more">Afficher %1$d de plus</string>
+    <string name="pkg_show_more">Afficher 20 de plus</string>
     <string name="pkg_hide">Masquer</string>
     <string name="pkg_undo">Invalider une boîte ajoutée par erreur</string>
     <string name="pkg_undo_title">Invalider cette boîte ?</string>
