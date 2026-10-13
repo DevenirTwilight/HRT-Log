@@ -1,3 +1,5 @@
+> 2026-10-13：用户授权顺序合并PR23→主线CI→PR24改目标及复验→合并。PR23已合入默认分支，merge `d06bcce`，Android38463928846 / Science38463928705待完成；PR24尚未合并、HEAD92f8c42不变。签名APK build26保持原样。
+
 > 最终测试修复验收（2026-10-13）：1033a370272f4cdb6c9978cbf0b721f285464100 的Android push38439313884 / PR38439320044三作业全success；Science PR38439320016 gate/deep实际success，push38439314196 gate success/deep依普通测试改动门控skip。独立下载设备报告digest e380699f…10e76b一致：data15/15、app92零失败/8原条件跳过，UnifiedConcentrationAndroidTest六项全部实际通过（11.961s，无跳过）；B2重启/清理/恢复与VOIDED跨新PID/加密备份/安全恢复脚本全通过。直接Standard方案挂起由真实窗口主线程Recomposer及空闲同步修复，原断言与模型不变。实际本地编译3m2s，已纠正先前记录笔误。已交付build26源c725310/原证书/文件哈希不变。此次仅补验收记录；交还条件仍是PR23最终记录HEAD自身检查全部完成通过，不循环追加自身SHA。PR23不合并，无公开Release；用户手机覆盖安装未核验。
 
 > 仪器线程修复更正（2026-10-13）：a8fd4de的Android/JVM/Science完成通过，但两组API35在app 14/92后挂起至45分钟，被作业超时自动结束（CANCELLED，不是通过，也不是SDK NOT_RUN）；data设备15项已通过，不能宣称app完成。实际日志16:43启动92项、16:44后停止推进；直接StandardTestDispatcher方案不适合该Activity启动/测试时钟，已撤换，不盲重试。改为Debug-only合成Activity可选真实生命周期主线程Recomposer，并为该组6项Android仪器测试注册其空闲状态；其余测试默认入口/时钟与全部原断言不变。本地assembleFullDebugAndroidTest已成功（3m2s），等待本HEAD最终完整CI；APK源c725310及已交付签名文件不变，不重建/重签，不涉及生产/PK/Schema/PNBAK1。
