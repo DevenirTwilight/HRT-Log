@@ -1,6 +1,6 @@
-# 22 科研验证精简工程验收（进行中）
+# 22 科研验证精简工程验收（CI 待验收）
 
-2026-10-13；独立分支 feature/science-validation-simplification-20261013，起点 1e584285cb1e6f7a4b09a3e20585418d35a28735。B2 PR [20](https://github.com/DevenirTwilight/HRT-Log/pull/20) OPEN，未混入本分支。不是 COMPLETE；S1–S4 与最终 CI 尚待实际验收。
+2026-10-13；独立分支 feature/science-validation-simplification-20261013，起点 1e584285cb1e6f7a4b09a3e20585418d35a28735。B2 PR [20](https://github.com/DevenirTwilight/HRT-Log/pull/20) 开发期间未混入；2026-10-13 产品负责人批准后 PR20 以 `9c3b5d6` 合入默认分支，本分支随后合并默认分支以保留 B2 的设备脚本与测试（REQUIREMENTS §78）。S1–S3 已在 `97236d7` CI 通过；合并 B2 后的最终 CI 见文末，未全绿前不称 COMPLETE。
 
 ## S0 实际调用与迁移
 
@@ -35,3 +35,28 @@ S1 本地：独立命令实际164/164、5/5通过，原记录逐字节核验；�
 S2 当前科研入口只核验冻结协议输入与训练/外部研究分组；日常不再消费生产文件SHA、显示审批、分类白名单或Git授权提交。原两套审批/字节锁测试源移至`legacy-guard-tests/`作为停用见证；归档损坏与浅克隆负样本已迁独立测试。其余研究261项（本地7.999秒）和当前research.py合成运行通过，报告`clinical_accuracy_established=false`。静态四语/已废实验页检查保留，但移除另一个`model-source-lock.json`生产字节门槛；32×13数值对照保留，去除Python工具自身的源码哈希阻断。
 
 S3 CI设计：Android jvm维持domain/PK/importer及32×13数值参考/四语检查，不下载审批Git提交；Android单元、lint、full Debug/unsigned Release、来源/账本/Manifest/Schema、设备与重启原步骤不删。新增science-change-gate在每个push/PR显示结果；依据真实Git差异筛选research-deep，手动总是深测。深测完整历史、科研方法、原/候选两套SciPy独立重算；旧PR19入口仅手动保留。五类触发测试UI-only=false、PK core=true、research data=true、workflow=true、docs-only=false；新PK源=true。后续B2合并时必须检查其新增设备脚本仍在Android工作流。
+
+## S2 实际正反样本（2026-10-13，本地，`97236d7` 临时工作树，样本后逐字节还原）
+
+| 样本 | 改动 | 新日常守卫 | research-deep | 实际测试 |
+|---|---|---|---|---|
+| P1 正 | `ui/ConcentrationScreen.kt` 列间距 8→10dp | 退出 0，无需任何批准/哈希文件 | 不触发 | UnifiedConcentrationUiTest 15/15 通过 |
+| P2 正 | `pk-engine/.../experimental/` 新增无用途辅助文件 | 退出 0，无需分类登记 | 触发 | M2OnlyNumericalContractTest 3/3 通过 |
+| N1 负 | M2 情景输出 ×1.01 | — | 触发 | M2OnlyNumericalContractTest 失败（AssertionFailedError） |
+| N2 负 | 新 PDF 方案为舌下画 Legacy 曲线 | — | 不触发（Exports.kt 属普通产品文件） | SublingualEstimatePolicyTest 失败（AssertionError），常规 Android 单元测试内 |
+| N3 负 | 冻结 v1 估算显示被改写为“暂不可用” | — | 触发（conc/） | SublingualEstimatePolicyTest 失败（AssertionError） |
+
+负样本均由数值/产品语义断言拦截，而非文件哈希。N2 说明 D-2 回归不依赖深度 CI。
+
+## 精简前后对比（同一 P1/P2 改动，旧守卫在默认分支 `1e58428` 实测）
+
+| 项目 | 精简前 | 精简后 |
+|---|---|---|
+| P1 一行 UI 间距 | `check_protocol.py` 退出 1：“PK display file differs from its last approved state: ConcentrationScreen.kt”；全科研 discover 293 项中 9 失败 60 错误（26 个测试方法）。须追加显示批准记录、更新哈希链与需求文档证据提交后才能通过 | 守卫退出 0，不改任何批准/哈希文件；UI 测试 15/15 |
+| P2 新 PK 辅助文件 | 旧 `check_protocol.py`、全科研 302 项与源锁检查均通过（pk-engine experimental 未纳入旧分类），即旧锁对此类新增并无科学保护 | 通过，同时由 gate 触发 research-deep 做数值/档案深测 |
+| 数值回归（N1） | 依赖同一 Kotlin 数值断言 | 同一断言保留于常规 CI |
+| 常规 CI 中的科研步骤 | 每次 push 下载审批 Git 对象 + 全科研 discover（本地约 41–62 秒） + research.py 合成运行 | 32×13 数值参考 + 四语检查（数秒）；gate 4 秒 |
+| 深度验证 | 与日常混在一起，随任意 UI 改动运行 | research-deep 仅在 PK/科研/工作流路径变化或手动时运行；`97236d7` 实测档案/方法学约 11 秒、两套 SciPy 约 66 秒，合计约 1.5 分钟 |
+| Android 主工作流 | — | `97236d7` 运行 38373891829 09:05:56→09:18:10 success；Science validation 38373891825 success |
+
+本地计时为本环境单次结果，不作性能结论。

@@ -1,3 +1,5 @@
+> 当前（2026-10-13）：B2 PR #20 经产品负责人“给你权限，批准”后，于 head `0cd7afb` 八项检查全绿时以 merge commit `9c3b5d6` 合入默认分支 `claude/new-session-1959qb`；未签名、未交付。科研精简分支 `feature/science-validation-simplification-20261013` 已合入含 B2 的默认分支（B2 设备脚本 run_import_cleanup_restart/run_restore_process_death 仍在 android.yml），S2 正反样本与精简前后对比已写入报告22；合并后完整 CI 与科研 PR 见报告22 §验收。科研 PR 不合并，签名/交付须另授权。
+
 > S3（2026-10-13）：新增始终出现的science-change-gate，五类路径测试本地通过；research-deep负责历史/方法学/双SciPy参考。Android常规JVM去掉历史对象下载，原Android/设备/Release身份步骤保留。专项实际CI和S2正反变异仍待验收。
 
 > S2（2026-10-13）：旧守卫日常入口已删生产SHA/显示审批/新增PK强制分类路径；保留冻结协议/数据泄漏校验。旧字节授权测试保存在legacy-guard-tests不参与discover，剩余科研261项本地通过。S2实际正反样本、S3 CI拆分和完整CI待完成。
@@ -5,6 +7,16 @@
 > S1（2026-10-13）：独立research_archive/verify_historical_archive已实现，本地164/5及305测试通过，篡改与真实浅克隆缺对象均失败。新增专项工作流；S2/S3与最终CI未完成。S0 CI运行中，等待后推送，避免取消。
 
 > 2026-10-13 科研守卫精简：S0 依赖映射已记录，S1–S4 待实施，尚未验收。独立默认分支起点 1e58428；B2 PR20 OPEN，未混入。见[工程报告22](audits/product-quality-2026-10/22-science-validation-simplification.md)。本轮不合并/签名/交付。
+
+> 2026-10-13：B2 PR #20 OPEN（https://github.com/DevenirTwilight/HRT-Log/pull/20）。最终文档提交2362148的PR检查通过，但push38368581852的CausalTimeUiTest.traditional失败：后台readAt回调写入AtomicReference后、Main/Compose尚未发布点读文本，测试过早assertExists。补充等待目标语义节点后保留原断言；本地四语4项通过（3m23s），新提交完整CI待验收。不把单次重跑当根因修复；未改生产代码/研究记录。守卫精简任务在独立默认分支worktree实施，不混入B2。
+
+> B2四批最终验收（2026-10-13）：A/B/C/D COMPLETE，均独立提交并等待各自完整CI全绿后推进。D `b6cad04af8f7e977581426afa429d90e53bb8122`，38366443689三任务及38366443699 reference全success；app703（61既有条件跳过）/data72/reminder14零失败，API35 app88/data14零失败，旧4重启方法独立各1通过；D密码检查点实际外部强杀、新PIDverify1/1通过，六方法主套件跳过如实保留。lint0错误179警告，完整unsignedRelease/git/clean/无INTERNET/ledger通过。四个核心变异均被业务断言捕获。最终报告21/机器摘要/回滚已完成，正在提交验收文档并创建PR；未默认合并、正式签名或交付。下文为历史过程记录，以此段与报告21最终表为当前状态。
+
+> B2-D提交门槛状态：状态/布局/翻译59项及真实取消入口1项通过；取消后误调用恢复的变异1/1由目标断言杀死，源码恢复后同测通过，Android测试编译成功。D全量本地JVM/Android正在串行执行；将提交并等待本批jvm/android/device/reference四项CI。强杀验证须以设备CI的真实检查点、外部kill和新PID断言为准，当前未提前宣称通过。
+
+> B2最新进展（2026-10-13）：A/B/C COMPLETE；C完整SHA `8e97e7a620ba0a22559c8d7fb7c4d01a7e744280`，CI38362778379 jvm/android/device-tests及38362778161 reference全success。C app645（61既有条件跳过）/data72/reminder14与API35 app77/data14零失败，lint0错误179警告，unsignedRelease/来源/无INTERNET/ledger通过。D现已补9项状态测试与48组布局测试，并实施记忆内三选择流程，正在验证；实际设备/进程死亡测试及变异/全套CI仍待完成。禁止自动恢复、默认合并、正式签名或交付。
+
+> B2当前交接（2026-10-12）：分支 `feature/b2-privacy-reliability-20261012`，起点 `1e584285cb1e6f7a4b09a3e20585418d35a28735`。A COMPLETE（ed5682e，CI38291254654/38291254617）；B COMPLETE（348064c+公开API修复5f839e98eb085eaab92c415a434d00fcc956e8ba，CI38301348940三任务+38301348930 reference全success）。B原RestrictedApi失败不掩盖；实际API35密码流程已过。C在B全绿后已实施，准备提交并等待本批CI；D未开始。C聚焦123项、错误成功标记变异、恢复后目标测试通过；全量JVM194、data72/reminder14/app645（61既有条件跳过）零失败。全量发现切换导入入口的旧清理竞态，现先cancel+join旧读取，原4项断言与全量已通过；lint/构建收尾，设备/unsignedRelease须等本批CI。临时工具脚本现用进程内Kotlin编译+单worker防止8GiB OOM，不改测试门槛。详见[审计21](audits/product-quality-2026-10/21-b2-privacy-reliability.md)。禁止默认合并、正式签名/交付。
 
 > 最新当前事实（2026-10-12）：PR #19 已合并并通过主线 CI；见 [STATUS](STATUS.md) 和 [审计20](audits/product-quality-2026-10/20-pr19-merge-and-mainline-validation.md)。下文保留历史阶段的“未合并/待批准”叙述，不代表现在。
 

@@ -21,7 +21,9 @@ import java.util.concurrent.TimeUnit
     private fun startMaintenance() {
         WorkManager.getInstance(this).enqueueUniquePeriodicWork("reminder-maintenance",ExistingPeriodicWorkPolicy.KEEP,
             PeriodicWorkRequestBuilder<MaintenanceWorker>(6,TimeUnit.HOURS).build())
-        CoroutineScope(SupervisorJob()+Dispatchers.IO).launch { runCatching{EntryPointAccessors.fromApplication(this@NotesApplication,ReminderEntryPoint::class.java).coordinator().sync()} }
+        CoroutineScope(SupervisorJob()+Dispatchers.IO).launch {
+            net.plainnotes.app.privacy.TransMemoImportCopies.startup({noBackupFilesDir},true)
+            runCatching{EntryPointAccessors.fromApplication(this@NotesApplication,ReminderEntryPoint::class.java).coordinator().sync()} }
     }
 }
 class MaintenanceWorker(context:Context,params:WorkerParameters):CoroutineWorker(context,params) {

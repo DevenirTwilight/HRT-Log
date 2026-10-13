@@ -1,3 +1,5 @@
+> B2 四批 A/B/C/D COMPLETE，全部独立CI全绿，PR待审阅；现状见[审计21](21-b2-privacy-reliability.md)。报告04/06的旧 PR19/守卫阻断陈述属历史，报告20终态保持。
+
 > **当前更新（2026-10-12）：PR #19 已以 merge commit `4c88c1c7ecaa8ede67d7a0e432dcfbb7262d1d8f` 合并默认分支，新的主线 CI 全部成功（MERGED_CI_VERIFIED）。B0/B1/D-1/D-2 已完成；以下早期审计基准与风险描述保留为历史，不作为重复实施指令。** 现状见[STATUS](../../STATUS.md)；正式合并、科研保护、测试/跳过及未发布边界见[审计20](20-pr19-merge-and-mainline-validation.md)。
 
 # HRT Log 产品质量审计（2026-10）
@@ -110,3 +112,5 @@ PR #19 描述称 M1 研究核来自 P2-AZ（#17 的内容），而 #17/#18 本�
 | `18-m2-conditional-scenario-ui.md` | D-1 已实施并合并，旧风险和科学边界仍保留 |
 | `19-pdf-labs-model-consistency.md` | D-2 已实施并合并，旧冻结不改写 |
 | `20-pr19-merge-and-mainline-validation.md` + `20-pr19-validation-evidence.json` | PR #19 merge commit 与独立主线验收；MERGED_CI_VERIFIED，未签名/交付/发布 |
+
+| `21-b2-privacy-reliability.md` | B2 四批实施验收；A COMPLETE，B COMPLETE，C COMPLETE（8e97e7a，38362778379/38362778161全绿），D COMPLETE（b6cad04，38366443689/38366443699全绿） |

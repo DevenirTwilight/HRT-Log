@@ -32,9 +32,11 @@ import java.time.LocalDate
 @Composable fun DataSection(model: NotesViewModel, scheduleTexts: Map<Long, String>) {
     val context = LocalContext.current
     val job by model.dataJob.collectAsStateWithLifecycle()
-    var backupPassword by remember { mutableStateOf<CharArray?>(null) }
-    var restoreUri by remember { mutableStateOf<android.net.Uri?>(null) }
-    var askBackup by remember { mutableStateOf(false) }
+    var backupUri by remember { mutableStateOf<android.net.Uri?>(null) }
+    var awaitingBackupPicker by remember { mutableStateOf(false) }
+    val restore=remember { net.plainnotes.app.privacy.RestoreProtection() }
+    var awaitingRestorePicker by remember { mutableStateOf(false) }
+    var csvOptions by remember { mutableStateOf(false) }
     var pdfOptions by remember { mutableStateOf(false) }
     var pdfChoice by remember { mutableStateOf(90 to true) }
     var wipe by remember { mutableStateOf(false) }
@@ -43,28 +45,67 @@ import java.time.LocalDate
     val htLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { it?.let(model::openHrtTracker) }
     val state by model.state.collectAsStateWithLifecycle()
     val backupLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/octet-stream")) { uri ->
-        val pw = backupPassword; backupPassword = null; if (uri != null && pw != null) model.exportBackup(uri, pw) }
-    val restoreLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { restoreUri = it }
+        if(awaitingBackupPicker){awaitingBackupPicker=false;backupUri=uri} }
+    val restoreLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        if(awaitingRestorePicker){awaitingRestorePicker=false;restore.select(uri)}
+    }
+    val protectionBackupLauncher=rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/octet-stream")) { restore.destination(it) }
+    LaunchedEffect(job,restore.stage) {
+        if(restore.stage is net.plainnotes.app.privacy.RestoreProtection.Stage.BackingUp) {
+            when(val outcome=job) {
+                is NotesViewModel.DataJob.Done->{restore.backupFinished(outcome.message==R.string.backup_saved);model.clearDataJob()}
+                is NotesViewModel.DataJob.Failed->{restore.backupFinished(false);model.clearDataJob()}
+                else->{}
+            }
+        }
+    }
     val csvLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { it?.let { u -> model.exportCsv(u, labels, scheduleTexts) } }
     val pdfLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { it?.let { u -> model.exportPdf(u, pdfChoice.first, pdfChoice.second, context, labels, scheduleTexts) } }
 
     SectionCard(stringResource(R.string.data)) {
         DataRow(Icons.Outlined.MoveToInbox, stringResource(R.string.import_ht), stringResource(R.string.import_ht_desc)) { htLauncher.launchPicker(arrayOf("application/json", "text/plain", "*/*")) }
         DataRow(Icons.Outlined.MoveToInbox, stringResource(R.string.import_tm), stringResource(R.string.import_tm_desc)) { importLauncher.launchPicker(arrayOf("*/*")) }
-        DataRow(Icons.Outlined.Lock, stringResource(R.string.backup_export), stringResource(R.string.backup_export_desc)) { askBackup = true }
-        DataRow(Icons.Outlined.SettingsBackupRestore, stringResource(R.string.backup_restore), stringResource(R.string.backup_restore_desc)) { restoreLauncher.launchPicker(arrayOf("*/*")) }
-        DataRow(Icons.Outlined.TableChart, stringResource(R.string.export_csv), stringResource(R.string.export_csv_desc)) { csvLauncher.launchPicker("notes-export-${LocalDate.now()}.zip") }
+        DataRow(Icons.Outlined.Lock, stringResource(R.string.backup_export), stringResource(R.string.backup_export_desc)) {
+            awaitingBackupPicker=true
+            try{backupLauncher.launchPicker("notes-${LocalDate.now()}.pnbak")}
+            catch(_:Exception){awaitingBackupPicker=false;model.dataJob.value=NotesViewModel.DataJob.Failed(R.string.operation_error)}
+        }
+        BackupStatus(model.backupHistory)
+        DataRow(Icons.Outlined.SettingsBackupRestore, stringResource(R.string.backup_restore), stringResource(R.string.backup_restore_desc)) {
+            awaitingRestorePicker=true
+            try{restoreLauncher.launchPicker(arrayOf("*/*"))}
+            catch(_:Exception){awaitingRestorePicker=false;restore.cancel();model.dataJob.value=NotesViewModel.DataJob.Failed(R.string.operation_error)}
+        }
+        DataRow(Icons.Outlined.TableChart, stringResource(R.string.export_csv), stringResource(R.string.export_csv_desc)) { csvOptions = true }
         DataRow(Icons.Outlined.PictureAsPdf, stringResource(R.string.export_pdf), stringResource(R.string.export_pdf_desc)) { pdfOptions = true }
         HorizontalDivider()
         DataRow(Icons.Outlined.DeleteForever, stringResource(R.string.wipe), stringResource(R.string.wipe_desc), danger = true) { wipe = true }
     }
 
-    if (askBackup) PasswordDialog(stringResource(R.string.backup_export), stringResource(R.string.backup_password_note), confirm = true, { askBackup = false }) { pw ->
-        askBackup = false; backupPassword = pw; backupLauncher.launchPicker("notes-${LocalDate.now()}.pnbak") }
-    restoreUri?.let { uri -> PasswordDialog(stringResource(R.string.backup_restore), stringResource(R.string.backup_restore_warning), confirm = false, { restoreUri = null }) { pw ->
-        restoreUri = null; model.restoreBackup(uri, pw) } }
+    backupUri?.let { uri -> PasswordDialog(stringResource(R.string.backup_export),stringResource(R.string.backup_password_note),confirm=true,{backupUri=null}) { pw ->
+        if(backupUri==uri){backupUri=null;model.exportBackup(uri,pw)}else pw.fill('\u0000')
+    } }
+    when(val stage=restore.stage) {
+        is net.plainnotes.app.privacy.RestoreProtection.Stage.Choice->RestoreProtectionDialog(stage.notice,restore::cancel,{
+            restore.chooseBackup()
+            try{protectionBackupLauncher.launchPicker("notes-${LocalDate.now()}.pnbak")}
+            catch(_:Exception){restore.pickerFailed()}
+        },restore::continueRestore)
+        is net.plainnotes.app.privacy.RestoreProtection.Stage.BackupPassword->PasswordDialog(stringResource(R.string.backup_export),stringResource(R.string.backup_password_note),true,restore::cancelPassword) { pw ->
+            if(restore.beginBackup(stage.source,stage.target)){model.clearDataJob();model.exportBackup(stage.target,pw)}else pw.fill('\u0000')
+        }
+        is net.plainnotes.app.privacy.RestoreProtection.Stage.RestorePassword->PasswordDialog(stringResource(R.string.backup_restore),stringResource(R.string.backup_restore_warning),false,restore::cancelPassword) { pw ->
+            val source=restore.takeRestore(stage.source)
+            if(source!=null)model.restoreBackup(source,pw)else pw.fill('\u0000')
+        }
+        else->{}
+    }
+    if (csvOptions) PlainExportDialog(stringResource(R.string.export_csv),{csvOptions=false}) {
+        csvOptions=false;csvLauncher.launchPicker("notes-export-${LocalDate.now()}.zip")
+    }
     if (pdfOptions) AlertDialog(onDismissRequest = { pdfOptions = false }, icon = { Icon(Icons.Outlined.PictureAsPdf, null) }, title = { Text(stringResource(R.string.export_pdf)) },
-        text = { Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        text = { Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            ExportPrivacyNotice()
             Text(stringResource(R.string.report_period_label), style = MaterialTheme.typography.labelLarge)
             val ranges=listOf(30,90,180,365)
             AdaptiveChoice(ranges.map{stringResource(R.string.days_short,it)},ranges.indexOf(pdfChoice.first),{pdfChoice=ranges[it] to pdfChoice.second})
@@ -108,7 +149,7 @@ import java.time.LocalDate
     var pw by remember { mutableStateOf("") }; var pw2 by remember { mutableStateOf("") }
     val ok = pw.length >= 8 && (!confirm || pw == pw2)
     AlertDialog(onDismissRequest = onDismiss, icon = { Icon(Icons.Outlined.Lock, null) }, title = { Text(title) },
-        text = { Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        text = { Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Text(note, style = MaterialTheme.typography.bodySmall)
             OutlinedTextField(pw, { pw = it }, Modifier.fillMaxWidth(), label = { Text(stringResource(R.string.backup_password)) }, singleLine = true,
                 visualTransformation = PasswordVisualTransformation(), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -116,7 +157,7 @@ import java.time.LocalDate
             if (confirm) OutlinedTextField(pw2, { pw2 = it }, Modifier.fillMaxWidth(), label = { Text(stringResource(R.string.backup_password_repeat)) }, singleLine = true,
                 visualTransformation = PasswordVisualTransformation(), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password), isError = pw2.isNotEmpty() && pw != pw2)
         } },
-        confirmButton = { Button(enabled = ok, onClick = { onOk(pw.toCharArray()) }) { Text(stringResource(R.string.ok)) } },
+        confirmButton = { Button(enabled = ok, onClick = { val secret=pw.toCharArray();pw="";pw2="";try{onOk(secret)}catch(e:Exception){secret.fill('\u0000');throw e} }) { Text(stringResource(R.string.ok)) } },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } })
 }
 

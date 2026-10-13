@@ -1027,4 +1027,20 @@
 <string name="about_source_unknown">未知</string>
 <string name="about_source_copy">複製建置來源</string>
 <string name="about_source_copied">已複製</string>
+    <string name="export_privacy_notice">此匯出檔案不會由 HRT Log 加密。儲存到你選擇的位置後，其保護取決於該位置的權限與服務提供者。請妥善保管，避免意外分享。加密備份（.pnbak）不屬於此類匯出。</string>
+    <string name="backup_history_last">最近一次完成加密備份匯出：%1$s</string>
+    <string name="backup_history_never">從未在本裝置記錄</string>
+    <string name="backup_history_note">這是本裝置記錄的匯出操作時間，不保證檔案仍在、已同步或能夠還原。</string>
+    <string name="backup_reminder_title">應用程式內備份提醒</string>
+    <string name="backup_reminder_note">僅在此頁面提示，不傳送通知。</string>
+    <string name="backup_reminder_days">每 %1$d 天</string>
+    <string name="backup_reminder_due">可以考慮匯出一份新的加密備份。</string>
+<string name="restore_protection_title">還原前確認</string>
+<string name="restore_protection_note">可以先匯出目前資料的加密備份。匯出不會開始還原；也可以選擇不備份，直接繼續還原。</string>
+<string name="restore_backup_current">先備份目前資料</string>
+<string name="restore_continue">繼續還原</string>
+<string name="restore_backup_cancelled">未完成目前資料備份，還原尚未開始。</string>
+<string name="restore_backup_failed">目前資料備份失敗，還原尚未開始。</string>
+<string name="restore_backup_saved">目前資料已匯出，還原尚未開始。取代資料前請再次選擇。</string>
+<string name="restore_backup_same_target">請選擇另一個輸出檔案，不能覆寫所選的待還原檔案。</string>
 </resources>

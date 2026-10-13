@@ -190,6 +190,7 @@ class VisitExportRequest(val from: LocalDate, val to: LocalDate, val sections: S
     }
     AlertDialog(onDismissRequest = onDismiss, title = { Text(stringResource(R.string.visit_generate)) }, text = {
         Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            ExportPrivacyNotice()
             Text(range.previous?.let { stringResource(R.string.visit_range_previous, formatDate(Instant.ofEpochMilli(it.at_utc).atZone(zone).toLocalDate())) } ?: stringResource(R.string.visit_range_none),
                 style = MaterialTheme.typography.bodySmall, color = if (range.previous == null) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant)
             TextButton(onClick = { pick = 1 }) { Text(stringResource(R.string.batch_from) + ": " + from) }
