@@ -1,3 +1,6 @@
+
+> B4-D正式APK已私下交付（2026-10-13，REQ §83）：0.2.0/build26/full Universal，构建源 `c72531027a4d9782ea0a31dc181acd238e1c83fe`（git/clean），12,901,236B，APK SHA256 `0c6bd9132ab15ca7625f1da19b59c1c9450cf4cb0518b15100e30396c5ed3fa0`，原证书989ba045…59379b1，v2/v3、四ABI/8原生库16KB、非debug/无INTERNET、签名前后代码/资源逐项不变。Drive仅owner/shared=false，独立下载大小/哈希/来源/版本/证书一致，临时签名材料已清理、永久备份未改；私有链接只在聊天，不入Git。源码push/PR Android三任务全success，Science PR gate/deep实际success、push普通交付版本门控成功且deep按规则skip；报告24与机器交付记录已补全。实际ARM覆盖安装/用户已安装版本NOT_RUN/UNKNOWN，先加密备份、仅更新，不卸载清数据。账本首次追加26，后续实际交付至少27。发现SDK37 V3.0 Signer输出的证书解析缺陷，已红绿修复核验工具（8来源+8账本测试），不打包入APK；后续记录/工具提交不是另造APK。PR23保持OPEN未合并，无公开Release/标签。下方阶段记录保留。
+
 > B4-D正式签名/私下交付获授权（2026-10-13，REQ §83）：用户“整完给我个apk，正式签名”。从已全绿461574b构建full Universal，按D-4将build25→26，保持0.2.0/包名/原证书/Room9/PNBAK1/PK；私有签名仓库已核实Private，尚未恢复临时密钥。现提交版本与授权记录，构建干净源码并等待本提交CI后签名/核验/Drive仅owner交付，实际交付后记账。PR23不合并，无公开Release/标签。下方“不签名”是授权前历史。
 
 > B4-D最终验收：READY_FOR_OWNER_REVIEW，生效条件为PR23当前HEAD的push/PR完整检查全绿。代码6061ab3及首轮验收文档e9d9b99的实际检查证据见报告24；e9d9b99 push设备attempt1在SDK安装无输出45分钟后结束取日志，NOT_RUN，只重试设备；最终状态提交新增设备作业45分钟超时，不改变测试集合。交还前必须核对当前HEAD，不借用旧绿色。本轮实现A/B并保留C安全限制，产品负责人无需再决定A/B。PR23保持OPEN；没有默认分支合并、正式签名或APK交付。下方阶段记录保留，不代表当前仍在实施。

@@ -145,3 +145,15 @@ REQUIREMENTS §82已加入“所有用户录入/确认的信息都应存在可�
 当前验收状态为 **READY_FOR_OWNER_REVIEW**，生效条件是PR23当前最终HEAD自己的所有必需检查完成且全绿。最后状态提交不改生产/测试/Schema/备份/PK；仅另给device-tests增加45分钟作业超时，避免SDK安装无期限挂起；其具体SHA与实际检查链接在PR23正文固定记录，提交后仍完整执行Android与Science，再交还验收，不循环追加自身SHA的文档提交。限制与未执行项不因绿色CI解除，PR保持OPEN。
 
 首轮文档push设备attempt1保留为CANCELLED / NOT_RUN：14:42:48开始`sdkmanager --install emulator --channel=0`后持续无输出，45分钟仍未结束；没有启动模拟器、没有执行测试、没有测试artifact。为了取得诊断日志，在45分钟边界仅结束该唯一未完成作业，不是因为代码变更取消正常CI。日志确认SDK安装挂起后只重试该设备job；JVM/Android已绿色并保留，Science也不重跑。最终状态提交增加device-tests的45分钟显式超时，不更换API35、动作版本、模拟器构建或测试集合，不跳过任何现有检查。此取消不冒称通过；attempt2设备job `115382600209` 已实际success，完整设备测试及独立作废重启/加密备份/安全恢复再次通过，JVM/Android为继承原绿色，首轮文档四个run最终均success。
+
+### §83 正式签名APK私下交付（2026-10-13）
+
+用户明确要求“整完给我个apk，正式签名”，覆盖本报告之前的不签名/不交付边界；不授权合并或公开Release。依D-4将versionCode25→26（versionName仍0.2.0）。实际构建源 `c72531027a4d9782ea0a31dc181acd238e1c83fe`，干净git检出；本地fullRelease成功11m57s。该源Android push [38426457889](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38426457889) 与PR [38426465766](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38426465766) 的JVM/Android/API35均success；Science PR [38426465277](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38426465277) gate/deep实际success，push [38426458127](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38426458127) gate success、deep按普通交付版本变更门控skipped，没有冒称执行。签名仅在本地，不进入CI。
+
+`HRT-Log-build26-B4D-full-official.apk`：12,901,236 bytes，APK SHA256 `0c6bd9132ab15ca7625f1da19b59c1c9450cf4cb0518b15100e30396c5ed3fa0`；原正式证书SHA256 `989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1`；包名net.plainnotes.app/build26，v2/v3、四ABI/8 ELF原生库16KB与ZIP16KB、非debuggable、无INTERNET检查通过。签名前后所有原ZIP条目逐项内容/CRC相同，只增加三项标准签名META-INF，未重写代码、资源或模型。
+
+恢复前重新确认签名备份仓库Private；密钥/密码仅在仓库外700目录/600文件中短暂恢复，签名后finally删除，原永久备份未改。Drive上传后元数据shared=false、唯一owner权限；独立下载回查大小、SHA256、完整源身份、版本与原证书均一致。实际交付后追加账本26，下一次实际交付至少27。私有下载链接、文件ID、密钥与密码不写进公开记录；详细机器证据见`docs/delivery/b4d-build26-2026-10-13.json`。
+
+首次签名后来源核验失败，原因是SDK37输出`V3.0 Signer: certificate SHA-256 digest:`，旧工具按第一个冒号拆分，误把说明文字并入证书字段；实际apksigner签名和原证书检查当时已通过。补充真实新/旧输出格式回归，新格式红测失败后修复为按证书摘要标记提取；8项来源与8项账本测试通过，实际签名文件重新核验通过。仅核验工具修复，不进入APK，不更换证书或重新造包。严格全条目对比也记录了标准签名META-INF新增，原代码/资源字节均不变。后续账本/工具提交不是另一个APK构建源，包内源码SHA保持c725310。
+
+真实ARM安装、覆盖更新后提醒和用户手机数据保留仍NOT_RUN，不把静态验证或API35 debug测试冒称手机验收。安装前先加密备份，只接受同包名原正式证书的“更新”，不卸载/清数据。A/B VOIDED能力与C安全限制照本报告，不扩大医学宣称。PR23未合并，无公开Release/标签。

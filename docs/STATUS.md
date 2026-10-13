@@ -1,3 +1,5 @@
+> 当前交付：DELIVERED_PRIVATE / SOURCE_CI_VERIFIED_BUILD26（2026-10-13）。用户§83明确授权的B4-D full Universal正式APK已上传仅owner Drive，独立下载回查一致；0.2.0/build26、原正式证书、Room9/PNBAK1/PK不变。构建源c725310完整Android与PR Science验收通过；来源/签名/16KB/权限/版本检查及账本记录完成，见[机器交付记录](delivery/b4d-build26-2026-10-13.json)与[报告24](audits/product-quality-2026-10/24-b4-stock-consistency.md)。用户安装与物理ARM覆盖升级未验证；PR23保持OPEN，未合并默认分支或公开发布。
+
 > 当前B4-D交付：OFFICIAL_APK_AUTHORIZED_BUILD_PENDING（2026-10-13，REQ §83）。功能461574b完整CI已通过；用户明确授权正式签名APK，必要将versionCode升26，保留0.2.0与原正式证书。正在构建/验收私有交付，不提前记账或冒称已交付；PR23仍OPEN、未合并。
 
 > B4-D：READY_FOR_OWNER_REVIEW（须最终HEAD检查全绿生效）（2026-10-13）。代码HEAD `6061ab3f0ed2c8843117db3066dcd5b60edde450` 的push/PR Android三任务、Science gate/deep全success；JVM194、data109/rem17/app763零失败（app61原跳过），API35 data15/app92零失败（app8条件跳过，新作废重启两方法随后独立通过），lint0错误178警告、Debug/unsigned Release及来源检查通过。无流水/ADJUST-only可逻辑VOIDED，正常UI/库存/共享预测/提醒/扣减完全排除；高级确认恢复重新检查一致性。实例4mg→2mg、普通2盒→1盒，ADJUST完整保留。C含CONSUME/REVERSE仍安全拒绝，方案见[报告24](audits/product-quality-2026-10/24-b4-stock-consistency.md)。代码及首轮验收文档HEAD完整CI通过；当前HEAD的绿色状态以PR23实时检查为准，必须全部完成后交还验收；PR23保持OPEN，不合并/正式签名/交付。A/B无需新增决定，C下一阶段另审。
