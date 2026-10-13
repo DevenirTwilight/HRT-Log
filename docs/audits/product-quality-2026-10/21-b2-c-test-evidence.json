@@ -1,0 +1,53 @@
+{
+  "batch": "B2-C",
+  "date": "2026-10-13",
+  "state": "WAITING_CI",
+  "focused": {
+    "tests": 123,
+    "failures": 0,
+    "skipped": 0
+  },
+  "mutation": {
+    "change": "record export time before output opens/writes/closes",
+    "tests": 1,
+    "failures": 1,
+    "intended_assertion": "No success timestamp before normal close",
+    "source_restored": true,
+    "restored_target_tests": 1,
+    "restored_target_failures": 0
+  },
+  "import_switch_regression": {
+    "initial_full_failure": "Plain SQLite copy must be removed before preview is published",
+    "fix": "cancel and join prior import read before next read",
+    "unchanged_focused_tests": 4,
+    "focused_failures": 0
+  },
+  "jvm": {
+    "domain": 58,
+    "pk": 124,
+    "importer": 12,
+    "failures": 0
+  },
+  "boundaries": {
+    "baseline_files_checked": 78,
+    "reviewed_debug_compile_only_change": true,
+    "historical_files": 164,
+    "identical_results": 5
+  },
+  "ci": "PENDING_PUSH",
+  "not_run": [
+    "physical ARM",
+    "real cloud persistence",
+    "real TalkBack",
+    "OEM differences"
+  ],
+  "local_android": {
+    "app": 645,
+    "data": 72,
+    "reminder": 14,
+    "failures": 0,
+    "errors": 0,
+    "app_existing_skips": 61,
+    "period_stability": 5
+  }
+}

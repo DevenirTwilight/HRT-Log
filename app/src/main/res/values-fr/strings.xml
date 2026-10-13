@@ -1028,4 +1028,11 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="about_source_copy">Copier l’origine de la compilation</string>
 <string name="about_source_copied">Copié</string>
     <string name="export_privacy_notice">HRT Log ne chiffre pas ce fichier exporté. Sa protection dépend ensuite des autorisations et du fournisseur de l’emplacement choisi. Conservez-le avec soin pour éviter un partage involontaire. Les sauvegardes chiffrées (.pnbak) ne sont pas concernées.</string>
+    <string name="backup_history_last">Dernier export de sauvegarde chiffrée terminé : %1$s</string>
+    <string name="backup_history_never">Aucun export enregistré sur cet appareil</string>
+    <string name="backup_history_note">Cette date correspond à un export enregistré sur cet appareil. Elle ne garantit ni la présence du fichier, ni sa synchronisation, ni la possibilité de le restaurer.</string>
+    <string name="backup_reminder_title">Rappel de sauvegarde dans l’application</string>
+    <string name="backup_reminder_note">Affiché uniquement sur cette page, sans notification.</string>
+    <string name="backup_reminder_days">%1$d jours</string>
+    <string name="backup_reminder_due">Vous pouvez envisager d’exporter une nouvelle sauvegarde chiffrée.</string>
 </resources>

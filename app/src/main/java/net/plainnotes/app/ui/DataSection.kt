@@ -32,9 +32,9 @@ import java.time.LocalDate
 @Composable fun DataSection(model: NotesViewModel, scheduleTexts: Map<Long, String>) {
     val context = LocalContext.current
     val job by model.dataJob.collectAsStateWithLifecycle()
-    var backupPassword by remember { mutableStateOf<CharArray?>(null) }
+    var backupUri by remember { mutableStateOf<android.net.Uri?>(null) }
+    var awaitingBackupPicker by remember { mutableStateOf(false) }
     var restoreUri by remember { mutableStateOf<android.net.Uri?>(null) }
-    var askBackup by remember { mutableStateOf(false) }
     var csvOptions by remember { mutableStateOf(false) }
     var pdfOptions by remember { mutableStateOf(false) }
     var pdfChoice by remember { mutableStateOf(90 to true) }
@@ -44,7 +44,7 @@ import java.time.LocalDate
     val htLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { it?.let(model::openHrtTracker) }
     val state by model.state.collectAsStateWithLifecycle()
     val backupLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/octet-stream")) { uri ->
-        val pw = backupPassword; backupPassword = null; if (uri != null && pw != null) model.exportBackup(uri, pw) }
+        if(awaitingBackupPicker){awaitingBackupPicker=false;backupUri=uri} }
     val restoreLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { restoreUri = it }
     val csvLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { it?.let { u -> model.exportCsv(u, labels, scheduleTexts) } }
     val pdfLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { it?.let { u -> model.exportPdf(u, pdfChoice.first, pdfChoice.second, context, labels, scheduleTexts) } }
@@ -52,7 +52,12 @@ import java.time.LocalDate
     SectionCard(stringResource(R.string.data)) {
         DataRow(Icons.Outlined.MoveToInbox, stringResource(R.string.import_ht), stringResource(R.string.import_ht_desc)) { htLauncher.launchPicker(arrayOf("application/json", "text/plain", "*/*")) }
         DataRow(Icons.Outlined.MoveToInbox, stringResource(R.string.import_tm), stringResource(R.string.import_tm_desc)) { importLauncher.launchPicker(arrayOf("*/*")) }
-        DataRow(Icons.Outlined.Lock, stringResource(R.string.backup_export), stringResource(R.string.backup_export_desc)) { askBackup = true }
+        DataRow(Icons.Outlined.Lock, stringResource(R.string.backup_export), stringResource(R.string.backup_export_desc)) {
+            awaitingBackupPicker=true
+            try{backupLauncher.launchPicker("notes-${LocalDate.now()}.pnbak")}
+            catch(_:Exception){awaitingBackupPicker=false;model.dataJob.value=NotesViewModel.DataJob.Failed(R.string.operation_error)}
+        }
+        BackupStatus(model.backupHistory)
         DataRow(Icons.Outlined.SettingsBackupRestore, stringResource(R.string.backup_restore), stringResource(R.string.backup_restore_desc)) { restoreLauncher.launchPicker(arrayOf("*/*")) }
         DataRow(Icons.Outlined.TableChart, stringResource(R.string.export_csv), stringResource(R.string.export_csv_desc)) { csvOptions = true }
         DataRow(Icons.Outlined.PictureAsPdf, stringResource(R.string.export_pdf), stringResource(R.string.export_pdf_desc)) { pdfOptions = true }
@@ -60,8 +65,9 @@ import java.time.LocalDate
         DataRow(Icons.Outlined.DeleteForever, stringResource(R.string.wipe), stringResource(R.string.wipe_desc), danger = true) { wipe = true }
     }
 
-    if (askBackup) PasswordDialog(stringResource(R.string.backup_export), stringResource(R.string.backup_password_note), confirm = true, { askBackup = false }) { pw ->
-        askBackup = false; backupPassword = pw; backupLauncher.launchPicker("notes-${LocalDate.now()}.pnbak") }
+    backupUri?.let { uri -> PasswordDialog(stringResource(R.string.backup_export),stringResource(R.string.backup_password_note),confirm=true,{backupUri=null}) { pw ->
+        if(backupUri==uri){backupUri=null;model.exportBackup(uri,pw)}else pw.fill('\u0000')
+    } }
     restoreUri?.let { uri -> PasswordDialog(stringResource(R.string.backup_restore), stringResource(R.string.backup_restore_warning), confirm = false, { restoreUri = null }) { pw ->
         restoreUri = null; model.restoreBackup(uri, pw) } }
     if (csvOptions) PlainExportDialog(stringResource(R.string.export_csv),{csvOptions=false}) {
@@ -113,7 +119,7 @@ import java.time.LocalDate
     var pw by remember { mutableStateOf("") }; var pw2 by remember { mutableStateOf("") }
     val ok = pw.length >= 8 && (!confirm || pw == pw2)
     AlertDialog(onDismissRequest = onDismiss, icon = { Icon(Icons.Outlined.Lock, null) }, title = { Text(title) },
-        text = { Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        text = { Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Text(note, style = MaterialTheme.typography.bodySmall)
             OutlinedTextField(pw, { pw = it }, Modifier.fillMaxWidth(), label = { Text(stringResource(R.string.backup_password)) }, singleLine = true,
                 visualTransformation = PasswordVisualTransformation(), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -121,7 +127,7 @@ import java.time.LocalDate
             if (confirm) OutlinedTextField(pw2, { pw2 = it }, Modifier.fillMaxWidth(), label = { Text(stringResource(R.string.backup_password_repeat)) }, singleLine = true,
                 visualTransformation = PasswordVisualTransformation(), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password), isError = pw2.isNotEmpty() && pw != pw2)
         } },
-        confirmButton = { Button(enabled = ok, onClick = { onOk(pw.toCharArray()) }) { Text(stringResource(R.string.ok)) } },
+        confirmButton = { Button(enabled = ok, onClick = { val secret=pw.toCharArray();pw="";pw2="";try{onOk(secret)}catch(e:Exception){secret.fill('\u0000');throw e} }) { Text(stringResource(R.string.ok)) } },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } })
 }
 

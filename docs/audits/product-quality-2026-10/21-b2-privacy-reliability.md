@@ -5,8 +5,8 @@
 | 批次 | 状态 | 提交/CI |
 |---|---|---|
 | A | COMPLETE | `ed5682e7a5fd6cc0540e42ac15f4dddca23210f9`；[38291254654](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38291254654) jvm/android/device-tests 全 success；[38291254617](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38291254617) reference success |
-| B | WAITING_CI | 本批独立提交后登记完整SHA及运行；不得沿用A绿色 |
-| C | 尚未开始 | 前批 CI 全绿后推进 |
+| B | COMPLETE | 主提交 `348064c251d7a21338ae7637b4d5394f6e4122da` + 修复 `5f839e98eb085eaab92c415a434d00fcc956e8ba`；[38301348940](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38301348940) 三任务全success，[38301348930](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38301348930) reference success |
+| C | WAITING_CI | B修复提交全绿后实施；本批提交和CI待登记 |
 | D | 尚未开始 | 前批 CI 全绿后推进 |
 
 ## A：最短生命周期
@@ -43,3 +43,18 @@ B 首次提交 `348064c251d7a21338ae7637b4d5394f6e4122da` 的 [38298443443](http
 本地首次全量因cgroup8GiB触发OOM kill（事件计数1）中断，不计业务失败或变异；清理旧Kotlin守护进程/孤立测试worker，CLI改为进程内编译、单worker重跑，577项app（61既有条件跳过）、data72/reminder14全部零失败，随后同一 RestrictedApi lint 错误被捕获。此处保留失败与环境边界，不用旧绿色代替修复提交验收。
 
 B 公开API修复的本地聚焦55项、lint（0错误174警告）及instrumentation完整编译/打包已通过；没有关闭RestrictedApi检查。完整source/CI仍以随后修复提交为准。
+
+
+B 最终绿色仅对应 `5f839e98eb085eaab92c415a434d00fcc956e8ba`：jvm/android/device-tests/reference 全success，原失败记录保留。CI下载 ZIP 的官方 SHA-256核对：build `6b1955cd26b2e56b8a4622b8e9f5cb2c10c35c2f03d3231b89e5e91fcbf2fb5b`，device `4ce72bccff1c2c429ca133d71b718eb905c8b56332b9e1b1fbe7805caaf9f1c0`。app577（61既有条件跳过）/data72/reminder14零失败；API35 data14/app74（4重启方法主套件跳过后各1独立通过），真实备份密码流程1/1通过。lint0错误174警告、full Debug/unsigned Release/instrumentation、无INTERNET及来源/ledger通过。B回滚须逆序 `git revert 5f839e98eb085eaab92c415a434d00fcc956e8ba`、`git revert 348064c251d7a21338ae7637b4d5394f6e4122da`；后续依赖批次先回滚，不改数据/账本。
+
+## C：加密备份完成时间和页面提醒（验收中）
+
+主空间与伪装入口的加密导出共用 `BackupWriter`：先加密并清除提交的密码字符数组，再打开用户选定的 SAF 输出流，写入并正常关闭后才提交 UTC 操作时间；失败与取消使用旧元数据快照回滚。`BackupHistory` 只存操作时间和默认关闭的提醒配置，不存 URI、密码或用户文件名；清除数据递增代次，使旧导出无法在清除后补写成功记录。恢复路径未写此时间。主空间只在页面前台展示本地时间、7/14/30 天提醒和“记录时间不证明文件存在、同步或可恢复”的说明；无定时器、通知、后台任务。主空间及伪装入口现在先选 SAF，再索取密码；取消选择不询问密码。
+
+改动前 `BackupExportFlowTest` 两条真实 ViewModel→内存 Room→加密输出回归因缺少完成时间失败。改动后聚焦 `BackupHistoryTest` 16、`BackupExportFlowTest` 3、`BackupStatusLayoutTest` 48、入口6、B布局48、翻译2，共123项零失败/跳过。48布局组合为四语×320/411dp×字号1/1.3/2×浅深，实际验证整行可点开关、完整时间/免责声明及短屏滚动；真实 TalkBack/OEM差异仍待实测。Android新增合成 SAF 结果测试，验证取消、真实加密写入/清除、输入密码后重建；待本批设备CI。Android编译和lint已通过，完整回归、错误成功标记负向变异、对应CI尚未结束，不能填绿。
+
+C 负向变异：先在合法源码下聚焦123项通过；故意把记录成功时间移到打开输出流和正常关闭之前，目标测试1/1因 `No success timestamp before normal close` 断言失败，旧时间2026-01-01与错误新时间2026-01-02被准确区分，并非超时/环境缺件。已恢复原源码，恢复后测试及本批完整CI尚待收尾。
+
+C 全量本地回归首次发现 A 的切换入口竞态：旧 Trans Memo 读取作业收到取消后，HT Tracker 读取可先发布预览，而旧临时副本仍在 `finally` 清理中；`switchingToHrtTrackerCancelsTheTransMemoRead` 真实断言失败。C 的 ViewModel 改动中补充顺序屏障：新读取先取消并 `join` 旧读取（含其 finally），再开始新入口读取。原断言未放宽；聚焦及完整重跑结果待补。该补强不改读取/导入交易算法。
+
+C 本地第二轮全量：JVM194、data72/reminder14/app645（61既有条件跳过）零失败，切换入口4项聚焦与全量均通过，PeriodStability5/5保留。恢复后错误成功标记目标1/1通过。lint/构建收尾，设备和unsignedRelease完整验收仍以该提交CI为准；机器摘要见 `21-b2-c-test-evidence.json`。

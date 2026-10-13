@@ -68,6 +68,15 @@ class PlainExportEntryTest {
         assertTrue(launches.isEmpty())
         ui.onNodeWithTag("export-privacy-notice").assertDoesNotExist()
     }
+    @Test fun backupPickerComesBeforeAnyPasswordAndCancellationStaysIdle(){
+        data();ui.onNodeWithText(text(R.string.backup_export)).performScrollTo().performClick()
+        picker("application/octet-stream","notes-")
+        ui.onNodeWithText(text(R.string.backup_password_note)).assertDoesNotExist()
+        ui.runOnUiThread{registry.dispatchResult(request,Activity.RESULT_CANCELED,null)}
+        ui.onNodeWithText(text(R.string.backup_password_note)).assertDoesNotExist()
+        assertTrue(model.dataJob.value is NotesViewModel.DataJob.Idle)
+        assertNull(model.backupHistory.state.value.lastExport)
+    }
     @Test fun reportNoticePrecedesPickerWithChartChoice(){
         data();ui.onNodeWithText(text(R.string.export_pdf)).performScrollTo().performClick();notice();cancel()
         ui.onNodeWithText(text(R.string.export_pdf)).performScrollTo().performClick();notice()

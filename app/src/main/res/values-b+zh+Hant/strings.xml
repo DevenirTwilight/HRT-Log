@@ -1028,4 +1028,11 @@
 <string name="about_source_copy">複製建置來源</string>
 <string name="about_source_copied">已複製</string>
     <string name="export_privacy_notice">此匯出檔案不會由 HRT Log 加密。儲存到你選擇的位置後，其保護取決於該位置的權限與服務提供者。請妥善保管，避免意外分享。加密備份（.pnbak）不屬於此類匯出。</string>
+    <string name="backup_history_last">最近一次完成加密備份匯出：%1$s</string>
+    <string name="backup_history_never">從未在本裝置記錄</string>
+    <string name="backup_history_note">這是本裝置記錄的匯出操作時間，不保證檔案仍在、已同步或能夠還原。</string>
+    <string name="backup_reminder_title">應用程式內備份提醒</string>
+    <string name="backup_reminder_note">僅在此頁面提示，不傳送通知。</string>
+    <string name="backup_reminder_days">每 %1$d 天</string>
+    <string name="backup_reminder_due">可以考慮匯出一份新的加密備份。</string>
 </resources>
