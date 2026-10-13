@@ -2,6 +2,8 @@ package net.plainnotes.app.ui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
@@ -172,51 +174,85 @@ val CHECKABLE_STATES = setOf("IN_USE", "EMPTY")
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } })
 }
 
-/**
- * All packages of one medication in one place, grouped as in use, unopened, used up and discarded. History groups
- * start collapsed, so a long history does not lengthen the stock page. Details stay editable; a package without any
- * stock history can be removed as added by mistake.
- */
+/** Bounded, keyed package management. History is collapsed initially; each group adds at most 20 rows at a time. */
 @Composable fun PackagesDialog(m: MedicationEntity, containers: List<ContainerEntity>, withHistory: Set<Long>, onDismiss: () -> Unit,
-                               onInfo: (ContainerEntity) -> Unit, voided:List<ContainerEntity> = emptyList(),
-                               onRestore:(ContainerEntity)->Unit = {}, onUndo: (ContainerEntity) -> Unit) {
-    val mine = containers.filter { it.medication_id == m.id && it.state != "VOIDED" }
-    var showVoided by remember { mutableStateOf(false) }
+                               onInfo: (ContainerEntity) -> Unit, voided: List<ContainerEntity> = emptyList(),
+                               onRestore: (ContainerEntity) -> Unit = {}, listState: LazyListState = rememberLazyListState(),
+                               onUndo: (ContainerEntity) -> Unit) {
+    val order = compareByDescending<ContainerEntity> { it.opened_on.orEmpty() }.thenByDescending { it.id }
+    val mine = remember(containers, m.id) { containers.filter { it.medication_id == m.id && it.state != "VOIDED" } }
+    val grouped = remember(mine) { mine.groupBy { it.state }.mapValues { (_, boxes) -> boxes.sortedWith(order) } }
+    val hidden = remember(voided, m.id) { voided.filter { it.medication_id == m.id && it.state == "VOIDED" }.sortedWith(order) }
+    var showVoided by remember(m.id) { mutableStateOf(false) }
     val groups = listOf("IN_USE" to R.string.pkg_in_use, "SEALED" to R.string.pkg_sealed, "EMPTY" to R.string.pkg_empty, "DISCARDED" to R.string.pkg_discarded)
-    val expanded = remember { mutableStateMapOf("IN_USE" to true, "SEALED" to true, "EMPTY" to false, "DISCARDED" to false) }
+    val expanded = remember(m.id) { mutableStateMapOf("IN_USE" to true, "SEALED" to true, "EMPTY" to false, "DISCARDED" to false) }
+    val visible = remember(m.id) { mutableStateMapOf<String, Int>() }
+    fun append(group: String, total: Int) {
+        val index = listState.firstVisibleItemIndex
+        val offset = listState.firstVisibleItemScrollOffset
+        visible[group] = minOf((visible[group] ?: 20) + 20, total)
+        // Preserve the viewport even when the load-more button itself was the first visible keyed item.
+        listState.requestScrollToItem(index, offset)
+    }
     AlertDialog(onDismissRequest = onDismiss, title = { Text(m.name) },
-        text = { Column(Modifier.verticalScroll(rememberScrollState()).testTag("packages-${m.id}"), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            groups.forEach { (state, label) ->
-                val boxes = mine.filter { it.state == state }.sortedByDescending { it.opened_on ?: "" }
+        text = { LazyColumn(Modifier.fillMaxWidth().heightIn(max = 420.dp).testTag("packages-${m.id}"), state = listState,
+            verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            groups.forEach { (status, label) ->
+                val boxes = grouped[status].orEmpty()
                 if (boxes.isEmpty()) return@forEach
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("${stringResource(label)} (${boxes.size})", style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f))
-                    if (state == "EMPTY" || state == "DISCARDED") TextButton(onClick = { expanded[state] = expanded[state] != true }, modifier = Modifier.heightIn(min = 48.dp)) {
-                        Text(if (expanded[state] == true) stringResource(R.string.pkg_hide) else stringResource(R.string.pkg_show, boxes.size)) }
+                item(key = "header-$status", contentType = "header") {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text("${stringResource(label)} (${boxes.size})", style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f))
+                        if (status == "EMPTY" || status == "DISCARDED") TextButton(onClick = { expanded[status] = expanded[status] != true },
+                            modifier = Modifier.heightIn(min = 48.dp).testTag("package-toggle-$status")) {
+                            Text(if (expanded[status] == true) stringResource(R.string.pkg_hide) else stringResource(R.string.pkg_show, boxes.size))
+                        }
+                    }
                 }
-                if (expanded[state] == true) boxes.forEach { box ->
-                    Column(Modifier.padding(start = 8.dp)) {
-                        Text(packageLabel(box, m), style = MaterialTheme.typography.bodyMedium)
-                        Column {
-                            TextButton(onClick = { onInfo(box) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.wb_package_info)) }
+                if (expanded[status] == true) {
+                    val count = visible[status] ?: 20
+                    items(boxes.take(count), key = { it.id }, contentType = { "package" }) { box ->
+                        Column(Modifier.padding(start = 8.dp).testTag("package-row-${box.id}")) {
+                            Text(packageLabel(box, m), style = MaterialTheme.typography.bodyMedium)
+                            TextButton(onClick = { onInfo(box) }, modifier = Modifier.heightIn(min = 48.dp).testTag("package-info-${box.id}")) {
+                                Text(stringResource(R.string.wb_package_info))
+                            }
                             if (box.id !in withHistory) TextButton(onClick = { onUndo(box) }, modifier = Modifier.heightIn(min = 48.dp).testTag("undo-package-${box.id}")) {
-                                Text(stringResource(R.string.pkg_undo)) }
+                                Text(stringResource(R.string.pkg_undo))
+                            }
+                        }
+                    }
+                    if (count < boxes.size) item(key = "more-$status", contentType = "more") {
+                        TextButton(onClick = { append(status, boxes.size) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("package-more-$status")) {
+                            Text(stringResource(R.string.pkg_show_more))
                         }
                     }
                 }
             }
-            if (mine.any { it.id in withHistory }) Text(stringResource(R.string.pkg_undo_locked), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            TextButton(onClick = { showVoided = !showVoided }, modifier = Modifier.heightIn(min = 48.dp).testTag("view-voided")) {
-                Text(stringResource(if(showVoided) R.string.pkg_hide_voided else R.string.pkg_view_voided))
+            if (mine.any { it.id in withHistory }) item(key = "undo-locked", contentType = "notice") {
+                Text(stringResource(R.string.pkg_undo_locked), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
-            if(showVoided) {
-                val hidden=voided.filter{it.medication_id==m.id && it.state=="VOIDED"}
-                if(hidden.isEmpty()) Text(stringResource(R.string.pkg_no_voided))
-                hidden.forEach { box ->
+            item(key = "advanced-voided", contentType = "advanced") {
+                TextButton(onClick = { showVoided = !showVoided; if (!showVoided) visible.remove("VOIDED") },
+                    modifier = Modifier.heightIn(min = 48.dp).testTag("view-voided")) {
+                    Text(stringResource(if (showVoided) R.string.pkg_hide_voided else R.string.pkg_view_voided))
+                }
+            }
+            if (showVoided) {
+                if (hidden.isEmpty()) item(key = "voided-empty", contentType = "notice") { Text(stringResource(R.string.pkg_no_voided)) }
+                val count = visible["VOIDED"] ?: 20
+                items(hidden.take(count), key = { it.id }, contentType = { "voided" }) { box ->
                     Column(Modifier.testTag("voided-package-${box.id}")) {
-                        Text(stringResource(R.string.pkg_voided),style=MaterialTheme.typography.titleSmall)
-                        Text(packageLabel(box,m))
-                        TextButton(onClick={onRestore(box)},modifier=Modifier.heightIn(min=48.dp).testTag("restore-package-${box.id}")){Text(stringResource(R.string.pkg_restore))}
+                        Text(stringResource(R.string.pkg_voided), style = MaterialTheme.typography.titleSmall)
+                        Text(packageLabel(box, m))
+                        TextButton(onClick = { onRestore(box) }, modifier = Modifier.heightIn(min = 48.dp).testTag("restore-package-${box.id}")) {
+                            Text(stringResource(R.string.pkg_restore))
+                        }
+                    }
+                }
+                if (count < hidden.size) item(key = "more-VOIDED", contentType = "more") {
+                    TextButton(onClick = { append("VOIDED", hidden.size) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("package-more-VOIDED")) {
+                        Text(stringResource(R.string.pkg_show_more))
                     }
                 }
             }
