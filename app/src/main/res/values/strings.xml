@@ -1061,6 +1061,7 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="pkg_opened">opened %1$s</string>
     <string name="pkg_left">%1$s left</string>
     <string name="pkg_show">Show (%1$d)</string>
+    <string name="pkg_show_more">Show 20 more</string>
     <string name="pkg_hide">Hide</string>
     <string name="pkg_undo">Void mistakenly added package</string>
     <string name="pkg_undo_title">Void this package?</string>

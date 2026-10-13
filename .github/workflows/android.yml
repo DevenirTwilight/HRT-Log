@@ -117,6 +117,7 @@ jobs:
             ./gradlew :core:data:connectedDebugAndroidTest --no-parallel --max-workers=2
             adb logcat -G 16M
             ./gradlew :app:connectedFullDebugAndroidTest --no-parallel --max-workers=2
+            python3 scripts/collect_package_history_evidence.py --output app/build/reports/package-history-evidence.json
             python3 scripts/collect_unified_device_performance.py --output app/build/reports/unified-device-performance.json
             python3 scripts/collect_pr19_display_performance.py
             python3 scripts/run_disguise_restart.py
@@ -132,3 +133,4 @@ jobs:
             app/build/reports/androidTests/
             app/build/reports/unified-device-performance.json
             app/build/reports/pr19-display-performance.json
+            app/build/reports/package-history-evidence.json

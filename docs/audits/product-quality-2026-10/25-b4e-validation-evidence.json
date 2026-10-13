@@ -1,0 +1,226 @@
+{
+  "code_head": "589d19241da5f095849995d6461a5a1458c10e39",
+  "pr": 24,
+  "base_head": "8749207ad883161275ead8a3ec458b0a352cc868",
+  "artifact_run": 38453994837,
+  "artifact_sha256": {
+    "build": "49e7c7430a6926eb0cf4586a48100040e6e01c1f4bfc7becb0708d59317bd54a",
+    "device": "ab1581e354b2f2261068e7bd376268fc7dbcc225d879cfb488da001f3fa7a39e",
+    "jvm": "277fec898915591ed77a6d5d15b3a6fcf532a4a56267459bd68818bc1167e98c"
+  },
+  "test_summaries": {
+    "app/build/reports/tests/testFullDebugUnitTest/index.html": {
+      "tests": 787,
+      "failures": 0,
+      "skipped": 61
+    },
+    "app/build/reports/tests/testFullDebugUnitTest/net.plainnotes.app.PackageHistoryPaginationTest/index.html": {
+      "tests": 24,
+      "failures": 0,
+      "skipped": 0
+    },
+    "core/data/build/reports/tests/testDebugUnitTest/index.html": {
+      "tests": 109,
+      "failures": 0,
+      "skipped": 0
+    },
+    "core/reminder/build/reports/tests/testDebugUnitTest/index.html": {
+      "tests": 17,
+      "failures": 0,
+      "skipped": 0
+    },
+    "core/data/build/reports/androidTests/connected/debug/index.html": {
+      "tests": 15,
+      "failures": 0,
+      "skipped": 0
+    },
+    "app/build/reports/androidTests/connected/debug/flavors/full/index.html": {
+      "tests": 116,
+      "failures": 0,
+      "skipped": 8
+    },
+    "app/build/reports/androidTests/connected/debug/flavors/full/net.plainnotes.app.debug.UnifiedConcentrationAndroidTest.html": {
+      "tests": 6,
+      "failures": 0,
+      "skipped": 0
+    },
+    "app/build/reports/androidTests/connected/debug/flavors/full/net.plainnotes.app.stock.PackageHistoryAndroidTest.html": {
+      "tests": 24,
+      "failures": 0,
+      "skipped": 0
+    }
+  },
+  "lint": {
+    "errors": 0,
+    "warnings": 181
+  },
+  "ui_evidence": {
+    "events": 136,
+    "max_attached_package_rows": 3,
+    "measurement_limit": "Synthetic Debug API35; effective Compose 320dp viewport via LocalDensity, 2x font. Attached semantics nodes, not total recomposition calls, CPU/FPS or physical ARM/Release.",
+    "locales": {
+      "en": {
+        "first_pages": [
+          {
+            "total": 1,
+            "shown": 1,
+            "composed_rows": 1
+          },
+          {
+            "total": 20,
+            "shown": 20,
+            "composed_rows": 2
+          },
+          {
+            "total": 21,
+            "shown": 20,
+            "composed_rows": 2
+          },
+          {
+            "total": 100,
+            "shown": 20,
+            "composed_rows": 2
+          },
+          {
+            "total": 500,
+            "shown": 20,
+            "composed_rows": 2
+          }
+        ],
+        "history_500_batches": 25,
+        "maximum_attached_rows_in_500_batches": 2,
+        "completed_100": true,
+        "completed_voided_100": true
+      },
+      "zh-CN": {
+        "first_pages": [
+          {
+            "total": 1,
+            "shown": 1,
+            "composed_rows": 1
+          },
+          {
+            "total": 20,
+            "shown": 20,
+            "composed_rows": 2
+          },
+          {
+            "total": 21,
+            "shown": 20,
+            "composed_rows": 2
+          },
+          {
+            "total": 100,
+            "shown": 20,
+            "composed_rows": 2
+          },
+          {
+            "total": 500,
+            "shown": 20,
+            "composed_rows": 2
+          }
+        ],
+        "history_500_batches": 25,
+        "maximum_attached_rows_in_500_batches": 3,
+        "completed_100": true,
+        "completed_voided_100": true
+      },
+      "zh-TW": {
+        "first_pages": [
+          {
+            "total": 1,
+            "shown": 1,
+            "composed_rows": 1
+          },
+          {
+            "total": 20,
+            "shown": 20,
+            "composed_rows": 2
+          },
+          {
+            "total": 21,
+            "shown": 20,
+            "composed_rows": 2
+          },
+          {
+            "total": 100,
+            "shown": 20,
+            "composed_rows": 2
+          },
+          {
+            "total": 500,
+            "shown": 20,
+            "composed_rows": 2
+          }
+        ],
+        "history_500_batches": 25,
+        "maximum_attached_rows_in_500_batches": 3,
+        "completed_100": true,
+        "completed_voided_100": true
+      },
+      "fr": {
+        "first_pages": [
+          {
+            "total": 1,
+            "shown": 1,
+            "composed_rows": 1
+          },
+          {
+            "total": 20,
+            "shown": 20,
+            "composed_rows": 1
+          },
+          {
+            "total": 21,
+            "shown": 20,
+            "composed_rows": 1
+          },
+          {
+            "total": 100,
+            "shown": 20,
+            "composed_rows": 1
+          },
+          {
+            "total": 500,
+            "shown": 20,
+            "composed_rows": 1
+          }
+        ],
+        "history_500_batches": 25,
+        "maximum_attached_rows_in_500_batches": 2,
+        "completed_100": true,
+        "completed_voided_100": true
+      }
+    }
+  },
+  "jvm": {
+    "core/domain": {
+      "tests": 58,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "pk-engine": {
+      "tests": 124,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "importer": {
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "code_ci": {
+    "android_push": 38453937357,
+    "android_pr": 38453994837,
+    "science_push": 38453937324,
+    "science_pr": 38453994527,
+    "all_conclusions": "success",
+    "science_deep": "actually_executed_both"
+  },
+  "delivered_build26_unchanged_sha256": "0c6bd9132ab15ca7625f1da19b59c1c9450cf4cb0518b15100e30396c5ed3fa0",
+  "final_head_checks": "Resolve exact final SHA and CI links from PR24 final acceptance body; record commits do not self-reference their SHA."
+}

@@ -46,6 +46,11 @@ android {
     // (extracted at install), keeping every ABI: universal APK ~23.5 MB -> ~12.7 MB. Verified by release acceptance.
     buildTypes { getByName("release") { isMinifyEnabled = true; isShrinkResources = true; proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro") } }
     packaging { jniLibs { useLegacyPackaging = true } }
+    sourceSets {
+        getByName("test").java.srcDir("src/stockTest/java")
+        getByName("androidTest").java.srcDir("src/stockTest/java")
+    }
+
     buildFeatures { compose = true; buildConfig = true }
 }
 // A release must name a commit read from its own clean checkout; otherwise fail instead of shipping an unverifiable identity.

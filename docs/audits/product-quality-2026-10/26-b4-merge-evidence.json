@@ -1,0 +1,204 @@
+{
+  "observed_at": "2026-10-13T21:22:35.912641+00:00",
+  "repository": "DevenirTwilight/HRT-Log",
+  "default_branch": "claude/new-session-1959qb",
+  "authorization": "用户独立验收后明确：合并。REQUIREMENTS §85",
+  "status": "MERGED_CI_VERIFIED",
+  "pr23": {
+    "accepted_head": "8749207ad883161275ead8a3ec458b0a352cc868",
+    "merge": "d06bccee040cc9c488be319e21fffb3c5d66ff3a",
+    "tree": "25123f002b5cf6f33c5cc157652ea6cccf73fed5"
+  },
+  "pr24": {
+    "accepted_head": "92f8c42f9eced3466b719f30ab6680a4f4e2eac2",
+    "merge": "9af38f3008b7d8b7260c995f397b20e59174d443",
+    "verified_preview": "32345cb78bfa70d72bafed73ae60e40e7556bd23",
+    "preview_and_accepted_and_merge_tree": "2fae7ed87075e70e8b8d11480456c4a5d8b17134",
+    "retarget_files_unchanged": 19
+  },
+  "runs": {
+    "pr23_mainline": [
+      {
+        "id": 38463996746,
+        "name": "Android and domain checks",
+        "event": "push",
+        "head_sha": "d06bccee040cc9c488be319e21fffb3c5d66ff3a",
+        "head_branch": "claude/new-session-1959qb",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "html_url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38463996746",
+        "jobs": [
+          {
+            "id": 115526594422,
+            "name": "device-tests",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "id": 115526594596,
+            "name": "jvm",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "id": 115526594733,
+            "name": "android",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 38463996997,
+        "name": "Science validation",
+        "event": "push",
+        "head_sha": "d06bccee040cc9c488be319e21fffb3c5d66ff3a",
+        "head_branch": "claude/new-session-1959qb",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "html_url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38463996997",
+        "jobs": [
+          {
+            "id": 115526102242,
+            "name": "science-change-gate",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "id": 115526162319,
+            "name": "research-deep",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ],
+    "pr24_new_base_preview": [
+      {
+        "id": 38466418672,
+        "name": "Android and domain checks",
+        "event": "push",
+        "head_sha": "32345cb78bfa70d72bafed73ae60e40e7556bd23",
+        "head_branch": "verification/pr24-mainline-20261013",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "html_url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38466418672",
+        "jobs": [
+          {
+            "id": 115534274869,
+            "name": "android",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "id": 115534275176,
+            "name": "device-tests",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "id": 115534275353,
+            "name": "jvm",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 38466418719,
+        "name": "Science validation",
+        "event": "push",
+        "head_sha": "32345cb78bfa70d72bafed73ae60e40e7556bd23",
+        "head_branch": "verification/pr24-mainline-20261013",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "html_url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38466418719",
+        "jobs": [
+          {
+            "id": 115534274956,
+            "name": "science-change-gate",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "id": 115534352657,
+            "name": "research-deep",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ],
+    "pr24_mainline": [
+      {
+        "id": 38468046764,
+        "name": "Android and domain checks",
+        "event": "push",
+        "head_sha": "9af38f3008b7d8b7260c995f397b20e59174d443",
+        "head_branch": "claude/new-session-1959qb",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "html_url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38468046764",
+        "jobs": [
+          {
+            "id": 115539741565,
+            "name": "jvm",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "id": 115539742021,
+            "name": "android",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "id": 115539742079,
+            "name": "device-tests",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 38468046661,
+        "name": "Science validation",
+        "event": "push",
+        "head_sha": "9af38f3008b7d8b7260c995f397b20e59174d443",
+        "head_branch": "claude/new-session-1959qb",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "html_url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38468046661",
+        "jobs": [
+          {
+            "id": 115539739803,
+            "name": "science-change-gate",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "id": 115539970232,
+            "name": "research-deep",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ]
+  },
+  "superseded_run": {
+    "id": 38463928846,
+    "conclusion": "cancelled",
+    "reason": "同SHA后续push触发工作流并发规则；未主动取消，未记通过"
+  },
+  "delivered_build26_apk_sha256": "0c6bd9132ab15ca7625f1da19b59c1c9450cf4cb0518b15100e30396c5ed3fa0",
+  "new_official_apk": false,
+  "production_changes_in_record_commit": false,
+  "record_commit_ci": "最终记录提交精确SHA和其自身CI结果固定在PR正文，避免追加自身SHA循环；交还前必须实际完成检查。"
+}

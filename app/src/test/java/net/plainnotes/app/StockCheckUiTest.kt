@@ -82,7 +82,9 @@ class StockCheckUiTest(private val locale: String) {
         ui.onNodeWithText("Synthetic pharmacy", substring = true).assertExists()
         ui.onAllNodesWithText("#", substring = true).assertCountEquals(0)
         listOf(6L, 5L, 4L).forEach { ui.onNodeWithTag("undo-package-$it").assertDoesNotExist() }
+        ui.onNodeWithTag("packages-1").performScrollToKey("undo-locked")
         ui.onNodeWithText(s(R.string.pkg_undo_locked)).assertExists()
+        ui.onNodeWithTag("packages-1").performScrollToKey(7L)
         ui.onNodeWithTag("undo-package-7").performScrollTo().performClick()
         assertEquals(7L, undone)
     }
