@@ -1,3 +1,5 @@
+> 2026-10-13：B2 PR #20 OPEN（https://github.com/DevenirTwilight/HRT-Log/pull/20）。最终文档提交2362148的PR检查通过，但push38368581852的CausalTimeUiTest.traditional失败：后台readAt回调写入AtomicReference后、Main/Compose尚未发布点读文本，测试过早assertExists。补充等待目标语义节点后保留原断言；本地四语4项通过（3m23s），新提交完整CI待验收。不把单次重跑当根因修复；未改生产代码/研究记录。守卫精简任务在独立默认分支worktree实施，不混入B2。
+
 > B2四批最终验收（2026-10-13）：A/B/C/D COMPLETE，均独立提交并等待各自完整CI全绿后推进。D `b6cad04af8f7e977581426afa429d90e53bb8122`，38366443689三任务及38366443699 reference全success；app703（61既有条件跳过）/data72/reminder14零失败，API35 app88/data14零失败，旧4重启方法独立各1通过；D密码检查点实际外部强杀、新PIDverify1/1通过，六方法主套件跳过如实保留。lint0错误179警告，完整unsignedRelease/git/clean/无INTERNET/ledger通过。四个核心变异均被业务断言捕获。最终报告21/机器摘要/回滚已完成，正在提交验收文档并创建PR；未默认合并、正式签名或交付。下文为历史过程记录，以此段与报告21最终表为当前状态。
 
 > B2-D提交门槛状态：状态/布局/翻译59项及真实取消入口1项通过；取消后误调用恢复的变异1/1由目标断言杀死，源码恢复后同测通过，Android测试编译成功。D全量本地JVM/Android正在串行执行；将提交并等待本批jvm/android/device/reference四项CI。强杀验证须以设备CI的真实检查点、外部kill和新PID断言为准，当前未提前宣称通过。
