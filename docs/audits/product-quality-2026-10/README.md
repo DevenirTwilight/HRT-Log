@@ -114,3 +114,5 @@ PR #19 描述称 M1 研究核来自 P2-AZ（#17 的内容），而 #17/#18 本�
 | `20-pr19-merge-and-mainline-validation.md` + `20-pr19-validation-evidence.json` | PR #19 merge commit 与独立主线验收；MERGED_CI_VERIFIED，未签名/交付/发布 |
 
 | `21-b2-privacy-reliability.md` | B2 四批实施验收；A COMPLETE，B COMPLETE，C COMPLETE（8e97e7a，38362778379/38362778161全绿），D COMPLETE（b6cad04，38366443689/38366443699全绿） |
+
+| `25-b4e-package-history.md` | B4-E 独立后续分支：包装管理有界LazyColumn/每组20条/稳定ID与滚动；不改B4库存业务，不签名交付 |
