@@ -1,4 +1,4 @@
-> B2开发分支（2026-10-13）：**COMPLETE_CI_VERIFIED / 待PR审阅**。四批完整代码提交及独立CI见[审计21](audits/product-quality-2026-10/21-b2-privacy-reliability.md)；D最终b6cad04的38366443689/38366443699全success。默认分支尚未包含B2，未正式签名/交付；当前只创建PR，合并与交付须另授权。
+> 2026-10-13 B2 PR #20 经产品负责人批准，已于 `9c3b5d6` 合入默认分支（未签名、未交付）。科研守卫精简 PR #21：门控自保护修复 `968783c` CI 全绿（Android 38381299493/38381303849，Science 38381299642/38381303857），依 §79 授权以 merge commit 合并；合并后默认分支 CI 通过即为 MERGED_CI_VERIFIED，随后停止扩展科研守卫，下一阶段 B3 导航与无障碍；此前该分支已合入含 B2 的默认分支，状态见[工程报告22](audits/product-quality-2026-10/22-science-validation-simplification.md)；签名/交付须另授权。
 
 # HRT Log 当前状态（单一事实入口）
 

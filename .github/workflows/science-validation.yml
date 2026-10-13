@@ -1,0 +1,52 @@
+name: Science validation
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  science-change-gate:
+    runs-on: ubuntu-latest
+    outputs:
+      deep: ${{ steps.classify.outputs.deep }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+      - name: Classify science changes
+        id: classify
+        env:
+          GITHUB_EVENT_BEFORE: ${{ github.event.before }}
+        run: python3 scripts/science_change_gate.py
+      - name: Gate trigger matrix and change-range tests
+        run: python3 -m unittest discover -s scripts -p test_science_change_gate.py -v
+  research-deep:
+    needs: science-change-gate
+    if: needs.science-change-gate.outputs.deep == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install independent reference dependencies
+        run: python -m pip install numpy==2.3.5 scipy==1.17.0
+      - name: Frozen archive and scientific methods
+        run: |
+          python3 tools/pk-research/verify_historical_archive.py --report /tmp/archive-validation.json
+          python3 -m unittest discover -s tools/pk-research -p 'test_*.py' -v
+          python3 tools/pk-research/research.py --output /tmp/current-science
+      - name: Two independent SciPy calibrations
+        run: |
+          python3 tools/pk-research/pr19_calibration_reference.py --out /tmp/pr19-reference.json
+          python3 tools/pk-research/m2_only_reference.py --out /tmp/m2-only-reference.json
+          python3 tools/pk-research/compare_independent_references.py /tmp/pr19-reference.json /tmp/m2-only-reference.json
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: science-validation-results
+          path: |
+            /tmp/archive-validation.json
+            /tmp/pr19-reference.json
+            /tmp/m2-only-reference.json
+            /tmp/current-science/
