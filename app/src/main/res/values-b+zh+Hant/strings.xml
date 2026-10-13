@@ -1062,8 +1062,17 @@
     <string name="pkg_left">剩餘 %1$s</string>
     <string name="pkg_show">展開（%1$d）</string>
     <string name="pkg_hide">收起</string>
-    <string name="pkg_undo">撤銷誤新增</string>
-    <string name="pkg_undo_title">移除這盒包裝？</string>
-    <string name="pkg_undo_body">僅用於誤新增、從未使用過的包裝。移除後庫存和預測隨之更新；其他包裝和服藥記錄不受影響。</string>
-    <string name="pkg_undo_locked">有過用量或調整記錄的包裝不能移除，以保持庫存流水完整。如果服藥被記到了錯誤的包裝，請修正那筆服藥記錄；如果只是數量不對，請用「核對庫存」。</string>
+    <string name="pkg_undo">作廢誤新增包裝</string>
+    <string name="pkg_undo_title">作廢這盒包裝？</string>
+    <string name="pkg_undo_body">這盒藥是誤新增的。作廢後，它將不再計入庫存，也不會出現在正常包裝列表中。相關更正資訊會保留。</string>
+    <string name="pkg_undo_locked">這盒包裝關聯實際服藥流水，不能直接作廢，需要先安全重新分配消耗。</string>
+    <string name="stock_manage_plain">管理包裝</string>
+    <string name="pkg_view_voided">查看已作廢記錄</string>
+    <string name="pkg_hide_voided">隱藏已作廢記錄</string>
+    <string name="pkg_no_voided">沒有已作廢記錄。</string>
+    <string name="pkg_voided">已作廢 · 誤新增</string>
+    <string name="pkg_restore">恢復</string>
+    <string name="pkg_restore_title">恢復這盒包裝？</string>
+    <string name="pkg_restore_body">恢復原包裝及原狀態？系統將重新核對庫存與服藥記錄。如果作廢後發生了更正，將拒絕自動恢復。</string>
+    <string name="pkg_restore_conflict">作廢後庫存或服藥記錄已變化，無法安全自動恢復。請核對實際包裝並使用「核對庫存」，保留這條記錄以便進一步更正。</string>
 </resources>

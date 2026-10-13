@@ -71,6 +71,7 @@ dependencies {
     testImplementation(libs.room.runtime); testImplementation(libs.room.ktx); testImplementation(libs.sqlite)
     testImplementation(libs.junit4); testImplementation(libs.org.json); testImplementation(libs.robolectric); testImplementation(libs.android.test.core)
     testImplementation(platform(libs.compose.bom)); testImplementation(libs.compose.ui.test); debugImplementation(libs.compose.ui.test.manifest)
+    androidTestCompileOnly(libs.room.runtime); androidTestCompileOnly(libs.sqlite)
     androidTestImplementation(libs.android.test.runner); androidTestImplementation(libs.android.test.core); androidTestImplementation(libs.junit4)
     androidTestImplementation(platform(libs.compose.bom)); androidTestImplementation(libs.compose.ui.test)
 }

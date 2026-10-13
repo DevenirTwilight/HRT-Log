@@ -99,11 +99,13 @@ class StockCorrectionTest {
         val consumed = box(m, "IN_USE"); tx { SupplyLedger.allocate(dao, taken(m, 2.0)) }
         val adjusted = box(m, "SEALED").also { runBlocking { dao.setContainerState(it, "IN_USE", "2026-02-01") } }
         runBlocking { repo.correctStock(adjusted, 20.0) }
-        for (id in listOf(consumed, adjusted)) {
+        for (id in listOf(consumed)) {
             assertTrue(id in runBlocking { repo.containersWithLedger() })
             assertThrows(IllegalArgumentException::class.java) { runBlocking { repo.removeMistakenContainer(id) } }
             assertNotNull(all().singleOrNull { it.id == id }); assertTrue(ledger(id).isNotEmpty())
         }
+        runBlocking { repo.removeMistakenContainer(adjusted) }
+        assertEquals("VOIDED",c(adjusted).state);assertEquals(listOf("ADJUST"),ledger(adjusted).map{it.kind})
     }
 
     @Test fun fixingTheDoseRecordFirstThenCheckingStockLandsOnTheCount() {

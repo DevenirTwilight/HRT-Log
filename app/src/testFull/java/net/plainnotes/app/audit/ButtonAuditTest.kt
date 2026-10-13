@@ -199,7 +199,7 @@ class ButtonAuditTest(private val locale: String, private val scale: Float, priv
             Case("batch_add_dialog") { BatchAddDialog(meds, { listOf(LocalTime.of(8, 0), LocalTime.of(20, 0)) }, {}) { _, _, _, _, _ -> } },
             Case("add_stock_dialog") { AddStockDialog(meds[0], {}) { _, _, _, _, _ -> } },
             Case("check_stock_dialog") { CheckStockDialog(meds.first { it.id == containers[0].medication_id }, containers, {}) { _, _ -> } },
-            Case("packages_dialog") { PackagesDialog(meds.first { it.id == containers[0].medication_id }, containers, emptySet(), {}, {}, {}) },
+            Case("packages_dialog") { PackagesDialog(meds.first { it.id == containers[0].medication_id }, containers, emptySet(), {}, {}, onUndo={}) },
             Case("container_info_dialog") { ContainerInfoDialog(containers[0], {}) { _, _ -> } },
             Case("lab_dialog") { LabDialog(labs[1], {}, {}) { _, _ -> } },
             Case("weight_dialog") { WeightDialog(62.0, {}) {} },

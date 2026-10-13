@@ -106,6 +106,7 @@ data class ContainerEntity(
     val initial_used_amount: Double,
     val used_amount: Double,
     val opened_on: String? = null,
+    /** SEALED / IN_USE / EMPTY / DISCARDED / VOIDED (mistaken entry, hidden from ordinary stock). */
     val state: String,
     /** Optional, user-entered; never evaluated. */
     val source_note: String? = null,

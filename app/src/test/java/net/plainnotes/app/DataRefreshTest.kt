@@ -139,4 +139,20 @@ class DataRefreshTest {
         assertEquals(listOf(saved),runBlocking{db.dao().milestones()})
     }
 
+    @Test fun voidedAdjustmentOnlyPackageRefreshesStockCalendarAndSharedForecastImmediately() {
+        val packageId=model.extra.value.containers.single().id
+        model.correctStock(packageId,2.0)
+        await{model.extra.value.stockForecasts[id]?.available==2.0}
+        model.removeMistakenContainer(packageId)
+        await{model.extra.value.containers.isEmpty() && model.extra.value.voidedContainers.size==1 && model.extra.value.stockForecasts[id]?.status==StockForecast.Status.UNTRACKED}
+        assertNull(model.extra.value.stockForecasts.getValue(id).available)
+        assertNull(model.extra.value.stockForecasts.getValue(id).firstShort)
+        val shared=runBlocking{repo.stockForecasts()}.getValue(id)
+        assertEquals(StockForecast.Status.UNTRACKED,shared.status)
+        assertFalse(shared.isLow(today,zone))
+        val calendar=net.plainnotes.app.ui.dayInfos(emptyList(),model.extra.value.upcoming,emptyList(),model.extra.value.stockForecasts,zone)
+        assertEquals(0,calendar.values.sumOf{it.short})
+        assertEquals(1,model.extra.value.voidedContainers.size)
+    }
+
 }

@@ -1062,8 +1062,17 @@
     <string name="pkg_left">剩余 %1$s</string>
     <string name="pkg_show">展开（%1$d）</string>
     <string name="pkg_hide">收起</string>
-    <string name="pkg_undo">撤销误添加</string>
-    <string name="pkg_undo_title">移除这盒包装？</string>
-    <string name="pkg_undo_body">仅用于误添加、从未使用过的包装。移除后库存和预测随之更新；其他包装和服药记录不受影响。</string>
-    <string name="pkg_undo_locked">有过用量或调整记录的包装不能移除，以保持库存流水完整。如果服药被记到了错误的包装，请修正那条服药记录；如果只是数量不对，请用“核对库存”。</string>
+    <string name="pkg_undo">作废误添加包装</string>
+    <string name="pkg_undo_title">作废这盒包装？</string>
+    <string name="pkg_undo_body">这盒药是误添加的。作废后，它将不再计入库存，也不会出现在正常包装列表中。相关纠错信息会保留。</string>
+    <string name="pkg_undo_locked">这盒包装关联真实服药流水，不能直接作废，需要先安全重新分配消耗。</string>
+    <string name="stock_manage_plain">管理包装</string>
+    <string name="pkg_view_voided">查看已作废记录</string>
+    <string name="pkg_hide_voided">隐藏已作废记录</string>
+    <string name="pkg_no_voided">没有已作废记录。</string>
+    <string name="pkg_voided">已作废 · 误添加</string>
+    <string name="pkg_restore">恢复</string>
+    <string name="pkg_restore_title">恢复这盒包装？</string>
+    <string name="pkg_restore_body">恢复原包装及原状态？系统将重新核对库存与服药记录。如果作废后发生了更正，将拒绝自动恢复。</string>
+    <string name="pkg_restore_conflict">作废后库存或服药记录已变化，无法安全自动恢复。请核对真实包装并使用“核对库存”，保留这条记录以便进一步纠错。</string>
 </resources>

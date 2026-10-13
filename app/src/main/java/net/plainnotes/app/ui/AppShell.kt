@@ -110,6 +110,7 @@ class UiPrefs(context: Context) {
     var addStock by remember { mutableStateOf<MedicationEntity?>(null) }
     var checkStock by remember { mutableStateOf<MedicationEntity?>(null) }
     var managePackages by remember { mutableStateOf<MedicationEntity?>(null) }
+    var restorePackage by remember { mutableStateOf<net.plainnotes.app.data.ContainerEntity?>(null) }
     var undoPackage by remember { mutableStateOf<net.plainnotes.app.data.ContainerEntity?>(null) }
     var manageItems by remember { mutableStateOf(false) }
     var wellbeingPrompt by remember { mutableStateOf(prefs.wellbeingPrompt) }
@@ -225,11 +226,9 @@ class UiPrefs(context: Context) {
         dismissButton = { TextButton(onClick = { deleteRecord = null }) { Text(stringResource(R.string.cancel)) } }) }
     addStock?.let { m -> AddStockDialog(m, { addStock = null }) { cap, n, open,source,batch -> model.addContainers(m.id, cap, n, open,source,batch); addStock = null } }
     checkStock?.let { m -> CheckStockDialog(m, extra.containers, { checkStock = null }) { id, v -> model.correctStock(id, v); checkStock = null } }
-    managePackages?.let { m -> PackagesDialog(m, extra.containers, extra.containersWithLedger, { managePackages = null }, { packageInfo = it }, { undoPackage = it }) }
-    undoPackage?.let { box -> AlertDialog(onDismissRequest = { undoPackage = null }, icon = { Icon(Icons.Outlined.Delete, null) },
-        title = { Text(stringResource(R.string.pkg_undo_title)) }, text = { Text(stringResource(R.string.pkg_undo_body)) },
-        confirmButton = { Button(onClick = { model.removeMistakenContainer(box.id); undoPackage = null }) { Text(stringResource(R.string.remove)) } },
-        dismissButton = { TextButton(onClick = { undoPackage = null }) { Text(stringResource(R.string.cancel)) } }) }
+    managePackages?.let { m -> PackagesDialog(m, extra.containers, extra.containersWithConsumption, { managePackages = null }, { packageInfo = it }, voided=extra.voidedContainers, onRestore={ restorePackage = it }, onUndo={ undoPackage = it }) }
+    undoPackage?.let { box -> PackageCorrectionConfirmation(false,{undoPackage=null},label=meds[box.medication_id]?.let{it.name+" · "+packageLabel(box,it)}) { model.removeMistakenContainer(box.id);undoPackage=null } }
+    restorePackage?.let { box -> PackageCorrectionConfirmation(true,{restorePackage=null},label=meds[box.medication_id]?.let{it.name+" · "+packageLabel(box,it)}) { model.restoreVoidedContainer(box.id);restorePackage=null } }
     packageInfo?.let{box->ContainerInfoDialog(box,{packageInfo=null}){source,batch->model.setContainerInfo(box.id,source,batch);packageInfo=null}}
     if (manageItems) ManageCheckinItemsDialog(extra.items,{manageItems=false},model::saveCheckinItem,extra.effects,model::setReviewEffect,model::reorderItems)
     if(summary) SummaryExportDialog(model,state,{summary=false})

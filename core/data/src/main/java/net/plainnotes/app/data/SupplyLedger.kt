@@ -59,6 +59,7 @@ internal object SupplyLedger {
     /** Sets the remaining amount of a container through an ADJUST entry (manual correction). */
     suspend fun setRemaining(dao: NotesDao, containerId: Long, remaining: Double) {
         val c = dao.container(containerId)
+        require(c.state != "VOIDED") { "Voided package cannot be corrected" }
         require(remaining.isFinite() && remaining >= 0 && remaining <= c.capacity)
         val delta = (c.capacity - remaining) - c.used_amount
         if (kotlin.math.abs(delta) > EPS) dao.supply(entry(c.id, null, "ADJUST", delta, reason = "manual"))

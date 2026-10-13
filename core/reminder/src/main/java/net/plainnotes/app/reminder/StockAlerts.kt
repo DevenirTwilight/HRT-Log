@@ -36,7 +36,7 @@ object StockAlerts {
         meds.filter { it.active && it.notifications_on && it.needs_review == null }.flatMap { m ->
             val open = containers.filter { it.medication_id == m.id && it.state == "IN_USE" }
             val out = ArrayList<Alert>()
-            if (forecasts[m.id]?.isLow(today, zone) == true) out += Alert(m, Kind.LOW)
+            if (StockForecasts.available(m.id,containers)!=null && forecasts[m.id]?.isLow(today, zone) == true) out += Alert(m, Kind.LOW)
             val days = m.expiry_days_after_open
             if (days != null && open.any { c -> c.opened_on?.let { ChronoUnit.DAYS.between(today, LocalDate.parse(it).plusDays(days.toLong())) <= EXPIRY_WARNING_DAYS } == true })
                 out += Alert(m, Kind.EXPIRY)

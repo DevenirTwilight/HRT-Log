@@ -74,7 +74,7 @@ fun stockSummary(m: MedicationEntity, containers: List<ContainerEntity>, forecas
         items(meds, key = { it.id }) { m ->
             val sum = stockSummary(m, containers, forecasts[m.id], today, zone)
             val unallocated = records.filter { it.medication_id == m.id && it.deleted_at_utc == null }.sumOf { it.unallocated_supply_amount ?: 0.0 }
-            val packages = containers.count { it.medication_id == m.id }
+            val packages = containers.count { it.medication_id == m.id && it.state != "VOIDED" }
             val checkable = containers.any { it.medication_id == m.id && it.state in CHECKABLE_STATES }
             StockCard(m, sum, unallocated, today, zone, packages, checkable, { onReplace(m) }, { onCheck(m) }, { onAdd(m) }, { onManage(m) })
         }
@@ -96,6 +96,7 @@ val CHECKABLE_STATES = setOf("IN_USE", "EMPTY")
             if (packages == 0) {
                 Text(stringResource(R.string.stock_not_tracked), style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant)
                 Button(onClick = onAdd) { Text(stringResource(R.string.stock_start)) }
+                TextButton(onClick = onManage, modifier = Modifier.heightIn(min = 48.dp).testTag("stock-manage-${m.id}")) { Text(stringResource(R.string.stock_manage_plain)) }
                 return@SectionCard
             }
             // Only used-up or discarded packages: correcting one must not require adding a package that does not exist.
@@ -131,7 +132,7 @@ val CHECKABLE_STATES = setOf("IN_USE", "EMPTY")
 
 /** A package as people see it: amount, opening date, source and batch; never the internal row id. */
 @Composable fun packageLabel(box: ContainerEntity, m: MedicationEntity): String = listOfNotNull(
-    if (box.state == "IN_USE" || box.state == "EMPTY") stringResource(R.string.pkg_left, formatDose((box.capacity - box.used_amount).coerceAtLeast(0.0), m.unit)) + " / " + formatDose(box.capacity, m.unit)
+    if (box.state == "IN_USE" || box.state == "EMPTY" || box.state == "VOIDED") stringResource(R.string.pkg_left, formatDose((box.capacity - box.used_amount).coerceAtLeast(0.0), m.unit)) + " / " + formatDose(box.capacity, m.unit)
     else formatDose(box.capacity, m.unit),
     box.opened_on?.let { stringResource(R.string.pkg_opened, formatShortDate(LocalDate.parse(it))) },
     box.source_note, box.batch).joinToString(" · ")
@@ -177,8 +178,10 @@ val CHECKABLE_STATES = setOf("IN_USE", "EMPTY")
  * stock history can be removed as added by mistake.
  */
 @Composable fun PackagesDialog(m: MedicationEntity, containers: List<ContainerEntity>, withHistory: Set<Long>, onDismiss: () -> Unit,
-                               onInfo: (ContainerEntity) -> Unit, onUndo: (ContainerEntity) -> Unit) {
-    val mine = containers.filter { it.medication_id == m.id }
+                               onInfo: (ContainerEntity) -> Unit, voided:List<ContainerEntity> = emptyList(),
+                               onRestore:(ContainerEntity)->Unit = {}, onUndo: (ContainerEntity) -> Unit) {
+    val mine = containers.filter { it.medication_id == m.id && it.state != "VOIDED" }
+    var showVoided by remember { mutableStateOf(false) }
     val groups = listOf("IN_USE" to R.string.pkg_in_use, "SEALED" to R.string.pkg_sealed, "EMPTY" to R.string.pkg_empty, "DISCARDED" to R.string.pkg_discarded)
     val expanded = remember { mutableStateMapOf("IN_USE" to true, "SEALED" to true, "EMPTY" to false, "DISCARDED" to false) }
     AlertDialog(onDismissRequest = onDismiss, title = { Text(m.name) },
@@ -194,7 +197,7 @@ val CHECKABLE_STATES = setOf("IN_USE", "EMPTY")
                 if (expanded[state] == true) boxes.forEach { box ->
                     Column(Modifier.padding(start = 8.dp)) {
                         Text(packageLabel(box, m), style = MaterialTheme.typography.bodyMedium)
-                        Row {
+                        Column {
                             TextButton(onClick = { onInfo(box) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.wb_package_info)) }
                             if (box.id !in withHistory) TextButton(onClick = { onUndo(box) }, modifier = Modifier.heightIn(min = 48.dp).testTag("undo-package-${box.id}")) {
                                 Text(stringResource(R.string.pkg_undo)) }
@@ -203,6 +206,20 @@ val CHECKABLE_STATES = setOf("IN_USE", "EMPTY")
                 }
             }
             if (mine.any { it.id in withHistory }) Text(stringResource(R.string.pkg_undo_locked), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            TextButton(onClick = { showVoided = !showVoided }, modifier = Modifier.heightIn(min = 48.dp).testTag("view-voided")) {
+                Text(stringResource(if(showVoided) R.string.pkg_hide_voided else R.string.pkg_view_voided))
+            }
+            if(showVoided) {
+                val hidden=voided.filter{it.medication_id==m.id && it.state=="VOIDED"}
+                if(hidden.isEmpty()) Text(stringResource(R.string.pkg_no_voided))
+                hidden.forEach { box ->
+                    Column(Modifier.testTag("voided-package-${box.id}")) {
+                        Text(stringResource(R.string.pkg_voided),style=MaterialTheme.typography.titleSmall)
+                        Text(packageLabel(box,m))
+                        TextButton(onClick={onRestore(box)},modifier=Modifier.heightIn(min=48.dp).testTag("restore-package-${box.id}")){Text(stringResource(R.string.pkg_restore))}
+                    }
+                }
+            }
         } },
         confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.close)) } })
 }
@@ -231,4 +248,13 @@ val CHECKABLE_STATES = setOf("IN_USE", "EMPTY")
         OutlinedTextField(source,{source=it},label={Text(stringResource(R.string.wb_source_note))})
         OutlinedTextField(batch,{batch=it},label={Text(stringResource(R.string.wb_batch))})
     }},confirmButton={Button(onClick={onSave(source.takeIf{it.isNotBlank()},batch.takeIf{it.isNotBlank()})}){Text(stringResource(R.string.save))}},dismissButton={TextButton(onClick=onDismiss){Text(stringResource(R.string.cancel))}})
+}
+
+/** Explicit second confirmation; scrolls on short screens and never submits on dismissal. */
+@Composable fun PackageCorrectionConfirmation(restoring:Boolean,onDismiss:()->Unit,label:String?=null,onConfirm:()->Unit) {
+    AlertDialog(onDismissRequest=onDismiss,
+        title={Text(stringResource(if(restoring)R.string.pkg_restore_title else R.string.pkg_undo_title))},
+        text={Column(Modifier.verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(8.dp)){label?.let{Text(it,style=MaterialTheme.typography.titleSmall)};Text(stringResource(if(restoring)R.string.pkg_restore_body else R.string.pkg_undo_body))}},
+        confirmButton={TextButton(onClick=onConfirm,modifier=Modifier.heightIn(min=48.dp).testTag("confirm-package-correction")){Text(stringResource(if(restoring)R.string.pkg_restore else R.string.pkg_undo))}},
+        dismissButton={TextButton(onClick=onDismiss,modifier=Modifier.heightIn(min=48.dp)){Text(stringResource(R.string.cancel))}})
 }

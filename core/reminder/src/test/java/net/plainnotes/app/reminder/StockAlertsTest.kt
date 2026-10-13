@@ -46,4 +46,11 @@ class StockAlertsTest {
         assertEquals(listOf(StockAlerts.Kind.EXPIRY), kinds(listOf(med), listOf(box(0.0, "2026-02-11"))))  // expires 13 March
         assertEquals(emptyList<StockAlerts.Kind>(), kinds(listOf(med), listOf(box(0.0, "2026-02-08").copy(state = "SEALED", opened_on = null), box(0.0, "2026-02-20"))))
     }
+    @Test fun voidedStockNeverProducesLowOrExpiryAlerts() {
+        val hidden=listOf(box(26.0,"2026-01-01","VOIDED"))
+        assertEquals(emptyList<StockAlerts.Kind>(),kinds(listOf(med),hidden))
+        val stale=StockForecasts.forecastAll(listOf(med),listOf(box(26.0)),week)
+        assertTrue(StockAlerts.due(listOf(med),hidden,stale,today,utc).isEmpty())
+    }
+
 }

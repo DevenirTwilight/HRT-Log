@@ -605,7 +605,7 @@ const val BACKFILL_MAX_DAYS=731L
         else dao.insertContainer(ContainerEntity(medication_id=medicationId,capacity=capacity,initial_used_amount=0.0,used_amount=0.0,opened_on=LocalDate.now().toString(),state="IN_USE"))
     }
     suspend fun setRemaining(containerId:Long,remaining:Double)=transaction { SupplyLedger.setRemaining(it,containerId,remaining) }
-    suspend fun discardContainer(containerId:Long)=transaction { dao -> val c=dao.container(containerId);dao.setContainerState(c.id,"DISCARDED",c.opened_on) }
+    suspend fun discardContainer(containerId:Long)=transaction { dao -> val c=dao.container(containerId);require(c.state!="VOIDED");dao.setContainerState(c.id,"DISCARDED",c.opened_on) }
     /**
      * B4 "check stock": sets what is really left in an open or used-up package through the ledger's ADJUST entry. A
      * used-up package with something left becomes open again; no package is created, no dose record changes. Sealed
@@ -618,14 +618,10 @@ const val BACKFILL_MAX_DAYS=731L
     }
     /** Packages with at least one ledger entry (consumption, reversal or adjustment). */
     suspend fun containersWithLedger()=transaction { dao -> dao.containersWithLedger().toSet() }
-    /**
-     * Undoes a package that was added by mistake. Only a package without any ledger entry can go: nothing was
-     * consumed from it, reversed or adjusted, so removing the row leaves no dangling history. Anything else is refused.
-     */
-    suspend fun removeMistakenContainer(containerId:Long)=transaction { dao ->
-        require(dao.supplyForContainer(containerId).isEmpty()){"Package has stock history"}
-        dao.deleteContainer(containerId)
-    }
+    /** Logical correction: ADJUST is audit history, not evidence of an actual intake. */
+    suspend fun removeMistakenContainer(containerId:Long)=transaction { dao -> PackageCorrections.void(sql(),dao,containerId,Instant.now()) }
+    suspend fun restoreVoidedContainer(containerId:Long)=transaction { dao -> PackageCorrections.restore(sql(),dao,containerId,Instant.now()) }
+    suspend fun voidedContainers()=transaction { it.voidedContainers() }
 
     // --- Well-being ---
     suspend fun checkinItems()=transaction { dao ->

@@ -1,3 +1,7 @@
+> B4-D：IMPLEMENTED_LOCAL_VERIFIED_CI_PENDING（2026-10-13）。无流水/ADJUST-only逻辑VOIDED、默认完全隐藏、高级确认恢复已实现；本地全量通过，真实误添加库存4mg→2mg、包装2→1。最终HEAD的Android/Science及API35等待执行，不能套用B4-C状态。C含CONSUME/REVERSE仍安全拒绝，后续补偿设计见报告24。PR23不合并/正式签名/发包。
+
+> B4-D实施中（2026-10-13）：用户批准VOIDED，起点PR23/4afa8b0；无流水与ADJUST-only逻辑作废、原状态安全恢复、默认隐藏与保护触发器已编码。数据106/提醒17及历史164/5/科研261本地通过（后续新增边界测试及完整最终CI待执行）；四语UI/实际API35重启待验收。真实CONSUME/REVERSE仍拒绝直接作废，补偿设计见报告24。不是COMPLETE，不合并/签名/发包。
+
 > 当前（2026-10-13）：PR #22（B3）已于 `bab53d3` 合并，主线 CI 全绿。B4（库存一致性与库存纠错）在 `feature/b4-stock-consistency-20261013`：B4-A 统一逐次扣减预测，B4-B 库存页、日历、提醒接入，B4-C 措辞、核对库存、撤销误添加、包装管理。验收见[审计24](audits/product-quality-2026-10/24-b4-stock-consistency.md)。待产品负责人决定：已有调整流水的误添加包装如何处理。PR 等待审阅，不合并，不签名，不交付。
 
 > 当前（2026-10-13）：B3 PR #22 head 见审计23“最终 CI”；B3-A 返回键回日历、B3-B 日历 TalkBack 语义（四语）、B3-C 旋转/重建保留选中日；设备测试 CalendarIntakeAndroidTest 2/2 在 API35 模拟器实际通过（取消/真实返回键不写记录，保存一次后返回不重复）。状态 READY_FOR_OWNER_REVIEW（以最终提交 CI 全绿为前提），不合并、不签名、不交付；物理 ARM 与真人 TalkBack 为 NOT_RUN；320dp 日期格 34dp 宽按决定不阻断。PR #21 已于 `d5dc9e5` 合并并 MERGED_CI_VERIFIED。下一阶段 B4 库存一致性，未开始。

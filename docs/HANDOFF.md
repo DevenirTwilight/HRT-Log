@@ -1,3 +1,9 @@
+> B4-D实现/本地回归已完成（2026-10-13）：JVM194、data109/rem17/app763零失败（app61原跳过），Period5、Calendar10、DataRefresh6、四语320dp/2×UI20通过；最后3条VOIDED零有效包装样本18data/20UI通过。lint0错误178警告、fullDebug/两仪器包完成。现提交并等待本HEAD的完整push/PR Android/Science；API35旧Schema9及外部force-stop新PID验证仍待实际结果。PR23保持OPEN，不正式签名/交付。
+
+> B4-D本地验收：data109/reminder17、JVM194、四语320dp/2×原生UI20、DataRefresh6、历史164/5和科研261已通过。真实假盒ADJUST-only库存4mg→2mg/正常2盒→1盒，原行VOIDED保留。首次全app763有既有日历LazyColumn标题断言失败，保留全部断言补滚动后Calendar10通过，完整复跑进行中。仪器包Room类型编译可见性已修正且两包构建通过；API35新PID/旧Schema9仍待CI。PR23不合并，不正式签名或交付。
+
+> B4-D（2026-10-13）开始：PR23 head4afa8b0全CI已完成成功，无运行中作业。用户已批准VOIDED及最小状态规则调整，必须支持ADJUST-only，默认完全隐藏、高级确认恢复；不改Room9/表结构/PNBAK1、PK/版本/签名。设计与C安全限制/补偿方案写入报告24，红测正在运行。
+
 > 当前（2026-10-13）：PR #22（B3）已于 `bab53d3` 合并，主线 CI 全绿。B4（库存一致性与库存纠错）在 `feature/b4-stock-consistency-20261013`：B4-A 统一逐次扣减预测，B4-B 库存页、日历、提醒接入，B4-C 措辞、核对库存、撤销误添加、包装管理。验收见[审计24](audits/product-quality-2026-10/24-b4-stock-consistency.md)。待产品负责人决定：已有调整流水的误添加包装如何处理。PR 等待审阅，不合并，不签名，不交付。
 
 > 当前（2026-10-13）：B3 PR #22 head 见审计23“最终 CI”；B3-A 返回键回日历、B3-B 日历 TalkBack 语义（四语）、B3-C 旋转/重建保留选中日；设备测试 CalendarIntakeAndroidTest 2/2 在 API35 模拟器实际通过（取消/真实返回键不写记录，保存一次后返回不重复）。状态 READY_FOR_OWNER_REVIEW（以最终提交 CI 全绿为前提），不合并、不签名、不交付；物理 ARM 与真人 TalkBack 为 NOT_RUN；320dp 日期格 34dp 宽按决定不阻断。PR #21 已于 `d5dc9e5` 合并并 MERGED_CI_VERIFIED。下一阶段 B4 库存一致性，未开始。

@@ -1062,8 +1062,17 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="pkg_left">%1$s left</string>
     <string name="pkg_show">Show (%1$d)</string>
     <string name="pkg_hide">Hide</string>
-    <string name="pkg_undo">Undo, added by mistake</string>
-    <string name="pkg_undo_title">Remove this package?</string>
-    <string name="pkg_undo_body">Only for a package added by mistake and never used. It is removed and the stock and forecast update; other packages and dose records stay as they are.</string>
-    <string name="pkg_undo_locked">Packages with any use or correction cannot be removed, so the stock history stays complete. If a dose was counted against the wrong package, correct that dose; if only the amount is wrong, use Check stock.</string>
+    <string name="pkg_undo">Void mistakenly added package</string>
+    <string name="pkg_undo_title">Void this package?</string>
+    <string name="pkg_undo_body">This package was added by mistake. Once voided, it will no longer count towards stock or appear in normal package lists. Correction details will be kept.</string>
+    <string name="pkg_undo_locked">A package linked to actual intakes cannot be voided directly. Its consumption must first be safely reassigned.</string>
+    <string name="stock_manage_plain">Manage packages</string>
+    <string name="pkg_view_voided">View voided records</string>
+    <string name="pkg_hide_voided">Hide voided records</string>
+    <string name="pkg_no_voided">No voided records.</string>
+    <string name="pkg_voided">Voided — added by mistake</string>
+    <string name="pkg_restore">Restore</string>
+    <string name="pkg_restore_title">Restore this package?</string>
+    <string name="pkg_restore_body">Restore the original package and its previous status? Stock and intake history will be checked again. If they changed afterwards, automatic restoration will be refused.</string>
+    <string name="pkg_restore_conflict">Stock or intake history changed after this package was voided. It cannot be safely restored automatically. Check the real packages and use Check stock; keep this record for further correction.</string>
 </resources>
