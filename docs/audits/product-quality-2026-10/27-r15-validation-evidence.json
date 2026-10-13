@@ -1,38 +1,182 @@
 {
-  "observed_at": "2026-10-13T23:16:33.363979+00:00",
-  "phase": "LOCAL_TARGETED_PASS_FULL_CI_PENDING",
+  "observed_at": "2026-10-13T23:58:19.353559+00:00",
+  "phase": "CODE_CI_VERIFIED_FINAL_REPORT_HEAD_CI_PENDING",
   "baseline": "fe8798634ccd0d92d2913f384abfcfff94d32274",
-  "local_suites": [
-    {
-      "name": "net.plainnotes.app.data.UndoSkippedTest",
-      "tests": "32",
-      "skipped": "0",
-      "failures": "0",
-      "errors": "0",
-      "time": "21.21"
-    },
-    {
-      "name": "net.plainnotes.app.UndoSkippedHistoryUiTest",
-      "tests": "24",
-      "skipped": "0",
-      "failures": "0",
-      "errors": "0",
-      "time": "39.24"
-    },
-    {
-      "name": "net.plainnotes.app.DataRefreshTest",
-      "tests": "8",
-      "skipped": "0",
-      "failures": "0",
-      "errors": "0",
-      "time": "8.996"
-    }
-  ],
+  "source_head": "ebd02da91d96cfbdebe1e7de2fd7b651cfdaaec7",
   "b4": {
     "status": "MERGED_CI_VERIFIED",
     "android": 38470156117,
     "android_attempt": 2,
     "science": 38470156282,
-    "science_deep": "skipped_on_document_only_head"
-  }
+    "science_deep": "document_only_skip"
+  },
+  "local_suites": [
+    {
+      "module": "core/domain",
+      "tests": 58,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "module": "pk-engine",
+      "tests": 124,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "module": "importer",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "module": "core/data",
+      "tests": 142,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "module": "core/reminder",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "module": "app",
+      "tests": 813,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 61
+    }
+  ],
+  "ci_runs": [
+    {
+      "id": 38484766169,
+      "name": "Android and domain checks",
+      "event": "push",
+      "head_sha": "ebd02da91d96cfbdebe1e7de2fd7b651cfdaaec7",
+      "head_branch": "feature/r15-undo-skipped-20261013",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38484766169",
+      "jobs": [
+        {
+          "id": 115595628420,
+          "name": "android",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 115595628482,
+          "name": "device-tests",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 115595628571,
+          "name": "jvm",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 38484766307,
+      "name": "Science validation",
+      "event": "push",
+      "head_sha": "ebd02da91d96cfbdebe1e7de2fd7b651cfdaaec7",
+      "head_branch": "feature/r15-undo-skipped-20261013",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38484766307",
+      "jobs": [
+        {
+          "id": 115595628348,
+          "name": "science-change-gate",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 115595686157,
+          "name": "research-deep",
+          "status": "completed",
+          "conclusion": "skipped"
+        }
+      ]
+    },
+    {
+      "id": 38483241759,
+      "name": "Science validation",
+      "event": "push",
+      "head_sha": "8b2baa17810b14aeca264956b6c28a8fddc31677",
+      "head_branch": "feature/r15-undo-skipped-20261013",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38483241759",
+      "jobs": [
+        {
+          "id": 115590605932,
+          "name": "science-change-gate",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 115590668305,
+          "name": "research-deep",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "api35": {
+    "data": {
+      "tests": 48,
+      "failures": 0,
+      "skipped": 0
+    },
+    "app": {
+      "tests": 141,
+      "failures": 0,
+      "skipped": 8
+    },
+    "r15_data": 33,
+    "r15_four_language_ui": 24,
+    "r15_restart_main": 1,
+    "r15_fresh_pid_phases": [
+      1,
+      1
+    ]
+  },
+  "lint": {
+    "errors": 0,
+    "warnings": 178
+  },
+  "artifacts": [
+    {
+      "id": 11859831404,
+      "sha256": "69ccd4cbf4ba5f7107472ecae315136b829143a8369d2681c7c34f519c5178c9"
+    },
+    {
+      "id": 11860147057,
+      "sha256": "21433a38342736f5ed8900f0ddd22b7a34d76f23af3ba0eec402b71aa50e0ba5"
+    }
+  ],
+  "safety_limits": [
+    "cancelled_old_future_slot",
+    "unproven_legacy_wall_move",
+    "inventory_unit_mismatch"
+  ],
+  "new_skips": 0,
+  "physical_arm_and_human_talkback": "NOT_RUN",
+  "signed_or_delivered_apk": false,
+  "merged": false
 }

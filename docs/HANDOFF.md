@@ -1,3 +1,5 @@
+> R-15代码完整验收通过：ebd02da Android38484766169/JVM/API35全部success；JVM194/data142/rem17/app813零失败（61原skip），API35 data48/app141零失败（8原skip且独立脚本实际通过），新data33/UI四语24/新PID全部过。lint0错误178既有警告，unsignedRelease及来源保护通过。报告27/机器摘要已更新；独立PR最终验收文档HEAD自身push/PR全CI成功后才交还，精确SHA/链接固定PR正文。三类历史安全限制见报告，不合并/签名/交付APK，build26不变。
+
 > R-15回归修正：完整JVM194/data142/reminder17通过；首轮宽泛retained过滤破坏旧契约，已限定R15撤回证据；设备新重启fixture缺必填提醒参数已补齐。保留失败/修正证据，等待新HEAD完整Android/API35/Science，不取消正在运行CI，不称验收完成。见报告27。
 
 > R-15首版本地目标通过（2026-10-13，REQ §86）：32/32真实Room仓库、四语320dp/2x原生UI24/24、刷新8/8零失败/无跳过，两仪器包编译成功（2m18s）。真实4语Disabled红测、未来Slot幽灵红测1项、旧改期无证明/单位不同红测2项均保留。实现原始Slot可选证据仅附加已有SKIP JSON临床快照、软删除及清标记保留改期/剂量、原版范围过滤保证真实提前服药不丢、VM复用mutate/refresh并阻止重复缓存更新。新进程脚本专用synthetic数据库，emulator guard，无pm clear/新Assume skip。已补原规则补录确认标签一致性，正常功能不变。旧取消未来Slot、无证明的wall改期、跨库存单位保守拒绝，后两种/新行为须进一步业务决定，详见[报告27](audits/product-quality-2026-10/27-r15-undo-skipped.md)。首次Android编译缺ApplicationProvider依赖已正常修正。全量JVM/Android/lint/full构建及真实API35/最终CI仍待完成；下一步跑完整回归、等待本实现HEAD CI，建独立PR，不能宣称验收完成。不合并/签名/交付、不变Room9/PNBAK1/PK/version26/build26。

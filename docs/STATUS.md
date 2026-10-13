@@ -1,3 +1,5 @@
+> R-15代码完整验收通过：ebd02da Android38484766169/JVM/API35全部success；JVM194/data142/rem17/app813零失败（61原skip），API35 data48/app141零失败（8原skip且独立脚本实际通过），新data33/UI四语24/新PID全部过。lint0错误178既有警告，unsignedRelease及来源保护通过。报告27/机器摘要已更新；独立PR最终验收文档HEAD自身push/PR全CI成功后才交还，精确SHA/链接固定PR正文。三类历史安全限制见报告，不合并/签名/交付APK，build26不变。
+
 > R-15回归修正：完整JVM194/data142/reminder17通过；首轮宽泛retained过滤破坏旧契约，已限定R15撤回证据；设备新重启fixture缺必填提醒参数已补齐。保留失败/修正证据，等待新HEAD完整Android/API35/Science，不取消正在运行CI，不称验收完成。见报告27。
 
 > R-15本地目标通过：data32/UI四语24/refresh8全过、两仪器包构建成功；完整回归/API35/Science最终HEAD CI待完成。旧时段已取消/原时区证明缺失/跨库存单位保留安全限制，报告27说明后续产品决定。B4 MERGED_CI_VERIFIED，build26不变。
