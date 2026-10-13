@@ -1,3 +1,5 @@
+> B4两项PR已顺序合并（2026-10-13）：PR24在新基线验证merge32345cb的Android38466418672及Science38466418719 gate/deep全部成功后，经expected-head92f8c42校验，以merge commit `9af38f3008b7d8b7260c995f397b20e59174d443` 合入默认分支；父提交d06bcce/92f8c42，树2fae7ed与验收HEAD及验证合并完全一致。PR23 merge d06bcce先完成主线全绿，再调整PR24目标并复验。当前主线Android38468046764 / Science38468046661待完成，不能提前称最终主线通过。原分支未改/删除、无新APK或签名。待主线通过后，将最终合并报告和授权记录归入默认分支，再验证最终文档HEAD检查。
+
 > B4合并第二步（2026-10-13）：PR23 merge d06bcce主线Android38463996746三作业及Science38463996997 gate/deep全部实际success；首轮Android38463928846因同SHA重复push被并发规则取消，未记通过。PR24已改为默认分支，HEAD92f8c42和19文件差异未变、无冲突。GitHub refs/pull/24/merge暂仍指向旧8749207父提交，因此独立verification/pr24-mainline-20261013以明确双亲d06bcce/92f8c42创建验证merge `32345cb78bfa70d72bafed73ae60e40e7556bd23`，树2fae7ed与验收HEAD完全相同；正在完整CI复验，尚未合并PR24。不改已验收两个分支或build26。
 
 > B4顺序合并授权及首步（2026-10-13，REQ §85）：用户明确“合并”。PR23验收HEAD8749207经重新核对全部检查、无进行中CI/冲突后，以merge commit `d06bccee040cc9c488be319e21fffb3c5d66ff3a` 合入默认分支 `claude/new-session-1959qb`；两父提交bab53d3/8749207符合预期。主线Android38463928846、Science38463928705正在运行，尚未宣称通过。PR24仍OPEN、HEAD92f8c42、目标B4；必须待首步主线通过后改为默认分支并在新基线验证。合并记录暂存独立chore分支，避免提前推送默认分支取消当前CI。没有重新签名/交付、修改build26或业务代码。
