@@ -1061,6 +1061,7 @@
     <string name="pkg_opened">%1$s 開封</string>
     <string name="pkg_left">剩餘 %1$s</string>
     <string name="pkg_show">展開（%1$d）</string>
+    <string name="pkg_show_more">繼續顯示 20 條</string>
     <string name="pkg_hide">收起</string>
     <string name="pkg_undo">作廢誤新增包裝</string>
     <string name="pkg_undo_title">作廢這盒包裝？</string>
