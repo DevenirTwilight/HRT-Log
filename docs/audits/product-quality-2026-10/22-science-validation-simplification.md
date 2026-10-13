@@ -1,4 +1,4 @@
-# 22 科研验证精简工程验收（COMPLETE_CI_VERIFIED）
+# 22 科研验证精简工程验收（MERGED_CI_VERIFIED 待合并后默认分支 CI）
 
 2026-10-13；独立分支 feature/science-validation-simplification-20261013，起点 1e584285cb1e6f7a4b09a3e20585418d35a28735。B2 PR [20](https://github.com/DevenirTwilight/HRT-Log/pull/20) 开发期间未混入；2026-10-13 产品负责人批准后 PR20 以 `9c3b5d6` 合入默认分支，本分支随后合并默认分支以保留 B2 的设备脚本与测试（REQUIREMENTS §78）。S1–S3 已在 `97236d7` CI 通过；合并 B2 后的最终 CI 全绿，见文末。
 
@@ -68,4 +68,16 @@ S3 CI设计：Android jvm维持domain/PK/importer及32×13数值参考/四语检
 | push | Android 38377979046 / Science 38377978995 | success | success（09:40:21→09:54:02） | success | success（5 秒） | success（约 1.6 分钟） |
 | PR #21 | Android 38378010351 / Science 38378010352 | success | success（09:40:35→09:50:48） | success | success（6 秒） | success（约 1.6 分钟） |
 
-结论：S0–S4 完成，CI 全绿。2026-10-13 产品负责人回复“我授权，继续”，据此在 CI 全绿后合并 PR #21（REQUIREMENTS §79）。未签名、未交付 APK、未发布 Release。未验证：真实 ARM 设备。
+（`1d90612` 与文档提交 `571503e` 均全绿；`571503e` push 仅改文档，research-deep 按规则 skipped，PR 运行 research-deep success。）
+
+## 门控自保护修复（`968783c`，2026-10-13 最终任务书）
+
+问题：`SCIENCE_FILES` 未包含门控脚本及其测试，单独修改门控时不会触发 research-deep；推送旧 HEAD 缺失时 `rev-parse` 直接报错；注释称“未知源码均深测”与实际不符。
+
+修复：门控脚本、其测试与 M2/PR19 两个变异脚本加入深测范围（workflow 目录原本即触发）；新分支、旧 HEAD 缺失、PR 基线不可解析、手动及未知事件一律全量深测；`git diff` 本身失败仍使作业失败，不静默跳过。注释改为真实策略：普通 UI、翻译、项目文档不触发，由常规 Android 测试覆盖。未恢复任何哈希冻结、审批链或分类机制。
+
+测试（`scripts/test_science_change_gate.py`，9 项，本地通过）：路径矩阵（门控脚本/测试、science 与 Android workflow、PK 内核与参数、科研数据与参考文件、新增 PK 源（pk-engine 与 app conc）、UI 间距、翻译、项目文档、普通产品脚本、空改动、混合改动、前缀不误匹配）；真实临时 Git 仓库验证 push 多提交范围、PR 以合并基点计算（基线后续提交不计入）、新分支/全零/缺对象/缺基线/手动/未知事件全量、命令写入 `deep=` 输出、diff 失败抛错。变异：删去门控自保护两项 → 3 项失败；缺对象静默返回空 → 1 项失败。本地另跑历史档案 164/164、5/5，全科研 Python、32×13 参考、四语、M2 契约 3/3、PeriodStability 5/5、D-2 10/10、LabEstimate 1/1 通过。
+
+CI（`968783c`）：push Android 38381299493、Science 38381299642；PR Android 38381303849、Science 38381303857，jvm/android/device-tests/science-change-gate/research-deep 全 success。push 运行中 research-deep 实际被触发，证明仅改门控文件即深测。
+
+合并：依据 REQUIREMENTS §79 授权，在本文档提交 CI 全绿且 PR HEAD 未变后以 merge commit 合并；合并 SHA 与默认分支 CI 记录于 HANDOFF。未签名、未交付、未发布。未验证：真实 ARM。
