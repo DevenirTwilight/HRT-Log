@@ -244,7 +244,8 @@ const val BACKFILL_MAX_DAYS=731L
     private suspend fun timeline(dao:NotesDao,now:Instant,from:Instant,to:Instant,zone:ZoneId):List<TimelineEntry> {
         val meds=dao.medications().associateBy{it.id}
         val rules=ruleModels(dao).filter { meds[it.medicationId]?.needs_review==null }
-        return Timeline.build(rules,dao.overrides().map{it.model()},dao.records().map{it.model()},from,to,now,zone,dao.retained().map{it.model()})
+        val retracted=dao.deletedRecords().filter{it.status=="SKIPPED" && SkipSlotEvidence.has(it)}.mapNotNull{it.slot_key}.toSet()
+        return Timeline.build(rules,dao.overrides().map{it.model()},dao.records().map{it.model()},from,to,now,zone,dao.retained().map{it.model()},retracted)
     }
     private suspend fun reconcile(dao:NotesDao,now:Instant,zone:ZoneId) {
         val from=dao.rules().minOfOrNull{it.missed_tracking_from_utc}?.let(Instant::ofEpochMilli) ?: now
@@ -473,7 +474,7 @@ const val BACKFILL_MAX_DAYS=731L
         reconcile(dao,now,ZoneId.systemDefault())
     }
     /** Shared override writes; callers decide whether reconciliation is global or limited to their correction. */
-    private suspend fun applyOverride(dao:NotesDao,slot:Slot,value:SlotOverride,now:Instant) {
+    private suspend fun applyOverride(dao:NotesDao,slot:Slot,value:SlotOverride,now:Instant,captureRetraction:Boolean=false) {
         require(slot.key==value.key)
         val record=dao.records().singleOrNull{it.slot_key==slot.key}
         require(record?.status !in listOf("ON_TIME","LATE","MISSED")) { "Edit recorded history instead" }
@@ -485,7 +486,8 @@ const val BACKFILL_MAX_DAYS=731L
             val next=OverrideEntity(previous?.id ?: 0,slot.medicationId,slot.ruleId,slot.key,value.rescheduled?.toEpochMilli(),value.zone?.id,value.dose,value.skipped)
             if(previous==null)dao.insertOverride(next)else dao.updateOverride(next)
         }
-        if(record?.status=="SKIPPED" && !value.skipped)dao.updateRecord(record.copy(deleted_at_utc=now.toEpochMilli(),revision=record.revision+1))
+        if(record?.status=="SKIPPED" && !value.skipped)dao.updateRecord(record.copy(deleted_at_utc=now.toEpochMilli(),revision=record.revision+1,
+            config_snapshot=if(captureRetraction)SkipSlotEvidence.capture(record.config_snapshot,slot) else record.config_snapshot))
         if(value.skipped && record==null) {
             val skipped=recordFor(dao,value.apply(slot),"SKIPPED")
             dao.record(skipped.copy(config_snapshot=SkipSlotEvidence.capture(skipped.config_snapshot,slot)))
@@ -522,7 +524,7 @@ const val BACKFILL_MAX_DAYS=731L
         if(effective.at.toEpochMilli()!=record.scheduled_utc || effective.zone.id!=record.scheduled_zone ||
             effective.dose!=record.planned_dose || effective.lateMinutes!=record.late_after_minutes_snapshot)throw SkipUndoUnavailable()
         dao.retain(original.retained())
-        applyOverride(dao,original,change.model().copy(skipped=false),now)
+        applyOverride(dao,original,change.model().copy(skipped=false),now,captureRetraction=true)
         // Same Timeline projection as calendar/reconcile, but this transaction may write only the chosen slot.
         val restored=timeline(dao,now,effective.at,effective.at.plusMillis(1),zone).singleOrNull{it.slot.key==key} ?: throw SkipUndoUnavailable()
         if(restored.state==SlotState.UNCONFIRMED)dao.record(recordFor(dao,restored.slot,"MISSED",origin="AUTO_MISSED"))

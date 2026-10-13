@@ -35,7 +35,7 @@ class UndoSkippedRestartAndroidTest {
         try {
             val r=repo(db)
             val id=r.saveMedication(MedicationEntity(name="R15 Synthetic",molecule="E2",route="ORAL",unit="MG",dose_per_intake=2.0,
-                container_capacity=20.0,site_rotation=false,notifications_on=true,active=true,sort_order=0),null,RuleKind.EVERY_N_DAYS,1,
+                container_capacity=20.0,site_rotation=false,notifications_on=true,soon_alert_minutes=30,late_after_minutes=120,active=true,sort_order=0),null,RuleKind.EVERY_N_DAYS,1,
                 listOf(LocalTime.of(8,0),LocalTime.of(20,0)),emptySet(),at(7))
             r.addContainers(id,20.0,1,true);r.addContainers(id,20.0,1,true)
             val fake=r.containers().maxBy{it.id};r.correctStock(fake.id,2.0);r.removeMistakenContainer(fake.id)

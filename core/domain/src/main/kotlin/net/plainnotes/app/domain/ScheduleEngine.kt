@@ -93,7 +93,7 @@ object Timeline {
         }
 
     fun build(rules: List<ScheduleRule>, overrides: List<SlotOverride>, records: List<DoseRecord>,
-              from: Instant, to: Instant, now: Instant, zone: ZoneId, retained: List<Slot> = emptyList()): List<TimelineEntry> {
+              from: Instant, to: Instant, now: Instant, zone: ZoneId, retained: List<Slot> = emptyList(), retractedSkips:Set<String> = emptySet()): List<TimelineEntry> {
         ScheduleEngine.validateVersions(rules)
         require(overrides.map { it.key }.distinct().size == overrides.size)
         val active=records.filterNot { it.deleted }.filter { it.key != null }
@@ -107,9 +107,9 @@ object Timeline {
         val retainedRules=rules.associateBy{it.id}
         retained.forEach { s ->
             val rule=retainedRules[s.ruleId]
-            // Original-slot evidence may outlive a skip. A later plan cut cancels unrecorded future slots;
-            // real records still win, including doses taken early before that cut.
-            if(s.key in byKey || rule!=null && s.original>=rule.from && (rule.until==null || s.original<rule.until))slots[s.key]=s
+            // R15 evidence outlives its retracted skip. A later cut cancels only those unrecorded future slots;
+            // legacy retention and real records still win, including doses taken early before that cut.
+            if(s.key !in retractedSkips || s.key in byKey || rule!=null && s.original>=rule.from && (rule.until==null || s.original<rule.until))slots[s.key]=s
         }
         overrides.forEach { o -> if(o.key !in slots) rules.firstNotNullOfOrNull { ScheduleEngine.resolve(it,o.key,zone) }?.let { slots[o.key]=it } }
         // Recorded UTC/zone/dose snapshots win over a later timezone or configuration change.

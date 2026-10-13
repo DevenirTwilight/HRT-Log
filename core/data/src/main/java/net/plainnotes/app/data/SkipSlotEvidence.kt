@@ -15,6 +15,7 @@ internal object SkipSlotEvidence {
         if(evidence!=null)context.put(KEY,evidence)
         return context.toString()
     }
+    fun has(record:RecordEntity)=runCatching{JSONObject(record.config_snapshot).optJSONObject(KEY)!=null}.getOrDefault(false)
     data class Clock(val key:String,val at:Instant,val zone:ZoneId)
     fun read(record:RecordEntity):Clock? = try {
         val context=JSONObject(record.config_snapshot)

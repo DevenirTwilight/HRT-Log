@@ -1,3 +1,5 @@
+> R-15回归修正：完整JVM194/data142/reminder17通过；首轮宽泛retained过滤破坏旧契约，已限定R15撤回证据；设备新重启fixture缺必填提醒参数已补齐。保留失败/修正证据，等待新HEAD完整Android/API35/Science，不取消正在运行CI，不称验收完成。见报告27。
+
 > R-15本地目标通过：data32/UI四语24/refresh8全过、两仪器包构建成功；完整回归/API35/Science最终HEAD CI待完成。旧时段已取消/原时区证明缺失/跨库存单位保留安全限制，报告27说明后续产品决定。B4 MERGED_CI_VERIFIED，build26不变。
 
 > B4 MERGED_CI_VERIFIED（最终主线fe879863 Android38470156117 attempt2、Science38470156282均success，deep按文档门控skip）。R-15独立分支开始审查与红测，未实现/未验收；不合并、不签名或交付APK。

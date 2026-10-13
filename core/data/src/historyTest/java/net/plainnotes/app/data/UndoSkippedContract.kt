@@ -221,4 +221,12 @@ abstract class UndoSkippedContract {
         assertEquals(3.0,restored.dose,0.0)
     }
 
+    @Test fun legacyUndoAlsoGetsScopedEvidenceAndCannotCreateGhostDemand()=runBlocking {
+        val r=legacy(skip());repo.undoSkipped(r,at(7))
+        val evidence=org.json.JSONObject(dao.recordById(r.id)!!.config_snapshot).getJSONObject("skip_original_slot_v1")
+        assertEquals(r.slot_key,evidence.getString("key"));assertEquals(at(8).toEpochMilli(),evidence.getLong("original_utc"))
+        repo.saveMedication(med.copy(id=r.medication_id),null,RuleKind.EVERY_N_DAYS,1,listOf(LocalTime.of(18,0)),emptySet(),at(7).plusSeconds(30*60))
+        assertTrue(repo.stockDemand(at(7).plusSeconds(31*60),zone).none{it.slot.key==r.slot_key})
+    }
+
 }
