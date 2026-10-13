@@ -1,3 +1,5 @@
+> 2026-10-13 科研守卫精简：S0 依赖映射已记录，S1–S4 待实施，尚未验收。独立默认分支起点 1e58428；B2 PR20 OPEN，未混入。见[工程报告22](audits/product-quality-2026-10/22-science-validation-simplification.md)。本轮不合并/签名/交付。
+
 > 最新当前事实（2026-10-12）：PR #19 已合并并通过主线 CI；见 [STATUS](STATUS.md) 和 [审计20](audits/product-quality-2026-10/20-pr19-merge-and-mainline-validation.md)。下文保留历史阶段的“未合并/待批准”叙述，不代表现在。
 
 # M2-only最终APK已正式签名并私下交付，全部工程成果已保存（2026-10-12）

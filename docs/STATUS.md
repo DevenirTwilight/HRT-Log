@@ -1,3 +1,5 @@
+> 2026-10-13 科研守卫精简：S0 依赖映射已记录，S1–S4 待实施，尚未验收。独立默认分支起点 1e58428；B2 PR20 OPEN，未混入。见[工程报告22](audits/product-quality-2026-10/22-science-validation-simplification.md)。本轮不合并/签名/交付。
+
 # HRT Log 当前状态（单一事实入口）
 
 > 当前应用状态：**MERGED_CI_VERIFIED**（2026-10-12）。历史过程见 HANDOFF，需求原文见 REQUIREMENTS；本轮完整证据见[审计20](audits/product-quality-2026-10/20-pr19-merge-and-mainline-validation.md)。应用验收基线如下，随后文档提交的最新 HEAD 以 Git 为准。
