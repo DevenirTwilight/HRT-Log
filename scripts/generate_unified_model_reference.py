@@ -34,7 +34,7 @@ if __name__ == '__main__':
     data = reference()
     if args.check:
         frozen = json.loads((ROOT / 'pk-engine/src/test/resources/unified-m1-python-reference.json').read_text())
-        for key in ('source', 'source_sha256', 'parameter_sha256', 'times'):
+        for key in ('source', 'parameter_sha256', 'times'):
             if data[key] != frozen[key]: raise ValueError('Reference identity changed: ' + key)
         if len(data['reference']) != len(frozen['reference']): raise ValueError('Candidate count changed')
         for a, b in zip(data['reference'], frozen['reference']):

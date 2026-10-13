@@ -6,9 +6,14 @@ E=ROOT/'docs/design/pr19-calibration-evidence'
 class Pr19CalibrationContract(unittest.TestCase):
  def test_frozen_sources_and_actual_science_catalogs_match(self):
   r=json.loads((E/'reference.json').read_text());lock=json.loads((E/'product-lock.json').read_text())
-  for p,h in r['input_hashes'].items():self.assertEqual(h,hashlib.sha256((ROOT/p).read_bytes()).hexdigest(),p)
+  import research_archive as archive
+  for p,h in r['input_hashes'].items():
+   blob=archive.git_blobs(archive.ARCHIVE_COMMIT,[p])[p]
+   self.assertIsNotNone(blob,p)
+   self.assertEqual(h,hashlib.sha256(blob).hexdigest(),p)
   for family in ('M1','M2'):
-   self.assertEqual(lock[family]['catalog_sha256'],hashlib.sha256((ROOT/lock[family]['catalog_file']).read_bytes()).hexdigest())
+   blob=archive.git_blobs(archive.ARCHIVE_COMMIT,[lock[family]['catalog_file']])[lock[family]['catalog_file']]
+   self.assertEqual(lock[family]['catalog_sha256'],hashlib.sha256(blob).hexdigest())
    self.assertEqual(lock[family]['runtime_parameter_sha256'],hashlib.sha256(lock[family]['runtime_signature'].encode()).hexdigest())
    self.assertEqual(r['default_'+family.lower()],lock[family]['id'])
  def test_production_preview_is_explicit_literature_protocol_not_common_example(self):

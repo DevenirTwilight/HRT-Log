@@ -214,55 +214,30 @@ def historical_baseline(directory=P2, start_sha=None):
         raise ValueError(f'Historical baseline not reproduced at {start}: {len(bad)} file(s), e.g. {bad[0]}')
     return len(baseline['files'])
 
-def check(directory=P2, production_root=ROOT, historical=True):
+def check(directory=P2, production_root=ROOT, historical=False):
+    """Check frozen P2 inputs and scientific study separation only.
+
+    Production Kotlin sources, new PK files and display changes are governed by
+    executable numerical, compatibility and UI tests, never by old SHA approvals.
+    Full historical replay is the separate verify_historical_archive.py command.
+    """
     lock = json.loads((directory / 'protocol-lock.json').read_text())
     for name, expected in lock['files'].items():
         if digest(directory / name) != expected:
             raise ValueError('Frozen input changed: ' + name)
     if lock['protocol_sha256'] != digest(directory / 'validation-protocol.md') or lock['dataset_sha256'] != digest(directory / 'evidence-catalog.json'):
         raise ValueError('Protocol/dataset SHA mismatch')
-    baseline = json.loads((directory / 'production-baseline.json').read_text())
-    cls = classification(directory, baseline)
-    for name in cls['live_lock_baseline']:
-        path = production_root / name
-        if not path.is_file() or digest(path) != baseline['files'][name]:
-            raise ValueError('Production or old evidence changed: ' + name)
-    for name, expected in cls['live_lock_additional'].items():
-        path = production_root / name
-        if not path.is_file() or digest(path) != expected:
-            raise ValueError('Research input changed: ' + name)
-    for name in cls['display_review']:
-        path = production_root / name
-        if not path.is_file():
-            raise ValueError('PK display file missing: ' + name)
-        if digest(path) != baseline['files'][name]:
-            check_display(directory, name, baseline['files'][name], digest(path))
-    for name, registered in cls.get('display_review_additional', {}).items():
-        path = production_root / name
-        if not path.is_file():
-            raise ValueError('PK display file missing: ' + name)
-        if digest(path) != registered:
-            check_display(directory, name, registered, digest(path))
-    missing = unclassified(cls, baseline) if 'unclassified_scan' in cls else []
-    if missing:
-        raise ValueError('Unclassified file under a PK source prefix: ' + ', '.join(missing))
-    check_deviations(directory, baseline, cls)
-    offenders = dependency_scan(cls, production_root)
-    if offenders:
-        raise ValueError('Research tooling depends on unlocked production files: ' + '; '.join(offenders))
     catalog = json.loads((directory / 'evidence-catalog.json').read_text())
     split = json.loads((directory / 'split-manifest.json').read_text())
     assigned = [sid for ids in split['roles'].values() for sid in ids]
     if len(assigned) != len(set(assigned)) or set(assigned) != {s['id'] for s in catalog['studies']}:
         raise ValueError('Study split leakage/missing study')
-    for s in catalog['studies']:
-        if s['id'] not in split['roles'][s['role']] or (s['previously_seen'] and s['role'] == 'LOCKED_EXTERNAL'):
+    for study in catalog['studies']:
+        if study['id'] not in split['roles'][study['role']] or (study['previously_seen'] and study['role'] == 'LOCKED_EXTERNAL'):
             raise ValueError('Unblinded/incorrect role')
-    train = [r['id'] for r in catalog['records'] if r['used_in_fitting']]
+    train = [record['id'] for record in catalog['records'] if record['used_in_fitting']]
     if train != split['train_record_ids']:
         raise ValueError('Train record mismatch')
-    if historical:
-        historical_baseline(directory)
     return lock
 
 # --- historical research replay ----------------------------------------------------------------------------------
@@ -297,6 +272,7 @@ def compare_results(output, expected_dir, files):
 
 if __name__ == '__main__':
     if sys.argv[1:] == ['--required-commits']:
-        print(' '.join(required_commits()))
+        import research_archive
+        print(' '.join(research_archive.required_commits()))
     else:
         print(json.dumps(check(), indent=2))

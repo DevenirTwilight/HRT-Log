@@ -1,3 +1,5 @@
+> S2（2026-10-13）：旧守卫日常入口已删生产SHA/显示审批/新增PK强制分类路径；保留冻结协议/数据泄漏校验。旧字节授权测试保存在legacy-guard-tests不参与discover，剩余科研261项本地通过。S2实际正反样本、S3 CI拆分和完整CI待完成。
+
 > S1（2026-10-13）：独立research_archive/verify_historical_archive已实现，本地164/5及305测试通过，篡改与真实浅克隆缺对象均失败。新增专项工作流；S2/S3与最终CI未完成。S0 CI运行中，等待后推送，避免取消。
 
 > 2026-10-13 科研守卫精简：S0 依赖映射已记录，S1–S4 待实施，尚未验收。独立默认分支起点 1e58428；B2 PR20 OPEN，未混入。见[工程报告22](audits/product-quality-2026-10/22-science-validation-simplification.md)。本轮不合并/签名/交付。
