@@ -26,6 +26,8 @@ import java.time.LocalTime
 class CalendarTestActivity : ComponentActivity() {
     private lateinit var fixture: CalendarFixture
     val repository get() = fixture.repository
+    /** Back presses that reached the activity, standing in for MainActivity's finish / disguise-exit callback. */
+    @Volatile var activityBacks = 0
     override fun onCreate(state: Bundle?) {
         super.onCreate(state)
         window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
@@ -35,6 +37,8 @@ class CalendarTestActivity : ComponentActivity() {
         })[CalendarFixture::class.java]
         val appearance = UiPrefs(this).appearance
         setContent { NotesTheme(ThemeMode.LIGHT) { NotesApp(fixture.model, appearance, {}) } }
+        // Same order as MainActivity: registered before composition, so Compose handlers take precedence.
+        onBackPressedDispatcher.addCallback(this, object : androidx.activity.OnBackPressedCallback(true) { override fun handleOnBackPressed() { activityBacks++ } })
     }
 }
 private class CalendarFixture(context: Context) : ViewModel() {

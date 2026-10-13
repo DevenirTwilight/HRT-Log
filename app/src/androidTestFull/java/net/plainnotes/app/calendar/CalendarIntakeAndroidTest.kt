@@ -1,7 +1,6 @@
 package net.plainnotes.app.calendar
 
 import android.view.KeyEvent
-import androidx.activity.OnBackPressedCallback
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.*
@@ -27,7 +26,6 @@ class CalendarIntakeAndroidTest {
     private val tomorrow = LocalDate.now().plusDays(1)
 
     @Before fun open() {
-        ui.runOnUiThread { context.onBackPressedDispatcher.addCallback(context, object : OnBackPressedCallback(true) { override fun handleOnBackPressed() {} }) }
         selectTomorrow()
     }
 
@@ -39,7 +37,10 @@ class CalendarIntakeAndroidTest {
         return ui.onNode(hasContentDescription(name, substring = true) and hasClickAction())
     }
     private fun selectTomorrow() {
+        // Wait for the synthetic medication to load: the empty-state card above the calendar disappears then and the grid moves.
+        ui.waitUntil(20_000) { ui.onAllNodesWithText("Synthetic Estradiol").fetchSemanticsNodes().isNotEmpty() }
         ui.waitUntil(20_000) { ui.onAllNodes(hasClickAction() and SemanticsMatcher.keyIsDefined(SemanticsProperties.Selected)).fetchSemanticsNodes().size >= 7 }
+        ui.waitForIdle()
         if (runCatching { cell(tomorrow).fetchSemanticsNode() }.isFailure) ui.onNodeWithContentDescription(s(R.string.calendar_next)).performClick()
         cell(tomorrow).performClick()
         ui.waitForIdle()
@@ -66,9 +67,11 @@ class CalendarIntakeAndroidTest {
         ui.waitUntil(20_000) { intakes().size == before + 1 }
         repeat(2) { ui.runOnUiThread { context.onBackPressedDispatcher.onBackPressed() }; ui.waitForIdle() }
         ui.onNodeWithContentDescription(s(R.string.menu)).performClick()
-        ui.onNodeWithTag("drawer-content").onChildren().filterToOne(hasText(s(R.string.history))).performClick(); ui.waitForIdle()
+        ui.onNodeWithTag("drawer-content").onChildren().filterToOne(hasText(s(R.string.history))).performClick()
+        ui.waitUntil(10_000) { runCatching { ui.onNodeWithTag("drawer-content").assertIsNotDisplayed() }.isSuccess }
         repeat(2) { ui.runOnUiThread { context.onBackPressedDispatcher.onBackPressed() }; ui.waitForIdle() }
         ui.onNodeWithContentDescription(s(R.string.calendar_pick_start)).assertExists()
+        assertEquals("Back on the calendar reaches the activity; Back from History does not", 3, context.activityBacks)
         assertEquals(before + 1, intakes().size)
     }
 }
