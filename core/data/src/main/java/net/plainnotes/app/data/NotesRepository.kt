@@ -664,6 +664,19 @@ const val BACKFILL_MAX_DAYS=731L
             dao.deleteNote(date.toString())} else dao.note(DayNoteEntity(date.toString(),text)) }
     /** Planned slots in [from, to) for forecasting; reconciles first so past slots carry their final state. */
     suspend fun planned(from:Instant,to:Instant,now:Instant=Instant.now(),zone:ZoneId=ZoneId.systemDefault())=transaction { dao -> timeline(dao,now,from,to,zone) }
+    /**
+     * The open doses the stock forecast walks (B4): unfinished doses since tracking began plus the next
+     * [StockForecasts.WINDOW_DAYS] days. The stock page, the calendar and stock reminders all use this one input.
+     */
+    suspend fun stockDemand(now:Instant=Instant.now(),zone:ZoneId=ZoneId.systemDefault())=transaction { dao ->
+        val from=dao.rules().minOfOrNull{it.missed_tracking_from_utc}?.let(Instant::ofEpochMilli) ?: now
+        (timeline(dao,now,minOf(from,now),now.plusMillis(1),zone)+timeline(dao,now,now,now.plus(java.time.Duration.ofDays(StockForecasts.WINDOW_DAYS)),zone))
+            .filter{it.state in listOf(SlotState.PENDING,SlotState.SOON,SlotState.OVERDUE)}.distinctBy{it.slot.key}
+    }
+    /** Shared stock forecasts for the active medications (B4). */
+    suspend fun stockForecasts(now:Instant=Instant.now(),zone:ZoneId=ZoneId.systemDefault())=transaction { dao ->
+        StockForecasts.forecastAll(dao.medications(),dao.containers(),stockDemand(now,zone))
+    }
     suspend fun labs()=withContext(Dispatchers.IO){db().dao().labs()}
     suspend fun labContexts()=withContext(Dispatchers.IO){db().dao().labContexts()}
     private suspend fun captureLab(dao:NotesDao,lab:LabValueEntity,origin:String,now:Instant,estimate:String?) {

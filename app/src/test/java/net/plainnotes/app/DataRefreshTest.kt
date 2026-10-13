@@ -7,7 +7,6 @@ import kotlinx.coroutines.runBlocking
 import net.plainnotes.app.data.*
 import net.plainnotes.app.domain.*
 import net.plainnotes.app.reminder.ReminderCoordinator
-import net.plainnotes.app.ui.stockSummary
 import org.junit.*
 import org.junit.Assert.*
 import org.junit.runner.RunWith
@@ -45,10 +44,17 @@ class DataRefreshTest {
     @After fun cleanup(){ androidx.lifecycle.ViewModelStore().apply{put("model",model);clear()};db.close() }
 
     @Test fun stockAndCalendarRefreshTogetherAfterAdjustmentAndScheduleEdit() {
-        assertEquals(21,stockSummary(model.state.value.medications.single(),model.extra.value.containers,model.state.value.schedules[id]).daysLeft)
+        // B4: the refreshed shared forecast follows the package (84 mg = 42 doses of 2 mg twice a day; 40 mg = 20).
+        fun forecast()=model.extra.value.stockForecasts.getValue(id)
+        assertEquals(84.0,forecast().available!!,1e-9)
+        val full=forecast().daysUntilShort(today,zone)!!
+        assertTrue("about three weeks: $full",full in 20..22)
         model.setRemaining(model.extra.value.containers.single().id,40.0)
-        await{model.extra.value.containers.single().used_amount==44.0}
-        assertEquals(10,stockSummary(model.state.value.medications.single(),model.extra.value.containers,model.state.value.schedules[id]).daysLeft)
+        await{model.extra.value.containers.single().used_amount==44.0 && model.extra.value.stockForecasts[id]?.available==40.0}
+        val reduced=forecast().daysUntilShort(today,zone)!!
+        assertTrue("about ten days: $reduced",reduced in 9..11); assertEquals(11,full-reduced)
+        // The reminder path asks the repository for the same forecast the page and calendar show.
+        assertEquals(forecast().firstShort,runBlocking{repo.stockForecasts()}.getValue(id).firstShort)
         val m=model.state.value.medications.single().copy(dose_per_intake=4.0)
         model.save(net.plainnotes.app.ui.MedicationDraft(m,null,RuleKind.EVERY_N_DAYS,1,listOf(LocalTime.NOON),emptySet(),null))
         await{model.state.value.schedules[id]?.times==listOf(LocalTime.NOON)}

@@ -14,54 +14,60 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import net.plainnotes.app.NotesState
 import net.plainnotes.app.R
-import net.plainnotes.app.ScheduleSummary
 import net.plainnotes.app.data.ContainerEntity
 import net.plainnotes.app.data.MedicationEntity
 import net.plainnotes.app.data.RecordEntity
-import net.plainnotes.app.domain.RuleKind
+import net.plainnotes.app.data.StockForecast
+import net.plainnotes.app.data.StockForecasts
+import java.time.ZoneId
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
-import kotlin.math.floor
 
-const val LOW_STOCK_DAYS = net.plainnotes.app.reminder.StockAlerts.LOW_STOCK_DAYS
+const val LOW_STOCK_DAYS = net.plainnotes.app.data.StockForecasts.LOW_STOCK_DAYS
 const val EXPIRY_WARNING_DAYS = net.plainnotes.app.reminder.StockAlerts.EXPIRY_WARNING_DAYS
 
-/** Average planned use per day, from the current schedule (null when unscheduled). */
-fun dailyUse(m: MedicationEntity, s: ScheduleSummary?): Double? = s?.let {
-    val dose=it.dose ?: m.dose_per_intake
-    val perDay=it.times.indices.sumOf { index -> it.timeDoses.getOrNull(index) ?: dose }
-    when (it.kind) {
-        RuleKind.EVERY_N_DAYS -> perDay / it.interval
-        RuleKind.EVERY_N_HOURS -> 24.0 / it.interval * dose
-        RuleKind.WEEKLY -> it.weekdays.size * perDay / (7.0 * it.interval)
-    }
-}?.takeIf { it > 0 }
-
-class StockSummary(val open: ContainerEntity?, val remaining: Double, val sealedCount: Int, val daysLeft: Int?, val expiresOn: LocalDate?) {
-    val tracked get() = open != null || sealedCount > 0 || remaining > 0
-    val low get() = tracked && daysLeft != null && daysLeft < LOW_STOCK_DAYS
+/**
+ * What the stock page shows for one medication. Days and the low-stock label come from the shared per-dose
+ * [StockForecast] (B4), the same one the calendar and stock reminders use; packages and expiry come from containers.
+ */
+class StockSummary(val open: ContainerEntity?, val remaining: Double, val sealedCount: Int, val forecast: StockForecast?,
+                   val daysLeft: Int?, val low: Boolean, val expiresOn: LocalDate?) {
+    val tracked get() = open != null || sealedCount > 0
     fun expiringSoon(today: LocalDate) = expiresOn != null && ChronoUnit.DAYS.between(today, expiresOn) <= EXPIRY_WARNING_DAYS
 }
-fun stockSummary(m: MedicationEntity, containers: List<ContainerEntity>, s: ScheduleSummary?): StockSummary {
+fun stockSummary(m: MedicationEntity, containers: List<ContainerEntity>, forecast: StockForecast?, today: LocalDate, zone: ZoneId): StockSummary {
     val mine = containers.filter { it.medication_id == m.id }
     val open = mine.filter { it.state == "IN_USE" }.minByOrNull { it.opened_on ?: "" }
-    val remaining = mine.filter { it.state == "IN_USE" }.sumOf { it.capacity - it.used_amount } + mine.filter { it.state == "SEALED" }.sumOf { it.capacity }
-    val days = dailyUse(m, s)?.let { floor(remaining / it).toInt() }
+    val remaining = StockForecasts.available(m.id, containers) ?: 0.0
     val expires = open?.opened_on?.let { d -> m.expiry_days_after_open?.let { LocalDate.parse(d).plusDays(it.toLong()) } }
-    return StockSummary(open, remaining, mine.count { it.state == "SEALED" }, days, expires)
+    return StockSummary(open, remaining, mine.count { it.state == "SEALED" }, forecast, forecast?.daysUntilShort(today, zone),
+        forecast?.isLow(today, zone) == true, expires)
 }
 
+/** One sentence for a medication's shared forecast, plus whether it is a warning (calendar card and stock page). */
+@Composable fun stockForecastText(f: StockForecast?, m: MedicationEntity, today: LocalDate, zone: ZoneId): Pair<String, Boolean> =
+    when (f?.status ?: StockForecast.Status.UNTRACKED) {
+        StockForecast.Status.UNTRACKED -> stringResource(R.string.forecast_untracked) to false
+        StockForecast.Status.NO_PLAN -> stringResource(R.string.forecast_no_plan, formatDose(f!!.available ?: 0.0, m.unit)) to false
+        StockForecast.Status.SHORT -> { val last = f!!.lastCovered
+            if (last == null) stringResource(R.string.forecast_empty) to true
+            else stringResource(R.string.forecast_until, formatShortDate(last.atZone(zone).toLocalDate()), f.daysUntilShort(today, zone) ?: 0,
+                formatDose(f.available ?: 0.0, m.unit)) to f.isLow(today, zone) }
+        StockForecast.Status.COVERED_THROUGH_WINDOW -> stringResource(R.string.forecast_year, formatDose(f!!.available ?: 0.0, m.unit)) to false
+    }
+
 @Composable fun StockScreen(state: NotesState, containers: List<ContainerEntity>, records: List<RecordEntity>, onReplace: (MedicationEntity) -> Unit,
-                            onAdjust: (ContainerEntity, MedicationEntity) -> Unit, onAdd: (MedicationEntity) -> Unit, contentPadding: PaddingValues, onInfo:(ContainerEntity)->Unit={}) {
+                            onAdjust: (ContainerEntity, MedicationEntity) -> Unit, onAdd: (MedicationEntity) -> Unit, contentPadding: PaddingValues, onInfo:(ContainerEntity)->Unit={},
+                            forecasts: Map<Long, StockForecast> = emptyMap(), today: LocalDate = LocalDate.now(), zone: ZoneId = ZoneId.systemDefault()) {
     val meds = state.medications.filter { it.active }
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = contentPadding.calculateTopPadding() + 8.dp,
         bottom = contentPadding.calculateBottomPadding() + 32.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         if (meds.isEmpty()) item { EmptyState(Icons.Outlined.Inventory2, stringResource(R.string.no_medications), stringResource(R.string.stock_empty_body)) }
         items(meds, key = { it.id }) { m ->
-            val sum = stockSummary(m, containers, state.schedules[m.id])
+            val sum = stockSummary(m, containers, forecasts[m.id], today, zone)
             val unallocated = records.filter { it.medication_id == m.id && it.deleted_at_utc == null }.sumOf { it.unallocated_supply_amount ?: 0.0 }
             Column(verticalArrangement=Arrangement.spacedBy(6.dp)) {
-                StockCard(m,sum,unallocated,{onReplace(m)},{sum.open?.let{onAdjust(it,m)}},{onAdd(m)})
+                StockCard(m,sum,unallocated,today,zone,{onReplace(m)},{sum.open?.let{onAdjust(it,m)}},{onAdd(m)})
                 containers.filter{it.medication_id==m.id}.sortedByDescending{it.id}.forEach{box->
                     Column {
                         Text(listOfNotNull("#${box.id} · ${formatDose(box.capacity,m.unit)}",box.source_note,box.batch).joinToString(" · "),style=MaterialTheme.typography.bodySmall)
@@ -73,8 +79,8 @@ fun stockSummary(m: MedicationEntity, containers: List<ContainerEntity>, s: Sche
     }
 }
 
-@Composable private fun StockCard(m: MedicationEntity, s: StockSummary, unallocated: Double, onReplace: () -> Unit, onAdjust: () -> Unit, onAdd: () -> Unit) {
-    val c = MaterialTheme.colorScheme; val today = LocalDate.now()
+@Composable private fun StockCard(m: MedicationEntity, s: StockSummary, unallocated: Double, today: LocalDate, zone: ZoneId, onReplace: () -> Unit, onAdjust: () -> Unit, onAdd: () -> Unit) {
+    val c = MaterialTheme.colorScheme
     SectionCard(null) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(m.name, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
@@ -87,10 +93,10 @@ fun stockSummary(m: MedicationEntity, containers: List<ContainerEntity>, s: Sche
         }
         Row(verticalAlignment = Alignment.Bottom) {
             Text(formatDose(s.remaining, m.unit), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold)
-            Spacer(Modifier.width(8.dp))
-            Text(s.daysLeft?.let { stringResource(R.string.stock_days_left, it) } ?: stringResource(R.string.stock_no_schedule), style = MaterialTheme.typography.bodyMedium,
-                color = if (s.low) c.error else c.onSurfaceVariant, modifier = Modifier.padding(bottom = 4.dp))
         }
+        // Same sentence and warning as the calendar's stock card, from the same shared forecast.
+        val (detail, warn) = stockForecastText(s.forecast, m, today, zone)
+        Text(detail, style = MaterialTheme.typography.bodyMedium, color = if (warn) c.error else c.onSurfaceVariant)
         val o = s.open
         if (o != null) {
             val left = o.capacity - o.used_amount
