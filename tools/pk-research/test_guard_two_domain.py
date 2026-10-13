@@ -8,6 +8,7 @@ import tempfile
 import unittest
 from pathlib import Path
 import check_protocol as guard
+import research_archive as archive
 
 P2 = guard.P2
 ROOT = guard.ROOT
@@ -198,22 +199,22 @@ class CurrentDomainTest(unittest.TestCase):
 
 class HistoricalDomainTest(unittest.TestCase):
     def test_all_164_baseline_hashes_reproduce_from_git(self):
-        self.assertEqual(guard.historical_baseline(), 164)
+        self.assertEqual(archive.historical_baseline(), 164)
 
     def test_missing_historical_object_fails_closed(self):  # N6
-        with self.assertRaises(guard.HistoricalObjectMissing): guard.historical_baseline(start_sha='f' * 40)
+        with self.assertRaises(archive.HistoricalObjectMissing): archive.historical_baseline(start_sha='f' * 40)
         with tempfile.TemporaryDirectory() as d:
             p = copy_p2(d)
-            with self.assertRaises(guard.HistoricalObjectMissing):
-                guard.replay_research(Path(d) / 'out', directory=p, commit='e' * 40)
+            with self.assertRaises(archive.HistoricalObjectMissing):
+                archive.replay_research(Path(d) / 'out', directory=p, commit='e' * 40)
 
     def test_wrong_historical_commit_fails(self):  # N7
-        with self.assertRaises(ValueError): guard.historical_baseline(start_sha=F1_COMMIT)
+        with self.assertRaises(ValueError): archive.historical_baseline(start_sha=F1_COMMIT)
 
     def test_current_source_cannot_stand_in_for_history(self):  # N8
         head = subprocess.run(['git', 'rev-parse', 'HEAD'], cwd=ROOT, capture_output=True, text=True, check=True).stdout.strip()
         with tempfile.TemporaryDirectory() as d:
-            with self.assertRaises(ValueError): guard.replay_research(Path(d) / 'out', commit=head)
+            with self.assertRaises(ValueError): archive.replay_research(Path(d) / 'out', commit=head)
 
 
 class HistoricalReplayTest(unittest.TestCase):
@@ -221,20 +222,20 @@ class HistoricalReplayTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.tmp = tempfile.TemporaryDirectory(); cls.out = Path(cls.tmp.name) / 'replay'
-        guard.replay_research(cls.out)
+        archive.replay_research(cls.out)
 
     @classmethod
     def tearDownClass(cls):
         cls.tmp.cleanup()
 
     def test_replay_matches_all_recorded_results_byte_for_byte(self):  # positive
-        self.assertEqual(guard.compare_results(self.out, RESULTS, FILES), 5)
+        self.assertEqual(archive.compare_results(self.out, RESULTS, FILES), 5)
 
     def _tampered(self, name, change):
         with tempfile.TemporaryDirectory() as d:
             for f in FILES: shutil.copy(RESULTS / f, Path(d) / f)
             path = Path(d) / name; path.write_bytes(change(path.read_bytes()))
-            with self.assertRaises(ValueError): guard.compare_results(self.out, d, FILES)
+            with self.assertRaises(ValueError): archive.compare_results(self.out, d, FILES)
 
     def test_tampered_result_summary_fails(self):  # N3
         def change(raw):

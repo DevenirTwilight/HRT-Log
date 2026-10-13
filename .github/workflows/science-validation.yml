@@ -1,0 +1,34 @@
+name: Science validation
+on:
+  push:
+    paths:
+      - 'pk-engine/**'
+      - 'app/src/**'
+      - 'tools/**'
+      - 'scripts/**'
+      - 'docs/pk-research/**'
+      - 'docs/design/**'
+      - '.github/workflows/**'
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  research-deep:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Frozen archive (missing objects fail)
+        run: python3 tools/pk-research/verify_historical_archive.py --report /tmp/archive-validation.json
+      - name: Archive negative regressions
+        run: python3 -m unittest discover -s tools/pk-research -p test_research_archive.py -v
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: science-archive
+          path: /tmp/archive-validation.json

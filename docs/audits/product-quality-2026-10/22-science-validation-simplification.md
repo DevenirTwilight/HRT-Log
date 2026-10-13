@@ -29,3 +29,5 @@ M2 仍为 Price 1997 n=6 条件性文献情景；P2-C HOLD，m2_absolute_pgml=fa
 ## 验收记录
 
 待 S1–S4 实际测试后填写；不沿用 B2 成绩冒称本分支通过。真实 ARM 未验收。
+
+S1 本地：独立命令实际164/164、5/5通过，原记录逐字节核验；回放1.777秒、总2.058秒（本环境单次，非CI或性能结论）。全科研305项28.756秒通过。隔离档案analysis.json把clinical_accuracy_established改true，由明确Archived record changed断言捕获；真实depth=1克隆缺对象抛HistoricalObjectMissing，未跳过。原历史对象/重放负样本迁至research_archive，当前锁尚待S2退出；日常workflow的历史fetch待S3集中移除。
