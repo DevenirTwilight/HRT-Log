@@ -1,3 +1,5 @@
+> B4 MERGED_CI_VERIFIED（最终主线fe879863 Android38470156117 attempt2、Science38470156282均success，deep按文档门控skip）。R-15独立分支开始审查与红测，未实现/未验收；不合并、不签名或交付APK。
+
 > B4顺序合并完成（2026-10-13，REQ §85）：PR23 merge `d06bcce` 完整主线通过后，PR24改为默认分支、19文件差异不变，以明确新基线验证merge32345cb执行完整Android/Science全部成功，再以merge `9af38f3` 合并。其主线Android38468046764三任务、Science38468046661 gate/deep全部实际success；两个验收HEAD8749207/92f8c42保持，最终业务源码树与验收一致。详见[报告26](audits/product-quality-2026-10/26-b4-merge-and-mainline-validation.md)及机器证据。本次仅归入最新授权/交接/验收文档，交还条件仍为最后文档HEAD自身完整CI实际成功，精确SHA/链接固定PR正文，不循环追加自身SHA。下方待完成/不合并叙述属历史。无新正式签名/APK/版本/发布；build26文件不变。
 
 > 2026-10-13：PR23和PR24已按授权顺序合并（d06bcce / 9af38f3），PR24新基线完整Android/Science成功；当前默认分支9af38f3合并后CI待完成。源码树与验收92f8c42完全相同，build26未改。
