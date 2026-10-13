@@ -159,7 +159,7 @@ class UiPrefs(context: Context) {
             floatingActionButton = {
                 when (destination) {
                     Destination.CALENDAR -> Box {
-                        ExtendedFloatingActionButton(onClick = { addMenu = true }, icon = { Icon(Icons.Outlined.Add, null) }, text = { Text(stringResource(R.string.add)) })
+                        ExtendedFloatingActionButton(onClick = { addMenu = true }, modifier = Modifier.testTag("calendar-add"), icon = { Icon(Icons.Outlined.Add, null) }, text = { Text(stringResource(R.string.add)) })
                         DropdownMenu(addMenu, { addMenu = false }) {
                             DropdownMenuItem(text = { Text(stringResource(R.string.manual)) }, leadingIcon = { Icon(Icons.Outlined.AddTask, null) }, enabled = state.medications.any { it.active },
                                 onClick = { addMenu = false; manual = true })

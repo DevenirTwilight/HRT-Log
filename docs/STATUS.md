@@ -1,3 +1,5 @@
+> 当前（2026-10-13）：PR #21 已于 `d5dc9e5` 合并，默认分支 CI 全绿（Android 38385723304、Science 38385723291），科研守卫精简 MERGED_CI_VERIFIED，停止扩展。B3（导航与无障碍）在 `feature/b3-navigation-accessibility-20261013` 三批提交（B3-A 返回键、B3-B 日历读屏、B3-C 核心操作测试与旋转保留选中日），验收见[审计23](audits/product-quality-2026-10/23-b3-navigation-accessibility.md)；PR 等待审阅，不合并、不签名、不交付。真人 TalkBack 与物理 ARM 为 NOT_RUN。下一阶段候选：R-09 剩余天数口径、R-08 浓度页性能、记录流程精简、真机测试。
+
 > 2026-10-13 B2 PR #20 经产品负责人批准，已于 `9c3b5d6` 合入默认分支（未签名、未交付）。科研守卫精简 PR #21：门控自保护修复 `968783c` CI 全绿（Android 38381299493/38381303849，Science 38381299642/38381303857），依 §79 授权以 merge commit 合并；合并后默认分支 CI 通过即为 MERGED_CI_VERIFIED，随后停止扩展科研守卫，下一阶段 B3 导航与无障碍；此前该分支已合入含 B2 的默认分支，状态见[工程报告22](audits/product-quality-2026-10/22-science-validation-simplification.md)；签名/交付须另授权。
 
 # HRT Log 当前状态（单一事实入口）

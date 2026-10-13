@@ -60,7 +60,9 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
     var view by rememberSaveable { mutableStateOf(initialView) }
     var selectedText by rememberSaveable { mutableStateOf(state.calendarStart.toString()) }
     val selected = LocalDate.parse(selectedText)
-    LaunchedEffect(state.calendarStart) { selectedText = state.calendarStart.toString() }
+    // Follow a new start date only when it actually changes; recreation (rotation) keeps the user's selected day.
+    var appliedStart by rememberSaveable { mutableStateOf(state.calendarStart.toString()) }
+    LaunchedEffect(state.calendarStart) { val start = state.calendarStart.toString(); if (start != appliedStart) { appliedStart = start; selectedText = start } }
     val upcoming = remember(extra.upcoming) { extra.upcoming }
     val runOut = remember(state.medications, extra.containers, upcoming) { forecast(state.medications, extra.containers, upcoming) }
     val displayedUpcoming = remember(upcoming, state.slots) { (state.slots + upcoming).distinctBy { it.slot.key }.filter { it.state in OPEN_STATES } }
