@@ -1,3 +1,5 @@
+> B4-D最终验收：READY_FOR_OWNER_REVIEW，生效条件为PR23当前HEAD的push/PR完整检查全绿。代码6061ab3及首轮验收文档e9d9b99的实际检查证据见报告24；e9d9b99 push设备attempt1在SDK安装无输出45分钟后结束取日志，NOT_RUN，只重试设备；最终状态提交新增设备作业45分钟超时，不改变测试集合。交还前必须核对当前HEAD，不借用旧绿色。本轮实现A/B并保留C安全限制，产品负责人无需再决定A/B。PR23保持OPEN；没有默认分支合并、正式签名或APK交付。下方阶段记录保留，不代表当前仍在实施。
+
 > B4-D代码验收完成（2026-10-13）：6061ab3完整push/PR Android/Science全success，实际API35旧Schema9与外部force-stop新PID、加密备份/安全恢复通过；报告24已记录实际计数、artifact哈希、首次失败与仅设备重试。库存4mg→2mg/正常2盒→1盒；18数据纠错、20四语320dp/2×UI、即时共享预测刷新通过。现只提交验收文档并等待最终HEAD全部检查，不套用代码HEAD绿色。C任何CONSUME/REVERSE继续拒绝直接作废，后续补偿方案已写，A/B无需新增决定。PR23保持OPEN，无合并/正式签名/交付。下方为历史过程记录。
 
 > B4-D实现/本地回归已完成（2026-10-13）：JVM194、data109/rem17/app763零失败（app61原跳过），Period5、Calendar10、DataRefresh6、四语320dp/2×UI20通过；最后3条VOIDED零有效包装样本18data/20UI通过。lint0错误178警告、fullDebug/两仪器包完成。现提交并等待本HEAD的完整push/PR Android/Science；API35旧Schema9及外部force-stop新PID验证仍待实际结果。PR23保持OPEN，不正式签名/交付。

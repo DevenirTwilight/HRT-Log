@@ -1,6 +1,6 @@
 # 24 B4 库存一致性与库存纠错验收
 
-> 最新B4-D：产品负责人已批准VOIDED，ADJUST-only方案待决定项已解决；实现代码CI已全绿，验收文档最终HEAD检查随后执行；以末节B4-D为准。下列B4-A/B/C及旧待决定说明保留阶段证据，不代表D的验收结果。
+> 最新B4-D：产品负责人已批准VOIDED，ADJUST-only方案待决定项已解决；READY_FOR_OWNER_REVIEW（当前HEAD全部检查完成且全绿后生效）；实现代码及首轮验收文档CI已全绿，以末节B4-D为准。下列B4-A/B/C及旧待决定说明保留阶段证据，不代表D的验收结果。
 
 2026-10-13；分支 `feature/b4-stock-consistency-20261013`，起点默认分支 `bab53d3`（PR #22 合并后 Android 38397467180、Science 38397467156 全绿）。路线图 R-09/D-3、R-14 及产品负责人补充任务“库存核对与纠错”。未合并、未签名、未交付。
 
@@ -137,3 +137,11 @@ B4-C当时只实现无流水撤销并等待决定。产品负责人现已在B4-D
 A（无流水）与B（仅ADJUST，包括多次）完整实现并验证；C（任何真实消耗/回补关联）保留安全拒绝，补偿方案及失败回滚已写明，未擅自上线。自动恢复会重新检查原状态、流水、同药物包装及服药上下文，后续变化时保守拒绝。A/B本轮无需产品负责人再作决定；C扩大范围需下一阶段专项设计审阅。
 
 REQUIREMENTS §82已加入“所有用户录入/确认的信息都应存在可发现纠错路径；用版本、逻辑作废或补偿保留可追溯性，区分真实事件、误录入和修正”的长期原则。本轮未扩展服药/化验/预约历史重构。真实ARM/真人四语操作NOT_RUN；没有操作真实用户数据库。PR23保持OPEN，不合并默认分支、不正式签名、不发包。验收文档提交后的最终SHA及检查可在PR23实时核对，必须全部完成后才交还验收；文档更新不借用代码HEAD绿色，也不再循环追加记录自身SHA的提交。
+
+### 首轮验收文档HEAD与最终状态
+
+首轮验收文档 `e9d9b991280b1f6d4b16984046d732f109bd810d`：Android [push 38415622705 attempt 2](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38415622705) / [PR 38415606299](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38415606299) 的JVM、Android、API35均success；Science [push 38415622649](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38415622649) gate success、deep因仅文档变更按原路径门控skipped，[PR 38415606892](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38415606892) gate/deep实际success。跳过未冒称深验证执行，完整PR深验证和代码HEAD深验证均实际通过。
+
+当前验收状态为 **READY_FOR_OWNER_REVIEW**，生效条件是PR23当前最终HEAD自己的所有必需检查完成且全绿。最后状态提交不改生产/测试/Schema/备份/PK；仅另给device-tests增加45分钟作业超时，避免SDK安装无期限挂起；其具体SHA与实际检查链接在PR23正文固定记录，提交后仍完整执行Android与Science，再交还验收，不循环追加自身SHA的文档提交。限制与未执行项不因绿色CI解除，PR保持OPEN。
+
+首轮文档push设备attempt1保留为CANCELLED / NOT_RUN：14:42:48开始`sdkmanager --install emulator --channel=0`后持续无输出，45分钟仍未结束；没有启动模拟器、没有执行测试、没有测试artifact。为了取得诊断日志，在45分钟边界仅结束该唯一未完成作业，不是因为代码变更取消正常CI。日志确认SDK安装挂起后只重试该设备job；JVM/Android已绿色并保留，Science也不重跑。最终状态提交增加device-tests的45分钟显式超时，不更换API35、动作版本、模拟器构建或测试集合，不跳过任何现有检查。此取消不冒称通过；attempt2设备job `115382600209` 已实际success，完整设备测试及独立作废重启/加密备份/安全恢复再次通过，JVM/Android为继承原绿色，首轮文档四个run最终均success。
