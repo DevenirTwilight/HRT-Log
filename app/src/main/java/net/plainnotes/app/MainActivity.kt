@@ -57,7 +57,7 @@ import net.plainnotes.app.ui.UiPrefs
             NotesTheme(appearance.mode, appearance.dynamic, appearance.contrast) {
                 if (!contentVisible) androidx.compose.material3.Surface(modifier=androidx.compose.ui.Modifier.fillMaxSize()) {}
                 else if (locked) LockScreen({ pin -> lock.verify(pin).also { if (it) locked = false } }, { lock.waitMillis() }, if (lock.biometric && biometricAvailable()) ::showBiometric else null)
-                else NotesApp(model, appearance) { appearance = it; prefs.appearance = it }
+                else NotesApp(model, appearance, { appearance = it; prefs.appearance = it }, backToCalendar = !Disguise.enabled(this@MainActivity))
             }
         }
         onBackPressedDispatcher.addCallback(this,object:androidx.activity.OnBackPressedCallback(true){
