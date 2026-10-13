@@ -12,6 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.Role
 import net.plainnotes.app.NotesState
 import net.plainnotes.app.R
 import net.plainnotes.app.data.ContainerEntity
@@ -49,15 +54,18 @@ fun stockSummary(m: MedicationEntity, containers: List<ContainerEntity>, forecas
     when (f?.status ?: StockForecast.Status.UNTRACKED) {
         StockForecast.Status.UNTRACKED -> stringResource(R.string.forecast_untracked) to false
         StockForecast.Status.NO_PLAN -> stringResource(R.string.forecast_no_plan, formatDose(f!!.available ?: 0.0, m.unit)) to false
-        StockForecast.Status.SHORT -> { val last = f!!.lastCovered
-            if (last == null) stringResource(R.string.forecast_empty) to true
-            else stringResource(R.string.forecast_until, formatShortDate(last.atZone(zone).toLocalDate()), f.daysUntilShort(today, zone) ?: 0,
+        // Date and day count both name the first dose the stock cannot cover, in calendar days.
+        StockForecast.Status.SHORT -> { val short = f!!.firstShort!!
+            if (f.lastCovered == null) stringResource(R.string.forecast_empty) to true
+            else stringResource(R.string.forecast_short, formatShortDate(short.atZone(zone).toLocalDate()), f.daysUntilShort(today, zone) ?: 0,
                 formatDose(f.available ?: 0.0, m.unit)) to f.isLow(today, zone) }
-        StockForecast.Status.COVERED_THROUGH_WINDOW -> stringResource(R.string.forecast_year, formatDose(f!!.available ?: 0.0, m.unit)) to false
+        // Not "unlimited": every planned dose in the window is covered, so it lasts at least to the last one.
+        StockForecast.Status.COVERED_THROUGH_WINDOW -> stringResource(R.string.forecast_covered, formatShortDate(f!!.lastCovered!!.atZone(zone).toLocalDate()),
+            formatDose(f.available ?: 0.0, m.unit)) to false
     }
 
 @Composable fun StockScreen(state: NotesState, containers: List<ContainerEntity>, records: List<RecordEntity>, onReplace: (MedicationEntity) -> Unit,
-                            onAdjust: (ContainerEntity, MedicationEntity) -> Unit, onAdd: (MedicationEntity) -> Unit, contentPadding: PaddingValues, onInfo:(ContainerEntity)->Unit={},
+                            onCheck: (MedicationEntity) -> Unit, onAdd: (MedicationEntity) -> Unit, contentPadding: PaddingValues, onManage: (MedicationEntity) -> Unit = {},
                             forecasts: Map<Long, StockForecast> = emptyMap(), today: LocalDate = LocalDate.now(), zone: ZoneId = ZoneId.systemDefault()) {
     val meds = state.medications.filter { it.active }
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = contentPadding.calculateTopPadding() + 8.dp,
@@ -66,20 +74,18 @@ fun stockSummary(m: MedicationEntity, containers: List<ContainerEntity>, forecas
         items(meds, key = { it.id }) { m ->
             val sum = stockSummary(m, containers, forecasts[m.id], today, zone)
             val unallocated = records.filter { it.medication_id == m.id && it.deleted_at_utc == null }.sumOf { it.unallocated_supply_amount ?: 0.0 }
-            Column(verticalArrangement=Arrangement.spacedBy(6.dp)) {
-                StockCard(m,sum,unallocated,today,zone,{onReplace(m)},{sum.open?.let{onAdjust(it,m)}},{onAdd(m)})
-                containers.filter{it.medication_id==m.id}.sortedByDescending{it.id}.forEach{box->
-                    Column {
-                        Text(listOfNotNull("#${box.id} · ${formatDose(box.capacity,m.unit)}",box.source_note,box.batch).joinToString(" · "),style=MaterialTheme.typography.bodySmall)
-                        TextButton(onClick={onInfo(box)},modifier=Modifier.heightIn(min=48.dp)){Text(stringResource(R.string.wb_package_info))}
-                    }
-                }
-            }
+            val packages = containers.count { it.medication_id == m.id }
+            val checkable = containers.any { it.medication_id == m.id && it.state in CHECKABLE_STATES }
+            StockCard(m, sum, unallocated, today, zone, packages, checkable, { onReplace(m) }, { onCheck(m) }, { onAdd(m) }, { onManage(m) })
         }
     }
 }
 
-@Composable private fun StockCard(m: MedicationEntity, s: StockSummary, unallocated: Double, today: LocalDate, zone: ZoneId, onReplace: () -> Unit, onAdjust: () -> Unit, onAdd: () -> Unit) {
+/** Packages whose remaining amount "Check stock" may correct: open ones and ones the app counted as used up. */
+val CHECKABLE_STATES = setOf("IN_USE", "EMPTY")
+
+@Composable private fun StockCard(m: MedicationEntity, s: StockSummary, unallocated: Double, today: LocalDate, zone: ZoneId, packages: Int, checkable: Boolean,
+                                  onReplace: () -> Unit, onCheck: () -> Unit, onAdd: () -> Unit, onManage: () -> Unit) {
     val c = MaterialTheme.colorScheme
     SectionCard(null) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -87,34 +93,118 @@ fun stockSummary(m: MedicationEntity, containers: List<ContainerEntity>, forecas
             if (s.low) StatusPill(stringResource(R.string.stock_low), c.errorContainer, c.onErrorContainer, Icons.Outlined.Warning)
         }
         if (s.open == null && s.sealedCount == 0) {
-            Text(stringResource(R.string.stock_not_tracked), style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant)
-            Button(onClick = onAdd) { Text(stringResource(R.string.stock_start)) }
-            return@SectionCard
-        }
-        Row(verticalAlignment = Alignment.Bottom) {
+            if (packages == 0) {
+                Text(stringResource(R.string.stock_not_tracked), style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant)
+                Button(onClick = onAdd) { Text(stringResource(R.string.stock_start)) }
+                return@SectionCard
+            }
+            // Only used-up or discarded packages: correcting one must not require adding a package that does not exist.
+            Text(stringResource(R.string.stock_no_active), style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant)
+        } else {
             Text(formatDose(s.remaining, m.unit), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold)
+            // Same sentence and warning as the calendar's stock card, from the same shared forecast.
+            val (detail, warn) = stockForecastText(s.forecast, m, today, zone)
+            Text(detail, style = MaterialTheme.typography.bodyMedium, color = if (warn) c.error else c.onSurfaceVariant)
+            val o = s.open
+            if (o != null) {
+                val left = o.capacity - o.used_amount
+                LinearProgressIndicator(progress = { (left / o.capacity).toFloat().coerceIn(0f, 1f) }, modifier = Modifier.fillMaxWidth().height(8.dp), drawStopIndicator = {})
+                Text(stringResource(R.string.stock_current, formatDose(left, m.unit), formatDose(o.capacity, m.unit)), style = MaterialTheme.typography.bodySmall)
+                o.opened_on?.let { Text(stringResource(R.string.stock_opened, formatShortDate(LocalDate.parse(it))), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant) }
+                s.expiresOn?.let { e -> Text(stringResource(if (e.isBefore(today)) R.string.stock_expired else R.string.stock_expires, formatShortDate(e)), style = MaterialTheme.typography.bodySmall,
+                    color = if (s.expiringSoon(today)) c.error else c.onSurfaceVariant) }
+            } else Text(stringResource(R.string.stock_none_open), style = MaterialTheme.typography.bodySmall, color = c.error)
+            if (s.sealedCount > 0) Text(stringResource(R.string.stock_sealed, s.sealedCount), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
         }
-        // Same sentence and warning as the calendar's stock card, from the same shared forecast.
-        val (detail, warn) = stockForecastText(s.forecast, m, today, zone)
-        Text(detail, style = MaterialTheme.typography.bodyMedium, color = if (warn) c.error else c.onSurfaceVariant)
-        val o = s.open
-        if (o != null) {
-            val left = o.capacity - o.used_amount
-            LinearProgressIndicator(progress = { (left / o.capacity).toFloat().coerceIn(0f, 1f) }, modifier = Modifier.fillMaxWidth().height(8.dp), drawStopIndicator = {})
-            Text(stringResource(R.string.stock_current, formatDose(left, m.unit), formatDose(o.capacity, m.unit)), style = MaterialTheme.typography.bodySmall)
-            o.opened_on?.let { Text(stringResource(R.string.stock_opened, formatShortDate(LocalDate.parse(it))), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant) }
-            s.expiresOn?.let { e -> Text(stringResource(if (e.isBefore(today)) R.string.stock_expired else R.string.stock_expires, formatShortDate(e)), style = MaterialTheme.typography.bodySmall,
-                color = if (s.expiringSoon(today)) c.error else c.onSurfaceVariant) }
-        } else Text(stringResource(R.string.stock_none_open), style = MaterialTheme.typography.bodySmall, color = c.error)
-        if (s.sealedCount > 0) Text(stringResource(R.string.stock_sealed, s.sealedCount), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
         if (unallocated > 0) Text(stringResource(R.string.stock_unallocated, formatDose(unallocated, m.unit)), style = MaterialTheme.typography.bodySmall, color = c.tertiary)
-        val actions=listOf(R.string.stock_replace)+ (if(s.open!=null)listOf(R.string.stock_adjust) else emptyList())+R.string.stock_add
-        AdaptiveActions(actions.map{stringResource(it)},contentInset=48.dp) { i,mod -> when(actions[i]) {
-            R.string.stock_replace->FilledTonalButton(onClick=onReplace,modifier=mod){Text(stringResource(actions[i]))}
-            R.string.stock_adjust->OutlinedButton(onClick=onAdjust,modifier=mod){Text(stringResource(actions[i]))}
-            else->TextButton(onClick=onAdd,modifier=mod){Text(stringResource(actions[i]))}
-        }}
+        // Three different things: open the next real package, correct an existing one, add packages really obtained.
+        val actions = (if (s.sealedCount > 0 || s.open != null) listOf(R.string.stock_replace) else emptyList()) +
+            (if (checkable) listOf(R.string.stock_check) else emptyList()) + R.string.stock_add
+        AdaptiveActions(actions.map { stringResource(it) }, contentInset = 48.dp) { i, mod -> when (actions[i]) {
+            R.string.stock_replace -> FilledTonalButton(onClick = onReplace, modifier = mod) { Text(stringResource(actions[i])) }
+            R.string.stock_check -> OutlinedButton(onClick = onCheck, modifier = mod.testTag("stock-check-${m.id}")) { Text(stringResource(actions[i])) }
+            else -> TextButton(onClick = onAdd, modifier = mod) { Text(stringResource(actions[i])) }
+        } }
+        if (packages > 0) TextButton(onClick = onManage, modifier = Modifier.heightIn(min = 48.dp).testTag("stock-manage-${m.id}")) { Text(stringResource(R.string.stock_manage, packages)) }
     }
+}
+
+/** A package as people see it: amount, opening date, source and batch; never the internal row id. */
+@Composable fun packageLabel(box: ContainerEntity, m: MedicationEntity): String = listOfNotNull(
+    if (box.state == "IN_USE" || box.state == "EMPTY") stringResource(R.string.pkg_left, formatDose((box.capacity - box.used_amount).coerceAtLeast(0.0), m.unit)) + " / " + formatDose(box.capacity, m.unit)
+    else formatDose(box.capacity, m.unit),
+    box.opened_on?.let { stringResource(R.string.pkg_opened, formatShortDate(LocalDate.parse(it))) },
+    box.source_note, box.batch).joinToString(" · ")
+
+/**
+ * "Check stock": pick an open or used-up package and enter what is really left, in the medication's stock unit. It
+ * writes one ledger correction to that package; nothing is added and no dose record changes. With several
+ * candidates nothing is preselected, so an old package is never revived by accident.
+ */
+@Composable fun CheckStockDialog(m: MedicationEntity, containers: List<ContainerEntity>, onDismiss: () -> Unit, onSave: (Long, Double) -> Unit) {
+    val candidates = containers.filter { it.medication_id == m.id && it.state in CHECKABLE_STATES }
+        .sortedWith(compareBy<ContainerEntity>({ if (it.state == "IN_USE") 0 else 1 }, { it.opened_on?.let { d -> -LocalDate.parse(d).toEpochDay() } ?: 0L }, { -it.id }))
+    var chosen by remember { mutableStateOf(candidates.singleOrNull()?.id) }
+    val box = candidates.firstOrNull { it.id == chosen }
+    var left by remember(chosen) { mutableStateOf(box?.let { inputNumber((it.capacity - it.used_amount).coerceAtLeast(0.0)) } ?: "") }
+    val v = left.toDoubleOrNull()?.takeIf { box != null && it.isFinite() && it >= 0 && it <= box.capacity }
+    AlertDialog(onDismissRequest = onDismiss, icon = { Icon(Icons.Outlined.Tune, null) }, title = { Text(stringResource(R.string.stock_check)) },
+        text = { Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Text(m.name, style = MaterialTheme.typography.titleSmall)
+            Text(stringResource(R.string.stock_check_pick), style = MaterialTheme.typography.labelLarge)
+            candidates.forEach { c ->
+                Row(Modifier.fillMaxWidth().heightIn(min = 48.dp).selectable(chosen == c.id, role = Role.RadioButton) { chosen = c.id }.testTag("check-package-${c.id}"),
+                    verticalAlignment = Alignment.CenterVertically) {
+                    RadioButton(chosen == c.id, null); Spacer(Modifier.width(8.dp))
+                    Text(stringResource(if (c.state == "IN_USE") R.string.pkg_in_use else R.string.pkg_empty) + " · " + packageLabel(c, m), style = MaterialTheme.typography.bodyMedium)
+                }
+            }
+            if (box != null) {
+                NumberField(left, { left = it }, stringResource(R.string.stock_check_amount), suffix = unitLabel(m.unit), isError = v == null,
+                    supporting = stringResource(R.string.stock_max, formatDose(box.capacity, m.unit)))
+                if (v != null && m.dose_per_intake > 0) Text(stringResource(R.string.stock_check_doses, inputNumber(Math.round(v / m.dose_per_intake * 10) / 10.0),
+                    formatDose(m.dose_per_intake, m.unit)), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+            Text(stringResource(R.string.stock_check_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        } },
+        confirmButton = { Button(enabled = box != null && v != null, onClick = { onSave(box!!.id, v!!) }) { Text(stringResource(R.string.save)) } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } })
+}
+
+/**
+ * All packages of one medication in one place, grouped as in use, unopened, used up and discarded. History groups
+ * start collapsed, so a long history does not lengthen the stock page. Details stay editable; a package without any
+ * stock history can be removed as added by mistake.
+ */
+@Composable fun PackagesDialog(m: MedicationEntity, containers: List<ContainerEntity>, withHistory: Set<Long>, onDismiss: () -> Unit,
+                               onInfo: (ContainerEntity) -> Unit, onUndo: (ContainerEntity) -> Unit) {
+    val mine = containers.filter { it.medication_id == m.id }
+    val groups = listOf("IN_USE" to R.string.pkg_in_use, "SEALED" to R.string.pkg_sealed, "EMPTY" to R.string.pkg_empty, "DISCARDED" to R.string.pkg_discarded)
+    val expanded = remember { mutableStateMapOf("IN_USE" to true, "SEALED" to true, "EMPTY" to false, "DISCARDED" to false) }
+    AlertDialog(onDismissRequest = onDismiss, title = { Text(m.name) },
+        text = { Column(Modifier.verticalScroll(rememberScrollState()).testTag("packages-${m.id}"), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            groups.forEach { (state, label) ->
+                val boxes = mine.filter { it.state == state }.sortedByDescending { it.opened_on ?: "" }
+                if (boxes.isEmpty()) return@forEach
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text("${stringResource(label)} (${boxes.size})", style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f))
+                    if (state == "EMPTY" || state == "DISCARDED") TextButton(onClick = { expanded[state] = expanded[state] != true }, modifier = Modifier.heightIn(min = 48.dp)) {
+                        Text(if (expanded[state] == true) stringResource(R.string.pkg_hide) else stringResource(R.string.pkg_show, boxes.size)) }
+                }
+                if (expanded[state] == true) boxes.forEach { box ->
+                    Column(Modifier.padding(start = 8.dp)) {
+                        Text(packageLabel(box, m), style = MaterialTheme.typography.bodyMedium)
+                        Row {
+                            TextButton(onClick = { onInfo(box) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.wb_package_info)) }
+                            if (box.id !in withHistory) TextButton(onClick = { onUndo(box) }, modifier = Modifier.heightIn(min = 48.dp).testTag("undo-package-${box.id}")) {
+                                Text(stringResource(R.string.pkg_undo)) }
+                        }
+                    }
+                }
+            }
+            if (mine.any { it.id in withHistory }) Text(stringResource(R.string.pkg_undo_locked), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        } },
+        confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.close)) } })
 }
 
 @Composable fun AddStockDialog(m: MedicationEntity, onDismiss: () -> Unit, onSave: (Double, Int, Boolean,String?,String?) -> Unit) {
@@ -135,22 +225,9 @@ fun stockSummary(m: MedicationEntity, containers: List<ContainerEntity>, forecas
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } })
 }
 
-@Composable fun AdjustStockDialog(c: ContainerEntity, m: MedicationEntity, onDismiss: () -> Unit, onSave: (Double) -> Unit) {
-    var left by remember { mutableStateOf(inputNumber(c.capacity - c.used_amount)) }
-    val v = left.toDoubleOrNull()?.takeIf { it >= 0 && it <= c.capacity }
-    AlertDialog(onDismissRequest = onDismiss, icon = { Icon(Icons.Outlined.Tune, null) }, title = { Text(stringResource(R.string.stock_adjust)) },
-        text = { Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text(stringResource(R.string.stock_adjust_body), style = MaterialTheme.typography.bodyMedium)
-            NumberField(left, { left = it }, stringResource(R.string.stock_remaining), suffix = unitLabel(m.unit), isError = v == null,
-                supporting = stringResource(R.string.stock_max, formatDose(c.capacity, m.unit)))
-        } },
-        confirmButton = { Button(enabled = v != null, onClick = { onSave(v!!) }) { Text(stringResource(R.string.save)) } },
-        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } })
-}
-
 @Composable fun ContainerInfoDialog(box:ContainerEntity,onDismiss:()->Unit,onSave:(String?,String?)->Unit) {
     var source by remember{mutableStateOf(box.source_note.orEmpty())};var batch by remember{mutableStateOf(box.batch.orEmpty())}
-    AlertDialog(onDismissRequest=onDismiss,title={Text(stringResource(R.string.wb_package_info)+" #"+box.id)},text={Column {
+    AlertDialog(onDismissRequest=onDismiss,title={Text(stringResource(R.string.wb_package_info))},text={Column {
         OutlinedTextField(source,{source=it},label={Text(stringResource(R.string.wb_source_note))})
         OutlinedTextField(batch,{batch=it},label={Text(stringResource(R.string.wb_batch))})
     }},confirmButton={Button(onClick={onSave(source.takeIf{it.isNotBlank()},batch.takeIf{it.isNotBlank()})}){Text(stringResource(R.string.save))}},dismissButton={TextButton(onClick=onDismiss){Text(stringResource(R.string.cancel))}})

@@ -49,7 +49,7 @@ class ButtonLayoutRegressionTest(private val locale:String,private val width:Int
         var page by mutableIntStateOf(0);var clicks=0
         rule.setContent { NotesTheme(if(dark)ThemeMode.DARK else ThemeMode.LIGHT){Surface {
             when(page){
-                0->StockScreen(state,boxes,emptyList(),{clicks++},{_,_->clicks++},{clicks++},PaddingValues())
+                0->StockScreen(state,boxes,emptyList(),{clicks++},{clicks++},{clicks++},PaddingValues())
                 1->Column(Modifier.fillMaxWidth().padding(16.dp)){DateTimeRow(LocalDateTime.of(2026,10,28,23,46),{})}
                 2->CalendarScreen(state,LocalDate.of(2026,10,28),{},{},{},{},PaddingValues(),extra=extra)
                 3->SettingsScreen(Appearance(ThemeMode.SYSTEM,false),{},false,{},{},{},PaddingValues())
@@ -77,7 +77,7 @@ class ButtonLayoutRegressionTest(private val locale:String,private val width:Int
                 }
             }
             if(p==0){
-                val labels=listOf(R.string.stock_add,R.string.stock_replace,R.string.stock_adjust)
+                val labels=listOf(R.string.stock_add,R.string.stock_replace,R.string.stock_check)
                 val bounds=labels.map{rule.onNodeWithText(ctx.getString(it)).fetchSemanticsNode().boundsInRoot}
                 assertTrue("stock action widths differ",bounds.maxOf{it.width}-bounds.minOf{it.width}<=1f)
                 assertTrue("stock action heights differ",bounds.maxOf{it.height}-bounds.minOf{it.height}<=1f)

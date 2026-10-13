@@ -62,7 +62,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
                 val upcoming=(repo.planned(now,now.plus(Duration.ofDays(366)),now)+slots.filter{it.slot.at<now}).distinctBy{it.slot.key}.filter{it.state in net.plainnotes.app.ui.OPEN_STATES}
                 val stockForecasts=repo.stockForecasts(now)
                 NotesState(meds,slots,dao.appointments(),mutable.value.error,false,schedules,profiles,start,dao.rules().associate{it.id to it.config_snapshot}) to
-                    ExtraState(dao.records(),dao.containers(),repo.checkinItems(),dao.scores("0001-01-01",today.toString()),dao.notes("0001-01-01",today.toString()),upcoming,dao.stageReviews(),dao.symptomChecks("0001-01-01",today.toString()),dao.reviewEffects(),dao.regimens(),dao.regimenLinks(),dao.milestones(),dao.labs(),dao.labContexts(),dao.visitQuestions(),dao.visitPacks(),dao.historyPeriods(),dao.annotations(),dao.trash().filter{it.state==Trash.TRASHED},dao.deletedRecords(),stockForecasts)
+                    ExtraState(dao.records(),dao.containers(),repo.checkinItems(),dao.scores("0001-01-01",today.toString()),dao.notes("0001-01-01",today.toString()),upcoming,dao.stageReviews(),dao.symptomChecks("0001-01-01",today.toString()),dao.reviewEffects(),dao.regimens(),dao.regimenLinks(),dao.milestones(),dao.labs(),dao.labContexts(),dao.visitQuestions(),dao.visitPacks(),dao.historyPeriods(),dao.annotations(),dao.trash().filter{it.state==Trash.TRASHED},dao.deletedRecords(),stockForecasts,dao.containersWithLedger().toSet())
             }
             ensureActive()
             mutable.value=snapshot.first.copy(error=mutable.value.error);extra.value=snapshot.second;refreshRevision++;readFailureShown=false
@@ -114,7 +114,9 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
                           /** §39 recycle bin (only items that can still be restored). */ val trash:List<TrashItemEntity> = emptyList(),
                           val trashedRecords:List<RecordEntity> = emptyList(),
                           /** B4: the one stock forecast per active medication (stock page, calendar, same rule as reminders). */
-                          val stockForecasts:Map<Long,StockForecast> = emptyMap())
+                          val stockForecasts:Map<Long,StockForecast> = emptyMap(),
+                          /** Packages with ledger history; only the others can be undone as added by mistake. */
+                          val containersWithLedger:Set<Long> = emptySet())
     val extra=MutableStateFlow(ExtraState())
     private fun guarded(block:suspend()->Unit)=viewModelScope.launch{try{block()}catch(e:kotlinx.coroutines.CancellationException){throw e}catch(e:Exception){mutable.value=mutable.value.copy(error=if(e is PeriodRestoreConflict)R.string.period_restore_overlap else R.string.operation_error)}}
     fun loadExtra():Job=refresh()
@@ -133,6 +135,8 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     fun addContainers(med:Long,capacity:Double,count:Int,open:Boolean,source:String?=null,batch:String?=null)=mutateExtra{repo.addContainers(med,capacity,count,open,source,batch)}
     fun replaceContainer(med:Long,capacity:Double)=mutateExtra{repo.replaceContainer(med,capacity)}
     fun setRemaining(container:Long,remaining:Double)=mutateExtra{repo.setRemaining(container,remaining)}
+    fun correctStock(container:Long,remaining:Double)=mutateExtra{repo.correctStock(container,remaining)}
+    fun removeMistakenContainer(container:Long)=mutateExtra{repo.removeMistakenContainer(container)}
     fun setScore(date:LocalDate,item:Long,value:Int?)=mutateExtra{repo.setScore(date,item,value)}
     fun setNote(date:LocalDate,text:String)=mutateExtra{repo.setNote(date,text)}
     fun saveCheckinItem(v:CheckinItemEntity)=mutateExtra{repo.saveCheckinItem(v)}

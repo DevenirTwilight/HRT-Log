@@ -606,6 +606,26 @@ const val BACKFILL_MAX_DAYS=731L
     }
     suspend fun setRemaining(containerId:Long,remaining:Double)=transaction { SupplyLedger.setRemaining(it,containerId,remaining) }
     suspend fun discardContainer(containerId:Long)=transaction { dao -> val c=dao.container(containerId);dao.setContainerState(c.id,"DISCARDED",c.opened_on) }
+    /**
+     * B4 "check stock": sets what is really left in an open or used-up package through the ledger's ADJUST entry. A
+     * used-up package with something left becomes open again; no package is created, no dose record changes. Sealed
+     * packages are full by definition and discarded ones are not reopened here.
+     */
+    suspend fun correctStock(containerId:Long,remaining:Double)=transaction { dao ->
+        val c=dao.container(containerId)
+        require(c.state in setOf("IN_USE","EMPTY")){"Only an open or used-up package can be corrected"}
+        SupplyLedger.setRemaining(dao,containerId,remaining)
+    }
+    /** Packages with at least one ledger entry (consumption, reversal or adjustment). */
+    suspend fun containersWithLedger()=transaction { dao -> dao.containersWithLedger().toSet() }
+    /**
+     * Undoes a package that was added by mistake. Only a package without any ledger entry can go: nothing was
+     * consumed from it, reversed or adjusted, so removing the row leaves no dangling history. Anything else is refused.
+     */
+    suspend fun removeMistakenContainer(containerId:Long)=transaction { dao ->
+        require(dao.supplyForContainer(containerId).isEmpty()){"Package has stock history"}
+        dao.deleteContainer(containerId)
+    }
 
     // --- Well-being ---
     suspend fun checkinItems()=transaction { dao ->

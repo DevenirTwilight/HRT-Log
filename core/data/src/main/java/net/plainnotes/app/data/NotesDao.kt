@@ -63,6 +63,9 @@ import kotlinx.coroutines.flow.Flow
     @Query("UPDATE supply_container SET capacity = :capacity WHERE id = :id") suspend fun setContainerCapacity(id: Long, capacity: Double)
     @Query("UPDATE supply_container SET state = :state, opened_on = :openedOn WHERE id = :id") suspend fun setContainerState(id: Long, state: String, openedOn: String?)
     @Query("SELECT * FROM supply_transaction WHERE dose_record_id = :recordId ORDER BY id") suspend fun supplyFor(recordId: Long): List<SupplyEntryEntity>
+    @Query("SELECT * FROM supply_transaction WHERE container_id = :containerId ORDER BY id") suspend fun supplyForContainer(containerId: Long): List<SupplyEntryEntity>
+    @Query("SELECT DISTINCT container_id FROM supply_transaction") suspend fun containersWithLedger(): List<Long>
+    @Query("DELETE FROM supply_container WHERE id = :id") suspend fun deleteContainer(id: Long)
     @Insert suspend fun supply(value: SupplyEntryEntity): Long
     @Query("SELECT * FROM checkin_item ORDER BY sort_order, id") suspend fun checkinItems(): List<CheckinItemEntity>
     @Insert suspend fun insertCheckinItem(value: CheckinItemEntity): Long

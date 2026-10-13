@@ -1,3 +1,5 @@
+> 当前（2026-10-13）：PR #22（B3）已于 `bab53d3` 合并，主线 CI 全绿。B4（库存一致性与库存纠错）在 `feature/b4-stock-consistency-20261013`：B4-A 统一逐次扣减预测，B4-B 库存页、日历、提醒接入，B4-C 措辞、核对库存、撤销误添加、包装管理。验收见[审计24](audits/product-quality-2026-10/24-b4-stock-consistency.md)。待产品负责人决定：已有调整流水的误添加包装如何处理。PR 等待审阅，不合并，不签名，不交付。
+
 > 当前（2026-10-13）：B3 PR #22 head 见审计23“最终 CI”；B3-A 返回键回日历、B3-B 日历 TalkBack 语义（四语）、B3-C 旋转/重建保留选中日；设备测试 CalendarIntakeAndroidTest 2/2 在 API35 模拟器实际通过（取消/真实返回键不写记录，保存一次后返回不重复）。状态 READY_FOR_OWNER_REVIEW（以最终提交 CI 全绿为前提），不合并、不签名、不交付；物理 ARM 与真人 TalkBack 为 NOT_RUN；320dp 日期格 34dp 宽按决定不阻断。PR #21 已于 `d5dc9e5` 合并并 MERGED_CI_VERIFIED。下一阶段 B4 库存一致性，未开始。
 
 > 当前（2026-10-13）：B2 PR #20 经产品负责人“给你权限，批准”后，于 head `0cd7afb` 八项检查全绿时以 merge commit `9c3b5d6` 合入默认分支 `claude/new-session-1959qb`；未签名、未交付。科研守卫精简 PR #21：门控自保护修复 `968783c` CI 全绿（Android 38381299493/38381303849，Science 38381299642/38381303857），依 §79 授权以 merge commit 合并；合并后默认分支 CI 通过即为 MERGED_CI_VERIFIED，随后停止扩展科研守卫，下一阶段 B3 导航与无障碍；此前该分支已合入含 B2 的默认分支（B2 设备脚本 run_import_cleanup_restart/run_restore_process_death 仍在 android.yml），S2 正反样本与精简前后对比已写入报告22；合并后完整 CI 与科研 PR 见报告22 §验收。签名/交付须另授权。
