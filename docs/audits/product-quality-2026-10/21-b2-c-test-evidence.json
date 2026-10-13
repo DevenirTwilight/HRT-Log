@@ -1,7 +1,7 @@
 {
   "batch": "B2-C",
   "date": "2026-10-13",
-  "state": "WAITING_CI",
+  "state": "COMPLETE",
   "focused": {
     "tests": 123,
     "failures": 0,
@@ -34,7 +34,48 @@
     "historical_files": 164,
     "identical_results": 5
   },
-  "ci": "PENDING_PUSH",
+  "ci": [
+    {
+      "run_id": 38362778379,
+      "source_sha": "8e97e7a620ba0a22559c8d7fb7c4d01a7e744280",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38362778379",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 115180683650,
+          "name": "jvm",
+          "conclusion": "success",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38362778379/job/115180683650"
+        },
+        {
+          "id": 115180683858,
+          "name": "device-tests",
+          "conclusion": "success",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38362778379/job/115180683858"
+        },
+        {
+          "id": 115180683885,
+          "name": "android",
+          "conclusion": "success",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38362778379/job/115180683885"
+        }
+      ]
+    },
+    {
+      "run_id": 38362778161,
+      "source_sha": "8e97e7a620ba0a22559c8d7fb7c4d01a7e744280",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38362778161",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 115180682096,
+          "name": "reference",
+          "conclusion": "success",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38362778161/job/115180682096"
+        }
+      ]
+    }
+  ],
   "not_run": [
     "physical ARM",
     "real cloud persistence",
@@ -49,5 +90,17 @@
     "errors": 0,
     "app_existing_skips": 61,
     "period_stability": 5
+  },
+  "commit": "8e97e7a620ba0a22559c8d7fb7c4d01a7e744280",
+  "device": {
+    "app": 77,
+    "data": 14,
+    "failures": 0,
+    "conditional_restart_skips": 4,
+    "new_C_tests": 3
+  },
+  "lint": {
+    "errors": 0,
+    "warnings": 179
   }
 }

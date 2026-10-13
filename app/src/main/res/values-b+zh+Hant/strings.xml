@@ -1035,4 +1035,12 @@
     <string name="backup_reminder_note">僅在此頁面提示，不傳送通知。</string>
     <string name="backup_reminder_days">每 %1$d 天</string>
     <string name="backup_reminder_due">可以考慮匯出一份新的加密備份。</string>
+<string name="restore_protection_title">還原前確認</string>
+<string name="restore_protection_note">可以先匯出目前資料的加密備份。匯出不會開始還原；也可以選擇不備份，直接繼續還原。</string>
+<string name="restore_backup_current">先備份目前資料</string>
+<string name="restore_continue">繼續還原</string>
+<string name="restore_backup_cancelled">未完成目前資料備份，還原尚未開始。</string>
+<string name="restore_backup_failed">目前資料備份失敗，還原尚未開始。</string>
+<string name="restore_backup_saved">目前資料已匯出，還原尚未開始。取代資料前請再次選擇。</string>
+<string name="restore_backup_same_target">請選擇另一個輸出檔案，不能覆寫所選的待還原檔案。</string>
 </resources>

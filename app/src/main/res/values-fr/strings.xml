@@ -1035,4 +1035,12 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="backup_reminder_note">Affiché uniquement sur cette page, sans notification.</string>
     <string name="backup_reminder_days">%1$d jours</string>
     <string name="backup_reminder_due">Vous pouvez envisager d’exporter une nouvelle sauvegarde chiffrée.</string>
+<string name="restore_protection_title">Avant la restauration</string>
+<string name="restore_protection_note">Vous pouvez d’abord exporter une sauvegarde chiffrée des données actuelles. L’export ne lance pas la restauration. Vous pouvez aussi continuer sans nouvelle sauvegarde.</string>
+<string name="restore_backup_current">Sauvegarder les données actuelles</string>
+<string name="restore_continue">Continuer la restauration</string>
+<string name="restore_backup_cancelled">Aucune sauvegarde des données actuelles n’a été terminée. La restauration n’a pas commencé.</string>
+<string name="restore_backup_failed">La sauvegarde des données actuelles a échoué. La restauration n’a pas commencé.</string>
+<string name="restore_backup_saved">Les données actuelles ont été exportées. La restauration n’a pas commencé ; choisissez à nouveau avant de les remplacer.</string>
+<string name="restore_backup_same_target">Choisissez un autre fichier de destination. Le fichier choisi pour la restauration ne doit pas être écrasé.</string>
 </resources>

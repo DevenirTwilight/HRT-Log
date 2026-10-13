@@ -77,6 +77,22 @@ class PlainExportEntryTest {
         assertTrue(model.dataJob.value is NotesViewModel.DataJob.Idle)
         assertNull(model.backupHistory.state.value.lastExport)
     }
+    @Test fun cancelledProtectionBackupCannotAutomaticallyStartRestore(){
+        data();ui.onNodeWithText(text(R.string.backup_restore)).performScrollTo().performClick()
+        assertEquals(Intent.ACTION_OPEN_DOCUMENT,launches.single().action)
+        val source=Uri.parse("content://synthetic-provider/restore-source")
+        ui.runOnUiThread{registry.dispatchResult(request,Activity.RESULT_OK,Intent().setData(source))}
+        ui.onNodeWithTag("restore-protection").assertExists()
+        ui.onNodeWithText(text(R.string.backup_password)).assertDoesNotExist()
+        ui.onNodeWithText(text(R.string.restore_backup_current)).performScrollTo().performClick()
+        assertEquals(Intent.ACTION_CREATE_DOCUMENT,launches.last().action)
+        ui.runOnUiThread{registry.dispatchResult(request,Activity.RESULT_CANCELED,null)}
+        ui.onNodeWithText(text(R.string.restore_backup_cancelled)).assertExists()
+        assertTrue("Cancelled backup picker must never start a restore operation",model.dataJob.value is NotesViewModel.DataJob.Idle)
+        assertNull(model.backupHistory.state.value.lastExport)
+        ui.onNodeWithText(text(R.string.cancel)).performScrollTo().performClick()
+        ui.onNodeWithTag("restore-protection").assertDoesNotExist()
+    }
     @Test fun reportNoticePrecedesPickerWithChartChoice(){
         data();ui.onNodeWithText(text(R.string.export_pdf)).performScrollTo().performClick();notice();cancel()
         ui.onNodeWithText(text(R.string.export_pdf)).performScrollTo().performClick();notice()

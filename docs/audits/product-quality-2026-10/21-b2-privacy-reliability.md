@@ -6,8 +6,8 @@
 |---|---|---|
 | A | COMPLETE | `ed5682e7a5fd6cc0540e42ac15f4dddca23210f9`；[38291254654](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38291254654) jvm/android/device-tests 全 success；[38291254617](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38291254617) reference success |
 | B | COMPLETE | 主提交 `348064c251d7a21338ae7637b4d5394f6e4122da` + 修复 `5f839e98eb085eaab92c415a434d00fcc956e8ba`；[38301348940](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38301348940) 三任务全success，[38301348930](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38301348930) reference success |
-| C | WAITING_CI | B修复提交全绿后实施；本批提交和CI待登记 |
-| D | 尚未开始 | 前批 CI 全绿后推进 |
+| C | COMPLETE | `8e97e7a620ba0a22559c8d7fb7c4d01a7e744280`；[38362778379](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38362778379) 三任务全success；[38362778161](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38362778161) reference success |
+| D | WAITING_CI | C对应四项CI全绿后实施；本批提交/CI待登记 |
 
 ## A：最短生命周期
 
@@ -58,3 +58,17 @@ C 负向变异：先在合法源码下聚焦123项通过；故意把记录成功
 C 全量本地回归首次发现 A 的切换入口竞态：旧 Trans Memo 读取作业收到取消后，HT Tracker 读取可先发布预览，而旧临时副本仍在 `finally` 清理中；`switchingToHrtTrackerCancelsTheTransMemoRead` 真实断言失败。C 的 ViewModel 改动中补充顺序屏障：新读取先取消并 `join` 旧读取（含其 finally），再开始新入口读取。原断言未放宽；聚焦及完整重跑结果待补。该补强不改读取/导入交易算法。
 
 C 本地第二轮全量：JVM194、data72/reminder14/app645（61既有条件跳过）零失败，切换入口4项聚焦与全量均通过，PeriodStability5/5保留。恢复后错误成功标记目标1/1通过。lint/构建收尾，设备和unsignedRelease完整验收仍以该提交CI为准；机器摘要见 `21-b2-c-test-evidence.json`。
+
+C 最终验收：完整SHA如表，四项CI均全success。官方ZIP SHA-256核对 build `0111377e00b984d5e3b233071d7057f574a7246b2d4507524b0a9c6a74402abf`、device `21712eecc8c132163b9d4a138d2502aaa2feacc9bc1ce941bced4d68f8766255`，未下载APK。CI app645/data72/reminder14零失败，app61既有条件跳过；API35 app77/data14零失败，4重启方法主套件跳过后分别独立验证，新增C3项通过。本地完整Debug及instrumentation打包通过；CI完整unsignedRelease/来源/无INTERNET/ledger通过。lint0错误179警告。C回滚为 `git revert 8e97e7a620ba0a22559c8d7fb7c4d01a7e744280`，先回滚后续D；不删除数据/研究/账本。D不改RawData.restore或事务。
+
+## D：恢复前保护选择（验收中）
+
+用户取得恢复来源后进入三选择页面。可先导出当前加密数据，再回到同一来源的选择页；可明确继续到原替换警告与密码，也可取消。`RestoreProtection` 仅维护当前界面的阶段，无副作用/密码/持久化，备份结果不能授权恢复；直接相同 URI 在取得输出后、任何写入前拒绝。迟到保存器回调及重建从 Idle 开始，不继续旧意图。SAF 不同 URI 指向同一底层文件的提供方别名无法靠 URI 相等可靠识别，未假称覆盖全部云提供方。
+
+先补9条状态测试和48组四语/宽度/字体/主题短屏布局后实施，聚焦含翻译59项通过；布局实际验证三按钮48dp、完整字符、实际字行几何和滚动。实际入口取消备份回归、API35真实加密文件/数据回归、重建和外部强杀测试正在验证。强杀测试须先在真实密码字段输入后写无秘密的PID检查点，由外部脚本终止该进程，再以不同PID的新进程断言无待恢复状态/密码、未自动写入数据、原加密来源完整；不把被主动终止的prepare阶段谎称完成测试。
+
+RawData.restore/事务/Schema/核心数据及冻结协议未修改。原恢复失败/兼容、锁/伪装/通知及科研/数值门槛照常全跑；物理ARM、真实云最终持久化、真TalkBack/OEM差异仍未验证。最终CI/测试数/回滚待本批验收后登记。
+
+D 取消后自动恢复负向：正常生产DataSection及真实ActivityResultRegistry回归1/1先通过，Android测试完整编译通过。故意在保护备份保存器返回取消时调用 `model.restoreBackup`；同一入口测试1/1因 `Cancelled backup picker must never start a restore operation` 断言失败，非环境/超时。已恢复源码，恢复后同测与完整回归正在执行；详细机器摘要待本批最终CI。
+
+D 变异恢复后目标1/1通过；完整Android测试源码编译成功。完整本地JVM/Android和本批CI仍在验收中，当前不填COMPLETE。

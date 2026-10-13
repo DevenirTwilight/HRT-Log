@@ -1,3 +1,7 @@
+> B2-D提交门槛状态：状态/布局/翻译59项及真实取消入口1项通过；取消后误调用恢复的变异1/1由目标断言杀死，源码恢复后同测通过，Android测试编译成功。D全量本地JVM/Android正在串行执行；将提交并等待本批jvm/android/device/reference四项CI。强杀验证须以设备CI的真实检查点、外部kill和新PID断言为准，当前未提前宣称通过。
+
+> B2最新进展（2026-10-13）：A/B/C COMPLETE；C完整SHA `8e97e7a620ba0a22559c8d7fb7c4d01a7e744280`，CI38362778379 jvm/android/device-tests及38362778161 reference全success。C app645（61既有条件跳过）/data72/reminder14与API35 app77/data14零失败，lint0错误179警告，unsignedRelease/来源/无INTERNET/ledger通过。D现已补9项状态测试与48组布局测试，并实施记忆内三选择流程，正在验证；实际设备/进程死亡测试及变异/全套CI仍待完成。禁止自动恢复、默认合并、正式签名或交付。
+
 > B2当前交接（2026-10-12）：分支 `feature/b2-privacy-reliability-20261012`，起点 `1e584285cb1e6f7a4b09a3e20585418d35a28735`。A COMPLETE（ed5682e，CI38291254654/38291254617）；B COMPLETE（348064c+公开API修复5f839e98eb085eaab92c415a434d00fcc956e8ba，CI38301348940三任务+38301348930 reference全success）。B原RestrictedApi失败不掩盖；实际API35密码流程已过。C在B全绿后已实施，准备提交并等待本批CI；D未开始。C聚焦123项、错误成功标记变异、恢复后目标测试通过；全量JVM194、data72/reminder14/app645（61既有条件跳过）零失败。全量发现切换导入入口的旧清理竞态，现先cancel+join旧读取，原4项断言与全量已通过；lint/构建收尾，设备/unsignedRelease须等本批CI。临时工具脚本现用进程内Kotlin编译+单worker防止8GiB OOM，不改测试门槛。详见[审计21](audits/product-quality-2026-10/21-b2-privacy-reliability.md)。禁止默认合并、正式签名/交付。
 
 > 最新当前事实（2026-10-12）：PR #19 已合并并通过主线 CI；见 [STATUS](STATUS.md) 和 [审计20](audits/product-quality-2026-10/20-pr19-merge-and-mainline-validation.md)。下文保留历史阶段的“未合并/待批准”叙述，不代表现在。

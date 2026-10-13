@@ -1,0 +1,45 @@
+{
+  "batch": "B2-D",
+  "date": "2026-10-13",
+  "state": "WAITING_CI",
+  "focused": {
+    "state_tests": 9,
+    "layout_matrix": 48,
+    "translations": 2,
+    "real_entry_cancel_test": 1,
+    "failures": 0,
+    "skipped": 0
+  },
+  "mutation": {
+    "change": "call restoreBackup when protection backup picker is cancelled",
+    "tests": 1,
+    "failures": 1,
+    "intended_assertion": "Cancelled backup picker must never start a restore operation",
+    "source_restored": true,
+    "restored_target_tests": 1,
+    "restored_target_failures": 0
+  },
+  "research": {
+    "tests": 302,
+    "failures": 0
+  },
+  "old_pk_audit": {
+    "tests": 13,
+    "failures": 0
+  },
+  "boundaries": {
+    "baseline_files_checked": 78,
+    "reviewed_debug_compile_only_change": true,
+    "historical_files": 164,
+    "identical_results": 5
+  },
+  "device": "PENDING_CI",
+  "ci": "PENDING_PUSH",
+  "not_run": [
+    "physical ARM",
+    "real cloud persistence",
+    "real TalkBack",
+    "OEM differences",
+    "SAF alias equality across different URIs"
+  ]
+}

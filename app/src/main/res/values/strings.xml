@@ -1035,4 +1035,12 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="backup_reminder_note">Only shown on this page; no notifications.</string>
     <string name="backup_reminder_days">%1$d days</string>
     <string name="backup_reminder_due">Consider exporting a new encrypted backup.</string>
+<string name="restore_protection_title">Before restoring</string>
+<string name="restore_protection_note">You can first export an encrypted backup of your current data. Exporting does not start a restore. You may also continue without a new backup.</string>
+<string name="restore_backup_current">Back up current data</string>
+<string name="restore_continue">Continue restore</string>
+<string name="restore_backup_cancelled">No current-data backup was completed. Restore has not started.</string>
+<string name="restore_backup_failed">The current-data backup failed. Restore has not started.</string>
+<string name="restore_backup_saved">Current data was exported. Restore has not started; choose again before replacing it.</string>
+<string name="restore_backup_same_target">Choose a different output file. The selected restore file must not be overwritten.</string>
 </resources>

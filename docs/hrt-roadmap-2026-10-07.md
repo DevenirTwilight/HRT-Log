@@ -1,4 +1,4 @@
-> 当前产品任务（2026-10-12）：B0/B1/D-1/D-2 已合并；B2 已授权四批顺序实施。A COMPLETE（提交ed5682e与对应两组CI全绿）；B明文告知COMPLETE（5f839e9及对应CI全绿）；C已实施、待本批CI，D尚未开始。现状以[STATUS](STATUS.md)和[审计21](audits/product-quality-2026-10/21-b2-privacy-reliability.md)为准。P2-C HOLD 与个人绝对 pg/mL 能力 false 不变。
+> 当前产品任务（2026-10-12）：B0/B1/D-1/D-2 已合并；B2 已授权四批顺序实施。A COMPLETE（提交ed5682e与对应两组CI全绿）；B明文告知COMPLETE（5f839e9及对应CI全绿）；C COMPLETE（8e97e7a，38362778379/38362778161全绿），D实施中。现状以[STATUS](STATUS.md)和[审计21](audits/product-quality-2026-10/21-b2-privacy-reliability.md)为准。P2-C HOLD 与个人绝对 pg/mL 能力 false 不变。
 
 # 最新状态：P2-A/B研究完成，外部科学证据不足（2026-10-09，§50）
 
