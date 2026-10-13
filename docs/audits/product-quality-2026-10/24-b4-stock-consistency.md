@@ -157,3 +157,8 @@ REQUIREMENTS §82已加入“所有用户录入/确认的信息都应存在可�
 首次签名后来源核验失败，原因是SDK37输出`V3.0 Signer: certificate SHA-256 digest:`，旧工具按第一个冒号拆分，误把说明文字并入证书字段；实际apksigner签名和原证书检查当时已通过。补充真实新/旧输出格式回归，新格式红测失败后修复为按证书摘要标记提取；8项来源与8项账本测试通过，实际签名文件重新核验通过。仅核验工具修复，不进入APK，不更换证书或重新造包。严格全条目对比也记录了标准签名META-INF新增，原代码/资源字节均不变。后续账本/工具提交不是另一个APK构建源，包内源码SHA保持c725310。
 
 真实ARM安装、覆盖更新后提醒和用户手机数据保留仍NOT_RUN，不把静态验证或API35 debug测试冒称手机验收。安装前先加密备份，只接受同包名原正式证书的“更新”，不卸载/清数据。A/B VOIDED能力与C安全限制照本报告，不扩大医学宣称。PR23未合并，无公开Release/标签。
+
+### 交付后仪器测试线程修复
+
+交付后测试框架修复（2026-10-13）：b965273记录/来源工具HEAD的push Android38429993057全success，PR38430002274在既有UnifiedConcentrationAndroidTest出现CalledFromWrongThreadException，未冒称全绿；其Science PR38430002398 gate/deep实际success、push38429993004按原门控deep skip。栈证据显示Compose1.9.3测试默认UnconfinedTestDispatcher将frame/apply恢复到Default worker；仅该Android仪器测试规则改用StandardTestDispatcher，保留全部6项原断言/模型参数/时限，不改生产APK。两仪器依赖编译及assembleFullDebugAndroidTest成功（2m27s）。已等前轮全部结束，现提交本修复并等待本HEAD完整Android/API35/Science检查；结果以PR23实时CI为准，不借用旧绿色，不盲目重试或取消正常CI。已交付APK源c725310与哈希不变，无重建/重签/新交付。
+

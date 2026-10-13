@@ -5,8 +5,12 @@ import net.plainnotes.app.R
 import net.plainnotes.app.pk.experimental.*
 import org.junit.Rule
 import org.junit.Test
+import kotlinx.coroutines.test.StandardTestDispatcher
+@OptIn(ExperimentalTestApi::class)
 class UnifiedConcentrationAndroidTest {
-    @get:Rule val ui=createAndroidComposeRule<UnifiedConcentrationTestActivity>()
+    // The default UnconfinedTestDispatcher can resume the test frame/apply loop on a Default worker.
+    // Queue resumptions on the rule's scheduler instead; every original UI/model assertion stays intact.
+    @get:Rule val ui=createAndroidComposeRule<UnifiedConcentrationTestActivity>(effectContext=StandardTestDispatcher())
     private fun await(tag:String)=ui.waitUntil(30_000){ui.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty()}
     private fun noSelector() { for(choice in ResearchModel.entries)ui.onAllNodesWithTag("model-${choice.name}").assertCountEquals(0) }
     @Test fun originalUiHasOnlyM2ReferenceAndOneChart() {

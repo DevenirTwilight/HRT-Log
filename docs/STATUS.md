@@ -1,3 +1,5 @@
+> 交付后测试框架修复（2026-10-13）：b965273记录/来源工具HEAD的push Android38429993057全success，PR38430002274在既有UnifiedConcentrationAndroidTest出现CalledFromWrongThreadException，未冒称全绿；其Science PR38430002398 gate/deep实际success、push38429993004按原门控deep skip。栈证据显示Compose1.9.3测试默认UnconfinedTestDispatcher将frame/apply恢复到Default worker；仅该Android仪器测试规则改用StandardTestDispatcher，保留全部6项原断言/模型参数/时限，不改生产APK。两仪器依赖编译及assembleFullDebugAndroidTest成功（2m27s）。已等前轮全部结束，现提交本修复并等待本HEAD完整Android/API35/Science检查；结果以PR23实时CI为准，不借用旧绿色，不盲目重试或取消正常CI。已交付APK源c725310与哈希不变，无重建/重签/新交付。
+
 > 当前交付：DELIVERED_PRIVATE / SOURCE_CI_VERIFIED_BUILD26（2026-10-13）。用户§83明确授权的B4-D full Universal正式APK已上传仅owner Drive，独立下载回查一致；0.2.0/build26、原正式证书、Room9/PNBAK1/PK不变。构建源c725310完整Android与PR Science验收通过；来源/签名/16KB/权限/版本检查及账本记录完成，见[机器交付记录](delivery/b4d-build26-2026-10-13.json)与[报告24](audits/product-quality-2026-10/24-b4-stock-consistency.md)。用户安装与物理ARM覆盖升级未验证；PR23保持OPEN，未合并默认分支或公开发布。
 
 > 当前B4-D交付：OFFICIAL_APK_AUTHORIZED_BUILD_PENDING（2026-10-13，REQ §83）。功能461574b完整CI已通过；用户明确授权正式签名APK，必要将versionCode升26，保留0.2.0与原正式证书。正在构建/验收私有交付，不提前记账或冒称已交付；PR23仍OPEN、未合并。
