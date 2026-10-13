@@ -33,3 +33,5 @@ M2 仍为 Price 1997 n=6 条件性文献情景；P2-C HOLD，m2_absolute_pgml=fa
 S1 本地：独立命令实际164/164、5/5通过，原记录逐字节核验；回放1.777秒、总2.058秒（本环境单次，非CI或性能结论）。全科研305项28.756秒通过。隔离档案analysis.json把clinical_accuracy_established改true，由明确Archived record changed断言捕获；真实depth=1克隆缺对象抛HistoricalObjectMissing，未跳过。原历史对象/重放负样本迁至research_archive，当前锁尚待S2退出；日常workflow的历史fetch待S3集中移除。
 
 S2 当前科研入口只核验冻结协议输入与训练/外部研究分组；日常不再消费生产文件SHA、显示审批、分类白名单或Git授权提交。原两套审批/字节锁测试源移至`legacy-guard-tests/`作为停用见证；归档损坏与浅克隆负样本已迁独立测试。其余研究261项（本地7.999秒）和当前research.py合成运行通过，报告`clinical_accuracy_established=false`。静态四语/已废实验页检查保留，但移除另一个`model-source-lock.json`生产字节门槛；32×13数值对照保留，去除Python工具自身的源码哈希阻断。
+
+S3 CI设计：Android jvm维持domain/PK/importer及32×13数值参考/四语检查，不下载审批Git提交；Android单元、lint、full Debug/unsigned Release、来源/账本/Manifest/Schema、设备与重启原步骤不删。新增science-change-gate在每个push/PR显示结果；依据真实Git差异筛选research-deep，手动总是深测。深测完整历史、科研方法、原/候选两套SciPy独立重算；旧PR19入口仅手动保留。五类触发测试UI-only=false、PK core=true、research data=true、workflow=true、docs-only=false；新PK源=true。后续B2合并时必须检查其新增设备脚本仍在Android工作流。

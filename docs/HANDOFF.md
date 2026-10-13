@@ -1,3 +1,5 @@
+> S3（2026-10-13）：新增始终出现的science-change-gate，五类路径测试本地通过；research-deep负责历史/方法学/双SciPy参考。Android常规JVM去掉历史对象下载，原Android/设备/Release身份步骤保留。专项实际CI和S2正反变异仍待验收。
+
 > S2（2026-10-13）：旧守卫日常入口已删生产SHA/显示审批/新增PK强制分类路径；保留冻结协议/数据泄漏校验。旧字节授权测试保存在legacy-guard-tests不参与discover，剩余科研261项本地通过。S2实际正反样本、S3 CI拆分和完整CI待完成。
 
 > S1（2026-10-13）：独立research_archive/verify_historical_archive已实现，本地164/5及305测试通过，篡改与真实浅克隆缺对象均失败。新增专项工作流；S2/S3与最终CI未完成。S0 CI运行中，等待后推送，避免取消。

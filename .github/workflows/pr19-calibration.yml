@@ -1,19 +1,5 @@
-name: PR19 independent literature calibration replay
-on:
-  push:
-    paths:
-      - 'pk-engine/src/**'
-      - 'app/src/**'
-      - 'tools/pk-research/pr19_calibration_reference.py'
-      - 'tools/pk-research/test_pr19_calibration_contract.py'
-      - 'tools/pk-research/m2_only_reference.py'
-      - 'docs/design/m2-only-evidence/independent-reference.json'
-      - 'docs/design/pr19-calibration-evidence/**'
-      - '.github/workflows/pr19-calibration.yml'
-      - 'tools/pk-research/check_protocol.py'
-      - 'docs/pk-research/p2/**'
-  pull_request:
-  workflow_dispatch:
+name: PR19 independent literature calibration replay (manual legacy entry)
+on: workflow_dispatch
 permissions:
   contents: read
 jobs:
@@ -21,13 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
-      # test_pr19_calibration_contract calls the two-domain guard, whose historical domain reads git objects that a
-      # shallow checkout lacks (same step as android.yml); a failed fetch fails the job instead of skipping history.
-      - name: Fetch frozen P2 history objects
-        run: |
-          commits="d892e9b7ea9d933687c18b5ca2fd3f605b0d1118 $(python3 tools/pk-research/check_protocol.py --required-commits)"
-          git fetch --no-tags --depth=1 origin $commits
-          for c in $commits; do git cat-file -e "$c^{commit}"; done
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
