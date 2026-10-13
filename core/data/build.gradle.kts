@@ -21,8 +21,8 @@ dependencies {
     testImplementation(libs.room.testing)
     implementation(libs.hilt.android); ksp(libs.hilt.compiler)
     testImplementation(libs.junit4); testImplementation(libs.robolectric); testImplementation(libs.android.test.core)
-    androidTestImplementation(libs.android.test.runner); androidTestImplementation(libs.room.testing); androidTestImplementation(libs.junit4)
+    androidTestImplementation(libs.android.test.core); androidTestImplementation(libs.android.test.runner); androidTestImplementation(libs.room.testing); androidTestImplementation(libs.junit4)
 }
 ksp { arg("room.schemaLocation", "$projectDir/schemas") }
-android.sourceSets.getByName("androidTest").assets.srcDir("$projectDir/schemas")
-android.sourceSets.getByName("test").assets.srcDir("$projectDir/schemas")
+android.sourceSets.getByName("androidTest").apply { assets.srcDir("$projectDir/schemas"); java.srcDir("src/historyTest/java") }
+android.sourceSets.getByName("test").apply { assets.srcDir("$projectDir/schemas"); java.srcDir("src/historyTest/java") }

@@ -48,7 +48,9 @@ android {
     packaging { jniLibs { useLegacyPackaging = true } }
     sourceSets {
         getByName("test").java.srcDir("src/stockTest/java")
+        getByName("test").java.srcDir("src/historyTest/java")
         getByName("androidTest").java.srcDir("src/stockTest/java")
+        getByName("androidTest").java.srcDir("src/historyTest/java")
     }
 
     buildFeatures { compose = true; buildConfig = true }

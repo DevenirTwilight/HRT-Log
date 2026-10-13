@@ -1,3 +1,5 @@
+> R-15撤销误跳过首版及边界见[报告27](27-r15-undo-skipped.md)，本地目标通过，完整CI/API35尚待验收；不合并或交付APK。
+
 > 当前B4：PR23、PR24已按授权顺序合并并分别通过新主线CI；见[报告26](26-b4-merge-and-mainline-validation.md)。本记录最终文档HEAD须自身检查通过后交还，实际SHA/CI固定PR正文。原阶段记录保留。
 
 > B2 四批 A/B/C/D COMPLETE，全部独立CI全绿，PR待审阅；现状见[审计21](21-b2-privacy-reliability.md)。报告04/06的旧 PR19/守卫阻断陈述属历史，报告20终态保持。

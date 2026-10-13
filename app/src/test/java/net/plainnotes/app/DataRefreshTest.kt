@@ -7,6 +7,7 @@ import kotlinx.coroutines.runBlocking
 import net.plainnotes.app.data.*
 import net.plainnotes.app.domain.*
 import net.plainnotes.app.reminder.ReminderCoordinator
+import net.plainnotes.app.reminder.CacheStore
 import org.junit.*
 import org.junit.Assert.*
 import org.junit.runner.RunWith
@@ -153,6 +154,35 @@ class DataRefreshTest {
         val calendar=net.plainnotes.app.ui.dayInfos(emptyList(),model.extra.value.upcoming,emptyList(),model.extra.value.stockForecasts,zone)
         assertEquals(0,calendar.values.sumOf{it.short})
         assertEquals(1,model.extra.value.voidedContainers.size)
+    }
+
+    @Test fun undoSkippedRefreshesHistoryCalendarAndSharedForecastWithoutStockMovement() {
+        val slot=model.state.value.slots.first{it.slot.medicationId==id && it.slot.at>Instant.now().plusSeconds(60)}.slot
+        model.changeOverride(slot,SlotOverride(slot.key,skipped=true))
+        await{model.extra.value.records.any{it.slot_key==slot.key && it.status=="SKIPPED"} && model.state.value.slots.any{it.slot.key==slot.key && it.state==SlotState.SKIPPED}}
+        val r=model.extra.value.records.single{it.slot_key==slot.key};val boxes=model.extra.value.containers;val before=model.extra.value.stockForecasts.getValue(id)
+        val job=model.undoSkipped(r)
+        await{job.isCompleted && model.extra.value.records.none{it.id==r.id} && model.state.value.slots.any{it.slot.key==slot.key && it.state==SlotState.PENDING}}
+        assertEquals(boxes,model.extra.value.containers);assertEquals(before.available,model.extra.value.stockForecasts.getValue(id).available)
+        assertEquals(before.plannedDoses+1,model.extra.value.stockForecasts.getValue(id).plannedDoses)
+        assertTrue(model.extra.value.records.none{it.status in listOf("ON_TIME","LATE")})
+        assertEquals(0,net.plainnotes.app.ui.adherence(model.extra.value.records).skipped)
+        assertTrue(runBlocking{repo.transaction{it.supplyFor(r.id)}}.isEmpty());assertNull(model.state.value.error)
+    }
+    @Test fun undoRestoresOneDueReminderAndRepeatedSelectionDoesNotRebuildIt() {
+        val context=ApplicationProvider.getApplicationContext<Context>()
+        val current=model.state.value.medications.single()
+        runBlocking{repo.saveMedication(current.copy(notifications_on=true),null,RuleKind.EVERY_N_DAYS,1,listOf(LocalTime.of(8,0),LocalTime.of(20,0)),emptySet())}
+        val slot=model.state.value.slots.first{it.slot.medicationId==id && it.slot.at>Instant.now().plusSeconds(60)}.slot
+        model.changeOverride(slot,SlotOverride(slot.key,skipped=true));await{model.extra.value.records.any{it.slot_key==slot.key && it.status=="SKIPPED"}}
+        val r=model.extra.value.records.single{it.slot_key==slot.key}
+        val skippedCache=CacheStore(context).read()!!
+        assertTrue(runBlocking{repo.transaction{it.mappings().none{m->m.generation==skippedCache.generation && m.identity=="${slot.key}:DUE"}}})
+        val job=model.undoSkipped(r);await{job.isCompleted && model.extra.value.records.none{it.id==r.id}}
+        val restoredCache=CacheStore(context).read()!!
+        assertEquals(1,runBlocking{repo.transaction{it.mappings().count{m->m.generation==restoredCache.generation && m.identity=="${slot.key}:DUE"}}})
+        val repeated=model.undoSkipped(r);await{repeated.isCompleted && model.state.value.error==R.string.history_skip_stale}
+        assertEquals(restoredCache,CacheStore(context).read());assertEquals(0.0,model.extra.value.containers.single().used_amount,0.0)
     }
 
 }

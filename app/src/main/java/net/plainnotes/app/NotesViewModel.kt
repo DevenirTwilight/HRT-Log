@@ -120,7 +120,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
                           val voidedContainers:List<ContainerEntity> = emptyList(),
                           val containersWithConsumption:Set<Long> = emptySet())
     val extra=MutableStateFlow(ExtraState())
-    private fun guarded(block:suspend()->Unit)=viewModelScope.launch{try{block()}catch(e:kotlinx.coroutines.CancellationException){throw e}catch(e:Exception){mutable.value=mutable.value.copy(error=when(e){is PeriodRestoreConflict->R.string.period_restore_overlap;is PackageRestoreConflict->R.string.pkg_restore_conflict;is PackageConsumptionConflict->R.string.pkg_undo_locked;else->R.string.operation_error})}}
+    private fun guarded(block:suspend()->Unit)=viewModelScope.launch{try{block()}catch(e:kotlinx.coroutines.CancellationException){throw e}catch(e:Exception){mutable.value=mutable.value.copy(error=when(e){is PeriodRestoreConflict->R.string.period_restore_overlap;is PackageRestoreConflict->R.string.pkg_restore_conflict;is PackageConsumptionConflict->R.string.pkg_undo_locked;is SkipUndoStale->R.string.history_skip_stale;is SkipUndoUnavailable->R.string.history_skip_unavailable;is SkipUndoUnitConflict->R.string.history_skip_unit_changed;else->R.string.operation_error})}}
     fun loadExtra():Job=refresh()
     private fun mutateExtra(block:suspend()->Unit)=change(block)
     data class ImportedLink(val record:RecordEntity,val candidates:List<TimelineEntry>)
@@ -134,6 +134,16 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     fun linkImported(id:Long,key:String)=change{repo.linkImported(id,key);importedLink.value=null}
     fun editRecord(id:Long,t:Instant,d:Double)=change{repo.editRecord(id,t,d)}
     fun deleteRecord(id:Long)=change{repo.deleteRecord(id)}
+    private val undoingSkips=mutableSetOf<Long>()
+    fun undoSkipped(record:RecordEntity)=guarded {
+        if(!undoingSkips.add(record.id))return@guarded
+        try {
+            // Reject a known stale selection before invalidating the reminder cache. The transaction rechecks it.
+            if(record !in extra.value.records)throw SkipUndoStale()
+            mutate{repo.undoSkipped(record)}
+            refresh().join()
+        } finally {undoingSkips.remove(record.id)}
+    }
     fun addContainers(med:Long,capacity:Double,count:Int,open:Boolean,source:String?=null,batch:String?=null)=mutateExtra{repo.addContainers(med,capacity,count,open,source,batch)}
     fun replaceContainer(med:Long,capacity:Double)=mutateExtra{repo.replaceContainer(med,capacity)}
     fun setRemaining(container:Long,remaining:Double)=mutateExtra{repo.setRemaining(container,remaining)}
@@ -329,6 +339,6 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
             sections=VisitSection.encode(sections),language=language,template_version=net.plainnotes.app.visit.VISIT_TEMPLATE_VERSION,input_digest=digest,facts_json=facts.json().toString()))}
         refresh().join();DataJob.Done(R.string.export_saved)
     }
-    fun testReminder()=viewModelScope.launch{try{reminders.testReminder()}catch(e:Exception){mutable.value=mutable.value.copy(error=when(e){is PeriodRestoreConflict->R.string.period_restore_overlap;is PackageRestoreConflict->R.string.pkg_restore_conflict;is PackageConsumptionConflict->R.string.pkg_undo_locked;else->R.string.operation_error})}}
+    fun testReminder()=viewModelScope.launch{try{reminders.testReminder()}catch(e:Exception){mutable.value=mutable.value.copy(error=when(e){is PeriodRestoreConflict->R.string.period_restore_overlap;is PackageRestoreConflict->R.string.pkg_restore_conflict;is PackageConsumptionConflict->R.string.pkg_undo_locked;is SkipUndoStale->R.string.history_skip_stale;is SkipUndoUnavailable->R.string.history_skip_unavailable;is SkipUndoUnitConflict->R.string.history_skip_unit_changed;else->R.string.operation_error})}}
     fun sync()=viewModelScope.launch{runCatching{reminders.sync()};refresh().join()}
 }

@@ -13,6 +13,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import net.plainnotes.app.data.ProfileEntity
 import net.plainnotes.app.pk.Ester
 import net.plainnotes.app.pk.Pk
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.semantics.Role
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -54,7 +56,9 @@ private fun RecordEntity.at(): Instant = Instant.ofEpochMilli(taken_utc ?: sched
 
 @Composable fun HistoryScreen(state: NotesState, records: List<RecordEntity>, onEdit: (RecordEntity) -> Unit, onDelete: (RecordEntity) -> Unit, contentPadding: PaddingValues,
                               onAdd: () -> Unit = {}, onBatch: () -> Unit = {}, onConfirmMissed:(RecordEntity)->Unit = {},selectedRecordIds:Set<Long>?=null,onClearSelection:()->Unit={},
-                              labels: Map<Long, Set<RecordLabel>> = emptyMap(), onExtra: (RecordEntity, Boolean) -> Unit = { _, _ -> }) {
+                              labels: Map<Long, Set<RecordLabel>> = emptyMap(), onExtra: (RecordEntity, Boolean) -> Unit = { _, _ -> },
+                              onUndoSkip: (RecordEntity) -> Unit = {}) {
+    var undoSkip by remember { mutableStateOf<RecordEntity?>(null) }
     val meds = state.medications.associateBy { it.id }
     var medFilter by rememberSaveable(selectedRecordIds) { mutableStateOf<Long?>(null) }
     var days by rememberSaveable(selectedRecordIds) { mutableIntStateOf(if(selectedRecordIds==null)30 else 0) }
@@ -62,6 +66,14 @@ private fun RecordEntity.at(): Instant = Instant.ofEpochMilli(taken_utc ?: sched
     val since = if (days == 0) Instant.EPOCH else LocalDate.now().minusDays(days.toLong() - 1).atStartOfDay(zone).toInstant()
     val shown = records.filter { it.deleted_at_utc == null && (selectedRecordIds==null || it.id in selectedRecordIds) && (medFilter == null || it.medication_id == medFilter) && !it.at().isBefore(since) }.sortedByDescending { it.at() }
     val byDay = shown.groupBy { it.at().atZone(zone).toLocalDate() }
+    LaunchedEffect(undoSkip,shown) { if(undoSkip!=null && undoSkip !in shown)undoSkip=null }
+    undoSkip?.takeIf{it in shown}?.let { r ->
+        UndoSkippedDialog(r,{undoSkip=null}) {
+            // A second queued activation must not submit another mutation after the first closes this dialog.
+            undoSkip?.takeIf{it==r}?.let { selected -> undoSkip=null;onUndoSkip(selected) }
+        }
+    }
+
     val simple = LocalSimpleMode.current
     val canAdd = state.medications.any { it.active }
     LazyColumn(Modifier.fillMaxSize().testTag("history-records"), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = contentPadding.calculateTopPadding() + 8.dp,
@@ -83,7 +95,7 @@ private fun RecordEntity.at(): Instant = Instant.ofEpochMilli(taken_utc ?: sched
         }
         item { AdherenceCard(adherence(shown)) }
         if (shown.isEmpty()) item { EmptyState(Icons.Outlined.History, stringResource(R.string.history_empty_title), stringResource(R.string.history_empty_body)) }
-        byDay.forEach { (day, list) -> item(key = day.toString()) { DayCard(day, list, meds, state.profiles, onEdit, onDelete, onConfirmMissed, labels, onExtra) } }
+        byDay.forEach { (day, list) -> item(key = day.toString()) { DayCard(day, list, meds, state.profiles, onEdit, onDelete, onConfirmMissed, labels, onExtra, {undoSkip=it}) } }
     }
 }
 
@@ -108,7 +120,7 @@ private fun RecordEntity.at(): Instant = Instant.ofEpochMilli(taken_utc ?: sched
 }
 
 @Composable private fun DayCard(day: LocalDate, list: List<RecordEntity>, meds: Map<Long, MedicationEntity>, profiles: Map<Long, ProfileEntity>,
-                                onEdit: (RecordEntity) -> Unit, onDelete: (RecordEntity) -> Unit, onConfirmMissed:(RecordEntity)->Unit, labels: Map<Long, Set<RecordLabel>>, onExtra: (RecordEntity, Boolean) -> Unit) {
+                                onEdit: (RecordEntity) -> Unit, onDelete: (RecordEntity) -> Unit, onConfirmMissed:(RecordEntity)->Unit, labels: Map<Long, Set<RecordLabel>>, onExtra: (RecordEntity, Boolean) -> Unit, onUndoSkip:(RecordEntity)->Unit) {
     val c = MaterialTheme.colorScheme
     Surface(shape = MaterialTheme.shapes.extraLarge, color = c.surfaceContainerLow, modifier = Modifier.fillMaxWidth()) {
         Column {
@@ -118,7 +130,7 @@ private fun RecordEntity.at(): Instant = Instant.ofEpochMilli(taken_utc ?: sched
             }
             list.forEachIndexed { i, r ->
                 if (i > 0) HorizontalDivider(Modifier.padding(horizontal = 16.dp), color = c.outlineVariant.copy(alpha = 0.5f))
-                RecordRow(r, meds[r.medication_id], profiles[r.medication_id], { onEdit(r) }, { onDelete(r) }, {onConfirmMissed(r)}, labels[r.id].orEmpty()) { onExtra(r, it) }
+                RecordRow(r, meds[r.medication_id], profiles[r.medication_id], { onEdit(r) }, { onDelete(r) }, {onConfirmMissed(r)}, labels[r.id].orEmpty(), {onUndoSkip(r)}) { onExtra(r, it) }
             }
         }
     }
@@ -164,7 +176,7 @@ fun routeIcon(route: String?): ImageVector = when (route) {
 }
 
 @Composable private fun RecordRow(r: RecordEntity, med: MedicationEntity?, profile: ProfileEntity?, onEdit: () -> Unit, onDelete: () -> Unit, onConfirmMissed:()->Unit,
-                                  labels: Set<RecordLabel>, onExtra: (Boolean) -> Unit) {
+                                  labels: Set<RecordLabel>, onUndoSkip:()->Unit, onExtra: (Boolean) -> Unit) {
     val c = MaterialTheme.colorScheme
     var menu by remember { mutableStateOf(false) }
     val simple = LocalSimpleMode.current
@@ -174,7 +186,7 @@ fun routeIcon(route: String?): ImageVector = when (route) {
     val historyProfile=context?.profile
     val route = context?.route
     Box {
-        FlowRow(Modifier.fillMaxWidth().testTag("history-record:${r.id}").clickable(enabled=r.status!="SKIPPED"){menu=true}.padding(16.dp),verticalArrangement=Arrangement.spacedBy(8.dp),itemVerticalAlignment=Alignment.CenterVertically) {
+        FlowRow(Modifier.fillMaxWidth().testTag("history-record:${r.id}").clickable(role=Role.Button,onClickLabel=if(r.status=="SKIPPED")stringResource(R.string.history_undo_skip) else null){menu=true}.padding(16.dp),verticalArrangement=Arrangement.spacedBy(8.dp),itemVerticalAlignment=Alignment.CenterVertically) {
             val injection = route == "INJECTION"
             Box(Modifier.size(52.dp).clip(RoundedCornerShape(16.dp)).background(if (injection) c.primaryContainer else c.surfaceContainerHigh)
                 .border(1.dp, c.outlineVariant.copy(alpha = 0.6f), RoundedCornerShape(16.dp)), contentAlignment = Alignment.Center) {
@@ -207,6 +219,10 @@ fun routeIcon(route: String?): ImageVector = when (route) {
             }
         }
         DropdownMenu(menu, { menu = false }) {
+            if(r.status=="SKIPPED") {
+                DropdownMenuItem(text={Text(stringResource(R.string.history_undo_skip))},leadingIcon={Icon(Icons.Outlined.Undo,null)},
+                    modifier=Modifier.testTag("history-undo-skip:${r.id}"),onClick={menu=false;onUndoSkip()})
+            } else {
             if(r.unconfirmed)DropdownMenuItem(text={Text(stringResource(R.string.confirm_missed))},onClick={menu=false;onConfirmMissed()})
             if (taken && r.scheduled_utc == null) {
                 val marked = RecordLabel.EXTRA_USER in labels
@@ -214,8 +230,27 @@ fun routeIcon(route: String?): ImageVector = when (route) {
             }
             DropdownMenuItem(text = { Text(stringResource(if (r.status == "MISSED") R.string.history_backfill else R.string.edit)) }, leadingIcon = { Icon(Icons.Outlined.Edit, null) }, onClick = { menu = false; onEdit() })
             if (taken) DropdownMenuItem(text = { Text(stringResource(R.string.remove)) }, leadingIcon = { Icon(Icons.Outlined.Delete, null) }, onClick = { menu = false; onDelete() })
+            }
         }
     }
+}
+
+/** Clear, scrollable confirmation; no mutation is called before the user explicitly confirms. */
+@Composable private fun UndoSkippedDialog(record:RecordEntity,onDismiss:()->Unit,onConfirm:()->Unit) {
+    val context=MedicationSnapshot.decode(record.config_snapshot,record.medication_id)
+    AlertDialog(onDismissRequest=onDismiss,modifier=Modifier.testTag("undo-skip-dialog"),
+        title={Text(stringResource(R.string.history_undo_skip))},
+        text={Column(Modifier.heightIn(max=320.dp).verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(12.dp)) {
+            Text(if(LocalSimpleMode.current)choiceLabel(context?.molecule ?: "OTHER") else context?.name ?: stringResource(R.string.history_context_unknown))
+            record.scheduled_utc?.let{Text(formatDateTime(Instant.ofEpochMilli(it)))}
+            Text(stringResource(R.string.history_undo_skip_help))
+        }},confirmButton={
+            val actions=listOf(stringResource(R.string.history_undo_skip),stringResource(R.string.cancel))
+            AdaptiveActions(actions,contentInset=48.dp) { index,modifier ->
+                if(index==0)Button(onClick=onConfirm,modifier=modifier.testTag("undo-skip-confirm")){Text(actions[index])}
+                else TextButton(onClick=onDismiss,modifier=modifier.testTag("undo-skip-cancel")){Text(actions[index])}
+            }
+        })
 }
 
 @Composable private fun Chip(text: String) {

@@ -1076,4 +1076,9 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="pkg_restore_title">Restaurer cette boîte ?</string>
     <string name="pkg_restore_body">Restaurer la boîte et son état précédent ? Le stock et les prises seront vérifiés à nouveau. S’ils ont changé depuis, la restauration automatique sera refusée.</string>
     <string name="pkg_restore_conflict">Le stock ou les prises ont changé depuis l’invalidation. La restauration automatique n’est pas sûre. Vérifiez les boîtes réelles avec Vérifier le stock et conservez cette entrée pour une correction ultérieure.</string>
+    <string name="history_undo_skip">Annuler le saut</string>
+    <string name="history_undo_skip_help">Le statut sera recalculé selon le plan initial et le moment actuel. Aucune prise ne sera enregistrée et le stock actuel restera inchangé. Le report et les ajustements de dose seront conservés.</string>
+    <string name="history_skip_stale">Cet enregistrement a changé. Actualisez puis réessayez. Aucun enregistrement modifié.</string>
+    <string name="history_skip_unavailable">Le créneau du plan initial ne peut pas être identifié avec certitude. Aucun enregistrement modifié. Consultez le plan historique avant de corriger cet enregistrement.</string>
+    <string name="history_skip_unit_changed">La dose historique et le stock actuel utilisent des unités différentes. Le saut ne peut pas encore être annulé en toute sécurité. Aucun enregistrement modifié.</string>
 </resources>

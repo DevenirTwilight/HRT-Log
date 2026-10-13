@@ -1,0 +1,38 @@
+{
+  "observed_at": "2026-10-13T23:16:33.363979+00:00",
+  "phase": "LOCAL_TARGETED_PASS_FULL_CI_PENDING",
+  "baseline": "fe8798634ccd0d92d2913f384abfcfff94d32274",
+  "local_suites": [
+    {
+      "name": "net.plainnotes.app.data.UndoSkippedTest",
+      "tests": "32",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "time": "21.21"
+    },
+    {
+      "name": "net.plainnotes.app.UndoSkippedHistoryUiTest",
+      "tests": "24",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "time": "39.24"
+    },
+    {
+      "name": "net.plainnotes.app.DataRefreshTest",
+      "tests": "8",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "time": "8.996"
+    }
+  ],
+  "b4": {
+    "status": "MERGED_CI_VERIFIED",
+    "android": 38470156117,
+    "android_attempt": 2,
+    "science": 38470156282,
+    "science_deep": "skipped_on_document_only_head"
+  }
+}

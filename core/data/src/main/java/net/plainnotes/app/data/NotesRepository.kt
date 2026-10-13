@@ -332,8 +332,9 @@ const val BACKFILL_MAX_DAYS=731L
                 .filter{it.slot.medicationId==id && it.slot.original<effectiveNow && it.state in listOf(SlotState.PENDING,SlotState.SOON,SlotState.OVERDUE)}
             keep.forEach{dao.retain(it.slot.retained())}
             val models=ruleModels(dao).filter{r->old.any{it.id==r.id}}
+            val retainedKeys=dao.retained().map{it.slot_key}.toSet()
             dao.overrides().filter{it.medication_id==id}.forEach { change ->
-                models.firstNotNullOfOrNull{ScheduleEngine.resolve(it,change.slot_key,zone)}?.takeIf{it.original<effectiveNow}?.let{dao.retain(it.retained())}
+                models.firstNotNullOfOrNull{ScheduleEngine.resolve(it,change.slot_key,zone)}?.takeIf{it.original<effectiveNow && it.key !in retainedKeys}?.let{dao.retain(it.retained())}
             }
             old.forEach{require(cut>it.effective_from_utc);dao.updateRule(it.copy(effective_until_utc=cut))}
         }
@@ -468,18 +469,63 @@ const val BACKFILL_MAX_DAYS=731L
         if(extra)dao.insertAnnotation(RecordAnnotationEntity(rid,HistoryPeriods.EXTRA,System.currentTimeMillis()))
     }
     suspend fun override(slot:Slot,value:SlotOverride,now:Instant=Instant.now())=transaction { dao ->
+        applyOverride(dao,slot,value,now)
+        reconcile(dao,now,ZoneId.systemDefault())
+    }
+    /** Shared override writes; callers decide whether reconciliation is global or limited to their correction. */
+    private suspend fun applyOverride(dao:NotesDao,slot:Slot,value:SlotOverride,now:Instant) {
         require(slot.key==value.key)
         val record=dao.records().singleOrNull{it.slot_key==slot.key}
         require(record?.status !in listOf("ON_TIME","LATE","MISSED")) { "Edit recorded history instead" }
+        // The first explicit skip still has the actual original slot (before a move or dose override).
+        // A later SKIPPED timeline entry contains the effective record snapshot and must not replace this evidence.
+        if(value.skipped && record==null)dao.retain(slot.retained())
         val previous=dao.overrides().singleOrNull{it.slot_key==slot.key}
         if(value.isDefault)dao.deleteOverride(slot.key) else {
             val next=OverrideEntity(previous?.id ?: 0,slot.medicationId,slot.ruleId,slot.key,value.rescheduled?.toEpochMilli(),value.zone?.id,value.dose,value.skipped)
             if(previous==null)dao.insertOverride(next)else dao.updateOverride(next)
         }
         if(record?.status=="SKIPPED" && !value.skipped)dao.updateRecord(record.copy(deleted_at_utc=now.toEpochMilli(),revision=record.revision+1))
-        if(value.skipped && record==null)dao.record(recordFor(dao,value.apply(slot),"SKIPPED"))
-        if(value.skipped && record?.status=="SKIPPED")dao.updateRecord(recordFor(dao,value.apply(slot),"SKIPPED").copy(id=record.id,revision=record.revision+1))
-        reconcile(dao,now,ZoneId.systemDefault())
+        if(value.skipped && record==null) {
+            val skipped=recordFor(dao,value.apply(slot),"SKIPPED")
+            dao.record(skipped.copy(config_snapshot=SkipSlotEvidence.capture(skipped.config_snapshot,slot)))
+        }
+        if(value.skipped && record?.status=="SKIPPED") {
+            val skipped=recordFor(dao,value.apply(slot),"SKIPPED")
+            dao.updateRecord(skipped.copy(id=record.id,revision=record.revision+1,config_snapshot=SkipSlotEvidence.capture(skipped.config_snapshot,slot,record)))
+        }
+    }
+    /** Undo the user's skip only, preserving schedule versions, original evidence, moves, doses and all stock. */
+    suspend fun undoSkipped(expected:RecordEntity,now:Instant=Instant.now())=transaction { dao ->
+        val record=dao.recordById(expected.id) ?: throw SkipUndoStale()
+        if(record!=expected || record.deleted_at_utc!=null || record.status!="SKIPPED")throw SkipUndoStale()
+        val key=record.slot_key ?: throw SkipUndoUnavailable()
+        val change=dao.overrides().singleOrNull{it.slot_key==key} ?: throw SkipUndoUnavailable()
+        if(!change.skipped || change.medication_id!=record.medication_id || change.rule_version_id!=record.rule_version_id ||
+            record.origin!="APP" || record.taken_utc!=null || record.actual_dose!=null ||
+            (record.unallocated_supply_amount ?: 0.0)!=0.0 || dao.supplyFor(record.id).isNotEmpty())throw SkipUndoUnavailable()
+        val model=ruleModels(dao).singleOrNull{it.id==record.rule_version_id && it.medicationId==record.medication_id} ?: throw SkipUndoUnavailable()
+        val evidence=SkipSlotEvidence.read(record)
+        if(evidence!=null && evidence.key!=key)throw SkipUndoUnavailable()
+        // A legacy moved wall-clock row (even with derived retention) does not prove its original zone.
+        // Unmoved records prove their original clock directly; elapsed keys prove their absolute anchor.
+        if(evidence==null && change.rescheduled_utc!=null && model.kind!=RuleKind.EVERY_N_HOURS)throw SkipUndoUnavailable()
+        val savedRule=dao.rules().single{it.id==model.id}
+        val zone=evidence?.zone ?: (if(change.rescheduled_utc==null)record.scheduled_zone else savedRule.anchor_zone)
+            ?.let{runCatching{ZoneId.of(it)}.getOrNull()} ?: throw SkipUndoUnavailable()
+        val original=ScheduleEngine.resolve(model,key,zone) ?: throw SkipUndoUnavailable()
+        if(evidence!=null && original.original!=evidence.at)throw SkipUndoUnavailable()
+        val unit=MedicationSnapshot.decode(record.config_snapshot,record.medication_id)?.unit
+            ?: MedicationSnapshot.decode(savedRule.config_snapshot,record.medication_id)?.unit ?: throw SkipUndoUnavailable()
+        if(unit!=dao.medication(record.medication_id).unit)throw SkipUndoUnitConflict()
+        val effective=change.model().apply(original)
+        if(effective.at.toEpochMilli()!=record.scheduled_utc || effective.zone.id!=record.scheduled_zone ||
+            effective.dose!=record.planned_dose || effective.lateMinutes!=record.late_after_minutes_snapshot)throw SkipUndoUnavailable()
+        dao.retain(original.retained())
+        applyOverride(dao,original,change.model().copy(skipped=false),now)
+        // Same Timeline projection as calendar/reconcile, but this transaction may write only the chosen slot.
+        val restored=timeline(dao,now,effective.at,effective.at.plusMillis(1),zone).singleOrNull{it.slot.key==key} ?: throw SkipUndoUnavailable()
+        if(restored.state==SlotState.UNCONFIRMED)dao.record(recordFor(dao,restored.slot,"MISSED",origin="AUTO_MISSED"))
     }
     suspend fun currentOverride(key:String)=withContext(Dispatchers.IO){db().dao().overrides().singleOrNull{it.slot_key==key}?.model() ?: SlotOverride(key)}
     suspend fun appointment(value:AppointmentEntity)=saveAppointment(value)
