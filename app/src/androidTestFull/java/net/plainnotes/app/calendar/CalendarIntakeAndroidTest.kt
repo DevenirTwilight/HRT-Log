@@ -42,7 +42,8 @@ class CalendarIntakeAndroidTest {
         ui.waitUntil(20_000) { ui.onAllNodes(hasClickAction() and SemanticsMatcher.keyIsDefined(SemanticsProperties.Selected)).fetchSemanticsNodes().size >= 7 }
         if (runCatching { cell(tomorrow).fetchSemanticsNode() }.isFailure) ui.onNodeWithContentDescription(s(R.string.calendar_next)).performClick()
         cell(tomorrow).performClick()
-        ui.runOnIdle { assertEquals(true, cell(tomorrow).fetchSemanticsNode().config.getOrNull(SemanticsProperties.Selected)) }
+        ui.waitForIdle()
+        assertEquals(true, cell(tomorrow).fetchSemanticsNode().config.getOrNull(SemanticsProperties.Selected))
         ui.waitUntil(20_000) { runCatching { ui.onNode(hasScrollToIndexAction()).performScrollToNode(hasText(s(R.string.complete))) }.isSuccess }
     }
     private fun complete() = ui.onAllNodes(hasText(s(R.string.complete)) and hasClickAction()).onFirst()
