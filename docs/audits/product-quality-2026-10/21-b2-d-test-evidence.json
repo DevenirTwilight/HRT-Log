@@ -1,7 +1,7 @@
 {
   "batch": "B2-D",
   "date": "2026-10-13",
-  "state": "WAITING_CI",
+  "state": "COMPLETE",
   "focused": {
     "state_tests": 9,
     "layout_matrix": 48,
@@ -33,13 +33,113 @@
     "historical_files": 164,
     "identical_results": 5
   },
-  "device": "PENDING_CI",
-  "ci": "PENDING_PUSH",
+  "device": {
+    "app": 88,
+    "data": 14,
+    "failures": 0,
+    "conditional_restart_skips": 6,
+    "new_D_flow_tests": 9,
+    "prior_independent_restart_methods_passed": 4,
+    "prepare_password_checkpoint_and_external_kill": "PASS",
+    "fresh_process_method_tests": 1,
+    "fresh_process_failures": 0,
+    "proof": {
+      "job_id": 115192589191,
+      "proof": [
+        "2026-10-13T08:09:27.1746933Z OK (1 test)",
+        "2026-10-13T08:09:30.4143410Z OK (1 test)",
+        "2026-10-13T08:09:30.4144302Z PASS: fresh process requires authentication, private ciphertext persists",
+        "2026-10-13T08:09:32.3829477Z OK (1 test)",
+        "2026-10-13T08:09:33.7121025Z OK (1 test)",
+        "2026-10-13T08:09:33.7121907Z PASS: fresh process deletes owned import residues and preserves unrelated sentinel",
+        "2026-10-13T08:09:39.2290434Z PASS: deliberately killed the process after the real password-dialog checkpoint",
+        "2026-10-13T08:09:43.2315524Z OK (1 test)",
+        "2026-10-13T08:09:43.2316827Z PASS: fresh process has no pending source/password/restore and keeps encrypted source intact"
+      ]
+    }
+  },
+  "ci": [
+    {
+      "run_id": 38366443689,
+      "source_sha": "b6cad04af8f7e977581426afa429d90e53bb8122",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38366443689",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 115192588836,
+          "name": "android",
+          "conclusion": "success",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38366443689/job/115192588836"
+        },
+        {
+          "id": 115192589100,
+          "name": "jvm",
+          "conclusion": "success",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38366443689/job/115192589100"
+        },
+        {
+          "id": 115192589191,
+          "name": "device-tests",
+          "conclusion": "success",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38366443689/job/115192589191"
+        }
+      ]
+    },
+    {
+      "run_id": 38366443699,
+      "source_sha": "b6cad04af8f7e977581426afa429d90e53bb8122",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38366443699",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 115192588241,
+          "name": "reference",
+          "conclusion": "success",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38366443699/job/115192588241"
+        }
+      ]
+    }
+  ],
   "not_run": [
     "physical ARM",
     "real cloud persistence",
     "real TalkBack",
     "OEM differences",
     "SAF alias equality across different URIs"
-  ]
+  ],
+  "commit": "b6cad04af8f7e977581426afa429d90e53bb8122",
+  "local_android": {
+    "app": 703,
+    "data": 72,
+    "reminder": 14,
+    "failures": 0,
+    "errors": 0,
+    "existing_app_skips": 61,
+    "period_stability": 5
+  },
+  "lint": {
+    "errors": 0,
+    "warnings": 179
+  },
+  "artifact_digests": {
+    "build": "1eded9d5d1bf97a20902cbc18fcd24e5e84525c32b364dceb3427fc8d823bc9c",
+    "device": "cfd17fcedc19b1f5841bee33f966e2c919189d1969919bca8521e729da02a2d7"
+  },
+  "release_source": {
+    "sha": "b6cad04af8f7e977581426afa429d90e53bb8122",
+    "origin": "git",
+    "dirty": false,
+    "version_name": "0.2.0",
+    "version_code": 25,
+    "formally_signed": false,
+    "delivered": false
+  },
+  "local_build": {
+    "jvm": "PASS",
+    "full_debug": "PASS",
+    "instrumentation": "PASS",
+    "lint_errors": 0,
+    "lint_warnings": 179,
+    "unsigned_release": "CI verified; not repeated locally"
+  }
 }

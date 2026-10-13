@@ -1,13 +1,13 @@
 # B2 隐私与数据安全实施验收（2026-10-12）
 
-分支 `feature/b2-privacy-reliability-20261012`；merge-base/最新默认分支 `1e584285cb1e6f7a4b09a3e20585418d35a28735`。PR19 的报告20是已合并历史终态，不由本报告覆盖。S0 复核四项缺口仍存在；原 SQLite parser 关闭句柄并物化数据，允许结束读取即删除，不扩大 scope。
+分支 `feature/b2-privacy-reliability-20261012`；merge-base/最新默认分支 `1e584285cb1e6f7a4b09a3e20585418d35a28735`。PR19 的报告20是已合并历史终态，不由本报告覆盖。本文保留实施阶段的红灯和等待记录；表格及每批“最终验收”为最终状态。S0 复核四项缺口仍存在；原 SQLite parser 关闭句柄并物化数据，允许结束读取即删除，不扩大 scope。
 
 | 批次 | 状态 | 提交/CI |
 |---|---|---|
 | A | COMPLETE | `ed5682e7a5fd6cc0540e42ac15f4dddca23210f9`；[38291254654](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38291254654) jvm/android/device-tests 全 success；[38291254617](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38291254617) reference success |
 | B | COMPLETE | 主提交 `348064c251d7a21338ae7637b4d5394f6e4122da` + 修复 `5f839e98eb085eaab92c415a434d00fcc956e8ba`；[38301348940](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38301348940) 三任务全success，[38301348930](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38301348930) reference success |
 | C | COMPLETE | `8e97e7a620ba0a22559c8d7fb7c4d01a7e744280`；[38362778379](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38362778379) 三任务全success；[38362778161](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38362778161) reference success |
-| D | WAITING_CI | C对应四项CI全绿后实施；本批提交/CI待登记 |
+| D | COMPLETE | `b6cad04af8f7e977581426afa429d90e53bb8122`；[38366443689](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38366443689) 三任务全success；[38366443699](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38366443699) reference success |
 
 ## A：最短生命周期
 
@@ -72,3 +72,25 @@ RawData.restore/事务/Schema/核心数据及冻结协议未修改。原恢复�
 D 取消后自动恢复负向：正常生产DataSection及真实ActivityResultRegistry回归1/1先通过，Android测试完整编译通过。故意在保护备份保存器返回取消时调用 `model.restoreBackup`；同一入口测试1/1因 `Cancelled backup picker must never start a restore operation` 断言失败，非环境/超时。已恢复源码，恢复后同测与完整回归正在执行；详细机器摘要待本批最终CI。
 
 D 变异恢复后目标1/1通过；完整Android测试源码编译成功。完整本地JVM/Android和本批CI仍在验收中，当前不填COMPLETE。
+
+D 最终验收：上述完整代码SHA的四项CI全success，经API逐项核对head和所有job；CI app703/data72/reminder14零失败，app61既有条件跳过，PeriodStability5/5。API35 app88/data14零失败；六项重启方法主套件条件跳过，其中旧伪装2项/清理2项各1独立通过，D prepare在真实密码字段输入后由外部故意杀死（不计完成测试），不同PID新进程verify1/1通过。九项D设备流程全部通过：取消选择、取消保护备份、相同URI拒绝、真实当前数据备份后主动恢复旧来源、失败输出、错误密码、损坏来源、取消密码、Activity重建；对当前数据库全部表和原输入字节作不变性断言，恢复后导出时间保持。旧schema/v1-v2快照与原事务校验依原全套通过，没有改RawData.restore。
+
+官方报告ZIP SHA-256：build `1eded9d5d1bf97a20902cbc18fcd24e5e84525c32b364dceb3427fc8d823bc9c`、device `cfd17fcedc19b1f5841bee33f966e2c919189d1969919bca8521e729da02a2d7`，下载核对一致，不含交付APK。lint0错误179警告、full Debug/unsigned Release/instrumentation、无INTERNET和ledger门槛全过。unsigned Release来源为上述SHA/git/clean，版本0.2.0/build25；未正式签名、未交付。机器详情见 `21-b2-d-test-evidence.json`。
+
+## 最终范围与回滚
+
+本轮全部变更文件由Git对象生成于 [21-b2-changed-files.txt](21-b2-changed-files.txt)。A集中在临时副本组件、ViewModel、Application和重启脚本；B集中在四个导出入口/复用告知/四语及debug-only合成宿主；C集中在BackupWriter/BackupHistory/BackupStatus、ViewModel与主/伪装备份入口；D集中在RestoreProtection/RestoreProtectionDialog/DataSection、四语、实际设备/外部进程死亡测试及CI调用。新增测试和文档均在文件清单，不含真实健康记录、私有链接或凭据。
+
+核心data与schema、pk-engine、55实时科研锁/15显示文件、冻结基线/协议/研究输出、历史记录、D-1/D-2导出渲染器、delivery ledger和报告20均保持。额外78文件基准只存在B已审查的普通debugCompileOnly类型差异；applicationId/正式签名配置/0.2.0/build25/PNBAK1不变，P2-C HOLD及个人绝对pg/mL能力false不变。SAF权限/云最终落盘、不同URI底层别名不由本应用保证；真实ARM、TalkBack和OEM差异未验收。
+
+按依赖逆序回滚代码：
+
+1. `git revert b6cad04af8f7e977581426afa429d90e53bb8122`
+2. `git revert 8e97e7a620ba0a22559c8d7fb7c4d01a7e744280`
+3. `git revert 5f839e98eb085eaab92c415a434d00fcc956e8ba`
+4. `git revert 348064c251d7a21338ae7637b4d5394f6e4122da`
+5. `git revert ed5682e7a5fd6cc0540e42ac15f4dddca23210f9`
+
+后续文档提交若需回滚先按Git历史处理；不重写历史或删除账本/数据/研究。C还包含本轮发现的导入切换顺序修复，回滚C会撤销该修复，需要重新核对取消清理竞态。最终PR只供审阅，合并默认分支和正式APK签名/交付须另有用户授权。
+
+D本地最终收尾：完整JVM194、app703/data72/reminder14、lint（0错误179警告）、full Debug及两套instrumentation打包全部成功；未重复本地unsignedRelease，清洁完整unsignedRelease由该提交CI实际验证。
