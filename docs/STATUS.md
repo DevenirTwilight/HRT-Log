@@ -1,6 +1,10 @@
-## MED-02B4 / B2-GATE3（PR-A #32）CI 全绿，按 §12 合并中 — 2026-10-14
+## MED-02B4 / B2-GATE3（PR-A #32）已合并 — 2026-10-14
 
-MED-02B4 是项目批次编号，不是附件路线 B4（图片库）或 B3（完整备份）。基线 9d99fd9（默认分支 claude/new-session-1959qb）。PR-A #32 分支 feature/med02b4-b2-gate3-20261014：真实内核 ProxyFD 撤权/缓存、两个真实进程的写入者租约、孤儿幂等、测试专用格式 admission、外部审查包（报告48–52）。修正 c74b41d 测试协调器锁缺陷（同进程探测关闭第二描述符丢失写入者 OS 锁），先红后绿。首轮 9cd28be 设备失败（peer 打开同一数据库，SchemaGuards 每次打开重写 schema → SQLITE_SCHEMA/522）已在 76909b8 修正为 peer 不打开数据库；76909b8 的 Android PR 38644133964 / push 38644129077 与 Science 全部成功，API26/29/35 原始日志含全部 GATE3 证据与红绿 PASS（报告52）。全部 test-only，B2 生产 NO-GO、NOT_REVIEWED_EXTERNALLY 不变。下一步：仅文档最终 HEAD 的必需检查成功后普通合并、复验默认分支 CI；然后 PR-B（隐私声明与四语离线页面，本地 887 测试 0 失败、lint 无新问题，尚未提交）。
+PR-A #32 按任务书 §12 普通合并为 b248294（最终 HEAD 704c542，仅文档；证据 HEAD 76909b8）。704c542 PR 运行的 API29 job 首次因模拟器堆增长上限 16MiB（配置 heapsize=512m 未生效）导致 5 个既有 Argon2id 备份测试 OOM；同 SHA 的 push 运行 API29 成功，按环境异常重跑一次后全部成功（Android PR 38646318276 attempt 2、push 38646311796、Science 38646318234/38646311633）。证据见报告49–52：三 API 的内核 ProxyFD 撤权（远端 EIO、撤权后新明文 0）、两个真实 PID 的写入者租约与被杀 peer 清理、两项红对照预期失败。合并后默认分支 CI 结果见 PR-B 条目。B2 生产 NO-GO、NOT_REVIEWED_EXTERNALLY 不变。
+
+## PRIVACY-P0（PR-B）开发中 — 2026-10-14
+
+分支 feature/privacy-p0-20261014，基于 b248294。根目录 PRIVACY.md（英文权威版）、docs/privacy-evidence.md（每条表述 → 源码/守卫/测试）、README 隐私与版本层次、关于→隐私四语离线全屏说明（en/fr/zh-CN/zh-TW，仅在已解锁的真实应用内，伪装外壳不显示）、docs/release-notes/TEMPLATE.md、med-eu 事实核对注记。测试：PrivacyNoticeLayoutTest 16（4 语 × 320/411dp × 1/2× 字号、明暗、标题语义、WCAG AA 对比度、不截断、≥48dp 关闭、无链接）、PrivacyNoticeOlderApiTest 2（API26/29）、PrivacyNoticeFactsTest 3、ShellPrivacyBoundaryTest 3；本地 app 全部单测 887、0 失败（61 skip 为既有审计类）、lint 无新问题。不改存储/加密/schema/备份/版本/签名。已知缺口（不在声明中宣称）：THIRD_PARTY_NOTICES 未列 BouncyCastle；“删除全部数据”不清除 stock_alerts 偏好；真机 TalkBack NOT_RUN。验证记录见报告53。下一步：CI 全绿后按 §12 合并并复验默认分支。
 
 ## MED-02B3 / B2-SECURITY-GATE2 接手与独立复核修正 — 2026-10-14
 
