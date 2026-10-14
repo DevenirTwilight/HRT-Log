@@ -19,13 +19,15 @@
 
 ## B. 跨进程写入者租约（`Gate3ProcessLockAndroidTest` + `Gate2PeerProvider`）
 
-第二个真实 Android 进程：测试 APK 内 `android:process=":gate2peer"` 的 provider（仅 androidTest 清单，emulator-only，unstable client 调用，peer 死亡不连带杀死测试进程）。两进程打开同一合成 SQLCipher fixture 与同一 per-operation fcntl 锁文件。
+第二个真实 Android 进程：测试 APK 内 `android:process=":gate2peer"` 的 provider（仅 androidTest 清单，emulator-only，unstable client 调用，peer 死亡不连带杀死测试进程）。peer 只取得同一 per-operation fcntl 锁并用 CREATE_NEW+NOFOLLOW 创建写入者自己的叶子，**从不打开 SQLCipher 数据库**；SQL 状态（WRITING 与叶子 dev/inode）由本进程按写入者的方式记录。
+
+首轮 CI（9cd28be）教训：最初让 peer 也打开同一数据库，API26 出现 `SQLITE_SCHEMA (17)` 与 `disk I/O error (522)`。原因是生产 `SchemaGuards.onOpen` 每次打开都 DROP/CREATE 触发器与索引，另一进程的连接因此遭遇 schema 变更；生产应用是单进程，从不在两个进程打开同一数据库。故改为上述设计，测试的仍是跨进程租约与文件所有权本身。API29 另有一处等待条件竞态（只等 WRITING+持锁，叶子可能尚未创建），改为等待 peer 显式写出的 parked 标记。
 
 **缺陷修正**：POSIX 记录锁属于进程，关闭文件的任一描述符会释放本进程在该文件上的全部锁。c74b41d 的 maintenance 探测在写入者同进程内新开并关闭第二个 channel，会静默丢失写入者的 OS 锁。修正为进程内注册表：每个锁文件在本进程只有一个 channel，已持有时不再打开探测 channel；`LeaseState` 区分 `FREE`、`HELD_THIS_PROCESS`、`HELD_OTHER_PROCESS`；锁调用异常（不支持/失败）直接抛出，fail-closed，从不当作允许并发写。
 
 测试：
 1. `sameProcessMaintenanceProbeNeverDropsALiveWritersOsLock`：本进程写入者暂停在 WRITING，本进程 reconcile=`SKIP_LIVE_WRITER` 后，peer 进程看到的必须仍是 `HELD_OTHER_PROCESS`。红对照 `gate3_red=true` 恢复旧探测 → peer 看到 FREE → 预期失败 1 次；注册表路径同断言通过。
-2. `peerProcessWriterBlocksReconcileAndSecondWriterButNotOtherOperations`：peer 持锁暂停在 WRITING；本进程 reconcile=`SKIP_LIVE_WRITER`，叶子、阶段、配额不变；本进程作为第二写入者与确认释放均被拒；另一个 operation 可在本进程完整提交；peer 释放后其提交因单胜者 CAS 失败、只清理自己的叶子，CURRENT 与旧对象保留。
+2. `peerProcessWriterBlocksReconcileAndSecondWriterButNotOtherOperations`：peer 持锁并持有其叶子；本进程 reconcile=`SKIP_LIVE_WRITER`，叶子、阶段、配额不变；本进程作为第二写入者与确认释放均被拒；另一个 operation 可在本进程完整提交；peer 未提交即释放租约后，reconcile 只清理其持久记录 dev/inode 的叶子，CURRENT 与旧对象保留。
 3. `killedPeerWriterReleasesLeaseAndOnlyItsOwnLeafIsCleaned`：peer 持锁时被 `Process.killProcess`（同 UID、独立测试包）；内核释放锁后本进程 reconcile=`CLEANED_OWNED_INCOMPLETE`，只删除其持久记录 dev/inode 的叶子；旧 CURRENT 与外来文件保留；下一次调用得到新的 peer PID。
 
 不做：`pm clear`、强停 `net.plainnotes.app` 用户实例、操作真实 PRIMARY 数据库。真机需另行批准测试设备与数据目录（NOT_RUN_ARM）。

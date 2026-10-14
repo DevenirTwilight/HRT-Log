@@ -5,47 +5,53 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
-import java.io.ByteArrayInputStream
+import java.io.File
+import java.nio.ByteBuffer
+import java.nio.channels.FileChannel
+import java.nio.file.LinkOption
+import java.nio.file.StandardOpenOption
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
-/** TEST APK ONLY, separate process `:gate2peer`: a second real Android PID that opens the same synthetic fixture.
- * It only touches `synthetic-gate2-*` fixtures of this standalone library test package. */
+/** TEST APK ONLY, separate process `:gate2peer`: a second real Android PID for cross-process writer-lease evidence.
+ * It never opens the SQLCipher database (the production app is single-process, and Room's schema guards rewrite
+ * triggers on every open); it only takes the per-operation fcntl lease and creates the writer's own leaf, exactly as
+ * the writer's filesystem side does. Paths must lie inside a `synthetic-gate2-*` fixture of this test package. */
 class Gate2PeerProvider : ContentProvider() {
     companion object {
         const val AUTHORITY = "net.plainnotes.app.data.test.synthetic.gate2peer"
         private val releases = ConcurrentHashMap<String, CountDownLatch>()
     }
     override fun onCreate(): Boolean { Gate2EmulatorGuard.requireEmulator(); return true }
+    private fun fixturePath(extras: Bundle, key: String): File {
+        val f = File(extras.getString(key) ?: error("Synthetic $key required"))
+        val base = context!!.noBackupFilesDir.canonicalPath + File.separator + "synthetic-gate2-"
+        check(f.canonicalPath.startsWith(base)) { "Synthetic fixture only" }
+        return f
+    }
 
     override fun call(method: String, arg: String?, extras: Bundle?): Bundle {
-        val fixture = extras?.getString("fixture") ?: error("Synthetic fixture required")
-        check(fixture.startsWith("synthetic-gate2-")) { "Synthetic fixture only" }
         val out = Bundle().apply { putInt("pid", android.os.Process.myPid()) }
         when (method) {
             "pid" -> Unit
-            // Blocks this binder thread while holding the operation's writer lease in WRITING.
-            "holdWriting" -> {
-                val id = arg!!; val latch = CountDownLatch(1); releases[id] = latch
-                val store = Gate2Store(context!!, fixture)
+            // Holds the operation's writer lease and its own new leaf until released or killed. Blocks this binder thread.
+            "holdLease" -> {
+                val id = arg!!; val lock = fixturePath(extras!!, "lock"); val leaf = fixturePath(extras, "leaf"); val marker = fixturePath(extras, "marker")
+                val lease = Gate2Store.Leases.acquire(lock) ?: return out.apply { putString("result", "LEASE_HELD") }
+                val latch = CountDownLatch(1); releases[id] = latch
                 try {
-                    var paused = false
-                    store.import(store.operationOf(id), ByteArrayInputStream(ByteArray(150_000) { (it * 13).toByte() }), fault = {
-                        if (it == Gate2Store.Seam.WRITE && !paused) { paused = true; check(latch.await(60, TimeUnit.SECONDS)) { "Peer hold timed out" } }
-                    })
-                    out.putString("result", store.phase(id))
-                } catch (t: Throwable) {
-                    out.putString("result", "FAILED:${t.message}")
-                } finally { releases.remove(id); store.close() }
+                    check(leaf.parentFile!!.mkdirs() || leaf.parentFile!!.isDirectory)
+                    FileChannel.open(leaf.toPath(), StandardOpenOption.WRITE, StandardOpenOption.CREATE_NEW, LinkOption.NOFOLLOW_LINKS).use {
+                        it.write(ByteBuffer.wrap(ByteArray(4096) { 7 })); it.force(true)
+                    }
+                    marker.writeText(android.os.Process.myPid().toString())   // explicit event: lease held, leaf created, parked
+                    check(latch.await(60, TimeUnit.SECONDS)) { "Peer hold timed out" }
+                    out.putString("result", "RELEASED")
+                } finally { releases.remove(id); lease.close() }
             }
             "release" -> out.putBoolean("released", releases[arg!!]?.let { it.countDown(); true } ?: false)
-            "leaseState" -> Gate2Store(context!!, fixture).let { s -> try { out.putString("state", s.leaseState(arg!!).name) } finally { s.close() } }
-            "reconcile" -> Gate2Store(context!!, fixture).let { s -> try { out.putString("state", s.reconcile()[arg!!]) } finally { s.close() } }
-            "secondWriter" -> Gate2Store(context!!, fixture).let { s ->
-                try { s.import(s.operationOf(arg!!), ByteArrayInputStream(ByteArray(1000))); out.putString("result", "IMPORTED") }
-                catch (t: Throwable) { out.putString("result", "FAILED:${t.message}") } finally { s.close() }
-            }
+            "leaseState" -> out.putString("state", Gate2Store.Leases.state(fixturePath(extras!!, "lock")).name)
             else -> error("Unknown synthetic peer call")
         }
         return out

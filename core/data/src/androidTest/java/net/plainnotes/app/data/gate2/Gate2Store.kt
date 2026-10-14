@@ -142,6 +142,15 @@ internal class Gate2Store(val context:Context,val fixture:String="synthetic-gate
     private fun maintenanceLease(id:String):Closeable?=
         if(Leases.unsafeLegacyProbeForRedTest)Leases.legacySecondChannel(leaseFile(id)) else Leases.acquire(leaseFile(id))
     fun leaseState(id:String):LeaseState=Leases.state(leaseFile(id))
+    fun leaseFileOf(id:String)=leaseFile(id)
+    /** TEST ONLY (cross-process lease evidence): records, as the live writer itself would, that [op] is WRITING with
+     * the leaf a peer process created under its own lease. SQL stays in this single process; the peer never opens the
+     * database, matching the single-process production app. */
+    fun recordPeerWriting(op:Operation) {
+        val leaf=Os.lstat(file(op).path);check(OsConstants.S_ISREG(leaf.st_mode))
+        db.runInTransaction{raw.execSQL("UPDATE synthetic_gate2_operation SET phase='WRITING',owned_device=?,owned_inode=? WHERE id=? AND phase='PREPARED'",arrayOf(leaf.st_dev,leaf.st_ino,op.id))}
+        check(phase(op.id)=="WRITING")
+    }
     private fun <T> withLease(lease:Closeable?,block:()->T):T {
         lease?:throw IllegalStateException("Synthetic writer lease held")
         try{return block()}finally{lease.close()}
