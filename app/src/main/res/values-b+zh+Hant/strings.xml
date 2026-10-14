@@ -1099,4 +1099,7 @@
     <string name="medical_offset">選擇 UTC 偏移</string>
     <string name="medical_time_ambiguous">這個時間出現兩次，請選擇 UTC 偏移。</string>
     <string name="medical_time_gap">夏令時間變化導致這個當地時間不存在，請選擇其他時間。</string>
+    <string name="medical_change_zone">修改就診時區</string>
+    <string name="medical_zone_search">搜尋城市或時區</string>
+    <string name="medical_zone_help">新時區會重新解釋表單中的當地日期和時間，請在儲存前核對。</string>
 </resources>

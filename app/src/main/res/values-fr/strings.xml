@@ -1099,4 +1099,7 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="medical_offset">Choisir le décalage UTC</string>
     <string name="medical_time_ambiguous">Cette heure existe deux fois. Choisissez le décalage UTC.</string>
     <string name="medical_time_gap">Cette heure locale n’existe pas à cause du changement d’heure. Choisissez une autre heure.</string>
+    <string name="medical_change_zone">Changer le fuseau de consultation</string>
+    <string name="medical_zone_search">Rechercher une ville ou un fuseau</string>
+    <string name="medical_zone_help">Le nouveau fuseau interprète la date et l’heure locales affichées. Vérifiez-les avant d’enregistrer.</string>
 </resources>

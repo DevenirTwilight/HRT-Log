@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import net.plainnotes.app.R
@@ -53,7 +54,8 @@ import java.time.*
 
 /** Drafts stay in memory; failure retains them. A stored instant is not reinterpreted in the device's current zone. */
 @Composable fun MedicalVisitDialog(initial:AppointmentEntity?,state:MedicalVisitSaveState,onDismiss:()->Unit,onSave:(AppointmentEntity)->Unit) {
-    val zone=remember(initial?.id){ZoneId.of(initial?.at_zone ?: ZoneId.systemDefault().id)}
+    var zone by remember(initial?.id){mutableStateOf(ZoneId.of(initial?.at_zone ?: ZoneId.systemDefault().id))}
+    var chooseZone by remember{mutableStateOf(false)}
     var time by remember(initial?.id){mutableStateOf(initial?.let{Instant.ofEpochMilli(it.at_utc).atZone(zone).toLocalDateTime()} ?: Instant.now().minusSeconds(60).atZone(zone).toLocalDateTime().withSecond(0).withNano(0))}
     var type by remember(initial?.id){mutableStateOf(initial?.type ?: "OTHER")}
     var doctor by remember(initial?.id){mutableStateOf(initial?.practitioner.orEmpty())}
@@ -69,6 +71,7 @@ import java.time.*
             Text(stringResource(R.string.medical_past_help))
             if(state.failed)Text(stringResource(if(state.stale)R.string.medical_stale else R.string.medical_save_error),color=MaterialTheme.colorScheme.error)
             Text(stringResource(R.string.medical_visit_zone,zone.id),modifier=Modifier.testTag("medical-zone"))
+            TextButton(enabled=!state.saving,onClick={chooseZone=true},modifier=Modifier.testTag("medical-change-zone")){Text(stringResource(R.string.medical_change_zone))}
             DropdownField(stringResource(R.string.appointment_type),APPOINTMENT_TYPES+(initial?.type?.takeIf{it !in APPOINTMENT_TYPES}?.let{listOf(it)} ?: emptyList()),type,{choiceLabel(it)},{if(!state.saving)type=it})
             DateTimeRow(time,{if(!state.saving){val next=if(it.hour==time.hour && it.minute==time.minute)it.withSecond(time.second).withNano(time.nano) else it;if(next!=time){time=next;offset=null}}})
             val offsets=zone.rules.getValidOffsets(time)
@@ -85,6 +88,22 @@ import java.time.*
                 else TextButton(enabled=!state.saving,onClick=onDismiss,modifier=mod){Text(stringResource(R.string.cancel))}
             }
         })
+    if(chooseZone)MedicalTimeZoneDialog(zone.id,{chooseZone=false}){id->zone=ZoneId.of(id);offset=null;chooseZone=false}
+}
+
+@Composable private fun MedicalTimeZoneDialog(current:String,onDismiss:()->Unit,onChoose:(String)->Unit) {
+    var search by remember{mutableStateOf("")}
+    val keyboard=LocalSoftwareKeyboardController.current
+    val all=remember(current){(ZoneId.getAvailableZoneIds()+current).sorted()}
+    val options=remember(all,search){all.filter{it.contains(search.trim(),ignoreCase=true)}}
+    AlertDialog(onDismissRequest=onDismiss,title={Text(stringResource(R.string.medical_change_zone))},text={Column(Modifier.heightIn(max=320.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
+        OutlinedTextField(search,{search=it},modifier=Modifier.fillMaxWidth().testTag("medical-zone-search"),label={Text(stringResource(R.string.medical_zone_search))},singleLine=true)
+        LazyColumn(Modifier.weight(1f,fill=false).testTag("medical-zone-list")) {
+            item("help"){Text(stringResource(R.string.medical_zone_help))}
+            items(options,key={it}) { id ->
+            TextButton(onClick={keyboard?.hide();onChoose(id)},modifier=Modifier.fillMaxWidth().testTag("medical-zone:$id")){Text(id)}
+        } }
+    }},confirmButton={TextButton(onClick=onDismiss){Text(stringResource(R.string.cancel))}})
 }
 
 /** Explicitly a time-window browser; it writes no association, duplicate lab, or inferred diagnosis. */

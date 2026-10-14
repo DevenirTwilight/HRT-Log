@@ -7,7 +7,7 @@ import org.junit.*
 import org.junit.Assert.*
 import java.time.*
 
-open class HistoricalVisitContract {
+abstract class HistoricalVisitContract {
     private lateinit var db:NotesDatabase
     private lateinit var repo:NotesRepository
     private val at=Instant.parse("2026-03-10T23:30:00Z")

@@ -40,3 +40,11 @@ UTC/id稳定排序；未确认过去预约独立分组，不推断为就诊。�
 新增API35主套件方法及外部force-stop新PID脚本：仅专用synthetic主/旧DECOY两个命名库、合成就诊/问题回答/化验及PNBAK1，证明重启/恢复/回收及隔离，不pm clear真实应用数据；主套件无新增Assume/skip，真实设备结果待CI。生产SQLCipher/锁定/当前伪装笔记认证路由完全保持，合成Room fixture不冒称新的加密机制。
 
 MED-A未改Schema/实体/PK/正式版本/签名/PNBAK1；MED-B29仅设计且审批项齐全。下一步完整JVM/Android/lint/Debug/unsignedRelease/API35/Science及B2/B3/B4回归，在最终HEAD上验证后创建PR和最终独立报告。当前目标通过不等于完整验收完成。
+
+## 全量发现修正与时区可纠错
+
+968ffa0的JVM和API35成功（新PID脚本实际PASS），但Android与本地全data因共享HistoricalVisitContract误声明open、被直接当作无运行器JUnit类发现而失败。SDK28 wrapper的18项本身通过；API35也重复执行了裸base和wrapper。因此改为abstract共用合同，仍由SDK28/API35 wrapper各执行同一18项，不加Ignore/skip或测试排除、不删业务断言。全data实际127/127通过；不是把首轮968ffa0失败称成功。其设备artifact11863154906 digest be5b341c9f81381872d401f0111211b7c118b8786251523adc34ef1be5b81dba，原始控制台Finished161重复计8个原skip事件，报告应读HTML而非把其当新增测试。
+
+补可搜索时区选择，复用at_zone、不新增表；选区按新zone解释当前本地日期/时间，有明确说明，原记录默认精确UTC不变。可主动纠正时区，UTC差异/DST不猜；列表有界LazyColumn、帮助/候选滚动，选定隐藏键盘，避免小屏/2x挤掉候选。新增每语1项，共四语UI40/40，加时区索引7/7、保存3/3、刷新8/8、导航7/7，共65目标项全部零失败/0skip；完整JVM194已通过。下一步完整app/reminder/lint/Debug/两仪器包与新HEAD完整CI/unsignedRelease/API35，不提前验收。
+
+A继续使用既有日期+时间模型；不把“仅知日期”暗变为精确医疗时刻，未来date precision及结构化就诊原因/经过/随访字段应另行设计和批准。本期用户明确核对表单的日期/时间/zone；没有解析自由文本医学结论。

@@ -1099,4 +1099,7 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="medical_offset">Choose UTC offset</string>
     <string name="medical_time_ambiguous">This time occurs twice. Choose the UTC offset.</string>
     <string name="medical_time_gap">This local time does not exist because of a daylight-saving change. Choose another time.</string>
+    <string name="medical_change_zone">Change visit time zone</string>
+    <string name="medical_zone_search">Search city or time zone</string>
+    <string name="medical_zone_help">The new time zone will interpret the local date and time shown in this form. Check both before saving.</string>
 </resources>
