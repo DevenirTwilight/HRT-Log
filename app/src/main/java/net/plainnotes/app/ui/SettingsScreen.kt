@@ -19,11 +19,13 @@ import androidx.compose.material.icons.outlined.*
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.app.NotificationManagerCompat
@@ -122,13 +124,20 @@ class Appearance(val mode: ThemeMode, val dynamic: Boolean, val contrast: Contra
 @Composable fun AboutScreen(contentPadding: PaddingValues) {
     val context = LocalContext.current
     val version = remember { runCatching { context.packageManager.getPackageInfo(context.packageName, 0).versionName }.getOrNull() ?: "" }
+    var privacyNotice by rememberSaveable { mutableStateOf(false) }
+    if (privacyNotice) PrivacyNoticeDialog { privacyNotice = false }
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(contentPadding).padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
         SectionCard(null) {
             Text(stringResource(R.string.app_name), style = MaterialTheme.typography.headlineSmall)
             Text(stringResource(R.string.version, version), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         SourceIdentitySection(remember { SourceIdentity.current(context) })
-        SectionCard(stringResource(R.string.privacy)) { Text(stringResource(R.string.privacy_body), style = MaterialTheme.typography.bodyMedium) }
+        SectionCard(stringResource(R.string.privacy)) {
+            Text(stringResource(R.string.privacy_body), style = MaterialTheme.typography.bodyMedium)
+            TextButton(onClick = { privacyNotice = true }, modifier = Modifier.heightIn(min = 48.dp).testTag("privacy-notice-open"), contentPadding = PaddingValues(0.dp)) {
+                Text(stringResource(R.string.privacy_notice_open))
+            }
+        }
         SectionCard(stringResource(R.string.credits)) { Text(stringResource(R.string.credits_body), style = MaterialTheme.typography.bodyMedium) }
         SectionCard(stringResource(R.string.chrysalide_title)) {
             Text(stringResource(R.string.chrysalide_body), style = MaterialTheme.typography.bodyMedium)

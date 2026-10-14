@@ -15,6 +15,8 @@
 
 P0独立小PR：PRIVACY.md、README/关于页四语入口、导出/卸载/备份及伪装限制；每句映射代码/测试，不把UI改动混入本分支。四语320dp/2×/TalkBack入口、离线可阅读、明文与加密输出提示、无真实数据截图是验收条件。本文不是已上线隐私声明。
 
+2026-10-14 事实核对（PRIVACY-P0）：上表各项已逐条对照源码写入根目录 `PRIVACY.md` 与应用内关于→隐私四语离线说明，映射见 `docs/privacy-evidence.md`；本表结论不变。核对补充：合并后的 fullRelease 清单无 INTERNET，但含 WorkManager 声明的 ACCESS_NETWORK_STATE/WAKE_LOCK/FOREGROUND_SERVICE；“删除全部数据”未清除 `stock_alerts` 偏好、`THIRD_PARTY_NOTICES.md` 未列 BouncyCastle，均列为后续缺口而非声明内容。该说明是工程事实陈述，不是法律意见；上述立法的适用性仍按下方条件矩阵判断。
+
 原文“备份Argon2 19MiB/2迭代”与当前PNBAK1源码不符，不能照搬；AppLock凭据与备份KDF必须分开描述。
 
 ## 条件适用性矩阵
