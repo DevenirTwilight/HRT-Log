@@ -1076,4 +1076,27 @@
     <string name="pkg_restore_title">恢复这盒包装？</string>
     <string name="pkg_restore_body">恢复原包装及原状态？系统将重新核对库存与服药记录。如果作废后发生了更正，将拒绝自动恢复。</string>
     <string name="pkg_restore_conflict">作废后库存或服药记录已变化，无法安全自动恢复。请核对真实包装并使用“核对库存”，保留这条记录以便进一步纠错。</string>
+    <string name="medical_records">医疗档案</string>
+    <string name="medical_add_visit">记录已发生的就诊</string>
+    <string name="medical_past_help">仅记录已经发生的就诊。这里保存您自己的备注，不是应用生成的诊断。</string>
+    <string name="medical_unconfirmed">过去的预约 · 尚未确认就诊</string>
+    <string name="medical_context_labs">时间范围内的化验</string>
+    <string name="medical_context_help">这些化验仅按日期范围展示，不会自动认定属于这次就诊。</string>
+    <string name="medical_visit_zone">就诊时区：%1$s</string>
+    <string name="medical_retract">撤回就诊确认</string>
+    <string name="medical_retract_help">仅撤回“就诊已发生”的确认。预约、备注和问题仍会保留。</string>
+    <string name="medical_delete_help">将这次就诊、相关问题和就诊包记录移到回收站，可在那里恢复。</string>
+    <string name="medical_bin">打开回收站</string>
+    <string name="medical_future_error">就诊日期不能在未来。</string>
+    <string name="medical_stale">这次就诊已被修改或移除。请关闭编辑器并重新打开当前记录。</string>
+    <string name="medical_save_error">未能保存就诊，填写的内容仍在这里。</string>
+    <string name="medical_confirmed">已确认的就诊</string>
+    <string name="medical_context_empty">该时间范围内没有化验。</string>
+    <string name="medical_edit_visit">编辑就诊记录</string>
+    <string name="medical_empty">尚无过去的就诊或预约。</string>
+    <string name="medical_timeline">查看 HRT 历史</string>
+    <string name="medical_saved_refresh">就诊已保存，但刷新失败。请重新打开页面，不要再次添加。</string>
+    <string name="medical_offset">选择 UTC 偏移</string>
+    <string name="medical_time_ambiguous">这个时间出现两次，请选择 UTC 偏移。</string>
+    <string name="medical_time_gap">夏令时变化导致这个当地时间不存在，请选择其他时间。</string>
 </resources>

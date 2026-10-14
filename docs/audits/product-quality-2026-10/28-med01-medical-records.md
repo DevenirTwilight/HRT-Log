@@ -26,3 +26,17 @@ B设计见29，不实现文件导入/预览、新表、新备份格式或加密�
 scope89a9277 Android38489468115三作业、Science38489468353均实际success。SDK28仓库13项红测实际13失败、0skip，13.093s，构建1m5s；临时UnsupportedOperationException seams只用于红测，生产提交前替换。两次测试返回类型写错的编译失败不当作红测；已按saveLab实际Unit返回，改为检查持久化lab ID，原业务断言未减少。四语UI/重复提交红测仍在运行，尚不计作通过。
 
 MED-B设计29完成：推荐元数据+逐对象/版本DEK分块AEAD、独立空间KEK及可移植密码备份；未知SAF长度用认证结束清单而不是提前猜总长。PDF公开ProxyFD无明文预览必须实证，失败不采用明文缓存。新Schema/备份/加密及配额/旧备份关联恢复均等待产品批准，不阻塞A。没有实施附件机制。
+
+## A首版实施与目标验证
+
+历史录入/编辑复用appointment，原子写入明确确认，at_utc实际发生时间与completed_utc确认时间分开；完整预期记录比较拒绝陈旧编辑/撤回/删除。保存协调器区分“事务已提交”和后续提醒/刷新失败，busy+完成确认防止重复插入；错误保留草稿，取消不写。旧未知类别保持直到用户明确选择，医生/机构/日期/备注可纠正。新Medical入口复用Visits详情、原化验值/上下文、HRT时间线、现有回收站；MED详情不提供旧的单独问题不可恢复删除。
+
+UTC/id稳定排序；未确认过去预约独立分组，不推断为就诊。编辑保留原zone与未更改的精确UTC；DST gap不静默平移、overlap要求明确offset，原有精确instant和用户显式改选offset都正确保留。范围化验按就诊zone的日边界，仅上下文，明确不建立归属；原LabDetail/Context复用，未复制数据或产生诊断。
+
+实际本地：SDK28数据合同18/18（18.143s）、SDK35原生四语UI36/36（36.725s）、索引/时区6/6、保存协调器3/3、DataRefresh8/8（10.703s）、AppShellBackNavigation7/7（25.407s，包含所有Destination及新MED页）零失败/零新增skip。UI实际320dp宽/2倍字号，确认/取消/错误草稿、原zone/ID、原化验详情/明确日期上下文、回收站入口和TalkBack Button role验证。
+
+失败修正如实保留：UI测试两处语法/类型编译问题没有形成有效红测；随后业务执行60项有5失败，4项来自assertTextContains默认精确匹配误用，改为验证完整本地化zone标签（更完整，并未删掉断言）。1项DST显式offset旧编译产物仍采用原instant，构建期间源代码改动造成产物没有反映修正；冻结源码并强制compileFullDebugKotlin重新构建，原业务断言全部通过。数据重启新测试曾返回Boolean导致JUnit初始化失败，补Unit类型；invalid zone为DateTimeException，测试明确识别此拒绝类型，保留无写入断言。旧类别兼容及明确offset选择均补防回归。
+
+新增API35主套件方法及外部force-stop新PID脚本：仅专用synthetic主/旧DECOY两个命名库、合成就诊/问题回答/化验及PNBAK1，证明重启/恢复/回收及隔离，不pm clear真实应用数据；主套件无新增Assume/skip，真实设备结果待CI。生产SQLCipher/锁定/当前伪装笔记认证路由完全保持，合成Room fixture不冒称新的加密机制。
+
+MED-A未改Schema/实体/PK/正式版本/签名/PNBAK1；MED-B29仅设计且审批项齐全。下一步完整JVM/Android/lint/Debug/unsignedRelease/API35/Science及B2/B3/B4回归，在最终HEAD上验证后创建PR和最终独立报告。当前目标通过不等于完整验收完成。

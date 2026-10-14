@@ -12,6 +12,12 @@
 
 当前事实：PRIMARY/旧DECOY是独立SQLCipher库和wrap/alias；full伪装的现行普通笔记由PrivateStore独立加密，DECOY仅兼容保留。附件第一阶段只进入已解锁PRIMARY医疗页。**不把医疗页加入伪装笔记，不把PRIMARY索引/计数/名称/密钥共享给它**。若未来希望伪装空间也拥有假医疗库，须明确产品路由、独立store UUID/目录/Keystore alias/KEK/索引/备份，仅重复代码，不能复用真实对象或去重索引。
 
+## 医疗记录系统的后续结构（不是单纯附件列表）
+
+A保留Appointment为就诊根实体、LabValue及版本化LabContext为数值根实体、原HRT规则版本/实际服药为历史根实体。未来若需要单独检索就诊原因、诊疗经过、随访日期，可设计Appointment一对一扩展或版本化补充信息，而不是复制一次就诊到新的重复表；任何新增列/表先审批迁移。当前note支持用户手写这些内容，但不自动分词生成诊断。
+
+附件链接是显式的typed target ID与文件版本/链接revision，可关联就诊、原化验ID、原HRT历史ID；同一原件可多链接，不复制现有化验值或真实服药流水。归档分类、用户文字和链接可修订/撤回，真实服药与已经冻结的导出事实仍保持原可追溯语义。诊断字段若未来新增，只接受用户明确录入/确认，不从文件名/日期/自由文本自动产生结论。
+
 ## 四种存储选型
 
 | 方案 | 优点 | 成本/兼容和恢复问题 | 决定 |
@@ -101,3 +107,13 @@ PNBAK1现有格式/Argon2id参数/32MiB限制/旧文件读取一律保留。新�
 - 伪装医疗库是否确有需求；默认保持当前伪装笔记隔离，不开放真实医疗记录或复用PRIMARY对象。
 
 上述决策只阻塞MED-B后续实施，**不阻塞安全的MED-01A**。本次无新Schema/附件格式/真实原件导入，也无真实医疗数据进入仓库。
+
+## 已核对的公开技术资料
+
+2026-10-14实际GET返回HTTP200并核对标题：
+
+- [Android PdfRenderer](https://developer.android.com/reference/android/graphics/pdf/PdfRenderer)：seekable输入要求及渲染API；有此要求并不能证明ProxyFD兼容，仍需本设计POC。
+- [StorageManager](https://developer.android.com/reference/android/os/storage/StorageManager)：公开openProxyFileDescriptor入口，作为候选随机访问机制。
+- [Android Keystore](https://developer.android.com/privacy-and-security/keystore)：本设备密钥管理/认证边界，不当作跨设备可恢复的附件密钥来源。
+
+NIST标准页面本次访问被HTTP拒绝，未伪称在线原文核验；分块GCM提案必须由独立密码学审查及测试向量确认，以上HTTP200也不等同于本app兼容性/性能实测。当前没有做或部署加密POC。

@@ -482,6 +482,33 @@ const val BACKFILL_MAX_DAYS=731L
         reconcile(dao,now,ZoneId.systemDefault())
     }
     suspend fun currentOverride(key:String)=withContext(Dispatchers.IO){db().dao().overrides().singleOrNull{it.slot_key==key}?.model() ?: SlotOverride(key)}
+    /** Explicit past-visit recording; confirmation time is separate from the occurrence and no clinical facts are inferred. */
+    suspend fun saveHistoricalVisit(value:AppointmentEntity,expected:AppointmentEntity?=null,now:Instant=Instant.now()):AppointmentEntity=transaction { dao ->
+        ZoneId.of(value.at_zone)
+        require(value.at_utc<=now.toEpochMilli() && value.remind_minutes_before>=0)
+        require(value.type in listOf("ENDO","GP","LAB","PSY","SURGERY","OTHER") || expected?.type==value.type && value.type.isNotBlank())
+        val clean=value.copy(location=value.location?.trim()?.takeIf{it.isNotEmpty()},practitioner=value.practitioner?.trim()?.takeIf{it.isNotEmpty()},note=value.note?.trim()?.takeIf{it.isNotEmpty()})
+        if(expected==null) {
+            require(value.id==0L)
+            val inserted=clean.copy(completed_utc=now.toEpochMilli(),remind_minutes_before=0)
+            inserted.copy(id=dao.appointment(inserted))
+        } else {
+            require(value.id==expected.id && expected.id>0)
+            val current=dao.appointmentById(expected.id) ?: throw MedicalVisitConflict()
+            if(current!=expected)throw MedicalVisitConflict()
+            val updated=clean.copy(completed_utc=current.completed_utc ?: now.toEpochMilli())
+            dao.updateAppointment(updated);updated
+        }
+    }
+    suspend fun retractHistoricalVisit(expected:AppointmentEntity,now:Instant=Instant.now())=transaction { dao ->
+        if(dao.appointmentById(expected.id)!=expected || expected.completed_utc==null || expected.at_utc>now.toEpochMilli())throw MedicalVisitConflict()
+        dao.updateAppointment(expected.copy(completed_utc=null))
+    }
+    /** The existing appointment bin preserves the same ID, questions, answers and immutable exported-pack metadata. */
+    suspend fun deleteHistoricalVisit(expected:AppointmentEntity,now:Instant=Instant.now())=transaction { dao ->
+        if(dao.appointmentById(expected.id)!=expected || expected.at_utc>now.toEpochMilli())throw MedicalVisitConflict()
+        deleteAppointment(expected.id,now)
+    }
     suspend fun appointment(value:AppointmentEntity)=saveAppointment(value)
     /** Inserts or edits an appointment; the confirmed-visit time is kept as stored unless changed through [setVisitCompleted]. */
     suspend fun saveAppointment(value:AppointmentEntity)=transaction { dao ->

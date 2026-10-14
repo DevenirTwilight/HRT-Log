@@ -1,3 +1,5 @@
+> MED-01A首版已实现/目标通过：data18、四语320dp/2x UI36、时区索引6、保存协调器3、刷新8、导航7全过。医疗档案独立入口复用appointment/lab/上下文/HRT历史/回收站；完整预期快照事务、显式确认、重复提交保护、原zone与DST精确offset、旧类别兼容、明确“范围≠关联”，MED详情不新增不可恢复单问题删除。编译问题/5项目标失败与修正详审计28；B设计29独立且仅待批准。脚本仅synthetic/emulator新PID、无新skip/pm clear。下一步完整本地回归及本HEAD CI/API35，再独立报告/PR；未完成全量，不能称验收完成。R15/主线/build26未改，不合并/签名/交付/改Schema/格式/PK。
+
 > MED-01审计/设计阶段完成：scope89a9277完整CI全绿，data13项实际红测13失败/0skip；返回类型编译修正如实保留。B设计29已完成，审批项目/POC/恢复与未知长度认证结束清单齐全，不实现附件加密/Schema/格式。A仓库最小事务本地已写，17合同/四语UI与保存协调器测试待绿；接下来替换UI seams、接AppShell/Visits/原化验详情，再完整回归。生产修改尚未提交，不宣称功能完成。R15未改。
 
 > MED-01开始：默认fe879863 Android38470156117（attempt2）/Science38470156282 success；独立feature/med01-medical-records-20261014 /workspace/HRT-Log-med01从主线创建。R15 PR25/feature/r15-undo-skipped-20261013 HEAD239a73c仍OPEN未改。审计28：Appointment已含完成确认和关联问题/VisitPack回收恢复，化验与冻结上下文独立存在；A不增加表，B仅设计29。下一步补历史录入/事务/重复保存/四语红测，实施集中入口与明确“范围≠关联”。不签名/交付/合并/改Schema备份加密或PK。
