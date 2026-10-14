@@ -124,6 +124,7 @@ jobs:
             python3 scripts/run_import_cleanup_restart.py
             python3 scripts/run_restore_process_death.py
             python3 scripts/run_voided_package_restart.py
+            python3 scripts/run_undo_skipped_restart.py
             python3 scripts/run_medical_records_restart.py
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
