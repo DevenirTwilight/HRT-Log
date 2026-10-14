@@ -1,3 +1,14 @@
+## MED-02B0 design / review milestone — 2026-10-14
+
+报告32–37完成，包括两位AI独立原报告与第二轮交叉修订；不是外部认证。
+公开RFC5869/RFC9106和固定Wycheproof6向量，Python/JCA新草案转录；JVM194+POC35零失败。
+SQLite22 +backup model14 +framing3=39合成测试，scripts全部74零失败。
+首批9afec67 Android38539482928新增测试compile失败（非公开SDK O_DIRECTORY/Os.unlink），
+改公开Os.open/fstat目录类型/Os.remove，断言不变；该CI尚在跑其余job，等结束再推纠正，未取消。
+本地完整Android/lint/unsigned build正在83763 session；新协议KAT变更需最终CI重新验证。
+默认Schema9/PNBAK1/PK/version/signing均不动；build26 SHA256仍0c6bd9132ab15ca7625f1da19b59c1c9450cf4cb0518b15100e30396c5ed3fa0。
+下一步纠正后完整pushCI、stacked PR指向PR27分支，最终HEAD push/PR checks全绿并写结果。不合并、不交付APK。
+
 ## MED-02B0 synthetic review milestone — 2026-10-14
 
 Scope commit0a925e8 push Android38536137541/Science38536137432 both green.

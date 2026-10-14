@@ -16,7 +16,7 @@ def hkdf(ikm, salt, info, length=32):
 
 def draft(size):
     dek = bytes(range(32)); salt = bytes(range(32,64))
-    identities = b''.join(uuid.UUID(int=i).bytes for i in range(1,6))
+    identities = b''.join(uuid.UUID(int=i+(size<<8)).bytes for i in range(1,6))
     header = b'DRAFT-ONLY-OBJ0!' + struct.pack('>HHI',0,1,65536) + identities + salt + struct.pack('>HH',1,0)
     assert len(header) == 140
     h0 = hashlib.sha256(header).digest()

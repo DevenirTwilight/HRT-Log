@@ -19,8 +19,8 @@ class AttachmentFilesystemDesignAndroidTest {
         try { block(root) } finally { check(root.deleteRecursively()) }
     }
     private fun syncDirectory(root: File) {
-        val fd = Os.open(root.path, OsConstants.O_RDONLY or OsConstants.O_DIRECTORY or OsConstants.O_CLOEXEC or OsConstants.O_NOFOLLOW, 0)
-        try { Os.fsync(fd) } finally { Os.close(fd) }
+        val fd = Os.open(root.path, OsConstants.O_RDONLY or OsConstants.O_CLOEXEC or OsConstants.O_NOFOLLOW, 0)
+        try { assertTrue(OsConstants.S_ISDIR(Os.fstat(fd).st_mode)); Os.fsync(fd) } finally { Os.close(fd) }
     }
     @Test fun linkPublicationCannotReplaceExistingOwnedTargetAndDirectorySyncWorks() = fixture { root ->
         val source = File(root, "synthetic.part")
@@ -33,7 +33,7 @@ class AttachmentFilesystemDesignAndroidTest {
         val target = File(root, "new.object")
         Os.link(source.path, target.path); syncDirectory(root)
         assertEquals(Os.stat(source.path).st_ino, Os.stat(target.path).st_ino)
-        Os.unlink(source.path); syncDirectory(root)
+        Os.remove(source.path); syncDirectory(root)
         assertArrayEquals(byteArrayOf(1, 2, 3), target.readBytes())
         // Success only establishes these emulator/API operations, NOT flash/power-cut behavior.
     }

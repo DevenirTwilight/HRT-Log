@@ -7,6 +7,7 @@ def hkdf(ikm,salt,info):return hmac.digest(hmac.digest(salt,ikm,'sha256'),info+b
 class DraftVectors(unittest.TestCase):
     def test_profile_and_canonical_header(self):
         self.assertEqual([d['size'] for d in DATA['drafts']],[0,1,65536,65537])
+        self.assertEqual(len({d['keys']['footer'] for d in DATA['drafts']}),4)
         for d in DATA['drafts']:
             h=bytes.fromhex(d['header']);self.assertEqual(len(h),140)
             self.assertEqual(h[:16],b'DRAFT-ONLY-OBJ0!');self.assertEqual(struct.unpack('>HHI',h[16:24]),(0,1,65536))

@@ -47,8 +47,8 @@ class Store:
         if package.bytes_needed > free: raise Rejected('space reservation')
         generation='new-'+operation
         prior=self.journal.get(operation)
-        if prior and prior['digest'] != package.digest: raise Rejected('pending idempotency collision')
-        self.journal[operation]={'generation':generation,'digest':package.digest,'phase':'PREPARED'}
+        if prior and (prior['archive'], prior['digest']) != (package.archive, package.digest): raise Rejected('pending idempotency collision')
+        self.journal[operation]={'generation':generation,'archive':package.archive,'digest':package.digest,'phase':'PREPARED'}
         def boundary(name):
             if fail == name:
                 self.crash(); raise Rejected('injected '+name)
@@ -58,7 +58,11 @@ class Store:
         self.journal[operation]['phase']='AUTHENTICATED'; boundary('authenticated')
         # Simulated file sync, no-replace publication and directory sync form durable generation.
         boundary('file_synced'); boundary('published_before_dirsync')
-        self.durable_files[generation]=self.volatile_files.pop(generation)
+        if generation in self.durable_files:
+            if self.durable_files[generation] != package.objects: raise Rejected('immutable existing generation differs')
+            self.volatile_files.pop(generation)  # Continue already authenticated immutable publication; no overwrite.
+        else:
+            self.durable_files[generation]=self.volatile_files.pop(generation)
         boundary('directory_synced')
         if self.revision != expected: raise Rejected('CAS failed')
         # One atomic SQL commit in this model; NOT several independent assignment durability claims.
@@ -73,7 +77,7 @@ class Store:
         for row in self.journal.values():
             g=row['generation']
             if row['phase']=='COMMITTED':
-                if g not in self.durable_files: raise Rejected('committed file missing: block access, never fabricate')
+                if g not in self.durable_files and (g == self.active or g in self.leases): raise Rejected('active/leased committed file missing: block access, never fabricate')
             elif g != self.active and g not in self.leases:
                 self.durable_files.pop(g,None); row['phase']='ABORTED'
         self.volatile_files.clear()

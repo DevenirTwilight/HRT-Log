@@ -16,6 +16,24 @@ class BackupStateModel(unittest.TestCase):
         s=Store()
         with self.assertRaises(Rejected): s.restore(P,'op',1,fail='committed_ack_lost')
         s.reconcile(); self.assertEqual(s.restore(P,'op',1),'new-op'); self.assertEqual(s.revision,2)
+    def test_directory_synced_retry_continues_identical_generation_without_overwrite(self):
+        s=Store()
+        with self.assertRaises(Rejected):s.restore(P,'op',1,fail='directory_synced')
+        pinned=s.durable_files['new-op'];s.restore(P,'op',1)
+        self.assertIs(s.durable_files['new-op'],pinned)
+    def test_directory_synced_retry_rejects_different_existing_content(self):
+        s=Store()
+        with self.assertRaises(Rejected):s.restore(P,'op',1,fail='directory_synced')
+        with self.assertRaises(Rejected):s.restore(replace(P,objects=('o1','o2','o3')),'op',1)
+        self.assertEqual(s.active,'old');self.assertEqual(s.durable_files['new-op'],('o1','o2'))
+    def test_retired_generation_gc_does_not_break_later_reconciliation(self):
+        s=Store();s.restore(P,'first',1);s.restore(replace(P,archive='archive-2'),'second',2)
+        s.collect('new-first');s.reconcile();self.assertEqual(s.active,'new-second')
+    def test_pending_operation_binds_archive_and_digest(self):
+        s=Store()
+        with self.assertRaises(Rejected):s.restore(P,'op',1,fail='reserved')
+        with self.assertRaises(Rejected):s.restore(replace(P,archive='different'),'op',1)
+        self.assertEqual(s.active,'old')
     def test_duplicate_restore_after_user_edit_is_not_blind_success(self):
         s=Store();s.restore(P,'op',1);s.revision+=1
         with self.assertRaises(Rejected):s.restore(P,'op',1)
