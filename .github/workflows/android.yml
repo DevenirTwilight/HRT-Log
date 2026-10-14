@@ -117,6 +117,7 @@ jobs:
           disable-animations: true
           script: |
             ./gradlew :core:data:connectedDebugAndroidTest --no-parallel --max-workers=2
+            python3 scripts/run_attachment_foundation_restart.py
             adb logcat -G 16M
             ./gradlew :app:connectedFullDebugAndroidTest --no-parallel --max-workers=2
             python3 scripts/collect_package_history_evidence.py --output app/build/reports/package-history-evidence.json
@@ -170,6 +171,8 @@ jobs:
           disable-animations: true
           script: |
             adb logcat -G 16M
+            ./gradlew :core:data:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.data.AttachmentFoundationAndroidTest,net.plainnotes.app.data.AttachmentSqlCipherMigrationTest,net.plainnotes.app.data.AttachmentKeyAndroidTest --no-parallel --max-workers=2
+            python3 scripts/run_attachment_foundation_restart.py
             ./gradlew :app:connectedFullDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.package=net.plainnotes.app.attachmentpoc --no-parallel --max-workers=2
             python3 scripts/run_attachment_poc_restart.py
             python3 scripts/collect_attachment_poc_evidence.py --output app/build/reports/attachment-poc-evidence.json
@@ -178,5 +181,6 @@ jobs:
         with:
           name: attachment-poc-api${{ matrix.api }}
           path: |
+            core/data/build/reports/androidTests/
             app/build/reports/androidTests/
             app/build/reports/attachment-poc-evidence.json

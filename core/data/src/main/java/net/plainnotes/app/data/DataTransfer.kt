@@ -26,21 +26,23 @@ internal val DOMAIN_TABLES = listOf("medication", "pk_profile", "schedule_rule",
 
 /** Raw-SQL maintenance that has to bypass the append-only ledger triggers: full clear and backup restore. */
 internal object RawData {
-    private fun triggers(db: SupportSQLiteDatabase): List<String> = db.query("SELECT name FROM sqlite_master WHERE type='trigger'").use { c ->
+    private fun triggers(db: SupportSQLiteDatabase): List<String> = db.query("SELECT name FROM sqlite_master WHERE type='trigger' AND tbl_name NOT LIKE 'attachment_%'").use { c ->
         buildList { while (c.moveToNext()) add(c.getString(0)) } }
-    /** Runs [block] with every guard trigger removed, then reinstalls them (inside the caller's transaction). */
+    /** Runs [block] with legacy guards temporarily removed; attachment guards remain installed, then reinstalls them (inside the caller's transaction). */
     fun <T> unguarded(db: SupportSQLiteDatabase, block: () -> T): T {
         triggers(db).forEach { db.execSQL("DROP TRIGGER IF EXISTS \"$it\"") }
         return try { block() } finally { SchemaGuards.install(db) }
     }
     fun clear(db: SupportSQLiteDatabase) = unguarded(db) {
+        check(db.inTransaction())
+        AttachmentIdentity.replaceStructuredDataset(db)
         (DOMAIN_TABLES + "reminder_mapping").reversed().forEach { db.execSQL("DELETE FROM $it") }
     }
     fun dump(db: SupportSQLiteDatabase): JSONObject {
         val tables = JSONObject()
         DOMAIN_TABLES.forEach { t ->
             val rows = JSONArray()
-            db.query("SELECT * FROM $t").use { c ->
+            db.query("SELECT ${RecordBackupCompatibility.columns.getValue(t).joinToString(",") { "`$it`" }} FROM $t").use { c ->
                 while (c.moveToNext()) rows.put(JSONObject().apply {
                     for (i in 0 until c.columnCount) when (c.getType(i)) {
                         Cursor.FIELD_TYPE_NULL -> put(c.getColumnName(i), JSONObject.NULL)
@@ -58,6 +60,8 @@ internal object RawData {
     /** Replaces all data with [tables]; the container cache is recomputed from the ledger afterwards. */
     fun restore(db: SupportSQLiteDatabase, tables: JSONObject,upgradeRegimens:Boolean=false,backfillTrash:Boolean=false) = unguarded(db) {
         BackupValidation.validateTables(db,tables)
+        check(db.inTransaction())
+        AttachmentIdentity.replaceStructuredDataset(db)
         (DOMAIN_TABLES + "reminder_mapping").reversed().forEach { db.execSQL("DELETE FROM $it") }
         DOMAIN_TABLES.forEach { t ->
             val rows = tables.optJSONArray(t) ?: return@forEach

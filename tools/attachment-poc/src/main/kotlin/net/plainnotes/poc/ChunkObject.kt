@@ -29,6 +29,8 @@ object ChunkObject {
         @Synchronized fun open(expected: Identity = identity): Reader {
             check(!closed); return Reader(file, key, expected)
         }
+        /** Short publication only. Safe adapters authenticate/decrypt OUTSIDE this owner monitor. */
+        @Synchronized fun <T> whileOpen(block: () -> T): T { check(!closed);return block() }
         /** Only synthetic portable-envelope tests use this; no production key export API. */
         @Synchronized fun syntheticKey(): ByteArray { check(!closed); return key.copyOf() }
         @Synchronized override fun close() { closed = true; key.fill(0) }

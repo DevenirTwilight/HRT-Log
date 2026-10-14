@@ -1,3 +1,10 @@
+## MED-02B1 — 基础实现及代码验收完成（2026-10-14）
+
+明确生产Room10授权见REQUIREMENTS §90。默认关闭的八表/DAO、stable typed identity/Trash墓碑、CURRENT/epoch/三UUID域、密钥隔离基础、PNBAK9兼容和可撤销commit/Reader原型完成。
+代码f04c3fe的push/PR JVM、Android/lint/Debug/unsignedRelease、API26/29/35及Science全部成功。JVM239；Android单元data180/rem17/app865，原61skip；API35 data88/app报告223，原8skip；26/29各21+41及独立强停验证。Room9迁移/旧链/失败回滚/PNBAK/身份/密钥/真实process force-stop和B2/B3/B4/R15/MED01回归全通过，无新skip。
+报告38提供可复现证明与未解决风险。独立PR29 stacked到未合并28/27，不自动合并。最终文档HEAD交付也必须CI全绿；精确最终SHA/CI入口见 https://github.com/DevenirTwilight/HRT-Log/pull/29 正文及checks。
+不启用真实附件、不正式cipher/full备份/生产PDF、不PK/version/signing/APK交付。真实ARM/硬件掉电/独立专家认证NOT_RUN，下一阶段须单独批准，不自动开展B2/B3。
+
 ## MED-02B0交付设计与最终检查入口 — 2026-10-14
 
 PR28 https://github.com/DevenirTwilight/HRT-Log/pull/28 OPEN，stacked到PR27已验收固定1c8d385，均不合并。

@@ -17,7 +17,7 @@ fun migration1To2(today: () -> LocalDate = LocalDate::now) = object : Migration(
     }
 }
 
-/** Every migration, in order; also used to know which backup schemas can be restored. */
+/** Runtime migrations. PNBAK1 record serialization compatibility is separately frozen at 9. */
 val migration2To3 = object : Migration(2, 3) {
     override fun migrate(db: SupportSQLiteDatabase) {
         db.execSQL("ALTER TABLE `symptom_check` ADD COLUMN `context_snapshot` TEXT")
@@ -71,4 +71,7 @@ val migration8To9 = object : Migration(8,9) {
         Trash.backfill(db)
     }
 }
-fun allMigrations(today: () -> LocalDate = LocalDate::now): Array<Migration> = arrayOf(migration1To2(today), migration2To3, migration3To4, migration4To5, migration5To6, migration6To7, migration7To8, migration8To9)
+val migration9To10 = object : Migration(9,10) {
+    override fun migrate(db:SupportSQLiteDatabase) = AttachmentSchema.migrate(db)
+}
+fun allMigrations(today: () -> LocalDate = LocalDate::now): Array<Migration> = arrayOf(migration1To2(today), migration2To3, migration3To4, migration4To5, migration5To6, migration6To7, migration7To8, migration8To9, migration9To10)

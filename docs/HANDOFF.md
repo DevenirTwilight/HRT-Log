@@ -1,3 +1,67 @@
+## MED-02B1 代码全绿及最终交付入口 — 2026-10-14
+
+实现基准f04c3fe11d8e5021f2404064ff01fc25f55a1831全部push/PR CI成功：Android38584644420/38584652287，Science38584643704/38584652558（两deep实际成功）。JVM239；data180/rem17/app865，61原有skip；API35 data88/app报告223、8原有skip；API26/29各data21+POC41。没有新skip/削减断言。
+新增真实SQLCipher在未提交事务中force-stop的新PID验证三个API均成功；原B2/B3/B4/R15/MED01及各种重启/备份回归全过。Room9原生迁移、1→10链、失败DDL回滚、29旧表/索引fingerprint、Room9生成PNBAK后恢复到10、stableUUID/trash/purge/ID复用和密钥隔离均验证。
+报告38已汇总代码阶段证据、失败历史、artifact digest及NOT_RUN边界。当前最后HEAD为验收文档提交；最终精确SHA/最终CI记录在PR29正文：https://github.com/DevenirTwilight/HRT-Log/pull/29 。交付前必须等此文档HEAD的完整CI全部结束且成功，不冒用f04旧结果。
+PR29 stacked于28/27，三项仍OPEN，不自动合并。B1已实现但附件仍关闭；没有正式cipher/full backup/真实导入/生产preview。真实ARM、硬件掉电、生产协议/便携wrapper/外部专家认证仍未验收，后续B2需单独授权和独立审核，不自动开始。
+Room10授权见REQUIREMENTS §90。PNBAK1序列化仍9、crypto参数/版本号/签名/PK不改；build26 SHA256保持0c6bd9132ab15ca7625f1da19b59c1c9450cf4cb0518b15100e30396c5ed3fa0。无新APK签名或交付，无真实医疗数据操作。
+
+## MED-02B1 R15版本回归修正与强停补测批 — 2026-10-14
+
+20181a7 push/PR所有CI均已结束。Android/JVM/Science（PR deep实际运行）和API26/29均成功；API35 data87全通过，app全量仅R15 runtime9→10旧断言失败，未其他业务失败，无新skip。已修runtime10并实际解密PNBAK检查schema9，保留所有原数据/库存/VOIDED断言。
+本地完整data180/rem17/app865通过（app原有61skip），命令12m10s；四迁移合同增强为真正Room9升级前生成旧PNBAK，升级10后恢复并逐表fingerprint相同。本地四合同再过4/0fail/skip，13.812s，连设备包assemble1m42s成功。
+强停合同新增于library test APK合成SQLCipher DB，第二PREPARED操作及就诊行修改保持未提交，外部脚本强停后新PID检查回滚和已提交scope/UUID/PREPARED，功能始终0。新force-stop实际验证仍待最终三API，不能称通过。app测试编译2m53s通过；最终core test APK补编译36s成功。
+准备提交并推送此独立补测批，当前旧CI都结束才推，不取消任何CI。不启用附件、不真实文件、不B2/B3、不merge/sign/APK。
+
+## MED-02B1 原生迁移API26/29通过与强停补测准备 — 2026-10-14
+
+20181a7的PR/push API26、29兼容任务均成功，每API data21 + app POC41，含四真实SQLCipher迁移/回滚/隔离合同、密钥和安全预览合同；原live cipher import强停脚本也通过。JVM/Science PR deep通过，完整Android/API35仍跑，不取消。
+额外审查发现app R15重启合同仍断言runtime9，已改10并添加实际解密PNBAK序列化schema9断言，原VOIDED/实际扣减/跳过撤销断言全部保留。当前CI尚未包含此修正，预期该旧断言会失败。
+新增专用library test APK强停合同/脚本，独占synthetic-med02b1-foundation-restart.db，在未提交SQLCipher事务中阻塞后force-stop；新PID应保留已提交scope/typedUUID/PREPARED并回滚另一操作及业务行变更，feature仍0。只操作合成library test包，不触碰真实app数据。此新合同尚待编译/实际设备运行，不计通过。
+本地data180/rem17通过，app full unit仍运行；新强停compile在后排队。当前CI全部结束后才推此修正/补测批。
+
+## MED-02B1 共用迁移合同本地通过 — 2026-10-14
+
+四个真实Room迁移合同本地Robolectric通过，4 tests、0 fail/error/skip；core:data设备测试包完整assemble通过，命令2m21s。迁移/29旧表fingerprint/PNBAK恢复/回滚/隔离断言共用，设备SQLCipher及密文header仍单独强制验证。此非native或ARM验收。
+修正批将推送PR29并等待最终三API及完整Android/Science。上一轮c74f527所有GitHub CI已结束才推，未取消任何CI。附件功能仍关闭；无批准外改动。
+
+## MED-02B1 第二轮设备夹具修正 — 2026-10-14
+
+PR29仍OPEN且功能关闭。c74f527 push Android38578061148、PR38578070063全部结束，device26/29/35失败；各Science成功，不取消任何CI。
+原无索引/旧VOIDED升级夹具问题已通过；本轮三native失败均因新夹具把day_note.text错写为note，尚未运行这些测试的真正断言。双SQLCipher库同整数ID/PRIMARY隔离测试已在三个API实际通过，不能据此冒称其余迁移通过。
+已修字段并将四个迁移合同共用到本地真实Room/Robolectric与设备真实SQLCipher，设备密文文件头断言仍保留，未增加skip或减少断言。先完成本地四合同验证，再推修正并等待全部设备及完整CI。
+本地重复完整Android构建在Release R8阶段主动中止，退出130，不计完整通过；已完成的本地任务保留结果，但完整构建证明取GitHub最终CI。未取消任何GitHub CI，立即优先执行四迁移合同与native测试编译。真实ARM和生产密文/完整备份仍未实施，最终验收未完成。
+
+## MED-02B1 首轮设备结果与修正待推 — 2026-10-14
+
+PR29 https://github.com/DevenirTwilight/HRT-Log/pull/29 OPEN，stacked于PR28，不合并。代码2af68bb push38575437245、PR38575565339 Android正在完成剩余jobs；push38575437312/PR38575565328 Science gate/deep全成功，JVM成功。
+三API四native fixture因Room无索引表省略indices字段而JSONException，尚未实际验证迁移；已修正确解析optJSONArray空列表，保留每个已声明index和全hash断言。API35另有旧B4直接Room9 builder忘加新9→10路径，已补migration9To10及runtime10/serialization9双断言；原VOIDED/ADJUST/重开断言不减少，无skip/destructive。
+本地完整JVM63+124+12+40=239零fail/skip；当前将修正提交在本地，等上述CI全部结束才推，不取消。完整本地Android/lint/unsigned构建与最终三API验收仍待。
+附件仍关闭，生产新cipher/backup/AppLock文件入口未实施，正式build26不动。报告38保留失败事实及后续验收限制。
+
+## MED-02B1 基础代码与本地验证 — 2026-10-14
+
+明确授权见 REQUIREMENTS §90；独立 stacked 分支基于 PR28 977e077，27/28仍OPEN且已验证。
+Room10 additive八表/实体/DAO已实现；29个旧entity/字段/FK/index导出完全一致。
+CURRENT localDataset/logicalVault/physicalGeneration/recordEpoch分离，PRIMARY初始化；legacy DECOY附件表保持空。
+typed身份与Trash exact payload hash同事务保存/恢复、purge墓碑；intID复用新UUID；重复删除实际服药保持原trash所有权。
+PNBAK1 serialization固定9及28业务表字段清单，magic/Argon2id32MiB,t3,p1/GCM/32MiB限额不变；旧恢复/overwrite/clear同事务退休旧scope、quarantine旧links、fresh epoch/vault/generation。
+session父/子能力+同步Room整个commit门已实现；原型Reader/ProxyFD/图片使用可撤销入口，底层SYNPOC01仍仅历史审计，非生产。
+先失败：新Owner/撤权2合同实际2 fail；epoch组合FK合同4 tests/1 fail；随后修复。
+本地data176、domain63、POC40和schema/scripts92目前零fail/新增skip；app Android测试已编译。
+原生SQLCipher的9→10、1→10、DDL中断回滚、VOIDED/账本/旧包、双库隔离与Keystore tests已编译，仍待API26/29/35 CI实际运行，不冒称通过。
+最后约束加强/最终focus正在执行；之后干净commit、完整JVM/Android/lint/Debug/unsignedRelease和CI、独立PR/报告38。
+当前尚未验收完成，不启用附件、不实际导入、不B2/B3、不合并或正式签名交付APK。
+真实ARM/硬件掉电/正式对象协议/便携wrapper/完整backup仍未验证或未实施。build26 SHA256仍0c6bd9132ab15ca7625f1da19b59c1c9450cf4cb0518b15100e30396c5ed3fa0。
+
+## MED-02B1 启动及明确授权 — 2026-10-14
+
+负责人已明确批准本轮生产 Room10 非破坏性基础修改，见 REQUIREMENTS §90。
+PR27 1c8d385 与 PR28 977e077 push/PR Android/Science 均成功，均 OPEN 未合并；默认 c3bf2cbc 未改变。
+独立分支 feature/med02b1-attachment-foundation-20261014 从977e077创建，后续 stacked PR 指向PR28。
+当前正在先写撤权竞态/Reader 生命周期失败合同；实际 Room/SQLCipher 迁移和旧 PNBAK 兼容证明尚未完成。
+不启用附件入口、不导入真实数据、不实现 B2/B3、不签名交付 APK。
+
 ## MED-02B0交付设计与最终检查入口 — 2026-10-14
 
 PR28 https://github.com/DevenirTwilight/HRT-Log/pull/28 OPEN，stacked到PR27已验收固定1c8d385，均不合并。
