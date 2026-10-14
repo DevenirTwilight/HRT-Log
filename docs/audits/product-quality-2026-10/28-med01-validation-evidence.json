@@ -1,0 +1,148 @@
+{
+  "observed_at": "2026-10-14T02:02:41.860584+00:00",
+  "phase": "CODE_CI_VERIFIED_FINAL_REPORT_HEAD_CHECKS_PENDING",
+  "source_head": "b793ded2c004556af0dac3cff231c49aa9f0be09",
+  "baseline": "fe8798634ccd0d92d2913f384abfcfff94d32274",
+  "b4_main_ci": {
+    "android": 38470156117,
+    "attempt": 2,
+    "science": 38470156282,
+    "status": "MERGED_CI_VERIFIED"
+  },
+  "r15": {
+    "pr": 25,
+    "head": "239a73c4cc1b363d8153eac99551e2e0383c04d3",
+    "changed": false
+  },
+  "local_suites": [
+    {
+      "module": "core/domain",
+      "tests": 58,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "module": "pk-engine",
+      "tests": 124,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "module": "importer",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "module": "core/data",
+      "tests": 127,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "module": "core/reminder",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "module": "app",
+      "tests": 839,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 61
+    }
+  ],
+  "lint": {
+    "Warning": 178
+  },
+  "code_ci_runs": [
+    {
+      "id": 38497285919,
+      "name": "Android and domain checks",
+      "event": "push",
+      "head_sha": "b793ded2c004556af0dac3cff231c49aa9f0be09",
+      "head_branch": "feature/med01-medical-records-20261014",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38497285919",
+      "jobs": [
+        {
+          "id": 115635838237,
+          "name": "android",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 115635838462,
+          "name": "device-tests",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 115635838534,
+          "name": "jvm",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 38497285943,
+      "name": "Science validation",
+      "event": "push",
+      "head_sha": "b793ded2c004556af0dac3cff231c49aa9f0be09",
+      "head_branch": "feature/med01-medical-records-20261014",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38497285943",
+      "jobs": [
+        {
+          "id": 115635838469,
+          "name": "science-change-gate",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 115635880280,
+          "name": "research-deep",
+          "status": "completed",
+          "conclusion": "skipped"
+        }
+      ]
+    }
+  ],
+  "api35": {
+    "data": 33,
+    "app": 157,
+    "failures": 0,
+    "existing_app_skips": 8,
+    "medical_data": 18,
+    "medical_ui": 40,
+    "medical_restart_main": 1,
+    "medical_new_pid_phases": [
+      1,
+      1
+    ]
+  },
+  "code_device_artifact": {
+    "id": 11864487520,
+    "sha256": "36e9f81c5520c7901d4b75ebb7f9c73635aa8ebc282375fa90336066a2fe3b89",
+    "download_verified": true
+  },
+  "med01b": "DESIGN_ONLY_NEEDS_APPROVAL",
+  "new_skips": 0,
+  "schema": 9,
+  "versionCode": 26,
+  "merged": false,
+  "signed_or_delivered_apk": false,
+  "real_health_data_used": false,
+  "physical_arm_and_human_talkback": "NOT_RUN"
+}

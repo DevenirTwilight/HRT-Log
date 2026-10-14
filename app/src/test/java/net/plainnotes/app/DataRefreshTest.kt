@@ -185,4 +185,36 @@ class DataRefreshTest {
         assertEquals(restoredCache,CacheStore(context).read());assertEquals(0.0,model.extra.value.containers.single().used_amount,0.0)
     }
 
+
+    @Test fun medicalVisitCommitRefreshesSharedStateWithoutDuplicateOrInventoryChange() {
+        val before=model.extra.value.containers
+        val draft=AppointmentEntity(type="ENDO",at_utc=Instant.now().minusSeconds(86400).toEpochMilli(),at_zone="Pacific/Kiritimati",practitioner="Synthetic practitioner",note="Synthetic consultation",remind_minutes_before=0)
+        model.saveMedicalVisit(draft);model.saveMedicalVisit(draft)
+        await{model.medicalVisitSave.value.saved!=null}
+        val saved=model.medicalVisitSave.value.saved!!
+        assertEquals(listOf(saved),model.state.value.appointments)
+        assertEquals(listOf(saved),runBlocking{repo.appointments()})
+        assertEquals(before,model.extra.value.containers)
+        model.saveMedicalVisit(draft)
+        shadowOf(android.os.Looper.getMainLooper()).idle()
+        assertEquals(1,runBlocking{repo.appointments()}.size)
+        model.clearMedicalVisitSave();model.saveMedicalVisit(saved.copy(practitioner="Corrected synthetic"),saved)
+        await{model.medicalVisitSave.value.saved?.practitioner=="Corrected synthetic"}
+        assertEquals(saved.id,model.state.value.appointments.single().id)
+        assertEquals(saved.completed_utc,model.state.value.appointments.single().completed_utc)
+        assertEquals(before,model.extra.value.containers)
+    }
+    @Test fun medicalRetractionDeletionAndRecoveryRefreshWithoutDroppingQuestions() {
+        val confirmed=runBlocking{repo.saveHistoricalVisit(AppointmentEntity(type="ENDO",at_utc=Instant.now().minusSeconds(86400).toEpochMilli(),at_zone="UTC",remind_minutes_before=0))}
+        runBlocking{repo.saveVisitQuestion(VisitQuestionEntity(appointment_id=confirmed.id,sort_order=0,text="Synthetic question",answer_note="Synthetic answer"))}
+        model.loadExtra();await{model.extra.value.visitQuestions.size==1 && model.state.value.appointments.size==1}
+        model.retractMedicalVisit(confirmed);await{model.state.value.appointments.singleOrNull()?.completed_utc==null}
+        val unconfirmed=model.state.value.appointments.single()
+        assertEquals(confirmed.copy(completed_utc=null),unconfirmed)
+        model.deleteMedicalVisit(unconfirmed);await{model.state.value.appointments.isEmpty() && model.extra.value.trash.size==1}
+        assertTrue(model.extra.value.visitQuestions.isEmpty())
+        model.restoreTrash(model.extra.value.trash.single().id);await{model.state.value.appointments.size==1 && model.extra.value.visitQuestions.size==1}
+        assertEquals(unconfirmed,model.state.value.appointments.single())
+        assertEquals("Synthetic answer",model.extra.value.visitQuestions.single().answer_note)
+    }
 }
