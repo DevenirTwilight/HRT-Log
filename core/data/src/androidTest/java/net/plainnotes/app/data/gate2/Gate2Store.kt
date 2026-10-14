@@ -12,6 +12,8 @@ import net.plainnotes.poc.B2StreamingCandidate
 import java.io.*
 import java.nio.channels.Channels
 import java.nio.channels.FileChannel
+import java.nio.channels.FileLock
+import java.nio.channels.OverlappingFileLockException
 import java.nio.file.*
 import java.security.KeyStore
 import java.security.MessageDigest
@@ -49,7 +51,7 @@ internal class Gate2Store(val context:Context,val fixture:String="synthetic-gate
             val s=AttachmentIdentity.initialize(raw,true)?:AttachmentIdentity.current(raw)!!
             raw.execSQL("CREATE TABLE IF NOT EXISTS synthetic_gate2_current(id INTEGER PRIMARY KEY CHECK(id=1), revision INTEGER NOT NULL, active TEXT, quota_bytes INTEGER NOT NULL DEFAULT 0)")
             raw.execSQL("INSERT OR IGNORE INTO synthetic_gate2_current(id,revision) VALUES(1,0)")
-            raw.execSQL("CREATE TABLE IF NOT EXISTS synthetic_gate2_operation(id TEXT PRIMARY KEY, dataset TEXT NOT NULL, epoch TEXT NOT NULL, attempt TEXT NOT NULL UNIQUE, version TEXT NOT NULL UNIQUE, object_id TEXT NOT NULL UNIQUE, handle TEXT NOT NULL, physical TEXT NOT NULL, phase TEXT NOT NULL, expected INTEGER NOT NULL, reservation INTEGER NOT NULL, context BLOB NOT NULL, stage_wrap BLOB NOT NULL, active_wrap BLOB, plain_hash BLOB, cipher_hash BLOB, plain_bytes INTEGER, cipher_bytes INTEGER, owned_device INTEGER, owned_inode INTEGER)")
+            raw.execSQL("CREATE TABLE IF NOT EXISTS synthetic_gate2_operation(id TEXT PRIMARY KEY, dataset TEXT NOT NULL, epoch TEXT NOT NULL, attempt TEXT NOT NULL UNIQUE, version TEXT NOT NULL UNIQUE, object_id TEXT NOT NULL UNIQUE, handle TEXT NOT NULL, physical TEXT NOT NULL, phase TEXT NOT NULL, expected INTEGER NOT NULL, reservation INTEGER NOT NULL, context BLOB NOT NULL, stage_wrap BLOB NOT NULL, active_wrap BLOB, plain_hash BLOB, cipher_hash BLOB, plain_bytes INTEGER, cipher_bytes INTEGER, owned_device INTEGER, owned_inode INTEGER, parent_device INTEGER, parent_inode INTEGER)")
             s
         })
         session=AttachmentSession(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch))
@@ -77,7 +79,7 @@ internal class Gate2Store(val context:Context,val fixture:String="synthetic-gate
     private fun contextBytes(attempt:UUID,version:UUID,obj:UUID,handle:UUID):ByteArray=
         net.plainnotes.poc.Gate2Context.encode(UUID.fromString(scope.logicalVault),obj,version,attempt,handle)
     data class Operation(val id:String,val attempt:String,val version:String,val objectId:String,val physical:String,val context:ByteArray,val expected:Long)
-    enum class Seam { WRITE, BEFORE_FILE_SYNC, AFTER_FILE_SYNC, AUTHENTICATED, BEFORE_DIR_SYNC, AFTER_DIR_SYNC, BEFORE_COMMIT, IN_COMMIT, AFTER_COMMIT }
+    enum class Seam { AFTER_CREATE, WRITE, BEFORE_FILE_SYNC, AFTER_FILE_SYNC, AUTHENTICATED, BEFORE_DIR_SYNC, AFTER_DIR_SYNC, BEFORE_COMMIT, IN_COMMIT, AFTER_COMMIT }
     fun revision():Long=raw.query("SELECT revision FROM synthetic_gate2_current WHERE id=1").use{check(it.moveToFirst());it.getLong(0)}
     fun active():String?=raw.query("SELECT active FROM synthetic_gate2_current WHERE id=1").use{check(it.moveToFirst());if(it.isNull(0))null else it.getString(0)}
     fun phase(id:String):String=raw.query("SELECT phase FROM synthetic_gate2_operation WHERE id=?",arrayOf(id)).use{check(it.moveToFirst());it.getString(0)}
@@ -90,7 +92,7 @@ internal class Gate2Store(val context:Context,val fixture:String="synthetic-gate
         val attempt=UUID.randomUUID();val version=UUID.randomUUID();val obj=UUID.randomUUID();val handle=UUID.randomUUID();val physical=UUID.randomUUID()
         val ctx=contextBytes(attempt,version,obj,handle);val key=ByteArray(32).also(SecureRandom()::nextBytes)
         val envelope=try{wrap(key,stageAlias,ctx+"/staging/$id/${scope.dataset}/$physical".toByteArray())}finally{key.fill(0)}
-        val used=raw.query("SELECT COALESCE(SUM(reservation),0) FROM synthetic_gate2_operation WHERE phase NOT IN('ABORTED','CLEANED')").use{check(it.moveToFirst());it.getLong(0)}
+        val used=raw.query("SELECT COALESCE(SUM(reservation),0) FROM synthetic_gate2_operation WHERE phase NOT IN('ABORTED','CLEANED','RELEASED_FOREIGN')").use{check(it.moveToFirst());it.getLong(0)}
         check(used+reservation<=40L*1024*1024){"Synthetic quota reservation"}
         val expected=revision()
         raw.execSQL("INSERT INTO synthetic_gate2_operation(id,dataset,epoch,attempt,version,object_id,handle,physical,phase,expected,reservation,context,stage_wrap) VALUES(?,?,?,?,?,?,?,?,'PREPARED',?,?,?,?)",
@@ -105,19 +107,41 @@ internal class Gate2Store(val context:Context,val fixture:String="synthetic-gate
         check(it.moveToFirst());unwrap(it.getBlob(0),stageAlias,op.context+"/staging/${op.id}/${scope.dataset}/${op.physical}".toByteArray())
     }
     private fun update(op:Operation,phase:String)=db.runInTransaction {raw.execSQL("UPDATE synthetic_gate2_operation SET phase=? WHERE id=?",arrayOf(phase,op.id))}
+    /** Live-writer lease: an OS advisory lock on a per-operation file, held for the whole import. Another process
+     * holding it makes tryLock return null; this JVM holding it throws OverlappingFileLockException. The kernel
+     * drops it when the holder dies, so a fresh process can recover a force-stopped writer. */
+    private fun tryLease(id:String):FileLock? {
+        val f=File(root,"leases/$id.lock");check(f.parentFile!!.mkdirs()||f.parentFile!!.isDirectory)
+        val channel=FileChannel.open(f.toPath(),StandardOpenOption.CREATE,StandardOpenOption.WRITE,LinkOption.NOFOLLOW_LINKS)
+        val lock=try{channel.tryLock()}catch(e:OverlappingFileLockException){null}catch(t:Throwable){channel.close();throw t}
+        if(lock==null)channel.close()
+        return lock
+    }
+    private fun <T> withLease(id:String,block:()->T):T {
+        val lease=tryLease(id)?:throw IllegalStateException("Synthetic writer lease held")
+        try{return block()}finally{lease.channel().close()}
+    }
     fun import(op:Operation,source:InputStream,capability:AttachmentSession.Capability=session.issue(),
-               fault:(Seam)->Unit={},cleanup:(File)->Boolean={it.delete()},unsafeCleanupForRedTest:Boolean=false) {
-        check(phase(op.id)=="PREPARED");val target=file(op);check(target.parentFile!!.mkdirs()||target.parentFile!!.isDirectory)
+               fault:(Seam)->Unit={},cleanup:(File)->Boolean={it.delete()},unsafeCleanupForRedTest:Boolean=false)=
+        withLease(op.id){importLeased(op,source,capability,fault,cleanup,unsafeCleanupForRedTest)}
+    private fun importLeased(op:Operation,source:InputStream,capability:AttachmentSession.Capability,
+               fault:(Seam)->Unit,cleanup:(File)->Boolean,unsafeCleanupForRedTest:Boolean) {
+        check(phase(op.id)=="PREPARED");val target=file(op)
+        // Only a parent directory this operation created itself (empty when created) may later vouch for a leaf
+        // whose inode was never recorded.
+        val freshParent=target.parentFile!!.mkdirs();check(freshParent||target.parentFile!!.isDirectory)
         val scratch=ByteArray(8192);var created=false
         val dir=Os.open(target.parentFile!!.path,OsConstants.O_RDONLY or OsConstants.O_CLOEXEC or OsConstants.O_NOFOLLOW,0)
         val pinned=Os.fstat(dir)
         val key=try{stageKey(op)}catch(e:Throwable){Os.close(dir);throw e}
         try {
-            capability.publishFor(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch)){Unit};update(op,"WRITING")
+            capability.publishFor(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch)){Unit}
+            db.runInTransaction {raw.execSQL("UPDATE synthetic_gate2_operation SET phase='WRITING',parent_device=?,parent_inode=? WHERE id=?",
+                arrayOf(if(freshParent)pinned.st_dev else null,if(freshParent)pinned.st_ino else null,op.id))}
             // Fixed durable reservation for this attempt; no native SQL round-trip per 8KiB chunk.
             val reserved=reservation(op.id);val primitive=B2StreamingCandidate.primitive(key)
             FileChannel.open(target.toPath(),StandardOpenOption.WRITE,StandardOpenOption.CREATE_NEW,LinkOption.NOFOLLOW_LINKS).use { fd ->
-                created=true;val ownedStat=Os.stat(target.path);raw.execSQL("UPDATE synthetic_gate2_operation SET owned_device=?,owned_inode=? WHERE id=?",arrayOf(ownedStat.st_dev,ownedStat.st_ino,op.id))
+                created=true;fault(Seam.AFTER_CREATE);val ownedStat=Os.stat(target.path);raw.execSQL("UPDATE synthetic_gate2_operation SET owned_device=?,owned_inode=? WHERE id=?",arrayOf(ownedStat.st_dev,ownedStat.st_ino,op.id))
                 val out=object:FilterOutputStream(Channels.newOutputStream(fd)){override fun close(){flush()}}
                 primitive.newEncryptingStream(out,op.context).use { cipher ->
                     var total=0L;var zeros=0
@@ -149,7 +173,7 @@ internal class Gate2Store(val context:Context,val fixture:String="synthetic-gate
             // Durable SQL state is authoritative even when the post-commit acknowledgement was lost.
             if(unsafeCleanupForRedTest || phase(op.id)!="COMMITTED") {
                 val sameParent=runCatching{Os.stat(target.parentFile!!.path).let{it.st_dev==pinned.st_dev&&it.st_ino==pinned.st_ino}}.getOrDefault(false)
-                val sameFile=ownedFile(op)
+                val sameFile=ownedForCleanup(op)
                 val clean=!created||(sameParent&&sameFile&&cleanup(target));update(op,if(clean)"ABORTED" else "CLEANUP_PENDING")
             }
             throw e
@@ -174,20 +198,53 @@ internal class Gate2Store(val context:Context,val fixture:String="synthetic-gate
     private fun ownedFile(op:Operation):Boolean=raw.query("SELECT owned_device,owned_inode FROM synthetic_gate2_operation WHERE id=?",arrayOf(op.id)).use{c->
         check(c.moveToFirst());if(c.isNull(0)||c.isNull(1))false else runCatching{Os.lstat(file(op).path).let{OsConstants.S_ISREG(it.st_mode)&&it.st_dev==c.getLong(0)&&it.st_ino==c.getLong(1)}}.getOrDefault(false)
     }
+    /** Crash or failure right after CREATE_NEW, before the leaf inode was recorded: the leaf is ours only when it is a
+     * regular file inside the parent this operation created and recorded. Does not resist same-UID/root races. */
+    private fun unrecordedOwnedLeaf(op:Operation):Boolean=raw.query("SELECT owned_device,parent_device,parent_inode FROM synthetic_gate2_operation WHERE id=?",arrayOf(op.id)).use{c->
+        check(c.moveToFirst());if(!c.isNull(0)||c.isNull(1)||c.isNull(2))false else runCatching{
+            val parent=Os.lstat(file(op).parentFile!!.path);val leaf=Os.lstat(file(op).path)
+            OsConstants.S_ISDIR(parent.st_mode)&&parent.st_dev==c.getLong(1)&&parent.st_ino==c.getLong(2)&&OsConstants.S_ISREG(leaf.st_mode)&&leaf.st_dev==parent.st_dev
+        }.getOrDefault(false)
+    }
+    private fun ownedForCleanup(op:Operation)=ownedFile(op)||unrecordedOwnedLeaf(op)
     private fun ownedInCurrent(id:String):Boolean=raw.query("SELECT dataset,epoch FROM synthetic_gate2_operation WHERE id=?",arrayOf(id)).use{check(it.moveToFirst());it.getString(0)==scope.dataset&&it.getString(1)==scope.epoch}
     fun reconcile():Map<String,String> {
         val results=mutableMapOf<String,String>()
         val ids=raw.query("SELECT id FROM synthetic_gate2_operation").use{c->buildList{while(c.moveToNext())add(c.getString(0))}}
-        for(id in ids){val op=row(id);val p=phase(id)
-            if(AttachmentIdentity.current(raw)!=scope||!ownedInCurrent(id)){results[id]="QUARANTINED_EPOCH";continue}
-            if(id==active()&&p=="COMMITTED"){open(id).use{};results[id]="KEEP_ACTIVE";continue}
-            if(p=="AUTHENTICATED"||p=="COMMITTED"){results[id]="QUARANTINE_COMPLETE_ORPHAN";continue}
-            if(p in setOf("PREPARED","WRITING","CLEANUP_PENDING")){
-                val f=file(op);if(f.exists()&&!ownedFile(op)){results[id]="QUARANTINE_FOREIGN_PATH";continue};val clean=!f.exists()||f.delete();update(op,if(clean)"ABORTED" else "CLEANUP_PENDING")
-                results[id]=if(clean)"CLEANED_OWNED_INCOMPLETE" else "CLEANUP_PENDING"
-            }else results[id]="RETAIN_TERMINAL"
+        for(id in ids){
+            // Never classify or clean an operation whose writer is still alive (this process or another one).
+            val lease=tryLease(id);if(lease==null){results[id]="SKIP_LIVE_WRITER";continue}
+            try{results[id]=classify(id)}finally{lease.channel().close()}
         }
         return results
+    }
+    private fun classify(id:String):String {
+        val op=row(id);val p=phase(id)
+        if(p in TERMINAL)return "RETAIN_TERMINAL"
+        if(AttachmentIdentity.current(raw)!=scope||!ownedInCurrent(id))return "QUARANTINED_EPOCH"
+        if(id==active()&&p=="COMMITTED"){open(id).use{};return "KEEP_ACTIVE"}
+        if(p=="AUTHENTICATED"||p=="COMMITTED")return "QUARANTINE_COMPLETE_ORPHAN"
+        check(p in setOf("PREPARED","WRITING","CLEANUP_PENDING")){"Unknown synthetic phase"}
+        val f=file(op);if(f.exists()&&!ownedForCleanup(op))return "QUARANTINE_FOREIGN_PATH"
+        val clean=!f.exists()||f.delete();update(op,if(clean)"ABORTED" else "CLEANUP_PENDING")
+        return if(clean)"CLEANED_OWNED_INCOMPLETE" else "CLEANUP_PENDING"
+    }
+    /** Explicit, confirmed release of a quarantined orphan (complete orphan, foreign path, failed cleanup, retired
+     * epoch). Frees its quota reservation. Deletes ciphertext only when it is provably this operation's own file;
+     * a foreign file is never deleted. The active pointer is never released here. */
+    fun releaseQuarantined(id:String,confirmed:Boolean):String=withLease(id) {
+        check(confirmed){"Release requires explicit confirmation"}
+        val op=row(id);val p=phase(id)
+        val orphan=p=="AUTHENTICATED"||p=="CLEANUP_PENDING"||(!ownedInCurrent(id)&&p !in TERMINAL)
+        check(id!=active()&&orphan){"Not a quarantined orphan"}
+        val f=file(op);val own=ownedForCleanup(op)
+        if(own)check(f.delete()){"Synthetic orphan delete failed"}
+        val released=if(own||!f.exists())"CLEANED" else "RELEASED_FOREIGN"
+        update(op,released);released
+    }
+    fun fileOf(id:String)=file(row(id))
+    private companion object {
+        val TERMINAL=setOf("ABORTED","CLEANED","RELEASED_FOREIGN")
     }
     fun gc(id:String):Boolean=synchronized(leased) {
         check(AttachmentIdentity.current(raw)==scope&&ownedInCurrent(id));check(active()!=id);if((leased[id]?:0)>0)return false

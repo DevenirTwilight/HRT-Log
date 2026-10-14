@@ -3,6 +3,7 @@
 负责人指示另一会话接手PR31推到全绿且保留复核。37b813d文档HEAD的push/PR 14项检查已全部成功。独立复核见报告47（作者以外的AI工程复核，不是外部专家审核）：无阻断问题；M1恢复与写入者互斥、M2孤儿隔离保留/配额两项生产设计缺口已写入报告45风险与审批前置。
 追加提交只动测试与文档：16项Store负向合同改为断言拒绝原因，双写者补失败者密文已删/胜者保留，新增Gate2上下文向量stdlib重算测试（设计校验58→61），报告46标注DIRECT_CALLBACK/TIMING_BASED证据及MIME拒绝NOT_RUN并修正旧PENDING文字。生产src/main/Schema/guards/备份/PK/version/sign仍零改动。
 本地：JVM261零fail/skip、设计61、Release隔离3通过；core/data Android测试APK本地编译成功，设备测试只能由CI运行（本机无KVM）。修正提交的最终HEAD及全部CI以PR31正文为准，未全绿前不称通过；不合并、不签名、不交付APK。生产NO-GO不变。
+第二轮（负责人要求“查出的问题帮我解决”）：测试协调器实现M1每operation OS锁租约（reconcile跳过活动写入者、同operation拒绝第二写入者）与M2（记录本operation新建父目录、AFTER_CREATE失败/强停可清理自己的叶子；显式确认释放孤儿、释放配额且不删外来文件），新增3项Store测试与AFTER_CREATE强停（每API 4处）；两处100ms计时证据改为等待BLOCKED；Tink测试依赖改用版本目录。本地JVM261、设计61、Release隔离3、两个Android测试APK编译均通过，Release运行时类路径无Tink。cc6b2d7的API26/29设备结果已证实收紧后的断言成立。孤儿保留期/用户提示、退役epoch active指针（B3）、经内核ProxyFD撤权读取仍为后续事项。
 
 ## MED-02B3 / B2-SECURITY-GATE2 代码全绿及最终交接 — 2026-10-14
 

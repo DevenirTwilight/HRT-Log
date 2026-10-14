@@ -15,6 +15,10 @@ class TinkPdfGate2AndroidTest {
     private val context get()=InstrumentationRegistry.getInstrumentation().targetContext
     private val key=ByteArray(32){(it+31).toByte()}
     private val aad="B2-SECURITY-GATE2-TEST-ONLY/synthetic-pdf".toByteArray()
+    private fun awaitBlocked(thread:Thread) {
+        val deadline=android.os.SystemClock.elapsedRealtime()+20_000
+        while(thread.state!=Thread.State.BLOCKED){check(thread.isAlive&&android.os.SystemClock.elapsedRealtime()<deadline){"Thread never blocked: ${thread.state}"};Thread.sleep(5)}
+    }
     private fun session()=AttachmentSession(UUID.randomUUID(),UUID.randomUUID())
     private fun pdf():ByteArray {
         // Four valid pages with bounded comment padding: offsets span multiple real Tink segments.
@@ -79,17 +83,18 @@ class TinkPdfGate2AndroidTest {
     }
     @Test fun ownerRevocationDuringNativePageLifetimeRejectsBitmapAndSerializesRendererClose()=fixture {file,evidence->
         val owner=session().issue();val rendered=java.util.concurrent.CountDownLatch(1);val release=java.util.concurrent.CountDownLatch(1)
-        val closing=java.util.concurrent.CountDownLatch(1);val closed=java.util.concurrent.CountDownLatch(1)
+        val closed=java.util.concurrent.CountDownLatch(1)
         val pool=java.util.concurrent.Executors.newFixedThreadPool(2)
         val v=EncryptedTinkPdfGate2(context,file,key,aad,owner,evidence,beforeBitmapDelivery={rendered.countDown();check(release.await(20,java.util.concurrent.TimeUnit.SECONDS))})
         try {
             val result=pool.submit(java.util.concurrent.Callable{v.render(3)})
             assertTrue(rendered.await(20,java.util.concurrent.TimeUnit.SECONDS));owner.close()
-            val close=pool.submit{closing.countDown();v.close();closed.countDown()}
-            assertTrue(closing.await(20,java.util.concurrent.TimeUnit.SECONDS));assertFalse(closed.await(100,java.util.concurrent.TimeUnit.MILLISECONDS))
+            val closer=Thread{v.close();closed.countDown()}.apply{start()}
+            // Deterministic, not a timing window: close is parked on the renderer monitor the open page holds.
+            awaitBlocked(closer);assertEquals(1L,closed.count)
             release.countDown()
             val failure=assertThrows(java.util.concurrent.ExecutionException::class.java){result.get(20,java.util.concurrent.TimeUnit.SECONDS)}
-            assertTrue(failure.cause is IllegalStateException);close.get(20,java.util.concurrent.TimeUnit.SECONDS)
+            assertTrue(failure.cause is IllegalStateException);closer.join(20_000);assertEquals(0L,closed.count)
             assertEquals(1,v.rejectedBitmaps)
         }finally{release.countDown();pool.shutdownNow();v.close()}
     }

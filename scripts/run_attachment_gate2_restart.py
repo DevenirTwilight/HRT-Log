@@ -15,7 +15,7 @@ base = ['adb', 'shell', 'am', 'instrument', '-w', '-e', 'class',
 component = package + '/androidx.test.runner.AndroidJUnitRunner'
 import sys
 seam = sys.argv[1] if len(sys.argv) > 1 else 'IN_COMMIT'
-assert seam in ('WRITE', 'IN_COMMIT', 'AFTER_COMMIT')
+assert seam in ('AFTER_CREATE', 'WRITE', 'IN_COMMIT', 'AFTER_COMMIT')
 base += ['prepare', '-e', 'gate2_seam', seam]
 subprocess.run(['adb','shell','run-as',package,'rm','-f','files/synthetic-gate2-restart-ready','files/synthetic-gate2-restart-result'],check=True)
 process = subprocess.Popen(base + [component], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)

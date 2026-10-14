@@ -44,10 +44,15 @@ class Gate2RestartAndroidTest {
             val committed=seam==Gate2Store.Seam.AFTER_COMMIT
             assertEquals(state.getString(if(committed)"next" else "old"),s.active());assertEquals(if(committed)2L else 1L,s.revision())
             val result=s.reconcile();assertEquals("KEEP_ACTIVE",result[s.active()])
-            if(fresh&&!committed)assertEquals(if(seam==Gate2Store.Seam.WRITE)"CLEANED_OWNED_INCOMPLETE" else "QUARANTINE_COMPLETE_ORPHAN",result[state.getString("next")])
+            val incomplete=seam==Gate2Store.Seam.WRITE||seam==Gate2Store.Seam.AFTER_CREATE
+            if(fresh&&!committed)assertEquals(if(incomplete)"CLEANED_OWNED_INCOMPLETE" else "QUARANTINE_COMPLETE_ORPHAN",result[state.getString("next")])
+            // A real crash orphan keeps its quota until an explicit confirmed release, which deletes only its own file.
+            var release="n/a"
+            if(fresh&&seam==Gate2Store.Seam.IN_COMMIT){val next=state.getString("next");val orphan=s.fileOf(next);assertTrue(orphan.exists())
+                release=s.releaseQuarantined(next,confirmed=true);assertEquals("CLEANED",release);assertFalse(orphan.exists());assertEquals("RETAIN_TERMINAL",s.reconcile()[next])}
             s.open().use{assertEquals(payload.size.toLong(),it.size())};s.assertProductionOff()
             s.raw.query("PRAGMA foreign_key_check").use{assertEquals(0,it.count)}
-            File(context.filesDir,"synthetic-gate2-restart-result").writeText(JSONObject().put("previous_pid",state.getInt("pid")).put("fresh_pid",android.os.Process.myPid()).put("fresh_process_asserted",fresh).put("api",android.os.Build.VERSION.SDK_INT).put("abi",android.os.Build.SUPPORTED_ABIS.first()).put("seam",seam.name).put("revision",s.revision()).put("reconcile",JSONObject(result)).put("production_enabled",0).toString())
+            File(context.filesDir,"synthetic-gate2-restart-result").writeText(JSONObject().put("previous_pid",state.getInt("pid")).put("fresh_pid",android.os.Process.myPid()).put("fresh_process_asserted",fresh).put("api",android.os.Build.VERSION.SDK_INT).put("abi",android.os.Build.SUPPORTED_ABIS.first()).put("seam",seam.name).put("revision",s.revision()).put("reconcile",JSONObject(result)).put("orphan_release",release).put("production_enabled",0).toString())
             android.util.Log.i("GATE2","api=${android.os.Build.VERSION.SDK_INT} fresh_pid=$fresh seam=$seam revision=${s.revision()} state=$result production_enabled=0")
         }finally{s.destroy();marker.delete()}
     }

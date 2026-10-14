@@ -122,6 +122,7 @@ jobs:
             ./gradlew :core:data:connectedDebugAndroidTest --no-parallel --max-workers=2
             python3 scripts/run_attachment_foundation_restart.py
             python3 scripts/run_attachment_gate2_red.py
+            python3 scripts/run_attachment_gate2_restart.py AFTER_CREATE
             python3 scripts/run_attachment_gate2_restart.py WRITE
             python3 scripts/run_attachment_gate2_restart.py IN_COMMIT
             python3 scripts/run_attachment_gate2_restart.py AFTER_COMMIT
@@ -182,6 +183,7 @@ jobs:
             ./gradlew :core:data:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.data.AttachmentFoundationAndroidTest,net.plainnotes.app.data.AttachmentSqlCipherMigrationTest,net.plainnotes.app.data.AttachmentKeyAndroidTest,net.plainnotes.app.data.Gate2StoreAndroidTest,net.plainnotes.app.data.Gate2RestartAndroidTest,net.plainnotes.app.data.Gate2SafAndroidTest,net.plainnotes.app.data.Gate2ContextAndroidTest --no-parallel --max-workers=2
             python3 scripts/run_attachment_foundation_restart.py
             python3 scripts/run_attachment_gate2_red.py
+            python3 scripts/run_attachment_gate2_restart.py AFTER_CREATE
             python3 scripts/run_attachment_gate2_restart.py WRITE
             python3 scripts/run_attachment_gate2_restart.py IN_COMMIT
             python3 scripts/run_attachment_gate2_restart.py AFTER_COMMIT

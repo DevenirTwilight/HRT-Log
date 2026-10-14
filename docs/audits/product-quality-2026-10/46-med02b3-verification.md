@@ -15,6 +15,18 @@
 
 这些改动的最终HEAD及其全部CI以PR31正文为准；修正提交本身尚未有设备结果前，不称通过。
 
+### 第二轮：复核问题的代码修正（仍只动测试/构建测试依赖/文档）
+
+负责人要求把查出的问题解决而非只记录。在测试协调器与测试中实现（生产src/main零改动）：
+
+- **M1 恢复与写入者互斥**：`import`全程持有每operation的OS建议锁（`leases/<id>.lock`）；`reconcile`与`releaseQuarantined`逐operation `tryLock`，持锁者返回`SKIP_LIVE_WRITER`、不分类不删除；同一operation第二写入者被拒（`Synthetic writer lease held`）。新增`reconcileNeverTouchesALiveWriterAndALeaseAdmitsOneWriterPerOperation`：写入暂停在WRITE时reconcile不动其文件与阶段，释放后正常提交。进程被强停时内核释放锁，四处强停新PID恢复照常。“另一存活进程中的写入者”只由锁语义推断，未单独实测。
+- **M2 孤儿与创建窗口**：进入WRITING时记录“本operation新建的父目录”dev/inode；新增`AFTER_CREATE` seam（CREATE_NEW之后、记录叶子inode之前）。该处失败或被强停时，叶子只在本operation新建并记录的父目录内、为普通文件时才清理；父目录非本operation新建时保持隔离不删。新增`releaseQuarantined(id, confirmed)`：必须显式确认；释放配额；只删可证明属于自己的文件；外来文件永不删除（`RELEASED_FOREIGN`）；active不能释放。新增两项Store测试，restart脚本与CI增加`AFTER_CREATE`（每API四处强停），`IN_COMMIT`真实崩溃孤儿在新PID确认释放后`CLEANED`。保留期/确认主体/用户提示仍是产品决定；退役epoch的active指针归B3。
+- **小3 计时型证据**：`inCommitRevokeWaitsForEntireNativeCommit`与PDF renderer关闭串行改为等待对方线程进入`Thread.State.BLOCKED`（等待监视器）后再断言未完成，不再依赖“100ms内未完成”。
+- **小7 Tink坐标**：三处测试依赖改用版本目录`libs.tink.jvm`/`libs.tink.android`（同为1.23.0）；Release运行时类路径仍无Tink。
+- 小4（直接回调）保持DIRECT_CALLBACK标注：经内核ProxyFD路径的撤权读取（含页缓存是否绕过回调）作为后续独立证据项，未在本PR断言。
+
+Store测试16→19；每API强停3→4（三API共12次新PID）。
+
 ## 已核验完整代码结果
 
 固定代码 `00cb4cf89671f06c432fa52323e31022498a6fbf`；[PR31](https://github.com/DevenirTwilight/HRT-Log/pull/31) OPEN、未合并，stacked base=PR30分支feature/med02b2-v2-import-gate；parent814d355，默认main仍cfe600ee。父PR30 OPEN、原最终四CI成功；不改变或合并父分支。

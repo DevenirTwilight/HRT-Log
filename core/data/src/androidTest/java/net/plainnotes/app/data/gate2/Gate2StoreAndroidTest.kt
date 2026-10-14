@@ -25,6 +25,10 @@ class Gate2StoreAndroidTest {
         assertTrue("Expected ${T::class.java.name} but got $t",generateSequence(t){it.cause}.any{it is T})
     }
     private fun fixture(test:(Gate2Store)->Unit){val start=android.os.SystemClock.elapsedRealtime();val s=Gate2Store(context);try{test(s);s.assertProductionOff()}finally{val info=android.os.Debug.MemoryInfo();android.os.Debug.getMemoryInfo(info);android.util.Log.i("GATE2_METRIC","method=${testName.methodName} api=${android.os.Build.VERSION.SDK_INT} elapsed_ms=${android.os.SystemClock.elapsedRealtime()-start} final_pss_kib=${info.totalPss} sample=final_not_peak");s.destroy()}}
+    private fun awaitBlocked(thread:Thread) {
+        val deadline=android.os.SystemClock.elapsedRealtime()+20_000
+        while(thread.state!=Thread.State.BLOCKED){check(thread.isAlive&&android.os.SystemClock.elapsedRealtime()<deadline){"Thread never blocked: ${thread.state}"};Thread.sleep(5)}
+    }
     private fun initial(s:Gate2Store):Gate2Store.Operation=s.prepare().also{s.import(it,ByteArrayInputStream(bytes))}
 
     @Test fun allPrecommitFaultsLeaveOldCurrentAndRealSqlRollback()=fixture { s ->
@@ -81,8 +85,10 @@ class Gate2StoreAndroidTest {
         try{
             val write=pool.submit {s.import(op,ByteArrayInputStream(bytes),fault={if(it==Gate2Store.Seam.IN_COMMIT){inCommit.countDown();check(leave.await(20,TimeUnit.SECONDS))}})}
             assertTrue(inCommit.await(20,TimeUnit.SECONDS))
-            val revoke=pool.submit{s.session.revoke();revoked.countDown()}
-            assertFalse(revoked.await(100,TimeUnit.MILLISECONDS));leave.countDown();write.get(20,TimeUnit.SECONDS);revoke.get(20,TimeUnit.SECONDS)
+            val revoker=Thread{s.session.revoke();revoked.countDown()}.apply{start()}
+            // Deterministic, not a timing window: the revoker is parked on the session monitor the native commit holds.
+            awaitBlocked(revoker);assertEquals(1L,revoked.count)
+            leave.countDown();write.get(20,TimeUnit.SECONDS);revoker.join(20_000);assertEquals(0L,revoked.count)
             assertEquals(op.id,s.active());assertEquals("COMMITTED",s.phase(op.id));failsAs<IllegalStateException>{s.open()}  // revoked session cannot issue a read capability
         }finally{leave.countDown();pool.shutdownNow()}
     }
@@ -181,6 +187,49 @@ class Gate2StoreAndroidTest {
         assertEquals(old.id,s.active());assertEquals(1L,s.revision());assertEquals("CLEANUP_PENDING",s.phase(next.id))
         assertArrayEquals(s.file(old).readBytes(),target.readBytes());assertEquals("QUARANTINE_FOREIGN_PATH",s.reconcile()[next.id])
         assertTrue(target.exists());s.open().close()
+    }
+
+    @Test fun reconcileNeverTouchesALiveWriterAndALeaseAdmitsOneWriterPerOperation()=fixture { s ->
+        val old=initial(s);val op=s.prepare();val writing=CountDownLatch(1);val leave=CountDownLatch(1)
+        val pool=Executors.newSingleThreadExecutor()
+        try{
+            val write=pool.submit{s.import(op,ByteArrayInputStream(bytes),fault={if(it==Gate2Store.Seam.WRITE&&writing.count>0L){writing.countDown();check(leave.await(20,TimeUnit.SECONDS))}})}
+            assertTrue(writing.await(20,TimeUnit.SECONDS))
+            val live=s.reconcile()
+            assertEquals("SKIP_LIVE_WRITER",live[op.id]);assertEquals("KEEP_ACTIVE",live[old.id])
+            assertEquals("WRITING",s.phase(op.id));assertTrue("Live writer's file must survive recovery",s.file(op).exists())
+            failsWith("Synthetic writer lease held"){s.import(op,ByteArrayInputStream(bytes))}
+            failsWith("Synthetic writer lease held"){s.releaseQuarantined(op.id,confirmed=true)}
+            leave.countDown();write.get(20,TimeUnit.SECONDS)
+            assertEquals(op.id,s.active());assertEquals("COMMITTED",s.phase(op.id));assertEquals("KEEP_ACTIVE",s.reconcile()[op.id])
+        }finally{leave.countDown();pool.shutdownNow()}
+    }
+
+    @Test fun quarantinedOrphanNeedsConfirmedReleaseWhichFreesQuotaButNeverDeletesForeignFile()=fixture { s ->
+        val old=initial(s);val next=s.prepare(reservation=17L*1024*1024);val target=s.file(next)
+        failsWith("Synthetic owned leaf replaced before commit"){s.import(next,ByteArrayInputStream(bytes),fault={if(it==Gate2Store.Seam.BEFORE_COMMIT){
+            check(target.renameTo(File(target.parentFile,"owned-moved.cipher")));s.file(old).copyTo(target)
+        }})}
+        assertEquals("QUARANTINE_FOREIGN_PATH",s.reconcile()[next.id])
+        s.prepare(reservation=17L*1024*1024)                                             // 1 + 17 + 17 of 40 MiB
+        failsWith("Synthetic quota reservation"){s.prepare(reservation=17L*1024*1024)}   // quarantined row still holds 17 MiB
+        failsWith("Release requires explicit confirmation"){s.releaseQuarantined(next.id,confirmed=false)}
+        assertEquals("CLEANUP_PENDING",s.phase(next.id))
+        failsWith("Not a quarantined orphan"){s.releaseQuarantined(old.id,confirmed=true)}  // the active object is never an orphan
+        assertEquals("RELEASED_FOREIGN",s.releaseQuarantined(next.id,confirmed=true))
+        assertArrayEquals("Foreign bytes are never deleted",s.file(old).readBytes(),target.readBytes())
+        s.prepare(reservation=17L*1024*1024)                                             // released reservation is free again
+        assertEquals("RETAIN_TERMINAL",s.reconcile()[next.id]);assertEquals(old.id,s.active());s.open().close()
+    }
+
+    @Test fun failureRightAfterCreateCleansLeafOnlyInsideItsOwnRecordedParent()=fixture { s ->
+        val op=s.prepare();val f=s.file(op)
+        failsWith("Synthetic injected AFTER_CREATE"){s.import(op,ByteArrayInputStream(bytes),fault={if(it==Gate2Store.Seam.AFTER_CREATE)throw IOException("Synthetic injected AFTER_CREATE")})}
+        assertEquals("ABORTED",s.phase(op.id));assertFalse(f.exists())
+        // A parent the operation did not create cannot vouch for an unrecorded leaf: kept and quarantined, never deleted.
+        val other=s.prepare();val existing=s.file(other);existing.parentFile!!.mkdirs()
+        failsWith("Synthetic injected AFTER_CREATE"){s.import(other,ByteArrayInputStream(bytes),fault={if(it==Gate2Store.Seam.AFTER_CREATE)throw IOException("Synthetic injected AFTER_CREATE")})}
+        assertEquals("CLEANUP_PENDING",s.phase(other.id));assertTrue(existing.exists());assertEquals("QUARANTINE_FOREIGN_PATH",s.reconcile()[other.id]);assertTrue(existing.exists())
     }
 
 }
