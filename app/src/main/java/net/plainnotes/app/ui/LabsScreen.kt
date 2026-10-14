@@ -164,3 +164,19 @@ private fun max(a: Double, b: Double) = if (a > b) a else b
         }) { Text(stringResource(R.string.save)) } },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } })
 }
+
+
+/** Read the original lab and its frozen context; no duplicate row, inferred visit association, or new estimate. */
+@Composable fun LabDetailDialog(v:LabValueEntity,contexts:List<net.plainnotes.app.data.LabContextEntity>,onDismiss:()->Unit,onEdit:()->Unit) {
+    val local=Instant.ofEpochMilli(v.sampled_utc).atZone(ZoneId.of(v.sampled_zone))
+    AlertDialog(onDismissRequest=onDismiss,title={Text(analyteLabel(v.analyte_code))},text={Column(Modifier.heightIn(max=320.dp).verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(8.dp)) {
+        Text(displayNumber(v.value)+" "+v.unit)
+        Text(formatDate(local.toLocalDate())+" · "+formatTime(local.toLocalTime())+" · "+v.sampled_zone)
+        if(v.reference_lower!=null || v.reference_upper!=null)Text(stringResource(R.string.lab_range_value,v.reference_lower?.let{displayNumber(it)} ?: "–",v.reference_upper?.let{displayNumber(it)} ?: "–",v.reference_unit ?: ""))
+        listOfNotNull(v.laboratory,v.note).forEach{Text(it)}
+        LabContextSection(v,contexts,null)
+    }},confirmButton={AdaptiveActions(listOf(stringResource(R.string.edit),stringResource(R.string.ok)),contentInset=48.dp){i,mod->
+        if(i==0)OutlinedButton(onClick=onEdit,modifier=mod){Text(stringResource(R.string.edit))}
+        else TextButton(onClick=onDismiss,modifier=mod){Text(stringResource(R.string.ok))}
+    }})
+}

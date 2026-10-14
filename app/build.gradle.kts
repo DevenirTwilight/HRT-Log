@@ -47,8 +47,8 @@ android {
     buildTypes { getByName("release") { isMinifyEnabled = true; isShrinkResources = true; proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro") } }
     packaging { jniLibs { useLegacyPackaging = true } }
     sourceSets {
-        getByName("test").java.srcDir("src/stockTest/java")
-        getByName("androidTest").java.srcDir("src/stockTest/java")
+        getByName("test").java.srcDirs("src/stockTest/java", "src/medicalTest/java")
+        getByName("androidTest").java.srcDirs("src/stockTest/java", "src/medicalTest/java")
     }
 
     buildFeatures { compose = true; buildConfig = true }

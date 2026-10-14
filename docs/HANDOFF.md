@@ -1,3 +1,13 @@
+> MED-01代码完整验收：b793ded Android38497285919三作业及Science38497285943均success；JVM194/data127/rem17/app839零失败（61原skip），API35 data33/app157零失败（8原条件skip经独立脚本实际通过）；医疗data18/UI四语40/时区索引7/保存3/刷新8/导航7、新PID/PNBAK1/回收及隔离全过。lint0错误，Debug/unsignedRelease/两测试包与来源清单保护通过。审计28/机器证据和B设计29齐全；B新表/加密/流式备份/预览需审批，A正常场景无阻塞。独立PR最终报告HEAD自身push/PR CI须全绿后交还，精确SHA/链接固定PR正文。R15不改；不合并/签名/交付APK或改build26/Schema/PK/格式。
+
+> MED-01回归修正：968ffa0 API35/JVM成功但Android失败，共享合同误被独立JUnit发现；已abstract保留两端各18项全部断言，不加skip/exclude。完整data127/127通过，JVM194通过；新增可搜索时区纠错/明确本地时钟解释，四语UI40/索引7/保存3/刷新8/导航7=65全部过。接下来完整app/reminder/lint/Debug/两仪器包与本HEAD完整CI/unsignedRelease/API35，再最终报告PR。原代码失败证据在28，B设计29仍仅待审批。R15未改，不改Schema/PK/格式/正式版本/签名，不交付APK或合并。
+
+> MED-01A首版已实现/目标通过：data18、四语320dp/2x UI36、时区索引6、保存协调器3、刷新8、导航7全过。医疗档案独立入口复用appointment/lab/上下文/HRT历史/回收站；完整预期快照事务、显式确认、重复提交保护、原zone与DST精确offset、旧类别兼容、明确“范围≠关联”，MED详情不新增不可恢复单问题删除。编译问题/5项目标失败与修正详审计28；B设计29独立且仅待批准。脚本仅synthetic/emulator新PID、无新skip/pm clear。下一步完整本地回归及本HEAD CI/API35，再独立报告/PR；未完成全量，不能称验收完成。R15/主线/build26未改，不合并/签名/交付/改Schema/格式/PK。
+
+> MED-01审计/设计阶段完成：scope89a9277完整CI全绿，data13项实际红测13失败/0skip；返回类型编译修正如实保留。B设计29已完成，审批项目/POC/恢复与未知长度认证结束清单齐全，不实现附件加密/Schema/格式。A仓库最小事务本地已写，17合同/四语UI与保存协调器测试待绿；接下来替换UI seams、接AppShell/Visits/原化验详情，再完整回归。生产修改尚未提交，不宣称功能完成。R15未改。
+
+> MED-01开始：默认fe879863 Android38470156117（attempt2）/Science38470156282 success；独立feature/med01-medical-records-20261014 /workspace/HRT-Log-med01从主线创建。R15 PR25/feature/r15-undo-skipped-20261013 HEAD239a73c仍OPEN未改。审计28：Appointment已含完成确认和关联问题/VisitPack回收恢复，化验与冻结上下文独立存在；A不增加表，B仅设计29。下一步补历史录入/事务/重复保存/四语红测，实施集中入口与明确“范围≠关联”。不签名/交付/合并/改Schema备份加密或PK。
+
 > B4顺序合并完成（2026-10-13，REQ §85）：PR23 merge `d06bcce` 完整主线通过后，PR24改为默认分支、19文件差异不变，以明确新基线验证merge32345cb执行完整Android/Science全部成功，再以merge `9af38f3` 合并。其主线Android38468046764三任务、Science38468046661 gate/deep全部实际success；两个验收HEAD8749207/92f8c42保持，最终业务源码树与验收一致。详见[报告26](audits/product-quality-2026-10/26-b4-merge-and-mainline-validation.md)及机器证据。本次仅归入最新授权/交接/验收文档，交还条件仍为最后文档HEAD自身完整CI实际成功，精确SHA/链接固定PR正文，不循环追加自身SHA。下方待完成/不合并叙述属历史。无新正式签名/APK/版本/发布；build26文件不变。
 
 > B4两项PR已顺序合并（2026-10-13）：PR24在新基线验证merge32345cb的Android38466418672及Science38466418719 gate/deep全部成功后，经expected-head92f8c42校验，以merge commit `9af38f3008b7d8b7260c995f397b20e59174d443` 合入默认分支；父提交d06bcce/92f8c42，树2fae7ed与验收HEAD及验证合并完全一致。PR23 merge d06bcce先完成主线全绿，再调整PR24目标并复验。当前主线Android38468046764 / Science38468046661待完成，不能提前称最终主线通过。原分支未改/删除、无新APK或签名。待主线通过后，将最终合并报告和授权记录归入默认分支，再验证最终文档HEAD检查。

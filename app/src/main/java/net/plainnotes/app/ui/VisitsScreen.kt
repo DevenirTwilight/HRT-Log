@@ -38,11 +38,12 @@ import java.time.*
 
 /** Appointments with their questions and visit packs. Selecting one shows its detail; Back returns to the list. */
 @Composable fun VisitsScreen(state: NotesState, extra: NotesViewModel.ExtraState, model: NotesViewModel, selected: Long?, onSelect: (Long?) -> Unit,
-                             onAdd: () -> Unit, contentPadding: PaddingValues) {
+                             onAdd: () -> Unit, contentPadding: PaddingValues, medical:Boolean=false, onMedicalEdit:(AppointmentEntity)->Unit={}, onLab:(LabValueEntity)->Unit={}) {
     val appointment = selected?.let { id -> state.appointments.firstOrNull { it.id == id } }
+    LaunchedEffect(selected,appointment,medical){if(medical && selected!=null && appointment==null)onSelect(null)}
     if (appointment != null) {
         BackHandler { onSelect(null) }
-        VisitDetail(appointment, state, extra, model, { onSelect(null) }, contentPadding)
+        VisitDetail(appointment, state, extra, model, { onSelect(null) }, contentPadding,medical,onMedicalEdit,onLab)
         return
     }
     val now = Instant.now().toEpochMilli()
@@ -73,25 +74,30 @@ import java.time.*
     }
 }
 
-@Composable private fun VisitDetail(a: AppointmentEntity, state: NotesState, extra: NotesViewModel.ExtraState, model: NotesViewModel, onBack: () -> Unit, contentPadding: PaddingValues) {
+@Composable private fun VisitDetail(a: AppointmentEntity, state: NotesState, extra: NotesViewModel.ExtraState, model: NotesViewModel, onBack: () -> Unit, contentPadding: PaddingValues, medical:Boolean=false,onMedicalEdit:(AppointmentEntity)->Unit={},onLab:(LabValueEntity)->Unit={}) {
     var edit by remember { mutableStateOf(false) }
     var remove by remember { mutableStateOf(false) }
+    var medicalRemove by remember { mutableStateOf<AppointmentEntity?>(null) }
+    var medicalRetract by remember { mutableStateOf<AppointmentEntity?>(null) }
     var question by remember { mutableStateOf<VisitQuestionEntity?>(null) }
     var generate by rememberSaveable { mutableStateOf(false) }
     val questions = extra.visitQuestions.filter { it.appointment_id == a.id }.sortedWith(compareBy({ it.sort_order }, { it.id }))
     val packs = extra.visitPacks.filter { it.appointment_id == a.id }.sortedByDescending { it.generated_utc }
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = contentPadding.calculateTopPadding() + 8.dp,
         bottom = contentPadding.calculateBottomPadding() + 32.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        item { TextButton(onClick = onBack) { Icon(Icons.AutoMirrored.Outlined.ArrowBack, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.visits)) } }
+        item { TextButton(onClick = onBack) { Icon(Icons.AutoMirrored.Outlined.ArrowBack, null); Spacer(Modifier.width(8.dp)); Text(stringResource(if(medical)R.string.medical_records else R.string.visits)) } }
         item {
             SectionCard(choiceLabel(a.type.ifBlank { "OTHER" })) {
-                Text(formatDate(Instant.ofEpochMilli(a.at_utc).atZone(ZoneId.systemDefault()).toLocalDate()) + " " + formatTime(Instant.ofEpochMilli(a.at_utc)), style = MaterialTheme.typography.titleMedium)
+                val displayZone=if(medical)ZoneId.of(a.at_zone) else ZoneId.systemDefault()
+                val local=Instant.ofEpochMilli(a.at_utc).atZone(displayZone)
+                Text(formatDate(local.toLocalDate()) + " " + formatTime(local.toLocalTime()), style = MaterialTheme.typography.titleMedium)
+                if(medical)Text(stringResource(R.string.medical_visit_zone,a.at_zone),style=MaterialTheme.typography.bodySmall)
                 a.practitioner?.let { Text(stringResource(R.string.practitioner) + ": " + it) }
                 a.location?.let { Text(stringResource(R.string.location) + ": " + it) }
                 a.note?.let { Text(it) }
                 AdaptiveActions(listOf(stringResource(R.string.edit),stringResource(R.string.visit_delete))) { i,mod ->
-                    if(i==0)OutlinedButton(onClick={edit=true},modifier=mod){Icon(Icons.Outlined.Edit,null);Spacer(Modifier.width(6.dp));Text(stringResource(R.string.edit))}
-                    else TextButton(onClick={remove=true},modifier=mod){Text(stringResource(R.string.visit_delete))}
+                    if(i==0)OutlinedButton(onClick={if(medical)onMedicalEdit(a) else edit=true},modifier=mod){Icon(Icons.Outlined.Edit,null);Spacer(Modifier.width(6.dp));Text(stringResource(R.string.edit))}
+                    else TextButton(onClick={if(medical)medicalRemove=a else remove=true},modifier=mod){Text(stringResource(R.string.visit_delete))}
                 }
             }
         }
@@ -99,10 +105,12 @@ import java.time.*
             SectionCard(stringResource(if (a.completed_utc != null) R.string.visit_completed else R.string.visit_not_confirmed)) {
                 a.completed_utc?.let { Text(formatDateTime(Instant.ofEpochMilli(it)), style = MaterialTheme.typography.bodySmall) }
                 Text(stringResource(R.string.visit_confirm_help), style = MaterialTheme.typography.bodySmall)
-                if (a.completed_utc == null) Button(onClick = { model.setVisitCompleted(a.id, true) }) { Icon(Icons.Outlined.TaskAlt, null); Spacer(Modifier.width(6.dp)); Text(stringResource(R.string.visit_confirm)) }
+                if (a.completed_utc == null) Button(onClick = { if(medical){model.clearMedicalVisitSave();model.saveMedicalVisit(a,a)}else model.setVisitCompleted(a.id, true) }) { Icon(Icons.Outlined.TaskAlt, null); Spacer(Modifier.width(6.dp)); Text(stringResource(R.string.visit_confirm)) }
+                else if(medical)OutlinedButton(onClick={medicalRetract=a}){Text(stringResource(R.string.medical_retract))}
                 else OutlinedButton(onClick = { model.setVisitCompleted(a.id, false) }) { Text(stringResource(R.string.visit_unconfirm)) }
             }
         }
+        if(medical)item("medical-labs") { SectionCard(stringResource(R.string.medical_context_labs)) { MedicalVisitLabs(a,extra.labs,onLab) } }
         item {
             SectionCard(stringResource(R.string.visit_questions)) {
                 questions.forEachIndexed { i, q ->
@@ -133,11 +141,13 @@ import java.time.*
     if (remove) AlertDialog(onDismissRequest = { remove = false }, icon = { Icon(Icons.Outlined.Delete, null) }, text = { Text(stringResource(R.string.visit_delete_confirm)) },
         confirmButton = { Button(onClick = { remove = false; onBack(); model.deleteAppointment(a.id) }) { Text(stringResource(R.string.remove)) } },
         dismissButton = { TextButton(onClick = { remove = false }) { Text(stringResource(R.string.cancel)) } })
-    question?.let { q -> QuestionDialog(q, { question = null }, { model.deleteVisitQuestion(q.id); question = null }) { model.saveVisitQuestion(it); question = null } }
+    medicalRemove?.let{expected->MedicalCorrectionConfirmation(false,{medicalRemove=null}){medicalRemove=null;model.deleteMedicalVisit(expected);onBack()}}
+    medicalRetract?.let{expected->MedicalCorrectionConfirmation(true,{medicalRetract=null}){medicalRetract=null;model.retractMedicalVisit(expected)}}
+    question?.let { q -> QuestionDialog(q, { question = null }, { model.deleteVisitQuestion(q.id); question = null },allowDelete=!medical) { model.saveVisitQuestion(it); question = null } }
     if (generate) VisitPackDialog(a, state, extra, { generate = false }) { uri, r -> model.exportVisitPack(uri, a.id, r.from, r.to, r.sections, r.context, r.labels, r.schedules, r.regimenLabels, r.unknownName) }
 }
 
-@Composable private fun QuestionDialog(initial: VisitQuestionEntity, onDismiss: () -> Unit, onDelete: () -> Unit, onSave: (VisitQuestionEntity) -> Unit) {
+@Composable private fun QuestionDialog(initial: VisitQuestionEntity, onDismiss: () -> Unit, onDelete: () -> Unit, allowDelete:Boolean=true,onSave: (VisitQuestionEntity) -> Unit) {
     var text by rememberSaveable { mutableStateOf(initial.text) }
     var answer by rememberSaveable { mutableStateOf(initial.answer_note.orEmpty()) }
     var asked by rememberSaveable { mutableStateOf(initial.status == "ASKED") }
@@ -146,7 +156,7 @@ import java.time.*
             OutlinedTextField(text, { text = it }, Modifier.fillMaxWidth(), label = { Text(stringResource(R.string.visit_question_text)) })
             Row(Modifier.fillMaxWidth().toggleable(asked, role = Role.Checkbox) { asked = it }, verticalAlignment = Alignment.CenterVertically) { Checkbox(asked, null); Text(stringResource(R.string.visit_question_asked)) }
             OutlinedTextField(answer, { answer = it }, Modifier.fillMaxWidth(), label = { Text(stringResource(R.string.visit_answer)) })
-            if (initial.id != 0L) TextButton(onClick = onDelete) { Text(stringResource(R.string.remove)) }
+            if (initial.id != 0L && allowDelete) TextButton(onClick = onDelete) { Text(stringResource(R.string.remove)) }
         }
     }, confirmButton = { Button(enabled = text.isNotBlank(), onClick = { onSave(initial.copy(text = text, answer_note = answer, status = if (asked) "ASKED" else "OPEN")) }) { Text(stringResource(R.string.save)) } },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } })

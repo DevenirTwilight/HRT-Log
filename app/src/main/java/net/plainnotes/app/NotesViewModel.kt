@@ -120,7 +120,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
                           val voidedContainers:List<ContainerEntity> = emptyList(),
                           val containersWithConsumption:Set<Long> = emptySet())
     val extra=MutableStateFlow(ExtraState())
-    private fun guarded(block:suspend()->Unit)=viewModelScope.launch{try{block()}catch(e:kotlinx.coroutines.CancellationException){throw e}catch(e:Exception){mutable.value=mutable.value.copy(error=when(e){is PeriodRestoreConflict->R.string.period_restore_overlap;is PackageRestoreConflict->R.string.pkg_restore_conflict;is PackageConsumptionConflict->R.string.pkg_undo_locked;else->R.string.operation_error})}}
+    private fun guarded(block:suspend()->Unit)=viewModelScope.launch{try{block()}catch(e:kotlinx.coroutines.CancellationException){throw e}catch(e:Exception){mutable.value=mutable.value.copy(error=when(e){is MedicalVisitConflict->R.string.medical_stale;is PeriodRestoreConflict->R.string.period_restore_overlap;is PackageRestoreConflict->R.string.pkg_restore_conflict;is PackageConsumptionConflict->R.string.pkg_undo_locked;else->R.string.operation_error})}}
     fun loadExtra():Job=refresh()
     private fun mutateExtra(block:suspend()->Unit)=change(block)
     data class ImportedLink(val record:RecordEntity,val candidates:List<TimelineEntry>)
@@ -307,6 +307,18 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     }
     fun loadOverride(key:String)=viewModelScope.launch{override.value=repo.currentOverride(key)}
     fun changeOverride(s:Slot,o:SlotOverride)=change{repo.override(s,o);override.value=null}
+    private val medicalSaving=net.plainnotes.app.medical.MedicalVisitSaving(viewModelScope,{draft,committed->
+        mutate {
+            val saved=repo.pinnedTo(draft.space).saveHistoricalVisit(draft.value,draft.expected)
+            committed(saved)
+            mutable.update{it.copy(appointments=(it.appointments.filterNot{row->row.id==saved.id}+saved).sortedBy{row->row.at_utc})}
+        }
+    },{val before=refreshRevision;refresh().join();refreshRevision>before})
+    val medicalVisitSave=medicalSaving.state
+    fun saveMedicalVisit(value:AppointmentEntity,expected:AppointmentEntity?=null)=medicalSaving.save(net.plainnotes.app.medical.MedicalVisitDraft(value,expected,repo.space))
+    fun clearMedicalVisitSave()=medicalSaving.clear()
+    fun retractMedicalVisit(value:AppointmentEntity)=change{repo.retractHistoricalVisit(value)}
+    fun deleteMedicalVisit(value:AppointmentEntity)=change{repo.deleteHistoricalVisit(value)}
     fun appointment(v:AppointmentEntity)=change{repo.appointment(v)}
     fun deleteAppointment(id:Long)=change{repo.deleteAppointment(id)}
     fun setVisitCompleted(id:Long,completed:Boolean)=change{repo.setVisitCompleted(id,completed)}
@@ -329,6 +341,6 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
             sections=VisitSection.encode(sections),language=language,template_version=net.plainnotes.app.visit.VISIT_TEMPLATE_VERSION,input_digest=digest,facts_json=facts.json().toString()))}
         refresh().join();DataJob.Done(R.string.export_saved)
     }
-    fun testReminder()=viewModelScope.launch{try{reminders.testReminder()}catch(e:Exception){mutable.value=mutable.value.copy(error=when(e){is PeriodRestoreConflict->R.string.period_restore_overlap;is PackageRestoreConflict->R.string.pkg_restore_conflict;is PackageConsumptionConflict->R.string.pkg_undo_locked;else->R.string.operation_error})}}
+    fun testReminder()=viewModelScope.launch{try{reminders.testReminder()}catch(e:Exception){mutable.value=mutable.value.copy(error=when(e){is MedicalVisitConflict->R.string.medical_stale;is PeriodRestoreConflict->R.string.period_restore_overlap;is PackageRestoreConflict->R.string.pkg_restore_conflict;is PackageConsumptionConflict->R.string.pkg_undo_locked;else->R.string.operation_error})}}
     fun sync()=viewModelScope.launch{runCatching{reminders.sync()};refresh().join()}
 }

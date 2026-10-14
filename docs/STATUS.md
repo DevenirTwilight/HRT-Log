@@ -1,3 +1,5 @@
+> MED-01代码完整验收：b793ded Android38497285919三作业及Science38497285943均success；JVM194/data127/rem17/app839零失败（61原skip），API35 data33/app157零失败（8原条件skip经独立脚本实际通过）；医疗data18/UI四语40/时区索引7/保存3/刷新8/导航7、新PID/PNBAK1/回收及隔离全过。lint0错误，Debug/unsignedRelease/两测试包与来源清单保护通过。审计28/机器证据和B设计29齐全；B新表/加密/流式备份/预览需审批，A正常场景无阻塞。独立PR最终报告HEAD自身push/PR CI须全绿后交还，精确SHA/链接固定PR正文。R15不改；不合并/签名/交付APK或改build26/Schema/PK/格式。
+
 > B4顺序合并完成（2026-10-13，REQ §85）：PR23 merge `d06bcce` 完整主线通过后，PR24改为默认分支、19文件差异不变，以明确新基线验证merge32345cb执行完整Android/Science全部成功，再以merge `9af38f3` 合并。其主线Android38468046764三任务、Science38468046661 gate/deep全部实际success；两个验收HEAD8749207/92f8c42保持，最终业务源码树与验收一致。详见[报告26](audits/product-quality-2026-10/26-b4-merge-and-mainline-validation.md)及机器证据。本次仅归入最新授权/交接/验收文档，交还条件仍为最后文档HEAD自身完整CI实际成功，精确SHA/链接固定PR正文，不循环追加自身SHA。下方待完成/不合并叙述属历史。无新正式签名/APK/版本/发布；build26文件不变。
 
 > 2026-10-13：PR23和PR24已按授权顺序合并（d06bcce / 9af38f3），PR24新基线完整Android/Science成功；当前默认分支9af38f3合并后CI待完成。源码树与验收92f8c42完全相同，build26未改。
