@@ -1,3 +1,5 @@
+> MED-02A POC范围完成（2026-10-14）：代码6521173 push/PR Android/JVM/三个API/Science全部成功；PR API29外部protobuf解析失败经HTTP200核验仅失败job定向重跑一次成功（attempt2），未改断言/skip/版本。JVM194+28/data160/rem17/app865、API35 data66/app212（61/8原skip外部流程实际跑）、API26/29各30、Science261全部过；lint0/178既有警告，Debug/unsignedRelease/两仪器包/来源与manifest保护通过，实际DEX证明POC仅testAPK。报告30/机器证据+设计31完整，固定最终SHA/自身CI在PR27正文，最终提交检查成功后交还。PR25/26已MERGED_CI_VERIFIED于c3bf2cbc主线；PR27不自合并，MED02B迁移/协议/完整包/配额/关联政策待批准，物理ARM/独立review/生产AppLock与正式附件库未实施。无生产main/Schema/PNBAK1/PK/版本/签名/build26/真实数据改变，无正式APK交付。
+
 > MED-02A首轮CI实况：dcb8beb Android/JVM/Science及API26/29全部success；API35设备7失败均为基于MODEL/FINGERPRINT的emulator守卫拒绝，PDF/图片未进入。修正为公开getprop实际ro.kernel.qemu==1（不删除guard、不新增skip）；另补真实ContentResolver synthetic test-provider未知SIZE/可靠pipe错误/MIME、内存采样和100对象/1000元数据/多显式链接。主线PR25/26已合并且c3bf2cbc全CI成功，本分支已纳入。新HEAD完整设备/回归仍待，不能报全绿；正式main/Schema/PNBAK1/PK/签名/版本无变。
 
 > 集成基线已验证（2026-10-14）：PR26合并051ee22主线Android38524575273/Science38524575321全绿；PR25安全解决冲突后c97d9c6 push/PR全绿并按用户授权合并c3bf2cbc，最新主线Android38527627941三任务和Science38527627946 gate/deep全部成功。MED02独立分支纳入此最终已验证基线，R15/MED01代码与全部合同/重启脚本完整保留；POC新28 JVM通过/设备实测首轮仍待。下面“未合并/待CI”是历史记录，以本段为最新状态。
