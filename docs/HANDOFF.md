@@ -1,3 +1,5 @@
+> MED-02A启动（2026-10-14）：MED01 PR26已合并051ee22，主线Android38524575273三任务与Science38524575321 gate/deep全部success。独立feature/med02a-attachment-poc-20261014从此已验证HEAD建立；PR25用户已授权合并，R15分支c97d9c6保留两套功能/测试解决冲突，新CI38525995026/38525995037及38525991389/38525991267正在核验，尚未合并。POC只合成数据、独立模块及测试依赖，不接生产APK；完成后需纳入R15验证主线。尚无加密/预览实测，不称完成，不改Schema/PNBAK1/PK/版本/签名/真实数据/build26。
+
 > MED-01代码完整验收：b793ded Android38497285919三作业及Science38497285943均success；JVM194/data127/rem17/app839零失败（61原skip），API35 data33/app157零失败（8原条件skip经独立脚本实际通过）；医疗data18/UI四语40/时区索引7/保存3/刷新8/导航7、新PID/PNBAK1/回收及隔离全过。lint0错误，Debug/unsignedRelease/两测试包与来源清单保护通过。审计28/机器证据和B设计29齐全；B新表/加密/流式备份/预览需审批，A正常场景无阻塞。独立PR最终报告HEAD自身push/PR CI须全绿后交还，精确SHA/链接固定PR正文。R15不改；不合并/签名/交付APK或改build26/Schema/PK/格式。
 
 > MED-01回归修正：968ffa0 API35/JVM成功但Android失败，共享合同误被独立JUnit发现；已abstract保留两端各18项全部断言，不加skip/exclude。完整data127/127通过，JVM194通过；新增可搜索时区纠错/明确本地时钟解释，四语UI40/索引7/保存3/刷新8/导航7=65全部过。接下来完整app/reminder/lint/Debug/两仪器包与本HEAD完整CI/unsignedRelease/API35，再最终报告PR。原代码失败证据在28，B设计29仍仅待审批。R15未改，不改Schema/PK/格式/正式版本/签名，不交付APK或合并。
