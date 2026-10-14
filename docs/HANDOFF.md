@@ -1,3 +1,17 @@
+## MED-02B1 R15版本回归修正与强停补测批 — 2026-10-14
+
+20181a7 push/PR所有CI均已结束。Android/JVM/Science（PR deep实际运行）和API26/29均成功；API35 data87全通过，app全量仅R15 runtime9→10旧断言失败，未其他业务失败，无新skip。已修runtime10并实际解密PNBAK检查schema9，保留所有原数据/库存/VOIDED断言。
+本地完整data180/rem17/app865通过（app原有61skip），命令12m10s；四迁移合同增强为真正Room9升级前生成旧PNBAK，升级10后恢复并逐表fingerprint相同。本地四合同再过4/0fail/skip，13.812s，连设备包assemble1m42s成功。
+强停合同新增于library test APK合成SQLCipher DB，第二PREPARED操作及就诊行修改保持未提交，外部脚本强停后新PID检查回滚和已提交scope/UUID/PREPARED，功能始终0。新force-stop实际验证仍待最终三API，不能称通过。app测试编译2m53s通过；最终core test APK补编译36s成功。
+准备提交并推送此独立补测批，当前旧CI都结束才推，不取消任何CI。不启用附件、不真实文件、不B2/B3、不merge/sign/APK。
+
+## MED-02B1 原生迁移API26/29通过与强停补测准备 — 2026-10-14
+
+20181a7的PR/push API26、29兼容任务均成功，每API data21 + app POC41，含四真实SQLCipher迁移/回滚/隔离合同、密钥和安全预览合同；原live cipher import强停脚本也通过。JVM/Science PR deep通过，完整Android/API35仍跑，不取消。
+额外审查发现app R15重启合同仍断言runtime9，已改10并添加实际解密PNBAK序列化schema9断言，原VOIDED/实际扣减/跳过撤销断言全部保留。当前CI尚未包含此修正，预期该旧断言会失败。
+新增专用library test APK强停合同/脚本，独占synthetic-med02b1-foundation-restart.db，在未提交SQLCipher事务中阻塞后force-stop；新PID应保留已提交scope/typedUUID/PREPARED并回滚另一操作及业务行变更，feature仍0。只操作合成library test包，不触碰真实app数据。此新合同尚待编译/实际设备运行，不计通过。
+本地data180/rem17通过，app full unit仍运行；新强停compile在后排队。当前CI全部结束后才推此修正/补测批。
+
 ## MED-02B1 共用迁移合同本地通过 — 2026-10-14
 
 四个真实Room迁移合同本地Robolectric通过，4 tests、0 fail/error/skip；core:data设备测试包完整assemble通过，命令2m21s。迁移/29旧表fingerprint/PNBAK恢复/回滚/隔离断言共用，设备SQLCipher及密文header仍单独强制验证。此非native或ARM验收。

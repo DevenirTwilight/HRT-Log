@@ -58,12 +58,15 @@ class UndoSkippedRestartAndroidTest {
             }
             check(r.calendar(at(7),zone,day).single{it.slot.key==skipped.slot_key})
             val hidden=r.voidedContainers().single();assertEquals("VOIDED",hidden.state);assertEquals(20.0,StockForecasts.available(skipped.medication_id,r.containers())!!,0.0)
+            val plaintext=BackupCodec.decrypt(backup.readBytes(),"r15-synthetic-pass".toCharArray())
+            try { assertEquals(9,org.json.JSONObject(plaintext.toString(Charsets.UTF_8)).getInt("schema")) }
+            finally { plaintext.fill(0) }
             r.restoreBackup(backup.readBytes(),"r15-synthetic-pass".toCharArray())
             assertFalse(r.currentOverride(skipped.slot_key!!).skipped);assertNotNull(db.dao().recordById(skipped.id)!!.deleted_at_utc)
             val slot=r.calendar(at(7),zone,day).single{it.slot.key==skipped.slot_key};check(slot)
             r.complete(slot.slot,at(10),3.0);r.complete(slot.slot,at(10),3.0)
             assertEquals(3.0,r.containers().single().used_amount,0.0);assertEquals(hidden,r.voidedContainers().single())
-            assertEquals(1,r.records().count{it.slot_key==skipped.slot_key});assertEquals(9,db.openHelper.writableDatabase.version)
+            assertEquals(1,r.records().count{it.slot_key==skipped.slot_key});assertEquals(10,db.openHelper.writableDatabase.version)
         } finally { db.close();context.deleteDatabase(name);backup.delete();pid.delete() }
     }
 }

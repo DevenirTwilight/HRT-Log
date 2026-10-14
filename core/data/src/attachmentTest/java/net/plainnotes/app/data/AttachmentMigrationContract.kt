@@ -53,6 +53,8 @@ abstract class AttachmentMigrationContract {
     }
     @Test fun encryptedRoom9MigratesAllLegacyRowsIndicesGuardsAndReopens()=runBlocking {
         val name="synthetic-b1-migration-${UUID.randomUUID()}.db";val pass=ByteArray(32){(it+1).toByte()}
+        val password="synthetic-native-password".toCharArray()
+        var backup:ByteArray?=null
         var room:NotesDatabase?=null
         try {
             val before=fixture(name,pass,9).use { helper ->
@@ -79,6 +81,9 @@ abstract class AttachmentMigrationContract {
                 raw.execSQL("INSERT INTO trash_item(kind,ref,item_date,deleted_utc,payload_json,state) VALUES ('CORRECTION',?,'2026-01-01',1000,?,'HIDDEN')",arrayOf("package-void:2:$operation",payload.toString()))
                 raw.execSQL("UPDATE supply_container SET state='VOIDED' WHERE id=2")
                 PackageCorrections.validate(raw)
+                assertEquals(9,raw.version)
+                val data=JSONObject().put("format",1).put("schema",9).put("tables",RawData.dump(raw)).toString().toByteArray()
+                try { backup=BackupCodec.encrypt(data,password) } finally { data.fill(0) }
                 fingerprint(raw)
             }
             assertEquals(29,before.size)
@@ -90,11 +95,8 @@ abstract class AttachmentMigrationContract {
             raw.query("SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'attachment_%'").use{assertEquals(8,it.count)}
             val scope=db.withTransaction { requireNotNull(AttachmentIdentity.initialize(raw,true)) }
             val id=db.withTransaction { AttachmentIdentity.bind(raw,scope,"APPOINTMENT",1) }
-            val password="synthetic-native-password".toCharArray()
-            val data=JSONObject().put("format",1).put("schema",9).put("tables",RawData.dump(raw)).toString().toByteArray()
-            val backup=BackupCodec.encrypt(data,password);data.fill(0)
             val repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=db})
-            repo.restoreBackup(backup,password)
+            repo.restoreBackup(requireNotNull(backup),password)
             try {raw.execSQL("UPDATE supply_transaction SET used_delta=2 WHERE id=1");fail("Ledger protection lost")}
             catch(_:android.database.SQLException){}
             raw.query("SELECT state FROM supply_container WHERE id=2").use{assertTrue(it.moveToFirst());assertEquals("VOIDED",it.getString(0))}
@@ -108,7 +110,7 @@ abstract class AttachmentMigrationContract {
             assertEquals("PREPARED",room!!.attachments().pending(next.dataset).single().phase)
             assertEquals(before,fingerprint(room!!.openHelper.writableDatabase))
             assertEncryptedDatabase(name)
-        } finally { room?.close();context.deleteDatabase(name);pass.fill(0) }
+        } finally { room?.close();context.deleteDatabase(name);pass.fill(0);password.fill('\u0000');backup?.fill(0) }
     }
     @Test fun nativeOldestSchemaMigrationChainValidatesRoom10() {
         val name="synthetic-b1-oldest-${UUID.randomUUID()}.db";val pass=ByteArray(32){5};var room:NotesDatabase?=null

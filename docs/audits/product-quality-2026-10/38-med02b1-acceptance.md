@@ -73,3 +73,19 @@ AttachmentSession的撤权、epoch和父子读取能力由同一短同步门管�
 本地重复完整Android命令在Release R8阶段主动停止（退出130），以优先验证迁移夹具修正；不计为完整构建成功。未取消任何GitHub任务，最终完整Android构建以最后HEAD的CI为准。
 
 修正后本地四个真实Room迁移合同实际通过：4 tests，0 failure/error/skip，测试14.358s；core:data设备测试包assemble同时通过，完整命令2m21s。本地仍是普通SQLite，不替代后续native SQLCipher/密文头检查。
+
+## 原生迁移首批实际通过与强停补测
+
+20181a7 PR/push API26、29兼容任务均成功，每API data21与POC41全部通过，原live cipher import强停也通过；原生四迁移合同已运行。PR Science深度验证实际成功。API35/完整Android仍进行中，非最终全绿。
+
+额外代码检查发现R15 app重启合同还断言runtime9，改为已批准的10并新增实际解密旧PNBAK序列化schema9检查。其他真实扣减、VOIDED、计划状态和重复服药断言保留。当前CI未包含此修正，不能据此宣称全量通过。
+
+为B1专门新增library test APK的SQLCipher强停合同：已提交CURRENT/identity/PREPARED后开启第二事务并在其中阻塞，force-stop后新PID检验已提交状态持久、未提交元数据及就诊文字变更回滚，开关仍关闭且无任何版本/原件。只使用独占合成数据库；既有真实app数据不触碰。这属于进程强停证明，不代表硬件掉电或文件系统与数据库联合原子性。新合同尚待实际运行。
+
+## 20181a7全量结果及补测批
+
+该HEAD push38581720343与PR38581734170全部任务已结束：Android/JVM/API26/29成功；pushScience38581720069成功（deep按原工作流跳过），PRScience38581733920的deep实际成功。API35 data87全部通过；app只有UndoSkippedRestartAndroidTest旧runtime9断言失败（实际10），8个原有条件跳过不变，其他用例通过。仍不能标记整批通过。
+
+修正R15运行时期望为10，额外解密合成PNBAK检查序列化版本9，其他断言原样保留。四个共用迁移合同进一步在真实Room9夹具升级前生成PNBAK，再在Room10恢复；本地4/0failure/0skip，13.812s，连native测试包assemble命令1m42s通过。强停测试先保留一笔已提交PREPARED，再阻塞第二个未提交PREPARED事务，不伪造正式导入或认证对象。
+
+本地完整单元回归data180、reminder17、app865均零fail/error，app61个既有skip不变；完整命令12m10s。新强停合同及R15 app测试编译2m53s通过；force-stop实际运行仍待最终CI。
