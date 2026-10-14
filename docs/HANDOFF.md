@@ -1,3 +1,5 @@
+> MED-01代码完整验收：b793ded Android38497285919三作业及Science38497285943均success；JVM194/data127/rem17/app839零失败（61原skip），API35 data33/app157零失败（8原条件skip经独立脚本实际通过）；医疗data18/UI四语40/时区索引7/保存3/刷新8/导航7、新PID/PNBAK1/回收及隔离全过。lint0错误，Debug/unsignedRelease/两测试包与来源清单保护通过。审计28/机器证据和B设计29齐全；B新表/加密/流式备份/预览需审批，A正常场景无阻塞。独立PR最终报告HEAD自身push/PR CI须全绿后交还，精确SHA/链接固定PR正文。R15不改；不合并/签名/交付APK或改build26/Schema/PK/格式。
+
 > MED-01回归修正：968ffa0 API35/JVM成功但Android失败，共享合同误被独立JUnit发现；已abstract保留两端各18项全部断言，不加skip/exclude。完整data127/127通过，JVM194通过；新增可搜索时区纠错/明确本地时钟解释，四语UI40/索引7/保存3/刷新8/导航7=65全部过。接下来完整app/reminder/lint/Debug/两仪器包与本HEAD完整CI/unsignedRelease/API35，再最终报告PR。原代码失败证据在28，B设计29仍仅待审批。R15未改，不改Schema/PK/格式/正式版本/签名，不交付APK或合并。
 
 > MED-01A首版已实现/目标通过：data18、四语320dp/2x UI36、时区索引6、保存协调器3、刷新8、导航7全过。医疗档案独立入口复用appointment/lab/上下文/HRT历史/回收站；完整预期快照事务、显式确认、重复提交保护、原zone与DST精确offset、旧类别兼容、明确“范围≠关联”，MED详情不新增不可恢复单问题删除。编译问题/5项目标失败与修正详审计28；B设计29独立且仅待批准。脚本仅synthetic/emulator新PID、无新skip/pm clear。下一步完整本地回归及本HEAD CI/API35，再独立报告/PR；未完成全量，不能称验收完成。R15/主线/build26未改，不合并/签名/交付/改Schema/格式/PK。

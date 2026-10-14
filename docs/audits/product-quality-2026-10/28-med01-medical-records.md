@@ -1,4 +1,6 @@
-# 28 — MED-01 医疗档案现状审计与A验收
+# 28 — MED-01 医疗档案现状审计与A独立验收
+
+> 代码完整验收通过；实施过程中的待测/失败记录保留，最终结果以末节与交付PR正文为准。最终报告HEAD自身CI必须全绿后才交还。
 
 基线fe8798634ccd0d92d2913f384abfcfff94d32274；Android38470156117 attempt2三作业success、Science38470156282 gate success/deep按纯文档规则skip。R15 PR25 OPEN，HEAD239a73c，独立分支保留，不复制未合并功能。MED-A独立分支，尚未实施/验收。REQ87。
 
@@ -48,3 +50,85 @@ MED-A未改Schema/实体/PK/正式版本/签名/PNBAK1；MED-B29仅设计且审�
 补可搜索时区选择，复用at_zone、不新增表；选区按新zone解释当前本地日期/时间，有明确说明，原记录默认精确UTC不变。可主动纠正时区，UTC差异/DST不猜；列表有界LazyColumn、帮助/候选滚动，选定隐藏键盘，避免小屏/2x挤掉候选。新增每语1项，共四语UI40/40，加时区索引7/7、保存3/3、刷新8/8、导航7/7，共65目标项全部零失败/0skip；完整JVM194已通过。下一步完整app/reminder/lint/Debug/两仪器包与新HEAD完整CI/unsignedRelease/API35，不提前验收。
 
 A继续使用既有日期+时间模型；不把“仅知日期”暗变为精确医疗时刻，未来date precision及结构化就诊原因/经过/随访字段应另行设计和批准。本期用户明确核对表单的日期/时间/zone；没有解析自由文本医学结论。
+
+## 完整代码验收
+
+代码SHA `b793ded2c004556af0dac3cff231c49aa9f0be09`。
+
+| 检查 | 实际结果 |
+| --- | --- |
+| 完整JVM | domain58/PK124/importer12，共194，0失败/0skip |
+| 完整Android原生 | data127/reminder17/app839，0失败；app61项原条件skip，新增skip为0 |
+| 医疗仓库合同 | SDK28/API35各同一18项全部执行通过；裸共用base不作为无平台测试重复发现 |
+| 四语320dp/2x UI | 简中/繁中/英/法各10项共40，原生SDK35和API35全部执行通过；实际宽度测量及Button role |
+| 时间与保存 | 索引7、保存协调器3、刷新8、导航7全部通过；DST gap/overlap/显式offset/跨区日期/重复确认/已提交后错误 |
+| API35完整套件 | data33/0失败/0skip，app157/0失败/8原条件skip；8原重启方法通过独立脚本真实执行 |
+| 医疗新进程 | 主套件1/1、外部prepare/force-stop后verify各1/1；不同PID、原ID/zone/问题回答/数值上下文/PNBAK1/回收还原/旧空间隔离 |
+| 构建 | fullDebug与data/app仪器包本地完成；CI unsigned fullRelease及来源/干净检出/清单无INTERNET/交付账本通过 |
+| Science | 代码push gate success/deep按路径规则skip；最终PR deep必须实际执行成功，不借用旧绿色 |
+
+lint：0错误，178项警告（完整列表以HTML/XML报告为准，不抑制）。
+
+Android：https://github.com/DevenirTwilight/HRT-Log/actions/runs/38497285919 。Science：https://github.com/DevenirTwilight/HRT-Log/actions/runs/38497285943 。最终文档提交/PR的精确HEAD和其自身CI固定于交付PR正文及独立最终报告，避免追加自身SHA循环。
+
+独立下载API35 artifact11864487520，SHA256 `36e9f81c5520c7901d4b75ebb7f9c73635aa8ebc282375fa90336066a2fe3b89`与GitHub匹配；直接读取HTML确认data33/app157、医疗合同18/UI40无失败/跳过。控制台Finished165重复计入8项skip结束事件，不当作额外用例。日志确认B2认证/明文清理/真实密码检查点强杀及新PID、B3日历返回、B4预测/VOIDED备份恢复、B4-E136次视口测量最多3个挂载节点和新医疗进程证明全部通过。
+
+## 功能清单与逐项验收
+
+| 要求 | 实现/证据 |
+| --- | --- |
+| 集中医疗档案 | 新顶层入口，原appointment/lab/HRT数据视图，不复制临床表；原未来预约仍在Visits |
+| 查看过去就诊 | 已确认与未确认过去预约分组，不能把时间过去推断为就诊；组内UTC/ID降序、LazyColumn稳定key |
+| 新增已发生就诊 | 明确过去日期/时间表单，事务内同时存一次原预约和确认时间，拒绝未来时刻 |
+| 文字/日期/归档类别 | 医生、机构、备注、原类别（含旧未知非空类别）可编辑；陈旧完整快照拒绝，原ID/确认时间及子记录保持 |
+| 时区与精度 | 默认原zone及精确UTC，用户可搜索并明确纠正zone；同一当地日期/时间按新zone解释，文案说明；DST重叠要求选择offset，gap拒绝 |
+| 撤销与删除 | 撤回确认保留原预约/备注/问题；整次删除二次确认、现有回收站入口，可恢复原ID与问题/回答/不可变Visit Pack元数据；重复/陈旧安全拒绝 |
+| 化验上下文 | 用户选择日期范围、明确zone及“范围≠归属”，日边界与下一日exclusive，原lab ID/数值/保存上下文详情和原编辑流程；无自动关联或临床解释 |
+| HRT/导出复用 | 可进入现有HRT时间线/化验；原VisitPack/PDF/CSV仍是用户选定生成摘要，不冒称文件原件档案 |
+| 取消/失败/重启 | UI取消0提交；事务注入失败回滚；已提交后提醒/刷新失败仍确认保存、阻止重复；文件库重开与外部新PID证明 |
+| 数据不丢/隔离 | 既有预约、lab/context、问题/包、旧类别、回收和PNBAK1往返保留；NotesViewModel原PRIMARY固定及独立旧DECOY store fixture；真实伪装私密笔记/SQLCipher/锁定行为原回归保持 |
+
+## 兼容边界及负责人决策
+
+MED-01A无Schema、实体列、正式PNBAK1、加密参数、PK内核、versionCode26或签名配置改变，没有导入真实PDF/照片/处方、修改真实用户医疗数据、签名/交付APK或自动合并。R15 PR25/独立分支HEAD239a73c未改；本分支从主线fe879863，不混入其未合并代码，不能冒称MED分支执行了尚未合入的R15新增测试。
+
+当前PNBAK1仍32MiB整包限制；就诊原因/诊疗经过/随访用用户自由备注，不变成app诊断。日期仍既有日期+时间模型，只有日期未知具体时刻的精度字段及结构化扩展需要后续方案/批准，不能伪造精确时刻。原单独问题删除的R26缺口仍在普通旧Visits，MED入口不新增这条不可恢复删除；整次就诊回收完整包含问题/回答。真人TalkBack及真实ARM性能基准NOT_RUN，自动化语义/四语/小屏/2x/API35实际验证不等同于这些实测。
+
+MED-01B设计29是独立技术方案，未实现新表/加密/导入/预览。推荐加密元数据+独立分块AEAD对象：比较BLOB与逐文件成本、各空间KEK/版本DEK、未知SAF长度认证结束清单、原子generation恢复、去重/替换/回收/损坏、无明文预览POC、独立流式医疗包保留PNBAK1、异常/进程死/URI隐私边界均给出具体步骤。
+
+需要负责人批准：新元数据/版本/链接/恢复journal迁移与密码学POC审查；新完整医疗包及旧PNBAK1恢复附件隔离/人工重新关联政策；提议容量与版本/回收清除策略；PDF无明文ProxyFD预览实证后才启用及密码PDF/分享首批范围；是否确需独立伪装医疗库；未来就诊结构化及date precision。正常MED-A没有阻塞性产品决定；未因B等待审批停下A。
+
+## 新增/修改文件
+
+- `.github/workflows/android.yml`
+- `app/build.gradle.kts`
+- `app/src/androidTest/java/net/plainnotes/app/medical/MedicalRecordsAndroidTest.kt`
+- `app/src/androidTest/java/net/plainnotes/app/medical/MedicalRecordsRestartAndroidTest.kt`
+- `app/src/main/java/net/plainnotes/app/NotesViewModel.kt`
+- `app/src/main/java/net/plainnotes/app/medical/MedicalRecordIndex.kt`
+- `app/src/main/java/net/plainnotes/app/medical/MedicalVisitSaving.kt`
+- `app/src/main/java/net/plainnotes/app/ui/AppShell.kt`
+- `app/src/main/java/net/plainnotes/app/ui/LabsScreen.kt`
+- `app/src/main/java/net/plainnotes/app/ui/MedicalRecordsScreen.kt`
+- `app/src/main/java/net/plainnotes/app/ui/VisitsScreen.kt`
+- `app/src/main/res/values-b+zh+Hant/strings.xml`
+- `app/src/main/res/values-fr/strings.xml`
+- `app/src/main/res/values-zh/strings.xml`
+- `app/src/main/res/values/strings.xml`
+- `app/src/medicalTest/java/net/plainnotes/app/medical/MedicalRecordsUiContract.kt`
+- `app/src/test/java/net/plainnotes/app/DataRefreshTest.kt`
+- `app/src/test/java/net/plainnotes/app/MedicalRecordIndexTest.kt`
+- `app/src/test/java/net/plainnotes/app/MedicalRecordsUiTest.kt`
+- `app/src/test/java/net/plainnotes/app/MedicalVisitSavingTest.kt`
+- `core/data/build.gradle.kts`
+- `core/data/src/androidTest/java/net/plainnotes/app/data/HistoricalVisitAndroidTest.kt`
+- `core/data/src/main/java/net/plainnotes/app/data/MedicalVisitConflict.kt`
+- `core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt`
+- `core/data/src/medicalTest/java/net/plainnotes/app/data/HistoricalVisitContract.kt`
+- `core/data/src/test/java/net/plainnotes/app/data/HistoricalVisitTest.kt`
+- `docs/HANDOFF.md`
+- `docs/REQUIREMENTS.md`
+- `docs/audits/product-quality-2026-10/28-med01-medical-records.md`
+- `docs/audits/product-quality-2026-10/29-med01b-encrypted-attachments-design.md`
+- `docs/audits/product-quality-2026-10/README.md`
+- `scripts/run_medical_records_restart.py`
