@@ -1,10 +1,12 @@
-## MED-02B4 / B2-GATE3（PR-A #32）已合并 — 2026-10-14
+## MED-02B4 完成：PR-A #32 与 PR-B #33 均已合并 — 2026-10-14
 
-PR-A #32 按任务书 §12 普通合并为 b248294（最终 HEAD 704c542，仅文档；证据 HEAD 76909b8）。704c542 PR 运行的 API29 job 首次因模拟器堆增长上限 16MiB（配置 heapsize=512m 未生效）导致 5 个既有 Argon2id 备份测试 OOM；同 SHA 的 push 运行 API29 成功，按环境异常重跑一次后全部成功（Android PR 38646318276 attempt 2、push 38646311796、Science 38646318234/38646311633）。证据见报告49–52：三 API 的内核 ProxyFD 撤权（远端 EIO、撤权后新明文 0）、两个真实 PID 的写入者租约与被杀 peer 清理、两项红对照预期失败。合并后默认分支 CI 结果见 PR-B 条目。B2 生产 NO-GO、NOT_REVIEWED_EXTERNALLY 不变。
-
-## PRIVACY-P0（PR-B）开发中 — 2026-10-14
-
-分支 feature/privacy-p0-20261014，基于 b248294。根目录 PRIVACY.md（英文权威版）、docs/privacy-evidence.md（每条表述 → 源码/守卫/测试）、README 隐私与版本层次、关于→隐私四语离线全屏说明（en/fr/zh-CN/zh-TW，仅在已解锁的真实应用内，伪装外壳不显示）、docs/release-notes/TEMPLATE.md、med-eu 事实核对注记。测试：PrivacyNoticeLayoutTest 16（4 语 × 320/411dp × 1/2× 字号、明暗、标题语义、WCAG AA 对比度、不截断、≥48dp 关闭、无链接）、PrivacyNoticeOlderApiTest 2（API26/29）、PrivacyNoticeFactsTest 3、ShellPrivacyBoundaryTest 3；本地 app 全部单测 887、0 失败（61 skip 为既有审计类）、lint 无新问题。不改存储/加密/schema/备份/版本/签名。已知缺口（不在声明中宣称）：THIRD_PARTY_NOTICES 未列 BouncyCastle；“删除全部数据”不清除 stock_alerts 偏好；真机 TalkBack NOT_RUN。验证记录见报告53。下一步：CI 全绿后按 §12 合并并复验默认分支。
+默认分支 claude/new-session-1959qb 当前 b43d109，两个 PR 都按任务书 §12 普通合并（无 --auto/--admin，未改设置）。
+- PR-A #32（B2-GATE3，test-only）：最终 HEAD 704c542 → 合并 b248294。证据 HEAD 76909b8。704c542 的 PR 运行 API29 job 首次因模拟器堆上限 16MiB 导致既有 Argon2id 测试 OOM，同 SHA push 运行通过，重跑一次后通过。合并后默认分支 Android 38648868004、Science 38648867999 全部成功。报告 48–52 + 52 JSON。
+- PR-B #33（PRIVACY-P0）：HEAD c4eefcc → 合并 b43d109。CI：Android PR 38649038071、push 38649004158，Science 38649037891/38649004015 全部成功；CI app 单测 889 项，0 失败，61 项为既有跳过；隐私测试 16/2/3/3 与 PeriodStabilityTest 5 均实际执行；lint 0 error。合并后默认分支 Android 38650880858、Science 38650880863 全部成功（research-deep 按条件 skipped）。报告 53。
+- B2 生产 NO-GO；外部审查 NOT_REVIEWED_EXTERNALLY；未签名、未交付 APK、未发布。
+- 待负责人决定：孤儿保留期/GC 策略与提示；外来路径预约是否可释放；B3 旧 epoch active 指针。
+- 已知缺口（后续小 PR）：THIRD_PARTY_NOTICES 与应用内许可未列 BouncyCastle；“删除全部数据”不清除 stock_alerts；真机 TalkBack 与 ARM 真机 NOT_RUN。
+- 下一步（需另行批准）：把报告 51 及 44/45 交给独立真人密码/安全专家审查；专家整改后，由负责人单独批准一个默认关闭的生产 B2-IMPLEMENTATION PR。
 
 ## MED-02B3 / B2-SECURITY-GATE2 接手与独立复核修正 — 2026-10-14
 
