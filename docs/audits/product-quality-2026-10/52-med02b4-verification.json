@@ -1,0 +1,88 @@
+{
+  "report": "52",
+  "batch": "MED-02B4/B2-GATE3",
+  "evidence_head": "76909b8a0101f25385146b75aa7af85355512221",
+  "base": "9d99fd9",
+  "default_branch": "claude/new-session-1959qb",
+  "runs": {
+    "android_pr": {
+      "id": 38644133964,
+      "conclusion": "success"
+    },
+    "android_push": {
+      "id": 38644129077,
+      "conclusion": "success"
+    },
+    "science_pr": {
+      "id": 38644133912,
+      "conclusion": "success"
+    },
+    "science_push": {
+      "id": 38644129153,
+      "conclusion": "success",
+      "research_deep": "skipped"
+    }
+  },
+  "device_counts": {
+    "api26": {
+      "data": 51,
+      "app": 70
+    },
+    "api29": {
+      "data": 51,
+      "app": 70
+    },
+    "api35": {
+      "data": 118,
+      "app": 260
+    }
+  },
+  "gate3": {
+    "kernel": {
+      "green": {
+        "farOffset": "ERRNO(EIO)",
+        "sameOffset": "CACHE_OR_READ(4096)",
+        "deliveredAfterRevoke": 0
+      },
+      "red": {
+        "farOffset": "CACHE_OR_READ(4096)",
+        "deliveredAfterRevoke": 4096,
+        "expected_failure": true
+      },
+      "dup": {
+        "farAfterRevoke": "ERRNO(EIO)",
+        "deliveredAfterRevoke": 0
+      }
+    },
+    "process": {
+      "sameProcessProbe": {
+        "green": "HELD_OTHER_PROCESS",
+        "red": "FREE"
+      },
+      "peerWriter": "CLEANED_OWNED_INCOMPLETE",
+      "killedPeer": "CLEANED_OWNED_INCOMPLETE",
+      "distinct_pids": true
+    },
+    "red_green_script": "PASS",
+    "apis": [
+      26,
+      29,
+      35
+    ]
+  },
+  "first_round_failure": {
+    "head": "9cd28be",
+    "cause": "peer opened same SQLCipher DB; SchemaGuards rewrite on open -> SQLITE_SCHEMA 17 / IOERR 522; API29 wait race",
+    "fixed_in": "76909b8"
+  },
+  "not_run": [
+    "NOT_RUN_ARM",
+    "NOT_RUN_REAL_ENOSPC",
+    "hardware_power_loss",
+    "hostile_pdf_isolated_worker",
+    "real_device_talkback"
+  ],
+  "external_review": "NOT_REVIEWED_EXTERNALLY",
+  "production_b2": "NO-GO",
+  "production_src_main_changed": false
+}

@@ -49,7 +49,12 @@ class Gate2RestartAndroidTest {
             // A real crash orphan keeps its quota until an explicit confirmed release, which deletes only its own file.
             var release="n/a"
             if(fresh&&seam==Gate2Store.Seam.IN_COMMIT){val next=state.getString("next");val orphan=s.fileOf(next);assertTrue(orphan.exists())
-                release=s.releaseQuarantined(next,confirmed=true);assertEquals("CLEANED",release);assertFalse(orphan.exists());assertEquals("RETAIN_TERMINAL",s.reconcile()[next])}
+                val held=s.reservedBytes()
+                release=s.releaseQuarantined(next,confirmed=true);assertEquals("CLEANED",release);assertFalse(orphan.exists());assertEquals("RETAIN_TERMINAL",s.reconcile()[next])
+                // Idempotent: a repeated release is refused and frees nothing twice; repeated recovery is stable.
+                val freed=s.reservedBytes();assertTrue(freed<held)
+                try{s.releaseQuarantined(next,confirmed=true);fail("Released twice")}catch(e:IllegalStateException){assertEquals("Not a quarantined orphan",e.message)}
+                assertEquals(freed,s.reservedBytes());assertEquals("RETAIN_TERMINAL",s.reconcile()[next])}
             s.open().use{assertEquals(payload.size.toLong(),it.size())};s.assertProductionOff()
             s.raw.query("PRAGMA foreign_key_check").use{assertEquals(0,it.count)}
             File(context.filesDir,"synthetic-gate2-restart-result").writeText(JSONObject().put("previous_pid",state.getInt("pid")).put("fresh_pid",android.os.Process.myPid()).put("fresh_process_asserted",fresh).put("api",android.os.Build.VERSION.SDK_INT).put("abi",android.os.Build.SUPPORTED_ABIS.first()).put("seam",seam.name).put("revision",s.revision()).put("reconcile",JSONObject(result)).put("orphan_release",release).put("production_enabled",0).toString())

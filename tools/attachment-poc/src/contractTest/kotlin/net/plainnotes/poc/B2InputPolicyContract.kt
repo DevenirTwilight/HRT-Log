@@ -18,6 +18,14 @@ object B2InputPolicy {
         require(declared in setOf(actual,"application/octet-stream")) {"MIME conflict"}
         return actual
     }
+    /** A user-supplied display name is shown/exported later, never used as a path: plain name, no separators,
+     * control characters or dot-only names, at most 255 UTF-8 bytes. Not a statement about the file's origin. */
+    fun displayName(name:String?):String {
+        val n=name?.trim()
+        require(n!=null&&n.isNotEmpty()&&n!="."&&n!=".."&&n.none{it=='/'||it=='\\'||it.code<0x20||it.code==0x7f}
+            &&n.toByteArray(Charsets.UTF_8).size<=255){"Unsafe display name"}
+        return n
+    }
     fun pixels(width:Long,height:Long):Long {require(width in 1..10000&&height in 1..10000);val pixels=width*height;require(pixels<=20000000);return pixels}
     fun eligibleForProduct(parserVerified:Boolean,backupVerified:Boolean,ownerApproved:Boolean)=parserVerified&&backupVerified&&ownerApproved
 }
@@ -32,6 +40,12 @@ abstract class B2InputPolicyContract {
         assertEquals("application/pdf",B2InputPolicy.signature("%PDF-fake".toByteArray(),"application/pdf"))
         assertFalse(B2InputPolicy.eligibleForProduct(false,true,true));assertFalse(B2InputPolicy.eligibleForProduct(true,false,true));assertFalse(B2InputPolicy.eligibleForProduct(true,true,false))
         try{B2InputPolicy.signature("not PDF".toByteArray(),"application/pdf");fail("Fake format accepted")}catch(_:IllegalArgumentException){}
+    }
+    @Test fun displayNamesArePlainNamesNeverPaths() {
+        for(ok in listOf("synthetic.pdf","Bilan 2026-03.pdf","化验单 第1页.png","a..b.pdf","x".repeat(255)))assertEquals(ok,B2InputPolicy.displayName(ok))
+        assertEquals("trimmed.pdf",B2InputPolicy.displayName("  trimmed.pdf "))
+        for(bad in listOf(null,"","   ",".","..","../secret.pdf","dir/x.pdf","dir\\x.pdf","nul\u0000.pdf","tab\t.pdf","del\u007f.pdf","x".repeat(256),"化".repeat(86)))
+            try{B2InputPolicy.displayName(bad);fail("Unsafe name accepted: $bad")}catch(e:IllegalArgumentException){assertEquals("Unsafe display name",e.message)}
     }
     @Test fun highCompressionDimensionsAreRejectedBeforeDecodeWithoutChangingOriginal() {
         val original=ByteBuffer.allocate(8).putInt(100000).putInt(100000).array();val snapshot=original.copyOf()
