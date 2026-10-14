@@ -3,11 +3,12 @@ package net.plainnotes.app.attachmentpoc
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import net.plainnotes.poc.ChunkObject
+import net.plainnotes.poc.CapabilityObject
 import java.io.InputStream
 
 /** Instrumentation-only, original encrypted bytes remain unchanged; no disk bitmap/thumbnail cache. */
 object ImagePoc {
-    private fun stream(r:ChunkObject.Reader)=object:InputStream(){
+    private fun stream(r:CapabilityObject.Reader)=object:InputStream(){
         var at=0L
         override fun read():Int{val b=ByteArray(1);return if(read(b,0,1)==-1)-1 else b[0].toInt() and 255}
         override fun read(b:ByteArray,off:Int,len:Int):Int{
@@ -22,7 +23,9 @@ object ImagePoc {
         header.size>=12 && header.copyOf(4).toString(Charsets.US_ASCII)=="RIFF" && header.copyOfRange(8,12).toString(Charsets.US_ASCII)=="WEBP"->"image/webp"
         else->error("Unsupported synthetic image magic")
     }
-    fun decode(owned:ChunkObject.Owned,mime:String,edge:Int=512):Bitmap=owned.open().use{r->
+    fun decode(owned:ChunkObject.Owned,mime:String,edge:Int=512,
+               session:CapabilityObject.Session=CapabilityObject.Session(),beforePublication:()->Unit={}):Bitmap=
+        CapabilityObject.adopt(owned,session).use{scoped->scoped.open().use{r->
         require(edge in 1..1024)
         val header=ByteArray(minOf(12,r.size.toInt()));r.readAt(0,header);require(identify(header)==mime)
         val bounds=BitmapFactory.Options().apply{inJustDecodeBounds=true}
@@ -34,6 +37,7 @@ object ImagePoc {
         val options=BitmapFactory.Options().apply{inSampleSize=sample;inPreferredConfig=Bitmap.Config.ARGB_8888}
         val bitmap=stream(r).use{BitmapFactory.decodeStream(it,null,options)}?:error("Synthetic image decode failed")
         if(bitmap.width>edge || bitmap.height>edge || bitmap.allocationByteCount>4*1024*1024){bitmap.recycle();error("Synthetic image bound exceeded")}
-        bitmap
-    }
+        try {beforePublication();scoped.publish {bitmap}}
+        catch(e:Throwable){bitmap.recycle();throw e}
+    }}
 }

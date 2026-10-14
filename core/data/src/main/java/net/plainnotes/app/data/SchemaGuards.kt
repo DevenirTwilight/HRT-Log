@@ -41,6 +41,7 @@ object SchemaGuards : RoomDatabase.Callback() {
         }
     }
     fun install(db: SupportSQLiteDatabase) {
+        AttachmentSchema.install(db)
         // Same Room index name/columns; partial predicate implements active-record uniqueness.
         db.execSQL("DROP INDEX IF EXISTS index_dose_record_slot_key")
         db.execSQL("CREATE UNIQUE INDEX index_dose_record_slot_key ON dose_record(slot_key) WHERE deleted_at_utc IS NULL")

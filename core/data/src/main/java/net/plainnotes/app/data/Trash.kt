@@ -46,7 +46,8 @@ object Trash {
     fun payload(vararg parts:Pair<String,JSONArray>)=JSONObject().put("order",JSONArray(parts.map{it.first})).put("tables",JSONObject().apply{parts.forEach{(t,rows)->put(t,rows)}})
 
     fun insert(db:SupportSQLiteDatabase,kind:String,ref:String,date:String,payload:JSONObject,now:Long) {
-        db.insert("trash_item",SQLiteDatabase.CONFLICT_ABORT,ContentValues().apply{put("kind",kind);put("ref",ref);put("item_date",date);put("deleted_utc",now);put("payload_json",payload.toString());put("state",TRASHED)})
+        val trashId=db.insert("trash_item",SQLiteDatabase.CONFLICT_ABORT,ContentValues().apply{put("kind",kind);put("ref",ref);put("item_date",date);put("deleted_utc",now);put("payload_json",payload.toString());put("state",TRASHED)})
+        AttachmentIdentity.trashed(db,kind,ref,trashId,payload.toString())
     }
 
     /**

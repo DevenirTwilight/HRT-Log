@@ -195,6 +195,7 @@ const val BACKFILL_MAX_DAYS=731L
                     if(last.state==HistoryPeriods.REVOKED)rows.filter{it.state==HistoryPeriods.CONFIRMED}.maxByOrNull{it.revision}?.let{appendPeriod(dao,it.copy(id=0,revision=last.revision+1,created_utc=now.toEpochMilli()))}}
             }
         }
+        AttachmentIdentity.restored(sql(),t)
         sql().execSQL("DELETE FROM trash_item WHERE id=?",arrayOf(id))
     }
     private fun purgeKeys(keys:Collection<String>) {
@@ -223,6 +224,7 @@ const val BACKFILL_MAX_DAYS=731L
             Trash.CORRECTION->{purgeKeys(dao.historyPeriods().filter{it.group_key==t.ref}.map{it.period_key}.distinct());true}
             else->error("Unknown kind")
         }
+        AttachmentIdentity.purged(sql(),t)
         if(removed)sql().execSQL("DELETE FROM trash_item WHERE id=?",arrayOf(id)) else sql().execSQL("UPDATE trash_item SET state='HIDDEN' WHERE id=?",arrayOf(id))
         removed
     }
@@ -613,7 +615,7 @@ const val BACKFILL_MAX_DAYS=731L
     }
     suspend fun exportBackup(password:CharArray):ByteArray=withContext(Dispatchers.IO) {
         val db=db()
-        val json=db.withTransaction { RegimenHistory.seed(db.openHelper.writableDatabase);JSONObject().put("format",BackupCodec.FORMAT_VERSION).put("schema",db.openHelper.writableDatabase.version)
+        val json=db.withTransaction { RegimenHistory.seed(db.openHelper.writableDatabase);JSONObject().put("format",BackupCodec.FORMAT_VERSION).put("schema",RecordBackupCompatibility.SCHEMA)
             .put("created",Instant.now().toString()).put("tables",RawData.dump(db.openHelper.writableDatabase)) }
         val plain=json.toString().toByteArray(Charsets.UTF_8)
         try{BackupCodec.encrypt(plain,password)}finally{plain.fill(0)}
@@ -626,7 +628,7 @@ const val BACKFILL_MAX_DAYS=731L
     suspend fun restoreBackup(data:ByteArray,password:CharArray,today:LocalDate=LocalDate.now())=withContext(Dispatchers.IO) {
         val plain=BackupCodec.decrypt(data,password)
         val json=try{String(plain,Charsets.UTF_8).let{BackupLimits.checkJson(it);JSONObject(it)}}finally{plain.fill(0)}
-        val db=db(); val current=db.openHelper.writableDatabase.version; val schema=json.optInt("schema")
+        val db=db(); val current=RecordBackupCompatibility.SCHEMA; val schema=json.optInt("schema")
         if(json.optInt("format")!=BackupCodec.FORMAT_VERSION||schema<1) throw BackupCodec.BadFile("incompatible version")
         if(schema>current) throw BackupCodec.NewerBackup()
         val tables=json.getJSONObject("tables")
@@ -655,6 +657,7 @@ const val BACKFILL_MAX_DAYS=731L
     /** Soft-deletes a taken intake; a scheduled slot becomes due again and may later be marked missed. */
     suspend fun deleteRecord(id:Long,now:Instant=Instant.now())=transaction { dao ->
         val r=requireNotNull(dao.recordById(id));require(r.status in listOf("ON_TIME","LATE"))
+        if(r.deleted_at_utc!=null)return@transaction
         SupplyLedger.reverse(dao,id)
         dao.updateRecord(r.copy(deleted_at_utc=now.toEpochMilli(),revision=r.revision+1))
         val day=Instant.ofEpochMilli(r.taken_utc ?: r.scheduled_utc ?: now.toEpochMilli()).atZone(r.taken_zone?.let{z->runCatching{ZoneId.of(z)}.getOrNull()} ?: ZoneId.systemDefault()).toLocalDate()

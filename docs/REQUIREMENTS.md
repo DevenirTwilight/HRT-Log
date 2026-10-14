@@ -765,3 +765,7 @@ MED-02B0最终设计细化（2026-10-14，仍待生产批准）：local metadata
 完整恢复fresh local scopes并保持原cipher/AAD，CURRENT唯一/retired隔离，same crypto version不得不同bytes；旧PNBAK恢复空fresh dataset/crypto域，不按ID重关联。
 operation owned generation/UUID/暂存device wrap/hash及终态不可逆清理纳入Room10草案，都是tools synthetic而非生产变更。
 实际API26/29/35 hardlink被拒绝，禁止把它作已验证发布方案；候选O_EXCL cipher creation+完整认证/file+dirsync+DB原子授权发布，真正掉电/SQLCipher联合恢复仍待验证。
+
+## 90. MED-02B1 生产基础设施明确批准（2026-10-14）
+
+负责人在本轮确认：“确认批准上述 MED-02B1 生产修改”。授权 Room9→10 非破坏性迁移、实体、DAO、稳定身份及旧备份兼容适配层。附件功能保持默认关闭；只实施基础接口及合成验证，不实施正式附件密文协议、新完整备份、真实文件导入或 PDF 预览。PR27/28 未合并，独立 stacked 分支依赖已验证977e077，不覆盖旧 PR，不自动合并、不改变 PK/versionCode/签名/build26，不交付 APK。PNBAK1 magic/KDF/GCM/既有限额保持不变；结构化序列化版本仍为9。

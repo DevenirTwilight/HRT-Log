@@ -50,7 +50,12 @@ enum class Space(val file:String,val wrap:String,val alias:String) {
             val db=Room.databaseBuilder(context,NotesDatabase::class.java,space.file)
                 .openHelperFactory(SupportOpenHelperFactory(passphrase))
                 .addMigrations(*allMigrations()).addCallback(SchemaGuards).build()
-            try { db.openHelper.writableDatabase } catch(e:Exception) { db.close(); throw KeyRecoveryRequired(e) }
+            try {
+                val sql=db.openHelper.writableDatabase
+                sql.beginTransaction()
+                try { AttachmentIdentity.initialize(sql,space==Space.PRIMARY);sql.setTransactionSuccessful() }
+                finally { sql.endTransaction() }
+            } catch(e:Exception) { db.close(); throw KeyRecoveryRequired(e) }
             // SQLCipher 4.10 retains this array for every WAL connection. Clearing it here
             // makes later concurrent reads fail to decrypt the same database.
             instances[space]=db;passphrases[space]=passphrase;return db

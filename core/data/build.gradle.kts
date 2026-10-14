@@ -24,5 +24,5 @@ dependencies {
     androidTestImplementation(libs.android.test.core); androidTestImplementation(libs.android.test.runner); androidTestImplementation(libs.room.testing); androidTestImplementation(libs.junit4)
 }
 ksp { arg("room.schemaLocation", "$projectDir/schemas") }
-android.sourceSets.getByName("androidTest").apply { assets.srcDir("$projectDir/schemas"); java.srcDirs("src/historyTest/java", "src/medicalTest/java") }
-android.sourceSets.getByName("test").apply { assets.srcDir("$projectDir/schemas"); java.srcDirs("src/historyTest/java", "src/medicalTest/java") }
+android.sourceSets.getByName("androidTest").apply { assets.srcDir("$projectDir/schemas"); java.srcDirs("src/historyTest/java", "src/medicalTest/java", "src/attachmentTest/java") }
+android.sourceSets.getByName("test").apply { assets.srcDir("$projectDir/schemas"); java.srcDirs("src/historyTest/java", "src/medicalTest/java", "src/attachmentTest/java") }
