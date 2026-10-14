@@ -1,6 +1,6 @@
 # 42 — MED-02B2 / B2-GATE 验证与交付
 
-2026-10-14。**工作中，最终CI未完成时不称验收通过。** 此批是设计及隔离合成合同，不是正式医疗附件库。
+2026-10-14。**代码阶段完整验收通过；最终文档HEAD的精确SHA/CI以PR30最终交付记录为准，交付前仍必须核验其全部结束成功。** 此批是设计及隔离合成合同，不是正式医疗附件库。
 
 ## 真实基线与状态差异
 
@@ -14,7 +14,7 @@
 
 主线MERGED_CI_VERIFIED：[Android38598762817](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38598762817)全5jobs成功，[Science38598762944](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38598762944)gate成功、纯文档deep按既定门控skip。代码be953的[Android38596888161](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38596888161)和[Science38596888022](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38596888022)全成功且deep实际运行。
 
-独立feature/med02b2-v2-import-gate从cfe创建，parent clean，远程HTTPS为DevenirTwilight/HRT-Log；不重写/修改27–29。北京时间=UTC+8仅换算，环境Etc/UTC，实际查询日期2026-10-14；正式build26与仓库默认不同。新PR目标默认；最终SHA/PR/final HEAD checks链接在本节末及PR正文固定，不能借用旧SHA。
+独立feature/med02b2-v2-import-gate从cfe创建，parent clean，远程HTTPS为DevenirTwilight/HRT-Log；不重写/修改27–29。北京时间=UTC+8仅换算，环境Etc/UTC，实际查询日期2026-10-14；正式build26与仓库默认不同。新PR目标默认；最终SHA/PR/final HEAD checks链接在PR30正文固定，不能借用旧SHA。
 
 ## 本批实际改动
 
@@ -36,10 +36,11 @@
 | --- | --- |
 | 新候选JVM合同 | 新增20方法PASS、全POC60与domain63/PK124/importer12共259PASS，0fail/skip；真实JCA/Tink/file IO，不是生产SQL进口器 |
 | 设计Python | 58方法PASS（继承53+新图5）；pure模型不证明真backup |
-| Release检查器单测 | 3方法PASS，9marker×3污染位置=27负向subcases；真实APK扫描待最终build/CI |
-| 全JVM | 最终全套以本PR最终HEAD XML为准，基线domain63/PK124/importer12/POC40不删 |
-| Android unit/lint/Debug/unsignedRelease | 当前完整回归待执行/CI，不能预判通过 |
-| API26/29/35 | 新同源合同wrapper已加入既有instrumentation体系，真实运行结果待CI；旧B1迁移/SQLCipher/强停/SAF/PDF/图片回归保留 |
+| Release检查器单测 | 3方法PASS，9marker×3污染位置=27负向subcases；f8本地及CI实际unsigned Release扫描PASS，1个DEX |
+| 全JVM | f8本地及CI：domain63/PK124/importer12/POC60=259，零失败/错误/skip；新增20，不删原40 |
+| Android unit/lint/Debug/unsignedRelease | f8本地完整31m05及push/PR全部PASS；data180/rem17/app865，61原有app skip；lint/两variant构建/两test APK通过 |
+| API26/29/35 | f8三API实际PASS：26/29每API data21+app61，零fail/skip；35 data88/app报告243、零fail、8原有skip。新增20同源合同三端通过；B1 SQLCipher/迁移/强停与旧B2/B3/B4/R15/MED01重启回归全部执行通过 |
+| Science | f8 push及PR gate/deep全部实际SUCCESS |
 | 新B2 filesystem/Room联合force-stop/freshPID | NOT_RUN，未实现正式importer；不能拿继承B1未提交事务强停当本批新协议验证 |
 | 真实ENOSPC/硬件掉电/祖先替换 | NOT_RUN；异常注入、fsync返回不代表真正满盘/掉电 |
 | 低端ARM/PSS/能耗/256MiB真实库1000件 | NOT_RUN；JAR尺寸/算法缓冲和模型1000节点不是ARM性能 |
@@ -72,3 +73,22 @@ B2-GATE研究GO，B2-IMPLEMENTATION **NO-GO/BLOCKED，尚未授权开始**。需
 无需负责人逐步批准本B2-GATE的安全研究/测试；以上只阻断未来生产子项。资料库开放另需B3可信完整恢复、B4图片/UX、B5恶意PDF/ARM、B6完整产品验收及显式开启批准。
 
 **MED-02B2 本阶段不等于医疗附件功能已上线；B3 完整可信备份与跨设备恢复通过、后续 B4/B5 安全和用户体验验收、负责人明确批准前，不允许向用户交付可保管唯一医疗原件的正式资料库。**
+
+## 已核验代码CI与实测证据
+
+[PR30](https://github.com/DevenirTwilight/HRT-Log/pull/30)，OPEN/未合并，base默认；代码f8b5c7a54bed07149c74a1a60efffef58c2fb054。
+
+| 检查 | 链接/结果 |
+| --- | --- |
+| PR Android/JVM/lint/Release/API26/29/35 | [38602239109](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38602239109)，5jobs全success |
+| push Android | [38602160691](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38602160691)，5jobs全success |
+| PR Science | [38602239260](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38602239260)，gate/deep实际success |
+| push Science | [38602160448](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38602160448)，gate/deep实际success |
+
+下载核验5份报告ZIP，不含APK：[原始artifact身份及API计数](42-med02b2-code-evidence.json)。API26 SHA d071ff1769bb1c12ef689e70afd31a1c8a222be8d600ed41a3fbe52516671b9a；29 de6aceed3b59d063335fa56e38845c5b27d57a811a3ead827b080874745f51d9；35 1367823a58d8f15690e7f8020db4adb5fa6f78681228f0764d3a3d8608ee09ff；build 569a55f78b6f6e78a5e179fba86076b9162b2aabc0e49f7b71713eff56c2f4df；JVM c6aced5bc1683cefad15322e43fe4376ec31ddf69d6c4f52ef4bdbe8df7b4484。
+
+实际测试耗时（不能当吞吐/PSS/ARM基准）：本地POC60方法4.950s；B2 matrix9方法API26 0.360s、API29 0.286s；Import7方法API26 2.669s、29 1.815s。矩阵包括0/1/65480/65481/65536/65537/1MiB/16MiB随机读，16MiB+1明确拒绝；20/100/1000图仅synthetic元数据模型，不是1000件真实UI或容量。8KiB输入/64KiB候选segment是算法buffer，不是测得PSS；native/整设备资源仍NOT_RUN。
+
+最终git scope核对：production Kotlin、core/data/schemas、PK、AppLock、PNBAK/guard、main manifest、R8和版本/sign配置无差异；只新增测试依赖、docs/scripts/CI及隔离tests。正式build26 SHA仍0c6bd9132ab15ca7625f1da19b59c1c9450cf4cb0518b15100e30396c5ed3fa0，不重新签名或交付。
+
+本末次文档提交记录这些已完成代码结果；其最终精确HEAD/完整CI在PR30正文与checks固定，必须等待其全部成功才结束交付，不能借用本表f8状态。

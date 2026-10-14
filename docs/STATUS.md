@@ -1,3 +1,8 @@
+## MED-02B2 / B2-GATE — 代码完整验收通过（2026-10-14）
+
+独立PR30 OPEN/未合并，默认base cfe600ee；f8代码push/PR Android/JVM/API26/29/35与Science均成功，JVM259、新20，Android180/17/865、原61skip；API35 88/243、原8skip，26/29每21/61，零失败/新增skip。最后交接文档HEAD及最终checks见PR30正文，须全部结束成功再交付。
+产品V2/补充来源/欧盟修订与官方核查、协议比较/失败合同、Release隔离已交付（39–42）。研究/合成验证GO，生产B2 NO-GO：专家/正式protocol/key/FS+Room/AppLock/完整备份和ARM门未通过；附件默认0，Room10/PNBAK9不变。未合并/签名/发布新APK。以下历史索引保留。
+
 ## MED-02B2 / B2-GATE 设计与合成合同推进 — 2026-10-14
 
 分支feature/med02b2-v2-import-gate，parent cfe600eeb6efcca60668763a31969af07a2892b9。三前置PR27/28/29均已合并，最终主线Android38598762817全5成功/Science38598762944 gate成功（文档deep按门控skip），MERGED_CI_VERIFIED。未改父分支。

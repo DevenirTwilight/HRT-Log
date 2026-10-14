@@ -1,0 +1,313 @@
+{
+  "code_sha": "f8b5c7a54bed07149c74a1a60efffef58c2fb054",
+  "synthetic_only": true,
+  "runs": [
+    {
+      "id": 38602239109,
+      "name": "Android and domain checks",
+      "event": "pull_request",
+      "head_sha": "f8b5c7a54bed07149c74a1a60efffef58c2fb054",
+      "head_branch": "feature/med02b2-v2-import-gate",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38602239109",
+      "jobs": [
+        {
+          "id": 115984104661,
+          "name": "jvm",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 115984104939,
+          "name": "attachment-poc-compatibility (29)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 115984104958,
+          "name": "attachment-poc-compatibility (26)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 115984104984,
+          "name": "android",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 115984105017,
+          "name": "device-tests",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 38602239260,
+      "name": "Science validation",
+      "event": "pull_request",
+      "head_sha": "f8b5c7a54bed07149c74a1a60efffef58c2fb054",
+      "head_branch": "feature/med02b2-v2-import-gate",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38602239260",
+      "jobs": [
+        {
+          "id": 115984106011,
+          "name": "science-change-gate",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 115984208924,
+          "name": "research-deep",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 38602160691,
+      "name": "Android and domain checks",
+      "event": "push",
+      "head_sha": "f8b5c7a54bed07149c74a1a60efffef58c2fb054",
+      "head_branch": "feature/med02b2-v2-import-gate",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38602160691",
+      "jobs": [
+        {
+          "id": 115983835682,
+          "name": "android",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 115983836020,
+          "name": "jvm",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 115983836062,
+          "name": "device-tests",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 115983836241,
+          "name": "attachment-poc-compatibility (29)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 115983836389,
+          "name": "attachment-poc-compatibility (26)",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 38602160448,
+      "name": "Science validation",
+      "event": "push",
+      "head_sha": "f8b5c7a54bed07149c74a1a60efffef58c2fb054",
+      "head_branch": "feature/med02b2-v2-import-gate",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38602160448",
+      "jobs": [
+        {
+          "id": 115983832781,
+          "name": "science-change-gate",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 115983908875,
+          "name": "research-deep",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "name": "jvm",
+      "sha256": "c6aced5bc1683cefad15322e43fe4376ec31ddf69d6c4f52ef4bdbe8df7b4484",
+      "bytes": 40380,
+      "summaries": []
+    },
+    {
+      "name": "build",
+      "sha256": "569a55f78b6f6e78a5e179fba86076b9162b2aabc0e49f7b71713eff56c2f4df",
+      "bytes": 854727,
+      "summaries": []
+    },
+    {
+      "name": "api26",
+      "sha256": "d071ff1769bb1c12ef689e70afd31a1c8a222be8d600ed41a3fbe52516671b9a",
+      "bytes": 28275,
+      "summaries": [
+        {
+          "path": "core/data/build/reports/androidTests/connected/debug/index.html",
+          "counters": [
+            "21",
+            "0",
+            "0",
+            "10.180s"
+          ]
+        },
+        {
+          "path": "app/build/reports/androidTests/connected/debug/flavors/full/index.html",
+          "counters": [
+            "61",
+            "0",
+            "0",
+            "6.924s"
+          ]
+        },
+        {
+          "path": "app/build/reports/androidTests/connected/debug/flavors/full/net.plainnotes.app.attachmentpoc.B2StreamingMatrixAndroidTest.html",
+          "counters": [
+            "9",
+            "0",
+            "0",
+            "0.360s"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "api29",
+      "sha256": "de6aceed3b59d063335fa56e38845c5b27d57a811a3ead827b080874745f51d9",
+      "bytes": 28266,
+      "summaries": [
+        {
+          "path": "core/data/build/reports/androidTests/connected/debug/index.html",
+          "counters": [
+            "21",
+            "0",
+            "0",
+            "9.255s"
+          ]
+        },
+        {
+          "path": "app/build/reports/androidTests/connected/debug/flavors/full/index.html",
+          "counters": [
+            "61",
+            "0",
+            "0",
+            "5.189s"
+          ]
+        },
+        {
+          "path": "app/build/reports/androidTests/connected/debug/flavors/full/net.plainnotes.app.attachmentpoc.B2StreamingMatrixAndroidTest.html",
+          "counters": [
+            "9",
+            "0",
+            "0",
+            "0.286s"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "api35",
+      "sha256": "1367823a58d8f15690e7f8020db4adb5fa6f78681228f0764d3a3d8608ee09ff",
+      "bytes": 77445,
+      "summaries": [
+        {
+          "path": "core/data/build/reports/androidTests/connected/debug/index.html",
+          "counters": [
+            "88",
+            "0",
+            "0",
+            "14.585s"
+          ]
+        },
+        {
+          "path": "app/build/reports/androidTests/connected/debug/flavors/full/index.html",
+          "counters": [
+            "243",
+            "0",
+            "8",
+            "4m36.50s"
+          ]
+        },
+        {
+          "path": "app/build/reports/androidTests/connected/debug/flavors/full/net.plainnotes.app.attachmentpoc.B2StreamingMatrixAndroidTest.html",
+          "counters": [
+            "9",
+            "0",
+            "0",
+            "0.261s"
+          ]
+        }
+      ]
+    }
+  ],
+  "local": {
+    "synthetic_only": true,
+    "jvm": [
+      {
+        "module": "core/domain",
+        "tests": 63,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "test_duration_seconds": 0.78
+      },
+      {
+        "module": "pk-engine",
+        "tests": 124,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "test_duration_seconds": 51.116
+      },
+      {
+        "module": "importer",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "test_duration_seconds": 0.832
+      },
+      {
+        "module": "tools/attachment-poc",
+        "tests": 60,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "test_duration_seconds": 4.95
+      }
+    ],
+    "logs": [
+      {
+        "file": "med02b2-red.log",
+        "sha256": "3f4f1e776519e5abb88ccaa1188e965a3ba6c6a68bb978921dbfdb12ec882b06"
+      },
+      {
+        "file": "med02b2-tink.log",
+        "sha256": "aa0a3bc20abe0a1655391c6127166b126df1851efb5172429ad02c014d9bd27c"
+      },
+      {
+        "file": "med02b2-jvm-final.log",
+        "sha256": "685c8768efce121e9cafe40dadd1ffdfe86c0d63940b4e7a77840b7ee5a46129"
+      },
+      {
+        "file": "med02b2-instrumentation-compile.log",
+        "sha256": "b82373b8f972cc5361e8657f774765b57e1d4e4d11f3799633ad12248fb3401d"
+      }
+    ]
+  }
+}
