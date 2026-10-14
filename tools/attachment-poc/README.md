@@ -38,3 +38,14 @@ failure seam, not deliberate device-disk exhaustion.
 
 See reports [30](../../docs/audits/product-quality-2026-10/30-med02a-attachment-poc.md)
 and [31](../../docs/audits/product-quality-2026-10/31-med02b-minimum-implementation-plan.md).
+
+## MED-02B2 / B2-GATE (NON_PRODUCTION)
+
+`src/contractTest` now evaluates Tink1.23 Streaming AEAD with full pinned-FD authentication
+before a revocable random-read lease, input/cancel/failure IO and explicitly in-memory CAS
+models. JVM `testImplementation` / app `androidTestImplementation` only. Never app main
+writer/reader, clinical store, formal container/key policy or full backup. Synthetic graph
+models remain under attachment-design-validation. Reports39–42 distinguish actual crypto,
+file IO, memory/graph models, inherited Room/SQLCipher tests and NOT_RUN hardware gates.
+Release payload guard: `python3 scripts/check_attachment_release_isolation.py` after clean
+fullRelease; known POC magic/namespaces/providers/Tink cannot enter production DEX/manifest.

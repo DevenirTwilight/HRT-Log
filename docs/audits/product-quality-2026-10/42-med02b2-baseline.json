@@ -1,0 +1,32 @@
+{
+  "checked_utc": "2026-10-14T16:52:50.647123+00:00",
+  "checked_local_Etc_UTC": "2026-10-14T16:52:50.647123+00:00",
+  "branch": "feature/med02b2-v2-import-gate",
+  "parent": "cfe600eeb6efcca60668763a31969af07a2892b9",
+  "prs": [
+    {
+      "number": 27,
+      "state": "closed",
+      "merged": true,
+      "head": "1c8d38553b30734565ac6c44751f0bb1dc19c9a7",
+      "base": "claude/new-session-1959qb",
+      "merge": "d4564fc50201b1d8132d63467028c230e87521fa"
+    },
+    {
+      "number": 28,
+      "state": "closed",
+      "merged": true,
+      "head": "977e07796cdcec831ebd6d3142e0b80daafa2ea1",
+      "base": "claude/new-session-1959qb",
+      "merge": "79f50e81c03a2077ede999c18952dd104df548b1"
+    },
+    {
+      "number": 29,
+      "state": "closed",
+      "merged": true,
+      "head": "772f7ecba354dc4d5c36399db53a4f19eb7bc98f",
+      "base": "claude/new-session-1959qb",
+      "merge": "be953672f503940a10880e23dabaaa853d3017bb"
+    }
+  ]
+}

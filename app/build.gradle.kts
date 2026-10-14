@@ -81,5 +81,7 @@ dependencies {
     androidTestImplementation(platform(libs.compose.bom)); androidTestImplementation(libs.compose.ui.test)
     // MED-02A synthetic POC: excluded from main/debug/release runtime dependencies.
     androidTestImplementation(project(":attachment-poc"))
+    // B2-GATE comparison only: no application runtime or release dependency.
+    androidTestImplementation("com.google.crypto.tink:tink-android:1.23.0")
 }
 android.sourceSets.getByName("androidTest").java.srcDir("../tools/attachment-poc/src/contractTest/kotlin")
