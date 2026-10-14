@@ -63,6 +63,8 @@ class AttachmentPreviewAndroidTest {
     }
     @Test fun largePdfUsesStreamAndBoundedPageWithActualMemoryObservation()=fixture{root->
         val start=SystemClock.elapsedRealtime();val before=Debug.getPss()
+        val observed=SampledMemory()
+        try {
         LargeSyntheticPdf.input().use{input->ChunkObject.write(root,ChunkObject.Identity.fresh(),input).use{o->
             assertTrue(o.file.length()>4*1024*1024)
             EncryptedPdfPoc(context,o).use{v->val bitmap=v.render(0);assertEquals(Color.WHITE,bitmap.getPixel(0,0));assertTrue(bitmap.allocationByteCount<=16*1024*1024)
@@ -71,6 +73,7 @@ class AttachmentPreviewAndroidTest {
             }
         }}
         assertEquals(1,root.listFiles()!!.size)
+        }finally{observed.close();Log.i("MED02APOC","large_pdf api=${android.os.Build.VERSION.SDK_INT} ${observed.fields()}")}
     }
     @Test fun jpegPngWebpBoundedThumbnailOriginalBytesAndMimeMismatch()=fixture{root->
         val bitmap=Bitmap.createBitmap(2048,1024,Bitmap.Config.ARGB_8888);bitmap.eraseColor(Color.BLUE)

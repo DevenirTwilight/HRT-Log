@@ -1,3 +1,5 @@
+> MED-02A补充验证：JVM新增100个独立密文对象及相同内容不同显式链接保留测试；20+8=28项全部成功（36s）。添加大PDF实际采样Java/native/PSS观察器，不把算法bound当内存峰值。首轮dcb8beb API26/29/35/Android还在运行，暂不推送以避免取消；待完成后纳入验证后的R15主线并推送下一批。生产不变，PR25已合并、主线Android仍待，其余JVM/设备/Science成功。
+
 > MED-02A原型阶段（2026-10-14）：JVM加密19/恢复模型7全部通过，无新增skip；Android POC包修正PdfDocument显式关闭后编译成功46s。独立test-only模块、ProxyFD/PdfRenderer/图片/真实synthetic Keystore与live-import force-stop脚本已实现，API26/29/35实测尚待新HEAD CI，不称可行/验收完成。scope32a1681完整CI成功；R15 PR25已合并c3bf2cbc（集成c97d9c6 push/PR全绿），主线38527627941/38527627946仍待完整结果，再纳入本分支最终回归。设计31仅待审批，不实施Room10/完整医疗备份，不交付APK/自合并/改生产数据或build26。
 
 > MED-02A启动（2026-10-14）：MED01 PR26已合并051ee22，主线Android38524575273三任务与Science38524575321 gate/deep全部success。独立feature/med02a-attachment-poc-20261014从此已验证HEAD建立；PR25用户已授权合并，R15分支c97d9c6保留两套功能/测试解决冲突，新CI38525995026/38525995037及38525991389/38525991267正在核验，尚未合并。POC只合成数据、独立模块及测试依赖，不接生产APK；完成后需纳入R15验证主线。尚无加密/预览实测，不称完成，不改Schema/PNBAK1/PK/版本/签名/真实数据/build26。

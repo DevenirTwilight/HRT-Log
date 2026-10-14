@@ -85,6 +85,14 @@ abstract class ChunkContract {
             println("MED02A_STREAM bytes=${r.size} block=${r.blockSize} scratch_bound=${r.maxScratchBytes} elapsed_ms=${(System.nanoTime()-started)/1000000}")
         }}
     }
+    @Test fun hundredEncryptedObjectsRemainIndependentAndOnlyChosenObjectsOpen()=fixture{root->
+        val all=(0 until 100).map{obj(root,bytes(64+it))}
+        try {
+            assertEquals(100,root.listFiles()!!.size);assertEquals(100,all.map{it.identity}.distinct().size)
+            for(i in listOf(99,0,50))all[i].open().use{r->val data=ByteArray(64+i);assertEquals(data.size,r.readAt(0,data));assertArrayEquals(bytes(data.size),data)}
+            assertTrue(root.listFiles()!!.none{it.extension=="part"})
+        }finally{all.forEach{it.close()}}
+    }
 }
 
 class SyntheticStream(private val count:Long):InputStream() {

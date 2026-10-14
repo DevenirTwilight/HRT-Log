@@ -13,7 +13,8 @@ class RecoveryModel(val store:UUID=UUID.randomUUID()) {
     fun page(offset:Int,limit:Int=20)=all().drop(offset).take(limit)
     fun add(e:Entry):UUID {
         require(e.link==null || e.link.recordEpoch==recordEpoch)
-        val duplicate=rows.values.firstOrNull{it.hash==e.hash && !it.trashed}
+        // Deduplicate repeated submission for the same association only. Never discard another explicit link.
+        val duplicate=rows.values.firstOrNull{it.hash==e.hash && it.link==e.link && !it.trashed}
         if(duplicate!=null)return duplicate.id
         require(e.id !in rows);rows=rows+(e.id to e);return e.id
     }

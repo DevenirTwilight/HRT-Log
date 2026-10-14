@@ -49,6 +49,11 @@ class RecoveryTest {
         assertThrows(IllegalArgumentException::class.java){m.restore(listOf(e,e),m.store,m.recordEpoch)}
         assertTrue(m.all().isEmpty())
     }
+    @Test fun sameContentDifferentExplicitAssociationsAreRetained() {
+        val m=RecoveryModel();val a=RecoveryModel.Entry(UUID.randomUUID(),"same bytes",RecoveryModel.Link(1,m.recordEpoch))
+        val b=a.copy(id=UUID.randomUUID(),link=RecoveryModel.Link(2,m.recordEpoch));m.add(a);m.add(b)
+        assertEquals(setOf(1L,2L),m.all().map{it.link!!.recordId}.toSet())
+    }
     @Test fun thousandMetadataRowsPageWithoutDecryptingOrCreatingPreviews() {
         val m=RecoveryModel();repeat(1000){m.add(RecoveryModel.Entry(UUID(0,it.toLong()),"hash$it",null))}
         val pages=(0 until 1000 step 20).flatMap{m.page(it)}
