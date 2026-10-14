@@ -1,3 +1,11 @@
+## MED-02B1 代码全绿及最终交付入口 — 2026-10-14
+
+实现基准f04c3fe11d8e5021f2404064ff01fc25f55a1831全部push/PR CI成功：Android38584644420/38584652287，Science38584643704/38584652558（两deep实际成功）。JVM239；data180/rem17/app865，61原有skip；API35 data88/app报告223、8原有skip；API26/29各data21+POC41。没有新skip/削减断言。
+新增真实SQLCipher在未提交事务中force-stop的新PID验证三个API均成功；原B2/B3/B4/R15/MED01及各种重启/备份回归全过。Room9原生迁移、1→10链、失败DDL回滚、29旧表/索引fingerprint、Room9生成PNBAK后恢复到10、stableUUID/trash/purge/ID复用和密钥隔离均验证。
+报告38已汇总代码阶段证据、失败历史、artifact digest及NOT_RUN边界。当前最后HEAD为验收文档提交；最终精确SHA/最终CI记录在PR29正文：https://github.com/DevenirTwilight/HRT-Log/pull/29 。交付前必须等此文档HEAD的完整CI全部结束且成功，不冒用f04旧结果。
+PR29 stacked于28/27，三项仍OPEN，不自动合并。B1已实现但附件仍关闭；没有正式cipher/full backup/真实导入/生产preview。真实ARM、硬件掉电、生产协议/便携wrapper/外部专家认证仍未验收，后续B2需单独授权和独立审核，不自动开始。
+Room10授权见REQUIREMENTS §90。PNBAK1序列化仍9、crypto参数/版本号/签名/PK不改；build26 SHA256保持0c6bd9132ab15ca7625f1da19b59c1c9450cf4cb0518b15100e30396c5ed3fa0。无新APK签名或交付，无真实医疗数据操作。
+
 ## MED-02B1 R15版本回归修正与强停补测批 — 2026-10-14
 
 20181a7 push/PR所有CI均已结束。Android/JVM/Science（PR deep实际运行）和API26/29均成功；API35 data87全通过，app全量仅R15 runtime9→10旧断言失败，未其他业务失败，无新skip。已修runtime10并实际解密PNBAK检查schema9，保留所有原数据/库存/VOIDED断言。

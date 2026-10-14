@@ -1,4 +1,54 @@
-# 38 — MED-02B1 实施与验证记录（进行中）
+# 38 — MED-02B1 附件基础设施实施与验收
+
+代码阶段验收通过。实现基准 `f04c3fe11d8e5021f2404064ff01fc25f55a1831` 的 push 与 PR 全部 CI 成功。附件功能保持关闭；此结论不是正式附件库上线或生产密码学认证。
+
+独立 [PR29](https://github.com/DevenirTwilight/HRT-Log/pull/29) 指向未合并的 PR28（977e077），PR28 依赖未合并 PR27（1c8d385）。三项 PR 均未自动合并。主线与实验分支不能混淆。最终交付 SHA 和最终文档 HEAD 的完整 CI 链接固定记录在 PR29 正文；交付前必须核验该最终 HEAD 全绿，不能冒用更早代码提交的结果。
+
+## 验收结果与可复现证据
+
+| 层级 | 实际结果 |
+| --- | --- |
+| 纯 JVM | domain63 + PK124 + importer12 + 合成POC40 = 239；零失败/错误/跳过 |
+| Android 单元测试 | data180、reminder17、app865；零失败；app61个原有skip不变 |
+| API35完整设备 | data88，零失败/skip；app报告223、零失败、8个原有skip（instrumentation日志Finished231，沿用报告自身计数口径） |
+| API26/API29 | 每API data21 + app合成POC41；零失败/skip；另跑B1与POC各自的真实force-stop新PID验证 |
+| 构建与lint | full Debug、unsigned full Release、两个test APK、lint及manifest/provenance检查全部成功 |
+| Science | push与PR gate/deep均实际成功；未修改PK模型 |
+| 新增跳过/删减断言 | 无；旧运行时版本断言合法更新为10，并新增旧备份序列化9检查 |
+| 真实ARM/硬件掉电 | NOT_RUN；不能用x86_64模拟器或process force-stop替代 |
+
+代码阶段完整CI：
+
+- [PR Android/JVM/lint/API26/29/35](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38584652287)
+- [Push Android/JVM/lint/API26/29/35](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38584644420)
+- [PR Science深度验证](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38584652558)
+- [Push Science深度验证](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38584643704)
+
+已下载并校验PR CI证据artifact的API digest：device-test-results SHA256 `2224b5771a7841f50d2f851553b5eb4a524fe6d3f5002492aefc58c312e7611e`；jvm-test-results `608df7ba9c79c4bf87c5ec77504d16caf652ae46798fd0ebfe9f163d410b7ffa`；build-results `0cb1f8f875ee9cdb78ecf5ca13e985ee012cea50270f3d75a867b354fb0f1e3b`。统计取真实XML/HTML，非估计。
+
+## Room9→10、旧数据与PNBAK1证明
+
+AttachmentMigrationContract的同四合同运行于本地真实Room和三API原生SQLCipher。真实Room9导出建库并加载合成旧记录，迁移前后比较29个旧表的行、列类型、CREATE SQL和索引SHA256；Room自身校验新schema，PRAGMA foreign_key_check零错误，八张新增元数据表存在。原始真实剂量、CONSUME、ADJUST、VOIDED、就诊、化验和日记保留。
+
+旧PNBAK1在Room9夹具升级前生成，升级至10后恢复，29表fingerprint仍一致；备份序列化固定9且无附件表/密钥。旧scope退休、链接隔离、新dataset/recordEpoch产生；相同整数ID不会重绑旧UUID。另验证最早1→10迁移链、迁移DDL中断回滚（旧9数据与版本保留）、关闭重开和双SQLCipher库同ID隔离。没有destructiveMigration，没有重写旧29表。
+
+Shared AttachmentFoundationContract保留并验证16个稳定身份、Trash恢复/墓碑、真实DoseRecord修订、scope切换、原子事务、重复操作、损坏/错误密码/失败恢复、认证状态保护和密钥角色合同。新的session/capability竞争测试保护实际同步Room提交的整个线性化点，不只检查后再提交。
+
+## 真实强停及旧回归
+
+新增 AttachmentFoundationRestartAndroidTest 仅在独占library test APK的合成SQLCipher库运行：先提交CURRENT/typedUUID/PREPARED，再在未提交的第二事务内插入另一操作并修改合成就诊行。脚本确认prepare进程仍存活后force-stop；新PID验证已提交数据仍在、未提交操作及文字变更回滚、feature_enabled=0、无版本/原件且FK正常。API26、29、35全部实际通过；不清除实际app数据。
+
+API35还实际通过原伪装锁定、新进程认证、导入明文残留清理、恢复密码对话框process-death、VOIDED与加密备份恢复、R15撤销跳过和一次真实扣减、MED01原就诊ID/时区/问题/化验/回收站、合成cipher import强停。四语/320dp/2倍字体和B2/B3/B4回归保留。B4-E实测136个viewport样本，最大3个挂载包装节点；这仍不是ARM性能基准。
+
+## 完成范围与发布边界
+
+默认不可用的Room10八表、DAO、typed稳定身份、CURRENT/RETIRED与三个UUID域、事务及操作日志基础、密钥角色/隔离基础接口、PNBAK9适配和POC撤权补强已实现。生产正式加密对象协议、附件入口、真实原件导入、完整医疗备份、生产PDF预览均未实施。
+
+负责人对B1生产迁移的明确授权见REQUIREMENTS §90。本轮无新增待决定的产品行为。后续B2仍需单独批准正式协议和密钥策略，完成独立安全审核、真实ARM/资源限制与文件系统崩溃恢复；B3完整备份验收前不得开启附件功能。B1的关闭/认证禁止保护只能在对应后续授权及验证后调整，不通过配置偷偷启用。
+
+PK、正式PNBAK1密码学参数、versionCode和正式签名不变。build26 SHA256仍为 `0c6bd9132ab15ca7625f1da19b59c1c9450cf4cb0518b15100e30396c5ed3fa0`。未签名、发布或交付新APK，未使用真实医疗数据。
+
+以下保留阶段性失败和修复记录；其中“尚待”“正在运行”描述记录当时，最终结论以上述验收结果及PR29最终HEAD检查为准。
 
 范围和授权见 REQUIREMENTS §90；stacked于PR28固定977e077，PR27/28不合并。
 
