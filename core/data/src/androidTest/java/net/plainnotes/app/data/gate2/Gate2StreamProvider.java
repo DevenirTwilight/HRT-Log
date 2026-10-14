@@ -19,20 +19,27 @@ public final class Gate2StreamProvider extends ContentProvider {
     }
     private String kind(Uri uri) {
         String path = uri.getLastPathSegment();
-        if (!"unknown".equals(path) && !"failure".equals(path) && !"mime".equals(path) && !"false".equals(path))
+        if (!"unknown".equals(path) && !"failure".equals(path) && !"mime".equals(path) && !"false".equals(path)
+                && !"pdfclaim".equals(path) && !"badname".equals(path) && !"pdfok".equals(path))
             throw new IllegalArgumentException("Unsupported synthetic source");
         return path;
     }
     @Override public Cursor query(Uri uri, String[] projection, String selection, String[] args, String sort) {
         kind(uri);
         MatrixCursor cursor = new MatrixCursor(new String[]{OpenableColumns.DISPLAY_NAME, OpenableColumns.SIZE});
-        cursor.addRow(new Object[]{"synthetic.bin", "false".equals(kind(uri)) ? 1L : null});
+        cursor.addRow(new Object[]{"badname".equals(kind(uri)) ? "../synthetic-secret.pdf" : "synthetic.bin", "false".equals(kind(uri)) ? 1L : null});
         return cursor;
     }
-    @Override public String getType(Uri uri) { return "mime".equals(kind(uri)) ? "image/png" : "application/octet-stream"; }
+    @Override public String getType(Uri uri) {
+        String kind = kind(uri);
+        if ("mime".equals(kind)) return "image/png";                  // claims PNG, bytes are PDF
+        if ("pdfclaim".equals(kind) || "badname".equals(kind) || "pdfok".equals(kind)) return "application/pdf";
+        return "application/octet-stream";
+    }
     @Override public ParcelFileDescriptor openFile(Uri uri, String mode) throws FileNotFoundException {
         if (!"r".equals(mode)) throw new FileNotFoundException("Synthetic read-only source");
-        boolean failure = "failure".equals(kind(uri));
+        final String kind = kind(uri);
+        boolean failure = "failure".equals(kind);
         final ParcelFileDescriptor[] pipe;
         try { pipe = ParcelFileDescriptor.createReliablePipe(); }
         catch (IOException e) { throw new FileNotFoundException("Synthetic pipe unavailable"); }
@@ -40,6 +47,10 @@ public final class Gate2StreamProvider extends ContentProvider {
             try {
                 byte[] bytes = new byte[failure ? 1200 : 8192];
                 for (int i = 0; i < bytes.length; i++) bytes[i] = (byte)((i * 31 + 17) % 251);
+                // Synthetic signatures only: PDF header for mime/badname/pdfok, PNG signature for pdfclaim.
+                byte[] signature = "pdfclaim".equals(kind) ? new byte[]{(byte)0x89, 80, 78, 71, 13, 10, 26, 10}
+                        : ("mime".equals(kind) || "badname".equals(kind) || "pdfok".equals(kind)) ? "%PDF-1.7\n".getBytes(java.nio.charset.StandardCharsets.US_ASCII) : null;
+                if (signature != null) System.arraycopy(signature, 0, bytes, 0, signature.length);
                 // Keep the reliable descriptor open until closeWithError, so the read side sees the fault.
                 try (ParcelFileDescriptor.AutoCloseOutputStream out = new ParcelFileDescriptor.AutoCloseOutputStream(pipe[1])) {
                     out.write(bytes); out.flush();

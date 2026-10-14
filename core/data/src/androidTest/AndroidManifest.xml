@@ -2,5 +2,9 @@
     <application>
         <provider android:name="net.plainnotes.app.data.Gate2StreamProvider"
             android:authorities="net.plainnotes.app.data.test.synthetic.gate2" android:exported="false" />
+        <!-- TEST APK ONLY: second real process for cross-process writer-lease evidence on synthetic fixtures. -->
+        <provider android:name="net.plainnotes.app.data.Gate2PeerProvider"
+            android:authorities="net.plainnotes.app.data.test.synthetic.gate2peer" android:exported="false"
+            android:process=":gate2peer" />
     </application>
 </manifest>

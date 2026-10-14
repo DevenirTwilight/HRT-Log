@@ -12,7 +12,6 @@ import net.plainnotes.poc.B2StreamingCandidate
 import java.io.*
 import java.nio.channels.Channels
 import java.nio.channels.FileChannel
-import java.nio.channels.FileLock
 import java.nio.channels.OverlappingFileLockException
 import java.nio.file.*
 import java.security.KeyStore
@@ -107,35 +106,65 @@ internal class Gate2Store(val context:Context,val fixture:String="synthetic-gate
         check(it.moveToFirst());unwrap(it.getBlob(0),stageAlias,op.context+"/staging/${op.id}/${scope.dataset}/${op.physical}".toByteArray())
     }
     private fun update(op:Operation,phase:String)=db.runInTransaction {raw.execSQL("UPDATE synthetic_gate2_operation SET phase=? WHERE id=?",arrayOf(phase,op.id))}
-    /** Live-writer lease: an OS advisory lock on a per-operation file, held for the whole import. Another process
-     * holding it makes tryLock return null; this JVM holding it throws OverlappingFileLockException. The kernel
-     * drops it when the holder dies, so a fresh process can recover a force-stopped writer. */
-    private fun tryLease(id:String):FileLock? {
-        val f=File(root,"leases/$id.lock");check(f.parentFile!!.mkdirs()||f.parentFile!!.isDirectory)
-        val channel=FileChannel.open(f.toPath(),StandardOpenOption.CREATE,StandardOpenOption.WRITE,LinkOption.NOFOLLOW_LINKS)
-        val lock=try{channel.tryLock()}catch(e:OverlappingFileLockException){null}catch(t:Throwable){channel.close();throw t}
-        if(lock==null)channel.close()
-        return lock
+    enum class LeaseState { FREE, HELD_THIS_PROCESS, HELD_OTHER_PROCESS }
+    /** Live-writer lease: an OS advisory (fcntl) lock on a per-operation file, held for the whole import. The kernel
+     * drops it when the holder dies, so a fresh process can recover a force-stopped writer. POSIX record locks belong
+     * to the process: closing ANY descriptor of the file drops every lock this process holds on it. So this process
+     * keeps exactly one channel per locked file and never opens a probe channel on a file it already locks.
+     * An unsupported/failed lock call throws and is never treated as permission to proceed. */
+    internal object Leases {
+        private val held=HashMap<String,FileChannel>()
+        /** RED CONTROL ONLY: restores the earlier probe that opened (and closed) a second channel. */
+        @Volatile var unsafeLegacyProbeForRedTest=false
+        private fun open(f:File)=FileChannel.open(f.toPath(),StandardOpenOption.CREATE,StandardOpenOption.WRITE,LinkOption.NOFOLLOW_LINKS)
+        @Synchronized fun acquire(f:File):Closeable? {
+            val key=f.canonicalPath;if(key in held)return null
+            val channel=open(f)
+            val lock=try{channel.tryLock()}catch(t:Throwable){channel.close();throw t}
+            if(lock==null){channel.close();return null}  // safe: this process holds no lock on this file
+            held[key]=channel
+            return Closeable{synchronized(Leases){if(held[key]===channel){held.remove(key);channel.close()}}}
+        }
+        @Synchronized fun state(f:File):LeaseState {
+            val key=f.canonicalPath;if(key in held)return LeaseState.HELD_THIS_PROCESS
+            val channel=open(f)
+            try{val lock=channel.tryLock()?:return LeaseState.HELD_OTHER_PROCESS;lock.release();return LeaseState.FREE}finally{channel.close()}
+        }
+        fun legacySecondChannel(f:File):Closeable? {
+            val channel=open(f)
+            val lock=try{channel.tryLock()}catch(e:OverlappingFileLockException){null}catch(t:Throwable){channel.close();throw t}
+            if(lock==null){channel.close();return null}
+            return Closeable{channel.close()}
+        }
     }
-    private fun <T> withLease(id:String,block:()->T):T {
-        val lease=tryLease(id)?:throw IllegalStateException("Synthetic writer lease held")
-        try{return block()}finally{lease.channel().close()}
+    private fun leaseFile(id:String)=File(root,"leases/$id.lock").also{check(it.parentFile!!.mkdirs()||it.parentFile!!.isDirectory)}
+    /** Lease for maintenance (reconcile, confirmed release); the writer always uses the registry. */
+    private fun maintenanceLease(id:String):Closeable?=
+        if(Leases.unsafeLegacyProbeForRedTest)Leases.legacySecondChannel(leaseFile(id)) else Leases.acquire(leaseFile(id))
+    fun leaseState(id:String):LeaseState=Leases.state(leaseFile(id))
+    private fun <T> withLease(lease:Closeable?,block:()->T):T {
+        lease?:throw IllegalStateException("Synthetic writer lease held")
+        try{return block()}finally{lease.close()}
     }
+    /** Test-only admission: declared MIME must match the signature and the display name must be a plain file name.
+     * A signature is NOT parser validation; production VERIFIED/VALIDATED stay forbidden. */
+    data class Admission(val mime:String,val displayName:String?)
     fun import(op:Operation,source:InputStream,capability:AttachmentSession.Capability=session.issue(),
-               fault:(Seam)->Unit={},cleanup:(File)->Boolean={it.delete()},unsafeCleanupForRedTest:Boolean=false)=
-        withLease(op.id){importLeased(op,source,capability,fault,cleanup,unsafeCleanupForRedTest)}
+               fault:(Seam)->Unit={},cleanup:(File)->Boolean={it.delete()},unsafeCleanupForRedTest:Boolean=false,admission:Admission?=null)=
+        withLease(Leases.acquire(leaseFile(op.id))){importLeased(op,source,capability,fault,cleanup,unsafeCleanupForRedTest,admission)}
     private fun importLeased(op:Operation,source:InputStream,capability:AttachmentSession.Capability,
-               fault:(Seam)->Unit,cleanup:(File)->Boolean,unsafeCleanupForRedTest:Boolean) {
+               fault:(Seam)->Unit,cleanup:(File)->Boolean,unsafeCleanupForRedTest:Boolean,admission:Admission?) {
         check(phase(op.id)=="PREPARED");val target=file(op)
         // Only a parent directory this operation created itself (empty when created) may later vouch for a leaf
         // whose inode was never recorded.
         val freshParent=target.parentFile!!.mkdirs();check(freshParent||target.parentFile!!.isDirectory)
-        val scratch=ByteArray(8192);var created=false
+        val scratch=ByteArray(8192);var created=false;val head=ByteArray(64);var headLength=0
         val dir=Os.open(target.parentFile!!.path,OsConstants.O_RDONLY or OsConstants.O_CLOEXEC or OsConstants.O_NOFOLLOW,0)
         val pinned=Os.fstat(dir)
         val key=try{stageKey(op)}catch(e:Throwable){Os.close(dir);throw e}
         try {
             capability.publishFor(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch)){Unit}
+            admission?.let{net.plainnotes.poc.B2InputPolicy.displayName(it.displayName)}
             db.runInTransaction {raw.execSQL("UPDATE synthetic_gate2_operation SET phase='WRITING',parent_device=?,parent_inode=? WHERE id=?",
                 arrayOf(if(freshParent)pinned.st_dev else null,if(freshParent)pinned.st_ino else null,op.id))}
             // Fixed durable reservation for this attempt; no native SQL round-trip per 8KiB chunk.
@@ -148,8 +177,10 @@ internal class Gate2Store(val context:Context,val fixture:String="synthetic-gate
                     while(true){capability.check();val n=source.read(scratch);if(n<0)break
                         if(n==0){check(++zeros<=8){"Synthetic provider stalled"};continue};zeros=0;total+=n
                         check(total<=B2StreamingCandidate.MAX_BYTES && primitive.expectedCiphertextSize(total)<=reserved){"Synthetic input limit"}
+                        if(headLength<head.size){val c=minOf(n,head.size-headLength);System.arraycopy(scratch,0,head,headLength,c);headLength+=c}
                         cipher.write(scratch,0,n);scratch.fill(0);fault(Seam.WRITE)}
                 }
+                admission?.let{net.plainnotes.poc.B2InputPolicy.signature(head.copyOf(headLength),it.mime)}
                 check(fd.size()<=reserved);fault(Seam.BEFORE_FILE_SYNC);fd.force(true);fault(Seam.AFTER_FILE_SYNC)
             }
             val evidence=B2StreamingCandidate.openAuthenticated(target,key,op.context,capability).use{it.evidence}
@@ -177,7 +208,7 @@ internal class Gate2Store(val context:Context,val fixture:String="synthetic-gate
                 val clean=!created||(sameParent&&sameFile&&cleanup(target));update(op,if(clean)"ABORTED" else "CLEANUP_PENDING")
             }
             throw e
-        } finally {scratch.fill(0);key.fill(0);Os.close(dir)}
+        } finally {scratch.fill(0);head.fill(0);key.fill(0);Os.close(dir)}
     }
     private fun reservation(id:String)=raw.query("SELECT reservation FROM synthetic_gate2_operation WHERE id=?",arrayOf(id)).use{check(it.moveToFirst());it.getLong(0)}
     class TrackedLease(private val delegate:B2StreamingCandidate.Lease,private val release:Closeable):Closeable {
@@ -213,8 +244,8 @@ internal class Gate2Store(val context:Context,val fixture:String="synthetic-gate
         val ids=raw.query("SELECT id FROM synthetic_gate2_operation").use{c->buildList{while(c.moveToNext())add(c.getString(0))}}
         for(id in ids){
             // Never classify or clean an operation whose writer is still alive (this process or another one).
-            val lease=tryLease(id);if(lease==null){results[id]="SKIP_LIVE_WRITER";continue}
-            try{results[id]=classify(id)}finally{lease.channel().close()}
+            val lease=maintenanceLease(id);if(lease==null){results[id]="SKIP_LIVE_WRITER";continue}
+            try{results[id]=classify(id)}finally{lease.close()}
         }
         return results
     }
@@ -232,17 +263,20 @@ internal class Gate2Store(val context:Context,val fixture:String="synthetic-gate
     /** Explicit, confirmed release of a quarantined orphan (complete orphan, foreign path, failed cleanup, retired
      * epoch). Frees its quota reservation. Deletes ciphertext only when it is provably this operation's own file;
      * a foreign file is never deleted. The active pointer is never released here. */
-    fun releaseQuarantined(id:String,confirmed:Boolean):String=withLease(id) {
+    fun releaseQuarantined(id:String,confirmed:Boolean):String=withLease(maintenanceLease(id)) {
         check(confirmed){"Release requires explicit confirmation"}
         val op=row(id);val p=phase(id)
         val orphan=p=="AUTHENTICATED"||p=="CLEANUP_PENDING"||(!ownedInCurrent(id)&&p !in TERMINAL)
-        check(id!=active()&&orphan){"Not a quarantined orphan"}
+        check(id!=active()&&orphan&&(synchronized(leased){leased[id]?:0})==0){"Not a quarantined orphan"}
         val f=file(op);val own=ownedForCleanup(op)
         if(own)check(f.delete()){"Synthetic orphan delete failed"}
         val released=if(own||!f.exists())"CLEANED" else "RELEASED_FOREIGN"
         update(op,released);released
     }
     fun fileOf(id:String)=file(row(id))
+    fun operationOf(id:String)=row(id)
+    /** Reserved bytes still counted against the synthetic quota (same rule as prepare). */
+    fun reservedBytes():Long=raw.query("SELECT COALESCE(SUM(reservation),0) FROM synthetic_gate2_operation WHERE phase NOT IN('ABORTED','CLEANED','RELEASED_FOREIGN')").use{check(it.moveToFirst());it.getLong(0)}
     private companion object {
         val TERMINAL=setOf("ABORTED","CLEANED","RELEASED_FOREIGN")
     }

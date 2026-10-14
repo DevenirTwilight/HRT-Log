@@ -232,4 +232,32 @@ class Gate2StoreAndroidTest {
         assertEquals("CLEANUP_PENDING",s.phase(other.id));assertTrue(existing.exists());assertEquals("QUARANTINE_FOREIGN_PATH",s.reconcile()[other.id]);assertTrue(existing.exists())
     }
 
+    @Test fun orphanHandlingIsIdempotentAndAnInterruptedReleaseResumes()=fixture { s ->
+        val old=initial(s)
+        // AFTER_CREATE failure: terminal immediately, repeated recovery changes nothing and holds no quota.
+        val created=s.prepare()
+        failsWith("Synthetic injected AFTER_CREATE"){s.import(created,ByteArrayInputStream(bytes),fault={if(it==Gate2Store.Seam.AFTER_CREATE)throw IOException("Synthetic injected AFTER_CREATE")})}
+        val afterCreate=s.reservedBytes()
+        repeat(2){assertEquals("RETAIN_TERMINAL",s.reconcile()[created.id]);assertEquals("ABORTED",s.phase(created.id));assertEquals(afterCreate,s.reservedBytes())}
+        failsWith("Not a quarantined orphan"){s.releaseQuarantined(created.id,confirmed=true)}
+        // IN_COMMIT rollback whose cleanup failed: own ciphertext kept, quota held until a confirmed release.
+        val pending=s.prepare()
+        failsWith("Synthetic injected IN_COMMIT"){s.import(pending,ByteArrayInputStream(bytes),fault={if(it==Gate2Store.Seam.IN_COMMIT)throw IOException("Synthetic injected IN_COMMIT")},cleanup={false})}
+        assertEquals("CLEANUP_PENDING",s.phase(pending.id));assertTrue(s.file(pending).exists())
+        val held=s.reservedBytes()
+        assertEquals("CLEANED",s.releaseQuarantined(pending.id,confirmed=true));assertFalse(s.file(pending).exists())
+        val freed=s.reservedBytes();assertEquals(held-1024*1024,freed)
+        failsWith("Not a quarantined orphan"){s.releaseQuarantined(pending.id,confirmed=true)}
+        repeat(2){assertEquals("RETAIN_TERMINAL",s.reconcile()[pending.id]);assertEquals(freed,s.reservedBytes())}
+        // Crash after the unlink but before the SQL update: the next confirmed release finishes, never double-frees.
+        val torn=s.prepare()
+        failsWith("Synthetic injected IN_COMMIT"){s.import(torn,ByteArrayInputStream(bytes),fault={if(it==Gate2Store.Seam.IN_COMMIT)throw IOException("Synthetic injected IN_COMMIT")},cleanup={false})}
+        val tornHeld=s.reservedBytes();assertTrue(s.file(torn).delete())
+        assertEquals("CLEANED",s.releaseQuarantined(torn.id,confirmed=true));assertEquals(tornHeld-1024*1024,s.reservedBytes())
+        // Committed history and the active object are never orphans.
+        val newer=initial(s);assertEquals(newer.id,s.active())
+        failsWith("Not a quarantined orphan"){s.releaseQuarantined(old.id,confirmed=true)};assertTrue(s.file(old).exists())
+        failsWith("Not a quarantined orphan"){s.releaseQuarantined(newer.id,confirmed=true)};s.open().close()
+    }
+
 }
