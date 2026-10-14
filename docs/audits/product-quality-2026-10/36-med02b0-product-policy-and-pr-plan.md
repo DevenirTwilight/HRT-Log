@@ -10,7 +10,7 @@
 
 候选导入最低可用余量：预留cipher大小+元数据+16MiB操作余量，并保留全机至少64MiB或总容量5%（较大者）；均待低端ARM实测，不是OS写成功保证。未知长度SAF必须按实际读字节限流，实时预算预约增长，超限取消并只清owned ciphertext；不信任MIME/宣称长度。完整恢复需同时保留旧数据与完整新staging、至少完整输入估计cipher+SQL暂存+margin，不自动删旧原件腾空间。预览最大并发1、图片候选原像素≤20M、边≤10000、输出≤4M像素、deadline与PSS目标需实测后冻结；这些不是native parser安全保证。
 
-报告30实际只有单合成4MiB PDF的三模拟器进程采样；不是16MiB原件、256MiB库、1000对象/低端ARM基准。B0没有新增性能/内存测量，不填虚构数值。新的API目录fsync/no-replace实验是操作可用性，非性能或掉电验证。
+报告30实际只有单合成4MiB PDF的三模拟器进程采样；不是16MiB原件、256MiB库、1000对象/低端ARM基准。B0未新增专项配额/性能基准，三API仅复跑同一合成4MiB PDF的既有采样回归，不作为容量或ARM验收，不填虚构数值。新的API目录fsync/no-replace实验是操作可用性，非性能或掉电验证。
 
 容量验收矩阵：API26/29/35各真实低内存ARM设备；1/16MiB及+1B文件，PNG/JPEG/WebP高压缩/EXIF/ICC/动画拒绝语料，1/20/100/1000对象及超额，含trash/旧版本/pending，满配并发import/backup/delete/restore；测walltime、CPU、进程PSS/native/java采样、峰值采样间隔、磁盘cipher/staging/WAL增长、用户取消时延。列表SQL分页+boundedLazy，不能一次创建1000节点；320dp/2×font四语/TalkBack。未有设备项标NOT_RUN，不能用emulator代替ARM。
 
@@ -43,7 +43,7 @@
 
 ## 明确需要负责人决定
 
-1. 是否批准B1生产additive Room10及typed identity/tombstone/envelope/generation表，禁止destructive migration？草案SQL不等于批准。
+1. 是否批准B1生产additive Room10及local metadata dataset与crypto vault分离、typed identity/tombstone/envelope/generation表，禁止destructive migration？草案SQL不等于批准。
 2. 独立安全专家人选/范围：对象组合/AEAD预算/KDF、完整backup/恢复/key包裹、Android native hostile parsers与durability；AI审查不能替代。
 3. 是否先评估成熟Streaming AEAD后再冻结自有组合？新的正式magic/协议/backup格式须另批准，不使用研究标记。
 4. 图片首批PRIMARY-only、PDF/分享延期是否批准？quota与像素/deadline只按实测批准，16/256/1000候选可调。
@@ -53,3 +53,18 @@
 8. B1–B5默认关闭，图片与PDF各自何时显式启用。任何批准不得推导为授权签名/version/APK发布。
 
 当前没有需要暂停本轮设计/合成测试的问题；上述决定只阻断对应生产实施，不阻断B0交付。
+
+最终Room10草案包含fresh localDataset namespace+不可变crypto vault映射、CURRENT唯一/RETIRED隔离、
+原件ciphertext commitment及operation owned generation/UUID/staged wrappedDEK/hash与终态不可逆清理。
+旧完整包不会UPSERT已有PURGED/不同revision；旧PNBAK创建新空metadata/crypto域，旧scope保留隔离。
+这些schema/restore选择仍须负责人批准；crypto/keys/SQLCipher真实恢复未由合成约束认证。
+
+### 双份恢复空间必须单独批准
+
+若256MiB/1000对象当作含staging的绝对硬上限，满库无法同时保留旧库和恢复一份满库；
+不能靠先删旧数据解决。建议正常import预算256MiB/1000仍含trash/retained/pending，
+完整replace restore另预约旧+新两份最多512MiB/2000对象，再加加密SQL snapshot/staging与margin，
+真实free-space/硬上限按ARM测量冻结。超过日常预算时允许查看、纠错、backup、手动清理，禁止新增原件；
+旧generation至少到重启验证+receipt，随后只在批准的保留政策/明确用户清理下回收，不擅自过期删除。
+此恢复例外目前未批准/未验收；若不批准，预算不足必须拒绝恢复并保留原数据，报告清楚该限制。
+负责人需要决定临时恢复额度及成功后旧快照/对象保留与容量债务政策，不能把256候选悄悄变成已验收512。

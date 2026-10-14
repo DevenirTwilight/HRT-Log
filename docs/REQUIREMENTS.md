@@ -760,3 +760,8 @@ Room9→10仅草案及合成测试，不改生产entities/schema；完整医疗�
 旧PNBAK1保持参数与格式，未来导出冻结serializationSchema9，恢复/overwrite/clear同事务quarantine旧关联。
 quota16MiB/256MiB/1000与pixels/deadline必须ARM测量和负责人批准；垃圾箱/旧版本保留、永久删除备份政策见报告36待决定。
 B1–B5默认关闭；独立专家审核、完整加密backup/newdevice恢复及明确开启批准前不能保存真实医疗附件。
+
+MED-02B0最终设计细化（2026-10-14，仍待生产批准）：local metadata dataset UUID与immutable crypto logicalVault、physical generation分别独立。
+完整恢复fresh local scopes并保持原cipher/AAD，CURRENT唯一/retired隔离，same crypto version不得不同bytes；旧PNBAK恢复空fresh dataset/crypto域，不按ID重关联。
+operation owned generation/UUID/暂存device wrap/hash及终态不可逆清理纳入Room10草案，都是tools synthetic而非生产变更。
+实际API26/29/35 hardlink被拒绝，禁止把它作已验证发布方案；候选O_EXCL cipher creation+完整认证/file+dirsync+DB原子授权发布，真正掉电/SQLCipher联合恢复仍待验证。

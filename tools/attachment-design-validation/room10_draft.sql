@@ -2,6 +2,8 @@
 -- Caller supplies random UUID scopes, pins PRIMARY, and wraps this entire DDL in one transaction.
 CREATE TABLE attachment_store (
  store_uuid TEXT PRIMARY KEY NOT NULL CHECK(length(store_uuid)=36),
+ logical_vault_uuid TEXT NOT NULL CHECK(length(logical_vault_uuid)=36),
+ store_state TEXT NOT NULL CHECK(store_state IN('STAGING','CURRENT','RETIRED')),
  space TEXT NOT NULL CHECK(space='PRIMARY'),
  record_epoch TEXT NOT NULL CHECK(length(record_epoch)=36),
  generation INTEGER NOT NULL CHECK(generation>=1),
@@ -10,6 +12,8 @@ CREATE TABLE attachment_store (
  FOREIGN KEY(store_uuid,active_generation_uuid) REFERENCES attachment_generation(store_uuid,generation_uuid) DEFERRABLE INITIALLY DEFERRED,
  UNIQUE(store_uuid,record_epoch)
 );
+CREATE UNIQUE INDEX attachment_single_current ON attachment_store(space) WHERE store_state='CURRENT';
+CREATE TRIGGER attachment_store_crypto_identity BEFORE UPDATE ON attachment_store WHEN NEW.store_uuid!=OLD.store_uuid OR NEW.logical_vault_uuid!=OLD.logical_vault_uuid OR NEW.space!=OLD.space BEGIN SELECT RAISE(ABORT,'immutable metadata crypto mapping'); END;
 CREATE TABLE attachment_record_identity (
  store_uuid TEXT NOT NULL, record_epoch TEXT NOT NULL,
  record_uuid TEXT NOT NULL CHECK(length(record_uuid)=36),
@@ -38,6 +42,7 @@ CREATE TABLE attachment_version (
  ordinal INTEGER NOT NULL CHECK(ordinal>=1), object_uuid TEXT NOT NULL CHECK(length(object_uuid)=36),
  protocol_revision INTEGER NOT NULL CHECK(protocol_revision>=1), dek_handle_uuid TEXT NOT NULL CHECK(length(dek_handle_uuid)=36),
  plaintext_sha256 BLOB NOT NULL CHECK(length(plaintext_sha256)=32),
+ ciphertext_sha256 BLOB NOT NULL CHECK(length(ciphertext_sha256)=32),
  plaintext_bytes INTEGER NOT NULL CHECK(plaintext_bytes BETWEEN 0 AND 16777216),
  ciphertext_bytes INTEGER NOT NULL CHECK(ciphertext_bytes>0), mime TEXT NOT NULL,
  status TEXT NOT NULL CHECK(status IN('STAGED','VERIFIED','MISSING','CORRUPT','PURGED')),
@@ -63,24 +68,36 @@ CREATE TABLE attachment_operation (
  kind TEXT NOT NULL CHECK(kind IN('IMPORT','REPLACE','TRASH','RESTORE','PURGE','BACKUP','FULL_RESTORE','OLD_RESTORE')),
  phase TEXT NOT NULL CHECK(phase IN('PREPARED','WRITING','AUTHENTICATED','COMMITTED','CLEANED','ABORTED')),
  expected_generation INTEGER NOT NULL CHECK(expected_generation>=1), expected_document_revision INTEGER,
- document_uuid TEXT, reserved_bytes INTEGER NOT NULL CHECK(reserved_bytes>=0),
+ document_uuid TEXT,
+ resource_generation_uuid TEXT, object_uuid TEXT, version_uuid TEXT, dek_handle_uuid TEXT, staged_wrapped_dek BLOB, staged_wrapped_dek_sha256 BLOB,
+ reserved_bytes INTEGER NOT NULL CHECK(reserved_bytes>=0),
  reserved_objects INTEGER NOT NULL CHECK(reserved_objects>=0), updated_utc INTEGER NOT NULL CHECK(updated_utc>0),
  PRIMARY KEY(store_uuid,operation_uuid), UNIQUE(store_uuid,idempotency_uuid),
  FOREIGN KEY(store_uuid) REFERENCES attachment_store(store_uuid) ON DELETE RESTRICT,
- FOREIGN KEY(store_uuid,document_uuid) REFERENCES attachment_document(store_uuid,document_uuid) ON DELETE RESTRICT
+ FOREIGN KEY(store_uuid,document_uuid) REFERENCES attachment_document(store_uuid,document_uuid) ON DELETE RESTRICT,
+ FOREIGN KEY(store_uuid,resource_generation_uuid) REFERENCES attachment_generation(store_uuid,generation_uuid) ON DELETE RESTRICT,
+ CHECK(resource_generation_uuid IS NULL OR length(resource_generation_uuid)=36),
+ CHECK(object_uuid IS NULL OR length(object_uuid)=36),
+ CHECK(version_uuid IS NULL OR length(version_uuid)=36),
+ CHECK(dek_handle_uuid IS NULL OR length(dek_handle_uuid)=36),
+ CHECK(staged_wrapped_dek IS NULL OR length(staged_wrapped_dek) BETWEEN 1 AND 1024),
+ CHECK(staged_wrapped_dek_sha256 IS NULL OR length(staged_wrapped_dek_sha256)=32),
+ CHECK(staged_wrapped_dek IS NULL OR staged_wrapped_dek_sha256 IS NOT NULL),
+ CHECK(kind NOT IN('IMPORT','REPLACE') OR phase NOT IN('WRITING','AUTHENTICATED','COMMITTED') OR (resource_generation_uuid IS NOT NULL AND object_uuid IS NOT NULL AND version_uuid IS NOT NULL AND dek_handle_uuid IS NOT NULL AND staged_wrapped_dek IS NOT NULL)),
+ CHECK(kind NOT IN('IMPORT','REPLACE') OR phase!='CLEANED' OR (resource_generation_uuid IS NOT NULL AND object_uuid IS NOT NULL AND version_uuid IS NOT NULL AND dek_handle_uuid IS NOT NULL))
 );
 CREATE INDEX attachment_operation_pending ON attachment_operation(store_uuid,phase);
 CREATE TRIGGER attachment_record_identity_insert BEFORE INSERT ON attachment_record_identity WHEN NEW.state='ACTIVE' BEGIN
- SELECT CASE WHEN NOT EXISTS(SELECT 1 FROM attachment_store WHERE store_uuid=NEW.store_uuid AND record_epoch=NEW.record_epoch) THEN RAISE(ABORT,'stale record epoch') END;
+ SELECT CASE WHEN NOT EXISTS(SELECT 1 FROM attachment_store WHERE store_uuid=NEW.store_uuid AND record_epoch=NEW.record_epoch AND store_state='CURRENT') THEN RAISE(ABORT,'stale record epoch') END;
  SELECT CASE WHEN NOT ((NEW.target_kind='APPOINTMENT' AND EXISTS(SELECT 1 FROM appointment WHERE id=NEW.legacy_id)) OR (NEW.target_kind='LAB' AND EXISTS(SELECT 1 FROM lab_value WHERE id=NEW.legacy_id)) OR (NEW.target_kind='DOSE_RECORD' AND EXISTS(SELECT 1 FROM dose_record WHERE id=NEW.legacy_id AND deleted_at_utc IS NULL))) THEN RAISE(ABORT,'missing typed target') END;
 END;
 CREATE TRIGGER attachment_identity_immutable BEFORE UPDATE ON attachment_record_identity WHEN NEW.store_uuid!=OLD.store_uuid OR NEW.record_epoch!=OLD.record_epoch OR NEW.record_uuid!=OLD.record_uuid OR NEW.target_kind!=OLD.target_kind OR NEW.legacy_id!=OLD.legacy_id BEGIN SELECT RAISE(ABORT,'immutable identity'); END;
 CREATE TRIGGER attachment_link_scope_insert BEFORE INSERT ON attachment_link WHEN NEW.state='ACTIVE' BEGIN
- SELECT CASE WHEN NOT EXISTS(SELECT 1 FROM attachment_store s JOIN attachment_record_identity r ON r.store_uuid=s.store_uuid AND r.record_epoch=s.record_epoch WHERE s.store_uuid=NEW.store_uuid AND r.record_epoch=NEW.record_epoch AND r.record_uuid=NEW.record_uuid AND r.state='ACTIVE') THEN RAISE(ABORT,'inactive record scope') END;
+ SELECT CASE WHEN NOT EXISTS(SELECT 1 FROM attachment_store s JOIN attachment_record_identity r ON r.store_uuid=s.store_uuid AND r.record_epoch=s.record_epoch WHERE s.store_uuid=NEW.store_uuid AND s.store_state='CURRENT' AND r.record_epoch=NEW.record_epoch AND r.record_uuid=NEW.record_uuid AND r.state='ACTIVE') THEN RAISE(ABORT,'inactive record scope') END;
  SELECT CASE WHEN NOT EXISTS(SELECT 1 FROM attachment_document d JOIN attachment_version v ON v.store_uuid=d.store_uuid AND v.document_uuid=d.document_uuid AND v.version_uuid=d.active_version_uuid WHERE d.store_uuid=NEW.store_uuid AND d.document_uuid=NEW.document_uuid AND d.state='ACTIVE' AND v.status='VERIFIED') THEN RAISE(ABORT,'inactive document/version') END;
 END;
 CREATE TRIGGER attachment_link_scope_update BEFORE UPDATE ON attachment_link WHEN NEW.state='ACTIVE' BEGIN
- SELECT CASE WHEN NOT EXISTS(SELECT 1 FROM attachment_store s JOIN attachment_record_identity r ON r.store_uuid=s.store_uuid AND r.record_epoch=s.record_epoch WHERE s.store_uuid=NEW.store_uuid AND r.record_epoch=NEW.record_epoch AND r.record_uuid=NEW.record_uuid AND r.state='ACTIVE') THEN RAISE(ABORT,'inactive record scope') END;
+ SELECT CASE WHEN NOT EXISTS(SELECT 1 FROM attachment_store s JOIN attachment_record_identity r ON r.store_uuid=s.store_uuid AND r.record_epoch=s.record_epoch WHERE s.store_uuid=NEW.store_uuid AND s.store_state='CURRENT' AND r.record_epoch=NEW.record_epoch AND r.record_uuid=NEW.record_uuid AND r.state='ACTIVE') THEN RAISE(ABORT,'inactive record scope') END;
  SELECT CASE WHEN NOT EXISTS(SELECT 1 FROM attachment_document d JOIN attachment_version v ON v.store_uuid=d.store_uuid AND v.document_uuid=d.document_uuid AND v.version_uuid=d.active_version_uuid WHERE d.store_uuid=NEW.store_uuid AND d.document_uuid=NEW.document_uuid AND d.state='ACTIVE' AND v.status='VERIFIED') THEN RAISE(ABORT,'inactive document/version') END;
 END;
 CREATE TRIGGER attachment_active_verified BEFORE UPDATE OF active_version_uuid ON attachment_document WHEN NEW.active_version_uuid IS NOT NULL BEGIN SELECT CASE WHEN NOT EXISTS(SELECT 1 FROM attachment_version v WHERE v.store_uuid=NEW.store_uuid AND v.document_uuid=NEW.document_uuid AND v.version_uuid=NEW.active_version_uuid AND v.status='VERIFIED') THEN RAISE(ABORT,'unverified version') END; END;
@@ -89,10 +106,10 @@ CREATE TRIGGER attachment_no_active_insert BEFORE INSERT ON attachment_document 
 -- user_version is set by the synthetic runner only after all checks, never by this draft.
 CREATE TRIGGER attachment_record_identity_restore BEFORE UPDATE OF state ON attachment_record_identity WHEN NEW.state='ACTIVE' BEGIN
  SELECT CASE WHEN OLD.state='PURGED' THEN RAISE(ABORT,'purged identity cannot restore') END;
- SELECT CASE WHEN NOT EXISTS(SELECT 1 FROM attachment_store WHERE store_uuid=NEW.store_uuid AND record_epoch=NEW.record_epoch) THEN RAISE(ABORT,'stale record epoch') END;
+ SELECT CASE WHEN NOT EXISTS(SELECT 1 FROM attachment_store WHERE store_uuid=NEW.store_uuid AND record_epoch=NEW.record_epoch AND store_state='CURRENT') THEN RAISE(ABORT,'stale record epoch') END;
  SELECT CASE WHEN NOT ((NEW.target_kind='APPOINTMENT' AND EXISTS(SELECT 1 FROM appointment WHERE id=NEW.legacy_id)) OR (NEW.target_kind='LAB' AND EXISTS(SELECT 1 FROM lab_value WHERE id=NEW.legacy_id)) OR (NEW.target_kind='DOSE_RECORD' AND EXISTS(SELECT 1 FROM dose_record WHERE id=NEW.legacy_id AND deleted_at_utc IS NULL))) THEN RAISE(ABORT,'missing typed target') END;
 END;
-CREATE TRIGGER attachment_version_identity BEFORE UPDATE ON attachment_version WHEN NEW.store_uuid!=OLD.store_uuid OR NEW.document_uuid!=OLD.document_uuid OR NEW.version_uuid!=OLD.version_uuid OR NEW.ordinal!=OLD.ordinal OR NEW.object_uuid!=OLD.object_uuid OR NEW.protocol_revision!=OLD.protocol_revision OR NEW.plaintext_bytes!=OLD.plaintext_bytes OR NEW.ciphertext_bytes!=OLD.ciphertext_bytes OR NEW.plaintext_sha256!=OLD.plaintext_sha256 OR NEW.dek_handle_uuid!=OLD.dek_handle_uuid OR NEW.mime!=OLD.mime BEGIN SELECT RAISE(ABORT,'immutable version bytes'); END;
+CREATE TRIGGER attachment_version_identity BEFORE UPDATE ON attachment_version WHEN NEW.store_uuid!=OLD.store_uuid OR NEW.document_uuid!=OLD.document_uuid OR NEW.version_uuid!=OLD.version_uuid OR NEW.ordinal!=OLD.ordinal OR NEW.object_uuid!=OLD.object_uuid OR NEW.protocol_revision!=OLD.protocol_revision OR NEW.plaintext_bytes!=OLD.plaintext_bytes OR NEW.ciphertext_bytes!=OLD.ciphertext_bytes OR NEW.plaintext_sha256!=OLD.plaintext_sha256 OR NEW.ciphertext_sha256!=OLD.ciphertext_sha256 OR NEW.dek_handle_uuid!=OLD.dek_handle_uuid OR NEW.mime!=OLD.mime BEGIN SELECT RAISE(ABORT,'immutable version bytes'); END;
 
 CREATE TABLE attachment_generation (
  store_uuid TEXT NOT NULL, generation_uuid TEXT NOT NULL CHECK(length(generation_uuid)=36),
@@ -126,3 +143,14 @@ CREATE TRIGGER attachment_identity_keep BEFORE DELETE ON attachment_record_ident
 CREATE TRIGGER attachment_link_keep BEFORE DELETE ON attachment_link BEGIN SELECT RAISE(ABORT,'link history retained'); END;
 CREATE TRIGGER attachment_generation_no_restage BEFORE UPDATE ON attachment_generation WHEN OLD.state!='STAGING' AND NEW.state='STAGING' BEGIN SELECT RAISE(ABORT,'generation cannot return to staging'); END;
 CREATE TRIGGER attachment_generation_terminal BEFORE UPDATE ON attachment_generation WHEN OLD.state='PURGED' AND NEW.state!='PURGED' BEGIN SELECT RAISE(ABORT,'purged generation is terminal'); END;
+
+CREATE TRIGGER attachment_retired_store_terminal BEFORE UPDATE ON attachment_store WHEN OLD.store_state='RETIRED' AND NEW.store_state!='RETIRED' BEGIN SELECT RAISE(ABORT,'retired dataset is terminal'); END;
+
+CREATE TRIGGER attachment_same_crypto_version BEFORE INSERT ON attachment_version BEGIN
+ SELECT CASE WHEN EXISTS(SELECT 1 FROM attachment_version v JOIN attachment_store oldscope ON oldscope.store_uuid=v.store_uuid JOIN attachment_store newscope ON newscope.store_uuid=NEW.store_uuid WHERE oldscope.logical_vault_uuid=newscope.logical_vault_uuid AND v.version_uuid=NEW.version_uuid AND (v.document_uuid!=NEW.document_uuid OR v.object_uuid!=NEW.object_uuid OR v.dek_handle_uuid!=NEW.dek_handle_uuid OR v.protocol_revision!=NEW.protocol_revision OR v.plaintext_sha256!=NEW.plaintext_sha256 OR v.ciphertext_sha256!=NEW.ciphertext_sha256 OR v.plaintext_bytes!=NEW.plaintext_bytes OR v.ciphertext_bytes!=NEW.ciphertext_bytes)) THEN RAISE(ABORT,'crypto version identity conflict') END;
+END;
+CREATE TRIGGER attachment_operation_owned_resources BEFORE UPDATE ON attachment_operation WHEN OLD.phase!='PREPARED' AND (NEW.resource_generation_uuid IS NOT OLD.resource_generation_uuid OR NEW.object_uuid IS NOT OLD.object_uuid OR NEW.version_uuid IS NOT OLD.version_uuid OR NEW.dek_handle_uuid IS NOT OLD.dek_handle_uuid OR NEW.staged_wrapped_dek_sha256 IS NOT OLD.staged_wrapped_dek_sha256 OR (NEW.staged_wrapped_dek IS NOT OLD.staged_wrapped_dek AND NOT (OLD.staged_wrapped_dek IS NOT NULL AND NEW.staged_wrapped_dek IS NULL AND NEW.phase IN('CLEANED','ABORTED')))) BEGIN SELECT RAISE(ABORT,'operation resource ownership frozen'); END;
+CREATE TRIGGER attachment_operation_no_reprepare BEFORE UPDATE ON attachment_operation WHEN OLD.phase!='PREPARED' AND NEW.phase='PREPARED' BEGIN SELECT RAISE(ABORT,'operation cannot return to prepared'); END;
+
+CREATE TRIGGER attachment_operation_terminal BEFORE UPDATE ON attachment_operation WHEN OLD.phase IN('CLEANED','ABORTED') AND NEW.phase!=OLD.phase BEGIN SELECT RAISE(ABORT,'operation terminal'); END;
+CREATE TRIGGER attachment_operation_no_key_revival BEFORE UPDATE ON attachment_operation WHEN OLD.phase IN('CLEANED','ABORTED') AND OLD.staged_wrapped_dek IS NULL AND NEW.staged_wrapped_dek IS NOT NULL BEGIN SELECT RAISE(ABORT,'staging key cannot revive'); END;

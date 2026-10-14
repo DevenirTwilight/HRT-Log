@@ -81,7 +81,7 @@ class Room10Draft(unittest.TestCase):
         self.objects = dict(self.db.execute("SELECT name,sql FROM sqlite_master WHERE sql IS NOT NULL"))
         migrate(self.db)
         self.store,self.epoch,self.record,self.doc = uid(),uid(),uid(),uid()
-        self.db.execute('INSERT INTO attachment_store(store_uuid,space,record_epoch,generation,feature_enabled) VALUES(?,?,?,?,0)',(self.store,'PRIMARY',self.epoch,1))
+        self.db.execute("INSERT INTO attachment_store(store_uuid,logical_vault_uuid,store_state,space,record_epoch,generation,feature_enabled) VALUES(?,?,'CURRENT',?,?,?,0)",(self.store,uid(),'PRIMARY',self.epoch,1))
         self.identity(self.record)
         self.db.execute("INSERT INTO attachment_document VALUES(?,?,1,'Synthetic','REPORT','ACTIVE',NULL,NULL)",(self.store,self.doc))
         verified=self.version('VERIFIED')
@@ -94,7 +94,7 @@ class Room10Draft(unittest.TestCase):
         self.db.execute("INSERT INTO attachment_link VALUES(?,?,?,?,?,1,'ACTIVE')",(store or self.store,uid(),epoch or self.epoch,record or self.record,self.doc))
     def version(self,status='STAGED'):
         version=uid()
-        self.db.execute('INSERT INTO attachment_version VALUES(?,?,?,?,?,1,?,?,?,?,?,?)',(self.store,self.doc,version,self.db.execute('SELECT COALESCE(MAX(ordinal),0)+1 FROM attachment_version').fetchone()[0],uid(),uid(),bytes(32),10,100,'image/png',status))
+        self.db.execute('INSERT INTO attachment_version VALUES(?,?,?,?,?,1,?,?,?,?,?,?,?)',(self.store,self.doc,version,self.db.execute('SELECT COALESCE(MAX(ordinal),0)+1 FROM attachment_version').fetchone()[0],uid(),uid(),bytes(32),bytes([1])*32,10,100,'image/png',status))
         return version
     def test_legacy_data_indices_guards_exact(self):
         self.assertEqual(fingerprint(self.db),self.before)
@@ -114,7 +114,7 @@ class Room10Draft(unittest.TestCase):
         self.assertEqual(self.db.execute('SELECT count(*) FROM attachment_link').fetchone()[0],0)
     def test_disabled_default_and_primary_only(self):
         self.assertEqual(self.db.execute('SELECT feature_enabled FROM attachment_store').fetchone()[0],0)
-        with self.assertRaises(sqlite3.IntegrityError): self.db.execute('INSERT INTO attachment_store(store_uuid,space,record_epoch,generation,feature_enabled) VALUES(?,?,?,?,0)',(uid(),'DECOY',uid(),1))
+        with self.assertRaises(sqlite3.IntegrityError): self.db.execute("INSERT INTO attachment_store(store_uuid,logical_vault_uuid,store_state,space,record_epoch,generation,feature_enabled) VALUES(?,?,'CURRENT',?,?,?,0)",(uid(),uid(),'DECOY',uid(),1))
     def test_typed_missing_target_rejected(self):
         with self.assertRaises(sqlite3.IntegrityError): self.identity(uid(),'LAB',999)
         with self.assertRaises(sqlite3.IntegrityError): self.identity(uid(),'UNKNOWN',1)
@@ -122,7 +122,7 @@ class Room10Draft(unittest.TestCase):
     def test_duplicate_live_record_rejected(self):
         with self.assertRaises(sqlite3.IntegrityError): self.identity(uid())
     def test_cross_store_link_rejected(self):
-        other=uid(); self.db.execute('INSERT INTO attachment_store(store_uuid,space,record_epoch,generation,feature_enabled) VALUES(?,?,?,?,0)',(other,'PRIMARY',uid(),1))
+        other=uid(); self.db.execute("INSERT INTO attachment_store(store_uuid,logical_vault_uuid,store_state,space,record_epoch,generation,feature_enabled) VALUES(?,?,'STAGING',?,?,?,0)",(other,uid(),'PRIMARY',uid(),1))
         with self.assertRaises(sqlite3.IntegrityError): self.link(store=other)
     def test_stale_epoch_rejected_old_backup_no_id_reassociation(self):
         self.link(); newepoch=uid()
@@ -160,7 +160,7 @@ class Room10Draft(unittest.TestCase):
         with self.assertRaises(sqlite3.IntegrityError): self.link()
         self.db.execute("UPDATE attachment_link SET state='RETRACTED'"); self.link()
     def test_operation_idempotency_nonnegative_reservations(self):
-        token=uid(); args=(self.store,uid(),token,'IMPORT','PREPARED',1,None,self.doc,100,1,1)
+        token=uid(); args=(self.store,uid(),token,'IMPORT','PREPARED',1,None,self.doc,None,None,None,None,None,None,100,1,1)
         self.db.execute('INSERT INTO attachment_operation VALUES('+','.join('?' for _ in args)+')',args)
         with self.assertRaises(sqlite3.IntegrityError): self.db.execute('INSERT INTO attachment_operation VALUES('+','.join('?' for _ in args)+')',(self.store,uid())+args[2:])
         with self.assertRaises(sqlite3.IntegrityError): self.db.execute('UPDATE attachment_operation SET reserved_bytes=-1')
@@ -247,6 +247,159 @@ class Room10Draft(unittest.TestCase):
         self.db.execute("UPDATE attachment_generation SET state='PURGED'")
         with self.assertRaises(sqlite3.IntegrityError): self.db.execute("UPDATE attachment_generation SET state='VALIDATED'")
         self.assertEqual(self.db.execute('SELECT state FROM attachment_generation').fetchone()[0],'PURGED')
+
+    def staging_dataset(self, vault=None):
+        local=uid(); epoch=uid()
+        self.db.execute("INSERT INTO attachment_store(store_uuid,logical_vault_uuid,store_state,space,record_epoch,generation,feature_enabled) VALUES(?,?,'STAGING','PRIMARY',?,1,0)",(local,vault or uid(),epoch))
+        return local,epoch
+
+    def switch_dataset(self, newlocal, expected_generation=1, interrupt=False):
+        self.db.commit()
+        self.db.execute('BEGIN IMMEDIATE')
+        try:
+            changed=self.db.execute("UPDATE attachment_store SET store_state='RETIRED',generation=generation+1 WHERE store_uuid=? AND store_state='CURRENT' AND generation=?",(self.store,expected_generation)).rowcount
+            if changed!=1: raise RuntimeError('stale current dataset CAS')
+            self.db.execute("UPDATE attachment_link SET state='QUARANTINED' WHERE store_uuid=? AND state='ACTIVE'",(self.store,))
+            self.db.execute("UPDATE appointment SET note='Synthetic restored dataset' WHERE id=1")
+            if interrupt: raise OSError('synthetic activation interruption')
+            changed=self.db.execute("UPDATE attachment_store SET store_state='CURRENT' WHERE store_uuid=? AND store_state='STAGING'",(newlocal,)).rowcount
+            if changed!=1: raise RuntimeError('missing staging dataset')
+            self.db.commit()
+        except BaseException:
+            self.db.rollback()
+            raise
+
+    def test_same_crypto_vault_different_metadata_namespaces_keep_old_purged_tombstones(self):
+        vault=self.db.execute('SELECT logical_vault_uuid FROM attachment_store WHERE store_uuid=?',(self.store,)).fetchone()[0]
+        newlocal,_=self.staging_dataset(vault)
+        self.db.execute("UPDATE attachment_document SET state='PURGED',deleted_utc=1,revision=5")
+        self.db.execute("INSERT INTO attachment_document VALUES(?,?,2,'Restored synthetic','REPORT','ACTIVE',NULL,NULL)",(newlocal,self.doc))
+        rows=self.db.execute('SELECT store_uuid,revision,state FROM attachment_document WHERE document_uuid=? ORDER BY revision',(self.doc,)).fetchall()
+        self.assertEqual(rows,[(newlocal,2,'ACTIVE'),(self.store,5,'PURGED')])
+        self.assertEqual(self.db.execute('SELECT count(DISTINCT logical_vault_uuid) FROM attachment_store').fetchone()[0],1)
+
+    def test_current_dataset_unique_and_crypto_namespace_immutable(self):
+        newlocal,_=self.staging_dataset()
+        with self.assertRaises(sqlite3.IntegrityError): self.db.execute("UPDATE attachment_store SET store_state='CURRENT' WHERE store_uuid=?",(newlocal,))
+        with self.assertRaises(sqlite3.IntegrityError): self.db.execute('UPDATE attachment_store SET logical_vault_uuid=? WHERE store_uuid=?',(uid(),self.store))
+        self.assertEqual(self.db.execute("SELECT count(*) FROM attachment_store WHERE store_state='CURRENT'").fetchone()[0],1)
+
+    def test_switch_dataset_cas_and_current_query_excludes_retired_metadata(self):
+        self.link(); newlocal,_=self.staging_dataset()
+        self.db.execute("INSERT INTO attachment_document VALUES(?,?,2,'Restored synthetic','REPORT','ACTIVE',NULL,NULL)",(newlocal,self.doc))
+        self.switch_dataset(newlocal)
+        rows=self.db.execute("SELECT d.store_uuid,d.revision FROM attachment_document d JOIN attachment_store s ON s.store_uuid=d.store_uuid WHERE s.store_state='CURRENT' AND d.state='ACTIVE'").fetchall()
+        self.assertEqual(rows,[(newlocal,2)])
+        self.assertEqual(self.db.execute('SELECT state FROM attachment_link WHERE store_uuid=?',(self.store,)).fetchone()[0],'QUARANTINED')
+        self.assertEqual(self.db.execute('SELECT count(*) FROM attachment_document').fetchone()[0],2)
+        with self.assertRaises(RuntimeError): self.switch_dataset(newlocal)
+        self.assertEqual(self.db.execute("SELECT store_uuid FROM attachment_store WHERE store_state='CURRENT'").fetchone()[0],newlocal)
+
+    def test_switch_interruption_rolls_back_current_links_and_legacy_rows(self):
+        self.link(); newlocal,_=self.staging_dataset(); before=fingerprint(self.db)
+        with self.assertRaises(OSError): self.switch_dataset(newlocal,interrupt=True)
+        self.assertEqual(fingerprint(self.db),before)
+        self.assertEqual(self.db.execute("SELECT store_uuid FROM attachment_store WHERE store_state='CURRENT'").fetchone()[0],self.store)
+        self.assertEqual(self.db.execute('SELECT state FROM attachment_link').fetchone()[0],'ACTIVE')
+        self.assertEqual(self.db.execute('SELECT generation FROM attachment_store WHERE store_uuid=?',(self.store,)).fetchone()[0],1)
+
+    def test_staging_or_retired_registry_and_link_cannot_gain_active_state(self):
+        self.link(); newlocal,newepoch=self.staging_dataset()
+        with self.assertRaises(sqlite3.IntegrityError): self.identity(uid(),store=newlocal,epoch=newepoch)
+        self.db.execute("UPDATE attachment_record_identity SET state='TRASHED',trash_id=99 WHERE store_uuid=?",(self.store,))
+        self.switch_dataset(newlocal)
+        with self.assertRaises(sqlite3.IntegrityError): self.db.execute("UPDATE attachment_record_identity SET state='ACTIVE',trash_id=NULL WHERE store_uuid=?",(self.store,))
+        with self.assertRaises(sqlite3.IntegrityError): self.identity(uid(),store=self.store)
+        with self.assertRaises(sqlite3.IntegrityError): self.link()
+        with self.assertRaises(sqlite3.IntegrityError): self.db.execute("UPDATE attachment_link SET state='ACTIVE' WHERE store_uuid=?",(self.store,))
+        with self.assertRaises(sqlite3.IntegrityError): self.db.execute("UPDATE attachment_store SET store_state='STAGING' WHERE store_uuid=?",(self.store,))
+
+    def test_old_pnbak_empty_dataset_uses_fresh_crypto_and_record_domains(self):
+        oldvault=self.db.execute('SELECT logical_vault_uuid FROM attachment_store WHERE store_uuid=?',(self.store,)).fetchone()[0]
+        newlocal,newepoch=self.staging_dataset()
+        self.switch_dataset(newlocal)
+        freshvault=self.db.execute('SELECT logical_vault_uuid FROM attachment_store WHERE store_uuid=?',(newlocal,)).fetchone()[0]
+        self.assertNotEqual(freshvault,oldvault)
+        self.assertNotEqual(newepoch,self.epoch)
+        self.assertEqual(self.db.execute('SELECT count(*) FROM attachment_document WHERE store_uuid=?',(newlocal,)).fetchone()[0],0)
+        freshrecord=uid(); self.identity(freshrecord,store=newlocal,epoch=newepoch)
+        self.assertNotEqual(freshrecord,self.record)
+
+    def crypto_restore_dataset(self):
+        vault=self.db.execute('SELECT logical_vault_uuid FROM attachment_store WHERE store_uuid=?',(self.store,)).fetchone()[0]
+        local,_=self.staging_dataset(vault)
+        self.db.execute("INSERT INTO attachment_document VALUES(?,?,7,'Restored text revision','REPORT','ACTIVE',NULL,NULL)",(local,self.doc))
+        row=list(self.db.execute('SELECT * FROM attachment_version WHERE store_uuid=?',(self.store,)).fetchone())
+        row[0]=local
+        return row
+
+    def test_same_crypto_version_restore_preserves_bytes_across_local_datasets(self):
+        row=self.crypto_restore_dataset()
+        self.db.execute('INSERT INTO attachment_version VALUES('+','.join('?' for _ in row)+')',row)
+        self.assertEqual(self.db.execute('SELECT count(*) FROM attachment_version WHERE version_uuid=?',(row[2],)).fetchone()[0],2)
+        self.assertEqual(self.db.execute('SELECT revision FROM attachment_document WHERE store_uuid=?',(row[0],)).fetchone()[0],7)
+        with self.assertRaises(sqlite3.IntegrityError): self.db.execute('UPDATE attachment_version SET ciphertext_sha256=? WHERE store_uuid=?',(bytes([7])*32,row[0]))
+
+    def test_same_crypto_version_conflicting_identity_rejected(self):
+        row=self.crypto_restore_dataset()
+        for index,value in [(4,uid()),(5,2),(6,uid()),(7,bytes([7])*32),(8,bytes([8])*32),(9,11),(10,101)]:
+            bad=list(row);bad[index]=value
+            with self.subTest(column=index):
+                with self.assertRaises(sqlite3.IntegrityError): self.db.execute('INSERT INTO attachment_version VALUES('+','.join('?' for _ in bad)+')',bad)
+        different_document=uid()
+        self.db.execute("INSERT INTO attachment_document VALUES(?,?,1,'Other synthetic','REPORT','ACTIVE',NULL,NULL)",(row[0],different_document))
+        bad=list(row); bad[1]=different_document
+        with self.assertRaises(sqlite3.IntegrityError): self.db.execute('INSERT INTO attachment_version VALUES('+','.join('?' for _ in bad)+')',bad)
+        self.assertEqual(self.db.execute('SELECT count(*) FROM attachment_version WHERE store_uuid=?',(row[0],)).fetchone()[0],0)
+
+    def prepared_import(self):
+        operation=uid(); args=(self.store,operation,uid(),'IMPORT','PREPARED',1,None,self.doc,None,None,None,None,None,None,100,1,1)
+        self.db.execute('INSERT INTO attachment_operation VALUES('+','.join('?' for _ in args)+')',args)
+        return operation
+
+    def synthetic_resources(self,local=None):
+        local=local or self.store; physical=uid()
+        self.db.execute("INSERT INTO attachment_generation VALUES(?,?,'STAGING',NULL,1)",(local,physical))
+        return physical,uid(),uid(),uid(),b'synthetic-wrapped-key',hashlib.sha256(b'synthetic-wrapped-key').digest()
+
+    def test_import_requires_complete_resources_before_writing(self):
+        operation=self.prepared_import()
+        with self.assertRaises(sqlite3.IntegrityError): self.db.execute("UPDATE attachment_operation SET phase='WRITING' WHERE operation_uuid=?",(operation,))
+        resources=self.synthetic_resources()
+        self.db.execute("UPDATE attachment_operation SET resource_generation_uuid=?,object_uuid=?,version_uuid=?,dek_handle_uuid=?,staged_wrapped_dek=?,staged_wrapped_dek_sha256=?,phase='WRITING' WHERE operation_uuid=?",resources+(operation,))
+        self.assertEqual(self.db.execute('SELECT phase FROM attachment_operation WHERE operation_uuid=?',(operation,)).fetchone()[0],'WRITING')
+        with self.assertRaises(sqlite3.IntegrityError): self.db.execute("UPDATE attachment_operation SET phase='PREPARED' WHERE operation_uuid=?",(operation,))
+
+    def test_missing_cross_store_generation_and_write_ownership_changes_rejected(self):
+        operation=self.prepared_import(); other,_=self.staging_dataset(); resources=self.synthetic_resources(other)
+        for generation in [uid(),resources[0]]:
+            with self.subTest(generation=generation):
+                with self.assertRaises(sqlite3.IntegrityError): self.db.execute("UPDATE attachment_operation SET resource_generation_uuid=?,object_uuid=?,version_uuid=?,dek_handle_uuid=?,staged_wrapped_dek=?,staged_wrapped_dek_sha256=?,phase='WRITING' WHERE operation_uuid=?",(generation,)+resources[1:]+(operation,))
+        owned=self.synthetic_resources()
+        with self.assertRaises(sqlite3.IntegrityError): self.db.execute("UPDATE attachment_operation SET staged_wrapped_dek=? WHERE operation_uuid=?",(bytes(1025),operation))
+        self.db.execute("UPDATE attachment_operation SET resource_generation_uuid=?,object_uuid=?,version_uuid=?,dek_handle_uuid=?,staged_wrapped_dek=?,staged_wrapped_dek_sha256=?,phase='WRITING' WHERE operation_uuid=?",owned+(operation,))
+        for column,value in [('resource_generation_uuid',uid()),('object_uuid',uid()),('version_uuid',uid()),('dek_handle_uuid',uid()),('staged_wrapped_dek',b'different-synthetic-wrap')]:
+            with self.subTest(column=column):
+                with self.assertRaises(sqlite3.IntegrityError): self.db.execute('UPDATE attachment_operation SET '+column+'=? WHERE operation_uuid=?',(value,operation))
+        self.db.execute("UPDATE attachment_operation SET phase='AUTHENTICATED' WHERE operation_uuid=?",(operation,))
+        self.assertEqual(self.db.execute('SELECT resource_generation_uuid,object_uuid,version_uuid,dek_handle_uuid,staged_wrapped_dek,staged_wrapped_dek_sha256 FROM attachment_operation WHERE operation_uuid=?',(operation,)).fetchone(),owned)
+
+    def test_terminal_operation_wipes_staging_key_irreversibly_retaining_resource_audit(self):
+        for terminal in ['CLEANED','ABORTED']:
+            with self.subTest(terminal=terminal):
+                operation=self.prepared_import(); owned=self.synthetic_resources()
+                self.db.execute("UPDATE attachment_operation SET resource_generation_uuid=?,object_uuid=?,version_uuid=?,dek_handle_uuid=?,staged_wrapped_dek=?,staged_wrapped_dek_sha256=?,phase='WRITING' WHERE operation_uuid=?",owned+(operation,))
+                if terminal=='CLEANED':
+                    for phase in ['AUTHENTICATED','COMMITTED']:
+                        changed=self.db.execute('UPDATE attachment_operation SET phase=? WHERE operation_uuid=? AND phase=?',(phase,operation,'WRITING' if phase=='AUTHENTICATED' else 'AUTHENTICATED')).rowcount
+                        self.assertEqual(changed,1)
+                self.db.execute('UPDATE attachment_operation SET phase=?,staged_wrapped_dek=NULL WHERE operation_uuid=?',(terminal,operation))
+                audit=self.db.execute('SELECT resource_generation_uuid,object_uuid,version_uuid,dek_handle_uuid,staged_wrapped_dek,staged_wrapped_dek_sha256 FROM attachment_operation WHERE operation_uuid=?',(operation,)).fetchone()
+                self.assertEqual(audit,owned[:4]+(None,owned[5]))
+                with self.assertRaises(sqlite3.IntegrityError): self.db.execute('UPDATE attachment_operation SET staged_wrapped_dek=? WHERE operation_uuid=?',(owned[4],operation))
+                with self.assertRaises(sqlite3.IntegrityError): self.db.execute("UPDATE attachment_operation SET phase='WRITING' WHERE operation_uuid=?",(operation,))
+                with self.assertRaises(sqlite3.IntegrityError): self.db.execute('UPDATE attachment_operation SET staged_wrapped_dek_sha256=? WHERE operation_uuid=?',(bytes(32),operation))
+                with self.assertRaises(sqlite3.IntegrityError): self.db.execute('UPDATE attachment_operation SET object_uuid=? WHERE operation_uuid=?',(uid(),operation))
 
     def test_schema_guard_not_weakened(self):
         with self.assertRaises(sqlite3.IntegrityError): self.db.execute('UPDATE appointment SET remind_minutes_before=-1')

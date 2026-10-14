@@ -7,7 +7,7 @@
 POC证明限定合成数据上的AEAD/随机读取和公共Android预览可行，**不能直接生产化**。本次不同AI审查者先独立阅读再交叉核查，第三位形成合成迁移草案；主审补充确定性运行证据。没有外部专业安全认证，没有生产迁移/正式新format、用户附件、真实医疗数据、version/signing/build26变更。
 
 - [33 加密对象协议草案与公开向量](33-med02b0-object-protocol-draft.md)：新HKDF域分离组合候选/固定转录；不是SYNPOC01改名。
-- [34 Room10迁移草案](34-med02b0-room10-migration-draft.md)：typed identity桥/墓碑、generation、append envelope、25 SQLite合成测试。
+- [34 Room10迁移草案](34-med02b0-room10-migration-draft.md)：typed identity桥/墓碑、generation、append envelope、36 SQLite合成测试。
 - [35 完整加密医疗备份与恢复](35-med02b0-medical-backup-draft.md)：独立格式、流式完整集合认证、SQL权威最后commit、旧包epoch隔离、14失败模型测试。
 - [36 配额、纠错政策、B1–B6](36-med02b0-product-policy-and-pr-plan.md)：候选标准/测量计划、默认关闭与审批。
 - [37 B1可执行提示词](37-med02b1-executable-prompt.md)：需相应批准后才能修改正式Room等生产子项。
@@ -38,7 +38,7 @@ POC证明限定合成数据上的AEAD/随机读取和公共Android预览可行�
 |PDF交付竞态/native关闭无硬时限|crypto8 / C03|源码复核，既有良性POC不能排除|受限worker/deadline/恶意样本/锁定UI先撤显示；不要保证瞬间RAM擦除|
 |图片原语限尺寸不等于恶意parser安全|C08 / crypto8|既有合成格式结果仅继承报告30|静态format allowlist、metadata/动画/pixel/native资源、并发1、无diskcache、ARM|
 |便携PBKDF2与wrap域/budget非生产profile|crypto5/6 / C07|公开HKDF/GCM/Argon2id KAT互操作；不测密码熵/成本|专家定域/GCM限制、允许KDFprofile及ARM成本、wrap轮换/newdevice|
-|epoch不足防同epoch整数ID复用；trash FK危险|C06 / crypto交叉|25 SQLite合成测试含同ID新UUID/trash continuity|typed UUID registry+tombstone、实际Room hooks、oldrestore/clear同事务quarantine|
+|epoch不足防同epoch整数ID复用；trash FK危险|C06 / crypto交叉|36 SQLite合成测试含同ID新UUID/trash continuity|typed UUID registry+tombstone、实际Room hooks、oldrestore/clear同事务quarantine|
 |RawData删全部trigger、Roomversion进PNBAKschema|C06/C07兼容 / crypto交叉|现有生产源码读取；生产未改|完整guardregistry/白名单、固定serialization9 adapter、旧包回归|
 |GC/恢复/租约与commit ack失败|C04/C06 / crypto4|14模型测试+多失败seam|真实SQLCipher+文件实现/ENOSPC/kill/lease GC，不能靠模型赋值宣称atomic|
 
@@ -46,7 +46,7 @@ POC证明限定合成数据上的AEAD/随机读取和公共Android预览可行�
 
 ## 运行证据与复现
 
-新增JVM7：3确定性audit findings +4primitive/draft test methods，继承28，合计35零失败。RFC5869A1、RFC9106§5.3及固定C2SP/Wycheproof6正负cases；Python cryptography50生成0/1/65536/65537转录，JCA独立核对全域/header/footer/body/AAD篡改。不是新生产serializer、没有随机密钥质量/组合安全证明。源码仅新增testImplementation JSON/BC，不引入生产依赖。Stdlib42项：25合成SQLite +14backup state model +3framing/HKDF/budget；0新skip。初次CI入口loader路径配置失败，改独立TestLoader/top_level，未弱化断言。
+新增JVM7：3确定性audit findings +4primitive/draft test methods，继承28，合计35零失败。RFC5869A1、RFC9106§5.3及固定C2SP/Wycheproof6正负cases；Python cryptography50生成0/1/65536/65537转录，JCA独立核对全域/header/footer/body/AAD篡改。不是新生产serializer、没有随机密钥质量/组合安全证明。源码仅新增testImplementation JSON/BC，不引入生产依赖。Stdlib53项：36合成SQLite +14backup state model +3framing/HKDF/budget；0新skip。本地验证该CI入口脚本时曾因loader路径配置失败，改独立TestLoader/top_level，未弱化断言。
 
 复现：
 
@@ -86,3 +86,38 @@ API26/29/35 test-only新增3 filesystem方法：合成专用noBackup目录，fsy
 三API hardlink反例来源（全部77e168e）：[PR Android38541101840](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38541101840)，
 API26 job115775769865、API29 job115775770206、API35 job115775769875，均link failed EACCES；
 [JVM/Science深度](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38541101806)通过。最终替代验证另运行新HEAD，不能把这些失败写成通过。
+
+### 最终命名空间、owned资源与密钥生命周期修订
+
+主审发现旧完整包同docUUID/不同revision/PURGED墓碑不能在旧local scope安全UPSERT；第三审查者与crypto审查者交叉确认，
+SQL localDataset UUID、crypto logicalVault UUID、physicalGeneration分离；CURRENT唯一/retired终态和普通query/key/lease/CAS gate。
+保留原件密文/AAD，metadata一对一fresh map；same crypto version必须明密文hash/bytes一致。
+新增owned operation物理generation/UUID/staged device wrap+hash，暂存Key只能终态不可逆清除，不重填复活。
+最终36迁移+14backup模型+3framing=53，scripts全部88零失败；35 JVM POC零失败。所有新SQL仅tools。
+源device envelopes不作为目标AVAILABLE，portable解包后目标fresh alias重包裹，同DEK验证/持久化再激活。
+SQL字段shape/hash长度不证明实际wrap/AEAD；真实SQLCipher联合恢复、外部expert、ARM仍NOT_RUN。
+
+### 已核实回归与最终HEAD检查入口
+
+代码阶段651e51008fa51caefa2342294a3956b0a3ec75df：
+
+|检查|实际结果/链接|
+|---|---|
+|push Android|[38543179106](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38543179106)全部5jobs SUCCESS|
+|PR Android|[38543186185](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38543186185)全部5jobs SUCCESS|
+|push Science|[38543179176](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38543179176)gate通过，doc/tools delta深度按原gate未运行|
+|PR Science|[38543186188](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38543186188)gate及research-deep实际SUCCESS|
+|JVM|domain58+PK124+importer12=194，POC35，无fail/newskip|
+|Android unit|data160/reminder17/app865，0fail；app61既有条件skip|
+|API35|data66/app215，0fail；app8既有条件skip，外部设备回归脚本均成功|
+|API26/29|各33真实targeted POC方法，0fail/0skip，三个filesystem实验实际执行|
+|lint/build|lint0error、现有warnings保留；Debug/unsigned Release及两test APK成功，provenance/manifest/ledger检查通过|
+
+实际artifact SHA256：API35 report4061ec83f2a24520a0d3caa829561d74492736224193f7f58a5ab73d1129bb1c，API29 421e456bd57dc344f026a7a0eedd5bdf170c674df653928bf7380aab3207a75b，API26 5a56e264457fe0c6f1d437817fa9376dea51d376188e2c20f1e109e9a6d7e439，build 00b536e8bc7858712ecc1d5776af152ac85a1f1425114903b6dbe9361ddd76a1。仅测试报告下载，不是APK交付。
+
+本地完整unit/lint/Debug通过；并行文档提交期间Release来源保护正确中止，未绕过，干净651e510重跑unsigned Release和两test APK全部成功。
+此后新增metadata namespace草案/测试及最终文档必须在新最终HEAD重跑完整push+PR checks；**上表651不冒称是后来HEAD**。
+[PR28最终HEAD与实时checks](https://github.com/DevenirTwilight/HRT-Log/pull/28/checks)是最终交付验收记录入口，PR正文交付时写精确SHA/四CI链接；主审必须实际等全部结束，不能依赖本表先前绿灯。
+
+生产main/Schema9/PNBAK1/PK/正式signing/version与PR27对比无变化，build26现文件SHA256仍0c6bd9132ab15ca7625f1da19b59c1c9450cf4cb0518b15100e30396c5ed3fa0。
+最终需要负责人批准的schema、协议/专家、完整backup、primary/images、quota/ARM与retention范围详36；没有当前B0任务需补充授权的事项。

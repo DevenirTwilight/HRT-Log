@@ -14,7 +14,7 @@
 
 身份为logicalVaultUUID、objectUUID、versionUUID、attemptUUID、stableDEKHandleUUID。主空间独立noBackup目录、Keystore alias与索引；不共用伪装空间密钥。physicalGeneration、recordEpoch、sessionEpoch不进入内容AAD：它们分别是文件组、结构化数据集合、授权生命周期，恢复/重新关联不应强制改变原件密文。完整备份认证它们的元数据映射。
 
-设备KEK仅包裹DEK，envelope独立域，绑定vault/version/DEKhandle/wrapEpoch。append新envelope，验证解包等于既有DEK后再切换；旧alias直到新包裹验证且持久化后才考虑回收。Keystore不可用时禁止生成替代key冒充恢复。跨设备用独立便携包裹，不导出设备Keystore key。随机96bit wrap nonce候选最多65536次调用（失败也计）后轮换：仅nonce碰撞生日估计约2^-65，不是完整GCM安全界。确定性计数器备选必须先证明崩溃时原子预留不重复。
+设备KEK仅包裹DEK，envelope独立域，绑定crypto logicalVault/version/DEKhandle+目标localDataset/wrapEpoch/role。暂存operation wrap还绑定owned operationUUID与resource physicalGeneration，独立role；active device wrap以新nonce重新包裹并计入KEK总调用预算。portable backup wrap绑定source crypto身份+archive，不能绑定未知目标localDataset。append新envelope，验证解包等于既有DEK后再切换；旧alias直到新包裹验证且持久化后才考虑回收。Keystore不可用时禁止生成替代key冒充恢复。跨设备用独立便携包裹，不导出设备Keystore key。随机96bit wrap nonce候选最多65536次调用（失败也计）后轮换：仅nonce碰撞生日估计约2^-65，不是完整GCM安全界。确定性计数器备选必须先证明崩溃时原子预留不重复。
 
 ## 固定研究转录（不是正式wire规范）
 
@@ -38,7 +38,7 @@ H0=SHA256(unsignedHeader)，**不含tag**，避免密钥派生循环。L为ASCII
 - footer：独立key、nonce12个00，AAD=L||03||H0||headerTag；明文u64(total)||u32(count)||SHA256(按序原件)，44B，sealed60B。该key只加密一次；改footer必须新尝试。
 - 候选对象布局：header140+tag16，然后每块index4/len4/sealed，最后footer60；EOF严格，已认证total决定精确物理长度216+total+24×count。不解析自由路径或可变无界字段。
 
-header先验证tag及可信元数据的vault/object/version/attempt/handle/headerHash，限制分配；随后footer、每块tag、总长/块数、原件hash、精确EOF全部通过才发布读权限。失败不返回部分明文，清响应缓冲并关闭能力；随机读也核对可信版本和会话授权。内容hash保留SQLCipher内，不作为公开文件名或自动跨就诊去重/关联依据。
+header先验证tag及可信元数据的crypto vault/object/version/handle，固定大小解析attempt/salt；H0是unsignedHeader的自描述摘要，不当信任锚，限制分配；随后footer、每块tag、总长/块数、原件hash、可信metadata的整对象ciphertextSHA256、精确EOF全部通过才发布读权限。失败不返回部分明文，清响应缓冲并关闭能力；随机读也核对可信版本和会话授权。内容hash保留SQLCipher内，不作为公开文件名或自动跨就诊去重/关联依据。
 
 ## 密码学与资源预算（候选，未批准）
 
@@ -58,3 +58,5 @@ header先验证tag及可信元数据的vault/object/version/attempt/handle/heade
 `draft_vectors.json`新转录覆盖0/1/65536/65537字节，固定合成DEK/salt及按样本大小区分的UUID绝不能复用生产；不同样本header/派生key各异，但这不验证真实随机DEK/attempt allocator唯一性。Python cryptography50 AESGCM生成，JCA独立验证HKDF、header/body/footer、AAD篡改及公共负向量。两套实现一致仅说明此转录互操作，不证明协议无设计漏洞。stdlib三测试核对编码、序号/nonce/长度/hash及保守预算。generator仅测试工具，需要本地可选cryptography，CI不安装该库以运行生产代码。
 
 复现：`python3 tools/attachment-design-validation/generate_draft_vectors.py --wycheproof <已核实原始JSON> --check`；`./gradlew -PjvmOnly :attachment-poc:test`。真实熵、所有API provider的新协议KAT、形式化攻击分析、外部专家审查、生产密钥与锁定集成尚未完成。
+
+SQL `store_uuid`最终定义为新随机本地metadata dataset，**不是**header首个logicalVaultUUID；它与crypto logical_vault_uuid字段、physical generation及session/epoch明确分离（报告34）。同crypto version跨dataset必须相同原件byte commitments，不能借新scope复用versionID写不同内容。旧完整包恢复保持header/cipher/DEK，metadata映射fresh local IDs。新公开转录仍crypto身份，与此SQL命名修订无关。

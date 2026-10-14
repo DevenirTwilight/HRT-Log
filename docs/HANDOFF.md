@@ -1,3 +1,18 @@
+## MED-02B0交付设计与最终检查入口 — 2026-10-14
+
+PR28 https://github.com/DevenirTwilight/HRT-Log/pull/28 OPEN，stacked到PR27已验收固定1c8d385，均不合并。
+报告32–37和三份AI peer原稿完成：协议公开向量/Room10/完整backup状态机/配额纠错政策/B1–B6/B1提示词。
+不外部认证、不启用生产附件；Schema9/PNBAK1/PK/version/正式签名/build26不改。
+代码阶段651e510 push Android38543179106、PR Android38543186185、push Science38543179176、PR Science38543186188全部success（PR deep实际成功）。
+实际JVM194+POC35；data160/rem17/app865零fail(61原有skip)；API35 data66/app215零fail(8原有skip)；API26/29各33零fail/skip。
+新3 filesystem实验实测Os.link EACCES不可用，O_EXCL禁止覆盖/目录sync/leaf nofollow通过，不证明硬件掉电。
+本地干净651unsigned Release与两test APK补跑通过；之前dirty源码中止是provenance保护，不绕过。
+最后合成草案补强localDataset/cryptoVault/physicalGeneration三域与CURRENT gate、不可变cipher commitment、owned operation wrap生命周期：
+Room36+backup模型14+framing3=53，scripts全部88、0fail/newskip；公认新protocol/actual restore仍未生产实现。
+最终本次HEAD必须完整push+PR JVM/Android/lint/API35/API26/29/Science再过，验收结果与精确HEAD/四CI链接记录在PR28正文/checks，不能冒用651先前绿灯。
+最终交付主审会等待这些checks全部结束；审阅者应看PR28当前HEAD/checks。后续仅经负责人批准执行提示词37，不能自动开始B1或合并27/28，不能签名/交付APK。
+仍需独立expert、真实Room/SQLCipher/新device/ENOSPC/powercut、ARM容量/KDF/native恶意格式；具体批准项见36。
+
 ## MED-02B0 final synthetic corrections — 2026-10-14
 
 PR28 https://github.com/DevenirTwilight/HRT-Log/pull/28 已OPEN，stacked到未合并PR27，均不得自动合并。
