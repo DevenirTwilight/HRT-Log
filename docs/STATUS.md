@@ -1,9 +1,20 @@
+> 集成基线已验证（2026-10-14）：PR26合并051ee22主线Android38524575273/Science38524575321全绿；PR25安全解决冲突后c97d9c6 push/PR全绿并按用户授权合并c3bf2cbc，最新主线Android38527627941三任务和Science38527627946 gate/deep全部成功。MED02独立分支纳入此最终已验证基线，R15/MED01代码与全部合同/重启脚本完整保留；POC新28 JVM通过/设备实测首轮仍待。下面“未合并/待CI”是历史记录，以本段为最新状态。
+
 > MED-02A补充验证：JVM新增100个独立密文对象及相同内容不同显式链接保留测试；20+8=28项全部成功（36s）。添加大PDF实际采样Java/native/PSS观察器，不把算法bound当内存峰值。首轮dcb8beb API26/29/35/Android还在运行，暂不推送以避免取消；待完成后纳入验证后的R15主线并推送下一批。生产不变，PR25已合并、主线Android仍待，其余JVM/设备/Science成功。
 
 > MED-02A原型阶段（2026-10-14）：JVM加密19/恢复模型7全部通过，无新增skip；Android POC包修正PdfDocument显式关闭后编译成功46s。独立test-only模块、ProxyFD/PdfRenderer/图片/真实synthetic Keystore与live-import force-stop脚本已实现，API26/29/35实测尚待新HEAD CI，不称可行/验收完成。scope32a1681完整CI成功；R15 PR25已合并c3bf2cbc（集成c97d9c6 push/PR全绿），主线38527627941/38527627946仍待完整结果，再纳入本分支最终回归。设计31仅待审批，不实施Room10/完整医疗备份，不交付APK/自合并/改生产数据或build26。
 
 > MED-02A启动（2026-10-14）：MED01 PR26已合并051ee22，主线Android38524575273三任务与Science38524575321 gate/deep全部success。独立feature/med02a-attachment-poc-20261014从此已验证HEAD建立；PR25用户已授权合并，R15分支c97d9c6保留两套功能/测试解决冲突，新CI38525995026/38525995037及38525991389/38525991267正在核验，尚未合并。POC只合成数据、独立模块及测试依赖，不接生产APK；完成后需纳入R15验证主线。尚无加密/预览实测，不称完成，不改Schema/PNBAK1/PK/版本/签名/真实数据/build26。
 
+> 2026-10-14：用户明确授权合并PR25。R15分支合入MED-01主线051ee22，保留两套四语、仓库/刷新/UI合同与外部重启脚本；仅解决共享插入位置冲突，不覆盖功能。合并前本地目标回归及新HEAD完整CI待完成；之后才合并PR25、等待主线成功，再开始MED-02A POC。无Schema/PK/版本/签名/PNBAK1变化。
+
+> R-15代码完整验收通过：ebd02da Android38484766169/JVM/API35全部success；JVM194/data142/rem17/app813零失败（61原skip），API35 data48/app141零失败（8原skip且独立脚本实际通过），新data33/UI四语24/新PID全部过。lint0错误178既有警告，unsignedRelease及来源保护通过。报告27/机器摘要已更新；独立PR最终验收文档HEAD自身push/PR全CI成功后才交还，精确SHA/链接固定PR正文。三类历史安全限制见报告，不合并/签名/交付APK，build26不变。
+
+> R-15回归修正：完整JVM194/data142/reminder17通过；首轮宽泛retained过滤破坏旧契约，已限定R15撤回证据；设备新重启fixture缺必填提醒参数已补齐。保留失败/修正证据，等待新HEAD完整Android/API35/Science，不取消正在运行CI，不称验收完成。见报告27。
+
+> R-15本地目标通过：data32/UI四语24/refresh8全过、两仪器包构建成功；完整回归/API35/Science最终HEAD CI待完成。旧时段已取消/原时区证明缺失/跨库存单位保留安全限制，报告27说明后续产品决定。B4 MERGED_CI_VERIFIED，build26不变。
+
+> B4 MERGED_CI_VERIFIED（最终主线fe879863 Android38470156117 attempt2、Science38470156282均success，deep按文档门控skip）。R-15独立分支开始审查与红测，未实现/未验收；不合并、不签名或交付APK。
 > MED-01代码完整验收：b793ded Android38497285919三作业及Science38497285943均success；JVM194/data127/rem17/app839零失败（61原skip），API35 data33/app157零失败（8原条件skip经独立脚本实际通过）；医疗data18/UI四语40/时区索引7/保存3/刷新8/导航7、新PID/PNBAK1/回收及隔离全过。lint0错误，Debug/unsignedRelease/两测试包与来源清单保护通过。审计28/机器证据和B设计29齐全；B新表/加密/流式备份/预览需审批，A正常场景无阻塞。独立PR最终报告HEAD自身push/PR CI须全绿后交还，精确SHA/链接固定PR正文。R15不改；不合并/签名/交付APK或改build26/Schema/PK/格式。
 
 > B4顺序合并完成（2026-10-13，REQ §85）：PR23 merge `d06bcce` 完整主线通过后，PR24改为默认分支、19文件差异不变，以明确新基线验证merge32345cb执行完整Android/Science全部成功，再以merge `9af38f3` 合并。其主线Android38468046764三任务、Science38468046661 gate/deep全部实际success；两个验收HEAD8749207/92f8c42保持，最终业务源码树与验收一致。详见[报告26](audits/product-quality-2026-10/26-b4-merge-and-mainline-validation.md)及机器证据。本次仅归入最新授权/交接/验收文档，交还条件仍为最后文档HEAD自身完整CI实际成功，精确SHA/链接固定PR正文，不循环追加自身SHA。下方待完成/不合并叙述属历史。无新正式签名/APK/版本/发布；build26文件不变。

@@ -1,9 +1,22 @@
+> 集成基线已验证（2026-10-14）：PR26合并051ee22主线Android38524575273/Science38524575321全绿；PR25安全解决冲突后c97d9c6 push/PR全绿并按用户授权合并c3bf2cbc，最新主线Android38527627941三任务和Science38527627946 gate/deep全部成功。MED02独立分支纳入此最终已验证基线，R15/MED01代码与全部合同/重启脚本完整保留；POC新28 JVM通过/设备实测首轮仍待。下面“未合并/待CI”是历史记录，以本段为最新状态。
+
 > MED-02A补充验证：JVM新增100个独立密文对象及相同内容不同显式链接保留测试；20+8=28项全部成功（36s）。添加大PDF实际采样Java/native/PSS观察器，不把算法bound当内存峰值。首轮dcb8beb API26/29/35/Android还在运行，暂不推送以避免取消；待完成后纳入验证后的R15主线并推送下一批。生产不变，PR25已合并、主线Android仍待，其余JVM/设备/Science成功。
 
 > MED-02A原型阶段（2026-10-14）：JVM加密19/恢复模型7全部通过，无新增skip；Android POC包修正PdfDocument显式关闭后编译成功46s。独立test-only模块、ProxyFD/PdfRenderer/图片/真实synthetic Keystore与live-import force-stop脚本已实现，API26/29/35实测尚待新HEAD CI，不称可行/验收完成。scope32a1681完整CI成功；R15 PR25已合并c3bf2cbc（集成c97d9c6 push/PR全绿），主线38527627941/38527627946仍待完整结果，再纳入本分支最终回归。设计31仅待审批，不实施Room10/完整医疗备份，不交付APK/自合并/改生产数据或build26。
 
 > MED-02A启动（2026-10-14）：MED01 PR26已合并051ee22，主线Android38524575273三任务与Science38524575321 gate/deep全部success。独立feature/med02a-attachment-poc-20261014从此已验证HEAD建立；PR25用户已授权合并，R15分支c97d9c6保留两套功能/测试解决冲突，新CI38525995026/38525995037及38525991389/38525991267正在核验，尚未合并。POC只合成数据、独立模块及测试依赖，不接生产APK；完成后需纳入R15验证主线。尚无加密/预览实测，不称完成，不改Schema/PNBAK1/PK/版本/签名/真实数据/build26。
 
+> 2026-10-14：用户明确授权合并PR25。R15分支合入MED-01主线051ee22，保留两套四语、仓库/刷新/UI合同与外部重启脚本；仅解决共享插入位置冲突，不覆盖功能。合并前本地目标回归及新HEAD完整CI待完成；之后才合并PR25、等待主线成功，再开始MED-02A POC。无Schema/PK/版本/签名/PNBAK1变化。
+
+> R-15代码完整验收通过：ebd02da Android38484766169/JVM/API35全部success；JVM194/data142/rem17/app813零失败（61原skip），API35 data48/app141零失败（8原skip且独立脚本实际通过），新data33/UI四语24/新PID全部过。lint0错误178既有警告，unsignedRelease及来源保护通过。报告27/机器摘要已更新；独立PR最终验收文档HEAD自身push/PR全CI成功后才交还，精确SHA/链接固定PR正文。三类历史安全限制见报告，不合并/签名/交付APK，build26不变。
+
+> R-15回归修正：完整JVM194/data142/reminder17通过；首轮宽泛retained过滤破坏旧契约，已限定R15撤回证据；设备新重启fixture缺必填提醒参数已补齐。保留失败/修正证据，等待新HEAD完整Android/API35/Science，不取消正在运行CI，不称验收完成。见报告27。
+
+> R-15首版本地目标通过（2026-10-13，REQ §86）：32/32真实Room仓库、四语320dp/2x原生UI24/24、刷新8/8零失败/无跳过，两仪器包编译成功（2m18s）。真实4语Disabled红测、未来Slot幽灵红测1项、旧改期无证明/单位不同红测2项均保留。实现原始Slot可选证据仅附加已有SKIP JSON临床快照、软删除及清标记保留改期/剂量、原版范围过滤保证真实提前服药不丢、VM复用mutate/refresh并阻止重复缓存更新。新进程脚本专用synthetic数据库，emulator guard，无pm clear/新Assume skip。已补原规则补录确认标签一致性，正常功能不变。旧取消未来Slot、无证明的wall改期、跨库存单位保守拒绝，后两种/新行为须进一步业务决定，详见[报告27](audits/product-quality-2026-10/27-r15-undo-skipped.md)。首次Android编译缺ApplicationProvider依赖已正常修正。全量JVM/Android/lint/full构建及真实API35/最终CI仍待完成；下一步跑完整回归、等待本实现HEAD CI，建独立PR，不能宣称验收完成。不合并/签名/交付、不变Room9/PNBAK1/PK/version26/build26。
+
+> R-15红测与事务边界（2026-10-13）：共享仓库17项真实Room红测已实际失败17/17、无跳过（17.755s/构建4m13s），未实现seam不会提交为实现。四语320dp/2x原HistoryScreen不可点击红测在运行。仓库已本地写入最小撤销事务，尚未编译/验收：完整预期记录校验、主动override核查、原rule/retained与有效快照一致、只清skipped/软删除并按既有Timeline对目标Slot生成AUTO_MISSED，不碰库存账本。首次主动skip保存已有原Slot证据；旧wall改期无retained原时区证据、已被新计划取消的未来旧Slot等保守拒绝，不拼造历史。scope提交da1b1f5 Android38473817967及Science38473817984已success。细节与后续见[报告27](audits/product-quality-2026-10/27-r15-undo-skipped.md)；生产/测试修改尚未提交，R-15未验收。
+
+> R-15开始（2026-10-13，REQ §86）：已重新核对B4最终fe879863主线Android38470156117 attempt2三任务success、Science38470156282 gate success/deep门控skip；B4 MERGED_CI_VERIFIED，首轮原UI测试框架线程异常未永久修复，证据见PR23/24。独立feature/r15-undo-skipped-20261013从最新默认分支创建。已审查HistoryScreen禁用SKIPPED点击、override现有标记撤销与软删除、Timeline原版本/retained/快照优先和自动未确认漏服、真实服药编辑/删除的补偿账本。接下来先写红测：安全撤销必须校验当前记录、主动skip override、可靠历史Slot及修改版本；保留剂量/改期，只复用现有状态投影。尚未修改生产代码，不能宣称实现完成。不合并/签名/交付、不改Room/PK/备份/版本。
 > MED-01代码完整验收：b793ded Android38497285919三作业及Science38497285943均success；JVM194/data127/rem17/app839零失败（61原skip），API35 data33/app157零失败（8原条件skip经独立脚本实际通过）；医疗data18/UI四语40/时区索引7/保存3/刷新8/导航7、新PID/PNBAK1/回收及隔离全过。lint0错误，Debug/unsignedRelease/两测试包与来源清单保护通过。审计28/机器证据和B设计29齐全；B新表/加密/流式备份/预览需审批，A正常场景无阻塞。独立PR最终报告HEAD自身push/PR CI须全绿后交还，精确SHA/链接固定PR正文。R15不改；不合并/签名/交付APK或改build26/Schema/PK/格式。
 
 > MED-01回归修正：968ffa0 API35/JVM成功但Android失败，共享合同误被独立JUnit发现；已abstract保留两端各18项全部断言，不加skip/exclude。完整data127/127通过，JVM194通过；新增可搜索时区纠错/明确本地时钟解释，四语UI40/索引7/保存3/刷新8/导航7=65全部过。接下来完整app/reminder/lint/Debug/两仪器包与本HEAD完整CI/unsignedRelease/API35，再最终报告PR。原代码失败证据在28，B设计29仍仅待审批。R15未改，不改Schema/PK/格式/正式版本/签名，不交付APK或合并。

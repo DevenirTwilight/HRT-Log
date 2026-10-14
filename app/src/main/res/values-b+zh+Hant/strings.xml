@@ -1076,6 +1076,11 @@
     <string name="pkg_restore_title">恢復這盒包裝？</string>
     <string name="pkg_restore_body">恢復原包裝及原狀態？系統將重新核對庫存與服藥記錄。如果作廢後發生了更正，將拒絕自動恢復。</string>
     <string name="pkg_restore_conflict">作廢後庫存或服藥記錄已變化，無法安全自動恢復。請核對實際包裝並使用「核對庫存」，保留這條記錄以便進一步更正。</string>
+    <string name="history_undo_skip">撤銷跳過</string>
+    <string name="history_undo_skip_help">撤銷後，將依原來的計畫和目前時間重新判斷狀態。不會記為已服藥，也不會改變現有庫存。改期和劑量調整將保留。</string>
+    <string name="history_skip_stale">這筆紀錄已變更。請重新整理後再試。未修改任何紀錄。</string>
+    <string name="history_skip_unavailable">無法可靠定位原來的計畫時段。未修改任何紀錄。請先查看這筆紀錄的歷史計畫資訊。</string>
+    <string name="history_skip_unit_changed">這筆歷史劑量與目前庫存的單位不同，暫時無法安全撤銷跳過。未修改任何紀錄。</string>
     <string name="medical_records">醫療檔案</string>
     <string name="medical_add_visit">記錄已發生的就診</string>
     <string name="medical_past_help">僅記錄已經發生的就診。這裡保存您自己的備註，不是應用程式產生的診斷。</string>

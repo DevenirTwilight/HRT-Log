@@ -39,7 +39,7 @@
 | R-12 | 导出明文提示 | DataSection、Visits、Wellbeing | 04 D-2 | P2 NEXT | 无 | S | 3/3/1 |
 | R-13 | 日历格语义：TalkBack 能读出日期 + 状态 | CalendarScreen | 02 UX-4 | P2 NEXT | 无 | S～M | 3/2/2 |
 | R-14 | 库存卡只显示在用/未开封包装，历史包装折叠，去掉 `#id` | StockScreen | 02 UX-5 | P2 NEXT | 无 | S | 3/1/1 |
-| R-15 | 历史页可撤销误跳过 | HistoryScreen、Repository | 02 UX-9 | P2 LATER | 跳过存为 override 还是 record，需要按现有语义设计 | M | 3/2/3 |
+| R-15 | 历史页可撤销误跳过 | HistoryScreen、Repository | 02 UX-9 | IMPLEMENTED / OWNER REVIEW | 报告27；最终报告HEAD CI须全绿，旧取消时段/缺证据/跨单位保守限制 | M | 3/2/3 |
 | R-16 | 投影异常时显示提示，不再静默空标签 | AppShell、ViewModel | 05 ARCH-3 | P2 NEXT | 无 | S | 2/3/1 |
 | R-17 | 时期投影移到 ViewModel 后台计算 | AppShell、Longitudinal | 05 ARCH-2 | P2 LATER | R-08 | M | 2/2/3 |
 | R-18 | 伪装暗码强度/限速 | Disguise | 04 D-4 | P2 NEXT | D-8 | S | 2/3/1 |

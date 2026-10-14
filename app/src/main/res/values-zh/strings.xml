@@ -1076,6 +1076,11 @@
     <string name="pkg_restore_title">恢复这盒包装？</string>
     <string name="pkg_restore_body">恢复原包装及原状态？系统将重新核对库存与服药记录。如果作废后发生了更正，将拒绝自动恢复。</string>
     <string name="pkg_restore_conflict">作废后库存或服药记录已变化，无法安全自动恢复。请核对真实包装并使用“核对库存”，保留这条记录以便进一步纠错。</string>
+    <string name="history_undo_skip">撤销跳过</string>
+    <string name="history_undo_skip_help">撤销后，将按原来的计划和当前时间重新判断状态。不会记为已服药，也不会改变现有库存。改期和剂量调整将保留。</string>
+    <string name="history_skip_stale">这条记录已发生更改。请刷新后重试。未修改任何记录。</string>
+    <string name="history_skip_unavailable">无法可靠定位原来的计划时段。未修改任何记录。请先查看这条记录的历史计划信息。</string>
+    <string name="history_skip_unit_changed">这条历史剂量与当前库存的单位不同，暂不能安全撤销跳过。未修改任何记录。</string>
     <string name="medical_records">医疗档案</string>
     <string name="medical_add_visit">记录已发生的就诊</string>
     <string name="medical_past_help">仅记录已经发生的就诊。这里保存您自己的备注，不是应用生成的诊断。</string>
