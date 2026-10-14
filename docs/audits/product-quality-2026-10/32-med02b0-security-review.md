@@ -7,7 +7,7 @@
 POC证明限定合成数据上的AEAD/随机读取和公共Android预览可行，**不能直接生产化**。本次不同AI审查者先独立阅读再交叉核查，第三位形成合成迁移草案；主审补充确定性运行证据。没有外部专业安全认证，没有生产迁移/正式新format、用户附件、真实医疗数据、version/signing/build26变更。
 
 - [33 加密对象协议草案与公开向量](33-med02b0-object-protocol-draft.md)：新HKDF域分离组合候选/固定转录；不是SYNPOC01改名。
-- [34 Room10迁移草案](34-med02b0-room10-migration-draft.md)：typed identity桥/墓碑、generation、append envelope、22 SQLite合成测试。
+- [34 Room10迁移草案](34-med02b0-room10-migration-draft.md)：typed identity桥/墓碑、generation、append envelope、25 SQLite合成测试。
 - [35 完整加密医疗备份与恢复](35-med02b0-medical-backup-draft.md)：独立格式、流式完整集合认证、SQL权威最后commit、旧包epoch隔离、14失败模型测试。
 - [36 配额、纠错政策、B1–B6](36-med02b0-product-policy-and-pr-plan.md)：候选标准/测量计划、默认关闭与审批。
 - [37 B1可执行提示词](37-med02b1-executable-prompt.md)：需相应批准后才能修改正式Room等生产子项。
@@ -34,11 +34,11 @@ POC证明限定合成数据上的AEAD/随机读取和公共Android预览可行�
 |最终authorized检查后撤权仍publish|crypto1 / C01|新JUnit在RENAME seam撤权，文件仍生成，确定性PASS证明缺口|publish/revoke共用短gate/session epoch；SQL READY/link commit是线性化权威；长IO不持锁|
 |owner.close仍可读取既有Reader|crypto2 / C02|新JUnit open→owner.close→read原字节成功|区分close与授权revoke；集中capability registry撤销reader/ProxyFD/native/UI结果，交付及消费验epoch|
 |整体合法旧tuple回放|crypto3 / C06补充|新JUnit完整旧tuple可认证；可信new version拒绝旧对象|fresh immutable version+DEK+SQL CAS；明确整个vault旧快照无法一般检测|
-|atomic move不保证no-replace/dir durability|crypto4 / C04/C05|新Android实验link existing拒绝、dirfsync、leaf nofollow，结果按最终CI记录|owned dirs/FD/fstat/祖先防替换、journal/file+dirsync/CAS、cleanup错误保留；硬件断电仍NOT_RUN|
+|atomic move不保证no-replace/dir durability|crypto4 / C04/C05|Android实测hardlink EACCES否定该方案；新实验O_EXCL existing拒绝、dirfsync、leaf nofollow，结果按最终CI记录|owned dirs/FD/fstat/祖先防替换、journal/file+dirsync/CAS、cleanup错误保留；硬件断电仍NOT_RUN|
 |PDF交付竞态/native关闭无硬时限|crypto8 / C03|源码复核，既有良性POC不能排除|受限worker/deadline/恶意样本/锁定UI先撤显示；不要保证瞬间RAM擦除|
 |图片原语限尺寸不等于恶意parser安全|C08 / crypto8|既有合成格式结果仅继承报告30|静态format allowlist、metadata/动画/pixel/native资源、并发1、无diskcache、ARM|
 |便携PBKDF2与wrap域/budget非生产profile|crypto5/6 / C07|公开HKDF/GCM/Argon2id KAT互操作；不测密码熵/成本|专家定域/GCM限制、允许KDFprofile及ARM成本、wrap轮换/newdevice|
-|epoch不足防同epoch整数ID复用；trash FK危险|C06 / crypto交叉|22 SQLite合成测试含同ID新UUID/trash continuity|typed UUID registry+tombstone、实际Room hooks、oldrestore/clear同事务quarantine|
+|epoch不足防同epoch整数ID复用；trash FK危险|C06 / crypto交叉|25 SQLite合成测试含同ID新UUID/trash continuity|typed UUID registry+tombstone、实际Room hooks、oldrestore/clear同事务quarantine|
 |RawData删全部trigger、Roomversion进PNBAKschema|C06/C07兼容 / crypto交叉|现有生产源码读取；生产未改|完整guardregistry/白名单、固定serialization9 adapter、旧包回归|
 |GC/恢复/租约与commit ack失败|C04/C06 / crypto4|14模型测试+多失败seam|真实SQLCipher+文件实现/ENOSPC/kill/lease GC，不能靠模型赋值宣称atomic|
 
@@ -46,7 +46,7 @@ POC证明限定合成数据上的AEAD/随机读取和公共Android预览可行�
 
 ## 运行证据与复现
 
-新增JVM7：3确定性audit findings +4primitive/draft test methods，继承28，合计35零失败。RFC5869A1、RFC9106§5.3及固定C2SP/Wycheproof6正负cases；Python cryptography50生成0/1/65536/65537转录，JCA独立核对全域/header/footer/body/AAD篡改。不是新生产serializer、没有随机密钥质量/组合安全证明。源码仅新增testImplementation JSON/BC，不引入生产依赖。Stdlib39项：22合成SQLite +14backup state model +3framing/HKDF/budget；0新skip。初次CI入口loader路径配置失败，改独立TestLoader/top_level，未弱化断言。
+新增JVM7：3确定性audit findings +4primitive/draft test methods，继承28，合计35零失败。RFC5869A1、RFC9106§5.3及固定C2SP/Wycheproof6正负cases；Python cryptography50生成0/1/65536/65537转录，JCA独立核对全域/header/footer/body/AAD篡改。不是新生产serializer、没有随机密钥质量/组合安全证明。源码仅新增testImplementation JSON/BC，不引入生产依赖。Stdlib42项：25合成SQLite +14backup state model +3framing/HKDF/budget；0新skip。初次CI入口loader路径配置失败，改独立TestLoader/top_level，未弱化断言。
 
 复现：
 
@@ -55,7 +55,7 @@ python3 -m unittest discover -s scripts -p test_attachment_design_validation.py
 ./gradlew -PjvmOnly :core:domain:test :pk-engine:test :importer:test :attachment-poc:test --rerun-tasks --no-parallel --max-workers=1
 ```
 
-API26/29/35 test-only新增2 filesystem方法：合成专用noBackup目录，fsync文件/目录、link EEXIST不覆盖+同inode、leaf O_NOFOLLOW拒绝。不操作真实data；只运行经ro.kernel.qemu明确attestation的模拟器。不能将fsync返回成功当flash掉电认证，祖先目录FD绑定/真实no-replace协调器仍未来实现。
+API26/29/35 test-only新增3 filesystem方法：合成专用noBackup目录，fsync文件/目录、O_EXCL EEXIST不覆盖及hardlink EACCES无副作用、leaf O_NOFOLLOW拒绝。不操作真实data；只运行经ro.kernel.qemu明确attestation的模拟器。不能将fsync返回成功当flash掉电认证，祖先目录FD绑定/真实no-replace协调器仍未来实现。
 
 完整Android/JVM/lint/API35与适用Science最终SHA/check链接在本报告末尾最终CI记录填入，保留全部旧B2/B3/B4/R15/MED01测试与既有条件skip。不取消运行中CI。报告30既有PDF/图片/Keystore/force-stop与内存采样仅继承，不误称本轮新增测量；没有真实ARM/容量基准或独立安全专家。本轮未运行真实掉电/满盘/正式新backup，统一NOT_RUN。
 
@@ -75,3 +75,14 @@ API26/29/35 test-only新增2 filesystem方法：合成专用noBackup目录，fsy
 不同AI审查者read-only复核报告33–37与新tools，发现并修正：backup bootstrap envelope自引用AAD歧义；SQL快照释放后可变rows改用加密SQLCipher spool冻结；历史COMMITTED generation合法GC不再被reconcile误判；pending operation绑定archive+digest；dirsync后重复恢复验证既有immutable generation、不覆盖；报告34删除recordEpoch入contentAAD旧句并区分activation与成功receipt。新增四模型测试，14模型+22SQLite+3framing共39。合成向量UUID按样本区分、footer派生key各异，不把固定KAT当真实attempt唯一性证明。未实施正式backup/spool或对象协议。
 
 首批代码9afec67 Android38539482928失败：新增test误用非公开O_DIRECTORY/Os.unlink导致compile，未执行设备实验；改公开Os.open+fstat S_ISDIR、Os.remove，所有断言保留。该批Science38539482869成功。此失败明确保留，最终纠正后HEAD另跑完整checks。
+
+第三轮主审发现并修正synthetic DDL终态绕过（详34）：新增3项，迁移25+备份模型14+framing3=42。
+保留历史CI77e168e对应先前39合成测试，最终新HEAD会运行42；不混淆版本或称生产漏洞修复。
+
+77e168e 第二批API26/29/35运行揭示真实Os.link EACCES，否定hardlink发布候选；不是compile或偶发网络失败。
+实验更新为单独严格验证sandbox hardlink拒绝且无副作用，新增O_EXCL禁止覆盖+目录sync替代验证；
+没有删除安全验收标准或以任意异常取绿。实际pipeline仍保持无明文/完整认证/DB最后原子发布，正式实现待批准。
+
+三API hardlink反例来源（全部77e168e）：[PR Android38541101840](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38541101840)，
+API26 job115775769865、API29 job115775770206、API35 job115775769875，均link failed EACCES；
+[JVM/Science深度](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38541101806)通过。最终替代验证另运行新HEAD，不能把这些失败写成通过。

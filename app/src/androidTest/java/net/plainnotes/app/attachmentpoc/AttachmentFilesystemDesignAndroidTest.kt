@@ -22,20 +22,30 @@ class AttachmentFilesystemDesignAndroidTest {
         val fd = Os.open(root.path, OsConstants.O_RDONLY or OsConstants.O_CLOEXEC or OsConstants.O_NOFOLLOW, 0)
         try { assertTrue(OsConstants.S_ISDIR(Os.fstat(fd).st_mode)); Os.fsync(fd) } finally { Os.close(fd) }
     }
-    @Test fun linkPublicationCannotReplaceExistingOwnedTargetAndDirectorySyncWorks() = fixture { root ->
-        val source = File(root, "synthetic.part")
-        FileOutputStream(source).use { it.write(byteArrayOf(1, 2, 3)); it.fd.sync() }
+    @Test fun exclusiveCreationCannotReplaceExistingOwnedTargetAndDirectorySyncWorks() = fixture { root ->
         val existing = File(root, "existing.object").also { it.writeBytes(byteArrayOf(9)) }
-        try { Os.link(source.path, existing.path); fail("link replaced existing target") }
-        catch (expected: ErrnoException) { assertEquals(OsConstants.EEXIST, expected.errno) }
+        val flags = OsConstants.O_WRONLY or OsConstants.O_CREAT or OsConstants.O_EXCL or OsConstants.O_CLOEXEC or OsConstants.O_NOFOLLOW
+        try {
+            val fd = Os.open(existing.path, flags, 384)
+            Os.close(fd); fail("O_EXCL replaced existing target")
+        } catch (expected: ErrnoException) { assertEquals(OsConstants.EEXIST, expected.errno) }
         assertArrayEquals(byteArrayOf(9), existing.readBytes())
-        assertArrayEquals(byteArrayOf(1, 2, 3), source.readBytes())
         val target = File(root, "new.object")
-        Os.link(source.path, target.path); syncDirectory(root)
-        assertEquals(Os.stat(source.path).st_ino, Os.stat(target.path).st_ino)
-        Os.remove(source.path); syncDirectory(root)
+        val fd = Os.open(target.path, flags, 384)
+        FileOutputStream(fd).use { it.write(byteArrayOf(1, 2, 3)); it.fd.sync() }
+        syncDirectory(root)
         assertArrayEquals(byteArrayOf(1, 2, 3), target.readBytes())
-        // Success only establishes these emulator/API operations, NOT flash/power-cut behavior.
+        // Production would keep this owned file inaccessible until whole AEAD verification + DB commit.
+        // This primitive is exclusive creation, not atomic file+DB publication or power-cut proof.
+    }
+    @Test fun hardlinkCandidateIsDeniedWithoutChangingEitherFile() = fixture { root ->
+        val source = File(root, "source.part").also { it.writeBytes(byteArrayOf(1, 2, 3)) }
+        val target = File(root, "link.object")
+        try { Os.link(source.path, target.path); fail("Sandbox hardlink denial assumption changed: reassess design") }
+        catch (expected: ErrnoException) { assertEquals(OsConstants.EACCES, expected.errno) }
+        assertFalse(target.exists())
+        assertArrayEquals(byteArrayOf(1, 2, 3), source.readBytes())
+        // Actual negative evidence: hardlinks cannot be the Android production publication primitive.
     }
     @Test fun noFollowRejectsLeafSymlink() = fixture { root ->
         val real = File(root, "real.object").also { it.writeBytes(byteArrayOf(4)) }

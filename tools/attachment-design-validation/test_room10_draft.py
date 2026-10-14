@@ -222,6 +222,32 @@ class Room10Draft(unittest.TestCase):
         self.db.execute("UPDATE attachment_version SET status='CORRUPT'")
         with self.assertRaises(sqlite3.IntegrityError): self.link()
 
+    def test_purged_identity_cannot_revive_through_trash_or_be_deleted(self):
+        self.db.execute("UPDATE attachment_record_identity SET state='PURGED',trash_id=NULL")
+        # Original typed clinical target remains, making this a real bypass attempt rather than a missing-row rejection.
+        self.assertEqual(self.db.execute('SELECT count(*) FROM appointment WHERE id=1').fetchone()[0],1)
+        with self.assertRaises(sqlite3.IntegrityError): self.db.execute("UPDATE attachment_record_identity SET state='TRASHED',trash_id=99")
+        with self.assertRaises(sqlite3.IntegrityError): self.db.execute("UPDATE attachment_record_identity SET state='ACTIVE',trash_id=NULL")
+        with self.assertRaises(sqlite3.IntegrityError): self.db.execute('DELETE FROM attachment_record_identity')
+        self.assertEqual(self.db.execute('SELECT state FROM attachment_record_identity').fetchone()[0],'PURGED')
+
+    def test_unreferenced_link_tombstone_cannot_be_deleted(self):
+        self.link()
+        self.db.execute("UPDATE attachment_link SET state='RETRACTED'")
+        with self.assertRaises(sqlite3.IntegrityError): self.db.execute('DELETE FROM attachment_link')
+        self.assertEqual(self.db.execute('SELECT state FROM attachment_link').fetchone()[0],'RETRACTED')
+
+    def test_validated_generation_cannot_restage_or_change_manifest_in_two_steps(self):
+        physical=uid(); original=bytes([1])*32
+        self.db.execute("INSERT INTO attachment_generation VALUES(?,?,'STAGING',NULL,1)",(self.store,physical))
+        self.db.execute("UPDATE attachment_generation SET state='VALIDATED',manifest_digest=?",(original,))
+        with self.assertRaises(sqlite3.IntegrityError): self.db.execute("UPDATE attachment_generation SET state='STAGING'")
+        with self.assertRaises(sqlite3.IntegrityError): self.db.execute('UPDATE attachment_generation SET manifest_digest=?',(bytes([2])*32,))
+        self.assertEqual(self.db.execute('SELECT state,manifest_digest FROM attachment_generation').fetchone(),('VALIDATED',original))
+        self.db.execute("UPDATE attachment_generation SET state='PURGED'")
+        with self.assertRaises(sqlite3.IntegrityError): self.db.execute("UPDATE attachment_generation SET state='VALIDATED'")
+        self.assertEqual(self.db.execute('SELECT state FROM attachment_generation').fetchone()[0],'PURGED')
+
     def test_schema_guard_not_weakened(self):
         with self.assertRaises(sqlite3.IntegrityError): self.db.execute('UPDATE appointment SET remind_minutes_before=-1')
         with self.assertRaises(sqlite3.IntegrityError): self.db.execute('UPDATE lab_value SET value=0')

@@ -120,3 +120,9 @@ CREATE TRIGGER attachment_envelope_handle BEFORE INSERT ON attachment_key_envelo
 END;
 CREATE TRIGGER attachment_envelope_immutable BEFORE UPDATE ON attachment_key_envelope WHEN NEW.store_uuid!=OLD.store_uuid OR NEW.document_uuid!=OLD.document_uuid OR NEW.version_uuid!=OLD.version_uuid OR NEW.envelope_uuid!=OLD.envelope_uuid OR NEW.dek_handle_uuid!=OLD.dek_handle_uuid OR NEW.wrap_epoch!=OLD.wrap_epoch OR NEW.wrapping_key_alias!=OLD.wrapping_key_alias OR NEW.wrapped_dek!=OLD.wrapped_dek OR NEW.created_utc!=OLD.created_utc OR OLD.state='TOMBSTONED' OR NEW.state!='TOMBSTONED' BEGIN SELECT RAISE(ABORT,'append-only envelope'); END;
 CREATE TRIGGER attachment_envelope_keep BEFORE DELETE ON attachment_key_envelope BEGIN SELECT RAISE(ABORT,'retain envelope tombstone'); END;
+-- Irreversible logical tombstones: block multi-step revival and physical loss of identity history.
+CREATE TRIGGER attachment_identity_tombstone BEFORE UPDATE ON attachment_record_identity WHEN OLD.state='PURGED' AND NEW.state!='PURGED' BEGIN SELECT RAISE(ABORT,'purged identity is terminal'); END;
+CREATE TRIGGER attachment_identity_keep BEFORE DELETE ON attachment_record_identity BEGIN SELECT RAISE(ABORT,'identity history retained'); END;
+CREATE TRIGGER attachment_link_keep BEFORE DELETE ON attachment_link BEGIN SELECT RAISE(ABORT,'link history retained'); END;
+CREATE TRIGGER attachment_generation_no_restage BEFORE UPDATE ON attachment_generation WHEN OLD.state!='STAGING' AND NEW.state='STAGING' BEGIN SELECT RAISE(ABORT,'generation cannot return to staging'); END;
+CREATE TRIGGER attachment_generation_terminal BEFORE UPDATE ON attachment_generation WHEN OLD.state='PURGED' AND NEW.state!='PURGED' BEGIN SELECT RAISE(ABORT,'purged generation is terminal'); END;

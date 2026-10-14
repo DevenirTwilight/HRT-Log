@@ -10,7 +10,7 @@
 >
 > 先在实际Room/SQLCipher合成库写失败测试：真实schema9全部29表、最早支持migration链、appointments/questions/visitpack、labs/context、Trash snapshot/reference、R15 override与dose、B4 VOIDED/ADJUST/immutable ledger、主/伪装空间。不得使用真实健康数据、清空用户设备数据、删保护trigger、改skip/弱化断言取绿。
 >
-> 正式实现获批准的additive Migration9_10和Room Entity/DAO/index/FK，附件metadata包括document/version/link/operation/store/typed recordUUID tombstone/generation/独立append envelope，CHECK/trigger统一install。old tables/columns/rows/ledger保护不变，不destructive fallback。feature flag default0，无用户入口。测试Room新export/validate身份hash及旧表hash、重开onOpen、DDL/事务失败回滚、异常trigger完整恢复；SQLite工具22测试仅参考不是生产验收。
+> 正式实现获批准的additive Migration9_10和Room Entity/DAO/index/FK，附件metadata包括document/version/link/operation/store/typed recordUUID tombstone/generation/独立append envelope，CHECK/trigger统一install。old tables/columns/rows/ledger保护不变，不destructive fallback。feature flag default0，无用户入口。测试Room新export/validate身份hash及旧表hash、重开onOpen、DDL/事务失败回滚、异常trigger完整恢复；SQLite工具25测试仅参考不是生产验收。
 >
 > lazy identity仅在明确typed可信目标选择时建立；appointment/lab原有snapshot删除→registry TRASHED同事务，原Trash父子同ID恢复→相同recordUUID，purge→不可复用tombstone；旧整数ID新row必须新UUID。不可定位旧payload保守拒绝建立link，不猜Slot/就诊、不复制数据。并发CAS与取消不留半link。
 >

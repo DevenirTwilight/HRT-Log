@@ -1,3 +1,15 @@
+## MED-02B0 final synthetic corrections — 2026-10-14
+
+PR28 https://github.com/DevenirTwilight/HRT-Log/pull/28 已OPEN，stacked到未合并PR27，均不得自动合并。
+77e168e JVM35/Science PR38541101806深度通过，push Android38541015153 full build/lint成功但device失败。
+API26/29/35实际Os.link EACCES，否定hardlink发布方案，报告32/35保存来源与限制。
+已将候选改为O_EXCL独占创建cipher对象+完整认证/file+dirsync+DB CAS最后发布，另保留硬链接拒绝严谨测试；
+不是降低认证/禁止覆盖标准，不skip这项不可行结果。原已验收POC main source仍不改。
+主审发现并补强typed tombstone两步绕过和generation退回STAGING：合成迁移25+backup14+framing3=42，
+scripts全部77零失败。报告32–37完整，生产未启用。
+上一批PR Android38541101840剩余android job尚运行，必须等结束再推当前纠正版本，未取消CI。
+本地完整Android/lint/unsigned build83763仍进行。接下来当前补丁提交/推送、最终HEAD全checks及验收记录。
+
 ## MED-02B0 design / review milestone — 2026-10-14
 
 报告32–37完成，包括两位AI独立原报告与第二轮交叉修订；不是外部认证。
