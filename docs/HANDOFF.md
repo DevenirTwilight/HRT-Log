@@ -1,3 +1,15 @@
+> MED-02A POC范围完成（2026-10-14）：代码6521173 push/PR Android/JVM/三个API/Science全部成功；PR API29外部protobuf解析失败经HTTP200核验仅失败job定向重跑一次成功（attempt2），未改断言/skip/版本。JVM194+28/data160/rem17/app865、API35 data66/app212（61/8原skip外部流程实际跑）、API26/29各30、Science261全部过；lint0/178既有警告，Debug/unsignedRelease/两仪器包/来源与manifest保护通过，实际DEX证明POC仅testAPK。报告30/机器证据+设计31完整，固定最终SHA/自身CI在PR27正文，最终提交检查成功后交还。PR25/26已MERGED_CI_VERIFIED于c3bf2cbc主线；PR27不自合并，MED02B迁移/协议/完整包/配额/关联政策待批准，物理ARM/独立review/生产AppLock与正式附件库未实施。无生产main/Schema/PNBAK1/PK/版本/签名/build26/真实数据改变，无正式APK交付。
+
+> MED-02A首轮CI实况：dcb8beb Android/JVM/Science及API26/29全部success；API35设备7失败均为基于MODEL/FINGERPRINT的emulator守卫拒绝，PDF/图片未进入。修正为公开getprop实际ro.kernel.qemu==1（不删除guard、不新增skip）；另补真实ContentResolver synthetic test-provider未知SIZE/可靠pipe错误/MIME、内存采样和100对象/1000元数据/多显式链接。主线PR25/26已合并且c3bf2cbc全CI成功，本分支已纳入。新HEAD完整设备/回归仍待，不能报全绿；正式main/Schema/PNBAK1/PK/签名/版本无变。
+
+> 集成基线已验证（2026-10-14）：PR26合并051ee22主线Android38524575273/Science38524575321全绿；PR25安全解决冲突后c97d9c6 push/PR全绿并按用户授权合并c3bf2cbc，最新主线Android38527627941三任务和Science38527627946 gate/deep全部成功。MED02独立分支纳入此最终已验证基线，R15/MED01代码与全部合同/重启脚本完整保留；POC新28 JVM通过/设备实测首轮仍待。下面“未合并/待CI”是历史记录，以本段为最新状态。
+
+> MED-02A补充验证：JVM新增100个独立密文对象及相同内容不同显式链接保留测试；20+8=28项全部成功（36s）。添加大PDF实际采样Java/native/PSS观察器，不把算法bound当内存峰值。首轮dcb8beb API26/29/35/Android还在运行，暂不推送以避免取消；待完成后纳入验证后的R15主线并推送下一批。生产不变，PR25已合并、主线Android仍待，其余JVM/设备/Science成功。
+
+> MED-02A原型阶段（2026-10-14）：JVM加密19/恢复模型7全部通过，无新增skip；Android POC包修正PdfDocument显式关闭后编译成功46s。独立test-only模块、ProxyFD/PdfRenderer/图片/真实synthetic Keystore与live-import force-stop脚本已实现，API26/29/35实测尚待新HEAD CI，不称可行/验收完成。scope32a1681完整CI成功；R15 PR25已合并c3bf2cbc（集成c97d9c6 push/PR全绿），主线38527627941/38527627946仍待完整结果，再纳入本分支最终回归。设计31仅待审批，不实施Room10/完整医疗备份，不交付APK/自合并/改生产数据或build26。
+
+> MED-02A启动（2026-10-14）：MED01 PR26已合并051ee22，主线Android38524575273三任务与Science38524575321 gate/deep全部success。独立feature/med02a-attachment-poc-20261014从此已验证HEAD建立；PR25用户已授权合并，R15分支c97d9c6保留两套功能/测试解决冲突，新CI38525995026/38525995037及38525991389/38525991267正在核验，尚未合并。POC只合成数据、独立模块及测试依赖，不接生产APK；完成后需纳入R15验证主线。尚无加密/预览实测，不称完成，不改Schema/PNBAK1/PK/版本/签名/真实数据/build26。
+
 > 2026-10-14：用户明确授权合并PR25。R15分支合入MED-01主线051ee22，保留两套四语、仓库/刷新/UI合同与外部重启脚本；仅解决共享插入位置冲突，不覆盖功能。合并前本地目标回归及新HEAD完整CI待完成；之后才合并PR25、等待主线成功，再开始MED-02A POC。无Schema/PK/版本/签名/PNBAK1变化。
 
 > R-15代码完整验收通过：ebd02da Android38484766169/JVM/API35全部success；JVM194/data142/rem17/app813零失败（61原skip），API35 data48/app141零失败（8原skip且独立脚本实际通过），新data33/UI四语24/新PID全部过。lint0错误178既有警告，unsignedRelease及来源保护通过。报告27/机器摘要已更新；独立PR最终验收文档HEAD自身push/PR全CI成功后才交还，精确SHA/链接固定PR正文。三类历史安全限制见报告，不合并/签名/交付APK，build26不变。

@@ -79,4 +79,7 @@ dependencies {
     androidTestCompileOnly(libs.room.runtime); androidTestCompileOnly(libs.sqlite)
     androidTestImplementation(libs.android.test.runner); androidTestImplementation(libs.android.test.core); androidTestImplementation(libs.junit4)
     androidTestImplementation(platform(libs.compose.bom)); androidTestImplementation(libs.compose.ui.test)
+    // MED-02A synthetic POC: excluded from main/debug/release runtime dependencies.
+    androidTestImplementation(project(":attachment-poc"))
 }
+android.sourceSets.getByName("androidTest").java.srcDir("../tools/attachment-poc/src/contractTest/kotlin")

@@ -123,3 +123,6 @@ PR #19 描述称 M1 研究核来自 P2-AZ（#17 的内容），而 #17/#18 本�
 
 - [28 MED-01医疗档案审计与A验收](28-med01-medical-records.md)
 - [29 MED-01B安全附件库设计（待批准）](29-med01b-encrypted-attachments-design.md)
+
+- [30 — MED-02A合成附件安全POC](30-med02a-attachment-poc.md)（进行中、非产品上线）
+- [31 — MED-02B最小实施方案与审批](31-med02b-minimum-implementation-plan.md)（DESIGN_ONLY）

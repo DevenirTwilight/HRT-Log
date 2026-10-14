@@ -1,0 +1,278 @@
+[
+  {
+    "artifact_id": 11878375202,
+    "sha256": "a26801428af1906c2039a65791c9526ddf5fbf799d3f72f0bb77eca8f9c289ae",
+    "run": 38530237063,
+    "head": "6521173330de1277090bbdc43095ce73c4fddd1b",
+    "evidence": {
+      "scope": "SYNTHETIC_POC_NOT_PRODUCT_ACCEPTANCE",
+      "api": 26,
+      "device": "Android SDK built for x86_64",
+      "abi": "x86_64",
+      "observations": [
+        {
+          "kind": "image",
+          "api": 26,
+          "mime": "image/jpeg",
+          "bytes": 12576,
+          "bitmap_bytes": 524288,
+          "elapsed_ms": 7
+        },
+        {
+          "kind": "image",
+          "api": 26,
+          "mime": "image/png",
+          "bytes": 10706,
+          "bitmap_bytes": 524288,
+          "elapsed_ms": 25
+        },
+        {
+          "kind": "image",
+          "api": 26,
+          "mime": "image/webp",
+          "bytes": 3814,
+          "bitmap_bytes": 524288,
+          "elapsed_ms": 9
+        },
+        {
+          "kind": "pdf",
+          "api": 26,
+          "reads": 34,
+          "scratch_bound": 3088
+        },
+        {
+          "kind": "pdf",
+          "api": 26,
+          "reads": 34,
+          "scratch_bound": 3088
+        },
+        {
+          "kind": "pdf",
+          "elapsed_ms": 110,
+          "pss_before_kib": 108109,
+          "pss_after_kib": 120109
+        },
+        {
+          "kind": "large_pdf",
+          "api": 26,
+          "cipher_bytes": 4196472,
+          "bitmap_bytes": 1572864,
+          "reads": 165,
+          "scratch_bound": 196624,
+          "elapsed_ms": 308,
+          "pss_before_kib": 119821,
+          "pss_after_kib": 121843
+        },
+        {
+          "kind": "large_pdf",
+          "api": 26,
+          "sampled_java_max_bytes": 22191544,
+          "sampled_native_max_bytes": 14122008,
+          "sampled_pss_max_kib": 139451,
+          "memory_samples": 10
+        },
+        {
+          "kind": "restart",
+          "api": 26,
+          "fresh_pid": 0,
+          "partial_count": 1,
+          "old_object_retained": 1,
+          "plaintext_pdf_files": 0
+        },
+        {
+          "kind": "restart",
+          "api": 26,
+          "fresh_pid": 1,
+          "partial_count": 1,
+          "old_object_retained": 1,
+          "plaintext_pdf_files": 0
+        }
+      ],
+      "limits": "scratch_bound is an algorithm bound; PSS before/after is observed process memory, not peak. No physical ARM benchmark."
+    }
+  },
+  {
+    "artifact_id": 11878355261,
+    "sha256": "b34db7f32656ea7405f91968c2b7fecab695a1bc1e538f2964fd2d301bcd5915",
+    "run": 38530237063,
+    "head": "6521173330de1277090bbdc43095ce73c4fddd1b",
+    "evidence": {
+      "scope": "SYNTHETIC_POC_NOT_PRODUCT_ACCEPTANCE",
+      "api": 29,
+      "device": "Android SDK built for x86_64",
+      "abi": "x86_64",
+      "observations": [
+        {
+          "kind": "image",
+          "api": 29,
+          "mime": "image/jpeg",
+          "bytes": 13130,
+          "bitmap_bytes": 524288,
+          "elapsed_ms": 4
+        },
+        {
+          "kind": "image",
+          "api": 29,
+          "mime": "image/png",
+          "bytes": 10719,
+          "bitmap_bytes": 524288,
+          "elapsed_ms": 20
+        },
+        {
+          "kind": "image",
+          "api": 29,
+          "mime": "image/webp",
+          "bytes": 4376,
+          "bitmap_bytes": 524288,
+          "elapsed_ms": 7
+        },
+        {
+          "kind": "pdf",
+          "api": 29,
+          "reads": 364,
+          "scratch_bound": 3088
+        },
+        {
+          "kind": "pdf",
+          "api": 29,
+          "reads": 364,
+          "scratch_bound": 3088
+        },
+        {
+          "kind": "pdf",
+          "elapsed_ms": 246,
+          "pss_before_kib": 193942,
+          "pss_after_kib": 197326
+        },
+        {
+          "kind": "large_pdf",
+          "api": 29,
+          "cipher_bytes": 4196472,
+          "bitmap_bytes": 1572864,
+          "reads": 165,
+          "scratch_bound": 196624,
+          "elapsed_ms": 179,
+          "pss_before_kib": 194982,
+          "pss_after_kib": 205903
+        },
+        {
+          "kind": "large_pdf",
+          "api": 29,
+          "sampled_java_max_bytes": 8443272,
+          "sampled_native_max_bytes": 10077616,
+          "sampled_pss_max_kib": 205899,
+          "memory_samples": 10
+        },
+        {
+          "kind": "restart",
+          "api": 29,
+          "fresh_pid": 0,
+          "partial_count": 1,
+          "old_object_retained": 1,
+          "plaintext_pdf_files": 0
+        },
+        {
+          "kind": "restart",
+          "api": 29,
+          "fresh_pid": 1,
+          "partial_count": 1,
+          "old_object_retained": 1,
+          "plaintext_pdf_files": 0
+        }
+      ],
+      "limits": "scratch_bound is an algorithm bound; PSS before/after is observed process memory, not peak. No physical ARM benchmark."
+    }
+  },
+  {
+    "artifact_id": 11878516424,
+    "sha256": "2968bea731a331ff1d99939df28ad10f8e6515ac27a0f4c6d4f776f97ad8186d",
+    "run": 38530237063,
+    "head": "6521173330de1277090bbdc43095ce73c4fddd1b",
+    "evidence": {
+      "scope": "SYNTHETIC_POC_NOT_PRODUCT_ACCEPTANCE",
+      "api": 35,
+      "device": "Android SDK built for x86_64",
+      "abi": "x86_64",
+      "observations": [
+        {
+          "kind": "image",
+          "api": 35,
+          "mime": "image/jpeg",
+          "bytes": 13050,
+          "bitmap_bytes": 524288,
+          "elapsed_ms": 6
+        },
+        {
+          "kind": "image",
+          "api": 35,
+          "mime": "image/png",
+          "bytes": 10719,
+          "bitmap_bytes": 524288,
+          "elapsed_ms": 21
+        },
+        {
+          "kind": "image",
+          "api": 35,
+          "mime": "image/webp",
+          "bytes": 4296,
+          "bitmap_bytes": 524288,
+          "elapsed_ms": 8
+        },
+        {
+          "kind": "pdf",
+          "api": 35,
+          "reads": 24,
+          "scratch_bound": 3088
+        },
+        {
+          "kind": "pdf",
+          "api": 35,
+          "reads": 24,
+          "scratch_bound": 3088
+        },
+        {
+          "kind": "pdf",
+          "elapsed_ms": 108,
+          "pss_before_kib": 191829,
+          "pss_after_kib": 197487
+        },
+        {
+          "kind": "large_pdf",
+          "api": 35,
+          "cipher_bytes": 4196472,
+          "bitmap_bytes": 1572864,
+          "reads": 165,
+          "scratch_bound": 196624,
+          "elapsed_ms": 182,
+          "pss_before_kib": 197543,
+          "pss_after_kib": 205924
+        },
+        {
+          "kind": "large_pdf",
+          "api": 35,
+          "sampled_java_max_bytes": 8417376,
+          "sampled_native_max_bytes": 12618656,
+          "sampled_pss_max_kib": 199704,
+          "memory_samples": 9
+        },
+        {
+          "kind": "restart",
+          "api": 35,
+          "fresh_pid": 0,
+          "partial_count": 1,
+          "old_object_retained": 1,
+          "plaintext_pdf_files": 0
+        },
+        {
+          "kind": "restart",
+          "api": 35,
+          "fresh_pid": 1,
+          "partial_count": 1,
+          "old_object_retained": 1,
+          "plaintext_pdf_files": 0
+        }
+      ],
+      "limits": "scratch_bound is an algorithm bound; PSS before/after is observed process memory, not peak. No physical ARM benchmark."
+    }
+  }
+]

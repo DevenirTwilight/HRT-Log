@@ -1,0 +1,199 @@
+{
+  "scope": "POC_COMPLETE_NOT_PRODUCTION_NOT_SECURITY_CERTIFICATION",
+  "observed_at": "2026-10-14T08:08:56.825148+00:00",
+  "code_head": "6521173330de1277090bbdc43095ce73c4fddd1b",
+  "baseline": "c3bf2cbce6663167814aa48a0e8e9e1300adb2e4",
+  "pr": 27,
+  "code_ci": [
+    {
+      "id": 38530335526,
+      "name": "Science validation",
+      "event": "pull_request",
+      "head_sha": "6521173330de1277090bbdc43095ce73c4fddd1b",
+      "head_branch": "feature/med02a-attachment-poc-20261014",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38530335526",
+      "jobs": [
+        {
+          "id": 115740436720,
+          "name": "science-change-gate",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 115740497567,
+          "name": "research-deep",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 38530335636,
+      "name": "Android and domain checks",
+      "event": "pull_request",
+      "head_sha": "6521173330de1277090bbdc43095ce73c4fddd1b",
+      "head_branch": "feature/med02a-attachment-poc-20261014",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 2,
+      "html_url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38530335636",
+      "jobs": [
+        {
+          "id": 115745521393,
+          "name": "attachment-poc-compatibility (29)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 115745523512,
+          "name": "jvm",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 115745523662,
+          "name": "device-tests",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 115745561739,
+          "name": "attachment-poc-compatibility (26)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 115745564481,
+          "name": "android",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 38530237210,
+      "name": "Science validation",
+      "event": "push",
+      "head_sha": "6521173330de1277090bbdc43095ce73c4fddd1b",
+      "head_branch": "feature/med02a-attachment-poc-20261014",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38530237210",
+      "jobs": [
+        {
+          "id": 115740107101,
+          "name": "science-change-gate",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 115740167724,
+          "name": "research-deep",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 38530237063,
+      "name": "Android and domain checks",
+      "event": "push",
+      "head_sha": "6521173330de1277090bbdc43095ce73c4fddd1b",
+      "head_branch": "feature/med02a-attachment-poc-20261014",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38530237063",
+      "jobs": [
+        {
+          "id": 115740107593,
+          "name": "android",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 115740107835,
+          "name": "device-tests",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 115740107868,
+          "name": "attachment-poc-compatibility (26)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 115740107959,
+          "name": "jvm",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 115740108015,
+          "name": "attachment-poc-compatibility (29)",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "local_results": {
+    "jvm_existing": 194,
+    "poc_jvm": 28,
+    "data": 160,
+    "reminder": 17,
+    "app": 865,
+    "app_existing_skips": 61,
+    "lint_errors": 0,
+    "lint_existing_warnings": 178,
+    "new_skips": 0,
+    "python_scripts": 35,
+    "local_full_android_duration": "21m56s",
+    "local_full_jvm_duration": "2m26s",
+    "debug_and_test_apks": "success",
+    "poc_absent_from_main_debug_dex": true,
+    "poc_present_only_in_test_dex": true
+  },
+  "api_results": {
+    "26": {
+      "poc_tests": 30,
+      "failed": 0,
+      "skipped": 0
+    },
+    "29": {
+      "poc_tests": 30,
+      "failed": 0,
+      "skipped": 0
+    },
+    "35": {
+      "poc_tests": 30,
+      "data_tests": 66,
+      "app_tests": 212,
+      "failed": 0,
+      "existing_app_skips": 8,
+      "old_conditional_restart_flows_externally_executed": true
+    }
+  },
+  "science": {
+    "tests": 261,
+    "archived_records": 225,
+    "deep_executed": true
+  },
+  "limitations": [
+    "Physical ARM/real low-memory phone NOT_RUN",
+    "Independent cryptographic/security review NOT_RUN",
+    "Production AppLock viewer integration NOT_IMPLEMENTED",
+    "Room10 migration NOT_IMPLEMENTED",
+    "Full medical backup format NOT_IMPLEMENTED",
+    "Actual disk exhaustion NOT_RUN; deterministic ENOSPC seam used",
+    "Real power-loss persistence NOT_RUN; live force-stop actually executed",
+    "No absolute instantaneous/native/kernel RAM-erasure guarantee",
+    "100 encrypted objects and1000 metadata rows tested;256MiB whole-vault workload NOT_RUN"
+  ],
+  "final_report_head": "Exact report commit and own CI recorded in PR27 body after successful checks; avoids self-referential hash"
+}
