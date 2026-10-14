@@ -1,0 +1,773 @@
+{
+  "code_sha": "00cb4cf89671f06c432fa52323e31022498a6fbf",
+  "pr": 31,
+  "parent_pr": 30,
+  "parent_sha": "814d355c60396a9246ab6883ea70d3ccf67438cc",
+  "ci": [
+    {
+      "id": 38625636512,
+      "name": "Android and domain checks",
+      "event": "pull_request",
+      "head_sha": "00cb4cf89671f06c432fa52323e31022498a6fbf",
+      "head_branch": "feature/med02b3-b2-security-gate-20261014",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38625636512",
+      "jobs": [
+        {
+          "id": 116063949129,
+          "name": "android",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 116063949387,
+          "name": "attachment-poc-compatibility (29)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 116063949594,
+          "name": "jvm",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 116063949624,
+          "name": "device-tests",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 116063949878,
+          "name": "attachment-poc-compatibility (26)",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 38625636623,
+      "name": "Science validation",
+      "event": "pull_request",
+      "head_sha": "00cb4cf89671f06c432fa52323e31022498a6fbf",
+      "head_branch": "feature/med02b3-b2-security-gate-20261014",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38625636623",
+      "jobs": [
+        {
+          "id": 116063948818,
+          "name": "science-change-gate",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 116064010450,
+          "name": "research-deep",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 38625628282,
+      "name": "Android and domain checks",
+      "event": "push",
+      "head_sha": "00cb4cf89671f06c432fa52323e31022498a6fbf",
+      "head_branch": "feature/med02b3-b2-security-gate-20261014",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38625628282",
+      "jobs": [
+        {
+          "id": 116063923659,
+          "name": "device-tests",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 116063923769,
+          "name": "attachment-poc-compatibility (29)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 116063923833,
+          "name": "jvm",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 116063923864,
+          "name": "attachment-poc-compatibility (26)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 116063924029,
+          "name": "android",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 38625628466,
+      "name": "Science validation",
+      "event": "push",
+      "head_sha": "00cb4cf89671f06c432fa52323e31022498a6fbf",
+      "head_branch": "feature/med02b3-b2-security-gate-20261014",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38625628466",
+      "jobs": [
+        {
+          "id": 116063923622,
+          "name": "science-change-gate",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 116063988796,
+          "name": "research-deep",
+          "status": "completed",
+          "conclusion": "skipped"
+        }
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "scope": 26,
+      "artifact_id": 11924268467,
+      "zip_sha256": "1bac8250d9225f234c7dfae99980ded77b91f7dc85fb437efedcc74bd8ec514a",
+      "reports": {
+        "core/data/build/reports/androidTests/connected/debug/index.html": {
+          "tests": 43,
+          "failures": 0,
+          "skipped": 0
+        },
+        "app/build/reports/androidTests/connected/debug/flavors/full/index.html": {
+          "tests": 67,
+          "failures": 0,
+          "skipped": 0
+        }
+      },
+      "red_green": {
+        "scope": "test-only deliberate unsafe cleanup control; no production defect claimed",
+        "red": "expected one failure",
+        "green": "OK (1 test)"
+      },
+      "fresh_pid_restarts": [
+        {
+          "previous_pid": 3645,
+          "fresh_pid": 3695,
+          "fresh_process_asserted": true,
+          "api": 26,
+          "abi": "x86_64",
+          "seam": "AFTER_COMMIT",
+          "revision": 2,
+          "reconcile": {
+            "71407236-2abd-41f3-b965-1953209f2a9b": "KEEP_ACTIVE",
+            "8c0d6f4e-2471-46d7-b026-a3a732c26cd8": "QUARANTINE_COMPLETE_ORPHAN"
+          },
+          "production_enabled": 0
+        },
+        {
+          "previous_pid": 3541,
+          "fresh_pid": 3592,
+          "fresh_process_asserted": true,
+          "api": 26,
+          "abi": "x86_64",
+          "seam": "IN_COMMIT",
+          "revision": 1,
+          "reconcile": {
+            "9d090b55-3064-4ef8-a33a-c3008c66bd14": "KEEP_ACTIVE",
+            "b21381e2-043d-4830-9553-52f7cfeab72c": "QUARANTINE_COMPLETE_ORPHAN"
+          },
+          "production_enabled": 0
+        },
+        {
+          "previous_pid": 3440,
+          "fresh_pid": 3489,
+          "fresh_process_asserted": true,
+          "api": 26,
+          "abi": "x86_64",
+          "seam": "WRITE",
+          "revision": 1,
+          "reconcile": {
+            "a79601b3-09ac-47d1-aeec-be6c82727530": "CLEANED_OWNED_INCOMPLETE",
+            "c8f31ebe-7a65-4217-aad7-abf5903e4016": "KEEP_ACTIVE"
+          },
+          "production_enabled": 0
+        }
+      ],
+      "final_memory_samples": [
+        {
+          "method": "idempotencyReservationAndRetriesHaveFreshCryptographicIdentities",
+          "api": 26,
+          "elapsed_ms": 650,
+          "final_pss_kib": 39215,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "replacingAuthenticatedLeafWithValidOldCipherCannotCommitOrDeleteReplacement",
+          "api": 26,
+          "elapsed_ms": 1373,
+          "final_pss_kib": 38703,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "exclusiveCreateAndNoFollowNeverOverwriteExistingOrSymlinkTargets",
+          "api": 26,
+          "elapsed_ms": 411,
+          "final_pss_kib": 38448,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "cleanupFailureReconcilesOnlyOwnedFileAndGcRespectsLease",
+          "api": 26,
+          "elapsed_ms": 1586,
+          "final_pss_kib": 38854,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "postCommitAckLossRetainsDurableActiveAndDoesNotRepeatCas",
+          "api": 26,
+          "elapsed_ms": 1545,
+          "final_pss_kib": 77109,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "revokedBeforeCommitCannotPublishAndReadDeliveryIsRevoked",
+          "api": 26,
+          "elapsed_ms": 1526,
+          "final_pss_kib": 38397,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "nativeEmptyOneAndSegmentBoundariesAndCipherOverheadReservation",
+          "api": 26,
+          "elapsed_ms": 1601,
+          "final_pss_kib": 38409,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "foreignSessionCannotCommitIntoOtherSqlCipherDataset",
+          "api": 26,
+          "elapsed_ms": 1012,
+          "final_pss_kib": 40669,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "stagingActiveRolesAndCrossObjectWrappedKeysCannotBeSubstituted",
+          "api": 26,
+          "elapsed_ms": 856,
+          "final_pss_kib": 37961,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "allPrecommitFaultsLeaveOldCurrentAndRealSqlRollback",
+          "api": 26,
+          "elapsed_ms": 4339,
+          "final_pss_kib": 39256,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "twoRealSqlWritersOneCasWinner",
+          "api": 26,
+          "elapsed_ms": 1948,
+          "final_pss_kib": 40116,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "realReadLimitStalledSourceAndCancelledOwnerNeverCommit",
+          "api": 26,
+          "elapsed_ms": 52497,
+          "final_pss_kib": 39142,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "inCommitRevokeWaitsForEntireNativeCommit",
+          "api": 26,
+          "elapsed_ms": 905,
+          "final_pss_kib": 37834,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "parentReplacementCannotDeleteForeignCipherOnFailure",
+          "api": 26,
+          "elapsed_ms": 1053,
+          "final_pss_kib": 38722,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "postCommitAckLossRetainsDurableActiveAndDoesNotRepeatCas",
+          "api": 26,
+          "elapsed_ms": 1747,
+          "final_pss_kib": 32909,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "postCommitAckLossRetainsDurableActiveAndDoesNotRepeatCas",
+          "api": 26,
+          "elapsed_ms": 1756,
+          "final_pss_kib": 32235,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        }
+      ]
+    },
+    {
+      "scope": 29,
+      "artifact_id": 11924421378,
+      "zip_sha256": "f4ef2003771becab0afcaad67ac7086fb29da7f0a67d1a78f8a7b59a0d76610c",
+      "reports": {
+        "core/data/build/reports/androidTests/connected/debug/index.html": {
+          "tests": 43,
+          "failures": 0,
+          "skipped": 0
+        },
+        "app/build/reports/androidTests/connected/debug/flavors/full/index.html": {
+          "tests": 67,
+          "failures": 0,
+          "skipped": 0
+        }
+      },
+      "red_green": {
+        "scope": "test-only deliberate unsafe cleanup control; no production defect claimed",
+        "red": "expected one failure",
+        "green": "OK (1 test)"
+      },
+      "fresh_pid_restarts": [
+        {
+          "previous_pid": 5227,
+          "fresh_pid": 5322,
+          "fresh_process_asserted": true,
+          "api": 29,
+          "abi": "x86_64",
+          "seam": "AFTER_COMMIT",
+          "revision": 2,
+          "reconcile": {
+            "250be2c7-1a34-41d2-8d50-ef4930c3007a": "KEEP_ACTIVE",
+            "607ae3e8-723e-4bc1-ac33-b93594c2332c": "QUARANTINE_COMPLETE_ORPHAN"
+          },
+          "production_enabled": 0
+        },
+        {
+          "previous_pid": 5065,
+          "fresh_pid": 5161,
+          "fresh_process_asserted": true,
+          "api": 29,
+          "abi": "x86_64",
+          "seam": "IN_COMMIT",
+          "revision": 1,
+          "reconcile": {
+            "55bc6373-6e82-4eb5-a559-114ea0cbf152": "QUARANTINE_COMPLETE_ORPHAN",
+            "f3267b51-bf90-4cae-a2d0-e5b38698fefd": "KEEP_ACTIVE"
+          },
+          "production_enabled": 0
+        },
+        {
+          "previous_pid": 4911,
+          "fresh_pid": 4999,
+          "fresh_process_asserted": true,
+          "api": 29,
+          "abi": "x86_64",
+          "seam": "WRITE",
+          "revision": 1,
+          "reconcile": {
+            "1d8df3c7-6797-40ab-b38b-21a2c1e75cae": "KEEP_ACTIVE",
+            "e2c9dc45-a8eb-4f12-91fd-9a957bc1c988": "CLEANED_OWNED_INCOMPLETE"
+          },
+          "production_enabled": 0
+        }
+      ],
+      "final_memory_samples": [
+        {
+          "method": "idempotencyReservationAndRetriesHaveFreshCryptographicIdentities",
+          "api": 29,
+          "elapsed_ms": 299,
+          "final_pss_kib": 90728,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "replacingAuthenticatedLeafWithValidOldCipherCannotCommitOrDeleteReplacement",
+          "api": 29,
+          "elapsed_ms": 1046,
+          "final_pss_kib": 57760,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "exclusiveCreateAndNoFollowNeverOverwriteExistingOrSymlinkTargets",
+          "api": 29,
+          "elapsed_ms": 476,
+          "final_pss_kib": 57987,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "cleanupFailureReconcilesOnlyOwnedFileAndGcRespectsLease",
+          "api": 29,
+          "elapsed_ms": 1050,
+          "final_pss_kib": 56125,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "postCommitAckLossRetainsDurableActiveAndDoesNotRepeatCas",
+          "api": 29,
+          "elapsed_ms": 994,
+          "final_pss_kib": 94057,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "revokedBeforeCommitCannotPublishAndReadDeliveryIsRevoked",
+          "api": 29,
+          "elapsed_ms": 1008,
+          "final_pss_kib": 93324,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "nativeEmptyOneAndSegmentBoundariesAndCipherOverheadReservation",
+          "api": 29,
+          "elapsed_ms": 1076,
+          "final_pss_kib": 56536,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "foreignSessionCannotCommitIntoOtherSqlCipherDataset",
+          "api": 29,
+          "elapsed_ms": 700,
+          "final_pss_kib": 58632,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "stagingActiveRolesAndCrossObjectWrappedKeysCannotBeSubstituted",
+          "api": 29,
+          "elapsed_ms": 727,
+          "final_pss_kib": 57452,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "allPrecommitFaultsLeaveOldCurrentAndRealSqlRollback",
+          "api": 29,
+          "elapsed_ms": 2693,
+          "final_pss_kib": 56008,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "twoRealSqlWritersOneCasWinner",
+          "api": 29,
+          "elapsed_ms": 1117,
+          "final_pss_kib": 56308,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "realReadLimitStalledSourceAndCancelledOwnerNeverCommit",
+          "api": 29,
+          "elapsed_ms": 30710,
+          "final_pss_kib": 55936,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "inCommitRevokeWaitsForEntireNativeCommit",
+          "api": 29,
+          "elapsed_ms": 633,
+          "final_pss_kib": 56308,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "parentReplacementCannotDeleteForeignCipherOnFailure",
+          "api": 29,
+          "elapsed_ms": 718,
+          "final_pss_kib": 56472,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "postCommitAckLossRetainsDurableActiveAndDoesNotRepeatCas",
+          "api": 29,
+          "elapsed_ms": 1113,
+          "final_pss_kib": 90424,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "postCommitAckLossRetainsDurableActiveAndDoesNotRepeatCas",
+          "api": 29,
+          "elapsed_ms": 1116,
+          "final_pss_kib": 93044,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        }
+      ]
+    },
+    {
+      "scope": 35,
+      "artifact_id": 11923514799,
+      "zip_sha256": "ca0d929aaa7ddf1771c7d90f682239a5f30376c39017aa3ca117b3c448dbc3e3",
+      "reports": {
+        "core/data/build/reports/androidTests/connected/debug/index.html": {
+          "tests": 110,
+          "failures": 0,
+          "skipped": 0
+        },
+        "app/build/reports/androidTests/connected/debug/flavors/full/index.html": {
+          "tests": 249,
+          "failures": 0,
+          "skipped": 8
+        }
+      },
+      "red_green": {
+        "scope": "test-only deliberate unsafe cleanup control; no production defect claimed",
+        "red": "expected one failure",
+        "green": "OK (1 test)"
+      },
+      "fresh_pid_restarts": [
+        {
+          "previous_pid": 2801,
+          "fresh_pid": 2852,
+          "fresh_process_asserted": true,
+          "api": 35,
+          "abi": "x86_64",
+          "seam": "AFTER_COMMIT",
+          "revision": 2,
+          "reconcile": {
+            "b2738377-9d21-41f3-8316-bfe08d6c1f3d": "QUARANTINE_COMPLETE_ORPHAN",
+            "fd50c724-4b84-4a36-816c-52e48021c0b7": "KEEP_ACTIVE"
+          },
+          "production_enabled": 0
+        },
+        {
+          "previous_pid": 2707,
+          "fresh_pid": 2757,
+          "fresh_process_asserted": true,
+          "api": 35,
+          "abi": "x86_64",
+          "seam": "IN_COMMIT",
+          "revision": 1,
+          "reconcile": {
+            "693d00bf-76c6-4175-85bf-8e7c46e791bf": "KEEP_ACTIVE",
+            "ae194640-843f-4f32-b0b6-bec0c7ca3dc2": "QUARANTINE_COMPLETE_ORPHAN"
+          },
+          "production_enabled": 0
+        },
+        {
+          "previous_pid": 2614,
+          "fresh_pid": 2661,
+          "fresh_process_asserted": true,
+          "api": 35,
+          "abi": "x86_64",
+          "seam": "WRITE",
+          "revision": 1,
+          "reconcile": {
+            "697ba4e2-d395-43b7-b835-23aefb7e7e57": "CLEANED_OWNED_INCOMPLETE",
+            "cbeb846f-a2de-4d47-9a05-ed91a6237bc1": "KEEP_ACTIVE"
+          },
+          "production_enabled": 0
+        }
+      ],
+      "final_memory_samples": [
+        {
+          "method": "idempotencyReservationAndRetriesHaveFreshCryptographicIdentities",
+          "api": 35,
+          "elapsed_ms": 588,
+          "final_pss_kib": 112991,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "replacingAuthenticatedLeafWithValidOldCipherCannotCommitOrDeleteReplacement",
+          "api": 35,
+          "elapsed_ms": 1572,
+          "final_pss_kib": 66492,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "exclusiveCreateAndNoFollowNeverOverwriteExistingOrSymlinkTargets",
+          "api": 35,
+          "elapsed_ms": 573,
+          "final_pss_kib": 67600,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "cleanupFailureReconcilesOnlyOwnedFileAndGcRespectsLease",
+          "api": 35,
+          "elapsed_ms": 1617,
+          "final_pss_kib": 64836,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "postCommitAckLossRetainsDurableActiveAndDoesNotRepeatCas",
+          "api": 35,
+          "elapsed_ms": 1548,
+          "final_pss_kib": 101724,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "revokedBeforeCommitCannotPublishAndReadDeliveryIsRevoked",
+          "api": 35,
+          "elapsed_ms": 1559,
+          "final_pss_kib": 105056,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "nativeEmptyOneAndSegmentBoundariesAndCipherOverheadReservation",
+          "api": 35,
+          "elapsed_ms": 1564,
+          "final_pss_kib": 111544,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "foreignSessionCannotCommitIntoOtherSqlCipherDataset",
+          "api": 35,
+          "elapsed_ms": 675,
+          "final_pss_kib": 65448,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "stagingActiveRolesAndCrossObjectWrappedKeysCannotBeSubstituted",
+          "api": 35,
+          "elapsed_ms": 1065,
+          "final_pss_kib": 67392,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "allPrecommitFaultsLeaveOldCurrentAndRealSqlRollback",
+          "api": 35,
+          "elapsed_ms": 4494,
+          "final_pss_kib": 67444,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "twoRealSqlWritersOneCasWinner",
+          "api": 35,
+          "elapsed_ms": 1754,
+          "final_pss_kib": 67008,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "realReadLimitStalledSourceAndCancelledOwnerNeverCommit",
+          "api": 35,
+          "elapsed_ms": 56806,
+          "final_pss_kib": 62351,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "inCommitRevokeWaitsForEntireNativeCommit",
+          "api": 35,
+          "elapsed_ms": 910,
+          "final_pss_kib": 64259,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "parentReplacementCannotDeleteForeignCipherOnFailure",
+          "api": 35,
+          "elapsed_ms": 803,
+          "final_pss_kib": 66267,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "postCommitAckLossRetainsDurableActiveAndDoesNotRepeatCas",
+          "api": 35,
+          "elapsed_ms": 1667,
+          "final_pss_kib": 55659,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        },
+        {
+          "method": "postCommitAckLossRetainsDurableActiveAndDoesNotRepeatCas",
+          "api": 35,
+          "elapsed_ms": 1646,
+          "final_pss_kib": 56073,
+          "scope": "fixture final sample, not peak or ARM benchmark"
+        }
+      ]
+    },
+    {
+      "scope": "android",
+      "artifact_id": 11924886205,
+      "zip_sha256": "4a37fb023ec409cecec08724423f5fbb76ffa0e2b5e7560997a96949bc8e7fe3",
+      "reports": {
+        "app/build/reports/tests/testFullDebugUnitTest/index.html": {
+          "tests": 865,
+          "failures": 0,
+          "skipped": 61
+        },
+        "core/data/build/reports/tests/testDebugUnitTest/index.html": {
+          "tests": 180,
+          "failures": 0,
+          "skipped": 0
+        },
+        "core/reminder/build/reports/tests/testDebugUnitTest/index.html": {
+          "tests": 17,
+          "failures": 0,
+          "skipped": 0
+        }
+      }
+    },
+    {
+      "scope": "jvm",
+      "artifact_id": 11923717738,
+      "zip_sha256": "a8f60bf1ff0493a29b5b828854a7fbd962b03fa559a8ad8141445684ad59cba2",
+      "reports": {},
+      "jvm": {
+        "core/domain": {
+          "tests": 63,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "pk-engine": {
+          "tests": 124,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "importer": {
+          "tests": 12,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "tools/attachment-poc": {
+          "tests": 62,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    }
+  ],
+  "production_file_diff": [],
+  "changed_files": [
+    ".github/workflows/android.yml",
+    "app/src/androidTest/java/net/plainnotes/app/attachmentpoc/EncryptedTinkPdfGate2.kt",
+    "app/src/androidTest/java/net/plainnotes/app/attachmentpoc/TinkPdfGate2AndroidTest.kt",
+    "core/data/build.gradle.kts",
+    "core/data/src/androidTest/AndroidManifest.xml",
+    "core/data/src/androidTest/java/net/plainnotes/app/data/gate2/Gate2ContextAndroidTest.kt",
+    "core/data/src/androidTest/java/net/plainnotes/app/data/gate2/Gate2EmulatorGuard.java",
+    "core/data/src/androidTest/java/net/plainnotes/app/data/gate2/Gate2RestartAndroidTest.kt",
+    "core/data/src/androidTest/java/net/plainnotes/app/data/gate2/Gate2SafAndroidTest.kt",
+    "core/data/src/androidTest/java/net/plainnotes/app/data/gate2/Gate2Store.kt",
+    "core/data/src/androidTest/java/net/plainnotes/app/data/gate2/Gate2StoreAndroidTest.kt",
+    "core/data/src/androidTest/java/net/plainnotes/app/data/gate2/Gate2StreamProvider.java",
+    "docs/HANDOFF.md",
+    "docs/REQUIREMENTS.md",
+    "docs/STATUS.md",
+    "docs/audits/product-quality-2026-10/43-med02b3-baseline.json",
+    "docs/audits/product-quality-2026-10/43-med02b3-baseline.md",
+    "docs/audits/product-quality-2026-10/44-med02b3-crypto-decision-and-external-review.md",
+    "docs/audits/product-quality-2026-10/45-med02b3-risk-and-production-approval.md",
+    "docs/audits/product-quality-2026-10/46-med02b3-first-device-evidence.json",
+    "docs/audits/product-quality-2026-10/46-med02b3-verification.md",
+    "docs/audits/product-quality-2026-10/sources/med02b3/execution-task.md",
+    "docs/audits/product-quality-2026-10/sources/med02b3/source-manifest.json",
+    "scripts/check_attachment_release_isolation.py",
+    "scripts/run_attachment_gate2_red.py",
+    "scripts/run_attachment_gate2_restart.py",
+    "tools/attachment-design-validation/gate2-context-vector.json",
+    "tools/attachment-poc/src/contractTest/kotlin/net/plainnotes/poc/Gate2Context.kt",
+    "tools/attachment-poc/src/contractTest/kotlin/net/plainnotes/poc/Gate2ContextContract.kt",
+    "tools/attachment-poc/src/test/kotlin/net/plainnotes/poc/Gate2ContextTest.kt"
+  ]
+}

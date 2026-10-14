@@ -1,0 +1,87 @@
+{
+  "queried_utc": "2026-10-14T19:00:32.067119+00:00",
+  "default": "claude/new-session-1959qb",
+  "main_sha": "cfe600eeb6efcca60668763a31969af07a2892b9",
+  "parent_pr": 30,
+  "parent_state": "open",
+  "parent_merged": false,
+  "parent_head": "814d355c60396a9246ab6883ea70d3ccf67438cc",
+  "parent_branch": "feature/med02b2-v2-import-gate",
+  "parent_base": "claude/new-session-1959qb",
+  "runs": [
+    {
+      "id": 38611467149,
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38611467149"
+    },
+    {
+      "id": 38611467054,
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38611467054"
+    },
+    {
+      "id": 38611458836,
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38611458836"
+    },
+    {
+      "id": 38611459048,
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38611459048"
+    }
+  ],
+  "parent_input_files": [
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/AttachmentSchema.kt",
+      "sha256": "0bb46ca007c4975780f95bd17021ddff39fbde15d4a478966ad00f5238f97162"
+    },
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/AttachmentOperations.kt",
+      "sha256": "e78ded0a19e4d9c12aac4417311d3722ad3580c43d2b9f856c34d9e80d1c3221"
+    },
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/AttachmentTransaction.kt",
+      "sha256": "21bd946ee8e4ed3cdf6d403147cbdb87c421f3abe72e4e17868573d355846605"
+    },
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/AttachmentKeyFoundation.kt",
+      "sha256": "50287e497de096ca2711afa8e28c15b6942b9d446b3dd2e493fcf2c663d9b446"
+    },
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/AttachmentIdentity.kt",
+      "sha256": "efc72ddc0f615a81cede5f08b189329dffb0c0a1b1bc1e9efb24864743c91e9a"
+    },
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/RecordBackupCompatibility.kt",
+      "sha256": "aa1019a4a98ac05fdadae8b0cfb00821ec9403bf4bdd4aab0a110b42f4406165"
+    },
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt",
+      "sha256": "9b63c3bb4498cfd3213a338a07e69ef2e0f9f2eb36a8fba015fc5b51345caeb2"
+    },
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/Migrations.kt",
+      "sha256": "7d6b75e7dd4ea6e3e19dd4c38e9db6ab8130e75642b29179a7db490abcb06c98"
+    },
+    {
+      "path": "core/domain/src/main/kotlin/net/plainnotes/app/domain/AttachmentSession.kt",
+      "sha256": "ef0e1730cdafbe8f8082eab3e451191788c68e47a0d0cef4ea83b52752079005"
+    },
+    {
+      "path": "tools/attachment-poc/src/contractTest/kotlin/net/plainnotes/poc/B2StreamingCandidate.kt",
+      "sha256": "694c63801d6c11b50334bb1ab411c93b62e40815db2d1dd5168ea69ccc624bc7"
+    },
+    {
+      "path": "tools/attachment-poc/src/contractTest/kotlin/net/plainnotes/poc/B2ImportSandbox.kt",
+      "sha256": "5c3eca8f0c5ac066945492dc604cb492f21ba98865ffd9512fd3c9abdecec5ca"
+    }
+  ]
+}

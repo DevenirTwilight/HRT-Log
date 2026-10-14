@@ -22,7 +22,11 @@ dependencies {
     implementation(libs.hilt.android); ksp(libs.hilt.compiler)
     testImplementation(libs.junit4); testImplementation(libs.robolectric); testImplementation(libs.android.test.core)
     androidTestImplementation(libs.android.test.core); androidTestImplementation(libs.android.test.runner); androidTestImplementation(libs.room.testing); androidTestImplementation(libs.junit4)
+    // SECURITY-GATE2 standalone synthetic SQLCipher/FS experiment. Never runtime/release.
+    androidTestImplementation(project(":attachment-poc"))
+    androidTestImplementation(libs.tink.android)
 }
 ksp { arg("room.schemaLocation", "$projectDir/schemas") }
 android.sourceSets.getByName("androidTest").apply { assets.srcDir("$projectDir/schemas"); java.srcDirs("src/historyTest/java", "src/medicalTest/java", "src/attachmentTest/java") }
 android.sourceSets.getByName("test").apply { assets.srcDir("$projectDir/schemas"); java.srcDirs("src/historyTest/java", "src/medicalTest/java", "src/attachmentTest/java") }
+android.sourceSets.getByName("androidTest").java.srcDir("../../tools/attachment-poc/src/contractTest/kotlin")

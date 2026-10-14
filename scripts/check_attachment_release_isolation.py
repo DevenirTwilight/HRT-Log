@@ -9,7 +9,7 @@ import zipfile
 
 FORBIDDEN=(b'net/plainnotes/poc/', b'net.plainnotes.poc.', b'com/google/crypto/tink/',
            b'com.google.crypto.tink.', b'SYNPOC01', b'DRAFT-ONLY-OBJ0!', b'B2-TEST-ONLY',
-           b'SyntheticStreamProvider', b'attachmentpoc')
+           b'SyntheticStreamProvider', b'attachmentpoc', b'Gate2StreamProvider', b'B2-SECURITY-GATE2-TEST-ONLY')
 
 def check_apk(path):
     with zipfile.ZipFile(path) as apk:

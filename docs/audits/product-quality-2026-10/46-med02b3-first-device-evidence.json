@@ -1,0 +1,126 @@
+[
+  {
+    "api": 26,
+    "abi": "x86_64",
+    "evidence": "ANDROID_EMULATOR / REAL_SQLCIPHER_TEST / REAL_CIPHER_TEST",
+    "run_id": 38621821257,
+    "head_sha": "9360fbb19165007963d68aebc01960ff894e3ac2",
+    "artifact_id": 11922593419,
+    "artifact_sha256": "c88d80453963a19d6a4622a2a2f103d251bbf2a8052d4dd2d85fbd51b3b4bc03",
+    "native_data_tests": 42,
+    "app_tests": 66,
+    "failures": 0,
+    "new_skips": 0,
+    "red_green": {
+      "scope": "test-only deliberate unsafe cleanup control; no production defect claimed",
+      "red": "expected one failure",
+      "green": "OK (1 test)"
+    },
+    "fresh_pid_restarts": [
+      {
+        "previous_pid": 3625,
+        "fresh_pid": 3671,
+        "fresh_process_asserted": true,
+        "api": 26,
+        "abi": "x86_64",
+        "seam": "AFTER_COMMIT",
+        "revision": 2,
+        "reconcile": {
+          "e7349f1b-a335-4689-95fa-45b8327e3631": "QUARANTINE_COMPLETE_ORPHAN",
+          "f151b7eb-2904-41ea-a18e-71c518ef81a2": "KEEP_ACTIVE"
+        },
+        "production_enabled": 0
+      },
+      {
+        "previous_pid": 3531,
+        "fresh_pid": 3576,
+        "fresh_process_asserted": true,
+        "api": 26,
+        "abi": "x86_64",
+        "seam": "IN_COMMIT",
+        "revision": 1,
+        "reconcile": {
+          "2132ed7f-ed57-4d5a-9efe-5ff89ddbbff6": "KEEP_ACTIVE",
+          "67b26a9e-a788-4681-97f0-e0a3a37e9c5a": "QUARANTINE_COMPLETE_ORPHAN"
+        },
+        "production_enabled": 0
+      },
+      {
+        "previous_pid": 3437,
+        "fresh_pid": 3481,
+        "fresh_process_asserted": true,
+        "api": 26,
+        "abi": "x86_64",
+        "seam": "WRITE",
+        "revision": 1,
+        "reconcile": {
+          "e7c68f06-3540-463f-9cb5-2df65a916088": "CLEANED_OWNED_INCOMPLETE",
+          "f7448142-530d-4339-81f7-f7c055cee046": "KEEP_ACTIVE"
+        },
+        "production_enabled": 0
+      }
+    ]
+  },
+  {
+    "api": 29,
+    "abi": "x86_64",
+    "evidence": "ANDROID_EMULATOR / REAL_SQLCIPHER_TEST / REAL_CIPHER_TEST",
+    "run_id": 38621821257,
+    "head_sha": "9360fbb19165007963d68aebc01960ff894e3ac2",
+    "artifact_id": 11922029181,
+    "artifact_sha256": "e871a72c12483db8cbf030e61cb05301a5a3bf9f9d5805b020bc12f96141b4d8",
+    "native_data_tests": 42,
+    "app_tests": 66,
+    "failures": 0,
+    "new_skips": 0,
+    "red_green": {
+      "scope": "test-only deliberate unsafe cleanup control; no production defect claimed",
+      "red": "expected one failure",
+      "green": "OK (1 test)"
+    },
+    "fresh_pid_restarts": [
+      {
+        "previous_pid": 5223,
+        "fresh_pid": 5320,
+        "fresh_process_asserted": true,
+        "api": 29,
+        "abi": "x86_64",
+        "seam": "AFTER_COMMIT",
+        "revision": 2,
+        "reconcile": {
+          "83505018-c4d8-47c4-9e10-2da6d08d4acb": "QUARANTINE_COMPLETE_ORPHAN",
+          "9c794392-ebb8-48e9-b736-e094fefad558": "KEEP_ACTIVE"
+        },
+        "production_enabled": 0
+      },
+      {
+        "previous_pid": 5064,
+        "fresh_pid": 5160,
+        "fresh_process_asserted": true,
+        "api": 29,
+        "abi": "x86_64",
+        "seam": "IN_COMMIT",
+        "revision": 1,
+        "reconcile": {
+          "00adedfb-4743-4d15-8a1d-7e96e4ccd282": "KEEP_ACTIVE",
+          "d8c7e7b6-4da0-4e11-ba1e-81efbbbd4895": "QUARANTINE_COMPLETE_ORPHAN"
+        },
+        "production_enabled": 0
+      },
+      {
+        "previous_pid": 4909,
+        "fresh_pid": 4998,
+        "fresh_process_asserted": true,
+        "api": 29,
+        "abi": "x86_64",
+        "seam": "WRITE",
+        "revision": 1,
+        "reconcile": {
+          "81ac4399-2b19-4ff0-ae62-18a125025b3c": "CLEANED_OWNED_INCOMPLETE",
+          "d7dd510c-7f5d-4fc8-bcdd-027f45a0b816": "KEEP_ACTIVE"
+        },
+        "production_enabled": 0
+      }
+    ]
+  }
+]

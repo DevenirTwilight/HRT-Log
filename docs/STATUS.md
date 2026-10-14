@@ -1,3 +1,29 @@
+## MED-02B3 / B2-SECURITY-GATE2 接手与独立复核修正 — 2026-10-14
+
+负责人指示另一会话接手PR31推到全绿且保留复核。37b813d文档HEAD的push/PR 14项检查已全部成功。独立复核见报告47（作者以外的AI工程复核，不是外部专家审核）：无阻断问题；M1恢复与写入者互斥、M2孤儿隔离保留/配额两项生产设计缺口已写入报告45风险与审批前置。
+追加提交只动测试与文档：16项Store负向合同改为断言拒绝原因，双写者补失败者密文已删/胜者保留，新增Gate2上下文向量stdlib重算测试（设计校验58→61），报告46标注DIRECT_CALLBACK/TIMING_BASED证据及MIME拒绝NOT_RUN并修正旧PENDING文字。生产src/main/Schema/guards/备份/PK/version/sign仍零改动。
+本地：JVM261零fail/skip、设计61、Release隔离3通过；core/data Android测试APK本地编译成功，设备测试只能由CI运行（本机无KVM）。修正提交的最终HEAD及全部CI以PR31正文为准，未全绿前不称通过；不合并、不签名、不交付APK。生产NO-GO不变。
+第二轮（负责人要求“查出的问题帮我解决”）：测试协调器实现M1每operation OS锁租约（reconcile跳过活动写入者、同operation拒绝第二写入者）与M2（记录本operation新建父目录、AFTER_CREATE失败/强停可清理自己的叶子；显式确认释放孤儿、释放配额且不删外来文件），新增3项Store测试与AFTER_CREATE强停（每API 4处）；两处100ms计时证据改为等待BLOCKED；Tink测试依赖改用版本目录。本地JVM261、设计61、Release隔离3、两个Android测试APK编译均通过，Release运行时类路径无Tink。cc6b2d7的API26/29设备结果已证实收紧后的断言成立。孤儿保留期/用户提示、退役epoch active指针（B3）、经内核ProxyFD撤权读取仍为后续事项。
+
+## MED-02B3 / B2-SECURITY-GATE2 代码全绿及最终交接 — 2026-10-14
+
+PR31 https://github.com/DevenirTwilight/HRT-Log/pull/31 OPEN未合并，stacked于PR30(parent814d355，仍OPEN)，main cfe600ee不变。代码00cb4cf89671f06c432fa52323e31022498a6fbf的push/PR Android38625628282/38625636512全五job成功；Science38625628466/38625636623成功，PR deep实际通过、push deep按原gate skip。
+JVM261；Androidunit data180/rem17/app865、61原有skip；26/29每API data43/app67零fail/skip；35 data110/app报告249、8原有skip。新16 Store/3 SAF/1 restart+3外部强停/2向量/6 TinkPDF；9次freshPID、三个API红1fail→绿1pass全部实际成功。原B2/B3/B4/R15/MED01/PNBAK9/迁移/重启回归保留。原artifact/SHA/PID/实际final-not-peak PSS见46-code-evidence，首轮9360 API35失败保留。
+报告43基线、44协议/外部审查包、45风险/审批、46验收已完成。当前末次文档HEAD还须等待全部最终push/PR CI；精确SHA及最终CI固定PR31正文，不能以00cb结果冒称后续HEAD。生产源码/Schema/guards/备份/PK/version/sign不改、feature0；真实原件/密钥/私有build26未访问，无合并/正式签名/交付APK。ZIP四MD已在PR30归档并SHA核对，PR31继承但尚未进main。
+RESEARCH_GO / IMPLEMENTATION_PENDING_OWNER_AND_EXTERNAL_REVIEW，生产NO-GO；ARM/掉电/真ENOSPC/敌意PDF/外部专家/未来完整备份和附件UI仍未验收。此MED-02B3=安全准入证据，不是路线B3完整备份或正式资料库。后续最小B2范围与需批准事项见45，不自动开始。以下保留阶段历史。
+
+## MED-02B3 / B2-SECURITY-GATE2 首轮设备证据及修正 — 2026-10-14
+
+PR31 https://github.com/DevenirTwilight/HRT-Log/pull/31 OPEN，stacked于未合并PR30(parent814d355)，不自合并。首轮9360fbb：PR/push Science gate/deep成功，JVM261及PR完整Android构建成功；API26/29各data42/app66、红1fail→绿1pass、三处force-stop freshPID实际成功。API35 provider误用fingerprint导致startup crash/0tests，首轮非全绿。
+修正复用现有ro.kernel.qemu attestation；fixed reservation/primitive移出每8KiB native SQL循环；四页PDF扩为>4段并验证蓝/白页面像素。全部test-only，生产feature0/guards/Room10/PNBAK9/PK/version/sign不改。证据原始JSON及SHA/PID见46-first-device-evidence。
+首轮四run现已全部结束；修正library/app测试编译成功5m11+最终1m20，准备推本批，不取消GitHub任务。本地重复旧HEAD全Android退出130，不冒称本地完整通过（同HEAD PR完整Android已成功）；下一步新测试编译、推修正及完整最后HEAD CI，更新报告46与最终PR正文。生产NO-GO/外部专家、ARM、掉电/真ENOSPC/敌意PDF仍未验收。此阶段不是完整备份B3或正式附件上线。
+
+## MED-02B3 / B2-SECURITY-GATE2 开发中 — 2026-10-14
+
+从PR30固定814d355c60396a9246ab6883ea70d3ccf67438cc创建独立feature/med02b3-b2-security-gate-20261014；PR30仍OPEN未合并，base默认cfe600ee，四组最终CI已成功。新PR须stacked指向feature/med02b2-v2-import-gate，不合并父PR。
+新增test-only原生SQLCipher+FS+AndroidKeystore隔离协调器/失败矩阵/强停新PID脚本和Tink→全认证固定FD→ProxyFD/PdfRenderer合成四页PDF测试；正式Schema/guards/PNBAK/PK/版本/sign/AppLock不变。生产feature0/VERIFIED禁用，库测试包仅net.plainnotes.app.data.test，禁止pm clear/真实用户数据/私有构建读取。
+最新library test APK及app Android测试编译通过（首轮5m27、全app7m31、最新增量1m16）；JVM261零fail/error/skip、Python设计58及Release检查器3方法/33污染subcases通过。首次提交准备推送及创建stacked PR；native设备/最终HEAD CI尚未完成，不称通过。下一步修正编译、push创建stacked PR，运行完整JVM/Android/lint/Debug/unsignedRelease/API26/29/35/Science，保留红绿及真实强停日志；每轮CI结束后才再推。报告43–46记录新证据及未决专家/ARM/掉电/生产批准。此阶段不是完整备份B3或正式附件上线。
+
 ## MED-02B2 / B2-GATE — 代码完整验收通过（2026-10-14）
 
 独立PR30 OPEN/未合并，默认base cfe600ee；f8代码push/PR Android/JVM/API26/29/35与Science均成功，JVM259、新20，Android180/17/865、原61skip；API35 88/243、原8skip，26/29每21/61，零失败/新增skip。最后交接文档HEAD及最终checks见PR30正文，须全部结束成功再交付。
