@@ -1,3 +1,10 @@
+## MED-02B1 首轮设备结果与修正待推 — 2026-10-14
+
+PR29 https://github.com/DevenirTwilight/HRT-Log/pull/29 OPEN，stacked于PR28，不合并。代码2af68bb push38575437245、PR38575565339 Android正在完成剩余jobs；push38575437312/PR38575565328 Science gate/deep全成功，JVM成功。
+三API四native fixture因Room无索引表省略indices字段而JSONException，尚未实际验证迁移；已修正确解析optJSONArray空列表，保留每个已声明index和全hash断言。API35另有旧B4直接Room9 builder忘加新9→10路径，已补migration9To10及runtime10/serialization9双断言；原VOIDED/ADJUST/重开断言不减少，无skip/destructive。
+本地完整JVM63+124+12+40=239零fail/skip；当前将修正提交在本地，等上述CI全部结束才推，不取消。完整本地Android/lint/unsigned构建与最终三API验收仍待。
+附件仍关闭，生产新cipher/backup/AppLock文件入口未实施，正式build26不动。报告38保留失败事实及后续验收限制。
+
 ## MED-02B1 基础代码与本地验证 — 2026-10-14
 
 明确授权见 REQUIREMENTS §90；独立 stacked 分支基于 PR28 977e077，27/28仍OPEN且已验证。

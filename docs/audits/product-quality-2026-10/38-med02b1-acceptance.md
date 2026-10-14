@@ -21,3 +21,11 @@ MED01 历史就诊合同原有运行时版本9断言，在明确授权的 Room10
 ## 预览原型的撤权边界
 
 继承的 SYNPOC01 低层类继续保留审计复现，仍明确不是生产安全入口。新的 CapabilityObject 承载安全入口；原 Android ProxyFD/PdfRenderer 与图片原型已采用该适配器。Reader 子能力关闭不影响兄弟 Reader；父对象关闭或 session 撤权使全部子能力不可发布。完整认证/解密及 native render 在授权门外，结果交付在共同门内，Owned原始关闭也参与其自己的短发布门。耗时 Reader 构造不持有 owner 锁。尚未接入真实应用医疗附件UI或生产 AppLock/文件服务；这必须在B2/B4开启前独立验收。已交付给调用者的旧明文不能被撤回，不承诺 JVM/闪存法证擦除。
+
+## 首轮设备失败与修正
+
+代码2af68bb push Android38575437245三个API均失败：合成native fixture错误地要求无索引表也必须含JSON indices字段，四个native迁移用例在建Room9前即JSONException。改为遵循Room导出规范：字段不存在代表空索引列表，已声明索引仍逐条执行；29表/索引/data hash、native迁移验证等断言全部保留。
+
+API35原B4的直接Room9测试builder未添加9→10路径，出现required migration not found。补与生产一致的migration9To10，并将明确授权后的runtime断言改为10，同时增加PNBAK序列化版本仍为9的断言；VOIDED、ADJUST数量、普通查询空状态及重开全部原断言保留。未添加destructive fallback或skip。首轮不能称原生迁移通过；修正后需最终三API重跑。
+
+2af68bb push/PR Science两个gate/deep实际成功，JVM均成功；尚在运行的Android/PR jobs不取消，全部结束后才推修正批。
