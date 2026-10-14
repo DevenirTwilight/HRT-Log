@@ -1,3 +1,5 @@
+> MED-01审计/设计阶段完成：scope89a9277完整CI全绿，data13项实际红测13失败/0skip；返回类型编译修正如实保留。B设计29已完成，审批项目/POC/恢复与未知长度认证结束清单齐全，不实现附件加密/Schema/格式。A仓库最小事务本地已写，17合同/四语UI与保存协调器测试待绿；接下来替换UI seams、接AppShell/Visits/原化验详情，再完整回归。生产修改尚未提交，不宣称功能完成。R15未改。
+
 > MED-01开始：默认fe879863 Android38470156117（attempt2）/Science38470156282 success；独立feature/med01-medical-records-20261014 /workspace/HRT-Log-med01从主线创建。R15 PR25/feature/r15-undo-skipped-20261013 HEAD239a73c仍OPEN未改。审计28：Appointment已含完成确认和关联问题/VisitPack回收恢复，化验与冻结上下文独立存在；A不增加表，B仅设计29。下一步补历史录入/事务/重复保存/四语红测，实施集中入口与明确“范围≠关联”。不签名/交付/合并/改Schema备份加密或PK。
 
 > B4顺序合并完成（2026-10-13，REQ §85）：PR23 merge `d06bcce` 完整主线通过后，PR24改为默认分支、19文件差异不变，以明确新基线验证merge32345cb执行完整Android/Science全部成功，再以merge `9af38f3` 合并。其主线Android38468046764三任务、Science38468046661 gate/deep全部实际success；两个验收HEAD8749207/92f8c42保持，最终业务源码树与验收一致。详见[报告26](audits/product-quality-2026-10/26-b4-merge-and-mainline-validation.md)及机器证据。本次仅归入最新授权/交接/验收文档，交还条件仍为最后文档HEAD自身完整CI实际成功，精确SHA/链接固定PR正文，不循环追加自身SHA。下方待完成/不合并叙述属历史。无新正式签名/APK/版本/发布；build26文件不变。
