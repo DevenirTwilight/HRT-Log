@@ -1,3 +1,9 @@
+## MED-02 前置栈主线合并验收 — 2026-10-14
+
+负责人明确“合并”，见REQUIREMENTS §91。PR27/28/29已按顺序合入claude/new-session-1959qb，保留merge历史：27=d4564fc50201b1d8132d63467028c230e87521fa；28=79f50e81c03a2077ede999c18952dd104df548b1；29=be953672f503940a10880e23dabaaa853d3017bb。每次合并树与该PR已验收HEAD逐字节相同，后续PR retarget后的diff与原stacked diff相同。
+主线代码为MERGED_CI_VERIFIED：27 Android38591069907/Science38591070376；28 Android38593942970/Science38593943130；29 [Android38596888161](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38596888161)/[Science38596888022](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38596888022)，全部结束成功，三次Science deep实际成功。最终交接文档HEAD及其主线检查以PR29正文最终集成记录为准，不用代码HEAD冒充后续文档HEAD。
+Room runtime10/PNBAK1 serialization9，附件feature默认0。没有真实附件/正式对象协议/新完整备份/生产预览/AppLock原件服务入口；PK、旧29表、正式version/sign/build26不变。真实ARM/硬件掉电/外部独立专家仍NOT_RUN。B2-GATE仅按新任务书开展设计和隔离合成验证，B2生产仍需独立批准；不自合并后续PR、不签名交付APK。以下均为历史阶段记录，旧OPEN/stacked陈述不再代表当前状态。
+
 ## MED-02B1 代码全绿及最终交付入口 — 2026-10-14
 
 实现基准f04c3fe11d8e5021f2404064ff01fc25f55a1831全部push/PR CI成功：Android38584644420/38584652287，Science38584643704/38584652558（两deep实际成功）。JVM239；data180/rem17/app865，61原有skip；API35 data88/app报告223、8原有skip；API26/29各data21+POC41。没有新skip/削减断言。
