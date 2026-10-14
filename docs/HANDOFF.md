@@ -1,6 +1,6 @@
-## MED-02B4 / B2-GATE3（PR-A）开发中 — 2026-10-14
+## MED-02B4 / B2-GATE3（PR-A #32）CI 全绿，按 §12 合并中 — 2026-10-14
 
-MED-02B4 是项目批次编号，不是附件路线 B4（图片库）或 B3（完整备份）。主线 9d99fd9（#30/#31 已合并，合并后 Android 38637930685 五 job 与 Science 38637934425 全部成功）。PR-A 分支 feature/med02b4-b2-gate3-20261014：真实内核 ProxyFD 撤权/缓存测试、两个真实进程的写入者租约、孤儿幂等、测试专用格式 admission、外部审查包（报告48–52）。发现并修正 c74b41d 测试协调器的锁缺陷：同进程探测关闭第二描述符会丢失写入者的 OS 锁（POSIX 记录锁按进程），改为进程内单 channel 注册表，先红后绿。全部 test-only，生产 NO-GO 不变。本地 JVM262、设计61、隔离3、两个测试 APK 编译通过；设备结果待 CI。下一步：PR-A CI 全绿后按任务书 §12 合并并复验主线，再做 PR-B（PRIVACY.md 与应用内四语隐私说明）。
+MED-02B4 是项目批次编号，不是附件路线 B4（图片库）或 B3（完整备份）。基线 9d99fd9（默认分支 claude/new-session-1959qb）。PR-A #32 分支 feature/med02b4-b2-gate3-20261014：真实内核 ProxyFD 撤权/缓存、两个真实进程的写入者租约、孤儿幂等、测试专用格式 admission、外部审查包（报告48–52）。修正 c74b41d 测试协调器锁缺陷（同进程探测关闭第二描述符丢失写入者 OS 锁），先红后绿。首轮 9cd28be 设备失败（peer 打开同一数据库，SchemaGuards 每次打开重写 schema → SQLITE_SCHEMA/522）已在 76909b8 修正为 peer 不打开数据库；76909b8 的 Android PR 38644133964 / push 38644129077 与 Science 全部成功，API26/29/35 原始日志含全部 GATE3 证据与红绿 PASS（报告52）。全部 test-only，B2 生产 NO-GO、NOT_REVIEWED_EXTERNALLY 不变。下一步：仅文档最终 HEAD 的必需检查成功后普通合并、复验默认分支 CI；然后 PR-B（隐私声明与四语离线页面，本地 887 测试 0 失败、lint 无新问题，尚未提交）。
 
 ## MED-02B3 / B2-SECURITY-GATE2 接手与独立复核修正 — 2026-10-14
 
