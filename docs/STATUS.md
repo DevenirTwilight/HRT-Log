@@ -1,3 +1,13 @@
+## MED-02B0 synthetic review milestone — 2026-10-14
+
+Scope commit0a925e8 push Android38536137541/Science38536137432 both green.
+Independent AI peer reviews completed; not external certification. 22 synthetic Room9→10
+SQLite tests +10 backup durability model tests +3 draft framing/HKDF tests pass locally.
+POC JVM existing28 +7 new review/vector tests pass (35 total); accepted POC source unchanged.
+New Android public-API link/no-replace, leaf O_NOFOLLOW and directory fsync experiments
+are test-only; three API runtime evidence pending CI. Production Schema9/PNBAK1 unchanged.
+Protocol/backup/policies/docs33..37 and final full CI/stacked PR still pending.
+
 > MED-02B0启动（2026-10-14）：主线c3bf2cbc Android38527627941/Science38527627946全绿；PR27仍OPEN，1c8d385 push/PR四run全success。本轮独立feature/med02b0-security-design-20261014从已验收PR27创建，后续stacked PR，不改accepted27/生产Schema/PNBAK1/PK/版本/签名/真实附件。用户明确要求不同审查者，已安排两位独立AI代码复核与第三位合成迁移设计；不是外部专业认证。初步生产阻断：publish撤权竞态、Reader生命周期、整体rollback边界、目录fsync/DBjournal/KDF成本。需确定性证据、生产协议/Room10/新备份设计及B1提示词，全部未正式上线。
 
 > MED-02A POC范围完成（2026-10-14）：代码6521173 push/PR Android/JVM/三个API/Science全部成功；PR API29外部protobuf解析失败经HTTP200核验仅失败job定向重跑一次成功（attempt2），未改断言/skip/版本。JVM194+28/data160/rem17/app865、API35 data66/app212（61/8原skip外部流程实际跑）、API26/29各30、Science261全部过；lint0/178既有警告，Debug/unsignedRelease/两仪器包/来源与manifest保护通过，实际DEX证明POC仅testAPK。报告30/机器证据+设计31完整，固定最终SHA/自身CI在PR27正文，最终提交检查成功后交还。PR25/26已MERGED_CI_VERIFIED于c3bf2cbc主线；PR27不自合并，MED02B迁移/协议/完整包/配额/关联政策待批准，物理ARM/独立review/生产AppLock与正式附件库未实施。无生产main/Schema/PNBAK1/PK/版本/签名/build26/真实数据改变，无正式APK交付。
