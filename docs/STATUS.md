@@ -2,7 +2,7 @@
 
 负责人已明确批准Room10生产基础修改（REQUIREMENTS §90）。独立branch feature/med02b1-attachment-foundation-20261014 stacked于未合并PR28；PR27/28已验收CI，不自行合并。
 新增八张默认关闭的附件metadata表、稳定typed UUID/trash桥、CURRENT/epoch隔离、密钥角色基础接口、可撤销读取/commit原型，旧PNBAK固定版本9适配。29旧表导出定义完全不变；实际SQLCipher迁移/三API/最终完整checks待CI证明。
-不启用生产附件，不实现正式cipher/full backup/真实文件导入，不PK/version/signing/APK交付。报告38持续更新；当前不能标记完成。
+不启用生产附件，不实现正式cipher/full backup/真实文件导入，不PK/version/signing/APK交付。报告38持续更新；当前不能标记完成。PR29已OPEN，c74f527两Android CI设备失败，Science/JVM/完整构建通过；day_note夹具字段已修正，四迁移合同改为本地/设备共用，待本地验证与最终三API重跑。未取消GitHub CI。
 
 ## MED-02B0交付设计与最终检查入口 — 2026-10-14
 

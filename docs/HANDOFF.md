@@ -1,3 +1,15 @@
+## MED-02B1 共用迁移合同本地通过 — 2026-10-14
+
+四个真实Room迁移合同本地Robolectric通过，4 tests、0 fail/error/skip；core:data设备测试包完整assemble通过，命令2m21s。迁移/29旧表fingerprint/PNBAK恢复/回滚/隔离断言共用，设备SQLCipher及密文header仍单独强制验证。此非native或ARM验收。
+修正批将推送PR29并等待最终三API及完整Android/Science。上一轮c74f527所有GitHub CI已结束才推，未取消任何CI。附件功能仍关闭；无批准外改动。
+
+## MED-02B1 第二轮设备夹具修正 — 2026-10-14
+
+PR29仍OPEN且功能关闭。c74f527 push Android38578061148、PR38578070063全部结束，device26/29/35失败；各Science成功，不取消任何CI。
+原无索引/旧VOIDED升级夹具问题已通过；本轮三native失败均因新夹具把day_note.text错写为note，尚未运行这些测试的真正断言。双SQLCipher库同整数ID/PRIMARY隔离测试已在三个API实际通过，不能据此冒称其余迁移通过。
+已修字段并将四个迁移合同共用到本地真实Room/Robolectric与设备真实SQLCipher，设备密文文件头断言仍保留，未增加skip或减少断言。先完成本地四合同验证，再推修正并等待全部设备及完整CI。
+本地重复完整Android构建在Release R8阶段主动中止，退出130，不计完整通过；已完成的本地任务保留结果，但完整构建证明取GitHub最终CI。未取消任何GitHub CI，立即优先执行四迁移合同与native测试编译。真实ARM和生产密文/完整备份仍未实施，最终验收未完成。
+
 ## MED-02B1 首轮设备结果与修正待推 — 2026-10-14
 
 PR29 https://github.com/DevenirTwilight/HRT-Log/pull/29 OPEN，stacked于PR28，不合并。代码2af68bb push38575437245、PR38575565339 Android正在完成剩余jobs；push38575437312/PR38575565328 Science gate/deep全成功，JVM成功。
