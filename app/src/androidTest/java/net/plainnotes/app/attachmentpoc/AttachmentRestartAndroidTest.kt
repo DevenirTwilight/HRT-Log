@@ -24,7 +24,7 @@ class AttachmentRestartAndroidTest {
     private val alias="synthetic-med02a-restart-key"
     private fun store()=KeyStore.getInstance("AndroidKeyStore").apply{load(null)}
     @Test fun interruptedSyntheticImport() {
-        check(android.os.Build.FINGERPRINT.contains("generic") || android.os.Build.MODEL.contains("sdk")) {"Synthetic emulator only"}
+        SyntheticEmulatorGuard.requireEmulator()
         when(InstrumentationRegistry.getArguments().getString("med02a_phase")) {
             "prepare"->prepare(true)
             "verify"->verify(true)

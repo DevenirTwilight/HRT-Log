@@ -1,0 +1,170 @@
+[
+  {
+    "artifact_id": 11877436084,
+    "sha256": "415f9ddd461f98409f6ec53f92a01b2b6675fd9fc64965bf49528a6cb7860695",
+    "run": 38528743955,
+    "head": "dcb8beba49b6f986c218f4581a9450d9e96a9e36",
+    "evidence": {
+      "scope": "SYNTHETIC_POC_NOT_PRODUCT_ACCEPTANCE",
+      "api": 26,
+      "device": "Android SDK built for x86_64",
+      "abi": "x86_64",
+      "observations": [
+        {
+          "kind": "image",
+          "api": 26,
+          "mime": "image/jpeg",
+          "bytes": 12576,
+          "bitmap_bytes": 524288,
+          "elapsed_ms": 4
+        },
+        {
+          "kind": "image",
+          "api": 26,
+          "mime": "image/png",
+          "bytes": 10706,
+          "bitmap_bytes": 524288,
+          "elapsed_ms": 20
+        },
+        {
+          "kind": "image",
+          "api": 26,
+          "mime": "image/webp",
+          "bytes": 3814,
+          "bitmap_bytes": 524288,
+          "elapsed_ms": 7
+        },
+        {
+          "kind": "pdf",
+          "api": 26,
+          "reads": 34,
+          "scratch_bound": 3088
+        },
+        {
+          "kind": "pdf",
+          "api": 26,
+          "reads": 34,
+          "scratch_bound": 3088
+        },
+        {
+          "kind": "pdf",
+          "elapsed_ms": 96,
+          "pss_before_kib": 107131,
+          "pss_after_kib": 120014
+        },
+        {
+          "kind": "large_pdf",
+          "api": 26,
+          "cipher_bytes": 4196472,
+          "bitmap_bytes": 1572864,
+          "reads": 165,
+          "scratch_bound": 196624,
+          "elapsed_ms": 200,
+          "pss_before_kib": 119754,
+          "pss_after_kib": 122785
+        },
+        {
+          "kind": "restart",
+          "api": 26,
+          "fresh_pid": 0,
+          "partial_count": 1,
+          "old_object_retained": 1,
+          "plaintext_pdf_files": 0
+        },
+        {
+          "kind": "restart",
+          "api": 26,
+          "fresh_pid": 1,
+          "partial_count": 1,
+          "old_object_retained": 1,
+          "plaintext_pdf_files": 0
+        }
+      ],
+      "limits": "scratch_bound is an algorithm bound; PSS before/after is observed process memory, not peak. No physical ARM benchmark."
+    }
+  },
+  {
+    "artifact_id": 11877292759,
+    "sha256": "1b935660f39945df763dce90c8b865488037a320575bac744c9c3e322a9df5ac",
+    "run": 38528743955,
+    "head": "dcb8beba49b6f986c218f4581a9450d9e96a9e36",
+    "evidence": {
+      "scope": "SYNTHETIC_POC_NOT_PRODUCT_ACCEPTANCE",
+      "api": 29,
+      "device": "Android SDK built for x86_64",
+      "abi": "x86_64",
+      "observations": [
+        {
+          "kind": "image",
+          "api": 29,
+          "mime": "image/jpeg",
+          "bytes": 13130,
+          "bitmap_bytes": 524288,
+          "elapsed_ms": 5
+        },
+        {
+          "kind": "image",
+          "api": 29,
+          "mime": "image/png",
+          "bytes": 10719,
+          "bitmap_bytes": 524288,
+          "elapsed_ms": 23
+        },
+        {
+          "kind": "image",
+          "api": 29,
+          "mime": "image/webp",
+          "bytes": 4376,
+          "bitmap_bytes": 524288,
+          "elapsed_ms": 9
+        },
+        {
+          "kind": "pdf",
+          "api": 29,
+          "reads": 364,
+          "scratch_bound": 3088
+        },
+        {
+          "kind": "pdf",
+          "api": 29,
+          "reads": 364,
+          "scratch_bound": 3088
+        },
+        {
+          "kind": "pdf",
+          "elapsed_ms": 255,
+          "pss_before_kib": 190957,
+          "pss_after_kib": 196596
+        },
+        {
+          "kind": "large_pdf",
+          "api": 29,
+          "cipher_bytes": 4196472,
+          "bitmap_bytes": 1572864,
+          "reads": 165,
+          "scratch_bound": 196624,
+          "elapsed_ms": 175,
+          "pss_before_kib": 197340,
+          "pss_after_kib": 206952
+        },
+        {
+          "kind": "restart",
+          "api": 29,
+          "fresh_pid": 0,
+          "partial_count": 1,
+          "old_object_retained": 1,
+          "plaintext_pdf_files": 0
+        },
+        {
+          "kind": "restart",
+          "api": 29,
+          "fresh_pid": 1,
+          "partial_count": 1,
+          "old_object_retained": 1,
+          "plaintext_pdf_files": 0
+        }
+      ],
+      "limits": "scratch_bound is an algorithm bound; PSS before/after is observed process memory, not peak. No physical ARM benchmark."
+    }
+  }
+]

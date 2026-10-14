@@ -23,3 +23,29 @@
 R15集成c97d9c6本地data全量及刷新/导航目标成功9m42；push/PR Android38525991389/38525995026及Science38525991267/38525995037全绿，已按用户授权合并PR25为c3bf2cbc。该合并主线JVM/Science成功，Android/API35尚待。MED01主线051ee22全绿；POCscope32a1681 Android38526529630/Science38526529638成功。生产边界仍不变；最终POC需纳入R15并等最终HEAD全部检查。
 
 首轮Android编译失败为PdfDocument未实现所用use receiver，改显式try/finally关闭后compileFullDebugAndroidTestKotlin成功46s；编译错误不算设备红测或PDF可行性结果。JVM后续代码未改变19+7合同。Android原型含4页/跳页/缩放/重开/撤权、损坏/截断拒绝、4MiB流式PDF、JPEG/PNG/WebP原字节保留与尺寸炸弹、真实Keystore及实时强停测试。将实际API26/29/35输出及新PID证据填入最终报告；物理ARM未运行，Native内存/系统磁盘不能从设计上冒称验证。
+
+## API26/29首轮真实结果（dcb8beb，不是最终HEAD）
+
+Android38528743955的API26/29定向作业实际success，每端26项（加密19+预览6+重启1）零失败/零skip，另live import force-stop后新PIDverify通过。原始artifact摘要与SHA256已核验，见30-med02a-first-device-evidence.json，11877436084/API26与11877292759/API29。真实公开ProxyFD/PdfRenderer多页/跳页/zoom/reopen/撤权、完整认证后才发FD、bitmaps释放、新app文件/cache没有PDF头/完整明文copy均通过。无外部PDF依赖；磁盘观测只覆盖新app-owned文件，不能当系统/provider全盘取证。
+
+| 实测x86_64 emulator | API26 | API29 |
+| --- | ---: | ---: |
+| 4页PDF往返两次时延ms | 96 | 255 |
+| 4MiB stream PDF cipher bytes | 4196472 | 4196472 |
+| large PDF import+verify+render ms | 200 | 175 |
+| 512×768 bitmap实际bytes | 1572864 | 1572864 |
+| large PDF进程PSS before/after KiB | 119754→122785 | 197340→206952 |
+| JPEG/PNG/WebP thumb bytes各 | 524288 | 524288 |
+| JPEG/PNG/WebP decode ms | 4/20/7 | 5/23/9 |
+
+PSS是整个测试进程前后观测，不是峰值/图片专属占用，不是ARM benchmark。大PDF算法scratch bound196624 bytes明确不含provider/native内部。下一批新增周期采样指标需最终设备实际结果；只记测得值。主线c3bf2cbc最终Android38527627941/JVM/API35、Science38527627946全部success，已经纳入POC分支f6761c4，不回退R15/MED01；完整JVM194+POC28已本地成功2m26，Python35成功。
+
+## 仍需实测/审查
+
+API35和下一批最终HEAD设备与完整回归仍待；物理ARM、真人TalkBack、256MiB全部对象备份、真实Room10迁移、独立密码学审查均NOT_RUN，不能称产品ready。原型没有新医疗包/真正附件迁移，没有生产AppLock viewer路由。使用真实ContentResolver的测试APK专用synthetic管道提供者（不注册正式APK）将补验未知statSize/空SIZE、可靠pipe读取错误与MIME不符；单纯InputStream seam与系统provider路径结果分开报告。ENOSPC为确定性注入，不填满设备。最终范围/审批见31。
+
+## 首轮API35失败与修正
+
+dcb8beb Android38528743955最终failure：Android/JVM/Science与API26/29 success，API35 app183中7失败，全部为fixture的“generic指纹或sdk机型名”启发式守卫拒绝（IllegalStateException: Synthetic emulator only）；19加密合同通过，PDF/图片/Keystore/重启body未执行。不能称API35预览已验证，也不无目的重跑。已改用/system/bin/getprop ro.kernel.qemu精确为1，与既有外部emulator脚本同一证据；失败/无法获取仍拒绝，仍不运行真机清理，不新增Assume/skip，不改任何业务断言。新批须在26/29/35全部实际运行验证。
+
+另外真实测试APK ContentProvider只输出固定合成byte pipe，无路径/临床/数据库访问；只test manifest注册、正式APK没有provider。未知SIZE(null)/statSize=-1、可靠管道closeWithError实际IOException、声明MIME不符由ContentResolver实际验证；其测试尚待设备。新Keystore测试删除alias后旧handle拒绝，再仅通过可信synthetic便携envelope重建新key并重包裹。

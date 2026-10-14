@@ -1,0 +1,8 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <!-- TEST APK ONLY. Generates synthetic bytes; no filesystem/database access. -->
+        <provider android:name="net.plainnotes.app.attachmentpoc.SyntheticStreamProvider"
+            android:authorities="net.plainnotes.app.test.synthetic-attachments"
+            android:exported="true" />
+    </application>
+</manifest>

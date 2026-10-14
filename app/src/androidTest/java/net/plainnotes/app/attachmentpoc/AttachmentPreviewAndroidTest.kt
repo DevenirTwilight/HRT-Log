@@ -23,7 +23,7 @@ class AttachmentPreviewAndroidTest {
     private val context get()=InstrumentationRegistry.getInstrumentation().targetContext
     private inline fun fixture(block:(File)->Unit) {
         // Never inspect or clean an installed user's real cache/files.
-        check(android.os.Build.FINGERPRINT.contains("generic") || android.os.Build.MODEL.contains("sdk")) {"Synthetic emulator only"}
+        SyntheticEmulatorGuard.requireEmulator()
         val root=Files.createTempDirectory(context.filesDir.toPath(),"synthetic-med02a-").toFile()
         try{block(root)}finally{root.deleteRecursively()}
     }
@@ -106,6 +106,10 @@ class AttachmentPreviewAndroidTest {
             val envelope=KeyEnvelope.wrap(key,ctx,content);assertArrayEquals(content,KeyEnvelope.unwrap(key,ctx,envelope))
             val portable=KeyEnvelope.portable("synthetic password".toCharArray(),ctx,content);assertArrayEquals(content,KeyEnvelope.restore("synthetic password".toCharArray(),ctx,portable))
             store.deleteEntry(alias);assertNull(store.getKey(alias,null)) // No regeneration or pretend successful restore.
+            assertThrows(java.security.GeneralSecurityException::class.java){KeyEnvelope.unwrap(key,ctx,envelope)}
+            // Only explicit trusted portable recovery creates the replacement synthetic device key.
+            val recovered=KeyEnvelope.restore("synthetic password".toCharArray(),ctx,portable)
+            try {val replacement=generator.generateKey();assertArrayEquals(content,KeyEnvelope.unwrap(replacement,ctx,KeyEnvelope.wrap(replacement,ctx,recovered)))}finally{recovered.fill(0)}
         }finally{store.deleteEntry(alias)}
     }
 }
