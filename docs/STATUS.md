@@ -1,3 +1,9 @@
+## MED-02B3 / B2-SECURITY-GATE2 首轮设备证据及修正 — 2026-10-14
+
+PR31 https://github.com/DevenirTwilight/HRT-Log/pull/31 OPEN，stacked于未合并PR30(parent814d355)，不自合并。首轮9360fbb：PR/push Science gate/deep成功，JVM261及PR完整Android构建成功；API26/29各data42/app66、红1fail→绿1pass、三处force-stop freshPID实际成功。API35 provider误用fingerprint导致startup crash/0tests，首轮非全绿。
+修正复用现有ro.kernel.qemu attestation；fixed reservation/primitive移出每8KiB native SQL循环；四页PDF扩为>4段并验证蓝/白页面像素。全部test-only，生产feature0/guards/Room10/PNBAK9/PK/version/sign不改。证据原始JSON及SHA/PID见46-first-device-evidence。
+首轮四run现已全部结束；修正library/app测试编译成功5m11+最终1m20，准备推本批，不取消GitHub任务。本地重复旧HEAD全Android退出130，不冒称本地完整通过（同HEAD PR完整Android已成功）；下一步新测试编译、推修正及完整最后HEAD CI，更新报告46与最终PR正文。生产NO-GO/外部专家、ARM、掉电/真ENOSPC/敌意PDF仍未验收。此阶段不是完整备份B3或正式附件上线。
+
 ## MED-02B3 / B2-SECURITY-GATE2 开发中 — 2026-10-14
 
 从PR30固定814d355c60396a9246ab6883ea70d3ccf67438cc创建独立feature/med02b3-b2-security-gate-20261014；PR30仍OPEN未合并，base默认cfe600ee，四组最终CI已成功。新PR须stacked指向feature/med02b2-v2-import-gate，不合并父PR。

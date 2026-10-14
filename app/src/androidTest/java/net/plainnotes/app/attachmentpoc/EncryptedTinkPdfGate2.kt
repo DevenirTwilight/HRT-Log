@@ -16,13 +16,14 @@ import java.nio.ByteBuffer
 /** TEST ONLY: actual Tink full authentication -> same pinned FD lease -> public ProxyFD/PdfRenderer. */
 class EncryptedTinkPdfGate2(context:Context,file:File,key:ByteArray,aad:ByteArray,
     private val owner:AttachmentSession.Capability, expected:B2StreamingCandidate.Evidence,
-    private val beforeDelivery:()->Unit={}):Closeable {
+    private val beforeDelivery:()->Unit={}, private val beforeBitmapDelivery:()->Unit={}):Closeable {
     private val lease=B2StreamingCandidate.openAuthenticated(file,key,aad,owner,expected)
     private val thread=HandlerThread("synthetic-tink-gate2").apply{start()}
     private val monitor=Any()
     private var descriptor:ParcelFileDescriptor?=null
     private var renderer:PdfRenderer?=null
     private var bitmap:Bitmap?=null
+    var rejectedBitmaps=0;private set
     var reads=0;private set
     var maxRequest=0;private set
     val callback=object:ProxyFileDescriptorCallback() {
@@ -54,8 +55,8 @@ class EncryptedTinkPdfGate2(context:Context,file:File,key:ByteArray,aad:ByteArra
         renderer!!.openPage(page).use { p ->
             val height=width.toLong()*p.height/p.width;require(height in 1..1024 && width*height*4<=4L*1024*1024)
             val result=Bitmap.createBitmap(width,height.toInt(),Bitmap.Config.ARGB_8888)
-            try {p.render(result,null,null,PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);beforeDelivery();owner.publish{bitmap=result;result}}
-            catch(t:Throwable){result.recycle();throw t}
+            try {p.render(result,null,null,PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);beforeDelivery();beforeBitmapDelivery();owner.publish{bitmap=result;result}}
+            catch(t:Throwable){result.recycle();rejectedBitmaps++;throw t}
         }
     }
     fun release(page:Bitmap)=synchronized(monitor){check(bitmap===page);page.recycle();bitmap=null}

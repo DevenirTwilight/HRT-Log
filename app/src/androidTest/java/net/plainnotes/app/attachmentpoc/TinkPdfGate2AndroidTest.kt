@@ -1,7 +1,6 @@
 package net.plainnotes.app.attachmentpoc
 
 import android.graphics.Color
-import android.graphics.pdf.PdfDocument
 import android.system.ErrnoException
 import androidx.test.platform.app.InstrumentationRegistry
 import net.plainnotes.app.domain.AttachmentSession
@@ -18,11 +17,21 @@ class TinkPdfGate2AndroidTest {
     private val aad="B2-SECURITY-GATE2-TEST-ONLY/synthetic-pdf".toByteArray()
     private fun session()=AttachmentSession(UUID.randomUUID(),UUID.randomUUID())
     private fun pdf():ByteArray {
-        val doc=PdfDocument()
-        try {
-            for(i in 1..4){val p=doc.startPage(PdfDocument.PageInfo.Builder(200,300,i).create());p.canvas.drawColor(if(i%2==0)Color.BLUE else Color.WHITE);doc.finishPage(p)}
-            return ByteArrayOutputStream().also{doc.writeTo(it)}.toByteArray()
-        }finally{doc.close()}
+        // Four valid pages with bounded comment padding: offsets span multiple real Tink segments.
+        val text=StringBuilder("%PDF-1.4\n");val offsets=mutableListOf<Int>()
+        fun obj(id:Int,body:String){offsets+=text.length;text.append("$id 0 obj\n$body\nendobj\n")}
+        obj(1,"<< /Type /Catalog /Pages 2 0 R >>")
+        obj(2,"<< /Type /Pages /Kids [3 0 R 5 0 R 7 0 R 9 0 R] /Count 4 >>")
+        for(i in 0..3){val page=3+i*2;val content=page+1
+            obj(page,"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 200 300] /Resources << >> /Contents $content 0 R >>")
+            val rgb=if(i%2==0)"1 1 1" else "0 0 1"
+            val paint="q $rgb rg 0 0 200 300 re f Q\n%"+"X".repeat(131072)+"\n"
+            obj(content,"<< /Length ${paint.length} >>\nstream\n${paint}endstream")
+        }
+        val xref=text.length;text.append("xref\n0 11\n0000000000 65535 f \n")
+        offsets.forEach{text.append(String.format(java.util.Locale.ROOT,"%010d 00000 n \n",it))}
+        text.append("trailer\n<< /Size 11 /Root 1 0 R >>\nstartxref\n$xref\n%%EOF\n")
+        return text.toString().toByteArray(Charsets.US_ASCII)
     }
     private fun fixture(test:(File,B2StreamingCandidate.Evidence)->Unit) {
         SyntheticEmulatorGuard.requireEmulator();val root=Files.createTempDirectory(context.noBackupFilesDir.toPath(),"synthetic-gate2-pdf-").toFile()
@@ -37,8 +46,8 @@ class TinkPdfGate2AndroidTest {
     }
     @Test fun actualTinkMultipageProxyJumpScaleReopenNoPlaintextFallback()=fixture {file,evidence->
         repeat(2){EncryptedTinkPdfGate2(context,file,key,aad,session().issue(),evidence).use{v->
-            assertEquals(4,v.pages)
-            for(page in listOf(0,3,1,0)){val b=v.render(page,if(page==3)512 else 128);assertTrue(b.width<=512);v.release(b);assertTrue(b.isRecycled)}
+            assertEquals(4,v.pages);assertTrue(evidence.length>B2StreamingCandidate.SCRATCH*4)
+            for(page in listOf(0,3,1,0)){val b=v.render(page,if(page==3)512 else 128);assertTrue(b.width<=512);assertEquals(if(page%2==0)Color.WHITE else Color.BLUE,b.getPixel(b.width/2,b.height/2));v.release(b);assertTrue(b.isRecycled)}
             assertTrue(v.reads>0);assertTrue(v.maxRequest>0)
         }}
     }
@@ -68,4 +77,21 @@ class TinkPdfGate2AndroidTest {
             assertTrue(old.delete());val again=v.render(0);v.release(again)
         }
     }
+    @Test fun ownerRevocationDuringNativePageLifetimeRejectsBitmapAndSerializesRendererClose()=fixture {file,evidence->
+        val owner=session().issue();val rendered=java.util.concurrent.CountDownLatch(1);val release=java.util.concurrent.CountDownLatch(1)
+        val closing=java.util.concurrent.CountDownLatch(1);val closed=java.util.concurrent.CountDownLatch(1)
+        val pool=java.util.concurrent.Executors.newFixedThreadPool(2)
+        val v=EncryptedTinkPdfGate2(context,file,key,aad,owner,evidence,beforeBitmapDelivery={rendered.countDown();check(release.await(20,java.util.concurrent.TimeUnit.SECONDS))})
+        try {
+            val result=pool.submit(java.util.concurrent.Callable{v.render(3)})
+            assertTrue(rendered.await(20,java.util.concurrent.TimeUnit.SECONDS));owner.close()
+            val close=pool.submit{closing.countDown();v.close();closed.countDown()}
+            assertTrue(closing.await(20,java.util.concurrent.TimeUnit.SECONDS));assertFalse(closed.await(100,java.util.concurrent.TimeUnit.MILLISECONDS))
+            release.countDown()
+            val failure=assertThrows(java.util.concurrent.ExecutionException::class.java){result.get(20,java.util.concurrent.TimeUnit.SECONDS)}
+            assertTrue(failure.cause is IllegalStateException);close.get(20,java.util.concurrent.TimeUnit.SECONDS)
+            assertEquals(1,v.rejectedBitmaps)
+        }finally{release.countDown();pool.shutdownNow();v.close()}
+    }
+
 }

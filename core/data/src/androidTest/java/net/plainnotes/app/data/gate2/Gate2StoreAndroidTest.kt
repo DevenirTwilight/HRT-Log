@@ -162,4 +162,14 @@ class Gate2StoreAndroidTest {
         assertEquals(old,s.active());assertEquals("ABORTED",s.phase(overflow.id));assertFalse(s.file(overflow).exists())
     }
 
+    @Test fun replacingAuthenticatedLeafWithValidOldCipherCannotCommitOrDeleteReplacement()=fixture { s ->
+        val old=initial(s);val next=s.prepare();val target=s.file(next)
+        fails{s.import(next,ByteArrayInputStream(bytes),fault={if(it==Gate2Store.Seam.BEFORE_COMMIT){
+            check(target.renameTo(File(target.parentFile,"owned-moved.cipher")));s.file(old).copyTo(target)
+        }})}
+        assertEquals(old.id,s.active());assertEquals(1L,s.revision());assertEquals("CLEANUP_PENDING",s.phase(next.id))
+        assertArrayEquals(s.file(old).readBytes(),target.readBytes());assertEquals("QUARANTINE_FOREIGN_PATH",s.reconcile()[next.id])
+        assertTrue(target.exists());s.open().close()
+    }
+
 }

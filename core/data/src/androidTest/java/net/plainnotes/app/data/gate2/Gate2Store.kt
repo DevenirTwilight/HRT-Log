@@ -114,17 +114,19 @@ internal class Gate2Store(val context:Context,val fixture:String="synthetic-gate
         val key=try{stageKey(op)}catch(e:Throwable){Os.close(dir);throw e}
         try {
             capability.publishFor(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch)){Unit};update(op,"WRITING")
+            // Fixed durable reservation for this attempt; no native SQL round-trip per 8KiB chunk.
+            val reserved=reservation(op.id);val primitive=B2StreamingCandidate.primitive(key)
             FileChannel.open(target.toPath(),StandardOpenOption.WRITE,StandardOpenOption.CREATE_NEW,LinkOption.NOFOLLOW_LINKS).use { fd ->
                 created=true;val ownedStat=Os.stat(target.path);raw.execSQL("UPDATE synthetic_gate2_operation SET owned_device=?,owned_inode=? WHERE id=?",arrayOf(ownedStat.st_dev,ownedStat.st_ino,op.id))
                 val out=object:FilterOutputStream(Channels.newOutputStream(fd)){override fun close(){flush()}}
-                B2StreamingCandidate.primitive(key).newEncryptingStream(out,op.context).use { cipher ->
+                primitive.newEncryptingStream(out,op.context).use { cipher ->
                     var total=0L;var zeros=0
                     while(true){capability.check();val n=source.read(scratch);if(n<0)break
                         if(n==0){check(++zeros<=8){"Synthetic provider stalled"};continue};zeros=0;total+=n
-                        check(total<=B2StreamingCandidate.MAX_BYTES && B2StreamingCandidate.primitive(key).expectedCiphertextSize(total)<=reservation(op.id)){"Synthetic input limit"}
+                        check(total<=B2StreamingCandidate.MAX_BYTES && primitive.expectedCiphertextSize(total)<=reserved){"Synthetic input limit"}
                         cipher.write(scratch,0,n);scratch.fill(0);fault(Seam.WRITE)}
                 }
-                check(fd.size()<=reservation(op.id));fault(Seam.BEFORE_FILE_SYNC);fd.force(true);fault(Seam.AFTER_FILE_SYNC)
+                check(fd.size()<=reserved);fault(Seam.BEFORE_FILE_SYNC);fd.force(true);fault(Seam.AFTER_FILE_SYNC)
             }
             val evidence=B2StreamingCandidate.openAuthenticated(target,key,op.context,capability).use{it.evidence}
             db.runInTransaction {raw.execSQL("UPDATE synthetic_gate2_operation SET phase='AUTHENTICATED',plain_hash=?,cipher_hash=?,plain_bytes=?,cipher_bytes=? WHERE id=?",
@@ -136,7 +138,7 @@ internal class Gate2Store(val context:Context,val fixture:String="synthetic-gate
             fault(Seam.AFTER_DIR_SYNC);fault(Seam.BEFORE_COMMIT)
             val activeWrap=wrap(key,activeAlias,op.context+"/active/${scope.dataset}/1".toByteArray())
             AttachmentTransaction.commit(db,scope,capability) {
-                check(phase(op.id)=="AUTHENTICATED")
+                check(phase(op.id)=="AUTHENTICATED");check(ownedFile(op)){"Synthetic owned leaf replaced before commit"}
                 raw.execSQL("UPDATE synthetic_gate2_current SET active=?,revision=revision+1 WHERE id=1 AND revision=?",arrayOf(op.id,op.expected))
                 val changed=raw.query("SELECT changes()").use{check(it.moveToFirst());it.getLong(0)};check(changed==1L){"Synthetic stale CAS"}
                 raw.execSQL("UPDATE synthetic_gate2_operation SET phase='COMMITTED',active_wrap=? WHERE id=?",arrayOf(activeWrap,op.id))

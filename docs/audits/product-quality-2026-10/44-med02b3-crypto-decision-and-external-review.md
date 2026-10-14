@@ -19,7 +19,7 @@
 
 ## canonical context 精确候选（未冻结）
 
-[独立Python UUID转录](../../../tools/attachment-design-validation/gate2-context-vector.json)与Gate2ContextContract固定向量：ASCII `B2-SECURITY-GATE2-TEST-ONLY` + 00；u16BE protocol=0；u16BE suite=1；五个UUID16B网络顺序依次logicalVault/object/version/attempt/DEKhandle；u16BE format（合成opaque=0）。总长由固定向量验证；真实正式protocolID、格式allowlist、metadata版本/flags尚未分配。负向向量拒绝u16截短及UUID顺序替代，不证明完整密码组合安全。
+[独立Python UUID转录](../../../tools/attachment-design-validation/gate2-context-vector.json)与Gate2ContextContract固定向量：ASCII `B2-SECURITY-GATE2-TEST-ONLY` + 00；u16BE protocol=0；u16BE suite=1；五个UUID16B网络顺序依次logicalVault/object/version/attempt/DEKhandle；u16BE format（合成opaque=0）。固定114B（marker28B、protocol/suite4B、五UUID80B、format2B），由独立向量验证；真实正式protocolID、格式allowlist、metadata版本/flags尚未分配。负向向量拒绝u16截短及UUID顺序替代，不证明完整密码组合安全。
 
 SQLCipher元数据是selected版本的可信来源：明文长度、plainSHA256、cipherSHA256及完整crypto上下文。public hash不是认证本身；只有可信SQL选定+真实AEAD全对象验证一起满足承诺。localDataset只绑定本地查询、device envelope、epoch和CAS；physicalGeneration绑定owned FS；recordEpoch绑定医疗记录集合；session/process epoch绑定内存能力；它们不偷塞内容AAD以致跨设备恢复必须改旧原件。
 

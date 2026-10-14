@@ -37,3 +37,23 @@ python3 scripts/run_attachment_gate2_restart.py AFTER_COMMIT
 硬件掉电、真实ENOSPC、低端ARM/能耗/真实256MiB库1000版本、Root、敌意/密码PDF/native worker deadline、未来附件四语/320dp/2×/TalkBack、生产Tink/R8增量、跨设备完整备份和外部独立审查均NOT_RUN/NOT_REVIEWED_EXTERNALLY。预提交seam异常是FAULT_INJECTION_ONLY。最终原B2/B3/B4/R15/MED01回归及Release隔离要取最后HEAD。
 
 MED-02B3（B2-SECURITY-GATE2）是安全准入和集成证据阶段，**不是 B3 完整加密备份**，也**不是可向用户交付保存唯一医疗原件的正式资料库**。正式 B2 仍需协议/密钥方案的外部独立审查和负责人批准；B3 完整可信备份与跨设备恢复、B4/B5 图片与多页 PDF、B6 真实设备和无障碍验收以及明确启用批准仍是后续门槛。
+
+## 首轮9360fbb真实CI及修正批
+
+代码9360fbb19165007963d68aebc01960ff894e3ac2：PR Android38621821257的JVM/完整Android构建/26/29成功，但API35失败；push38621755505同API35失败，JVM/完整Android/26/29成功；两Android run已全部结束。两个Science38621820854/38621755706的gate/deep全部实际SUCCESS。首轮**不是全绿**。
+
+API26/29各native data42、app66零fail/skip，红控制预期1fail→修正同断言1pass；三处force-stop后freshPID分别验证WRITING owned清理、IN_COMMIT rollback/完整orphan隔离、AFTER_COMMIT新current/revision2保留。原B1 SQLCipher/迁移/旧包强停及旧POC继续成功。[原始artifact身份/digest与PID](46-med02b3-first-device-evidence.json)已下载核对；不是APK交付。
+
+API35 startup crash根因新增provider误用fingerprint判断emulator，0 tests，不能说native通过。改用现有已验收`/system/bin/getprop ro.kernel.qemu=1` attestation；保持emulator-only、standalone包与所有安全断言，不新增skip。
+
+实际样本发现16MiB+1拒绝方法（包含fixture建立/IO/失败清理）耗时API26 47044ms、API29 34502ms；各fixture结束时PSS仅final_not_peak，不是峰值/ARM基准。协调器此前每8KiB重新查询native SQL reservation并构造primitive；修正为本attempt固定的durable reservation在IO前读取一次、同primitive计数，仍逐读检查actual limit/cipher overhead/capability。新样本必须实测，不承诺预测加速。
+
+PDF增加四页有界comment padding，原件>4×64KiB，避免只验证一个加密segment；页面白/蓝交替并检查中央像素，保留第一页/末页/跳页/缩放/重开/撤权/坏tail/路径替换。不是恶意PDF或16MiB parser容量验收。
+
+本地旧HEAD完整Android重复运行退出130：同HEAD PR完整unit/lint/Debug/unsignedRelease已成功，为及时应用已定位修正停止仅本地Gradle客户端，未取消任何GitHub CI，未把该本地命令算完整成功。修正批需本地测试编译及最后HEAD全部CI；所有首轮CI结束后才推，不重跑无原因失败。
+
+新增第6项TinkPDF native page生命周期竞争：真实render生成位图、Page仍打开时暂停发布；owner撤权后结果拒绝并回收，Renderer close与Page生命周期串行。此为合成instrumentation seam，不是敌意parser deadline或正式AppLock接线认证。编译/最终CI结果以本批实际记录为准。
+
+补充提交前owned leaf检查与真实路径替换负向合同：全认证后将目标改为另一个合法旧cipher，SQL gate必须拒绝，保持旧CURRENT及foreign文件、重启清理只隔离。此inode保护不声称抵抗同UID/root无限竞争或持续整库回滚。新16项Store/6项PDF要在修正最终HEAD实际运行。
+
+修正批本地library test APK/app Android测试编译全部成功：5m11及最终增量1m20；Release检查器3方法再次通过。首轮四run已全部结束，允许推本批；新HEAD全量CI尚未完成，不能冒称最终验收。
