@@ -1,3 +1,53 @@
+## MED-02B0交付设计与最终检查入口 — 2026-10-14
+
+PR28 https://github.com/DevenirTwilight/HRT-Log/pull/28 OPEN，stacked到PR27已验收固定1c8d385，均不合并。
+报告32–37和三份AI peer原稿完成：协议公开向量/Room10/完整backup状态机/配额纠错政策/B1–B6/B1提示词。
+不外部认证、不启用生产附件；Schema9/PNBAK1/PK/version/正式签名/build26不改。
+代码阶段651e510 push Android38543179106、PR Android38543186185、push Science38543179176、PR Science38543186188全部success（PR deep实际成功）。
+实际JVM194+POC35；data160/rem17/app865零fail(61原有skip)；API35 data66/app215零fail(8原有skip)；API26/29各33零fail/skip。
+新3 filesystem实验实测Os.link EACCES不可用，O_EXCL禁止覆盖/目录sync/leaf nofollow通过，不证明硬件掉电。
+本地干净651unsigned Release与两test APK补跑通过；之前dirty源码中止是provenance保护，不绕过。
+最后合成草案补强localDataset/cryptoVault/physicalGeneration三域与CURRENT gate、不可变cipher commitment、owned operation wrap生命周期：
+Room36+backup模型14+framing3=53，scripts全部88、0fail/newskip；公认新protocol/actual restore仍未生产实现。
+最终本次HEAD必须完整push+PR JVM/Android/lint/API35/API26/29/Science再过，验收结果与精确HEAD/四CI链接记录在PR28正文/checks，不能冒用651先前绿灯。
+最终交付主审会等待这些checks全部结束；审阅者应看PR28当前HEAD/checks。后续仅经负责人批准执行提示词37，不能自动开始B1或合并27/28，不能签名/交付APK。
+仍需独立expert、真实Room/SQLCipher/新device/ENOSPC/powercut、ARM容量/KDF/native恶意格式；具体批准项见36。
+
+## MED-02B0 final synthetic corrections — 2026-10-14
+
+PR28 https://github.com/DevenirTwilight/HRT-Log/pull/28 已OPEN，stacked到未合并PR27，均不得自动合并。
+77e168e JVM35/Science PR38541101806深度通过，push Android38541015153 full build/lint成功但device失败。
+API26/29/35实际Os.link EACCES，否定hardlink发布方案，报告32/35保存来源与限制。
+已将候选改为O_EXCL独占创建cipher对象+完整认证/file+dirsync+DB CAS最后发布，另保留硬链接拒绝严谨测试；
+不是降低认证/禁止覆盖标准，不skip这项不可行结果。原已验收POC main source仍不改。
+主审发现并补强typed tombstone两步绕过和generation退回STAGING：合成迁移25+backup14+framing3=42，
+scripts全部77零失败。报告32–37完整，生产未启用。
+上一批PR Android38541101840剩余android job尚运行，必须等结束再推当前纠正版本，未取消CI。
+本地完整Android/lint/unsigned build83763仍进行。接下来当前补丁提交/推送、最终HEAD全checks及验收记录。
+
+## MED-02B0 design / review milestone — 2026-10-14
+
+报告32–37完成，包括两位AI独立原报告与第二轮交叉修订；不是外部认证。
+公开RFC5869/RFC9106和固定Wycheproof6向量，Python/JCA新草案转录；JVM194+POC35零失败。
+SQLite22 +backup model14 +framing3=39合成测试，scripts全部74零失败。
+首批9afec67 Android38539482928新增测试compile失败（非公开SDK O_DIRECTORY/Os.unlink），
+改公开Os.open/fstat目录类型/Os.remove，断言不变；该CI尚在跑其余job，等结束再推纠正，未取消。
+本地完整Android/lint/unsigned build正在83763 session；新协议KAT变更需最终CI重新验证。
+默认Schema9/PNBAK1/PK/version/signing均不动；build26 SHA256仍0c6bd9132ab15ca7625f1da19b59c1c9450cf4cb0518b15100e30396c5ed3fa0。
+下一步纠正后完整pushCI、stacked PR指向PR27分支，最终HEAD push/PR checks全绿并写结果。不合并、不交付APK。
+
+## MED-02B0 synthetic review milestone — 2026-10-14
+
+Scope commit0a925e8 push Android38536137541/Science38536137432 both green.
+Independent AI peer reviews completed; not external certification. 22 synthetic Room9→10
+SQLite tests +10 backup durability model tests +3 draft framing/HKDF tests pass locally.
+POC JVM existing28 +7 new review/vector tests pass (35 total); accepted POC source unchanged.
+New Android public-API link/no-replace, leaf O_NOFOLLOW and directory fsync experiments
+are test-only; three API runtime evidence pending CI. Production Schema9/PNBAK1 unchanged.
+Protocol/backup/policies/docs33..37 and final full CI/stacked PR still pending.
+
+> MED-02B0启动（2026-10-14）：主线c3bf2cbc Android38527627941/Science38527627946全绿；PR27仍OPEN，1c8d385 push/PR四run全success。本轮独立feature/med02b0-security-design-20261014从已验收PR27创建，后续stacked PR，不改accepted27/生产Schema/PNBAK1/PK/版本/签名/真实附件。用户明确要求不同审查者，已安排两位独立AI代码复核与第三位合成迁移设计；不是外部专业认证。初步生产阻断：publish撤权竞态、Reader生命周期、整体rollback边界、目录fsync/DBjournal/KDF成本。需确定性证据、生产协议/Room10/新备份设计及B1提示词，全部未正式上线。
+
 > MED-02A POC范围完成（2026-10-14）：代码6521173 push/PR Android/JVM/三个API/Science全部成功；PR API29外部protobuf解析失败经HTTP200核验仅失败job定向重跑一次成功（attempt2），未改断言/skip/版本。JVM194+28/data160/rem17/app865、API35 data66/app212（61/8原skip外部流程实际跑）、API26/29各30、Science261全部过；lint0/178既有警告，Debug/unsignedRelease/两仪器包/来源与manifest保护通过，实际DEX证明POC仅testAPK。报告30/机器证据+设计31完整，固定最终SHA/自身CI在PR27正文，最终提交检查成功后交还。PR25/26已MERGED_CI_VERIFIED于c3bf2cbc主线；PR27不自合并，MED02B迁移/协议/完整包/配额/关联政策待批准，物理ARM/独立review/生产AppLock与正式附件库未实施。无生产main/Schema/PNBAK1/PK/版本/签名/build26/真实数据改变，无正式APK交付。
 
 > MED-02A首轮CI实况：dcb8beb Android/JVM/Science及API26/29全部success；API35设备7失败均为基于MODEL/FINGERPRINT的emulator守卫拒绝，PDF/图片未进入。修正为公开getprop实际ro.kernel.qemu==1（不删除guard、不新增skip）；另补真实ContentResolver synthetic test-provider未知SIZE/可靠pipe错误/MIME、内存采样和100对象/1000元数据/多显式链接。主线PR25/26已合并且c3bf2cbc全CI成功，本分支已纳入。新HEAD完整设备/回归仍待，不能报全绿；正式main/Schema/PNBAK1/PK/签名/版本无变。

@@ -48,3 +48,13 @@ relicensed under MIT; each item remains subject to its source's terms.
   quotations from published labels and studies, each with a citation.
 
 Symptom scales such as GENDER-Q and GCLS are not included; see `docs/licensing.md`.
+
+## MED-02B0 synthetic crypto review vectors
+
+`tools/attachment-design-validation/draft_vectors.json` selects AES-GCM cases 91,92,93,130,131,132
+from C2SP/Wycheproof commit `7a325932231bd7a724c791c8b0d65ea4d6d2f435`, Apache-2.0.
+Original test comments/flags/results retained; no upstream executable code copied. License:
+`tools/attachment-design-validation/WYCHEPROOF-LICENSE`. Source URL and full source SHA256
+are embedded in the fixture. Independently generated draft transcripts are HRT Log synthetic
+design evidence, not a production format or security certification. RFC5869 Appendix A.1
+and RFC9106 section 5.3 standard test inputs/outputs are identified in test names and report33.

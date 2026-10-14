@@ -746,3 +746,22 @@ B只研究PDF/图片/处方等附件库：比较BLOB/逐文件/元数据+单独�
 ## 88. MED-02A 医疗附件安全技术验证（2026-10-14）
 
 用户授权独立合成数据POC：AES-256-GCM分块、每对象随机密钥/唯一nonce、未知长度流/认证结束清单/随机读/篡改与失败；ProxyFD+PdfRenderer无明文磁盘预览API26/29/35；JPEG/PNG/WebP识别/尺寸/解码限制与原字节保留；加密元数据/Keystore/可移植密钥、原子提交/纠错/恢复和旧PNBAK1关联冲突模型。测试及设计不等于上线/独立安全认证。不得新增生产Schema/附件格式/备份机制，不能降为明文文件后备，不改真实数据/PK/版本/签名/build26，不交付APK/自合并。完整适用JVM/Android/API35/lint/Science；报告只记实际测量，缺设备标NOT_RUN；交付独立PR、失败注入/威胁模型/下一阶段范围和具体审批。用户后续明确授权安全解决PR25冲突并合并；MED02最终需基于验证后的最新主线，保留R15全部实现与测试。
+
+## 89. MED-02B0 生产附件库安全审查与实施准备（2026-10-14）
+
+产品负责人授权独立分支技术审计、不同审查者交叉复核、合成迁移/攻击/失败注入测试、协议/Room10/完整医疗备份草案与恢复状态机、配额/纠错政策、B1..B6独立PR验收计划及B1提示词，并提交独立PR。PR27已验收但不自动合并；基于其验证HEAD建立stacked分支，保留主线R15/MED01。交叉AI复核不称外部专业认证，明确静态/运行/模型/未测试证据。不得将SYNPOC01改名生产；标准密码学原语和公开可核验向量，nonce/域/限额/EOF/rollback/撤权/Keystore/KDF/fs原子性/掉电深入审查。
+
+Room9→10仅草案及合成测试，不改生产entities/schema；完整医疗包独立于PNBAK1且旧记录恢复不能按相同整数ID重连。候选16MiB/256MiB/1000须实测，不标验收标准；图片优先，PDF恶意资源/真实ARM后，PRIMARY唯一入口，伪装不共享，密码PDF/分享暂缓；替换/旧版本/回收/永久删除具体政策。B1..B5在数据安全和完整备份通过前默认关闭。生产迁移/正式对象与备份格式/真实原件导入/正式版本/签名发布均需另行批准，本轮不实施，不自动合并PR27或本PR。
+
+### MED-02B0 设计细化（2026-10-14，待生产批准）
+
+报告32–37与tools合成SQL/向量/状态模型交付为审查草案，不批准生产Room10/新crypto/完整包上线。
+附件typed stable recordUUID+tombstone与recordEpoch共同防整数ID重用；physicalGeneration/sessionEpoch不进原件AAD。
+旧PNBAK1保持参数与格式，未来导出冻结serializationSchema9，恢复/overwrite/clear同事务quarantine旧关联。
+quota16MiB/256MiB/1000与pixels/deadline必须ARM测量和负责人批准；垃圾箱/旧版本保留、永久删除备份政策见报告36待决定。
+B1–B5默认关闭；独立专家审核、完整加密backup/newdevice恢复及明确开启批准前不能保存真实医疗附件。
+
+MED-02B0最终设计细化（2026-10-14，仍待生产批准）：local metadata dataset UUID与immutable crypto logicalVault、physical generation分别独立。
+完整恢复fresh local scopes并保持原cipher/AAD，CURRENT唯一/retired隔离，same crypto version不得不同bytes；旧PNBAK恢复空fresh dataset/crypto域，不按ID重关联。
+operation owned generation/UUID/暂存device wrap/hash及终态不可逆清理纳入Room10草案，都是tools synthetic而非生产变更。
+实际API26/29/35 hardlink被拒绝，禁止把它作已验证发布方案；候选O_EXCL cipher creation+完整认证/file+dirsync+DB原子授权发布，真正掉电/SQLCipher联合恢复仍待验证。
