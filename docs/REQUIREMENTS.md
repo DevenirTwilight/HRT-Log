@@ -778,3 +778,10 @@ operation owned generation/UUID/暂存device wrap/hash及终态不可逆清理�
 
 用户附件授权产品V2契约、Tink成熟Streaming AEAD与JCA草案实证对照、隔离synthetic输入/发布/撤权/恢复合同、Release无POC校验、官方法规条件核查及独立PR。不批准正式协议writer/reader、Room10变更、PNBAK或完整备份、附件入口/真实数据、PK/版本/签名发布，自合并禁止。原27–29已按§91授权合并且主线cfe600ee CI全成功，旧stacked假设不再适用。
 补充ZIP四Markdown必须完整阅读、原文与修订分开原样保留；SOURCE_MISSING已解决，来源SHA与采取/拒绝/延期映射见39/欧盟矩阵。吸收PHR三链、Inbox/元数据检索、日期精度/来源、双向显式多关联、版本纠错/Trash、精选就诊包；V1图片+PDF，不以Beta替代。OCR/全文/FHIR互通后置，不自动诊断/猜关联。原稿评分/普遍豁免/零外传/历史许可结案不直接采用；PrivacyP0和无障碍/分发专项独立。B2生产必须另批具体协议/keys/恢复/guards/AppLock/FS+SQL批准，真实ARM/掉电/外部专家未跑如实标记。
+
+## 93. MED-02B3 / B2-SECURITY-GATE2 隔离集成证据（2026-10-14）
+
+任务原文和SHA归档于audits/product-quality-2026-10/sources/med02b3。此MED-02B3不是路线B3完整医疗加密备份。
+允许从PR30已验收HEAD建立独立stacked分支，开展test-only真实Android SQLCipher/FS/合成Keystore/授权门/强停新PID，Tink全认证固定FD到ProxyFD/PdfRenderer、专家审查包和未来生产授权提案；提交、推送、独立PR和完整最终HEAD CI。
+禁止生产协议冻结、writer/reader/AppLock接线、Schema/guards/备份/PK/版本/sign变更、真实原件/密钥/私有构建访问、功能开启、自动合并和APK交付。feature0及VERIFIED/VALIDATED硬拒保持。ARM/真实ENOSPC/硬件掉电/敌意parser/外部审核无实际证据则NOT_RUN/NOT_REVIEWED_EXTERNALLY。
+必须延续报告39的PHR V2显式链接、日期精度、纠错版本/回收站、图片+多页PDF及开放前完整备份契约；不增加提前可见UI。最高RESEARCH_GO / IMPLEMENTATION_PENDING_OWNER_AND_EXTERNAL_REVIEW，生产NO-GO。
