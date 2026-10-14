@@ -1,7 +1,17 @@
 # HRT Log / Plain Notes
 
 Native offline Android log and reminder app. Package: `net.plainnotes.app`.
-Current baseline: Build **25** / **0.2.0**, database schema **9**.
+**Privacy:** see [`PRIVACY.md`](PRIVACY.md) (also inside the app, offline, in four languages: About → Privacy).
+HRT Log is a personal record and reminder app. It does not diagnose, choose doses or judge treatment effect;
+concentration curves are conditional literature-based estimates, not personal measurements.
+
+Version layers (do not confuse them):
+- **Default branch code** (this repository): versionCode 26 / 0.2.0, Room database runtime version **10**
+  (including disabled attachment metadata tables), encrypted backup `PNBAK1` structured serialization **9**.
+- **Privately delivered build 26**: signed with the official key and handed to the maintainer only; it is not a
+  public release and is a different object from whatever the default branch currently builds.
+- **Public release**: [v0.2.0](https://github.com/DevenirTwilight/HRT-Log/releases/tag/v0.2.0), versionCode 5 (source `462da22`), much older than the default branch.
+- **Open pull requests** are unmerged and not part of any build until merged.
 Current work and verification: [`docs/HANDOFF.md`](docs/HANDOFF.md);
 feature status and unapproved candidates: [`docs/BACKLOG.md`](docs/BACKLOG.md).
 [`docs/PLAN.md`](docs/PLAN.md) retains the historical architecture decisions.
@@ -150,7 +160,7 @@ and portions of the documentation are primarily produced with AI development too
 ## Disguise mode
 
 Settings → Disguise mode swaps the launcher icon for a working calculator or notes app. Type your code and press `=`
-(calculator) or search for it (notes) to open the app; an optional decoy code opens a separate, empty space.
+(calculator) or search for it (notes) to open the app; an optional alternate code opens private notes, not your HRT records.
 Shake the phone to return to the disguise. Known limits: the real app name still shows in the system app list,
 in system settings and in notification headers; after switching, some launchers take a few seconds to refresh and
 drop the old home-screen shortcut (add the new icon from the app drawer).
