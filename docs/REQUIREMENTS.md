@@ -785,3 +785,5 @@ operation owned generation/UUID/暂存device wrap/hash及终态不可逆清理�
 允许从PR30已验收HEAD建立独立stacked分支，开展test-only真实Android SQLCipher/FS/合成Keystore/授权门/强停新PID，Tink全认证固定FD到ProxyFD/PdfRenderer、专家审查包和未来生产授权提案；提交、推送、独立PR和完整最终HEAD CI。
 禁止生产协议冻结、writer/reader/AppLock接线、Schema/guards/备份/PK/版本/sign变更、真实原件/密钥/私有构建访问、功能开启、自动合并和APK交付。feature0及VERIFIED/VALIDATED硬拒保持。ARM/真实ENOSPC/硬件掉电/敌意parser/外部审核无实际证据则NOT_RUN/NOT_REVIEWED_EXTERNALLY。
 必须延续报告39的PHR V2显式链接、日期精度、纠错版本/回收站、图片+多页PDF及开放前完整备份契约；不增加提前可见UI。最高RESEARCH_GO / IMPLEMENTATION_PENDING_OWNER_AND_EXTERNAL_REVIEW，生产NO-GO。
+
+2026-10-14补充：负责人选择“接手#31推到全绿”并明确复核不取消。接手会话可在PR31分支追加测试/文档修正提交（不改写历史、不改生产源码），把复核发现记入报告45/47，推动最终HEAD全部CI成功；合并、签名、APK交付和生产实施仍需另行批准。

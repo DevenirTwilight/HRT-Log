@@ -3,6 +3,18 @@
 2026-10-14。**代码阶段00cb4cf完整CI验收通过；附件生产仍NO-GO。** 最终验收文档HEAD及其全部push/PR检查以[PR31最终记录](https://github.com/DevenirTwilight/HRT-Log/pull/31)固定，交付前必须实际等最后HEAD成功，不借用旧代码绿灯。以下先给结果，再保留真实阶段性失败与修正历史。
 
 
+## 接手与独立复核修正（2026-10-14，37b813d之后）
+
+37b813d文档HEAD的push/PR共14项检查全部SUCCESS（Android38628580213/38628589483、Science38628580444/38628589514）。随后按负责人指示由另一会话接手推进PR31，并先做独立复核（[报告47](47-med02b3-independent-review.md)，作者以外的AI工程复核，**不是**外部专家审核，NOT_REVIEWED_EXTERNALLY不变）。复核修正只动测试与文档：
+
+- 负向合同改为断言拒绝原因：自有守卫用消息（`Synthetic stale CAS`、`Synthetic owned leaf replaced before commit`、`Synthetic parent replaced`、`Synthetic input limit`、`Synthetic provider stalled`、`Commitment mismatch`、`Synthetic key unavailable`、`Synthetic quota reservation`、`Attachment capability revoked`、`Capability scope mismatch`及注入seam消息），O_EXCL/NOFOLLOW用`FileAlreadyExistsException`，角色/跨对象包裹替换用`GeneralSecurityException`；只有裸`check()`的4处断言`IllegalStateException`。没有删除或放宽任何原断言。
+- 双写者CAS补断言：失败者自己的密文已删除、胜者对象保留且为CURRENT。
+- 新增`tools/attachment-design-validation/test_gate2_context_vector.py`：用stdlib从JSON输入重算114B转录，并核对Kotlin合同中固定的同一hex；设计校验58→61。改错一字节时2项实际失败，恢复后通过。
+- 证据等级标注：`revokedAfterDecryptBeforeDelivery…`与`ownerCloseRecyclesNativeBitmap…`直接调用`ProxyFileDescriptorCallback.onRead`，是DIRECT_CALLBACK证据，不经内核ProxyFD；IN_COMMIT撤权等待及renderer关闭串行用“100ms内未完成”证明阻塞，属TIMING_BASED证据。`mimeClaimIsNotFormatValidation`只证明测试provider的MIME声明与魔数不符，导入器对“MIME与魔数不符”的拒绝NOT_RUN（生产仍禁止VALIDATED）。
+- 报告45补充复核M1（恢复与写入者互斥）与M2（孤儿隔离保留/配额）为风险与审批前置。
+
+这些改动的最终HEAD及其全部CI以PR31正文为准；修正提交本身尚未有设备结果前，不称通过。
+
 ## 已核验完整代码结果
 
 固定代码 `00cb4cf89671f06c432fa52323e31022498a6fbf`；[PR31](https://github.com/DevenirTwilight/HRT-Log/pull/31) OPEN、未合并，stacked base=PR30分支feature/med02b2-v2-import-gate；parent814d355，默认main仍cfe600ee。父PR30 OPEN、原最终四CI成功；不改变或合并父分支。
@@ -66,7 +78,7 @@ python3 scripts/run_attachment_gate2_restart.py AFTER_COMMIT
 - 确定性红控制是故意unsafe的test-only ack cleanup，要求相同“已提交active仍存在”断言先失败；修正路径读取durable SQL COMMITTED后保留active。不是生产缺陷或修改已验收B2。
 - 新epoch恢复时旧harness journal必须按row.dataset/epoch隔离，不只比较连接当前scope；parent路径替换后的cleanup/reconcile必须核对持久device/inode，不能按路径误删foreign。这些检查保留在新增真实测试。
 - 最新本地library test APK与app Android测试Kotlin编译PASS，联合7m31、最新增量1m16。纯JVM domain63/PK124/importer12/POC62=261，零fail/error/skip；设计58PASS、Release检查器3方法/33污染subcases PASS。
-- 完整Android unit/lint/Debug/unsignedRelease、red-green、三API freshPID/PDF、最终push/PR CI仍PENDING，后续实际结果更新此报告，不借父814绿灯。
+- （历史，写于00cb CI完成前）完整Android unit/lint/Debug/unsignedRelease、red-green、三API freshPID/PDF、最终push/PR CI当时PENDING；其实际结果见上文“已核验完整代码结果”，37b813d文档HEAD的14项检查也已全部成功。
 
 ## 尚未运行与生产限制
 
