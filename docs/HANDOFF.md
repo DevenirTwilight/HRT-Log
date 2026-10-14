@@ -1,3 +1,10 @@
+## MED-02B3 / B2-SECURITY-GATE2 代码全绿及最终交接 — 2026-10-14
+
+PR31 https://github.com/DevenirTwilight/HRT-Log/pull/31 OPEN未合并，stacked于PR30(parent814d355，仍OPEN)，main cfe600ee不变。代码00cb4cf89671f06c432fa52323e31022498a6fbf的push/PR Android38625628282/38625636512全五job成功；Science38625628466/38625636623成功，PR deep实际通过、push deep按原gate skip。
+JVM261；Androidunit data180/rem17/app865、61原有skip；26/29每API data43/app67零fail/skip；35 data110/app报告249、8原有skip。新16 Store/3 SAF/1 restart+3外部强停/2向量/6 TinkPDF；9次freshPID、三个API红1fail→绿1pass全部实际成功。原B2/B3/B4/R15/MED01/PNBAK9/迁移/重启回归保留。原artifact/SHA/PID/实际final-not-peak PSS见46-code-evidence，首轮9360 API35失败保留。
+报告43基线、44协议/外部审查包、45风险/审批、46验收已完成。当前末次文档HEAD还须等待全部最终push/PR CI；精确SHA及最终CI固定PR31正文，不能以00cb结果冒称后续HEAD。生产源码/Schema/guards/备份/PK/version/sign不改、feature0；真实原件/密钥/私有build26未访问，无合并/正式签名/交付APK。ZIP四MD已在PR30归档并SHA核对，PR31继承但尚未进main。
+RESEARCH_GO / IMPLEMENTATION_PENDING_OWNER_AND_EXTERNAL_REVIEW，生产NO-GO；ARM/掉电/真ENOSPC/敌意PDF/外部专家/未来完整备份和附件UI仍未验收。此MED-02B3=安全准入证据，不是路线B3完整备份或正式资料库。后续最小B2范围与需批准事项见45，不自动开始。以下保留阶段历史。
+
 ## MED-02B3 / B2-SECURITY-GATE2 首轮设备证据及修正 — 2026-10-14
 
 PR31 https://github.com/DevenirTwilight/HRT-Log/pull/31 OPEN，stacked于未合并PR30(parent814d355)，不自合并。首轮9360fbb：PR/push Science gate/deep成功，JVM261及PR完整Android构建成功；API26/29各data42/app66、红1fail→绿1pass、三处force-stop freshPID实际成功。API35 provider误用fingerprint导致startup crash/0tests，首轮非全绿。

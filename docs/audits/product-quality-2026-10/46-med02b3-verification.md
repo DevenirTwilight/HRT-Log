@@ -1,6 +1,42 @@
 # 46 — MED-02B3 / B2-SECURITY-GATE2 验证记录
 
-2026-10-14。**开发中，最终HEAD CI尚未执行/通过**。下面是新增测试范围，不把代码存在或编译成功当设备结果。
+2026-10-14。**代码阶段00cb4cf完整CI验收通过；附件生产仍NO-GO。** 最终验收文档HEAD及其全部push/PR检查以[PR31最终记录](https://github.com/DevenirTwilight/HRT-Log/pull/31)固定，交付前必须实际等最后HEAD成功，不借用旧代码绿灯。以下先给结果，再保留真实阶段性失败与修正历史。
+
+
+## 已核验完整代码结果
+
+固定代码 `00cb4cf89671f06c432fa52323e31022498a6fbf`；[PR31](https://github.com/DevenirTwilight/HRT-Log/pull/31) OPEN、未合并，stacked base=PR30分支feature/med02b2-v2-import-gate；parent814d355，默认main仍cfe600ee。父PR30 OPEN、原最终四CI成功；不改变或合并父分支。
+
+| 检查 | 实际结果 |
+| --- | --- |
+| 全JVM | domain63/PK124/importer12/POC62=261，零fail/error/skip；本轮新增2个确定性context向量，父B2原20合同不重复计功 |
+| Android unit | data180/reminder17/app865，零失败；app61原有skip不变 |
+| lint / 构建 | full lint、Debug、unsigned Release、两test APK、provenance/manifest/Release全DEX隔离均PASS |
+| API26/29 | 每API native data43/app67，零fail/skip；真实SQLCipher/Keystore/FS与6个TinkPDF方法实际运行 |
+| API35完整设备 | data110/app报告249，零fail；8原有app skip（runner Finished257），所有旧重启脚本成功 |
+| 三API红绿 | 故意unsafe test-only ack cleanup控制各预期1failure，同断言修正路径各1pass；不是生产漏洞声明 |
+| 三API强停 | 每API WRITE/IN_COMMIT/AFTER_COMMIT三次，共9次不同fresh PID；旧CURRENT/清理、完整orphan隔离、已COMMIT新CURRENT保留分别验证 |
+| 旧回归 | B2隐私/导入清理、B3导航/锁定/伪装、B4统一库存/VOIDED/恢复/分页、R15误跳过、MED01就诊/化验/Trash/PNBAK9全部保留通过；B4-E最大挂载3行不是ARM基准 |
+| Science | PR gate/deep实际SUCCESS；push gateSUCCESS、deep按原分类SKIPPED，无新增skip/PK改动 |
+
+[PR Android38625636512](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38625636512)、[push Android38625628282](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38625628282)各五job全部结束SUCCESS；[PR Science38625636623](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38625636623)、[push Science38625628466](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38625628466)全部结束SUCCESS（push既有deep门控）。不是最终后来文档HEAD的替代。
+
+[原始artifact身份、ZIP digest、根HTML/XML计数、PID和实际内存样本](46-med02b3-code-evidence.json)已下载核对5份报告，未下载/交付APK。仅本轮新增：16项原生Store方法、3项本地SAF provider、1项普通restart合同另加3处外部强停、2项同源canonical向量、6项TinkPDF；与父B2 20方法严格区分。生产B1日志仍PREPARED，模拟有效状态在独立synthetic_gate2表，不是正式生产READY。
+
+## 实际资源数据与未完成项目
+
+16MiB+1/stall/cancel测试方法包含fixture建立/实际加密IO/拒绝清理；结束时仅采一次PSS，**不是峰值/吞吐/ARM性能**。代码00cb：API26 elapsed52497ms/finalPSS39142KiB；29 30710ms/55936KiB；35 56806ms/62351KiB。不能据此声称缓存reservation必然加速或冻结16/256/1000额度；独立设备基准仍NOT_RUN。其余原始方法样本在JSON，不填猜测数值。
+
+四页合成PDF>4×64KiB跨段，正确蓝/白页中央像素、第一页/末页跳页/缩放/重开；同FD完整认证→ProxyFD随机offset→公共PdfRenderer，不落完整明文PDF/cache。坏tail在FD发行前拒绝；路径替换原inode租约继续、newopen commitment拒绝；unlink不会撤销既有FD，owner能力关闭才撤权。真实render后Page仍打开/位图未交付时，撤权拒绝并回收结果，renderer关闭与page生命周期串行。
+
+真实ARM、硬件掉电、真实磁盘ENOSPC、Root无限竞争/整个合法旧快照回滚、敌意/密码PDF/隔离worker deadline、满配256MiB/1000真实对象、生产Tink/R8 APK增量、未来资料库四语320dp/2×/TalkBack、完整附件备份/跨设备恢复及外部独立审核NOT_RUN/NOT_REVIEWED_EXTERNALLY。seam异常为FAULT_INJECTION_ONLY；fsync返回及force-stop不是掉电认证。
+
+## 不变量、来源与下一阶段
+
+相对parent814，production Kotlin/src/main、Room schema10/八表/旧29表/guards、PNBAK1 magic/KDF/AES-GCM/serialization9、AppLock、PK、versionCode、正式签名配置无差异；实际CI Release全DEX/manifest无POC/Tink/provider/实验marker和INTERNET。没有取消GitHub CI；未访问真实用户数据/密钥/私有构建/内部交付链接，未接触/重建正式build26，不冒称重新校验其私有APK checksum。
+ZIP四份Markdown原字节及SHA在sources/med02b2，全部通过重新hash核对；用户原欧盟稿与后续修订分别保留。它们已在PR30仓库分支，PR31继承，尚未进入默认main；SOURCE_MISSING已解决。PHR V2显式临床关联、日期/来源语义、纠错/版本/Trash、图片+多页PDF、开放前完整B3备份、Privacy P0和欧盟条件矩阵保持；本PR无提前UI。
+
+协议决定及专家固定审查包见44；风险/实机计划与具体最小生产B2审批范围见45；代码/来源基线见43。结论RESEARCH_GO / IMPLEMENTATION_PENDING_OWNER_AND_EXTERNAL_REVIEW，生产NO-GO。仍需负责人确定独立专家、审核后wire/context/DEK/KEK/角色预算、默认关闭writer/recovery/AppLock接线及必要最小guard/ADR；**本PR没有替代批准或实施生产协议**。
 
 ## 代码范围与可复现命令
 
