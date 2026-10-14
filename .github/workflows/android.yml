@@ -19,6 +19,7 @@ jobs:
       - name: Lightweight scientific contracts and four-language checks
         run: |
           python3 -m unittest discover -s scripts -p 'test_attachment_design_validation.py'
+          python3 -m unittest discover -s scripts -p 'test_attachment_release_isolation.py'
           python3 scripts/generate_unified_model_reference.py --check
           python3 scripts/check_unified_concentration.py
           python3 -m unittest discover -s scripts -p 'test_collect_unified_device_performance.py'
@@ -61,6 +62,8 @@ jobs:
           python3 tools/pk-audit/sublingual_p1c1_compare.py --after docs/pk-research/results/sublingual-p1c1-after.json --engine docs/pk-research/results/sublingual-p1c1-engine.json --calculator docs/pk-research/results/sublingual-p1c1-calculator.json --eligibility docs/pk-research/results/sublingual-p1c1-eligibility.json --output app/build/reports/pk-p1c1-comparison
           python3 tools/pk-audit/sublingual_p1c2_compare.py --output app/build/reports/pk-p1c2-comparison
       - run: python3 scripts/check_release_manifest.py
+      - name: Exclude experimental attachment code and providers from release payload
+        run: python3 scripts/check_attachment_release_isolation.py
       # Audit B1 / D-4: the R8-shrunk Release APK must name exactly this commit from a clean checkout, and the delivery
       # ledger keeps delivered versionCodes strictly increasing (source, APK and certificate identities kept apart).
       - name: Release APK source identity and delivery ledger

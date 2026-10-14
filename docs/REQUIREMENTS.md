@@ -773,3 +773,8 @@ operation owned generation/UUID/暂存device wrap/hash及终态不可逆清理�
 ## 91. MED-02 前置栈顺序合并授权（2026-10-14）
 
 负责人在MED-02B1交付后明确要求“合并”。据此按PR27→28→29保留历史merge commit合并；每步等待主线完整CI成功，后续PR改指默认分支并验证差异与已验收内容完全一致，不强推、不重写父分支。最终合并验收见报告38及HANDOFF最新索引。授权只覆盖这三项PR，不启用附件、不批准生产对象协议/完整医疗备份、B2/B3或新版本签名交付。后续B2-GATE附件另授权设计及隔离合成验证，不自动合并其PR。
+
+## 92. MED-02B2 / B2-GATE 与补充原始资料（2026-10-14）
+
+用户附件授权产品V2契约、Tink成熟Streaming AEAD与JCA草案实证对照、隔离synthetic输入/发布/撤权/恢复合同、Release无POC校验、官方法规条件核查及独立PR。不批准正式协议writer/reader、Room10变更、PNBAK或完整备份、附件入口/真实数据、PK/版本/签名发布，自合并禁止。原27–29已按§91授权合并且主线cfe600ee CI全成功，旧stacked假设不再适用。
+补充ZIP四Markdown必须完整阅读、原文与修订分开原样保留；SOURCE_MISSING已解决，来源SHA与采取/拒绝/延期映射见39/欧盟矩阵。吸收PHR三链、Inbox/元数据检索、日期精度/来源、双向显式多关联、版本纠错/Trash、精选就诊包；V1图片+PDF，不以Beta替代。OCR/全文/FHIR互通后置，不自动诊断/猜关联。原稿评分/普遍豁免/零外传/历史许可结案不直接采用；PrivacyP0和无障碍/分发专项独立。B2生产必须另批具体协议/keys/恢复/guards/AppLock/FS+SQL批准，真实ARM/掉电/外部专家未跑如实标记。

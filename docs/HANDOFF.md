@@ -1,3 +1,18 @@
+## MED-02B2 代码全绿与最终验收交接 — 2026-10-14
+
+PR30 https://github.com/DevenirTwilight/HRT-Log/pull/30 OPEN，base默认cfe600ee（已验证主线），不合并。代码f8b5c7a54bed07149c74a1a60efffef58c2fb054：PR Android38602239109/push38602160691全5jobs成功；Science PR38602239260/push38602160448 gate/deep全部实际成功。
+JVM259（63/124/12/POC60，新20），设计58、隔离3；Android data180/rem17/app865、61原有skip；API35 data88/app报告243、8原有skip；26/29各data21/app61，无fail/newskip。原B1/SQLCipher/Room/PNBAK/R15/MED01/B2/B3/B4/重启流程保持。
+本地完整full unit/lint/Debug/unsignedRelease/testAPK成功31m05，实际Release DEX/manifest无POC/Tink/provider和INTERNET。五报告ZIP身份/原始计数见42-code-evidence；不是APK交付。生产源码/Schema/backup/PK/版本/sign不改，build26摘要不变。
+用户补充4 Markdown完整阅读原样归档并SHA；SOURCE_MISSING已补齐，接受/拒绝/延期在39及欧盟矩阵。报告39–42和Tink/JCA比较/失败合同交付；B2生产NO-GO，正式protocol/key/guards/FS+Room/AppLock需独立批准，B3/B4/B5/ARM/专家门保持。
+当前末次文档HEAD还需完整push/PR Android/API26/29/35/Science检查；最终SHA和CI固定在PR30正文，交付前实际等待全结束，不冒用f8代码结果。无真原件/新正式backup/入口、无合并签名发布。以下为历史阶段记录。
+
+## MED-02B2 / B2-GATE 设计与合成合同推进 — 2026-10-14
+
+分支feature/med02b2-v2-import-gate，parent cfe600eeb6efcca60668763a31969af07a2892b9。三前置PR27/28/29均已合并，最终主线Android38598762817全5成功/Science38598762944 gate成功（文档deep按门控skip），MERGED_CI_VERIFIED。未改父分支。
+用户新任务及补充资料授权见REQUIREMENTS §92；四Markdown原样归档sources/med02b2，SOURCE_MISSING已补齐。报告39–42/欧盟矩阵已起草，接受/拒绝/延期有来源映射。Tink1.23仅test依赖，不修改production Kotlin/Room10/PNBAK1/PK/版本/签名/feature0。
+失败先行1/1损坏tail仍可读首字节→完整认证门；空对象seek EOF失败→同FD顺序stream认证后租约。新增20合同通过，全JVM259零失败/skip；Python设计58/Release隔离3通过；全JVM/Android编译及完整CI逐步执行，最终HEAD尚未全绿时不称完成。真实ARM/硬件掉电/真ENOSPC/新B2联合SQL+FS强停/外部专家仍NOT_RUN。
+下一步完整full unit/lint/Debug/unsignedRelease+API26/29/35+Science，独立PR默认base，等待最终HEAD检查。生产B2仍NO-GO/需另批协议/key/guards/持久化接线批准；不自动合并、不真实原件、不B3、不签名交付APK。
+
 ## MED-02 前置栈主线合并验收 — 2026-10-14
 
 负责人明确“合并”，见REQUIREMENTS §91。PR27/28/29已按顺序合入claude/new-session-1959qb，保留merge历史：27=d4564fc50201b1d8132d63467028c230e87521fa；28=79f50e81c03a2077ede999c18952dd104df548b1；29=be953672f503940a10880e23dabaaa853d3017bb。每次合并树与该PR已验收HEAD逐字节相同，后续PR retarget后的diff与原stacked diff相同。

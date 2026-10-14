@@ -58,3 +58,12 @@ Original test comments/flags/results retained; no upstream executable code copie
 are embedded in the fixture. Independently generated draft transcripts are HRT Log synthetic
 design evidence, not a production format or security certification. RFC5869 Appendix A.1
 and RFC9106 section 5.3 standard test inputs/outputs are identified in test names and report33.
+
+## MED-02B2 test-only Streaming AEAD evaluation
+
+Tink Java / Android 1.23.0 (`com.google.crypto.tink:tink` / `tink-android`) is used only by
+JVM tests and synthetic Android instrumentation, never by app runtime/release.
+Copyright Google LLC; Apache License 2.0. Upstream source and license:
+https://github.com/tink-crypto/tink-java/tree/v1.23.0
+https://github.com/tink-crypto/tink-java/blob/v1.23.0/LICENSE
+No upstream source is copied into production. Library use is not project security certification.

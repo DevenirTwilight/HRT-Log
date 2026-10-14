@@ -1,0 +1,31 @@
+{
+  "archive_sha256": "ead7afa0cbd244ca112c2465fcedf648e810071a9b8368626a45dab6b0748341",
+  "received_utc_date": "2026-10-14",
+  "files": [
+    {
+      "file": "HRT_Log_MED-02B2_缺失参考资料包_说明.md",
+      "bytes": 2435,
+      "sha256": "85cab05d9e76f900119d6275488d4f58e168a9bd5a90a67b6b352d4c4d041945"
+    },
+    {
+      "file": "HRT_Log_MED02_医疗档案系统竞品研究与升级方案_2026-10-14.md",
+      "bytes": 27151,
+      "sha256": "68326b4841d4571a3a9a0c2ec105763bc8c967cd1ed20a3f369eeb868a28fa11"
+    },
+    {
+      "file": "HRT_Log_欧盟评估_后续核查修订说明_2026-10-14.md",
+      "bytes": 6425,
+      "sha256": "383d2ebca8e1aede5d8401e1a85f2bb653d34aef6e6a9e04e20db6c0b673169d"
+    },
+    {
+      "file": "HRT_Log_欧盟适配评估_全部修改意见_用户原文_2026-10-14.md",
+      "bytes": 14322,
+      "sha256": "69a1364f921e532a2bcb8a494847c1d91208a326eefd39f7b32d57a3ff5bde53"
+    },
+    {
+      "file": "med02b2-execution-contract-20261014.md",
+      "bytes": 32434,
+      "sha256": "5b432c72e06f10048e5143da5b8caae0881d6094dc1fbe6a9d74b6141b9e7394"
+    }
+  ]
+}
