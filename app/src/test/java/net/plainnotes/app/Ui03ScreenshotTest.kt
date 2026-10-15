@@ -74,7 +74,13 @@ class Ui03ScreenshotTest(private val locale: String, private val width: Int, pri
                 ui.onNodeWithContentDescription(menu).performClick(); ui.waitForIdle()
                 ui.onNodeWithTag("drawer-content").performScrollToNode(hasText(context.getString(d.title)))
                 ui.onNodeWithTag("drawer-content").onChildren().filterToOne(hasText(context.getString(d.title))).performClick()
-                ui.mainClock.advanceTimeBy(1_000); shot("10_" + d.name.lowercase())
+                ui.mainClock.advanceTimeBy(1_000)
+                // The concentration page computes in the background; shoot it once that has finished, not mid-load.
+                if (d == Destination.CONCENTRATION) ui.waitUntil(30_000) {
+                    ui.onAllNodesWithText(context.getString(R.string.calib_title)).fetchSemanticsNodes().isNotEmpty() &&
+                        ui.onAllNodesWithText(context.getString(R.string.uc_preview_loading)).fetchSemanticsNodes().isEmpty()
+                }
+                shot("10_" + d.name.lowercase())
             }
         } finally { androidx.lifecycle.ViewModelStore().apply { put("model", model); clear() }; db.close() }
     }
