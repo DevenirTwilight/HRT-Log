@@ -16,8 +16,22 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.unit.dp
 import androidx.compose.material.icons.outlined.MoreVert
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.HelpOutline
+import androidx.compose.material.icons.outlined.Cancel
+import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.Event
+import androidx.compose.material.icons.outlined.Flag
+import androidx.compose.material.icons.outlined.Healing
+import androidx.compose.material.icons.outlined.Medication
+import androidx.compose.material.icons.outlined.Mood
+import androidx.compose.material.icons.outlined.RateReview
+import androidx.compose.material.icons.outlined.Schedule
+import androidx.compose.material.icons.outlined.Science
+import androidx.compose.material.icons.outlined.SkipNext
 import net.plainnotes.app.R
 import net.plainnotes.app.NotesState
 import net.plainnotes.app.NotesViewModel
@@ -88,8 +102,8 @@ import java.time.*
     LazyColumn(Modifier.fillMaxSize().testTag("period-timeline"),state=list,contentPadding=PaddingValues(start=16.dp,end=16.dp,
         top=contentPadding.calculateTopPadding()+8.dp,bottom=contentPadding.calculateBottomPadding()+32.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
         item(key="intro") {
-            Text(stringResource(R.string.period_timeline_intro),style=MaterialTheme.typography.bodySmall)
-            Text(stringResource(R.string.timeline_zone,zone.id),style=MaterialTheme.typography.labelSmall)
+            // UI-01 E: the viewing zone is named only when it is not the phone's, by name rather than ID.
+            TimelineZoneNote(zone)
             if(record.recognitionUnavailable)Text(stringResource(R.string.period_recognition_unavailable),modifier=Modifier.semantics{liveRegion=LiveRegionMode.Polite},style=MaterialTheme.typography.bodySmall)
             feedback?.let{Text(stringResource(it),modifier=Modifier.semantics{liveRegion=LiveRegionMode.Polite})}
         }
@@ -120,7 +134,33 @@ import java.time.*
                 period!=null->{
                     val current=period.contains(now)
                     val standards=projection.standards.filter{it.key in period.finalStandardSpanKeys}
-                    SectionCard(stringResource(if(standards.isEmpty())R.string.timeline_epoch_unknown else if(current)R.string.period_current else R.string.period_past)) {
+                    val sourceRows=record.resolvedRecords.filter{r->(r.taken_utc ?: r.scheduled_utc)?.let{period.contains(Instant.ofEpochMilli(it))}==true}
+                    val meds=TimelineEdits.medicationsIn(projection,period);val range=TimelineEdits.rangeOf(period,zone)
+                    SectionCard(null) {
+                        // UI-01 E: title and ⋮ on one row. Details remain available without occupying every card; editing semantics are unchanged.
+                        Row(verticalAlignment=androidx.compose.ui.Alignment.CenterVertically) {
+                            Text(stringResource(if(standards.isEmpty())R.string.timeline_epoch_unknown else if(current)R.string.period_current else R.string.period_past),
+                                style=MaterialTheme.typography.titleSmall,color=MaterialTheme.colorScheme.primary,fontWeight=androidx.compose.ui.text.font.FontWeight.SemiBold,
+                                modifier=Modifier.weight(1f).semantics{heading()})
+                            Box {
+                                var menu by remember{mutableStateOf(false)}
+                                IconButton(onClick={menu=true},modifier=Modifier.testTag("period-menu:${period.key}")){
+                                    Icon(androidx.compose.material.icons.Icons.Outlined.MoreVert,stringResource(R.string.period_menu))}
+                                DropdownMenu(expanded=menu,onDismissRequest={menu=false}) {
+                                    @Composable fun item(text:Int,tag:String,action:()->Unit)=DropdownMenuItem(text={Text(stringResource(text))},
+                                        modifier=Modifier.testTag("$tag:${period.key}"),onClick={menu=false;action()})
+                                    item(R.string.period_menu_edit,"period-edit-any"){val m=meds.firstOrNull()
+                                        editPeriod(R.string.period_edit_title_edit,meds,m,range,m?.let{TimelineEdits.standardOf(projection,period,it)},range,exact=period.from to period.until)}
+                                    if(meds.isNotEmpty())item(R.string.period_menu_delete,"period-delete"){deleteFor=period}
+                                    if(sourceRows.isNotEmpty())item(R.string.period_records,"period-history"){onImportedHistory(sourceRows.map{it.id})}
+                                    if(!simple)item(R.string.period_saved_changes,"period-details"){auditKey=period.key}
+                                }
+                            }
+                        }
+                        // Display only: day count from the period's own start date, nothing is written.
+                        if(current && standards.isNotEmpty())Text(stringResource(R.string.period_day_n,
+                            java.time.temporal.ChronoUnit.DAYS.between(period.from.atZone(zone).toLocalDate(),now.atZone(zone).toLocalDate()).toInt()+1),
+                            style=MaterialTheme.typography.titleMedium,modifier=Modifier.testTag("period-day:${period.key}"))
                         val end=period.until?.minusNanos(1)?.atZone(zone)?.toLocalDate()
                         Text(formatDate(period.from.atZone(zone).toLocalDate())+" → "+(end?.let{formatDate(it)} ?: stringResource(R.string.epoch_ongoing)))
                         if(standards.isEmpty())Text(stringResource(R.string.epoch_no_plan))
@@ -176,23 +216,6 @@ import java.time.*
                         }
                         if(period.segments.size>1)Text(stringResource(R.string.period_same_day),style=MaterialTheme.typography.bodySmall)
                         if(standards.any{span->extra.regimens.any{it.id in span.rawVersionIds && it.origin=="LEGACY_RULE"}})Text(stringResource(R.string.epoch_reconstructed),style=MaterialTheme.typography.bodySmall)
-                        val sourceRows=record.resolvedRecords.filter{r->(r.taken_utc ?: r.scheduled_utc)?.let{period.contains(Instant.ofEpochMilli(it))}==true}
-                        // Details remain available without occupying every card. Editing semantics are unchanged.
-                        val meds=TimelineEdits.medicationsIn(projection,period);val range=TimelineEdits.rangeOf(period,zone)
-                        Box(Modifier.fillMaxWidth(),contentAlignment=androidx.compose.ui.Alignment.CenterEnd) {
-                            var menu by remember{mutableStateOf(false)}
-                            IconButton(onClick={menu=true},modifier=Modifier.testTag("period-menu:${period.key}")){
-                                Icon(androidx.compose.material.icons.Icons.Outlined.MoreVert,stringResource(R.string.period_menu))}
-                            DropdownMenu(expanded=menu,onDismissRequest={menu=false}) {
-                                @Composable fun item(text:Int,tag:String,action:()->Unit)=DropdownMenuItem(text={Text(stringResource(text))},
-                                    modifier=Modifier.testTag("$tag:${period.key}"),onClick={menu=false;action()})
-                                item(R.string.period_menu_edit,"period-edit-any"){val m=meds.firstOrNull()
-                                    editPeriod(R.string.period_edit_title_edit,meds,m,range,m?.let{TimelineEdits.standardOf(projection,period,it)},range,exact=period.from to period.until)}
-                                if(meds.isNotEmpty())item(R.string.period_menu_delete,"period-delete"){deleteFor=period}
-                                if(sourceRows.isNotEmpty())item(R.string.period_records,"period-history"){onImportedHistory(sourceRows.map{it.id})}
-                                if(!simple)item(R.string.period_saved_changes,"period-details"){auditKey=period.key}
-                            }
-                        }
                     }
                 }
                 block.key=="upcoming"->SectionCard(stringResource(R.string.period_upcoming)){Text(stringResource(R.string.period_future_note),style=MaterialTheme.typography.bodySmall)}
@@ -250,8 +273,28 @@ import java.time.*
 }
 @Composable private fun EventRow(event:PeriodEvent,onOpen:(PeriodEvent)->Unit) {
     TextButton(onClick={onOpen(event)},modifier=Modifier.fillMaxWidth().testTag("timeline:${event.key}")) {
-        Text(formatDate(event.date)+" · "+eventKindLabel(event.kind)+(if(LocalSimpleMode.current)"" else " · "+eventTitle(event)),modifier=Modifier.fillMaxWidth())
+        // UI-01 E: a type badge in front; the type is also in the words, so it is never colour or icon alone.
+        EventTypeBadge(event.kind);Spacer(Modifier.width(12.dp))
+        Text(formatDate(event.date)+" · "+eventKindLabel(event.kind)+(if(LocalSimpleMode.current)"" else " · "+eventTitle(event)),modifier=Modifier.weight(1f))
     }
+}
+@Composable internal fun TimelineZoneNote(zone:ZoneId,device:ZoneId=ZoneId.systemDefault()) {
+    if(zone.rules!=device.rules)Text(stringResource(R.string.timeline_shown_in,zone.getDisplayName(java.time.format.TextStyle.FULL,currentLocale())),
+        style=MaterialTheme.typography.labelMedium,modifier=Modifier.testTag("timeline-zone"))
+}
+/** Icon for every [EventKind]; decorative next to the kind's name (UI-01 E). */
+internal fun eventKindIcon(kind:EventKind):androidx.compose.ui.graphics.vector.ImageVector=when(kind){
+    EventKind.REGIMEN->Icons.Outlined.Medication;EventKind.DOSE->Icons.Outlined.CheckCircle;EventKind.MISSED->Icons.Outlined.Cancel
+    EventKind.UNCONFIRMED->Icons.AutoMirrored.Outlined.HelpOutline;EventKind.SKIPPED->Icons.Outlined.SkipNext;EventKind.LAB->Icons.Outlined.Science
+    EventKind.SYMPTOM->Icons.Outlined.Healing;EventKind.WELLBEING->Icons.Outlined.Mood;EventKind.REVIEW->Icons.Outlined.RateReview
+    EventKind.APPOINTMENT->Icons.Outlined.Event;EventKind.MILESTONE->Icons.Outlined.Flag;EventKind.PLANNED->Icons.Outlined.Schedule
+}
+@Composable internal fun EventTypeBadge(kind:EventKind) {
+    val c=MaterialTheme.colorScheme
+    val (bg,fg)=when(kind){EventKind.MISSED->c.errorContainer to c.onErrorContainer;EventKind.LAB->c.tertiaryContainer to c.onTertiaryContainer
+        EventKind.APPOINTMENT,EventKind.MILESTONE->c.secondaryContainer to c.onSecondaryContainer;else->c.primaryContainer to c.onPrimaryContainer}
+    Surface(shape=androidx.compose.foundation.shape.CircleShape,color=bg,contentColor=fg,modifier=Modifier.testTag("event-badge:${kind.name}")){
+        Icon(eventKindIcon(kind),null,Modifier.padding(6.dp).size(20.dp))}
 }
 @Composable private fun EventDetail(event:PeriodEvent,extra:NotesViewModel.ExtraState,zone:ZoneId,onDismiss:()->Unit,onEdit:(MilestoneEntity)->Unit,onDelete:(MilestoneEntity)->Unit) {
     AlertDialog(onDismissRequest=onDismiss,title={Text(eventKindLabel(event.kind))},text={Column(Modifier.verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(8.dp)) {
