@@ -194,7 +194,7 @@
 <string name="legend_labs">Lab results</string>
 <string name="legend_recorded">From records</string>
 <string name="licenses">Open-source licences</string>
-<string name="licenses_body">Built with Kotlin, AndroidX, Jetpack Compose, Room, Hilt, WorkManager and kotlinx.coroutines (Apache-2.0) and SQLCipher for Android (BSD-style). See THIRD_PARTY_NOTICES.md in the source code.</string>
+<string name="licenses_body">Built with Kotlin, AndroidX, Jetpack Compose, Room, Hilt, WorkManager and kotlinx.coroutines (Apache-2.0), SQLCipher for Android (BSD-style) and Bouncy Castle (MIT, notice below). See THIRD_PARTY_NOTICES.md in the source code.</string>
 <string name="medication">Medication</string>
 <string name="menu">Menu</string>
 <string name="minutes_unit">min</string>
@@ -1128,7 +1128,7 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="privacy_notice_disguise_title">Limits of disguise mode</string>
     <string name="privacy_notice_disguise_body">Disguise mode changes the launcher icon and name and hides the app behind a calculator or notes screen. It does not protect against root access, a compromised system, someone inspecting the installed app, or Android settings that list the real app.</string>
     <string name="privacy_notice_delete_title">Deleting data</string>
-    <string name="privacy_notice_delete_body">“Delete all data” removes the records database and its key on this phone, and uninstalling removes the app\'s data. Files you exported, backups you saved and copies held by other apps or cloud services are not removed.</string>
+    <string name="privacy_notice_delete_body">“Delete all data” removes the records database and its key on this phone, together with the app\'s settings, reminder and stock-alert data, app lock and disguise settings; uninstalling removes the app\'s data. Files you exported, backups you saved and copies held by other apps or cloud services are not removed.</string>
     <string name="privacy_notice_changes_title">If the app changes</string>
     <string name="privacy_notice_changes_body">If medical file storage, sync, sharing or advice features are ever added, this notice will be updated and reviewed before they are released.</string>
 </resources>

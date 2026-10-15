@@ -1,3 +1,7 @@
+## MED-02B5 / PRIVACY-P1（PR-A）开发中 — 2026-10-15
+
+MED-02B5 是开发批次名，不是附件路线 B5（PDF）。基线 b43d109（#32、#33 已合并；MED-02B4 合并交接记录 PR #34 仍 OPEN，等待负责人独立处理，本分支不包含其内容）。分支 feature/privacy-p1-20261015：“删除全部数据”补清 `stock_alerts`（销毁数据库前先清、成功前校验，失败报告错误）；THIRD_PARTY_NOTICES 与应用内许可补 Bouncy Castle（MIT 全文）及 jakarta.inject；源码守卫 LocalDataWipeCoverageTest / ThirdPartyNoticesTest（先红后绿）；API35 emulator 新增 WipeStockAlertsAndroidTest、PrivacyNoticeDeviceAndroidTest、PrivacyNoticeLockAndDisguiseAndroidTest。本地 app 893、0 失败（61 既有 skip）、lint 0 error。报告54。下一步：CI 全绿后按 MED-02B5 任务书 §6 合并、复验默认分支，再从最新主线做 PR-B（B3-BACKUP-GATE，test-only）。B2 生产 NO-GO、NOT_REVIEWED_EXTERNALLY 不变。
+
 ## MED-02B4 / B2-GATE3（PR-A #32）已合并 — 2026-10-14
 
 PR-A #32 按任务书 §12 普通合并为 b248294（最终 HEAD 704c542，仅文档；证据 HEAD 76909b8）。704c542 PR 运行的 API29 job 首次因模拟器堆增长上限 16MiB（配置 heapsize=512m 未生效）导致 5 个既有 Argon2id 备份测试 OOM；同 SHA 的 push 运行 API29 成功，按环境异常重跑一次后全部成功（Android PR 38646318276 attempt 2、push 38646311796、Science 38646318234/38646311633）。证据见报告49–52：三 API 的内核 ProxyFD 撤权（远端 EIO、撤权后新明文 0）、两个真实 PID 的写入者租约与被杀 peer 清理、两项红对照预期失败。合并后默认分支 CI 结果见 PR-B 条目。B2 生产 NO-GO、NOT_REVIEWED_EXTERNALLY 不变。

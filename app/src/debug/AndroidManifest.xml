@@ -4,5 +4,6 @@
         <activity android:name="net.plainnotes.app.debug.UnifiedConcentrationTestActivity" android:exported="false" />
         <activity android:name="net.plainnotes.app.debug.DataPrivacyTestActivity" android:exported="false" />
         <activity android:name="net.plainnotes.app.debug.CalendarTestActivity" android:exported="false" />
+        <activity android:name="net.plainnotes.app.debug.AboutTestActivity" android:exported="false" />
     </application>
 </manifest>

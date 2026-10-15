@@ -1,6 +1,7 @@
 package net.plainnotes.app.calendar
 
 import android.view.KeyEvent
+import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.*
@@ -45,7 +46,9 @@ class CalendarIntakeAndroidTest {
         }
         ui.waitForIdle()
         if (runCatching { cell(tomorrow).fetchSemanticsNode() }.isFailure) ui.onNodeWithContentDescription(s(R.string.calendar_next)).performClick()
-        cell(tomorrow).performClick()
+        // Activate the cell through its click action, not a touch at its centre: on the 320dp-wide CI emulator the
+        // floating Add button covers the Friday/Saturday cells of the third week row, so a tap would hit the button.
+        cell(tomorrow).performSemanticsAction(SemanticsActions.OnClick)
         ui.waitUntil(10_000) { cell(tomorrow).fetchSemanticsNode().config.getOrNull(SemanticsProperties.Selected) == true }
         assertEquals(true, cell(tomorrow).fetchSemanticsNode().config.getOrNull(SemanticsProperties.Selected))
         ui.waitUntil(20_000) { runCatching { ui.onNode(hasScrollToIndexAction()).performScrollToNode(hasText(s(R.string.complete))) }.isSuccess }
