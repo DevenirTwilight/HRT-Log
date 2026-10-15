@@ -1,21 +1,21 @@
 ## 当前进度总览 — 2026-10-15
 
-- 已合并：UI-01 #38（47bd1b2）、MED-02B6 PR-A #37（76bba2a）、PR-B #39（43caf6f）、UI-02A #40（926a5e1）、BDPM 参考资料 #41（8e72861）。前四个合并后主线 CI 已复验全绿；8e72861 的主线 CI 已复验全绿（Android 38785994714，Science 38785993927）。
-- **当前任务书：UI-03**（原文 `docs/audits/product-quality-2026-10/sources/ui03/ui03-prompt.md`，REQUIREMENTS §99）。严格顺序 A → B → 收尾：
-  1. UI-03A（已合并）：分支 `feature/ui03a-drawer-groups-20261015`。
-     - 内容：抽屉按“信息来源”分组、4 个入口改名、AGENTS.md 补交付门槛、人工清单、截图；报告 62。
-     - **PR #42 已合并为 f1d1308**（最终 HEAD ecef3cb，6 个必需检查全部成功）。合并后主线 CI 复验见下一条更新。
-  2. UI-02B：UI-03A 合并并复验主线后，从新主线建 `feature/ui02b-appshell-state-20261015`。
-     - 已有的本地成果在会话 scratchpad 的 u4 工作树（提交 578ccf2 和 df72dbe，**未推送**，会话结束就会丢失；丢失后按以下描述重做即可）：
-       - `ui/ShellHosts.kt`：Stock/History/Lab/Medical/Medication/Wellbeing 六组对话框状态 holder；
-       - 跨页面安全网测试 `NotesAppCrossPageFlowTest`（复核横幅、PK 免责声明、医疗保存失败 snackbar）和设备测试 `NotificationEntryAndroidTest`；
-       - 真实外壳截图测试 `NotesAppShotTest`（`UI02B_SHOTS`）。
-     - 重构前后像素比较：外壳 192/192 一致，UI-01 截图 160/160 一致。
-     - 已在新主线 f1d1308 上的本地工作树 u6 中重排提交：先提交安全网（含新增的 `AfterIntakePromptAndroidTest`，即服药后身心提示），再提交重构。
-     - 像素复比完成：外壳 192/192、Ui03 192/192 一致。浓度页截图时机已修正（c5719af）。
-     - 本地 201 例 0 失败。报告 63。
-     - 下一步：主线 f1d1308 的 CI 复验全绿后，先只推安全网提交，让 CI 在重构前跑设备测试；然后推重构和文档，开 PR，全绿后合并。
-  3. 收尾：写 UI 阶段总结报告，更新 BACKLOG、STATUS 和本文件。
+- **UI 阶段完成**（UI-03 任务书 A → B → 收尾，REQUIREMENTS §99）：
+
+  | PR | 内容 | 合并提交 | 合并后主线 CI |
+  |---|---|---|---|
+  | #38 | UI-01 | 47bd1b2 | 已复验全绿 |
+  | #40 | UI-02A | 926a5e1 | 已复验全绿 |
+  | #42 | UI-03A | f1d1308 | 已复验全绿（Android 38795232265，Science 38795232662） |
+  | #43 | UI-02B | 94ceb81 | 已复验全绿（Android 38804244100，Science 38804244145） |
+
+  - 总结见报告 64；BACKLOG 顶部只剩待负责人决定的 4 项。
+  - 真机清单全部 NOT_RUN：`docs/ui-audit/2026-10-15-ui02/manual-checklist.md` 和 `docs/ui-audit/2026-10-15-ui03/manual-checklist.md`。
+- **APK 交付**（REQUIREMENTS §100，负责人要求“整完给我个apk”）：
+  - 本 PR 把 versionCode 改为 27。
+  - 合并并复验主线后：从主线干净源码构建 full Universal Release，用 HANDOFF 第 7 节私有备份中的原证书签名，核验后通过会话私密文件发送给负责人，再追加交付账本。
+  - 签名材料只在仓库外的临时目录中恢复，用完删除。
+- 已合并的其他工作：MED-02B6 #37/#39、BDPM 参考资料 #41（主线 8e72861 已复验全绿）。
 - PR #34 仍 OPEN，待负责人处理；`diag/calendar-intake-20261015` 分支待负责人删除。
 
 ## UI-01 界面层级改进 — 2026-10-15
