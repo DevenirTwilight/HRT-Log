@@ -1,0 +1,56 @@
+{
+  "attribution": "Source : Base de Données Publique des Médicaments (ANSM / HAS / UNCAM). Données mises à jour le 29/09/2026, extraites le 15/10/2026. Réutilisation structurée par HRT Log, sans caution des autorités.",
+  "data_update_semantics": "SITE_DISPLAYED_DATE_NOT_EXPORT_TIMESTAMP",
+  "data_updated_on": "2026-09-29",
+  "download_page": "https://base-donnees-publique.medicaments.gouv.fr/telechargement",
+  "download_page_evidence": {
+    "bytes": 48732,
+    "sha256": "2d4ceb5e2f96be76fead3ca3bd26d2f34c7b7f7061862075d1ad287df5548a62",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/telechargement"
+  },
+  "format_document_evidence": {
+    "bytes": 295557,
+    "sha256": "db10d5a62bc640c227405bcb11cef5db9ad2a2d9a6b4b547198ee19978b6bc8b",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/Contenu_et_format_des_fichiers_telechargeables_dans_la_BDM_v5.pdf"
+  },
+  "format_document_updated_on": "2026-10-13",
+  "inputs": {
+    "page-evidence.json": "8528d8ff6b4cdea17f120d142f1504bb58fb03b1f6045b723ebe9d25077d3ca1",
+    "source-rows.json": "6fa5a7d615e755327127553ad88acf7ed538e7086f0be236a86b4c6eca19ea05"
+  },
+  "license": {
+    "download_pdf_sha256": "44ff23ae2b5cce0d729d1b53b20d17aae625189b131c2dd9cb98d1fe0d0a2a90",
+    "download_pdf_url": "https://base-donnees-publique.medicaments.gouv.fr/docs/telechargement/licence_bdpm.pdf",
+    "download_pdf_version": "1.0",
+    "footer_id": "etalab-2.0",
+    "footer_text_sha256": "a1deb9d7554ad10e041dbd7440b3dec0ac0d3679f9e1655ee9d850908b015995",
+    "footer_url": "https://github.com/etalab/licence-ouverte/blob/master/LO.md",
+    "id": "LicenseRef-BDPM-version-conflict",
+    "note": "Footer links Open Licence 2.0; linked download contract PDF says version 1.0. Attribution retained. Resolve before Android bundling/full text reuse.",
+    "verification": "CONFLICT"
+  },
+  "reference_version": "fr-bdpm-2026-10-15.1",
+  "schema_version": 1,
+  "scope": {
+    "excluded": [
+      "ALTIZIDE",
+      "RETARD PHARLON"
+    ],
+    "exclusion_reason": "Combination products and the separate RETARD PHARLON formulation require independent review.",
+    "prefixes": [
+      "PROVAMES ",
+      "PROGYNOVA ",
+      "OESTRODOSE ",
+      "DERMESTRIL ",
+      "THAISSEPT ",
+      "ACETATE DE CYPROTERONE ",
+      "CYPROTERONE ",
+      "ANDROCUR ",
+      "ALDACTONE ",
+      "SPIRONOLACTONE ",
+      "UTROGESTAN ",
+      "PROGESTERONE "
+    ]
+  },
+  "verified_on": "2026-10-15"
+}
