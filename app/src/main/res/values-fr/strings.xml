@@ -1174,4 +1174,5 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="settings_backup_never">Jamais sauvegardé</string>
     <string name="settings_bin_count">%1$d élément(s)</string>
     <string name="settings_back">Retour aux réglages</string>
+    <string name="settings_appearance_summary">Thème : %1$s · Langue : %2$s</string>
 </resources>

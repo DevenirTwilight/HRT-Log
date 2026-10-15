@@ -1174,4 +1174,5 @@
     <string name="settings_backup_never">从未备份</string>
     <string name="settings_bin_count">%1$d 项</string>
     <string name="settings_back">返回设置</string>
+    <string name="settings_appearance_summary">主题：%1$s · 语言：%2$s</string>
 </resources>

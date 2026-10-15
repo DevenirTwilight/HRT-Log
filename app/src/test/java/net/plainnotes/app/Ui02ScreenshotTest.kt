@@ -51,10 +51,13 @@ class Ui02ScreenshotTest(private val locale: String, private val width: Int, pri
             labs = listOf(LabValueEntity(8, "E2", 420.0, "pmol/L", at(today.minusDays(20), 9).toEpochMilli(), zone.id)),
             milestones = listOf(MilestoneEntity(5, today.minusDays(60).toString(), kind = "STARTED")))
         val sums = SettingsSummaries("Synthetic region", "App lock: synthetic", "Backup: synthetic", "3")
+        // UI02_CONTRAST=MEDIUM|HIGH: en and zh-CN at 411dp, font 1, light and dark.
+        val contrast = System.getenv("UI02_CONTRAST")?.let { runCatching { Contrast.valueOf(it) }.getOrNull() } ?: Contrast.STANDARD
+        if (contrast != Contrast.STANDARD) assumeTrue(locale in listOf("en", "zh-rCN") && width == 411 && font == 1f)
         var page by mutableIntStateOf(0)
         val pages = SettingsPage.entries
         val names = pages.map { "settings_" + it.name.lowercase() } + listOf("home_stock", "timeline_filter_labs")
-        rule.setContent { NotesTheme(if (dark) ThemeMode.DARK else ThemeMode.LIGHT) { androidx.compose.material3.Surface {
+        rule.setContent { NotesTheme(if (dark) ThemeMode.DARK else ThemeMode.LIGHT, contrast = contrast) { androidx.compose.material3.Surface {
             when {
                 page < pages.size -> SettingsScreen(Appearance(ThemeMode.SYSTEM, false), {}, false, {}, {}, {}, PaddingValues(), page = pages[page], summaries = sums,
                     wellbeingSlot = { RegionSection("FR") {} }, privacySlot = { PrivacySection(1, false) {} },
@@ -72,7 +75,7 @@ class Ui02ScreenshotTest(private val locale: String, private val width: Int, pri
             val view = rule.activity.window.decorView
             val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
             view.draw(android.graphics.Canvas(bitmap))
-            File(dir, "${name}_${locale}_${width}dp_${if (font == 1f) "1x" else "2x"}_${if (dark) "dark" else "light"}.png").outputStream()
+            File(dir, "${name}_${locale}_${width}dp_${if (font == 1f) "1x" else "2x"}_${if (dark) "dark" else "light"}${if (contrast == Contrast.STANDARD) "" else "_" + contrast.name.lowercase()}.png").outputStream()
                 .use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
         }
     }

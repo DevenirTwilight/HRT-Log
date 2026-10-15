@@ -74,7 +74,7 @@ class Appearance(val mode: ThemeMode, val dynamic: Boolean, val contrast: Contra
         if (page == SettingsPage.OVERVIEW) {
             val themeLabel = stringResource(when (appearance.mode) { ThemeMode.SYSTEM -> R.string.theme_system; ThemeMode.LIGHT -> R.string.theme_light; ThemeMode.DARK -> R.string.theme_dark })
             SettingsRow(SettingsPage.REMINDERS, if (problems == 0) stringResource(R.string.settings_all_ok) else stringResource(R.string.settings_n_need_action, problems), problems > 0, onPage)
-            SettingsRow(SettingsPage.APPEARANCE, themeLabel + " · " + languageLabel(), false, onPage)
+            SettingsRow(SettingsPage.APPEARANCE, stringResource(R.string.settings_appearance_summary, themeLabel, languageLabel()), false, onPage)
             SettingsRow(SettingsPage.WELLBEING, summaries.wellbeing, false, onPage)
             SettingsRow(SettingsPage.PRIVACY, summaries.privacy, false, onPage)
             SettingsRow(SettingsPage.DATA, summaries.data, false, onPage)

@@ -1174,4 +1174,5 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="settings_backup_never">Never backed up</string>
     <string name="settings_bin_count">%1$d items</string>
     <string name="settings_back">Back to settings</string>
+    <string name="settings_appearance_summary">Theme: %1$s · Language: %2$s</string>
 </resources>

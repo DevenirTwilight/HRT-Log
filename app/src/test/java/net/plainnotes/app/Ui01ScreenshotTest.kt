@@ -69,6 +69,8 @@ class Ui01ScreenshotTest(private val locale: String, private val width: Int, pri
         val names = listOf("calendar", "stock", "timeline", "drawer", "medical")
         // UI-02 A1: UI01_CONTRAST=MEDIUM|HIGH renders the same set in another contrast mode.
         val contrast = System.getenv("UI01_CONTRAST")?.let { runCatching { Contrast.valueOf(it) }.getOrNull() } ?: Contrast.STANDARD
+        // The contrast sets cover en and zh-CN at 411dp, font 1 (light and dark), as UI-02 asks.
+        if (contrast != Contrast.STANDARD) assumeTrue(locale in listOf("en", "zh-rCN") && width == 411 && font == 1f)
         rule.setContent { NotesTheme(if (dark) ThemeMode.DARK else ThemeMode.LIGHT, contrast = contrast) { androidx.compose.material3.Surface {
             when (page) {
                 0 -> CalendarScreen(state, today, {}, {}, {}, {}, PaddingValues(), extra = extra)
