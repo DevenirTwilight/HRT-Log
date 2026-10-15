@@ -36,7 +36,8 @@ class SettingsButtonInteractionTest(private val locale:String,private val width:
         prefs.appearance=Appearance(ThemeMode.SYSTEM,true,Contrast.STANDARD)
         var appearance by mutableStateOf(prefs.appearance)
         ui.setContent{NotesTheme(if(dark)ThemeMode.DARK else ThemeMode.LIGHT,contrast=appearance.contrast){Surface{
-            SettingsScreen(appearance,{appearance=it;prefs.appearance=it},false,{},{},{},PaddingValues())
+            // UI-02 A2: the theme and contrast groups are on the "Appearance and language" page.
+            SettingsScreen(appearance,{appearance=it;prefs.appearance=it},false,{},{},{},PaddingValues(),page=SettingsPage.APPEARANCE)
         }}}
         fun choice(label:String)=ui.onNode(hasText(label) and SemanticsMatcher.keyIsDefined(SemanticsProperties.Selected))
         fun group(ids:List<Int>,validate:(Int)->Unit) {

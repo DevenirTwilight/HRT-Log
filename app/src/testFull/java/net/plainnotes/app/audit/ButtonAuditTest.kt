@@ -154,8 +154,13 @@ class ButtonAuditTest(private val locale: String, private val scale: Float, priv
         }
         val padding = PaddingValues()
         return listOf(
-            Case("settings") { SettingsScreen(Appearance(ThemeMode.SYSTEM, false), {}, false, {}, {}, {}, padding) {
-                RegionSection("FR") {}; PrivacySection(1, true) {}; DisguiseSection({}) { _, _ -> true }; DataSection(m, mapOf(1L to "08:00 · 20:00")) } },
+            // UI-02 A2: one case per settings page that holds buttons (the sections are unchanged, only split by page).
+            Case("settings") { SettingsScreen(Appearance(ThemeMode.SYSTEM, false), {}, false, {}, {}, {}, padding, page = SettingsPage.REMINDERS) },
+            Case("settings_appearance") { SettingsScreen(Appearance(ThemeMode.SYSTEM, false), {}, false, {}, {}, {}, padding, page = SettingsPage.APPEARANCE) },
+            Case("settings_wellbeing") { SettingsScreen(Appearance(ThemeMode.SYSTEM, false), {}, false, {}, {}, {}, padding, page = SettingsPage.WELLBEING, wellbeingSlot = { RegionSection("FR") {} }) },
+            Case("settings_privacy") { SettingsScreen(Appearance(ThemeMode.SYSTEM, false), {}, false, {}, {}, {}, padding, page = SettingsPage.PRIVACY,
+                privacySlot = { PrivacySection(1, true) {}; DisguiseSection({}) { _, _ -> true } }) },
+            Case("settings_data") { SettingsScreen(Appearance(ThemeMode.SYSTEM, false), {}, false, {}, {}, {}, padding, page = SettingsPage.DATA, dataSlot = { DataSection(m, mapOf(1L to "08:00 · 20:00")) }) },
             Case("calendar_day") { CalendarScreen(s, today, {}, {}, {}, {}, padding, extra = x, initialView = CalView.DAY) },
             Case("calendar_month") { CalendarScreen(s, today, {}, {}, {}, {}, padding, extra = x) },
             Case("calendar_week") { CalendarScreen(s, today, {}, {}, {}, {}, padding, extra = x, initialView = CalView.WEEK) },

@@ -67,7 +67,9 @@ class Ui01ScreenshotTest(private val locale: String, private val width: Int, pri
             milestones = listOf(MilestoneEntity(5, today.minusDays(60).toString(), kind = "STARTED")))
         var page by mutableIntStateOf(0)
         val names = listOf("calendar", "stock", "timeline", "drawer", "medical")
-        rule.setContent { NotesTheme(if (dark) ThemeMode.DARK else ThemeMode.LIGHT) { androidx.compose.material3.Surface {
+        // UI-02 A1: UI01_CONTRAST=MEDIUM|HIGH renders the same set in another contrast mode.
+        val contrast = System.getenv("UI01_CONTRAST")?.let { runCatching { Contrast.valueOf(it) }.getOrNull() } ?: Contrast.STANDARD
+        rule.setContent { NotesTheme(if (dark) ThemeMode.DARK else ThemeMode.LIGHT, contrast = contrast) { androidx.compose.material3.Surface {
             when (page) {
                 0 -> CalendarScreen(state, today, {}, {}, {}, {}, PaddingValues(), extra = extra)
                 1 -> StockScreen(state, boxes, records, {}, {}, {}, PaddingValues(), forecasts = forecasts, today = today, zone = zone)
@@ -82,7 +84,7 @@ class Ui01ScreenshotTest(private val locale: String, private val width: Int, pri
             val view = rule.activity.window.decorView
             val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
             view.draw(android.graphics.Canvas(bitmap))
-            File(dir, "${name}_${locale}_${width}dp_${if (font == 1f) "1x" else "2x"}_${if (dark) "dark" else "light"}.png").outputStream()
+            File(dir, "${name}_${locale}_${width}dp_${if (font == 1f) "1x" else "2x"}_${if (dark) "dark" else "light"}${if (contrast == Contrast.STANDARD) "" else "_" + contrast.name.lowercase()}.png").outputStream()
                 .use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
         }
     }

@@ -187,6 +187,7 @@ class HomeStockCardTest {
         ui.onAllNodes(hasTestTag("home-stock-view")).assertCountEquals(2)
         ui.onAllNodes(hasTestTag("home-stock-view")).onFirst().performClick()
         assertEquals(1, stockOpened)
-        ui.onNodeWithText(s(R.string.forecast_note)).assertDoesNotExist()
+        // The removed general footnote (former forecast_note, deleted in UI-02 A1) is not shown on the home card.
+        ui.onNodeWithText("Based on your schedule and the open and sealed packages in Stock.").assertDoesNotExist()
     }
 }
