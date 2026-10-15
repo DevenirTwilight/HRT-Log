@@ -92,7 +92,7 @@ import java.time.*
             Text(choiceLabel(a.type.ifBlank{"OTHER"}),style=MaterialTheme.typography.titleLarge)
             Text(visitWhen(a))
             listOfNotNull(a.practitioner?.takeIf{it.isNotBlank()},a.location?.takeIf{it.isNotBlank()}).forEach{Text(it)}
-            FilledTonalButton({onVisit(a)},Modifier.padding(top=8.dp).heightIn(min=48.dp).testTag("medical-next-open")){Text(stringResource(R.string.medical_next_prepare))}
+            Button({onVisit(a)},Modifier.padding(top=8.dp).heightIn(min=48.dp).testTag("medical-next-open")){Text(stringResource(R.string.medical_next_prepare))}
         }
     }
 }

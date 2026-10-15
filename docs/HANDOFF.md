@@ -1,4 +1,13 @@
-## UI-01 界面层级改进 开发中 — 2026-10-15
+## UI-01 界面层级改进 — 2026-10-15
+
+分支 feature/ui01-visual-hierarchy-20261015，基于 f16c9d6。任务书原文归档于 sources/ui01/，范围与禁止事项见 REQUIREMENTS §96（负责人追加授权自动合并）。
+- A–H 已全部实现，按节提交；报告 60。
+  - A：今天卡；B：首页库存卡只显示低/用完；C：日历 ✓½✕；D：库存卡单一主按钮 + ⋮ + 包装折叠；E：时间线展示层；F：抽屉分组；G：医疗档案首页；H：新增 29 个四语 key。
+- 新测试 TodayCard 9、HomeStock 4、StockCardActions 5、CalendarDayMark 4、TimelineAndDrawer 3、MedicalHome 4+1，本地全部通过。
+- 迁移了 5 处既有断言，逐条说明见报告 60 §3；PeriodStabilityTest、ButtonLayoutRegressionTest 64/64 等既有门槛本地通过。
+- 截图 before/after 各 160 张加 10 张对比图：docs/ui-audit/2026-10-15-ui01/。
+- 只改展示层；没有新的写入路径；未改 schema/备份/加密/锁/伪装/PK/PDF；不签名、不交付。
+- 下一步：CI 全绿 → 开 PR → 按授权普通合并 → 复验默认分支。
 
 分支 feature/ui01-visual-hierarchy-20261015，基于 f16c9d6。任务书原文归档于 sources/ui01/，范围与禁止事项见 REQUIREMENTS §96（负责人追加授权自动合并）。按 A→H 每节一个提交；进度：开工（§96 + 原文归档）。涉及文件 AppShell/CalendarScreen/Components/LongitudinalScreen/StockScreen 在保护矩阵中均为 HISTORY_ONLY，MedicalRecordsScreen 不在矩阵中；不改任何 PK_DISPLAY_REVIEW 文件。
 

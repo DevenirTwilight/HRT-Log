@@ -117,7 +117,8 @@ val CHECKABLE_STATES = setOf("IN_USE", "EMPTY")
             Text(formatDose(s.remaining, m.unit), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold)
             // Same sentence and warning as the calendar's stock card, from the same shared forecast.
             val (detail, warn) = stockForecastText(s.forecast, m, today, zone)
-            Text(detail, style = MaterialTheme.typography.bodyMedium, color = if (warn) c.error else c.onSurfaceVariant)
+            // On the tertiary low-stock card the label above already warns; keep the sentence at full contrast there.
+            Text(detail, style = MaterialTheme.typography.bodyMedium, color = if (s.low) c.onTertiaryContainer else if (warn) c.error else c.onSurfaceVariant)
             val o = s.open
             if (o != null) {
                 val left = o.capacity - o.used_amount
