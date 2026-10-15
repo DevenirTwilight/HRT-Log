@@ -5,7 +5,7 @@
   1. UI-03A（进行中）：分支 `feature/ui03a-drawer-groups-20261015`。
      - 内容：抽屉按“信息来源”分组、4 个入口改名、AGENTS.md 补交付门槛、人工清单、截图；报告 62。
      - 已完成全部实现、测试和截图（改前、改后各 192 张），本地相关测试 167 例全部通过。
-     - 下一步：开 PR，CI 全绿后普通合并，再复验主线。
+     - PR #42 已开，等待 CI；全绿后普通合并，再复验主线。
   2. UI-02B：UI-03A 合并并复验主线后，从新主线建 `feature/ui02b-appshell-state-20261015`。
      - 已有的本地成果在会话 scratchpad 的 u4 工作树（提交 578ccf2 和 df72dbe，**未推送**，会话结束就会丢失；丢失后按以下描述重做即可）：
        - `ui/ShellHosts.kt`：Stock/History/Lab/Medical/Medication/Wellbeing 六组对话框状态 holder；
