@@ -52,6 +52,61 @@ class DemoArchiveAndroidTest {
         inList("demo-detail", hasTestTag("demo-status")).assert(hasAnyDescendant(hasText(s(R.string.demo_status_quarantined)))); shot("08-quarantined")
     }
 
+    /** PR-B: the whole synthetic flow on a native emulator, each step with a real screenshot. */
+    @Test fun fullScriptedFlow() {
+        fun action(tag: String) = inList("demo-detail", hasTestTag(tag))
+        fun uuid(n: Int) = "00000000-0000-4000-8000-%012d".format(n)
+        // Link a visit and two labs to the uncategorised inbox photo; the retired dataset cannot be linked.
+        inList("demo-list", hasTestTag("demo-doc:${uuid(2)}")).performClick()
+        action("demo-link-manage").performClick()
+        for (k in listOf("VISIT:epoch-2026:7", "LAB:epoch-2026:12", "LAB:epoch-2026:13")) inList("demo-link-list", hasTestTag("demo-link-toggle:$k")).performClick()
+        inList("demo-link-list", hasTestTag("demo-link-blocked:LAB:epoch-2025-retired:12")).assertIsDisplayed(); shot("10-link-dialog")
+        ui.onNodeWithTag("demo-link-close").performClick()
+        action("demo-link:LAB:epoch-2026:13").assertIsDisplayed(); shot("11-linked")
+        action("demo-unlink:LAB:epoch-2026:13").performClick()
+        ui.onAllNodesWithTag("demo-link:LAB:epoch-2026:13").assertCountEquals(0)
+        // Edit with validation: an impossible date is refused and the draft is kept; then saved.
+        action("demo-edit").performClick()
+        ui.onNodeWithTag("demo-edit-title").performTextReplacement("Clinic handout, triaged (synthetic)")
+        ui.onNodeWithTag("demo-edit-prec:DAY").performScrollTo().performClick()
+        ui.onNodeWithTag("demo-edit-year").performScrollTo().performTextReplacement("2026")
+        ui.onNodeWithTag("demo-edit-month").performScrollTo().performTextReplacement("2")
+        ui.onNodeWithTag("demo-edit-day").performScrollTo().performTextReplacement("30")
+        ui.onNodeWithTag("demo-edit-save").performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.OnClick)
+        // The soft keyboard from the day field can cover the top of the dialog (CI run 38752825365), so check the error by
+        // its text rather than its on-screen visibility; the form stays open and nothing was saved.
+        ui.onNodeWithTag("demo-edit-error").assertTextEquals(s(R.string.demo_err_day)); ui.onNodeWithTag("demo-edit-form").assertExists(); shot("12-edit-error")
+        ui.onNodeWithTag("demo-edit-day").performScrollTo().performTextReplacement("27")
+        ui.onNodeWithTag("demo-edit-cat:LETTER").performScrollTo().performClick()
+        ui.onNodeWithTag("demo-edit-save").performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.OnClick)
+        ui.waitUntil(5_000) { ui.onAllNodesWithTag("demo-edit-form").fetchSemanticsNodes().isEmpty() }
+        // Linking already took it out of the inbox, so there is nothing left to file.
+        ui.onAllNodesWithTag("demo-file").assertCountEquals(0); shot("13-edited")
+        // A correction adds v2 and keeps v1.
+        action("demo-correct").performClick()
+        ui.onNodeWithTag("demo-correct-note").performTextInput("Clearer photo of the same handout")
+        ui.onNodeWithTag("demo-correct-save").performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.OnClick)
+        action("demo-version:${uuid(202)}").assertIsDisplayed(); shot("14-correction")
+        // Bin → restore → bin → permanent delete (two confirmations).
+        action("demo-trash").performClick(); action("demo-restore").assertIsDisplayed(); shot("15-in-bin")
+        action("demo-restore").performClick(); action("demo-trash").performClick()
+        action("demo-delete").performClick(); ui.onNodeWithTag("demo-delete-confirm1").performClick(); shot("16-delete-second-confirm")
+        ui.onNodeWithTag("demo-delete-confirm2").performClick()
+        ui.waitUntil(5_000) { ui.onAllNodesWithTag("demo-detail").fetchSemanticsNodes().isEmpty() }
+        ui.onNodeWithTag("demo-tab-TRASH").performClick()
+        ui.onAllNodesWithTag("demo-doc:${uuid(2)}").assertCountEquals(0)
+        // Failure states stay visible and never open.
+        ui.onNodeWithTag("demo-tab-ALL").performClick()
+        inList("demo-list", hasTestTag("demo-doc:${uuid(5)}")).performClick()
+        action("demo-status").assert(hasAnyDescendant(hasText(s(R.string.demo_status_corrupt)))); shot("17-corrupt")
+        ui.runOnUiThread { ui.activity.onBackPressedDispatcher.onBackPressed() }
+        // Reset Demo brings the fixture back.
+        inList("demo-list", hasTestTag("demo-reset")).performClick(); shot("18-reset-confirm")
+        ui.onNodeWithTag("demo-reset-confirm").performClick()
+        ui.onNodeWithTag("demo-tab-INBOX").performClick()
+        inList("demo-list", hasTestTag("demo-doc:${uuid(2)}")).assertIsDisplayed(); shot("19-after-reset")
+    }
+
     /** Re-run by the capture script with the system in night mode, for dark-theme screenshots. */
     @Test fun overviewScreens() {
         banner(); shot("90-overview-inbox")
