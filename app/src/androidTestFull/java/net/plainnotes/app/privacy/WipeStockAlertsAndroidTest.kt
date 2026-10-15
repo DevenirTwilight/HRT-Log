@@ -43,11 +43,15 @@ class WipeStockAlertsAndroidTest {
         NotificationPrefs(context).title = "synthetic"
         openDialog()
         ui.onNode(hasSetTextAction()).performTextInput(text(R.string.wipe_word))
+        val original = ui.activity   // read before confirming: the wipe finishes this activity
         ui.onNodeWithText(text(R.string.wipe_action)).assertIsEnabled().performClick()
-        val original = ui.activity
-        ui.waitUntil(20_000) { StockAlerts.isClear(context) && NotificationPrefs(context).title == null }
-        // The production flow finishes and relaunches the screen after a wipe; wait for that before cleaning up.
-        ui.waitUntil(20_000) { DeviceTestHygiene.activities().any { it is DataPrivacyTestActivity && it !== original } }
+        // The production flow finishes and relaunches the screen, so poll without the rule's (destroyed) activity.
+        fun await(what: String, condition: () -> Boolean) {
+            val deadline = android.os.SystemClock.elapsedRealtime() + 20_000
+            while (!condition()) { check(android.os.SystemClock.elapsedRealtime() < deadline) { "Timed out: $what" }; Thread.sleep(50) }
+        }
+        await("markers cleared") { StockAlerts.isClear(context) && NotificationPrefs(context).title == null }
+        await("screen relaunched") { DeviceTestHygiene.activities().any { it is DataPrivacyTestActivity && it !== original } }
         assertNull(markers.getString("1:LOW", null)); assertNull(markers.getString("legacy-key", null))
     }
 }
