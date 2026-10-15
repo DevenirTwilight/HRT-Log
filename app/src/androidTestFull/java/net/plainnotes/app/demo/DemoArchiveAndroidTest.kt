@@ -72,17 +72,19 @@ class DemoArchiveAndroidTest {
         ui.onNodeWithTag("demo-edit-year").performScrollTo().performTextReplacement("2026")
         ui.onNodeWithTag("demo-edit-month").performScrollTo().performTextReplacement("2")
         ui.onNodeWithTag("demo-edit-day").performScrollTo().performTextReplacement("30")
-        ui.onNodeWithTag("demo-edit-save").performClick()
-        ui.onNodeWithTag("demo-edit-error").performScrollTo().assertIsDisplayed(); shot("12-edit-error")
+        ui.onNodeWithTag("demo-edit-save").performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.OnClick)
+        // The soft keyboard from the day field can cover the top of the dialog (CI run 38752825365), so check the error by
+        // its text rather than its on-screen visibility; the form stays open and nothing was saved.
+        ui.onNodeWithTag("demo-edit-error").assertTextEquals(s(R.string.demo_err_day)); ui.onNodeWithTag("demo-edit-form").assertExists(); shot("12-edit-error")
         ui.onNodeWithTag("demo-edit-day").performScrollTo().performTextReplacement("27")
         ui.onNodeWithTag("demo-edit-cat:LETTER").performScrollTo().performClick()
-        ui.onNodeWithTag("demo-edit-save").performClick()
+        ui.onNodeWithTag("demo-edit-save").performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.OnClick)
         ui.waitUntil(5_000) { ui.onAllNodesWithTag("demo-edit-form").fetchSemanticsNodes().isEmpty() }
         action("demo-file").performClick(); shot("13-edited")
         // A correction adds v2 and keeps v1.
         action("demo-correct").performClick()
         ui.onNodeWithTag("demo-correct-note").performTextInput("Clearer photo of the same handout")
-        ui.onNodeWithTag("demo-correct-save").performClick()
+        ui.onNodeWithTag("demo-correct-save").performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.OnClick)
         action("demo-version:${uuid(202)}").assertIsDisplayed(); shot("14-correction")
         // Bin → restore → bin → permanent delete (two confirmations).
         action("demo-trash").performClick(); action("demo-restore").assertIsDisplayed(); shot("15-in-bin")
