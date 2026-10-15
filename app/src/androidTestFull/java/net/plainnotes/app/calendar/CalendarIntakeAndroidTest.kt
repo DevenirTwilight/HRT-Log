@@ -36,15 +36,7 @@ class CalendarIntakeAndroidTest {
         val name = d.format(DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, "yMMMMdEEEE"), locale))
         return ui.onNode(hasContentDescription(name, substring = true) and hasClickAction())
     }
-    private fun diag(tag: String): String {
-        val root = ui.onRoot(useUnmergedTree = false).fetchSemanticsNode()
-        val nodes = ui.onAllNodes(hasClickAction() and SemanticsMatcher.keyIsDefined(SemanticsProperties.Selected)).fetchSemanticsNodes()
-        return "[$tag] root=${root.boundsInRoot} selectable=${nodes.size}\n" + nodes.joinToString("\n") { n ->
-            "  ${n.boundsInRoot} sel=${n.config.getOrNull(SemanticsProperties.Selected)} cd=${n.config.getOrNull(SemanticsProperties.ContentDescription)}" } +
-            "\n  tomorrowName=" + run { val locale = context.resources.configuration.locales[0]
-                tomorrow.format(DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, "yMMMMdEEEE"), locale)) } +
-            "\n  texts=" + ui.onAllNodes(hasText("", substring = true)).fetchSemanticsNodes().take(40).map { it.config.getOrNull(SemanticsProperties.Text)?.joinToString() + "@" + it.boundsInRoot.top.toInt() }
-    }
+    private fun diag(tag: String): String = "[$tag] " + ui.onAllNodes(isRoot(), useUnmergedTree = true).printToString(Int.MAX_VALUE) + "\n"
     private fun selectTomorrow() {
         // Wait for the synthetic medication to load: the "Nothing planned yet" card above the calendar is shown only until
         // then, and removing it moves the grid. (Today's dose card may already be gone, so the name is no signal.)
