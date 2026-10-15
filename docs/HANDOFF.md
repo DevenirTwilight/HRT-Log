@@ -1,3 +1,11 @@
+## 当前进度总览 — 2026-10-15
+
+- UI-01：PR #38 **已合并**为 47bd1b2（最终 HEAD 40788f9；push/PR 两组 Android 与 Science 全部成功）。主线复验结果见下一条更新。
+- MED-02B6 PR-A：PR #37 **已合并**为 76bba2a；合并后主线 Android 与 Science 全部成功。
+- MED-02B6 PR-B（PHR-DEMO-FLOWS）开发中：分支 feature/med02b6-phr-demo-flows-20261015。已实现关联/编辑/更正版本/回收站/永久删除/重置，四语字符串，JVM 与 Robolectric 测试，API35 完整脚本流程与 API26/29 基本兼容测试，报告 59。
+- UI-02（REQUIREMENTS §97）开工：分支 feature/ui02a-settings-20261015，基于 47bd1b2。PR-B（AppShell 状态拆分）要等 PR-A 合并后才开始。
+- PR #34 仍 OPEN，待负责人处理；`diag/calendar-intake-20261015` 分支待负责人删除。
+
 ## UI-01 界面层级改进 — 2026-10-15
 
 分支 feature/ui01-visual-hierarchy-20261015，基于 f16c9d6。任务书原文归档于 sources/ui01/，范围与禁止事项见 REQUIREMENTS §96（负责人追加授权自动合并）。
