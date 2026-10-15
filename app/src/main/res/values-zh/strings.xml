@@ -194,7 +194,7 @@
 <string name="legend_labs">化验结果</string>
 <string name="legend_recorded">基于记录</string>
 <string name="licenses">开源许可</string>
-<string name="licenses_body">使用 Kotlin、AndroidX、Jetpack Compose、Room、Hilt、WorkManager、kotlinx.coroutines（Apache-2.0）和 SQLCipher for Android（BSD 风格许可）构建。详见源代码中的 THIRD_PARTY_NOTICES.md。</string>
+<string name="licenses_body">使用 Kotlin、AndroidX、Jetpack Compose、Room、Hilt、WorkManager、kotlinx.coroutines（Apache-2.0）、SQLCipher for Android（BSD 风格许可）和 Bouncy Castle（MIT，许可声明见下）构建。详见源代码中的 THIRD_PARTY_NOTICES.md。</string>
 <string name="medication">药物</string>
 <string name="menu">菜单</string>
 <string name="minutes_unit">分钟</string>
@@ -1128,7 +1128,7 @@
     <string name="privacy_notice_disguise_title">伪装模式的局限</string>
     <string name="privacy_notice_disguise_body">伪装模式会更改桌面上的图标和名称，并把应用隐藏在计算器或笔记界面之后。它不能防范 root 权限、被攻破的系统、对已安装应用的检查，也无法改变 Android 设置中列出的真实应用。</string>
     <string name="privacy_notice_delete_title">删除数据</string>
-    <string name="privacy_notice_delete_body">“删除全部数据”会删除这台手机上的记录数据库及其密钥；卸载应用会删除应用数据。你导出的文件、保存的备份，以及其他应用或云服务中的副本不会被删除。</string>
+    <string name="privacy_notice_delete_body">“删除全部数据”会删除这台手机上的记录数据库及其密钥，以及应用设置、提醒与库存提醒数据、应用锁和伪装设置；卸载应用会删除应用数据。你导出的文件、保存的备份，以及其他应用或云服务中的副本不会被删除。</string>
     <string name="privacy_notice_changes_title">如果应用发生变化</string>
     <string name="privacy_notice_changes_body">将来如果加入医疗文件存储、同步、分享或建议类功能，会在发布前更新并复核本说明。</string>
 </resources>

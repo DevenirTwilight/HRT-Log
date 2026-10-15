@@ -265,13 +265,17 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         val d=repo.transaction{exportData(labels,schedules)};val c=if(includeChart)conc.value.result else null
         withContext(Dispatchers.IO){app.contentResolver.openOutputStream(uri,"wt")!!.use{net.plainnotes.app.export.PdfReport.write(context,d,days,c,it,labels=recordLabels())}};DataJob.Done(R.string.export_saved)
     }
-    /** Deletes everything: database, key, reminders cache and preferences. The caller restarts the UI. */
     /** Legacy empty HRT database is retained across upgrade and erased only after explicit confirmation. */
     suspend fun destroyLegacyPrivateData()=withContext(Dispatchers.IO){repo.destroy(Space.DECOY)}
+    /** Deletes everything: database, key, reminders cache, stock-alert markers and preferences. The caller restarts the UI.
+     * Any store that cannot be cleared reports [DataJob.Failed] instead of success. */
     fun wipeAll(onDone:()->Unit)=viewModelScope.launch {
         dataJob.value=DataJob.Working
         try {
-        withContext(Dispatchers.IO){ mutate{repo.destroyAll()}
+        withContext(Dispatchers.IO){
+            // Stock-alert markers go first, so an interrupted wipe never leaves them behind a fresh database (ids restart).
+            check(net.plainnotes.app.reminder.StockAlerts.clear(app)){"stock alerts not cleared"}
+            mutate{repo.destroyAll()}
             net.plainnotes.app.disguise.Disguise.disable(app); repo.destroy(net.plainnotes.app.data.Space.DECOY)
             app.getSharedPreferences("prefs",android.content.Context.MODE_PRIVATE).edit().clear().commit()
             backupHistory.clear()
@@ -279,7 +283,9 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
             net.plainnotes.app.reminder.NotificationPrefs(app).clear(); net.plainnotes.app.security.AppLock(app).disable()
             java.io.File(app.createDeviceProtectedStorageContext().filesDir,"reminders.cache").delete()
             app.getSystemService(android.app.NotificationManager::class.java).cancelAll()
-            runCatching{reminders.sync()} }
+            runCatching{reminders.sync()}
+            // Cleared again after the last reminder pass; never report success with markers left over.
+            check(net.plainnotes.app.reminder.StockAlerts.clear(app) && net.plainnotes.app.reminder.StockAlerts.isClear(app)){"stock alerts not cleared"} }
         dataJob.value=DataJob.Idle;onDone()
         }catch(e:CancellationException){throw e}catch(_:Exception){dataJob.value=DataJob.Failed(R.string.operation_error)}
     }

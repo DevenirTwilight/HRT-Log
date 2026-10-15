@@ -1,6 +1,6 @@
 # HRT Log privacy notice
 
-Last updated: 2026-10-14. Applies to the HRT Log Android app (`net.plainnotes.app`, `full` flavor) built from this repository's default branch. This notice describes how the app handles data. It is not a legal opinion or a certification. The same facts are shown inside the app (About → Privacy → *Read the full privacy notice*) in English, French, Simplified Chinese and Traditional Chinese, bundled in the app and readable offline. Every statement below is mapped to code, guards or tests in [`docs/privacy-evidence.md`](docs/privacy-evidence.md).
+Last updated: 2026-10-15. Applies to the HRT Log Android app (`net.plainnotes.app`, `full` flavor) built from this repository's default branch. This notice describes how the app handles data. It is not a legal opinion or a certification. The same facts are shown inside the app (About → Privacy → *Read the full privacy notice*) in English, French, Simplified Chinese and Traditional Chinese, bundled in the app and readable offline. Every statement below is mapped to code, guards or tests in [`docs/privacy-evidence.md`](docs/privacy-evidence.md).
 
 ## What the app is for
 
@@ -46,7 +46,7 @@ Disguise mode changes the launcher icon and name and hides the app behind a calc
 
 ## Deleting data
 
-"Delete all data" removes the records database and its key on this phone. Uninstalling removes the app's data. Files you exported, backups you saved and copies held by other apps or cloud services are not removed.
+"Delete all data" removes the records database and its key on this phone, together with the app's settings, reminder and stock-alert data, app lock and disguise settings (including Notes disguise text and private notes). Uninstalling removes the app's data. Files you exported, backups you saved and copies held by other apps or cloud services are not removed.
 
 ## If the app changes
 

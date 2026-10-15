@@ -24,6 +24,16 @@ object StockAlerts {
     const val EXPIRY_WARNING_DAYS = 3
     enum class Kind { LOW, EXPIRY }
     data class Alert(val medication: MedicationEntity, val kind: Kind)
+    /** Once-a-day markers, `"<medication id>:<kind>"` to the last ISO date an alert was posted. */
+    const val PREFS = "stock_alerts"
+
+    /**
+     * Removes every marker, including keys left by older versions. Part of "Delete all data": medication ids restart
+     * after a wipe, so a stale marker would both reveal which ids alerted on which dates and silence a new medication's
+     * first alert that day. Returns false if the store could not be written; [isClear] then reports the residue.
+     */
+    fun clear(context: Context): Boolean = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().clear().commit()
+    fun isClear(context: Context): Boolean = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).all.isEmpty()
 
     /**
      * Which alerts are due. Low stock is exactly the shared forecast's [StockForecast.isLow] (B4), the same judgement the
@@ -45,7 +55,7 @@ object StockAlerts {
 
     /** Posts each alert at most once per day; wording follows the neutral-notification settings. */
     fun post(context: Context, alerts: List<Alert>, today: LocalDate) {
-        val sent = context.getSharedPreferences("stock_alerts", Context.MODE_PRIVATE)
+        val sent = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
         val text = NotificationPrefs(context)
         val nm = context.getSystemService(NotificationManager::class.java)
         nm.createNotificationChannel(NotificationChannel("reminders", context.getString(R.string.reminder_channel), NotificationManager.IMPORTANCE_HIGH))

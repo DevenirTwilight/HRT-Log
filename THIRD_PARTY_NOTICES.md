@@ -4,13 +4,39 @@ HRT Log's own source code is under the MIT License (see `LICENSE`). The MIT Lice
 only material the project has the right to license. The items below keep their own terms.
 
 Runtime components include Kotlin (Apache-2.0), AndroidX/Compose/Material 3/Material Icons/
-Room/WorkManager (Apache-2.0), Dagger/Hilt (Apache-2.0), kotlinx.coroutines (Apache-2.0), and
-SQLCipher Android and its native cryptographic dependencies. Their original
+Room/WorkManager (Apache-2.0), Dagger/Hilt (Apache-2.0), kotlinx.coroutines (Apache-2.0),
+Bouncy Castle (MIT, see below) and SQLCipher Android and its native cryptographic dependencies. Their original
 copyright and license notices apply; upstream notices are retained in dependency
 artifacts. SQLCipher licensing: https://www.zetetic.net/sqlcipher/license/ .
 
 Development-only tools include Gradle (Apache-2.0), JUnit (EPL-2.0), Robolectric
 (MIT) and org.json (public domain, tests only). No analytics or advertising SDKs are included.
+
+## Bouncy Castle
+
+`org.bouncycastle:bcprov-jdk18on:1.86` is a runtime dependency of the app and `core/data`. The app uses its Argon2id
+implementation for the app lock code hash and the `.pnbak` backup key derivation (parameters unchanged). Licence as
+shipped in the artifact (`META-INF/LICENSE.md`; the POM names it the Bouncy Castle Licence,
+https://www.bouncycastle.org/licence.html, an MIT licence). The same notice is shown in the app under About →
+Open-source licences.
+
+> MIT License (https://opensource.org/licenses/MIT)
+>
+> Copyright (c) 2000-2026 The Legion of the Bouncy Castle Inc. (https://www.bouncycastle.org).
+> Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+> associated documentation files (the "Software"), to deal in the Software without restriction,
+> including without limitation the rights to use, copy, modify, merge, publish, distribute,
+> sub license, and/or sell copies of the Software, and to permit persons to whom the Software is
+> furnished to do so, subject to the following conditions: The above copyright notice and this
+> permission notice shall be included in all copies or substantial portions of the Software.
+>
+> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
+> NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+> NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+> DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
+> OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+The tests in `tools/attachment-poc` use the same artifact (test scope only).
 
 ## Concentration model
 

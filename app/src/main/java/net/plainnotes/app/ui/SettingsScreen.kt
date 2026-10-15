@@ -148,6 +148,8 @@ class Appearance(val mode: ThemeMode, val dynamic: Boolean, val contrast: Contra
         }
         SectionCard(stringResource(R.string.licenses)) {
             Text(stringResource(R.string.licenses_body), style = MaterialTheme.typography.bodySmall)
+            Text(stringResource(R.string.licenses_bouncycastle_title), style = MaterialTheme.typography.labelMedium, modifier = Modifier.padding(top = 8.dp))
+            Text(stringResource(R.string.licenses_bouncycastle_notice), style = MaterialTheme.typography.bodySmall, modifier = Modifier.testTag("licence-bouncycastle"))
         }
     }
 }

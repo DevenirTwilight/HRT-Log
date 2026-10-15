@@ -194,7 +194,7 @@
 <string name="legend_labs">檢驗結果</string>
 <string name="legend_recorded">基於記錄</string>
 <string name="licenses">開源許可</string>
-<string name="licenses_body">使用 Kotlin、AndroidX、Jetpack Compose、Room、Hilt、WorkManager、kotlinx.coroutines（Apache-2.0）和 SQLCipher for Android（BSD 風格許可）構建。詳見原始碼中的 THIRD_PARTY_NOTICES.md。</string>
+<string name="licenses_body">使用 Kotlin、AndroidX、Jetpack Compose、Room、Hilt、WorkManager、kotlinx.coroutines（Apache-2.0）、SQLCipher for Android（BSD 風格許可）和 Bouncy Castle（MIT，授權聲明見下）構建。詳見原始碼中的 THIRD_PARTY_NOTICES.md。</string>
 <string name="medication">藥物</string>
 <string name="menu">選單</string>
 <string name="minutes_unit">分鐘</string>
@@ -1128,7 +1128,7 @@
     <string name="privacy_notice_disguise_title">偽裝模式的限制</string>
     <string name="privacy_notice_disguise_body">偽裝模式會更改主畫面上的圖示和名稱，並把 App 隱藏在計算機或筆記畫面之後。它無法防範 root 權限、遭入侵的系統、對已安裝 App 的檢查，也無法改變 Android 設定中列出的真實 App。</string>
     <string name="privacy_notice_delete_title">刪除資料</string>
-    <string name="privacy_notice_delete_body">「刪除全部資料」會刪除這支手機上的紀錄資料庫及其金鑰；解除安裝 App 會刪除 App 資料。你匯出的檔案、儲存的備份，以及其他 App 或雲端服務中的副本不會被刪除。</string>
+    <string name="privacy_notice_delete_body">「刪除全部資料」會刪除這支手機上的紀錄資料庫及其金鑰，以及 App 設定、提醒與庫存提醒資料、App 鎖和偽裝設定；解除安裝 App 會刪除 App 資料。你匯出的檔案、儲存的備份，以及其他 App 或雲端服務中的副本不會被刪除。</string>
     <string name="privacy_notice_changes_title">如果 App 有所改變</string>
     <string name="privacy_notice_changes_body">將來若加入醫療檔案儲存、同步、分享或建議類功能，會在發布前更新並複核本說明。</string>
 </resources>
