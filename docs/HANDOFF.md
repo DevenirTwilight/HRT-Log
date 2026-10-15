@@ -1,3 +1,7 @@
+## UI-01 界面层级改进 开发中 — 2026-10-15
+
+分支 feature/ui01-visual-hierarchy-20261015，基于 f16c9d6。任务书原文归档于 sources/ui01/，范围与禁止事项见 REQUIREMENTS §96（负责人追加授权自动合并）。按 A→H 每节一个提交；进度：开工（§96 + 原文归档）。涉及文件 AppShell/CalendarScreen/Components/LongitudinalScreen/StockScreen 在保护矩阵中均为 HISTORY_ONLY，MedicalRecordsScreen 不在矩阵中；不改任何 PK_DISPLAY_REVIEW 文件。
+
 ## MED-02B5 当前状态 — 2026-10-15
 
 MED-02B5 是开发批次名，不是附件路线 B5（PDF）。
