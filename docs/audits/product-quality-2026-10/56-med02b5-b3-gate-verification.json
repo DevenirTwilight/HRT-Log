@@ -1,0 +1,177 @@
+{
+  "report": "56",
+  "batch": "MED-02B5/B3-BACKUP-GATE",
+  "pr": 36,
+  "base": "104cdab7963e1ecd94ae9fa1714aafaef5a0ca82",
+  "evidence_head": "bee25b6",
+  "mainline_before": {
+    "sha": "104cdab",
+    "android": {
+      "run": 38715560071,
+      "conclusion": "success"
+    },
+    "science": {
+      "run": 38715559977,
+      "conclusion": "success"
+    }
+  },
+  "runs": {
+    "android_pr": {
+      "id": 38721589784,
+      "conclusion": "success"
+    },
+    "android_push": {
+      "id": 38721583749,
+      "conclusion": "success"
+    },
+    "science_pr": {
+      "id": 38721589776,
+      "conclusion": "success",
+      "research_deep": "success"
+    },
+    "science_push": {
+      "id": 38721583744,
+      "conclusion": "success",
+      "research_deep": "skipped"
+    }
+  },
+  "device": {
+    "api26": {
+      "B3GateAndroidTest": [
+        18,
+        0,
+        0
+      ],
+      "B3RestartAndroidTest": [
+        1,
+        0,
+        0
+      ],
+      "core_data_total": 70,
+      "restart_scripts": [
+        "BEFORE_COMMIT:PASS",
+        "AFTER_COMMIT:PASS"
+      ],
+      "red_controls": "PASS",
+      "maxMemoryMiB": 384
+    },
+    "api29": {
+      "B3GateAndroidTest": [
+        18,
+        0,
+        0
+      ],
+      "B3RestartAndroidTest": [
+        1,
+        0,
+        0
+      ],
+      "core_data_total": 70,
+      "restart_scripts": [
+        "BEFORE_COMMIT:PASS",
+        "AFTER_COMMIT:PASS"
+      ],
+      "red_controls": "PASS",
+      "maxMemoryMiB": 512
+    },
+    "api35": {
+      "B3GateAndroidTest": [
+        18,
+        0,
+        0
+      ],
+      "B3RestartAndroidTest": [
+        1,
+        0,
+        0
+      ],
+      "core_data_total": 137,
+      "restart_scripts": [
+        "BEFORE_COMMIT:PASS",
+        "AFTER_COMMIT:PASS"
+      ],
+      "red_controls": "PASS",
+      "maxMemoryMiB": 192
+    }
+  },
+  "unit": {
+    "app": [
+      893,
+      0,
+      61
+    ],
+    "reminder": [
+      19,
+      0,
+      0
+    ],
+    "data": [
+      180,
+      0,
+      0
+    ]
+  },
+  "rejections": {
+    "frame": [
+      "MANIFEST_MISSING",
+      "TRAILING_AFTER_MANIFEST",
+      "DUPLICATE_ENTRY",
+      "MANIFEST_MISMATCH",
+      "MANIFEST_MISMATCH",
+      "OBJECT_MISSING",
+      "OBJECT_MISSING",
+      "OBJECT_HASH",
+      "OBJECT_AUTH",
+      "OBJECT_AUTH",
+      "DEK_MISSING",
+      "DEK_MALFORMED",
+      "GRAPH_INVALID",
+      "GRAPH_INVALID",
+      "GRAPH_INVALID",
+      "GRAPH_INVALID"
+    ],
+    "byte_cases": 14,
+    "kdf_calls_for_refused_profiles": 0
+  },
+  "evidence_labels": [
+    "TEST_ONLY",
+    "REAL_ANDROID_SQLCIPHER",
+    "REAL_CIPHER_IO",
+    "SIMULATED_NEW_DEVICE",
+    "FAULT_INJECTION_ONLY",
+    "REAL_FORCE_STOP"
+  ],
+  "ci_history": [
+    {
+      "head": "2019925",
+      "result": "exportSnapshot SQLITE_NOTADB on 26/29/35"
+    },
+    {
+      "head": "d4d62b3",
+      "result": "same; lock hypothesis rejected"
+    },
+    {
+      "head": "bee25b6",
+      "result": "key-lifetime fix; all success"
+    }
+  ],
+  "finding": "Zeroing the key array passed to SQLCipher before close re-keys pool connections with zeros (test fixture only; production DatabaseAccess unaffected)",
+  "not_run": [
+    "NOT_RUN_ARM",
+    "PHYSICAL_CROSS_DEVICE",
+    "NOT_RUN_REAL_ENOSPC",
+    "hardware_power_loss",
+    "signed_upgrade",
+    "scale_1000_objects_PSS",
+    "hostile_pdf",
+    "production_tink_r8",
+    "external_review"
+  ],
+  "status": {
+    "b3_backup_gate": "RESEARCH_GO",
+    "production_b3": "NOT_IMPLEMENTED",
+    "production_b2": "NO-GO",
+    "external_review": "NOT_REVIEWED_EXTERNALLY"
+  },
+  "pr34": "OPEN, awaiting owner; not included"
+}
