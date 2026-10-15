@@ -9,6 +9,16 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.Alignment
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.EventNote
+import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
+import androidx.compose.material.icons.outlined.Science
+import androidx.compose.material.icons.outlined.Timeline
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -19,35 +29,95 @@ import net.plainnotes.app.data.*
 import net.plainnotes.app.medical.*
 import java.time.*
 
-/** A view over existing records, never a second clinical store or an inferred visit/lab association. */
+/**
+ * A view over existing records, never a second clinical store or an inferred visit/lab association (§87: closeness in
+ * time is never shown as a link). UI-01 G: no file or attachment entry. [onConfirm] is wired to the same existing write the
+ * visit detail's "Confirm the visit took place" uses in the medical archive (saveMedicalVisit → completed_utc, with its
+ * stale-record check); it is undone with "Retract" in that detail.
+ */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable fun MedicalRecordsScreen(appointments:List<AppointmentEntity>,onVisit:(AppointmentEntity)->Unit,onAdd:()->Unit,
-    onLabs:()->Unit,onHistory:()->Unit,onTrash:()->Unit,contentPadding:PaddingValues) {
-    val past=MedicalRecordIndex.past(appointments,Instant.now())
+    onLabs:()->Unit,onHistory:()->Unit,onTrash:()->Unit,contentPadding:PaddingValues,onConfirm:(AppointmentEntity)->Unit={onVisit(it)},
+    questionCounts:Map<Long,Int> = emptyMap(),now:Instant=Instant.now()) {
+    val past=MedicalRecordIndex.past(appointments,now)
     val confirmed=past.filter{it.completed_utc!=null}
     val unconfirmed=past.filter{it.completed_utc==null}
+    val next=appointments.filter{it.at_utc>now.toEpochMilli()}.minWithOrNull(compareBy<AppointmentEntity>{it.at_utc}.thenBy{it.id})
+    val byYear=confirmed.groupBy{Instant.ofEpochMilli(it.at_utc).atZone(ZoneId.of(it.at_zone)).year}
     LazyColumn(Modifier.fillMaxSize().testTag("medical-list"),contentPadding=PaddingValues(start=16.dp,end=16.dp,
         top=contentPadding.calculateTopPadding()+8.dp,bottom=contentPadding.calculateBottomPadding()+32.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
-        item("actions") { Column(verticalArrangement=Arrangement.spacedBy(8.dp)) {
-            Button(onClick=onAdd,modifier=Modifier.fillMaxWidth().testTag("medical-add")){Text(stringResource(R.string.medical_add_visit))}
-            OutlinedButton(onClick=onLabs,modifier=Modifier.fillMaxWidth().testTag("medical-labs")){Text(stringResource(R.string.labs))}
-            OutlinedButton(onClick=onHistory,modifier=Modifier.fillMaxWidth().testTag("medical-history")){Text(stringResource(R.string.medical_timeline))}
-            TextButton(onClick=onTrash,modifier=Modifier.fillMaxWidth().testTag("medical-bin")){Text(stringResource(R.string.medical_bin))}
-        } }
+        item("actions") { Button(onClick=onAdd,modifier=Modifier.fillMaxWidth().heightIn(min=48.dp).testTag("medical-add")){Text(stringResource(R.string.medical_add_visit))} }
+        next?.let{a->item("next"){NextVisitCard(a,onVisit)}}
+        if(unconfirmed.isNotEmpty())item("unconfirmed"){MedicalHeading(stringResource(R.string.medical_were_you_there))}
+        items(unconfirmed,key={"visit:${it.id}"}) { MedicalVisitCard(it,questionCounts[it.id] ?: 0,onVisit,onConfirm) }
         if(past.isEmpty())item("empty"){Text(stringResource(R.string.medical_empty))}
-        if(confirmed.isNotEmpty())item("confirmed"){Text(stringResource(R.string.medical_confirmed),style=MaterialTheme.typography.titleSmall)}
-        items(confirmed,key={"visit:${it.id}"}) { MedicalVisitCard(it,onVisit) }
-        if(unconfirmed.isNotEmpty())item("unconfirmed"){Text(stringResource(R.string.medical_unconfirmed),style=MaterialTheme.typography.titleSmall)}
-        items(unconfirmed,key={"visit:${it.id}"}) { MedicalVisitCard(it,onVisit) }
+        if(confirmed.isNotEmpty())item("confirmed"){MedicalHeading(stringResource(R.string.medical_confirmed))}
+        byYear.forEach{(year,rows)->
+            item("year:$year"){Text(year.toString(),style=MaterialTheme.typography.labelLarge,color=MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier=Modifier.semantics{heading()}.testTag("medical-year:$year"))}
+            items(rows,key={"visit:${it.id}"}) { MedicalVisitCard(it,questionCounts[it.id] ?: 0,onVisit,null) }
+        }
+        item("related") { Column(verticalArrangement=Arrangement.spacedBy(8.dp)) {
+            MedicalHeading(stringResource(R.string.medical_related))
+            RelatedCard(Icons.Outlined.Science,stringResource(R.string.labs),"medical-labs",onLabs)
+            RelatedCard(Icons.Outlined.Timeline,stringResource(R.string.medical_timeline),"medical-history",onHistory)
+        } }
+        item("bin") { TextButton(onClick=onTrash,modifier=Modifier.fillMaxWidth().heightIn(min=48.dp).testTag("medical-bin")){Text(stringResource(R.string.medical_bin))} }
     }
 }
-@Composable private fun MedicalVisitCard(a:AppointmentEntity,onVisit:(AppointmentEntity)->Unit) {
-    val local=Instant.ofEpochMilli(a.at_utc).atZone(ZoneId.of(a.at_zone))
-    ElevatedCard(Modifier.fillMaxWidth().testTag("medical-visit:${a.id}").clickable(role=Role.Button){onVisit(a)}) {
+@Composable private fun MedicalHeading(text:String)=Text(text,style=MaterialTheme.typography.titleMedium,modifier=Modifier.semantics{heading()})
+
+@Composable private fun RelatedCard(icon:androidx.compose.ui.graphics.vector.ImageVector,label:String,tag:String,onClick:()->Unit) {
+    OutlinedCard(onClick,Modifier.fillMaxWidth().heightIn(min=56.dp).testTag(tag)) {
+        Row(Modifier.padding(16.dp),verticalAlignment=Alignment.CenterVertically) {
+            Icon(icon,null,tint=MaterialTheme.colorScheme.primary);Spacer(Modifier.width(12.dp))
+            Text(label,style=MaterialTheme.typography.titleSmall,modifier=Modifier.weight(1f))
+            Icon(Icons.AutoMirrored.Outlined.KeyboardArrowRight,null)
+        }
+    }
+}
+
+/** The visit's own clock; the zone is named only when it is not the phone's (never as an ID). */
+@Composable private fun visitWhen(a:AppointmentEntity):String {
+    val zone=ZoneId.of(a.at_zone);val local=Instant.ofEpochMilli(a.at_utc).atZone(zone)
+    return formatDate(local.toLocalDate())+" · "+formatTime(local.toLocalTime())+
+        (if(zone.rules!=ZoneId.systemDefault().rules)" · "+zone.getDisplayName(java.time.format.TextStyle.FULL,currentLocale()) else "")
+}
+
+@Composable private fun NextVisitCard(a:AppointmentEntity,onVisit:(AppointmentEntity)->Unit) {
+    val c=MaterialTheme.colorScheme
+    Surface(color=c.secondaryContainer,contentColor=c.onSecondaryContainer,shape=RoundedCornerShape(24.dp),modifier=Modifier.fillMaxWidth().testTag("medical-next:${a.id}")) {
         Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(4.dp)) {
-            Text(choiceLabel(a.type),style=MaterialTheme.typography.titleMedium)
-            Text(formatDate(local.toLocalDate())+" · "+formatTime(local.toLocalTime())+" · "+a.at_zone)
-            listOfNotNull(a.practitioner,a.location).forEach{Text(it)}
-            Text(stringResource(if(a.completed_utc!=null)R.string.visit_completed else R.string.visit_not_confirmed),style=MaterialTheme.typography.labelMedium)
+            Text(stringResource(R.string.medical_next_visit),style=MaterialTheme.typography.labelLarge,modifier=Modifier.semantics{heading()})
+            Text(choiceLabel(a.type.ifBlank{"OTHER"}),style=MaterialTheme.typography.titleLarge)
+            Text(visitWhen(a))
+            listOfNotNull(a.practitioner?.takeIf{it.isNotBlank()},a.location?.takeIf{it.isNotBlank()}).forEach{Text(it)}
+            FilledTonalButton({onVisit(a)},Modifier.padding(top=8.dp).heightIn(min=48.dp).testTag("medical-next-open")){Text(stringResource(R.string.medical_next_prepare))}
+        }
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable private fun MedicalVisitCard(a:AppointmentEntity,questions:Int,onVisit:(AppointmentEntity)->Unit,onConfirm:((AppointmentEntity)->Unit)?) {
+    ElevatedCard(Modifier.fillMaxWidth().testTag("medical-visit:${a.id}").clickable(role=Role.Button){onVisit(a)}) {
+        Row(Modifier.padding(16.dp),verticalAlignment=Alignment.Top) {
+            Surface(shape=CircleShape,color=MaterialTheme.colorScheme.secondaryContainer){
+                Icon(Icons.AutoMirrored.Outlined.EventNote,null,Modifier.padding(8.dp).size(20.dp),tint=MaterialTheme.colorScheme.onSecondaryContainer)}
+            Spacer(Modifier.width(12.dp))
+            Column(Modifier.weight(1f),verticalArrangement=Arrangement.spacedBy(4.dp)) {
+                Text(choiceLabel(a.type),style=MaterialTheme.typography.titleMedium)
+                Text(visitWhen(a))
+                listOfNotNull(a.practitioner?.takeIf{it.isNotBlank()},a.location?.takeIf{it.isNotBlank()}).forEach{Text(it)}
+                // Read-only summary of what is already saved with the visit.
+                val extras=listOfNotNull(a.note?.takeIf{it.isNotBlank()}?.let{stringResource(R.string.medical_has_note)},
+                    questions.takeIf{it>0}?.let{stringResource(R.string.medical_question_count,it)})
+                if(extras.isNotEmpty())Text(extras.joinToString(" · "),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(if(a.completed_utc!=null)R.string.visit_completed else R.string.visit_not_confirmed),style=MaterialTheme.typography.labelMedium)
+                if(onConfirm!=null)FlowRow(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+                    Button({onConfirm(a)},Modifier.heightIn(min=48.dp).testTag("medical-confirm:${a.id}")){Text(stringResource(R.string.visit_confirm))}
+                    TextButton({onVisit(a)},Modifier.heightIn(min=48.dp).testTag("medical-open:${a.id}")){Text(stringResource(R.string.medical_edit_or_delete))}
+                }
+            }
         }
     }
 }
