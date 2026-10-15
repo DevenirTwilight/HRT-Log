@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MED-02B6 demo, debug build only. Synthetic. -->
+<resources>
+    <string name="demo_launcher_label">Archive de démonstration HRT Log (synthétique)</string>
+    <string name="demo_banner">DÉMO SYNTHÉTIQUE — ne pas y conserver de vrais documents médicaux</string>
+    <string name="demo_breadcrumb">Dossier médical › Bibliothèque de démonstration</string>
+    <string name="demo_tab_inbox">À trier</string>
+    <string name="demo_tab_all">Tous les fichiers</string>
+    <string name="demo_tab_categories">Catégories</string>
+    <string name="demo_tab_trash">Corbeille</string>
+    <string name="demo_search">Rechercher titre, catégorie, source ou date</string>
+    <string name="demo_empty">Rien ici</string>
+    <string name="demo_uncategorised">Sans catégorie</string>
+    <string name="demo_not_linked">Non lié</string>
+    <string name="demo_linked">Lié à %1$d enregistrements</string>
+    <string name="demo_date_unknown">Date clinique inconnue</string>
+    <string name="demo_date_day">Date clinique : %1$s</string>
+    <string name="demo_date_month">Date clinique : %1$s (mois seulement)</string>
+    <string name="demo_date_year">Date clinique : %1$s (année seulement)</string>
+    <string name="demo_imported">Ajouté le %1$s</string>
+    <string name="demo_status_metadata">Métadonnées seulement — aucun fichier original</string>
+    <string name="demo_status_test">Fichier de test synthétique</string>
+    <string name="demo_status_missing">Original manquant — impossible à ouvrir</string>
+    <string name="demo_status_corrupt">Original endommagé — impossible à ouvrir</string>
+    <string name="demo_status_quarantined">En quarantaine — conservé à part, jamais ouvert</string>
+    <string name="demo_preview_test">Aperçu fictif synthétique. Aucun vrai fichier n’a été lu ni authentifié.</string>
+    <string name="demo_source">Source (indiquée par vous) : %1$s</string>
+    <string name="demo_source_none">Source non indiquée</string>
+    <string name="demo_source_hint">Une indication saisie par vous, pas une signature ni un cachet vérifiés.</string>
+    <string name="demo_note">Note</string>
+    <string name="demo_versions">Versions</string>
+    <string name="demo_version_current">v%1$d · actuelle</string>
+    <string name="demo_version_retained">v%1$d · conservée (remplacée)</string>
+    <string name="demo_version_meta">Ajoutée le %1$s · %2$d Kio</string>
+    <string name="demo_links">Enregistrements liés</string>
+    <string name="demo_links_none">Aucun lien. Rien n’est lié automatiquement par date, empreinte de fichier ou numéro.</string>
+    <string name="demo_link_visit">Consultation</string>
+    <string name="demo_link_lab">Analyse</string>
+    <string name="demo_link_retired">jeu de données retiré</string>
+    <string name="demo_back">Retour</string>
+    <string name="demo_cat_lab_report">Compte rendu d’analyse</string>
+    <string name="demo_cat_imaging">Imagerie</string>
+    <string name="demo_cat_prescription">Ordonnance</string>
+    <string name="demo_cat_letter">Courrier</string>
+    <string name="demo_cat_other">Autre</string>
+    <string name="demo_categories_count">%1$s (%2$d)</string>
+    <string name="demo_evidence_title">Rejeu d’une preuve de test — pas une sauvegarde de vos fichiers</string>
+    <string name="demo_evidence_body">Enregistré lors d’un test CI (PR #36) : un paquet synthétique a été authentifié, l’ancien jeu de données conservé, le nouveau activé. Cette application ne sait pas sauvegarder de fichiers médicaux.</string>
+    <string name="demo_inbox_state">En attente de tri</string>
+    <string name="demo_correction">Correction : %1$s</string>
+</resources>

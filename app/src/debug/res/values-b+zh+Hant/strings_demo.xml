@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MED-02B6 demo, debug build only. Synthetic. -->
+<resources>
+    <string name="demo_launcher_label">HRT 日誌示範資料庫（合成）</string>
+    <string name="demo_banner">合成範例——不可用於存放真實醫療原件</string>
+    <string name="demo_breadcrumb">醫療檔案 › 示範資料庫</string>
+    <string name="demo_tab_inbox">待整理</string>
+    <string name="demo_tab_all">全部檔案</string>
+    <string name="demo_tab_categories">類別</string>
+    <string name="demo_tab_trash">回收筒</string>
+    <string name="demo_search">搜尋標題、類別、來源或日期</string>
+    <string name="demo_empty">這裡沒有內容</string>
+    <string name="demo_uncategorised">未分類</string>
+    <string name="demo_not_linked">未關聯</string>
+    <string name="demo_linked">已關聯 %1$d 筆紀錄</string>
+    <string name="demo_date_unknown">臨床日期未知</string>
+    <string name="demo_date_day">臨床日期：%1$s</string>
+    <string name="demo_date_month">臨床日期：%1$s（僅月份）</string>
+    <string name="demo_date_year">臨床日期：%1$s（僅年份）</string>
+    <string name="demo_imported">新增於 %1$s</string>
+    <string name="demo_status_metadata">僅中繼資料——沒有原件</string>
+    <string name="demo_status_test">合成測試檔案</string>
+    <string name="demo_status_missing">原件遺失——無法開啟</string>
+    <string name="demo_status_corrupt">原件已損壞——無法開啟</string>
+    <string name="demo_status_quarantined">已隔離——另外保留，不會開啟</string>
+    <string name="demo_preview_test">合成佔位預覽。沒有讀取或驗證任何真實檔案。</string>
+    <string name="demo_source">來源（你填寫的）：%1$s</string>
+    <string name="demo_source_none">未填寫來源</string>
+    <string name="demo_source_hint">這是你填寫的說明，不是經過驗證的簽章。</string>
+    <string name="demo_note">備註</string>
+    <string name="demo_versions">版本</string>
+    <string name="demo_version_current">v%1$d · 目前</string>
+    <string name="demo_version_retained">v%1$d · 已保留（被取代）</string>
+    <string name="demo_version_meta">新增於 %1$s · %2$d KiB</string>
+    <string name="demo_links">已關聯的紀錄</string>
+    <string name="demo_links_none">沒有關聯。不會依日期、檔案雜湊或編號自動關聯。</string>
+    <string name="demo_link_visit">就診</string>
+    <string name="demo_link_lab">檢驗</string>
+    <string name="demo_link_retired">已退役資料集</string>
+    <string name="demo_back">返回</string>
+    <string name="demo_cat_lab_report">檢驗報告</string>
+    <string name="demo_cat_imaging">影像</string>
+    <string name="demo_cat_prescription">處方</string>
+    <string name="demo_cat_letter">信件</string>
+    <string name="demo_cat_other">其他</string>
+    <string name="demo_categories_count">%1$s（%2$d）</string>
+    <string name="demo_evidence_title">測試證據回放——不是你的檔案備份</string>
+    <string name="demo_evidence_body">來自僅供測試的 CI 執行（PR #36）：合成備份包通過驗證、舊資料集保留、新資料集生效。本 App 不能備份醫療檔案。</string>
+    <string name="demo_inbox_state">在待整理中</string>
+    <string name="demo_correction">更正：%1$s</string>
+</resources>
