@@ -54,7 +54,7 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
 @Composable fun CalendarScreen(state: NotesState, today: LocalDate, onComplete: (TimelineEntry) -> Unit, onChange: (TimelineEntry) -> Unit,
                                onAddMedication: () -> Unit, onResetStart: () -> Unit, contentPadding: PaddingValues, onReview: () -> Unit = {},
                                extra: NotesViewModel.ExtraState = NotesViewModel.ExtraState(), onStock: () -> Unit = {}, initialView: CalView = CalView.MONTH,
-                               onAppointment: (AppointmentEntity) -> Unit = {}) {
+                               onAppointment: (AppointmentEntity) -> Unit = {}, onAddStock: (MedicationEntity) -> Unit = {}) {
     val zone = ZoneId.systemDefault()
     val meds = state.medications.associateBy { it.id }
     var view by rememberSaveable { mutableStateOf(initialView) }
@@ -121,7 +121,7 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
             items(dayRecords, key = { "r${it.id}" }) { r -> RecordLine(r, MedicationSnapshot.decode(r.config_snapshot,r.medication_id)?.medication(r.medication_id)) }
             items(dayAppts, key = { "a${it.id}" }) { AppointmentCard(it) { onAppointment(it) } }
         }
-        item(key = "stock") { HomeStockCard(state.medications.filter { it.active }, runOut, today, zone, onStock) }
+        item(key = "stock") { HomeStockCard(state.medications.filter { it.active }, runOut, today, zone, onStock, onAddStock) }
     }
 }
 

@@ -129,4 +129,50 @@ class AppShellBackNavigationTest {
         for (d in listOf(Destination.HISTORY, Destination.STOCK, Destination.CONCENTRATION)) { open(d); back(); back() }
         assertEquals(emptyList<RecordEntity>(), runBlocking { db.dao().records() })
     }
+
+    // UI-02 A2: settings pages. Back goes page → overview → calendar; the drawer and dialogs still close first.
+    private fun settingsPage(page: SettingsPage) = ui.onNodeWithTag("settings-page:${page.name}")
+    @Test fun settingsPageBackGoesToOverviewThenCalendar() {
+        show(); open(Destination.SETTINGS); settingsPage(SettingsPage.OVERVIEW).assertExists()
+        for (page in SettingsPage.entries - SettingsPage.OVERVIEW) {
+            ui.onNodeWithTag("settings-page:OVERVIEW").performScrollToNode(hasTestTag("settings-row:${page.name}"))
+            ui.onNodeWithTag("settings-row:${page.name}").performClick(); ui.waitForIdle()
+            settingsPage(page).assertExists()
+            ui.onNodeWithTag("settings-back").assertExists(); ui.onNodeWithContentDescription(context.getString(R.string.menu)).assertDoesNotExist()
+            back(); settingsPage(SettingsPage.OVERVIEW).assertExists(); assertNotCalendar()
+        }
+        back(); assertCalendar(); assertEquals(0, activityBacks)
+    }
+    @Test fun settingsTopBarArrowReturnsToOverview() {
+        show(); open(Destination.SETTINGS)
+        ui.onNodeWithTag("settings-page:OVERVIEW").performScrollToNode(hasTestTag("settings-row:DATA"))
+        ui.onNodeWithTag("settings-row:DATA").performClick(); ui.waitForIdle()
+        ui.onNodeWithTag("settings-back").performClick(); ui.waitForIdle()
+        settingsPage(SettingsPage.OVERVIEW).assertExists(); assertEquals(0, activityBacks)
+    }
+    @Test fun dialogOnASettingsPageClosesFirst() {
+        show(); open(Destination.SETTINGS)
+        ui.onNodeWithTag("settings-page:OVERVIEW").performScrollToNode(hasTestTag("settings-row:BIN"))
+        ui.onNodeWithTag("settings-row:BIN").performClick(); ui.waitForIdle()
+        ui.onNodeWithTag("trash-open").performClick(); ui.waitForIdle()
+        ui.onNode(isDialog()).assertExists()
+        ui.runOnUiThread { org.robolectric.shadows.ShadowDialog.getLatestDialog().onBackPressed() }; ui.waitForIdle()
+        ui.onNode(isDialog()).assertDoesNotExist(); settingsPage(SettingsPage.BIN).assertExists()
+        back(); settingsPage(SettingsPage.OVERVIEW).assertExists()
+    }
+    @Test fun settingsPageSurvivesRecreation() {
+        val restore = androidx.compose.ui.test.junit4.StateRestorationTester(ui)
+        val appearance = UiPrefs(context).appearance
+        restore.setContent { MaterialTheme { NotesApp(model, appearance, {}) } }
+        open(Destination.SETTINGS); ui.onNodeWithTag("settings-page:OVERVIEW").performScrollToNode(hasTestTag("settings-row:APPEARANCE")); ui.onNodeWithTag("settings-row:APPEARANCE").performClick(); ui.waitForIdle()
+        restore.emulateSavedInstanceStateRestore(); ui.waitForIdle()
+        settingsPage(SettingsPage.APPEARANCE).assertExists()
+    }
+    @Test fun disguiseModeBackOnASettingsPageStillReachesTheActivity() {
+        show(backToCalendar = false); open(Destination.SETTINGS)
+        ui.onNodeWithTag("settings-page:OVERVIEW").performScrollToNode(hasTestTag("settings-row:PRIVACY"))
+        ui.onNodeWithTag("settings-row:PRIVACY").performClick(); ui.waitForIdle()
+        back()
+        assertEquals("Disguise/lock: Back goes to the activity unchanged", 1, activityBacks)
+    }
 }

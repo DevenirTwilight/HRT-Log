@@ -43,10 +43,12 @@ class SettingsButtonsAndroidTest(private val locale:String,private val width:Int
         val localized=ui.activity.createConfigurationContext(configuration)
         val prefs=UiPrefs(ctx);prefs.appearance=Appearance(ThemeMode.SYSTEM,true,Contrast.STANDARD)
         var appearance by mutableStateOf(prefs.appearance)
+        // UI-02 A2: appearance and privacy now live on separate settings pages; the same groups are checked on each.
+        var page by mutableStateOf(SettingsPage.APPEARANCE)
         val density=ui.activity.resources.displayMetrics.widthPixels/width.toFloat()
         ui.setContent{CompositionLocalProvider(LocalActivityResultRegistryOwner provides ui.activity,LocalContext provides localized,LocalConfiguration provides configuration,LocalDensity provides Density(density,scale)){
             NotesTheme(ThemeMode.LIGHT,contrast=appearance.contrast){Surface(Modifier.fillMaxSize().testTag("settings-viewport")){
-                SettingsScreen(appearance,{appearance=it;prefs.appearance=it},false,{},{},{},PaddingValues()){Column(Modifier.testTag("privacy-section")){PrivacySection(1,false){}}}
+                SettingsScreen(appearance,{appearance=it;prefs.appearance=it},false,{},{},{},PaddingValues(),page=page,privacySlot={Column(Modifier.testTag("privacy-section")){PrivacySection(1,false){}}})
             }}
         }}
         assertEquals(width.toFloat(),ui.onNodeWithTag("settings-viewport").fetchSemanticsNode().size.width/density,1f)
@@ -75,6 +77,7 @@ class SettingsButtonsAndroidTest(private val locale:String,private val width:Int
         }
         group(listOf(R.string.theme_system,R.string.theme_light,R.string.theme_dark)){assertEquals(ThemeMode.entries[it],UiPrefs(ctx).appearance.mode);assertTrue(UiPrefs(ctx).appearance.dynamic)}
         group(listOf(R.string.contrast_low,R.string.contrast_medium,R.string.contrast_high)){assertEquals(Contrast.entries[it],UiPrefs(ctx).appearance.contrast);assertEquals(ThemeMode.DARK,UiPrefs(ctx).appearance.mode)}
+        ui.runOnIdle{page=SettingsPage.PRIVACY};ui.waitForIdle()
         group(listOf(R.string.lock_after_now,R.string.lock_after_30s,R.string.lock_after_5m)){assertEquals(listOf(0L,30_000L,300_000L)[it],UiPrefs(ctx).lockAfterMillis)}
         // SwitchRow has separate label and switch semantics; test the real first switch in the privacy section.
         ui.onAllNodes(isToggleable() and hasAnyAncestor(hasTestTag("privacy-section"))).onFirst().performScrollTo().assertIsOn()

@@ -17,6 +17,7 @@ import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.unit.dp
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.Icons
@@ -82,6 +83,9 @@ import java.time.*
             record.importedHistory.filter{!it.future && it.displayPeriodKey==null}.forEach{add(StoryBlock(it.key,imported=it))}
         }
     }
+    // UI-02 A1: front-end type filter only; the projection and period cards are unchanged.
+    var filter by rememberSaveable { mutableStateOf(TimelineFilter.ALL) }
+    val shown=remember(blocks,filter){if(filter==TimelineFilter.ALL)blocks else blocks.filter{b->b.event?.let{filter.matches(it.kind)} ?: (b.imported==null || filter==TimelineFilter.OTHER)}}
     LaunchedEffect(saveState.saved?.id) {
         saveState.saved?.let{saved->
             edit=null;focusKey="milestone:${saved.id}"
@@ -91,7 +95,9 @@ import java.time.*
     }
     LaunchedEffect(focusKey,record) {
         val target=focusKey?.let{key->(record.events+record.upcoming).firstOrNull{it.key==key}} ?: return@LaunchedEffect
-        val index=blocks.indexOfFirst{it.event?.key==target.key}+2
+        // A focused event hidden by the filter brings the full list back first.
+        val visible=if(shown.any{it.event?.key==target.key})shown else {filter=TimelineFilter.ALL;blocks}
+        val index=visible.indexOfFirst{it.event?.key==target.key}+3
         list.animateScrollToItem(index)
         detailKey=target.key // exact source is visible even inside a large historical period
         focusKey=null
@@ -116,7 +122,8 @@ import java.time.*
                     enabled=state.medications.isNotEmpty(),modifier=mod.testTag("timeline-new-period")){Text(labels[i])}
             }
         }
-        items(blocks,key={it.key}){block->
+        item(key="filters"){TimelineFilterChips(filter){filter=it}}
+        items(shown,key={it.key}){block->
             val event=block.event;val period=block.period
             when {
                 block.imported!=null->{val imported=block.imported
@@ -276,6 +283,22 @@ import java.time.*
         // UI-01 E: a type badge in front; the type is also in the words, so it is never colour or icon alone.
         EventTypeBadge(event.kind);Spacer(Modifier.width(12.dp))
         Text(formatDate(event.date)+" · "+eventKindLabel(event.kind)+(if(LocalSimpleMode.current)"" else " · "+eventTitle(event)),modifier=Modifier.weight(1f))
+    }
+}
+/** UI-02 A1: the timeline's type filter. OTHER is every kind not named by another chip. */
+enum class TimelineFilter(val label:Int) {
+    ALL(R.string.timeline_filter_all),LAB(R.string.timeline_filter_labs),VISIT(R.string.timeline_filter_visits),
+    MILESTONE(R.string.timeline_filter_milestones),OTHER(R.string.timeline_filter_other);
+    fun matches(kind:EventKind)=when(this){ALL->true;LAB->kind==EventKind.LAB;VISIT->kind==EventKind.APPOINTMENT;MILESTONE->kind==EventKind.MILESTONE
+        OTHER->kind!=EventKind.LAB && kind!=EventKind.APPOINTMENT && kind!=EventKind.MILESTONE}
+}
+@OptIn(ExperimentalLayoutApi::class)
+@Composable private fun TimelineFilterChips(selected:TimelineFilter,onSelect:(TimelineFilter)->Unit) {
+    FlowRow(Modifier.fillMaxWidth().testTag("timeline-filters"),horizontalArrangement=Arrangement.spacedBy(Spacing.s)) {
+        TimelineFilter.entries.forEach{f->
+            FilterChip(selected==f,{onSelect(f)},{Text(stringResource(f.label))},
+                Modifier.heightIn(min=48.dp).semantics{this.selected=selected==f}.testTag("timeline-filter:${f.name}"))
+        }
     }
 }
 @Composable internal fun TimelineZoneNote(zone:ZoneId,device:ZoneId=ZoneId.systemDefault()) {

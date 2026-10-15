@@ -88,6 +88,9 @@ class UiPrefs(context: Context) {
     val importedLink by model.importedLink.collectAsStateWithLifecycle()
     val notificationSlot by model.notificationSlot.collectAsStateWithLifecycle()
     var destination by rememberSaveable { mutableStateOf(Destination.CALENDAR) }
+    // UI-02 A2: the settings page shown, kept across rotation and process recreation.
+    var settingsPage by rememberSaveable { mutableStateOf(SettingsPage.OVERVIEW) }
+    val settingsSub = destination == Destination.SETTINGS && settingsPage != SettingsPage.OVERVIEW
     var importedRecordIds by remember { mutableStateOf<Set<Long>?>(null) }
     LaunchedEffect(destination){if(destination!=Destination.HISTORY)importedRecordIds=null}
     var visitId by rememberSaveable { mutableStateOf<Long?>(null) }
@@ -154,16 +157,23 @@ class UiPrefs(context: Context) {
     androidx.activity.compose.BackHandler(enabled = backToCalendar && (drawer.isOpen || destination != Destination.CALENDAR)) {
         if (drawer.isOpen) scope.launch { drawer.close() } else destination = Destination.CALENDAR
     }
+    // UI-02 A2: a settings page goes back to the overview first (registered later, so it runs before the handler above);
+    // the drawer still closes first, dialogs still win, and disguise/lock (backToCalendar = false) are unchanged.
+    androidx.activity.compose.BackHandler(enabled = backToCalendar && settingsSub && !drawer.isOpen) { settingsPage = SettingsPage.OVERVIEW }
     CompositionLocalProvider(LocalSimpleMode provides (simpleMode && state.medications.count { it.active } <= 1)) {
     ModalNavigationDrawer(drawerState = drawer, drawerContent = {
         ModalDrawerSheet {
-            DrawerContent(destination) { d -> destination = d; if (d == Destination.VISITS) { visitId = null; medicalOrigin=false }; scope.launch { drawer.close() } }
+            DrawerContent(destination) { d -> destination = d; if (d == Destination.VISITS) { visitId = null; medicalOrigin=false }; if (d == Destination.SETTINGS) settingsPage = SettingsPage.OVERVIEW; scope.launch { drawer.close() } }
         }
     }) {
         Scaffold(
             topBar = {
-                TopAppBar(title = { Text(stringResource(if (destination == Destination.CALENDAR) R.string.app_name else destination.title)) },
-                    navigationIcon = { IconButton(onClick = { scope.launch { drawer.open() } }) { Icon(Icons.Outlined.Menu, stringResource(R.string.menu)) } },
+                TopAppBar(title = { Text(stringResource(if (settingsSub) settingsPage.title else if (destination == Destination.CALENDAR) R.string.app_name else destination.title)) },
+                    navigationIcon = {
+                        if (settingsSub) IconButton(onClick = { settingsPage = SettingsPage.OVERVIEW }, modifier = Modifier.testTag("settings-back")) {
+                            Icon(Icons.AutoMirrored.Outlined.ArrowBack, stringResource(R.string.settings_back)) }
+                        else IconButton(onClick = { scope.launch { drawer.open() } }) { Icon(Icons.Outlined.Menu, stringResource(R.string.menu)) }
+                    },
                     actions = {
                         if (destination == Destination.WELLBEING) IconButton(onClick={summary=true}) { Icon(Icons.Outlined.PictureAsPdf,stringResource(R.string.wb_summary)) }
                         if (destination == Destination.CALENDAR) IconButton(onClick = { pickStart = true }) { Icon(Icons.Outlined.EditCalendar, stringResource(R.string.calendar_pick_start)) }
@@ -192,19 +202,30 @@ class UiPrefs(context: Context) {
             when (destination) {
                 Destination.CALENDAR -> CalendarScreen(state, today, { completeEntry = it }, { overrideEntry = it; model.loadOverride(it.slot.key) }, { model.edit(null) },
                     { model.calendarFrom(null) }, pad, onReview = { destination = Destination.MEDICATIONS }, extra = extra, onStock = { destination = Destination.STOCK },
-                    onAppointment = { visitId = it.id; medicalOrigin=false; destination = Destination.VISITS })
+                    onAppointment = { visitId = it.id; medicalOrigin=false; destination = Destination.VISITS }, onAddStock = { addStock = it })
                 Destination.MEDICATIONS -> MedicationsScreen(state, { model.edit(null) }, { model.edit(it) }, { archive = it }, pad)
                 Destination.CONCENTRATION -> net.plainnotes.app.experimental.UnifiedConcentrationScreen(extra.records, state.ruleSnapshots, extra.labs, pad,
                     content = { innerPad, preview, selector -> ConcentrationScreen(state, conc.result, conc.loading, conc.weight, concSettings, { concSettings = it; prefs.conc = it },
                         { model.setWeight(it) }, { model.editById(it) }, { destination = Destination.LABS }, innerPad,extra.records,state.profiles,model::confirmHistoricalContext,{destination=Destination.HISTORY},preview,selector,m2Only=true) })
                 Destination.LABS -> LabsScreen(extra.labs, conc.doseTimes, { labEdit = it; labNew = it == null }, { model.deleteLab(it) }, pad,extra.labContexts,{v,estimate->model.rebuildLabContext(v,estimate)})
-                Destination.SETTINGS -> SettingsScreen(appearance, onAppearance, highReliability, { highReliability = it; prefs.highReliability = it; model.sync() },
-                    { model.sync() }, { model.testReminder() }, pad, wellbeingPrompt, { wellbeingPrompt = it; prefs.wellbeingPrompt = it }) {
-                    RegionSection(region){region=it;prefs.region=it}
-                    PrivacySection(state.medications.count { it.active }, simpleMode) { simpleMode = it; prefs.simpleMode = it }
-                    net.plainnotes.app.disguise.DisguiseSection(model::destroyLegacyPrivateData, onRoutingChanged = { model.sync() }, backup = model::backupTo)
-                    DataSection(model, state.medications.associate { it.id to scheduleText(state.schedules[it.id]) })
-                    RecycleBinSection(state, extra, model::restoreTrash, model::purgeTrash, model::emptyTrash)
+                Destination.SETTINGS -> {
+                    val lockOn = remember(settingsPage) { net.plainnotes.app.security.AppLock(context).enabled }
+                    val backup by model.backupHistory.state.collectAsState()
+                    val regionLabel = stringResource(when (region) { "CN" -> R.string.wb_region_cn; "HK" -> R.string.wb_region_hk; "TW" -> R.string.wb_region_tw
+                        "FR" -> R.string.wb_region_fr; "OTHER" -> R.string.wb_region_other; else -> R.string.wb_region_unset })
+                    val summaries = SettingsSummaries(regionLabel, stringResource(if (lockOn) R.string.settings_lock_on else R.string.settings_lock_off),
+                        backup.lastExport?.let { stringResource(R.string.settings_backup_last, formatDateTime(it)) } ?: stringResource(R.string.settings_backup_never),
+                        stringResource(R.string.settings_bin_count, extra.trash.size))
+                    SettingsScreen(appearance, onAppearance, highReliability, { highReliability = it; prefs.highReliability = it; model.sync() },
+                        { model.sync() }, { model.testReminder() }, pad, wellbeingPrompt, { wellbeingPrompt = it; prefs.wellbeingPrompt = it },
+                        page = settingsPage, onPage = { settingsPage = it }, summaries = summaries,
+                        wellbeingSlot = { RegionSection(region){region=it;prefs.region=it} },
+                        privacySlot = {
+                            PrivacySection(state.medications.count { it.active }, simpleMode) { simpleMode = it; prefs.simpleMode = it }
+                            net.plainnotes.app.disguise.DisguiseSection(model::destroyLegacyPrivateData, onRoutingChanged = { model.sync() }, backup = model::backupTo)
+                        },
+                        dataSlot = { DataSection(model, state.medications.associate { it.id to scheduleText(state.schedules[it.id]) }) },
+                        binSlot = { RecycleBinSection(state, extra, model::restoreTrash, model::purgeTrash, model::emptyTrash) })
                 }
                 Destination.ABOUT -> AboutScreen(pad)
                 Destination.TIMELINE -> LongitudinalScreen(state,extra,model::saveMilestone,model::deleteMilestone,{kind->destination=when(kind){
