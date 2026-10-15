@@ -26,6 +26,7 @@ import java.time.LocalTime
 class CalendarTestActivity : ComponentActivity() {
     private lateinit var fixture: CalendarFixture
     val repository get() = fixture.repository
+    val model get() = fixture.model
     /** Back presses that reached the activity, standing in for MainActivity's finish / disguise-exit callback. */
     @Volatile var activityBacks = 0
     override fun onCreate(state: Bundle?) {

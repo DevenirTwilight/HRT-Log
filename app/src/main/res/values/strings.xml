@@ -515,11 +515,8 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="calendar_day_empty">Nothing recorded or planned on this day.</string>
 <string name="calendar_next">Next</string>
 <string name="calendar_previous">Previous</string>
-<string name="forecast_add">Add stock</string>
 <string name="forecast_empty">Not enough for the next planned dose</string>
 <string name="forecast_no_plan">%1$s left · no schedule to forecast from</string>
-<string name="forecast_note">Based on your schedule and the open and sealed packages in Stock.</string>
-<string name="forecast_title">Stock forecast</string>
 <string name="forecast_untracked">Stock not tracked yet</string>
 <string name="legend_missed">Missed</string>
 <string name="legend_partial">Some missed</string>
@@ -688,7 +685,6 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="timeline">Timeline</string>
     <string name="epochs">Treatment stages</string>
     <string name="timeline_intro">Saved regimens and recorded events, without inferring cause and effect.</string>
-    <string name="timeline_zone">Viewing time zone: %1$s</string>
     <string name="timeline_filters">Filters</string>
     <string name="timeline_all_time">All dates</string>
     <string name="timeline_days">%1$d days</string>
@@ -827,7 +823,6 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="milestone_saving">Saving…</string>
     <string name="milestone_saved">Milestone saved</string>
     <string name="milestone_saved_refresh_failed">Milestone saved. Refresh could not finish; do not save it again.</string>
-    <string name="period_timeline_intro">Treatment periods from saved plans and stable patterns in actual history. Individual doses are in History.</string>
     <string name="period_current">Current period</string>
     <string name="period_past">Past period</string>
     <string name="period_upcoming">Upcoming</string>
@@ -1161,4 +1156,22 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="drawer_group_treatment">Treatment</string>
     <string name="drawer_group_medical">Medical</string>
     <string name="drawer_group_body">Body and mind</string>
+    <!-- UI-02 (2026-10-15) -->
+    <string name="timeline_filter_all">All</string>
+    <string name="timeline_filter_labs">Labs</string>
+    <string name="timeline_filter_visits">Visits</string>
+    <string name="timeline_filter_milestones">Milestones</string>
+    <string name="timeline_filter_other">Other</string>
+    <string name="settings_reminders">Reminders</string>
+    <string name="settings_appearance_language">Appearance and language</string>
+    <string name="settings_privacy_security">Privacy and security</string>
+    <string name="settings_data_backup">Data and backup</string>
+    <string name="settings_all_ok">All OK</string>
+    <string name="settings_n_need_action">%1$d need attention</string>
+    <string name="settings_lock_on">App lock on</string>
+    <string name="settings_lock_off">App lock off</string>
+    <string name="settings_backup_last">Last backup %1$s</string>
+    <string name="settings_backup_never">Never backed up</string>
+    <string name="settings_bin_count">%1$d items</string>
+    <string name="settings_back">Back to settings</string>
 </resources>

@@ -515,11 +515,8 @@
 <string name="calendar_day_empty">这天没有记录，也没有计划。</string>
 <string name="calendar_next">下一个</string>
 <string name="calendar_previous">上一个</string>
-<string name="forecast_add">添加库存</string>
 <string name="forecast_empty">库存不够下一次计划服药</string>
 <string name="forecast_no_plan">剩余 %1$s · 没有服药计划，无法预测</string>
-<string name="forecast_note">按服药计划和库存页里已开封、未开封的包装推算。</string>
-<string name="forecast_title">库存预计</string>
 <string name="forecast_untracked">还没有记录库存</string>
 <string name="legend_missed">已漏服</string>
 <string name="legend_partial">部分漏服</string>
@@ -688,7 +685,6 @@
     <string name="timeline">时间线</string>
     <string name="epochs">治疗阶段</string>
     <string name="timeline_intro">查看当时的方案与实际记录，不推断因果关系。</string>
-    <string name="timeline_zone">查看时区：%1$s</string>
     <string name="timeline_filters">筛选</string>
     <string name="timeline_all_time">全部时间</string>
     <string name="timeline_days">%1$d 天</string>
@@ -827,7 +823,6 @@
     <string name="milestone_saving">正在保存…</string>
     <string name="milestone_saved">里程碑已保存</string>
     <string name="milestone_saved_refresh_failed">里程碑已保存，但刷新未完成；请勿重复保存。</string>
-    <string name="period_timeline_intro">已保存方案和稳定历史记录共同组成治疗时期。每一次服药请在历史中查看。</string>
     <string name="period_current">当前时期</string>
     <string name="period_past">过去时期</string>
     <string name="period_upcoming">即将发生</string>
@@ -1161,4 +1156,22 @@
     <string name="drawer_group_treatment">治疗</string>
     <string name="drawer_group_medical">医疗</string>
     <string name="drawer_group_body">身心</string>
+    <!-- UI-02 (2026-10-15) -->
+    <string name="timeline_filter_all">全部</string>
+    <string name="timeline_filter_labs">化验</string>
+    <string name="timeline_filter_visits">就诊</string>
+    <string name="timeline_filter_milestones">里程碑</string>
+    <string name="timeline_filter_other">其他</string>
+    <string name="settings_reminders">提醒</string>
+    <string name="settings_appearance_language">外观与语言</string>
+    <string name="settings_privacy_security">隐私与安全</string>
+    <string name="settings_data_backup">数据与备份</string>
+    <string name="settings_all_ok">全部正常</string>
+    <string name="settings_n_need_action">%1$d 项需要处理</string>
+    <string name="settings_lock_on">应用锁已开启</string>
+    <string name="settings_lock_off">应用锁未开启</string>
+    <string name="settings_backup_last">最近备份：%1$s</string>
+    <string name="settings_backup_never">从未备份</string>
+    <string name="settings_bin_count">%1$d 项</string>
+    <string name="settings_back">返回设置</string>
 </resources>

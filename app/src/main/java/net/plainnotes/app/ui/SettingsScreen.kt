@@ -17,6 +17,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
+import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -47,9 +49,16 @@ import net.plainnotes.app.R
 
 class Appearance(val mode: ThemeMode, val dynamic: Boolean, val contrast: Contrast = Contrast.STANDARD)
 
+/**
+ * UI-02 A2: settings overview plus six pages. Every section below is the same composable as before, only rendered on its
+ * page; the slots carry the sections AppShell owns (region, privacy/disguise, data, recycle bin). The reminder checks are
+ * computed once here and feed both the overview summary and the reminders page.
+ */
 @Composable fun SettingsScreen(appearance: Appearance, onAppearance: (Appearance) -> Unit, highReliability: Boolean, onHighReliability: (Boolean) -> Unit,
                                onSync: () -> Unit, onTest: () -> Unit, contentPadding: PaddingValues, wellbeingPrompt: Boolean = true, onWellbeingPrompt: (Boolean) -> Unit = {},
-                               extra: @Composable ColumnScope.() -> Unit = {}) {
+                               page: SettingsPage = SettingsPage.OVERVIEW, onPage: (SettingsPage) -> Unit = {}, summaries: SettingsSummaries = SettingsSummaries(),
+                               wellbeingSlot: @Composable ColumnScope.() -> Unit = {}, privacySlot: @Composable ColumnScope.() -> Unit = {},
+                               dataSlot: @Composable ColumnScope.() -> Unit = {}, binSlot: @Composable ColumnScope.() -> Unit = {}) {
     val context = LocalContext.current; val inspection = LocalInspectionMode.current
     val revision = resumeRevision()
     var reliabilityInfo by remember { mutableStateOf(false) }
@@ -59,8 +68,19 @@ class Appearance(val mode: ThemeMode, val dynamic: Boolean, val contrast: Contra
     val notifications = remember(revision) { inspection || NotificationManagerCompat.from(context).areNotificationsEnabled() }
     val battery = remember(revision) { inspection || context.getSystemService(PowerManager::class.java).isIgnoringBatteryOptimizations(context.packageName) }
     val channel = remember(revision) { inspection || context.getSystemService(NotificationManager::class.java).getNotificationChannel("reminders")?.importance != NotificationManager.IMPORTANCE_NONE }
-    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(contentPadding).padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-        SectionCard(stringResource(R.string.reliability)) {
+    val problems = listOf(exact, notifications && channel, battery).count { !it }
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(contentPadding).padding(Spacing.l).testTag("settings-page:${page.name}"),
+        verticalArrangement = Arrangement.spacedBy(14.dp)) {
+        if (page == SettingsPage.OVERVIEW) {
+            val themeLabel = stringResource(when (appearance.mode) { ThemeMode.SYSTEM -> R.string.theme_system; ThemeMode.LIGHT -> R.string.theme_light; ThemeMode.DARK -> R.string.theme_dark })
+            SettingsRow(SettingsPage.REMINDERS, if (problems == 0) stringResource(R.string.settings_all_ok) else stringResource(R.string.settings_n_need_action, problems), problems > 0, onPage)
+            SettingsRow(SettingsPage.APPEARANCE, themeLabel + " · " + languageLabel(), false, onPage)
+            SettingsRow(SettingsPage.WELLBEING, summaries.wellbeing, false, onPage)
+            SettingsRow(SettingsPage.PRIVACY, summaries.privacy, false, onPage)
+            SettingsRow(SettingsPage.DATA, summaries.data, false, onPage)
+            SettingsRow(SettingsPage.BIN, summaries.bin, false, onPage)
+        }
+        if (page == SettingsPage.REMINDERS) SectionCard(stringResource(R.string.reliability)) {
             CheckRow(Icons.Outlined.Alarm, stringResource(R.string.check_exact), exact, stringResource(R.string.check_exact_bad)) {
                 if (Build.VERSION.SDK_INT >= 31) open(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM, true)
             }
@@ -84,7 +104,7 @@ class Appearance(val mode: ThemeMode, val dynamic: Boolean, val contrast: Contra
             TextButton(onClick = { reliabilityInfo = !reliabilityInfo }) { Text(stringResource(R.string.reliability_limits_title)) }
             if (reliabilityInfo) Text(stringResource(R.string.reliability_limits), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
-        SectionCard(stringResource(R.string.appearance)) {
+        if (page == SettingsPage.APPEARANCE) SectionCard(stringResource(R.string.appearance)) {
             val themes=ThemeMode.entries.map{m->stringResource(when(m){ThemeMode.SYSTEM->R.string.theme_system;ThemeMode.LIGHT->R.string.theme_light;ThemeMode.DARK->R.string.theme_dark})}
             val contrasts=Contrast.entries.map{c->stringResource(when(c){Contrast.STANDARD->R.string.contrast_low;Contrast.MEDIUM->R.string.contrast_medium;Contrast.HIGH->R.string.contrast_high})}
             Text(stringResource(R.string.theme),style=MaterialTheme.typography.labelLarge)
@@ -93,16 +113,58 @@ class Appearance(val mode: ThemeMode, val dynamic: Boolean, val contrast: Contra
             Text(stringResource(R.string.contrast),style=MaterialTheme.typography.labelLarge)
             AdaptiveButtonChoice(contrasts,Contrast.entries.indexOf(appearance.contrast),{onAppearance(Appearance(appearance.mode,appearance.dynamic,Contrast.entries[it]))},groupLabels=themes+contrasts)
         }
-        SectionCard(stringResource(R.string.wellbeing)) {
-            SwitchRow(stringResource(R.string.wb_prompt_setting), wellbeingPrompt, stringResource(R.string.wb_prompt_setting_desc)) { onWellbeingPrompt(it) }
+        if (page == SettingsPage.WELLBEING) {
+            SectionCard(stringResource(R.string.wellbeing)) {
+                SwitchRow(stringResource(R.string.wb_prompt_setting), wellbeingPrompt, stringResource(R.string.wb_prompt_setting_desc)) { onWellbeingPrompt(it) }
+            }
+            wellbeingSlot()
         }
-        extra()
-        SectionCard(stringResource(R.string.language)) {
+        if (page == SettingsPage.PRIVACY) privacySlot()
+        if (page == SettingsPage.DATA) dataSlot()
+        if (page == SettingsPage.BIN) binSlot()
+        if (page == SettingsPage.APPEARANCE) SectionCard(stringResource(R.string.language)) {
             val current = androidx.appcompat.app.AppCompatDelegate.getApplicationLocales().toLanguageTags()
             val options = listOf("" to stringResource(R.string.language_system), "en-US" to "English", "fr-FR" to "Français", "zh-CN" to "简体中文", "zh-TW" to "繁體中文")
             DropdownField(stringResource(R.string.language), options.map { it.first }, options.firstOrNull { it.first == current }?.first ?: "", { t -> options.first { it.first == t }.second }, { tag ->
                 androidx.appcompat.app.AppCompatDelegate.setApplicationLocales(if (tag.isEmpty()) androidx.core.os.LocaleListCompat.getEmptyLocaleList() else androidx.core.os.LocaleListCompat.forLanguageTags(tag))
             })
+        }
+    }
+}
+
+/** The six settings pages after the overview; titles are reused for the top bar. */
+enum class SettingsPage(val title: Int, val icon: ImageVector) {
+    OVERVIEW(R.string.settings, Icons.Outlined.Settings),
+    REMINDERS(R.string.settings_reminders, Icons.Outlined.NotificationsActive),
+    APPEARANCE(R.string.settings_appearance_language, Icons.Outlined.Palette),
+    WELLBEING(R.string.wellbeing, Icons.Outlined.FavoriteBorder),
+    PRIVACY(R.string.settings_privacy_security, Icons.Outlined.Lock),
+    DATA(R.string.settings_data_backup, Icons.Outlined.Storage),
+    BIN(R.string.trash_title, Icons.Outlined.Delete),
+}
+
+/** One-line overview states that AppShell knows (the reminder one is computed here). */
+data class SettingsSummaries(val wellbeing: String = "", val privacy: String = "", val data: String = "", val bin: String = "")
+
+@Composable private fun languageLabel(): String {
+    val current = androidx.appcompat.app.AppCompatDelegate.getApplicationLocales().toLanguageTags()
+    return when (current) { "en-US" -> "English"; "fr-FR" -> "Français"; "zh-CN" -> "简体中文"; "zh-TW" -> "繁體中文"; else -> stringResource(R.string.language_system) }
+}
+
+/** ≥56dp overview row; the row is one button whose spoken name is title and summary together. */
+@Composable private fun SettingsRow(page: SettingsPage, summary: String, attention: Boolean, onPage: (SettingsPage) -> Unit) {
+    val c = MaterialTheme.colorScheme
+    Surface(onClick = { onPage(page) }, shape = Corners.list, color = c.surfaceContainerLow,
+        modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).testTag("settings-row:${page.name}")) {
+        Row(Modifier.padding(horizontal = Spacing.l, vertical = Spacing.m), verticalAlignment = Alignment.CenterVertically) {
+            Icon(page.icon, null, tint = if (attention) c.tertiary else c.primary)
+            Spacer(Modifier.width(Spacing.l))
+            Column(Modifier.weight(1f)) {
+                Text(stringResource(page.title), style = MaterialTheme.typography.titleMedium)
+                if (summary.isNotEmpty()) Text(summary, style = MaterialTheme.typography.bodyMedium,
+                    color = if (attention) c.tertiary else c.onSurfaceVariant, fontWeight = if (attention) FontWeight.SemiBold else null)
+            }
+            Icon(Icons.AutoMirrored.Outlined.KeyboardArrowRight, null, tint = c.onSurfaceVariant)
         }
     }
 }

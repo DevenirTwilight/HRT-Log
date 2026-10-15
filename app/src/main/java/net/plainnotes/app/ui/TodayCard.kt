@@ -114,23 +114,28 @@ private val RoundedCornerShape24 = androidx.compose.foundation.shape.RoundedCorn
  * UI-01 B: only medications the shared forecast calls low or out ([StockForecast.isLow], the stock page's and stock
  * reminder's rule; no new threshold). Nothing actionable, nothing shown: untracked or no-plan stays on the stock page.
  */
-@Composable internal fun HomeStockCard(meds: List<MedicationEntity>, forecasts: Map<Long, StockForecast>, today: LocalDate, zone: ZoneId, onStock: () -> Unit) {
+@Composable internal fun HomeStockCard(meds: List<MedicationEntity>, forecasts: Map<Long, StockForecast>, today: LocalDate, zone: ZoneId, onStock: () -> Unit,
+                                       onAdd: (MedicationEntity) -> Unit = {}) {
     val low = meds.filter { forecasts[it.id]?.isLow(today, zone) == true }
     if (low.isEmpty()) return
     val c = MaterialTheme.colorScheme
     Surface(color = c.tertiaryContainer, contentColor = c.onTertiaryContainer, shape = MaterialTheme.shapes.large, modifier = Modifier.fillMaxWidth().testTag("home-stock")) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Column(Modifier.padding(Spacing.l), verticalArrangement = Arrangement.spacedBy(Spacing.s)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(Icons.Outlined.Inventory2, null); Spacer(Modifier.width(8.dp))
                 Text(stringResource(R.string.home_stock_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
             }
             low.forEach { m ->
-                Row(Modifier.fillMaxWidth().testTag("home-stock-row:${m.id}"), verticalAlignment = Alignment.CenterVertically) {
-                    Column(Modifier.weight(1f)) {
-                        Text(m.name, style = MaterialTheme.typography.titleSmall)
-                        Text(stockForecastText(forecasts[m.id], m, today, zone).first, style = MaterialTheme.typography.bodyMedium)
+                Column(Modifier.fillMaxWidth().testTag("home-stock-row:${m.id}"), verticalArrangement = Arrangement.spacedBy(Spacing.xs)) {
+                    Text(m.name, style = MaterialTheme.typography.titleSmall)
+                    Text(stockForecastText(forecasts[m.id], m, today, zone).first, style = MaterialTheme.typography.bodyMedium)
+                    // UI-02 A1: "Add stock" opens AppShell's existing AddStockDialog (the stock page's own wiring); side by side
+                    // when both fit, stacked otherwise.
+                    val labels = listOf(stringResource(R.string.home_stock_view), stringResource(R.string.stock_add))
+                    AdaptiveActions(labels, contentInset = 48.dp) { i, mod ->
+                        if (i == 0) OutlinedButton(onStock, mod.testTag("home-stock-view"), colors = ButtonDefaults.outlinedButtonColors(contentColor = c.onTertiaryContainer)) { Text(labels[0]) }
+                        else Button({ onAdd(m) }, mod.testTag("home-stock-add:${m.id}"), colors = ButtonDefaults.buttonColors(containerColor = c.tertiary, contentColor = c.onTertiary)) { Text(labels[1]) }
                     }
-                    TextButton(onStock, Modifier.testTag("home-stock-view")) { Text(stringResource(R.string.home_stock_view)) }
                 }
             }
         }

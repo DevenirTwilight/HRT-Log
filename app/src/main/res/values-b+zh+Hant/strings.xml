@@ -515,11 +515,8 @@
 <string name="calendar_day_empty">這天沒有記錄，也沒有計畫。</string>
 <string name="calendar_next">下一個</string>
 <string name="calendar_previous">上一個</string>
-<string name="forecast_add">新增庫存</string>
 <string name="forecast_empty">庫存不夠下一次計畫服藥</string>
 <string name="forecast_no_plan">剩餘 %1$s · 沒有服藥計畫，無法預測</string>
-<string name="forecast_note">按服藥計畫和庫存頁裡已開封、未開封的包裝推算。</string>
-<string name="forecast_title">庫存預計</string>
 <string name="forecast_untracked">還沒有記錄庫存</string>
 <string name="legend_missed">已漏服</string>
 <string name="legend_partial">部分漏服</string>
@@ -688,7 +685,6 @@
     <string name="timeline">時間線</string>
     <string name="epochs">治療階段</string>
     <string name="timeline_intro">查看當時的方案與實際記錄，不推斷因果關係。</string>
-    <string name="timeline_zone">查看時區：%1$s</string>
     <string name="timeline_filters">篩選</string>
     <string name="timeline_all_time">全部時間</string>
     <string name="timeline_days">%1$d 天</string>
@@ -827,7 +823,6 @@
     <string name="milestone_saving">正在儲存…</string>
     <string name="milestone_saved">里程碑已儲存</string>
     <string name="milestone_saved_refresh_failed">里程碑已儲存，但重新整理未完成；請勿重複儲存。</string>
-    <string name="period_timeline_intro">已儲存方案和穩定歷史紀錄共同組成治療時期。每一次服藥請在歷史中查看。</string>
     <string name="period_current">目前時期</string>
     <string name="period_past">過去時期</string>
     <string name="period_upcoming">即將發生</string>
@@ -1161,4 +1156,22 @@
     <string name="drawer_group_treatment">治療</string>
     <string name="drawer_group_medical">醫療</string>
     <string name="drawer_group_body">身心</string>
+    <!-- UI-02 (2026-10-15) -->
+    <string name="timeline_filter_all">全部</string>
+    <string name="timeline_filter_labs">檢驗</string>
+    <string name="timeline_filter_visits">就診</string>
+    <string name="timeline_filter_milestones">里程碑</string>
+    <string name="timeline_filter_other">其他</string>
+    <string name="settings_reminders">提醒</string>
+    <string name="settings_appearance_language">外觀與語言</string>
+    <string name="settings_privacy_security">隱私與安全</string>
+    <string name="settings_data_backup">資料與備份</string>
+    <string name="settings_all_ok">全部正常</string>
+    <string name="settings_n_need_action">%1$d 項需要處理</string>
+    <string name="settings_lock_on">應用程式鎖已開啟</string>
+    <string name="settings_lock_off">應用程式鎖未開啟</string>
+    <string name="settings_backup_last">最近備份：%1$s</string>
+    <string name="settings_backup_never">從未備份</string>
+    <string name="settings_bin_count">%1$d 項</string>
+    <string name="settings_back">返回設定</string>
 </resources>

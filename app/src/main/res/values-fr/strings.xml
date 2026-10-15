@@ -515,11 +515,8 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="calendar_day_empty">Rien d’enregistré ni de prévu ce jour-là.</string>
 <string name="calendar_next">Suivant</string>
 <string name="calendar_previous">Précédent</string>
-<string name="forecast_add">Ajouter</string>
 <string name="forecast_empty">Pas assez pour la prochaine prise prévue</string>
 <string name="forecast_no_plan">Reste %1$s · aucun planning pour prévoir</string>
-<string name="forecast_note">Calculé à partir du planning et des boîtes ouvertes et neuves du stock.</string>
-<string name="forecast_title">Prévision du stock</string>
 <string name="forecast_untracked">Stock non suivi</string>
 <string name="legend_missed">Oublié</string>
 <string name="legend_partial">Oublis partiels</string>
@@ -688,7 +685,6 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="timeline">Chronologie</string>
     <string name="epochs">Étapes du traitement</string>
     <string name="timeline_intro">Schémas enregistrés et événements consignés, sans déduire de lien de cause à effet.</string>
-    <string name="timeline_zone">Fuseau horaire affiché : %1$s</string>
     <string name="timeline_filters">Filtres</string>
     <string name="timeline_all_time">Toutes les dates</string>
     <string name="timeline_days">%1$d jours</string>
@@ -827,7 +823,6 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="milestone_saving">Enregistrement…</string>
     <string name="milestone_saved">Jalon enregistré</string>
     <string name="milestone_saved_refresh_failed">Jalon enregistré. Actualisation inachevée ; ne le sauvegardez pas à nouveau.</string>
-    <string name="period_timeline_intro">Les périodes réunissent les schémas enregistrés et les tendances stables des prises réelles. Chaque prise figure dans Historique.</string>
     <string name="period_current">Période actuelle</string>
     <string name="period_past">Période passée</string>
     <string name="period_upcoming">À venir</string>
@@ -1161,4 +1156,22 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="drawer_group_treatment">Traitement</string>
     <string name="drawer_group_medical">Santé</string>
     <string name="drawer_group_body">Corps et esprit</string>
+    <!-- UI-02 (2026-10-15) -->
+    <string name="timeline_filter_all">Tout</string>
+    <string name="timeline_filter_labs">Analyses</string>
+    <string name="timeline_filter_visits">Consultations</string>
+    <string name="timeline_filter_milestones">Étapes</string>
+    <string name="timeline_filter_other">Autres</string>
+    <string name="settings_reminders">Rappels</string>
+    <string name="settings_appearance_language">Apparence et langue</string>
+    <string name="settings_privacy_security">Confidentialité et sécurité</string>
+    <string name="settings_data_backup">Données et sauvegarde</string>
+    <string name="settings_all_ok">Tout est en ordre</string>
+    <string name="settings_n_need_action">%1$d point(s) à traiter</string>
+    <string name="settings_lock_on">Verrouillage activé</string>
+    <string name="settings_lock_off">Verrouillage désactivé</string>
+    <string name="settings_backup_last">Dernière sauvegarde : %1$s</string>
+    <string name="settings_backup_never">Jamais sauvegardé</string>
+    <string name="settings_bin_count">%1$d élément(s)</string>
+    <string name="settings_back">Retour aux réglages</string>
 </resources>
