@@ -126,13 +126,90 @@ object DemoFixtures {
     }
 }
 
+/** What the edit form submits. Dates are given in the precision the user chose; nothing is inferred. */
+data class DemoEdit(val title: String, val institution: String, val category: String?, val precision: DatePrecision,
+                    val year: String, val month: String, val day: String, val note: String)
+
+/** Why an edit was refused; the form shows it and keeps the draft. */
+enum class DemoEditError { TITLE_BLANK, TITLE_TOO_LONG, YEAR, MONTH, DAY, FUTURE, NOTE_TOO_LONG }
+
 /** In-memory demo state only. A fresh instance is the fixture; nothing is persisted or shared with the real app data. */
-class DemoRepository {
+class DemoRepository(private val today: () -> LocalDate = { LocalDate.now() }) {
     private val state = MutableStateFlow(DemoFixtures.documents())
     val documents: StateFlow<List<AttachmentSummary>> = state
     val targets: List<LinkTarget> = DemoFixtures.targets
     fun target(key: String): LinkTarget? = targets.firstOrNull { it.key == key }
     fun document(uuid: String): AttachmentSummary? = state.value.firstOrNull { it.uuid == uuid }
+
+    private fun update(uuid: String, change: (AttachmentSummary) -> AttachmentSummary): Boolean {
+        val before = state.value
+        if (before.none { it.uuid == uuid }) return false
+        state.value = before.map { if (it.uuid == uuid) change(it) else it }
+        return true
+    }
+
+    /** Explicit link chosen by the user. Only a live (non-retired) target; never inferred from dates, hashes or ids. */
+    fun link(uuid: String, key: String): Boolean {
+        val t = target(key) ?: return false
+        if (t.retired || document(uuid)?.trashed != false) return false
+        return update(uuid) { d -> if (key in d.links) d else d.copy(links = d.links + key, inInbox = false) }
+    }
+    fun unlink(uuid: String, key: String): Boolean = update(uuid) { d -> d.copy(links = d.links - key) }
+
+    /** Validates first; on error nothing changes. Leaving the inbox is a separate, explicit action ([file]). */
+    fun edit(uuid: String, e: DemoEdit): DemoEditError? {
+        val err = validate(e)
+        if (err != null) return err
+        update(uuid) { d -> d.copy(title = e.title.trim(), source = SourceClaim(e.institution.trim().ifEmpty { null }), category = e.category,
+            clinicalDate = clinicalDate(e)!!, note = e.note.trim().ifEmpty { null }) }
+        return null
+    }
+    fun file(uuid: String): Boolean = update(uuid) { it.copy(inInbox = false) }
+
+    fun validate(e: DemoEdit): DemoEditError? {
+        val title = e.title.trim()
+        if (title.isEmpty()) return DemoEditError.TITLE_BLANK
+        if (title.length > 120) return DemoEditError.TITLE_TOO_LONG
+        if (e.note.trim().length > 500) return DemoEditError.NOTE_TOO_LONG
+        if (e.precision == DatePrecision.UNKNOWN) return null
+        val y = e.year.trim().toIntOrNull()?.takeIf { it in 1900..today().year } ?: return DemoEditError.YEAR
+        if (e.precision == DatePrecision.YEAR) return null
+        val m = e.month.trim().toIntOrNull()?.takeIf { it in 1..12 } ?: return DemoEditError.MONTH
+        if (e.precision == DatePrecision.MONTH) return if (java.time.YearMonth.of(y, m) > java.time.YearMonth.from(today())) DemoEditError.FUTURE else null
+        val d = e.day.trim().toIntOrNull()?.let { runCatching { LocalDate.of(y, m, it) }.getOrNull() } ?: return DemoEditError.DAY
+        return if (d.isAfter(today())) DemoEditError.FUTURE else null
+    }
+    private fun clinicalDate(e: DemoEdit): ClinicalDate? = when (e.precision) {
+        DatePrecision.UNKNOWN -> ClinicalDate.UNKNOWN
+        DatePrecision.YEAR -> ClinicalDate.year(e.year.trim().toInt())
+        DatePrecision.MONTH -> ClinicalDate.month(e.year.trim().toInt(), e.month.trim().toInt())
+        DatePrecision.DAY -> ClinicalDate.day(LocalDate.of(e.year.trim().toInt(), e.month.trim().toInt(), e.day.trim().toInt()))
+    }
+
+    /** A correction adds a new CURRENT version (synthetic bytes); the previous one is kept as RETAINED, never edited. */
+    fun addCorrection(uuid: String, note: String): Boolean {
+        val n = note.trim()
+        if (n.isEmpty() || n.length > 500) return false
+        val doc = document(uuid) ?: return false
+        if (doc.trashed) return false
+        val seq = doc.versions.maxOf { it.seq } + 1
+        val num = uuid.takeLast(12).toLong()
+        val added = VersionSummary("00000000-0000-4000-8000-%012d".format(num * 100 + seq), seq, VersionState.CURRENT, today(),
+            doc.current.sizeKiB + 3, DocumentStatus.TEST_FILE, n)
+        return update(uuid) { d -> d.copy(versions = d.versions.map { it.copy(state = VersionState.RETAINED) } + added) }
+    }
+
+    fun trash(uuid: String): Boolean = update(uuid) { it.copy(trashed = true) }
+    fun restore(uuid: String): Boolean = update(uuid) { it.copy(trashed = false) }
+    /** Only from the bin; the screen asks twice before calling this. */
+    fun deleteForever(uuid: String): Boolean {
+        val doc = document(uuid) ?: return false
+        if (!doc.trashed) return false
+        state.value = state.value.filter { it.uuid != uuid }
+        return true
+    }
+    /** Back to the deterministic fixture. */
+    fun reset() { state.value = DemoFixtures.documents() }
 
     companion object {
         /** Tab and search filter. Search matches title, category, stated institution, clinical date text and import date. */
