@@ -29,7 +29,8 @@ class AfterIntakePromptAndroidTest {
         val taken = runBlocking { context.repository.records() }.count { it.status != "MISSED" }
         ui.runOnUiThread { context.model.notificationSlot.value = context.model.state.value.slots.first().slot }
         ui.waitUntil(10_000) { dialogOpen() }
-        ui.onNode(hasText(s(R.string.complete)) and hasAnyAncestor(isDialog())).performSemanticsAction(SemanticsActions.OnClick)
+        ui.onNode(hasText(s(R.string.complete)) and hasAnyAncestor(isDialog())).assertExists()   // the intake dialog (its title)
+        ui.onNode(hasText(s(R.string.save)) and hasAnyAncestor(isDialog())).performSemanticsAction(SemanticsActions.OnClick)
         ui.waitUntil(10_000) { !dialogOpen() }
         ui.waitUntil(10_000) { runBlocking { context.repository.records() }.count { it.status != "MISSED" } == taken + 1 }
         ui.waitUntil(10_000) { ui.onAllNodesWithText(s(R.string.wb_prompt)).fetchSemanticsNodes().isNotEmpty() }
