@@ -69,6 +69,8 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
     val displayedUpcoming = remember(upcoming, state.slots) { (state.slots + upcoming).distinctBy { it.slot.key }.filter { it.state in OPEN_STATES } }
     val infos = remember(extra.records, displayedUpcoming, state.appointments, runOut) { dayInfos(extra.records, displayedUpcoming, state.appointments, runOut, zone) }
     fun select(d: LocalDate) { selectedText = d.toString() }
+    // Frozen plan-time snapshot first, as the dose was planned; the current medication only when none was stored.
+    fun medOf(e: TimelineEntry) = state.ruleSnapshots[e.slot.ruleId]?.let { MedicationSnapshot.decode(it, e.slot.medicationId)?.medication(e.slot.medicationId) } ?: meds[e.slot.medicationId]
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = contentPadding.calculateTopPadding() + 8.dp,
         bottom = contentPadding.calculateBottomPadding() + 96.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         val pending = state.medications.count { it.needs_review != null }
@@ -82,6 +84,16 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
         }
         if (state.medications.isEmpty()) item {
             EmptyState(Icons.Outlined.Medication, stringResource(R.string.empty_title), stringResource(R.string.empty_body)) { Button(onClick = onAddMedication) { Text(stringResource(R.string.add_medication)) } }
+        }
+        // UI-01 A: today's open doses (the same open entries as the day list) and today's records, shown first.
+        else item(key = "today") {
+            val todayOpen = displayedUpcoming.filter { it.slot.at.atZone(zone).toLocalDate() == today }.sortedBy { it.slot.at }
+            val todayRecords = extra.records.filter { r -> r.deleted_at_utc == null && (r.taken_utc ?: r.scheduled_utc)?.let { Instant.ofEpochMilli(it).atZone(zone).toLocalDate() } == today }
+                .sortedBy { it.taken_utc ?: it.scheduled_utc }
+            val taken = todayRecords.filter { it.status == "ON_TIME" || it.status == "LATE" }
+            TodayCard(today, todayOpen, taken, todayOpen.size + todayRecords.size,
+                todayOpen.isEmpty() && todayRecords.isNotEmpty() && todayRecords.none { it.status == "MISSED" }, ::medOf,
+                { MedicationSnapshot.decode(it.config_snapshot, it.medication_id)?.medication(it.medication_id) }, onComplete, onChange)
         }
         item {
             Surface(shape = MaterialTheme.shapes.extraLarge, color = MaterialTheme.colorScheme.surfaceContainerLow, modifier = Modifier.fillMaxWidth()) {
@@ -105,11 +117,11 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
             val dayOpen = upcoming.filter { it.slot.at.atZone(zone).toLocalDate() == selected }.sortedBy { it.slot.at }
             val dayAppts = state.appointments.filter { Instant.ofEpochMilli(it.at_utc).atZone(zone).toLocalDate() == selected }
             if (dayRecords.isEmpty() && dayOpen.isEmpty() && dayAppts.isEmpty()) item { Text(stringResource(R.string.calendar_day_empty), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(start = 4.dp)) }
-            items(dayOpen, key = { it.slot.key }) { e -> DoseCard(e, state.ruleSnapshots[e.slot.ruleId]?.let{MedicationSnapshot.decode(it,e.slot.medicationId)?.medication(e.slot.medicationId)} ?: meds[e.slot.medicationId], { onComplete(e) }, { onChange(e) }) }
+            items(dayOpen, key = { it.slot.key }) { e -> DoseCard(e, medOf(e), { onComplete(e) }, { onChange(e) }) }
             items(dayRecords, key = { "r${it.id}" }) { r -> RecordLine(r, MedicationSnapshot.decode(r.config_snapshot,r.medication_id)?.medication(r.medication_id)) }
             items(dayAppts, key = { "a${it.id}" }) { AppointmentCard(it) { onAppointment(it) } }
         }
-        item(key = "stock") { StockForecastCard(state.medications.filter { it.active }, runOut, today, zone, onStock) }
+        item(key = "stock") { HomeStockCard(state.medications.filter { it.active }, runOut, today, zone, onStock) }
     }
 }
 
@@ -138,7 +150,7 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
     return when (kind) {
         DayKind.TAKEN -> c.primaryContainer to c.onPrimaryContainer
         DayKind.PARTIAL -> c.tertiaryContainer to c.onTertiaryContainer
-        DayKind.MISSED -> c.error to c.onError
+        DayKind.MISSED -> c.errorContainer to c.onErrorContainer
         DayKind.UNCONFIRMED -> c.surfaceContainerHigh to c.onSurfaceVariant
         DayKind.PLANNED -> c.surfaceContainerHighest to c.onSurface
         DayKind.NONE -> Color.Transparent to c.onSurface
@@ -172,12 +184,18 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
     val c = MaterialTheme.colorScheme
     val (bg, fg) = kindColors(info?.kind ?: DayKind.NONE)
     val description = dayDescription(date, info, isToday)
-    Box(modifier.clip(RoundedCornerShape(12.dp)).background(bg).then(if (isSelected) Modifier.border(2.dp, c.primary, RoundedCornerShape(12.dp)) else Modifier)
-        .selectable(isSelected, role = Role.Button, onClick = onClick).semantics { contentDescription = description }.alpha(if (inMonth) 1f else 0.4f).padding(4.dp)) {
+    val kind = info?.kind ?: DayKind.NONE
+    val mark = dayMark(kind)
+    Box(modifier.clip(RoundedCornerShape(12.dp)).background(bg).then(if (isSelected) Modifier.border(2.dp, c.primary, RoundedCornerShape(12.dp))
+            else if (kind == DayKind.MISSED) Modifier.border(1.5.dp, c.error, RoundedCornerShape(12.dp)) else Modifier)
+        .selectable(isSelected, role = Role.Button, onClick = onClick).semantics { contentDescription = description; mark?.let { dayMarkSemantics = it } }
+        .alpha(if (inMonth) 1f else 0.4f).padding(4.dp)) {
         // The digit and dots are decorative here; the cell's name already says them in words.
         Column(Modifier.clearAndSetSemantics {}, horizontalAlignment=Alignment.CenterHorizontally,verticalArrangement=Arrangement.spacedBy(4.dp)) {
         CalendarDateBadge(date.dayOfMonth,isToday,fg)
         Row(Modifier.heightIn(min=12.dp), horizontalArrangement = Arrangement.spacedBy(2.dp), verticalAlignment = Alignment.CenterVertically) {
+            // UI-01 C: a shape for the day's state as well as its colour (✓ taken, ½ some missed, ✕ missed); drawn, so it never clips.
+            mark?.let { DayMarkIcon(it, if (kind == DayKind.MISSED) c.error else fg) }
             if (info != null) {
                 if (info.runOut.isNotEmpty()) Icon(Icons.Outlined.Inventory2, null, Modifier.size(12.dp), tint = c.error)
                 else repeat(minOf(info.open, 3)) { Box(Modifier.size(5.dp).clip(CircleShape).background(if (info.short > 0) c.error else c.primary)) }
@@ -282,10 +300,14 @@ private fun markLabel(status: String) = when (status) {
     val c = MaterialTheme.colorScheme
     FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
         val swatches = listOf(c.outline to R.string.status_unconfirmed) + if (year) listOf(c.primary to R.string.legend_taken, c.tertiary to R.string.legend_partial, c.error to R.string.legend_missed, c.outlineVariant to R.string.legend_planned)
-            else listOf(c.primaryContainer to R.string.legend_taken, c.tertiaryContainer to R.string.legend_partial, c.error to R.string.legend_missed, c.surfaceContainerHighest to R.string.legend_planned)
+            else listOf(c.primaryContainer to R.string.legend_taken, c.tertiaryContainer to R.string.legend_partial, c.errorContainer to R.string.legend_missed, c.surfaceContainerHighest to R.string.legend_planned)
         swatches.forEach { (col, label) ->
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(Modifier.size(12.dp).clip(RoundedCornerShape(3.dp)).background(col).border(0.5.dp, c.outlineVariant, RoundedCornerShape(3.dp))); Spacer(Modifier.width(4.dp))
+                val mark = if (year) null else when (label) { R.string.legend_taken -> DayMark.CHECK; R.string.legend_partial -> DayMark.HALF; R.string.legend_missed -> DayMark.CROSS; else -> null }
+                Box(Modifier.size(14.dp).clip(RoundedCornerShape(3.dp)).background(col).border(if (mark == DayMark.CROSS) 1.dp else 0.5.dp,
+                    if (mark == DayMark.CROSS) c.error else c.outlineVariant, RoundedCornerShape(3.dp)), contentAlignment = Alignment.Center) {
+                    mark?.let { DayMarkIcon(it, if (it == DayMark.CROSS) c.error else c.onSurface) }
+                }; Spacer(Modifier.width(4.dp))
                 Text(stringResource(label), style = MaterialTheme.typography.labelSmall, color = c.onSurfaceVariant)
             }
         }
@@ -316,27 +338,6 @@ private fun markLabel(status: String) = when (status) {
     }
 }
 
-@Composable private fun StockForecastCard(meds: List<MedicationEntity>, forecasts: Map<Long, net.plainnotes.app.data.StockForecast>, today: LocalDate, zone: ZoneId, onStock: () -> Unit) {
-    if (meds.isEmpty()) return
-    val c = MaterialTheme.colorScheme
-    SectionCard(stringResource(R.string.forecast_title)) {
-        meds.forEach { m ->
-            val f = forecasts[m.id]
-            val status = f?.status ?: net.plainnotes.app.data.StockForecast.Status.UNTRACKED
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Outlined.Inventory2, null, tint = c.primary); Spacer(Modifier.width(12.dp))
-                Column(Modifier.weight(1f)) {
-                    Text(m.name, style = MaterialTheme.typography.titleSmall)
-                    val (text, warn) = stockForecastText(f, m, today, zone)
-                    Text(text, style = MaterialTheme.typography.bodyMedium, color = if (warn) c.error else c.onSurfaceVariant)
-                }
-                if (status == net.plainnotes.app.data.StockForecast.Status.UNTRACKED) TextButton(onClick = onStock) { Text(stringResource(R.string.forecast_add)) }
-            }
-        }
-        Text(stringResource(R.string.forecast_note), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
-    }
-}
-
 @Composable private fun DayHeader(date: LocalDate, today: LocalDate) {
     val days = ChronoUnit.DAYS.between(today, date)
     val title = when (days) { 0L -> stringResource(R.string.today); 1L -> stringResource(R.string.tomorrow); -1L -> stringResource(R.string.yesterday); else -> formatShortDate(date) }
@@ -357,6 +358,7 @@ private fun markLabel(status: String) = when (status) {
     SlotState.ON_TIME -> R.string.status_on_time; SlotState.LATE -> R.string.status_late; SlotState.MISSED -> R.string.status_missed; SlotState.UNCONFIRMED -> R.string.status_unconfirmed; SlotState.SKIPPED -> R.string.status_skipped
 })
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable private fun DoseCard(entry: TimelineEntry, med: MedicationEntity?, onComplete: () -> Unit, onChange: () -> Unit) {
     val s = entry.slot; val st = entry.state; val c = MaterialTheme.colorScheme
     val done = st == SlotState.ON_TIME || st == SlotState.LATE || st == SlotState.SKIPPED
@@ -371,14 +373,15 @@ private fun markLabel(status: String) = when (status) {
     val border = if (st == SlotState.OVERDUE) BorderStroke(1.5.dp, c.error) else null
     OutlinedCard(Modifier.fillMaxWidth().alpha(if (done) 0.72f else 1f), border = border ?: CardDefaults.outlinedCardBorder(),
         colors = CardDefaults.outlinedCardColors(containerColor = if (st == SlotState.OVERDUE) c.errorContainer.copy(alpha = 0.35f) else c.surfaceContainerLowest)) {
-        Row(Modifier.padding(16.dp), verticalAlignment = Alignment.Top) {
-            Column(Modifier.width(64.dp)) {
+        // UI-01 A: time above the name, so a long name uses the card's full width instead of a narrow column.
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), itemVerticalAlignment = Alignment.CenterVertically) {
                 Text(formatTime(s.at), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold,
                     color = if (st == SlotState.OVERDUE) c.error else c.onSurface)
                 if (s.at != s.original) Text(stringResource(R.string.moved_from, formatTime(s.original)), style = MaterialTheme.typography.labelSmall, color = c.onSurfaceVariant)
             }
-            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                if (!LocalSimpleMode.current) Text(med?.name ?: "", style = MaterialTheme.typography.titleMedium, maxLines = 1)
+            Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                if (!LocalSimpleMode.current) Text(med?.name ?: "", style = MaterialTheme.typography.titleMedium)
                 Text(listOfNotNull(formatDose(s.dose, med?.unit), med?.route?.let { choiceLabel(it) }).joinToString(" · "),
                     style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant)
                 StatusPill(stateLabel(st), pillBg, pillFg, if (done && st != SlotState.SKIPPED) Icons.Rounded.Check else if (st == SlotState.OVERDUE) Icons.Outlined.ErrorOutline else null)
@@ -424,6 +427,26 @@ private fun markLabel(status: String) = when (status) {
         }
         Box(Modifier.sizeIn(minWidth=26.dp,minHeight=26.dp).clip(CircleShape).background(if(today)MaterialTheme.colorScheme.primary else Color.Transparent),contentAlignment=Alignment.Center){
             Text(day.toString(),style=fitted,softWrap=false,maxLines=1,fontWeight=if(today)FontWeight.Bold else FontWeight.Normal,color=if(today)MaterialTheme.colorScheme.onPrimary else foreground)
+        }
+    }
+}
+
+/** UI-01 C: non-colour mark for a day's state. Exposed to tests as [dayMarkSemantics]; TalkBack reads the day's description instead. */
+enum class DayMark { CHECK, HALF, CROSS }
+fun dayMark(kind: DayKind): DayMark? = when (kind) { DayKind.TAKEN -> DayMark.CHECK; DayKind.PARTIAL -> DayMark.HALF; DayKind.MISSED -> DayMark.CROSS; else -> null }
+val DayMarkKey = androidx.compose.ui.semantics.SemanticsPropertyKey<DayMark>("DayMark")
+var androidx.compose.ui.semantics.SemanticsPropertyReceiver.dayMarkSemantics by DayMarkKey
+
+@Composable private fun DayMarkIcon(mark: DayMark, color: Color) {
+    androidx.compose.foundation.Canvas(Modifier.size(10.dp)) {
+        val w = size.width; val stroke = w * 0.16f
+        when (mark) {
+            DayMark.CHECK -> { drawLine(color, androidx.compose.ui.geometry.Offset(w * 0.12f, w * 0.55f), androidx.compose.ui.geometry.Offset(w * 0.4f, w * 0.82f), stroke)
+                drawLine(color, androidx.compose.ui.geometry.Offset(w * 0.4f, w * 0.82f), androidx.compose.ui.geometry.Offset(w * 0.9f, w * 0.2f), stroke) }
+            DayMark.HALF -> { drawCircle(color, w * 0.42f, style = androidx.compose.ui.graphics.drawscope.Stroke(stroke * 0.8f))
+                drawArc(color, 90f, 180f, true, topLeft = androidx.compose.ui.geometry.Offset(w * 0.08f, w * 0.08f), size = androidx.compose.ui.geometry.Size(w * 0.84f, w * 0.84f)) }
+            DayMark.CROSS -> { drawLine(color, androidx.compose.ui.geometry.Offset(w * 0.15f, w * 0.15f), androidx.compose.ui.geometry.Offset(w * 0.85f, w * 0.85f), stroke)
+                drawLine(color, androidx.compose.ui.geometry.Offset(w * 0.85f, w * 0.15f), androidx.compose.ui.geometry.Offset(w * 0.15f, w * 0.85f), stroke) }
         }
     }
 }
