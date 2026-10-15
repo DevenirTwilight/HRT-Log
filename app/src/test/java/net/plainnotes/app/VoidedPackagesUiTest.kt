@@ -29,6 +29,9 @@ class VoidedPackagesUiTest(private val locale:String) {
         val real=ContainerEntity(1,1,30.0,0.0,10.0,"2026-01-01","IN_USE")
         val sealed=ContainerEntity(2,1,30.0,0.0,0.0,null,"SEALED")
         ui.setContent{NotesTheme(ThemeMode.LIGHT){StockScreen(NotesState(listOf(med),loading=false),listOf(real,sealed,hidden),emptyList(),{},{},{},PaddingValues())}}
+        // UI-01 D: the section header counts the same packages; management opens from inside it.
+        ui.onNodeWithTag("stock-packages-1").performScrollTo().assertTextContains(text(R.string.stock_packages_section,2)).performClick()
+        ui.onNodeWithText(text(R.string.stock_packages_section,3)).assertDoesNotExist()
         ui.onNodeWithTag("stock-manage-1").performScrollTo().assertTextContains(text(R.string.stock_manage,2))
         ui.onNodeWithText(text(R.string.stock_manage,3)).assertDoesNotExist()
         ui.onNodeWithText("VOID_SENTINEL",substring=true).assertDoesNotExist()

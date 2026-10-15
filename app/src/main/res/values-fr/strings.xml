@@ -1131,4 +1131,34 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="privacy_notice_delete_body">« Supprimer toutes les données » supprime la base de données et sa clé sur ce téléphone, ainsi que les réglages de l’application, les données de rappel et d’alerte de stock, le verrouillage et les réglages de déguisement ; la désinstallation supprime les données de l’application. Les fichiers exportés, les sauvegardes enregistrées et les copies conservées par d’autres applications ou services cloud ne sont pas supprimés.</string>
     <string name="privacy_notice_changes_title">Si l’application évolue</string>
     <string name="privacy_notice_changes_body">Si le stockage de documents médicaux, la synchronisation, le partage ou des conseils étaient un jour ajoutés, cette notice serait mise à jour et revue avant leur publication.</string>
+    <!-- UI-01 (2026-10-15) -->
+    <string name="today_progress">%1$d sur %2$d prises</string>
+    <string name="today_next">Prochaine prise</string>
+    <string name="today_take_now">Prendre maintenant</string>
+    <string name="today_other_time">Noter une autre heure</string>
+    <string name="today_change_or_skip">Reporter ou sauter</string>
+    <string name="today_all_done">Toutes les prises du jour sont faites</string>
+    <string name="today_nothing">Aucune prise prévue aujourd’hui</string>
+    <string name="today_overdue">Heure passée</string>
+    <string name="today_same_time">À la même heure</string>
+    <string name="today_done_heading">Faites aujourd’hui</string>
+    <string name="today_more">Plus d’options pour cette prise</string>
+    <string name="home_stock_title">Stock bientôt épuisé</string>
+    <string name="home_stock_view">Voir le stock</string>
+    <string name="stock_runs_out_in">Épuisé dans environ %1$d jour(s)</string>
+    <string name="stock_packages_section">Historique des boîtes (%1$d)</string>
+    <string name="stock_more_actions">Autres actions de stock</string>
+    <string name="medical_were_you_there">Ce rendez-vous a-t-il eu lieu ?</string>
+    <string name="medical_next_visit">Prochain rendez-vous</string>
+    <string name="medical_next_prepare">Questions et dossier de consultation</string>
+    <string name="medical_related">Données associées</string>
+    <string name="medical_has_note">Notes enregistrées</string>
+    <string name="medical_question_count">Questions : %1$d</string>
+    <string name="medical_edit_or_delete">Modifier ou supprimer</string>
+    <string name="timeline_shown_in">Affiché en %1$s</string>
+    <string name="period_day_n">Jour %1$d</string>
+    <string name="drawer_group_daily">Au quotidien</string>
+    <string name="drawer_group_treatment">Traitement</string>
+    <string name="drawer_group_medical">Santé</string>
+    <string name="drawer_group_body">Corps et esprit</string>
 </resources>

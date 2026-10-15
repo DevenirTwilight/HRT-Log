@@ -212,6 +212,8 @@ abstract class PackageHistoryUiContract(private val language: String) {
         var boxes by mutableStateOf(listOf(box(501L, "IN_USE")) + (1L..500L).map { box(it) } +
             (1001L..1100L).map { box(it, "VOIDED") })
         content { StockScreen(NotesState(listOf(med), loading = false), boxes, emptyList(), {}, {}, {}, PaddingValues()) }
+        // UI-01 D: management sits in the collapsed "Package records (n)" section, which counts the same 501 packages.
+        ui.onNodeWithTag("stock-packages-1").performScrollTo().assertTextContains(strings.getString(R.string.stock_packages_section, 501)).performClick()
         ui.onAllNodesWithTag("stock-manage-1").assertCountEquals(1)
         ui.onAllNodesWithText("Synthetic", substring = false).assertCountEquals(1)
         ui.onNodeWithTag("stock-manage-1").performScrollTo().assertTextContains(strings.getString(R.string.stock_manage, 501))

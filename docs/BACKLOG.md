@@ -1,3 +1,12 @@
+# UI-01 后续 P2（2026-10-15，REQUIREMENTS §96）
+
+UI-01 任务书明确不做、列入后续评估的三项：
+1. `NotesApp` 状态拆分：AppShell 中对话框/导航状态较多，拆为按页面的状态持有者，需单独设计与回归。
+2. 设置页拆分为子页面（外观、提醒、隐私与数据、关于）。
+3. 底部导航评估：抽屉分组后再评估是否需要“今天/日历/库存/档案”底部导航，注意伪装模式与返回键行为。
+
+另：UI-01 后不再显示的旧字符串（`period_timeline_intro`、`timeline_zone`、`forecast_title`、`forecast_note`、`forecast_add`）待负责人决定是否删除。
+
 # 最新状态：P2-A/B研究完成，外部科学证据不足（2026-10-09，§50）
 
 P0和P1-A/B/C1/C2已完成；本轮完成拟合前证据/协议冻结、隔离A经验核/B约束双途径原型、339固定情景与按研究条件比较。**正式人口核及个人校准未替换**。`external_validation_insufficient`、`clinical_accuracy_established=false`；没有锁定盲法外测，不选赢家。Cortez本轮全文、Yaish缓存全文重核，其他五项仅摘要。

@@ -45,8 +45,12 @@ class StockCheckUiTest(private val locale: String) {
         } } }
         ui.onNodeWithText(s(R.string.stock_no_active)).assertExists()
         ui.onNodeWithText(s(R.string.stock_not_tracked)).assertDoesNotExist()
+        // UI-01 D: "Check stock" moved from the card's button row into its ⋮ menu; still offered, still not "Add".
+        ui.onNodeWithTag("stock-more-1").assertHasClickAction().performClick()
         ui.onNodeWithTag("stock-check-1").assertHasClickAction().performClick()
         assertEquals(1, checked); assertEquals(0, added)
+        // UI-01 D: package management sits inside the collapsed "Package records (n)" section.
+        ui.onNodeWithTag("stock-packages-1").performClick()
         ui.onNodeWithTag("stock-manage-1").assertExists()
         ui.onAllNodesWithText("#", substring = true).assertCountEquals(0)
     }
