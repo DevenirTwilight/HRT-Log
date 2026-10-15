@@ -1,6 +1,10 @@
-## MED-02B5 / PRIVACY-P1（PR-A）开发中 — 2026-10-15
+## MED-02B5 当前状态 — 2026-10-15
 
-MED-02B5 是开发批次名，不是附件路线 B5（PDF）。基线 b43d109（#32、#33 已合并；MED-02B4 合并交接记录 PR #34 仍 OPEN，等待负责人独立处理，本分支不包含其内容）。分支 feature/privacy-p1-20261015：“删除全部数据”补清 `stock_alerts`（销毁数据库前先清、成功前校验，失败报告错误）；THIRD_PARTY_NOTICES 与应用内许可补 Bouncy Castle（MIT 全文）及 jakarta.inject；源码守卫 LocalDataWipeCoverageTest / ThirdPartyNoticesTest（先红后绿）；API35 emulator 新增 WipeStockAlertsAndroidTest、PrivacyNoticeDeviceAndroidTest、PrivacyNoticeLockAndDisguiseAndroidTest。本地 app 893、0 失败（61 既有 skip）、lint 0 error。报告54。下一步：CI 全绿后按 MED-02B5 任务书 §6 合并、复验默认分支，再从最新主线做 PR-B（B3-BACKUP-GATE，test-only）。B2 生产 NO-GO、NOT_REVIEWED_EXTERNALLY 不变。
+MED-02B5 是开发批次名，不是附件路线 B5（PDF）。
+- PR-A #35（PRIVACY-P1）**已合并**：最终 HEAD 603fb7d → merge 104cdab。“删除全部数据”补清 `stock_alerts`（先于数据库清除、成功前校验，失败报告错误）；THIRD_PARTY_NOTICES 与应用内许可补 Bouncy Castle（MIT 全文）及 jakarta.inject；源码守卫与 API35 emulator 设备测试（报告54）。CI：Android PR 38713340330 / push 38713334902 全部 success。期间发现并修复与本批无关、默认分支同样失败的 `CalendarIntakeAndroidTest`（320px emulator 上浮动“添加”按钮遮住周五格子，改用语义点击；测试专用）。合并后默认分支 CI 见下一条更新。临时诊断分支 `diag/calendar-intake-20261015` 因代理限制无法由会话删除，待负责人删除。
+- PR-B（B3-BACKUP-GATE，test-only）开发中：分支 feature/med02b5-b3-backup-gate-20261015，基于 104cdab。core/data 独立测试 APK 内的完整加密包导出 + 新命名空间恢复（真实 SQLCipher/Keystore/文件 IO）、严格失败合同、两项红对照、新 PID 强停脚本；设计与待决政策见报告55，外部审查附录见报告57，实测见报告56。
+- PR #34（MED-02B4 合并交接记录）仍 OPEN，等待负责人独立处理；本批未合并、未带入其内容。
+- B2/B3 生产仍 NO-GO；NOT_REVIEWED_EXTERNALLY；未签名、未交付、未发布。
 
 ## MED-02B4 / B2-GATE3（PR-A #32）已合并 — 2026-10-14
 
