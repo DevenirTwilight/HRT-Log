@@ -60,10 +60,7 @@ class PrivacyNoticeLockAndDisguiseAndroidTest {
     private val instrument get() = InstrumentationRegistry.getInstrumentation()
     private val context get() = instrument.targetContext
     @Before fun setup() { Disguise.disable(context); AppLock(context).disable(); Session.reset() }
-    @After fun cleanup() {
-        instrument.runOnMainSync { ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED).toList().forEach { it.finish() } }
-        instrument.waitForIdleSync(); Disguise.disable(context); AppLock(context).disable(); Session.reset()
-    }
+    @After fun cleanup() { DeviceTestHygiene.finishAll(); Disguise.disable(context); AppLock(context).disable(); Session.reset() }
     private fun launch(type: Class<out Activity>) = ActivityScenario.launch<Activity>(Intent(context, type).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
     private fun resumed(type: Class<out Activity>): Boolean {
         var found = false
