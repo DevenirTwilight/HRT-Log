@@ -93,7 +93,7 @@ class B3GateAndroidTest {
     }
 
     @Test fun portableRestoreIntoAFreshNamespaceKeepsTheWholeGraphAndRetiresTheOldDataset() {
-        val s = seed(); val sourceEpoch = s.v.epoch(s.ds); val sourceVault = s.v.vaultOf(s.ds)
+        val s = seed(); val sourceEpoch = s.v.epoch(s.ds); val sourceVault = s.v.vaultOf(s.ds); val sourceGeneration = s.v.generationOf(s.ds)
         val bundle = export(s)
         val d = dest(); val oldEpoch = d.v.epoch(d.oldDs)
         s.v.destroy(); assertFalse("Source phone gone: its alias no longer exists", s.v.aliasExists())
@@ -103,6 +103,7 @@ class B3GateAndroidTest {
         assertEquals(fresh, d.v.current()); assertEquals(1L, d.v.currentCount()); assertFalse(receipt.cleanupPending)
         assertNotEquals(s.ds, fresh); assertNotEquals(sourceEpoch, d.v.epoch(fresh)); assertNotEquals(oldEpoch, d.v.epoch(fresh))
         assertEquals(sourceVault, d.v.vaultOf(fresh))
+        assertNotEquals("Fresh physical generation", sourceGeneration, d.v.generationOf(fresh)); assertNotEquals(d.v.generationOf(d.oldDs), d.v.generationOf(fresh))
         assertEquals(s.ds, d.v.scalarString("SELECT source_dataset FROM dataset WHERE uuid=?", fresh))
         // Graph identical in every state: retained/trashed versions, corrections, tombstone, every link state.
         assertEquals(s.records, d.v.records(fresh)); assertEquals(s.links, d.v.links(fresh))
@@ -169,6 +170,10 @@ class B3GateAndroidTest {
                 replace(l, B3Frame.VERSIONS, versionsFrame(s.versions.map { when (it.uuid) {
                     va.uuid -> it.copy(cipherHash = vb.cipherHash, cipherBytes = vb.cipherBytes, plainHash = vb.plainHash)
                     vb.uuid -> it.copy(cipherHash = va.cipherHash, cipherBytes = va.cipherBytes, plainHash = va.plainHash); else -> it } })) } to {_: MutableList<F> -> }),
+            Triple("embedded object ciphertext with a broken tag (hashes made consistent)", Reject.OBJECT_AUTH, { l: MutableList<F> -> val o = frames(l, B3Frame.OBJECT).first()
+                val bad = cipherOf(o.value).also { it[it.size - 3] = (it[it.size - 3].toInt() xor 1).toByte() }; l[o.index] = objectFrame(o.value, bad)
+                val ver = objectOf(o.value)
+                replace(l, B3Frame.VERSIONS, versionsFrame(s.versions.map { if (it.uuid == ver) it.copy(cipherHash = B3.sha256(bad)) else it })) } to {_: MutableList<F> -> }),
             Triple("portable key missing", Reject.DEK_MISSING, { l: MutableList<F> -> l.removeAt(frames(l, B3Frame.DEK).first().index); Unit } to {_: MutableList<F> -> }),
             Triple("portable key truncated", Reject.DEK_MALFORMED, { l: MutableList<F> -> val k = frames(l, B3Frame.DEK).first()
                 val h = DataInputStream(ByteArrayInputStream(k.value.payload)).readUTF(); l[k.index] = F(B3Frame.DEK, B3Frame.bytes { writeUTF(h); writeInt(16); write(ByteArray(16)) }) } to {_: MutableList<F> -> }),
@@ -209,6 +214,7 @@ class B3GateAndroidTest {
             Triple("cut at a segment boundary", Reject.STREAM_AUTH) { restore(variant(good.copyOf(B3.BOOTSTRAP + B3.SEGMENT))) },
             Triple("trailing bytes", Reject.STREAM_AUTH) { restore(variant(good + ByteArray(37) { 1 })) },
             Triple("body bit flip", Reject.STREAM_AUTH) { restore(variant(good.copyOf().also { it[good.size / 2] = (it[good.size / 2].toInt() xor 1).toByte() })) },
+            Triple("authentic prefix, corrupted tail", Reject.STREAM_AUTH) { restore(variant(good.copyOf().also { it[good.size - 5] = (it[good.size - 5].toInt() xor 1).toByte() })) },
             Triple("salt bit flip", Reject.WRONG_PASSWORD_OR_HEADER) { restore(variant(good.copyOf().also { it[m + 5] = (it[m + 5].toInt() xor 1).toByte() })) },
             Triple("archive id changed", Reject.WRONG_PASSWORD_OR_HEADER) { restore(variant(good.copyOf().also { it[m + 21] = (it[m + 21].toInt() xor 1).toByte() })) },
             Triple("magic changed", Reject.BAD_MAGIC) { restore(variant(good.copyOf().also { it[0] = 'X'.code.toByte() })) },
@@ -281,7 +287,7 @@ class B3GateAndroidTest {
 
     @Test fun twoCurrentDatasetsAreRefusedBeforeStaging() {
         val s = seed(); val bundle = export(s); val d = dest()
-        d.v.db.execSQL("INSERT INTO dataset(uuid,state,epoch,vault) VALUES(?,'CURRENT',?,?)", arrayOf(UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString()))
+        d.v.db.execSQL("INSERT INTO dataset(uuid,state,epoch,vault,generation) VALUES(?,'CURRENT',?,?,?)", arrayOf(UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString()))
         val before = state(d.v)
         rejects(Reject.INVARIANT) { B3Restorer.restore(d.v, bundle, pw(), capability = cap()) }
         assertEquals(before, state(d.v)); assertEquals(0L, d.v.scalarLong("SELECT COUNT(*) FROM operation"))
@@ -322,18 +328,50 @@ class B3GateAndroidTest {
                 s.v.tx { s.v.db.execSQL("UPDATE version SET state='RETAINED' WHERE uuid=?", arrayOf(d2v1.uuid)) }
                 s.v.addVersion(s.ds, d2v1.document, 2, "CURRENT", payload(7))
                 s.v.tx { s.v.db.execSQL("DELETE FROM version WHERE uuid=?", arrayOf(d3v1.uuid)) }
-                gcDuringExport = s.v.gcObject(d3v1.vault, d3v1.obj)
+                s.v.tx { s.v.db.execSQL("UPDATE record SET state='LIVE' WHERE uuid=?", arrayOf(s.ids.getValue("lab3"))) }   // trash restored meanwhile
+                gcDuringExport = s.v.gcObject(s.v.generationOf(s.ds), d3v1.obj)
             })
         writer.join(25_000)
         assertTrue("Writer eventually committed (after the gate)", committedAt.get() > 0)
-        assertEquals(false, gcDuringExport); assertTrue("Leased object survived", s.v.objectFile(d3v1.vault, d3v1.obj).exists())
-        assertTrue("Lease released after export", s.v.gcObject(d3v1.vault, d3v1.obj))
+        assertEquals(false, gcDuringExport); assertTrue("Leased object survived", s.v.objectFile(s.v.generationOf(s.ds), d3v1.obj).exists())
+        assertTrue("Lease released after export", s.v.gcObject(s.v.generationOf(s.ds), d3v1.obj))
         val d = vault(); val fresh = B3Restorer.restore(d, bundle, pw(), capability = cap()).dataset
         assertEquals("synthetic estradiol 120 pg/mL", d.records(fresh).single { it.uuid == lab1 }.body)
         assertEquals("CURRENT", d.versions(fresh).single { it.uuid == d2v1.uuid }.state)
+        assertEquals("Snapshot keeps the trashed state", "TRASHED", d.records(fresh).single { it.uuid == s.ids["lab3"] }.state)
+        assertEquals("Snapshot keeps the selected version", 1, d.versions(fresh).count { it.document == d2v1.document })
         assertArrayEquals(payload(4), d.decrypt(fresh, d.versions(fresh).single { it.uuid == d3v1.uuid }))
         assertEquals("changed during export", s.v.records(s.ds).single { it.uuid == lab1 }.body)
         evidence("snapshot", "writerHeldOffMs" to gateHeldMs, "gcRefusedUnderLease" to (gcDuringExport == false), "result" to "CONSISTENT")
+    }
+
+    /** Two restores race for the same destination: the second commit wins only if it started from the CURRENT it sees;
+     * the loser fails its CAS, keeps nothing, and the winner's dataset and files are untouched. Deterministic interleaving:
+     * B runs to completion while A is parked between publish and commit. */
+    @Test fun concurrentRestoresLetExactlyOneCommit() {
+        val a = seed(); val b = seed(); val bundleA = export(a); val bundleB = export(b); val d = dest()
+        var winner: B3Receipt? = null
+        val e = rejects(Reject.CAS_STALE) { B3Restorer.restore(d.v, bundleA, pw(), capability = cap()) { if (it == B3Vault.Seam.BEFORE_COMMIT) winner = B3Restorer.restore(d.v, bundleB, pw(), capability = cap()) } }
+        val w = winner!!
+        assertEquals(w.dataset, d.v.current()); assertEquals(1L, d.v.currentCount())
+        assertEquals("Winner graph intact", b.records, d.v.records(w.dataset))
+        d.v.versions(w.dataset).forEach { v -> assertArrayEquals(b.plain.getValue(v.uuid), d.v.decrypt(w.dataset, v)) }
+        assertTrue("Loser left no rows", a.versions.none { v -> d.v.scalarLong("SELECT COUNT(*) FROM version WHERE uuid=?", v.uuid) > 0 })
+        val names = d.v.objects.walkTopDown().filter { it.isFile }.map { it.name }.toSet()
+        assertTrue("Loser left no files", a.versions.none { v -> "${v.obj}.cipher" in names })
+        assertEquals(0L, d.v.reserved()); assertEquals(0L, d.v.stagedRows())
+        evidence("concurrentRestore", "loser" to e.reason, "winner" to "COMMITTED")
+    }
+
+    /** A valid ciphertext copied into the objects directory is never activated: only the SQL commit publishes. */
+    @Test fun aPlantedObjectFileIsNeverActivated() {
+        val s = seed(); val bundle = export(s); val d = dest()
+        val v = s.versions.first(); val planted = File(d.v.objects, "${UUID.randomUUID()}/${UUID.randomUUID()}.cipher")
+        planted.parentFile!!.mkdirs(); s.v.objectFile(s.v.generationOf(s.ds), v.obj).copyTo(planted)
+        assertEquals(emptyMap<String, String>(), B3Restorer.reconcile(d.v))
+        val fresh = B3Restorer.restore(d.v, bundle, pw(), capability = cap()).dataset
+        assertTrue(planted.exists()); assertEquals(0L, d.v.scalarLong("SELECT COUNT(*) FROM version WHERE object=?", planted.name.removeSuffix(".cipher")))
+        assertEquals(s.versions.size, d.v.versions(fresh).size)
     }
 
     @Test fun lockOrCancelStopsExportAndRestoreWithoutSuccess() {

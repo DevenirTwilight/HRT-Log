@@ -23,6 +23,7 @@
 | localDataset（SQL `dataset.uuid`） | 本机查询/CAS 的作用域 | 目标端**新建**，与源不同；源 id 只记录为 `source_dataset` |
 | recordEpoch | 一次数据集生命周期；同整数 ID 跨 epoch 不同 | 目标端**新 epoch**，不复用源或旧 epoch |
 | logicalCryptoVault | 对象 AAD 的密码学身份 | **保留**（否则必须重新加密，不能只改 header） |
+| physical generation（`dataset.generation`，目录 `objects/<generation>/`） | 本机密文文件集合（报告 34 的 `generation_uuid`），不是内容 AAD | 目标端**新建**；恢复操作先记录在 journal，提交时成为新 dataset 的 generation；旧 dataset 的 generation 目录原样保留 |
 | version / object UUID | 内容不可变版本与物理对象 | 保留；目标已有同 UUID → 拒绝（INVARIANT），不重绑不覆盖 |
 | DEK handle | 每版本密钥句柄 | 保留句柄；包裹**按目标别名重做** |
 | attempt / operation | 恢复操作与幂等键 | 目标端 journal；同 operation 重放返回同 receipt |
@@ -46,7 +47,7 @@
 
 ## 6. 恢复：最后一步才切换 SQL 权威
 
-顺序：不变量（至多一个 CURRENT、authority 指向 CURRENT）→ bootstrap/magic/protocol/profile → 资源预算（profile 内存 ≤ maxMemory/4）→ 密码（GCM 解包）→ 配额预约（旧数据 + 新副本同时容纳，不先删旧）→ 流式解析，对象写入 operation 自有 staging 文件（CREATE_NEW+NOFOLLOW，先 journal 后写）→ 全对象认证（密文长度/SHA、DEK 存在且 32B、按**版本自身身份**的内层 AEAD 解密、明文 SHA）、图校验（每文档至多一个 CURRENT、更正目标存在、墓碑无内容、LIVE link 只指向 LIVE 记录且文档有 CURRENT、TRASHED/PURGED 状态一致）、目标端身份冲突检查 → staging rows 写入 SQLCipher 内的 stage 表（静态加密，普通查询不可见），DEK 用目标别名以 operation 作用域 AAD 重新包裹 → file + 目录 fsync → 发布：移到最终对象名（存在即拒绝；rename 会静默覆盖），目录 fsync，阶段 SYNCED → **单个 SQL 事务**：CAS（authority.current 与 revision 等于开始时读到的值）→ 旧 dataset `RETIRED`（`retired_by`=operation）、其 LIVE link → `QUARANTINED` → 新 dataset `CURRENT`（新 localDataset、新 epoch、保留 vault）→ 从 stage 表导入 rows → DEK 改用最终 dataset 作用域重新包裹 → authority 指向新 dataset、revision+1 → operation `COMMITTED` → 清理 stage 与 staging（失败则 `COMMITTED_CLEANUP_PENDING`，由 reconcile 完成）。
+顺序：不变量（至多一个 CURRENT、authority 指向 CURRENT）→ bootstrap/magic/protocol/profile → 资源预算（profile 内存 ≤ maxMemory/4）→ 密码（GCM 解包）→ 配额预约（旧数据 + 新副本同时容纳，不先删旧）→ 流式解析，对象写入 operation 自有 staging 文件（CREATE_NEW+NOFOLLOW，先 journal 后写）→ 全对象认证（密文长度/SHA、DEK 存在且 32B、按**版本自身身份**的内层 AEAD 解密、明文 SHA）、图校验（每文档至多一个 CURRENT、更正目标存在、墓碑无内容、LIVE link 只指向 LIVE 记录且文档有 CURRENT、TRASHED/PURGED 状态一致）、目标端身份冲突检查 → staging rows 写入 SQLCipher 内的 stage 表（静态加密，普通查询不可见），DEK 用目标别名以 operation 作用域 AAD 重新包裹 → file + 目录 fsync → 发布：移到本次恢复新建的 generation 目录下的最终对象名（目录必须是新建的；对象名存在即拒绝，因为 rename 会静默覆盖），目录 fsync，阶段 SYNCED → **单个 SQL 事务**：CAS（authority.current 与 revision 等于开始时读到的值）→ 旧 dataset `RETIRED`（`retired_by`=operation）、其 LIVE link → `QUARANTINED` → 新 dataset `CURRENT`（新 localDataset、新 epoch、保留 vault）→ 从 stage 表导入 rows → DEK 改用最终 dataset 作用域重新包裹 → authority 指向新 dataset、revision+1 → operation `COMMITTED` → 清理 stage 与 staging（失败则 `COMMITTED_CLEANUP_PENDING`，由 reconcile 完成）。
 
 任何提交前拒绝：`abort` 只删除本 operation journal 中**未被任何版本引用**的文件、清 stage 行、释放预约（ABORTED）；外来文件永不触碰。进程死亡后由 `reconcile` 做同样的事；已 COMMITTED 的只补完清理。重放同一 operation：已提交则返回同一 receipt（不新建 dataset、不重复计配额）；archive 不同则 ARCHIVE_MISMATCH。
 

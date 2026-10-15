@@ -150,13 +150,13 @@ internal class B3Vault private constructor(val context: Context, val name: Strin
         listOf(
             "CREATE TABLE authority(id INTEGER PRIMARY KEY CHECK(id=1), current TEXT, revision INTEGER NOT NULL)",
             "INSERT INTO authority VALUES(1,NULL,0)",
-            "CREATE TABLE dataset(uuid TEXT PRIMARY KEY, state TEXT NOT NULL CHECK(state IN('CURRENT','RETIRED')), epoch TEXT NOT NULL, vault TEXT NOT NULL, source_dataset TEXT, operation TEXT, retired_by TEXT)",
+            "CREATE TABLE dataset(uuid TEXT PRIMARY KEY, state TEXT NOT NULL CHECK(state IN('CURRENT','RETIRED')), epoch TEXT NOT NULL, vault TEXT NOT NULL, generation TEXT NOT NULL UNIQUE, source_dataset TEXT, operation TEXT, retired_by TEXT)",
             "CREATE TABLE record(uuid TEXT PRIMARY KEY, dataset TEXT NOT NULL, kind TEXT NOT NULL, int_id INTEGER NOT NULL, state TEXT NOT NULL CHECK(state IN('LIVE','TRASHED','PURGED')), body TEXT, CHECK(state<>'PURGED' OR body IS NULL))",
             "CREATE TABLE version(uuid TEXT PRIMARY KEY, dataset TEXT NOT NULL, document TEXT NOT NULL, seq INTEGER NOT NULL, state TEXT NOT NULL CHECK(state IN('CURRENT','RETAINED','TRASHED')), vault TEXT NOT NULL, object TEXT NOT NULL UNIQUE, dek TEXT NOT NULL, plain_hash BLOB NOT NULL, cipher_hash BLOB NOT NULL, cipher_bytes INTEGER NOT NULL, corrects TEXT)",
             "CREATE UNIQUE INDEX one_current_version ON version(dataset,document) WHERE state='CURRENT'",
             "CREATE TABLE dek(handle TEXT NOT NULL, dataset TEXT NOT NULL, wrap BLOB NOT NULL, PRIMARY KEY(handle,dataset))",
             "CREATE TABLE link(uuid TEXT PRIMARY KEY, dataset TEXT NOT NULL, document TEXT NOT NULL, record TEXT NOT NULL, state TEXT NOT NULL CHECK(state IN('LIVE','TRASHED','PURGED','QUARANTINED')))",
-            "CREATE TABLE operation(id TEXT PRIMARY KEY, archive TEXT NOT NULL, digest BLOB, phase TEXT NOT NULL, expected TEXT, expected_revision INTEGER NOT NULL, reservation INTEGER NOT NULL, receipt TEXT, files TEXT NOT NULL DEFAULT '')",
+            "CREATE TABLE operation(id TEXT PRIMARY KEY, archive TEXT NOT NULL, digest BLOB, phase TEXT NOT NULL, expected TEXT, expected_revision INTEGER NOT NULL, reservation INTEGER NOT NULL, generation TEXT NOT NULL, receipt TEXT, files TEXT NOT NULL DEFAULT '')",
             "CREATE TABLE quota(id INTEGER PRIMARY KEY CHECK(id=1), limit_bytes INTEGER NOT NULL)",
             "INSERT INTO quota VALUES(1,${64L * 1024 * 1024})",
             // Staging: encrypted at rest in the same SQLCipher file, invisible to every live query.
@@ -176,6 +176,8 @@ internal class B3Vault private constructor(val context: Context, val name: Strin
     fun datasetState(uuid: String): String? = scalarString("SELECT state FROM dataset WHERE uuid=?", uuid)
     fun epoch(uuid: String): String = scalarString("SELECT epoch FROM dataset WHERE uuid=?", uuid)!!
     fun vaultOf(uuid: String): String = scalarString("SELECT vault FROM dataset WHERE uuid=?", uuid)!!
+    /** Local physical generation: the directory holding this dataset's ciphertext. Never part of any AAD. */
+    fun generationOf(uuid: String): String = scalarString("SELECT generation FROM dataset WHERE uuid=?", uuid)!!
     fun setQuota(bytes: Long) = db.execSQL("UPDATE quota SET limit_bytes=? WHERE id=1", arrayOf(bytes))
     fun reserved(): Long = scalarLong("SELECT COALESCE(SUM(reservation),0) FROM operation WHERE phase IN('PREPARED','STAGED','SYNCED')")
     fun stagedRows(): Long = listOf("stage_record", "stage_version", "stage_link", "stage_dek").sumOf { scalarLong("SELECT COUNT(*) FROM $it") }
@@ -187,13 +189,13 @@ internal class B3Vault private constructor(val context: Context, val name: Strin
     fun links(dataset: String) = db.rawQuery("SELECT uuid,document,record,state FROM link WHERE dataset=? ORDER BY uuid", arrayOf(dataset)).use { c ->
         generateSequence { if (c.moveToNext()) B3Link(c.getString(0), c.getString(1), c.getString(2), c.getString(3)) else null }.toList() }
     fun dekWrap(dataset: String, handle: String): ByteArray? = db.rawQuery("SELECT wrap FROM dek WHERE dataset=? AND handle=?", arrayOf(dataset, handle)).use { if (it.moveToFirst()) it.getBlob(0) else null }
-    fun objectFile(vault: String, obj: String) = File(objects, "$vault/$obj.cipher")
+    fun objectFile(generation: String, obj: String) = File(objects, "$generation/$obj.cipher")
 
     /** A new CURRENT dataset (fresh epoch and logical crypto vault) for seeding a namespace. */
     fun newDataset(): String = tx {
         check(current() == null) { "Seeding needs an empty namespace" }
         val ds = UUID.randomUUID().toString()
-        db.execSQL("INSERT INTO dataset(uuid,state,epoch,vault) VALUES(?,'CURRENT',?,?)", arrayOf(ds, UUID.randomUUID().toString(), UUID.randomUUID().toString()))
+        db.execSQL("INSERT INTO dataset(uuid,state,epoch,vault,generation) VALUES(?,'CURRENT',?,?,?)", arrayOf(ds, UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString()))
         db.execSQL("UPDATE authority SET current=?, revision=revision+1 WHERE id=1", arrayOf(ds)); ds
     }
     fun addRecord(dataset: String, kind: String, intId: Int, state: String, body: String?): String = UUID.randomUUID().toString().also {
@@ -205,7 +207,7 @@ internal class B3Vault private constructor(val context: Context, val name: Strin
         val vault = vaultOf(dataset); val version = UUID.randomUUID().toString(); val obj = UUID.randomUUID().toString(); val handle = UUID.randomUUID().toString()
         val dek = ByteArray(32).also(SecureRandom()::nextBytes)
         try {
-            val file = objectFile(vault, obj).also { check(it.parentFile!!.mkdirs() || it.parentFile!!.isDirectory) }
+            val file = objectFile(generationOf(dataset), obj).also { check(it.parentFile!!.mkdirs() || it.parentFile!!.isDirectory) }
             FileChannel.open(file.toPath(), StandardOpenOption.WRITE, StandardOpenOption.CREATE_NEW, LinkOption.NOFOLLOW_LINKS).use { ch ->
                 B3.streaming(dek).newEncryptingStream(java.nio.channels.Channels.newOutputStream(ch), B3.objectAad(vault, document, version, obj)).use { it.write(plain) }
             }
@@ -223,14 +225,14 @@ internal class B3Vault private constructor(val context: Context, val name: Strin
     fun decrypt(dataset: String, v: B3Version): ByteArray {
         val dek = unwrap(dekWrap(dataset, v.dek) ?: error("No DEK"), dekAad(dataset, v.dek))
         try {
-            return B3.streaming(dek).newDecryptingStream(FileInputStream(objectFile(v.vault, v.obj)), B3.objectAad(v.vault, v.document, v.uuid, v.obj)).use { it.readBytes() }
+            return B3.streaming(dek).newDecryptingStream(FileInputStream(objectFile(generationOf(dataset), v.obj)), B3.objectAad(v.vault, v.document, v.uuid, v.obj)).use { it.readBytes() }
         } finally { dek.fill(0) }
     }
     /** Physical cleanup of an object. Refused while a backup lease pins it or while any version row references it. */
-    @Synchronized fun gcObject(vault: String, obj: String): Boolean {
+    @Synchronized fun gcObject(generation: String, obj: String): Boolean {
         if (obj in leases) return false
         if (scalarLong("SELECT COUNT(*) FROM version WHERE object=?", obj) > 0) return false
-        return objectFile(vault, obj).delete()
+        return objectFile(generation, obj).delete()
     }
     @Synchronized internal fun lease(ids: Collection<String>) { leases += ids }
     @Synchronized internal fun release(ids: Collection<String>) { leases -= ids.toSet() }
@@ -258,7 +260,7 @@ internal object B3Frame {
 
 /** What an export captured inside one exclusive read gate: a consistent snapshot of rows plus the immutable objects
  * they reference, which stay pinned by a backup lease until the bundle is closed. */
-internal class B3Snapshot(val dataset: String, val epoch: String, val vault: String, val records: List<B3Record>, val versions: List<B3Version>,
+internal class B3Snapshot(val dataset: String, val epoch: String, val vault: String, val generation: String, val records: List<B3Record>, val versions: List<B3Version>,
                           val links: List<B3Link>, val deks: Map<String, ByteArray>)
 
 internal object B3Exporter {
@@ -299,7 +301,7 @@ internal object B3Exporter {
             val records = v.records(ds); duringCapture()
             val versions = v.versions(ds); val links = v.links(ds)
             val deks = versions.associate { it.dek to v.unwrap(v.dekWrap(ds, it.dek)!!, v.dekAad(ds, it.dek)) }
-            val snap = B3Snapshot(ds, v.epoch(ds), v.vaultOf(ds), records, versions, links, deks)
+            val snap = B3Snapshot(ds, v.epoch(ds), v.vaultOf(ds), v.generationOf(ds), records, versions, links, deks)
             v.db.setTransactionSuccessful(); return snap
         } finally { v.db.endTransaction() }
     }
@@ -312,7 +314,7 @@ internal object B3Exporter {
         out += F(LINKS, bytes { writeInt(s.links.size); s.links.forEach { l -> writeUTF(l.uuid); writeUTF(l.document); writeUTF(l.record); writeUTF(l.state) } })
         s.deks.forEach { (handle, dek) -> out += F(DEK, bytes { writeUTF(handle); blob(dek) }) }
         s.versions.forEach { x -> B3.alive(capability)
-            val cipher = FileInputStream(v.objectFile(x.vault, x.obj)).use { it.readBytes() }
+            val cipher = FileInputStream(v.objectFile(s.generation, x.obj)).use { it.readBytes() }
             if (!MessageDigest.isEqual(B3.sha256(cipher), x.cipherHash)) error("Source object changed under lease")
             out += F(OBJECT, bytes { writeUTF(x.uuid); writeUTF(x.obj); blob(cipher) })
         }
@@ -393,8 +395,10 @@ internal object B3Restorer {
         val used = dest.scalarLong("SELECT COALESCE(SUM(cipher_bytes),0) FROM version") + dest.reserved()
         val limit = dest.scalarLong("SELECT limit_bytes FROM quota WHERE id=1")
         if (used + reservation > limit) { master.fill(0); B3.reject(B3.Reject.QUOTA, "need $reservation, used $used of $limit") }
-        dest.db.execSQL("INSERT INTO operation(id,archive,phase,expected,expected_revision,reservation) VALUES(?,?,'PREPARED',?,?,?)",
-            arrayOf(operation, archive, expected, expectedRevision, reservation))
+        // Fresh physical generation for the restored dataset; the logical crypto vault comes from the bundle.
+        val generation = UUID.randomUUID().toString()
+        dest.db.execSQL("INSERT INTO operation(id,archive,phase,expected,expected_revision,reservation,generation) VALUES(?,?,'PREPARED',?,?,?,?)",
+            arrayOf(operation, archive, expected, expectedRevision, reservation, generation))
         val staging = File(dest.root, "staging/$operation").also { check(it.mkdirs()) }
         var parsed: Parsed? = null
         try {
@@ -402,10 +406,10 @@ internal object B3Restorer {
             authenticate(dest, operation, parsed, staging, capability)
             dest.db.execSQL("UPDATE operation SET phase='STAGED', digest=? WHERE id=?", arrayOf(parsed.manifestDigest, operation))
             seam(B3Vault.Seam.AFTER_STAGE)
-            publish(dest, operation, parsed)
+            publish(dest, operation, parsed, generation)
             seam(B3Vault.Seam.BEFORE_COMMIT)
             B3.alive(capability)
-            commit(dest, operation, parsed, expected, expectedRevision, seam)
+            commit(dest, operation, parsed, expected, expectedRevision, generation, seam)
         } catch (e: B3.SimulatedProcessDeath) { throw e }
         catch (e: B3.Rejected) { abort(dest, operation); throw e }
         catch (e: Throwable) { if (dest.phase(operation) != "COMMITTED") abort(dest, operation); throw e }
@@ -550,8 +554,8 @@ internal object B3Restorer {
     }
 
     /** Moves owned, verified objects to their final names (never replacing). Not referenced by SQL until the commit. */
-    private fun publish(dest: B3Vault, op: String, p: Parsed) {
-        val dir = File(dest.objects, p.meta.third).also { check(it.mkdirs() || it.isDirectory) }
+    private fun publish(dest: B3Vault, op: String, p: Parsed, generation: String) {
+        val dir = File(dest.objects, generation).also { check(it.mkdirs()) { "generation directory already exists" } }
         p.versions.forEach { v ->
             val target = File(dir, "${v.obj}.cipher")
             // rename(2) would replace silently; an existing name is someone else's object. (Single owned writer: no race.)
@@ -564,7 +568,7 @@ internal object B3Restorer {
     }
 
     /** The single authority switch. CAS on the CURRENT pointer and revision read at the start. */
-    private fun commit(dest: B3Vault, op: String, p: Parsed, expected: String?, expectedRevision: Long, seam: (B3Vault.Seam) -> Unit) = dest.tx {
+    private fun commit(dest: B3Vault, op: String, p: Parsed, expected: String?, expectedRevision: Long, generation: String, seam: (B3Vault.Seam) -> Unit) = dest.tx {
         if (!B3.unsafeSkipCasForRedTest && (dest.current() != expected || dest.revision() != expectedRevision))
             B3.reject(B3.Reject.CAS_STALE, "CURRENT changed since the restore started")
         val fresh = UUID.randomUUID().toString()
@@ -573,8 +577,8 @@ internal object B3Restorer {
             dest.db.execSQL("UPDATE dataset SET state='RETIRED', retired_by=? WHERE uuid=?", arrayOf(op, expected))
             dest.db.execSQL("UPDATE link SET state='QUARANTINED' WHERE dataset=? AND state='LIVE'", arrayOf(expected))
         }
-        dest.db.execSQL("INSERT INTO dataset(uuid,state,epoch,vault,source_dataset,operation) VALUES(?,'CURRENT',?,?,?,?)",
-            arrayOf(fresh, UUID.randomUUID().toString(), p.meta.third, p.meta.first, op))
+        dest.db.execSQL("INSERT INTO dataset(uuid,state,epoch,vault,generation,source_dataset,operation) VALUES(?,'CURRENT',?,?,?,?,?)",
+            arrayOf(fresh, UUID.randomUUID().toString(), p.meta.third, generation, p.meta.first, op))
         dest.db.execSQL("INSERT INTO record SELECT uuid,?,kind,int_id,state,body FROM stage_record WHERE op=?", arrayOf(fresh, op))
         dest.db.execSQL("INSERT INTO version SELECT uuid,?,document,seq,state,vault,object,dek,plain_hash,cipher_hash,cipher_bytes,corrects FROM stage_version WHERE op=?", arrayOf(fresh, op))
         dest.db.execSQL("INSERT INTO link SELECT uuid,?,document,record,state FROM stage_link WHERE op=?", arrayOf(fresh, op))
@@ -603,6 +607,8 @@ internal object B3Restorer {
             val referenced = dest.scalarLong("SELECT COUNT(*) FROM version WHERE object=?", f.name.removeSuffix(".cipher")) > 0
             if (!referenced && f.canonicalPath.startsWith(dest.root.canonicalPath + File.separator)) f.delete() }
         File(dest.root, "staging/$op").deleteRecursively()
+        // The operation's own generation directory, only if nothing else was left in it.
+        dest.scalarString("SELECT generation FROM operation WHERE id=?", op)?.let { File(dest.objects, it) }?.let { d -> if (d.list()?.isEmpty() == true) d.delete() }
         dest.tx { listOf("stage_record", "stage_version", "stage_link", "stage_dek").forEach { dest.db.execSQL("DELETE FROM $it WHERE op=?", arrayOf(op)) }
             dest.db.execSQL("UPDATE operation SET phase='ABORTED' WHERE id=?", arrayOf(op)) }
     }
