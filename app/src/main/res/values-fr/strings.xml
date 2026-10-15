@@ -1,7 +1,7 @@
 <resources>
 <string name="app_name">HRT Log</string>
 <string name="calendar">Calendrier</string>
-<string name="medications">Médicaments</string>
+<string name="medications">Plans de traitement</string>
 <string name="reliability">Fiabilité des rappels</string>
 <string name="add">Ajouter</string>
 <string name="save">Enregistrer</string>
@@ -128,7 +128,7 @@
 <string name="check_ok">OK</string>
 <string name="coming_soon_body">Cette section est en cours de développement et arrivera dans une prochaine version.</string>
 <string name="complete_info">Compléter</string>
-<string name="concentration">Concentrations estimées</string>
+<string name="concentration">Niveaux estimés</string>
 <string name="credits">Remerciements</string>
 <string name="credits_body">Les fonctionnalités de HRT Log s\'inspirent de Trans Memo, créée par l\'association Chrysalide (ses captures d\'écran ont servi de référence pendant le développement), ainsi que de Transmtf HRT Tracker. HRT Log n\'utilise aucun code de Trans Memo et n\'a aucun lien d\'affiliation ni de partenariat avec Chrysalide ou Transmtf.</string>
 <string name="day_unit">jours</string>
@@ -682,7 +682,7 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="backup_too_large">Cette sauvegarde dépasse les limites de taille ou de structure prises en charge. Aucune donnée n’a été restaurée.</string>
     <string name="report_current_plan">Schéma actuellement enregistré</string>
     <string name="report_recorded_contexts">Contextes médicamenteux enregistrés sur cette période</string>
-    <string name="timeline">Chronologie</string>
+    <string name="timeline">Chronologie du traitement</string>
     <string name="epochs">Étapes du traitement</string>
     <string name="timeline_intro">Schémas enregistrés et événements consignés, sans déduire de lien de cause à effet.</string>
     <string name="timeline_filters">Filtres</string>
@@ -1152,10 +1152,10 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="medical_edit_or_delete">Modifier ou supprimer</string>
     <string name="timeline_shown_in">Affiché en %1$s</string>
     <string name="period_day_n">Jour %1$d</string>
-    <string name="drawer_group_daily">Au quotidien</string>
-    <string name="drawer_group_treatment">Traitement</string>
-    <string name="drawer_group_medical">Santé</string>
-    <string name="drawer_group_body">Corps et esprit</string>
+    <string name="drawer_group_journal">Journal</string>
+    <string name="drawer_group_medication">Traitement</string>
+    <string name="drawer_group_records">Suivi médical</string>
+    <string name="nav_history">Journal des prises</string>
     <!-- UI-02 (2026-10-15) -->
     <string name="timeline_filter_all">Tout</string>
     <string name="timeline_filter_labs">Analyses</string>

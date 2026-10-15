@@ -1,7 +1,7 @@
 <resources>
 <string name="app_name">HRT 日志</string>
 <string name="calendar">日历</string>
-<string name="medications">药物</string>
+<string name="medications">药物方案</string>
 <string name="reliability">提醒可靠性</string>
 <string name="add">添加</string>
 <string name="save">保存</string>
@@ -128,7 +128,7 @@
 <string name="check_ok">正常</string>
 <string name="coming_soon_body">这部分正在开发中，将在后续版本提供。</string>
 <string name="complete_info">去补全</string>
-<string name="concentration">血药浓度</string>
+<string name="concentration">浓度估算</string>
 <string name="credits">致谢</string>
 <string name="credits_body">HRT 日志的功能设计参照了 Chrysalide 协会出品的 Trans Memo（开发时参考了它的界面截图），也参照了 Transmtf HRT Tracker。HRT 日志没有使用 Trans Memo 的代码，与 Chrysalide、Transmtf 都没有隶属或合作关系。</string>
 <string name="day_unit">天</string>
@@ -682,7 +682,7 @@
     <string name="backup_too_large">备份超过支持的大小或结构限制，未恢复任何数据。</string>
     <string name="report_current_plan">当前记录的方案</string>
     <string name="report_recorded_contexts">该时间段保存的用药上下文</string>
-    <string name="timeline">时间线</string>
+    <string name="timeline">治疗时间线</string>
     <string name="epochs">治疗阶段</string>
     <string name="timeline_intro">查看当时的方案与实际记录，不推断因果关系。</string>
     <string name="timeline_filters">筛选</string>
@@ -1152,10 +1152,10 @@
     <string name="medical_edit_or_delete">编辑或删除</string>
     <string name="timeline_shown_in">按 %1$s 显示</string>
     <string name="period_day_n">第 %1$d 天</string>
-    <string name="drawer_group_daily">每天</string>
-    <string name="drawer_group_treatment">治疗</string>
-    <string name="drawer_group_medical">医疗</string>
-    <string name="drawer_group_body">身心</string>
+    <string name="drawer_group_journal">日常记录</string>
+    <string name="drawer_group_medication">用药管理</string>
+    <string name="drawer_group_records">就医资料</string>
+    <string name="nav_history">服药记录</string>
     <!-- UI-02 (2026-10-15) -->
     <string name="timeline_filter_all">全部</string>
     <string name="timeline_filter_labs">化验</string>

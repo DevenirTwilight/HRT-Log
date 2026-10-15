@@ -1,7 +1,7 @@
 <resources>
 <string name="app_name">HRT Log</string>
 <string name="calendar">Calendar</string>
-<string name="medications">Medications</string>
+<string name="medications">Medication plans</string>
 <string name="reliability">Reminder reliability</string>
 <string name="add">Add</string>
 <string name="save">Save</string>
@@ -682,7 +682,7 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="backup_too_large">This backup exceeds the supported size or structure limits. No data was restored.</string>
     <string name="report_current_plan">Current recorded plan</string>
     <string name="report_recorded_contexts">Medication contexts recorded in this period</string>
-    <string name="timeline">Timeline</string>
+    <string name="timeline">Treatment timeline</string>
     <string name="epochs">Treatment stages</string>
     <string name="timeline_intro">Saved regimens and recorded events, without inferring cause and effect.</string>
     <string name="timeline_filters">Filters</string>
@@ -1152,10 +1152,10 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="medical_edit_or_delete">Edit or delete</string>
     <string name="timeline_shown_in">Shown in %1$s</string>
     <string name="period_day_n">Day %1$d</string>
-    <string name="drawer_group_daily">Daily</string>
-    <string name="drawer_group_treatment">Treatment</string>
-    <string name="drawer_group_medical">Medical</string>
-    <string name="drawer_group_body">Body and mind</string>
+    <string name="drawer_group_journal">Daily log</string>
+    <string name="drawer_group_medication">Medication</string>
+    <string name="drawer_group_records">Care records</string>
+    <string name="nav_history">Dose log</string>
     <!-- UI-02 (2026-10-15) -->
     <string name="timeline_filter_all">All</string>
     <string name="timeline_filter_labs">Labs</string>
