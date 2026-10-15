@@ -1,0 +1,8 @@
+
+net.plainnotes.app.demo.DemoCompatAndroidTest:.
+
+Time: 3.891
+
+OK (1 test)
+
+
