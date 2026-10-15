@@ -1,7 +1,6 @@
 package net.plainnotes.app.demo
 
 import android.graphics.Bitmap
-import android.view.KeyEvent
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.platform.app.InstrumentationRegistry
@@ -40,7 +39,11 @@ class DemoArchiveAndroidTest {
         ui.onNodeWithTag("demo-detail").assertExists(); banner(); shot("05-detail")
         inList("demo-detail", hasText(s(R.string.demo_version_retained, 1))).assertIsDisplayed()
         inList("demo-detail", hasTestTag("demo-link:LAB:epoch-2026:13")).assertIsDisplayed(); shot("06-versions-and-links")
-        instrument.sendKeyDownUpSync(KeyEvent.KEYCODE_BACK); ui.waitForIdle()
+        // System Back through the activity's dispatcher (the demo's BackHandler). A hardware BACK key is not used: after typing
+        // in the search field the first BACK may only close the soft keyboard (CI push run 38739412867), which is the IME's
+        // behaviour, not the demo's.
+        ui.runOnUiThread { ui.activity.onBackPressedDispatcher.onBackPressed() }
+        ui.waitUntil(5_000) { ui.onAllNodesWithTag("demo-detail").fetchSemanticsNodes().isEmpty() }
         ui.onNodeWithTag("demo-detail").assertDoesNotExist(); ui.onNodeWithTag("demo-list").assertExists()
         ui.onNodeWithTag("demo-tab-TRASH").performClick()
         inList("demo-list", hasTestTag("demo-doc:00000000-0000-4000-8000-000000000004")).assertIsDisplayed(); shot("07-bin")

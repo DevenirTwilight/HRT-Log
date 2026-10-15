@@ -1,0 +1,17 @@
+{
+  "api": "35",
+  "screenshots": [
+    "01-inbox.png",
+    "02-categories.png",
+    "03-category-lab-reports.png",
+    "04-search.png",
+    "05-detail.png",
+    "06-versions-and-links.png",
+    "07-bin.png",
+    "08-quarantined.png",
+    "90-overview-inbox.png",
+    "91-overview-detail.png"
+  ],
+  "video": true,
+  "note": "Real emulator captures of synthetic demo data (debug build only). Night-mode shots start with 9."
+}

@@ -34,7 +34,12 @@
 
 ## 本地结果与 CI
 
-（本地结果与 CI 运行编号在提交后追加。）
+- 本地：`DemoFixtureTest` 3 + `DemoArchiveLayoutTest` 8（4 语 × 2，320dp、2× 字号、暗色）全部通过；debug/androidTest 编译通过；`test_attachment_release_isolation.py` 通过。完整单测/lint 本地运行超出 30 分钟上限，以 CI 为准。
+- CI，HEAD 17d08a9：
+  - PR 运行 Android 38739458659 五个 job 全部 success；Science 38739458692 success。
+  - device-tests（原生 API35 emulator）运行了 `DemoArchiveAndroidTest` 2 项与 `run_demo_capture.py`，artifact `demo-evidence`：10 张 PNG（亮色 01–08，夜间 90/91）+ `demo-walkthrough.mp4` 录屏 + `demo-evidence.json`。副本已提交到 `docs/ui-audit/2026-10-15-med02b6-demo/`（合成数据）。
+  - 同 SHA 的 push 运行 38739412867 的 device-tests **失败 1 项**：`inboxCategoriesSearchDetailBackAndBin` 第 44 行，按硬件 BACK 后详情仍在。原因：前一步在搜索框输入后软键盘可能仍弹出，第一下 BACK 被输入法用于收起键盘（与 PR 运行通过的差异只在输入法状态）。这是测试写法问题，不是演示的返回逻辑问题。
+- 修正（测试专用）：返回改为经 `onBackPressedDispatcher`（即演示的 BackHandler），并等待详情消失。修正后 HEAD 的 CI 结果见 PR #37 正文。
 
 ## 已知缺口
 
