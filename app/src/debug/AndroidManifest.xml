@@ -5,5 +5,10 @@
         <activity android:name="net.plainnotes.app.debug.DataPrivacyTestActivity" android:exported="false" />
         <activity android:name="net.plainnotes.app.debug.CalendarTestActivity" android:exported="false" />
         <activity android:name="net.plainnotes.app.debug.AboutTestActivity" android:exported="false" />
+        <!-- MED-02B6 synthetic document-library demo. Debug build only, synthetic fixtures, no app data. Deliberately NO
+             launcher icon (it would undermine disguise mode); start it with
+             adb shell am start -n net.plainnotes.app/net.plainnotes.app.debug.demo.MedicalArchiveDemoActivity -->
+        <activity android:name="net.plainnotes.app.debug.demo.MedicalArchiveDemoActivity" android:exported="true"
+            android:label="@string/demo_launcher_label" android:taskAffinity="net.plainnotes.app.demo" android:theme="@style/Theme.Notes" />
     </application>
 </manifest>

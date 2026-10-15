@@ -9,7 +9,10 @@ import zipfile
 
 FORBIDDEN=(b'net/plainnotes/poc/', b'net.plainnotes.poc.', b'com/google/crypto/tink/',
            b'com.google.crypto.tink.', b'SYNPOC01', b'DRAFT-ONLY-OBJ0!', b'B2-TEST-ONLY',
-           b'SyntheticStreamProvider', b'attachmentpoc', b'Gate2StreamProvider', b'B2-SECURITY-GATE2-TEST-ONLY', b'Gate2PeerProvider', b'KernelProxyFdGate3', b'B3Vault', b'HRTLOG-B3-TEST-ONLY')
+           b'SyntheticStreamProvider', b'attachmentpoc', b'Gate2StreamProvider', b'B2-SECURITY-GATE2-TEST-ONLY', b'Gate2PeerProvider', b'KernelProxyFdGate3', b'B3Vault', b'HRTLOG-B3-TEST-ONLY',
+           b'net/plainnotes/app/debug/demo/', b'MedicalArchiveDemoActivity', b'DemoRepository')
+# MED-02B6: the synthetic document-library demo exists only in the debug build; its resources must not reach release.
+RESOURCE_FORBIDDEN=(b'demo_banner', b'demo_launcher_label', b'SYNTHETIC DEMO')
 
 def check_apk(path):
     with zipfile.ZipFile(path) as apk:
@@ -19,6 +22,10 @@ def check_apk(path):
             value=apk.read(name)
             for marker in FORBIDDEN:
                 assert marker not in value and marker.decode().encode('utf-16-le') not in value, f'Test-only marker {marker!r} in {name}'
+        if 'resources.arsc' in apk.namelist():
+            table=apk.read('resources.arsc')
+            for marker in RESOURCE_FORBIDDEN:
+                assert marker not in table and marker.decode().encode('utf-16-le') not in table, f'Demo resource {marker!r} in resources.arsc'
     return len(dex)
 
 if __name__=='__main__':
