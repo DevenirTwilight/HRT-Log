@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
@@ -89,15 +90,24 @@ val CHECKABLE_STATES = setOf("IN_USE", "EMPTY")
 @Composable private fun StockCard(m: MedicationEntity, s: StockSummary, unallocated: Double, today: LocalDate, zone: ZoneId, packages: Int, checkable: Boolean,
                                   onReplace: () -> Unit, onCheck: () -> Unit, onAdd: () -> Unit, onManage: () -> Unit) {
     val c = MaterialTheme.colorScheme
-    SectionCard(null) {
+    // UI-01 D: low stock (the shared forecast's rule) is a tertiary card with the days in words, not only a colour.
+    SectionCard(null, Modifier.testTag("stock-card-${m.id}"), container = if (s.low) c.tertiaryContainer else c.surfaceContainerLow) {
+        // Three different things: open the next real package, correct an existing one, add packages really obtained.
+        // One of them is the card's main button; the others are in the ⋮ menu, unchanged.
+        val primary = if (s.sealedCount > 0) R.string.stock_replace else R.string.stock_add
+        val menu = (if (primary != R.string.stock_replace && (s.sealedCount > 0 || s.open != null)) listOf(R.string.stock_replace) else emptyList()) +
+            (if (checkable) listOf(R.string.stock_check) else emptyList()) + (if (primary != R.string.stock_add) listOf(R.string.stock_add) else emptyList())
+        val tracked = !(s.open == null && s.sealedCount == 0 && packages == 0)
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(m.name, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
-            if (s.low) StatusPill(stringResource(R.string.stock_low), c.errorContainer, c.onErrorContainer, Icons.Outlined.Warning)
+            if (tracked) StockMenu(m.id, menu, onReplace, onCheck, onAdd)
         }
+        if (s.low) StatusPill(s.daysLeft?.takeIf { s.forecast?.lastCovered != null }?.let { stringResource(R.string.stock_runs_out_in, it) } ?: stringResource(R.string.forecast_empty),
+            c.tertiary, c.onTertiary, Icons.Outlined.Warning)
         if (s.open == null && s.sealedCount == 0) {
             if (packages == 0) {
                 Text(stringResource(R.string.stock_not_tracked), style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant)
-                Button(onClick = onAdd) { Text(stringResource(R.string.stock_start)) }
+                OutlinedButton(onClick = onAdd, modifier = Modifier.testTag("stock-primary-${m.id}")) { Text(stringResource(R.string.stock_start)) }
                 TextButton(onClick = onManage, modifier = Modifier.heightIn(min = 48.dp).testTag("stock-manage-${m.id}")) { Text(stringResource(R.string.stock_manage_plain)) }
                 return@SectionCard
             }
@@ -120,15 +130,32 @@ val CHECKABLE_STATES = setOf("IN_USE", "EMPTY")
             if (s.sealedCount > 0) Text(stringResource(R.string.stock_sealed, s.sealedCount), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
         }
         if (unallocated > 0) Text(stringResource(R.string.stock_unallocated, formatDose(unallocated, m.unit)), style = MaterialTheme.typography.bodySmall, color = c.tertiary)
-        // Three different things: open the next real package, correct an existing one, add packages really obtained.
-        val actions = (if (s.sealedCount > 0 || s.open != null) listOf(R.string.stock_replace) else emptyList()) +
-            (if (checkable) listOf(R.string.stock_check) else emptyList()) + R.string.stock_add
-        AdaptiveActions(actions.map { stringResource(it) }, contentInset = 48.dp) { i, mod -> when (actions[i]) {
-            R.string.stock_replace -> FilledTonalButton(onClick = onReplace, modifier = mod) { Text(stringResource(actions[i])) }
-            R.string.stock_check -> OutlinedButton(onClick = onCheck, modifier = mod.testTag("stock-check-${m.id}")) { Text(stringResource(actions[i])) }
-            else -> TextButton(onClick = onAdd, modifier = mod) { Text(stringResource(actions[i])) }
-        } }
-        if (packages > 0) TextButton(onClick = onManage, modifier = Modifier.heightIn(min = 48.dp).testTag("stock-manage-${m.id}")) { Text(stringResource(R.string.stock_manage, packages)) }
+        Button(onClick = if (primary == R.string.stock_replace) onReplace else onAdd, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("stock-primary-${m.id}")) {
+            Text(stringResource(primary))
+        }
+        if (packages > 0) {
+            // Collapsed by default; the packages dialog (details, undo, history, voided) opens from inside, unchanged.
+            var expanded by rememberSaveable(m.id) { mutableStateOf(false) }
+            TextButton(onClick = { expanded = !expanded }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("stock-packages-${m.id}")) {
+                Text(stringResource(R.string.stock_packages_section, packages), Modifier.weight(1f))
+                Icon(if (expanded) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore, null)
+            }
+            if (expanded) TextButton(onClick = onManage, modifier = Modifier.heightIn(min = 48.dp).testTag("stock-manage-${m.id}")) { Text(stringResource(R.string.stock_manage, packages)) }
+        }
+    }
+}
+
+@Composable private fun StockMenu(id: Long, actions: List<Int>, onReplace: () -> Unit, onCheck: () -> Unit, onAdd: () -> Unit) {
+    if (actions.isEmpty()) return
+    var open by remember { mutableStateOf(false) }
+    Box {
+        IconButton({ open = true }, Modifier.testTag("stock-more-$id")) { Icon(Icons.Outlined.MoreVert, stringResource(R.string.stock_more_actions)) }
+        DropdownMenu(open, { open = false }) {
+            actions.forEach { a ->
+                DropdownMenuItem({ Text(stringResource(a)) }, { open = false; when (a) { R.string.stock_replace -> onReplace(); R.string.stock_check -> onCheck(); else -> onAdd() } },
+                    modifier = Modifier.testTag(when (a) { R.string.stock_replace -> "stock-replace-$id"; R.string.stock_check -> "stock-check-$id"; else -> "stock-add-$id" }))
+            }
+        }
     }
 }
 
