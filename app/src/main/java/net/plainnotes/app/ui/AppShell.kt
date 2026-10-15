@@ -72,8 +72,9 @@ class UiPrefs(context: Context) {
     val context = LocalContext.current
     val prefs = remember { UiPrefs(context) }
     var region by remember { mutableStateOf(prefs.region) }
-    var summary by rememberSaveable { mutableStateOf(false) }
-    var packageInfo by remember { mutableStateOf<net.plainnotes.app.data.ContainerEntity?>(null) }
+    // UI-02B: page-owned dialog state lives in holders (ShellHosts.kt), created here with the same remember/rememberSaveable.
+    val wellbeingDialogs = rememberWellbeingDialogs()
+    val stockDialogs = remember { StockDialogs() }
     val state by model.state.collectAsStateWithLifecycle()
     val editor by model.editor.collectAsStateWithLifecycle()
     val override by model.override.collectAsStateWithLifecycle()
@@ -104,30 +105,18 @@ class UiPrefs(context: Context) {
     var overrideEntry by remember { mutableStateOf<TimelineEntry?>(null) }
     var addMenu by remember { mutableStateOf(false) }
     var manual by remember { mutableStateOf(false) }
-    var batch by remember { mutableStateOf(false) }
-    var batchDone by remember { mutableStateOf<Int?>(null) }
+    val historyDialogs = remember { HistoryDialogs() }
     var appointment by remember { mutableStateOf(false) }
-    var archive by remember { mutableStateOf<MedicationEntity?>(null) }
-    var labEdit by remember { mutableStateOf<LabValueEntity?>(null) }
-    var labNew by remember { mutableStateOf(false) }
+    val medicationDialogs = remember { MedicationDialogs() }
+    val labDialogs = remember { LabDialogs() }
     var pickStart by remember { mutableStateOf(false) }
     val today = LocalDate.now()
     var medicalOrigin by rememberSaveable { mutableStateOf(false) }
-    var medicalEditing by remember { mutableStateOf(false) }
-    var medicalEdit by remember { mutableStateOf<net.plainnotes.app.data.AppointmentEntity?>(null) }
-    var medicalLab by remember { mutableStateOf<Long?>(null) }
+    val medicalDialogs = remember { MedicalDialogs() }
     val medicalRefreshText=stringResource(R.string.medical_saved_refresh)
     val medicalErrorText=stringResource(if(medicalSave.stale)R.string.medical_stale else R.string.medical_save_error)
-    LaunchedEffect(medicalSave.saved){if(medicalSave.saved!=null){medicalEditing=false;medicalEdit=null;if(medicalSave.refreshFailed)snackbar.showSnackbar(medicalRefreshText);model.clearMedicalVisitSave()}}
-    LaunchedEffect(medicalSave.failed){if(medicalSave.failed && !medicalEditing){snackbar.showSnackbar(medicalErrorText);model.clearMedicalVisitSave()}}
-    var editRecord by remember { mutableStateOf<net.plainnotes.app.data.RecordEntity?>(null) }
-    var deleteRecord by remember { mutableStateOf<net.plainnotes.app.data.RecordEntity?>(null) }
-    var addStock by remember { mutableStateOf<MedicationEntity?>(null) }
-    var checkStock by remember { mutableStateOf<MedicationEntity?>(null) }
-    var managePackages by remember { mutableStateOf<MedicationEntity?>(null) }
-    var restorePackage by remember { mutableStateOf<net.plainnotes.app.data.ContainerEntity?>(null) }
-    var undoPackage by remember { mutableStateOf<net.plainnotes.app.data.ContainerEntity?>(null) }
-    var manageItems by remember { mutableStateOf(false) }
+    LaunchedEffect(medicalSave.saved){if(medicalSave.saved!=null){medicalDialogs.editing=false;medicalDialogs.edit=null;if(medicalSave.refreshFailed)snackbar.showSnackbar(medicalRefreshText);model.clearMedicalVisitSave()}}
+    LaunchedEffect(medicalSave.failed){if(medicalSave.failed && !medicalDialogs.editing){snackbar.showSnackbar(medicalErrorText);model.clearMedicalVisitSave()}}
     var wellbeingPrompt by remember { mutableStateOf(prefs.wellbeingPrompt) }
     var simpleMode by remember { mutableStateOf(prefs.simpleMode) }
     val promptText = stringResource(R.string.wb_prompt); val promptAction = stringResource(R.string.wb_prompt_action)
@@ -175,7 +164,7 @@ class UiPrefs(context: Context) {
                         else IconButton(onClick = { scope.launch { drawer.open() } }) { Icon(Icons.Outlined.Menu, stringResource(R.string.menu)) }
                     },
                     actions = {
-                        if (destination == Destination.WELLBEING) IconButton(onClick={summary=true}) { Icon(Icons.Outlined.PictureAsPdf,stringResource(R.string.wb_summary)) }
+                        if (destination == Destination.WELLBEING) IconButton(onClick={wellbeingDialogs.summary=true}) { Icon(Icons.Outlined.PictureAsPdf,stringResource(R.string.wb_summary)) }
                         if (destination == Destination.CALENDAR) IconButton(onClick = { pickStart = true }) { Icon(Icons.Outlined.EditCalendar, stringResource(R.string.calendar_pick_start)) }
                         if (destination == Destination.CONCENTRATION) IconButton(onClick = { model.loadConcentration() }) { Icon(Icons.Outlined.Refresh, stringResource(R.string.refresh)) }
                     })
@@ -194,7 +183,7 @@ class UiPrefs(context: Context) {
                     }
                     Destination.MEDICATIONS -> ExtendedFloatingActionButton(onClick = { model.edit(null) }, icon = { Icon(Icons.Outlined.Add, null) }, text = { Text(stringResource(R.string.add_medication)) })
                     Destination.VISITS -> if (visitId == null) ExtendedFloatingActionButton(onClick = { appointment = true }, icon = { Icon(Icons.Outlined.Add, null) }, text = { Text(stringResource(R.string.appointment)) })
-                    Destination.LABS -> ExtendedFloatingActionButton(onClick = { labNew = true }, icon = { Icon(Icons.Outlined.Add, null) }, text = { Text(stringResource(R.string.lab_add)) })
+                    Destination.LABS -> ExtendedFloatingActionButton(onClick = { labDialogs.labNew = true }, icon = { Icon(Icons.Outlined.Add, null) }, text = { Text(stringResource(R.string.lab_add)) })
                     else -> {}
                 }
             },
@@ -202,12 +191,12 @@ class UiPrefs(context: Context) {
             when (destination) {
                 Destination.CALENDAR -> CalendarScreen(state, today, { completeEntry = it }, { overrideEntry = it; model.loadOverride(it.slot.key) }, { model.edit(null) },
                     { model.calendarFrom(null) }, pad, onReview = { destination = Destination.MEDICATIONS }, extra = extra, onStock = { destination = Destination.STOCK },
-                    onAppointment = { visitId = it.id; medicalOrigin=false; destination = Destination.VISITS }, onAddStock = { addStock = it })
-                Destination.MEDICATIONS -> MedicationsScreen(state, { model.edit(null) }, { model.edit(it) }, { archive = it }, pad)
+                    onAppointment = { visitId = it.id; medicalOrigin=false; destination = Destination.VISITS }, onAddStock = { stockDialogs.addStock = it })
+                Destination.MEDICATIONS -> MedicationsScreen(state, { model.edit(null) }, { model.edit(it) }, { medicationDialogs.archive = it }, pad)
                 Destination.CONCENTRATION -> net.plainnotes.app.experimental.UnifiedConcentrationScreen(extra.records, state.ruleSnapshots, extra.labs, pad,
                     content = { innerPad, preview, selector -> ConcentrationScreen(state, conc.result, conc.loading, conc.weight, concSettings, { concSettings = it; prefs.conc = it },
                         { model.setWeight(it) }, { model.editById(it) }, { destination = Destination.LABS }, innerPad,extra.records,state.profiles,model::confirmHistoricalContext,{destination=Destination.HISTORY},preview,selector,m2Only=true) })
-                Destination.LABS -> LabsScreen(extra.labs, conc.doseTimes, { labEdit = it; labNew = it == null }, { model.deleteLab(it) }, pad,extra.labContexts,{v,estimate->model.rebuildLabContext(v,estimate)})
+                Destination.LABS -> LabsScreen(extra.labs, conc.doseTimes, { labDialogs.labEdit = it; labDialogs.labNew = it == null }, { model.deleteLab(it) }, pad,extra.labContexts,{v,estimate->model.rebuildLabContext(v,estimate)})
                 Destination.SETTINGS -> {
                     val lockOn = remember(settingsPage) { net.plainnotes.app.security.AppLock(context).enabled }
                     val backup by model.backupHistory.state.collectAsState()
@@ -236,14 +225,14 @@ class UiPrefs(context: Context) {
                 }},pad,onAppointment={visitId=it;medicalOrigin=false;destination=Destination.VISITS},saveState=milestoneSave,onSaveHandled=model::clearMilestoneSave,onImportedHistory={importedRecordIds=it.toSet();destination=Destination.HISTORY},
                     timelineActions=TimelineActions(model::editTimeline,model::deletePeriod))
                 Destination.MEDICAL -> MedicalRecordsScreen(state.appointments,{visitId=it.id;medicalOrigin=true;destination=Destination.VISITS},
-                    {model.clearMedicalVisitSave();medicalEdit=null;medicalEditing=true},{destination=Destination.LABS},{destination=Destination.TIMELINE},{destination=Destination.SETTINGS},pad,
+                    {model.clearMedicalVisitSave();medicalDialogs.edit=null;medicalDialogs.editing=true},{destination=Destination.LABS},{destination=Destination.TIMELINE},{destination=Destination.SETTINGS},pad,
                     onConfirm={model.clearMedicalVisitSave();model.saveMedicalVisit(it,it)},questionCounts=extra.visitQuestions.groupingBy{it.appointment_id}.eachCount())
                 Destination.VISITS -> VisitsScreen(state, extra, model, visitId, { visitId = it;if(it==null && medicalOrigin){medicalOrigin=false;destination=Destination.MEDICAL} }, { appointment = true }, pad,
-                    medical=medicalOrigin,onMedicalEdit={model.clearMedicalVisitSave();medicalEdit=it;medicalEditing=true},onLab={medicalLab=it.id})
-                Destination.HISTORY -> HistoryScreen(state, extra.records, { editRecord = it }, { deleteRecord = it }, pad, onAdd = { manual = true }, onBatch = { batch = true }, onConfirmMissed={model.confirmMissed(it.id)},selectedRecordIds=importedRecordIds,labels=historyLabels,onExtra={r,on->model.setExtra(r.id,on)},onClearSelection={importedRecordIds=null},onUndoSkip={model.undoSkipped(it)})
-                Destination.STOCK -> StockScreen(state, extra.containers, extra.records, { m -> model.replaceContainer(m.id, m.container_capacity) }, { checkStock = it }, { addStock = it }, pad,
-                    onManage = { managePackages = it }, forecasts = extra.stockForecasts)
-                Destination.WELLBEING -> WellbeingHub(state,extra,model,region,{manageItems=true},pad)
+                    medical=medicalOrigin,onMedicalEdit={model.clearMedicalVisitSave();medicalDialogs.edit=it;medicalDialogs.editing=true},onLab={medicalDialogs.lab=it.id})
+                Destination.HISTORY -> HistoryScreen(state, extra.records, { historyDialogs.editRecord = it }, { historyDialogs.deleteRecord = it }, pad, onAdd = { manual = true }, onBatch = { historyDialogs.batch = true }, onConfirmMissed={model.confirmMissed(it.id)},selectedRecordIds=importedRecordIds,labels=historyLabels,onExtra={r,on->model.setExtra(r.id,on)},onClearSelection={importedRecordIds=null},onUndoSkip={model.undoSkipped(it)})
+                Destination.STOCK -> StockScreen(state, extra.containers, extra.records, { m -> model.replaceContainer(m.id, m.container_capacity) }, { stockDialogs.checkStock = it }, { stockDialogs.addStock = it }, pad,
+                    onManage = { stockDialogs.managePackages = it }, forecasts = extra.stockForecasts)
+                Destination.WELLBEING -> WellbeingHub(state,extra,model,region,{wellbeingDialogs.manageItems=true},pad)
                 else -> ComingSoonScreen(destination.icon, stringResource(destination.title), pad)
             }
         }
@@ -260,37 +249,20 @@ class UiPrefs(context: Context) {
         IntakeDialog(stringResource(R.string.complete), intakeMed, e.slot.dose,
         if (e.state in listOf(net.plainnotes.app.domain.SlotState.MISSED,net.plainnotes.app.domain.SlotState.UNCONFIRMED)) e.slot.at else Instant.now(),
         { completeEntry = null }, intakeMed?.let(::siteFor)) { t, d, site -> model.complete(e.slot, t, d, site); completeEntry = null; afterIntake() } }
-    editRecord?.let { r -> IntakeDialog(stringResource(if (r.status == "MISSED") R.string.history_backfill else R.string.edit), MedicationSnapshot.decode(r.config_snapshot,r.medication_id)?.medication(r.medication_id), r.actual_dose ?: r.planned_dose ?: meds[r.medication_id]?.dose_per_intake ?: 1.0,
-        Instant.ofEpochMilli(r.taken_utc ?: r.scheduled_utc ?: System.currentTimeMillis()), { editRecord = null }) { t, d, _ -> model.editRecord(r.id, t, d); editRecord = null } }
-    deleteRecord?.let { r -> AlertDialog(onDismissRequest = { deleteRecord = null }, icon = { Icon(Icons.Outlined.Delete, null) }, text = { Text(stringResource(R.string.history_delete_confirm)) },
-        confirmButton = { Button(onClick = { model.deleteRecord(r.id); deleteRecord = null }) { Text(stringResource(R.string.remove)) } },
-        dismissButton = { TextButton(onClick = { deleteRecord = null }) { Text(stringResource(R.string.cancel)) } }) }
-    addStock?.let { m -> AddStockDialog(m, { addStock = null }) { cap, n, open,source,batch -> model.addContainers(m.id, cap, n, open,source,batch); addStock = null } }
-    checkStock?.let { m -> CheckStockDialog(m, extra.containers, { checkStock = null }) { id, v -> model.correctStock(id, v); checkStock = null } }
-    managePackages?.let { m -> PackagesDialog(m, extra.containers, extra.containersWithConsumption, { managePackages = null }, { packageInfo = it }, voided=extra.voidedContainers, onRestore={ restorePackage = it }, onUndo={ undoPackage = it }) }
-    undoPackage?.let { box -> PackageCorrectionConfirmation(false,{undoPackage=null},label=meds[box.medication_id]?.let{it.name+" · "+packageLabel(box,it)}) { model.removeMistakenContainer(box.id);undoPackage=null } }
-    restorePackage?.let { box -> PackageCorrectionConfirmation(true,{restorePackage=null},label=meds[box.medication_id]?.let{it.name+" · "+packageLabel(box,it)}) { model.restoreVoidedContainer(box.id);restorePackage=null } }
-    packageInfo?.let{box->ContainerInfoDialog(box,{packageInfo=null}){source,batch->model.setContainerInfo(box.id,source,batch);packageInfo=null}}
-    if (manageItems) ManageCheckinItemsDialog(extra.items,{manageItems=false},model::saveCheckinItem,extra.effects,model::setReviewEffect,model::reorderItems)
-    if(summary) SummaryExportDialog(model,state,{summary=false})
+    HistoryRecordDialogs(historyDialogs, model, meds)
+    StockPageDialogs(stockDialogs, model, extra, meds)
+    if (wellbeingDialogs.manageItems) ManageCheckinItemsDialog(extra.items,{wellbeingDialogs.manageItems=false},model::saveCheckinItem,extra.effects,model::setReviewEffect,model::reorderItems)
+    if(wellbeingDialogs.summary) SummaryExportDialog(model,state,{wellbeingDialogs.summary=false})
     overrideEntry?.let { e -> if (override?.key == e.slot.key) OverrideDialog(e, meds[e.slot.medicationId], override!!, { overrideEntry = null }) { o -> model.changeOverride(e.slot, o); overrideEntry = null } }
-    if (batch) BatchAddDialog(state.medications.filter { it.active && it.needs_review == null }, { m ->
-        state.schedules[m.id]?.takeIf { it.kind == net.plainnotes.app.domain.RuleKind.EVERY_N_DAYS && it.interval == 1 && it.times.isNotEmpty() }?.times ?: TWICE_DAILY
-    }, { batch = false }) { id, from, to, times, d -> batch = false; model.backfill(id, from, to, times, d) { batchDone = it } }
-    val batchText = batchDone?.let { stringResource(R.string.batch_done, it) }
-    LaunchedEffect(batchText) { batchText?.let { snackbar.showSnackbar(it); batchDone = null } }
+    HistoryBatchDialog(historyDialogs, model, state, snackbar)
     if (manual) ManualIntakeDialog(state.medications.filter { it.active }, ::siteFor, { manual = false }) { id, t, d, site, extraDose -> model.manual(id, t, d, site, extraDose); manual = false; afterIntake() }
-    if(medicalEditing)MedicalVisitDialog(medicalEdit,medicalSave,{if(!medicalSave.saving){medicalEditing=false;medicalEdit=null;model.clearMedicalVisitSave()}}){model.saveMedicalVisit(it,medicalEdit)}
-    medicalLab?.let{id->extra.labs.firstOrNull{it.id==id}?.let{v->LabDetailDialog(v,extra.labContexts.filter{it.lab_id==id},{medicalLab=null}){medicalLab=null;labEdit=v}}}
+    MedicalVisitEditor(medicalDialogs, model, medicalSave)
+    MedicalLabDetail(medicalDialogs, labDialogs, extra)
     if (appointment) AppointmentDialog({ appointment = false }) { model.appointment(it); appointment = false }
-    if (labNew || labEdit != null) LabDialog(labEdit, { labNew = false; labEdit = null }, { model.saveLab(it); labNew = false; labEdit = null },onSaveWithEstimate={v,estimate->model.saveLab(v,estimate);labNew=false;labEdit=null})
+    LabEditDialog(labDialogs, model)
     if (pickStart) DatePickerModal(state.calendarStart, { pickStart = false }) { model.calendarFrom(it) }
     if (disclaimer) PkDisclaimerDialog({ prefs.disclaimerAccepted = true; disclaimer = false }) { disclaimer = false; destination = Destination.CALENDAR }
-    archive?.let { m ->
-        AlertDialog(onDismissRequest = { archive = null }, icon = { Icon(Icons.Outlined.Archive, null) }, title = { Text(m.name) }, text = { Text(stringResource(R.string.delete_confirm)) },
-            confirmButton = { Button(onClick = { model.delete(m.id); archive = null }) { Text(stringResource(R.string.yes)) } },
-            dismissButton = { TextButton(onClick = { archive = null }) { Text(stringResource(R.string.cancel)) } })
-    }
+    ArchiveMedicationDialog(medicationDialogs, model)
 }
 
 /** Drawer entries scroll so Settings and About stay reachable on short screens and with large font scales. */
