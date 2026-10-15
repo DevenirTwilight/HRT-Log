@@ -8,6 +8,7 @@
 
 ## 当前构建规则（2026-10-07，必须遵守）
 
+- **时期稳定性测试是交付门槛（2026-10-08）**：`app/src/test/java/net/plainnotes/app/PeriodStabilityTest.kt`（黄金数据、非治疗操作不变性、顺序、夏令时）随 `:app:testFullDebugUnitTest` 在 CI 必跑。任何一项失败都不能签名交付；不得跳过、删减或放宽这些断言。
 - **play版本已废弃。只维护、测试、构建和交付full版本**，后续不要恢复play变体或运行play任务。历史文档/公开旧附件中的play仅是历史记录。交付full APK沿用现有私有正式签名。
 
 ## 交接规则（必须遵守）
