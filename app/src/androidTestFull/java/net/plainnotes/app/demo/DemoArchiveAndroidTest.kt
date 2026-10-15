@@ -80,7 +80,8 @@ class DemoArchiveAndroidTest {
         ui.onNodeWithTag("demo-edit-cat:LETTER").performScrollTo().performClick()
         ui.onNodeWithTag("demo-edit-save").performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.OnClick)
         ui.waitUntil(5_000) { ui.onAllNodesWithTag("demo-edit-form").fetchSemanticsNodes().isEmpty() }
-        action("demo-file").performClick(); shot("13-edited")
+        // Linking already took it out of the inbox, so there is nothing left to file.
+        ui.onAllNodesWithTag("demo-file").assertCountEquals(0); shot("13-edited")
         // A correction adds v2 and keeps v1.
         action("demo-correct").performClick()
         ui.onNodeWithTag("demo-correct-note").performTextInput("Clearer photo of the same handout")
