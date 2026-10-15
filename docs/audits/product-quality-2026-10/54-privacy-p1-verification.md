@@ -60,6 +60,10 @@
 
 修复（测试专用、一行）：选择格子改用其语义点击动作 `performSemanticsAction(SemanticsActions.OnClick)`（等同无障碍激活），不再依赖触摸坐标。未改生产代码，未跳过或放宽断言。另记录产品观察（不在本 PR 范围）：窄屏首屏上浮动按钮会盖住第三周的周五/周六格子，用户需滚动才能点到，建议后续 B3 导航/无障碍批次评估。
 
-## CI 结果
+## CI 结果（最终 HEAD 603fb7d，PR #35）
 
-（待最终 HEAD 的 CI 结束后追加。）
+- Android [PR 38713340330](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38713340330) / [push 38713334902](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38713334902)：jvm、android、device-tests、attachment-poc-compatibility 26/29 全部 success；Science science-change-gate success，research-deep 按条件 skipped。
+- device-tests 报告（API35 原生 emulator）：`WipeStockAlertsAndroidTest` 2/2、`PrivacyNoticeDeviceAndroidTest` 1/1、`PrivacyNoticeLockAndDisguiseAndroidTest` 2/2、`CalendarIntakeAndroidTest` 2/2。
+- android job：app 单测 893、0 失败、61 既有 skip；reminder 19（含 `StockAlertsClearTest` 2）。
+- 过程记录（保留失败证据）：91718cb 首轮 device-tests 失败（日历测试，后证实与本 PR 无关）；61d1047 加入设备测试卫生（结束全部 activity、恢复偏好）后同样失败，确认默认分支同样失败；274f64b 修复日历测试后，`WipeStockAlertsAndroidTest` 暴露竞态（在 wipe 销毁 activity 后读取 `ui.activity`）；603fb7d 改为确认前读取、之后轮询，全部通过。
+- 合并：普通合并 `104cdab`（2026-10-15）。PR-A 测试 API26/29 只有 Robolectric 层（无 emulator 设备测试），真机 TalkBack NOT_RUN。
