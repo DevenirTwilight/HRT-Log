@@ -112,6 +112,11 @@ internal class B3Vault private constructor(val context: Context, val name: Strin
     val objects = File(root, "objects")
     private val dbFile = File(root, "vault.db")
     val db: SQLiteDatabase
+    /** SQLCipher keeps a reference to the key array and re-reads it whenever its pool (re)opens a connection, e.g. when
+     * WAL is enabled. Zeroing it right after open silently re-keyed the file with zeros (found on API 26/29/35: a fresh
+     * connection with the real key got SQLITE_NOTADB). So the key lives exactly as long as the database is open. */
+    private val dbKey: ByteArray
+    private val secondKeys = mutableListOf<ByteArray>()
     /** Object ids pinned by a running export (backup lease). */
     private val leases = HashSet<String>()
 
@@ -130,8 +135,8 @@ internal class B3Vault private constructor(val context: Context, val name: Strin
             try { File(root, "db.wrap").writeBytes(wrap(pass, "B3-TEST-DBKEY|$name".toByteArray())) } finally { pass.fill(0) }
         }
         // Reopening never creates key material: a missing alias or wrap fails closed.
-        val pass = unwrap(File(root, "db.wrap").readBytes(), "B3-TEST-DBKEY|$name".toByteArray())
-        db = try { SQLiteDatabase.openOrCreateDatabase(dbFile, pass, null, null) } finally { pass.fill(0) }
+        dbKey = unwrap(File(root, "db.wrap").readBytes(), "B3-TEST-DBKEY|$name".toByteArray())
+        db = try { SQLiteDatabase.openOrCreateDatabase(dbFile, dbKey, null, null) } catch (e: Throwable) { dbKey.fill(0); throw e }
         db.enableWriteAheadLogging()
         if (create) schema()
     }
@@ -238,12 +243,12 @@ internal class B3Vault private constructor(val context: Context, val name: Strin
     @Synchronized internal fun release(ids: Collection<String>) { leases -= ids.toSet() }
     /** Second, independent SQLCipher connection to the same file (a concurrent writer). */
     fun secondConnection(): SQLiteDatabase {
-        val pass = unwrap(File(root, "db.wrap").readBytes(), "B3-TEST-DBKEY|$name".toByteArray())
-        return try { SQLiteDatabase.openOrCreateDatabase(dbFile, pass, null, null).also { it.enableWriteAheadLogging() } } finally { pass.fill(0) }
+        val pass = unwrap(File(root, "db.wrap").readBytes(), "B3-TEST-DBKEY|$name".toByteArray()).also { synchronized(secondKeys) { secondKeys += it } }
+        return SQLiteDatabase.openOrCreateDatabase(dbFile, pass, null, null).also { it.enableWriteAheadLogging() }  // key zeroed in close()
     }
-    override fun close() = db.close()
+    override fun close() { db.close(); dbKey.fill(0); synchronized(secondKeys) { secondKeys.forEach { it.fill(0) }; secondKeys.clear() } }
     /** Removes the fixture and its Keystore alias ("the source phone is gone"). */
-    fun destroy() { runCatching { db.close() }; root.deleteRecursively(); runCatching { keys().deleteEntry(kekAlias) } }
+    fun destroy() { runCatching { close() }; root.deleteRecursively(); runCatching { keys().deleteEntry(kekAlias) } }
     fun aliasExists() = keys().containsAlias(kekAlias)
 }
 

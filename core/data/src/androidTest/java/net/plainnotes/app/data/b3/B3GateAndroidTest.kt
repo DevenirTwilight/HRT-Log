@@ -127,6 +127,17 @@ class B3GateAndroidTest {
             "sourceAliasExists" to s.v.aliasExists(), "result" to "RESTORED_INTO_FRESH_NAMESPACE")
     }
 
+    /** Regression for the key-lifetime defect: an independent connection opened later with the real wrapped key must
+     * read the same encrypted file (it failed with SQLITE_NOTADB when the key array was zeroed right after open). */
+    @Test fun anIndependentConnectionOpensTheVaultWithItsRealKey() {
+        val s = seed()
+        val second = s.v.secondConnection()
+        try { assertEquals(s.records.size.toLong(), second.rawQuery("SELECT COUNT(*) FROM record WHERE dataset=?", arrayOf(s.ds)).use { it.moveToFirst(); it.getLong(0) }) }
+        finally { second.close() }
+        s.v.close(); val reopened = B3Vault.open(context, s.v.name).also { created += it }
+        assertEquals(s.records, reopened.records(s.ds))
+    }
+
     @Test fun keysAreReWrappedForTheDestinationAndNoOtherAliasOpensThem() {
         val s = seed(); val bundle = export(s); val d = vault()
         val fresh = B3Restorer.restore(d, bundle, pw(), capability = cap()).dataset

@@ -51,6 +51,10 @@
 
 任何提交前拒绝：`abort` 只删除本 operation journal 中**未被任何版本引用**的文件、清 stage 行、释放预约（ABORTED）；外来文件永不触碰。进程死亡后由 `reconcile` 做同样的事；已 COMMITTED 的只补完清理。重放同一 operation：已提交则返回同一 receipt（不新建 dataset、不重复计配额）；archive 不同则 ARCHIVE_MISMATCH。
 
+## 6a. 实测发现：SQLCipher 密钥数组的生命周期
+
+首轮 CI（API26/29/35）中，测试夹具在 `openOrCreateDatabase` 之后立即把密钥数组清零。SQLCipher 保留该数组引用，并在连接池（启用 WAL 时）重新打开连接时再次读取，结果数据库文件实际以**全零密钥**加密；原连接照常工作，但以真实密钥新开的独立连接得到 `SQLITE_NOTADB`。修正：密钥数组与数据库同寿命，`close()` 时再清零，并新增回归测试（独立连接与重开都必须用真实密钥读到同一数据）。生产 `DatabaseAccess` 已按此方式在关闭时才清零 passphrase，不受影响；这一点列入外部审查问题（报告 57 §3 第 11 条）：任何正式 B3 实现都必须证明“清零”不会早于库使用者释放密钥。
+
 ## 7. 旧数据集与 ACTIVE 指针
 
 恢复后只有一个 CURRENT。旧 dataset 转为 `RETIRED`（可追溯：`retired_by`），其行、版本、DEK 包裹与密文**全部保留**作为安全回退，LIVE link 改为 `QUARANTINED`，绝不重新关联到新 dataset 的同整数 ID 记录。旧 dataset 何时可清理是负责人决定项（§9 P3）。
