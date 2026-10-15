@@ -27,6 +27,14 @@ try:
 finally:
     subprocess.run(['adb', 'shell', 'pkill', '-INT', 'screenrecord']); recorder.wait(timeout=30); time.sleep(2)
 video = subprocess.run(['adb', 'pull', '/sdcard/demo-walkthrough.mp4', str(out / 'demo-walkthrough.mp4')])
+# PR-B: the full interactive flow, recorded separately.
+recorder = subprocess.Popen(['adb', 'shell', 'screenrecord', '--time-limit', '150', '/sdcard/demo-flows.mp4'])
+time.sleep(1)
+try:
+    instrument('fullScriptedFlow')
+finally:
+    subprocess.run(['adb', 'shell', 'pkill', '-INT', 'screenrecord']); recorder.wait(timeout=30); time.sleep(2)
+flows_video = subprocess.run(['adb', 'pull', '/sdcard/demo-flows.mp4', str(out / 'demo-flows.mp4')])
 subprocess.run(['adb', 'shell', 'cmd', 'uimode', 'night', 'yes'], check=True)
 try:
     time.sleep(2); instrument('overviewScreens')
@@ -38,7 +46,8 @@ for name in names:
 pngs = sorted(p.name for p in out.glob('*.png') if p.stat().st_size > 1000)
 api = subprocess.check_output(['adb', 'shell', 'getprop', 'ro.build.version.sdk'], text=True).strip()
 summary = {'api': api, 'screenshots': pngs, 'video': (out / 'demo-walkthrough.mp4').exists() and video.returncode == 0,
+           'flows_video': (out / 'demo-flows.mp4').exists() and flows_video.returncode == 0,
            'note': 'Real emulator captures of synthetic demo data (debug build only). Night-mode shots start with 9.'}
 (out / 'demo-evidence.json').write_text(json.dumps(summary, indent=2))
-assert len(pngs) >= 8, pngs
+assert len(pngs) >= 18, pngs
 print('PASS: demo walkthrough ran on the emulator; screenshots ' + ', '.join(pngs) + ('; video recorded' if summary['video'] else '; video NOT captured'))

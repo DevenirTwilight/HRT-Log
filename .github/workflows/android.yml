@@ -206,11 +206,13 @@ jobs:
             python3 scripts/run_attachment_poc_restart.py
             python3 scripts/collect_attachment_poc_evidence.py --output app/build/reports/attachment-poc-evidence.json
             python3 scripts/run_attachment_gate3_red.py
+            python3 scripts/run_demo_compat.py
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
           name: attachment-poc-api${{ matrix.api }}
           path: |
+            app/build/reports/demo/
             core/data/build/reports/androidTests/
             core/data/build/reports/gate2/
             core/data/build/reports/gate3/
