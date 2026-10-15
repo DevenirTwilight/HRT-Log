@@ -83,12 +83,12 @@ class TimelineAndDrawerHierarchyTest {
 
     @Test @Config(qualifiers = "w320dp-h640dp") fun drawerKeepsAllTwelveEntriesUnderHeadings() {
         RuntimeEnvironment.setFontScale(2f)
-        assertEquals(Destination.entries.toList().sortedBy { it.ordinal }, DRAWER_GROUPS.flatMap { it.second }.sortedBy { it.ordinal })
-        assertEquals(12, DRAWER_GROUPS.sumOf { it.second.size })
+        assertEquals(Destination.entries.toList().sortedBy { it.ordinal }, DRAWER_GROUPS.flatMap { it.items }.sortedBy { it.ordinal })
+        assertEquals(12, DRAWER_GROUPS.sumOf { it.items.size })
         var picked: Destination? = null
         ui.setContent { NotesTheme(ThemeMode.LIGHT) { DrawerContent(Destination.CALENDAR) { picked = it } } }
         val headings = ui.onAllNodes(SemanticsMatcher.keyIsDefined(SemanticsProperties.Heading)).fetchSemanticsNodes()
-        assertEquals(4, headings.size)
+        assertEquals(3, headings.size)                                            // UI-03: journal, medication, records
         for (d in Destination.entries) {
             ui.onNodeWithTag("drawer-content").performScrollToNode(hasText(s(d.title)))
             ui.onNodeWithTag("drawer-content").onChildren().filterToOne(hasText(s(d.title))).assertIsDisplayed().performClick()

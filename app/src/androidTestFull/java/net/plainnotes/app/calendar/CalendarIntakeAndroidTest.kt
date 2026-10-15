@@ -91,7 +91,7 @@ class CalendarIntakeAndroidTest {
         repeat(2) { activityBack() }
         assertEquals("Back on the calendar goes to the activity", 2, context.activityBacks)
         ui.onNodeWithContentDescription(s(R.string.menu)).performClick()
-        ui.onNodeWithTag("drawer-content").onChildren().filterToOne(hasText(s(R.string.history))).performClick()
+        ui.onNodeWithTag("drawer-content").onChildren().filterToOne(hasText(s(Destination.HISTORY.title))).performClick()
         ui.waitUntil(10_000) { runCatching { ui.onNodeWithTag("drawer-content").assertIsNotDisplayed() }.isSuccess }
         ui.onNodeWithContentDescription(s(R.string.calendar_pick_start)).assertDoesNotExist()  // on History
         activityBack()

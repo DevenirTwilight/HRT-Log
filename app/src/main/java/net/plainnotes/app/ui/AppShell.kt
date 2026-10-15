@@ -38,7 +38,7 @@ enum class Destination(val title: Int, val icon: ImageVector, val ready: Boolean
     TIMELINE(R.string.timeline, Icons.Outlined.Timeline, true),
     MEDICAL(R.string.medical_records, Icons.Outlined.FolderOpen, true),
     VISITS(R.string.visits, Icons.AutoMirrored.Outlined.EventNote, true),
-    HISTORY(R.string.history, Icons.Outlined.History, true),
+    HISTORY(R.string.nav_history, Icons.Outlined.History, true),
     STOCK(R.string.stock, Icons.Outlined.Inventory2, true),
     MEDICATIONS(R.string.medications, Icons.Outlined.Medication, true),
     WELLBEING(R.string.wellbeing, Icons.Outlined.FavoriteBorder, true),
@@ -168,7 +168,7 @@ class UiPrefs(context: Context) {
     }) {
         Scaffold(
             topBar = {
-                TopAppBar(title = { Text(stringResource(if (settingsSub) settingsPage.title else if (destination == Destination.CALENDAR) R.string.app_name else destination.title)) },
+                TopAppBar(title = { Text(stringResource(if (settingsSub) settingsPage.title else if (destination == Destination.CALENDAR) R.string.app_name else destination.title), Modifier.testTag("top-title")) },
                     navigationIcon = {
                         if (settingsSub) IconButton(onClick = { settingsPage = SettingsPage.OVERVIEW }, modifier = Modifier.testTag("settings-back")) {
                             Icon(Icons.AutoMirrored.Outlined.ArrowBack, stringResource(R.string.settings_back)) }
@@ -294,13 +294,24 @@ class UiPrefs(context: Context) {
 }
 
 /** Drawer entries scroll so Settings and About stay reachable on short screens and with large font scales. */
-/** Drawer sections (heading, entries); a null heading is the divider before Settings and About. */
-internal val DRAWER_GROUPS: List<Pair<Int?, List<Destination>>> = listOf(
-    R.string.drawer_group_daily to listOf(Destination.CALENDAR, Destination.HISTORY, Destination.STOCK),
-    R.string.drawer_group_treatment to listOf(Destination.MEDICATIONS, Destination.TIMELINE, Destination.CONCENTRATION, Destination.LABS),
-    R.string.drawer_group_medical to listOf(Destination.MEDICAL, Destination.VISITS),
-    R.string.drawer_group_body to listOf(Destination.WELLBEING),
-    null to listOf(Destination.SETTINGS, Destination.ABOUT),
+/** One drawer section; display order only, the [Destination] enum (saved state, notification entry) is unchanged. */
+internal sealed interface DrawerSection {
+    val items: List<Destination>
+    /** The first entries, with no heading or divider above them. */
+    data class Top(override val items: List<Destination>) : DrawerSection
+    /** A headed group; [key] names its `drawer-group:<key>` test tag. */
+    data class Group(val key: String, val heading: Int, override val items: List<Destination>) : DrawerSection
+    /** A divider, then entries without a heading (Settings and About). */
+    data class Divider(override val items: List<Destination>) : DrawerSection
+}
+
+/** UI-03 (REQUIREMENTS §99): grouped by where the information comes from. */
+internal val DRAWER_GROUPS: List<DrawerSection> = listOf(
+    DrawerSection.Top(listOf(Destination.CALENDAR, Destination.TIMELINE)),
+    DrawerSection.Group("journal", R.string.drawer_group_journal, listOf(Destination.HISTORY, Destination.WELLBEING)),
+    DrawerSection.Group("medication", R.string.drawer_group_medication, listOf(Destination.MEDICATIONS, Destination.STOCK, Destination.CONCENTRATION)),
+    DrawerSection.Group("records", R.string.drawer_group_records, listOf(Destination.MEDICAL, Destination.VISITS, Destination.LABS)),
+    DrawerSection.Divider(listOf(Destination.SETTINGS, Destination.ABOUT)),
 )
 
 @Composable internal fun DrawerContent(selected: Destination, onSelect: (Destination) -> Unit) {
@@ -313,11 +324,14 @@ internal val DRAWER_GROUPS: List<Pair<Int?, List<Destination>>> = listOf(
             Text(stringResource(R.string.app_name), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
         }
         // UI-01 F: grouped display order only; every Destination stays, and the enum (saved state, notification entry) is unchanged.
-        DRAWER_GROUPS.forEach { (group, items) ->
-            if (group == null) HorizontalDivider(Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
-            else Text(stringResource(group), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(start = 28.dp, end = 16.dp, top = 12.dp, bottom = 4.dp).semantics { heading() }.testTag("drawer-group:$group"))
-            items.forEach { d ->
+        DRAWER_GROUPS.forEach { section ->
+            when (section) {
+                is DrawerSection.Top -> Unit
+                is DrawerSection.Divider -> HorizontalDivider(Modifier.padding(vertical = 8.dp, horizontal = 16.dp).testTag("drawer-divider"))
+                is DrawerSection.Group -> Text(stringResource(section.heading), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(start = 28.dp, end = 16.dp, top = 12.dp, bottom = 4.dp).semantics { heading() }.testTag("drawer-group:${section.key}"))
+            }
+            section.items.forEach { d ->
                 NavigationDrawerItem(label = { Text(stringResource(d.title)) }, icon = { Icon(d.icon, null) }, selected = selected == d,
                     badge = if (!d.ready) ({ Text(stringResource(R.string.soon_badge), style = MaterialTheme.typography.labelSmall) }) else null,
                     onClick = { onSelect(d) }, modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding))
