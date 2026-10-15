@@ -1,3 +1,16 @@
+## 当前进度总览 — 2026-10-15
+
+- UI-01：PR #38 **已合并**为 47bd1b2（最终 HEAD 40788f9；push/PR 两组 Android 与 Science 全部成功）。主线复验结果见下一条更新。
+- MED-02B6 PR-A：PR #37 **已合并**为 76bba2a；合并后主线 Android 与 Science 全部成功。
+- MED-02B6 PR-B（PHR-DEMO-FLOWS）开发中：分支 feature/med02b6-phr-demo-flows-20261015。已实现关联/编辑/更正版本/回收站/永久删除/重置，四语字符串，JVM 与 Robolectric 测试，API35 完整脚本流程与 API26/29 基本兼容测试，报告 59。
+- UI-01 合并后主线 47bd1b2 已复验：Android 38749639264 与 Science 38749638770 全部成功。
+- MED-02B6 PR-B：PR #39。首轮 device-tests 因 API35 软键盘遮挡编辑对话框失败，0c4e9cb 已修（仅改测试），等待 CI。
+- UI-02A（REQUIREMENTS §97）：分支 feature/ui02a-settings-20261015。
+  - 已完成：A1 删 5 个字符串、首页“添加库存”、时间线筛选、对比度断言；A2 设置总览加 6 个子页面；A3 token；四语；测试；人工清单；报告 61（含底部导航评估）。
+  - 进行中：截图生成，然后开 PR。
+  - 待办：CI 全绿后合并并复验主线，然后开始 UI-02B（AppShell 状态拆分，从合并后的主线新建分支）。
+- PR #34 仍 OPEN，待负责人处理；`diag/calendar-intake-20261015` 分支待负责人删除。
+
 ## UI-01 界面层级改进 — 2026-10-15
 
 分支 feature/ui01-visual-hierarchy-20261015，基于 f16c9d6。任务书原文归档于 sources/ui01/，范围与禁止事项见 REQUIREMENTS §96（负责人追加授权自动合并）。

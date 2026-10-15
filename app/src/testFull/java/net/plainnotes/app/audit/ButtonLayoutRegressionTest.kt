@@ -54,9 +54,12 @@ class ButtonLayoutRegressionTest(private val locale:String,private val width:Int
                 2->CalendarScreen(state,LocalDate.of(2026,10,28),{},{},{},{},PaddingValues(),extra=extra)
                 3->SettingsScreen(Appearance(ThemeMode.SYSTEM,false),{},false,{},{},{},PaddingValues())
                 4->HistoryScreen(state,records,{},{},PaddingValues())
+                // UI-02 A2: the settings sections moved to pages; each page gets the same readability/48dp checks.
+                else->SettingsScreen(Appearance(ThemeMode.SYSTEM,false),{},false,{},{},{},PaddingValues(),page=SettingsPage.entries[page-4],
+                    wellbeingSlot={RegionSection("FR"){}},privacySlot={PrivacySection(1,false){}})
             }
         }}}
-        repeat(5){p->
+        repeat(5+SettingsPage.entries.size-1){p->
             rule.runOnIdle{page=p};rule.waitForIdle()
             rule.onAllNodes(SemanticsMatcher.keyIsDefined(SemanticsProperties.Text),useUnmergedTree=true).fetchSemanticsNodes().forEach{n->
                 val results=mutableListOf<TextLayoutResult>();n.config.getOrNull(SemanticsActions.GetTextLayoutResult)?.action?.invoke(results)
