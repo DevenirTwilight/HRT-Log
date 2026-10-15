@@ -9,7 +9,6 @@
 - 只改展示层；没有新的写入路径；未改 schema/备份/加密/锁/伪装/PK/PDF；不签名、不交付。
 - 下一步：CI 全绿 → 开 PR → 按授权普通合并 → 复验默认分支。
 
-分支 feature/ui01-visual-hierarchy-20261015，基于 f16c9d6。任务书原文归档于 sources/ui01/，范围与禁止事项见 REQUIREMENTS §96（负责人追加授权自动合并）。按 A→H 每节一个提交；进度：开工（§96 + 原文归档）。涉及文件 AppShell/CalendarScreen/Components/LongitudinalScreen/StockScreen 在保护矩阵中均为 HISTORY_ONLY，MedicalRecordsScreen 不在矩阵中；不改任何 PK_DISPLAY_REVIEW 文件。
 
 ## MED-02B6 / PHR-DEMO 当前状态 — 2026-10-15
 
