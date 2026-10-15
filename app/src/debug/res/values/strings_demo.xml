@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MED-02B6 demo, debug build only. Synthetic. -->
+<resources>
+    <string name="demo_launcher_label">HRT Log demo archive (synthetic)</string>
+    <string name="demo_banner">SYNTHETIC DEMO — not for storing real medical originals</string>
+    <string name="demo_breadcrumb">Medical records › Demo document library</string>
+    <string name="demo_tab_inbox">Inbox</string>
+    <string name="demo_tab_all">All files</string>
+    <string name="demo_tab_categories">Categories</string>
+    <string name="demo_tab_trash">Bin</string>
+    <string name="demo_search">Search title, category, source or date</string>
+    <string name="demo_empty">Nothing here</string>
+    <string name="demo_uncategorised">Uncategorised</string>
+    <string name="demo_not_linked">Not linked</string>
+    <string name="demo_linked">Linked to %1$d records</string>
+    <string name="demo_date_unknown">Clinical date unknown</string>
+    <string name="demo_date_day">Clinical date: %1$s</string>
+    <string name="demo_date_month">Clinical date: %1$s (month only)</string>
+    <string name="demo_date_year">Clinical date: %1$s (year only)</string>
+    <string name="demo_imported">Added %1$s</string>
+    <string name="demo_status_metadata">Metadata only — no original file</string>
+    <string name="demo_status_test">Synthetic test file</string>
+    <string name="demo_status_missing">Original missing — cannot be opened</string>
+    <string name="demo_status_corrupt">Original damaged — cannot be opened</string>
+    <string name="demo_status_quarantined">Quarantined — kept apart, not opened</string>
+    <string name="demo_preview_test">Synthetic placeholder preview. No real file was read or authenticated.</string>
+    <string name="demo_source">Source (as stated by you): %1$s</string>
+    <string name="demo_source_none">Source not stated</string>
+    <string name="demo_source_hint">A statement you entered, not a verified signature or seal.</string>
+    <string name="demo_note">Note</string>
+    <string name="demo_versions">Versions</string>
+    <string name="demo_version_current">v%1$d · current</string>
+    <string name="demo_version_retained">v%1$d · kept (replaced)</string>
+    <string name="demo_version_meta">Added %1$s · %2$d KiB</string>
+    <string name="demo_links">Linked records</string>
+    <string name="demo_links_none">No links. Nothing is linked automatically by date, file hash or number.</string>
+    <string name="demo_link_visit">Visit</string>
+    <string name="demo_link_lab">Lab</string>
+    <string name="demo_link_retired">retired dataset</string>
+    <string name="demo_back">Back</string>
+    <string name="demo_cat_lab_report">Lab report</string>
+    <string name="demo_cat_imaging">Imaging</string>
+    <string name="demo_cat_prescription">Prescription</string>
+    <string name="demo_cat_letter">Letter</string>
+    <string name="demo_cat_other">Other</string>
+    <string name="demo_categories_count">%1$s (%2$d)</string>
+    <string name="demo_evidence_title">Test evidence replay — not a backup of your files</string>
+    <string name="demo_evidence_body">Recorded in a test-only CI run (PR #36): a synthetic bundle was authenticated, the old dataset kept, the new dataset made active. This app cannot back up medical files.</string>
+    <string name="demo_inbox_state">Waiting in the inbox</string>
+    <string name="demo_correction">Correction: %1$s</string>
+</resources>

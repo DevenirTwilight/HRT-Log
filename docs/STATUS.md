@@ -2,6 +2,12 @@
 
 展示层改进 A–H（今天卡、首页库存精简、日历双编码、库存卡单一主操作、时间线展示、抽屉分组、医疗档案首页、四语文案），报告 60，REQUIREMENTS §96。数据、计算与安全行为不变。
 
+## MED-02B6 / PHR-DEMO 当前状态 — 2026-10-15
+
+- 默认分支 f16c9d6：PR #36（MED-02B5 / B3-BACKUP-GATE，test-only）**已合并**，合并后 Android 38726656377 与 Science 38726656317 全部成功。B3-BACKUP-GATE RESEARCH_GO；生产 B3 NOT_IMPLEMENTED；B2 NO-GO；NOT_REVIEWED_EXTERNALLY。
+- PR-A（PHR-DEMO-UI）开发中：分支 feature/med02b6-phr-demo-ui-20261015。debug 构建专用的合成医疗资料库演示（待整理/全部/类别/回收站、搜索、详情、版本、显式关联、日期精度、来源声明、缺失/损坏/隔离状态，四语常驻“合成示例”横幅）；release 隔离检查器新增演示标记。无启动器图标，adb 启动，仅 emulator。报告58。
+- PR #34 仍 OPEN，等待负责人独立处理。临时诊断分支 `diag/calendar-intake-20261015` 已不被任何 PR/CI 引用，建议负责人删除（会话无权限）。
+
 ## MED-02B5 当前状态 — 2026-10-15
 
 MED-02B5 是开发批次名，不是附件路线 B5（PDF）。
