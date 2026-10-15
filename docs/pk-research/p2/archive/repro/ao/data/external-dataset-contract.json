@@ -1,0 +1,23 @@
+{
+  "contract_version": "P2-AO-v1",
+  "use": "future authorized offline audit, never ingest real identifiable samples into repo/cloud chat",
+  "discovery_minimum": [
+    "study_id_and_publication_doi", "human_subject_pseudonym_and_study_arm", "participant_sampling_visits", 
+    "estradiol_molecule_formulation_and_route", "actual_dose_mg_and_actual_taken_timestamp_with_timezone",
+    "sample_collection_timestamp_with_timezone", "estradiol_serum_concentration_value_and_unit",
+    "assay_method_and_assay_laboratory", "assay_lloq_and_censoring_flags", "baseline_pre_dose_sample",
+    "relevant_prior_dose_history_and_other_exogenous_E2", "ethics_or_data_use_permission",
+    "proof_not_exposed_during_M2_development"
+  ],
+  "nice_to_have": [
+    "within_subject_duplicate_aliquot", "batch_assay_and_quality_control", "actual_dissolution_or_hold_duration",
+    "missed_or_delayed_doses", "body_mass_bmi", "medication_changes", "E1_measurements",
+    "8h_12h_18h_24h_or_steady_state_trough_measurements"
+  ],
+  "study_level_provenance": [
+    "registry_ids", "recruitment_start_end", "recruiting_sites", "parent_study_id", "participant_overlap_attested",
+    "data_file_sha256", "acquisition_date", "permissions", "assay_unit_definitions",
+    "frozen_prevalidation_model_revision_sha256", "analysis_plan_prevalidation_date"
+  ],
+  "external_gate": "Requires independently untouched human observations and verified participant-level time-series; cannot be satisfied by synthetic rows, digitized published group curve, or inaccessible OSF DOI."
+}

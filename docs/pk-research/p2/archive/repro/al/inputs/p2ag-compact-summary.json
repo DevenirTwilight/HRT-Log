@@ -1,0 +1,232 @@
+{
+  "phase": "P2-AG",
+  "qualifier": "Previously exposed and analyst-digitized sources; hypothesis and anchor conditioned, not blind clinical validation.",
+  "training_n_timepoints": 7,
+  "n_training_study_specific_nuisance": 4,
+  "M1_n_shared_shape_parameters": 2,
+  "M2_n_shared_shape_parameters": 4,
+  "train_vs_validation_time_overlap": "Early studies 0..1h; Price has 1..24h and is used at 1h only for amplitude calibration.",
+  "comparison": {
+    "M1_rosano_cap_100": {
+      "train_pseudoloss": 0.8026071154098421,
+      "n_fast": 4,
+      "train_opt_optimizations": 12,
+      "heldout_by_price_baseline": {
+        "0": {
+          "standardized_rmse": 4.938789691987316,
+          "raw_rmse_pg_ml": 43.41588290501112,
+          "early_rmse_pg_ml": 50.44320552282369,
+          "late_rmse_pg_ml": 28.029307223475577,
+          "t2_prediction_pg_ml": 204.65212442631147,
+          "t24_prediction_pg_ml": 4.909938067423384e-10
+        },
+        "6": {
+          "standardized_rmse": 4.207732182055135,
+          "raw_rmse_pg_ml": 38.22375055553267,
+          "early_rmse_pg_ml": 45.20951409556726,
+          "late_rmse_pg_ml": 22.127961409840704,
+          "t2_prediction_pg_ml": 207.92342943396065,
+          "t24_prediction_pg_ml": 6.000000000484447
+        },
+        "12": {
+          "standardized_rmse": 3.5018315372227256,
+          "raw_rmse_pg_ml": 33.162362094515785,
+          "early_rmse_pg_ml": 40.00246131992528,
+          "late_rmse_pg_ml": 16.29880894668509,
+          "t2_prediction_pg_ml": 211.19473444160982,
+          "t24_prediction_pg_ml": 12.0000000004779
+        },
+        "18": {
+          "standardized_rmse": 2.8399094385623944,
+          "raw_rmse_pg_ml": 28.301949542217347,
+          "early_rmse_pg_ml": 34.83399523600906,
+          "late_rmse_pg_ml": 10.660935897162487,
+          "t2_prediction_pg_ml": 214.466039449259,
+          "t24_prediction_pg_ml": 18.000000000471353
+        },
+        "24": {
+          "standardized_rmse": 2.2609278246655187,
+          "raw_rmse_pg_ml": 23.766139171916453,
+          "early_rmse_pg_ml": 29.724251077324798,
+          "late_rmse_pg_ml": 5.801708328070004,
+          "t2_prediction_pg_ml": 217.7373444569082,
+          "t24_prediction_pg_ml": 24.00000000046481
+        }
+      },
+      "at_bound_ke": false,
+      "min_score_is_not_external_accuracy": true
+    },
+    "M2_rosano_cap_100": {
+      "train_pseudoloss": 1.681377281529156e-14,
+      "n_fast": 10,
+      "train_opt_optimizations": 12,
+      "heldout_by_price_baseline": {
+        "0": {
+          "standardized_rmse": 5.016792177434084,
+          "raw_rmse_pg_ml": 54.38210912237645,
+          "early_rmse_pg_ml": 65.2783717547805,
+          "late_rmse_pg_ml": 28.00584014098876,
+          "t2_prediction_pg_ml": 137.71521763512797,
+          "t24_prediction_pg_ml": 1.2612400176585187e-05
+        },
+        "6": {
+          "standardized_rmse": 4.2943941238255,
+          "raw_rmse_pg_ml": 49.443180344227436,
+          "early_rmse_pg_ml": 60.151952267290454,
+          "late_rmse_pg_ml": 22.10382962733259,
+          "t2_prediction_pg_ml": 141.87901473332627,
+          "t24_prediction_pg_ml": 6.000012444234841
+        },
+        "12": {
+          "standardized_rmse": 3.600094443246974,
+          "raw_rmse_pg_ml": 44.68142326430381,
+          "early_rmse_pg_ml": 55.09439394504787,
+          "late_rmse_pg_ml": 16.27344932223775,
+          "t2_prediction_pg_ml": 146.04281183152455,
+          "t24_prediction_pg_ml": 12.000012276069505
+        },
+        "18": {
+          "standardized_rmse": 2.953774040141881,
+          "raw_rmse_pg_ml": 40.159909109885604,
+          "early_rmse_pg_ml": 50.12654453253821,
+          "late_rmse_pg_ml": 10.633188042656828,
+          "t2_prediction_pg_ml": 150.20660892972285,
+          "t24_prediction_pg_ml": 18.00001210790417
+        },
+        "24": {
+          "standardized_rmse": 2.3946031258857983,
+          "raw_rmse_pg_ml": 35.96935121632038,
+          "early_rmse_pg_ml": 45.27794197363235,
+          "late_rmse_pg_ml": 5.770432350814413,
+          "t2_prediction_pg_ml": 154.37040602792115,
+          "t24_prediction_pg_ml": 24.000011939738833
+        }
+      },
+      "at_bound_ke": true,
+      "min_score_is_not_external_accuracy": true
+    },
+    "M1_rosano_cap_225": {
+      "train_pseudoloss": 0.2087955074858086,
+      "n_fast": 6,
+      "train_opt_optimizations": 12,
+      "heldout_by_price_baseline": {
+        "0": {
+          "standardized_rmse": 5.4296763332001845,
+          "raw_rmse_pg_ml": 63.55959403117803,
+          "early_rmse_pg_ml": 77.41004702318467,
+          "late_rmse_pg_ml": 28.02974043527682,
+          "t2_prediction_pg_ml": 124.08597670438063,
+          "t24_prediction_pg_ml": 6.431132605330981e-14
+        },
+        "6": {
+          "standardized_rmse": 4.7270836079153,
+          "raw_rmse_pg_ml": 58.65692733327662,
+          "early_rmse_pg_ml": 72.18875503584461,
+          "late_rmse_pg_ml": 22.128407273038896,
+          "t2_prediction_pg_ml": 128.4314970149889,
+          "t24_prediction_pg_ml": 6.000000000000063
+        },
+        "12": {
+          "standardized_rmse": 4.0575872101107855,
+          "raw_rmse_pg_ml": 53.92569495915465,
+          "early_rmse_pg_ml": 67.03259686908618,
+          "late_rmse_pg_ml": 16.2992780980761,
+          "t2_prediction_pg_ml": 132.77701732559714,
+          "t24_prediction_pg_ml": 12.000000000000062
+        },
+        "18": {
+          "standardized_rmse": 3.440562261842313,
+          "raw_rmse_pg_ml": 49.41516317232669,
+          "early_rmse_pg_ml": 61.95783605240248,
+          "late_rmse_pg_ml": 10.66145032815988,
+          "t2_prediction_pg_ml": 137.1225376362054,
+          "t24_prediction_pg_ml": 18.00000000000006
+        },
+        "24": {
+          "standardized_rmse": 2.909584775547557,
+          "raw_rmse_pg_ml": 45.19146432392869,
+          "early_rmse_pg_ml": 56.986222628579874,
+          "late_rmse_pg_ml": 5.802290770520891,
+          "t2_prediction_pg_ml": 141.46805794681364,
+          "t24_prediction_pg_ml": 24.00000000000006
+        }
+      },
+      "at_bound_ke": true,
+      "min_score_is_not_external_accuracy": true
+    },
+    "M2_rosano_cap_225": {
+      "train_pseudoloss": 5.329762155695857e-13,
+      "n_fast": 10,
+      "train_opt_optimizations": 12,
+      "heldout_by_price_baseline": {
+        "0": {
+          "standardized_rmse": 5.016790305510158,
+          "raw_rmse_pg_ml": 54.382034507868205,
+          "early_rmse_pg_ml": 65.27827230821259,
+          "late_rmse_pg_ml": 28.005840105199262,
+          "t2_prediction_pg_ml": 137.71544816269048,
+          "t24_prediction_pg_ml": 1.2612404118316505e-05
+        },
+        "6": {
+          "standardized_rmse": 4.294392135398503,
+          "raw_rmse_pg_ml": 49.44310430521647,
+          "early_rmse_pg_ml": 60.15185227238169,
+          "late_rmse_pg_ml": 22.10382959051796,
+          "t2_prediction_pg_ml": 141.87924218718794,
+          "t24_prediction_pg_ml": 6.00001244423873
+        },
+        "12": {
+          "standardized_rmse": 3.600092302534495,
+          "raw_rmse_pg_ml": 44.68134564545046,
+          "early_rmse_pg_ml": 55.0942932339727,
+          "late_rmse_pg_ml": 16.273449283529967,
+          "t2_prediction_pg_ml": 146.0430362116854,
+          "t24_prediction_pg_ml": 12.000012276073342
+        },
+        "18": {
+          "standardized_rmse": 2.9537717061491926,
+          "raw_rmse_pg_ml": 40.15982984612939,
+          "early_rmse_pg_ml": 50.12644293187753,
+          "late_rmse_pg_ml": 10.633188000260397,
+          "t2_prediction_pg_ml": 150.20683023618287,
+          "t24_prediction_pg_ml": 18.000012107907953
+        },
+        "24": {
+          "standardized_rmse": 2.394600578052778,
+          "raw_rmse_pg_ml": 35.96927045523812,
+          "early_rmse_pg_ml": 45.27783932514716,
+          "late_rmse_pg_ml": 5.770432302907323,
+          "t2_prediction_pg_ml": 154.37062426068033,
+          "t24_prediction_pg_ml": 24.000011939742567
+        }
+      },
+      "at_bound_ke": true,
+      "min_score_is_not_external_accuracy": true
+    }
+  },
+  "anchor_interval_checks": {
+    "hypothetical_1h_figure_read_range": [
+      435.0,
+      465.0
+    ],
+    "hypothetical_price_baseline_range": [
+      0.0,
+      24.0
+    ],
+    "m2_predicted_price_t2_range_pg_ml": [
+      133.1247103806237,
+      158.9609132824254
+    ],
+    "manual_price_t2_read_range": [
+      192.5,
+      257.5
+    ],
+    "manual_range_disjoint": true,
+    "manual_figure_ranges_are_not_statistical_confidence_bands": true
+  },
+  "leaky_in_sample_reference": {
+    "standardized_rmse": 0.32265402565575757,
+    "raw_rmse_pg_ml": 8.376780024970293,
+    "not_external_validation": true
+  }
+}

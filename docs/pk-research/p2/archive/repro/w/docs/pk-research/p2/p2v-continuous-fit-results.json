@@ -1,0 +1,1888 @@
+{
+  "phase": "P2-V",
+  "source_repo_default_head_checked": "7a45741f1a83646195db0a0e20c9806da4878af3",
+  "sources": "P2-U published aggregate and manual Price plot points",
+  "Doll_used": false,
+  "method": "continuous multi-start constrained GLS, same shape with separately profiled amplitudes/baselines",
+  "not_population_NLME": true,
+  "reported_covariance_only_hypothetical": true,
+  "not_blinded_external_validation": true,
+  "human_coverage_proven": false,
+  "production_model_or_database_modified": false,
+  "scenarios": {
+    "primary": {
+      "scenario": {
+        "delta": 0.15,
+        "rho": 0.0
+      },
+      "n_sources": 3,
+      "fit": {
+        "M0": {
+          "loss": 4.186762247234725,
+          "parameters": {
+            "family": "M0",
+            "n_fast": 1,
+            "k_fast_per_h": 0.5675575752930232,
+            "k_elim_per_h": 0.5175575752930232,
+            "k_slow_per_h": null,
+            "effective_slow_weight": 0.0
+          },
+          "study_profiles": {
+            "Rosano1997_PK25": {
+              "pseudo_loss": 6.769924688071147,
+              "baseline": 0.0,
+              "amplitude_at_1h": 1124.2126230764777,
+              "predictions": [
+                294.44986518546546,
+                537.9891270858591,
+                897.9978978386997,
+                1124.2126230764777
+              ]
+            },
+            "Komesaroff1998_n10": {
+              "pseudo_loss": 1.9845343937136894,
+              "baseline": 88.72622802176635,
+              "amplitude_at_1h": 2169.0857610525727,
+              "predictions": [
+                88.72622802176635,
+                903.2366436764382,
+                1511.1456707267196
+              ]
+            },
+            "Price1997_figure1": {
+              "pseudo_loss": 3.8058276599193386,
+              "baseline": 24.0,
+              "amplitude_at_1h": 101.15955597863457,
+              "predictions": [
+                125.15955597863457,
+                141.63670512959047,
+                126.61963927568083,
+                103.58953502737454,
+                64.41955296924729,
+                42.261429955407536,
+                27.15290246162248,
+                24.185818092461677,
+                24.00980483636852
+              ]
+            }
+          },
+          "n_optimizations": 2,
+          "optimizer_success_for_best": true,
+          "local_multistart_not_global_proof": true,
+          "best_for_each_n": {
+            "1": {
+              "loss": 4.186762247234725,
+              "param": {
+                "family": "M0",
+                "n_fast": 1,
+                "k_fast_per_h": 0.5675575752930232,
+                "k_elim_per_h": 0.5175575752930232,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            }
+          },
+          "tail_q6_index": 0.21633443839206432,
+          "price_auc_diagnostic": {
+            "price_predicted_increment_AUC0_24": 593.332434101673,
+            "price_manual_figure_increment_AUC_at_fitted_baseline": 993.5,
+            "price_author_table_AUC0_24": 2109,
+            "price_table_minus_model_AUC": 1515.667565898327,
+            "same_cohort_fig_and_table_not_independent": true,
+            "hypothetical_predose_concentration": 24.0
+          }
+        },
+        "M1": {
+          "loss": 0.5930991605685234,
+          "parameters": {
+            "family": "M1",
+            "n_fast": 8,
+            "k_fast_per_h": 14.424207816930702,
+            "k_elim_per_h": 0.5006048829941504,
+            "k_slow_per_h": null,
+            "effective_slow_weight": 0.0
+          },
+          "study_profiles": {
+            "Rosano1997_PK25": {
+              "pseudo_loss": 0.06793476258724909,
+              "baseline": 220.27369327147784,
+              "amplitude_at_1h": 1923.506572626748,
+              "predictions": [
+                228.5189752784102,
+                494.29424819686045,
+                1884.5877996577653,
+                2143.780265898226
+              ]
+            },
+            "Komesaroff1998_n10": {
+              "pseudo_loss": 0.4574295155545038,
+              "baseline": 90.28817160603276,
+              "amplitude_at_1h": 3644.5749783750457,
+              "predictions": [
+                90.28817160603276,
+                232.98064866916081,
+                2005.2677174571988
+              ]
+            },
+            "Price1997_figure1": {
+              "pseudo_loss": 1.2539332035638173,
+              "baseline": 24.0,
+              "amplitude_at_1h": 308.47544485764786,
+              "predictions": [
+                332.47544485764786,
+                217.36208389042346,
+                141.2094334167124,
+                95.0481261739101,
+                50.10554424272697,
+                33.59208183113535,
+                25.295009999700508,
+                24.064241177419294,
+                24.003186793057328
+              ]
+            }
+          },
+          "n_optimizations": 14,
+          "optimizer_success_for_best": true,
+          "local_multistart_not_global_proof": true,
+          "best_for_each_n": {
+            "2": {
+              "loss": 1.707333573561006,
+              "param": {
+                "family": "M1",
+                "n_fast": 2,
+                "k_fast_per_h": 2.036756682813341,
+                "k_elim_per_h": 0.49093808745604683,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            },
+            "3": {
+              "loss": 1.0901396846398914,
+              "param": {
+                "family": "M1",
+                "n_fast": 3,
+                "k_fast_per_h": 3.78833611831145,
+                "k_elim_per_h": 0.5092258960690352,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            },
+            "4": {
+              "loss": 0.8112626830131315,
+              "param": {
+                "family": "M1",
+                "n_fast": 4,
+                "k_fast_per_h": 5.752066442983793,
+                "k_elim_per_h": 0.5158352900431866,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            },
+            "5": {
+              "loss": 0.680541440882931,
+              "param": {
+                "family": "M1",
+                "n_fast": 5,
+                "k_fast_per_h": 7.8325855975885625,
+                "k_elim_per_h": 0.5132105488772394,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            },
+            "6": {
+              "loss": 0.6199837775953722,
+              "param": {
+                "family": "M1",
+                "n_fast": 6,
+                "k_fast_per_h": 9.98289804829072,
+                "k_elim_per_h": 0.5085009115909114,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            },
+            "7": {
+              "loss": 0.5961278464187452,
+              "param": {
+                "family": "M1",
+                "n_fast": 7,
+                "k_fast_per_h": 12.182096925614735,
+                "k_elim_per_h": 0.5041880514162416,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            },
+            "8": {
+              "loss": 0.5930991605685234,
+              "param": {
+                "family": "M1",
+                "n_fast": 8,
+                "k_fast_per_h": 14.424207816930702,
+                "k_elim_per_h": 0.5006048829941504,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            }
+          },
+          "tail_q6_index": 0.04452242311109612,
+          "bounded_study_time_scale_sensitivity": {
+            "max_absolute_scale": 1.25,
+            "assumed_reference_scale": 1.2,
+            "regularization_weight": 0.3,
+            "penalized_objective": 0.5437617856801308,
+            "unpenalized_loss": 0.49589200299316366,
+            "time_multipliers": {
+              "Rosano1997_PK25": 0.910072132014243,
+              "Komesaroff1998_n10": 1.08667633863201,
+              "Price1997_figure1": 1.011167711526337
+            },
+            "refitted_global_parameters": {
+              "family": "M1",
+              "n_fast": 8,
+              "k_fast_per_h": 15.915750048679035,
+              "k_elim_per_h": 0.49314806708352227,
+              "k_slow_per_h": null,
+              "effective_slow_weight": 0.0
+            },
+            "not_empirical_random_effects": true
+          },
+          "price_auc_diagnostic": {
+            "price_predicted_increment_AUC0_24": 813.4765428466991,
+            "price_manual_figure_increment_AUC_at_fitted_baseline": 993.5,
+            "price_author_table_AUC0_24": 2109,
+            "price_table_minus_model_AUC": 1295.523457153301,
+            "same_cohort_fig_and_table_not_independent": true,
+            "hypothetical_predose_concentration": 24.0
+          }
+        },
+        "M2": {
+          "loss": 0.04079956427346082,
+          "parameters": {
+            "family": "M2",
+            "n_fast": 8,
+            "k_fast_per_h": 12.52860184652404,
+            "k_elim_per_h": 1.3205143102855312,
+            "k_slow_per_h": 0.23352691574436912,
+            "effective_slow_weight": 0.4960174991339771
+          },
+          "study_profiles": {
+            "Rosano1997_PK25": {
+              "pseudo_loss": 0.06218443128529821,
+              "baseline": 123.70409793597615,
+              "amplitude_at_1h": 2070.4815298286644,
+              "predictions": [
+                231.02390817470015,
+                482.88193725136307,
+                1865.7117274529182,
+                2194.1856277646407
+              ]
+            },
+            "Komesaroff1998_n10": {
+              "pseudo_loss": 0.017030296994828928,
+              "baseline": 89.54720511086983,
+              "amplitude_at_1h": 3829.4585741512874,
+              "predictions": [
+                89.54720511086983,
+                438.9116354049116,
+                1985.8609415602464
+              ]
+            },
+            "Price1997_figure1": {
+              "pseudo_loss": 0.04318396454025532,
+              "baseline": 23.74455378588828,
+              "amplitude_at_1h": 436.8532056894461,
+              "predictions": [
+                460.5977594753344,
+                211.65508172007011,
+                118.79848903585017,
+                84.65514432317885,
+                57.870509924707285,
+                44.847167676189194,
+                32.02214874164623,
+                25.783367700139642,
+                24.246735470248485
+              ]
+            }
+          },
+          "n_optimizations": 14,
+          "optimizer_success_for_best": true,
+          "local_multistart_not_global_proof": true,
+          "best_for_each_n": {
+            "2": {
+              "loss": 1.404756009839739,
+              "param": {
+                "family": "M2",
+                "n_fast": 2,
+                "k_fast_per_h": 1.755401169242875,
+                "k_elim_per_h": 1.2396405035406726,
+                "k_slow_per_h": 0.07948956982861802,
+                "effective_slow_weight": 0.4463089568197163
+              }
+            },
+            "3": {
+              "loss": 0.6320837245428423,
+              "param": {
+                "family": "M2",
+                "n_fast": 3,
+                "k_fast_per_h": 3.131800658606994,
+                "k_elim_per_h": 1.4425500823227273,
+                "k_slow_per_h": 0.10773183309763805,
+                "effective_slow_weight": 0.4675113301321298
+              }
+            },
+            "4": {
+              "loss": 0.3042616063599836,
+              "param": {
+                "family": "M2",
+                "n_fast": 4,
+                "k_fast_per_h": 4.83992489009573,
+                "k_elim_per_h": 1.3632253565285377,
+                "k_slow_per_h": 0.13492373199117788,
+                "effective_slow_weight": 0.4592895115110633
+              }
+            },
+            "5": {
+              "loss": 0.16057784644433656,
+              "param": {
+                "family": "M2",
+                "n_fast": 5,
+                "k_fast_per_h": 6.701383619161616,
+                "k_elim_per_h": 1.304333803772284,
+                "k_slow_per_h": 0.16129962842978127,
+                "effective_slow_weight": 0.45798487451693326
+              }
+            },
+            "6": {
+              "loss": 0.0935133368725181,
+              "param": {
+                "family": "M2",
+                "n_fast": 6,
+                "k_fast_per_h": 8.645469960322673,
+                "k_elim_per_h": 1.2823733422406014,
+                "k_slow_per_h": 0.1870452839194953,
+                "effective_slow_weight": 0.46511684597726005
+              }
+            },
+            "7": {
+              "loss": 0.05887904133804701,
+              "param": {
+                "family": "M2",
+                "n_fast": 7,
+                "k_fast_per_h": 10.597096377762291,
+                "k_elim_per_h": 1.2930599446189732,
+                "k_slow_per_h": 0.21156942889823802,
+                "effective_slow_weight": 0.4790163664754996
+              }
+            },
+            "8": {
+              "loss": 0.04079956427346082,
+              "param": {
+                "family": "M2",
+                "n_fast": 8,
+                "k_fast_per_h": 12.52860184652404,
+                "k_elim_per_h": 1.3205143102855312,
+                "k_slow_per_h": 0.23352691574436912,
+                "effective_slow_weight": 0.4960174991339771
+              }
+            }
+          },
+          "tail_q6_index": 0.051629085519196934,
+          "bounded_study_time_scale_sensitivity": {
+            "max_absolute_scale": 1.25,
+            "assumed_reference_scale": 1.2,
+            "regularization_weight": 0.3,
+            "penalized_objective": 0.03690453436636588,
+            "unpenalized_loss": 0.033153942040854874,
+            "time_multipliers": {
+              "Rosano1997_PK25": 1.0281513399819728,
+              "Komesaroff1998_n10": 0.9928753934859718,
+              "Price1997_figure1": 0.9795986895081408
+            },
+            "refitted_global_parameters": {
+              "family": "M2",
+              "n_fast": 8,
+              "k_fast_per_h": 12.110119426557743,
+              "k_elim_per_h": 1.3548416377026062,
+              "k_slow_per_h": 0.22879048260774365,
+              "effective_slow_weight": 0.4948277643584516
+            },
+            "not_empirical_random_effects": true
+          },
+          "price_auc_diagnostic": {
+            "price_predicted_increment_AUC0_24": 997.8707119454449,
+            "price_manual_figure_increment_AUC_at_fitted_baseline": 999.5029860316254,
+            "price_author_table_AUC0_24": 2109,
+            "price_table_minus_model_AUC": 1111.1292880545552,
+            "same_cohort_fig_and_table_not_independent": true,
+            "hypothetical_predose_concentration": 23.74455378588828
+          }
+        }
+      }
+    },
+    "wide_discrepancy": {
+      "scenario": {
+        "delta": 0.3,
+        "rho": 0.0
+      },
+      "n_sources": 3,
+      "fit": {
+        "M0": {
+          "loss": 1.2015432774759491,
+          "parameters": {
+            "family": "M0",
+            "n_fast": 1,
+            "k_fast_per_h": 0.5459964631069765,
+            "k_elim_per_h": 0.4959964631069764,
+            "k_slow_per_h": null,
+            "effective_slow_weight": 0.0
+          },
+          "study_profiles": {
+            "Rosano1997_PK25": {
+              "pseudo_loss": 1.6562461840511629,
+              "baseline": 0.0,
+              "amplitude_at_1h": 1142.712660714143,
+              "predictions": [
+                293.96573731062136,
+                539.0381448261934,
+                906.2387141184456,
+                1142.712660714143
+              ]
+            },
+            "Komesaroff1998_n10": {
+              "pseudo_loss": 0.9395426444198337,
+              "baseline": 88.10382464496737,
+              "amplitude_at_1h": 1616.9537063890557,
+              "predictions": [
+                88.10382464496737,
+                685.5442438182953,
+                1137.0823722674115
+              ]
+            },
+            "Price1997_figure1": {
+              "pseudo_loss": 1.0088410039568507,
+              "baseline": 24.0,
+              "amplitude_at_1h": 94.05027901881544,
+              "predictions": [
+                118.05027901881544,
+                135.75318199943663,
+                123.61194077351357,
+                102.94066080801387,
+                65.85660889717153,
+                43.743996257456246,
+                27.715919542160172,
+                24.249245310634702,
+                24.014967958870937
+              ]
+            }
+          },
+          "n_optimizations": 2,
+          "optimizer_success_for_best": true,
+          "local_multistart_not_global_proof": true,
+          "best_for_each_n": {
+            "1": {
+              "loss": 1.2015432774759491,
+              "param": {
+                "family": "M0",
+                "n_fast": 1,
+                "k_fast_per_h": 0.5459964631069765,
+                "k_elim_per_h": 0.4959964631069764,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            }
+          },
+          "tail_q6_index": 0.24368688704277672,
+          "price_auc_diagnostic": {
+            "price_predicted_increment_AUC0_24": 586.8915730217201,
+            "price_manual_figure_increment_AUC_at_fitted_baseline": 993.5,
+            "price_author_table_AUC0_24": 2109,
+            "price_table_minus_model_AUC": 1522.10842697828,
+            "same_cohort_fig_and_table_not_independent": true,
+            "hypothetical_predose_concentration": 24.0
+          }
+        },
+        "M1": {
+          "loss": 0.19898236924156787,
+          "parameters": {
+            "family": "M1",
+            "n_fast": 5,
+            "k_fast_per_h": 8.096685299162111,
+            "k_elim_per_h": 0.4993962374101342,
+            "k_slow_per_h": null,
+            "effective_slow_weight": 0.0
+          },
+          "study_profiles": {
+            "Rosano1997_PK25": {
+              "pseudo_loss": 0.13440009891168686,
+              "baseline": 187.65794166461365,
+              "amplitude_at_1h": 1948.2706743608228,
+              "predictions": [
+                220.0884968093489,
+                539.3218236644202,
+                1689.0462554645826,
+                2135.9286160254364
+              ]
+            },
+            "Komesaroff1998_n10": {
+              "pseudo_loss": 0.07843031691538818,
+              "baseline": 90.65368256823085,
+              "amplitude_at_1h": 4078.1588947947766,
+              "predictions": [
+                90.65368256823085,
+                389.12048051165664,
+                2076.5648891542796
+              ]
+            },
+            "Price1997_figure1": {
+              "pseudo_loss": 0.3841166918976286,
+              "baseline": 24.0,
+              "amplitude_at_1h": 280.7885031129656,
+              "predictions": [
+                304.7885031129656,
+                218.63819765597898,
+                142.21256651834364,
+                95.74297073615591,
+                50.42465322729115,
+                33.732832209418945,
+                25.320380541817375,
+                24.06597644859193,
+                24.003296694877683
+              ]
+            }
+          },
+          "n_optimizations": 14,
+          "optimizer_success_for_best": true,
+          "local_multistart_not_global_proof": true,
+          "best_for_each_n": {
+            "2": {
+              "loss": 0.4888811652281371,
+              "param": {
+                "family": "M1",
+                "n_fast": 2,
+                "k_fast_per_h": 1.8830199251041804,
+                "k_elim_per_h": 0.47613907015492857,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            },
+            "3": {
+              "loss": 0.28602582570921037,
+              "param": {
+                "family": "M1",
+                "n_fast": 3,
+                "k_fast_per_h": 3.7111411554242753,
+                "k_elim_per_h": 0.4983118868689314,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            },
+            "4": {
+              "loss": 0.21324998531911113,
+              "param": {
+                "family": "M1",
+                "n_fast": 4,
+                "k_fast_per_h": 5.833889141555679,
+                "k_elim_per_h": 0.5049939757495886,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            },
+            "5": {
+              "loss": 0.19898236924156787,
+              "param": {
+                "family": "M1",
+                "n_fast": 5,
+                "k_fast_per_h": 8.096685299162111,
+                "k_elim_per_h": 0.4993962374101342,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            },
+            "6": {
+              "loss": 0.20999611560100964,
+              "param": {
+                "family": "M1",
+                "n_fast": 6,
+                "k_fast_per_h": 10.421846555905852,
+                "k_elim_per_h": 0.49258631405398307,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            },
+            "7": {
+              "loss": 0.23142830791204694,
+              "param": {
+                "family": "M1",
+                "n_fast": 7,
+                "k_fast_per_h": 12.777749385254381,
+                "k_elim_per_h": 0.4872017351441027,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            },
+            "8": {
+              "loss": 0.25634090216090827,
+              "param": {
+                "family": "M1",
+                "n_fast": 8,
+                "k_fast_per_h": 15.155634150136368,
+                "k_elim_per_h": 0.4831760799191099,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            }
+          },
+          "tail_q6_index": 0.04952923641224507,
+          "price_auc_diagnostic": {
+            "price_predicted_increment_AUC0_24": 790.3091779596327,
+            "price_manual_figure_increment_AUC_at_fitted_baseline": 993.5,
+            "price_author_table_AUC0_24": 2109,
+            "price_table_minus_model_AUC": 1318.6908220403673,
+            "same_cohort_fig_and_table_not_independent": true,
+            "hypothetical_predose_concentration": 24.0
+          }
+        },
+        "M2": {
+          "loss": 0.012031389003968463,
+          "parameters": {
+            "family": "M2",
+            "n_fast": 8,
+            "k_fast_per_h": 12.336858775778339,
+            "k_elim_per_h": 1.3960031093667566,
+            "k_slow_per_h": 0.2427321309594721,
+            "effective_slow_weight": 0.5191392300231059
+          },
+          "study_profiles": {
+            "Rosano1997_PK25": {
+              "pseudo_loss": 0.01836765261361392,
+              "baseline": 108.46918450338607,
+              "amplitude_at_1h": 2093.1871602344218,
+              "predictions": [
+                230.91864630760733,
+                483.54982900915894,
+                1854.8012840766949,
+                2201.656344737808
+              ]
+            },
+            "Komesaroff1998_n10": {
+              "pseudo_loss": 0.0018718943195104145,
+              "baseline": 89.57270059247772,
+              "amplitude_at_1h": 3866.966165096477,
+              "predictions": [
+                89.57270059247772,
+                472.31267187919065,
+                1990.124963948771
+              ]
+            },
+            "Price1997_figure1": {
+              "pseudo_loss": 0.015854620078781054,
+              "baseline": 23.72733394913765,
+              "amplitude_at_1h": 437.4190114754353,
+              "predictions": [
+                461.1463454245729,
+                209.41385961554948,
+                118.43758102020541,
+                85.40518633978179,
+                58.45972752676626,
+                44.904367646514984,
+                31.73953774639471,
+                25.594763330906098,
+                24.162586006764425
+              ]
+            }
+          },
+          "n_optimizations": 14,
+          "optimizer_success_for_best": true,
+          "local_multistart_not_global_proof": true,
+          "best_for_each_n": {
+            "2": {
+              "loss": 0.42985038356451355,
+              "param": {
+                "family": "M2",
+                "n_fast": 2,
+                "k_fast_per_h": 1.743190688138541,
+                "k_elim_per_h": 1.1513934301753492,
+                "k_slow_per_h": 0.07976767894900703,
+                "effective_slow_weight": 0.4284786433912867
+              }
+            },
+            "3": {
+              "loss": 0.18361845024188597,
+              "param": {
+                "family": "M2",
+                "n_fast": 3,
+                "k_fast_per_h": 3.209657771187277,
+                "k_elim_per_h": 1.2869435730584724,
+                "k_slow_per_h": 0.10032720873513495,
+                "effective_slow_weight": 0.44299781561965723
+              }
+            },
+            "4": {
+              "loss": 0.08082539591646683,
+              "param": {
+                "family": "M2",
+                "n_fast": 4,
+                "k_fast_per_h": 4.922350550135855,
+                "k_elim_per_h": 1.2766198547134293,
+                "k_slow_per_h": 0.1281686872056841,
+                "effective_slow_weight": 0.4426592975012041
+              }
+            },
+            "5": {
+              "loss": 0.04086368353752552,
+              "param": {
+                "family": "M2",
+                "n_fast": 5,
+                "k_fast_per_h": 6.702844495753293,
+                "k_elim_per_h": 1.3049178697552213,
+                "k_slow_per_h": 0.16532943157977062,
+                "effective_slow_weight": 0.45478505898318866
+              }
+            },
+            "6": {
+              "loss": 0.024337340083455727,
+              "param": {
+                "family": "M2",
+                "n_fast": 6,
+                "k_fast_per_h": 8.547994517462884,
+                "k_elim_per_h": 1.3375772902460925,
+                "k_slow_per_h": 0.19852180688895807,
+                "effective_slow_weight": 0.4771403746191883
+              }
+            },
+            "7": {
+              "loss": 0.01626912163253104,
+              "param": {
+                "family": "M2",
+                "n_fast": 7,
+                "k_fast_per_h": 10.435436228503539,
+                "k_elim_per_h": 1.367959298073546,
+                "k_slow_per_h": 0.2237983264333457,
+                "effective_slow_weight": 0.4997539790763435
+              }
+            },
+            "8": {
+              "loss": 0.012031389003968463,
+              "param": {
+                "family": "M2",
+                "n_fast": 8,
+                "k_fast_per_h": 12.336858775778339,
+                "k_elim_per_h": 1.3960031093667566,
+                "k_slow_per_h": 0.2427321309594721,
+                "effective_slow_weight": 0.5191392300231059
+              }
+            }
+          },
+          "tail_q6_index": 0.05164333830262086,
+          "price_auc_diagnostic": {
+            "price_predicted_increment_AUC0_24": 995.8998024960467,
+            "price_manual_figure_increment_AUC_at_fitted_baseline": 999.9076521952653,
+            "price_author_table_AUC0_24": 2109,
+            "price_table_minus_model_AUC": 1113.1001975039533,
+            "same_cohort_fig_and_table_not_independent": true,
+            "hypothetical_predose_concentration": 23.72733394913765
+          }
+        }
+      }
+    },
+    "within_study_positive_correlation": {
+      "scenario": {
+        "delta": 0.15,
+        "rho": 0.65
+      },
+      "n_sources": 3,
+      "fit": {
+        "M0": {
+          "loss": 5.054392536949486,
+          "parameters": {
+            "family": "M0",
+            "n_fast": 1,
+            "k_fast_per_h": 0.2475598480504162,
+            "k_elim_per_h": 0.19755984805041618,
+            "k_slow_per_h": null,
+            "effective_slow_weight": 0.0
+          },
+          "study_profiles": {
+            "Rosano1997_PK25": {
+              "pseudo_loss": 5.870890244206661,
+              "baseline": 0.0,
+              "amplitude_at_1h": 1048.1666574278158,
+              "predictions": [
+                210.2723670553046,
+                405.23462867335104,
+                752.5455420443013,
+                1048.1666574278158
+              ]
+            },
+            "Komesaroff1998_n10": {
+              "pseudo_loss": 4.412149903379301,
+              "baseline": 109.6195424481242,
+              "amplitude_at_1h": 3080.1990840844655,
+              "predictions": [
+                109.6195424481242,
+                1019.4673875971487,
+                1830.8662411372943
+              ]
+            },
+            "Price1997_figure1": {
+              "pseudo_loss": 4.880137463262496,
+              "baseline": 21.2732662844043,
+              "amplitude_at_1h": 13.3901561529168,
+              "predictions": [
+                34.6634224373211,
+                42.71672452013179,
+                47.033850338663335,
+                48.78731084164506,
+                47.772692420901876,
+                43.97851372725762,
+                35.37248285818423,
+                26.941032478580734,
+                23.313142255607687
+              ]
+            }
+          },
+          "n_optimizations": 2,
+          "optimizer_success_for_best": true,
+          "local_multistart_not_global_proof": true,
+          "best_for_each_n": {
+            "1": {
+              "loss": 5.054392536949486,
+              "param": {
+                "family": "M0",
+                "n_fast": 1,
+                "k_fast_per_h": 0.2475598480504162,
+                "k_elim_per_h": 0.19755984805041618,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            }
+          },
+          "tail_q6_index": 1.8421679897520549,
+          "price_auc_diagnostic": {
+            "price_predicted_increment_AUC0_24": 333.602167827888,
+            "price_manual_figure_increment_AUC_at_fitted_baseline": 1057.578242316499,
+            "price_author_table_AUC0_24": 2109,
+            "price_table_minus_model_AUC": 1775.397832172112,
+            "same_cohort_fig_and_table_not_independent": true,
+            "hypothetical_predose_concentration": 21.2732662844043
+          }
+        },
+        "M1": {
+          "loss": 0.694571117662278,
+          "parameters": {
+            "family": "M1",
+            "n_fast": 8,
+            "k_fast_per_h": 13.856869577533816,
+            "k_elim_per_h": 0.7325107246096619,
+            "k_slow_per_h": null,
+            "effective_slow_weight": 0.0
+          },
+          "study_profiles": {
+            "Rosano1997_PK25": {
+              "pseudo_loss": 0.10466851765362113,
+              "baseline": 223.33112029183226,
+              "amplitude_at_1h": 1920.5278957024202,
+              "predictions": [
+                230.44291370717858,
+                475.9601852971949,
+                1891.4939964119358,
+                2143.8590159942523
+              ]
+            },
+            "Komesaroff1998_n10": {
+              "pseudo_loss": 0.6169053551992024,
+              "baseline": 78.26054537169412,
+              "amplitude_at_1h": 3228.426606260146,
+              "predictions": [
+                78.26054537169412,
+                191.31907332716708,
+                1728.0019163716738
+              ]
+            },
+            "Price1997_figure1": {
+              "pseudo_loss": 1.3621394801340105,
+              "baseline": 24.0,
+              "amplitude_at_1h": 370.02005935389604,
+              "predictions": [
+                394.02005935389604,
+                211.35242162758558,
+                114.06123505320564,
+                67.29248676445698,
+                34.0037263131687,
+                26.311591401373235,
+                24.123426839302972,
+                24.001522851004058,
+                24.00001878906722
+              ]
+            }
+          },
+          "n_optimizations": 14,
+          "optimizer_success_for_best": true,
+          "local_multistart_not_global_proof": true,
+          "best_for_each_n": {
+            "2": {
+              "loss": 2.7401001921963153,
+              "param": {
+                "family": "M1",
+                "n_fast": 2,
+                "k_fast_per_h": 1.223261850213448,
+                "k_elim_per_h": 0.31222706932795674,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            },
+            "3": {
+              "loss": 1.9742683388314985,
+              "param": {
+                "family": "M1",
+                "n_fast": 3,
+                "k_fast_per_h": 3.251489853596125,
+                "k_elim_per_h": 1.080514463701848,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            },
+            "4": {
+              "loss": 1.389008958314645,
+              "param": {
+                "family": "M1",
+                "n_fast": 4,
+                "k_fast_per_h": 5.207394655630132,
+                "k_elim_per_h": 0.9673586646759091,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            },
+            "5": {
+              "loss": 1.0562710395178931,
+              "param": {
+                "family": "M1",
+                "n_fast": 5,
+                "k_fast_per_h": 7.239882890479172,
+                "k_elim_per_h": 0.8777840229183284,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            },
+            "6": {
+              "loss": 0.8615153700790826,
+              "param": {
+                "family": "M1",
+                "n_fast": 6,
+                "k_fast_per_h": 9.38036520513555,
+                "k_elim_per_h": 0.8123106030389512,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            },
+            "7": {
+              "loss": 0.7487449841319437,
+              "param": {
+                "family": "M1",
+                "n_fast": 7,
+                "k_fast_per_h": 11.589863013638167,
+                "k_elim_per_h": 0.7668833169736288,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            },
+            "8": {
+              "loss": 0.694571117662278,
+              "param": {
+                "family": "M1",
+                "n_fast": 8,
+                "k_fast_per_h": 13.856869577533816,
+                "k_elim_per_h": 0.7325107246096619,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            }
+          },
+          "tail_q6_index": 0.013686683696211068,
+          "price_auc_diagnostic": {
+            "price_predicted_increment_AUC0_24": 739.9410006815707,
+            "price_manual_figure_increment_AUC_at_fitted_baseline": 993.5,
+            "price_author_table_AUC0_24": 2109,
+            "price_table_minus_model_AUC": 1369.0589993184294,
+            "same_cohort_fig_and_table_not_independent": true,
+            "hypothetical_predose_concentration": 24.0
+          }
+        },
+        "M2": {
+          "loss": 0.13059610609923644,
+          "parameters": {
+            "family": "M2",
+            "n_fast": 8,
+            "k_fast_per_h": 12.65876270702857,
+            "k_elim_per_h": 1.2371942293619307,
+            "k_slow_per_h": 0.2110049862236152,
+            "effective_slow_weight": 0.4746574809759085
+          },
+          "study_profiles": {
+            "Rosano1997_PK25": {
+              "pseudo_loss": 0.20230472152347256,
+              "baseline": 139.85481146009505,
+              "amplitude_at_1h": 2021.5701475759497,
+              "predictions": [
+                228.19567735818464,
+                470.7103403197076,
+                1839.22508508385,
+                2161.4249590360446
+              ]
+            },
+            "Komesaroff1998_n10": {
+              "pseudo_loss": 0.07587138416589821,
+              "baseline": 85.56325062182492,
+              "amplitude_at_1h": 3695.4597346519704,
+              "predictions": [
+                85.56325062182492,
+                384.97342273944037,
+                1900.2069619000845
+              ]
+            },
+            "Price1997_figure1": {
+              "pseudo_loss": 0.11361221260833856,
+              "baseline": 23.035340160096357,
+              "amplitude_at_1h": 428.6224900803726,
+              "predictions": [
+                451.65783024046897,
+                211.0037204472449,
+                117.52582142100451,
+                82.79742031370795,
+                56.8751421656668,
+                44.774663613626316,
+                32.35471904766212,
+                25.66279508756976,
+                23.77614774668476
+              ]
+            }
+          },
+          "n_optimizations": 14,
+          "optimizer_success_for_best": true,
+          "local_multistart_not_global_proof": true,
+          "best_for_each_n": {
+            "2": {
+              "loss": 2.7401028903390157,
+              "param": {
+                "family": "M2",
+                "n_fast": 2,
+                "k_fast_per_h": 1.2232643484537555,
+                "k_elim_per_h": 0.3122291451655751,
+                "k_slow_per_h": 0.08537719988687854,
+                "effective_slow_weight": 1e-05
+              }
+            },
+            "3": {
+              "loss": 1.6750680221635665,
+              "param": {
+                "family": "M2",
+                "n_fast": 3,
+                "k_fast_per_h": 3.2172190905370748,
+                "k_elim_per_h": 1.4621655512553862,
+                "k_slow_per_h": 0.1100813809507714,
+                "effective_slow_weight": 0.4095406669684663
+              }
+            },
+            "4": {
+              "loss": 0.9422301857621136,
+              "param": {
+                "family": "M2",
+                "n_fast": 4,
+                "k_fast_per_h": 4.81437478354063,
+                "k_elim_per_h": 1.4409273092646864,
+                "k_slow_per_h": 0.13326956222820313,
+                "effective_slow_weight": 0.4266673421788379
+              }
+            },
+            "5": {
+              "loss": 0.5486600101899277,
+              "param": {
+                "family": "M2",
+                "n_fast": 5,
+                "k_fast_per_h": 6.628845023866604,
+                "k_elim_per_h": 1.3372609500400132,
+                "k_slow_per_h": 0.1529541961965871,
+                "effective_slow_weight": 0.43547011490002047
+              }
+            },
+            "6": {
+              "loss": 0.33389740526120953,
+              "param": {
+                "family": "M2",
+                "n_fast": 6,
+                "k_fast_per_h": 8.618872409026725,
+                "k_elim_per_h": 1.2567346477020596,
+                "k_slow_per_h": 0.17001628225035756,
+                "effective_slow_weight": 0.4434957978474008
+              }
+            },
+            "7": {
+              "loss": 0.20569760455409403,
+              "param": {
+                "family": "M2",
+                "n_fast": 7,
+                "k_fast_per_h": 10.655827165206077,
+                "k_elim_per_h": 1.2272227067462238,
+                "k_slow_per_h": 0.18859096981760554,
+                "effective_slow_weight": 0.45588457101148466
+              }
+            },
+            "8": {
+              "loss": 0.13059610609923644,
+              "param": {
+                "family": "M2",
+                "n_fast": 8,
+                "k_fast_per_h": 12.65876270702857,
+                "k_elim_per_h": 1.2371942293619307,
+                "k_slow_per_h": 0.2110049862236152,
+                "effective_slow_weight": 0.4746574809759085
+              }
+            }
+          },
+          "tail_q6_index": 0.05461487523659045,
+          "price_auc_diagnostic": {
+            "price_predicted_increment_AUC0_24": 998.2060929930117,
+            "price_manual_figure_increment_AUC_at_fitted_baseline": 1016.1695062377355,
+            "price_author_table_AUC0_24": 2109,
+            "price_table_minus_model_AUC": 1110.7939070069883,
+            "same_cohort_fig_and_table_not_independent": true,
+            "hypothetical_predose_concentration": 23.035340160096357
+          }
+        }
+      }
+    },
+    "rosano_baseline_limited": {
+      "scenario": {
+        "delta": 0.15,
+        "rho": 0.0,
+        "ros_baseline_cap": 100.0
+      },
+      "n_sources": 3,
+      "fit": {
+        "M0": {
+          "loss": 4.186762247234725,
+          "parameters": {
+            "family": "M0",
+            "n_fast": 1,
+            "k_fast_per_h": 0.5675575752930232,
+            "k_elim_per_h": 0.5175575752930232,
+            "k_slow_per_h": null,
+            "effective_slow_weight": 0.0
+          },
+          "study_profiles": {
+            "Rosano1997_PK25": {
+              "pseudo_loss": 6.769924688071147,
+              "baseline": 0.0,
+              "amplitude_at_1h": 1124.2126230764777,
+              "predictions": [
+                294.44986518546546,
+                537.9891270858591,
+                897.9978978386997,
+                1124.2126230764777
+              ]
+            },
+            "Komesaroff1998_n10": {
+              "pseudo_loss": 1.9845343937136894,
+              "baseline": 88.72622802176635,
+              "amplitude_at_1h": 2169.0857610525727,
+              "predictions": [
+                88.72622802176635,
+                903.2366436764382,
+                1511.1456707267196
+              ]
+            },
+            "Price1997_figure1": {
+              "pseudo_loss": 3.8058276599193386,
+              "baseline": 24.0,
+              "amplitude_at_1h": 101.15955597863457,
+              "predictions": [
+                125.15955597863457,
+                141.63670512959047,
+                126.61963927568083,
+                103.58953502737454,
+                64.41955296924729,
+                42.261429955407536,
+                27.15290246162248,
+                24.185818092461677,
+                24.00980483636852
+              ]
+            }
+          },
+          "n_optimizations": 2,
+          "optimizer_success_for_best": true,
+          "local_multistart_not_global_proof": true,
+          "best_for_each_n": {
+            "1": {
+              "loss": 4.186762247234725,
+              "param": {
+                "family": "M0",
+                "n_fast": 1,
+                "k_fast_per_h": 0.5675575752930232,
+                "k_elim_per_h": 0.5175575752930232,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            }
+          },
+          "tail_q6_index": 0.21633443839206432,
+          "price_auc_diagnostic": {
+            "price_predicted_increment_AUC0_24": 593.332434101673,
+            "price_manual_figure_increment_AUC_at_fitted_baseline": 993.5,
+            "price_author_table_AUC0_24": 2109,
+            "price_table_minus_model_AUC": 1515.667565898327,
+            "same_cohort_fig_and_table_not_independent": true,
+            "hypothetical_predose_concentration": 24.0
+          }
+        },
+        "M1": {
+          "loss": 1.0556118004660568,
+          "parameters": {
+            "family": "M1",
+            "n_fast": 4,
+            "k_fast_per_h": 6.359508789660269,
+            "k_elim_per_h": 0.5091647154572154,
+            "k_slow_per_h": null,
+            "effective_slow_weight": 0.0
+          },
+          "study_profiles": {
+            "Rosano1997_PK25": {
+              "pseudo_loss": 1.6333733246711106,
+              "baseline": 100.0,
+              "amplitude_at_1h": 2041.6750285797334,
+              "predictions": [
+                165.39834212259538,
+                560.0680532827569,
+                1684.4247353859894,
+                2141.6750285797334
+              ]
+            },
+            "Komesaroff1998_n10": {
+              "pseudo_loss": 0.0005753593918462475,
+              "baseline": 89.42612508483093,
+              "amplitude_at_1h": 3627.37170275329,
+              "predictions": [
+                89.42612508483093,
+                477.90120242323314,
+                1972.4440451185699
+              ]
+            },
+            "Price1997_figure1": {
+              "pseudo_loss": 1.5328867173352136,
+              "baseline": 24.0,
+              "amplitude_at_1h": 273.9761856699993,
+              "predictions": [
+                297.9761856699993,
+                220.64300229111274,
+                142.52087963547228,
+                95.23255021722431,
+                49.729047748072006,
+                33.2932765333232,
+                25.212436926951515,
+                24.057133995638807,
+                24.00269234084272
+              ]
+            }
+          },
+          "n_optimizations": 14,
+          "optimizer_success_for_best": true,
+          "local_multistart_not_global_proof": true,
+          "best_for_each_n": {
+            "2": {
+              "loss": 1.7073335735651132,
+              "param": {
+                "family": "M1",
+                "n_fast": 2,
+                "k_fast_per_h": 2.0367540912968405,
+                "k_elim_per_h": 0.49093864222999534,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            },
+            "3": {
+              "loss": 1.12414445983312,
+              "param": {
+                "family": "M1",
+                "n_fast": 3,
+                "k_fast_per_h": 3.989519385994152,
+                "k_elim_per_h": 0.5096426160691725,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            },
+            "4": {
+              "loss": 1.0556118004660568,
+              "param": {
+                "family": "M1",
+                "n_fast": 4,
+                "k_fast_per_h": 6.359508789660269,
+                "k_elim_per_h": 0.5091647154572154,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            },
+            "5": {
+              "loss": 1.150718523710077,
+              "param": {
+                "family": "M1",
+                "n_fast": 5,
+                "k_fast_per_h": 8.73479062231342,
+                "k_elim_per_h": 0.5027487801433373,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            },
+            "6": {
+              "loss": 1.2778664905565291,
+              "param": {
+                "family": "M1",
+                "n_fast": 6,
+                "k_fast_per_h": 11.106592805758567,
+                "k_elim_per_h": 0.49764324795728426,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            },
+            "7": {
+              "loss": 1.3992864606476374,
+              "param": {
+                "family": "M1",
+                "n_fast": 7,
+                "k_fast_per_h": 13.49270204804493,
+                "k_elim_per_h": 0.49388815025227634,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            },
+            "8": {
+              "loss": 1.5053422898731474,
+              "param": {
+                "family": "M1",
+                "n_fast": 8,
+                "k_fast_per_h": 15.908859080690371,
+                "k_elim_per_h": 0.49091674472229363,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            }
+          },
+          "tail_q6_index": 0.04927699115831812,
+          "price_auc_diagnostic": {
+            "price_predicted_increment_AUC0_24": 781.7398836496529,
+            "price_manual_figure_increment_AUC_at_fitted_baseline": 993.5,
+            "price_author_table_AUC0_24": 2109,
+            "price_table_minus_model_AUC": 1327.260116350347,
+            "same_cohort_fig_and_table_not_independent": true,
+            "hypothetical_predose_concentration": 24.0
+          }
+        },
+        "M2": {
+          "loss": 0.045816016650995085,
+          "parameters": {
+            "family": "M2",
+            "n_fast": 8,
+            "k_fast_per_h": 12.373833942354223,
+            "k_elim_per_h": 1.4098354840381118,
+            "k_slow_per_h": 0.2501259113932534,
+            "effective_slow_weight": 0.5208552316650121
+          },
+          "study_profiles": {
+            "Rosano1997_PK25": {
+              "pseudo_loss": 0.07675761808657051,
+              "baseline": 100.0,
+              "amplitude_at_1h": 2101.7950509118295,
+              "predictions": [
+                227.1746880870836,
+                485.55980705868205,
+                1866.1185265700583,
+                2201.7950509118295
+              ]
+            },
+            "Komesaroff1998_n10": {
+              "pseudo_loss": 0.0009956035983728305,
+              "baseline": 89.434454194715,
+              "amplitude_at_1h": 3782.732564076524,
+              "predictions": [
+                89.434454194715,
+                475.15065719382966,
+                1973.4983548553712
+              ]
+            },
+            "Price1997_figure1": {
+              "pseudo_loss": 0.05969482826804193,
+              "baseline": 24.0,
+              "amplitude_at_1h": 437.91454578686574,
+              "predictions": [
+                461.91454578686574,
+                209.0992043580903,
+                118.54224517044739,
+                85.50600586115827,
+                58.27007382054578,
+                44.6002011000044,
+                31.567410149977427,
+                25.687226717799895,
+                24.3761868597961
+              ]
+            }
+          },
+          "n_optimizations": 14,
+          "optimizer_success_for_best": true,
+          "local_multistart_not_global_proof": true,
+          "best_for_each_n": {
+            "2": {
+              "loss": 1.4047560098397875,
+              "param": {
+                "family": "M2",
+                "n_fast": 2,
+                "k_fast_per_h": 1.755400024096717,
+                "k_elim_per_h": 1.2396411146309607,
+                "k_slow_per_h": 0.07948968547771419,
+                "effective_slow_weight": 0.44630881721597077
+              }
+            },
+            "3": {
+              "loss": 0.632083724537264,
+              "param": {
+                "family": "M2",
+                "n_fast": 3,
+                "k_fast_per_h": 3.1317982602255015,
+                "k_elim_per_h": 1.4425546954869253,
+                "k_slow_per_h": 0.10773192898087434,
+                "effective_slow_weight": 0.4675108601362149
+              }
+            },
+            "4": {
+              "loss": 0.30718313695817473,
+              "param": {
+                "family": "M2",
+                "n_fast": 4,
+                "k_fast_per_h": 4.77577272560776,
+                "k_elim_per_h": 1.4430882605060853,
+                "k_slow_per_h": 0.14682575202805487,
+                "effective_slow_weight": 0.4657070936981543
+              }
+            },
+            "5": {
+              "loss": 0.17213364662730446,
+              "param": {
+                "family": "M2",
+                "n_fast": 5,
+                "k_fast_per_h": 6.527042409368761,
+                "k_elim_per_h": 1.4619270653442897,
+                "k_slow_per_h": 0.19002869851856405,
+                "effective_slow_weight": 0.48138288219818043
+              }
+            },
+            "6": {
+              "loss": 0.10617553728625323,
+              "param": {
+                "family": "M2",
+                "n_fast": 6,
+                "k_fast_per_h": 8.437089050967565,
+                "k_elim_per_h": 1.4364330518143806,
+                "k_slow_per_h": 0.2184764136354205,
+                "effective_slow_weight": 0.4968852245514431
+              }
+            },
+            "7": {
+              "loss": 0.06808273866906236,
+              "param": {
+                "family": "M2",
+                "n_fast": 7,
+                "k_fast_per_h": 10.403235660534651,
+                "k_elim_per_h": 1.4177203367074467,
+                "k_slow_per_h": 0.2378403521129312,
+                "effective_slow_weight": 0.5094831700099544
+              }
+            },
+            "8": {
+              "loss": 0.045816016650995085,
+              "param": {
+                "family": "M2",
+                "n_fast": 8,
+                "k_fast_per_h": 12.373833942354223,
+                "k_elim_per_h": 1.4098354840381118,
+                "k_slow_per_h": 0.2501259113932534,
+                "effective_slow_weight": 0.5208552316650121
+              }
+            }
+          },
+          "tail_q6_index": 0.05024820503598038,
+          "price_auc_diagnostic": {
+            "price_predicted_increment_AUC0_24": 989.2447266843204,
+            "price_manual_figure_increment_AUC_at_fitted_baseline": 993.5,
+            "price_author_table_AUC0_24": 2109,
+            "price_table_minus_model_AUC": 1119.7552733156795,
+            "same_cohort_fig_and_table_not_independent": true,
+            "hypothetical_predose_concentration": 24.0
+          }
+        }
+      }
+    },
+    "price_baseline_zero": {
+      "scenario": {
+        "delta": 0.15,
+        "rho": 0.0,
+        "price_baseline_cap": 0.0
+      },
+      "n_sources": 3,
+      "fit": {
+        "M0": {
+          "loss": 5.136877784290853,
+          "parameters": {
+            "family": "M0",
+            "n_fast": 1,
+            "k_fast_per_h": 0.7617848477283244,
+            "k_elim_per_h": 0.10260598673496044,
+            "k_slow_per_h": null,
+            "effective_slow_weight": 0.0
+          },
+          "study_profiles": {
+            "Rosano1997_PK25": {
+              "pseudo_loss": 5.903421684011954,
+              "baseline": 0.0,
+              "amplitude_at_1h": 1241.4321660473463,
+              "predictions": [
+                291.4555330433806,
+                543.2176348715388,
+                946.3523245746027,
+                1241.4321660473463
+              ]
+            },
+            "Komesaroff1998_n10": {
+              "pseudo_loss": 1.8399737319301248,
+              "baseline": 88.71677734383793,
+              "amplitude_at_1h": 2364.651616764737,
+              "predictions": [
+                88.71677734383793,
+                892.5000933128002,
+                1536.5434717136445
+              ]
+            },
+            "Price1997_figure1": {
+              "pseudo_loss": 7.66723793693048,
+              "baseline": 0.0,
+              "amplitude_at_1h": 57.20845254413214,
+              "predictions": [
+                57.20845254413214,
+                78.3363894286502,
+                83.16480366313043,
+                80.87505208061765,
+                69.59123481469325,
+                57.49112670861097,
+                38.320261578668855,
+                20.711785711892123,
+                11.190596998464077
+              ]
+            }
+          },
+          "n_optimizations": 2,
+          "optimizer_success_for_best": true,
+          "local_multistart_not_global_proof": true,
+          "best_for_each_n": {
+            "1": {
+              "loss": 5.136877784290853,
+              "param": {
+                "family": "M0",
+                "n_fast": 1,
+                "k_fast_per_h": 0.7617848477283244,
+                "k_elim_per_h": 0.10260598673496044,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            }
+          },
+          "tail_q6_index": 1.3369212905292431,
+          "price_auc_diagnostic": {
+            "price_predicted_increment_AUC0_24": 1001.1218866721479,
+            "price_manual_figure_increment_AUC_at_fitted_baseline": 1557.5,
+            "price_author_table_AUC0_24": 2109,
+            "price_table_minus_model_AUC": 1107.8781133278521,
+            "same_cohort_fig_and_table_not_independent": true,
+            "hypothetical_predose_concentration": 0.0
+          }
+        },
+        "M1": {
+          "loss": 2.0605489399024672,
+          "parameters": {
+            "family": "M1",
+            "n_fast": 8,
+            "k_fast_per_h": 14.982333811320702,
+            "k_elim_per_h": 0.11880014230412721,
+            "k_slow_per_h": null,
+            "effective_slow_weight": 0.0
+          },
+          "study_profiles": {
+            "Rosano1997_PK25": {
+              "pseudo_loss": 0.1282652237360983,
+              "baseline": 219.0295433026422,
+              "amplitude_at_1h": 1963.960047515406,
+              "predictions": [
+                227.93083975528884,
+                497.97870473973586,
+                1826.674291853602,
+                2182.989590818048
+              ]
+            },
+            "Komesaroff1998_n10": {
+              "pseudo_loss": 0.4230276591558016,
+              "baseline": 90.24874671957777,
+              "amplitude_at_1h": 3804.4077949979924,
+              "predictions": [
+                90.24874671957777,
+                242.88270204639394,
+                2006.2597900935532
+              ]
+            },
+            "Price1997_figure1": {
+              "pseudo_loss": 5.630353936815501,
+              "baseline": 0.0,
+              "amplitude_at_1h": 126.79996887201546,
+              "predictions": [
+                126.79996887201546,
+                114.83221489687187,
+                101.96937941642804,
+                90.54730525262606,
+                71.39816291309985,
+                56.29872311653031,
+                35.004313112452586,
+                17.161533105073854,
+                8.413769399513594
+              ]
+            }
+          },
+          "n_optimizations": 14,
+          "optimizer_success_for_best": true,
+          "local_multistart_not_global_proof": true,
+          "best_for_each_n": {
+            "2": {
+              "loss": 2.9064787530927934,
+              "param": {
+                "family": "M1",
+                "n_fast": 2,
+                "k_fast_per_h": 2.117737620814905,
+                "k_elim_per_h": 0.10776262318537068,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            },
+            "3": {
+              "loss": 2.4263761162794295,
+              "param": {
+                "family": "M1",
+                "n_fast": 3,
+                "k_fast_per_h": 3.894202081900412,
+                "k_elim_per_h": 0.11235976574188684,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            },
+            "4": {
+              "loss": 2.2266219663227456,
+              "param": {
+                "family": "M1",
+                "n_fast": 4,
+                "k_fast_per_h": 5.9855993498199895,
+                "k_elim_per_h": 0.11542762457240295,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            },
+            "5": {
+              "loss": 2.1308268450318057,
+              "param": {
+                "family": "M1",
+                "n_fast": 5,
+                "k_fast_per_h": 8.173660784379903,
+                "k_elim_per_h": 0.11711374843993522,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            },
+            "6": {
+              "loss": 2.0841539220467946,
+              "param": {
+                "family": "M1",
+                "n_fast": 6,
+                "k_fast_per_h": 10.406342232817632,
+                "k_elim_per_h": 0.1180426845494784,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            },
+            "7": {
+              "loss": 2.0644551217025118,
+              "param": {
+                "family": "M1",
+                "n_fast": 7,
+                "k_fast_per_h": 12.675561754900517,
+                "k_elim_per_h": 0.1185472610883803,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            },
+            "8": {
+              "loss": 2.0605489399024672,
+              "param": {
+                "family": "M1",
+                "n_fast": 8,
+                "k_fast_per_h": 14.982333811320702,
+                "k_elim_per_h": 0.11880014230412721,
+                "k_slow_per_h": null,
+                "effective_slow_weight": 0.0
+              }
+            }
+          },
+          "tail_q6_index": 0.5523278394751502,
+          "price_auc_diagnostic": {
+            "price_predicted_increment_AUC0_24": 1094.3470886312919,
+            "price_manual_figure_increment_AUC_at_fitted_baseline": 1557.5,
+            "price_author_table_AUC0_24": 2109,
+            "price_table_minus_model_AUC": 1014.6529113687081,
+            "same_cohort_fig_and_table_not_independent": true,
+            "hypothetical_predose_concentration": 0.0
+          }
+        },
+        "M2": {
+          "loss": 0.13181079087560957,
+          "parameters": {
+            "family": "M2",
+            "n_fast": 8,
+            "k_fast_per_h": 13.33858402097674,
+            "k_elim_per_h": 0.9461483654047314,
+            "k_slow_per_h": 0.05166645068033081,
+            "effective_slow_weight": 0.6551641813676453
+          },
+          "study_profiles": {
+            "Rosano1997_PK25": {
+              "pseudo_loss": 0.040302775657332195,
+              "baseline": 183.21543328852152,
+              "amplitude_at_1h": 1995.9246846105252,
+              "predictions": [
+                231.41324459305872,
+                480.72873300262785,
+                1889.4518389889495,
+                2179.140117899047
+              ]
+            },
+            "Komesaroff1998_n10": {
+              "pseudo_loss": 0.21269712974069,
+              "baseline": 89.97327008118424,
+              "amplitude_at_1h": 3813.838263018735,
+              "predictions": [
+                89.97327008118424,
+                314.96204427129567,
+                2007.6456545389763
+              ]
+            },
+            "Price1997_figure1": {
+              "pseudo_loss": 0.14243246722880654,
+              "baseline": 0.0,
+              "amplitude_at_1h": 444.2627792404411,
+              "predictions": [
+                444.2627792404411,
+                221.64453510232173,
+                120.84524418925045,
+                79.95779898001781,
+                54.03140834648094,
+                46.00235656713547,
+                36.981072263972095,
+                27.11462226625285,
+                19.887131892686092
+              ]
+            }
+          },
+          "n_optimizations": 14,
+          "optimizer_success_for_best": true,
+          "local_multistart_not_global_proof": true,
+          "best_for_each_n": {
+            "2": {
+              "loss": 1.448960137204506,
+              "param": {
+                "family": "M2",
+                "n_fast": 2,
+                "k_fast_per_h": 1.8261833485518741,
+                "k_elim_per_h": 1.1758499605231376,
+                "k_slow_per_h": 0.03612098739843101,
+                "effective_slow_weight": 0.705791766628202
+              }
+            },
+            "3": {
+              "loss": 0.6764309825522249,
+              "param": {
+                "family": "M2",
+                "n_fast": 3,
+                "k_fast_per_h": 3.219899307470506,
+                "k_elim_per_h": 1.3157905011000757,
+                "k_slow_per_h": 0.0472617135828566,
+                "effective_slow_weight": 0.6805808273012348
+              }
+            },
+            "4": {
+              "loss": 0.3528909793318135,
+              "param": {
+                "family": "M2",
+                "n_fast": 4,
+                "k_fast_per_h": 5.0065033524489495,
+                "k_elim_per_h": 1.1752106482742262,
+                "k_slow_per_h": 0.05009815532865533,
+                "effective_slow_weight": 0.6689452820069893
+              }
+            },
+            "5": {
+              "loss": 0.21394500100067682,
+              "param": {
+                "family": "M2",
+                "n_fast": 5,
+                "k_fast_per_h": 6.975208324322284,
+                "k_elim_per_h": 1.0735519147910164,
+                "k_slow_per_h": 0.05091193194395626,
+                "effective_slow_weight": 0.6629560755370385
+              }
+            },
+            "6": {
+              "loss": 0.15509955215820634,
+              "param": {
+                "family": "M2",
+                "n_fast": 6,
+                "k_fast_per_h": 9.05576441760024,
+                "k_elim_per_h": 1.008729745039071,
+                "k_slow_per_h": 0.05118231108923331,
+                "effective_slow_weight": 0.6595520040592638
+              }
+            },
+            "7": {
+              "loss": 0.13325450525311597,
+              "param": {
+                "family": "M2",
+                "n_fast": 7,
+                "k_fast_per_h": 11.184349674329987,
+                "k_elim_per_h": 0.9701135726511739,
+                "k_slow_per_h": 0.05142241369350421,
+                "effective_slow_weight": 0.6571738161037638
+              }
+            },
+            "8": {
+              "loss": 0.13181079087560957,
+              "param": {
+                "family": "M2",
+                "n_fast": 8,
+                "k_fast_per_h": 13.33858402097674,
+                "k_elim_per_h": 0.9461483654047314,
+                "k_slow_per_h": 0.05166645068033081,
+                "effective_slow_weight": 0.6551641813676453
+              }
+            }
+          },
+          "tail_q6_index": 0.21691655453028236,
+          "price_auc_diagnostic": {
+            "price_predicted_increment_AUC0_24": 1560.013633991844,
+            "price_manual_figure_increment_AUC_at_fitted_baseline": 1557.5,
+            "price_author_table_AUC0_24": 2109,
+            "price_table_minus_model_AUC": 548.986366008156,
+            "same_cohort_fig_and_table_not_independent": true,
+            "hypothetical_predose_concentration": 0.0
+          }
+        }
+      }
+    }
+  }
+}

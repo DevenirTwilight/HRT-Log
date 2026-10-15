@@ -1,0 +1,92 @@
+{
+  "clinical_accuracy_established": false,
+  "date": "2026-10-10",
+  "komesaroff_0_15_30": {
+    "n1": {
+      "baseline_adjusted_contrast_pmol_l": 1085.2,
+      "signal_over_max_sem_if_positive": 1.452744310575636,
+      "upper_bound_sem_pmol_l_from_triangle_inequality": 747.0,
+      "warning": "No paired covariance; zero baseline is measured mean, not assumed exact for inference"
+    },
+    "n2": {
+      "baseline_adjusted_contrast_pmol_l": 290.79999999999995,
+      "signal_over_max_sem_if_positive": 0.24213155703580347,
+      "upper_bound_sem_pmol_l_from_triangle_inequality": 1201.0,
+      "warning": "No paired covariance; zero baseline is measured mean, not assumed exact for inference"
+    }
+  },
+  "no_new_external_locked_human_PK_series": true,
+  "phase": "P2-S",
+  "production_change_authorized": false,
+  "rosano_20_40": {
+    "n1": {
+      "assumptions": [
+        "zero-delay positive linear cascade",
+        "same participants and published SD",
+        "baseline nonnegative and constant",
+        "exact nominal sampling times",
+        "measurement method affine scale fixed across sampled times",
+        "not a p-value or a validated measurement-error model"
+      ],
+      "conservative_zero_baseline_contrast_pmol_l": 1044.0,
+      "growth_bound_factor": 2.0,
+      "input_order": 1,
+      "min_signal_over_max_sem_if_positive": 7.609329446064141,
+      "min_symmetric_per_mean_perturbation_to_satisfy_bound_pmol_l": 348.0,
+      "necessary_actual_time_ratio_at_observed_zero_baseline_ratio": 4.230769230769231,
+      "observed_ratio": 4.230769230769231,
+      "sem_range_over_unknown_correlation_pmol_l": [
+        45.2,
+        137.2
+      ]
+    },
+    "n2": {
+      "assumptions": [
+        "zero-delay positive linear cascade",
+        "same participants and published SD",
+        "baseline nonnegative and constant",
+        "exact nominal sampling times",
+        "measurement method affine scale fixed across sampled times",
+        "not a p-value or a validated measurement-error model"
+      ],
+      "conservative_zero_baseline_contrast_pmol_l": 108.0,
+      "growth_bound_factor": 4.0,
+      "input_order": 2,
+      "min_signal_over_max_sem_if_positive": 0.5895196506550219,
+      "min_symmetric_per_mean_perturbation_to_satisfy_bound_pmol_l": 21.6,
+      "necessary_actual_time_ratio_at_observed_zero_baseline_ratio": 2.0568833780186058,
+      "observed_ratio": 4.230769230769231,
+      "sem_range_over_unknown_correlation_pmol_l": [
+        0.8,
+        183.2
+      ]
+    },
+    "n3": {
+      "assumptions": [
+        "zero-delay positive linear cascade",
+        "same participants and published SD",
+        "baseline nonnegative and constant",
+        "exact nominal sampling times",
+        "measurement method affine scale fixed across sampled times",
+        "not a p-value or a validated measurement-error model"
+      ],
+      "conservative_zero_baseline_contrast_pmol_l": -1764.0,
+      "growth_bound_factor": 8.0,
+      "input_order": 3,
+      "min_signal_over_max_sem_if_positive": null,
+      "min_symmetric_per_mean_perturbation_to_satisfy_bound_pmol_l": 0.0,
+      "necessary_actual_time_ratio_at_observed_zero_baseline_ratio": 1.6173590602058208,
+      "observed_ratio": 4.230769230769231,
+      "sem_range_over_unknown_correlation_pmol_l": [
+        92.8,
+        275.2
+      ]
+    }
+  },
+  "source_data_or_assay_correction_inferred": false,
+  "sources": [
+    "docs/pk-research/p2/p2e-source-metrics.json",
+    "docs/pk-research/p2/p2d-komesaroff-table1.json"
+  ],
+  "status": "EXPLORATORY_AGGREGATE_BOUNDS_ONLY"
+}
