@@ -17,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -213,7 +215,8 @@ class UiPrefs(context: Context) {
                 }},pad,onAppointment={visitId=it;medicalOrigin=false;destination=Destination.VISITS},saveState=milestoneSave,onSaveHandled=model::clearMilestoneSave,onImportedHistory={importedRecordIds=it.toSet();destination=Destination.HISTORY},
                     timelineActions=TimelineActions(model::editTimeline,model::deletePeriod))
                 Destination.MEDICAL -> MedicalRecordsScreen(state.appointments,{visitId=it.id;medicalOrigin=true;destination=Destination.VISITS},
-                    {model.clearMedicalVisitSave();medicalEdit=null;medicalEditing=true},{destination=Destination.LABS},{destination=Destination.TIMELINE},{destination=Destination.SETTINGS},pad)
+                    {model.clearMedicalVisitSave();medicalEdit=null;medicalEditing=true},{destination=Destination.LABS},{destination=Destination.TIMELINE},{destination=Destination.SETTINGS},pad,
+                    onConfirm={model.clearMedicalVisitSave();model.saveMedicalVisit(it,it)},questionCounts=extra.visitQuestions.groupingBy{it.appointment_id}.eachCount())
                 Destination.VISITS -> VisitsScreen(state, extra, model, visitId, { visitId = it;if(it==null && medicalOrigin){medicalOrigin=false;destination=Destination.MEDICAL} }, { appointment = true }, pad,
                     medical=medicalOrigin,onMedicalEdit={model.clearMedicalVisitSave();medicalEdit=it;medicalEditing=true},onLab={medicalLab=it.id})
                 Destination.HISTORY -> HistoryScreen(state, extra.records, { editRecord = it }, { deleteRecord = it }, pad, onAdd = { manual = true }, onBatch = { batch = true }, onConfirmMissed={model.confirmMissed(it.id)},selectedRecordIds=importedRecordIds,labels=historyLabels,onExtra={r,on->model.setExtra(r.id,on)},onClearSelection={importedRecordIds=null},onUndoSkip={model.undoSkipped(it)})
@@ -270,6 +273,15 @@ class UiPrefs(context: Context) {
 }
 
 /** Drawer entries scroll so Settings and About stay reachable on short screens and with large font scales. */
+/** Drawer sections (heading, entries); a null heading is the divider before Settings and About. */
+internal val DRAWER_GROUPS: List<Pair<Int?, List<Destination>>> = listOf(
+    R.string.drawer_group_daily to listOf(Destination.CALENDAR, Destination.HISTORY, Destination.STOCK),
+    R.string.drawer_group_treatment to listOf(Destination.MEDICATIONS, Destination.TIMELINE, Destination.CONCENTRATION, Destination.LABS),
+    R.string.drawer_group_medical to listOf(Destination.MEDICAL, Destination.VISITS),
+    R.string.drawer_group_body to listOf(Destination.WELLBEING),
+    null to listOf(Destination.SETTINGS, Destination.ABOUT),
+)
+
 @Composable internal fun DrawerContent(selected: Destination, onSelect: (Destination) -> Unit) {
     Column(Modifier.verticalScroll(rememberScrollState()).padding(horizontal = 12.dp).testTag("drawer-content")) {
         Row(Modifier.padding(horizontal = 16.dp, vertical = 24.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -279,11 +291,16 @@ class UiPrefs(context: Context) {
             Spacer(Modifier.width(12.dp))
             Text(stringResource(R.string.app_name), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
         }
-        Destination.entries.forEach { d ->
-            if (d == Destination.SETTINGS) HorizontalDivider(Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
-            NavigationDrawerItem(label = { Text(stringResource(d.title)) }, icon = { Icon(d.icon, null) }, selected = selected == d,
-                badge = if (!d.ready) ({ Text(stringResource(R.string.soon_badge), style = MaterialTheme.typography.labelSmall) }) else null,
-                onClick = { onSelect(d) }, modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding))
+        // UI-01 F: grouped display order only; every Destination stays, and the enum (saved state, notification entry) is unchanged.
+        DRAWER_GROUPS.forEach { (group, items) ->
+            if (group == null) HorizontalDivider(Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
+            else Text(stringResource(group), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(start = 28.dp, end = 16.dp, top = 12.dp, bottom = 4.dp).semantics { heading() }.testTag("drawer-group:$group"))
+            items.forEach { d ->
+                NavigationDrawerItem(label = { Text(stringResource(d.title)) }, icon = { Icon(d.icon, null) }, selected = selected == d,
+                    badge = if (!d.ready) ({ Text(stringResource(R.string.soon_badge), style = MaterialTheme.typography.labelSmall) }) else null,
+                    onClick = { onSelect(d) }, modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding))
+            }
         }
     }
 }

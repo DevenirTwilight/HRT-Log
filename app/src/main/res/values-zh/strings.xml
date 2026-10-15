@@ -1131,4 +1131,34 @@
     <string name="privacy_notice_delete_body">“删除全部数据”会删除这台手机上的记录数据库及其密钥，以及应用设置、提醒与库存提醒数据、应用锁和伪装设置；卸载应用会删除应用数据。你导出的文件、保存的备份，以及其他应用或云服务中的副本不会被删除。</string>
     <string name="privacy_notice_changes_title">如果应用发生变化</string>
     <string name="privacy_notice_changes_body">将来如果加入医疗文件存储、同步、分享或建议类功能，会在发布前更新并复核本说明。</string>
+    <!-- UI-01 (2026-10-15) -->
+    <string name="today_progress">已服 %1$d / %2$d</string>
+    <string name="today_next">下一次</string>
+    <string name="today_take_now">现在服用</string>
+    <string name="today_other_time">其他时间</string>
+    <string name="today_change_or_skip">改期或跳过</string>
+    <string name="today_all_done">今天已全部完成</string>
+    <string name="today_nothing">今天没有计划服药</string>
+    <string name="today_overdue">已过时间</string>
+    <string name="today_same_time">同一时间</string>
+    <string name="today_done_heading">今天已完成</string>
+    <string name="today_more">这次服药的更多操作</string>
+    <string name="home_stock_title">库存即将用完</string>
+    <string name="home_stock_view">查看库存</string>
+    <string name="stock_runs_out_in">约 %1$d 天后用完</string>
+    <string name="stock_packages_section">包装记录（%1$d）</string>
+    <string name="stock_more_actions">更多库存操作</string>
+    <string name="medical_were_you_there">去过了吗？</string>
+    <string name="medical_next_visit">下次就诊</string>
+    <string name="medical_next_prepare">问题清单和就诊资料包</string>
+    <string name="medical_related">相关资料</string>
+    <string name="medical_has_note">有备注</string>
+    <string name="medical_question_count">问题：%1$d</string>
+    <string name="medical_edit_or_delete">编辑或删除</string>
+    <string name="timeline_shown_in">按 %1$s 显示</string>
+    <string name="period_day_n">第 %1$d 天</string>
+    <string name="drawer_group_daily">每天</string>
+    <string name="drawer_group_treatment">治疗</string>
+    <string name="drawer_group_medical">医疗</string>
+    <string name="drawer_group_body">身心</string>
 </resources>

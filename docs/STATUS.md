@@ -1,3 +1,7 @@
+## UI-01 界面层级改进 — 2026-10-15
+
+展示层改进 A–H（今天卡、首页库存精简、日历双编码、库存卡单一主操作、时间线展示、抽屉分组、医疗档案首页、四语文案），报告 60，REQUIREMENTS §96。数据、计算与安全行为不变。
+
 ## MED-02B6 / PHR-DEMO 当前状态 — 2026-10-15
 
 - 默认分支 f16c9d6：PR #36（MED-02B5 / B3-BACKUP-GATE，test-only）**已合并**，合并后 Android 38726656377 与 Science 38726656317 全部成功。B3-BACKUP-GATE RESEARCH_GO；生产 B3 NOT_IMPLEMENTED；B2 NO-GO；NOT_REVIEWED_EXTERNALLY。

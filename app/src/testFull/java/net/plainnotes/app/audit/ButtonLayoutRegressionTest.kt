@@ -77,11 +77,17 @@ class ButtonLayoutRegressionTest(private val locale:String,private val width:Int
                 }
             }
             if(p==0){
-                val labels=listOf(R.string.stock_add,R.string.stock_replace,R.string.stock_check)
-                val bounds=labels.map{rule.onNodeWithText(ctx.getString(it)).fetchSemanticsNode().boundsInRoot}
-                assertTrue("stock action widths differ",bounds.maxOf{it.width}-bounds.minOf{it.width}<=1f)
-                assertTrue("stock action heights differ",bounds.maxOf{it.height}-bounds.minOf{it.height}<=1f)
-                rule.onNodeWithText(ctx.getString(R.string.stock_add)).performClick();assertEquals(1,clicks)
+                // UI-01 D: one main button per card (it replaced the three equal-size buttons); the other two actions are
+                // in the ⋮ menu, each a full-width ≥48dp item that is not clipped, and every action still reaches its callback.
+                rule.onNodeWithTag("stock-primary-1").assertTextEquals(ctx.getString(R.string.stock_add)).performClick();assertEquals(1,clicks)
+                rule.onNodeWithTag("stock-more-1").performClick();rule.waitForIdle()
+                listOf("stock-replace-1" to R.string.stock_replace,"stock-check-1" to R.string.stock_check).forEachIndexed{i,(tag,label)->
+                    val item=rule.onNodeWithTag(tag).assertTextEquals(ctx.getString(label)).fetchSemanticsNode()
+                    val d=ctx.resources.displayMetrics.density
+                    assertTrue("menu item $tag too small: ${item.size}",item.size.height/d>=48f)
+                    rule.onNodeWithTag(tag).performClick();assertEquals(2+i,clicks)
+                    if(i==0){rule.onNodeWithTag("stock-more-1").performClick();rule.waitForIdle()}
+                }
             }
         }
     }
