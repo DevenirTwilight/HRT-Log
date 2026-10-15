@@ -8,6 +8,8 @@ Room/WorkManager (Apache-2.0), Dagger/Hilt (Apache-2.0), kotlinx.coroutines (Apa
 Bouncy Castle (MIT, see below) and SQLCipher Android and its native cryptographic dependencies. Their original
 copyright and license notices apply; upstream notices are retained in dependency
 artifacts. SQLCipher licensing: https://www.zetetic.net/sqlcipher/license/ .
+Dagger/Hilt bring in `jakarta.inject:jakarta.inject-api:2.0.1` and `javax.inject:javax.inject:1`
+(Apache-2.0); the Jakarta Dependency Injection `NOTICE.md` is shipped in the APK unchanged.
 
 Development-only tools include Gradle (Apache-2.0), JUnit (EPL-2.0), Robolectric
 (MIT) and org.json (public domain, tests only). No analytics or advertising SDKs are included.

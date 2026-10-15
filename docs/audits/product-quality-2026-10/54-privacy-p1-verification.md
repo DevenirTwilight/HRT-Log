@@ -30,6 +30,7 @@
 - 坐标：`org.bouncycastle:bcprov-jdk18on:1.86`（`gradle/libs.versions.toml`），`app` 与 `core/data` 的 `implementation`（fullReleaseRuntimeClasspath 已确认），`tools/attachment-poc` 仅测试。用途：AppLock Argon2id 与 `.pnbak` 备份 KDF（参数不变）。
 - 许可来源：构件内 `META-INF/LICENSE.md` 为 MIT 全文（“Copyright (c) 2000-2026 The Legion of the Bouncy Castle Inc.”）；POM `<license>` 为 “Bouncy Castle Licence”，https://www.bouncycastle.org/licence.html。jar SHA-256 `2af190b300cbb0b35e248ccf5f4a06b6072030aeb3da7a98ec73abe5b4cb371f`（本地 Gradle 缓存）。
 - 修改：`THIRD_PARTY_NOTICES.md` 新增 Bouncy Castle 节（坐标、用途、MIT 全文）；应用内“开源许可”四语正文加入 Bouncy Castle，并显示不翻译的许可全文（`res/values/legal_notices.xml`）。项目自身 MIT 与第三方许可的边界不变。
+- 发布 APK 核查（本地 `:app:assembleFullRelease`，未签名）：APK 内保留 Bouncy Castle 构件自带的 `META-INF/LICENSE.md`（MIT 全文）与 Jakarta Dependency Injection 的 `META-INF/NOTICE.md`（Apache-2.0）；后者经 Dagger/Hilt 传递引入（`jakarta.inject-api:2.0.1`、`javax.inject:1`），原通知未点名，已补一行。权限清单无 INTERNET；`check_attachment_release_isolation.py` PASS（1 个 DEX）。
 - 守卫 `ThirdPartyNoticesTest`（2，JVM）：所有交付模块的运行时依赖别名必须映射到通知名称并同时出现在 `THIRD_PARTY_NOTICES.md` 与应用内文本；Bouncy Castle 坐标/版本与 MIT 关键句逐字存在。红：b43d109 的通知上失败 `Bouncy Castle missing from THIRD_PARTY_NOTICES.md`、`Notice names the exact artifact and version`。
 
 ## A3 隐私页与真实 Android 验证
@@ -45,9 +46,13 @@
 
 不改 Room schema/guards、PNBAK1（Argon2id 32MiB/3/1、AES-256-GCM、序列化 9）、AppLock 参数、PK/M2、versionCode/applicationId/签名、依赖目录；无新权限、无 INTERNET；debug 清单新增的测试宿主只在 debug 构建。
 
-## 本地结果（提交前）
+## 本地结果（提交前，06eaa8c 起）
 
-（见下方追加。）
+- `:app:testFullDebugUnitTest` 893（基线 889 + `LocalDataWipeCoverageTest` 2 + `ThirdPartyNoticesTest` 2），0 失败/错误，61 skip 与基线相同（既有条件跳过：ExportTest、M2ScenarioVisualAuditTest、ButtonAuditTest），含 `PeriodStabilityTest`。
+- `:core:reminder:testDebugUnitTest` 19（含 `StockAlertsClearTest` 2），`:core:data:testDebugUnitTest` 180，均 0 失败/skip。
+- `lintFullDebug` 0 error，178 warning 与基线数量相同（`NotesViewModel` 两条 ApplySharedPref 为既有 `commit()` 行位移）。
+- `:app:assembleFullDebug`、`:app:assembleFullDebugAndroidTest`（含 3 个新设备测试类）编译成功；本机无 KVM，设备测试由 CI 运行。
+- 红态证据 XML：`docs/audits/product-quality-2026-10/evidence/privacy-p1/`。
 
 ## CI 结果
 
