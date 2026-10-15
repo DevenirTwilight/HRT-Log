@@ -54,6 +54,12 @@
 - `:app:assembleFullDebug`、`:app:assembleFullDebugAndroidTest`（含 3 个新设备测试类）编译成功；本机无 KVM，设备测试由 CI 运行。
 - 红态证据 XML：`docs/audits/product-quality-2026-10/evidence/privacy-p1/`。
 
+## 与本 PR 无关的 CI 阻断与修复（主线同样失败）
+
+2026-10-15 起，`device-tests`（API35）中既有的 `CalendarIntakeAndroidTest` 两项在本 PR 与**未改动的默认分支**上同样失败（默认分支 workflow_dispatch [38707248155](https://github.com/DevenirTwilight/HRT-Log/actions/runs/38707248155) 失败于同一位置）。临时诊断分支 `diag/calendar-intake-20261015`（仅打印语义树，不合并；代理不允许本会话删除远程分支，待负责人删除）显示根因：CI emulator 为 320×640px，日历月视图中“明天”=周五 10-16 的格子 (220,504)–(254,558)，被浮动“添加”按钮 `calendar-add` (205,520)–(304,576) 覆盖；测试用触摸点击格子中心，实际点到了按钮，选中永远不变。10-14 的“明天”是周四（中心 x≈199，在按钮左侧），因此此前通过。这是**日期相关的测试缺陷**，与本 PR 改动无关；每当“明天”落在被按钮覆盖的列/行时都会失败。
+
+修复（测试专用、一行）：选择格子改用其语义点击动作 `performSemanticsAction(SemanticsActions.OnClick)`（等同无障碍激活），不再依赖触摸坐标。未改生产代码，未跳过或放宽断言。另记录产品观察（不在本 PR 范围）：窄屏首屏上浮动按钮会盖住第三周的周五/周六格子，用户需滚动才能点到，建议后续 B3 导航/无障碍批次评估。
+
 ## CI 结果
 
 （待最终 HEAD 的 CI 结束后追加。）
