@@ -311,9 +311,12 @@ class B3GateAndroidTest {
     @Test fun exportSnapshotIsConsistentUnderAConcurrentWriterAndLeasedObjectsSurvive() {
         val s = seed(); val lab1 = s.ids.getValue("lab1"); val d2v1 = s.versions.single { it.uuid == s.ids["d2v1"] }; val d3v1 = s.versions.single { it.uuid == s.ids["d3v1"] }
         val committedAt = AtomicLong(0); var gateHeldMs = 0L; var gcDuringExport: Boolean? = null
+        // The writer opens its own SQLCipher connection before the gate (opening reads the encrypted header, which the
+        // exclusive gate also blocks) and attempts its write only while the gate is held.
+        val ready = java.util.concurrent.CountDownLatch(1); val go = java.util.concurrent.CountDownLatch(1)
         val writer = Thread {
-            val second = s.v.secondConnection()
-            try { val deadline = System.nanoTime() + 20_000_000_000L
+            val second = s.v.secondConnection(); ready.countDown()
+            try { check(go.await(20, java.util.concurrent.TimeUnit.SECONDS)); val deadline = System.nanoTime() + 20_000_000_000L
                 while (System.nanoTime() < deadline) {
                     try { second.execSQL("UPDATE record SET body='changed during export' WHERE uuid=?", arrayOf(lab1)); committedAt.set(System.nanoTime()); break }
                     catch (e: android.database.sqlite.SQLiteException) { Thread.sleep(20) }
@@ -321,8 +324,9 @@ class B3GateAndroidTest {
             } finally { second.close() }
         }
         val bundle = bundleFile()
+        writer.start(); assertTrue("Writer connection opened", ready.await(20, java.util.concurrent.TimeUnit.SECONDS))
         B3Exporter.export(s.v, pw(), bundle, cap(),
-            duringCapture = { writer.start(); Thread.sleep(300); gateHeldMs = 300; assertEquals("Writer committed inside the snapshot gate", 0L, committedAt.get()) },
+            duringCapture = { go.countDown(); Thread.sleep(300); gateHeldMs = 300; assertEquals("Writer committed inside the snapshot gate", 0L, committedAt.get()) },
             afterCapture = {
                 // A newer CURRENT replaces d2v1 and d3v1 is purged while the export runs.
                 s.v.tx { s.v.db.execSQL("UPDATE version SET state='RETAINED' WHERE uuid=?", arrayOf(d2v1.uuid)) }
