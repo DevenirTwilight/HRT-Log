@@ -36,6 +36,15 @@ class CalendarIntakeAndroidTest {
         val name = d.format(DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, "yMMMMdEEEE"), locale))
         return ui.onNode(hasContentDescription(name, substring = true) and hasClickAction())
     }
+    private fun diag(tag: String): String {
+        val root = ui.onRoot(useUnmergedTree = false).fetchSemanticsNode()
+        val nodes = ui.onAllNodes(hasClickAction() and SemanticsMatcher.keyIsDefined(SemanticsProperties.Selected)).fetchSemanticsNodes()
+        return "[$tag] root=${root.boundsInRoot} selectable=${nodes.size}\n" + nodes.joinToString("\n") { n ->
+            "  ${n.boundsInRoot} sel=${n.config.getOrNull(SemanticsProperties.Selected)} cd=${n.config.getOrNull(SemanticsProperties.ContentDescription)}" } +
+            "\n  tomorrowName=" + run { val locale = context.resources.configuration.locales[0]
+                tomorrow.format(DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, "yMMMMdEEEE"), locale)) } +
+            "\n  texts=" + ui.onAllNodes(hasText("", substring = true)).fetchSemanticsNodes().take(40).map { it.config.getOrNull(SemanticsProperties.Text)?.joinToString() + "@" + it.boundsInRoot.top.toInt() }
+    }
     private fun selectTomorrow() {
         // Wait for the synthetic medication to load: the "Nothing planned yet" card above the calendar is shown only until
         // then, and removing it moves the grid. (Today's dose card may already be gone, so the name is no signal.)
@@ -45,8 +54,10 @@ class CalendarIntakeAndroidTest {
         }
         ui.waitForIdle()
         if (runCatching { cell(tomorrow).fetchSemanticsNode() }.isFailure) ui.onNodeWithContentDescription(s(R.string.calendar_next)).performClick()
+        val before = diag("before-click")
         cell(tomorrow).performClick()
-        ui.waitUntil(10_000) { cell(tomorrow).fetchSemanticsNode().config.getOrNull(SemanticsProperties.Selected) == true }
+        try { ui.waitUntil(10_000) { cell(tomorrow).fetchSemanticsNode().config.getOrNull(SemanticsProperties.Selected) == true } }
+        catch (e: Throwable) { throw AssertionError("CALDIAG tomorrow=$tomorrow zone=${java.time.ZoneId.systemDefault()} now=${java.time.ZonedDateTime.now()}\n$before\n${diag("after-click")}", e) }
         assertEquals(true, cell(tomorrow).fetchSemanticsNode().config.getOrNull(SemanticsProperties.Selected))
         ui.waitUntil(20_000) { runCatching { ui.onNode(hasScrollToIndexAction()).performScrollToNode(hasText(s(R.string.complete))) }.isSuccess }
     }

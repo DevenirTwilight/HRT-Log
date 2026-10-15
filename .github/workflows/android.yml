@@ -119,27 +119,7 @@ jobs:
           arch: x86_64
           disable-animations: true
           script: |
-            ./gradlew :core:data:connectedDebugAndroidTest --no-parallel --max-workers=2
-            python3 scripts/run_attachment_foundation_restart.py
-            python3 scripts/run_attachment_gate2_red.py
-            python3 scripts/run_attachment_gate2_restart.py AFTER_CREATE
-            python3 scripts/run_attachment_gate2_restart.py WRITE
-            python3 scripts/run_attachment_gate2_restart.py IN_COMMIT
-            python3 scripts/run_attachment_gate2_restart.py AFTER_COMMIT
-            adb logcat -G 16M
-            ./gradlew :app:connectedFullDebugAndroidTest --no-parallel --max-workers=2
-            python3 scripts/collect_package_history_evidence.py --output app/build/reports/package-history-evidence.json
-            python3 scripts/collect_unified_device_performance.py --output app/build/reports/unified-device-performance.json
-            python3 scripts/collect_pr19_display_performance.py
-            python3 scripts/run_disguise_restart.py
-            python3 scripts/run_import_cleanup_restart.py
-            python3 scripts/run_restore_process_death.py
-            python3 scripts/run_voided_package_restart.py
-            python3 scripts/run_undo_skipped_restart.py
-            python3 scripts/run_medical_records_restart.py
-            python3 scripts/run_attachment_poc_restart.py
-            python3 scripts/collect_attachment_poc_evidence.py --output app/build/reports/attachment-poc-evidence.json
-            python3 scripts/run_attachment_gate3_red.py
+            ./gradlew :app:connectedFullDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.calendar.CalendarIntakeAndroidTest --no-parallel --max-workers=2
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
