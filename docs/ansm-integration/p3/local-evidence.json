@@ -1,0 +1,72 @@
+{
+  "checked_at": "2026-10-16T14:15:26.860273+00:00",
+  "baseline": "cfbe62c4a466f55234d53fbeff4c7f2c03224d50",
+  "domain": {
+    "status": "PASS",
+    "totals": {
+      "tests": 126,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "original_measurement_tests": 35,
+    "added_tests": 5,
+    "reports": [
+      {
+        "file": "TEST-net.plainnotes.app.domain.AttachmentSessionTest.xml",
+        "sha256": "657ba03e5cc32dc6e6fa0ae473203aac847e9c65da2a0461eb6629635bc801b4"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.domain.PeriodAttributionTest.xml",
+        "sha256": "b523f4c0f8c3f789fb5ff76c26324694cdbda9a5e9bb3e09d23fe62e28579c85"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.domain.ScheduleTest.xml",
+        "sha256": "b2c1a06e1904128e2fdb36c9288fb769f5eef29b9249d07167076243b0c0216a"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.domain.SustainedPatternsTest.xml",
+        "sha256": "b79d2e7521d3f732cc314ce500e2957e0922e322738dae7b768c28b6443c46a1"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.domain.TreatmentEpochsTest.xml",
+        "sha256": "ba803799ae41f293a97c51dcc3c7c5fcbe3db6aa35c11bec159cecff9d8ddaaa"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.domain.TreatmentPeriodsTest.xml",
+        "sha256": "8cd7bd3237b96a29c519a9fbb1044c8d99acc0a2599da618cdf566ffcc61f42c"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.domain.measurement.LegacyBoundaryTest.xml",
+        "sha256": "483713ba3d758387934ff92b3930dae972606742cfe226f4bd9a4aefb17d4488"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.domain.measurement.MeasurementCoreTest.xml",
+        "sha256": "a4b0db68a54775912d1cfafeea33fcba42fbee6b26ea44e2c0d741f5a0c7d644"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.domain.measurement.ProductionMeasurementTest.xml",
+        "sha256": "4374a7b50bf5fef847c42cca81878a79ddb379315a81b2aa2f207967c02f5eed"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.domain.measurement.SyntheticHistoryContractTest.xml",
+        "sha256": "5090a8831c2aeddbac2e8ad1d6e121fef60c1eba98d9a633dcf0456764bea1a0"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.domain.shadow.ShadowMeasurementAllocatorTest.xml",
+        "sha256": "b75d0b9a89a2cc3b8f71adbbfcaa67d3d4b7f3fd4ed85d91389b9f18b6a875c1"
+      }
+    ]
+  },
+  "python_isolation_tests": {
+    "status": "PASS",
+    "tests": 5
+  },
+  "android_data": "IN_PROGRESS",
+  "native_compile": "IN_PROGRESS",
+  "release_binary_isolation": "NOT_RUN",
+  "native_execution": "NOT_RUN",
+  "physical_device": "NOT_RUN",
+  "inventory_integration": "NOT_IMPLEMENTED",
+  "pk_changes": false
+}
