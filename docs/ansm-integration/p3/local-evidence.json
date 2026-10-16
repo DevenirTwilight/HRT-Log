@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-16T14:15:26.860273+00:00",
+  "checked_at": "2026-10-16T14:26:58.681789+00:00",
   "baseline": "cfbe62c4a466f55234d53fbeff4c7f2c03224d50",
   "domain": {
     "status": "PASS",
@@ -62,11 +62,132 @@
     "status": "PASS",
     "tests": 5
   },
-  "android_data": "IN_PROGRESS",
-  "native_compile": "IN_PROGRESS",
-  "release_binary_isolation": "NOT_RUN",
+  "android_data": {
+    "status": "PASS",
+    "totals": {
+      "tests": 204,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": [
+      {
+        "file": "TEST-net.plainnotes.app.data.Ansm03b0InventoryTest.xml",
+        "sha256": "474e6d0cf5c1a98a8f550907537e7b529237697a86e6c98683ed13babd547256"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.data.AttachmentFoundationTest.xml",
+        "sha256": "8b1f8bd7b2db46434271c9ce37f6022f092f4014c408778c18259064c9aa6112"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.data.AttachmentMigrationTest.xml",
+        "sha256": "b3ec9dbd398dc1a05a10bd78b64de7176d1f5c1a8e1c880ee270c3c76804071c"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.data.BackfillTest.xml",
+        "sha256": "fdb3a964008c56f562700daa987f3c98f66ec00370288fefc67a83c45166905b"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.data.BackupReplacementTest.xml",
+        "sha256": "d8374a235a4d607fcdced548083b76fb0a3289731866315882f5d0f963783c6d"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.data.DataTransferTest.xml",
+        "sha256": "be48b17a1a1bde27bca6a703cfe1b93d79b3def08ac5730aca39c5e433eed016"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.data.HistoricalContextRepairTest.xml",
+        "sha256": "1aa1bedc216a8f405a20d741f331cd7223b7542cd9707fb7634c88be18f5e142"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.data.HistoricalVisitTest.xml",
+        "sha256": "4206e7d1755bdee99ac24dfb57a0c04eded0e84e85c457b2ce5cd76fb452f86d"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.data.HistoryIntegrityTest.xml",
+        "sha256": "23f1d5eaebc571f6c84bf19b02e300a1e589ae90e24c03995f93dbf5623e7a88"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.data.HistoryPeriodDataTest.xml",
+        "sha256": "92c2334770770d27541f29bed38084688b53a2d6a5d9cf6e65c115eb3b128986"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.data.HrtTrackerImportTest.xml",
+        "sha256": "3cb6aba8a7ce30e8696e594014d0ea29824e64049394333371f0b92638b749a7"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.data.KeyBoundaryTest.xml",
+        "sha256": "7754b6bb9f4a029125630de90be7b9d4de41baba13de7a8d393be21ae162cf2b"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.data.LabContextTest.xml",
+        "sha256": "6ec573467ac7332fe3fd8da86d451e2a437c2c4768a6b99e22629aa310f25915"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.data.LedgerReplacementTest.xml",
+        "sha256": "a80bc017ce6b4a74fc1db7bbaf6d2c6a19984947df1fc7a9e8c8ba9478b66086"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.data.PlanEditTest.xml",
+        "sha256": "c953395617d5857f0373f2922d9d986261686297c116f18d7c2704977542cec0"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.data.RegimenHistoryTest.xml",
+        "sha256": "5670a6698810276061bc9d87ff7100209c1a8fae78fbdd58763cedcb31930588"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.data.SchemaConstraintTest.xml",
+        "sha256": "d23886c4756036670f7d50d5d360a01b96b94ffe59bff69b576333d53cfcfe66"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.data.StockCorrectionTest.xml",
+        "sha256": "3ae905dd10668e0b85d54f6ace22881b2c49e6f85e7a18098e5b80996c28db79"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.data.StockForecastTest.xml",
+        "sha256": "1fcfa305a91f02fea3744d517f864ac994b3830617eae0fcb8f2f2030a00d3f8"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.data.SupplyLedgerTest.xml",
+        "sha256": "bf2603a1b3d64580fc99f631f0713886f48a0054a72c5bcefc92267d688b5ecd"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.data.TrashDataTest.xml",
+        "sha256": "106906f3e5e358e754989e99ff2b4415391b2822490932534678596dee8e6fd9"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.data.UndoSkippedTest.xml",
+        "sha256": "c9d33925bbb395a4585abe49c84f2f74eea1648905ff581b03dcf531417973eb"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.data.VisitPackDataTest.xml",
+        "sha256": "189b2ee2b0e9a74f43a5306551ade71be1bdb18a06d312c045574aa9d37f666d"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.data.VoidedPackageTest.xml",
+        "sha256": "1853cdb918142fd15acc7252ffc1b6e68f691dc704361bd9e5344e6ab113163b"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.data.WellbeingMigrationTest.xml",
+        "sha256": "edc73dee606ca0f3bb5f3f8b5c02afa0b487473909265273422bd1ba64bc12ca"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.data.WellbeingRecordsTest.xml",
+        "sha256": "929b628c7eb4d079baeb4e5e43d8b4bcd6d3833658acf0cb13d67aaefa2c940d"
+      }
+    ]
+  },
+  "native_compile": "PASS",
+  "release_binary_isolation": "PASS",
   "native_execution": "NOT_RUN",
   "physical_device": "NOT_RUN",
   "inventory_integration": "NOT_IMPLEMENTED",
-  "pk_changes": false
+  "pk_changes": false,
+  "tested_source": "247ee4fa478ba72f403026f2a229dd165c9b7b32",
+  "no_internet": "PASS",
+  "unsigned_release_build": "PASS",
+  "signed_or_delivered": false,
+  "earlier_failure": "Source provenance guard rejected a build started from dirty pre-commit baseline; clean committed rerun PASS without weakening guard",
+  "pr": 55,
+  "ci": "IN_PROGRESS"
 }
