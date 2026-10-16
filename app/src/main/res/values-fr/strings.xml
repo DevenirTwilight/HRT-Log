@@ -1136,7 +1136,6 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="today_nothing">Aucune prise prévue aujourd’hui</string>
     <string name="today_overdue">Heure passée</string>
     <string name="today_same_time">À la même heure</string>
-    <string name="today_done_heading">Faites aujourd’hui</string>
     <string name="today_more">Plus d’options pour cette prise</string>
     <string name="home_stock_title">Stock bientôt épuisé</string>
     <string name="home_stock_view">Voir le stock</string>
@@ -1175,4 +1174,8 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
     <string name="settings_bin_count">%1$d élément(s)</string>
     <string name="settings_back">Retour aux réglages</string>
     <string name="settings_appearance_summary">Thème : %1$s · Langue : %2$s</string>
+    <string name="today_later">Plus tard</string>
+    <string name="today_log_heading">Journal du jour</string>
+    <string name="today_appointment">Rendez-vous du jour</string>
+    <string name="today_show_all">Tout afficher (%1$d)</string>
 </resources>
