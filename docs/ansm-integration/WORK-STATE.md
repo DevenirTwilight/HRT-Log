@@ -27,3 +27,5 @@ P1新引用存储、专用CAS/幂等API、默认UNKNOWN历史捕获、恢复epoc
 
 P0 #53 source 1d368ef9a1868f57291cd43a193a74c02dd9e8b6，六必需检查均SUCCESS，merge cfbe62c4a466f55234d53fbeff4c7f2c03224d50；5份CI报告ZIP已校验官方digest/CRC并确认无APK。API26/29/35新增恢复合同各7/7通过，PeriodStability5/5、PK124/124通过；旧条件SKIPPED保留见p0-ci-evidence.json。未签名/发布/交付，物理设备/断电NOT_RUN。
 P1完整215项PASS（24新增），0失败/跳过；原生编译PASS，执行NOT_RUN。新迁移合同覆盖1…10→11、Room10旧37实体与REVERSE账本位级指纹、迁移故障DDL回滚与旧版本降级拒绝。中间失败属于测试夹具构造/旧版本固定期望，未关闭现有守卫；旧28业务表新增7=35，附件与本地runtime仍不备份。
+
+已普通合入默认分支cfbe62c（#52/#53），保留全部B0影子测试和P0修复后的正向恢复/真实回滚期望；无生产代码冲突。P1 CI类清单保留原有全部项并追加引用/迁移合同；B0当前业务schema期望更新到10，未来不支持版本测试使用11，仍保留完整拒绝和目标库不变断言。
