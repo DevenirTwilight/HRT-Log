@@ -189,5 +189,14 @@
   "signed_or_delivered": false,
   "earlier_failure": "Source provenance guard rejected a build started from dirty pre-commit baseline; clean committed rerun PASS without weakening guard",
   "pr": 55,
-  "ci": "IN_PROGRESS"
+  "ci": "PREVIOUS_ANDROID_FAIL_FIXED_PENDING_RERUN",
+  "python_all_tests": {
+    "status": "PASS",
+    "tests": 113,
+    "guard_sha256": {
+      "scripts/ansm03_report.py": "877bcaf3b2c3b76c2575c9e66c1b87329236cd8f2903502087893dd5c7994787",
+      "scripts/test_ansm03_boundary.py": "bc349002fe69393eeb78d5bee79fa55c390878a345af1121eae61da729eefb8e"
+    }
+  },
+  "ci_failure": "Old 03A boundary asserted no main measurement package and exactly four test files; updated to reviewed singleton main API plus unchanged frozen archive, with negative tests for IO and unreviewed callers."
 }

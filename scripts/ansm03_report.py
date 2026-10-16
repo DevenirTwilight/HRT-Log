@@ -20,20 +20,31 @@ def git(*args):
     return subprocess.check_output(['git', *args], cwd=ROOT, text=True).strip()
 
 
+APPROVED_CORE = Path('core/domain/src/main/kotlin/net/plainnotes/app/domain/measurement/MeasurementCore.kt')
+PURE_IMPORTS = ['import java.math.BigDecimal', 'import java.time.LocalDate']
+FORBIDDEN_CORE_APIS = ('android.', 'androidx.', 'kotlinx.coroutines', 'java.io.', 'java.net.', 'java.nio.',
+                      'java.sql.', 'javax.sql.', 'System.currentTimeMillis', 'LocalDate.now(', 'System.getenv', 'Class.forName')
+
+
 def isolation():
+    # P3 explicitly authorizes one pure production core, never the frozen prototype or production stock callers.
     offenders = []
     for module in ('app', 'core', 'pk-engine', 'importer'):
         for file in (ROOT / module).rglob('*.kt'):
             relative = file.relative_to(ROOT)
-            if 'build' in relative.parts or 'test' in relative.parts or 'androidTest' in relative.parts:
+            if any(part in relative.parts for part in ('build', 'test', 'androidTest', 'historyTest', 'medicalTest', 'attachmentTest')):
                 continue
-            if 'net.plainnotes.app.domain.measurement' in file.read_text():
+            if 'net.plainnotes.app.domain.measurement' in file.read_text() and relative != APPROVED_CORE:
                 offenders.append(str(relative))
     imports = [line for line in (ROOT / MODEL / 'MeasurementCore.kt').read_text().splitlines() if line.startswith('import ')]
-    allowed = ['import java.math.BigDecimal', 'import java.time.LocalDate']
-    return {'status': 'PASS' if not offenders and imports == allowed else 'FAIL',
-            'production_callers': offenders, 'model_imports': imports, 'source_set': 'test',
-            'production_integration': 'NOT_IMPLEMENTED'}
+    core = ROOT / APPROVED_CORE
+    production = core.read_text() if core.is_file() else ''
+    production_imports = [line for line in production.splitlines() if line.startswith('import ')]
+    forbidden = [token for token in FORBIDDEN_CORE_APIS if token in production]
+    return {'status': 'PASS' if not offenders and imports == PURE_IMPORTS and core.is_file() and production_imports == PURE_IMPORTS and not forbidden else 'FAIL',
+            'production_callers': offenders, 'model_imports': imports, 'production_imports': production_imports,
+            'forbidden_apis': forbidden, 'approved_core': str(APPROVED_CORE), 'source_set': 'reviewed-main-core-and-frozen-test-oracle',
+            'production_integration': 'CORE_ONLY_NO_INVENTORY'}
 
 
 def report(baseline):
@@ -57,7 +68,8 @@ def report(baseline):
     if jar.exists():
         with zipfile.ZipFile(jar) as z:
             found = [n for n in z.namelist() if '/measurement/' in n]
-        jar_check = {'status': 'FAIL' if found else 'PASS', 'measurement_entries': found,
+            forbidden = [n for n in z.namelist() if '/prototype/' in n or '/shadow/' in n]
+        jar_check = {'status': 'PASS' if 'net/plainnotes/app/domain/measurement/Measurements.class' in found and not forbidden else 'FAIL', 'measurement_entries': found,
                      'sha256': hashlib.sha256(jar.read_bytes()).hexdigest()}
     return {'baseline': baseline, 'observed_head': git('rev-parse', 'HEAD'), 'isolation': isolation(),
             'protected_changed_files': changed, 'protected_baseline_objects': fingerprints,
