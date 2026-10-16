@@ -45,7 +45,7 @@
 ./gradlew -PjvmOnly :core:domain:test :pk-engine:test :importer:test :attachment-poc:test --no-daemon --max-workers=1
 python3 -m unittest discover -s scripts -p 'test_*.py'
 ./gradlew :core:data:testDebugUnitTest --tests '*SupplyLedgerTest' --tests '*StockForecastTest' --tests '*StockCorrectionTest' --tests '*PlanEditTest' --tests '*DataTransferTest' --tests '*AttachmentMigrationTest' :app:testFullDebugUnitTest --tests '*PeriodStabilityTest' --tests '*BackupHistoryTest' --tests '*TranslationsTest' --no-daemon --max-workers=1
-python3 scripts/ansm03_report.py --baseline 1e8754e9bab8b01034cb3de22ceaf9dc61a1438a --output /tmp/ansm03-report.json
+python3 scripts/ansm03_report.py --baseline 2f4b958425e1cd67dad1d97deb8ab724eb8ecac1 --output /tmp/ansm03-report.json
 ```
 
 本地使用-Xmx1536m与Kotlin in-process限制同时运行内存；所有项目文件配置原样保留。
@@ -59,3 +59,6 @@ python3 scripts/ansm03_report.py --baseline 1e8754e9bab8b01034cb3de22ceaf9dc61a1
 JVM266（domain67/PK124/importer12/POC63），应用1198/0fail/205既有skip，data180/reminder19；lint0error/185warning。
 API35 data137/app264（8既有skip），API26/29各data70/app70；无fail。
 这些数据建立旧生产基线；最终实现应domain98/JVM297且新增35零skip，须由最终HEAD重新确认。
+
+最终实现推送前正常合入PR49的文档主线2f4b958；所有生产代码/配置及计量源码哈希不变，
+无需把同源码数学验证重复冒充新证据。相对最新主线的保护对象与源哈希验证追加repository-audit.json。
