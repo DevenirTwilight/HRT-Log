@@ -1,0 +1,46 @@
+{
+  "recorded_at_utc": "2026-10-15T21:19:49.407544+00:00",
+  "baseline_sha": "94ceb81c55425c51e2339d54e4b59cd6017c85b5",
+  "scope": "ANSM-01 offline resource only",
+  "commands": [
+    {
+      "command": "python3 scripts/bdpm_reference.py --check",
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "command": "python3 -m unittest discover -s scripts -p 'test_*.py'",
+      "exit_code": 0,
+      "tests": 143,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "new_bdpm_tests": 39
+    }
+  ],
+  "file_sha256": {
+    "docs/reference/fr/README.md": "f805e774ccb3584c17980f2f76a428fcff26fa867ab0690664d0090b37be2bb6",
+    "docs/reference/fr/catalog.json": "d56a81299d66655508254e673aaa81579c564a3e077df2fb4e40e217bf182817",
+    "docs/reference/fr/manifest.json": "cffa99dbe1dccf604aa9908a2caccd93ab30312af6c2f0fd6cf46c8cb69bef32",
+    "docs/reference/fr/page-evidence.json": "8528d8ff6b4cdea17f120d142f1504bb58fb03b1f6045b723ebe9d25077d3ca1",
+    "docs/reference/fr/source-rows.json": "6fa5a7d615e755327127553ad88acf7ed538e7086f0be236a86b4c6eca19ea05",
+    "docs/reference/fr/validation-report.json": "a72d1742b08c44cedd31cff9cedb230e849d52cb2c55b18b971f7118443e436c",
+    "scripts/bdpm_reference.py": "32519c7e26414b3520543affec5da43c4ef36bcfa85635c70d416ef079ae8a31",
+    "scripts/test_bdpm_reference.py": "3f7c8e208761a4eb8523ce836ac93a6eb0e5fc9ed93778a072d8ba982e4e0dfb"
+  },
+  "not_run": [
+    "LOCAL_ANDROID_NO_SDK_OR_JAVAC",
+    "PHYSICAL_DEVICE",
+    "MANUAL_TALKBACK",
+    "UI_SCREENSHOT_MATRIX_NO_UI_CHANGE"
+  ],
+  "ci": "FINAL_HEAD_PENDING",
+  "compatibility": {
+    "production_changes": false,
+    "room_migration": false,
+    "pnbak_change": false,
+    "pk_change": false,
+    "version_change": false,
+    "runtime_network": false
+  }
+}
