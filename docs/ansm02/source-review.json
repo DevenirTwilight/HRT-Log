@@ -1,0 +1,34 @@
+{
+  "retrieved_at_utc": "2026-10-16T03:08:02.309369+00:00",
+  "status": "CONFLICT_UNRESOLVED",
+  "owner_distribution_approval": "NOT_FOUND",
+  "pr45_reviews_comments": 0,
+  "observations": [
+    "Download footer still links Etalab 2.0",
+    "Download license PDF still says version 1.0",
+    "Format PDF still describes ST; raw composition contains SA and FT",
+    "No official clinical text or data copied into Android"
+  ],
+  "sources": [
+    {
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/telechargement",
+      "bytes": 48732,
+      "sha256": "7eb4eeb50655c4e1494c24f07911cd04c4cc90f0b9bea4b36fa3d9bb6366c8bb"
+    },
+    {
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/docs/telechargement/licence_bdpm.pdf",
+      "bytes": 540249,
+      "sha256": "44ff23ae2b5cce0d729d1b53b20d17aae625189b131c2dd9cb98d1fe0d0a2a90"
+    },
+    {
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/Contenu_et_format_des_fichiers_telechargeables_dans_la_BDM_v5.pdf",
+      "bytes": 295557,
+      "sha256": "db10d5a62bc640c227405bcb11cef5db9ad2a2d9a6b4b547198ee19978b6bc8b"
+    },
+    {
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_COMPO_bdpm.txt",
+      "bytes": 2735840,
+      "sha256": "90a6e8ee286b6245c3938dd417ac75d1135a61b15ba50cfad70ee6b3bd181b7a"
+    }
+  ]
+}

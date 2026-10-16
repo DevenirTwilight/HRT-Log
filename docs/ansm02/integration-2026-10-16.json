@@ -1,0 +1,158 @@
+{
+  "observed_at_utc": "2026-10-16T04:18:02.000898+00:00",
+  "reason": "PR47 merged during final verification; strict PR state became BEHIND",
+  "previous_head": "8d3368c841f97f8e092be9c7b7cbb316a9ffff6c",
+  "previous_head_runs": [
+    {
+      "id": 38848300623,
+      "name": "Android and domain checks",
+      "event": "push",
+      "conclusion": "success",
+      "attempt": 1
+    },
+    {
+      "id": 38848300659,
+      "name": "Science validation",
+      "event": "push",
+      "conclusion": "success",
+      "attempt": 1
+    },
+    {
+      "id": 38848303534,
+      "name": "Android and domain checks",
+      "event": "pull_request",
+      "conclusion": "success",
+      "attempt": 1
+    },
+    {
+      "id": 38848303579,
+      "name": "Science validation",
+      "event": "pull_request",
+      "conclusion": "success",
+      "attempt": 1
+    }
+  ],
+  "previous_head_build_artifact": {
+    "head": "8d3368c841f97f8e092be9c7b7cbb316a9ffff6c",
+    "artifact_id": 12024726906,
+    "sha256": "3783d8aa721f797dbc5a105b44318d5d9f4b69a5784c7a067bdd54d515344fbf",
+    "crc": "PASS",
+    "apk_entries": 0,
+    "matching_screenshots": 384,
+    "summary": [
+      {
+        "path": "app/build/reports/tests/testFullDebugUnitTest/index.html",
+        "counts": {
+          "tests": 1272,
+          "failures": 0,
+          "skipped": 173
+        }
+      },
+      {
+        "path": "core/data/build/reports/tests/testDebugUnitTest/index.html",
+        "counts": {
+          "tests": 180,
+          "failures": 0,
+          "skipped": 0
+        }
+      },
+      {
+        "path": "core/reminder/build/reports/tests/testDebugUnitTest/index.html",
+        "counts": {
+          "tests": 19,
+          "failures": 0,
+          "skipped": 0
+        }
+      },
+      {
+        "path": "app/build/reports/tests/testFullDebugUnitTest/net.plainnotes.app.PeriodStabilityTest/index.html",
+        "counts": {
+          "tests": 5,
+          "failures": 0,
+          "skipped": 0
+        }
+      },
+      {
+        "path": "app/build/reports/tests/testFullDebugUnitTest/net.plainnotes.app.catalog.SyntheticCatalogTest/index.html",
+        "counts": {
+          "tests": 9,
+          "failures": 0,
+          "skipped": 0
+        }
+      },
+      {
+        "path": "app/build/reports/tests/testFullDebugUnitTest/net.plainnotes.app.catalog.CatalogPrototypeFlowTest/index.html",
+        "counts": {
+          "tests": 8,
+          "failures": 0,
+          "skipped": 0
+        }
+      },
+      {
+        "path": "app/build/reports/tests/testFullDebugUnitTest/net.plainnotes.app.catalog.CatalogPrototypeHostTest/index.html",
+        "counts": {
+          "tests": 1,
+          "failures": 0,
+          "skipped": 0
+        }
+      },
+      {
+        "path": "app/build/reports/tests/testFullDebugUnitTest/net.plainnotes.app.catalog.CatalogPrototypeLayoutTest/index.html",
+        "counts": {
+          "tests": 96,
+          "failures": 0,
+          "skipped": 0
+        }
+      }
+    ]
+  },
+  "latest_baseline": "1e8754e9bab8b01034cb3de22ceaf9dc61a1438a",
+  "mainline_pr": 47,
+  "integration_merge": "89c9519f699895ac2ef3eadfd85b6e8783ed0e57",
+  "integration_method": "normal merge; no history rewrite; no conflicts",
+  "upstream_changes": "UI04 Calendar/TodayCard/strings/tests/docs; versionCode28 comes from merged PR47, not this PR",
+  "own_implementation_hashes_match_prior_acceptance": true,
+  "protected_sources_unchanged_relative_to_latest_baseline": {
+    "app/src/main": "3211c65746b091e19e44cfdc4dd74727f29e9f6e",
+    "app/src/full": "09d7ad91e678757caf3958b05ff33ea435dda8a6",
+    "core": "b80c15bf3bf593b2180e392b42c24b2206e881aa",
+    "pk-engine": "89136c2dbf33ec71a989350e99350f4dcd2ac00a",
+    "importer": "788106531fda5c97d1a9b66ec375e8e2afe5545d",
+    "app/build.gradle.kts": "7842e145335e728488480dfb199e6d5c64576357",
+    ".github": "2d3d1e6da7f882553342dbb655ffe69ea83dcfa0",
+    "gradle": "194bcea615eb017bf2366b024c941679c839f465",
+    "build.gradle.kts": "7b527fc7d94ab0d90d509815f2e3225a9cc674d4",
+    "settings.gradle.kts": "3a7c1dcbc6852062292e748ebb427f64596dd556"
+  },
+  "own_changed_paths": [
+    "app/src/debug/AndroidManifest.xml",
+    "app/src/debug/assets/ansm02-synthetic.json",
+    "app/src/debug/java/net/plainnotes/app/debug/catalog/CatalogPrototypeScreen.kt",
+    "app/src/debug/java/net/plainnotes/app/debug/catalog/SyntheticCatalog.kt",
+    "app/src/debug/res/values-b+zh+Hant/ansm_catalog.xml",
+    "app/src/debug/res/values-fr/ansm_catalog.xml",
+    "app/src/debug/res/values-zh/ansm_catalog.xml",
+    "app/src/debug/res/values/ansm_catalog.xml",
+    "app/src/test/java/net/plainnotes/app/catalog/CatalogPrototypeUiTest.kt",
+    "app/src/test/java/net/plainnotes/app/catalog/SyntheticCatalogTest.kt",
+    "docs/ansm02/README.md",
+    "docs/ansm02/ci-code-evidence.json",
+    "docs/ansm02/compatibility-design.md",
+    "docs/ansm02/local-verification.json",
+    "docs/ansm02/manual-checklist.md",
+    "docs/ansm02/repository-audit.json",
+    "docs/ansm02/requirements.md",
+    "docs/ansm02/screenshots/en_320_2.0_true_HIGH_confirm.png",
+    "docs/ansm02/screenshots/en_411_1.0_false_STANDARD_detail.png",
+    "docs/ansm02/screenshots/fr-rFR_320_2.0_true_HIGH_confirm.png",
+    "docs/ansm02/screenshots/fr-rFR_411_1.0_false_STANDARD_detail.png",
+    "docs/ansm02/screenshots/zh-rCN_320_2.0_true_HIGH_confirm.png",
+    "docs/ansm02/screenshots/zh-rCN_411_1.0_false_STANDARD_detail.png",
+    "docs/ansm02/screenshots/zh-rTW_320_2.0_true_HIGH_confirm.png",
+    "docs/ansm02/screenshots/zh-rTW_411_1.0_false_STANDARD_detail.png",
+    "docs/ansm02/source-review.json",
+    "scripts/check_attachment_release_isolation.py",
+    "scripts/test_ansm02_boundary.py"
+  ],
+  "final_ci": "The integrated final HEAD must run all six required checks again. Final SHA/results recorded in PR48 body/checks."
+}
