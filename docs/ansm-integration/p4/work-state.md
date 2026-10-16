@@ -29,3 +29,7 @@ Room版本门先红测试源37f84cb真实FAIL：旧Room11读取器成功打开�
 源e4d5ddb完整Room12验证：data268（含迁移6/容器10/包装12）零失败/跳过，Period5+Privacy3通过，原生源码编译PASS。目录更新、药物当前引用、PK、原Scalar账本/预测与正式库存入口均未改；模式未启用。Room12源尚未通过远端当前CI，不得套用旧5bcf8d3六绿灯。
 
 Room12检查点0843450六项CI在push/PR全部SUCCESS；当前仍DRAFT，不以此替代后续代码验收。后续MeasuredUsePayload六项本地PASS，旧Double剂量仅以原始IEEE754位保存上下文，实际库存量为独立精确Quantity。MeasuredConsumptionStore新增八项真实Room测试PASS：精确分数、相同UUID幂等/冲突、不同规格逐项事实不求和、未知换算不扣、耗尽余量、外药物/旧epoch拒绝及新记录/来源/流水故障全回滚。适配器仍无Repository/App调用者，当前备份仍拒绝此格式，旧SupplyLedger/预测未改。正在增加原始量逆操作与故障回滚；没有启用正式库存。
+
+源7320a89新增精确消耗/原量冲销/实际剩余调整的12项合成Room事务测试及Python157项边界守卫PASS。旧剂量原始Double位仅保留上下文，物理库存量独立；重复op冲突拒绝，调整CAS拒绝覆盖并发实际消耗，零量也检查量纲，原量逆操作与分配故障完整回滚。证据consumption-local-evidence.json。当前将同12项抽到historyTest共享合同，JVM改用真实文件库，SQLCipher原生类与CI只追加清单；完整回归/原生执行尚待本次新源码结果。没有启用正式入口、备份格式接受或预测。主线f1e9b4d六项检查已全部成功。
+
+0843450远端报告已下载并核对GitHub摘要/ZIP CRC：API26数据127、API29数据127、API35数据194，均零失败/跳过；每个API均包含引用21/迁移6/容器10合同。App1379零失败205条件跳过/data268/reminder20/PK40，机器证据room12-ci-evidence.json。该源不含后续消耗适配器，不能套用为最新代码验收。新共享合同完整JVM数据286全部通过（零失败/错误/跳过）；原生编译待结束，原生新增12合同尚未执行。
