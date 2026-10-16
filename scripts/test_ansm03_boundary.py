@@ -19,6 +19,31 @@ class MeasurementIsolationTest(unittest.TestCase):
         self.assertIn('ansm03-exact-v1', (report.ROOT / report.MODEL / 'MeasurementCore.kt').read_text())
         self.assertIn('kotlin.exclude("net/plainnotes/app/domain/measurement/MeasurementCore.kt")', (report.ROOT / 'core/domain/build.gradle.kts').read_text())
 
+    def test_quantum_adapter_has_a_narrow_pure_boundary(self):
+        import tempfile
+        from unittest.mock import patch
+        original_root = report.ROOT
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for relative in (report.MODEL / 'MeasurementCore.kt', report.APPROVED_CORE, report.APPROVED_STOCK_QUANTUM):
+                target = root / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_text((original_root / relative).read_text())
+            stock = root / report.APPROVED_STOCK_QUANTUM
+            original = stock.read_text()
+            with patch.object(report, 'ROOT', root):
+                self.assertEqual('PASS', report.isolation()['status'])
+                for token in report.FORBIDDEN_CORE_APIS:
+                    stock.write_text(original + '\n' + token)
+                    self.assertEqual('FAIL', report.isolation()['status'], token)
+                stock.write_text(original)
+                rogue = stock.parent / 'Unreviewed.kt'
+                rogue.write_text('package net.plainnotes.app.domain.stock')
+                self.assertEqual('FAIL', report.isolation()['status'])
+                rogue.unlink()
+                stock.write_text(original + '\nimport java.math.RoundingMode')
+                self.assertEqual('FAIL', report.isolation()['status'])
+
     def test_frozen_contract_and_production_gate_are_separate(self):
         docs = report.ROOT / 'docs/ansm03'
         self.assertIn('ansm03-exact-v1', (docs / 'measurement-contract.md').read_text())

@@ -21,28 +21,36 @@ def git(*args):
 
 
 APPROVED_CORE = Path('core/domain/src/main/kotlin/net/plainnotes/app/domain/measurement/MeasurementCore.kt')
+APPROVED_STOCK_QUANTUM = Path('core/domain/src/main/kotlin/net/plainnotes/app/domain/stock/StockQuantum.kt')
+STOCK_IMPORTS = ['import java.math.BigDecimal', 'import net.plainnotes.app.domain.measurement.*']
 PURE_IMPORTS = ['import java.math.BigDecimal', 'import java.time.LocalDate']
 FORBIDDEN_CORE_APIS = ('android.', 'androidx.', 'kotlinx.coroutines', 'java.io.', 'java.net.', 'java.nio.',
                       'java.sql.', 'javax.sql.', 'System.currentTimeMillis', 'LocalDate.now(', 'System.getenv', 'Class.forName')
 
 
 def isolation():
-    # P3 explicitly authorizes one pure production core, never the frozen prototype or production stock callers.
+    # P3 core and P4 exact-quantum adapter only; database/UI/ledger callers remain forbidden.
     offenders = []
     for module in ('app', 'core', 'pk-engine', 'importer'):
         for file in (ROOT / module).rglob('*.kt'):
             relative = file.relative_to(ROOT)
             if any(part in relative.parts for part in ('build', 'test', 'androidTest', 'historyTest', 'medicalTest', 'attachmentTest')):
                 continue
-            if 'net.plainnotes.app.domain.measurement' in file.read_text() and relative != APPROVED_CORE:
+            if any(token in file.read_text() for token in ('net.plainnotes.app.domain.measurement', 'net.plainnotes.app.domain.stock')) and relative not in (APPROVED_CORE, APPROVED_STOCK_QUANTUM):
                 offenders.append(str(relative))
     imports = [line for line in (ROOT / MODEL / 'MeasurementCore.kt').read_text().splitlines() if line.startswith('import ')]
     core = ROOT / APPROVED_CORE
     production = core.read_text() if core.is_file() else ''
     production_imports = [line for line in production.splitlines() if line.startswith('import ')]
     forbidden = [token for token in FORBIDDEN_CORE_APIS if token in production]
-    return {'status': 'PASS' if not offenders and imports == PURE_IMPORTS and core.is_file() and production_imports == PURE_IMPORTS and not forbidden else 'FAIL',
-            'production_callers': offenders, 'model_imports': imports, 'production_imports': production_imports,
+    stock = ROOT / APPROVED_STOCK_QUANTUM
+    stock_text = stock.read_text() if stock.is_file() else ''
+    stock_imports = [line for line in stock_text.splitlines() if line.startswith('import ')]
+    stock_forbidden = [token for token in FORBIDDEN_CORE_APIS if token in stock_text]
+    stock_valid = not stock.exists() or (stock_imports == STOCK_IMPORTS and not stock_forbidden)
+    return {'status': 'PASS' if stock_valid and not offenders and imports == PURE_IMPORTS and core.is_file() and production_imports == PURE_IMPORTS and not forbidden else 'FAIL',
+            'approved_stock_quantum': str(APPROVED_STOCK_QUANTUM) if stock.exists() else None,
+            'stock_imports': stock_imports, 'stock_forbidden_apis': stock_forbidden, 'production_callers': offenders, 'model_imports': imports, 'production_imports': production_imports,
             'forbidden_apis': forbidden, 'approved_core': str(APPROVED_CORE), 'source_set': 'reviewed-main-core-and-frozen-test-oracle',
             'production_integration': 'CORE_ONLY_NO_INVENTORY'}
 
