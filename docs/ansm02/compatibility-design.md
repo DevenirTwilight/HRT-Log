@@ -41,18 +41,37 @@ asset适配器，将01字段映射到只读DTO；构建不下载。损坏/重复
 
 ## ANSM-02B 建议实体（全部 NOT_IMPLEMENTED）
 
-建议审查后增加 Room11 的三个独立结构；最终版本号必须集成时重核，不能抢占其他迁移：
+建议审查后增加候选 Room11 的三个领域结构与两个身份结构；最终版本号必须集成时重核，不能抢占其他迁移：
 
 1. OfficialReferenceSnapshot：不可变UUID、schemaVersion、namespace、CIS、可空CIP13、
    referenceVersion、catalogSha256、productPayloadSha256、capturedAtUtc；必要原文快照含
    名称/成分角色与分母/剂型/所有途径/选定包装/独立状态/字段来源与核实日/未知冲突列表。
    无用户剂量/计划/PK参数；失去当前目录也能读。规范JSON确定性哈希并设大小/字段预算。
-2. MedicationReferenceEvent：事件UUID、medication_id、revision、关联快照UUID（解除为空）、
+2. MedicationReferenceEvent：事件UUID、datasetUUID、medicationUUID、revision、关联快照UUID（解除为空）、
    observedAtUtc、previousEventUUID、动作LINK/UNLINK/CORRECT、可选用户更正说明。
    append-only；每药物revision唯一，重复opUUID幂等；不得用可回溯生效时间改写旧事实。
-3. RecordReferenceCapture：record_id+record_revision及可空eventUUID，表示本次记录明确捕获的
-   来源；未来方案需单独的 rule_version_id 捕获映射。旧行**不回填**；未知就是未知。
-   如编辑旧记录，仅用户明确更正引用才产生新revision；保留旧修订证据，不能按当前药物绑定补齐。
+3. RecordReferenceCapture：captureUUID、datasetUUID、record_id+record_revision、独立referenceRevision、
+   previousCaptureUUID、operationUUID、nullable contextEventUUID、
+   nullable actualProductSnapshotUUID、actualConfirmationSource。context仅表示创建记录时冻结的
+   用户药物关联上下文，不证明实际使用了该CIS/CIP。actual默认null，只有用户明确确认本次
+   实际商品/包装才冻结另一快照；不能从当前绑定、方案或库存旧容器推断。未来方案需单独的
+   rule_version_id 捕获映射。旧行**不回填**；未知就是未知。
+   来源更正仅追加referenceRevision并保留旧capture，绝不改变RecordEntity.revision或触发账本冲销。
+   用户实际时间/剂量更正仍走原记录修订；新capture显式锚定对应record_revision，不能按当前药物绑定补齐。
+
+4. ReferenceDataset：datasetUUID与CURRENT/RETIRED状态，只属于官方引用子系统。
+   首次显式关联时延迟初始化；旧药物/旧备份不创建虚构官方身份。整库替换先使旧scope失效，事务内清除旧绑定及旧scope，
+   新备份导入在同一事务建立新local scope并重映射全部引用，保留来源dataset标识作出处，
+   不按旧整数ID自动接续。不得借用功能关闭的attachment_store或偏好文件。
+5. ReferenceMedicationIdentity：datasetUUID、medicationUUID、nullable medication_id、
+   LIVE/PURGED。这里LIVE指身份仍存在，不能与Medication.active混同；复合FK将事件绑定到它，
+   CURRENT中每个存在的med_id唯一。整型ID只是库句柄；未来若批准物理删除，先按所有权移除
+   关联数据并使旧身份PURGED/med_id=null，同整数ID新药必须新UUID。记录捕获必须验证event
+   的UUID确属该记录药物；本提案不新增药物回收站或永久删除功能。
+
+这五个概念都尚未建表；具体DDL、索引/约束、恢复顺序和故障注入须在02B批准包评审后冻结。
+已有AttachmentIdentity.bind只支持APPOINTMENT/LAB/DOSE_RECORD，没有MEDICATION身份；
+不能假设可直接复用或新增一种附件target来绕过本批迁移审批。
 
 当前引用由最新event导出，引用事件和快照同事务提交；引用已归档/已撤销产品仍可读。
 选择包装必须验证parentCIS，换CIS清除不属于它的CIP；取消不提交，重复确认同op不新增。
@@ -71,11 +90,15 @@ PNBAK1 magic/加密/KDF保持，建议业务schema10显式增加引用表及列�
 全部引用为空（不由当前目录补），旧format1仍可解密。新版导出必须包含全部不可变快照、
 事件、记录修订映射，不依赖APK目录存在。旧版读取新业务schema应明确拒绝，不静默丢引用。
 限制payload大小/JSON嵌套/哈希，重复UUID/CIS-CIP冲突/孤儿/循环revision/无效枚举整体拒绝并
-回滚，保留原库。恢复顺序快照→med→event→record映射需与实际FK和旧恢复顺序联合设计。
+回滚，保留原库。建议同事务先按capture→event→identity→snapshot/scope清除旧引用，
+再按原顺序恢复业务表，随后新scope→snapshot→identity→event→capture；最终顺序仍须
+与实际FK/旧恢复入口联合审阅和故障注入。不得遗留已被覆盖的旧药物-CIS绑定。
 ID重分配必须重映射所有引用，不能将整数ID复用关联另一药物；优先使用既有逻辑数据集/稳定UUID
 机制，但不把功能关闭的附件表当本功能存储。
 
-软删除药物/记录保留引用与事件，恢复恢复原上下文；永久清除在同事务按所有权删除映射，
+当前removeMedication仅停用药物、关通知并结束现行规则，不是删除或回收站；停用/重新启用
+不解绑、不清快照或更换medicationUUID。实际记录进入既有回收站则保留capture，恢复原上下文；
+记录永久清除在同事务按所有权删除映射，
 只清无任何活跃/回收站/历史修订引用的快照。整库覆盖恢复/删除全部数据遵守既有dataset/epoch
 与锁机制，不单独保存偏好侧车。更正产生新事件，不覆盖既有快照；目录更新仅影响新选择。
 
@@ -119,3 +142,31 @@ medication身份、数据集稳定身份和event所属药物；仅整数ID相同
 无历史映射的旧记录始终显示“未保存官方来源”，不以event时间推算来源。
 引用源版本更正与用户实际剂量更正是两种操作，后者仍走原记录修订与账本路径；
 前者不触发任何库存冲销。所有CAS/错误归属/重复提交测试属于02B审批后的验收。
+
+现有MedicationEditor仅E2提供实际route，其余保存null。官方产品多途径列表不能替用户确认
+实际途径，也不能由PK profile补齐历史。若正式选择后要扩展实际途径录入，必须单独确定
+旧unknown/null、记录修订与备份语义并审批；本Mock不填充route。
+
+## 选择确认的字段边界
+
+|信息|当前Mock确认行为|未来正式接线的约束|
+|---|---|---|
+|CIS、显式可选CIP、来源版本、商品原名|仅UI引用预览；可取消/解除|在独立引用结构中保存；不取第一个包装作默认实际包装|
+|用户名称与剂量文本|原样保留|关联不是重命名；新药如提供名称候选也须可修改且不改已有药物|
+|成分/剂型/规格/途径|只读来源|不是用户实际成分/途径确认，更不是品牌/盐/酯/释放形式等效关系|
+|剂量、频率、时间、实际途径、库存单位/容量、PK|不预填、不计算|由原手动流程明确输入；不从商品规格或包装数转换|
+|未知字段、授权/销售/供应、RCP/Notice正文核实|分别显示或标未知|不把许可/面板/授权/无公告推成临床内容、适用个人或可买到|
+
+确认本身不能修正用户历史或自动消除参考资料与手动信息的差异。所有持久化与新药物创建
+必须在02B审批后设计真正事务和取消语义；当前不存在这种正式入口。
+
+另一个高风险语义是“关联商品”与“这次实际用的商品/包装”不同。用户更换关联后可能仍在
+使用旧包装；记录发生时间也可能早于补录时间。上下文捕获必须标明创建/更正时刻，不能
+把它标为实际给药商品。实际商品快照只接受明确事实录入；未知保持null，不能按当前链接
+回填过去或用它校正库存。02B需对这两种来源分别做补录、迟到记录、关联切换、目录更新、
+更正/撤销和备份回放测试；该事实确认UI不在当前Mock实现或任何已批准的生产范围内。
+
+引用元数据更正与真实服药更正必须用不同修订域：前者CAS追加referenceRevision，保持
+RecordEntity整行（包括revision）、SupplyLedger及方案/PK不变；不能调用现有实际记录编辑
+路径来“顺便保存来源”。后者才使用既有RecordEntity.revision及冲销流程。审批后需对同一
+记录的引用更正/重复操作/并发更正验证旧capture字节不变及库存流水计数/哈希完全不变。

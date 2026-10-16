@@ -1,9 +1,9 @@
 # ANSM-02A：合成目录与只读详情交接（2026-10-16）
 
-**实现状态：SYNTHETIC_UI_LOCAL_VERIFIED / PRODUCTION_INTEGRATION_BLOCKED。**
+**实现状态：SYNTHETIC_UI_IMPLEMENTATION_CI_VERIFIED / PRODUCTION_INTEGRATION_BLOCKED。**
 这是可运行、可测试的debug原型，不是正式药品目录、用户绑定、医疗资料核实或发布批准。
 本轮[要求摘要](requirements.md)、[兼容设计/审批包](compatibility-design.md)、
-[验收边界与复现命令](manual-checklist.md)、[本地机器证据](local-verification.json)。
+[验收边界与复现命令](manual-checklist.md)、[本地机器证据](local-verification.json)、[实现SHA的CI证据](ci-code-evidence.json)。
 
 ## 基线、前置条件与协作
 
@@ -60,7 +60,7 @@ PR47（UI-04）正在改正式日历、字符串、测试及共享REQUIREMENTS/H
 ## 自动证据与不变性
 
 本地最终命令：新增114测试（数据9、交互8、资产宿主1、布局96）、PeriodStability5、
-现有翻译2，共121，0失败/错误/跳过；全部scripts108通过。Lint成功，0错误、178项既有警告，
+现有翻译2，共121，0失败/错误/跳过；全部scripts108通过。Lint成功，0错误、185项警告，
 新目录文件0项。详见机器证据。
 384张Native Robolectric截图：四语×320/411dp×1/2××明暗×三对比度×四视图。
 完整图随既有CI build-results归档；本目录保留8张代表图，完整文件哈希在机器报告。
@@ -74,6 +74,15 @@ Native Paragraph溢出标记误报，改用与原隐私验收相同的实际字�
 计划和预测/锁与伪装/PK与PDF/版本包名不改。正式APK隔离守卫新增目录代码、资源、资产
 拒绝项；保留全部原有检查，负向注入测试通过。实际Release/No INTERNET和完整兼容回归
 还必须以本PR最终HEAD的六项必需CI为准，不借用先前SHA或Mock结果。
+
+实现SHA `0129df3020caa995bbbfe42f92db49cbcb87a22e` 的push Android38846525419 / Science38846525473、
+PR Android38846586349 / Science38846586350全部success，均attempt1，未取消/重跑。
+下载报告校验和/CRC已核对且无APK：JVM262（domain63/PK124/importer12/POC63），
+app1272/0fail/173原skip、data180/reminder19；新目录114与PeriodStability5均0fail/skip。
+API35 data137、app264（8原skip）；API26/29各data70+app70正常套件0fail/skip；
+独立红对照按预期失败且修复路径成功，不混同正常测试。No INTERNET、实际unsigned Release
+目录隔离、PNBAK1/VOIDED/撤销及新PID恢复日志均已核验。CI生成384张图与本地哈希全部相同。
+这些数字只归属于实现SHA；此后的交接文档HEAD仍须完整CI，不能借用旧绿灯。
 
 最终SHA、完整CI结论和报告下载证据固定在本PR正文/checks，避免为记录自身SHA循环提交。
 不自动合并，不签名，不交付APK，不创建Release。工程成功不代表资料或临床/发布验收。
