@@ -34,3 +34,5 @@
 历史四语新增测试首轮12项中4项FAIL：fixture只设active=false仍保留已生效rule，NotesViewModel正常reconcile生成AUTO_MISSED，导致“single record”断言失败。改为创建无计划的合成历史药物（saveMedication active=false），保留记录数量/原内容相等断言；12项定向重跑PASS。未改变生产reconcile。另复核旋转期间在途写入：控制器open改为busy时返回null，保留原事务/目标且AppShell不重新打开错误目标；原真实阻塞测试追加拒绝open及状态完全相等断言。
 
 最终源6697747：data243/app75全PASS，零失败/错误/跳过，含真实历史UI12项、控制器7项、四语UI16项、矩阵32项、Period5与Privacy3；96配置192图，8张代表图和全量摘要已更新。最新人工抽查zh-CN320dp/2x/dark/HIGH，未冒充真机或TalkBack。合成fixture首轮4失败保留在工作记录，不删除断言。普通合入父PR最新945512a（含已合并#45/#48冻结资源及debug原型）；最终整合CI尚待执行。#56仍是feature base草稿，不能合进feature，需父PR #54合入默认后改base并按保护检查自动合并。
+
+父#54六检查在源945512a全部SUCCESS并保护合并c95cea1。#56已改实际默认base并普通合入c95cea1；后续保护自动合并仅针对默认分支，不再是feature base草稿。P1最新三API及完整CI证据更新于p1-ci-evidence.json，旧d9证据独立归档，未混同主线复验。

@@ -2,7 +2,7 @@
 
 官方目录分发仍为OFF。以下证据是实际生产组件使用**用户录入的合成资料**生成，不是BDPM商品核实或真实健康记录。
 
-依赖P1 #54的稳定引用/历史/备份API；本阶段不新增Schema，不改变库存或PK。PR #56当前stacked草稿，合并前必须retarget实际默认分支并重新通过六检查。
+依赖P1 #54的稳定引用/历史/备份API；本阶段不新增Schema，不改变库存或PK。父#54已保护合并c95cea1；PR #56已改为实际默认分支，当前整合HEAD必须重新通过六检查。
 
 源6697747本地data243、app75全PASS；后者包含Controller7、四语小屏2x操作16、历史来源只读操作12、布局矩阵32、PeriodStability5及Privacy3。每个布局遍历STANDARD/MEDIUM/HIGH三档对比度，产生96配置/192张合成截图。local-evidence.json记录准确测试源、报告摘要和限制；完整图片摘要见screenshot-manifest.json，四语代表图在screenshots/。
 
