@@ -108,6 +108,60 @@ abstract class ReferenceMigrationContract {
             open().useRoom {assertEquals(before,RawData.dump(it.openHelper.writableDatabase).toString())}
         } finally {context.deleteDatabase(name);key.fill(0)}
     }
+    @Test fun failedElevenToTwelveFenceRollsBackWithAllReferenceFactsAndEpochIntact() {
+        val name="synthetic-fence-rollback-${UUID.randomUUID()}.db";val key=ByteArray(32){83};var invoked=false
+        try {
+            val before=fixture(name,key,11).use {helper->
+                val raw=helper.writableDatabase;SchemaGuards.install(raw);raw.beginTransaction()
+                try {
+                    raw.execSQL("INSERT INTO medication(id,name,molecule,unit,dose_per_intake,container_capacity,site_rotation,notifications_on,active,sort_order) VALUES(1,'SYNTHETIC Room11 reference','OTHER','MG',1,28,0,0,0,0)")
+                    ReferenceStore.initialAssociation(raw,1,UUID.randomUUID().toString(),UserReferenceProduct("SYNTHETIC old reference",sourceVersion="old-v1",recordedOn="2026-10-16"),ReferenceStore.previewEpoch(raw))
+                    raw.setTransactionSuccessful()
+                } finally {raw.endTransaction()}
+                RawData.dump(raw).toString() to raw.query("SELECT dataset_uuid,epoch FROM reference_runtime").use{assertTrue(it.moveToFirst());it.getString(0) to it.getString(1)}
+            }
+            val injected=object:androidx.room.migration.Migration(11,12) {
+                override fun migrate(db:SupportSQLiteDatabase) {
+                    invoked=true;migration11To12.migrate(db);db.execSQL("CREATE TABLE synthetic_interrupted_fence(id INTEGER PRIMARY KEY)")
+                    error("SYNTHETIC format fence interrupted")
+                }
+            }
+            Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(key.clone())).addMigrations(injected).build().useRoom {room->
+                try{room.openHelper.writableDatabase;fail("Interrupted format fence succeeded")}catch(e:IllegalStateException){assertTrue(e.message.orEmpty().contains("SYNTHETIC format fence interrupted"))}
+            }
+            assertTrue(invoked)
+            fixture(name,key,11).use {helper->
+                val raw=helper.writableDatabase;assertEquals(11,raw.version);assertEquals(before.first,RawData.dump(raw).toString())
+                raw.query("SELECT name FROM sqlite_master WHERE name='synthetic_interrupted_fence'").use{assertFalse(it.moveToFirst())}
+                raw.query("SELECT dataset_uuid,epoch FROM reference_runtime").use{assertTrue(it.moveToFirst());assertEquals(before.second,it.getString(0) to it.getString(1))}
+            }
+            Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(key.clone())).addMigrations(*allMigrations()).addCallback(SchemaGuards).build().useRoom {room->
+                val raw=room.openHelper.writableDatabase;assertEquals(12,raw.version);assertEquals(before.first,RawData.dump(raw).toString())
+                raw.query("SELECT dataset_uuid,epoch FROM reference_runtime").use{assertTrue(it.moveToFirst());assertEquals(before.second,it.getString(0) to it.getString(1))}
+            }
+        } finally {context.deleteDatabase(name);key.fill(0)}
+    }
+    @Test fun unsupportedMeasurementsInOldRoomElevenAreRejectedWithoutClearingAnything() {
+        val name="synthetic-old-unrecognized-measurement-${UUID.randomUUID()}.db";val key=ByteArray(32){89}
+        try {
+            val before=fixture(name,key,11).use {helper->
+                val raw=helper.writableDatabase;SchemaGuards.install(raw);raw.beginTransaction()
+                try {
+                    val scope=ReferenceStore.scope(raw)
+                    ReferenceStore.insert(raw,"reference_snapshot",JSONObject().put("uuid",UUID.randomUUID().toString()).put("dataset_uuid",scope.dataset)
+                        .put("kind","PRESENTATION").put("namespace","USER_ENTERED").put("source_version","unknown-old-prototype")
+                        .put("payload_json","{}").put("payload_sha256",ReferencePayload.sha("{}")))
+                    raw.setTransactionSuccessful()
+                } finally {raw.endTransaction()}
+                RawData.dump(raw).toString()
+            }
+            Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(key.clone())).addMigrations(*allMigrations()).build().useRoom {room->
+                try{room.openHelper.writableDatabase;fail("Old unknown measurement was promoted to the new format")}
+                catch(e:Exception){assertTrue(generateSequence<Throwable>(e){it.cause}.any{it.message.orEmpty().contains("Unrecognized measurement data in the old database format")})}
+            }
+            fixture(name,key,11).use{assertEquals(11,it.writableDatabase.version);assertEquals(before,RawData.dump(it.writableDatabase).toString())}
+        } finally {context.deleteDatabase(name);key.fill(0)}
+    }
     @Test fun failedTenToElevenMigrationRollsBackDdlAndKeepsOriginalEncryptedDatabaseReadable() {
         val name="synthetic-reference-failed-migration-${UUID.randomUUID()}.db";val key=ByteArray(32){63};var invoked=false
         try {

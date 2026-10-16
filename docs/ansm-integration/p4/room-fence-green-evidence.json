@@ -1,0 +1,14 @@
+{
+  "tested_source": "7fcc67108ba136e7b0d055ae083ca4d25faa1014",
+  "status": "TARGETED_GREEN",
+  "tests": 1,
+  "failures": 0,
+  "report_sha256": "feaf80891185be1f4b9de18a82ace5a511e7e79bfc6c6015946893661254e7b1",
+  "log_sha256": "d68a0779cb93a073a3b44c4e092089e50639e3923f9f237b7489ca34066d938a",
+  "schema12_export_generated_during_build": true,
+  "entity_and_view_definitions_unchanged": true,
+  "entity_count": 45,
+  "business_backup": 10,
+  "new_presentation_backup_acceptance": "OFF",
+  "full_migration_and_native_execution": "PENDING"
+}
