@@ -261,4 +261,61 @@ abstract class MeasuredConsumptionContract {
         assertEquals(1.0,db.dao().container(b.container.id).used_amount,0.0);assertEquals(1,count("supply_transaction"));assertEquals(r,db.dao().recordById(r.id))
     }
 
+    @Test fun earlierCountDoesNotBlockTheInverseOfALaterPhysicalUse()=runBlocking {
+        val m=med();val b=box(m)
+        db.withTransaction{MeasuredConsumptionStore.adjustRemaining(db,b.scope,b.container,b.containerUuid,b.presentationEventUuid,b.presentation.sha256,
+            Quantity(BigDecimal("27.5"),MeasureUnit.TABLET,meaning),true,UUID.randomUUID().toString(),at.plusSeconds(60))}
+        val observed=db.dao().container(b.container.id);val r=record(m)
+        val original=consume(r,b,listOf(use(b))) // Clock intentionally earlier than the count; causal order is the ledger.
+        db.withTransaction{MeasuredConsumptionStore.reverseOriginal(db,b.scope,r,original.operationUuid,UUID.randomUUID().toString(),at.minusSeconds(60))}
+        assertEquals(observed.used_amount,db.dao().container(b.container.id).used_amount,0.0)
+        assertEquals(listOf(1.0,1.0,-1.0),db.dao().supplyForContainer(b.container.id).map{it.used_delta})
+        assertEquals(r,db.dao().recordById(r.id))
+    }
+
+    @Test fun replayedRemainingCountKeepsItsOriginalCausalAnchorAfterLaterUse()=runBlocking {
+        val m=med();val b=box(m);val op=UUID.randomUUID().toString()
+        val target=Quantity(BigDecimal("27.5"),MeasureUnit.TABLET,meaning)
+        db.withTransaction{MeasuredConsumptionStore.adjustRemaining(db,b.scope,b.container,b.containerUuid,b.presentationEventUuid,b.presentation.sha256,target,true,op,at)}
+        val before=ReferenceStore.row(raw,"measured_operation","operation_uuid=?",arrayOf(op))!!
+        assertEquals("0",org.json.JSONObject(before.getString("input_json")).getJSONObject("execution").getString("ledger_head_id"))
+        consume(record(m),b,listOf(use(b)))
+        db.withTransaction{assertTrue(MeasuredConsumptionStore.adjustRemaining(db,b.scope,b.container,b.containerUuid,b.presentationEventUuid,b.presentation.sha256,target,true,op,at.plusSeconds(86400)) is MeasureResult.Success)}
+        assertEquals(before.toString(),ReferenceStore.row(raw,"measured_operation","operation_uuid=?",arrayOf(op))!!.toString())
+        assertEquals(2.0,db.dao().container(b.container.id).used_amount,0.0);assertEquals(2,count("supply_transaction"));assertEquals(2,count("measured_operation"))
+    }
+    @Test fun noOpCountBeforeAUseDoesNotBlockItsLaterInverse()=runBlocking {
+        val m=med();val b=box(m)
+        db.withTransaction{MeasuredConsumptionStore.adjustRemaining(db,b.scope,b.container,b.containerUuid,b.presentationEventUuid,b.presentation.sha256,
+            Quantity(BigDecimal("28"),MeasureUnit.TABLET,meaning),true,UUID.randomUUID().toString(),at.plusSeconds(60))}
+        val r=record(m);val original=consume(r,b,listOf(use(b)))
+        db.withTransaction{MeasuredConsumptionStore.reverseOriginal(db,b.scope,r,original.operationUuid,UUID.randomUUID().toString(),at.minusSeconds(60))}
+        assertEquals(0.0,db.dao().container(b.container.id).used_amount,0.0)
+        assertEquals(listOf(1.0,-1.0),db.dao().supplyForContainer(b.container.id).map{it.used_delta})
+    }
+    @Test fun malformedOrNonexistentAdjustmentAnchorsCannotBeReplayed()=runBlocking {
+        val m=med();val b=box(m);val op=UUID.randomUUID().toString();val target=Quantity(BigDecimal("27.5"),MeasureUnit.TABLET,meaning)
+        db.withTransaction{MeasuredConsumptionStore.adjustRemaining(db,b.scope,b.container,b.containerUuid,b.presentationEventUuid,b.presentation.sha256,target,true,op,at)}
+        val original=ReferenceStore.row(raw,"measured_operation","operation_uuid=?",arrayOf(op))!!
+        val other=med("SYNTHETIC different owner");val foreign=box(other);val foreignRecord=record(other);consume(foreignRecord,foreign,listOf(use(foreign)))
+        val foreignHead=db.dao().supplyFor(foreignRecord.id).single().id.toString()
+        val mutations:List<(org.json.JSONObject)->Unit> = listOf(
+            {it.put("format","1")},
+            {it.getJSONObject("execution").put("unexpected",true)},
+            {it.getJSONObject("execution").put("ledger_head_id","01")},
+            {it.getJSONObject("execution").put("ledger_head_id","0e0")},
+            {it.getJSONObject("execution").put("ledger_head_id","9223372036854775808")},
+            {it.getJSONObject("execution").put("ledger_head_id","999999")},
+            {it.getJSONObject("execution").put("ledger_head_id",foreignHead)},
+        )
+        for(mutate in mutations){
+            val json=org.json.JSONObject(original.getString("input_json"));mutate(json);val forgedOp=UUID.randomUUID().toString()
+            val forged=org.json.JSONObject(original.toString()).put("operation_uuid",forgedOp).put("input_json",ReferencePayload.canonical(json))
+            db.withTransaction{ReferenceStore.insert(raw,"measured_operation",forged)}
+            rejects(ReferenceError.INVALID_SOURCE){db.withTransaction{MeasuredConsumptionStore.adjustRemaining(db,b.scope,b.container,b.containerUuid,b.presentationEventUuid,b.presentation.sha256,target,true,forgedOp,at)}}
+        }
+        assertEquals(1.0,db.dao().container(b.container.id).used_amount,0.0);assertEquals(2,count("supply_transaction"))
+        assertEquals(1.0,db.dao().container(foreign.container.id).used_amount,0.0)
+    }
+
 }

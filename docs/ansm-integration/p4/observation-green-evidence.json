@@ -1,6 +1,6 @@
 {
   "base": "fc5df5b82eac600800a5ea261179f2ae88636e98",
-  "status": "PASS_DATA_NATIVE_COMPILE_APP_PENDING",
+  "status": "PASS",
   "data": {
     "tests": 296,
     "failures": 0,
@@ -9,7 +9,20 @@
   },
   "shared_consumption_tests": 22,
   "native_test_compilation": "PASS",
-  "period_and_privacy": "PENDING",
+  "period_and_privacy": {
+    "PeriodStabilityTest": {
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "PrivacyNoticeFactsTest": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
   "files": {
     "core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt": "0a358d252e692eac6efd3df6f4896fbd4c8bc807d0ac83ef15e589f0a2ebc0c1",
     "core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt": "62947d667515d80938b92dba37f96a1fd8b1ba20d91abcbc78bf4d08d7ff380b",
@@ -20,5 +33,7 @@
   "inverse_observation_strategy": "Conservative rejection for any affected ADJUST history; causal refinement not implemented",
   "production_entry": "NOT_IMPLEMENTED",
   "backup_acceptance": "OFF",
-  "physical_device_and_talkback": "NOT_RUN"
+  "physical_device_and_talkback": "NOT_RUN",
+  "tested_commit": "b3ba292",
+  "log_sha256": "e0b3f9c3d23c2587be0d330eba3821570d336b5dbbc28eeca1ef024b7ff69d0a"
 }

@@ -63,6 +63,39 @@ internal object MeasuredConsumptionStore {
         }
         return MeasuredConsumptionReceipt(row.getString("operation_uuid"),request.record.uuid,request.record.revision,lines,ReferencePayload.optional(row,"unknown_reason"))
     }
+    private data class AdjustmentCapture(val request:JSONObject,val ledgerHead:Long)
+    /** Stable user intent is distinct from the ledger head observed during the original execution. */
+    private fun adjustmentCapture(row:JSONObject):AdjustmentCapture = try {
+        fun keys(json:JSONObject,expected:Set<String>)=require(json.keys().asSequence().toSet()==expected)
+        fun text(json:JSONObject,key:String):String {require(json.get(key) is String);return json.getString(key)}
+        fun count(json:JSONObject,key:String,max:Long):Long {
+            val token=text(json,key);require(Regex("0|[1-9][0-9]{0,18}").matches(token))
+            return token.toLong().also{require(it<=max)}
+        }
+        val encoded=row.getString("input_json");val envelope=JSONObject(encoded)
+        keys(envelope,setOf("format","request","execution"))
+        require(envelope.get("format") is Int && envelope.getInt("format")==1 && ReferencePayload.canonical(envelope)==encoded)
+        val request=envelope.getJSONObject("request")
+        keys(request,setOf("format","kind","stock_algorithm","conversion_algorithm","user_confirmed","dataset_uuid","medication_uuid","container_uuid","presentation_event_uuid","presentation_sha256","expected_used_quanta","expected_state","expected_opened_on","remaining_input","remaining_stock","remaining_quanta"))
+        require(request.get("format") is Int && request.getInt("format")==1 && text(request,"kind")=="ADJUST")
+        require(text(request,"stock_algorithm")==StockQuantum.ALGORITHM && text(request,"conversion_algorithm")==Measurements.ALGORITHM)
+        require(request.get("user_confirmed") is Boolean && request.getBoolean("user_confirmed"))
+        for(key in listOf("dataset_uuid","medication_uuid","container_uuid","presentation_event_uuid"))require(ReferencePayload.uuid(text(request,key)))
+        require(Regex("[0-9a-f]{64}").matches(text(request,"presentation_sha256")))
+        require(row.getString("kind")=="ADJUST" && row.getString("dataset_uuid")==text(request,"dataset_uuid") && row.isNull("record_uuid") && row.isNull("record_revision"))
+        require(ReferencePayload.sha(ReferencePayload.canonical(request))==row.getString("request_sha256"))
+        require(row.isNull("unallocated_quantity") && row.isNull("unallocated_unit") && row.isNull("unknown_reason"))
+        count(request,"expected_used_quanta",StockQuantum.MAX_QUANTA);count(request,"remaining_quanta",StockQuantum.MAX_QUANTA)
+        require(text(request,"expected_state") in setOf("SEALED","IN_USE","EMPTY","DISCARDED"))
+        if(!request.isNull("expected_opened_on"))java.time.LocalDate.parse(text(request,"expected_opened_on"))
+        val original=PackageMeasurementPayload.quantity(request.getJSONObject("remaining_input"))
+        val normalized=PackageMeasurementPayload.quantity(request.getJSONObject("remaining_stock"))
+        val converted=Measurements.add(normalized.copy(value=BigDecimal.ZERO),original)
+        require(converted is MeasureResult.Success && converted.value.meaning==normalized.meaning && converted.value.unit==normalized.unit && converted.value.value.compareTo(normalized.value)==0)
+        val execution=envelope.getJSONObject("execution");keys(execution,setOf("ledger_head_id"))
+        AdjustmentCapture(request,count(execution,"ledger_head_id",Long.MAX_VALUE))
+    } catch(e:Exception){fail(ReferenceError.INVALID_SOURCE)}
+
     /** Inverse uses only original immutable allocation/ledger facts, never current product strength or catalogue data. */
     suspend fun reverseOriginal(database:NotesDatabase,scope:ReferenceScope,expected:RecordEntity,sourceOperation:String,
         operationUuid:String,created:Instant):Int {
@@ -102,13 +135,17 @@ internal object MeasuredConsumptionStore {
             MeasureUnit.valueOf(a.getString("unit"))
             Triple(a,entry,box)
         }
-        // A remaining count is a separate observed fact, including no-op counts with no ledger delta.
-        // Without an explicit reconciliation contract, do not infer whether it precedes/follows use from clocks.
-        // Conservatively require reconciliation for any count history of an affected container.
-        val affected=originals.map{it.first.getString("container_uuid")}.toSet()
-        db.query("SELECT input_json FROM measured_operation WHERE dataset_uuid=? AND kind='ADJUST'",arrayOf(scope.dataset)).use {c->while(c.moveToNext()) {
-            val counted=try{JSONObject(c.getString(0)).getString("container_uuid")}catch(e:Exception){fail(ReferenceError.INVALID_SOURCE)}
-            if(counted in affected)fail(ReferenceError.OPERATION_CONFLICT)
+        // A count containing the original consumption is an independent observation, including no-op counts.
+        // Its captured ledger head establishes causality without interpreting timestamps as operation order.
+        val affected=originals.associateBy{it.first.getString("container_uuid")}
+        db.query("SELECT operation_uuid FROM measured_operation WHERE dataset_uuid=? AND kind='ADJUST'",arrayOf(scope.dataset)).use {c->while(c.moveToNext()) {
+            val observation=adjustmentCapture(ReferenceStore.row(db,"measured_operation","operation_uuid=?",arrayOf(c.getString(0)))!!)
+            affected[observation.request.getString("container_uuid")]?.let {original->
+                if(observation.ledgerHead>0)db.query("SELECT container_id FROM supply_transaction WHERE id=?",arrayOf(observation.ledgerHead)).use {head->
+                    if(!head.moveToFirst() || head.getLong(0)!=original.third.id)fail(ReferenceError.INVALID_SOURCE)
+                }
+                if(observation.ledgerHead>=original.second.id)fail(ReferenceError.OPERATION_CONFLICT)
+            }
         }}
         ReferenceStore.insert(db,"measured_operation",JSONObject().put("operation_uuid",operationUuid).put("dataset_uuid",scope.dataset).put("record_uuid",record)
             .put("record_revision",current.revision).put("kind","REVERSE").put("request_sha256",hash).put("input_json",canonical)
@@ -133,8 +170,6 @@ internal object MeasuredConsumptionStore {
         if(identity.getString("dataset_uuid")!=scope.dataset || identity.getString("kind")!="CONTAINER" || identity.isNull("live_handle") || identity.getLong("live_handle")!=expected.id)fail(ReferenceError.UNKNOWN_IDENTITY)
         val event=ReferenceStore.row(db,"reference_event","operation_uuid=?",arrayOf(presentationEvent)) ?: fail(ReferenceError.INVALID_SOURCE)
         if(event.getString("dataset_uuid")!=scope.dataset || event.getString("subject_uuid")!=containerUuid || event.isNull("snapshot_uuid"))fail(ReferenceError.INVALID_SOURCE)
-        val head=ReferenceStore.row(db,"reference_event","subject_uuid=? ORDER BY revision DESC LIMIT 1",arrayOf(containerUuid))!!
-        if(head.getString("operation_uuid")!=presentationEvent)fail(ReferenceError.STALE_REVISION)
         val snapshot=ReferenceStore.row(db,"reference_snapshot","uuid=?",arrayOf(event.getString("snapshot_uuid"))) ?: fail(ReferenceError.INVALID_SOURCE)
         val frozen=PackageMeasurementPayload.read(snapshot.getString("payload_json"))
         if(snapshot.getString("dataset_uuid")!=scope.dataset || snapshot.getString("kind")!="PRESENTATION" || snapshot.getString("payload_sha256")!=presentationSha || frozen.sha256!=presentationSha)fail(ReferenceError.INVALID_SOURCE)
@@ -148,21 +183,30 @@ internal object MeasuredConsumptionStore {
         val remainingQuanta=(count as MeasureResult.Success).value
         if(expected.capacity!=stock.capacityQuanta.toDouble() || expected.initial_used_amount!=0.0 || !expected.used_amount.isFinite() || expected.used_amount<0 ||
             expected.used_amount>stock.capacityQuanta || expected.used_amount.toLong().toDouble()!=expected.used_amount)fail(ReferenceError.INVALID_SOURCE)
-        val input=JSONObject().put("format",1).put("kind","ADJUST").put("dataset_uuid",scope.dataset).put("medication_uuid",identity.getString("owner_uuid"))
+        val input=JSONObject().put("format",1).put("kind","ADJUST").put("stock_algorithm",StockQuantum.ALGORITHM).put("conversion_algorithm",Measurements.ALGORITHM).put("user_confirmed",true).put("dataset_uuid",scope.dataset).put("medication_uuid",identity.getString("owner_uuid"))
             .put("container_uuid",containerUuid).put("presentation_event_uuid",presentationEvent).put("presentation_sha256",presentationSha)
             .put("expected_used_quanta",expected.used_amount.toLong().toString()).put("expected_state",expected.state).put("expected_opened_on",expected.opened_on ?: JSONObject.NULL)
             .put("remaining_input",PackageMeasurementPayload.quantity(remaining)).put("remaining_stock",PackageMeasurementPayload.quantity(target)).put("remaining_quanta",remainingQuanta.toString())
         val canonical=ReferencePayload.canonical(input);val hash=ReferencePayload.sha(canonical)
         if(ReferenceStore.row(db,"reference_event","operation_uuid=?",arrayOf(operationUuid))!=null)fail(ReferenceError.OPERATION_CONFLICT)
         ReferenceStore.row(db,"measured_operation","operation_uuid=?",arrayOf(operationUuid))?.let {old->
-            if(old.getString("dataset_uuid")!=scope.dataset || old.getString("kind")!="ADJUST" || old.getString("request_sha256")!=hash || old.getString("input_json")!=canonical)fail(ReferenceError.OPERATION_CONFLICT)
-            return MeasureResult.Success(target)
+            if(old.getString("dataset_uuid")!=scope.dataset || old.getString("kind")!="ADJUST" || old.getString("request_sha256")!=hash)fail(ReferenceError.OPERATION_CONFLICT)
+            val captured=adjustmentCapture(old)
+            if(ReferencePayload.canonical(captured.request)!=canonical)fail(ReferenceError.OPERATION_CONFLICT)
+            if(captured.ledgerHead>0)db.query("SELECT container_id FROM supply_transaction WHERE id=?",arrayOf(captured.ledgerHead)).use {head->
+                if(!head.moveToFirst() || head.getLong(0)!=expected.id)fail(ReferenceError.INVALID_SOURCE)
+            }
+            return MeasureResult.Success(target) // The original observation, never a new count or today's balance.
         }
+        val head=ReferenceStore.row(db,"reference_event","subject_uuid=? ORDER BY revision DESC LIMIT 1",arrayOf(containerUuid))!!
+        if(head.getString("operation_uuid")!=presentationEvent)fail(ReferenceError.STALE_REVISION)
         val current=dao.container(expected.id);if(current!=expected)fail(ReferenceError.STALE_REVISION)
         if(current.state=="VOIDED")return MeasureResult.Failure(MeasureError.VOIDED)
         val newUsed=stock.capacityQuanta-remainingQuanta;val delta=newUsed-current.used_amount.toLong()
+        val ledgerHead=db.query("SELECT COALESCE(MAX(id),0) FROM supply_transaction WHERE container_id=?",arrayOf(current.id)).use{it.moveToFirst();it.getLong(0)}
+        val envelope=JSONObject().put("format",1).put("request",input).put("execution",JSONObject().put("ledger_head_id",ledgerHead.toString()))
         ReferenceStore.insert(db,"measured_operation",JSONObject().put("operation_uuid",operationUuid).put("dataset_uuid",scope.dataset).put("record_uuid",JSONObject.NULL)
-            .put("record_revision",JSONObject.NULL).put("kind","ADJUST").put("request_sha256",hash).put("input_json",canonical)
+            .put("record_revision",JSONObject.NULL).put("kind","ADJUST").put("request_sha256",hash).put("input_json",ReferencePayload.canonical(envelope))
             .put("unallocated_quantity",JSONObject.NULL).put("unallocated_unit",JSONObject.NULL).put("unknown_reason",JSONObject.NULL).put("created_utc",created.toEpochMilli()))
         if(delta!=0L) {
             val entry=dao.supply(SupplyEntryEntity(container_id=current.id,operation_id=operationUuid,kind="ADJUST",used_delta=delta.toDouble(),

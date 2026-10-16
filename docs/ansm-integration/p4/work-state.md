@@ -1,6 +1,6 @@
 # P4 工作状态
 
-当前：Room12候选源码与迁移本地验证通过，业务备份仍10、计量格式接受OFF；无Repository/App入口。PR #57始终DRAFT。数据268/Period+Privacy8零失败，原生编译PASS；新Room12三API与六检查待当前HEAD。主线仍Room11，最新f1e9b4d已合并P3，合并后CI待验。
+当前：#57 DRAFT，新计量正式入口/备份接受 OFF。已验证b3ba292完整data296（共享22）、Period5+Privacy3及原生编译PASS；当前本地因果锚精化23项部分回归PASS，新增重试/非法锚/跨容器校验完整回归待结果。主线f1e9b4d仍Room11且六CI PASS；候选Room12仅在本PR、业务备份仍10。
 
 2026-10-16：IN_PROGRESS，生产库存未接线。当前复用P3的de26444，普通合入P1源945512a，不直接复制未合并源码。#54已受保护合并为c95cea1；#55待主线检查及更新。
 
@@ -41,3 +41,9 @@ Room12检查点0843450六项CI在push/PR全部SUCCESS；当前仍DRAFT，不以�
 更换包装入口负向测试先红（旧replace确实关闭计量来源），补require保护与旧discard保护后共享20合同PASS。新增删除后整数ID复用仍走旧模式、已计量记录不得再旧分配、明确有向mg→泵换算/用户60泵而标签64泵、不同酯来源不足拒绝均PASS；证据replacement-red/green-evidence.json。新增手工实盘后逆操作不得改写实盘结果的负向测试正在运行，尚未记PASS。
 
 原量冲销会覆盖后续实盘的负向测试实际FAIL（Expected OPERATION_CONFLICT）；现对受影响容器任何ADJUST观察保守拒绝新的逆操作，包括没有流水差额的实盘，同UUID已成功逆操作仍可重放。完整data296（共享22）与原生源码编译PASS，Python157 PASS；Period/Privacy本轮仍待完成。观察发生在消费之前也暂时保守阻断，不能声称完整协调已实现；下一步为明确账本因果锚与请求/执行捕获分离，避免依赖时钟。证据observation-red/green-evidence.json与observation-reconciliation.md。
+
+源b3ba292完整data296、共享22、原生源码编译及PeriodStability5/Privacy3全部PASS，零失败/错误/跳过；完整构建6m35s。当前源已推送#57，最新六CI待运行，不能套用0843450绿灯。下一步按明确账本头锚精化观察先后判断，不修改旧记录/库存/PK。
+
+新增“较早观察不应阻断较晚消费逆操作”先红（b3ba292保守策略返回OPERATION_CONFLICT），证据anchor-red-evidence.json。当前本地候选将ADJUST稳定用户请求与执行时账本头分离、严格解析并按因果锚判断；初版辅助函数漏写return导致编译FAIL（非测试失败），已修正重跑，结果待验。没有更改Schema/备份接受或正式入口，不能把候选代码写成生产集成完成。
+
+因果锚完整数据层回归data300（共享26）、原生源码编译与Python157全部PASS；本轮Period/Privacy仍在执行。ADJUST稳定请求与执行锚分离，重放不重采；先于消费的零/非零实盘允许逆操作，包含原消费的观察拒绝未经协调逆操作；倒退时钟无影响。不存在锚先红（Expected INVALID_SOURCE），补数据库存在性/容器归属检查后，非法/溢出/不存在/异容器7类锚均拒绝且两个容器余额不变。证据anchor-*-evidence.json。尚非完整备份历史验证；补录是否已计入实盘及ABA确认票据、正式更正UI仍未实施，正式入口/备份接受保持OFF。

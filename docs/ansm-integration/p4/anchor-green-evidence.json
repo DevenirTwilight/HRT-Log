@@ -1,0 +1,12 @@
+{
+  "base": "b3ba2920b16c3715dfae6e60057d27a909ec2fe0",
+  "status": "PASS",
+  "shared_tests": 23,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "scope": "JVM only; full current regression and native pending",
+  "first_attempt": "FAIL_COMPILE: missing return in count parser; corrected, no test assertions changed",
+  "log_sha256": "39c4650ff54325325da467ab977a9714eb61cfa095fbf3d4767a9205274ed72a",
+  "actor_sha256": "f2c4a55a5051a2dc829ce5a9daa6e0b3721e21430a43ea4e66c7a17aabc52d21"
+}
