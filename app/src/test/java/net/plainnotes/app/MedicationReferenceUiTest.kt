@@ -34,7 +34,7 @@ class MedicationReferenceUiTest(private val locale:String) {
     private fun count(table:String)=db.openHelper.writableDatabase.query("SELECT COUNT(*) FROM `$table`").use{it.moveToFirst();it.getInt(0)}
     private fun manual(){ui.onNodeWithTag("reference-screen").performScrollToNode(hasTestTag("reference-manual"));ui.onNodeWithTag("reference-manual").performClick();ui.onNodeWithTag("reference-name").performTextInput("SYNTHETIC user product");ui.onNodeWithTag("reference-preview").performClick();ui.onNodeWithTag("reference-select").performClick()}
     @Test fun confirmingActuallyPersistsAndCancellingDoesNotCreateExtraMedication() {
-        val id=runBlocking{medication();db.dao().medications().single().id};runBlocking{controller.open(id).join()}
+        val id=runBlocking{medication();db.dao().medications().single().id};runBlocking{controller.open(id)!!.join()}
         ui.setContent{NotesTheme(ThemeMode.LIGHT){MedicationReferenceDialog(controller){}}}
         manual();ui.onNodeWithTag("reference-confirm").performClick();ui.waitUntil(10000){controller.state.value.saved}
         assertEquals("SYNTHETIC user product",runBlocking{repo.medicationReferenceState(id)}.reference!!.product!!.name)
@@ -42,14 +42,14 @@ class MedicationReferenceUiTest(private val locale:String) {
         ui.onNodeWithTag("reference-close").performClick();assertEquals(1,count("reference_event"))
     }
     @Test fun cancellingFinalConfirmationWritesNoDatasetOrAssociation() {
-        val id=runBlocking{medication()};runBlocking{controller.open(id).join()}
+        val id=runBlocking{medication()};runBlocking{controller.open(id)!!.join()}
         ui.setContent{NotesTheme(ThemeMode.DARK){MedicationReferenceDialog(controller){}}}
         manual()
         ui.onNodeWithTag("reference-confirm-cancel").performClick();ui.waitForIdle()
         assertEquals(0,count("reference_dataset"));assertEquals(0,count("reference_event"));assertEquals(1,count("medication"))
     }
     @Test fun invalidIdentifierIsNotTruncatedToAnotherProductAndDraftRemainsEditable() {
-        val id=runBlocking{medication()};runBlocking{controller.open(id).join()}
+        val id=runBlocking{medication()};runBlocking{controller.open(id)!!.join()}
         ui.setContent{NotesTheme(ThemeMode.LIGHT){MedicationReferenceDialog(controller){}}}
         ui.onNodeWithTag("reference-screen").performScrollToNode(hasTestTag("reference-manual"));ui.onNodeWithTag("reference-manual").performClick()
         ui.onNodeWithTag("reference-name").performTextInput("SYNTHETIC draft")

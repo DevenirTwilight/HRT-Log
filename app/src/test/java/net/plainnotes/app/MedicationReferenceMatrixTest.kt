@@ -38,7 +38,7 @@ class MedicationReferenceMatrixTest(private val locale:String,private val width:
             val controller=MedicationReferenceController(repo,scope)
             runBlocking {
                 val id=repo.saveMedication(MedicationEntity(name="SYNTHETIC actual medication",molecule="OTHER",unit="TABLET",dose_per_intake=1.0,container_capacity=28.0,soon_alert_minutes=0,late_after_minutes=60,site_rotation=false,notifications_on=false,active=true,sort_order=0),null,RuleKind.EVERY_N_DAYS,1,listOf(LocalTime.NOON),emptySet(),Instant.parse("2026-03-28T12:00:00Z"))
-                repo.associateInitialMedication(id,UUID.randomUUID().toString(),product,repo.medicationReferenceState(id).previewEpoch);controller.open(id).join()
+                repo.associateInitialMedication(id,UUID.randomUUID().toString(),product,repo.medicationReferenceState(id).previewEpoch);controller.open(id)!!.join()
             }
             var contrast by mutableStateOf(Contrast.STANDARD)
             ui.setContent{NotesTheme(if(dark)ThemeMode.DARK else ThemeMode.LIGHT,contrast=contrast){MedicationReferenceDialog(controller){}}}
