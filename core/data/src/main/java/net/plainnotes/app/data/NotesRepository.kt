@@ -32,9 +32,19 @@ const val BACKFILL_MAX_DAYS=731L
             database.withTransaction { block(database.dao(),database.openHelper.writableDatabase) }
         }
     }
+    suspend fun medicationReferenceState(medication: Long): MedicationReferenceState = transactionWithSql(Space.PRIMARY) { _, raw ->
+        val scope=ReferenceStore.existingScope(raw)
+        MedicationReferenceState(scope,scope?.let {ReferenceStore.current(raw,it,medication)})
+    }
+    suspend fun associateInitialMedication(medication: Long, operationUuid: String, product: UserReferenceProduct): MedicationReferenceState = transactionWithSql(Space.PRIMARY) { _, raw ->
+        ReferenceStore.initialAssociation(raw,medication,operationUuid,product)
+    }
     suspend fun referenceScope(): ReferenceScope = transactionWithSql(Space.PRIMARY) { _, raw -> ReferenceStore.scope(raw) }
     suspend fun medicationReference(scope: ReferenceScope, medication: Long): MedicationReference? = transactionWithSql(Space.PRIMARY) { _, raw ->
         ReferenceStore.current(raw,scope,medication)
+    }
+    suspend fun recordReferenceContexts(scope: ReferenceScope, record: Long): List<RecordReferenceContext> = transactionWithSql(Space.PRIMARY) { _, raw ->
+        ReferenceStore.recordContexts(raw,scope,record)
     }
     suspend fun associateMedication(scope: ReferenceScope, medication: Long, expectedRevision: Int, operationUuid: String, product: UserReferenceProduct?): MedicationReference = transactionWithSql(Space.PRIMARY) { _, raw ->
         ReferenceStore.associate(raw,scope,medication,expectedRevision,operationUuid,product)

@@ -78,7 +78,9 @@ abstract class AttachmentFoundationContract {
         try {
             val json=JSONObject(String(decoded,Charsets.UTF_8));assertEquals(10,json.getInt("schema"))
             assertFalse(json.getJSONObject("tables").keys().asSequence().any{it.startsWith("attachment_")})
-            assertEquals(28,json.getJSONObject("tables").length())
+            assertEquals(35,json.getJSONObject("tables").length())
+            assertTrue(ReferenceSchema.businessTables.all {json.getJSONObject("tables").has(it)})
+            assertFalse(json.getJSONObject("tables").has("reference_runtime"))
         } finally { decoded.fill(0) }
         repo.restoreBackup(backup,password)
         val next=requireNotNull(AttachmentIdentity.current(raw));assertNotEquals(scope.dataset,next.dataset);assertNotEquals(scope.epoch,next.epoch);assertNotEquals(scope.logicalVault,next.logicalVault)

@@ -52,6 +52,21 @@ internal object ReferenceStore {
         insert(db,"reference_runtime",JSONObject().put("id",1).put("dataset_uuid",dataset).put("epoch",epoch))
         return ReferenceScope(dataset,epoch)
     }
+    fun existingScope(db: SupportSQLiteDatabase): ReferenceScope? {
+        check(db.inTransaction())
+        val runtime=row(db,"reference_runtime","id=1",emptyArray()) ?: return null
+        val scope=ReferenceScope(runtime.getString("dataset_uuid"),runtime.getString("epoch"))
+        checkScope(db,scope)
+        return scope
+    }
+    fun initialAssociation(db: SupportSQLiteDatabase, medication: Long, operation: String, product: UserReferenceProduct): MedicationReferenceState {
+        check(db.inTransaction())
+        val existing=existingScope(db)
+        // A retry can return its exact original result. Another editor's initialization requires a fresh preview.
+        if(existing!=null && row(db,"reference_event","operation_uuid=?",arrayOf(operation))==null) fail(ReferenceError.STALE_SCOPE)
+        val current=existing ?: scope(db)
+        return MedicationReferenceState(current,associate(db,current,medication,0,operation,product))
+    }
     fun checkScope(db: SupportSQLiteDatabase, expected: ReferenceScope) {
         check(db.inTransaction())
         val current=row(db,"reference_runtime","id=1",emptyArray()) ?: fail(ReferenceError.STALE_SCOPE)
@@ -86,9 +101,24 @@ internal object ReferenceStore {
         val event=row(db,"reference_event","subject_uuid=? ORDER BY revision DESC LIMIT 1",arrayOf(subject.getString("uuid"))) ?: return null
         return read(db,event)
     }
+    fun recordContexts(db: SupportSQLiteDatabase, scope: ReferenceScope, record: Long): List<RecordReferenceContext> {
+        checkScope(db,scope)
+        val identity=row(db,"reference_identity","dataset_uuid=? AND kind='RECORD' AND live_handle=?",arrayOf(scope.dataset,record)) ?: return emptyList()
+        val uuid=identity.getString("uuid")
+        val captures=db.query("SELECT uuid FROM record_reference_capture WHERE record_uuid=? ORDER BY record_revision,capture_revision",arrayOf(uuid)).use { c ->
+            buildList {while(c.moveToNext())add(c.getString(0))}
+        }
+        return captures.map { id ->
+            val capture=row(db,"record_reference_capture","uuid=?",arrayOf(id))!!
+            if(captureHash(capture)!=capture.getString("payload_sha256")) fail(ReferenceError.INVALID_SOURCE)
+            val event=ReferencePayload.optional(capture,"context_event_uuid")?.let { row(db,"reference_event","operation_uuid=?",arrayOf(it)) ?: fail(ReferenceError.INVALID_SOURCE) }
+            val context=event?.let {read(db,it)}
+            RecordReferenceContext(uuid,capture.getInt("record_revision"),capture.getInt("capture_revision"),context?.revision,context?.product,capture.getString("kind")=="CONFIRM")
+        }
+    }
     fun associate(db: SupportSQLiteDatabase, scope: ReferenceScope, medication: Long, expectedRevision: Int, operation: String, product: UserReferenceProduct?): MedicationReference {
         checkScope(db,scope)
-        require(ReferencePayload.uuid(operation) && expectedRevision>=0 && expectedRevision<Int.MAX_VALUE)
+        if(!ReferencePayload.uuid(operation) || expectedRevision<0 || expectedRevision==Int.MAX_VALUE) fail(ReferenceError.INVALID_SOURCE)
         val payload=product?.let { try { ReferencePayload.userProduct(it) } catch (_: Exception) { fail(ReferenceError.INVALID_SOURCE) } }
         val canonical=payload?.let(ReferencePayload::canonical)
         val subject=identity(db,scope,"MEDICATION",medication,null)

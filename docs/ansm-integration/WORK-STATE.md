@@ -6,8 +6,8 @@ P0分支feature/ansm02b-03b-p0-restore-20261016，最新HEAD以git/对应PR为�
 |阶段|状态|下一动作|
 |---|---|---|
 |Phase0|IN_PROGRESS|来源许可再核实/恢复依赖图|
-|P0|IN_PROGRESS|#53 draft；本地191通过，原生CI待验；等#52集成后更新B0缺陷期望|
-|P1|IN_PROGRESS|Room11/业务Schema10增量实现；引用与恢复17项本地PASS，完整迁移/原生CI待验|
+|P0|DONE|#53已合并cfbe62c，源HEAD六检查通过；主线复验进行中|
+|P1|IN_PROGRESS|完整本地215项PASS/原生编译PASS；接入最新主线并提交独立PR，原生运行待CI|
 |P2|NOT_STARTED|生产入口，官方资源OFF，手动来源可用|
 |P3|NOT_STARTED|复用原35测试及计量核心|
 |P4|NOT_STARTED|Legacy/Verified互斥，事务幂等|
@@ -24,3 +24,6 @@ P1工作树/workspace/HRT-Log-p1，feature/ansm02b-03b-p1-persistence-20261016�
 
 P1新引用存储、专用CAS/幂等API、默认UNKNOWN历史捕获、恢复epoch和统一新表Schema已有代码；17项新测试PASS。本地首轮191回归6项FAIL均已定位旧版本固定断言/旧fixture导出与迁移路径，已明确更新，完整重跑待执行。生产包装/精确分配尚未启用，P1 validator明确拒绝未启用的PRESENTATION/Measured操作，防止半实现数据被接受。
 #52已合并至默认分支92f27e99e5567a9eb42bbb3f19a577238ca97c5c，主线六检查复验进行中。
+
+P0 #53 source 1d368ef9a1868f57291cd43a193a74c02dd9e8b6，六必需检查均SUCCESS，merge cfbe62c4a466f55234d53fbeff4c7f2c03224d50；5份CI报告ZIP已校验官方digest/CRC并确认无APK。API26/29/35新增恢复合同各7/7通过，PeriodStability5/5、PK124/124通过；旧条件SKIPPED保留见p0-ci-evidence.json。未签名/发布/交付，物理设备/断电NOT_RUN。
+P1完整215项PASS（24新增），0失败/跳过；原生编译PASS，执行NOT_RUN。新迁移合同覆盖1…10→11、Room10旧37实体与REVERSE账本位级指纹、迁移故障DDL回滚与旧版本降级拒绝。中间失败属于测试夹具构造/旧版本固定期望，未关闭现有守卫；旧28业务表新增7=35，附件与本地runtime仍不备份。

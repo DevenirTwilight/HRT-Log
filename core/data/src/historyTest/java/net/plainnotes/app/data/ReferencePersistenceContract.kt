@@ -166,4 +166,64 @@ abstract class ReferencePersistenceContract {
         }
         ReferenceSchema.validate(raw)
     }
+    @Test fun sourceHistoryReadsFrozenContextAndDoesNotBackfillTheOlderRecord()=runBlocking {
+        val medication=med();repo.unscheduled(medication,at.minusSeconds(60),1.0)
+        val older=db.dao().records().single().id
+        val scope=repo.referenceScope();val first=repo.associateMedication(scope,medication,0,id(),product(version="frozen-source"))
+        repo.unscheduled(medication,at,1.0)
+        val newer=db.dao().records().last().id
+        val captured=repo.recordReferenceContexts(scope,newer).single()
+        assertEquals(first.revision,captured.referenceRevision);assertFalse(captured.actualPackageConfirmed)
+        assertEquals(product(version="frozen-source"),captured.product)
+        repo.associateMedication(scope,medication,1,id(),product(version="current-source"))
+        assertEquals(captured,repo.recordReferenceContexts(scope,newer).single())
+        assertTrue(repo.recordReferenceContexts(scope,older).isEmpty())
+    }
+    @Test fun referenceCallsAreRejectedInLegacyPrivateSpaceBeforeOpeningAnyDatabase()=runBlocking {
+        val guarded=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space):NotesDatabase {fail("Wrong-space API must not open database");return db}}).pinnedTo(Space.DECOY)
+        val before=business()
+        failure(ReferenceError.WRONG_SPACE){guarded.referenceScope()}
+        assertEquals(before,business())
+    }
+    @Test fun sameIntegerIdInAnotherDatabaseOrImportedDatasetNeverAcceptsOldScope()=runBlocking {
+        val medication=med();val scope=repo.referenceScope();repo.associateMedication(scope,medication,0,id(),product())
+        val source=business();val archive=repo.exportBackup(password)
+        val secondName="synthetic-reference-other-${UUID.randomUUID()}.db"
+        val second=Room.databaseBuilder(context,NotesDatabase::class.java,secondName).openHelperFactory(factory(key.clone()))
+            .addMigrations(*allMigrations()).addCallback(SchemaGuards).allowMainThreadQueries().build()
+        try {
+            second.openHelper.writableDatabase
+            val other=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=second})
+            val secondMedication=other.saveMedication(MedicationEntity(name="SYNTHETIC second dataset",molecule="OTHER",unit="TABLET",dose_per_intake=1.0,
+                container_capacity=10.0,soon_alert_minutes=0,late_after_minutes=60,site_rotation=false,notifications_on=false,active=true,sort_order=0),
+                null,RuleKind.EVERY_N_DAYS,1,listOf(LocalTime.NOON),emptySet(),at)
+            assertEquals(medication,secondMedication)
+            val otherScope=other.referenceScope();val before=RawData.dump(second.openHelper.writableDatabase).toString()
+            assertNotEquals(scope.dataset,otherScope.dataset)
+            failure(ReferenceError.STALE_SCOPE){other.associateMedication(scope,secondMedication,0,id(),product())}
+            assertEquals(before,RawData.dump(second.openHelper.writableDatabase).toString());assertEquals(source,business())
+            other.restoreBackup(archive,password)
+            val imported=other.referenceScope();assertEquals(scope.dataset,imported.dataset);assertNotEquals(scope.epoch,imported.epoch)
+            failure(ReferenceError.STALE_SCOPE){other.medicationReference(scope,medication)}
+            assertEquals(source,RawData.dump(second.openHelper.writableDatabase).toString())
+            assertEquals(product(),other.medicationReference(imported,medication)!!.product)
+        } finally {second.close();context.deleteDatabase(secondName);archive.fill(0)}
+    }
+
+    @Test fun openingAndCancellingReferencePreviewWritesNothingAndFirstConfirmationIsAtomic()=runBlocking {
+        val medication=med();val before=business()
+        val preview=repo.medicationReferenceState(medication)
+        assertNull(preview.scope);assertNull(preview.reference)
+        assertEquals(before,business());assertEquals(0,count("reference_runtime"))
+        failure(ReferenceError.INVALID_SOURCE){repo.associateInitialMedication(medication,id(),product().copy(recordedOn="invalid"))}
+        assertEquals(before,business());assertEquals(0,count("reference_runtime"))
+        val operation=id();val linked=repo.associateInitialMedication(medication,operation,product())
+        assertNotNull(linked.scope);assertEquals(1,linked.reference!!.revision)
+        val committed=business()
+        assertEquals(linked,repo.associateInitialMedication(medication,operation,product()))
+        assertEquals(committed,business())
+        failure(ReferenceError.STALE_SCOPE){repo.associateInitialMedication(medication,id(),product())}
+        assertEquals(committed,business())
+    }
+
 }

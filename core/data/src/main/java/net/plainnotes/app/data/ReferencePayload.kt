@@ -25,12 +25,23 @@ data class ReferenceScope(val dataset: String, val epoch: String)
 enum class ReferenceError { STALE_SCOPE, STALE_REVISION, OPERATION_CONFLICT, UNKNOWN_IDENTITY, INVALID_SOURCE, WRONG_SPACE, ALREADY_CONSUMED }
 class ReferenceFailure(val code: ReferenceError) : IllegalArgumentException(code.name)
 
+data class MedicationReferenceState(val scope: ReferenceScope?, val reference: MedicationReference?)
+
 data class MedicationReference(
     val medicationUuid: String,
     val revision: Int,
     val operationUuid: String,
     val snapshotUuid: String?,
     val product: UserReferenceProduct?,
+)
+
+data class RecordReferenceContext(
+    val recordUuid: String,
+    val recordRevision: Int,
+    val captureRevision: Int,
+    val referenceRevision: Int?,
+    val product: UserReferenceProduct?,
+    val actualPackageConfirmed: Boolean,
 )
 
 internal object ReferencePayload {

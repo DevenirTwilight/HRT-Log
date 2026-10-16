@@ -1,0 +1,150 @@
+{
+  "status": "PASS",
+  "checked_at": "2026-10-16T13:48:57.368555+00:00",
+  "command": ":core:data:testDebugUnitTest :core:data:assembleDebugAndroidTest",
+  "totals": {
+    "tests": 215,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "new_tests": {
+    "net.plainnotes.app.data.ReferenceMigrationTest": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "net.plainnotes.app.data.ReferencePayloadTest": {
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "net.plainnotes.app.data.ReferencePersistenceTest": {
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "native_execution": "NOT_RUN",
+  "native_compile": "PASS",
+  "schema_old_entities_unchanged": 37,
+  "room_version": 11,
+  "business_backup_schema": 10,
+  "reports": [
+    {
+      "file": "TEST-net.plainnotes.app.data.AttachmentFoundationTest.xml",
+      "sha256": "7ff283d94c12cc6974a0f80f815f9bcc7179ceef1d2299246d225894b39c3be6"
+    },
+    {
+      "file": "TEST-net.plainnotes.app.data.AttachmentMigrationTest.xml",
+      "sha256": "64e88442b3b8ddbdcb31a53a25cd774786a257de2db014ab460fa22d79efc29f"
+    },
+    {
+      "file": "TEST-net.plainnotes.app.data.BackfillTest.xml",
+      "sha256": "a9830f9c9a50424c0bcec0e2c200edd70ed454297dc456e7b1b6d33b18528e0d"
+    },
+    {
+      "file": "TEST-net.plainnotes.app.data.BackupReplacementTest.xml",
+      "sha256": "79430ad89f1c5093f785702e6f8c3fca24c46a29b0d373f04a355f8a950510b9"
+    },
+    {
+      "file": "TEST-net.plainnotes.app.data.DataTransferTest.xml",
+      "sha256": "6739ec2e47dfef4f4f99a5460dea71bb52cbb5930a82516a4e8208c9f72e7a3e"
+    },
+    {
+      "file": "TEST-net.plainnotes.app.data.HistoricalContextRepairTest.xml",
+      "sha256": "b5b20a6fa620dd19d7684ee39cbcebd3804d0ae64060e935173018021f7f242f"
+    },
+    {
+      "file": "TEST-net.plainnotes.app.data.HistoricalVisitTest.xml",
+      "sha256": "ff519797ab32cb0499febbf2c47dd835f238b858886bb73a7688fbeff96896b0"
+    },
+    {
+      "file": "TEST-net.plainnotes.app.data.HistoryIntegrityTest.xml",
+      "sha256": "8d65f9518c3d25958cd71f673fed4587b6a4fb1981d0cace29402cd372c3d4c0"
+    },
+    {
+      "file": "TEST-net.plainnotes.app.data.HistoryPeriodDataTest.xml",
+      "sha256": "bd9d5dd4022f02b45ed46b5d2860e2dea99047bb15980ef24f9f71dbe32a204a"
+    },
+    {
+      "file": "TEST-net.plainnotes.app.data.HrtTrackerImportTest.xml",
+      "sha256": "f6f671f9fc835e4295994b51a72530b5560b42c7c8582c9e7b9888ce24dc72c9"
+    },
+    {
+      "file": "TEST-net.plainnotes.app.data.KeyBoundaryTest.xml",
+      "sha256": "fae2d6f940660a1dffb29c6e3b31797984a5e521a878300075c730bf9d12c8f4"
+    },
+    {
+      "file": "TEST-net.plainnotes.app.data.LabContextTest.xml",
+      "sha256": "1f61b44889207d4c4bb14341e6da9b24cdf83fc8c4f36acf651c1fb37b37c48a"
+    },
+    {
+      "file": "TEST-net.plainnotes.app.data.LedgerReplacementTest.xml",
+      "sha256": "c9dc01ba35a375f10f2c32d1c9193537a729d68e099497775e0579a0acaa9399"
+    },
+    {
+      "file": "TEST-net.plainnotes.app.data.PlanEditTest.xml",
+      "sha256": "1f3bdbe5b77a83854e27c50b2f1fe9e3649c44c39a60dfd40717cd678dbfbd84"
+    },
+    {
+      "file": "TEST-net.plainnotes.app.data.ReferenceMigrationTest.xml",
+      "sha256": "03be8a27db0729a27f7a39bbfd4abfee26f7c48c73e5c6c6420336586bcc0412"
+    },
+    {
+      "file": "TEST-net.plainnotes.app.data.ReferencePayloadTest.xml",
+      "sha256": "2dc0d911464a80a041f283b8120382238086b9ff9a2e48142bedff1d82cd2707"
+    },
+    {
+      "file": "TEST-net.plainnotes.app.data.ReferencePersistenceTest.xml",
+      "sha256": "93e973e486079dc548977e0ca2d350e3e3a4257bae0b9ea92b622bf284c87cad"
+    },
+    {
+      "file": "TEST-net.plainnotes.app.data.RegimenHistoryTest.xml",
+      "sha256": "58576453acb55c36a4c8acb799c8733ef8340ee6add11c1e282a1bdb926f2d8e"
+    },
+    {
+      "file": "TEST-net.plainnotes.app.data.SchemaConstraintTest.xml",
+      "sha256": "06dc36dc3275f453d9d055a70e5366076feff810f8b34c1b591117869913a101"
+    },
+    {
+      "file": "TEST-net.plainnotes.app.data.StockCorrectionTest.xml",
+      "sha256": "d8c7fb0c6f0a89ef5e74152ed472a3e62f9d4e8a51e94d620020d2a9b7c0aca5"
+    },
+    {
+      "file": "TEST-net.plainnotes.app.data.StockForecastTest.xml",
+      "sha256": "411aef704e86d8b7ac5e868ef83cabcb61e77ce2c9c1e5666a052a81379b48cb"
+    },
+    {
+      "file": "TEST-net.plainnotes.app.data.SupplyLedgerTest.xml",
+      "sha256": "ef93adc78d7f61d42db54a970af8db6d5091d28a5f6eebd43adec75e07cd4823"
+    },
+    {
+      "file": "TEST-net.plainnotes.app.data.TrashDataTest.xml",
+      "sha256": "40d8aa8e7808871129394b128745cc1ce74de4a863072045b5eda6127294f3b8"
+    },
+    {
+      "file": "TEST-net.plainnotes.app.data.UndoSkippedTest.xml",
+      "sha256": "b11cd91c7afa05bf8bbc8e38cab4e3d7b1c6d4350d9c9063a0ae4cf9f2aa29ef"
+    },
+    {
+      "file": "TEST-net.plainnotes.app.data.VisitPackDataTest.xml",
+      "sha256": "38c00af32428ec141e33647216690f59b6584d2819484b0ba7695ae8837dffad"
+    },
+    {
+      "file": "TEST-net.plainnotes.app.data.VoidedPackageTest.xml",
+      "sha256": "b6babb458cf18a581afe3b9169c6a42cd9f2e909173d0ba460083772829ef5a3"
+    },
+    {
+      "file": "TEST-net.plainnotes.app.data.WellbeingMigrationTest.xml",
+      "sha256": "40544c2c389dee7da1be1061f5ec2d8c616a04ac0d81ef747d0354cd8309cc9c"
+    },
+    {
+      "file": "TEST-net.plainnotes.app.data.WellbeingRecordsTest.xml",
+      "sha256": "96242fb940f62ef59eabe828c7021396ef054cda3b3c37742bcb3aba3b98b6f2"
+    }
+  ]
+}
