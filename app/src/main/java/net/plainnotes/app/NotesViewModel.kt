@@ -24,6 +24,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     @dagger.hilt.android.qualifiers.ApplicationContext private val app:android.content.Context):ViewModel() {
     // One activity owns one data space; an old activity must never follow a shell switch.
     private val repo=repository.pinnedTo(Space.PRIMARY)
+    val medicationReferences=net.plainnotes.app.reference.MedicationReferenceController(repo,viewModelScope)
     private var refreshJob:Job?=null
     private var refreshRevision=0L
     private var concJob:Job?=null

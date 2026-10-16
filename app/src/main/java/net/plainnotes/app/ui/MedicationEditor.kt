@@ -35,7 +35,7 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable fun MedicationEditor(edit: EditMedication, onDismiss: () -> Unit, inDialog: Boolean = true,
-                                 containers: List<net.plainnotes.app.data.ContainerEntity> = emptyList(), onSave: (MedicationDraft) -> Unit) {
+                                 containers: List<net.plainnotes.app.data.ContainerEntity> = emptyList(), onReference: (() -> Unit)? = null, onSave: (MedicationDraft) -> Unit) {
     val m = edit.medication; val p = edit.profile
     val review = remember(m) { m?.needs_review?.let { runCatching { org.json.JSONObject(it) }.getOrNull() } }
     val prefill = review?.optJSONObject("prefill")
@@ -110,7 +110,8 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
                 if (tried && !valid) Text(stringResource(R.string.invalid), color = MaterialTheme.colorScheme.error)
                 review?.let { r -> ReviewCard(r) }
                 SectionCard(stringResource(R.string.section_basic)) {
-                    OutlinedTextField(name, { name = it }, Modifier.fillMaxWidth(), label = { Text(stringResource(R.string.name)) }, singleLine = true, isError = tried && name.isBlank())
+                    OutlinedTextField(name, { name = it }, Modifier.fillMaxWidth().testTag("medication-name"), label = { Text(stringResource(R.string.name)) }, singleLine = true, isError = tried && name.isBlank())
+                    onReference?.let { open->TextButton(onClick=open,modifier=Modifier.fillMaxWidth().heightIn(min=48.dp).testTag("medication-reference-entry")){Text(stringResource(R.string.ref2_browse))} }
                     DropdownField(stringResource(R.string.molecule), MOLECULES, molecule, { choiceLabel(it) }, { molecule = it }, detail = { if (it == "E2") null else brandNames(it) })
                     if (isE2) {
                         DropdownField(stringResource(R.string.route), E2_ROUTES, route.takeIf { it in E2_ROUTES }, { choiceLabel(it) }, isError = tried && route !in E2_ROUTES, onSelect = {
