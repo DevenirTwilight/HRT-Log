@@ -46,6 +46,59 @@ internal object MeasuredConsumptionStore {
         }
         return MeasuredConsumptionReceipt(row.getString("operation_uuid"),request.record.uuid,request.record.revision,lines,ReferencePayload.optional(row,"unknown_reason"))
     }
+    /** Inverse uses only original immutable allocation/ledger facts, never current product strength or catalogue data. */
+    suspend fun reverseOriginal(database:NotesDatabase,scope:ReferenceScope,expected:RecordEntity,sourceOperation:String,
+        operationUuid:String,created:Instant):Int {
+        val db=database.openHelper.writableDatabase;check(db.inTransaction());ReferenceStore.checkScope(db,scope)
+        if(!ReferencePayload.uuid(operationUuid) || !ReferencePayload.uuid(sourceOperation) || created.toEpochMilli()<0)fail(ReferenceError.INVALID_SOURCE)
+        val dao=database.dao();val current=dao.recordById(expected.id) ?: fail(ReferenceError.UNKNOWN_IDENTITY)
+        val owner=ReferenceStore.identity(db,scope,"MEDICATION",current.medication_id,null)
+        val record=ReferenceStore.identity(db,scope,"RECORD",current.id,owner)
+        val source=ReferenceStore.row(db,"measured_operation","operation_uuid=?",arrayOf(sourceOperation)) ?: fail(ReferenceError.UNKNOWN_IDENTITY)
+        if(source.getString("dataset_uuid")!=scope.dataset || source.getString("record_uuid")!=record || source.getString("kind")!="CONSUME")fail(ReferenceError.UNKNOWN_IDENTITY)
+        val allocationIds=db.query("SELECT uuid FROM measured_allocation WHERE operation_uuid=? ORDER BY uuid",arrayOf(sourceOperation)).use{c->buildList{while(c.moveToNext())add(c.getString(0))}}
+        val input=JSONObject().put("format",1).put("kind","REVERSE").put("dataset_uuid",scope.dataset).put("medication_uuid",owner)
+            .put("record_uuid",record).put("record_revision",expected.revision).put("source_operation_uuid",sourceOperation)
+            .put("source_request_sha256",source.getString("request_sha256")).put("source_allocation_uuids",JSONArray(allocationIds))
+        val canonical=ReferencePayload.canonical(input);val hash=ReferencePayload.sha(canonical)
+        if(ReferenceStore.row(db,"reference_event","operation_uuid=?",arrayOf(operationUuid))!=null)fail(ReferenceError.OPERATION_CONFLICT)
+        ReferenceStore.row(db,"measured_operation","operation_uuid=?",arrayOf(operationUuid))?.let {old->
+            if(old.getString("dataset_uuid")!=scope.dataset || old.getString("kind")!="REVERSE" || old.getString("request_sha256")!=hash || old.getString("input_json")!=canonical)fail(ReferenceError.OPERATION_CONFLICT)
+            return allocationIds.size
+        }
+        if(current!=expected || current.revision<source.getInt("record_revision"))fail(ReferenceError.STALE_REVISION)
+        db.query("SELECT input_json FROM measured_operation WHERE record_uuid=? AND kind='REVERSE'",arrayOf(record)).use {c->while(c.moveToNext()) {
+            if(JSONObject(c.getString(0)).getString("source_operation_uuid")==sourceOperation)fail(ReferenceError.OPERATION_CONFLICT)
+        }}
+        val entries=dao.supplyFor(current.id);val byId=entries.associateBy{it.id};val reversed=entries.mapNotNull{it.reversal_of_id}.toSet()
+        val originals=allocationIds.map {id->
+            val a=ReferenceStore.row(db,"measured_allocation","uuid=?",arrayOf(id))!!
+            if(a.getString("dataset_uuid")!=scope.dataset || !a.isNull("reverses_uuid"))fail(ReferenceError.INVALID_SOURCE)
+            val entry=byId[a.getLong("ledger_entry_id")] ?: fail(ReferenceError.INVALID_SOURCE)
+            if(entry.kind!="CONSUME" || entry.id in reversed || entry.operation_id!=sourceOperation || !entry.used_delta.isFinite() || entry.used_delta<=0 ||
+                entry.used_delta>StockQuantum.MAX_QUANTA || entry.used_delta.toLong().toDouble()!=entry.used_delta)fail(ReferenceError.OPERATION_CONFLICT)
+            val container=ReferenceStore.row(db,"reference_identity","uuid=?",arrayOf(a.getString("container_uuid"))) ?: fail(ReferenceError.INVALID_SOURCE)
+            if(container.getString("dataset_uuid")!=scope.dataset || ReferencePayload.optional(container,"owner_uuid")!=owner || container.isNull("live_handle") || container.getLong("live_handle")!=entry.container_id)fail(ReferenceError.UNKNOWN_IDENTITY)
+            val box=dao.container(entry.container_id)
+            if(box.state=="VOIDED" || box.used_amount<entry.used_delta || !box.used_amount.isFinite() || box.used_amount.toLong().toDouble()!=box.used_amount)fail(ReferenceError.OPERATION_CONFLICT)
+            val quantity=Measurements.parse(a.getString("quantity"));if(quantity !is MeasureResult.Success || quantity.value.signum()<=0 || (Measurements.decimalText(quantity.value) as MeasureResult.Success).value!=a.getString("quantity"))fail(ReferenceError.INVALID_SOURCE)
+            MeasureUnit.valueOf(a.getString("unit"))
+            Triple(a,entry,box)
+        }
+        ReferenceStore.insert(db,"measured_operation",JSONObject().put("operation_uuid",operationUuid).put("dataset_uuid",scope.dataset).put("record_uuid",record)
+            .put("record_revision",current.revision).put("kind","REVERSE").put("request_sha256",hash).put("input_json",canonical)
+            .put("unallocated_quantity",JSONObject.NULL).put("unallocated_unit",JSONObject.NULL).put("unknown_reason",JSONObject.NULL).put("created_utc",created.toEpochMilli()))
+        originals.forEach {(a,entry,box)->
+            val reverse=dao.supply(SupplyEntryEntity(container_id=entry.container_id,dose_record_id=current.id,dose_revision=current.revision,operation_id=operationUuid,
+                kind="REVERSE",used_delta=-entry.used_delta,reversal_of_id=entry.id,created_utc=created.toEpochMilli(),created_zone="UTC",reason="reverse frozen physical stock use"))
+            ReferenceStore.insert(db,"measured_allocation",JSONObject().put("uuid",UUID.randomUUID().toString()).put("dataset_uuid",scope.dataset).put("operation_uuid",operationUuid)
+                .put("container_uuid",a.getString("container_uuid")).put("presentation_event_uuid",a.getString("presentation_event_uuid")).put("ledger_entry_id",reverse)
+                .put("quantity",a.getString("quantity")).put("unit",a.getString("unit")).put("reverses_uuid",a.getString("uuid")))
+            if(box.state=="EMPTY")dao.setContainerState(box.id,"IN_USE",box.opened_on)
+        }
+        return originals.size
+    }
+
     suspend fun consumeNewRecord(database:NotesDatabase,scope:ReferenceScope,expected:RecordEntity,operationUuid:String,
         uses:List<ConfirmedStockUse>,created:Instant):MeasuredConsumptionReceipt {
         val db=database.openHelper.writableDatabase;check(db.inTransaction());ReferenceStore.checkScope(db,scope)

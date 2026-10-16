@@ -95,4 +95,27 @@ class MeasuredConsumptionStoreTest {
         assertEquals("ACTUAL_PACKAGE_NOT_CONFIRMED",receipt.issue);assertTrue(receipt.lines.isEmpty())
         assertEquals(0,count("supply_transaction"));assertEquals(r,db.dao().recordById(r.id));assertEquals(1,count("measured_operation"))
     }
+    @Test fun reversingUsesOriginalQuantaAfterCurrentMedicationAndReferenceChange()=runBlocking {
+        val m=med();val b=box(m);val r=record(m);val receipt=consume(r,b,listOf(use(b,"28")))
+        db.withTransaction {
+            val current=db.dao().medication(m);db.dao().updateMedication(current.copy(name="SYNTHETIC renamed",dose_per_intake=99.0))
+            ReferenceStore.associate(raw,b.scope,m,0,UUID.randomUUID().toString(),product.copy(strength="SYNTHETIC changed current reference"))
+        }
+        val op=UUID.randomUUID().toString()
+        db.withTransaction{assertEquals(1,MeasuredConsumptionStore.reverseOriginal(db,b.scope,r,receipt.operationUuid,op,at))}
+        db.withTransaction{assertEquals(1,MeasuredConsumptionStore.reverseOriginal(db,b.scope,r,receipt.operationUuid,op,at))}
+        assertEquals(0.0,db.dao().container(b.container.id).used_amount,0.0)
+        assertEquals(listOf(56.0,-56.0),db.dao().supplyFor(r.id).map{it.used_delta})
+        assertEquals(2,count("measured_operation"));assertEquals(2,count("measured_allocation"));assertEquals(r,db.dao().recordById(r.id))
+        rejects(ReferenceError.OPERATION_CONFLICT){db.withTransaction{MeasuredConsumptionStore.reverseOriginal(db,b.scope,r,receipt.operationUuid,UUID.randomUUID().toString(),at)}}
+    }
+    @Test fun reversalFailureRollsBackAllInverseEntriesAndLeavesOriginalConsumption()=runBlocking {
+        val m=med();val b=box(m);val r=record(m);val receipt=consume(r,b,listOf(use(b)))
+        raw.execSQL("CREATE TRIGGER synthetic_reverse_failure BEFORE INSERT ON measured_allocation WHEN NEW.reverses_uuid IS NOT NULL BEGIN SELECT RAISE(ABORT,'synthetic measured reverse failure'); END")
+        try{db.withTransaction{MeasuredConsumptionStore.reverseOriginal(db,b.scope,r,receipt.operationUuid,UUID.randomUUID().toString(),at)};fail("Inverse fault missed")}
+        catch(e:Exception){assertTrue(generateSequence<Throwable>(e){it.cause}.any{it.message.orEmpty().contains("synthetic measured reverse failure")})}
+        assertEquals(1.0,db.dao().container(b.container.id).used_amount,0.0);assertEquals(1,count("supply_transaction"));assertEquals(1,count("measured_operation"))
+        assertEquals(r,db.dao().recordById(r.id))
+    }
+
 }

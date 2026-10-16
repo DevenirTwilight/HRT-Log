@@ -27,3 +27,5 @@ Room版本门先红测试源37f84cb真实FAIL：旧Room11读取器成功打开�
 源7fcc671同一Room11旧读取器门测试转绿，1/1 PASS；生成的Room12导出与Room11的45实体及views逐项相同，未改旧表结构。业务备份仍10，新包装接受仍OFF。继续增加11→12故障DDL注入回滚（保留旧引用/epoch）及旧11未知计量数据拒绝/原库不清除，并完整回归全部原有迁移。目标拒绝测试成功不代表三API/全回归通过，随后记录实际结果。
 
 源e4d5ddb完整Room12验证：data268（含迁移6/容器10/包装12）零失败/跳过，Period5+Privacy3通过，原生源码编译PASS。目录更新、药物当前引用、PK、原Scalar账本/预测与正式库存入口均未改；模式未启用。Room12源尚未通过远端当前CI，不得套用旧5bcf8d3六绿灯。
+
+Room12检查点0843450六项CI在push/PR全部SUCCESS；当前仍DRAFT，不以此替代后续代码验收。后续MeasuredUsePayload六项本地PASS，旧Double剂量仅以原始IEEE754位保存上下文，实际库存量为独立精确Quantity。MeasuredConsumptionStore新增八项真实Room测试PASS：精确分数、相同UUID幂等/冲突、不同规格逐项事实不求和、未知换算不扣、耗尽余量、外药物/旧epoch拒绝及新记录/来源/流水故障全回滚。适配器仍无Repository/App调用者，当前备份仍拒绝此格式，旧SupplyLedger/预测未改。正在增加原始量逆操作与故障回滚；没有启用正式库存。
