@@ -52,10 +52,10 @@ const val BACKFILL_MAX_DAYS=731L
     }
     suspend fun medicationReferenceState(medication: Long): MedicationReferenceState = transactionWithSql(Space.PRIMARY) { _, raw ->
         val scope=ReferenceStore.existingScope(raw)
-        MedicationReferenceState(scope,scope?.let {ReferenceStore.current(raw,it,medication)})
+        MedicationReferenceState(scope,scope?.let {ReferenceStore.current(raw,it,medication)},ReferenceStore.previewEpoch(raw))
     }
-    suspend fun associateInitialMedication(medication: Long, operationUuid: String, product: UserReferenceProduct): MedicationReferenceState = transactionWithSql(Space.PRIMARY) { _, raw ->
-        ReferenceStore.initialAssociation(raw,medication,operationUuid,product)
+    suspend fun associateInitialMedication(medication: Long, operationUuid: String, product: UserReferenceProduct, expectedPreviewEpoch: String): MedicationReferenceState = transactionWithSql(Space.PRIMARY) { _, raw ->
+        ReferenceStore.initialAssociation(raw,medication,operationUuid,product,expectedPreviewEpoch)
     }
     suspend fun referenceScope(): ReferenceScope = transactionWithSql(Space.PRIMARY) { _, raw -> ReferenceStore.scope(raw) }
     suspend fun medicationReference(scope: ReferenceScope, medication: Long): MedicationReference? = transactionWithSql(Space.PRIMARY) { _, raw ->

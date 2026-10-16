@@ -59,7 +59,7 @@ abstract class ReferenceMigrationContract {
                         raw.query("SELECT text FROM day_note").use {assertTrue(it.moveToFirst());assertEquals("SYNTHETIC schema $version",it.getString(0));assertFalse(it.moveToNext())}
                         raw.query("PRAGMA foreign_key_check").use {assertFalse(it.moveToFirst())}
                         ReferenceSchema.businessTables.forEach {table->raw.query("SELECT COUNT(*) FROM `$table`").use {it.moveToFirst();assertEquals(0,it.getInt(0))}}
-                        raw.query("SELECT COUNT(*) FROM reference_runtime").use {it.moveToFirst();assertEquals(0,it.getInt(0))}
+                        raw.query("SELECT COUNT(*) FROM reference_runtime").use {it.moveToFirst();assertEquals(1,it.getInt(0))}
                     }
             } finally {context.deleteDatabase(name);key.fill(0)}
         }

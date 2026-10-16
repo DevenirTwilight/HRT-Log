@@ -44,3 +44,5 @@ P0预演内存库包含所有新业务表，完整检查FK、摘要、事件链�
 旧1…10 fixture → Room新版本、业务备份1…9 → 新reader；新完整roundtrip、旧reader拒绝、新旧数据集ID碰撞、当前目录不存在、坏摘要/孤儿/循环/重复UUID/过期CAS、不同UUID scope、部分DDL/写入/提交前故障、删除/恢复/墓碑、原账本和计划/PK内容哈希不变。API26/29/35原生SQLCipher需实际运行；物理设备/断电未跑则NOT_RUN。
 
 实现补充：捕获的record_revision/capture_revision及事件revision限于正Int范围；仍存在的记录不能捕获未来revision。记录已物理删除的墓碑保持历史，不按复用整数ID的新行解释。canonical JSON明确自行转义、拒绝未配对surrogate，跨API摘要采用固定向量验证。旧业务头若夹带新引用表必须拒绝，不能用旧头绕过新格式准入。
+
+空引用预览修正：reference_runtime在数据库初始化/打开时即保有本地epoch及预留dataset UUID；业务reference_dataset仍为空，预览/取消不创建或更改业务引用。MedicationReferenceState新增previewEpoch，首次关联必须携带它。恢复空的旧/新备份也生成全新本地epoch；删除medication/dose_record/supply_container退休旧编辑票据，禁止REPLACE已识别对象，未识别对象的同ID替换亦退休epoch。仅本地缓存行变化，不回填官方身份，不进业务备份，Room11/业务10保持。

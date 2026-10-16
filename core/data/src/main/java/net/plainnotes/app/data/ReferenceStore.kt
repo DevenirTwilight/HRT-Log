@@ -37,35 +37,41 @@ internal object ReferenceStore {
         } }
         db.insert(table, SQLiteDatabase.CONFLICT_ABORT, cv)
     }
+    fun previewEpoch(db: SupportSQLiteDatabase): String {
+        check(db.inTransaction())
+        val runtime=row(db,"reference_runtime","id=1",emptyArray()) ?: fail(ReferenceError.STALE_SCOPE)
+        val epoch=runtime.getString("epoch")
+        if(!ReferencePayload.uuid(epoch) || !ReferencePayload.uuid(runtime.getString("dataset_uuid"))) fail(ReferenceError.STALE_SCOPE)
+        return epoch
+    }
     fun scope(db: SupportSQLiteDatabase): ReferenceScope {
         check(db.inTransaction())
-        row(db,"reference_runtime","id=1",emptyArray())?.let { runtime ->
-            val dataset=runtime.getString("dataset_uuid");val epoch=runtime.getString("epoch")
-            if(!ReferencePayload.uuid(dataset) || !ReferencePayload.uuid(epoch) || row(db,"reference_dataset","uuid=?",arrayOf(dataset))==null) fail(ReferenceError.STALE_SCOPE)
-            return ReferenceScope(dataset,epoch)
-        }
-        val datasets=db.query("SELECT uuid FROM reference_dataset").use { c ->
-            if(c.moveToFirst()) c.getString(0).also { require(!c.moveToNext()) } else null
-        }
-        val dataset=datasets ?: id().also { uuid -> insert(db,"reference_dataset",JSONObject().put("uuid",uuid).put("created_utc",System.currentTimeMillis())) }
-        val epoch=id()
-        insert(db,"reference_runtime",JSONObject().put("id",1).put("dataset_uuid",dataset).put("epoch",epoch))
+        val epoch=previewEpoch(db)
+        val runtime=row(db,"reference_runtime","id=1",emptyArray())!!
+        val dataset=runtime.getString("dataset_uuid")
+        val existing=db.query("SELECT uuid FROM reference_dataset").use {c->if(c.moveToFirst())c.getString(0).also{require(!c.moveToNext())}else null}
+        if(existing!=null && existing!=dataset) fail(ReferenceError.STALE_SCOPE)
+        if(existing==null)insert(db,"reference_dataset",JSONObject().put("uuid",dataset).put("created_utc",System.currentTimeMillis()))
         return ReferenceScope(dataset,epoch)
     }
     fun existingScope(db: SupportSQLiteDatabase): ReferenceScope? {
-        check(db.inTransaction())
-        val runtime=row(db,"reference_runtime","id=1",emptyArray()) ?: return null
-        val scope=ReferenceScope(runtime.getString("dataset_uuid"),runtime.getString("epoch"))
-        checkScope(db,scope)
-        return scope
+        val epoch=previewEpoch(db)
+        val runtime=row(db,"reference_runtime","id=1",emptyArray())!!
+        val dataset=runtime.getString("dataset_uuid")
+        if(row(db,"reference_dataset","uuid=?",arrayOf(dataset))==null) {
+            db.query("SELECT 1 FROM reference_dataset").use {if(it.moveToFirst())fail(ReferenceError.STALE_SCOPE)}
+            return null
+        }
+        return ReferenceScope(dataset,epoch)
     }
-    fun initialAssociation(db: SupportSQLiteDatabase, medication: Long, operation: String, product: UserReferenceProduct): MedicationReferenceState {
+    fun initialAssociation(db: SupportSQLiteDatabase, medication: Long, operation: String, product: UserReferenceProduct, expectedPreviewEpoch: String): MedicationReferenceState {
         check(db.inTransaction())
+        // Validate even an empty preview before materializing identities or considering operation replay.
+        if(previewEpoch(db)!=expectedPreviewEpoch)fail(ReferenceError.STALE_SCOPE)
         val existing=existingScope(db)
-        // A retry can return its exact original result. Another editor's initialization requires a fresh preview.
         if(existing!=null && row(db,"reference_event","operation_uuid=?",arrayOf(operation))==null) fail(ReferenceError.STALE_SCOPE)
         val current=existing ?: scope(db)
-        return MedicationReferenceState(current,associate(db,current,medication,0,operation,product))
+        return MedicationReferenceState(current,associate(db,current,medication,0,operation,product),previewEpoch(db))
     }
     fun checkScope(db: SupportSQLiteDatabase, expected: ReferenceScope) {
         check(db.inTransaction())

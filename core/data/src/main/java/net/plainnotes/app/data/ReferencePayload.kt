@@ -44,7 +44,7 @@ data class ReferenceScope(val dataset: String, val epoch: String)
 enum class ReferenceError { STALE_SCOPE, STALE_REVISION, OPERATION_CONFLICT, UNKNOWN_IDENTITY, INVALID_SOURCE, WRONG_SPACE, ALREADY_CONSUMED }
 class ReferenceFailure(val code: ReferenceError) : IllegalArgumentException(code.name)
 
-data class MedicationReferenceState(val scope: ReferenceScope?, val reference: MedicationReference?)
+data class MedicationReferenceState(val scope: ReferenceScope?, val reference: MedicationReference?, val previewEpoch: String)
 
 data class MedicationReference(
     val medicationUuid: String,

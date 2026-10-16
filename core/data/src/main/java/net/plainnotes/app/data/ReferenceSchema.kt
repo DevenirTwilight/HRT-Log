@@ -58,8 +58,20 @@ internal object ReferenceSchema {
         "measured_operation" to "length(NEW.operation_uuid)=36 AND length(NEW.request_sha256)=64 AND NEW.kind IN ('CONSUME','REVERSE','ADJUST') AND NEW.created_utc>=0 AND ((NEW.kind='ADJUST' AND NEW.record_uuid IS NULL AND NEW.record_revision IS NULL) OR (NEW.kind IN ('CONSUME','REVERSE') AND NEW.record_revision>=1 AND EXISTS(SELECT 1 FROM reference_identity i WHERE i.uuid=NEW.record_uuid AND i.kind='RECORD' AND i.dataset_uuid=NEW.dataset_uuid)))",
         "measured_allocation" to "length(NEW.uuid)=36 AND length(NEW.quantity)>0 AND length(NEW.unit)>0 AND EXISTS(SELECT 1 FROM measured_operation o WHERE o.operation_uuid=NEW.operation_uuid AND o.dataset_uuid=NEW.dataset_uuid) AND EXISTS(SELECT 1 FROM reference_identity c JOIN supply_transaction t ON t.id=NEW.ledger_entry_id WHERE c.uuid=NEW.container_uuid AND c.kind='CONTAINER' AND c.dataset_uuid=NEW.dataset_uuid AND (c.live_handle=t.container_id OR c.live_handle IS NULL AND c.original_handle=t.container_id)) AND EXISTS(SELECT 1 FROM reference_event e WHERE e.operation_uuid=NEW.presentation_event_uuid AND e.subject_uuid=NEW.container_uuid AND e.dataset_uuid=NEW.dataset_uuid) AND (NEW.reverses_uuid IS NULL OR EXISTS(SELECT 1 FROM measured_allocation a WHERE a.uuid=NEW.reverses_uuid AND a.dataset_uuid=NEW.dataset_uuid AND a.container_uuid=NEW.container_uuid AND a.quantity=NEW.quantity AND a.unit=NEW.unit))"
     )
+    private fun initializeRuntime(db: SupportSQLiteDatabase) {
+        db.query("SELECT 1 FROM reference_runtime WHERE id=1").use {if(it.moveToFirst())return}
+        restoreRuntime(db)
+    }
     fun install(db: SupportSQLiteDatabase) {
         if (!exists(db)) return // Older isolated migration fixtures have not reached this schema yet.
+        initializeRuntime(db) // Local-only editing epoch exists before the first reference, never in business backups.
+        val freshEpoch="lower(hex(randomblob(4)))||'-'||lower(hex(randomblob(2)))||'-'||lower(hex(randomblob(2)))||'-'||lower(hex(randomblob(2)))||'-'||lower(hex(randomblob(6)))"
+        listOf("medication" to "MEDICATION","dose_record" to "RECORD","supply_container" to "CONTAINER").forEach { (table,kind)->
+            db.execSQL("CREATE TRIGGER IF NOT EXISTS reference_retire_epoch_$table AFTER DELETE ON `$table` BEGIN UPDATE reference_runtime SET epoch=$freshEpoch WHERE id=1; END")
+            db.execSQL("""CREATE TRIGGER IF NOT EXISTS reference_guard_replace_$table BEFORE INSERT ON `$table` WHEN EXISTS(SELECT 1 FROM `$table` WHERE id=NEW.id)
+                BEGIN SELECT CASE WHEN EXISTS(SELECT 1 FROM reference_identity WHERE kind='$kind' AND live_handle=NEW.id) THEN RAISE(ABORT,'Cannot replace an identified reference subject') END;
+                UPDATE reference_runtime SET epoch=$freshEpoch WHERE id=1; END""")
+        }
         businessTables.forEach { table ->
             db.execSQL("DROP TRIGGER IF EXISTS reference_guard_${table}")
             db.execSQL("CREATE TRIGGER reference_guard_${table} BEFORE INSERT ON `$table` BEGIN SELECT CASE WHEN COALESCE((${predicates.getValue(table)}),0)=0 THEN RAISE(ABORT,'Invalid reference state') END; END")
@@ -82,7 +94,7 @@ internal object ReferenceSchema {
     fun retireRuntime(db: SupportSQLiteDatabase) { if (exists(db)) db.execSQL("DELETE FROM reference_runtime") }
     fun restoreRuntime(db: SupportSQLiteDatabase) {
         val dataset = db.query("SELECT uuid FROM reference_dataset").use { c -> if (c.moveToFirst()) c.getString(0).also { require(!c.moveToNext()) } else null }
-        if (dataset != null) db.execSQL("INSERT INTO reference_runtime(id,dataset_uuid,epoch) VALUES(1,?,?)", arrayOf(dataset, UUID.randomUUID().toString()))
+        db.execSQL("INSERT OR IGNORE INTO reference_runtime(id,dataset_uuid,epoch) VALUES(1,?,?)", arrayOf(dataset ?: UUID.randomUUID().toString(), UUID.randomUUID().toString()))
     }
 
     fun validate(db: SupportSQLiteDatabase) {

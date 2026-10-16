@@ -39,6 +39,8 @@ abstract class ReferencePersistenceContract {
         ingredients=listOf("SYNTHETIC ingredient A","SYNTHETIC ingredient B"),strength="2 mg / tablet (synthetic)",form="tablet",routes=listOf("oral","other user-recorded route"),sourceVersion=version,recordedOn="2026-10-16")
     private suspend fun med(label:String="SYNTHETIC medication")=repo.saveMedication(MedicationEntity(name=label,molecule="OTHER",unit="TABLET",dose_per_intake=1.0,
         container_capacity=10.0,soon_alert_minutes=0,late_after_minutes=60,site_rotation=false,notifications_on=false,active=true,sort_order=0),null,RuleKind.EVERY_N_DAYS,1,listOf(LocalTime.NOON),emptySet(),at)
+    private suspend fun initial(medication:Long,operation:String,value:UserReferenceProduct,epoch:String?=null)=
+        repo.associateInitialMedication(medication,operation,value,epoch ?: repo.medicationReferenceState(medication).previewEpoch)
     private fun business()=RawData.dump(raw).toString()
     private fun legacy()=RawData.dump(raw,DOMAIN_TABLES.filterNot { it in ReferenceSchema.businessTables }).toString()
     private fun guards()=raw.query("SELECT name,sql FROM sqlite_master WHERE type='trigger' ORDER BY name").use { c->buildList {while(c.moveToNext())add(c.getString(0) to c.getString(1))} }
@@ -169,6 +171,7 @@ abstract class ReferencePersistenceContract {
         repo.unscheduled(medication,at,1.0);val record=db.dao().records().single()
         val old=RawData.dump(raw).getJSONArray("record_reference_capture").getJSONObject(0).getString("record_uuid")
         db.withTransaction {raw.execSQL("DELETE FROM dose_record WHERE id=?",arrayOf(record.id))}
+        failure(ReferenceError.STALE_SCOPE){repo.medicationReference(scope,medication)}
         raw.query("SELECT live_handle FROM reference_identity WHERE uuid=?",arrayOf(old)).use {assertTrue(it.moveToFirst());assertTrue(it.isNull(0))}
         db.dao().record(record.copy(id=record.id,taken_utc=at.plusSeconds(120).toEpochMilli()))
         db.withTransaction {ReferenceStore.captureContext(raw,db.dao().recordById(record.id)!!)}
@@ -234,20 +237,49 @@ abstract class ReferencePersistenceContract {
         val medication=med();val before=business()
         val preview=repo.medicationReferenceState(medication)
         assertNull(preview.scope);assertNull(preview.reference)
-        assertEquals(before,business());assertEquals(0,count("reference_runtime"))
-        failure(ReferenceError.INVALID_SOURCE){repo.associateInitialMedication(medication,id(),product().copy(recordedOn="invalid"))}
-        assertEquals(before,business());assertEquals(0,count("reference_runtime"))
-        val operation=id();val linked=repo.associateInitialMedication(medication,operation,product())
+        assertTrue(ReferencePayload.uuid(preview.previewEpoch))
+        assertEquals(before,business());assertEquals(1,count("reference_runtime"))
+        failure(ReferenceError.INVALID_SOURCE){initial(medication,id(),product().copy(recordedOn="invalid"))}
+        assertEquals(before,business());assertEquals(1,count("reference_runtime"))
+        val operation=id();val linked=initial(medication,operation,product())
         assertNotNull(linked.scope);assertEquals(1,linked.reference!!.revision)
         val committed=business()
-        assertEquals(linked,repo.associateInitialMedication(medication,operation,product()))
+        assertEquals(linked,initial(medication,operation,product()))
         assertEquals(committed,business())
-        failure(ReferenceError.STALE_SCOPE){repo.associateInitialMedication(medication,id(),product())}
+        failure(ReferenceError.STALE_SCOPE){initial(medication,id(),product())}
         assertEquals(committed,business())
     }
 
+    @Test fun emptyReferenceRestoreRetiresPreviewWithoutCreatingAnyBusinessIdentity()=runBlocking {
+        val medication=med();val preview=repo.medicationReferenceState(medication)
+        assertNull(preview.scope);val before=business();val archive=repo.exportBackup(password)
+        repo.restoreBackup(archive,password)
+        val fresh=repo.medicationReferenceState(medication);assertNull(fresh.scope);assertNotEquals(preview.previewEpoch,fresh.previewEpoch)
+        failure(ReferenceError.STALE_SCOPE){initial(medication,id(),product(),preview.previewEpoch)}
+        assertEquals(before,business());assertEquals(0,count("reference_dataset"));assertEquals(0,count("reference_event"))
+        val linked=initial(medication,id(),product(),fresh.previewEpoch);assertEquals(product(),linked.reference!!.product)
+    }
+    @Test fun deletingAndReusingMedicationHandleRetiresEmptyPreview()=runBlocking {
+        val template=MedicationEntity(name="SYNTHETIC old identity",molecule="OTHER",unit="MG",dose_per_intake=1.0,container_capacity=10.0,soon_alert_minutes=0,late_after_minutes=60,site_rotation=false,notifications_on=false,active=true,sort_order=0)
+        val medication=db.dao().insertMedication(template);val preview=repo.medicationReferenceState(medication)
+        db.withTransaction {raw.execSQL("DELETE FROM medication WHERE id=?",arrayOf(medication))}
+        db.dao().insertMedication(template.copy(id=medication,name="SYNTHETIC different identity"))
+        val before=business()
+        failure(ReferenceError.STALE_SCOPE){initial(medication,id(),product(),preview.previewEpoch)}
+        assertEquals(before,business());assertEquals(0,count("reference_event"))
+        val fresh=repo.medicationReferenceState(medication);assertNotEquals(preview.previewEpoch,fresh.previewEpoch)
+        assertNotNull(initial(medication,id(),product(),fresh.previewEpoch).reference)
+    }
+    @Test fun replacementOfIdentifiedSubjectRejectsWithoutRetiringItsValidEpoch()=runBlocking {
+        val medication=med();val linked=initial(medication,id(),product());val before=business()
+        var rejected:Exception?=null
+        try {raw.execSQL("INSERT OR REPLACE INTO medication SELECT * FROM medication WHERE id=?",arrayOf(medication))}catch(e:Exception){rejected=e}
+        assertNotNull("Replacing a stable identity must reject",rejected)
+        assertTrue(generateSequence(rejected){it.cause as? Exception}.any {it.message?.contains("Cannot replace an identified reference subject")==true})
+        assertEquals(before,business());assertEquals(linked.previewEpoch,repo.medicationReferenceState(medication).previewEpoch)
+    }
     @Test fun futureHeaderIsRejectedBeforeOpeningDatabaseAndLegacyMaximumCannotReadNewBackup()=runBlocking {
-        val medication=med();repo.associateInitialMedication(medication,id(),product())
+        val medication=med();initial(medication,id(),product())
         val backup=repo.exportBackup(password)
         val decoded=JSONObject(String(BackupCodec.decrypt(backup,password),Charsets.UTF_8))
         assertEquals(10,decoded.getInt("schema"))
