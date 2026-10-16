@@ -8,7 +8,8 @@
     - 四语新 key，删除 `today_done_heading`。
   - 测试：`Ui04TodayDedupTest` 8 例先红后绿。
   - 必须通过的测试本地已通过。`CalendarCoreFlowTest` 的 320dp 场景改为先滚动再点日期格，原因是今天卡变高，日期格被推到屏幕下方；断言未改。
-  - 下一步：前后截图、报告 65、PR。合并后再交付 build28 APK。
+  - 截图：改前、改后各 192 张；其他日期 64/64 一致。报告 65。
+  - 下一步：开 PR，全绿后合并；然后交付 build28 APK（versionCode 改为 28）。
 - 交付账本 PR #46 已合并为 a3146df（build27 已登记）。
 
 ## 2026-10-15 进度总览（历史）
