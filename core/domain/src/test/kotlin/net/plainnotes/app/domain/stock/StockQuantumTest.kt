@@ -100,6 +100,18 @@ class StockQuantumTest {
         }
         assertEquals(BigDecimal("0.6"),ok(stock.remaining(0)).value)
     }
+    @Test fun restoredIntegerLedgerUsesExactSummationEvenWhenCancellationOrderIsAdversarial() {
+        val max=StockQuantum.MAX_QUANTA
+        val stock=ok(StockQuantum.create(q(max.toString()),q("1"),actual))
+        val deltas=List(1000){max}+listOf(1L)+List(1000){-max}
+        assertNotEquals(1.0,deltas.sumOf{it.toDouble()})
+        assertEquals(1L,ok(stock.restoredUsed(0,deltas)))
+        assertEquals(1L,ok(stock.restoredUsed(0,deltas.reversed())))
+        failure(MeasureError.INSUFFICIENT_STOCK,stock.restoredUsed(0,listOf(-1)))
+        failure(MeasureError.INSUFFICIENT_STOCK,stock.restoredUsed(max,listOf(1)))
+        failure(MeasureError.INVALID_NUMBER,stock.restoredUsed(0,listOf(Long.MIN_VALUE)))
+        failure(MeasureError.PRECISION_OR_RANGE,stock.restoredUsed(0,List(100001){1L}))
+    }
     @Test fun deterministicFractionAndBalancePropertiesCoverBothBounds() {
         val stock=ok(StockQuantum.create(q("1000"),q("0.0001"),actual))
         var seed=17L

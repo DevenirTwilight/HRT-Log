@@ -63,6 +63,21 @@ class StockQuantum private constructor(
         if(n is MeasureResult.Failure)return n
         return if((n as MeasureResult.Success).value>capacityQuanta)failure(MeasureError.INSUFFICIENT_STOCK)else n
     }
+    /** Exact restore-cache reduction for validated integer-mode entries. This is not a history validator.
+     * Arbitrary CONSUME/REVERSE cancellation order can exceed 2^53 or Long temporarily, even when
+     * the final used count is small. Never use SQL SUM(Double) for this new mode.
+     */
+    fun restoredUsed(initialQuanta:Long,signedDeltas:List<Long>):MeasureResult<Long> {
+        if(signedDeltas.size>100000)return failure(MeasureError.PRECISION_OR_RANGE)
+        if(initialQuanta<0 || initialQuanta>capacityQuanta)return failure(MeasureError.INVALID_NUMBER)
+        var sum=BigDecimal.valueOf(initialQuanta)
+        for(delta in signedDeltas) {
+            if(delta==0L || delta < -MAX_QUANTA || delta>MAX_QUANTA)return failure(MeasureError.INVALID_NUMBER)
+            sum=sum.add(BigDecimal.valueOf(delta))
+        }
+        if(sum.signum()<0 || sum>BigDecimal.valueOf(capacityQuanta))return failure(MeasureError.INSUFFICIENT_STOCK)
+        return MeasureResult.Success(sum.longValueExact(),algorithm=ALGORITHM)
+    }
     /** Used count must come from the new integer-mode ledger, never rounded from an old scalar. */
     fun remaining(usedQuanta:Long):MeasureResult<Quantity> {
         if(usedQuanta<0)return failure(MeasureError.INVALID_NUMBER)
