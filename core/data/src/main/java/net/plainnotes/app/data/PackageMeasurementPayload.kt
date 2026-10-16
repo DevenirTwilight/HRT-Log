@@ -104,7 +104,11 @@ internal object PackageMeasurementPayload {
             }))
         return read(ReferencePayload.canonical(json))
     }
-    fun read(payload:String):FrozenPackageMeasurement {
+    /** Invalid external payloads share one explicit validation exception; no partial state is returned. */
+    fun read(payload:String):FrozenPackageMeasurement = try { readCanonical(payload) }
+        catch(e:IllegalArgumentException){throw e}
+        catch(e:Exception){throw IllegalArgumentException("Invalid package measurement payload",e)}
+    private fun readCanonical(payload:String):FrozenPackageMeasurement {
         require(payload.toByteArray(Charsets.UTF_8).size<=ReferencePayload.MAX_BYTES)
         val json=JSONObject(payload);require(ReferencePayload.canonical(json)==payload)
         keys(json,fields)

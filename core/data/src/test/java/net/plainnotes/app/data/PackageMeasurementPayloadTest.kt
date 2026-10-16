@@ -28,7 +28,7 @@ class PackageMeasurementPayloadTest {
         assertEquals(ReferencePayload.sha(frozen.payload),frozen.sha256)
         assertEquals(product,frozen.product());assertEquals(product.ingredients,frozen.product().ingredients)
         assertEquals(MeasureUnit.G,frozen.measurement().nominalTotal!!.unit)
-        assertEquals(BigDecimal("80"),frozen.measurement().nominalTotal!!.value)
+        assertEquals("80",frozen.measurement().nominalTotal!!.value.toPlainString())
     }
     @Test fun nominalPumpsNeverBecomeConfirmedUsableCapacity() {
         val frozen=PackageMeasurementPayload.freeze(draft(null,StockCapacityBasis.LABEL_NOMINAL))
@@ -79,7 +79,9 @@ class PackageMeasurementPayloadTest {
     @Test fun extraFieldsFloatingPointAndInvalidEnumsOrDecimalsAreRejected() {
         val frozen=PackageMeasurementPayload.freeze(draft())
         for(change in listOf<(JSONObject)->Unit>({it.put("unexpected",true)},{it.put("quantum",0.5)},{it.put("quantum","0.0000000000000000001")},{it.put("stock_unit","mg")},{it.put("confirmed_capacity","064")})) {
-            val json=JSONObject(frozen.payload);change(json);reject{PackageMeasurementPayload.read(ReferencePayload.canonical(json))}
+            val json=JSONObject(frozen.payload);change(json)
+            val invalid=if(json.opt("quantum") is Double)json.toString() else ReferencePayload.canonical(json)
+            reject{PackageMeasurementPayload.read(invalid)}
         }
     }
     @Test fun sourceVersionIsFrozenAndRequiredOnActualUse() {
