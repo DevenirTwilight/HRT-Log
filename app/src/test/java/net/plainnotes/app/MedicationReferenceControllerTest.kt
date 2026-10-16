@@ -23,6 +23,7 @@ class MedicationReferenceControllerTest {
     @After fun cleanup(){scope.cancel();db.close()}
     private val product=UserReferenceProduct("SYNTHETIC source",listOf("SYNTHETIC compound A"),"2 mg / tablet","tablet",listOf("oral"),sourceVersion="user-v1",recordedOn="2026-10-16")
     private suspend fun med()=repo.saveMedication(MedicationEntity(name="SYNTHETIC recorded medication",molecule="E2",route="ORAL",unit="MG",dose_per_intake=0.5,container_capacity=28.0,soon_alert_minutes=0,late_after_minutes=60,site_rotation=false,notifications_on=false,active=true,sort_order=0),"E2",RuleKind.EVERY_N_DAYS,1,listOf(LocalTime.NOON),emptySet(),Instant.parse("2026-03-28T12:00:00Z"))
+    private suspend fun linkInitial(id:Long,value:UserReferenceProduct)=repo.associateInitialMedication(id,UUID.randomUUID().toString(),value,repo.medicationReferenceState(id).previewEpoch)
     private fun count(table:String)=db.openHelper.writableDatabase.query("SELECT COUNT(*) FROM `$table`").use{it.moveToFirst();it.getInt(0)}
     @Test fun openingSearchingAndCancellingMakesNoReferenceWrites()=runBlocking {
         val id=med();controller.open(id).join();controller.search("SYNTHETIC","","")!!.join();assertTrue(controller.close())
@@ -40,13 +41,13 @@ class MedicationReferenceControllerTest {
     }
     @Test fun staleEditorCannotOverwriteNewerAssociationAndReloadIsExplicit()=runBlocking {
         val id=med();controller.open(id).join()
-        repo.associateInitialMedication(id,UUID.randomUUID().toString(),product.copy(sourceVersion="other-editor"))
+        linkInitial(id,product.copy(sourceVersion="other-editor"))
         controller.confirm(product)!!.join();assertTrue(controller.state.value.failed);assertTrue(controller.state.value.stale)
         assertNull(controller.confirm(product));assertEquals(1,count("reference_event"))
         controller.open(id).join();controller.confirm(product)!!.join();assertTrue(controller.state.value.saved);assertEquals(2,count("reference_event"))
     }
     @Test fun backupRestoreRetiresOpenEditorWithoutChangingImportedReference()=runBlocking {
-        val id=med();repo.associateInitialMedication(id,UUID.randomUUID().toString(),product)
+        val id=med();linkInitial(id,product)
         val archive=repo.exportBackup("SYNTHETIC-password".toCharArray());controller.open(id).join()
         repo.restoreBackup(archive,"SYNTHETIC-password".toCharArray())
         controller.confirm(product.copy(sourceVersion="stale-change"))!!.join();assertTrue(controller.state.value.stale)

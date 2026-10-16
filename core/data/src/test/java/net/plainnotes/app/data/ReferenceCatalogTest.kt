@@ -21,8 +21,9 @@ class ReferenceCatalogTest {
     @After fun close(){db.close()}
     private fun product(name:String="SYNTHETIC Œstrogène A",version:String="user-v1")=UserReferenceProduct(name,listOf("SYNTHETIC estradiol free compound","SYNTHETIC ingredient B, hydrate"),"2 mg / tablet","Comprimé",listOf("Orale"),sourceVersion=version,recordedOn="2026-10-16")
     private suspend fun medication()=repo.saveMedication(MedicationEntity(name="SYNTHETIC actual medication",molecule="OTHER",unit="TABLET",dose_per_intake=1.0,container_capacity=28.0,soon_alert_minutes=0,late_after_minutes=60,site_rotation=false,notifications_on=false,active=true,sort_order=0),null,RuleKind.EVERY_N_DAYS,1,listOf(LocalTime.NOON),emptySet(),Instant.parse("2026-03-28T12:00:00Z"))
+    private suspend fun initial(id:Long,operation:String,value:UserReferenceProduct)=repo.associateInitialMedication(id,operation,value,repo.medicationReferenceState(id).previewEpoch)
     @Test fun accentsCaseAndLigaturesAreSearchOnlyAndNeverChangeStoredNames()=runBlocking {
-        val id=medication();repo.associateInitialMedication(id,UUID.randomUUID().toString(),product())
+        val id=medication();initial(id,UUID.randomUUID().toString(),product())
         assertEquals(product(),repo.savedReferenceProducts("OESTROGENE","COMPRIME","ORALE").entries.single().product)
         assertEquals(1,repo.savedReferenceProducts("INGREDIENT B, HYDRATE").entries.size)
         assertTrue(repo.savedReferenceProducts("estradiol","gel","").entries.isEmpty())
@@ -30,7 +31,7 @@ class ReferenceCatalogTest {
         assertEquals("SYNTHETIC Œstrogène A",repo.savedReferenceProducts().entries.single().product.name)
     }
     @Test fun differentCisStrengthsRoutesAndVersionsRemainSeparateSnapshots()=runBlocking {
-        val id=medication();val first=repo.associateInitialMedication(id,UUID.randomUUID().toString(),product().copy(cis="00000001",cip="0000000000001"))
+        val id=medication();val first=initial(id,UUID.randomUUID().toString(),product().copy(cis="00000001",cip="0000000000001"))
         repo.associateMedication(first.scope!!,id,1,UUID.randomUUID().toString(),product(version="user-v2").copy(cis="00000002",strength="1 mg / capsule",form="capsule",routes=listOf("other recorded route")))
         val page=repo.savedReferenceProducts("estradiol")
         assertEquals(2,page.entries.size);assertEquals(2,page.entries.map{it.snapshotUuid}.toSet().size)
@@ -42,7 +43,7 @@ class ReferenceCatalogTest {
         assertTrue(repo.savedReferenceProducts(strength="2000 µg").entries.isEmpty())
     }
     @Test fun boundedMatchingResultsStillSearchPastTheFirstTwoHundredStoredSnapshots()=runBlocking {
-        val id=medication();val initial=repo.associateInitialMedication(id,UUID.randomUUID().toString(),product("SYNTHETIC entry-000"))
+        val id=medication();val initial=initial(id,UUID.randomUUID().toString(),product("SYNTHETIC entry-000"))
         for(i in 1..200)repo.associateMedication(initial.scope!!,id,i,UUID.randomUUID().toString(),product("SYNTHETIC entry-${i.toString().padStart(3,'0')}","user-$i"))
         val page=repo.savedReferenceProducts();assertEquals(200,page.entries.size);assertTrue(page.limited)
         val hidden=db.openHelper.writableDatabase.query("SELECT uuid,payload_json FROM reference_snapshot ORDER BY uuid DESC LIMIT 1").use {

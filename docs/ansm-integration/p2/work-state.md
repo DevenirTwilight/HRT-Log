@@ -26,3 +26,5 @@
 对照负责人P2原始要求补齐原始规格筛选：仅原文包含搜索，不将2mg与2000µg自动视为同一商品。原先239/62证据仍对应8e910ee；新筛选变更单独重跑。
 
 原始规格补齐源ca399ec的data239/app62与192图再次PASS。新增EmptyPreview恢复负向测试随后真实FAIL，明确观察到source events=1，证据empty-preview-red-evidence.json。P1 #54已转回草稿修复本地previewEpoch协议，#56保持草稿，旧通过证据不冒充此边界已通过。
+
+已合入P1空预览epoch修复cb7d90f，真实控制器首次提交携带打开时previewEpoch；每次成功后独立读取实际最新关联（幂等回放的原事件不伪装当前状态），仍不调用全局refresh/PK。此前空引用恢复红测试预期转绿，最新完整回归待运行。

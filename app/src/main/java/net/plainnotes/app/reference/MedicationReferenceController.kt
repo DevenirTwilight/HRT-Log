@@ -56,10 +56,13 @@ class MedicationReferenceController(private val repo:NotesRepository,private val
                 val capturedScope=pending.current.scope
                 val current=if(capturedScope==null) {
                     requireNotNull(pending.product)
-                    repo.associateInitialMedication(pending.target,pending.uuid,pending.product)
+                    repo.associateInitialMedication(pending.target,pending.uuid,pending.product,pending.current.previewEpoch)
                 } else MedicationReferenceState(capturedScope,repo.associateMedication(capturedScope,pending.target,
-                    pending.current.reference?.revision ?: 0,pending.uuid,pending.product))
-                mutable.value=mutable.value.copy(current=current,busy=false,saved=true)
+                    pending.current.reference?.revision ?: 0,pending.uuid,pending.product),pending.current.previewEpoch)
+                // An idempotent replay returns its original event; display the actual latest association instead.
+                val fresh=repo.medicationReferenceState(pending.target)
+                if(fresh.previewEpoch!=current.previewEpoch)throw ReferenceFailure(ReferenceError.STALE_SCOPE)
+                mutable.value=mutable.value.copy(current=fresh,busy=false,saved=true)
                 attempt=null
             }catch(e:CancellationException){throw e}
             catch(e:Exception){mutable.value=mutable.value.copy(busy=false,failed=true,stale=e is ReferenceFailure && e.code in setOf(ReferenceError.STALE_SCOPE,ReferenceError.STALE_REVISION))}
