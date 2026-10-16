@@ -25,7 +25,7 @@ import javax.crypto.spec.SecretKeySpec
 /** Tables in foreign-key order (parents first). Reminder mappings are rebuilt by the scheduler and never exported. */
 internal val DOMAIN_TABLES = listOf("medication", "pk_profile", "schedule_rule", "rule_time", "slot_override", "dose_record", "supply_container", "supply_transaction",
     "retained_slot", "appointment", "checkin_item", "checkin_score", "day_note", "lab_analyte", "lab_value", "pk_settings",
-    "stage_review", "symptom_check", "review_effect", "regimen_version", "regimen_rule_link", "milestone", "lab_context_revision", "visit_question", "visit_pack", "history_period_revision", "record_annotation", "trash_item")
+    "stage_review", "symptom_check", "review_effect", "regimen_version", "regimen_rule_link", "milestone", "lab_context_revision", "visit_question", "visit_pack", "history_period_revision", "record_annotation", "trash_item") + ReferenceSchema.businessTables
 
 /** Raw-SQL maintenance that has to bypass the append-only ledger triggers: full clear and backup restore. */
 internal object RawData {
@@ -45,23 +45,28 @@ internal object RawData {
             }
         }
     }
-    private fun deleteRows(db: SupportSQLiteDatabase, ledger: List<List<Long>>) {
+    private fun deleteRows(db: SupportSQLiteDatabase, ledger: List<List<Long>>, references: Map<String, List<List<String>>>) {
         (DOMAIN_TABLES + "reminder_mapping").reversed().forEach { table ->
-            if (table == "supply_transaction") LedgerReplacement.delete(db, ledger)
+            if (table in references) ReferenceDependencies.delete(db, table, references.getValue(table))
+            else if (table == "supply_transaction") LedgerReplacement.delete(db, ledger)
             else db.execSQL("DELETE FROM $table")
         }
     }
     fun clear(db: SupportSQLiteDatabase) {
         check(db.inTransaction())
         val ledger = LedgerReplacement.current(db)
+        val references = ReferenceDependencies.current(db)
         unguarded(db) {
+            ReferenceSchema.retireRuntime(db)
             AttachmentIdentity.replaceStructuredDataset(db)
-            deleteRows(db, ledger)
+            deleteRows(db, ledger, references)
         }
     }
-    fun dump(db: SupportSQLiteDatabase): JSONObject {
+    fun dump(db: SupportSQLiteDatabase, tableNames: List<String> = DOMAIN_TABLES): JSONObject {
+        // Explicit trusted subset is used to construct old-version fixture archives; production exports always use all tables.
+        require(tableNames.distinct().size == tableNames.size && tableNames.all { it in DOMAIN_TABLES })
         val tables = JSONObject()
-        DOMAIN_TABLES.forEach { t ->
+        tableNames.forEach { t ->
             val rows = JSONArray()
             db.query("SELECT ${RecordBackupCompatibility.columns.getValue(t).joinToString(",") { "`$it`" }} FROM $t").use { c ->
                 while (c.moveToNext()) rows.put(JSONObject().apply {
@@ -83,13 +88,16 @@ internal object RawData {
         check(db.inTransaction())
         BackupValidation.validateTables(db, tables)
         val ledger = LedgerReplacement.current(db)
+        val references = ReferenceDependencies.current(db)
         val supplyOrder = tables.optJSONArray("supply_transaction")?.let(LedgerReplacement::insertionOrder).orEmpty()
         preflight(context, db, tables, supplyOrder, upgradeRegimens, backfillTrash)
         unguarded(db) {
+            ReferenceSchema.retireRuntime(db)
             AttachmentIdentity.replaceStructuredDataset(db)
-            deleteRows(db, ledger)
+            deleteRows(db, ledger, references)
             insertRows(db, tables, supplyOrder)
             finishRestore(db, upgradeRegimens, backfillTrash)
+            ReferenceSchema.restoreRuntime(db)
         }
     }
 
@@ -121,7 +129,7 @@ internal object RawData {
     private fun insertRows(db: SupportSQLiteDatabase, tables: JSONObject, supplyOrder: List<Int>) {
         DOMAIN_TABLES.forEach { t ->
             val rows = tables.optJSONArray(t) ?: return@forEach
-            val order = if (t == "supply_transaction") supplyOrder else (0 until rows.length()).toList()
+            val order = if (t == "supply_transaction") supplyOrder else ReferenceDependencies.insertionOrder(t, rows)
             order.forEach { i ->
                 val r = rows.getJSONObject(i); val cv = ContentValues()
                 r.keys().forEach { k -> when (val v = r.get(k)) {

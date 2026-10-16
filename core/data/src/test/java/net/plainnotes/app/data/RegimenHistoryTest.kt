@@ -52,7 +52,7 @@ class RegimenHistoryTest {
         val password="synthetic-password".toCharArray()
         val json=JSONObject(String(BackupCodec.decrypt(repo.exportBackup(password),password)))
         val tables=json.getJSONObject("tables");listOf("regimen_version","regimen_rule_link","milestone").forEach{tables.remove(it)}
-        json.put("schema",3)
+        json.put("schema",3).also { legacy -> ReferenceSchema.businessTables.forEach { legacy.getJSONObject("tables").remove(it) } }
         tables.getJSONArray("schedule_rule").getJSONObject(0).put("config_snapshot","{\"molecule\":\"E2\",\"route\":\"GEL\",\"unit\":\"MG\",\"ester\":\"E2\"}")
         repo.restoreBackup(BackupCodec.encrypt(json.toString().toByteArray(),password),password)
         val reconstructed=db.dao().regimens().single();assertEquals("LEGACY_RULE",reconstructed.origin);assertNull(reconstructed.recorded_at_utc)

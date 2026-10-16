@@ -1,0 +1,242 @@
+{
+  "kind": "SYNTHETIC_ONLY",
+  "version": "synthetic-v1",
+  "source": "Synthetic fixture / exemple fictif / 合成示例 / 合成範例",
+  "verifiedOn": "2026-10-16",
+  "products": [
+    {
+      "cis": "SYNTH-CIS-1",
+      "name": "Atelier Éstradiol — exemple synthétique 1 mg",
+      "form": "comprimé",
+      "strength": "1 mg",
+      "routes": [
+        "orale"
+      ],
+      "ingredients": [
+        {
+          "name": "Estradiol synthétique",
+          "strength": "1 mg",
+          "denominator": "1 unité",
+          "role": "SA",
+          "group": "1"
+        }
+      ],
+      "presentations": [
+        {
+          "cip": "SYNTH-CIP-11",
+          "cis": "SYNTH-CIS-1",
+          "label": "28 comprimés — exemple"
+        },
+        {
+          "cip": "SYNTH-CIP-12",
+          "cis": "SYNTH-CIS-1",
+          "label": "90 comprimés — exemple"
+        }
+      ],
+      "registration": "ACTIVE",
+      "marketing": "MARKETED_DECLARED",
+      "rcp": "PANEL_OBSERVED",
+      "notice": "PANEL_OBSERVED"
+    },
+    {
+      "cis": "SYNTH-CIS-2",
+      "name": "Atelier Éstradiol — exemple synthétique 2 mg",
+      "form": "comprimé",
+      "strength": "2 mg",
+      "routes": [
+        "orale"
+      ],
+      "ingredients": [
+        {
+          "name": "Estradiol synthétique",
+          "strength": "2 mg",
+          "denominator": "1 unité",
+          "role": "SA",
+          "group": "1"
+        }
+      ],
+      "presentations": [
+        {
+          "cip": "SYNTH-CIP-21",
+          "cis": "SYNTH-CIS-2",
+          "label": "28 comprimés — exemple"
+        }
+      ],
+      "registration": "ACTIVE",
+      "marketing": "MARKETED_DECLARED",
+      "rcp": "PANEL_OBSERVED",
+      "notice": "PANEL_OBSERVED"
+    },
+    {
+      "cis": "SYNTH-CIS-3",
+      "name": "Atelier gel — exemple synthétique 0,04 g/100 g",
+      "form": "gel",
+      "strength": "0,04 g/100 g",
+      "routes": [
+        "cutanée"
+      ],
+      "ingredients": [
+        {
+          "name": "Estradiol synthétique",
+          "strength": "0,04 g",
+          "denominator": "100 g de gel",
+          "role": "SA",
+          "group": "1"
+        }
+      ],
+      "presentations": [
+        {
+          "cip": "SYNTH-CIP-31",
+          "cis": "SYNTH-CIS-3",
+          "label": "60 g de gel · exemple : 40 pressions nominales · rendement utilisable inconnu"
+        }
+      ],
+      "registration": "ACTIVE",
+      "marketing": "MARKETED_DECLARED",
+      "rcp": "PANEL_OBSERVED",
+      "notice": "PANEL_OBSERVED"
+    },
+    {
+      "cis": "SYNTH-CIS-4",
+      "name": "Atelier patch — exemple synthétique 25 µg/24 h",
+      "form": "dispositif transdermique",
+      "strength": "25 µg/24 h",
+      "routes": [
+        "transdermique"
+      ],
+      "ingredients": [
+        {
+          "name": "Estradiol synthétique",
+          "strength": "2 mg",
+          "denominator": "1 dispositif",
+          "role": "SA",
+          "group": "1"
+        }
+      ],
+      "presentations": [
+        {
+          "cip": "SYNTH-CIP-41",
+          "cis": "SYNTH-CIS-4",
+          "label": "4 dispositifs — exemple"
+        }
+      ],
+      "registration": "ACTIVE",
+      "marketing": "MARKETED_DECLARED",
+      "rcp": "PANEL_OBSERVED",
+      "notice": "PANEL_OBSERVED"
+    },
+    {
+      "cis": "SYNTH-CIS-5",
+      "name": "Atelier Progestérone — exemple synthétique 100 mg",
+      "form": "capsule",
+      "strength": "100 mg",
+      "routes": [
+        "orale",
+        "vaginale"
+      ],
+      "ingredients": [
+        {
+          "name": "Progestérone synthétique",
+          "strength": "100 mg",
+          "denominator": "1 capsule",
+          "role": "SA",
+          "group": "1"
+        }
+      ],
+      "presentations": [],
+      "registration": "ARCHIVED",
+      "marketing": "STOPPED_DECLARED",
+      "rcp": "PANEL_OBSERVED",
+      "notice": "PANEL_OBSERVED"
+    },
+    {
+      "cis": "SYNTH-CIS-6",
+      "name": "Atelier association — exemple synthétique de très longue dénomination avec deux substances et une fraction thérapeutique distincte 1 mg + 5 mg",
+      "form": "comprimé",
+      "strength": "1 mg + 5 mg",
+      "routes": [
+        "orale"
+      ],
+      "ingredients": [
+        {
+          "name": "Substance synthétique A",
+          "strength": "1 mg",
+          "denominator": "1 comprimé",
+          "role": "SA",
+          "group": "1"
+        },
+        {
+          "name": "Fraction synthétique A",
+          "strength": "0,8 mg",
+          "denominator": "1 comprimé",
+          "role": "FT",
+          "group": "1"
+        },
+        {
+          "name": "Substance synthétique B",
+          "strength": "5 mg",
+          "denominator": "1 comprimé",
+          "role": "SA",
+          "group": "2"
+        }
+      ],
+      "presentations": [],
+      "registration": "UNVERIFIED",
+      "marketing": "UNVERIFIED",
+      "rcp": "UNVERIFIED",
+      "notice": "MISSING"
+    },
+    {
+      "cis": "SYNTH-CIS-7",
+      "name": "Atelier inconnu — exemple synthétique",
+      "form": "solution",
+      "strength": null,
+      "routes": [
+        "cutanée"
+      ],
+      "ingredients": [
+        {
+          "name": "Estradiol synthétique",
+          "strength": null,
+          "denominator": "1 unité",
+          "role": "SA",
+          "group": "1"
+        }
+      ],
+      "presentations": [
+        {
+          "cip": "SYNTH-CIP-71",
+          "cis": "SYNTH-CIS-7",
+          "label": "10 mL — exemple, quantité utilisable inconnue"
+        }
+      ],
+      "registration": "REPEALED",
+      "marketing": "NOT_MARKETED",
+      "rcp": "MISSING",
+      "notice": "UNVERIFIED"
+    },
+    {
+      "cis": "SYNTH-CIS-8",
+      "name": "Atelier Éstradiol — exemple synthétique 1 mg",
+      "form": "capsule",
+      "strength": "1 mg",
+      "routes": [
+        "orale"
+      ],
+      "ingredients": [
+        {
+          "name": "Estradiol synthétique",
+          "strength": "1 mg",
+          "denominator": "1 unité",
+          "role": "SA",
+          "group": "1"
+        }
+      ],
+      "presentations": [],
+      "registration": "EXPIRED",
+      "marketing": "UNVERIFIED",
+      "rcp": "PANEL_OBSERVED",
+      "notice": "PANEL_OBSERVED"
+    }
+  ]
+}

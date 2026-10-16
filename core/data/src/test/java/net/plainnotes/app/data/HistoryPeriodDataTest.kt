@@ -99,7 +99,7 @@ class HistoryPeriodDataTest {
             {it.getJSONObject("tables").getJSONArray("history_period_revision").getJSONObject(0).put("revision",2)},
             {it.getJSONObject("tables").getJSONArray("record_annotation").getJSONObject(0).put("kind","MISSED")},
         ).forEach{edit->try{repo.restoreBackup(tamper(edit),pwd);fail()}catch(_:Exception){};assertEquals(periods,repo.historyPeriods())}
-        val old=tamper{o->o.put("schema",6);o.getJSONObject("tables").apply{remove("history_period_revision");remove("record_annotation")}}
+        val old=tamper{o->o.put("schema",6).also { legacy -> ReferenceSchema.businessTables.forEach { legacy.getJSONObject("tables").remove(it) } };o.getJSONObject("tables").apply{remove("history_period_revision");remove("record_annotation")}}
         repo.restoreBackup(old,pwd);assertTrue(repo.historyPeriods().isEmpty());assertTrue(repo.annotations().isEmpty());assertEquals(1,repo.records().size)
         try{repo.restoreBackup(tamper{it.getJSONObject("tables").remove("record_annotation")},pwd);fail()}catch(_:Exception){}
     }
@@ -147,7 +147,7 @@ class HistoryPeriodDataTest {
         repo.restoreBackup(backup,pwd);assertEquals(periods,repo.historyPeriods())
         fun tamper(edit:(JSONObject)->Unit)=BackupCodec.encrypt(JSONObject(String(BackupCodec.decrypt(backup,pwd))).also(edit).toString().toByteArray(),pwd)
         // A schema 7 backup has no kind or group_key: its rows are confirmed periods.
-        val v7=tamper{o->o.put("schema",7);val rows=o.getJSONObject("tables").getJSONArray("history_period_revision")
+        val v7=tamper{o->o.put("schema",7).also { legacy -> ReferenceSchema.businessTables.forEach { legacy.getJSONObject("tables").remove(it) } };val rows=o.getJSONObject("tables").getJSONArray("history_period_revision")
             val keep=org.json.JSONArray();for(i in 0 until rows.length())rows.getJSONObject(i).let{if(it.getString("kind")=="CONFIRMED"){it.remove("kind");it.remove("group_key");keep.put(it)}}
             o.getJSONObject("tables").put("history_period_revision",keep)}
         repo.restoreBackup(v7,pwd)
