@@ -56,4 +56,16 @@ class ReferencePayloadTest {
         rejects {ReferencePayload.userProduct(product().copy(recordedOn="2026-02-30"))}
         rejects {ReferencePayload.validateProduct(ReferencePayload.userProduct(product()).put("recommended_dose","SYNTHETIC forbidden field"))}
     }
+    @Test fun snapshotHeaderAndRequiredTextCannotUseJsonTypeCoercion() {
+        rejects {ReferencePayload.validateProduct(ReferencePayload.userProduct(product()).put("format","1"))}
+        listOf("name","source_version","recorded_on").forEach { key->
+            rejects {ReferencePayload.validateProduct(ReferencePayload.userProduct(product()).put(key,1))}
+        }
+    }
+    @Test fun unpairedSurrogatesCannotProduceAmbiguousUtf8Digests() {
+        listOf('\uD800','\uDC00').forEach { c ->
+            rejects {ReferencePayload.canonical(JSONObject().put("text",String(charArrayOf(c))))}
+            rejects {ReferencePayload.canonical(JSONObject().put(String(charArrayOf(c)),"value"))}
+        }
+    }
 }

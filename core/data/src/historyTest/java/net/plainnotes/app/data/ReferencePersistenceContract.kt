@@ -46,6 +46,10 @@ abstract class ReferencePersistenceContract {
     private fun failure(code:ReferenceError, block:suspend ()->Unit)=runBlocking {
         try {block();fail("Expected reference rejection: $code")} catch(e:ReferenceFailure) {assertEquals(code,e.code)}
     }
+    @Test fun canonicalUnicodeDigestIsIdenticalAcrossAndroidVersions() {
+        val value=JSONObject().put("b","0.125").put("a","SYNTHETIC œstrogène µg 片 🧪 / \"\n")
+        assertEquals("5ca17d160cc3848455eaad77fa7f180c0aebdf7e440b1406a0d46131fe92a2f1",ReferencePayload.sha(ReferencePayload.canonical(value)))
+    }
     @Test fun linkingCorrectingAndUnlinkingNeverRewritesLegacyFactsOrStock()=runBlocking {
         val medication=med();repo.addContainers(medication,10.0,1,true);repo.unscheduled(medication,at,1.0)
         val before=legacy();val scope=repo.referenceScope()
@@ -137,6 +141,22 @@ abstract class ReferencePersistenceContract {
             assertEquals(before,business());assertEquals(scope,repo.referenceScope());assertEquals(expectedGuards,guards())
         }
     }
+    @Test fun futureOrOutOfRangeCaptureRevisionsRejectEvenWithRecomputedDigest()=runBlocking {
+        val medication=med();val scope=repo.referenceScope()
+        repo.associateMedication(scope,medication,0,id(),product())
+        repo.unscheduled(medication,at,1.0)
+        val before=business();val expectedGuards=guards();val original=RawData.dump(raw)
+        listOf("record_revision" to 2L,"record_revision" to 2147483648L,"capture_revision" to 2147483648L).forEach { (field,value)->
+            val invalid=JSONObject(original.toString())
+            val capture=invalid.getJSONArray("record_reference_capture").getJSONObject(0)
+            capture.put(field,value)
+            capture.put("payload_sha256",ReferenceStore.captureHash(capture))
+            var rejected=false
+            try {db.withTransaction {RawData.restore(context,raw,invalid)}} catch(_:Exception){rejected=true}
+            assertTrue("Future or overflowing capture revision accepted: $field=$value",rejected)
+            assertEquals(before,business());assertEquals(scope,repo.referenceScope());assertEquals(expectedGuards,guards())
+        }
+    }
     @Test fun injectedFailureRollsBackReferenceBusinessRuntimeAndLegacyRows()=runBlocking {
         val medication=med();val scope=repo.referenceScope();repo.associateMedication(scope,medication,0,id(),product())
         val before=business();val expected=guards();val source=RawData.dump(raw)
@@ -224,6 +244,26 @@ abstract class ReferencePersistenceContract {
         assertEquals(committed,business())
         failure(ReferenceError.STALE_SCOPE){repo.associateInitialMedication(medication,id(),product())}
         assertEquals(committed,business())
+    }
+
+    @Test fun futureHeaderIsRejectedBeforeOpeningDatabaseAndLegacyMaximumCannotReadNewBackup()=runBlocking {
+        val medication=med();repo.associateInitialMedication(medication,id(),product())
+        val backup=repo.exportBackup(password)
+        val decoded=JSONObject(String(BackupCodec.decrypt(backup,password),Charsets.UTF_8))
+        assertEquals(10,decoded.getInt("schema"))
+        try {RecordBackupCompatibility.readVersion(decoded,9);fail("Legacy maximum accepted schema10")}
+        catch(_:BackupCodec.NewerBackup){}
+        val guarded=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space):NotesDatabase {fail("Future header must be refused before opening database");return db}})
+        decoded.put("schema",11)
+        val future=BackupCodec.encrypt(decoded.toString().toByteArray(),password)
+        try {guarded.restoreBackup(future,password);fail("Future header accepted")}
+        catch(_:BackupCodec.NewerBackup){}
+        val before=business();val scope=repo.referenceScope();decoded.put("schema",9)
+        val misdeclared=BackupCodec.encrypt(decoded.toString().toByteArray(),password)
+        try {repo.restoreBackup(misdeclared,password);fail("Schema9 silently accepted reference data")}
+        catch(e:IllegalArgumentException){assertEquals("Misdeclared reference backup version",e.message)}
+        assertEquals(before,business());assertEquals(scope,repo.referenceScope())
+        backup.fill(0);future.fill(0);misdeclared.fill(0)
     }
 
 }

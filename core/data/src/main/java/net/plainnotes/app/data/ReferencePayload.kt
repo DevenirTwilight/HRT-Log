@@ -50,6 +50,32 @@ internal object ReferencePayload {
     private val fields = setOf("format", "kind", "namespace", "source_version", "recorded_on", "name", "ingredients", "strength", "form", "routes", "cis", "cip", "source_url", "verification")
     fun uuid(text: String): Boolean = runCatching { UUID.fromString(text).toString() == text }.getOrDefault(false)
     fun sha(text: String): String = MessageDigest.getInstance("SHA-256").digest(text.toByteArray(Charsets.UTF_8)).joinToString("") { "%02x".format(it.toInt() and 255) }
+    /** Fixed JSON escaping and scalar Unicode validation; independent of Android's JSONObject writer version. */
+    private fun quote(text: String): String = buildString {
+        append('"')
+        var index=0
+        while(index<text.length) {
+            val c=text[index++]
+            require(c!='\u0000')
+            when {
+                Character.isHighSurrogate(c) -> {
+                    require(index<text.length && Character.isLowSurrogate(text[index]))
+                    append(c);append(text[index++])
+                }
+                Character.isLowSurrogate(c) -> error("Unpaired Unicode surrogate")
+                c=='"' -> append("\\\"")
+                c=='\\' -> append("\\\\")
+                c=='\b' -> append("\\b")
+                c=='\t' -> append("\\t")
+                c=='\n' -> append("\\n")
+                c=='\u000c' -> append("\\f")
+                c=='\r' -> append("\\r")
+                c.code<32 -> append("\\u"+c.code.toString(16).padStart(4,'0'))
+                else -> append(c)
+            }
+        }
+        append('"')
+    }
     fun canonical(json: JSONObject): String {
         fun encode(value: Any, depth: Int): String {
             require(depth <= 16) { "Reference nesting limit" }
@@ -59,14 +85,14 @@ internal object ReferencePayload {
                     require(value.length() <= 64)
                     value.keys().asSequence().toList().sorted().joinToString(",", "{", "}") { key ->
                         require(key.length <= 64)
-                        JSONObject.quote(key) + ":" + encode(value.get(key), depth + 1)
+                        quote(key) + ":" + encode(value.get(key), depth + 1)
                     }
                 }
                 is JSONArray -> {
                     require(value.length() <= 128)
                     (0 until value.length()).joinToString(",", "[", "]") { encode(value.get(it), depth + 1) }
                 }
-                is String -> { require(value.length <= MAX_TEXT && value.none { it == '\u0000' }); JSONObject.quote(value) }
+                is String -> { require(value.length <= MAX_TEXT); quote(value) }
                 is Int, is Long, is Boolean -> value.toString()
                 else -> error("Exact reference values must use decimal strings, not floating point")
             }
@@ -85,10 +111,10 @@ internal object ReferencePayload {
     fun validateProduct(json: JSONObject) {
         canonical(json)
         require(json.keys().asSequence().toSet() == fields)
-        require(json.getInt("format") == 1 && json.getString("kind") == "PRODUCT")
+        require(json.get("format") is Int && json.getInt("format") == 1 && json.getString("kind") == "PRODUCT")
         // Official snapshot adapter is a separate gated feature. User-entered facts never claim official verification.
         require(json.getString("namespace") == "USER_ENTERED" && json.getString("verification") == "UNVERIFIED")
-        listOf("name", "source_version", "recorded_on").forEach { require(json.getString(it).isNotBlank()) }
+        listOf("name", "source_version", "recorded_on").forEach { require(json.get(it) is String && json.getString(it).isNotBlank()) }
         LocalDate.parse(json.getString("recorded_on"))
         listOf("strength", "form", "cis", "cip", "source_url").forEach { require(json.isNull(it) || json.get(it) is String) }
         listOf("ingredients", "routes").forEach { key ->

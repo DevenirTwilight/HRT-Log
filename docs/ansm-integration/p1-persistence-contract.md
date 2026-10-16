@@ -24,7 +24,7 @@
 ## 完整性与操作
 
 - 所有UUID验证规范、尺寸与JSON预算有界；canonical对象key排序、array顺序保留、数值只允许明确整数或十进制字符串，SHA256在插入和恢复时复算。
-- source namespace 与verification独立；USER_ENTERED不可标成官方核实。CIP必须属于同一冻结CIS产品。SA/FT/ST原码保留，不归一或求和。
+- source namespace 与verification独立；USER_ENTERED不可标成官方核实。用户输入CIP须明确声明对应CIS，但此结构关系不代表已完成官方所属核实。SA/FT/ST原码保留，不归一或求和。
 - 引用事件的前一事件/subject/dataset/revision连续；事务内expected revision对比，双编辑器过期拒绝。
 - 同operation UUID、同canonical request幂等；不同内容拒绝。必须先验证当前dataset/epoch，不能因为重试UUID已存在跳过域隔离。
 - UUID、dataset、kind、owner不可更新；handle只能从原ID变null，不能重新绑定整数ID。物理删除触发独立墓碑维护；active=false不算删除。
@@ -42,3 +42,5 @@ P0预演内存库包含所有新业务表，完整检查FK、摘要、事件链�
 ## 验证门
 
 旧1…10 fixture → Room新版本、业务备份1…9 → 新reader；新完整roundtrip、旧reader拒绝、新旧数据集ID碰撞、当前目录不存在、坏摘要/孤儿/循环/重复UUID/过期CAS、不同UUID scope、部分DDL/写入/提交前故障、删除/恢复/墓碑、原账本和计划/PK内容哈希不变。API26/29/35原生SQLCipher需实际运行；物理设备/断电未跑则NOT_RUN。
+
+实现补充：捕获的record_revision/capture_revision及事件revision限于正Int范围；仍存在的记录不能捕获未来revision。记录已物理删除的墓碑保持历史，不按复用整数ID的新行解释。canonical JSON明确自行转义、拒绝未配对surrogate，跨API摘要采用固定向量验证。旧业务头若夹带新引用表必须拒绝，不能用旧头绕过新格式准入。

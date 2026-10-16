@@ -456,8 +456,10 @@ const val BACKFILL_MAX_DAYS=731L
         val status=ScheduleEngine.complete(slot,taken,ZoneId.systemDefault(),dose).status.name
         val result=recordFor(dao,slot,status,taken,dose).copy(unallocated_supply_amount=dose,site=site?.takeIf{it.isNotBlank()})
         val id=if(existing==null)dao.record(result) else {dao.updateRecord(result.copy(id=existing.id,revision=existing.revision+1,config_snapshot=existing.config_snapshot));existing.id}
-        SupplyLedger.allocate(dao,dao.recordById(id)!!)
+        val remaining=SupplyLedger.allocate(dao,dao.recordById(id)!!)
+
         ReferenceStore.captureContext(raw,dao.recordById(id)!!)
+        remaining
     }
     /**
      * Batch backfill ("batch add" in HRT tracker): one intake per day in [from]..[to] at each of [times], past instants only.
@@ -643,7 +645,7 @@ const val BACKFILL_MAX_DAYS=731L
     }
     suspend fun exportBackup(password:CharArray):ByteArray=withContext(Dispatchers.IO) {
         val db=db()
-        val json=db.withTransaction { RegimenHistory.seed(db.openHelper.writableDatabase);JSONObject().put("format",BackupCodec.FORMAT_VERSION).put("schema",RecordBackupCompatibility.SCHEMA)
+        val json=db.withTransaction { RegimenHistory.seed(db.openHelper.writableDatabase);ReferenceSchema.validate(db.openHelper.writableDatabase);JSONObject().put("format",BackupCodec.FORMAT_VERSION).put("schema",RecordBackupCompatibility.SCHEMA)
             .put("created",Instant.now().toString()).put("tables",RawData.dump(db.openHelper.writableDatabase)) }
         val plain=json.toString().toByteArray(Charsets.UTF_8)
         try{BackupCodec.encrypt(plain,password)}finally{plain.fill(0)}
@@ -656,12 +658,12 @@ const val BACKFILL_MAX_DAYS=731L
     suspend fun restoreBackup(data:ByteArray,password:CharArray,today:LocalDate=LocalDate.now())=withContext(Dispatchers.IO) {
         val plain=BackupCodec.decrypt(data,password)
         val json=try{String(plain,Charsets.UTF_8).let{BackupLimits.checkJson(it);JSONObject(it)}}finally{plain.fill(0)}
-        val db=db(); val current=RecordBackupCompatibility.SCHEMA; val schema=json.optInt("schema")
-        if(json.optInt("format")!=BackupCodec.FORMAT_VERSION||schema<1) throw BackupCodec.BadFile("incompatible version")
-        if(schema>current) throw BackupCodec.NewerBackup()
+        val schema=RecordBackupCompatibility.readVersion(json)
         val tables=json.getJSONObject("tables")
+        require(schema>=10 || ReferenceSchema.businessTables.none {tables.has(it)}) { "Misdeclared reference backup version" }
         val required=DOMAIN_TABLES.filterNot{(schema<2 && it in listOf("stage_review","symptom_check","review_effect")) || (schema<4 && it in listOf("regimen_version","regimen_rule_link","milestone")) || (schema<5 && it=="lab_context_revision") || (schema<6 && it in listOf("visit_question","visit_pack")) || (schema<7 && it in listOf("history_period_revision","record_annotation")) || (schema<9 && it=="trash_item") || (schema<10 && it in ReferenceSchema.businessTables)}
         require(required.all{tables.has(it)}) { "Incomplete backup" }
+        val db=db()
         db.withTransaction {
             val sql=db.openHelper.writableDatabase
             RawData.restore(access.applicationContext,sql,tables,upgradeRegimens=schema<4,backfillTrash=schema<9)

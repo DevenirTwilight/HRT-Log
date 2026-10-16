@@ -3,6 +3,16 @@ package net.plainnotes.app.data
 /** PNBAK1 business serialization has an independent version from Room; crypto framing is unchanged. */
 internal object RecordBackupCompatibility {
     const val SCHEMA = 10
+    /** Version gate runs before opening any database. The supported maximum is explicit for legacy-reader contract tests. */
+    fun readVersion(json: org.json.JSONObject, supported: Int = SCHEMA): Int {
+        require(supported>=1)
+        val format=json.opt("format");val version=json.opt("schema")
+        if((format !is Int && format !is Long) || (format as Number).toLong()!=BackupCodec.FORMAT_VERSION.toLong() ||
+            (version !is Int && version !is Long) || (version as Number).toLong()<1) throw BackupCodec.BadFile("incompatible version")
+        val value=(version as Number).toLong()
+        if(value>supported.toLong()) throw BackupCodec.NewerBackup()
+        return value.toInt()
+    }
     val columns = mapOf(
         "medication" to listOf("id","name","molecule","route","unit","dose_per_intake","container_capacity","expiry_days_after_open","soon_alert_minutes","late_after_minutes","site_rotation","site_set","notifications_on","active","sort_order","needs_review"),
         "pk_profile" to listOf("medication_id","ester","pk_route","sl_tier","gel_product_id","gel_site","gel_area_cm2","patch_release_ug_day"),
