@@ -25,7 +25,7 @@ class MeasurementIsolationTest(unittest.TestCase):
         original_root = report.ROOT
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            for relative in (report.MODEL / 'MeasurementCore.kt', report.APPROVED_CORE, report.APPROVED_STOCK_QUANTUM):
+            for relative in (report.MODEL / 'MeasurementCore.kt', report.APPROVED_CORE, report.APPROVED_STOCK_QUANTUM, report.APPROVED_PACKAGE_CODEC):
                 target = root / relative
                 target.parent.mkdir(parents=True, exist_ok=True)
                 target.write_text((original_root / relative).read_text())
@@ -43,6 +43,14 @@ class MeasurementIsolationTest(unittest.TestCase):
                 rogue.unlink()
                 stock.write_text(original + '\nimport java.math.RoundingMode')
                 self.assertEqual('FAIL', report.isolation()['status'])
+                stock.write_text(original)
+                codec = root / report.APPROVED_PACKAGE_CODEC
+                content = codec.read_text()
+                for token in report.FORBIDDEN_CORE_APIS:
+                    codec.write_text(content + '\n' + token)
+                    self.assertEqual('FAIL', report.isolation()['status'], token)
+                codec.write_text(content)
+                self.assertEqual('PASS', report.isolation()['status'])
 
     def test_frozen_contract_and_production_gate_are_separate(self):
         docs = report.ROOT / 'docs/ansm03'
