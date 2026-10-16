@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.*
@@ -71,7 +72,11 @@ class CalendarCoreFlowTest {
         ui.waitUntil(10_000) { ui.onAllNodes(dateCell).fetchSemanticsNodes().isNotEmpty() }
         if (ui.onAllNodes(hasContentDescription(fullDate(tomorrow), substring = true) and hasClickAction()).fetchSemanticsNodes().isEmpty())
             ui.onNodeWithContentDescription(s(R.string.calendar_next)).performClick()
-        cell(tomorrow).performClick(); ui.waitForIdle()
+        // UI-04: the today card now also lists today's records, so on a 568dp screen the grid row starts below the fold.
+        // Scroll to the cell as the user does, then activate it through its click action, as CalendarIntakeAndroidTest
+        // does: scrolled to the bottom edge, the floating Add button covers the right-hand cells, so a tap would hit it.
+        dayList.performScrollToNode(hasContentDescription(fullDate(tomorrow), substring = true))
+        cell(tomorrow).performSemanticsAction(SemanticsActions.OnClick); ui.waitForIdle()
     }
     private fun completeButton() = ui.onAllNodes(hasText(s(R.string.complete)) and hasClickAction()).onFirst()
     private val dayList get() = ui.onNode(hasScrollToIndexAction())
