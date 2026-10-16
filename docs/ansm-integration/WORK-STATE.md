@@ -1,19 +1,19 @@
 # 工作状态
 
-2026-10-16。起始默认claude/new-session-1959qb，原基线2f4b958425e1cd67dad1d97deb8ab724eb8ecac1；最新主线c95cea12f6312c2a492b63aa4f9ec6b59be403a0（#54已合并，主线CI待复验；此前0dca778已合并#45/#48）。下表为当前状态，后续开发日志保留原始失败及当时状态。
+2026-10-16。最新默认claude/new-session-1959qb为f1e9b4de1c97e73966b4af8900b78391eada5c43（P3合并后CI待验）。下表为当前状态，历史日志保留当时的失败与恢复证据。
 
-|阶段|状态|证据和下一动作|
+|阶段|状态|当前证据及下一动作|
 |---|---|---|
-|Phase0|DONE|联合授权REQUIREMENTS §102/受保护自动合并§103；许可/FT-ST未闭环，官方打包OFF|
-|P0|INTEGRATION_VERIFIED|#53已合并；主线六检查PASS，三API新增恢复各7项PASS|
-|P1|PRODUCTION_IMPLEMENTED / PR_CI_VERIFIED|#54源945512a全部六检查PASS，已保护合并c95cea1；Room11/业务10；三API新增24项各PASS，完整App1312零失败205条件跳过/data237/reminder20/Period5通过；主线CI待复验|
-|P2|CODED / LOCAL_VERIFIED|#56已改为默认base；源6697747数据243/App75 PASS，96配置192图，历史来源只读UI12项；当前整合CI待验，不将本地结果当最终CI|
-|P3|CODED / CI_VERIFIED_ON_PRIOR_BASE|#55独立精确生产核心，domain126/data204/发布隔离PASS，原六检查PASS，待依赖更新复验|
-|P4|IN_PROGRESS|独立分支精确整数刻度边界14项新增测试，domain140 PASS；无生产账本调用，后续实现包装/备份/事务并验证|
-|P5|NOT_STARTED|统一预测未知语义及四语正式库存UI未实施|
-|官方分发|BLOCKED|许可版本冲突、FT/ST原码保留；不阻断通用用户来源实现|
+|Phase0|DONE|联合实施§102和受保护自动合并§103；官方许可/FT-ST未闭环，打包OFF|
+|P0|INTEGRATION_VERIFIED|#53已合并，主线六检查和三API恢复合同通过|
+|P1|PRODUCTION_IMPLEMENTED|#54合并c95cea1，主线六检查通过；Room11/业务10，实际包装未启用|
+|P2|PRODUCTION_IMPLEMENTED|#56合并b5d9751，主线六检查复验PASS；真实手动来源/关联/历史UI，App1379零失败205条件跳过，data243与192图已核验|
+|P3|PRODUCTION_CORE_IMPLEMENTED|#55源e1c40bd六检查成功，合并f1e9b4d；只生产化计量API，不代表库存接线；主线CI待验；Gate3红对照顺序修复保留全部原断言|
+|P4|IN_PROGRESS / NOT_ACTIVATED|#57草稿，当前本地Room12候选非破坏版本门、45实体不变；data268/domain140、Period5+Privacy3与原生编译PASS；新Room12 CI待验；无Repository/App计量入口，业务备份10仍拒绝新格式；正式消费/预测未接线|
+|P5|NOT_STARTED|统一新计量预测不确定性和实际包装正式UI未实施|
+|官方分发|BLOCKED|许可版本冲突与FT/ST未闭环，不能因#45已合并而打包官方目录|
 
-#50→#51→桥接#52及P0 #53已合入，#45/#48已合入；均不等于官方数据进入Android正式资源。#54已按当前六检查通过保护合并；#55/#56仍需当前六检查成功及无冲突/未解决讨论才保护自动合并。不合并无关PR，不发布APK，不启用医疗附件。真实TalkBack/物理设备/断电NOT_RUN。
+#45/#48/#50及#51经#52桥接已合并；P0/P1/P2/P3均保护合并，无管理员绕过。当前默认运行仍Room11，Room12仅在#57待验源码，不称已部署。医疗附件/网络/PK/签名/版本/发布不动，实机/断电/TalkBack NOT_RUN。#57不能自动合并未完成的正式库存接线。资料UI医疗中心缺失部分审计见p2/medical-ui-status-2026-10-16.md。
 
 ## 历史开发记录（当时状态，当前以上表为准）
 
