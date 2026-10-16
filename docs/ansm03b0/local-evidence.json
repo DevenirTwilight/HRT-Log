@@ -1,0 +1,682 @@
+{
+  "scope": "TEST_ONLY synthetic inputs; production integration PRODUCTION_BLOCKED",
+  "physical_device": "NOT_RUN",
+  "production_implemented": false,
+  "released": false,
+  "test_runs": [
+    {
+      "module": "core/domain",
+      "status": "PASS",
+      "suites": [
+        {
+          "name": "net.plainnotes.app.domain.AttachmentSessionTest",
+          "timestamp": "2026-10-16T09:39:47.382Z",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "name": "net.plainnotes.app.domain.PeriodAttributionTest",
+          "timestamp": "2026-10-16T09:39:47.544Z",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "name": "net.plainnotes.app.domain.ScheduleTest",
+          "timestamp": "2026-10-16T09:39:47.574Z",
+          "tests": 30,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "name": "net.plainnotes.app.domain.SustainedPatternsTest",
+          "timestamp": "2026-10-16T09:39:47.675Z",
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "name": "net.plainnotes.app.domain.TreatmentEpochsTest",
+          "timestamp": "2026-10-16T09:39:47.700Z",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "name": "net.plainnotes.app.domain.TreatmentPeriodsTest",
+          "timestamp": "2026-10-16T09:39:47.738Z",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "name": "net.plainnotes.app.domain.measurement.LegacyBoundaryTest",
+          "timestamp": "2026-10-16T09:39:47.774Z",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "name": "net.plainnotes.app.domain.measurement.MeasurementCoreTest",
+          "timestamp": "2026-10-16T09:39:47.777Z",
+          "tests": 26,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "name": "net.plainnotes.app.domain.measurement.SyntheticHistoryContractTest",
+          "timestamp": "2026-10-16T09:39:48.037Z",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "name": "net.plainnotes.app.domain.shadow.ShadowMeasurementAllocatorTest",
+          "timestamp": "2026-10-16T09:39:48.044Z",
+          "tests": 23,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      ]
+    },
+    {
+      "module": "core/data",
+      "status": "PASS",
+      "suites": [
+        {
+          "name": "net.plainnotes.app.data.Ansm03b0InventoryTest",
+          "timestamp": "2026-10-16T09:44:45.879Z",
+          "tests": 13,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      ]
+    },
+    {
+      "module": "core/reminder",
+      "status": "PASS",
+      "suites": [
+        {
+          "name": "net.plainnotes.app.reminder.Ansm03b0ForecastBoundaryTest",
+          "timestamp": "2026-10-16T09:41:11.606Z",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "name": "net.plainnotes.app.reminder.CacheStoreTest",
+          "timestamp": "2026-10-16T09:41:11.794Z",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "name": "net.plainnotes.app.reminder.ExactAlarmTest",
+          "timestamp": "2026-10-16T09:41:14.087Z",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "name": "net.plainnotes.app.reminder.LockedBootAlarmTest",
+          "timestamp": "2026-10-16T09:41:53.187Z",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "name": "net.plainnotes.app.reminder.NotificationPrivacyTest",
+          "timestamp": "2026-10-16T09:41:53.598Z",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "name": "net.plainnotes.app.reminder.StockAlertsClearTest",
+          "timestamp": "2026-10-16T09:41:53.695Z",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "name": "net.plainnotes.app.reminder.StockAlertsTest",
+          "timestamp": "2026-10-16T09:41:57.353Z",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      ]
+    }
+  ],
+  "synthetic_events": [
+    {
+      "report": "ledger-baseline.json",
+      "event": "before-packages",
+      "records": 0,
+      "ledger_rows": 0,
+      "containers": [],
+      "forecast": {
+        "available_legacy": null,
+        "days": null,
+        "first_short": null,
+        "status": "UNTRACKED"
+      }
+    },
+    {
+      "report": "ledger-baseline.json",
+      "event": "created-sealed",
+      "records": 0,
+      "ledger_rows": 0,
+      "containers": [
+        {
+          "batch": null,
+          "capacity": "binary64:4611686018427387904",
+          "id": 1,
+          "initial_used_amount": "binary64:0",
+          "medication_id": 1,
+          "opened_on": null,
+          "source_note": null,
+          "state": "SEALED",
+          "used_amount": "binary64:0"
+        },
+        {
+          "batch": null,
+          "capacity": "binary64:4611686018427387904",
+          "id": 2,
+          "initial_used_amount": "binary64:0",
+          "medication_id": 1,
+          "opened_on": null,
+          "source_note": null,
+          "state": "SEALED",
+          "used_amount": "binary64:0"
+        }
+      ],
+      "forecast": {
+        "available_legacy": "binary64:4616189618054758400",
+        "days": 4,
+        "first_short": "2026-03-31T07:00:00Z",
+        "status": "SHORT"
+      }
+    },
+    {
+      "report": "ledger-baseline.json",
+      "event": "opened-oldest",
+      "records": 0,
+      "ledger_rows": 0,
+      "containers": [
+        {
+          "batch": null,
+          "capacity": "binary64:4611686018427387904",
+          "id": 1,
+          "initial_used_amount": "binary64:0",
+          "medication_id": 1,
+          "opened_on": "2026-10-16",
+          "source_note": null,
+          "state": "IN_USE",
+          "used_amount": "binary64:0"
+        },
+        {
+          "batch": null,
+          "capacity": "binary64:4611686018427387904",
+          "id": 2,
+          "initial_used_amount": "binary64:0",
+          "medication_id": 1,
+          "opened_on": null,
+          "source_note": null,
+          "state": "SEALED",
+          "used_amount": "binary64:0"
+        }
+      ],
+      "forecast": {
+        "available_legacy": "binary64:4616189618054758400",
+        "days": 4,
+        "first_short": "2026-03-31T07:00:00Z",
+        "status": "SHORT"
+      }
+    },
+    {
+      "report": "ledger-baseline.json",
+      "event": "completed",
+      "records": 1,
+      "ledger_rows": 1,
+      "containers": [
+        {
+          "batch": null,
+          "capacity": "binary64:4611686018427387904",
+          "id": 1,
+          "initial_used_amount": "binary64:0",
+          "medication_id": 1,
+          "opened_on": "2026-10-16",
+          "source_note": null,
+          "state": "IN_USE",
+          "used_amount": "binary64:4607182418800017408"
+        },
+        {
+          "batch": null,
+          "capacity": "binary64:4611686018427387904",
+          "id": 2,
+          "initial_used_amount": "binary64:0",
+          "medication_id": 1,
+          "opened_on": null,
+          "source_note": null,
+          "state": "SEALED",
+          "used_amount": "binary64:0"
+        }
+      ],
+      "forecast": {
+        "available_legacy": "binary64:4613937818241073152",
+        "days": 4,
+        "first_short": "2026-03-31T07:00:00Z",
+        "status": "SHORT"
+      }
+    },
+    {
+      "report": "ledger-baseline.json",
+      "event": "duplicate-public-complete",
+      "records": 1,
+      "ledger_rows": 1,
+      "containers": [
+        {
+          "batch": null,
+          "capacity": "binary64:4611686018427387904",
+          "id": 1,
+          "initial_used_amount": "binary64:0",
+          "medication_id": 1,
+          "opened_on": "2026-10-16",
+          "source_note": null,
+          "state": "IN_USE",
+          "used_amount": "binary64:4607182418800017408"
+        },
+        {
+          "batch": null,
+          "capacity": "binary64:4611686018427387904",
+          "id": 2,
+          "initial_used_amount": "binary64:0",
+          "medication_id": 1,
+          "opened_on": null,
+          "source_note": null,
+          "state": "SEALED",
+          "used_amount": "binary64:0"
+        }
+      ],
+      "forecast": {
+        "available_legacy": "binary64:4613937818241073152",
+        "days": 4,
+        "first_short": "2026-03-31T07:00:00Z",
+        "status": "SHORT"
+      }
+    },
+    {
+      "report": "ledger-baseline.json",
+      "event": "actual-correction",
+      "records": 1,
+      "ledger_rows": 3,
+      "containers": [
+        {
+          "batch": null,
+          "capacity": "binary64:4611686018427387904",
+          "id": 1,
+          "initial_used_amount": "binary64:0",
+          "medication_id": 1,
+          "opened_on": "2026-10-16",
+          "source_note": null,
+          "state": "IN_USE",
+          "used_amount": "binary64:4609434218613702656"
+        },
+        {
+          "batch": null,
+          "capacity": "binary64:4611686018427387904",
+          "id": 2,
+          "initial_used_amount": "binary64:0",
+          "medication_id": 1,
+          "opened_on": null,
+          "source_note": null,
+          "state": "SEALED",
+          "used_amount": "binary64:0"
+        }
+      ],
+      "forecast": {
+        "available_legacy": "binary64:4612811918334230528",
+        "days": 3,
+        "first_short": "2026-03-30T07:00:00Z",
+        "status": "SHORT"
+      }
+    },
+    {
+      "report": "ledger-baseline.json",
+      "event": "deleted-and-reversed",
+      "records": 1,
+      "ledger_rows": 4,
+      "containers": [
+        {
+          "batch": null,
+          "capacity": "binary64:4611686018427387904",
+          "id": 1,
+          "initial_used_amount": "binary64:0",
+          "medication_id": 1,
+          "opened_on": "2026-10-16",
+          "source_note": null,
+          "state": "IN_USE",
+          "used_amount": "binary64:0"
+        },
+        {
+          "batch": null,
+          "capacity": "binary64:4611686018427387904",
+          "id": 2,
+          "initial_used_amount": "binary64:0",
+          "medication_id": 1,
+          "opened_on": null,
+          "source_note": null,
+          "state": "SEALED",
+          "used_amount": "binary64:0"
+        }
+      ],
+      "forecast": {
+        "available_legacy": "binary64:4616189618054758400",
+        "days": 4,
+        "first_short": "2026-03-31T07:00:00Z",
+        "status": "SHORT"
+      }
+    },
+    {
+      "report": "ledger-baseline.json",
+      "event": "restored-record",
+      "records": 1,
+      "ledger_rows": 5,
+      "containers": [
+        {
+          "batch": null,
+          "capacity": "binary64:4611686018427387904",
+          "id": 1,
+          "initial_used_amount": "binary64:0",
+          "medication_id": 1,
+          "opened_on": "2026-10-16",
+          "source_note": null,
+          "state": "IN_USE",
+          "used_amount": "binary64:4609434218613702656"
+        },
+        {
+          "batch": null,
+          "capacity": "binary64:4611686018427387904",
+          "id": 2,
+          "initial_used_amount": "binary64:0",
+          "medication_id": 1,
+          "opened_on": null,
+          "source_note": null,
+          "state": "SEALED",
+          "used_amount": "binary64:0"
+        }
+      ],
+      "forecast": {
+        "available_legacy": "binary64:4612811918334230528",
+        "days": 3,
+        "first_short": "2026-03-30T07:00:00Z",
+        "status": "SHORT"
+      }
+    },
+    {
+      "report": "ledger-baseline.json",
+      "event": "manual-adjust",
+      "records": 1,
+      "ledger_rows": 6,
+      "containers": [
+        {
+          "batch": null,
+          "capacity": "binary64:4611686018427387904",
+          "id": 1,
+          "initial_used_amount": "binary64:0",
+          "medication_id": 1,
+          "opened_on": "2026-10-16",
+          "source_note": null,
+          "state": "IN_USE",
+          "used_amount": "binary64:4610560118520545280"
+        },
+        {
+          "batch": null,
+          "capacity": "binary64:4611686018427387904",
+          "id": 2,
+          "initial_used_amount": "binary64:0",
+          "medication_id": 1,
+          "opened_on": null,
+          "source_note": null,
+          "state": "SEALED",
+          "used_amount": "binary64:0"
+        }
+      ],
+      "forecast": {
+        "available_legacy": "binary64:4612248968380809216",
+        "days": 3,
+        "first_short": "2026-03-30T07:00:00Z",
+        "status": "SHORT"
+      }
+    },
+    {
+      "report": "ledger-baseline.json",
+      "event": "PNBAK1-nonempty-restore-rejected-rolled-back",
+      "records": 1,
+      "ledger_rows": 6,
+      "containers": [
+        {
+          "batch": null,
+          "capacity": "binary64:4611686018427387904",
+          "id": 1,
+          "initial_used_amount": "binary64:0",
+          "medication_id": 1,
+          "opened_on": "2026-10-16",
+          "source_note": null,
+          "state": "IN_USE",
+          "used_amount": "binary64:4610560118520545280"
+        },
+        {
+          "batch": null,
+          "capacity": "binary64:4611686018427387904",
+          "id": 2,
+          "initial_used_amount": "binary64:0",
+          "medication_id": 1,
+          "opened_on": null,
+          "source_note": null,
+          "state": "SEALED",
+          "used_amount": "binary64:0"
+        }
+      ],
+      "forecast": {
+        "available_legacy": "binary64:4612248968380809216",
+        "days": 3,
+        "first_short": "2026-03-30T07:00:00Z",
+        "status": "SHORT"
+      }
+    },
+    {
+      "report": "ledger-baseline.json",
+      "event": "PNBAK1-fresh-target-restored",
+      "records": 1,
+      "ledger_rows": 6,
+      "containers": [
+        {
+          "batch": null,
+          "capacity": "binary64:4611686018427387904",
+          "id": 1,
+          "initial_used_amount": "binary64:0",
+          "medication_id": 1,
+          "opened_on": "2026-10-16",
+          "source_note": null,
+          "state": "IN_USE",
+          "used_amount": "binary64:4610560118520545280"
+        },
+        {
+          "batch": null,
+          "capacity": "binary64:4611686018427387904",
+          "id": 2,
+          "initial_used_amount": "binary64:0",
+          "medication_id": 1,
+          "opened_on": null,
+          "source_note": null,
+          "state": "SEALED",
+          "used_amount": "binary64:0"
+        }
+      ],
+      "forecast": {
+        "available_legacy": "binary64:4612248968380809216",
+        "days": 3,
+        "first_short": "2026-03-30T07:00:00Z",
+        "status": "SHORT"
+      }
+    },
+    {
+      "report": "void-restore.json",
+      "event": "open",
+      "records": 0,
+      "ledger_rows": 0,
+      "containers": [
+        {
+          "batch": null,
+          "capacity": "binary64:4611686018427387904",
+          "id": 1,
+          "initial_used_amount": "binary64:0",
+          "medication_id": 1,
+          "opened_on": "2026-10-16",
+          "source_note": null,
+          "state": "IN_USE",
+          "used_amount": "binary64:0"
+        }
+      ],
+      "forecast": {
+        "available_legacy": "binary64:4611686018427387904",
+        "days": 2,
+        "first_short": "2026-03-29T07:00:00Z",
+        "status": "SHORT"
+      }
+    },
+    {
+      "report": "void-restore.json",
+      "event": "ADJUST",
+      "records": 0,
+      "ledger_rows": 1,
+      "containers": [
+        {
+          "batch": null,
+          "capacity": "binary64:4611686018427387904",
+          "id": 1,
+          "initial_used_amount": "binary64:0",
+          "medication_id": 1,
+          "opened_on": "2026-10-16",
+          "source_note": null,
+          "state": "IN_USE",
+          "used_amount": "binary64:4607182418800017408"
+        }
+      ],
+      "forecast": {
+        "available_legacy": "binary64:4607182418800017408",
+        "days": 1,
+        "first_short": "2026-03-28T08:00:00Z",
+        "status": "SHORT"
+      }
+    },
+    {
+      "report": "void-restore.json",
+      "event": "VOIDED",
+      "records": 0,
+      "ledger_rows": 1,
+      "containers": [
+        {
+          "batch": null,
+          "capacity": "binary64:4611686018427387904",
+          "id": 1,
+          "initial_used_amount": "binary64:0",
+          "medication_id": 1,
+          "opened_on": "2026-10-16",
+          "source_note": null,
+          "state": "VOIDED",
+          "used_amount": "binary64:4607182418800017408"
+        }
+      ],
+      "forecast": {
+        "available_legacy": null,
+        "days": null,
+        "first_short": null,
+        "status": "UNTRACKED"
+      }
+    },
+    {
+      "report": "void-restore.json",
+      "event": "restored",
+      "records": 0,
+      "ledger_rows": 1,
+      "containers": [
+        {
+          "batch": null,
+          "capacity": "binary64:4611686018427387904",
+          "id": 1,
+          "initial_used_amount": "binary64:0",
+          "medication_id": 1,
+          "opened_on": "2026-10-16",
+          "source_note": null,
+          "state": "IN_USE",
+          "used_amount": "binary64:4607182418800017408"
+        }
+      ],
+      "forecast": {
+        "available_legacy": "binary64:4607182418800017408",
+        "days": 1,
+        "first_short": "2026-03-28T08:00:00Z",
+        "status": "SHORT"
+      }
+    }
+  ],
+  "synthetic_reports": [
+    {
+      "name": "gel-capacity.json",
+      "sha256": "31fa337393638244f9671f66339f2e6146bba705cf41a430545c2d094dde16d9",
+      "size": 4045
+    },
+    {
+      "name": "ledger-baseline.json",
+      "sha256": "ed46f525e7169ded17b06cd7e9f34b5b429cc246cad015f411f62cba1a72d138",
+      "size": 49136
+    },
+    {
+      "name": "mixed-strength-unknown.json",
+      "sha256": "150a688fd583f56b573d80f76f307674f9f9171deb5796ab19a7b3d318f4c246",
+      "size": 4236
+    },
+    {
+      "name": "patch-history.json",
+      "sha256": "3385f9f910229e6eab21cd132f260d45aa019d218ed228ae41b15b84b0b780e0",
+      "size": 4859
+    },
+    {
+      "name": "unsafe-bridge-difference.json",
+      "sha256": "ad08b070aa39f51d170ac2f5427c03884a286e9ce18ee3963cbe55b1bd61be53",
+      "size": 4339
+    },
+    {
+      "name": "void-restore.json",
+      "sha256": "c4fffc61f470eced193d4fe44d74a462fce93508a5a4e3b32cc5713087611c98",
+      "size": 14596
+    }
+  ],
+  "limits": [
+    "XML presence identifies a reported run, not future-source or CI success; pair with command completion and source hashes.",
+    "Legacy REAL values remain binary64 observations, original decimal precision UNKNOWN.",
+    "Candidate SQL is not a Room schema, production serializer, full new-backup roundtrip or forecast date algorithm."
+  ]
+}
