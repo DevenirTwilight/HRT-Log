@@ -45,7 +45,8 @@ listOf("test", "androidTest").forEach { name ->
     android.sourceSets.getByName(name).java.srcDir(layout.buildDirectory.dir("generated/ansm03b0TestSources").get().asFile)
 }
 tasks.configureEach {
-    if (name in setOf("kspDebugUnitTestKotlin", "compileDebugUnitTestKotlin", "kspDebugAndroidTestKotlin", "compileDebugAndroidTestKotlin")) {
+    if (name in setOf("kspDebugUnitTestKotlin", "compileDebugUnitTestKotlin", "kspDebugAndroidTestKotlin", "compileDebugAndroidTestKotlin") ||
+        name.contains("lint", ignoreCase = true)) {
         dependsOn(ansm03b0TestSources)
     }
 }

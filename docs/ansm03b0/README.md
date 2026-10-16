@@ -44,7 +44,7 @@ Room10与PNBAK1业务schema9分开，DOMAIN_TABLES/列白名单显式；旧恢�
 审计与隔离计划完成；原35项基线重跑PASS，源码/断言哈希不变。
 新增只读影子23项、真实Repository/Room合同13项、提醒边界1项，完整domain121/data193/reminder20本地PASS。
 真实集成揭示非空REVERSE账本恢复外键拒绝、候选域残留及守卫丢失；均未改生产，详见[兼容评估](compatibility-findings.md)。
-六项最终CI尚待提交后证据，不称设备已运行。见[验证账本](verification.md)。
+首轮API26/29/35新增原生合同各13项通过；首轮Android lint生成依赖失败已定位并补齐，最终六项CI以PR #51的最终HEAD/正文为准。见[验证账本](verification.md)。
 [准入与四PR方案](production-admission.md)及[统一预测合同](forecast-contract.md)已提交供审批。
 
 ## 本批文件范围
@@ -59,3 +59,11 @@ Room10与PNBAK1业务schema9分开，DOMAIN_TABLES/列白名单显式；旧恢�
 
 正式app源码、Room实体/迁移/schema、PNBAK1、库存/预测/提醒生产源码、PK及参数、AppLock/伪装、四语正式字符串均不改。
 本批无新UI、无截图交付，UI真机/TalkBack NOT_RUN；不把父PR48的合成UI当本批正式关联。
+
+02B接口与混合规格人工确认的独立提案见[接口合同](interface-contract.md)，不是已实现UI/持久化。
+
+首轮9598093：JVM320项、数据193、提醒20、应用1198（205原有条件SKIPPED），均0失败；PeriodStability5/0/0。
+设备API35 data150/app264（8原有条件SKIPPED），API26/29各data83/app70，均0失败；首次Android工作流因新lint依赖遗漏FAIL。
+依赖已补齐，本地lintDebug PASS。其余原生/科学任务完整结束，没有取消或弱化；详见[first CI证据](first-ci-evidence.json)。
+本交接记录提交时证据；最终HEAD/SHA、六项最终CI及合成报告摘要在[PR #51](https://github.com/DevenirTwilight/HRT-Log/pull/51)正文及Checks核验，不能用首轮结果代替。
+截至本提交：B0已完成可验证实现，B1仍PRODUCTION_BLOCKED；无生产接线/发布。物理真机与新协议强停NOT_RUN。
