@@ -55,9 +55,15 @@ class MeasuredContainerStoreTest {
     }
     @Test fun voidedReplayDoesNotCreateOrRestoreStock()=runBlocking {
         val med=med();val ticket=epoch();val op=UUID.randomUUID().toString();val created=create(med,op,ticket=ticket)
-        db.dao().setContainerState(created.container.id,"VOIDED",null)
+        db.withTransaction{PackageCorrections.void(raw,db.dao(),created.container.id,at)}
         val replay=create(med,op,ticket=ticket)
         assertEquals("VOIDED",replay.container.state);assertEquals(1,count("supply_container"));assertEquals(0,count("supply_transaction"))
+        assertEquals(1,count("trash_item"))
+        db.withTransaction{PackageCorrections.restore(raw,db.dao(),created.container.id,at.plusSeconds(1))}
+        PackageCorrections.validate(raw)
+        val restored=create(med,op,ticket=ticket)
+        assertEquals("SEALED",restored.container.state);assertEquals(created.containerUuid,restored.containerUuid)
+        assertEquals(2,count("trash_item"));assertEquals(1,count("reference_event"));assertEquals(0,count("supply_transaction"))
     }
     @Test fun physicalDeletionAndReusedIntegerIdNeverReattachOldSource()=runBlocking {
         val med=med();val ticket=epoch();val op=UUID.randomUUID().toString();val original=create(med,op,ticket=ticket)

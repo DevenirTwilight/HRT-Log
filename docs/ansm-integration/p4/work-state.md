@@ -9,3 +9,5 @@
 不将名义64泵当实际可用；不将用户资料声明当官方核实；不从PK或当前引用推断实际包装。附件/联网/PK/签名/发布均不动。真机及TalkBack NOT_RUN。此分支尚不可自动合并，不能把14项纯测试当成正式库存已完成。
 
 新增候选包装载荷codec12项首轮10通过/2失败：一项用BigDecimal.equals错误要求相同scale（80与8E+1数学相同，实际存储plain文本80），改为明确plain文本80断言；另一项负向测试在调用codec之前就由canonical(Double)抛IllegalState，未进入预期验证异常。修复read将外部解析/类型错误统一为IllegalArgumentException，并把非法Double原始JSON送入codec，保留其必须拒绝断言。来源、单位、精度等断言未削弱；后续完整回归待运行。当前Room11/业务10及拒绝新模式的守卫未改。
+
+候选容器事务适配器已在main源码准备，但仅由合成Room测试调用，NotesRepository/App没有入口，当前备份守卫仍明确拒绝新格式。创建事务先验epoch、独立UUID/不可变包装、整数容量，重试同op返回原容器，异载荷/owner/商品op冲突拒绝；源/容器创建故障同事务回滚。新增8项真实Room测试首轮7通过/1失败：测试直接写VOIDED被既有Package correction evidence守卫正确拒绝。改为调用真实PackageCorrections.void/restore，继续断言证据追加、重复创建不恢复库存和来源不变；未改守卫或生产VOIDED行为。正在完整回归。未来新库存格式需要版本门，当前Room/业务版本未改变。
