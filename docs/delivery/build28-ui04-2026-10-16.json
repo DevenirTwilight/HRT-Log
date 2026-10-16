@@ -1,0 +1,52 @@
+{
+ "apk": "HRT-Log-build28-UI04-full-official.apk",
+ "package": {
+  "application_id": "net.plainnotes.app",
+  "version_code": 28,
+  "version_name": "0.2.0"
+ },
+ "apk_sha256": "bc5bbcf0f4e1ae6865e16c2fba7a550e0828b290ed89b7180fd90bdd7930b210",
+ "signing_cert_sha256": [
+  "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1"
+ ],
+ "source": {
+  "SOURCE_COMMIT_TIME_UTC": "2026-10-16T04:15:15Z",
+  "SOURCE_DIRTY": "false",
+  "SOURCE_ORIGIN": "git",
+  "SOURCE_SHA": "1e8754e9bab8b01034cb3de22ceaf9dc61a1438a"
+ },
+ "size_bytes": 13048692,
+ "signature_v2": true,
+ "signature_v3": true,
+ "zipalign_16kb": true,
+ "native_library_count": 8,
+ "abis": [
+  "arm64-v8a",
+  "armeabi-v7a",
+  "x86",
+  "x86_64"
+ ],
+ "debuggable": false,
+ "internet_permission": false,
+ "signed_unsigned_payload_identical": true,
+ "added_signature_entries": [
+  "META-INF/MANIFEST.MF",
+  "META-INF/RELEASE.RSA",
+  "META-INF/RELEASE.SF"
+ ],
+ "unsigned_apk_sha256": "4ede6b23a44b3eaa71db0a2d2731d68e230fd85a6bb896d960d67529c1a2f254",
+ "temporary_credentials_removed": true,
+ "signing_backup_repository_private": true,
+ "source_ci": {
+  "main_android_run": 38849672376,
+  "main_science_run": 38849672454,
+  "main_conclusion": "all jobs success on the merge commit 1e8754e (no rerun)",
+  "pr_47_head": "37aa6a8d4019b82ce858edd172109c3b0b06d748",
+  "pr_47_note": "attachment-poc (29) API29 16MiB-heap OOM and attachment-poc (26) Gate3 timing fault each passed on their single rerun; both commented on PR #47."
+ },
+ "authorization": "REQUIREMENTS §101 (UI-04 task book §6.4), same procedure as §100",
+ "physical_arm_installation": "NOT_RUN",
+ "delivery_time_utc": "2026-10-16T06:25:12Z",
+ "delivery_channel": "claude-session-private-file",
+ "download_links_in_public_repository": false
+}
