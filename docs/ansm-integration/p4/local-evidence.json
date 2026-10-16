@@ -1,0 +1,78 @@
+{
+  "checked_at": "2026-10-16T18:52:52.050443+00:00",
+  "tested_source": "9ed9aaa9a012bc81fbcaa74b64a0fe42a6910172",
+  "status": "PURE_CORE_LOCAL_PASS",
+  "domain": {
+    "totals": {
+      "tests": 140,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "new_quantum_tests": 14,
+    "reports": [
+      {
+        "file": "TEST-net.plainnotes.app.domain.AttachmentSessionTest.xml",
+        "sha256": "49955a7cec9b7d466d1f003a5edae4cb9caafa9234425400e81f5dd06025b7b4"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.domain.PeriodAttributionTest.xml",
+        "sha256": "5db0387d26473217f35d46d7e3ac1e53cf8e69620334cbc42b361f9eb4129492"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.domain.ScheduleTest.xml",
+        "sha256": "d46d9c0dd586313e7909fc61d65c560267cbb0de72992dc03eff32dd90a15c8f"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.domain.SustainedPatternsTest.xml",
+        "sha256": "f0b27d0fd36b987abe9266ad48d54d6cfe6e7731fd98c22a1729ffba75ff6cd2"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.domain.TreatmentEpochsTest.xml",
+        "sha256": "3ef02863e415d102dbe4033ee506554a03a1395ecb1c109197a6454ddc28dbb1"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.domain.TreatmentPeriodsTest.xml",
+        "sha256": "10b4c75b1e94f44bb1155ba4c759ce71c83f6e32c5a30380390407d0a9309a0e"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.domain.measurement.LegacyBoundaryTest.xml",
+        "sha256": "0781cc9433d6b88a2f162ef8c7938690b120f080d9796f86d1b7e216efbbecd4"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.domain.measurement.MeasurementCoreTest.xml",
+        "sha256": "9bc58b353cf3bdb1b035d4234c068ac1ec8affe9c3daeeb4c16d9dd801aea3ee"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.domain.measurement.ProductionMeasurementTest.xml",
+        "sha256": "f03c0593b2e93f7e1140f7be5711be3f2cb60d2a0bfbe2cb59e1016973a25b78"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.domain.measurement.SyntheticHistoryContractTest.xml",
+        "sha256": "53d158e4276bf00a0e9e4380504be3ebf7a9dc055945327fb390fcdd4354baf1"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.domain.shadow.ShadowMeasurementAllocatorTest.xml",
+        "sha256": "fe786a2897d1a028236b944b5c25ea44eb507dba02f0c4e3136f174df47c4dd6"
+      },
+      {
+        "file": "TEST-net.plainnotes.app.domain.stock.StockQuantumTest.xml",
+        "sha256": "ef992a359ae298cdd696236496e2a91a0525ab9b409a816fcfcdebd23711385d"
+      }
+    ]
+  },
+  "python_tests": {
+    "tests": 157,
+    "status": "PASS",
+    "log_sha256": "dd592672435b9ed6453e7e0f3f52eff80e926c1478459762722f468a2d7bf6ad"
+  },
+  "production_inventory_wiring": "NOT_IMPLEMENTED",
+  "new_presentation_storage": "NOT_IMPLEMENTED",
+  "forecast_changes": "NOT_IMPLEMENTED",
+  "room_version_changed": false,
+  "business_backup_changed": false,
+  "original_scalar_history_changed": false,
+  "physical_device": "NOT_RUN",
+  "ci": "NOT_RUN_CURRENT_BRANCH",
+  "released": false
+}
