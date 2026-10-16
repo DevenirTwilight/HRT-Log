@@ -636,7 +636,7 @@ const val BACKFILL_MAX_DAYS=731L
         require(required.all{tables.has(it)}) { "Incomplete backup" }
         db.withTransaction {
             val sql=db.openHelper.writableDatabase
-            RawData.restore(sql,tables,upgradeRegimens=schema<4,backfillTrash=schema<9)
+            RawData.restore(access.applicationContext,sql,tables,upgradeRegimens=schema<4,backfillTrash=schema<9)
             if(schema<2) WellbeingUpgrade.apply(sql,today)
         }
     }

@@ -1,0 +1,147 @@
+{
+  "head": "9598093cb46ca8b242193970696ae250628f1b43",
+  "pr_android_run": 38882689936,
+  "push_android_run": 38882682411,
+  "science_runs": [
+    38882689925,
+    38882682409
+  ],
+  "status": "FAIL lint generated-source dependency; all executed tests below passed. No claim of release guards that were SKIPPED.",
+  "fix": "Explicit Sync dependency for lint tasks, local lintDebug PASS; final HEAD evidence in PR #51 checks/body.",
+  "artifacts": [
+    {
+      "artifact_id": 12038676083,
+      "name": "attachment-poc-api26",
+      "bytes": 54972,
+      "digest": "sha256:42439b9e02f0336ece4a9e35746fee66c273826439423abfb29412a0b2183c3f",
+      "crc": "PASS",
+      "apk_entries": [],
+      "reports": [
+        {
+          "path": "core/data/build/reports/androidTests/connected/debug/index.html",
+          "tests": 83,
+          "failures": 0,
+          "skipped": 0
+        },
+        {
+          "path": "app/build/reports/androidTests/connected/debug/flavors/full/index.html",
+          "tests": 70,
+          "failures": 0,
+          "skipped": 0
+        }
+      ]
+    },
+    {
+      "artifact_id": 12038587196,
+      "name": "device-test-results",
+      "bytes": 114657,
+      "digest": "sha256:ffef9668dcc6e671355c030ad947bb85b4f4f9f4f67ac1a717552a98c69f6e38",
+      "crc": "PASS",
+      "apk_entries": [],
+      "reports": [
+        {
+          "path": "core/data/build/reports/androidTests/connected/debug/index.html",
+          "tests": 150,
+          "failures": 0,
+          "skipped": 0
+        },
+        {
+          "path": "app/build/reports/androidTests/connected/debug/flavors/full/index.html",
+          "tests": 264,
+          "failures": 0,
+          "skipped": 8
+        }
+      ]
+    },
+    {
+      "artifact_id": 12038555116,
+      "name": "jvm-test-results",
+      "bytes": 48184,
+      "digest": "sha256:41a5def7bf28905299a1462c0ab16c66a85b324a4ff7a65061a3d71987c140c0",
+      "crc": "PASS",
+      "apk_entries": [],
+      "reports": [
+        {
+          "path": "core/domain/",
+          "tests": 121,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "pk-engine/",
+          "tests": 124,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "importer/",
+          "tests": 12,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "tools/attachment-poc/",
+          "tests": 63,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      ]
+    },
+    {
+      "artifact_id": 12038353575,
+      "name": "attachment-poc-api29",
+      "bytes": 54941,
+      "digest": "sha256:b878b05840a880f5ed13c1d7c8da8e26ac5574af6dc364db45a01670985eb3aa",
+      "crc": "PASS",
+      "apk_entries": [],
+      "reports": [
+        {
+          "path": "core/data/build/reports/androidTests/connected/debug/index.html",
+          "tests": 83,
+          "failures": 0,
+          "skipped": 0
+        },
+        {
+          "path": "app/build/reports/androidTests/connected/debug/flavors/full/index.html",
+          "tests": 70,
+          "failures": 0,
+          "skipped": 0
+        }
+      ]
+    },
+    {
+      "artifact_id": 12038283846,
+      "name": "build-results",
+      "bytes": 1345344,
+      "digest": "sha256:0a7824d74006014f864ac8b7eab0365c7228653a568c456218b9f413c0532f32",
+      "crc": "PASS",
+      "apk_entries": [],
+      "reports": [
+        {
+          "path": "app/build/reports/tests/testFullDebugUnitTest/index.html",
+          "tests": 1198,
+          "failures": 0,
+          "skipped": 205
+        },
+        {
+          "path": "core/data/build/reports/tests/testDebugUnitTest/index.html",
+          "tests": 193,
+          "failures": 0,
+          "skipped": 0
+        },
+        {
+          "path": "core/reminder/build/reports/tests/testDebugUnitTest/index.html",
+          "tests": 20,
+          "failures": 0,
+          "skipped": 0
+        }
+      ]
+    }
+  ],
+  "physical_device": "NOT_RUN",
+  "new_protocol_force_stop": "NOT_RUN"
+}

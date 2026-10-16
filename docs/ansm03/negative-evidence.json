@@ -1,0 +1,13 @@
+{
+  "phase": "runtime negative test before identity guard fix",
+  "status": "FAIL",
+  "tests": "1",
+  "failures": "1",
+  "failure": "org.opentest4j.AssertionFailedError: expected: <Failure(error=INSUFFICIENT_SOURCE)> but was: <Success(value=Quantity(value=27, unit=TABLET, meaning=Meaning(kind=USE_COUNT, identity=tablet@SYNTH-PACK-A:2mg:v1)), algorithm=ansm03-exact-v1, evidence=null)>",
+  "source_sha256": {
+    "core/domain/src/test/kotlin/net/plainnotes/app/domain/measurement/MeasurementCore.kt": "975b24fd722ffc4488b3b69fa89a1c8a8890ebf145dc598d489636610bc32655",
+    "core/domain/src/test/kotlin/net/plainnotes/app/domain/measurement/MeasurementCoreTest.kt": "c13eeb5d3086b6e41331a1933a6508efdcae4d123a001b00699580988e4f870e"
+  },
+  "log_sha256": "d423f1d79db421c086b90be16350a71df6a6fa378d8bbd188d5e56ed7f1de67d",
+  "resolution": "Reject malformed/unknown frozen presentation reference before confirmed-capacity arithmetic; same assertion retained. Final green is recorded separately."
+}
