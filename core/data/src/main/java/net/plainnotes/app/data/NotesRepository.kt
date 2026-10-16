@@ -50,6 +50,14 @@ const val BACKFILL_MAX_DAYS=731L
         }
         SavedReferencePage(entries.toList(),limited)
     }
+    suspend fun referencePreviewEpoch():String = transactionWithSql(Space.PRIMARY) { _,raw -> ReferenceStore.previewEpoch(raw) }
+    /** The caller's epoch was captured with its displayed record list, before any asynchronous restore or ID reuse. */
+    suspend fun recordedReferenceHistory(expectedEpoch:String,record:Long):RecordedReferenceHistory = transactionWithSql(Space.PRIMARY) { dao,raw ->
+        if(ReferenceStore.previewEpoch(raw)!=expectedEpoch)throw ReferenceFailure(ReferenceError.STALE_SCOPE)
+        val stored=dao.recordById(record) ?: throw ReferenceFailure(ReferenceError.UNKNOWN_IDENTITY)
+        val scope=ReferenceStore.existingScope(raw)
+        RecordedReferenceHistory(stored.revision,scope?.let{ReferenceStore.recordContexts(raw,it,record)} ?: emptyList())
+    }
     suspend fun medicationReferenceState(medication: Long): MedicationReferenceState = transactionWithSql(Space.PRIMARY) { _, raw ->
         val scope=ReferenceStore.existingScope(raw)
         MedicationReferenceState(scope,scope?.let {ReferenceStore.current(raw,it,medication)},ReferenceStore.previewEpoch(raw))

@@ -206,6 +206,8 @@ abstract class ReferencePersistenceContract {
         val guarded=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space):NotesDatabase {fail("Wrong-space API must not open database");return db}}).pinnedTo(Space.DECOY)
         val before=business()
         failure(ReferenceError.WRONG_SPACE){guarded.referenceScope()}
+        failure(ReferenceError.WRONG_SPACE){guarded.referencePreviewEpoch()}
+        failure(ReferenceError.WRONG_SPACE){guarded.recordedReferenceHistory("SYNTHETIC-unused",1)}
         assertEquals(before,business())
     }
     @Test fun sameIntegerIdInAnotherDatabaseOrImportedDatasetNeverAcceptsOldScope()=runBlocking {
@@ -277,6 +279,19 @@ abstract class ReferencePersistenceContract {
         assertNotNull("Replacing a stable identity must reject",rejected)
         assertTrue(generateSequence(rejected){it.cause as? Exception}.any {it.message?.contains("Cannot replace an identified reference subject")==true})
         assertEquals(before,business());assertEquals(linked.previewEpoch,repo.medicationReferenceState(medication).previewEpoch)
+    }
+    @Test fun historyReaderUsesFrozenSourceAndRetiresEvenAnEmptyDatasetTicket()=runBlocking {
+        val medication=med();repo.unscheduled(medication,at,1.0);val older=db.dao().records().single().id
+        val epoch=repo.referencePreviewEpoch()
+        assertTrue(repo.recordedReferenceHistory(epoch,older).contexts.isEmpty());assertEquals(0,count("reference_dataset"))
+        val linked=initial(medication,id(),product(version="frozen-history"))
+        repo.unscheduled(medication,at.plusSeconds(60),1.0);val newer=db.dao().records().last().id
+        repo.associateMedication(linked.scope!!,medication,1,id(),product(version="current-source"))
+        assertEquals(product(version="frozen-history"),repo.recordedReferenceHistory(epoch,newer).contexts.single().product)
+        assertTrue(repo.recordedReferenceHistory(epoch,older).contexts.isEmpty())
+        val archive=repo.exportBackup(password);repo.restoreBackup(archive,password)
+        failure(ReferenceError.STALE_SCOPE){repo.recordedReferenceHistory(epoch,newer)}
+        val fresh=repo.referencePreviewEpoch();assertEquals(product(version="frozen-history"),repo.recordedReferenceHistory(fresh,newer).contexts.single().product)
     }
     @Test fun futureHeaderIsRejectedBeforeOpeningDatabaseAndLegacyMaximumCannotReadNewBackup()=runBlocking {
         val medication=med();initial(medication,id(),product())

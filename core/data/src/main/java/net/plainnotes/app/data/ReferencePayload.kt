@@ -63,6 +63,8 @@ data class RecordReferenceContext(
     val actualPackageConfirmed: Boolean,
 )
 
+data class RecordedReferenceHistory(val recordRevision: Int, val contexts: List<RecordReferenceContext>)
+
 internal object ReferencePayload {
     const val MAX_BYTES = 65536
     const val MAX_TEXT = 2048
