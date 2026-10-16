@@ -1,0 +1,13 @@
+{
+  "status": "EXPECTED_RED",
+  "baseline": "2f4b958425e1cd67dad1d97deb8ab724eb8ecac1",
+  "command": ":core:data:testDebugUnitTest --tests *BackupReplacementTest",
+  "tests": 4,
+  "failures": 4,
+  "production_modified_for_red": false,
+  "failure_classes": {
+    "SQLiteConstraintException": 3,
+    "AssertionError_trigger_preservation": 1
+  },
+  "native_device": "NOT_RUN"
+}

@@ -1,0 +1,58 @@
+{
+  "checked_at": "2026-10-16T12:44:16.549666+00:00",
+  "official_packaging": "OFF",
+  "rights_resolution": "BLOCKED",
+  "ft_st_interpretation": "UNRESOLVED",
+  "sources": [
+    {
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/telechargement",
+      "final_url": "https://base-donnees-publique.medicaments.gouv.fr/telechargement",
+      "status": 200,
+      "bytes": 48732,
+      "sha256": "5cea635d3499d545f25815cd194c7d8ca09adcdd9e0b6bd99a5ddf97abf5a5db"
+    },
+    {
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/docs/telechargement/licence_bdpm.pdf",
+      "final_url": "https://base-donnees-publique.medicaments.gouv.fr/docs/telechargement/licence_bdpm.pdf",
+      "status": 200,
+      "bytes": 540249,
+      "sha256": "44ff23ae2b5cce0d729d1b53b20d17aae625189b131c2dd9cb98d1fe0d0a2a90"
+    },
+    {
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/Contenu_et_format_des_fichiers_telechargeables_dans_la_BDM_v5.pdf",
+      "final_url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/Contenu_et_format_des_fichiers_telechargeables_dans_la_BDM_v5.pdf",
+      "status": 200,
+      "bytes": 295557,
+      "sha256": "db10d5a62bc640c227405bcb11cef5db9ad2a2d9a6b4b547198ee19978b6bc8b"
+    },
+    {
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_COMPO_bdpm.txt",
+      "final_url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_COMPO_bdpm.txt",
+      "status": 200,
+      "bytes": 2735840,
+      "sha256": "90a6e8ee286b6245c3938dd417ac75d1135a61b15ba50cfad70ee6b3bd181b7a"
+    }
+  ],
+  "license_links": [
+    "/docs/telechargement/licence_bdpm.pdf",
+    "https://github.com/etalab/licence-ouverte/blob/master/LO.md"
+  ],
+  "composition_links": [
+    "/download/file/CIS_COMPO_bdpm.txt"
+  ],
+  "license_text_sha256": "2128c46fb8b0852130f7600355300dab9c411b297d59e25f3609af2ccb5772e2",
+  "license_limited_quotes": [
+    "Cette licence est une version 1.0 de la Licence Ouverte. Etalab se réserve la faculté de proposer"
+  ],
+  "format_text_sha256": "5bed9c14257b04325e8976108f93be2a835bea658c58c8a0bdf0ae887e035e9c",
+  "format_limited_quotes": [
+    "Nature du composant (principe actif : « SA » ou fraction thérapeutique : « ST »)",
+    "Numéro de liaison SA/FT"
+  ],
+  "composition_role_counts": {
+    "SA": 26915,
+    "FT": 5524,
+    "ST": 0
+  },
+  "format_note": "Same official PDF contains both ST in field description and SA/FT in liaison section; preserve raw codes, no equivalence inferred."
+}

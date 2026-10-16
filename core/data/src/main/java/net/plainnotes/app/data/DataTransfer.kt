@@ -1,10 +1,13 @@
 package net.plainnotes.app.data
 
 import android.content.ContentValues
+import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.util.Base64
 import androidx.sqlite.db.SupportSQLiteDatabase
+import androidx.sqlite.db.SupportSQLiteOpenHelper
+import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
 import net.plainnotes.app.importer.SqlSource
 import net.plainnotes.app.importer.TransMemo
 import org.bouncycastle.crypto.generators.Argon2BytesGenerator
@@ -26,17 +29,35 @@ internal val DOMAIN_TABLES = listOf("medication", "pk_profile", "schedule_rule",
 
 /** Raw-SQL maintenance that has to bypass the append-only ledger triggers: full clear and backup restore. */
 internal object RawData {
-    private fun triggers(db: SupportSQLiteDatabase): List<String> = db.query("SELECT name FROM sqlite_master WHERE type='trigger' AND tbl_name NOT LIKE 'attachment_%'").use { c ->
-        buildList { while (c.moveToNext()) add(c.getString(0)) } }
-    /** Runs [block] with legacy guards temporarily removed; attachment guards remain installed, then reinstalls them (inside the caller's transaction). */
+    private data class Guard(val name: String, val sql: String)
+    private fun triggers(db: SupportSQLiteDatabase): List<Guard> = db.query("SELECT name,sql FROM sqlite_master WHERE type='trigger' AND tbl_name NOT LIKE 'attachment_%'").use { c ->
+        buildList { while (c.moveToNext()) add(Guard(c.getString(0), c.getString(1))) } }
+    /** Only trusted installed DDL is captured; no backup-provided SQL is ever executed. */
     fun <T> unguarded(db: SupportSQLiteDatabase, block: () -> T): T {
-        triggers(db).forEach { db.execSQL("DROP TRIGGER IF EXISTS \"$it\"") }
-        return try { block() } finally { SchemaGuards.install(db) }
-    }
-    fun clear(db: SupportSQLiteDatabase) = unguarded(db) {
         check(db.inTransaction())
-        AttachmentIdentity.replaceStructuredDataset(db)
-        (DOMAIN_TABLES + "reminder_mapping").reversed().forEach { db.execSQL("DELETE FROM $it") }
+        val guards = triggers(db)
+        guards.forEach { db.execSQL("DROP TRIGGER IF EXISTS \"${it.name.replace("\"", "\"\"")}\"") }
+        return try { block() } finally {
+            SchemaGuards.install(db)
+            guards.forEach { guard ->
+                val exists = db.query("SELECT 1 FROM sqlite_master WHERE type='trigger' AND name=?", arrayOf(guard.name)).use { it.moveToFirst() }
+                if (!exists) db.execSQL(guard.sql)
+            }
+        }
+    }
+    private fun deleteRows(db: SupportSQLiteDatabase, ledger: List<List<Long>>) {
+        (DOMAIN_TABLES + "reminder_mapping").reversed().forEach { table ->
+            if (table == "supply_transaction") LedgerReplacement.delete(db, ledger)
+            else db.execSQL("DELETE FROM $table")
+        }
+    }
+    fun clear(db: SupportSQLiteDatabase) {
+        check(db.inTransaction())
+        val ledger = LedgerReplacement.current(db)
+        unguarded(db) {
+            AttachmentIdentity.replaceStructuredDataset(db)
+            deleteRows(db, ledger)
+        }
     }
     fun dump(db: SupportSQLiteDatabase): JSONObject {
         val tables = JSONObject()
@@ -57,15 +78,51 @@ internal object RawData {
         }
         return tables
     }
-    /** Replaces all data with [tables]; the container cache is recomputed from the ledger afterwards. */
-    fun restore(db: SupportSQLiteDatabase, tables: JSONObject,upgradeRegimens:Boolean=false,backfillTrash:Boolean=false) = unguarded(db) {
-        BackupValidation.validateTables(db,tables)
+    /** Validate in memory before retiring identities or modifying the encrypted target. */
+    fun restore(context: Context, db: SupportSQLiteDatabase, tables: JSONObject, upgradeRegimens: Boolean = false, backfillTrash: Boolean = false) {
         check(db.inTransaction())
-        AttachmentIdentity.replaceStructuredDataset(db)
-        (DOMAIN_TABLES + "reminder_mapping").reversed().forEach { db.execSQL("DELETE FROM $it") }
+        BackupValidation.validateTables(db, tables)
+        val ledger = LedgerReplacement.current(db)
+        val supplyOrder = tables.optJSONArray("supply_transaction")?.let(LedgerReplacement::insertionOrder).orEmpty()
+        preflight(context, db, tables, supplyOrder, upgradeRegimens, backfillTrash)
+        unguarded(db) {
+            AttachmentIdentity.replaceStructuredDataset(db)
+            deleteRows(db, ledger)
+            insertRows(db, tables, supplyOrder)
+            finishRestore(db, upgradeRegimens, backfillTrash)
+        }
+    }
+
+    /** A transient RAM database uses only trusted current table/index definitions, never backup DDL.
+     * No plaintext file is created; the actual destination remains SQLCipher with FK enforcement enabled.
+     */
+    private fun preflight(context: Context, db: SupportSQLiteDatabase, tables: JSONObject, supplyOrder: List<Int>, upgradeRegimens: Boolean, backfillTrash: Boolean) {
+        val definitions = db.query("SELECT type,tbl_name,sql FROM sqlite_master WHERE type IN ('table','index') AND sql IS NOT NULL ORDER BY CASE type WHEN 'table' THEN 0 ELSE 1 END,name").use { c -> buildList {
+            while (c.moveToNext()) if (c.getString(1) in DOMAIN_TABLES) add(c.getString(2))
+        } }
+        val configuration = SupportSQLiteOpenHelper.Configuration.builder(context)
+            .name(null) // Android's public helper API: explicitly in-memory, never a decrypted temporary file.
+            .callback(object : SupportSQLiteOpenHelper.Callback(1) {
+                override fun onConfigure(db: SupportSQLiteDatabase) { db.setForeignKeyConstraintsEnabled(true) }
+                override fun onCreate(db: SupportSQLiteDatabase) { definitions.forEach(db::execSQL) }
+                override fun onUpgrade(db: SupportSQLiteDatabase, oldVersion: Int, newVersion: Int) = error("Transient database cannot upgrade")
+            }).build()
+        FrameworkSQLiteOpenHelperFactory().create(configuration).use { helper ->
+            val staging = helper.writableDatabase
+            staging.beginTransaction()
+            try {
+                insertRows(staging, tables, supplyOrder)
+                finishRestore(staging, upgradeRegimens, backfillTrash)
+                staging.setTransactionSuccessful()
+            } finally { staging.endTransaction() }
+        }
+    }
+
+    private fun insertRows(db: SupportSQLiteDatabase, tables: JSONObject, supplyOrder: List<Int>) {
         DOMAIN_TABLES.forEach { t ->
             val rows = tables.optJSONArray(t) ?: return@forEach
-            for (i in 0 until rows.length()) {
+            val order = if (t == "supply_transaction") supplyOrder else (0 until rows.length()).toList()
+            order.forEach { i ->
                 val r = rows.getJSONObject(i); val cv = ContentValues()
                 r.keys().forEach { k -> when (val v = r.get(k)) {
                     JSONObject.NULL -> cv.putNull(k)
@@ -77,11 +134,15 @@ internal object RawData {
                 db.insert(t, SQLiteDatabase.CONFLICT_ABORT, cv)
             }
         }
+    }
+
+    private fun finishRestore(db: SupportSQLiteDatabase, upgradeRegimens: Boolean, backfillTrash: Boolean) {
         db.execSQL("UPDATE supply_container SET used_amount = initial_used_amount + COALESCE((SELECT SUM(used_delta) FROM supply_transaction WHERE container_id = supply_container.id), 0)")
-        if(upgradeRegimens)RegimenHistory.seed(db)
-        if(backfillTrash)Trash.backfill(db)
+        if (upgradeRegimens) RegimenHistory.seed(db)
+        if (backfillTrash) Trash.backfill(db)
         BackupValidation.validateState(db)
     }
+
 }
 
 /** Password-encrypted backup file: magic, Argon2id salt, AES-GCM nonce, ciphertext of the JSON dump. */
