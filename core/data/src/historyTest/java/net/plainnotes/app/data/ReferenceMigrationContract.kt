@@ -2,6 +2,7 @@ package net.plainnotes.app.data
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.withTransaction
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteOpenHelper
 import androidx.test.core.app.ApplicationProvider
@@ -84,6 +85,27 @@ abstract class ReferenceMigrationContract {
                 try {old.writableDatabase;fail("Old application silently downgraded new database")} catch(_:android.database.SQLException){}
             }
             open().useRoom {assertEquals(before,fingerprint(it.openHelper.writableDatabase))}
+        } finally {context.deleteDatabase(name);key.fill(0)}
+    }
+    @Test fun oldRoomElevenReaderCannotOpenTheNewMeasurementFormat()=kotlinx.coroutines.runBlocking {
+        val name="synthetic-measured-format-fence-${UUID.randomUUID()}.db";val key=ByteArray(32){71}
+        try {
+            fixture(name,key,11).use {it.writableDatabase.execSQL("INSERT INTO medication(id,name,molecule,unit,dose_per_intake,container_capacity,site_rotation,notifications_on,active,sort_order) VALUES(1,'SYNTHETIC format fence','OTHER','MG',1,28,0,0,0,0)")}
+            fun open()=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(key.clone())).addMigrations(*allMigrations()).addCallback(SchemaGuards).allowMainThreadQueries().build()
+            val before=open().useRoom {room->
+                room.withTransaction {
+                    val product=UserReferenceProduct("SYNTHETIC 2mg tablets",listOf("SYNTHETIC ingredient"),sourceVersion="synthetic-v1",recordedOn="2026-10-16")
+                    val draft=PackageMeasurementDraft(product,net.plainnotes.app.domain.measurement.MeasureUnit.TABLET,
+                        net.plainnotes.app.domain.measurement.Meaning(net.plainnotes.app.domain.measurement.QuantityKind.USE_COUNT,"SYNTHETIC 2mg tablet"),
+                        "0.5","28",net.plainnotes.app.domain.stock.StockCapacityBasis.USER_COUNTED)
+                    MeasuredContainerStore.create(room,ReferenceStore.previewEpoch(room.openHelper.writableDatabase),1,UUID.randomUUID().toString(),draft,java.time.Instant.parse("2026-10-16T12:00:00Z"))
+                }
+                RawData.dump(room.openHelper.writableDatabase).toString()
+            }
+            var rejected=false
+            fixture(name,key,11).use {old->try{old.writableDatabase}catch(_:android.database.SQLException){rejected=true}}
+            assertTrue("Room11 reader opened the new measurement format and could misinterpret integer stock quanta",rejected)
+            open().useRoom {assertEquals(before,RawData.dump(it.openHelper.writableDatabase).toString())}
         } finally {context.deleteDatabase(name);key.fill(0)}
     }
     @Test fun failedTenToElevenMigrationRollsBackDdlAndKeepsOriginalEncryptedDatabaseReadable() {
