@@ -1,6 +1,7 @@
 package net.plainnotes.app.data
 
 import androidx.room.withTransaction
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import net.plainnotes.app.domain.*
@@ -31,6 +32,23 @@ const val BACKFILL_MAX_DAYS=731L
             val database=access.get(target)
             database.withTransaction { block(database.dao(),database.openHelper.writableDatabase) }
         }
+    }
+    /** Offline scan over immutable user-entered snapshots; bounded results, no product/name coalescing. */
+    suspend fun savedReferenceProducts(query:String="",form:String="",route:String="",strength:String=""):SavedReferencePage = transactionWithSql(Space.PRIMARY) { _,raw ->
+        require(listOf(query,form,route,strength).all {it.length<=256})
+        val entries=mutableListOf<SavedReferenceProduct>()
+        var limited=false
+        raw.query("SELECT uuid,payload_json FROM reference_snapshot WHERE kind='PRODUCT' AND namespace='USER_ENTERED' ORDER BY uuid").use { cursor ->
+            while(cursor.moveToNext()) {
+                kotlinx.coroutines.currentCoroutineContext().ensureActive()
+                val product=ReferencePayload.readProduct(JSONObject(cursor.getString(1)))
+                if(ReferenceSearch.matches(product,query,form,route,strength)) {
+                    if(entries.size==200) {limited=true;break}
+                    entries+=SavedReferenceProduct(cursor.getString(0),product)
+                }
+            }
+        }
+        SavedReferencePage(entries.toList(),limited)
     }
     suspend fun referencePreviewEpoch():String = transactionWithSql(Space.PRIMARY) { _,raw -> ReferenceStore.previewEpoch(raw) }
     /** The caller's epoch was captured with its displayed record list, before any asynchronous restore or ID reuse. */

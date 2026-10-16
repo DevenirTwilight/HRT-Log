@@ -1,0 +1,243 @@
+{
+  "checked_at": "2026-10-16T16:13:40.855135+00:00",
+  "tested_source": "66977474eb967412570c567ff07c02bcd17d7e82",
+  "status": "PASS",
+  "pr": 56,
+  "parent_pr": 54,
+  "reports": {
+    "data": {
+      "totals": {
+        "tests": 243,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reports": [
+        {
+          "file": "TEST-net.plainnotes.app.data.Ansm03b0InventoryTest.xml",
+          "sha256": "ee2a38c2e32cc08109c2f8337324afe657179a5778fedb5d9ef7ceb5512d8a07",
+          "timestamp": "2026-10-16T15:53:22.138Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.AttachmentFoundationTest.xml",
+          "sha256": "6b07df887a18750fddb83283011c990f94c1e2dba343eec7a9b7153aae408aac",
+          "timestamp": "2026-10-16T15:53:34.851Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.AttachmentMigrationTest.xml",
+          "sha256": "2df1920ba5d7b29d31e5b832466b223975988f639095321aac145b51f38f5963",
+          "timestamp": "2026-10-16T15:53:37.583Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.BackfillTest.xml",
+          "sha256": "ca7718bdcbbc32c361bb6c2c66b276f930a48e3faebdd94ab53c4434acb445d0",
+          "timestamp": "2026-10-16T15:53:39.525Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.BackupReplacementTest.xml",
+          "sha256": "783448b144569d09ef52016f957a2a15f3e7fa1ea42a8bd8afe8d804a299460f",
+          "timestamp": "2026-10-16T15:53:39.701Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.DataTransferTest.xml",
+          "sha256": "6cbd2838d3584ba3861391018c4622bf5496eecda7031ea752645feda0fac9b8",
+          "timestamp": "2026-10-16T15:53:42.139Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.HistoricalContextRepairTest.xml",
+          "sha256": "4db7535ae65b05cd4c923159371ef0d2ac4fd7b3aa8b18b84d6ddf7da32dfdb0",
+          "timestamp": "2026-10-16T15:53:42.798Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.HistoricalVisitTest.xml",
+          "sha256": "18092b4aea757f3b57794a4096905e026c7651b0e3ad8467cfedcad590aab759",
+          "timestamp": "2026-10-16T15:53:43.219Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.HistoryIntegrityTest.xml",
+          "sha256": "afa2cdbfc98816b23c1701abe7df9e6bde6bba2ec0bdfad303d3b80b3af22f9b",
+          "timestamp": "2026-10-16T15:53:44.657Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.HistoryPeriodDataTest.xml",
+          "sha256": "4bf5bac58fac84887d5ae40ca8b8d5560b8ec909369971c290b1d73d9d3d0cde",
+          "timestamp": "2026-10-16T15:53:47.854Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.HrtTrackerImportTest.xml",
+          "sha256": "3c6dd36c6ff4359a3a3508bf7b160238ac96491526a9765d8543142f56495c13",
+          "timestamp": "2026-10-16T15:53:51.302Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.KeyBoundaryTest.xml",
+          "sha256": "30e3f54df504f2009cd4a90603d8f4eaaa1e9885ed46c5311396797c5aa4cac8",
+          "timestamp": "2026-10-16T15:53:51.380Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.LabContextTest.xml",
+          "sha256": "9ddc2dd749206b679be608c2b13d256b65db148b67a3bc5db9c8d63610a264ad",
+          "timestamp": "2026-10-16T15:53:51.428Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.LedgerReplacementTest.xml",
+          "sha256": "e735982c953800efa299a09b797b53d7f163257dc6cbccab7e402cdad7d9ef28",
+          "timestamp": "2026-10-16T15:53:52.606Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.PlanEditTest.xml",
+          "sha256": "4ff55f1beaeec1030c2a5c42a285878fe2744ab3cd7650897d34fedeba739096",
+          "timestamp": "2026-10-16T15:53:52.749Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.ReferenceCatalogTest.xml",
+          "sha256": "b22962707ca0f6b04ee7f4d3bde0ba8a3e0dc1261dfe31749c8f61254424f6d1",
+          "timestamp": "2026-10-16T15:53:52.916Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.ReferenceMigrationTest.xml",
+          "sha256": "cdc958f7cc6eaf8d7ad6d9c71ef1fe96257a7abbe6bfb3f956e826c9b39cc652",
+          "timestamp": "2026-10-16T15:53:53.575Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.ReferencePayloadTest.xml",
+          "sha256": "e770a4928d0dafe20fb3ee0b27a539c4c8a5c2536e7d1cfa04b6f81d262116b0",
+          "timestamp": "2026-10-16T15:53:56.519Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.ReferencePersistenceTest.xml",
+          "sha256": "540716bb2075a7cc89b337d4b1c981198c687e4fc585024440ebed1bd9b2d4cd",
+          "timestamp": "2026-10-16T15:53:56.689Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.RegimenHistoryTest.xml",
+          "sha256": "a56a6479debb7a2316d0e42e5f436aa96a15acb8caa390702ed005ebb37a22af",
+          "timestamp": "2026-10-16T15:54:02.366Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.SchemaConstraintTest.xml",
+          "sha256": "f0ccdc635ef04158058cc529de46bd38bc339607aa4cd12e24c8e153d0331f46",
+          "timestamp": "2026-10-16T15:54:04.935Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.StockCorrectionTest.xml",
+          "sha256": "d9dfd86849fdb37d8e368c08bb356d61fce7d37c37317e7949a111f2413b1838",
+          "timestamp": "2026-10-16T15:54:05.486Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.StockForecastTest.xml",
+          "sha256": "e9ede5688825bdfac5f035a4134ad578bdda3dabd42d3d0c1605708336a7db38",
+          "timestamp": "2026-10-16T15:54:06.001Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.SupplyLedgerTest.xml",
+          "sha256": "d6fa96a34dc5ba54d6feb581acaccfd2395d2c78d7d469ecc299731f10f04f23",
+          "timestamp": "2026-10-16T15:54:06.086Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.TrashDataTest.xml",
+          "sha256": "0b37816ccd1d2aa623ce9b1d2116e8d22f826a445c80bb4f8b2df81cf0ddcbbd",
+          "timestamp": "2026-10-16T15:54:06.441Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.UndoSkippedTest.xml",
+          "sha256": "2919347d094d87048b370f871f3b38cabd2353f678365b1d79707f5a81d910e7",
+          "timestamp": "2026-10-16T15:54:07.573Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.VisitPackDataTest.xml",
+          "sha256": "db9a54d6ece9483aa71c92357aaffcf066d948e1753c2db79097cfdcc9082764",
+          "timestamp": "2026-10-16T15:54:09.994Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.VoidedPackageTest.xml",
+          "sha256": "c99060bf56bdd20789dd547327dc953db1a3dd08e7817ec46cd2e90fa7d78039",
+          "timestamp": "2026-10-16T15:54:12.380Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.WellbeingMigrationTest.xml",
+          "sha256": "504dbe3bbb93c7cb3e07ac6fb6cbf7dd93df9770953e2ff66fd8369cb9d1f57f",
+          "timestamp": "2026-10-16T15:54:13.956Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.WellbeingRecordsTest.xml",
+          "sha256": "3fc73ff52b5a0ea7813feaf3331d905996d0aa59061c5cdd21c1d5fca7d6b297",
+          "timestamp": "2026-10-16T15:54:14.731Z"
+        }
+      ]
+    },
+    "app": {
+      "totals": {
+        "tests": 75,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reports": [
+        {
+          "file": "TEST-net.plainnotes.app.MedicationReferenceControllerTest.xml",
+          "sha256": "738a4cc53aa6c7aeb557ff26894f15296608dbd81dcd2055de5d4a3b4b30fcc9",
+          "timestamp": "2026-10-16T16:09:55.754Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.MedicationReferenceMatrixTest.xml",
+          "sha256": "355f43b9a26dd33ad94ae36d7a0495fa97890865cb59ed3a3cff2ee53554e79f",
+          "timestamp": "2026-10-16T16:10:03.898Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.MedicationReferenceUiTest.xml",
+          "sha256": "5dd8f18f4048f1aee350be490fce20d6f7de879e24f6d096431414b76836f2a7",
+          "timestamp": "2026-10-16T16:10:53.784Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.PeriodStabilityTest.xml",
+          "sha256": "58d0868b9261a82be558dc1bf2397f2d9d45b429ca65a39a9356fb7172b86f32",
+          "timestamp": "2026-10-16T16:11:07.954Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.PrivacyNoticeFactsTest.xml",
+          "sha256": "1dc74c9b35b9d1b93564dcc0f3711dfcb63819aee6d35f29d5f23a665ad57130",
+          "timestamp": "2026-10-16T16:12:14.808Z"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.RecordedReferenceUiTest.xml",
+          "sha256": "248b0704a6740971ca6be9b9f60eab77b41ad6bda5e0fb7d936a24335e1a368c",
+          "timestamp": "2026-10-16T16:12:14.860Z"
+        }
+      ]
+    }
+  },
+  "screenshots": {
+    "count": 192,
+    "matrix_configurations": 96,
+    "representatives_committed": 8,
+    "all_nonblank": true,
+    "manifest": "screenshot-manifest.json",
+    "manually_viewed_latest": [
+      "zh-rCN_320dp_2.0x_dark_HIGH_details.png"
+    ]
+  },
+  "earlier_failures": [
+    "Cross-module nullable scope smart cast: fixed by local immutable capture",
+    "32 PixelCopy-based screenshot timeouts: replaced by actual native Dialog Canvas draw; all original layout/operation assertions retained",
+    "Empty-reference restore allowed first preview to commit: real red evidence retained; P1 previewEpoch fix and controller regression now PASS",
+    "History UI fixture left an active historical schedule after active=false; fixture now creates no plan, all record-content/count assertions retained; 12 targeted then full 75 PASS"
+  ],
+  "native_ui": "NOT_RUN",
+  "physical_device": "NOT_RUN",
+  "TalkBack_manual": "NOT_RUN",
+  "ci": "PENDING_CURRENT_INTEGRATED_HEAD",
+  "official_packaging": "OFF",
+  "stock_algorithm_changed": false,
+  "pk_parameters_changed": false,
+  "released": false,
+  "previous_evidence": {
+    "tested_source": "8e910eedb72114d7432597c7a5256a9306937ae6",
+    "data": 239,
+    "app": 62,
+    "status": "HISTORICAL_PASS"
+  },
+  "build_log_sha256": "1943cc7b3979f12d5a58b9efae702c30f6322172b67061251bd7bb48d23aeb0e",
+  "tested_source_note": "Exact app source/tests at 6697747; data tests unchanged from 1948eda and Gradle UP-TO-DATE. Later merge only adds main #45/#48 files and evidence; final integrated CI remains pending.",
+  "record_history_ui": "IMPLEMENTED_AND_LOCALLY_TESTED",
+  "production_inventory_wiring": "NOT_IMPLEMENTED"
+}

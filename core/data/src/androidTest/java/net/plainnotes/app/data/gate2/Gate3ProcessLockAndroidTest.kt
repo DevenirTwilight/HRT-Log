@@ -58,11 +58,15 @@ class Gate3ProcessLockAndroidTest {
             val write = pool.submit { s.import(op, ByteArrayInputStream(bytes), fault = { if (it == Gate2Store.Seam.WRITE && writing.count > 0L) { writing.countDown(); check(leave.await(30, TimeUnit.SECONDS)) } }) }
             assertTrue(writing.await(30, TimeUnit.SECONDS))
             assertEquals(Gate2Store.LeaseState.HELD_THIS_PROCESS, s.leaseState(op.id))
-            assertEquals("SKIP_LIVE_WRITER", s.reconcile()[op.id])                       // same-process probe
+            // Collect the same-process result, then observe the peer before asserting either invariant.
+            // API26's deliberately unsafe red probe may itself acquire the second lock and clean the leaf;
+            // asserting here would stop before the red control's required cross-process lock observation.
+            val maintenanceResult = s.reconcile()[op.id]
             val lock = Bundle().apply { putString("lock", s.leaseFileOf(op.id).path) }
             val peerState = call("leaseState", op.id, lock).getString("state")
             evidence("sameProcessProbe", "red" to red, "peerPid" to call("pid").getInt("pid"), "peerSees" to peerState)
             assertEquals("Peer process could acquire a live writer's lease after a same-process probe", "HELD_OTHER_PROCESS", peerState)
+            assertEquals("SKIP_LIVE_WRITER", maintenanceResult)
             leave.countDown(); write.get(30, TimeUnit.SECONDS)
             assertEquals(op.id, s.active()); assertEquals(Gate2Store.LeaseState.FREE, s.leaseState(op.id))
             assertEquals("FREE", call("leaseState", op.id, lock).getString("state"))

@@ -45,6 +45,8 @@ import java.time.Instant
 /** History record dialogs and the batch backfill (its result snackbar may arrive after leaving the page). */
 @Stable class HistoryDialogs {
     var editRecord by mutableStateOf<RecordEntity?>(null)
+    var referenceEpoch by mutableStateOf<String?>(null)
+    var referenceRecord by mutableStateOf<RecordEntity?>(null)
     var deleteRecord by mutableStateOf<RecordEntity?>(null)
     var batch by mutableStateOf(false)
     var batchDone by mutableStateOf<Int?>(null)
@@ -52,7 +54,8 @@ import java.time.Instant
 
 @Composable internal fun HistoryRecordDialogs(h: HistoryDialogs, model: NotesViewModel, meds: Map<Long, MedicationEntity>) {
     h.editRecord?.let { r -> IntakeDialog(stringResource(if (r.status == "MISSED") R.string.history_backfill else R.string.edit), MedicationSnapshot.decode(r.config_snapshot,r.medication_id)?.medication(r.medication_id), r.actual_dose ?: r.planned_dose ?: meds[r.medication_id]?.dose_per_intake ?: 1.0,
-        Instant.ofEpochMilli(r.taken_utc ?: r.scheduled_utc ?: System.currentTimeMillis()), { h.editRecord = null }) { t, d, _ -> model.editRecord(r.id, t, d); h.editRecord = null } }
+        Instant.ofEpochMilli(r.taken_utc ?: r.scheduled_utc ?: System.currentTimeMillis()), { h.editRecord = null },onReference={h.referenceRecord=r}) { t, d, _ -> model.editRecord(r.id, t, d); h.editRecord = null } }
+    h.referenceRecord?.let {r->RecordedReferenceDialog(r,h.referenceEpoch,model::recordedReferenceHistory){h.referenceRecord=null}}
     h.deleteRecord?.let { r -> AlertDialog(onDismissRequest = { h.deleteRecord = null }, icon = { Icon(Icons.Outlined.Delete, null) }, text = { Text(stringResource(R.string.history_delete_confirm)) },
         confirmButton = { Button(onClick = { model.deleteRecord(r.id); h.deleteRecord = null }) { Text(stringResource(R.string.remove)) } },
         dismissButton = { TextButton(onClick = { h.deleteRecord = null }) { Text(stringResource(R.string.cancel)) } }) }
