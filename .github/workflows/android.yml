@@ -64,6 +64,8 @@ jobs:
       - run: python3 scripts/check_release_manifest.py
       - name: Exclude experimental attachment code and providers from release payload
         run: python3 scripts/check_attachment_release_isolation.py
+      - name: Exclude ANSM test-only measurement and shadow integration from release
+        run: python3 scripts/check_ansm03b0_isolation.py
       # Audit B1 / D-4: the R8-shrunk Release APK must name exactly this commit from a clean checkout, and the delivery
       # ledger keeps delivered versionCodes strictly increasing (source, APK and certificate identities kept apart).
       - name: Release APK source identity and delivery ledger
@@ -95,6 +97,7 @@ jobs:
             app/build/reports/pk-p1c2-comparison/
             app/build/reports/lint-results-*
             core/*/build/reports/tests/
+            core/data/build/reports/ansm03b0/
             pk-engine/build/reports/tests/
             importer/build/reports/tests/
   device-tests:
@@ -192,7 +195,7 @@ jobs:
           disable-animations: true
           script: |
             adb logcat -G 16M
-            ./gradlew :core:data:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.data.AttachmentFoundationAndroidTest,net.plainnotes.app.data.AttachmentSqlCipherMigrationTest,net.plainnotes.app.data.AttachmentKeyAndroidTest,net.plainnotes.app.data.Gate2StoreAndroidTest,net.plainnotes.app.data.Gate2RestartAndroidTest,net.plainnotes.app.data.Gate2SafAndroidTest,net.plainnotes.app.data.Gate2ContextAndroidTest,net.plainnotes.app.data.Gate3ProcessLockAndroidTest,net.plainnotes.app.data.B3GateAndroidTest,net.plainnotes.app.data.B3RestartAndroidTest --no-parallel --max-workers=2
+            ./gradlew :core:data:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.data.AttachmentFoundationAndroidTest,net.plainnotes.app.data.AttachmentSqlCipherMigrationTest,net.plainnotes.app.data.AttachmentKeyAndroidTest,net.plainnotes.app.data.Gate2StoreAndroidTest,net.plainnotes.app.data.Gate2RestartAndroidTest,net.plainnotes.app.data.Gate2SafAndroidTest,net.plainnotes.app.data.Gate2ContextAndroidTest,net.plainnotes.app.data.Gate3ProcessLockAndroidTest,net.plainnotes.app.data.B3GateAndroidTest,net.plainnotes.app.data.B3RestartAndroidTest,net.plainnotes.app.data.Ansm03b0InventoryAndroidTest --no-parallel --max-workers=2
             python3 scripts/run_attachment_foundation_restart.py
             python3 scripts/run_attachment_gate2_red.py
             python3 scripts/run_attachment_gate2_restart.py AFTER_CREATE

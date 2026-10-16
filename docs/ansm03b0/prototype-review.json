@@ -1,0 +1,35 @@
+{
+  "status": "PASS",
+  "original_tests": 35,
+  "source_unchanged": true,
+  "review": {
+    "exact_arithmetic": "bounded BigDecimal, explicit nonterminating rejection, no rounding or Double math",
+    "provenance": "ref/version/digest and actualPackage checks; verified flag is trusted input, not clinical verification",
+    "partial_units": "fractional tablets/devices require evidence, release/absorption/chemical-equivalence conversions refused",
+    "unknown_capacity": "nominal content never becomes confirmed usable capacity",
+    "limits_to_be_addressed_in_B0": [
+      "No dataset or stable record/container scope in 03A",
+      "No business operation UUID/capture durability",
+      "No real ledger observation comparison or transaction integration",
+      "No official data admission/evidence validator",
+      "No production forecast or backup API"
+    ]
+  },
+  "test_suites": [
+    {
+      "name": "net.plainnotes.app.domain.measurement.MeasurementCoreTest",
+      "tests": 26,
+      "failures": 0
+    },
+    {
+      "name": "net.plainnotes.app.domain.measurement.SyntheticHistoryContractTest",
+      "tests": 5,
+      "failures": 0
+    },
+    {
+      "name": "net.plainnotes.app.domain.measurement.LegacyBoundaryTest",
+      "tests": 4,
+      "failures": 0
+    }
+  ]
+}
