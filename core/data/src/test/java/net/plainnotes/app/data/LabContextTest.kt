@@ -69,7 +69,7 @@ class LabContextTest {
         assertThrows(IllegalArgumentException::class.java){LabContext.validate(broken.toString())}
         val badEstimate=JSONObject(expected.single().context_json).put("estimate","invalid")
         assertThrows(IllegalArgumentException::class.java){LabContext.validate(badEstimate.toString())}
-        val old=JSONObject(String(BackupCodec.decrypt(backup,pwd)));old.put("schema",4);old.getJSONObject("tables").remove("lab_context_revision")
+        val old=JSONObject(String(BackupCodec.decrypt(backup,pwd)));old.put("schema",4).also { legacy -> ReferenceSchema.businessTables.forEach { legacy.getJSONObject("tables").remove(it) } };old.getJSONObject("tables").remove("lab_context_revision")
         repo.restoreBackup(BackupCodec.encrypt(old.toString().toByteArray(),pwd),pwd);assertEquals(1,repo.labs().size);assertTrue(repo.labContexts().isEmpty())
     }
     @Test fun simultaneousLastIntakesAreBothPreservedAndNoCurrentConfigurationRewritesTheirContext()=runBlocking {

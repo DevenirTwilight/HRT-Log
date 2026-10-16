@@ -119,7 +119,7 @@ class TrashDataTest {
         val bin=repo.trash();val pwd="synthetic-pass".toCharArray();val backup=repo.exportBackup(pwd)
         repo.restoreBackup(backup,pwd);assertEquals(bin,repo.trash())
         // A schema 8 backup has no bin: its soft-deleted record and deleted period move in; the milestone was really deleted then.
-        val v8=BackupCodec.encrypt(JSONObject(String(BackupCodec.decrypt(backup,pwd))).apply{put("schema",8);getJSONObject("tables").remove("trash_item")}.toString().toByteArray(),pwd)
+        val v8=BackupCodec.encrypt(JSONObject(String(BackupCodec.decrypt(backup,pwd))).apply{put("schema",8).also { legacy -> ReferenceSchema.businessTables.forEach { legacy.getJSONObject("tables").remove(it) } };getJSONObject("tables").remove("trash_item")}.toString().toByteArray(),pwd)
         repo.restoreBackup(v8,pwd)
         assertEquals(setOf(Trash.RECORD,Trash.PERIOD),repo.trash().map{it.kind}.toSet())
         // A purged item stays purged in a later backup.

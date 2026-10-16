@@ -82,7 +82,7 @@ abstract class AttachmentMigrationContract {
                 raw.execSQL("UPDATE supply_container SET state='VOIDED' WHERE id=2")
                 PackageCorrections.validate(raw)
                 assertEquals(9,raw.version)
-                val data=JSONObject().put("format",1).put("schema",9).put("tables",RawData.dump(raw)).toString().toByteArray()
+                val data=JSONObject().put("format",1).put("schema",9).put("tables",RawData.dump(raw,DOMAIN_TABLES.filterNot { it in ReferenceSchema.businessTables })).toString().toByteArray()
                 try { backup=BackupCodec.encrypt(data,password) } finally { data.fill(0) }
                 fingerprint(raw)
             }
@@ -90,7 +90,7 @@ abstract class AttachmentMigrationContract {
             fun open()=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass))
                 .addMigrations(*allMigrations()).addCallback(SchemaGuards).build()
             room=open();val db=room!!;val raw=db.openHelper.writableDatabase
-            assertEquals(10,raw.version);assertEquals(before,fingerprint(raw))
+            assertEquals(11,raw.version);assertEquals(before,fingerprint(raw))
             raw.query("PRAGMA foreign_key_check").use{assertEquals(0,it.count)}
             raw.query("SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'attachment_%'").use{assertEquals(8,it.count)}
             val scope=db.withTransaction { requireNotNull(AttachmentIdentity.initialize(raw,true)) }
@@ -118,7 +118,7 @@ abstract class AttachmentMigrationContract {
             fixture(name,pass,1).use{it.writableDatabase.execSQL("INSERT INTO day_note(date,text) VALUES ('2026-01-01','synthetic oldest chain')")}
             room=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass))
                 .addMigrations(*allMigrations()).addCallback(SchemaGuards).build()
-            val raw=room!!.openHelper.writableDatabase;assertEquals(10,raw.version)
+            val raw=room!!.openHelper.writableDatabase;assertEquals(11,raw.version)
             raw.query("SELECT text FROM day_note").use{assertTrue(it.moveToFirst());assertEquals("synthetic oldest chain",it.getString(0))}
             raw.query("PRAGMA foreign_key_check").use{assertEquals(0,it.count)}
         } finally {room?.close();context.deleteDatabase(name);pass.fill(0)}
@@ -130,7 +130,7 @@ abstract class AttachmentMigrationContract {
             val fault=object:androidx.room.migration.Migration(9,10) {
                 override fun migrate(db:SupportSQLiteDatabase) {AttachmentSchema.migrate(db);error("synthetic migration interruption")}
             }
-            room=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(fault).build()
+            room=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(fault,migration10To11).build()
             try{room!!.openHelper.writableDatabase;fail("Interrupted migration reported success")}catch(_:IllegalStateException){}
             room!!.close();room=null
             fixture(name,pass,9).use {
@@ -138,8 +138,8 @@ abstract class AttachmentMigrationContract {
                 db.query("SELECT text FROM day_note").use{c->assertTrue(c.moveToFirst());assertEquals("synthetic rollback sentinel",c.getString(0))}
                 db.query("SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'attachment_%'").use{c->assertEquals(0,c.count)}
             }
-            room=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(migration9To10).addCallback(SchemaGuards).build()
-            assertEquals(10,room!!.openHelper.writableDatabase.version)
+            room=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(migration9To10,migration10To11).addCallback(SchemaGuards).build()
+            assertEquals(11,room!!.openHelper.writableDatabase.version)
         } finally {room?.close();context.deleteDatabase(name);pass.fill(0)}
     }
 
