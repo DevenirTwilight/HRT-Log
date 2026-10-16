@@ -1,0 +1,73 @@
+# ANSM-03A 工作交接
+
+2026-10-16。授权范围：量纲合同、test-only 纯 Kotlin 原型、合成验证、03B 审批方案。
+不接入库存/预测/日历/提醒，不改 Room10、PNBAK1 schema9、PK、UI、权限、版本或签名。
+用户本轮要求避免共享 HANDOFF/REQUIREMENTS 等冲突，因此本目录记录新增要求与逐阶段交接。
+
+基线：默认分支 `claude/new-session-1959qb`，`1e8754e9bab8b01034cb3de22ceaf9dc61a1438a`。
+开工 PR45 OPEN，HEAD348c68def84ccc627a46be57ace463ade3635a15；PR48 OPEN，
+HEADdf0a615f78589e9c7df5352fda75f2364ebcddaa；两者六检查成功但未合并。
+PR49占用共享HANDOFF/STATUS/交付账本。本分支从默认分支创建，不继承45/48未合并内容。
+01/02设计通过固定Git对象只读查看；工程绿不表示资料许可或生产接线通过。
+未发现许可版本、FT/ST或官方数据分发负责人确认；继续保留阻断，不重分发临床原文。
+
+## 现状数据流与文件边界
+
+- `core/data/.../Entities.kt`：MedicationEntity单位/实际剂量/默认容量是用户配置；ProfileEntity只属PK。
+  ContainerEntity只有capacity/initial_used_amount/used_amount及状态，没有自己的单位、CIS/CIP或强度。
+  SupplyEntryEntity保存CONSUME/REVERSE/ADJUST标量，唯一操作键及反向引用。
+- `MedicationSnapshot.kt`：v2冻结用户名称/成分/途径/单位/PK，不含官方商品和容器规格。
+- `NotesRepository.complete/unscheduled`：事务保存实际记录与快照→SupplyLedger.allocate。
+  计划完成重复调用直接返回；手动批量backfill只写历史不扣库存；导入关联也不补扣。
+- `SupplyLedger.kt`：只分配ON_TIME/LATE未删除记录；快照单位与当前药物不同则全量未分配。
+  已开容器按opened_on/id，随后SEALED按id；追加CONSUME，触发器更新used，耗尽置EMPTY。
+  不足保留unallocated_supply_amount。未知快照单位当前不阻止分配，这是既有边界，不能据此建立新换算。
+- 实际编辑/删除先REVERSE未冲销消耗，再修订记录；实际恢复可重新分配。不是改写原流水。
+  `PackageCorrections.kt`：VOIDED拒绝存在CONSUME/REVERSE的包装；允许ADJUST历史，保存容器/账本/上下文哈希，
+  重复作废幂等；恢复拒绝上下文变更。不能用删除/恢复绕开新量纲检查。
+- `NotesViewModel.refresh`统一提交快照、取消过时读取，各页共享。`StockForecast.kt`汇总同med的IN_USE/SEALED标量，
+  遍历Timeline未完成槽（跳过/改时/剂量覆盖/计划版本），已服不再减；366日窗口，7日低库存。
+  日历/库存与`core/reminder/.../StockAlerts.kt`使用同一预测，日期差按当地日历/DST。
+- `saveMedication`即使只保存元数据也会reconcile/更新规则快照；resizeContainers=true会改可调整的开封/未开容器容量。
+  **未来官方引用更新必须独立事务，不调用这个路径。** 当前编辑可填小数但没有成分与片数换算。
+- `NotesDatabase`运行版本10；`DataTransfer`显式业务表/列白名单、PNBAK1 format1；业务schema9。
+  `BackupValidation`验证结构/关联/账本；未来新表不会自动得到备份支持。旧备份不能推断官方身份。
+
+计量核心选择 `core/domain/src/test/kotlin/.../measurement/`，沿用既有JUnit5与JVM任务，
+没有新增依赖或Gradle/CI修改，不进入main编译产物或Android。是可执行的隔离原型，不是正式库存集成。
+
+## 阶段记录
+
+1. 审计与合同已写，LegacyBoundaryTest 4/4 PASS，说明旧标量投影信息不足，不制造生产失败。
+2. 已实现test-only核心：精确十进制、维度/语义身份、有向含量关系、来源与实际包装确认、结构化错误、冻结包装快照；无生产调用。
+   最终本地：新增35项（核心26、历史协议5、旧边界4）全部PASS；全JVM297项PASS；Python107项PASS。
+   定向数据32、应用23项PASS（包含PeriodStability 5、备份历史16、四语2），均零fail/error/skip。
+   malformed presentation身份的运行时负例先红后绿，原断言保留；证据见negative-evidence.json。
+   生产路径Git对象与基线完全一致，主JAR无measurement类。当前最终HEAD CI结果固定PR正文/检查页，不冒用先行提交CI。
+   真机/ARM/TalkBack：NOT_RUN；无UI/截图/安装包交付。
+3. ANSM-03B全部NOT_IMPLEMENTED，独立审批前不迁移、不接线。
+
+## 交付索引与后续
+
+独立PR：[ANSM-03A #50](https://github.com/DevenirTwilight/HRT-Log/pull/50)，不自动合并。
+最终SHA、最新默认分支与六检查的实际结果固定该PR正文；本交接记录本地完成证据，不宣称获准生产或发布。
+
+- [量纲合同](measurement-contract.md)：数字上限/分数/单位/来源/错误语义。
+- [来源边界](source-boundaries.md)：先前证据引用与本轮合成数据的区别。
+- [03B审批方案](production-integration-proposal.md)：快照/实体、Room1→10→候选N、PNBAK旧新格式、失败/取消/回滚、预测及02B接口。
+- [验收映射](acceptance-matrix.md)、[验证账本](verification.md)、[本地机器证据](local-verification.json)、[先红后绿证据](negative-evidence.json)。
+- [计量核心与测试](../../core/domain/src/test/kotlin/net/plainnotes/app/domain/measurement/)、[报告脚本](../../scripts/ansm03_report.py)、独立边界测试scripts/test_ansm03_boundary.py。
+
+修改文件范围：本目录9份文档/JSON、core/domain test源集4份Kotlin、独立scripts两份；
+实际清单以PR Files changed为准。未改共享HANDOFF/REQUIREMENTS/STATUS/BACKLOG、UI、Gradle、CI或生产源码。
+
+03B阻断：01/02前置验收、许可和FT/ST处理、正式DTO/来源条件与成分编码、实际包装确认、
+容器身份及冻结快照、迁移与业务备份版本、旧unknown策略、混合规格分配/预测/提醒未知表现、失败/回滚测试计划，
+全部需独立审阅与负责人明确批准；不能因35项原型测试通过启动正式库存接线。
+
+## 主线集成补充
+
+PR49于2026-10-16合并；最终集成基线为`2f4b958425e1cd67dad1d97deb8ab724eb8ecac1`。
+本分支正常merge，仅继承上游交付/交接文档，没有修改其内容；相对最新主线仍仅本批15个文件。
+生产保护路径与2f4b958的Git对象完全相同，新计量源码哈希与本地35项验证逐项相同。
+原1e8754e开工证据仍保留；集成证据追加repository-audit.json，不改写历史核实结果。

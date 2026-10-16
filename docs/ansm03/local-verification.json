@@ -1,0 +1,568 @@
+{
+  "baseline": "1e8754e9bab8b01034cb3de22ceaf9dc61a1438a",
+  "observed_head": "3e0e0e13fc6e130b24bd550bc56fd4868a1e6deb",
+  "isolation": {
+    "status": "PASS",
+    "production_callers": [],
+    "model_imports": [
+      "import java.math.BigDecimal",
+      "import java.time.LocalDate"
+    ],
+    "source_set": "test",
+    "production_integration": "NOT_IMPLEMENTED"
+  },
+  "protected_changed_files": [],
+  "protected_baseline_objects": {
+    "app/src/main": "3211c65746b091e19e44cfdc4dd74727f29e9f6e",
+    "app/src/debug": "057fe68a1488774b590cb9c177e57187a595e9d7",
+    "app/src/full": "09d7ad91e678757caf3958b05ff33ea435dda8a6",
+    "core/data": "42be7b9bf0a5845587971255dd4b189615b4eb99",
+    "core/reminder": "0f24f7d777554a2d3e705da01bf378e80eac4c63",
+    "core/ui": "2508628c664da85f69575f2a9dbfadc7e5156ec4",
+    "core/domain/src/main": "9fd5607c0578cd0924b5891ffcc98c45327664b9",
+    "pk-engine": "89136c2dbf33ec71a989350e99350f4dcd2ac00a",
+    "importer": "788106531fda5c97d1a9b66ec375e8e2afe5545d",
+    ".github": "2d3d1e6da7f882553342dbb655ffe69ea83dcfa0",
+    "gradle": "194bcea615eb017bf2366b024c941679c839f465",
+    "app/build.gradle.kts": "7842e145335e728488480dfb199e6d5c64576357",
+    "core/domain/build.gradle.kts": "8b85fb1cf6526cb656dea6114de26d41fe02e76a",
+    "settings.gradle.kts": "3a7c1dcbc6852062292e748ebb427f64596dd556",
+    "build.gradle.kts": "7b527fc7d94ab0d90d509815f2e3225a9cc674d4",
+    "gradle.properties": "3efe699c31d2a063f2b6b9f0e19413b48512c90f",
+    "docs/HANDOFF.md": "19d9b4044d1f24429478d6d888495d16236897df",
+    "docs/REQUIREMENTS.md": "f1b7434717c0ba3c993510b65c68006876555865",
+    "docs/STATUS.md": "a4f4f4662b09cbf6010791b4f76f7dcfbfc96513",
+    "docs/BACKLOG.md": "e07f29ac2c129ca67bbbfda7e9319e2bc546adc1"
+  },
+  "protected_head_objects": {
+    "app/src/main": "3211c65746b091e19e44cfdc4dd74727f29e9f6e",
+    "app/src/debug": "057fe68a1488774b590cb9c177e57187a595e9d7",
+    "app/src/full": "09d7ad91e678757caf3958b05ff33ea435dda8a6",
+    "core/data": "42be7b9bf0a5845587971255dd4b189615b4eb99",
+    "core/reminder": "0f24f7d777554a2d3e705da01bf378e80eac4c63",
+    "core/ui": "2508628c664da85f69575f2a9dbfadc7e5156ec4",
+    "core/domain/src/main": "9fd5607c0578cd0924b5891ffcc98c45327664b9",
+    "pk-engine": "89136c2dbf33ec71a989350e99350f4dcd2ac00a",
+    "importer": "788106531fda5c97d1a9b66ec375e8e2afe5545d",
+    ".github": "2d3d1e6da7f882553342dbb655ffe69ea83dcfa0",
+    "gradle": "194bcea615eb017bf2366b024c941679c839f465",
+    "app/build.gradle.kts": "7842e145335e728488480dfb199e6d5c64576357",
+    "core/domain/build.gradle.kts": "8b85fb1cf6526cb656dea6114de26d41fe02e76a",
+    "settings.gradle.kts": "3a7c1dcbc6852062292e748ebb427f64596dd556",
+    "build.gradle.kts": "7b527fc7d94ab0d90d509815f2e3225a9cc674d4",
+    "gradle.properties": "3efe699c31d2a063f2b6b9f0e19413b48512c90f",
+    "docs/HANDOFF.md": "19d9b4044d1f24429478d6d888495d16236897df",
+    "docs/REQUIREMENTS.md": "f1b7434717c0ba3c993510b65c68006876555865",
+    "docs/STATUS.md": "a4f4f4662b09cbf6010791b4f76f7dcfbfc96513",
+    "docs/BACKLOG.md": "e07f29ac2c129ca67bbbfda7e9319e2bc546adc1"
+  },
+  "protected_status": "PASS",
+  "source_sha256": {
+    "core/domain/src/test/kotlin/net/plainnotes/app/domain/measurement/LegacyBoundaryTest.kt": "757515b8be15bb43c071605cccb15f4375b692ec621fa1e17a4976e34af60cf5",
+    "core/domain/src/test/kotlin/net/plainnotes/app/domain/measurement/MeasurementCore.kt": "c03ee7e95797167612e7af42d3317533cbd38aa577344d07a15d184eaafce4a1",
+    "core/domain/src/test/kotlin/net/plainnotes/app/domain/measurement/MeasurementCoreTest.kt": "c13eeb5d3086b6e41331a1933a6508efdcae4d123a001b00699580988e4f870e",
+    "core/domain/src/test/kotlin/net/plainnotes/app/domain/measurement/SyntheticHistoryContractTest.kt": "051f9b8ea70c136acd87dfbab5c8a487ef9278a487d82b0c8ba5f3987ee778a8"
+  },
+  "main_jar": {
+    "status": "PASS",
+    "measurement_entries": [],
+    "sha256": "823be136b973660a1f1b88efb964f9158458f868b3e59b6eab96107b7f8abf71"
+  },
+  "actual_local_reports": [
+    {
+      "module": "core/domain",
+      "task": "test",
+      "status": "PASS",
+      "suites": [
+        {
+          "suite": "net.plainnotes.app.domain.AttachmentSessionTest",
+          "timestamp": "2026-10-16T06:51:57.370Z",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.domain.PeriodAttributionTest",
+          "timestamp": "2026-10-16T06:51:57.489Z",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.domain.ScheduleTest",
+          "timestamp": "2026-10-16T06:51:57.503Z",
+          "tests": 30,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.domain.SustainedPatternsTest",
+          "timestamp": "2026-10-16T06:51:57.569Z",
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.domain.TreatmentEpochsTest",
+          "timestamp": "2026-10-16T06:51:57.599Z",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.domain.TreatmentPeriodsTest",
+          "timestamp": "2026-10-16T06:51:57.605Z",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.domain.measurement.LegacyBoundaryTest",
+          "timestamp": "2026-10-16T06:51:57.671Z",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.domain.measurement.MeasurementCoreTest",
+          "timestamp": "2026-10-16T06:51:56.992Z",
+          "tests": 26,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.domain.measurement.SyntheticHistoryContractTest",
+          "timestamp": "2026-10-16T06:51:57.676Z",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      ],
+      "totals": {
+        "tests": 98,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "module": "pk-engine",
+      "task": "test",
+      "status": "PASS",
+      "suites": [
+        {
+          "suite": "net.plainnotes.app.pk.BaselineEligibilityTest",
+          "timestamp": "2026-10-16T06:42:33.609Z",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.pk.CausalEvaluationTest",
+          "timestamp": "2026-10-16T06:42:33.741Z",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.pk.EngineTest",
+          "timestamp": "2026-10-16T06:42:33.788Z",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.pk.LabDispositionTest",
+          "timestamp": "2026-10-16T06:42:33.852Z",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.pk.LabFitTest",
+          "timestamp": "2026-10-16T06:42:33.956Z",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.pk.LiteratureValidationTest",
+          "timestamp": "2026-10-16T06:42:34.686Z",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.pk.SublingualP0AuditTest",
+          "timestamp": "2026-10-16T06:42:34.810Z",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.pk.SublingualP1ATest",
+          "timestamp": "2026-10-16T06:42:34.885Z",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.pk.experimental.ConcentrationModelComparisonTest",
+          "timestamp": "2026-10-16T06:42:35.175Z",
+          "tests": 14,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.pk.experimental.ExperimentalSlModelViewTest",
+          "timestamp": "2026-10-16T06:42:38.716Z",
+          "tests": 12,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.pk.experimental.M2OnlyNumericalContractTest",
+          "timestamp": "2026-10-16T06:42:39.991Z",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.pk.experimental.PreparedResearchHistoryTest",
+          "timestamp": "2026-10-16T06:42:40.196Z",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.pk.experimental.ResearchDisplayProtocolTest",
+          "timestamp": "2026-10-16T06:42:41.402Z",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.pk.experimental.ResearchShapeComparisonV01Test",
+          "timestamp": "2026-10-16T06:42:42.179Z",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.pk.experimental.ResearchSublingualV01Test",
+          "timestamp": "2026-10-16T06:42:42.185Z",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.pk.experimental.StudyAnchorsTest",
+          "timestamp": "2026-10-16T06:42:42.209Z",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.pk.experimental.UnifiedComparisonPerformanceTest",
+          "timestamp": "2026-10-16T06:42:42.245Z",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.pk.experimental.UnifiedModelComparisonTest",
+          "timestamp": "2026-10-16T06:42:42.895Z",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      ],
+      "totals": {
+        "tests": 124,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "module": "importer",
+      "task": "test",
+      "status": "PASS",
+      "suites": [
+        {
+          "suite": "net.plainnotes.app.importer.HrtTrackerTest",
+          "timestamp": "2026-10-16T06:43:26.687Z",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.importer.TransMemoTest",
+          "timestamp": "2026-10-16T06:43:26.845Z",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      ],
+      "totals": {
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "module": "tools/attachment-poc",
+      "task": "test",
+      "status": "PASS",
+      "suites": [
+        {
+          "suite": "net.plainnotes.poc.B2ImportTest",
+          "timestamp": "2026-10-16T06:43:58.156Z",
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.poc.B2InputPolicyTest",
+          "timestamp": "2026-10-16T06:43:58.691Z",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.poc.B2StreamingMatrixTest",
+          "timestamp": "2026-10-16T06:43:58.710Z",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.poc.B2StreamingTest",
+          "timestamp": "2026-10-16T06:43:59.547Z",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.poc.CapabilityObjectTest",
+          "timestamp": "2026-10-16T06:43:59.560Z",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.poc.ChunkTest",
+          "timestamp": "2026-10-16T06:43:59.574Z",
+          "tests": 20,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.poc.Gate2ContextTest",
+          "timestamp": "2026-10-16T06:44:00.025Z",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.poc.ProductionDraftVectorsTest",
+          "timestamp": "2026-10-16T06:44:00.031Z",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.poc.RecoveryTest",
+          "timestamp": "2026-10-16T06:44:00.253Z",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.poc.SecurityReviewEvidenceTest",
+          "timestamp": "2026-10-16T06:44:00.750Z",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      ],
+      "totals": {
+        "tests": 63,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "module": "core/data",
+      "task": "testDebugUnitTest",
+      "status": "PASS",
+      "suites": [
+        {
+          "suite": "net.plainnotes.app.data.AttachmentMigrationTest",
+          "timestamp": "2026-10-16T06:45:53.659Z",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.data.DataTransferTest",
+          "timestamp": "2026-10-16T06:46:00.888Z",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.data.PlanEditTest",
+          "timestamp": "2026-10-16T06:46:01.746Z",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.data.StockCorrectionTest",
+          "timestamp": "2026-10-16T06:46:02.058Z",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.data.StockForecastTest",
+          "timestamp": "2026-10-16T06:46:02.727Z",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.data.SupplyLedgerTest",
+          "timestamp": "2026-10-16T06:46:02.866Z",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      ],
+      "totals": {
+        "tests": 32,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "module": "app",
+      "task": "testFullDebugUnitTest",
+      "status": "PASS",
+      "suites": [
+        {
+          "suite": "net.plainnotes.app.BackupHistoryTest",
+          "timestamp": "2026-10-16T06:48:04.053Z",
+          "tests": 16,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.PeriodStabilityTest",
+          "timestamp": "2026-10-16T06:48:09.185Z",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.TranslationsTest",
+          "timestamp": "2026-10-16T06:49:02.959Z",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "net.plainnotes.app.UnifiedConcentrationTranslationsTest",
+          "timestamp": "2026-10-16T06:49:03.093Z",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      ],
+      "totals": {
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "report_semantics": "JUnit XML present on disk; use command completion and source hashes to identify tested revision. No absent test is inferred PASS.",
+  "new_room_backup_binding": "NOT_IMPLEMENTED",
+  "physical_device": "NOT_RUN",
+  "completed_commands": [
+    {
+      "status": "PASS",
+      "log": "ansm03-jvm-verified.log",
+      "command": "./gradlew -PjvmOnly :core:domain:test :pk-engine:test :importer:test :attachment-poc:test --no-daemon -Dorg.gradle.jvmargs=-Xmx1024m -Pkotlin.compiler.execution.strategy=in-process --max-workers=1 --console=plain",
+      "log_sha256": "dd3cea8799b0eb30ce86310e1d03b3d84792e73166d6fca13253d973b5d1dcc1"
+    },
+    {
+      "status": "PASS",
+      "log": "ansm03-compatibility.log",
+      "command": "./gradlew :core:data:testDebugUnitTest --tests '*SupplyLedgerTest' --tests '*StockForecastTest' --tests '*StockCorrectionTest' --tests '*PlanEditTest' --tests '*DataTransferTest' --tests '*AttachmentMigrationTest' :app:testFullDebugUnitTest --tests '*PeriodStabilityTest' --tests '*BackupHistoryTest' --tests '*TranslationsTest' --no-daemon -Dorg.gradle.jvmargs=-Xmx1536m -Pkotlin.compiler.execution.strategy=in-process --max-workers=1 --console=plain",
+      "log_sha256": "a111cf3ed56576f47cd534b2d7b861fe80fa59ee7aa3d493095cd0dc83abb2f2"
+    }
+  ],
+  "python_scripts": {
+    "status": "PASS",
+    "tests": 107,
+    "failures": 0,
+    "command": "python3 -m unittest discover -s scripts -p 'test_*.py'"
+  },
+  "tested_before_commit": true,
+  "head_semantics": "Source hashes, completed commands and JUnit XML identify tested uncommitted implementation; observed_head is the previous audit commit, NOT an assertion that it contains this implementation."
+}
