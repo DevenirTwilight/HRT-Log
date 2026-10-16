@@ -1,6 +1,6 @@
 {
   "base": "b3ba2920b16c3715dfae6e60057d27a909ec2fe0",
-  "status": "PASS_DATA_NATIVE_COMPILE_APP_PENDING",
+  "status": "PASS",
   "data": {
     "tests": 300,
     "failures": 0,
@@ -9,7 +9,20 @@
   },
   "shared_consumption_contract": 26,
   "native_test_compilation": "PASS",
-  "period_privacy": "PENDING",
+  "period_privacy": {
+    "PeriodStabilityTest": {
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "PrivacyNoticeFactsTest": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
   "python_guard": {
     "tests": 157,
     "status": "PASS"
@@ -24,5 +37,7 @@
     "Full backup history validation NOT_IMPLEMENTED; business schema10 rejects all new measurement format",
     "Confirmation ABA and backfilled usage reconciliation NOT_IMPLEMENTED",
     "Physical device and TalkBack NOT_RUN"
-  ]
+  ],
+  "tested_commit": "2d2a289731a871833b6a981fbb227d0f04e3d7fb",
+  "log_sha256": "5293f39d86f5a3ee7175b6f60d711d33572e57fdc51b0106e107b728b2f39d70"
 }

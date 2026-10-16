@@ -14,6 +14,7 @@ internal sealed interface PhysicalUseResult {
     data class Unknown(override val containerUuid:String,val requested:Quantity,val reason:String):PhysicalUseResult
 }
 internal data class MeasuredConsumptionReceipt(val operationUuid:String,val recordUuid:String,val recordRevision:Int,val lines:List<PhysicalUseResult>,val issue:String?)
+internal data class AuditedStockProjection(val containerUuid:String,val presentationSha256:String,val usedQuanta:Long,val remaining:Quantity,val cacheMatches:Boolean)
 
 /** Isolated P4 adapter. No Repository/App caller yet; backup acceptance/legacy-path isolation remain disabled.
  * Caller must create the actual record and invoke this adapter in the same captured database transaction.
@@ -21,6 +22,106 @@ internal data class MeasuredConsumptionReceipt(val operationUuid:String,val reco
  */
 internal object MeasuredConsumptionStore {
     private fun fail(code:ReferenceError):Nothing=throw ReferenceFailure(code)
+
+    /** Read-only per-container projection audit. This does not replace whole-backup/zero-effect operation validation.
+     * Never repairs a cache or interprets an old scalar container as integer-mode stock.
+     */
+    suspend fun auditProjection(database:NotesDatabase,scope:ReferenceScope,containerUuid:String):MeasureResult<AuditedStockProjection> {
+        val db=database.openHelper.writableDatabase;check(db.inTransaction());ReferenceStore.checkScope(db,scope)
+        try {
+            val identity=ReferenceStore.row(db,"reference_identity","uuid=?",arrayOf(containerUuid)) ?: fail(ReferenceError.UNKNOWN_IDENTITY)
+            require(identity.getString("dataset_uuid")==scope.dataset && identity.getString("kind")=="CONTAINER")
+            if(identity.isNull("live_handle"))fail(ReferenceError.UNKNOWN_IDENTITY)
+            val owner=identity.getString("owner_uuid");val medication=ReferenceStore.row(db,"reference_identity","uuid=?",arrayOf(owner))!!
+            require(medication.getString("dataset_uuid")==scope.dataset && medication.getString("kind")=="MEDICATION" && !medication.isNull("live_handle"))
+            val dao=database.dao();val box=dao.container(identity.getLong("live_handle"));require(box.medication_id==medication.getLong("live_handle"))
+            val first=ReferenceStore.row(db,"reference_event","subject_uuid=? ORDER BY revision LIMIT 1",arrayOf(containerUuid))
+                ?: return MeasureResult.Failure(MeasureError.MISSING_HISTORICAL_SNAPSHOT)
+            require(first.getString("dataset_uuid")==scope.dataset && !first.isNull("snapshot_uuid"))
+            val snapshot=ReferenceStore.row(db,"reference_snapshot","uuid=?",arrayOf(first.getString("snapshot_uuid")))!!
+            require(snapshot.getString("dataset_uuid")==scope.dataset && snapshot.getString("kind")=="PRESENTATION")
+            val frozen=PackageMeasurementPayload.read(snapshot.getString("payload_json"));require(frozen.sha256==snapshot.getString("payload_sha256"))
+            val result=frozen.stockScale();if(result is MeasureResult.Failure)return result
+            val scale=(result as MeasureResult.Success).value
+            require(box.capacity==scale.capacityQuanta.toDouble() && box.initial_used_amount==0.0)
+            val entries=dao.supplyForContainer(box.id);require(entries.size<=100000)
+            var used=0L;var previousId=0L;val deltas=ArrayList<Long>()
+            fun same(a:Quantity,b:Quantity)=a.unit==b.unit && a.meaning==b.meaning && a.value.compareTo(b.value)==0
+            for(entry in entries) {
+                require(entry.id>previousId && entry.used_delta.isFinite() && entry.used_delta!=0.0 && kotlin.math.abs(entry.used_delta)<=StockQuantum.MAX_QUANTA && entry.used_delta.toLong().toDouble()==entry.used_delta)
+                val delta=entry.used_delta.toLong();val allocation=ReferenceStore.row(db,"measured_allocation","ledger_entry_id=?",arrayOf(entry.id))!!
+                require(allocation.getString("dataset_uuid")==scope.dataset && allocation.getString("container_uuid")==containerUuid && allocation.getString("operation_uuid")==entry.operation_id)
+                val event=ReferenceStore.row(db,"reference_event","operation_uuid=?",arrayOf(allocation.getString("presentation_event_uuid")))!!
+                require(event.getString("dataset_uuid")==scope.dataset && event.getString("subject_uuid")==containerUuid && event.getString("snapshot_uuid")==snapshot.getString("uuid"))
+                val operation=ReferenceStore.row(db,"measured_operation","operation_uuid=?",arrayOf(entry.operation_id))!!
+                require(operation.getString("dataset_uuid")==scope.dataset && operation.getString("kind")==entry.kind)
+                val text=allocation.getString("quantity");val parsed=Measurements.parse(text);require(parsed is MeasureResult.Success)
+                require((Measurements.decimalText(parsed.value) as MeasureResult.Success).value==text && parsed.value.signum()>0)
+                require(allocation.getString("unit")==scale.quantum.unit.name)
+                val physical=Quantity(parsed.value,scale.quantum.unit,scale.quantum.meaning)
+                require(same(physical,amount(scale,kotlin.math.abs(delta))))
+                if(entry.kind!="ADJUST") {
+                    val record=ReferenceStore.row(db,"reference_identity","uuid=?",arrayOf(operation.getString("record_uuid")))!!
+                    require(record.getString("kind")=="RECORD" && record.getString("dataset_uuid")==scope.dataset && record.getString("owner_uuid")==owner && !record.isNull("live_handle") && record.getLong("live_handle")==entry.dose_record_id)
+                    require(operation.getInt("record_revision")==entry.dose_revision)
+                    require(dao.recordById(entry.dose_record_id!!)!!.revision>=operation.getInt("record_revision"))
+                }
+                when(entry.kind) {
+                    "CONSUME"->{
+                        require(delta>0 && allocation.isNull("reverses_uuid"))
+                        val envelope=JSONObject(operation.getString("input_json"));val request=MeasuredUsePayload.read(ReferencePayload.canonical(envelope.getJSONObject("request"))).request()
+                        require(request.medicationUuid==owner)
+                        val input=request.uses.single{it.containerUuid==containerUuid};require(input.presentationEventUuid==event.getString("operation_uuid") && input.presentationSha256==frozen.sha256)
+                        val expected=if(input.quantity.meaning==scale.quantum.meaning)Measurements.inUnit(input.quantity,scale.quantum.unit)
+                            else when(val converted=frozen.measurement().convert(input.quantity,scale.quantum.meaning,scale.quantum.unit,ActualPackage(scale.ref,true))) {
+                                is MeasureResult.Failure->converted
+                                is MeasureResult.Success->MeasureResult.Success(converted.value.quantity)
+                            }
+                        require(expected is MeasureResult.Success)
+                        val wanted=scale.toQuanta(expected.value,ActualPackage(scale.ref,true));require(wanted is MeasureResult.Success)
+                        val line=receipt(operation).lines.single{it.containerUuid==containerUuid};require(line is PhysicalUseResult.Known && same(line.requested,expected.value) && same(line.allocated,physical))
+                        val captures=envelope.getJSONArray("captures");val capture=(0 until captures.length()).map{captures.getJSONObject(it)}.single{it.getString("container_uuid")==containerUuid}
+                        require(capture.getString("snapshot_uuid")==snapshot.getString("uuid") && capture.getString("used_before_quanta")==used.toString() && capture.getString("take_quanta")==delta.toString())
+                        require(capture.getString("requested_quanta")==wanted.value.toString() && delta==minOf(wanted.value,scale.capacityQuanta-used))
+                        val count=db.query("SELECT COUNT(*) FROM measured_allocation WHERE operation_uuid=? AND container_uuid=?",arrayOf(entry.operation_id,containerUuid)).use{it.moveToFirst();it.getLong(0)};require(count==1L)
+                    }
+                    "ADJUST"->{
+                        require(entry.dose_record_id==null && entry.dose_revision==null && allocation.isNull("reverses_uuid"))
+                        val capture=adjustmentCapture(operation);val request=capture.request
+                        require(request.getString("container_uuid")==containerUuid && request.getString("medication_uuid")==owner && request.getString("presentation_event_uuid")==event.getString("operation_uuid") && request.getString("presentation_sha256")==frozen.sha256)
+                        require(capture.ledgerHead==previousId && request.getString("expected_used_quanta")==used.toString())
+                        val remaining=PackageMeasurementPayload.quantity(request.getJSONObject("remaining_stock"))
+                        val target=if(remaining.value.signum()==0) {require(Measurements.add(scale.quantum.copy(value=BigDecimal.ZERO),remaining) is MeasureResult.Success);0L}
+                            else {val n=scale.toQuanta(remaining,ActualPackage(scale.ref,true));require(n is MeasureResult.Success);n.value}
+                        require(request.getString("remaining_quanta")==target.toString() && delta==scale.capacityQuanta-target-used)
+                    }
+                    "REVERSE"->{
+                        require(delta<0 && !allocation.isNull("reverses_uuid"))
+                        val original=ReferenceStore.row(db,"measured_allocation","uuid=?",arrayOf(allocation.getString("reverses_uuid")))!!
+                        val source=ReferenceStore.row(db,"measured_operation","operation_uuid=?",arrayOf(original.getString("operation_uuid")))!!
+                        val prior=entries.single{it.id==original.getLong("ledger_entry_id")}
+                        require(original.getString("dataset_uuid")==scope.dataset && original.getString("container_uuid")==containerUuid && original.isNull("reverses_uuid"))
+                        require(original.getString("quantity")==text && original.getString("unit")==allocation.getString("unit") && original.getString("presentation_event_uuid")==event.getString("operation_uuid"))
+                        require(prior.kind=="CONSUME" && prior.id<entry.id && prior.used_delta== -entry.used_delta && entry.reversal_of_id==prior.id && entry.dose_record_id==prior.dose_record_id)
+                        val input=reverseCapture(operation)
+                        require(input.getString("kind")=="REVERSE" && input.getString("dataset_uuid")==scope.dataset && input.getString("medication_uuid")==owner && input.getString("record_uuid")==operation.getString("record_uuid") && input.getInt("record_revision")==operation.getInt("record_revision"))
+                        require(source.getString("kind")=="CONSUME" && source.getString("dataset_uuid")==scope.dataset && source.getString("record_uuid")==operation.getString("record_uuid") && input.getString("source_operation_uuid")==source.getString("operation_uuid") && input.getString("source_request_sha256")==source.getString("request_sha256"))
+                        val sourceIds=db.query("SELECT uuid FROM measured_allocation WHERE operation_uuid=? ORDER BY uuid",arrayOf(source.getString("operation_uuid"))).use{c->buildList{while(c.moveToNext())add(c.getString(0))}}
+                        val captured=input.getJSONArray("source_allocation_uuids");require(sourceIds==(0 until captured.length()).map{captured.getString(it)})
+                        val reversed=db.query("SELECT reverses_uuid FROM measured_allocation WHERE operation_uuid=? ORDER BY reverses_uuid",arrayOf(operation.getString("operation_uuid"))).use{c->buildList{while(c.moveToNext()){require(!c.isNull(0));add(c.getString(0))}}}
+                        require(sourceIds==reversed)
+
+                    }
+                    else->error("Unsupported measured ledger kind")
+                }
+                used+=delta;require(used in 0..scale.capacityQuanta);deltas+=delta;previousId=entry.id
+            }
+            val reduced=scale.restoredUsed(0,deltas);require(reduced is MeasureResult.Success && reduced.value==used)
+            val remaining=scale.remaining(used);require(remaining is MeasureResult.Success)
+            return MeasureResult.Success(AuditedStockProjection(containerUuid,frozen.sha256,used,remaining.value,box.used_amount==used.toDouble()),algorithm=StockQuantum.ALGORITHM)
+        } catch(e:ReferenceFailure){throw e} catch(e:Exception){fail(ReferenceError.INVALID_SOURCE)}
+    }
+
     private data class Plan(val input:ConfirmedStockUse,val container:ContainerEntity?,val snapshot:String,val scale:StockQuantum?,
         val requested:Quantity?,val wanted:Long?,val used:Long?,val take:Long,val issue:String?)
     private fun amount(scale:StockQuantum,n:Long)=scale.quantum.copy(value=scale.quantum.value.multiply(BigDecimal.valueOf(n)))
@@ -63,6 +164,22 @@ internal object MeasuredConsumptionStore {
         }
         return MeasuredConsumptionReceipt(row.getString("operation_uuid"),request.record.uuid,request.record.revision,lines,ReferencePayload.optional(row,"unknown_reason"))
     }
+    private fun reverseCapture(row:JSONObject):JSONObject = try {
+        val encoded=row.getString("input_json");val input=JSONObject(encoded)
+        require(input.keys().asSequence().toSet()==setOf("format","kind","dataset_uuid","medication_uuid","record_uuid","record_revision","source_operation_uuid","source_request_sha256","source_allocation_uuids"))
+        require(input.get("format") is Int && input.getInt("format")==1 && input.get("kind") is String && input.getString("kind")=="REVERSE")
+        require(input.get("record_revision") is Int && input.getInt("record_revision")>0 && input.getInt("record_revision")==row.getInt("record_revision"))
+        for(key in listOf("dataset_uuid","medication_uuid","record_uuid","source_operation_uuid"))require(input.get(key) is String && ReferencePayload.uuid(input.getString(key)))
+        require(input.get("source_request_sha256") is String && Regex("[0-9a-f]{64}").matches(input.getString("source_request_sha256")))
+        require(row.getString("kind")=="REVERSE" && input.getString("dataset_uuid")==row.getString("dataset_uuid") && input.getString("record_uuid")==row.getString("record_uuid"))
+        val allocations=input.getJSONArray("source_allocation_uuids");require(allocations.length()<=64)
+        val ids=(0 until allocations.length()).map{require(allocations.get(it) is String);allocations.getString(it).also{value->require(ReferencePayload.uuid(value))}}
+        require(ids==ids.sorted() && ids.distinct().size==ids.size)
+        require(ReferencePayload.canonical(input)==encoded && ReferencePayload.sha(encoded)==row.getString("request_sha256"))
+        require(row.isNull("unallocated_quantity") && row.isNull("unallocated_unit") && row.isNull("unknown_reason"))
+        input
+    } catch(e:Exception){fail(ReferenceError.INVALID_SOURCE)}
+
     private data class AdjustmentCapture(val request:JSONObject,val ledgerHead:Long)
     /** Stable user intent is distinct from the ledger head observed during the original execution. */
     private fun adjustmentCapture(row:JSONObject):AdjustmentCapture = try {

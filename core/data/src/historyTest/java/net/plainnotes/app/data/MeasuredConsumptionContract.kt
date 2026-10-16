@@ -318,4 +318,77 @@ abstract class MeasuredConsumptionContract {
         assertEquals(1.0,db.dao().container(foreign.container.id).used_amount,0.0)
     }
 
+    @Test fun readOnlyProjectionAuditsPhysicalAmountsFromFrozenLedgerEvidence()=runBlocking {
+        val m=med();val b=box(m);val r=record(m);consume(r,b,listOf(use(b)))
+        db.withTransaction {
+            val result=MeasuredConsumptionStore.auditProjection(db,b.scope,b.containerUuid)
+            assertTrue(result is MeasureResult.Success);val audit=(result as MeasureResult.Success).value
+            assertEquals(net.plainnotes.app.domain.stock.StockQuantum.ALGORITHM,result.algorithm)
+            assertEquals(1L,audit.usedQuanta);assertEquals(Quantity(BigDecimal("27.5"),MeasureUnit.TABLET,meaning),audit.remaining)
+            assertTrue(audit.cacheMatches);assertEquals(b.presentation.sha256,audit.presentationSha256)
+        }
+        assertEquals(r,db.dao().recordById(r.id));assertEquals(1,count("supply_transaction"))
+    }
+    @Test fun projectionReportsACacheMismatchWithoutRepairingOrRewritingAnything()=runBlocking {
+        val m=med();val b=box(m);consume(record(m),b,listOf(use(b)))
+        raw.execSQL("UPDATE supply_container SET used_amount=10 WHERE id=?",arrayOf(b.container.id))
+        val before=db.dao().container(b.container.id)
+        db.withTransaction {
+            val result=MeasuredConsumptionStore.auditProjection(db,b.scope,b.containerUuid)
+            assertTrue(result is MeasureResult.Success);val audit=(result as MeasureResult.Success).value
+            assertFalse(audit.cacheMatches);assertEquals(1L,audit.usedQuanta);assertEquals(BigDecimal("27.5"),audit.remaining.value)
+        }
+        assertEquals(before,db.dao().container(b.container.id));assertEquals(1,count("supply_transaction"))
+    }
+    @Test fun projectionRejectsAnUnpairedLegacyEntryInsideMeasuredStock()=runBlocking {
+        val m=med();val b=box(m)
+        db.withTransaction{db.dao().supply(SupplyEntryEntity(container_id=b.container.id,operation_id=UUID.randomUUID().toString(),kind="ADJUST",used_delta=1.0,created_utc=at.toEpochMilli(),created_zone="UTC"))}
+        rejects(ReferenceError.INVALID_SOURCE){db.withTransaction{MeasuredConsumptionStore.auditProjection(db,b.scope,b.containerUuid)}}
+        assertEquals(1.0,db.dao().container(b.container.id).used_amount,0.0);assertEquals(1,count("supply_transaction"));assertEquals(0,count("measured_allocation"))
+    }
+    @Test fun projectionAuditsCountConsumeAndInverseWithoutUsingCurrentMedicationStrength()=runBlocking {
+        val m=med();val b=box(m)
+        db.withTransaction{MeasuredConsumptionStore.adjustRemaining(db,b.scope,b.container,b.containerUuid,b.presentationEventUuid,b.presentation.sha256,
+            Quantity(BigDecimal("27.5"),MeasureUnit.TABLET,meaning),true,UUID.randomUUID().toString(),at)}
+        val r=record(m);val original=consume(r,b,listOf(use(b)))
+        db.withTransaction{MeasuredConsumptionStore.reverseOriginal(db,b.scope,r,original.operationUuid,UUID.randomUUID().toString(),at)}
+        db.dao().updateMedication(db.dao().medication(m).copy(name="SYNTHETIC current changed",dose_per_intake=999.0,container_capacity=999.0))
+        db.withTransaction {
+            val result=MeasuredConsumptionStore.auditProjection(db,b.scope,b.containerUuid)
+            assertTrue(result is MeasureResult.Success);val audit=(result as MeasureResult.Success).value
+            assertEquals(1L,audit.usedQuanta);assertEquals(BigDecimal("27.5"),audit.remaining.value);assertTrue(audit.cacheMatches)
+        }
+        assertEquals(r,db.dao().recordById(r.id));assertEquals(3,count("supply_transaction"))
+    }
+
+    @Test fun projectionChecksTheCompleteInverseSetAcrossTwoExplicitSources()=runBlocking {
+        val m=med();val a=box(m);val other=Meaning(QuantityKind.USE_COUNT,"SYNTHETIC 1mg tablet");val b=box(m,other,"1 mg / tablet")
+        val r=record(m);val original=consume(r,a,listOf(use(a),use(b,identity=other)))
+        db.withTransaction{MeasuredConsumptionStore.reverseOriginal(db,a.scope,r,original.operationUuid,UUID.randomUUID().toString(),at)}
+        db.withTransaction {
+            for(source in listOf(a,b)) {
+                val result=MeasuredConsumptionStore.auditProjection(db,a.scope,source.containerUuid)
+                assertTrue(result is MeasureResult.Success);val audit=(result as MeasureResult.Success).value
+                assertEquals(0L,audit.usedQuanta);assertEquals(BigDecimal("28"),audit.remaining.value);assertTrue(audit.cacheMatches)
+            }
+        }
+        assertEquals(4,count("supply_transaction"));assertEquals(4,count("measured_allocation"));assertEquals(r,db.dao().recordById(r.id))
+    }
+
+    @Test fun projectionRejectsAnIncompleteInverseEvenWhenAnotherContainerIsMissingEvidence()=runBlocking {
+        val m=med();val a=box(m);val other=Meaning(QuantityKind.USE_COUNT,"SYNTHETIC 1mg tablet");val b=box(m,other,"1 mg / tablet")
+        val r=record(m);val original=consume(r,a,listOf(use(a),use(b,identity=other)))
+        db.withTransaction{MeasuredConsumptionStore.reverseOriginal(db,a.scope,r,original.operationUuid,UUID.randomUUID().toString(),at)}
+        fun guards()=raw.query("SELECT name,sql FROM sqlite_master WHERE type='trigger' ORDER BY name").use{c->buildList{while(c.moveToNext())add(c.getString(0) to c.getString(1))}}
+        val beforeGuards=guards()
+        val missing=raw.query("SELECT uuid FROM measured_allocation WHERE container_uuid=? AND reverses_uuid IS NOT NULL",arrayOf(b.containerUuid)).use{it.moveToFirst();it.getString(0)}
+        // Deliberately craft an untrusted restore-state fixture using the existing atomic maintenance helper.
+        // Trusted guards are reinstalled before the read-only audit; no production guard is changed.
+        db.withTransaction{RawData.unguarded(raw){raw.execSQL("DELETE FROM measured_allocation WHERE uuid=?",arrayOf(missing))}}
+        assertEquals(beforeGuards,guards())
+        rejects(ReferenceError.INVALID_SOURCE){db.withTransaction{MeasuredConsumptionStore.auditProjection(db,a.scope,a.containerUuid)}}
+        assertEquals(0.0,db.dao().container(a.container.id).used_amount,0.0);assertEquals(0.0,db.dao().container(b.container.id).used_amount,0.0)
+        assertEquals(4,count("supply_transaction"));assertEquals(3,count("measured_allocation"));assertEquals(r,db.dao().recordById(r.id))
+    }
+
 }

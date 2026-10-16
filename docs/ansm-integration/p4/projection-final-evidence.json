@@ -1,0 +1,37 @@
+{
+  "base": "2d2a289731a871833b6a981fbb227d0f04e3d7fb",
+  "status": "PASS",
+  "data": {
+    "tests": 306,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "shared_contract": {
+    "tests": 32,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "native_test_compilation": "PASS",
+  "native_current_projection_execution": "PENDING_CI",
+  "python_guard": {
+    "tests": 157,
+    "status": "PASS"
+  },
+  "files": {
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt": "6c3bf29de479d4c86ac5d786d125d0df83cfeef1dfe75de4ddd436f583ae8f79",
+    "core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt": "bc38502b0471b8a1c0bb82348377db84c283b13463859158f605e631511cb5e3"
+  },
+  "log_sha256": "ec6f108ff95aa8f2c90cd72afa72c7e80f9cadec2d77b276729cd25df9ed5d00",
+  "prior_period_and_privacy": {
+    "source": "2d2a289731a871833b6a981fbb227d0f04e3d7fb",
+    "tests": 8,
+    "status": "PASS",
+    "current_unused_audit_addition_not_executed_by_these_tests": true
+  },
+  "negative_fixture": "Incomplete inverse for the other container crafted only in synthetic maintenance transaction; complete trusted trigger DDL restored and asserted equal; audit refuses without writes",
+  "backup_new_format_acceptance": "OFF",
+  "formal_inventory_entry": "NOT_IMPLEMENTED",
+  "physical_and_talkback": "NOT_RUN"
+}
