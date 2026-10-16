@@ -1,0 +1,24 @@
+{
+  "parent": "606696edbccd6583a50d1fc28d6ed8069b2fcb5c",
+  "production_paths_changed": [],
+  "parent_tree_objects": {
+    "app/src": "f5b99ddf98dba747b37bfc78f304cbc969caa28e",
+    "core/data/src/main": "0c1e6a90c9ff3ec187b91fbe00da2c98b2b62fe6",
+    "core/data/schemas": "50738fc2a0082470c151ce315e32937409642fb8",
+    "core/domain/src/main": "9fd5607c0578cd0924b5891ffcc98c45327664b9",
+    "core/reminder/src/main": "54ab91b15e125d3e6f791a9d562b950931f2e05f",
+    "pk-engine": "89136c2dbf33ec71a989350e99350f4dcd2ac00a",
+    "importer/src/main": "74113eeeb4e34dd78d6b1d2831c6c913ccbbbe95",
+    "docs/pk-model.md": "cb502ee0bf7fddf12ee11bc5d1cb70ba78227642"
+  },
+  "test_source_sha256": {
+    "core/domain/src/test/kotlin/net/plainnotes/app/domain/shadow/ShadowMeasurementAllocator.kt": "020106f11fa559b270cd347c6a51fc6d8970fc87ab36b9b25ed1ae28a4680eeb",
+    "core/domain/src/test/kotlin/net/plainnotes/app/domain/shadow/ShadowMeasurementAllocatorTest.kt": "7d4321e13aab55ee7c5f7e252d548a0a34cef71b0e0df8591ecb7edc9664479c",
+    "core/data/src/test/shared/java/net/plainnotes/app/data/Ansm03b0InventoryContract.kt": "4ec99de59188bd50d57d07f934bc96e65db48a6567966cdddbe21e403b46d1e4",
+    "core/data/src/test/shared/java/net/plainnotes/app/data/Ansm03b0CandidateStore.kt": "0a32d234e541fdd03b38dcf893afdb76b5a8c0bce80399c85fca47a4a02e18c4",
+    "core/data/src/test/java/net/plainnotes/app/data/Ansm03b0InventoryTest.kt": "97859c6165f5138a3dcca0600c53034d4aa83b7677831766461c14c3fde711c8",
+    "core/data/src/androidTest/java/net/plainnotes/app/data/Ansm03b0InventoryAndroidTest.kt": "ab4244b6c70ba2fc9f8c8078d9f6bcbee99375f8a30329df1bef1a9ce523b49e",
+    "core/reminder/src/test/java/net/plainnotes/app/reminder/Ansm03b0ForecastBoundaryTest.kt": "cff93e03bde61057a9c4bdc6481b2f012ad302662954e81fa9a2383dd5171b69"
+  },
+  "note": "Production paths compared to frozen parent, test sources identify locally exercised final adapter revision. Gradle/CI test wiring intentionally separate."
+}

@@ -67,7 +67,7 @@ class DataTransferTest {
         assertTrue(runBlocking { dao.medications() }.isEmpty())
         try { BackupCodec.decrypt(enc, "wrong password".toCharArray()); fail() } catch (_: BackupCodec.WrongPassword) {}
         val tables = JSONObject(String(BackupCodec.decrypt(enc, "correct horse".toCharArray()))).getJSONObject("tables")
-        runBlocking { db.withTransaction { RawData.restore(raw, tables) } }
+        runBlocking { db.withTransaction { RawData.restore(context, raw, tables) } }
         assertEquals(before.toString(), runBlocking { db.withTransaction { RawData.dump(raw) } }.toString())
         assertEquals(6.0, runBlocking { dao.container(c).used_amount }, 1e-9)
         // Guards are back after restore: the ledger stays append-only.
