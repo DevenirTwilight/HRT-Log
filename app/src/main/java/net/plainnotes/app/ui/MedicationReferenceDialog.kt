@@ -31,6 +31,7 @@ import java.time.LocalDate
 @Composable fun MedicationReferenceDialog(controller:MedicationReferenceController,onDismiss:()->Unit) {
     val state by controller.state.collectAsState()
     var query by remember {mutableStateOf("")};var form by remember {mutableStateOf("")};var route by remember {mutableStateOf("")}
+    var strengthFilter by remember {mutableStateOf("")}
     var editing by remember {mutableStateOf(false)}
     var preview by remember {mutableStateOf<UserReferenceProduct?>(null)}
     var confirm by remember {mutableStateOf(false)};var unlink by remember {mutableStateOf(false)}
@@ -58,8 +59,9 @@ import java.time.LocalDate
                 item {Text(stringResource(R.string.ref2_saved_library),style=MaterialTheme.typography.titleMedium,modifier=Modifier.semantics{heading()})}
                 item {ReferenceField(query,{query=it.take(256)},R.string.ref2_search,"reference-search")}
                 item {ReferenceField(form,{form=it.take(256)},R.string.ref2_filter_form,"reference-form-filter")}
+                item {ReferenceField(strengthFilter,{strengthFilter=it.take(256)},R.string.ref2_filter_strength,"reference-strength-filter")}
                 item {ReferenceField(route,{route=it.take(256)},R.string.ref2_filter_route,"reference-route-filter")}
-                item {Button(enabled=!state.busy && !state.loading,onClick={keyboard?.hide();controller.search(query,form,route)},modifier=Modifier.heightIn(min=48.dp).testTag("reference-search-go")){Text(stringResource(R.string.ref2_find))}}
+                item {Button(enabled=!state.busy && !state.loading,onClick={keyboard?.hide();controller.search(query,form,route,strengthFilter)},modifier=Modifier.heightIn(min=48.dp).testTag("reference-search-go")){Text(stringResource(R.string.ref2_find))}}
                 if(!state.loading && state.products.isEmpty())item {Text(stringResource(R.string.ref2_empty),modifier=Modifier.testTag("reference-empty"))}
                 if(state.limited)item {Text(stringResource(R.string.ref2_limited))}
                 state.products.forEach { entry->item(key=entry.snapshotUuid) {

@@ -1224,4 +1224,5 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="ref2_browse">Consulter les références (facultatif)</string>
 <string name="ref2_invalid">Vérifiez la date, la longueur des champs, CIS/CIP et URL. La date doit être valide et l’URL correspondre au CIS saisi.</string>
 <string name="ref2_identifiers">CIS %1$s · CIP %2$s</string>
+<string name="ref2_filter_strength">Dosage d’origine contenant (facultatif)</string>
 </resources>

@@ -31,11 +31,12 @@ data class SavedReferencePage(val entries: List<SavedReferenceProduct>, val limi
 internal object ReferenceSearch {
     private fun fold(value:String)=java.text.Normalizer.normalize(value,java.text.Normalizer.Form.NFD)
         .replace(Regex("\\p{M}+"),"").lowercase(java.util.Locale.ROOT).replace("œ","oe").replace("æ","ae")
-    fun matches(product:UserReferenceProduct,query:String,form:String,route:String):Boolean {
-        val name=fold(query.trim());val f=fold(form.trim());val r=fold(route.trim())
+    fun matches(product:UserReferenceProduct,query:String,form:String,route:String,strength:String=""):Boolean {
+        val name=fold(query.trim());val f=fold(form.trim());val r=fold(route.trim());val spec=fold(strength.trim())
         return (name.isEmpty() || (listOf(product.name)+product.ingredients).any { fold(it).contains(name) }) &&
             (f.isEmpty() || fold(product.form.orEmpty()).contains(f)) &&
-            (r.isEmpty() || product.routes.any {fold(it).contains(r)})
+            (r.isEmpty() || product.routes.any {fold(it).contains(r)}) &&
+            (spec.isEmpty() || fold(product.strength.orEmpty()).contains(spec))
     }
 }
 

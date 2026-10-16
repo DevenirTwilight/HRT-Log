@@ -22,3 +22,5 @@
 
 最终源8e910ee：data239、app62全PASS，0失败/错误/跳过；32组合×三档对比度=96配置、192张真实Dialog原生绘制合成图均非空，8张四语代表图入库，其余由CI收集。人工抽查en320/2x/dark/HIGH、fr320/2x/dark/HIGH、zh-CN411/1x/light/STANDARD及zh-TW411/2x/light/STANDARD，长名换行/原单位/身份/状态明确。不是实机或TalkBack证据。
 已普通合入父PR #54的1f8d150证据更新（仅文档）；#56仍是以feature为base的草稿，不得auto-merge到feature。CI集成计划：#48未修改.github，#54的现有原生类清单保持，只在同一android job设置截图环境并追加合成截图artifact路径，检查名和全部断言不变；真实最终CI待当前HEAD。
+
+对照负责人P2原始要求补齐原始规格筛选：仅原文包含搜索，不将2mg与2000µg自动视为同一商品。原先239/62证据仍对应8e910ee；新筛选变更单独重跑。

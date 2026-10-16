@@ -37,6 +37,9 @@ class ReferenceCatalogTest {
         assertEquals(setOf("00000001","00000002"),page.entries.map{it.product.cis}.toSet())
         assertEquals(setOf("user-v1","user-v2"),page.entries.map{it.product.sourceVersion}.toSet())
         assertEquals(1,repo.savedReferenceProducts(form="capsule").entries.size)
+        assertEquals("00000001",repo.savedReferenceProducts(strength="2 mg").entries.single().product.cis)
+        assertEquals("00000002",repo.savedReferenceProducts(strength="1 MG").entries.single().product.cis)
+        assertTrue(repo.savedReferenceProducts(strength="2000 µg").entries.isEmpty())
     }
     @Test fun boundedMatchingResultsStillSearchPastTheFirstTwoHundredStoredSnapshots()=runBlocking {
         val id=medication();val initial=repo.associateInitialMedication(id,UUID.randomUUID().toString(),product("SYNTHETIC entry-000"))

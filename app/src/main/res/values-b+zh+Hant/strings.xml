@@ -1224,4 +1224,5 @@
 <string name="ref2_browse">瀏覽商品資料（選填）</string>
 <string name="ref2_invalid">請檢查日期、欄位長度、CIS/CIP 和所提供的網址；日期必須有效，網址必須對應已填寫的 CIS。</string>
 <string name="ref2_identifiers">CIS %1$s · CIP %2$s</string>
+<string name="ref2_filter_strength">原始規格包含（選填）</string>
 </resources>

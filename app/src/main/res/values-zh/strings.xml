@@ -1224,4 +1224,5 @@
 <string name="ref2_browse">浏览商品资料（可选）</string>
 <string name="ref2_invalid">请检查日期、字段长度、CIS/CIP 和所提供的网址；日期必须有效，网址必须对应已填写的 CIS。</string>
 <string name="ref2_identifiers">CIS %1$s · CIP %2$s</string>
+<string name="ref2_filter_strength">原始规格包含（可选）</string>
 </resources>

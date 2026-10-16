@@ -34,15 +34,15 @@ const val BACKFILL_MAX_DAYS=731L
         }
     }
     /** Offline scan over immutable user-entered snapshots; bounded results, no product/name coalescing. */
-    suspend fun savedReferenceProducts(query:String="",form:String="",route:String=""):SavedReferencePage = transactionWithSql(Space.PRIMARY) { _,raw ->
-        require(listOf(query,form,route).all {it.length<=256})
+    suspend fun savedReferenceProducts(query:String="",form:String="",route:String="",strength:String=""):SavedReferencePage = transactionWithSql(Space.PRIMARY) { _,raw ->
+        require(listOf(query,form,route,strength).all {it.length<=256})
         val entries=mutableListOf<SavedReferenceProduct>()
         var limited=false
         raw.query("SELECT uuid,payload_json FROM reference_snapshot WHERE kind='PRODUCT' AND namespace='USER_ENTERED' ORDER BY uuid").use { cursor ->
             while(cursor.moveToNext()) {
                 kotlinx.coroutines.currentCoroutineContext().ensureActive()
                 val product=ReferencePayload.readProduct(JSONObject(cursor.getString(1)))
-                if(ReferenceSearch.matches(product,query,form,route)) {
+                if(ReferenceSearch.matches(product,query,form,route,strength)) {
                     if(entries.size==200) {limited=true;break}
                     entries+=SavedReferenceProduct(cursor.getString(0),product)
                 }

@@ -1224,4 +1224,5 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="ref2_browse">Browse product references (optional)</string>
 <string name="ref2_invalid">Check the date, field lengths, CIS/CIP and supplied URL. The date must be real and the URL must match the entered CIS.</string>
 <string name="ref2_identifiers">CIS %1$s · CIP %2$s</string>
+<string name="ref2_filter_strength">Original strength contains (optional)</string>
 </resources>

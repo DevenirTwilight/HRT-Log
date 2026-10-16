@@ -31,13 +31,13 @@ class MedicationReferenceController(private val repo:NotesRepository,private val
             catch(_:Exception){if(token==generation)mutable.value=mutable.value.copy(loading=false,failed=true)}
         }.also {load=it}
     }
-    fun search(query:String,form:String,route:String):Job? {
+    fun search(query:String,form:String,route:String,strength:String=""):Job? {
         if(mutable.value.busy || mutable.value.loading || (mutable.value.target!=null && mutable.value.current==null))return null
         load?.cancel();val token=++generation
         mutable.value=mutable.value.copy(loading=true,failed=false)
         return scope.launch {
             try {
-                val page=repo.savedReferenceProducts(query,form,route)
+                val page=repo.savedReferenceProducts(query,form,route,strength)
                 if(token==generation)mutable.value=mutable.value.copy(products=page.entries,limited=page.limited,loading=false)
             }catch(e:CancellationException){throw e}
             catch(_:Exception){if(token==generation)mutable.value=mutable.value.copy(loading=false,failed=true)}
