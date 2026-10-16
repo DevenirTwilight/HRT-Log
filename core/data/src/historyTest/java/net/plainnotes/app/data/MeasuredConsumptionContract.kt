@@ -194,4 +194,71 @@ abstract class MeasuredConsumptionContract {
         assertEquals(before.toString(),ReferenceStore.row(raw,"reference_snapshot","payload_sha256=?",arrayOf(b.presentation.sha256))!!.toString())
     }
 
+    @Test fun legacyReplacementAndDiscardCannotMutateMeasuredPackaging()=runBlocking {
+        val m=med();val b=box(m);consume(record(m),b,listOf(use(b)))
+        val before=db.dao().container(b.container.id)
+        val repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=db})
+        try{repo.replaceContainer(m,28.0);fail("Legacy replace closed a measured source")}
+        catch(e:IllegalArgumentException){assertTrue(e.message.orEmpty().contains("Measured"))}
+        try{repo.discardContainer(b.container.id);fail("Legacy discard bypassed explicit packaging identity")}
+        catch(e:IllegalArgumentException){assertTrue(e.message.orEmpty().contains("Measured"))}
+        assertEquals(before,db.dao().container(b.container.id));assertEquals(1,db.dao().containers().size)
+        assertEquals(1,count("supply_transaction"));assertEquals(1,count("measured_operation"))
+    }
+    @Test fun measurementIdentityDoesNotFollowAReusedIntegerHandle()=runBlocking {
+        val m=med();val b=box(m)
+        db.withTransaction{db.dao().deleteContainer(b.container.id)}
+        db.dao().insertContainer(ContainerEntity(id=b.container.id,medication_id=m,capacity=28.0,initial_used_amount=0.0,used_amount=0.0,state="SEALED"))
+        assertTrue(db.dao().measuredContainerIds().isEmpty())
+        val r=record(m);db.withTransaction{assertEquals(0.0,SupplyLedger.allocate(db.dao(),r),0.0)}
+        assertEquals(0.1,db.dao().container(b.container.id).used_amount,0.0)
+        assertEquals(1,count("reference_snapshot"));assertEquals(0,count("measured_operation"))
+    }
+    @Test fun legacyAllocationCannotReapplyAnAlreadyCapturedPhysicalUse()=runBlocking {
+        val m=med();val b=box(m);val r=record(m);consume(r,b,listOf(use(b)))
+        val old=db.dao().insertContainer(ContainerEntity(medication_id=m,capacity=28.0,initial_used_amount=0.0,used_amount=0.0,state="SEALED"))
+        try{db.withTransaction{SupplyLedger.allocate(db.dao(),r)};fail("Legacy allocation repeated an already measured use")}
+        catch(e:IllegalArgumentException){assertTrue(e.message.orEmpty().contains("Measured"))}
+        assertEquals(0.0,db.dao().container(old).used_amount,0.0);assertEquals(1.0,db.dao().container(b.container.id).used_amount,0.0)
+        assertEquals(r,db.dao().recordById(r.id));assertEquals(1,count("supply_transaction"))
+    }
+    @Test fun syntheticPumpStockUsesOnlyExplicitDirectedContentAndConfirmedCapacity()=runBlocking {
+        val m=med();val pump=Meaning(QuantityKind.USE_COUNT,"SYNTHETIC gel pump")
+        val active=Meaning(QuantityKind.ACTIVE_MASS,"SYNTHETIC estradiol")
+        fun q(value:String,unit:MeasureUnit,identity:Meaning)=Quantity(BigDecimal(value),unit,identity)
+        val draft=PackageMeasurementDraft(product.copy(name="SYNTHETIC pump gel",ingredients=listOf("SYNTHETIC estradiol"),strength="0.75 mg per pump"),MeasureUnit.PUMP,pump,"1","60",StockCapacityBasis.USER_COUNTED,
+            nominalTotal=q("80",MeasureUnit.G,Meaning(QuantityKind.FORMULATION,"SYNTHETIC gel")),nominalUses=q("64",MeasureUnit.PUMP,pump),
+            relations=listOf(DeclaredPackageContent(q("0.75",MeasureUnit.MG,active),q("1",MeasureUnit.PUMP,pump),"SYNTHETIC fixture evidence","synthetic directed inverse","2026-10-16","Explicit confirmed source only",true)))
+        val b=db.withTransaction{MeasuredContainerStore.create(db,ReferenceStore.previewEpoch(raw),m,UUID.randomUUID().toString(),draft,at)}
+        val first=record(m)
+        val mass=ConfirmedStockUse(b.containerUuid,b.presentationEventUuid,b.presentation.sha256,q("1.5",MeasureUnit.MG,active),true)
+        val result=consume(first,b,listOf(mass)).lines.single() as PhysicalUseResult.Known
+        assertEquals(q("2",MeasureUnit.PUMP,pump),result.allocated)
+        val second=record(m);consume(second,b,listOf(mass.copy(quantity=q("1",MeasureUnit.PUMP,pump))))
+        assertEquals(60.0,db.dao().container(b.container.id).capacity,0.0);assertEquals(3.0,db.dao().container(b.container.id).used_amount,0.0)
+        assertEquals(first,db.dao().recordById(first.id));assertEquals(second,db.dao().recordById(second.id))
+        val third=record(m)
+        val ester=consume(third,b,listOf(mass.copy(quantity=q("1.5",MeasureUnit.MG,Meaning(QuantityKind.ACTIVE_MASS,"SYNTHETIC estradiol ester"))))).lines.single() as PhysicalUseResult.Unknown
+        assertEquals("INSUFFICIENT_SOURCE",ester.reason);assertEquals(3.0,db.dao().container(b.container.id).used_amount,0.0)
+    }
+
+    @Test fun reverseCannotRewriteALaterConfirmedRemainingObservation()=runBlocking {
+        val m=med();val b=box(m);val r=record(m);val original=consume(r,b,listOf(use(b)))
+        db.withTransaction{MeasuredConsumptionStore.adjustRemaining(db,b.scope,db.dao().container(b.container.id),b.containerUuid,b.presentationEventUuid,b.presentation.sha256,
+            Quantity(BigDecimal("27"),MeasureUnit.TABLET,meaning),true,UUID.randomUUID().toString(),at)}
+        val before=db.dao().container(b.container.id)
+        rejects(ReferenceError.OPERATION_CONFLICT){db.withTransaction{MeasuredConsumptionStore.reverseOriginal(db,b.scope,r,original.operationUuid,UUID.randomUUID().toString(),at)}}
+        assertEquals(before,db.dao().container(b.container.id));assertEquals(2,count("supply_transaction"));assertEquals(2,count("measured_operation"))
+        assertEquals(r,db.dao().recordById(r.id))
+    }
+
+    @Test fun noOpRemainingObservationAlsoRequiresReconciliationBeforeAnInverse()=runBlocking {
+        val m=med();val b=box(m);val r=record(m);val original=consume(r,b,listOf(use(b)))
+        db.withTransaction{MeasuredConsumptionStore.adjustRemaining(db,b.scope,db.dao().container(b.container.id),b.containerUuid,b.presentationEventUuid,b.presentation.sha256,
+            Quantity(BigDecimal("27.5"),MeasureUnit.TABLET,meaning),true,UUID.randomUUID().toString(),at)}
+        assertEquals(1,count("supply_transaction"));assertEquals(2,count("measured_operation"))
+        rejects(ReferenceError.OPERATION_CONFLICT){db.withTransaction{MeasuredConsumptionStore.reverseOriginal(db,b.scope,r,original.operationUuid,UUID.randomUUID().toString(),at)}}
+        assertEquals(1.0,db.dao().container(b.container.id).used_amount,0.0);assertEquals(1,count("supply_transaction"));assertEquals(r,db.dao().recordById(r.id))
+    }
+
 }

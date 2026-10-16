@@ -37,3 +37,7 @@ Room12检查点0843450六项CI在push/PR全部SUCCESS；当前仍DRAFT，不以�
 共享消耗12合同在701fb52本地完整data286及原生测试源码编译均PASS（不是原生运行PASS）。新增回执负向合同先红：字符串版本号被误接受（Expected INVALID_SOURCE）；改严格类型/封闭字段/规范整数/范围/UUID后13合同全部PASS，7种伪造载荷均拒绝且原消费不变，机器证据receipt-red/green-evidence.json。未来备份仍需按不可变包装/分配/原流水交叉验证，不能只靠此结构解析。
 
 旧路径首轮3个负向合同实际FAIL（旧分配扣了新包装0.1刻度、旧剩余量接受刻度、药物resize把56刻度改100），证据legacy-isolation-red-evidence.json。随后按容器历史PRESENTATION稳定身份排除旧分配/resize，并拒绝旧修改/冲销入口处理计量记录；正式旧标量历史不重写。完整data290（共享消耗16）零失败/错误/跳过，原生编译PASS，Python157 PASS，逐文件摘要见legacy-isolation-green-evidence.json。此前“旧SupplyLedger未修改”是历史检查点，本次开始明确的旧路径隔离改动，非正式入口启用。剩余replace/discard旧入口隔离、备份/预测/修订UI仍待完成。
+
+更换包装入口负向测试先红（旧replace确实关闭计量来源），补require保护与旧discard保护后共享20合同PASS。新增删除后整数ID复用仍走旧模式、已计量记录不得再旧分配、明确有向mg→泵换算/用户60泵而标签64泵、不同酯来源不足拒绝均PASS；证据replacement-red/green-evidence.json。新增手工实盘后逆操作不得改写实盘结果的负向测试正在运行，尚未记PASS。
+
+原量冲销会覆盖后续实盘的负向测试实际FAIL（Expected OPERATION_CONFLICT）；现对受影响容器任何ADJUST观察保守拒绝新的逆操作，包括没有流水差额的实盘，同UUID已成功逆操作仍可重放。完整data296（共享22）与原生源码编译PASS，Python157 PASS；Period/Privacy本轮仍待完成。观察发生在消费之前也暂时保守阻断，不能声称完整协调已实现；下一步为明确账本因果锚与请求/执行捕获分离，避免依赖时钟。证据observation-red/green-evidence.json与observation-reconciliation.md。

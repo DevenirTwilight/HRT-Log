@@ -736,13 +736,18 @@ const val BACKFILL_MAX_DAYS=731L
     /** Closes the open container(s) of a medication and opens a sealed one (or a new one with [capacity]). */
     suspend fun replaceContainer(medicationId:Long,capacity:Double)=transaction { dao ->
         val all=dao.containers().filter{it.medication_id==medicationId}
+        val measured=dao.measuredContainerIds().toSet()
+        require(all.none{it.id in measured}) { "Measured containers require explicit package replacement" }
         all.filter{it.state=="IN_USE"}.forEach{dao.setContainerState(it.id,if(it.capacity-it.used_amount<=1e-9)"EMPTY" else "DISCARDED",it.opened_on)}
         val sealed=all.filter{it.state=="SEALED"}.minByOrNull{it.id}
         if(sealed!=null)dao.setContainerState(sealed.id,"IN_USE",LocalDate.now().toString())
         else dao.insertContainer(ContainerEntity(medication_id=medicationId,capacity=capacity,initial_used_amount=0.0,used_amount=0.0,opened_on=LocalDate.now().toString(),state="IN_USE"))
     }
     suspend fun setRemaining(containerId:Long,remaining:Double)=transaction { SupplyLedger.setRemaining(it,containerId,remaining) }
-    suspend fun discardContainer(containerId:Long)=transaction { dao -> val c=dao.container(containerId);require(c.state!="VOIDED");dao.setContainerState(c.id,"DISCARDED",c.opened_on) }
+    suspend fun discardContainer(containerId:Long)=transaction { dao ->
+        require(containerId !in dao.measuredContainerIds()) { "Measured container requires explicit package discard" }
+        val c=dao.container(containerId);require(c.state!="VOIDED");dao.setContainerState(c.id,"DISCARDED",c.opened_on)
+    }
     /**
      * B4 "check stock": sets what is really left in an open or used-up package through the ledger's ADJUST entry. A
      * used-up package with something left becomes open again; no package is created, no dose record changes. Sealed

@@ -102,6 +102,14 @@ internal object MeasuredConsumptionStore {
             MeasureUnit.valueOf(a.getString("unit"))
             Triple(a,entry,box)
         }
+        // A remaining count is a separate observed fact, including no-op counts with no ledger delta.
+        // Without an explicit reconciliation contract, do not infer whether it precedes/follows use from clocks.
+        // Conservatively require reconciliation for any count history of an affected container.
+        val affected=originals.map{it.first.getString("container_uuid")}.toSet()
+        db.query("SELECT input_json FROM measured_operation WHERE dataset_uuid=? AND kind='ADJUST'",arrayOf(scope.dataset)).use {c->while(c.moveToNext()) {
+            val counted=try{JSONObject(c.getString(0)).getString("container_uuid")}catch(e:Exception){fail(ReferenceError.INVALID_SOURCE)}
+            if(counted in affected)fail(ReferenceError.OPERATION_CONFLICT)
+        }}
         ReferenceStore.insert(db,"measured_operation",JSONObject().put("operation_uuid",operationUuid).put("dataset_uuid",scope.dataset).put("record_uuid",record)
             .put("record_revision",current.revision).put("kind","REVERSE").put("request_sha256",hash).put("input_json",canonical)
             .put("unallocated_quantity",JSONObject.NULL).put("unallocated_unit",JSONObject.NULL).put("unknown_reason",JSONObject.NULL).put("created_utc",created.toEpochMilli()))
