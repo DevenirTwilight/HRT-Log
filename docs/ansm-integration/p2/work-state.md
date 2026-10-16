@@ -32,3 +32,5 @@
 真实历史来源UI已接入HistoryRecordDialogs的只读入口，捕获选择记录时的ExtraState.referenceEpoch，DAO同一事务读取记录与epoch；不在异步按钮执行时重取新数据集票据。历史来源窗口保留原始版本、明确参考背景不代表实际包装；旧记录未记录来源不补填当前引用。新增四语320dp/2x的冻结来源/无来源/恢复后拒绝/原编辑窗口入口测试12项；最新回归待运行，P1历史接口237数据/原生24项编译已PASS。
 
 历史四语新增测试首轮12项中4项FAIL：fixture只设active=false仍保留已生效rule，NotesViewModel正常reconcile生成AUTO_MISSED，导致“single record”断言失败。改为创建无计划的合成历史药物（saveMedication active=false），保留记录数量/原内容相等断言；12项定向重跑PASS。未改变生产reconcile。另复核旋转期间在途写入：控制器open改为busy时返回null，保留原事务/目标且AppShell不重新打开错误目标；原真实阻塞测试追加拒绝open及状态完全相等断言。
+
+最终源6697747：data243/app75全PASS，零失败/错误/跳过，含真实历史UI12项、控制器7项、四语UI16项、矩阵32项、Period5与Privacy3；96配置192图，8张代表图和全量摘要已更新。最新人工抽查zh-CN320dp/2x/dark/HIGH，未冒充真机或TalkBack。合成fixture首轮4失败保留在工作记录，不删除断言。普通合入父PR最新945512a（含已合并#45/#48冻结资源及debug原型）；最终整合CI尚待执行。#56仍是feature base草稿，不能合进feature，需父PR #54合入默认后改base并按保护检查自动合并。

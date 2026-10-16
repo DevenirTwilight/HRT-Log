@@ -1,5 +1,5 @@
 {
-  "tested_source": "8e910eedb72114d7432597c7a5256a9306937ae6",
+  "tested_source": "66977474eb967412570c567ff07c02bcd17d7e82",
   "renderer": "Robolectric API35 native graphics / actual Dialog window / Canvas",
   "synthetic_only": true,
   "configurations": 96,
