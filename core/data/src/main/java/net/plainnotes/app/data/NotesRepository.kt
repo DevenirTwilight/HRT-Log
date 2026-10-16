@@ -351,7 +351,10 @@ const val BACKFILL_MAX_DAYS=731L
         require(value.name.isNotBlank() && value.dose_per_intake.isFinite() && value.dose_per_intake>0)
         val zone=ZoneId.systemDefault();reconcile(dao,effectiveNow,zone)
         val id=if(value.id==0L)dao.insertMedication(value) else {dao.updateMedication(value);value.id}
-        if(resizeContainers) resizableContainers(dao.containers(),id,value.container_capacity).forEach{dao.setContainerCapacity(it.id,value.container_capacity)}
+        if(resizeContainers) {
+            val measured=dao.measuredContainerIds().toSet()
+            resizableContainers(dao.containers().filter{it.id !in measured},id,value.container_capacity).forEach{dao.setContainerCapacity(it.id,value.container_capacity)}
+        }
         val cut=effectiveNow.toEpochMilli()
         val newProfile=profileFor(id,value,ester,pk)
         val snapshot=MedicationSnapshot.encode(value,newProfile)

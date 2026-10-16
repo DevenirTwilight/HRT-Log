@@ -1,0 +1,13 @@
+{
+  "base_source": "701fb522d574facac6895d4a052f221ed2ab7030",
+  "status": "PASS",
+  "suite": "MeasuredConsumptionStoreTest",
+  "tests": 13,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "negative_mutations": 7,
+  "log_sha256": "50d2841135885d8aa9a94d3859baf00060651ffaa9b51d7b09423e957b10e736",
+  "scope": "JVM only, native pending; candidate receipt parser strictness, not full backup validation",
+  "parser_sha256": "0250deb85bf9c70e9f32e9a36987c9ab09210ad6153ca1ee3201d7d1bef8ef96"
+}

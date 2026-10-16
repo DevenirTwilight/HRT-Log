@@ -30,16 +30,33 @@ internal object MeasuredConsumptionStore {
         .put("take_quanta",p.take.toString()).put("issue",p.issue ?: JSONObject.NULL)
     private fun receipt(row:JSONObject):MeasuredConsumptionReceipt = try {readReceipt(row)} catch(e:Exception){fail(ReferenceError.INVALID_SOURCE)}
     private fun readReceipt(row:JSONObject):MeasuredConsumptionReceipt {
-        val envelope=JSONObject(row.getString("input_json"));val request=MeasuredUsePayload.read(ReferencePayload.canonical(envelope.getJSONObject("request"))).request()
-        if(ReferencePayload.canonical(envelope)!=row.getString("input_json") || envelope.getInt("format")!=1 ||
+        fun keys(value:JSONObject,expected:Set<String>)=require(value.keys().asSequence().toSet()==expected)
+        fun text(value:JSONObject,key:String):String {require(value.get(key) is String);return value.getString(key)}
+        fun quanta(value:JSONObject,key:String):Long {
+            val token=text(value,key);require(Regex("0|[1-9][0-9]{0,15}").matches(token))
+            return token.toLong().also{require(it<=StockQuantum.MAX_QUANTA)}
+        }
+        val envelope=JSONObject(row.getString("input_json"));keys(envelope,setOf("format","request","captures"))
+        val request=MeasuredUsePayload.read(ReferencePayload.canonical(envelope.getJSONObject("request"))).request()
+        if(ReferencePayload.canonical(envelope)!=row.getString("input_json") || envelope.get("format") !is Int || envelope.getInt("format")!=1 || row.getString("kind")!="CONSUME" ||
             ReferencePayload.sha(ReferencePayload.canonical(envelope.getJSONObject("request")))!=row.getString("request_sha256") ||
             row.getString("dataset_uuid")!=request.datasetUuid || row.getString("record_uuid")!=request.record.uuid || row.getInt("record_revision")!=request.record.revision)fail(ReferenceError.INVALID_SOURCE)
         val captures=envelope.getJSONArray("captures");require(captures.length()==request.uses.size)
         val lines=request.uses.mapIndexed {i,input->
-            val c=captures.getJSONObject(i);require(c.getString("container_uuid")==input.containerUuid && c.getString("presentation_event_uuid")==input.presentationEventUuid)
-            if(c.isNull("requested_stock"))PhysicalUseResult.Unknown(input.containerUuid,input.quantity,c.getString("issue"))
-            else {
-                val q=PackageMeasurementPayload.quantity(c.getJSONObject("requested_stock"));val wanted=BigDecimal(c.getString("requested_quanta"));val take=BigDecimal(c.getString("take_quanta"));require(wanted.signum()>0 && take.signum()>=0 && take<=wanted)
+            val c=captures.getJSONObject(i)
+            keys(c,setOf("container_uuid","presentation_event_uuid","snapshot_uuid","requested_stock","requested_quanta","used_before_quanta","take_quanta","issue"))
+            require(text(c,"container_uuid")==input.containerUuid && text(c,"presentation_event_uuid")==input.presentationEventUuid)
+            require(ReferencePayload.uuid(text(c,"snapshot_uuid")))
+            if(!c.isNull("used_before_quanta"))quanta(c,"used_before_quanta")
+            val takeCount=quanta(c,"take_quanta")
+            val issue=if(c.isNull("issue"))null else text(c,"issue").also{require(it.isNotBlank() && it.length<=128)}
+            if(c.isNull("requested_stock")) {
+                require(c.isNull("requested_quanta") && takeCount==0L && issue!=null)
+                PhysicalUseResult.Unknown(input.containerUuid,input.quantity,issue)
+            } else {
+                val q=PackageMeasurementPayload.quantity(c.getJSONObject("requested_stock"));require(q.value.signum()>0)
+                val wantedCount=quanta(c,"requested_quanta");require(wantedCount>0 && takeCount<=wantedCount)
+                val wanted=BigDecimal.valueOf(wantedCount);val take=BigDecimal.valueOf(takeCount)
                 val allocated=q.copy(value=if(take.signum()==0)BigDecimal.ZERO else q.value.multiply(take).divide(wanted).stripTrailingZeros())
                 PhysicalUseResult.Known(input.containerUuid,q,allocated,q.copy(value=q.value.subtract(allocated.value).stripTrailingZeros()))
             }

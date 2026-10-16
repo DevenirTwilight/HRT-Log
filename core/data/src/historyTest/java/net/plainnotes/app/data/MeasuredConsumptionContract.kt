@@ -144,4 +144,54 @@ abstract class MeasuredConsumptionContract {
         assertEquals(before,count("measured_operation"));assertEquals(current,db.dao().container(b.container.id))
     }
 
+    @Test fun malformedFrozenReceiptsCannotBeAcceptedAsSuccessfulRetries()=runBlocking {
+        val m=med();val b=box(m);val r=record(m);val original=consume(r,b,listOf(use(b)))
+        val row=ReferenceStore.row(raw,"measured_operation","operation_uuid=?",arrayOf(original.operationUuid))!!
+        val mutations:List<(org.json.JSONObject)->Unit> = listOf(
+            {it.put("format","1")},
+            {it.put("unexpected",true)},
+            {it.getJSONArray("captures").getJSONObject(0).put("take_quanta","0e0")},
+            {it.getJSONArray("captures").getJSONObject(0).put("requested_quanta","01")},
+            {it.getJSONArray("captures").getJSONObject(0).put("used_before_quanta","9007199254740992")},
+            {it.getJSONArray("captures").getJSONObject(0).put("snapshot_uuid","not-a-uuid")},
+            {it.getJSONArray("captures").getJSONObject(0).put("unknown_extra",true)},
+        )
+        for(mutate in mutations){
+            val input=org.json.JSONObject(row.getString("input_json"));mutate(input)
+            val op=UUID.randomUUID().toString();val forged=org.json.JSONObject(row.toString()).put("operation_uuid",op).put("input_json",ReferencePayload.canonical(input))
+            db.withTransaction{ReferenceStore.insert(raw,"measured_operation",forged)}
+            rejects(ReferenceError.INVALID_SOURCE){consume(r,b,listOf(use(b)),op)}
+        }
+        assertEquals(1,count("supply_transaction"));assertEquals(1.0,db.dao().container(b.container.id).used_amount,0.0)
+    }
+
+    @Test fun legacyAllocationMustSkipMeasuredContainersWhileKeepingLegacyBehavior()=runBlocking {
+        val m=med();val b=box(m)
+        val old=db.dao().insertContainer(ContainerEntity(medication_id=m,capacity=28.0,initial_used_amount=0.0,used_amount=0.0,state="SEALED"))
+        val r=record(m)
+        db.withTransaction{assertEquals(0.0,SupplyLedger.allocate(db.dao(),r),0.0)}
+        assertEquals(0.0,db.dao().container(b.container.id).used_amount,0.0)
+        assertEquals(0.1,db.dao().container(old).used_amount,0.0)
+        assertEquals(old,db.dao().supplyFor(r.id).single().container_id)
+    }
+    @Test fun legacyAdjustmentAndReverseMustRefuseMeasuredHistory()=runBlocking {
+        val m=med();val b=box(m)
+        try{db.withTransaction{SupplyLedger.setRemaining(db.dao(),b.container.id,27.5)};fail("Legacy correction accepted internal quanta")}
+        catch(e:IllegalArgumentException){assertTrue(e.message.orEmpty().contains("Measured"))}
+        val r=record(m);consume(r,b,listOf(use(b)))
+        try{db.withTransaction{SupplyLedger.reverse(db.dao(),r.id)};fail("Legacy reverse omitted frozen measurement evidence")}
+        catch(e:IllegalArgumentException){assertTrue(e.message.orEmpty().contains("Measured"))}
+        assertEquals(1.0,db.dao().container(b.container.id).used_amount,0.0);assertEquals(1,count("supply_transaction"))
+    }
+    @Test fun legacyMedicationResizeMustLeaveFrozenPackagingUntouched()=runBlocking {
+        val m=med();val b=box(m)
+        val old=db.dao().insertContainer(ContainerEntity(medication_id=m,capacity=28.0,initial_used_amount=0.0,used_amount=0.0,state="SEALED"))
+        val before=ReferenceStore.row(raw,"reference_snapshot","payload_sha256=?",arrayOf(b.presentation.sha256))!!
+        val repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=db})
+        repo.saveMedication(db.dao().medication(m).copy(container_capacity=100.0),null,net.plainnotes.app.domain.RuleKind.EVERY_N_DAYS,1,listOf(java.time.LocalTime.NOON),emptySet(),at,resizeContainers=true)
+        assertEquals(56.0,db.dao().container(b.container.id).capacity,0.0)
+        assertEquals(100.0,db.dao().container(old).capacity,0.0)
+        assertEquals(before.toString(),ReferenceStore.row(raw,"reference_snapshot","payload_sha256=?",arrayOf(b.presentation.sha256))!!.toString())
+    }
+
 }

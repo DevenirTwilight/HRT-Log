@@ -33,3 +33,7 @@ Room12检查点0843450六项CI在push/PR全部SUCCESS；当前仍DRAFT，不以�
 源7320a89新增精确消耗/原量冲销/实际剩余调整的12项合成Room事务测试及Python157项边界守卫PASS。旧剂量原始Double位仅保留上下文，物理库存量独立；重复op冲突拒绝，调整CAS拒绝覆盖并发实际消耗，零量也检查量纲，原量逆操作与分配故障完整回滚。证据consumption-local-evidence.json。当前将同12项抽到historyTest共享合同，JVM改用真实文件库，SQLCipher原生类与CI只追加清单；完整回归/原生执行尚待本次新源码结果。没有启用正式入口、备份格式接受或预测。主线f1e9b4d六项检查已全部成功。
 
 0843450远端报告已下载并核对GitHub摘要/ZIP CRC：API26数据127、API29数据127、API35数据194，均零失败/跳过；每个API均包含引用21/迁移6/容器10合同。App1379零失败205条件跳过/data268/reminder20/PK40，机器证据room12-ci-evidence.json。该源不含后续消耗适配器，不能套用为最新代码验收。新共享合同完整JVM数据286全部通过（零失败/错误/跳过）；原生编译待结束，原生新增12合同尚未执行。
+
+共享消耗12合同在701fb52本地完整data286及原生测试源码编译均PASS（不是原生运行PASS）。新增回执负向合同先红：字符串版本号被误接受（Expected INVALID_SOURCE）；改严格类型/封闭字段/规范整数/范围/UUID后13合同全部PASS，7种伪造载荷均拒绝且原消费不变，机器证据receipt-red/green-evidence.json。未来备份仍需按不可变包装/分配/原流水交叉验证，不能只靠此结构解析。
+
+旧路径首轮3个负向合同实际FAIL（旧分配扣了新包装0.1刻度、旧剩余量接受刻度、药物resize把56刻度改100），证据legacy-isolation-red-evidence.json。随后按容器历史PRESENTATION稳定身份排除旧分配/resize，并拒绝旧修改/冲销入口处理计量记录；正式旧标量历史不重写。完整data290（共享消耗16）零失败/错误/跳过，原生编译PASS，Python157 PASS，逐文件摘要见legacy-isolation-green-evidence.json。此前“旧SupplyLedger未修改”是历史检查点，本次开始明确的旧路径隔离改动，非正式入口启用。剩余replace/discard旧入口隔离、备份/预测/修订UI仍待完成。
