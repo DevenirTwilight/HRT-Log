@@ -109,7 +109,7 @@ class UiPrefs(context: Context) {
     var appointment by remember { mutableStateOf(false) }
     val medicationDialogs = remember { MedicationDialogs() }
     var referenceOpen by remember {mutableStateOf(false)}
-    fun openReference(medication:net.plainnotes.app.data.MedicationEntity?){model.medicationReferences.open(medication?.id);referenceOpen=true}
+    fun openReference(medication:net.plainnotes.app.data.MedicationEntity?){if(model.medicationReferences.open(medication?.id)!=null)referenceOpen=true}
     val labDialogs = remember { LabDialogs() }
     var pickStart by remember { mutableStateOf(false) }
     val today = LocalDate.now()

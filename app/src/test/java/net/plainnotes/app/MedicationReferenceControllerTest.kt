@@ -26,29 +26,29 @@ class MedicationReferenceControllerTest {
     private suspend fun linkInitial(id:Long,value:UserReferenceProduct)=repo.associateInitialMedication(id,UUID.randomUUID().toString(),value,repo.medicationReferenceState(id).previewEpoch)
     private fun count(table:String)=db.openHelper.writableDatabase.query("SELECT COUNT(*) FROM `$table`").use{it.moveToFirst();it.getInt(0)}
     @Test fun openingSearchingAndCancellingMakesNoReferenceWrites()=runBlocking {
-        val id=med();controller.open(id).join();controller.search("SYNTHETIC","","")!!.join();assertTrue(controller.close())
+        val id=med();controller.open(id)!!.join();controller.search("SYNTHETIC","","")!!.join();assertTrue(controller.close())
         assertEquals(0,count("reference_dataset"));assertEquals(0,count("reference_event"));assertEquals(1,count("medication"))
     }
     @Test fun actualConfirmationUnlinkAndReopenPreserveMedicationStockAndRecordContext()=runBlocking {
         val id=med();repo.addContainers(id,28.0,1,true);repo.unscheduled(id,Instant.parse("2026-03-28T13:00:00Z"),0.5)
         val beforeProfile=repo.profile(id);assertNotNull(beforeProfile);val beforeMed=db.dao().medication(id);val beforeContainers=repo.containers();val beforeRecords=repo.records()
-        controller.open(id).join();controller.confirm(product)!!.join();assertTrue(controller.state.value.saved)
+        controller.open(id)!!.join();controller.confirm(product)!!.join();assertTrue(controller.state.value.saved)
         assertEquals(product,repo.medicationReferenceState(id).reference!!.product)
-        controller.close();controller.open(id).join();assertEquals(product,controller.state.value.current!!.reference!!.product)
+        controller.close();controller.open(id)!!.join();assertEquals(product,controller.state.value.current!!.reference!!.product)
         controller.confirm(null)!!.join();assertNull(repo.medicationReferenceState(id).reference!!.product)
         assertEquals(beforeProfile,repo.profile(id));assertEquals(beforeMed,db.dao().medication(id));assertEquals(beforeContainers,repo.containers());assertEquals(beforeRecords,repo.records())
         assertEquals(1,count("medication"));assertEquals(2,count("reference_event"))
     }
     @Test fun staleEditorCannotOverwriteNewerAssociationAndReloadIsExplicit()=runBlocking {
-        val id=med();controller.open(id).join()
+        val id=med();controller.open(id)!!.join()
         linkInitial(id,product.copy(sourceVersion="other-editor"))
         controller.confirm(product)!!.join();assertTrue(controller.state.value.failed);assertTrue(controller.state.value.stale)
         assertNull(controller.confirm(product));assertEquals(1,count("reference_event"))
-        controller.open(id).join();controller.confirm(product)!!.join();assertTrue(controller.state.value.saved);assertEquals(2,count("reference_event"))
+        controller.open(id)!!.join();controller.confirm(product)!!.join();assertTrue(controller.state.value.saved);assertEquals(2,count("reference_event"))
     }
     @Test fun backupRestoreRetiresOpenEditorWithoutChangingImportedReference()=runBlocking {
         val id=med();linkInitial(id,product)
-        val archive=repo.exportBackup("SYNTHETIC-password".toCharArray());controller.open(id).join()
+        val archive=repo.exportBackup("SYNTHETIC-password".toCharArray());controller.open(id)!!.join()
         repo.restoreBackup(archive,"SYNTHETIC-password".toCharArray())
         controller.confirm(product.copy(sourceVersion="stale-change"))!!.join();assertTrue(controller.state.value.stale)
         assertEquals(product,repo.medicationReferenceState(id).reference!!.product);assertEquals(1,count("reference_event"))
@@ -61,16 +61,18 @@ class MedicationReferenceControllerTest {
             if(block.get()){entered.countDown();check(release.await(5,java.util.concurrent.TimeUnit.SECONDS))}
             return db
         }})
-        val control=MedicationReferenceController(guarded,scope);control.open(id).join();block.set(true)
+        val control=MedicationReferenceController(guarded,scope);control.open(id)!!.join();block.set(true)
         val first=control.confirm(product)!!
         try {
             assertTrue(entered.await(5,java.util.concurrent.TimeUnit.SECONDS));assertTrue(control.state.value.busy)
             assertNull(control.confirm(product));assertFalse(control.close())
+            val pending=control.state.value
+            assertNull(control.open(null));assertEquals(pending,control.state.value)
         }finally{release.countDown()}
         first.join();assertTrue(control.state.value.saved);assertEquals(1,count("reference_event"));assertEquals(1,count("medication"))
     }
     @Test fun restoringAnEmptyReferenceDatasetRetiresTheFirstAssociationPreview()=runBlocking {
-        val id=med();controller.open(id).join();assertNull(controller.state.value.current!!.scope)
+        val id=med();controller.open(id)!!.join();assertNull(controller.state.value.current!!.scope)
         val archive=repo.exportBackup("SYNTHETIC-empty-reference-password".toCharArray())
         repo.restoreBackup(archive,"SYNTHETIC-empty-reference-password".toCharArray())
         controller.confirm(product)!!.join()
@@ -79,6 +81,6 @@ class MedicationReferenceControllerTest {
         assertEquals(0,count("reference_event"));assertEquals(0,count("reference_dataset"))
     }
     @Test fun unsavedMedicationCanBrowseButCannotCreateOrLinkOne()=runBlocking {
-        controller.open(null).join();assertNull(controller.confirm(product));assertEquals(0,count("medication"));assertEquals(0,count("reference_dataset"))
+        controller.open(null)!!.join();assertNull(controller.confirm(product));assertEquals(0,count("medication"));assertEquals(0,count("reference_dataset"))
     }
 }

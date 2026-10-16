@@ -18,8 +18,9 @@ class MedicationReferenceController(private val repo:NotesRepository,private val
     private var generation=0L
     private data class Attempt(val target:Long,val current:MedicationReferenceState,val product:UserReferenceProduct?,val uuid:String)
     private var attempt:Attempt?=null
-    fun open(target:Long?):Job {
-        check(!mutable.value.busy)
+    fun open(target:Long?):Job? {
+        // A recreated screen may outlive its dialog while the original write is still pending.
+        if(mutable.value.busy)return null
         load?.cancel();val token=++generation;attempt=null
         mutable.value=MedicationReferenceUiState(target=target,loading=true)
         return scope.launch {

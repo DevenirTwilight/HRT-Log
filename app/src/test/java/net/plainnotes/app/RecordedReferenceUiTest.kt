@@ -32,7 +32,7 @@ class RecordedReferenceUiTest(private val locale:String) {
     @Before fun setup(){RuntimeEnvironment.setQualifiers("$locale-w320dp-h640dp-xxhdpi");RuntimeEnvironment.setFontScale(2f)
         db=Room.inMemoryDatabaseBuilder(ui.activity,NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build();repo=NotesRepository(object:DatabaseAccess(ui.activity){override fun get(space:Space)=db})}
     @After fun cleanup(){model?.let{ViewModelStore().apply{put("source-model",it);clear()}};db.close()}
-    private suspend fun medication()=repo.saveMedication(MedicationEntity(name="SYNTHETIC logged medication",molecule="OTHER",unit="TABLET",dose_per_intake=1.0,container_capacity=28.0,soon_alert_minutes=0,late_after_minutes=60,site_rotation=false,notifications_on=false,active=true,sort_order=0),null,RuleKind.EVERY_N_DAYS,1,listOf(LocalTime.NOON),emptySet(),at)
+    private suspend fun medication(active:Boolean=true)=repo.saveMedication(MedicationEntity(name="SYNTHETIC logged medication",molecule="OTHER",unit="TABLET",dose_per_intake=1.0,container_capacity=28.0,soon_alert_minutes=0,late_after_minutes=60,site_rotation=false,notifications_on=false,active=active,sort_order=0),null,RuleKind.EVERY_N_DAYS,1,listOf(LocalTime.NOON),emptySet(),at)
     private suspend fun link(id:Long)=repo.associateInitialMedication(id,UUID.randomUUID().toString(),original,repo.referencePreviewEpoch())
     private fun awaitRead(){ui.waitUntil(10000){ui.onAllNodesWithTag("record-reference-loading").fetchSemanticsNodes().isEmpty()}}
     @Test fun originalContextRemainsVisibleAfterCurrentReferenceChanges() {
@@ -66,8 +66,8 @@ class RecordedReferenceUiTest(private val locale:String) {
         assertTrue(fresh.contexts.isEmpty());assertEquals(pair.first,runBlocking{repo.records().single()})
     }
     @Test fun actualHistoryEditEntryOpensReadOnlySourceWithoutSavingTheRecord() {
-        val pair=runBlocking{val id=medication();repo.unscheduled(id,at,1.0);repo.records().single() to repo.referencePreviewEpoch()}
-        runBlocking {val m=repo.medications().single();repo.transaction{it.updateMedication(m.copy(active=false))}}
+        // A history-only fixture has no scheduled rule: ViewModel refresh must not reconcile unrelated missed slots.
+        val pair=runBlocking{val id=medication(active=false);repo.unscheduled(id,at,1.0);repo.records().single() to repo.referencePreviewEpoch()}
         val vm=NotesViewModel(repo,ReminderCoordinator(ui.activity,repo),ui.activity).also{model=it}
         val dialogs=HistoryDialogs().apply{editRecord=pair.first;referenceEpoch=pair.second}
         val meds=runBlocking{repo.medications().associateBy{it.id}}
