@@ -1,0 +1,9 @@
+# API26 Gate3 预期失败对照定位
+
+2026-10-16，#55源db33fea4b9c9de4373127c2155e2f0f197c05a13，PR run38950889128/job117141666743失败。相同HEAD push run38950884482对应API26成功；不以另一次成功覆盖失败。
+
+失败并非新增计量测试：报告artifact12067999320（SHA256 c4fc58ff854b5dd10a0b40f0d907fcd46b6a07af987d7fdf676d1128b2c0f207，ZIP CRC通过）显示数据114/App70全部零失败零跳过。之后run_attachment_gate3_red.py显式gate3_red=true的预期失败对照，尚未执行peer断言就先在same-process断言失败：expected SKIP_LIVE_WRITER，actual CLEANED_OWNED_INCOMPLETE。脚本要求包含既有peer断言信息，因此正确拒绝该轮对照，任务失败，自动合并队列停止。
+
+红分支有意打开并关闭第二个FileChannel，破坏当前进程的fcntl lease；当API26允许该legacy探测取得锁时，reconcile先执行清理分支。原测试先断言reconcile结果，导致没有收集红对照必需的peer证据。调整为先保留maintenanceResult，取得真实peerState并先断言原HELD_OTHER_PROCESS（沿用原信息），再断言原SKIP_LIVE_WRITER。两条断言的期望、最终writer提交/释放检查、30秒界限、脚本失败匹配全部保留；未修改Gate2Store/生产代码、CI、附件开关。红路径仍必须在原peer断言失败，绿路径仍必须同时通过全部断言。
+
+本地没有KVM，实际三API红/绿仍待最新CI；不把原生编译当实机运行。不是剂量/库存算法或正式附件功能修改。失败原始证据与根因明确后才提交修复，未盲目重跑。

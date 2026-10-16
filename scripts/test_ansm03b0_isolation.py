@@ -34,3 +34,10 @@ class Ansm03b0IsolationTest(unittest.TestCase):
     def test_missing_executable_payload_is_not_a_pass(self):
         with self.assertRaises(AssertionError):
             self.archive('readme.txt', b'no classes')
+
+    def test_reviewed_measurement_is_allowed_but_oracle_is_rejected(self):
+        self.assertEqual(1,self.archive('net/plainnotes/app/domain/measurement/Measurements.class',b'ansm03-exact-v2'))
+        with self.assertRaises(AssertionError):
+            self.archive('net/plainnotes/app/domain/prototype/measurement/Measurements.class',b'oracle')
+        with self.assertRaises(AssertionError):
+            self.archive('a.class',b'ansm03-exact-v1')

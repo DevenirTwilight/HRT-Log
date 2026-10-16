@@ -6,8 +6,9 @@ import json
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-MARKERS = (b'net/plainnotes/app/domain/measurement/', b'net/plainnotes/app/domain/shadow/',
-           b'net.plainnotes.app.domain.measurement.', b'net.plainnotes.app.domain.shadow.',
+# Reviewed P3 measurement API is allowed. The archived prototype/oracle and all shadow code remain forbidden.
+MARKERS = (b'net/plainnotes/app/domain/prototype/', b'net.plainnotes.app.domain.prototype.',
+           b'net/plainnotes/app/domain/shadow/', b'net.plainnotes.app.domain.shadow.',
            b'ShadowMeasurementAllocator', b'Ansm03b0', b'ansm_lab_', b'ansm03-exact-v1')
 
 
@@ -27,6 +28,7 @@ def check_sources(root=ROOT):
     # The frozen parent model and all three original test files are never rewritten by B0.
     for path, expected in audit['original_source_hashes'].items():
         assert hashlib.sha256((root / path).read_bytes()).hexdigest() == expected, f'Parent changed: {path}'
+    assert (root / 'core/domain/src/main/kotlin/net/plainnotes/app/domain/measurement/MeasurementCore.kt').is_file(), 'Missing reviewed production API'
     for base in ('app/src', 'core/data/src', 'core/domain/src', 'core/reminder/src'):
         for p in (root / base).rglob('*.kt'):
             rel = p.relative_to(root)
@@ -36,7 +38,7 @@ def check_sources(root=ROOT):
             assert not any(m in value for m in MARKERS), f'Runtime source references prototype: {rel}'
     generated = root / 'core/data/build/generated/ansm03b0TestSources'
     if generated.exists():
-        expected = {'net/plainnotes/app/domain/measurement/MeasurementCore.kt', 'net/plainnotes/app/domain/shadow/ShadowMeasurementAllocator.kt'}
+        expected = {'net/plainnotes/app/domain/shadow/ShadowMeasurementAllocator.kt'}
         assert {str(p.relative_to(generated)) for p in generated.rglob('*.kt')} == expected
         for p in generated.rglob('*.kt'):
             assert p.read_bytes() == (root / 'core/domain/src/test/kotlin' / p.relative_to(generated)).read_bytes()
@@ -44,7 +46,10 @@ def check_sources(root=ROOT):
 
 def main():
     check_sources()
-    check_archive(ROOT / 'core/domain/build/libs/domain.jar')
+    domain_jar = ROOT / 'core/domain/build/libs/domain.jar'
+    check_archive(domain_jar)
+    with zipfile.ZipFile(domain_jar) as z:
+        assert 'net/plainnotes/app/domain/measurement/Measurements.class' in z.namelist(), 'Production measurement API missing from runtime JAR'
     jars = list((ROOT / 'core/data/build/intermediates/runtime_library_classes_jar/release').rglob('*.jar'))
     assert jars, 'Missing unshrunk release runtime JAR; assembleFullRelease first'
     for jar in jars:
@@ -53,7 +58,7 @@ def main():
     assert apks, 'Missing release APK'
     for apk in apks:
         check_archive(apk, apk=True)
-    print('PASS ANSM-03B0: parent unchanged; test generation exact; runtime JARs and release APK exclude prototype')
+    print('PASS ANSM-03B0/P3: frozen parent unchanged; runtime excludes oracle/shadow; reviewed production measurements permitted')
 
 
 if __name__ == '__main__':
