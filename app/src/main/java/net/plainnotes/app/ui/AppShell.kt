@@ -108,6 +108,8 @@ class UiPrefs(context: Context) {
     val historyDialogs = remember { HistoryDialogs() }
     var appointment by remember { mutableStateOf(false) }
     val medicationDialogs = remember { MedicationDialogs() }
+    var referenceOpen by remember {mutableStateOf(false)}
+    fun openReference(medication:net.plainnotes.app.data.MedicationEntity?){if(model.medicationReferences.open(medication?.id)!=null)referenceOpen=true}
     val labDialogs = remember { LabDialogs() }
     var pickStart by remember { mutableStateOf(false) }
     val today = LocalDate.now()
@@ -192,7 +194,7 @@ class UiPrefs(context: Context) {
                 Destination.CALENDAR -> CalendarScreen(state, today, { completeEntry = it }, { overrideEntry = it; model.loadOverride(it.slot.key) }, { model.edit(null) },
                     { model.calendarFrom(null) }, pad, onReview = { destination = Destination.MEDICATIONS }, extra = extra, onStock = { destination = Destination.STOCK },
                     onAppointment = { visitId = it.id; medicalOrigin=false; destination = Destination.VISITS }, onAddStock = { stockDialogs.addStock = it })
-                Destination.MEDICATIONS -> MedicationsScreen(state, { model.edit(null) }, { model.edit(it) }, { medicationDialogs.archive = it }, pad)
+                Destination.MEDICATIONS -> MedicationsScreen(state, { model.edit(null) }, { model.edit(it) }, { medicationDialogs.archive = it }, pad,onReference={openReference(it)})
                 Destination.CONCENTRATION -> net.plainnotes.app.experimental.UnifiedConcentrationScreen(extra.records, state.ruleSnapshots, extra.labs, pad,
                     content = { innerPad, preview, selector -> ConcentrationScreen(state, conc.result, conc.loading, conc.weight, concSettings, { concSettings = it; prefs.conc = it },
                         { model.setWeight(it) }, { model.editById(it) }, { destination = Destination.LABS }, innerPad,extra.records,state.profiles,model::confirmHistoricalContext,{destination=Destination.HISTORY},preview,selector,m2Only=true) })
@@ -229,7 +231,7 @@ class UiPrefs(context: Context) {
                     onConfirm={model.clearMedicalVisitSave();model.saveMedicalVisit(it,it)},questionCounts=extra.visitQuestions.groupingBy{it.appointment_id}.eachCount())
                 Destination.VISITS -> VisitsScreen(state, extra, model, visitId, { visitId = it;if(it==null && medicalOrigin){medicalOrigin=false;destination=Destination.MEDICAL} }, { appointment = true }, pad,
                     medical=medicalOrigin,onMedicalEdit={model.clearMedicalVisitSave();medicalDialogs.edit=it;medicalDialogs.editing=true},onLab={medicalDialogs.lab=it.id})
-                Destination.HISTORY -> HistoryScreen(state, extra.records, { historyDialogs.editRecord = it }, { historyDialogs.deleteRecord = it }, pad, onAdd = { manual = true }, onBatch = { historyDialogs.batch = true }, onConfirmMissed={model.confirmMissed(it.id)},selectedRecordIds=importedRecordIds,labels=historyLabels,onExtra={r,on->model.setExtra(r.id,on)},onClearSelection={importedRecordIds=null},onUndoSkip={model.undoSkipped(it)})
+                Destination.HISTORY -> { val historySnapshot=extra;HistoryScreen(state, historySnapshot.records, { historyDialogs.referenceEpoch=historySnapshot.referenceEpoch;historyDialogs.editRecord = it }, { historyDialogs.deleteRecord = it }, pad, onAdd = { manual = true }, onBatch = { historyDialogs.batch = true }, onConfirmMissed={model.confirmMissed(it.id)},selectedRecordIds=importedRecordIds,labels=historyLabels,onExtra={r,on->model.setExtra(r.id,on)},onClearSelection={importedRecordIds=null},onUndoSkip={model.undoSkipped(it)}) }
                 Destination.STOCK -> StockScreen(state, extra.containers, extra.records, { m -> model.replaceContainer(m.id, m.container_capacity) }, { stockDialogs.checkStock = it }, { stockDialogs.addStock = it }, pad,
                     onManage = { stockDialogs.managePackages = it }, forecasts = extra.stockForecasts)
                 Destination.WELLBEING -> WellbeingHub(state,extra,model,region,{wellbeingDialogs.manageItems=true},pad)
@@ -241,7 +243,8 @@ class UiPrefs(context: Context) {
     }
     val meds = state.medications.associateBy { it.id }
     importedLink?.let { link -> ImportedPlanDialog(link, meds[link.record.medication_id], model::closeImportedLink) { key -> model.linkImported(link.record.id, key) } }
-    editor?.let { MedicationEditor(it, { model.closeEditor() }, containers = extra.containers) { d -> model.save(d) } }
+    editor?.let { MedicationEditor(it, { model.closeEditor() }, containers = extra.containers,onReference={openReference(it.medication)}) { d -> model.save(d) } }
+    if(referenceOpen)MedicationReferenceDialog(model.medicationReferences){referenceOpen=false}
     completeEntry?.let { e ->
         val saved=state.ruleSnapshots[e.slot.ruleId]?.let{MedicationSnapshot.decode(it,e.slot.medicationId)?.medication(e.slot.medicationId)}
         val current=meds[e.slot.medicationId]

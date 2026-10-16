@@ -18,7 +18,7 @@ import net.plainnotes.app.NotesState
 import net.plainnotes.app.R
 import net.plainnotes.app.data.MedicationEntity
 
-@Composable fun MedicationsScreen(state: NotesState, onAdd: () -> Unit, onEdit: (MedicationEntity) -> Unit, onArchive: (MedicationEntity) -> Unit, contentPadding: PaddingValues) {
+@Composable fun MedicationsScreen(state: NotesState, onAdd: () -> Unit, onEdit: (MedicationEntity) -> Unit, onArchive: (MedicationEntity) -> Unit, contentPadding: PaddingValues,onReference:((MedicationEntity)->Unit)?=null) {
     val list = state.medications.sortedWith(compareByDescending<MedicationEntity> { it.active }.thenBy { it.sort_order }.thenBy { it.id })
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = contentPadding.calculateTopPadding() + 8.dp,
         bottom = contentPadding.calculateBottomPadding() + 96.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -27,11 +27,11 @@ import net.plainnotes.app.data.MedicationEntity
                 Button(onClick = onAdd) { Text(stringResource(R.string.add_medication)) }
             }
         }
-        items(list, key = { it.id }) { m -> MedicationCard(m, state, { onEdit(m) }, { onArchive(m) }) }
+        items(list, key = { it.id }) { m -> MedicationCard(m, state, { onEdit(m) }, { onArchive(m) },onReference?.let {callback->{callback(m)}}) }
     }
 }
 
-@Composable private fun MedicationCard(m: MedicationEntity, state: NotesState, onEdit: () -> Unit, onArchive: () -> Unit) {
+@Composable private fun MedicationCard(m: MedicationEntity, state: NotesState, onEdit: () -> Unit, onArchive: () -> Unit,onReference:(()->Unit)?) {
     val c = MaterialTheme.colorScheme
     var menu by remember { mutableStateOf(false) }
     val profile = state.profiles[m.id]
@@ -62,6 +62,7 @@ import net.plainnotes.app.data.MedicationEntity
                 IconButton(onClick = { menu = true }) { Icon(Icons.Outlined.MoreVert, stringResource(R.string.more)) }
                 DropdownMenu(menu, { menu = false }) {
                     DropdownMenuItem(text = { Text(stringResource(R.string.edit)) }, leadingIcon = { Icon(Icons.Outlined.Edit, null) }, onClick = { menu = false; onEdit() })
+                    onReference?.let {open->DropdownMenuItem(text={Text(stringResource(R.string.ref2_title))},leadingIcon={Icon(Icons.Outlined.Info,null)},onClick={menu=false;open()})}
                     if (m.active) DropdownMenuItem(text = { Text(stringResource(R.string.delete)) }, leadingIcon = { Icon(Icons.Outlined.Archive, null) }, onClick = { menu = false; onArchive() })
                 }
             }

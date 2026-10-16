@@ -21,6 +21,25 @@ data class UserReferenceProduct(
     val recordedOn: String,
 )
 
+/** User-entered snapshots only. A matching name is never an equivalence or an official identity claim. */
+fun validatedUserReferenceProduct(product:UserReferenceProduct):UserReferenceProduct {
+    try { ReferencePayload.userProduct(product) } catch(_:Exception) {throw ReferenceFailure(ReferenceError.INVALID_SOURCE)}
+    return product.copy(ingredients=product.ingredients.toList(),routes=product.routes.toList())
+}
+data class SavedReferenceProduct(val snapshotUuid: String, val product: UserReferenceProduct)
+data class SavedReferencePage(val entries: List<SavedReferenceProduct>, val limited: Boolean)
+internal object ReferenceSearch {
+    private fun fold(value:String)=java.text.Normalizer.normalize(value,java.text.Normalizer.Form.NFD)
+        .replace(Regex("\\p{M}+"),"").lowercase(java.util.Locale.ROOT).replace("œ","oe").replace("æ","ae")
+    fun matches(product:UserReferenceProduct,query:String,form:String,route:String,strength:String=""):Boolean {
+        val name=fold(query.trim());val f=fold(form.trim());val r=fold(route.trim());val spec=fold(strength.trim())
+        return (name.isEmpty() || (listOf(product.name)+product.ingredients).any { fold(it).contains(name) }) &&
+            (f.isEmpty() || fold(product.form.orEmpty()).contains(f)) &&
+            (r.isEmpty() || product.routes.any {fold(it).contains(r)}) &&
+            (spec.isEmpty() || fold(product.strength.orEmpty()).contains(spec))
+    }
+}
+
 data class ReferenceScope(val dataset: String, val epoch: String)
 enum class ReferenceError { STALE_SCOPE, STALE_REVISION, OPERATION_CONFLICT, UNKNOWN_IDENTITY, INVALID_SOURCE, WRONG_SPACE, ALREADY_CONSUMED }
 class ReferenceFailure(val code: ReferenceError) : IllegalArgumentException(code.name)

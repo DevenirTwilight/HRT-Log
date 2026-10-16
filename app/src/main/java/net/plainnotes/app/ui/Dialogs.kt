@@ -11,6 +11,7 @@ import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -30,7 +31,7 @@ import java.time.ZoneId
 fun LocalDateTime.toInstantHere(): Instant = ScheduleEngine.wallInstant(this, ZoneId.systemDefault())
 fun Instant.toLocalHere(): LocalDateTime = atZone(ZoneId.systemDefault()).toLocalDateTime().withSecond(0).withNano(0)
 
-@Composable fun IntakeDialog(title: String, medication: MedicationEntity?, plannedDose: Double, initial: Instant, onDismiss: () -> Unit, siteSuggestion: String? = null,
+@Composable fun IntakeDialog(title: String, medication: MedicationEntity?, plannedDose: Double, initial: Instant, onDismiss: () -> Unit, siteSuggestion: String? = null,onReference:(()->Unit)?=null,
                              onSave: (Instant, Double, String?) -> Unit) {
     var time by remember { mutableStateOf(initial.toLocalHere()) }
     var site by remember { mutableStateOf(siteSuggestion) }
@@ -38,13 +39,14 @@ fun Instant.toLocalHere(): LocalDateTime = atZone(ZoneId.systemDefault()).toLoca
     val doseV = dose.toDoubleOrNull()?.takeIf { it.isFinite() && it > 0 }
     val future = time.toInstantHere().isAfter(Instant.now().plusSeconds(60))
     AlertDialog(onDismissRequest = onDismiss, icon = { Icon(Icons.Outlined.CheckCircle, null) }, title = { Text(title) },
-        text = { Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        text = { Column(if(onReference!=null)Modifier.heightIn(max=androidx.compose.ui.platform.LocalConfiguration.current.screenHeightDp.dp*0.5f).verticalScroll(rememberScrollState()) else Modifier,verticalArrangement = Arrangement.spacedBy(12.dp)) {
             medication?.let { Text(it.name, style = MaterialTheme.typography.titleMedium) }
             Text(stringResource(R.string.actual_time), style = MaterialTheme.typography.labelLarge)
             DateTimeRow(time, { time = it })
             if (future) Text(stringResource(R.string.future_time_warning), color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
             NumberField(dose, { dose = it }, stringResource(R.string.actual_dose), suffix = medication?.let { unitLabel(it.unit) }, isError = doseV == null)
             if (siteSuggestion != null) SitePicker(site, siteSuggestion) { site = it }
+            onReference?.let {open->TextButton(onClick=open,modifier=Modifier.fillMaxWidth().heightIn(min=48.dp).testTag("record-reference-entry")){Text(stringResource(R.string.ref2_history_entry))}}
         } },
         confirmButton = { Button(onClick = { onSave(time.toInstantHere(), doseV!!, site) }, enabled = doseV != null && !future) { Text(stringResource(R.string.save)) } },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } })
