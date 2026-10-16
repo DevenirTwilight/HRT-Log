@@ -41,4 +41,21 @@ Room10与PNBAK1业务schema9分开，DOMAIN_TABLES/列白名单显式；旧恢�
 
 ## 阶段记录
 
-审计与隔离计划完成；原35项基线重跑PASS，原源码/测试哈希不变；影子/Room集成尚待实际结果。
+审计与隔离计划完成；原35项基线重跑PASS，源码/断言哈希不变。
+新增只读影子23项、真实Repository/Room合同13项、提醒边界1项，完整domain121/data193/reminder20本地PASS。
+真实集成揭示非空REVERSE账本恢复外键拒绝、候选域残留及守卫丢失；均未改生产，详见[兼容评估](compatibility-findings.md)。
+六项最终CI尚待提交后证据，不称设备已运行。见[验证账本](verification.md)。
+[准入与四PR方案](production-admission.md)及[统一预测合同](forecast-contract.md)已提交供审批。
+
+## 本批文件范围
+
+- core/domain/src/test/.../shadow/：只读影子与23项负向/边界测试。
+- core/data/src/test/shared/java/.../Ansm03b0*：真实业务共同合同与候选SQL；test/java、androidTest/java两个入口。
+- core/reminder/src/test/.../Ansm03b0ForecastBoundaryTest.kt：现有统一预测/提醒DST基线。
+- core/data/build.gradle.kts：两个测试源文件Sync及测试编译依赖；不增加main源/依赖。
+- .github/workflows/android.yml：追加设备合同、独立release守卫、JSON报告归档；保留原六项检查。
+- scripts/check_ansm03b0_isolation.py、test_ansm03b0_isolation.py、ansm03b0_report.py：隔离及实际结果摘要。
+- docs/ansm03b0/：独立审计/实验合同/恢复风险/审批/验收交接。
+
+正式app源码、Room实体/迁移/schema、PNBAK1、库存/预测/提醒生产源码、PK及参数、AppLock/伪装、四语正式字符串均不改。
+本批无新UI、无截图交付，UI真机/TalkBack NOT_RUN；不把父PR48的合成UI当本批正式关联。

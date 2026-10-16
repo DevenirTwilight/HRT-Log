@@ -30,3 +30,22 @@ ksp { arg("room.schemaLocation", "$projectDir/schemas") }
 android.sourceSets.getByName("androidTest").apply { assets.srcDir("$projectDir/schemas"); java.srcDirs("src/historyTest/java", "src/medicalTest/java", "src/attachmentTest/java") }
 android.sourceSets.getByName("test").apply { assets.srcDir("$projectDir/schemas"); java.srcDirs("src/historyTest/java", "src/medicalTest/java", "src/attachmentTest/java") }
 android.sourceSets.getByName("androidTest").java.srcDir("../../tools/attachment-poc/src/contractTest/kotlin")
+
+// ANSM-03B0: compile the original test-only measurement file and its read-only shadow adapter.
+// Explicit includes keep JUnit5 tests out of Android/JUnit4; no source is added to main or release.
+val ansm03b0TestSources = tasks.register<Sync>("prepareAnsm03b0TestSources") {
+    from(rootProject.layout.projectDirectory.dir("core/domain/src/test/kotlin")) {
+        include("net/plainnotes/app/domain/measurement/MeasurementCore.kt")
+        include("net/plainnotes/app/domain/shadow/ShadowMeasurementAllocator.kt")
+    }
+    into(layout.buildDirectory.dir("generated/ansm03b0TestSources"))
+}
+listOf("test", "androidTest").forEach { name ->
+    android.sourceSets.getByName(name).java.srcDir("src/test/shared/java")
+    android.sourceSets.getByName(name).java.srcDir(layout.buildDirectory.dir("generated/ansm03b0TestSources").get().asFile)
+}
+tasks.configureEach {
+    if (name in setOf("kspDebugUnitTestKotlin", "compileDebugUnitTestKotlin", "kspDebugAndroidTestKotlin", "compileDebugAndroidTestKotlin")) {
+        dependsOn(ansm03b0TestSources)
+    }
+}
