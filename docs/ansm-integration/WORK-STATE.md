@@ -1,19 +1,21 @@
 # 工作状态
 
-2026-10-16。起始默认分支 claude/new-session-1959qb，基线 2f4b958425e1cd67dad1d97deb8ab724eb8ecac1；当前已验证主线 cfbe62c4a466f55234d53fbeff4c7f2c03224d50。
+2026-10-16。起始默认claude/new-session-1959qb，原基线2f4b958425e1cd67dad1d97deb8ab724eb8ecac1；已合并主线基线0dca778396619a005144dab044eaf4eafeafad40（#45/#48已合并）。下表为当前状态，后续开发日志保留原始失败及当时状态。
 
 |阶段|状态|证据和下一动作|
 |---|---|---|
-|Phase0|DONE|负责人联合实施授权已完整归档；官方许可/FT-ST仍未闭环，分发OFF|
-|P0|INTEGRATION_VERIFIED|#53已合并；主线六项必需检查PASS；API26/29/35新增恢复测试各7项PASS|
-|P1|IN_PROGRESS|Room11/业务备份Schema10、稳定引用/CAS/历史捕获已实现；最终233数据测试PASS（0失败/跳过），既有PeriodStability/PrivacyNotice8项PASS；原生编译PASS，PR #54 CI进行中，原生运行NOT_RUN|
-|P2|NOT_STARTED|真实生产入口，官方资源OFF，保留手动来源|
-|P3|NOT_STARTED|复用原35项测试，审查并生产化计量核心|
-|P4|NOT_STARTED|Legacy/Verified互斥、精确账本、事务幂等|
-|P5|NOT_STARTED|统一预测不确定性及四语集成|
-|官方分发|BLOCKED|许可版本冲突、FT/ST原码保留；不阻断通用实现|
+|Phase0|DONE|联合授权REQUIREMENTS §102/受保护自动合并§103；许可/FT-ST未闭环，官方打包OFF|
+|P0|INTEGRATION_VERIFIED|#53已合并；主线六检查PASS，三API新增恢复各7项PASS|
+|P1|CODED / CI_IN_PROGRESS|#54源945512a，Room11/业务10；本地237数据PASS，API26/29新增引用+迁移24、数据114/App70通过；API35新增24/数据181通过，App264零失败8条件跳过；完整检查未结束，不提前合并|
+|P2|CODED / LOCAL_VERIFIED|#56仍stacked草稿；源6697747数据243/App75 PASS，96配置192图，历史来源只读UI12项；当前整合CI待验，父#54合并后改base默认|
+|P3|CODED / CI_VERIFIED_ON_PRIOR_BASE|#55独立精确生产核心，domain126/data204/发布隔离PASS，原六检查PASS，待依赖更新复验|
+|P4|IN_PROGRESS|独立分支精确整数刻度边界14项新增测试，domain140 PASS；无生产账本调用，后续实现包装/备份/事务并验证|
+|P5|NOT_STARTED|统一预测未知语义及四语正式库存UI未实施|
+|官方分发|BLOCKED|许可版本冲突、FT/ST原码保留；不阻断通用用户来源实现|
 
-#50已合入默认分支b1b2d93；#51合入其原功能base，桥接#52已合入92f27e9；P0 #53源提交1d368ef已合入cfbe62c。用户授权本任务受保护自动合并（REQUIREMENTS §103），不得绕过六检查或合并无关PR。#45/#48仍OPEN、auto-merge已启用，不冒称已进入正式Android。
+#50→#51→桥接#52及P0 #53已合入，#45/#48已合入；均不等于官方数据进入Android正式资源。#54/#55只在当前六检查成功及无冲突/未解决讨论时保护自动合并；#56不能合入feature base。不合并无关PR，不发布APK，不启用医疗附件。真实TalkBack/物理设备/断电NOT_RUN。
+
+## 历史开发记录（当时状态，当前以上表为准）
 
 P0完整CI证据见p0-ci-evidence.json。下载的五份报告已校验官方digest/CRC；API26/29/35新增恢复合同各7/7通过；PeriodStability5/5、PK124/124通过，旧条件SKIPPED如实保留。物理设备/断电测试NOT_RUN，无签名/发布/APK交付。
 
