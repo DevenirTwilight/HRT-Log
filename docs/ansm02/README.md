@@ -7,6 +7,14 @@
 
 ## 基线、前置条件与协作
 
+最终集成更新：验收期间PR47由其他执行者合并为
+`1e8754e9bab8b01034cb3de22ceaf9dc61a1438a`。本分支已正常merge纳入，未改其实现或重写历史。
+最新基线改为该SHA，旧a314/0129/8d证据保留其原始归属；本地121项与384图来自旧基线上的
+相同Mock代码，不能冒充最新主线集成测试。新集成HEAD另跑完整CI，最终结果见PR48。
+相对新基线，正式main/full、core、PK、Gradle和CI完全无差异，28个本批文件范围仍隔离。
+versionCode28来自已合并PR47，本PR不修改版本、不签名/交付APK。
+详见[integration-2026-10-16.json](integration-2026-10-16.json)。以下为开工和实现阶段历史证据。
+
 开工默认分支 `claude/new-session-1959qb`，HEAD `2ab7a0c84aab47d38fb84d90520e67d86b8a5de1`。
 独立分支 `feature/ansm02a-synthetic-catalog-20261016` 从该主线创建，未叠在PR45上。
 设计提交d2a32df的Android38843986141/Science38843986147已全部成功，仅证明设计阶段同基线工程检查。
