@@ -13,3 +13,5 @@
 候选容器事务适配器已在main源码准备，但仅由合成Room测试调用，NotesRepository/App没有入口，当前备份守卫仍明确拒绝新格式。创建事务先验epoch、独立UUID/不可变包装、整数容量，重试同op返回原容器，异载荷/owner/商品op冲突拒绝；源/容器创建故障同事务回滚。新增8项真实Room测试首轮7通过/1失败：测试直接写VOIDED被既有Package correction evidence守卫正确拒绝。改为调用真实PackageCorrections.void/restore，继续断言证据追加、重复创建不恢复库存和来源不变；未改守卫或生产VOIDED行为。正在完整回归。未来新库存格式需要版本门，当前Room/业务版本未改变。
 
 源783606a完整data257/domain140 PASS（0失败/错误/跳过），原生测试源码编译PASS。容器创建8项真实Room全绿，含故障注入、scope/UUID冲突、旧库存不变、真实VOIDED/恢复和已删除ID复用。不是正式接线完成。随后将同一8项抽到historyTest共享合同并增加关闭/重开保留来源/原生加密头断言；Robolectric和SQLCipher共用9项，现有CI三API清单只追加新类、不替换旧类。新共享合同待本地及CI真实执行，不能以旧8项通过冒充原生9项通过。
+
+源13828f0共享合同回归完成：data258/domain140零失败/错误/跳过，新的9项容器合同在JVM PASS，原生编译PASS；SQLCipher三API实际执行仍NOT_RUN。旧SupplyLedger/StockForecast/PackageCorrections源码逐字未变，PK tree与c95cea1相同，摘要保存在local-evidence.json。新模式仍没有Repository/App入口、当前备份仍拒绝PRESENTATION；不得自动合并草稿或称正式库存已完成。后续先合入P3/P2真实依赖和Gate3自检修复，再验证完整整合分支。
