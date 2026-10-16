@@ -24,3 +24,5 @@
 已普通合入父PR #54的1f8d150证据更新（仅文档）；#56仍是以feature为base的草稿，不得auto-merge到feature。CI集成计划：#48未修改.github，#54的现有原生类清单保持，只在同一android job设置截图环境并追加合成截图artifact路径，检查名和全部断言不变；真实最终CI待当前HEAD。
 
 对照负责人P2原始要求补齐原始规格筛选：仅原文包含搜索，不将2mg与2000µg自动视为同一商品。原先239/62证据仍对应8e910ee；新筛选变更单独重跑。
+
+原始规格补齐源ca399ec的data239/app62与192图再次PASS。新增EmptyPreview恢复负向测试随后真实FAIL，明确观察到source events=1，证据empty-preview-red-evidence.json。P1 #54已转回草稿修复本地previewEpoch协议，#56保持草稿，旧通过证据不冒充此边界已通过。

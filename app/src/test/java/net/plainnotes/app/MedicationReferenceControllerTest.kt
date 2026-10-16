@@ -68,6 +68,15 @@ class MedicationReferenceControllerTest {
         }finally{release.countDown()}
         first.join();assertTrue(control.state.value.saved);assertEquals(1,count("reference_event"));assertEquals(1,count("medication"))
     }
+    @Test fun restoringAnEmptyReferenceDatasetRetiresTheFirstAssociationPreview()=runBlocking {
+        val id=med();controller.open(id).join();assertNull(controller.state.value.current!!.scope)
+        val archive=repo.exportBackup("SYNTHETIC-empty-reference-password".toCharArray())
+        repo.restoreBackup(archive,"SYNTHETIC-empty-reference-password".toCharArray())
+        controller.confirm(product)!!.join()
+        assertFalse("Stale empty preview committed a link; reference events=${count("reference_event")}",controller.state.value.saved)
+        assertTrue("Restoring a dataset with no references must retire an older first-link preview",controller.state.value.stale)
+        assertEquals(0,count("reference_event"));assertEquals(0,count("reference_dataset"))
+    }
     @Test fun unsavedMedicationCanBrowseButCannotCreateOrLinkOne()=runBlocking {
         controller.open(null).join();assertNull(controller.confirm(product));assertEquals(0,count("medication"));assertEquals(0,count("reference_dataset"))
     }
