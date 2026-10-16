@@ -23,6 +23,9 @@ def git(*args):
 APPROVED_CORE = Path('core/domain/src/main/kotlin/net/plainnotes/app/domain/measurement/MeasurementCore.kt')
 APPROVED_STOCK_QUANTUM = Path('core/domain/src/main/kotlin/net/plainnotes/app/domain/stock/StockQuantum.kt')
 APPROVED_PACKAGE_CODEC = Path('core/data/src/main/java/net/plainnotes/app/data/PackageMeasurementPayload.kt')
+APPROVED_CONTAINER_STORE = Path('core/data/src/main/java/net/plainnotes/app/data/MeasuredContainerStore.kt')
+STORE_IMPORTS = ['import androidx.sqlite.db.SupportSQLiteDatabase', 'import net.plainnotes.app.domain.measurement.MeasureResult', 'import org.json.JSONObject', 'import java.time.Instant', 'import java.util.UUID']
+STORE_FORBIDDEN_APIS = ('java.io.', 'java.net.', 'java.nio.', 'System.currentTimeMillis', 'Instant.now(', 'System.getenv', 'Class.forName', 'net.plainnotes.app.pk', 'SupplyLedger.allocate')
 PACKAGE_IMPORTS = ['import net.plainnotes.app.domain.measurement.*', 'import net.plainnotes.app.domain.stock.*', 'import org.json.JSONArray', 'import org.json.JSONObject', 'import java.math.BigDecimal', 'import java.time.LocalDate']
 STOCK_IMPORTS = ['import java.math.BigDecimal', 'import net.plainnotes.app.domain.measurement.*']
 PURE_IMPORTS = ['import java.math.BigDecimal', 'import java.time.LocalDate']
@@ -38,7 +41,7 @@ def isolation():
             relative = file.relative_to(ROOT)
             if any(part in relative.parts for part in ('build', 'test', 'androidTest', 'historyTest', 'medicalTest', 'attachmentTest')):
                 continue
-            if any(token in file.read_text() for token in ('net.plainnotes.app.domain.measurement', 'net.plainnotes.app.domain.stock')) and relative not in (APPROVED_CORE, APPROVED_STOCK_QUANTUM, APPROVED_PACKAGE_CODEC):
+            if any(token in file.read_text() for token in ('net.plainnotes.app.domain.measurement', 'net.plainnotes.app.domain.stock')) and relative not in (APPROVED_CORE, APPROVED_STOCK_QUANTUM, APPROVED_PACKAGE_CODEC, APPROVED_CONTAINER_STORE):
                 offenders.append(str(relative))
     imports = [line for line in (ROOT / MODEL / 'MeasurementCore.kt').read_text().splitlines() if line.startswith('import ')]
     core = ROOT / APPROVED_CORE
@@ -55,12 +58,18 @@ def isolation():
     package_imports = [line for line in package_text.splitlines() if line.startswith('import ')]
     package_forbidden = [token for token in FORBIDDEN_CORE_APIS if token in package_text]
     package_valid = not package_codec.exists() or (package_imports == PACKAGE_IMPORTS and not package_forbidden)
-    return {'status': 'PASS' if package_valid and stock_valid and not offenders and imports == PURE_IMPORTS and core.is_file() and production_imports == PURE_IMPORTS and not forbidden else 'FAIL',
-            'approved_package_codec': str(APPROVED_PACKAGE_CODEC) if package_codec.exists() else None,
+    container_store = ROOT / APPROVED_CONTAINER_STORE
+    store_text = container_store.read_text() if container_store.is_file() else ''
+    store_imports = [line for line in store_text.splitlines() if line.startswith('import ')]
+    store_forbidden = [token for token in STORE_FORBIDDEN_APIS if token in store_text]
+    store_valid = not container_store.exists() or (store_imports == STORE_IMPORTS and not store_forbidden)
+    return {'status': 'PASS' if store_valid and package_valid and stock_valid and not offenders and imports == PURE_IMPORTS and core.is_file() and production_imports == PURE_IMPORTS and not forbidden else 'FAIL',
+            'approved_container_store': str(APPROVED_CONTAINER_STORE) if container_store.exists() else None,
+            'store_imports': store_imports, 'store_forbidden_apis': store_forbidden, 'approved_package_codec': str(APPROVED_PACKAGE_CODEC) if package_codec.exists() else None,
             'package_imports': package_imports, 'package_forbidden_apis': package_forbidden, 'approved_stock_quantum': str(APPROVED_STOCK_QUANTUM) if stock.exists() else None,
             'stock_imports': stock_imports, 'stock_forbidden_apis': stock_forbidden, 'production_callers': offenders, 'model_imports': imports, 'production_imports': production_imports,
             'forbidden_apis': forbidden, 'approved_core': str(APPROVED_CORE), 'source_set': 'reviewed-main-core-and-frozen-test-oracle',
-            'production_integration': 'CORE_ONLY_NO_INVENTORY'}
+            'production_integration': 'P4_ADAPTERS_UNACTIVATED' if container_store.exists() else 'CORE_ONLY_NO_INVENTORY'}
 
 
 def report(baseline):
