@@ -99,7 +99,7 @@ class TodayCardTest {
         inCard(hasTestTag("today-also-take:${b.slot.key}")).performClick()
         inCard(hasTestTag("today-take-now")).performClick()
         assertEquals(listOf(b, a), completed)
-        // Only the doses due at the next time are listed; later ones stay in the day list below.
+        // Only the doses due at the next time are listed here; later ones are in the "Later today" section (UI-04).
         inCard(hasTestTag("today-also:${later.slot.key}")).assertDoesNotExist()
     }
 

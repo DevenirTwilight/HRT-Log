@@ -1136,7 +1136,6 @@
     <string name="today_nothing">今天没有计划服药</string>
     <string name="today_overdue">已过时间</string>
     <string name="today_same_time">同一时间</string>
-    <string name="today_done_heading">今天已完成</string>
     <string name="today_more">这次服药的更多操作</string>
     <string name="home_stock_title">库存即将用完</string>
     <string name="home_stock_view">查看库存</string>
@@ -1175,4 +1174,8 @@
     <string name="settings_bin_count">%1$d 项</string>
     <string name="settings_back">返回设置</string>
     <string name="settings_appearance_summary">主题：%1$s · 语言：%2$s</string>
+    <string name="today_later">稍后</string>
+    <string name="today_log_heading">今天的记录</string>
+    <string name="today_appointment">今天的预约</string>
+    <string name="today_show_all">显示全部（%1$d）</string>
 </resources>

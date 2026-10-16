@@ -1136,7 +1136,6 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="today_nothing">No doses planned today</string>
     <string name="today_overdue">Past time</string>
     <string name="today_same_time">Also at this time</string>
-    <string name="today_done_heading">Done today</string>
     <string name="today_more">More options for this dose</string>
     <string name="home_stock_title">Running low</string>
     <string name="home_stock_view">View stock</string>
@@ -1175,4 +1174,8 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="settings_bin_count">%1$d items</string>
     <string name="settings_back">Back to settings</string>
     <string name="settings_appearance_summary">Theme: %1$s · Language: %2$s</string>
+    <string name="today_later">Later today</string>
+    <string name="today_log_heading">Today’s log</string>
+    <string name="today_appointment">Today’s appointment</string>
+    <string name="today_show_all">Show all (%1$d)</string>
 </resources>
