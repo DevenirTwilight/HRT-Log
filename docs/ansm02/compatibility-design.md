@@ -29,8 +29,9 @@
 字母重音兼容搜索不改显示原文；产品键不同绝不合并。按剂型、原始规格、途径独立筛选。
 常驻合成横幅、状态与来源分开，未知供应始终未知；有效授权不意味能买到。
 独立RCP/Notice显示入口/正文核实的区别，合成无真实URL，不构造链接或联网。
-Mock选择只保存内存中的引用预览，不预填剂量、计划、容量、PK，不产生用户药物。
-手动创建继续可用；本演示的手动操作也只返回预览，不写数据。进程结束即丢弃。
+Mock选择仅修改独立UI预览状态，不预填剂量、计划、容量、PK，不产生用户药物。
+手动创建继续可用；本演示的手动操作也只返回预览，不写业务库/备份。UI使用rememberSaveable，
+Android可能恢复合成草稿；这不是正式引用持久化，恢复/配置变更专项未验收。不得输入真实健康资料。
 
 未来正式加载：在01合并、许可/归因和分发范围签核后，单独实现受版本和校验和保护的
 asset适配器，将01字段映射到只读DTO；构建不下载。损坏/重复/无效所属关系整体拒绝，
@@ -93,3 +94,28 @@ ID重分配必须重映射所有引用，不能将整数ID复用关联另一药�
 门：01已合并且主线六检查成功 → 许可与原字段解释/可显示范围及日期由负责人确认 →
 DTO/快照/迁移/备份方案独立审阅批准 → 无共享文件并行冲突 → 02B接线与全量兼容验证。
 ANSM-03还需独立量纲及容器历史方案；不能从本Mock选择或CIP标签推导库存容量/消耗。
+
+## 01真实字段 → 未来DTO适配（当前不实现）
+
+以PR45固定HEAD阅读结构，不复制数据到本分支：
+
+|01字段|未来只读投影|禁止的推断|
+|---|---|---|
+|reference_version / sources / license / verified_on / data_updated_on / data_update_semantics|版本、来源、许可门、核实日、网站显示日期及语义分别显示|不把获取日期或网站日期当每个导出更新时间|
+|cis / name_fr / form_fr / routes_fr|namespace+CIS、原名、剂型、多途径|不合并同名不同CIS，不从PK途径反推官方途径|
+|ingredients[].name_fr / substance_code / component_type_raw / group / strength_fr / denominator_fr / source|保留角色分组的成分行及原单位/分母、字段来源|没有统一product.strength字段，不能用名称解析替代；不能把SA和FT相加|
+|authorization.value/raw / marketing.value/raw|独立授权与销售声明，保留原文|不合成“可以买到”状态|
+|supply_notices / supply_verification / unverified_fields / conflicts|独立公告、未知与冲突|空公告不表示无短缺，缺结果不表示停产|
+|presentations[].cis / cip13 / cip7 / label_fr / authorization_raw / marketing / package_quantity / source|CIS-CIP所属、原包装说明、独立状态和名义数量|不能改用户库存单位或容量；不推断可分片或可用泵数|
+|documents.rcp 与 documents.notice 的 url/panel_id/verification/reason|两个文档入口与面板观察证据|VERIFIED在这里仅入口存在；正文由field_verification.rcp_notice_content单独决定|
+|page_source / field_verification|身份核查证据、字段级状态|HTTP200/面板存在不验证全文，不生成医学摘要|
+
+Mock DTO仅验证交互，不是上述正式适配器的完整实现；它没有通用源哈希、逐字段证据、
+实时供应或真实文档链接，不得通过移除合成标签直接用于生产。未来适配器需另有字段级测试。
+
+并发与跨实体约束：LINK/UNLINK/CORRECT提交携带expectedHeadRevision，以事务CAS拒绝
+过时编辑，不覆盖另一窗口的更正。每个RecordReferenceCapture必须同时校验记录的
+medication身份、数据集稳定身份和event所属药物；仅整数ID相同不足以通过。
+无历史映射的旧记录始终显示“未保存官方来源”，不以event时间推算来源。
+引用源版本更正与用户实际剂量更正是两种操作，后者仍走原记录修订与账本路径；
+前者不触发任何库存冲销。所有CAS/错误归属/重复提交测试属于02B审批后的验收。
