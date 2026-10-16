@@ -17,3 +17,5 @@
 首次本地app编译因跨模块nullable scope无法smart cast而FAIL，已改为捕获局部不可变scope，未削弱断言。测试和截图最终结果随后写入local-evidence.json。
 
 首轮core/data239项PASS；应用Controller5+四语UI16+Period5+Privacy3共29项PASS。随后补充busy期间真实等待/重复确认和关闭拒绝测试，以及加载竞态与过期后明确reload，正在运行最终含32组合/三档对比度矩阵。截图与最终PASS尚未宣称。
+
+截图矩阵首次FAIL：Compose captureToImage在Robolectric Dialog上超时，尚未产图；不是已完成截图。改用ShadowDialog取得实际Dialog窗口并原生Canvas绘制，保留全部语义/滚动/操作断言；后续重跑并目视检查。另强化结果上限测试，显式选择确实不在前200条中的快照，避免随机UUID排序使测试只验证已显示条目。

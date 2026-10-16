@@ -3,7 +3,6 @@ package net.plainnotes.app
 import android.graphics.Bitmap
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.*
-import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.room.Room
@@ -47,7 +46,10 @@ class MedicationReferenceMatrixTest(private val locale:String,private val width:
             fun shot(name:String){
                 if(label==null)return
                 ui.waitForIdle()
-                val image=ui.onNodeWithTag("reference-window").captureToImage().asAndroidBitmap()
+                val view=requireNotNull(org.robolectric.shadows.ShadowDialog.getLatestDialog()?.window).decorView
+                check(view.width>0 && view.height>0) { "Reference dialog has no rendered bounds" }
+                val image=Bitmap.createBitmap(view.width,view.height,Bitmap.Config.ARGB_8888)
+                view.draw(android.graphics.Canvas(image))
                 val folder=File("build/ansm-p2-ui-shots/$label").apply{mkdirs()}
                 File(folder,"${locale}_${width}dp_${font}x_${if(dark)"dark" else "light"}_${contrast.name}_${name}.png").outputStream().use{image.compress(Bitmap.CompressFormat.PNG,100,it)}
             }

@@ -39,10 +39,14 @@ class ReferenceCatalogTest {
         assertEquals(1,repo.savedReferenceProducts(form="capsule").entries.size)
     }
     @Test fun boundedMatchingResultsStillSearchPastTheFirstTwoHundredStoredSnapshots()=runBlocking {
-        val id=medication();val initial=repo.associateInitialMedication(id,UUID.randomUUID().toString(),product("SYNTHETIC entry-0"))
-        for(i in 1..200)repo.associateMedication(initial.scope!!,id,i,UUID.randomUUID().toString(),product("SYNTHETIC entry-$i","user-$i"))
+        val id=medication();val initial=repo.associateInitialMedication(id,UUID.randomUUID().toString(),product("SYNTHETIC entry-000"))
+        for(i in 1..200)repo.associateMedication(initial.scope!!,id,i,UUID.randomUUID().toString(),product("SYNTHETIC entry-${i.toString().padStart(3,'0')}","user-$i"))
         val page=repo.savedReferenceProducts();assertEquals(200,page.entries.size);assertTrue(page.limited)
-        val exact=repo.savedReferenceProducts("entry-200");assertEquals(1,exact.entries.size);assertFalse(exact.limited)
+        val hidden=db.openHelper.writableDatabase.query("SELECT uuid,payload_json FROM reference_snapshot ORDER BY uuid DESC LIMIT 1").use {
+            assertTrue(it.moveToFirst());SavedReferenceProduct(it.getString(0),ReferencePayload.readProduct(org.json.JSONObject(it.getString(1))))
+        }
+        assertTrue(page.entries.none {it.snapshotUuid==hidden.snapshotUuid})
+        val exact=repo.savedReferenceProducts(hidden.product.name);assertEquals(hidden,exact.entries.single());assertFalse(exact.limited)
     }
     @Test fun loadingEmptyLibraryAndCancelledPreviewDoNotCreateDatasetOrIdentity()=runBlocking {
         val id=medication();assertTrue(repo.savedReferenceProducts().entries.isEmpty());assertNull(repo.medicationReferenceState(id).scope)
