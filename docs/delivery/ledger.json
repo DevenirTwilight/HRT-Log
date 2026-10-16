@@ -38,6 +38,19 @@
    "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
    "file_name": "HRT-Log-build27-UI-phase-full-official.apk",
    "channel": "claude-session-private-file"
+  },
+  {
+   "date": "2026-10-16T06:25:12Z",
+   "version_code": 28,
+   "version_name": "0.2.0",
+   "application_id": "net.plainnotes.app",
+   "source_sha": "1e8754e9bab8b01034cb3de22ceaf9dc61a1438a",
+   "source_origin": "git",
+   "source_dirty": false,
+   "apk_sha256": "bc5bbcf0f4e1ae6865e16c2fba7a550e0828b290ed89b7180fd90bdd7930b210",
+   "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
+   "file_name": "HRT-Log-build28-UI04-full-official.apk",
+   "channel": "claude-session-private-file"
   }
  ]
 }
