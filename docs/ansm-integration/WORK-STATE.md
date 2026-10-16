@@ -7,7 +7,7 @@ P0分支feature/ansm02b-03b-p0-restore-20261016，最新HEAD以git/对应PR为�
 |---|---|---|
 |Phase0|IN_PROGRESS|来源许可再核实/恢复依赖图|
 |P0|IN_PROGRESS|#53 draft；本地191通过，原生CI待验；等#52集成后更新B0缺陷期望|
-|P1|IN_PROGRESS|共用持久化合同已冻结，开始独立分支；生产Schema尚未修改|
+|P1|IN_PROGRESS|Room11/业务Schema10增量实现；引用与恢复17项本地PASS，完整迁移/原生CI待验|
 |P2|NOT_STARTED|生产入口，官方资源OFF，手动来源可用|
 |P3|NOT_STARTED|复用原35测试及计量核心|
 |P4|NOT_STARTED|Legacy/Verified互斥，事务幂等|
@@ -21,3 +21,6 @@ P0 红测试已运行：真实生产恢复/清库路径 4 项均按预期 FAIL�
 P0 本地全数据回归191/191 PASS，包含新增共享恢复7项、依赖图4项；原生测试编译PASS，原生运行NOT_RUN。新增一次故障注入断言曾因协程复制异常对象而FAIL，改为确认原注入错误消息逃逸并完整比较数据/身份/守卫，未改变已有断言；随后全套通过。
 
 P1工作树/workspace/HRT-Log-p1，feature/ansm02b-03b-p1-persistence-20261016，基于P0 eedf587；P0尚未合并。字段/身份/epoch/精确捕获/新业务备份合同见p1-persistence-contract.md，状态DESIGN，不标为生产可用。
+
+P1新引用存储、专用CAS/幂等API、默认UNKNOWN历史捕获、恢复epoch和统一新表Schema已有代码；17项新测试PASS。本地首轮191回归6项FAIL均已定位旧版本固定断言/旧fixture导出与迁移路径，已明确更新，完整重跑待执行。生产包装/精确分配尚未启用，P1 validator明确拒绝未启用的PRESENTATION/Measured操作，防止半实现数据被接受。
+#52已合并至默认分支92f27e99e5567a9eb42bbb3f19a577238ca97c5c，主线六检查复验进行中。

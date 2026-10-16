@@ -23,6 +23,22 @@ const val BACKFILL_MAX_DAYS=731L
     suspend fun <T> transaction(block: suspend (NotesDao) -> T): T = withContext(Dispatchers.IO) {
         val db=db();db.withTransaction { block(db.dao()) }
     }
+    /** Capture the database once: changing the selected space cannot redirect a suspended reference transaction. */
+    private suspend fun <T> transactionWithSql(required: Space? = null, block: suspend (NotesDao, androidx.sqlite.db.SupportSQLiteDatabase) -> T): T {
+        val target=space
+        if(required!=null && target!=required) throw ReferenceFailure(ReferenceError.WRONG_SPACE)
+        return withContext(Dispatchers.IO) {
+            val database=access.get(target)
+            database.withTransaction { block(database.dao(),database.openHelper.writableDatabase) }
+        }
+    }
+    suspend fun referenceScope(): ReferenceScope = transactionWithSql(Space.PRIMARY) { _, raw -> ReferenceStore.scope(raw) }
+    suspend fun medicationReference(scope: ReferenceScope, medication: Long): MedicationReference? = transactionWithSql(Space.PRIMARY) { _, raw ->
+        ReferenceStore.current(raw,scope,medication)
+    }
+    suspend fun associateMedication(scope: ReferenceScope, medication: Long, expectedRevision: Int, operationUuid: String, product: UserReferenceProduct?): MedicationReference = transactionWithSql(Space.PRIMARY) { _, raw ->
+        ReferenceStore.associate(raw,scope,medication,expectedRevision,operationUuid,product)
+    }
     suspend fun medications()=withContext(Dispatchers.IO){db().dao().medications()}
     suspend fun saveMilestone(value:MilestoneEntity)=transaction{dao->
         LocalDate.parse(value.date);require(value.kind in MILESTONE_KINDS)
@@ -423,14 +439,15 @@ const val BACKFILL_MAX_DAYS=731L
         dao.updateRecord(record.copy(rule_version_id=slot.ruleId,slot_key=key,scheduled_utc=slot.at.toEpochMilli(),scheduled_zone=slot.zone.id,
             planned_dose=slot.dose,late_after_minutes_snapshot=slot.lateMinutes,status=status,revision=record.revision+1))
     }
-    suspend fun complete(slot:Slot,taken:Instant,dose:Double,site:String?=null)=transaction { dao ->
+    suspend fun complete(slot:Slot,taken:Instant,dose:Double,site:String?=null)=transactionWithSql { dao, raw ->
         val existing=dao.records().singleOrNull{it.slot_key==slot.key}
-        if(existing?.status in listOf("ON_TIME","LATE"))return@transaction
+        if(existing?.status in listOf("ON_TIME","LATE"))return@transactionWithSql
         require(existing?.status!="SKIPPED");require(dose.isFinite()&&dose>0)
         val status=ScheduleEngine.complete(slot,taken,ZoneId.systemDefault(),dose).status.name
         val result=recordFor(dao,slot,status,taken,dose).copy(unallocated_supply_amount=dose,site=site?.takeIf{it.isNotBlank()})
         val id=if(existing==null)dao.record(result) else {dao.updateRecord(result.copy(id=existing.id,revision=existing.revision+1,config_snapshot=existing.config_snapshot));existing.id}
         SupplyLedger.allocate(dao,dao.recordById(id)!!)
+        ReferenceStore.captureContext(raw,dao.recordById(id)!!)
     }
     /**
      * Batch backfill ("batch add" in HRT tracker): one intake per day in [from]..[to] at each of [times], past instants only.
@@ -463,12 +480,13 @@ const val BACKFILL_MAX_DAYS=731L
         }
         added
     }
-    suspend fun unscheduled(id:Long,taken:Instant,dose:Double,site:String?=null,extra:Boolean=false)=transaction { dao ->
+    suspend fun unscheduled(id:Long,taken:Instant,dose:Double,site:String?=null,extra:Boolean=false)=transactionWithSql { dao, raw ->
         require(dose.isFinite()&&dose>0);val m=dao.medication(id)
         val snap=MedicationSnapshot.encode(m,dao.profile(id))
         val rid=dao.record(RecordEntity(medication_id=id,taken_utc=taken.toEpochMilli(),taken_zone=ZoneId.systemDefault().id,actual_dose=dose,unallocated_supply_amount=dose,site=site?.takeIf{it.isNotBlank()},
             status="ON_TIME",origin="APP",revision=1,config_snapshot=snap))
         SupplyLedger.allocate(dao,dao.recordById(rid)!!)
+        ReferenceStore.captureContext(raw,dao.recordById(rid)!!)
         if(extra)dao.insertAnnotation(RecordAnnotationEntity(rid,HistoryPeriods.EXTRA,System.currentTimeMillis()))
     }
     suspend fun override(slot:Slot,value:SlotOverride,now:Instant=Instant.now())=transaction { dao ->
@@ -632,7 +650,7 @@ const val BACKFILL_MAX_DAYS=731L
         if(json.optInt("format")!=BackupCodec.FORMAT_VERSION||schema<1) throw BackupCodec.BadFile("incompatible version")
         if(schema>current) throw BackupCodec.NewerBackup()
         val tables=json.getJSONObject("tables")
-        val required=DOMAIN_TABLES.filterNot{(schema<2 && it in listOf("stage_review","symptom_check","review_effect")) || (schema<4 && it in listOf("regimen_version","regimen_rule_link","milestone")) || (schema<5 && it=="lab_context_revision") || (schema<6 && it in listOf("visit_question","visit_pack")) || (schema<7 && it in listOf("history_period_revision","record_annotation")) || (schema<9 && it=="trash_item")}
+        val required=DOMAIN_TABLES.filterNot{(schema<2 && it in listOf("stage_review","symptom_check","review_effect")) || (schema<4 && it in listOf("regimen_version","regimen_rule_link","milestone")) || (schema<5 && it=="lab_context_revision") || (schema<6 && it in listOf("visit_question","visit_pack")) || (schema<7 && it in listOf("history_period_revision","record_annotation")) || (schema<9 && it=="trash_item") || (schema<10 && it in ReferenceSchema.businessTables)}
         require(required.all{tables.has(it)}) { "Incomplete backup" }
         db.withTransaction {
             val sql=db.openHelper.writableDatabase

@@ -16,3 +16,10 @@ P3/P4：原35保留、生产/原型同向量差分、来源有向转换、部分
 - 中间新增故障注入用例FAIL：协程栈恢复复制异常对象，身份相等不是业务合同；改查注入消息逃逸，继续严格比较所有业务行/身份/守卫/重开内容。
 - PASS：:core:data:testDebugUnitTest :core:data:assembleDebugAndroidTest，191测试，0失败/跳过；原生测试仅编译PASS。
 - NOT_RUN：原生SQLCipher API26/29/35、物理设备、断电。待GitHub CI实际结果。
+
+## P1实现中
+
+- PASS：ReferencePersistenceTest 10项 + ReferencePayloadTest 7项，本地Robolectric。
+- FAIL已定位：初始完整旧回归6项，固定Room10/Schema9期望和旧fixture使用新表清单/旧迁移缺步骤，已调整但全套复跑尚未完成。
+- 初始新测试12项FAIL：10项合成药物夹具缺少现有active计划要求的soon/late参数；2项负向测试未捕获日期/JSON的专用拒绝异常。修正夹具与专用异常覆盖后17项全通过，没有修改旧业务断言以掩盖错误。
+- NOT_RUN：完整P1回归、原生SQLCipher、迁移1…10专项、UI/物理设备。

@@ -1,8 +1,8 @@
 package net.plainnotes.app.data
 
-/** PNBAK1 record-only serialization stays at 9 even when Room runtime advances. */
+/** PNBAK1 business serialization has an independent version from Room; crypto framing is unchanged. */
 internal object RecordBackupCompatibility {
-    const val SCHEMA = 9
+    const val SCHEMA = 10
     val columns = mapOf(
         "medication" to listOf("id","name","molecule","route","unit","dose_per_intake","container_capacity","expiry_days_after_open","soon_alert_minutes","late_after_minutes","site_rotation","site_set","notifications_on","active","sort_order","needs_review"),
         "pk_profile" to listOf("medication_id","ester","pk_route","sl_tier","gel_product_id","gel_site","gel_area_cm2","patch_release_ug_day"),
@@ -32,5 +32,5 @@ internal object RecordBackupCompatibility {
         "history_period_revision" to listOf("id","period_key","revision","state","medication_id","identity_json","standard_json","from_date","until_date","zone","evidence_json","origin","created_utc","kind","group_key"),
         "record_annotation" to listOf("record_id","kind","created_utc"),
         "trash_item" to listOf("id","kind","ref","item_date","deleted_utc","payload_json","state")
-    )
+    ) + ReferenceSchema.columns
 }
