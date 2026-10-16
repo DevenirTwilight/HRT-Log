@@ -149,14 +149,17 @@ abstract class Ansm03b0InventoryContract {
         val plain = BackupCodec.decrypt(backup, password); val json = JSONObject(String(plain, Charsets.UTF_8)); plain.fill(0)
         assertEquals(9, json.getInt("schema")); assertEquals(1, json.getInt("format"))
         val businessBefore = RawData.dump(raw).toString()
-        // Existing RESTRICT self-FK on reversal_of_id prevents bulk deletion of this ledger.
-        // Record the real restore gap and prove rollback; never relax production constraints.
+        // P0 fixes the former RESTRICT failure. Preserve full rollback coverage using a real injected failure.
         val beforeRestore = fingerprint()
-        try { repo.restoreBackup(backup, password); fail("Expected current nonempty self-FK restore limitation") }
-        catch (e: Exception) {
-            assertTrue(generateSequence(e as Throwable?) { it.cause }.any { it.message.orEmpty().contains("FOREIGN KEY", true) })
-        }
-        assertEquals(beforeRestore, fingerprint()); events.put(state("PNBAK1-nonempty-restore-rejected-rolled-back", m))
+        try {
+            db.withTransaction { repo.restoreBackup(backup, password); error("SYNTHETIC_P0_BEFORE_COMMIT") }
+            fail("Injected replacement failure missed")
+        } catch (e: IllegalStateException) { assertEquals("SYNTHETIC_P0_BEFORE_COMMIT",e.message) }
+        assertEquals(beforeRestore, fingerprint()); events.put(state("PNBAK1-injected-failure-rolled-back", m))
+        repo.restoreBackup(backup,password)
+        assertEquals(businessBefore,RawData.dump(raw).toString())
+        raw.query("PRAGMA foreign_key_check").use { assertFalse(it.moveToFirst()) }
+        events.put(state("PNBAK1-nonempty-target-restored",m))
         db.close(); context.deleteDatabase(databaseName)
         databaseName = "ansm03b0-synthetic-fresh-${UUID.randomUUID()}.db"
         db = open(databaseName); raw
@@ -312,7 +315,8 @@ abstract class Ansm03b0InventoryContract {
         repo.restoreBackup(backup, password)
         // Expected integration gap, NOT a production regression: production has no ansm_lab tables.
         assertEquals(scope.dataset, Ansm03b0CandidateStore.current(raw))
-        raw.query("SELECT COUNT(*) FROM sqlite_master WHERE type='trigger' AND name='ansm_lab_snapshot_update'").use { assertTrue(it.moveToFirst()); assertEquals(0, it.getInt(0)) }
+        raw.query("SELECT COUNT(*) FROM sqlite_master WHERE type='trigger' AND name='ansm_lab_snapshot_update'").use { assertTrue(it.moveToFirst()); assertEquals(1, it.getInt(0)) }
+        expectRejected("ANSM_TEST_ONLY_IMMUTABLE") { raw.execSQL("UPDATE ansm_lab_snapshot SET payload='{}'") }
         val before = fingerprint()
         try { db.withTransaction { Ansm03b0CandidateStore.retire(raw, scope.dataset); repo.restoreBackup(backup, password); error("SYNTHETIC_RESTORE_INTERRUPTED") }; fail("Restore fault missed") }
         catch (e: IllegalStateException) { assertEquals("SYNTHETIC_RESTORE_INTERRUPTED", e.message) }

@@ -40,6 +40,7 @@ enum class Space(val file:String,val wrap:String,val alias:String) {
         // Switching the UI must not close a database still used by an in-flight transaction.
         current=space
     }
+    internal val applicationContext: Context get() = context.applicationContext
     fun get(): NotesDatabase=get(current)
     @Synchronized open fun get(space:Space): NotesDatabase {
         if(!context.getSystemService(UserManager::class.java).isUserUnlocked) throw DataLockedException()
