@@ -1,0 +1,348 @@
+{
+  "recorded_at_utc": "2026-10-16T03:59:06.970252+00:00",
+  "scope": "IMPLEMENTATION_HEAD_EVIDENCE_NOT_A_LATER_DOCUMENTATION_HEAD",
+  "implementation_head": "0129df3020caa995bbbfe42f92db49cbcb87a22e",
+  "baseline_sha": "a3146dfd63057a563b57f7967e2de857de486d90",
+  "runs": [
+    {
+      "id": 38846525419,
+      "event": "push",
+      "name": "Android and domain checks",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38846525419",
+      "head_sha": "0129df3020caa995bbbfe42f92db49cbcb87a22e",
+      "attempt": 1,
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 116798206209,
+          "name": "attachment-poc-compatibility (26)",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38846525419/job/116798206209"
+        },
+        {
+          "id": 116798206315,
+          "name": "device-tests",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38846525419/job/116798206315"
+        },
+        {
+          "id": 116798206390,
+          "name": "jvm",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38846525419/job/116798206390"
+        },
+        {
+          "id": 116798206447,
+          "name": "android",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38846525419/job/116798206447"
+        },
+        {
+          "id": 116798206507,
+          "name": "attachment-poc-compatibility (29)",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38846525419/job/116798206507"
+        }
+      ]
+    },
+    {
+      "id": 38846525473,
+      "event": "push",
+      "name": "Science validation",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38846525473",
+      "head_sha": "0129df3020caa995bbbfe42f92db49cbcb87a22e",
+      "attempt": 1,
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 116798206100,
+          "name": "science-change-gate",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38846525473/job/116798206100"
+        },
+        {
+          "id": 116798264076,
+          "name": "research-deep",
+          "status": "completed",
+          "conclusion": "skipped",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38846525473/job/116798264076"
+        }
+      ]
+    },
+    {
+      "id": 38846586349,
+      "event": "pull_request",
+      "name": "Android and domain checks",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38846586349",
+      "head_sha": "0129df3020caa995bbbfe42f92db49cbcb87a22e",
+      "attempt": 1,
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 116798395602,
+          "name": "attachment-poc-compatibility (26)",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38846586349/job/116798395602"
+        },
+        {
+          "id": 116798395845,
+          "name": "jvm",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38846586349/job/116798395845"
+        },
+        {
+          "id": 116798395856,
+          "name": "android",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38846586349/job/116798395856"
+        },
+        {
+          "id": 116798395883,
+          "name": "device-tests",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38846586349/job/116798395883"
+        },
+        {
+          "id": 116798395905,
+          "name": "attachment-poc-compatibility (29)",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38846586349/job/116798395905"
+        }
+      ]
+    },
+    {
+      "id": 38846586350,
+      "event": "pull_request",
+      "name": "Science validation",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38846586350",
+      "head_sha": "0129df3020caa995bbbfe42f92db49cbcb87a22e",
+      "attempt": 1,
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 116798395601,
+          "name": "science-change-gate",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38846586350/job/116798395601"
+        },
+        {
+          "id": 116798439632,
+          "name": "research-deep",
+          "status": "completed",
+          "conclusion": "skipped",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38846586350/job/116798439632"
+        }
+      ]
+    }
+  ],
+  "build_artifact": {
+    "artifact_id": 12023578700,
+    "sha256": "37c7ab690256f782c231cbeb2e4d9185c10f854131ef2f53eed5207b1e44f16e",
+    "bytes": 81357721,
+    "crc": "PASS",
+    "apk_entries": 0,
+    "screenshots": 384,
+    "test_summaries": [
+      {
+        "path": "app/build/reports/tests/testFullDebugUnitTest/index.html",
+        "counts": {
+          "tests": 1272,
+          "failures": 0,
+          "skipped": 173
+        }
+      },
+      {
+        "path": "core/data/build/reports/tests/testDebugUnitTest/index.html",
+        "counts": {
+          "tests": 180,
+          "failures": 0,
+          "skipped": 0
+        }
+      },
+      {
+        "path": "core/reminder/build/reports/tests/testDebugUnitTest/index.html",
+        "counts": {
+          "tests": 19,
+          "failures": 0,
+          "skipped": 0
+        }
+      },
+      {
+        "path": "app/build/reports/tests/testFullDebugUnitTest/net.plainnotes.app.PeriodStabilityTest/index.html",
+        "counts": {
+          "tests": 5,
+          "failures": 0,
+          "skipped": 0
+        }
+      },
+      {
+        "path": "app/build/reports/tests/testFullDebugUnitTest/net.plainnotes.app.catalog.SyntheticCatalogTest/index.html",
+        "counts": {
+          "tests": 9,
+          "failures": 0,
+          "skipped": 0
+        }
+      },
+      {
+        "path": "app/build/reports/tests/testFullDebugUnitTest/net.plainnotes.app.catalog.CatalogPrototypeFlowTest/index.html",
+        "counts": {
+          "tests": 8,
+          "failures": 0,
+          "skipped": 0
+        }
+      },
+      {
+        "path": "app/build/reports/tests/testFullDebugUnitTest/net.plainnotes.app.catalog.CatalogPrototypeHostTest/index.html",
+        "counts": {
+          "tests": 1,
+          "failures": 0,
+          "skipped": 0
+        }
+      },
+      {
+        "path": "app/build/reports/tests/testFullDebugUnitTest/net.plainnotes.app.catalog.CatalogPrototypeLayoutTest/index.html",
+        "counts": {
+          "tests": 96,
+          "failures": 0,
+          "skipped": 0
+        }
+      }
+    ],
+    "local_representative_pixel_file_matches": 8,
+    "all_local_screenshot_file_matches": 384
+  },
+  "device_api35_artifact": {
+    "artifact_id": 12023428665,
+    "sha256": "4b9ee14a7124dbe6d4a28b763e63465616715bdf169e45e79cfbbe70c2ba0176",
+    "bytes": 112861,
+    "crc": "PASS",
+    "test_summaries": [
+      {
+        "path": "core/data/build/reports/androidTests/connected/debug/index.html",
+        "counts": {
+          "tests": 137,
+          "failures": 0,
+          "skipped": 0
+        }
+      },
+      {
+        "path": "app/build/reports/androidTests/connected/debug/flavors/full/index.html",
+        "counts": {
+          "tests": 264,
+          "failures": 0,
+          "skipped": 8
+        }
+      }
+    ],
+    "apk_entries": 0
+  },
+  "jvm_artifact": {
+    "artifact_id": 12023198173,
+    "sha256": "011e6dfbe01fc49a101209798be0e57631e6c68fa645f93295aef8c87876d65e",
+    "crc": "PASS",
+    "apk_entries": 0,
+    "test_summaries": {
+      "core/domain": {
+        "tests": 63,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "pk-engine": {
+        "tests": 124,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "importer": {
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "tools/attachment-poc": {
+        "tests": 63,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  "api26_29_artifacts": [
+    {
+      "api": 26,
+      "artifact_id": 12023378323,
+      "sha256": "87d59d4adcb845e48bfafef569fab4dbe82771825494a3f7ebcafd2845afe9f1",
+      "crc": "PASS",
+      "apk_entries": 0,
+      "normal_connected_test_summaries": [
+        {
+          "path": "core/data/build/reports/androidTests/connected/debug/index.html",
+          "counts": {
+            "tests": 70,
+            "failures": 0,
+            "skipped": 0
+          }
+        },
+        {
+          "path": "app/build/reports/androidTests/connected/debug/flavors/full/index.html",
+          "counts": {
+            "tests": 70,
+            "failures": 0,
+            "skipped": 0
+          }
+        }
+      ],
+      "fault_injection": "Separate intentional red failures and fixed green passes; workflow gates verify exact signals. Not counted as ordinary failures."
+    },
+    {
+      "api": 29,
+      "artifact_id": 12024195432,
+      "sha256": "6fe7092e7d30f6aeafc7053de7b6bdf8bbc5230debe830e0385423783a90215c",
+      "crc": "PASS",
+      "apk_entries": 0,
+      "normal_connected_test_summaries": [
+        {
+          "path": "core/data/build/reports/androidTests/connected/debug/index.html",
+          "counts": {
+            "tests": 70,
+            "failures": 0,
+            "skipped": 0
+          }
+        },
+        {
+          "path": "app/build/reports/androidTests/connected/debug/flavors/full/index.html",
+          "counts": {
+            "tests": 70,
+            "failures": 0,
+            "skipped": 0
+          }
+        }
+      ],
+      "fault_injection": "Separate intentional red failures and fixed green passes; workflow gates verify exact signals. Not counted as ordinary failures."
+    }
+  ],
+  "verified_log_markers": [
+    "2026-10-16T03:48:50.0319607Z PASS: fresh process retains VOIDED, encrypted backup and safe restoration",
+    "2026-10-16T03:48:53.9909254Z PASS: R15 undo persists in a new PID, PNBAK1 retains evidence, real intake deducts once, VOIDED stays excluded",
+    "2026-10-16T03:48:57.7857102Z PASS: MED-01 new PID retains original visit ID/timezone/questions/labs, PNBAK1 and recycle recovery, isolated legacy store",
+    "2026-10-16T03:52:53.3777206Z PASS fullRelease: HRT Log application identity, correct entry points, no INTERNET (app/build/intermediates/merged_manifests/fullRelease/processFullReleaseManifest/AndroidManifest.xml)",
+    "2026-10-16T03:52:53.4977137Z PASS attachment isolation: app/build/outputs/apk/full/release/app-full-release-unsigned.apk, 1 DEX files"
+  ],
+  "existing_skips": "App JVM173 and API35 app8 are existing conditional cases; all114 new catalogue tests have0 skips. No old test source modified.",
+  "source_invariance": "Protected production source trees equal a314 baseline; release guard actually passed on unsigned CI payload. No formal signature/APK delivery.",
+  "approval_status": "MOCK_ENGINEERING_VERIFIED; official catalogue/production persistence NOT_IMPLEMENTED; owner distribution/schema approval pending; no merge/release",
+  "final_head_rule": "Final docs HEAD and all its checks must complete; record final SHA and CI in PR48 body/checks instead of claiming this code HEAD is the last commit."
+}
