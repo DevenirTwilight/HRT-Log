@@ -705,5 +705,178 @@
   },
   "initial_local_attempt": "NOT_COMPLETED: stopped own JVM before tests; missing Java proxy configuration; configured proxy retry PASS",
   "production_binding": "NOT_IMPLEMENTED",
-  "physical_device": "NOT_RUN"
+  "physical_device": "NOT_RUN",
+  "audit_commit_ci": {
+    "head": "3e0e0e13fc6e130b24bd550bc56fd4868a1e6deb",
+    "semantics": "Audit/contract commit with 4 new legacy boundary tests only; NOT the later measurement implementation.",
+    "android_run": 38862315036,
+    "science_run": 38862314983,
+    "status": "PASS",
+    "jobs": [
+      {
+        "conclusion": "success",
+        "name": "android",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "attachment-poc-compatibility (26)",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "device-tests",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "jvm",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "attachment-poc-compatibility (29)",
+        "status": "completed"
+      }
+    ],
+    "downloaded_artifacts": [
+      {
+        "artifact_id": 12030296084,
+        "name": "attachment-poc-api29",
+        "bytes": 53313,
+        "digest": "sha256:b60c955a015c87e0522329519c8b8d0dac11f4e69d68e7c8b812d95b069a063d",
+        "crc": "PASS",
+        "apk_entries": [],
+        "reports": [
+          {
+            "path": "core/data/build/reports/androidTests/connected/debug/index.html",
+            "tests": 70,
+            "failures": 0,
+            "skipped": 0
+          },
+          {
+            "path": "app/build/reports/androidTests/connected/debug/flavors/full/index.html",
+            "tests": 70,
+            "failures": 0,
+            "skipped": 0
+          }
+        ]
+      },
+      {
+        "artifact_id": 12029889368,
+        "name": "device-test-results",
+        "bytes": 113007,
+        "digest": "sha256:cf5c13f24f540af53cba96b69911bc6f5882bed8d77e5ad38736302dc71664f0",
+        "crc": "PASS",
+        "apk_entries": [],
+        "reports": [
+          {
+            "path": "core/data/build/reports/androidTests/connected/debug/index.html",
+            "tests": 137,
+            "failures": 0,
+            "skipped": 0
+          },
+          {
+            "path": "app/build/reports/androidTests/connected/debug/flavors/full/index.html",
+            "tests": 264,
+            "failures": 0,
+            "skipped": 8
+          }
+        ]
+      },
+      {
+        "artifact_id": 12029714200,
+        "name": "build-results",
+        "bytes": 1465458,
+        "digest": "sha256:2a8462f8f920e3e067a49ad4a629ce287173b950428dffe8a07912df296172f1",
+        "crc": "PASS",
+        "apk_entries": [],
+        "reports": [
+          {
+            "path": "app/build/reports/tests/testFullDebugUnitTest/index.html",
+            "tests": 1198,
+            "failures": 0,
+            "skipped": 205
+          },
+          {
+            "path": "core/data/build/reports/tests/testDebugUnitTest/index.html",
+            "tests": 180,
+            "failures": 0,
+            "skipped": 0
+          },
+          {
+            "path": "core/reminder/build/reports/tests/testDebugUnitTest/index.html",
+            "tests": 19,
+            "failures": 0,
+            "skipped": 0
+          }
+        ],
+        "lint": {
+          "Error": 0,
+          "Warning": 185
+        }
+      },
+      {
+        "artifact_id": 12029542608,
+        "name": "attachment-poc-api26",
+        "bytes": 53355,
+        "digest": "sha256:a1cc43a9e405a23ea71045bda2635a56943070f91192218bb96b16525e9350e5",
+        "crc": "PASS",
+        "apk_entries": [],
+        "reports": [
+          {
+            "path": "core/data/build/reports/androidTests/connected/debug/index.html",
+            "tests": 70,
+            "failures": 0,
+            "skipped": 0
+          },
+          {
+            "path": "app/build/reports/androidTests/connected/debug/flavors/full/index.html",
+            "tests": 70,
+            "failures": 0,
+            "skipped": 0
+          }
+        ]
+      },
+      {
+        "artifact_id": 12029308489,
+        "name": "jvm-test-results",
+        "bytes": 42104,
+        "digest": "sha256:18d1a4a57fa3a706f9829aff83e01b62951380902660c8785d1dabc6f837bf7f",
+        "crc": "PASS",
+        "apk_entries": [],
+        "reports": [
+          {
+            "path": "core/domain/",
+            "tests": 67,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "path": "pk-engine/",
+            "tests": 124,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "path": "importer/",
+            "tests": 12,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "path": "tools/attachment-poc/",
+            "tests": 63,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          }
+        ]
+      }
+    ],
+    "artifact_download": "CLI redirected artifact host returned403; existing connected GitHub download tool succeeded. No authentication/policy changes."
+  }
 }

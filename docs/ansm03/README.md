@@ -39,5 +39,28 @@ PR49占用共享HANDOFF/STATUS/交付账本。本分支从默认分支创建，�
 ## 阶段记录
 
 1. 审计与合同已写，LegacyBoundaryTest 4/4 PASS，说明旧标量投影信息不足，不制造生产失败。
-2. 计量实现/完整回归/最终CI：待实际执行；此时NOT_IMPLEMENTED/NOT_RUN。
+2. 已实现test-only核心：精确十进制、维度/语义身份、有向含量关系、来源与实际包装确认、结构化错误、冻结包装快照；无生产调用。
+   最终本地：新增35项（核心26、历史协议5、旧边界4）全部PASS；全JVM297项PASS；Python107项PASS。
+   定向数据32、应用23项PASS（包含PeriodStability 5、备份历史16、四语2），均零fail/error/skip。
+   malformed presentation身份的运行时负例先红后绿，原断言保留；证据见negative-evidence.json。
+   生产路径Git对象与基线完全一致，主JAR无measurement类。当前最终HEAD CI结果固定PR正文/检查页，不冒用先行提交CI。
+   真机/ARM/TalkBack：NOT_RUN；无UI/截图/安装包交付。
 3. ANSM-03B全部NOT_IMPLEMENTED，独立审批前不迁移、不接线。
+
+## 交付索引与后续
+
+独立PR：[ANSM-03A #50](https://github.com/DevenirTwilight/HRT-Log/pull/50)，不自动合并。
+最终SHA、最新默认分支与六检查的实际结果固定该PR正文；本交接记录本地完成证据，不宣称获准生产或发布。
+
+- [量纲合同](measurement-contract.md)：数字上限/分数/单位/来源/错误语义。
+- [来源边界](source-boundaries.md)：先前证据引用与本轮合成数据的区别。
+- [03B审批方案](production-integration-proposal.md)：快照/实体、Room1→10→候选N、PNBAK旧新格式、失败/取消/回滚、预测及02B接口。
+- [验收映射](acceptance-matrix.md)、[验证账本](verification.md)、[本地机器证据](local-verification.json)、[先红后绿证据](negative-evidence.json)。
+- [计量核心与测试](../../core/domain/src/test/kotlin/net/plainnotes/app/domain/measurement/)、[报告脚本](../../scripts/ansm03_report.py)、独立边界测试scripts/test_ansm03_boundary.py。
+
+修改文件范围：本目录9份文档/JSON、core/domain test源集4份Kotlin、独立scripts两份；
+实际清单以PR Files changed为准。未改共享HANDOFF/REQUIREMENTS/STATUS/BACKLOG、UI、Gradle、CI或生产源码。
+
+03B阻断：01/02前置验收、许可和FT/ST处理、正式DTO/来源条件与成分编码、实际包装确认、
+容器身份及冻结快照、迁移与业务备份版本、旧unknown策略、混合规格分配/预测/提醒未知表现、失败/回滚测试计划，
+全部需独立审阅与负责人明确批准；不能因35项原型测试通过启动正式库存接线。
