@@ -19,3 +19,6 @@
 首轮core/data239项PASS；应用Controller5+四语UI16+Period5+Privacy3共29项PASS。随后补充busy期间真实等待/重复确认和关闭拒绝测试，以及加载竞态与过期后明确reload，正在运行最终含32组合/三档对比度矩阵。截图与最终PASS尚未宣称。
 
 截图矩阵首次FAIL：Compose captureToImage在Robolectric Dialog上超时，尚未产图；不是已完成截图。改用ShadowDialog取得实际Dialog窗口并原生Canvas绘制，保留全部语义/滚动/操作断言；后续重跑并目视检查。另强化结果上限测试，显式选择确实不在前200条中的快照，避免随机UUID排序使测试只验证已显示条目。
+
+最终源8e910ee：data239、app62全PASS，0失败/错误/跳过；32组合×三档对比度=96配置、192张真实Dialog原生绘制合成图均非空，8张四语代表图入库，其余由CI收集。人工抽查en320/2x/dark/HIGH、fr320/2x/dark/HIGH、zh-CN411/1x/light/STANDARD及zh-TW411/2x/light/STANDARD，长名换行/原单位/身份/状态明确。不是实机或TalkBack证据。
+已普通合入父PR #54的1f8d150证据更新（仅文档）；#56仍是以feature为base的草稿，不得auto-merge到feature。CI集成计划：#48未修改.github，#54的现有原生类清单保持，只在同一android job设置截图环境并追加合成截图artifact路径，检查名和全部断言不变；真实最终CI待当前HEAD。

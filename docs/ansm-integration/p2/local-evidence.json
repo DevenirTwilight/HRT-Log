@@ -1,0 +1,188 @@
+{
+  "checked_at": "2026-10-16T14:53:23.773839+00:00",
+  "tested_source": "8e910eedb72114d7432597c7a5256a9306937ae6",
+  "status": "PASS",
+  "pr": 56,
+  "parent_pr": 54,
+  "reports": {
+    "data": {
+      "totals": {
+        "tests": 239,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reports": [
+        {
+          "file": "TEST-net.plainnotes.app.data.Ansm03b0InventoryTest.xml",
+          "sha256": "7a619534376063970f577faee165b31e9b90ea04a1ce493cf552c8c6256e76c4"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.AttachmentFoundationTest.xml",
+          "sha256": "c31eb2fcd4690e9eab78f049f39fcfa25fd4a127f6aeb61518a598ad02817d71"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.AttachmentMigrationTest.xml",
+          "sha256": "fd380a7175683d0d693e6c94c7d2ef84064907b8939d2612c5081436b2cdde5b"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.BackfillTest.xml",
+          "sha256": "19b643fd53fdfa06fd53b3f490cf9d2b3ca18534f46a02e864ba2657a74bab7a"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.BackupReplacementTest.xml",
+          "sha256": "46d95e67bee151b70b92cbb402851db78f5fc1d82bf2a0e92aa11adb0f522fde"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.DataTransferTest.xml",
+          "sha256": "40fce9b91c5ef22b147948970820e499a1289e28f7d581a31b6391ad57d62278"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.HistoricalContextRepairTest.xml",
+          "sha256": "d469841a0fe4905f56bc9550c56e7aae2f07ed6f16a7567e9879748bf6048701"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.HistoricalVisitTest.xml",
+          "sha256": "280a4a5f24a8f4e7facc52dead94667cf328d1ba43a0187f9d65fd06179319d1"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.HistoryIntegrityTest.xml",
+          "sha256": "84eb2b25cf7dbdb32b0c7a06a83a477a264663914daf549172a549aac723f72f"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.HistoryPeriodDataTest.xml",
+          "sha256": "d65bda19358ab512dbee573fc19785e6a4e4456a157268653608e12e410ac5fd"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.HrtTrackerImportTest.xml",
+          "sha256": "7ca7c788720c1c97c0cb0701b499a03face388964f0eb04cb316efec3ba9d6f9"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.KeyBoundaryTest.xml",
+          "sha256": "65b184bbbae8abd6eebed9e360e279369b72ad8abfa18a3fe72ce00dd040c50d"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.LabContextTest.xml",
+          "sha256": "49bc10c516f8f5a673e8077ab9dcc4cee4f99753dfc2de47fdce8379a3a1548a"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.LedgerReplacementTest.xml",
+          "sha256": "a2424ffe843b3269f51ac9144373f38a20a2c0fa2a5ffd7e4d6c8f2756011e98"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.PlanEditTest.xml",
+          "sha256": "57e71b74e5a7040e37fc307e8998f2466e12cf654b54131c59080b1829079420"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.ReferenceCatalogTest.xml",
+          "sha256": "9cb4bdb9a3da426e86e337b63ab3f38843dd355e3c1724c1c1bea1ab9ebb4f1c"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.ReferenceMigrationTest.xml",
+          "sha256": "ea2da7b84cee89f613d36ad83cfb9fc3b727a0663c65a613fd71c9918efea697"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.ReferencePayloadTest.xml",
+          "sha256": "7e34f4152aa39043abe5e17dbab8946a50fd7304d8781a850996ed0e0a6bc571"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.ReferencePersistenceTest.xml",
+          "sha256": "e2d5e917419c397fef013709babbcbabf8cc9d1864c4e2b801c73a09d2f1b06f"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.RegimenHistoryTest.xml",
+          "sha256": "43be511113fd02c1ea7475f0426b1a438ceae65536e041242a0c6a5ad38fd2bb"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.SchemaConstraintTest.xml",
+          "sha256": "7aa9ee48f36ed841bf4ca1611fe5f6df9f7916fb62f7da9b67b6eaec8f2669cc"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.StockCorrectionTest.xml",
+          "sha256": "74444995c43812eedc1f84ce97eb998b34cceffc95bd4d10bbf4e974db53347c"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.StockForecastTest.xml",
+          "sha256": "c51f5e422e9aad96db9d33ece0ef16106212f1b41edfb90fbd379abad24a948e"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.SupplyLedgerTest.xml",
+          "sha256": "8de54255a581543445891da2de408f2587d478c73da5806f841936b17bf0aa9a"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.TrashDataTest.xml",
+          "sha256": "ede776f162c3d243d20d025d7ab231d7e4678ad2668e29b760d7b5aa96a28e67"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.UndoSkippedTest.xml",
+          "sha256": "6dac9b17ddf8f44a885169541f38648d75bc7a9c1acc2b667e76169c0740e440"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.VisitPackDataTest.xml",
+          "sha256": "58ebf5836bafea4e492cbe6face8b93df763705ed854ac3a597ae551898bbe76"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.VoidedPackageTest.xml",
+          "sha256": "f71c113ce02e7baa2527a55a4d3ca9f726458b42c788daad3c575e00601b82a2"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.WellbeingMigrationTest.xml",
+          "sha256": "df05adc521b41703ef8a4a65a86c02141dd3783bccbe46d6e590f935890ed94e"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.data.WellbeingRecordsTest.xml",
+          "sha256": "9c17129940d3fe21f071c918a53ddbce0c415091d1408129066d2f82f0870d95"
+        }
+      ]
+    },
+    "app": {
+      "totals": {
+        "tests": 62,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "reports": [
+        {
+          "file": "TEST-net.plainnotes.app.MedicationReferenceControllerTest.xml",
+          "sha256": "292c644008aa60f3768e0126062b3a60b26240288b1e1d4e922ccc45a238c2b9"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.MedicationReferenceMatrixTest.xml",
+          "sha256": "54563bfd9199e49223b08d24e9edd55970a57d7d31d42f3665032eacb06879c8"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.MedicationReferenceUiTest.xml",
+          "sha256": "6f192c20b0312df64219c74c9a85fbd68f5c7e43e80d449a89fdf7256c58790e"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.PeriodStabilityTest.xml",
+          "sha256": "3195c17220446ed8df8901af06edd8d947b11b908f08a4c26ce8ec5543a42924"
+        },
+        {
+          "file": "TEST-net.plainnotes.app.PrivacyNoticeFactsTest.xml",
+          "sha256": "95a4ff380ac67d36db99907d58ec04d1a6170d7d5396408b2efd7cf6942d9621"
+        }
+      ]
+    }
+  },
+  "screenshots": {
+    "count": 192,
+    "matrix_configurations": 96,
+    "representatives_committed": 8,
+    "all_nonblank": true,
+    "manifest": "screenshot-manifest.json"
+  },
+  "earlier_failures": [
+    "Cross-module nullable scope smart cast: fixed by local immutable capture",
+    "32 PixelCopy-based screenshot timeouts: replaced by actual native Dialog Canvas draw; all original layout/operation assertions retained"
+  ],
+  "native_ui": "NOT_RUN",
+  "physical_device": "NOT_RUN",
+  "TalkBack_manual": "NOT_RUN",
+  "ci": "PENDING",
+  "official_packaging": "OFF",
+  "stock_algorithm_changed": false,
+  "pk_parameters_changed": false,
+  "released": false
+}
