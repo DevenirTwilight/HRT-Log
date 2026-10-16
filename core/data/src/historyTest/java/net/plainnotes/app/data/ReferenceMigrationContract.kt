@@ -12,7 +12,7 @@ import org.junit.Test
 import org.junit.Assert.*
 import java.util.UUID
 
-/** Authoritative exported schemas 1..10, then the real production migration and Room validation. */
+/** Authoritative exported schemas 1..11, then the real production migration and Room validation. */
 abstract class ReferenceMigrationContract {
     protected abstract fun factory(key:ByteArray):SupportSQLiteOpenHelper.Factory
     protected open val assetsContext:Context get()=context
@@ -49,14 +49,14 @@ abstract class ReferenceMigrationContract {
             }
         }.toString()
     }
-    @Test fun everyPublishedRoomOneThroughTenUpgradesNonDestructivelyToEleven() {
-        for(version in 1..10) {
+    @Test fun everyPublishedRoomOneThroughElevenUpgradesNonDestructivelyToTwelve() {
+        for(version in 1..11) {
             val name="synthetic-reference-migration-$version-${UUID.randomUUID()}.db";val key=ByteArray(32){(version+it).toByte()}
             try {
                 fixture(name,key,version).use {it.writableDatabase.execSQL("INSERT INTO day_note(date,text) VALUES('2026-10-16',?)",arrayOf("SYNTHETIC schema $version"))}
                 Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(key.clone()))
                     .addMigrations(*allMigrations()).addCallback(SchemaGuards).allowMainThreadQueries().build().useRoom {room->
-                        val raw=room.openHelper.writableDatabase;assertEquals(11,raw.version)
+                        val raw=room.openHelper.writableDatabase;assertEquals(12,raw.version)
                         raw.query("SELECT text FROM day_note").use {assertTrue(it.moveToFirst());assertEquals("SYNTHETIC schema $version",it.getString(0));assertFalse(it.moveToNext())}
                         raw.query("PRAGMA foreign_key_check").use {assertFalse(it.moveToFirst())}
                         ReferenceSchema.businessTables.forEach {table->raw.query("SELECT COUNT(*) FROM `$table`").use {it.moveToFirst();assertEquals(0,it.getInt(0))}}
@@ -80,7 +80,7 @@ abstract class ReferenceMigrationContract {
                 fingerprint(raw)
             }
             fun open()=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(key.clone())).addMigrations(*allMigrations()).addCallback(SchemaGuards).build()
-            open().useRoom {assertEquals(before,fingerprint(it.openHelper.writableDatabase));assertEquals(11,it.openHelper.writableDatabase.version)}
+            open().useRoom {assertEquals(before,fingerprint(it.openHelper.writableDatabase));assertEquals(12,it.openHelper.writableDatabase.version)}
             fixture(name,key,10).use {old->
                 try {old.writableDatabase;fail("Old application silently downgraded new database")} catch(_:android.database.SQLException){}
             }
@@ -115,7 +115,7 @@ abstract class ReferenceMigrationContract {
             val injected=object:androidx.room.migration.Migration(10,11) {
                 override fun migrate(db:SupportSQLiteDatabase) {invoked=true;ReferenceSchema.migrate(db);error("SYNTHETIC reference migration interrupted")}
             }
-            Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(key.clone())).addMigrations(injected).build().useRoom {room->
+            Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(key.clone())).addMigrations(injected,migration11To12).build().useRoom {room->
                 try {room.openHelper.writableDatabase;fail("Interrupted migration succeeded")}catch(e:IllegalStateException){assertTrue(e.message.orEmpty().contains("SYNTHETIC reference migration interrupted"))}
             }
             assertTrue(invoked)
@@ -124,7 +124,7 @@ abstract class ReferenceMigrationContract {
                 raw.query("SELECT text FROM day_note").use {assertTrue(it.moveToFirst());assertEquals("SYNTHETIC intact Room10",it.getString(0))}
                 raw.query("SELECT name FROM sqlite_master WHERE type='table' AND name IN (${(ReferenceSchema.businessTables+"reference_runtime").joinToString(",") {"'"+it+"'"}})").use {assertEquals(0,it.count)}
             }
-            Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(key.clone())).addMigrations(*allMigrations()).addCallback(SchemaGuards).build().useRoom {assertEquals(11,it.openHelper.writableDatabase.version)}
+            Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(key.clone())).addMigrations(*allMigrations()).addCallback(SchemaGuards).build().useRoom {assertEquals(12,it.openHelper.writableDatabase.version)}
         } finally {context.deleteDatabase(name);key.fill(0)}
     }
 }
