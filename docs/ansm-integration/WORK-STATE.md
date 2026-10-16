@@ -6,7 +6,7 @@
 |---|---|---|
 |Phase0|DONE|负责人联合实施授权已完整归档；官方许可/FT-ST仍未闭环，分发OFF|
 |P0|INTEGRATION_VERIFIED|#53已合并；主线六项必需检查PASS；API26/29/35新增恢复测试各7项PASS|
-|P1|IN_PROGRESS|Room11/业务备份Schema10、稳定引用/CAS/历史捕获已实现；上一轮231数据+8应用测试PASS，新增修订边界测试正重跑；尚无P1 PR，原生运行NOT_RUN|
+|P1|IN_PROGRESS|Room11/业务备份Schema10、稳定引用/CAS/历史捕获已实现；最终233数据测试PASS（0失败/跳过），既有PeriodStability/PrivacyNotice8项PASS；原生编译PASS，PR #54 CI进行中，原生运行NOT_RUN|
 |P2|NOT_STARTED|真实生产入口，官方资源OFF，保留手动来源|
 |P3|NOT_STARTED|复用原35项测试，审查并生产化计量核心|
 |P4|NOT_STARTED|Legacy/Verified互斥、精确账本、事务幂等|
@@ -22,3 +22,5 @@ P1工作树/workspace/HRT-Log-p1，分支feature/ansm02b-03b-p1-persistence-2026
 P1只启用商品引用存储和上下文捕获；实际包装确认/精确消费尚未启用。validator明确拒绝PRESENTATION及measured_operation，防止半实现数据被接受。更新引用不走saveMedication，不resize容器，不调用新库存分配器。真实绑定UI尚未实现。
 
 中间失败已保留于开发日志：旧固定版本期望/不正确旧备份夹具、RoomDatabase关闭助手、合成REVERSE构造顺序。修正夹具和明确版本期望，未删减既有业务断言。全部B0影子合同保留，新版本头拒绝与恢复失败目标不变断言保留。
+
+最终P1源95f44d7包含重算摘要后的未来修订/溢出拒绝及JSON字段类型拒绝；233项完整回归PASS，详见p1-local-evidence.json。#54当前草稿，尚未合并或发布。发布二进制隔离本地因未构建unsigned release而NOT_RUN，源码隔离PASS；远端CI保留完整实际构建守卫，不以缺失产物冒充通过。

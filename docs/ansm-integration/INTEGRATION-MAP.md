@@ -10,7 +10,7 @@
 |#51|MERGED至原feature base，edebcfdd197fef38c4347e0fbf33ee484be46b07|未误称直接进入默认分支；通过#52桥接|
 |#52|MERGED，默认merge92f27e99e5567a9eb42bbb3f19a577238ca97c5c|影子测试/真实数据合同已集成|
 |#53 P0|MERGED，默认mergecfbe62c4a466f55234d53fbeff4c7f2c03224d50|修复真实非空恢复/清库，原生三API验证；主线CI通过|
-|P1|独立分支，PR尚未创建|已合入主线cfbe62c；Room11/业务Schema10实现与完整本地回归|
+|P1|独立PR #54，草稿/CI进行中|已合入主线cfbe62c；Room11/业务Schema10实现与完整本地回归|
 
 实施顺序P0→P1→P2/P3→P4→P5，各独立PR。用户后续已明确授权受保护自动合并（REQUIREMENTS §103），不授权绕过检查、修改保护规则或合并无关PR。
 共享交点：core/data实体/Room/SchemaGuards/NotesRepository/DataTransfer/BackupValidation、ViewModel/AppShell、四语、CI。串行集成，避免同文件并写；不强推、不重写冻结资料；#34及PK研究PR不属于此队列。
