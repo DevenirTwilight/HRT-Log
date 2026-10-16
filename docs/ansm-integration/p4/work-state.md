@@ -11,3 +11,5 @@
 新增候选包装载荷codec12项首轮10通过/2失败：一项用BigDecimal.equals错误要求相同scale（80与8E+1数学相同，实际存储plain文本80），改为明确plain文本80断言；另一项负向测试在调用codec之前就由canonical(Double)抛IllegalState，未进入预期验证异常。修复read将外部解析/类型错误统一为IllegalArgumentException，并把非法Double原始JSON送入codec，保留其必须拒绝断言。来源、单位、精度等断言未削弱；后续完整回归待运行。当前Room11/业务10及拒绝新模式的守卫未改。
 
 候选容器事务适配器已在main源码准备，但仅由合成Room测试调用，NotesRepository/App没有入口，当前备份守卫仍明确拒绝新格式。创建事务先验epoch、独立UUID/不可变包装、整数容量，重试同op返回原容器，异载荷/owner/商品op冲突拒绝；源/容器创建故障同事务回滚。新增8项真实Room测试首轮7通过/1失败：测试直接写VOIDED被既有Package correction evidence守卫正确拒绝。改为调用真实PackageCorrections.void/restore，继续断言证据追加、重复创建不恢复库存和来源不变；未改守卫或生产VOIDED行为。正在完整回归。未来新库存格式需要版本门，当前Room/业务版本未改变。
+
+源783606a完整data257/domain140 PASS（0失败/错误/跳过），原生测试源码编译PASS。容器创建8项真实Room全绿，含故障注入、scope/UUID冲突、旧库存不变、真实VOIDED/恢复和已删除ID复用。不是正式接线完成。随后将同一8项抽到historyTest共享合同并增加关闭/重开保留来源/原生加密头断言；Robolectric和SQLCipher共用9项，现有CI三API清单只追加新类、不替换旧类。新共享合同待本地及CI真实执行，不能以旧8项通过冒充原生9项通过。
