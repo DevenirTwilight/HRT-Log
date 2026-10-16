@@ -1,0 +1,709 @@
+{
+  "checked_at": "2026-10-16T06:37:54.321972+00:00",
+  "baseline": "1e8754e9bab8b01034cb3de22ceaf9dc61a1438a",
+  "default_branch": "claude/new-session-1959qb",
+  "worktree_clean_at_start": true,
+  "prs": [
+    {
+      "baseRefName": "claude/new-session-1959qb",
+      "files": [
+        {
+          "path": "docs/ansm/README.md",
+          "additions": 59,
+          "deletions": 0
+        },
+        {
+          "path": "docs/ansm/audit-and-design.md",
+          "additions": 107,
+          "deletions": 0
+        },
+        {
+          "path": "docs/ansm/ci-code-evidence.json",
+          "additions": 316,
+          "deletions": 0
+        },
+        {
+          "path": "docs/ansm/local-verification.json",
+          "additions": 46,
+          "deletions": 0
+        },
+        {
+          "path": "docs/ansm/repository-audit.json",
+          "additions": 970,
+          "deletions": 0
+        },
+        {
+          "path": "docs/ansm/source-verification.md",
+          "additions": 51,
+          "deletions": 0
+        },
+        {
+          "path": "docs/reference/fr/README.md",
+          "additions": 115,
+          "deletions": 0
+        },
+        {
+          "path": "docs/reference/fr/catalog.json",
+          "additions": 8246,
+          "deletions": 0
+        },
+        {
+          "path": "docs/reference/fr/manifest.json",
+          "additions": 56,
+          "deletions": 0
+        },
+        {
+          "path": "docs/reference/fr/page-evidence.json",
+          "additions": 874,
+          "deletions": 0
+        },
+        {
+          "path": "docs/reference/fr/source-rows.json",
+          "additions": 3797,
+          "deletions": 0
+        },
+        {
+          "path": "docs/reference/fr/validation-report.json",
+          "additions": 1147,
+          "deletions": 0
+        },
+        {
+          "path": "scripts/bdpm_reference.py",
+          "additions": 422,
+          "deletions": 0
+        },
+        {
+          "path": "scripts/test_bdpm_reference.py",
+          "additions": 302,
+          "deletions": 0
+        }
+      ],
+      "headRefName": "feature/ansm01-reference-data-20261015",
+      "headRefOid": "348c68def84ccc627a46be57ace463ade3635a15",
+      "mergedAt": null,
+      "number": 45,
+      "state": "OPEN",
+      "statusCheckRollup": [
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-15T21:41:04Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38811596671/job/116692602508",
+          "name": "jvm",
+          "startedAt": "2026-10-15T21:40:07Z",
+          "status": "COMPLETED",
+          "workflowName": "Android and domain checks"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-15T21:41:12Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38811588310/job/116685878568",
+          "name": "jvm",
+          "startedAt": "2026-10-15T21:40:02Z",
+          "status": "COMPLETED",
+          "workflowName": "Android and domain checks"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-15T21:40:14Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38811596603/job/116685905878",
+          "name": "science-change-gate",
+          "startedAt": "2026-10-15T21:40:06Z",
+          "status": "COMPLETED",
+          "workflowName": "Science validation"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-15T21:40:10Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38811588320/job/116685877803",
+          "name": "science-change-gate",
+          "startedAt": "2026-10-15T21:40:02Z",
+          "status": "COMPLETED",
+          "workflowName": "Science validation"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-15T21:40:14Z",
+          "conclusion": "SKIPPED",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38811596603/job/116685985451",
+          "name": "research-deep",
+          "startedAt": "2026-10-15T21:40:15Z",
+          "status": "COMPLETED",
+          "workflowName": "Science validation"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-15T21:40:10Z",
+          "conclusion": "SKIPPED",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38811588320/job/116685954804",
+          "name": "research-deep",
+          "startedAt": "2026-10-15T21:40:11Z",
+          "status": "COMPLETED",
+          "workflowName": "Science validation"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-15T21:54:49Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38811596671/job/116692568510",
+          "name": "android",
+          "startedAt": "2026-10-15T21:40:07Z",
+          "status": "COMPLETED",
+          "workflowName": "Android and domain checks"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-15T21:56:27Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38811588310/job/116685879080",
+          "name": "android",
+          "startedAt": "2026-10-15T21:40:03Z",
+          "status": "COMPLETED",
+          "workflowName": "Android and domain checks"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-15T22:10:56Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38811596671/job/116692566466",
+          "name": "device-tests",
+          "startedAt": "2026-10-15T21:56:23Z",
+          "status": "COMPLETED",
+          "workflowName": "Android and domain checks"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-15T21:55:01Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38811588310/job/116685878902",
+          "name": "device-tests",
+          "startedAt": "2026-10-15T21:40:03Z",
+          "status": "COMPLETED",
+          "workflowName": "Android and domain checks"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-15T21:48:51Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38811596671/job/116692569064",
+          "name": "attachment-poc-compatibility (26)",
+          "startedAt": "2026-10-15T21:40:06Z",
+          "status": "COMPLETED",
+          "workflowName": "Android and domain checks"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-15T21:49:03Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38811588310/job/116685878862",
+          "name": "attachment-poc-compatibility (26)",
+          "startedAt": "2026-10-15T21:40:03Z",
+          "status": "COMPLETED",
+          "workflowName": "Android and domain checks"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-15T21:47:23Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38811596671/job/116692629625",
+          "name": "attachment-poc-compatibility (29)",
+          "startedAt": "2026-10-15T21:40:06Z",
+          "status": "COMPLETED",
+          "workflowName": "Android and domain checks"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-15T21:47:29Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38811588310/job/116685878941",
+          "name": "attachment-poc-compatibility (29)",
+          "startedAt": "2026-10-15T21:40:03Z",
+          "status": "COMPLETED",
+          "workflowName": "Android and domain checks"
+        }
+      ]
+    },
+    {
+      "baseRefName": "claude/new-session-1959qb",
+      "files": [
+        {
+          "path": "app/src/debug/AndroidManifest.xml",
+          "additions": 2,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/debug/assets/ansm02-synthetic.json",
+          "additions": 242,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/debug/java/net/plainnotes/app/debug/catalog/CatalogPrototypeScreen.kt",
+          "additions": 227,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/debug/java/net/plainnotes/app/debug/catalog/SyntheticCatalog.kt",
+          "additions": 81,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/debug/res/values-b+zh+Hant/ansm_catalog.xml",
+          "additions": 63,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/debug/res/values-fr/ansm_catalog.xml",
+          "additions": 63,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/debug/res/values-zh/ansm_catalog.xml",
+          "additions": 63,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/debug/res/values/ansm_catalog.xml",
+          "additions": 63,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/test/java/net/plainnotes/app/catalog/CatalogPrototypeUiTest.kt",
+          "additions": 164,
+          "deletions": 0
+        },
+        {
+          "path": "app/src/test/java/net/plainnotes/app/catalog/SyntheticCatalogTest.kt",
+          "additions": 106,
+          "deletions": 0
+        },
+        {
+          "path": "docs/ansm02/README.md",
+          "additions": 119,
+          "deletions": 0
+        },
+        {
+          "path": "docs/ansm02/ci-code-evidence.json",
+          "additions": 348,
+          "deletions": 0
+        },
+        {
+          "path": "docs/ansm02/compatibility-design.md",
+          "additions": 172,
+          "deletions": 0
+        },
+        {
+          "path": "docs/ansm02/integration-2026-10-16.json",
+          "additions": 158,
+          "deletions": 0
+        },
+        {
+          "path": "docs/ansm02/local-verification.json",
+          "additions": 2104,
+          "deletions": 0
+        },
+        {
+          "path": "docs/ansm02/manual-checklist.md",
+          "additions": 37,
+          "deletions": 0
+        },
+        {
+          "path": "docs/ansm02/repository-audit.json",
+          "additions": 173,
+          "deletions": 0
+        },
+        {
+          "path": "docs/ansm02/requirements.md",
+          "additions": 21,
+          "deletions": 0
+        },
+        {
+          "path": "docs/ansm02/screenshots/en_320_2.0_true_HIGH_confirm.png",
+          "additions": 0,
+          "deletions": 0
+        },
+        {
+          "path": "docs/ansm02/screenshots/en_411_1.0_false_STANDARD_detail.png",
+          "additions": 0,
+          "deletions": 0
+        },
+        {
+          "path": "docs/ansm02/screenshots/fr-rFR_320_2.0_true_HIGH_confirm.png",
+          "additions": 0,
+          "deletions": 0
+        },
+        {
+          "path": "docs/ansm02/screenshots/fr-rFR_411_1.0_false_STANDARD_detail.png",
+          "additions": 0,
+          "deletions": 0
+        },
+        {
+          "path": "docs/ansm02/screenshots/zh-rCN_320_2.0_true_HIGH_confirm.png",
+          "additions": 0,
+          "deletions": 0
+        },
+        {
+          "path": "docs/ansm02/screenshots/zh-rCN_411_1.0_false_STANDARD_detail.png",
+          "additions": 0,
+          "deletions": 0
+        },
+        {
+          "path": "docs/ansm02/screenshots/zh-rTW_320_2.0_true_HIGH_confirm.png",
+          "additions": 0,
+          "deletions": 0
+        },
+        {
+          "path": "docs/ansm02/screenshots/zh-rTW_411_1.0_false_STANDARD_detail.png",
+          "additions": 0,
+          "deletions": 0
+        },
+        {
+          "path": "docs/ansm02/source-review.json",
+          "additions": 34,
+          "deletions": 0
+        },
+        {
+          "path": "scripts/check_attachment_release_isolation.py",
+          "additions": 4,
+          "deletions": 2
+        },
+        {
+          "path": "scripts/test_ansm02_boundary.py",
+          "additions": 61,
+          "deletions": 0
+        }
+      ],
+      "headRefName": "feature/ansm02a-synthetic-catalog-20261016",
+      "headRefOid": "df0a615f78589e9c7df5352fda75f2364ebcddaa",
+      "mergedAt": null,
+      "number": 48,
+      "state": "OPEN",
+      "statusCheckRollup": [
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-16T04:19:22Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38849917719/job/116813883706",
+          "name": "jvm",
+          "startedAt": "2026-10-16T04:18:13Z",
+          "status": "COMPLETED",
+          "workflowName": "Android and domain checks"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-16T04:19:21Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38849913819/job/116808623348",
+          "name": "jvm",
+          "startedAt": "2026-10-16T04:18:09Z",
+          "status": "COMPLETED",
+          "workflowName": "Android and domain checks"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-16T04:18:22Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38849917735/job/116808634741",
+          "name": "science-change-gate",
+          "startedAt": "2026-10-16T04:18:12Z",
+          "status": "COMPLETED",
+          "workflowName": "Science validation"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-16T04:18:24Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38849913787/job/116808622852",
+          "name": "science-change-gate",
+          "startedAt": "2026-10-16T04:18:10Z",
+          "status": "COMPLETED",
+          "workflowName": "Science validation"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-16T04:18:22Z",
+          "conclusion": "SKIPPED",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38849917735/job/116808690686",
+          "name": "research-deep",
+          "startedAt": "2026-10-16T04:18:23Z",
+          "status": "COMPLETED",
+          "workflowName": "Science validation"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-16T04:18:24Z",
+          "conclusion": "SKIPPED",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38849913787/job/116808697566",
+          "name": "research-deep",
+          "startedAt": "2026-10-16T04:18:24Z",
+          "status": "COMPLETED",
+          "workflowName": "Science validation"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-16T04:37:34Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38849917719/job/116813849722",
+          "name": "android",
+          "startedAt": "2026-10-16T04:18:12Z",
+          "status": "COMPLETED",
+          "workflowName": "Android and domain checks"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-16T04:38:06Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38849913819/job/116808623250",
+          "name": "android",
+          "startedAt": "2026-10-16T04:18:10Z",
+          "status": "COMPLETED",
+          "workflowName": "Android and domain checks"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-16T04:31:41Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38849917719/job/116813850130",
+          "name": "device-tests",
+          "startedAt": "2026-10-16T04:18:13Z",
+          "status": "COMPLETED",
+          "workflowName": "Android and domain checks"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-16T04:33:15Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38849913819/job/116808623322",
+          "name": "device-tests",
+          "startedAt": "2026-10-16T04:18:10Z",
+          "status": "COMPLETED",
+          "workflowName": "Android and domain checks"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-16T04:27:41Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38849917719/job/116813849388",
+          "name": "attachment-poc-compatibility (26)",
+          "startedAt": "2026-10-16T04:18:13Z",
+          "status": "COMPLETED",
+          "workflowName": "Android and domain checks"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-16T04:27:31Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38849913819/job/116808623282",
+          "name": "attachment-poc-compatibility (26)",
+          "startedAt": "2026-10-16T04:18:10Z",
+          "status": "COMPLETED",
+          "workflowName": "Android and domain checks"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-16T04:46:25Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38849917719/job/116813848738",
+          "name": "attachment-poc-compatibility (29)",
+          "startedAt": "2026-10-16T04:38:00Z",
+          "status": "COMPLETED",
+          "workflowName": "Android and domain checks"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-16T04:25:37Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38849913819/job/116808622946",
+          "name": "attachment-poc-compatibility (29)",
+          "startedAt": "2026-10-16T04:18:09Z",
+          "status": "COMPLETED",
+          "workflowName": "Android and domain checks"
+        }
+      ]
+    },
+    {
+      "baseRefName": "claude/new-session-1959qb",
+      "files": [
+        {
+          "path": "docs/HANDOFF.md",
+          "additions": 10,
+          "deletions": 10
+        },
+        {
+          "path": "docs/STATUS.md",
+          "additions": 6,
+          "deletions": 0
+        },
+        {
+          "path": "docs/delivery/build28-ui04-2026-10-16.json",
+          "additions": 52,
+          "deletions": 0
+        },
+        {
+          "path": "docs/delivery/ledger.json",
+          "additions": 13,
+          "deletions": 0
+        }
+      ],
+      "headRefName": "docs/delivery-build28-20261016",
+      "headRefOid": "dee25ad7715b6bfd5db02edc0893f4a0748aaca4",
+      "mergedAt": null,
+      "number": 49,
+      "state": "OPEN",
+      "statusCheckRollup": [
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-16T06:26:48Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38861121577/job/116846989561",
+          "name": "jvm",
+          "startedAt": "2026-10-16T06:25:33Z",
+          "status": "COMPLETED",
+          "workflowName": "Android and domain checks"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-16T06:26:23Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38861100894/job/116843330129",
+          "name": "jvm",
+          "startedAt": "2026-10-16T06:25:20Z",
+          "status": "COMPLETED",
+          "workflowName": "Android and domain checks"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-16T06:25:42Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38861121651/job/116843393781",
+          "name": "science-change-gate",
+          "startedAt": "2026-10-16T06:25:32Z",
+          "status": "COMPLETED",
+          "workflowName": "Science validation"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-16T06:25:31Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38861100897/job/116843329625",
+          "name": "science-change-gate",
+          "startedAt": "2026-10-16T06:25:20Z",
+          "status": "COMPLETED",
+          "workflowName": "Science validation"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "0001-01-01T00:00:00Z",
+          "conclusion": "",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38861121577/job/116846988432",
+          "name": "android",
+          "startedAt": "2026-10-16T06:37:28Z",
+          "status": "IN_PROGRESS",
+          "workflowName": "Android and domain checks"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "0001-01-01T00:00:00Z",
+          "conclusion": "",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38861100894/job/116843330100",
+          "name": "android",
+          "startedAt": "2026-10-16T06:25:20Z",
+          "status": "IN_PROGRESS",
+          "workflowName": "Android and domain checks"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-16T06:25:42Z",
+          "conclusion": "SKIPPED",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38861121651/job/116843456986",
+          "name": "research-deep",
+          "startedAt": "2026-10-16T06:25:43Z",
+          "status": "COMPLETED",
+          "workflowName": "Science validation"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-16T06:26:36Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38861100897/job/116843401759",
+          "name": "research-deep",
+          "startedAt": "2026-10-16T06:25:34Z",
+          "status": "COMPLETED",
+          "workflowName": "Science validation"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "0001-01-01T00:00:00Z",
+          "conclusion": "",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38861100894/job/116843330133",
+          "name": "device-tests",
+          "startedAt": "2026-10-16T06:25:20Z",
+          "status": "IN_PROGRESS",
+          "workflowName": "Android and domain checks"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-16T06:37:18Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38861121577/job/116846989827",
+          "name": "device-tests",
+          "startedAt": "2026-10-16T06:25:33Z",
+          "status": "COMPLETED",
+          "workflowName": "Android and domain checks"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-16T06:33:32Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38861121577/job/116846990206",
+          "name": "attachment-poc-compatibility (26)",
+          "startedAt": "2026-10-16T06:25:33Z",
+          "status": "COMPLETED",
+          "workflowName": "Android and domain checks"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-16T06:31:14Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38861100894/job/116843330265",
+          "name": "attachment-poc-compatibility (26)",
+          "startedAt": "2026-10-16T06:25:20Z",
+          "status": "COMPLETED",
+          "workflowName": "Android and domain checks"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-16T06:33:16Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38861121577/job/116847029499",
+          "name": "attachment-poc-compatibility (29)",
+          "startedAt": "2026-10-16T06:25:33Z",
+          "status": "COMPLETED",
+          "workflowName": "Android and domain checks"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-10-16T06:33:18Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38861100894/job/116843330139",
+          "name": "attachment-poc-compatibility (29)",
+          "startedAt": "2026-10-16T06:25:20Z",
+          "status": "COMPLETED",
+          "workflowName": "Android and domain checks"
+        }
+      ]
+    }
+  ],
+  "legacy_boundary": {
+    "status": "PASS",
+    "tests": 4,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "initial_local_attempt": "NOT_COMPLETED: stopped own JVM before tests; missing Java proxy configuration; configured proxy retry PASS",
+  "production_binding": "NOT_IMPLEMENTED",
+  "physical_device": "NOT_RUN"
+}
