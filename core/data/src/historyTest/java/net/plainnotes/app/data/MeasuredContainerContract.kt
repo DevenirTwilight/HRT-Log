@@ -29,7 +29,7 @@ abstract class MeasuredContainerContract {
     @After fun cleanup(){db.close();context.deleteDatabase(name)}
     private suspend fun med(name:String="SYNTHETIC medication")=db.dao().insertMedication(MedicationEntity(name=name,molecule="OTHER",unit="MG",dose_per_intake=1.0,container_capacity=28.0,site_rotation=false,notifications_on=false,active=false,sort_order=0))
     private suspend fun epoch()=db.withTransaction{ReferenceStore.previewEpoch(raw)}
-    private suspend fun create(med:Long,op:String,source:PackageMeasurementDraft=draft,ticket:String?=null)=db.withTransaction{MeasuredContainerStore.create(raw,db.dao(),ticket ?: ReferenceStore.previewEpoch(raw),med,op,source,at)}
+    private suspend fun create(med:Long,op:String,source:PackageMeasurementDraft=draft,ticket:String?=null)=db.withTransaction{MeasuredContainerStore.create(db,ticket ?: ReferenceStore.previewEpoch(raw),med,op,source,at)}
     private fun count(table:String)=raw.query("SELECT COUNT(*) FROM `$table`").use{it.moveToFirst();it.getInt(0)}
     private suspend fun reject(code:ReferenceError,block:suspend()->Unit){try{block();fail("Expected $code")}catch(e:ReferenceFailure){assertEquals(code,e.code)}}
     @Test fun explicitContainerCreationFreezesASeparateUnitWithoutChangingMedicationOrLegacyStock()=runBlocking {
@@ -96,9 +96,23 @@ abstract class MeasuredContainerContract {
         assertEquals(before.presentation.payload,after.presentation.payload);assertEquals(before.presentation.sha256,after.presentation.sha256)
         assertEquals(1,count("reference_event"));assertEquals(1,count("supply_container"));assertEquals(0,count("supply_transaction"))
     }
+    @Test fun anotherDatasetWithTheSameIntegerIdCannotSupplyTheCreationTicket()=runBlocking {
+        val med=med();val otherName="synthetic-other-measured-${UUID.randomUUID()}.db"
+        val other=Room.databaseBuilder(context,NotesDatabase::class.java,otherName).openHelperFactory(factory(ByteArray(32){(it+7).toByte()})).allowMainThreadQueries().addCallback(SchemaGuards).build()
+        try {
+            val otherMed=other.dao().insertMedication(db.dao().medication(med).copy(name="SYNTHETIC other dataset"))
+            assertEquals(med,otherMed)
+            val otherTicket=other.withTransaction{ReferenceStore.previewEpoch(other.openHelper.writableDatabase)}
+            reject(ReferenceError.STALE_SCOPE){create(med,UUID.randomUUID().toString(),ticket=otherTicket)}
+            assertEquals(0,count("reference_dataset"));assertEquals(0,count("supply_container"))
+            create(med,UUID.randomUUID().toString())
+            assertTrue(other.dao().containers().isEmpty())
+            other.openHelper.writableDatabase.query("SELECT COUNT(*) FROM reference_dataset").use{assertTrue(it.moveToFirst());assertEquals(0,it.getInt(0))}
+        } finally {other.close();context.deleteDatabase(otherName)}
+    }
     @Test fun adapterRequiresTheCallersRealDatabaseTransaction()=runBlocking {
         val med=med();val ticket=epoch()
-        try{MeasuredContainerStore.create(raw,db.dao(),ticket,med,UUID.randomUUID().toString(),draft,at);fail("Nontransactional write accepted")}catch(_:IllegalStateException){}
+        try{MeasuredContainerStore.create(db,ticket,med,UUID.randomUUID().toString(),draft,at);fail("Nontransactional write accepted")}catch(_:IllegalStateException){}
         assertEquals(0,count("supply_container"));assertEquals(0,count("reference_dataset"))
     }
 }

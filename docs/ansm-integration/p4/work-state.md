@@ -15,3 +15,7 @@
 源783606a完整data257/domain140 PASS（0失败/错误/跳过），原生测试源码编译PASS。容器创建8项真实Room全绿，含故障注入、scope/UUID冲突、旧库存不变、真实VOIDED/恢复和已删除ID复用。不是正式接线完成。随后将同一8项抽到historyTest共享合同并增加关闭/重开保留来源/原生加密头断言；Robolectric和SQLCipher共用9项，现有CI三API清单只追加新类、不替换旧类。新共享合同待本地及CI真实执行，不能以旧8项通过冒充原生9项通过。
 
 源13828f0共享合同回归完成：data258/domain140零失败/错误/跳过，新的9项容器合同在JVM PASS，原生编译PASS；SQLCipher三API实际执行仍NOT_RUN。旧SupplyLedger/StockForecast/PackageCorrections源码逐字未变，PK tree与c95cea1相同，摘要保存在local-evidence.json。新模式仍没有Repository/App入口、当前备份仍拒绝PRESENTATION；不得自动合并草稿或称正式库存已完成。后续先合入P3/P2真实依赖和Gate3自检修复，再验证完整整合分支。
+
+源5bcf8d3已普通合入P3最新e1c40bd（含P2主线b5d9751与Gate3对照顺序修复），完整整合data264/domain140/App75全PASS，原生编译PASS。PR #56已六检查成功并保护合并b5d9751；完整App1379零失败205条件跳过/data243/reminder20/Period5及192图的CI摘要/CRC已校验，证据p2/ci-evidence.json，主线复验仍待结果。当前P4新模式仍未启用。
+
+进一步消除适配器误接线风险：create只接收单一NotesDatabase，由其同时获取DAO和SQL连接，禁止独立传入来自两个数据集的DAO/SQL。共享合同增加相同整数ID不同数据集票据的拒绝与另一库完全不写入检查；新10项容器合同待运行，不以旧9项通过替代。PUBLIC Repository/App入口仍不存在。

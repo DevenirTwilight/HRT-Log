@@ -1,11 +1,11 @@
 package net.plainnotes.app.data
 
-import androidx.sqlite.db.SupportSQLiteDatabase
 import net.plainnotes.app.domain.measurement.MeasureResult
 import org.json.JSONObject
 import java.time.Instant
 import java.util.UUID
 
+/** container is a current projection; the frozen presentation/event are the original creation facts. */
 internal data class CreatedMeasuredContainer(
     val scope:ReferenceScope,val container:ContainerEntity,val containerUuid:String,
     val presentationEventUuid:String,val presentation:FrozenPackageMeasurement,
@@ -18,10 +18,12 @@ internal data class CreatedMeasuredContainer(
 internal object MeasuredContainerStore {
     private fun fail(code:ReferenceError):Nothing=throw ReferenceFailure(code)
     suspend fun create(
-        db:SupportSQLiteDatabase,dao:NotesDao,expectedEpoch:String,medication:Long,
+        database:NotesDatabase,expectedEpoch:String,medication:Long,
         operationUuid:String,draft:PackageMeasurementDraft,created:Instant,
     ):CreatedMeasuredContainer {
+        val db=database.openHelper.writableDatabase
         check(db.inTransaction())
+        val dao=database.dao()
         if(ReferenceStore.previewEpoch(db)!=expectedEpoch)fail(ReferenceError.STALE_SCOPE)
         if(!ReferencePayload.uuid(operationUuid) || created.toEpochMilli()<0)fail(ReferenceError.INVALID_SOURCE)
         val frozen=PackageMeasurementPayload.freeze(draft)
