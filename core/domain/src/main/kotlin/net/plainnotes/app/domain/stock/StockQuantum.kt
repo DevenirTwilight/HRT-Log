@@ -3,6 +3,8 @@ package net.plainnotes.app.domain.stock
 import java.math.BigDecimal
 import net.plainnotes.app.domain.measurement.*
 
+enum class StockCapacityBasis { USER_COUNTED, USER_DECLARED, LABEL_NOMINAL, UNKNOWN }
+
 /** An explicitly confirmed physical capacity expressed in a frozen minimum quantum.
  * This is an arithmetic boundary, not a ledger, source verifier or stock allocation policy.
  * Only a future, separately validated new-container mode may use its integer projection.
@@ -13,6 +15,7 @@ class StockQuantum private constructor(
     val quantum:Quantity,
     val ref:PresentationRef,
     val capacityQuanta:Long,
+    val capacityBasis:StockCapacityBasis,
 ) {
     companion object {
         const val ALGORITHM="ansm03-stock-quanta-v1"
@@ -35,8 +38,9 @@ class StockQuantum private constructor(
             catch(_:ArithmeticException){failure(MeasureError.PRECISION_OR_RANGE)}
         }
         /** The capacity must be an actual user-confirmed amount, never a nominal-label fallback. */
-        fun create(confirmedCapacity:Quantity,quantum:Quantity,actual:ActualPackage?):MeasureResult<StockQuantum> {
+        fun create(confirmedCapacity:Quantity,quantum:Quantity,actual:ActualPackage?,basis:StockCapacityBasis):MeasureResult<StockQuantum> {
             source(actual)?.let{return failure(it)}
+            if(basis in setOf(StockCapacityBasis.LABEL_NOMINAL,StockCapacityBasis.UNKNOWN))return failure(MeasureError.UNKNOWN_CAPACITY)
             positive(confirmedCapacity)?.let{return failure(it)}
             positive(quantum)?.let{return failure(it)}
             if(confirmedCapacity.meaning.kind in setOf(QuantityKind.ABSORBED_MASS,QuantityKind.RELEASE_RATE) ||
@@ -49,7 +53,7 @@ class StockQuantum private constructor(
             // Normalize numbers for deterministic persistence; retain the explicitly selected display units.
             val capacity=confirmedCapacity.copy(value=confirmedCapacity.value.stripTrailingZeros())
             val frozenQuantum=quantum.copy(value=quantum.value.stripTrailingZeros())
-            return MeasureResult.Success(StockQuantum(capacity,frozenQuantum,actual!!.ref,(quanta as MeasureResult.Success).value),algorithm=ALGORITHM)
+            return MeasureResult.Success(StockQuantum(capacity,frozenQuantum,actual!!.ref,(quanta as MeasureResult.Success).value,basis),algorithm=ALGORITHM)
         }
     }
     /** Requires confirmation of the same frozen source on every actual use; no cross-strength pooling. */
