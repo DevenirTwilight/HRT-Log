@@ -11,10 +11,13 @@
 
   - 总结见报告 64；BACKLOG 顶部只剩待负责人决定的 4 项。
   - 真机清单全部 NOT_RUN：`docs/ui-audit/2026-10-15-ui02/manual-checklist.md` 和 `docs/ui-audit/2026-10-15-ui03/manual-checklist.md`。
-- **APK 交付**（REQUIREMENTS §100，负责人要求“整完给我个apk”）：
-  - 本 PR 把 versionCode 改为 27。
-  - 合并并复验主线后：从主线干净源码构建 full Universal Release，用 HANDOFF 第 7 节私有备份中的原证书签名，核验后通过会话私密文件发送给负责人，再追加交付账本。
-  - 签名材料只在仓库外的临时目录中恢复，用完删除。
+- **build27 已交付（2026-10-16）**：
+  - 0.2.0 / build27 full Universal 正式签名包，构建自 2ab7a0c（干净源码），APK SHA-256 `6944546a6fb2285fbb7cbeaa038dd0340cd1a1bd8237acc0b10b0cd5b1798f56`，原证书 989ba045…59379b1。
+  - 已核验：v2/v3 签名、16KB 对齐、四种 ABI、非 debug、无 INTERNET 权限；签名前后内容逐项相同。
+  - 通过本会话的私密文件发送给负责人；临时签名材料已删除，永久备份未改。
+  - 账本已追加 27，下一次交付需要 ≥ 28。机器记录见 `docs/delivery/build27-ui-phase-2026-10-16.json`。
+  - 主线 2ab7a0c 的 CI：attachment-poc (26) 第一次运行是已知的 Gate3 计时故障；唯一一次重跑时模拟器没能启动，没有任何测试运行。合并提交的源码树与 PR #44 head 完全相同，后者全部检查通过。其余各项均成功。
+  - 真机安装 NOT_RUN。
 - 已合并的其他工作：MED-02B6 #37/#39、BDPM 参考资料 #41（主线 8e72861 已复验全绿）。
 - PR #34 仍 OPEN，待负责人处理；`diag/calendar-intake-20261015` 分支待负责人删除。
 
