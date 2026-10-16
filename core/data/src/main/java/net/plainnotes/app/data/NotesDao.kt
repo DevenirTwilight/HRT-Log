@@ -2,6 +2,9 @@ package net.plainnotes.app.data
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 @Dao interface NotesDao {
+    /** Captured with record rows on this DAO/transaction; never reopen a second database handle for a list ticket. */
+    @Query("SELECT epoch FROM reference_runtime WHERE id=1") suspend fun referencePreviewEpoch():String
+
     @Query("SELECT * FROM history_period_revision ORDER BY period_key,revision") suspend fun historyPeriods():List<HistoryPeriodEntity>
     @Query("SELECT * FROM trash_item ORDER BY deleted_utc DESC,id DESC") suspend fun trash():List<TrashItemEntity>
     @Insert suspend fun insertHistoryPeriod(value:HistoryPeriodEntity):Long

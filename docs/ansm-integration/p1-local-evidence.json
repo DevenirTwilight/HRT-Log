@@ -164,8 +164,8 @@
   "guard_source_sha256": {
     "core/data/src/main/java/net/plainnotes/app/data/ReferenceStore.kt": "a9a539b26fb673d1bcc7cf87f4cfc75fbdbabc46e24da26730c1228d35642233",
     "core/data/src/main/java/net/plainnotes/app/data/ReferenceSchema.kt": "489de9c3bf75616124d0bdba15a64aa369f91d8ac1028a605c14e1dc867890a0",
-    "core/data/src/main/java/net/plainnotes/app/data/ReferencePayload.kt": "0eb32b3699d6288a787649f1708dcc165d1197270bcd0885d875e430f4c1ac2b",
-    "core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt": "622c1bc7614c07ff6ec5d20e1719f2884327543e471a000363982eeddaad79ca"
+    "core/data/src/main/java/net/plainnotes/app/data/ReferencePayload.kt": "f42ca576273c95294b6114bbc3cba08a80711101712f98f5adfbb1b3aff655df",
+    "core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt": "485189f58a8821ca95e17c3b864982def856ad7ebfd4763f6e137882305d32d4"
   },
   "initial_runtime": "Local-only singleton exists before preview; business dataset still absent until confirmation",
   "real_controller_empty_restore": {
@@ -173,5 +173,6 @@
     "source": "fb797e5",
     "app_tests": 63,
     "data_tests": 242
-  }
+  },
+  "guard_hash_note": "Hashes match tested P1 ef19db8, not the later P2 repository additions."
 }

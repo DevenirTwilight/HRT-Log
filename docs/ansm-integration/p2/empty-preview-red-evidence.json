@@ -1,0 +1,12 @@
+{
+  "checked_at": "2026-10-16T15:23:58.774884+00:00",
+  "status": "FAIL_EXPECTED",
+  "production_source": "ca399ec",
+  "test_file_sha256": "65ff374e634520d6ae2151ba304fcc855e911a8f10bbeafc30b5770ce78aaae6",
+  "tests": 1,
+  "failures": 1,
+  "message": "java.lang.AssertionError: Stale empty preview committed a link; reference events=1",
+  "report_sha256": "6a7f97caf0ac454cf27324dfeea1303ccc36d1c723dfe08096b77e355fdf604a",
+  "meaning": "Empty reference preview survived a real PNBAK1 restore and committed a reference; P1 must remain draft until fixed.",
+  "synthetic_only": true
+}
