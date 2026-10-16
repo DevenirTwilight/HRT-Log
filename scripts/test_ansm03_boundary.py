@@ -25,7 +25,7 @@ class MeasurementIsolationTest(unittest.TestCase):
         original_root = report.ROOT
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            for relative in (report.MODEL / 'MeasurementCore.kt', report.APPROVED_CORE, report.APPROVED_STOCK_QUANTUM, report.APPROVED_PACKAGE_CODEC, report.APPROVED_CONTAINER_STORE):
+            for relative in (report.MODEL / 'MeasurementCore.kt', report.APPROVED_CORE, report.APPROVED_STOCK_QUANTUM, report.APPROVED_PACKAGE_CODEC, report.APPROVED_CONTAINER_STORE, report.APPROVED_USE_PAYLOAD):
                 target = root / relative
                 target.parent.mkdir(parents=True, exist_ok=True)
                 target.write_text((original_root / relative).read_text())
@@ -57,6 +57,13 @@ class MeasurementIsolationTest(unittest.TestCase):
                     store.write_text(original_store + '\n' + token)
                     self.assertEqual('FAIL', report.isolation()['status'], token)
                 store.write_text(original_store)
+                self.assertEqual('PASS', report.isolation()['status'])
+                use_payload = root / report.APPROVED_USE_PAYLOAD
+                original_use = use_payload.read_text()
+                for token in report.FORBIDDEN_CORE_APIS:
+                    use_payload.write_text(original_use + '\n' + token)
+                    self.assertEqual('FAIL', report.isolation()['status'], token)
+                use_payload.write_text(original_use)
                 self.assertEqual('PASS', report.isolation()['status'])
 
     def test_frozen_contract_and_production_gate_are_separate(self):

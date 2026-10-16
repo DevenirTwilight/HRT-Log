@@ -80,7 +80,7 @@ internal object PackageMeasurementPayload {
         keys(json,setOf("value","unit","meaning"))
         return Quantity(exact(text(json,"value")),MeasureUnit.valueOf(text(json,"unit")),meaning(json.getJSONObject("meaning"))).also{require(Measurements.error(it)==null)}
     }
-    private fun quantity(value:Quantity):JSONObject {
+    internal fun quantity(value:Quantity):JSONObject {
         require(Measurements.error(value)==null)
         return JSONObject().put("value",(Measurements.decimalText(value.value) as MeasureResult.Success).value)
             .put("unit",value.unit.name).put("meaning",meaning(value.meaning))

@@ -24,6 +24,8 @@ APPROVED_CORE = Path('core/domain/src/main/kotlin/net/plainnotes/app/domain/meas
 APPROVED_STOCK_QUANTUM = Path('core/domain/src/main/kotlin/net/plainnotes/app/domain/stock/StockQuantum.kt')
 APPROVED_PACKAGE_CODEC = Path('core/data/src/main/java/net/plainnotes/app/data/PackageMeasurementPayload.kt')
 APPROVED_CONTAINER_STORE = Path('core/data/src/main/java/net/plainnotes/app/data/MeasuredContainerStore.kt')
+APPROVED_USE_PAYLOAD = Path('core/data/src/main/java/net/plainnotes/app/data/MeasuredUsePayload.kt')
+USE_IMPORTS = ['import net.plainnotes.app.domain.measurement.*', 'import net.plainnotes.app.domain.stock.StockQuantum', 'import org.json.JSONArray', 'import org.json.JSONObject']
 STORE_IMPORTS = ['import net.plainnotes.app.domain.measurement.MeasureResult', 'import org.json.JSONObject', 'import java.time.Instant', 'import java.util.UUID']
 STORE_FORBIDDEN_APIS = ('java.io.', 'java.net.', 'java.nio.', 'System.currentTimeMillis', 'Instant.now(', 'System.getenv', 'Class.forName', 'net.plainnotes.app.pk', 'SupplyLedger.allocate')
 PACKAGE_IMPORTS = ['import net.plainnotes.app.domain.measurement.*', 'import net.plainnotes.app.domain.stock.*', 'import org.json.JSONArray', 'import org.json.JSONObject', 'import java.math.BigDecimal', 'import java.time.LocalDate']
@@ -41,7 +43,7 @@ def isolation():
             relative = file.relative_to(ROOT)
             if any(part in relative.parts for part in ('build', 'test', 'androidTest', 'historyTest', 'medicalTest', 'attachmentTest')):
                 continue
-            if any(token in file.read_text() for token in ('net.plainnotes.app.domain.measurement', 'net.plainnotes.app.domain.stock')) and relative not in (APPROVED_CORE, APPROVED_STOCK_QUANTUM, APPROVED_PACKAGE_CODEC, APPROVED_CONTAINER_STORE):
+            if any(token in file.read_text() for token in ('net.plainnotes.app.domain.measurement', 'net.plainnotes.app.domain.stock')) and relative not in (APPROVED_CORE, APPROVED_STOCK_QUANTUM, APPROVED_PACKAGE_CODEC, APPROVED_CONTAINER_STORE, APPROVED_USE_PAYLOAD):
                 offenders.append(str(relative))
     imports = [line for line in (ROOT / MODEL / 'MeasurementCore.kt').read_text().splitlines() if line.startswith('import ')]
     core = ROOT / APPROVED_CORE
@@ -63,8 +65,14 @@ def isolation():
     store_imports = [line for line in store_text.splitlines() if line.startswith('import ')]
     store_forbidden = [token for token in STORE_FORBIDDEN_APIS if token in store_text]
     store_valid = not container_store.exists() or (store_imports == STORE_IMPORTS and not store_forbidden)
-    return {'status': 'PASS' if store_valid and package_valid and stock_valid and not offenders and imports == PURE_IMPORTS and core.is_file() and production_imports == PURE_IMPORTS and not forbidden else 'FAIL',
-            'approved_container_store': str(APPROVED_CONTAINER_STORE) if container_store.exists() else None,
+    use_payload = ROOT / APPROVED_USE_PAYLOAD
+    use_text = use_payload.read_text() if use_payload.is_file() else ''
+    use_imports = [line for line in use_text.splitlines() if line.startswith('import ')]
+    use_forbidden = [token for token in FORBIDDEN_CORE_APIS if token in use_text]
+    use_valid = not use_payload.exists() or (use_imports == USE_IMPORTS and not use_forbidden)
+    return {'status': 'PASS' if use_valid and store_valid and package_valid and stock_valid and not offenders and imports == PURE_IMPORTS and core.is_file() and production_imports == PURE_IMPORTS and not forbidden else 'FAIL',
+            'approved_use_payload': str(APPROVED_USE_PAYLOAD) if use_payload.exists() else None,
+            'use_imports': use_imports, 'use_forbidden_apis': use_forbidden, 'approved_container_store': str(APPROVED_CONTAINER_STORE) if container_store.exists() else None,
             'store_imports': store_imports, 'store_forbidden_apis': store_forbidden, 'approved_package_codec': str(APPROVED_PACKAGE_CODEC) if package_codec.exists() else None,
             'package_imports': package_imports, 'package_forbidden_apis': package_forbidden, 'approved_stock_quantum': str(APPROVED_STOCK_QUANTUM) if stock.exists() else None,
             'stock_imports': stock_imports, 'stock_forbidden_apis': stock_forbidden, 'production_callers': offenders, 'model_imports': imports, 'production_imports': production_imports,
