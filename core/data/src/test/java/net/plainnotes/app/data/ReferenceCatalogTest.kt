@@ -53,7 +53,8 @@ class ReferenceCatalogTest {
         val exact=repo.savedReferenceProducts(hidden.product.name);assertEquals(hidden,exact.entries.single());assertFalse(exact.limited)
     }
     @Test fun loadingEmptyLibraryAndCancelledPreviewDoNotCreateDatasetOrIdentity()=runBlocking {
-        val id=medication();assertTrue(repo.savedReferenceProducts().entries.isEmpty());assertNull(repo.medicationReferenceState(id).scope)
+        val id=medication();val epoch=db.dao().referencePreviewEpoch();assertEquals(epoch,repo.referencePreviewEpoch());assertTrue(repo.savedReferenceProducts().entries.isEmpty());assertNull(repo.medicationReferenceState(id).scope)
+        assertEquals(epoch,db.dao().referencePreviewEpoch())
         db.openHelper.writableDatabase.query("SELECT COUNT(*) FROM reference_dataset").use{it.moveToFirst();assertEquals(0,it.getInt(0))}
         db.openHelper.writableDatabase.query("SELECT COUNT(*) FROM reference_identity").use{it.moveToFirst();assertEquals(0,it.getInt(0))}
     }

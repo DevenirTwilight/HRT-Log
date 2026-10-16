@@ -28,3 +28,5 @@
 原始规格补齐源ca399ec的data239/app62与192图再次PASS。新增EmptyPreview恢复负向测试随后真实FAIL，明确观察到source events=1，证据empty-preview-red-evidence.json。P1 #54已转回草稿修复本地previewEpoch协议，#56保持草稿，旧通过证据不冒充此边界已通过。
 
 已合入P1空预览epoch修复cb7d90f，真实控制器首次提交携带打开时previewEpoch；每次成功后独立读取实际最新关联（幂等回放的原事件不伪装当前状态），仍不调用全局refresh/PK。此前空引用恢复红测试预期转绿，最新完整回归待运行。
+
+真实历史来源UI已接入HistoryRecordDialogs的只读入口，捕获选择记录时的ExtraState.referenceEpoch，DAO同一事务读取记录与epoch；不在异步按钮执行时重取新数据集票据。历史来源窗口保留原始版本、明确参考背景不代表实际包装；旧记录未记录来源不补填当前引用。新增四语320dp/2x的冻结来源/无来源/恢复后拒绝/原编辑窗口入口测试12项；最新回归待运行，P1历史接口237数据/原生24项编译已PASS。
