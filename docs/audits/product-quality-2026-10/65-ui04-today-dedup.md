@@ -81,7 +81,14 @@
 2. **`TodayCardTest.severalMedicationsAtTheSameTimeEachHaveAnAction`**：只改了一行注释（“稍后的服药留在下方当日列表”改为“在‘稍后’分区”）。断言 `today-also:<later>` 不存在仍然成立，没有改。
 3. **`TodayCardTest`** 中 `today-done:<id>` 的断言照常通过：记录行沿用这个 tag，并在文字末尾加上状态。
 
-三个设备测试 `CalendarIntakeAndroidTest`、`AfterIntakePromptAndroidTest` 和 `NotificationEntryAndroidTest`，都通过选中明天的 DoseCard 或通知入口操作，不经过今天的当日区，所以没有修改。
+4. **`HomeAddStockAndroidTest`**（设备测试）：
+   - PR 首轮 CI 中失败：首页库存卡“添加库存”的点击没有打开对话框。
+   - 用同一个 `CalendarTestActivity` 在 320×640 下复现：今天卡变高后，库存卡成了屏幕下方的最后一项；`performScrollToNode` 只滚到刚好可见，按钮停在底边（y 588–640），正好被浮动“添加”按钮（y 568–624）盖住。主线上同一位置是 y 476–528，不重叠。
+   - 列表底部本来就留了 96dp 内边距，用户把列表滚到底，最后一张卡就会离开浮动按钮。
+   - 测试改为先滚到底再点击：复现中按钮回到 y 476–528，与主线相同。
+   - 断言（打开同一个对话框、写入相同数据）原样保留。
+
+另外三个设备测试 `CalendarIntakeAndroidTest`、`AfterIntakePromptAndroidTest` 和 `NotificationEntryAndroidTest`，都通过选中明天的 DoseCard 或通知入口操作，不经过今天的当日区，所以没有修改。
 
 ## 7. 截图
 
