@@ -63,13 +63,14 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
                 val upcoming=(repo.planned(now,now.plus(Duration.ofDays(366)),now)+slots.filter{it.slot.at<now}).distinctBy{it.slot.key}.filter{it.state in net.plainnotes.app.ui.OPEN_STATES}
                 val stockForecasts=repo.stockForecasts(now)
                 NotesState(meds,slots,dao.appointments(),mutable.value.error,false,schedules,profiles,start,dao.rules().associate{it.id to it.config_snapshot}) to
-                    ExtraState(dao.records(),dao.containers(),repo.checkinItems(),dao.scores("0001-01-01",today.toString()),dao.notes("0001-01-01",today.toString()),upcoming,dao.stageReviews(),dao.symptomChecks("0001-01-01",today.toString()),dao.reviewEffects(),dao.regimens(),dao.regimenLinks(),dao.milestones(),dao.labs(),dao.labContexts(),dao.visitQuestions(),dao.visitPacks(),dao.historyPeriods(),dao.annotations(),dao.trash().filter{it.state==Trash.TRASHED},dao.deletedRecords(),stockForecasts,dao.containersWithLedger().toSet(),dao.voidedContainers(),dao.containersWithConsumption().toSet())
+                    ExtraState(dao.records(),dao.containers(),repo.checkinItems(),dao.scores("0001-01-01",today.toString()),dao.notes("0001-01-01",today.toString()),upcoming,dao.stageReviews(),dao.symptomChecks("0001-01-01",today.toString()),dao.reviewEffects(),dao.regimens(),dao.regimenLinks(),dao.milestones(),dao.labs(),dao.labContexts(),dao.visitQuestions(),dao.visitPacks(),dao.historyPeriods(),dao.annotations(),dao.trash().filter{it.state==Trash.TRASHED},dao.deletedRecords(),stockForecasts,dao.containersWithLedger().toSet(),dao.voidedContainers(),dao.containersWithConsumption().toSet(),referenceEpoch=repo.referencePreviewEpoch())
             }
             ensureActive()
             mutable.value=snapshot.first.copy(error=mutable.value.error);extra.value=snapshot.second;refreshRevision++;readFailureShown=false
             loadConcentration()
         }catch(e:CancellationException){throw e}catch(e:Exception){readFailure(e)} }.also{refreshJob=it}
     }
+    suspend fun recordedReferenceHistory(epoch:String,record:Long)=repo.recordedReferenceHistory(epoch,record)
     fun clearError(){mutable.value=mutable.value.copy(error=null)}
     private fun change(block:suspend()->Unit)=guarded{mutate(block);refresh().join()}
     fun edit(m:MedicationEntity?)=viewModelScope.launch {try {
@@ -119,7 +120,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
                           /** Packages with ledger history; only the others can be undone as added by mistake. */
                           val containersWithLedger:Set<Long> = emptySet(),
                           val voidedContainers:List<ContainerEntity> = emptyList(),
-                          val containersWithConsumption:Set<Long> = emptySet())
+                          val containersWithConsumption:Set<Long> = emptySet(),val referenceEpoch:String?=null)
     val extra=MutableStateFlow(ExtraState())
     private fun guarded(block:suspend()->Unit)=viewModelScope.launch{try{block()}catch(e:kotlinx.coroutines.CancellationException){throw e}catch(e:Exception){mutable.value=mutable.value.copy(error=when(e){is MedicalVisitConflict->R.string.medical_stale;is PeriodRestoreConflict->R.string.period_restore_overlap;is PackageRestoreConflict->R.string.pkg_restore_conflict;is PackageConsumptionConflict->R.string.pkg_undo_locked;is SkipUndoStale->R.string.history_skip_stale;is SkipUndoUnavailable->R.string.history_skip_unavailable;is SkipUndoUnitConflict->R.string.history_skip_unit_changed;else->R.string.operation_error})}}
     fun loadExtra():Job=refresh()

@@ -1225,4 +1225,12 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="ref2_invalid">Check the date, field lengths, CIS/CIP and supplied URL. The date must be real and the URL must match the entered CIS.</string>
 <string name="ref2_identifiers">CIS %1$s · CIP %2$s</string>
 <string name="ref2_filter_strength">Original strength contains (optional)</string>
+<string name="ref2_history_title">Saved reference context</string>
+<string name="ref2_history_entry">View saved reference context</string>
+<string name="ref2_history_revision">Record revision %1$d</string>
+<string name="ref2_history_empty">No reference source was captured for this revision. It is not inferred from the current medication reference.</string>
+<string name="ref2_history_context">Reference context saved with the entry; it does not confirm the product or package actually used.</string>
+<string name="ref2_history_stale">The dataset changed. Close this window and reopen the record.</string>
+<string name="ref2_history_error">Could not read the saved reference. Closing this window leaves the record unchanged.</string>
+<string name="ref2_history_saved_only">This shows the saved record. Unsaved changes are not included.</string>
 </resources>

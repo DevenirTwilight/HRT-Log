@@ -1225,4 +1225,12 @@
 <string name="ref2_invalid">請檢查日期、欄位長度、CIS/CIP 和所提供的網址；日期必須有效，網址必須對應已填寫的 CIS。</string>
 <string name="ref2_identifiers">CIS %1$s · CIP %2$s</string>
 <string name="ref2_filter_strength">原始規格包含（選填）</string>
+<string name="ref2_history_title">已儲存的來源背景</string>
+<string name="ref2_history_entry">查看已儲存的來源背景</string>
+<string name="ref2_history_revision">紀錄版本 %1$d</string>
+<string name="ref2_history_empty">此版本未記錄參考來源，不根據藥物目前關聯的資料推斷或補填。</string>
+<string name="ref2_history_context">這是輸入時儲存的參考背景，不代表確認實際使用了該商品或包裝。</string>
+<string name="ref2_history_stale">資料集已變更，請關閉視窗並重新開啟紀錄。</string>
+<string name="ref2_history_error">無法讀取已儲存的來源，關閉視窗不會變更紀錄。</string>
+<string name="ref2_history_saved_only">此處顯示已儲存的紀錄，不包含尚未儲存的修改。</string>
 </resources>

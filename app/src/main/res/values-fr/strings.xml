@@ -1225,4 +1225,12 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="ref2_invalid">Vérifiez la date, la longueur des champs, CIS/CIP et URL. La date doit être valide et l’URL correspondre au CIS saisi.</string>
 <string name="ref2_identifiers">CIS %1$s · CIP %2$s</string>
 <string name="ref2_filter_strength">Dosage d’origine contenant (facultatif)</string>
+<string name="ref2_history_title">Contexte de référence enregistré</string>
+<string name="ref2_history_entry">Voir le contexte de référence enregistré</string>
+<string name="ref2_history_revision">Révision de la prise %1$d</string>
+<string name="ref2_history_empty">Aucune source n’a été enregistrée pour cette révision. Elle n’est pas déduite de la référence actuelle du médicament.</string>
+<string name="ref2_history_context">Contexte de référence enregistré avec la prise ; il ne confirme pas le produit ou conditionnement réellement utilisé.</string>
+<string name="ref2_history_stale">Le jeu de données a changé. Fermez cette fenêtre et rouvrez la prise.</string>
+<string name="ref2_history_error">Impossible de lire la référence enregistrée. Fermer cette fenêtre ne modifie pas la prise.</string>
+<string name="ref2_history_saved_only">Cette vue concerne la prise enregistrée. Les modifications non enregistrées ne sont pas incluses.</string>
 </resources>
