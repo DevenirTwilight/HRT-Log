@@ -33,6 +33,10 @@ class HomeAddStockAndroidTest {
         runBlocking { context.repository.addContainers(id, 2.0, 1, true) }
         context.model.sync()
         ui.waitUntil(20_000) { runCatching { ui.onNode(hasScrollToIndexAction()).performScrollToNode(hasTestTag("home-stock-add:$id")) }.isSuccess }
+        // UI-04: the today card now also lists today's records and later doses, so the stock card is the last item below
+        // the fold; scrolled only until visible it sits under the floating Add button. Scroll to the end, as the user does
+        // (the list's bottom padding lifts the last card clear of that button), then tap.
+        repeat(3) { ui.onNode(hasScrollToIndexAction()).performTouchInput { swipeUp() } }; ui.waitForIdle()
         val before = containers().size
         ui.onNodeWithTag("home-stock-add:$id").performClick()
         saveDialog()

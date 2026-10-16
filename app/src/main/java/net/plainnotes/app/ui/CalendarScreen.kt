@@ -18,6 +18,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.platform.testTag
 import net.plainnotes.app.NotesViewModel
 import net.plainnotes.app.data.RecordEntity
 import java.time.YearMonth
@@ -68,12 +69,16 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
     val runOut = extra.stockForecasts
     val displayedUpcoming = remember(upcoming, state.slots) { (state.slots + upcoming).distinctBy { it.slot.key }.filter { it.state in OPEN_STATES } }
     val infos = remember(extra.records, displayedUpcoming, state.appointments, runOut) { dayInfos(extra.records, displayedUpcoming, state.appointments, runOut, zone) }
-    fun select(d: LocalDate) { selectedText = d.toString() }
+    // UI-04: today lives in the today card; going (back) to today brings that card into view instead of a day list.
+    val listState = androidx.compose.foundation.lazy.rememberLazyListState()
+    var toToday by remember { mutableIntStateOf(0) }
+    fun select(d: LocalDate) { selectedText = d.toString(); if (d == today) toToday++ }
     // Frozen plan-time snapshot first, as the dose was planned; the current medication only when none was stored.
     fun medOf(e: TimelineEntry) = state.ruleSnapshots[e.slot.ruleId]?.let { MedicationSnapshot.decode(it, e.slot.medicationId)?.medication(e.slot.medicationId) } ?: meds[e.slot.medicationId]
-    LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = contentPadding.calculateTopPadding() + 8.dp,
+    val pending = state.medications.count { it.needs_review != null }
+    LaunchedEffect(toToday) { if (toToday > 0 && state.medications.isNotEmpty()) listState.animateScrollToItem(if (pending > 0) 1 else 0) }
+    LazyColumn(Modifier.fillMaxSize(), state = listState, contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = contentPadding.calculateTopPadding() + 8.dp,
         bottom = contentPadding.calculateBottomPadding() + 96.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        val pending = state.medications.count { it.needs_review != null }
         if (pending > 0) item {
             Surface(onClick = onReview, color = MaterialTheme.colorScheme.tertiaryContainer, shape = MaterialTheme.shapes.medium) {
                 Row(Modifier.fillMaxWidth().padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -85,15 +90,17 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
         if (state.medications.isEmpty()) item {
             EmptyState(Icons.Outlined.Medication, stringResource(R.string.empty_title), stringResource(R.string.empty_body)) { Button(onClick = onAddMedication) { Text(stringResource(R.string.add_medication)) } }
         }
-        // UI-01 A: today's open doses (the same open entries as the day list) and today's records, shown first.
+        // UI-01 A / UI-04: everything about today (open doses, records, appointments) in one card, shown first.
         else item(key = "today") {
             val todayOpen = displayedUpcoming.filter { it.slot.at.atZone(zone).toLocalDate() == today }.sortedBy { it.slot.at }
             val todayRecords = extra.records.filter { r -> r.deleted_at_utc == null && (r.taken_utc ?: r.scheduled_utc)?.let { Instant.ofEpochMilli(it).atZone(zone).toLocalDate() } == today }
                 .sortedBy { it.taken_utc ?: it.scheduled_utc }
             val taken = todayRecords.filter { it.status == "ON_TIME" || it.status == "LATE" }
+            val todayAppts = state.appointments.filter { Instant.ofEpochMilli(it.at_utc).atZone(zone).toLocalDate() == today }
             TodayCard(today, todayOpen, taken, todayOpen.size + todayRecords.size,
                 todayOpen.isEmpty() && todayRecords.isNotEmpty() && todayRecords.none { it.status == "MISSED" }, ::medOf,
-                { MedicationSnapshot.decode(it.config_snapshot, it.medication_id)?.medication(it.medication_id) }, onComplete, onChange)
+                { MedicationSnapshot.decode(it.config_snapshot, it.medication_id)?.medication(it.medication_id) }, onComplete, onChange,
+                records = todayRecords, appointments = todayAppts, onAppointment = onAppointment)
         }
         item {
             Surface(shape = MaterialTheme.shapes.extraLarge, color = MaterialTheme.colorScheme.surfaceContainerLow, modifier = Modifier.fillMaxWidth()) {
@@ -110,16 +117,17 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
                 }
             }
         }
-        if (view != CalView.YEAR) {
-            item(key = "dayhead") { DayHeader(selected, today) }
+        // UI-04: the day list is for other dates; today's doses, records and appointments are in the today card above.
+        if (view != CalView.YEAR && (selected != today || state.medications.isEmpty())) {
+            item(key = "dayhead") { Box(Modifier.testTag("day-head")) { DayHeader(selected, today) } }
             val dayRecords = extra.records.filter { r -> r.deleted_at_utc == null && (r.taken_utc ?: r.scheduled_utc)?.let { Instant.ofEpochMilli(it).atZone(zone).toLocalDate() } == selected }
                 .sortedBy { it.taken_utc ?: it.scheduled_utc }
             val dayOpen = upcoming.filter { it.slot.at.atZone(zone).toLocalDate() == selected }.sortedBy { it.slot.at }
             val dayAppts = state.appointments.filter { Instant.ofEpochMilli(it.at_utc).atZone(zone).toLocalDate() == selected }
             if (dayRecords.isEmpty() && dayOpen.isEmpty() && dayAppts.isEmpty()) item { Text(stringResource(R.string.calendar_day_empty), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(start = 4.dp)) }
-            items(dayOpen, key = { it.slot.key }) { e -> DoseCard(e, medOf(e), { onComplete(e) }, { onChange(e) }) }
-            items(dayRecords, key = { "r${it.id}" }) { r -> RecordLine(r, MedicationSnapshot.decode(r.config_snapshot,r.medication_id)?.medication(r.medication_id)) }
-            items(dayAppts, key = { "a${it.id}" }) { AppointmentCard(it) { onAppointment(it) } }
+            items(dayOpen, key = { it.slot.key }) { e -> Box(Modifier.testTag("day-dose:${e.slot.key}")) { DoseCard(e, medOf(e), { onComplete(e) }, { onChange(e) }) } }
+            items(dayRecords, key = { "r${it.id}" }) { r -> Box(Modifier.testTag("day-record:${r.id}")) { RecordLine(r, MedicationSnapshot.decode(r.config_snapshot,r.medication_id)?.medication(r.medication_id)) } }
+            items(dayAppts, key = { "a${it.id}" }) { a -> Box(Modifier.testTag("day-appt:${a.id}")) { AppointmentCard(a) { onAppointment(a) } } }
         }
         item(key = "stock") { HomeStockCard(state.medications.filter { it.active }, runOut, today, zone, onStock, onAddStock) }
     }
