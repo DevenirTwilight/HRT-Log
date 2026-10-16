@@ -1,0 +1,173 @@
+{
+  "checked_at_utc": "2026-10-16T03:35:58.085700+00:00",
+  "repository": "DevenirTwilight/HRT-Log",
+  "default_branch": "claude/new-session-1959qb",
+  "baseline": "a3146dfd63057a563b57f7967e2de857de486d90",
+  "pr45": {
+    "state": "open",
+    "merged": false,
+    "merged_at": null
+  },
+  "pr45_head": "348c68def84ccc627a46be57ace463ade3635a15",
+  "pr45_comments": 0,
+  "pr45_reviews": 0,
+  "open_prs": [
+    {
+      "number": 47,
+      "head": "7b8730a0bb7829730db31af2840438d6b71769b2",
+      "branch": "feature/ui04-today-dedup-20261016"
+    },
+    {
+      "number": 45,
+      "head": "348c68def84ccc627a46be57ace463ade3635a15",
+      "branch": "feature/ansm01-reference-data-20261015"
+    },
+    {
+      "number": 34,
+      "head": "8e3a118db1844448f87e0bbd71d744e59cabbef8",
+      "branch": "docs/med02b4-merge-record-20261014"
+    },
+    {
+      "number": 18,
+      "head": "68ceac2717b487029d894a76f4185cdf1f890d35",
+      "branch": "research/p2-ba-evidence-use-case-20261011"
+    },
+    {
+      "number": 17,
+      "head": "82c32a7fee993f8937e0f65f66bc0629956c46ce",
+      "branch": "research/p2-az-retrospective-study-transfer-20261011"
+    },
+    {
+      "number": 16,
+      "head": "34573e101d9156dc6e0981486d6a9f59302408c7",
+      "branch": "research/p2-ay-anchor-ratio-observability-20261011"
+    },
+    {
+      "number": 15,
+      "head": "132dc36da3d72465d5201b3c8568ce00931d9701",
+      "branch": "docs/p2-historical-research-consolidation-20261011"
+    },
+    {
+      "number": 10,
+      "head": "eb4d43bf2563d1397474ed73939c01470eb8030f",
+      "branch": "research/p2-au-clock-grid-robustness-20261011"
+    },
+    {
+      "number": 6,
+      "head": "ff28e10bb0365d17ab3bffa865b473e234302543",
+      "branch": "research/p2-r-through-at-complete-archive-20261010"
+    },
+    {
+      "number": 3,
+      "head": "4b264187b08f23ae4ef88a10715e29500d60ce29",
+      "branch": "p2ar/unified-concentration-comparison"
+    },
+    {
+      "number": 2,
+      "head": "cd56688e36c4dccaceab4be814773c562ef862cc",
+      "branch": "ccr-8cffa954-5gedc0"
+    },
+    {
+      "number": 1,
+      "head": "c0b9b6c53461610ea8c8460e610f1a1ed9aadf60",
+      "branch": "research/experimental-sl-v01"
+    }
+  ],
+  "ruleset": {
+    "id": 25120328,
+    "name": "My Ruleset",
+    "target": "branch",
+    "source_type": "Repository",
+    "source": "DevenirTwilight/HRT-Log",
+    "enforcement": "active",
+    "conditions": {
+      "ref_name": {
+        "exclude": [],
+        "include": [
+          "~DEFAULT_BRANCH"
+        ]
+      }
+    },
+    "rules": [
+      {
+        "type": "deletion"
+      },
+      {
+        "type": "non_fast_forward"
+      },
+      {
+        "type": "pull_request",
+        "parameters": {
+          "required_approving_review_count": 0,
+          "dismiss_stale_reviews_on_push": false,
+          "required_reviewers": [],
+          "require_code_owner_review": false,
+          "require_last_push_approval": false,
+          "required_review_thread_resolution": true,
+          "require_extra_approval_for_unattributed_changes": true,
+          "allowed_merge_methods": [
+            "merge",
+            "squash",
+            "rebase"
+          ]
+        }
+      },
+      {
+        "type": "required_status_checks",
+        "parameters": {
+          "strict_required_status_checks_policy": true,
+          "do_not_enforce_on_create": false,
+          "required_status_checks": [
+            {
+              "context": "jvm",
+              "integration_id": 15368
+            },
+            {
+              "context": "android",
+              "integration_id": 15368
+            },
+            {
+              "context": "device-tests",
+              "integration_id": 15368
+            },
+            {
+              "context": "attachment-poc-compatibility (26)",
+              "integration_id": 15368
+            },
+            {
+              "context": "attachment-poc-compatibility (29)",
+              "integration_id": 15368
+            },
+            {
+              "context": "science-change-gate",
+              "integration_id": 15368
+            }
+          ]
+        }
+      }
+    ],
+    "node_id": "RRS_lACqUmVwb3NpdG9yec5Tz0FMzgF_Tkg",
+    "created_at": "2026-10-14T21:57:02.097Z",
+    "updated_at": "2026-10-14T21:57:02.178Z",
+    "bypass_actors": [],
+    "current_user_can_bypass": "never",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/DevenirTwilight/HRT-Log/rulesets/25120328"
+      },
+      "html": {
+        "href": "https://github.com/DevenirTwilight/HRT-Log/rules/25120328"
+      }
+    }
+  },
+  "shared_file_conflicts_avoided": [
+    "PR47: main UI/strings/tests, REQUIREMENTS/HANDOFF",
+    "PR45: frozen reference data"
+  ],
+  "local_worktrees": "/workspace/HRT-Log  ff0695f [feature/ansm02a-synthetic-catalog-20261016]",
+  "approvals_required_for_production": [
+    "Official data distribution/licence and original field treatment",
+    "ANSM02B DTO and persistence/backup changes",
+    "ANSM03 stock and conversion integration"
+  ]
+}

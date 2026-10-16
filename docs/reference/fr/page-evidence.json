@@ -1,0 +1,874 @@
+[
+  {
+    "bytes": 175755,
+    "cis": "60021127",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "SPIRONOLACTONE VIATRIS 75 mg, comprimé pelliculé",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:15.824554+00:00",
+    "sha256": "07f4f216a17e474156b3fbfdd70bf193596ec2ea7aa7561b4fb259e32edca3bf",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/60021127/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 178241,
+    "cis": "60058378",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "SPIRONOLACTONE ZENTIVA 75 mg, comprimé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:16.301786+00:00",
+    "sha256": "6d72d63d4d5cb81aef23afb54b10ca7fa41ab4d5bef620052d7be40c1a57aa95",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/60058378/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 179667,
+    "cis": "60337762",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "SPIRONOLACTONE TEVA 75 mg, comprimé pelliculé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:15.562111+00:00",
+    "sha256": "de2449c22a0c02476c8e9911b9c4523d407c42ed329937d1e67b67e9c1b25fa2",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/60337762/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 186131,
+    "cis": "60464076",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "SPIRONOLACTONE VIATRIS 25 mg, comprimé pelliculé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:15.710035+00:00",
+    "sha256": "74495bbab575c495cccf5612f5ebcc55c530e96a31b2aa27073690045925a6db",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/60464076/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 194791,
+    "cis": "60625921",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "SPIRONOLACTONE BIOGARAN 25 mg, comprimé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:14.179641+00:00",
+    "sha256": "d19584c72f271996077928fbc4d27cca73972fff61f93aa9b90104ddc03f9af7",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/60625921/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 150520,
+    "cis": "60734372",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "SPIRONOLACTONE SANDOZ 25 mg, comprimé pelliculé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:15.058432+00:00",
+    "sha256": "fc079f89eb529856bb427ca4b50d2b2a619ff86a1e7a017e985bd9bed3e8b69f",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/60734372/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 148151,
+    "cis": "60899178",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "ACETATE DE CYPROTERONE EG 100 mg, comprimé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:11.020810+00:00",
+    "sha256": "9d7dd5cb0fde0d8197b084fcad2fc4cb06d78c738b9bde73870ea4ca5d994d88",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/60899178/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 231305,
+    "cis": "60940721",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "PROGYNOVA 2 mg, comprimé enrobé",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:13.563153+00:00",
+    "sha256": "5d4331cdf7b14e571de1539339c71f7ce24219670bdc3d3c1d33153f2e852929",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/60940721/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 161457,
+    "cis": "61255738",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "ANDROCUR 50 mg, comprimé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:12.234790+00:00",
+    "sha256": "02a8bdb13b79bdccd65224e2e1dacd17859af6edeff03848c635b94c80236edd",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/61255738/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 188858,
+    "cis": "61457558",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "SPIRONOLACTONE PFIZER 50 mg, comprimé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:15.015719+00:00",
+    "sha256": "bb41e64164cb41f2739a1102fbd47b42053716a4858bf4bf9d7e57a3c62facd8",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/61457558/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 247153,
+    "cis": "61614618",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "THAISSEPT 25 microgrammes/24 heures, dispositif transdermique",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:16.347826+00:00",
+    "sha256": "30da793097f02257e9e8a062768c5b90fbe63aaa62251fcceb16c49e2edd8b1a",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/61614618/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 197734,
+    "cis": "61662029",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "SPIRONOLACTONE EG 25 mg, comprimé pelliculé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:14.697672+00:00",
+    "sha256": "27a530392755114dbf1f6faab04d4be06310a7b220bd6b39c6769640c800c629",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/61662029/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 161649,
+    "cis": "61673424",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "UTROGESTAN 100 mg, capsule molle orale ou vaginale",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:16.857746+00:00",
+    "sha256": "6fb9c4112680b2ccff5fc35726dd4784c3ac2d2cb369c2b53f99defa4c925565",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/61673424/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 249613,
+    "cis": "61774149",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "DERMESTRIL SEPTEM 75 microgrammes/24 heures, dispositif transdermique",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:12.895777+00:00",
+    "sha256": "a0372cc1e5d88642a056dcd508d32ca7b93f49e5ac11fa2b4fd82f181ab01479",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/61774149/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 182283,
+    "cis": "61938189",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "SPIRONOLACTONE ARROW 50 mg, comprimé pelliculé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:14.049215+00:00",
+    "sha256": "e5831123c7e659c05b7dffeb0698fc32059506b79cdd33b7da2eb455c891a9f5",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/61938189/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 161449,
+    "cis": "62028953",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "CYPROTERONE BIOGARAN 50 mg, comprimé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:11.951056+00:00",
+    "sha256": "76c50c19fc1a925b36700f9923791f6c96139505614623498603f228247f0433",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/62028953/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 150320,
+    "cis": "62075038",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "PROGESTERONE BIOGARAN 100 mg, capsule molle ou capsule molle vaginale",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:13.061903+00:00",
+    "sha256": "30b047d87303d24547d5642a4abac2f5d96cecf8cf362e62e9d27754f4c10662",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/62075038/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 249339,
+    "cis": "62402447",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "DERMESTRIL SEPTEM 50 microgrammes/24 heures, dispositif transdermique",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:12.813037+00:00",
+    "sha256": "5fb414622d4a291ad123a5349fb307f24e2452792e25a8b5a28a3c872a485712",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/62402447/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 159822,
+    "cis": "62450997",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "CYPROTERONE MYLAN 50 mg, comprimé",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:12.104630+00:00",
+    "sha256": "8035f36ad7ee49fc13d42cae48221cceb33224f33927d3e1fe26a09feeb5e584",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/62450997/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 185852,
+    "cis": "62465928",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "SPIRONOLACTONE BIOGARAN 50 mg, comprimé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:14.184501+00:00",
+    "sha256": "31752f0aa486c856302be89801558e2e28fc40f38ab8940b23c3d5fe0c5b3c6a",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/62465928/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 241533,
+    "cis": "62512491",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "PROGYNOVA 1 mg, comprimé enrobé",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:13.830830+00:00",
+    "sha256": "99af301ab0f3cb7b5382bb41d09efba67a74d299520d06c7a76bca3dce86e3b4",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/62512491/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 189443,
+    "cis": "62673263",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "SPIRONOLACTONE PFIZER 75 mg, comprimé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:15.213802+00:00",
+    "sha256": "a22bf55b8edb39c2785663fdff5f5f00c3cf900a675db5d0b9a378480cd24c5e",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/62673263/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 231429,
+    "cis": "63071975",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "OESTRODOSE 0,06 POUR CENT, gel pour application cutanée en flacon avec pompe doseuse",
+    "packaging_location": "RCP 6.5",
+    "packaging_quote": "La pompe délivre des doses unitaires de 1,25 g de gel, correspondant à 0,75 mg d'estradiol. Flacon de 64 doses.",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:13.227242+00:00",
+    "sha256": "9e7631286963a0448a420c012d3e4ed5133c91560edc9200b2d454c79c47e2df",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/63071975/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 189799,
+    "cis": "63145849",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "SPIRONOLACTONE ARROW 25 mg, comprimé pelliculé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:13.733146+00:00",
+    "sha256": "e6df0f8ffc50fc82c539713c0cccb27f241aace920c9411202d2f69018850ff9",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/63145849/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 160643,
+    "cis": "63157698",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "UTROGESTAN 200 mg, capsule molle orale ou vaginale",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:16.833781+00:00",
+    "sha256": "3debf2597141deb3ce42fe89a47f7fc6f315bb44968b732949945c9c2ecfdbb8",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/63157698/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 190905,
+    "cis": "63603104",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "SPIRONOLACTONE ZENTIVA 25 mg, comprimé pelliculé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:15.965708+00:00",
+    "sha256": "a44d63c5a71b09f885bab3097b8b872bf8756b5a7bfb811b5ca85e84330075de",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/63603104/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 144909,
+    "cis": "63873854",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "SPIRONOLACTONE SANDOZ 50 mg, comprimé pelliculé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:15.114624+00:00",
+    "sha256": "8d96c3fa6c2bbabd9059eafdbc942d498b8a02c10cd02275810a2dae30ce6f41",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/63873854/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 248965,
+    "cis": "64061941",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "DERMESTRIL SEPTEM 25 microgrammes/24 heures, dispositif transdermique",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:12.751652+00:00",
+    "sha256": "b8d76071ad8f106e1e65413dce998bf6fd2ec20cfe3ddc1b345043a2b0e9b033",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/64061941/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 177020,
+    "cis": "64322708",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "SPIRONOLACTONE VIATRIS 50 mg, comprimé pelliculé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:15.806543+00:00",
+    "sha256": "4ab0b81b57dcd464d821ad0fa6150133df3d3dc592cda650b2a1118f386638d2",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/64322708/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 181484,
+    "cis": "64347259",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "SPIRONOLACTONE EG 75 mg, comprimé pelliculé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:15.033568+00:00",
+    "sha256": "f9750b3d2a6e40e90a0fc6a1e2ef53df267a20de62e46b5bcb25749423375646",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/64347259/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 126425,
+    "cis": "64358280",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "UTROGESTAN 400 mg, capsule molle vaginale",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:16.927349+00:00",
+    "sha256": "9e6a0881fe11fbb6af86e23b537c5651d7c354accda9ed0e5383f0770de9ae71",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/64358280/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 176430,
+    "cis": "64398047",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "SPIRONOLACTONE EG 50 mg, comprimé pelliculé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:14.624387+00:00",
+    "sha256": "feaebcfb4edc90dc55952dc954c571176685279ec25ef408516767ef4d774735",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/64398047/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 186516,
+    "cis": "64431166",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "SPIRONOLACTONE ZYDUS 50 mg, comprimé pelliculé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:16.453617+00:00",
+    "sha256": "9a47a6701c33727fb0783e8d6cf06c56eaeee492ce0536e4c7f9903c4aaab86b",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/64431166/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 196717,
+    "cis": "64565845",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "ALDACTONE 25 mg, comprimé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:11.376944+00:00",
+    "sha256": "92d242df251b6c7946d45d795ed454c1751d83146df8cb9f7b561c989811e08d",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/64565845/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 184447,
+    "cis": "64640867",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "SPIRONOLACTONE BIOGARAN 75 mg, comprimé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:14.293179+00:00",
+    "sha256": "e3a14c4cd043f052e49ac537ae7eefce6d1d1bcef26cf4bf501e8db7f4b66918",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/64640867/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 187462,
+    "cis": "64802027",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "SPIRONOLACTONE TEVA 25 mg, comprimé pelliculé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:15.479853+00:00",
+    "sha256": "38114649463e13980ddf3f316ec8f8b499cc902d41360bf391e268e4cb0c2c94",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/64802027/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 260970,
+    "cis": "64833859",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "DERMESTRIL 25 microgrammes/24 heures, dispositif transdermique",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:12.642270+00:00",
+    "sha256": "d78b76681612e792bb9bebce29b2db727f0486c0402a4757c11cd200ca4ef3de",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/64833859/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 212178,
+    "cis": "65281285",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "PROVAMES 1 mg, comprimé pelliculé",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:13.769643+00:00",
+    "sha256": "9831f5b757e7a29ea6c9a3e943a054b83475dbb3e7a46e79b8d17da2d2d91b65",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/65281285/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 213623,
+    "cis": "65421374",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "PROVAMES 2 mg, comprimé pelliculé",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:13.643729+00:00",
+    "sha256": "e5acec40ba2099a3bbfba728d0f454653c2360383ce55a9f4ac23e12ca608b55",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/65421374/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 198054,
+    "cis": "65618628",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "SPIRONOLACTONE PFIZER 25 mg, comprimé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:14.971567+00:00",
+    "sha256": "2cc3545df2892efc851fe3382be3443c9e53c3569e38a2549289f6289b30f3cb",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/65618628/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 260202,
+    "cis": "65662980",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "DERMESTRIL 50 microgrammes/24 heures, dispositif transdermique",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:13.148275+00:00",
+    "sha256": "eb1ae5c02a2240fccc7b67f1f1d75d9d456137e4f804277cdb258df637c6ae53",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/65662980/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 189123,
+    "cis": "65696662",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "SPIRONOLACTONE CRISTERS 50 mg, comprimé pelliculé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:14.564037+00:00",
+    "sha256": "40d75be8d061c718ff8da28a355e4eaf59b362ea115b8dbb91d66e5762586a9a",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/65696662/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 152980,
+    "cis": "65900339",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "ACETATE DE CYPROTERONE ARROW 100 mg, comprimé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:10.964907+00:00",
+    "sha256": "f31b6da1d7f6b855b7f6ef92681634bf368478143350dd84b4831bbff3cbcf3d",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/65900339/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 247829,
+    "cis": "65982553",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "THAISSEPT 50 microgrammes/24 heures, dispositif transdermique",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:16.593318+00:00",
+    "sha256": "c20da763a691b0f9d48bdac2c691cb7e1368b4f6e1f485a5a4d4b2a165958293",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/65982553/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 183063,
+    "cis": "66032486",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "SPIRONOLACTONE ARROW 75 mg, comprimé pelliculé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:14.485706+00:00",
+    "sha256": "01b25f6736c56ba412e6742bcf5bd1ef9479e8bf84144d6b791311f5dae81d73",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/66032486/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 132405,
+    "cis": "66156975",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "PROGESTERONE VIATRIS 100 mg, capsule molle ou capsule molle vaginale",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:13.202247+00:00",
+    "sha256": "a33b23de78b8c1de09161e1ac2871191b68e3a7c106b72c676ec92defca923d8",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/66156975/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 152320,
+    "cis": "66426680",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "PROGESTERONE BIOGARAN 200 mg, capsule molle ou capsule molle vaginale",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:13.301784+00:00",
+    "sha256": "452cc625a8a281cbbddd913cc333952ded0d24388181b92b35981924d061337c",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/66426680/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 261932,
+    "cis": "66501802",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "DERMESTRIL 100 microgrammes/24 heures, dispositif transdermique",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:12.257331+00:00",
+    "sha256": "9bdb1e8967a74db6b315f42bd3b4a25784b46c4b9ce1934beb7fe92bad082a7e",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/66501802/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 191393,
+    "cis": "67368301",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "ALDACTONE 50 mg, comprimé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:12.333429+00:00",
+    "sha256": "e8b1df88fdc0fe126f00aecc3da8c5c73f8d2d67bd06964fb3d3bcfd2a482c91",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/67368301/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 155133,
+    "cis": "67443608",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "ACETATE DE CYPROTERONE TEVA 100 mg, comprimé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:10.594192+00:00",
+    "sha256": "7b99a03a8cb1e7be362b4d89d532d17a4349bd3aa6ce7bbf68b3bd629c5bf130",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/67443608/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 175227,
+    "cis": "67552319",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "ACETATE DE CYPROTERONE ARROW 50 mg, comprimé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:11.654288+00:00",
+    "sha256": "8fa6cc56a6a52e385dbf10800888f4eb7a1387d91c999793a4388a15216d1e7e",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/67552319/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 159355,
+    "cis": "67588728",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "ACETATE DE CYPROTERONE EG 50 mg, comprimé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:11.728838+00:00",
+    "sha256": "afabc2c51ad02901154f80a2a3a97c926c556018c3d4f1db1d13a0e8ccf5bf30",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/67588728/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 151100,
+    "cis": "67941726",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "CYPROTERONE MYLAN 100 mg, comprimé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:12.359483+00:00",
+    "sha256": "d2859fab46557011aa9f207fecfb1d44f4c2f231a10252ee29d992d560742b97",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/67941726/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 184273,
+    "cis": "68492540",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "ALDACTONE 75 mg, comprimé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:11.526667+00:00",
+    "sha256": "54f79253a0477a944a94e94791450e1c9b13ee9f3c25e4712cec8ce65b5a2757",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/68492540/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 181496,
+    "cis": "68800618",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "SPIRONOLACTONE TEVA 50 mg, comprimé pelliculé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:15.422558+00:00",
+    "sha256": "84a6d2d6c642d4fda5a8bef1249d0f48fc63fdedb463185c91125b873c809996",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/68800618/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 197651,
+    "cis": "68916754",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "SPIRONOLACTONE CRISTERS 25 mg, comprimé pelliculé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:14.446794+00:00",
+    "sha256": "a338455422c7f40b03e4dc8efc6230279076c0bafb1d1d9c377e343dbc4927bc",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/68916754/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 184177,
+    "cis": "69006984",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "SPIRONOLACTONE ZENTIVA 50 mg, comprimé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:16.103615+00:00",
+    "sha256": "141e252cd9cba8a7ec1f0e2890357e92b0c5fcaafc33d221135b5bd13f5dced5",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/69006984/extrait",
+    "verification": "VERIFIED"
+  },
+  {
+    "bytes": 193315,
+    "cis": "69360552",
+    "data_updated_on": "2026-09-29",
+    "http_status": 200,
+    "name": "SPIRONOLACTONE ZYDUS 25 mg, comprimé pelliculé sécable",
+    "panels": [
+      "rcp",
+      "notice"
+    ],
+    "retrieved_at_utc": "2026-10-15T21:09:16.317970+00:00",
+    "sha256": "62cf33f77ea5a72acd07b7e4ed03ee8519340b57ded15213c123b1aee4260528",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/69360552/extrait",
+    "verification": "VERIFIED"
+  }
+]

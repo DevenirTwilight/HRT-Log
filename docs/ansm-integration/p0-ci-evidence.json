@@ -1,0 +1,238 @@
+{
+  "phase": "P0",
+  "state": "PRODUCTION_IMPLEMENTED_NOT_RELEASED",
+  "source_head": "1d368ef9a1868f57291cd43a193a74c02dd9e8b6",
+  "merge_commit": "cfbe62c4a466f55234d53fbeff4c7f2c03224d50",
+  "merged_at": "2026-10-16T13:46:36Z",
+  "pr": 53,
+  "android_pr_run": 38906781437,
+  "required_checks": [
+    {
+      "name": "jvm",
+      "conclusion": "SUCCESS",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38906781437/job/116992222425"
+    },
+    {
+      "name": "jvm",
+      "conclusion": "SUCCESS",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38906773365/job/116992195979"
+    },
+    {
+      "name": "science-change-gate",
+      "conclusion": "SUCCESS",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38906781499/job/116992224332"
+    },
+    {
+      "name": "science-change-gate",
+      "conclusion": "SUCCESS",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38906773885/job/116992196302"
+    },
+    {
+      "name": "android",
+      "conclusion": "SUCCESS",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38906781437/job/116992222145"
+    },
+    {
+      "name": "android",
+      "conclusion": "SUCCESS",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38906773365/job/116992195318"
+    },
+    {
+      "name": "device-tests",
+      "conclusion": "SUCCESS",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38906781437/job/116992222559"
+    },
+    {
+      "name": "device-tests",
+      "conclusion": "SUCCESS",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38906773365/job/116992195595"
+    },
+    {
+      "name": "attachment-poc-compatibility (26)",
+      "conclusion": "SUCCESS",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38906781437/job/116992222622"
+    },
+    {
+      "name": "attachment-poc-compatibility (26)",
+      "conclusion": "SUCCESS",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38906773365/job/116992195505"
+    },
+    {
+      "name": "attachment-poc-compatibility (29)",
+      "conclusion": "SUCCESS",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38906781437/job/116992222710"
+    },
+    {
+      "name": "attachment-poc-compatibility (29)",
+      "conclusion": "SUCCESS",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38906773365/job/116992195521"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 12049450094,
+      "name": "attachment-poc-api29",
+      "digest": "sha256:2258eb96763aab77db111408080e691f6623f9aa1da00b5e6d7653bd34976ac8",
+      "bytes": 56299,
+      "crc": "PASS",
+      "apk_entries": 0,
+      "reports": [
+        {
+          "path": "core/data/build/reports/androidTests/connected/debug/index.html",
+          "tests": 90,
+          "failures": 0,
+          "skipped": 0
+        },
+        {
+          "path": "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.BackupReplacementAndroidTest.html",
+          "tests": 7,
+          "failures": 0,
+          "skipped": 0
+        },
+        {
+          "path": "app/build/reports/androidTests/connected/debug/flavors/full/index.html",
+          "tests": 70,
+          "failures": 0,
+          "skipped": 0
+        }
+      ]
+    },
+    {
+      "id": 12049416112,
+      "name": "device-test-results",
+      "digest": "sha256:385dbcdd2e4dad9a6cd867386f97e757fff050d080662cb14530acef9f911928",
+      "bytes": 116061,
+      "crc": "PASS",
+      "apk_entries": 0,
+      "reports": [
+        {
+          "path": "core/data/build/reports/androidTests/connected/debug/index.html",
+          "tests": 157,
+          "failures": 0,
+          "skipped": 0
+        },
+        {
+          "path": "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.BackupReplacementAndroidTest.html",
+          "tests": 7,
+          "failures": 0,
+          "skipped": 0
+        },
+        {
+          "path": "app/build/reports/androidTests/connected/debug/flavors/full/index.html",
+          "tests": 264,
+          "failures": 0,
+          "skipped": 8
+        }
+      ]
+    },
+    {
+      "id": 12048878626,
+      "name": "build-results",
+      "digest": "sha256:91c74c2b80eb776d94b69f3600b02d930b3c7255e0ce0adeb4dbab43ca6f7c85",
+      "bytes": 1492508,
+      "crc": "PASS",
+      "apk_entries": 0,
+      "reports": [
+        {
+          "path": "app/build/reports/tests/testFullDebugUnitTest/index.html",
+          "tests": 1198,
+          "failures": 0,
+          "skipped": 205
+        },
+        {
+          "path": "app/build/reports/tests/testFullDebugUnitTest/net.plainnotes.app.PeriodStabilityTest/index.html",
+          "tests": 5,
+          "failures": 0,
+          "skipped": 0
+        },
+        {
+          "path": "core/data/build/reports/tests/testDebugUnitTest/index.html",
+          "tests": 204,
+          "failures": 0,
+          "skipped": 0
+        },
+        {
+          "path": "core/data/build/reports/tests/testDebugUnitTest/net.plainnotes.app.data.BackupReplacementTest/index.html",
+          "tests": 7,
+          "failures": 0,
+          "skipped": 0
+        },
+        {
+          "path": "core/reminder/build/reports/tests/testDebugUnitTest/index.html",
+          "tests": 20,
+          "failures": 0,
+          "skipped": 0
+        }
+      ]
+    },
+    {
+      "id": 12048771988,
+      "name": "jvm-test-results",
+      "digest": "sha256:94734a85b490f753e8719e4ec2dd89eea5df2fa07bc89e3e97bb4e60e1d8a61c",
+      "bytes": 47931,
+      "crc": "PASS",
+      "apk_entries": 0,
+      "reports": [
+        {
+          "path": "core/domain/",
+          "tests": 121,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "pk-engine/",
+          "tests": 124,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "importer/",
+          "tests": 12,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "tools/attachment-poc/",
+          "tests": 63,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      ]
+    },
+    {
+      "id": 12048268644,
+      "name": "attachment-poc-api26",
+      "digest": "sha256:179d466cf8564a32a660eb33f50de5c8992788ac9b91922e031bc3178e3cb347",
+      "bytes": 56223,
+      "crc": "PASS",
+      "apk_entries": 0,
+      "reports": [
+        {
+          "path": "core/data/build/reports/androidTests/connected/debug/index.html",
+          "tests": 90,
+          "failures": 0,
+          "skipped": 0
+        },
+        {
+          "path": "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.BackupReplacementAndroidTest.html",
+          "tests": 7,
+          "failures": 0,
+          "skipped": 0
+        },
+        {
+          "path": "app/build/reports/androidTests/connected/debug/flavors/full/index.html",
+          "tests": 70,
+          "failures": 0,
+          "skipped": 0
+        }
+      ]
+    }
+  ],
+  "physical_device": "NOT_RUN",
+  "physical_power_loss": "NOT_RUN",
+  "main_ci": "IN_PROGRESS"
+}

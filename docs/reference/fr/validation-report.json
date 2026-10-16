@@ -1,0 +1,1147 @@
+{
+  "authorization_counts": {
+    "ACTIVE": 50,
+    "ARCHIVED": 3,
+    "REPEALED": 5
+  },
+  "catalog_sha256": "d56a81299d66655508254e673aaa81579c564a3e077df2fb4e40e217bf182817",
+  "generator_sha256": "32519c7e26414b3520543affec5da43c4ef36bcfa85635c70d416ef079ae8a31",
+  "generator_version": 1,
+  "input_checksums": {
+    "page-evidence.json": "8528d8ff6b4cdea17f120d142f1504bb58fb03b1f6045b723ebe9d25077d3ca1",
+    "source-rows.json": "6fa5a7d615e755327127553ad88acf7ed538e7086f0be236a86b4c6eca19ea05"
+  },
+  "limitations": [
+    "NOT_A_COMPLETE_FRENCH_MARKET_CATALOG",
+    "DECLARATION_NOT_REALTIME_AVAILABILITY",
+    "NO_NOTICE_DOES_NOT_ESTABLISH_NORMAL_SUPPLY",
+    "NO_CLINICAL_OR_PK_VALIDATION",
+    "OFFLINE_REPLAY_USES_CAPTURED_EXCERPTS_NOT_CURRENT_WEBSITE"
+  ],
+  "manifest_sha256": "cffa99dbe1dccf604aa9908a2caccd93ab30312af6c2f0fd6cf46c8cb69bef32",
+  "presentation_count": 96,
+  "product_count": 58,
+  "products": [
+    {
+      "cis": "60021127",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "60058378",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "60337762",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "60464076",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "60625921",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "60734372",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "60899178",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "60940721",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "61255738",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "61457558",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "61614618",
+      "conflicts": [
+        "FORMAT_SPEC_SAYS_ST_SOURCE_USES_FT"
+      ],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "61662029",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "61673424",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "61774149",
+      "conflicts": [
+        "FORMAT_SPEC_SAYS_ST_SOURCE_USES_FT"
+      ],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "61938189",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "62028953",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "62075038",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "62402447",
+      "conflicts": [
+        "FORMAT_SPEC_SAYS_ST_SOURCE_USES_FT"
+      ],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "62450997",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "62465928",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "62512491",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "62673263",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "63071975",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "63145849",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "63157698",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "63603104",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "63873854",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "64061941",
+      "conflicts": [
+        "FORMAT_SPEC_SAYS_ST_SOURCE_USES_FT"
+      ],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "64322708",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "64347259",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "64358280",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "64398047",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "64431166",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "64565845",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "64640867",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "64802027",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "64833859",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "65281285",
+      "conflicts": [
+        "FORMAT_SPEC_SAYS_ST_SOURCE_USES_FT"
+      ],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "65421374",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "65618628",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "65662980",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "65696662",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "65900339",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "65982553",
+      "conflicts": [
+        "FORMAT_SPEC_SAYS_ST_SOURCE_USES_FT"
+      ],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "66032486",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "66156975",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "66426680",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "66501802",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "67368301",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "67443608",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "67552319",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "67588728",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "67941726",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "68492540",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "68800618",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "68916754",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "69006984",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    },
+    {
+      "cis": "69360552",
+      "conflicts": [],
+      "documents": {
+        "notice": "VERIFIED",
+        "rcp": "VERIFIED"
+      },
+      "supply_verification": "UNVERIFIED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ],
+      "unverified_presentations": []
+    }
+  ],
+  "reference_version": "fr-bdpm-2026-10-15.1",
+  "release_blockers": [
+    "LICENSE_VERSION_CONFLICT",
+    "OWNER_ACCEPTANCE_PENDING",
+    "NOT_INTEGRATED_IN_ANDROID"
+  ],
+  "result": "PASS"
+}

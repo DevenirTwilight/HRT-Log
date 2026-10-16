@@ -134,8 +134,17 @@ class Gate2StoreAndroidTest {
             val password="synthetic-gate2-password".toCharArray()
             kotlinx.coroutines.runBlocking {
                 val backup=repo.exportBackup(password);val clear=BackupCodec.decrypt(backup,password)
-                try{val j=org.json.JSONObject(String(clear,Charsets.UTF_8));assertEquals(9,j.getInt("schema"));assertFalse(j.getJSONObject("tables").keys().asSequence().any{it.startsWith("attachment_")||it.startsWith("synthetic_")})}finally{clear.fill(0)}
-                repo.restoreBackup(backup,password)
+                val legacy=try{
+                    val j=org.json.JSONObject(String(clear,Charsets.UTF_8));assertEquals(10,j.getInt("schema"))
+                    val tables=j.getJSONObject("tables")
+                    assertFalse(tables.keys().asSequence().any{it.startsWith("attachment_")||it.startsWith("synthetic_")})
+                    // Preserve genuine Schema9 coverage: strip only the newly introduced, explicitly empty reference tables.
+                    ReferenceSchema.businessTables.forEach {table->assertEquals(0,tables.getJSONArray(table).length());tables.remove(table)}
+                    j.put("schema",9)
+                    val plain=j.toString().toByteArray(Charsets.UTF_8)
+                    try {BackupCodec.encrypt(plain,password)}finally{plain.fill(0)}
+                }finally{clear.fill(0)}
+                repo.restoreBackup(legacy,password)
             };password.fill('\u0000')
             val fresh=AttachmentIdentity.current(s.raw)!!;assertNotEquals(s.scope.dataset,fresh.dataset);assertNotEquals(s.scope.epoch,fresh.epoch)
             val newIdentity=s.db.runInTransaction(Callable{AttachmentIdentity.bind(s.raw,fresh,"APPOINTMENT",1)});assertNotEquals(oldIdentity,newIdentity)

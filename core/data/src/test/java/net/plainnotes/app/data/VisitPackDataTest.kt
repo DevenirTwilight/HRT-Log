@@ -82,7 +82,7 @@ class VisitPackDataTest {
         }
 
         // A schema 5 backup has no visit tables and no completion column; it restores with nothing confirmed.
-        val old=tamper{o->o.put("schema",5);o.getJSONObject("tables").apply{remove("visit_question");remove("visit_pack")
+        val old=tamper{o->o.put("schema",5).also { legacy -> ReferenceSchema.businessTables.forEach { legacy.getJSONObject("tables").remove(it) } };o.getJSONObject("tables").apply{remove("visit_question");remove("visit_pack")
             getJSONArray("appointment").getJSONObject(0).remove("completed_utc")}}
         repo.restoreBackup(BackupCodec.encrypt(old,pwd),pwd)
         assertEquals(1,repo.appointments().size);assertNull(repo.appointments().single().completed_utc)
