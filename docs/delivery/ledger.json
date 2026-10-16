@@ -25,6 +25,19 @@
    "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
    "file_name": "HRT-Log-build26-B4D-full-official.apk",
    "channel": "google-drive-owner-only"
+  },
+  {
+   "date": "2026-10-16T02:57:00Z",
+   "version_code": 27,
+   "version_name": "0.2.0",
+   "application_id": "net.plainnotes.app",
+   "source_sha": "2ab7a0c84aab47d38fb84d90520e67d86b8a5de1",
+   "source_origin": "git",
+   "source_dirty": false,
+   "apk_sha256": "6944546a6fb2285fbb7cbeaa038dd0340cd1a1bd8237acc0b10b0cd5b1798f56",
+   "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
+   "file_name": "HRT-Log-build27-UI-phase-full-official.apk",
+   "channel": "claude-session-private-file"
   }
  ]
 }

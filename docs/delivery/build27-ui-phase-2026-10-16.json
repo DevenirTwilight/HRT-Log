@@ -1,0 +1,58 @@
+{
+ "apk": "HRT-Log-build27-UI-phase-full-official.apk",
+ "package": {
+  "application_id": "net.plainnotes.app",
+  "version_code": 27,
+  "version_name": "0.2.0"
+ },
+ "apk_sha256": "6944546a6fb2285fbb7cbeaa038dd0340cd1a1bd8237acc0b10b0cd5b1798f56",
+ "signing_cert_sha256": [
+  "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1"
+ ],
+ "source": {
+  "SOURCE_COMMIT_TIME_UTC": "2026-10-15T21:21:17Z",
+  "SOURCE_DIRTY": "false",
+  "SOURCE_ORIGIN": "git",
+  "SOURCE_SHA": "2ab7a0c84aab47d38fb84d90520e67d86b8a5de1"
+ },
+ "size_bytes": 13040500,
+ "signature_v2": true,
+ "signature_v3": true,
+ "zipalign_16kb": true,
+ "native_library_count": 8,
+ "abis": [
+  "arm64-v8a",
+  "armeabi-v7a",
+  "x86",
+  "x86_64"
+ ],
+ "debuggable": false,
+ "internet_permission": false,
+ "signed_unsigned_payload_identical": true,
+ "added_signature_entries": [
+  "META-INF/MANIFEST.MF",
+  "META-INF/RELEASE.RSA",
+  "META-INF/RELEASE.SF"
+ ],
+ "unsigned_apk_sha256": "74eec921834bce94a1bbe4d2469a13c8fe8b98533d3b4f7e12a1cdfef99f0b01",
+ "temporary_credentials_removed": true,
+ "signing_backup_repository_private": true,
+ "source_ci": {
+  "pr_44_head": "ca6c24cee2d6afe37cdb42a459520358218674b3",
+  "pr_44_head_tree": "5eed91eed6d1e6fe5311f97ef95b2de459b482e3",
+  "pr_44_runs_all_success": [
+   38806884390,
+   38806879122
+  ],
+  "merge_commit": "2ab7a0c84aab47d38fb84d90520e67d86b8a5de1",
+  "merge_commit_tree": "5eed91eed6d1e6fe5311f97ef95b2de459b482e3",
+  "main_run": 38809226303,
+  "main_science_run": 38809226302,
+  "main_run_note": "Science success; jvm, android, device-tests and attachment-poc (29) success. attachment-poc (26) attempt 1: known Gate3ProcessLockAndroidTest:61 timing fault (expected SKIP_LIVE_WRITER, got CLEANED_OWNED_INCOMPLETE; same signature as on PR #40). Attempt 2 (the single allowed rerun): emulator never started (SDK emulator package download 'Error on ZipFile unknown archive'), no test ran. The merge commit's tree is identical to PR #44's head tree, on which both attachment-poc (26) runs passed."
+ },
+ "physical_arm_installation": "NOT_RUN",
+ "delivery_time_utc": "2026-10-16T02:57:00Z",
+ "delivery_channel": "claude-session-private-file",
+ "delivery_channel_note": "Sent to the owner as a private file in this Claude Code session (REQUIREMENTS §100); the Google Drive upload used before cannot carry a file this size from this session.",
+ "download_links_in_public_repository": false
+}
