@@ -118,4 +118,27 @@ class MeasuredConsumptionStoreTest {
         assertEquals(r,db.dao().recordById(r.id))
     }
 
+    @Test fun remainingAdjustmentIsExactAndIdempotentWithRealZeroAndNoOpTargets()=runBlocking {
+        val m=med();val b=box(m);val op=UUID.randomUUID().toString()
+        val target=Quantity(BigDecimal("27.5"),MeasureUnit.TABLET,meaning)
+        suspend fun adjust(expected:ContainerEntity,value:Quantity,id:String)=db.withTransaction{MeasuredConsumptionStore.adjustRemaining(db,b.scope,expected,b.containerUuid,b.presentationEventUuid,b.presentation.sha256,value,true,id,at)}
+        assertTrue(adjust(b.container,target,op) is MeasureResult.Success)
+        assertTrue(adjust(b.container,target,op) is MeasureResult.Success)
+        assertEquals(1.0,db.dao().container(b.container.id).used_amount,0.0);assertEquals(1,count("supply_transaction"))
+        val current=db.dao().container(b.container.id);val noop=UUID.randomUUID().toString()
+        assertTrue(adjust(current,target,noop) is MeasureResult.Success);assertTrue(adjust(current,target,noop) is MeasureResult.Success)
+        assertEquals(1,count("supply_transaction"));assertEquals(2,count("measured_operation"))
+        val zero=target.copy(value=BigDecimal.ZERO);assertTrue(adjust(current,zero,UUID.randomUUID().toString()) is MeasureResult.Success)
+        assertEquals(56.0,db.dao().container(b.container.id).used_amount,0.0);assertEquals("EMPTY",db.dao().container(b.container.id).state)
+        assertTrue(db.dao().records().isEmpty())
+    }
+    @Test fun staleRemainingCountCannotOverwriteAConcurrentActualUseAndUnitsNeverMix()=runBlocking {
+        val m=med();val b=box(m);consume(record(m),b,listOf(use(b)))
+        rejects(ReferenceError.STALE_REVISION){db.withTransaction{MeasuredConsumptionStore.adjustRemaining(db,b.scope,b.container,b.containerUuid,b.presentationEventUuid,b.presentation.sha256,Quantity(BigDecimal("27"),MeasureUnit.TABLET,meaning),true,UUID.randomUUID().toString(),at)}}
+        val before=count("measured_operation");val current=db.dao().container(b.container.id)
+        val result=db.withTransaction{MeasuredConsumptionStore.adjustRemaining(db,b.scope,current,b.containerUuid,b.presentationEventUuid,b.presentation.sha256,Quantity(BigDecimal.ZERO,MeasureUnit.ML,Meaning(QuantityKind.FORMULATION,"SYNTHETIC solution")),true,UUID.randomUUID().toString(),at)}
+        assertEquals(MeasureResult.Failure(MeasureError.INCOMPATIBLE_UNIT),result)
+        assertEquals(before,count("measured_operation"));assertEquals(current,db.dao().container(b.container.id))
+    }
+
 }

@@ -99,6 +99,58 @@ internal object MeasuredConsumptionStore {
         return originals.size
     }
 
+    /** Explicit physical remaining-count correction. Zero is a real target, never an unknown value. */
+    suspend fun adjustRemaining(database:NotesDatabase,scope:ReferenceScope,expected:ContainerEntity,containerUuid:String,
+        presentationEvent:String,presentationSha:String,remaining:Quantity,userConfirmed:Boolean,operationUuid:String,created:Instant):MeasureResult<Quantity> {
+        val db=database.openHelper.writableDatabase;check(db.inTransaction());ReferenceStore.checkScope(db,scope)
+        if(!userConfirmed || !ReferencePayload.uuid(operationUuid) || created.toEpochMilli()<0)fail(ReferenceError.INVALID_SOURCE)
+        val dao=database.dao();val identity=ReferenceStore.row(db,"reference_identity","uuid=?",arrayOf(containerUuid)) ?: fail(ReferenceError.UNKNOWN_IDENTITY)
+        if(identity.getString("dataset_uuid")!=scope.dataset || identity.getString("kind")!="CONTAINER" || identity.isNull("live_handle") || identity.getLong("live_handle")!=expected.id)fail(ReferenceError.UNKNOWN_IDENTITY)
+        val event=ReferenceStore.row(db,"reference_event","operation_uuid=?",arrayOf(presentationEvent)) ?: fail(ReferenceError.INVALID_SOURCE)
+        if(event.getString("dataset_uuid")!=scope.dataset || event.getString("subject_uuid")!=containerUuid || event.isNull("snapshot_uuid"))fail(ReferenceError.INVALID_SOURCE)
+        val head=ReferenceStore.row(db,"reference_event","subject_uuid=? ORDER BY revision DESC LIMIT 1",arrayOf(containerUuid))!!
+        if(head.getString("operation_uuid")!=presentationEvent)fail(ReferenceError.STALE_REVISION)
+        val snapshot=ReferenceStore.row(db,"reference_snapshot","uuid=?",arrayOf(event.getString("snapshot_uuid"))) ?: fail(ReferenceError.INVALID_SOURCE)
+        val frozen=PackageMeasurementPayload.read(snapshot.getString("payload_json"))
+        if(snapshot.getString("dataset_uuid")!=scope.dataset || snapshot.getString("kind")!="PRESENTATION" || snapshot.getString("payload_sha256")!=presentationSha || frozen.sha256!=presentationSha)fail(ReferenceError.INVALID_SOURCE)
+        val scale=frozen.stockScale();if(scale is MeasureResult.Failure)return scale
+        val stock=(scale as MeasureResult.Success).value
+        val normalized=Measurements.add(stock.quantum.copy(value=BigDecimal.ZERO),remaining)
+        if(normalized is MeasureResult.Failure)return normalized
+        val target=(normalized as MeasureResult.Success).value
+        val count=if(target.value.signum()==0)MeasureResult.Success(0L) else stock.toQuanta(target,ActualPackage(stock.ref,true))
+        if(count is MeasureResult.Failure)return count
+        val remainingQuanta=(count as MeasureResult.Success).value
+        if(expected.capacity!=stock.capacityQuanta.toDouble() || expected.initial_used_amount!=0.0 || !expected.used_amount.isFinite() || expected.used_amount<0 ||
+            expected.used_amount>stock.capacityQuanta || expected.used_amount.toLong().toDouble()!=expected.used_amount)fail(ReferenceError.INVALID_SOURCE)
+        val input=JSONObject().put("format",1).put("kind","ADJUST").put("dataset_uuid",scope.dataset).put("medication_uuid",identity.getString("owner_uuid"))
+            .put("container_uuid",containerUuid).put("presentation_event_uuid",presentationEvent).put("presentation_sha256",presentationSha)
+            .put("expected_used_quanta",expected.used_amount.toLong().toString()).put("expected_state",expected.state).put("expected_opened_on",expected.opened_on ?: JSONObject.NULL)
+            .put("remaining_input",PackageMeasurementPayload.quantity(remaining)).put("remaining_stock",PackageMeasurementPayload.quantity(target)).put("remaining_quanta",remainingQuanta.toString())
+        val canonical=ReferencePayload.canonical(input);val hash=ReferencePayload.sha(canonical)
+        if(ReferenceStore.row(db,"reference_event","operation_uuid=?",arrayOf(operationUuid))!=null)fail(ReferenceError.OPERATION_CONFLICT)
+        ReferenceStore.row(db,"measured_operation","operation_uuid=?",arrayOf(operationUuid))?.let {old->
+            if(old.getString("dataset_uuid")!=scope.dataset || old.getString("kind")!="ADJUST" || old.getString("request_sha256")!=hash || old.getString("input_json")!=canonical)fail(ReferenceError.OPERATION_CONFLICT)
+            return MeasureResult.Success(target)
+        }
+        val current=dao.container(expected.id);if(current!=expected)fail(ReferenceError.STALE_REVISION)
+        if(current.state=="VOIDED")return MeasureResult.Failure(MeasureError.VOIDED)
+        val newUsed=stock.capacityQuanta-remainingQuanta;val delta=newUsed-current.used_amount.toLong()
+        ReferenceStore.insert(db,"measured_operation",JSONObject().put("operation_uuid",operationUuid).put("dataset_uuid",scope.dataset).put("record_uuid",JSONObject.NULL)
+            .put("record_revision",JSONObject.NULL).put("kind","ADJUST").put("request_sha256",hash).put("input_json",canonical)
+            .put("unallocated_quantity",JSONObject.NULL).put("unallocated_unit",JSONObject.NULL).put("unknown_reason",JSONObject.NULL).put("created_utc",created.toEpochMilli()))
+        if(delta!=0L) {
+            val entry=dao.supply(SupplyEntryEntity(container_id=current.id,operation_id=operationUuid,kind="ADJUST",used_delta=delta.toDouble(),
+                created_utc=created.toEpochMilli(),created_zone="UTC",reason="confirmed physical remaining count"))
+            ReferenceStore.insert(db,"measured_allocation",JSONObject().put("uuid",UUID.randomUUID().toString()).put("dataset_uuid",scope.dataset).put("operation_uuid",operationUuid)
+                .put("container_uuid",containerUuid).put("presentation_event_uuid",presentationEvent).put("ledger_entry_id",entry)
+                .put("quantity",(Measurements.decimalText(amount(stock,kotlin.math.abs(delta)).value) as MeasureResult.Success).value).put("unit",stock.quantum.unit.name).put("reverses_uuid",JSONObject.NULL))
+            val state=when{newUsed==stock.capacityQuanta->"EMPTY";current.state=="EMPTY" || current.state=="SEALED"->"IN_USE";else->current.state}
+            dao.setContainerState(current.id,state,current.opened_on)
+        }
+        return MeasureResult.Success(target)
+    }
+
     suspend fun consumeNewRecord(database:NotesDatabase,scope:ReferenceScope,expected:RecordEntity,operationUuid:String,
         uses:List<ConfirmedStockUse>,created:Instant):MeasuredConsumptionReceipt {
         val db=database.openHelper.writableDatabase;check(db.inTransaction());ReferenceStore.checkScope(db,scope)
