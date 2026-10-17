@@ -12,7 +12,8 @@ class DrugDocumentsTest {
     private val product=UserReferenceProduct("SYNTHETIC source",cis="00000001",sourceUrl=url,sourceVersion="synthetic-v1",recordedOn="2026-10-17")
     private fun evidence(kind:DrugDocumentKind=DrugDocumentKind.RCP)=DocumentEvidence(kind,"00000001",sourceNamespace="BDPM_FR",sourceVersion="synthetic-v1",sourceUrl=url,
         retrievedAt="2026-10-17",pageIdentityVerifiedAt="2026-10-17",contentVerifiedAt=null,documentVersion=null,lastModifiedIfVerified=null,evidenceDigest="0".repeat(64),
-        panelId=if(kind==DrugDocumentKind.RCP)"tabpanel-rcp-panel" else "tabpanel-notice-panel",entryStatus=DocumentEntryStatus.VERIFIED)
+        panelId=if(kind==DrugDocumentKind.RCP)"tabpanel-rcp-panel" else "tabpanel-notice-panel",entryStatus=DocumentEntryStatus.VERIFIED,
+        fieldEvidence=DocumentFieldEvidence("SYNTHETIC page CIS field",if(kind==DrugDocumentKind.RCP)"tabpanel-rcp-panel" else "tabpanel-notice-panel","0".repeat(64),"2026-10-17"))
     @Test fun exactPublicProductUriDoesNotAcceptHealthParametersOrAuthorityTricks() {
         assertTrue(PublicProductPage.valid(url,"00000001"))
         val bad=listOf(url+"?dose=PRIVATE",url+"#rcp",url+"/",url.replace("https:","http:"),url.replace("https:","intent:"),
@@ -40,7 +41,7 @@ class DrugDocumentsTest {
         listOf(e.copy(cis="00000002"),e.copy(kind=DrugDocumentKind.NOTICE),e.copy(panelId="tabpanel-notice-panel"),
             e.copy(sourceVersion="synthetic-v2"),e.copy(cip="0000000000001",cipBelongsToCis="00000002"),
             e.copy(sourceNamespace="USER_ENTERED"),e.copy(sourceUrl=url+"?private=1"),e.copy(pageIdentityVerifiedAt="2026-02-30"),
-            e.copy(evidenceDigest="missing"),e.copy(pageIdentityVerifiedAt=null),e.copy(entryStatus=DocumentEntryStatus.UNVERIFIED),
+            e.copy(evidenceDigest="missing"),e.copy(fieldEvidence=null),e.copy(fieldEvidence=e.fieldEvidence!!.copy(entryLocator="wrong-document")),e.copy(pageIdentityVerifiedAt=null),e.copy(entryStatus=DocumentEntryStatus.UNVERIFIED),
             e.copy(entryStatus=DocumentEntryStatus.ARCHIVED),e.copy(entryStatus=DocumentEntryStatus.REMOVED)).forEach {
             assertTrue(it.toString(),DrugDocuments.evaluate(product,DrugDocumentKind.RCP,it,true) is DocumentAvailability.Unavailable)
         }

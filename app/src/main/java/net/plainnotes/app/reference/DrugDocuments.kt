@@ -8,12 +8,14 @@ import java.time.LocalDate
 enum class DrugDocumentKind { RCP, NOTICE }
 enum class DocumentEntryStatus { UNVERIFIED, VERIFIED, ARCHIVED, REMOVED }
 enum class TextReuseStatus { UNKNOWN, ALLOWED }
+data class DocumentFieldEvidence(val pageIdentityLocator:String,val entryLocator:String,val sourceSha256:String,val reviewedAt:String)
 data class DocumentEvidence(
     val kind:DrugDocumentKind,val cis:String,val cip:String?=null,val cipBelongsToCis:String?=null,
     val sourceNamespace:String,val sourceVersion:String,val sourceUrl:String,
     val retrievedAt:String?,val pageIdentityVerifiedAt:String?,val contentVerifiedAt:String?,
     val documentVersion:String?,val lastModifiedIfVerified:String?,val evidenceDigest:String?,
     val panelId:String?,val entryStatus:DocumentEntryStatus,val textReuse:TextReuseStatus=TextReuseStatus.UNKNOWN,
+    val fieldEvidence:DocumentFieldEvidence?=null,
 )
 enum class DocumentBlock { PUBLICATION_OFF, NO_EVIDENCE, WRONG_IDENTITY, WRONG_VERSION, UNVERIFIED, ARCHIVED, REMOVED, INVALID_SOURCE }
 sealed interface DocumentAvailability {
@@ -41,7 +43,9 @@ internal object DrugDocuments {
             e.evidenceDigest==null || !Regex("[0-9a-f]{64}").matches(e.evidenceDigest))return blocked(DocumentBlock.UNVERIFIED)
         val expectedPanel=if(kind==DrugDocumentKind.RCP)"tabpanel-rcp-panel" else "tabpanel-notice-panel"
         if(e.sourceNamespace!="BDPM_FR" || e.panelId!=expectedPanel || !PublicProductPage.valid(e.sourceUrl,e.cis))return blocked(DocumentBlock.INVALID_SOURCE)
-        try {listOfNotNull(e.retrievedAt,e.pageIdentityVerifiedAt,e.contentVerifiedAt).forEach{LocalDate.parse(it)}}
+        val fields=e.fieldEvidence ?: return blocked(DocumentBlock.UNVERIFIED)
+        if(fields.pageIdentityLocator.isBlank() || fields.entryLocator!=expectedPanel || fields.sourceSha256!=e.evidenceDigest)return blocked(DocumentBlock.INVALID_SOURCE)
+        try {listOfNotNull(e.retrievedAt,e.pageIdentityVerifiedAt,e.contentVerifiedAt,fields.reviewedAt).forEach{LocalDate.parse(it)}}
         catch(_:RuntimeException){return blocked(DocumentBlock.INVALID_SOURCE)}
         // Entry presence never promotes content verification or grants text reuse.
         return DocumentAvailability.Entry(e)

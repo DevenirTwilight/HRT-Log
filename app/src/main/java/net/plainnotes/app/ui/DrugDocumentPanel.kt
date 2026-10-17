@@ -1,10 +1,14 @@
 package net.plainnotes.app.ui
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
@@ -42,6 +46,7 @@ import net.plainnotes.app.reference.*
 @Composable internal fun PublicProductPageAction(product:UserReferenceProduct,
     open:((String,String?,Long?,Boolean)->DocumentOpenResult)?=null) {
     val context=LocalContext.current
+    val keyboard=LocalSoftwareKeyboardController.current
     val activity=context.documentActivity()
     val owner=remember(activity,product){activity?.documentNavigationGeneration}
     var confirming by remember(product){mutableStateOf(false)}
@@ -50,16 +55,18 @@ import net.plainnotes.app.reference.*
     val valid=PublicProductPage.valid(url,product.cis)
     if(valid) {
         Text(url)
-        TextButton(onClick={confirming=true;error=null},modifier=Modifier.heightIn(min=48.dp).testTag("document-public-page")) {Text(stringResource(R.string.ref2_open_source))}
+        TextButton(onClick={keyboard?.hide();confirming=true;error=null},modifier=Modifier.heightIn(min=48.dp).testTag("document-public-page")) {Text(stringResource(R.string.ref2_open_source))}
     } else Text(stringResource(R.string.drug_docs_invalid_link),modifier=Modifier.testTag("document-invalid-link"))
     error?.let {result->Text(stringResource(if(result==DocumentOpenResult.NOT_AUTHORIZED)R.string.drug_docs_access_changed else R.string.ref2_browser_error),
         modifier=Modifier.testTag("document-open-error"),color=MaterialTheme.colorScheme.error)}
     if(confirming)AlertDialog(onDismissRequest={confirming=false},title={Text(stringResource(R.string.ref2_open_source))},
-        text={Text(stringResource(R.string.drug_docs_external))},
+        text={Column(Modifier.heightIn(max=LocalConfiguration.current.screenHeightDp.dp*0.45f).verticalScroll(rememberScrollState())) {Text(stringResource(R.string.drug_docs_external))}},
         confirmButton={TextButton(modifier=Modifier.heightIn(min=48.dp).testTag("document-open-confirm"),onClick={
-            confirming=false
-            val result=open?.invoke(url,product.cis,owner,true) ?: PublicDocumentNavigation.open(context,url,product.cis,owner,true)
-            error=result.takeIf{it!=DocumentOpenResult.OPENED}
+            if(confirming) {
+                confirming=false // Consume this confirmation once, including a queued second click.
+                val result=open?.invoke(url,product.cis,owner,true) ?: PublicDocumentNavigation.open(context,url,product.cis,owner,true)
+                error=result.takeIf{it!=DocumentOpenResult.OPENED}
+            }
         }) {Text(stringResource(R.string.ref2_open))}},
         dismissButton={TextButton(modifier=Modifier.heightIn(min=48.dp).testTag("document-open-cancel"),onClick={confirming=false}){Text(stringResource(R.string.cancel))}})
 }

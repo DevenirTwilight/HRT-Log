@@ -60,6 +60,11 @@ class MedicationReferenceMatrixTest(private val locale:String,private val width:
                 ui.onNodeWithTag("reference-screen").performScrollToNode(hasTestTag("reference-details"))
                 ui.onAllNodesWithText(product.name).onFirst().assertExists()
                 shot("details")
+                for(kind in listOf("RCP","NOTICE")) {
+                    ui.onNodeWithTag("reference-screen").performScrollToNode(hasTestTag("drug-document:$kind"))
+                    ui.onNodeWithTag("drug-document:$kind").assertIsDisplayed()
+                    shot("document-$kind")
+                }
                 ui.onNodeWithTag("reference-screen").performScrollToNode(hasTestTag("reference-manual"))
                 ui.onNodeWithTag("reference-manual").assertIsDisplayed().assertIsEnabled()
                 ui.onNodeWithTag("reference-screen").performScrollToIndex(0)
