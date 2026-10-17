@@ -1,6 +1,6 @@
 # P4 工作状态
 
-当前：#57 DRAFT；全局候选域/操作/因果链/退役验证完整data324（共享50）/原生源码编译/Period5/Privacy3/Python158 PASS。原生新50项仍NOT_RUN；源10480c6六CI与三API共享35项已归档PASS。容器独立库存编码、业务Schema11/精确恢复、真实Repository/观察协调/ABA与统一预测UI尚未完成；正式入口/精确恢复OFF。默认f1e9b4d Room11/业务10，候选Room12仅本PR。
+当前：#57 DRAFT，最新库存编码候选完整data330/共享56/原生编译/Period5/Privacy3/Python159 PASS；候选Room12新增独立编码列，业务Schema11目前只放行Legacy/Product-only备份，精确恢复/正式计量入口OFF。源0a418eb六CI/三API共享50已核验PASS；新56原生NOT_RUN。继续严格JSON/精确恢复、真实Repository/协调/ABA和统一预测UI。默认仍f1e9b4d Room11/业务10。
 
 2026-10-16：IN_PROGRESS，生产库存未接线。当前复用P3的de26444，普通合入P1源945512a，不直接复制未合并源码。#54已受保护合并为c95cea1；#55待主线检查及更新。
 
@@ -63,3 +63,9 @@ Room12检查点0843450六项CI在push/PR全部SUCCESS；当前仍DRAFT，不以�
 43项共享合同已PASS；GLOBAL候选仅引用校验遗漏既有VOIDED生命周期，真实负例FAIL（global-lifecycle-red-evidence.json）。当前复用BackupValidation原有全业务只读校验，不复制/放宽PackageCorrections守卫；补严格存储类型/总行数、跨参考事件操作UUID冲突及退役容器/记录整数ID复用。49项共享及原生源码编译正在运行，退役身份从不按original_handle重连当前新行；有分配却退休且仍连整数账本的状态拒绝。默认业务10/旧恢复拒绝新格式保持。
 
 当前全局候选最终本地完整data324、共享50、原生源码编译、时期稳定性5/隐私3及Python158全部PASS；机器证据global-full-local-evidence.json。GLOBAL逆操作越过独立实盘的负例确实FAIL，随后按操作因果链筛选逆操作之前的观察并重用原包装/原数量保护，转绿。所有红日志保留，不将新源码当已有原生CI成功。下一步实际实施stock-encoding-version-contract.md的独立编码及Schema11；不能仅删除拒绝门或只根据外部引用是否还在来解释Double库存。
+
+库存编码结构负例实际FAIL（encoding-red-evidence.json）后，候选Room12新增inventory_encoding默认LEGACY_SCALAR，明确新建才INTEGER_QUANTA_V1；业务Schema11写入/旧格式拒绝门同步准备，精确恢复仍OFF。原缺引用表负例已1项转绿。初轮全325项12FAIL如实保存encoding-compat-initial-evidence.json，涉及旧版本断言、发布前夹具读列及允许新列的精确DDL比较。
+
+真实旧VOIDED v1快照恢复另复现PackageRestoreConflict（encoding-old-void-red-evidence.json），非模拟器偶发。当前保留旧v1的Legacy字段/上下文哈希比较，新v2审计显式稳定容器UUID并追踪已知身份；原消费/上下文变化守卫不放宽。旧Room夹具使用测试专用PublishedBusinessFixture读发布列；旧37实体所有旧值/位与DDL仍比较，只精确剥离本次新增的单一DDL片段并单独断言默认Legacy，未放宽其它结构。当前完整326项及原生源码编译运行中，新Schema11兼容性尚未PASS，不启用、不合并。
+
+库存编码检查点最终data330（共享56）/原生源码编译/Period5/Privacy3/Python159全部PASS。旧v1VOID证据已通过实际Repository恢复；v2每条历史审计都校验稳定容器UUID，含已恢复状态的伪造UUID负例确实FAIL后转绿；旧9/10导入、旧最大9/10 reader拒绝11、版本错误先于目标库打开及编码双向UPDATE禁止均覆盖。新SourceMode字段为存储标记，不是官方身份/单位推断。来源指纹见encoding-final-local-evidence.json，原失败保留。当前未连接精确备份/实际写入UI；下一步严格JSON整数词法、不可变生命周期前缀与完整精确恢复，不能套用旧0a418eb原生50通过当新56通过。

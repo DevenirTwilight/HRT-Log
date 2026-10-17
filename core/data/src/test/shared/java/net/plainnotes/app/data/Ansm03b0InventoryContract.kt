@@ -147,7 +147,7 @@ abstract class Ansm03b0InventoryContract {
         val unchanged = dao.supplyFor(record.id); repo.correctStock(dao.containers().first().id, 0.25); assertEquals(unchanged, dao.supplyFor(record.id))
         val password = "synthetic-B0-only".toCharArray(); val backup = repo.exportBackup(password)
         val plain = BackupCodec.decrypt(backup, password); val json = JSONObject(String(plain, Charsets.UTF_8)); plain.fill(0)
-        assertEquals(10, json.getInt("schema")); assertEquals(1, json.getInt("format"))
+        assertEquals(11, json.getInt("schema")); assertEquals(1, json.getInt("format"))
         val businessBefore = RawData.dump(raw).toString()
         // P0 fixes the former RESTRICT failure. Preserve full rollback coverage using a real injected failure.
         val beforeRestore = fingerprint()
@@ -327,7 +327,7 @@ abstract class Ansm03b0InventoryContract {
         }
         assertEquals("SYNTH-RESTORED-UNKNOWN", Ansm03b0CandidateStore.current(raw))
         raw.query("SELECT COUNT(*) FROM ansm_lab_container WHERE dataset='SYNTH-RESTORED-UNKNOWN'").use { assertTrue(it.moveToFirst()); assertEquals(0, it.getInt(0)) }
-        val badPayload = JSONObject().put("format", 1).put("schema", 11).put("tables", RawData.dump(raw)).toString().toByteArray()
+        val badPayload = JSONObject().put("format", 1).put("schema", 12).put("tables", RawData.dump(raw)).toString().toByteArray()
         val candidateBackup = BackupCodec.encrypt(badPayload, password); badPayload.fill(0)
         val stable = fingerprint(); try { repo.restoreBackup(candidateBackup, password); fail("Old reader must reject candidate newer business schema") }
         catch (_: BackupCodec.NewerBackup) {}

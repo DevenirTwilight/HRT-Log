@@ -101,7 +101,7 @@ abstract class ReferencePersistenceContract {
         repo.unscheduled(medication,at,1.0);val record=db.dao().records().single();repo.editRecord(record.id,at.plusSeconds(60),1.5,at.plusSeconds(86400))
         val before=business();val expectedGuards=guards();val backup=repo.exportBackup(password)
         val decoded=JSONObject(String(BackupCodec.decrypt(backup,password),Charsets.UTF_8))
-        assertEquals(10,decoded.getInt("schema"));assertFalse(decoded.getJSONObject("tables").has("reference_runtime"))
+        assertEquals(11,decoded.getInt("schema"));assertFalse(decoded.getJSONObject("tables").has("reference_runtime"))
         repeat(2) {
             repo.restoreBackup(backup,password)
             assertEquals(before,business());assertEquals(expectedGuards,guards())
@@ -117,6 +117,7 @@ abstract class ReferencePersistenceContract {
     @Test fun oldSchemaNineBackupClearsNewReferencesAndKeepsLegacyStockUnknown()=runBlocking {
         val medication=med();repo.addContainers(medication,10.0,1,true);repo.unscheduled(medication,at,1.0)
         val legacy=legacy();val oldTables=RawData.dump(raw,DOMAIN_TABLES.filterNot {it in ReferenceSchema.businessTables})
+        PublishedBusinessFixture.stripLegacyEncoding(oldTables)
         val archive=BackupCodec.encrypt(JSONObject().put("format",1).put("schema",9).put("tables",oldTables).toString().toByteArray(),password)
         val scope=repo.referenceScope();repo.associateMedication(scope,medication,0,id(),product())
         repo.restoreBackup(archive,password)
@@ -297,11 +298,13 @@ abstract class ReferencePersistenceContract {
         val medication=med();initial(medication,id(),product())
         val backup=repo.exportBackup(password)
         val decoded=JSONObject(String(BackupCodec.decrypt(backup,password),Charsets.UTF_8))
-        assertEquals(10,decoded.getInt("schema"))
-        try {RecordBackupCompatibility.readVersion(decoded,9);fail("Legacy maximum accepted schema10")}
-        catch(_:BackupCodec.NewerBackup){}
+        assertEquals(11,decoded.getInt("schema"))
+        for(maximum in listOf(9,10)) {
+            try {RecordBackupCompatibility.readVersion(decoded,maximum);fail("Legacy maximum accepted schema11")}
+            catch(_:BackupCodec.NewerBackup){}
+        }
         val guarded=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space):NotesDatabase {fail("Future header must be refused before opening database");return db}})
-        decoded.put("schema",11)
+        decoded.put("schema",12)
         val future=BackupCodec.encrypt(decoded.toString().toByteArray(),password)
         try {guarded.restoreBackup(future,password);fail("Future header accepted")}
         catch(_:BackupCodec.NewerBackup){}

@@ -59,7 +59,7 @@ class UndoSkippedRestartAndroidTest {
             check(r.calendar(at(7),zone,day).single{it.slot.key==skipped.slot_key})
             val hidden=r.voidedContainers().single();assertEquals("VOIDED",hidden.state);assertEquals(20.0,StockForecasts.available(skipped.medication_id,r.containers())!!,0.0)
             val plaintext=BackupCodec.decrypt(backup.readBytes(),"r15-synthetic-pass".toCharArray())
-            try { assertEquals(10,org.json.JSONObject(plaintext.toString(Charsets.UTF_8)).getInt("schema")) }
+            try { assertEquals(11,org.json.JSONObject(plaintext.toString(Charsets.UTF_8)).getInt("schema")) }
             finally { plaintext.fill(0) }
             r.restoreBackup(backup.readBytes(),"r15-synthetic-pass".toCharArray())
             assertFalse(r.currentOverride(skipped.slot_key!!).skipped);assertNotNull(db.dao().recordById(skipped.id)!!.deleted_at_utc)

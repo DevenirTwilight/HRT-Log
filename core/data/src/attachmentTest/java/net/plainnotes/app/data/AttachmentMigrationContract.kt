@@ -45,8 +45,8 @@ abstract class AttachmentMigrationContract {
         return (0 until entities.length()).associate { i ->
             val t=entities.getJSONObject(i).getString("tableName")
             val canonical=buildString {
-                db.query("SELECT * FROM `$t` ORDER BY rowid").use{c->while(c.moveToNext()){for(j in 0 until c.columnCount){append(c.getType(j));append(':');append(if(c.isNull(j))"<null>" else c.getString(j));append('|')};append('\n')}}
-                db.query("SELECT type,name,sql FROM sqlite_master WHERE tbl_name=? AND type IN('table','index') ORDER BY type,name",arrayOf(t)).use{c->while(c.moveToNext()){append(c.getString(0));append(c.getString(1));append(c.getString(2));append('\n')}}
+                db.query("SELECT ${entities.getJSONObject(i).getJSONArray("fields").let{fields->(0 until fields.length()).map{fields.getJSONObject(it).getString("columnName")}}.joinToString(","){"`$it`"}} FROM `$t` ORDER BY rowid").use{c->while(c.moveToNext()){for(j in 0 until c.columnCount){append(c.getType(j));append(':');append(if(c.isNull(j))"<null>" else c.getString(j));append('|')};append('\n')}}
+                db.query("SELECT type,name,sql FROM sqlite_master WHERE tbl_name=? AND type IN('table','index') ORDER BY type,name",arrayOf(t)).use{c->while(c.moveToNext()){append(c.getString(0));append(c.getString(1));append(PublishedBusinessFixture.publishedDdl(db,t,c.getString(0),c.getString(2)));append('\n')}}
             }
             t to MessageDigest.getInstance("SHA-256").digest(canonical.toByteArray()).joinToString(""){"%02x".format(it)}
         }
@@ -82,7 +82,7 @@ abstract class AttachmentMigrationContract {
                 raw.execSQL("UPDATE supply_container SET state='VOIDED' WHERE id=2")
                 PackageCorrections.validate(raw)
                 assertEquals(9,raw.version)
-                val data=JSONObject().put("format",1).put("schema",9).put("tables",RawData.dump(raw,DOMAIN_TABLES.filterNot { it in ReferenceSchema.businessTables })).toString().toByteArray()
+                val data=JSONObject().put("format",1).put("schema",9).put("tables",PublishedBusinessFixture.dump(raw,DOMAIN_TABLES.filterNot { it in ReferenceSchema.businessTables })).toString().toByteArray()
                 try { backup=BackupCodec.encrypt(data,password) } finally { data.fill(0) }
                 fingerprint(raw)
             }
@@ -90,7 +90,7 @@ abstract class AttachmentMigrationContract {
             fun open()=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass))
                 .addMigrations(*allMigrations()).addCallback(SchemaGuards).build()
             room=open();val db=room!!;val raw=db.openHelper.writableDatabase
-            assertEquals(12,raw.version);assertEquals(before,fingerprint(raw))
+            assertEquals(12,raw.version);assertEquals(before,fingerprint(raw));raw.query("SELECT inventory_encoding FROM supply_container").use{c->while(c.moveToNext())assertEquals(InventoryEncoding.LEGACY,c.getString(0))}
             raw.query("PRAGMA foreign_key_check").use{assertEquals(0,it.count)}
             raw.query("SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'attachment_%'").use{assertEquals(8,it.count)}
             val scope=db.withTransaction { requireNotNull(AttachmentIdentity.initialize(raw,true)) }

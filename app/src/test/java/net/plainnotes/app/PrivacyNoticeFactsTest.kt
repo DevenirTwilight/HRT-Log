@@ -19,7 +19,7 @@ class PrivacyNoticeFactsTest {
         assertTrue(codec.contains("AES/GCM/NoPadding"))
         for (l in locales) { val body = string(l, "privacy_notice_backup_body")
             assertTrue(l, body.contains("Argon2id") && body.contains("32 Mi") && body.contains("AES-256-GCM") && body.contains("3")) }
-        assertEquals("Structured backup serialization is explicitly 10, independent of Room12", true, src("core/data/src/main/java/net/plainnotes/app/data/RecordBackupCompatibility.kt").contains("const val SCHEMA = 10"))
+        assertEquals("Structured backup serialization is explicitly 11, independent of Room12", true, src("core/data/src/main/java/net/plainnotes/app/data/RecordBackupCompatibility.kt").contains("const val SCHEMA = 11"))
     }
 
     @Test fun noInternetPermissionAndSystemBackupOff() {

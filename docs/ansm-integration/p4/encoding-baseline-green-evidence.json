@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "totals": {
+    "tests": 326,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "shared_tests": 52,
+  "native_source_compilation": "PASS",
+  "native_execution": "NOT_RUN",
+  "exact_backup_restore": "OFF",
+  "log_sha256": "d53e3a7c587bf90104e4b7a1e6626372be3fa6eba065b1bd26862dba28c9d429"
+}

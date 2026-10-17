@@ -38,13 +38,19 @@ abstract class ReferenceMigrationContract {
         return JSONObject().apply {
             for(i in 0 until definitions.length()) {
                 val table=definitions.getJSONObject(i).getString("tableName");val rows=JSONArray()
-                db.query("SELECT * FROM `$table` ORDER BY rowid").use {c->while(c.moveToNext()) rows.put(JSONArray((0 until c.columnCount).map {column->
+                db.query("SELECT ${definitions.getJSONObject(i).getJSONArray("fields").let{fields->(0 until fields.length()).map{fields.getJSONObject(it).getString("columnName")}}.joinToString(","){"`$it`"}} FROM `$table` ORDER BY rowid").use {c->while(c.moveToNext()) rows.put(JSONArray((0 until c.columnCount).map {column->
                     JSONArray().put(c.getType(column)).put(if(c.isNull(column)) JSONObject.NULL else if(c.getType(column)==android.database.Cursor.FIELD_TYPE_BLOB)
                         android.util.Base64.encodeToString(c.getBlob(column),android.util.Base64.NO_WRAP) else if(c.getType(column)==android.database.Cursor.FIELD_TYPE_FLOAT) java.lang.Double.doubleToRawLongBits(c.getDouble(column)).toString() else c.getString(column))
                 }))}
                 put(table,rows)
                 val ddl=JSONArray()
-                db.query("SELECT type,name,sql FROM sqlite_master WHERE tbl_name=? AND type IN ('table','index') ORDER BY type,name",arrayOf(table)).use {c->while(c.moveToNext())ddl.put(JSONArray().put(c.getString(0)).put(c.getString(1)).put(if(c.isNull(2))JSONObject.NULL else c.getString(2)))}
+                db.query("SELECT type,name,sql FROM sqlite_master WHERE tbl_name=? AND type IN ('table','index') ORDER BY type,name",arrayOf(table)).use {c->while(c.moveToNext())ddl.put(JSONArray().put(c.getString(0)).put(c.getString(1)).put(if(c.isNull(2))JSONObject.NULL else c.getString(2).let { sql ->
+                    if(table=="supply_container" && c.getString(0)=="table" && InventoryEncoding.present(db)) {
+                        val allowed=listOf(", inventory_encoding TEXT NOT NULL DEFAULT 'LEGACY_SCALAR'",", `inventory_encoding` TEXT NOT NULL DEFAULT 'LEGACY_SCALAR'")
+                        val fragment=allowed.single{sql.contains(it)}
+                        sql.replace(fragment,"")
+                    } else sql
+                }))}
                 put("ddl_$table",ddl)
             }
         }.toString()
@@ -80,7 +86,7 @@ abstract class ReferenceMigrationContract {
                 fingerprint(raw)
             }
             fun open()=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(key.clone())).addMigrations(*allMigrations()).addCallback(SchemaGuards).build()
-            open().useRoom {assertEquals(before,fingerprint(it.openHelper.writableDatabase));assertEquals(12,it.openHelper.writableDatabase.version)}
+            open().useRoom {assertEquals(before,fingerprint(it.openHelper.writableDatabase));assertEquals(12,it.openHelper.writableDatabase.version);it.openHelper.writableDatabase.query("SELECT inventory_encoding FROM supply_container").use{c->while(c.moveToNext())assertEquals(InventoryEncoding.LEGACY,c.getString(0))}}
             fixture(name,key,10).use {old->
                 try {old.writableDatabase;fail("Old application silently downgraded new database")} catch(_:android.database.SQLException){}
             }
@@ -118,7 +124,7 @@ abstract class ReferenceMigrationContract {
                     ReferenceStore.initialAssociation(raw,1,UUID.randomUUID().toString(),UserReferenceProduct("SYNTHETIC old reference",sourceVersion="old-v1",recordedOn="2026-10-16"),ReferenceStore.previewEpoch(raw))
                     raw.setTransactionSuccessful()
                 } finally {raw.endTransaction()}
-                RawData.dump(raw).toString() to raw.query("SELECT dataset_uuid,epoch FROM reference_runtime").use{assertTrue(it.moveToFirst());it.getString(0) to it.getString(1)}
+                PublishedBusinessFixture.dump(raw).toString() to raw.query("SELECT dataset_uuid,epoch FROM reference_runtime").use{assertTrue(it.moveToFirst());it.getString(0) to it.getString(1)}
             }
             val injected=object:androidx.room.migration.Migration(11,12) {
                 override fun migrate(db:SupportSQLiteDatabase) {
@@ -131,12 +137,12 @@ abstract class ReferenceMigrationContract {
             }
             assertTrue(invoked)
             fixture(name,key,11).use {helper->
-                val raw=helper.writableDatabase;assertEquals(11,raw.version);assertEquals(before.first,RawData.dump(raw).toString())
+                val raw=helper.writableDatabase;assertEquals(11,raw.version);assertEquals(before.first,PublishedBusinessFixture.dump(raw).toString())
                 raw.query("SELECT name FROM sqlite_master WHERE name='synthetic_interrupted_fence'").use{assertFalse(it.moveToFirst())}
                 raw.query("SELECT dataset_uuid,epoch FROM reference_runtime").use{assertTrue(it.moveToFirst());assertEquals(before.second,it.getString(0) to it.getString(1))}
             }
             Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(key.clone())).addMigrations(*allMigrations()).addCallback(SchemaGuards).build().useRoom {room->
-                val raw=room.openHelper.writableDatabase;assertEquals(12,raw.version);assertEquals(before.first,RawData.dump(raw).toString())
+                val raw=room.openHelper.writableDatabase;assertEquals(12,raw.version);assertEquals(before.first,PublishedBusinessFixture.dump(raw).toString())
                 raw.query("SELECT dataset_uuid,epoch FROM reference_runtime").use{assertTrue(it.moveToFirst());assertEquals(before.second,it.getString(0) to it.getString(1))}
             }
         } finally {context.deleteDatabase(name);key.fill(0)}
@@ -153,13 +159,13 @@ abstract class ReferenceMigrationContract {
                         .put("payload_json","{}").put("payload_sha256",ReferencePayload.sha("{}")))
                     raw.setTransactionSuccessful()
                 } finally {raw.endTransaction()}
-                RawData.dump(raw).toString()
+                PublishedBusinessFixture.dump(raw).toString()
             }
             Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(key.clone())).addMigrations(*allMigrations()).build().useRoom {room->
                 try{room.openHelper.writableDatabase;fail("Old unknown measurement was promoted to the new format")}
                 catch(e:Exception){assertTrue(generateSequence<Throwable>(e){it.cause}.any{it.message.orEmpty().contains("Unrecognized measurement data in the old database format")})}
             }
-            fixture(name,key,11).use{assertEquals(11,it.writableDatabase.version);assertEquals(before,RawData.dump(it.writableDatabase).toString())}
+            fixture(name,key,11).use{assertEquals(11,it.writableDatabase.version);assertFalse(InventoryEncoding.present(it.writableDatabase));assertEquals(before,PublishedBusinessFixture.dump(it.writableDatabase).toString())}
         } finally {context.deleteDatabase(name);key.fill(0)}
     }
     @Test fun failedTenToElevenMigrationRollsBackDdlAndKeepsOriginalEncryptedDatabaseReadable() {

@@ -76,7 +76,7 @@ abstract class AttachmentFoundationContract {
         val backup=repo.exportBackup(password)
         val decoded=BackupCodec.decrypt(backup,password)
         try {
-            val json=JSONObject(String(decoded,Charsets.UTF_8));assertEquals(10,json.getInt("schema"))
+            val json=JSONObject(String(decoded,Charsets.UTF_8));assertEquals(11,json.getInt("schema"))
             assertFalse(json.getJSONObject("tables").keys().asSequence().any{it.startsWith("attachment_")})
             assertEquals(35,json.getJSONObject("tables").length())
             assertTrue(ReferenceSchema.businessTables.all {json.getJSONObject("tables").has(it)})

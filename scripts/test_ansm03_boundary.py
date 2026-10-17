@@ -138,3 +138,29 @@ class OperationChainIsolationTest(unittest.TestCase):
                 self.assertEqual('FAIL', report.isolation()['status'])
                 chain.write_text(content)
                 self.assertEqual('PASS', report.isolation()['status'])
+
+
+class InventoryEncodingIsolationTest(unittest.TestCase):
+    def test_encoding_rejects_io_pk_and_unreviewed_imports(self):
+        import tempfile
+        from unittest.mock import patch
+        original_root = report.ROOT
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for relative in (report.MODEL / 'MeasurementCore.kt', report.APPROVED_CORE, report.APPROVED_STOCK_QUANTUM,
+                             report.APPROVED_PACKAGE_CODEC, report.APPROVED_CONTAINER_STORE, report.APPROVED_USE_PAYLOAD,
+                             report.APPROVED_CONSUMPTION_STORE, report.APPROVED_OPERATION_CHAIN, report.APPROVED_INVENTORY_ENCODING):
+                target = root / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_text((original_root / relative).read_text())
+            encoding = root / report.APPROVED_INVENTORY_ENCODING
+            content = encoding.read_text()
+            with patch.object(report, 'ROOT', root):
+                self.assertEqual('PASS', report.isolation()['status'])
+                for token in report.STORE_FORBIDDEN_APIS:
+                    encoding.write_text(content + '\n' + token)
+                    self.assertEqual('FAIL', report.isolation()['status'], token)
+                encoding.write_text(content + '\nimport java.time.Clock')
+                self.assertEqual('FAIL', report.isolation()['status'])
+                encoding.write_text(content)
+                self.assertEqual('PASS', report.isolation()['status'])

@@ -47,11 +47,11 @@ internal object MeasuredContainerStore {
             if(identity.isNull("live_handle"))fail(ReferenceError.UNKNOWN_IDENTITY)
             val container=dao.container(identity.getLong("live_handle"))
             if(container.medication_id!=medication)fail(ReferenceError.UNKNOWN_IDENTITY)
-            if(container.capacity!=scale.value.capacityQuanta.toDouble() || container.initial_used_amount!=0.0)fail(ReferenceError.INVALID_SOURCE)
+            if(container.inventory_encoding!=InventoryEncoding.EXACT || container.capacity!=scale.value.capacityQuanta.toDouble() || container.initial_used_amount!=0.0)fail(ReferenceError.INVALID_SOURCE)
             return CreatedMeasuredContainer(scope,container,identity.getString("uuid"),operationUuid,frozen)
         }
         val capacity=scale.value.capacityQuanta.toDouble() // Exact bounded integer bridge; not a physical-unit Double.
-        val handle=dao.insertContainer(ContainerEntity(medication_id=medication,capacity=capacity,initial_used_amount=0.0,used_amount=0.0,state="SEALED"))
+        val handle=dao.insertContainer(ContainerEntity(medication_id=medication,capacity=capacity,initial_used_amount=0.0,used_amount=0.0,state="SEALED",inventory_encoding=InventoryEncoding.EXACT))
         val subject=ReferenceStore.identity(db,scope,"CONTAINER",handle,owner)
         val snapshot=UUID.randomUUID().toString()
         ReferenceStore.insert(db,"reference_snapshot",JSONObject().put("uuid",snapshot).put("dataset_uuid",scope.dataset).put("kind","PRESENTATION")

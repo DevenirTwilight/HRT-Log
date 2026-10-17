@@ -664,4 +664,99 @@ abstract class MeasuredConsumptionContract {
         assertEquals(0.0,db.dao().container(b.container.id).used_amount,0.0);assertEquals(2,count("supply_transaction"))
     }
 
+    @Test fun globalAuditCannotTreatAnExactContainerWithAllReferencesMissingAsLegacyScalar()=runBlocking {
+        val m=med();val b=box(m)
+        staged { staging ->
+            staging.execSQL("DELETE FROM reference_event")
+            staging.execSQL("DELETE FROM reference_snapshot")
+            staging.execSQL("DELETE FROM reference_identity WHERE kind='CONTAINER'")
+            staging.execSQL("DELETE FROM reference_identity WHERE kind='MEDICATION'")
+            staging.execSQL("DELETE FROM reference_dataset")
+            assertEquals(56.0,staging.query("SELECT capacity FROM supply_container").use{it.moveToFirst();it.getDouble(0)},0.0)
+            try {MeasuredConsumptionStore.auditStagedDataset(staging);fail("Exact integer stock silently became unmarked legacy scalar")}
+            catch(e:ReferenceFailure){assertEquals(ReferenceError.INVALID_SOURCE,e.code)}
+        }
+        assertEquals(1,count("reference_event"));assertEquals(56.0,db.dao().container(b.container.id).capacity,0.0)
+    }
+
+    @Test fun publishedLegacyVoidEvidenceStillRestoresAfterTheStorageMarkerIsAdded()=runBlocking {
+        val m=med()
+        val first=db.dao().insertContainer(ContainerEntity(medication_id=m,capacity=28.0,initial_used_amount=0.0,used_amount=0.0,state="SEALED"))
+        db.dao().insertContainer(ContainerEntity(medication_id=m,capacity=28.0,initial_used_amount=0.0,used_amount=0.0,state="SEALED"))
+        db.withTransaction{PackageCorrections.void(raw,db.dao(),first,at)}
+        val old=raw.query("SELECT id,payload_json FROM trash_item WHERE ref LIKE 'package-void:%'").use{it.moveToFirst();it.getLong(0) to org.json.JSONObject(it.getString(1))}
+        val legacy=old.second.put("version",1);legacy.remove("container_uuid");legacy.getJSONObject("container").remove("inventory_encoding")
+        // Published v1 hashed exactly the pre-marker columns of the other legacy containers.
+        val others=Trash.rows(raw,"supply_container","medication_id=? AND id!=? ORDER BY id",arrayOf(m,first))
+        for(index in 0 until others.length()) {val row=others.getJSONObject(index);assertEquals(InventoryEncoding.LEGACY,row.getString("inventory_encoding"));row.remove("inventory_encoding")}
+        val meds=Trash.rows(raw,"medication","id=? ORDER BY id",arrayOf(m))
+        val records=Trash.rows(raw,"dose_record","medication_id=? ORDER BY id",arrayOf(m))
+        val entries=Trash.rows(raw,"supply_transaction","container_id IN (SELECT id FROM supply_container WHERE medication_id=?) ORDER BY id",arrayOf(m))
+        legacy.put("context_sha256",ReferencePayload.sha(meds.toString()+others.toString()+records.toString()+entries.toString()))
+        db.withTransaction{RawData.unguarded(raw){raw.execSQL("UPDATE trash_item SET payload_json=? WHERE id=?",arrayOf(legacy.toString(),old.first))}}
+        val repository=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=db})
+        repository.restoreVoidedContainer(first)
+        assertEquals("SEALED",db.dao().container(first).state);assertEquals(0.0,db.dao().container(first).used_amount,0.0)
+        assertEquals(2,count("trash_item"));assertEquals(0,count("supply_transaction"))
+    }
+
+    @Test fun inventoryEncodingCannotBeChangedThroughOrdinarySqlInEitherDirection()=runBlocking {
+        val m=med();val exact=box(m)
+        val legacy=db.dao().insertContainer(ContainerEntity(medication_id=m,capacity=28.0,initial_used_amount=0.0,used_amount=0.0,state="SEALED"))
+        for((id,encoding) in listOf(exact.container.id to InventoryEncoding.LEGACY,legacy to InventoryEncoding.EXACT)) {
+            try {raw.execSQL("UPDATE supply_container SET inventory_encoding=? WHERE id=?",arrayOf(encoding,id));fail("Inventory encoding changed in place")}
+            catch(e:android.database.SQLException){assertTrue(e.message.orEmpty().contains("Immutable inventory encoding"))}
+        }
+        assertEquals(InventoryEncoding.EXACT,db.dao().container(exact.container.id).inventory_encoding)
+        assertEquals(InventoryEncoding.LEGACY,db.dao().container(legacy).inventory_encoding)
+    }
+
+    @Test fun inventoryVersionErrorsAreRejectedBeforeOpeningTheDestination()=runBlocking {
+        val m=med();val b=box(m)
+        val guarded=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space):NotesDatabase {fail("Invalid inventory version opened destination");return db}})
+        val password="SYNTHETIC inventory version fixture".toCharArray()
+        for(schema in listOf(10,11)) {
+            val tables=RawData.dump(raw)
+            if(schema==11)tables.getJSONArray("supply_container").getJSONObject(0).remove("inventory_encoding")
+            val data=BackupCodec.encrypt(org.json.JSONObject().put("format",1).put("schema",schema).put("tables",tables).toString().toByteArray(),password)
+            try {guarded.restoreBackup(data,password);fail("Inventory schema mismatch accepted")}
+            catch(e:IllegalArgumentException){assertTrue(e.message.orEmpty().contains(if(schema==10)"Misdeclared inventory" else "Missing or invalid inventory"))}
+            finally {data.fill(0)}
+        }
+        password.fill('\u0000');assertEquals(InventoryEncoding.EXACT,db.dao().container(b.container.id).inventory_encoding)
+    }
+
+    @Test fun publishedBusinessSchemaTenRestoresLegacyAmountsAndProductReferencesWithoutInferringUnits()=runBlocking {
+        val repository=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=db})
+        val m=med();repository.addContainers(m,28.0,1,true)
+        repository.associateMedication(repository.referenceScope(),m,0,UUID.randomUUID().toString(),product)
+        repository.unscheduled(m,at,0.1)
+        val password="SYNTHETIC schema10 fixture".toCharArray()
+        val backup=repository.exportBackup(password)
+        val old=org.json.JSONObject(String(BackupCodec.decrypt(backup,password),Charsets.UTF_8))
+        assertEquals(11,old.getInt("schema"));old.put("schema",10)
+        PublishedBusinessFixture.stripLegacyEncoding(old.getJSONObject("tables"))
+        val encoded=BackupCodec.encrypt(old.toString().toByteArray(),password)
+        val before=RawData.dump(raw).toString();val ticket=repository.referenceScope()
+        repository.restoreBackup(encoded,password)
+        assertEquals(before,RawData.dump(raw).toString());assertNotEquals(ticket.epoch,repository.referenceScope().epoch)
+        assertEquals(InventoryEncoding.LEGACY,db.dao().containers().single().inventory_encoding)
+        assertEquals(product,repository.medicationReference(repository.referenceScope(),m)!!.product)
+        assertEquals(0.1,db.dao().records().single().actual_dose!!,0.0)
+        backup.fill(0);encoded.fill(0);password.fill('\u0000')
+    }
+
+    @Test fun globalAuditRejectsForgedIdentityInAnAlreadyRestoredPackageAudit()=runBlocking {
+        val m=med();val id=db.dao().insertContainer(ContainerEntity(medication_id=m,capacity=28.0,initial_used_amount=0.0,used_amount=0.0,state="SEALED"))
+        db.withTransaction{PackageCorrections.void(raw,db.dao(),id,at);PackageCorrections.restore(raw,db.dao(),id,at)}
+        staged { staging ->
+            val event=staging.query("SELECT id,payload_json FROM trash_item WHERE ref LIKE 'package-void:%'").use{it.moveToFirst();it.getLong(0) to org.json.JSONObject(it.getString(1))}
+            event.second.put("container_uuid",UUID.randomUUID().toString())
+            staging.execSQL("UPDATE trash_item SET payload_json=? WHERE id=?",arrayOf(event.second.toString(),event.first))
+            try {MeasuredConsumptionStore.auditStagedDataset(staging);fail("Restored package hid a forged historical UUID")}
+            catch(e:ReferenceFailure){assertEquals(ReferenceError.INVALID_SOURCE,e.code)}
+        }
+        assertEquals("SEALED",db.dao().container(id).state);assertEquals(2,count("trash_item"))
+    }
+
 }

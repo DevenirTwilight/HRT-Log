@@ -9,7 +9,7 @@
 |P1|PRODUCTION_IMPLEMENTED|#54合并c95cea1，主线六检查通过；Room11/业务10，实际包装未启用|
 |P2|PRODUCTION_IMPLEMENTED|#56合并b5d9751，主线六检查复验PASS；真实手动来源/关联/历史UI，App1379零失败205条件跳过，data243与192图已核验|
 |P3|PRODUCTION_CORE_IMPLEMENTED|#55源e1c40bd六检查成功，合并f1e9b4d；只生产化计量API，不代表库存接线；主线六检查PASS；Gate3红对照顺序修复保留全部原断言|
-|P4|IN_PROGRESS / NOT_ACTIVATED|#57草稿；全局候选及操作因果链、零效果/退役隔离，data324/共享50/原生编译/Period5/Privacy3/Python158 PASS；新50原生NOT_RUN，旧10480c6六CI/三API35 PASS；候选Room12/业务10；独立编码、Schema11恢复、真实事务及预测UI待实施|
+|P4|IN_PROGRESS / NOT_ACTIVATED|#57草稿；独立库存编码/Schema11候选Legacy-only与v1/v2生命周期，data330/共享56/原生编译/Period5/Privacy3/Python159 PASS；源0a418eb六CI/API26/29/35共享50 PASS；新56原生待验；正式精确恢复/记录/预测UI仍OFF|
 |P5|NOT_STARTED|统一新计量预测不确定性和实际包装正式UI未实施|
 |官方分发|BLOCKED|许可版本冲突与FT/ST未闭环，不能因#45已合并而打包官方目录|
 

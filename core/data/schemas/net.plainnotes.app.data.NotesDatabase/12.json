@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 12,
-    "identityHash": "023bb80c620ada03a7eb6fe6b9c40e7e",
+    "identityHash": "682b224fde7b074409afc1b7e53bf512",
     "entities": [
       {
         "tableName": "medication",
@@ -666,7 +666,7 @@
       },
       {
         "tableName": "supply_container",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `medication_id` INTEGER NOT NULL, `capacity` REAL NOT NULL, `initial_used_amount` REAL NOT NULL, `used_amount` REAL NOT NULL, `opened_on` TEXT, `state` TEXT NOT NULL, `source_note` TEXT, `batch` TEXT, FOREIGN KEY(`medication_id`) REFERENCES `medication`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `medication_id` INTEGER NOT NULL, `capacity` REAL NOT NULL, `initial_used_amount` REAL NOT NULL, `used_amount` REAL NOT NULL, `opened_on` TEXT, `state` TEXT NOT NULL, `source_note` TEXT, `batch` TEXT, `inventory_encoding` TEXT NOT NULL DEFAULT 'LEGACY_SCALAR', FOREIGN KEY(`medication_id`) REFERENCES `medication`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
         "fields": [
           {
             "fieldPath": "id",
@@ -718,6 +718,13 @@
             "fieldPath": "batch",
             "columnName": "batch",
             "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "inventory_encoding",
+            "columnName": "inventory_encoding",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'LEGACY_SCALAR'"
           }
         ],
         "primaryKey": {
@@ -3971,7 +3978,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '023bb80c620ada03a7eb6fe6b9c40e7e')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '682b224fde7b074409afc1b7e53bf512')"
     ]
   }
 }

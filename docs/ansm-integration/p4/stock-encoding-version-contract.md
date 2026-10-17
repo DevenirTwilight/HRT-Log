@@ -1,12 +1,12 @@
 # 容器库存编码与业务版本合同
 
-2026-10-17，§102/104授权范围内的下一步非破坏实现；当前代码尚未新增此字段，正式入口仍OFF。
+2026-10-17，§102/104授权范围内的下一步非破坏实现；当前候选已新增字段并本地验证，正式入口与精确恢复仍OFF。
 
 ## 已识别的结构边界
 
 仅靠外部PRESENTATION/identity/event来辨认旧Double字段中保存的是整数刻度，在这些引用表整体缺失时不能证明单位。一个未使用的56刻度容器也可在外观上成为合法的旧56标量容器。不得根据名称、当前规格、capacity数值或“看起来像整数”推断哪一种。现有候选Room12仅提供旧读取器版本门，不解决这种自描述问题。
 
-因此容器自身需要一个独立的存储编码标记。拟在未合并的Room12中新增 `inventory_encoding TEXT NOT NULL DEFAULT 'LEGACY_SCALAR'`：旧库升级只新增默认标记，不改capacity/used/历史；只有显式新建并确认包装的事务可写 `INTEGER_QUANTA_V1`。该字段只说明库存编码，不表示官方核实、成分等效、吸收量或新医学事实。
+因此容器自身需要一个独立的存储编码标记。已在未合并的Room12中新增 `inventory_encoding TEXT NOT NULL DEFAULT 'LEGACY_SCALAR'`：旧库升级只新增默认标记，不改capacity/used/历史；只有显式新建并确认包装的事务可写 `INTEGER_QUANTA_V1`。该字段只说明库存编码，不表示官方核实、成分等效、吸收量或新医学事实。
 
 新模式必须双向匹配：编码为INTEGER_QUANTA_V1的活容器必须有唯一稳定UUID、冻结包装与来源；具有PRESENTATION的活容器必须使用该编码。缺任一侧全部拒绝，不能降级成旧模式。退休UUID不能按original_handle重连复用整数ID的新行。编码不能通过旧编辑/resize/普通UPDATE改变；删除后明确新建的旧标量容器仍属于新身份。
 
@@ -22,3 +22,5 @@
 ## 正式启用门
 
 新增列或业务版本均不意味着新库存已对用户开放。完整全局验证、所有零效果/退休/逆操作集合、旧备份和新格式恢复、真实Repository事务、确认票据/补录协调以及所有库存读取方的UNKNOWN保护完成前，#57保持DRAFT，正式创建/消费与精确库存恢复入口OFF。
+
+本地完整data330/共享56/原生源码编译/Period5/Privacy3/Python159 PASS，encoding-final-local-evidence.json记录来源指纹；新源码原生执行尚NOT_RUN。业务11当前只启用Legacy/Product-only备份；完整精确读写/缓存恢复及严格整数词法门仍待接线。当前不能称Schema11精确恢复已完成。

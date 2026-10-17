@@ -674,7 +674,7 @@ const val BACKFILL_MAX_DAYS=731L
     }
     suspend fun exportBackup(password:CharArray):ByteArray=withContext(Dispatchers.IO) {
         val db=db()
-        val json=db.withTransaction { RegimenHistory.seed(db.openHelper.writableDatabase);ReferenceSchema.validate(db.openHelper.writableDatabase);JSONObject().put("format",BackupCodec.FORMAT_VERSION).put("schema",RecordBackupCompatibility.SCHEMA)
+        val json=db.withTransaction { RegimenHistory.seed(db.openHelper.writableDatabase);InventoryEncoding.legacyOnly(db.openHelper.writableDatabase);ReferenceSchema.validate(db.openHelper.writableDatabase);JSONObject().put("format",BackupCodec.FORMAT_VERSION).put("schema",RecordBackupCompatibility.SCHEMA)
             .put("created",Instant.now().toString()).put("tables",RawData.dump(db.openHelper.writableDatabase)) }
         val plain=json.toString().toByteArray(Charsets.UTF_8)
         try{BackupCodec.encrypt(plain,password)}finally{plain.fill(0)}
@@ -690,6 +690,7 @@ const val BACKFILL_MAX_DAYS=731L
         val schema=RecordBackupCompatibility.readVersion(json)
         val tables=json.getJSONObject("tables")
         require(schema>=10 || ReferenceSchema.businessTables.none {tables.has(it)}) { "Misdeclared reference backup version" }
+        RecordBackupCompatibility.validateInventoryVersion(schema,tables)
         val required=DOMAIN_TABLES.filterNot{(schema<2 && it in listOf("stage_review","symptom_check","review_effect")) || (schema<4 && it in listOf("regimen_version","regimen_rule_link","milestone")) || (schema<5 && it=="lab_context_revision") || (schema<6 && it in listOf("visit_question","visit_pack")) || (schema<7 && it in listOf("history_period_revision","record_annotation")) || (schema<9 && it=="trash_item") || (schema<10 && it in ReferenceSchema.businessTables)}
         require(required.all{tables.has(it)}) { "Incomplete backup" }
         val db=db()

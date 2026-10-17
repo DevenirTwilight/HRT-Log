@@ -78,13 +78,14 @@ val migration10To11 = object : Migration(10,11) {
     override fun migrate(db:SupportSQLiteDatabase) = ReferenceSchema.migrate(db)
 }
 /** Database-format fence: Room11 readers must never interpret future integer stock quanta as scalar units.
- * No table or legacy row changes. Published Room11 only supported product reference snapshots.
+ * Only an explicit LEGACY storage marker is added; no legacy amount is rewritten. Published Room11 supported product references.
  */
 val migration11To12 = object : Migration(11,12) {
     override fun migrate(db:SupportSQLiteDatabase) {
         db.query("SELECT 1 FROM reference_snapshot WHERE kind='PRESENTATION' LIMIT 1").use {require(!it.moveToFirst()) {"Unrecognized measurement data in the old database format"}}
         db.query("SELECT 1 FROM measured_operation LIMIT 1").use {require(!it.moveToFirst()) {"Unrecognized measured operation in the old database format"}}
         ReferenceSchema.validate(db)
+        db.execSQL("ALTER TABLE supply_container ADD COLUMN inventory_encoding TEXT NOT NULL DEFAULT 'LEGACY_SCALAR'")
     }
 }
 fun allMigrations(today: () -> LocalDate = LocalDate::now): Array<Migration> = arrayOf(migration1To2(today), migration2To3, migration3To4, migration4To5, migration5To6, migration6To7, migration7To8, migration8To9, migration9To10, migration10To11, migration11To12)

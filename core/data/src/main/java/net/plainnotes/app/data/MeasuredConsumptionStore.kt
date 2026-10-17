@@ -56,7 +56,7 @@ internal object MeasuredConsumptionStore {
             val frozen=PackageMeasurementPayload.read(snapshot.getString("payload_json"));require(frozen.sha256==snapshot.getString("payload_sha256"))
             val result=frozen.stockScale();if(result is MeasureResult.Failure)return result
             val scale=(result as MeasureResult.Success).value
-            require(box.capacity==scale.capacityQuanta.toDouble() && box.initial_used_amount==0.0)
+            require(box.inventory_encoding==InventoryEncoding.EXACT && box.capacity==scale.capacityQuanta.toDouble() && box.initial_used_amount==0.0)
             val entries=projectionEntries(db,box.id)
             var used=0L;var previousId=0L;val deltas=ArrayList<Long>()
             fun same(a:Quantity,b:Quantity)=a.unit==b.unit && a.meaning==b.meaning && a.value.compareTo(b.value)==0
@@ -139,6 +139,7 @@ internal object MeasuredConsumptionStore {
         try {
             BackupValidation.validateCandidateStoredColumns(db)
             BackupValidation.validateMeasuredCandidateState(db)
+            db.query("SELECT 1 FROM supply_container c WHERE c.inventory_encoding='INTEGER_QUANTA_V1' AND NOT EXISTS(SELECT 1 FROM reference_identity i JOIN reference_event e ON e.subject_uuid=i.uuid JOIN reference_snapshot s ON s.uuid=e.snapshot_uuid WHERE i.kind='CONTAINER' AND i.live_handle=c.id AND s.kind='PRESENTATION') LIMIT 1").use{require(!it.moveToFirst())}
             db.query("SELECT 1 FROM measured_operation o JOIN reference_event e ON e.operation_uuid=o.operation_uuid LIMIT 1").use{require(!it.moveToFirst())}
             db.query("PRAGMA foreign_key_check").use{require(!it.moveToFirst())}
             val identities=db.query("SELECT DISTINCT i.uuid,i.dataset_uuid FROM reference_identity i JOIN reference_event e ON e.subject_uuid=i.uuid JOIN reference_snapshot s ON s.uuid=e.snapshot_uuid WHERE i.kind='CONTAINER' AND s.kind='PRESENTATION' ORDER BY i.uuid").use { c ->
@@ -309,7 +310,7 @@ internal object MeasuredConsumptionStore {
 
     private fun sameQuantity(a:Quantity,b:Quantity)=a.unit==b.unit && a.meaning==b.meaning && a.value.compareTo(b.value)==0
 
-    private data class ProjectionBox(val id:Long,val medication_id:Long,val capacity:Double,val initial_used_amount:Double,val used_amount:Double)
+    private data class ProjectionBox(val id:Long,val medication_id:Long,val capacity:Double,val initial_used_amount:Double,val used_amount:Double,val inventory_encoding:String)
     private data class ProjectionEntry(val id:Long,val dose_record_id:Long?,val dose_revision:Long?,val operation_id:String,val kind:String,val used_delta:Double,val reversal_of_id:Long?)
     private fun integer(c:Cursor,index:Int):Long {require(c.getType(index)==Cursor.FIELD_TYPE_INTEGER);return c.getLong(index)}
     private fun nullableInteger(c:Cursor,index:Int):Long?=if(c.isNull(index))null else integer(c,index)
@@ -318,8 +319,8 @@ internal object MeasuredConsumptionStore {
         return c.getDouble(index).also{require(it.isFinite())}
     }
     private fun projectionBox(db:SupportSQLiteDatabase,id:Long):ProjectionBox =
-        db.query("SELECT id,medication_id,capacity,initial_used_amount,used_amount FROM supply_container WHERE id=?",arrayOf(id)).use { c ->
-            require(c.moveToFirst());ProjectionBox(integer(c,0),integer(c,1),scalar(c,2),scalar(c,3),scalar(c,4))
+        db.query("SELECT id,medication_id,capacity,initial_used_amount,used_amount,inventory_encoding FROM supply_container WHERE id=?",arrayOf(id)).use { c ->
+            require(c.moveToFirst());ProjectionBox(integer(c,0),integer(c,1),scalar(c,2),scalar(c,3),scalar(c,4),c.getString(5))
         }
     private fun projectionEntries(db:SupportSQLiteDatabase,id:Long):List<ProjectionEntry> =
         db.query("SELECT id,dose_record_id,dose_revision,operation_id,kind,used_delta,reversal_of_id FROM supply_transaction WHERE container_id=? ORDER BY id",arrayOf(id)).use { c ->
@@ -470,7 +471,7 @@ internal object MeasuredConsumptionStore {
             val container=ReferenceStore.row(db,"reference_identity","uuid=?",arrayOf(a.getString("container_uuid"))) ?: fail(ReferenceError.INVALID_SOURCE)
             if(container.getString("dataset_uuid")!=scope.dataset || ReferencePayload.optional(container,"owner_uuid")!=owner || container.isNull("live_handle") || container.getLong("live_handle")!=entry.container_id)fail(ReferenceError.UNKNOWN_IDENTITY)
             val box=dao.container(entry.container_id)
-            if(box.state=="VOIDED" || box.used_amount<entry.used_delta || !box.used_amount.isFinite() || box.used_amount.toLong().toDouble()!=box.used_amount)fail(ReferenceError.OPERATION_CONFLICT)
+            if(box.inventory_encoding!=InventoryEncoding.EXACT || box.state=="VOIDED" || box.used_amount<entry.used_delta || !box.used_amount.isFinite() || box.used_amount.toLong().toDouble()!=box.used_amount)fail(ReferenceError.OPERATION_CONFLICT)
             val quantity=Measurements.parse(a.getString("quantity"));if(quantity !is MeasureResult.Success || quantity.value.signum()<=0 || (Measurements.decimalText(quantity.value) as MeasureResult.Success).value!=a.getString("quantity"))fail(ReferenceError.INVALID_SOURCE)
             MeasureUnit.valueOf(a.getString("unit"))
             Triple(a,entry,box)
@@ -521,7 +522,7 @@ internal object MeasuredConsumptionStore {
         val count=if(target.value.signum()==0)MeasureResult.Success(0L) else stock.toQuanta(target,ActualPackage(stock.ref,true))
         if(count is MeasureResult.Failure)return count
         val remainingQuanta=(count as MeasureResult.Success).value
-        if(expected.capacity!=stock.capacityQuanta.toDouble() || expected.initial_used_amount!=0.0 || !expected.used_amount.isFinite() || expected.used_amount<0 ||
+        if(expected.inventory_encoding!=InventoryEncoding.EXACT || expected.capacity!=stock.capacityQuanta.toDouble() || expected.initial_used_amount!=0.0 || !expected.used_amount.isFinite() || expected.used_amount<0 ||
             expected.used_amount>stock.capacityQuanta || expected.used_amount.toLong().toDouble()!=expected.used_amount)fail(ReferenceError.INVALID_SOURCE)
         val input=JSONObject().put("format",1).put("kind","ADJUST").put("stock_algorithm",StockQuantum.ALGORITHM).put("conversion_algorithm",Measurements.ALGORITHM).put("user_confirmed",true).put("dataset_uuid",scope.dataset).put("medication_uuid",identity.getString("owner_uuid"))
             .put("container_uuid",containerUuid).put("presentation_event_uuid",presentationEvent).put("presentation_sha256",presentationSha)
@@ -594,7 +595,7 @@ internal object MeasuredConsumptionStore {
             if(scale !is MeasureResult.Success)Plan(input,box,sid,null,null,null,null,0,(scale as MeasureResult.Failure).error.name)
             else {
                 val s=scale.value
-                if(box!=null && (box.capacity!=s.capacityQuanta.toDouble() || box.initial_used_amount!=0.0 || !box.used_amount.isFinite() ||
+                if(box!=null && (box.inventory_encoding!=InventoryEncoding.EXACT || box.capacity!=s.capacityQuanta.toDouble() || box.initial_used_amount!=0.0 || !box.used_amount.isFinite() ||
                     box.used_amount<0 || box.used_amount>s.capacityQuanta || box.used_amount.toLong().toDouble()!=box.used_amount))fail(ReferenceError.INVALID_SOURCE)
                 val physical=physicalStock(presentation,s,input.quantity)
                 if(physical is MeasureResult.Failure)Plan(input,box,sid,s,null,null,box?.used_amount?.toLong(),0,physical.error.name)
