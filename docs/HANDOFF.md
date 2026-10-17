@@ -1,3 +1,10 @@
+## CI：Robolectric 离线依赖（PR #63）— 2026-10-17
+
+- 主线 34f0e01 的 android 任务中 core:reminder 五个测试类因 Robolectric 运行期下载 android-all 失败（MavenArtifactFetcher/FileNotFoundException）；同代码 64db9b4 全绿，差异仅文档，判定为外部下载失败。
+- 修复：根 `robolectricJars` 任务由 Gradle 解析 SDK 26/28/29/31/35 的 android-all-instrumented，CI 传 `-ProbolectricDir` 离线运行；不改测试。本地离线 reminder 20/20、data 243/243、app 1379（0 失败，205 为既有环境门控 skip）；空目录负向确认会失败而非联网。
+- 以后 @Config 新增 SDK 或升级 Robolectric，须同步更新根 build.gradle.kts 里的版本列表。
+- #62 已合并，主线 Release 校验 run 39062691250 成功（线上附件与 tag 指向 76627bfe 一致）。
+
 ## 公开 Release v0.2.0 重建（REQUIREMENTS §104）— 2026-10-17
 
 - 源码 `76627bfe`（默认分支 f1e9b4de + versionCode 29，PR #61 合并为 64db9b4）；该提交 push/PR 两套 Android（jvm、android 含 lint/unsignedRelease、device-tests、API26/29 兼容）与 Science 全部成功。
