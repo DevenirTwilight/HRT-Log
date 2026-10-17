@@ -1,3 +1,7 @@
+## P4 同机对照明确收益；写入门仍FAIL — 2026-10-17
+
+cdc50b7原生run39068064156完整结束：本次审计/预测/恢复审计低于15s，但真实写入15.25–16.47s>5s，P4_BLOCKED，入口OFF。后置同机raw17s vs cached12–13s且完整投影相等；不是P4准入成功。保留同一生产源码此前四预算失败，避免将一次较快运行写为稳定修复。继续仅测试定位逐包装/逐操作方法耗时；生产未变。[阶段账本](ansm-integration/WORK-STATE.md)已记录工件SHA/完整失败与JVM诊断。P5/P6未实施，Beta #64仍NO-GO。
+
 ## P4 原生复验仍阻断 — 2026-10-17
 
 原生db34e87四预算FAIL，真实写入19.16–19.76s>5s；未放宽门槛。data407/Period5/Privacy3/Python168 PASS；JVM查询减少67.5%不等于原生成功。主线d13048b合并后六CI已PASS。新增测试专用后置分段与同机raw/cache对照，保持原预算/峰值范围及全部断言；尚待原生运行。最新证据及限制见 [阶段账本](ansm-integration/WORK-STATE.md)。正式入口OFF，P4_BLOCKED，P5/P6未实施，#64 Beta仍NO-GO。

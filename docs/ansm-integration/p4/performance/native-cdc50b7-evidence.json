@@ -1,0 +1,16 @@
+{
+  "head": "cdc50b73c6016d4391815d8ee4aeed82002bb489",
+  "status": "FAIL",
+  "run": 39068064156,
+  "artifact_id": 12113788250,
+  "artifact_sha256": "c2d200e9dd1f2208f49609d23fb5d7fa8acece52742680d459e9e6bc3b50d7ec",
+  "zip_crc": "PASS",
+  "report": "native-cdc50b7-report.json",
+  "same_runner_cache_benefit": "raw17.05/16.99s; cached12.05/13.31s; all complete projections equal",
+  "budget_exceeded": [
+    "post_restore_write_including_ticket_ms"
+  ],
+  "not_fixed": "Writes15.25/15.52/16.47s exceed5s. Same production source failed four timing budgets in previous run; latest audit passes do not establish stability.",
+  "budgets_changed": false,
+  "next": "Test-only split actual projection and operation auditors; no additional production optimization before evidence."
+}

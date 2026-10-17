@@ -32,7 +32,8 @@ class NativePerformanceIsolationTest(unittest.TestCase):
         self.assertLess(text.index('running.set(false);sampler.join(1000)'), text.index('val components=JSONObject()'))
         self.assertLess(text.index('components.put("status","COMPLETE")'), text.index('assertEquals("Diagnostic budgets;'))
         for name in ('raw_full_first_ms', 'cached_full_second_ms', 'cached_full_first_ms',
-                     'raw_full_second_ms', 'raw_state_including_references_ms', 'raw_operation_chain_ms'):
+                     'raw_full_second_ms', 'raw_state_including_references_ms', 'raw_operation_chain_ms',
+                     'cached_operations_with_setup_ms', 'cached_projections_with_setup_ms'):
             self.assertIn(name, text)
         diagnostic = text[text.index('val components=JSONObject()'):text.index('components.put("status","COMPLETE")')]
         self.assertNotIn('execSQL', diagnostic)

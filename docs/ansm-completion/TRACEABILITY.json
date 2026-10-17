@@ -81,7 +81,7 @@
       "blocker": "",
       "owner_decision_required": false,
       "progress": "IN_PROGRESS",
-      "note": "P4_BLOCKED / 正式入口OFF。db34e87 data407、Period5/Privacy3、Python168与原生源码编译PASS；原生run39066391148四时限FAIL，写入19.16–19.76s>5s。JVM SQL62219→20198不等于原生改善。主线d13048b六CI PASS；P5仅现有UI接线审计，P6未实施；#64 Beta仍NO-GO。下一步仅测试原生分段及同机缓存/无缓存对照。"
+      "note": "P4_BLOCKED / 正式入口OFF。cdc50b7原生run39068064156最终FAIL：本次审计/预测/恢复审计<15s，写入15.25–16.47s仍>5s。同机raw17s vs cached12–13s且全部投影相等，证明收益但未放行；相同生产源码上一db34e87四预算FAIL仍保留。继续TEST_ONLY逐包装/逐操作耗时细分，不改预算。data407、Period5/Privacy3、Python169、原生源码编译PASS；主线d13048b六CI PASS；P5/P6未实施，Beta #64 NO-GO。"
     },
     {
       "requirement_id": "V4.04",

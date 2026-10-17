@@ -82,6 +82,29 @@ def native_source(text):
                 val reads=ReferenceAuditReads(raw)
                 try{ReferenceSchema.validateCandidateReferences(reads)}finally{reads.finish()}
             }
+            // Time the actual private audit methods; these are diagnostics, never acceptance substitutes.
+            val presentationType=MeasuredConsumptionStore::class.java.declaredClasses.single{it.simpleName=="PresentationAudit"}
+            val presentationConstructor=presentationType.getDeclaredConstructor().apply{isAccessible=true}
+            val operationsAuditor=MeasuredConsumptionStore::class.java.declaredMethods.single{it.name=="auditOperations"}.apply{isAccessible=true}
+            val projectionAuditor=MeasuredConsumptionStore::class.java.declaredMethods.single{it.name=="auditStagedProjection" && it.parameterTypes.size==4}.apply{isAccessible=true}
+            component("cached_operations_with_setup_ms") {
+                val reads=ReferenceAuditReads(raw)
+                try{operationsAuditor.invoke(MeasuredConsumptionStore,reads,presentationConstructor.newInstance())}finally{reads.finish()}
+            }
+            component("cached_projections_with_setup_ms") {
+                val reads=ReferenceAuditReads(raw)
+                try {
+                    val presentations=presentationConstructor.newInstance()
+                    val identities=reads.query("SELECT DISTINCT i.uuid,i.dataset_uuid FROM reference_identity i JOIN reference_event e ON e.subject_uuid=i.uuid JOIN reference_snapshot s ON s.uuid=e.snapshot_uuid WHERE i.kind='CONTAINER' AND s.kind='PRESENTATION' ORDER BY i.uuid").use { c ->
+                        buildList{while(c.moveToNext())add(c.getString(0) to c.getString(1))}
+                    }
+                    val values=identities.map { (uuid,dataset) ->
+                        val result=projectionAuditor.invoke(MeasuredConsumptionStore,reads,dataset,uuid,presentations)
+                        require(result is MeasureResult.Success<*>);result.value as AuditedStockProjection
+                    }
+                    assertEquals(rawProjection,values)
+                } finally{reads.finish()}
+            }
             components.put("status","COMPLETE")
             file.writeText(report.toString(2));assertEquals("Diagnostic budgets; device acceptance remains NOT_RUN",emptyList<String>(),exceeded)''')
     # AGP may uninstall the synthetic test APK after a process crash, deleting
