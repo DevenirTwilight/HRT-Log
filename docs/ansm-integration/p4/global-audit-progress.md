@@ -22,3 +22,9 @@
 下一步必须补库存编码自描述标记及独立业务Schema11（stock-encoding-version-contract.md），先用引用表整体缺失的负例证实边界。当前仍不能把这一检查点称P4-A整体完成或启用恢复。
 
 最终本地data324/共享50/原生编译/Period5/Privacy3/Python158全部PASS，新50项原生实际执行NOT_RUN；完整来源指纹见global-full-local-evidence.json。已增加原IO/PK/导入边界脚本对新操作因果链的负向守卫，未削弱既有断言。下一步骤的独立库存编码仍必需，P4未完成/未激活。
+
+2026-10-17 历史包装补强：两个真实红例证明已RESTORED行的正文/历史容量曾未校验；现v2保存作废时ledger_head_id，验证冻结前缀hash/ADJUST-only以及StockQuantum精确投影，并强制RESTORE正文沿用原VOID正文。v1发布兼容保留，不能将v1解释成新模式。完整data336零失败，原生源码编译PASS；新原生运行NOT_RUN。见lifecycle-body-{red,green}-evidence.json。
+
+Python边界守卫发现PackageCorrections新增MeasureResult依赖超出既有白名单。根据§102/104仅增加此文件的完整明确imports角色；网络、文件IO、隐式时钟、反射、PK、旧自动分配禁令保持，并在临时副本上逐项注入违禁token及额外import验证拒绝。新增负向断言还发现初版角色条件未并入总status，已修正，未删减旧断言。
+
+接着实现同一RawData暂存/事务替换的内部精确恢复入口，正式Repository捕获目标Space和本地epoch；新公开入口和UI仍关闭。完整回归尚在执行，不能提前标INTEGRATION_VERIFIED。

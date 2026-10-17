@@ -1,6 +1,6 @@
 # P4 工作状态
 
-当前：#57 DRAFT，最新库存编码候选完整data330/共享56/原生编译/Period5/Privacy3/Python159 PASS；候选Room12新增独立编码列，业务Schema11目前只放行Legacy/Product-only备份，精确恢复/正式计量入口OFF。源0a418eb六CI/三API共享50已核验PASS；新56原生NOT_RUN。继续严格JSON/精确恢复、真实Repository/协调/ABA和统一预测UI。默认仍f1e9b4d Room11/业务10。
+当前：#57 DRAFT。内部正式NotesRepository精确备份/恢复已复用可信暂存和原子替换，data342/共享68合同/Android测试源码编译/Python159 PASS；六阶段故障注入完整回滚、独立新库恢复、重复恢复、损坏缓存和过期票据拒绝已验证。v2包装证据补齐历史正文及冻结前缀。新68原生NOT_RUN；6ac7499 CI仍在跑，3343724三API共享56实际PASS但API35整体验收FAIL（旧业务版本断言已修正）。公开精确入口/实际服药接线/预测UI仍OFF，下一步进入正式记录/修订/观察/ABA。默认f1e9b4d仍Room11/业务10，候选Room12/业务11只在#57。
 
 2026-10-16：IN_PROGRESS，生产库存未接线。当前复用P3的de26444，普通合入P1源945512a，不直接复制未合并源码。#54已受保护合并为c95cea1；#55待主线检查及更新。
 

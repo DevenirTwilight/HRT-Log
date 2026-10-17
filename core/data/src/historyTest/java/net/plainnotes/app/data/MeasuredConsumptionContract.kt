@@ -812,4 +812,145 @@ abstract class MeasuredConsumptionContract {
         assertEquals(1,BackupJsonReader.read("{\"x\":[0]}").getJSONArray("x").length())
     }
 
+    @Test fun globalAuditRejectsRestoredEvidenceWhoseBodyDiffersFromTheOriginalVoid()=runBlocking {
+        val m=med();val b=box(m)
+        db.withTransaction {PackageCorrections.void(raw,db.dao(),b.container.id,at);PackageCorrections.restore(raw,db.dao(),b.container.id,at)}
+        staged { staging ->
+            val row=staging.query("SELECT id,payload_json FROM trash_item WHERE ref LIKE 'package-restore:%'").use {it.moveToFirst();it.getLong(0) to org.json.JSONObject(it.getString(1))}
+            row.second.getJSONObject("container").put("used_amount",1)
+            staging.execSQL("UPDATE trash_item SET payload_json=? WHERE id=?",arrayOf(row.second.toString(),row.first))
+            try {MeasuredConsumptionStore.auditStagedDataset(staging);fail("Restore body changed the original voided physical facts")}
+            catch(e:ReferenceFailure){assertEquals(ReferenceError.INVALID_SOURCE,e.code)}
+        }
+        assertEquals("SEALED",db.dao().container(b.container.id).state)
+        assertEquals(0.0,db.dao().container(b.container.id).used_amount,0.0)
+    }
+
+    @Test fun globalAuditRejectsInvalidExactCapacityInPreviouslyRestoredLifecycleEvidence()=runBlocking {
+        val m=med();val b=box(m)
+        db.withTransaction {PackageCorrections.void(raw,db.dao(),b.container.id,at);PackageCorrections.restore(raw,db.dao(),b.container.id,at)}
+        staged { staging ->
+            val rows=staging.query("SELECT id,payload_json FROM trash_item WHERE ref LIKE 'package-%'").use {c->buildList {while(c.moveToNext())add(c.getLong(0) to org.json.JSONObject(c.getString(1)))}}
+            for((id,payload) in rows) {
+                payload.getJSONObject("container").put("capacity",-1)
+                staging.execSQL("UPDATE trash_item SET payload_json=? WHERE id=?",arrayOf(payload.toString(),id))
+            }
+            try {MeasuredConsumptionStore.auditStagedDataset(staging);fail("Historical exact capacity was never validated")}
+            catch(e:ReferenceFailure){assertEquals(ReferenceError.INVALID_SOURCE,e.code)}
+        }
+        assertEquals(56.0,db.dao().container(b.container.id).capacity,0.0)
+    }
+
+    @Test fun internalMeasuredBackupRoundTripsPhysicalHistoryAndReplacesANonemptyTarget()=runBlocking {
+        val repository=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=db})
+        val m=med();val b=box(m);val r=record(m)
+        val receipt=consume(r,b,listOf(use(b,"1.5")))
+        db.withTransaction{MeasuredConsumptionStore.reverseOriginal(db,b.scope,r,receipt.operationUuid,UUID.randomUUID().toString(),at)}
+        consume(record(m),b,emptyList())
+        val password="SYNTHETIC exact round trip".toCharArray()
+        val oldEpoch=repository.referencePreviewEpoch()
+        val backup=repository.exportMeasuredBackup(password,oldEpoch)
+        val expected=RawData.dump(raw).toString()
+        val header=BackupJsonReader.read(BackupCodec.decrypt(backup,password))
+        assertEquals(11,RecordBackupCompatibility.readVersion(header))
+        try {RecordBackupCompatibility.readVersion(header,10);fail("Old reader accepted new inventory business schema")}
+        catch(_:BackupCodec.NewerBackup){}
+        med("SYNTHETIC target-only medication")
+        assertNotEquals(expected,RawData.dump(raw).toString())
+        repository.restoreMeasuredBackup(backup,password,oldEpoch)
+        assertEquals(expected,RawData.dump(raw).toString())
+        val firstEpoch=repository.referencePreviewEpoch();assertNotEquals(oldEpoch,firstEpoch)
+        db.withTransaction {assertEquals(1,MeasuredConsumptionStore.auditStagedDataset(raw).size)}
+        repository.restoreMeasuredBackup(backup,password,firstEpoch)
+        assertEquals(expected,RawData.dump(raw).toString());assertNotEquals(firstEpoch,repository.referencePreviewEpoch())
+        backup.fill(0);password.fill('\u0000')
+    }
+
+    @Test fun internalMeasuredRestoreRejectsCorruptCacheWithoutReplacingAnyTargetFactOrEpoch()=runBlocking {
+        val repository=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=db})
+        val m=med();val b=box(m);consume(record(m),b,listOf(use(b)))
+        val password="SYNTHETIC corrupt cache".toCharArray();val epoch=repository.referencePreviewEpoch()
+        val backup=repository.exportMeasuredBackup(password,epoch)
+        val parsed=BackupJsonReader.read(BackupCodec.decrypt(backup,password))
+        parsed.getJSONObject("tables").getJSONArray("supply_container").getJSONObject(0).put("used_amount",2)
+        val corrupt=BackupCodec.encrypt(parsed.toString().toByteArray(),password)
+        val before=RawData.dump(raw).toString()
+        rejects(ReferenceError.INVALID_SOURCE){repository.restoreMeasuredBackup(corrupt,password,epoch)}
+        assertEquals(before,RawData.dump(raw).toString());assertEquals(epoch,repository.referencePreviewEpoch())
+        assertEquals(1.0,db.dao().container(b.container.id).used_amount,0.0)
+        backup.fill(0);corrupt.fill(0);password.fill('\u0000')
+    }
+
+    @Test fun internalMeasuredBackupRequiresCurrentLocalEpochAndPrimaryBeforeLookingUpIds()=runBlocking {
+        val access=object:DatabaseAccess(context){override fun get(space:Space)=db};val repository=NotesRepository(access)
+        val m=med();val b=box(m);consume(record(m),b,emptyList())
+        val password="SYNTHETIC scope fixture".toCharArray();val epoch=repository.referencePreviewEpoch()
+        val backup=repository.exportMeasuredBackup(password,epoch);val before=RawData.dump(raw).toString()
+        rejects(ReferenceError.STALE_SCOPE){repository.exportMeasuredBackup(password,UUID.randomUUID().toString())}
+        rejects(ReferenceError.STALE_SCOPE){repository.restoreMeasuredBackup(backup,password,UUID.randomUUID().toString())}
+        access.select(Space.DECOY)
+        rejects(ReferenceError.WRONG_SPACE){repository.restoreMeasuredBackup(backup,password,epoch)}
+        rejects(ReferenceError.WRONG_SPACE){repository.exportMeasuredBackup(password,epoch)}
+        access.select(Space.PRIMARY)
+        assertEquals(before,RawData.dump(raw).toString());assertEquals(epoch,repository.referencePreviewEpoch())
+        backup.fill(0);password.fill('\u0000')
+    }
+
+    @Test fun publicLegacyBackupEntryDoesNotAccidentallyEnableMeasuredRestoreOrExport()=runBlocking {
+        val repository=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=db})
+        val m=med();val b=box(m);consume(record(m),b,emptyList())
+        val password="SYNTHETIC guarded public fixture".toCharArray();val epoch=repository.referencePreviewEpoch()
+        val backup=repository.exportMeasuredBackup(password,epoch);val before=RawData.dump(raw).toString()
+        var exportRejected=false;try {repository.exportBackup(password)}catch(_:IllegalArgumentException){exportRejected=true}
+        assertTrue("Public exact export became enabled before forecast/UI admission",exportRejected)
+        var restoreRejected=false;try {repository.restoreBackup(backup,password)}catch(_:IllegalArgumentException){restoreRejected=true}
+        assertTrue("Public exact restore became enabled before forecast/UI admission",restoreRejected)
+        assertEquals(before,RawData.dump(raw).toString());assertEquals(epoch,repository.referencePreviewEpoch())
+        backup.fill(0);password.fill('\u0000')
+    }
+
+    @Test fun measuredRestoreRollsBackEveryReplacementCheckpointIncludingTheNewEpoch()=runBlocking {
+        val repository=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=db})
+        val m=med();val b=box(m);consume(record(m),b,listOf(use(b)))
+        val password="SYNTHETIC atomic restore fixture".toCharArray();val epoch=repository.referencePreviewEpoch()
+        val backup=repository.exportMeasuredBackup(password,epoch)
+        med("SYNTHETIC target-only data to preserve on rollback")
+        val before=RawData.dump(raw).toString()
+        fun ddl()=raw.query("SELECT type,name,sql FROM sqlite_master WHERE sql IS NOT NULL ORDER BY type,name").use {c->buildList{while(c.moveToNext())add(listOf(c.getString(0),c.getString(1),c.getString(2)))}}
+        val definitions=ddl()
+        for(stage in RestoreCheckpoint.entries) {
+            var reached=false
+            try {
+                repository.restoreMeasuredBackup(backup,password,epoch,checkpoint={point->if(point==stage){reached=true;throw IllegalStateException("SYNTHETIC injected restore failure")}})
+                fail("Restore committed despite injected $stage failure")
+            } catch(e:IllegalStateException){assertEquals("SYNTHETIC injected restore failure",e.message)}
+            assertTrue("Checkpoint not exercised: $stage",reached)
+            assertEquals(before,RawData.dump(raw).toString());assertEquals(epoch,repository.referencePreviewEpoch())
+            assertEquals(definitions,ddl());raw.query("PRAGMA foreign_key_check").use{assertFalse(it.moveToFirst())}
+            db.withTransaction{assertEquals(1,MeasuredConsumptionStore.auditStagedDataset(raw).size)}
+        }
+        repository.restoreMeasuredBackup(backup,password,epoch)
+        assertNotEquals(before,RawData.dump(raw).toString());assertNotEquals(epoch,repository.referencePreviewEpoch())
+        backup.fill(0);password.fill('\u0000')
+    }
+
+    @Test fun measuredBackupRestoresOnANewEncryptedDatabaseWithoutAnyCurrentCatalog()=runBlocking {
+        val repository=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=db})
+        val m=med();val b=box(m);consume(record(m),b,listOf(use(b,"1.5")))
+        val password="SYNTHETIC new device fixture".toCharArray()
+        val sourceEpoch=repository.referencePreviewEpoch();val backup=repository.exportMeasuredBackup(password,sourceEpoch)
+        val expected=RawData.dump(raw).toString();val otherName="synthetic-new-device-${UUID.randomUUID()}.db"
+        val other=Room.databaseBuilder(context,NotesDatabase::class.java,otherName).openHelperFactory(factory(ByteArray(32){(it+99).toByte()})).allowMainThreadQueries().addCallback(SchemaGuards).build()
+        try {
+            val target=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=other})
+            val oldEpoch=target.referencePreviewEpoch()
+            target.restoreMeasuredBackup(backup,password,oldEpoch)
+            val targetRaw=other.openHelper.writableDatabase
+            assertEquals(expected,RawData.dump(targetRaw).toString())
+            assertNotEquals(oldEpoch,target.referencePreviewEpoch());assertNotEquals(sourceEpoch,target.referencePreviewEpoch())
+            other.withTransaction {assertEquals(1,MeasuredConsumptionStore.auditStagedDataset(targetRaw).size)}
+            assertEquals(sourceEpoch,repository.referencePreviewEpoch());assertEquals(expected,RawData.dump(raw).toString())
+        } finally {other.close();context.deleteDatabase(otherName);backup.fill(0);password.fill('\u0000')}
+    }
+
 }

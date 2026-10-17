@@ -672,9 +672,22 @@ const val BACKFILL_MAX_DAYS=731L
                                  names:Map<net.plainnotes.app.importer.HrtTracker.Group,String>,weightKg:Double?,zone:ZoneId=ZoneId.systemDefault())=transaction { dao ->
         HrtTrackerWriter.write(dao,plan,targets,names,weightKg,zone)
     }
-    suspend fun exportBackup(password:CharArray):ByteArray=withContext(Dispatchers.IO) {
-        val db=db()
-        val json=db.withTransaction { RegimenHistory.seed(db.openHelper.writableDatabase);InventoryEncoding.legacyOnly(db.openHelper.writableDatabase);ReferenceSchema.validate(db.openHelper.writableDatabase);JSONObject().put("format",BackupCodec.FORMAT_VERSION).put("schema",RecordBackupCompatibility.SCHEMA)
+    suspend fun exportBackup(password:CharArray):ByteArray=exportBackupFrom(space,password,null)
+    /** No UI caller until measured restore and forecast admission is complete. */
+    internal suspend fun exportMeasuredBackup(password:CharArray,expectedEpoch:String):ByteArray {
+        val target=space
+        if(target!=Space.PRIMARY)throw ReferenceFailure(ReferenceError.WRONG_SPACE)
+        return exportBackupFrom(target,password,expectedEpoch)
+    }
+    private suspend fun exportBackupFrom(target:Space,password:CharArray,measuredEpoch:String?):ByteArray=withContext(Dispatchers.IO) {
+        val db=access.get(target)
+        val json=db.withTransaction {
+            val raw=db.openHelper.writableDatabase
+            if(measuredEpoch!=null && ReferenceStore.previewEpoch(raw)!=measuredEpoch)throw ReferenceFailure(ReferenceError.STALE_SCOPE)
+            RegimenHistory.seed(raw)
+            if(measuredEpoch==null){InventoryEncoding.legacyOnly(raw);ReferenceSchema.validate(raw)}
+            else MeasuredConsumptionStore.auditStagedDataset(raw)
+            JSONObject().put("format",BackupCodec.FORMAT_VERSION).put("schema",RecordBackupCompatibility.SCHEMA)
             .put("created",Instant.now().toString()).put("tables",RawData.dump(db.openHelper.writableDatabase)) }
         val plain=json.toString().toByteArray(Charsets.UTF_8)
         try{BackupCodec.encrypt(plain,password)}finally{plain.fill(0)}
@@ -684,7 +697,15 @@ const val BACKFILL_MAX_DAYS=731L
      * Restores a backup from this schema or an older one (older ones are upgraded right after the rows are written, with the
      * same steps as the Room migration). A backup from a newer schema is refused.
      */
-    suspend fun restoreBackup(data:ByteArray,password:CharArray,today:LocalDate=LocalDate.now())=withContext(Dispatchers.IO) {
+    suspend fun restoreBackup(data:ByteArray,password:CharArray,today:LocalDate=LocalDate.now())=
+        restoreBackupTo(space,data,password,today,null)
+    /** Internal integration entry; shares strict parsing and the atomic legacy replacement implementation. */
+    internal suspend fun restoreMeasuredBackup(data:ByteArray,password:CharArray,expectedEpoch:String,today:LocalDate=LocalDate.now(),checkpoint:(RestoreCheckpoint)->Unit = {}) {
+        val target=space
+        if(target!=Space.PRIMARY)throw ReferenceFailure(ReferenceError.WRONG_SPACE)
+        restoreBackupTo(target,data,password,today,expectedEpoch,checkpoint)
+    }
+    private suspend fun restoreBackupTo(target:Space,data:ByteArray,password:CharArray,today:LocalDate,measuredEpoch:String?,checkpoint:(RestoreCheckpoint)->Unit = {})=withContext(Dispatchers.IO) {
         val plain=BackupCodec.decrypt(data,password)
         val json=try{BackupJsonReader.read(plain)}finally{plain.fill(0)}
         val schema=RecordBackupCompatibility.readVersion(json)
@@ -693,10 +714,11 @@ const val BACKFILL_MAX_DAYS=731L
         RecordBackupCompatibility.validateInventoryVersion(schema,tables)
         val required=DOMAIN_TABLES.filterNot{(schema<2 && it in listOf("stage_review","symptom_check","review_effect")) || (schema<4 && it in listOf("regimen_version","regimen_rule_link","milestone")) || (schema<5 && it=="lab_context_revision") || (schema<6 && it in listOf("visit_question","visit_pack")) || (schema<7 && it in listOf("history_period_revision","record_annotation")) || (schema<9 && it=="trash_item") || (schema<10 && it in ReferenceSchema.businessTables)}
         require(required.all{tables.has(it)}) { "Incomplete backup" }
-        val db=db()
+        val db=access.get(target)
         db.withTransaction {
             val sql=db.openHelper.writableDatabase
-            RawData.restore(access.applicationContext,sql,tables,upgradeRegimens=schema<4,backfillTrash=schema<9)
+            if(measuredEpoch!=null && ReferenceStore.previewEpoch(sql)!=measuredEpoch)throw ReferenceFailure(ReferenceError.STALE_SCOPE)
+            RawData.restore(access.applicationContext,sql,tables,upgradeRegimens=schema<4,backfillTrash=schema<9,measured=measuredEpoch!=null,checkpoint=checkpoint)
             if(schema<2) WellbeingUpgrade.apply(sql,today)
         }
     }

@@ -25,7 +25,7 @@ class MeasurementIsolationTest(unittest.TestCase):
         original_root = report.ROOT
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            for relative in (report.MODEL / 'MeasurementCore.kt', report.APPROVED_CORE, report.APPROVED_STOCK_QUANTUM, report.APPROVED_PACKAGE_CODEC, report.APPROVED_CONTAINER_STORE, report.APPROVED_USE_PAYLOAD, report.APPROVED_CONSUMPTION_STORE):
+            for relative in (report.MODEL / 'MeasurementCore.kt', report.APPROVED_CORE, report.APPROVED_STOCK_QUANTUM, report.APPROVED_PACKAGE_CODEC, report.APPROVED_CONTAINER_STORE, report.APPROVED_USE_PAYLOAD, report.APPROVED_CONSUMPTION_STORE, report.APPROVED_CORRECTIONS):
                 target = root / relative
                 target.parent.mkdir(parents=True, exist_ok=True)
                 target.write_text((original_root / relative).read_text())
@@ -71,6 +71,16 @@ class MeasurementIsolationTest(unittest.TestCase):
                     consumption.write_text(original_consumption + '\n' + token)
                     self.assertEqual('FAIL', report.isolation()['status'], token)
                 consumption.write_text(original_consumption)
+                self.assertEqual('PASS', report.isolation()['status'])
+
+                corrections = root / report.APPROVED_CORRECTIONS
+                original_corrections = corrections.read_text()
+                for token in report.STORE_FORBIDDEN_APIS:
+                    corrections.write_text(original_corrections + '\n' + token)
+                    self.assertEqual('FAIL', report.isolation()['status'], token)
+                corrections.write_text(original_corrections + '\nimport java.math.RoundingMode')
+                self.assertEqual('FAIL', report.isolation()['status'])
+                corrections.write_text(original_corrections)
                 self.assertEqual('PASS', report.isolation()['status'])
 
     def test_frozen_contract_and_production_gate_are_separate(self):

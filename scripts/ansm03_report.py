@@ -29,6 +29,8 @@ APPROVED_INVENTORY_ENCODING = Path('core/data/src/main/java/net/plainnotes/app/d
 ENCODING_IMPORTS = ['import androidx.sqlite.db.SupportSQLiteDatabase']
 APPROVED_OPERATION_CHAIN = Path('core/data/src/main/java/net/plainnotes/app/data/MeasuredOperationChain.kt')
 CHAIN_IMPORTS = ['import androidx.sqlite.db.SupportSQLiteDatabase', 'import org.json.JSONObject']
+APPROVED_CORRECTIONS = Path('core/data/src/main/java/net/plainnotes/app/data/PackageCorrections.kt')
+CORRECTION_IMPORTS = ['import android.content.ContentValues', 'import android.database.sqlite.SQLiteDatabase', 'import androidx.sqlite.db.SupportSQLiteDatabase', 'import org.json.JSONObject', 'import net.plainnotes.app.domain.measurement.MeasureResult', 'import java.security.MessageDigest', 'import java.time.Instant', 'import java.time.ZoneOffset', 'import java.util.UUID']
 APPROVED_CONSUMPTION_STORE = Path('core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt')
 CONSUMPTION_IMPORTS = ['import android.database.Cursor', 'import androidx.sqlite.db.SupportSQLiteDatabase', 'import net.plainnotes.app.domain.measurement.*', 'import net.plainnotes.app.domain.stock.StockQuantum', 'import org.json.JSONArray', 'import org.json.JSONObject', 'import java.math.BigDecimal', 'import java.time.Instant', 'import java.util.UUID']
 USE_IMPORTS = ['import net.plainnotes.app.domain.measurement.*', 'import net.plainnotes.app.domain.stock.StockQuantum', 'import org.json.JSONArray', 'import org.json.JSONObject']
@@ -49,7 +51,7 @@ def isolation():
             relative = file.relative_to(ROOT)
             if any(part in relative.parts for part in ('build', 'test', 'androidTest', 'historyTest', 'medicalTest', 'attachmentTest')):
                 continue
-            if any(token in file.read_text() for token in ('net.plainnotes.app.domain.measurement', 'net.plainnotes.app.domain.stock')) and relative not in (APPROVED_CORE, APPROVED_STOCK_QUANTUM, APPROVED_PACKAGE_CODEC, APPROVED_CONTAINER_STORE, APPROVED_USE_PAYLOAD, APPROVED_CONSUMPTION_STORE):
+            if any(token in file.read_text() for token in ('net.plainnotes.app.domain.measurement', 'net.plainnotes.app.domain.stock')) and relative not in (APPROVED_CORE, APPROVED_STOCK_QUANTUM, APPROVED_PACKAGE_CODEC, APPROVED_CONTAINER_STORE, APPROVED_USE_PAYLOAD, APPROVED_CONSUMPTION_STORE, APPROVED_CORRECTIONS):
                 offenders.append(str(relative))
     imports = [line for line in (ROOT / MODEL / 'MeasurementCore.kt').read_text().splitlines() if line.startswith('import ')]
     core = ROOT / APPROVED_CORE
@@ -86,12 +88,19 @@ def isolation():
     chain_imports = [line for line in chain_text.splitlines() if line.startswith('import ')]
     chain_forbidden = [token for token in STORE_FORBIDDEN_APIS if token in chain_text]
     chain_valid = not chain.exists() or (chain_imports == CHAIN_IMPORTS and not chain_forbidden)
+    corrections = ROOT / APPROVED_CORRECTIONS
+    correction_text = corrections.read_text() if corrections.is_file() else ''
+    correction_imports = [line for line in correction_text.splitlines() if line.startswith('import ')]
+    correction_forbidden = [token for token in STORE_FORBIDDEN_APIS if token in correction_text]
+    correction_valid = not corrections.exists() or (correction_imports == CORRECTION_IMPORTS and not correction_forbidden)
     encoding = ROOT / APPROVED_INVENTORY_ENCODING
     encoding_text = encoding.read_text() if encoding.is_file() else ''
     encoding_imports = [line for line in encoding_text.splitlines() if line.startswith('import ')]
     encoding_forbidden = [token for token in STORE_FORBIDDEN_APIS if token in encoding_text]
     encoding_valid = not encoding.exists() or (encoding_imports == ENCODING_IMPORTS and not encoding_forbidden)
-    return {'status': 'PASS' if encoding_valid and chain_valid and consumption_valid and use_valid and store_valid and package_valid and stock_valid and not offenders and imports == PURE_IMPORTS and core.is_file() and production_imports == PURE_IMPORTS and not forbidden else 'FAIL',
+    return {'status': 'PASS' if correction_valid and encoding_valid and chain_valid and consumption_valid and use_valid and store_valid and package_valid and stock_valid and not offenders and imports == PURE_IMPORTS and core.is_file() and production_imports == PURE_IMPORTS and not forbidden else 'FAIL',
+            'approved_corrections': str(APPROVED_CORRECTIONS) if corrections.exists() else None,
+            'correction_imports': correction_imports, 'correction_forbidden_apis': correction_forbidden,
             'approved_inventory_encoding': str(APPROVED_INVENTORY_ENCODING) if encoding.exists() else None,
             'encoding_imports': encoding_imports, 'encoding_forbidden_apis': encoding_forbidden,
             'approved_operation_chain': str(APPROVED_OPERATION_CHAIN) if chain.exists() else None,

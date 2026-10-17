@@ -15,5 +15,18 @@
     "failure": "MigrationBaselineTest expected business10, actual11; corrected explicit version and added legacy encoding assertion",
     "api26": "PASS",
     "api29": "PASS"
-  }
+  },
+  "period_stability": {
+    "tests": 5,
+    "failures": 0
+  },
+  "privacy_notice": {
+    "tests": 3,
+    "failures": 0
+  },
+  "python": {
+    "tests": 159,
+    "failures": 0
+  },
+  "app_log_sha256": "aa0eff4fbd4859698100d7a0334b8bc674f63a1177fe493f81cfd8179af03f8a"
 }
