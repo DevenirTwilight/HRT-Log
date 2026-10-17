@@ -1,0 +1,11 @@
+# 实际使用接线进度
+
+当前：IMPLEMENTED_INTERNAL / LOCAL_INTEGRATION_VERIFIED，未启用UI，不是生产验收完成。
+
+正式Repository新增内部入口，在捕获的PRIMARY数据库同一事务内写入实际记录、上下文和精确账本。确认票据冻结数据集/本地epoch、药物稳定UUID、药物/包装/流水/引用状态和包含零差额观察的执行链。重放已有operationUUID先比较原实际输入，不以当前包装资料重新计算已完成操作；新写入必须通过票据CAS。
+
+扩展的使用载荷保留v1合同，新v2明确保存DEDUCT_CURRENT、ALREADY_ACCOUNTED或UNKNOWN，以及无包装来源时用户明确记录的物理量。临床剂量Double原位、物理用量和库存效果分开；ALREADY_ACCOUNTED有独立回执类型，不伪装成未知或零消耗。未知不会自动扣减。用户必须明确确认事实和库存效果，不通过时间戳猜测补录是否已计入实盘。
+
+当前编译首轮FAIL：新的旧流水修订门未处理nullable dose_revision，以及SQL行工具参数Array方差不匹配；均修正，未改测试断言。合成测试覆盖真实Repository写入/重试/同UUID异输入、ALREADY_ACCOUNTED/UNKNOWN、无来源物理量备份、三个实际写入失败点、零差额票据失效、ABA余额恢复以及跨epoch/DECOY隔离。完整data349/共享75合同及Android测试源码编译PASS，Python159 PASS；新75原生和本轮App回归尚NOT_RUN。
+
+后续：完成真实修订/删除与原量逆操作的包装协调；补录不推断库存效果；库存创建、实盘和生命周期只能通过有稳定身份的票据入口。统一预测与正式UI尚未接通，不能开启内部入口的App调用。

@@ -14,13 +14,14 @@ internal sealed interface PhysicalUseResult {
     val containerUuid:String
     data class Known(override val containerUuid:String,val requested:Quantity,val allocated:Quantity,val unallocated:Quantity):PhysicalUseResult
     data class Unknown(override val containerUuid:String,val requested:Quantity,val reason:String):PhysicalUseResult
+    data class AlreadyAccounted(override val containerUuid:String,val requested:Quantity):PhysicalUseResult
 }
 internal data class MeasuredConsumptionReceipt(val operationUuid:String,val recordUuid:String,val recordRevision:Int,val lines:List<PhysicalUseResult>,val issue:String?)
 internal data class AuditedStockProjection(val containerUuid:String,val presentationSha256:String,val usedQuanta:Long,val remaining:Quantity,val cacheMatches:Boolean)
 
-/** Isolated P4 adapter. No Repository/App caller yet; backup acceptance remains disabled; legacy scalar paths reject measured stock.
- * Caller must create the actual record and invoke this adapter in the same captured database transaction.
- * A revision/correction with prior stock history needs the dedicated inverse workflow, never this new-use path.
+/** Internal P4 adapter used by the captured Repository transaction; public UI admission remains disabled.
+ * Actual records, source captures and stock entries commit in one transaction.
+ * A later revision accepts prior exact history only after its complete audited inverse.
  */
 internal object MeasuredConsumptionStore {
     private fun fail(code:ReferenceError):Nothing=throw ReferenceFailure(code)
@@ -243,7 +244,11 @@ internal object MeasuredConsumptionStore {
                         val conversion=physical(frozen,scale,input.quantity)
                         val wanted:MeasureResult<Long> = when(conversion) {is MeasureResult.Success->scale.toQuanta(conversion.value,ActualPackage(scale.ref,true));is MeasureResult.Failure->conversion}
                         val take:Long;val issue:String?
-                        if(wanted is MeasureResult.Failure) {
+                        if(request.stockEffect!=MeasuredStockEffect.DEDUCT_CURRENT) {
+                            take=0;issue=if(request.stockEffect==MeasuredStockEffect.ALREADY_ACCOUNTED)"ALREADY_ACCOUNTED" else "STOCK_EFFECT_NOT_CONFIRMED"
+                            require(c.isNull("requested_stock") && c.isNull("requested_quanta"))
+                            if(request.stockEffect==MeasuredStockEffect.UNKNOWN)left+=input.quantity
+                        } else if(wanted is MeasureResult.Failure) {
                             take=0;issue=wanted.error.name
                             require(c.isNull("requested_stock") && c.isNull("requested_quanta"))
                             left+=input.quantity
@@ -262,9 +267,9 @@ internal object MeasuredConsumptionStore {
                         if(take==0L)require(matching.isEmpty()) else {require(matching.size==1);expectedAllocations+=matching.single().getString("uuid")}
                     }
                     require(expectedAllocations==allocations.map{it.getString("uuid")}.toSet())
-                    val reason=when {issues.isEmpty()->"ACTUAL_PACKAGE_NOT_CONFIRMED";issues.size==1->issues.single();issues.any{it!=null}->"MULTIPLE_SOURCE_BALANCES";else->null}
+                    val reason=when {request.stockEffect==MeasuredStockEffect.ALREADY_ACCOUNTED->null;request.stockEffect==MeasuredStockEffect.UNKNOWN->"STOCK_EFFECT_NOT_CONFIRMED";issues.isEmpty()->"ACTUAL_PACKAGE_NOT_CONFIRMED";issues.size==1->issues.single();issues.any{it!=null}->"MULTIPLE_SOURCE_BALANCES";else->null}
                     require(result.issue==reason)
-                    val unallocated=left.singleOrNull()?.takeIf{reason!=null}
+                    val unallocated=(left.singleOrNull() ?: request.unlinkedActual)?.takeIf{reason!=null}
                     require(ReferencePayload.optional(op,"unallocated_quantity")==unallocated?.let{(Measurements.decimalText(it.value) as MeasureResult.Success).value})
                     require(ReferencePayload.optional(op,"unallocated_unit")==unallocated?.unit?.name)
                 }
@@ -347,6 +352,15 @@ internal object MeasuredConsumptionStore {
         .put("take_quanta",p.take.toString()).put("issue",p.issue ?: JSONObject.NULL)
         .put("stock_state",p.container?.state ?: JSONObject.NULL)
         .put("ledger_head_id",p.container?.let {box->db.query("SELECT COALESCE(MAX(id),0) FROM supply_transaction WHERE container_id=?",arrayOf(box.id)).use{it.moveToFirst();it.getLong(0).toString()}} ?: JSONObject.NULL)
+    internal fun existingConsumption(db:SupportSQLiteDatabase,operationUuid:String):Pair<MeasuredConsumptionRequest,MeasuredConsumptionReceipt>? {
+        val row=ReferenceStore.row(db,"measured_operation","operation_uuid=?",arrayOf(operationUuid)) ?: return null
+        if(row.getString("kind")!="CONSUME")fail(ReferenceError.OPERATION_CONFLICT)
+        val result=receipt(row)
+        return MeasuredUsePayload.read(ReferencePayload.canonical(JSONObject(row.getString("input_json")).getJSONObject("request"))).request() to result
+    }
+    internal fun existingAdjustment(db:SupportSQLiteDatabase,operationUuid:String):JSONObject? =
+        ReferenceStore.row(db,"measured_operation","operation_uuid=?",arrayOf(operationUuid))?.let {if(it.getString("kind")!="ADJUST")fail(ReferenceError.OPERATION_CONFLICT);adjustmentCapture(it).request}
+
     private fun receipt(row:JSONObject):MeasuredConsumptionReceipt = try {readReceipt(row)} catch(e:Exception){fail(ReferenceError.INVALID_SOURCE)}
     private fun readReceipt(row:JSONObject):MeasuredConsumptionReceipt {
         fun keys(value:JSONObject,expected:Set<String>)=require(value.keys().asSequence().toSet()==expected)
@@ -374,7 +388,8 @@ internal object MeasuredConsumptionStore {
             val issue=if(c.isNull("issue"))null else text(c,"issue").also{require(it.isNotBlank() && it.length<=128)}
             if(c.isNull("requested_stock")) {
                 require(c.isNull("requested_quanta") && takeCount==0L && issue!=null)
-                PhysicalUseResult.Unknown(input.containerUuid,input.quantity,issue)
+                if(request.stockEffect==MeasuredStockEffect.ALREADY_ACCOUNTED) {require(issue=="ALREADY_ACCOUNTED");PhysicalUseResult.AlreadyAccounted(input.containerUuid,input.quantity)}
+                else PhysicalUseResult.Unknown(input.containerUuid,input.quantity,issue)
             } else {
                 val q=PackageMeasurementPayload.quantity(c.getJSONObject("requested_stock"));require(q.value.signum()>0)
                 val wantedCount=quanta(c,"requested_quanta");require(wantedCount>0 && takeCount<=wantedCount)
@@ -562,13 +577,13 @@ internal object MeasuredConsumptionStore {
     }
 
     suspend fun consumeNewRecord(database:NotesDatabase,scope:ReferenceScope,expected:RecordEntity,operationUuid:String,
-        uses:List<ConfirmedStockUse>,created:Instant):MeasuredConsumptionReceipt {
+        uses:List<ConfirmedStockUse>,created:Instant,stockEffect:MeasuredStockEffect=MeasuredStockEffect.DEDUCT_CURRENT,unlinkedActual:Quantity?=null):MeasuredConsumptionReceipt {
         val db=database.openHelper.writableDatabase;check(db.inTransaction());ReferenceStore.checkScope(db,scope)
         if(!ReferencePayload.uuid(operationUuid) || created.toEpochMilli()<0)fail(ReferenceError.INVALID_SOURCE)
         val dao=database.dao();val current=dao.recordById(expected.id) ?: fail(ReferenceError.UNKNOWN_IDENTITY)
         val medication=ReferenceStore.identity(db,scope,"MEDICATION",current.medication_id,null)
         val record=ReferenceStore.identity(db,scope,"RECORD",current.id,medication)
-        val frozen=MeasuredUsePayload.freeze(MeasuredConsumptionRequest(scope.dataset,medication,MeasuredUsePayload.record(record,expected),uses))
+        val frozen=MeasuredUsePayload.freeze(MeasuredConsumptionRequest(scope.dataset,medication,MeasuredUsePayload.record(record,expected),uses,stockEffect,unlinkedActual))
         if(ReferenceStore.row(db,"reference_event","operation_uuid=?",arrayOf(operationUuid))!=null)fail(ReferenceError.OPERATION_CONFLICT)
         ReferenceStore.row(db,"measured_operation","operation_uuid=?",arrayOf(operationUuid))?.let {old->
             if(old.getString("dataset_uuid")!=scope.dataset || old.getString("record_uuid")!=record || old.getString("kind")!="CONSUME" || old.getString("request_sha256")!=frozen.sha256)fail(ReferenceError.OPERATION_CONFLICT)
@@ -576,7 +591,16 @@ internal object MeasuredConsumptionStore {
         }
         if(current!=expected)fail(ReferenceError.STALE_REVISION)
         if(current.origin!="APP")fail(ReferenceError.INVALID_SOURCE)
-        if(current.unallocated_supply_amount!=null || dao.supplyFor(current.id).isNotEmpty())fail(ReferenceError.ALREADY_CONSUMED)
+        if(current.unallocated_supply_amount!=null)fail(ReferenceError.ALREADY_CONSUMED)
+        val prior=dao.supplyFor(current.id)
+        if(prior.isNotEmpty()) {
+            // A new revision may follow only a complete, audited inverse of all earlier exact consumption.
+            val reversed=prior.mapNotNull{it.reversal_of_id}.toSet()
+            if(current.revision<=1 || prior.any{it.kind !in setOf("CONSUME","REVERSE") || (it.dose_revision==null || it.dose_revision>=current.revision)} ||
+                prior.filter{it.kind=="CONSUME"}.any{it.id !in reversed})fail(ReferenceError.ALREADY_CONSUMED)
+            for(entry in prior)db.query("SELECT 1 FROM measured_allocation WHERE ledger_entry_id=?",arrayOf(entry.id)).use{if(!it.moveToFirst())fail(ReferenceError.ALREADY_CONSUMED)}
+            auditStagedDataset(db)
+        }
         db.query("SELECT 1 FROM measured_operation WHERE record_uuid=? AND record_revision=? LIMIT 1",arrayOf(record,current.revision)).use{if(it.moveToFirst())fail(ReferenceError.ALREADY_CONSUMED)}
         val request=frozen.request()
         val plans=request.uses.map {input->
@@ -592,7 +616,13 @@ internal object MeasuredConsumptionStore {
             val sid=snapshot.getString("uuid");val box=if(identity.isNull("live_handle"))null else dao.container(identity.getLong("live_handle"))
             if(box!=null && box.medication_id!=current.medication_id)fail(ReferenceError.UNKNOWN_IDENTITY)
             val scale=presentation.stockScale()
-            if(scale !is MeasureResult.Success)Plan(input,box,sid,null,null,null,null,0,(scale as MeasureResult.Failure).error.name)
+            if(scale is MeasureResult.Success && box!=null && (box.inventory_encoding!=InventoryEncoding.EXACT || box.capacity!=scale.value.capacityQuanta.toDouble() || box.initial_used_amount!=0.0 ||
+                    !box.used_amount.isFinite() || box.used_amount<0 || box.used_amount>scale.value.capacityQuanta || box.used_amount.toLong().toDouble()!=box.used_amount))fail(ReferenceError.INVALID_SOURCE)
+            if(stockEffect!=MeasuredStockEffect.DEDUCT_CURRENT) {
+                require(scale is MeasureResult.Success)
+                Plan(input,box,sid,scale.value,null,null,box?.used_amount?.toLong(),0,if(stockEffect==MeasuredStockEffect.ALREADY_ACCOUNTED)"ALREADY_ACCOUNTED" else "STOCK_EFFECT_NOT_CONFIRMED")
+            }
+            else if(scale !is MeasureResult.Success)Plan(input,box,sid,null,null,null,null,0,(scale as MeasureResult.Failure).error.name)
             else {
                 val s=scale.value
                 if(box!=null && (box.inventory_encoding!=InventoryEncoding.EXACT || box.capacity!=s.capacityQuanta.toDouble() || box.initial_used_amount!=0.0 || !box.used_amount.isFinite() ||
@@ -611,8 +641,8 @@ internal object MeasuredConsumptionStore {
                 }
             }
         }
-        val issue=when {plans.isEmpty()->"ACTUAL_PACKAGE_NOT_CONFIRMED";plans.size==1->plans.single().issue;plans.any{it.issue!=null}->"MULTIPLE_SOURCE_BALANCES";else->null}
-        val left=plans.singleOrNull()?.let {p->if(p.requested==null)p.input.quantity else amount(p.scale!!,p.wanted!!-p.take)}?.takeIf{issue!=null}
+        val issue=when {stockEffect==MeasuredStockEffect.ALREADY_ACCOUNTED->null;stockEffect==MeasuredStockEffect.UNKNOWN->"STOCK_EFFECT_NOT_CONFIRMED";plans.isEmpty()->"ACTUAL_PACKAGE_NOT_CONFIRMED";plans.size==1->plans.single().issue;plans.any{it.issue!=null}->"MULTIPLE_SOURCE_BALANCES";else->null}
+        val left=(plans.singleOrNull()?.let {p->if(p.requested==null)p.input.quantity else amount(p.scale!!,p.wanted!!-p.take)} ?: unlinkedActual)?.takeIf{issue!=null}
         val envelope=JSONObject().put("format",2).put("request",JSONObject(frozen.json)).put("captures",JSONArray(plans.map{captureJson(db,it)})).put("chain",MeasuredOperationChain.next(db))
         ReferenceStore.insert(db,"measured_operation",JSONObject().put("operation_uuid",operationUuid).put("dataset_uuid",scope.dataset).put("record_uuid",record)
             .put("record_revision",current.revision).put("kind","CONSUME").put("request_sha256",frozen.sha256).put("input_json",ReferencePayload.canonical(envelope))

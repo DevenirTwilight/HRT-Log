@@ -75,6 +75,18 @@ const val BACKFILL_MAX_DAYS=731L
     suspend fun associateMedication(scope: ReferenceScope, medication: Long, expectedRevision: Int, operationUuid: String, product: UserReferenceProduct?): MedicationReference = transactionWithSql(Space.PRIMARY) { _, raw ->
         ReferenceStore.associate(raw,scope,medication,expectedRevision,operationUuid,product)
     }
+    // Internal production integration; UI activation waits for shared forecast admission.
+    internal suspend fun measuredWriteTicket(scope:ReferenceScope,medication:Long,record:Long?=null):MeasuredWriteTicket = transactionWithSql(Space.PRIMARY) { _,raw ->
+        MeasuredUseIntegration.ticket(raw,scope,medication,record)
+    }
+    internal suspend fun recordMeasuredUse(ticket:MeasuredWriteTicket,operationUuid:String,draft:MeasuredActualUseDraft,created:Instant=Instant.now(),checkpoint:(ActualUseCheckpoint)->Unit={}):RecordedMeasuredUse {
+        val target=space
+        if(target!=Space.PRIMARY)throw ReferenceFailure(ReferenceError.WRONG_SPACE)
+        val frozenDraft=draft.copy(uses=draft.uses.toList())
+        return withContext(Dispatchers.IO) {val database=access.get(target);database.withTransaction {
+            MeasuredUseIntegration.create(database,ticket,operationUuid,frozenDraft,created,checkpoint)
+        }}
+    }
     suspend fun medications()=withContext(Dispatchers.IO){db().dao().medications()}
     suspend fun saveMilestone(value:MilestoneEntity)=transaction{dao->
         LocalDate.parse(value.date);require(value.kind in MILESTONE_KINDS)

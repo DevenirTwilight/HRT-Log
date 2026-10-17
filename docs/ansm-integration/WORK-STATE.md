@@ -9,7 +9,7 @@
 |P1|PRODUCTION_IMPLEMENTED|#54合并c95cea1，主线六检查通过；Room11/业务10，实际包装未启用|
 |P2|PRODUCTION_IMPLEMENTED|#56合并b5d9751，主线六检查复验PASS；真实手动来源/关联/历史UI，App1379零失败205条件跳过，data243与192图已核验|
 |P3|PRODUCTION_CORE_IMPLEMENTED|#55源e1c40bd六检查成功，合并f1e9b4d；只生产化计量API，不代表库存接线；主线六检查PASS；Gate3红对照顺序修复保留全部原断言|
-|P4|IN_PROGRESS / NOT_ACTIVATED|#57草稿；内部正式Repository精确备份/恢复、六阶段异常回滚与新库恢复已本地data342/共享68/原生源码编译/Python159 PASS；新68原生NOT_RUN；公开精确UI/真实服药接线/预测仍OFF；旧3343724三API共享56 PASS但整体验收FAIL，见encoding-ci-evidence|
+|P4|IN_PROGRESS / NOT_ACTIVATED|#57草稿；内部正式Repository精确备份与实际服药事务/幂等/显式库存效果/ABA票据，本地data349/共享75/原生源码编译/Python159 PASS；新75原生及新App回归NOT_RUN；修订恢复/实盘/统一预测UI仍待完成|
 |P5|NOT_STARTED|统一新计量预测不确定性和实际包装正式UI未实施|
 |官方分发|BLOCKED|许可版本冲突与FT/ST未闭环，不能因#45已合并而打包官方目录|
 

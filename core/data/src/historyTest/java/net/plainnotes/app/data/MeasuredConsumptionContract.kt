@@ -953,4 +953,86 @@ abstract class MeasuredConsumptionContract {
         } finally {other.close();context.deleteDatabase(otherName);backup.fill(0);password.fill('\u0000')}
     }
 
+    private fun actual(b:CreatedMeasuredContainer,effect:MeasuredStockEffect=MeasuredStockEffect.DEDUCT_CURRENT)=MeasuredActualUseDraft(
+        takenUtc=at.toEpochMilli(),takenZone="Europe/Paris",clinicalDose=0.125,uses=listOf(use(b)),stockEffect=effect,userConfirmed=true)
+    private fun repository()=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=db})
+
+    @Test fun repositoryWritesActualClinicalFactAndPhysicalConsumptionAtomicallyAndIdempotently()=runBlocking {
+        val m=med();val b=box(m);val repo=repository();val ticket=repo.measuredWriteTicket(b.scope,m)
+        val op=UUID.randomUUID().toString();val before=db.dao().medication(m)
+        val first=repo.recordMeasuredUse(ticket,op,actual(b),at)
+        val replay=repo.recordMeasuredUse(ticket,op,actual(b),at)
+        assertEquals(first,replay);assertEquals(1,count("dose_record"));assertEquals(1,count("supply_transaction"))
+        assertEquals(0.125,first.record.actual_dose!!,0.0);assertEquals(1.0,db.dao().container(b.container.id).used_amount,0.0)
+        assertEquals(before,db.dao().medication(m));assertNull(db.dao().profile(m))
+        rejects(ReferenceError.OPERATION_CONFLICT){repo.recordMeasuredUse(ticket,op,actual(b).copy(clinicalDose=2.0),at)}
+        rejects(ReferenceError.OPERATION_CONFLICT){repo.recordMeasuredUse(ticket,op,actual(b).copy(stockEffect=MeasuredStockEffect.UNKNOWN),at)}
+        assertEquals(1,count("dose_record"));assertEquals(1,count("supply_transaction"))
+    }
+
+    @Test fun repositoryActualUseRetainsAlreadyAccountedAndUnknownStockEffectsWithoutDeducting()=runBlocking {
+        val m=med();val b=box(m);val repo=repository()
+        val accounted=repo.recordMeasuredUse(repo.measuredWriteTicket(b.scope,m),UUID.randomUUID().toString(),actual(b,MeasuredStockEffect.ALREADY_ACCOUNTED),at)
+        assertTrue(accounted.receipt.lines.single() is PhysicalUseResult.AlreadyAccounted);assertNull(accounted.receipt.issue)
+        val unknown=repo.recordMeasuredUse(repo.measuredWriteTicket(b.scope,m),UUID.randomUUID().toString(),actual(b,MeasuredStockEffect.UNKNOWN),at)
+        assertEquals("STOCK_EFFECT_NOT_CONFIRMED",unknown.receipt.issue)
+        assertEquals(BigDecimal("0.5"),(unknown.receipt.lines.single() as PhysicalUseResult.Unknown).requested.value)
+        assertEquals(2,count("dose_record"));assertEquals(0,count("supply_transaction"));assertEquals(0.0,db.dao().container(b.container.id).used_amount,0.0)
+        db.withTransaction{assertEquals(1,MeasuredConsumptionStore.auditStagedDataset(raw).size)}
+    }
+
+    @Test fun repositoryPreservesUnlinkedPhysicalActualQuantityAcrossExactBackupRestore()=runBlocking {
+        val m=med();val b=box(m);val repo=repository()
+        val physical=Quantity(BigDecimal("0.25"),MeasureUnit.ML,Meaning(QuantityKind.FORMULATION,"SYNTHETIC unconfirmed formulation"))
+        val draft=actual(b).copy(uses=emptyList(),unlinkedActual=physical)
+        val saved=repo.recordMeasuredUse(repo.measuredWriteTicket(b.scope,m),UUID.randomUUID().toString(),draft,at)
+        assertEquals("ACTUAL_PACKAGE_NOT_CONFIRMED",saved.receipt.issue);assertEquals(0,count("supply_transaction"))
+        val op=raw.query("SELECT input_json,unallocated_quantity,unallocated_unit FROM measured_operation").use{it.moveToFirst();assertEquals("0.25",it.getString(1));assertEquals("ML",it.getString(2));org.json.JSONObject(it.getString(0))}
+        assertEquals(physical,MeasuredUsePayload.read(ReferencePayload.canonical(op.getJSONObject("request"))).request().unlinkedActual)
+        val password="SYNTHETIC actual physical fact backup".toCharArray();val epoch=repo.referencePreviewEpoch()
+        val backup=repo.exportMeasuredBackup(password,epoch);val before=RawData.dump(raw).toString()
+        repo.restoreMeasuredBackup(backup,password,epoch)
+        assertEquals(before,RawData.dump(raw).toString());assertEquals(0,count("supply_transaction"))
+        backup.fill(0);password.fill('\u0000')
+    }
+
+    @Test fun repositoryActualUseRollsBackRecordReferenceAndStockAtEveryFaultCheckpoint()=runBlocking {
+        val m=med();val b=box(m);val repo=repository();val ticket=repo.measuredWriteTicket(b.scope,m)
+        val before=RawData.dump(raw).toString()
+        for(stage in ActualUseCheckpoint.entries) {
+            var reached=false
+            try {repo.recordMeasuredUse(ticket,UUID.randomUUID().toString(),actual(b),at,checkpoint={point->if(point==stage){reached=true;throw IllegalStateException("SYNTHETIC actual-use fault")}});fail("Partial actual use committed at $stage")}
+            catch(e:IllegalStateException){assertEquals("SYNTHETIC actual-use fault",e.message)}
+            assertTrue(reached);assertEquals(before,RawData.dump(raw).toString());assertEquals(ticket,repo.measuredWriteTicket(b.scope,m))
+            assertEquals(0,count("dose_record"));assertEquals(0,count("supply_transaction"))
+        }
+    }
+
+    @Test fun zeroDifferenceCountInvalidatesAnActualUseTicketEvenWithIdenticalContainerAndLedger()=runBlocking {
+        val m=med();val b=box(m);val repo=repository();val ticket=repo.measuredWriteTicket(b.scope,m)
+        val before=db.dao().container(b.container.id)
+        db.withTransaction{MeasuredConsumptionStore.adjustRemaining(db,b.scope,before,b.containerUuid,b.presentationEventUuid,b.presentation.sha256,Quantity(BigDecimal("28"),MeasureUnit.TABLET,meaning),true,UUID.randomUUID().toString(),at)}
+        assertEquals(before,db.dao().container(b.container.id));assertEquals(0,count("supply_transaction"))
+        rejects(ReferenceError.STALE_REVISION){repo.recordMeasuredUse(ticket,UUID.randomUUID().toString(),actual(b),at)}
+        assertEquals(0,count("dose_record"));assertEquals(1,count("measured_operation"))
+    }
+
+    @Test fun returnedBalanceAfterAnAbaAdjustmentDoesNotReviveAnOldActualUseTicket()=runBlocking {
+        val m=med();val b=box(m);val repo=repository();val ticket=repo.measuredWriteTicket(b.scope,m)
+        for(amount in listOf("27","28"))db.withTransaction{MeasuredConsumptionStore.adjustRemaining(db,b.scope,db.dao().container(b.container.id),b.containerUuid,b.presentationEventUuid,b.presentation.sha256,Quantity(BigDecimal(amount),MeasureUnit.TABLET,meaning),true,UUID.randomUUID().toString(),at)}
+        assertEquals(0.0,db.dao().container(b.container.id).used_amount,0.0)
+        rejects(ReferenceError.STALE_REVISION){repo.recordMeasuredUse(ticket,UUID.randomUUID().toString(),actual(b),at)}
+        assertEquals(0,count("dose_record"));assertEquals(2,count("supply_transaction"))
+    }
+
+    @Test fun actualUseRejectsStaleDatasetBeforeLookingUpReusedIdsAndNeverTargetsDecoy()=runBlocking {
+        val m=med();val b=box(m);val repo=repository();val ticket=repo.measuredWriteTicket(b.scope,m)
+        db.withTransaction{ReferenceSchema.retireRuntime(raw);ReferenceSchema.restoreRuntime(raw)}
+        val before=RawData.dump(raw).toString()
+        rejects(ReferenceError.STALE_SCOPE){repo.recordMeasuredUse(ticket,UUID.randomUUID().toString(),actual(b),at)}
+        val forbidden=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space):NotesDatabase{fail("Decoy actual use opened database");return db}}).pinnedTo(Space.DECOY)
+        rejects(ReferenceError.WRONG_SPACE){forbidden.recordMeasuredUse(ticket,UUID.randomUUID().toString(),actual(b),at)}
+        assertEquals(before,RawData.dump(raw).toString());assertEquals(0,count("dose_record"))
+    }
+
 }

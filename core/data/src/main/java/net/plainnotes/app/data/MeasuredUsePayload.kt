@@ -10,6 +10,13 @@ data class ConfirmedStockUse(
     val containerUuid:String,val presentationEventUuid:String,val presentationSha256:String,
     val quantity:Quantity,val userConfirmed:Boolean,
 )
+enum class MeasuredStockEffect { DEDUCT_CURRENT, ALREADY_ACCOUNTED, UNKNOWN }
+/** Clinical dose and physical quantity remain independent user-entered facts. No recommended values. */
+data class MeasuredActualUseDraft(
+    val takenUtc:Long,val takenZone:String,val clinicalDose:Double,
+    val uses:List<ConfirmedStockUse>,val stockEffect:MeasuredStockEffect,
+    val unlinkedActual:Quantity?=null,val userConfirmed:Boolean,
+)
 internal data class FrozenUseRecord(
     val uuid:String,val revision:Int,val takenUtc:Long,val takenZone:String?,val status:String,
     /** Exact IEEE-754 context of the old factual field, not a recovered decimal or a stock quantity. */
@@ -17,6 +24,7 @@ internal data class FrozenUseRecord(
 )
 internal data class MeasuredConsumptionRequest(
     val datasetUuid:String,val medicationUuid:String,val record:FrozenUseRecord,val uses:List<ConfirmedStockUse>,
+    val stockEffect:MeasuredStockEffect=MeasuredStockEffect.DEDUCT_CURRENT,val unlinkedActual:Quantity?=null,
 )
 internal class FrozenConsumptionRequest internal constructor(val json:String) {
     val sha256:String get()=ReferencePayload.sha(json)
@@ -44,13 +52,15 @@ internal object MeasuredUsePayload {
     fun freeze(request:MeasuredConsumptionRequest):FrozenConsumptionRequest {
         require(request.uses.size<=64)
         val r=request.record
-        val json=JSONObject().put("format",FORMAT).put("kind","CONSUME").put("stock_algorithm",StockQuantum.ALGORITHM)
+        val extended=request.stockEffect!=MeasuredStockEffect.DEDUCT_CURRENT || request.unlinkedActual!=null
+        val json=JSONObject().put("format",if(extended)2 else FORMAT).put("kind","CONSUME").put("stock_algorithm",StockQuantum.ALGORITHM)
             .put("conversion_algorithm",Measurements.ALGORITHM).put("dataset_uuid",request.datasetUuid).put("medication_uuid",request.medicationUuid)
             .put("record",JSONObject().put("uuid",r.uuid).put("revision",r.revision).put("taken_utc",r.takenUtc)
                 .put("taken_zone",r.takenZone ?: JSONObject.NULL).put("status",r.status).put("legacy_actual_dose_bits",r.legacyActualDoseBits).put("config_sha256",r.configSha256))
             .put("uses",JSONArray(request.uses.sortedBy{it.containerUuid}.map {u->JSONObject().put("container_uuid",u.containerUuid)
                 .put("presentation_event_uuid",u.presentationEventUuid).put("presentation_sha256",u.presentationSha256)
                 .put("quantity",PackageMeasurementPayload.quantity(u.quantity)).put("user_confirmed",u.userConfirmed)}))
+        if(extended)json.put("stock_effect",request.stockEffect.name).put("unlinked_actual",request.unlinkedActual?.let(PackageMeasurementPayload::quantity) ?: JSONObject.NULL)
         return read(ReferencePayload.canonical(json))
     }
     fun read(json:String):FrozenConsumptionRequest {
@@ -59,8 +69,14 @@ internal object MeasuredUsePayload {
     }
     internal fun decode(payload:String):MeasuredConsumptionRequest {
         require(payload.toByteArray(Charsets.UTF_8).size<=ReferencePayload.MAX_BYTES)
-        val json=JSONObject(payload);require(ReferencePayload.canonical(json)==payload);keys(json,fields)
-        require(json.get("format") is Int && json.getInt("format")==FORMAT && string(json,"kind")=="CONSUME")
+        val json=JSONObject(payload);require(ReferencePayload.canonical(json)==payload)
+        require(json.get("format") is Int && json.getInt("format") in 1..2 && string(json,"kind")=="CONSUME")
+        val extended=json.getInt("format")==2
+        keys(json,if(extended)fields+setOf("stock_effect","unlinked_actual") else fields)
+        val effect=if(extended)MeasuredStockEffect.valueOf(string(json,"stock_effect")) else MeasuredStockEffect.DEDUCT_CURRENT
+        val unlinked=if(!extended || json.isNull("unlinked_actual"))null else PackageMeasurementPayload.quantity(json.getJSONObject("unlinked_actual")).also {
+            require(it.value.signum()>0 && it.meaning.kind !in setOf(QuantityKind.ABSORBED_MASS,QuantityKind.RELEASE_RATE))
+        }
         require(string(json,"stock_algorithm")==StockQuantum.ALGORITHM && string(json,"conversion_algorithm")==Measurements.ALGORITHM)
         val dataset=uuid(json,"dataset_uuid");val medication=uuid(json,"medication_uuid")
         val r=json.getJSONObject("record");keys(r,recordFields)
@@ -81,6 +97,8 @@ internal object MeasuredUsePayload {
         require(uses.map{it.containerUuid}.distinct().size==uses.size)
         require(uses.map{it.containerUuid}==uses.map{it.containerUuid}.sorted())
         // An empty list records missing actual-package confirmation; it never means zero actual use.
-        return MeasuredConsumptionRequest(dataset,medication,record,uses)
+        require(unlinked==null || uses.isEmpty())
+        require(!extended || effect!=MeasuredStockEffect.DEDUCT_CURRENT || unlinked!=null)
+        return MeasuredConsumptionRequest(dataset,medication,record,uses,effect,unlinked)
     }
 }
