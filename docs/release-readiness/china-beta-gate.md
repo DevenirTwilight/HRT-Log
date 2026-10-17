@@ -18,7 +18,7 @@
 | 本轮重新下载/验签 APK | **PASS（只读）**；证据见 `build29-readonly-verification.json` |
 | 后端 Beta 候选 APK | **NOT_IMPLEMENTED**，无候选构建、签名或版本号 |
 
-2026-10-17 本轮直接下载现有公开 APK 并只读核对：上述文件哈希/证书、嵌入 clean git 源码 SHA 与实际 tag 完全一致；v2/v3 签名、包名/版本、非 debug、minSdk26/target37、四 ABI、ZIP CRC、APK ZIP 16KiB 对齐及 No INTERNET 均 PASS。实际权限还包含既有 `ACCESS_NETWORK_STATE`，完整列表保存在 JSON；没有修改权限。真实安装/覆盖升级和 ELF 段对齐复核本轮未跑。GitHub Release 的历史 `targetCommitish=c52c8518…` 与实际 tag 不同，按实际 tag 与二进制来源核对，未改 Release 元数据。
+2026-10-17 本轮直接下载现有公开 APK 并只读核对：上述文件哈希/证书、嵌入 clean git 源码 SHA 与实际 tag 完全一致；v2/v3 签名、包名/版本、非 debug、minSdk26/target37、四 ABI、ZIP CRC、APK ZIP 16KiB 对齐及 No INTERNET 均 PASS。实际权限还包含既有 `ACCESS_NETWORK_STATE`，完整列表保存在 JSON；没有修改权限。补充只读 GNU readelf 检查：四 ABI 共8个原生库的全部 PT_LOAD p_align 均为16384，见 `build29-elf-alignment.json`；这是静态文件检查，16KiB页设备运行、真实安装和覆盖升级仍NOT_RUN。GitHub Release 的历史 `targetCommitish=c52c8518…` 与实际 tag 不同，按实际 tag 与二进制来源核对，未改 Release 元数据。
 
 发布已完成，本任务不重签、不上传 APK、不移动 tag、不发布社交公告。未来候选构建只在负责人另批后进行，沿用证书、包名和非降级版本，不要求卸载/清数据。
 

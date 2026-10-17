@@ -1,0 +1,90 @@
+{
+  "scope": "READ_ONLY_EXISTING_RELEASE_NO_NEW_BUILD",
+  "apk_sha256": "0d950bbb4bb281089318e080e3272400498b48cd094f4ffb4675fbabe6f93201",
+  "tool": "GNU readelf (GNU Binutils for Debian) 2.44",
+  "libraries": [
+    {
+      "path": "lib/arm64-v8a/libandroidx.graphics.path.so",
+      "sha256": "41e9a793c43a0f4fddb19e33f346bace464f30f888ba7b9eaf96294ea115bfb6",
+      "pt_load_alignments": [
+        16384,
+        16384,
+        16384
+      ],
+      "all_load_align_at_least_16k": true
+    },
+    {
+      "path": "lib/arm64-v8a/libsqlcipher.so",
+      "sha256": "bc85746647ce4ea5f390eccd61e5236fbd11786a91802877b9fdbbb66a55192d",
+      "pt_load_alignments": [
+        16384,
+        16384,
+        16384
+      ],
+      "all_load_align_at_least_16k": true
+    },
+    {
+      "path": "lib/armeabi-v7a/libandroidx.graphics.path.so",
+      "sha256": "41399eba6fc2a60f6f14642375c1824f3cf25eb8fec7397d753730a3ceda3e2b",
+      "pt_load_alignments": [
+        16384,
+        16384,
+        16384
+      ],
+      "all_load_align_at_least_16k": true
+    },
+    {
+      "path": "lib/armeabi-v7a/libsqlcipher.so",
+      "sha256": "a3d6e16e4477961cffc563ad9e9b49aa9cf0f4def5f008a9b349c9afacec6170",
+      "pt_load_alignments": [
+        16384,
+        16384,
+        16384
+      ],
+      "all_load_align_at_least_16k": true
+    },
+    {
+      "path": "lib/x86/libandroidx.graphics.path.so",
+      "sha256": "eb0570b41fd3bff25d8204a967c03bd7550719e768b791f680cc40cbe35f29af",
+      "pt_load_alignments": [
+        16384,
+        16384,
+        16384
+      ],
+      "all_load_align_at_least_16k": true
+    },
+    {
+      "path": "lib/x86/libsqlcipher.so",
+      "sha256": "efd77986abfa03cff177ea1d9801bd3080bd8bfc90a26ac1a977da169c5b89c8",
+      "pt_load_alignments": [
+        16384,
+        16384,
+        16384
+      ],
+      "all_load_align_at_least_16k": true
+    },
+    {
+      "path": "lib/x86_64/libandroidx.graphics.path.so",
+      "sha256": "4e56c996f13670e70082658de7880c4020eabf4f25e43387f88ed78a713fc9f0",
+      "pt_load_alignments": [
+        16384,
+        16384,
+        16384
+      ],
+      "all_load_align_at_least_16k": true
+    },
+    {
+      "path": "lib/x86_64/libsqlcipher.so",
+      "sha256": "482f62c4d77e136d7cb7eb30d74a5c4cbadc3577d10ced1f13f3e745e1be7e7a",
+      "pt_load_alignments": [
+        16384,
+        16384,
+        16384
+      ],
+      "all_load_align_at_least_16k": true
+    }
+  ],
+  "all_libraries_pt_load_align_at_least_16k": true,
+  "runtime_16k_device": "NOT_RUN",
+  "note": "ELF p_align inspection only; not a runtime, installation or ABI execution test."
+}

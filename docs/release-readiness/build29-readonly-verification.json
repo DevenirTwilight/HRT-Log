@@ -61,5 +61,11 @@
   "new_apk_built_or_distributed": false,
   "manifest_dump_sha256": "6a6a93b7ea2f162848c14fbdd58b9b9c1cc12ee503c28e6d0e9b541e1356202f",
   "signer_output_sha256": "f54e860c1abc52779cd40bdee82140dee0a036e886574dbc6065e34340279b63",
-  "elf_load_segment_alignment": "NOT_RUN_THIS_AUDIT"
+  "elf_load_segment_alignment": {
+    "status": "PASS_STATIC_INSPECTION",
+    "libraries": 8,
+    "all_pt_load_p_align": 16384,
+    "evidence": "build29-elf-alignment.json",
+    "device_runtime": "NOT_RUN"
+  }
 }
