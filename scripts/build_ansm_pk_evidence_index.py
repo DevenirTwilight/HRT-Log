@@ -39,6 +39,11 @@ def build():
     cohort = read('docs/pk-research/p2/p2r-cohort-evidence-ledger.json')
     return {'schema_version': 1, 'baseline': 'f1e9b4de1c97e73966b4af8900b78391eada5c43',
             'status': 'EVIDENCE_ARCHIVED_PARTIAL_REVIEW_MODEL_CHANGE_BLOCKED',
+            'current_model_loading': {
+                'legacy_top_level_status': params['status'], 'models_note': params['models_note'],
+                'actual_loader': 'pk-engine/src/main/kotlin/net/plainnotes/app/pk/FittedModels.kt: PkParams.models reads root.models',
+                'actual_consumer': 'pk-engine/src/main/kotlin/net/plainnotes/app/pk/Engine.kt: Engine.choose uses PkParams.models',
+                'status': 'LEGACY_STATUS_TEXT_IS_NOT_A_RUNTIME_GATE'},
             'model_change_authorized': False, 'clinical_accuracy_established': False,
             'official_distribution_approved': False, 'raw_clinical_text_redistributed': False,
             'official_label_references': references,

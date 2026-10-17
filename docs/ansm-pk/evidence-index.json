@@ -1,6 +1,13 @@
 {
   "baseline": "f1e9b4de1c97e73966b4af8900b78391eada5c43",
   "clinical_accuracy_established": false,
+  "current_model_loading": {
+    "actual_consumer": "pk-engine/src/main/kotlin/net/plainnotes/app/pk/Engine.kt: Engine.choose uses PkParams.models",
+    "actual_loader": "pk-engine/src/main/kotlin/net/plainnotes/app/pk/FittedModels.kt: PkParams.models reads root.models",
+    "legacy_top_level_status": "Literature values only (M4a). Not used by the engine yet; awaiting review.",
+    "models_note": "Fitted by tools/pk-fit/fit.py from the literature entries named in each model's basis; 'checks' are model outputs for comparison with the literature, recomputed by the engine's validation tests.",
+    "status": "LEGACY_STATUS_TEXT_IS_NOT_A_RUNTIME_GATE"
+  },
   "human_research_acquisition": {
     "classification": "REPOSITORY_RESEARCH_NOT_ANSM_CONCLUSIONS",
     "cohort_ledger_source": "docs/pk-research/p2/p2r-cohort-evidence-ledger.json",

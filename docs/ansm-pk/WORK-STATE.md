@@ -9,3 +9,5 @@
 尚未完成：其余官方引用及58商品RCP5.2逐项核实、完整研究方法/人群对照、独立科学复核、最终CI。新索引不把此前已暴露研究改称held-out；旧P2的0独立锁定SL队列结论以既有台账及哈希保留，不自动认证模型。真机/模型改动验收NOT_RUN，不提供建议剂量，不发布。
 
 本地维护者检查：离线索引字节复现PASS，原有Python156项PASS；没有新增拟合/治疗算法，不能把这些脚本测试叫作医学验证。18个PK/浓度源文件逐一与默认基线blob摘要相等，pk-engine/app/core/importer相对基线无任何差异。当前仍无原生或真机新功能测试（NOT_RUN），CI待提交后运行。
+
+独立草稿PR59：https://github.com/DevenirTwilight/HRT-Log/pull/59。验收源3ec00f5的push/PR六项必需CI全SUCCESS（科研深测按原条件有PASS/SKIPPED）；本PR未下载远端报告，不借其他PR的artifact当本次证据。本次增加现有参数顶层旧status与实际models加载的口径核查、来源点击链接及CI状态归档，未改生产参数或源文件；索引字节复现PASS。新证据提交需自己的最终六CI。尚未全面核实其余标签、58产品及研究方法，独立科学审查PENDING，模型变化/官方分发仍BLOCKED，未经授权不合并。
