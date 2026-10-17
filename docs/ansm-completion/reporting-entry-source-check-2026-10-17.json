@@ -1,0 +1,12 @@
+{
+  "requested_url": "https://signalement.social-sante.gouv.fr/",
+  "retrieved_at_utc": "2026-10-17T15:29:24.151173+00:00",
+  "scope": "MAINTAINER_ONLY_NO_APP_NETWORK",
+  "verification": "UNVERIFIED",
+  "error": "HTTP Error 500: Internal Server Error",
+  "account_requirement": "UNVERIFIED",
+  "patient_or_professional_flow": "UNVERIFIED",
+  "medical_content_review": "NOT_RUN",
+  "navigation_in_app": "NOT_IMPLEMENTED",
+  "http_status": 500
+}

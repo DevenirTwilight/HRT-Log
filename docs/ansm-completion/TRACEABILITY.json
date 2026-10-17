@@ -71,17 +71,17 @@
       "corrected_scope": "按原节执行；不得把未完成工程归因于许可。后节新事实优先，不覆盖既有安全门。",
       "stage": "P4",
       "affected_product_or_dataset": "ANSM selected FR snapshot / user-entered references / legacy and exact stock",
-      "implementation_path": "docs/ansm-integration/WORK-STATE.md",
+      "implementation_path": "docs/ansm-integration/p4/work-state.md",
       "test_id": [],
       "pr_url": "https://github.com/DevenirTwilight/HRT-Log/pull/57",
       "source_url": [],
       "source_date": null,
       "review_status": "UNREVIEWED",
-      "result_status": "NOT_IMPLEMENTED",
+      "result_status": "PRODUCTION_BLOCKED",
       "blocker": "",
       "owner_decision_required": false,
       "progress": "IN_PROGRESS",
-      "note": "节级初始追踪，不代表逐声明或功能验收；后续补字段/产品/测试级子项。"
+      "note": "P4 Room12/业务11、真实内部Repository、冻结修订/逆操作/后实盘协调与UNKNOWN保护已编码；data390/shared114 JVM及原生编译PASS，前三轮原生大库FAIL（39045008821仍实际heap384m），实际ART配置与报告留存修正待原生重跑，最终CI待验；App入口OFF，不能标阶段完成。"
     },
     {
       "requirement_id": "V4.04",
@@ -111,17 +111,17 @@
       "corrected_scope": "按原节执行；不得把未完成工程归因于许可。后节新事实优先，不覆盖既有安全门。",
       "stage": "ANSM04",
       "affected_product_or_dataset": "ANSM selected FR snapshot / user-entered references / legacy and exact stock",
-      "implementation_path": "",
+      "implementation_path": "https://github.com/DevenirTwilight/HRT-Log/tree/fda7782c81f81481e93688fe62bd2788c8be5f47/docs/ansm04",
       "test_id": [],
-      "pr_url": "",
+      "pr_url": "https://github.com/DevenirTwilight/HRT-Log/pull/58",
       "source_url": [],
       "source_date": null,
       "review_status": "UNREVIEWED",
-      "result_status": "NOT_IMPLEMENTED",
+      "result_status": "PRODUCTION_BLOCKED",
       "blocker": "",
       "owner_decision_required": true,
-      "progress": "NOT_STARTED",
-      "note": "节级初始追踪，不代表逐声明或功能验收；后续补字段/产品/测试级子项。"
+      "progress": "IN_PROGRESS",
+      "note": "04A已实现只读分栏/证据DTO/显式安全导航，91项本地和384图，Python160；58/64/96逐商品台账。最终CI待验，真实原生MainActivity浏览器/TalkBack NOT_RUN。04B原文/正式注册表未实现、临床与版权审查未放行。"
     },
     {
       "requirement_id": "V4.06",
@@ -711,17 +711,17 @@
       "corrected_scope": "按原节执行；不得把未完成工程归因于许可。后节新事实优先，不覆盖既有安全门。",
       "stage": "ANSM06",
       "affected_product_or_dataset": "ANSM selected FR snapshot / user-entered references / legacy and exact stock",
-      "implementation_path": "",
+      "implementation_path": "docs/ansm-completion/BDPM-DATASET-INVENTORY.md",
       "test_id": [],
       "pr_url": "",
       "source_url": [],
       "source_date": null,
       "review_status": "UNREVIEWED",
-      "result_status": "NOT_IMPLEMENTED",
+      "result_status": "PRODUCTION_BLOCKED",
       "blocker": "",
       "owner_decision_required": true,
-      "progress": "NOT_STARTED",
-      "note": "节级初始追踪，不代表逐声明或功能验收；后续补字段/产品/测试级子项。"
+      "progress": "IN_PROGRESS",
+      "note": "已记录实际字段12及原值Oui508/Non15375的下载观察；冻结目录不含该字段，逐商品台账明确NOT_COVERED。产品级原值/四语临床审阅与正式展示未完成，不推断无加强监测。"
     },
     {
       "requirement_id": "V4.36",
@@ -731,7 +731,7 @@
       "corrected_scope": "按原节执行；不得把未完成工程归因于许可。后节新事实优先，不覆盖既有安全门。",
       "stage": "ANSM06",
       "affected_product_or_dataset": "ANSM selected FR snapshot / user-entered references / legacy and exact stock",
-      "implementation_path": "",
+      "implementation_path": "docs/ansm-completion/reporting-entry-source-check-2026-10-17.json",
       "test_id": [],
       "pr_url": "",
       "source_url": [],
@@ -740,8 +740,8 @@
       "result_status": "NOT_IMPLEMENTED",
       "blocker": "",
       "owner_decision_required": true,
-      "progress": "NOT_STARTED",
-      "note": "节级初始追踪，不代表逐声明或功能验收；后续补字段/产品/测试级子项。"
+      "progress": "IN_PROGRESS",
+      "note": "2026-10-17维护者实际访问给定公众入口HTTP500；可用性/账户/患者流程UNVERIFIED。未接App、无自动报送，不以公告功能冒充报告路径。"
     },
     {
       "requirement_id": "V4.37",
@@ -771,17 +771,17 @@
       "corrected_scope": "按原节执行；不得把未完成工程归因于许可。后节新事实优先，不覆盖既有安全门。",
       "stage": "CROSS_CUTTING",
       "affected_product_or_dataset": "ANSM selected FR snapshot / user-entered references / legacy and exact stock",
-      "implementation_path": "",
+      "implementation_path": "https://github.com/DevenirTwilight/HRT-Log/tree/fda7782c81f81481e93688fe62bd2788c8be5f47/app/src/main/java/net/plainnotes/app/reference",
       "test_id": [],
-      "pr_url": "",
+      "pr_url": "https://github.com/DevenirTwilight/HRT-Log/pull/58",
       "source_url": [],
       "source_date": null,
       "review_status": "UNREVIEWED",
-      "result_status": "NOT_IMPLEMENTED",
+      "result_status": "PRODUCTION_BLOCKED",
       "blocker": "",
       "owner_decision_required": false,
-      "progress": "NOT_STARTED",
-      "note": "节级初始追踪，不代表逐声明或功能验收；后续补字段/产品/测试级子项。"
+      "progress": "IN_PROGRESS",
+      "note": "04A已实现显式二次确认、严格公共URL、MainActivity既有状态只读检查和无extra Intent；四语文案承认浏览器/后续重定向边界。取消/无权限/无浏览器/URI攻击测试PASS；最终CI与真实原生导航尚未验收。"
     },
     {
       "requirement_id": "V4.39",
@@ -972,5 +972,6 @@
       "progress": "IN_PROGRESS",
       "note": "docs/ansm-integration/p4/performance/large-coverage-1a75c5b/evidence.json; failed baseline retained, no threshold relaxation"
     }
-  ]
+  ],
+  "checkpoint": "2026-10-17 dd7e61c P4 pending native performance / fda7782 independent04A draft"
 }

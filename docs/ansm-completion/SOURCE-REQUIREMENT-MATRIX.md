@@ -45,3 +45,11 @@
 |V4.38|CROSS_CUTTING|外部浏览器、身份与网络边界的技术性更正|NOT_IMPLEMENTED / NOT_STARTED|
 |V4.39|ANSM05|最终临床内容、来源与发布开关的“三向一致”闸门|NOT_IMPLEMENTED / NOT_STARTED|
 |V4.40|GOVERNANCE|V4 范围封口：解决已确认缺陷，不允许无限扩需求|EVIDENCE_ONLY / IN_PROGRESS|
+
+## 当前可追溯增量（2026-10-17）
+
+- P4 #57/dd7e61c：内部真实流程及兼容已编码并本地390项通过；原生性能前三轮FAIL、实际ART配置与阶段日志修正待重跑，最终六CI待验，PRODUCTION_BLOCKED。
+- 04A #58/fda7782：四语只读资料入口/安全导航，91项与384图及Python160通过；58/64/96逐商品台账完整，正式临床内容和资源OFF，最终CI待验。
+- 06公众报告入口本次HTTP500，来源可用性UNVERIFIED、App功能NOT_IMPLEMENTED。
+
+上述是局部实际进展，不关闭节级全部要求。原表为初始记录；机器表对应条目已补最新证据与未完成项。

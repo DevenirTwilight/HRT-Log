@@ -1,5 +1,11 @@
 # ANSM V4 当前基线
 
+当前检查点（2026-10-17）：实际默认仍f1e9b4de1c97e73966b4af8900b78391eada5c43 / Room11 / 业务10。#57最新dd7e61c64768ce562ea4ee5a9a94607293a949ce，仍OPEN/DRAFT；候选Room12/业务11、全局审计、精确恢复、真实内部Repository、更正/独立协调、共享UNKNOWN保护已经实现，本地data390/shared114与原生源码编译PASS。原生大库前三轮FAIL（第三轮实际heap384m），修正待原生重跑；最终六CI尚未闭环，App精确写入口OFF、P5/P6 NOT_IMPLEMENTED。不能把以下历史里程碑当当前缺失项或验收结果。
+
+独立ANSM-04A草稿#58当前fda7782：四语只读RCP/Notice分栏、证据DTO和显式公共产品页安全导航；选定91项/384张合成截图及离线Python160 PASS，逐商品58/64/96覆盖台账已提交。正式临床资源OFF、04B/05/06/PK索引未完成，04A最终CI待验、实机/TalkBack NOT_RUN。没有发布或APK交付。
+
+## 历史检查点（保留其当时的源码与范围）
+
 2026-10-17。实取证据：[JSON](baseline-evidence-2026-10-17.json)。
 
 默认分支 `claude/new-session-1959qb`：`f1e9b4de1c97e73966b4af8900b78391eada5c43`；运行Room11 / PNBAK1业务10。P0–P3及#45/#48/#50已合并，不重复开发。

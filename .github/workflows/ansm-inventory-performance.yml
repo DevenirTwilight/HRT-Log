@@ -5,6 +5,7 @@ on:
       - '.github/workflows/ansm-inventory-performance.yml'
       - 'scripts/*ansm*native*performance.py'
       - 'scripts/configure_ansm_low_memory_avd.py'
+      - 'scripts/configure_ansm_native_runtime.py'
       - 'docs/ansm-integration/p4/performance/**'
       - 'core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt'
       - 'core/data/src/main/java/net/plainnotes/app/data/ReferencePayload.kt'
@@ -44,6 +45,7 @@ jobs:
           pre-emulator-launch-script: python3 scripts/configure_ansm_low_memory_avd.py
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -memory 512 -qemu -m 512
           script: |
+            python3 scripts/configure_ansm_native_runtime.py
             python3 scripts/run_ansm_native_performance.py
       - name: Remove generated test source
         if: always()

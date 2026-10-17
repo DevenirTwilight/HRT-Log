@@ -28,7 +28,7 @@ def diagnostics():
     properties['MemTotal'] = next((line for line in memory.splitlines() if line.startswith('MemTotal:')), 'UNKNOWN')
     (folder/'environment.json').write_text(json.dumps(properties,indent=2)+'\n')
     with (folder/'synthetic-crash-log.txt').open('w') as output:
-        capture = subprocess.Popen(['adb','logcat','-v','threadtime','-s','AndroidRuntime:E','libc:F','DEBUG:F','lowmemorykiller:I','ActivityManager:W'],stdout=output,stderr=subprocess.STDOUT)
+        capture = subprocess.Popen(['adb','logcat','-v','threadtime','-s','AndroidRuntime:E','libc:F','DEBUG:F','lowmemorykiller:I','ActivityManager:I','ANSM_PERF:I'],stdout=output,stderr=subprocess.STDOUT)
         try:
             return run()
         finally:

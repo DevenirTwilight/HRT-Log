@@ -1,0 +1,30 @@
+{
+  "status": "LOCAL_VALIDATION_PASS_NATIVE_PENDING",
+  "production_source_baseline": "617c9dd8636b386676ebd4a2166fccd27f162d3a",
+  "python": {
+    "tests": 168,
+    "failures": 0,
+    "errors": 0
+  },
+  "native_source_compile": "PASS",
+  "native_runtime_configuration": "NOT_RUN",
+  "budgets_changed": false,
+  "synthetic_size_changed": false,
+  "source_sha256": {
+    "scripts/configure_ansm_native_runtime.py": "90aad2be8ce7ee36ec27b4e81988ca1ad69bc003572f3b043a36d87424cf3907",
+    "scripts/collect_ansm_native_performance.py": "9a41d75a8581a0dc0280efb37e5bd1deb3e41b3d8f4f02a1b7487116ab4cd77b",
+    "scripts/prepare_ansm_native_performance.py": "6a84e741d769c9f0989d39444ab7a23cdcd7706d11109cb383ac255ac13717f2",
+    "scripts/run_ansm_native_performance.py": "b5de04bbd60f61650e02b16f7e319049853b09dcc57d42583a2755fe59a2f17e",
+    "scripts/test_ansm_native_performance.py": "acf99de04ea61127a30d6176f3969de722424d9197496e64a46988b5da5ce924",
+    ".github/workflows/ansm-inventory-performance.yml": "1402e87a41713f25eadd7e13728fa96532937b6a1eda04358b0357ebc573497f"
+  },
+  "log_sha256": {
+    "/tmp/ansm-p4-native-runtime-python.log": "e2d59006700ed3bac062c148db91e7d72ca7f3e014731c67554ee1477a8205a3",
+    "/tmp/ansm-p4-native-runtime-compile.log": "fda740e602bc25c2d0655804cdbc1f780cdac1f3af8e712712b1e9a80288a308"
+  },
+  "generated_source": {
+    "source_sha256": "9313167178989def0d4d89d785f84cdde764fba21033543cdf85e472c5511242",
+    "native_sha256": "6248ad409bf68cc5bc5e9db298dc97d079fe0568a3bd5e3fae9d509fcf72f7f5",
+    "status": "GENERATED_NOT_RUN"
+  }
+}
