@@ -1,5 +1,7 @@
 # P4 工作状态
 
+2026-10-17 混合包装：真实旧unscheduled静默扣旧包装负例FAIL后，正式Repository四处分配入口增加显式物理用量门，低层旧算法和所有原断言保持。初放底层导致原兼容断言FAIL，已归档并移回入口。完整data365/共享90、原生源码编译PASS；新90实际原生NOT_RUN。db1ef03三API原生82实际PASS且制品SHA/CRC核验，见revision-ci-evidence.json。当前P4计划服药及后实盘协调仍未完，#57 DRAFT。
+
 2026-10-17 共享UNKNOWN/生命周期检查点：data362（共享87）、reminder21、App选定40和Python159本地PASS；原生测试源码编译PASS，新增87三API实际运行仍待验。四项实际红例已归档，旧无票据VOID/RESTORE被禁止操作精确包装，独立有票据生命周期和ABA/UUID隔离已通过。库存/日历/提醒不再把整数quanta或未知开封期限解释为当前药物mg/确定天数/有效期；四语中性UNKNOWN UI不启用旧写入口。四语/320和411dp/1×2×/深浅/三对比度矩阵32项PASS，实际生成192张合成截图；已人工检查法语320dp大字高对比库存及繁中320dp大字主页样图，无确定药量/天数或写按钮。真机/TalkBack/断电NOT_RUN。db1ef03六项必需CI均SUCCESS（不代表新未提交源码CI通过）；主线仍f1e9b4d，#57 DRAFT。见unknown-lifecycle-contract.md与local/red证据。后续先完成实际计划服药和后实盘独立协调，不能以安全拒绝代替完整流程。
 
 2026-10-17 新检查点：实际Repository服药事务/幂等/ALREADY_ACCOUNTED/UNKNOWN/未关联物理量持久化、零差额和ABA票据失效的完整data349/共享75/原生源码编译/Python159 PASS。新75原生、当前实际接线后的App回归NOT_RUN。正式UI仍OFF；修订/删除/恢复/实盘票据及统一预测待完成。见actual-use-local-evidence.json。

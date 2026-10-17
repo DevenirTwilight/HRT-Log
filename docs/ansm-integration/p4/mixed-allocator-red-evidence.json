@@ -1,0 +1,21 @@
+{
+  "status": "FAIL_EXPECTED",
+  "totals": {
+    "tests": 2,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "name": "legacyActualUseCannotSilentlyChooseScalarStockWhenTypedStockAlsoExists",
+      "failure": "java.lang.AssertionError: Old allocator silently selected legacy stock without actual-package confirmation"
+    },
+    {
+      "name": "oldAllocatorCannotAddScalarConsumptionToAnExplicitUnknownStockEffect",
+      "failure": null
+    }
+  ],
+  "log_sha256": "601065eced23e9637de4800a6c1f15816992ce7abeb2659cd97c6aedb7c022d1",
+  "initial_fixture_compile_failure": "insertContainer was initially called as container; fixture corrected before running assertions, no production code was modified to manufacture the failure."
+}

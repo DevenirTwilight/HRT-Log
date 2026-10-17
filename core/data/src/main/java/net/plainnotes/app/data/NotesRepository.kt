@@ -255,7 +255,7 @@ const val BACKFILL_MAX_DAYS=731L
             }
             Trash.RECORD->{val r=requireNotNull(dao.recordById(t.ref.toLong()));require(r.deleted_at_utc!=null)
                 val back=r.copy(deleted_at_utc=null,revision=r.revision+1);dao.updateRecord(back)
-                if(back.status in listOf("ON_TIME","LATE"))SupplyLedger.allocate(dao,dao.recordById(back.id)!!)}
+                if(back.status in listOf("ON_TIME","LATE"))allocateLegacyActualUse(dao,dao.recordById(back.id)!!)}
             Trash.PERIOD->{
                 val all=dao.historyPeriods();val deleted=HistoryPeriods.userEdits(all).filter{it.group_key==t.ref}
                 val users=HistoryPeriods.userEdits(all).filter{it.kind==HistoryPeriods.PERIOD && it.group_key!=t.ref};val versions=dao.regimens()
@@ -519,6 +519,14 @@ const val BACKFILL_MAX_DAYS=731L
         dao.updateRecord(record.copy(rule_version_id=slot.ruleId,slot_key=key,scheduled_utc=slot.at.toEpochMilli(),scheduled_zone=slot.zone.id,
             planned_dose=slot.dose,late_after_minutes_snapshot=slot.lateMinutes,status=status,revision=record.revision+1))
     }
+    /** User entry guard: clinical dose alone never selects a physical package in mixed stock. */
+    private suspend fun allocateLegacyActualUse(dao:NotesDao,record:RecordEntity):Double {
+        val measured=dao.measuredContainerIds().toSet()
+        require(dao.containers().none {it.medication_id==record.medication_id && it.id in measured}) {
+            "Mixed or measured stock requires explicit physical-use confirmation"
+        }
+        return SupplyLedger.allocate(dao,record)
+    }
     suspend fun complete(slot:Slot,taken:Instant,dose:Double,site:String?=null)=transactionWithSql { dao, raw ->
         val existing=dao.records().singleOrNull{it.slot_key==slot.key}
         if(existing?.status in listOf("ON_TIME","LATE"))return@transactionWithSql
@@ -526,7 +534,7 @@ const val BACKFILL_MAX_DAYS=731L
         val status=ScheduleEngine.complete(slot,taken,ZoneId.systemDefault(),dose).status.name
         val result=recordFor(dao,slot,status,taken,dose).copy(unallocated_supply_amount=dose,site=site?.takeIf{it.isNotBlank()})
         val id=if(existing==null)dao.record(result) else {dao.updateRecord(result.copy(id=existing.id,revision=existing.revision+1,config_snapshot=existing.config_snapshot));existing.id}
-        val remaining=SupplyLedger.allocate(dao,dao.recordById(id)!!)
+        val remaining=allocateLegacyActualUse(dao,dao.recordById(id)!!)
 
         ReferenceStore.captureContext(raw,dao.recordById(id)!!)
         remaining
@@ -567,7 +575,7 @@ const val BACKFILL_MAX_DAYS=731L
         val snap=MedicationSnapshot.encode(m,dao.profile(id))
         val rid=dao.record(RecordEntity(medication_id=id,taken_utc=taken.toEpochMilli(),taken_zone=ZoneId.systemDefault().id,actual_dose=dose,unallocated_supply_amount=dose,site=site?.takeIf{it.isNotBlank()},
             status="ON_TIME",origin="APP",revision=1,config_snapshot=snap))
-        SupplyLedger.allocate(dao,dao.recordById(rid)!!)
+        allocateLegacyActualUse(dao,dao.recordById(rid)!!)
         ReferenceStore.captureContext(raw,dao.recordById(rid)!!)
         if(extra)dao.insertAnnotation(RecordAnnotationEntity(rid,HistoryPeriods.EXTRA,System.currentTimeMillis()))
     }
@@ -775,7 +783,7 @@ const val BACKFILL_MAX_DAYS=731L
         SupplyLedger.reverse(dao,id)
         val late=r.scheduled_utc?.let{s->r.late_after_minutes_snapshot?.let{l->taken.toEpochMilli()>s+l*60_000L}} ?: false
         val next=r.copy(taken_utc=taken.toEpochMilli(),taken_zone=ZoneId.systemDefault().id,actual_dose=dose,status=if(late)"LATE" else "ON_TIME",revision=r.revision+1)
-        dao.updateRecord(next);SupplyLedger.allocate(dao,dao.recordById(id)!!)
+        dao.updateRecord(next);allocateLegacyActualUse(dao,dao.recordById(id)!!)
     }
     /** Soft-deletes a taken intake; a scheduled slot becomes due again and may later be marked missed. */
     suspend fun deleteRecord(id:Long,now:Instant=Instant.now())=transaction { dao ->

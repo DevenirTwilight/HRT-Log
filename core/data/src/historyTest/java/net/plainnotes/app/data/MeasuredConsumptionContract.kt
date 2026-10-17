@@ -1187,4 +1187,33 @@ abstract class MeasuredConsumptionContract {
         assertEquals(1,count("supply_transaction"))
     }
 
+    @Test fun legacyActualUseCannotSilentlyChooseScalarStockWhenTypedStockAlsoExists()=runBlocking {
+        val m=med();val exact=box(m);val repo=repository()
+        val legacy=db.dao().insertContainer(ContainerEntity(medication_id=m,capacity=20.0,initial_used_amount=0.0,used_amount=0.0,opened_on=null,state="SEALED"))
+        val before=RawData.dump(raw).toString()
+        try {repo.unscheduled(m,at,0.125);fail("Old allocator silently selected legacy stock without actual-package confirmation")}
+        catch(e:IllegalArgumentException){assertTrue(e.message.orEmpty().contains("physical-use"))}
+        assertEquals(before,RawData.dump(raw).toString())
+        assertEquals(0.0,db.dao().container(legacy).used_amount,0.0)
+        assertEquals(0.0,db.dao().container(exact.container.id).used_amount,0.0)
+    }
+    @Test fun oldAllocatorCannotAddScalarConsumptionToAnExplicitUnknownStockEffect()=runBlocking {
+        val m=med();val b=box(m);val repo=repository()
+        val saved=repo.recordMeasuredUse(repo.measuredWriteTicket(b.scope,m),UUID.randomUUID().toString(),actual(b,MeasuredStockEffect.UNKNOWN),at)
+        val before=RawData.dump(raw).toString()
+        try {db.withTransaction{SupplyLedger.allocate(db.dao(),saved.record)};fail("A second allocator accepted an explicitly captured unknown stock effect")}
+        catch(e:IllegalArgumentException){assertTrue(e.message.orEmpty().contains("physical-use"))}
+        assertEquals(before,RawData.dump(raw).toString());assertEquals(0,count("supply_transaction"))
+    }
+
+    @Test fun typedStockOfAnotherMedicationDoesNotBlockLegacyOnlyActualUse()=runBlocking {
+        val measured=med();box(measured)
+        val legacyMed=med("SYNTHETIC legacy-only medication")
+        val id=db.dao().insertContainer(ContainerEntity(medication_id=legacyMed,capacity=20.0,initial_used_amount=0.0,used_amount=0.0,opened_on=null,state="SEALED"))
+        repository().unscheduled(legacyMed,at,0.125)
+        assertEquals(0.125,db.dao().container(id).used_amount,0.0)
+        assertEquals(1,count("dose_record"));assertEquals(1,count("supply_transaction"));assertEquals(0,count("measured_operation"))
+        assertEquals(legacyMed,db.dao().records().single().medication_id)
+    }
+
 }

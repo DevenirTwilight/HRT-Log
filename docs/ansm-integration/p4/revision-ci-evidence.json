@@ -1,0 +1,85 @@
+{
+  "status": "PASS",
+  "head": "db1ef03f3c030a88c2b83cd108e4763d8455825c",
+  "workflow_run": 39031948124,
+  "six_required_checks": "PASS",
+  "environment": "GitHub Android emulators / SQLCipher; not physical hardware",
+  "artifacts": [
+    {
+      "artifact_id": 12100489389,
+      "name": "attachment-poc-api26",
+      "sha256": "aec96a1bc506c6648ed2d3be93a3d872e494db3f6b50803138c0eae4541e7b07",
+      "digest_verified": true,
+      "crc_verified": true,
+      "apk_present": false,
+      "reports": {
+        "core/data/build/reports/androidTests/connected/debug/index.html": {
+          "tests": 209,
+          "failures": 0,
+          "skipped": 0
+        },
+        "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.MeasuredConsumptionAndroidTest.html": {
+          "tests": 82,
+          "failures": 0,
+          "skipped": 0
+        },
+        "app/build/reports/androidTests/connected/debug/flavors/full/index.html": {
+          "tests": 70,
+          "failures": 0,
+          "skipped": 0
+        }
+      }
+    },
+    {
+      "artifact_id": 12101111678,
+      "name": "attachment-poc-api29",
+      "sha256": "55a81f2a1e6ffc0f76e7ce34eb93e2cc4e9edcded9c758624bdc18d40c5c64c2",
+      "digest_verified": true,
+      "crc_verified": true,
+      "apk_present": false,
+      "reports": {
+        "core/data/build/reports/androidTests/connected/debug/index.html": {
+          "tests": 209,
+          "failures": 0,
+          "skipped": 0
+        },
+        "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.MeasuredConsumptionAndroidTest.html": {
+          "tests": 82,
+          "failures": 0,
+          "skipped": 0
+        },
+        "app/build/reports/androidTests/connected/debug/flavors/full/index.html": {
+          "tests": 70,
+          "failures": 0,
+          "skipped": 0
+        }
+      }
+    },
+    {
+      "artifact_id": 12100664153,
+      "name": "device-test-results",
+      "sha256": "dbcf79889a870d4d76de0b1b866e7180b05af80c7a3e99a4e50f939067afdcda",
+      "digest_verified": true,
+      "crc_verified": true,
+      "apk_present": false,
+      "reports": {
+        "core/data/build/reports/androidTests/connected/debug/index.html": {
+          "tests": 276,
+          "failures": 0,
+          "skipped": 0
+        },
+        "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.MeasuredConsumptionAndroidTest.html": {
+          "tests": 82,
+          "failures": 0,
+          "skipped": 0
+        },
+        "app/build/reports/androidTests/connected/debug/flavors/full/index.html": {
+          "tests": 264,
+          "failures": 0,
+          "skipped": 8
+        }
+      }
+    }
+  ],
+  "new87_runtime": "NOT_RUN"
+}
