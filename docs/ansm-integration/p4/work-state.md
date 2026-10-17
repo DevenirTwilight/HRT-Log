@@ -68,7 +68,7 @@ Room12检查点0843450六项CI在push/PR全部SUCCESS；当前仍DRAFT，不以�
 
 暂存库复用最终本地验证PASS：data309/domain140、共享35、原生源码编译、PeriodStability5、PrivacyNoticeFacts3、Python157；所有实际运行零失败/错误/跳过。应用首个筛选只匹配PeriodStability，未把不存在的PrivacyBoundaryTest计为通过；随后明确补跑真实PrivacyNoticeFactsTest并保存独立XML摘要。源哈希/日志摘要见staging-local-evidence.json。共享SQL拒绝数值列文本，不恢复本地epoch，不修改源/暂存业务数据；PK、正式恢复、备份版本、数据库版本、预测及Manifest相对c7均无改动。当前提交新CI待验；继续全局候选恢复校验，#57保持DRAFT。
 
-续作§104已归档原文及SHA256（5128e10f…49c8）。10480c6最新六CI全PASS，三API共享35项实际PASS，见staging-ci-evidence.json。全局扫描首轮共享40 PASS；UNKNOWN无流水伪造与未来同余额实盘头两项负例均实际FAIL并留证。正在补序列化操作因果链并跑共享41，新源码尚未验收，正式恢复/入口继续OFF；下一步不停止为单容器研究报告，按global-audit-progress.md完成全局/恢复/真实接线。
+续作原§104（现§105）已归档原文及SHA256（5128e10f…49c8）。10480c6最新六CI全PASS，三API共享35项实际PASS，见staging-ci-evidence.json。全局扫描首轮共享40 PASS；UNKNOWN无流水伪造与未来同余额实盘头两项负例均实际FAIL并留证。正在补序列化操作因果链并跑共享41，新源码尚未验收，正式恢复/入口继续OFF；下一步不停止为单容器研究报告，按global-audit-progress.md完成全局/恢复/真实接线。
 
 因果链候选41项共享JVM已PASS（global-chain-green-evidence.json）；未来头负例在重算链摘要仍合法后拒绝。新增修订号4294967297被getInt截成1、无分配真实剂量与冻结输入不一致两项负例实际FAIL（global-record-red-evidence.json），已补Int上界/同revision原事实精确位比对，43项共享回归正在运行。当前仍非完整全域/退役/备份接受验收，旧默认PRODUCT-only守卫保留。
 

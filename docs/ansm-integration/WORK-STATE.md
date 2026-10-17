@@ -1,3 +1,9 @@
+## 2026-10-17 主线 CI 修复合并与本地最终补证
+
+#63 由负责人已启用的自动合并流程合入 d13048b18ad15eb4e7aba70f63c3c5d94a705660；源80c31ce最终六CI均成功。已校验CI工件SHA/CRC：reminder20、data243均0fail/skip，app1379零fail、205既有skip。主线新复验39065037526尚在跑，不能称主线复验完成。P4 已同步这份已合并修复，保留双方 HANDOFF。
+
+a3e95e4 本地最终 native 源码编译、Period5、Privacy3 PASS；最终 JVM 大库审计1974ms、预测2337ms、恢复6303ms、三次写入2625/2352/2415ms，峰值475205928B，仍DIAGNOSTIC_ONLY。低内存原生39064593821待结果。优化前bfcec65重复原生 FAIL，新增恢复151970ms超120s；完整报表及SHA/CRC已归档，不只挑选较好的一次。P4_BLOCKED，正式入口OFF。
+
 ## 2026-10-17 P4 审计热点优化提交
 
 保留原始提前行数门后，最终本地 data402 零失败/零跳过；Python168 PASS。单构建器 canonical 以冻结旧编码器作字节/SHA 对照；候选列检查保留所有类型/行数/UTF8预算，批量扫描；候选来源检查仅事务内有界复用完整文本。新3项 shared 负向测试复用原生 SQLCipher runner，未削弱旧断言。先前中间版 Android 源码编译成功，最终重编译/原生预算与六CI待跑。中间 JVM 大库审计1916ms、三次写入2369/2534/2267ms，DIAGNOSTIC_ONLY，不冒充 API26。

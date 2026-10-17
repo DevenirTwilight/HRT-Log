@@ -1,3 +1,7 @@
+## 主线 CI 修复已合并；P4 准入仍待实测 — 2026-10-17
+
+#63 自动合并为 d13048b，源80c31ce六项必需CI全部成功并核验工件；合并后主线复验仍在跑。P4 同步已合并修复，仅解决 HANDOFF 并保留双方记录。a3e95e4 最终 data402/Python168/Period5/Privacy3/原生源码编译成功，低内存原生性能仍待 run39064593821，不称 P4 已完成。阶段证据见 [集成账本](ansm-integration/WORK-STATE.md)。未重新发布、未开精确库存入口，P5/P6仅审计/待开发。
+
 ## P4 批量审计与后端收尾 — 2026-10-17
 
 新增优化/负向验证已通过最终本地 data402、Python168；原生和最终 CI 尚待跑，不得称 P4 已完成或合并。完整失败证据、范围与当前报告见 [集成账本](ansm-integration/WORK-STATE.md)。#63 独立 CI 修复由 Claude 负责；#64 是仅文档 Beta NO-GO 清单，无发布授权。P5 完成真实代码接线审计，未实施 gateway/UI 写入，不重画 Claude UI，也未启用附件。官方资源/PK/发行边界不变。
@@ -5,6 +9,13 @@
 ## ANSM 后端收尾续作 — 2026-10-17
 
 #57 合入最新默认 35600a0，保留 build29 发布账本与 Claude 八张 REFERENCE_ONLY 图。新任务见 REQUIREMENTS §107；旧 P4/V4 编号顺延 §105/106，主线发布 §104 不变。CI 修复 #63 已由 Claude 负责，避免重复开发。原生性能第五次运行完整 FAIL，四项超时；准确指标见 [阶段账本](ansm-integration/WORK-STATE.md) 及 performance/native-fifth-report.json。当前 P4_BLOCKED，正式精确库存入口 OFF，P5/P6 未实施，未发布。
+
+## CI：Robolectric 离线依赖（PR #63）— 2026-10-17
+
+- 主线 34f0e01 的 android 任务中 core:reminder 五个测试类因 Robolectric 运行期下载 android-all 失败（MavenArtifactFetcher/FileNotFoundException）；同代码 64db9b4 全绿，差异仅文档，判定为外部下载失败。
+- 修复：根 `robolectricJars` 任务由 Gradle 解析 SDK 26/28/29/31/35 的 android-all-instrumented，CI 传 `-ProbolectricDir` 离线运行；不改测试。本地离线 reminder 20/20、data 243/243、app 1379（0 失败，205 为既有环境门控 skip）；空目录负向确认会失败而非联网。
+- 以后 @Config 新增 SDK 或升级 Robolectric，须同步更新根 build.gradle.kts 里的版本列表。
+- #62 已合并，主线 Release 校验 run 39062691250 成功（线上附件与 tag 指向 76627bfe 一致）。
 
 ## 公开 Release v0.2.0 重建（REQUIREMENTS §104）— 2026-10-17
 
