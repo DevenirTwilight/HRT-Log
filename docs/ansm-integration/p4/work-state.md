@@ -1,5 +1,7 @@
 # P4 工作状态
 
+2026-10-17 最新后实盘协调：内部真实更正/删除入口要求逐包装当前实盘确认，追加明确非实盘的最小账本桥接、原量REVERSE、真实最终观察及临床修订，不改原流水；所有前缀保留0…capacity守卫。15新合同PASS，完整data388/共享113、原生源码编译、App Period5/Privacy3 PASS。有效重算摘要/执行链后的改目标、孤立桥接、缺失零差额观察均拒绝；六故障点全回滚，异规格独立、UNKNOWN、删除恢复/加密备份、过期票据/DECOY均覆盖。初全量唯一失败是构建期间夹具改动导致旧未启用版本被编译，字节码已核实并固定输入重跑，原证据保留。dfb0b15六CI及三API共享98均PASS并验证SHA/CRC，见scheduled-ci-evidence.json。新增113原生/最终HEAD CI未验；App写入口仍OFF，性能/P5/P6待完成，#57 DRAFT。下一步实际跑长期合成诊断。
+
 2026-10-17 最新计划服药检查点：完整data373（共享98）、Android测试源码编译、App PeriodStability5/PrivacyNoticeFacts3全部PASS；计划服药8项包括真实完成/MISSED补录/取消/计划量修订/UUID重试/三个故障回滚/篡改检测/加密备份/巴黎跳时，未改原断言。早期三轮夹具/辅助函数/事务调用错误如实留证。新98原生和最终HEAD六CI待验；App精确写入口OFF，后实盘协调及性能/P5/P6仍未完成，#57保持DRAFT。见scheduled-final-local-evidence.json及对应contract。
 
 2026-10-17 计划服药候选：内部scoped slot票据/真实Repository完成事务与五项共享测试已编码，验证运行中；format3冻结计划元数据摘要并纳入全局审计，原1/2保留。已有MISSED复用ID和config_snapshot，实际剂量/包装/库存效果独立。源码尚未验收、不启用UI，独立实盘协调仍未完成。

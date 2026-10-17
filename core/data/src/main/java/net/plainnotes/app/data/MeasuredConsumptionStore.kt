@@ -62,6 +62,7 @@ internal object MeasuredConsumptionStore {
             val scale=(result as MeasureResult.Success).value
             require(box.inventory_encoding==InventoryEncoding.EXACT && box.capacity==scale.capacityQuanta.toDouble() && box.initial_used_amount==0.0)
             val entries=projectionEntries(db,box.id)
+            val operationChain by lazy {MeasuredOperationChain.validate(db)}
             var used=0L;var previousId=0L;val deltas=ArrayList<Long>()
             fun same(a:Quantity,b:Quantity)=a.unit==b.unit && a.meaning==b.meaning && a.value.compareTo(b.value)==0
             for(entry in entries) {
@@ -103,6 +104,7 @@ internal object MeasuredConsumptionStore {
                     "ADJUST"->{
                         require(entry.dose_record_id==null && entry.dose_revision==null && allocation.isNull("reverses_uuid"))
                         val capture=adjustmentCapture(operation);val request=capture.request
+                        capture.bridgeFor?.let{MeasuredReconciliation.verifyBridge(db,operation,it,operationChain)}
                         require(request.getString("container_uuid")==containerUuid && request.getString("medication_uuid")==owner && request.getString("presentation_event_uuid")==event.getString("operation_uuid") && request.getString("presentation_sha256")==frozen.sha256)
                         require(capture.ledgerHead==previousId && request.getString("expected_used_quanta")==used.toString())
                         val remaining=PackageMeasurementPayload.quantity(request.getJSONObject("remaining_stock"))
@@ -119,6 +121,7 @@ internal object MeasuredConsumptionStore {
                         require(original.getString("quantity")==text && original.getString("unit")==allocation.getString("unit") && original.getString("presentation_event_uuid")==event.getString("operation_uuid"))
                         require(prior.kind=="CONSUME" && prior.id<entry.id && prior.used_delta== -entry.used_delta && entry.reversal_of_id==prior.id && entry.dose_record_id==prior.dose_record_id)
                         val input=reverseCapture(operation)
+                        if(input.has("reconciliation"))MeasuredReconciliation.verify(db,operation,input,operationChain)
                         require(input.getString("kind")=="REVERSE" && input.getString("dataset_uuid")==dataset && input.getString("medication_uuid")==owner && input.getString("record_uuid")==operation.getString("record_uuid") && input.getInt("record_revision")==operation.getInt("record_revision"))
                         require(source.getString("kind")=="CONSUME" && source.getString("dataset_uuid")==dataset && source.getString("record_uuid")==operation.getString("record_uuid") && input.getString("source_operation_uuid")==source.getString("operation_uuid") && input.getString("source_request_sha256")==source.getString("request_sha256"))
                         val sourceIds=db.query("SELECT uuid FROM measured_allocation WHERE operation_uuid=? ORDER BY uuid",arrayOf(source.getString("operation_uuid"))).use{c->buildList{while(c.moveToNext())add(c.getString(0))}}
@@ -137,7 +140,7 @@ internal object MeasuredConsumptionStore {
         } catch(e:ReferenceFailure){throw e} catch(e:Exception){fail(ReferenceError.INVALID_SOURCE)}
     }
 
-    /** Candidate whole-dataset audit. Not connected to backup acceptance or Repository. */
+    /** Full read-only audit shared by internal Repository writes, staging and exact backup restore. */
     internal fun auditStagedDataset(db:SupportSQLiteDatabase):List<AuditedStockProjection> {
         check(db.inTransaction())
         try {
@@ -209,7 +212,7 @@ internal object MeasuredConsumptionStore {
             physicalStock(frozen,scale,input)
         val operations=rows("measured_operation")
         require(operations.size<=BackupLimits.MAX_ROWS)
-        val observations=operations.filter{it.getString("kind")=="ADJUST"}.map { row ->
+        val observations=operations.filter{it.getString("kind")=="ADJUST" && adjustmentCapture(it).bridgeFor==null}.map { row ->
             val capture=adjustmentCapture(row)
             Triple(capture.request.getString("container_uuid"),chain.getValue(row.getString("operation_uuid")).sequence,capture.ledgerHead)
         }.groupBy{it.first}
@@ -293,6 +296,7 @@ internal object MeasuredConsumptionStore {
                 }
                 "ADJUST"->{
                     val capture=adjustmentCapture(op);val r=capture.request
+                    capture.bridgeFor?.let{MeasuredReconciliation.verifyBridge(db,op,it,chain)}
                     val (box,frozen)=source(r.getString("container_uuid"),r.getString("presentation_event_uuid"),r.getString("presentation_sha256"),dataset,r.getString("medication_uuid"))
                     val scaleResult=frozen.stockScale();require(scaleResult is MeasureResult.Success);val scale=scaleResult.value
                     val used=prefix(box,scale,capture.ledgerHead,chain.getValue(id).sequence);require(r.getString("expected_used_quanta")==used.toString())
@@ -315,8 +319,9 @@ internal object MeasuredConsumptionStore {
                         require(c.moveToFirst() && integer(c,0)>=op.getLong("record_revision"))
                     }
                     val originalAllocations=rows("measured_allocation","operation_uuid=?",arrayOf(originalId))
+                    if(r.has("reconciliation"))MeasuredReconciliation.verify(db,op,r,chain)
                     for(allocation in originalAllocations) {
-                        require(observations[allocation.getString("container_uuid")].orEmpty().none { observation ->
+                        require(r.has("reconciliation") || observations[allocation.getString("container_uuid")].orEmpty().none { observation ->
                             observation.second<chain.getValue(id).sequence && observation.third>=allocation.getLong("ledger_entry_id")
                         }) // An independent count containing the consumption requires explicit reconciliation.
                     }
@@ -429,13 +434,16 @@ internal object MeasuredConsumptionStore {
         }
         return MeasuredConsumptionReceipt(row.getString("operation_uuid"),request.record.uuid,request.record.revision,lines,ReferencePayload.optional(row,"unknown_reason"))
     }
-    private fun reverseCapture(row:JSONObject):JSONObject = try {
+    internal fun reverseCapture(row:JSONObject):JSONObject = try {
         val encoded=row.getString("input_json");val envelope=JSONObject(encoded)
         require(envelope.keys().asSequence().toSet()==setOf("format","request","chain") && envelope.get("format") is Int && envelope.getInt("format")==2)
         require(ReferencePayload.canonical(envelope)==encoded);MeasuredOperationChain.read(envelope)
         val input=envelope.getJSONObject("request")
-        require(input.keys().asSequence().toSet()==setOf("format","kind","dataset_uuid","medication_uuid","record_uuid","record_revision","source_operation_uuid","source_request_sha256","source_allocation_uuids"))
-        require(input.get("format") is Int && input.getInt("format")==1 && input.get("kind") is String && input.getString("kind")=="REVERSE")
+        val coordinated=input.has("reconciliation")
+        require(input.keys().asSequence().toSet()==setOf("format","kind","dataset_uuid","medication_uuid","record_uuid","record_revision","source_operation_uuid","source_request_sha256","source_allocation_uuids")+if(coordinated)setOf("reconciliation") else emptySet())
+        require(input.get("format") is Int && input.getInt("format")==if(coordinated)2 else 1)
+        require(input.get("kind") is String && input.getString("kind")=="REVERSE")
+        if(coordinated)MeasuredReconciliation.read(input.getJSONObject("reconciliation"))
         require(input.get("record_revision") is Int && input.getInt("record_revision")>0 && input.getInt("record_revision")==row.getInt("record_revision"))
         for(key in listOf("dataset_uuid","medication_uuid","record_uuid","source_operation_uuid"))require(input.get(key) is String && ReferencePayload.uuid(input.getString(key)))
         require(input.get("source_request_sha256") is String && Regex("[0-9a-f]{64}").matches(input.getString("source_request_sha256")))
@@ -448,9 +456,9 @@ internal object MeasuredConsumptionStore {
         input
     } catch(e:Exception){fail(ReferenceError.INVALID_SOURCE)}
 
-    private data class AdjustmentCapture(val request:JSONObject,val ledgerHead:Long)
+    internal data class AdjustmentCapture(val request:JSONObject,val ledgerHead:Long,val bridgeFor:String?=null)
     /** Stable user intent is distinct from the ledger head observed during the original execution. */
-    private fun adjustmentCapture(row:JSONObject):AdjustmentCapture = try {
+    internal fun adjustmentCapture(row:JSONObject):AdjustmentCapture = try {
         fun keys(json:JSONObject,expected:Set<String>)=require(json.keys().asSequence().toSet()==expected)
         fun text(json:JSONObject,key:String):String {require(json.get(key) is String);return json.getString(key)}
         fun count(json:JSONObject,key:String,max:Long):Long {
@@ -461,10 +469,13 @@ internal object MeasuredConsumptionStore {
         keys(envelope,setOf("format","request","execution","chain"));MeasuredOperationChain.read(envelope)
         require(envelope.get("format") is Int && envelope.getInt("format")==2 && ReferencePayload.canonical(envelope)==encoded)
         val request=envelope.getJSONObject("request")
-        keys(request,setOf("format","kind","stock_algorithm","conversion_algorithm","user_confirmed","dataset_uuid","medication_uuid","container_uuid","presentation_event_uuid","presentation_sha256","expected_used_quanta","expected_state","expected_opened_on","remaining_input","remaining_stock","remaining_quanta"))
-        require(request.get("format") is Int && request.getInt("format")==1 && text(request,"kind")=="ADJUST")
+        val bridge=request.has("accounting_bridge_for")
+        keys(request,setOf("format","kind","stock_algorithm","conversion_algorithm","user_confirmed","dataset_uuid","medication_uuid","container_uuid","presentation_event_uuid","presentation_sha256","expected_used_quanta","expected_state","expected_opened_on","remaining_input","remaining_stock","remaining_quanta")+if(bridge)setOf("accounting_bridge_for") else emptySet())
+        require(request.get("format") is Int && request.getInt("format")==if(bridge)2 else 1)
+        require(text(request,"kind")=="ADJUST")
+        val bridgeFor=if(bridge)text(request,"accounting_bridge_for").also{require(ReferencePayload.uuid(it))} else null
         require(text(request,"stock_algorithm")==StockQuantum.ALGORITHM && text(request,"conversion_algorithm")==Measurements.ALGORITHM)
-        require(request.get("user_confirmed") is Boolean && request.getBoolean("user_confirmed"))
+        require(request.get("user_confirmed") is Boolean && request.getBoolean("user_confirmed")== !bridge)
         for(key in listOf("dataset_uuid","medication_uuid","container_uuid","presentation_event_uuid"))require(ReferencePayload.uuid(text(request,key)))
         require(Regex("[0-9a-f]{64}").matches(text(request,"presentation_sha256")))
         require(row.getString("kind")=="ADJUST" && row.getString("dataset_uuid")==text(request,"dataset_uuid") && row.isNull("record_uuid") && row.isNull("record_revision"))
@@ -478,12 +489,15 @@ internal object MeasuredConsumptionStore {
         val converted=Measurements.add(normalized.copy(value=BigDecimal.ZERO),original)
         require(converted is MeasureResult.Success && converted.value.meaning==normalized.meaning && converted.value.unit==normalized.unit && converted.value.value.compareTo(normalized.value)==0)
         val execution=envelope.getJSONObject("execution");keys(execution,setOf("ledger_head_id"))
-        AdjustmentCapture(request,count(execution,"ledger_head_id",Long.MAX_VALUE))
+        AdjustmentCapture(request,count(execution,"ledger_head_id",Long.MAX_VALUE),bridgeFor)
     } catch(e:Exception){fail(ReferenceError.INVALID_SOURCE)}
 
     /** Inverse uses only original immutable allocation/ledger facts, never current product strength or catalogue data. */
     suspend fun reverseOriginal(database:NotesDatabase,scope:ReferenceScope,expected:RecordEntity,sourceOperation:String,
-        operationUuid:String,created:Instant):Int {
+        operationUuid:String,created:Instant):Int = reverse(database,scope,expected,sourceOperation,operationUuid,created,null)
+
+    private suspend fun reverse(database:NotesDatabase,scope:ReferenceScope,expected:RecordEntity,sourceOperation:String,
+        operationUuid:String,created:Instant,reconciliation:JSONObject?):Int {
         val db=database.openHelper.writableDatabase;check(db.inTransaction());ReferenceStore.checkScope(db,scope)
         if(!ReferencePayload.uuid(operationUuid) || !ReferencePayload.uuid(sourceOperation) || created.toEpochMilli()<0)fail(ReferenceError.INVALID_SOURCE)
         val dao=database.dao();val current=dao.recordById(expected.id) ?: fail(ReferenceError.UNKNOWN_IDENTITY)
@@ -495,6 +509,7 @@ internal object MeasuredConsumptionStore {
         val input=JSONObject().put("format",1).put("kind","REVERSE").put("dataset_uuid",scope.dataset).put("medication_uuid",owner)
             .put("record_uuid",record).put("record_revision",expected.revision).put("source_operation_uuid",sourceOperation)
             .put("source_request_sha256",source.getString("request_sha256")).put("source_allocation_uuids",JSONArray(allocationIds))
+        if(reconciliation!=null)input.put("format",2).put("reconciliation",reconciliation)
         val canonical=ReferencePayload.canonical(input);val hash=ReferencePayload.sha(canonical)
         if(ReferenceStore.row(db,"reference_event","operation_uuid=?",arrayOf(operationUuid))!=null)fail(ReferenceError.OPERATION_CONFLICT)
         ReferenceStore.row(db,"measured_operation","operation_uuid=?",arrayOf(operationUuid))?.let {old->
@@ -525,11 +540,11 @@ internal object MeasuredConsumptionStore {
         val affected=originals.associateBy{it.first.getString("container_uuid")}
         db.query("SELECT operation_uuid FROM measured_operation WHERE dataset_uuid=? AND kind='ADJUST'",arrayOf(scope.dataset)).use {c->while(c.moveToNext()) {
             val observation=adjustmentCapture(ReferenceStore.row(db,"measured_operation","operation_uuid=?",arrayOf(c.getString(0)))!!)
-            affected[observation.request.getString("container_uuid")]?.let {original->
+            if(observation.bridgeFor==null)affected[observation.request.getString("container_uuid")]?.let {original->
                 if(observation.ledgerHead>0)db.query("SELECT container_id FROM supply_transaction WHERE id=?",arrayOf(observation.ledgerHead)).use {head->
                     if(!head.moveToFirst() || head.getLong(0)!=original.third.id)fail(ReferenceError.INVALID_SOURCE)
                 }
-                if(observation.ledgerHead>=original.second.id)fail(ReferenceError.OPERATION_CONFLICT)
+                if(observation.ledgerHead>=original.second.id && reconciliation==null)fail(ReferenceError.OPERATION_CONFLICT)
             }
         }}
         ReferenceStore.insert(db,"measured_operation",JSONObject().put("operation_uuid",operationUuid).put("dataset_uuid",scope.dataset).put("record_uuid",record)
@@ -548,9 +563,13 @@ internal object MeasuredConsumptionStore {
 
     /** Explicit physical remaining-count correction. Zero is a real target, never an unknown value. */
     suspend fun adjustRemaining(database:NotesDatabase,scope:ReferenceScope,expected:ContainerEntity,containerUuid:String,
-        presentationEvent:String,presentationSha:String,remaining:Quantity,userConfirmed:Boolean,operationUuid:String,created:Instant):MeasureResult<Quantity> {
+        presentationEvent:String,presentationSha:String,remaining:Quantity,userConfirmed:Boolean,operationUuid:String,created:Instant):MeasureResult<Quantity> =
+        adjust(database,scope,expected,containerUuid,presentationEvent,presentationSha,remaining,userConfirmed,operationUuid,created,null)
+
+    private suspend fun adjust(database:NotesDatabase,scope:ReferenceScope,expected:ContainerEntity,containerUuid:String,
+        presentationEvent:String,presentationSha:String,remaining:Quantity,userConfirmed:Boolean,operationUuid:String,created:Instant,bridgeFor:String?):MeasureResult<Quantity> {
         val db=database.openHelper.writableDatabase;check(db.inTransaction());ReferenceStore.checkScope(db,scope)
-        if(!userConfirmed || !ReferencePayload.uuid(operationUuid) || created.toEpochMilli()<0)fail(ReferenceError.INVALID_SOURCE)
+        if(userConfirmed!=(bridgeFor==null) || !ReferencePayload.uuid(operationUuid) || created.toEpochMilli()<0)fail(ReferenceError.INVALID_SOURCE)
         val dao=database.dao();val identity=ReferenceStore.row(db,"reference_identity","uuid=?",arrayOf(containerUuid)) ?: fail(ReferenceError.UNKNOWN_IDENTITY)
         if(identity.getString("dataset_uuid")!=scope.dataset || identity.getString("kind")!="CONTAINER" || identity.isNull("live_handle") || identity.getLong("live_handle")!=expected.id)fail(ReferenceError.UNKNOWN_IDENTITY)
         val event=ReferenceStore.row(db,"reference_event","operation_uuid=?",arrayOf(presentationEvent)) ?: fail(ReferenceError.INVALID_SOURCE)
@@ -568,10 +587,11 @@ internal object MeasuredConsumptionStore {
         val remainingQuanta=(count as MeasureResult.Success).value
         if(expected.inventory_encoding!=InventoryEncoding.EXACT || expected.capacity!=stock.capacityQuanta.toDouble() || expected.initial_used_amount!=0.0 || !expected.used_amount.isFinite() || expected.used_amount<0 ||
             expected.used_amount>stock.capacityQuanta || expected.used_amount.toLong().toDouble()!=expected.used_amount)fail(ReferenceError.INVALID_SOURCE)
-        val input=JSONObject().put("format",1).put("kind","ADJUST").put("stock_algorithm",StockQuantum.ALGORITHM).put("conversion_algorithm",Measurements.ALGORITHM).put("user_confirmed",true).put("dataset_uuid",scope.dataset).put("medication_uuid",identity.getString("owner_uuid"))
+        val input=JSONObject().put("format",if(bridgeFor==null)1 else 2).put("kind","ADJUST").put("stock_algorithm",StockQuantum.ALGORITHM).put("conversion_algorithm",Measurements.ALGORITHM).put("user_confirmed",userConfirmed).put("dataset_uuid",scope.dataset).put("medication_uuid",identity.getString("owner_uuid"))
             .put("container_uuid",containerUuid).put("presentation_event_uuid",presentationEvent).put("presentation_sha256",presentationSha)
             .put("expected_used_quanta",expected.used_amount.toLong().toString()).put("expected_state",expected.state).put("expected_opened_on",expected.opened_on ?: JSONObject.NULL)
             .put("remaining_input",PackageMeasurementPayload.quantity(remaining)).put("remaining_stock",PackageMeasurementPayload.quantity(target)).put("remaining_quanta",remainingQuanta.toString())
+        if(bridgeFor!=null)input.put("accounting_bridge_for",bridgeFor)
         val canonical=ReferencePayload.canonical(input);val hash=ReferencePayload.sha(canonical)
         if(ReferenceStore.row(db,"reference_event","operation_uuid=?",arrayOf(operationUuid))!=null)fail(ReferenceError.OPERATION_CONFLICT)
         ReferenceStore.row(db,"measured_operation","operation_uuid=?",arrayOf(operationUuid))?.let {old->
@@ -595,7 +615,7 @@ internal object MeasuredConsumptionStore {
             .put("unallocated_quantity",JSONObject.NULL).put("unallocated_unit",JSONObject.NULL).put("unknown_reason",JSONObject.NULL).put("created_utc",created.toEpochMilli()))
         if(delta!=0L) {
             val entry=dao.supply(SupplyEntryEntity(container_id=current.id,operation_id=operationUuid,kind="ADJUST",used_delta=delta.toDouble(),
-                created_utc=created.toEpochMilli(),created_zone="UTC",reason="confirmed physical remaining count"))
+                created_utc=created.toEpochMilli(),created_zone="UTC",reason=if(bridgeFor==null)"confirmed physical remaining count" else "accounting bridge for explicit reconciliation; not a physical count"))
             ReferenceStore.insert(db,"measured_allocation",JSONObject().put("uuid",UUID.randomUUID().toString()).put("dataset_uuid",scope.dataset).put("operation_uuid",operationUuid)
                 .put("container_uuid",containerUuid).put("presentation_event_uuid",presentationEvent).put("ledger_entry_id",entry)
                 .put("quantity",(Measurements.decimalText(amount(stock,kotlin.math.abs(delta)).value) as MeasureResult.Success).value).put("unit",stock.quantum.unit.name).put("reverses_uuid",JSONObject.NULL))
@@ -603,6 +623,36 @@ internal object MeasuredConsumptionStore {
             dao.setContainerState(current.id,state,current.opened_on)
         }
         return MeasureResult.Success(target)
+    }
+
+    internal fun replayReconciliation(db:SupportSQLiteDatabase,scope:ReferenceScope,source:String,reverse:String,counts:List<ConfirmedStockCount>):Boolean {
+        val row=ReferenceStore.row(db,"measured_operation","operation_uuid=?",arrayOf(reverse)) ?: return false
+        if(row.getString("kind")!="REVERSE")fail(ReferenceError.OPERATION_CONFLICT)
+        val input=reverseCapture(row)
+        if(row.getString("dataset_uuid")!=scope.dataset || input.getString("source_operation_uuid")!=source || !input.has("reconciliation") ||
+            !MeasuredReconciliation.sameInputs(input.getJSONObject("reconciliation"),counts))fail(ReferenceError.OPERATION_CONFLICT)
+        MeasuredReconciliation.verify(db,row,input,MeasuredOperationChain.validate(db));return true
+    }
+    /** Private bridge/reverse writes are committed only with complete confirmed final counts and full audit. */
+    internal suspend fun reconcileOriginal(database:NotesDatabase,scope:ReferenceScope,expected:RecordEntity,source:String,operation:String,
+        counts:List<ConfirmedStockCount>,created:Instant,checkpoint:(ReconciliationCheckpoint)->Unit) {
+        val db=database.openHelper.writableDatabase;check(db.inTransaction());ReferenceStore.checkScope(db,scope)
+        if(replayReconciliation(db,scope,source,operation,counts))return
+        auditStagedDataset(db)
+        val plan=try{MeasuredReconciliation.capture(database,scope,source,operation,counts)}catch(e:Exception){fail(ReferenceError.INVALID_SOURCE)}
+        for(target in plan.targets) if(target.bridgeUuid!=null) {
+            val result=adjust(database,scope,target.container,target.count.containerUuid,target.count.presentationEventUuid,target.count.presentationSha256,
+                requireNotNull(target.bridgeRemaining),false,target.bridgeUuid,created,operation)
+            if(result !is MeasureResult.Success)fail(ReferenceError.INVALID_SOURCE)
+        }
+        checkpoint(ReconciliationCheckpoint.BRIDGES_WRITTEN)
+        reverse(database,scope,expected,source,operation,created,plan.proof);checkpoint(ReconciliationCheckpoint.ORIGINAL_REVERSED)
+        for(target in plan.targets) {
+            val c=target.count
+            val result=adjustRemaining(database,scope,database.dao().container(target.container.id),c.containerUuid,c.presentationEventUuid,c.presentationSha256,c.remaining,c.userConfirmed,target.countUuid,created)
+            if(result !is MeasureResult.Success)fail(ReferenceError.INVALID_SOURCE)
+        }
+        checkpoint(ReconciliationCheckpoint.COUNTS_CAPTURED)
     }
 
     suspend fun consumeNewRecord(database:NotesDatabase,scope:ReferenceScope,expected:RecordEntity,operationUuid:String,

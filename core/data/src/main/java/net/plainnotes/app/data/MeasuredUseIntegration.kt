@@ -15,6 +15,7 @@ internal data class MeasuredScheduledTicket(val write:MeasuredWriteTicket,val sl
 internal data class RecordedMeasuredUse(val record:RecordEntity,val receipt:MeasuredConsumptionReceipt)
 internal enum class MeasuredPackageAction { VOID, RESTORE }
 internal data class MeasuredPackageReceipt(val operationUuid:String,val containerUuid:String,val action:MeasuredPackageAction)
+internal enum class ReconciliationCheckpoint { BRIDGES_WRITTEN, ORIGINAL_REVERSED, COUNTS_CAPTURED, RECORD_WRITTEN, CONTEXT_CAPTURED, STOCK_CAPTURED }
 internal enum class ActualUseCheckpoint { RECORD_WRITTEN, CONTEXT_CAPTURED, STOCK_CAPTURED }
 
 /** Transaction helpers, not a second allocator. All physical conversion remains in MeasuredConsumptionStore. */
@@ -179,6 +180,54 @@ internal object MeasuredUseIntegration {
         val result=MeasuredConsumptionStore.consumeNewRecord(database,ticket.scope,next,newOperation,draft.uses,created,draft.stockEffect,draft.unlinkedActual)
         checkpoint(ActualUseCheckpoint.STOCK_CAPTURED);MeasuredConsumptionStore.auditStagedDataset(db)
         return RecordedMeasuredUse(next,result)
+    }
+    suspend fun reconcileRevise(database:NotesDatabase,ticket:MeasuredWriteTicket,sourceOperation:String,reverseOperation:String,newOperation:String,
+        counts:List<ConfirmedStockCount>,draft:MeasuredActualUseDraft,created:Instant,checkpoint:(ReconciliationCheckpoint)->Unit):RecordedMeasuredUse {
+        val db=database.openHelper.writableDatabase;check(db.inTransaction());owner(db,ticket)
+        require(listOf(sourceOperation,reverseOperation,newOperation).all(ReferencePayload::uuid) && setOf(sourceOperation,reverseOperation,newOperation).size==3)
+        checkDraft(draft,created);require(draft.stockEffect!=MeasuredStockEffect.DEDUCT_CURRENT)
+        val current=actualRecord(database,ticket)
+        MeasuredConsumptionStore.existingConsumption(db,newOperation)?.let{(request,receipt)->
+            val inverse=MeasuredConsumptionStore.sourceOfInverse(db,reverseOperation) ?: fail(ReferenceError.OPERATION_CONFLICT)
+            val subject=ReferenceStore.row(db,"reference_identity","uuid=?",arrayOf(request.record.uuid)) ?: fail(ReferenceError.UNKNOWN_IDENTITY)
+            if(subject.isNull("live_handle") || subject.getLong("live_handle")!=current.id || request.datasetUuid!=ticket.scope.dataset || request.medicationUuid!=ticket.medicationUuid ||
+                inverse.getString("source_operation_uuid")!=sourceOperation || inverse.getString("record_uuid")!=request.record.uuid || !sameActual(request,draft,status(current,draft.takenUtc)))fail(ReferenceError.OPERATION_CONFLICT)
+            if(!MeasuredConsumptionStore.replayReconciliation(db,ticket.scope,sourceOperation,reverseOperation,counts))fail(ReferenceError.OPERATION_CONFLICT)
+            val targets=MeasuredReconciliation.read(inverse.getJSONObject("reconciliation"))
+            val operation=ReferenceStore.row(db,"measured_operation","operation_uuid=?",arrayOf(newOperation))!!
+            if(JSONObject(operation.getString("input_json")).getJSONObject("chain").getString("previous_operation_uuid")!=targets.last().getString("count_uuid"))fail(ReferenceError.OPERATION_CONFLICT)
+            return RecordedMeasuredUse(current,receipt)
+        }
+        validate(db,ticket);require(current.deleted_at_utc==null && current.revision<Int.MAX_VALUE)
+        currentSource(db,ticket,current,sourceOperation)
+        MeasuredConsumptionStore.reconcileOriginal(database,ticket.scope,current,sourceOperation,reverseOperation,counts,created,checkpoint)
+        val next=current.copy(taken_utc=draft.takenUtc,taken_zone=draft.takenZone,actual_dose=draft.clinicalDose,status=status(current,draft.takenUtc),revision=current.revision+1)
+        database.dao().updateRecord(next);checkpoint(ReconciliationCheckpoint.RECORD_WRITTEN)
+        ReferenceStore.captureContext(db,next);checkpoint(ReconciliationCheckpoint.CONTEXT_CAPTURED)
+        val result=MeasuredConsumptionStore.consumeNewRecord(database,ticket.scope,next,newOperation,draft.uses,created,draft.stockEffect,draft.unlinkedActual)
+        checkpoint(ReconciliationCheckpoint.STOCK_CAPTURED);MeasuredConsumptionStore.auditStagedDataset(db)
+        return RecordedMeasuredUse(next,result)
+    }
+    suspend fun reconcileDelete(database:NotesDatabase,ticket:MeasuredWriteTicket,sourceOperation:String,reverseOperation:String,
+        counts:List<ConfirmedStockCount>,created:Instant,checkpoint:(ReconciliationCheckpoint)->Unit):RecordEntity {
+        val db=database.openHelper.writableDatabase;check(db.inTransaction());owner(db,ticket)
+        require(listOf(sourceOperation,reverseOperation).all(ReferencePayload::uuid) && sourceOperation!=reverseOperation)
+        val current=actualRecord(database,ticket)
+        MeasuredConsumptionStore.sourceOfInverse(db,reverseOperation)?.let{inverse->
+            val identity=ReferenceStore.row(db,"reference_identity","uuid=?",arrayOf(inverse.getString("record_uuid"))) ?: fail(ReferenceError.UNKNOWN_IDENTITY)
+            if(inverse.getString("dataset_uuid")!=ticket.scope.dataset || inverse.getString("medication_uuid")!=ticket.medicationUuid || inverse.getString("source_operation_uuid")!=sourceOperation ||
+                identity.isNull("live_handle") || identity.getLong("live_handle")!=current.id || current.deleted_at_utc==null || current.revision!=inverse.getInt("record_revision")+1 ||
+                !MeasuredConsumptionStore.replayReconciliation(db,ticket.scope,sourceOperation,reverseOperation,counts))fail(ReferenceError.OPERATION_CONFLICT)
+            return current
+        }
+        validate(db,ticket);require(current.deleted_at_utc==null && current.revision<Int.MAX_VALUE)
+        currentSource(db,ticket,current,sourceOperation)
+        MeasuredConsumptionStore.reconcileOriginal(database,ticket.scope,current,sourceOperation,reverseOperation,counts,created,checkpoint)
+        val next=current.copy(deleted_at_utc=created.toEpochMilli(),revision=current.revision+1);database.dao().updateRecord(next);checkpoint(ReconciliationCheckpoint.RECORD_WRITTEN)
+        val date=Instant.ofEpochMilli(requireNotNull(current.taken_utc)).atZone(ZoneId.of(requireNotNull(current.taken_zone))).toLocalDate().toString()
+        db.execSQL("DELETE FROM trash_item WHERE kind='RECORD' AND ref=?",arrayOf(current.id.toString()))
+        Trash.insert(db,Trash.RECORD,current.id.toString(),date,JSONObject(),created.toEpochMilli())
+        checkpoint(ReconciliationCheckpoint.CONTEXT_CAPTURED);MeasuredConsumptionStore.auditStagedDataset(db);return next
     }
     suspend fun delete(database:NotesDatabase,ticket:MeasuredWriteTicket,sourceOperation:String,reverseOperation:String,created:Instant):RecordEntity {
         val db=database.openHelper.writableDatabase;check(db.inTransaction());owner(db,ticket)

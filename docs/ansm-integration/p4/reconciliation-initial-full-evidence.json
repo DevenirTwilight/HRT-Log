@@ -1,0 +1,11 @@
+{
+  "status": "FAIL",
+  "totals": {
+    "tests": 388,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0
+  },
+  "reason": "Unknown-forecast fixture was inactive in compiled test. Source was edited while Gradle was preparing test inputs; compiled bytecode lacks the active fixture update. Recompile from stable inputs, preserving all assertions.",
+  "log_sha256": "f63e2763517fe604fbccf9cb345f5eaa2f5ebb19ada43222cfe68f50afdf8132"
+}

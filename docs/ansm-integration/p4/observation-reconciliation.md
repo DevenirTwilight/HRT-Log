@@ -31,3 +31,6 @@
 ADJUST 的正式确认票据还需绑定完整库存观察版本（包含无差额观察），防止余额恢复为同一数值后掩盖中间操作的 ABA 情况。当前内部适配器只比较容器投影与冻结包装，尚无正式确认票据/更正协调 UI，因此这部分不能标为生产接线验收完成。
 
 2026-10-17 integration finding: a later independent count can reduce projected used quanta below the original consumption delta. An ordinary inverse would then leave the valid [0, capacity] range even inside an otherwise atomic correction. Existing `reverseOriginal` rejects this before writing, so neither record revision nor stock is changed. This is a protected refusal, not a completed reconciliation feature. A future explicit reconciliation journal must distinguish any bookkeeping bridge from a real user stock observation, retain the original consumption/count, prove its linked inverse/final observation, and validate every prefix. Merely bypassing the count guard, allowing negative prefixes, or renaming an invented intermediate balance as a user count is unacceptable. Tests for the completed workflow remain NOT_IMPLEMENTED.
+
+
+2026-10-17 后续实现已完成本地集成验证：参见reconciliation-contract.md与reconciliation-final-evidence.json。旧普通逆操作拒绝语义保持；新的独立确认流程通过最小、明确非实际观察的账本桥接维持前缀范围，然后按原量冲销并捕获用户真实确认的当前数量。data388/shared113、原生源码编译及App保护8 PASS；正式App入口OFF、原生113和长期性能验收未完成。此前NOT_IMPLEMENTED条目是历史检查点，不代表最新协调代码。

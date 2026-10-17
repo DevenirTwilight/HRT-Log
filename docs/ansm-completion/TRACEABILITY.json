@@ -921,6 +921,33 @@
       "owner_decision_required": false,
       "progress": "LOCAL_ONLY",
       "note": "docs/ansm-integration/p4/scheduled-final-local-evidence.json"
+    },
+    {
+      "requirement_id": "V4.03.RECONCILIATION",
+      "origin_file": "docs/ansm-completion/sources/owner-v4-2026-10-17.md",
+      "origin_section": 3,
+      "original_claim": "Explicit reconciliation must preserve independent current observations, frozen inverses and append-only history",
+      "corrected_scope": "New internal confirmed workflow; ordinary inverse refusal unchanged. Account-only bridges are not physical observations. App entry OFF.",
+      "stage": "P4",
+      "affected_product_or_dataset": "Synthetic user-entered/unknown product stock; no official packaging",
+      "implementation_path": "core/data/src/main/java/net/plainnotes/app/data/MeasuredReconciliation.kt",
+      "test_id": [
+        "reconciliationPreservesCurrentCountEvenWhenOriginalInverseWouldBeNegative",
+        "reconciliationFailureAtEveryBoundaryRollsBackBridgeInverseCountsAndClinicalFact",
+        "reconciliationKeepsTwoExplicitlyConfirmedStrengthsSeparateAndRequiresBothCounts",
+        "reconciliationAuditRejectsChangedTargetEvenWithValidRequestHashesAndExecutionChain",
+        "reconciliationAuditRejectsAnOrphanAccountingBridgeWithAnOtherwiseValidChain",
+        "reconciliationAuditRejectsMissingNoOpFinalCountEvenWhenBalancesAndChainRemainValid"
+      ],
+      "pr_url": "https://github.com/DevenirTwilight/HRT-Log/pull/57",
+      "source_url": [],
+      "source_date": null,
+      "review_status": "UNREVIEWED",
+      "result_status": "INTEGRATION_VERIFIED",
+      "blocker": "New native113 / final CI / performance and P5/P6 pending",
+      "owner_decision_required": false,
+      "progress": "LOCAL_ONLY",
+      "note": "docs/ansm-integration/p4/reconciliation-final-evidence.json"
     }
   ]
 }

@@ -1309,4 +1309,176 @@ abstract class MeasuredConsumptionContract {
         assertEquals(moment.toEpochMilli(),saved.record.taken_utc);assertEquals(0,count("supply_transaction"))
     }
 
+    private suspend fun reconciliationFixture(remaining:String="27"):Triple<NotesRepository,CreatedMeasuredContainer,RecordedMeasuredUse> {
+        val m=med();val b=box(m);val repo=repository()
+        val first=repo.recordMeasuredUse(repo.measuredWriteTicket(b.scope,m),UUID.randomUUID().toString(),actual(b).copy(uses=listOf(use(b,"14"))),at)
+        repo.countMeasuredStock(repo.measuredWriteTicket(b.scope,m),UUID.randomUUID().toString(),countInput(b,remaining),at)
+        return Triple(repo,b,first)
+    }
+    private fun corrected(b:CreatedMeasuredContainer)=actual(b,MeasuredStockEffect.ALREADY_ACCOUNTED).copy(clinicalDose=0.2)
+    private suspend fun reconcile(repo:NotesRepository,b:CreatedMeasuredContainer,first:RecordedMeasuredUse,n:String="27",reverse:String=UUID.randomUUID().toString(),next:String=UUID.randomUUID().toString())=
+        repo.reconcileMeasuredUse(repo.measuredWriteTicket(b.scope,first.record.medication_id,first.record.id),first.receipt.operationUuid,reverse,next,listOf(countInput(b,n)),corrected(b),at)
+
+    @Test fun reconciliationPreservesCurrentCountEvenWhenOriginalInverseWouldBeNegative()=runBlocking {
+        val (repo,b,first)=reconciliationFixture();val original=db.dao().supplyForContainer(b.container.id)
+        val old=ReferenceStore.row(raw,"measured_operation","operation_uuid=?",arrayOf(first.receipt.operationUuid))!!.toString()
+        val saved=reconcile(repo,b,first)
+        assertEquals(2,saved.record.revision);assertEquals(0.2,saved.record.actual_dose!!,0.0)
+        assertEquals(2.0,db.dao().container(b.container.id).used_amount,0.0)
+        assertEquals(original,db.dao().supplyForContainer(b.container.id).take(original.size))
+        assertEquals(listOf(28.0,-26.0,26.0,-28.0,2.0),db.dao().supplyForContainer(b.container.id).map{it.used_delta})
+        assertEquals(old,ReferenceStore.row(raw,"measured_operation","operation_uuid=?",arrayOf(first.receipt.operationUuid))!!.toString())
+        val bridges=raw.query("SELECT input_json FROM measured_operation WHERE kind='ADJUST'").use{c->buildList{while(c.moveToNext()){val r=org.json.JSONObject(c.getString(0)).getJSONObject("request");if(r.has("accounting_bridge_for"))add(r)}}}
+        assertEquals(1,bridges.size);assertFalse(bridges.single().getBoolean("user_confirmed"))
+        assertTrue(saved.receipt.lines.single() is PhysicalUseResult.AlreadyAccounted)
+        db.withTransaction {assertEquals(2L,MeasuredConsumptionStore.auditStagedDataset(raw).single().usedQuanta)}
+    }
+    @Test fun reconciliationReplaysOriginalConfirmedInputsWithoutRecountingTodaysBalance()=runBlocking {
+        val (repo,b,first)=reconciliationFixture();val ticket=repo.measuredWriteTicket(b.scope,first.record.medication_id,first.record.id)
+        val reverse=UUID.randomUUID().toString();val next=UUID.randomUUID().toString();val counts=listOf(countInput(b,"27"))
+        val saved=repo.reconcileMeasuredUse(ticket,first.receipt.operationUuid,reverse,next,counts,corrected(b),at)
+        val before=RawData.dump(raw).toString()
+        assertEquals(saved,repo.reconcileMeasuredUse(ticket,first.receipt.operationUuid,reverse,next,counts,corrected(b),at))
+        rejects(ReferenceError.OPERATION_CONFLICT){repo.reconcileMeasuredUse(ticket,first.receipt.operationUuid,reverse,next,listOf(countInput(b,"26")),corrected(b),at)}
+        rejects(ReferenceError.OPERATION_CONFLICT){repo.reconcileMeasuredUse(ticket,first.receipt.operationUuid,reverse,next,counts,corrected(b).copy(clinicalDose=0.3),at)}
+        assertEquals(before,RawData.dump(raw).toString())
+        repo.countMeasuredStock(repo.measuredWriteTicket(b.scope,first.record.medication_id),UUID.randomUUID().toString(),countInput(b,"25"),at)
+        assertEquals(saved,repo.reconcileMeasuredUse(ticket,first.receipt.operationUuid,reverse,next,counts,corrected(b),at))
+        assertEquals(6.0,db.dao().container(b.container.id).used_amount,0.0)
+    }
+    @Test fun reconciliationWithoutBridgeStillRequiresTheConfirmedFinalCount()=runBlocking {
+        val (repo,b,first)=reconciliationFixture("0")
+        reconcile(repo,b,first,"0")
+        assertEquals(listOf(28.0,28.0,-28.0,28.0),db.dao().supplyForContainer(b.container.id).map{it.used_delta})
+        assertEquals("EMPTY",db.dao().container(b.container.id).state)
+        db.withTransaction {assertEquals(56L,MeasuredConsumptionStore.auditStagedDataset(raw).single().usedQuanta)}
+    }
+    @Test fun reconciliationAtFullRemainingCountHasBoundedBridgeAndNoInventedPhysicalUse()=runBlocking {
+        val (repo,b,first)=reconciliationFixture("28")
+        reconcile(repo,b,first,"28")
+        assertEquals(listOf(28.0,-28.0,28.0,-28.0),db.dao().supplyForContainer(b.container.id).map{it.used_delta})
+        assertEquals(0.0,db.dao().container(b.container.id).used_amount,0.0)
+        db.withTransaction {assertEquals(0L,MeasuredConsumptionStore.auditStagedDataset(raw).single().usedQuanta)}
+    }
+    @Test fun reconciliationFailureAtEveryBoundaryRollsBackBridgeInverseCountsAndClinicalFact()=runBlocking {
+        val (repo,b,first)=reconciliationFixture();val ticket=repo.measuredWriteTicket(b.scope,first.record.medication_id,first.record.id)
+        val before=RawData.dump(raw).toString()
+        for(point in ReconciliationCheckpoint.entries) {
+            var reached=false
+            try {repo.reconcileMeasuredUse(ticket,first.receipt.operationUuid,UUID.randomUUID().toString(),UUID.randomUUID().toString(),listOf(countInput(b,"27")),corrected(b),at){if(it==point){reached=true;error("synthetic reconciliation fault")}};fail("Expected injected fault")}
+            catch(e:IllegalStateException){assertTrue(reached);assertEquals("synthetic reconciliation fault",e.message)}
+            assertEquals(before,RawData.dump(raw).toString())
+        }
+    }
+    @Test fun reconciliationRejectsMissingIncompatibleUnconfirmedOrForeignCurrentCounts()=runBlocking {
+        val (repo,b,first)=reconciliationFixture();val ticket=repo.measuredWriteTicket(b.scope,first.record.medication_id,first.record.id)
+        val other=box(med("SYNTHETIC foreign"));val before=RawData.dump(raw).toString()
+        val incompatible=countInput(b,"1").copy(remaining=Quantity(BigDecimal.ONE,MeasureUnit.ML,Meaning(QuantityKind.FORMULATION,"SYNTHETIC liquid")))
+        for(input in listOf(emptyList(),listOf(incompatible),listOf(countInput(b,"27").copy(userConfirmed=false)),listOf(countInput(other,"27")),listOf(countInput(b,"29")))) {
+            rejects(ReferenceError.INVALID_SOURCE){repo.reconcileMeasuredUse(ticket,first.receipt.operationUuid,UUID.randomUUID().toString(),UUID.randomUUID().toString(),input,corrected(b),at)}
+            assertEquals(before,RawData.dump(raw).toString())
+        }
+    }
+    @Test fun reconciliationNeverDeductsASecondDoseAfterTheConfirmedCurrentCount()=runBlocking {
+        val (repo,b,first)=reconciliationFixture();val before=RawData.dump(raw).toString()
+        try {repo.reconcileMeasuredUse(repo.measuredWriteTicket(b.scope,first.record.medication_id,first.record.id),first.receipt.operationUuid,UUID.randomUUID().toString(),UUID.randomUUID().toString(),listOf(countInput(b,"27")),actual(b),at);fail("Implicit deduction after observed current stock")}
+        catch(_:IllegalArgumentException){}
+        assertEquals(before,RawData.dump(raw).toString())
+    }
+    @Test fun reconciliationDeleteRestoreAndEncryptedBackupRetainTheObservedCurrentStock()=runBlocking {
+        val (repo,b,first)=reconciliationFixture();val ticket=repo.measuredWriteTicket(b.scope,first.record.medication_id,first.record.id);val reverse=UUID.randomUUID().toString()
+        val counts=listOf(countInput(b,"27"));val deleted=repo.reconcileDeleteMeasuredUse(ticket,first.receipt.operationUuid,reverse,counts,at)
+        assertNotNull(deleted.deleted_at_utc);assertEquals(deleted,repo.reconcileDeleteMeasuredUse(ticket,first.receipt.operationUuid,reverse,counts,at))
+        assertEquals(2.0,db.dao().container(b.container.id).used_amount,0.0)
+        val restored=repo.restoreMeasuredUse(repo.measuredWriteTicket(b.scope,first.record.medication_id,first.record.id),UUID.randomUUID().toString(),actual(b,MeasuredStockEffect.ALREADY_ACCOUNTED).copy(uses=listOf(use(b,"14"))),at)
+        assertNull(restored.record.deleted_at_utc);assertEquals(3,restored.record.revision)
+        val before=RawData.dump(raw).toString();val password="SYNTHETIC reconciliation backup".toCharArray()
+        val bytes=repo.exportMeasuredBackup(password,repo.referencePreviewEpoch())
+        try {repo.restoreMeasuredBackup(bytes,password,repo.referencePreviewEpoch());assertEquals(before,RawData.dump(raw).toString())}
+        finally {password.fill('\u0000');bytes.fill(0)}
+        assertEquals(2.0,db.dao().container(b.container.id).used_amount,0.0)
+    }
+    private fun rechainForReconciliationTamper(change:(String,org.json.JSONObject)->Unit) {
+        val nodes=raw.query("SELECT operation_uuid,input_json FROM measured_operation").use{c->buildList{while(c.moveToNext())add(c.getString(0) to org.json.JSONObject(c.getString(1)))}}.sortedBy{it.second.getJSONObject("chain").getString("sequence").toInt()}
+        var previous:String?=null;var hash:String?=null
+        for((index,pair) in nodes.withIndex()) {
+            val (id,payload)=pair;change(id,payload)
+            payload.put("chain",org.json.JSONObject().put("sequence",(index+1).toString()).put("previous_operation_uuid",previous ?: org.json.JSONObject.NULL).put("previous_payload_sha256",hash ?: org.json.JSONObject.NULL))
+            val text=ReferencePayload.canonical(payload)
+            raw.execSQL("UPDATE measured_operation SET input_json=?,request_sha256=? WHERE operation_uuid=?",arrayOf(text,ReferencePayload.sha(ReferencePayload.canonical(payload.getJSONObject("request"))),id))
+            previous=id;hash=ReferencePayload.sha(text)
+        }
+    }
+    @Test fun reconciliationAuditRejectsChangedTargetEvenWithValidRequestHashesAndExecutionChain()=runBlocking {
+        val (repo,b,first)=reconciliationFixture();val reverse=UUID.randomUUID().toString()
+        reconcile(repo,b,first,reverse=reverse)
+        db.withTransaction {RawData.unguarded(raw){rechainForReconciliationTamper {id,p->if(id==reverse)p.getJSONObject("request").getJSONObject("reconciliation").getJSONArray("targets").getJSONObject(0).put("remaining_input",PackageMeasurementPayload.quantity(countInput(b,"26").remaining))}}}
+        db.withTransaction {assertTrue(MeasuredOperationChain.validate(raw).isNotEmpty())}
+        rejects(ReferenceError.INVALID_SOURCE){db.withTransaction{MeasuredConsumptionStore.auditStagedDataset(raw)}}
+        assertEquals(2.0,db.dao().container(b.container.id).used_amount,0.0)
+    }
+    @Test fun reconciliationAuditRejectsAnOrphanAccountingBridgeWithAnOtherwiseValidChain()=runBlocking {
+        val (repo,b,first)=reconciliationFixture();reconcile(repo,b,first)
+        db.withTransaction {RawData.unguarded(raw){rechainForReconciliationTamper {_,p->val r=p.getJSONObject("request");if(r.has("accounting_bridge_for"))r.put("accounting_bridge_for",UUID.randomUUID().toString())}}}
+        db.withTransaction {assertTrue(MeasuredOperationChain.validate(raw).isNotEmpty())}
+        rejects(ReferenceError.INVALID_SOURCE){db.withTransaction{MeasuredConsumptionStore.auditStagedDataset(raw)}}
+    }
+    @Test fun reconciliationAuditRejectsMissingNoOpFinalCountEvenWhenBalancesAndChainRemainValid()=runBlocking {
+        val (repo,b,first)=reconciliationFixture("28");val reverse=UUID.randomUUID().toString();reconcile(repo,b,first,"28",reverse)
+        val proof=MeasuredConsumptionStore.sourceOfInverse(raw,reverse)!!.getJSONObject("reconciliation")
+        val finalCount=proof.getJSONArray("targets").getJSONObject(0).getString("count_uuid")
+        assertEquals(0,raw.query("SELECT 1 FROM measured_allocation WHERE operation_uuid=?",arrayOf(finalCount)).use{it.count})
+        db.withTransaction {RawData.unguarded(raw){raw.execSQL("DELETE FROM measured_operation WHERE operation_uuid=?",arrayOf(finalCount));rechainForReconciliationTamper{_,_->}}}
+        db.withTransaction {assertTrue(MeasuredOperationChain.validate(raw).isNotEmpty())}
+        rejects(ReferenceError.INVALID_SOURCE){db.withTransaction{MeasuredConsumptionStore.auditStagedDataset(raw)}}
+        assertEquals(0.0,db.dao().container(b.container.id).used_amount,0.0)
+    }
+
+    @Test fun reconciliationKeepsTwoExplicitlyConfirmedStrengthsSeparateAndRequiresBothCounts()=runBlocking {
+        val m=med();val one=box(m);val otherMeaning=meaning.copy(identity="SYNTHETIC other strength")
+        val two=box(m,otherMeaning,"SYNTHETIC 1mg tablet");val repo=repository()
+        val first=repo.recordMeasuredUse(repo.measuredWriteTicket(one.scope,m),UUID.randomUUID().toString(),actual(one).copy(uses=listOf(use(one,"14"),use(two,"1",otherMeaning))),at)
+        val counts=listOf(countInput(two,"28").let{it.copy(remaining=it.remaining.copy(meaning=otherMeaning))},countInput(one,"28"))
+        for(c in counts)repo.countMeasuredStock(repo.measuredWriteTicket(one.scope,m),UUID.randomUUID().toString(),c,at)
+        val ticket=repo.measuredWriteTicket(one.scope,m,first.record.id);val before=RawData.dump(raw).toString()
+        rejects(ReferenceError.INVALID_SOURCE){repo.reconcileMeasuredUse(ticket,first.receipt.operationUuid,UUID.randomUUID().toString(),UUID.randomUUID().toString(),counts.take(1),corrected(one),at)}
+        assertEquals(before,RawData.dump(raw).toString())
+        val saved=repo.reconcileMeasuredUse(ticket,first.receipt.operationUuid,UUID.randomUUID().toString(),UUID.randomUUID().toString(),counts,corrected(one),at)
+        assertEquals(0.2,saved.record.actual_dose!!,0.0)
+        assertEquals(0.0,db.dao().container(one.container.id).used_amount,0.0);assertEquals(0.0,db.dao().container(two.container.id).used_amount,0.0)
+        db.withTransaction {val projections=MeasuredConsumptionStore.auditStagedDataset(raw);assertEquals(2,projections.size);assertEquals(setOf(meaning,otherMeaning),projections.map{it.remaining.meaning}.toSet())}
+    }
+    @Test fun reconciliationPreservesUnknownStockEffectWithoutApplyingAnotherConsumption()=runBlocking {
+        // Forecasts intentionally contain active medications only; activate this synthetic fixture explicitly.
+        val (repo,b,first)=reconciliationFixture()
+        db.dao().updateMedication(db.dao().medication(first.record.medication_id).copy(active=true,soon_alert_minutes=0,late_after_minutes=60))
+        val ticket=repo.measuredWriteTicket(b.scope,first.record.medication_id,first.record.id)
+        val saved=repo.reconcileMeasuredUse(ticket,first.receipt.operationUuid,UUID.randomUUID().toString(),UUID.randomUUID().toString(),listOf(countInput(b,"27")),corrected(b).copy(stockEffect=MeasuredStockEffect.UNKNOWN),at)
+        assertEquals("STOCK_EFFECT_NOT_CONFIRMED",saved.receipt.issue)
+        assertEquals(2.0,db.dao().container(b.container.id).used_amount,0.0)
+        assertEquals(1,db.dao().supplyFor(first.record.id).count{it.kind=="CONSUME"})
+        val forecast=repo.stockForecasts(at,java.time.ZoneId.of("Europe/Paris")).getValue(first.record.medication_id)
+        assertEquals(StockForecast.Status.UNKNOWN,forecast.status);assertTrue(StockUnknownReason.STOCK_EFFECT_UNKNOWN in forecast.uncertainty)
+    }
+    @Test fun reconciliationRejectsStaleZeroCountTicketWrongEpochAndDecoyBeforeAnyWrite()=runBlocking {
+        val (repo,b,first)=reconciliationFixture();val m=first.record.medication_id;val ticket=repo.measuredWriteTicket(b.scope,m,first.record.id)
+        repo.countMeasuredStock(repo.measuredWriteTicket(b.scope,m),UUID.randomUUID().toString(),countInput(b,"27"),at)
+        val before=RawData.dump(raw).toString()
+        rejects(ReferenceError.STALE_REVISION){repo.reconcileMeasuredUse(ticket,first.receipt.operationUuid,UUID.randomUUID().toString(),UUID.randomUUID().toString(),listOf(countInput(b,"27")),corrected(b),at)}
+        rejects(ReferenceError.STALE_SCOPE){repo.reconcileMeasuredUse(ticket.copy(scope=b.scope.copy(epoch=UUID.randomUUID().toString())),first.receipt.operationUuid,UUID.randomUUID().toString(),UUID.randomUUID().toString(),listOf(countInput(b,"27")),corrected(b),at)}
+        val forbidden=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space):NotesDatabase{fail("Decoy reconciliation opened a database");return db}}).pinnedTo(Space.DECOY)
+        rejects(ReferenceError.WRONG_SPACE){forbidden.reconcileMeasuredUse(ticket,first.receipt.operationUuid,UUID.randomUUID().toString(),UUID.randomUUID().toString(),listOf(countInput(b,"27")),corrected(b),at)}
+        assertEquals(before,RawData.dump(raw).toString())
+    }
+    @Test fun reconciliationUsesFrozenPackagingAfterCurrentMedicationAndProductReferenceChanges()=runBlocking {
+        val (repo,b,first)=reconciliationFixture();val m=first.record.medication_id
+        db.dao().updateMedication(db.dao().medication(m).copy(name="SYNTHETIC changed current name",dose_per_intake=99.0))
+        repo.associateMedication(b.scope,m,0,UUID.randomUUID().toString(),product.copy(strength="SYNTHETIC unrelated current strength"))
+        val saved=reconcile(repo,b,first)
+        assertEquals(first.record.config_snapshot,saved.record.config_snapshot);assertEquals(2.0,db.dao().container(b.container.id).used_amount,0.0)
+        assertEquals(99.0,db.dao().medication(m).dose_per_intake,0.0)
+        val sources=raw.query("SELECT DISTINCT presentation_event_uuid FROM measured_allocation").use{c->buildSet{while(c.moveToNext())add(c.getString(0))}}
+        assertEquals(setOf(b.presentationEventUuid),sources)
+    }
+
 }

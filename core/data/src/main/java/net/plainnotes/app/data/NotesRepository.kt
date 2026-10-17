@@ -134,6 +134,16 @@ const val BACKFILL_MAX_DAYS=731L
         val frozenDraft=draft.copy(uses=draft.uses.toList())
         return measuredTransaction{MeasuredUseIntegration.revise(it,ticket,sourceOperation,reverseOperation,newOperation,frozenDraft,created,checkpoint)}
     }
+    internal suspend fun reconcileMeasuredUse(ticket:MeasuredWriteTicket,sourceOperation:String,reverseOperation:String,newOperation:String,
+        counts:List<ConfirmedStockCount>,draft:MeasuredActualUseDraft,created:Instant=Instant.now(),checkpoint:(ReconciliationCheckpoint)->Unit={}):RecordedMeasuredUse {
+        val frozenDraft=draft.copy(uses=draft.uses.toList());val frozenCounts=counts.toList()
+        return measuredTransaction{MeasuredUseIntegration.reconcileRevise(it,ticket,sourceOperation,reverseOperation,newOperation,frozenCounts,frozenDraft,created,checkpoint)}
+    }
+    internal suspend fun reconcileDeleteMeasuredUse(ticket:MeasuredWriteTicket,sourceOperation:String,reverseOperation:String,
+        counts:List<ConfirmedStockCount>,created:Instant=Instant.now(),checkpoint:(ReconciliationCheckpoint)->Unit={}):RecordEntity {
+        val frozenCounts=counts.toList()
+        return measuredTransaction{MeasuredUseIntegration.reconcileDelete(it,ticket,sourceOperation,reverseOperation,frozenCounts,created,checkpoint)}
+    }
     internal suspend fun deleteMeasuredUse(ticket:MeasuredWriteTicket,sourceOperation:String,reverseOperation:String,created:Instant=Instant.now()):RecordEntity =
         measuredTransaction{MeasuredUseIntegration.delete(it,ticket,sourceOperation,reverseOperation,created)}
     internal suspend fun restoreMeasuredUse(ticket:MeasuredWriteTicket,newOperation:String,draft:MeasuredActualUseDraft,created:Instant=Instant.now(),checkpoint:(ActualUseCheckpoint)->Unit={}):RecordedMeasuredUse {
