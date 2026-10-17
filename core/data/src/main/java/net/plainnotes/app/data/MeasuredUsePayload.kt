@@ -10,6 +10,10 @@ data class ConfirmedStockUse(
     val containerUuid:String,val presentationEventUuid:String,val presentationSha256:String,
     val quantity:Quantity,val userConfirmed:Boolean,
 )
+data class ConfirmedStockCount(
+    val containerUuid:String,val presentationEventUuid:String,val presentationSha256:String,
+    val remaining:Quantity,val userConfirmed:Boolean,
+)
 enum class MeasuredStockEffect { DEDUCT_CURRENT, ALREADY_ACCOUNTED, UNKNOWN }
 /** Clinical dose and physical quantity remain independent user-entered facts. No recommended values. */
 data class MeasuredActualUseDraft(

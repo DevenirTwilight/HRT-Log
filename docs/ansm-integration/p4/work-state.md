@@ -2,7 +2,7 @@
 
 2026-10-17 新检查点：实际Repository服药事务/幂等/ALREADY_ACCOUNTED/UNKNOWN/未关联物理量持久化、零差额和ABA票据失效的完整data349/共享75/原生源码编译/Python159 PASS。新75原生、当前实际接线后的App回归NOT_RUN。正式UI仍OFF；修订/删除/恢复/实盘票据及统一预测待完成。见actual-use-local-evidence.json。
 
-当前：#57 DRAFT。内部正式NotesRepository精确备份/恢复已复用可信暂存和原子替换，data342/共享68合同/Android测试源码编译/Python159 PASS；六阶段故障注入完整回滚、独立新库恢复、重复恢复、损坏缓存和过期票据拒绝已验证。v2包装证据补齐历史正文及冻结前缀。新68原生NOT_RUN；6ac7499 CI仍在跑，3343724三API共享56实际PASS但API35整体验收FAIL（旧业务版本断言已修正）。公开精确入口/实际服药接线/预测UI仍OFF，下一步进入正式记录/修订/观察/ABA。默认f1e9b4d仍Room11/业务10，候选Room12/业务11只在#57。
+当前：#57 DRAFT。内部真实Repository包装创建/服药/更正/删除/恢复/实盘，完整data356/共享82/原生源码编译/Python159 PASS。b95a0d9六CI与三API共享75运行已核验PASS，修订批82原生与当前App回归NOT_RUN。更正遇后续独立实盘保守拒绝，独立协调、生命周期票据、共享UNKNOWN和UI仍需完成。正式用户入口OFF；主线f1e9b4d Room11/业务10不变。V4补充见REQUIREMENTS105及ansm-completion/BASELINE.md。
 
 2026-10-16：IN_PROGRESS，生产库存未接线。当前复用P3的de26444，普通合入P1源945512a，不直接复制未合并源码。#54已受保护合并为c95cea1；#55待主线检查及更新。
 

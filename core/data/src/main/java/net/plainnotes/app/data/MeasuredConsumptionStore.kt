@@ -17,6 +17,7 @@ internal sealed interface PhysicalUseResult {
     data class AlreadyAccounted(override val containerUuid:String,val requested:Quantity):PhysicalUseResult
 }
 internal data class MeasuredConsumptionReceipt(val operationUuid:String,val recordUuid:String,val recordRevision:Int,val lines:List<PhysicalUseResult>,val issue:String?)
+internal data class MeasuredCountReceipt(val operationUuid:String,val result:MeasureResult<Quantity>)
 internal data class AuditedStockProjection(val containerUuid:String,val presentationSha256:String,val usedQuanta:Long,val remaining:Quantity,val cacheMatches:Boolean)
 
 /** Internal P4 adapter used by the captured Repository transaction; public UI admission remains disabled.
@@ -360,6 +361,17 @@ internal object MeasuredConsumptionStore {
     }
     internal fun existingAdjustment(db:SupportSQLiteDatabase,operationUuid:String):JSONObject? =
         ReferenceStore.row(db,"measured_operation","operation_uuid=?",arrayOf(operationUuid))?.let {if(it.getString("kind")!="ADJUST")fail(ReferenceError.OPERATION_CONFLICT);adjustmentCapture(it).request}
+
+    internal fun replayCount(db:SupportSQLiteDatabase,scope:ReferenceScope,medicationUuid:String,operationUuid:String,input:ConfirmedStockCount):MeasuredCountReceipt? {
+        val request=existingAdjustment(db,operationUuid) ?: return null
+        require(input.userConfirmed)
+        if(request.getString("dataset_uuid")!=scope.dataset || request.getString("medication_uuid")!=medicationUuid || request.getString("container_uuid")!=input.containerUuid ||
+            request.getString("presentation_event_uuid")!=input.presentationEventUuid || request.getString("presentation_sha256")!=input.presentationSha256 ||
+            ReferencePayload.canonical(request.getJSONObject("remaining_input"))!=ReferencePayload.canonical(PackageMeasurementPayload.quantity(input.remaining)))fail(ReferenceError.OPERATION_CONFLICT)
+        return MeasuredCountReceipt(operationUuid,MeasureResult.Success(PackageMeasurementPayload.quantity(request.getJSONObject("remaining_stock"))))
+    }
+    internal fun sourceOfInverse(db:SupportSQLiteDatabase,operationUuid:String):JSONObject? =
+        ReferenceStore.row(db,"measured_operation","operation_uuid=?",arrayOf(operationUuid))?.let{if(it.getString("kind")!="REVERSE")fail(ReferenceError.OPERATION_CONFLICT);reverseCapture(it)}
 
     private fun receipt(row:JSONObject):MeasuredConsumptionReceipt = try {readReceipt(row)} catch(e:Exception){fail(ReferenceError.INVALID_SOURCE)}
     private fun readReceipt(row:JSONObject):MeasuredConsumptionReceipt {

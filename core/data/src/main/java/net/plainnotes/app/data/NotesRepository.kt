@@ -87,6 +87,33 @@ const val BACKFILL_MAX_DAYS=731L
             MeasuredUseIntegration.create(database,ticket,operationUuid,frozenDraft,created,checkpoint)
         }}
     }
+    private suspend fun <T> measuredTransaction(block:suspend(NotesDatabase)->T):T {
+        val target=space
+        if(target!=Space.PRIMARY)throw ReferenceFailure(ReferenceError.WRONG_SPACE)
+        return withContext(Dispatchers.IO){val database=access.get(target);database.withTransaction{block(database)}}
+    }
+    internal suspend fun createMeasuredPackage(expectedEpoch:String,expectedMedication:MedicationEntity,operationUuid:String,draft:PackageMeasurementDraft,created:Instant=Instant.now()):CreatedMeasuredContainer {
+        val frozenDraft=draft.copy(product=draft.product.copy(ingredients=draft.product.ingredients.toList(),routes=draft.product.routes.toList()),relations=draft.relations.toList())
+        return measuredTransaction {database->
+            val raw=database.openHelper.writableDatabase
+            if(ReferenceStore.previewEpoch(raw)!=expectedEpoch)throw ReferenceFailure(ReferenceError.STALE_SCOPE)
+            if(database.dao().medication(expectedMedication.id)!=expectedMedication)throw ReferenceFailure(ReferenceError.STALE_REVISION)
+            val result=MeasuredContainerStore.create(database,expectedEpoch,expectedMedication.id,operationUuid,frozenDraft,created)
+            MeasuredConsumptionStore.auditStagedDataset(raw);result
+        }
+    }
+    internal suspend fun countMeasuredStock(ticket:MeasuredWriteTicket,operationUuid:String,input:ConfirmedStockCount,created:Instant=Instant.now()):MeasuredCountReceipt =
+        measuredTransaction{MeasuredUseIntegration.count(it,ticket,operationUuid,input,created)}
+    internal suspend fun reviseMeasuredUse(ticket:MeasuredWriteTicket,sourceOperation:String,reverseOperation:String,newOperation:String,draft:MeasuredActualUseDraft,created:Instant=Instant.now(),checkpoint:(ActualUseCheckpoint)->Unit={}):RecordedMeasuredUse {
+        val frozenDraft=draft.copy(uses=draft.uses.toList())
+        return measuredTransaction{MeasuredUseIntegration.revise(it,ticket,sourceOperation,reverseOperation,newOperation,frozenDraft,created,checkpoint)}
+    }
+    internal suspend fun deleteMeasuredUse(ticket:MeasuredWriteTicket,sourceOperation:String,reverseOperation:String,created:Instant=Instant.now()):RecordEntity =
+        measuredTransaction{MeasuredUseIntegration.delete(it,ticket,sourceOperation,reverseOperation,created)}
+    internal suspend fun restoreMeasuredUse(ticket:MeasuredWriteTicket,newOperation:String,draft:MeasuredActualUseDraft,created:Instant=Instant.now(),checkpoint:(ActualUseCheckpoint)->Unit={}):RecordedMeasuredUse {
+        val frozenDraft=draft.copy(uses=draft.uses.toList())
+        return measuredTransaction{MeasuredUseIntegration.restore(it,ticket,newOperation,frozenDraft,created,checkpoint)}
+    }
     suspend fun medications()=withContext(Dispatchers.IO){db().dao().medications()}
     suspend fun saveMilestone(value:MilestoneEntity)=transaction{dao->
         LocalDate.parse(value.date);require(value.kind in MILESTONE_KINDS)

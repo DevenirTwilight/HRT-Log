@@ -1035,4 +1035,100 @@ abstract class MeasuredConsumptionContract {
         assertEquals(before,RawData.dump(raw).toString());assertEquals(0,count("dose_record"))
     }
 
+    private fun countInput(b:CreatedMeasuredContainer,n:String)=ConfirmedStockCount(b.containerUuid,b.presentationEventUuid,b.presentation.sha256,Quantity(BigDecimal(n),MeasureUnit.TABLET,meaning),true)
+
+    @Test fun formalRepositoryCreatesAConfirmedPackageWithoutChangingTheMedicationOrProfile()=runBlocking {
+        val m=med();val repo=repository();val original=db.dao().medication(m);val epoch=repo.referencePreviewEpoch();val op=UUID.randomUUID().toString()
+        val draft=PackageMeasurementDraft(product,MeasureUnit.TABLET,meaning,"0.5","28",StockCapacityBasis.USER_COUNTED)
+        val b=repo.createMeasuredPackage(epoch,original,op,draft,at)
+        val replay=repo.createMeasuredPackage(epoch,original,op,draft,at)
+        assertEquals(b.container,replay.container);assertEquals(b.containerUuid,replay.containerUuid)
+        assertEquals(b.presentationEventUuid,replay.presentationEventUuid);assertEquals(b.presentation.payload,replay.presentation.payload)
+        assertEquals(b.scope,replay.scope)
+        assertEquals(1,count("supply_container"));assertEquals(56.0,b.container.capacity,0.0)
+        assertEquals(original,db.dao().medication(m));assertNull(db.dao().profile(m));assertEquals(0,count("dose_record"))
+        val used=repo.recordMeasuredUse(repo.measuredWriteTicket(b.scope,m),UUID.randomUUID().toString(),actual(b),at)
+        assertEquals(0.125,used.record.actual_dose!!,0.0);assertEquals(1.0,db.dao().container(b.container.id).used_amount,0.0)
+    }
+
+    @Test fun realRepositoryCorrectionUsesOriginalInverseAndCreatesOneNewRevisionWithFrozenHistory()=runBlocking {
+        val m=med();val b=box(m);val repo=repository()
+        val first=repo.recordMeasuredUse(repo.measuredWriteTicket(b.scope,m),UUID.randomUUID().toString(),actual(b),at)
+        val oldOperation=ReferenceStore.row(raw,"measured_operation","operation_uuid=?",arrayOf(first.receipt.operationUuid))!!.toString()
+        val ticket=repo.measuredWriteTicket(b.scope,m,first.record.id);val reverse=UUID.randomUUID().toString();val newOp=UUID.randomUUID().toString()
+        val draft=actual(b).copy(clinicalDose=0.2,uses=listOf(use(b,"1")))
+        val revised=repo.reviseMeasuredUse(ticket,first.receipt.operationUuid,reverse,newOp,draft,at)
+        assertEquals(2,revised.record.revision);assertEquals(0.2,revised.record.actual_dose!!,0.0)
+        assertEquals(listOf("CONSUME","REVERSE","CONSUME"),db.dao().supplyFor(first.record.id).map{it.kind})
+        assertEquals(2.0,db.dao().container(b.container.id).used_amount,0.0)
+        assertEquals(oldOperation,ReferenceStore.row(raw,"measured_operation","operation_uuid=?",arrayOf(first.receipt.operationUuid))!!.toString())
+        assertEquals(revised,repo.reviseMeasuredUse(ticket,first.receipt.operationUuid,reverse,newOp,draft,at))
+        rejects(ReferenceError.OPERATION_CONFLICT){repo.reviseMeasuredUse(ticket,first.receipt.operationUuid,reverse,newOp,draft.copy(clinicalDose=0.3),at)}
+        assertEquals(3,count("supply_transaction"));assertEquals(1,count("dose_record"))
+    }
+
+    @Test fun repositoryCorrectionRefusesToOverrideAnIndependentLaterStockCount()=runBlocking {
+        val m=med();val b=box(m);val repo=repository()
+        val first=repo.recordMeasuredUse(repo.measuredWriteTicket(b.scope,m),UUID.randomUUID().toString(),actual(b),at)
+        repo.countMeasuredStock(repo.measuredWriteTicket(b.scope,m),UUID.randomUUID().toString(),countInput(b,"27.5"),at)
+        val ticket=repo.measuredWriteTicket(b.scope,m,first.record.id);val before=RawData.dump(raw).toString()
+        rejects(ReferenceError.OPERATION_CONFLICT){repo.reviseMeasuredUse(ticket,first.receipt.operationUuid,UUID.randomUUID().toString(),UUID.randomUUID().toString(),actual(b).copy(clinicalDose=0.2),at)}
+        assertEquals(before,RawData.dump(raw).toString());assertEquals(first.record,db.dao().recordById(first.record.id))
+    }
+
+    @Test fun correctionFaultAfterNewConsumptionRollsBackBothInverseAndClinicalRevision()=runBlocking {
+        val m=med();val b=box(m);val repo=repository()
+        val first=repo.recordMeasuredUse(repo.measuredWriteTicket(b.scope,m),UUID.randomUUID().toString(),actual(b),at)
+        val ticket=repo.measuredWriteTicket(b.scope,m,first.record.id);val before=RawData.dump(raw).toString()
+        for(stage in ActualUseCheckpoint.entries) {
+            var reached=false
+            try {repo.reviseMeasuredUse(ticket,first.receipt.operationUuid,UUID.randomUUID().toString(),UUID.randomUUID().toString(),actual(b).copy(clinicalDose=0.2),at,checkpoint={p->if(p==stage){reached=true;throw IllegalStateException("SYNTHETIC revision fault")}});fail("Partial inverse/revision committed")}
+            catch(e:IllegalStateException){assertEquals("SYNTHETIC revision fault",e.message)}
+            assertTrue(reached);assertEquals(before,RawData.dump(raw).toString())
+        }
+    }
+
+    @Test fun realRepositoryDeleteAndRestoreAppendExactHistoryAndPreserveTheOriginalClinicalSnapshot()=runBlocking {
+        val m=med();val b=box(m);val repo=repository()
+        val first=repo.recordMeasuredUse(repo.measuredWriteTicket(b.scope,m),UUID.randomUUID().toString(),actual(b),at)
+        val ticket=repo.measuredWriteTicket(b.scope,m,first.record.id);val inverse=UUID.randomUUID().toString()
+        val deleted=repo.deleteMeasuredUse(ticket,first.receipt.operationUuid,inverse,at)
+        assertNotNull(deleted.deleted_at_utc);assertEquals(2,deleted.revision);assertEquals(0.0,db.dao().container(b.container.id).used_amount,0.0)
+        assertEquals(deleted,repo.deleteMeasuredUse(ticket,first.receipt.operationUuid,inverse,at));assertEquals(2,count("supply_transaction"))
+        val restoreTicket=repo.measuredWriteTicket(b.scope,m,first.record.id);val restoreOp=UUID.randomUUID().toString()
+        val restored=repo.restoreMeasuredUse(restoreTicket,restoreOp,actual(b),at)
+        assertNull(restored.record.deleted_at_utc);assertEquals(3,restored.record.revision)
+        assertEquals(first.record.config_snapshot,restored.record.config_snapshot);assertEquals(first.record.actual_dose,restored.record.actual_dose)
+        assertEquals(1.0,db.dao().container(b.container.id).used_amount,0.0);assertEquals(0,db.dao().trash().count{it.kind==Trash.RECORD})
+        assertEquals(restored,repo.restoreMeasuredUse(restoreTicket,restoreOp,actual(b),at));assertEquals(3,count("supply_transaction"))
+        val password="SYNTHETIC restored revision backup".toCharArray();val epoch=repo.referencePreviewEpoch()
+        val backup=repo.exportMeasuredBackup(password,epoch);val before=RawData.dump(raw).toString();repo.restoreMeasuredBackup(backup,password,epoch)
+        assertEquals(before,RawData.dump(raw).toString());backup.fill(0);password.fill('\u0000')
+    }
+
+    @Test fun repositoryCountIsIdempotentAndOldTicketsCannotOverwriteEvenAZeroObservation()=runBlocking {
+        val m=med();val b=box(m);val repo=repository();val ticket=repo.measuredWriteTicket(b.scope,m);val op=UUID.randomUUID().toString()
+        val first=repo.countMeasuredStock(ticket,op,countInput(b,"27.5"),at)
+        assertTrue(first.result is MeasureResult.Success)
+        assertEquals(first,repo.countMeasuredStock(ticket,op,countInput(b,"27.5"),at));assertEquals(1,count("supply_transaction"))
+        rejects(ReferenceError.OPERATION_CONFLICT){repo.countMeasuredStock(ticket,op,countInput(b,"27"),at)}
+        rejects(ReferenceError.STALE_REVISION){repo.countMeasuredStock(ticket,UUID.randomUUID().toString(),countInput(b,"28"),at)}
+        val fresh=repo.measuredWriteTicket(b.scope,m)
+        repo.countMeasuredStock(fresh,UUID.randomUUID().toString(),countInput(b,"27.5"),at)
+        rejects(ReferenceError.STALE_REVISION){repo.countMeasuredStock(fresh,UUID.randomUUID().toString(),countInput(b,"28"),at)}
+        assertEquals(1,count("supply_transaction"));assertEquals(2,count("measured_operation"))
+    }
+
+    @Test fun correctionCannotReuseAnotherRecordsOperationOrAnOlderSourceRevision()=runBlocking {
+        val m=med();val b=box(m);val repo=repository()
+        val first=repo.recordMeasuredUse(repo.measuredWriteTicket(b.scope,m),UUID.randomUUID().toString(),actual(b),at)
+        val second=repo.recordMeasuredUse(repo.measuredWriteTicket(b.scope,m),UUID.randomUUID().toString(),actual(b),at)
+        val firstTicket=repo.measuredWriteTicket(b.scope,m,first.record.id)
+        rejects(ReferenceError.STALE_REVISION){repo.reviseMeasuredUse(firstTicket,second.receipt.operationUuid,UUID.randomUUID().toString(),UUID.randomUUID().toString(),actual(b),at)}
+        val revised=repo.reviseMeasuredUse(firstTicket,first.receipt.operationUuid,UUID.randomUUID().toString(),UUID.randomUUID().toString(),actual(b).copy(clinicalDose=0.2),at)
+        val ticket=repo.measuredWriteTicket(b.scope,m,first.record.id)
+        rejects(ReferenceError.STALE_REVISION){repo.reviseMeasuredUse(ticket,first.receipt.operationUuid,UUID.randomUUID().toString(),UUID.randomUUID().toString(),actual(b),at)}
+        assertEquals(revised.record,db.dao().recordById(first.record.id));assertEquals(second.record,db.dao().recordById(second.record.id))
+    }
+
 }

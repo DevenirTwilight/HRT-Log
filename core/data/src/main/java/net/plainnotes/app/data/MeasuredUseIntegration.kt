@@ -23,6 +23,8 @@ internal object MeasuredUseIntegration {
         val chain=MeasuredOperationChain.validate(db).values.lastOrNull()
         val json=JSONObject().put("medication",rows("medication","id=?",arrayOf(medication)))
             .put("profile",rows("pk_profile","medication_id=?",arrayOf(medication)))
+            .put("rules",rows("schedule_rule","medication_id=? ORDER BY id",arrayOf(medication)))
+            .put("times",rows("rule_time","rule_id IN (SELECT id FROM schedule_rule WHERE medication_id=?) ORDER BY id",arrayOf(medication)))
             .put("containers",rows("supply_container","medication_id=? ORDER BY id",arrayOf(medication)))
             .put("ledger",rows("supply_transaction","container_id IN (SELECT id FROM supply_container WHERE medication_id=?) ORDER BY id",arrayOf(medication)))
             .put("references",rows("reference_event","subject_uuid IN (SELECT uuid FROM reference_identity WHERE dataset_uuid=? AND (uuid=? OR owner_uuid=?)) ORDER BY subject_uuid,revision",arrayOf(scope.dataset,medIdentity(db,scope,medication).getString("uuid"),medIdentity(db,scope,medication).getString("uuid"))))
@@ -36,10 +38,13 @@ internal object MeasuredUseIntegration {
         if(record!=null)db.query("SELECT 1 FROM dose_record WHERE id=? AND medication_id=?",arrayOf(record,medication)).use{if(!it.moveToFirst())fail(ReferenceError.UNKNOWN_IDENTITY)}
         return MeasuredWriteTicket(scope,medication,identity.getString("uuid"),record,state(db,scope,medication,record))
     }
-    fun validate(db:SupportSQLiteDatabase,ticket:MeasuredWriteTicket) {
-        check(db.inTransaction());ReferenceStore.checkScope(db,ticket.scope)
+    private fun owner(db:SupportSQLiteDatabase,ticket:MeasuredWriteTicket) {
+        ReferenceStore.checkScope(db,ticket.scope)
         val identity=ReferenceStore.row(db,"reference_identity","uuid=?",arrayOf(ticket.medicationUuid)) ?: fail(ReferenceError.UNKNOWN_IDENTITY)
         if(identity.getString("dataset_uuid")!=ticket.scope.dataset || identity.getString("kind")!="MEDICATION" || identity.isNull("live_handle") || identity.getLong("live_handle")!=ticket.medicationId)fail(ReferenceError.UNKNOWN_IDENTITY)
+    }
+    fun validate(db:SupportSQLiteDatabase,ticket:MeasuredWriteTicket) {
+        check(db.inTransaction());owner(db,ticket)
         if(state(db,ticket.scope,ticket.medicationId,ticket.recordId)!=ticket.stateSha256)fail(ReferenceError.STALE_REVISION)
     }
     private fun checkDraft(draft:MeasuredActualUseDraft,created:Instant) {
@@ -49,7 +54,7 @@ internal object MeasuredUseIntegration {
     }
     suspend fun create(database:NotesDatabase,ticket:MeasuredWriteTicket,operationUuid:String,draft:MeasuredActualUseDraft,created:Instant,
         checkpoint:(ActualUseCheckpoint)->Unit={}):RecordedMeasuredUse {
-        val db=database.openHelper.writableDatabase;check(db.inTransaction());ReferenceStore.checkScope(db,ticket.scope)
+        val db=database.openHelper.writableDatabase;check(db.inTransaction());owner(db,ticket)
         require(ReferencePayload.uuid(operationUuid));checkDraft(draft,created)
         if(ticket.recordId!=null)fail(ReferenceError.INVALID_SOURCE)
         val dao=database.dao()
@@ -74,4 +79,104 @@ internal object MeasuredUseIntegration {
         MeasuredConsumptionStore.auditStagedDataset(db)
         return RecordedMeasuredUse(saved,receipt)
     }
+    suspend fun count(database:NotesDatabase,ticket:MeasuredWriteTicket,operationUuid:String,input:ConfirmedStockCount,created:Instant):MeasuredCountReceipt {
+        val db=database.openHelper.writableDatabase;check(db.inTransaction());owner(db,ticket)
+        require(ReferencePayload.uuid(operationUuid) && input.userConfirmed)
+        if(ticket.recordId!=null)fail(ReferenceError.INVALID_SOURCE)
+        MeasuredConsumptionStore.replayCount(db,ticket.scope,ticket.medicationUuid,operationUuid,input)?.let{return it}
+        validate(db,ticket)
+        val identity=ReferenceStore.row(db,"reference_identity","uuid=?",arrayOf(input.containerUuid)) ?: fail(ReferenceError.UNKNOWN_IDENTITY)
+        if(identity.getString("dataset_uuid")!=ticket.scope.dataset || identity.getString("kind")!="CONTAINER" || identity.getString("owner_uuid")!=ticket.medicationUuid || identity.isNull("live_handle"))fail(ReferenceError.UNKNOWN_IDENTITY)
+        val box=database.dao().container(identity.getLong("live_handle"))
+        val result=MeasuredConsumptionStore.adjustRemaining(database,ticket.scope,box,input.containerUuid,input.presentationEventUuid,input.presentationSha256,input.remaining,input.userConfirmed,operationUuid,created)
+        MeasuredConsumptionStore.auditStagedDataset(db)
+        return MeasuredCountReceipt(operationUuid,result)
+    }
+    private fun sameActual(request:MeasuredConsumptionRequest,draft:MeasuredActualUseDraft,status:String):Boolean {
+        val proposed=request.copy(record=request.record.copy(takenUtc=draft.takenUtc,takenZone=draft.takenZone,status=status,
+            legacyActualDoseBits=java.lang.Long.toHexString(java.lang.Double.doubleToRawLongBits(draft.clinicalDose)).padStart(16,'0')),
+            uses=draft.uses,stockEffect=draft.stockEffect,unlinkedActual=draft.unlinkedActual)
+        return MeasuredUsePayload.freeze(proposed).json==MeasuredUsePayload.freeze(request).json
+    }
+    private fun status(record:RecordEntity,taken:Long)=if(record.scheduled_utc!=null && record.late_after_minutes_snapshot!=null &&
+        taken>record.scheduled_utc+record.late_after_minutes_snapshot.toLong()*60_000L)"LATE" else "ON_TIME"
+    private suspend fun actualRecord(database:NotesDatabase,ticket:MeasuredWriteTicket):RecordEntity {
+        val id=ticket.recordId ?: fail(ReferenceError.INVALID_SOURCE)
+        val record=database.dao().recordById(id) ?: fail(ReferenceError.UNKNOWN_IDENTITY)
+        if(record.medication_id!=ticket.medicationId || record.origin!="APP" || record.status !in setOf("ON_TIME","LATE"))fail(ReferenceError.INVALID_SOURCE)
+        return record
+    }
+    private fun currentSource(db:SupportSQLiteDatabase,ticket:MeasuredWriteTicket,record:RecordEntity,sourceOperation:String):MeasuredConsumptionRequest {
+        val source=MeasuredConsumptionStore.existingConsumption(db,sourceOperation)?.first ?: fail(ReferenceError.UNKNOWN_IDENTITY)
+        val identity=ReferenceStore.row(db,"reference_identity","uuid=?",arrayOf(source.record.uuid)) ?: fail(ReferenceError.UNKNOWN_IDENTITY)
+        if(source.datasetUuid!=ticket.scope.dataset || source.medicationUuid!=ticket.medicationUuid || identity.isNull("live_handle") || identity.getLong("live_handle")!=record.id || source.record.revision!=record.revision)fail(ReferenceError.STALE_REVISION)
+        return source
+    }
+    suspend fun revise(database:NotesDatabase,ticket:MeasuredWriteTicket,sourceOperation:String,reverseOperation:String,newOperation:String,
+        draft:MeasuredActualUseDraft,created:Instant,checkpoint:(ActualUseCheckpoint)->Unit={}):RecordedMeasuredUse {
+        val db=database.openHelper.writableDatabase;check(db.inTransaction());owner(db,ticket)
+        require(listOf(sourceOperation,reverseOperation,newOperation).all(ReferencePayload::uuid) && setOf(sourceOperation,reverseOperation,newOperation).size==3)
+        checkDraft(draft,created)
+        val current=actualRecord(database,ticket)
+        MeasuredConsumptionStore.existingConsumption(db,newOperation)?.let{(request,receipt)->
+            val inverse=MeasuredConsumptionStore.sourceOfInverse(db,reverseOperation) ?: fail(ReferenceError.OPERATION_CONFLICT)
+            val row=ReferenceStore.row(db,"measured_operation","operation_uuid=?",arrayOf(newOperation))!!
+            val subject=ReferenceStore.row(db,"reference_identity","uuid=?",arrayOf(request.record.uuid)) ?: fail(ReferenceError.UNKNOWN_IDENTITY)
+            if(subject.isNull("live_handle") || subject.getLong("live_handle")!=current.id || request.datasetUuid!=ticket.scope.dataset || request.medicationUuid!=ticket.medicationUuid ||
+                inverse.getString("source_operation_uuid")!=sourceOperation || inverse.getString("record_uuid")!=request.record.uuid ||
+                JSONObject(row.getString("input_json")).getJSONObject("chain").getString("previous_operation_uuid")!=reverseOperation ||
+                !sameActual(request,draft,status(current,draft.takenUtc)))fail(ReferenceError.OPERATION_CONFLICT)
+            return RecordedMeasuredUse(current,receipt)
+        }
+        validate(db,ticket);require(current.deleted_at_utc==null && current.revision<Int.MAX_VALUE)
+        currentSource(db,ticket,current,sourceOperation)
+        MeasuredConsumptionStore.reverseOriginal(database,ticket.scope,current,sourceOperation,reverseOperation,created)
+        val next=current.copy(taken_utc=draft.takenUtc,taken_zone=draft.takenZone,actual_dose=draft.clinicalDose,status=status(current,draft.takenUtc),revision=current.revision+1)
+        database.dao().updateRecord(next);checkpoint(ActualUseCheckpoint.RECORD_WRITTEN)
+        ReferenceStore.captureContext(db,next);checkpoint(ActualUseCheckpoint.CONTEXT_CAPTURED)
+        val result=MeasuredConsumptionStore.consumeNewRecord(database,ticket.scope,next,newOperation,draft.uses,created,draft.stockEffect,draft.unlinkedActual)
+        checkpoint(ActualUseCheckpoint.STOCK_CAPTURED);MeasuredConsumptionStore.auditStagedDataset(db)
+        return RecordedMeasuredUse(next,result)
+    }
+    suspend fun delete(database:NotesDatabase,ticket:MeasuredWriteTicket,sourceOperation:String,reverseOperation:String,created:Instant):RecordEntity {
+        val db=database.openHelper.writableDatabase;check(db.inTransaction());owner(db,ticket)
+        require(listOf(sourceOperation,reverseOperation).all(ReferencePayload::uuid) && sourceOperation!=reverseOperation)
+        val current=actualRecord(database,ticket)
+        MeasuredConsumptionStore.sourceOfInverse(db,reverseOperation)?.let{inverse->
+            val identity=ReferenceStore.row(db,"reference_identity","uuid=?",arrayOf(inverse.getString("record_uuid"))) ?: fail(ReferenceError.UNKNOWN_IDENTITY)
+            if(inverse.getString("dataset_uuid")!=ticket.scope.dataset || inverse.getString("medication_uuid")!=ticket.medicationUuid || inverse.getString("source_operation_uuid")!=sourceOperation ||
+                identity.isNull("live_handle") || identity.getLong("live_handle")!=current.id || current.deleted_at_utc==null || current.revision!=inverse.getInt("record_revision")+1)fail(ReferenceError.OPERATION_CONFLICT)
+            return current
+        }
+        validate(db,ticket);require(current.deleted_at_utc==null && current.revision<Int.MAX_VALUE)
+        currentSource(db,ticket,current,sourceOperation)
+        MeasuredConsumptionStore.reverseOriginal(database,ticket.scope,current,sourceOperation,reverseOperation,created)
+        val next=current.copy(deleted_at_utc=created.toEpochMilli(),revision=current.revision+1);database.dao().updateRecord(next)
+        val date=Instant.ofEpochMilli(requireNotNull(current.taken_utc)).atZone(ZoneId.of(requireNotNull(current.taken_zone))).toLocalDate().toString()
+        db.execSQL("DELETE FROM trash_item WHERE kind='RECORD' AND ref=?",arrayOf(current.id.toString()))
+        Trash.insert(db,Trash.RECORD,current.id.toString(),date,JSONObject(),created.toEpochMilli())
+        MeasuredConsumptionStore.auditStagedDataset(db);return next
+    }
+    suspend fun restore(database:NotesDatabase,ticket:MeasuredWriteTicket,newOperation:String,draft:MeasuredActualUseDraft,created:Instant,
+        checkpoint:(ActualUseCheckpoint)->Unit={}):RecordedMeasuredUse {
+        val db=database.openHelper.writableDatabase;check(db.inTransaction());owner(db,ticket)
+        require(ReferencePayload.uuid(newOperation));checkDraft(draft,created)
+        val current=actualRecord(database,ticket)
+        MeasuredConsumptionStore.existingConsumption(db,newOperation)?.let{(request,receipt)->
+            val identity=ReferenceStore.row(db,"reference_identity","uuid=?",arrayOf(request.record.uuid)) ?: fail(ReferenceError.UNKNOWN_IDENTITY)
+            if(request.datasetUuid!=ticket.scope.dataset || request.medicationUuid!=ticket.medicationUuid || identity.isNull("live_handle") ||
+                identity.getLong("live_handle")!=current.id || !sameActual(request,draft,current.status))fail(ReferenceError.OPERATION_CONFLICT)
+            return RecordedMeasuredUse(current,receipt)
+        }
+        validate(db,ticket);require(current.deleted_at_utc!=null && current.revision<Int.MAX_VALUE)
+        require(current.taken_utc==draft.takenUtc && current.taken_zone==draft.takenZone && current.actual_dose?.toRawBits()==draft.clinicalDose.toRawBits())
+        val item=database.dao().trash().single{it.kind==Trash.RECORD && it.ref==current.id.toString() && it.state==Trash.TRASHED}
+        val next=current.copy(deleted_at_utc=null,revision=current.revision+1);database.dao().updateRecord(next);checkpoint(ActualUseCheckpoint.RECORD_WRITTEN)
+        AttachmentIdentity.restored(db,item);db.execSQL("DELETE FROM trash_item WHERE id=?",arrayOf(item.id))
+        ReferenceStore.captureContext(db,next);checkpoint(ActualUseCheckpoint.CONTEXT_CAPTURED)
+        val result=MeasuredConsumptionStore.consumeNewRecord(database,ticket.scope,next,newOperation,draft.uses,created,draft.stockEffect,draft.unlinkedActual)
+        checkpoint(ActualUseCheckpoint.STOCK_CAPTURED);MeasuredConsumptionStore.auditStagedDataset(db)
+        return RecordedMeasuredUse(next,result)
+    }
+
 }
