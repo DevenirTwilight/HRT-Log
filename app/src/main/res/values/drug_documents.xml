@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="drug_docs_title">Product documents</string>
+    <string name="drug_docs_rcp">RCP — summary of product characteristics</string>
+    <string name="drug_docs_notice">Notice — patient information leaflet</string>
+    <string name="drug_docs_unverified">Document entry and body have not been verified for this saved reference.</string>
+    <string name="drug_docs_entry_verified">Product page entry verified on %1$s.</string>
+    <string name="drug_docs_body_not_verified">An entry check does not verify the complete document body.</string>
+    <string name="drug_docs_distribution_off">Official offline documents are not enabled. User-entered references are not official verification.</string>
+    <string name="drug_docs_no_advice">These references do not set your dose, route or treatment plan.</string>
+    <string name="drug_docs_invalid_link">The supplied link does not match an allowed public product page.</string>
+    <string name="drug_docs_access_changed">Access changed. Return to the unlocked app before trying again.</string>
+    <string name="drug_docs_external">This opens the supplied public product page in your browser. No medication records are included. The browser and website can see the page you visit and apply their own privacy terms to information you enter there. Subsequent redirects are outside this app’s control. The page may have changed or be unavailable.</string>
+</resources>
