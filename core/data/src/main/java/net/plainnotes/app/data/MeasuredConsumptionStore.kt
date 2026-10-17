@@ -27,6 +27,8 @@ internal data class AuditedStockProjection(val containerUuid:String,val presenta
  * A later revision accepts prior exact history only after its complete audited inverse.
  */
 internal object MeasuredConsumptionStore {
+    // Materialize proven live handles once; preserve the exact NOT EXISTS coverage predicate.
+    internal const val EXACT_SOURCE_COVERAGE_QUERY="SELECT 1 FROM supply_container c LEFT JOIN (SELECT DISTINCT i.live_handle FROM reference_identity i JOIN reference_event e ON e.subject_uuid=i.uuid JOIN reference_snapshot s ON s.uuid=e.snapshot_uuid WHERE i.kind='CONTAINER' AND i.live_handle IS NOT NULL AND s.kind='PRESENTATION') covered ON covered.live_handle=c.id WHERE c.inventory_encoding='INTEGER_QUANTA_V1' AND covered.live_handle IS NULL LIMIT 1"
     private fun fail(code:ReferenceError):Nothing=throw ReferenceFailure(code)
 
     /** Read-only per-container projection audit. This does not replace whole-backup/zero-effect operation validation.
@@ -146,7 +148,7 @@ internal object MeasuredConsumptionStore {
         try {
             BackupValidation.validateCandidateStoredColumns(db)
             BackupValidation.validateMeasuredCandidateState(db)
-            db.query("SELECT 1 FROM supply_container c WHERE c.inventory_encoding='INTEGER_QUANTA_V1' AND NOT EXISTS(SELECT 1 FROM reference_identity i JOIN reference_event e ON e.subject_uuid=i.uuid JOIN reference_snapshot s ON s.uuid=e.snapshot_uuid WHERE i.kind='CONTAINER' AND i.live_handle=c.id AND s.kind='PRESENTATION') LIMIT 1").use{require(!it.moveToFirst())}
+            db.query(EXACT_SOURCE_COVERAGE_QUERY).use{require(!it.moveToFirst())}
             db.query("SELECT 1 FROM measured_operation o JOIN reference_event e ON e.operation_uuid=o.operation_uuid LIMIT 1").use{require(!it.moveToFirst())}
             db.query("PRAGMA foreign_key_check").use{require(!it.moveToFirst())}
             val identities=db.query("SELECT DISTINCT i.uuid,i.dataset_uuid FROM reference_identity i JOIN reference_event e ON e.subject_uuid=i.uuid JOIN reference_snapshot s ON s.uuid=e.snapshot_uuid WHERE i.kind='CONTAINER' AND s.kind='PRESENTATION' ORDER BY i.uuid").use { c ->

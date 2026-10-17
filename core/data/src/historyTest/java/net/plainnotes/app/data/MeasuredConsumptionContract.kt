@@ -1481,4 +1481,25 @@ abstract class MeasuredConsumptionContract {
         assertEquals(setOf(b.presentationEventUuid),sources)
     }
 
+    @Test fun materializedSourceCoverageIsReadOnlyAndMatchesOriginalExistencePredicate()=runBlocking {
+        val m=med();val other=med("SYNTHETIC other owner")
+        db.withTransaction {
+            fun uncovered(query:String)=raw.query(query).use{it.moveToFirst()}
+            val original="SELECT 1 FROM supply_container c WHERE c.inventory_encoding='INTEGER_QUANTA_V1' AND NOT EXISTS(SELECT 1 FROM reference_identity i JOIN reference_event e ON e.subject_uuid=i.uuid JOIN reference_snapshot s ON s.uuid=e.snapshot_uuid WHERE i.kind='CONTAINER' AND i.live_handle=c.id AND s.kind='PRESENTATION') LIMIT 1"
+            fun agrees(expected:Boolean) {
+                val before=RawData.dump(raw).toString()
+                assertEquals(expected,uncovered(original));assertEquals(expected,uncovered(MeasuredConsumptionStore.EXACT_SOURCE_COVERAGE_QUERY))
+                assertEquals(before,RawData.dump(raw).toString())
+            }
+            agrees(false)
+            db.dao().insertContainer(ContainerEntity(medication_id=m,capacity=28.0,initial_used_amount=0.0,used_amount=0.0,state="SEALED"))
+            agrees(false) // A legacy scalar needs no inferred official/physical identity.
+            box(m);box(other);box(m,Meaning(QuantityKind.USE_COUNT,"SYNTHETIC different strength"))
+            agrees(false) // Independent owners and meanings remain separately validated by the full auditor.
+            db.dao().insertContainer(ContainerEntity(medication_id=m,capacity=56.0,initial_used_amount=0.0,used_amount=0.0,state="SEALED",inventory_encoding=InventoryEncoding.EXACT))
+            agrees(true)
+            rejects(ReferenceError.INVALID_SOURCE){MeasuredConsumptionStore.auditStagedDataset(raw)}
+        }
+    }
+
 }

@@ -944,10 +944,33 @@
       "source_date": null,
       "review_status": "UNREVIEWED",
       "result_status": "INTEGRATION_VERIFIED",
-      "blocker": "New native113 / final CI / performance and P5/P6 pending",
+      "blocker": "Current query114 native / final CI / P4 admission and P5/P6 pending",
       "owner_decision_required": false,
-      "progress": "LOCAL_ONLY",
-      "note": "docs/ansm-integration/p4/reconciliation-final-evidence.json"
+      "progress": "NATIVE_113_VERIFIED_PRIOR_HEAD",
+      "note": "docs/ansm-integration/p4/reconciliation-final-evidence.json; reconciliation-native-evidence.json verifies113 onAPI26/29/35 at9281885, not current query source."
+    },
+    {
+      "requirement_id": "V4.31.PERFORMANCE",
+      "origin_file": "docs/ansm-completion/sources/owner-v4-2026-10-17.md",
+      "origin_section": 31,
+      "original_claim": "Large5–10-year synthetic history, thousands of containers/operations/source snapshots; low-memoryAPI26 and backup/time/memory/disk budgets",
+      "corrected_scope": "2000 exact containers+operations+frozen snapshots,14600 facts,20 multilingual source variants; real backup/restore and writes. No unlimited retention or hardware claim.",
+      "stage": "P4/P6",
+      "affected_product_or_dataset": "Synthetic USER_ENTERED only",
+      "implementation_path": "scripts/run_ansm_inventory_performance.py",
+      "test_id": [
+        "thousandsOfFrozenPackagesAndTenYearHistory",
+        "materializedSourceCoverageIsReadOnlyAndMatchesOriginalExistencePredicate"
+      ],
+      "pr_url": "https://github.com/DevenirTwilight/HRT-Log/pull/57",
+      "source_url": [],
+      "source_date": null,
+      "review_status": "UNREVIEWED",
+      "result_status": "LOCAL_DIAGNOSTIC_BUDGET_PASS",
+      "blocker": "NativeAPI26 low-memory and final current-source CI pending; physical hardware NOT_RUN",
+      "owner_decision_required": false,
+      "progress": "IN_PROGRESS",
+      "note": "docs/ansm-integration/p4/performance/large-coverage-1a75c5b/evidence.json; failed baseline retained, no threshold relaxation"
     }
   ]
 }

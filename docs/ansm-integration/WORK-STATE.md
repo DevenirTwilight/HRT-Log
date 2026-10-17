@@ -44,3 +44,5 @@ P1已普通合入实际默认分支的ANSM-01/#45及02A/#48；不改变其冻结
 
 
 2026-10-17 P4续作：#57内部真实计划服药、MISSED补录与format3冻结计划上下文已本地集成验证，完整data373/shared98、原生源码编译、Period5/Privacy3 PASS。共享UNKNOWN/生命周期/data362及四语32组192图已单独留证，混合库存正式入口守卫/data365 PASS。db1ef03六CI及三API共享82实际PASS并校验SHA/CRC。当前新增98原生和最终HEAD CI待验；后实盘独立协调、性能、P5/P6未完成，App精确写入口OFF、#57 DRAFT。完整证据与下一步见p4/work-state.md，V4逐项追踪见../ansm-completion/TRACEABILITY.json。未合并、未发布。
+
+2026-10-17 大库检查点：P4本地data389/shared114/原生及大库原生源码编译/Python163 PASS。14600合成事实+2000包装/操作/来源的完整备份恢复已通过；后续写入预算最初真实FAIL，经保留全部校验的查询优化后4.32…4.64s转绿。新增独立API26 SQLCipher低内存性能任务，未改六必需检查；原生低内存运行与新HEAD CI仍待验，不称P4完成。#57继续DRAFT、App精确写入口OFF，P5/P6未完成。

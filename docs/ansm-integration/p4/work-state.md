@@ -85,3 +85,5 @@ Room12检查点0843450六项CI在push/PR全部SUCCESS；当前仍DRAFT，不以�
 2026-10-17 严格输入：完整data334/共享60 JVM PASS，原生源码编译PASS；尾随JSON真实红例与夹具初始化顺序失败均已归档。Python159 PASS（首次从仓库根直接调用产生3个导入错误，改用PYTHONPATH=scripts及discover后完整159运行通过，未改测试）。API35旧固定业务版本断言正在修正并补充Legacy标记断言；公开精确恢复/新UI仍OFF。见strict-backup-input-contract.md。
 
 2026-10-17 性能及CI续作：事务内身份/来源/整数前缀索引本地完整data388/shared113和原生测试源码编译PASS，未缓存跨事务信任。相同手动探针exact200中位168.86→104.34ms，审计275.65→153.62ms，仅DIAGNOSTIC_ONLY，大库/低内存/设备门未完成。原始报告及来源指纹归档performance/。9281885远端android真实FAIL：新增MeasuredReconciliation被调用隔离守卫拒绝；本次只为该文件添加精确路径/精确imports/禁用API合同，同时新增逐个I/O、PK和未知import负例，不移除原守卫。完整Python160 PASS；新HEAD六CI待验，#57继续DRAFT，App写入口OFF。
+
+2026-10-17 大库验证检查点：合成14600事实/2000包装/2000消费/2000冻结来源/20长名称多语规格，完整暂存恢复、审计、加密备份/恢复已真实运行。首轮后续写入6.44…6.75s超过预置5s，真实FAIL保留；等价来源覆盖集合反连接后4.32…4.64s，完整预算PASS，未放宽阈值/安全守卫。全量本地data389/shared114、常规原生源码编译及独立大库原生测试源码编译PASS；Python163 PASS。采样JVM堆约533MB，不能代替原生低内存/RSS/磁盘结论。新增独立API26低内存SQLCipher任务（不改原六检查/Gradle/保护规则），运行结果仍NOT_RUN；新HEAD全部远端CI待验，#57 DRAFT、App写入口OFF、未合并未发布。旧9281885三API共享113零失败证据已校验SHA/CRC，不能代替新114。详见performance/coverage-query-contract.md、large-budget-contract.md及机器报告。
