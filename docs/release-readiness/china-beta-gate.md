@@ -6,13 +6,15 @@
 
 | 项目 | 已有发行记录（不是新候选） |
 |---|---|
-| 仓库审计基线 | `claude/new-session-1959qb` / `35600a0`，PR #62 合并后 |
+| 仓库审计基线 | `claude/new-session-1959qb` / `d13048b18ad15eb4e7aba70f63c3c5d94a705660`，PR #63 合并后 |
 | 已发布版本 | `v0.2.0` / versionCode **29** / full Universal |
 | 发行源码 / tag | `76627bfe215987122666b38ea7a42ee08731cdde` |
 | 包名 | `net.plainnotes.app` |
 | APK SHA256 | `0d950bbb4bb281089318e080e3272400498b48cd094f4ffb4675fbabe6f93201` |
 | 签名证书 SHA256 | `989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1` |
 | 记录来源 | `docs/delivery/ledger.json`、`docs/releases/0.2.0-rebuild-2026-10-17.md` |
+| 发行源码数据版本 | Room **11**；PNBAK1 业务 Schema **10**；外层 format **1**。来源：该源码 `NotesDatabase.kt`、`RecordBackupCompatibility.kt`、`DataTransfer.kt` |
+| P4 未合并候选数据版本 | Room **12** / 业务 Schema **11**；外层 format **1**，不是 build29 中已发行功能 |
 | 本轮重新下载/验签 APK | **NOT_RUN**；上列是仓库发行记录，不冒充本轮实测 |
 | 后端 Beta 候选 APK | **NOT_IMPLEMENTED**，无候选构建、签名或版本号 |
 
@@ -22,8 +24,8 @@
 
 | 门 | 目前证据 / 下一步 | 状态 |
 |---|---|---|
-| 主线完整六项 CI | `34f0e01` run39057460488 android 在 Robolectric 依赖获取阶段失败；独立 #63 修复正在跑，须检查最终 SHA 并复验合并后的主线 | FAIL / PENDING |
-| P4 原生低内存 | #57 `6e05960` run39047684726：512MiB 级模拟器、192MiB 堆，审计/预测/恢复后审计与三次写入超时 | FAIL |
+| 主线完整六项 CI | 原失败为测试初始化时外部 SDK 依赖获取；独立 #63 已合并为 d13048b，最终源80c31ce全检查通过；合并后 Android39065037526 五项及 Science39065037594 全部成功 | PASS |
+| P4 原生低内存 | #57 a3e95e4 run39064593821：总RAM520962048B、最大堆201326592B；审计18135ms、预测15773ms、恢复后审计15620ms、写入17638–17848ms仍FAIL。新候选 db34e87（事务内只读行缓存）原生结果待定 | FAIL |
 | P4 正式库存完整安全门 | #57 DRAFT，正式入口 OFF；不得用 JVM 诊断代替 API26 原生预算验收 | BLOCKED |
 | P5 最小业务接线 | 复用已有真实 Compose 控件，统一不可变库存 DTO；不能拿 PR60 概念图当实现 | NOT_IMPLEMENTED |
 | P6 正常 UI 端到端 | UI→Repository→SQLCipher→重启→备份→新设备/非空库恢复→共享预测与提醒；合成数据 | NOT_IMPLEMENTED |
