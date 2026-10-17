@@ -937,12 +937,27 @@ operation owned generation/UUID/暂存device wrap/hash及终态不可逆清理�
 负责人补充：“自动合并开了，自动合”。覆盖 §102 的不自动合并限制，仅限本轮 ANSM 依赖及新建实施 PR。最新 HEAD 必须通过六项必需检查、无冲突和未解决讨论，遵守严格分支保护；允许更新基线后使用 GitHub 自动合并，不使用管理员绕过、不改 ruleset。不包括无关 PR、官方资源分发批准、PK、签名或发布。合并后复验默认分支 CI。
 
 
-## 104. ANSM P4→P5 连续实施（2026-10-17）
+## 104. 用默认分支最新代码重建并替换公开 Release v0.2.0（2026-10-17）
+
+负责人明确授权（本轮覆盖 HANDOFF 中“不签名 / 不动公开 Release 与标签”的限制，仅限以下操作）：
+
+- 基于当前默认分支 HEAD 构建 full Universal release APK；versionName 仍为 0.2.0，versionCode 取账本最大值 + 1（= 29），旧公开版（versionCode 5）和私下测试版（≤ 28）都可直接覆盖安装。
+- 用既有私有正式签名（证书 989ba045…59379b1）签名，流程同 B4-D / `scripts/sign_local_apk.sh`；签名材料不进 Git，用完清理。签名前确认旧公开 APK 证书相同，不同则停下询问。
+- 编辑现有 v0.2.0 Release：删除旧 APK 资产（含已废弃的 play 包），上传新 APK 与 SHA256，说明写清是重新构建、新源码 commit 与 versionCode。不新建版本号或 Release。
+- 把 v0.2.0 tag 移到本次构建的源码 commit，同步 `.github/release-assets.json`、`docs/releases/`；旧 tag SHA（462da22）与旧 APK 哈希在 `docs/releases/` 留档。更新账本与 README 的 Public release 行和版本层次说明。
+- 只含已合并到默认分支且 CI 全绿的内容；未合并 PR、研究分支、debug 演示不进入；release 隔离检查必须通过。签名前完整 CI（JVM、Android、lint、unsignedRelease、设备测试、Science）与 `scripts/check_release_manifest.py`，确认无 INTERNET 权限。
+- 逐条核对宣传功能是否在此 release 构建中可用，缺失只报告，不临时改代码。隐私表述与 PRIVACY.md、docs/privacy-evidence.md 一致。任何一步失败即停止汇报。
+
+## 105. ANSM P4→P5 连续实施（2026-10-17）
 
 负责人续作原文：[任务书](ansm-integration/sources/owner-continuation-2026-10-17.md)，SHA256 `5128e10f2241904ae7165e37f12f8af5c962f1346c2ea4a9d8820794d76849c8`。继续现有#57，按全局候选验证→独立业务备份/原子恢复→正式Repository事务/观察协调/ABA→共享UNKNOWN安全投影顺序实施；完整验收及受保护合并后连续推进独立P5和P6。不重复索取§102/103已有范围授权；失败保留原证据，未实现入口OFF。官方分发、PK、附件、联网、破坏性迁移、PNBAK1外层密码学、签名/版本/发布边界不变。
 
 
-## 105. ANSM 剩余开发核漏修订 V4（2026-10-17）
+## 106. ANSM 剩余开发核漏修订 V4（2026-10-17）
 
-负责人完整任务书：[原文](ansm-completion/sources/owner-v4-2026-10-17.md)，SHA256 `c6728ed10f66b61bf19df6253bc591bc325ac6a8a1ab9604e5b41226967fcd48`。继承§102/103/104，不重做P0–P3；继续#57完成P4备份/实际事务/观察协调及UNKNOWN准入，再独立P5/P6。建立统一来源、产品、兼容、生命周期、威胁模型、临床文案和实物构建覆盖台账；V4 §34–40补充监管加强监测、不良反应报告安全外链、计量失败边界、外部浏览器控制范围及来源—译文—发布三向证据。
+负责人完整任务书：[原文](ansm-completion/sources/owner-v4-2026-10-17.md)，SHA256 `c6728ed10f66b61bf19df6253bc591bc325ac6a8a1ab9604e5b41226967fcd48`。继承§102/103/105，不重做P0–P3；继续#57完成P4备份/实际事务/观察协调及UNKNOWN准入，再独立P5/P6。建立统一来源、产品、兼容、生命周期、威胁模型、临床文案和实物构建覆盖台账；V4 §34–40补充监管加强监测、不良反应报告安全外链、计量失败边界、外部浏览器控制范围及来源—译文—发布三向证据。
 允许开发并提交独立ANSM-04/05/06只读工程PR，不将其视为新增临床/版权审阅或自动合并批准；这些PR停在相应审阅门，§103仍仅适用于明确覆盖的02B/03B P4/P5。官方许可/FT-ST未闭环则资源OFF，CPA个体风险/阈值/自动监测/漏服治疗建议、PK改模、网络、附件、破坏性迁移、PNBAK1外层密码学、签名/版本/发布仍未获授权。不得用法律阻断掩盖未完成的软件工程；可独立安全工作持续推进。
+
+## 107. 后端收尾与中国 Beta 验收（2026-10-17）
+
+原文见 [任务书](ansm-completion/sources/owner-backend-beta-2026-10-17.md)。先复核主线 CI 修复，再完成现有 #57 原生性能与安全门、复用既有 UI 最小 P5 接线、P6 E2E 与中国 Beta readiness。#63 已由并行开发者提交，不重复修改其 Gradle/CI；不将 ANSM 合并授权扩大到 CI PR。原生性能不达标保持 P4_BLOCKED/OFF。不重新签名、发布、移动 build29 标签。原 §104 续作顺延 §105，原 §105 V4 顺延 §106，历史来源原文保留；主线 §104 一次性发布授权及已完成记录不变。
