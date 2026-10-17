@@ -1,0 +1,36 @@
+{
+  "defaultBranchRef": {
+    "name": "claude/new-session-1959qb",
+    "target": {
+      "oid": "f1e9b4de1c97e73966b4af8900b78391eada5c43"
+    }
+  },
+  "p45": {
+    "state": "MERGED",
+    "mergedAt": "2026-10-16T14:22:45Z",
+    "mergeCommit": {
+      "oid": "6a4f03ad00510a2ec1b1f677bf9eeda593c81526"
+    }
+  },
+  "p48": {
+    "state": "MERGED",
+    "mergedAt": "2026-10-16T15:02:09Z",
+    "mergeCommit": {
+      "oid": "0dca778396619a005144dab044eaf4eafeafad40"
+    }
+  },
+  "p50": {
+    "state": "MERGED",
+    "mergedAt": "2026-10-16T12:48:53Z",
+    "mergeCommit": {
+      "oid": "b1b2d93be2b6d002faaf842f2519fc3958aef85a"
+    }
+  },
+  "p57": {
+    "state": "OPEN",
+    "isDraft": true,
+    "headRefOid": "c7daddf2edf5eb3f3eb4b5f7a38469f5ac5f1d73"
+  },
+  "checked_on": "2026-10-17",
+  "inventory_concurrent_pr": "Only #57 changes inventory/data; unrelated research/docs PRs left untouched"
+}

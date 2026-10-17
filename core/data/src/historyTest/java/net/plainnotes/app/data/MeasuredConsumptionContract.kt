@@ -391,4 +391,70 @@ abstract class MeasuredConsumptionContract {
         assertEquals(4,count("supply_transaction"));assertEquals(3,count("measured_allocation"));assertEquals(r,db.dao().recordById(r.id))
     }
 
+    /** Trusted installed DDL plus synthetic business rows only; deliberately no local runtime table. */
+    private fun <T> staged(block:(androidx.sqlite.db.SupportSQLiteDatabase)->T):T {
+        val trusted=raw.query("SELECT name,sql FROM sqlite_master WHERE type='table' AND sql IS NOT NULL ORDER BY name").use { c ->
+            buildList { while(c.moveToNext())if(c.getString(0) in DOMAIN_TABLES)add(c.getString(1)) }
+        }
+        val rows=RawData.dump(raw)
+        val configuration=SupportSQLiteOpenHelper.Configuration.builder(context).name(null)
+            .callback(object:SupportSQLiteOpenHelper.Callback(1) {
+                override fun onConfigure(db:androidx.sqlite.db.SupportSQLiteDatabase){db.setForeignKeyConstraintsEnabled(true)}
+                override fun onCreate(db:androidx.sqlite.db.SupportSQLiteDatabase){trusted.forEach(db::execSQL)}
+                override fun onUpgrade(db:androidx.sqlite.db.SupportSQLiteDatabase,oldVersion:Int,newVersion:Int)=error("Synthetic staging cannot upgrade")
+            }).build()
+        return androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory().create(configuration).use { helper ->
+            val staging=helper.writableDatabase;staging.beginTransaction()
+            try {
+                for(table in DOMAIN_TABLES) {
+                    val values=rows.getJSONArray(table)
+                    val order=if(table=="supply_transaction")LedgerReplacement.insertionOrder(values) else ReferenceDependencies.insertionOrder(table,values)
+                    for(i in order) {
+                        val row=values.getJSONObject(i);val keys=row.keys().asSequence().toList()
+                        val args=keys.map{key->row.get(key).let{if(it==org.json.JSONObject.NULL)null else it}}.toTypedArray()
+                        staging.execSQL("INSERT INTO `$table` (${keys.joinToString(","){"`$it`"}}) VALUES (${keys.joinToString(","){"?"}})",args)
+                    }
+                }
+                assertEquals(0,staging.query("SELECT COUNT(*) FROM sqlite_master WHERE name='reference_runtime'").use{it.moveToFirst();it.getInt(0)})
+                val result=block(staging);staging.setTransactionSuccessful();result
+            } finally {staging.endTransaction()}
+        }
+    }
+
+    @Test fun stagingProjectionReusesTheLiveAuditWithoutRuntimeIdentityOrAnyWrites()=runBlocking {
+        val m=med();val b=box(m);val r=record(m);val original=consume(r,b,listOf(use(b)))
+        db.withTransaction{MeasuredConsumptionStore.reverseOriginal(db,b.scope,r,original.operationUuid,UUID.randomUUID().toString(),at)}
+        consume(record(m),b,listOf(use(b,"1.5")))
+        val live=db.withTransaction{MeasuredConsumptionStore.auditProjection(db,b.scope,b.containerUuid)}
+        val before=RawData.dump(raw).toString()
+        staged { staging ->
+            val stagedBefore=RawData.dump(staging).toString()
+            assertEquals(live,MeasuredConsumptionStore.auditStagedProjection(staging,b.scope.dataset,b.containerUuid))
+            assertEquals(stagedBefore,RawData.dump(staging).toString())
+        }
+        assertEquals(before,RawData.dump(raw).toString());assertEquals(3,count("supply_transaction"))
+    }
+
+    @Test fun stagingRejectsForeignDatasetAndTextInANumericLedgerColumnWithoutAffectingSource()=runBlocking {
+        val m=med();val b=box(m);consume(record(m),b,listOf(use(b)))
+        val before=RawData.dump(raw).toString()
+        staged { staging ->
+            try {MeasuredConsumptionStore.auditStagedProjection(staging,UUID.randomUUID().toString(),b.containerUuid);fail("Foreign dataset accepted")}
+            catch(e:ReferenceFailure){assertEquals(ReferenceError.INVALID_SOURCE,e.code)}
+            staging.execSQL("UPDATE supply_transaction SET used_delta='not-a-number'")
+            try {MeasuredConsumptionStore.auditStagedProjection(staging,b.scope.dataset,b.containerUuid);fail("Text quantity accepted")}
+            catch(e:ReferenceFailure){assertEquals(ReferenceError.INVALID_SOURCE,e.code)}
+            assertEquals("not-a-number",staging.query("SELECT used_delta FROM supply_transaction").use{it.moveToFirst();it.getString(0)})
+        }
+        assertEquals(before,RawData.dump(raw).toString());assertEquals(1.0,db.dao().container(b.container.id).used_amount,0.0)
+    }
+
+    @Test fun liveAuditStillRejectsStaleEpochBeforeDelegatingToBusinessOnlyStaging()=runBlocking {
+        val m=med();val b=box(m);consume(record(m),b,listOf(use(b)))
+        val before=RawData.dump(raw).toString()
+        rejects(ReferenceError.STALE_SCOPE){db.withTransaction{MeasuredConsumptionStore.auditProjection(db,b.scope.copy(epoch=UUID.randomUUID().toString()),b.containerUuid)}}
+        assertEquals(before,RawData.dump(raw).toString())
+        staged { staging ->assertTrue(MeasuredConsumptionStore.auditStagedProjection(staging,b.scope.dataset,b.containerUuid) is MeasureResult.Success)}
+    }
+
 }

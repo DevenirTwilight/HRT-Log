@@ -1,6 +1,6 @@
 # P4 工作状态
 
-当前：#57 DRAFT，本地完整data306（共享32）/原生编译/Python157 PASS，当前新CI待验。前一源2d2a289的Period5+Privacy3 PASS。单容器只读审计已验证，完整全局备份校验、正式实际用量/修订/预测接线未完成；新计量正式入口/备份接受OFF。主线f1e9b4d仍Room11、六CI PASS；候选Room12仅在本PR、业务备份10。
+当前：#57 DRAFT；暂存库同核只读SQL审计完整data309/domain140、共享35、原生源码编译、Period5/Privacy3/Python157均PASS。源c7daddf六CI/API26/29/35共享32项已归档PASS；当前新35项远端待验。全局/零效果操作/退役身份备份校验、正式实际用量/修订/预测未完成；新入口和备份接受OFF。主线f1e9b4d仍Room11、业务10；候选Room12仅在本PR。
 
 2026-10-16：IN_PROGRESS，生产库存未接线。当前复用P3的de26444，普通合入P1源945512a，不直接复制未合并源码。#54已受保护合并为c95cea1；#55待主线检查及更新。
 
@@ -51,3 +51,7 @@ Room12检查点0843450六项CI在push/PR全部SUCCESS；当前仍DRAFT，不以�
 单容器只读投影首轮共享30项及原生源码编译PASS，Python157 PASS。包含有向换算重核、来源/量纲/物理量与整数流水配对、ADJUST/CONSUME/REVERSE重算、缓存差异只报告不修复、缺失配对流水拒绝。随后补严格REVERSE封闭字段/版本、当前记录修订边界及多包装原始/逆操作集合完整性；新增31项当前完整data回归运行中，不能套用首轮30成功。PRES备份接受仍OFF，完整全局验证尤其零效果/未知操作仍未完成。
 
 单容器投影当前完整data306（共享32）/原生编译/Python157全部PASS。新增故意缺另一容器逆操作证据的合成恢复状态：通过既有原子maintenance helper构造，全部可信trigger DDL安装回去并逐项相等断言后，审计本容器仍必须拒绝整个不完整逆集合；既有记录/四条流水及两个余额保持不变。没有弱化生产守卫，没有自动修复缓存。证据projection-final-evidence.json。Period/Privacy上一源2d2a289八项PASS，本次只增加无调用者只读审计；最新完整CI待当前源。
+
+2026-10-17续：重新核对默认分支f1e9b4d及开放PR，无其他库存/数据并行修改。源c7daddf六项必需CI在push/PR全SUCCESS；四份原生/JVM报告已校验官方SHA256、ZIP CRC且不含APK。API26/29数据各159、API35数据226，32项共享计量合同及10容器/6迁移/21引用合同在三API均PASS，PK124/domain140 PASS，证据projection-ci-evidence.json。新增暂存库SQL复用改动与3项合同仍在本地运行，不套用c7绿灯；正式备份接受、全局历史验证、实际记录入口和新预测仍未实施。
+
+暂存库复用最终本地验证PASS：data309/domain140、共享35、原生源码编译、PeriodStability5、PrivacyNoticeFacts3、Python157；所有实际运行零失败/错误/跳过。应用首个筛选只匹配PeriodStability，未把不存在的PrivacyBoundaryTest计为通过；随后明确补跑真实PrivacyNoticeFactsTest并保存独立XML摘要。源哈希/日志摘要见staging-local-evidence.json。共享SQL拒绝数值列文本，不恢复本地epoch，不修改源/暂存业务数据；PK、正式恢复、备份版本、数据库版本、预测及Manifest相对c7均无改动。当前提交新CI待验；继续全局候选恢复校验，#57保持DRAFT。
