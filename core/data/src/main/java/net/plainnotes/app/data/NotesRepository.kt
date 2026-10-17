@@ -114,6 +114,8 @@ const val BACKFILL_MAX_DAYS=731L
         val frozenDraft=draft.copy(uses=draft.uses.toList())
         return measuredTransaction{MeasuredUseIntegration.restore(it,ticket,newOperation,frozenDraft,created,checkpoint)}
     }
+    internal suspend fun correctMeasuredPackage(ticket:MeasuredWriteTicket,operationUuid:String,containerUuid:String,action:MeasuredPackageAction,userConfirmed:Boolean,created:Instant=Instant.now()):MeasuredPackageReceipt =
+        measuredTransaction{MeasuredUseIntegration.packageAction(it,ticket,operationUuid,containerUuid,action,userConfirmed,created)}
     suspend fun medications()=withContext(Dispatchers.IO){db().dao().medications()}
     suspend fun saveMilestone(value:MilestoneEntity)=transaction{dao->
         LocalDate.parse(value.date);require(value.kind in MILESTONE_KINDS)
@@ -823,8 +825,14 @@ const val BACKFILL_MAX_DAYS=731L
     /** Packages with at least one ledger entry (consumption, reversal or adjustment). */
     suspend fun containersWithLedger()=transaction { dao -> dao.containersWithLedger().toSet() }
     /** Logical correction: ADJUST is audit history, not evidence of an actual intake. */
-    suspend fun removeMistakenContainer(containerId:Long)=transaction { dao -> PackageCorrections.void(sql(),dao,containerId,Instant.now()) }
-    suspend fun restoreVoidedContainer(containerId:Long)=transaction { dao -> PackageCorrections.restore(sql(),dao,containerId,Instant.now()) }
+    suspend fun removeMistakenContainer(containerId:Long)=transactionWithSql { dao,raw ->
+        require(containerId !in dao.measuredContainerIds()) {"Exact package correction requires a current confirmation ticket"}
+        PackageCorrections.void(raw,dao,containerId,Instant.now())
+    }
+    suspend fun restoreVoidedContainer(containerId:Long)=transactionWithSql { dao,raw ->
+        require(containerId !in dao.measuredContainerIds()) {"Exact package correction requires a current confirmation ticket"}
+        PackageCorrections.restore(raw,dao,containerId,Instant.now())
+    }
     suspend fun voidedContainers()=transaction { it.voidedContainers() }
 
     // --- Well-being ---
@@ -888,14 +896,30 @@ const val BACKFILL_MAX_DAYS=731L
      * The open doses the stock forecast walks (B4): unfinished doses since tracking began plus the next
      * [StockForecasts.WINDOW_DAYS] days. The stock page, the calendar and stock reminders all use this one input.
      */
-    suspend fun stockDemand(now:Instant=Instant.now(),zone:ZoneId=ZoneId.systemDefault())=transaction { dao ->
+    private suspend fun stockDemandFrom(dao:NotesDao,now:Instant,zone:ZoneId):List<TimelineEntry> {
         val from=dao.rules().minOfOrNull{it.missed_tracking_from_utc}?.let(Instant::ofEpochMilli) ?: now
-        (timeline(dao,now,minOf(from,now),now.plusMillis(1),zone)+timeline(dao,now,now,now.plus(java.time.Duration.ofDays(StockForecasts.WINDOW_DAYS)),zone))
+        return (timeline(dao,now,minOf(from,now),now.plusMillis(1),zone)+timeline(dao,now,now,now.plus(java.time.Duration.ofDays(StockForecasts.WINDOW_DAYS)),zone))
             .filter{it.state in listOf(SlotState.PENDING,SlotState.SOON,SlotState.OVERDUE)}.distinctBy{it.slot.key}
     }
-    /** Shared stock forecasts for the active medications (B4). */
-    suspend fun stockForecasts(now:Instant=Instant.now(),zone:ZoneId=ZoneId.systemDefault())=transaction { dao ->
-        StockForecasts.forecastAll(dao.medications(),dao.containers(),stockDemand(now,zone))
+    suspend fun stockDemand(now:Instant=Instant.now(),zone:ZoneId=ZoneId.systemDefault())=transaction { dao ->stockDemandFrom(dao,now,zone)}
+    /** One captured SQL transaction; integer quanta never enter the legacy scalar forecast. */
+    suspend fun stockForecasts(now:Instant=Instant.now(),zone:ZoneId=ZoneId.systemDefault())=transactionWithSql { dao,raw ->
+        val meds=dao.medications();val containers=dao.containers();val demand=stockDemandFrom(dao,now,zone)
+        val forecasts=StockForecasts.forecastAll(meds,containers,demand)
+        val modern=containers.any{it.inventory_encoding!=InventoryEncoding.LEGACY} || raw.query("SELECT 1 FROM measured_operation LIMIT 1").use{it.moveToFirst()}
+        if(!modern)return@transactionWithSql forecasts
+        val balances=try {MeasuredConsumptionStore.forecastBalances(raw,MeasuredConsumptionStore.auditStagedDataset(raw))}
+            catch(_:ReferenceFailure){return@transactionWithSql forecasts.mapValues{(_,f)->f.copy(available=null,lastCovered=null,firstShort=null,uncertainty=setOf(StockUnknownReason.INVALID_NEEDS_REVIEW))}}
+        val unresolved=raw.query("SELECT r.medication_id,o.unknown_reason FROM measured_operation o JOIN reference_identity i ON i.uuid=o.record_uuid AND i.dataset_uuid=o.dataset_uuid AND i.kind='RECORD' JOIN dose_record r ON r.id=i.live_handle WHERE o.kind='CONSUME' AND o.record_revision=r.revision AND r.deleted_at_utc IS NULL AND (o.unknown_reason IS NOT NULL OR o.unallocated_quantity IS NOT NULL)").use{c->buildList{while(c.moveToNext())add(c.getLong(0) to if(c.isNull(1))null else c.getString(1))}}
+        val version=ReferencePayload.sha(ReferenceStore.previewEpoch(raw)+Trash.rows(raw,"supply_container","1 ORDER BY id",emptyArray()).toString()+Trash.rows(raw,"measured_operation","1 ORDER BY operation_uuid",emptyArray()).toString()+
+            demand.joinToString("|"){it.slot.key+":"+it.slot.at.toEpochMilli()+":"+it.slot.dose.toRawBits()})
+        forecasts.mapValues { (id,f) ->
+            val issues=unresolved.filter{it.first==id}.map{if(it.second=="STOCK_EFFECT_NOT_CONFIRMED")StockUnknownReason.STOCK_EFFECT_UNKNOWN else StockUnknownReason.UNALLOCATED}.toSet()
+            val physical=balances[id].orEmpty()
+            val reasons=(if(physical.isEmpty())f.uncertainty else (f.uncertainty-StockUnknownReason.UNKNOWN_SOURCE))+issues
+            if(reasons.isEmpty())f.copy(snapshotSha256=version)
+            else f.copy(available=null,lastCovered=null,firstShort=null,uncertainty=reasons,physicalBalances=physical,snapshotSha256=version)
+        }
     }
     suspend fun labs()=withContext(Dispatchers.IO){db().dao().labs()}
     suspend fun labContexts()=withContext(Dispatchers.IO){db().dao().labContexts()}

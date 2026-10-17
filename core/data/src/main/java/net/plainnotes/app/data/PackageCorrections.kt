@@ -90,15 +90,15 @@ internal object PackageCorrections {
     private fun latest(db:SupportSQLiteDatabase,id:Long):Pair<String,JSONObject>? = db.query(
         "SELECT ref,payload_json FROM trash_item WHERE kind='CORRECTION' AND (ref LIKE ? OR ref LIKE ?) ORDER BY id DESC LIMIT 1",
         arrayOf("package-void:$id:%","package-restore:$id:%")).use { c -> if(c.moveToFirst()) c.getString(0) to JSONObject(c.getString(1)) else null }
-    private fun append(db:SupportSQLiteDatabase,id:Long,action:String,payload:JSONObject,now:Instant) {
-        val operation=UUID.randomUUID().toString()
+    private fun append(db:SupportSQLiteDatabase,id:Long,action:String,payload:JSONObject,now:Instant,operationUuid:String?=null) {
+        val operation=operationUuid ?: UUID.randomUUID().toString();require(ReferencePayload.uuid(operation))
         db.insert("trash_item",SQLiteDatabase.CONFLICT_ABORT,ContentValues().apply{
             put("kind",Trash.CORRECTION);put("ref","package-$action:$id:$operation")
             put("item_date",now.atZone(ZoneOffset.UTC).toLocalDate().toString());put("deleted_utc",now.toEpochMilli())
             put("payload_json",payload.put("operation_id",operation).put("action",action).toString());put("state",Trash.HIDDEN)
         })
     }
-    suspend fun void(db:SupportSQLiteDatabase,dao:NotesDao,id:Long,now:Instant) {
+    suspend fun void(db:SupportSQLiteDatabase,dao:NotesDao,id:Long,now:Instant,operationUuid:String?=null) {
         val box=dao.container(id)
         if(box.state=="VOIDED")return // No second evidence row or second inventory change.
         require(box.state in realStates)
@@ -109,10 +109,10 @@ internal object PackageCorrections {
         val before=exactRow(rows(db,"supply_container","id=?",id).getJSONObject(0))
         val payload=JSONObject().put("version",2).put("container_uuid",subject).put("container",before)
             .put("ledger_sha256",ledger(db,id)).put("ledger_head_id",ledgerHead(db,id).toString()).put("context_sha256",context(db,box))
-        append(db,id,"void",payload,now)
+        append(db,id,"void",payload,now,operationUuid)
         dao.setContainerState(id,"VOIDED",box.opened_on)
     }
-    suspend fun restore(db:SupportSQLiteDatabase,dao:NotesDao,id:Long,now:Instant) {
+    suspend fun restore(db:SupportSQLiteDatabase,dao:NotesDao,id:Long,now:Instant,operationUuid:String?=null) {
         val box=dao.container(id)
         if(box.state!="VOIDED")return
         val event=latest(db,id) ?: throw PackageRestoreConflict()
@@ -124,14 +124,16 @@ internal object PackageCorrections {
         if(!event.first.startsWith("package-void:") || !matches ||
             before.getString("state") !in realStates || dao.supplyForContainer(id).any{it.kind!="ADJUST"} ||
             payload.getString("ledger_sha256")!=ledger(db,id))throw PackageRestoreConflict()
-        append(db,id,"restore",JSONObject(payload.toString()).put("restores",event.first),now)
+        append(db,id,"restore",JSONObject(payload.toString()).put("restores",event.first),now,operationUuid)
         dao.setContainerState(id,before.getString("state"),box.opened_on)
     }
     /** Used after backup restore, while raw maintenance is still in the caller's atomic transaction. */
     fun validate(db:SupportSQLiteDatabase) {
-        val last=mutableMapOf<Long,Pair<String,JSONObject>>()
+        val last=mutableMapOf<Long,Pair<String,JSONObject>>();val operations=HashSet<String>()
         db.query("SELECT ref,payload_json,state FROM trash_item WHERE ref LIKE 'package-void:%' OR ref LIKE 'package-restore:%' ORDER BY id").use { c -> while(c.moveToNext()) {
             val ref=c.getString(0);val parts=ref.split(':');require(parts.size==3);UUID.fromString(parts[2])
+            require(operations.add(parts[2])) {"Duplicate package operation UUID"}
+            if(db.query("SELECT 1 FROM sqlite_master WHERE type='table' AND name='reference_dataset'").use{it.moveToFirst()})for(table in listOf("measured_operation","reference_event"))db.query("SELECT 1 FROM $table WHERE operation_uuid=?",arrayOf(parts[2])).use{require(!it.moveToFirst()) {"Cross-domain package operation collision"}}
             val id=parts[1].toLong();val text=c.getString(1);val legacy=JSONObject(text)
             val p=if(version(legacy)==2)BackupJsonReader.read(text) else legacy;val before=p.getJSONObject("container")
             require(c.getString(2)==Trash.HIDDEN && version(p) in 1..2 && p.getString("operation_id")==parts[2] &&

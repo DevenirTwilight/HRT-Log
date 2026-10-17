@@ -18,6 +18,8 @@ internal sealed interface PhysicalUseResult {
 }
 internal data class MeasuredConsumptionReceipt(val operationUuid:String,val recordUuid:String,val recordRevision:Int,val lines:List<PhysicalUseResult>,val issue:String?)
 internal data class MeasuredCountReceipt(val operationUuid:String,val result:MeasureResult<Quantity>)
+/** One frozen container only: no sum across different strengths, units, sources or ingredient identities. */
+data class ConfirmedPhysicalStock(val containerUuid:String,val presentationSha256:String,val remaining:Quantity)
 internal data class AuditedStockProjection(val containerUuid:String,val presentationSha256:String,val usedQuanta:Long,val remaining:Quantity,val cacheMatches:Boolean)
 
 /** Internal P4 adapter used by the captured Repository transaction; public UI admission remains disabled.
@@ -161,6 +163,16 @@ internal object MeasuredConsumptionStore {
             auditOperations(db)
             return projections
         } catch(e:ReferenceFailure){throw e} catch(e:Exception){fail(ReferenceError.INVALID_SOURCE)}
+    }
+
+    internal fun forecastBalances(db:SupportSQLiteDatabase,projections:List<AuditedStockProjection>):Map<Long,List<ConfirmedPhysicalStock>> {
+        check(db.inTransaction())
+        return projections.mapNotNull {p->
+            db.query("SELECT c.medication_id,c.state FROM reference_identity i JOIN supply_container c ON c.id=i.live_handle WHERE i.uuid=? AND i.kind='CONTAINER'",arrayOf(p.containerUuid)).use {c->
+                require(c.moveToFirst())
+                if(c.getString(1) !in setOf("SEALED","IN_USE","EMPTY"))null else c.getLong(0) to ConfirmedPhysicalStock(p.containerUuid,p.presentationSha256,p.remaining)
+            }
+        }.groupBy({it.first},{it.second})
     }
 
     /** Verify operations that a ledger-only walk cannot see, including empty sources and no-op counts. */

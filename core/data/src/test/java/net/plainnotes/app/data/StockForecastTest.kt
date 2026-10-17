@@ -130,4 +130,12 @@ class StockForecastTest {
         // The same instant seen from another zone falls on the same date here, so the count is zone-explicit.
         assertEquals(3, r.daysUntilShort(LocalDate.of(2026, 3, 27), utc))
     }
+    @Test fun integerQuantaCannotBeTreatedAsLegacyMedicationDoseUnits() {
+        val exact=open(10.0).copy(inventory_encoding="INTEGER_QUANTA_V1")
+        val result=f(listOf(exact),doses(listOf(daily(8 to null))))
+        assertNull("Integer quanta were presented as mg stock",result.available)
+        assertNull(result.firstShort);assertNull(result.lastCovered)
+        assertFalse(result.isLow(day0,utc));assertNull(result.daysUntilShort(day0,utc))
+    }
+
 }

@@ -1,0 +1,802 @@
+{
+  "status": "PASS",
+  "environment": "Robolectric API35 native graphics; synthetic fixtures; not hardware or manual TalkBack",
+  "totals": {
+    "tests": 32,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "views": 192,
+  "matrix": {
+    "languages": 4,
+    "widths_dp": [
+      320,
+      411
+    ],
+    "font_scales": [
+      1,
+      2
+    ],
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "contrasts": 3,
+    "screens": [
+      "stock",
+      "home"
+    ]
+  },
+  "log_sha256": "cc56ccec0c9aa86b7c52c98b56dde216da4bc376e0083ea305e4b033d974feb0",
+  "images": [
+    {
+      "name": "en_320dp_1.0x_dark_HIGH_home.png",
+      "sha256": "93d473019842ad3a23bf6288312d550b506db5d7924996785dc40f4c88ae8eb3"
+    },
+    {
+      "name": "en_320dp_1.0x_dark_HIGH_stock.png",
+      "sha256": "df40e92ace0f58209a2257b74a145699b292939362eefea8d9c1b73d64e0ea18"
+    },
+    {
+      "name": "en_320dp_1.0x_dark_MEDIUM_home.png",
+      "sha256": "168e7b683483b0f647f04e1d4e93743b5f4d1e47857a090f39e67f680fea90fe"
+    },
+    {
+      "name": "en_320dp_1.0x_dark_MEDIUM_stock.png",
+      "sha256": "ff98b264ed55141422aa9d4a3a5c0416ecf00ea725e26091bd04756755b87093"
+    },
+    {
+      "name": "en_320dp_1.0x_dark_STANDARD_home.png",
+      "sha256": "f299e0b6224f6004ed80e6f5cdfaf5470b20122d4cb8d38fcd33f897d62999d7"
+    },
+    {
+      "name": "en_320dp_1.0x_dark_STANDARD_stock.png",
+      "sha256": "ff98b264ed55141422aa9d4a3a5c0416ecf00ea725e26091bd04756755b87093"
+    },
+    {
+      "name": "en_320dp_1.0x_light_HIGH_home.png",
+      "sha256": "568e1c9bd61058b618418646f67ca7c5bbf81fa6ec33d8be03f9739db1580cf5"
+    },
+    {
+      "name": "en_320dp_1.0x_light_HIGH_stock.png",
+      "sha256": "7fc56dbc6e5fade084b043af78e9b7d4102c01632d0c8d18ef6f15aa2f6b9477"
+    },
+    {
+      "name": "en_320dp_1.0x_light_MEDIUM_home.png",
+      "sha256": "a7c5465241ca21e874475e003bfa46a59a0900d3fafb1d63f43bb23ac5c21a3f"
+    },
+    {
+      "name": "en_320dp_1.0x_light_MEDIUM_stock.png",
+      "sha256": "6df3c4ac30b86cc20b7c542aee0612dfbf114797e20cdf13f25bce3eb5ecd8a2"
+    },
+    {
+      "name": "en_320dp_1.0x_light_STANDARD_home.png",
+      "sha256": "a769667b06f223ae63897f3245c7ee6c4801eb4f39bab985a11bf0f5d026437c"
+    },
+    {
+      "name": "en_320dp_1.0x_light_STANDARD_stock.png",
+      "sha256": "6df3c4ac30b86cc20b7c542aee0612dfbf114797e20cdf13f25bce3eb5ecd8a2"
+    },
+    {
+      "name": "en_320dp_2.0x_dark_HIGH_home.png",
+      "sha256": "5811d7a617347b3214784b8fd76ded4887f9c54dd3b8244b3dc52ad60fc995a7"
+    },
+    {
+      "name": "en_320dp_2.0x_dark_HIGH_stock.png",
+      "sha256": "1918289a1e4f2b990d1f217578dd941bd3d2bbfa20eb0689ab9b5d688fcb50be"
+    },
+    {
+      "name": "en_320dp_2.0x_dark_MEDIUM_home.png",
+      "sha256": "c173159e8b91b6c342e1d085164ee136d9b34fca9e5e01b80f0389332958ef0e"
+    },
+    {
+      "name": "en_320dp_2.0x_dark_MEDIUM_stock.png",
+      "sha256": "0bdab816b9e6c4bc0136e5e9b50df2a33f4915d2cf8dc21e64dd5b033eaa15f4"
+    },
+    {
+      "name": "en_320dp_2.0x_dark_STANDARD_home.png",
+      "sha256": "4c8f6c07821de7f4264f6695b465438cce5ef6a245293783dc0ba305c21ef8db"
+    },
+    {
+      "name": "en_320dp_2.0x_dark_STANDARD_stock.png",
+      "sha256": "0bdab816b9e6c4bc0136e5e9b50df2a33f4915d2cf8dc21e64dd5b033eaa15f4"
+    },
+    {
+      "name": "en_320dp_2.0x_light_HIGH_home.png",
+      "sha256": "da48cb92b0f61c02be5a6c6951e2ac2212b886c2fda85813e0b8762e8232d1c6"
+    },
+    {
+      "name": "en_320dp_2.0x_light_HIGH_stock.png",
+      "sha256": "bfcbf119f8ddd3c17cdb63a85584bf97894660f496e6080b074d2d25331467df"
+    },
+    {
+      "name": "en_320dp_2.0x_light_MEDIUM_home.png",
+      "sha256": "e5002d933e1ec0ecd90e1c7d04b2980cc353f2029ac3a473518fc6b1d373f12a"
+    },
+    {
+      "name": "en_320dp_2.0x_light_MEDIUM_stock.png",
+      "sha256": "6559c8e528728b385f63394409cc7b749a36ca81527435135cf7f8a4b70dfd3c"
+    },
+    {
+      "name": "en_320dp_2.0x_light_STANDARD_home.png",
+      "sha256": "382cf1f2e11841159643b237a01d7be935c83831f016f1e50c6fc0e555526b52"
+    },
+    {
+      "name": "en_320dp_2.0x_light_STANDARD_stock.png",
+      "sha256": "6559c8e528728b385f63394409cc7b749a36ca81527435135cf7f8a4b70dfd3c"
+    },
+    {
+      "name": "en_411dp_1.0x_dark_HIGH_home.png",
+      "sha256": "2ef5653eef3d34cc8b959d3b085ffb68e3d5e5516e1c3e3942ea3031c44b5f5c"
+    },
+    {
+      "name": "en_411dp_1.0x_dark_HIGH_stock.png",
+      "sha256": "a80650d214fd5f1d7206b1ddde1c345edee6a9265d7e12149ed6882c7831224e"
+    },
+    {
+      "name": "en_411dp_1.0x_dark_MEDIUM_home.png",
+      "sha256": "800bbc0ed8f83723279d7127b991f3f1da7a39e03b62eaab8c123ec9ff11c20c"
+    },
+    {
+      "name": "en_411dp_1.0x_dark_MEDIUM_stock.png",
+      "sha256": "3eebb890b450e35669d40642b27a92c85ddbd21c1c12538620896c777b09eb05"
+    },
+    {
+      "name": "en_411dp_1.0x_dark_STANDARD_home.png",
+      "sha256": "cbcb65cbf0ef287b02f0c5bc57763f6a0e0a4f87bae7def031aa85ef7d195492"
+    },
+    {
+      "name": "en_411dp_1.0x_dark_STANDARD_stock.png",
+      "sha256": "3eebb890b450e35669d40642b27a92c85ddbd21c1c12538620896c777b09eb05"
+    },
+    {
+      "name": "en_411dp_1.0x_light_HIGH_home.png",
+      "sha256": "0e003710d4e552200d88b111a0422a924255ca65c7f47ef831e676c5d7dbbf03"
+    },
+    {
+      "name": "en_411dp_1.0x_light_HIGH_stock.png",
+      "sha256": "4701502b12e92adcdd27403f95bdbcab1d7145345b714ed357491a755ba85512"
+    },
+    {
+      "name": "en_411dp_1.0x_light_MEDIUM_home.png",
+      "sha256": "5fdca174af57d29a31b6b64258c481b1704a890f3d0bde58175385a7fb3f5f4b"
+    },
+    {
+      "name": "en_411dp_1.0x_light_MEDIUM_stock.png",
+      "sha256": "6ab04cad4a86667de58010af2708b600f7cee89e89e6873d58cc6c8a02869a85"
+    },
+    {
+      "name": "en_411dp_1.0x_light_STANDARD_home.png",
+      "sha256": "b5fe732a47c74c13ff348a6a84ff0afbad9535eda32700f08aa3e935002dc63d"
+    },
+    {
+      "name": "en_411dp_1.0x_light_STANDARD_stock.png",
+      "sha256": "6ab04cad4a86667de58010af2708b600f7cee89e89e6873d58cc6c8a02869a85"
+    },
+    {
+      "name": "en_411dp_2.0x_dark_HIGH_home.png",
+      "sha256": "65c4ed3a3ab527f010f3ba0a13fedc9a582bc93c17016900ad2d44fc14ef3296"
+    },
+    {
+      "name": "en_411dp_2.0x_dark_HIGH_stock.png",
+      "sha256": "bb1701ee686f5cabc83417ca271011dfe1ca03c344db104205ff74b741440711"
+    },
+    {
+      "name": "en_411dp_2.0x_dark_MEDIUM_home.png",
+      "sha256": "00d9b06f5cb3502aa298c51c4deeefc960eb4359190e82982147166ddb052921"
+    },
+    {
+      "name": "en_411dp_2.0x_dark_MEDIUM_stock.png",
+      "sha256": "6cd99a461b034da92a284ada7413809c70fb66acfb9154729e30399f7d192bca"
+    },
+    {
+      "name": "en_411dp_2.0x_dark_STANDARD_home.png",
+      "sha256": "61bc45a55c9a0dbb4c4a400ede599ba6075bdae412fc50a1851fa8977d2d008b"
+    },
+    {
+      "name": "en_411dp_2.0x_dark_STANDARD_stock.png",
+      "sha256": "6cd99a461b034da92a284ada7413809c70fb66acfb9154729e30399f7d192bca"
+    },
+    {
+      "name": "en_411dp_2.0x_light_HIGH_home.png",
+      "sha256": "7dbbc836142d6dcdabb2e89ec385148fa2bd6ec39130b16fca801167343ad844"
+    },
+    {
+      "name": "en_411dp_2.0x_light_HIGH_stock.png",
+      "sha256": "fde7d9459b17fd8c1bdfe68bf77bbc28713d46c2d0ba18e873dade778b4faa54"
+    },
+    {
+      "name": "en_411dp_2.0x_light_MEDIUM_home.png",
+      "sha256": "869ba5510d74629a1775761b2dc67a35fa69b8240f646a3dae55418cd187d4ef"
+    },
+    {
+      "name": "en_411dp_2.0x_light_MEDIUM_stock.png",
+      "sha256": "6181efb77e14663024f3368c44913109b1c3199c901c49046c49edbe3fa44cc7"
+    },
+    {
+      "name": "en_411dp_2.0x_light_STANDARD_home.png",
+      "sha256": "a598e5f022e3d2b9a78c31e164bd0b21054d33efce70aef15ffe81bd235c1d0a"
+    },
+    {
+      "name": "en_411dp_2.0x_light_STANDARD_stock.png",
+      "sha256": "6181efb77e14663024f3368c44913109b1c3199c901c49046c49edbe3fa44cc7"
+    },
+    {
+      "name": "fr-rFR_320dp_1.0x_dark_HIGH_home.png",
+      "sha256": "0d3c48bfe08cdebf1d6e1c51b0ccd5e9cfb270a853d86e9cf08f63ae61a73975"
+    },
+    {
+      "name": "fr-rFR_320dp_1.0x_dark_HIGH_stock.png",
+      "sha256": "d17dcaf4f246b0361d6dd0a6e448aebaee92636fe460e9e43b345a2b3045b618"
+    },
+    {
+      "name": "fr-rFR_320dp_1.0x_dark_MEDIUM_home.png",
+      "sha256": "4ffe3328d6b264f4f0850c87a2720a93c6cabe1c1169fe2815b219f0a70cb2f3"
+    },
+    {
+      "name": "fr-rFR_320dp_1.0x_dark_MEDIUM_stock.png",
+      "sha256": "bac9819b261ccbbb51fb43c71f0495c98c09cbc1f1f4abafe264d5ac85b1bf0e"
+    },
+    {
+      "name": "fr-rFR_320dp_1.0x_dark_STANDARD_home.png",
+      "sha256": "26674cd41b8c1eacde494c5a798b5a287436bbf020bce60fe0d8d43dee907615"
+    },
+    {
+      "name": "fr-rFR_320dp_1.0x_dark_STANDARD_stock.png",
+      "sha256": "bac9819b261ccbbb51fb43c71f0495c98c09cbc1f1f4abafe264d5ac85b1bf0e"
+    },
+    {
+      "name": "fr-rFR_320dp_1.0x_light_HIGH_home.png",
+      "sha256": "49b19e97d23cc2f9edb325a56e2341a5bee647a9665e174f14c89bf41f9bda2c"
+    },
+    {
+      "name": "fr-rFR_320dp_1.0x_light_HIGH_stock.png",
+      "sha256": "d5ebd6f27c59e1e3ab9dcf70d27a8fa11ebeba56c1cf2597e30cbb632f3e93c3"
+    },
+    {
+      "name": "fr-rFR_320dp_1.0x_light_MEDIUM_home.png",
+      "sha256": "3f02e0c57d5d06cec80462d9ad70ccef6bf8800661b5e3e1d184e79f0d293da0"
+    },
+    {
+      "name": "fr-rFR_320dp_1.0x_light_MEDIUM_stock.png",
+      "sha256": "37fbb55f163388445bfd4d1c96cc225d8604d19c21a32a0399ec7b6ef66850a0"
+    },
+    {
+      "name": "fr-rFR_320dp_1.0x_light_STANDARD_home.png",
+      "sha256": "9c831dd9a4c25d9851dc89f847e2eeab5c719a83bf3a612e36440007715f8fba"
+    },
+    {
+      "name": "fr-rFR_320dp_1.0x_light_STANDARD_stock.png",
+      "sha256": "37fbb55f163388445bfd4d1c96cc225d8604d19c21a32a0399ec7b6ef66850a0"
+    },
+    {
+      "name": "fr-rFR_320dp_2.0x_dark_HIGH_home.png",
+      "sha256": "f40540d114bd1d7c39edcb90c97ecc0522cd2f0128fac44555802574fbe85463"
+    },
+    {
+      "name": "fr-rFR_320dp_2.0x_dark_HIGH_stock.png",
+      "sha256": "a61b9f26241f3d886c417353318e59b77b75ca2d8da2ca059d38bf8e8ef843eb"
+    },
+    {
+      "name": "fr-rFR_320dp_2.0x_dark_MEDIUM_home.png",
+      "sha256": "cd1facbb7b7354e68c30fa73cb2ce0faf8e9b84323d719aac21d63312fc76b12"
+    },
+    {
+      "name": "fr-rFR_320dp_2.0x_dark_MEDIUM_stock.png",
+      "sha256": "ffe0db0bc428a0b2c9cf212cc842064fb7b066c89239e29dcd115721e809596b"
+    },
+    {
+      "name": "fr-rFR_320dp_2.0x_dark_STANDARD_home.png",
+      "sha256": "9d3080425a3173ef17bb99feb4256c2e9c6f3e70d2148686d562539e85f1c22b"
+    },
+    {
+      "name": "fr-rFR_320dp_2.0x_dark_STANDARD_stock.png",
+      "sha256": "ffe0db0bc428a0b2c9cf212cc842064fb7b066c89239e29dcd115721e809596b"
+    },
+    {
+      "name": "fr-rFR_320dp_2.0x_light_HIGH_home.png",
+      "sha256": "8a7c6ca9b946e96702db5c663432d8e982d8f7b89fc55878d87d1f28bf68e163"
+    },
+    {
+      "name": "fr-rFR_320dp_2.0x_light_HIGH_stock.png",
+      "sha256": "eebc2e99f7991a7fa08174ccac4278cc56d6aa0af1830b915fecb3d2c2b10e9d"
+    },
+    {
+      "name": "fr-rFR_320dp_2.0x_light_MEDIUM_home.png",
+      "sha256": "6a409a7f192e1de7985fffc148d8b2c6deaed7ef173be09dc1d842036747be06"
+    },
+    {
+      "name": "fr-rFR_320dp_2.0x_light_MEDIUM_stock.png",
+      "sha256": "fcd6cbc76981327b57fc400f1e2532450ece7af43641abf4c2f9b7f311709adf"
+    },
+    {
+      "name": "fr-rFR_320dp_2.0x_light_STANDARD_home.png",
+      "sha256": "4e1383f3b594731c2f8da52239dd66e0e3fb53eb4dd9c14496543a8ed09fa2cd"
+    },
+    {
+      "name": "fr-rFR_320dp_2.0x_light_STANDARD_stock.png",
+      "sha256": "fcd6cbc76981327b57fc400f1e2532450ece7af43641abf4c2f9b7f311709adf"
+    },
+    {
+      "name": "fr-rFR_411dp_1.0x_dark_HIGH_home.png",
+      "sha256": "7fdf9c9e2b33eb40be799f7403cfe880e8dc17089b7492f318b111b1cac592db"
+    },
+    {
+      "name": "fr-rFR_411dp_1.0x_dark_HIGH_stock.png",
+      "sha256": "4fdc8cbceb9c1eee40d1e622136dc14c66bef23aea6a4a7be092256cb30c8701"
+    },
+    {
+      "name": "fr-rFR_411dp_1.0x_dark_MEDIUM_home.png",
+      "sha256": "967acbc16d2d7027a343479d09df5a3680139f7f69672ea2c5bf89ab16852756"
+    },
+    {
+      "name": "fr-rFR_411dp_1.0x_dark_MEDIUM_stock.png",
+      "sha256": "7577e7ac3eac9bb730b4d4264d0410a2ce299468f7abfb6fea6393cb9bce8ff3"
+    },
+    {
+      "name": "fr-rFR_411dp_1.0x_dark_STANDARD_home.png",
+      "sha256": "2e0483d4b4c5623fcdf260db4a808780008c7d9040cc852b7026a2cb8f2da871"
+    },
+    {
+      "name": "fr-rFR_411dp_1.0x_dark_STANDARD_stock.png",
+      "sha256": "7577e7ac3eac9bb730b4d4264d0410a2ce299468f7abfb6fea6393cb9bce8ff3"
+    },
+    {
+      "name": "fr-rFR_411dp_1.0x_light_HIGH_home.png",
+      "sha256": "fa5f022d0ec9410578db053d28212aa85fa4be393ac753750abcaa5ee4b0ece6"
+    },
+    {
+      "name": "fr-rFR_411dp_1.0x_light_HIGH_stock.png",
+      "sha256": "6b26a1bceb2d320b322a311708681ff8f1967ce59545ee76439564cb441d265d"
+    },
+    {
+      "name": "fr-rFR_411dp_1.0x_light_MEDIUM_home.png",
+      "sha256": "cc89f216b9f955669f7bad66f347683d33818917a462eefed08185eec2bb3ba0"
+    },
+    {
+      "name": "fr-rFR_411dp_1.0x_light_MEDIUM_stock.png",
+      "sha256": "cb0307e17613c7f8ebc7d5c78c0feec2a45ce1053f6a5c4f4a5f8999828d2dbe"
+    },
+    {
+      "name": "fr-rFR_411dp_1.0x_light_STANDARD_home.png",
+      "sha256": "a7e5a7793ee7091bbec06817533baf0ff2e5a6d96d735a00ee2b7ead696eaf5a"
+    },
+    {
+      "name": "fr-rFR_411dp_1.0x_light_STANDARD_stock.png",
+      "sha256": "cb0307e17613c7f8ebc7d5c78c0feec2a45ce1053f6a5c4f4a5f8999828d2dbe"
+    },
+    {
+      "name": "fr-rFR_411dp_2.0x_dark_HIGH_home.png",
+      "sha256": "8001b07a05a461a765fc2173c9ad94db43cdb1d0a0164679f3ec6e8509b95dc0"
+    },
+    {
+      "name": "fr-rFR_411dp_2.0x_dark_HIGH_stock.png",
+      "sha256": "ca9baa4fb27bfdbadea4a01f851929aebec2371f08a2506529e825d106e0ab86"
+    },
+    {
+      "name": "fr-rFR_411dp_2.0x_dark_MEDIUM_home.png",
+      "sha256": "a8c92d81496ff6c630f28642476e90a8668ff11c2a0155a035c354988789b463"
+    },
+    {
+      "name": "fr-rFR_411dp_2.0x_dark_MEDIUM_stock.png",
+      "sha256": "943457a082bd8dc87371e0ddcc46e3235ced19a94ce375fa5f4bc437e057345b"
+    },
+    {
+      "name": "fr-rFR_411dp_2.0x_dark_STANDARD_home.png",
+      "sha256": "7f0ec22847079af5ca2d2132ea1eaa76af68d2886e6b7f5f41fb1d1a60cd9d76"
+    },
+    {
+      "name": "fr-rFR_411dp_2.0x_dark_STANDARD_stock.png",
+      "sha256": "943457a082bd8dc87371e0ddcc46e3235ced19a94ce375fa5f4bc437e057345b"
+    },
+    {
+      "name": "fr-rFR_411dp_2.0x_light_HIGH_home.png",
+      "sha256": "0e4c1fc84ec20fd01ade32811bcdc76c400afd87f29dc5312dd42ce7b25fd4c3"
+    },
+    {
+      "name": "fr-rFR_411dp_2.0x_light_HIGH_stock.png",
+      "sha256": "dbe59a378f3595f41c1cce07ebe864a7ff7dc4bf68fb86fa21fca2193a4ccb8f"
+    },
+    {
+      "name": "fr-rFR_411dp_2.0x_light_MEDIUM_home.png",
+      "sha256": "b3bf3c3a119cf1d075dab7c366df78178e4cdc705a296eaf65685af27b77a3ef"
+    },
+    {
+      "name": "fr-rFR_411dp_2.0x_light_MEDIUM_stock.png",
+      "sha256": "d4e49b39ef55cc5a2a094249f4bcdb4b1c7edd7e9d1c75c14641e3d0f269b099"
+    },
+    {
+      "name": "fr-rFR_411dp_2.0x_light_STANDARD_home.png",
+      "sha256": "b0a02e0451a2ccd74bf233264148bb3b5216a8a1143bd6ce097b264068c722e8"
+    },
+    {
+      "name": "fr-rFR_411dp_2.0x_light_STANDARD_stock.png",
+      "sha256": "d4e49b39ef55cc5a2a094249f4bcdb4b1c7edd7e9d1c75c14641e3d0f269b099"
+    },
+    {
+      "name": "zh-rCN_320dp_1.0x_dark_HIGH_home.png",
+      "sha256": "ba20ee349344f9692d508af95303f8957a902da2c0ad33611ffdd296e838768b"
+    },
+    {
+      "name": "zh-rCN_320dp_1.0x_dark_HIGH_stock.png",
+      "sha256": "68e2e7ac75a04f0affcefd65a3f4cf627c1b2b49f7948f0d9493929831fec608"
+    },
+    {
+      "name": "zh-rCN_320dp_1.0x_dark_MEDIUM_home.png",
+      "sha256": "5f6f4bd8ce178dec4ca9874ec4c2b32844bf281132938f9a08f99ff2703a41db"
+    },
+    {
+      "name": "zh-rCN_320dp_1.0x_dark_MEDIUM_stock.png",
+      "sha256": "4164ec8766bb5c6276c4b9cf84894aaf301bea69fbc002377dea9a91ca17e455"
+    },
+    {
+      "name": "zh-rCN_320dp_1.0x_dark_STANDARD_home.png",
+      "sha256": "7193475e16a6a1238c7d218a0dd9c0dd338916f93408fd4fc4e5000d8fcdea54"
+    },
+    {
+      "name": "zh-rCN_320dp_1.0x_dark_STANDARD_stock.png",
+      "sha256": "4164ec8766bb5c6276c4b9cf84894aaf301bea69fbc002377dea9a91ca17e455"
+    },
+    {
+      "name": "zh-rCN_320dp_1.0x_light_HIGH_home.png",
+      "sha256": "0900f3ded9e000496bdf6afeae1e0e2318877dfadc9c58ab3de3516baf59d831"
+    },
+    {
+      "name": "zh-rCN_320dp_1.0x_light_HIGH_stock.png",
+      "sha256": "c3a396529675b878184f0e4bd0941b88ab06554e790d28a4b0684cac548a0b41"
+    },
+    {
+      "name": "zh-rCN_320dp_1.0x_light_MEDIUM_home.png",
+      "sha256": "7f253dc9e73dd8b4f5c62372f852026e0f9d0e81f77ae49419375213f67b7b28"
+    },
+    {
+      "name": "zh-rCN_320dp_1.0x_light_MEDIUM_stock.png",
+      "sha256": "4cce3404afcb3568eb79d188b913694cc196dc9ecf87aaa83fc8ac062e30cfc0"
+    },
+    {
+      "name": "zh-rCN_320dp_1.0x_light_STANDARD_home.png",
+      "sha256": "bb817c595eff37beba104396b366fd378276ced91cc5c7e8746e002b9b9b85d1"
+    },
+    {
+      "name": "zh-rCN_320dp_1.0x_light_STANDARD_stock.png",
+      "sha256": "4cce3404afcb3568eb79d188b913694cc196dc9ecf87aaa83fc8ac062e30cfc0"
+    },
+    {
+      "name": "zh-rCN_320dp_2.0x_dark_HIGH_home.png",
+      "sha256": "99c788609307746adfc261b239c42d6b2781edbfd4d5145e40f32381c72a1bbd"
+    },
+    {
+      "name": "zh-rCN_320dp_2.0x_dark_HIGH_stock.png",
+      "sha256": "626614b3a833cceebbd5d403d7a3e0abfcd0468bc99fe38640321a84c311e7ab"
+    },
+    {
+      "name": "zh-rCN_320dp_2.0x_dark_MEDIUM_home.png",
+      "sha256": "067b3dcce2fa5b090770653eb42134279122dc7749b7ef2c42424cadc08f3fcc"
+    },
+    {
+      "name": "zh-rCN_320dp_2.0x_dark_MEDIUM_stock.png",
+      "sha256": "4f8c6735bef1405b368d196cb1e7e2c9f4b65afb1f81b0c8af30c8c5cfc73aba"
+    },
+    {
+      "name": "zh-rCN_320dp_2.0x_dark_STANDARD_home.png",
+      "sha256": "1186faec6508334d5bcebc0b672414114f686ff870c08313956b9c7440f38f3e"
+    },
+    {
+      "name": "zh-rCN_320dp_2.0x_dark_STANDARD_stock.png",
+      "sha256": "4f8c6735bef1405b368d196cb1e7e2c9f4b65afb1f81b0c8af30c8c5cfc73aba"
+    },
+    {
+      "name": "zh-rCN_320dp_2.0x_light_HIGH_home.png",
+      "sha256": "a949145edf3d03f0600b789fb60d16d038464b430c42be1d807d0fbfb1480886"
+    },
+    {
+      "name": "zh-rCN_320dp_2.0x_light_HIGH_stock.png",
+      "sha256": "719a41fbf1d73038ff5988d787f141bcdf726adf5db5c35b374b13523ad53922"
+    },
+    {
+      "name": "zh-rCN_320dp_2.0x_light_MEDIUM_home.png",
+      "sha256": "41261877efa3f88a6f3825ba5c7a17e24a30dec28955eb659b53a888e7145f79"
+    },
+    {
+      "name": "zh-rCN_320dp_2.0x_light_MEDIUM_stock.png",
+      "sha256": "d44ca17c1d9a0c5e5cc38382ae7b247d00f81cffaa35b6edd4eb7422005854c5"
+    },
+    {
+      "name": "zh-rCN_320dp_2.0x_light_STANDARD_home.png",
+      "sha256": "ba678368014d65c6d90152859f36b88b11b00cf23af1d97ca0a11a294d4d372f"
+    },
+    {
+      "name": "zh-rCN_320dp_2.0x_light_STANDARD_stock.png",
+      "sha256": "d44ca17c1d9a0c5e5cc38382ae7b247d00f81cffaa35b6edd4eb7422005854c5"
+    },
+    {
+      "name": "zh-rCN_411dp_1.0x_dark_HIGH_home.png",
+      "sha256": "404ce642b0a814b099933772b80ca4aead1f527819c550018298e0176217cee0"
+    },
+    {
+      "name": "zh-rCN_411dp_1.0x_dark_HIGH_stock.png",
+      "sha256": "fc5985c24aba7fba858e508a22ba62f172ee8c468c2dab2189da6408411991b1"
+    },
+    {
+      "name": "zh-rCN_411dp_1.0x_dark_MEDIUM_home.png",
+      "sha256": "822e26f2e3bf159c7005bd62fc5ecc4e01a3f7fe0af67248f6a442c345cd3c01"
+    },
+    {
+      "name": "zh-rCN_411dp_1.0x_dark_MEDIUM_stock.png",
+      "sha256": "ef15c069bbdb4bdd9814d380adcdf265f1714bff7fff9e81638508be4fbd6585"
+    },
+    {
+      "name": "zh-rCN_411dp_1.0x_dark_STANDARD_home.png",
+      "sha256": "eca98c04cbfa8439acb7bb0c90fb6041928f0b4788c0afd5c5196c71e097a939"
+    },
+    {
+      "name": "zh-rCN_411dp_1.0x_dark_STANDARD_stock.png",
+      "sha256": "ef15c069bbdb4bdd9814d380adcdf265f1714bff7fff9e81638508be4fbd6585"
+    },
+    {
+      "name": "zh-rCN_411dp_1.0x_light_HIGH_home.png",
+      "sha256": "1d664196d97c45a733fd6c11315f4e1a832303ce3d5538d4afda892e0f57b115"
+    },
+    {
+      "name": "zh-rCN_411dp_1.0x_light_HIGH_stock.png",
+      "sha256": "73701fe365be53fc05f71c2b987259c21359d722f38d2e561d09e0fd7a530ac1"
+    },
+    {
+      "name": "zh-rCN_411dp_1.0x_light_MEDIUM_home.png",
+      "sha256": "836c2f195400ceac19d45d0c0af752b5c07b36c12f3f49b74270cecfdfde21aa"
+    },
+    {
+      "name": "zh-rCN_411dp_1.0x_light_MEDIUM_stock.png",
+      "sha256": "7c827bab8e7e668101e767297927ffbe4d0f049d5454c5c8f0c2910a3773ae7a"
+    },
+    {
+      "name": "zh-rCN_411dp_1.0x_light_STANDARD_home.png",
+      "sha256": "4135c24d1e9b66e900f8cf2da9948b4b154ca44485a85870f6c332d26acae38a"
+    },
+    {
+      "name": "zh-rCN_411dp_1.0x_light_STANDARD_stock.png",
+      "sha256": "7c827bab8e7e668101e767297927ffbe4d0f049d5454c5c8f0c2910a3773ae7a"
+    },
+    {
+      "name": "zh-rCN_411dp_2.0x_dark_HIGH_home.png",
+      "sha256": "fc7379cc27c8d51c4306ed3d06582dc87d9caf30f9645c878a1e9cd759650f27"
+    },
+    {
+      "name": "zh-rCN_411dp_2.0x_dark_HIGH_stock.png",
+      "sha256": "7c1c41a8a28f9ceec3bbade1fc71196c7472533ab876e5b2b0b955337f67c066"
+    },
+    {
+      "name": "zh-rCN_411dp_2.0x_dark_MEDIUM_home.png",
+      "sha256": "de368946a1c923f3dafaa64f225595ca6951dfbaafcfa78d39341befe36a005b"
+    },
+    {
+      "name": "zh-rCN_411dp_2.0x_dark_MEDIUM_stock.png",
+      "sha256": "b40bed2aef1e787ff8f25812acad01323246732d31098a6342c0b6b5072233dd"
+    },
+    {
+      "name": "zh-rCN_411dp_2.0x_dark_STANDARD_home.png",
+      "sha256": "ce1e704df843ce05cb5c38ba2428a8e8994976993c9b0f20a8e9cef880bca9a6"
+    },
+    {
+      "name": "zh-rCN_411dp_2.0x_dark_STANDARD_stock.png",
+      "sha256": "b40bed2aef1e787ff8f25812acad01323246732d31098a6342c0b6b5072233dd"
+    },
+    {
+      "name": "zh-rCN_411dp_2.0x_light_HIGH_home.png",
+      "sha256": "1745e46cb36a7a03e3da26516ada56e70dd320cd839458ca00e1b3c89d96445f"
+    },
+    {
+      "name": "zh-rCN_411dp_2.0x_light_HIGH_stock.png",
+      "sha256": "ad89f8faf9f686fd5d3ac9470da71608318af7592018679cce420567a688c9c3"
+    },
+    {
+      "name": "zh-rCN_411dp_2.0x_light_MEDIUM_home.png",
+      "sha256": "e2e681e814c07f18c0a1ed61ecbfc48ce76ed511ad958370baced7d8af52f23a"
+    },
+    {
+      "name": "zh-rCN_411dp_2.0x_light_MEDIUM_stock.png",
+      "sha256": "645ce8b76412ba45a218b65f66f0f7bbf1eead982a3cfeb03f1eb7f84b204bcb"
+    },
+    {
+      "name": "zh-rCN_411dp_2.0x_light_STANDARD_home.png",
+      "sha256": "cea58b678b032a4df505fcef304d9dbcab1fc22a6cfa2847dd416e0e7540b501"
+    },
+    {
+      "name": "zh-rCN_411dp_2.0x_light_STANDARD_stock.png",
+      "sha256": "645ce8b76412ba45a218b65f66f0f7bbf1eead982a3cfeb03f1eb7f84b204bcb"
+    },
+    {
+      "name": "zh-rTW_320dp_1.0x_dark_HIGH_home.png",
+      "sha256": "ee698f609ed5478fcfa96dc57424183b98e78b448ef52e363b03b93736866e81"
+    },
+    {
+      "name": "zh-rTW_320dp_1.0x_dark_HIGH_stock.png",
+      "sha256": "75a4f71dcfc82e90d406a405f3788b20ac92148a8036a955b50169522e0d8e83"
+    },
+    {
+      "name": "zh-rTW_320dp_1.0x_dark_MEDIUM_home.png",
+      "sha256": "86428f24b782bae8df206299ee9587dc4492fdb7abf4782445e001e559c856e3"
+    },
+    {
+      "name": "zh-rTW_320dp_1.0x_dark_MEDIUM_stock.png",
+      "sha256": "acb7bfc8b37c5166f2a1398acb1da27cd91518fb44eb7e563ac87fc2a582a17b"
+    },
+    {
+      "name": "zh-rTW_320dp_1.0x_dark_STANDARD_home.png",
+      "sha256": "d323da8e5307a6acd3e0af219a8e71e9e4ef81a23a06f9d3607d9b5db38f766f"
+    },
+    {
+      "name": "zh-rTW_320dp_1.0x_dark_STANDARD_stock.png",
+      "sha256": "acb7bfc8b37c5166f2a1398acb1da27cd91518fb44eb7e563ac87fc2a582a17b"
+    },
+    {
+      "name": "zh-rTW_320dp_1.0x_light_HIGH_home.png",
+      "sha256": "b89d93e0903f54d77d0d6b40eac1b8c5020d9eab81094747eed66c0a2a44a7a2"
+    },
+    {
+      "name": "zh-rTW_320dp_1.0x_light_HIGH_stock.png",
+      "sha256": "93f624bb81318bee4256a3241831943265ce0ff6e3cb465b320039b388f662cd"
+    },
+    {
+      "name": "zh-rTW_320dp_1.0x_light_MEDIUM_home.png",
+      "sha256": "632a921e3e38a5e8a3e645fb72c0fe1af0ee346f146c513d7d23b45b6484450f"
+    },
+    {
+      "name": "zh-rTW_320dp_1.0x_light_MEDIUM_stock.png",
+      "sha256": "bc8272f638f7cb7bc6e838249f3baddbe6d70d49b10bab138c638394654a5183"
+    },
+    {
+      "name": "zh-rTW_320dp_1.0x_light_STANDARD_home.png",
+      "sha256": "b51217f7d2ad2395b83d8ab1ddb9c414da1a59ff3165a82bee1edba8982d97be"
+    },
+    {
+      "name": "zh-rTW_320dp_1.0x_light_STANDARD_stock.png",
+      "sha256": "bc8272f638f7cb7bc6e838249f3baddbe6d70d49b10bab138c638394654a5183"
+    },
+    {
+      "name": "zh-rTW_320dp_2.0x_dark_HIGH_home.png",
+      "sha256": "c1865e6d1a4fd4892048c0accd8973b571cc0b2755ccb731c3708abe8a8a0454"
+    },
+    {
+      "name": "zh-rTW_320dp_2.0x_dark_HIGH_stock.png",
+      "sha256": "a7c515dcff3b05504f822ebd7e1cd6557364ac26b4fafaf7015483c9aef2ae3d"
+    },
+    {
+      "name": "zh-rTW_320dp_2.0x_dark_MEDIUM_home.png",
+      "sha256": "fdd8862f88ffb1f5b869f6260a0f20df2eaae0eea63713149d7c2340f898077f"
+    },
+    {
+      "name": "zh-rTW_320dp_2.0x_dark_MEDIUM_stock.png",
+      "sha256": "dd89eb1f2c3468a21b48efa318cd0046b98d634194f6be99327f0e9791643fa0"
+    },
+    {
+      "name": "zh-rTW_320dp_2.0x_dark_STANDARD_home.png",
+      "sha256": "fb1bd5901c8f6c4139332068b90579d8558a084f646f9759d34d489cc763d5e7"
+    },
+    {
+      "name": "zh-rTW_320dp_2.0x_dark_STANDARD_stock.png",
+      "sha256": "dd89eb1f2c3468a21b48efa318cd0046b98d634194f6be99327f0e9791643fa0"
+    },
+    {
+      "name": "zh-rTW_320dp_2.0x_light_HIGH_home.png",
+      "sha256": "03e04edd3bb637132fc6cab88a6e99883f9d7d1faacca82fc8459d073a206479"
+    },
+    {
+      "name": "zh-rTW_320dp_2.0x_light_HIGH_stock.png",
+      "sha256": "6864acf2f2b782b3b5506f09366d788b5ebd486b46a451fb7843d69db3bf185b"
+    },
+    {
+      "name": "zh-rTW_320dp_2.0x_light_MEDIUM_home.png",
+      "sha256": "95ce8ebea62168d8e31488949eefbfab997faf6329d031948355840d3ed125a1"
+    },
+    {
+      "name": "zh-rTW_320dp_2.0x_light_MEDIUM_stock.png",
+      "sha256": "fc7a39bbe8957210071ee4d2c6ff3a0ea1715c55421fb079ad732257cc9ebbad"
+    },
+    {
+      "name": "zh-rTW_320dp_2.0x_light_STANDARD_home.png",
+      "sha256": "0d5a7ba8232178a1b4a1cc116d4be40da152e04fbcd55e4e84765e2633d74ce6"
+    },
+    {
+      "name": "zh-rTW_320dp_2.0x_light_STANDARD_stock.png",
+      "sha256": "fc7a39bbe8957210071ee4d2c6ff3a0ea1715c55421fb079ad732257cc9ebbad"
+    },
+    {
+      "name": "zh-rTW_411dp_1.0x_dark_HIGH_home.png",
+      "sha256": "4ec91fe3b3b3760350649f5e4615e2186fb5db9d1d4aa59d67fda04ddbf445f4"
+    },
+    {
+      "name": "zh-rTW_411dp_1.0x_dark_HIGH_stock.png",
+      "sha256": "d96b40498b7ee6f7b0a8d364491a79f6e4102c33c1b454cf0ab0dfc6ab65fa28"
+    },
+    {
+      "name": "zh-rTW_411dp_1.0x_dark_MEDIUM_home.png",
+      "sha256": "68306400278f27c21cfa7b63e530563ddd7be1aea0da42e34e558dad02008cea"
+    },
+    {
+      "name": "zh-rTW_411dp_1.0x_dark_MEDIUM_stock.png",
+      "sha256": "bc1a37d7fad0dd7c544c9ee9e22a3562b062ebd288240b09090b97818079c9d2"
+    },
+    {
+      "name": "zh-rTW_411dp_1.0x_dark_STANDARD_home.png",
+      "sha256": "220e029d37e8659565f2b51253c7090c210da2988bab2a46f8d20d800176a226"
+    },
+    {
+      "name": "zh-rTW_411dp_1.0x_dark_STANDARD_stock.png",
+      "sha256": "bc1a37d7fad0dd7c544c9ee9e22a3562b062ebd288240b09090b97818079c9d2"
+    },
+    {
+      "name": "zh-rTW_411dp_1.0x_light_HIGH_home.png",
+      "sha256": "f8e5dc9c62cfd32feda80170cbdecf1518f524bc1b2b02069334cd45ef64e151"
+    },
+    {
+      "name": "zh-rTW_411dp_1.0x_light_HIGH_stock.png",
+      "sha256": "eea059c24e98e9a44a0192fa1ae1e5ad1e032833a0b07f44189f36b45db0bb91"
+    },
+    {
+      "name": "zh-rTW_411dp_1.0x_light_MEDIUM_home.png",
+      "sha256": "59908834afd7c2104695c7cd52bc4a661383fdd98af5161ff9d262931bc56e99"
+    },
+    {
+      "name": "zh-rTW_411dp_1.0x_light_MEDIUM_stock.png",
+      "sha256": "1d181a225fde36c331598c124054177693938a27bd19740d749798701ab84b78"
+    },
+    {
+      "name": "zh-rTW_411dp_1.0x_light_STANDARD_home.png",
+      "sha256": "9961a33afd2985d7e45147396d6dd54d64e222921ae357660e273a102032b177"
+    },
+    {
+      "name": "zh-rTW_411dp_1.0x_light_STANDARD_stock.png",
+      "sha256": "1d181a225fde36c331598c124054177693938a27bd19740d749798701ab84b78"
+    },
+    {
+      "name": "zh-rTW_411dp_2.0x_dark_HIGH_home.png",
+      "sha256": "47ba1ab44f9c087c0511f5c64ba9769b10f958dae73b5eb0d12a2289d77f3b1e"
+    },
+    {
+      "name": "zh-rTW_411dp_2.0x_dark_HIGH_stock.png",
+      "sha256": "69ce92831bed59adff1d6f1e40913e394ecb9e732d960028c25d8671392cd543"
+    },
+    {
+      "name": "zh-rTW_411dp_2.0x_dark_MEDIUM_home.png",
+      "sha256": "5c5699f0d1a545a003309c39d5fccaf6746376290d668fa6520da17e08dbe3eb"
+    },
+    {
+      "name": "zh-rTW_411dp_2.0x_dark_MEDIUM_stock.png",
+      "sha256": "6a4bbaf6714a39033391174ab582954971aa93cf649b124816289dff626bafad"
+    },
+    {
+      "name": "zh-rTW_411dp_2.0x_dark_STANDARD_home.png",
+      "sha256": "3fd0dfb0d301d5927f6d481ce63daa71875d7bfd370f574aaeccb5eb3e833607"
+    },
+    {
+      "name": "zh-rTW_411dp_2.0x_dark_STANDARD_stock.png",
+      "sha256": "6a4bbaf6714a39033391174ab582954971aa93cf649b124816289dff626bafad"
+    },
+    {
+      "name": "zh-rTW_411dp_2.0x_light_HIGH_home.png",
+      "sha256": "5ee2d7c2fffb597bb0d1b477febb689cbaccd9ed65ac2e95958a95a536baf1cc"
+    },
+    {
+      "name": "zh-rTW_411dp_2.0x_light_HIGH_stock.png",
+      "sha256": "2a227e9709d044fd862fd3e8203eb2480ec36387a6f9c61e2277eb4c601f4482"
+    },
+    {
+      "name": "zh-rTW_411dp_2.0x_light_MEDIUM_home.png",
+      "sha256": "b2dcc72805600bd59ec27e4d293dd7777248af7fd20078e17e76e93e5ea937ed"
+    },
+    {
+      "name": "zh-rTW_411dp_2.0x_light_MEDIUM_stock.png",
+      "sha256": "da5f7bc644e5a6b3aac2bd70692ed896bc857d97cf8651dcb923090351dd3562"
+    },
+    {
+      "name": "zh-rTW_411dp_2.0x_light_STANDARD_home.png",
+      "sha256": "ecb0c659e67c291df2efdfd8584cac190a92a3475e664aa79fbae0a073898b37"
+    },
+    {
+      "name": "zh-rTW_411dp_2.0x_light_STANDARD_stock.png",
+      "sha256": "da5f7bc644e5a6b3aac2bd70692ed896bc857d97cf8651dcb923090351dd3562"
+    }
+  ]
+}

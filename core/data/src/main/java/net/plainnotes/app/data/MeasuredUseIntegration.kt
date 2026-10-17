@@ -11,6 +11,8 @@ internal data class MeasuredWriteTicket(
     val recordId:Long?,val stateSha256:String,
 )
 internal data class RecordedMeasuredUse(val record:RecordEntity,val receipt:MeasuredConsumptionReceipt)
+internal enum class MeasuredPackageAction { VOID, RESTORE }
+internal data class MeasuredPackageReceipt(val operationUuid:String,val containerUuid:String,val action:MeasuredPackageAction)
 internal enum class ActualUseCheckpoint { RECORD_WRITTEN, CONTEXT_CAPTURED, STOCK_CAPTURED }
 
 /** Transaction helpers, not a second allocator. All physical conversion remains in MeasuredConsumptionStore. */
@@ -26,6 +28,7 @@ internal object MeasuredUseIntegration {
             .put("rules",rows("schedule_rule","medication_id=? ORDER BY id",arrayOf(medication)))
             .put("times",rows("rule_time","rule_id IN (SELECT id FROM schedule_rule WHERE medication_id=?) ORDER BY id",arrayOf(medication)))
             .put("containers",rows("supply_container","medication_id=? ORDER BY id",arrayOf(medication)))
+            .put("package_events",rows("trash_item","kind='CORRECTION' AND EXISTS (SELECT 1 FROM supply_container c WHERE c.medication_id=? AND (trash_item.ref LIKE ('package-void:'||c.id||':%') OR trash_item.ref LIKE ('package-restore:'||c.id||':%'))) ORDER BY id",arrayOf(medication)))
             .put("ledger",rows("supply_transaction","container_id IN (SELECT id FROM supply_container WHERE medication_id=?) ORDER BY id",arrayOf(medication)))
             .put("references",rows("reference_event","subject_uuid IN (SELECT uuid FROM reference_identity WHERE dataset_uuid=? AND (uuid=? OR owner_uuid=?)) ORDER BY subject_uuid,revision",arrayOf(scope.dataset,medIdentity(db,scope,medication).getString("uuid"),medIdentity(db,scope,medication).getString("uuid"))))
             .put("chain_sequence",chain?.sequence ?: 0).put("chain_sha256",chain?.payloadSha256 ?: JSONObject.NULL)
@@ -177,6 +180,31 @@ internal object MeasuredUseIntegration {
         val result=MeasuredConsumptionStore.consumeNewRecord(database,ticket.scope,next,newOperation,draft.uses,created,draft.stockEffect,draft.unlinkedActual)
         checkpoint(ActualUseCheckpoint.STOCK_CAPTURED);MeasuredConsumptionStore.auditStagedDataset(db)
         return RecordedMeasuredUse(next,result)
+    }
+
+    suspend fun packageAction(database:NotesDatabase,ticket:MeasuredWriteTicket,operationUuid:String,containerUuid:String,action:MeasuredPackageAction,userConfirmed:Boolean,created:Instant):MeasuredPackageReceipt {
+        val db=database.openHelper.writableDatabase;check(db.inTransaction());owner(db,ticket)
+        require(ReferencePayload.uuid(operationUuid) && ReferencePayload.uuid(containerUuid) && userConfirmed && ticket.recordId==null)
+        val identity=ReferenceStore.row(db,"reference_identity","uuid=?",arrayOf(containerUuid)) ?: fail(ReferenceError.UNKNOWN_IDENTITY)
+        if(identity.getString("dataset_uuid")!=ticket.scope.dataset || identity.getString("kind")!="CONTAINER" || identity.getString("owner_uuid")!=ticket.medicationUuid || identity.isNull("live_handle"))fail(ReferenceError.UNKNOWN_IDENTITY)
+        val id=identity.getLong("live_handle");val verb=action.name.lowercase()
+        val result=MeasuredPackageReceipt(operationUuid,containerUuid,action)
+        val old=db.query("SELECT ref,payload_json FROM trash_item WHERE kind='CORRECTION' AND ref LIKE ?",arrayOf("%:$operationUuid")).use{c->
+            if(!c.moveToFirst())null else {val row=c.getString(0) to JSONObject(c.getString(1));if(c.moveToNext())fail(ReferenceError.INVALID_SOURCE);row}
+        }
+        if(old!=null) {
+            if(old.first!="package-$verb:$id:$operationUuid" || old.second.optInt("version")!=2 || old.second.optString("container_uuid")!=containerUuid)fail(ReferenceError.OPERATION_CONFLICT)
+            return result
+        }
+        for(table in listOf("measured_operation","reference_event"))db.query("SELECT 1 FROM $table WHERE operation_uuid=?",arrayOf(operationUuid)).use{if(it.moveToFirst())fail(ReferenceError.OPERATION_CONFLICT)}
+        validate(db,ticket)
+        val box=database.dao().container(id)
+        if(box.inventory_encoding!=InventoryEncoding.EXACT)fail(ReferenceError.INVALID_SOURCE)
+        if((action==MeasuredPackageAction.VOID && box.state=="VOIDED") || (action==MeasuredPackageAction.RESTORE && box.state!="VOIDED"))fail(ReferenceError.STALE_REVISION)
+        if(action==MeasuredPackageAction.VOID)PackageCorrections.void(db,database.dao(),id,created,operationUuid)
+        else PackageCorrections.restore(db,database.dao(),id,created,operationUuid)
+        MeasuredConsumptionStore.auditStagedDataset(db)
+        return result
     }
 
 }

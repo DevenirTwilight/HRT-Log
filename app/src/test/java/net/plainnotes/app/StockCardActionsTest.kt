@@ -87,4 +87,23 @@ class StockCardActionsTest {
         assertEquals(listOf("add"), calls)
         ui.onNodeWithTag("stock-more-1").assertDoesNotExist()
     }
+    @Test fun exactQuantityUnknownStateShowsNoScalarAmountOrUnscopedActions() {
+        show(listOf(open.copy(inventory_encoding="INTEGER_QUANTA_V1")))
+        ui.onNodeWithTag("stock-unknown-1").assertTextEquals(s(R.string.forecast_needs_check))
+        ui.onNodeWithTag("stock-primary-1").assertDoesNotExist();ui.onNodeWithTag("stock-more-1").assertDoesNotExist()
+        ui.onNodeWithTag("stock-manage-1").assertDoesNotExist();assertTrue(calls.isEmpty())
+        ui.onAllNodes(hasText("mg",substring=true,ignoreCase=true)).assertCountEquals(0)
+    }
+
+    @Test fun homeUnknownStateShowsAnExplanationAndOnlyTheReadOnlyStockNavigation() {
+        val boxes=listOf(open.copy(inventory_encoding="INTEGER_QUANTA_V1"))
+        val forecasts=StockForecasts.forecastAll(listOf(med),boxes,emptyList())
+        ui.setContent {NotesTheme(ThemeMode.LIGHT){HomeStockCard(listOf(med),forecasts,today,zone,{calls+="view"},{calls+="add"})}}
+        ui.waitForIdle()
+        ui.onNodeWithTag("home-stock-unknown").assertExists()
+        ui.onNodeWithText(s(R.string.forecast_needs_check)).assertExists()
+        ui.onNodeWithTag("home-stock-add:1").assertDoesNotExist()
+        ui.onNodeWithTag("home-stock-unknown-view").performClick();assertEquals(listOf("view"),calls)
+    }
+
 }

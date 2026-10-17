@@ -1233,4 +1233,5 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="ref2_history_stale">Le jeu de données a changé. Fermez cette fenêtre et rouvrez la prise.</string>
 <string name="ref2_history_error">Impossible de lire la référence enregistrée. Fermer cette fenêtre ne modifie pas la prise.</string>
 <string name="ref2_history_saved_only">Cette vue concerne la prise enregistrée. Les modifications non enregistrées ne sont pas incluses.</string>
+    <string name="forecast_needs_check">Stock à vérifier. Aucune date fiable d’épuisement disponible.</string>
 </resources>

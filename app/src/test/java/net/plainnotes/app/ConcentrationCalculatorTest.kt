@@ -127,7 +127,7 @@ class StockSummaryTest {
         val open = ContainerEntity(1, 1, 30.0, 0.0, 22.0, today.minusDays(28).toString(), "IN_USE")
         val sealed = ContainerEntity(2, 1, 30.0, 0.0, 0.0, null, "SEALED")
         val s = summary(m, listOf(open, sealed), twiceDaily)
-        assertEquals(38.0, s.remaining, 1e-9); assertEquals(9, s.daysLeft); assertTrue(!s.low)   // 19 doses: day0..day8 + day9 08:00
+        assertEquals(38.0, requireNotNull(s.remaining), 1e-9); assertEquals(9, s.daysLeft); assertTrue(!s.low)   // 19 doses: day0..day8 + day9 08:00
         assertEquals(today.plusDays(2), s.expiresOn); assertTrue(s.expiringSoon(today))
         assertTrue(summary(m, listOf(open), twiceDaily).low)
     }

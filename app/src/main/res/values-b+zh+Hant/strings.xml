@@ -1233,4 +1233,5 @@
 <string name="ref2_history_stale">資料集已變更，請關閉視窗並重新開啟紀錄。</string>
 <string name="ref2_history_error">無法讀取已儲存的來源，關閉視窗不會變更紀錄。</string>
 <string name="ref2_history_saved_only">此處顯示已儲存的紀錄，不包含尚未儲存的修改。</string>
+    <string name="forecast_needs_check">庫存需核對，暫時無法可靠計算用盡日期。</string>
 </resources>

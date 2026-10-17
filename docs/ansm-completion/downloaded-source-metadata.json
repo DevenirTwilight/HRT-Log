@@ -1,0 +1,39 @@
+[
+  {
+    "name": "licence_bdpm.pdf",
+    "requested_url": "https://base-donnees-publique.medicaments.gouv.fr/docs/telechargement/licence_bdpm.pdf",
+    "retrieved_at_utc": "2026-10-17T12:34:36.579368+00:00",
+    "status": "RETRIEVED_NOT_DISTRIBUTION_APPROVED",
+    "http_status": 200,
+    "final_url": "https://base-donnees-publique.medicaments.gouv.fr/docs/telechargement/licence_bdpm.pdf",
+    "bytes": 540249,
+    "sha256": "44ff23ae2b5cce0d729d1b53b20d17aae625189b131c2dd9cb98d1fe0d0a2a90",
+    "content_type": "application/pdf"
+  },
+  {
+    "name": "format_v5.pdf",
+    "requested_url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/Contenu_et_format_des_fichiers_telechargeables_dans_la_BDM_v5.pdf",
+    "retrieved_at_utc": "2026-10-17T12:34:36.580109+00:00",
+    "status": "RETRIEVED_NOT_DISTRIBUTION_APPROVED",
+    "http_status": 200,
+    "final_url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/Contenu_et_format_des_fichiers_telechargeables_dans_la_BDM_v5.pdf",
+    "bytes": 295557,
+    "sha256": "db10d5a62bc640c227405bcb11cef5db9ad2a2d9a6b4b547198ee19978b6bc8b",
+    "content_type": "application/octet-stream"
+  },
+  {
+    "name": "CIS_COMPO_bdpm.txt",
+    "requested_url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_COMPO_bdpm.txt",
+    "retrieved_at_utc": "2026-10-17T12:34:36.580559+00:00",
+    "status": "RETRIEVED_NOT_DISTRIBUTION_APPROVED",
+    "http_status": 200,
+    "final_url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_COMPO_bdpm.txt",
+    "bytes": 2735840,
+    "sha256": "90a6e8ee286b6245c3938dd417ac75d1135a61b15ba50cfad70ee6b3bd181b7a",
+    "content_type": "application/octet-stream",
+    "raw_tab_token_occurrences_not_semantic_mapping": {
+      "SA": 26915,
+      "FT": 5524
+    }
+  }
+]

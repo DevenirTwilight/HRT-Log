@@ -1131,4 +1131,60 @@ abstract class MeasuredConsumptionContract {
         assertEquals(revised.record,db.dao().recordById(first.record.id));assertEquals(second.record,db.dao().recordById(second.record.id))
     }
 
+    @Test fun oldUnscopedPackageVoidCannotMutateExactInventory()=runBlocking {
+        val m=med();val b=box(m);val repo=repository();val before=RawData.dump(raw).toString()
+        var rejected=false;try {repo.removeMistakenContainer(b.container.id)}catch(_:IllegalArgumentException){rejected=true}
+        assertTrue("Old integer-only void bypassed the exact-stock confirmation ticket",rejected)
+        assertEquals(before,RawData.dump(raw).toString());assertEquals("SEALED",db.dao().container(b.container.id).state)
+    }
+    @Test fun oldUnscopedPackageRestoreCannotMutateExactInventory()=runBlocking {
+        val m=med();val b=box(m);val repo=repository()
+        db.withTransaction{PackageCorrections.void(raw,db.dao(),b.container.id,at)}
+        val before=RawData.dump(raw).toString()
+        var rejected=false;try {repo.restoreVoidedContainer(b.container.id)}catch(_:IllegalArgumentException){rejected=true}
+        assertTrue("Old integer-only restore bypassed the exact-stock confirmation ticket",rejected)
+        assertEquals(before,RawData.dump(raw).toString());assertEquals("VOIDED",db.dao().container(b.container.id).state)
+    }
+
+    @Test fun scopedPackageVoidRestoreIsIdempotentAndDoesNotReviveAnOldConfirmationTicket()=runBlocking {
+        val m=med();val b=box(m);val repo=repository();val original=db.dao().container(b.container.id)
+        val ticket=repo.measuredWriteTicket(b.scope,m);val op=UUID.randomUUID().toString()
+        val result=repo.correctMeasuredPackage(ticket,op,b.containerUuid,MeasuredPackageAction.VOID,true,at)
+        assertEquals(result,repo.correctMeasuredPackage(ticket,op,b.containerUuid,MeasuredPackageAction.VOID,true,at));assertEquals(1,count("trash_item"))
+        val restoreTicket=repo.measuredWriteTicket(b.scope,m);val restoreOp=UUID.randomUUID().toString()
+        val restored=repo.correctMeasuredPackage(restoreTicket,restoreOp,b.containerUuid,MeasuredPackageAction.RESTORE,true,at)
+        assertEquals(restored,repo.correctMeasuredPackage(restoreTicket,restoreOp,b.containerUuid,MeasuredPackageAction.RESTORE,true,at))
+        assertEquals(original,db.dao().container(b.container.id));assertEquals(0,count("supply_transaction"));assertEquals(2,count("trash_item"))
+        rejects(ReferenceError.STALE_REVISION){repo.recordMeasuredUse(ticket,UUID.randomUUID().toString(),actual(b),at)}
+        rejects(ReferenceError.OPERATION_CONFLICT){repo.correctMeasuredPackage(ticket,op,b.containerUuid,MeasuredPackageAction.RESTORE,true,at)}
+        assertEquals(0,count("dose_record"))
+    }
+
+    @Test fun scopedPackageCorrectionRetainsTheConsumptionGuardAndRejectsForeignIdentity()=runBlocking {
+        val m=med();val b=box(m);val other=med("SYNTHETIC other medication");val foreign=box(other);val repo=repository()
+        repo.recordMeasuredUse(repo.measuredWriteTicket(b.scope,m),UUID.randomUUID().toString(),actual(b),at)
+        val ticket=repo.measuredWriteTicket(b.scope,m);val before=RawData.dump(raw).toString()
+        try {repo.correctMeasuredPackage(ticket,UUID.randomUUID().toString(),b.containerUuid,MeasuredPackageAction.VOID,true,at);fail("Consumed exact package was voided")}
+        catch(_:PackageConsumptionConflict){}
+        rejects(ReferenceError.UNKNOWN_IDENTITY){repo.correctMeasuredPackage(ticket,UUID.randomUUID().toString(),foreign.containerUuid,MeasuredPackageAction.VOID,true,at)}
+        assertEquals(before,RawData.dump(raw).toString())
+    }
+
+    @Test fun sharedRepositoryForecastKeepsExactPhysicalBalancesSeparateFromClinicalDoseAndChangesVersionOnZeroCount()=runBlocking {
+        val m=med();val b=box(m);val other=box(m,strength="SYNTHETIC 1 mg / tablet");val repo=repository()
+        db.dao().updateMedication(db.dao().medication(m).copy(active=true,soon_alert_minutes=0,late_after_minutes=60))
+        repo.recordMeasuredUse(repo.measuredWriteTicket(b.scope,m),UUID.randomUUID().toString(),actual(b),at)
+        val first=repo.stockForecasts(at,java.time.ZoneId.of("Europe/Paris")).getValue(m)
+        assertEquals(StockForecast.Status.UNKNOWN,first.status);assertNull(first.available);assertNull(first.firstShort);assertFalse(first.isLow(java.time.LocalDate.parse("2026-10-16"),java.time.ZoneId.of("Europe/Paris")))
+        assertEquals(2,first.physicalBalances.size);assertEquals(2,first.physicalBalances.map{it.presentationSha256}.distinct().size)
+        assertEquals(BigDecimal("27.5"),first.physicalBalances.single{it.containerUuid==b.containerUuid}.remaining.value)
+        assertEquals(BigDecimal("28"),first.physicalBalances.single{it.containerUuid==other.containerUuid}.remaining.value)
+        assertTrue(StockUnknownReason.UNKNOWN_UNIT in first.uncertainty);assertFalse(StockUnknownReason.UNKNOWN_SOURCE in first.uncertainty)
+        assertEquals(first,repo.stockForecasts(at,java.time.ZoneId.of("Europe/Paris")).getValue(m))
+        repo.countMeasuredStock(repo.measuredWriteTicket(b.scope,m),UUID.randomUUID().toString(),countInput(b,"27.5"),at)
+        val second=repo.stockForecasts(at,java.time.ZoneId.of("Europe/Paris")).getValue(m)
+        assertNotEquals(first.snapshotSha256,second.snapshotSha256);assertEquals(first.physicalBalances,second.physicalBalances)
+        assertEquals(1,count("supply_transaction"))
+    }
+
 }
