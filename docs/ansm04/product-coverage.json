@@ -1,0 +1,4415 @@
+{
+  "clinical_review_complete": false,
+  "counts": {
+    "ingredient_rows": 64,
+    "presentations": 96,
+    "products": 58
+  },
+  "distribution_approved": false,
+  "limitations": [
+    "Dates are frozen ANSM-01 observations, not a current re-verification.",
+    "Page/panel existence never verifies body, translation or text reuse.",
+    "Authorization and sale declaration do not establish pharmacy supply.",
+    "Missing monitoring field never means no additional monitoring.",
+    "No clinical text, synthesized summary or health record is included."
+  ],
+  "products": [
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "60021127",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "07f4f216a17e474156b3fbfdd70bf193596ec2ea7aa7561b4fb259e32edca3bf",
+        "retrieved_at_utc": "2026-10-15T21:09:15.824554+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/60021127/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 13520,
+        "row_sha256": "31b6cf099435406638cd36a21b014c75737ce1ac008fe7403a23ecbe1fcf1dc2"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 57,
+          "row_sha256": "f2c3e5cfc39dbc4599d3973087620c774882593d96aa3d6cf24c58c26cfda924"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "SPIRONOLACTONE VIATRIS 75 mg, comprimé pelliculé",
+      "presentation_sources": [
+        {
+          "cip13": "3400934968174",
+          "cis": "60021127",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 41,
+            "row_sha256": "21f34e02a2a07a1284ee3c9296916e01c46996d0b4d2c372cca60d9da8e3b916"
+          }
+        },
+        {
+          "cip13": "3400937383387",
+          "cis": "60021127",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 42,
+            "row_sha256": "32ab007735fe38cc76bc4ba5cbf1e428280ed03a5710aceccf2a596eaf9a3a9d"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "60058378",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "6d72d63d4d5cb81aef23afb54b10ca7fa41ab4d5bef620052d7be40c1a57aa95",
+        "retrieved_at_utc": "2026-10-15T21:09:16.301786+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/60058378/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 13523,
+        "row_sha256": "adcd06d5846594f0a63ad0f79c2e495e17d30e890345824e7c570a6fab10c4a0"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 161,
+          "row_sha256": "03e6e1457a9304e78b079e2d4e255edbd74b54ec439e5f75e902077986b39b83"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "SPIRONOLACTONE ZENTIVA 75 mg, comprimé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400936738287",
+          "cis": "60058378",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 122,
+            "row_sha256": "3602f239ee10abf51dabdd2140dc41a1a3f88bf34b27696f31ad910aebf122cf"
+          }
+        },
+        {
+          "cip13": "3400937875035",
+          "cis": "60058378",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 123,
+            "row_sha256": "03f9d889d53fc13d779e8951b8e31aa348ffbf6835f877aca13072f47c79264a"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "60337762",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "de2449c22a0c02476c8e9911b9c4523d407c42ed329937d1e67b67e9c1b25fa2",
+        "retrieved_at_utc": "2026-10-15T21:09:15.562111+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/60337762/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 13517,
+        "row_sha256": "4af1f594a3670b90812397fea47950481fbb7af622b39e67354851448e216863"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 1127,
+          "row_sha256": "0e8ec0c90047e6eec9cf379a11e268a86a66cfbd29bc853627445623428a770a"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "SPIRONOLACTONE TEVA 75 mg, comprimé pelliculé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400936116320",
+          "cis": "60337762",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 695,
+            "row_sha256": "c58f3e3ef47b0a19d94096231772d73c4f9f918a41330ac00267162465a35bfc"
+          }
+        },
+        {
+          "cip13": "3400937290784",
+          "cis": "60337762",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 696,
+            "row_sha256": "4f86646ec0854f5b3459c4f2f5007427d3f444431411d95080484afafa152d73"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "60464076",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "74495bbab575c495cccf5612f5ebcc55c530e96a31b2aa27073690045925a6db",
+        "retrieved_at_utc": "2026-10-15T21:09:15.710035+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/60464076/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 13518,
+        "row_sha256": "ce4e1cd5f42e7ace559de06ec290a84ea90b6a908db84c8761ed30a3aadf4994"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 1554,
+          "row_sha256": "836abfdc5ffc8a891099a293ca3482ce96be440e2142fa9b37e0c544ba9406c0"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "SPIRONOLACTONE VIATRIS 25 mg, comprimé pelliculé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400930211595",
+          "cis": "60464076",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 949,
+            "row_sha256": "2b3ba989f5ed29b34cbb3a94832e580e8a46516009c05434e98f67501f498933"
+          }
+        },
+        {
+          "cip13": "3400939742403",
+          "cis": "60464076",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 950,
+            "row_sha256": "13158f372c03d76dca9286a000a632b8b238d0aef7a28a78bb86c4207105ebce"
+          }
+        },
+        {
+          "cip13": "3400939742571",
+          "cis": "60464076",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 951,
+            "row_sha256": "c6b220d35be426c6c0775123d6dc7032eb157014744199b41f59c36977e45c83"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "60625921",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "d19584c72f271996077928fbc4d27cca73972fff61f93aa9b90104ddc03f9af7",
+        "retrieved_at_utc": "2026-10-15T21:09:14.179641+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/60625921/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 13502,
+        "row_sha256": "e9ba464060676b1217db9df1c6118c4952256cf5216af930227fe3d4d19f8a38"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 2107,
+          "row_sha256": "80ad88a87d12470a334a5bab7c275cec12bf1253218fe44688470e656947d4d0"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "SPIRONOLACTONE BIOGARAN 25 mg, comprimé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400930136492",
+          "cis": "60625921",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 1307,
+            "row_sha256": "028005a2f0301bbc0c7531f5964aaae17b77818c9c842bac872501a030f38159"
+          }
+        },
+        {
+          "cip13": "3400934850738",
+          "cis": "60625921",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 1308,
+            "row_sha256": "ef212857e14a914881264984f65a8a173df54619992e1eae613928ff256fdcbf"
+          }
+        },
+        {
+          "cip13": "3400939627748",
+          "cis": "60625921",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 1309,
+            "row_sha256": "17244f01540b5ffcb05f33f31878699c60ce76a0d003d6848005e6256d71a963"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "60734372",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "fc079f89eb529856bb427ca4b50d2b2a619ff86a1e7a017e985bd9bed3e8b69f",
+        "retrieved_at_utc": "2026-10-15T21:09:15.058432+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/60734372/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 13513,
+        "row_sha256": "d8ea551a1ff47648b1c7f0591bf449841f52ccac85c595a7640e3f4200ffbe83"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 2542,
+          "row_sha256": "a9efc0f7d3888dcb2ecfc85265f87c31146f2cae9a749a1e32850abd82b4f18b"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "SPIRONOLACTONE SANDOZ 25 mg, comprimé pelliculé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400939616742",
+          "cis": "60734372",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 1559,
+            "row_sha256": "24c4ba9191e91e85c8b3806c6e4837889994e00d00e91ba948a941c6567f000d"
+          }
+        },
+        {
+          "cip13": "3400939616803",
+          "cis": "60734372",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 1560,
+            "row_sha256": "97db91358c5a1bb4636ae011d6dbd550ed5f9aa48d5443773c7da0101df412ec"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "REPEALED",
+      "cis": "60899178",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "9d7dd5cb0fde0d8197b084fcad2fc4cb06d78c738b9bde73870ea4ca5d994d88",
+        "retrieved_at_utc": "2026-10-15T21:09:11.020810+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/60899178/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 115,
+        "row_sha256": "8e5494155e280ffb37aa17a265ea9fd731021eef9c265f6747fd1e0180e7e74c"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 3010,
+          "row_sha256": "1e23dbae7529ed507f90f5514e4d451a570fd84dd6e825df47f71345f510dae5"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "NOT_MARKETED",
+      "name_fr": "ACETATE DE CYPROTERONE EG 100 mg, comprimé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400936945814",
+          "cis": "60899178",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 1916,
+            "row_sha256": "6df5556ee71c7adf02542835cebaecf18934cc1bf0ba559dbce467f58d06b1b0"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ARCHIVED",
+      "cis": "60940721",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "5d4331cdf7b14e571de1539339c71f7ce24219670bdc3d3c1d33153f2e852929",
+        "retrieved_at_utc": "2026-10-15T21:09:13.563153+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/60940721/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 11838,
+        "row_sha256": "e00bf419e89ba4b6d1480b8f6f13d5cf3017a2264ff96fae51b80aeef394a742"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 3172,
+          "row_sha256": "94982956dd94e64a413c01d8da18183d3e8dac8626d4a61fea5fbd61c1088cc3"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "NOT_MARKETED",
+      "name_fr": "PROGYNOVA 2 mg, comprimé enrobé",
+      "presentation_sources": [
+        {
+          "cip13": "3400931892229",
+          "cis": "60940721",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 2014,
+            "row_sha256": "d6662698ff110e8b5563a97e48c4885ee77368d4d355b96d94215c4c05260813"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "61255738",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "02a8bdb13b79bdccd65224e2e1dacd17859af6edeff03848c635b94c80236edd",
+        "retrieved_at_utc": "2026-10-15T21:09:12.234790+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/61255738/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 1055,
+        "row_sha256": "2cc88348980bfc99a60ae7a1ece9a751b6837ee08525d2dfae9446ff12147e2f"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 4318,
+          "row_sha256": "528cf4ece556ad3514544bba85efcc9ee1344c927e7e55e0abe210eec2cb067c"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "ANDROCUR 50 mg, comprimé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400932351008",
+          "cis": "61255738",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 2729,
+            "row_sha256": "1a34c17a35172a25a90f23833b318112d3eda0213f6bb9727f62646dcc4f4b20"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "61457558",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "bb41e64164cb41f2739a1102fbd47b42053716a4858bf4bf9d7e57a3c62facd8",
+        "retrieved_at_utc": "2026-10-15T21:09:15.015719+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/61457558/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 13511,
+        "row_sha256": "548c5aadd584e9bd45f53bce36ee5abcca7b6d941a3bf5afaefc24a451ec48e7"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 4998,
+          "row_sha256": "31f9dcd20126801aaf88243a2def03655206798cc6a915fb5eea34766f5ec71a"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "NOT_MARKETED",
+      "name_fr": "SPIRONOLACTONE PFIZER 50 mg, comprimé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400934670527",
+          "cis": "61457558",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 3187,
+            "row_sha256": "47bab5a32ec3990df186cda32d814e34ee488fea1ac8af54a7848c168fba8302"
+          }
+        },
+        {
+          "cip13": "3400937296700",
+          "cis": "61457558",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 3188,
+            "row_sha256": "18e722ca46a64e6cd84fa5ef7d9e43e37d6029f7bae82e1ef04dd1c44651a586"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "61614618",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [
+        "FORMAT_SPEC_SAYS_ST_SOURCE_USES_FT"
+      ],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "30da793097f02257e9e8a062768c5b90fbe63aaa62251fcceb16c49e2edd8b1a",
+        "retrieved_at_utc": "2026-10-15T21:09:16.347826+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/61614618/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 14205,
+        "row_sha256": "8f00972084af3367be40b08adca4757758034d81a982a19c49d9d118e21a884e"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 5442,
+          "row_sha256": "3afdbaed437b80f0beeabe05a4e24cf73c469c1e6ef1268c309c967c485c71e1"
+        },
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 5443,
+          "row_sha256": "0488c03f59af24b2a53304093a0d4736d5a03b7d11cdfbb88176101628b28117"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "THAISSEPT 25 microgrammes/24 heures, dispositif transdermique",
+      "presentation_sources": [
+        {
+          "cip13": "3400935239747",
+          "cis": "61614618",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 3479,
+            "row_sha256": "575aca344382acae058f88485f8603e9982c390a3c4c1fddee8f9d1b5a609aac"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "61662029",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "27a530392755114dbf1f6faab04d4be06310a7b220bd6b39c6769640c800c629",
+        "retrieved_at_utc": "2026-10-15T21:09:14.697672+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/61662029/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 13507,
+        "row_sha256": "f69fee380d54c6f0785b89e7f3ae8d66954da07a6c3cdd18129ed29b56148a0f"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 5599,
+          "row_sha256": "aa26de214a377dbe8102022981ff8bd76a8847af92368617f271782ef027d8ef"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "SPIRONOLACTONE EG 25 mg, comprimé pelliculé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400939615103",
+          "cis": "61662029",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 3579,
+            "row_sha256": "2ed26d7bdb67ffec8451c2448d4f5489ef4bbfd88b2f692691364b95c7fd3d99"
+          }
+        },
+        {
+          "cip13": "3400939615271",
+          "cis": "61662029",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 3580,
+            "row_sha256": "f5ae91e1a6213c9beee53395d3b07daafb81193ca28d1f33a01a61b5a53b2548"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "61673424",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "6fb9c4112680b2ccff5fc35726dd4784c3ac2d2cb369c2b53f99defa4c925565",
+        "retrieved_at_utc": "2026-10-15T21:09:16.857746+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/61673424/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 14853,
+        "row_sha256": "2c5c8e2d23475e88d10bf200a1993a5674b92cddd4039bc8d32029d2192288e5"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 5642,
+          "row_sha256": "cb822baf2ea1b2fc65deccbf3bf09fd489cd89dc8db6b6e464cda5dc4b3597bd"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "UTROGESTAN 100 mg, capsule molle orale ou vaginale",
+      "presentation_sources": [
+        {
+          "cip13": "3400932327515",
+          "cis": "61673424",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 3616,
+            "row_sha256": "09c4cd9686f41dc883786c2387c58d116e28b7852cbff6f95d9d65b46b4839e5"
+          }
+        },
+        {
+          "cip13": "3400935876782",
+          "cis": "61673424",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 3617,
+            "row_sha256": "6c7f3fe671b8c4d2cd7a87ea6d6ed7631b02123ba537f8e54b7bb8ed66fc9d83"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "61774149",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [
+        "FORMAT_SPEC_SAYS_ST_SOURCE_USES_FT"
+      ],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "a0372cc1e5d88642a056dcd508d32ca7b93f49e5ac11fa2b4fd82f181ab01479",
+        "retrieved_at_utc": "2026-10-15T21:09:12.895777+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/61774149/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 4140,
+        "row_sha256": "eae765f3486c4c2c2341337fc3117d511190f8ed725bb162d40bac57e02b87a3"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 6016,
+          "row_sha256": "96006bf6e8159d49d46723258ade3255e385f508729da7d316d155db50e7df01"
+        },
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 6017,
+          "row_sha256": "da11e38852077d8dd0ec3ce6d66a1e3571eaf9501180ccc14f56b39d6c56ae72"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "DERMESTRIL SEPTEM 75 microgrammes/24 heures, dispositif transdermique",
+      "presentation_sources": [
+        {
+          "cip13": "3400935239518",
+          "cis": "61774149",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 3832,
+            "row_sha256": "c313f5270962b8e68431326a3117cfae9103a42a5a14e57635e9a778a8ea4f8f"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "61938189",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "e5831123c7e659c05b7dffeb0698fc32059506b79cdd33b7da2eb455c891a9f5",
+        "retrieved_at_utc": "2026-10-15T21:09:14.049215+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/61938189/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 13500,
+        "row_sha256": "0db66d1b33b0c12fda15e4ee42c4293c340c6a75377558ad1950bf7d5cbc1a9b"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 6536,
+          "row_sha256": "2010a89eee110be96a095058eece01ef11d4f1f41ccf8ad8b35947f054cb70ea"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "SPIRONOLACTONE ARROW 50 mg, comprimé pelliculé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400937364577",
+          "cis": "61938189",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 4168,
+            "row_sha256": "7099ef9d3cfb82c84d6c8658e76108ab258f825bf915e36c57b1b8e428cd55c4"
+          }
+        },
+        {
+          "cip13": "3400938307658",
+          "cis": "61938189",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 4169,
+            "row_sha256": "d58bcec7b622213b698e10183cafe7cd7ff999abd5df39f3faf1cca22c47fff0"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ARCHIVED",
+      "cis": "62028953",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "76c50c19fc1a925b36700f9923791f6c96139505614623498603f228247f0433",
+        "retrieved_at_utc": "2026-10-15T21:09:11.951056+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/62028953/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 3868,
+        "row_sha256": "655c21ad1c58bc4c85b75b36a89aa21d5d42c6afc279a6a2a367e230be192008"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 6871,
+          "row_sha256": "478ba438ff595b27b49eea2c1a2b9a64bcf758badd52c7b3e01cef6456112b83"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "NOT_MARKETED",
+      "name_fr": "CYPROTERONE BIOGARAN 50 mg, comprimé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400934232732",
+          "cis": "62028953",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 4361,
+            "row_sha256": "fa8e7d7a161e41311b47e12b86d86b4b4c59fabffc92d4408c664a6c64c6bbc9"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "62075038",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "30b047d87303d24547d5642a4abac2f5d96cecf8cf362e62e9d27754f4c10662",
+        "retrieved_at_utc": "2026-10-15T21:09:13.061903+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/62075038/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 11822,
+        "row_sha256": "9a80ce0720689bc6762cc9be7189495691c9d847adc1e57973713db96966c5fe"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 7007,
+          "row_sha256": "12637d39439dc90e0cd99181f7db92e1d7620495f26da717e53bd135b9ba2798"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "PROGESTERONE BIOGARAN 100 mg, capsule molle ou capsule molle vaginale",
+      "presentation_sources": [
+        {
+          "cip13": "3400935804983",
+          "cis": "62075038",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 4449,
+            "row_sha256": "48d82d81d0adc3175ea952551e2399f2203457b780f056f39587ba06a1cf69b2"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "62402447",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [
+        "FORMAT_SPEC_SAYS_ST_SOURCE_USES_FT"
+      ],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "5fb414622d4a291ad123a5349fb307f24e2452792e25a8b5a28a3c872a485712",
+        "retrieved_at_utc": "2026-10-15T21:09:12.813037+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/62402447/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 4139,
+        "row_sha256": "a8b35f2afc269e016358edab3888ec110976b2aa1eda05335e0be6ee94ba9d7a"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 8048,
+          "row_sha256": "9643f947a18afab4efaa9a3b30cabb940db89a798d6317e839eb05851203791a"
+        },
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 8049,
+          "row_sha256": "563755db92e877c16d21920091542475752d0640d4b245d42a92375b90ac5b96"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "DERMESTRIL SEPTEM 50 microgrammes/24 heures, dispositif transdermique",
+      "presentation_sources": [
+        {
+          "cip13": "3400935239167",
+          "cis": "62402447",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 5070,
+            "row_sha256": "adc3cb6a524070c88ac7651995c52c313c76e01fd6d9ef45312d52f92b9a4368"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "REPEALED",
+      "cis": "62450997",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "8035f36ad7ee49fc13d42cae48221cceb33224f33927d3e1fe26a09feeb5e584",
+        "retrieved_at_utc": "2026-10-15T21:09:12.104630+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/62450997/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 3870,
+        "row_sha256": "fc715fb614e342e65d3adb73f59ff010caa00daa9f7348184a7e8337abaee0d3"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 8289,
+          "row_sha256": "44ea4f9505655bfde66723f7bfd4d4a69f23d0d810bdd1d3df5028ca75405267"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "NOT_MARKETED",
+      "name_fr": "CYPROTERONE MYLAN 50 mg, comprimé",
+      "presentation_sources": [
+        {
+          "cip13": "3400934090141",
+          "cis": "62450997",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 5197,
+            "row_sha256": "a7576a9fda247deb2dd872235c4542d645e58a95f760458815fc22a16ee75359"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "62465928",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "31752f0aa486c856302be89801558e2e28fc40f38ab8940b23c3d5fe0c5b3c6a",
+        "retrieved_at_utc": "2026-10-15T21:09:14.184501+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/62465928/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 13503,
+        "row_sha256": "eb238ca4a923c7aaf6a8f36965c0dbf90166f8cad2e4cf7d16e27167a8bb82da"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 8348,
+          "row_sha256": "5b874a39fe426c4d2477f4afc4f152e4b8dc99b997ece202b5f648ffc13d28f2"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "SPIRONOLACTONE BIOGARAN 50 mg, comprimé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400930136508",
+          "cis": "62465928",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 5229,
+            "row_sha256": "65def754029eb3537d034437a50155f1854ac8e378dbe7dea3345c38b80ce336"
+          }
+        },
+        {
+          "cip13": "3400934965913",
+          "cis": "62465928",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 5230,
+            "row_sha256": "ba86f0ddcb1471ecccaf1904333f86f963d6684f98a18d701333c36d0fb26fcf"
+          }
+        },
+        {
+          "cip13": "3400937847469",
+          "cis": "62465928",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 5231,
+            "row_sha256": "606a6a903c843111d45b60cd6d7ea8cbff4f11340242e5536792de70c3f9a7c2"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ARCHIVED",
+      "cis": "62512491",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "99af301ab0f3cb7b5382bb41d09efba67a74d299520d06c7a76bca3dce86e3b4",
+        "retrieved_at_utc": "2026-10-15T21:09:13.830830+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/62512491/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 11837,
+        "row_sha256": "3d221cd2033d4829de1d11418451c9f8d02d4bd2551953f18146310153c06f1f"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 8492,
+          "row_sha256": "05da3f81196506a55c25b559ef6a94a89771e2f0ff9dce5f3ccf31326df2fb7d"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "NOT_MARKETED",
+      "name_fr": "PROGYNOVA 1 mg, comprimé enrobé",
+      "presentation_sources": [
+        {
+          "cip13": "3400931891567",
+          "cis": "62512491",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 5322,
+            "row_sha256": "4fff0e7332b4ea6600c89025c3d2afae3b3c7bf109dfbdda2784097e689ec1d5"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "62673263",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "a22bf55b8edb39c2785663fdff5f5f00c3cf900a675db5d0b9a378480cd24c5e",
+        "retrieved_at_utc": "2026-10-15T21:09:15.213802+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/62673263/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 13512,
+        "row_sha256": "28be255e46e771a42b61d06eb5b962726bc534fd10cd304cf4fcb8d084cb3041"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 8938,
+          "row_sha256": "c320caae325bbdf2d3b6e6621e616dc32cd76749dca4f4a57100b911763115be"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "NOT_MARKETED",
+      "name_fr": "SPIRONOLACTONE PFIZER 75 mg, comprimé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400934318061",
+          "cis": "62673263",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 5622,
+            "row_sha256": "9550e4d3098c2d90c95c59dc12fd1fcd7dcef3707d9cf5cf5e2bcbeda2ca8714"
+          }
+        },
+        {
+          "cip13": "3400937296878",
+          "cis": "62673263",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 5623,
+            "row_sha256": "98ef1f8d467b442ac611b364838d361139d4249fcf9368150ba2a55cb7d8fd10"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "63071975",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "9e7631286963a0448a420c012d3e4ed5133c91560edc9200b2d454c79c47e2df",
+        "retrieved_at_utc": "2026-10-15T21:09:13.227242+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/63071975/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 10219,
+        "row_sha256": "7cb217d56ffcb7fe944e8966c13bb6981ab7779b417cfe7b5cdea6c57ce68b42"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 10284,
+          "row_sha256": "560ddc65f79c937dea9326d08a8401e68b6e9cc01da330804e63c378f0493ba7"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "OESTRODOSE 0,06 POUR CENT, gel pour application cutanée en flacon avec pompe doseuse",
+      "presentation_sources": [
+        {
+          "cip13": "3400933829247",
+          "cis": "63071975",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 6433,
+            "row_sha256": "41c7c040b51a1f3f1ce06d0f77090e2d46ac08c1315e6aa2c5a68caf4cd5f2c2"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "63145849",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "e6df0f8ffc50fc82c539713c0cccb27f241aace920c9411202d2f69018850ff9",
+        "retrieved_at_utc": "2026-10-15T21:09:13.733146+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/63145849/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 13499,
+        "row_sha256": "9afecb2335fb6752b05aab0d7d9c7008929ce421becde05f0c14b07e5454c6e0"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 10508,
+          "row_sha256": "329e7aea239b6a2042a57f66dadeaac755ec9bfb27c8a6ade4a39997c95aba4d"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "SPIRONOLACTONE ARROW 25 mg, comprimé pelliculé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400939681917",
+          "cis": "63145849",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 6618,
+            "row_sha256": "671f9aa0bcb42a78a3e203b852f5fc4cdbbeb9d4b6563a1d9f789c081288f740"
+          }
+        },
+        {
+          "cip13": "3400939682167",
+          "cis": "63145849",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 6619,
+            "row_sha256": "2c659778789d8db6109061c5909173b2365893acfa250f9ab663d172002982df"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "63157698",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "3debf2597141deb3ce42fe89a47f7fc6f315bb44968b732949945c9c2ecfdbb8",
+        "retrieved_at_utc": "2026-10-15T21:09:16.833781+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/63157698/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 14854,
+        "row_sha256": "f341793ec0e83f382a3439b7600546ac2b4fc70e32a6ed09ca35801031138b4d"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 10567,
+          "row_sha256": "f328b4bdaf2b8ba96c2e79bd0ceffd59a8d0c8a2dcf91a08f6ec589635d1a808"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "UTROGESTAN 200 mg, capsule molle orale ou vaginale",
+      "presentation_sources": [
+        {
+          "cip13": "3400934839962",
+          "cis": "63157698",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 6642,
+            "row_sha256": "e3af13d1284b62e086ba4161dbaf899f35aefc0609d25e4043a47d867bdbc8f1"
+          }
+        },
+        {
+          "cip13": "3400935876843",
+          "cis": "63157698",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 6643,
+            "row_sha256": "8de403846d4a8bb74dc5f2251ebf1c801da259461c05a96f05063cc35fa6a237"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "63603104",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "a44d63c5a71b09f885bab3097b8b872bf8756b5a7bfb811b5ca85e84330075de",
+        "retrieved_at_utc": "2026-10-15T21:09:15.965708+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/63603104/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 13521,
+        "row_sha256": "4c4c7069f3c99ea3d7216fd764bd9d9585990e6c606bb47dc54ae0f9975283ae"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 12063,
+          "row_sha256": "8f8c2fa4a8a9f02e68aafc27cbd7f4401965f74cc460d28a06b9fa9f63bdba3c"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "SPIRONOLACTONE ZENTIVA 25 mg, comprimé pelliculé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400939679495",
+          "cis": "63603104",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 7561,
+            "row_sha256": "08a319ddcf22549f0a6bfb9809fd4e6e4fdaa7fdfe8ff177ddbb2db041884fca"
+          }
+        },
+        {
+          "cip13": "3400939679556",
+          "cis": "63603104",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 7562,
+            "row_sha256": "1512cbbbaa880d4cb9c961b1e571bc67e25ebd16a3d980a36cac63dfa4966483"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "63873854",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "8d96c3fa6c2bbabd9059eafdbc942d498b8a02c10cd02275810a2dae30ce6f41",
+        "retrieved_at_utc": "2026-10-15T21:09:15.114624+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/63873854/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 13514,
+        "row_sha256": "767f0241c91d0b866b4bc3cac608ebce50f1185eda82043d436ea4b7e5c1e7f7"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 12753,
+          "row_sha256": "cd3f359e61107c907d73f68114429b8cc85ff88b63ae74f1bae8f089dc628121"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "SPIRONOLACTONE SANDOZ 50 mg, comprimé pelliculé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400936910744",
+          "cis": "63873854",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 8044,
+            "row_sha256": "03a22dcb8c91d6e111e43e0a472fae040502c683051ad2df60a6ddf3a3e25733"
+          }
+        },
+        {
+          "cip13": "3400936911345",
+          "cis": "63873854",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 8045,
+            "row_sha256": "df242f9b0d648cba9254b2fdb3cabbbfbe43e4f9b6044b0ba4540ac60eab5aa2"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "64061941",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [
+        "FORMAT_SPEC_SAYS_ST_SOURCE_USES_FT"
+      ],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "b8d76071ad8f106e1e65413dce998bf6fd2ec20cfe3ddc1b345043a2b0e9b033",
+        "retrieved_at_utc": "2026-10-15T21:09:12.751652+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/64061941/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 4138,
+        "row_sha256": "8a252315f35a6cbd894b62f37147011e8dc347517e1c958b0937aa3a0bcf0cc4"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 13294,
+          "row_sha256": "03660e4a848bf77947fcba23cb9fe1592015963ae8f4cf705c3ba6ebd10bd098"
+        },
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 13295,
+          "row_sha256": "7b5d1d8a7e9e39f796860bf10388cb5830909c09a1ef3702ff2a4c268e311b18"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "DERMESTRIL SEPTEM 25 microgrammes/24 heures, dispositif transdermique",
+      "presentation_sources": [
+        {
+          "cip13": "3400935239396",
+          "cis": "64061941",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 8383,
+            "row_sha256": "c6627d95d39a2409782e4a404eef0cc9750b4c30e83c0860c7254cbd4b1c96b0"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "64322708",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "4ab0b81b57dcd464d821ad0fa6150133df3d3dc592cda650b2a1118f386638d2",
+        "retrieved_at_utc": "2026-10-15T21:09:15.806543+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/64322708/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 13519,
+        "row_sha256": "a15a82bb3de6d92b4cb2f95dcc9dcbcf468a3a3a6e2cba6580631d3e25cec134"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 14154,
+          "row_sha256": "312a256c87fb4775a9eab3b4f624e3ce59946e253de58c6c14eae5d73bf4e63d"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "SPIRONOLACTONE VIATRIS 50 mg, comprimé pelliculé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400936902299",
+          "cis": "64322708",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 8911,
+            "row_sha256": "7158580f2c494cf9fd69b6aaf30084898be87a114fad0888bf07386fe0af305a"
+          }
+        },
+        {
+          "cip13": "3400936902589",
+          "cis": "64322708",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 8912,
+            "row_sha256": "1e72ca375b432eb753390cd1b5556461a4f8c77a19aa59888b89fde7bedfb020"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "64347259",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "f9750b3d2a6e40e90a0fc6a1e2ef53df267a20de62e46b5bcb25749423375646",
+        "retrieved_at_utc": "2026-10-15T21:09:15.033568+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/64347259/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 13509,
+        "row_sha256": "6b138de899454ef6c8c7791e03695df58130bb88ee43ad42c4fbbaa140ec2b24"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 14222,
+          "row_sha256": "b81d6245279e6e73a86656a81827f7f1db1fc8fb0feed8775510c06f76065a54"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "SPIRONOLACTONE EG 75 mg, comprimé pelliculé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400935268433",
+          "cis": "64347259",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 8963,
+            "row_sha256": "369a1cd3c18d9e0b8d3aee0fcd54a58496738e98edc781c005c56f0fd15c5015"
+          }
+        },
+        {
+          "cip13": "3400937391313",
+          "cis": "64347259",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 8964,
+            "row_sha256": "28576a44211f90d4033d3a757561214df6f47ce366994b506a9cdd20860e3a22"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "64358280",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "9e6a0881fe11fbb6af86e23b537c5651d7c354accda9ed0e5383f0770de9ae71",
+        "retrieved_at_utc": "2026-10-15T21:09:16.927349+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/64358280/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 14855,
+        "row_sha256": "cbc79b6eaee6e80c4d2bc56fb2da20b4fe0a4843e7063cb49573009fe5178b04"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 14276,
+          "row_sha256": "82b75f8d1c34d3a258798d03bc6bfcee6a2146bbc4b3ad1a3c6f02e2a6105393"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "UTROGESTAN 400 mg, capsule molle vaginale",
+      "presentation_sources": [
+        {
+          "cip13": "3400930305713",
+          "cis": "64358280",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 8993,
+            "row_sha256": "e056f08e373497c0de86cecbb31ca8f8f72cfe96a630bc47156e8134bb4dfc78"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "64398047",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "feaebcfb4edc90dc55952dc954c571176685279ec25ef408516767ef4d774735",
+        "retrieved_at_utc": "2026-10-15T21:09:14.624387+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/64398047/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 13508,
+        "row_sha256": "f6944f034d32793fe6a863e5be8709e8b32e4338ff11cb96bf888c3081207a27"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 14404,
+          "row_sha256": "faa7a58f724ebc62a0b3a21d44483abdeb51d6147c60969c632a5173cad421f7"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "SPIRONOLACTONE EG 50 mg, comprimé pelliculé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400935060594",
+          "cis": "64398047",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 9074,
+            "row_sha256": "8729e9b6673cada049e6e254f9542cadeacff5449d937853097ee0025bc1a710"
+          }
+        },
+        {
+          "cip13": "3400937391252",
+          "cis": "64398047",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 9075,
+            "row_sha256": "18df7bd01fcf65dee6ce8dc7ce22d8666d3e17488ecbb3cfe56b0f69a62a4008"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "64431166",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "9a47a6701c33727fb0783e8d6cf06c56eaeee492ce0536e4c7f9903c4aaab86b",
+        "retrieved_at_utc": "2026-10-15T21:09:16.453617+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/64431166/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 13525,
+        "row_sha256": "006192e78ca69547bb68f4eeae4066206dd7a80723fcee46fc905852722bccd2"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 14529,
+          "row_sha256": "ce55763ccee5db85b22025116f80199954615703524f6861a26bf8eb89cba809"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "SPIRONOLACTONE ZYDUS 50 mg, comprimé pelliculé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400937085960",
+          "cis": "64431166",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 9157,
+            "row_sha256": "a9d025daace2f60f74515a3fede6d0d5d3a2e1460746ca82bbeb4679f0b5951f"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "64565845",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "92d242df251b6c7946d45d795ed454c1751d83146df8cb9f7b561c989811e08d",
+        "retrieved_at_utc": "2026-10-15T21:09:11.376944+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/64565845/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 478,
+        "row_sha256": "06377d92d030ffb9613713941712b67b43f6b7ac57b1e3a65ec432ea07ecda45"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 14935,
+          "row_sha256": "aeb085954998967189d178c28526d90983d82758797d619351e3ce79849f13d0"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "ALDACTONE 25 mg, comprimé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400934466304",
+          "cis": "64565845",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 9421,
+            "row_sha256": "44a734ef5e24dfc5d81eb324fbd855aa491abef736ae5ff406a03a106b8a79f7"
+          }
+        },
+        {
+          "cip13": "3400937295987",
+          "cis": "64565845",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 9422,
+            "row_sha256": "cb8d898c75ef7a29c3c2ab2547cc2701511cd6a9c43fd792b6c1a54d2c002d6a"
+          }
+        },
+        {
+          "cip13": "3400956097630",
+          "cis": "64565845",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 9423,
+            "row_sha256": "a774923a85e3ef9ef40f2c1f1943eb89c8dd6a8f859777b21afca4b93f0a4bdd"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "64640867",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "e3a14c4cd043f052e49ac537ae7eefce6d1d1bcef26cf4bf501e8db7f4b66918",
+        "retrieved_at_utc": "2026-10-15T21:09:14.293179+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/64640867/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 13504,
+        "row_sha256": "ff432879f13d7f2d3282a290a24707bf8eaecce75ebce6e6d105662239b27686"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 15236,
+          "row_sha256": "a5db12277a031d3939e1a629a672b5ba5f4a5124ddc2f474431845368cfe745f"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "SPIRONOLACTONE BIOGARAN 75 mg, comprimé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400934847486",
+          "cis": "64640867",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 9615,
+            "row_sha256": "a7c4a5bf8a6e1c59bfebbb93f9cd8c0beda08b0f59bd466257817fd65b5216e6"
+          }
+        },
+        {
+          "cip13": "3400937847230",
+          "cis": "64640867",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 9616,
+            "row_sha256": "03179a4621ca28af09d677c5454208f10e48991d5cb569f41a9a9467b5198b49"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "64802027",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "38114649463e13980ddf3f316ec8f8b499cc902d41360bf391e268e4cb0c2c94",
+        "retrieved_at_utc": "2026-10-15T21:09:15.479853+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/64802027/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 13515,
+        "row_sha256": "6ac7abd61d8461e6550e32e7d8e108fed79ccf78e6240b9e5846a8ea081ba968"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 15710,
+          "row_sha256": "c10e978445aa28b7e5cde40dccea0ffa2c9530bafbe6cebdff4629af544f3250"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "SPIRONOLACTONE TEVA 25 mg, comprimé pelliculé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400939598840",
+          "cis": "64802027",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 9955,
+            "row_sha256": "cdb3039587714361b45d670e208bdcdaedf08dd4847687ca406ec15493c2b536"
+          }
+        },
+        {
+          "cip13": "3400939598901",
+          "cis": "64802027",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 9956,
+            "row_sha256": "92b2ac3f487c8e12120d54d78e430573620b3878616255bea6105f2e5608f7d6"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "64833859",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "d78b76681612e792bb9bebce29b2db727f0486c0402a4757c11cd200ca4ef3de",
+        "retrieved_at_utc": "2026-10-15T21:09:12.642270+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/64833859/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 4136,
+        "row_sha256": "1d47589320d7acc586fd0aaf05e90c973b93703e35e97ab3aff46c6e7e580221"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 15782,
+          "row_sha256": "69095e2de2a9879552278b1ee71fcbcd384acae53f1ef58cb4e719ba741d3fc4"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "DERMESTRIL 25 microgrammes/24 heures, dispositif transdermique",
+      "presentation_sources": [
+        {
+          "cip13": "3400934090660",
+          "cis": "64833859",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 10018,
+            "row_sha256": "0824320f64203a0264201dcb0eea6603ffc4eb46318ca04e8a5dff1bb9b91a39"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "65281285",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [
+        "FORMAT_SPEC_SAYS_ST_SOURCE_USES_FT"
+      ],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "9831f5b757e7a29ea6c9a3e943a054b83475dbb3e7a46e79b8d17da2d2d91b65",
+        "retrieved_at_utc": "2026-10-15T21:09:13.769643+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/65281285/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 11923,
+        "row_sha256": "1d3aa9125fd9abd8e73c311401dc053905b424b3363333f05fe35fc6fdb805cd"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 17411,
+          "row_sha256": "68627a424e9c2bc9e9059d5a47eca7dbee135cf9627a00e73b4080db7b995f3a"
+        },
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 17412,
+          "row_sha256": "97b618ac6a479d1a8f59ca563213e33811e4cf86465c7c477d1b4ae9b3239a69"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "PROVAMES 1 mg, comprimé pelliculé",
+      "presentation_sources": [
+        {
+          "cip13": "3400934666674",
+          "cis": "65281285",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 11018,
+            "row_sha256": "16102080ff5a0587148e9008b8f7a83024686394cf8336c10301f88ce73d527e"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "65421374",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "e5acec40ba2099a3bbfba728d0f454653c2360383ce55a9f4ac23e12ca608b55",
+        "retrieved_at_utc": "2026-10-15T21:09:13.643729+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/65421374/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 11924,
+        "row_sha256": "c76df6f1cf53adb2a0fff2ce97447b3913b52488661774666a7cd3dac4887035"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 17807,
+          "row_sha256": "a8d2bc74da70ca524ea9ba26d2e6e7dd92ff6c633e3c30df3f8be12920459270"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "PROVAMES 2 mg, comprimé pelliculé",
+      "presentation_sources": [
+        {
+          "cip13": "3400935479341",
+          "cis": "65421374",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 11282,
+            "row_sha256": "42199e743e0402ffc99d1b9213d1820907fd5a7e51f8735f97fc68cbf8aadf7a"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "65618628",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "2cc3545df2892efc851fe3382be3443c9e53c3569e38a2549289f6289b30f3cb",
+        "retrieved_at_utc": "2026-10-15T21:09:14.971567+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/65618628/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 13510,
+        "row_sha256": "5e44308e664b798114a5627a57dfecd1b0226f1d8aa9a8b5a2f7bf33768c5f56"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 18467,
+          "row_sha256": "3288c562d3af5c77e64a3d440225bb806626898c8737a00447e53e142a2ccb24"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "NOT_MARKETED",
+      "name_fr": "SPIRONOLACTONE PFIZER 25 mg, comprimé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400934850509",
+          "cis": "65618628",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 11710,
+            "row_sha256": "62a7bcbaf4de60c9d801f8ca848913373dd28579348360a3388235ef2fe4e21c"
+          }
+        },
+        {
+          "cip13": "3400939627977",
+          "cis": "65618628",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 11711,
+            "row_sha256": "a0e903f7a4946148881edc20ee160f6b1ecd51897ab26a93409572609d0475ca"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "65662980",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "eb1ae5c02a2240fccc7b67f1f1d75d9d456137e4f804277cdb258df637c6ae53",
+        "retrieved_at_utc": "2026-10-15T21:09:13.148275+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/65662980/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 4137,
+        "row_sha256": "6b6e805d60e335f17580849e8264a4e38290cb4d4f5172f055b768a900f714c6"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 18649,
+          "row_sha256": "1a5decc7658947d3d138197a8852d28703040cbba726c665fd1adf5e959d045d"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "DERMESTRIL 50 microgrammes/24 heures, dispositif transdermique",
+      "presentation_sources": [
+        {
+          "cip13": "3400934090431",
+          "cis": "65662980",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 11842,
+            "row_sha256": "4f1b9cabea5b70b4b8892169f612bbcbe250efcfb7cb7247df578d231da88d59"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "65696662",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "40d75be8d061c718ff8da28a355e4eaf59b362ea115b8dbb91d66e5762586a9a",
+        "retrieved_at_utc": "2026-10-15T21:09:14.564037+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/65696662/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 13506,
+        "row_sha256": "3c980a04a3fcb027eac174a51addf28ad091c6cfbbf2233b0b784cbaab64303e"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 18761,
+          "row_sha256": "f63151bf8c1b3f9fc7ad83a8021c97e9b679d68ee2ba70272c4aa2af645ddc6b"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "SPIRONOLACTONE CRISTERS 50 mg, comprimé pelliculé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400936033832",
+          "cis": "65696662",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 11931,
+            "row_sha256": "eea192866a4eaa021f2c65f9cd91e1bed811f0a43dfaa08d5867a03622e43526"
+          }
+        },
+        {
+          "cip13": "3400936034082",
+          "cis": "65696662",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 11932,
+            "row_sha256": "b1af4e4c12c693ca530cbcb945a9442b55246a1fb47ed8330d0749ed422a8a8a"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "65900339",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "f31b6da1d7f6b855b7f6ef92681634bf368478143350dd84b4831bbff3cbcf3d",
+        "retrieved_at_utc": "2026-10-15T21:09:10.964907+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/65900339/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 113,
+        "row_sha256": "1de87737207746df286a367ede839c51994a61f43975e7007e7cb86fffd65284"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 19313,
+          "row_sha256": "7dc752a5c39cd2fde3d98190ecec0d20bf7a69730408e3a9b73e83867f84064a"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "ACETATE DE CYPROTERONE ARROW 100 mg, comprimé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400938844597",
+          "cis": "65900339",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 12308,
+            "row_sha256": "20fd5dabd98a2ce88c3d3bd71d6265934c9ec94668b9b689dff015fbc30d6fd5"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "65982553",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [
+        "FORMAT_SPEC_SAYS_ST_SOURCE_USES_FT"
+      ],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "c20da763a691b0f9d48bdac2c691cb7e1368b4f6e1f485a5a4d4b2a165958293",
+        "retrieved_at_utc": "2026-10-15T21:09:16.593318+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/65982553/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 14206,
+        "row_sha256": "d65fb0b620fb114c3aabf96e2e1d517f6308a092e0ad9c9ca3a45f6872875daa"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 19592,
+          "row_sha256": "1a7fd0fba335c0c52c78e7fb9e107df8925e32125005b18fd770ffd5ba8822b9"
+        },
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 19593,
+          "row_sha256": "15c9c0473fc19133eeb22bf9e2a5153220cf5085aa1dbcaeb7b6b57d2fe2d410"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "THAISSEPT 50 microgrammes/24 heures, dispositif transdermique",
+      "presentation_sources": [
+        {
+          "cip13": "3400935239976",
+          "cis": "65982553",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 12478,
+            "row_sha256": "05100fbc2adeb083bcee4ba42af7a3ee40aafe84e566fd679e3cb14c12a5b9c7"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "66032486",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "01b25f6736c56ba412e6742bcf5bd1ef9479e8bf84144d6b791311f5dae81d73",
+        "retrieved_at_utc": "2026-10-15T21:09:14.485706+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/66032486/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 13501,
+        "row_sha256": "33907ebd43c13afcd5053b58b3b07853c33d9f77b9ad5e37a3f6f2e83563d884"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 19737,
+          "row_sha256": "2a97aa7f33522747c6c83d009e77602de50743888d8f170c1f38fe3fea66bfc5"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "SPIRONOLACTONE ARROW 75 mg, comprimé pelliculé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400936057845",
+          "cis": "66032486",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 12580,
+            "row_sha256": "9e3fa6998e2bd741303c7bb461406d2a9a3d4bac7568d43f16637ee5d3cc5c77"
+          }
+        },
+        {
+          "cip13": "3400937397056",
+          "cis": "66032486",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 12581,
+            "row_sha256": "d554a2c368b6416cc62a1bd71d6f29e0ccf0c61420d244640674e1331af39f43"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "66156975",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "a33b23de78b8c1de09161e1ac2871191b68e3a7c106b72c676ec92defca923d8",
+        "retrieved_at_utc": "2026-10-15T21:09:13.202247+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/66156975/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 11825,
+        "row_sha256": "4fc6d615d4d636d7f7f1ce759170232cb3b1eb1f0f9aea47be1b9d0a3c52a39f"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 20224,
+          "row_sha256": "c0348518e7aab1cdf2a5d7adf4076d5b3a8ffab78fd5aba93ccafdea00e7eea8"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "PROGESTERONE VIATRIS 100 mg, capsule molle ou capsule molle vaginale",
+      "presentation_sources": [
+        {
+          "cip13": "3400930024522",
+          "cis": "66156975",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 12870,
+            "row_sha256": "53d8f1d360eabf0f7e784495200049627554622a0ab4dd79778c44c404627bb6"
+          }
+        },
+        {
+          "cip13": "3400936178991",
+          "cis": "66156975",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 12871,
+            "row_sha256": "e3fa494d276a09e1e48f9772f70e7a8cc47fb90e45c5c1933ae5f125eee525c6"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "66426680",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "452cc625a8a281cbbddd913cc333952ded0d24388181b92b35981924d061337c",
+        "retrieved_at_utc": "2026-10-15T21:09:13.301784+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/66426680/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 11823,
+        "row_sha256": "a46a3925c203c6979e30984a24420aa3e50c685e1bb0b87d9c622ed3a396f74f"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 21094,
+          "row_sha256": "393bec5d68a48ccf8f8c72d689183d89e2d6d7b3026e28d41e9366b8ec8e843f"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "PROGESTERONE BIOGARAN 200 mg, capsule molle ou capsule molle vaginale",
+      "presentation_sources": [
+        {
+          "cip13": "3400935825056",
+          "cis": "66426680",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 13462,
+            "row_sha256": "a3e96ff9e0708e47cd3f88c3fb9ebb7aae53da1b5b676f0afb539e03ff124d87"
+          }
+        },
+        {
+          "cip13": "3400939793320",
+          "cis": "66426680",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 13463,
+            "row_sha256": "d5f5aefdfd835e5ab67e74a4f816b56d6d675b74d2f0f5fc5274697f3f52ceb6"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "66501802",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "9bdb1e8967a74db6b315f42bd3b4a25784b46c4b9ce1934beb7fe92bad082a7e",
+        "retrieved_at_utc": "2026-10-15T21:09:12.257331+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/66501802/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 4135,
+        "row_sha256": "afb42e5622d873420e84d1116ca5eec145608b6fe40db3b0b4b60375561fdcae"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 21324,
+          "row_sha256": "f70c1d3063ba4fe19c371a0d4c5167bfab7f0a06f5a204f898010b18f4fc483b"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "DERMESTRIL 100 microgrammes/24 heures, dispositif transdermique",
+      "presentation_sources": [
+        {
+          "cip13": "3400934090370",
+          "cis": "66501802",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 13588,
+            "row_sha256": "9a6f32665b743619b57788452720f82c726f14d135de0dee6967f3210803fe1c"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "67368301",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "e8b1df88fdc0fe126f00aecc3da8c5c73f8d2d67bd06964fb3d3bcfd2a482c91",
+        "retrieved_at_utc": "2026-10-15T21:09:12.333429+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/67368301/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 479,
+        "row_sha256": "d7ed8997dd59ed42ed5199a678ad2950891ac504e800ea46460b704dba68bca7"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 23948,
+          "row_sha256": "990d9fc2610e8c888f47d345c4a0f54743d0d73fc618cd2a19b4de87db3ae63e"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "ALDACTONE 50 mg, comprimé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400935125392",
+          "cis": "67368301",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 15417,
+            "row_sha256": "6b87811b56bbdc8b2ac87821a89b0f03847fbd481fa23ea9049a1ecd18f4c891"
+          }
+        },
+        {
+          "cip13": "3400937233545",
+          "cis": "67368301",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 15418,
+            "row_sha256": "fb452df24ec0dfe8b74ca249fef4d237167384aa41bd7e6ac20dba0715053065"
+          }
+        },
+        {
+          "cip13": "3400955245704",
+          "cis": "67368301",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 15419,
+            "row_sha256": "5d6bdfc84cd1947ccd4dfbeda7ec463111b1b9f8cdb56be722c51503a4942ed1"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "REPEALED",
+      "cis": "67443608",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "7b99a03a8cb1e7be362b4d89d532d17a4349bd3aa6ce7bbf68b3bd629c5bf130",
+        "retrieved_at_utc": "2026-10-15T21:09:10.594192+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/67443608/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 117,
+        "row_sha256": "9d383a79229882aec6b8509b2528b66c0532cf1b0afe078bb45743d5cd4372c1"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 24170,
+          "row_sha256": "03f7e71dd652c44963048eeddf721c7f528412cf651fca4c8813a5493e6f963f"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "NOT_MARKETED",
+      "name_fr": "ACETATE DE CYPROTERONE TEVA 100 mg, comprimé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400938206203",
+          "cis": "67443608",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 15557,
+            "row_sha256": "a55dd624e75a4f6a5ae16e5b96f2b5eb590ccc324842709366722d115655b7aa"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "67552319",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "8fa6cc56a6a52e385dbf10800888f4eb7a1387d91c999793a4388a15216d1e7e",
+        "retrieved_at_utc": "2026-10-15T21:09:11.654288+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/67552319/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 114,
+        "row_sha256": "dffe7a68d790b9640d005256144891220335082cb096c9562294b0f86cd4db7d"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 24476,
+          "row_sha256": "de9a0a6ed0ffdd8a49a927288efd4e4ba3a2a0deba22c542814d12db617b6200"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "ACETATE DE CYPROTERONE ARROW 50 mg, comprimé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400938844368",
+          "cis": "67552319",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 15772,
+            "row_sha256": "5add852930bfe7b2eea3e2ae8d3a78f6f41ddb74cf2db99daffdd33dc3f72f8c"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "REPEALED",
+      "cis": "67588728",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "afabc2c51ad02901154f80a2a3a97c926c556018c3d4f1db1d13a0e8ccf5bf30",
+        "retrieved_at_utc": "2026-10-15T21:09:11.728838+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/67588728/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 116,
+        "row_sha256": "60d508cbd412dc8a5d8feae77c97f73288b34ca2cd4561dd604f49e3cdfdbb70"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 24603,
+          "row_sha256": "7716dde1f92c5f41126ed02ac837487d3241ceb6c45a904dcc44debac9cec4f3"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "NOT_MARKETED",
+      "name_fr": "ACETATE DE CYPROTERONE EG 50 mg, comprimé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400936269705",
+          "cis": "67588728",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 15844,
+            "row_sha256": "eb8106a261c2674b2c37737a9c59bcd9dcd20c25799b49d62978e5306f4128f3"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "REPEALED",
+      "cis": "67941726",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "d2859fab46557011aa9f207fecfb1d44f4c2f231a10252ee29d992d560742b97",
+        "retrieved_at_utc": "2026-10-15T21:09:12.359483+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/67941726/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 3869,
+        "row_sha256": "baae0a77af5eb91eda2c71b5f4935ad691983094d692886729c9602868336e0a"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 25803,
+          "row_sha256": "e5de3879472b565e44f80bf7527ecc307dd5a42c156b8425127d1864a9d2bde0"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "NOT_MARKETED",
+      "name_fr": "CYPROTERONE MYLAN 100 mg, comprimé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400936935297",
+          "cis": "67941726",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 16647,
+            "row_sha256": "cdd3695f5212c49a05516ccb6a3e6ac73177bba2743d695219fa05ad2b28a09b"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "68492540",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "54f79253a0477a944a94e94791450e1c9b13ee9f3c25e4712cec8ce65b5a2757",
+        "retrieved_at_utc": "2026-10-15T21:09:11.526667+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/68492540/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 480,
+        "row_sha256": "54ca7acff6f1889d548c630593e1f61b672ac3b90965bdaa5ee2d7e13933912c"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 27529,
+          "row_sha256": "b70e99b725d2ffb0d41aae2484fa2b24006d75d76cd5094800ac0bc0ae771a7d"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "ALDACTONE 75 mg, comprimé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400932608072",
+          "cis": "68492540",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 17783,
+            "row_sha256": "03b9aa3801b5f027c2867f80280e9bf9421f4e8e8909fb16dfb26b50b208a463"
+          }
+        },
+        {
+          "cip13": "3400935125453",
+          "cis": "68492540",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 17784,
+            "row_sha256": "0983963257721be8e3d44ee028f69445d527e41884c46eaefba65ac60fe7e132"
+          }
+        },
+        {
+          "cip13": "3400937296069",
+          "cis": "68492540",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 17785,
+            "row_sha256": "cea1aa8117ea986b14d30601e821df22e87d69b1203191b7e5f69fccfd48476e"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "68800618",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "84a6d2d6c642d4fda5a8bef1249d0f48fc63fdedb463185c91125b873c809996",
+        "retrieved_at_utc": "2026-10-15T21:09:15.422558+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/68800618/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 13516,
+        "row_sha256": "31041793e6243611f3bf0bacce4cba59c21823731e0205497218e686320a4b61"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 28515,
+          "row_sha256": "45cf1cd9ca868d2c5a171aea8aa3f92d20bb4daa0a728ab91f45fe23355ba58b"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "SPIRONOLACTONE TEVA 50 mg, comprimé pelliculé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400936116269",
+          "cis": "68800618",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 18430,
+            "row_sha256": "47217d8c620f085eccc4d03caea95d7931f1c078d531ae6d024b511ce982e612"
+          }
+        },
+        {
+          "cip13": "3400937290616",
+          "cis": "68800618",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 18431,
+            "row_sha256": "d96b0ad8ee337888e50c3ea4fd5342cb278a8b55a39141bcccf21efa8366d9bc"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "68916754",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "a338455422c7f40b03e4dc8efc6230279076c0bafb1d1d9c377e343dbc4927bc",
+        "retrieved_at_utc": "2026-10-15T21:09:14.446794+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/68916754/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 13505,
+        "row_sha256": "638c18fd171731ca2f1a606b1e4540958517d683eb641afca96cfa307d74ef33"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 28858,
+          "row_sha256": "7df7054d153dddcd2bc2867975c40f478882f0b48ac42d2c122bfbfc8d0a975d"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "SPIRONOLACTONE CRISTERS 25 mg, comprimé pelliculé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400939614731",
+          "cis": "68916754",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 18643,
+            "row_sha256": "f0d6bf45e6c14b0b49aa99d1aa9119f3ff41f0ae03a58bfed457e4731861102c"
+          }
+        },
+        {
+          "cip13": "3400939614960",
+          "cis": "68916754",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 18644,
+            "row_sha256": "d609deea11176f8a3e87bf5b61710df99beebee12176d8736f273f6ca9668ea5"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "69006984",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "141e252cd9cba8a7ec1f0e2890357e92b0c5fcaafc33d221135b5bd13f5dced5",
+        "retrieved_at_utc": "2026-10-15T21:09:16.103615+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/69006984/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 13522,
+        "row_sha256": "c850cc880308dac898f3798e2039ed738474ba1b93692b063c624dff01ba0473"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 29103,
+          "row_sha256": "ed199a2eb50be9a0a3c8e5ceea63e03fe097d47d3e009987623e6e3e8f82bdf7"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "SPIRONOLACTONE ZENTIVA 50 mg, comprimé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400936738058",
+          "cis": "69006984",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 18807,
+            "row_sha256": "024af6ba6369d6cbe5d2a28e677df5aa316810bf99ba9a38f667d2038f3f6fa1"
+          }
+        },
+        {
+          "cip13": "3400937874953",
+          "cis": "69006984",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 18808,
+            "row_sha256": "92f8a2ae39faf35eea974a1510eebfc698cc9db1976867e04c12a525aec064cb"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    },
+    {
+      "additional_monitoring": "NOT_COVERED_BY_FROZEN_CATALOG",
+      "authorization_snapshot": "ACTIVE",
+      "cis": "69360552",
+      "clinical_fields": {
+        "adverse_reactions": "UNVERIFIED",
+        "contraindications": "UNVERIFIED",
+        "excipients": "UNVERIFIED",
+        "interactions": "UNVERIFIED",
+        "pk_section_5_2": "UNVERIFIED",
+        "storage": "UNVERIFIED"
+      },
+      "conflicts": [],
+      "document_page_observation": {
+        "entries": {
+          "notice": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-notice-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          },
+          "rcp": {
+            "body_review": "UNVERIFIED",
+            "observed_panel": "tabpanel-rcp-panel",
+            "snapshot_entry_observation": "VERIFIED",
+            "translation_review": "NOT_RUN"
+          }
+        },
+        "page_sha256": "62cf33f77ea5a72acd07b7e4ed03ee8519340b57ded15213c123b1aee4260528",
+        "retrieved_at_utc": "2026-10-15T21:09:16.317970+00:00",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/69360552/extrait"
+      },
+      "identity_source": {
+        "file": "CIS_bdpm.txt",
+        "line": 13524,
+        "row_sha256": "7db1eab4cccac1bf24a010133b31e18b5f610b2f903339afe6b228e07079a0f5"
+      },
+      "ingredient_sources": [
+        {
+          "file": "CIS_COMPO_bdpm.txt",
+          "line": 30380,
+          "row_sha256": "d840f14e195732a1cb61e2aac5a9a393d1461a72b74d4a788e79070debd7d0b5"
+        }
+      ],
+      "live_supply": "UNVERIFIED",
+      "marketing_snapshot": "MARKETED_DECLARED",
+      "name_fr": "SPIRONOLACTONE ZYDUS 25 mg, comprimé pelliculé sécable",
+      "presentation_sources": [
+        {
+          "cip13": "3400939678207",
+          "cis": "69360552",
+          "source": {
+            "file": "CIS_CIP_bdpm.txt",
+            "line": 19617,
+            "row_sha256": "41355e37e00bcaa4c8d53833cdfa39868635cacb0317310f27f9baf9457480ff"
+          }
+        }
+      ],
+      "publication_status": "OFFICIAL_DISTRIBUTION_BLOCKED",
+      "unverified_fields": [
+        "authorization_end_date",
+        "production_status",
+        "live_supply",
+        "excipients",
+        "storage",
+        "clinical_summaries",
+        "divisibility"
+      ]
+    }
+  ],
+  "reference_version": "fr-bdpm-2026-10-15.1",
+  "rights": "CONFLICT",
+  "schema_version": 1,
+  "scope": "DOCUMENTATION_ONLY_FROZEN_SNAPSHOT_NOT_CURRENT_MEDICAL_REVIEW",
+  "snapshot_verified_on": "2026-10-15",
+  "source_sha256": {
+    "catalog.json": "d56a81299d66655508254e673aaa81579c564a3e077df2fb4e40e217bf182817",
+    "manifest.json": "cffa99dbe1dccf604aa9908a2caccd93ab30312af6c2f0fd6cf46c8cb69bef32",
+    "page-evidence.json": "8528d8ff6b4cdea17f120d142f1504bb58fb03b1f6045b723ebe9d25077d3ca1",
+    "source-rows.json": "6fa5a7d615e755327127553ad88acf7ed538e7086f0be236a86b4c6eca19ea05"
+  }
+}

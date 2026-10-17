@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="drug_docs_title">Documents du produit</string>
+    <string name="drug_docs_rcp">RCP — résumé des caractéristiques du produit</string>
+    <string name="drug_docs_notice">Notice — information pour les patients</string>
+    <string name="drug_docs_unverified">L’entrée du document et son contenu ne sont pas vérifiés pour cette référence enregistrée.</string>
+    <string name="drug_docs_entry_verified">Entrée de la page du produit vérifiée le %1$s.</string>
+    <string name="drug_docs_body_not_verified">La vérification de l’entrée ne valide pas le texte intégral du document.</string>
+    <string name="drug_docs_distribution_off">Les documents officiels hors ligne ne sont pas activés. Une référence saisie par vous ne constitue pas une vérification officielle.</string>
+    <string name="drug_docs_no_advice">Ces références ne définissent ni votre dose, ni la voie, ni le programme de traitement.</string>
+    <string name="drug_docs_invalid_link">Le lien fourni ne correspond pas à une page publique de produit autorisée.</string>
+    <string name="drug_docs_access_changed">L’accès a changé. Revenez à l’application déverrouillée avant de réessayer.</string>
+    <string name="drug_docs_external">La page publique du produit fournie sera ouverte dans votre navigateur. Aucun historique de prise n’est inclus. Le navigateur et le site peuvent connaître la page visitée et appliquent leurs propres règles de confidentialité aux informations que vous y saisissez. Les redirections ultérieures ne sont pas contrôlées par cette application. La page peut avoir changé ou être indisponible.</string>
+</resources>
