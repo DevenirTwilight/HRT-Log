@@ -15,8 +15,10 @@
 | 记录来源 | `docs/delivery/ledger.json`、`docs/releases/0.2.0-rebuild-2026-10-17.md` |
 | 发行源码数据版本 | Room **11**；PNBAK1 业务 Schema **10**；外层 format **1**。来源：该源码 `NotesDatabase.kt`、`RecordBackupCompatibility.kt`、`DataTransfer.kt` |
 | P4 未合并候选数据版本 | Room **12** / 业务 Schema **11**；外层 format **1**，不是 build29 中已发行功能 |
-| 本轮重新下载/验签 APK | **NOT_RUN**；上列是仓库发行记录，不冒充本轮实测 |
+| 本轮重新下载/验签 APK | **PASS（只读）**；证据见 `build29-readonly-verification.json` |
 | 后端 Beta 候选 APK | **NOT_IMPLEMENTED**，无候选构建、签名或版本号 |
+
+2026-10-17 本轮直接下载现有公开 APK 并只读核对：上述文件哈希/证书、嵌入 clean git 源码 SHA 与实际 tag 完全一致；v2/v3 签名、包名/版本、非 debug、minSdk26/target37、四 ABI、ZIP CRC、APK ZIP 16KiB 对齐及 No INTERNET 均 PASS。实际权限还包含既有 `ACCESS_NETWORK_STATE`，完整列表保存在 JSON；没有修改权限。真实安装/覆盖升级和 ELF 段对齐复核本轮未跑。GitHub Release 的历史 `targetCommitish=c52c8518…` 与实际 tag 不同，按实际 tag 与二进制来源核对，未改 Release 元数据。
 
 发布已完成，本任务不重签、不上传 APK、不移动 tag、不发布社交公告。未来候选构建只在负责人另批后进行，沿用证书、包名和非降级版本，不要求卸载/清数据。
 
