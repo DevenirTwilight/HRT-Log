@@ -154,6 +154,11 @@ internal object MeasuredConsumptionStore {
         check(db.inTransaction())
         try {
             BackupValidation.validateCandidateStoredColumns(db)
+            val reads=ReferenceAuditReads(db)
+            try {return auditReadSnapshot(reads)} finally {reads.finish()}
+        } catch(e:ReferenceFailure){throw e} catch(e:Exception){fail(ReferenceError.INVALID_SOURCE)}
+    }
+    private fun auditReadSnapshot(db:SupportSQLiteDatabase):List<AuditedStockProjection> {
             BackupValidation.validateMeasuredCandidateState(db)
             db.query(EXACT_SOURCE_COVERAGE_QUERY).use{require(!it.moveToFirst())}
             db.query("SELECT 1 FROM measured_operation o JOIN reference_event e ON e.operation_uuid=o.operation_uuid LIMIT 1").use{require(!it.moveToFirst())}
@@ -175,7 +180,6 @@ internal object MeasuredConsumptionStore {
             }
             auditOperations(db,presentations)
             return projections
-        } catch(e:ReferenceFailure){throw e} catch(e:Exception){fail(ReferenceError.INVALID_SOURCE)}
     }
 
     internal fun forecastBalances(db:SupportSQLiteDatabase,projections:List<AuditedStockProjection>):Map<Long,List<ConfirmedPhysicalStock>> {

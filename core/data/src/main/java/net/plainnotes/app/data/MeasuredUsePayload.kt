@@ -31,8 +31,11 @@ internal data class MeasuredConsumptionRequest(
     val stockEffect:MeasuredStockEffect=MeasuredStockEffect.DEDUCT_CURRENT,val unlinkedActual:Quantity?=null,
 )
 internal class FrozenConsumptionRequest internal constructor(val json:String) {
-    val sha256:String get()=ReferencePayload.sha(json)
-    fun request():MeasuredConsumptionRequest=MeasuredUsePayload.decode(json)
+    val sha256:String by lazy {ReferencePayload.sha(json)}
+    private val decoded:MeasuredConsumptionRequest by lazy {
+        MeasuredUsePayload.decode(json).let{it.copy(uses=java.util.Collections.unmodifiableList(it.uses.toList()))}
+    }
+    fun request():MeasuredConsumptionRequest=decoded
 }
 
 /** Immutable input capture only. No database writes, actual-record creation, automatic allocation or dose inference. */
@@ -77,8 +80,9 @@ internal object MeasuredUsePayload {
         return read(ReferencePayload.canonical(json))
     }
     fun read(json:String):FrozenConsumptionRequest {
-        try {decode(json)}catch(e:IllegalArgumentException){throw e}catch(e:Exception){throw IllegalArgumentException("Invalid measured-use input",e)}
-        return FrozenConsumptionRequest(json)
+        val frozen=FrozenConsumptionRequest(json)
+        try {frozen.request()}catch(e:IllegalArgumentException){throw e}catch(e:Exception){throw IllegalArgumentException("Invalid measured-use input",e)}
+        return frozen
     }
     internal fun decode(payload:String):MeasuredConsumptionRequest {
         require(payload.toByteArray(Charsets.UTF_8).size<=ReferencePayload.MAX_BYTES)

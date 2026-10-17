@@ -56,6 +56,66 @@ abstract class MeasuredContainerContract {
         db.withTransaction{ReferenceSchema.validateCandidateReferences(raw)}
         assertEquals(2,count("reference_snapshot"))
     }
+    @Test fun auditPrimitiveRowsReturnFreshObjectsAndIndependentCursorHeaders()=runBlocking {
+        val med=med();val created=create(med,UUID.randomUUID().toString())
+        db.withTransaction {
+            val reads=ReferenceAuditReads(raw)
+            try {
+                val before=ReferenceStore.row(raw,"reference_identity","uuid=?",arrayOf(created.containerUuid))!!
+                val copy=ReferenceStore.row(reads,"reference_identity","uuid=?",arrayOf(created.containerUuid))!!
+                assertEquals(ReferencePayload.canonical(before),ReferencePayload.canonical(copy))
+                copy.put("kind","MUTATED")
+                assertEquals(ReferencePayload.canonical(before),ReferencePayload.canonical(ReferenceStore.row(reads,"reference_identity","uuid=?",arrayOf(created.containerUuid))!!))
+                val sql="SELECT * FROM `reference_identity` WHERE uuid=?"
+                val original=raw.query(sql,arrayOf(created.containerUuid)).use{it.getColumnName(0)}
+                reads.query(sql,arrayOf(created.containerUuid)).use{it.columnNames[0]="MUTATED"}
+                reads.query(sql,arrayOf(created.containerUuid)).use{assertEquals(original,it.getColumnName(0))}
+                assertNull(ReferenceStore.row(reads,"reference_identity","uuid=? AND kind=?",arrayOf(created.containerUuid,"RECORD")))
+            } finally{reads.finish()}
+        }
+    }
+    @Test fun insufficientAuditCacheNeverTurnsExistingRowsIntoAbsence()=runBlocking {
+        val med=med();val created=create(med,UUID.randomUUID().toString())
+        for(limit in listOf(0L,1L,512L))db.withTransaction {
+            val reads=ReferenceAuditReads(raw,limit)
+            try {
+                for(table in listOf("reference_identity","reference_snapshot","reference_event")) {
+                    val key=if(table=="reference_event")"operation_uuid" else "uuid"
+                    raw.query("SELECT $key FROM `$table`").use{c->while(c.moveToNext()) {
+                        val id=c.getString(0)
+                        assertEquals(ReferenceStore.row(raw,table,"$key=?",arrayOf(id)).toString(),ReferenceStore.row(reads,table,"$key=?",arrayOf(id)).toString())
+                    }}
+                }
+                assertNotNull(ReferenceStore.row(reads,"reference_identity","uuid=?",arrayOf(created.containerUuid)))
+                assertNull(ReferenceStore.row(reads,"reference_identity","uuid=?",arrayOf(UUID.randomUUID().toString())))
+            } finally{reads.finish()}
+        }
+    }
+    @Test fun auditReadScopeRejectsWritesAndCannotBeReusedInAnotherTransaction()=runBlocking {
+        val med=med();val before=db.dao().medication(med)
+        val ended=db.withTransaction {
+            val reads=ReferenceAuditReads(raw)
+            assertThrows(IllegalStateException::class.java){reads.execSQL("DELETE FROM medication")}
+            assertThrows(IllegalStateException::class.java){reads.query("DELETE FROM medication")}
+            assertThrows(IllegalStateException::class.java){reads.query("PRAGMA user_version=123")}
+            assertThrows(IllegalStateException::class.java){reads.compileStatement("DELETE FROM medication")}
+            reads.finish();reads
+        }
+        assertThrows(IllegalStateException::class.java){ended.query("SELECT 1")}
+        db.withTransaction{assertThrows(IllegalStateException::class.java){ended.query("SELECT 1")}}
+        assertEquals(before,db.dao().medication(med))
+    }
+    @Test fun auditDetectsUnderlyingWritesBeforeReturningAndTheCallerRollsBack()=runBlocking {
+        val med=med();val before=db.dao().medication(med)
+        var rejected=false
+        try {db.withTransaction {
+            val reads=ReferenceAuditReads(raw)
+            raw.execSQL("UPDATE medication SET name='SYNTHETIC unexpected change' WHERE id=?",arrayOf(med))
+            reads.finish()
+        }} catch(_:IllegalStateException){rejected=true}
+        assertTrue(rejected);assertEquals(before,db.dao().medication(med))
+        db.withTransaction{val reads=ReferenceAuditReads(raw);reads.finish()}
+    }
     @Test fun explicitContainerCreationFreezesASeparateUnitWithoutChangingMedicationOrLegacyStock()=runBlocking {
         val med=med();val before=db.dao().medication(med)
         val old=db.dao().insertContainer(ContainerEntity(medication_id=med,capacity=100.0,initial_used_amount=2.0,used_amount=2.0,state="IN_USE",opened_on="2026-10-15"))

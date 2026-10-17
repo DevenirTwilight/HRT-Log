@@ -44,6 +44,12 @@ class MeasuredUsePayloadTest {
         val lines=mutableListOf(use(1));val frozen=MeasuredUsePayload.freeze(request(lines));val before=frozen.json;lines.clear()
         assertEquals(before,frozen.json);assertEquals(1,frozen.request().uses.size)
     }
+    @Test fun decodedFrozenRequestHasNoMutableCollectionAliases() {
+        val frozen=MeasuredUsePayload.freeze(request(listOf(use(1))))
+        val before=frozen.json;val hash=frozen.sha256
+        assertThrows(UnsupportedOperationException::class.java){(frozen.request().uses as MutableList<ConfirmedStockUse>).clear()}
+        assertEquals(1,frozen.request().uses.size);assertEquals(before,frozen.json);assertEquals(hash,frozen.sha256)
+    }
     @Test fun unsupportedAlgorithmsFloatsAndInvalidClinicalContextAreRejected() {
         val frozen=MeasuredUsePayload.freeze(request(listOf(use(1))))
         for(change in listOf<(JSONObject)->Unit>({it.put("stock_algorithm","future")},{it.put("unexpected",true)},{it.getJSONObject("record").put("legacy_actual_dose_bits","7ff8000000000000")},{it.getJSONObject("record").put("taken_utc",1.5)})) {
