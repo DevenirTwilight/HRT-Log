@@ -81,7 +81,7 @@
       "blocker": "",
       "owner_decision_required": false,
       "progress": "IN_PROGRESS",
-      "note": "P4 Room12/业务11、真实内部Repository、冻结修订/逆操作/后实盘协调与UNKNOWN保护已编码；data390/shared114 JVM及原生编译PASS，前三轮原生大库FAIL（39045008821仍实际heap384m），实际ART配置与报告留存修正待原生重跑，最终CI待验；App入口OFF，不能标阶段完成。"
+      "note": "P4内部正式流程已编码；data396/shared114/Period5/Privacy3/Python168、原生源码及同规模JVM大库预算PASS。第四轮原生ART192MiB下审计32.57s/预测22.90s超15s，加密恢复进程退出。分块严格UTF8及仅不可变/事务内缓存修复待原生重验，仍PRODUCTION_BLOCKED，App入口OFF，P5/P6未完成。"
     },
     {
       "requirement_id": "V4.04",
@@ -121,7 +121,7 @@
       "blocker": "",
       "owner_decision_required": true,
       "progress": "IN_PROGRESS",
-      "note": "04A已实现只读分栏/证据DTO/显式安全导航，91项本地和384图，Python160；58/64/96逐商品台账。最终CI待验，真实原生MainActivity浏览器/TalkBack NOT_RUN。04B原文/正式注册表未实现、临床与版权审查未放行。"
+      "note": "04A验收源fda7782六CI通过，五份报告已验官方SHA/CRC，实际384张CI图。证据提交c43ae14需自己的最终CI；实机/TalkBack及原生新浏览器操作NOT_RUN。正式临床内容和04B仍OFF。"
     },
     {
       "requirement_id": "V4.06",
@@ -171,17 +171,17 @@
       "corrected_scope": "按原节执行；不得把未完成工程归因于许可。后节新事实优先，不覆盖既有安全门。",
       "stage": "ANSM_PK",
       "affected_product_or_dataset": "ANSM selected FR snapshot / user-entered references / legacy and exact stock",
-      "implementation_path": "",
+      "implementation_path": "https://github.com/DevenirTwilight/HRT-Log/tree/3ec00f5fac09e30927e3dea2325700b2165bc5de/docs/ansm-pk",
       "test_id": [],
-      "pr_url": "",
+      "pr_url": "https://github.com/DevenirTwilight/HRT-Log/pull/59",
       "source_url": [],
       "source_date": null,
       "review_status": "UNREVIEWED",
-      "result_status": "NOT_IMPLEMENTED",
+      "result_status": "PRODUCTION_BLOCKED",
       "blocker": "",
       "owner_decision_required": false,
-      "progress": "NOT_STARTED",
-      "note": "节级初始追踪，不代表逐声明或功能验收；后续补字段/产品/测试级子项。"
+      "progress": "IN_PROGRESS",
+      "note": "11既有BDPM引用与20研究获取记录已索引；本次3页RCP5.2 HTTP200/限定事实及18生产文件不变证据。源3ec00f5六CI通过。其余8既有引用/58商品完整5.2与独立科学审查未完成，MODEL_CHANGE_BLOCKED，不自动合并。"
     },
     {
       "requirement_id": "V4.09",
@@ -973,5 +973,5 @@
       "note": "docs/ansm-integration/p4/performance/large-coverage-1a75c5b/evidence.json; failed baseline retained, no threshold relaxation"
     }
   ],
-  "checkpoint": "2026-10-17 dd7e61c P4 pending native performance / fda7782 independent04A draft"
+  "checkpoint": "2026-10-17 P4 streaming/cache396 PASS native pending;04A sourcefda sixCI;PK source3ec sixCI partial evidence"
 }

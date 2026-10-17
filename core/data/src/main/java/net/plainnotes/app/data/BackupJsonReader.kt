@@ -6,26 +6,35 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.io.StringReader
 import java.math.BigDecimal
-import java.nio.ByteBuffer
+import java.io.ByteArrayInputStream
+import java.io.InputStreamReader
+import java.io.Reader
+import java.nio.charset.CharacterCodingException
 import java.nio.charset.CodingErrorAction
 
 /** Strict, bounded JSON input. Numeric lexemes are not rounded through Double before validation. */
 internal object BackupJsonReader {
+    private val integerToken=Regex("-?(0|[1-9][0-9]*)")
     fun read(bytes:ByteArray):JSONObject {
         if(bytes.size>BackupLimits.MAX_JSON_BYTES)throw BackupCodec.TooLarge()
-        val text=try {Charsets.UTF_8.newDecoder().onMalformedInput(CodingErrorAction.REPORT)
-            .onUnmappableCharacter(CodingErrorAction.REPORT).decode(ByteBuffer.wrap(bytes)).toString()}
-            catch(_:Exception){throw BackupCodec.BadFile("invalid UTF-8")}
-        return read(text)
+        fun reader()=InputStreamReader(ByteArrayInputStream(bytes),Charsets.UTF_8.newDecoder()
+            .onMalformedInput(CodingErrorAction.REPORT).onUnmappableCharacter(CodingErrorAction.REPORT))
+        // Consume the strict UTF-8/lexical pass completely, including malformed trailing bytes.
+        try {reader().use{BackupLimits.checkJson(it)}}
+        catch(_:CharacterCodingException){throw BackupCodec.BadFile("invalid UTF-8")}
+        return parse(reader())
     }
     fun read(text:String):JSONObject {
         BackupLimits.checkJson(text)
+        return parse(StringReader(text))
+    }
+    private fun parse(input:Reader):JSONObject {
         try {
-            JsonReader(StringReader(text)).use { reader ->
+            JsonReader(input).use { reader ->
                 reader.isLenient=false
                 var arrays=0;var objects=0
                 fun number(token:String):Number {
-                    if(token!="-0" && Regex("-?(0|[1-9][0-9]*)").matches(token)) {
+                    if(token!="-0" && integerToken.matches(token)) {
                         token.toLongOrNull()?.let {return if(it in Int.MIN_VALUE..Int.MAX_VALUE)it.toInt() else it}
                     }
                     return BigDecimal(token)

@@ -26,20 +26,33 @@ object BackupLimits {
     }
 
     /** Lexical budget for JSON including embedded snapshot/effects strings; semantic checks follow. */
-    fun checkJson(text: String) {
-        if (text.length > MAX_JSON_BYTES) throw BackupCodec.TooLarge()
-        var depth = 0; var quoted = false; var escaped = false; var length = 0
-        text.forEach { c ->
-            if (quoted) {
-                if (++length > MAX_STRING) throw BackupCodec.TooLarge()
-                if (escaped) escaped = false else if (c == '\\') escaped = true else if (c == '"') quoted = false
-            } else when (c) {
-                '"' -> { quoted = true; length = 0 }
-                '{', '[' -> if (++depth > MAX_DEPTH) throw BackupCodec.TooLarge()
-                '}', ']' -> if (--depth < 0) throw BackupCodec.BadFile("invalid structure")
+    private class JsonBudget {
+        private var depth=0;private var quoted=false;private var escaped=false;private var length=0
+        fun accept(c:Char) {
+            if(quoted) {
+                if(++length>MAX_STRING)throw BackupCodec.TooLarge()
+                if(escaped)escaped=false else if(c=='\\')escaped=true else if(c=='"')quoted=false
+            } else when(c) {
+                '"'->{quoted=true;length=0}
+                '{','['->if(++depth>MAX_DEPTH)throw BackupCodec.TooLarge()
+                '}',']'->if(--depth<0)throw BackupCodec.BadFile("invalid structure")
             }
         }
-        if (quoted || depth != 0) throw BackupCodec.BadFile("invalid structure")
+        fun complete(){if(quoted || depth!=0)throw BackupCodec.BadFile("invalid structure")}
+    }
+    fun checkJson(text: String) {
+        if(text.length>MAX_JSON_BYTES)throw BackupCodec.TooLarge()
+        val budget=JsonBudget();text.forEach(budget::accept);budget.complete()
+    }
+    /** Same lexical contract without retaining an additional whole decoded document. */
+    internal fun checkJson(reader:java.io.Reader) {
+        val budget=JsonBudget();val buffer=CharArray(8192);var total=0L
+        while(true) {
+            val count=reader.read(buffer);if(count<0)break
+            total+=count;if(total>MAX_JSON_BYTES)throw BackupCodec.TooLarge()
+            for(i in 0 until count)budget.accept(buffer[i])
+        }
+        budget.complete()
     }
 }
 

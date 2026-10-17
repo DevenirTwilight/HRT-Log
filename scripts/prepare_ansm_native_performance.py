@@ -45,6 +45,8 @@ def native_source(text):
             report.put("api26_low_memory_acceptance",if(exceeded.isEmpty())"EMULATOR_BUDGET_PASS" else "FAIL")
             report.put("budget_exceeded",JSONArray(exceeded))''')
     replace('sampler.join(1000);db.close()', 'sampler.join(1000);db.close();context.deleteDatabase("synthetic-large-performance.db")')
+    replace('fun stage(name:String){report.put("stage",name);file.writeText(report.toString(2))}',
+            'fun stage(name:String){report.put("stage",name).put("observed_heap_bytes",Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory()).put("peak_observed_jvm_heap_bytes",peak.get()).put("peak_observed_database_disk_bytes",diskPeak.get());file.writeText(report.toString(2))}')
     # AGP may uninstall the synthetic test APK after a process crash, deleting
     # its external-files report. Mirror only the compact timing metadata to logcat.
     text = text.replace('file.writeText(report.toString(2))',

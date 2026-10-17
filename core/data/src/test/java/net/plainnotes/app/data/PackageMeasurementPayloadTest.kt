@@ -93,4 +93,13 @@ class PackageMeasurementPayloadTest {
         val frozen=PackageMeasurementPayload.freeze(input);val before=frozen.payload;names.clear()
         assertEquals(before,frozen.payload);assertEquals(product.ingredients,frozen.product().ingredients)
     }
+    @Test fun returnedRelationsStayImmutableAndCannotChangeMemoizedIdentityOrScale() {
+        val frozen=PackageMeasurementPayload.freeze(draft());val before=frozen.payload;val ref=frozen.ref();val scale=ok(frozen.stockScale())
+        val exposed=frozen.measurement()
+        assertThrows(UnsupportedOperationException::class.java){(exposed.relations as MutableList).clear()}
+        assertTrue(frozen.measurement().relations.isNotEmpty())
+        assertEquals(before,frozen.payload);assertEquals(ref,frozen.ref())
+        assertEquals(scale.capacityQuanta,ok(frozen.stockScale()).capacityQuanta)
+        assertEquals(BigDecimal("64"),ok(frozen.stockScale()).capacity.value)
+    }
 }

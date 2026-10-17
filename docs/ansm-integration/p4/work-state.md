@@ -95,3 +95,11 @@ Room12检查点0843450六项CI在push/PR全部SUCCESS；当前仍DRAFT，不以�
 原生第二轮39044178114真实FAIL：测试进程19.193秒崩溃，数值JSON未生成，原因UNVERIFIED；artifact官方SHA/CRC已校验，不能推断为内存不足或算法失败。发现AVD输入heap-size写为hw.heapSize，实际vm.heapSize仍384m；新增仅CI启动前配置正确vm.heapSize=192、hw.ramSize=512，实际值必须再测。加载SQLCipher之前先写阶段报告，并在全新合成模拟器内采集最小运行环境和崩溃日志；不处理用户记录。不改变预算/校验/生产源码。Python165及生成原生源码编译PASS，见performance/native-diagnostic-configuration-evidence.json；第三轮原生及最终六CI待验。#57仍DRAFT、PRODUCTION_BLOCKED，P5/P6未实施。
 
 第三轮39045008821/artifact12105915908已校验官方SHA256/ZIP CRC：FAIL，实际MemTotal508752kB、heap384m；55.596秒进程崩溃，低内存相关错误存在但根因未证实，阶段JSON仍UNAVAILABLE。AVD配置确被模拟器覆盖，不能把配置文件当实际环境。新增仅对ro.kernel.qemu=1/API26/emulator-*且root的临时CI环境设置实际ART192m并重启framework，启动后核实属性；拒绝物理设备/其他API/非root。生成原生测试将不含用户数据的紧凑阶段元数据同步logcat，防AGP退出卸载丢文件；残缺/失败元数据绝不变为PASS，原测试exit始终保留。Python168、生成原生编译PASS；正式库存代码仍与617c9dd一致，预算和完整样本未改，第四轮待验。
+
+第四轮39045707219真实FAIL：实际RAM520962048bytes、ART最大堆192MiB已核实；验证暂存86.91s、完整备份24.46s完成，但审计32.57s、预测22.90s超过原15s；在加密恢复阶段进程退出，根因仍UNVERIFIED。阶段日志成功在APK卸载后恢复，未将IN_PROGRESS当PASS，见performance/native-fourth-*.json。
+
+本次修复不改格式、密码学或库存数学：BackupJsonReader按严格UTF-8分块预检和解析，避免整份CharBuffer/String副本；原大小/词法字符串/深度/重复键/字段/数字精度限制保留。FrozenPackageMeasurement仅记忆不可变摘要/身份/StockQuantum，同一只读审计事务按完整canonical payload复用验证，行身份/owner/来源SHA仍逐行检查，没有跨写缓存或可变JSON/列表缓存。完整data396/shared114、原生测试源码编译、Python168、Period5/Privacy3全部PASS；两个新增测试辅助代码误用已保留初轮2FAIL证据并修正，不改既有390断言。
+
+同样14600事实/2000包装操作来源的JVM大库再测全部预算PASS，完整加密恢复8.37s、三次后续写入2.87–3.45s、全程堆采样峰值528216672bytes；生成的大库原生测试也编译PASS。原生预算未放宽，原生新源码性能与最终六CI仍待验；App入口OFF、#57 DRAFT，P5/P6未实施。新增阶段采样记录堆/数据库磁盘，便于即使进程提前退出也保留诊断；仅生成合成原生测试、无生产日志。
+
+独立04A #58源码fda7782六CI及五报告官方SHA/CRC均已通过，384张CI合成截图；证据交接提交c43ae14自己的CI待验，官方分发OFF、真实浏览器/TalkBack NOT_RUN，未合并。独立PK #59源码3ec00f5六CI通过，18个生产文件与默认基线相同，仅完成11引用索引和3页实际来源观察；其余8引用/58商品完整科学复核未完成，不冒充ANSM模型验证，不自动合并。公众报告入口本次HTTP500继续UNVERIFIED。

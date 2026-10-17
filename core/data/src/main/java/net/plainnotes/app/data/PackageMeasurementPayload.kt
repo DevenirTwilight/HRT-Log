@@ -19,11 +19,12 @@ data class PackageMeasurementDraft(
     val relations:List<DeclaredPackageContent> = emptyList(),
 )
 
-/** The only retained state is canonical text. Caller-owned mutable lists cannot alter frozen facts. */
+/** Canonical text plus immutable derived identity/scale. No mutable JSON/list is cached or exposed. */
 internal class FrozenPackageMeasurement internal constructor(val payload:String) {
-    val sha256:String get()=ReferencePayload.sha(payload)
+    val sha256:String by lazy {ReferencePayload.sha(payload)}
     fun product()=ReferencePayload.readProduct(JSONObject(payload).getJSONObject("product"))
-    fun ref():PresentationRef {
+    fun ref():PresentationRef = frozenRef
+    private val frozenRef:PresentationRef by lazy {
         val json=JSONObject(payload);val product=json.getJSONObject("product")
         val identity=JSONObject(product.toString()).apply{remove("source_version");remove("recorded_on")}
         val productKey=ReferencePayload.optional(product,"cis")?.let{"declared-cis:$it"}
@@ -34,7 +35,7 @@ internal class FrozenPackageMeasurement internal constructor(val payload:String)
             ?: ReferencePayload.sha(ReferencePayload.canonical(physical))
         // Per-container actual capacity is a distinct fact; it cannot alter the product specification.
         val specification=JSONObject(payload).apply{remove("confirmed_capacity");remove("capacity_basis")}
-        return PresentationRef("USER_ENTERED",productKey,presentationKey,product.getString("source_version"),ReferencePayload.sha(ReferencePayload.canonical(specification)))
+        PresentationRef("USER_ENTERED",productKey,presentationKey,product.getString("source_version"),ReferencePayload.sha(ReferencePayload.canonical(specification)))
     }
     fun measurement():PresentationSnapshot {
         val json=JSONObject(payload);val ref=ref()
@@ -48,9 +49,10 @@ internal class FrozenPackageMeasurement internal constructor(val payload:String)
         val capacity=ReferencePayload.optional(json,"confirmed_capacity")?.let { Quantity(BigDecimal(it),MeasureUnit.valueOf(json.getString("stock_unit")),PackageMeasurementPayload.meaning(json.getJSONObject("stock_meaning"))) }
         return PresentationSnapshot(ref,optional("nominal_total"),optional("nominal_uses"),relations,capacity)
     }
-    fun stockScale():MeasureResult<StockQuantum> {
-        val json=JSONObject(payload);val capacity=measurement().confirmedUsable ?: return MeasureResult.Failure(MeasureError.UNKNOWN_CAPACITY)
-        return StockQuantum.create(capacity,Quantity(BigDecimal(json.getString("quantum")),capacity.unit,capacity.meaning),ActualPackage(ref(),true),StockCapacityBasis.valueOf(json.getString("capacity_basis")))
+    fun stockScale():MeasureResult<StockQuantum> = frozenScale
+    private val frozenScale:MeasureResult<StockQuantum> by lazy {
+        val json=JSONObject(payload);val capacity=measurement().confirmedUsable ?: return@lazy MeasureResult.Failure(MeasureError.UNKNOWN_CAPACITY)
+        StockQuantum.create(capacity,Quantity(BigDecimal(json.getString("quantum")),capacity.unit,capacity.meaning),ActualPackage(ref(),true),StockCapacityBasis.valueOf(json.getString("capacity_basis")))
     }
 }
 

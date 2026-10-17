@@ -43,7 +43,14 @@ internal object MeasuredConsumptionStore {
      * Not a backup acceptance gate: the caller still needs whole-dataset/zero-effect operation validation.
      * The live wrapper above checks its epoch before calling this same read-only SQL implementation.
      */
-    internal fun auditStagedProjection(db:SupportSQLiteDatabase,dataset:String,containerUuid:String):MeasureResult<AuditedStockProjection> {
+    /** Pure payload reuse is confined to one read-only transaction, never a cross-write trust cache. */
+    private class PresentationAudit {
+        private val byPayload=HashMap<String,FrozenPackageMeasurement>()
+        fun read(payload:String)=byPayload.getOrPut(payload){PackageMeasurementPayload.read(payload)}
+    }
+    internal fun auditStagedProjection(db:SupportSQLiteDatabase,dataset:String,containerUuid:String):MeasureResult<AuditedStockProjection> =
+        auditStagedProjection(db,dataset,containerUuid,PresentationAudit())
+    private fun auditStagedProjection(db:SupportSQLiteDatabase,dataset:String,containerUuid:String,presentations:PresentationAudit):MeasureResult<AuditedStockProjection> {
         check(db.inTransaction())
         try {
             require(ReferencePayload.uuid(dataset) && ReferencePayload.uuid(containerUuid))
@@ -59,7 +66,7 @@ internal object MeasuredConsumptionStore {
             require(first.getString("dataset_uuid")==dataset && !first.isNull("snapshot_uuid"))
             val snapshot=ReferenceStore.row(db,"reference_snapshot","uuid=?",arrayOf(first.getString("snapshot_uuid")))!!
             require(snapshot.getString("dataset_uuid")==dataset && snapshot.getString("kind")=="PRESENTATION")
-            val frozen=PackageMeasurementPayload.read(snapshot.getString("payload_json"));require(frozen.sha256==snapshot.getString("payload_sha256"))
+            val frozen=presentations.read(snapshot.getString("payload_json"));require(frozen.sha256==snapshot.getString("payload_sha256"))
             val result=frozen.stockScale();if(result is MeasureResult.Failure)return result
             val scale=(result as MeasureResult.Success).value
             require(box.inventory_encoding==InventoryEncoding.EXACT && box.capacity==scale.capacityQuanta.toDouble() && box.initial_used_amount==0.0)
@@ -154,6 +161,7 @@ internal object MeasuredConsumptionStore {
             val identities=db.query("SELECT DISTINCT i.uuid,i.dataset_uuid FROM reference_identity i JOIN reference_event e ON e.subject_uuid=i.uuid JOIN reference_snapshot s ON s.uuid=e.snapshot_uuid WHERE i.kind='CONTAINER' AND s.kind='PRESENTATION' ORDER BY i.uuid").use { c ->
                 buildList {while(c.moveToNext())add(c.getString(0) to c.getString(1))}
             }
+            val presentations=PresentationAudit()
             val projections=identities.mapNotNull { (uuid,dataset) ->
                 val identity=ReferenceStore.row(db,"reference_identity","uuid=?",arrayOf(uuid))!!
                 if(identity.isNull("live_handle")) {
@@ -161,11 +169,11 @@ internal object MeasuredConsumptionStore {
                     db.query("SELECT 1 FROM measured_allocation WHERE container_uuid=? LIMIT 1",arrayOf(uuid)).use{require(!it.moveToFirst())}
                     null
                 } else {
-                    val result=auditStagedProjection(db,dataset,uuid);require(result is MeasureResult.Success)
+                    val result=auditStagedProjection(db,dataset,uuid,presentations);require(result is MeasureResult.Success)
                     require(result.value.cacheMatches);result.value
                 }
             }
-            auditOperations(db)
+            auditOperations(db,presentations)
             return projections
         } catch(e:ReferenceFailure){throw e} catch(e:Exception){fail(ReferenceError.INVALID_SOURCE)}
     }
@@ -181,7 +189,7 @@ internal object MeasuredConsumptionStore {
     }
 
     /** Verify operations that a ledger-only walk cannot see, including empty sources and no-op counts. */
-    private fun auditOperations(db:SupportSQLiteDatabase) {
+    private fun auditOperations(db:SupportSQLiteDatabase,presentations:PresentationAudit) {
         fun rows(table:String,where:String="1",args:Array<out Any?> = emptyArray()):List<JSONObject> =
             db.query("SELECT ${if(table=="reference_event" || table=="measured_operation")"operation_uuid" else "uuid"} FROM `$table` WHERE $where",args).use { c ->
                 buildList {while(c.moveToNext())add(ReferenceStore.row(db,table,"${if(table=="reference_event" || table=="measured_operation")"operation_uuid" else "uuid"}=?",arrayOf(c.getString(0)))!!)}
@@ -203,7 +211,7 @@ internal object MeasuredConsumptionStore {
             require(event.getString("dataset_uuid")==dataset && event.getString("subject_uuid")==container && !event.isNull("snapshot_uuid"))
             val snap=ReferenceStore.row(db,"reference_snapshot","uuid=?",arrayOf(event.getString("snapshot_uuid")))!!
             require(snap.getString("dataset_uuid")==dataset && snap.getString("kind")=="PRESENTATION" && snap.getString("payload_sha256")==sha)
-            val frozen=PackageMeasurementPayload.read(snap.getString("payload_json"));require(frozen.sha256==sha)
+            val frozen=presentations.read(snap.getString("payload_json"));require(frozen.sha256==sha)
             box to frozen
         }
         val chain=MeasuredOperationChain.validate(db)
