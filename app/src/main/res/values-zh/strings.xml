@@ -1233,4 +1233,5 @@
 <string name="ref2_history_stale">数据集已变化，请关闭窗口并重新打开记录。</string>
 <string name="ref2_history_error">无法读取已保存的来源，关闭窗口不会更改记录。</string>
 <string name="ref2_history_saved_only">此处显示已保存的记录，不包含尚未保存的修改。</string>
+    <string name="forecast_needs_check">库存需核对，暂时无法可靠计算用尽日期。</string>
 </resources>

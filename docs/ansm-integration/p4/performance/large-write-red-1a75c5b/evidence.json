@@ -1,0 +1,10 @@
+{
+  "status": "FAIL",
+  "reason": "All three post-restore Repository writes exceeded predefined5000ms threshold; original threshold retained.",
+  "source_head": "1a75c5be7bb7c6615ff2d08ce551e56e52bcc49b",
+  "template_sha256": "705db597b7c00f2efdb16d3fd9f842f3a10a6eb488d2bd373996fcc6459a8547",
+  "report_sha256": "d346738dd0a81b171d1ff57a4fdcdd734d7c213a87f74ade30518fba8b0e202e",
+  "log_sha256": "e71d7c2ab42794c50b45e2e1c4f5eb734abfcb928e065aef20065d5837aae729",
+  "one_stack_sample": "MeasuredConsumptionStore.auditStagedDataset coverage query at line149; diagnostic only, not a statistical profile",
+  "native_low_memory": "NOT_RUN"
+}

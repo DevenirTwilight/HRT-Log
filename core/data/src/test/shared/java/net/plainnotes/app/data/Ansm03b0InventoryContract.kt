@@ -147,7 +147,7 @@ abstract class Ansm03b0InventoryContract {
         val unchanged = dao.supplyFor(record.id); repo.correctStock(dao.containers().first().id, 0.25); assertEquals(unchanged, dao.supplyFor(record.id))
         val password = "synthetic-B0-only".toCharArray(); val backup = repo.exportBackup(password)
         val plain = BackupCodec.decrypt(backup, password); val json = JSONObject(String(plain, Charsets.UTF_8)); plain.fill(0)
-        assertEquals(10, json.getInt("schema")); assertEquals(1, json.getInt("format"))
+        assertEquals(11, json.getInt("schema")); assertEquals(1, json.getInt("format"))
         val businessBefore = RawData.dump(raw).toString()
         // P0 fixes the former RESTRICT failure. Preserve full rollback coverage using a real injected failure.
         val beforeRestore = fingerprint()
@@ -327,7 +327,7 @@ abstract class Ansm03b0InventoryContract {
         }
         assertEquals("SYNTH-RESTORED-UNKNOWN", Ansm03b0CandidateStore.current(raw))
         raw.query("SELECT COUNT(*) FROM ansm_lab_container WHERE dataset='SYNTH-RESTORED-UNKNOWN'").use { assertTrue(it.moveToFirst()); assertEquals(0, it.getInt(0)) }
-        val badPayload = JSONObject().put("format", 1).put("schema", 11).put("tables", RawData.dump(raw)).toString().toByteArray()
+        val badPayload = JSONObject().put("format", 1).put("schema", 12).put("tables", RawData.dump(raw)).toString().toByteArray()
         val candidateBackup = BackupCodec.encrypt(badPayload, password); badPayload.fill(0)
         val stable = fingerprint(); try { repo.restoreBackup(candidateBackup, password); fail("Old reader must reject candidate newer business schema") }
         catch (_: BackupCodec.NewerBackup) {}
@@ -339,11 +339,11 @@ abstract class Ansm03b0InventoryContract {
             val before = fingerprint()
             try { db.withTransaction { Ansm03b0CandidateStore.create(raw, i) }; fail("DDL fault missed") }
             catch (e: IllegalStateException) { assertEquals("SYNTHETIC_DDL_FAILURE", e.message) }
-            assertEquals(before, fingerprint()); assertEquals(11, raw.version)
+            assertEquals(before, fingerprint()); assertEquals(12, raw.version)
         }
     }
     @Test fun allOldRoomVersionsUpgradeThenAcceptSeparateCandidateWithoutBackfillingInventory() {
-        for (version in 1..10) {
+        for (version in 1..11) {
             val name = "ansm03b0-synthetic-chain-$version-${UUID.randomUUID()}.db"
             val schema = assetsContext.assets.open("net.plainnotes.app.data.NotesDatabase/$version.json").bufferedReader().use { JSONObject(it.readText()).getJSONObject("database") }
             val config = SupportSQLiteOpenHelper.Configuration.builder(context).name(name).callback(object : SupportSQLiteOpenHelper.Callback(version) {
@@ -363,7 +363,7 @@ abstract class Ansm03b0InventoryContract {
                     h.writableDatabase.execSQL("INSERT INTO medication(id,name,molecule,unit,dose_per_intake,container_capacity,site_rotation,notifications_on,active,sort_order) VALUES (1,'Synthetic old','OTHER','MG',1,2,0,0,1,0)")
                     h.writableDatabase.execSQL("INSERT INTO supply_container(id,medication_id,capacity,initial_used_amount,used_amount,state) VALUES (1,1,2,0,0,'SEALED')")
                 }
-                migrated = open(name); val d = migrated.openHelper.writableDatabase; assertEquals(11, d.version)
+                migrated = open(name); val d = migrated.openHelper.writableDatabase; assertEquals(12, d.version)
                 Ansm03b0CandidateStore.create(d)
                 d.query("SELECT text FROM day_note").use { assertTrue(it.moveToFirst()); assertEquals("SYNTHETIC_CHAIN_SENTINEL", it.getString(0)) }
                 d.query("SELECT COUNT(*) FROM ansm_lab_container").use { assertTrue(it.moveToFirst()); assertEquals(0, it.getInt(0)) }

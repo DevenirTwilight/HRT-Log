@@ -1,0 +1,24 @@
+{
+  "status": "PASS",
+  "totals": {
+    "tests": 342,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "shared_contracts": 68,
+  "native_test_source_compile": "PASS",
+  "native_runtime_68": "NOT_RUN",
+  "python_tests": 159,
+  "python_status": "PASS",
+  "prior_app_checkpoint": "6ac7499: PeriodStability5 / PrivacyNotice3 PASS; not rerun after lifecycle/restore changes yet",
+  "log_sha256": "34e458d922f4e166b9ab865a5bda3928e8d6f86da0293b435937a04c2bdf6af8",
+  "sources": {
+    "core/data/src/main/java/net/plainnotes/app/data/DataTransfer.kt": "ddab42e3d7e89576d0aa0701bf0696f7e0f5441f1a8ab325dbde6eb2bc713f23",
+    "core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt": "35866a22636fb07cc3ce240f9bbeafb0fea316868489cf78b956769fa96f59f0",
+    "core/data/src/main/java/net/plainnotes/app/data/PackageCorrections.kt": "5a8e330babc2c1ea0d41659452b11dfc195154d061a34a8c12fbb65bf317efd3",
+    "core/data/src/main/java/net/plainnotes/app/data/BackupJsonReader.kt": "13cf43355b418863e74bb65c1f0b9cef44d2f264be62f378ce45db6fabed8677",
+    "core/data/src/main/java/net/plainnotes/app/data/InventoryEncoding.kt": "6fbd7fddfe381d63c860f30a63dcfed0ec26ff62b0e65bde4b52ce0e29c95a7c",
+    "core/data/src/main/java/net/plainnotes/app/data/RecordBackupCompatibility.kt": "818c2128c423b5108af7dcc133b03f92f9f763d2abf5937de79604136fb59bca"
+  }
+}

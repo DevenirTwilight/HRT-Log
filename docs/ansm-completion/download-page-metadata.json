@@ -1,0 +1,69 @@
+{
+  "requested_url": "https://base-donnees-publique.medicaments.gouv.fr/telechargement",
+  "retrieved_at_utc": "2026-10-17T12:33:31.847725+00:00",
+  "status": "PAGE_RETRIEVED_NOT_RIGHTS_APPROVED",
+  "http_status": 200,
+  "final_url": "https://base-donnees-publique.medicaments.gouv.fr/telechargement",
+  "sha256": "9aae4f4e4ef274ac984125074e7177e1e67e1b327ef58fd547d1337942c2a851",
+  "bytes": 48732,
+  "http_date": "Sat, 17 Oct 2026 12:33:33 GMT",
+  "content_type": "text/html; charset=UTF-8",
+  "relevant_links": [
+    {
+      "url": "/telechargement",
+      "text": "Téléchargement"
+    },
+    {
+      "url": "/docs/telechargement/licence_bdpm.pdf",
+      "text": "de la licence ouverte (pdf, 528 Ko)."
+    },
+    {
+      "url": "/download/file/Contenu_et_format_des_fichiers_telechargeables_dans_la_BDM_v5.pdf",
+      "text": "Cliquez ici pour télécharger le fichier descriptif (pdf, 289 Ko)"
+    },
+    {
+      "url": "/download/file/CIS_bdpm.txt",
+      "text": "Fichier des spécialités\n                                                          (Date de mise à jour : 29/09/2026, 3101 Ko)"
+    },
+    {
+      "url": "/download/file/CIS_CIP_bdpm.txt",
+      "text": "Fichier des présentations\n                                                          (Date de mise à jour : 16/10/2026, 4053 Ko)"
+    },
+    {
+      "url": "/download/file/CIS_COMPO_bdpm.txt",
+      "text": "Fichier des compositions\n                                                          (Date de mise à jour : 29/09/2026, 2672 Ko)"
+    },
+    {
+      "url": "/download/file/CIS_HAS_SMR_bdpm.txt",
+      "text": "Fichier des avis SMR de la HAS\n                                                          (Date de mise à jour : 29/09/2026, 4522 Ko)"
+    },
+    {
+      "url": "/download/file/CIS_HAS_ASMR_bdpm.txt",
+      "text": "Fichier des avis ASMR de la HAS\n                                                          (Date de mise à jour : 29/09/2026, 4497 Ko)"
+    },
+    {
+      "url": "/download/file/CIS_GENER_bdpm.txt",
+      "text": "Fichier des groupes génèriques\n                                                          (Date de mise à jour : 29/09/2026, 1191 Ko)"
+    },
+    {
+      "url": "/download/file/CIS_CPD_bdpm.txt",
+      "text": "Fichier des conditions de prescription et de délivrance\n                                                          (Date de mise à jour : 29/09/2026, 1305 Ko)"
+    },
+    {
+      "url": "/download/file/CIS_CIP_Dispo_Spec.txt",
+      "text": "Fichier des ruptures de stocks\n                                                          (Date de mise à jour : 12/10/2026, 151 Ko)"
+    },
+    {
+      "url": "/download/file/CIS_MITM.txt",
+      "text": "Fichier des médicaments d&#039;intérêt thérapeutique majeur\n                                                          (Date de mise à jour : 13/10/2026, 1581 Ko)"
+    },
+    {
+      "url": "/download/CIS_InfoImportantes.txt",
+      "text": "Fichier des Informations importantes (génération en direct)"
+    },
+    {
+      "url": "https://github.com/etalab/licence-ouverte/blob/master/LO.md",
+      "text": "licence etalab-2.0"
+    }
+  ]
+}

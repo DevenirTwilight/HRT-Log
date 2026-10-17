@@ -1,0 +1,44 @@
+{
+  "status": "DIAGNOSTIC_ONLY",
+  "base_head": "92818856a43e7c1c2c796e2a856d63a27374db13",
+  "uncommitted_source_sha256": "e92cf3ec28b8b79d495101a69ce3e81a66474676366197e92525cd4ab11fec2b",
+  "percentile_method": "nearest-rank",
+  "cases": [
+    {
+      "file": "years-0-exact-200.json",
+      "legacy_facts": 0,
+      "exact_facts": 200,
+      "write_median_ms": 104.3435575,
+      "write_p95_ms": 175.899973,
+      "write_max_ms": 220.883945,
+      "forecast_ms": 153.709094,
+      "audit_ms": 153.616718,
+      "sha256": "c15d28af7d7836a9b7d47cb932aa493ff778c065892301f4df19a5324e11a7d3"
+    },
+    {
+      "file": "years-10-exact-100.json",
+      "legacy_facts": 14500,
+      "exact_facts": 100,
+      "write_median_ms": 101.16812250000001,
+      "write_p95_ms": 150.399273,
+      "write_max_ms": 172.157004,
+      "forecast_ms": 309.889275,
+      "audit_ms": 125.232543,
+      "sha256": "bd200ee385d6421dd64cfb26a95d13c4b54a5dcc2f45320a1730ea3db9e82968"
+    },
+    {
+      "file": "years-5-exact-100.json",
+      "legacy_facts": 7200,
+      "exact_facts": 100,
+      "write_median_ms": 103.94630649999999,
+      "write_p95_ms": 150.452123,
+      "write_max_ms": 187.117724,
+      "forecast_ms": 222.391593,
+      "audit_ms": 108.95617,
+      "sha256": "5a6dacd060c275408cc69036a9a23a110dfc98d18dfdf773bac69c131a69ee65"
+    }
+  ],
+  "log_sha256": "74b3d4de87d5d101bb619f3720b3293bf12bc6aa956a9506af6a93c9d396027f",
+  "large_capacity_acceptance": "NOT_RUN",
+  "physical_device_acceptance": "NOT_RUN"
+}

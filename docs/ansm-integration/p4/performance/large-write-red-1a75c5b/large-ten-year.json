@@ -1,0 +1,37 @@
+{
+  "status": "FAIL",
+  "environment": "Robolectric API35 framework SQLite; not SQLCipher\/low-memory API26\/hardware",
+  "stage": "post_write_full_audit",
+  "real_seed_generation_ms": 4430.98808,
+  "synthetic_fixture_expansion_ms": 789.238111,
+  "raw_business_json_bytes": 19660909,
+  "records": 14600,
+  "containers": 2000,
+  "measured_operations": 2000,
+  "presentation_snapshots": 2000,
+  "distinct_synthetic_product_variants": 20,
+  "row_count": 32603,
+  "validated_staging_and_restore_ms": 13736.673319,
+  "full_audit_ms": 6234.863311,
+  "shared_forecast_ms": 6005.095859,
+  "full_encrypted_backup_ms": 6200.734791,
+  "encrypted_archive_bytes": 19661036,
+  "full_encrypted_restore_ms": 13619.852207,
+  "restored_full_audit_ms": 5599.244267,
+  "three_post_restore_writes_ms": 19691.545886,
+  "post_restore_write_including_ticket_ms": [
+    6497.218526,
+    6752.421863,
+    6436.683415
+  ],
+  "post_write_full_audit_ms": 5941.630525,
+  "peak_observed_jvm_heap_bytes": 520804128,
+  "heap_sample_interval_ms": 10,
+  "heap_is_not_native_rss": true,
+  "physical_device_acceptance": "NOT_RUN",
+  "api26_low_memory_acceptance": "NOT_RUN",
+  "budget_exceeded": [
+    "post_restore_write_including_ticket_ms"
+  ],
+  "failure": "java.lang.AssertionError: Diagnostic budgets; device acceptance remains NOT_RUN expected:<[]> but was:<[post_restore_write_including_ticket_ms]>"
+}

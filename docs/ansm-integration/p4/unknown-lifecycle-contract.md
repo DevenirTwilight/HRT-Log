@@ -1,0 +1,11 @@
+# Shared UNKNOWN and package lifecycle admission
+
+Status: IMPLEMENTED_INTERNAL / LOCAL_INTEGRATION_VERIFIED; not P4 completion or release.
+
+`INTEGER_QUANTA_V1` represents frozen physical packaging, not the medication's clinical dose unit. Its capacity/used projection must never be formatted as current medication mg or summed into legacy supply. Shared forecasts preserve each confirmed container's physical quantity and presentation hash separately. Any unconfirmed unit/source, missing source, unallocated actual use, unknown stock effect or invalid history yields UNKNOWN, with no definite remaining date or low-stock assertion. UNKNOWN is neither zero nor adequate supply.
+
+Stock page and home/calendar stock card use neutral four-language text. Unknown stock has no old unscoped add/resize/check/VOID actions. A stale legacy forecast cannot turn a newly typed container into medication-dose stock. Current medication expiry settings cannot establish the typed package's historical opening date or medical usability; typed expiry notifications remain unavailable until independently frozen facts exist. Legacy 366-day forecast and seven-day alert semantics remain covered by existing tests.
+
+The internal package correction entry requires the captured PRIMARY scope, medication UUID, container UUID, explicit confirmation and current state ticket. VOID and RESTORE UUIDs replay only their original action/container; different content conflicts. Existing consumption prohibition and historical lifecycle prefix validation remain. Public integer-only VOID/RESTORE reject typed containers. Package audit rows participate in ticket state so VOID→RESTORE ABA does not revive an old confirmation.
+
+Red evidence proves the earlier implementation allowed old unscoped corrections, formatted quanta as mg and emitted both LOW and EXPIRY claims. The corrected implementation passes local data362/shared87, reminder21 and selected app40; native87 execution requires separate evidence. The synthetic four-language matrix passes 32 parameter cases and captures 192 views; metadata and image hashes are in unknown-ui-matrix-evidence.json. No public measured App write entrance has been activated. Later-count reconciliation and scheduled actual-use workflows remain incomplete; this safety fallback does not claim to finish them.

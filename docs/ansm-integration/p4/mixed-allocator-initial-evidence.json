@@ -1,0 +1,14 @@
+{
+  "status": "FAIL",
+  "totals": {
+    "tests": 365,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0
+  },
+  "failed_cases": [
+    "legacyAllocationMustSkipMeasuredContainersWhileKeepingLegacyBehavior"
+  ],
+  "reason": "Guard in low-level allocator conflicts with existing legacy compatibility contract; keep original assertion and move guard to formal Repository actual-use entries.",
+  "log_sha256": "56e0d7f31bfc031018edf8976df631a415b1cc3b96b0e59e8a5464f52ad4041e"
+}

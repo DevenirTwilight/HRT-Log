@@ -2,7 +2,7 @@ package net.plainnotes.app.data
 
 /** PNBAK1 business serialization has an independent version from Room; crypto framing is unchanged. */
 internal object RecordBackupCompatibility {
-    const val SCHEMA = 10
+    const val SCHEMA = 11
     /** Version gate runs before opening any database. The supported maximum is explicit for legacy-reader contract tests. */
     fun readVersion(json: org.json.JSONObject, supported: Int = SCHEMA): Int {
         require(supported>=1)
@@ -13,6 +13,20 @@ internal object RecordBackupCompatibility {
         if(value>supported.toLong()) throw BackupCodec.NewerBackup()
         return value.toInt()
     }
+    fun validateInventoryVersion(schema:Int,tables:org.json.JSONObject) {
+        val rows=tables.optJSONArray("supply_container") ?: return
+        for(i in 0 until rows.length()) {
+            val row=rows.getJSONObject(i)
+            if(schema<11)require(!row.has("inventory_encoding")) {"Misdeclared inventory backup version"}
+            else {
+                require(row.has("inventory_encoding") && row.get("inventory_encoding") is String && row.getString("inventory_encoding") in setOf(InventoryEncoding.LEGACY,InventoryEncoding.EXACT)) {"Missing or invalid inventory encoding"}
+                if(row.getString("inventory_encoding")==InventoryEncoding.EXACT)for(column in listOf("capacity","initial_used_amount","used_amount")) {
+                    val value=row.get(column)
+                    require((value is Int || value is Long) && (value as Number).toLong() in 0..InventoryEncoding.MAX_EXACT_INTEGER) {"Non-integer exact inventory projection"}
+                }
+            }
+        }
+    }
     val columns = mapOf(
         "medication" to listOf("id","name","molecule","route","unit","dose_per_intake","container_capacity","expiry_days_after_open","soon_alert_minutes","late_after_minutes","site_rotation","site_set","notifications_on","active","sort_order","needs_review"),
         "pk_profile" to listOf("medication_id","ester","pk_route","sl_tier","gel_product_id","gel_site","gel_area_cm2","patch_release_ug_day"),
@@ -20,7 +34,7 @@ internal object RecordBackupCompatibility {
         "rule_time" to listOf("id","rule_id","local_time","dose_override"),
         "slot_override" to listOf("id","medication_id","rule_version_id","slot_key","rescheduled_utc","rescheduled_zone","dose_override","skipped"),
         "dose_record" to listOf("id","medication_id","rule_version_id","slot_key","scheduled_utc","scheduled_zone","planned_dose","late_after_minutes_snapshot","taken_utc","taken_zone","actual_dose","unallocated_supply_amount","status","site","note","origin","source_record_key","revision","deleted_at_utc","config_snapshot"),
-        "supply_container" to listOf("id","medication_id","capacity","initial_used_amount","used_amount","opened_on","state","source_note","batch"),
+        "supply_container" to listOf("id","medication_id","capacity","initial_used_amount","used_amount","opened_on","state","source_note","batch","inventory_encoding"),
         "supply_transaction" to listOf("id","container_id","dose_record_id","dose_revision","operation_id","kind","used_delta","reversal_of_id","created_utc","created_zone","reason"),
         "appointment" to listOf("id","type","at_utc","at_zone","location","practitioner","note","remind_minutes_before","completed_utc"),
         "checkin_item" to listOf("id","builtin_key","custom_label","enabled","sort_order","legacy"),

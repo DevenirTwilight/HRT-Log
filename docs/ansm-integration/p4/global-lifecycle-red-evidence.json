@@ -1,0 +1,5 @@
+{
+  "status": "EXPECTED_FAIL",
+  "failure": "java.lang.AssertionError: Consumed package was accepted as VOIDED",
+  "log_sha256": "4e3cae709e0f7290c9b1ca556aa86296fc0513fdd40c8f421ab796f06b80a84f"
+}

@@ -1,0 +1,23 @@
+{
+  "status": "FAIL",
+  "source_head": "b31efe20ab083571d44304cc6bf5342873811d90",
+  "run_id": 39042753707,
+  "artifact_id": 12104457718,
+  "artifact_sha256": "52bc8d861157ce1c548e3217e64604f235439c7f8f5c6e763155567ce58f72e7",
+  "zip_crc": "PASS",
+  "reports": [
+    "androidTests/connected/debug/net.plainnotes.app.data.LargeInventoryPerformanceProbe.html"
+  ],
+  "failed_budgets": [
+    "full_audit_ms",
+    "shared_forecast_ms",
+    "restored_full_audit_ms",
+    "post_restore_write_including_ticket_ms",
+    "peak_observed_jvm_heap_bytes",
+    "low_memory_environment"
+  ],
+  "environment_failure": "Emulator raised requested512MiB to1536MiB; logged qemu heap384m",
+  "report_collection_failure": "Collector ran after emulator-runner stopped device; detailed JSON unavailable, no numeric timings invented",
+  "log_sha256": "94abf7fc60e15e0b89c1ff64e161a83a0a7ed17f9732484f7841d1000c8298b9",
+  "next": "Preserve thresholds, bound actual QEMU RAM/AVD heap and collect before shutdown; optimize equivalent SHA256 byte encoding"
+}

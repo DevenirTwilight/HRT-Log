@@ -34,6 +34,7 @@ object SchemaGuards : RoomDatabase.Callback() {
     override fun onCreate(db: SupportSQLiteDatabase) = install(db)
     override fun onOpen(db: SupportSQLiteDatabase) = install(db)
     fun validateRestored(db: SupportSQLiteDatabase) {
+        InventoryEncoding.validate(db)
         predicates.filterKeys{it!="supply_transaction"}.forEach{(table,predicate)->
             db.query("SELECT 1 FROM `$table` AS NEW WHERE COALESCE(($predicate),0)=0 LIMIT 1").use{
                 require(!it.moveToFirst()){ "Invalid $table" }
@@ -43,6 +44,7 @@ object SchemaGuards : RoomDatabase.Callback() {
     fun install(db: SupportSQLiteDatabase) {
         AttachmentSchema.install(db)
         ReferenceSchema.install(db)
+        InventoryEncoding.install(db)
         // Same Room index name/columns; partial predicate implements active-record uniqueness.
         db.execSQL("DROP INDEX IF EXISTS index_dose_record_slot_key")
         db.execSQL("CREATE UNIQUE INDEX index_dose_record_slot_key ON dose_record(slot_key) WHERE deleted_at_utc IS NULL")

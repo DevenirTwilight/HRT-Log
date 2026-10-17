@@ -1,0 +1,16 @@
+{
+  "tested_source": "ab7d21c93e9964963ce537c1a4ea98d06cfdccb1",
+  "data": {
+    "tests": 265,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "new_shared_container_tests": 10,
+  "native_compilation": "PASS",
+  "native_execution": "NOT_RUN",
+  "room": 11,
+  "business_backup": 10,
+  "activation": "OFF",
+  "log_sha256": "0ba3a4b63ada9108a77bb0a3eb57020c4f5919bb759d7d8cc260b9c265699611"
+}

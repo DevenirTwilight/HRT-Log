@@ -1,0 +1,16 @@
+{
+  "base": "fc5df5b82eac600800a5ea261179f2ae88636e98",
+  "status": "PASS",
+  "tests": 20,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "scope": "JVM synthetic shared consumption contract; native execution pending",
+  "log_sha256": "2c41b5a5abfbcfb66e4c85635b795494bc51186aeaefb801c1e1e4d9344d18e7",
+  "new_cases": [
+    "old replace/discard refused",
+    "deleted handle reuse stays legacy",
+    "no double allocation of measured record",
+    "confirmed60 versus nominal64 pumps; explicit directed mass conversion; ester not equivalent"
+  ]
+}

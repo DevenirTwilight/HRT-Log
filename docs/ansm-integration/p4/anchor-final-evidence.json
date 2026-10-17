@@ -1,0 +1,43 @@
+{
+  "base": "b3ba2920b16c3715dfae6e60057d27a909ec2fe0",
+  "status": "PASS",
+  "data": {
+    "tests": 300,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "shared_consumption_contract": 26,
+  "native_test_compilation": "PASS",
+  "period_privacy": {
+    "PeriodStabilityTest": {
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "PrivacyNoticeFactsTest": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "python_guard": {
+    "tests": 157,
+    "status": "PASS"
+  },
+  "files": {
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt": "44421badce5930d2cdfd2ac06a57d5092c42143ae851e0ab40ce997c07ec221a",
+    "core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt": "0f284632a024f657450bb97ef2023deb616df1112c094575af156c7750475928"
+  },
+  "causal_anchor": "ADJUST request and execution separated; canonical integer ledger head; original retry capture stable; nonexistent and foreign-container heads refused",
+  "limitations": [
+    "Production entry NOT_IMPLEMENTED",
+    "Full backup history validation NOT_IMPLEMENTED; business schema10 rejects all new measurement format",
+    "Confirmation ABA and backfilled usage reconciliation NOT_IMPLEMENTED",
+    "Physical device and TalkBack NOT_RUN"
+  ],
+  "tested_commit": "2d2a289731a871833b6a981fbb227d0f04e3d7fb",
+  "log_sha256": "5293f39d86f5a3ee7175b6f60d711d33572e57fdc51b0106e107b728b2f39d70"
+}

@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "jvm_shared_tests": 43,
+  "native_execution": "NOT_RUN",
+  "log_sha256": "86483025f32a5a7847b5c5d171b9c534d91f7c74d67b1de774c98fe2340828d6",
+  "source_sha256": {
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt": "e95417954948196adbe724eb58b5ea94524fda80641eb43506d64c036f39f408",
+    "core/data/src/main/java/net/plainnotes/app/data/ReferenceSchema.kt": "f80d4422440d87bf768ed77458413bec43e69b3fedb1b9a9994efcc4bbffb526"
+  }
+}

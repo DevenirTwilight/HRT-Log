@@ -1,0 +1,10 @@
+{
+  "tested_source": "37f84cbca7f056f5c5a2e92920126aede563cf80",
+  "status": "EXPECTED_RED_BEFORE_FORMAT_FENCE",
+  "tests": 1,
+  "failures": 1,
+  "message": "java.lang.AssertionError: Room11 reader opened the new measurement format and could misinterpret integer stock quanta",
+  "report_sha256": "282672540da959214dd8fdc3bb5b478747ce26d86df9a5979fb8af4993b3d323",
+  "log_sha256": "4d2e1b920082209dc878eff8ecb24839d0a289363f41643d227b989cfa699e9e",
+  "production_code_modified_to_force_failure": false
+}

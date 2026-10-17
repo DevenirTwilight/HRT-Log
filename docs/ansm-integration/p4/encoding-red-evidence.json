@@ -1,0 +1,8 @@
+{
+  "parent": "0a418eb5bd40de53ee736b9b027ac2463b72c727",
+  "status": "EXPECTED_FAIL",
+  "test": "globalAuditCannotTreatAnExactContainerWithAllReferencesMissingAsLegacyScalar",
+  "failure": "java.lang.AssertionError: Exact integer stock silently became unmarked legacy scalar",
+  "log_sha256": "1ecb1061008985a348eff2dd2105f5073dd2626220572042356a7498fb538999",
+  "scope": "Removing all reference rows from an unused exact container was indistinguishable from valid legacy scalar stock"
+}

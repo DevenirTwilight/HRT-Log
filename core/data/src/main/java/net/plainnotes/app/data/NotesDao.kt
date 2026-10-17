@@ -61,6 +61,12 @@ import kotlinx.coroutines.flow.Flow
     @Query("DELETE FROM visit_pack WHERE appointment_id=:appointment") suspend fun deleteVisitPacks(appointment:Long)
     @Query("SELECT * FROM dose_record WHERE id = :id") suspend fun recordById(id: Long): RecordEntity?
     @Query("SELECT * FROM supply_container WHERE state!='VOIDED' ORDER BY medication_id, id") suspend fun containers(): List<ContainerEntity>
+    /** Any historical packaging identity keeps a container out of legacy scalar allocation, even after unlink. */
+    @Query("SELECT c.id FROM supply_container c WHERE c.inventory_encoding='INTEGER_QUANTA_V1' OR EXISTS(SELECT 1 FROM reference_identity i WHERE i.live_handle=c.id AND i.kind='CONTAINER' AND i.live_handle IS NOT NULL AND EXISTS(SELECT 1 FROM reference_event e JOIN reference_snapshot s ON s.uuid=e.snapshot_uuid WHERE e.subject_uuid=i.uuid AND e.dataset_uuid=i.dataset_uuid AND s.dataset_uuid=i.dataset_uuid AND s.kind='PRESENTATION'))")
+    suspend fun measuredContainerIds():List<Long>
+    @Query("SELECT EXISTS(SELECT 1 FROM reference_identity i JOIN measured_operation o ON o.record_uuid=i.uuid AND o.dataset_uuid=i.dataset_uuid WHERE i.kind='RECORD' AND i.live_handle=:recordId)")
+    suspend fun hasMeasuredRecord(recordId:Long):Boolean
+
     @Query("SELECT * FROM supply_container WHERE state='VOIDED' ORDER BY medication_id, id") suspend fun voidedContainers(): List<ContainerEntity>
     @Query("SELECT DISTINCT container_id FROM supply_transaction WHERE kind IN ('CONSUME','REVERSE')") suspend fun containersWithConsumption(): List<Long>
     @Query("SELECT * FROM supply_container WHERE id = :id") suspend fun container(id: Long): ContainerEntity

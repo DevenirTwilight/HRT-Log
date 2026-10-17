@@ -1,0 +1,40 @@
+{
+  "source_head": "92818856a43e7c1c2c796e2a856d63a27374db13",
+  "run_id": 39037406639,
+  "status": "NATIVE_CONTRACTS_PASS_CI_ANDROID_FAIL",
+  "android_failure": "Python measurement isolation rejected newly introduced MeasuredReconciliation; precise boundary contract added in subsequent1a75c5b, whose CI is separate.",
+  "artifacts": [
+    {
+      "api": "26",
+      "artifact_id": 12103146307,
+      "sha256": "6b8ee2b30c16f25aa6b3b573f744733e5a3c0a405d9ae0eabbdb109487dbb51f",
+      "zip_crc": "PASS",
+      "contains_apk": false,
+      "shared_contracts": 113,
+      "failures": 0,
+      "report": "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.MeasuredConsumptionAndroidTest.html"
+    },
+    {
+      "api": "29",
+      "artifact_id": 12102863058,
+      "sha256": "f4228ecacd5bbc204262e058416a65bbad1eab57c56343c18b08951d2b738043",
+      "zip_crc": "PASS",
+      "contains_apk": false,
+      "shared_contracts": 113,
+      "failures": 0,
+      "report": "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.MeasuredConsumptionAndroidTest.html"
+    },
+    {
+      "api": "35",
+      "artifact_id": 12103470618,
+      "sha256": "90d278777333fc99fc442bea9e2c4c3c421b567e499aa74c2be928abc93483b5",
+      "zip_crc": "PASS",
+      "contains_apk": false,
+      "shared_contracts": 113,
+      "failures": 0,
+      "report": "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.MeasuredConsumptionAndroidTest.html"
+    }
+  ],
+  "physical_hardware": "NOT_RUN",
+  "current_indexed_source_ci": "PENDING"
+}

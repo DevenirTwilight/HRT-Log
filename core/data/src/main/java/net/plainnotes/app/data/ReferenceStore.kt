@@ -24,7 +24,7 @@ internal object ReferenceStore {
             }
         }
     }
-    private fun insert(db: SupportSQLiteDatabase, table: String, value: JSONObject) {
+    internal fun insert(db: SupportSQLiteDatabase, table: String, value: JSONObject) {
         val allowed = if(table == "reference_runtime") setOf("id","dataset_uuid","epoch") else ReferenceSchema.columns.getValue(table).toSet()
         require(value.keys().asSequence().all { it in allowed })
         val cv = ContentValues()
@@ -78,7 +78,7 @@ internal object ReferenceStore {
         val current=row(db,"reference_runtime","id=1",emptyArray()) ?: fail(ReferenceError.STALE_SCOPE)
         if(current.getString("dataset_uuid")!=expected.dataset || current.getString("epoch")!=expected.epoch) fail(ReferenceError.STALE_SCOPE)
     }
-    private fun identity(db: SupportSQLiteDatabase, scope: ReferenceScope, kind: String, handle: Long, owner: String?): String {
+    internal fun identity(db: SupportSQLiteDatabase, scope: ReferenceScope, kind: String, handle: Long, owner: String?): String {
         checkScope(db,scope)
         row(db,"reference_identity","dataset_uuid=? AND kind=? AND live_handle=?",arrayOf(scope.dataset,kind,handle))?.let {
             if(ReferencePayload.optional(it,"owner_uuid")!=owner) fail(ReferenceError.UNKNOWN_IDENTITY)

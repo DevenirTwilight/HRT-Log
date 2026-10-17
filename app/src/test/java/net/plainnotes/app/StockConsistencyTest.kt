@@ -70,4 +70,26 @@ class StockConsistencyTest {
             shared.lastCovered?.let { assertEquals("${c.name}: run-out marker on the last covered day", setOf(1L), days.getValue(it.atZone(utc).toLocalDate()).runOut) }
         }
     }
+    @Test fun exactUnitsStayUnknownAcrossStockPageCalendarAndReminderAndNeverBorrowExpiry() {
+        val boxes=listOf(box(10.0).copy(inventory_encoding="INTEGER_QUANTA_V1"))
+        val m=med.copy(expiry_days_after_open=1)
+        val now=at(day0,6)
+        val demand=Timeline.build(listOf(rule(RuleKind.EVERY_N_DAYS,1,t8)),emptyList(),emptyList(),now,now.plus(Duration.ofDays(8)),now,utc)
+        assertTrue(demand.isNotEmpty())
+        val shared=StockForecasts.forecast(1,boxes,demand)
+        assertEquals(StockForecast.Status.UNKNOWN,shared.status);assertTrue(shared.plannedDoses>0)
+        val page=stockSummary(m,boxes,shared,day0,utc)
+        assertNull(page.remaining);assertNull(page.daysLeft);assertNull(page.expiresOn);assertFalse(page.low)
+        assertTrue(StockAlerts.due(listOf(m),boxes,mapOf(1L to shared),day0,utc).isEmpty())
+        val calendar=dayInfos(emptyList(),demand,emptyList(),mapOf(1L to shared),utc)
+        assertTrue(calendar.isNotEmpty());assertTrue(calendar.values.all{it.runOut.isEmpty() && it.short==0})
+    }
+    @Test fun staleLegacyForecastCannotFormatNewExactQuantaAsTheMedicationUnit() {
+        val boxes=listOf(box(10.0).copy(inventory_encoding="INTEGER_QUANTA_V1"))
+        val stale=StockForecast(1,10.0,5,at(day0,8),at(day0.plusDays(1),8))
+        val page=stockSummary(med,boxes,stale,day0,utc)
+        assertNull(page.remaining);assertEquals(StockForecast.Status.UNKNOWN,page.forecast!!.status)
+        assertNull(page.daysLeft);assertFalse(page.low)
+    }
+
 }

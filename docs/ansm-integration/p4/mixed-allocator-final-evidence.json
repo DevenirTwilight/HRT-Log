@@ -1,0 +1,252 @@
+{
+  "status": "PASS",
+  "totals": {
+    "tests": 365,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "classes": [
+    {
+      "class": "net.plainnotes.app.data.ReferenceMigrationTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "net.plainnotes.app.data.LabContextTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "net.plainnotes.app.data.HistoricalVisitTest",
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "net.plainnotes.app.data.HistoryIntegrityTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "net.plainnotes.app.data.SupplyLedgerTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "net.plainnotes.app.data.TrashDataTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "net.plainnotes.app.data.ReferenceCatalogTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "net.plainnotes.app.data.SchemaConstraintTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "net.plainnotes.app.data.ReferencePayloadTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "net.plainnotes.app.data.KeyBoundaryTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "net.plainnotes.app.data.HrtTrackerImportTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "net.plainnotes.app.data.RegimenHistoryTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "net.plainnotes.app.data.PlanEditTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "net.plainnotes.app.data.MeasuredConsumptionStoreTest",
+      "tests": 90,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "net.plainnotes.app.data.DataTransferTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "net.plainnotes.app.data.HistoryPeriodDataTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "net.plainnotes.app.data.VisitPackDataTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "net.plainnotes.app.data.WellbeingMigrationTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "net.plainnotes.app.data.AttachmentFoundationTest",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "net.plainnotes.app.data.VoidedPackageTest",
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "net.plainnotes.app.data.UndoSkippedTest",
+      "tests": 33,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "net.plainnotes.app.data.StockForecastTest",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "net.plainnotes.app.data.BackfillTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "net.plainnotes.app.data.AttachmentMigrationTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "net.plainnotes.app.data.BackupReplacementTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "net.plainnotes.app.data.LedgerReplacementTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "net.plainnotes.app.data.ReferencePersistenceTest",
+      "tests": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "net.plainnotes.app.data.HistoricalContextRepairTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "net.plainnotes.app.data.PackageMeasurementPayloadTest",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "net.plainnotes.app.data.Ansm03b0InventoryTest",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "net.plainnotes.app.data.StockCorrectionTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "net.plainnotes.app.data.WellbeingRecordsTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "net.plainnotes.app.data.MeasuredUsePayloadTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "net.plainnotes.app.data.MeasuredContainerStoreTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "android_test_source_compilation": "PASS",
+  "new_native90_runtime": "NOT_RUN",
+  "log_sha256": "a54c60401135901c6f0b45ad525ab79e024cabca76909f2c44cfaf6f5234b1e0"
+}

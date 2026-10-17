@@ -1,0 +1,9 @@
+{
+  "base": "b3ba2920b16c3715dfae6e60057d27a909ec2fe0",
+  "status": "FAIL",
+  "tests": 1,
+  "failures": 1,
+  "message": "java.lang.AssertionError: Expected INVALID_SOURCE",
+  "scope": "Valid-looking but nonexistent ledger head was accepted on retry",
+  "log_sha256": "9a40ec3a56bb7ef3c786b9a2f782d0cf679dce8f472eaa00d48d53430717beb8"
+}

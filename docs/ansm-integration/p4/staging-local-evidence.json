@@ -1,0 +1,78 @@
+{
+  "parent_source": "c7daddf2edf5eb3f3eb4b5f7a38469f5ac5f1d73",
+  "change": "Shared read-only SQL audit for live and RAM staging databases",
+  "status": "LOCAL_PASS_REMOTE_CURRENT_SOURCE_NOT_RUN",
+  "scope": "Candidate adapters only; no backup acceptance or production entry point",
+  "tests": {
+    "core/data": {
+      "status": "PASS",
+      "tests": 309,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core/domain": {
+      "status": "PASS",
+      "tests": 140,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "shared_contract": {
+      "status": "PASS",
+      "tests": 35
+    },
+    "native_source_compilation": {
+      "status": "PASS",
+      "log_sha256": "d615ba534459dcb19ac165722e29827d500112dcfd38acff49fce0c41dced6bd"
+    },
+    "python": {
+      "status": "PASS",
+      "tests": 157
+    },
+    "current_new_native_execution": "NOT_RUN",
+    "physical_device": "NOT_RUN",
+    "whole_backup_validator": "NOT_IMPLEMENTED",
+    "measurement_backup_acceptance": "OFF",
+    "formal_measurement_entry_point": "OFF",
+    "period_stability": {
+      "status": "PASS",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": "2026-10-17T07:08:58.845Z",
+      "xml_sha256": "9dc522a3addb045a59d3c2447e78d5b65def9612d558995bacd814e8aec596e7"
+    },
+    "privacy_notice_facts": {
+      "status": "PASS",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": "2026-10-17T07:10:30.459Z",
+      "xml_sha256": "6f26c2d485ba4d2b3c8565059663620af3b865fc5ca22d8fc20298a7be89e389"
+    }
+  },
+  "source_sha256": {
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt": "8a89878e0fd60ebc9b8fea92b652e59dd7015845d20e20a74964977be99c5595",
+    "core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt": "24dd0c2296b55c354031f4ab9b45667c6cc8d9337340cbe29b61d22999118c12",
+    "scripts/ansm03_report.py": "abd9503ff5a2da14fc79cde7079b2fc0d9e0eed453b4df494cdad90ef71ade27"
+  },
+  "unchanged_since_parent": {
+    "pk-engine": true,
+    "docs/pk-model.md": true,
+    "core/domain/src/main/kotlin/net/plainnotes/app/domain/measurement/MeasurementCore.kt": true,
+    "core/data/src/main/java/net/plainnotes/app/data/StockForecast.kt": true,
+    "core/data/src/main/java/net/plainnotes/app/data/DataTransfer.kt": true,
+    "core/data/src/main/java/net/plainnotes/app/data/BackupValidation.kt": true,
+    "core/data/src/main/java/net/plainnotes/app/data/NotesDatabase.kt": true,
+    "core/data/src/main/java/net/plainnotes/app/data/RecordBackupCompatibility.kt": true,
+    "app/src/main/AndroidManifest.xml": true
+  },
+  "completed_logs": {
+    "ansm-p4-staging-full.log": "85802621bd078f10acddf362c1e0c7fecbb8003e1190a9c0ec6af5efd1690e28",
+    "ansm-p4-staging-privacy.log": "7e09517ae5a05ff640a469e0394a7e704498f0bfe1e78b8cf5a35e13e557167f",
+    "ansm-p4-staging-python.log": "e8cf7f21c1ad3d851ea96f0d05e4771a8092341e8e4ccc1af590562abe583900"
+  }
+}

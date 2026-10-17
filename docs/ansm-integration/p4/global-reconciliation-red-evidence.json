@@ -1,0 +1,6 @@
+{
+  "status": "EXPECTED_FAIL",
+  "failure": "java.lang.AssertionError: Inverse silently rewrote the independent count",
+  "log_sha256": "118cfe504805e8967f052682e7075c70cee5c27186894545b12189b58bad4f98",
+  "scope": "Internally valid chain and prefixes still allowed inverse across a later independent no-op count"
+}

@@ -28,7 +28,7 @@ abstract class AttachmentFoundationContract {
     private suspend fun visit(id:Long=1)=db.dao().appointment(AppointmentEntity(id=id,type="ENDO",at_utc=1000,at_zone="UTC",location="Synthetic",practitioner="Synthetic",note="Synthetic",remind_minutes_before=0))
     private suspend fun bind(kind:String="APPOINTMENT",id:Long=1)=db.withTransaction { AttachmentIdentity.bind(raw,scope,kind,id) }
     @Test fun room11KeepsThreeAttachmentDomainsDefaultDisabled()=runBlocking {
-        assertEquals(11,raw.version)
+        assertEquals(12,raw.version)
         assertNotEquals(scope.dataset,scope.logicalVault);assertNotEquals(scope.dataset,scope.epoch)
         assertEquals(1,db.attachments().current().size)
         assertEquals(0L,db.attachments().current().single().feature_enabled)
@@ -76,7 +76,7 @@ abstract class AttachmentFoundationContract {
         val backup=repo.exportBackup(password)
         val decoded=BackupCodec.decrypt(backup,password)
         try {
-            val json=JSONObject(String(decoded,Charsets.UTF_8));assertEquals(10,json.getInt("schema"))
+            val json=JSONObject(String(decoded,Charsets.UTF_8));assertEquals(11,json.getInt("schema"))
             assertFalse(json.getJSONObject("tables").keys().asSequence().any{it.startsWith("attachment_")})
             assertEquals(35,json.getJSONObject("tables").length())
             assertTrue(ReferenceSchema.businessTables.all {json.getJSONObject("tables").has(it)})

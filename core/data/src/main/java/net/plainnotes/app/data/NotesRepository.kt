@@ -75,6 +75,83 @@ const val BACKFILL_MAX_DAYS=731L
     suspend fun associateMedication(scope: ReferenceScope, medication: Long, expectedRevision: Int, operationUuid: String, product: UserReferenceProduct?): MedicationReference = transactionWithSql(Space.PRIMARY) { _, raw ->
         ReferenceStore.associate(raw,scope,medication,expectedRevision,operationUuid,product)
     }
+    // Internal production integration; UI activation waits for shared forecast admission.
+    internal suspend fun measuredWriteTicket(scope:ReferenceScope,medication:Long,record:Long?=null):MeasuredWriteTicket = transactionWithSql(Space.PRIMARY) { _,raw ->
+        MeasuredUseIntegration.ticket(raw,scope,medication,record)
+    }
+    internal suspend fun recordMeasuredUse(ticket:MeasuredWriteTicket,operationUuid:String,draft:MeasuredActualUseDraft,created:Instant=Instant.now(),checkpoint:(ActualUseCheckpoint)->Unit={}):RecordedMeasuredUse {
+        val target=space
+        if(target!=Space.PRIMARY)throw ReferenceFailure(ReferenceError.WRONG_SPACE)
+        val frozenDraft=draft.copy(uses=draft.uses.toList())
+        return withContext(Dispatchers.IO) {val database=access.get(target);database.withTransaction {
+            MeasuredUseIntegration.create(database,ticket,operationUuid,frozenDraft,created,checkpoint)
+        }}
+    }
+    private suspend fun <T> measuredTransaction(block:suspend(NotesDatabase)->T):T {
+        val target=space
+        if(target!=Space.PRIMARY)throw ReferenceFailure(ReferenceError.WRONG_SPACE)
+        return withContext(Dispatchers.IO){val database=access.get(target);database.withTransaction{block(database)}}
+    }
+    private suspend fun currentMeasuredSlot(dao:NotesDao,slot:Slot,now:Instant):Slot {
+        val entry=timeline(dao,now,slot.at.minusMillis(1),slot.at.plusMillis(1),slot.zone).singleOrNull{it.slot.key==slot.key}
+            ?: throw ReferenceFailure(ReferenceError.STALE_REVISION)
+        if(entry.slot!=slot || slot.skipped || entry.state in setOf(SlotState.ON_TIME,SlotState.LATE,SlotState.SKIPPED))throw ReferenceFailure(ReferenceError.STALE_REVISION)
+        return entry.slot
+    }
+    internal suspend fun measuredScheduledTicket(scope:ReferenceScope,slot:Slot,now:Instant=Instant.now()):MeasuredScheduledTicket = measuredTransaction { database ->
+        val raw=database.openHelper.writableDatabase
+        MeasuredUseIntegration.ticket(raw,scope,slot.medicationId) // Scope/owner before any integer slot lookup.
+        currentMeasuredSlot(database.dao(),slot,now)
+        val existing=MeasuredUseIntegration.slotRecord(database,slot.key)
+        if(existing!=null && (existing.deleted_at_utc!=null || existing.status !in setOf("MISSED","UNCONFIRMED")))throw ReferenceFailure(ReferenceError.STALE_REVISION)
+        MeasuredScheduledTicket(MeasuredUseIntegration.ticket(raw,scope,slot.medicationId,existing?.id),slot)
+    }
+    internal suspend fun completeMeasuredSlot(ticket:MeasuredScheduledTicket,operationUuid:String,draft:MeasuredActualUseDraft,created:Instant=Instant.now(),checkpoint:(ActualUseCheckpoint)->Unit={}):RecordedMeasuredUse {
+        val frozen=draft.copy(uses=draft.uses.toList())
+        return measuredTransaction {database ->
+            val raw=database.openHelper.writableDatabase
+            ReferenceStore.checkScope(raw,ticket.write.scope)
+            if(MeasuredConsumptionStore.existingConsumption(raw,operationUuid)==null) {
+                MeasuredUseIntegration.validate(raw,ticket.write)
+                currentMeasuredSlot(database.dao(),ticket.slot,created)
+            }
+            MeasuredUseIntegration.completeScheduled(database,ticket,operationUuid,frozen,created,checkpoint)
+        }
+    }
+    internal suspend fun createMeasuredPackage(expectedEpoch:String,expectedMedication:MedicationEntity,operationUuid:String,draft:PackageMeasurementDraft,created:Instant=Instant.now()):CreatedMeasuredContainer {
+        val frozenDraft=draft.copy(product=draft.product.copy(ingredients=draft.product.ingredients.toList(),routes=draft.product.routes.toList()),relations=draft.relations.toList())
+        return measuredTransaction {database->
+            val raw=database.openHelper.writableDatabase
+            if(ReferenceStore.previewEpoch(raw)!=expectedEpoch)throw ReferenceFailure(ReferenceError.STALE_SCOPE)
+            if(database.dao().medication(expectedMedication.id)!=expectedMedication)throw ReferenceFailure(ReferenceError.STALE_REVISION)
+            val result=MeasuredContainerStore.create(database,expectedEpoch,expectedMedication.id,operationUuid,frozenDraft,created)
+            MeasuredConsumptionStore.auditStagedDataset(raw);result
+        }
+    }
+    internal suspend fun countMeasuredStock(ticket:MeasuredWriteTicket,operationUuid:String,input:ConfirmedStockCount,created:Instant=Instant.now()):MeasuredCountReceipt =
+        measuredTransaction{MeasuredUseIntegration.count(it,ticket,operationUuid,input,created)}
+    internal suspend fun reviseMeasuredUse(ticket:MeasuredWriteTicket,sourceOperation:String,reverseOperation:String,newOperation:String,draft:MeasuredActualUseDraft,created:Instant=Instant.now(),checkpoint:(ActualUseCheckpoint)->Unit={}):RecordedMeasuredUse {
+        val frozenDraft=draft.copy(uses=draft.uses.toList())
+        return measuredTransaction{MeasuredUseIntegration.revise(it,ticket,sourceOperation,reverseOperation,newOperation,frozenDraft,created,checkpoint)}
+    }
+    internal suspend fun reconcileMeasuredUse(ticket:MeasuredWriteTicket,sourceOperation:String,reverseOperation:String,newOperation:String,
+        counts:List<ConfirmedStockCount>,draft:MeasuredActualUseDraft,created:Instant=Instant.now(),checkpoint:(ReconciliationCheckpoint)->Unit={}):RecordedMeasuredUse {
+        val frozenDraft=draft.copy(uses=draft.uses.toList());val frozenCounts=counts.toList()
+        return measuredTransaction{MeasuredUseIntegration.reconcileRevise(it,ticket,sourceOperation,reverseOperation,newOperation,frozenCounts,frozenDraft,created,checkpoint)}
+    }
+    internal suspend fun reconcileDeleteMeasuredUse(ticket:MeasuredWriteTicket,sourceOperation:String,reverseOperation:String,
+        counts:List<ConfirmedStockCount>,created:Instant=Instant.now(),checkpoint:(ReconciliationCheckpoint)->Unit={}):RecordEntity {
+        val frozenCounts=counts.toList()
+        return measuredTransaction{MeasuredUseIntegration.reconcileDelete(it,ticket,sourceOperation,reverseOperation,frozenCounts,created,checkpoint)}
+    }
+    internal suspend fun deleteMeasuredUse(ticket:MeasuredWriteTicket,sourceOperation:String,reverseOperation:String,created:Instant=Instant.now()):RecordEntity =
+        measuredTransaction{MeasuredUseIntegration.delete(it,ticket,sourceOperation,reverseOperation,created)}
+    internal suspend fun restoreMeasuredUse(ticket:MeasuredWriteTicket,newOperation:String,draft:MeasuredActualUseDraft,created:Instant=Instant.now(),checkpoint:(ActualUseCheckpoint)->Unit={}):RecordedMeasuredUse {
+        val frozenDraft=draft.copy(uses=draft.uses.toList())
+        return measuredTransaction{MeasuredUseIntegration.restore(it,ticket,newOperation,frozenDraft,created,checkpoint)}
+    }
+    internal suspend fun correctMeasuredPackage(ticket:MeasuredWriteTicket,operationUuid:String,containerUuid:String,action:MeasuredPackageAction,userConfirmed:Boolean,created:Instant=Instant.now()):MeasuredPackageReceipt =
+        measuredTransaction{MeasuredUseIntegration.packageAction(it,ticket,operationUuid,containerUuid,action,userConfirmed,created)}
     suspend fun medications()=withContext(Dispatchers.IO){db().dao().medications()}
     suspend fun saveMilestone(value:MilestoneEntity)=transaction{dao->
         LocalDate.parse(value.date);require(value.kind in MILESTONE_KINDS)
@@ -214,7 +291,7 @@ const val BACKFILL_MAX_DAYS=731L
             }
             Trash.RECORD->{val r=requireNotNull(dao.recordById(t.ref.toLong()));require(r.deleted_at_utc!=null)
                 val back=r.copy(deleted_at_utc=null,revision=r.revision+1);dao.updateRecord(back)
-                if(back.status in listOf("ON_TIME","LATE"))SupplyLedger.allocate(dao,dao.recordById(back.id)!!)}
+                if(back.status in listOf("ON_TIME","LATE"))allocateLegacyActualUse(dao,dao.recordById(back.id)!!)}
             Trash.PERIOD->{
                 val all=dao.historyPeriods();val deleted=HistoryPeriods.userEdits(all).filter{it.group_key==t.ref}
                 val users=HistoryPeriods.userEdits(all).filter{it.kind==HistoryPeriods.PERIOD && it.group_key!=t.ref};val versions=dao.regimens()
@@ -351,7 +428,10 @@ const val BACKFILL_MAX_DAYS=731L
         require(value.name.isNotBlank() && value.dose_per_intake.isFinite() && value.dose_per_intake>0)
         val zone=ZoneId.systemDefault();reconcile(dao,effectiveNow,zone)
         val id=if(value.id==0L)dao.insertMedication(value) else {dao.updateMedication(value);value.id}
-        if(resizeContainers) resizableContainers(dao.containers(),id,value.container_capacity).forEach{dao.setContainerCapacity(it.id,value.container_capacity)}
+        if(resizeContainers) {
+            val measured=dao.measuredContainerIds().toSet()
+            resizableContainers(dao.containers().filter{it.id !in measured},id,value.container_capacity).forEach{dao.setContainerCapacity(it.id,value.container_capacity)}
+        }
         val cut=effectiveNow.toEpochMilli()
         val newProfile=profileFor(id,value,ester,pk)
         val snapshot=MedicationSnapshot.encode(value,newProfile)
@@ -475,6 +555,14 @@ const val BACKFILL_MAX_DAYS=731L
         dao.updateRecord(record.copy(rule_version_id=slot.ruleId,slot_key=key,scheduled_utc=slot.at.toEpochMilli(),scheduled_zone=slot.zone.id,
             planned_dose=slot.dose,late_after_minutes_snapshot=slot.lateMinutes,status=status,revision=record.revision+1))
     }
+    /** User entry guard: clinical dose alone never selects a physical package in mixed stock. */
+    private suspend fun allocateLegacyActualUse(dao:NotesDao,record:RecordEntity):Double {
+        val measured=dao.measuredContainerIds().toSet()
+        require(dao.containers().none {it.medication_id==record.medication_id && it.id in measured}) {
+            "Mixed or measured stock requires explicit physical-use confirmation"
+        }
+        return SupplyLedger.allocate(dao,record)
+    }
     suspend fun complete(slot:Slot,taken:Instant,dose:Double,site:String?=null)=transactionWithSql { dao, raw ->
         val existing=dao.records().singleOrNull{it.slot_key==slot.key}
         if(existing?.status in listOf("ON_TIME","LATE"))return@transactionWithSql
@@ -482,7 +570,7 @@ const val BACKFILL_MAX_DAYS=731L
         val status=ScheduleEngine.complete(slot,taken,ZoneId.systemDefault(),dose).status.name
         val result=recordFor(dao,slot,status,taken,dose).copy(unallocated_supply_amount=dose,site=site?.takeIf{it.isNotBlank()})
         val id=if(existing==null)dao.record(result) else {dao.updateRecord(result.copy(id=existing.id,revision=existing.revision+1,config_snapshot=existing.config_snapshot));existing.id}
-        val remaining=SupplyLedger.allocate(dao,dao.recordById(id)!!)
+        val remaining=allocateLegacyActualUse(dao,dao.recordById(id)!!)
 
         ReferenceStore.captureContext(raw,dao.recordById(id)!!)
         remaining
@@ -523,7 +611,7 @@ const val BACKFILL_MAX_DAYS=731L
         val snap=MedicationSnapshot.encode(m,dao.profile(id))
         val rid=dao.record(RecordEntity(medication_id=id,taken_utc=taken.toEpochMilli(),taken_zone=ZoneId.systemDefault().id,actual_dose=dose,unallocated_supply_amount=dose,site=site?.takeIf{it.isNotBlank()},
             status="ON_TIME",origin="APP",revision=1,config_snapshot=snap))
-        SupplyLedger.allocate(dao,dao.recordById(rid)!!)
+        allocateLegacyActualUse(dao,dao.recordById(rid)!!)
         ReferenceStore.captureContext(raw,dao.recordById(rid)!!)
         if(extra)dao.insertAnnotation(RecordAnnotationEntity(rid,HistoryPeriods.EXTRA,System.currentTimeMillis()))
     }
@@ -669,9 +757,22 @@ const val BACKFILL_MAX_DAYS=731L
                                  names:Map<net.plainnotes.app.importer.HrtTracker.Group,String>,weightKg:Double?,zone:ZoneId=ZoneId.systemDefault())=transaction { dao ->
         HrtTrackerWriter.write(dao,plan,targets,names,weightKg,zone)
     }
-    suspend fun exportBackup(password:CharArray):ByteArray=withContext(Dispatchers.IO) {
-        val db=db()
-        val json=db.withTransaction { RegimenHistory.seed(db.openHelper.writableDatabase);ReferenceSchema.validate(db.openHelper.writableDatabase);JSONObject().put("format",BackupCodec.FORMAT_VERSION).put("schema",RecordBackupCompatibility.SCHEMA)
+    suspend fun exportBackup(password:CharArray):ByteArray=exportBackupFrom(space,password,null)
+    /** No UI caller until measured restore and forecast admission is complete. */
+    internal suspend fun exportMeasuredBackup(password:CharArray,expectedEpoch:String):ByteArray {
+        val target=space
+        if(target!=Space.PRIMARY)throw ReferenceFailure(ReferenceError.WRONG_SPACE)
+        return exportBackupFrom(target,password,expectedEpoch)
+    }
+    private suspend fun exportBackupFrom(target:Space,password:CharArray,measuredEpoch:String?):ByteArray=withContext(Dispatchers.IO) {
+        val db=access.get(target)
+        val json=db.withTransaction {
+            val raw=db.openHelper.writableDatabase
+            if(measuredEpoch!=null && ReferenceStore.previewEpoch(raw)!=measuredEpoch)throw ReferenceFailure(ReferenceError.STALE_SCOPE)
+            RegimenHistory.seed(raw)
+            if(measuredEpoch==null){InventoryEncoding.legacyOnly(raw);ReferenceSchema.validate(raw)}
+            else MeasuredConsumptionStore.auditStagedDataset(raw)
+            JSONObject().put("format",BackupCodec.FORMAT_VERSION).put("schema",RecordBackupCompatibility.SCHEMA)
             .put("created",Instant.now().toString()).put("tables",RawData.dump(db.openHelper.writableDatabase)) }
         val plain=json.toString().toByteArray(Charsets.UTF_8)
         try{BackupCodec.encrypt(plain,password)}finally{plain.fill(0)}
@@ -681,18 +782,28 @@ const val BACKFILL_MAX_DAYS=731L
      * Restores a backup from this schema or an older one (older ones are upgraded right after the rows are written, with the
      * same steps as the Room migration). A backup from a newer schema is refused.
      */
-    suspend fun restoreBackup(data:ByteArray,password:CharArray,today:LocalDate=LocalDate.now())=withContext(Dispatchers.IO) {
+    suspend fun restoreBackup(data:ByteArray,password:CharArray,today:LocalDate=LocalDate.now())=
+        restoreBackupTo(space,data,password,today,null)
+    /** Internal integration entry; shares strict parsing and the atomic legacy replacement implementation. */
+    internal suspend fun restoreMeasuredBackup(data:ByteArray,password:CharArray,expectedEpoch:String,today:LocalDate=LocalDate.now(),checkpoint:(RestoreCheckpoint)->Unit = {}) {
+        val target=space
+        if(target!=Space.PRIMARY)throw ReferenceFailure(ReferenceError.WRONG_SPACE)
+        restoreBackupTo(target,data,password,today,expectedEpoch,checkpoint)
+    }
+    private suspend fun restoreBackupTo(target:Space,data:ByteArray,password:CharArray,today:LocalDate,measuredEpoch:String?,checkpoint:(RestoreCheckpoint)->Unit = {})=withContext(Dispatchers.IO) {
         val plain=BackupCodec.decrypt(data,password)
-        val json=try{String(plain,Charsets.UTF_8).let{BackupLimits.checkJson(it);JSONObject(it)}}finally{plain.fill(0)}
+        val json=try{BackupJsonReader.read(plain)}finally{plain.fill(0)}
         val schema=RecordBackupCompatibility.readVersion(json)
         val tables=json.getJSONObject("tables")
         require(schema>=10 || ReferenceSchema.businessTables.none {tables.has(it)}) { "Misdeclared reference backup version" }
+        RecordBackupCompatibility.validateInventoryVersion(schema,tables)
         val required=DOMAIN_TABLES.filterNot{(schema<2 && it in listOf("stage_review","symptom_check","review_effect")) || (schema<4 && it in listOf("regimen_version","regimen_rule_link","milestone")) || (schema<5 && it=="lab_context_revision") || (schema<6 && it in listOf("visit_question","visit_pack")) || (schema<7 && it in listOf("history_period_revision","record_annotation")) || (schema<9 && it=="trash_item") || (schema<10 && it in ReferenceSchema.businessTables)}
         require(required.all{tables.has(it)}) { "Incomplete backup" }
-        val db=db()
+        val db=access.get(target)
         db.withTransaction {
             val sql=db.openHelper.writableDatabase
-            RawData.restore(access.applicationContext,sql,tables,upgradeRegimens=schema<4,backfillTrash=schema<9)
+            if(measuredEpoch!=null && ReferenceStore.previewEpoch(sql)!=measuredEpoch)throw ReferenceFailure(ReferenceError.STALE_SCOPE)
+            RawData.restore(access.applicationContext,sql,tables,upgradeRegimens=schema<4,backfillTrash=schema<9,measured=measuredEpoch!=null,checkpoint=checkpoint)
             if(schema<2) WellbeingUpgrade.apply(sql,today)
         }
     }
@@ -708,7 +819,7 @@ const val BACKFILL_MAX_DAYS=731L
         SupplyLedger.reverse(dao,id)
         val late=r.scheduled_utc?.let{s->r.late_after_minutes_snapshot?.let{l->taken.toEpochMilli()>s+l*60_000L}} ?: false
         val next=r.copy(taken_utc=taken.toEpochMilli(),taken_zone=ZoneId.systemDefault().id,actual_dose=dose,status=if(late)"LATE" else "ON_TIME",revision=r.revision+1)
-        dao.updateRecord(next);SupplyLedger.allocate(dao,dao.recordById(id)!!)
+        dao.updateRecord(next);allocateLegacyActualUse(dao,dao.recordById(id)!!)
     }
     /** Soft-deletes a taken intake; a scheduled slot becomes due again and may later be marked missed. */
     suspend fun deleteRecord(id:Long,now:Instant=Instant.now())=transaction { dao ->
@@ -733,13 +844,18 @@ const val BACKFILL_MAX_DAYS=731L
     /** Closes the open container(s) of a medication and opens a sealed one (or a new one with [capacity]). */
     suspend fun replaceContainer(medicationId:Long,capacity:Double)=transaction { dao ->
         val all=dao.containers().filter{it.medication_id==medicationId}
+        val measured=dao.measuredContainerIds().toSet()
+        require(all.none{it.id in measured}) { "Measured containers require explicit package replacement" }
         all.filter{it.state=="IN_USE"}.forEach{dao.setContainerState(it.id,if(it.capacity-it.used_amount<=1e-9)"EMPTY" else "DISCARDED",it.opened_on)}
         val sealed=all.filter{it.state=="SEALED"}.minByOrNull{it.id}
         if(sealed!=null)dao.setContainerState(sealed.id,"IN_USE",LocalDate.now().toString())
         else dao.insertContainer(ContainerEntity(medication_id=medicationId,capacity=capacity,initial_used_amount=0.0,used_amount=0.0,opened_on=LocalDate.now().toString(),state="IN_USE"))
     }
     suspend fun setRemaining(containerId:Long,remaining:Double)=transaction { SupplyLedger.setRemaining(it,containerId,remaining) }
-    suspend fun discardContainer(containerId:Long)=transaction { dao -> val c=dao.container(containerId);require(c.state!="VOIDED");dao.setContainerState(c.id,"DISCARDED",c.opened_on) }
+    suspend fun discardContainer(containerId:Long)=transaction { dao ->
+        require(containerId !in dao.measuredContainerIds()) { "Measured container requires explicit package discard" }
+        val c=dao.container(containerId);require(c.state!="VOIDED");dao.setContainerState(c.id,"DISCARDED",c.opened_on)
+    }
     /**
      * B4 "check stock": sets what is really left in an open or used-up package through the ledger's ADJUST entry. A
      * used-up package with something left becomes open again; no package is created, no dose record changes. Sealed
@@ -753,8 +869,14 @@ const val BACKFILL_MAX_DAYS=731L
     /** Packages with at least one ledger entry (consumption, reversal or adjustment). */
     suspend fun containersWithLedger()=transaction { dao -> dao.containersWithLedger().toSet() }
     /** Logical correction: ADJUST is audit history, not evidence of an actual intake. */
-    suspend fun removeMistakenContainer(containerId:Long)=transaction { dao -> PackageCorrections.void(sql(),dao,containerId,Instant.now()) }
-    suspend fun restoreVoidedContainer(containerId:Long)=transaction { dao -> PackageCorrections.restore(sql(),dao,containerId,Instant.now()) }
+    suspend fun removeMistakenContainer(containerId:Long)=transactionWithSql { dao,raw ->
+        require(containerId !in dao.measuredContainerIds()) {"Exact package correction requires a current confirmation ticket"}
+        PackageCorrections.void(raw,dao,containerId,Instant.now())
+    }
+    suspend fun restoreVoidedContainer(containerId:Long)=transactionWithSql { dao,raw ->
+        require(containerId !in dao.measuredContainerIds()) {"Exact package correction requires a current confirmation ticket"}
+        PackageCorrections.restore(raw,dao,containerId,Instant.now())
+    }
     suspend fun voidedContainers()=transaction { it.voidedContainers() }
 
     // --- Well-being ---
@@ -818,14 +940,30 @@ const val BACKFILL_MAX_DAYS=731L
      * The open doses the stock forecast walks (B4): unfinished doses since tracking began plus the next
      * [StockForecasts.WINDOW_DAYS] days. The stock page, the calendar and stock reminders all use this one input.
      */
-    suspend fun stockDemand(now:Instant=Instant.now(),zone:ZoneId=ZoneId.systemDefault())=transaction { dao ->
+    private suspend fun stockDemandFrom(dao:NotesDao,now:Instant,zone:ZoneId):List<TimelineEntry> {
         val from=dao.rules().minOfOrNull{it.missed_tracking_from_utc}?.let(Instant::ofEpochMilli) ?: now
-        (timeline(dao,now,minOf(from,now),now.plusMillis(1),zone)+timeline(dao,now,now,now.plus(java.time.Duration.ofDays(StockForecasts.WINDOW_DAYS)),zone))
+        return (timeline(dao,now,minOf(from,now),now.plusMillis(1),zone)+timeline(dao,now,now,now.plus(java.time.Duration.ofDays(StockForecasts.WINDOW_DAYS)),zone))
             .filter{it.state in listOf(SlotState.PENDING,SlotState.SOON,SlotState.OVERDUE)}.distinctBy{it.slot.key}
     }
-    /** Shared stock forecasts for the active medications (B4). */
-    suspend fun stockForecasts(now:Instant=Instant.now(),zone:ZoneId=ZoneId.systemDefault())=transaction { dao ->
-        StockForecasts.forecastAll(dao.medications(),dao.containers(),stockDemand(now,zone))
+    suspend fun stockDemand(now:Instant=Instant.now(),zone:ZoneId=ZoneId.systemDefault())=transaction { dao ->stockDemandFrom(dao,now,zone)}
+    /** One captured SQL transaction; integer quanta never enter the legacy scalar forecast. */
+    suspend fun stockForecasts(now:Instant=Instant.now(),zone:ZoneId=ZoneId.systemDefault())=transactionWithSql { dao,raw ->
+        val meds=dao.medications();val containers=dao.containers();val demand=stockDemandFrom(dao,now,zone)
+        val forecasts=StockForecasts.forecastAll(meds,containers,demand)
+        val modern=containers.any{it.inventory_encoding!=InventoryEncoding.LEGACY} || raw.query("SELECT 1 FROM measured_operation LIMIT 1").use{it.moveToFirst()}
+        if(!modern)return@transactionWithSql forecasts
+        val balances=try {MeasuredConsumptionStore.forecastBalances(raw,MeasuredConsumptionStore.auditStagedDataset(raw))}
+            catch(_:ReferenceFailure){return@transactionWithSql forecasts.mapValues{(_,f)->f.copy(available=null,lastCovered=null,firstShort=null,uncertainty=setOf(StockUnknownReason.INVALID_NEEDS_REVIEW))}}
+        val unresolved=raw.query("SELECT r.medication_id,o.unknown_reason FROM measured_operation o JOIN reference_identity i ON i.uuid=o.record_uuid AND i.dataset_uuid=o.dataset_uuid AND i.kind='RECORD' JOIN dose_record r ON r.id=i.live_handle WHERE o.kind='CONSUME' AND o.record_revision=r.revision AND r.deleted_at_utc IS NULL AND (o.unknown_reason IS NOT NULL OR o.unallocated_quantity IS NOT NULL)").use{c->buildList{while(c.moveToNext())add(c.getLong(0) to if(c.isNull(1))null else c.getString(1))}}
+        val version=ReferencePayload.sha(ReferenceStore.previewEpoch(raw)+Trash.rows(raw,"supply_container","1 ORDER BY id",emptyArray()).toString()+Trash.rows(raw,"measured_operation","1 ORDER BY operation_uuid",emptyArray()).toString()+
+            demand.joinToString("|"){it.slot.key+":"+it.slot.at.toEpochMilli()+":"+it.slot.dose.toRawBits()})
+        forecasts.mapValues { (id,f) ->
+            val issues=unresolved.filter{it.first==id}.map{if(it.second=="STOCK_EFFECT_NOT_CONFIRMED")StockUnknownReason.STOCK_EFFECT_UNKNOWN else StockUnknownReason.UNALLOCATED}.toSet()
+            val physical=balances[id].orEmpty()
+            val reasons=(if(physical.isEmpty())f.uncertainty else (f.uncertainty-StockUnknownReason.UNKNOWN_SOURCE))+issues
+            if(reasons.isEmpty())f.copy(snapshotSha256=version)
+            else f.copy(available=null,lastCovered=null,firstShort=null,uncertainty=reasons,physicalBalances=physical,snapshotSha256=version)
+        }
     }
     suspend fun labs()=withContext(Dispatchers.IO){db().dao().labs()}
     suspend fun labContexts()=withContext(Dispatchers.IO){db().dao().labContexts()}

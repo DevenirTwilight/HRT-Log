@@ -1233,4 +1233,5 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="ref2_history_stale">The dataset changed. Close this window and reopen the record.</string>
 <string name="ref2_history_error">Could not read the saved reference. Closing this window leaves the record unchanged.</string>
 <string name="ref2_history_saved_only">This shows the saved record. Unsaved changes are not included.</string>
+    <string name="forecast_needs_check">Stock needs checking. A reliable depletion date is unavailable.</string>
 </resources>

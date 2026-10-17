@@ -44,7 +44,7 @@ object StockAlerts {
     fun due(meds: List<MedicationEntity>, containers: List<ContainerEntity>, forecasts: Map<Long, StockForecast>, today: LocalDate,
             zone: ZoneId = ZoneId.systemDefault()): List<Alert> =
         meds.filter { it.active && it.notifications_on && it.needs_review == null }.flatMap { m ->
-            val open = containers.filter { it.medication_id == m.id && it.state == "IN_USE" }
+            val open = containers.filter { it.medication_id == m.id && it.state == "IN_USE" && it.inventory_encoding=="LEGACY_SCALAR" }
             val out = ArrayList<Alert>()
             if (StockForecasts.available(m.id,containers)!=null && forecasts[m.id]?.isLow(today, zone) == true) out += Alert(m, Kind.LOW)
             val days = m.expiry_days_after_open

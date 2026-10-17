@@ -1,0 +1,14 @@
+{
+  "status": "EXPECTED_FAIL",
+  "tests": [
+    {
+      "name": "globalAuditRejectsCurrentActualRecordThatDisagreesWithFrozenInput",
+      "failure": "java.lang.AssertionError: Current factual dose disagrees with frozen original input"
+    },
+    {
+      "name": "globalAuditRejectsOverflowedRevisionEvenWhenAnOperationHasNoAllocation",
+      "failure": "java.lang.AssertionError: Overflowed revision was truncated into a valid record revision"
+    }
+  ],
+  "log_sha256": "bd1f25338a261be4cfe59844d559a890bb97963278a35bac71d50382db378629"
+}
