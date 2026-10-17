@@ -7,6 +7,12 @@
 - 临时分支已删除（代理不允许直接删除，改为推送一个只含“删除本分支”工作流的提交，由 Actions 删除）；Release 附件不受影响。
 - NOT_RUN：真机 ARM 覆盖安装（build 5 → 29、build 28 → 29）。
 
+## Claude UI 八页设计参考入库 — 2026-10-17
+
+- PR #60（已合并为 34f0e01）：`docs/design/claude-ui-2026-10-17/` 下有 README（页面↔代码对应、安全限制）、`DESIGN_REVIEW_FULL.md`（完整审查）和 `assets/` 八张原始 PNG（SHA-256 逐一核对 OK，图内仅占位数据）。
+- 性质 REFERENCE_ONLY：不是 App 截图，不授权开发 06/07/08 的医疗原件功能。无生产代码改动、无新 APK。
+- 下一步：负责人决定哪些页面（建议 01/03/04/05）形成独立 UI 任务；库存页等 Codex 的 P4/P5 后端。
+
 ## ANSM-02B/03B 联合实施开始 — 2026-10-16
 
 本轮负责人明确生产实现授权见REQUIREMENTS §102。独立工作树/任务状态/风险/证据统一于[集成账本](ansm-integration/WORK-STATE.md)，避免把旧ANSM test-only门当本轮未授权。
