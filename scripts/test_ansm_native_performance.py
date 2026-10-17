@@ -25,6 +25,20 @@ class NativePerformanceIsolationTest(unittest.TestCase):
         self.assertNotIn('setLargeHeap', text)
         self.assertNotIn('fallbackToDestructiveMigration', text)
 
+    def test_components_follow_original_budget_capture_and_do_not_replace_failure_gate(self):
+        prepare = module('prepare_ansm_native_performance')
+        text = prepare.native_source(prepare.SOURCE.read_text())
+        self.assertLess(text.index('report.put("budget_exceeded"'), text.index('val components=JSONObject()'))
+        self.assertLess(text.index('running.set(false);sampler.join(1000)'), text.index('val components=JSONObject()'))
+        self.assertLess(text.index('components.put("status","COMPLETE")'), text.index('assertEquals("Diagnostic budgets;'))
+        for name in ('raw_full_first_ms', 'cached_full_second_ms', 'cached_full_first_ms',
+                     'raw_full_second_ms', 'raw_state_including_references_ms', 'raw_operation_chain_ms'):
+            self.assertIn(name, text)
+        diagnostic = text[text.index('val components=JSONObject()'):text.index('components.put("status","COMPLETE")')]
+        self.assertNotIn('execSQL', diagnostic)
+        self.assertNotIn('exceeded.clear', text)
+        self.assertIn('assertEquals(rawProjection,MeasuredConsumptionStore.auditStagedDataset(raw))', diagnostic)
+
     def test_template_drift_fails_before_generating_a_misleading_native_test(self):
         prepare = module('prepare_ansm_native_performance')
         with self.assertRaises(ValueError):

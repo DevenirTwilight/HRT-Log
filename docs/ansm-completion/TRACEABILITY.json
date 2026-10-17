@@ -81,7 +81,7 @@
       "blocker": "",
       "owner_decision_required": false,
       "progress": "IN_PROGRESS",
-      "note": "P4完整原生 run39047684726 FAIL：审计27783.74839ms、预测26154.10693ms、恢复后审计27298.74734ms、写入26612/27220/26803ms，未改预算。新单构建器 canonical 与冻结旧编码器399项回归PASS；批量SQL/事务内有界来源验证正在验证，不冒充原生成功。P4_BLOCKED，入口OFF，P5/P6未实施。#63为独立CI修复，#64为Beta缺口文档。"
+      "note": "P4_BLOCKED / 正式入口OFF。db34e87 data407、Period5/Privacy3、Python168与原生源码编译PASS；原生run39066391148四时限FAIL，写入19.16–19.76s>5s。JVM SQL62219→20198不等于原生改善。主线d13048b六CI PASS；P5仅现有UI接线审计，P6未实施；#64 Beta仍NO-GO。下一步仅测试原生分段及同机缓存/无缓存对照。"
     },
     {
       "requirement_id": "V4.04",

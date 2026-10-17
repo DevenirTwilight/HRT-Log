@@ -1,0 +1,16 @@
+{
+  "status": "LOCAL_PASS_NATIVE_NOT_RUN",
+  "scope": "TEST_ONLY_POST_BUDGET_COMPONENTS",
+  "production_files_changed": false,
+  "native_generated_source_compilation": "PASS",
+  "python_tests": {
+    "tests": 169,
+    "failures": 0,
+    "errors": 0
+  },
+  "compile_log_sha256": "e9f4206864fb20a58a3d7594a47ab800078d27e43274b168140b37692390e9c6",
+  "python_log_sha256": "5054346e54a18992dc24f9389ee10c7636f5499a935f4574ffcb745e7b565753",
+  "native_result": "NOT_RUN",
+  "acceptance": "P4_BLOCKED",
+  "limits_changed": false
+}

@@ -47,6 +47,43 @@ def native_source(text):
     replace('sampler.join(1000);db.close()', 'sampler.join(1000);db.close();context.deleteDatabase("synthetic-large-performance.db")')
     replace('fun stage(name:String){report.put("stage",name);file.writeText(report.toString(2))}',
             'fun stage(name:String){report.put("stage",name).put("observed_heap_bytes",Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory()).put("peak_observed_jvm_heap_bytes",peak.get()).put("peak_observed_database_disk_bytes",diskPeak.get());file.writeText(report.toString(2))}')
+    # Diagnostics run only AFTER original timed phases and budget/peak capture.
+    # Reflection calls the unchanged private full auditor without the optional row cache;
+    # it is test-only and never participates in production acceptance or writes.
+    replace('file.writeText(report.toString(2));assertEquals("Diagnostic budgets; device acceptance remains NOT_RUN",emptyList<String>(),exceeded)', '''file.writeText(report.toString(2))
+            running.set(false);sampler.join(1000)
+            val components=JSONObject().put("scope","TEST_ONLY_POST_BUDGET_READ_ONLY")
+                .put("acceptance_metrics_frozen_before_diagnostics",true)
+            report.put("post_budget_components",components)
+            suspend fun component(name:String, block:()->Unit) {
+                val start=System.nanoTime()
+                db.withTransaction {block()}
+                components.put(name,(System.nanoTime()-start)/1_000_000.0)
+                file.writeText(report.toString(2))
+            }
+            val rawAuditor=MeasuredConsumptionStore::class.java.declaredMethods.single {
+                it.name=="auditReadSnapshot" && it.parameterTypes.contentEquals(arrayOf(androidx.sqlite.db.SupportSQLiteDatabase::class.java))
+            }.apply{isAccessible=true}
+            fun rawAudit():List<*> {
+                BackupValidation.validateCandidateStoredColumns(raw)
+                return rawAuditor.invoke(MeasuredConsumptionStore,raw) as List<*>
+            }
+            var rawProjection:List<*>?=null
+            component("raw_full_first_ms"){rawProjection=rawAudit();assertEquals(count,rawProjection!!.size)}
+            component("cached_full_second_ms"){assertEquals(rawProjection,MeasuredConsumptionStore.auditStagedDataset(raw))}
+            component("cached_full_first_ms"){assertEquals(rawProjection,MeasuredConsumptionStore.auditStagedDataset(raw))}
+            component("raw_full_second_ms"){assertEquals(rawProjection,rawAudit())}
+            component("stored_columns_ms"){BackupValidation.validateCandidateStoredColumns(raw)}
+            component("raw_references_ms"){ReferenceSchema.validateCandidateReferences(raw)}
+            component("raw_state_including_references_ms"){BackupValidation.validateMeasuredCandidateState(raw)}
+            component("raw_operation_chain_ms"){MeasuredOperationChain.validate(raw)}
+            component("row_cache_construction_finish_ms"){ReferenceAuditReads(raw).finish()}
+            component("cached_references_including_construction_ms") {
+                val reads=ReferenceAuditReads(raw)
+                try{ReferenceSchema.validateCandidateReferences(reads)}finally{reads.finish()}
+            }
+            components.put("status","COMPLETE")
+            file.writeText(report.toString(2));assertEquals("Diagnostic budgets; device acceptance remains NOT_RUN",emptyList<String>(),exceeded)''')
     # AGP may uninstall the synthetic test APK after a process crash, deleting
     # its external-files report. Mirror only the compact timing metadata to logcat.
     text = text.replace('file.writeText(report.toString(2))',

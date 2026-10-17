@@ -1,0 +1,11 @@
+{
+  "status": "FAIL",
+  "head": "db34e873c692c5a10af1d7ae659933c2af6800b7",
+  "run": 39066391148,
+  "artifact_id": 12114130780,
+  "artifact_sha256": "37c965693df3bdadde740a608dddfdaf1d5eddb774cb4a5d80316f835bcb0d48",
+  "zip_crc": "PASS",
+  "report": "native-db34e87-report.json",
+  "cause": "Completed, not crashed. Four unchanged timing budgets exceeded. SQL query reduction on JVM did not establish native improvement. Post-restore writes19.16–19.76s exceed5s. Same-runner paired diagnostics required before further production optimization.",
+  "budgets_changed": false
+}
