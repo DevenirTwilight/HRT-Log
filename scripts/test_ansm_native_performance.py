@@ -55,3 +55,16 @@ class NativePerformanceExecutionTest(unittest.TestCase):
                 self.assertEqual(2,len(calls))
                 self.assertIn('connectedDebugAndroidTest',calls[0][1])
                 self.assertTrue(calls[1][1].endswith('collect_ansm_native_performance.py'))
+
+
+class NativeAvdConfigurationTest(unittest.TestCase):
+    def test_correct_vm_heap_property_is_unique_and_other_avd_fields_are_preserved(self):
+        configure=module('configure_ansm_low_memory_avd').configure
+        source='hw.ramSize=1536\nvm.heapSize=384\nhw.cpu.ncore=2\navd.ini.displayname=SYNTHETIC\nvm.heapSize=256\n'
+        result=configure(source)
+        self.assertEqual(1,result.count('vm.heapSize='))
+        self.assertIn('vm.heapSize=192\n',result)
+        self.assertIn('hw.ramSize=512\n',result)
+        self.assertIn('hw.cpu.ncore=2\n',result)
+        self.assertIn('avd.ini.displayname=SYNTHETIC\n',result)
+        self.assertEqual(result,configure(result))

@@ -91,3 +91,5 @@ Room12检查点0843450六项CI在push/PR全部SUCCESS；当前仍DRAFT，不以�
 原生API26大库39042753707真实FAIL：模拟器将请求512MB提升到1536MB/heap384m，且审计/预测/写入/堆预算均未达标。采集在emulator关闭后误执行导致数值JSON丢失，已明确UNAVAILABLE，原日志/摘要及JUnit失败证据留存。重试保持原阈值，改实际QEMU512/AVDheap192并在退出前总是采集；来源SHA256改用等价固定小写ASCII编码，避免每摘要32次Formatter。新增独立固定向量/多Locale/前导零测试；完整回归运行中，不把修改当已通过。大库夹具恢复后释放额外JSON图，采样从生成开始不重置，不改库行与校验。
 
 摘要编码及原生重试检查点：完整data390/shared114、原生源码编译PASS；空串/abc/原始多语/前导00/长串独立SHA256向量在4个Locale与既有恢复/账本测试一起通过，旧摘要不重写。新大库JVM复测/生成原生源码编译PASS，后续写入3.55…3.91s、全程采样峰值495445544bytes，阈值与采样器未重置。完整报告、原生首轮真实FAIL及缺失JSON原因均归档。新原生API26x86/QEMU512/heap192及最终HEAD六CI待实际重验，不能套用b31之前全绿；#57继续DRAFT，App入口OFF。
+
+原生第二轮39044178114真实FAIL：测试进程19.193秒崩溃，数值JSON未生成，原因UNVERIFIED；artifact官方SHA/CRC已校验，不能推断为内存不足或算法失败。发现AVD输入heap-size写为hw.heapSize，实际vm.heapSize仍384m；新增仅CI启动前配置正确vm.heapSize=192、hw.ramSize=512，实际值必须再测。加载SQLCipher之前先写阶段报告，并在全新合成模拟器内采集最小运行环境和崩溃日志；不处理用户记录。不改变预算/校验/生产源码。Python165及生成原生源码编译PASS，见performance/native-diagnostic-configuration-evidence.json；第三轮原生及最终六CI待验。#57仍DRAFT、PRODUCTION_BLOCKED，P5/P6未实施。
