@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "jvm_shared_tests": 49,
+  "native_source_compilation": "PASS",
+  "native_execution": "NOT_RUN",
+  "log_sha256": "44b82a50e994290275e5a0e5a9d414ff67d7073aac8219a9f0de46dc07379b9a",
+  "source_sha256": {
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt": "bc8c2cde87f23bfdaa970d8b2a2b726e5fd2fe0c50788fde8ddb5d6e0c36c1cb",
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredOperationChain.kt": "804861d17ded5d06fe312a29f2bbc102ffe37fc784ce88d105ce567b08c18f47",
+    "core/data/src/main/java/net/plainnotes/app/data/ReferenceSchema.kt": "f80d4422440d87bf768ed77458413bec43e69b3fedb1b9a9994efcc4bbffb526",
+    "core/data/src/main/java/net/plainnotes/app/data/BackupValidation.kt": "32f29aaed90888c432e5ec017014cd5729eb6a7c803793d12ff84857fdfa28d1"
+  }
+}

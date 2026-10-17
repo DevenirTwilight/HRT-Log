@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "shared_tests": 40,
+  "scope": "Initial active-container and operation coverage; not complete admission",
+  "log_sha256": "8997296ae91faefba49b6754db30d0be1bef6261634429ebde0ce3ed45cf357c",
+  "initial_compile_failure": "Quantity/Long result union lost numeric type; fixed explicit MeasureResult<Long> without removing assertions"
+}

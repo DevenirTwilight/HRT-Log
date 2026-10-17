@@ -1,0 +1,47 @@
+{
+  "parent": "10480c6199107803993e2d80f81053fa808e157c",
+  "scope": "Candidate full-domain and operation audit, not backup activation",
+  "status": "LOCAL_PASS_PRODUCTION_NOT_ACTIVATED",
+  "data": {
+    "tests": 324,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "shared_contract_tests": 50,
+  "native_source_compilation": "PASS",
+  "current_native_execution": "NOT_RUN",
+  "python_tests": 158,
+  "physical_device": "NOT_RUN",
+  "backup_business_schema": 10,
+  "production_measurement_entry": "OFF",
+  "logs": {
+    "ansm-p4-global-full-green.log": "20fbc16efc03a00955847d50f4c139242df87db2ee70d1cc90bc09c5d4f5509c",
+    "ansm-p4-global-python.log": "6f8dd73177aeff6c5aee75c2f6df44ff880e09537391fb72a263001bee6d7241",
+    "ansm-p4-global-app-regression.log": "3cd92a7e2990418adfce24f964d1098f10ccbdd9a1f425ebce5f31968a239c09"
+  },
+  "source_sha256": {
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt": "74bca63020091aad69c19775c3de46f5a6322f13580711fa99d402ba848af0ae",
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredOperationChain.kt": "804861d17ded5d06fe312a29f2bbc102ffe37fc784ce88d105ce567b08c18f47",
+    "core/data/src/main/java/net/plainnotes/app/data/ReferenceSchema.kt": "f80d4422440d87bf768ed77458413bec43e69b3fedb1b9a9994efcc4bbffb526",
+    "core/data/src/main/java/net/plainnotes/app/data/BackupValidation.kt": "00c561fe9506f25833f99e78d0a6b912e610c663120e5cbdb4016179930dcd3f",
+    "core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt": "63bf720c9bb9f599e209c3c25cdff5dd00f39c532e07e45cb8218e5ddcc8c0a2"
+  },
+  "remaining_gate": "Explicit container inventory encoding plus business Schema11/versioned restore and Repository/forecast/UI integration",
+  "PeriodStabilityTest": {
+    "tests": 5,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "timestamp": "2026-10-17T08:47:31.974Z",
+    "xml_sha256": "7184780f693f2ddd875e9fc8e4e29746f3ed094c86fbca2d6d4135660b064702"
+  },
+  "PrivacyNoticeFactsTest": {
+    "tests": 3,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "timestamp": "2026-10-17T08:48:39.472Z",
+    "xml_sha256": "1a420d20a3bb43195522654f4e8f1912ca9e52da34d5cb8c3e65efbfdcc66b87"
+  }
+}

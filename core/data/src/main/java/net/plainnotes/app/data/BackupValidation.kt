@@ -82,11 +82,34 @@ internal object BackupValidation {
         }
     }
 
+    /** Trusted-column SQL checks on an already parsed isolated candidate, before any destination changes. */
+    internal fun validateCandidateStoredColumns(db:SupportSQLiteDatabase) {
+        check(db.inTransaction());var total=0L;var textBytes=0L
+        for(table in DOMAIN_TABLES) {
+            total+=db.query("SELECT COUNT(*) FROM `$table`").use{it.moveToFirst();it.getLong(0)}
+            require(total<=BackupLimits.MAX_ROWS)
+            val columns=db.query("PRAGMA table_info(`$table`)").use{c->buildList{while(c.moveToNext())add(c.getString(1) to c.getString(2))}}
+            for((column,type) in columns) {
+                val allowed=when(type){"INTEGER"->"typeof(`$column`)='integer'";"TEXT"->"typeof(`$column`)='text' AND length(`$column`)<=1048576";"REAL"->"typeof(`$column`) IN ('integer','real') AND `$column` BETWEEN -1.7976931348623157e308 AND 1.7976931348623157e308";else->error("Unknown trusted storage type")}
+                db.query("SELECT 1 FROM `$table` WHERE `$column` IS NOT NULL AND NOT ($allowed) LIMIT 1").use{require(!it.moveToFirst())}
+                if(type=="TEXT") {
+                    textBytes+=db.query("SELECT COALESCE(SUM(length(CAST(`$column` AS BLOB))),0) FROM `$table`").use{it.moveToFirst();it.getLong(0)}
+                    require(textBytes<=BackupLimits.MAX_JSON_BYTES)
+                }
+            }
+        }
+    }
+
     /** Checks the whole restored state, including values inserted while append-only triggers were disabled. */
-    fun validateState(db: SupportSQLiteDatabase) {
+    fun validateState(db: SupportSQLiteDatabase) = validateState(db, false)
+
+    /** Shared legacy domain checks plus candidate references; measured coverage is checked by the global auditor. */
+    internal fun validateMeasuredCandidateState(db: SupportSQLiteDatabase) = validateState(db, true)
+
+    private fun validateState(db: SupportSQLiteDatabase, candidate: Boolean) {
         db.query("PRAGMA foreign_key_check").use { require(!it.moveToFirst()) { "Invalid reference" } }
         SchemaGuards.validateRestored(db)
-        ReferenceSchema.validate(db)
+        if(candidate) ReferenceSchema.validateCandidateReferences(db) else ReferenceSchema.validate(db)
         LabContext.validateState(db)
         db.query("SELECT id,definition_json,clinical_signature,zone FROM regimen_version").use{c->while(c.moveToNext()) {
             val definition=RegimenDefinition.read(c.getString(1));require(definition.signature()==c.getString(2) && definition.zone==c.getString(3)){"Invalid regimen snapshot"}

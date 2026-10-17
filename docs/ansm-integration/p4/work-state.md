@@ -1,6 +1,6 @@
 # P4 工作状态
 
-当前：#57 DRAFT；暂存库同核只读SQL审计完整data309/domain140、共享35、原生源码编译、Period5/Privacy3/Python157均PASS。源c7daddf六CI/API26/29/35共享32项已归档PASS；当前新35项远端待验。全局/零效果操作/退役身份备份校验、正式实际用量/修订/预测未完成；新入口和备份接受OFF。主线f1e9b4d仍Room11、业务10；候选Room12仅在本PR。
+当前：#57 DRAFT；全局候选域/操作/因果链/退役验证完整data324（共享50）/原生源码编译/Period5/Privacy3/Python158 PASS。原生新50项仍NOT_RUN；源10480c6六CI与三API共享35项已归档PASS。容器独立库存编码、业务Schema11/精确恢复、真实Repository/观察协调/ABA与统一预测UI尚未完成；正式入口/精确恢复OFF。默认f1e9b4d Room11/业务10，候选Room12仅本PR。
 
 2026-10-16：IN_PROGRESS，生产库存未接线。当前复用P3的de26444，普通合入P1源945512a，不直接复制未合并源码。#54已受保护合并为c95cea1；#55待主线检查及更新。
 
@@ -55,3 +55,11 @@ Room12检查点0843450六项CI在push/PR全部SUCCESS；当前仍DRAFT，不以�
 2026-10-17续：重新核对默认分支f1e9b4d及开放PR，无其他库存/数据并行修改。源c7daddf六项必需CI在push/PR全SUCCESS；四份原生/JVM报告已校验官方SHA256、ZIP CRC且不含APK。API26/29数据各159、API35数据226，32项共享计量合同及10容器/6迁移/21引用合同在三API均PASS，PK124/domain140 PASS，证据projection-ci-evidence.json。新增暂存库SQL复用改动与3项合同仍在本地运行，不套用c7绿灯；正式备份接受、全局历史验证、实际记录入口和新预测仍未实施。
 
 暂存库复用最终本地验证PASS：data309/domain140、共享35、原生源码编译、PeriodStability5、PrivacyNoticeFacts3、Python157；所有实际运行零失败/错误/跳过。应用首个筛选只匹配PeriodStability，未把不存在的PrivacyBoundaryTest计为通过；随后明确补跑真实PrivacyNoticeFactsTest并保存独立XML摘要。源哈希/日志摘要见staging-local-evidence.json。共享SQL拒绝数值列文本，不恢复本地epoch，不修改源/暂存业务数据；PK、正式恢复、备份版本、数据库版本、预测及Manifest相对c7均无改动。当前提交新CI待验；继续全局候选恢复校验，#57保持DRAFT。
+
+续作§104已归档原文及SHA256（5128e10f…49c8）。10480c6最新六CI全PASS，三API共享35项实际PASS，见staging-ci-evidence.json。全局扫描首轮共享40 PASS；UNKNOWN无流水伪造与未来同余额实盘头两项负例均实际FAIL并留证。正在补序列化操作因果链并跑共享41，新源码尚未验收，正式恢复/入口继续OFF；下一步不停止为单容器研究报告，按global-audit-progress.md完成全局/恢复/真实接线。
+
+因果链候选41项共享JVM已PASS（global-chain-green-evidence.json）；未来头负例在重算链摘要仍合法后拒绝。新增修订号4294967297被getInt截成1、无分配真实剂量与冻结输入不一致两项负例实际FAIL（global-record-red-evidence.json），已补Int上界/同revision原事实精确位比对，43项共享回归正在运行。当前仍非完整全域/退役/备份接受验收，旧默认PRODUCT-only守卫保留。
+
+43项共享合同已PASS；GLOBAL候选仅引用校验遗漏既有VOIDED生命周期，真实负例FAIL（global-lifecycle-red-evidence.json）。当前复用BackupValidation原有全业务只读校验，不复制/放宽PackageCorrections守卫；补严格存储类型/总行数、跨参考事件操作UUID冲突及退役容器/记录整数ID复用。49项共享及原生源码编译正在运行，退役身份从不按original_handle重连当前新行；有分配却退休且仍连整数账本的状态拒绝。默认业务10/旧恢复拒绝新格式保持。
+
+当前全局候选最终本地完整data324、共享50、原生源码编译、时期稳定性5/隐私3及Python158全部PASS；机器证据global-full-local-evidence.json。GLOBAL逆操作越过独立实盘的负例确实FAIL，随后按操作因果链筛选逆操作之前的观察并重用原包装/原数量保护，转绿。所有红日志保留，不将新源码当已有原生CI成功。下一步实际实施stock-encoding-version-contract.md的独立编码及Schema11；不能仅删除拒绝门或只根据外部引用是否还在来解释Double库存。

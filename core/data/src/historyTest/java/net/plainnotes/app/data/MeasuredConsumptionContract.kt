@@ -393,7 +393,7 @@ abstract class MeasuredConsumptionContract {
 
     /** Trusted installed DDL plus synthetic business rows only; deliberately no local runtime table. */
     private fun <T> staged(block:(androidx.sqlite.db.SupportSQLiteDatabase)->T):T {
-        val trusted=raw.query("SELECT name,sql FROM sqlite_master WHERE type='table' AND sql IS NOT NULL ORDER BY name").use { c ->
+        val trusted=raw.query("SELECT tbl_name,sql FROM sqlite_master WHERE type IN ('table','index') AND sql IS NOT NULL ORDER BY CASE type WHEN 'table' THEN 0 ELSE 1 END,name").use { c ->
             buildList { while(c.moveToNext())if(c.getString(0) in DOMAIN_TABLES)add(c.getString(1)) }
         }
         val rows=RawData.dump(raw)
@@ -455,6 +455,213 @@ abstract class MeasuredConsumptionContract {
         rejects(ReferenceError.STALE_SCOPE){db.withTransaction{MeasuredConsumptionStore.auditProjection(db,b.scope.copy(epoch=UUID.randomUUID().toString()),b.containerUuid)}}
         assertEquals(before,RawData.dump(raw).toString())
         staged { staging ->assertTrue(MeasuredConsumptionStore.auditStagedProjection(staging,b.scope.dataset,b.containerUuid) is MeasureResult.Success)}
+    }
+
+    @Test fun globalAuditRejectsForgedUnknownOutcomeEvenWithoutALedgerEntry()=runBlocking {
+        val m=med();val b=box(m);val r=record(m);val op=consume(r,b,emptyList()).operationUuid
+        staged { staging ->
+            staging.execSQL("UPDATE measured_operation SET unknown_reason='FORGED_ZERO' WHERE operation_uuid=?",arrayOf(op))
+            try {MeasuredConsumptionStore.auditStagedDataset(staging);fail("Unallocated operation escaped global audit")}
+            catch(e:ReferenceFailure){assertEquals(ReferenceError.INVALID_SOURCE,e.code)}
+        }
+        assertEquals(0,count("supply_transaction"));assertEquals(r,db.dao().recordById(r.id))
+    }
+
+    @Test fun globalAuditIncludesEmptyAndIncompatibleUsesAlongsideExactConsumption()=runBlocking {
+        val m=med();val b=box(m)
+        consume(record(m),b,emptyList())
+        val incompatible=ConfirmedStockUse(b.containerUuid,b.presentationEventUuid,b.presentation.sha256,Quantity(BigDecimal.ONE,MeasureUnit.MG,Meaning(QuantityKind.ACTIVE_MASS,"SYNTHETIC unrelated ingredient")),true)
+        consume(record(m),b,listOf(incompatible));consume(record(m),b,listOf(use(b)))
+        val before=RawData.dump(raw).toString()
+        staged { staging ->
+            fun ddl()=staging.query("SELECT type,name,sql FROM sqlite_master ORDER BY type,name").use{c->buildList{while(c.moveToNext())add(listOf(c.getString(0),c.getString(1),if(c.isNull(2))null else c.getString(2)))}}
+            val data=RawData.dump(staging).toString();val schema=ddl()
+            val audited=MeasuredConsumptionStore.auditStagedDataset(staging)
+            assertEquals(1,audited.size);assertEquals(1L,audited.single().usedQuanta)
+            assertEquals(data,RawData.dump(staging).toString());assertEquals(schema,ddl())
+            assertEquals(1,staging.query("PRAGMA foreign_keys").use{it.moveToFirst();it.getInt(0)})
+        }
+        assertEquals(before,RawData.dump(raw).toString());assertEquals(1,count("supply_transaction"))
+    }
+
+    @Test fun globalAuditValidatesNoopCountAndCompleteInverseHistory()=runBlocking {
+        val m=med();val b=box(m)
+        db.withTransaction{MeasuredConsumptionStore.adjustRemaining(db,b.scope,b.container,b.containerUuid,b.presentationEventUuid,b.presentation.sha256,
+            Quantity(BigDecimal("28"),MeasureUnit.TABLET,meaning),true,UUID.randomUUID().toString(),at)}
+        val r=record(m);val consumed=consume(r,b,listOf(use(b)))
+        db.withTransaction{MeasuredConsumptionStore.reverseOriginal(db,b.scope,r,consumed.operationUuid,UUID.randomUUID().toString(),at)}
+        staged { staging ->assertEquals(0L,MeasuredConsumptionStore.auditStagedDataset(staging).single().usedQuanta)}
+        assertEquals(3,count("measured_operation"));assertEquals(2,count("supply_transaction"))
+    }
+
+    @Test fun globalAuditRejectsMissingActualConfirmationAndDoesNotRepairCorruptCache()=runBlocking {
+        val m=med();val b=box(m);consume(record(m),b,listOf(use(b)))
+        val before=RawData.dump(raw).toString()
+        staged { staging ->
+            staging.execSQL("DELETE FROM record_reference_capture WHERE kind='CONFIRM'")
+            try {MeasuredConsumptionStore.auditStagedDataset(staging);fail("Missing actual source accepted")}
+            catch(e:ReferenceFailure){assertEquals(ReferenceError.INVALID_SOURCE,e.code)}
+        }
+        staged { staging ->
+            staging.execSQL("UPDATE supply_container SET used_amount=10")
+            try {MeasuredConsumptionStore.auditStagedDataset(staging);fail("Corrupt cache accepted")}
+            catch(e:ReferenceFailure){assertEquals(ReferenceError.INVALID_SOURCE,e.code)}
+            assertEquals(10.0,staging.query("SELECT used_amount FROM supply_container").use{it.moveToFirst();it.getDouble(0)},0.0)
+        }
+        assertEquals(before,RawData.dump(raw).toString())
+    }
+
+    @Test fun globalAuditRejectsNoopCountWithAMissingCausalAnchor()=runBlocking {
+        val m=med();val b=box(m);val op=UUID.randomUUID().toString()
+        db.withTransaction{MeasuredConsumptionStore.adjustRemaining(db,b.scope,b.container,b.containerUuid,b.presentationEventUuid,b.presentation.sha256,
+            Quantity(BigDecimal("28"),MeasureUnit.TABLET,meaning),true,op,at)}
+        staged { staging ->
+            val row=ReferenceStore.row(staging,"measured_operation","operation_uuid=?",arrayOf(op))!!
+            val input=org.json.JSONObject(row.getString("input_json"));input.getJSONObject("execution").remove("ledger_head_id")
+            staging.execSQL("UPDATE measured_operation SET input_json=? WHERE operation_uuid=?",arrayOf(ReferencePayload.canonical(input),op))
+            try {MeasuredConsumptionStore.auditStagedDataset(staging);fail("No-op count with missing anchor accepted")}
+            catch(e:ReferenceFailure){assertEquals(ReferenceError.INVALID_SOURCE,e.code)}
+        }
+        assertEquals(0,count("supply_transaction"))
+    }
+
+    @Test fun globalAuditRejectsNoopObservationPointingAtAFutureSameBalanceHead()=runBlocking {
+        val m=med();val b=box(m);val observation=UUID.randomUUID().toString()
+        db.withTransaction{MeasuredConsumptionStore.adjustRemaining(db,b.scope,b.container,b.containerUuid,b.presentationEventUuid,b.presentation.sha256,
+            Quantity(BigDecimal("28"),MeasureUnit.TABLET,meaning),true,observation,at)}
+        val r=record(m);val consumed=consume(r,b,listOf(use(b)))
+        db.withTransaction{MeasuredConsumptionStore.reverseOriginal(db,b.scope,r,consumed.operationUuid,UUID.randomUUID().toString(),at)}
+        staged { staging ->
+            assertEquals(0L,MeasuredConsumptionStore.auditStagedDataset(staging).single().usedQuanta)
+            val row=ReferenceStore.row(staging,"measured_operation","operation_uuid=?",arrayOf(observation))!!
+            val input=org.json.JSONObject(row.getString("input_json"))
+            val future=staging.query("SELECT MAX(id) FROM supply_transaction").use{it.moveToFirst();it.getLong(0)}
+            input.getJSONObject("execution").put("ledger_head_id",future.toString())
+            staging.execSQL("UPDATE measured_operation SET input_json=? WHERE operation_uuid=?",arrayOf(ReferencePayload.canonical(input),observation))
+            val nodes=staging.query("SELECT operation_uuid,input_json FROM measured_operation ORDER BY rowid").use{c->buildList{while(c.moveToNext())add(c.getString(0) to org.json.JSONObject(c.getString(1)))}}
+            var previous:String?=null;var hash:String?=null
+            for((index,pair) in nodes.withIndex()) {
+                val (id,payload)=pair
+                payload.put("chain",org.json.JSONObject().put("sequence",(index+1).toString()).put("previous_operation_uuid",previous ?: org.json.JSONObject.NULL).put("previous_payload_sha256",hash ?: org.json.JSONObject.NULL))
+                val text=ReferencePayload.canonical(payload);staging.execSQL("UPDATE measured_operation SET input_json=? WHERE operation_uuid=?",arrayOf(text,id))
+                previous=id;hash=ReferencePayload.sha(text)
+            }
+            assertEquals(3,MeasuredOperationChain.validate(staging).size)
+            try {MeasuredConsumptionStore.auditStagedDataset(staging);fail("Future no-op anchor escaped the global audit")}
+            catch(e:ReferenceFailure){assertEquals(ReferenceError.INVALID_SOURCE,e.code)}
+        }
+        assertEquals(0.0,db.dao().container(b.container.id).used_amount,0.0)
+    }
+
+    @Test fun globalAuditRejectsOverflowedRevisionEvenWhenAnOperationHasNoAllocation()=runBlocking {
+        val m=med();val b=box(m);val r=record(m);val op=consume(r,b,emptyList()).operationUuid
+        staged { staging ->
+            staging.execSQL("UPDATE measured_operation SET record_revision=4294967297 WHERE operation_uuid=?",arrayOf(op))
+            try {MeasuredConsumptionStore.auditStagedDataset(staging);fail("Overflowed revision was truncated into a valid record revision")}
+            catch(e:ReferenceFailure){assertEquals(ReferenceError.INVALID_SOURCE,e.code)}
+        }
+        assertEquals(r,db.dao().recordById(r.id));assertEquals(0,count("supply_transaction"))
+    }
+
+    @Test fun globalAuditRejectsCurrentActualRecordThatDisagreesWithFrozenInput()=runBlocking {
+        val m=med();val b=box(m);val r=record(m);consume(r,b,emptyList())
+        staged { staging ->
+            staging.execSQL("UPDATE dose_record SET actual_dose=7.0 WHERE id=?",arrayOf(r.id))
+            try {MeasuredConsumptionStore.auditStagedDataset(staging);fail("Current factual dose disagrees with frozen original input")}
+            catch(e:ReferenceFailure){assertEquals(ReferenceError.INVALID_SOURCE,e.code)}
+        }
+        assertEquals(r,db.dao().recordById(r.id))
+    }
+
+    @Test fun globalAuditRejectsConsumedPackageMarkedVoidedWithoutLegalLifecycleEvidence()=runBlocking {
+        val m=med();val b=box(m);consume(record(m),b,listOf(use(b)))
+        staged { staging ->
+            staging.execSQL("UPDATE supply_container SET state='VOIDED' WHERE id=?",arrayOf(b.container.id))
+            try {MeasuredConsumptionStore.auditStagedDataset(staging);fail("Consumed package was accepted as VOIDED")}
+            catch(e:ReferenceFailure){assertEquals(ReferenceError.INVALID_SOURCE,e.code)}
+        }
+        assertEquals("IN_USE",db.dao().container(b.container.id).state);assertEquals(1,count("supply_transaction"))
+    }
+
+    @Test fun globalAuditKeepsRetiredContainerEvidenceSeparateFromAReusedLegacyIntegerId()=runBlocking {
+        val m=med();val b=box(m)
+        val incompatible=ConfirmedStockUse(b.containerUuid,b.presentationEventUuid,b.presentation.sha256,Quantity(BigDecimal.ONE,MeasureUnit.MG,Meaning(QuantityKind.ACTIVE_MASS,"SYNTHETIC unrelated")),true)
+        consume(record(m),b,listOf(incompatible))
+        raw.execSQL("DELETE FROM supply_container WHERE id=?",arrayOf(b.container.id))
+        raw.execSQL("INSERT INTO supply_container(id,medication_id,capacity,initial_used_amount,used_amount,state) VALUES(?,?,99,9,9,'IN_USE')",arrayOf(b.container.id,m))
+        assertTrue(ReferenceStore.row(raw,"reference_identity","uuid=?",arrayOf(b.containerUuid))!!.isNull("live_handle"))
+        val before=RawData.dump(raw).toString()
+        staged { staging ->assertTrue(MeasuredConsumptionStore.auditStagedDataset(staging).isEmpty())}
+        assertEquals(before,RawData.dump(raw).toString());assertEquals(9.0,db.dao().container(b.container.id).used_amount,0.0)
+    }
+
+    @Test fun globalAuditKeepsRetiredRecordFactsSeparateFromAnotherMedicationsReusedId()=runBlocking {
+        val m=med();val b=box(m);val r=record(m);consume(r,b,emptyList())
+        raw.execSQL("DELETE FROM dose_record WHERE id=?",arrayOf(r.id))
+        val other=med("SYNTHETIC unrelated new medication")
+        db.dao().record(r.copy(medication_id=other,actual_dose=7.0))
+        assertTrue(ReferenceStore.row(raw,"reference_identity","kind='RECORD' AND original_handle=?",arrayOf(r.id))!!.isNull("live_handle"))
+        staged { staging ->assertEquals(0L,MeasuredConsumptionStore.auditStagedDataset(staging).single().usedQuanta)}
+        assertEquals(other,db.dao().recordById(r.id)!!.medication_id);assertEquals(7.0,db.dao().recordById(r.id)!!.actual_dose!!,0.0)
+    }
+
+    @Test fun globalAuditRejectsRetiredIdentityAttachedToLiveIntegerLedgerHistory()=runBlocking {
+        val m=med();val b=box(m);consume(record(m),b,listOf(use(b)))
+        staged { staging ->
+            staging.execSQL("UPDATE reference_identity SET live_handle=NULL WHERE uuid=?",arrayOf(b.containerUuid))
+            try {MeasuredConsumptionStore.auditStagedDataset(staging);fail("Retired evidence attached to current integer rows")}
+            catch(e:ReferenceFailure){assertEquals(ReferenceError.INVALID_SOURCE,e.code)}
+        }
+        assertEquals(1.0,db.dao().container(b.container.id).used_amount,0.0)
+    }
+
+    @Test fun globalAuditAcceptsRealVoidedUnallocatedUseWithoutInventingConsumption()=runBlocking {
+        val m=med();val b=box(m)
+        db.withTransaction{PackageCorrections.void(raw,db.dao(),b.container.id,at)}
+        val result=consume(record(m),b,listOf(use(b)));assertEquals("VOIDED",result.issue)
+        staged { staging ->assertEquals(0L,MeasuredConsumptionStore.auditStagedDataset(staging).single().usedQuanta)}
+        assertEquals(0,count("supply_transaction"));assertEquals("VOIDED",db.dao().container(b.container.id).state)
+    }
+
+    @Test fun globalAuditRejectsOperationUuidCollidingWithAReferenceEvent()=runBlocking {
+        val m=med();val b=box(m);val op=consume(record(m),b,emptyList()).operationUuid
+        staged { staging ->
+            staging.execSQL("UPDATE measured_operation SET operation_uuid=? WHERE operation_uuid=?",arrayOf(b.presentationEventUuid,op))
+            try {MeasuredConsumptionStore.auditStagedDataset(staging);fail("Cross-domain operation UUID collision accepted")}
+            catch(e:ReferenceFailure){assertEquals(ReferenceError.INVALID_SOURCE,e.code)}
+        }
+        assertEquals(1,count("measured_operation"));assertEquals(0,count("supply_transaction"))
+    }
+
+    @Test fun globalAuditRejectsInverseThatWouldRewriteALaterIndependentNoopCount()=runBlocking {
+        val m=med();val b=box(m);val r=record(m);val consumed=consume(r,b,listOf(use(b)))
+        val inverse=UUID.randomUUID().toString()
+        db.withTransaction{MeasuredConsumptionStore.reverseOriginal(db,b.scope,r,consumed.operationUuid,inverse,at)}
+        val observation=UUID.randomUUID().toString()
+        db.withTransaction{MeasuredConsumptionStore.adjustRemaining(db,b.scope,db.dao().container(b.container.id),b.containerUuid,b.presentationEventUuid,b.presentation.sha256,
+            Quantity(BigDecimal("28"),MeasureUnit.TABLET,meaning),true,observation,at)}
+        staged { staging ->
+            assertEquals(0L,MeasuredConsumptionStore.auditStagedDataset(staging).single().usedQuanta)
+            val row=ReferenceStore.row(staging,"measured_operation","operation_uuid=?",arrayOf(observation))!!
+            val changed=org.json.JSONObject(row.getString("input_json"));val request=changed.getJSONObject("request")
+            request.put("expected_used_quanta","1").put("expected_state","IN_USE").put("remaining_quanta","55")
+            request.getJSONObject("remaining_input").put("value","27.5");request.getJSONObject("remaining_stock").put("value","27.5")
+            val originalEntry=staging.query("SELECT id FROM supply_transaction WHERE kind='CONSUME'").use{it.moveToFirst();it.getLong(0)}
+            changed.getJSONObject("execution").put("ledger_head_id",originalEntry.toString())
+            staging.execSQL("UPDATE measured_operation SET request_sha256=?,input_json=? WHERE operation_uuid=?",arrayOf(ReferencePayload.sha(ReferencePayload.canonical(request)),ReferencePayload.canonical(changed),observation))
+            // Make every hash and prefix internally valid; the independent count still prohibits this inverse.
+            var previous:String?=null;var hash:String?=null
+            for((index,id) in listOf(consumed.operationUuid,observation,inverse).withIndex()) {
+                val payload=org.json.JSONObject(ReferenceStore.row(staging,"measured_operation","operation_uuid=?",arrayOf(id))!!.getString("input_json"))
+                payload.put("chain",org.json.JSONObject().put("sequence",(index+1).toString()).put("previous_operation_uuid",previous ?: org.json.JSONObject.NULL).put("previous_payload_sha256",hash ?: org.json.JSONObject.NULL))
+                val text=ReferencePayload.canonical(payload);staging.execSQL("UPDATE measured_operation SET input_json=? WHERE operation_uuid=?",arrayOf(text,id))
+                previous=id;hash=ReferencePayload.sha(text)
+            }
+            assertEquals(3,MeasuredOperationChain.validate(staging).size)
+            try {MeasuredConsumptionStore.auditStagedDataset(staging);fail("Inverse silently rewrote the independent count")}
+            catch(e:ReferenceFailure){assertEquals(ReferenceError.INVALID_SOURCE,e.code)}
+        }
+        assertEquals(0.0,db.dao().container(b.container.id).used_amount,0.0);assertEquals(2,count("supply_transaction"))
     }
 
 }

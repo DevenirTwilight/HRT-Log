@@ -55,7 +55,7 @@ internal object ReferenceSchema {
         "reference_snapshot" to "length(NEW.uuid)=36 AND NEW.kind IN ('PRODUCT','PRESENTATION') AND length(NEW.namespace)>0 AND length(NEW.source_version)>0 AND length(NEW.payload_json) BETWEEN 2 AND 65536 AND length(NEW.payload_sha256)=64",
         "reference_event" to "length(NEW.operation_uuid)=36 AND NEW.revision BETWEEN 1 AND 2147483647 AND NEW.action IN ('LINK','UNLINK','CORRECT') AND length(NEW.request_sha256)=64 AND NEW.created_utc>=0 AND EXISTS(SELECT 1 FROM reference_identity i WHERE i.uuid=NEW.subject_uuid AND i.dataset_uuid=NEW.dataset_uuid AND i.kind IN ('MEDICATION','CONTAINER')) AND ((NEW.action='UNLINK' AND NEW.snapshot_uuid IS NULL) OR (NEW.action IN ('LINK','CORRECT') AND EXISTS(SELECT 1 FROM reference_snapshot s JOIN reference_identity i ON i.uuid=NEW.subject_uuid WHERE s.uuid=NEW.snapshot_uuid AND s.dataset_uuid=NEW.dataset_uuid AND s.kind=CASE i.kind WHEN 'MEDICATION' THEN 'PRODUCT' ELSE 'PRESENTATION' END))) AND ((NEW.revision=1 AND NEW.previous_uuid IS NULL) OR EXISTS(SELECT 1 FROM reference_event p WHERE p.operation_uuid=NEW.previous_uuid AND p.subject_uuid=NEW.subject_uuid AND p.dataset_uuid=NEW.dataset_uuid AND p.revision=NEW.revision-1))",
         "record_reference_capture" to "length(NEW.uuid)=36 AND NEW.record_revision BETWEEN 1 AND 2147483647 AND NEW.capture_revision BETWEEN 1 AND 2147483647 AND length(NEW.payload_sha256)=64 AND NEW.kind IN ('CONTEXT','CONFIRM','CLEAR') AND EXISTS(SELECT 1 FROM reference_identity i WHERE i.uuid=NEW.record_uuid AND i.kind='RECORD' AND i.dataset_uuid=NEW.dataset_uuid AND (i.live_handle IS NULL OR EXISTS(SELECT 1 FROM dose_record d WHERE d.id=i.live_handle AND NEW.record_revision<=d.revision)) AND (NEW.context_event_uuid IS NULL OR EXISTS(SELECT 1 FROM reference_event e WHERE e.operation_uuid=NEW.context_event_uuid AND e.subject_uuid=i.owner_uuid AND e.dataset_uuid=NEW.dataset_uuid))) AND ((NEW.kind='CONFIRM' AND EXISTS(SELECT 1 FROM reference_snapshot s JOIN reference_identity c ON c.uuid=NEW.container_uuid JOIN reference_identity r ON r.uuid=NEW.record_uuid WHERE s.uuid=NEW.actual_snapshot_uuid AND s.kind='PRESENTATION' AND s.dataset_uuid=NEW.dataset_uuid AND c.kind='CONTAINER' AND c.dataset_uuid=NEW.dataset_uuid AND c.owner_uuid=r.owner_uuid)) OR (NEW.kind IN ('CONTEXT','CLEAR') AND NEW.actual_snapshot_uuid IS NULL AND NEW.container_uuid IS NULL))",
-        "measured_operation" to "length(NEW.operation_uuid)=36 AND length(NEW.request_sha256)=64 AND NEW.kind IN ('CONSUME','REVERSE','ADJUST') AND NEW.created_utc>=0 AND ((NEW.kind='ADJUST' AND NEW.record_uuid IS NULL AND NEW.record_revision IS NULL) OR (NEW.kind IN ('CONSUME','REVERSE') AND NEW.record_revision>=1 AND EXISTS(SELECT 1 FROM reference_identity i WHERE i.uuid=NEW.record_uuid AND i.kind='RECORD' AND i.dataset_uuid=NEW.dataset_uuid)))",
+        "measured_operation" to "length(NEW.operation_uuid)=36 AND length(NEW.request_sha256)=64 AND NEW.kind IN ('CONSUME','REVERSE','ADJUST') AND NEW.created_utc>=0 AND ((NEW.kind='ADJUST' AND NEW.record_uuid IS NULL AND NEW.record_revision IS NULL) OR (NEW.kind IN ('CONSUME','REVERSE') AND NEW.record_revision BETWEEN 1 AND 2147483647 AND EXISTS(SELECT 1 FROM reference_identity i WHERE i.uuid=NEW.record_uuid AND i.kind='RECORD' AND i.dataset_uuid=NEW.dataset_uuid)))",
         "measured_allocation" to "length(NEW.uuid)=36 AND length(NEW.quantity)>0 AND length(NEW.unit)>0 AND EXISTS(SELECT 1 FROM measured_operation o WHERE o.operation_uuid=NEW.operation_uuid AND o.dataset_uuid=NEW.dataset_uuid) AND EXISTS(SELECT 1 FROM reference_identity c JOIN supply_transaction t ON t.id=NEW.ledger_entry_id WHERE c.uuid=NEW.container_uuid AND c.kind='CONTAINER' AND c.dataset_uuid=NEW.dataset_uuid AND (c.live_handle=t.container_id OR c.live_handle IS NULL AND c.original_handle=t.container_id)) AND EXISTS(SELECT 1 FROM reference_event e WHERE e.operation_uuid=NEW.presentation_event_uuid AND e.subject_uuid=NEW.container_uuid AND e.dataset_uuid=NEW.dataset_uuid) AND (NEW.reverses_uuid IS NULL OR EXISTS(SELECT 1 FROM measured_allocation a WHERE a.uuid=NEW.reverses_uuid AND a.dataset_uuid=NEW.dataset_uuid AND a.container_uuid=NEW.container_uuid AND a.quantity=NEW.quantity AND a.unit=NEW.unit))"
     )
     private fun initializeRuntime(db: SupportSQLiteDatabase) {
@@ -97,7 +97,12 @@ internal object ReferenceSchema {
         db.execSQL("INSERT OR IGNORE INTO reference_runtime(id,dataset_uuid,epoch) VALUES(1,?,?)", arrayOf(dataset ?: UUID.randomUUID().toString(), UUID.randomUUID().toString()))
     }
 
-    fun validate(db: SupportSQLiteDatabase) {
+    fun validate(db: SupportSQLiteDatabase) = validateReferences(db, false)
+
+    /** Candidate reference graph only; not a complete measured backup acceptance gate. */
+    internal fun validateCandidateReferences(db: SupportSQLiteDatabase) = validateReferences(db, true)
+
+    private fun validateReferences(db: SupportSQLiteDatabase, candidate: Boolean) {
         if (!exists(db)) return
         db.query("SELECT COUNT(*) FROM reference_dataset").use { require(it.moveToFirst() && it.getInt(0) <= 1) }
         predicates.forEach { (table, predicate) ->
@@ -111,8 +116,11 @@ internal object ReferenceSchema {
             require(canonical == c.getString(3) && ReferencePayload.sha(canonical) == c.getString(4))
             require(json.getString("kind") == c.getString(0) && json.getString("namespace") == c.getString(1) && json.getString("source_version") == c.getString(2))
             // P1 product linkage only. Presentation/measurement activation has its own reviewed P3/P4 validator.
-            require(c.getString(0) == "PRODUCT") { "Presentation storage not yet enabled" }
-            ReferencePayload.validateProduct(json)
+            if(candidate && c.getString(0)=="PRESENTATION") PackageMeasurementPayload.read(canonical)
+            else {
+                require(c.getString(0) == "PRODUCT") { "Presentation storage not yet enabled" }
+                ReferencePayload.validateProduct(json)
+            }
         } }
         db.query("SELECT * FROM reference_event").use { c -> while(c.moveToNext()) {
             val event=ReferenceStore.row(db,"reference_event","operation_uuid=?",arrayOf(c.getString(c.getColumnIndexOrThrow("operation_uuid"))))!!
@@ -128,7 +136,7 @@ internal object ReferenceSchema {
             val row=ReferenceStore.row(db,"record_reference_capture","uuid=?",arrayOf(c.getString(c.getColumnIndexOrThrow("uuid"))))!!
             require(ReferenceStore.captureHash(row)==row.getString("payload_sha256"))
         } }
-        db.query("SELECT 1 FROM measured_operation LIMIT 1").use { require(!it.moveToFirst()) { "Measured inventory not yet enabled" } }
+        if(!candidate) db.query("SELECT 1 FROM measured_operation LIMIT 1").use { require(!it.moveToFirst()) { "Measured inventory not yet enabled" } }
         db.query("SELECT 1 FROM reference_event GROUP BY subject_uuid HAVING MIN(revision)!=1 OR COUNT(*)!=MAX(revision) LIMIT 1").use { require(!it.moveToFirst()) }
         db.query("SELECT 1 FROM record_reference_capture GROUP BY record_uuid,record_revision HAVING MIN(capture_revision)!=1 OR COUNT(*)!=MAX(capture_revision) LIMIT 1").use { require(!it.moveToFirst()) }
     }

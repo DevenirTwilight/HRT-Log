@@ -25,6 +25,8 @@ APPROVED_STOCK_QUANTUM = Path('core/domain/src/main/kotlin/net/plainnotes/app/do
 APPROVED_PACKAGE_CODEC = Path('core/data/src/main/java/net/plainnotes/app/data/PackageMeasurementPayload.kt')
 APPROVED_CONTAINER_STORE = Path('core/data/src/main/java/net/plainnotes/app/data/MeasuredContainerStore.kt')
 APPROVED_USE_PAYLOAD = Path('core/data/src/main/java/net/plainnotes/app/data/MeasuredUsePayload.kt')
+APPROVED_OPERATION_CHAIN = Path('core/data/src/main/java/net/plainnotes/app/data/MeasuredOperationChain.kt')
+CHAIN_IMPORTS = ['import androidx.sqlite.db.SupportSQLiteDatabase', 'import org.json.JSONObject']
 APPROVED_CONSUMPTION_STORE = Path('core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt')
 CONSUMPTION_IMPORTS = ['import android.database.Cursor', 'import androidx.sqlite.db.SupportSQLiteDatabase', 'import net.plainnotes.app.domain.measurement.*', 'import net.plainnotes.app.domain.stock.StockQuantum', 'import org.json.JSONArray', 'import org.json.JSONObject', 'import java.math.BigDecimal', 'import java.time.Instant', 'import java.util.UUID']
 USE_IMPORTS = ['import net.plainnotes.app.domain.measurement.*', 'import net.plainnotes.app.domain.stock.StockQuantum', 'import org.json.JSONArray', 'import org.json.JSONObject']
@@ -77,7 +79,14 @@ def isolation():
     consumption_imports = [line for line in consumption_text.splitlines() if line.startswith('import ')]
     consumption_forbidden = [token for token in STORE_FORBIDDEN_APIS if token in consumption_text]
     consumption_valid = not consumption_store.exists() or (consumption_imports == CONSUMPTION_IMPORTS and not consumption_forbidden)
-    return {'status': 'PASS' if consumption_valid and use_valid and store_valid and package_valid and stock_valid and not offenders and imports == PURE_IMPORTS and core.is_file() and production_imports == PURE_IMPORTS and not forbidden else 'FAIL',
+    chain = ROOT / APPROVED_OPERATION_CHAIN
+    chain_text = chain.read_text() if chain.is_file() else ''
+    chain_imports = [line for line in chain_text.splitlines() if line.startswith('import ')]
+    chain_forbidden = [token for token in STORE_FORBIDDEN_APIS if token in chain_text]
+    chain_valid = not chain.exists() or (chain_imports == CHAIN_IMPORTS and not chain_forbidden)
+    return {'status': 'PASS' if chain_valid and consumption_valid and use_valid and store_valid and package_valid and stock_valid and not offenders and imports == PURE_IMPORTS and core.is_file() and production_imports == PURE_IMPORTS and not forbidden else 'FAIL',
+            'approved_operation_chain': str(APPROVED_OPERATION_CHAIN) if chain.exists() else None,
+            'chain_imports': chain_imports, 'chain_forbidden_apis': chain_forbidden,
             'approved_consumption_store': str(APPROVED_CONSUMPTION_STORE) if consumption_store.exists() else None,
             'consumption_imports': consumption_imports, 'consumption_forbidden_apis': consumption_forbidden, 'approved_use_payload': str(APPROVED_USE_PAYLOAD) if use_payload.exists() else None,
             'use_imports': use_imports, 'use_forbidden_apis': use_forbidden, 'approved_container_store': str(APPROVED_CONTAINER_STORE) if container_store.exists() else None,
