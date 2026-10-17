@@ -6,11 +6,11 @@ HRT Log is a personal record and reminder app. It does not diagnose, choose dose
 concentration curves are conditional literature-based estimates, not personal measurements.
 
 Version layers (do not confuse them):
-- **Default branch code** (this repository): versionCode 26 / 0.2.0, Room database runtime version **10**
+- **Default branch code** (this repository): versionCode 29 / 0.2.0, Room database runtime version **11**
   (including disabled attachment metadata tables), encrypted backup `PNBAK1` structured serialization **9**.
-- **Privately delivered build 26**: signed with the official key and handed to the maintainer only; it is not a
-  public release and is a different object from whatever the default branch currently builds.
-- **Public release**: [v0.2.0](https://github.com/DevenirTwilight/HRT-Log/releases/tag/v0.2.0), versionCode 5 (source `462da22`), much older than the default branch.
+- **Privately delivered builds 26–28**: signed with the official key and handed to the maintainer only; they are
+  not public releases. See [`docs/delivery/ledger.json`](docs/delivery/ledger.json).
+- **Public release**: [v0.2.0](https://github.com/DevenirTwilight/HRT-Log/releases/tag/v0.2.0), rebuilt 2026-10-17 as versionCode 29 (source `76627bf`, full flavor only). It replaced the earlier build 5 (source `462da22`), archived in [`docs/releases/`](docs/releases/0.2.0-build5-superseded.md). Later default-branch commits are not in it.
 - **Open pull requests** are unmerged and not part of any build until merged.
 Current work and verification: [`docs/HANDOFF.md`](docs/HANDOFF.md);
 feature status and unapproved candidates: [`docs/BACKLOG.md`](docs/BACKLOG.md).
