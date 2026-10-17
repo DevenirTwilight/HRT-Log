@@ -17,3 +17,5 @@
 最新本地验收：选定91项PASS/零失败/跳过，含原真实Room引用UI16、历史引用UI12、完整32参数×3对比度矩阵、新外链四语12、数据/导航9、时期稳定性5/隐私3及两项翻译。384张实际渲染合成截图，8张代表图入库；观察最小宽/2×字号繁中高对比RCP/Notice均可见、无关键标题截断。新资源完整性、页面证据与正文/权利不混同、URL注入、无用户动作/无权限/无浏览器/取消均覆盖。证据ui-matrix-evidence.json含全量截图/源码指纹。真机、人工TalkBack、实际MainActivity原生浏览器仍NOT_RUN；最终新HEAD六CI待验。PR58仍草稿，未经负责人审核不合并；04B临床原文/正式来源注册表继续OFF。
 
 逐商品覆盖台账已生成：product-coverage.json以冻结ANSM-01输入/原生成器校验，58 CIS/64成分行/96 CIP全部可追溯到原始行摘要和文档页面观察；不重新抓取或修改冻结目录。每项正文/译文/供应/加强监测缺失及发布OFF独立记录，不以旧页面VERIFIED洗白临床内容。新增篡改身份/正文状态/权利的负例，全部Python160 PASS。Kotlin源码与91项UI/逻辑验收时一致；本次只增维护者离线审计脚本/文档，不进Android资源。新HEAD CI仍待验。
+
+源fda7782的push/PR六项必需CI全部SUCCESS；五份报告官方SHA256与ZIP CRC已核实，无APK。实际CI生成384张合成截图；App全量1400零失败/205既有条件跳过，data243/reminder20零失败；新文档12操作+6数据+3导航、矩阵32、Period5、Privacy3均零失败/跳过。API26/29 data114/app70均零失败/跳过；API35 data181零失败/跳过，app264零失败/8既有条件跳过。完整机器证据ci-evidence.json。该成功属于fda7782源码；本次仅证据/交接提交的新HEAD需自己的六检查。官方分发仍OFF；原生MainActivity浏览器/实机/TalkBack仍NOT_RUN，不自动合并。
