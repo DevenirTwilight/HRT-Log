@@ -686,7 +686,7 @@ const val BACKFILL_MAX_DAYS=731L
      */
     suspend fun restoreBackup(data:ByteArray,password:CharArray,today:LocalDate=LocalDate.now())=withContext(Dispatchers.IO) {
         val plain=BackupCodec.decrypt(data,password)
-        val json=try{String(plain,Charsets.UTF_8).let{BackupLimits.checkJson(it);JSONObject(it)}}finally{plain.fill(0)}
+        val json=try{BackupJsonReader.read(plain)}finally{plain.fill(0)}
         val schema=RecordBackupCompatibility.readVersion(json)
         val tables=json.getJSONObject("tables")
         require(schema>=10 || ReferenceSchema.businessTables.none {tables.has(it)}) { "Misdeclared reference backup version" }

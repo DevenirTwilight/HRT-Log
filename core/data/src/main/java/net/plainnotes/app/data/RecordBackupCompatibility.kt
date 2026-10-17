@@ -18,7 +18,13 @@ internal object RecordBackupCompatibility {
         for(i in 0 until rows.length()) {
             val row=rows.getJSONObject(i)
             if(schema<11)require(!row.has("inventory_encoding")) {"Misdeclared inventory backup version"}
-            else require(row.has("inventory_encoding") && row.get("inventory_encoding") is String && row.getString("inventory_encoding") in setOf(InventoryEncoding.LEGACY,InventoryEncoding.EXACT)) {"Missing or invalid inventory encoding"}
+            else {
+                require(row.has("inventory_encoding") && row.get("inventory_encoding") is String && row.getString("inventory_encoding") in setOf(InventoryEncoding.LEGACY,InventoryEncoding.EXACT)) {"Missing or invalid inventory encoding"}
+                if(row.getString("inventory_encoding")==InventoryEncoding.EXACT)for(column in listOf("capacity","initial_used_amount","used_amount")) {
+                    val value=row.get(column)
+                    require((value is Int || value is Long) && (value as Number).toLong() in 0..InventoryEncoding.MAX_EXACT_INTEGER) {"Non-integer exact inventory projection"}
+                }
+            }
         }
     }
     val columns = mapOf(

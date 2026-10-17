@@ -1,0 +1,11 @@
+{
+  "status": "FAIL",
+  "totals": {
+    "tests": 333,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0
+  },
+  "reason": "Parser correctly rejected invalid trailing content; the new test captured its business baseline before referenceScope initialized its own dataset. Move setup before the baseline; retain both business and epoch equality assertions.",
+  "log_sha256": "871e10042705d9c423e9fccfcf6f529f6f9a60838fb0b55412680f97ef7a662d"
+}

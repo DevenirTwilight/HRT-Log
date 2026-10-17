@@ -759,4 +759,57 @@ abstract class MeasuredConsumptionContract {
         assertEquals("SEALED",db.dao().container(id).state);assertEquals(2,count("trash_item"))
     }
 
+    @Test fun malformedTrailingJsonCannotRestoreOrRetireTheActiveDataset()=runBlocking {
+        val repository=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=db})
+        val m=med();repository.addContainers(m,28.0,1,true)
+        val password="SYNTHETIC strict input fixture".toCharArray()
+        val valid=repository.exportBackup(password)
+        val trailing=String(BackupCodec.decrypt(valid,password),Charsets.UTF_8)+" SYNTHETIC_TRAILING_CONTENT"
+        val bad=BackupCodec.encrypt(trailing.toByteArray(Charsets.UTF_8),password)
+        val scope=repository.referenceScope();val before=RawData.dump(raw).toString()
+        var rejected=false
+        try {repository.restoreBackup(bad,password)}catch(_:BackupCodec.BadFile){rejected=true}
+        assertTrue("Trailing JSON content was accepted as a complete backup",rejected)
+        assertEquals(before,RawData.dump(raw).toString());assertEquals(scope,repository.referenceScope())
+        valid.fill(0);bad.fill(0);password.fill('\u0000')
+    }
+
+    @Test fun strictInputRetainsProjectionLexemesUntilTheirIntegerContractIsChecked()=runBlocking {
+        val m=med();box(m)
+        assertEquals(net.plainnotes.app.domain.stock.StockQuantum.MAX_QUANTA,InventoryEncoding.MAX_EXACT_INTEGER)
+        for(token in listOf("1.0000000000000001","1e0","-0")) {
+            val source=RawData.dump(raw).toString().replace("\"used_amount\":0","\"used_amount\":"+token)
+            val parsed=BackupJsonReader.read(source)
+            try {RecordBackupCompatibility.validateInventoryVersion(11,parsed);fail("Non-canonical projection accepted: $token")}
+            catch(e:IllegalArgumentException){assertTrue(e.message.orEmpty().contains("Non-integer exact inventory"))}
+        }
+        val valid=BackupJsonReader.read(RawData.dump(raw).toString())
+        RecordBackupCompatibility.validateInventoryVersion(11,valid)
+        assertTrue(valid.getJSONArray("supply_container").getJSONObject(0).get("capacity") is Int)
+    }
+
+    @Test fun strictJsonRejectsAmbiguousSyntaxDuplicateFieldsAndInvalidUtf8()=runBlocking {
+        val bad=listOf("{\"x\":1} trailing","{\"x\":1,\"x\":2}","{\"x\":01}","{\"x\":NaN}","{\"x\":Infinity}","{/*comment*/\"x\":1}","{'x':1}","{\"x\":1,}")
+        for(text in bad) {
+            try {BackupJsonReader.read(text);fail("Invalid JSON accepted: $text")}
+            catch(_:BackupCodec.BadFile){}
+        }
+        try {BackupJsonReader.read(byteArrayOf(123,34,120,34,58,34,0xc3.toByte(),34,125));fail("Malformed UTF-8 accepted")}
+        catch(_:BackupCodec.BadFile){}
+        val result=BackupJsonReader.read("{\"x\":0.1,\"n\":-0,\"unicode\":\"é µg\"}")
+        assertEquals(BigDecimal("0.1"),result.get("x"));assertTrue(result.get("n") is BigDecimal)
+        assertEquals("é µg",result.getString("unicode"))
+    }
+
+    @Test fun strictJsonEnforcesArrayFieldAndDepthBudgetsBeforeBuildingAnUnboundedTree()=runBlocking {
+        val arrays="{\"x\":["+List(BackupLimits.MAX_ROWS+1){"0"}.joinToString(",")+"]}"
+        val fields="{"+(0..256).joinToString(","){"\"key$it\":0"}+"}"
+        val deep="{\"x\":"+"[".repeat(40)+"0"+"]".repeat(40)+"}"
+        for(text in listOf(arrays,fields,deep)) {
+            try {BackupJsonReader.read(text);fail("JSON resource budget bypassed")}
+            catch(_:BackupCodec.TooLarge){}
+        }
+        assertEquals(1,BackupJsonReader.read("{\"x\":[0]}").getJSONArray("x").length())
+    }
+
 }

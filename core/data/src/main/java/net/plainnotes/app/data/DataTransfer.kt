@@ -73,7 +73,11 @@ internal object RawData {
                     for (i in 0 until c.columnCount) when (c.getType(i)) {
                         Cursor.FIELD_TYPE_NULL -> put(c.getColumnName(i), JSONObject.NULL)
                         Cursor.FIELD_TYPE_INTEGER -> put(c.getColumnName(i), c.getLong(i))
-                        Cursor.FIELD_TYPE_FLOAT -> put(c.getColumnName(i), c.getDouble(i))
+                        Cursor.FIELD_TYPE_FLOAT -> {
+                            val exact= t=="supply_container" && c.getColumnIndex("inventory_encoding")>=0 && c.getString(c.getColumnIndex("inventory_encoding"))==InventoryEncoding.EXACT
+                            if(exact && c.getColumnName(i) in setOf("capacity","initial_used_amount","used_amount"))put(c.getColumnName(i),InventoryEncoding.exactInteger(c.getDouble(i)))
+                            else put(c.getColumnName(i),c.getDouble(i))
+                        }
                         Cursor.FIELD_TYPE_BLOB -> put(c.getColumnName(i), "b64:" + Base64.encodeToString(c.getBlob(i), Base64.NO_WRAP))
                         else -> put(c.getColumnName(i), c.getString(i))
                     }

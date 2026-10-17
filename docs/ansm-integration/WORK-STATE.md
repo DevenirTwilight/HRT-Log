@@ -15,6 +15,8 @@
 
 #45/#48/#50及#51经#52桥接已合并；P0/P1/P2/P3均保护合并，无管理员绕过。当前默认运行仍Room11，Room12仅在#57待验源码，不称已部署。医疗附件/网络/PK/签名/版本/发布不动，实机/断电/TalkBack NOT_RUN。#57不能自动合并未完成的正式库存接线。资料UI医疗中心缺失部分审计见p2/medical-ui-status-2026-10-16.md。
 
+严格JSON检查点：data334项零失败/跳过，Android测试源码编译PASS（共享计量60项原生运行NOT_RUN）。公开恢复已拒绝尾随JSON、重复键、无效UTF-8；精确桥接字段必须为有界整数，不能先经Double舍入。PNBAK1外层不变，完整精确库存导出/恢复仍OFF。3343724远端API26/29 PASS；API35 FAIL为MigrationBaselineTest残留业务10断言（实际11），本次改为明确11并新增旧容器LEGACY验证，未删除原断言。新CI待运行，不能称六检查通过。
+
 ## 历史开发记录（当时状态，当前以上表为准）
 
 P0完整CI证据见p0-ci-evidence.json。下载的五份报告已校验官方digest/CRC；API26/29/35新增恢复合同各7/7通过；PeriodStability5/5、PK124/124通过，旧条件SKIPPED如实保留。物理设备/断电测试NOT_RUN，无签名/发布/APK交付。

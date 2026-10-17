@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "tests": {
+    "tests": 334,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "android_test_source_compile": "PASS",
+  "android_runtime_new_60": "NOT_RUN",
+  "log_sha256": "1c271419ee1dd9ad602d1bd3469ad37e9e24e3e02c95763817fcc1151729c5d1",
+  "scope": "Strict UTF-8/JSON and exact integer input; public measured restore remains OFF",
+  "prior_ci_3343724": {
+    "api35": "FAIL",
+    "failure": "MigrationBaselineTest expected business10, actual11; corrected explicit version and added legacy encoding assertion",
+    "api26": "PASS",
+    "api29": "PASS"
+  }
+}

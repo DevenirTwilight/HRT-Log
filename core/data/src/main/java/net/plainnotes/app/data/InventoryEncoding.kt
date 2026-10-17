@@ -6,6 +6,12 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 internal object InventoryEncoding {
     const val LEGACY="LEGACY_SCALAR"
     const val EXACT="INTEGER_QUANTA_V1"
+    // Representation contract of the existing SQLite REAL bridge, not a reconstructed legacy precision.
+    const val MAX_EXACT_INTEGER=9_007_199_254_740_991L
+    fun exactInteger(value:Double):Long {
+        require(value.isFinite() && value>=0 && value<=MAX_EXACT_INTEGER && value.toLong().toDouble()==value)
+        return value.toLong()
+    }
     fun present(db:SupportSQLiteDatabase)=db.query("PRAGMA table_info(supply_container)").use { c ->
         var found=false;while(c.moveToNext())if(c.getString(1)=="inventory_encoding")found=true;found
     }
