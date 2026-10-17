@@ -1,0 +1,7 @@
+# Manual synthetic performance diagnostic
+
+Run `python3 scripts/run_ansm_inventory_performance.py` with the normal Android/JDK build environment after any other Gradle process finishes. `ANSM_PERF_USES` defaults to100 and accepts10…5000. The runner refuses to overwrite existing source and removes its temporary JVM test source in `finally`; neither this template nor its reports enter the app or normal CI source set. No new dependency or Gradle/CI edit.
+
+The measured operation includes the real scoped ticket and Repository transaction. Cases include five/ten years of four facts/day with the last N using exact inventory, plus 2N exact-only operations. Reports separate setup, actual writes, shared forecast and full audit. JVM/framework SQLite timings diagnose algorithmic cost; they are not SQLCipher or physical-device latency acceptance, and mixed history does not prove all-exact ten-year scalability.
+
+Status: initial manual diagnostic PASS, source f20cf79, archived in baseline-f20cf79/. This proves fixture operations and measured timings only; no production latency budget or device acceptance is claimed. Exact-history growth shows an optimization concern; full acceptance remains incomplete. Reports appear under `core/data/build/reports/ansm-p4-performance/`. Full exact ten-year and 32MiB/100000-row capacity limits remain explicit acceptance items; do not raise restore safety budgets just to make a benchmark pass.
