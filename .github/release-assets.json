@@ -1,34 +1,29 @@
 {
   "release_id": 404602730,
   "tag": "v0.2.0",
-  "source_commit": "462da22e064b97a7799c87770ea49ebeb9521e5c",
+  "source_commit": "76627bfe215987122666b38ea7a42ee08731cdde",
   "version_name": "0.2.0",
-  "version_code": 5,
+  "version_code": 29,
   "assets": [
     {
       "name": "plainnotes-0.2.0-full.apk",
-      "size": 23006288,
-      "sha256": "231a2b2f0ba7146df3d8b24c98d27316429af1059876b7e5aab82b657a2ed4bc"
-    },
-    {
-      "name": "plainnotes-0.2.0-play.apk",
-      "size": 22919936,
-      "sha256": "f390a5cbb3ab3e21508521d286a00e4fa1f15f6da6a961795e85069d11b816f8"
+      "size": 13126516,
+      "sha256": "0d950bbb4bb281089318e080e3272400498b48cd094f4ffb4675fbabe6f93201"
     },
     {
       "name": "SIGNING_CERTIFICATE.txt",
-      "size": 358,
-      "sha256": "00669b6875a13d6eef258adfe4d67ad5f2955440d00a167e9d10a18119a0c004"
+      "size": 393,
+      "sha256": "faf8840718d15542aef9c957e575df2723b43529a9a3766b226efffacff55347"
     },
     {
       "name": "THIRD_PARTY_NOTICES.md",
-      "size": 1356,
-      "sha256": "c8e18578f29994473542fafe7777cb6939899e3ea814acee171efd469d9a17b8"
+      "size": 6011,
+      "sha256": "20f69f52bf83723fa0f49a47add3a0d45fac7294a30c1a8d3d53a303027b62d3"
     },
     {
       "name": "SHA256SUMS.txt",
-      "size": 184,
-      "sha256": "54c1b2a05616bdcf1fa97d3447cc97ba228e1219fb6c6ea1d3e4c6e0eb33202d"
+      "size": 271,
+      "sha256": "3e85475250875b2b96174ef5bd3474dd836d53b46d7029decdbbf8d644e7799e"
     }
   ]
 }

@@ -1,3 +1,11 @@
+## 公开 Release v0.2.0 重建（REQUIREMENTS §104）— 2026-10-17
+
+- 源码 `76627bfe`（默认分支 f1e9b4de + versionCode 29，PR #61 合并为 64db9b4）；该提交 push/PR 两套 Android（jvm、android 含 lint/unsignedRelease、device-tests、API26/29 兼容）与 Science 全部成功。
+- 本地构建 full release：`check_release_manifest.py` PASS（无 INTERNET）、`check_attachment_release_isolation.py` PASS、provenance SOURCE_DIRTY=false。签名 APK SHA-256 `0d950bbb4bb281089318e080e3272400498b48cd094f4ffb4675fbabe6f93201`，证书 989ba045…59379b1（旧公开 full/play 证书已核对相同），v2/v3、16KB 对齐、四 ABI、非 debug。临时签名材料已删除，永久备份未改。
+- 旧 tag/附件留档：`docs/releases/0.2.0-build5-superseded.md`；新说明：`docs/releases/0.2.0-rebuild-2026-10-17.md`；账本已追加 29（下一次 ≥ 30）。
+- **未完成（会话权限不允许）**：本会话无法编辑 Release（HTTP 403）或移动 tag（proxy 拒绝）。需负责人手动：删除 Release 404602730 全部旧附件，上传 4 个新附件，替换说明，并把 tag `v0.2.0` 强制移到 `76627bfe215987122666b38ea7a42ee08731cdde`。完成后才能合并本文档 PR（release-assets 校验依赖它）。
+- NOT_RUN：真机 ARM 覆盖安装（build 5 → 29、build 28 → 29）。
+
 ## ANSM-02B/03B 联合实施开始 — 2026-10-16
 
 本轮负责人明确生产实现授权见REQUIREMENTS §102。独立工作树/任务状态/风险/证据统一于[集成账本](ansm-integration/WORK-STATE.md)，避免把旧ANSM test-only门当本轮未授权。
