@@ -70,7 +70,13 @@ internal object ReferencePayload {
     const val MAX_TEXT = 2048
     private val fields = setOf("format", "kind", "namespace", "source_version", "recorded_on", "name", "ingredients", "strength", "form", "routes", "cis", "cip", "source_url", "verification")
     fun uuid(text: String): Boolean = runCatching { UUID.fromString(text).toString() == text }.getOrDefault(false)
-    fun sha(text: String): String = MessageDigest.getInstance("SHA-256").digest(text.toByteArray(Charsets.UTF_8)).joinToString("") { "%02x".format(it.toInt() and 255) }
+    fun sha(text: String): String {
+        val digest=MessageDigest.getInstance("SHA-256").digest(text.toByteArray(Charsets.UTF_8))
+        // Same fixed lowercase ASCII bytes; avoid32 locale Formatter instances for every audited digest.
+        val alphabet="0123456789abcdef";val out=CharArray(digest.size*2)
+        digest.forEachIndexed {index,byte->val n=byte.toInt() and 255;out[index*2]=alphabet[n ushr 4];out[index*2+1]=alphabet[n and 15]}
+        return String(out)
+    }
     /** Fixed JSON escaping and scalar Unicode validation; independent of Android's JSONObject writer version. */
     private fun quote(text: String): String = buildString {
         append('"')

@@ -37,3 +37,21 @@ class NativePerformanceIsolationTest(unittest.TestCase):
         for invalid in ('/sdcard/health.json', valid+'.backup', valid.replace('data.test','data.attacker'),
                         valid.replace('large-ten-year.json','backup.pnbak'), valid+'/../health.json'):
             self.assertEqual([], collect.report_paths([invalid]))
+
+
+class NativePerformanceExecutionTest(unittest.TestCase):
+    def test_failed_test_still_collects_before_shutdown_without_becoming_success(self):
+        from tempfile import TemporaryDirectory
+        from types import SimpleNamespace
+        runner = module('run_ansm_native_performance')
+        with TemporaryDirectory() as directory:
+            runner.ROOT = Path(directory)
+            for test_status, collection_status in [(1,0),(0,1),(1,1),(0,0)]:
+                calls=[]
+                def execute(command, **kwargs):
+                    calls.append(command)
+                    return SimpleNamespace(returncode=test_status if len(calls)==1 else collection_status)
+                self.assertEqual(test_status or collection_status,runner.run(execute))
+                self.assertEqual(2,len(calls))
+                self.assertIn('connectedDebugAndroidTest',calls[0][1])
+                self.assertTrue(calls[1][1].endswith('collect_ansm_native_performance.py'))

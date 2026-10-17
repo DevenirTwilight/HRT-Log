@@ -1,0 +1,20 @@
+{
+  "status": "LOCAL_DIAGNOSTIC_BUDGET_PASS",
+  "base_head": "b31efe20ab083571d44304cc6bf5342873811d90",
+  "report_sha256": "6aea40e804b39da042507cc8cbbdc1f6ff3d62a9e550e72aba9a4401ad217e34",
+  "log_sha256": "b49799be9c1c90e7994ef08f25bd3dc772275aa3449fa95ee822d3d8973a11c7",
+  "source_sha256": {
+    "core/data/src/main/java/net/plainnotes/app/data/ReferencePayload.kt": "a97bfd2f128cbb750e72075a818a25ef77a5a8162a4707ff57bc55cd58707d6c",
+    "docs/ansm-integration/p4/performance/LargeInventoryPerformanceProbe.kt": "9313167178989def0d4d89d785f84cdde764fba21033543cdf85e472c5511242"
+  },
+  "generated_native_source": {
+    "source_sha256": "9313167178989def0d4d89d785f84cdde764fba21033543cdf85e472c5511242",
+    "native_sha256": "12cab67ba8dcb84ff6247d690639e7b91457992b761138c8ba3a4b1c402b516f",
+    "status": "GENERATED_NOT_RUN"
+  },
+  "native_test_source_compilation": "PASS",
+  "native_runtime": "NOT_RUN",
+  "thresholds_changed": false,
+  "peak_sampler_reset": false,
+  "note": "Same logical large workload. Both equivalent SHA encoding and test-only retention were changed; no single-factor timing claim."
+}

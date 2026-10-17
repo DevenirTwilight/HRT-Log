@@ -113,6 +113,13 @@ class LargeInventoryPerformanceProbe {
             report.put("distinct_synthetic_product_variants",20).put("row_count",DOMAIN_TABLES.sumOf{fixture.getJSONArray(it).length()})
             timed("validated_staging_and_restore") {db.withTransaction{RawData.restore(context,raw,fixture,measured=true)}}
             timed("full_audit") {db.withTransaction{val values=MeasuredConsumptionStore.auditStagedDataset(raw);assertEquals(count,values.size);assertTrue(values.all{it.usedQuanta==1L})}}
+            val containerIdentity=rows(fixture,"reference_identity").single{it.getString("kind")=="CONTAINER" && it.getLong("live_handle")==1L}
+            val event=rows(fixture,"reference_event").single{it.getString("subject_uuid")==containerIdentity.getString("uuid")}
+            val snapshot=rows(fixture,"reference_snapshot").single{it.getString("uuid")==event.getString("snapshot_uuid")}
+            val scale=(PackageMeasurementPayload.read(snapshot.getString("payload_json")).stockScale() as MeasureResult.Success).value
+            // The sampler still includes fixture generation. Do not retain a second full test-only graph during real backup/restore.
+            DOMAIN_TABLES.forEach{fixture.remove(it);seed.remove(it)}
+            seeds.clear()
             timed("shared_forecast") {val forecast=repo.stockForecasts(now,ZoneId.of("Europe/Paris")).getValue(m);assertEquals(StockForecast.Status.UNKNOWN,forecast.status)}
             var archive=byteArrayOf()
             val password="synthetic-performance-only".toCharArray()
@@ -122,10 +129,6 @@ class LargeInventoryPerformanceProbe {
                 timed("full_encrypted_restore") {repo.restoreMeasuredBackup(archive,password,repo.referencePreviewEpoch())}
             } finally{password.fill('\u0000');archive.fill(0)}
             timed("restored_full_audit") {db.withTransaction{assertEquals(count,MeasuredConsumptionStore.auditStagedDataset(raw).size)}}
-            val containerIdentity=rows(fixture,"reference_identity").single{it.getString("kind")=="CONTAINER" && it.getLong("live_handle")==1L}
-            val event=rows(fixture,"reference_event").single{it.getString("subject_uuid")==containerIdentity.getString("uuid")}
-            val snapshot=rows(fixture,"reference_snapshot").single{it.getString("uuid")==event.getString("snapshot_uuid")}
-            val scale=(PackageMeasurementPayload.read(snapshot.getString("payload_json")).stockScale() as MeasureResult.Success).value
             val writeTimes=JSONArray()
             timed("three_post_restore_writes") {repeat(3) {
                 val scope=repo.referenceScope();val start=System.nanoTime()

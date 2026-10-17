@@ -6,6 +6,7 @@ on:
       - 'scripts/*ansm*native*performance.py'
       - 'docs/ansm-integration/p4/performance/**'
       - 'core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt'
+      - 'core/data/src/main/java/net/plainnotes/app/data/ReferencePayload.kt'
   workflow_dispatch:
 permissions:
   contents: read
@@ -35,14 +36,13 @@ jobs:
       - uses: ReactiveCircus/android-emulator-runner@4c44018e59b437e86cdfc41da381398f93ed8808
         with:
           api-level: 26
-          arch: x86_64
+          arch: x86
           disable-animations: true
-          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -memory 512
+          ram-size: 512M
+          heap-size: 192M
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -memory 512 -qemu -m 512
           script: |
-            ./gradlew :core:data:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.data.LargeInventoryPerformanceProbe --no-parallel --max-workers=2
-      - name: Collect synthetic diagnostics even on test failure
-        if: always()
-        run: python3 scripts/collect_ansm_native_performance.py
+            python3 scripts/run_ansm_native_performance.py
       - name: Remove generated test source
         if: always()
         run: python3 scripts/prepare_ansm_native_performance.py --clean
