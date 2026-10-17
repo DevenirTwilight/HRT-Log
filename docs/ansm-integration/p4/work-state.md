@@ -1,5 +1,9 @@
 # P4 工作状态
 
+2026-10-17 最新计划服药检查点：完整data373（共享98）、Android测试源码编译、App PeriodStability5/PrivacyNoticeFacts3全部PASS；计划服药8项包括真实完成/MISSED补录/取消/计划量修订/UUID重试/三个故障回滚/篡改检测/加密备份/巴黎跳时，未改原断言。早期三轮夹具/辅助函数/事务调用错误如实留证。新98原生和最终HEAD六CI待验；App精确写入口OFF，后实盘协调及性能/P5/P6仍未完成，#57保持DRAFT。见scheduled-final-local-evidence.json及对应contract。
+
+2026-10-17 计划服药候选：内部scoped slot票据/真实Repository完成事务与五项共享测试已编码，验证运行中；format3冻结计划元数据摘要并纳入全局审计，原1/2保留。已有MISSED复用ID和config_snapshot，实际剂量/包装/库存效果独立。源码尚未验收、不启用UI，独立实盘协调仍未完成。
+
 2026-10-17 混合包装：真实旧unscheduled静默扣旧包装负例FAIL后，正式Repository四处分配入口增加显式物理用量门，低层旧算法和所有原断言保持。初放底层导致原兼容断言FAIL，已归档并移回入口。完整data365/共享90、原生源码编译PASS；新90实际原生NOT_RUN。db1ef03三API原生82实际PASS且制品SHA/CRC核验，见revision-ci-evidence.json。当前P4计划服药及后实盘协调仍未完，#57 DRAFT。
 
 2026-10-17 共享UNKNOWN/生命周期检查点：data362（共享87）、reminder21、App选定40和Python159本地PASS；原生测试源码编译PASS，新增87三API实际运行仍待验。四项实际红例已归档，旧无票据VOID/RESTORE被禁止操作精确包装，独立有票据生命周期和ABA/UUID隔离已通过。库存/日历/提醒不再把整数quanta或未知开封期限解释为当前药物mg/确定天数/有效期；四语中性UNKNOWN UI不启用旧写入口。四语/320和411dp/1×2×/深浅/三对比度矩阵32项PASS，实际生成192张合成截图；已人工检查法语320dp大字高对比库存及繁中320dp大字主页样图，无确定药量/天数或写按钮。真机/TalkBack/断电NOT_RUN。db1ef03六项必需CI均SUCCESS（不代表新未提交源码CI通过）；主线仍f1e9b4d，#57 DRAFT。见unknown-lifecycle-contract.md与local/red证据。后续先完成实际计划服药和后实盘独立协调，不能以安全拒绝代替完整流程。

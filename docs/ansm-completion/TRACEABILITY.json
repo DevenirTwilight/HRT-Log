@@ -822,6 +822,105 @@
       "owner_decision_required": false,
       "progress": "IN_PROGRESS",
       "note": "节级初始追踪，不代表逐声明或功能验收；后续补字段/产品/测试级子项。"
+    },
+    {
+      "requirement_id": "V4.03.UNKNOWN",
+      "origin_file": "docs/ansm-completion/sources/owner-v4-2026-10-17.md",
+      "origin_section": 3,
+      "original_claim": "Typed stock must not become clinical-dose stock, definite days or inherited expiry",
+      "corrected_scope": "Shared generic UNKNOWN safety only; detailed P5 quantities/forms remain incomplete.",
+      "stage": "P4",
+      "affected_product_or_dataset": "Synthetic user-entered product/legacy and exact stock; no official packaging",
+      "implementation_path": "core/data/src/main/java/net/plainnotes/app/data/StockForecast.kt",
+      "test_id": [
+        "integerQuantaCannotBeTreatedAsLegacyMedicationDoseUnits",
+        "exactPackagingCannotBorrowCurrentLegacyExpiryOrDoseUnitsForAnAlert",
+        "MeasuredStockUnknownMatrixTest.unknownNeverBecomesScalarStockOrAnUnscopedWrite"
+      ],
+      "pr_url": "https://github.com/DevenirTwilight/HRT-Log/pull/57",
+      "source_url": [],
+      "source_date": null,
+      "review_status": "UNREVIEWED",
+      "result_status": "INTEGRATION_VERIFIED",
+      "blocker": "P4/P5 admission unfinished; new native execution and final CI pending",
+      "owner_decision_required": false,
+      "progress": "LOCAL_ONLY",
+      "note": "docs/ansm-integration/p4/unknown-lifecycle-local-evidence.json; unknown-ui-matrix-evidence.json"
+    },
+    {
+      "requirement_id": "V4.03.PACKAGE_SCOPE",
+      "origin_file": "docs/ansm-completion/sources/owner-v4-2026-10-17.md",
+      "origin_section": 3,
+      "original_claim": "Package VOID/RESTORE requires stable identity, confirmation, idempotence and ABA protection",
+      "corrected_scope": "Internal Repository entry only; public measured App entry OFF.",
+      "stage": "P4",
+      "affected_product_or_dataset": "Synthetic user-entered product/legacy and exact stock; no official packaging",
+      "implementation_path": "core/data/src/main/java/net/plainnotes/app/data/MeasuredUseIntegration.kt",
+      "test_id": [
+        "oldUnscopedPackageVoidCannotMutateExactInventory",
+        "oldUnscopedPackageRestoreCannotMutateExactInventory"
+      ],
+      "pr_url": "https://github.com/DevenirTwilight/HRT-Log/pull/57",
+      "source_url": [],
+      "source_date": null,
+      "review_status": "UNREVIEWED",
+      "result_status": "INTEGRATION_VERIFIED",
+      "blocker": "P4/P5 admission unfinished; new native execution and final CI pending",
+      "owner_decision_required": false,
+      "progress": "LOCAL_ONLY",
+      "note": "docs/ansm-integration/p4/unknown-lifecycle-local-evidence.json"
+    },
+    {
+      "requirement_id": "V4.03.MIXED_ADMISSION",
+      "origin_file": "docs/ansm-completion/sources/owner-v4-2026-10-17.md",
+      "origin_section": 3,
+      "original_claim": "Formal actual-record entries cannot guess a scalar package in mixed stock",
+      "corrected_scope": "Local data365/shared90 PASS; legacy low-level compatibility assertions retained; native90 not yet verified.",
+      "stage": "P4",
+      "affected_product_or_dataset": "Synthetic user-entered product/legacy and exact stock; no official packaging",
+      "implementation_path": "core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt",
+      "test_id": [
+        "legacyActualUseCannotSilentlyChooseScalarStockWhenTypedStockAlsoExists",
+        "typedStockOfAnotherMedicationDoesNotBlockLegacyOnlyActualUse"
+      ],
+      "pr_url": "https://github.com/DevenirTwilight/HRT-Log/pull/57",
+      "source_url": [],
+      "source_date": null,
+      "review_status": "UNREVIEWED",
+      "result_status": "INTEGRATION_VERIFIED",
+      "blocker": "P4/P5 admission unfinished; new native execution and final CI pending",
+      "owner_decision_required": false,
+      "progress": "LOCAL_ONLY",
+      "note": "docs/ansm-integration/p4/mixed-allocator-final-evidence.json"
+    },
+    {
+      "requirement_id": "V4.03.SCHEDULE",
+      "origin_file": "docs/ansm-completion/sources/owner-v4-2026-10-17.md",
+      "origin_section": 3,
+      "original_claim": "Reuse scheduled record and frozen planned context; preserve explicit stock effect and exact physical source",
+      "corrected_scope": "Eight scheduled real Repository contracts, full data373/shared98, native-source compilation and App PeriodStability5/PrivacyNoticeFacts3 PASS. New native98 runtime NOT_RUN; App entry OFF.",
+      "stage": "P4",
+      "affected_product_or_dataset": "Synthetic user-entered product/legacy and exact stock; no official packaging",
+      "implementation_path": "core/data/src/main/java/net/plainnotes/app/data/MeasuredUseIntegration.kt",
+      "test_id": [
+        "scheduledActualUseKeepsPlannedFieldsAndRetriesWithoutSecondConsumption",
+        "scheduledBackfillReusesMissedIdAndSnapshotAndDoesNotGuessStockEffect",
+        "scheduledWriteRejectsCanceledSlotWithoutMutation",
+        "scheduledDoseOverrideInvalidatesOldTicketAndKeepsClinicalDoseIndependent",
+        "scheduledWriteRollsBackRecordContextAndStockAtEachFailureBoundary",
+        "changedScheduledFactCannotPassFullAuditWithOnlyTheClinicalDoseUnchanged",
+        "scheduledEvidenceSurvivesEncryptedBackupWithoutTheCurrentCatalog",
+        "scheduledParisSpringGapPreservesActualAndPlannedZonesWithoutExtraStock"
+      ],
+      "pr_url": "https://github.com/DevenirTwilight/HRT-Log/pull/57",
+      "source_url": [],
+      "source_date": null,
+      "review_status": "UNREVIEWED",
+      "result_status": "INTEGRATION_VERIFIED",
+      "blocker": "P4/P5 admission unfinished; new native execution and final CI pending",
+      "owner_decision_required": false,
+      "progress": "LOCAL_ONLY",
+      "note": "docs/ansm-integration/p4/scheduled-final-local-evidence.json"
     }
   ]
 }

@@ -41,3 +41,6 @@ P1新增阻断：真实控制器已复现空引用数据集恢复后首次关联
 P2源fb797e5接新previewEpoch后完整data242/app63全PASS，真实EmptyPreview恢复红场景转绿；192新截图已生成。P1新增只读referencePreviewEpoch/recordedReferenceHistory接口，历史列表可携带同一事务读取的epoch，防止ID复用；无来源读取不创建业务引用，当前引用更正不重写历史。新增共享测试使原生合同24项，最新API待重验。
 
 P1已普通合入实际默认分支的ANSM-01/#45及02A/#48；不改变其冻结数据，不将参考JSON打包进Android。P1源ef19db8本地237数据PASS/原生24合同编译PASS；P2真实控制器空恢复场景及242数据/63应用PASS已完成。#54可恢复审阅并等待当前基线六检查；之前401为长驻监控凭证过期，当前工具gh访问正常，重启监控继续严格保护，不绕过检查。
+
+
+2026-10-17 P4续作：#57内部真实计划服药、MISSED补录与format3冻结计划上下文已本地集成验证，完整data373/shared98、原生源码编译、Period5/Privacy3 PASS。共享UNKNOWN/生命周期/data362及四语32组192图已单独留证，混合库存正式入口守卫/data365 PASS。db1ef03六CI及三API共享82实际PASS并校验SHA/CRC。当前新增98原生和最终HEAD CI待验；后实盘独立协调、性能、P5/P6未完成，App精确写入口OFF、#57 DRAFT。完整证据与下一步见p4/work-state.md，V4逐项追踪见../ansm-completion/TRACEABILITY.json。未合并、未发布。

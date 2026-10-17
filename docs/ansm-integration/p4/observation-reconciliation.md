@@ -29,3 +29,5 @@
 账本头只表示**记录提交的因果顺序**，不是实际服药/观察发生时间的认证。当前库存实盘必须明确为用户本次确认的当前剩余量；不得把过去某日的观察当当前余额套用。补录较早实际用药时，也不能从“用户确认了包装”自动推断这次需要额外扣减：它可能已经包含在后来的实盘中。正式 UI/事务合同需分别确认真实物理用量与库存效果，保留 UNKNOWN/已计入实盘等明确状态；没有可靠依据时不产生新扣减，也不修改真实历史。
 
 ADJUST 的正式确认票据还需绑定完整库存观察版本（包含无差额观察），防止余额恢复为同一数值后掩盖中间操作的 ABA 情况。当前内部适配器只比较容器投影与冻结包装，尚无正式确认票据/更正协调 UI，因此这部分不能标为生产接线验收完成。
+
+2026-10-17 integration finding: a later independent count can reduce projected used quanta below the original consumption delta. An ordinary inverse would then leave the valid [0, capacity] range even inside an otherwise atomic correction. Existing `reverseOriginal` rejects this before writing, so neither record revision nor stock is changed. This is a protected refusal, not a completed reconciliation feature. A future explicit reconciliation journal must distinguish any bookkeeping bridge from a real user stock observation, retain the original consumption/count, prove its linked inverse/final observation, and validate every prefix. Merely bypassing the count guard, allowing negative prefixes, or renaming an invented intermediate balance as a user count is unacceptable. Tests for the completed workflow remain NOT_IMPLEMENTED.

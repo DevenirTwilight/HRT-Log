@@ -229,13 +229,18 @@ internal object MeasuredConsumptionStore {
                     require(consumed.add(request.record.uuid to request.record.revision))
                     identity(request.medicationUuid,"MEDICATION",dataset)
                     val record=identity(request.record.uuid,"RECORD",dataset,request.medicationUuid)
-                    if(!record.isNull("live_handle"))db.query("SELECT revision,taken_utc,taken_zone,status,actual_dose,config_snapshot FROM dose_record WHERE id=?",arrayOf(record.getLong("live_handle"))).use { c ->
+                    if(!record.isNull("live_handle"))db.query("SELECT revision,taken_utc,taken_zone,status,actual_dose,config_snapshot,rule_version_id,slot_key,scheduled_utc,scheduled_zone,planned_dose,late_after_minutes_snapshot FROM dose_record WHERE id=?",arrayOf(record.getLong("live_handle"))).use { c ->
                         require(c.moveToFirst());val revision=integer(c,0);require(revision>=request.record.revision)
                         if(revision==request.record.revision.toLong()) {
                             require(!c.isNull(1) && integer(c,1)==request.record.takenUtc)
                             require((if(c.isNull(2))null else c.getString(2))==request.record.takenZone && c.getString(3)==request.record.status)
                             require(java.lang.Long.toHexString(java.lang.Double.doubleToRawLongBits(scalar(c,4))).padStart(16,'0')==request.record.legacyActualDoseBits)
                             require(ReferencePayload.sha(c.getString(5))==request.record.configSha256)
+                            request.record.scheduleSha256?.let { expected ->
+                                require(MeasuredUsePayload.scheduleSha(if(c.isNull(6))null else integer(c,6),if(c.isNull(7))null else c.getString(7),
+                                    if(c.isNull(8))null else integer(c,8),if(c.isNull(9))null else c.getString(9),if(c.isNull(10))null else scalar(c,10),
+                                    if(c.isNull(11))null else integer(c,11).also{require(it in 0..Int.MAX_VALUE.toLong())}.toInt())==expected)
+                            }
                         }
                     }
                     val captures=envelope.getJSONArray("captures")

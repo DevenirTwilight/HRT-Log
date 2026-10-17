@@ -18,3 +18,6 @@
 必需检查：jvm、android、device-tests(API35)、attachment-poc-compatibility(26)/(29)、science-change-gate。research-deep遵守原条件，合法SKIPPED不算PASS。真正设备、断电、人工TalkBack仍NOT_RUN。
 
 当前没有其他开放库存/数据层实现PR；旧科研及#34不夹带合并。主线SHA、任务旧锚点、候选SHA分别保留，不能把本表当发布批准。
+
+
+2026-10-17 subsequent P4 checkpoint: local data373/shared98, Android test-source compilation, App PeriodStability5 and PrivacyNoticeFacts3 PASS. Eight scheduled contracts verify planned-context freezing and exact backup round-trip; new native98 runtime and final CI pending. Earlier UNKNOWN matrix32/192 and data362/reminder21/app40 evidence remains separately scoped. Default f1e9b4d still Room11/business10; candidate remains Room12/business11, user-entered only and App measured write entry OFF. Later-count reconciliation, performance, P5/P6 and official distribution are not complete.

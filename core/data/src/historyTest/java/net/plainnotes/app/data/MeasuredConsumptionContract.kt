@@ -1216,4 +1216,97 @@ abstract class MeasuredConsumptionContract {
         assertEquals(legacyMed,db.dao().records().single().medication_id)
     }
 
+    private suspend fun scheduledFixture():Triple<NotesRepository,CreatedMeasuredContainer,net.plainnotes.app.domain.Slot> {
+        val repo=repository();val m=med()
+        repo.saveMedication(db.dao().medication(m).copy(active=true,soon_alert_minutes=0,late_after_minutes=60),null,net.plainnotes.app.domain.RuleKind.EVERY_N_DAYS,1,
+            listOf(java.time.LocalTime.NOON),emptySet(),at.minusSeconds(86400))
+        val b=box(m)
+        val slot=repo.planned(at.minusSeconds(1),at.plusSeconds(1),at,java.time.ZoneId.of("UTC")).single{it.slot.medicationId==m}.slot
+        return Triple(repo,b,slot)
+    }
+    @Test fun scheduledActualUseKeepsPlannedFieldsAndRetriesWithoutSecondConsumption()=runBlocking {
+        val (repo,b,slot)=scheduledFixture();val ticket=repo.measuredScheduledTicket(b.scope,slot,at);val op=UUID.randomUUID().toString()
+        val saved=repo.completeMeasuredSlot(ticket,op,actual(b),at)
+        assertEquals(slot.key,saved.record.slot_key);assertEquals(slot.ruleId,saved.record.rule_version_id)
+        assertEquals(slot.at.toEpochMilli(),saved.record.scheduled_utc);assertEquals(slot.zone.id,saved.record.scheduled_zone)
+        assertEquals(slot.dose,saved.record.planned_dose!!,0.0);assertEquals(0.125,saved.record.actual_dose!!,0.0)
+        assertEquals(saved,repo.completeMeasuredSlot(ticket,op,actual(b),at));assertEquals(1,count("dose_record"));assertEquals(1,count("supply_transaction"))
+        val frozen=MeasuredConsumptionStore.existingConsumption(raw,op)!!.first
+        assertEquals(MeasuredUsePayload.scheduleSha(saved.record),frozen.record.scheduleSha256)
+        rejects(ReferenceError.OPERATION_CONFLICT){repo.recordMeasuredUse(ticket.write,op,actual(b),at)}
+        rejects(ReferenceError.OPERATION_CONFLICT){repo.completeMeasuredSlot(ticket.copy(slot=slot.copy(dose=2.0)),op,actual(b),at)}
+        rejects(ReferenceError.STALE_REVISION){repo.completeMeasuredSlot(ticket,UUID.randomUUID().toString(),actual(b),at)}
+    }
+    @Test fun scheduledBackfillReusesMissedIdAndSnapshotAndDoesNotGuessStockEffect()=runBlocking {
+        val (repo,b,slot)=scheduledFixture();val config=db.dao().rules().single{it.id==slot.ruleId}.config_snapshot
+        val old=RecordEntity(medication_id=slot.medicationId,rule_version_id=slot.ruleId,slot_key=slot.key,scheduled_utc=slot.at.toEpochMilli(),scheduled_zone=slot.zone.id,
+            planned_dose=slot.dose,late_after_minutes_snapshot=slot.lateMinutes,status="MISSED",origin="APP",revision=1,config_snapshot=config)
+        val id=db.dao().record(old)
+        db.dao().updateMedication(db.dao().medication(slot.medicationId).copy(name="SYNTHETIC renamed later",dose_per_intake=99.0))
+        val ticket=repo.measuredScheduledTicket(b.scope,slot,at)
+        val saved=repo.completeMeasuredSlot(ticket,UUID.randomUUID().toString(),actual(b,MeasuredStockEffect.ALREADY_ACCOUNTED),at)
+        assertEquals(id,saved.record.id);assertEquals(2,saved.record.revision);assertEquals(config,saved.record.config_snapshot)
+        assertEquals(slot.dose,saved.record.planned_dose!!,0.0);assertEquals(0,count("supply_transaction"))
+        assertTrue(saved.receipt.lines.single() is PhysicalUseResult.AlreadyAccounted)
+    }
+    @Test fun scheduledWriteRejectsCanceledSlotWithoutMutation()=runBlocking {
+        val (repo,b,slot)=scheduledFixture();val ticket=repo.measuredScheduledTicket(b.scope,slot,at)
+        repo.override(slot,net.plainnotes.app.domain.SlotOverride(slot.key,skipped=true),at)
+        val before=RawData.dump(raw).toString()
+        rejects(ReferenceError.STALE_REVISION){repo.completeMeasuredSlot(ticket,UUID.randomUUID().toString(),actual(b),at)}
+        assertEquals(before,RawData.dump(raw).toString());assertEquals(0,count("supply_transaction"))
+    }
+    @Test fun scheduledWriteRollsBackRecordContextAndStockAtEachFailureBoundary()=runBlocking {
+        val (repo,b,slot)=scheduledFixture();val ticket=repo.measuredScheduledTicket(b.scope,slot,at)
+        val before=RawData.dump(raw).toString()
+        for(point in ActualUseCheckpoint.entries) {
+            try{repo.completeMeasuredSlot(ticket,UUID.randomUUID().toString(),actual(b),at){if(it==point)error("synthetic scheduled fault")};fail("Fault not reached")}
+            catch(e:IllegalStateException){assertEquals("synthetic scheduled fault",e.message)}
+            assertEquals(before,RawData.dump(raw).toString())
+        }
+        repo.completeMeasuredSlot(ticket,UUID.randomUUID().toString(),actual(b),at)
+        assertEquals(1,count("dose_record"));assertEquals(1,count("supply_transaction"))
+    }
+    @Test fun changedScheduledFactCannotPassFullAuditWithOnlyTheClinicalDoseUnchanged()=runBlocking {
+        val (repo,b,slot)=scheduledFixture()
+        val saved=repo.completeMeasuredSlot(repo.measuredScheduledTicket(b.scope,slot,at),UUID.randomUUID().toString(),actual(b),at)
+        db.withTransaction {RawData.unguarded(raw){raw.execSQL("UPDATE dose_record SET planned_dose=9 WHERE id=?",arrayOf(saved.record.id))}}
+        try{db.withTransaction{MeasuredConsumptionStore.auditStagedDataset(raw)};fail("Frozen schedule changed without detection")}
+        catch(e:ReferenceFailure){assertEquals(ReferenceError.INVALID_SOURCE,e.code)}
+    }
+
+    @Test fun scheduledDoseOverrideInvalidatesOldTicketAndKeepsClinicalDoseIndependent()=runBlocking {
+        val (repo,b,slot)=scheduledFixture();val old=repo.measuredScheduledTicket(b.scope,slot,at)
+        repo.override(slot,net.plainnotes.app.domain.SlotOverride(slot.key,dose=0.2),at)
+        val before=RawData.dump(raw).toString()
+        rejects(ReferenceError.STALE_REVISION){repo.completeMeasuredSlot(old,UUID.randomUUID().toString(),actual(b),at)}
+        assertEquals(before,RawData.dump(raw).toString())
+        val changed=repo.planned(at.minusSeconds(1),at.plusSeconds(1),at,slot.zone).single{it.slot.key==slot.key}.slot
+        val saved=repo.completeMeasuredSlot(repo.measuredScheduledTicket(b.scope,changed,at),UUID.randomUUID().toString(),actual(b),at)
+        assertEquals(0.2,saved.record.planned_dose!!,0.0);assertEquals(0.125,saved.record.actual_dose!!,0.0)
+    }
+    @Test fun scheduledEvidenceSurvivesEncryptedBackupWithoutTheCurrentCatalog()=runBlocking {
+        val (repo,b,slot)=scheduledFixture()
+        val saved=repo.completeMeasuredSlot(repo.measuredScheduledTicket(b.scope,slot,at),UUID.randomUUID().toString(),actual(b),at)
+        val before=RawData.dump(raw).toString();val password="SYNTHETIC scheduled backup".toCharArray()
+        val bytes=repo.exportMeasuredBackup(password,repo.referencePreviewEpoch())
+        try {
+            repo.restoreMeasuredBackup(bytes,password,repo.referencePreviewEpoch())
+            assertEquals(before,RawData.dump(raw).toString());assertEquals(saved.record,db.dao().recordById(saved.record.id))
+            assertEquals(MeasuredUsePayload.scheduleSha(saved.record),MeasuredConsumptionStore.existingConsumption(raw,saved.receipt.operationUuid)!!.first.record.scheduleSha256)
+            assertNotEquals(b.scope.epoch,repo.referencePreviewEpoch())
+        }finally{password.fill('\u0000');bytes.fill(0)}
+    }
+    @Test fun scheduledParisSpringGapPreservesActualAndPlannedZonesWithoutExtraStock()=runBlocking {
+        val moment=Instant.parse("2026-03-29T01:00:00Z");val paris=java.time.ZoneId.of("Europe/Paris")
+        val repo=repository();val m=med()
+        repo.saveMedication(db.dao().medication(m).copy(active=true,soon_alert_minutes=0,late_after_minutes=60),null,net.plainnotes.app.domain.RuleKind.EVERY_N_DAYS,1,
+            listOf(java.time.LocalTime.of(2,30)),emptySet(),moment.minusSeconds(86400))
+        val b=box(m);val slot=repo.planned(moment.minusSeconds(1),moment.plusSeconds(1),moment,paris).single{it.slot.medicationId==m}.slot
+        assertEquals(moment,slot.at);assertEquals(paris,slot.zone)
+        val saved=repo.completeMeasuredSlot(repo.measuredScheduledTicket(b.scope,slot,at),UUID.randomUUID().toString(),actual(b,MeasuredStockEffect.ALREADY_ACCOUNTED).copy(takenUtc=moment.toEpochMilli()),at)
+        assertEquals("Europe/Paris",saved.record.scheduled_zone);assertEquals("Europe/Paris",saved.record.taken_zone)
+        assertEquals(moment.toEpochMilli(),saved.record.taken_utc);assertEquals(0,count("supply_transaction"))
+    }
+
 }

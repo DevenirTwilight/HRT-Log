@@ -92,6 +92,32 @@ const val BACKFILL_MAX_DAYS=731L
         if(target!=Space.PRIMARY)throw ReferenceFailure(ReferenceError.WRONG_SPACE)
         return withContext(Dispatchers.IO){val database=access.get(target);database.withTransaction{block(database)}}
     }
+    private suspend fun currentMeasuredSlot(dao:NotesDao,slot:Slot,now:Instant):Slot {
+        val entry=timeline(dao,now,slot.at.minusMillis(1),slot.at.plusMillis(1),slot.zone).singleOrNull{it.slot.key==slot.key}
+            ?: throw ReferenceFailure(ReferenceError.STALE_REVISION)
+        if(entry.slot!=slot || slot.skipped || entry.state in setOf(SlotState.ON_TIME,SlotState.LATE,SlotState.SKIPPED))throw ReferenceFailure(ReferenceError.STALE_REVISION)
+        return entry.slot
+    }
+    internal suspend fun measuredScheduledTicket(scope:ReferenceScope,slot:Slot,now:Instant=Instant.now()):MeasuredScheduledTicket = measuredTransaction { database ->
+        val raw=database.openHelper.writableDatabase
+        MeasuredUseIntegration.ticket(raw,scope,slot.medicationId) // Scope/owner before any integer slot lookup.
+        currentMeasuredSlot(database.dao(),slot,now)
+        val existing=MeasuredUseIntegration.slotRecord(database,slot.key)
+        if(existing!=null && (existing.deleted_at_utc!=null || existing.status !in setOf("MISSED","UNCONFIRMED")))throw ReferenceFailure(ReferenceError.STALE_REVISION)
+        MeasuredScheduledTicket(MeasuredUseIntegration.ticket(raw,scope,slot.medicationId,existing?.id),slot)
+    }
+    internal suspend fun completeMeasuredSlot(ticket:MeasuredScheduledTicket,operationUuid:String,draft:MeasuredActualUseDraft,created:Instant=Instant.now(),checkpoint:(ActualUseCheckpoint)->Unit={}):RecordedMeasuredUse {
+        val frozen=draft.copy(uses=draft.uses.toList())
+        return measuredTransaction {database ->
+            val raw=database.openHelper.writableDatabase
+            ReferenceStore.checkScope(raw,ticket.write.scope)
+            if(MeasuredConsumptionStore.existingConsumption(raw,operationUuid)==null) {
+                MeasuredUseIntegration.validate(raw,ticket.write)
+                currentMeasuredSlot(database.dao(),ticket.slot,created)
+            }
+            MeasuredUseIntegration.completeScheduled(database,ticket,operationUuid,frozen,created,checkpoint)
+        }
+    }
     internal suspend fun createMeasuredPackage(expectedEpoch:String,expectedMedication:MedicationEntity,operationUuid:String,draft:PackageMeasurementDraft,created:Instant=Instant.now()):CreatedMeasuredContainer {
         val frozenDraft=draft.copy(product=draft.product.copy(ingredients=draft.product.ingredients.toList(),routes=draft.product.routes.toList()),relations=draft.relations.toList())
         return measuredTransaction {database->

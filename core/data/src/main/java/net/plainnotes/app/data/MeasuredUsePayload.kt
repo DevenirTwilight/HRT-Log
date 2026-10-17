@@ -24,7 +24,7 @@ data class MeasuredActualUseDraft(
 internal data class FrozenUseRecord(
     val uuid:String,val revision:Int,val takenUtc:Long,val takenZone:String?,val status:String,
     /** Exact IEEE-754 context of the old factual field, not a recovered decimal or a stock quantity. */
-    val legacyActualDoseBits:String,val configSha256:String,
+    val legacyActualDoseBits:String,val configSha256:String,val scheduleSha256:String?=null,
 )
 internal data class MeasuredConsumptionRequest(
     val datasetUuid:String,val medicationUuid:String,val record:FrozenUseRecord,val uses:List<ConfirmedStockUse>,
@@ -46,24 +46,33 @@ internal object MeasuredUsePayload {
     private fun string(json:JSONObject,key:String):String {require(json.get(key) is String);return json.getString(key)}
     private fun uuid(json:JSONObject,key:String)=string(json,key).also{require(ReferencePayload.uuid(it))}
     private fun hash(json:JSONObject,key:String)=string(json,key).also{require(digest.matches(it))}
+    fun scheduleSha(rule:Long?,key:String?,at:Long?,zone:String?,planned:Double?,late:Int?):String? {
+        if(listOf(rule,key,at,zone,planned,late).all{it==null})return null
+        require(rule!=null && rule>0 && !key.isNullOrBlank() && at!=null && zone!=null && planned!=null && planned.isFinite() && planned>0 && late!=null && late>=0)
+        java.time.ZoneId.of(zone)
+        return ReferencePayload.sha(ReferencePayload.canonical(JSONObject().put("rule",rule).put("key",key).put("at",at).put("zone",zone)
+            .put("planned_bits",java.lang.Long.toHexString(java.lang.Double.doubleToRawLongBits(planned)).padStart(16,'0')).put("late",late)))
+    }
+    fun scheduleSha(value:RecordEntity)=scheduleSha(value.rule_version_id,value.slot_key,value.scheduled_utc,value.scheduled_zone,value.planned_dose,value.late_after_minutes_snapshot)
     fun record(uuid:String,value:RecordEntity):FrozenUseRecord {
         require(value.deleted_at_utc==null)
         val actual=requireNotNull(value.actual_dose)
         require(actual.isFinite() && actual>0)
         return FrozenUseRecord(uuid,value.revision,requireNotNull(value.taken_utc),value.taken_zone,value.status,
-            java.lang.Long.toHexString(java.lang.Double.doubleToRawLongBits(actual)).padStart(16,'0'),ReferencePayload.sha(value.config_snapshot))
+            java.lang.Long.toHexString(java.lang.Double.doubleToRawLongBits(actual)).padStart(16,'0'),ReferencePayload.sha(value.config_snapshot),scheduleSha(value))
     }
     fun freeze(request:MeasuredConsumptionRequest):FrozenConsumptionRequest {
         require(request.uses.size<=64)
         val r=request.record
-        val extended=request.stockEffect!=MeasuredStockEffect.DEDUCT_CURRENT || request.unlinkedActual!=null
-        val json=JSONObject().put("format",if(extended)2 else FORMAT).put("kind","CONSUME").put("stock_algorithm",StockQuantum.ALGORITHM)
+        val extended=r.scheduleSha256!=null || request.stockEffect!=MeasuredStockEffect.DEDUCT_CURRENT || request.unlinkedActual!=null
+        val json=JSONObject().put("format",if(r.scheduleSha256!=null)3 else if(extended)2 else FORMAT).put("kind","CONSUME").put("stock_algorithm",StockQuantum.ALGORITHM)
             .put("conversion_algorithm",Measurements.ALGORITHM).put("dataset_uuid",request.datasetUuid).put("medication_uuid",request.medicationUuid)
             .put("record",JSONObject().put("uuid",r.uuid).put("revision",r.revision).put("taken_utc",r.takenUtc)
                 .put("taken_zone",r.takenZone ?: JSONObject.NULL).put("status",r.status).put("legacy_actual_dose_bits",r.legacyActualDoseBits).put("config_sha256",r.configSha256))
             .put("uses",JSONArray(request.uses.sortedBy{it.containerUuid}.map {u->JSONObject().put("container_uuid",u.containerUuid)
                 .put("presentation_event_uuid",u.presentationEventUuid).put("presentation_sha256",u.presentationSha256)
                 .put("quantity",PackageMeasurementPayload.quantity(u.quantity)).put("user_confirmed",u.userConfirmed)}))
+        if(r.scheduleSha256!=null)json.getJSONObject("record").put("schedule_sha256",r.scheduleSha256)
         if(extended)json.put("stock_effect",request.stockEffect.name).put("unlinked_actual",request.unlinkedActual?.let(PackageMeasurementPayload::quantity) ?: JSONObject.NULL)
         return read(ReferencePayload.canonical(json))
     }
@@ -74,8 +83,9 @@ internal object MeasuredUsePayload {
     internal fun decode(payload:String):MeasuredConsumptionRequest {
         require(payload.toByteArray(Charsets.UTF_8).size<=ReferencePayload.MAX_BYTES)
         val json=JSONObject(payload);require(ReferencePayload.canonical(json)==payload)
-        require(json.get("format") is Int && json.getInt("format") in 1..2 && string(json,"kind")=="CONSUME")
-        val extended=json.getInt("format")==2
+        require(json.get("format") is Int && json.getInt("format") in 1..3 && string(json,"kind")=="CONSUME")
+        val scheduled=json.getInt("format")==3
+        val extended=json.getInt("format")>=2
         keys(json,if(extended)fields+setOf("stock_effect","unlinked_actual") else fields)
         val effect=if(extended)MeasuredStockEffect.valueOf(string(json,"stock_effect")) else MeasuredStockEffect.DEDUCT_CURRENT
         val unlinked=if(!extended || json.isNull("unlinked_actual"))null else PackageMeasurementPayload.quantity(json.getJSONObject("unlinked_actual")).also {
@@ -83,7 +93,7 @@ internal object MeasuredUsePayload {
         }
         require(string(json,"stock_algorithm")==StockQuantum.ALGORITHM && string(json,"conversion_algorithm")==Measurements.ALGORITHM)
         val dataset=uuid(json,"dataset_uuid");val medication=uuid(json,"medication_uuid")
-        val r=json.getJSONObject("record");keys(r,recordFields)
+        val r=json.getJSONObject("record");keys(r,if(scheduled)recordFields+"schedule_sha256" else recordFields)
         require(r.get("revision") is Int && r.getInt("revision")>0)
         require(r.get("taken_utc") is Int || r.get("taken_utc") is Long)
         val zone=if(r.isNull("taken_zone"))null else string(r,"taken_zone")
@@ -91,7 +101,7 @@ internal object MeasuredUsePayload {
         val status=string(r,"status");require(status in setOf("ON_TIME","LATE"))
         val bits=string(r,"legacy_actual_dose_bits");require(Regex("[0-9a-f]{16}").matches(bits))
         val legacy=java.lang.Double.longBitsToDouble(java.lang.Long.parseUnsignedLong(bits,16));require(legacy.isFinite() && legacy>0)
-        val record=FrozenUseRecord(uuid(r,"uuid"),r.getInt("revision"),r.getLong("taken_utc"),zone,status,bits,hash(r,"config_sha256"))
+        val record=FrozenUseRecord(uuid(r,"uuid"),r.getInt("revision"),r.getLong("taken_utc"),zone,status,bits,hash(r,"config_sha256"),if(scheduled)hash(r,"schedule_sha256") else null)
         val rows=json.getJSONArray("uses");require(rows.length()<=64)
         val uses=(0 until rows.length()).map {i->
             val u=rows.getJSONObject(i);keys(u,useFields);require(u.get("user_confirmed") is Boolean && u.getBoolean("user_confirmed"))
@@ -102,7 +112,7 @@ internal object MeasuredUsePayload {
         require(uses.map{it.containerUuid}==uses.map{it.containerUuid}.sorted())
         // An empty list records missing actual-package confirmation; it never means zero actual use.
         require(unlinked==null || uses.isEmpty())
-        require(!extended || effect!=MeasuredStockEffect.DEDUCT_CURRENT || unlinked!=null)
+        require(json.getInt("format")!=2 || effect!=MeasuredStockEffect.DEDUCT_CURRENT || unlinked!=null)
         return MeasuredConsumptionRequest(dataset,medication,record,uses,effect,unlinked)
     }
 }

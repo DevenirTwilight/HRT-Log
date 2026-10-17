@@ -4,12 +4,14 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import org.json.JSONObject
 import java.time.Instant
 import java.time.ZoneId
+import net.plainnotes.app.domain.Slot
 
 /** Internal until shared forecasting and UI admission; never exposed through an unscoped integer ID. */
 internal data class MeasuredWriteTicket(
     val scope:ReferenceScope,val medicationId:Long,val medicationUuid:String,
     val recordId:Long?,val stateSha256:String,
 )
+internal data class MeasuredScheduledTicket(val write:MeasuredWriteTicket,val slot:Slot)
 internal data class RecordedMeasuredUse(val record:RecordEntity,val receipt:MeasuredConsumptionReceipt)
 internal enum class MeasuredPackageAction { VOID, RESTORE }
 internal data class MeasuredPackageReceipt(val operationUuid:String,val containerUuid:String,val action:MeasuredPackageAction)
@@ -62,7 +64,7 @@ internal object MeasuredUseIntegration {
         if(ticket.recordId!=null)fail(ReferenceError.INVALID_SOURCE)
         val dao=database.dao()
         MeasuredConsumptionStore.existingConsumption(db,operationUuid)?.let{(original,receipt)->
-            if(original.datasetUuid!=ticket.scope.dataset || original.medicationUuid!=ticket.medicationUuid)fail(ReferenceError.OPERATION_CONFLICT)
+            if(original.datasetUuid!=ticket.scope.dataset || original.medicationUuid!=ticket.medicationUuid || original.record.scheduleSha256!=null)fail(ReferenceError.OPERATION_CONFLICT)
             val proposed=original.copy(record=original.record.copy(takenUtc=draft.takenUtc,takenZone=draft.takenZone,status="ON_TIME",legacyActualDoseBits=java.lang.Long.toHexString(java.lang.Double.doubleToRawLongBits(draft.clinicalDose)).padStart(16,'0')),
                 uses=draft.uses,stockEffect=draft.stockEffect,unlinkedActual=draft.unlinkedActual)
             if(MeasuredUsePayload.freeze(proposed).json!=MeasuredUsePayload.freeze(original).json)fail(ReferenceError.OPERATION_CONFLICT)
@@ -80,6 +82,43 @@ internal object MeasuredUseIntegration {
         val receipt=MeasuredConsumptionStore.consumeNewRecord(database,ticket.scope,saved,operationUuid,draft.uses,created,draft.stockEffect,draft.unlinkedActual)
         checkpoint(ActualUseCheckpoint.STOCK_CAPTURED)
         MeasuredConsumptionStore.auditStagedDataset(db)
+        return RecordedMeasuredUse(saved,receipt)
+    }
+    internal suspend fun slotRecord(database:NotesDatabase,key:String):RecordEntity? {
+        val id=database.openHelper.writableDatabase.query("SELECT id FROM dose_record WHERE slot_key=?",arrayOf(key)).use{if(it.moveToFirst())it.getLong(0) else null}
+        return id?.let{database.dao().recordById(it)}
+    }
+    suspend fun completeScheduled(database:NotesDatabase,ticket:MeasuredScheduledTicket,operationUuid:String,draft:MeasuredActualUseDraft,created:Instant,
+        checkpoint:(ActualUseCheckpoint)->Unit={}):RecordedMeasuredUse {
+        val db=database.openHelper.writableDatabase;check(db.inTransaction());owner(db,ticket.write)
+        require(ReferencePayload.uuid(operationUuid));checkDraft(draft,created)
+        val slot=ticket.slot;val dao=database.dao()
+        if(slot.medicationId!=ticket.write.medicationId || slot.skipped)fail(ReferenceError.INVALID_SOURCE)
+        val scheduledHash=MeasuredUsePayload.scheduleSha(slot.ruleId,slot.key,slot.at.toEpochMilli(),slot.zone.id,slot.dose,slot.lateMinutes)
+        val status=if(draft.takenUtc>slot.at.plusSeconds(slot.lateMinutes.toLong()*60).toEpochMilli())"LATE" else "ON_TIME"
+        MeasuredConsumptionStore.existingConsumption(db,operationUuid)?.let{(original,receipt)->
+            if(original.datasetUuid!=ticket.write.scope.dataset || original.medicationUuid!=ticket.write.medicationUuid ||
+                original.record.scheduleSha256!=scheduledHash || !sameActual(original,draft,status))fail(ReferenceError.OPERATION_CONFLICT)
+            val identity=ReferenceStore.row(db,"reference_identity","uuid=?",arrayOf(original.record.uuid)) ?: fail(ReferenceError.UNKNOWN_IDENTITY)
+            if(identity.isNull("live_handle"))fail(ReferenceError.UNKNOWN_IDENTITY)
+            val record=dao.recordById(identity.getLong("live_handle")) ?: fail(ReferenceError.UNKNOWN_IDENTITY)
+            return RecordedMeasuredUse(record,receipt)
+        }
+        validate(db,ticket.write)
+        val existing=slotRecord(database,slot.key)
+        if(existing?.id!=ticket.write.recordId)fail(ReferenceError.STALE_REVISION)
+        if(existing!=null && (existing.deleted_at_utc!=null || existing.origin!="APP" || existing.status !in setOf("MISSED","UNCONFIRMED")))fail(ReferenceError.ALREADY_CONSUMED)
+        val rule=dao.rules().singleOrNull{it.id==slot.ruleId && it.medication_id==slot.medicationId} ?: fail(ReferenceError.INVALID_SOURCE)
+        val record=RecordEntity(id=existing?.id ?: 0,medication_id=slot.medicationId,rule_version_id=slot.ruleId,slot_key=slot.key,
+            scheduled_utc=slot.at.toEpochMilli(),scheduled_zone=slot.zone.id,planned_dose=slot.dose,late_after_minutes_snapshot=slot.lateMinutes,
+            taken_utc=draft.takenUtc,taken_zone=draft.takenZone,actual_dose=draft.clinicalDose,status=status,origin="APP",revision=(existing?.revision ?: 0)+1,
+            config_snapshot=existing?.config_snapshot ?: rule.config_snapshot)
+        if(existing!=null && MeasuredUsePayload.scheduleSha(existing)!=scheduledHash)fail(ReferenceError.STALE_REVISION)
+        val saved=if(existing==null)record.copy(id=dao.record(record)) else record.also{dao.updateRecord(it)}
+        checkpoint(ActualUseCheckpoint.RECORD_WRITTEN)
+        ReferenceStore.captureContext(db,saved);checkpoint(ActualUseCheckpoint.CONTEXT_CAPTURED)
+        val receipt=MeasuredConsumptionStore.consumeNewRecord(database,ticket.write.scope,saved,operationUuid,draft.uses,created,draft.stockEffect,draft.unlinkedActual)
+        checkpoint(ActualUseCheckpoint.STOCK_CAPTURED);MeasuredConsumptionStore.auditStagedDataset(db)
         return RecordedMeasuredUse(saved,receipt)
     }
     suspend fun count(database:NotesDatabase,ticket:MeasuredWriteTicket,operationUuid:String,input:ConfirmedStockCount,created:Instant):MeasuredCountReceipt {
