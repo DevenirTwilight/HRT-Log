@@ -111,16 +111,28 @@ internal object ReferenceSchema {
         db.query("SELECT uuid FROM reference_dataset UNION ALL SELECT uuid FROM reference_identity UNION ALL SELECT uuid FROM reference_snapshot UNION ALL SELECT operation_uuid FROM reference_event UNION ALL SELECT uuid FROM record_reference_capture UNION ALL SELECT operation_uuid FROM measured_operation UNION ALL SELECT uuid FROM measured_allocation").use { c ->
             while(c.moveToNext()) require(ReferencePayload.uuid(c.getString(0)))
         }
-        db.query("SELECT kind,namespace,source_version,payload_json,payload_sha256 FROM reference_snapshot").use { c -> while(c.moveToNext()) {
-            val json = JSONObject(c.getString(3)); val canonical = ReferencePayload.canonical(json)
-            require(canonical == c.getString(3) && ReferencePayload.sha(canonical) == c.getString(4))
-            require(json.getString("kind") == c.getString(0) && json.getString("namespace") == c.getString(1) && json.getString("source_version") == c.getString(2))
-            // P1 product linkage only. Presentation/measurement activation has its own reviewed P3/P4 validator.
-            if(candidate && c.getString(0)=="PRESENTATION") PackageMeasurementPayload.read(canonical)
-            else {
-                require(c.getString(0) == "PRODUCT") { "Presentation storage not yet enabled" }
-                ReferencePayload.validateProduct(json)
+        // Only pure payload validation is reused; row ownership/header/digest checks still run for every row.
+        // Bounded by 64 complete texts and confined to this read-only transaction. Never keyed by untrusted SHA.
+        data class PayloadHeader(val kind:String,val namespace:String,val version:String,val sha:String)
+        val validated=LinkedHashMap<String,PayloadHeader>()
+        val reuse=candidate && db.inTransaction()
+        fun payloadHeader(text:String):PayloadHeader {
+            if(reuse)validated[text]?.let{return it}
+            val json=JSONObject(text);val canonical=ReferencePayload.canonical(json)
+            require(canonical==text)
+            val kind=json.getString("kind")
+            if(candidate && kind=="PRESENTATION")PackageMeasurementPayload.read(canonical)
+            else {require(kind=="PRODUCT") {"Presentation storage not yet enabled"};ReferencePayload.validateProduct(json)}
+            val header=PayloadHeader(kind,json.getString("namespace"),json.getString("source_version"),ReferencePayload.sha(canonical))
+            if(reuse) {
+                if(validated.size==64)validated.remove(validated.keys.first())
+                validated[text]=header
             }
+            return header
+        }
+        db.query("SELECT kind,namespace,source_version,payload_json,payload_sha256 FROM reference_snapshot").use { c -> while(c.moveToNext()) {
+            val header=payloadHeader(c.getString(3))
+            require(header.sha==c.getString(4) && header.kind==c.getString(0) && header.namespace==c.getString(1) && header.version==c.getString(2))
         } }
         db.query("SELECT * FROM reference_event").use { c -> while(c.moveToNext()) {
             val event=ReferenceStore.row(db,"reference_event","operation_uuid=?",arrayOf(c.getString(c.getColumnIndexOrThrow("operation_uuid"))))!!

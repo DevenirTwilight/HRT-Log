@@ -77,54 +77,73 @@ internal object ReferencePayload {
         digest.forEachIndexed {index,byte->val n=byte.toInt() and 255;out[index*2]=alphabet[n ushr 4];out[index*2+1]=alphabet[n and 15]}
         return String(out)
     }
-    /** Fixed JSON escaping and scalar Unicode validation; independent of Android's JSONObject writer version. */
-    private fun quote(text: String): String = buildString {
-        append('"')
+    /** Byte-identical scalar escaping, appending safe runs without per-character builder calls. */
+    private fun StringBuilder.quote(text: String) {
+        append(34.toChar())
         var index=0
+        var run=0
         while(index<text.length) {
-            val c=text[index++]
-            require(c!='\u0000')
+            val c=text[index]
+            require(c.code!=0)
             when {
                 Character.isHighSurrogate(c) -> {
-                    require(index<text.length && Character.isLowSurrogate(text[index]))
-                    append(c);append(text[index++])
+                    require(index+1<text.length && Character.isLowSurrogate(text[index+1]))
+                    index+=2
                 }
                 Character.isLowSurrogate(c) -> error("Unpaired Unicode surrogate")
-                c=='"' -> append("\\\"")
-                c=='\\' -> append("\\\\")
-                c=='\b' -> append("\\b")
-                c=='\t' -> append("\\t")
-                c=='\n' -> append("\\n")
-                c=='\u000c' -> append("\\f")
-                c=='\r' -> append("\\r")
-                c.code<32 -> append("\\u"+c.code.toString(16).padStart(4,'0'))
-                else -> append(c)
+                c.code==34 || c.code==92 || c.code<32 -> {
+                    append(text,run,index)
+                    when {
+                        c=='"' -> append("\\\"")
+                        c=='\\' -> append("\\\\")
+                        c=='\b' -> append("\\b")
+                        c=='\t' -> append("\\t")
+                        c=='\n' -> append("\\n")
+                        c=='\u000c' -> append("\\f")
+                        c=='\r' -> append("\\r")
+                        c.code<32 -> append("\\u"+c.code.toString(16).padStart(4,'0'))
+                    }
+                    index++;run=index
+                }
+                else -> index++
             }
         }
-        append('"')
+        append(text,run,text.length)
+        append(34.toChar())
     }
     fun canonical(json: JSONObject): String {
-        fun encode(value: Any, depth: Int): String {
+        // One builder for the whole tree; no intermediate encoded subtree strings.
+        val out=StringBuilder()
+        fun encode(value: Any, depth: Int) {
             require(depth <= 16) { "Reference nesting limit" }
-            return when (value) {
-                JSONObject.NULL -> "null"
+            when (value) {
+                JSONObject.NULL -> out.append("null")
                 is JSONObject -> {
                     require(value.length() <= 64)
-                    value.keys().asSequence().toList().sorted().joinToString(",", "{", "}") { key ->
+                    out.append('{')
+                    value.keys().asSequence().toList().sorted().forEachIndexed { index,key ->
                         require(key.length <= 64)
-                        quote(key) + ":" + encode(value.get(key), depth + 1)
+                        if(index>0)out.append(',')
+                        out.quote(key);out.append(':');encode(value.get(key),depth+1)
                     }
+                    out.append('}')
                 }
                 is JSONArray -> {
                     require(value.length() <= 128)
-                    (0 until value.length()).joinToString(",", "[", "]") { encode(value.get(it), depth + 1) }
+                    out.append('[')
+                    for(index in 0 until value.length()) {
+                        if(index>0)out.append(',')
+                        encode(value.get(index),depth+1)
+                    }
+                    out.append(']')
                 }
-                is String -> { require(value.length <= MAX_TEXT); quote(value) }
-                is Int, is Long, is Boolean -> value.toString()
+                is String -> {require(value.length <= MAX_TEXT);out.quote(value)}
+                is Int, is Long, is Boolean -> out.append(value.toString())
                 else -> error("Exact reference values must use decimal strings, not floating point")
             }
         }
-        return encode(json, 0).also { require(it.toByteArray(Charsets.UTF_8).size <= MAX_BYTES) }
+        encode(json,0)
+        return out.toString().also { require(it.toByteArray(Charsets.UTF_8).size <= MAX_BYTES) }
     }
     fun userProduct(product: UserReferenceProduct): JSONObject = JSONObject().apply {
         put("format", 1); put("kind", "PRODUCT"); put("namespace", "USER_ENTERED")

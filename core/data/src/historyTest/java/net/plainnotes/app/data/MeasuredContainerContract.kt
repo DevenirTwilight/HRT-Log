@@ -32,6 +32,30 @@ abstract class MeasuredContainerContract {
     private suspend fun create(med:Long,op:String,source:PackageMeasurementDraft=draft,ticket:String?=null)=db.withTransaction{MeasuredContainerStore.create(db,ticket ?: ReferenceStore.previewEpoch(raw),med,op,source,at)}
     private fun count(table:String)=raw.query("SELECT COUNT(*) FROM `$table`").use{it.moveToFirst();it.getInt(0)}
     private suspend fun reject(code:ReferenceError,block:suspend()->Unit){try{block();fail("Expected $code")}catch(e:ReferenceFailure){assertEquals(code,e.code)}}
+    @Test fun candidateColumnScanPreservesEveryStorageTypeAndTextBoundaryPredicate() {
+        CandidateColumnScanOracle.check(context,factory(key.clone()),false)
+    }
+    @Test fun candidateColumnScanPreservesGlobalRowAndUtf8ByteBudgets() {
+        CandidateColumnScanOracle.check(context,factory(key.clone()),true)
+    }
+    @Test fun repeatedPayloadValidationStillChecksEveryRowsHeaderDigestAndCompleteText()=runBlocking {
+        val med=med();create(med,UUID.randomUUID().toString());create(med,UUID.randomUUID().toString())
+        val payloads=raw.query("SELECT payload_json FROM reference_snapshot").use{c->buildList{while(c.moveToNext())add(c.getString(0))}}
+        assertEquals(2,payloads.size);assertEquals(payloads[0],payloads[1])
+        for(change in listOf("source_version='synthetic-changed'","namespace='WRONG'","kind='PRODUCT'",
+            "payload_sha256='${"0".repeat(64)}'","payload_json=replace(payload_json,'SYNTHETIC tablets','SYNTHETIC changed')")) {
+            var rejected=false
+            try {db.withTransaction {
+                raw.execSQL("DROP TRIGGER reference_immutable_reference_snapshot_update")
+                raw.execSQL("UPDATE reference_snapshot SET $change WHERE rowid=(SELECT MAX(rowid) FROM reference_snapshot)")
+                ReferenceSchema.validateCandidateReferences(raw)
+                error("Modified repeated source accepted: $change")
+            }} catch(_:IllegalArgumentException){rejected=true}
+            assertTrue("Invalid repeated source rejected",rejected)
+        }
+        db.withTransaction{ReferenceSchema.validateCandidateReferences(raw)}
+        assertEquals(2,count("reference_snapshot"))
+    }
     @Test fun explicitContainerCreationFreezesASeparateUnitWithoutChangingMedicationOrLegacyStock()=runBlocking {
         val med=med();val before=db.dao().medication(med)
         val old=db.dao().insertContainer(ContainerEntity(medication_id=med,capacity=100.0,initial_used_amount=2.0,used_amount=2.0,state="IN_USE",opened_on="2026-10-15"))

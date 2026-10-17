@@ -1,0 +1,57 @@
+{
+  "baseline": "34f0e01e3713f12f744502d7053b440bb4b9da1c",
+  "run": 39057460488,
+  "artifact": 12109604851,
+  "zip_sha256": "ee60e852fc7d7c24185bb840786e2703eb60def154c01ef112baf109b42ca4e1",
+  "crc": "PASS",
+  "failures": [
+    {
+      "class": "net.plainnotes.app.reminder.CacheStoreTest",
+      "failure": "MavenArtifactFetcher / FileNotFoundException",
+      "public_artifact_urls": [
+        "https://repo1.maven.org/maven2/org/robolectric/android-all-instrumented/9-robolectric-4913185-2-i7/android-all-instrumented-9-robolectric-4913185-2-i7.pom.sha512"
+      ],
+      "numeric_historical_http_status": "UNAVAILABLE",
+      "report_sha256": "5cc61ea07b335ddf9091820f95bcc77b1b9fce03d2a431d69d19f29454a358df"
+    },
+    {
+      "class": "net.plainnotes.app.reminder.ExactAlarmTest",
+      "failure": "MavenArtifactFetcher / FileNotFoundException",
+      "public_artifact_urls": [
+        "https://repo1.maven.org/maven2/org/robolectric/android-all-instrumented/12-robolectric-7732740-i7/android-all-instrumented-12-robolectric-7732740-i7.pom.sha512"
+      ],
+      "numeric_historical_http_status": "UNAVAILABLE",
+      "report_sha256": "0f0e429be6df71b92158f61eac8bcf8e382ff713092c0ce3a37870fcfc19f789"
+    },
+    {
+      "class": "net.plainnotes.app.reminder.LockedBootAlarmTest",
+      "failure": "MavenArtifactFetcher / FileNotFoundException",
+      "public_artifact_urls": [
+        "https://repo1.maven.org/maven2/org/robolectric/android-all-instrumented/9-robolectric-4913185-2-i7/android-all-instrumented-9-robolectric-4913185-2-i7.pom.sha512"
+      ],
+      "numeric_historical_http_status": "UNAVAILABLE",
+      "report_sha256": "81df3d08f9c0fa1e421fe7f2d50c48912158221fb66cce14db400e365f2286e0"
+    },
+    {
+      "class": "net.plainnotes.app.reminder.NotificationPrivacyTest",
+      "failure": "MavenArtifactFetcher / FileNotFoundException",
+      "public_artifact_urls": [
+        "https://repo1.maven.org/maven2/org/robolectric/android-all-instrumented/9-robolectric-4913185-2-i7/android-all-instrumented-9-robolectric-4913185-2-i7.pom.sha512"
+      ],
+      "numeric_historical_http_status": "UNAVAILABLE",
+      "report_sha256": "18b120cfbff64592ecc02306b142606975287906c3dec869a063fc27700b7cda"
+    },
+    {
+      "class": "net.plainnotes.app.reminder.StockAlertsClearTest",
+      "failure": "MavenArtifactFetcher / FileNotFoundException",
+      "public_artifact_urls": [
+        "https://repo1.maven.org/maven2/org/robolectric/android-all-instrumented/15-robolectric-13954326-i7/android-all-instrumented-15-robolectric-13954326-i7.pom.sha512"
+      ],
+      "numeric_historical_http_status": "UNAVAILABLE",
+      "report_sha256": "7e3865cd5e106714edabf13da2af5fc9ab12cbd29d5564e5ae8887c8b21e2db3"
+    }
+  ],
+  "fix_pr": 63,
+  "fix_head": "80c31ce5d5c7fbfb7e4d6f0b48dd873b37d7486d",
+  "review": "Gradle offline property exists in all three modules; no application code, test assertions or manifest changes in PR diff. Final CI still pending. Runtime fetch failure is established; historical HTTP404 is not independently established by numeric response evidence."
+}

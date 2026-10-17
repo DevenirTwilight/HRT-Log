@@ -1,3 +1,9 @@
+## 2026-10-17 P4 审计热点优化提交
+
+保留原始提前行数门后，最终本地 data402 零失败/零跳过；Python168 PASS。单构建器 canonical 以冻结旧编码器作字节/SHA 对照；候选列检查保留所有类型/行数/UTF8预算，批量扫描；候选来源检查仅事务内有界复用完整文本。新3项 shared 负向测试复用原生 SQLCipher runner，未削弱旧断言。先前中间版 Android 源码编译成功，最终重编译/原生预算与六CI待跑。中间 JVM 大库审计1916ms、三次写入2369/2534/2267ms，DIAGNOSTIC_ONLY，不冒充 API26。
+
+主线 CI 五项实际失败出处和公开依赖 URL 已核对，历史数字 HTTP 状态 UNAVAILABLE；#63 为 Claude 独立修复仍待 CI。API35 Back 三失败原因 UNVERIFIED，未改断言。现有 UI 最小接线审计见 p5/existing-ui-wiring-audit-2026-10-17.md；未改共享 UI。Beta 缺口清单独立草稿 #64，真机/升级 NOT_RUN。结论 P4_BLOCKED / 正式入口 OFF，P5/P6 未实施。
+
 ## 2026-10-17 后端收尾任务重新核查
 
 默认分支已到 35600a0（#60 仅参考图、#62 发布账本已合并）。#63 是 Claude 独立 CI 修复，正在检查，不争用共享 Gradle/CI。#57 原生 run39047684726 完整运行但四项时限失败，证据见 p4/performance/native-fifth-evidence.json；P4_BLOCKED，P5/P6 未开放。CPU 诊断不是验收。新任务原文归档，需求编号冲突保留两份授权后顺延；发布 build29 不重做。

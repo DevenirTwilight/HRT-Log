@@ -99,16 +99,22 @@ internal object BackupValidation {
     internal fun validateCandidateStoredColumns(db:SupportSQLiteDatabase) {
         check(db.inTransaction());var total=0L;var textBytes=0L
         for(table in DOMAIN_TABLES) {
+            // Retain the original early row fence before scanning stored values.
             total+=db.query("SELECT COUNT(*) FROM `$table`").use{it.moveToFirst();it.getLong(0)}
             require(total<=BackupLimits.MAX_ROWS)
             val columns=db.query("PRAGMA table_info(`$table`)").use{c->buildList{while(c.moveToNext())add(c.getString(1) to c.getString(2))}}
-            for((column,type) in columns) {
+            // Trusted schema identifiers only. Aggregate all original column predicates in one table scan.
+            val invalid=columns.map { (column,type) ->
                 val allowed=when(type){"INTEGER"->"typeof(`$column`)='integer'";"TEXT"->"typeof(`$column`)='text' AND length(`$column`)<=1048576";"REAL"->"typeof(`$column`) IN ('integer','real') AND `$column` BETWEEN -1.7976931348623157e308 AND 1.7976931348623157e308";else->error("Unknown trusted storage type")}
-                db.query("SELECT 1 FROM `$table` WHERE `$column` IS NOT NULL AND NOT ($allowed) LIMIT 1").use{require(!it.moveToFirst())}
-                if(type=="TEXT") {
-                    textBytes+=db.query("SELECT COALESCE(SUM(length(CAST(`$column` AS BLOB))),0) FROM `$table`").use{it.moveToFirst();it.getLong(0)}
-                    require(textBytes<=BackupLimits.MAX_JSON_BYTES)
-                }
+                "COALESCE(MAX(CASE WHEN `$column` IS NOT NULL AND NOT ($allowed) THEN 1 ELSE 0 END),0)"
+            }
+            val lengths=columns.filter{it.second=="TEXT"}.map{(column,_)->"COALESCE(length(CAST(`$column` AS BLOB)),0)"}
+            val bytes=if(lengths.isEmpty())"0" else "COALESCE(SUM(${lengths.joinToString("+")}),0)"
+            val projection=(listOf(bytes)+invalid).joinToString(",")
+            db.query("SELECT $projection FROM `$table`").use { c ->
+                require(c.moveToFirst())
+                textBytes+=c.getLong(0);require(textBytes<=BackupLimits.MAX_JSON_BYTES)
+                for(index in columns.indices)require(c.getLong(index+1)==0L)
             }
         }
     }

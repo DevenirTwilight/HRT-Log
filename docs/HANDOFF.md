@@ -1,3 +1,7 @@
+## P4 批量审计与后端收尾 — 2026-10-17
+
+新增优化/负向验证已通过最终本地 data402、Python168；原生和最终 CI 尚待跑，不得称 P4 已完成或合并。完整失败证据、范围与当前报告见 [集成账本](ansm-integration/WORK-STATE.md)。#63 独立 CI 修复由 Claude 负责；#64 是仅文档 Beta NO-GO 清单，无发布授权。P5 完成真实代码接线审计，未实施 gateway/UI 写入，不重画 Claude UI，也未启用附件。官方资源/PK/发行边界不变。
+
 ## ANSM 后端收尾续作 — 2026-10-17
 
 #57 合入最新默认 35600a0，保留 build29 发布账本与 Claude 八张 REFERENCE_ONLY 图。新任务见 REQUIREMENTS §107；旧 P4/V4 编号顺延 §105/106，主线发布 §104 不变。CI 修复 #63 已由 Claude 负责，避免重复开发。原生性能第五次运行完整 FAIL，四项超时；准确指标见 [阶段账本](ansm-integration/WORK-STATE.md) 及 performance/native-fifth-report.json。当前 P4_BLOCKED，正式精确库存入口 OFF，P5/P6 未实施，未发布。

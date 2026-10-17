@@ -81,7 +81,7 @@
       "blocker": "",
       "owner_decision_required": false,
       "progress": "IN_PROGRESS",
-      "note": "P4内部正式流程已编码；data396/shared114/Period5/Privacy3/Python168、原生源码及同规模JVM大库预算PASS。第四轮原生ART192MiB下审计32.57s/预测22.90s超15s，加密恢复进程退出。分块严格UTF8及仅不可变/事务内缓存修复待原生重验，仍PRODUCTION_BLOCKED，App入口OFF，P5/P6未完成。"
+      "note": "P4完整原生 run39047684726 FAIL：审计27783.74839ms、预测26154.10693ms、恢复后审计27298.74734ms、写入26612/27220/26803ms，未改预算。新单构建器 canonical 与冻结旧编码器399项回归PASS；批量SQL/事务内有界来源验证正在验证，不冒充原生成功。P4_BLOCKED，入口OFF，P5/P6未实施。#63为独立CI修复，#64为Beta缺口文档。"
     },
     {
       "requirement_id": "V4.04",

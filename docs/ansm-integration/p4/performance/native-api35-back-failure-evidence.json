@@ -1,0 +1,27 @@
+{
+  "head": "6e05960be2c754387bff2d8e8be397c6fbce381d",
+  "run": 39047681347,
+  "artifact_id": 12106777544,
+  "zip_sha256": "7f3347c1a74da3a8ce1ec036603831783149cb040cdad2aa9209c52e1fc7cca1",
+  "crc": "PASS",
+  "failures": [
+    {
+      "class": "net.plainnotes.app.calendar.CalendarIntakeAndroidTest.html",
+      "failure_excerpt": "sts \n \n \n \n Failed tests \n \n  \n cancelAndSystemBackOnTheIntakeDialogWriteNothing \n \n androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 10000 ms\nat androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:755)\nat androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:362)\nat net.plainnotes.app.calendar.CalendarIntakeAndroidTest.systemBack(CalendarIntakeAndroidTest.kt:66)\nat net.plainnotes.app.calendar.CalendarIntakeAndroidTest.cancelAndSystemBackOnTheIntakeDialogWriteNothing(CalendarIntakeAn"
+    },
+    {
+      "class": "net.plainnotes.app.calendar.CalendarIntakeAndroidTest.html",
+      "failure_excerpt": "keAndroidTest.kt:77)\n \n \n \n \n  \n oneSaveThenBackNavigationLeavesExactlyOneIntake \n \n androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 10000 ms\nat androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:755)\nat androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:362)\nat net.plainnotes.app.calendar.CalendarIntakeAndroidTest.activityBack(CalendarIntakeAndroidTest.kt:69)\nat net.plainnotes.app.calendar.CalendarIntakeAndroidTest.oneSaveThenBackNavigationLeavesExactlyOneIntake(CalendarIntakeA"
+    },
+    {
+      "class": "net.plainnotes.app.privacy.PrivacyNoticeDeviceAndroidTest.html",
+      "failure_excerpt": "Failed tests \n \n  \n noticeOpensReadsSurvivesRecreationAndClosesWithBack \n \n java.lang.AssertionError: Failed: assertDoesNotExist.\nReason: Did not expect any node but found '1' node that satisfies: (TestTag = 'privacy-notice')\nNode found:\nNode #10227 at (l=0.0, t=0.0, r=320.0, b=568.0)px, Tag: 'privacy-notice'\nIsContainer = 'true'\nHas 3 children\n\nat androidx.compose.ui.test.SemanticsNodeInteraction.assertDoesNotExist(SemanticsNodeInteraction.kt:101)\nat net.plainnotes.app.privacy.PrivacyNoticeDeviceAndroidTest.noticeOpensReadsSurvivesRecreationAndClosesWithBack(PrivacyNoticeDeviceAndroidTest.kt:47)\n \n \n \n \n \n Tests"
+    }
+  ],
+  "same_test_sources_as_baseline": "git diff origin/claude/new-session-1959qb HEAD -- app/src/androidTestFull app/src/debug is empty at bfcec65",
+  "root_cause": "UNVERIFIED; system Back/focus failures differ from dependency fetch failure",
+  "baseline_api35_run": 39062691298,
+  "baseline_api35_status": "PASS at inspection; same-runner focused reproduction not yet performed",
+  "reproduction": "NOT_RUN",
+  "assertions": "UNCHANGED"
+}

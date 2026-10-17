@@ -960,4 +960,4 @@ operation owned generation/UUID/暂存device wrap/hash及终态不可逆清理�
 
 ## 107. 后端收尾与中国 Beta 验收（2026-10-17）
 
-原文见 [任务书](ansm-completion/sources/owner-backend-beta-2026-10-17.md)。先复核主线 CI 修复，再完成现有 #57 原生性能与安全门、复用既有 UI 最小 P5 接线、P6 E2E 与中国 Beta readiness。#63 已由并行开发者提交，不重复修改其 Gradle/CI；不将 ANSM 合并授权扩大到 CI PR。原生性能不达标保持 P4_BLOCKED/OFF。不重新签名、发布、移动 build29 标签。原 §104 续作顺延 §105，原 §105 V4 顺延 §106，历史来源原文保留；主线 §104 一次性发布授权及已完成记录不变。
+原文见 [任务书](ansm-completion/sources/owner-backend-beta-2026-10-17.md)，SHA256 `dd09002972f5aebb5cfecfd14fdf031da7a5f688e559a38bb25ad761277cb63e`。先复核主线 CI 修复，再完成现有 #57 原生性能与安全门、复用既有 UI 最小 P5 接线、P6 E2E 与中国 Beta readiness。#63 已由并行开发者提交，不重复修改其 Gradle/CI；不将 ANSM 合并授权扩大到 CI PR。原生性能不达标保持 P4_BLOCKED/OFF。不重新签名、发布、移动 build29 标签。原 §104 续作顺延 §105，原 §105 V4 顺延 §106，历史来源原文保留；主线 §104 一次性发布授权及已完成记录不变。
