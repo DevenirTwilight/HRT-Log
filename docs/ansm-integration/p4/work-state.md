@@ -83,3 +83,5 @@ Room12检查点0843450六项CI在push/PR全部SUCCESS；当前仍DRAFT，不以�
 库存编码检查点最终data330（共享56）/原生源码编译/Period5/Privacy3/Python159全部PASS。旧v1VOID证据已通过实际Repository恢复；v2每条历史审计都校验稳定容器UUID，含已恢复状态的伪造UUID负例确实FAIL后转绿；旧9/10导入、旧最大9/10 reader拒绝11、版本错误先于目标库打开及编码双向UPDATE禁止均覆盖。新SourceMode字段为存储标记，不是官方身份/单位推断。来源指纹见encoding-final-local-evidence.json，原失败保留。当前未连接精确备份/实际写入UI；下一步严格JSON整数词法、不可变生命周期前缀与完整精确恢复，不能套用旧0a418eb原生50通过当新56通过。
 
 2026-10-17 严格输入：完整data334/共享60 JVM PASS，原生源码编译PASS；尾随JSON真实红例与夹具初始化顺序失败均已归档。Python159 PASS（首次从仓库根直接调用产生3个导入错误，改用PYTHONPATH=scripts及discover后完整159运行通过，未改测试）。API35旧固定业务版本断言正在修正并补充Legacy标记断言；公开精确恢复/新UI仍OFF。见strict-backup-input-contract.md。
+
+2026-10-17 性能及CI续作：事务内身份/来源/整数前缀索引本地完整data388/shared113和原生测试源码编译PASS，未缓存跨事务信任。相同手动探针exact200中位168.86→104.34ms，审计275.65→153.62ms，仅DIAGNOSTIC_ONLY，大库/低内存/设备门未完成。原始报告及来源指纹归档performance/。9281885远端android真实FAIL：新增MeasuredReconciliation被调用隔离守卫拒绝；本次只为该文件添加精确路径/精确imports/禁用API合同，同时新增逐个I/O、PK和未知import负例，不移除原守卫。完整Python160 PASS；新HEAD六CI待验，#57继续DRAFT，App写入口OFF。

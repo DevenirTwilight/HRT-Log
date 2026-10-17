@@ -174,3 +174,29 @@ class InventoryEncodingIsolationTest(unittest.TestCase):
                 self.assertEqual('FAIL', report.isolation()['status'])
                 encoding.write_text(content)
                 self.assertEqual('PASS', report.isolation()['status'])
+
+
+class ReconciliationIsolationTest(unittest.TestCase):
+    def test_reconciliation_rejects_io_pk_and_unreviewed_imports(self):
+        import tempfile
+        from unittest.mock import patch
+        original_root = report.ROOT
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for relative in (report.MODEL / 'MeasurementCore.kt', report.APPROVED_CORE, report.APPROVED_STOCK_QUANTUM,
+                             report.APPROVED_PACKAGE_CODEC, report.APPROVED_CONTAINER_STORE, report.APPROVED_USE_PAYLOAD,
+                             report.APPROVED_CONSUMPTION_STORE, report.APPROVED_OPERATION_CHAIN, report.APPROVED_RECONCILIATION):
+                target = root / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_text((original_root / relative).read_text())
+            reconciliation = root / report.APPROVED_RECONCILIATION
+            content = reconciliation.read_text()
+            with patch.object(report, 'ROOT', root):
+                self.assertEqual('PASS', report.isolation()['status'])
+                for token in report.STORE_FORBIDDEN_APIS:
+                    reconciliation.write_text(content + '\n' + token)
+                    self.assertEqual('FAIL', report.isolation()['status'], token)
+                reconciliation.write_text(content + '\nimport java.time.Clock')
+                self.assertEqual('FAIL', report.isolation()['status'])
+                reconciliation.write_text(content)
+                self.assertEqual('PASS', report.isolation()['status'])

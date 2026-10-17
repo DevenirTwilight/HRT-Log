@@ -33,6 +33,8 @@ APPROVED_CORRECTIONS = Path('core/data/src/main/java/net/plainnotes/app/data/Pac
 CORRECTION_IMPORTS = ['import android.content.ContentValues', 'import android.database.sqlite.SQLiteDatabase', 'import androidx.sqlite.db.SupportSQLiteDatabase', 'import org.json.JSONObject', 'import net.plainnotes.app.domain.measurement.MeasureResult', 'import java.security.MessageDigest', 'import java.time.Instant', 'import java.time.ZoneOffset', 'import java.util.UUID']
 APPROVED_CONSUMPTION_STORE = Path('core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt')
 CONSUMPTION_IMPORTS = ['import android.database.Cursor', 'import androidx.sqlite.db.SupportSQLiteDatabase', 'import net.plainnotes.app.domain.measurement.*', 'import net.plainnotes.app.domain.stock.StockQuantum', 'import org.json.JSONArray', 'import org.json.JSONObject', 'import java.math.BigDecimal', 'import java.time.Instant', 'import java.util.UUID']
+APPROVED_RECONCILIATION = Path('core/data/src/main/java/net/plainnotes/app/data/MeasuredReconciliation.kt')
+RECONCILIATION_IMPORTS = ['import androidx.sqlite.db.SupportSQLiteDatabase', 'import net.plainnotes.app.domain.measurement.*', 'import net.plainnotes.app.domain.stock.StockQuantum', 'import org.json.JSONArray', 'import org.json.JSONObject', 'import java.util.UUID']
 USE_IMPORTS = ['import net.plainnotes.app.domain.measurement.*', 'import net.plainnotes.app.domain.stock.StockQuantum', 'import org.json.JSONArray', 'import org.json.JSONObject']
 STORE_IMPORTS = ['import net.plainnotes.app.domain.measurement.MeasureResult', 'import org.json.JSONObject', 'import java.time.Instant', 'import java.util.UUID']
 STORE_FORBIDDEN_APIS = ('java.io.', 'java.net.', 'java.nio.', 'System.currentTimeMillis', 'Instant.now(', 'System.getenv', 'Class.forName', 'net.plainnotes.app.pk', 'SupplyLedger.allocate')
@@ -51,7 +53,7 @@ def isolation():
             relative = file.relative_to(ROOT)
             if any(part in relative.parts for part in ('build', 'test', 'androidTest', 'historyTest', 'medicalTest', 'attachmentTest')):
                 continue
-            if any(token in file.read_text() for token in ('net.plainnotes.app.domain.measurement', 'net.plainnotes.app.domain.stock')) and relative not in (APPROVED_CORE, APPROVED_STOCK_QUANTUM, APPROVED_PACKAGE_CODEC, APPROVED_CONTAINER_STORE, APPROVED_USE_PAYLOAD, APPROVED_CONSUMPTION_STORE, APPROVED_CORRECTIONS):
+            if any(token in file.read_text() for token in ('net.plainnotes.app.domain.measurement', 'net.plainnotes.app.domain.stock')) and relative not in (APPROVED_CORE, APPROVED_STOCK_QUANTUM, APPROVED_PACKAGE_CODEC, APPROVED_CONTAINER_STORE, APPROVED_USE_PAYLOAD, APPROVED_CONSUMPTION_STORE, APPROVED_CORRECTIONS, APPROVED_RECONCILIATION):
                 offenders.append(str(relative))
     imports = [line for line in (ROOT / MODEL / 'MeasurementCore.kt').read_text().splitlines() if line.startswith('import ')]
     core = ROOT / APPROVED_CORE
@@ -98,7 +100,14 @@ def isolation():
     encoding_imports = [line for line in encoding_text.splitlines() if line.startswith('import ')]
     encoding_forbidden = [token for token in STORE_FORBIDDEN_APIS if token in encoding_text]
     encoding_valid = not encoding.exists() or (encoding_imports == ENCODING_IMPORTS and not encoding_forbidden)
-    return {'status': 'PASS' if correction_valid and encoding_valid and chain_valid and consumption_valid and use_valid and store_valid and package_valid and stock_valid and not offenders and imports == PURE_IMPORTS and core.is_file() and production_imports == PURE_IMPORTS and not forbidden else 'FAIL',
+    reconciliation = ROOT / APPROVED_RECONCILIATION
+    reconciliation_text = reconciliation.read_text() if reconciliation.is_file() else ''
+    reconciliation_imports = [line for line in reconciliation_text.splitlines() if line.startswith('import ')]
+    reconciliation_forbidden = [token for token in STORE_FORBIDDEN_APIS if token in reconciliation_text]
+    reconciliation_valid = not reconciliation.exists() or (reconciliation_imports == RECONCILIATION_IMPORTS and not reconciliation_forbidden)
+    return {'status': 'PASS' if reconciliation_valid and correction_valid and encoding_valid and chain_valid and consumption_valid and use_valid and store_valid and package_valid and stock_valid and not offenders and imports == PURE_IMPORTS and core.is_file() and production_imports == PURE_IMPORTS and not forbidden else 'FAIL',
+            'approved_reconciliation': str(APPROVED_RECONCILIATION) if reconciliation.exists() else None,
+            'reconciliation_imports': reconciliation_imports, 'reconciliation_forbidden_apis': reconciliation_forbidden,
             'approved_corrections': str(APPROVED_CORRECTIONS) if corrections.exists() else None,
             'correction_imports': correction_imports, 'correction_forbidden_apis': correction_forbidden,
             'approved_inventory_encoding': str(APPROVED_INVENTORY_ENCODING) if encoding.exists() else None,

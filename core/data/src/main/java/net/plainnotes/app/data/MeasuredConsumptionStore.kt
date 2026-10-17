@@ -184,29 +184,51 @@ internal object MeasuredConsumptionStore {
             db.query("SELECT ${if(table=="reference_event" || table=="measured_operation")"operation_uuid" else "uuid"} FROM `$table` WHERE $where",args).use { c ->
                 buildList {while(c.moveToNext())add(ReferenceStore.row(db,table,"${if(table=="reference_event" || table=="measured_operation")"operation_uuid" else "uuid"}=?",arrayOf(c.getString(0)))!!)}
             }
+        // Caches live only in this read-only audit transaction: no persisted or cross-write trust.
+        val identityRows=HashMap<String,JSONObject>()
+        val sources=HashMap<List<String>,Pair<JSONObject,FrozenPackageMeasurement>>()
+        val scales=HashMap<String,MeasureResult<StockQuantum>>()
+        fun stockScale(frozen:FrozenPackageMeasurement)=scales.getOrPut(frozen.sha256){frozen.stockScale()}
         fun identity(uuid:String,kind:String,dataset:String,owner:String?=null):JSONObject {
-            val r=ReferenceStore.row(db,"reference_identity","uuid=?",arrayOf(uuid))!!
+            val r=identityRows.getOrPut(uuid){ReferenceStore.row(db,"reference_identity","uuid=?",arrayOf(uuid))!!}
             require(r.getString("kind")==kind && r.getString("dataset_uuid")==dataset)
             if(owner!=null)require(r.getString("owner_uuid")==owner)
             return r
         }
-        fun source(container:String,eventId:String,sha:String,dataset:String,owner:String):Pair<JSONObject,FrozenPackageMeasurement> {
+        fun source(container:String,eventId:String,sha:String,dataset:String,owner:String):Pair<JSONObject,FrozenPackageMeasurement> = sources.getOrPut(listOf(container,eventId,sha,dataset,owner)) {
             val box=identity(container,"CONTAINER",dataset,owner)
             val event=ReferenceStore.row(db,"reference_event","operation_uuid=?",arrayOf(eventId))!!
             require(event.getString("dataset_uuid")==dataset && event.getString("subject_uuid")==container && !event.isNull("snapshot_uuid"))
             val snap=ReferenceStore.row(db,"reference_snapshot","uuid=?",arrayOf(event.getString("snapshot_uuid")))!!
             require(snap.getString("dataset_uuid")==dataset && snap.getString("kind")=="PRESENTATION" && snap.getString("payload_sha256")==sha)
             val frozen=PackageMeasurementPayload.read(snap.getString("payload_json"));require(frozen.sha256==sha)
-            return box to frozen
+            box to frozen
         }
         val chain=MeasuredOperationChain.validate(db)
+        data class PrefixIndex(val usedAtHead:Map<Long,Long>,val headBeforeSequence:java.util.TreeMap<Int,Long>)
+        val prefixes=HashMap<Pair<String,Long>,PrefixIndex>()
         fun prefix(box:JSONObject,scale:StockQuantum,head:Long,sequence:Int):Long {
             require(head>=0)
-            if(box.isNull("live_handle")) {require(head==0L);return 0L} // Never join a retired original_handle to a reused row.
-            val entries=projectionEntries(db,box.getLong("live_handle"))
-            require(head==(entries.filter{chain.getValue(it.operation_id).sequence<sequence}.maxOfOrNull{it.id} ?: 0L))
-            val deltas=entries.filter{it.id<=head}.map {e->require(e.used_delta.toLong().toDouble()==e.used_delta && kotlin.math.abs(e.used_delta)<=StockQuantum.MAX_QUANTA);e.used_delta.toLong()}
-            val value=scale.restoredUsed(0,deltas);require(value is MeasureResult.Success);return value.value
+            if(box.isNull("live_handle")) {require(head==0L);return 0L}
+            val index=prefixes.getOrPut(box.getString("uuid") to scale.capacityQuanta) {
+                val entries=projectionEntries(db,box.getLong("live_handle"))
+                val atHead=HashMap<Long,Long>().apply{put(0,0)}
+                val beforeSequence=java.util.TreeMap<Int,Long>()
+                var used=0L
+                for(e in entries) {
+                    require(e.used_delta.toLong().toDouble()==e.used_delta && kotlin.math.abs(e.used_delta)<=StockQuantum.MAX_QUANTA)
+                    // Same exact reducer and every bounded prefix, computed once rather than once per operation.
+                    val next=scale.restoredUsed(used,listOf(e.used_delta.toLong()));require(next is MeasureResult.Success)
+                    used=next.value;atHead[e.id]=used
+                    val seq=chain.getValue(e.operation_id).sequence
+                    beforeSequence[seq]=maxOf(beforeSequence[seq] ?: 0,e.id)
+                }
+                var maximum=0L
+                for(entry in beforeSequence.entries){maximum=maxOf(maximum,entry.value);entry.setValue(maximum)}
+                PrefixIndex(atHead,beforeSequence)
+            }
+            require(head==(index.headBeforeSequence.lowerEntry(sequence)?.value ?: 0L))
+            return requireNotNull(index.usedAtHead[head])
         }
         fun physical(frozen:FrozenPackageMeasurement,scale:StockQuantum,input:Quantity):MeasureResult<Quantity> =
             physicalStock(frozen,scale,input)
@@ -257,7 +279,7 @@ internal object MeasuredConsumptionStore {
                         require(confirmations.size==1)
                         val confirmation=confirmations.single();require(confirmation.getString("dataset_uuid")==dataset && confirmation.getString("actual_snapshot_uuid")==c.getString("snapshot_uuid"))
                         require(confirmed.add(confirmation.getString("uuid")))
-                        val scaleResult=frozen.stockScale();require(scaleResult is MeasureResult.Success);val scale=scaleResult.value
+                        val scaleResult=stockScale(frozen);require(scaleResult is MeasureResult.Success);val scale=scaleResult.value
                         val head=if(c.isNull("ledger_head_id"))null else c.getString("ledger_head_id").toLong()
                         val state=ReferencePayload.optional(c,"stock_state")
                         val used=if(state==null) {require(box.isNull("live_handle") && head==null && c.isNull("used_before_quanta"));null}
@@ -298,7 +320,7 @@ internal object MeasuredConsumptionStore {
                     val capture=adjustmentCapture(op);val r=capture.request
                     capture.bridgeFor?.let{MeasuredReconciliation.verifyBridge(db,op,it,chain)}
                     val (box,frozen)=source(r.getString("container_uuid"),r.getString("presentation_event_uuid"),r.getString("presentation_sha256"),dataset,r.getString("medication_uuid"))
-                    val scaleResult=frozen.stockScale();require(scaleResult is MeasureResult.Success);val scale=scaleResult.value
+                    val scaleResult=stockScale(frozen);require(scaleResult is MeasureResult.Success);val scale=scaleResult.value
                     val used=prefix(box,scale,capture.ledgerHead,chain.getValue(id).sequence);require(r.getString("expected_used_quanta")==used.toString())
                     val target=PackageMeasurementPayload.quantity(r.getJSONObject("remaining_stock"))
                     val n=if(target.value.signum()==0){require(Measurements.add(scale.quantum.copy(value=BigDecimal.ZERO),target) is MeasureResult.Success);0L}
