@@ -4,7 +4,7 @@
 - 本地构建 full release：`check_release_manifest.py` PASS（无 INTERNET）、`check_attachment_release_isolation.py` PASS、provenance SOURCE_DIRTY=false。签名 APK SHA-256 `0d950bbb4bb281089318e080e3272400498b48cd094f4ffb4675fbabe6f93201`，证书 989ba045…59379b1（旧公开 full/play 证书已核对相同），v2/v3、16KB 对齐、四 ABI、非 debug。临时签名材料已删除，永久备份未改。
 - 旧 tag/附件留档：`docs/releases/0.2.0-build5-superseded.md`；新说明：`docs/releases/0.2.0-rebuild-2026-10-17.md`；账本已追加 29（下一次 ≥ 30）。
 - **Release 已替换（2026-10-17）**：会话本身不能写 Release/tag（HTTP 403），负责人授权改用 GitHub Actions。临时孤立分支 `release-upload-v0.2.0-build29`（只含 4 个附件、说明和一次性工作流）触发 run 39056383497：先核对哈希和 Release/tag 原状态，删除 5 个旧附件，上传 4 个新附件并替换说明，把 tag `v0.2.0` 从 `462da22` 移到 `76627bfe`，再下载复核，全部成功。这是“APK 不进仓库”规则的一次性例外（APK 本来就公开发布）。
-- **待负责人处理**：会话代理不允许删除分支，请在 GitHub 网页 Branches 页删除 `release-upload-v0.2.0-build29`。
+- 临时分支已删除（代理不允许直接删除，改为推送一个只含“删除本分支”工作流的提交，由 Actions 删除）；Release 附件不受影响。
 - NOT_RUN：真机 ARM 覆盖安装（build 5 → 29、build 28 → 29）。
 
 ## ANSM-02B/03B 联合实施开始 — 2026-10-16
