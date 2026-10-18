@@ -9,6 +9,7 @@ import androidx.compose.material.icons.automirrored.outlined.*
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -20,7 +21,7 @@ import net.plainnotes.app.R
 import net.plainnotes.app.data.MedicationEntity
 
 @Composable fun MedicationsScreen(state: NotesState, onAdd: () -> Unit, onEdit: (MedicationEntity) -> Unit, onArchive: (MedicationEntity) -> Unit, contentPadding: PaddingValues,onReference:((MedicationEntity)->Unit)?=null,onBrowseReference:(()->Unit)?=null,onStock:(()->Unit)?=null) {
-    var centerOpen by remember { mutableStateOf(false) }
+    var centerOpen by rememberSaveable { mutableStateOf(false) }
     val list = state.medications.sortedWith(compareByDescending<MedicationEntity> { it.active }.thenBy { it.sort_order }.thenBy { it.id })
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = contentPadding.calculateTopPadding() + 8.dp,
         bottom = contentPadding.calculateBottomPadding() + 96.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {

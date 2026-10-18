@@ -1,6 +1,8 @@
 package net.plainnotes.app.shell
 
 import android.content.Intent
+import android.content.IntentFilter
+import android.view.KeyEvent
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
@@ -101,6 +103,74 @@ class InAppNavigationLockAndroidTest {
         launch(); unlock()
         scenario!!.moveToState(Lifecycle.State.CREATED); scenario!!.recreate(); scenario!!.moveToState(Lifecycle.State.RESUMED)
         assertLocked("recreated in background, then returned")
+    }
+
+    private fun back() {
+        InstrumentationRegistry.getInstrumentation().sendKeyDownUpSync(KeyEvent.KEYCODE_BACK)
+        ui.waitForIdle()
+    }
+
+    /** Real dialog windows: Back dismisses only the top window, never launches an importer or asks for PIN. */
+    @Test fun centerDialogsBackNavigationKeepsSessionAndNeverLaunchesFiles() {
+        val instrumentation = InstrumentationRegistry.getInstrumentation()
+        val monitors = listOf(Intent.ACTION_OPEN_DOCUMENT, Intent.ACTION_GET_CONTENT, Intent.ACTION_CREATE_DOCUMENT)
+            .map { instrumentation.addMonitor(IntentFilter(it), null, true) }
+        try {
+            launch(); unlock(); open(Destination.MEDICAL)
+            listOf("files", "originals", "practitioners", "visit-links", "lab-links", "organize").forEach { suffix ->
+                val tag = "medical-future-$suffix"
+                ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag(tag))
+                ui.onNodeWithTag(tag).performClick()
+                ui.onNodeWithTag("center-unavailable-dialog").assertExists()
+                back()
+                ui.onNodeWithTag("center-unavailable-dialog").assertDoesNotExist()
+                ui.onNodeWithTag("medical-list").assertExists()
+                assertUnlocked("Back from $tag")
+            }
+            open(Destination.MEDICATIONS)
+            ui.onNodeWithTag("drug-center-open").performClick()
+            listOf("catalogue", "rcp", "notice", "safety", "supply", "recalls").forEach { suffix ->
+                val tag = "drug-center-$suffix"
+                ui.onNodeWithTag("drug-center-list").performScrollToNode(hasTestTag(tag))
+                ui.onNodeWithTag(tag).performClick()
+                ui.onNodeWithTag("center-unavailable-dialog").assertExists()
+                back()
+                ui.onNodeWithTag("center-unavailable-dialog").assertDoesNotExist()
+                ui.onNodeWithTag("drug-center-window").assertExists()
+                assertUnlocked("Back from $tag")
+            }
+            ui.onNodeWithTag("drug-center-list").performScrollToNode(hasTestTag("drug-center-browse"))
+            ui.onNodeWithTag("drug-center-browse").performClick()
+            ui.onNodeWithTag("reference-screen").assertExists()
+            back()
+            ui.onNodeWithTag("reference-window").assertDoesNotExist()
+            ui.onNodeWithTag("drug-center-window").assertExists()
+            back()
+            ui.onNodeWithTag("drug-center-window").assertDoesNotExist()
+            title().assertTextEquals(context.getString(R.string.medications))
+            assertUnlocked("Back to medication plans")
+            monitors.forEach { assertEquals("Unavailable modules must never launch a file activity", 0, it.hits) }
+        } finally {
+            monitors.forEach(instrumentation::removeMonitor)
+        }
+    }
+
+    /** Saved UI state survives rotation inside the unlocked session; it must not be shown over the lock screen. */
+    @Test fun centerRecreationKeepsOpenWindowButActualLeaveStillLocks() {
+        launch(); unlock(); open(Destination.MEDICATIONS)
+        ui.onNodeWithTag("drug-center-open").performClick()
+        scenario!!.recreate()
+        assertUnlocked("recreate inside drug center")
+        ui.onNodeWithTag("drug-center-window").assertExists()
+        back()
+        ui.onNodeWithTag("drug-center-window").assertDoesNotExist()
+        title().assertTextEquals(context.getString(R.string.medications))
+        ui.onNodeWithTag("drug-center-open").performClick()
+        UiPrefs(context).lockAfterMillis = 0L
+        scenario!!.moveToState(Lifecycle.State.CREATED)
+        scenario!!.moveToState(Lifecycle.State.RESUMED)
+        assertLocked("actual leave from drug center with immediate auto-lock")
+        ui.onNodeWithTag("drug-center-window").assertDoesNotExist()
     }
 
     private fun resumedMain(): MainActivity? {

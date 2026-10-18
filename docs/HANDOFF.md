@@ -1872,3 +1872,7 @@ GitHub标记BEHIND，需合入已合并#83的746bb2e9；该主线仅将versionCo
 ## 中心 #82：保留环境失败并同步已审交付记录 — 2026-10-18
 
 #84已合并14da0bdd，仅交付记录/HANDOFF/账本；严格BEHIND要求再次正常同步。本分支无APK/版本操作，UI与核心实现不变。原源c981276e的push/API29出现18项既有备份OOM，ART堆增长上限16777216字节；同源PR/API29通过，报告55§10有相同环境先例。原始失败见centers/ci-environment-failure.json及PR82，低内存真实设备风险未解决。定向重试因workflow运行中被GitHub拒绝，未实际启动；同步主线后的新最终HEAD需完整CI，不把新源通过伪称旧源重试通过。不改KDF、堆、断言、Schema或权限，仍不启用P4/附件/官方资料分发。最终HEAD/六CI/合并及主线收据以PR82为准。
+
+## 中心状态恢复收尾 — 2026-10-18
+
+基线491a910f（#82已合并，源与主线六项必需CI均PASS，完整收据见PR82）。独立分支fix/centers-state-restoration-20261018：新状态恢复测试先在未改生产源码上真实失败，恢复后drug-center-window丢失，见centers/state-restoration-red.json。仅将MedicationsScreen中心打开状态改为rememberSaveable；追加两个原生测试覆盖12占位弹窗实际Back、无文件Intent、真实参考窗口返回、旋转和离开后锁定。待本地GREEN及最新HEAD六CI，未声称设备测试成功；不改布局/文案/Room/库存/PK/附件权限或发布。

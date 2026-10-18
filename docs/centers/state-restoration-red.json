@@ -1,0 +1,9 @@
+{
+  "baseline": "491a910fce1864bb169cc3b251905a1fbf2168c3",
+  "result": "FAIL_EXPECTED",
+  "tests": 1,
+  "failures": 1,
+  "failure": "CenterStateRestorationTest.kt:31: drug-center-window missing after saved instance state restoration",
+  "xml_sha256": "3e4b0f53b949c6313fa52380d0ac5291c83c58a07f19eb2b1883d4f1f27b874f",
+  "production_changed_before_red": false
+}
