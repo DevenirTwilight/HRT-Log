@@ -108,7 +108,9 @@ internal object ReferencePayload {
                 else -> index++
             }
         }
-        append(text,run,text.length)
+        // Android26's CharSequence range append copies character by character.
+        // The whole String overload is safe only after the complete scalar scan above.
+        if(run==0)append(text) else append(text,run,text.length)
         append(34.toChar())
     }
     fun canonical(json: JSONObject): String {

@@ -1,3 +1,11 @@
+## P4 采样运输已验证；全字符串追加优化本地回归通过 — 2026-10-18
+
+原生0b3c703/run39109780636已取回2310261B ART采样；8字节预检与最终nonce ACK真实PASS，官方工件SHA/CRC、原始trace SHA和确定性gzip已保存，离线重跑parser与原摘要完全相同。采样158040条、152个边界未闭合帧、0未知方法/不匹配退出、无overflow，仅PARTIAL_DIAGNOSTIC，不是调用计数或完整CPU剖析。此前head失败保留，不再称运输待验。证据：p4/performance/native-profile-0b3c703/。
+
+同轮原始预算仍FAIL：audit15569ms、forecast16150ms、三次真实写入15939/15672/15662ms；恢复后audit14587ms。fixture/SQLCipher/512MiB模拟器/192MiB堆/全部预算不变。真实热点以SQLCipher游标读取和Android26 CharSequence区间追加为主，不按猜测改正则/UUID。新候选只在完整Unicode标量扫描后对未转义完整字符串调用String追加；转义区间及全部NUL/代理项/大小/摘要/历史字节约束保留。先新增2条共享边界测试，旧实现加新测试5项PASS，再改生产；全data415、Period5、Privacy3零失败/跳过，Python198全套PASS。环境重启后原Gradle日志不可用，保留实际JUnit时间戳/摘要；原生合同编译产物存在，真实新设备结果仍待CI，不冒充完整日志或实机通过。
+
+主线8ebb719和Beta文档49236a2各六必需CI全PASS；#65已按单独授权合并，旧build29不含该修复。P4候选未合并、DRAFT/PRODUCTION_BLOCKED，App精确写入口OFF，P5/P6 NOT_IMPLEMENTED，Beta NO-GO。无Schema/备份格式/库存行为/PK/签名/版本/发布变化。下一步推送候选并用完全相同API26大库及六CI验收；未达5秒继续基于实际热点优化，不削预算或全量审计。
+
 ## P4 原生预检定位 API26 head 不支持字节模式 — 2026-10-18
 
 ceb504d run39109323920在生成大库/加载SQLCipher前按设计停在TRANSPORT_PREFLIGHT_FAILED；PERFORMANCE_NOT_RUN，所有本轮性能数值UNAVAILABLE。官方工件12129374268 SHA/CRC已核验；原始逐路径错误明确：正确测试包的run-as执行head返回exit1/head: not integer: c，另一个候选包unknown。这是本次预检的已确认工具故障；前两轮未保存原始远端错误，不倒填为完全已确认。不会把fail-fast当预算通过，最后完整4dc写入15.6–16.3s仍FAIL/P4_BLOCKED。
