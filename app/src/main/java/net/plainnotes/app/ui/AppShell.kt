@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -100,6 +101,7 @@ class UiPrefs(context: Context) {
     var highReliability by remember { mutableStateOf(prefs.highReliability) }
     var disclaimer by remember { mutableStateOf(false) }
     val drawer = rememberDrawerState(DrawerValue.Closed)
+    val timelineAdd = remember { TimelineAddHost() }
     val scope = rememberCoroutineScope()
     val snackbar = remember { SnackbarHostState() }
     var completeEntry by remember { mutableStateOf<TimelineEntry?>(null) }
@@ -164,7 +166,7 @@ class UiPrefs(context: Context) {
     CompositionLocalProvider(LocalSimpleMode provides (simpleMode && state.medications.count { it.active } <= 1)) {
     ModalNavigationDrawer(drawerState = drawer, drawerContent = {
         ModalDrawerSheet {
-            DrawerContent(destination) { d -> medicalChild=null; destination = d; if (d == Destination.VISITS) { visitId = null; medicalOrigin=false }; if (d == Destination.SETTINGS) settingsPage = SettingsPage.OVERVIEW; scope.launch { drawer.close() } }
+            DrawerContent(destination, lowStockMedications(state.medications.filter { it.active }, extra.stockForecasts, today, java.time.ZoneId.systemDefault()).size) { d -> medicalChild=null; destination = d; if (d == Destination.VISITS) { visitId = null; medicalOrigin=false }; if (d == Destination.SETTINGS) settingsPage = SettingsPage.OVERVIEW; scope.launch { drawer.close() } }
         }
     }) {
         Scaffold(
@@ -181,6 +183,10 @@ class UiPrefs(context: Context) {
                         if (destination == Destination.WELLBEING) IconButton(onClick={wellbeingDialogs.summary=true}) { Icon(Icons.Outlined.PictureAsPdf,stringResource(R.string.wb_summary)) }
                         if (destination == Destination.CALENDAR) IconButton(onClick = { pickStart = true }) { Icon(Icons.Outlined.EditCalendar, stringResource(R.string.calendar_pick_start)) }
                         if (destination == Destination.CONCENTRATION) IconButton(onClick = { model.loadConcentration() }) { Icon(Icons.Outlined.Refresh, stringResource(R.string.refresh)) }
+                        // UI-05 D: the timeline's "Add milestone" / "New period" (the timeline registers its own callbacks).
+                        if (destination == Destination.TIMELINE) TimelineAddMenu(timelineAdd)
+                        // UI-05 F: "Record a past visit", the same action as the former list button.
+                        if (destination == Destination.MEDICAL) MedicalAddAction { model.clearMedicalVisitSave();medicalDialogs.edit=null;medicalDialogs.editing=true }
                     })
             },
             snackbarHost = { SnackbarHost(snackbar) },
@@ -238,7 +244,7 @@ class UiPrefs(context: Context) {
                     net.plainnotes.app.timeline.EventKind.APPOINTMENT->Destination.VISITS
                     else->Destination.HISTORY
                 }},pad,onAppointment={visitId=it;medicalOrigin=false;destination=Destination.VISITS},saveState=milestoneSave,onSaveHandled=model::clearMilestoneSave,onImportedHistory={importedRecordIds=it.toSet();destination=Destination.HISTORY},
-                    timelineActions=TimelineActions(model::editTimeline,model::deletePeriod))
+                    timelineActions=TimelineActions(model::editTimeline,model::deletePeriod),addHost=timelineAdd)
                 Destination.MEDICAL -> MedicalRecordsScreen(state.appointments,{visitId=it.id;medicalOrigin=true;destination=Destination.VISITS},
                     {model.clearMedicalVisitSave();medicalDialogs.edit=null;medicalDialogs.editing=true},{openMedicalChild(Destination.LABS)},{openMedicalChild(Destination.TIMELINE)},{destination=Destination.SETTINGS},pad,
                     onConfirm={model.clearMedicalVisitSave();model.saveMedicalVisit(it,it)},questionCounts=extra.visitQuestions.groupingBy{it.appointment_id}.eachCount(),onVisits={openMedicalChild(Destination.VISITS)})
@@ -302,7 +308,7 @@ internal val DRAWER_GROUPS: List<DrawerSection> = listOf(
     DrawerSection.Divider(listOf(Destination.SETTINGS, Destination.ABOUT)),
 )
 
-@Composable internal fun DrawerContent(selected: Destination, onSelect: (Destination) -> Unit) {
+@Composable internal fun DrawerContent(selected: Destination, stockLow: Int = 0, onSelect: (Destination) -> Unit) {
     Column(Modifier.verticalScroll(rememberScrollState()).padding(horizontal = 12.dp).testTag("drawer-content")) {
         Row(Modifier.padding(horizontal = 16.dp, vertical = 24.dp), verticalAlignment = Alignment.CenterVertically) {
             Surface(shape = MaterialTheme.shapes.medium, color = MaterialTheme.colorScheme.primary) {
@@ -320,8 +326,17 @@ internal val DRAWER_GROUPS: List<DrawerSection> = listOf(
                     modifier = Modifier.padding(start = 28.dp, end = 16.dp, top = 12.dp, bottom = 4.dp).semantics { heading() }.testTag("drawer-group:${section.key}"))
             }
             section.items.forEach { d ->
+                // UI-05 E: Stock shows how many medications are low (same set as the home strips), with a spoken description.
+                val stockBadge = d == Destination.STOCK && stockLow > 0
+                val badgeText = if (stockBadge) stringResource(R.string.drawer_stock_badge, stockLow) else ""
                 NavigationDrawerItem(label = { Text(stringResource(d.title)) }, icon = { Icon(d.icon, null) }, selected = selected == d,
-                    badge = if (!d.ready) ({ Text(stringResource(R.string.soon_badge), style = MaterialTheme.typography.labelSmall) }) else null,
+                    badge = if (!d.ready) ({ Text(stringResource(R.string.soon_badge), style = MaterialTheme.typography.labelSmall) })
+                        else if (stockBadge) ({
+                            Surface(color = MaterialTheme.colorScheme.tertiaryContainer, contentColor = MaterialTheme.colorScheme.onTertiaryContainer, shape = Corners.badge,
+                                modifier = Modifier.semantics { contentDescription = badgeText }.testTag("drawer-stock-badge")) {
+                                Text("$stockLow", style = MaterialTheme.typography.labelLarge.tnum(), modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp))
+                            }
+                        }) else null,
                     onClick = { onSelect(d) }, modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding))
             }
         }

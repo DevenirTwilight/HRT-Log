@@ -1,3 +1,21 @@
+## UI-05 视觉精修（REQUIREMENTS §109，报告 66）— 2026-10-18
+
+- 分支 `feature/ui05-visual-polish-20261018`，基于默认分支 1abfeea。任务书原文已归档 `docs/audits/product-quality-2026-10/sources/ui05/`。
+- 保护矩阵核对：TodayCard/MedicalRecordsScreen 不在矩阵；CalendarScreen、StockScreen、LongitudinalScreen、AppShell、Components 均为 HISTORY_ONLY；不触及 PK_DISPLAY_REVIEW 及更严格类别。
+- 计划按 A（今天卡）→B（首页库存横条）→C（库存卡）→D（时间线展示）→E（抽屉角标）→F（医疗档案）→G（全局细节）逐节提交。
+- A 完成：进度胶囊、倒计时（仅显示，逾期不显示，每分钟刷新）、52dp 主按钮带勾与圆形 ⋮、分隔线、记录行状态图标（文字保留）。`Ui05TodayCardTest` 9/9（红测 6/7 失败），TodayCardTest/HomeStockCardTest/Ui04/CalendarSemantics/CalendarCoreFlow 通过。
+- B 完成：首页低库存改为每药一条紧凑横条（tertiaryContainer、圆角 16、整条点进库存页、“添加库存”仍开同一 AddStockDialog），移到今天卡正下方、月历之前；最多 3 条，其余“还有 n 种”。判定仍为 StockForecast.isLow。`Ui05HomeStockTest` 4/4（红测 2/4 失败）。断言迁移：HomeStockCardTest 中行内药名从完全匹配改为包含匹配（药名现在在“[药名]快用完了”句中，含义不变）；`home-stock-view` 标签现挂在整条横条上，原“2 个查看入口、点第一个进入库存页”断言原样通过。
+- C 完成：库存卡药名下加“途径 · 频率”（复用 choiceLabel/scheduleText）、余量旁“约 n 天”（取 forecast 已算出的天数，无计划或覆盖整个窗口时不显示）、长句改为进度条下方 bodySmall。主按钮、⋮ 菜单、低库存变色与胶囊、包装折叠/管理入口不变。`Ui05StockCardTest` 4/4（红测 3/4 失败），其余 8 个库存测试类通过，无断言迁移。
+- D 完成（只改展示层，投影/编辑逻辑未动）：“添加里程碑”“新建时期”移入顶栏 + 菜单（`TimelineAddHost` 登记原回调，启用规则同原按钮）；时期卡类型改为胶囊、标题“[起]–[止]”或“[起] 至今 · 第 n 天”、方案每行前加圆点；事件与导入摘要画成所属分组卡下方的白色内嵌列表（36dp 彩色类型图标 + 类型·名称/日期两行 + 右箭头），归属完全来自原投影块顺序；即将发生的事件为虚线卡。类型配色：化验 tertiary、就诊 secondary、里程碑 primary、阶段回顾 inverseSurface、其他 surfaceVariant（漏服保留 error 色），明暗×三档对比度均 ≥3:1。`Ui05TimelineTest` 8/8（红测 5/6 失败）。
+  - 断言迁移（逐条）：LongitudinalUiTest 两项“点击列表中的添加里程碑按钮”改为“点顶栏 + → 添加里程碑”，其后对话框断言全部不变；TimelineEditUiTest“简洁模式下仍有新建时期入口”改为“+ 存在且时间线登记的新建时期回调存在且可用”（菜单项调用该回调由 Ui05TimelineTest 证明）。焦点滚动索引因移除按钮项由 +3 改为 +2。
+  - 测试环境发现：Robolectric 在 `w411dp-h891dp` 限定符下打开时间线上的对话框会一直不空闲（原主线代码同样），去掉限定符即正常；不是应用缺陷。
+- E 完成：抽屉“库存”入口在有低库存药物时显示 tertiaryContainer 数字胶囊，语义描述“库存：n 种即将用完”，0 不显示；数量与首页横条同一集合（共用 `lowStockMedications`，即 StockForecast.isLow），首页最多 3 条 +“还有 n 种”，合计等于角标数。`Ui05DrawerBadgeTest` 3/3（红测 1/3 失败），抽屉相关既有测试通过，无断言迁移。
+- F 完成：“记录已发生的就诊”移到顶栏 +（`MedicalAddAction`，同一动作，tag `medical-add`、内容描述原文案）；下次就诊卡改为日期小方块（月/日/星期，白底圆角 14）+“下次就诊 · n 天后”+ 类型 + 时间·医生·地点，下方内嵌两行“想问的问题 · n 条”“就诊资料包”，都打开同一复诊详情（资料包状态本页读不到，不显示、不新增查询）；已确认就诊改为每年一个白色内嵌列表（40dp 图标、类型、日期·医生或机构、备注/问题数、右箭头）。“去过了吗？”卡只统一圆角。`Ui05MedicalHomeTest` 3/3（红测 3/3 失败）。
+  - 断言迁移：MedicalHomeTest 点击 `medical-next-open` 改为点击 `medical-next-questions`（原按钮被两行取代，“打开最近一次就诊”不变）；MedicalRecordsUiContract 对已确认就诊 701 的 `performScrollToKey("visit:701")` 改为按行标签滚动（已确认就诊成为年度内嵌列表的行），其后可见、Button 角色、可点击、打开该就诊的断言不变。
+- G 完成（只在本轮改过的文件中）：分区标题统一 15sp 粗体（`sectionTitleStyle`：今天卡分区、医疗档案分区）；卡片 24/内嵌列表 16/胶囊 10 使用 UI-02A `Corners`；时间和余量等数字用等宽数字（tnum）。`Ui05ContrastTest`：新增胶囊与图标底色在明暗 × 标准/中/高对比度下文字 ≥4.5:1、图标 ≥3:1 全部通过。
+- 收尾：报告 `audits/product-quality-2026-10/66-ui05-visual-polish.md`；截图 `ui-audit/2026-10-18-ui05/`（before/after 各 192、compare 12、hires 6）；真机清单第 10 节；STATUS 已更新。本地完整回归 0 失败。下一步：开 PR 按 §106 自动合并，合并后复验主线，再按负责人要求出正式签名包 build 31。
+- 新任务书已归档排队：LAB-01（`sources/lab01/`，UI-05 合并后开始）、LAB-02（`sources/lab02/`，LAB-01 合并且主线全绿后只做阶段 A；阶段 B 须负责人按任务书第 4 节原话批准）。
+
 ## 药品资料中心 B 接线与医疗中心 A 合并 — 2026-10-18
 
 A #73最终3fd5b2f六项必需CI全部PASS、无评审讨论，已受保护自动合并为ff2a4e9。证据centers/medical-final-ci.json。B在该新主线上顺序增加AppShell一个browse回调，入口位于现有药物方案页面；复用同一MedicationReferenceController的查询、产品详情/当前药物关联，不另建Repository或数据源。独立显示32用例x3对比度PASS，首轮2例实际点击被标题栏遮挡已修复，保留失败证据与全部触控断言。真实AppShell、非空记录/库存流水/Profile不变性及既有回归共133项本地PASS（0失败/跳过），源哈希/逐类计数centers/drug-integration-test-evidence.json；截图复核后将真实查询入口前移，最终版式38项定向复验PASS（非另增38个独立用例），证据centers/drug-final-layout-evidence.json，旧133版截图另存未覆盖。此源码检查点CI待验，后续最终HEAD/CI/合并收据以PR #74为准，不能宣称设备或发布验收完成。官方分发、RCP/Notice独立审查#58、安全/监管、P4写入、医疗原件仍OFF；真机/TalkBack NOT_RUN。并行#72未修改或复制，实际旧守卫失败证据centers/parallel-pr72-review.json。
