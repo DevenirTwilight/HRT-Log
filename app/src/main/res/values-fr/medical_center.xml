@@ -1,0 +1,7 @@
+<resources>
+    <string name="medical_center_overview">Aperçu du dossier médical</string>
+    <string name="medical_center_visits">Rendez-vous et consultations passées</string>
+    <string name="medical_center_prepare">Questions et préparation de consultation</string>
+    <string name="medical_center_pack">Export du dossier de consultation</string>
+    <string name="medical_center_choose_visit">Choisissez une consultation pour préparer vos questions ou exporter son dossier PDF. Les consultations sont partagées avec le suivi.</string>
+</resources>
