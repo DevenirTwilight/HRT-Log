@@ -1,3 +1,9 @@
+## build30 已交付（REQUIREMENTS §107）— 2026-10-18
+
+- 0.2.0 / versionCode 30 正式签名包，构建自 `dfb21c79`（#68 合并，含 #66 会话 P0-B 与 #67 提醒 P0-A），APK SHA-256 `f0e209f1a08c1bb6a2c65c907ecb20d365ab6c52d70127abe5e312c60c6703c8`，证书 989ba045…59379b1。
+- 已核验：无 INTERNET、release 隔离 PASS、v2/v3、16KB 对齐、四 ABI、非 debug、签名前后内容一致；临时签名材料已删除。会话私密文件交付；账本已追加 30，下一次交付需 ≥ 31。记录见 `docs/delivery/build30-china-beta-p0-2026-10-18.json`。
+- 公开 Release v0.2.0 仍为 build 29，未改动。NOT_RUN：真机安装与国产 ROM 验证。
+
 ## 中国 Beta P0-A：测试提醒不出现（REQUIREMENTS §105）— 2026-10-18
 
 - 根因（测试证实）：`testReminder()` 只把测试写入闹钟缓存，不进数据库；每次 `sync()`（MainActivity.onResume、开机、时间/时区变化、精确闹钟权限变化）和 `mutate()` 都按数据库重建缓存，测试被静默清除。用户检查三个系统开关后返回应用即触发。另：测试固定用 NORMAL，无法测试高可靠模式；权限/渠道被关时无任何反馈。

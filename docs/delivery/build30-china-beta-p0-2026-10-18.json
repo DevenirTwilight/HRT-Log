@@ -1,0 +1,51 @@
+{
+ "apk": "HRT-Log-build30-ChinaBetaP0-full-official.apk",
+ "package": {
+  "application_id": "net.plainnotes.app",
+  "version_code": 30,
+  "version_name": "0.2.0"
+ },
+ "apk_sha256": "f0e209f1a08c1bb6a2c65c907ecb20d365ab6c52d70127abe5e312c60c6703c8",
+ "signing_cert_sha256": [
+  "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1"
+ ],
+ "source": {
+  "SOURCE_DIRTY": "false",
+  "SOURCE_ORIGIN": "git",
+  "SOURCE_SHA": "dfb21c79d23c053f0d0e0f40242aa85db12f6a1c"
+ },
+ "size_bytes": 13142900,
+ "signature_v2": true,
+ "signature_v3": true,
+ "zipalign_16kb": true,
+ "abis": [
+  "arm64-v8a",
+  "armeabi-v7a",
+  "x86",
+  "x86_64"
+ ],
+ "debuggable": false,
+ "internet_permission": false,
+ "release_manifest_check": "PASS",
+ "attachment_release_isolation": "PASS",
+ "signed_unsigned_payload_identical": true,
+ "added_signature_entries": [
+  "META-INF/MANIFEST.MF",
+  "META-INF/RELEASE.RSA",
+  "META-INF/RELEASE.SF"
+ ],
+ "unsigned_apk_sha256": "3769c7fc5fd74661846cf9506e746677c8d5d813bbcc6b500923c1e1d6c29842",
+ "temporary_credentials_removed": true,
+ "source_ci": {
+  "pr_68_head": "1c0165a8",
+  "conclusion": "all required checks success on PR #68 head (android, jvm, device-tests API35, API26/29, science)",
+  "includes": [
+   "#66 session P0-B",
+   "#67 reminder P0-A"
+  ]
+ },
+ "authorization": "REQUIREMENTS §107",
+ "physical_arm_installation": "NOT_RUN",
+ "delivery_channel": "claude-session-private-file",
+ "download_links_in_public_repository": false
+}
