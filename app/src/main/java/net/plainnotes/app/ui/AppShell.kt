@@ -218,7 +218,7 @@ class UiPrefs(context: Context) {
                         },
                         dataSlot = { DataSection(model, state.medications.associate { it.id to scheduleText(state.schedules[it.id]) }) },
                         binSlot = { RecycleBinSection(state, extra, model::restoreTrash, model::purgeTrash, model::emptyTrash) },
-                        testStatus = reminderTest, onTestNow = { model.testNotificationNow() }, onRefreshTest = model::refreshReminderTest)
+                        testStatus = reminderTest, onRefreshTest = model::refreshReminderTest)
                 }
                 Destination.ABOUT -> AboutScreen(pad)
                 Destination.TIMELINE -> LongitudinalScreen(state,extra,model::saveMilestone,model::deleteMilestone,{kind->destination=when(kind){

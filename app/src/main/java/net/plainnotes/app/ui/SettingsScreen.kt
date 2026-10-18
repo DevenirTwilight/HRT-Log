@@ -61,7 +61,7 @@ class Appearance(val mode: ThemeMode, val dynamic: Boolean, val contrast: Contra
                                page: SettingsPage = SettingsPage.OVERVIEW, onPage: (SettingsPage) -> Unit = {}, summaries: SettingsSummaries = SettingsSummaries(),
                                wellbeingSlot: @Composable ColumnScope.() -> Unit = {}, privacySlot: @Composable ColumnScope.() -> Unit = {},
                                dataSlot: @Composable ColumnScope.() -> Unit = {}, binSlot: @Composable ColumnScope.() -> Unit = {},
-                               testStatus: ReminderTestStatus = ReminderTestStatus(), onTestNow: () -> Unit = {}, onRefreshTest: () -> Unit = {}) {
+                               testStatus: ReminderTestStatus = ReminderTestStatus(), onRefreshTest: () -> Unit = {}) {
     val context = LocalContext.current; val inspection = LocalInspectionMode.current
     val revision = resumeRevision()
     var reliabilityInfo by remember { mutableStateOf(false) }
@@ -103,7 +103,6 @@ class Appearance(val mode: ThemeMode, val dynamic: Boolean, val contrast: Contra
                 }
             }
             FilledTonalButton(onClick = onTest) { Icon(Icons.Outlined.NotificationsActive, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.test_reminder)) }
-            FilledTonalButton(onClick = onTestNow) { Icon(Icons.Outlined.Notifications, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.test_now)) }
             ReminderTestStatusText(testStatus, onRefreshTest)
             SwitchRow(stringResource(R.string.high_reliability), highReliability, stringResource(R.string.high_privacy)) { onHighReliability(it) }
             TextButton(onClick = { reliabilityInfo = !reliabilityInfo }) { Text(stringResource(R.string.reliability_limits_title)) }

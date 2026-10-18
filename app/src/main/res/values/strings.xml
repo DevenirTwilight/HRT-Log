@@ -32,7 +32,7 @@
 <string name="data_error">Encrypted data could not be opened. Unlock your device and retry. If the key is unavailable, restore from a backup; existing data will be kept.</string>
 <string name="operation_error">Operation could not be completed. Check the fields and retry.</string>
 <string name="invalid">Check the date, dose and schedule fields.</string>
-<string name="test_reminder">Send a test reminder in 1 minute</string>
+<string name="test_reminder">Send a test notification (one now, one in 1 minute)</string>
 <string name="high_reliability">High reliability mode</string>
 <string name="high_privacy">This mode can show an alarm icon and the next alarm in system UI. It still needs exact alarm access.</string>
 <string name="reliability_limits">Reminders cannot run while powered off or force stopped. A restart before first unlock uses a neutral 48-hour cache; after that window, reminders need an unlock. Before unlocking, a timezone change cannot recalculate the cached local schedule.</string>
@@ -1233,7 +1233,6 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="ref2_history_stale">The dataset changed. Close this window and reopen the record.</string>
 <string name="ref2_history_error">Could not read the saved reference. Closing this window leaves the record unchanged.</string>
 <string name="ref2_history_saved_only">This shows the saved record. Unsaved changes are not included.</string>
-<string name="test_now">Send a test notification now</string>
 <string name="test_now_result">Immediate test at %1$s: %2$s</string>
 <string name="test_scheduled">Test reminder set for %1$s (%2$s). You can leave the app while you wait.</string>
 <string name="test_mode_exact">exact alarm</string>
