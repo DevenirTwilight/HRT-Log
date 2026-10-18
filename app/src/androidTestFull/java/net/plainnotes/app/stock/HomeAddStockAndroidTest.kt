@@ -1,5 +1,6 @@
 package net.plainnotes.app.stock
 
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import kotlinx.coroutines.runBlocking
@@ -33,10 +34,14 @@ class HomeAddStockAndroidTest {
         runBlocking { context.repository.addContainers(id, 2.0, 1, true) }
         context.model.sync()
         ui.waitUntil(20_000) { runCatching { ui.onNode(hasScrollToIndexAction()).performScrollToNode(hasTestTag("home-stock-add:$id")) }.isSuccess }
-        // UI-04: the today card now also lists today's records and later doses, so the stock card is the last item below
-        // the fold; scrolled only until visible it sits under the floating Add button. Scroll to the end, as the user does
-        // (the list's bottom padding lifts the last card clear of that button), then tap.
-        repeat(3) { ui.onNode(hasScrollToIndexAction()).performTouchInput { swipeUp() } }; ui.waitForIdle()
+        // UI-05 B: the low-stock strip sits right under the today card, no longer last. Scrolled only until visible it can sit
+        // under the floating Add button, so lift it with short swipes until it is clear of that button, then tap.
+        repeat(6) {
+            val add = ui.onNodeWithTag("home-stock-add:$id").fetchSemanticsNode().boundsInRoot
+            val fab = ui.onNodeWithTag("calendar-add").fetchSemanticsNode().boundsInRoot
+            if (add.bottom < fab.top) return@repeat
+            ui.onNode(hasScrollToIndexAction()).performTouchInput { swipe(Offset(centerX, centerY), Offset(centerX, centerY - height / 5f)) }; ui.waitForIdle()
+        }
         val before = containers().size
         ui.onNodeWithTag("home-stock-add:$id").performClick()
         saveDialog()
