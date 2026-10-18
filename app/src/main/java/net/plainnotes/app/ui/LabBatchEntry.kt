@@ -155,10 +155,13 @@ internal fun labFlag(v: LabValueEntity): LabFlag? {
     Row(Modifier.fillMaxWidth().heightIn(min = 56.dp).testTag("lab-group-row:${v.id}").clickable(role = Role.Button, onClick = onOpen).clearAndSetSemantics {
         contentDescription = spoken; role = Role.Button; onClick { onOpen(); true } }.padding(horizontal = 16.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-        Text(name, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
-        Column(horizontalAlignment = Alignment.End) {
-            Text("$number ${v.unit}", style = MaterialTheme.typography.bodyLarge.tnum(), fontWeight = FontWeight.Medium)
-            flag?.let { Text(it, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.error, modifier = Modifier.testTag("lab-flag:${v.id}")) }
+        // Two lines (name, then value and flag) so nothing is cut mid-word at 320dp and font 2x.
+        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Text(name, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.Bottom) {
+                Text("$number ${v.unit}", style = MaterialTheme.typography.bodyLarge.tnum(), fontWeight = FontWeight.Medium, modifier = Modifier.weight(1f, fill = false))
+                flag?.let { Text(it, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.error, modifier = Modifier.testTag("lab-flag:${v.id}")) }
+            }
         }
         Icon(Icons.AutoMirrored.Outlined.KeyboardArrowRight, null)
     }
