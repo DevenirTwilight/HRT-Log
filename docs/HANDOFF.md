@@ -1,3 +1,7 @@
+## CI独立候选：精确闹钟测试前置权限 — 2026-10-18
+
+主线417 run39122664759/job117661246072在ReminderTestDeviceTest第52行status.exact断言失败，发生在90s等待前；同源Beta设备绿不覆盖该失败。原fixture只关闭AppOps命令管道，未等命令完成；竞态原因仍HYPOTHESIS。独立分支仅改androidTest一个文件：读到EOF再关闭，并在API31+明确断言AlarmManager已看到grant后才运行原测试。三个用例、全部旧断言、5/8s输入和90s期限逐字保留，不轮询/延时/重跑掩盖。原生编译及三API/六CI待验；完整隔离计划见ci-stability/exact-alarm-preflight-20261018/README.md。按最新主线REQUIREMENTS106走受保护auto-merge，无prod提醒/UI/库存/Schema/PK/权限/版本/签名/发布变化，真机NOT_RUN。
+
 ## build30 已交付（REQUIREMENTS §107）— 2026-10-18
 
 - 0.2.0 / versionCode 30 正式签名包，构建自 `dfb21c79`（#68 合并，含 #66 会话 P0-B 与 #67 提醒 P0-A），APK SHA-256 `f0e209f1a08c1bb6a2c65c907ecb20d365ab6c52d70127abe5e312c60c6703c8`，证书 989ba045…59379b1。
