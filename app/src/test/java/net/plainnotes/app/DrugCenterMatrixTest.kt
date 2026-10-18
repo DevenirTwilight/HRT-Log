@@ -54,10 +54,13 @@ class DrugCenterMatrixTest(private val locale:String,private val width:Int,priva
             }
             list.performScrollToIndex(0)
             if(System.getenv("CENTER_SHOTS")=="1" && width==320 && font==2f && !landscape && mode==Contrast.HIGH) {
-                ui.waitForIdle();val view=requireNotNull(org.robolectric.shadows.ShadowDialog.getLatestDialog()?.window).decorView
+                ui.waitForIdle();val view=requireNotNull(org.robolectric.shadows.ShadowDialog.getShownDialogs().lastOrNull{it.isShowing}?.window).decorView
                 check(view.width>0 && view.height>0)
                 val image=Bitmap.createBitmap(view.width,view.height,Bitmap.Config.ARGB_8888)
                 view.draw(android.graphics.Canvas(image))
+                val colors=hashSetOf<Int>()
+                for(x in 0 until image.width step 16)for(y in 0 until image.height step 16)colors.add(image.getPixel(x,y))
+                check(colors.size>8){"Blank center screenshot"}
                 val folder=File("build/drug-center-shots").apply{mkdirs()}
                 File(folder,"${locale}_${width}dp_${font}x_${if(dark)"dark" else "light"}_${mode.name}.png").outputStream().use{image.compress(Bitmap.CompressFormat.PNG,100,it)}
             }
