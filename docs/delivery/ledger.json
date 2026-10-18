@@ -64,6 +64,19 @@
    "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
    "file_name": "plainnotes-0.2.0-full.apk",
    "channel": "public-github-release-v0.2.0"
+  },
+  {
+   "date": "2026-10-18T11:00:00Z",
+   "version_code": 30,
+   "version_name": "0.2.0",
+   "application_id": "net.plainnotes.app",
+   "source_sha": "dfb21c79d23c053f0d0e0f40242aa85db12f6a1c",
+   "source_origin": "git",
+   "source_dirty": false,
+   "apk_sha256": "f0e209f1a08c1bb6a2c65c907ecb20d365ab6c52d70127abe5e312c60c6703c8",
+   "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
+   "file_name": "HRT-Log-build30-ChinaBetaP0-full-official.apk",
+   "channel": "claude-session-private-file"
   }
  ]
 }
