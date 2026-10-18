@@ -25,7 +25,7 @@ private const val DIVIDER = "|"
 private val EXPECTED: List<Any> = listOf(
     Destination.CALENDAR, Destination.TIMELINE,
     "journal", Destination.HISTORY, Destination.WELLBEING,
-    "medication", Destination.MEDICATIONS, Destination.STOCK, Destination.CONCENTRATION,
+    "medication", Destination.MEDICATIONS, Destination.REFERENCE, Destination.STOCK, Destination.CONCENTRATION,
     "records", Destination.MEDICAL, Destination.VISITS, Destination.LABS,
     DIVIDER, Destination.SETTINGS, Destination.ABOUT,
 )
@@ -68,7 +68,7 @@ class Ui03DrawerTest(private val locale: String, private val width: Int, private
     @Test fun orderAndGroupsMatchTheDecision() {
         assertEquals(EXPECTED, sequence())
         assertEquals(Destination.entries.toSet(), EXPECTED.filterIsInstance<Destination>().toSet())
-        assertEquals(12, EXPECTED.count { it is Destination })
+        assertEquals(13, EXPECTED.count { it is Destination })
     }
 
     @Test fun threeHeadingsAndNothingBeforeTheTopEntries() {
