@@ -32,7 +32,7 @@
 <string name="data_error">無法開啟加密資料。請先解鎖裝置再重試。如果金鑰不可用，請從備份恢復；現有資料會被保留。</string>
 <string name="operation_error">操作未能完成。請檢查填寫內容後重試。</string>
 <string name="invalid">請檢查日期、劑量和週期的填寫。</string>
-<string name="test_reminder">1 分鐘後傳送一條測試提醒</string>
+<string name="test_reminder">發送測試通知（現在一則，1 分鐘後再一則）</string>
 <string name="high_reliability">高可靠提醒模式</string>
 <string name="high_privacy">此模式可能會在系統介面顯示鬧鐘圖示和下一次鬧鐘時間，並且仍需要精確鬧鐘權限。</string>
 <string name="reliability_limits">關機或被強制停止時無法提醒。重啟後、首次解鎖前，只能使用一份不含健康資訊的 48 小時快取；超過這段時間，需要解鎖後才會繼續提醒。首次解鎖前如果更改了時區，快取中的本地時間不會重新計算。</string>
@@ -1233,4 +1233,16 @@
 <string name="ref2_history_stale">資料集已變更，請關閉視窗並重新開啟紀錄。</string>
 <string name="ref2_history_error">無法讀取已儲存的來源，關閉視窗不會變更紀錄。</string>
 <string name="ref2_history_saved_only">此處顯示已儲存的紀錄，不包含尚未儲存的修改。</string>
+<string name="test_now_result">%1$s 立即測試：%2$s</string>
+<string name="test_scheduled">測試提醒已安排在 %1$s（%2$s）。等待期間可以離開應用程式。</string>
+<string name="test_mode_exact">精確鬧鐘</string>
+<string name="test_mode_high">高可靠模式，系統鬧鐘</string>
+<string name="test_mode_inexact">未允許精確鬧鐘：可能延遲</string>
+<string name="test_received">%1$s 已收到鬧鐘：%2$s</string>
+<string name="test_missing">預定時間已過，但沒有收到鬧鐘。系統可能在延遲或阻止本應用程式的背景鬧鐘。</string>
+<string name="test_out_shown">通知已顯示</string>
+<string name="test_out_not_shown">已發送，但系統沒有顯示</string>
+<string name="test_out_permission">被阻止：未授予通知權限</string>
+<string name="test_out_app">被阻止：本應用程式的通知已關閉</string>
+<string name="test_out_channel">被阻止：提醒通知類別已關閉</string>
 </resources>

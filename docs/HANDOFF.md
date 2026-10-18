@@ -1,4 +1,15 @@
+## 中国 Beta P0-A：测试提醒不出现（REQUIREMENTS §105）— 2026-10-18
+
+- 根因（测试证实）：`testReminder()` 只把测试写入闹钟缓存，不进数据库；每次 `sync()`（MainActivity.onResume、开机、时间/时区变化、精确闹钟权限变化）和 `mutate()` 都按数据库重建缓存，测试被静默清除。用户检查三个系统开关后返回应用即触发。另：测试固定用 NORMAL，无法测试高可靠模式；权限/渠道被关时无任何反馈。
+- 修复：缓存中标记测试闹钟并在重建时保留直至触发（超时 15 分钟则丢弃）；重复点击只保留一个；按用户当前模式（HIGH 走 setAlarmClock）；同批到期时正式提醒与测试分别发出；新增“立即发送测试通知”（不经 AlarmManager）；`ReminderTestLog` 分别记录已安排/广播到达/通知结果（显示、已发未显示、权限/应用/渠道阻止），设置页显示。缓存格式双向兼容。
+- 证据：红测 7f01e82 CI 1382 项中仅新增 3 项失败（返回应用、数据修改、进程重建/开机后测试丢失）；修复后本地 `TestReminderSurvivalTest` 3/3、`ReminderTestChainTest` 12/12。设备测试 `ReminderTestDeviceTest`（真实 AlarmManager→AlarmReceiver→通知，含 HIGH 与返回应用）已加入 API26/29，API35 随完整套件。
+- 负责人要求只留一个按钮：一次点击先立即发一条（不经 AlarmManager），再安排 1 分钟后的定时测试；两者结果在设置页分行记录，互不冒充。
+- 设备测试发现并已修复：notify() 异步生效，立即读 activeNotifications 会误报“已发送但未显示”，现最多等待 3 秒再下结论。
+- NOT_RUN：国产 ROM 真机、Doze/息屏长时间等待、系统杀进程后真实触发（仪器测试结束时会强停包并清闹钟，无法可靠模拟）、通知栏视觉确认。
+
 ## 中国 Beta P0-B：应用内重复认证（REQUIREMENTS §105）— 2026-10-18
+
+- **已合并**：PR #66 → `bd31f8c`（合并前 push/PR 两套 CI 全部通过，含 API26/29/35 设备测试）。
 
 - 根因（已由设备测试证实）：`MainActivity.locked` 是 Activity 字段，任何配置变化重建（旋转、深浅色、字号、分屏/小窗等；Manifest 未声明 configChanges）都会在 `onCreate` 重新上锁；`leftAt` 也随之丢失，且“立即”自动锁定时配置变化被当成离开。纯页面切换（日历→库存→设置→历史→日历）在模拟器上本身不触发重新认证；用户机型上的具体触发源（配置变化或其他）尚未在真机上确认。
 - 修复：锁状态与离开时间放入 Activity 级 `LockState` ViewModel（只跨配置变化重建保留；进程死亡、finish、清空数据后的新 Activity 仍重新上锁）；配置变化不记为离开。伪装模式仍由 Session 管理，未改。

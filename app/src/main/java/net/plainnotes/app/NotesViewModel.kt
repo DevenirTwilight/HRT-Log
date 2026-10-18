@@ -282,7 +282,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
             app.getSharedPreferences("prefs",android.content.Context.MODE_PRIVATE).edit().clear().commit()
             backupHistory.clear()
             app.getSharedPreferences("shell_notes",android.content.Context.MODE_PRIVATE).edit().clear().commit()
-            net.plainnotes.app.reminder.NotificationPrefs(app).clear(); net.plainnotes.app.security.AppLock(app).disable()
+            net.plainnotes.app.reminder.NotificationPrefs(app).clear(); net.plainnotes.app.reminder.ReminderTestLog(app).clear(); net.plainnotes.app.security.AppLock(app).disable()
             java.io.File(app.createDeviceProtectedStorageContext().filesDir,"reminders.cache").delete()
             app.getSystemService(android.app.NotificationManager::class.java).cancelAll()
             runCatching{reminders.sync()}
@@ -359,6 +359,10 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
             sections=VisitSection.encode(sections),language=language,template_version=net.plainnotes.app.visit.VISIT_TEMPLATE_VERSION,input_digest=digest,facts_json=facts.json().toString()))}
         refresh().join();DataJob.Done(R.string.export_saved)
     }
-    fun testReminder()=viewModelScope.launch{try{reminders.testReminder()}catch(e:Exception){mutable.value=mutable.value.copy(error=when(e){is MedicalVisitConflict->R.string.medical_stale;is PeriodRestoreConflict->R.string.period_restore_overlap;is PackageRestoreConflict->R.string.pkg_restore_conflict;is PackageConsumptionConflict->R.string.pkg_undo_locked;is SkipUndoStale->R.string.history_skip_stale;is SkipUndoUnavailable->R.string.history_skip_unavailable;is SkipUndoUnitConflict->R.string.history_skip_unit_changed;else->R.string.operation_error})}}
-    fun sync()=viewModelScope.launch{runCatching{reminders.sync()};refresh().join()}
+    /** Stages of the last test reminder (scheduled, received, notification outcome) and the immediate test, for the settings page. */
+    val reminderTest=MutableStateFlow(net.plainnotes.app.reminder.ReminderTestStatus())
+    fun refreshReminderTest(){reminderTest.value=reminders.testStatus()}
+    /** One tap, two separately recorded tests: an immediate post (channel only), then the scheduled one through AlarmManager. */
+    fun testReminder()=viewModelScope.launch{try{runCatching{reminders.testNow()};reminderTest.value=reminders.testReminder()}catch(e:Exception){mutable.value=mutable.value.copy(error=when(e){is MedicalVisitConflict->R.string.medical_stale;is PeriodRestoreConflict->R.string.period_restore_overlap;is PackageRestoreConflict->R.string.pkg_restore_conflict;is PackageConsumptionConflict->R.string.pkg_undo_locked;is SkipUndoStale->R.string.history_skip_stale;is SkipUndoUnavailable->R.string.history_skip_unavailable;is SkipUndoUnitConflict->R.string.history_skip_unit_changed;else->R.string.operation_error})}}
+    fun sync()=viewModelScope.launch{runCatching{reminders.sync()};refreshReminderTest();refresh().join()}
 }
