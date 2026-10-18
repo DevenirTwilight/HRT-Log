@@ -74,7 +74,7 @@ import java.time.*
         item("bin") { TextButton(onClick=onTrash,modifier=Modifier.fillMaxWidth().heightIn(min=48.dp).testTag("medical-bin")){Text(stringResource(R.string.medical_bin))} }
     }
 }
-@Composable private fun MedicalHeading(text:String)=Text(text,style=MaterialTheme.typography.titleMedium,modifier=Modifier.semantics{heading()})
+@Composable private fun MedicalHeading(text:String)=Text(text,style=sectionTitleStyle,modifier=Modifier.semantics{heading()})
 
 @Composable private fun RelatedCard(icon:androidx.compose.ui.graphics.vector.ImageVector,label:String,tag:String,onClick:()->Unit) {
     OutlinedCard(onClick,Modifier.fillMaxWidth().heightIn(min=56.dp).testTag(tag)) {

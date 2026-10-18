@@ -111,6 +111,10 @@ private fun Long.pickerDate() = Instant.ofEpochMilli(this).atZone(ZoneOffset.UTC
         keyboardOptions = KeyboardOptions(keyboardType = if (decimal) KeyboardType.Decimal else KeyboardType.Number))
 }
 
+/** UI-05 G: section titles on the pages UI-05 restyled: 15 sp bold. */
+val sectionTitleStyle: androidx.compose.ui.text.TextStyle
+    @Composable get() = MaterialTheme.typography.titleSmall.copy(fontSize = androidx.compose.ui.unit.TextUnit(15f, androidx.compose.ui.unit.TextUnitType.Sp), fontWeight = FontWeight.Bold)
+
 @Composable fun SectionCard(title: String?, modifier: Modifier = Modifier, container: androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.surfaceContainerLow,
                             shape: androidx.compose.ui.graphics.Shape = CardDefaults.elevatedShape, content: @Composable ColumnScope.() -> Unit) {
     ElevatedCard(modifier.fillMaxWidth(), shape = shape, colors = CardDefaults.elevatedCardColors(containerColor = container),

@@ -91,7 +91,7 @@ internal val LocalTodayClock = staticCompositionLocalOf<() -> Instant> { Instant
                     if (open.size > 1 || records.isNotEmpty() || appointments.isNotEmpty())
                         HorizontalDivider(color = c.onPrimary.copy(alpha = 0.2f), modifier = Modifier.testTag("today-divider"))
                     if (sameTime.size > 1) {
-                        Text(stringResource(R.string.today_same_time), style = MaterialTheme.typography.labelLarge)
+                        Text(stringResource(R.string.today_same_time), style = sectionTitleStyle)
                         sameTime.drop(1).forEach { e ->
                             Row(Modifier.fillMaxWidth().testTag("today-also:${e.slot.key}"), verticalAlignment = Alignment.CenterVertically) {
                                 DoseLine(e, medOf(e), simple, Modifier.weight(1f))
@@ -149,7 +149,7 @@ internal val LocalTodayClock = staticCompositionLocalOf<() -> Instant> { Instant
 @Composable private fun <T> Section(title: Int, tag: String, rows: List<T>, row: @Composable (T) -> Unit) {
     var all by rememberSaveable(tag) { mutableStateOf(false) }
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Text(stringResource(title), style = MaterialTheme.typography.labelLarge, modifier = Modifier.semantics { heading() }.testTag(tag))
+        Text(stringResource(title), style = sectionTitleStyle, modifier = Modifier.semantics { heading() }.testTag(tag))
         (if (all) rows else rows.take(3)).forEach { row(it) }
         if (!all && rows.size > 3) TextButton({ all = true }, Modifier.testTag("today-show-all:" + tag.removePrefix("today-")),
             colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.onPrimary)) { Text(stringResource(R.string.today_show_all, rows.size)) }

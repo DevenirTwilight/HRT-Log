@@ -12,6 +12,7 @@
 - E 完成：抽屉“库存”入口在有低库存药物时显示 tertiaryContainer 数字胶囊，语义描述“库存：n 种即将用完”，0 不显示；数量与首页横条同一集合（共用 `lowStockMedications`，即 StockForecast.isLow），首页最多 3 条 +“还有 n 种”，合计等于角标数。`Ui05DrawerBadgeTest` 3/3（红测 1/3 失败），抽屉相关既有测试通过，无断言迁移。
 - F 完成：“记录已发生的就诊”移到顶栏 +（`MedicalAddAction`，同一动作，tag `medical-add`、内容描述原文案）；下次就诊卡改为日期小方块（月/日/星期，白底圆角 14）+“下次就诊 · n 天后”+ 类型 + 时间·医生·地点，下方内嵌两行“想问的问题 · n 条”“就诊资料包”，都打开同一复诊详情（资料包状态本页读不到，不显示、不新增查询）；已确认就诊改为每年一个白色内嵌列表（40dp 图标、类型、日期·医生或机构、备注/问题数、右箭头）。“去过了吗？”卡只统一圆角。`Ui05MedicalHomeTest` 3/3（红测 3/3 失败）。
   - 断言迁移：MedicalHomeTest 点击 `medical-next-open` 改为点击 `medical-next-questions`（原按钮被两行取代，“打开最近一次就诊”不变）；MedicalRecordsUiContract 对已确认就诊 701 的 `performScrollToKey("visit:701")` 改为按行标签滚动（已确认就诊成为年度内嵌列表的行），其后可见、Button 角色、可点击、打开该就诊的断言不变。
+- G 完成（只在本轮改过的文件中）：分区标题统一 15sp 粗体（`sectionTitleStyle`：今天卡分区、医疗档案分区）；卡片 24/内嵌列表 16/胶囊 10 使用 UI-02A `Corners`；时间和余量等数字用等宽数字（tnum）。`Ui05ContrastTest`：新增胶囊与图标底色在明暗 × 标准/中/高对比度下文字 ≥4.5:1、图标 ≥3:1 全部通过。
 - 新任务书已归档排队：LAB-01（`sources/lab01/`，UI-05 合并后开始）、LAB-02（`sources/lab02/`，LAB-01 合并且主线全绿后只做阶段 A；阶段 B 须负责人按任务书第 4 节原话批准）。
 
 ## build30 已交付（REQUIREMENTS §107）— 2026-10-18
