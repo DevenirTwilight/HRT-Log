@@ -4,6 +4,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Inventory2
 import androidx.compose.material.icons.outlined.MoreVert
+import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.Remove
+import androidx.compose.material.icons.automirrored.outlined.HelpOutline
+import androidx.compose.foundation.background
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.automirrored.outlined.EventNote
 import androidx.compose.foundation.clickable
 import androidx.compose.ui.draw.clip
@@ -31,6 +37,9 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 
+/** UI-05 A: "now" for the today card's countdown only (display, never written); tests provide a fixed instant. */
+internal val LocalTodayClock = staticCompositionLocalOf<() -> Instant> { Instant::now }
+
 /**
  * UI-01 A / UI-04: everything about today, shown once. Display only: [open] are today's open doses, [taken] today's taken
  * records (the progress count), [records] all of today's records and [appointments] today's appointments, all already
@@ -48,10 +57,14 @@ import java.time.ZoneId
     val simple = LocalSimpleMode.current
     Surface(color = c.primary, contentColor = c.onPrimary, shape = RoundedCornerShape24, modifier = Modifier.fillMaxWidth().testTag("today-card")) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            // UI-05 A: progress as a translucent pill at the right of the date row.
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s)) {
                 Text(stringResource(R.string.today) + " · " + formatShortDate(today), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.semantics { heading() }.testTag("today-date"))
-                if (total > 0) Text(stringResource(R.string.today_progress, taken.size, total), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.testTag("today-progress"))
+                    modifier = Modifier.weight(1f).semantics { heading() }.testTag("today-date"))
+                if (total > 0) Surface(color = c.onPrimary.copy(alpha = 0.16f), contentColor = c.onPrimary, shape = Corners.badge, modifier = Modifier.testTag("today-progress-pill")) {
+                    Text(stringResource(R.string.today_progress, taken.size, total), style = MaterialTheme.typography.labelLarge.tnum(),
+                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp).testTag("today-progress"))
+                }
             }
             val next = open.firstOrNull()
             when {
@@ -59,18 +72,24 @@ import java.time.ZoneId
                     val sameTime = open.filter { it.slot.at == next.slot.at }
                     Text(stringResource(R.string.today_next), style = MaterialTheme.typography.labelLarge)
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text(formatTime(next.slot.at), style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.SemiBold, modifier = Modifier.testTag("today-next-time"))
+                        Text(formatTime(next.slot.at), style = MaterialTheme.typography.headlineMedium.tnum(), fontWeight = FontWeight.SemiBold, modifier = Modifier.testTag("today-next-time"))
                         // OVERDUE is said in words, not only by colour.
                         if (next.state == SlotState.OVERDUE) Surface(color = c.errorContainer, contentColor = c.onErrorContainer, shape = MaterialTheme.shapes.small) {
                             Text(stringResource(R.string.today_overdue), style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp).testTag("today-next-status"))
-                        }
+                        } else Countdown(next.slot.at)
                     }
                     DoseLine(next, medOf(next), simple, Modifier.testTag("today-next-name"))
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Button({ onComplete(next) }, Modifier.weight(1f).testTag("today-take-now"),
-                            colors = ButtonDefaults.buttonColors(containerColor = c.onPrimary, contentColor = c.primary)) { Text(stringResource(R.string.today_take_now)) }
-                        DoseMenu(next, "today-more", onComplete, onChange)
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.m)) {
+                        Button({ onComplete(next) }, Modifier.weight(1f).heightIn(min = 52.dp).testTag("today-take-now"),
+                            colors = ButtonDefaults.buttonColors(containerColor = c.onPrimary, contentColor = c.primary)) {
+                            Icon(Icons.Outlined.Check, null, Modifier.size(20.dp).testTag("today-take-now-icon")); Spacer(Modifier.width(Spacing.s))
+                            Text(stringResource(R.string.today_take_now), fontWeight = FontWeight.SemiBold)
+                        }
+                        DoseMenu(next, "today-more", onComplete, onChange, round = true)
                     }
+                    // UI-05 A: a thin line between "next" and the sections below it (only when something follows).
+                    if (open.size > 1 || records.isNotEmpty() || appointments.isNotEmpty())
+                        HorizontalDivider(color = c.onPrimary.copy(alpha = 0.2f), modifier = Modifier.testTag("today-divider"))
                     if (sameTime.size > 1) {
                         Text(stringResource(R.string.today_same_time), style = MaterialTheme.typography.labelLarge)
                         sameTime.drop(1).forEach { e ->
@@ -99,11 +118,18 @@ import java.time.ZoneId
             // UI-04: all of today's records, each with its status in words (not only colour), as RecordLine said it.
             if (records.isNotEmpty()) Section(R.string.today_log_heading, "today-log", records) { r ->
                 val m = recordMed(r)
-                Column(Modifier.fillMaxWidth()) {
-                    Text(listOfNotNull(formatTime(Instant.ofEpochMilli(r.taken_utc ?: r.scheduled_utc ?: 0)), if (simple) null else m?.name,
-                        (r.actual_dose ?: r.planned_dose)?.let { formatDose(it, m?.unit) }, stringResource(recordStatus(r))).joinToString(" · "),
-                        style = MaterialTheme.typography.bodyMedium, modifier = Modifier.testTag("today-done:${r.id}"))
-                    if (r.unconfirmed) Text(stringResource(R.string.unconfirmed_help), style = MaterialTheme.typography.bodySmall)
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s)) {
+                    // UI-05 A: a small status icon before the unchanged status words (decorative: the words carry the meaning).
+                    val (kind, icon) = recordIcon(r)
+                    Box(Modifier.size(28.dp).clip(CircleShape).background(c.onPrimary.copy(alpha = 0.16f)).testTag("today-done-icon:${r.id}:$kind"), contentAlignment = Alignment.Center) {
+                        Icon(icon, null, Modifier.size(16.dp))
+                    }
+                    Column(Modifier.weight(1f)) {
+                        Text(listOfNotNull(formatTime(Instant.ofEpochMilli(r.taken_utc ?: r.scheduled_utc ?: 0)), if (simple) null else m?.name,
+                            (r.actual_dose ?: r.planned_dose)?.let { formatDose(it, m?.unit) }, stringResource(recordStatus(r))).joinToString(" · "),
+                            style = MaterialTheme.typography.bodyMedium.tnum(), modifier = Modifier.testTag("today-done:${r.id}"))
+                        if (r.unconfirmed) Text(stringResource(R.string.unconfirmed_help), style = MaterialTheme.typography.bodySmall)
+                    }
                 }
             }
             // UI-04: today's appointments, one row each; a tap opens the visit as the day list's AppointmentCard did.
@@ -130,6 +156,28 @@ import java.time.ZoneId
     }
 }
 
+/** UI-05 A: icon kind per record status, matching the words of [recordStatus]: taken ✓, missed ✕, skipped –, unconfirmed ?. */
+private fun recordIcon(r: RecordEntity) = when {
+    r.status == "ON_TIME" || r.status == "LATE" -> "TAKEN" to Icons.Outlined.Check
+    r.status == "MISSED" && r.unconfirmed -> "UNCONFIRMED" to Icons.AutoMirrored.Outlined.HelpOutline
+    r.status == "MISSED" -> "MISSED" to Icons.Outlined.Close
+    else -> "SKIPPED" to Icons.Outlined.Remove
+}
+
+/** UI-05 A: "in n h / in n min" to the next dose, from slot.at and now only; refreshed each minute, never written. */
+@Composable private fun Countdown(at: Instant) {
+    val clock = LocalTodayClock.current
+    var now by remember { mutableStateOf(clock()) }
+    LaunchedEffect(at) { while (true) { kotlinx.coroutines.delay(60_000 - now.toEpochMilli() % 60_000); now = clock() } }
+    val minutes = java.time.Duration.between(now, at).toMinutes()
+    if (minutes < 0) return
+    Text(if (minutes >= 60) stringResource(R.string.today_in_hours, (minutes / 60).toInt()) else stringResource(R.string.today_in_minutes, maxOf(1, minutes.toInt())),
+        style = MaterialTheme.typography.bodyMedium.tnum(), modifier = Modifier.testTag("today-countdown"))
+}
+
+/** UI-05 G: tabular figures so times and amounts line up. */
+internal fun androidx.compose.ui.text.TextStyle.tnum() = copy(fontFeatureSettings = "tnum")
+
 /** The same status words as RecordLine. */
 private fun recordStatus(r: RecordEntity) = when (r.status) {
     "ON_TIME" -> R.string.status_on_time; "LATE" -> R.string.status_late
@@ -147,10 +195,15 @@ private val RoundedCornerShape24 = androidx.compose.foundation.shape.RoundedCorn
     }
 }
 
-@Composable private fun DoseMenu(e: TimelineEntry, tag: String, onComplete: (TimelineEntry) -> Unit, onChange: (TimelineEntry) -> Unit) {
+@Composable private fun DoseMenu(e: TimelineEntry, tag: String, onComplete: (TimelineEntry) -> Unit, onChange: (TimelineEntry) -> Unit, round: Boolean = false) {
     var open by remember { mutableStateOf(false) }
     Box {
-        IconButton({ open = true }, Modifier.testTag(tag)) {
+        // UI-05 A: next to the main button the menu is a 52 dp round outlined button of the same height.
+        if (round) OutlinedIconButton({ open = true }, Modifier.size(52.dp).testTag(tag),
+            border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f))) {
+            Icon(Icons.Outlined.MoreVert, stringResource(R.string.today_more), tint = MaterialTheme.colorScheme.onPrimary)
+        }
+        else IconButton({ open = true }, Modifier.testTag(tag)) {
             Icon(Icons.Outlined.MoreVert, stringResource(R.string.today_more))
         }
         DropdownMenu(open, { open = false }) {

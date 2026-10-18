@@ -1245,4 +1245,6 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="test_out_permission">bloquée : autorisation de notification non accordée</string>
 <string name="test_out_app">bloquée : les notifications de l’app sont désactivées</string>
 <string name="test_out_channel">bloquée : la catégorie de notification des rappels est désactivée</string>
+<string name="today_in_hours">Dans %1$d h</string>
+<string name="today_in_minutes">Dans %1$d min</string>
 </resources>

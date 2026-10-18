@@ -1245,4 +1245,6 @@
 <string name="test_out_permission">被阻止：未授予通知权限</string>
 <string name="test_out_app">被阻止：本应用的通知已关闭</string>
 <string name="test_out_channel">被阻止：提醒通知类别已关闭</string>
+<string name="today_in_hours">还有 %1$d 小时</string>
+<string name="today_in_minutes">还有 %1$d 分钟</string>
 </resources>

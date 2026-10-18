@@ -2,7 +2,8 @@
 
 - 分支 `feature/ui05-visual-polish-20261018`，基于默认分支 1abfeea。任务书原文已归档 `docs/audits/product-quality-2026-10/sources/ui05/`。
 - 保护矩阵核对：TodayCard/MedicalRecordsScreen 不在矩阵；CalendarScreen、StockScreen、LongitudinalScreen、AppShell、Components 均为 HISTORY_ONLY；不触及 PK_DISPLAY_REVIEW 及更严格类别。
-- 计划按 A（今天卡）→B（首页库存横条）→C（库存卡）→D（时间线展示）→E（抽屉角标）→F（医疗档案）→G（全局细节）逐节提交；尚未开始改代码。
+- 计划按 A（今天卡）→B（首页库存横条）→C（库存卡）→D（时间线展示）→E（抽屉角标）→F（医疗档案）→G（全局细节）逐节提交。
+- A 完成：进度胶囊、倒计时（仅显示，逾期不显示，每分钟刷新）、52dp 主按钮带勾与圆形 ⋮、分隔线、记录行状态图标（文字保留）。`Ui05TodayCardTest` 9/9（红测 6/7 失败），TodayCardTest/HomeStockCardTest/Ui04/CalendarSemantics/CalendarCoreFlow 通过。
 
 ## build30 已交付（REQUIREMENTS §107）— 2026-10-18
 
