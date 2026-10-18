@@ -94,6 +94,13 @@ import kotlinx.coroutines.flow.Flow
     @Insert suspend fun insertLab(value: LabValueEntity): Long
     @Update suspend fun updateLab(value: LabValueEntity)
     @Query("DELETE FROM lab_value WHERE id = :id") suspend fun deleteLab(id: Long)
+    @Query("SELECT * FROM lab_panel ORDER BY sampled_utc, id") suspend fun labPanels(): List<LabPanelEntity>
+    @Query("SELECT * FROM lab_panel WHERE id = :id") suspend fun labPanel(id: Long): LabPanelEntity?
+    @Query("SELECT * FROM lab_panel WHERE uuid = :uuid") suspend fun labPanelByUuid(uuid: String): LabPanelEntity?
+    @Insert suspend fun insertLabPanel(value: LabPanelEntity): Long
+    @Update suspend fun updateLabPanel(value: LabPanelEntity)
+    @Query("DELETE FROM lab_panel WHERE id = :id") suspend fun deleteLabPanel(id: Long)
+    @Query("SELECT * FROM lab_value WHERE panel_id = :panel ORDER BY id") suspend fun panelMembers(panel: Long): List<LabValueEntity>
     @Insert(onConflict = OnConflictStrategy.IGNORE) suspend fun analyte(value: AnalyteEntity)
     @Query("SELECT * FROM pk_settings WHERE id = 1") suspend fun pkSettings(): PkSettingsEntity?
     @Upsert suspend fun pkSettings(value: PkSettingsEntity)

@@ -14,7 +14,7 @@ import java.time.*
 
 /**
  * LAB-01 B, synthetic data only: saveLabs writes N results in one transaction exactly as N saveLab calls would (every field
- * but ids, contexts included, estimate asked per result), and a failure on any one keeps none of them.
+ * but ids and the LAB-02 panel, contexts included, estimate asked per result), and a failure on any one keeps none of them.
  */
 @RunWith(RobolectricTestRunner::class) @Config(sdk=[28])
 class LabBatchSaveTest {
@@ -52,7 +52,10 @@ class LabBatchSaveTest {
         six.forEach{single.saveLab(it,at,recapture=true,estimate=estimate)}
         val b=batch.labs().sortedBy{it.id};val s=single.labs().sortedBy{it.id}
         assertEquals(6,b.size)
-        assertEquals(s.map{it.copy(id=0)},b.map{it.copy(id=0)})
+        // LAB-02: the batch is also one lab panel (ADR Q6); every other field equals the single saves.
+        assertEquals(s.map{it.copy(id=0)},b.map{it.copy(id=0,panel_id=null)})
+        assertTrue(s.all{it.panel_id==null});val panel=batch.labPanels().single();assertTrue(b.all{it.panel_id==panel.id})
+        assertEquals(Triple(sampled,"Europe/Paris","Synthetic lab"),Triple(panel.sampled_utc,panel.sampled_zone,panel.laboratory))
         assertEquals(setOf(sampled),b.map{it.sampled_utc}.toSet());assertEquals(setOf("Europe/Paris"),b.map{it.sampled_zone}.toSet());assertEquals(setOf("Synthetic lab"),b.map{it.laboratory}.toSet())
         fun contexts(r:NotesRepository,labs:List<LabValueEntity>)=r.let{runBlocking{it.labContexts()}}.map{c->c.copy(id=0,lab_id=labs.indexOfFirst{it.id==c.lab_id}.toLong())}.sortedBy{it.lab_id}
         assertEquals(contexts(single,s),contexts(batch,b))
@@ -67,7 +70,7 @@ class LabBatchSaveTest {
         val analytes=db.analytes()
         try{repo.saveLabs(six,at,recapture=true,estimate=failing);fail("expected the batch to fail")}catch(_:IllegalStateException){}
         assertEquals(4,calls)
-        assertTrue(repo.labs().isEmpty());assertTrue(repo.labContexts().isEmpty());assertEquals(analytes,db.analytes())
+        assertTrue(repo.labs().isEmpty());assertTrue(repo.labContexts().isEmpty());assertEquals(analytes,db.analytes());assertTrue(repo.labPanels().isEmpty())
         // An invalid row (the single-result rules) also rolls the whole batch back.
         try{repo.saveLabs(six.take(3)+six[3].copy(value=0.0),at);fail("expected the batch to fail")}catch(_:IllegalArgumentException){}
         assertTrue(repo.labs().isEmpty())

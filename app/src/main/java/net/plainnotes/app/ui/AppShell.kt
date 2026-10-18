@@ -216,7 +216,8 @@ class UiPrefs(context: Context) {
                 Destination.CONCENTRATION -> net.plainnotes.app.experimental.UnifiedConcentrationScreen(extra.records, state.ruleSnapshots, extra.labs, pad,
                     content = { innerPad, preview, selector -> ConcentrationScreen(state, conc.result, conc.loading, conc.weight, concSettings, { concSettings = it; prefs.conc = it },
                         { model.setWeight(it) }, { model.editById(it) }, { destination = Destination.LABS }, innerPad,extra.records,state.profiles,model::confirmHistoricalContext,{destination=Destination.HISTORY},preview,selector,m2Only=true) })
-                Destination.LABS -> LabsScreen(extra.labs, conc.doseTimes, { labDialogs.labEdit = it; labDialogs.labNew = it == null }, { model.deleteLab(it) }, pad,extra.labContexts,{v,estimate->model.rebuildLabContext(v,estimate)})
+                Destination.LABS -> LabsScreen(extra.labs, conc.doseTimes, { labDialogs.labEdit = it; labDialogs.labNew = it == null }, { model.deleteLab(it) }, pad,extra.labContexts,{v,estimate->model.rebuildLabContext(v,estimate)},
+                    extra.labPanels,{labDialogs.panel=it.id},{labDialogs.saveAs=it})
                 Destination.SETTINGS -> {
                     val lockOn = remember(settingsPage) { net.plainnotes.app.security.AppLock(context).enabled }
                     val backup by model.backupHistory.state.collectAsState()
@@ -281,6 +282,7 @@ class UiPrefs(context: Context) {
     MedicalVisitEditor(medicalDialogs, model, medicalSave)
     MedicalLabDetail(medicalDialogs, labDialogs, extra)
     if (appointment) AppointmentDialog({ appointment = false }) { model.appointment(it); appointment = false }
+    LabPanelHost(labDialogs, model, extra)
     LabEditDialog(labDialogs, model, extra.labs)
     if (pickStart) DatePickerModal(state.calendarStart, { pickStart = false }) { model.calendarFrom(it) }
     if (disclaimer) PkDisclaimerDialog({ prefs.disclaimerAccepted = true; disclaimer = false }) { disclaimer = false; destination = Destination.CALENDAR }
