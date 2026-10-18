@@ -121,4 +121,14 @@ zh-TW 沿用现有术语“檢驗”“機構”；fr 沿用“analyse”“labo
 
 ## 8. 本地回归与 CI
 
-见 PR。
+本地完整回归（本分支合入 #75 后）：
+
+- `core:reminder` 20 项；
+- `core:data` 250 项；
+- `app:testFullDebugUnitTest` 1629 项，0 失败。
+  - 跳过 237 项，都是既有的默认关闭用例：205 项既有环境门控截图/审计用例，32 项 UI-05 截图参数组合。
+  - `Lab01LayoutTest` 不截图时也会断言，所以计入通过。
+- `PeriodStabilityTest`、`LabEstimateTest`、`LabContextUiTest`、`SublingualEstimatePolicyTest`、`MedicalRecords*`、`ButtonLayoutRegressionTest`、`TranslationsTest` 均通过；
+- `lintFullDebug` 通过。
+
+CI 结果以 PR 为准。
