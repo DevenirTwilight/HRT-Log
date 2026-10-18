@@ -1,3 +1,9 @@
+## UI-05 视觉精修开始（REQUIREMENTS §108）— 2026-10-18
+
+- 分支 `feature/ui05-visual-polish-20261018`，基于默认分支 1abfeea。任务书原文已归档 `docs/audits/product-quality-2026-10/sources/ui05/`。
+- 保护矩阵核对：TodayCard/MedicalRecordsScreen 不在矩阵；CalendarScreen、StockScreen、LongitudinalScreen、AppShell、Components 均为 HISTORY_ONLY；不触及 PK_DISPLAY_REVIEW 及更严格类别。
+- 计划按 A（今天卡）→B（首页库存横条）→C（库存卡）→D（时间线展示）→E（抽屉角标）→F（医疗档案）→G（全局细节）逐节提交；尚未开始改代码。
+
 ## build30 已交付（REQUIREMENTS §107）— 2026-10-18
 
 - 0.2.0 / versionCode 30 正式签名包，构建自 `dfb21c79`（#68 合并，含 #66 会话 P0-B 与 #67 提醒 P0-A），APK SHA-256 `f0e209f1a08c1bb6a2c65c907ecb20d365ab6c52d70127abe5e312c60c6703c8`，证书 989ba045…59379b1。
