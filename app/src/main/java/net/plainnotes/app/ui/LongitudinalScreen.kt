@@ -3,6 +3,13 @@ package net.plainnotes.app.ui
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -44,7 +51,7 @@ import java.time.*
 @Composable fun LongitudinalScreen(state:NotesState,extra:NotesViewModel.ExtraState,onSave:(MilestoneEntity)->Unit,
     onDelete:(Long)->Unit,onOpen:(EventKind)->Unit,contentPadding:PaddingValues,onAppointment:(Long)->Unit={},
     saveState:MilestoneSaveState=MilestoneSaveState(),onSaveHandled:()->Unit={},onImportedHistory:(List<Long>)->Unit={onOpen(EventKind.DOSE)},
-    timelineActions:TimelineActions=TimelineActions()) {
+    timelineActions:TimelineActions=TimelineActions(),addHost:TimelineAddHost?=null) {
     var now by remember{mutableStateOf(Instant.now())}
     LaunchedEffect(Unit){while(true){kotlinx.coroutines.delay(60_000);now=Instant.now()}}
     val record=remember(extra.records,extra.regimens,extra.labs,extra.reviews,extra.milestones,extra.historyPeriods,state.appointments,state.ruleSnapshots,now){PeriodTimelineProjection.build(extra,state.appointments,now,ruleSnapshots=state.ruleSnapshots)}
@@ -97,7 +104,7 @@ import java.time.*
         val target=focusKey?.let{key->(record.events+record.upcoming).firstOrNull{it.key==key}} ?: return@LaunchedEffect
         // A focused event hidden by the filter brings the full list back first.
         val visible=if(shown.any{it.event?.key==target.key})shown else {filter=TimelineFilter.ALL;blocks}
-        val index=visible.indexOfFirst{it.event?.key==target.key}+3
+        val index=visible.indexOfFirst{it.event?.key==target.key}+2 // after the intro and filter items
         list.animateScrollToItem(index)
         detailKey=target.key // exact source is visible even inside a large historical period
         focusKey=null
@@ -105,50 +112,68 @@ import java.time.*
     fun open(event:PeriodEvent) {
         (event.source as? EventSource.Appointment)?.let{onAppointment(it.value.id)} ?: run{detailKey=event.key}
     }
+    // UI-05 D: the two add actions moved to AppShell's top bar "+" menu; they are the same callbacks as the former buttons.
+    addHost?.let{host->
+        val addMilestone by rememberUpdatedState{onSaveHandled();edit=MilestoneEntity(date=LocalDate.now(zone).toString())}
+        // §37b: a past period the import missed, or any period the user wants to state.
+        val newPeriod by rememberUpdatedState{editPeriod(R.string.period_edit_title_create,emptyList(),null,TimelineEdits.Range(LocalDate.now(zone).minusDays(30),LocalDate.now(zone)),null,null)}
+        // Registered once (stable lambdas reading the latest state), so composing never writes new state into the host.
+        DisposableEffect(host){host.milestone={addMilestone()};host.period={newPeriod()};onDispose{host.milestone=null;host.period=null}}
+        SideEffect{host.milestoneEnabled=!saveState.saving;host.periodEnabled=state.medications.isNotEmpty()}
+    }
+    // UI-05 D: events (and imported summaries) are drawn as the inset list of the group card above them: a period, the
+    // upcoming card or the unknown card. Group membership is only the order of the unchanged projection's blocks.
+    fun isChild(b:StoryBlock)=b.event!=null || b.imported!=null
+    val groups=remember(shown){var group="";shown.map{b->if(!isChild(b))group=b.period?.key ?: b.key;group}}
     LazyColumn(Modifier.fillMaxSize().testTag("period-timeline"),state=list,contentPadding=PaddingValues(start=16.dp,end=16.dp,
-        top=contentPadding.calculateTopPadding()+8.dp,bottom=contentPadding.calculateBottomPadding()+32.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
+        top=contentPadding.calculateTopPadding()+8.dp,bottom=contentPadding.calculateBottomPadding()+32.dp),verticalArrangement=Arrangement.Top) {
         item(key="intro") {
             // UI-01 E: the viewing zone is named only when it is not the phone's, by name rather than ID.
             TimelineZoneNote(zone)
             if(record.recognitionUnavailable)Text(stringResource(R.string.period_recognition_unavailable),modifier=Modifier.semantics{liveRegion=LiveRegionMode.Polite},style=MaterialTheme.typography.bodySmall)
             feedback?.let{Text(stringResource(it),modifier=Modifier.semantics{liveRegion=LiveRegionMode.Polite})}
         }
-        item(key="actions") {
-            val labels=listOf(stringResource(R.string.milestone_add),stringResource(R.string.timeline_new_period))
-            AdaptiveActions(labels,contentInset=48.dp) { i,mod ->
-                if(i==0)FilledTonalButton(onClick={onSaveHandled();edit=MilestoneEntity(date=LocalDate.now(zone).toString())},enabled=!saveState.saving,modifier=mod){Text(labels[i])}
-                // §37b: a past period the import missed, or any period the user wants to state.
-                else OutlinedButton(onClick={editPeriod(R.string.period_edit_title_create,emptyList(),null,TimelineEdits.Range(LocalDate.now(zone).minusDays(30),LocalDate.now(zone)),null,null)},
-                    enabled=state.medications.isNotEmpty(),modifier=mod.testTag("timeline-new-period")){Text(labels[i])}
-            }
-        }
-        item(key="filters"){TimelineFilterChips(filter){filter=it}}
-        items(shown,key={it.key}){block->
-            val event=block.event;val period=block.period
+        item(key="filters"){Box(Modifier.padding(top=12.dp)){TimelineFilterChips(filter){filter=it}}}
+        itemsIndexed(shown,key={_,b->b.key}){index,block->
+            val event=block.event;val period=block.period;val group=groups[index]
+            val first=index==0 || !isChild(shown[index-1]);val last=index==shown.lastIndex || !isChild(shown[index+1])
+            val withList=!isChild(block) && block.key!="upcoming" && index<shown.lastIndex && isChild(shown[index+1])
+            val cardShape=if(withList)TopCardShape else CardDefaults.elevatedShape
             when {
                 block.imported!=null->{val imported=block.imported
-                    Surface(modifier=Modifier.padding(start=12.dp),shape=MaterialTheme.shapes.medium,tonalElevation=1.dp){
-                        TextButton(onClick={importKey=imported.key},modifier=Modifier.fillMaxWidth().testTag("timeline:${imported.key}")){
-                            Column(Modifier.fillMaxWidth()){
-                                Text(stringResource(R.string.timeline_imported_history))
-                                Text(importedRange(imported,zone))
-                                Text(stringResource(R.string.timeline_imported_count,imported.records.size),style=MaterialTheme.typography.bodySmall)
+                    GroupChild(group,first,last) {
+                        Row(Modifier.fillMaxWidth().heightIn(min=56.dp).clickable(role=androidx.compose.ui.semantics.Role.Button){importKey=imported.key}
+                            .padding(horizontal=12.dp,vertical=8.dp).testTag("timeline:${imported.key}"),verticalAlignment=androidx.compose.ui.Alignment.CenterVertically,
+                            horizontalArrangement=Arrangement.spacedBy(12.dp)) {
+                            EventTypeBadge(EventKind.DOSE)
+                            Column(Modifier.weight(1f)){
+                                Text(stringResource(R.string.timeline_imported_history),style=MaterialTheme.typography.titleSmall)
+                                Text(importedRange(imported,zone),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text(stringResource(R.string.timeline_imported_count,imported.records.size),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
                             }
+                            Icon(Icons.AutoMirrored.Outlined.KeyboardArrowRight,null)
                         }
                     }
                 }
-                event!=null->Surface(modifier=Modifier.padding(start=12.dp),shape=MaterialTheme.shapes.medium,tonalElevation=1.dp){EventRow(event,::open)}
+                event!=null->GroupChild(group,first,last){EventRow(event,::open)}
                 period!=null->{
                     val current=period.contains(now)
                     val standards=projection.standards.filter{it.key in period.finalStandardSpanKeys}
                     val sourceRows=record.resolvedRecords.filter{r->(r.taken_utc ?: r.scheduled_utc)?.let{period.contains(Instant.ofEpochMilli(it))}==true}
                     val meds=TimelineEdits.medicationsIn(projection,period);val range=TimelineEdits.rangeOf(period,zone)
-                    SectionCard(null) {
+                    SectionCard(null,Modifier.padding(top=12.dp),shape=cardShape) {
                         // UI-01 E: title and ⋮ on one row. Details remain available without occupying every card; editing semantics are unchanged.
+                        // UI-05 D: the period kind is a pill (current: filled primary).
                         Row(verticalAlignment=androidx.compose.ui.Alignment.CenterVertically) {
-                            Text(stringResource(if(standards.isEmpty())R.string.timeline_epoch_unknown else if(current)R.string.period_current else R.string.period_past),
-                                style=MaterialTheme.typography.titleSmall,color=MaterialTheme.colorScheme.primary,fontWeight=androidx.compose.ui.text.font.FontWeight.SemiBold,
-                                modifier=Modifier.weight(1f).semantics{heading()})
+                            val c=MaterialTheme.colorScheme
+                            Box(Modifier.weight(1f)) {
+                                Surface(color=if(current && standards.isNotEmpty())c.primary else c.secondaryContainer,contentColor=if(current && standards.isNotEmpty())c.onPrimary else c.onSecondaryContainer,
+                                    shape=Corners.badge,modifier=Modifier.testTag("period-pill:${period.key}")) {
+                                    Text(stringResource(if(standards.isEmpty())R.string.timeline_epoch_unknown else if(current)R.string.period_current else R.string.period_past),
+                                        style=MaterialTheme.typography.labelLarge,fontWeight=androidx.compose.ui.text.font.FontWeight.SemiBold,
+                                        modifier=Modifier.padding(horizontal=10.dp,vertical=4.dp).semantics{heading()})
+                                }
+                            }
                             Box {
                                 var menu by remember{mutableStateOf(false)}
                                 IconButton(onClick={menu=true},modifier=Modifier.testTag("period-menu:${period.key}")){
@@ -164,12 +189,16 @@ import java.time.*
                                 }
                             }
                         }
-                        // Display only: day count from the period's own start date, nothing is written.
-                        if(current && standards.isNotEmpty())Text(stringResource(R.string.period_day_n,
-                            java.time.temporal.ChronoUnit.DAYS.between(period.from.atZone(zone).toLocalDate(),now.atZone(zone).toLocalDate()).toInt()+1),
-                            style=MaterialTheme.typography.titleMedium,modifier=Modifier.testTag("period-day:${period.key}"))
-                        val end=period.until?.minusNanos(1)?.atZone(zone)?.toLocalDate()
-                        Text(formatDate(period.from.atZone(zone).toLocalDate())+" → "+(end?.let{formatDate(it)} ?: stringResource(R.string.epoch_ongoing)))
+                        // UI-05 D: "[from] – [to]", or "since [from] · day n" for the current period. Display only: the day count is
+                        // from the period's own start date, nothing is written.
+                        val end=period.until?.minusNanos(1)?.atZone(zone)?.toLocalDate();val from=formatDate(period.from.atZone(zone).toLocalDate())
+                        Row(verticalAlignment=androidx.compose.ui.Alignment.CenterVertically) {
+                            Text(if(end!=null)"$from – ${formatDate(end)}" else stringResource(R.string.period_since,from),style=MaterialTheme.typography.titleMedium.tnum(),
+                                fontWeight=androidx.compose.ui.text.font.FontWeight.Bold,modifier=Modifier.testTag("period-since:${period.key}"))
+                            if(current && standards.isNotEmpty())Text(" · "+stringResource(R.string.period_day_n,
+                                java.time.temporal.ChronoUnit.DAYS.between(period.from.atZone(zone).toLocalDate(),now.atZone(zone).toLocalDate()).toInt()+1),
+                                style=MaterialTheme.typography.titleMedium.tnum(),modifier=Modifier.testTag("period-day:${period.key}"))
+                        }
                         if(standards.isEmpty())Text(stringResource(R.string.epoch_no_plan))
                         // REQUIREMENTS §36: explicit stops and why this period differs from the previous one.
                         if(!simple) {
@@ -190,7 +219,11 @@ import java.time.*
                             val saved=extra.regimens.firstOrNull{it.id in span.rawVersionIds}
                             val confirmedRow=span.rawVersionIds.filter(ObservedTreatmentHistory::isConfirmedSpan).firstNotNullOfOrNull{id->
                                 confirmedRow(extra.historyPeriods,id)}
-                            StandardSummary(saved?.let{RegimenDefinition.read(it.definition_json).snapshot(it.medication_id)} ?: confirmedRow?.let{MedicationSnapshot.decode(it.identity_json,it.medication_id)} ?: observed?.snapshot,span.standard)
+                            // UI-05 D: one medication per line, each after a small dot.
+                            Row(horizontalArrangement=Arrangement.spacedBy(10.dp)) {
+                                Box(Modifier.padding(top=8.dp).size(6.dp).clip(androidx.compose.foundation.shape.CircleShape).background(MaterialTheme.colorScheme.primary))
+                                Column{StandardSummary(saved?.let{RegimenDefinition.read(it.definition_json).snapshot(it.medication_id)} ?: confirmedRow?.let{MedicationSnapshot.decode(it.identity_json,it.medication_id)} ?: observed?.snapshot,span.standard)}
+                            }
                             if(span.rawVersionIds.none{userEditRow(extra.historyPeriods,it)!=null} && observed!=null)
                                 Text(stringResource(R.string.period_inferred),style=MaterialTheme.typography.bodySmall)
                             if(span.standard.kind!="OBSERVED" && span.standard.slotIdentityUnknown)Text(stringResource(R.string.period_slot_unknown),style=MaterialTheme.typography.bodySmall)
@@ -225,8 +258,8 @@ import java.time.*
                         if(standards.any{span->extra.regimens.any{it.id in span.rawVersionIds && it.origin=="LEGACY_RULE"}})Text(stringResource(R.string.epoch_reconstructed),style=MaterialTheme.typography.bodySmall)
                     }
                 }
-                block.key=="upcoming"->SectionCard(stringResource(R.string.period_upcoming)){Text(stringResource(R.string.period_future_note),style=MaterialTheme.typography.bodySmall)}
-                else->SectionCard(stringResource(R.string.timeline_epoch_unknown)){Text(stringResource(R.string.period_unknown_note),style=MaterialTheme.typography.bodySmall)}
+                block.key=="upcoming"->SectionCard(stringResource(R.string.period_upcoming),Modifier.padding(top=12.dp)){Text(stringResource(R.string.period_future_note),style=MaterialTheme.typography.bodySmall)}
+                else->SectionCard(stringResource(R.string.timeline_epoch_unknown),Modifier.padding(top=12.dp),shape=cardShape){Text(stringResource(R.string.period_unknown_note),style=MaterialTheme.typography.bodySmall)}
             }
         }
     }
@@ -279,10 +312,41 @@ import java.time.*
     else->eventKindLabel(event.kind)
 }
 @Composable private fun EventRow(event:PeriodEvent,onOpen:(PeriodEvent)->Unit) {
-    TextButton(onClick={onOpen(event)},modifier=Modifier.fillMaxWidth().testTag("timeline:${event.key}")) {
-        // UI-01 E: a type badge in front; the type is also in the words, so it is never colour or icon alone.
-        EventTypeBadge(event.kind);Spacer(Modifier.width(12.dp))
-        Text(formatDate(event.date)+" · "+eventKindLabel(event.kind)+(if(LocalSimpleMode.current)"" else " · "+eventTitle(event)),modifier=Modifier.weight(1f))
+    // UI-01 E / UI-05 D: a coloured type icon in front; the type is also in the words, so it is never colour or icon alone.
+    // Two lines (type · name / date) and a chevron; the whole row opens the same detail as before.
+    Row(Modifier.fillMaxWidth().heightIn(min=56.dp).clickable(role=androidx.compose.ui.semantics.Role.Button){onOpen(event)}.padding(horizontal=12.dp,vertical=8.dp)
+        .testTag("timeline:${event.key}"),verticalAlignment=androidx.compose.ui.Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(12.dp)) {
+        EventTypeBadge(event.kind)
+        Column(Modifier.weight(1f)) {
+            Text(eventKindLabel(event.kind)+(if(LocalSimpleMode.current)"" else " · "+eventTitle(event)),style=MaterialTheme.typography.titleSmall)
+            Text(formatDate(event.date),style=MaterialTheme.typography.bodySmall.tnum(),color=MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+        Icon(Icons.AutoMirrored.Outlined.KeyboardArrowRight,null)
+    }
+}
+private val TopCardShape=androidx.compose.foundation.shape.RoundedCornerShape(topStart=24.dp,topEnd=24.dp)
+/**
+ * UI-05 D: one row of a group card's inset white list. The card's colour continues behind the list so the rows read as
+ * part of the card above; upcoming rows are separate dashed cards instead. [group] is only a test hook for membership.
+ */
+@Composable private fun GroupChild(group:String,first:Boolean,last:Boolean,content:@Composable ()->Unit) {
+    val c=MaterialTheme.colorScheme
+    if(group=="upcoming") {
+        val outline=c.outline
+        Box(Modifier.padding(top=8.dp).fillMaxWidth().testTag("timeline-group:$group")) {
+            Surface(color=c.surface,shape=Corners.list,modifier=Modifier.fillMaxWidth().testTag("timeline-upcoming-card").drawBehind{
+                drawRoundRect(outline,cornerRadius=androidx.compose.ui.geometry.CornerRadius(16.dp.toPx()),
+                    style=androidx.compose.ui.graphics.drawscope.Stroke(1.5.dp.toPx(),pathEffect=androidx.compose.ui.graphics.PathEffect.dashPathEffect(floatArrayOf(8.dp.toPx(),6.dp.toPx()))))
+            }){content()}
+        }
+        return
+    }
+    val r=16.dp;val bottom=if(last)24.dp else 0.dp
+    Box(Modifier.fillMaxWidth().testTag("timeline-group:$group").background(c.surfaceContainerLow,androidx.compose.foundation.shape.RoundedCornerShape(bottomStart=bottom,bottomEnd=bottom))
+        .padding(start=12.dp,end=12.dp,bottom=if(last)12.dp else 0.dp)) {
+        Surface(color=c.surfaceContainerLowest,shape=androidx.compose.foundation.shape.RoundedCornerShape(if(first)r else 0.dp,if(first)r else 0.dp,if(last)r else 0.dp,if(last)r else 0.dp)) {
+            Column { content(); if(!last)HorizontalDivider(Modifier.padding(start=60.dp),color=c.outlineVariant) }
+        }
     }
 }
 /** UI-02 A1: the timeline's type filter. OTHER is every kind not named by another chip. */
@@ -312,12 +376,18 @@ internal fun eventKindIcon(kind:EventKind):androidx.compose.ui.graphics.vector.I
     EventKind.SYMPTOM->Icons.Outlined.Healing;EventKind.WELLBEING->Icons.Outlined.Mood;EventKind.REVIEW->Icons.Outlined.RateReview
     EventKind.APPOINTMENT->Icons.Outlined.Event;EventKind.MILESTONE->Icons.Outlined.Flag;EventKind.PLANNED->Icons.Outlined.Schedule
 }
+/**
+ * UI-05 D: one colour per type group (lab, visit, milestone, stage review, other), each a theme container/on-container pair
+ * so the icon keeps ≥ 3:1 in light, dark and every contrast level (Ui05TimelineTest). A missed dose keeps the error colour.
+ */
+internal fun eventTypeColors(kind:EventKind,c:ColorScheme)=when(kind){
+    EventKind.LAB->c.tertiaryContainer to c.onTertiaryContainer;EventKind.APPOINTMENT->c.secondaryContainer to c.onSecondaryContainer
+    EventKind.MILESTONE->c.primaryContainer to c.onPrimaryContainer;EventKind.REVIEW->c.inverseSurface to c.inverseOnSurface
+    EventKind.MISSED->c.errorContainer to c.onErrorContainer;else->c.surfaceVariant to c.onSurfaceVariant}
 @Composable internal fun EventTypeBadge(kind:EventKind) {
-    val c=MaterialTheme.colorScheme
-    val (bg,fg)=when(kind){EventKind.MISSED->c.errorContainer to c.onErrorContainer;EventKind.LAB->c.tertiaryContainer to c.onTertiaryContainer
-        EventKind.APPOINTMENT,EventKind.MILESTONE->c.secondaryContainer to c.onSecondaryContainer;else->c.primaryContainer to c.onPrimaryContainer}
-    Surface(shape=androidx.compose.foundation.shape.CircleShape,color=bg,contentColor=fg,modifier=Modifier.testTag("event-badge:${kind.name}")){
-        Icon(eventKindIcon(kind),null,Modifier.padding(6.dp).size(20.dp))}
+    val (bg,fg)=eventTypeColors(kind,MaterialTheme.colorScheme)
+    Surface(shape=androidx.compose.foundation.shape.CircleShape,color=bg,contentColor=fg,modifier=Modifier.size(36.dp).testTag("event-badge:${kind.name}")){
+        Box(contentAlignment=androidx.compose.ui.Alignment.Center){Icon(eventKindIcon(kind),null,Modifier.size(20.dp))}}
 }
 @Composable private fun EventDetail(event:PeriodEvent,extra:NotesViewModel.ExtraState,zone:ZoneId,onDismiss:()->Unit,onEdit:(MilestoneEntity)->Unit,onDelete:(MilestoneEntity)->Unit) {
     AlertDialog(onDismissRequest=onDismiss,title={Text(eventKindLabel(event.kind))},text={Column(Modifier.verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(8.dp)) {
@@ -353,12 +423,13 @@ internal fun eventKindIcon(kind:EventKind):androidx.compose.ui.graphics.vector.I
         }}
     })
 }
-@Composable fun eventKindLabel(kind:EventKind)=stringResource(when(kind){
+@Composable fun eventKindLabel(kind:EventKind)=stringResource(eventKindLabelRes(kind))
+internal fun eventKindLabelRes(kind:EventKind)=when(kind){
     EventKind.REGIMEN->R.string.timeline_regimen;EventKind.DOSE->R.string.timeline_dose;EventKind.MISSED->R.string.timeline_missed
     EventKind.UNCONFIRMED->R.string.status_unconfirmed;EventKind.SKIPPED->R.string.timeline_skipped;EventKind.LAB->R.string.labs
     EventKind.SYMPTOM->R.string.wb_symptoms;EventKind.WELLBEING->R.string.wellbeing;EventKind.REVIEW->R.string.wb_reviews
     EventKind.APPOINTMENT->R.string.appointment;EventKind.MILESTONE->R.string.milestone;EventKind.PLANNED->R.string.timeline_planned
-})
+}
 @Composable internal fun milestoneKindLabel(kind:String)=stringResource(when(kind){"STARTED"->R.string.milestone_started;"ROUTE"->R.string.milestone_route;"SURGERY"->R.string.appt_surgery;"PAUSED"->R.string.milestone_paused;"STOPPED"->R.string.milestone_stopped;"RESUMED"->R.string.milestone_resumed;else->R.string.milestone_custom})
 @Composable private fun MilestoneDialog(initial:MilestoneEntity,saveState:MilestoneSaveState,onDismiss:()->Unit,onSave:(MilestoneEntity)->Unit) {
     var dateText by rememberSaveable(initial.id){mutableStateOf(initial.date)};val date=LocalDate.parse(dateText);var kind by rememberSaveable(initial.id){mutableStateOf(initial.kind)}
@@ -433,4 +504,23 @@ private fun changeRes(kind:net.plainnotes.app.domain.ChangeKind)=when(kind) {
     net.plainnotes.app.domain.ChangeKind.IDENTITY->R.string.period_change_identity
     net.plainnotes.app.domain.ChangeKind.GAP->R.string.period_change_gap
     net.plainnotes.app.domain.ChangeKind.UNJOINED->R.string.period_change_unjoined
+}
+
+/** UI-05 D: the timeline's two add actions for AppShell's top bar; the timeline registers its own original callbacks here. */
+class TimelineAddHost {
+    var milestone by mutableStateOf<(()->Unit)?>(null); var milestoneEnabled by mutableStateOf(true)
+    var period by mutableStateOf<(()->Unit)?>(null); var periodEnabled by mutableStateOf(false)
+}
+/** The top bar "+": "Add milestone" and "New period", enabled exactly as the former buttons were. */
+@Composable fun TimelineAddMenu(host:TimelineAddHost) {
+    var open by remember{mutableStateOf(false)}
+    Box {
+        IconButton({open=true},Modifier.testTag("timeline-add")){Icon(Icons.Outlined.Add,stringResource(R.string.add))}
+        DropdownMenu(open,{open=false}) {
+            DropdownMenuItem({Text(stringResource(R.string.milestone_add))},{open=false;host.milestone?.invoke()},enabled=host.milestone!=null && host.milestoneEnabled,
+                modifier=Modifier.testTag("timeline-add-milestone"))
+            DropdownMenuItem({Text(stringResource(R.string.timeline_new_period))},{open=false;host.period?.invoke()},enabled=host.period!=null && host.periodEnabled,
+                modifier=Modifier.testTag("timeline-new-period"))
+        }
+    }
 }

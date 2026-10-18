@@ -1250,4 +1250,5 @@
 <string name="home_stock_low">%1$s快用完了</string>
 <string name="home_stock_more">还有 %1$d 种</string>
 <string name="stock_about_days">约 %1$d 天</string>
+<string name="period_since">%1$s 至今</string>
 </resources>

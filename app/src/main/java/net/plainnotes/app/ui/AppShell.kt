@@ -100,6 +100,7 @@ class UiPrefs(context: Context) {
     var highReliability by remember { mutableStateOf(prefs.highReliability) }
     var disclaimer by remember { mutableStateOf(false) }
     val drawer = rememberDrawerState(DrawerValue.Closed)
+    val timelineAdd = remember { TimelineAddHost() }
     val scope = rememberCoroutineScope()
     val snackbar = remember { SnackbarHostState() }
     var completeEntry by remember { mutableStateOf<TimelineEntry?>(null) }
@@ -170,6 +171,8 @@ class UiPrefs(context: Context) {
                         if (destination == Destination.WELLBEING) IconButton(onClick={wellbeingDialogs.summary=true}) { Icon(Icons.Outlined.PictureAsPdf,stringResource(R.string.wb_summary)) }
                         if (destination == Destination.CALENDAR) IconButton(onClick = { pickStart = true }) { Icon(Icons.Outlined.EditCalendar, stringResource(R.string.calendar_pick_start)) }
                         if (destination == Destination.CONCENTRATION) IconButton(onClick = { model.loadConcentration() }) { Icon(Icons.Outlined.Refresh, stringResource(R.string.refresh)) }
+                        // UI-05 D: the timeline's "Add milestone" / "New period" (the timeline registers its own callbacks).
+                        if (destination == Destination.TIMELINE) TimelineAddMenu(timelineAdd)
                     })
             },
             snackbarHost = { SnackbarHost(snackbar) },
@@ -227,7 +230,7 @@ class UiPrefs(context: Context) {
                     net.plainnotes.app.timeline.EventKind.APPOINTMENT->Destination.VISITS
                     else->Destination.HISTORY
                 }},pad,onAppointment={visitId=it;medicalOrigin=false;destination=Destination.VISITS},saveState=milestoneSave,onSaveHandled=model::clearMilestoneSave,onImportedHistory={importedRecordIds=it.toSet();destination=Destination.HISTORY},
-                    timelineActions=TimelineActions(model::editTimeline,model::deletePeriod))
+                    timelineActions=TimelineActions(model::editTimeline,model::deletePeriod),addHost=timelineAdd)
                 Destination.MEDICAL -> MedicalRecordsScreen(state.appointments,{visitId=it.id;medicalOrigin=true;destination=Destination.VISITS},
                     {model.clearMedicalVisitSave();medicalDialogs.edit=null;medicalDialogs.editing=true},{destination=Destination.LABS},{destination=Destination.TIMELINE},{destination=Destination.SETTINGS},pad,
                     onConfirm={model.clearMedicalVisitSave();model.saveMedicalVisit(it,it)},questionCounts=extra.visitQuestions.groupingBy{it.appointment_id}.eachCount())

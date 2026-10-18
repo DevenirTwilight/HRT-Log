@@ -6,6 +6,10 @@
 - A 完成：进度胶囊、倒计时（仅显示，逾期不显示，每分钟刷新）、52dp 主按钮带勾与圆形 ⋮、分隔线、记录行状态图标（文字保留）。`Ui05TodayCardTest` 9/9（红测 6/7 失败），TodayCardTest/HomeStockCardTest/Ui04/CalendarSemantics/CalendarCoreFlow 通过。
 - B 完成：首页低库存改为每药一条紧凑横条（tertiaryContainer、圆角 16、整条点进库存页、“添加库存”仍开同一 AddStockDialog），移到今天卡正下方、月历之前；最多 3 条，其余“还有 n 种”。判定仍为 StockForecast.isLow。`Ui05HomeStockTest` 4/4（红测 2/4 失败）。断言迁移：HomeStockCardTest 中行内药名从完全匹配改为包含匹配（药名现在在“[药名]快用完了”句中，含义不变）；`home-stock-view` 标签现挂在整条横条上，原“2 个查看入口、点第一个进入库存页”断言原样通过。
 - C 完成：库存卡药名下加“途径 · 频率”（复用 choiceLabel/scheduleText）、余量旁“约 n 天”（取 forecast 已算出的天数，无计划或覆盖整个窗口时不显示）、长句改为进度条下方 bodySmall。主按钮、⋮ 菜单、低库存变色与胶囊、包装折叠/管理入口不变。`Ui05StockCardTest` 4/4（红测 3/4 失败），其余 8 个库存测试类通过，无断言迁移。
+- D 完成（只改展示层，投影/编辑逻辑未动）：“添加里程碑”“新建时期”移入顶栏 + 菜单（`TimelineAddHost` 登记原回调，启用规则同原按钮）；时期卡类型改为胶囊、标题“[起]–[止]”或“[起] 至今 · 第 n 天”、方案每行前加圆点；事件与导入摘要画成所属分组卡下方的白色内嵌列表（36dp 彩色类型图标 + 类型·名称/日期两行 + 右箭头），归属完全来自原投影块顺序；即将发生的事件为虚线卡。类型配色：化验 tertiary、就诊 secondary、里程碑 primary、阶段回顾 inverseSurface、其他 surfaceVariant（漏服保留 error 色），明暗×三档对比度均 ≥3:1。`Ui05TimelineTest` 8/8（红测 5/6 失败）。
+  - 断言迁移（逐条）：LongitudinalUiTest 两项“点击列表中的添加里程碑按钮”改为“点顶栏 + → 添加里程碑”，其后对话框断言全部不变；TimelineEditUiTest“简洁模式下仍有新建时期入口”改为“+ 存在且时间线登记的新建时期回调存在且可用”（菜单项调用该回调由 Ui05TimelineTest 证明）。焦点滚动索引因移除按钮项由 +3 改为 +2。
+  - 测试环境发现：Robolectric 在 `w411dp-h891dp` 限定符下打开时间线上的对话框会一直不空闲（原主线代码同样），去掉限定符即正常；不是应用缺陷。
+- 新任务书已归档排队：LAB-01（`sources/lab01/`，UI-05 合并后开始）、LAB-02（`sources/lab02/`，LAB-01 合并且主线全绿后只做阶段 A；阶段 B 须负责人按任务书第 4 节原话批准）。
 
 ## build30 已交付（REQUIREMENTS §107）— 2026-10-18
 

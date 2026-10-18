@@ -52,10 +52,15 @@ class TimelineEditUiTest {
 
     @Test fun cardMenuDeletesThroughTheRepositoryRowsAndSimpleModeCanStillEdit() {
         var edits:List<TimelineEditRow>?=null
+        val host=TimelineAddHost()
         val key=PeriodTimelineProjection.build(extra,emptyList()).projection.periods.first().key
-        ui.setContent{MaterialTheme{CompositionLocalProvider(LocalSimpleMode provides true){
-            LongitudinalScreen(state,extra,{},{},{},PaddingValues(),timelineActions=TimelineActions(delete={_,rows->edits=rows}))}}}
-        ui.onNodeWithTag("timeline-new-period").assertExists()
+        ui.setContent{MaterialTheme{CompositionLocalProvider(LocalSimpleMode provides true){androidx.compose.foundation.layout.Column{
+            TimelineAddMenu(host)
+            LongitudinalScreen(state,extra,{},{},{},PaddingValues(),timelineActions=TimelineActions(delete={_,rows->edits=rows}),addHost=host)}}}}
+        // UI-05 D: "New period" moved from a list button into the top bar "+" menu (Ui05TimelineTest checks the item calls
+        // this callback); it is still offered, and enabled, in simple mode.
+        ui.onNodeWithTag("timeline-add").assertExists()
+        ui.runOnIdle{assertNotNull(host.period);assertTrue(host.periodEnabled)}
         ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag("period-menu:$key"))
         ui.onNodeWithTag("period-menu:$key").performClick()
         ui.onNodeWithTag("period-edit-any:$key").assertExists()

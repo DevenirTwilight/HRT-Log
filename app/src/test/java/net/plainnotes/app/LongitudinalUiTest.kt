@@ -18,8 +18,10 @@ class LongitudinalUiTest {
     @get:Rule val ui=createAndroidComposeRule<ComponentActivity>()
     @Test fun milestoneRequiresCustomTitleAndPreservesExplicitUserDate() {
         var saved:MilestoneEntity?=null
-        ui.setContent{MaterialTheme{LongitudinalScreen(NotesState(loading=false),NotesViewModel.ExtraState(),{saved=it},{},{},PaddingValues())}}
-        ui.onNodeWithText(ui.activity.getString(R.string.milestone_add)).performClick()
+        // UI-05 D: "Add milestone" moved from a list button into the top bar "+" menu (same callback); open it from there.
+        ui.setContent{MaterialTheme{androidx.compose.foundation.layout.Column{val host=androidx.compose.runtime.remember{TimelineAddHost()};TimelineAddMenu(host)
+            LongitudinalScreen(NotesState(loading=false),NotesViewModel.ExtraState(),{saved=it},{},{},PaddingValues(),addHost=host)}}}
+        ui.onNodeWithTag("timeline-add").performClick();ui.onNodeWithTag("timeline-add-milestone").performClick()
         ui.onNodeWithText(ui.activity.getString(R.string.save)).assertIsNotEnabled()
         ui.onNodeWithText(ui.activity.getString(R.string.milestone_title)).performTextInput("Synthetic milestone")
         ui.onNodeWithText(ui.activity.getString(R.string.save)).performClick()
@@ -43,8 +45,8 @@ class LongitudinalUiTest {
         val restoration=androidx.compose.ui.test.junit4.StateRestorationTester(ui)
         val result=androidx.compose.runtime.mutableStateOf(net.plainnotes.app.timeline.MilestoneSaveState())
         var calls=0
-        restoration.setContent{MaterialTheme{LongitudinalScreen(NotesState(loading=false),NotesViewModel.ExtraState(),{calls++;result.value=net.plainnotes.app.timeline.MilestoneSaveState(saving=true)},{},{},PaddingValues(),saveState=result.value)}}
-        ui.onNodeWithText(ui.activity.getString(R.string.milestone_add)).performClick()
+        restoration.setContent{MaterialTheme{androidx.compose.foundation.layout.Column{val host=androidx.compose.runtime.remember{TimelineAddHost()};TimelineAddMenu(host);LongitudinalScreen(NotesState(loading=false),NotesViewModel.ExtraState(),{calls++;result.value=net.plainnotes.app.timeline.MilestoneSaveState(saving=true)},{},{},PaddingValues(),saveState=result.value,addHost=host)}}}
+        ui.onNodeWithTag("timeline-add").performClick();ui.onNodeWithTag("timeline-add-milestone").performClick() // UI-05 D: via the "+" menu
         ui.onNodeWithText(ui.activity.getString(R.string.milestone_title)).performTextInput("Synthetic restored draft")
         restoration.emulateSavedInstanceStateRestore()
         ui.onNodeWithText("Synthetic restored draft").assertExists()
