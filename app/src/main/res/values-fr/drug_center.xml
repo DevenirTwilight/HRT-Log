@@ -1,0 +1,22 @@
+<resources>
+    <string name="drug_center_title">Centre de référence des médicaments</string>
+    <string name="drug_center_region">France · référence ANSM / BDPM</string>
+    <string name="drug_center_official_off">Le catalogue officiel est indisponible pour le moment. Seules vos sources produit enregistrées sont disponibles ici. Ce centre ne couvre pas les produits commercialisés en Chine.</string>
+    <string name="drug_center_user_sources">Disponible : rechercher vos sources produit saisies et conservées localement ou les associer à un médicament existant. Ces sources ne sont pas vérifiées.</string>
+    <string name="drug_center_search">Rechercher les sources enregistrées</string>
+    <string name="drug_center_medications">Vos médicaments</string>
+    <string name="drug_center_empty">Aucun médicament. Vous pouvez consulter les sources enregistrées. La création manuelle reste disponible dans les schémas de traitement.</string>
+    <string name="drug_center_open_reference">Consulter ou associer la source · sans modifier la dose</string>
+    <string name="drug_center_identity">Identité du produit et source</string>
+    <string name="drug_center_identity_body">Les détails existants montrent les composants, dosage, forme, voies, CIS/CIP, version et date saisis. Les champs manquants restent inconnus ; un nom similaire ne prouve aucune équivalence.</string>
+    <string name="drug_center_packaging">Conditionnement</string>
+    <string name="drug_center_packaging_body">Le CIP saisi désigne une présentation déclarée, pas un stock utilisable vérifié. La capacité structurée est indisponible ici. Aucune conversion ni déduction de stock.</string>
+    <string name="drug_center_rcp">RCP · résumé des caractéristiques du produit</string>
+    <string name="drug_center_notice">Notice · information du patient</string>
+    <string name="drug_center_documents_off">Non activé dans ce centre. Vérification des documents et examen de la navigation en attente. Une page source ne constitue pas un texte de notice vérifié.</string>
+    <string name="drug_center_safety">Informations de sécurité</string>
+    <string name="drug_center_safety_off">Non implémenté. Aucun résumé clinique par produit ni évaluation de sécurité personnelle.</string>
+    <string name="drug_center_supply">Disponibilité, ruptures, rappels et informations réglementaires</string>
+    <string name="drug_center_supply_off">Non implémenté. La disponibilité actuelle est inconnue ; cela ne signifie ni disponibilité normale ni absence de rappels. Aucune consultation de stock en pharmacie en temps réel.</string>
+    <string name="drug_center_states">États : information manquante = champ non renseigné ; non vérifié = renseigné sans vérification ; inconnu = impossible à déterminer ; non implémenté = fonction indisponible. Aucun ne signifie disponibilité normale ou sécurité.</string>
+</resources>

@@ -1,0 +1,19 @@
+# Drug reference center — slice B
+
+Based on main ec61d53; navigation integration waits for medical-center slice A so neither PR competes for the same AppShell edit. Independent UI/resources/tests only during that wait.
+
+The center is a projection of existing NotesState.medications and MedicationReferenceController. Query opens its current offline saved-user-source browser (no target, no implicit binding). Selecting an existing medication opens exactly the same controller with its ID; its frozen scope/revision/UUID confirmation, cancel, unlink and error recovery remain unchanged. No medication save, container resize, PK or historical rewrite is introduced. Empty state keeps manual medication creation in Medication plans.
+
+France/ANSM/BDPM is explicitly a reference region, not a Chinese catalogue. No official dataset is packaged: licence-version inconsistency and FT/ST interpretation remain unresolved. Entered source identity/version/date are unverified snapshots, absent fields remain unavailable; equal names/ingredients do not establish equivalence. Packaging reference is not usable inventory.
+
+RCP and Notice have distinct read-only status sections; neither is a fabricated navigation link. #58 c43ae146 remains independent and source/navigation gated. Safety and supply/shortage/recall/regulatory sections say NOT_IMPLEMENTED with actual availability UNKNOWN, never no-recall/normal-supply/safe. No clinical summary, medical advice or live network operation.
+
+No database/backup/PK/network/security/signing/version changes. Attachments remain OFF. P4/P5 exact-stock admission remains independent. Official document API integration, approved catalogue distribution, regulatory snapshots and packaging metadata are future boundaries, not implemented actions.
+
+Evidence pending integration and test execution. Physical device, TalkBack and keyboard-on-device: NOT_RUN.
+
+First matrix run: FAIL (32 cases, 2 English/320dp/2x failures). Actual click callbacks stayed zero although semantic nodes existed: the dynamic header overlaid scrolling content. Corrected the new dialog to give its list a viewport padded by Scaffold insets, rather than only list content padding. Retain actual touch and count assertions; no semantic-action substitute. Full matrix re-run pending.
+
+Parallel PR72 appeared after initial scan and before PR73 publication. It combines both centers and clickable unavailable modules; latest user task calls for separate slices and real functional entries. No PR72 source was copied or overwritten; route preference was asked asynchronously while isolated verification continues. PR73 medical A at 3fd5b2f has local97 PASS; production hook for this B remains absent until A merges and integration route is settled.
+
+Corrected independent display run: PASS32, zero failures/skips; three contrasts per locale/size/font/theme case, actual click counters retained. Eight large-font component renders in drug-screenshots. This proves isolated UI behavior, NOT production navigation or persistence integration.
