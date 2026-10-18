@@ -40,8 +40,14 @@ class DrugCenterMatrixTest(private val locale:String,private val width:Int,priva
             ui.onNodeWithTag("drug-center-browse").assertIsDisplayed().assertHasClickAction().performClick()
             list.performScrollToNode(hasTestTag("drug-center-medication:7"))
             ui.onNodeWithTag("drug-center-medication:7").assertIsDisplayed().performClick()
-            for(tag in listOf("drug-center-identity","drug-center-packaging","drug-center-rcp","drug-center-notice","drug-center-safety","drug-center-supply")) {
+            for(tag in listOf("drug-center-identity","drug-center-packaging")) {
                 list.performScrollToNode(hasTestTag(tag));ui.onNodeWithTag(tag).assertIsDisplayed().assert(hasClickAction().not())
+            }
+            for(tag in listOf("drug-center-catalogue","drug-center-rcp","drug-center-notice","drug-center-safety","drug-center-supply","drug-center-recalls")) {
+                list.performScrollToNode(hasTestTag(tag));ui.onNodeWithTag(tag).assertIsDisplayed().assertHasClickAction().performClick()
+                ui.onNodeWithTag("center-unavailable-dialog").assertExists()
+                ui.onNodeWithTag("center-unavailable-close").performClick()
+                ui.onNodeWithTag("center-unavailable-dialog").assertDoesNotExist()
             }
             list.performScrollToIndex(0)
             if(System.getenv("CENTER_SHOTS")=="1" && width==320 && font==2f && mode==Contrast.HIGH) {

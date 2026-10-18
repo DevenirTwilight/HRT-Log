@@ -999,3 +999,7 @@ operation owned generation/UUID/暂存device wrap/hash及终态不可逆清理�
 保护文件：`ui/LabsScreen.kt` 属于 PK_DISPLAY_REVIEW。负责人在任务书第 1 节第 3 条明确批准本任务修改该文件，范围仅限批量录入入口、列表分组显示、单项编辑对话框中的分组提示。追加式批准记录 id：`PD-2026-10-18-LAB01-LABSSCREEN`（登记于 `docs/audits/product-quality-2026-10/display-approvals-after-archive.json`，证据为本节所在提交 890ae4ca；2026-10-18 更正：最初误写进已冻结的研究归档 `docs/pk-research/p2/display-approvals.json`，导致 research-deep 归档校验失败，已恢复该文件原样）。`LabContextSection.kt`、`Exports.kt`、`LabEstimate.kt`、`CalibrationEligibility.kt`、`LabFit.kt`、`ConcentrationCalculator.kt` 不改。
 
 实现决定（负责人可随时推翻）：化验页筛选标签前新增“全部”，默认选中，按次显示所有记录；选某个项目时仍显示该项目的趋势图和逐条记录（含编辑/删除菜单和上下文），与改动前相同。多项卡中的行点开现有的化验详情（`LabDetailDialog`），从详情进入编辑；删除仍在单项视图的 ⋮ 菜单里。新建时一行未动过的空行会被常用组合替换，其余情况只追加缺少的项目（任一孕酮检测方法都算已有孕酮）。
+
+## 113. 两个中心完整 UI 与可点击未开放入口（2026-10-18）
+
+负责人明确更新 §108 的界面边界：保留 #73/#74 已接通的真实功能，复用 UI-05 视觉；未完成能力也显示入口，点击仅说明“此功能尚未开放”。法国官方目录、RCP、Notice、安全、短缺、召回监管分别呈现；医疗文件库、原件、独立医生机构档案、文件与就诊/化验关联及资料整理分别预留。不启用附件选择/存储/URI，不分发未批准官方内容，不改数据库/备份/PK/库存/权限/发布。只有一个 DrugReferenceCenterScreen；不直接合并 #72 覆盖后续工作。旧无文件入口断言改为可见占位且无业务写入/外部启动的安全断言，保留认证、伪装、返回及全部旧入口可达性。按 §106 受保护自动合并；真机/TalkBack 未运行记 NOT_RUN。本条不授权签名或 APK 交付。

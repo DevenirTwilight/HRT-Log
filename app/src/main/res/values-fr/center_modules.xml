@@ -1,0 +1,18 @@
+<resources>
+    <string name="center_not_open">Cette fonctionnalité n’est pas encore ouverte.</string>
+    <string name="center_future_modules">À venir</string>
+    <string name="center_fr_catalogue">Catalogue officiel français des médicaments</string>
+    <string name="center_fr_catalogue_reason">La diffusion des données officielles attend la validation des sources et des conditions de réutilisation.</string>
+    <string name="center_shortages">Pénuries de médicaments</string>
+    <string name="center_recalls">Rappels et annonces réglementaires</string>
+    <string name="center_med_files">Bibliothèque de documents médicaux</string>
+    <string name="center_med_originals">PDF, images, ordonnances et dossiers originaux</string>
+    <string name="center_med_practitioners">Dossiers des médecins et établissements</string>
+    <string name="center_med_visit_links">Associer des documents aux consultations</string>
+    <string name="center_med_lab_links">Associer des documents aux analyses</string>
+    <string name="center_med_organize">Organiser, résumer et exporter les documents médicaux</string>
+    <string name="center_med_files_reason">L’importation et le stockage des originaux attendent la revue de sécurité. Aucun fichier n’est sélectionné ni enregistré ici.</string>
+    <string name="center_med_practitioners_reason">Les dossiers indépendants ne sont pas disponibles. Les informations existantes restent dans les consultations.</string>
+    <string name="center_med_links_reason">Les associations de documents ne sont pas disponibles. Aucun lien n’est déduit des dates.</string>
+    <string name="center_med_organize_reason">L’organisation des documents n’est pas disponible. Le dossier de consultation PDF reste exportable depuis une consultation.</string>
+</resources>

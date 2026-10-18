@@ -1,3 +1,7 @@
+## 两个中心可见未开放模块整合 — 2026-10-18
+
+基线11664eda，#74已六CI全绿并合并07836294；保留#73、UI-05、LAB-01真实功能。新分支feature/centers-visible-modules-20261018按最新负责人§113实现六个药品与六个医疗占位入口，点击仅说明，现有查询/关联/方案/库存及医疗功能保持真实。文件矩阵见centers/visible-modules-integration.md。源码已实现，本地测试/截图/CI待验，不启用附件或官方分发，不改数据层/PK/库存/发布。#72不整体合并，后续由本增量取代。
+
 ## 修复：研究归档被误改（2026-10-18）
 
 - LAB-01（#78）把 LabsScreen 批准记录追加进了已冻结的 `docs/pk-research/p2/display-approvals.json`，导致 research-deep 失败：`Archived record changed or missing`。已恢复该文件到归档提交 1e584285 的原样，记录移到 `docs/audits/product-quality-2026-10/display-approvals-after-archive.json`。之后 PK 显示文件的批准记录都写在这个新文件里。
