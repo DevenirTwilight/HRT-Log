@@ -1,0 +1,17 @@
+{
+  "head": "88a60f1d8df01671d8ea64b90117343974839012",
+  "run": 39103554604,
+  "artifact_id": 12127363238,
+  "artifact_sha256": "62caa3e1ebe3f97b6f0afec822d1d994df17a91611bc91ae0a84c86c1f37366a",
+  "zip_crc": "PASS",
+  "reports": [
+    {
+      "file": "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.DailyTrashCollisionAndroidTest.html",
+      "counts": {
+        "tests": 4,
+        "failures": 0,
+        "skipped": 0
+      }
+    }
+  ]
+}

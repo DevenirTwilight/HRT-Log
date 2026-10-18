@@ -12,6 +12,12 @@ No schema, migration, backup format/cryptography or clinical/stock/PK semantics 
 
 Local results: initial in-memory247 tests PASS, then the same4 new methods were moved to the existing shared-test mechanism and run with file-backed SQLite: full247 PASS, no failures/errors/skips. Native SQLCipher wrapper compiled; native26/29/35 execution and finalSHA six CI are NOT_RUN/PENDING at this checkpoint. Python156 PASS. Physical hardware NOT_RUN.
 
+## Verified source CI checkpoint
+
+Source `88a60f1d8df01671d8ea64b90117343974839012`: all six required checks passed in both push/PR runs. Official artifacts were downloaded and their GitHub digests and ZIP CRC verified. Actual SQLCipher `DailyTrashCollisionAndroidTest` ran all4 cases with zero failures/skips on each API26,29,35. Full JVM reports: data247/0fail/0skip, reminder20/0fail/0skip, app1379/0fail/205 existing conditional skips. The original `TrashDataTest` assertions remain unchanged. See api26/api29/api35/build evidence and source-88a60f1-checks JSON.
+
+This follow-up changes only evidence/HANDOFF. Its final HEAD ordinary CI must run separately; source88a60f1 green is not presented as that new HEAD's check result. No merge or release has occurred. [REQUIREMENTS §103](../../REQUIREMENTS.md) covers ANSM PRs; the owner task §2.1 explicitly forbids silently applying that auto-merge authority to a separate general CI/data fix. Owner review/ordinary protected merge remains a separate step.
+
 ## Integration ownership
 
 The only existing shared integration file changed is `.github/workflows/android.yml`: append `DailyTrashCollisionAndroidTest` to the API26/29 explicit list; API35 already runs every data test. All14 previous classes, all jobs/flags/prefetch steps and six required checks remain. Existing Gradle source sets already include the shared contract; no Gradle changes or dependencies are needed.

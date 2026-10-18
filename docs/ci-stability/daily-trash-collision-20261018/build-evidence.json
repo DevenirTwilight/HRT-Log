@@ -1,0 +1,33 @@
+{
+  "head": "88a60f1d8df01671d8ea64b90117343974839012",
+  "run": 39103554604,
+  "artifact_id": 12127761575,
+  "artifact_sha256": "5edda42066893493b97d0c78dd64e8ef5a9136a6aedbea6a5eac408314e3b6be",
+  "zip_crc": "PASS",
+  "reports": [
+    {
+      "file": "app/build/reports/tests/testFullDebugUnitTest/index.html",
+      "counts": {
+        "tests": 1379,
+        "failures": 0,
+        "skipped": 205
+      }
+    },
+    {
+      "file": "core/data/build/reports/tests/testDebugUnitTest/index.html",
+      "counts": {
+        "tests": 247,
+        "failures": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "file": "core/reminder/build/reports/tests/testDebugUnitTest/index.html",
+      "counts": {
+        "tests": 20,
+        "failures": 0,
+        "skipped": 0
+      }
+    }
+  ]
+}
