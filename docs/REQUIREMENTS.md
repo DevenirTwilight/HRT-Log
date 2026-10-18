@@ -968,3 +968,14 @@ operation owned generation/UUID/暂存device wrap/hash及终态不可逆清理�
 ## 107. 中国 Beta P0 修复后的正式签名测试包（2026-10-18）
 
 负责人：“合并后打个新包给我测试”“正式签名”。在 #66、#67 合并后，从默认分支构建 full Universal release，versionCode 29 → 30（账本最大 29 + 1），versionName 仍 0.2.0，沿用私有正式签名（证书 989ba045…59379b1），流程同 §104 / `scripts/sign_local_apk.sh`，签名材料不进 Git、用完清理。只通过会话私密文件交付给负责人测试，并登记账本；不新建或替换公开 Release，不移动 tag。
+
+
+## 108. UI-first: medicine reference and medical centers (2026-10-18)
+
+Owner decision: build the visible navigation and UI of the ANSM medicine reference center and the medical center **before** all underlying modules are ready. Future-feature cards may be clickable if they clearly explain that the feature is not available; no data mutation, file import, official-content fetch, or unsupported clinical claim.
+
+- Add a medicine reference center drawer entry that exposes existing user-entered medication/reference management and current stock. Official French catalogue, RCP/Notice, safety content, and supply/recall are clearly unavailable until independently approved. Do not bundle ANSM resources or call user-entered references officially verified.
+- Extend the existing medical archive rather than create a parallel store: retain real visits, labs and timeline; add a route to existing visits/visit preparation and inactive encrypted originals, practitioner and record-link sections. No MED-02 file picker, attachment import, original storage or preview until the independent security and backup gates.
+- Preserve existing navigation, current stock behavior, and all historical facts. Do not change P4, Room, PNBAK, PK, cryptography, Manifest, version or release.
+- Reuse the existing Material 3 style; localize all strings into four supported languages; test the new drawer entry, real routes and inert placeholders, without removing or skipping assertions.
+- Implement as an isolated UI PR based on the latest default branch. Coordinate future overlaps with P4 #57 and ANSM-04A #58; do not copy their unmerged code.
