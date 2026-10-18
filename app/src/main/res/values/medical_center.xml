@@ -1,0 +1,7 @@
+<resources>
+    <string name="medical_center_overview">Medical center overview</string>
+    <string name="medical_center_visits">Appointments and past visits</string>
+    <string name="medical_center_prepare">Questions and visit preparation</string>
+    <string name="medical_center_pack">Visit pack export</string>
+    <string name="medical_center_choose_visit">Choose a visit to prepare questions or export its PDF pack. Existing visit records are shared with Follow-up.</string>
+</resources>

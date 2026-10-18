@@ -1,3 +1,7 @@
+## 医疗中心薄纵切片 A — 2026-10-18
+
+基线ec61d53（#71已合并）。文件级矩阵及验收见`docs/centers/implementation-matrix.md`。现有医疗档案聚合预约/历史就诊、问题准备、资料包入口，复用VisitsScreen和原有Repository；化验/时间线从此进入可返回医疗档案。保留独立复诊及所有旧入口。附件OFF，不等待P4，不改正式库存/Schema/备份/PK。已编码并通过97项本地Compose/时期稳定性回归（0失败/跳过），含32显示矩阵用例各跑3对比度；四语320dp/2x深浅共8张Robolectric组件截图与源哈希见centers/medical-test-evidence.json。首轮新增测试重复导致编译失败已修正，旧断言全部保留。CI待验；真机及TalkBack NOT_RUN。B须等A合并后再改同一导航文件；不动#58。
+
 ## CI独立候选：精确闹钟测试前置权限 — 2026-10-18
 
 主线417 run39122664759/job117661246072在ReminderTestDeviceTest第52行status.exact断言失败，发生在90s等待前；同源Beta设备绿不覆盖该失败。原fixture只关闭AppOps命令管道，未等命令完成；竞态原因仍HYPOTHESIS。独立分支仅改androidTest一个文件：读到EOF再关闭，并在API31+明确断言AlarmManager已看到grant后才运行原测试。三个用例、全部旧断言、5/8s输入和90s期限逐字保留，不轮询/延时/重跑掩盖。原生编译及三API/六CI待验；完整隔离计划见ci-stability/exact-alarm-preflight-20261018/README.md。按最新主线REQUIREMENTS106走受保护auto-merge，无prod提醒/UI/库存/Schema/PK/权限/版本/签名/发布变化，真机NOT_RUN。
