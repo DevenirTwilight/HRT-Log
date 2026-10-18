@@ -1249,4 +1249,5 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="today_in_minutes">In %1$d min</string>
 <string name="home_stock_low">%1$s is running low</string>
 <string name="home_stock_more">%1$d more</string>
+<string name="stock_about_days">about %1$d days</string>
 </resources>

@@ -1249,4 +1249,5 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="today_in_minutes">Dans %1$d min</string>
 <string name="home_stock_low">%1$s : bientôt épuisé</string>
 <string name="home_stock_more">%1$d de plus</string>
+<string name="stock_about_days">environ %1$d jours</string>
 </resources>
