@@ -6,6 +6,11 @@
 
 基线11664eda，#74已六CI全绿并合并07836294；保留#73、UI-05、LAB-01真实功能。新分支feature/centers-visible-modules-20261018按最新负责人§113实现六个药品与六个医疗占位入口，点击仅说明，现有查询/关联/方案/库存及医疗功能保持真实。文件矩阵见centers/visible-modules-integration.md。源码已实现，本地测试/截图/CI待验，不启用附件或官方分发，不改数据层/PK/库存/发布。#72不整体合并，后续由本增量取代。
 
+## LAB-02（REQUIREMENTS §112）— 2026-10-18
+
+- 阶段 A：分支 `feature/lab02a-panel-design-20261018`（基于 LAB-01 分支，#78 合并后合入主线再开 PR）。ADR `docs/design/lab-panel-adr.md`（Q1–Q12 推荐答案已由负责人采纳），草案测试 `LabPanelDraftTest` 4/4、`Lab02PanelPkInvarianceTest` 1/1，报告 68。
+- 阶段 B：阶段 A 合并后开始（分支 `feature/lab02b-panel-impl-<日期>`），按 ADR 第 13、14 节文件和测试清单实施；完成后 build 32。
+
 ## 修复：研究归档被误改（2026-10-18）
 
 - LAB-01（#78）把 LabsScreen 批准记录追加进了已冻结的 `docs/pk-research/p2/display-approvals.json`，导致 research-deep 失败：`Archived record changed or missing`。已恢复该文件到归档提交 1e584285 的原样，记录移到 `docs/audits/product-quality-2026-10/display-approvals-after-archive.json`。之后 PK 显示文件的批准记录都写在这个新文件里。
