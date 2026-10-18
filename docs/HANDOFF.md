@@ -1,3 +1,9 @@
+## build31 已交付（REQUIREMENTS §110）— 2026-10-18
+
+- 0.2.0 / versionCode 31 正式签名包，构建自 `2a6d0642`（#76 合并，含 #75 UI-05；树与 PR #76 头 d08aa3de 相同，其全部必需检查通过），APK SHA-256 `7217a2a74033c79fd272611a8e6e83b6536dadea2b1c34f0099d986e240b6741`，证书 989ba045…59379b1，v2/v3、16KB 对齐、四 ABI、非 debug、无 INTERNET；manifest/附件隔离 PASS，provenance SOURCE_DIRTY=false。会话私密文件交付，未进 Git/Release；临时签名材料已删除。记录 `delivery/build31-ui05-2026-10-18.json`。真机安装 NOT_RUN。
+- 下一个交付：LAB-02 阶段 B 合并后的 build 32（负责人 2026-10-18“lab02做完给我个apk”）。
+
+
 ## LAB-01 一次化验批量录入（REQUIREMENTS §111，报告 67）— 2026-10-18
 
 - 分支 `feature/lab01-batch-entry-20261018`（UI-05 #75 合并后已合入默认分支）。实现、测试、批准记录 `PD-2026-10-18-LAB01-LABSSCREEN` 已提交推送；LAB-01 新测试 103 项本地全过。待办：完整回归、截图（before/after/compare）、报告第 8 节、开 PR 自动合并。
