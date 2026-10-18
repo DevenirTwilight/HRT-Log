@@ -996,6 +996,6 @@ operation owned generation/UUID/暂存device wrap/hash及终态不可逆清理�
 
 不改 Room schema、实体、迁移、备份格式，不改 PK 参数与计算、浓度页、导出 PDF、提醒；不新增权限、网络、埋点、依赖；不改 versionCode、不签名交付。按 §106 自动合并。
 
-保护文件：`ui/LabsScreen.kt` 属于 PK_DISPLAY_REVIEW。负责人在任务书第 1 节第 3 条明确批准本任务修改该文件，范围仅限批量录入入口、列表分组显示、单项编辑对话框中的分组提示。追加式批准记录 id：`PD-2026-10-18-LAB01-LABSSCREEN`（登记于 `docs/pk-research/p2/display-approvals.json`，证据为本节所在提交）。`LabContextSection.kt`、`Exports.kt`、`LabEstimate.kt`、`CalibrationEligibility.kt`、`LabFit.kt`、`ConcentrationCalculator.kt` 不改。
+保护文件：`ui/LabsScreen.kt` 属于 PK_DISPLAY_REVIEW。负责人在任务书第 1 节第 3 条明确批准本任务修改该文件，范围仅限批量录入入口、列表分组显示、单项编辑对话框中的分组提示。追加式批准记录 id：`PD-2026-10-18-LAB01-LABSSCREEN`（登记于 `docs/audits/product-quality-2026-10/display-approvals-after-archive.json`，证据为本节所在提交 890ae4ca；2026-10-18 更正：最初误写进已冻结的研究归档 `docs/pk-research/p2/display-approvals.json`，导致 research-deep 归档校验失败，已恢复该文件原样）。`LabContextSection.kt`、`Exports.kt`、`LabEstimate.kt`、`CalibrationEligibility.kt`、`LabFit.kt`、`ConcentrationCalculator.kt` 不改。
 
 实现决定（负责人可随时推翻）：化验页筛选标签前新增“全部”，默认选中，按次显示所有记录；选某个项目时仍显示该项目的趋势图和逐条记录（含编辑/删除菜单和上下文），与改动前相同。多项卡中的行点开现有的化验详情（`LabDetailDialog`），从详情进入编辑；删除仍在单项视图的 ⋮ 菜单里。新建时一行未动过的空行会被常用组合替换，其余情况只追加缺少的项目（任一孕酮检测方法都算已有孕酮）。

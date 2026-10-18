@@ -1,3 +1,8 @@
+## 修复：研究归档被误改（2026-10-18）
+
+- LAB-01（#78）把 LabsScreen 批准记录追加进了已冻结的 `docs/pk-research/p2/display-approvals.json`，导致 research-deep 失败：`Archived record changed or missing`。已恢复该文件到归档提交 1e584285 的原样，记录移到 `docs/audits/product-quality-2026-10/display-approvals-after-archive.json`。之后 PK 显示文件的批准记录都写在这个新文件里。
+- 本地验证：`verify_historical_archive.py` 通过；`tools/pk-research` 单元测试 261 项全部通过。
+
 ## build31 已交付（REQUIREMENTS §110）— 2026-10-18
 
 - 0.2.0 / versionCode 31 正式签名包，构建自 `2a6d0642`（#76 合并，含 #75 UI-05；树与 PR #76 头 d08aa3de 相同，其全部必需检查通过），APK SHA-256 `7217a2a74033c79fd272611a8e6e83b6536dadea2b1c34f0099d986e240b6741`，证书 989ba045…59379b1，v2/v3、16KB 对齐、四 ABI、非 debug、无 INTERNET；manifest/附件隔离 PASS，provenance SOURCE_DIRTY=false。会话私密文件交付，未进 Git/Release；临时签名材料已删除。记录 `delivery/build31-ui05-2026-10-18.json`。真机安装 NOT_RUN。
