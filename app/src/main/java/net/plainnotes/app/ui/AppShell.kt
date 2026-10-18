@@ -88,6 +88,7 @@ class UiPrefs(context: Context) {
     val medicalSave by model.medicalVisitSave.collectAsStateWithLifecycle()
     val importedLink by model.importedLink.collectAsStateWithLifecycle()
     val notificationSlot by model.notificationSlot.collectAsStateWithLifecycle()
+    val reminderTest by model.reminderTest.collectAsStateWithLifecycle()
     var destination by rememberSaveable { mutableStateOf(Destination.CALENDAR) }
     // UI-02 A2: the settings page shown, kept across rotation and process recreation.
     var settingsPage by rememberSaveable { mutableStateOf(SettingsPage.OVERVIEW) }
@@ -216,7 +217,8 @@ class UiPrefs(context: Context) {
                             net.plainnotes.app.disguise.DisguiseSection(model::destroyLegacyPrivateData, onRoutingChanged = { model.sync() }, backup = model::backupTo)
                         },
                         dataSlot = { DataSection(model, state.medications.associate { it.id to scheduleText(state.schedules[it.id]) }) },
-                        binSlot = { RecycleBinSection(state, extra, model::restoreTrash, model::purgeTrash, model::emptyTrash) })
+                        binSlot = { RecycleBinSection(state, extra, model::restoreTrash, model::purgeTrash, model::emptyTrash) },
+                        testStatus = reminderTest, onRefreshTest = model::refreshReminderTest)
                 }
                 Destination.ABOUT -> AboutScreen(pad)
                 Destination.TIMELINE -> LongitudinalScreen(state,extra,model::saveMilestone,model::deleteMilestone,{kind->destination=when(kind){

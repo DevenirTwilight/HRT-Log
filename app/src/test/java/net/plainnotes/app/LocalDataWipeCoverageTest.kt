@@ -17,6 +17,7 @@ class LocalDataWipeCoverageTest {
     private val clearedBy = mapOf(
         "notify" to "NotificationPrefs(app).clear()",
         "stock_alerts" to "StockAlerts.clear(app)",
+        "reminder_test" to "ReminderTestLog(app).clear()",
     )
 
     @Test fun everyPreferenceStoreIsClearedByDeleteAllData() {

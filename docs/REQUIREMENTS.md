@@ -947,3 +947,24 @@ operation owned generation/UUID/暂存device wrap/hash及终态不可逆清理�
 - 把 v0.2.0 tag 移到本次构建的源码 commit，同步 `.github/release-assets.json`、`docs/releases/`；旧 tag SHA（462da22）与旧 APK 哈希在 `docs/releases/` 留档。更新账本与 README 的 Public release 行和版本层次说明。
 - 只含已合并到默认分支且 CI 全绿的内容；未合并 PR、研究分支、debug 演示不进入；release 隔离检查必须通过。签名前完整 CI（JVM、Android、lint、unsignedRelease、设备测试、Science）与 `scripts/check_release_manifest.py`，确认无 INTERNET 权限。
 - 逐条核对宣传功能是否在此 release 构建中可用，缺失只报告，不临时改代码。隐私表述与 PRIVACY.md、docs/privacy-evidence.md 一致。任何一步失败即停止汇报。
+
+
+## 105. 中国 Beta P0：提醒可靠性与应用内重复认证（2026-10-18）
+
+负责人转达真实用户反馈并要求修复（不重做视觉设计，与 ANSM P4 #57 隔离，不改库存、数据库格式、备份密码学、药代模型或医疗附件；不签名、不发布）：
+
+- **P0-A 提醒**：开启三个系统开关后，测试提醒仍未出现。要求区分“立即通知测试”（只验证通知渠道能实际发布）和“定时提醒测试”（完整经过 AlarmManager → BroadcastReceiver → ReminderCoordinator → NotificationManager，默认约 1 分钟），二者结果不得互相冒充；正常导航、返回设置页不得清除测试事件，不得破坏正式提醒队列；区分“闹钟已安排 / 广播已到达 / 通知已发布 / 通知已显示”；重复点击、过期、权限缺失不得产生重复通知或虚假成功。
+- **P0-B 会话**：已解锁后在应用内切换页面（日历 → 库存等）不应再次要求 PIN 或伪装密码。不得削弱：普通模式后台自动锁定、伪装模式离开即锁、进程死亡与未授权启动拒绝、PRIMARY/PRIVATE 隔离、文件选择器豁免不扩大。
+- 两项拆成独立 PR；真实国产 Android 设备上的验证未执行时记为 NOT_RUN。任何一项未通过，不得标记中国 Beta 这两个 P0 已解决。
+
+
+## 106. AI 创建的 PR 默认自动合并（2026-10-18）
+
+负责人：“自动合并，记住，不然我开 auto merge 干什么？”仓库已开启 GitHub auto-merge。此后 AI（Claude Code、Codex 等）为负责人任务创建的 PR，**默认开启自动合并**，不再逐个询问；PR 若已满足合并条件（GitHub 不允许对已可合并的 PR 开自动合并），直接按同样条件合并。
+
+条件不变：最新 HEAD 全部必需检查通过、无冲突、无未解决评审；遵守分支保护，不用管理员绕过、不改 ruleset、不跳过/删改测试。草稿/研究 PR、需要外部审查或许可的 PR（如 #58、#59 类）、以及签名、发布、移动 tag、替换 APK 等仍需负责人单独授权。合并后复验默认分支 CI。
+
+
+## 107. 中国 Beta P0 修复后的正式签名测试包（2026-10-18）
+
+负责人：“合并后打个新包给我测试”“正式签名”。在 #66、#67 合并后，从默认分支构建 full Universal release，versionCode 29 → 30（账本最大 29 + 1），versionName 仍 0.2.0，沿用私有正式签名（证书 989ba045…59379b1），流程同 §104 / `scripts/sign_local_apk.sh`，签名材料不进 Git、用完清理。只通过会话私密文件交付给负责人测试，并登记账本；不新建或替换公开 Release，不移动 tag。
