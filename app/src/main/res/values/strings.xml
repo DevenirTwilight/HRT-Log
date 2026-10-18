@@ -1246,4 +1246,33 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="test_out_permission">blocked: notification permission not granted</string>
 <string name="test_out_app">blocked: notifications are off for this app</string>
 <string name="test_out_channel">blocked: the reminder notification category is off</string>
+
+<!-- Medical and medicine center UI skeleton: no official assets or medical originals activated. -->
+<string name="ui_skeleton_ref_title">Medicine reference center</string>
+<string name="ui_skeleton_coming_soon">Not available yet</string>
+<string name="ui_skeleton_unavailable">This feature is not available yet. No data will be written.</string>
+<string name="ui_skeleton_ref_intro">Browse your saved medication references. French official medicine data is not enabled in this version.</string>
+<string name="ui_skeleton_ready">Available now</string>
+<string name="ui_skeleton_manage_existing">Open existing medication plans and editing</string>
+<string name="ui_skeleton_existing_stock">Open current stock management; new exact container accounting is not enabled</string>
+<string name="ui_skeleton_no_medications">No saved medications yet. Add one in Medication plans.</string>
+<string name="ui_skeleton_saved_medications">Your medications and references</string>
+<string name="ui_skeleton_user_reference">Open your saved reference data; this is not official verification</string>
+<string name="ui_skeleton_future">Planned medicine reference features</string>
+<string name="ui_skeleton_official_catalogue">French official medicine catalogue</string>
+<string name="ui_skeleton_official_desc">Distribution rights and product identity checks are pending. No official catalogue will be opened or imported.</string>
+<string name="ui_skeleton_rcp_notice">Product information (RCP / Notice)</string>
+<string name="ui_skeleton_rcp_desc">The separate document workflow is still under review. No unverified clinical text or treatment advice is shown here.</string>
+<string name="ui_skeleton_safety">Medicine safety information</string>
+<string name="ui_skeleton_safety_desc">Source and content reviews are pending. This view provides no individual risk assessment or dose advice.</string>
+<string name="ui_skeleton_supply">Shortages, recalls and regulatory notices</string>
+<string name="ui_skeleton_supply_desc">Verified updates are not connected yet. Unknown status does not mean there are no notices.</string>
+<string name="ui_skeleton_visit_pack">Visits and visit preparation</string>
+<string name="ui_skeleton_med_future">Planned medical center features</string>
+<string name="ui_skeleton_med_documents">Encrypted medical document library</string>
+<string name="ui_skeleton_med_documents_desc">Encrypted original-file storage, preview and recovery are not approved for use. No file picker is opened and no file or URI is stored.</string>
+<string name="ui_skeleton_med_practitioners">Doctors and clinics directory</string>
+<string name="ui_skeleton_med_practitioners_desc">A separate directory is not available yet. Existing practitioner and location information remains in visit records.</string>
+<string name="ui_skeleton_med_links">Links between medical records</string>
+<string name="ui_skeleton_med_links_desc">Links between original files, labs and visits are not enabled. Existing records will not be matched or changed automatically.</string>
 </resources>
