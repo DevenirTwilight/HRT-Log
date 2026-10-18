@@ -1234,4 +1234,17 @@
 <string name="ref2_history_error">无法读取已保存的来源，关闭窗口不会更改记录。</string>
 <string name="ref2_history_saved_only">此处显示已保存的记录，不包含尚未保存的修改。</string>
     <string name="forecast_needs_check">库存需核对，暂时无法可靠计算用尽日期。</string>
+<string name="test_check_ok">通知检查：没有设置阻止通知</string>
+<string name="test_check_blocked">通知检查：%1$s</string>
+<string name="test_scheduled">测试提醒已安排在 %1$s（%2$s）。等待期间可以离开应用。</string>
+<string name="test_mode_exact">精确闹钟</string>
+<string name="test_mode_high">高可靠模式，系统闹钟</string>
+<string name="test_mode_inexact">未允许精确闹钟：可能延迟</string>
+<string name="test_received">%1$s 已收到闹钟：%2$s</string>
+<string name="test_missing">预定时间已过，但没有收到闹钟。系统可能在延迟或阻止本应用的后台闹钟。</string>
+<string name="test_out_shown">通知已显示</string>
+<string name="test_out_not_shown">已发送，但系统没有显示</string>
+<string name="test_out_permission">被阻止：未授予通知权限</string>
+<string name="test_out_app">被阻止：本应用的通知已关闭</string>
+<string name="test_out_channel">被阻止：提醒通知类别已关闭</string>
 </resources>

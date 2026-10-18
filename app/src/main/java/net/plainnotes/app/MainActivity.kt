@@ -29,11 +29,24 @@ import net.plainnotes.app.ui.NotesApp
 import net.plainnotes.app.ui.NotesTheme
 import net.plainnotes.app.ui.UiPrefs
 
+/**
+ * The PIN lock state of one unlocked session. A ViewModel survives only a configuration-change recreation (rotation,
+ * dark mode, font size, split screen) of this activity; process death and finishing the activity drop it, so those
+ * still start locked. Nothing here is restored from a Bundle or disk.
+ */
+class LockState : androidx.lifecycle.ViewModel() {
+    var initialized = false
+    var locked by mutableStateOf(true)
+    /** When the activity last left the screen; kept across a recreation so the background auto-lock timer is not reset. */
+    var leftAt = 0L
+}
+
 @AndroidEntryPoint class MainActivity : AppCompatActivity() {
     private val model: NotesViewModel by viewModels()
+    private val lockState: LockState by viewModels()
     private lateinit var lock: AppLock
-    private var locked by mutableStateOf(false)
-    private var leftAt = 0L
+    private var locked: Boolean get() = lockState.locked; set(value) { lockState.locked = value }
+    private var leftAt: Long get() = lockState.leftAt; set(value) { lockState.leftAt = value }
     private var initialized = false
     private var contentVisible by mutableStateOf(true)
     private var sessionGeneration = Session.generation
@@ -50,7 +63,8 @@ import net.plainnotes.app.ui.UiPrefs
         setTaskDescription(taskIdentity(getString(shell?.label ?: R.string.app_name),shell?.icon ?: R.mipmap.ic_launcher))
         val prefs = UiPrefs(this)
         lock = AppLock(this)
-        locked = Session.requiresAppPin(Disguise.enabled(this),lock.enabled)
+        // A configuration-change recreation keeps the session's state; any other creation starts from the lock rule.
+        if (!lockState.initialized) { locked = Session.requiresAppPin(Disguise.enabled(this),lock.enabled); lockState.initialized = true }
         initialized=true
         setContent {
             var appearance by remember { mutableStateOf(prefs.appearance) }
@@ -76,7 +90,8 @@ import net.plainnotes.app.ui.UiPrefs
         if (!Disguise.enabled(this) && lock.enabled && leftAt > 0 && SystemClock.elapsedRealtime() - leftAt >= UiPrefs(this).lockAfterMillis) locked = true
     }
     override fun onStop() {
-        super.onStop(); leftAt = SystemClock.elapsedRealtime()
+        // A configuration change is not leaving the app; a real leave starts the auto-lock timer.
+        super.onStop(); if (!isChangingConfigurations) leftAt = SystemClock.elapsedRealtime()
         // Disguise mode locks as soon as the app leaves the screen; only a system file picker is exempt.
         if (Disguise.enabled(this) && !Session.pickerActive(sessionGeneration) && !isChangingConfigurations) { Session.lock(sessionGeneration);contentVisible=false }
     }

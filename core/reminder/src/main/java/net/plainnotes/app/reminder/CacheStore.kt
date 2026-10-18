@@ -13,7 +13,7 @@ class CacheStore(context:Context) {
     @Synchronized fun read():AlarmCache?=runCatching {
         val j=JSONObject(String(file.readFully(),Charsets.UTF_8));val array=j.getJSONArray("alarms")
         AlarmCache(j.getString("generation"),j.getLong("expires"),(0 until array.length()).map { index ->
-            val a=array.getJSONObject(index);CachedAlarm(a.getString("id"),a.getLong("trigger"),a.getString("mode"),a.getBoolean("consumed"))
+            val a=array.getJSONObject(index);CachedAlarm(a.getString("id"),a.getLong("trigger"),a.getString("mode"),a.getBoolean("consumed"),a.optBoolean("test",false))
         })
     }.getOrNull()
     @Synchronized fun write(cache:AlarmCache) {
@@ -21,7 +21,7 @@ class CacheStore(context:Context) {
         val j=JSONObject().put("generation",cache.generation).put("expires",cache.expiresMillis)
         val alarms=JSONArray();cache.alarms.forEach { a ->
             require(a.mode in listOf("NORMAL","HIGH"));require(a.opaqueId.matches(Regex("[a-f0-9-]{36}")))
-            alarms.put(JSONObject().put("id",a.opaqueId).put("trigger",a.triggerMillis).put("mode",a.mode).put("consumed",a.consumed))
+            alarms.put(JSONObject().put("id",a.opaqueId).put("trigger",a.triggerMillis).put("mode",a.mode).put("consumed",a.consumed).apply{if(a.test)put("test",true)})
         };j.put("alarms",alarms)
         val output=file.startWrite();try{output.write(j.toString().toByteArray());file.finishWrite(output)}catch(e:Exception){file.failWrite(output);throw e}
     }
