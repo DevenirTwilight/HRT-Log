@@ -196,19 +196,35 @@ internal object MeasuredConsumptionStore {
         }.groupBy({it.first},{it.second})
     }
 
-    /** Stream the same typed metadata instead of retaining a second set of all operation envelopes. */
-    private inline fun forEachOperation(db:SupportSQLiteDatabase,adjustmentsOnly:Boolean,block:(JSONObject)->Unit) {
-        val sql=if(adjustmentsOnly)"SELECT * FROM measured_operation WHERE kind='ADJUST' ORDER BY operation_uuid" else "SELECT * FROM measured_operation ORDER BY operation_uuid"
+    /** A row-scoped typed view, never retained beyond the operation callback. */
+    private class OperationClinicalRow(private val cursor:Cursor,private val offset:Int) {
+        fun requireHandle(expected:Long) {
+            require(MeasuredConsumptionStore.integer(cursor,offset)==expected && MeasuredConsumptionStore.integer(cursor,offset+1)==expected)
+        }
+        fun integer(index:Int)=MeasuredConsumptionStore.integer(cursor,offset+2+index)
+        fun scalar(index:Int)=MeasuredConsumptionStore.scalar(cursor,offset+2+index)
+        fun isNull(index:Int)=cursor.isNull(offset+2+index)
+        fun getString(index:Int):String=cursor.getString(offset+2+index)
+    }
+    private val operationClinicalColumns=listOf("revision","taken_utc","taken_zone","status","actual_dose","config_snapshot",
+        "rule_version_id","slot_key","scheduled_utc","scheduled_zone","planned_dose","late_after_minutes_snapshot")
+    /** LEFT JOINs preserve absent/retired clinical rows and zero-effect operations for the original fail-closed checks. */
+    private inline fun forEachOperation(db:SupportSQLiteDatabase,adjustmentsOnly:Boolean,block:(JSONObject,OperationClinicalRow)->Unit) {
+        val columns=ReferenceSchema.columns.getValue("measured_operation")
+        val sql="SELECT "+columns.joinToString(","){"o.`$it`"}+
+            ",i.live_handle,d.id,"+operationClinicalColumns.joinToString(","){"d.`$it`"}+
+            " FROM measured_operation o LEFT JOIN reference_identity i ON i.uuid=o.record_uuid LEFT JOIN dose_record d ON d.id=i.live_handle"+
+            (if(adjustmentsOnly)" WHERE o.kind='ADJUST'" else "")+" ORDER BY o.operation_uuid"
         db.query(sql).use {c->
             require(c.count<=BackupLimits.MAX_ROWS)
             while(c.moveToNext())block(JSONObject().apply {
-                for(i in 0 until c.columnCount)put(c.getColumnName(i),when(c.getType(i)) {
+                for((i,name) in columns.withIndex())put(name,when(c.getType(i)) {
                     Cursor.FIELD_TYPE_NULL->JSONObject.NULL
                     Cursor.FIELD_TYPE_INTEGER->c.getLong(i)
                     Cursor.FIELD_TYPE_STRING->c.getString(i)
                     else->error("Unexpected reference storage type")
                 })
-            })
+            },OperationClinicalRow(c,columns.size))
         }
     }
     /** Verify operations that a ledger-only walk cannot see, including empty sources and no-op counts. */
@@ -267,14 +283,14 @@ internal object MeasuredConsumptionStore {
             physicalStock(frozen,scale,input)
         // Keep only narrow observation evidence; canonical strings already belong to the validated chain.
         val capturedObservations=ArrayList<Triple<String,Int,Long>>()
-        forEachOperation(db,true) {row->
+        forEachOperation(db,true) {row,_->
             val capture=adjustmentCapture(row)
             if(capture.bridgeFor==null)capturedObservations.add(Triple(capture.request.getString("container_uuid"),chain.getValue(row.getString("operation_uuid")).sequence,capture.ledgerHead))
         }
         val observations=capturedObservations.groupBy{it.first}
         val consumed=HashSet<Pair<String,Int>>();val reversed=HashSet<String>();val confirmed=HashSet<String>()
         val allocated=HashSet<String>();val visited=HashSet<String>()
-        forEachOperation(db,false) {op->
+        forEachOperation(db,false) {op,clinical->
             val id=op.getString("operation_uuid");val dataset=op.getString("dataset_uuid")
             require(visited.add(id))
             require(ReferencePayload.uuid(id) && ReferencePayload.uuid(dataset))
@@ -288,17 +304,18 @@ internal object MeasuredConsumptionStore {
                     require(consumed.add(request.record.uuid to request.record.revision))
                     identity(request.medicationUuid,"MEDICATION",dataset)
                     val record=identity(request.record.uuid,"RECORD",dataset,request.medicationUuid)
-                    if(!record.isNull("live_handle"))db.query("SELECT revision,taken_utc,taken_zone,status,actual_dose,config_snapshot,rule_version_id,slot_key,scheduled_utc,scheduled_zone,planned_dose,late_after_minutes_snapshot FROM dose_record WHERE id=?",arrayOf(record.getLong("live_handle"))).use { c ->
-                        require(c.moveToFirst());val revision=integer(c,0);require(revision>=request.record.revision)
+                    if(!record.isNull("live_handle")) {
+                        clinical.requireHandle(record.getLong("live_handle"))
+                        val revision=clinical.integer(0);require(revision>=request.record.revision)
                         if(revision==request.record.revision.toLong()) {
-                            require(!c.isNull(1) && integer(c,1)==request.record.takenUtc)
-                            require((if(c.isNull(2))null else c.getString(2))==request.record.takenZone && c.getString(3)==request.record.status)
-                            require(java.lang.Long.toHexString(java.lang.Double.doubleToRawLongBits(scalar(c,4))).padStart(16,'0')==request.record.legacyActualDoseBits)
-                            require(ReferencePayload.sha(c.getString(5))==request.record.configSha256)
+                            require(!clinical.isNull(1) && clinical.integer(1)==request.record.takenUtc)
+                            require((if(clinical.isNull(2))null else clinical.getString(2))==request.record.takenZone && clinical.getString(3)==request.record.status)
+                            require(java.lang.Long.toHexString(java.lang.Double.doubleToRawLongBits(clinical.scalar(4))).padStart(16,'0')==request.record.legacyActualDoseBits)
+                            require(ReferencePayload.sha(clinical.getString(5))==request.record.configSha256)
                             request.record.scheduleSha256?.let { expected ->
-                                require(MeasuredUsePayload.scheduleSha(if(c.isNull(6))null else integer(c,6),if(c.isNull(7))null else c.getString(7),
-                                    if(c.isNull(8))null else integer(c,8),if(c.isNull(9))null else c.getString(9),if(c.isNull(10))null else scalar(c,10),
-                                    if(c.isNull(11))null else integer(c,11).also{require(it in 0..Int.MAX_VALUE.toLong())}.toInt())==expected)
+                                require(MeasuredUsePayload.scheduleSha(if(clinical.isNull(6))null else clinical.integer(6),if(clinical.isNull(7))null else clinical.getString(7),
+                                    if(clinical.isNull(8))null else clinical.integer(8),if(clinical.isNull(9))null else clinical.getString(9),if(clinical.isNull(10))null else clinical.scalar(10),
+                                    if(clinical.isNull(11))null else clinical.integer(11).also{require(it in 0..Int.MAX_VALUE.toLong())}.toInt())==expected)
                             }
                         }
                     }
@@ -371,8 +388,9 @@ internal object MeasuredConsumptionStore {
                     val request=MeasuredUsePayload.read(ReferencePayload.canonical(JSONObject(original.getString("input_json")).getJSONObject("request"))).request()
                     require(r.getString("medication_uuid")==request.medicationUuid)
                     val record=identity(request.record.uuid,"RECORD",dataset,request.medicationUuid)
-                    if(!record.isNull("live_handle"))db.query("SELECT revision FROM dose_record WHERE id=?",arrayOf(record.getLong("live_handle"))).use { c ->
-                        require(c.moveToFirst() && integer(c,0)>=op.getLong("record_revision"))
+                    if(!record.isNull("live_handle")) {
+                        clinical.requireHandle(record.getLong("live_handle"))
+                        require(clinical.integer(0)>=op.getLong("record_revision"))
                     }
                     val originalAllocations=rows("measured_allocation","operation_uuid=?",arrayOf(originalId))
                     if(r.has("reconciliation"))MeasuredReconciliation.verify(db,op,r,chain)

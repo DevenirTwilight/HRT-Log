@@ -1887,3 +1887,11 @@ full/play release 本地构建成功（8m26s）；签名证书与原正式版完
 B0/B1/D-1/D-2已经进入默认分支，不再列为待重复实现；本地再次164/164历史hash、5/5结果逐字节回放、302项科研守卫全部通过。§60/§72 OWNER_CONFIRMED（2026-10-12事后确认），425a7ab、8216f30、0c3843c、23分钟延迟及完整SHA/审批链保留。原PK/参数、calculator1/2/历史化验/Visit Pack/备份没有改写。
 
 本轮未签名、未交付新APK、未公开发布；build25/0.2.0/schema9不变，delivery ledger不增条目，下一次独立交付至少build26且原签名。P2-C HOLD、PR18个人绝对pg/mL能力false与条件性情景的证据张力保留。物理ARM/用户安装版本/真实覆盖升级NOT_RUN或UNKNOWN，模拟器不是实机。B2隐私、B4/B5质量、附件/LabPanel、旧公开包许可处置仍另案。完整元数据/计数/回滚分析见审计20；不因本次合并批准后续任务。
+
+## P4续作审计与临床读取负向测试 — 2026-10-18
+
+回到原#57/6c871bfd，不新建第二PR。最新主线86131172（#85）六必需CI全部PASS，已把主线收据补PR85。原生39130872641写入8.17/8.23/7.59秒仍FAIL，入口OFF。拟以保留缺失行的LEFT JOIN减少每操作实际记录点查，先运行共享负向测试；文件级合同见ansm-integration/p4/performance/clinical-stream-contract.md，尚未改生产实现。发现主线LAB02与P4旧候选Room12/业务11编号碰撞：后续必须保留主线已审版本、独立确定下一版本及完整兼容链，不可覆盖main12.json或声称旧候选已整合。新性能候选与兼容接线分开验收，仍PRODUCTION_BLOCKED。
+
+## P4 临床批量读取本地422 PASS — 2026-10-18
+
+未改生产源码前，新共享负向测试实际FAIL（临床点查1次，预期0），收据clinical-stream-red-evidence.json；实现逐行typed LEFT JOIN后，完整数据JVM422零失败/错误/跳过，原生源码编译PASS，收据clinical-stream-local-evidence.json。保留现有剂量原始位/时间/状态/config与计划hash、退休身份、零分配操作、更正/冲销、完整全局审计；没有跨事务缓存、迁移或预算修改。相同14600事实/2000包装大负载本地诊断运行中；新HEAD原生性能及六CI仍待验。实际后续数值/原生收据固定PR57，避免CI元数据提交循环。Room12/业务11与主线LAB02的版本碰撞尚未集成，正式入口仍OFF。

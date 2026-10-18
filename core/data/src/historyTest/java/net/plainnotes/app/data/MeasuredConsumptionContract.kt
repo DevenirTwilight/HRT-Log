@@ -37,6 +37,26 @@ abstract class MeasuredConsumptionContract {
     private suspend fun consume(r:RecordEntity,box:CreatedMeasuredContainer,uses:List<ConfirmedStockUse>,op:String=UUID.randomUUID().toString())=db.withTransaction{MeasuredConsumptionStore.consumeNewRecord(db,box.scope,r,op,uses,at)}
     private fun count(table:String)=raw.query("SELECT COUNT(*) FROM `$table`").use{it.moveToFirst();it.getInt(0)}
     private suspend fun rejects(code:ReferenceError,block:suspend()->Unit){try{block();fail("Expected $code")}catch(e:ReferenceFailure){assertEquals(code,e.code)}}
+    @Test fun fullAuditReadsLiveClinicalFactsWithoutPerRecordSql()=runBlocking {
+        val m=med();val b=box(m);val r=record(m);consume(r,b,listOf(use(b)))
+        db.withTransaction {
+            val before=RawData.dump(raw).toString();var clinicalPointReads=0
+            val observed=object:androidx.sqlite.db.SupportSQLiteDatabase by raw {
+                override fun query(sql:String,bindArgs:Array<out Any?>):android.database.Cursor {
+                    if(sql.startsWith("SELECT revision") && sql.contains("FROM dose_record WHERE id=?"))clinicalPointReads++
+                    return raw.query(sql,bindArgs)
+                }
+            }
+            val projection=MeasuredConsumptionStore.auditStagedDataset(observed).single()
+            assertEquals(b.containerUuid,projection.containerUuid)
+            assertEquals(1L,projection.usedQuanta)
+            assertEquals(0,projection.remaining.value.compareTo(BigDecimal("27.5")))
+            assertTrue(projection.cacheMatches)
+            assertEquals(before,RawData.dump(raw).toString())
+            assertEquals("Complete operation stream must retain clinical validation without per-record SQLite cursors",0,clinicalPointReads)
+        }
+    }
+
     @Test fun completeSecondaryAuditIndexesAvoidRepeatedSqlButPartialIndexesNeverProveAbsence()=runBlocking {
         val m=med();val a=box(m);val b=box(m);val r=record(m)
         val receipt=consume(r,a,listOf(use(a),use(b)))
