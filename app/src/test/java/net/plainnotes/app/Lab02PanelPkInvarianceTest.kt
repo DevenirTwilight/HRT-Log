@@ -13,13 +13,11 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import java.time.*
-import java.util.UUID
 
 /**
- * LAB-02 phase A (docs/design/lab-panel-adr.md §9), synthetic data only: the same results give the same concentration lab
- * points, calibration eligibility, curve and per-lab estimate whether or not they belong to a lab panel. The draft 11→12
- * SQL is applied under a real Room v11 database and the results are grouped into a draft panel; PK readers only read
- * lab_value rows, so nothing they see may change. Test-only: no production class knows about panels yet.
+ * LAB-02 (docs/design/lab-panel-adr.md §9), synthetic data only: the same results give the same concentration lab points,
+ * calibration eligibility, curve and per-lab estimate whether or not they belong to a lab panel. Phase A ran this on the
+ * draft SQL; phase B runs it on the production Room 12 path (batch save makes a panel, "save as one blood test" groups).
  */
 @RunWith(RobolectricTestRunner::class) @Config(sdk = [28], application = android.app.Application::class)
 class Lab02PanelPkInvarianceTest {
@@ -49,21 +47,16 @@ class Lab02PanelPkInvarianceTest {
             val estimates = labs.map { runBlocking { net.plainnotes.app.conc.LabEstimate.capture(d, it) } }
             return listOf(labs, r.labs, r.labEligibility, r.calibration?.labCount, r.e2.toList(), r.timeH.toList(), r.currentPgMl, estimates)
         }
-        val before = pk()
-
-        val raw = db.openHelper.writableDatabase
-        // Same draft SQL as core/data LabPanelDraft (ADR §2); test-only, copied because app tests cannot see core/data test classes.
-        raw.beginTransaction(); try {
-            raw.execSQL("CREATE TABLE IF NOT EXISTS `lab_panel` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `uuid` TEXT NOT NULL, `sampled_utc` INTEGER NOT NULL, `sampled_zone` TEXT NOT NULL, `laboratory` TEXT, `note` TEXT, `created_utc` INTEGER NOT NULL)")
-            raw.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_lab_panel_uuid` ON `lab_panel` (`uuid`)")
-            raw.execSQL("ALTER TABLE `lab_value` ADD COLUMN `panel_id` INTEGER REFERENCES `lab_panel`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT")
-            raw.execSQL("CREATE INDEX IF NOT EXISTS `index_lab_value_panel_id` ON `lab_value` (`panel_id`)")
-            raw.setTransactionSuccessful() } finally { raw.endTransaction() }
-        raw.execSQL("INSERT INTO lab_panel(id,uuid,sampled_utc,sampled_zone,laboratory,note,created_utc) VALUES(1,?,?,'UTC','Synthetic lab','Synthetic note',?)",
-            arrayOf<Any?>(UUID.randomUUID().toString(), draw, at.toEpochMilli()))
-        raw.execSQL("UPDATE lab_value SET panel_id=1 WHERE sampled_utc=?", arrayOf<Any?>(draw))
-        raw.query("SELECT COUNT(*) FROM lab_value WHERE panel_id=1").use { it.moveToFirst(); assertEquals(3, it.getInt(0)) }
-
-        assertEquals(before, pk())
+        // The batch save above made one lab panel; its results give the same PK input as the plain result next to it.
+        assertEquals(1, repo.labPanels().size); assertTrue(db.dao().labs().filter { it.sampled_utc == draw }.all { it.panel_id != null })
+        // Production path (LAB-02 phase B): the same three results, saved one by one, become one lab panel on confirmation.
+        val single = draw + 3_600_000
+        listOf("E2" to 150.0, "T" to 30.0, "PRL" to 12.0).forEach { (code, v) -> repo.saveLab(LabValueEntity(analyte_code = code, value = v,
+            unit = net.plainnotes.app.ui.analyte(code).units.first().first, sampled_utc = single, sampled_zone = "UTC", laboratory = "Synthetic lab"), at) }
+        val ungrouped = pk()
+        repo.groupAsLabPanel(db.dao().labs().filter { it.sampled_utc == single }.map { it.id }, at)
+        assertEquals(2, repo.labPanels().size)
+        assertEquals(ungrouped.drop(1), pk().drop(1)) // every PK result; the rows themselves differ only by panel_id
+        assertEquals((ungrouped[0] as List<*>).map { (it as LabValueEntity).copy(panel_id = null) }, (pk()[0] as List<*>).map { (it as LabValueEntity).copy(panel_id = null) })
     }
 }

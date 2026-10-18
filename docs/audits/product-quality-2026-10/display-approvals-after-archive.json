@@ -19,6 +19,25 @@
     "diff": "+13/-2 lines in LabsScreen.kt; new UI code is in LabBatchEntry.kt"
    },
    "human_review": "recommended: check that the LabsScreen diff stays within the three approved items."
+  },
+  {
+   "id": "PD-2026-10-18-LAB02B-LABSSCREEN",
+   "file": "app/src/main/java/net/plainnotes/app/ui/LabsScreen.kt",
+   "approver": "DevenirTwilight",
+   "date": "2026-10-18",
+   "scope": "LAB-02 phase B: the labs list is grouped by real lab panels (labDraws) with two new callbacks (open a panel's detail, 'save as one blood test'); results without a panel keep the LAB-01 display grouping. No chart, unit, conversion, calculator, LabFit, context or export change.",
+   "previous_sha256": "27e2d80bdd1e0f6e987de284258f19daf16031c504619e3d34cb6f4f7ccee30f",
+   "new_sha256": "22ed83c3edeaa2fd504ad4ff45e5dd5e3b4c7c3c9e406558bdeb991e6a4ebddb",
+   "evidence": {
+    "commit": "5ce20d4e0f59d34af5ac165e02ecd0b0cf215e0a",
+    "path": "docs/REQUIREMENTS.md"
+   },
+   "owner_decision": "REQUIREMENTS §110 item 2 (owner: 批准 counts as LAB-02 phase B approval, 2026-10-18) and §112 items 2 and 5; LAB-02 task book section 3 (化验页：卡片改由真实化验单决定……提供“保存为一次化验”).",
+   "verification": {
+    "previous_blob": "27e2d80b… = LabsScreen.kt after LAB-01 (PD-2026-10-18-LAB01-LABSSCREEN new_sha256)",
+    "diff": "+5/-3 lines in LabsScreen.kt; panel UI is in LabBatchEntry.kt and LabPanelDetail.kt"
+   },
+   "human_review": "recommended: check that the LabsScreen diff stays within the approved scope."
   }
  ]
 }

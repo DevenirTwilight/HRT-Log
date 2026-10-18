@@ -45,7 +45,9 @@ class Lab01UnaffectedTest {
         draws.forEach{batch.saveLabs(it,at,recapture=true,estimate=estimate)}
         draws.flatten().forEach{single.saveLab(it,at,recapture=true,estimate=estimate)}
         val bl=bDb.dao().labs();val sl=sDb.dao().labs()
-        assertEquals(6,bl.size);assertEquals(sl,bl);assertEquals(sDb.dao().labContexts(),bDb.dao().labContexts())
+        // LAB-02: the batch saves are two lab panels; apart from panel_id the rows and their contexts are the same.
+        assertEquals(6,bl.size);assertEquals(sl,bl.map{it.copy(panel_id=null)});assertEquals(sDb.dao().labContexts(),bDb.dao().labContexts())
+        assertEquals(2,bDb.dao().labPanels().size);assertTrue(bl.all{it.panel_id!=null});assertTrue(sl.all{it.panel_id==null})
         // Concentration: lab points and per-lab calibration eligibility.
         fun conc(db:NotesDatabase)=runBlocking{val d=db.dao();val meds=d.medications()
             ConcentrationCalculator.compute(meds,meds.mapNotNull{x->d.profile(x.id)?.let{x.id to it}}.toMap(),d.records(),emptyList(),d.labs(),null,at)}
@@ -53,11 +55,13 @@ class Lab01UnaffectedTest {
         assertEquals(sc.labs,bc.labs);assertEquals(sc.labEligibility,bc.labEligibility);assertEquals(sc.calibration?.labCount,bc.calibration?.labCount);assertEquals(sc.e2.toList(),bc.e2.toList());assertTrue(bc.labs.isNotEmpty())
         // Timeline lab events and the medical records' "labs in this period".
         fun timeline(db:NotesDatabase)=runBlocking{net.plainnotes.app.timeline.LongitudinalProjection.build(NotesViewModel.ExtraState(records=db.dao().records(),regimens=db.dao().regimens(),labs=db.dao().labs()),emptyList(),ZoneId.of("UTC")).events}
-        assertEquals(timeline(sDb),timeline(bDb))
+        // LAB-02: a lab event carries its row, which now names its panel; nothing else about the event may differ.
+        fun plain(e:net.plainnotes.app.timeline.LongitudinalEvent)=(e.source as? net.plainnotes.app.timeline.EventSource.Lab)?.let{e.copy(source=net.plainnotes.app.timeline.EventSource.Lab(it.value.copy(panel_id=null)))} ?: e
+        assertEquals(timeline(sDb),timeline(bDb).map(::plain))
         val from=LocalDate.of(2026,3,1);val to=LocalDate.of(2026,3,10)
-        assertEquals(MedicalRecordIndex.labs(sl,from,to,ZoneId.of("UTC")),MedicalRecordIndex.labs(bl,from,to,ZoneId.of("UTC")))
+        assertEquals(MedicalRecordIndex.labs(sl,from,to,ZoneId.of("UTC")),MedicalRecordIndex.labs(bl,from,to,ZoneId.of("UTC")).map{it.copy(panel_id=null)})
         // Backup and restore keep the rows and their frozen contexts, one by one.
         val pwd="synthetic-pass".toCharArray();val backup=batch.exportBackup(pwd);batch.restoreBackup(backup,pwd)
-        assertEquals(sl,bDb.dao().labs());assertEquals(sDb.dao().labContexts(),bDb.dao().labContexts())
+        assertEquals(bl,bDb.dao().labs());assertEquals(sDb.dao().labContexts(),bDb.dao().labContexts());assertEquals(2,bDb.dao().labPanels().size)
     }
 }

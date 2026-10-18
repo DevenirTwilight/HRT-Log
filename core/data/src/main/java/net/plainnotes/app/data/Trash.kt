@@ -17,11 +17,11 @@ object Trash {
     const val TRASHED="TRASHED"
     const val HIDDEN="HIDDEN"
     // Snapshot kinds (rows live only in the payload while trashed).
-    const val MILESTONE="MILESTONE";const val LAB="LAB";const val APPOINTMENT="APPOINTMENT";const val REVIEW="REVIEW"
+    const val MILESTONE="MILESTONE";const val LAB="LAB";const val LAB_PANEL="LAB_PANEL";const val APPOINTMENT="APPOINTMENT";const val REVIEW="REVIEW"
     const val SYMPTOM="SYMPTOM";const val SCORE="SCORE";const val NOTE="NOTE"
     // Reference kinds (rows stay in their own table).
     const val RECORD="RECORD";const val PERIOD="PERIOD";const val CORRECTION="CORRECTION"
-    val SNAPSHOT_KINDS=listOf(MILESTONE,LAB,APPOINTMENT,REVIEW,SYMPTOM,SCORE,NOTE)
+    val SNAPSHOT_KINDS=listOf(MILESTONE,LAB,LAB_PANEL,APPOINTMENT,REVIEW,SYMPTOM,SCORE,NOTE)
     val KINDS=SNAPSHOT_KINDS+listOf(RECORD,PERIOD,CORRECTION)
 
     /** Rows of [table] matching [where], as JSON objects with every column (same encoding as backups). */

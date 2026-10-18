@@ -1273,4 +1273,17 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="lab_row_spoken">%1$s, %2$s, %3$s</string>
 <string name="lab_row_spoken_flag">, %1$s</string>
 <string name="lab_batch_failed">Nothing was saved. Your entries are still here.</string>
+<!-- LAB-02 lab panels -->
+<string name="trash_kind_lab_panel">Blood test</string>
+<string name="lab_panel_title">Blood test</string>
+<string name="lab_panel_save_as">Save as one blood test</string>
+<string name="lab_panel_save_as_body">These results will be kept together as one blood test. Their values and times do not change.</string>
+<string name="lab_panel_note">Note for this blood test</string>
+<string name="lab_panel_save_changes">Save changes</string>
+<string name="lab_panel_save_added">Save the new tests</string>
+<string name="lab_panel_remove_member">Take %1$s out of this blood test</string>
+<string name="lab_panel_delete">Delete this blood test</string>
+<string name="lab_panel_delete_confirm">The blood test and its %1$d results move to the recycle bin together.</string>
+<string name="lab_panel_open">Open this blood test</string>
+<string name="lab_panel_members">Results</string>
 </resources>

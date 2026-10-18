@@ -1273,4 +1273,17 @@
 <string name="lab_row_spoken">%1$s，%2$s，%3$s</string>
 <string name="lab_row_spoken_flag">，%1$s</string>
 <string name="lab_batch_failed">沒有儲存任何一項，填寫的內容仍保留。</string>
+<!-- LAB-02 lab panels -->
+<string name="trash_kind_lab_panel">檢驗單</string>
+<string name="lab_panel_title">檢驗單</string>
+<string name="lab_panel_save_as">儲存為一次檢驗</string>
+<string name="lab_panel_save_as_body">這些結果將作為同一次檢驗儲存在一起，數值和時間都不變。</string>
+<string name="lab_panel_note">這次檢驗的備註</string>
+<string name="lab_panel_save_changes">儲存修改</string>
+<string name="lab_panel_save_added">儲存新增項目</string>
+<string name="lab_panel_remove_member">把%1$s從這次檢驗中移出</string>
+<string name="lab_panel_delete">刪除這次檢驗</string>
+<string name="lab_panel_delete_confirm">這次檢驗和其中 %1$d 項會一起移到回收筒。</string>
+<string name="lab_panel_open">開啟這次檢驗</string>
+<string name="lab_panel_members">項目</string>
 </resources>

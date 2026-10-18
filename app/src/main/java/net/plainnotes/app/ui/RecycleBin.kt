@@ -69,9 +69,11 @@ import java.time.LocalDate
 }
 
 @Composable private fun trashKindLabel(kind:String)=stringResource(when(kind){
-    Trash.MILESTONE->R.string.trash_kind_milestone;Trash.LAB->R.string.trash_kind_lab;Trash.APPOINTMENT->R.string.trash_kind_appointment
+    Trash.MILESTONE->R.string.trash_kind_milestone;Trash.LAB->R.string.trash_kind_lab;Trash.LAB_PANEL->R.string.trash_kind_lab_panel;Trash.APPOINTMENT->R.string.trash_kind_appointment
     Trash.REVIEW->R.string.trash_kind_review;Trash.SYMPTOM->R.string.trash_kind_symptom;Trash.SCORE->R.string.trash_kind_score;Trash.NOTE->R.string.trash_kind_note
     Trash.RECORD->R.string.trash_kind_record;Trash.PERIOD->R.string.trash_kind_period;else->R.string.trash_kind_correction})
+
+private fun labRows(t:TrashItemEntity)=runCatching{JSONObject(t.payload_json).getJSONObject("tables").getJSONArray("lab_value")}.getOrNull()
 
 /** A short title; medicine names and doses are left out in simple mode (§39). */
 @Composable private fun trashTitle(t:TrashItemEntity,state:NotesState,extra:NotesViewModel.ExtraState):String {
@@ -79,7 +81,9 @@ import java.time.LocalDate
     fun row()=runCatching{JSONObject(t.payload_json).let{p->p.getJSONObject("tables").getJSONArray(p.getJSONArray("order").getString(0)).getJSONObject(0)}}.getOrNull()
     return when(t.kind) {
         Trash.MILESTONE->row()?.let{r->if(r.isNull("title"))milestoneKindLabel(r.optString("kind","CUSTOM")) else r.getString("title")}.orEmpty()
-        Trash.LAB->row()?.optString("analyte_code")?.let{analyteLabel(it)}.orEmpty()
+        // LAB-02: the last result of a panel carries the panel first, so read the result table by name.
+        Trash.LAB->labRows(t)?.optJSONObject(0)?.optString("analyte_code")?.let{analyteLabel(it)}.orEmpty()
+        Trash.LAB_PANEL->labRows(t)?.length()?.let{stringResource(R.string.lab_group_count,it)}.orEmpty()
         Trash.APPOINTMENT->row()?.optString("type")?.let{choiceLabel(it)}.orEmpty()
         Trash.SCORE->row()?.optLong("item_id")?.let{id->extra.items.firstOrNull{it.id==id}?.let{checkinLabel(it)}}.orEmpty()
         Trash.SYMPTOM->row()?.optString("group_id").orEmpty()

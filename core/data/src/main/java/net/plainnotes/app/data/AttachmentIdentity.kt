@@ -55,11 +55,14 @@ internal object AttachmentIdentity {
         })
         return record
     }
-    private fun kind(trashKind:String)=when(trashKind){Trash.APPOINTMENT->"APPOINTMENT";Trash.LAB->"LAB";Trash.RECORD->"DOSE_RECORD";else->null}
+    private fun kind(trashKind:String)=when(trashKind){Trash.APPOINTMENT->"APPOINTMENT";Trash.LAB,Trash.LAB_PANEL->"LAB";Trash.RECORD->"DOSE_RECORD";else->null}
     private fun digest(value:String)=MessageDigest.getInstance("SHA-256").digest(value.toByteArray(Charsets.UTF_8))
     fun trashed(db:SupportSQLiteDatabase,trashKind:String,ref:String,trashId:Long,payload:String) {
-        val type=kind(trashKind) ?: return;val s=current(db) ?: return;val id=ref.toLongOrNull() ?: error("Invalid record ref")
-        db.execSQL("UPDATE attachment_record_identity SET state='TRASHED',trash_id=?,evidence_digest=? WHERE store_uuid=? AND record_epoch=? AND target_kind=? AND legacy_id=? AND state='ACTIVE'",arrayOf(trashId,digest(payload),s.dataset,s.epoch,type,id))
+        val type=kind(trashKind) ?: return;val s=current(db) ?: return
+        // LAB-02: a whole lab panel carries the identities of every result in it (its ref is the panel uuid, not a row id).
+        val ids=if(trashKind==Trash.LAB_PANEL)org.json.JSONObject(payload).getJSONObject("tables").getJSONArray("lab_value").let{a->(0 until a.length()).map{a.getJSONObject(it).getLong("id")}}
+            else listOf(ref.toLongOrNull() ?: error("Invalid record ref"))
+        ids.forEach{id->db.execSQL("UPDATE attachment_record_identity SET state='TRASHED',trash_id=?,evidence_digest=? WHERE store_uuid=? AND record_epoch=? AND target_kind=? AND legacy_id=? AND state='ACTIVE'",arrayOf(trashId,digest(payload),s.dataset,s.epoch,type,id))}
         db.execSQL("UPDATE attachment_link SET state='QUARANTINED',revision=revision+1 WHERE store_uuid=? AND record_epoch=? AND record_uuid IN(SELECT record_uuid FROM attachment_record_identity WHERE store_uuid=? AND trash_id=?) AND state='ACTIVE'",arrayOf(s.dataset,s.epoch,s.dataset,trashId))
     }
     /** Only exact retained trash ownership proves restoration, including payload commitment. */
