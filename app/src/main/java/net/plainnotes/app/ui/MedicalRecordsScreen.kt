@@ -38,7 +38,7 @@ import java.time.*
 @OptIn(ExperimentalLayoutApi::class)
 @Composable fun MedicalRecordsScreen(appointments:List<AppointmentEntity>,onVisit:(AppointmentEntity)->Unit,onAdd:()->Unit,
     onLabs:()->Unit,onHistory:()->Unit,onTrash:()->Unit,contentPadding:PaddingValues,onConfirm:(AppointmentEntity)->Unit={onVisit(it)},
-    questionCounts:Map<Long,Int> = emptyMap(),now:Instant=Instant.now()) {
+    questionCounts:Map<Long,Int> = emptyMap(),now:Instant=Instant.now(),onVisits:()->Unit = {}) {
     val past=MedicalRecordIndex.past(appointments,now)
     val confirmed=past.filter{it.completed_utc!=null}
     val unconfirmed=past.filter{it.completed_utc==null}
@@ -59,8 +59,15 @@ import java.time.*
         }
         item("related") { Column(verticalArrangement=Arrangement.spacedBy(8.dp)) {
             MedicalHeading(stringResource(R.string.medical_related))
+            RelatedCard(Icons.AutoMirrored.Outlined.EventNote,stringResource(R.string.ui_skeleton_visit_pack),"medical-visit-list",onVisits)
             RelatedCard(Icons.Outlined.Science,stringResource(R.string.labs),"medical-labs",onLabs)
             RelatedCard(Icons.Outlined.Timeline,stringResource(R.string.medical_timeline),"medical-history",onHistory)
+        } }
+        item("future-modules") { Column(verticalArrangement=Arrangement.spacedBy(8.dp)) {
+            MedicalHeading(stringResource(R.string.ui_skeleton_med_future))
+            FutureModuleCard(R.string.ui_skeleton_med_documents, R.string.ui_skeleton_med_documents_desc, "medical-future-documents")
+            FutureModuleCard(R.string.ui_skeleton_med_practitioners, R.string.ui_skeleton_med_practitioners_desc, "medical-future-practitioners")
+            FutureModuleCard(R.string.ui_skeleton_med_links, R.string.ui_skeleton_med_links_desc, "medical-future-links")
         } }
         item("bin") { TextButton(onClick=onTrash,modifier=Modifier.fillMaxWidth().heightIn(min=48.dp).testTag("medical-bin")){Text(stringResource(R.string.medical_bin))} }
     }
