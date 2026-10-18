@@ -127,6 +127,24 @@ class ArtSamplingRunnerIsolationTest(unittest.TestCase):
 class ArtSamplingHandshakeTest(unittest.TestCase):
     token='00000000-0000-4000-8000-000000000001'
     path=ArtSamplingCollectionTest.path
+    def test_absent_candidate_uses_shell_exit_status_instead_of_exec_out_error_bytes(self):
+        import subprocess
+        collector=module('collect_ansm_native_performance')
+        calls=[]
+        def execute(command,**kwargs):
+            calls.append(command)
+            if command[1]=='exec-out':
+                return b'head: /synthetic/absent.json: No such file or directory\n'
+            self.assertEqual(['adb','shell','-T','head','-c','65537','/synthetic/absent.json'],command)
+            raise subprocess.CalledProcessError(1,command)
+        self.assertIsNone(collector.device_json('/synthetic/absent.json',execute))
+        self.assertEqual('shell',calls[0][1])
+
+    def test_existing_malformed_handshake_is_not_silently_treated_as_absent(self):
+        collector=module('collect_ansm_native_performance')
+        with self.assertRaises(json.JSONDecodeError):
+            collector.device_json('/synthetic/malformed.json',lambda *args,**kwargs:b'{broken')
+
     def environment(self, calls, data=None, report_token=None):
         data=trace() if data is None else data
         ready={'scope':'SYNTHETIC_ART_TRACE_READY_V1','token':self.token,'bytes':len(data)}

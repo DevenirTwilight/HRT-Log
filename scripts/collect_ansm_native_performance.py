@@ -80,7 +80,10 @@ def valid_token(value):
 
 def device_json(path, execute):
     try:
-        data = execute(['adb','exec-out','head','-c','65537',path], stderr=subprocess.DEVNULL, timeout=5)
+        # shell v2 propagates remote failure; exec-out may return missing-file
+        # diagnostics as stdout with exit0. An absent alternate package must not
+        # prevent capture from the matching package. -T forbids PTY rewriting.
+        data = execute(['adb','shell','-T','head','-c','65537',path], stderr=subprocess.DEVNULL, timeout=5)
     except subprocess.CalledProcessError:
         return None
     if len(data) > 65536:

@@ -1,3 +1,11 @@
+## P4 新基线本地 data413 通过；采样读取错误已补负向测试 — 2026-10-18
+
+已将获单独批准并合并的#65/主线8ebb719普通合入P4（223aeff），共享workflow保留17个类的并集，双方HANDOFF均保留。新基线data413零fail/error/skip、原生合同编译PASS；Period/Privacy回归仍运行，主线8ebb719六CI复验仍待完成。
+
+7590cc7最终六项常规CI全部PASS；同源原生attempt2完整结束但写入10445/10459/10201ms仍>5s，P4_BLOCKED。工件12129236982官方SHA/CRC及完整报告已归档；attempt1恢复中退出的原因仍UNVERIFIED，成功完成复跑不是崩溃修复。采样实际生成1026403B，但host_ack=false、watcher JSONDecodeError，未取回，不能宣称已定位方法热点。
+
+针对exec-out可能把不存在候选路径的错误文字作为exit0 stdout交给JSON解析器，新增负向测试在旧代码实际21项/1 error；仅握手元数据读取改用保留远端退出码的adb shell -T，现Python190 PASS，畸形现存JSON仍拒绝。实际运输修复待原生验证；确切原设备错误响应未捕获，避免把推断写成已证实根因。没有新增生产优化，不放宽预算，不改Schema/备份/PK，正式入口OFF，P5/P6未实施，未发布。
+
 ## 已获单独授权并普通合并 #65；主线复验待验 — 2026-10-18
 
 负责人明确答复“批准普通受保护合并 #65”，已复核e69490f六CI全部成功、无冲突/未解决讨论，以匹配HEAD的普通merge合入8ebb7198fe1dbd1d0c2a5f96e24cdecf7efac54c；无admin/force/auto。主线CI待验，后续P4基线合并保留双方共享workflow类名单/HANDOFF，不能将旧分支绿灯冒充新基线结果。P4原生7590cc7 attempt2仍运行，原失败保留。授权见REQUIREMENTS§108。
