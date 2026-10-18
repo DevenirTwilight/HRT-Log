@@ -281,7 +281,7 @@ class UiPrefs(context: Context) {
     MedicalVisitEditor(medicalDialogs, model, medicalSave)
     MedicalLabDetail(medicalDialogs, labDialogs, extra)
     if (appointment) AppointmentDialog({ appointment = false }) { model.appointment(it); appointment = false }
-    LabEditDialog(labDialogs, model)
+    LabEditDialog(labDialogs, model, extra.labs)
     if (pickStart) DatePickerModal(state.calendarStart, { pickStart = false }) { model.calendarFrom(it) }
     if (disclaimer) PkDisclaimerDialog({ prefs.disclaimerAccepted = true; disclaimer = false }) { disclaimer = false; destination = Destination.CALENDAR }
     ArchiveMedicationDialog(medicationDialogs, model)

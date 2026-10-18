@@ -14,6 +14,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import net.plainnotes.app.R
@@ -53,13 +54,16 @@ fun toCanonical(a: Analyte, value: Double, unit: String): Double? = a.units.firs
 
 @Composable fun LabsScreen(labs: List<LabValueEntity>, doseTimes: List<Instant>, onEdit: (LabValueEntity?) -> Unit, onDelete: (LabValueEntity) -> Unit, contentPadding: PaddingValues,contexts:List<net.plainnotes.app.data.LabContextEntity> = emptyList(),onRebuild:((LabValueEntity,Boolean)->Unit)?=null) {
     val present = ANALYTES.filter { a -> labs.any { it.analyte_code == a.code } }
+    // LAB-01: "All" (the default) lists every result, one card per draw (same time and laboratory); an analyte chip shows its trend and rows as before.
     var selected by remember { mutableStateOf<String?>(null) }
-    val code = selected?.takeIf { s -> present.any { it.code == s } } ?: present.firstOrNull()?.code
+    val code = selected?.takeIf { s -> present.any { it.code == s } }
+    var detail by remember { mutableStateOf<LabValueEntity?>(null) }
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = contentPadding.calculateTopPadding() + 8.dp,
         bottom = contentPadding.calculateBottomPadding() + 96.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         if (labs.isEmpty()) item { EmptyState(Icons.Outlined.Science, stringResource(R.string.labs_empty_title), stringResource(R.string.labs_empty_body)) { Button(onClick = { onEdit(null) }) { Text(stringResource(R.string.lab_add)) } } }
         if (present.isNotEmpty()) item {
             Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                FilterChip(code == null, { selected = null }, label = { Text(stringResource(R.string.lab_filter_all)) }, modifier = Modifier.testTag("lab-filter-all"))
                 present.forEach { a -> FilterChip(code == a.code, { selected = a.code }, label = { Text(analyteLabel(a.code)) }) }
             }
         }
@@ -81,8 +85,12 @@ fun toCanonical(a: Analyte, value: Double, unit: String): Double? = a.units.firs
                 }
             }
             items(values.reversed(), key = { it.id }) { v -> LabRow(v, { onEdit(v) }, { onDelete(v) },contexts.filter{it.lab_id==v.id},onRebuild) }
+        } else items(labGroups(labs), key = { g -> "draw:" + g.first().id }) { g ->
+            if (g.size == 1) g.first().let { v -> LabRow(v, { onEdit(v) }, { onDelete(v) },contexts.filter{it.lab_id==v.id},onRebuild) }
+            else LabGroupCard(g) { detail = it }
         }
     }
+    detail?.let { v -> LabDetailDialog(v, contexts.filter { it.lab_id == v.id }, { detail = null }) { detail = null; onEdit(v) } }
 }
 
 private fun max(a: Double, b: Double) = if (a > b) a else b
@@ -112,7 +120,7 @@ private fun max(a: Double, b: Double) = if (a > b) a else b
     }
 }
 
-@Composable fun LabDialog(initial: LabValueEntity?, onDismiss: () -> Unit, onSave: (LabValueEntity) -> Unit,onSaveWithEstimate:((LabValueEntity,Boolean)->Unit)?=null) {
+@Composable fun LabDialog(initial: LabValueEntity?, onDismiss: () -> Unit, onSave: (LabValueEntity) -> Unit,inGroup:Boolean=false,onSaveWithEstimate:((LabValueEntity,Boolean)->Unit)?=null) {
     var includeEstimate by remember { mutableStateOf(false) }
     var code by remember { mutableStateOf(initial?.analyte_code ?: "E2") }
     val a = analyte(code)
@@ -155,6 +163,9 @@ private fun max(a: Double, b: Double) = if (a > b) a else b
                 Row(verticalAlignment=Alignment.CenterVertically){Checkbox(includeEstimate,{includeEstimate=it});Text(stringResource(R.string.lab_context_include_estimate))}
                 Text(stringResource(R.string.lab_context_save_note),style=MaterialTheme.typography.bodySmall)
             }
+            // LAB-01 D: a hint only, saving is not blocked.
+            if (initial != null && inGroup && (time != Instant.ofEpochMilli(initial.sampled_utc).toLocalHere() || lab.trim() != initial.laboratory?.trim().orEmpty()))
+                Text(stringResource(R.string.lab_group_split_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.tertiary, modifier = Modifier.testTag("lab-split-hint"))
         } },
         confirmButton = { Button(enabled = valueV != null && rangeOk, onClick = {
             val hasRange = loV != null || hiV != null

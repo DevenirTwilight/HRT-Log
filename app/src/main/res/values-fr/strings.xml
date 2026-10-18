@@ -1256,4 +1256,21 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="medical_in_days">dans %1$d jours</string>
 <string name="medical_next_questions">Questions à poser · %1$d</string>
 <string name="medical_next_pack">Dossier de consultation</string>
+<!-- LAB-01 batch lab entry -->
+<string name="lab_batch_title">Enregistrer une prise de sang</string>
+<string name="lab_batch_add_row">Ajouter une analyse</string>
+<string name="lab_batch_presets">Ensembles courants</string>
+<string name="lab_preset_hormones">Six hormones</string>
+<string name="lab_preset_liver">Foie</string>
+<string name="lab_preset_kidney">Rein et électrolytes</string>
+<string name="lab_group_count">%1$d analyses</string>
+<string name="lab_batch_duplicate">Cette analyse figure déjà dans cette saisie</string>
+<string name="lab_group_split_hint">Si vous modifiez l\'heure ou le laboratoire, ce résultat s\'affichera seul</string>
+<string name="lab_flag_high">Élevé</string>
+<string name="lab_flag_low">Bas</string>
+<string name="lab_filter_all">Tout</string>
+<string name="lab_batch_remove_row">Supprimer l\'analyse %1$d</string>
+<string name="lab_row_spoken">%1$s, %2$s, %3$s</string>
+<string name="lab_row_spoken_flag">, %1$s</string>
+<string name="lab_batch_failed">Rien n\'a été enregistré. Votre saisie est conservée.</string>
 </resources>

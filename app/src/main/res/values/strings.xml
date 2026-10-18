@@ -1256,4 +1256,21 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="medical_in_days">in %1$d days</string>
 <string name="medical_next_questions">Questions to ask · %1$d</string>
 <string name="medical_next_pack">Visit pack</string>
+<!-- LAB-01 batch lab entry -->
+<string name="lab_batch_title">Record a blood test</string>
+<string name="lab_batch_add_row">Add a test</string>
+<string name="lab_batch_presets">Common sets</string>
+<string name="lab_preset_hormones">Six hormones</string>
+<string name="lab_preset_liver">Liver</string>
+<string name="lab_preset_kidney">Kidney and electrolytes</string>
+<string name="lab_group_count">%1$d tests</string>
+<string name="lab_batch_duplicate">This test is already in this entry</string>
+<string name="lab_group_split_hint">Changing the time or lab will show this result on its own</string>
+<string name="lab_flag_high">High</string>
+<string name="lab_flag_low">Low</string>
+<string name="lab_filter_all">All</string>
+<string name="lab_batch_remove_row">Remove test %1$d</string>
+<string name="lab_row_spoken">%1$s, %2$s, %3$s</string>
+<string name="lab_row_spoken_flag">, %1$s</string>
+<string name="lab_batch_failed">Nothing was saved. Your entries are still here.</string>
 </resources>

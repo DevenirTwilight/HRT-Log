@@ -73,10 +73,18 @@ import java.time.Instant
 @Stable class LabDialogs {
     var labEdit by mutableStateOf<LabValueEntity?>(null)
     var labNew by mutableStateOf(false)
+    var batchSaving by mutableStateOf(false)
+    var batchFailed by mutableStateOf(false)
 }
 
-@Composable internal fun LabEditDialog(l: LabDialogs, model: NotesViewModel) {
-    if (l.labNew || l.labEdit != null) LabDialog(l.labEdit, { l.labNew = false; l.labEdit = null }, { model.saveLab(it); l.labNew = false; l.labEdit = null },onSaveWithEstimate={v,estimate->model.saveLab(v,estimate);l.labNew=false;l.labEdit=null})
+@Composable internal fun LabEditDialog(l: LabDialogs, model: NotesViewModel, labs: List<LabValueEntity> = emptyList()) {
+    // LAB-01: "add" opens the batch form; editing one result keeps the single dialog, with the split hint when it is shown in a draw card.
+    if (l.labNew && l.labEdit == null) LabBatchDialog({ if (!l.batchSaving) { l.labNew = false; l.batchFailed = false } }, { values, estimate ->
+        l.batchSaving = true; l.batchFailed = false
+        model.saveLabs(values, estimate) { ok -> l.batchSaving = false; if (ok) l.labNew = false else l.batchFailed = true }
+    }, saving = l.batchSaving, failed = l.batchFailed)
+    else if (l.labEdit != null) LabDialog(l.labEdit, { l.labNew = false; l.labEdit = null }, { model.saveLab(it); l.labNew = false; l.labEdit = null },onSaveWithEstimate={v,estimate->model.saveLab(v,estimate);l.labNew=false;l.labEdit=null},
+        inGroup = l.labEdit!!.let { e -> labGroups(labs).any { g -> g.size > 1 && g.any { it.id == e.id } } })
 }
 
 /** Medical visit editor and lab detail, used by the medical records and the visit detail. */
