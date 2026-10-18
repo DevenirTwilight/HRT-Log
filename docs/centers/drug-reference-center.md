@@ -17,3 +17,13 @@ First matrix run: FAIL (32 cases, 2 English/320dp/2x failures). Actual click cal
 Parallel PR72 appeared after initial scan and before PR73 publication. It combines both centers and clickable unavailable modules; latest user task calls for separate slices and real functional entries. No PR72 source was copied or overwritten; route preference was asked asynchronously while isolated verification continues. PR73 medical A at 3fd5b2f has local97 PASS; production hook for this B remains absent until A merges and integration route is settled.
 
 Corrected independent display run: PASS32, zero failures/skips; three contrasts per locale/size/font/theme case, actual click counters retained. Eight large-font component renders in drug-screenshots. This proves isolated UI behavior, NOT production navigation or persistence integration.
+
+## File-level connection plan
+
+- `DrugReferenceCenterScreen.kt`: center/dialog, real existing-medication callbacks, read-only unavailable sections; standalone matrix verified.
+- `MedicationsScreen.kt`: optional browse callback enables one center button and hosts the center, retaining original add/edit/archive/reference actions. Full Kotlin compilation PASS. Current AppShell does not yet supply the browse callback, so this is not advertised as enabled production navigation.
+- `AppShell.kt`, after A merges: supply `onBrowseReference={openReference(null)}` to the existing medication screen. This is the only planned shared-shell hook; existing per-medication `openReference(it)` remains identical.
+- `DrugCenterNavigationTest.kt`, after that hook: real NotesApp/Room and existing reference controller; nonempty actual-record/ledger/profile fixtures, offline saved-source search, cancel/back, frozen rows unchanged.
+- `DrugCenterMatrixTest.kt`: 32 real Compose renders each 3 contrasts, actual callback counts, unavailable sections have no click action, long synthetic names/units preserve text. Physical TalkBack and keyboard testing NOT_RUN.
+
+Future #58 integration reuses the same MedicationReferenceDialog product-detail path after its independent approval; no copied RCP/Notice text or invented URL. P4/P5 exact-stock conversion and MED02 originals remain separate gates. This center provides no packaging-capacity conversion, inventory evidence or safety inference.

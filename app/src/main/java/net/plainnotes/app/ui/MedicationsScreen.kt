@@ -12,22 +12,32 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import net.plainnotes.app.NotesState
 import net.plainnotes.app.R
 import net.plainnotes.app.data.MedicationEntity
 
-@Composable fun MedicationsScreen(state: NotesState, onAdd: () -> Unit, onEdit: (MedicationEntity) -> Unit, onArchive: (MedicationEntity) -> Unit, contentPadding: PaddingValues,onReference:((MedicationEntity)->Unit)?=null) {
+@Composable fun MedicationsScreen(state: NotesState, onAdd: () -> Unit, onEdit: (MedicationEntity) -> Unit, onArchive: (MedicationEntity) -> Unit, contentPadding: PaddingValues,onReference:((MedicationEntity)->Unit)?=null,onBrowseReference:(()->Unit)?=null) {
+    var centerOpen by remember { mutableStateOf(false) }
     val list = state.medications.sortedWith(compareByDescending<MedicationEntity> { it.active }.thenBy { it.sort_order }.thenBy { it.id })
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = contentPadding.calculateTopPadding() + 8.dp,
         bottom = contentPadding.calculateBottomPadding() + 96.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        if(onReference!=null && onBrowseReference!=null)item("reference-center") {
+            OutlinedButton(onClick={centerOpen=true},modifier=Modifier.fillMaxWidth().heightIn(min=48.dp).testTag("drug-center-open")) {
+                Text(stringResource(R.string.drug_center_title))
+            }
+        }
         if (list.isEmpty()) item {
             EmptyState(Icons.Outlined.Medication, stringResource(R.string.no_medications), stringResource(R.string.empty_body)) {
                 Button(onClick = onAdd) { Text(stringResource(R.string.add_medication)) }
             }
         }
         items(list, key = { it.id }) { m -> MedicationCard(m, state, { onEdit(m) }, { onArchive(m) },onReference?.let {callback->{callback(m)}}) }
+    }
+    if(centerOpen && onReference!=null && onBrowseReference!=null) {
+        DrugReferenceCenterDialog(state.medications,onBrowseReference,onReference){centerOpen=false}
     }
 }
 
