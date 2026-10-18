@@ -1,0 +1,7 @@
+<resources>
+    <string name="medical_center_overview">医疗中心概览</string>
+    <string name="medical_center_visits">预约及历史就诊</string>
+    <string name="medical_center_prepare">问题清单与就诊准备</string>
+    <string name="medical_center_pack">就诊资料包导出</string>
+    <string name="medical_center_choose_visit">选择一次就诊，准备问题或导出该次就诊的 PDF 资料包。与“复诊”共用现有就诊记录。</string>
+</resources>

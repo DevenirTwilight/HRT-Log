@@ -1,0 +1,61 @@
+{
+  "tests": 97,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "classes": [
+    {
+      "name": "net.plainnotes.app.AppShellBackNavigationTest",
+      "tests": 15,
+      "sha256": "52bcb03b166ba2187b0300de7393b51cd1505aef433b74d4351fba9f5fc31e17"
+    },
+    {
+      "name": "net.plainnotes.app.MedicalCenterMatrixTest",
+      "tests": 32,
+      "sha256": "7ad10ae1c40965a6837ef30cde3e2b192c61875d47ca365a5a5b4e660af34d7b"
+    },
+    {
+      "name": "net.plainnotes.app.MedicalRecordsUiTest",
+      "tests": 40,
+      "sha256": "1c108d3a904ac5440aae1d65b87507fcd9c88199d3d7c29524e279617e0bd012"
+    },
+    {
+      "name": "net.plainnotes.app.MedicalHomeConfirmFlowTest",
+      "tests": 1,
+      "sha256": "a69a65de1d32e8691d8cef882426a9d878a927a49819b8e0d8514b98763b4d83"
+    },
+    {
+      "name": "net.plainnotes.app.MedicalHomeTest",
+      "tests": 4,
+      "sha256": "7ee5eeb9ea318d762c5d8b42ea7bf5c4047ad9664128ca49e51ee313bd7e409b"
+    },
+    {
+      "name": "net.plainnotes.app.PeriodStabilityTest",
+      "tests": 5,
+      "sha256": "70615299ea9c203ca488d94b9a9206eede7018d55e87e61205bb1cea235cc144"
+    }
+  ],
+  "baseline": "ec61d536db3e82624c8921791764f7c064e56ef9",
+  "status": "PASS",
+  "matrix": "4 languages x 320/411dp x 1/2 font x light/dark x 3 contrasts; 32 parameter cases, each 3 contrasts",
+  "physicalDevice": "NOT_RUN",
+  "TalkBack": "NOT_RUN",
+  "CI": "PENDING",
+  "priorExpandedRun": "FAIL: duplicate new test method at compile; corrected without changing existing assertions",
+  "screenshots": {
+    "zh-rTW_320dp_2.0x_light_HIGH.png": "9851a848b609bbba9a82b61f078210d3a95bfb9f259070334f1664420315561c",
+    "zh-rCN_320dp_2.0x_dark_HIGH.png": "f7ab8ba355a03bdfc9991602c34f49085d2973daf5c710a5d531ac581ad783c2",
+    "zh-rCN_320dp_2.0x_light_HIGH.png": "e9657c4211983a81abe61e11a1c9740dd20e7d2aace0d192645b2d1a78609239",
+    "en_320dp_2.0x_light_HIGH.png": "57428e42922042a2cc742e1d063e5baf4cbdba6cfa574170d97f55085333b062",
+    "fr-rFR_320dp_2.0x_light_HIGH.png": "612fcf4b7c207e091b46d3e3a4771ef6234f02ebc1c26431d5c65b4ed1585585",
+    "zh-rTW_320dp_2.0x_dark_HIGH.png": "773299fea43a279ff3a36c60b9a0d93ad7177043fe47fb402013f5b0abfafe11",
+    "en_320dp_2.0x_dark_HIGH.png": "ef33751cd8860d0cad9ca71f2491586b9f7677934e1788d604ca0c6aa04d8835",
+    "fr-rFR_320dp_2.0x_dark_HIGH.png": "9f98744d7826bbe20e8632da5e77ae7f4ce8970b7496539ca0630cd768aeed45"
+  },
+  "sourceSha256": {
+    "app/src/main/java/net/plainnotes/app/ui/AppShell.kt": "451187f6893a2f1d66a77678abb15307619e1b240a1eb8d462d2195334d4ca2b",
+    "app/src/main/java/net/plainnotes/app/ui/MedicalRecordsScreen.kt": "d8574cde8f60f92786c64cc7defaec8fb7269f4d98572789a51d4403a9ec761d",
+    "app/src/test/java/net/plainnotes/app/AppShellBackNavigationTest.kt": "a735f7729fcb78e307ec9f0b025fbc9300706ff2d9c8687b878cb4965643b9b9",
+    "app/src/test/java/net/plainnotes/app/MedicalCenterMatrixTest.kt": "298e86246463149f7ee0b5680cb16ef89852e306a964f93ac4899be10ba540b3"
+  }
+}

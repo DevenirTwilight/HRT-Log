@@ -106,6 +106,51 @@ class AppShellBackNavigationTest {
         assertCalendar(); assertEquals(0, activityBacks)
     }
 
+    @Test fun medicalCenterOpensRealVisitsAndReturnsWithoutCreatingRecords() {
+        show(); open(Destination.MEDICAL)
+        for(tag in listOf("medical-center-visits","medical-center-prepare","medical-center-pack")) {
+            ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag(tag))
+            ui.onNodeWithTag(tag).performClick();ui.waitForIdle()
+            ui.onNodeWithText(context.getString(R.string.visits_empty)).assertExists()
+            ui.onNodeWithTag("medical-center-back").performClick();ui.waitForIdle()
+            ui.onNodeWithTag("medical-list").assertExists()
+        }
+        assertTrue(runBlocking { db.dao().appointments().isEmpty() })
+        assertTrue(runBlocking { db.dao().labs().isEmpty() })
+        back();assertCalendar()
+    }
+
+    @Test fun medicalCenterLabsAndTimelineReturnToTheirOrigin() {
+        show();open(Destination.MEDICAL)
+        for(tag in listOf("medical-labs","medical-history")) {
+            ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag(tag))
+            ui.onNodeWithTag(tag).performClick();ui.waitForIdle()
+            ui.onNodeWithTag("medical-list").assertDoesNotExist()
+            back();ui.onNodeWithTag("medical-list").assertExists()
+        }
+        back();assertCalendar();assertEquals(0,activityBacks)
+    }
+
+    @Test fun medicalCenterPreparationReachesRealQuestionsAndExportAndCancels() {
+        runBlocking { repo.appointment(AppointmentEntity(at_utc=Instant.now().plus(3,ChronoUnit.DAYS).toEpochMilli(),at_zone="UTC",type="CHECKUP",practitioner="Synthetic preparation visit",remind_minutes_before=0)) }
+        model.sync();show();open(Destination.MEDICAL)
+        ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag("medical-center-prepare"))
+        ui.onNodeWithTag("medical-center-prepare").performClick()
+        ui.waitUntil(10_000){ui.onAllNodesWithText("Synthetic preparation visit",substring=true).fetchSemanticsNodes().isNotEmpty()}
+        ui.onAllNodesWithText("Synthetic preparation visit",substring=true).onFirst().performClick()
+        ui.onAllNodes(hasScrollToNodeAction()).onFirst().performScrollToNode(hasText(context.getString(R.string.visit_question_add)))
+        ui.onNodeWithText(context.getString(R.string.visit_question_add)).assertHasClickAction()
+        ui.onAllNodes(hasScrollToNodeAction()).onFirst().performScrollToNode(hasText(context.getString(R.string.visit_generate)))
+        ui.onNodeWithText(context.getString(R.string.visit_generate)).performClick()
+        ui.onNode(isDialog()).assertExists()
+        ui.onNodeWithText(context.getString(R.string.cancel)).performClick()
+        ui.onNode(isDialog()).assertDoesNotExist()
+        back() // detail -> same real visit list
+        ui.onNodeWithTag("medical-center-back").performClick()
+        ui.onNodeWithTag("medical-list").assertExists()
+        assertEquals(1,runBlocking{db.dao().appointments().size})
+    }
+
     @Test fun disguiseModeKeepsTheImmediateExitToTheShell() {
         show(backToCalendar = false); open(Destination.STOCK)
         back()
