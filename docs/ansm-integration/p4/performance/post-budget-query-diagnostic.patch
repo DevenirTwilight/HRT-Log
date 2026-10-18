@@ -1,0 +1,18 @@
+--- a/LargeInventoryPerformanceProbe.kt
++++ b/LargeInventoryPerformanceProbe.kt
+@@ -146,6 +146,15 @@
+             if((0 until writeTimes.length()).any{writeTimes.getDouble(it)>5000.0})exceeded.add("post_restore_write_including_ticket_ms")
+             if(bytes>32*1024*1024)exceeded.add("raw_business_json_bytes")
+             if(peak.get()>768L*1024*1024)exceeded.add("peak_observed_jvm_heap_bytes")
++            val queryCounts=HashMap<String,Int>()
++            val counted=object:androidx.sqlite.db.SupportSQLiteDatabase by raw {
++                override fun query(sql:String):android.database.Cursor {queryCounts[sql]=(queryCounts[sql] ?: 0)+1;return raw.query(sql)}
++                override fun query(sql:String,bindArgs:Array<out Any?>):android.database.Cursor {queryCounts[sql]=(queryCounts[sql] ?: 0)+1;return raw.query(sql,bindArgs)}
++            }
++            val original=db.withTransaction{MeasuredConsumptionStore.auditStagedDataset(raw)}
++            val observed=db.withTransaction{MeasuredConsumptionStore.auditStagedDataset(counted)}
++            assertEquals(original,observed)
++            report.put("diagnostic_query_stats",JSONObject().put("scope","POST_BUDGET_DIAGNOSTIC_COUNTED_SQL_NOT_ACCEPTANCE").put("full_projection_equality",true).put("queries",queryCounts.values.sum()).put("top_query_templates",JSONArray(queryCounts.entries.sortedByDescending{it.value}.take(20).map{JSONObject().put("sql",it.key).put("count",it.value)})))
+             report.put("budget_exceeded",JSONArray(exceeded)).put("status",if(exceeded.isEmpty())"DIAGNOSTIC_BUDGET_PASS" else "DIAGNOSTIC_BUDGET_FAIL")
+             file.writeText(report.toString(2));assertEquals("Diagnostic budgets; device acceptance remains NOT_RUN",emptyList<String>(),exceeded)
+         } catch(t:Throwable){report.put("failure",t.javaClass.name+": "+t.message);report.put("status","FAIL");file.writeText(report.toString(2));throw t}

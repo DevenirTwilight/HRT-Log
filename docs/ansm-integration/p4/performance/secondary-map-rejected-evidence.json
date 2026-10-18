@@ -1,0 +1,9 @@
+{
+  "result": "REJECTED_BEFORE_PUSH",
+  "reason": "Per-row512-byte secondary maps exhausted the shared8MiB budget and evicted allocation primitive rows. Query count20811 exceeds prior20198. Local PASS does not justify this candidate.",
+  "source_sha256": "8aadc9ba24af24f5dfd2da8bd74daa6b940d223781a8befa2041235766ceee82",
+  "test_source_sha256": "05ded7a18eb59cc89822814b10bc0135f6dce72aecf845775d22a3ff3d10ed64",
+  "log_sha256": "e2922a01790de1a21bf60b95be56cc369e730ce5fb4ab13d78cd2816fad5489b",
+  "generated_probe_source_sha256": "73a43ba3aacddc3bdc2b2bdd8a22b0a94e0b07cd47e497adef2075187e0d5faf",
+  "next": "Build reference-only sorted indexes after primitive cache completion; reserve from remaining budget or fall back without displacing primitive rows."
+}

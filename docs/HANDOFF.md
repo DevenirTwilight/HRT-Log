@@ -1,3 +1,11 @@
+## P4 排序索引回归通过；写入性能仍待原生验收 — 2026-10-18
+
+3ee5110六项必需CI全PASS，已核验官方工件SHA/CRC：API26/29/35的ReferencePersistenceAndroidTest各23用例、含2条新字节边界、零fail/skip。原生run39121269126完整FAIL，仅真实写入11959/11020/11524ms>5000；audit11286/forecast11600/restored audit10395ms本轮<15000，不能当稳定/因果证明。运输双ACK PASS；1155058B trace离线parser完全复现，76108样本、152边界未闭合帧、零未知/不匹配退出、无溢出，仍PARTIAL_DIAGNOSTIC。SQLCipher游标为主要采样成本。原始工件/报告/hash见ansm-integration/p4/performance/native-profile-3ee5110/，不删除早期失败。
+
+先写共享SQL/边界负向测试，原实现真实expected0/actual8；第一个分组Map方案虽data417 PASS，却在相同大库查询20198→20811退化（挤掉原始行缓存），已拒绝且未推送，证据保留。替代方案仅按剩余8MiB预算为已完整缓存的不可变行建立排序引用索引，保留重复行、整数类型、原游标独立性；部分/未建索引回SQL，不缓存跨事务信任，不改审计或存量语义。新方案data417零失败/跳过、Android测试源码编译PASS；同规模JVM大库完整投影一致、查询20198→14189（少6009），真实Repository三写入1489/1561/1588ms仅JVM诊断，原生NOT_RUN。新增重复确认测试初次JUnit返回值声明错误已明确Unit修正并保留失败，未放松断言。原始fixture与所有预算不变；诊断patch只加在计时结束后的临时测试副本，生成文件已清理。
+
+主线另有#66–#69到1abfeea，真实device-tests在定时提醒链FAIL；#70由另一开发者处理，避开提醒/UI/字符串共享文件。下一步普通合并主线并保留新旧需求/交接/设备类名单，再做最终CI及原生预算。P4保持DRAFT/PRODUCTION_BLOCKED、正式入口OFF，P5/P6未实施。主线私密build30是独立授权与交付，不含未合并P4；公开build29未改变。本轮未签名、发布或交付APK。
+
 ## P4 采样运输已验证；全字符串追加优化本地回归通过 — 2026-10-18
 
 原生0b3c703/run39109780636已取回2310261B ART采样；8字节预检与最终nonce ACK真实PASS，官方工件SHA/CRC、原始trace SHA和确定性gzip已保存，离线重跑parser与原摘要完全相同。采样158040条、152个边界未闭合帧、0未知方法/不匹配退出、无overflow，仅PARTIAL_DIAGNOSTIC，不是调用计数或完整CPU剖析。此前head失败保留，不再称运输待验。证据：ansm-integration/p4/performance/native-profile-0b3c703/。

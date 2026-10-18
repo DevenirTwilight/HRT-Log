@@ -967,10 +967,10 @@
       "source_date": null,
       "review_status": "UNREVIEWED",
       "result_status": "PRODUCTION_BLOCKED",
-      "blocker": "Native0b3c703 audit15569ms, forecast16150ms and writes15939/15672/15662ms exceed unchanged15000/5000ms. Whole-string candidate device evidence pending. Physical hardware NOT_RUN.",
+      "blocker": "Native3ee5110 real writes11959/11020/11524ms exceed5000ms; sorted row index candidate native NOT_RUN. Physical hardware NOT_RUN.",
       "owner_decision_required": false,
       "progress": "NATIVE_BUDGET_FAIL",
-      "note": "Actual transport PASS; partial sampled trace and original failures in docs/ansm-integration/p4/performance/native-profile-0b3c703/. Local data415/Period5/Privacy3 PASS for whole-string candidate is not native acceptance. No fixture/budget relaxation; formal App entry OFF."
+      "note": "Source3ee all6 ordinary CI and API26/29/35 reference23 cases PASS, but native budget FAIL. Sorted candidate local417/native source compilation/full projection equality/query20198→14189 PASS is diagnostic only. Failed map approach20811 queries rejected before push. See performance/secondary-sorted-* and native-profile-3ee5110/."
     },
     {
       "requirement_id": "BACKEND_BETA.2.MAIN_CI",
@@ -993,7 +993,7 @@
       "blocker": "",
       "owner_decision_required": false,
       "progress": "MERGED_MAIN_CI_PASS",
-      "note": "Owner explicitly approved ordinary protected merge of e69490f. Main8ebb719: Android39107748016 + Science39107748012 all6 required PASS. API26/29/35 each4 new SQLCipher cases0fail/0skip; official digests/CRC verified in performance/main-8ebb719-*. Published build29 source76627bf does not include this fix; no new release."
+      "note": "Owner explicitly approved ordinary protected merge of e69490f. Main8ebb719: Android39107748016 + Science39107748012 all6 required PASS. API26/29/35 each4 new SQLCipher cases0fail/0skip; official digests/CRC verified in performance/main-8ebb719-*. Published build29 source76627bf does not include this fix; no new release. Later main1ab independently changes reminders/navigation and has device-tests FAIL (scheduledTestTravelsTheRealAlarmChain); do not label latest main all green or attribute that failure to the already-verified #65 fix."
     },
     {
       "requirement_id": "BACKEND_BETA.3.NATIVE_TRANSPORT",
@@ -1017,7 +1017,7 @@
       "blocker": "P4 PRODUCTION_BLOCKED: real write budget FAIL; physical-device evidence absent.",
       "owner_decision_required": false,
       "progress": "NATIVE_TRANSPORT_PASS_PROFILE_PARTIAL",
-      "note": "Actual0b3 API26 run39109780636: eight-byte preflight and final trace ACK PASS. Official artifact SHA/CRC verified;2310261-byte raw trace archived compressed. Parser reproduces exactly:158040 records,0 unknown methods/unmatched exits,152 clipped boundary frames,overflow=false. Partial post-budget diagnostic, not invocation counts or budget success. String range append and SQLCipher cursor reads dominate sampled CPU. New whole-string fast path retains all scalar/byte validation; frozen corpus plus new boundaries PASS locally, native pending."
+      "note": "Actual0b3 and3ee API26 preflight/sample ACK PASS. Native3ee trace1155058 bytes parser reproduces;76108 records,152 clipped boundary frames,0 unknown methods/unmatched exits,overflow=false. Source3ee all6 CI PASS; real-write budget FAIL. Sorted row-reference index local417/source compile and large-query14189 PASS, native pending."
     },
     {
       "requirement_id": "BACKEND_BETA.4.EXISTING_UI",
@@ -1080,5 +1080,5 @@
       "note": "Independent docs PR64 source49236a2 includes main8ebb719 CI/native daily proofs; final docs49236a2 six required CI PASS. Public build29 static identity checks remain separate. No candidate APK built; physical ARM/China-ROM/upgrades/restore/16KiB execution NOT_RUN."
     }
   ],
-  "checkpoint": "2026-10-18 main8ebb719 and Beta49236a2 sixCI PASS. Native0b3 transport/preflight/trace ACK PASS, profile PARTIAL; unchanged performance budgets FAIL. Whole-string candidate local data415/Period5/Privacy3 PASS, native pending. P4_BLOCKED, P5/P6 NOT_IMPLEMENTED, Beta NO-GO."
+  "checkpoint": "2026-10-18 source3ee5110 all6 required CI and API26/29/35 canonical cases PASS; native real-write11–12s FAIL. Sorted indexes local417/native compile and full-scale query20198→14189/projection equality PASS; actual native pending. New main1ab device reminder test FAIL; ordinary integration pending. P4_BLOCKED/OFF, P5/P6 NOT_IMPLEMENTED, Beta NO-GO."
 }

@@ -37,6 +37,52 @@ abstract class MeasuredConsumptionContract {
     private suspend fun consume(r:RecordEntity,box:CreatedMeasuredContainer,uses:List<ConfirmedStockUse>,op:String=UUID.randomUUID().toString())=db.withTransaction{MeasuredConsumptionStore.consumeNewRecord(db,box.scope,r,op,uses,at)}
     private fun count(table:String)=raw.query("SELECT COUNT(*) FROM `$table`").use{it.moveToFirst();it.getInt(0)}
     private suspend fun rejects(code:ReferenceError,block:suspend()->Unit){try{block();fail("Expected $code")}catch(e:ReferenceFailure){assertEquals(code,e.code)}}
+    @Test fun completeSecondaryAuditIndexesAvoidRepeatedSqlButPartialIndexesNeverProveAbsence()=runBlocking {
+        val m=med();val a=box(m);val b=box(m);val r=record(m)
+        val receipt=consume(r,a,listOf(use(a),use(b)))
+        db.withTransaction{MeasuredConsumptionStore.reverseOriginal(db,a.scope,r,receipt.operationUuid,UUID.randomUUID().toString(),at)}
+        db.withTransaction {
+            val recordUuid=raw.query("SELECT record_uuid FROM measured_operation WHERE operation_uuid=?",arrayOf(receipt.operationUuid)).use{it.moveToFirst();it.getString(0)}
+            val queries=listOf(
+                "SELECT COUNT(*) FROM measured_allocation WHERE operation_uuid=? AND container_uuid=?" to arrayOf<Any?>(receipt.operationUuid,a.containerUuid),
+                "SELECT uuid FROM `measured_allocation` WHERE operation_uuid=?" to arrayOf<Any?>(receipt.operationUuid),
+                "SELECT uuid FROM measured_allocation WHERE operation_uuid=? ORDER BY uuid" to arrayOf<Any?>(receipt.operationUuid),
+                "SELECT uuid FROM `record_reference_capture` WHERE record_uuid=? AND record_revision=? AND kind='CONFIRM' AND container_uuid=?" to arrayOf<Any?>(recordUuid,1,a.containerUuid),
+                "SELECT uuid FROM `record_reference_capture` WHERE record_uuid=? AND record_revision=? AND kind='CONFIRM' AND container_uuid=?" to arrayOf<Any?>(recordUuid,1L,b.containerUuid),
+                "SELECT uuid FROM `record_reference_capture` WHERE record_uuid=? AND record_revision=? AND kind='CONFIRM' AND container_uuid=?" to arrayOf<Any?>(recordUuid,2,a.containerUuid),
+                "SELECT uuid FROM `measured_allocation` WHERE operation_uuid=?" to arrayOf<Any?>(UUID.randomUUID().toString()),
+                "SELECT COUNT(*) FROM measured_allocation WHERE operation_uuid=? AND container_uuid=?" to arrayOf<Any?>(receipt.operationUuid,UUID.randomUUID().toString()),
+            )
+            fun values(c:android.database.Cursor)=c.use{buildList{while(it.moveToNext())add(List(it.columnCount){i->if(it.isNull(i))null else it.getString(i)})}}
+            for(limit in listOf(0L,1L,512L,8L*1024*1024)) {
+                var sqlCalls=0
+                val observed=object:androidx.sqlite.db.SupportSQLiteDatabase by raw {
+                    override fun query(sql:String,bindArgs:Array<out Any?>):android.database.Cursor {sqlCalls++;return raw.query(sql,bindArgs)}
+                }
+                val reads=ReferenceAuditReads(observed,limit)
+                try {
+                    for((sql,args) in queries)assertEquals("Exact predicate/row multiplicity at budget $limit: $sql",values(raw.query(sql,args)),values(reads.query(sql,args)))
+                    if(limit==8L*1024*1024)assertEquals("Complete secondary indexes must serve these queries without repeated SQL",0,sqlCalls)
+                    else assertEquals("Incomplete table must query SQLite even when a cached group appears absent",queries.size,sqlCalls)
+                } finally{reads.finish()}
+            }
+        }
+    }
+    @Test fun secondaryConfirmationIndexRetainsDuplicateRowsSoTheWholeAuditStillRejectsAmbiguity()=runBlocking {
+        val m=med();val b=box(m);val r=record(m);consume(r,b,listOf(use(b)))
+        db.withTransaction {
+            val first=ReferenceStore.row(raw,"record_reference_capture","kind='CONFIRM'",emptyArray())!!
+            ReferenceStore.insert(raw,"record_reference_capture",org.json.JSONObject(first.toString()).put("uuid",UUID.randomUUID().toString()).put("capture_revision",first.getInt("capture_revision")+1))
+            val sql="SELECT uuid FROM `record_reference_capture` WHERE record_uuid=? AND record_revision=? AND kind='CONFIRM' AND container_uuid=?"
+            val args=arrayOf<Any?>(first.getString("record_uuid"),1,b.containerUuid)
+            fun ids(database:androidx.sqlite.db.SupportSQLiteDatabase)=database.query(sql,args).use{c->buildList{while(c.moveToNext())add(c.getString(0))}.sorted()}
+            val expected=ids(raw);assertEquals("Fixture must really contain two distinct confirmations",2,expected.size)
+            val reads=ReferenceAuditReads(raw)
+            try{assertEquals(expected,ids(reads))}finally{reads.finish()}
+            assertThrows("Index must not conceal ambiguous historical confirmation",ReferenceFailure::class.java){MeasuredConsumptionStore.auditStagedDataset(raw)}
+            Unit
+        }
+    }
     @Test fun fractionalPhysicalUseWritesOneExactIntegerWithoutChangingTheDoseFact()=runBlocking {
         val m=med();val b=box(m);val r=record(m);val before=db.dao().medication(m)
         val receipt=consume(r,b,listOf(use(b)))
