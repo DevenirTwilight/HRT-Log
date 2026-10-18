@@ -1,0 +1,13 @@
+{
+  "base_head": "66ea8d56f96b80b72247475109bbc222658fb2e8",
+  "result": "JVM_DIAGNOSTIC_PASS_NOT_NATIVE_ADMISSION",
+  "previous_queries": 12186,
+  "joined_queries": 8180,
+  "removed_queries": 4006,
+  "full_projection_equality": "PASS",
+  "log_sha256": "11fe236281b6aa4b423507249b3fdc3c5bb973d7f36e35f623848bfb699c49a0",
+  "source_sha256": "cec924d46dbcacb54afb0401a457b6e3939a42a596eceb614f125d3bf6aef8ed",
+  "fixture_sha256": "9313167178989def0d4d89d785f84cdde764fba21033543cdf85e472c5511242",
+  "diagnostic_patch": "post-budget-query-diagnostic.patch",
+  "read_semantics": "Streaming LEFT JOIN retains unmatched ledger rows and exact clinical revision type checks. Primitive prior entries retained for original inverse lookup; no envelope cache or changed quantity computation."
+}

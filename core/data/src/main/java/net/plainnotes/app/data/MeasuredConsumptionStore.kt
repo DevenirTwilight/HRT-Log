@@ -70,17 +70,16 @@ internal object MeasuredConsumptionStore {
             val result=frozen.stockScale();if(result is MeasureResult.Failure)return result
             val scale=(result as MeasureResult.Success).value
             require(box.inventory_encoding==InventoryEncoding.EXACT && box.capacity==scale.capacityQuanta.toDouble() && box.initial_used_amount==0.0)
-            val entries=projectionEntries(db,box.id)
+            val entries=ArrayList<ProjectionEntry>()
             val operationChain by lazy {MeasuredOperationChain.validate(db)}
             var used=0L;var previousId=0L;val deltas=ArrayList<Long>()
             fun same(a:Quantity,b:Quantity)=a.unit==b.unit && a.meaning==b.meaning && a.value.compareTo(b.value)==0
-            for(entry in entries) {
+            forEachProjectionOperation(db,box.id) { entry,operation,recordRevision ->
                 require(entry.id>previousId && entry.used_delta.isFinite() && entry.used_delta!=0.0 && kotlin.math.abs(entry.used_delta)<=StockQuantum.MAX_QUANTA && entry.used_delta.toLong().toDouble()==entry.used_delta)
                 val delta=entry.used_delta.toLong();val allocation=ReferenceStore.row(db,"measured_allocation","ledger_entry_id=?",arrayOf(entry.id))!!
                 require(allocation.getString("dataset_uuid")==dataset && allocation.getString("container_uuid")==containerUuid && allocation.getString("operation_uuid")==entry.operation_id)
                 val event=ReferenceStore.row(db,"reference_event","operation_uuid=?",arrayOf(allocation.getString("presentation_event_uuid")))!!
                 require(event.getString("dataset_uuid")==dataset && event.getString("subject_uuid")==containerUuid && event.getString("snapshot_uuid")==snapshot.getString("uuid"))
-                val operation=ReferenceStore.row(db,"measured_operation","operation_uuid=?",arrayOf(entry.operation_id))!!
                 require(operation.getString("dataset_uuid")==dataset && operation.getString("kind")==entry.kind)
                 val text=allocation.getString("quantity");val parsed=Measurements.parse(text);require(parsed is MeasureResult.Success)
                 require((Measurements.decimalText(parsed.value) as MeasureResult.Success).value==text && parsed.value.signum()>0)
@@ -91,9 +90,7 @@ internal object MeasuredConsumptionStore {
                     val record=ReferenceStore.row(db,"reference_identity","uuid=?",arrayOf(operation.getString("record_uuid")))!!
                     require(record.getString("kind")=="RECORD" && record.getString("dataset_uuid")==dataset && record.getString("owner_uuid")==owner && !record.isNull("live_handle") && record.getLong("live_handle")==entry.dose_record_id)
                     require(operation.getLong("record_revision")==entry.dose_revision)
-                    db.query("SELECT revision FROM dose_record WHERE id=?",arrayOf(entry.dose_record_id)).use { c ->
-                        require(c.moveToFirst() && c.getType(0)==Cursor.FIELD_TYPE_INTEGER && c.getLong(0)>=operation.getInt("record_revision"))
-                    }
+                    require(recordRevision!=null && recordRevision>=operation.getInt("record_revision"))
                 }
                 when(entry.kind) {
                     "CONSUME"->{
@@ -141,7 +138,7 @@ internal object MeasuredConsumptionStore {
                     }
                     else->error("Unsupported measured ledger kind")
                 }
-                used+=delta;require(used in 0..scale.capacityQuanta);deltas+=delta;previousId=entry.id
+                used+=delta;require(used in 0..scale.capacityQuanta);deltas+=delta;previousId=entry.id;entries.add(entry)
             }
             val reduced=scale.restoredUsed(0,deltas);require(reduced is MeasureResult.Success && reduced.value==used)
             val remaining=scale.remaining(used);require(remaining is MeasureResult.Success)
@@ -396,6 +393,31 @@ internal object MeasuredConsumptionStore {
         db.query("SELECT id,medication_id,capacity,initial_used_amount,used_amount,inventory_encoding FROM supply_container WHERE id=?",arrayOf(id)).use { c ->
             require(c.moveToFirst());ProjectionBox(integer(c,0),integer(c,1),scalar(c,2),scalar(c,3),scalar(c,4),c.getString(5))
         }
+    private val projectionOperationColumns=ReferenceSchema.columns.getValue("measured_operation")
+    private val projectionOperationQuery="SELECT t.id,t.dose_record_id,t.dose_revision,t.operation_id,t.kind,t.used_delta,t.reversal_of_id,"+
+        projectionOperationColumns.joinToString(","){"o.`$it`"}+
+        ",d.revision FROM supply_transaction t LEFT JOIN measured_operation o ON o.operation_uuid=t.operation_id LEFT JOIN dose_record d ON d.id=t.dose_record_id WHERE t.container_id=? ORDER BY t.id"
+    /** Keep unmatched ledger rows visible. Stream envelope fields; retain only the same primitive prior entries for inverse checks. */
+    private inline fun forEachProjectionOperation(db:SupportSQLiteDatabase,id:Long,block:(ProjectionEntry,JSONObject,Long?)->Unit) {
+        db.query(projectionOperationQuery,arrayOf(id)).use { c ->
+            require(c.count<=100000)
+            while(c.moveToNext()) {
+                require(c.getType(3)==Cursor.FIELD_TYPE_STRING && c.getType(4)==Cursor.FIELD_TYPE_STRING)
+                val entry=ProjectionEntry(integer(c,0),nullableInteger(c,1),nullableInteger(c,2),c.getString(3),c.getString(4),scalar(c,5),nullableInteger(c,6))
+                require(c.getType(7)==Cursor.FIELD_TYPE_STRING) {"Ledger operation missing"}
+                val operation=JSONObject().apply {
+                    for((index,name) in projectionOperationColumns.withIndex())put(name,when(c.getType(7+index)) {
+                        Cursor.FIELD_TYPE_NULL->JSONObject.NULL
+                        Cursor.FIELD_TYPE_INTEGER->c.getLong(7+index)
+                        Cursor.FIELD_TYPE_STRING->c.getString(7+index)
+                        else->error("Unexpected reference storage type")
+                    })
+                }
+                val revision=if(entry.kind=="ADJUST")null else nullableInteger(c,7+projectionOperationColumns.size)
+                block(entry,operation,revision)
+            }
+        }
+    }
     private fun projectionEntries(db:SupportSQLiteDatabase,id:Long):List<ProjectionEntry> =
         db.query("SELECT id,dose_record_id,dose_revision,operation_id,kind,used_delta,reversal_of_id FROM supply_transaction WHERE container_id=? ORDER BY id",arrayOf(id)).use { c ->
             require(c.count<=100000)

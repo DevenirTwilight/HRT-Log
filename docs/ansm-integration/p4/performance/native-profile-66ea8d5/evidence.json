@@ -1,0 +1,23 @@
+{
+  "source_head": "66ea8d56f96b80b72247475109bbc222658fb2e8",
+  "run": 39123897415,
+  "artifact_id": 12135880887,
+  "artifact_sha256": "cc6ae65c2a92529161ba07de5f5c60de35e2aa19c4f7b80444161b3c03d37177",
+  "artifact_sha256_verification": "PASS",
+  "zip_crc": "PASS",
+  "trace_sha256": "75637774cd4bd9ca8a8861028a942f5d2301f06548d0fc1fd0857859b57687fb",
+  "trace_gzip_sha256": "eb5efa50c72ad753a084596e9d110c1ba95ba57000ed4a9af469770244265a7e",
+  "parser_source_sha256": "b291a87edf240f5e93c6411a810c7f2ad5c946b373c0df1427d5aa42d09f6190",
+  "parser_reproduction": "PASS",
+  "transport": "NATIVE_PREFLIGHT_AND_SAMPLE_ACK_PASS",
+  "profile": "PARTIAL_DIAGNOSTIC",
+  "records": 61340,
+  "clipped_open_frames": 152,
+  "unknown_method_records": 0,
+  "unmatched_exits": 0,
+  "overflow": "false",
+  "performance": "FAIL:actual writes9347/9233/8923ms exceed unchanged5000ms. Full audit8836/forecast8836/restored8357ms pass this run. Cross-run changes do not prove stable or isolated causal improvement.",
+  "physical": "NOT_RUN",
+  "p4": "PRODUCTION_BLOCKED",
+  "next": "Join operation and clinical revision into the existing per-container ledger cursor, preserving unmatched ledger rejection, inverse history, all global checks. Local420/native compilation/query8180/full projection equality PASS; native pending."
+}

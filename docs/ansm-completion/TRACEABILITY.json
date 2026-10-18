@@ -967,10 +967,10 @@
       "source_date": null,
       "review_status": "UNREVIEWED",
       "result_status": "PRODUCTION_BLOCKED",
-      "blocker": "Native0fd actual writes13726/13307/13938ms exceed unchanged5000ms. Bulk operation cursor local418/query12186 PASS but native not yet tested. Physical NOT_RUN.",
+      "blocker": "Native66ea8d5 writes9347/9233/8923ms exceed unchanged5000ms. Streaming projection join local420/query8180 PASS, native NOT_RUN. Physical NOT_RUN.",
       "owner_decision_required": false,
       "progress": "NATIVE_BUDGET_FAIL",
-      "note": "Full0fd failure and raw/parsed trace in performance/native-profile-0fd0ca3/. Query reductions are diagnostic only. Bulk cursor retains all per-row/full-dataset/source/revision/ledger checks; no skipped audit or new trust cache."
+      "note": "Source-specific native proofs in performance/native-profile-66ea8d5/. No skipped audit/amount/clinical/inverse predicate, no changed fixture/budget, no envelope trust cache. Joined candidate local evidence is diagnostic only."
     },
     {
       "requirement_id": "BACKEND_BETA.2.MAIN_CI",
@@ -990,10 +990,10 @@
       "source_date": "2026-10-18",
       "review_status": "OWNER_MERGE_APPROVED",
       "result_status": "PRODUCTION_IMPLEMENTED",
-      "blocker": "",
+      "blocker": "Later main417 device failure at status.exact before delivery. Independent fixture-only PR71 awaiting six required CI; race hypothesis not yet proven.",
       "owner_decision_required": false,
       "progress": "MERGED_MAIN_CI_PASS",
-      "note": "Owner explicitly approved ordinary protected merge of e69490f. Main8ebb719: Android39107748016 + Science39107748012 all6 required PASS. API26/29/35 each4 new SQLCipher cases0fail/0skip; official digests/CRC verified in performance/main-8ebb719-*. Published build29 source76627bf does not include this fix; no new release. Later main1ab independently changes reminders/navigation and has device-tests FAIL (scheduledTestTravelsTheRealAlarmChain); do not label latest main all green or attribute that failure to the already-verified #65 fix."
+      "note": "Owner explicitly approved ordinary protected merge of e69490f. Main8ebb719: Android39107748016 + Science39107748012 all6 required PASS. API26/29/35 each4 new SQLCipher cases0fail/0skip; official digests/CRC verified in performance/main-8ebb719-*. Published build29 source76627bf does not include this fix; no new release. Later main1ab independently changes reminders/navigation and has device-tests FAIL (scheduledTestTravelsTheRealAlarmChain); do not label latest main all green or attribute that failure to the already-verified #65 fix. PR71 head95c8d3c only waits command EOF and asserts preparation before unchanged test methods, no production notification fix or timeout relaxation."
     },
     {
       "requirement_id": "BACKEND_BETA.3.NATIVE_TRANSPORT",
@@ -1017,7 +1017,7 @@
       "blocker": "P4 PRODUCTION_BLOCKED: real write budget FAIL; physical-device evidence absent.",
       "owner_decision_required": false,
       "progress": "NATIVE_TRANSPORT_PASS_PROFILE_PARTIAL",
-      "note": "Actual0fd trace1470239B,97996 records/152 clipped frames,0 unknown/unmatched,overflow=false; partial parser reproduced. Transport/preflight/sample ACK PASS, real-write budget FAIL. Bulk operation cursor full local418/native compile/large projection equality/query12186 PASS; native pending."
+      "note": "Actual66ea8d5 transport/sample ACK PASS; raw trace parser reproduces61340 sampled records,152 clipped frames,0 unknown/unmatched,overflow=false, PARTIAL_DIAGNOSTIC. Real-write budget FAIL. Streamed ledger+operation+revision candidate local420/contract compile/query8180/full projection equality PASS, native pending."
     },
     {
       "requirement_id": "BACKEND_BETA.4.EXISTING_UI",
@@ -1077,8 +1077,8 @@
       "blocker": "P4 budget FAIL; P5/P6 incomplete; physical evidence absent. Official distribution/FT-ST review remains a separate gate.",
       "owner_decision_required": false,
       "progress": "READINESS_NO_GO",
-      "note": "Docs source063861d ordinarily merges main417, distinguishes previously verified public29 from declared-by-merged-ledger private30 (source dfb,not later70/P4). New docs CI pending; prior49236a2 sixCI PASS remains separately archived. No signing/release by this work; physical/China-ROM/upgrades/restore NOT_RUN."
+      "note": "Docs source063861d ordinarily merges main417, distinguishes previously verified public29 from declared-by-merged-ledger private30 (source dfb,not later70/P4). Current063861d six required CI PASS; prior49236a2 sixCI PASS remains separately archived. No signing/release by this work; physical/China-ROM/upgrades/restore NOT_RUN."
     }
   ],
-  "checkpoint": "2026-10-18 main417 ordinarily integrated as0fd. Native0fd complete FAIL:actual writes13.3–13.9s exceed5s, trace PARTIAL/transport PASS. Bulk operation cursor local418/native compile/large projection equality/query12186 PASS, native pending. Period5/Privacy3 after main merge PASS. P4_BLOCKED/OFF; P5/P6 NOT_IMPLEMENTED. Beta063861d integrates main417/build30 ledger declarations only, NO-GO."
+  "checkpoint": "2026-10-18 native66ea8d5 complete FAIL writes8.92–9.35s>5s; joined streaming projection local420/native compilation/large projection equality/query8180 PASS, native pending. CI fixture PR71 preserves all prior mode/delivery checks, exact-alarm permission setup HYPOTHESIS pending actual CI. Beta063861d six required CI PASS, still NO-GO. P4_BLOCKED/OFF, P5/P6 NOT_IMPLEMENTED."
 }

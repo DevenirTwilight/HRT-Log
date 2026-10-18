@@ -1,3 +1,11 @@
+## P4 流水联合读取本地420通过；原生写入仍>5s — 2026-10-18
+
+66ea8d5原生run39123897415完整FAIL：audit8836/forecast8836/restored8357ms本轮<15s，三写9347/9233/8923ms>5000。官方工件SHA/CRC与raw trace/gzip/parser复现PASS，61340采样/152边界帧、零未知/不匹配退出、无溢出，仍PARTIAL_DIAGNOSTIC；SQLCipher游标/GC/UTF8仍主要成本，见ansm-integration/p4/performance/native-profile-66ea8d5/。不删除0fd/3ee等旧失败，不按较快一次宣称稳定改善。
+
+新共享负向测试旧代码先实际expected0/actual1操作回读，再强化记录版本后expected[0,0]/actual[1,1]；非法operation_id+伪造零cache必须拒绝、回滚后账本/cache/immutable trigger完全还原的负向测试已PASS。生产候选只把同一流水的操作字段和临床revision纳入流式LEFT JOIN，所有字段类型、ID域、原消耗反向查找、临床事实和全局审计断言保留；历史查询只保留原来的primitive先前流水，不增加envelope缓存，不隐藏无匹配行。data420零fail/skip、Android合同编译PASS；相同大库备份/恢复/三真实Repo写入与完整投影一致，JVM SQL12186→8180，写1354/1424/1487ms仅诊断。原生新HEAD待验，不放宽5s或样本。
+
+另在独立CI分支创建#71（95c8d3c）：最新主线417实际失败是ReminderTestDeviceTest行52 status.exact=false，发生在90s等待前；权限命令未读完的竞态只是HYPOTHESIS。仅测试准备读命令EOF并断言API31+真正grant；三个测试方法/全部旧断言/5/8s输入/90s期限逐字不变，无生产提醒逻辑改动，按主线最新REQUIREMENTS106开启保护auto-merge，六CI/三API待验，任何FAIL须保留处理。Beta #64的063861d自身六项CI已全PASS，但仍DRAFT/NO-GO，不等于主线417设备失败已修复或P4准入。P4 DRAFT/正式入口OFF，P5/P6未实施，本工作无签名/发布/APK交付。
+
 ## P4 原生排序索引仍FAIL；批量操作读取本地通过 — 2026-10-18
 
 已普通合并主线417e383（#66–#70）为0fd0ca3；四语冲突保留全部主线提醒文案和既有forecast_needs_check，workflow保留17数据类与2新增App类，双方交接保留。主线需求105–107原编号保留，旧P4的105–108映射108–111；新106普遍自动合并授权继承，草稿/外部审阅/发布例外不变。合并后Period5/Privacy3本地PASS，证据merged-main417-app-local-evidence.json；生产参数/PK/权限没有新增变动。

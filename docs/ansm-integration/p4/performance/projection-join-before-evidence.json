@@ -1,0 +1,10 @@
+{
+  "base_head": "66ea8d56f96b80b72247475109bbc222658fb2e8",
+  "result": "EXPECTED_RED",
+  "tests": 2,
+  "failures": 1,
+  "orphan_ledger_negative": "PASS - invalid operation link plus forged zero cache is rejected and full rollback restores ledger/cache/trigger",
+  "failure_message": "java.lang.AssertionError: A live projection must read its operation along with the ledger row, not fetch each operation again expected:<0> but was:<1>",
+  "log_sha256": "e0876422f41f39c298ee96fe9f2ec2fdb9afad3ce3e68e1d817385f5ee95fc58",
+  "junit_sha256": "7ceb605fba291f21b64846ec3747f70f86ab8618f986b12e592b7b8a262a9205"
+}

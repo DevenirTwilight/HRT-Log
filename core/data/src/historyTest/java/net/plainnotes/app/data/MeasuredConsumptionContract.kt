@@ -103,6 +103,42 @@ abstract class MeasuredConsumptionContract {
             assertEquals("Zero-effect operation must be fully audited from its bulk row rather than point-fetched",0,pointReads)
         }
     }
+    @Test fun projectionAuditReadsLedgerAndOperationTogetherWithoutPointLookups()=runBlocking {
+        val m=med();val b=box(m);val r=record(m);val receipt=consume(r,b,listOf(use(b)))
+        db.withTransaction {
+            val before=RawData.dump(raw).toString();var pointReads=0;var revisionReads=0
+            val counted=object:androidx.sqlite.db.SupportSQLiteDatabase by raw {
+                override fun query(sql:String,bindArgs:Array<out Any?>):android.database.Cursor {
+                    if(sql.contains("measured_operation",ignoreCase=true) && bindArgs.any{it==receipt.operationUuid})pointReads++
+                    if(sql.contains("FROM dose_record",ignoreCase=true))revisionReads++
+                    return raw.query(sql,bindArgs)
+                }
+            }
+            val audited=MeasuredConsumptionStore.auditStagedProjection(counted,b.scope.dataset,b.containerUuid)
+            assertTrue(audited is MeasureResult.Success);val value=(audited as MeasureResult.Success).value
+            assertEquals(1L,value.usedQuanta);assertTrue(value.cacheMatches)
+            assertEquals(0,value.remaining.value.compareTo(BigDecimal("27.5")))
+            assertEquals(before,RawData.dump(raw).toString())
+            assertEquals("Projection must retain both operation and clinical revision checks without separate point queries",listOf(0,0),listOf(pointReads,revisionReads))
+        }
+    }
+    @Test fun projectionAuditNeverHidesAnOrphanLedgerWhenTheScalarCacheIsForged()=runBlocking {
+        val m=med();val b=box(m);val r=record(m);consume(r,b,listOf(use(b)))
+        val before=db.withTransaction{RawData.dump(raw).toString()}
+        class SyntheticRollback:RuntimeException()
+        try {db.withTransaction {
+            raw.execSQL("DROP TRIGGER immutable_supply_update")
+            raw.execSQL("UPDATE supply_transaction SET operation_id=? WHERE dose_record_id=?",arrayOf(UUID.randomUUID().toString(),r.id))
+            raw.execSQL("UPDATE supply_container SET used_amount=0 WHERE id=?",arrayOf(b.container.id))
+            // An INNER JOIN would hide the ledger and falsely agree with this forged zero cache.
+            assertThrows(ReferenceFailure::class.java){MeasuredConsumptionStore.auditStagedProjection(raw,b.scope.dataset,b.containerUuid)}
+            throw SyntheticRollback()
+        }} catch(_:SyntheticRollback){}
+        db.withTransaction {
+            assertEquals(before,RawData.dump(raw).toString())
+            raw.query("SELECT 1 FROM sqlite_master WHERE type='trigger' AND name='immutable_supply_update'").use{assertTrue(it.moveToFirst())}
+        }
+    }
     @Test fun fractionalPhysicalUseWritesOneExactIntegerWithoutChangingTheDoseFact()=runBlocking {
         val m=med();val b=box(m);val r=record(m);val before=db.dao().medication(m)
         val receipt=consume(r,b,listOf(use(b)))
