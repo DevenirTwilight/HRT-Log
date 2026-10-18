@@ -11,7 +11,7 @@ def report_paths(lines):
     return [p.strip() for p in lines if re.fullmatch(r'/sdcard/Android/data/net\.plainnotes\.app\.data(?:\.test)?/files/ansm-performance/large-ten-year\.json', p.strip())]
 
 
-def log_report(text):
+def log_report(text, expected_token=None):
     reports = []
     for line in text.splitlines():
         match = re.search(r'\bI\s+ANSM_PERF\s*: (\{.*\})$', line)
@@ -20,7 +20,7 @@ def log_report(text):
                 value = json.loads(match.group(1))
             except json.JSONDecodeError:
                 continue  # A split/truncated log line is not a valid report.
-            if value.get('environment') == 'Native API26 SQLCipher synthetic fixture; emulator, not physical hardware':
+            if value.get('environment') == 'Native API26 SQLCipher synthetic fixture; emulator, not physical hardware' and (expected_token is None or value.get('diagnostic_run_token') == expected_token):
                 reports.append(value)
     if not reports:
         raise ValueError('No complete synthetic metadata in crash log')
@@ -126,7 +126,7 @@ def watch_trace_once(out, token, execute=subprocess.check_output):
     report = device_json(folder+'large-ten-year.json', execute)
     capture = report.get('post_budget_components',{}).get('sampling_trace',{}) if isinstance(report,dict) else {}
     if (not isinstance(report,dict) or report.get('environment') != 'Native API26 SQLCipher synthetic fixture; emulator, not physical hardware'
-            or capture.get('token') != token or capture.get('bytes') != value['bytes']
+            or report.get('diagnostic_run_token') != token or capture.get('token') != token or capture.get('bytes') != value['bytes']
             or capture.get('scope') != 'TEST_ONLY_POST_BUDGET_METHOD_STACKS_NO_ARGUMENTS'):
         return False
     try:
@@ -143,8 +143,10 @@ def watch_trace_once(out, token, execute=subprocess.check_output):
     return False
 
 
-def watch_trace(out, stop, execute=subprocess.check_output):
+def watch_trace(out, stop, execute=subprocess.check_output, *, expected_token):
     # Read the host log only until the post-budget ready signal. No adb polling during budgets.
+    if not valid_token(expected_token):
+        raise ValueError('Missing current synthetic run token')
     position=0
     pending=''
     tokens=set()
@@ -158,7 +160,7 @@ def watch_trace(out, stop, execute=subprocess.check_output):
                 if not match:
                     continue
                 value=json.loads(match.group(1))
-                if value.get('scope') == 'SYNTHETIC_ART_TRACE_READY_V1' and valid_token(value.get('token')):
+                if value.get('scope') == 'SYNTHETIC_ART_TRACE_READY_V1' and value.get('token') == expected_token:
                     tokens.add(value['token'])
             for token in tokens:
                 if watch_trace_once(out,token,execute):
@@ -168,7 +170,7 @@ def watch_trace(out, stop, execute=subprocess.check_output):
         stop.wait(0.25)
 
 
-def collect():
+def collect(expected_token=None):
     out = Path('core/data/build/reports/ansm-native-performance')
     out.mkdir(parents=True, exist_ok=True)
     paths = subprocess.check_output(['adb', 'shell', 'find', '/sdcard/Android/data', '-path', '*/files/ansm-performance/large-ten-year.json', '-type', 'f'], text=True).splitlines()
@@ -180,10 +182,12 @@ def collect():
         report = json.loads(data)
     else:
         try:
-            report = log_report((out / 'synthetic-crash-log.txt').read_text())
+            report = log_report((out / 'synthetic-crash-log.txt').read_text(),expected_token)
         except (OSError, ValueError) as error:
             raise SystemExit('Synthetic report unavailable in external files and logcat') from error
         data = (json.dumps(report, indent=2) + '\n').encode()
+    if expected_token is not None and report.get('diagnostic_run_token') != expected_token:
+        raise SystemExit('Synthetic report belongs to another run')
     (out / 'large-ten-year.json').write_bytes(data)
     # Method stacks contain code names/times only, from the synthetic post-budget phase.
     trace = cached_trace(report, out)
@@ -204,4 +208,10 @@ def collect():
 
 
 if __name__ == "__main__":
-    collect()
+    import argparse
+    parser=argparse.ArgumentParser()
+    parser.add_argument('--run-token')
+    args=parser.parse_args()
+    if args.run_token is not None and not valid_token(args.run_token):
+        raise SystemExit('Invalid synthetic run token')
+    collect(args.run_token)

@@ -22,6 +22,8 @@ def native_source(text):
     replace('        val db=Room.inMemoryDatabaseBuilder(context,NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build()', '')
     replace('Robolectric API35 framework SQLite; not SQLCipher/low-memory API26/hardware', 'Native API26 SQLCipher synthetic fixture; emulator, not physical hardware')
     replace('        val file=File("build/reports/ansm-p4-performance/large-ten-year.json").apply{parentFile.mkdirs()}', '''        val file=File(context.getExternalFilesDir(null),"ansm-performance/large-ten-year.json").apply{parentFile.mkdirs()}
+        val traceSessionToken=androidx.test.platform.app.InstrumentationRegistry.getArguments().getString("ansmTraceToken")
+        report.put("diagnostic_run_token",traceSessionToken ?: JSONObject.NULL)
         report.put("stage","BEFORE_SQLCIPHER_LOAD");file.writeText(report.toString(2))
         System.loadLibrary("sqlcipher")
         report.put("stage","BEFORE_DATABASE_OPEN");file.writeText(report.toString(2))
@@ -123,7 +125,7 @@ def native_source(text):
                 try{assertEquals(rawProjection,MeasuredConsumptionStore.auditStagedDataset(raw))}
                 finally{android.os.Debug.stopMethodTracing()}
             }
-            val traceToken=UUID.randomUUID().toString()
+            val traceToken=traceSessionToken ?: UUID.randomUUID().toString()
             components.put("sampling_trace",JSONObject().put("file","audit-sampling.trace").put("bytes",trace.length()).put("token",traceToken)
                 .put("interval_us",1000).put("scope","TEST_ONLY_POST_BUDGET_METHOD_STACKS_NO_ARGUMENTS"))
             components.put("status","COMPLETE")

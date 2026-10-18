@@ -81,7 +81,7 @@
       "blocker": "",
       "owner_decision_required": false,
       "progress": "IN_PROGRESS",
-      "note": "P4_BLOCKED/OFF。efc7aba原生run39104315237写入16.1–16.5s仍>5s，完整失败保留。预算后方法栈生成2.3MB但AGP清理未取回，分析UNAVAILABLE。仅测试工具改为ready/nonce/host ack，主机不在原预算中轮询adb，预算后最多等待30s；Python184/原生编译PASS，实际握手/热点分析NOT_RUN。#65源88a60f1六CI全PASS、26/29各4SQLCipher用例已核验；一般日常修复不自行扩大合并权限。P5/P6未实施，Beta NO-GO。"
+      "note": "P4_BLOCKED/OFF。0b7bf67 run39106094875在测试前因新增日志清理失败，PERFORMANCE_NOT_RUN/数值UNAVAILABLE，已归档官方工件SHA/CRC。移除清日志依赖，以本轮nonce绑定Instrumentation/watcher/collector，拒绝旧ready和旧绿报告；Python188/原生编译PASS，实际修正运输NOT_RUN，无生产/预算改动。最后实际库存写入仍16.1–16.5s>5s。#65源88a六CI/三API各4绿已核验，e694仅文档最终CI待跑且未合并。P5/P6未实施，Beta NO-GO。"
     },
     {
       "requirement_id": "V4.04",

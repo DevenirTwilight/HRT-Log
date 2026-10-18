@@ -1,0 +1,19 @@
+{
+  "status": "LOCAL_PASS_NATIVE_NOT_RUN",
+  "scope": "TEST_ONLY_RUN_BOUND_TRACE_HANDSHAKE",
+  "production_files_changed": false,
+  "python_tests": 188,
+  "generated_native_source_compilation": "PASS",
+  "generator_metadata": {
+    "source_sha256": "9313167178989def0d4d89d785f84cdde764fba21033543cdf85e472c5511242",
+    "native_sha256": "1d7b3709d43d5446c6a5d6bebdd075be803d982b7a94684d5553447ace94b275",
+    "status": "GENERATED_NOT_RUN"
+  },
+  "log_sha256": {
+    "ansm-trace-run-token-python.log": "aba29c628a0e7e359587d3b7f2c4deab71e9b3d4975d998651fa13e2142876e4",
+    "ansm-trace-run-token-compile.log": "e9f4206864fb20a58a3d7594a47ab800078d27e43274b168140b37692390e9c6"
+  },
+  "actual_transport": "NOT_RUN",
+  "acceptance": "P4_BLOCKED",
+  "original_budgets_changed": false
+}

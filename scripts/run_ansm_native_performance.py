@@ -3,20 +3,28 @@
 import json
 import re
 import threading
+import uuid
 from pathlib import Path
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 
-def run(execute=subprocess.run):
-    test = execute([str(ROOT / 'gradlew'), ':core:data:connectedDebugAndroidTest',
-                    '-Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.data.LargeInventoryPerformanceProbe',
-                    '-Pandroid.injected.androidTest.leaveApksInstalledAfterRun=true',
-                    '--no-parallel', '--max-workers=2'], cwd=ROOT)
-    collection = execute(['python3', str(ROOT / 'scripts/collect_ansm_native_performance.py')], cwd=ROOT)
+def run(execute=subprocess.run, trace_token=None):
+    if trace_token is not None and (not isinstance(trace_token,str) or str(uuid.UUID(trace_token))!=trace_token):
+        raise ValueError('Invalid synthetic run token')
+    command=[str(ROOT / 'gradlew'), ':core:data:connectedDebugAndroidTest',
+             '-Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.data.LargeInventoryPerformanceProbe',
+             '-Pandroid.injected.androidTest.leaveApksInstalledAfterRun=true',
+             '--no-parallel','--max-workers=2']
+    collector=['python3', str(ROOT / 'scripts/collect_ansm_native_performance.py')]
+    if trace_token is not None:
+        command.append('-Pandroid.testInstrumentationRunnerArguments.ansmTraceToken='+trace_token)
+        collector.extend(['--run-token',trace_token])
+    test = execute(command,cwd=ROOT)
+    collection = execute(collector,cwd=ROOT)
     folder = ROOT / 'core/data/build/reports/ansm-native-performance'
     folder.mkdir(parents=True, exist_ok=True)
-    (folder / 'execution.json').write_text(json.dumps({'test_exit': test.returncode, 'collection_exit': collection.returncode})+'\n')
+    (folder / 'execution.json').write_text(json.dumps({'test_exit': test.returncode, 'collection_exit': collection.returncode, 'run_token':trace_token})+'\n')
     return test.returncode or collection.returncode
 
 
@@ -31,8 +39,6 @@ def verify_emulator(execute=subprocess.check_output):
 def diagnostics():
     # This wrapper is used only by the fresh synthetic CI emulator, never the application/user device.
     verify_emulator()
-    # Discard stale ready markers only in this verified synthetic emulator, before any timed work.
-    subprocess.run(['adb','logcat','-c'],check=True)
     folder = ROOT / 'core/data/build/reports/ansm-native-performance'
     folder.mkdir(parents=True, exist_ok=True)
     properties = {}
@@ -45,10 +51,11 @@ def diagnostics():
         capture = subprocess.Popen(['adb','logcat','-v','threadtime','-s','AndroidRuntime:E','art:E','System.err:W','libc:F','DEBUG:F','lowmemorykiller:I','ActivityManager:I','ANSM_PERF:I','ANSM_TRACE:I'],stdout=output,stderr=subprocess.STDOUT)
         from collect_ansm_native_performance import watch_trace
         stop=threading.Event()
-        watcher=threading.Thread(target=watch_trace,args=(folder,stop),daemon=True)
+        trace_token=str(uuid.uuid4())
+        watcher=threading.Thread(target=watch_trace,args=(folder,stop),kwargs={'expected_token':trace_token},daemon=True)
         watcher.start()
         try:
-            return run()
+            return run(trace_token=trace_token)
         finally:
             stop.set();watcher.join(timeout=10)
             capture.terminate()

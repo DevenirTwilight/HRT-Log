@@ -130,7 +130,7 @@ class ArtSamplingHandshakeTest(unittest.TestCase):
     def environment(self, calls, data=None, report_token=None):
         data=trace() if data is None else data
         ready={'scope':'SYNTHETIC_ART_TRACE_READY_V1','token':self.token,'bytes':len(data)}
-        report={'environment':'Native API26 SQLCipher synthetic fixture; emulator, not physical hardware',
+        report={'environment':'Native API26 SQLCipher synthetic fixture; emulator, not physical hardware','diagnostic_run_token':self.token,
                 'post_budget_components':{'sampling_trace':{'token':self.token if report_token is None else report_token,'bytes':len(data),
                     'scope':'TEST_ONLY_POST_BUDGET_METHOD_STACKS_NO_ARGUMENTS'}}}
         base=ArtSamplingCollectionTest().fake(calls,data=data)
@@ -185,7 +185,7 @@ class ArtSamplingHandshakeTest(unittest.TestCase):
         with TemporaryDirectory() as directory:
             out=Path(directory);(out/'synthetic-crash-log.txt').write_text('I ANSM_PERF: {"stage":"full_audit"}\n')
             def forbidden(*args,**kwargs):raise AssertionError('adb polled during measured budgets')
-            collector.watch_trace(out,Stop(),forbidden)
+            collector.watch_trace(out,Stop(),forbidden,expected_token=self.token)
             self.assertFalse((out/'audit-sampling.trace').exists())
 
     def test_ready_log_signal_drives_capture_before_test_can_exit(self):
@@ -195,5 +195,46 @@ class ArtSamplingHandshakeTest(unittest.TestCase):
             out=Path(directory);execute,_=self.environment([])
             message={'scope':'SYNTHETIC_ART_TRACE_READY_V1','token':self.token,'bytes':len(trace())}
             (out/'synthetic-crash-log.txt').write_text('10-18 06:00:00.000 1 2 I ANSM_TRACE: '+json.dumps(message)+'\n')
-            collector.watch_trace(out,threading.Event(),execute)
+            collector.watch_trace(out,threading.Event(),execute,expected_token=self.token)
             self.assertEqual(self.token,(out/'trace-collected.ack').read_text())
+
+
+class ArtSamplingRunTokenTest(unittest.TestCase):
+    token='00000000-0000-4000-8000-000000000001'
+    def test_runner_forwards_one_current_token_to_instrumentation_collector_and_execution_record(self):
+        from types import SimpleNamespace
+        runner=module('run_ansm_native_performance')
+        with TemporaryDirectory() as directory:
+            runner.ROOT=Path(directory);calls=[]
+            def execute(command,**kwargs):calls.append(command);return SimpleNamespace(returncode=1 if len(calls)==1 else 0)
+            self.assertEqual(1,runner.run(execute,trace_token=self.token))
+            self.assertIn('-Pandroid.testInstrumentationRunnerArguments.ansmTraceToken='+self.token,calls[0])
+            self.assertEqual(['--run-token',self.token],calls[1][-2:])
+            self.assertEqual(self.token,json.loads((runner.ROOT/'core/data/build/reports/ansm-native-performance/execution.json').read_text())['run_token'])
+
+    def test_invalid_run_token_rejects_before_starting_gradle(self):
+        runner=module('run_ansm_native_performance')
+        def forbidden(*args,**kwargs):raise AssertionError('Invalid token reached Gradle')
+        for token in ('BAD','00000000-0000-4000-8000-00000000000A'):
+            with self.assertRaises(ValueError):runner.run(forbidden,trace_token=token)
+
+    def test_old_ready_signal_cannot_cause_device_polling_during_current_budgets(self):
+        collector=module('collect_ansm_native_performance')
+        class Stop:
+            stopped=False
+            def is_set(self):return self.stopped
+            def wait(self,seconds):self.stopped=True
+        with TemporaryDirectory() as directory:
+            out=Path(directory);old={'scope':'SYNTHETIC_ART_TRACE_READY_V1','token':'00000000-0000-4000-8000-000000000002','bytes':len(trace())}
+            (out/'synthetic-crash-log.txt').write_text('10-18 06:00:00.000 1 2 I ANSM_TRACE: '+json.dumps(old)+'\n')
+            def forbidden(*args,**kwargs):raise AssertionError('Stale marker caused adb polling')
+            collector.watch_trace(out,Stop(),forbidden,expected_token=self.token)
+            self.assertFalse((out/'audit-sampling.trace').exists())
+
+    def test_metadata_recovery_never_uses_another_runs_green_report(self):
+        collector=module('collect_ansm_native_performance')
+        current={'environment':'Native API26 SQLCipher synthetic fixture; emulator, not physical hardware','diagnostic_run_token':self.token,'status':'FAIL'}
+        stale={**current,'diagnostic_run_token':'00000000-0000-4000-8000-000000000002','status':'DIAGNOSTIC_BUDGET_PASS','api26_low_memory_acceptance':'EMULATOR_BUDGET_PASS'}
+        text='\n'.join('10-18 06:00:00.000 1 2 I ANSM_PERF: '+json.dumps(value) for value in (current,stale))
+        self.assertEqual(current,collector.log_report(text,expected_token=self.token))
+        with self.assertRaises(ValueError):collector.log_report(text,expected_token='00000000-0000-4000-8000-000000000003')

@@ -1,3 +1,11 @@
+## P4 握手工具准备失败已定位修正；性能未运行 — 2026-10-18
+
+0b7bf67 run39106094875在测试前失败：我新增的强制adb logcat -c在API26返回failed to clear main log。工件12127979394仅source.json，官方SHA/CRC核验PASS；本轮PERFORMANCE_NOT_RUN，数值UNAVAILABLE，不拿上一轮数字充当本轮结果，也不归因生产库存。证据native-0b7bf67-preparation-failure.json。
+
+移除对清日志权限的依赖，改为主机为每次运行生成独立nonce，并同时传给Instrumentation、watcher和collector。原预算开始前仅记录元数据；旧日志ready和旧绿色报告不匹配当前nonce就不能触发adb轮询/被归到当前运行。仅收到本轮预算后ready才采集并回执；保留固定路径、大小/完整性、原退出码和预算后30s上限。新增nonce转发/非法输入/旧ready不触发设备读取/旧绿报告不冒充当前失败的独立测试。Python188和生成原生源码编译PASS，修正后真实运输NOT_RUN。没有生产代码/预算/fixture改动。
+
+#65源88a60f1六项检查及三API各4 SQLCipher用例、data247/reminder20/app1379（205既有skip）工件均已核验；e69490f仅证据文档的最终CI待跑，未合并一般日常数据修复。P4_BLOCKED/OFF，P5/P6未实施，Beta NO-GO。
+
 ## P4 采样执行但工件被清理；改为预算后握手 — 2026-10-18
 
 efc7aba原生run39104315237仍最终FAIL：本次三写入16143/16304/16463ms>5s，审计14793ms/预测14853ms/恢复审计14887ms。全部原始指标及官方工件12127614905 SHA/CRC已归档native-efc7aba-*，不借此前较快结果宣称稳定通过。

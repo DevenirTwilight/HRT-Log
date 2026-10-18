@@ -1,3 +1,9 @@
+## P4 工具准备失败非性能结果；已修nonce隔离 — 2026-10-18
+
+0b7bf67原生run39106094875在测试前因新增logcat -c失败，PERFORMANCE_NOT_RUN/数值UNAVAILABLE。移除清日志依赖，以主机本轮nonce绑定Instrumentation、watcher及collector，旧ready/旧绿报告不能触发读取或冒充当前结果。Python188/原生源码编译PASS，实际运输待验；不改原预算/生产代码。详细故障/工件SHA/修正见[阶段账本](ansm-integration/WORK-STATE.md)。
+
+#65源88a60f1六CI和26/29/35各4新用例实际SQLCipher成功已核验；e69490f仅证据的最终CI待跑，未擅自合并一般日常数据修复。P4_BLOCKED/OFF，P5/P6未实施，未签名发布。
+
 ## P4 采样运输改为预算后握手；#65源CI全绿 — 2026-10-18
 
 efc7aba原生写入16.1–16.5s仍>5s，P4_BLOCKED；Trace实际生成但AGP清理导致未取回，分析UNAVAILABLE，不编造热点。后续仅测试工具：预算后ready/nonce/host ack，主机仅收到log标记后读固定合成路径，不在原计时阶段轮询adb，最多预算后等30s，保留原失败断言。Python184/原生源码编译PASS，实际握手NOT_RUN。详见[阶段账本](ansm-integration/WORK-STATE.md)。
