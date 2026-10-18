@@ -1,0 +1,52 @@
+{
+ "apk": "hrt-log-build31-full-universal-official-2a6d0642.apk",
+ "package": {
+  "application_id": "net.plainnotes.app",
+  "version_code": 31,
+  "version_name": "0.2.0"
+ },
+ "apk_sha256": "7217a2a74033c79fd272611a8e6e83b6536dadea2b1c34f0099d986e240b6741",
+ "signing_cert_sha256": [
+  "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1"
+ ],
+ "source": {
+  "SOURCE_DIRTY": "false",
+  "SOURCE_ORIGIN": "git",
+  "SOURCE_SHA": "2a6d0642d273e12c8c64f8896bfa07fb5c8246a0"
+ },
+ "size_bytes": 13179764,
+ "signature_v2": true,
+ "signature_v3": true,
+ "zipalign_16kb": true,
+ "abis": [
+  "arm64-v8a",
+  "armeabi-v7a",
+  "x86",
+  "x86_64"
+ ],
+ "debuggable": false,
+ "internet_permission": false,
+ "release_manifest_check": "PASS",
+ "attachment_release_isolation": "PASS",
+ "signed_unsigned_payload_identical": true,
+ "added_signature_entries": [
+  "META-INF/MANIFEST.MF",
+  "META-INF/RELEASE.RSA",
+  "META-INF/RELEASE.SF"
+ ],
+ "unsigned_apk_sha256": "18ab75cfb954c549e0bf0d697eb387fea84fa869de55cb29062beb997d2cf085",
+ "temporary_credentials_removed": true,
+ "source_ci": {
+  "pr_76_head": "d08aa3de",
+  "merge_commit_tree_equals_pr_head_tree": true,
+  "conclusion": "all required checks success on PR #76 head (android, jvm, device-tests, API26/29, science)",
+  "includes": [
+   "#75 UI-05 visual polish",
+   "#76 versionCode 31"
+  ]
+ },
+ "authorization": "REQUIREMENTS §110",
+ "physical_arm_installation": "NOT_RUN",
+ "delivery_channel": "claude-session-private-file",
+ "download_links_in_public_repository": false
+}
