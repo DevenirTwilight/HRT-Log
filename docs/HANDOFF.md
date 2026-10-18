@@ -2,6 +2,7 @@
 
 - 分支 `feature/lab01-batch-entry-20261018`（UI-05 #75 合并后已合入默认分支）。实现、测试、批准记录 `PD-2026-10-18-LAB01-LABSSCREEN` 已提交推送；LAB-01 新测试 103 项本地全过。待办：完整回归、截图（before/after/compare）、报告第 8 节、开 PR 自动合并。
 - 同时进行：build 31（REQUIREMENTS §110，PR #76 versionCode 31，合并后从合并提交构建签名、私密交付、登记账本）。
+- 负责人 2026-10-18：“你推荐吧，lab02做完给我个apk”——LAB-02 待决问题全部按 ADR 推荐答案；LAB-02 阶段 B 合并后出正式签名包（build 32，versionCode 32），写入 REQUIREMENTS §112。
 - 之后：LAB-02 阶段 A（ADR 草稿在会话临时目录，将放到 `docs/design/lab-panel-adr.md`），然后按 §110 第 2 条直接做阶段 B（负责人已批准，按 ADR 推荐答案，负责人可推翻）。
 
 ## UI-05 视觉精修（REQUIREMENTS §109，报告 66）— 2026-10-18
