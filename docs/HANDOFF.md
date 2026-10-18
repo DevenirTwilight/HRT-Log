@@ -1,4 +1,4 @@
-## UI-05 视觉精修开始（REQUIREMENTS §108）— 2026-10-18
+## UI-05 视觉精修（REQUIREMENTS §108，报告 66）— 2026-10-18
 
 - 分支 `feature/ui05-visual-polish-20261018`，基于默认分支 1abfeea。任务书原文已归档 `docs/audits/product-quality-2026-10/sources/ui05/`。
 - 保护矩阵核对：TodayCard/MedicalRecordsScreen 不在矩阵；CalendarScreen、StockScreen、LongitudinalScreen、AppShell、Components 均为 HISTORY_ONLY；不触及 PK_DISPLAY_REVIEW 及更严格类别。
@@ -13,6 +13,7 @@
 - F 完成：“记录已发生的就诊”移到顶栏 +（`MedicalAddAction`，同一动作，tag `medical-add`、内容描述原文案）；下次就诊卡改为日期小方块（月/日/星期，白底圆角 14）+“下次就诊 · n 天后”+ 类型 + 时间·医生·地点，下方内嵌两行“想问的问题 · n 条”“就诊资料包”，都打开同一复诊详情（资料包状态本页读不到，不显示、不新增查询）；已确认就诊改为每年一个白色内嵌列表（40dp 图标、类型、日期·医生或机构、备注/问题数、右箭头）。“去过了吗？”卡只统一圆角。`Ui05MedicalHomeTest` 3/3（红测 3/3 失败）。
   - 断言迁移：MedicalHomeTest 点击 `medical-next-open` 改为点击 `medical-next-questions`（原按钮被两行取代，“打开最近一次就诊”不变）；MedicalRecordsUiContract 对已确认就诊 701 的 `performScrollToKey("visit:701")` 改为按行标签滚动（已确认就诊成为年度内嵌列表的行），其后可见、Button 角色、可点击、打开该就诊的断言不变。
 - G 完成（只在本轮改过的文件中）：分区标题统一 15sp 粗体（`sectionTitleStyle`：今天卡分区、医疗档案分区）；卡片 24/内嵌列表 16/胶囊 10 使用 UI-02A `Corners`；时间和余量等数字用等宽数字（tnum）。`Ui05ContrastTest`：新增胶囊与图标底色在明暗 × 标准/中/高对比度下文字 ≥4.5:1、图标 ≥3:1 全部通过。
+- 收尾：报告 `audits/product-quality-2026-10/66-ui05-visual-polish.md`；截图 `ui-audit/2026-10-18-ui05/`（before/after 各 192、compare 12、hires 6）；真机清单第 10 节；STATUS 已更新。本地完整回归 0 失败。下一步：开 PR 按 §106 自动合并，合并后复验主线，再按负责人要求出正式签名包 build 31。
 - 新任务书已归档排队：LAB-01（`sources/lab01/`，UI-05 合并后开始）、LAB-02（`sources/lab02/`，LAB-01 合并且主线全绿后只做阶段 A；阶段 B 须负责人按任务书第 4 节原话批准）。
 
 ## build30 已交付（REQUIREMENTS §107）— 2026-10-18
