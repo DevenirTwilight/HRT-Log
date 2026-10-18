@@ -1,3 +1,12 @@
+## Beta只读准入清单同步main417与独立build30 — 2026-10-18
+
+普通合入#66–#70主线417e383，保留双方交接。仅更新readiness文档，区分公开build29只读实测、主线账本声明的私密build30（source dfb，不含后来#70或P4）与未合并P4候选0fd；未重新下载/验签build30。旧49236a2文档六CI全PASS，本次新HEAD须独立CI，不能借旧绿灯。P4源3ee普通六CI及三API引用23各PASS，但原生三写入11–12s>5s仍FAIL；排序索引本地417与大库SQL14189/投影一致PASS仅诊断，原生0fd待验。主线旧1ab定时提醒设备失败已记录，新417自己的CI待验。P5/P6、ARM/国产ROM/升级/真实恢复NOT_RUN或未实施，NO-GO/DRAFT不变。本工作没有签名、发布、APK交付或自动打开P4入口，源码ledger的独立build30交付事实保留。
+
+## 中国 Beta 同步主线修复证据；仍 NO-GO — 2026-10-18
+
+负责人单独明确批准#65普通受保护合并，主线8ebb719已六项必需CI全PASS；合并后26/29/35各4新增SQLCipher用例实际0fail/0skip，官方工件SHA/CRC已核验，证据归档release-readiness/main-8ebb719-*。本分支通过普通基线merge同步主线并保留其交接，不复制未合并P4代码。新文档HEAD需独立CI，不能用旧ab93f0b或主线绿灯冒充。
+
+Beta仍P4_BLOCKED/NO-GO：P4最新完整原生4dc09b8写入15.6–16.3s>5s，未取回ART trace；新测试工具ceb504d预检仅本地Python197/原生编译PASS，实际原生待验。P5/P6未实施，国产ROM/覆盖升级/真机恢复NOT_RUN。现有公开build29仍是76627bf，不含后来#65修复；本轮无重签、重发、版本/tag变更或APK交付。readiness文档已区分PASS_MAIN_ONLY与NOT_IN_BUILD29。
 ## build30 已交付（REQUIREMENTS §107）— 2026-10-18
 
 - 0.2.0 / versionCode 30 正式签名包，构建自 `dfb21c79`（#68 合并，含 #66 会话 P0-B 与 #67 提醒 P0-A），APK SHA-256 `f0e209f1a08c1bb6a2c65c907ecb20d365ab6c52d70127abe5e312c60c6703c8`，证书 989ba045…59379b1。

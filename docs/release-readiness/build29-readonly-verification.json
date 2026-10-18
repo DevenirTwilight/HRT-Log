@@ -1,0 +1,71 @@
+{
+  "scope": "READ_ONLY_EXISTING_PUBLIC_RELEASE_NOT_A_NEW_BUILD_OR_DELIVERY",
+  "verified_at": "2026-10-17T20:35:13.911521+00:00",
+  "release_tag": "v0.2.0",
+  "tag_commit": "76627bfe215987122666b38ea7a42ee08731cdde",
+  "release_target_commitish_metadata": "c52c8518c40727ff4f5b0316670e109551886f93",
+  "target_commitish_note": "Historical GitHub release field differs; actual tag and embedded clean source SHA match. No release metadata was modified.",
+  "provenance": {
+    "apk": "build29.apk",
+    "package": {
+      "application_id": "net.plainnotes.app",
+      "version_code": 29,
+      "version_name": "0.2.0"
+    },
+    "apk_sha256": "0d950bbb4bb281089318e080e3272400498b48cd094f4ffb4675fbabe6f93201",
+    "signing_cert_sha256": [
+      "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1"
+    ],
+    "source": {
+      "SOURCE_COMMIT_TIME_UTC": "2026-10-17T17:33:41Z",
+      "SOURCE_DIRTY": "false",
+      "SOURCE_ORIGIN": "git",
+      "SOURCE_SHA": "76627bfe215987122666b38ea7a42ee08731cdde"
+    }
+  },
+  "checks": {
+    "apk_sha256": "PASS",
+    "certificate": "PASS",
+    "embedded_source_sha": "PASS",
+    "embedded_clean_git_source": "PASS",
+    "signatures_v2_v3": "PASS",
+    "no_internet_permission": "PASS",
+    "non_debuggable": "PASS",
+    "zip_crc": "PASS",
+    "apk_zipalign_16k": "PASS"
+  },
+  "min_sdk": 26,
+  "target_sdk": 37,
+  "abis": [
+    "arm64-v8a",
+    "armeabi-v7a",
+    "x86",
+    "x86_64"
+  ],
+  "permissions": [
+    "android.permission.RECEIVE_BOOT_COMPLETED",
+    "android.permission.SCHEDULE_EXACT_ALARM",
+    "android.permission.POST_NOTIFICATIONS",
+    "android.permission.USE_BIOMETRIC",
+    "android.permission.USE_FINGERPRINT",
+    "android.permission.WAKE_LOCK",
+    "android.permission.ACCESS_NETWORK_STATE",
+    "android.permission.FOREGROUND_SERVICE",
+    "net.plainnotes.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+  ],
+  "access_network_state_present": true,
+  "physical_install_upgrade": "NOT_RUN",
+  "rom_reminder_verification": "NOT_RUN",
+  "candidate_p4_not_in_this_apk": true,
+  "private_signing_material_accessed": false,
+  "new_apk_built_or_distributed": false,
+  "manifest_dump_sha256": "6a6a93b7ea2f162848c14fbdd58b9b9c1cc12ee503c28e6d0e9b541e1356202f",
+  "signer_output_sha256": "f54e860c1abc52779cd40bdee82140dee0a036e886574dbc6065e34340279b63",
+  "elf_load_segment_alignment": {
+    "status": "PASS_STATIC_INSPECTION",
+    "libraries": 8,
+    "all_pt_load_p_align": 16384,
+    "evidence": "build29-elf-alignment.json",
+    "device_runtime": "NOT_RUN"
+  }
+}
