@@ -1246,4 +1246,33 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="test_out_permission">bloquée : autorisation de notification non accordée</string>
 <string name="test_out_app">bloquée : les notifications de l’app sont désactivées</string>
 <string name="test_out_channel">bloquée : la catégorie de notification des rappels est désactivée</string>
+
+<!-- Medical and medicine center UI skeleton: no official assets or medical originals activated. -->
+<string name="ui_skeleton_ref_title">Références des médicaments</string>
+<string name="ui_skeleton_coming_soon">Pas encore disponible</string>
+<string name="ui_skeleton_unavailable">Cette fonction est indisponible. Aucune donnée ne sera enregistrée ni modifiée.</string>
+<string name="ui_skeleton_ref_intro">Consultez vos références de médicaments enregistrées. Le catalogue officiel français est désactivé pour le moment.</string>
+<string name="ui_skeleton_ready">Disponible maintenant</string>
+<string name="ui_skeleton_manage_existing">Ouvrir les plans de traitement et leurs réglages existants</string>
+<string name="ui_skeleton_existing_stock">Ouvrir le stock actuel ; le nouveau décompte précis des contenants est désactivé</string>
+<string name="ui_skeleton_no_medications">Aucun médicament enregistré. Ajoutez-en un dans les plans de traitement.</string>
+<string name="ui_skeleton_saved_medications">Mes médicaments et références</string>
+<string name="ui_skeleton_user_reference">Ouvrir les références saisies par vous ; elles ne sont pas vérifiées officiellement</string>
+<string name="ui_skeleton_future">Fonctions de référence prévues</string>
+<string name="ui_skeleton_official_catalogue">Catalogue officiel français</string>
+<string name="ui_skeleton_official_desc">Les droits de diffusion et la vérification des produits restent en attente. Aucun catalogue officiel ne sera ouvert ni importé.</string>
+<string name="ui_skeleton_rcp_notice">Documents du médicament (RCP / Notice)</string>
+<string name="ui_skeleton_rcp_desc">La fonction documentaire est toujours en cours de vérification. Aucun texte médical non validé ni conseil thérapeutique ne figure ici.</string>
+<string name="ui_skeleton_safety">Informations de sécurité</string>
+<string name="ui_skeleton_safety_desc">La revue des sources et des contenus est en attente. Cette page ne donne ni évaluation individuelle des risques ni conseil de dosage.</string>
+<string name="ui_skeleton_supply">Ruptures, rappels et avis réglementaires</string>
+<string name="ui_skeleton_supply_desc">Les mises à jour vérifiées ne sont pas encore connectées. Un statut inconnu ne signifie pas absence de signalement.</string>
+<string name="ui_skeleton_visit_pack">Consultations et préparation</string>
+<string name="ui_skeleton_med_future">Fonctions médicales prévues</string>
+<string name="ui_skeleton_med_documents">Bibliothèque chiffrée de documents médicaux</string>
+<string name="ui_skeleton_med_documents_desc">Le stockage chiffré, la prévisualisation et la restauration des originaux ne sont pas validés. Aucun sélecteur de fichiers ne sera ouvert, aucun fichier ni chemin enregistré.</string>
+<string name="ui_skeleton_med_practitioners">Répertoire des médecins et établissements</string>
+<string name="ui_skeleton_med_practitioners_desc">Le répertoire dédié est indisponible. Les médecins et lieux existants restent consultables dans les visites.</string>
+<string name="ui_skeleton_med_links">Liens entre documents et dossiers</string>
+<string name="ui_skeleton_med_links_desc">Les liens entre fichiers originaux, analyses et visites sont désactivés. Les dossiers existants ne sont ni associés ni modifiés automatiquement.</string>
 </resources>
