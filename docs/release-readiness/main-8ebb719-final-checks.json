@@ -1,0 +1,49 @@
+{
+  "source_head": "8ebb7198fe1dbd1d0c2a5f96e24cdecf7efac54c",
+  "checks": [
+    {
+      "name": "device-tests",
+      "status": "completed",
+      "conclusion": "success",
+      "job": 117617160372,
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39107748016/job/117617160372"
+    },
+    {
+      "name": "jvm",
+      "status": "completed",
+      "conclusion": "success",
+      "job": 117617160399,
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39107748016/job/117617160399"
+    },
+    {
+      "name": "attachment-poc-compatibility (26)",
+      "status": "completed",
+      "conclusion": "success",
+      "job": 117617160420,
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39107748016/job/117617160420"
+    },
+    {
+      "name": "attachment-poc-compatibility (29)",
+      "status": "completed",
+      "conclusion": "success",
+      "job": 117617160422,
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39107748016/job/117617160422"
+    },
+    {
+      "name": "android",
+      "status": "completed",
+      "conclusion": "success",
+      "job": 117617160436,
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39107748016/job/117617160436"
+    },
+    {
+      "name": "science-change-gate",
+      "status": "completed",
+      "conclusion": "success",
+      "job": 117617159883,
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39107748012/job/117617159883"
+    }
+  ],
+  "new_daily_sqlcipher_cases": "API26/29/35 each4 PASS,0skip; artifact digests/CRC verified",
+  "historical_back_failure": "New main API35 Calendar2 and Privacy1 pass; old source6e root cause remains UNVERIFIED."
+}

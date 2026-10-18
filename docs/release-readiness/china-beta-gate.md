@@ -6,7 +6,7 @@
 
 | 项目 | 已有发行记录（不是新候选） |
 |---|---|
-| 仓库审计基线 | `claude/new-session-1959qb` / `d13048b18ad15eb4e7aba70f63c3c5d94a705660`，PR #63 合并后 |
+| 仓库审计基线 | `claude/new-session-1959qb` / `8ebb7198fe1dbd1d0c2a5f96e24cdecf7efac54c`，PR #65 合并后 |
 | 已发布版本 | `v0.2.0` / versionCode **29** / full Universal |
 | 发行源码 / tag | `76627bfe215987122666b38ea7a42ee08731cdde` |
 | 包名 | `net.plainnotes.app` |
@@ -20,15 +20,17 @@
 
 2026-10-17 本轮直接下载现有公开 APK 并只读核对：上述文件哈希/证书、嵌入 clean git 源码 SHA 与实际 tag 完全一致；v2/v3 签名、包名/版本、非 debug、minSdk26/target37、四 ABI、ZIP CRC、APK ZIP 16KiB 对齐及 No INTERNET 均 PASS。实际权限还包含既有 `ACCESS_NETWORK_STATE`，完整列表保存在 JSON；没有修改权限。补充只读 GNU readelf 检查：四 ABI 共8个原生库的全部 PT_LOAD p_align 均为16384，见 `build29-elf-alignment.json`；这是静态文件检查，16KiB页设备运行、真实安装和覆盖升级仍NOT_RUN。GitHub Release 的历史 `targetCommitish=c52c8518…` 与实际 tag 不同，按实际 tag 与二进制来源核对，未改 Release 元数据。
 
+已发布build29仍对应76627bfe，主线后来合并的#65修复没有自动进入该APK；没有重新签名或替换公开资产。
+
 发布已完成，本任务不重签、不上传 APK、不移动 tag、不发布社交公告。未来候选构建只在负责人另批后进行，沿用证书、包名和非降级版本，不要求卸载/清数据。
 
 ## 工程与产品准入
 
 | 门 | 目前证据 / 下一步 | 状态 |
 |---|---|---|
-| 主线完整六项 CI | 原失败为测试初始化时外部 SDK 依赖获取；独立 #63 已合并为 d13048b，最终源80c31ce全检查通过；合并后 Android39065037526 五项及 Science39065037594 全部成功 | PASS |
-| P4 原生低内存 | #57生产候选3cea864 run39102897438：实际RAM520962048B、最大堆201326592B；审计12576ms/预测12645ms/恢复审计10083ms本次<15s，真实写入12296–13373ms>5s仍FAIL。此前多预算失败完整保留，不以单次较快运行认定稳定性修复。最新efc7aba仅合成ART采样工具，原生待验 | FAIL |
-| 日常快照恢复 | 文档分支b05de9b的run39069136997真实失败：TrashDataTest的UNIQUE(kind,ref)，不是依赖下载。独立#65固定时间4红→本地data247/Python156/原生编译绿；API26/29各4实际SQLCipher用例PASS且工件SHA/CRC核验，最终API35/六CI与审阅待完成。未合并到主线，不把另一绿色作业当修复 | BLOCKED |
+| 主线完整六项 CI | #63 修复已保留；#65 获单独批准后普通合并为8ebb719。合并后 Android39107748016 五项与 Science39107748012 必需门全部PASS，见main-8ebb719-final-checks.json | PASS |
+| P4 原生低内存 | #57候选4dc09b8 / run39108085887：实际RAM520962048B、最大堆201326592B；审计13327ms/预测13809ms/恢复审计14861ms本次<15s，写入15604/15957/16339ms仍>5s。7590cc7此前完整复查写入10201–10459ms仍FAIL，另一次恢复中退出根因UNVERIFIED。全部原始失败保留；采样未取回，不宣称方法热点已定位。新工具候选ceb504d的内部路径/大库前二进制ACK预检Python197/原生编译PASS，实际新原生待验 | FAIL |
+| 日常快照恢复 | 原UNIQUE(kind,ref)真实失败已由独立#65固定时间4红→绿修复；负责人单独批准普通合入主线8ebb719。源最终e69490f六CI及合并后主线六CI均PASS，合并后API26/29/35各4新SQLCipher用例0fail/0skip，官方工件SHA/CRC核验。现有公开build29源码76627bf不含该修复；未来获批候选须包含已修复主线 | PASS_MAIN_ONLY / NOT_IN_BUILD29 |
 | P4 正式库存完整安全门 | #57 DRAFT，正式入口 OFF；不得用 JVM 诊断代替 API26 原生预算验收 | BLOCKED |
 | P5 最小业务接线 | 复用已有真实 Compose 控件，统一不可变库存 DTO；不能拿 PR60 概念图当实现 | NOT_IMPLEMENTED |
 | P6 正常 UI 端到端 | UI→Repository→SQLCipher→重启→备份→新设备/非空库恢复→共享预测与提醒；合成数据 | NOT_IMPLEMENTED |

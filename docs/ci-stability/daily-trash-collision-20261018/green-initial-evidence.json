@@ -1,0 +1,14 @@
+{
+  "scope": "INITIAL_GREEN_IN_MEMORY",
+  "status": "PASS",
+  "counts": {
+    "tests": 247,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "reports_sha256": "63604924587385a2b813ff8f7d67fd3c3adf3a84d6ae5046932722f14415b019",
+  "log_sha256": "7f8ed99a8cb4415b5afb575185fe3f721d7db7577b2daf4a8740564565ff8000",
+  "native_source_compilation": "PASS",
+  "native_execution": "NOT_RUN"
+}
