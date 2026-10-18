@@ -1,3 +1,9 @@
+## 日常回收站同毫秒冲突独立修复候选 — 2026-10-18
+
+在#64的CI run39069136997发现真实TrashDataTest UNIQUE(kind,ref)失败，非SDK下载。固定时间4新测试在原d13048b代码全部FAIL；修复只为冲突的新SCORE/NOTE/SYMPTOM快照分配独立ref，保留原内容/引用/删除时间，其他kind重复仍拒绝，事务失败完整回滚。不改Schema、PNBAK1、NotesRepository、库存、PK或UI。
+
+初始及最终共享文件库夹具全data247零fail/skip，Python156，SQLCipher原生源码编译PASS；新增4用例将覆盖26/29/35，当前执行NOT_RUN。既有26/29名单仅追加新类，保留旧14类/六检查。PR57也改同一名单，未来受审合并后须保留daily+两个measured类并复验，不自动合并本候选。证据、备份兼容及集成计划见[独立报告](ci-stability/daily-trash-collision-20261018/README.md)。无签名/发布/APK交付。
+
 ## CI：Robolectric 离线依赖（PR #63）— 2026-10-17
 
 - 主线 34f0e01 的 android 任务中 core:reminder 五个测试类因 Robolectric 运行期下载 android-all 失败（MavenArtifactFetcher/FileNotFoundException）；同代码 64db9b4 全绿，差异仅文档，判定为外部下载失败。

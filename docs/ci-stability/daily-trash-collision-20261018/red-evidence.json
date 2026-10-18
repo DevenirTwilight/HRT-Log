@@ -1,0 +1,44 @@
+{
+  "scope": "DETERMINISTIC_PRE_FIX_REPRODUCTION",
+  "base": "d13048b18ad15eb4e7aba70f63c3c5d94a705660",
+  "tests": 4,
+  "failures": 4,
+  "errors": 0,
+  "skipped": 0,
+  "failure_summary": [
+    {
+      "test": "failedReinsertRollsBackSwapIncludingNewTrashEntry",
+      "type": "java.lang.AssertionError",
+      "message": "java.lang.AssertionError: Must reach injected reinsert failure, not fail earlier on identity"
+    },
+    {
+      "test": "sameMillisecondNoteSwapPreservesBothTexts",
+      "type": "android.database.sqlite.SQLiteConstraintException",
+      "message": "android.database.sqlite.SQLiteConstraintException: UNIQUE constraint failed: trash_item.kind, trash_item.ref (code 2067 SQLITE_CONSTRAINT_UNIQUE)"
+    },
+    {
+      "test": "collisionChangesOnlyNewDailySnapshotIdentityAndKeepsOtherKindsUnique",
+      "type": "android.database.sqlite.SQLiteConstraintException",
+      "message": "android.database.sqlite.SQLiteConstraintException: UNIQUE constraint failed: trash_item.kind, trash_item.ref (code 2067 SQLITE_CONSTRAINT_UNIQUE)"
+    },
+    {
+      "test": "sameMillisecondScoreSwapPreservesBothValuesThroughBackup",
+      "type": "android.database.sqlite.SQLiteConstraintException",
+      "message": "android.database.sqlite.SQLiteConstraintException: UNIQUE constraint failed: trash_item.kind, trash_item.ref (code 2067 SQLITE_CONSTRAINT_UNIQUE)"
+    }
+  ],
+  "xml_sha256": "3efefed1a01ad3f4a15ad76001c132c82cf702c910a1d763f3074e583666e6bf",
+  "log_sha256": "7bda36495d2d0e5145b048c98f4802f8a033e59ff15e711ebacee474ed902809",
+  "test_sha256": "ae9c10886baf243b18c3e1882cd8937972f7d7165f9c6038ea58d7bf442f827a",
+  "original_source_sha256": "1d39533fa4966c3d34c4e3a0485af89dcd85b96a84d50e334b4ba4aa0e8b9db8",
+  "original_ci": {
+    "run": 39069136997,
+    "head": "b05de9beabc100ba76a88469fb8c44526818490c",
+    "job": 117503045426,
+    "artifact_id": 12114701507,
+    "artifact_sha256": "c015990648d9ab480be5a97a5b71e622e251a1d1bb155328cd35ab556e6e88b2",
+    "zip_crc": "PASS",
+    "test": "TrashDataTest.aDailyValueEnteredAgainIsSwappedIntoTheBinOnRestore",
+    "error": "SQLiteConstraintException UNIQUE trash_item.kind, trash_item.ref"
+  }
+}

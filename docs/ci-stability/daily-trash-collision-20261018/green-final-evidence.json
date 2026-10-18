@@ -1,0 +1,45 @@
+{
+  "status": "LOCAL_PASS_NATIVE_NOT_RUN",
+  "base": "d13048b18ad15eb4e7aba70f63c3c5d94a705660",
+  "counts": {
+    "tests": 247,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "storage": "file-backed SQLite on Robolectric SDK28; same4 shared methods compiled for SQLCipher API26/29/35",
+  "reports_sha256": "2e14ec268a57eafacce4a5cd15a40e4b84cc7c0bc5b516fd68f3656610aece6b",
+  "logs_sha256": {
+    "ansm-daily-trash-final.log": "69c5a83c382a6a870aa00067431c1019e71d5e1787a1c4f9d2af4fd3eb34ca4d",
+    "ansm-daily-trash-python.log": "f61ff1d55b326f2f5519e90f69575732959932337f7ee5dd0a16e299ddb8dd1c"
+  },
+  "python_tests": 156,
+  "native_test_compilation": "PASS",
+  "native_test_execution": {
+    "26": "NOT_RUN",
+    "29": "NOT_RUN",
+    "35": "NOT_RUN"
+  },
+  "workflow_change": {
+    "class_list_before": 14,
+    "class_list_after": 15,
+    "classes_removed": [],
+    "only_class_appended": "DailyTrashCollisionAndroidTest",
+    "all_other_workflow_bytes_unchanged": true
+  },
+  "protected_files_unchanged": [
+    "core/data/schemas",
+    "core/data/src/main/java/net/plainnotes/app/data/NotesDatabase.kt",
+    "core/data/src/main/java/net/plainnotes/app/data/DataTransfer.kt",
+    "core/data/src/main/java/net/plainnotes/app/data/BackupValidation.kt",
+    "core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt",
+    "pk-engine",
+    "app",
+    "gradle",
+    "build.gradle.kts"
+  ],
+  "source_sha256": {
+    "core/data/src/main/java/net/plainnotes/app/data/Trash.kt": "88e732686879dac7fda6039db4a72b34a44f21a454ead8a89f4a702d4a5fcd40",
+    "core/data/src/historyTest/java/net/plainnotes/app/data/DailyTrashCollisionContract.kt": "c65106d3d4e7de75e66d92e3e0fe46e732968c81c11c9a0ac36f0452df52d97c"
+  }
+}
