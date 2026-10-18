@@ -1872,3 +1872,17 @@ GitHub标记BEHIND，需合入已合并#83的746bb2e9；该主线仅将versionCo
 ## 中心 #82：保留环境失败并同步已审交付记录 — 2026-10-18
 
 #84已合并14da0bdd，仅交付记录/HANDOFF/账本；严格BEHIND要求再次正常同步。本分支无APK/版本操作，UI与核心实现不变。原源c981276e的push/API29出现18项既有备份OOM，ART堆增长上限16777216字节；同源PR/API29通过，报告55§10有相同环境先例。原始失败见centers/ci-environment-failure.json及PR82，低内存真实设备风险未解决。定向重试因workflow运行中被GitHub拒绝，未实际启动；同步主线后的新最终HEAD需完整CI，不把新源通过伪称旧源重试通过。不改KDF、堆、断言、Schema或权限，仍不启用P4/附件/官方资料分发。最终HEAD/六CI/合并及主线收据以PR82为准。
+
+## 中心状态恢复收尾 — 2026-10-18
+
+基线491a910f（#82已合并，源与主线六项必需CI均PASS，完整收据见PR82）。独立分支fix/centers-state-restoration-20261018：新状态恢复测试先在未改生产源码上真实失败，恢复后drug-center-window丢失，见centers/state-restoration-red.json。仅将MedicationsScreen中心打开状态改为rememberSaveable；追加两个原生测试覆盖12占位弹窗实际Back、无文件Intent、真实参考窗口返回、旋转和离开后锁定。待本地GREEN及最新HEAD六CI，未声称设备测试成功；不改布局/文案/Room/库存/PK/附件权限或发布。
+
+## 中心状态恢复 #85 本地验收 PASS — 2026-10-18
+
+源码1e66587e：23项本地测试PASS、零失败错误跳过（状态恢复1、真实药品中心导航1、时期稳定性5、AppShell返回/伪装16），原生Kotlin编译PASS；见centers/state-restoration-green.json及state-restoration.md。未动现有断言，仅追加新测试。原生API26/29/35执行与最终六CI仍待验，真机/TalkBack NOT_RUN，未签名交付。最终HEAD/受保护合并/主线收据以PR85为准，避免只写CI元数据引发循环重跑。
+
+## 中心 #85 原生测试监控器修正 — 2026-10-18
+
+最终源d89e8b3d的push/API26出现新增测试失败：IntentFilter监控器误拦截action为空的MainActivity启动，发生在中心操作前，非环境重试。保留失败收据centers/state-restoration-native-first-failure.json。改用只匹配三种明确文件action的测试监控器，追加真实MIME文件Intent阳性对照，既有中心路径仍要求零文件启动；不放宽断言、不改生产源码。23项本地GREEN仍适用，修正后原生编译/新HEAD六CI待验，旧源未请求重试。
+
+监控器修正后的原生Kotlin编译PASS；将以新HEAD运行完整六CI和原生三项新增测试（监控器阳性对照、12占位实际Back与零文件启动、旋转/离开锁定）。23项本地测试对应的生产源码未变，无需重复渲染或无关本地回归。最新HEAD和最终CI/合并收据仍以PR85为准。
