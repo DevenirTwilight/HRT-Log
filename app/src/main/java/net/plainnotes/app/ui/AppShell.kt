@@ -41,6 +41,7 @@ enum class Destination(val title: Int, val icon: ImageVector, val ready: Boolean
     HISTORY(R.string.nav_history, Icons.Outlined.History, true),
     STOCK(R.string.stock, Icons.Outlined.Inventory2, true),
     MEDICATIONS(R.string.medications, Icons.Outlined.Medication, true),
+    REFERENCE(R.string.ui_skeleton_ref_title, Icons.Outlined.MenuBook, true),
     WELLBEING(R.string.wellbeing, Icons.Outlined.FavoriteBorder, true),
     CONCENTRATION(R.string.concentration, Icons.AutoMirrored.Outlined.ShowChart, true),
     LABS(R.string.labs, Icons.Outlined.Science, true),
@@ -133,7 +134,7 @@ class UiPrefs(context: Context) {
 
     LaunchedEffect(notificationSlot) { notificationSlot?.let { s -> completeEntry = state.slots.firstOrNull { it.slot.key == s.key } ?: TimelineEntry(s, net.plainnotes.app.domain.SlotState.PENDING); model.notificationSlot.value = null } }
     LaunchedEffect(Unit) { model.loadExtra() }
-    LaunchedEffect(destination) { if (destination in listOf(Destination.CALENDAR, Destination.HISTORY, Destination.STOCK, Destination.WELLBEING, Destination.TIMELINE, Destination.VISITS, Destination.MEDICAL, Destination.CONCENTRATION)) model.loadExtra() }
+    LaunchedEffect(destination) { if (destination in listOf(Destination.CALENDAR, Destination.HISTORY, Destination.STOCK, Destination.WELLBEING, Destination.TIMELINE, Destination.VISITS, Destination.MEDICAL, Destination.REFERENCE, Destination.CONCENTRATION)) model.loadExtra() }
     LaunchedEffect(destination, concSettings.calibrate, concSettings.mode) {
         if (destination == Destination.CONCENTRATION || destination == Destination.LABS) {
             model.concentrationSettings(concSettings.calibrate, concSettings.mode); model.loadConcentration()
@@ -230,10 +231,13 @@ class UiPrefs(context: Context) {
                     timelineActions=TimelineActions(model::editTimeline,model::deletePeriod))
                 Destination.MEDICAL -> MedicalRecordsScreen(state.appointments,{visitId=it.id;medicalOrigin=true;destination=Destination.VISITS},
                     {model.clearMedicalVisitSave();medicalDialogs.edit=null;medicalDialogs.editing=true},{destination=Destination.LABS},{destination=Destination.TIMELINE},{destination=Destination.SETTINGS},pad,
-                    onConfirm={model.clearMedicalVisitSave();model.saveMedicalVisit(it,it)},questionCounts=extra.visitQuestions.groupingBy{it.appointment_id}.eachCount())
+                    onConfirm={model.clearMedicalVisitSave();model.saveMedicalVisit(it,it)},questionCounts=extra.visitQuestions.groupingBy{it.appointment_id}.eachCount(),
+                    onVisits={visitId=null;medicalOrigin=true;destination=Destination.VISITS})
                 Destination.VISITS -> VisitsScreen(state, extra, model, visitId, { visitId = it;if(it==null && medicalOrigin){medicalOrigin=false;destination=Destination.MEDICAL} }, { appointment = true }, pad,
                     medical=medicalOrigin,onMedicalEdit={model.clearMedicalVisitSave();medicalDialogs.edit=it;medicalDialogs.editing=true},onLab={medicalDialogs.lab=it.id})
                 Destination.HISTORY -> { val historySnapshot=extra;HistoryScreen(state, historySnapshot.records, { historyDialogs.referenceEpoch=historySnapshot.referenceEpoch;historyDialogs.editRecord = it }, { historyDialogs.deleteRecord = it }, pad, onAdd = { manual = true }, onBatch = { historyDialogs.batch = true }, onConfirmMissed={model.confirmMissed(it.id)},selectedRecordIds=importedRecordIds,labels=historyLabels,onExtra={r,on->model.setExtra(r.id,on)},onClearSelection={importedRecordIds=null},onUndoSkip={model.undoSkipped(it)}) }
+                Destination.REFERENCE -> ReferenceCenterScreen(state.medications, { destination = Destination.MEDICATIONS },
+                    { med -> openReference(med) }, { destination = Destination.STOCK }, pad)
                 Destination.STOCK -> StockScreen(state, extra.containers, extra.records, { m -> model.replaceContainer(m.id, m.container_capacity) }, { stockDialogs.checkStock = it }, { stockDialogs.addStock = it }, pad,
                     onManage = { stockDialogs.managePackages = it }, forecasts = extra.stockForecasts)
                 Destination.WELLBEING -> WellbeingHub(state,extra,model,region,{wellbeingDialogs.manageItems=true},pad)
@@ -286,7 +290,7 @@ internal sealed interface DrawerSection {
 internal val DRAWER_GROUPS: List<DrawerSection> = listOf(
     DrawerSection.Top(listOf(Destination.CALENDAR, Destination.TIMELINE)),
     DrawerSection.Group("journal", R.string.drawer_group_journal, listOf(Destination.HISTORY, Destination.WELLBEING)),
-    DrawerSection.Group("medication", R.string.drawer_group_medication, listOf(Destination.MEDICATIONS, Destination.STOCK, Destination.CONCENTRATION)),
+    DrawerSection.Group("medication", R.string.drawer_group_medication, listOf(Destination.MEDICATIONS, Destination.REFERENCE, Destination.STOCK, Destination.CONCENTRATION)),
     DrawerSection.Group("records", R.string.drawer_group_records, listOf(Destination.MEDICAL, Destination.VISITS, Destination.LABS)),
     DrawerSection.Divider(listOf(Destination.SETTINGS, Destination.ABOUT)),
 )
