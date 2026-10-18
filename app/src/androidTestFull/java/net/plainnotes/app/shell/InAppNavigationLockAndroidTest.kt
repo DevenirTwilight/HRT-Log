@@ -1,7 +1,9 @@
 package net.plainnotes.app.shell
 
 import android.content.Intent
-import android.content.IntentFilter
+import android.app.Activity
+import android.app.Instrumentation
+import java.util.concurrent.atomic.AtomicInteger
 import android.view.KeyEvent
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.*
@@ -110,11 +112,47 @@ class InAppNavigationLockAndroidTest {
         ui.waitForIdle()
     }
 
+    /** Inspect the raw action: IntentFilter monitors also match actionless explicit launches and miss MIME types. */
+    private class FileActivityMonitor : Instrumentation.ActivityMonitor() {
+        val blocked = AtomicInteger(0)
+        override fun onStartActivity(intent: Intent): Instrumentation.ActivityResult? {
+            if (intent.action !in actions) return null
+            blocked.incrementAndGet()
+            return Instrumentation.ActivityResult(Activity.RESULT_CANCELED, null)
+        }
+        companion object {
+            val actions = listOf(Intent.ACTION_OPEN_DOCUMENT, Intent.ACTION_GET_CONTENT, Intent.ACTION_CREATE_DOCUMENT)
+        }
+    }
+
+    /** Positive control: real MIME-bearing file intents are intercepted, while explicit MainActivity still launches. */
+    @Test fun fileIntentMonitorBlocksDocumentActionsWithoutBlockingTheApp() {
+        val instrumentation = InstrumentationRegistry.getInstrumentation()
+        val monitor = FileActivityMonitor()
+        instrumentation.addMonitor(monitor)
+        try {
+            launch(); unlock()
+            FileActivityMonitor.actions.forEachIndexed { index, action ->
+                scenario!!.onActivity { activity ->
+                    @Suppress("DEPRECATION")
+                    activity.startActivityForResult(Intent(action).setType("application/pdf")
+                        .addCategory(Intent.CATEGORY_OPENABLE), 300 + index)
+                }
+                ui.waitUntil(5_000) { monitor.blocked.get() == index + 1 }
+                assertUnlocked("blocked synthetic file intent $action")
+            }
+            assertEquals(3, monitor.blocked.get())
+            assertNotNull("No external file activity replaces MainActivity", resumedMain())
+        } finally {
+            instrumentation.removeMonitor(monitor)
+        }
+    }
+
     /** Real dialog windows: Back dismisses only the top window, never launches an importer or asks for PIN. */
     @Test fun centerDialogsBackNavigationKeepsSessionAndNeverLaunchesFiles() {
         val instrumentation = InstrumentationRegistry.getInstrumentation()
-        val monitors = listOf(Intent.ACTION_OPEN_DOCUMENT, Intent.ACTION_GET_CONTENT, Intent.ACTION_CREATE_DOCUMENT)
-            .map { instrumentation.addMonitor(IntentFilter(it), null, true) }
+        val monitor = FileActivityMonitor()
+        instrumentation.addMonitor(monitor)
         try {
             launch(); unlock(); open(Destination.MEDICAL)
             listOf("files", "originals", "practitioners", "visit-links", "lab-links", "organize").forEach { suffix ->
@@ -149,9 +187,9 @@ class InAppNavigationLockAndroidTest {
             ui.onNodeWithTag("drug-center-window").assertDoesNotExist()
             title().assertTextEquals(context.getString(R.string.medications))
             assertUnlocked("Back to medication plans")
-            monitors.forEach { assertEquals("Unavailable modules must never launch a file activity", 0, it.hits) }
+            assertEquals("Unavailable modules must never launch a file activity", 0, monitor.blocked.get())
         } finally {
-            monitors.forEach(instrumentation::removeMonitor)
+            instrumentation.removeMonitor(monitor)
         }
     }
 

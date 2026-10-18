@@ -18,3 +18,9 @@ No layout/string change: reuse #82 four-language, 320/411dp, fonts/themes/contra
 Current checkpoint: RED verified; GREEN and latest-HEAD six required CI pending. Native compilation is not execution. Final results and protected merge receipt will be recorded in this PR without a documentation-only CI loop.
 
 Local GREEN: 23 tests PASS, zero failures/errors/skips: restoration1, real drug-center navigation1, PeriodStability5, AppShellBackNavigation16 (including disguise). Native Kotlin compilation PASS. Per-suite XML hashes: state-restoration-green.json. Production delta remains the single saveable Boolean. Await final-head native execution and required CI; PR85 will retain final machine receipt.
+
+## Native first failure and correction
+
+API26 push job117761040588 on d89e8b3d failed before center interaction: filter-based ActivityMonitors intercepted the explicit actionless MainActivity launch. This is a test instrumentation defect, not an environment retry. Original result is retained in state-restoration-native-first-failure.json. Replace only the test monitor with raw-action matching, including MIME-bearing Intents; non-file Intents return null and proceed. Add a positive-control native test issuing all three synthetic file actions and requiring exactly three blocked launches, with MainActivity still resumed/unlocked. The existing center-path negative test still requires zero blocked file actions; no safety assertion is weakened. Native suite now adds three tests total. Local compilation and new-head native runs pending; no retry of the faulty source requested. Production state fix and its23 local results remain byte-for-byte unchanged.
+
+Corrected native monitor compilation: PASS (`:app:compileFullDebugAndroidTestKotlin`); actual API26/29/35 execution remains pending on the corrected final HEAD. No production source changed after the23 local tests.

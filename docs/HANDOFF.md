@@ -1880,3 +1880,9 @@ GitHub标记BEHIND，需合入已合并#83的746bb2e9；该主线仅将versionCo
 ## 中心状态恢复 #85 本地验收 PASS — 2026-10-18
 
 源码1e66587e：23项本地测试PASS、零失败错误跳过（状态恢复1、真实药品中心导航1、时期稳定性5、AppShell返回/伪装16），原生Kotlin编译PASS；见centers/state-restoration-green.json及state-restoration.md。未动现有断言，仅追加新测试。原生API26/29/35执行与最终六CI仍待验，真机/TalkBack NOT_RUN，未签名交付。最终HEAD/受保护合并/主线收据以PR85为准，避免只写CI元数据引发循环重跑。
+
+## 中心 #85 原生测试监控器修正 — 2026-10-18
+
+最终源d89e8b3d的push/API26出现新增测试失败：IntentFilter监控器误拦截action为空的MainActivity启动，发生在中心操作前，非环境重试。保留失败收据centers/state-restoration-native-first-failure.json。改用只匹配三种明确文件action的测试监控器，追加真实MIME文件Intent阳性对照，既有中心路径仍要求零文件启动；不放宽断言、不改生产源码。23项本地GREEN仍适用，修正后原生编译/新HEAD六CI待验，旧源未请求重试。
+
+监控器修正后的原生Kotlin编译PASS；将以新HEAD运行完整六CI和原生三项新增测试（监控器阳性对照、12占位实际Back与零文件启动、旋转/离开锁定）。23项本地测试对应的生产源码未变，无需重复渲染或无关本地回归。最新HEAD和最终CI/合并收据仍以PR85为准。

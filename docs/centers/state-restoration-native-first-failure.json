@@ -1,0 +1,16 @@
+{
+  "source": "d89e8b3d8840118e6f97ae42c9c8f4512e018500",
+  "job_url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39156591167/job/117761040588",
+  "result": "FAIL",
+  "test": "centerDialogsBackNavigationKeepsSessionAndNeverLaunchesFiles",
+  "reason": "Test IntentFilter ActivityMonitor intercepted actionless explicit MainActivity launch; failure before center assertions. Replace with raw-action monitor; add MIME-bearing positive control. No production change for this failure.",
+  "log_excerpt": [
+    "2026-10-18T19:07:41.1117584Z \tjava.lang.RuntimeException: Could not launch intent Intent { flg=0x14008000 cmp=net.plainnotes.app/.MainActivity } within 45000 milliseconds. Perhaps the main thread has not gone idle within a reasonable amount of time? There could be an animation or something constantly repainting the screen. Or the activity is doing network calls on creation? See the threaddump logs. For your reference the last time the event queue was idle before your activity launch request was 1792350415707 and now the last time the queue went idle was: 1792350425157. If these numbers are the same your activity might be hogging the event queue.",
+    "2026-10-18T19:08:20.8110580Z Finished 13 tests on emulator-5554 - 8.0.0",
+    "2026-10-18T19:08:20.8116907Z java.lang.RuntimeException: java.lang.RuntimeException: Could not launch intent Intent { flg=0x14008000 cmp=net.plainnotes.app/.MainActivity } within 45000 milliseconds. Perhaps the main thread has not gone idle within a reasonable amount of time? There could be an animation or something constantly repainting the screen. Or the activity is doing network calls on creation? See the threaddump logs. For your reference the last time the event queue was idle before your activity launch request was 1792350415707 and now the last time the queue went idle was: 1792350425157. If these numbers are the same your activity might be hogging the event queue.",
+    "2026-10-18T19:08:20.8130309Z at net.plainnotes.app.shell.InAppNavigationLockAndroidTest.centerDialogsBackNavigationKeepsSessionAndNeverLaunchesFiles(InAppNavigationLockAndroidTest.kt:119)",
+    "2026-10-18T19:08:20.8135046Z java.lang.RuntimeException: Could not launch intent Intent { flg=0x14008000 cmp=net.plainnotes.app/.MainActivity } within 45000 milliseconds. Perhaps the main thread has not gone idle within a reasonable amount of time? There could be an animation or something constantly repainting the screen. Or the activity is doing network calls on creation? See the threaddump logs. For your reference the last time the event queue was idle before your activity launch request was 1792350415707 and now the last time the queue went idle was: 1792350425157. If these numbers are the same your activity might be hogging the event queue.",
+    "2026-10-18T19:08:20.8142377Z at net.plainnotes.app.shell.InAppNavigationLockAndroidTest.centerDialogsBackNavigationKeepsSessionAndNeverLaunchesFiles(InAppNavigationLockAndroidTest.kt:119)"
+  ],
+  "rerun": "NOT_REQUESTED"
+}
