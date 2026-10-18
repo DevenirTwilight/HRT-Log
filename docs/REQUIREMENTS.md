@@ -963,3 +963,8 @@ operation owned generation/UUID/暂存device wrap/hash及终态不可逆清理�
 负责人：“自动合并，记住，不然我开 auto merge 干什么？”仓库已开启 GitHub auto-merge。此后 AI（Claude Code、Codex 等）为负责人任务创建的 PR，**默认开启自动合并**，不再逐个询问；PR 若已满足合并条件（GitHub 不允许对已可合并的 PR 开自动合并），直接按同样条件合并。
 
 条件不变：最新 HEAD 全部必需检查通过、无冲突、无未解决评审；遵守分支保护，不用管理员绕过、不改 ruleset、不跳过/删改测试。草稿/研究 PR、需要外部审查或许可的 PR（如 #58、#59 类）、以及签名、发布、移动 tag、替换 APK 等仍需负责人单独授权。合并后复验默认分支 CI。
+
+
+## 107. 中国 Beta P0 修复后的正式签名测试包（2026-10-18）
+
+负责人：“合并后打个新包给我测试”“正式签名”。在 #66、#67 合并后，从默认分支构建 full Universal release，versionCode 29 → 30（账本最大 29 + 1），versionName 仍 0.2.0，沿用私有正式签名（证书 989ba045…59379b1），流程同 §104 / `scripts/sign_local_apk.sh`，签名材料不进 Git、用完清理。只通过会话私密文件交付给负责人测试，并登记账本；不新建或替换公开 Release，不移动 tag。
