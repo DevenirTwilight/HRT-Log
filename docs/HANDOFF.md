@@ -1876,3 +1876,7 @@ GitHub标记BEHIND，需合入已合并#83的746bb2e9；该主线仅将versionCo
 ## 中心状态恢复收尾 — 2026-10-18
 
 基线491a910f（#82已合并，源与主线六项必需CI均PASS，完整收据见PR82）。独立分支fix/centers-state-restoration-20261018：新状态恢复测试先在未改生产源码上真实失败，恢复后drug-center-window丢失，见centers/state-restoration-red.json。仅将MedicationsScreen中心打开状态改为rememberSaveable；追加两个原生测试覆盖12占位弹窗实际Back、无文件Intent、真实参考窗口返回、旋转和离开后锁定。待本地GREEN及最新HEAD六CI，未声称设备测试成功；不改布局/文案/Room/库存/PK/附件权限或发布。
+
+## 中心状态恢复 #85 本地验收 PASS — 2026-10-18
+
+源码1e66587e：23项本地测试PASS、零失败错误跳过（状态恢复1、真实药品中心导航1、时期稳定性5、AppShell返回/伪装16），原生Kotlin编译PASS；见centers/state-restoration-green.json及state-restoration.md。未动现有断言，仅追加新测试。原生API26/29/35执行与最终六CI仍待验，真机/TalkBack NOT_RUN，未签名交付。最终HEAD/受保护合并/主线收据以PR85为准，避免只写CI元数据引发循环重跑。
