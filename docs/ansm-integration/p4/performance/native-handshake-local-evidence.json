@@ -1,0 +1,19 @@
+{
+  "status": "LOCAL_PASS_NATIVE_NOT_RUN",
+  "scope": "TEST_ONLY_POST_BUDGET_TRACE_HANDSHAKE",
+  "production_files_changed": false,
+  "python_tests": 184,
+  "generated_native_source_compilation": "PASS",
+  "generator_metadata": {
+    "source_sha256": "9313167178989def0d4d89d785f84cdde764fba21033543cdf85e472c5511242",
+    "native_sha256": "a24cd7621d9d7efe908de6a4d36159d51aa78163837b73a9f4d76ef9b6f20589",
+    "status": "GENERATED_NOT_RUN"
+  },
+  "log_sha256": {
+    "ansm-trace-handshake-python.log": "5011b3651f021308d9af32fc125b47d1d4de85f4ed98128a8a4ecdc6c1da18c0",
+    "ansm-trace-handshake-compile.log": "cded9b3970e8e50247af0aa70728ed837069cd5aeeb3f70056530cb90fee2df7"
+  },
+  "transport": "Host reads local log only until ready marker; then canonical nonce binds ready/report/captured bytes/ack before test exits. Maximum diagnostic wait30s after frozen budgets. Prior traces are not accepted for another nonce.",
+  "actual_handshake_and_profile": "NOT_RUN",
+  "acceptance": "P4_BLOCKED"
+}

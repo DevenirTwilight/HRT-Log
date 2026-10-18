@@ -81,7 +81,7 @@
       "blocker": "",
       "owner_decision_required": false,
       "progress": "IN_PROGRESS",
-      "note": "P4_BLOCKED/OFF。3cea864六CI PASS，原生run39102897438最终FAIL：审计12.58s/预测12.64s/恢复审计10.08s，本次<15s；三写入12.30–13.37s仍>5s。逐操作4.31s/逐包装3.41s；正则差0.111s非主瓶颈，未改生产pattern。准备预算冻结后TEST_ONLY ART方法栈采样：Python179/原生编译PASS，实际trace NOT_RUN。独立一般日常恢复bug已提交#65，4红→data247绿/原生编译绿，CI待验且不自动合并。P5/P6未实施，Beta NO-GO。"
+      "note": "P4_BLOCKED/OFF。efc7aba原生run39104315237写入16.1–16.5s仍>5s，完整失败保留。预算后方法栈生成2.3MB但AGP清理未取回，分析UNAVAILABLE。仅测试工具改为ready/nonce/host ack，主机不在原预算中轮询adb，预算后最多等待30s；Python184/原生编译PASS，实际握手/热点分析NOT_RUN。#65源88a60f1六CI全PASS、26/29各4SQLCipher用例已核验；一般日常修复不自行扩大合并权限。P5/P6未实施，Beta NO-GO。"
     },
     {
       "requirement_id": "V4.04",

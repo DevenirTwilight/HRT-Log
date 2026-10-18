@@ -123,9 +123,20 @@ def native_source(text):
                 try{assertEquals(rawProjection,MeasuredConsumptionStore.auditStagedDataset(raw))}
                 finally{android.os.Debug.stopMethodTracing()}
             }
-            components.put("sampling_trace",JSONObject().put("file","audit-sampling.trace").put("bytes",trace.length())
+            val traceToken=UUID.randomUUID().toString()
+            components.put("sampling_trace",JSONObject().put("file","audit-sampling.trace").put("bytes",trace.length()).put("token",traceToken)
                 .put("interval_us",1000).put("scope","TEST_ONLY_POST_BUDGET_METHOD_STACKS_NO_ARGUMENTS"))
             components.put("status","COMPLETE")
+            file.writeText(report.toString(2))
+            File(file.parentFile,"trace-ready.json").writeText(JSONObject().put("scope","SYNTHETIC_ART_TRACE_READY_V1")
+                .put("token",traceToken).put("bytes",trace.length()).toString())
+            android.util.Log.i("ANSM_TRACE",JSONObject().put("scope","SYNTHETIC_ART_TRACE_READY_V1")
+                .put("token",traceToken).put("bytes",trace.length()).toString())
+            val ack=File(file.parentFile,"trace-collected.ack")
+            val deadline=android.os.SystemClock.elapsedRealtime()+30000
+            fun acknowledged()=runCatching{ack.readText()==traceToken}.getOrDefault(false)
+            while(!acknowledged() && android.os.SystemClock.elapsedRealtime()<deadline)Thread.sleep(100)
+            components.put("sampling_host_ack",acknowledged())
             file.writeText(report.toString(2));assertEquals("Diagnostic budgets; device acceptance remains NOT_RUN",emptyList<String>(),exceeded)''')
     # AGP may uninstall the synthetic test APK after a process crash, deleting
     # its external-files report. Mirror only the compact timing metadata to logcat.

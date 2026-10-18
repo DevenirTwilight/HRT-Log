@@ -1,3 +1,9 @@
+## P4 采样运输改为预算后握手；#65源CI全绿 — 2026-10-18
+
+efc7aba原生写入16.1–16.5s仍>5s，P4_BLOCKED；Trace实际生成但AGP清理导致未取回，分析UNAVAILABLE，不编造热点。后续仅测试工具：预算后ready/nonce/host ack，主机仅收到log标记后读固定合成路径，不在原计时阶段轮询adb，最多预算后等30s，保留原失败断言。Python184/原生源码编译PASS，实际握手NOT_RUN。详见[阶段账本](ansm-integration/WORK-STATE.md)。
+
+独立#65源88a60f1六CI全PASS，API26/29新4用例真实SQLCipher成功；原始工件/35报告继续核验。尚不自动合并一般日常修复。正式库存入口OFF，P5/P6未实施，未签名发布。
+
 ## P4 写入12.3–13.4s仍阻断；独立日常恢复修复#65 — 2026-10-18
 
 3cea864六CI PASS，原生run39102897438完整FAIL：本次审计/预测<15s，三写入仍>5s。解析复用本地data409/Period5/Privacy3已通过，未冒充P4完成。下一提交仅在原预算冻结后进行合成ART方法栈采样；Python179与原生源码编译PASS，实际采样NOT_RUN。新工具强制API26模拟器、固定路径/硬大小上限、保留失败退出码，不进入正式App。详见[阶段账本](ansm-integration/WORK-STATE.md)。

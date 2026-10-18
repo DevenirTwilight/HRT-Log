@@ -122,3 +122,78 @@ class ArtSamplingRunnerIsolationTest(unittest.TestCase):
         runner=module('run_ansm_native_performance')
         for kwargs in ({'serial':'physical-device'},{'qemu':'0'},{'sdk':'35'}):
             with self.assertRaises(ValueError):runner.verify_emulator(ArtSamplingCollectionTest().fake([],**kwargs))
+
+
+class ArtSamplingHandshakeTest(unittest.TestCase):
+    token='00000000-0000-4000-8000-000000000001'
+    path=ArtSamplingCollectionTest.path
+    def environment(self, calls, data=None, report_token=None):
+        data=trace() if data is None else data
+        ready={'scope':'SYNTHETIC_ART_TRACE_READY_V1','token':self.token,'bytes':len(data)}
+        report={'environment':'Native API26 SQLCipher synthetic fixture; emulator, not physical hardware',
+                'post_budget_components':{'sampling_trace':{'token':self.token if report_token is None else report_token,'bytes':len(data),
+                    'scope':'TEST_ONLY_POST_BUDGET_METHOD_STACKS_NO_ARGUMENTS'}}}
+        base=ArtSamplingCollectionTest().fake(calls,data=data)
+        def execute(command, **kwargs):
+            if 'head' in command and command[-1].endswith('.json'):
+                calls.append(command)
+                if '/net.plainnotes.app.data/' in command[-1]:
+                    import subprocess
+                    raise subprocess.CalledProcessError(1,command)
+                return json.dumps(ready if command[-1].endswith('trace-ready.json') else report).encode()
+            if 'push' in command:
+                calls.append(command)
+                self.assertEqual(self.token,Path(command[2]).read_text())
+                self.assertEqual(self.path.rsplit('/',1)[0]+'/trace-collected.ack',command[-1])
+                return b'1 synthetic file pushed'
+            return base(command,**kwargs)
+        return execute,report
+
+    def test_pre_cleanup_capture_ack_and_post_cleanup_cache_are_bound_to_same_nonce(self):
+        collector=module('collect_ansm_native_performance')
+        with TemporaryDirectory() as directory:
+            out=Path(directory);calls=[];execute,report=self.environment(calls)
+            self.assertTrue(collector.watch_trace_once(out,self.token,execute))
+            self.assertTrue(any('push' in c for c in calls))
+            cached=collector.cached_trace(report,out)
+            self.assertEqual('DIAGNOSTIC_PROFILE',cached['status'])
+            report['post_budget_components']['sampling_trace']['token']='00000000-0000-4000-8000-000000000002'
+            self.assertIsNone(collector.cached_trace(report,out))
+
+    def test_mismatched_report_nonce_never_reads_binary_or_acknowledges(self):
+        collector=module('collect_ansm_native_performance')
+        with TemporaryDirectory() as directory:
+            calls=[];execute,_=self.environment(calls,report_token='00000000-0000-4000-8000-000000000002')
+            self.assertFalse(collector.watch_trace_once(Path(directory),self.token,execute))
+            self.assertFalse(any('push' in c or c[-1].endswith('.trace') for c in calls))
+
+    def test_unsupported_format_preserves_raw_trace_but_cannot_claim_parsed_profile(self):
+        collector=module('collect_ansm_native_performance')
+        with TemporaryDirectory() as directory:
+            out=Path(directory);execute,report=self.environment([],data=b'NOT_AN_ART_TRACE'*5)
+            self.assertTrue(collector.watch_trace_once(out,self.token,execute))
+            self.assertEqual('UNAVAILABLE',collector.cached_trace(report,out)['status'])
+            self.assertFalse((out/'audit-sampling-summary.json').exists())
+            self.assertEqual(b'NOT_AN_ART_TRACE'*5,(out/'audit-sampling.trace').read_bytes())
+
+    def test_watcher_has_no_adb_activity_before_post_budget_ready_log_signal(self):
+        collector=module('collect_ansm_native_performance')
+        class Stop:
+            stopped=False
+            def is_set(self):return self.stopped
+            def wait(self,seconds):self.stopped=True
+        with TemporaryDirectory() as directory:
+            out=Path(directory);(out/'synthetic-crash-log.txt').write_text('I ANSM_PERF: {"stage":"full_audit"}\n')
+            def forbidden(*args,**kwargs):raise AssertionError('adb polled during measured budgets')
+            collector.watch_trace(out,Stop(),forbidden)
+            self.assertFalse((out/'audit-sampling.trace').exists())
+
+    def test_ready_log_signal_drives_capture_before_test_can_exit(self):
+        import threading
+        collector=module('collect_ansm_native_performance')
+        with TemporaryDirectory() as directory:
+            out=Path(directory);execute,_=self.environment([])
+            message={'scope':'SYNTHETIC_ART_TRACE_READY_V1','token':self.token,'bytes':len(trace())}
+            (out/'synthetic-crash-log.txt').write_text('10-18 06:00:00.000 1 2 I ANSM_TRACE: '+json.dumps(message)+'\n')
+            collector.watch_trace(out,threading.Event(),execute)
+            self.assertEqual(self.token,(out/'trace-collected.ack').read_text())

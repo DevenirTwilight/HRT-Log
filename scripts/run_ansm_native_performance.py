@@ -2,6 +2,7 @@
 """Run/collect inside the clean synthetic emulator, including failures, before shutdown."""
 import json
 import re
+import threading
 from pathlib import Path
 import subprocess
 
@@ -30,6 +31,8 @@ def verify_emulator(execute=subprocess.check_output):
 def diagnostics():
     # This wrapper is used only by the fresh synthetic CI emulator, never the application/user device.
     verify_emulator()
+    # Discard stale ready markers only in this verified synthetic emulator, before any timed work.
+    subprocess.run(['adb','logcat','-c'],check=True)
     folder = ROOT / 'core/data/build/reports/ansm-native-performance'
     folder.mkdir(parents=True, exist_ok=True)
     properties = {}
@@ -39,10 +42,15 @@ def diagnostics():
     properties['MemTotal'] = next((line for line in memory.splitlines() if line.startswith('MemTotal:')), 'UNKNOWN')
     (folder/'environment.json').write_text(json.dumps(properties,indent=2)+'\n')
     with (folder/'synthetic-crash-log.txt').open('w') as output:
-        capture = subprocess.Popen(['adb','logcat','-v','threadtime','-s','AndroidRuntime:E','art:E','System.err:W','libc:F','DEBUG:F','lowmemorykiller:I','ActivityManager:I','ANSM_PERF:I'],stdout=output,stderr=subprocess.STDOUT)
+        capture = subprocess.Popen(['adb','logcat','-v','threadtime','-s','AndroidRuntime:E','art:E','System.err:W','libc:F','DEBUG:F','lowmemorykiller:I','ActivityManager:I','ANSM_PERF:I','ANSM_TRACE:I'],stdout=output,stderr=subprocess.STDOUT)
+        from collect_ansm_native_performance import watch_trace
+        stop=threading.Event()
+        watcher=threading.Thread(target=watch_trace,args=(folder,stop),daemon=True)
+        watcher.start()
         try:
             return run()
         finally:
+            stop.set();watcher.join(timeout=10)
             capture.terminate()
             try: capture.wait(timeout=5)
             except subprocess.TimeoutExpired: capture.kill();capture.wait()
