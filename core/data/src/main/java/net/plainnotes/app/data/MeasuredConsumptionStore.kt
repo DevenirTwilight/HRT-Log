@@ -246,7 +246,18 @@ internal object MeasuredConsumptionStore {
         }
         fun physical(frozen:FrozenPackageMeasurement,scale:StockQuantum,input:Quantity):MeasureResult<Quantity> =
             physicalStock(frozen,scale,input)
-        val operations=rows("measured_operation")
+        // One cursor preserves every stored field/type without one encrypted point query per operation.
+        // No new retained envelope cache: this replaces the same existing operation list.
+        val operations=db.query("SELECT * FROM measured_operation ORDER BY operation_uuid").use { c ->
+            buildList {while(c.moveToNext())add(JSONObject().apply {
+                for(i in 0 until c.columnCount)put(c.getColumnName(i),when(c.getType(i)) {
+                    Cursor.FIELD_TYPE_NULL->JSONObject.NULL
+                    Cursor.FIELD_TYPE_INTEGER->c.getLong(i)
+                    Cursor.FIELD_TYPE_STRING->c.getString(i)
+                    else->error("Unexpected reference storage type")
+                })
+            })}
+        }
         require(operations.size<=BackupLimits.MAX_ROWS)
         val observations=operations.filter{it.getString("kind")=="ADJUST" && adjustmentCapture(it).bridgeFor==null}.map { row ->
             val capture=adjustmentCapture(row)

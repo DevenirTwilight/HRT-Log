@@ -1,3 +1,13 @@
+## P4 原生排序索引仍FAIL；批量操作读取本地通过 — 2026-10-18
+
+已普通合并主线417e383（#66–#70）为0fd0ca3；四语冲突保留全部主线提醒文案和既有forecast_needs_check，workflow保留17数据类与2新增App类，双方交接保留。主线需求105–107原编号保留，旧P4的105–108映射108–111；新106普遍自动合并授权继承，草稿/外部审阅/发布例外不变。合并后Period5/Privacy3本地PASS，证据merged-main417-app-local-evidence.json；生产参数/PK/权限没有新增变动。
+
+0fd原生run39122744634官方工件SHA/CRC、1470239B trace及可复现parser已归档ansm-integration/p4/performance/native-profile-0fd0ca3/：完整audit14149/forecast13529/restored12720ms本轮<15s，但三次写入13726/13307/13938ms>5s仍FAIL。SQL减少不能宣称原生改善。97996采样、152边界未闭合帧、零未知方法/不匹配退出、无溢出，PARTIAL_DIAGNOSTIC；SQLCipher游标仍首要成本。相同SHA重复手动run39122741164取消，仅防重复、无验收结论；保留的PR原生运行不论成败完整记录。所有既有失败和预算保留。
+
+新增零分配操作负向测试：旧实现真实expected0/actual1逐操作回读；现在一次游标读取同一组完整操作字段，NULL/整数/String类型以及全部链/版本/来源/账本/历史校验保留，不增加持久或跨事务缓存、不接写入。data418零失败/跳过，Android测试源码编译PASS；原同规模JVM大库/完整投影相等、SQL14189→12186（三写1379/1388/1495ms）仅诊断，原生未验。对应bulk-operation-*证据与临时诊断patch已保存，生成源码已清理。候选六CI/原生待新HEAD验收。
+
+Beta #64只读同步main417为063861d；区分公开build29、由主线账本声明/其他开发线交付的私密build30（source dfb，不含#70或P4）与本P4候选；没有重新下载/验签/交付build30，真机/升级NOT_RUN。P4_BLOCKED/DRAFT、App入口OFF，P5/P6未实施，Beta NO-GO，本工作未签名发布。
+
 ## P4 排序索引回归通过；写入性能仍待原生验收 — 2026-10-18
 
 3ee5110六项必需CI全PASS，已核验官方工件SHA/CRC：API26/29/35的ReferencePersistenceAndroidTest各23用例、含2条新字节边界、零fail/skip。原生run39121269126完整FAIL，仅真实写入11959/11020/11524ms>5000；audit11286/forecast11600/restored audit10395ms本轮<15000，不能当稳定/因果证明。运输双ACK PASS；1155058B trace离线parser完全复现，76108样本、152边界未闭合帧、零未知/不匹配退出、无溢出，仍PARTIAL_DIAGNOSTIC。SQLCipher游标为主要采样成本。原始工件/报告/hash见ansm-integration/p4/performance/native-profile-3ee5110/，不删除早期失败。

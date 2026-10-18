@@ -967,10 +967,10 @@
       "source_date": null,
       "review_status": "UNREVIEWED",
       "result_status": "PRODUCTION_BLOCKED",
-      "blocker": "Native3ee5110 real writes11959/11020/11524ms exceed5000ms; sorted row index candidate native NOT_RUN. Physical hardware NOT_RUN.",
+      "blocker": "Native0fd actual writes13726/13307/13938ms exceed unchanged5000ms. Bulk operation cursor local418/query12186 PASS but native not yet tested. Physical NOT_RUN.",
       "owner_decision_required": false,
       "progress": "NATIVE_BUDGET_FAIL",
-      "note": "Source3ee all6 ordinary CI and API26/29/35 reference23 cases PASS, but native budget FAIL. Sorted candidate local417/native source compilation/full projection equality/query20198→14189 PASS is diagnostic only. Failed map approach20811 queries rejected before push. See performance/secondary-sorted-* and native-profile-3ee5110/."
+      "note": "Full0fd failure and raw/parsed trace in performance/native-profile-0fd0ca3/. Query reductions are diagnostic only. Bulk cursor retains all per-row/full-dataset/source/revision/ledger checks; no skipped audit or new trust cache."
     },
     {
       "requirement_id": "BACKEND_BETA.2.MAIN_CI",
@@ -1017,7 +1017,7 @@
       "blocker": "P4 PRODUCTION_BLOCKED: real write budget FAIL; physical-device evidence absent.",
       "owner_decision_required": false,
       "progress": "NATIVE_TRANSPORT_PASS_PROFILE_PARTIAL",
-      "note": "Actual0b3 and3ee API26 preflight/sample ACK PASS. Native3ee trace1155058 bytes parser reproduces;76108 records,152 clipped boundary frames,0 unknown methods/unmatched exits,overflow=false. Source3ee all6 CI PASS; real-write budget FAIL. Sorted row-reference index local417/source compile and large-query14189 PASS, native pending."
+      "note": "Actual0fd trace1470239B,97996 records/152 clipped frames,0 unknown/unmatched,overflow=false; partial parser reproduced. Transport/preflight/sample ACK PASS, real-write budget FAIL. Bulk operation cursor full local418/native compile/large projection equality/query12186 PASS; native pending."
     },
     {
       "requirement_id": "BACKEND_BETA.4.EXISTING_UI",
@@ -1067,7 +1067,7 @@
       "corrected_scope": "Owner backend/Beta source sha256 dd09002972f5aebb5cfecfd14fdf031da7a5f688e559a38bb25ad761277cb63e; requirement-specific result only, not release authority.",
       "stage": "BETA",
       "affected_product_or_dataset": "Synthetic fixtures; legacy scalar and user-entered exact stock. Official distribution OFF; public build29 remains separately identified.",
-      "implementation_path": "https://github.com/DevenirTwilight/HRT-Log/blob/49236a2c4d01ce1a73d0e1a7cdda9ee23c68bd1c/docs/release-readiness/china-beta-gate.md",
+      "implementation_path": "https://github.com/DevenirTwilight/HRT-Log/blob/063861d/docs/release-readiness/china-beta-gate.md",
       "test_id": [],
       "pr_url": "https://github.com/DevenirTwilight/HRT-Log/pull/64",
       "source_url": [],
@@ -1077,8 +1077,8 @@
       "blocker": "P4 budget FAIL; P5/P6 incomplete; physical evidence absent. Official distribution/FT-ST review remains a separate gate.",
       "owner_decision_required": false,
       "progress": "READINESS_NO_GO",
-      "note": "Independent docs PR64 source49236a2 includes main8ebb719 CI/native daily proofs; final docs49236a2 six required CI PASS. Public build29 static identity checks remain separate. No candidate APK built; physical ARM/China-ROM/upgrades/restore/16KiB execution NOT_RUN."
+      "note": "Docs source063861d ordinarily merges main417, distinguishes previously verified public29 from declared-by-merged-ledger private30 (source dfb,not later70/P4). New docs CI pending; prior49236a2 sixCI PASS remains separately archived. No signing/release by this work; physical/China-ROM/upgrades/restore NOT_RUN."
     }
   ],
-  "checkpoint": "2026-10-18 source3ee5110 all6 required CI and API26/29/35 canonical cases PASS; native real-write11–12s FAIL. Sorted indexes local417/native compile and full-scale query20198→14189/projection equality PASS; actual native pending. New main1ab device reminder test FAIL; ordinary integration pending. P4_BLOCKED/OFF, P5/P6 NOT_IMPLEMENTED, Beta NO-GO."
+  "checkpoint": "2026-10-18 main417 ordinarily integrated as0fd. Native0fd complete FAIL:actual writes13.3–13.9s exceed5s, trace PARTIAL/transport PASS. Bulk operation cursor local418/native compile/large projection equality/query12186 PASS, native pending. Period5/Privacy3 after main merge PASS. P4_BLOCKED/OFF; P5/P6 NOT_IMPLEMENTED. Beta063861d integrates main417/build30 ledger declarations only, NO-GO."
 }

@@ -1,0 +1,12 @@
+{
+  "base_head": "0fd0ca38bd94db910632067bffb17e2fe2f96f9a",
+  "result": "JVM_DIAGNOSTIC_PASS_NOT_NATIVE_ADMISSION",
+  "previous_queries": 14189,
+  "bulk_queries": 12186,
+  "removed_queries": 2003,
+  "full_projection_equality": "PASS",
+  "log_sha256": "75525617f88434d82ebb7f0fd4a032bd60fe0f297b1ad70987b4c8b77a63f829",
+  "source_sha256": "32d7cc98aff2586ea7091828632def1841199167ff493cad22f3d57076dbefb8",
+  "diagnostic_patch": "post-budget-query-diagnostic.patch",
+  "original_fixture_sha256": "9313167178989def0d4d89d785f84cdde764fba21033543cdf85e472c5511242"
+}

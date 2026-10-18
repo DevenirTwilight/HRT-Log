@@ -83,6 +83,26 @@ abstract class MeasuredConsumptionContract {
             Unit
         }
     }
+    @Test fun zeroAllocationAuditScansOperationRowsWithoutRepeatedPrimaryQueries()=runBlocking {
+        val m=med();val b=box(m);val r=record(m);val receipt=consume(r,b,emptyList())
+        db.withTransaction {
+            val before=RawData.dump(raw).toString()
+            var pointReads=0
+            val counted=object:androidx.sqlite.db.SupportSQLiteDatabase by raw {
+                override fun query(sql:String,bindArgs:Array<out Any?>):android.database.Cursor {
+                    if(sql.contains("measured_operation",ignoreCase=true) && bindArgs.any{it==receipt.operationUuid})pointReads++
+                    return raw.query(sql,bindArgs)
+                }
+            }
+            val projections=MeasuredConsumptionStore.auditStagedDataset(counted)
+            assertEquals(listOf(b.containerUuid),projections.map{it.containerUuid})
+            assertEquals(0L,projections.single().usedQuanta)
+            assertEquals(0,projections.single().remaining.value.compareTo(BigDecimal("28")))
+            assertTrue(projections.single().cacheMatches)
+            assertEquals(before,RawData.dump(raw).toString())
+            assertEquals("Zero-effect operation must be fully audited from its bulk row rather than point-fetched",0,pointReads)
+        }
+    }
     @Test fun fractionalPhysicalUseWritesOneExactIntegerWithoutChangingTheDoseFact()=runBlocking {
         val m=med();val b=box(m);val r=record(m);val before=db.dao().medication(m)
         val receipt=consume(r,b,listOf(use(b)))
