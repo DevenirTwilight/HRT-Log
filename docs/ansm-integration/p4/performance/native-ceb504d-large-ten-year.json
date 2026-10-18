@@ -1,0 +1,7 @@
+{
+  "status": "TRANSPORT_PREFLIGHT_FAILED",
+  "environment": "Native API26 SQLCipher synthetic fixture; emulator, not physical hardware",
+  "diagnostic_run_token": "6bff094c-c315-47f3-aa94-b1ca244649c3",
+  "stage": "TRANSPORT_PREFLIGHT",
+  "performance": "NOT_RUN"
+}

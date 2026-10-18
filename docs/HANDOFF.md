@@ -1,3 +1,11 @@
+## P4 原生预检定位 API26 head 不支持字节模式 — 2026-10-18
+
+ceb504d run39109323920在生成大库/加载SQLCipher前按设计停在TRANSPORT_PREFLIGHT_FAILED；PERFORMANCE_NOT_RUN，所有本轮性能数值UNAVAILABLE。官方工件12129374268 SHA/CRC已核验；原始逐路径错误明确：正确测试包的run-as执行head返回exit1/head: not integer: c，另一个候选包unknown。这是本次预检的已确认工具故障；前两轮未保存原始远端错误，不倒填为完全已确认。不会把fail-fast当预算通过，最后完整4dc写入15.6–16.3s仍FAIL/P4_BLOCKED。
+
+新增API26错误响应负向测试在旧reader实际29项/1失败；改为有界dd（bs=字节上限、count=1），统一非PTY shell v2分离stderr，避免exec-out将dd统计文字混入二进制。JSON硬上限65537B、trace硬上限expected_size+1（<=32MiB+1）、8字节含NUL/CR/LF/高位字节探针最多读9B并逐字节验证；App-UID固定路径、nonce/ACK与预算阶段之间不轮询不变。Python198 PASS；生成的Kotlin未变，复用刚完成的原生编译证据，不重复编译。实际dd运输预检待验；无生产代码/预算/Schema/备份/PK变化。
+
+主线8ebb719已六CI PASS，26/29/35各4新增SQLCipher用例工件核验PASS。Beta #64已普通同步主线并推送49236a2，仅文档，准确区分主线修复与旧公开build29；新文档CI待验。P5/P6未实施，正式入口OFF，Beta NO-GO，未签名发布。
+
 ## P4 测试运输改为 App 内部路径与大库前预检；主线六 CI 通过 — 2026-10-18
 
 #65 已获单独明确批准后普通合入主线8ebb719，合并后六项必需CI全PASS；官方工件SHA/CRC核验26/29/35各4个新SQLCipher用例真实PASS/0skip，见performance/main-8ebb719-*。本地P4通过普通merge同步主线（223aeff），workflow保留17类并集、双方HANDOFF保留。data413、Period5、PrivacyNoticeFacts3、Python190及原生合同编译PASS，Privacy初次过滤名误写后已实际按正确类名补跑3项，证据已更新。

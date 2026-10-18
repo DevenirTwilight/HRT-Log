@@ -66,7 +66,7 @@ class ArtSamplingCollectionTest(unittest.TestCase):
             if command[-1]=='ro.kernel.qemu':return qemu+'\n'
             if command[-1]=='ro.build.version.sdk':return sdk+'\n'
             if 'wc' in command:return str(len(data) if size is None else size)+' '+command[-1]+'\n'
-            if 'head' in command:return data
+            if 'dd' in command:return data
             raise AssertionError(command)
         return execute
 
@@ -82,14 +82,14 @@ class ArtSamplingCollectionTest(unittest.TestCase):
             for kwargs in ({'serial':'physical-device'},{'qemu':'0'},{'sdk':'35'}):
                 calls=[]
                 with self.assertRaises(ValueError):collector.collect_trace(self.path,Path(directory),self.fake(calls,**kwargs))
-                self.assertFalse(any('cat' in c or 'head' in c or 'wc' in c for c in calls))
+                self.assertFalse(any('cat' in c or 'dd' in c or 'wc' in c for c in calls))
 
     def test_size_fence_and_incomplete_transfer_do_not_create_a_profile(self):
         collector=module('collect_ansm_native_performance')
         with TemporaryDirectory() as directory:
             calls=[]
             with self.assertRaises(ValueError):collector.collect_trace(self.path,Path(directory),self.fake(calls,size=33*1024*1024))
-            self.assertFalse(any('cat' in c or 'head' in c for c in calls))
+            self.assertFalse(any('cat' in c or 'dd' in c for c in calls))
             with self.assertRaises(ValueError):collector.collect_trace(self.path,Path(directory),self.fake([],size=len(trace())+1))
             self.assertFalse((Path(directory)/'audit-sampling-summary.json').exists())
             base=self.fake([])
@@ -103,8 +103,8 @@ class ArtSamplingCollectionTest(unittest.TestCase):
             self.assertEqual('DIAGNOSTIC_PROFILE',out['status'])
             reads=[]
             collector.collect_trace(self.path,Path(directory),self.fake(reads))
-            command=next(c for c in reads if 'head' in c)
-            self.assertEqual(str(len(trace())+1),command[command.index('-c')+1])
+            command=next(c for c in reads if 'dd' in c)
+            self.assertIn('bs='+str(len(trace())+1),command);self.assertIn('count=1',command);self.assertEqual(['adb','shell','-T'],command[:3])
             self.assertEqual(trace(),(Path(directory)/'audit-sampling.trace').read_bytes())
             self.assertEqual(out['sha256'],json.loads((Path(directory)/'audit-sampling-summary.json').read_text())['trace_sha256'])
             self.assertFalse(collector.budget_pass({'status':'FAIL','api26_low_memory_acceptance':'FAIL'}))
@@ -135,7 +135,7 @@ class ArtSamplingHandshakeTest(unittest.TestCase):
             calls.append(command)
             if command[1]=='exec-out':
                 return b'head: /synthetic/absent.json: No such file or directory\n'
-            self.assertEqual(['adb','shell','-T','head','-c','65537','/synthetic/absent.json'],command)
+            self.assertEqual(['adb','shell','-T','dd','bs=65537','count=1','if=/synthetic/absent.json'],command)
             raise subprocess.CalledProcessError(1,command)
         self.assertIsNone(collector.device_json('/synthetic/absent.json',execute))
         self.assertEqual('shell',calls[0][1])
@@ -153,7 +153,7 @@ class ArtSamplingHandshakeTest(unittest.TestCase):
                     'scope':'TEST_ONLY_POST_BUDGET_METHOD_STACKS_NO_ARGUMENTS'}}}
         base=ArtSamplingCollectionTest().fake(calls,data=data)
         def execute(command, **kwargs):
-            if 'head' in command and command[-1].endswith('.json'):
+            if 'dd' in command and command[-1].endswith('.json'):
                 calls.append(command)
                 if '/net.plainnotes.app.data/' in command[-1]:
                     import subprocess
@@ -262,12 +262,23 @@ class InternalTransportPreflightTest(unittest.TestCase):
     token='00000000-0000-4000-8000-000000000001'
     folder='/data/user/0/net.plainnotes.app.data.test/files/ansm-performance/'
 
+    def test_api26_head_without_byte_mode_requires_bounded_dd_for_json(self):
+        import subprocess
+        collector=module('collect_ansm_native_performance');value={'scope':'SYNTHETIC','token':self.token}
+        def execute(command,**kwargs):
+            if 'head' in command:raise subprocess.CalledProcessError(1,command,stderr=b'head: not integer: c\n')
+            self.assertIn('dd',command);self.assertIn('bs=65537',command);self.assertIn('count=1',command)
+            self.assertEqual(['adb','shell','-T'],command[:3])
+            self.assertEqual('if=files/ansm-performance/trace-ready.json',command[-1])
+            return json.dumps(value).encode()
+        self.assertEqual(value,collector.device_json(self.folder+'trace-ready.json',execute))
+
     def test_internal_command_is_app_uid_scoped_and_has_no_shell_interpolation(self):
         collector=module('collect_ansm_native_performance')
-        self.assertEqual(['adb','shell','-T','run-as','net.plainnotes.app.data.test','head','-c','65537','files/ansm-performance/trace-ready.json'],
-            collector.internal_command(self.folder+'trace-ready.json','head','-c','65537'))
+        self.assertEqual(['adb','shell','-T','run-as','net.plainnotes.app.data.test','dd','bs=65537','count=1','if=files/ansm-performance/trace-ready.json'],
+            collector.internal_command(self.folder+'trace-ready.json','dd','bs=65537','count=1'))
         for path in ('/data/user/0/other.app/files/ansm-performance/trace-ready.json',self.folder+'../database',self.folder+'database',self.folder+'trace-ready.json;id'):
-            with self.assertRaises(ValueError):collector.internal_command(path,'head','-c','65537')
+            with self.assertRaises(ValueError):collector.internal_command(path,'dd','bs=65537','count=1')
 
     def fixture(self, *,bad_nonce=False,bad_probe=False):
         import subprocess
@@ -279,7 +290,7 @@ class InternalTransportPreflightTest(unittest.TestCase):
             if command[-1].endswith('transport-preflight.json'):
                 return json.dumps({'scope':'SYNTHETIC_TRANSPORT_PREFLIGHT_V1','token':self.token if not bad_nonce else '00000000-0000-4000-8000-000000000002','bytes':8}).encode()
             if command[-1].endswith('transport-probe.bin'):
-                self.assertEqual('exec-out',command[1]);self.assertIn('9',command)
+                self.assertEqual(['adb','shell','-T'],command[:3]);self.assertIn('bs=9',command);self.assertIn('count=1',command)
                 return bytes([0,1,127,128,255,10,13,1 if bad_probe else 0])
             if 'tee' in command:
                 self.assertEqual(self.token.encode(),kwargs['input']);return kwargs['input']
@@ -333,7 +344,7 @@ class InternalTransportPreflightTest(unittest.TestCase):
             self.assertEqual(trace(),(out/'audit-sampling.trace').read_bytes())
             self.assertEqual('DIAGNOSTIC_PROFILE',collector.cached_trace(report,out)['status'])
             self.assertFalse(any('push' in c for c in calls))
-            self.assertTrue(all('run-as' in c for c in calls if 'head' in c or 'wc' in c or 'tee' in c))
+            self.assertTrue(all('run-as' in c for c in calls if 'dd' in c or 'wc' in c or 'tee' in c))
 
     def test_completed_preflight_does_not_poll_adb_during_the_large_fixture(self):
         collector,calls,execute=self.fixture();test=self

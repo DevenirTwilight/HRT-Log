@@ -13,11 +13,13 @@ def report_paths(lines):
 
 def internal_command(path, tool, *args, binary=False):
     match=re.fullmatch(r'/data/user/0/(net\.plainnotes\.app\.data(?:\.test)?)/(files/ansm-performance/(?:large-ten-year\.json|trace-ready\.json|audit-sampling\.trace|trace-collected\.ack|transport-preflight\.(?:json|ack)|transport-probe\.bin))',path)
-    if not match or tool not in ('head','wc','tee'):
+    if not match or tool not in ('dd','wc','tee'):
         raise ValueError('Not a fixed synthetic internal transport command')
     if tool=='tee' and not path.endswith('.ack'):
         raise ValueError('Synthetic transport writes acknowledgements only')
-    return ['adb',*(['exec-out'] if binary else ['shell','-T']),'run-as',match[1],tool,*args,match[2]]
+    # API26 head has no byte mode. Non-PTY shell v2 also keeps dd diagnostics
+    # off binary stdout; exec-out can merge them into the method trace.
+    return ['adb','shell','-T','run-as',match[1],tool,*args,('if='+match[2]) if tool=='dd' else match[2]]
 
 
 def transport_ack(folder, name, token, execute):
@@ -74,7 +76,7 @@ def collect_trace(report_path, out, execute=subprocess.check_output, expected_si
         raise ValueError('Trace size outside diagnostic bounds')
     if expected_size is not None and int(size) != expected_size:
         raise ValueError('Ready trace length differs from device file')
-    data = execute(internal_command(path,'head','-c',str(int(size)+1),binary=True) if internal else ['adb', 'exec-out', 'head', '-c', str(int(size) + 1), path])
+    data = execute(internal_command(path,'dd','bs='+str(int(size)+1),'count=1',binary=True) if internal else ['adb','shell','-T','dd','bs='+str(int(size)+1),'count=1','if='+path],stderr=subprocess.PIPE,timeout=30)
     if len(data) != int(size):
         raise ValueError('Incomplete trace transfer')
     (out / 'audit-sampling.trace').write_bytes(data)
@@ -99,7 +101,7 @@ def device_json(path, execute, failures=None):
         # shell v2 propagates remote failure; exec-out may return missing-file
         # diagnostics as stdout with exit0. An absent alternate package must not
         # prevent capture from the matching package. -T forbids PTY rewriting.
-        command=internal_command(path,'head','-c','65537') if path.startswith('/data/user/0/') else ['adb','shell','-T','head','-c','65537',path]
+        command=internal_command(path,'dd','bs=65537','count=1') if path.startswith('/data/user/0/') else ['adb','shell','-T','dd','bs=65537','count=1','if='+path]
         data = execute(command, stderr=subprocess.PIPE, timeout=5)
     except subprocess.CalledProcessError as error:
         if failures is not None:
@@ -183,7 +185,7 @@ def watch_preflight_once(out, token, execute=subprocess.check_output):
     (out/'preflight-path-attempts.json').write_text(json.dumps({'matching_paths':len(ready),'remote_failures':failures},indent=2)+'\n')
     if len(ready)>1:raise ValueError('Ambiguous preflight packages')
     if not ready:return False
-    data=execute(internal_command(ready[0]+'transport-probe.bin','head','-c','9',binary=True),stderr=subprocess.PIPE,timeout=5)
+    data=execute(internal_command(ready[0]+'transport-probe.bin','dd','bs=9','count=1',binary=True),stderr=subprocess.PIPE,timeout=5)
     if data!=bytes([0,1,127,128,255,10,13,0]):raise ValueError('Binary preflight transfer mismatch')
     transport_ack(ready[0],'transport-preflight.ack',token,execute)
     (out/'transport-preflight.json').write_text(json.dumps({'status':'PASS','source_token':token,'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest(),'scope':'BEFORE_LARGE_FIXTURE_TRANSPORT_ONLY'},indent=2)+'\n')
