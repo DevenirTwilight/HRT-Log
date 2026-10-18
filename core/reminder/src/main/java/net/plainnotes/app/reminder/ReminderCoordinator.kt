@@ -195,7 +195,7 @@ import javax.inject.Singleton
     /** Immediate test: posts through the same channel now, without AlarmManager. Its result never stands in for the scheduled test. */
     suspend fun testNow()=withContext(Dispatchers.IO){ postTest().also{testLog.immediate(System.currentTimeMillis(),it)} }
     fun testStatus()=testLog.read()
-    private fun postTest():TestOutcome {
+    private suspend fun postTest():TestOutcome {
         val nm=context.getSystemService(NotificationManager::class.java)
         channel(nm)
         if(Build.VERSION.SDK_INT>=33 && ContextCompat.checkSelfPermission(context,Manifest.permission.POST_NOTIFICATIONS)!=PackageManager.PERMISSION_GRANTED)return TestOutcome.BLOCKED_PERMISSION
@@ -206,6 +206,8 @@ import javax.inject.Singleton
             .setContentTitle(NotificationPrefs(context).title ?: context.getString(R.string.neutral_reminder)).setContentText(context.getString(R.string.test_notification_body))
             .setVisibility(NotificationCompat.VISIBILITY_SECRET).setContentIntent(open).setAutoCancel(true).build())
         // Posted is not the same as shown: the system may still drop it (e.g. a vendor block); only an active entry counts.
-        return if(nm.activeNotifications.any{it.id==TEST_NOTIFICATION})TestOutcome.SHOWN else TestOutcome.POSTED_NOT_SHOWN
+        // notify() is handed to the system asynchronously, so allow it a moment to appear before reporting it missing.
+        repeat(30) { if(nm.activeNotifications.any{it.id==TEST_NOTIFICATION})return TestOutcome.SHOWN; kotlinx.coroutines.delay(100) }
+        return TestOutcome.POSTED_NOT_SHOWN
     }
 }
