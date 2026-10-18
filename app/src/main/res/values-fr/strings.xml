@@ -1247,4 +1247,6 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="test_out_channel">bloquée : la catégorie de notification des rappels est désactivée</string>
 <string name="today_in_hours">Dans %1$d h</string>
 <string name="today_in_minutes">Dans %1$d min</string>
+<string name="home_stock_low">%1$s : bientôt épuisé</string>
+<string name="home_stock_more">%1$d de plus</string>
 </resources>

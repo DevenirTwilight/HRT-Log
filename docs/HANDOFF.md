@@ -4,6 +4,7 @@
 - 保护矩阵核对：TodayCard/MedicalRecordsScreen 不在矩阵；CalendarScreen、StockScreen、LongitudinalScreen、AppShell、Components 均为 HISTORY_ONLY；不触及 PK_DISPLAY_REVIEW 及更严格类别。
 - 计划按 A（今天卡）→B（首页库存横条）→C（库存卡）→D（时间线展示）→E（抽屉角标）→F（医疗档案）→G（全局细节）逐节提交。
 - A 完成：进度胶囊、倒计时（仅显示，逾期不显示，每分钟刷新）、52dp 主按钮带勾与圆形 ⋮、分隔线、记录行状态图标（文字保留）。`Ui05TodayCardTest` 9/9（红测 6/7 失败），TodayCardTest/HomeStockCardTest/Ui04/CalendarSemantics/CalendarCoreFlow 通过。
+- B 完成：首页低库存改为每药一条紧凑横条（tertiaryContainer、圆角 16、整条点进库存页、“添加库存”仍开同一 AddStockDialog），移到今天卡正下方、月历之前；最多 3 条，其余“还有 n 种”。判定仍为 StockForecast.isLow。`Ui05HomeStockTest` 4/4（红测 2/4 失败）。断言迁移：HomeStockCardTest 中行内药名从完全匹配改为包含匹配（药名现在在“[药名]快用完了”句中，含义不变）；`home-stock-view` 标签现挂在整条横条上，原“2 个查看入口、点第一个进入库存页”断言原样通过。
 
 ## build30 已交付（REQUIREMENTS §107）— 2026-10-18
 

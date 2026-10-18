@@ -1247,4 +1247,6 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="test_out_channel">blocked: the reminder notification category is off</string>
 <string name="today_in_hours">In %1$d h</string>
 <string name="today_in_minutes">In %1$d min</string>
+<string name="home_stock_low">%1$s is running low</string>
+<string name="home_stock_more">%1$d more</string>
 </resources>
