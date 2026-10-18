@@ -90,6 +90,19 @@
    "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
    "file_name": "hrt-log-build31-full-universal-official-2a6d0642.apk",
    "channel": "claude-session-private-file"
+  },
+  {
+   "date": "2026-10-18T17:40:00Z",
+   "version_code": 32,
+   "version_name": "0.2.0",
+   "application_id": "net.plainnotes.app",
+   "source_sha": "746bb2e91f86e1eccbccb852cdfecba0683aa5f7",
+   "source_origin": "git",
+   "source_dirty": false,
+   "apk_sha256": "b374ce232640dd100e326f15444b0b4cb8f8c32024c60235dd7cbdd937051b27",
+   "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
+   "file_name": "hrt-log-build32-full-universal-official-746bb2e9.apk",
+   "channel": "claude-session-private-file"
   }
  ]
 }
