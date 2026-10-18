@@ -20,11 +20,13 @@
 
 ## 2. 批准记录
 
-已在 `docs/pk-research/p2/display-approvals.json` 追加：
+登记在 `docs/audits/product-quality-2026-10/display-approvals-after-archive.json`：
 
 - id：`PD-2026-10-18-LAB01-LABSSCREEN`
 - 前 `fff4590c…d53ab`，后 `27e2d80b…cee30f`
 - 证据：提交 `890ae4ca`，其中的 `docs/REQUIREMENTS.md` §111 含此 id，并引用任务书第 1 节第 3 条原文。
+
+更正（2026-10-18）：最初把记录追加到了 `docs/pk-research/p2/display-approvals.json`。这个文件属于已冻结的研究归档，`research_archive.verify_records` 要求它与归档提交逐字节相同，所以 #78 合并后 research-deep 失败。现已恢复该文件原样，记录改放在新文件中，内容不变。
 
 说明：`LabsScreen.kt` 在本任务前已经和冻结基线（`11dc6b23…`）不同，此前没有该文件的批准记录。当前守卫（`check_protocol.check`）已不再校验显示文件的批准链（显示改动由 UI 测试把关）。所以本条记录的“前”哈希取本任务开始时的文件，而不是冻结基线。
 

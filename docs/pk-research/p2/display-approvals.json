@@ -164,25 +164,6 @@
    },
    "owner_decision": "REQUIREMENTS §67 item 5 (D-2 option D2-2, 2026-10-12) and §69 item 4.",
    "human_review": "recommended: check that the diff stays within D2-2 and that no persisted format changed."
-  },
-  {
-   "id": "PD-2026-10-18-LAB01-LABSSCREEN",
-   "file": "app/src/main/java/net/plainnotes/app/ui/LabsScreen.kt",
-   "approver": "DevenirTwilight",
-   "date": "2026-10-18",
-   "scope": "LAB-01 batch lab entry, limited to: the add entry opening the batch form, the 'All' list showing one card per draw (same sampled_utc and same trimmed laboratory, display only), and the split hint in the single edit dialog. No chart, unit, conversion, calculator, LabFit, context or export change.",
-   "previous_sha256": "fff4590c717898c791d757980efc46bf40a3eac5f8bc424b085f7df2839d53ab",
-   "new_sha256": "27e2d80bdd1e0f6e987de284258f19daf16031c504619e3d34cb6f4f7ccee30f",
-   "evidence": {
-    "commit": "890ae4cad56f132b60842643dcb3ea7cbf3eea68",
-    "path": "docs/REQUIREMENTS.md"
-   },
-   "owner_decision": "REQUIREMENTS §111 (2026-10-18), quoting the LAB-01 task book section 1 item 3 uploaded by the owner on 2026-10-18 (docs/audits/product-quality-2026-10/sources/lab01/lab01-prompt.md, SHA-256 d087ba27…6c6): 负责人在此明确批准本任务修改该文件，范围仅限：批量录入入口、列表分组显示、单项编辑对话框中的分组提示。",
-   "verification": {
-    "previous_blob": "fff4590c… = LabsScreen.kt on the default branch before LAB-01 (it already differed from the frozen baseline 11dc6b23…, with no earlier approval entry for this file; the guard no longer enforces display chains, see check_protocol.check)",
-    "diff": "+13/-2 lines in LabsScreen.kt; new UI code is in LabBatchEntry.kt"
-   },
-   "human_review": "recommended: check that the LabsScreen diff stays within the three approved items."
   }
  ]
 }
