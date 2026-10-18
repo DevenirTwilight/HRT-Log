@@ -22,7 +22,7 @@
 | `app/visit/VisitPack.kt` | 矩阵外 | 摘要使用 `legacyString()`，已生成资料包的摘要不变（Q10） |
 | `app/ui/LabBatchEntry.kt` | 矩阵外 | `labDraws`：真实化验单优先，其余结果仍按 LAB-01 规则显示；卡片显示备注、标题可点开详情、“保存为一次化验”按钮 |
 | `app/ui/LabPanelDetail.kt`（新） | 矩阵外 | 化验单详情（整体改时间、机构、备注；成员可打开或移出；新增项目时同一化验单内不能重复；整体删除需确认）和“保存为一次化验”确认对话框 |
-| `app/ui/LabsScreen.kt` | **PK_DISPLAY_REVIEW** | 新增 `panels`、`onPanel`、`onSaveAsPanel` 参数，列表改用 `labDraws`（+5 / −3 行），已登记批准记录 |
+| `app/ui/LabsScreen.kt` | **PK_DISPLAY_REVIEW** | 新增 `panels`、`onPanel`、`onSaveAsPanel` 参数，列表改用 `labDraws`（+6 / −4 行），已登记批准记录 |
 | `app/ui/ShellHosts.kt`、`AppShell.kt`、`RecycleBin.kt` | HISTORY_ONLY / 矩阵外 | 接线；回收站显示“化验单 · n 项”；最后一条成员的回收站标题按 `lab_value` 表读取 |
 | 四语文案 | — | 12 条 |
 
@@ -63,7 +63,14 @@
 
 ## 4.1 本地回归
 
-见 HANDOFF 与 PR。
+- 完整回归：
+  - `core:reminder` 20 项；
+  - `core:data` 261 项，0 失败；
+  - `app:testFullDebugUnitTest` 1634 项。唯一失败是 `PrivacyNoticeFactsTest`：它固定检查备份结构版本，已更新为 11，`PRIVACY.md` 和 `docs/privacy-evidence.md` 中原本过时的“serialization 9”也一并改为 11。随后定向复跑通过。
+  - 跳过 237 项，都是既有的默认关闭用例。
+- 修复行布局后，`*Lab0*` 共 172 项复跑通过。
+- `lintFullDebug` 通过；app 和 core:data 的设备测试编译通过。
+- 设备上的迁移和进程重启以 CI 为准：API 35 跑完整设备测试，API 26/29 跑兼容任务。
 
 ## 5. NOT_RUN
 
