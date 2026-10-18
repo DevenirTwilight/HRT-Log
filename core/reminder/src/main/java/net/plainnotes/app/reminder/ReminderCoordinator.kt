@@ -189,18 +189,22 @@ import javax.inject.Singleton
         val mode=if(context.getSharedPreferences("prefs",Context.MODE_PRIVATE).getBoolean("high_reliability",false))"HIGH" else "NORMAL"
         val a=CachedAlarm(UUID.randomUUID().toString(),now+delayMillis,mode,test=true)
         store.write(current.copy(expiresMillis=maxOf(current.expiresMillis,a.triggerMillis),alarms=current.alarms.filterNot{it.test}+a))
-        testLog.scheduled(now,a.triggerMillis,mode,canExact());scheduleCached()
+        testLog.scheduled(now,a.triggerMillis,mode,canExact(),blocked(context.getSystemService(NotificationManager::class.java).also(::channel)))
+        scheduleCached()
         testLog.read()
     }}
-    /** Immediate test: posts through the same channel now, without AlarmManager. Its result never stands in for the scheduled test. */
-    suspend fun testNow()=withContext(Dispatchers.IO){ postTest().also{testLog.immediate(System.currentTimeMillis(),it)} }
     fun testStatus()=testLog.read()
+    /** What would stop a notification right now, read from the system without posting anything (null: nothing blocks it). */
+    private fun blocked(nm:NotificationManager):TestOutcome? = when {
+        Build.VERSION.SDK_INT>=33 && ContextCompat.checkSelfPermission(context,Manifest.permission.POST_NOTIFICATIONS)!=PackageManager.PERMISSION_GRANTED->TestOutcome.BLOCKED_PERMISSION
+        !NotificationManagerCompat.from(context).areNotificationsEnabled()->TestOutcome.BLOCKED_APP
+        nm.getNotificationChannel("reminders")?.importance==NotificationManager.IMPORTANCE_NONE->TestOutcome.BLOCKED_CHANNEL
+        else->null
+    }
     private suspend fun postTest():TestOutcome {
         val nm=context.getSystemService(NotificationManager::class.java)
         channel(nm)
-        if(Build.VERSION.SDK_INT>=33 && ContextCompat.checkSelfPermission(context,Manifest.permission.POST_NOTIFICATIONS)!=PackageManager.PERMISSION_GRANTED)return TestOutcome.BLOCKED_PERMISSION
-        if(!NotificationManagerCompat.from(context).areNotificationsEnabled())return TestOutcome.BLOCKED_APP
-        if(nm.getNotificationChannel("reminders")?.importance==NotificationManager.IMPORTANCE_NONE)return TestOutcome.BLOCKED_CHANNEL
+        blocked(nm)?.let{return it}
         val open=context.packageManager.getLaunchIntentForPackage(context.packageName)?.let{PendingIntent.getActivity(context,1,it,PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)}
         NotificationManagerCompat.from(context).notify(TEST_NOTIFICATION,NotificationCompat.Builder(context,"reminders").setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
             .setContentTitle(NotificationPrefs(context).title ?: context.getString(R.string.neutral_reminder)).setContentText(context.getString(R.string.test_notification_body))
