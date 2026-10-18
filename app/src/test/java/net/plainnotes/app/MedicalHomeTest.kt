@@ -36,7 +36,8 @@ class MedicalHomeTest {
         ui.onNodeWithTag("medical-next:2").assertExists()
         ui.onNodeWithTag("medical-next:3").assertDoesNotExist()
         ui.onNodeWithText("Synthetic doctor 3").assertDoesNotExist()       // not listed anywhere else either
-        ui.onNodeWithTag("medical-next-open").performClick()
+        // UI-05 F: the single "Questions and visit pack" button became two rows that open the same visit; tap the first.
+        ui.onNodeWithTag("medical-next-questions").performClick()
         assertEquals(sooner, opened)
     }
 

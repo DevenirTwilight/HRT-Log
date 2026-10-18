@@ -1252,4 +1252,7 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="stock_about_days">environ %1$d jours</string>
 <string name="period_since">Depuis le %1$s</string>
 <string name="drawer_stock_badge">Stock : %1$d bientôt épuisé(s)</string>
+<string name="medical_in_days">dans %1$d jours</string>
+<string name="medical_next_questions">Questions à poser · %1$d</string>
+<string name="medical_next_pack">Dossier de consultation</string>
 </resources>

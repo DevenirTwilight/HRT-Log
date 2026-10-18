@@ -174,6 +174,8 @@ class UiPrefs(context: Context) {
                         if (destination == Destination.CONCENTRATION) IconButton(onClick = { model.loadConcentration() }) { Icon(Icons.Outlined.Refresh, stringResource(R.string.refresh)) }
                         // UI-05 D: the timeline's "Add milestone" / "New period" (the timeline registers its own callbacks).
                         if (destination == Destination.TIMELINE) TimelineAddMenu(timelineAdd)
+                        // UI-05 F: "Record a past visit", the same action as the former list button.
+                        if (destination == Destination.MEDICAL) MedicalAddAction { model.clearMedicalVisitSave();medicalDialogs.edit=null;medicalDialogs.editing=true }
                     })
             },
             snackbarHost = { SnackbarHost(snackbar) },

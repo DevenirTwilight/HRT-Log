@@ -1252,4 +1252,7 @@
 <string name="stock_about_days">约 %1$d 天</string>
 <string name="period_since">%1$s 至今</string>
 <string name="drawer_stock_badge">库存：%1$d 种即将用完</string>
+<string name="medical_in_days">%1$d 天后</string>
+<string name="medical_next_questions">想问的问题 · %1$d 条</string>
+<string name="medical_next_pack">就诊资料包</string>
 </resources>
