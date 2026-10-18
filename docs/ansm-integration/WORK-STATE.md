@@ -1,3 +1,11 @@
+## P4 单次消费解析复用已编码并通过本地回归 — 2026-10-18
+
+最新确认65cf08e的六项常规CI全部PASS，但独立原生run39069126496四预算FAIL，真实写入18.60–19.03s>5s。原生逐操作审核（含构造）7563ms、逐包装投影6295ms；工件12114726822 SHA/CRC及报告已归档native-65cf08e-*，不使用前次较快运行冒充稳定修复。
+
+在旧实现上先实际通过2个冻结旧解码器对照测试（39有效/33明确拒绝输入），再改为单次审核内复用完整验证的消费 envelope/request/receipt，避免两个热路径各自重复解析、重复 canonical/hash。所有原断言保留，不新增跨行/事务缓存，不改Schema/备份/PK/分配算法/入口。候选本地 data409零fail/error/skip、原生共享合同及生成大库源码编译、Period5/Privacy3、Python169均PASS。同规模JVM大库审计1348ms、写入1686/1573/1661ms，仅DIAGNOSTIC_ONLY，原生新结果NOT_RUN。完整范围与证据见performance/consumption-decoder-reuse.md、receipt-decoder-local-evidence.json。新探针首次转义编译失败及环境缺编译器已记录，修正后重编译通过；未记为原生执行成功。
+
+发现独立Beta分支#64的一个Android作业在TrashDataTest真实失败：trash_item.kind/ref UNIQUE冲突；同SHA另一作业PASS不能视为修复。已在独立fix/daily-trash-ref-collision-20261018工作树准备固定时间复现；当前P4 diff不含该修复。P4_BLOCKED/DRAFT/正式入口OFF；P5/P6未实施，Beta NO-GO。
+
 ## P4 同机原生对照已完成；写入仍超预算 — 2026-10-17
 
 测试提交cdc50b7，run39068064156，官方工件12113788250 SHA/CRC核验PASS。完整原生报告见performance/native-cdc50b7-report.json，来源见同名evidence。原验收阶段审计14494ms、预测13971ms、恢复后审计13663ms，均低于15s；三次真实写入15245/15521/16471ms仍超过5s，最终FAIL，P4_BLOCKED。生产代码与上一db34e87相同；上次四预算FAIL完整保留，不能声称已修复稳定性或放行。

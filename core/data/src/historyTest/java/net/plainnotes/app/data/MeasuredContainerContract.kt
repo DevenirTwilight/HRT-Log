@@ -32,6 +32,8 @@ abstract class MeasuredContainerContract {
     private suspend fun create(med:Long,op:String,source:PackageMeasurementDraft=draft,ticket:String?=null)=db.withTransaction{MeasuredContainerStore.create(db,ticket ?: ReferenceStore.previewEpoch(raw),med,op,source,at)}
     private fun count(table:String)=raw.query("SELECT COUNT(*) FROM `$table`").use{it.moveToFirst();it.getInt(0)}
     private suspend fun reject(code:ReferenceError,block:suspend()->Unit){try{block();fail("Expected $code")}catch(e:ReferenceFailure){assertEquals(code,e.code)}}
+    @Test fun consumptionDecoderMatchesFrozenReceiptOracleForValidAndInterleavedRows() {ConsumptionReceiptOracle.validCorpus()}
+    @Test fun consumptionDecoderPreservesFrozenMalformedReceiptRejections() {ConsumptionReceiptOracle.malformedCorpus()}
     @Test fun candidateColumnScanPreservesEveryStorageTypeAndTextBoundaryPredicate() {
         CandidateColumnScanOracle.check(context,factory(key.clone()),false)
     }

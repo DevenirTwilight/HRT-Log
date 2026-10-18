@@ -98,13 +98,13 @@ internal object MeasuredConsumptionStore {
                 when(entry.kind) {
                     "CONSUME"->{
                         require(delta>0 && allocation.isNull("reverses_uuid"))
-                        val envelope=JSONObject(operation.getString("input_json"));val request=MeasuredUsePayload.read(ReferencePayload.canonical(envelope.getJSONObject("request"))).request()
+                        val decoded=consumption(operation);val envelope=decoded.envelope;val request=decoded.request
                         require(request.medicationUuid==owner)
                         val input=request.uses.single{it.containerUuid==containerUuid};require(input.presentationEventUuid==event.getString("operation_uuid") && input.presentationSha256==frozen.sha256)
                         val expected=physicalStock(frozen,scale,input.quantity)
                         require(expected is MeasureResult.Success)
                         val wanted=scale.toQuanta(expected.value,ActualPackage(scale.ref,true));require(wanted is MeasureResult.Success)
-                        val line=receipt(operation).lines.single{it.containerUuid==containerUuid};require(line is PhysicalUseResult.Known && same(line.requested,expected.value) && same(line.allocated,physical))
+                        val line=decoded.receipt.lines.single{it.containerUuid==containerUuid};require(line is PhysicalUseResult.Known && same(line.requested,expected.value) && same(line.allocated,physical))
                         val captures=envelope.getJSONArray("captures");val capture=(0 until captures.length()).map{captures.getJSONObject(it)}.single{it.getString("container_uuid")==containerUuid}
                         require(capture.getString("snapshot_uuid")==snapshot.getString("uuid") && capture.getString("used_before_quanta")==used.toString() && capture.getString("take_quanta")==delta.toString())
                         require(capture.getString("requested_quanta")==wanted.value.toString() && delta==minOf(wanted.value,scale.capacityQuanta-used))
@@ -263,8 +263,7 @@ internal object MeasuredConsumptionStore {
             allocations.forEach{require(allocated.add(it.getString("uuid")))}
             when(op.getString("kind")) {
                 "CONSUME"->{
-                    val result=receipt(op);val envelope=JSONObject(op.getString("input_json"))
-                    val request=MeasuredUsePayload.read(ReferencePayload.canonical(envelope.getJSONObject("request"))).request()
+                    val decoded=consumption(op);val result=decoded.receipt;val envelope=decoded.envelope;val request=decoded.request
                     require(consumed.add(request.record.uuid to request.record.revision))
                     identity(request.medicationUuid,"MEDICATION",dataset)
                     val record=identity(request.record.uuid,"RECORD",dataset,request.medicationUuid)
@@ -431,8 +430,11 @@ internal object MeasuredConsumptionStore {
     internal fun sourceOfInverse(db:SupportSQLiteDatabase,operationUuid:String):JSONObject? =
         ReferenceStore.row(db,"measured_operation","operation_uuid=?",arrayOf(operationUuid))?.let{if(it.getString("kind")!="REVERSE")fail(ReferenceError.OPERATION_CONFLICT);reverseCapture(it)}
 
-    private fun receipt(row:JSONObject):MeasuredConsumptionReceipt = try {readReceipt(row)} catch(e:Exception){fail(ReferenceError.INVALID_SOURCE)}
-    private fun readReceipt(row:JSONObject):MeasuredConsumptionReceipt {
+    /** One call-local parse, including all original checks. Not retained across rows, audits or writes. */
+    private data class DecodedConsumption(val envelope:JSONObject,val request:MeasuredConsumptionRequest,val receipt:MeasuredConsumptionReceipt)
+    private fun receipt(row:JSONObject):MeasuredConsumptionReceipt = consumption(row).receipt
+    private fun consumption(row:JSONObject):DecodedConsumption = try {readConsumption(row)} catch(e:Exception){fail(ReferenceError.INVALID_SOURCE)}
+    private fun readConsumption(row:JSONObject):DecodedConsumption {
         fun keys(value:JSONObject,expected:Set<String>)=require(value.keys().asSequence().toSet()==expected)
         fun text(value:JSONObject,key:String):String {require(value.get(key) is String);return value.getString(key)}
         fun quanta(value:JSONObject,key:String):Long {
@@ -440,9 +442,9 @@ internal object MeasuredConsumptionStore {
             return token.toLong().also{require(it<=StockQuantum.MAX_QUANTA)}
         }
         val envelope=JSONObject(row.getString("input_json"));keys(envelope,setOf("format","request","captures","chain"));MeasuredOperationChain.read(envelope)
-        val request=MeasuredUsePayload.read(ReferencePayload.canonical(envelope.getJSONObject("request"))).request()
+        val frozen=MeasuredUsePayload.read(ReferencePayload.canonical(envelope.getJSONObject("request")));val request=frozen.request()
         if(ReferencePayload.canonical(envelope)!=row.getString("input_json") || envelope.get("format") !is Int || envelope.getInt("format")!=2 || row.getString("kind")!="CONSUME" ||
-            ReferencePayload.sha(ReferencePayload.canonical(envelope.getJSONObject("request")))!=row.getString("request_sha256") ||
+            frozen.sha256!=row.getString("request_sha256") ||
             row.getString("dataset_uuid")!=request.datasetUuid || row.getString("record_uuid")!=request.record.uuid || row.getInt("record_revision")!=request.record.revision)fail(ReferenceError.INVALID_SOURCE)
         val captures=envelope.getJSONArray("captures");require(captures.length()==request.uses.size)
         val lines=request.uses.mapIndexed {i,input->
@@ -468,7 +470,7 @@ internal object MeasuredConsumptionStore {
                 PhysicalUseResult.Known(input.containerUuid,q,allocated,q.copy(value=q.value.subtract(allocated.value).stripTrailingZeros()))
             }
         }
-        return MeasuredConsumptionReceipt(row.getString("operation_uuid"),request.record.uuid,request.record.revision,lines,ReferencePayload.optional(row,"unknown_reason"))
+        return DecodedConsumption(envelope,request,MeasuredConsumptionReceipt(row.getString("operation_uuid"),request.record.uuid,request.record.revision,lines,ReferencePayload.optional(row,"unknown_reason")))
     }
     internal fun reverseCapture(row:JSONObject):JSONObject = try {
         val encoded=row.getString("input_json");val envelope=JSONObject(encoded)

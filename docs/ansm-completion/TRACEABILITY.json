@@ -81,7 +81,7 @@
       "blocker": "",
       "owner_decision_required": false,
       "progress": "IN_PROGRESS",
-      "note": "P4_BLOCKED / 正式入口OFF。cdc50b7原生run39068064156最终FAIL：本次审计/预测/恢复审计<15s，写入15.25–16.47s仍>5s。同机raw17s vs cached12–13s且全部投影相等，证明收益但未放行；相同生产源码上一db34e87四预算FAIL仍保留。继续TEST_ONLY逐包装/逐操作耗时细分，不改预算。data407、Period5/Privacy3、Python169、原生源码编译PASS；主线d13048b六CI PASS；P5/P6未实施，Beta #64 NO-GO。"
+      "note": "P4_BLOCKED/OFF。65cf08e六CI PASS、原生run39069126496四预算FAIL，写入18.60–19.03s>5s；逐操作7563ms/逐包装6295ms。新候选仅消除同次审核重复解析，保留所有校验；先验旧解码器39有效/33拒绝，后验data409、Period5/Privacy3、Python169、原生源码编译和完整JVM大库PASS，新的原生NOT_RUN。P5/P6未实施。另有#64日常评分回收站UNIQUE冲突独立复现，不混入P4，不以另一作业通过冒充修复。"
     },
     {
       "requirement_id": "V4.04",

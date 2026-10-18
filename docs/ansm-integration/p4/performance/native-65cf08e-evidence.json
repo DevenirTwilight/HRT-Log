@@ -1,0 +1,27 @@
+{
+  "status": "FAIL",
+  "head": "65cf08e748e424d2639bac8f4264ac2d7414d75b",
+  "run": 39069126496,
+  "artifact_id": 12114726822,
+  "artifact_sha256": "01d663f8845b3d4bcc2bfe7cc50778e21329a2355a444e387b2ffcfff3807d77",
+  "zip_crc": "PASS",
+  "source": {
+    "source_sha256": "9313167178989def0d4d89d785f84cdde764fba21033543cdf85e472c5511242",
+    "native_sha256": "9368ab43aadda982117201daaceaf0214c9202af222c0a20de8e6f96071918b3",
+    "status": "GENERATED_NOT_RUN"
+  },
+  "report": "native-65cf08e-report.json",
+  "budget_exceeded": [
+    "full_audit_ms",
+    "shared_forecast_ms",
+    "restored_full_audit_ms",
+    "post_restore_write_including_ticket_ms"
+  ],
+  "components_ms": {
+    "operations_with_setup": 7562.8284,
+    "projections_with_setup": 6295.38035
+  },
+  "budgets_changed": false,
+  "production_status": "P4_BLOCKED",
+  "next": "Remove duplicate decoding only within one consumption audit call. Preserve every header/chain/digest/capture/amount check; no cross-transaction cache."
+}

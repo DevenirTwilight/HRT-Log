@@ -23,6 +23,7 @@ class NativePerformanceIsolationTest(unittest.TestCase):
                        'physical_device_acceptance','NOT_RUN'):
             self.assertIn(marker, text)
         self.assertNotIn('setLargeHeap', text)
+        self.assertIn(r'val numericPattern="""[0-9]+(?:\.[0-9]+)?"""', text)
         self.assertNotIn('fallbackToDestructiveMigration', text)
 
     def test_components_follow_original_budget_capture_and_do_not_replace_failure_gate(self):
@@ -33,7 +34,8 @@ class NativePerformanceIsolationTest(unittest.TestCase):
         self.assertLess(text.index('components.put("status","COMPLETE")'), text.index('assertEquals("Diagnostic budgets;'))
         for name in ('raw_full_first_ms', 'cached_full_second_ms', 'cached_full_first_ms',
                      'raw_full_second_ms', 'raw_state_including_references_ms', 'raw_operation_chain_ms',
-                     'cached_operations_with_setup_ms', 'cached_projections_with_setup_ms'):
+                     'cached_operations_with_setup_ms', 'cached_projections_with_setup_ms',
+                     'decimal_regex_compile_12000_ms', 'decimal_regex_reuse_12000_ms'):
             self.assertIn(name, text)
         diagnostic = text[text.index('val components=JSONObject()'):text.index('components.put("status","COMPLETE")')]
         self.assertNotIn('execSQL', diagnostic)

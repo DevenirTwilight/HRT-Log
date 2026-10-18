@@ -105,6 +105,18 @@ def native_source(text):
                     assertEquals(rawProjection,values)
                 } finally{reads.finish()}
             }
+            // Diagnostic only: quantify Android decimal-pattern compilation cost before considering reuse.
+            val numericTokens=arrayOf("0.5","1","2.00","bad","0,5","1e3")
+            val numericPattern="""[0-9]+(?:\\.[0-9]+)?"""
+            val numericRegex=Regex(numericPattern)
+            component("decimal_regex_reuse_12000_ms") {
+                var matches=0;repeat(12000){if(numericRegex.matches(numericTokens[it%numericTokens.size]))matches++}
+                assertEquals(6000,matches)
+            }
+            component("decimal_regex_compile_12000_ms") {
+                var matches=0;repeat(12000){if(Regex(numericPattern).matches(numericTokens[it%numericTokens.size]))matches++}
+                assertEquals(6000,matches)
+            }
             components.put("status","COMPLETE")
             file.writeText(report.toString(2));assertEquals("Diagnostic budgets; device acceptance remains NOT_RUN",emptyList<String>(),exceeded)''')
     # AGP may uninstall the synthetic test APK after a process crash, deleting
