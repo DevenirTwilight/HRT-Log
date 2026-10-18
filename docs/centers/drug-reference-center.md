@@ -1,6 +1,6 @@
 # Drug reference center — slice B
 
-Based on main ec61d53; navigation integration waits for medical-center slice A so neither PR competes for the same AppShell edit. Independent UI/resources/tests only during that wait.
+Current baseline: ff2a4e9, after medical slice A #73 passed all six required checks and merged. B then added its single AppShell browse callback. Earlier isolated work used ec61d53; those results remain separately identified below. No competing A/B shell edits.
 
 The center is a projection of existing NotesState.medications and MedicationReferenceController. Query opens its current offline saved-user-source browser (no target, no implicit binding). Selecting an existing medication opens exactly the same controller with its ID; its frozen scope/revision/UUID confirmation, cancel, unlink and error recovery remain unchanged. No medication save, container resize, PK or historical rewrite is introduced. Empty state keeps manual medication creation in Medication plans.
 
@@ -10,7 +10,7 @@ RCP and Notice have distinct read-only status sections; neither is a fabricated 
 
 No database/backup/PK/network/security/signing/version changes. Attachments remain OFF. P4/P5 exact-stock admission remains independent. Official document API integration, approved catalogue distribution, regulatory snapshots and packaging metadata are future boundaries, not implemented actions.
 
-Evidence pending integration and test execution. Physical device, TalkBack and keyboard-on-device: NOT_RUN.
+Local integration verified: 133 tests, zero failures/errors/skips. Real NotesApp/Room/reference controller with nonempty actual records, ledger and profile; saved-source offline query and cancellation/back leave those rows unchanged. Existing medical home/records, shell navigation, reference controller/history and PeriodStability regressions included. See drug-integration-test-evidence.json. Six required CI checks PENDING. Physical device, TalkBack and keyboard-on-device: NOT_RUN.
 
 First matrix run: FAIL (32 cases, 2 English/320dp/2x failures). Actual click callbacks stayed zero although semantic nodes existed: the dynamic header overlaid scrolling content. Corrected the new dialog to give its list a viewport padded by Scaffold insets, rather than only list content padding. Retain actual touch and count assertions; no semantic-action substitute. Full matrix re-run pending.
 
@@ -21,7 +21,7 @@ Corrected independent display run: PASS32, zero failures/skips; three contrasts 
 ## File-level connection plan
 
 - `DrugReferenceCenterScreen.kt`: center/dialog, real existing-medication callbacks, read-only unavailable sections; standalone matrix verified.
-- `MedicationsScreen.kt`: optional browse callback enables one center button and hosts the center, retaining original add/edit/archive/reference actions. Full Kotlin compilation PASS. Current AppShell does not yet supply the browse callback, so this is not advertised as enabled production navigation.
+- `MedicationsScreen.kt`: optional browse callback enables one center button and hosts the center, retaining original add/edit/archive/reference actions. Full Kotlin compilation PASS. AppShell now supplies the browse callback after A merged; the real center entry is enabled.
 - `AppShell.kt`, after A merges: supply `onBrowseReference={openReference(null)}` to the existing medication screen. This is the only planned shared-shell hook; existing per-medication `openReference(it)` remains identical.
 - `DrugCenterNavigationTest.kt`, after that hook: real NotesApp/Room and existing reference controller; nonempty actual-record/ledger/profile fixtures, offline saved-source search, cancel/back, frozen rows unchanged.
 - `DrugCenterMatrixTest.kt`: 32 real Compose renders each 3 contrasts, actual callback counts, unavailable sections have no click action, long synthetic names/units preserve text. Physical TalkBack and keyboard testing NOT_RUN.

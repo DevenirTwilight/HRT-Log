@@ -1,0 +1,82 @@
+{
+  "tests": 133,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "status": "PASS",
+  "integration": "LOCAL_INTEGRATION_VERIFIED",
+  "baseline": "ff2a4e98c2e553a69732dd447c9a44dc1b7f3841",
+  "physicalDevice": "NOT_RUN",
+  "TalkBack": "NOT_RUN",
+  "CI": "PENDING",
+  "data": "Synthetic only; nonempty actual records, ledger and profile asserted unchanged through real NotesApp/reference controller",
+  "classes": [
+    {
+      "name": "net.plainnotes.app.AppShellBackNavigationTest",
+      "tests": 15,
+      "sha256": "5a52e7ca23f19d4f232fb6c346817e0f371f99e804b675f501b3ebe06dbfb864"
+    },
+    {
+      "name": "net.plainnotes.app.DrugCenterNavigationTest",
+      "tests": 1,
+      "sha256": "9bdb4948f80dee9240dfa0215906d5c35a79836b416d51024a4baec4d864cf20"
+    },
+    {
+      "name": "net.plainnotes.app.MedicationReferenceUiTest",
+      "tests": 16,
+      "sha256": "69c704ef0f5b8b94c7fcf7764851591dddbf75090f56702e978d7c147d7c395d"
+    },
+    {
+      "name": "net.plainnotes.app.RecordedReferenceUiTest",
+      "tests": 12,
+      "sha256": "f9b26c148f5ee66a2ffbc71801e792622b55857d868c8151dd5d79d46d9399f7"
+    },
+    {
+      "name": "net.plainnotes.app.MedicationReferenceControllerTest",
+      "tests": 7,
+      "sha256": "2dc54755298b46bdcd402003769f1f45e18e0f704ae85838b9aa5a2edbfed74c"
+    },
+    {
+      "name": "net.plainnotes.app.MedicalRecordsUiTest",
+      "tests": 40,
+      "sha256": "8382cb6ee95b1a84ba0b761bf5301c5f55eed2a0015167d786e57bd038926b12"
+    },
+    {
+      "name": "net.plainnotes.app.MedicalHomeConfirmFlowTest",
+      "tests": 1,
+      "sha256": "0e90db0081717ded63073b45a78bc2255bf4a8c63e868a53c71cf8ab5c8a2f5b"
+    },
+    {
+      "name": "net.plainnotes.app.DrugCenterMatrixTest",
+      "tests": 32,
+      "sha256": "4ba87b057cfc13327c1ac4285d01374d4cbb93150d01da0cd127b09d2da27604"
+    },
+    {
+      "name": "net.plainnotes.app.MedicalHomeTest",
+      "tests": 4,
+      "sha256": "9445a16697c33cbfd05dc885daa652c53b71ecd901b8fa73a25a24ab59055d50"
+    },
+    {
+      "name": "net.plainnotes.app.PeriodStabilityTest",
+      "tests": 5,
+      "sha256": "654daa319d41264f6438a7b5a6b56a0f47931e47005958c6df487ca0f4822709"
+    }
+  ],
+  "sourceSha256": {
+    "app/src/main/java/net/plainnotes/app/ui/AppShell.kt": "e7bebf36744d7f8ee663baa69c17e6d247ac62a8dbed96e8c887a2f416002c79",
+    "app/src/main/java/net/plainnotes/app/ui/MedicationsScreen.kt": "377c699a191d01b63fe81fc5296417a59d6dd993804f69fcf01bb7c124726ebe",
+    "app/src/main/java/net/plainnotes/app/ui/DrugReferenceCenterScreen.kt": "6a7664360504bb2fce6f2ab68e407d7d11333af1ba9d12679fa3f4db47ba3f33",
+    "app/src/test/java/net/plainnotes/app/DrugCenterNavigationTest.kt": "d9b76dd73b41a8398dd15d1026034b496535fcaae22668b9ade33d2dca20dc51",
+    "app/src/test/java/net/plainnotes/app/DrugCenterMatrixTest.kt": "a9eacf9f1c4aeba32bac30f209cd039de84696ac05b283cd42b8035f703877d4"
+  },
+  "screenshots": {
+    "zh-rTW_320dp_2.0x_light_HIGH.png": "cf35ab848d10e677dbc9ec87d8083957731609b78188e67400e5eb55266914e4",
+    "zh-rCN_320dp_2.0x_dark_HIGH.png": "23a7e296437d120ab79f987c3060b1ae122c3db3b083fbdad83cb4fb366e34cd",
+    "zh-rCN_320dp_2.0x_light_HIGH.png": "f53e7088b604b07a8b08eab90e0e3d4e9117812fb8d3c73d1d88ae20e615fb40",
+    "en_320dp_2.0x_light_HIGH.png": "f7b3b689be974f5491f7189b215a12c6f2b56c3a69caf413c3a1e271733150ec",
+    "fr-rFR_320dp_2.0x_light_HIGH.png": "fe16e4b3cd4e43437741ec395bd3d8cc23a3b956a92d9c922452c2a6c943cf0f",
+    "zh-rTW_320dp_2.0x_dark_HIGH.png": "96afbe64bf0100323ef84316e71a754ba3ec58e4d97275488e869d9091f64fbb",
+    "en_320dp_2.0x_dark_HIGH.png": "3e5f70704c60fb3d556440ba1e217215fa2a21803b51195aa83443b6a4d52cc0",
+    "fr-rFR_320dp_2.0x_dark_HIGH.png": "942f3a76443023d9272f71d30285348557b3167ccf5750fc85b71b77e1241cc8"
+  }
+}

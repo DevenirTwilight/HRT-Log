@@ -206,7 +206,7 @@ class UiPrefs(context: Context) {
                 Destination.CALENDAR -> CalendarScreen(state, today, { completeEntry = it }, { overrideEntry = it; model.loadOverride(it.slot.key) }, { model.edit(null) },
                     { model.calendarFrom(null) }, pad, onReview = { destination = Destination.MEDICATIONS }, extra = extra, onStock = { destination = Destination.STOCK },
                     onAppointment = { visitId = it.id; medicalOrigin=false; destination = Destination.VISITS }, onAddStock = { stockDialogs.addStock = it })
-                Destination.MEDICATIONS -> MedicationsScreen(state, { model.edit(null) }, { model.edit(it) }, { medicationDialogs.archive = it }, pad,onReference={openReference(it)})
+                Destination.MEDICATIONS -> MedicationsScreen(state, { model.edit(null) }, { model.edit(it) }, { medicationDialogs.archive = it }, pad,onReference={openReference(it)},onBrowseReference={openReference(null)})
                 Destination.CONCENTRATION -> net.plainnotes.app.experimental.UnifiedConcentrationScreen(extra.records, state.ruleSnapshots, extra.labs, pad,
                     content = { innerPad, preview, selector -> ConcentrationScreen(state, conc.result, conc.loading, conc.weight, concSettings, { concSettings = it; prefs.conc = it },
                         { model.setWeight(it) }, { model.editById(it) }, { destination = Destination.LABS }, innerPad,extra.records,state.profiles,model::confirmHistoricalContext,{destination=Destination.HISTORY},preview,selector,m2Only=true) })
