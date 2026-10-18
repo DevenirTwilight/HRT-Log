@@ -19,6 +19,6 @@ The fixture currently closes `executeShellCommand`'s descriptor immediately. It 
 ## Current evidence status
 
 - Main417 API35: FAIL before delivery wait, `status.exact=false`.
-- Proposed fixture source/compilation: NOT_IMPLEMENTED at this plan checkpoint.
-- Actual fixed API26/29/35 and final-head six CI: NOT_RUN at this plan checkpoint.
+- Fixture source: IMPLEMENTED_TEST_ONLY; all original test methods/assertions/deadlines byte-identical. Local native compilation NOT_RUN; unchanged remote CI will compile and execute.
+- Actual fixed API26/29/35 and final-head six CI: PENDING.
 - Race causality, physical/vendor-ROM/Doze/reboot: UNVERIFIED / NOT_RUN.
