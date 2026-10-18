@@ -1246,4 +1246,33 @@
 <string name="test_out_permission">被阻止：未授予通知權限</string>
 <string name="test_out_app">被阻止：本應用程式的通知已關閉</string>
 <string name="test_out_channel">被阻止：提醒通知類別已關閉</string>
+
+<!-- Medical and medicine center UI skeleton: no official assets or medical originals activated. -->
+<string name="ui_skeleton_ref_title">藥品資料中心</string>
+<string name="ui_skeleton_coming_soon">尚未開放</string>
+<string name="ui_skeleton_unavailable">此功能尚未開放；本次操作不會儲存或修改資料。</string>
+<string name="ui_skeleton_ref_intro">這裡可以查看已儲存的個人藥品參考資料。法國官方藥品目錄目前尚未啟用。</string>
+<string name="ui_skeleton_ready">現已可用</string>
+<string name="ui_skeleton_manage_existing">進入現有的藥物方案與編輯功能</string>
+<string name="ui_skeleton_existing_stock">進入現有庫存頁面；新的精確包裝計量尚未開放</string>
+<string name="ui_skeleton_no_medications">目前沒有已儲存的藥物，請先在「藥物方案」中新增。</string>
+<string name="ui_skeleton_saved_medications">我的藥物與參考資料</string>
+<string name="ui_skeleton_user_reference">查看使用者輸入的資料，不代表官方核實</string>
+<string name="ui_skeleton_future">後續藥品資料功能</string>
+<string name="ui_skeleton_official_catalogue">法國官方藥品目錄</string>
+<string name="ui_skeleton_official_desc">官方資料散布授權與產品身分核驗尚未完成，這裡不會開啟或匯入官方目錄。</string>
+<string name="ui_skeleton_rcp_notice">藥品說明書（RCP / Notice）</string>
+<string name="ui_skeleton_rcp_desc">說明書流程仍在獨立審查；這裡不會顯示未經核實的醫學正文或治療建議。</string>
+<string name="ui_skeleton_safety">藥品安全資訊</string>
+<string name="ui_skeleton_safety_desc">來源查核及文案審查尚未完成，不提供個人風險判斷或劑量建議。</string>
+<string name="ui_skeleton_supply">短缺、召回與監管公告</string>
+<string name="ui_skeleton_supply_desc">尚未接入經過核實的更新來源。狀態未知不代表沒有公告。</string>
+<string name="ui_skeleton_visit_pack">就診與資料準備</string>
+<string name="ui_skeleton_med_future">後續醫療中心功能</string>
+<string name="ui_skeleton_med_documents">加密醫療文件庫</string>
+<string name="ui_skeleton_med_documents_desc">文件原件加密儲存、預覽與完整復原尚未通過安全驗收；不會開啟檔案選擇器，也不會儲存檔案或路徑。</string>
+<string name="ui_skeleton_med_practitioners">醫生與醫療機構檔案</string>
+<string name="ui_skeleton_med_practitioners_desc">獨立名錄尚未開放；現有就診紀錄中的醫生與地點仍可在就診頁面查看。</string>
+<string name="ui_skeleton_med_links">醫療資料關聯</string>
+<string name="ui_skeleton_med_links_desc">文件原件、檢驗和就診紀錄之間的關聯功能尚未開放；不會自動配對或修改既有紀錄。</string>
 </resources>
