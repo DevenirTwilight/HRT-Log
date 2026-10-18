@@ -8,7 +8,22 @@ import subprocess
 import uuid
 
 def report_paths(lines):
-    return [p.strip() for p in lines if re.fullmatch(r'/sdcard/Android/data/net\.plainnotes\.app\.data(?:\.test)?/files/ansm-performance/large-ten-year\.json', p.strip())]
+    return [p.strip() for p in lines if re.fullmatch(r'(?:/sdcard/Android/data|/data/user/0)/net\.plainnotes\.app\.data(?:\.test)?/files/ansm-performance/large-ten-year\.json', p.strip())]
+
+
+def internal_command(path, tool, *args, binary=False):
+    match=re.fullmatch(r'/data/user/0/(net\.plainnotes\.app\.data(?:\.test)?)/(files/ansm-performance/(?:large-ten-year\.json|trace-ready\.json|audit-sampling\.trace|trace-collected\.ack|transport-preflight\.(?:json|ack)|transport-probe\.bin))',path)
+    if not match or tool not in ('head','wc','tee'):
+        raise ValueError('Not a fixed synthetic internal transport command')
+    if tool=='tee' and not path.endswith('.ack'):
+        raise ValueError('Synthetic transport writes acknowledgements only')
+    return ['adb',*(['exec-out'] if binary else ['shell','-T']),'run-as',match[1],tool,*args,match[2]]
+
+
+def transport_ack(folder, name, token, execute):
+    if not valid_token(token):raise ValueError('Invalid acknowledgement token')
+    response=execute(internal_command(folder+name,'tee'),input=token.encode(),stderr=subprocess.PIPE,timeout=5)
+    if response!=token.encode():raise ValueError('Acknowledgement transport mismatch')
 
 
 def log_report(text, expected_token=None):
@@ -49,7 +64,8 @@ def verify_trace_emulator(execute):
 def collect_trace(report_path, out, execute=subprocess.check_output, expected_size=None):
     verify_trace_emulator(execute)
     path = trace_path(report_path)
-    words = execute(['adb', 'shell', 'wc', '-c', path], text=True).split()
+    internal=path.startswith('/data/user/0/')
+    words = execute(internal_command(path,'wc','-c') if internal else ['adb', 'shell', 'wc', '-c', path], text=True).split()
     if not words:
         raise ValueError('Missing trace size')
     size = words[0]
@@ -58,7 +74,7 @@ def collect_trace(report_path, out, execute=subprocess.check_output, expected_si
         raise ValueError('Trace size outside diagnostic bounds')
     if expected_size is not None and int(size) != expected_size:
         raise ValueError('Ready trace length differs from device file')
-    data = execute(['adb', 'exec-out', 'head', '-c', str(int(size) + 1), path])
+    data = execute(internal_command(path,'head','-c',str(int(size)+1),binary=True) if internal else ['adb', 'exec-out', 'head', '-c', str(int(size) + 1), path])
     if len(data) != int(size):
         raise ValueError('Incomplete trace transfer')
     (out / 'audit-sampling.trace').write_bytes(data)
@@ -78,13 +94,16 @@ def valid_token(value):
         return False
 
 
-def device_json(path, execute):
+def device_json(path, execute, failures=None):
     try:
         # shell v2 propagates remote failure; exec-out may return missing-file
         # diagnostics as stdout with exit0. An absent alternate package must not
         # prevent capture from the matching package. -T forbids PTY rewriting.
-        data = execute(['adb','shell','-T','head','-c','65537',path], stderr=subprocess.DEVNULL, timeout=5)
-    except subprocess.CalledProcessError:
+        command=internal_command(path,'head','-c','65537') if path.startswith('/data/user/0/') else ['adb','shell','-T','head','-c','65537',path]
+        data = execute(command, stderr=subprocess.PIPE, timeout=5)
+    except subprocess.CalledProcessError as error:
+        if failures is not None:
+            failures.append({'path':path,'returncode':error.returncode,'stderr':(error.stderr or b'')[:256].decode('utf-8',errors='replace')})
         return None
     if len(data) > 65536:
         raise ValueError('Oversized synthetic handshake metadata')
@@ -109,20 +128,23 @@ def cached_trace(report, out):
         return None
 
 
-def watch_trace_once(out, token, execute=subprocess.check_output):
+def watch_trace_once(out, token, execute=subprocess.check_output, *, internal=False):
     if not valid_token(token):
         raise ValueError('Invalid synthetic trace token')
     verify_trace_emulator(execute)
     ready = []
+    failures=[]
+    scope='SYNTHETIC_ART_INTERNAL_TRACE_READY_V1' if internal else 'SYNTHETIC_ART_TRACE_READY_V1'
     for package in ('net.plainnotes.app.data.test', 'net.plainnotes.app.data'):
-        folder = '/sdcard/Android/data/' + package + '/files/ansm-performance/'
-        value = device_json(folder+'trace-ready.json', execute)
-        if isinstance(value,dict) and value.get('scope') == 'SYNTHETIC_ART_TRACE_READY_V1' and value.get('token') == token:
+        folder = ('/data/user/0/' if internal else '/sdcard/Android/data/') + package + '/files/ansm-performance/'
+        value = device_json(folder+'trace-ready.json', execute, failures)
+        if isinstance(value,dict) and value.get('scope') == scope and value.get('token') == token:
             if set(value) != {'scope','token','bytes'} or type(value['bytes']) is not int or not 18 <= value['bytes'] <= 32*1024*1024:
                 raise ValueError('Invalid synthetic ready metadata')
             ready.append((folder,value))
     if len(ready) > 1:
         raise ValueError('Ambiguous synthetic ready paths')
+    (out/'trace-path-attempts.json').write_text(json.dumps({'scope':scope,'matching_paths':len(ready),'remote_failures':failures},indent=2)+'\n')
     if not ready:
         return False
     folder, value = ready[0]
@@ -141,9 +163,31 @@ def watch_trace_once(out, token, execute=subprocess.check_output):
     if 'sha256' in meta:
         ack=out/'trace-collected.ack'
         ack.write_text(token)
-        execute(['adb','push',str(ack),folder+'trace-collected.ack'],stderr=subprocess.DEVNULL,timeout=5)
+        if internal:transport_ack(folder,'trace-collected.ack',token,execute)
+        else:execute(['adb','push',str(ack),folder+'trace-collected.ack'],stderr=subprocess.DEVNULL,timeout=5)
         return True
     return False
+
+
+def watch_preflight_once(out, token, execute=subprocess.check_output):
+    if not valid_token(token):raise ValueError('Invalid preflight token')
+    verify_trace_emulator(execute)
+    ready=[];failures=[]
+    for package in ('net.plainnotes.app.data.test','net.plainnotes.app.data'):
+        folder='/data/user/0/'+package+'/files/ansm-performance/'
+        value=device_json(folder+'transport-preflight.json',execute,failures)
+        if isinstance(value,dict) and value.get('scope')=='SYNTHETIC_TRANSPORT_PREFLIGHT_V1' and value.get('token')==token:
+            if set(value)!={'scope','token','bytes'} or type(value['bytes']) is not int or value['bytes']!=8:
+                raise ValueError('Invalid transport preflight metadata')
+            ready.append(folder)
+    (out/'preflight-path-attempts.json').write_text(json.dumps({'matching_paths':len(ready),'remote_failures':failures},indent=2)+'\n')
+    if len(ready)>1:raise ValueError('Ambiguous preflight packages')
+    if not ready:return False
+    data=execute(internal_command(ready[0]+'transport-probe.bin','head','-c','9',binary=True),stderr=subprocess.PIPE,timeout=5)
+    if data!=bytes([0,1,127,128,255,10,13,0]):raise ValueError('Binary preflight transfer mismatch')
+    transport_ack(ready[0],'transport-preflight.ack',token,execute)
+    (out/'transport-preflight.json').write_text(json.dumps({'status':'PASS','source_token':token,'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest(),'scope':'BEFORE_LARGE_FIXTURE_TRANSPORT_ONLY'},indent=2)+'\n')
+    return True
 
 
 def watch_trace(out, stop, execute=subprocess.check_output, *, expected_token):
@@ -163,10 +207,12 @@ def watch_trace(out, stop, execute=subprocess.check_output, *, expected_token):
                 if not match:
                     continue
                 value=json.loads(match.group(1))
-                if value.get('scope') == 'SYNTHETIC_ART_TRACE_READY_V1' and value.get('token') == expected_token:
-                    tokens.add(value['token'])
-            for token in tokens:
-                if watch_trace_once(out,token,execute):
+                if value.get('scope') in ('SYNTHETIC_ART_TRACE_READY_V1','SYNTHETIC_ART_INTERNAL_TRACE_READY_V1','SYNTHETIC_TRANSPORT_PREFLIGHT_V1') and value.get('token') == expected_token:
+                    tokens.add((value['scope'],value['token']))
+            for scope,token in list(tokens):
+                if scope=='SYNTHETIC_TRANSPORT_PREFLIGHT_V1':
+                    if watch_preflight_once(out,token,execute):tokens.remove((scope,token))
+                elif watch_trace_once(out,token,execute,internal=scope=='SYNTHETIC_ART_INTERNAL_TRACE_READY_V1'):
                     return
         except (OSError,ValueError,subprocess.CalledProcessError,subprocess.TimeoutExpired) as error:
             (out/'trace-watch-error.json').write_text(json.dumps({'status':'UNAVAILABLE','reason':type(error).__name__})+'\n')

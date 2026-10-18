@@ -47,7 +47,7 @@
     "TEST-net.plainnotes.app.data.MeasuredContainerStoreTest.xml": "407b0dd542f2f5c77bc04e80be4864f301c2e35d8129c551b99ef03fa85ff477"
   },
   "native_contract_compilation": "PASS",
-  "app_period_and_privacy": "RUNNING; actual PrivacyNoticeFactsTest rerun still required, initial PrivacySurfaceTest filter matches no class",
+  "app_period_and_privacy": "PASS: Period5, PrivacyNoticeFacts3, no failures/errors/skips. Initial PrivacySurfaceTest filter matched no class; corrected explicit class was actually run separately.",
   "python": {
     "tests": 190,
     "failures": 0,
@@ -57,5 +57,21 @@
     "green_log_sha256": "af980132c12a9adfdc2fd752e90557112b8b90fc7075909c1347fb3027e59ac8"
   },
   "native_transport_fix": "NOT_RUN",
-  "production_admission": "PRODUCTION_BLOCKED"
+  "production_admission": "PRODUCTION_BLOCKED",
+  "period_stability": {
+    "tests": 5,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "junit_sha256": "2f944c1e70902ab344846d8c07b58361be23c468500cf290e732bd581c027f68"
+  },
+  "privacy_facts": {
+    "tests": 3,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "junit_sha256": "2f6a7069ce86c7c8b5dda78c707b421688c332bba682977955080ec99aabc129"
+  },
+  "regression_log_sha256": "ff96bf0d09ed4603b3716d185645611ca698c1bf7754acb1bc04ff18047451d5",
+  "privacy_log_sha256": "8c0a47b5be3367da42d726a9b87ea505176a95b3b0c43ee70c097c3cd0371fe8"
 }

@@ -1,0 +1,11 @@
+{
+  "api": 26,
+  "source": "8ebb7198fe1dbd1d0c2a5f96e24cdecf7efac54c",
+  "run": 39107748016,
+  "sha256": "9f7b29ce31eb744b3c567b8caee7a20e6b45bba364bb442d3320bb6718d5b122",
+  "zip_crc": "PASS",
+  "report": "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.DailyTrashCollisionAndroidTest.html",
+  "tests": "4",
+  "failures": "0",
+  "skipped": "0"
+}

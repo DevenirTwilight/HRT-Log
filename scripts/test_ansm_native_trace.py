@@ -256,3 +256,110 @@ class ArtSamplingRunTokenTest(unittest.TestCase):
         text='\n'.join('10-18 06:00:00.000 1 2 I ANSM_PERF: '+json.dumps(value) for value in (current,stale))
         self.assertEqual(current,collector.log_report(text,expected_token=self.token))
         with self.assertRaises(ValueError):collector.log_report(text,expected_token='00000000-0000-4000-8000-000000000003')
+
+
+class InternalTransportPreflightTest(unittest.TestCase):
+    token='00000000-0000-4000-8000-000000000001'
+    folder='/data/user/0/net.plainnotes.app.data.test/files/ansm-performance/'
+
+    def test_internal_command_is_app_uid_scoped_and_has_no_shell_interpolation(self):
+        collector=module('collect_ansm_native_performance')
+        self.assertEqual(['adb','shell','-T','run-as','net.plainnotes.app.data.test','head','-c','65537','files/ansm-performance/trace-ready.json'],
+            collector.internal_command(self.folder+'trace-ready.json','head','-c','65537'))
+        for path in ('/data/user/0/other.app/files/ansm-performance/trace-ready.json',self.folder+'../database',self.folder+'database',self.folder+'trace-ready.json;id'):
+            with self.assertRaises(ValueError):collector.internal_command(path,'head','-c','65537')
+
+    def fixture(self, *,bad_nonce=False,bad_probe=False):
+        import subprocess
+        collector=module('collect_ansm_native_performance');calls=[]
+        def execute(command,**kwargs):
+            calls.append(command)
+            if 'run-as' not in command:return ArtSamplingCollectionTest().fake([])(command,**kwargs)
+            if 'net.plainnotes.app.data' in command:raise subprocess.CalledProcessError(1,command,stderr=b'run-as: unknown synthetic alternate package')
+            if command[-1].endswith('transport-preflight.json'):
+                return json.dumps({'scope':'SYNTHETIC_TRANSPORT_PREFLIGHT_V1','token':self.token if not bad_nonce else '00000000-0000-4000-8000-000000000002','bytes':8}).encode()
+            if command[-1].endswith('transport-probe.bin'):
+                self.assertEqual('exec-out',command[1]);self.assertIn('9',command)
+                return bytes([0,1,127,128,255,10,13,1 if bad_probe else 0])
+            if 'tee' in command:
+                self.assertEqual(self.token.encode(),kwargs['input']);return kwargs['input']
+            raise AssertionError(command)
+        return collector,calls,execute
+
+    def test_binary_read_and_app_owned_ack_pass_before_the_large_fixture(self):
+        collector,calls,execute=self.fixture()
+        with TemporaryDirectory() as directory:
+            out=Path(directory)
+            self.assertTrue(collector.watch_preflight_once(out,self.token,execute))
+            self.assertTrue(any('tee' in c for c in calls))
+            self.assertEqual('PASS',json.loads((out/'transport-preflight.json').read_text())['status'])
+
+    def test_corrupt_binary_or_wrong_nonce_cannot_acknowledge_preflight(self):
+        for options in ({'bad_nonce':True},{'bad_probe':True}):
+            collector,calls,execute=self.fixture(**options)
+            with TemporaryDirectory() as directory:
+                if options.get('bad_probe'):
+                    with self.assertRaises(ValueError):collector.watch_preflight_once(Path(directory),self.token,execute)
+                else:self.assertFalse(collector.watch_preflight_once(Path(directory),self.token,execute))
+                self.assertFalse(any('tee' in c for c in calls))
+
+    def test_generated_transport_preflight_precedes_database_and_all_original_budgets(self):
+        prepare=module('prepare_ansm_native_performance');text=prepare.native_source(prepare.SOURCE.read_text())
+        self.assertIn('File(context.filesDir,"ansm-performance/large-ten-year.json")',text)
+        self.assertLess(text.index('SYNTHETIC_TRANSPORT_PREFLIGHT_V1'),text.index('System.loadLibrary("sqlcipher")'))
+        self.assertLess(text.index('TRANSPORT_PREFLIGHT_FAILED'),text.index('val running=AtomicBoolean(true)'))
+        self.assertIn('SYNTHETIC_ART_INTERNAL_TRACE_READY_V1',text)
+
+    def test_internal_trace_and_ack_are_complete_before_cleanup_and_reusable_after_it(self):
+        import subprocess
+        collector=module('collect_ansm_native_performance');base=ArtSamplingCollectionTest().fake([])
+        capture={'token':self.token,'bytes':len(trace()),'scope':'TEST_ONLY_POST_BUDGET_METHOD_STACKS_NO_ARGUMENTS'}
+        report={'environment':'Native API26 SQLCipher synthetic fixture; emulator, not physical hardware',
+                'diagnostic_run_token':self.token,'post_budget_components':{'sampling_trace':capture}}
+        ready={'scope':'SYNTHETIC_ART_INTERNAL_TRACE_READY_V1','token':self.token,'bytes':len(trace())}
+        calls=[]
+        def execute(command,**kwargs):
+            calls.append(command)
+            if 'run-as' in command:
+                if 'net.plainnotes.app.data' in command:raise subprocess.CalledProcessError(1,command,stderr=b'unknown alternate package')
+                if command[-1].endswith('.json'):return json.dumps(ready if command[-1].endswith('trace-ready.json') else report).encode()
+                if 'tee' in command:
+                    self.assertEqual('files/ansm-performance/trace-collected.ack',command[-1])
+                    self.assertEqual(self.token.encode(),kwargs['input']);return kwargs['input']
+            return base(command,**kwargs)
+        with TemporaryDirectory() as directory:
+            out=Path(directory)
+            self.assertTrue(collector.watch_trace_once(out,self.token,execute,internal=True))
+            self.assertEqual(trace(),(out/'audit-sampling.trace').read_bytes())
+            self.assertEqual('DIAGNOSTIC_PROFILE',collector.cached_trace(report,out)['status'])
+            self.assertFalse(any('push' in c for c in calls))
+            self.assertTrue(all('run-as' in c for c in calls if 'head' in c or 'wc' in c or 'tee' in c))
+
+    def test_completed_preflight_does_not_poll_adb_during_the_large_fixture(self):
+        collector,calls,execute=self.fixture();test=self
+        class Stop:
+            turns=0;previous=None
+            def is_set(self):return self.turns==2
+            def wait(self,seconds):
+                if self.turns==0:self.previous=len(calls)
+                else:test.assertEqual(self.previous,len(calls),'adb polled again during original budgets')
+                self.turns+=1
+        with TemporaryDirectory() as directory:
+            out=Path(directory)
+            value={'scope':'SYNTHETIC_TRANSPORT_PREFLIGHT_V1','token':self.token,'bytes':8}
+            (out/'synthetic-crash-log.txt').write_text('I ANSM_TRACE: '+json.dumps(value)+'\nI ANSM_PERF: {"stage":"full_audit"}\n')
+            collector.watch_trace(out,Stop(),execute,expected_token=self.token)
+            self.assertTrue((out/'transport-preflight.json').exists())
+
+    def test_preflight_rejects_real_device_and_preserves_bounded_remote_failure_details(self):
+        collector,calls,execute=self.fixture()
+        with TemporaryDirectory() as directory:
+            out=Path(directory)
+            self.assertTrue(collector.watch_preflight_once(out,self.token,execute))
+            failures=json.loads((out/'preflight-path-attempts.json').read_text())['remote_failures']
+            self.assertEqual(1,len(failures));self.assertEqual(1,failures[0]['returncode'])
+            self.assertIn('unknown synthetic alternate package',failures[0]['stderr'])
+            calls=[]
+            with self.assertRaises(ValueError):
+                collector.watch_preflight_once(out,self.token,ArtSamplingCollectionTest().fake(calls,serial='physical-device'))
+            self.assertFalse(any('run-as' in c for c in calls))

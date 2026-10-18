@@ -1,10 +1,12 @@
-## P4 新基线本地 data413 通过；采样读取错误已补负向测试 — 2026-10-18
+## P4 测试运输改为 App 内部路径与大库前预检；主线六 CI 通过 — 2026-10-18
 
-已将获单独批准并合并的#65/主线8ebb719普通合入P4（223aeff），共享workflow保留17个类的并集，双方HANDOFF均保留。新基线data413零fail/error/skip、原生合同编译PASS；Period/Privacy回归仍运行，主线8ebb719六CI复验仍待完成。
+#65 已获单独明确批准后普通合入主线8ebb719，合并后六项必需CI全PASS；官方工件SHA/CRC核验26/29/35各4个新SQLCipher用例真实PASS/0skip，见performance/main-8ebb719-*。本地P4通过普通merge同步主线（223aeff），workflow保留17类并集、双方HANDOFF保留。data413、Period5、PrivacyNoticeFacts3、Python190及原生合同编译PASS，Privacy初次过滤名误写后已实际按正确类名补跑3项，证据已更新。
 
-7590cc7最终六项常规CI全部PASS；同源原生attempt2完整结束但写入10445/10459/10201ms仍>5s，P4_BLOCKED。工件12129236982官方SHA/CRC及完整报告已归档；attempt1恢复中退出的原因仍UNVERIFIED，成功完成复跑不是崩溃修复。采样实际生成1026403B，但host_ack=false、watcher JSONDecodeError，未取回，不能宣称已定位方法热点。
+4dc09b8原生run39108085887完整FAIL：实际写入15604/15957/16339ms仍>5s，审计/预测/恢复后审计本次低于15s。ART文件生成2300664B，但host_ack=false、未取回，且没有逐路径错误信息；仅切换shell不足以完成运输，根因仍UNVERIFIED，不声称已分析方法热点。工件12129850807官方SHA/CRC及原始报告已归档native-4dc09b8-*；7590两次旧失败也保留。
 
-针对exec-out可能把不存在候选路径的错误文字作为exit0 stdout交给JSON解析器，新增负向测试在旧代码实际21项/1 error；仅握手元数据读取改用保留远端退出码的adb shell -T，现Python190 PASS，畸形现存JSON仍拒绝。实际运输修复待原生验证；确切原设备错误响应未捕获，避免把推断写成已证实根因。没有新增生产优化，不放宽预算，不改Schema/备份/PK，正式入口OFF，P5/P6未实施，未发布。
+新候选只修改测试工具：使用debug测试App UID的run-as读取自己的内部固定路径，不依赖外部存储别名。完整计量库/SQLCipher加载前，验证8字节含NUL/高位字节探针和App自己读取的nonce ACK；失败15s内停在TRANSPORT_PREFLIGHT_FAILED/PERFORMANCE_NOT_RUN，保留有界逐路径退出码/stderr。成功预检后不轮询adb，等原预算全部冻结后的采样ready才取方法栈并回执，原性能断言/fixture/SHA/预算不变。先新增负向测试实际25项中1失败/3错误，再Python197 PASS；生成原生源码编译PASS并清理测试生成文件。实际新运输NOT_RUN，不能用合成预检冒充原生成功。
+
+P4_BLOCKED/DRAFT、正式入口OFF；P5/P6未实施，Beta NO-GO。无生产代码/Schema/备份/PK新增改动，无新签名、发布或APK交付。完整证据见docs/ansm-integration/p4/performance/与阶段账本。
 
 ## #65 获单独批准后普通受保护合并 — 2026-10-18
 

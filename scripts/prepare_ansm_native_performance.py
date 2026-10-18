@@ -21,9 +21,26 @@ def native_source(text):
     replace('@RunWith(RobolectricTestRunner::class) @Config(sdk=[35])', '')
     replace('        val db=Room.inMemoryDatabaseBuilder(context,NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build()', '')
     replace('Robolectric API35 framework SQLite; not SQLCipher/low-memory API26/hardware', 'Native API26 SQLCipher synthetic fixture; emulator, not physical hardware')
-    replace('        val file=File("build/reports/ansm-p4-performance/large-ten-year.json").apply{parentFile.mkdirs()}', '''        val file=File(context.getExternalFilesDir(null),"ansm-performance/large-ten-year.json").apply{parentFile.mkdirs()}
+    replace('        val file=File("build/reports/ansm-p4-performance/large-ten-year.json").apply{parentFile.mkdirs()}', '''        val file=File(context.filesDir,"ansm-performance/large-ten-year.json").apply{parentFile.mkdirs()}
         val traceSessionToken=androidx.test.platform.app.InstrumentationRegistry.getArguments().getString("ansmTraceToken")
         report.put("diagnostic_run_token",traceSessionToken ?: JSONObject.NULL)
+        // Test-only transport admission, before the database/fixture and original acceptance budgets.
+        val preflightToken=requireNotNull(traceSessionToken){"Synthetic transport requires host nonce"}
+        File(file.parentFile,"transport-probe.bin").writeBytes(byteArrayOf(0,1,127,-128,-1,10,13,0))
+        val preflight=JSONObject().put("scope","SYNTHETIC_TRANSPORT_PREFLIGHT_V1").put("token",preflightToken).put("bytes",8)
+        File(file.parentFile,"transport-preflight.json").writeText(preflight.toString())
+        report.put("stage","TRANSPORT_PREFLIGHT");file.writeText(report.toString(2))
+        android.util.Log.i("ANSM_TRACE",preflight.toString())
+        val preflightAck=File(file.parentFile,"transport-preflight.ack")
+        val preflightDeadline=android.os.SystemClock.elapsedRealtime()+15000
+        fun preflightAcknowledged()=runCatching{preflightAck.readText()==preflightToken}.getOrDefault(false)
+        while(!preflightAcknowledged() && android.os.SystemClock.elapsedRealtime()<preflightDeadline)Thread.sleep(100)
+        if(!preflightAcknowledged()) {
+            report.put("status","TRANSPORT_PREFLIGHT_FAILED").put("performance","NOT_RUN")
+            file.writeText(report.toString(2))
+            throw AssertionError("Synthetic transport preflight failed before performance fixture")
+        }
+        report.put("transport_preflight","PASS")
         report.put("stage","BEFORE_SQLCIPHER_LOAD");file.writeText(report.toString(2))
         System.loadLibrary("sqlcipher")
         report.put("stage","BEFORE_DATABASE_OPEN");file.writeText(report.toString(2))
@@ -130,9 +147,9 @@ def native_source(text):
                 .put("interval_us",1000).put("scope","TEST_ONLY_POST_BUDGET_METHOD_STACKS_NO_ARGUMENTS"))
             components.put("status","COMPLETE")
             file.writeText(report.toString(2))
-            File(file.parentFile,"trace-ready.json").writeText(JSONObject().put("scope","SYNTHETIC_ART_TRACE_READY_V1")
+            File(file.parentFile,"trace-ready.json").writeText(JSONObject().put("scope","SYNTHETIC_ART_INTERNAL_TRACE_READY_V1")
                 .put("token",traceToken).put("bytes",trace.length()).toString())
-            android.util.Log.i("ANSM_TRACE",JSONObject().put("scope","SYNTHETIC_ART_TRACE_READY_V1")
+            android.util.Log.i("ANSM_TRACE",JSONObject().put("scope","SYNTHETIC_ART_INTERNAL_TRACE_READY_V1")
                 .put("token",traceToken).put("bytes",trace.length()).toString())
             val ack=File(file.parentFile,"trace-collected.ack")
             val deadline=android.os.SystemClock.elapsedRealtime()+30000
