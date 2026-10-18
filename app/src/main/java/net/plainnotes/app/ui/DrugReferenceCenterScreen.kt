@@ -21,9 +21,7 @@ import net.plainnotes.app.data.MedicationEntity
         start=16.dp,end=16.dp,top=contentPadding.calculateTopPadding()+8.dp,
         bottom=contentPadding.calculateBottomPadding()+32.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
         item("region") {Text(stringResource(R.string.drug_center_region),style=MaterialTheme.typography.titleMedium,modifier=Modifier.semantics{heading()})}
-        item("official") {Text(stringResource(R.string.drug_center_official_off))}
-        item("user-sources") {Text(stringResource(R.string.drug_center_user_sources))}
-        item("states") {Text(stringResource(R.string.drug_center_states),style=MaterialTheme.typography.bodySmall)}
+        item("source-scope") {Text(stringResource(R.string.drug_center_short_scope))}
         item("browse") {
             Button(onClick=onBrowse,modifier=Modifier.fillMaxWidth().heightIn(min=48.dp).testTag("drug-center-browse")) {
                 Text(stringResource(R.string.drug_center_search))
@@ -40,6 +38,9 @@ import net.plainnotes.app.data.MedicationEntity
                 }
             }
         }
+        item("official") {Text(stringResource(R.string.drug_center_official_off))}
+        item("user-sources") {Text(stringResource(R.string.drug_center_user_sources))}
+        item("states") {Text(stringResource(R.string.drug_center_states),style=MaterialTheme.typography.bodySmall)}
         item("identity") { DrugCenterSection(R.string.drug_center_identity,R.string.drug_center_identity_body,"drug-center-identity") }
         item("packaging") { DrugCenterSection(R.string.drug_center_packaging,R.string.drug_center_packaging_body,"drug-center-packaging") }
         item("rcp") { DrugCenterSection(R.string.drug_center_rcp,R.string.drug_center_documents_off,"drug-center-rcp") }

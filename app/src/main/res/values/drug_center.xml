@@ -19,4 +19,5 @@
     <string name="drug_center_supply">Supply, shortages, recalls and regulatory notices</string>
     <string name="drug_center_supply_off">Not implemented. Current availability is unknown; this does not mean normal supply or no recalls. There is no live pharmacy stock lookup.</string>
     <string name="drug_center_states">Status meanings: missing information = no field supplied; unverified = supplied but not checked; unknown = cannot determine; not implemented = no feature available. None means normal supply or safety.</string>
+    <string name="drug_center_short_scope">Unverified user sources. Official catalogue unavailable.</string>
 </resources>

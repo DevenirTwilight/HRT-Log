@@ -78,5 +78,7 @@
     "zh-rTW_320dp_2.0x_dark_HIGH.png": "96afbe64bf0100323ef84316e71a754ba3ec58e4d97275488e869d9091f64fbb",
     "en_320dp_2.0x_dark_HIGH.png": "3e5f70704c60fb3d556440ba1e217215fa2a21803b51195aa83443b6a4d52cc0",
     "fr-rFR_320dp_2.0x_dark_HIGH.png": "942f3a76443023d9272f71d30285348557b3167ccf5750fc85b71b77e1241cc8"
-  }
+  },
+  "sourceCommit": "dd6c72869a14259d710709c245735f0741b7a7ee",
+  "screenshotsDirectory": "docs/centers/drug-screenshots (prior layout, retained separately)"
 }

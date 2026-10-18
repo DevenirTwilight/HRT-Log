@@ -19,4 +19,5 @@
     <string name="drug_center_supply">供应、短缺、召回与监管公告</string>
     <string name="drug_center_supply_off">尚未实现。当前供应状态未知，不代表正常供应或没有召回。不查询实时药房库存。</string>
     <string name="drug_center_states">状态说明：资料缺失＝未提供字段；尚未核验＝已有资料但未完成核查；未知＝无法确定；尚未实现＝功能未开放。这些状态均不代表正常供应或安全。</string>
+    <string name="drug_center_short_scope">用户填写来源，尚未核验。官方目录未开放。</string>
 </resources>

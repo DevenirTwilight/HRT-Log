@@ -1,6 +1,6 @@
 ## 药品资料中心 B 接线与医疗中心 A 合并 — 2026-10-18
 
-A #73最终3fd5b2f六项必需CI全部PASS、无评审讨论，已受保护自动合并为ff2a4e9。证据centers/medical-final-ci.json。B在该新主线上顺序增加AppShell一个browse回调，入口位于现有药物方案页面；复用同一MedicationReferenceController的查询、产品详情/当前药物关联，不另建Repository或数据源。独立显示32用例x3对比度PASS，首轮2例实际点击被标题栏遮挡已修复，保留失败证据与全部触控断言。真实AppShell、非空记录/库存流水/Profile不变性及既有回归共133项本地PASS（0失败/跳过），源哈希/逐类计数centers/drug-integration-test-evidence.json；CI待验，不能宣称设备或发布验收完成。官方分发、RCP/Notice独立审查#58、安全/监管、P4写入、医疗原件仍OFF；真机/TalkBack NOT_RUN。并行#72未修改或复制，实际旧守卫失败证据centers/parallel-pr72-review.json。
+A #73最终3fd5b2f六项必需CI全部PASS、无评审讨论，已受保护自动合并为ff2a4e9。证据centers/medical-final-ci.json。B在该新主线上顺序增加AppShell一个browse回调，入口位于现有药物方案页面；复用同一MedicationReferenceController的查询、产品详情/当前药物关联，不另建Repository或数据源。独立显示32用例x3对比度PASS，首轮2例实际点击被标题栏遮挡已修复，保留失败证据与全部触控断言。真实AppShell、非空记录/库存流水/Profile不变性及既有回归共133项本地PASS（0失败/跳过），源哈希/逐类计数centers/drug-integration-test-evidence.json；截图复核后将真实查询入口前移，最终版式38项定向复验PASS（非另增38个独立用例），证据centers/drug-final-layout-evidence.json，旧133版截图另存未覆盖。此源码检查点CI待验，后续最终HEAD/CI/合并收据以PR #74为准，不能宣称设备或发布验收完成。官方分发、RCP/Notice独立审查#58、安全/监管、P4写入、医疗原件仍OFF；真机/TalkBack NOT_RUN。并行#72未修改或复制，实际旧守卫失败证据centers/parallel-pr72-review.json。
 
 ## 医疗中心薄纵切片 A — 2026-10-18
 

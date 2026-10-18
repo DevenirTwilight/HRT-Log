@@ -1,0 +1,51 @@
+{
+  "tests": 38,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "status": "PASS",
+  "scope": "Final layout: 32 display cases each 3 contrasts + real NotesApp/Room navigation/invariance + 5 PeriodStability tests",
+  "priorIntegratedSource": "dd6c72869a14259d710709c245735f0741b7a7ee",
+  "priorIntegrationTests": 133,
+  "CI": "PENDING_AT_COMMIT",
+  "physicalDevice": "NOT_RUN",
+  "TalkBack": "NOT_RUN",
+  "classes": [
+    {
+      "name": "net.plainnotes.app.DrugCenterNavigationTest",
+      "tests": 1,
+      "sha256": "40c670a15a6bfe266678b333b3c335c89ca1e84c3495763dcd127793231c9c70"
+    },
+    {
+      "name": "net.plainnotes.app.DrugCenterMatrixTest",
+      "tests": 32,
+      "sha256": "0d934a9b9eb2f8b40c33977ade4d5091560e6d0d394bedba9314e600d528bd87"
+    },
+    {
+      "name": "net.plainnotes.app.PeriodStabilityTest",
+      "tests": 5,
+      "sha256": "132f834acefe98b15bb549146d5143ca56590f81b216b5fce0a5578e28e24276"
+    }
+  ],
+  "sourceSha256": {
+    "app/src/main/java/net/plainnotes/app/ui/AppShell.kt": "e7bebf36744d7f8ee663baa69c17e6d247ac62a8dbed96e8c887a2f416002c79",
+    "app/src/main/java/net/plainnotes/app/ui/MedicationsScreen.kt": "377c699a191d01b63fe81fc5296417a59d6dd993804f69fcf01bb7c124726ebe",
+    "app/src/main/java/net/plainnotes/app/ui/DrugReferenceCenterScreen.kt": "b4db09aa031368a3bde7f3b659d3cae269db83eb4d2d4e1e6ffe4faf9245f595",
+    "app/src/test/java/net/plainnotes/app/DrugCenterNavigationTest.kt": "d9b76dd73b41a8398dd15d1026034b496535fcaae22668b9ade33d2dca20dc51",
+    "app/src/test/java/net/plainnotes/app/DrugCenterMatrixTest.kt": "a9eacf9f1c4aeba32bac30f209cd039de84696ac05b283cd42b8035f703877d4",
+    "app/src/main/res/values-fr/drug_center.xml": "d3f575bf5a9b4b0483d363ce486aa67e6271ec36252e8122e61861ae8f8cccdb",
+    "app/src/main/res/values/drug_center.xml": "ee60a8bbe436f4a95f0e0f9237c647aab65b2f29ad90caf0ceb06cd7a1b52600",
+    "app/src/main/res/values-zh/drug_center.xml": "390c3a2321725679d1c921e058b331f565e76e99a91b5bc1c62697bb393c8d96",
+    "app/src/main/res/values-b+zh+Hant/drug_center.xml": "d64ac04fa4b934a43ddb16e6651eefe4423d661560a6a661c5c51c15f9659d3c"
+  },
+  "screenshots": {
+    "docs/centers/drug-screenshots-final/zh-rTW_320dp_2.0x_light_HIGH.png": "d98865165125a1f054f8a2b040949aab06a3b478f050be4387150e5f46f936cc",
+    "docs/centers/drug-screenshots-final/zh-rCN_320dp_2.0x_dark_HIGH.png": "c340ee489b7c907d83661ed827b14bbaa0672dc565d88eaa89e3c09a84ab998f",
+    "docs/centers/drug-screenshots-final/zh-rCN_320dp_2.0x_light_HIGH.png": "5b070e6b8a93e555193f3cba8f659ad239229c1a979052d0ecfd35ef89cecb50",
+    "docs/centers/drug-screenshots-final/en_320dp_2.0x_light_HIGH.png": "818a8af0bc80f7180f33cc5ed6fc6a29d25913bbe9e2f4ba2c543f40a8058a5d",
+    "docs/centers/drug-screenshots-final/fr-rFR_320dp_2.0x_light_HIGH.png": "49507029268f5d3372d493b728ff597772ba164bb6bc6437d4f77006bb6488ed",
+    "docs/centers/drug-screenshots-final/zh-rTW_320dp_2.0x_dark_HIGH.png": "e73d263f80fa5740fd98059f964eb1993c85a944dcfd9f5b0ff4701cfeff2c4b",
+    "docs/centers/drug-screenshots-final/en_320dp_2.0x_dark_HIGH.png": "789e1a7f5690f8bb0fa3e4ac4aa3a294f5152e7ef89817016590b4540dac7c63",
+    "docs/centers/drug-screenshots-final/fr-rFR_320dp_2.0x_dark_HIGH.png": "d6730c00250263c9e6f5ef17e28bca9505e03cea6f84ae7a4b5c40bc14352285"
+  }
+}

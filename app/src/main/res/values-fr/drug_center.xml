@@ -19,4 +19,5 @@
     <string name="drug_center_supply">Disponibilité, ruptures, rappels et informations réglementaires</string>
     <string name="drug_center_supply_off">Non implémenté. La disponibilité actuelle est inconnue ; cela ne signifie ni disponibilité normale ni absence de rappels. Aucune consultation de stock en pharmacie en temps réel.</string>
     <string name="drug_center_states">États : information manquante = champ non renseigné ; non vérifié = renseigné sans vérification ; inconnu = impossible à déterminer ; non implémenté = fonction indisponible. Aucun ne signifie disponibilité normale ou sécurité.</string>
+    <string name="drug_center_short_scope">Sources utilisateur non vérifiées. Catalogue officiel indisponible.</string>
 </resources>

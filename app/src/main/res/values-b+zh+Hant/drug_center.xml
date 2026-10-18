@@ -19,4 +19,5 @@
     <string name="drug_center_supply">供應、短缺、召回與監管公告</string>
     <string name="drug_center_supply_off">尚未實現。目前供應狀態未知，不代表正常供應或沒有召回。不查詢即時藥房庫存。</string>
     <string name="drug_center_states">狀態說明：資料缺失＝未提供欄位；尚未核驗＝已有資料但未完成核查；未知＝無法確定；尚未實現＝功能未開放。這些狀態均不代表正常供應或安全。</string>
+    <string name="drug_center_short_scope">使用者填寫來源，尚未核驗。官方目錄未開放。</string>
 </resources>
