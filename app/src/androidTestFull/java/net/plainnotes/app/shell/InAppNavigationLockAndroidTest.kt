@@ -134,7 +134,7 @@ class InAppNavigationLockAndroidTest {
             open(d); assertNotNull("disguise session ended after opening ${d.name}", resumedMain()); assertEquals(UnlockTarget.PRIMARY, Session.target)
         }
         open(Destination.STOCK)
-        InstrumentationRegistry.getInstrumentation().runOnMainSync { resumedMain()!!.recreate() }
+        val main = resumedMain()!!; InstrumentationRegistry.getInstrumentation().runOnMainSync { main.recreate() }
         ui.waitUntil(20_000) { resumedMain() != null }; ui.waitForIdle()
         assertEquals(UnlockTarget.PRIMARY, Session.target); title().assertTextEquals(context.getString(R.string.stock))
         // Leaving the screen still ends the disguise session and returns only to the shell.
