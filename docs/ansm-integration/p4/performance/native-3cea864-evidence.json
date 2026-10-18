@@ -1,0 +1,20 @@
+{
+  "status": "FAIL",
+  "head": "3cea864729437b4a6d061e8e777235cc40f170e9",
+  "run": 39102897438,
+  "artifact_id": 12127009156,
+  "artifact_sha256": "be3cd21258bdcf061e4308f08112132167646428b1c223ee403a7bb56bf5fd4a",
+  "zip_crc": "PASS",
+  "generator_metadata": {
+    "source_sha256": "9313167178989def0d4d89d785f84cdde764fba21033543cdf85e472c5511242",
+    "native_sha256": "44ef1974a439b7cc9dc0647a373c6b303b834b989654a54417350b7d59ff4712",
+    "status": "GENERATED_NOT_RUN"
+  },
+  "report": "native-3cea864-report.json",
+  "budget_exceeded": [
+    "post_restore_write_including_ticket_ms"
+  ],
+  "assessment": "Full audit12.58s, forecast12.64s, restored audit10.08s pass15s this run; writes12.30\u201313.37s still fail5s. Do not call stable admission. Decimal pattern compilation difference0.111s/12000tokens is not the main bottleneck; production patterns unchanged.",
+  "budgets_changed": false,
+  "next": "Post-budget ART method-stack sampling in the isolated synthetic emulator; no production code changes."
+}

@@ -117,6 +117,14 @@ def native_source(text):
                 var matches=0;repeat(12000){if(Regex(numericPattern).matches(numericTokens[it%numericTokens.size]))matches++}
                 assertEquals(6000,matches)
             }
+            val trace=File(file.parentFile,"audit-sampling.trace")
+            component("sampled_cached_full_audit_ms") {
+                android.os.Debug.startMethodTracingSampling(trace.absolutePath,16*1024*1024,1000)
+                try{assertEquals(rawProjection,MeasuredConsumptionStore.auditStagedDataset(raw))}
+                finally{android.os.Debug.stopMethodTracing()}
+            }
+            components.put("sampling_trace",JSONObject().put("file","audit-sampling.trace").put("bytes",trace.length())
+                .put("interval_us",1000).put("scope","TEST_ONLY_POST_BUDGET_METHOD_STACKS_NO_ARGUMENTS"))
             components.put("status","COMPLETE")
             file.writeText(report.toString(2));assertEquals("Diagnostic budgets; device acceptance remains NOT_RUN",emptyList<String>(),exceeded)''')
     # AGP may uninstall the synthetic test APK after a process crash, deleting

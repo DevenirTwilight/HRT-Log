@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Run/collect inside the clean synthetic emulator, including failures, before shutdown."""
 import json
+import re
 from pathlib import Path
 import subprocess
 
@@ -9,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 def run(execute=subprocess.run):
     test = execute([str(ROOT / 'gradlew'), ':core:data:connectedDebugAndroidTest',
                     '-Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.data.LargeInventoryPerformanceProbe',
+                    '-Pandroid.injected.androidTest.leaveApksInstalledAfterRun=true',
                     '--no-parallel', '--max-workers=2'], cwd=ROOT)
     collection = execute(['python3', str(ROOT / 'scripts/collect_ansm_native_performance.py')], cwd=ROOT)
     folder = ROOT / 'core/data/build/reports/ansm-native-performance'
@@ -17,8 +19,17 @@ def run(execute=subprocess.run):
     return test.returncode or collection.returncode
 
 
+def verify_emulator(execute=subprocess.check_output):
+    serial = execute(['adb','get-serialno'],text=True).strip()
+    qemu = execute(['adb','shell','getprop','ro.kernel.qemu'],text=True).strip()
+    sdk = execute(['adb','shell','getprop','ro.build.version.sdk'],text=True).strip()
+    if not re.fullmatch(r'emulator-[0-9]+',serial) or qemu!='1' or sdk!='26':
+        raise ValueError('Synthetic performance runner requires an isolated API26 emulator')
+
+
 def diagnostics():
     # This wrapper is used only by the fresh synthetic CI emulator, never the application/user device.
+    verify_emulator()
     folder = ROOT / 'core/data/build/reports/ansm-native-performance'
     folder.mkdir(parents=True, exist_ok=True)
     properties = {}

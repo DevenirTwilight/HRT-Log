@@ -81,7 +81,7 @@
       "blocker": "",
       "owner_decision_required": false,
       "progress": "IN_PROGRESS",
-      "note": "P4_BLOCKED/OFF。65cf08e六CI PASS、原生run39069126496四预算FAIL，写入18.60–19.03s>5s；逐操作7563ms/逐包装6295ms。新候选仅消除同次审核重复解析，保留所有校验；先验旧解码器39有效/33拒绝，后验data409、Period5/Privacy3、Python169、原生源码编译和完整JVM大库PASS，新的原生NOT_RUN。P5/P6未实施。另有#64日常评分回收站UNIQUE冲突独立复现，不混入P4，不以另一作业通过冒充修复。"
+      "note": "P4_BLOCKED/OFF。3cea864六CI PASS，原生run39102897438最终FAIL：审计12.58s/预测12.64s/恢复审计10.08s，本次<15s；三写入12.30–13.37s仍>5s。逐操作4.31s/逐包装3.41s；正则差0.111s非主瓶颈，未改生产pattern。准备预算冻结后TEST_ONLY ART方法栈采样：Python179/原生编译PASS，实际trace NOT_RUN。独立一般日常恢复bug已提交#65，4红→data247绿/原生编译绿，CI待验且不自动合并。P5/P6未实施，Beta NO-GO。"
     },
     {
       "requirement_id": "V4.04",

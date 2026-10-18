@@ -1,3 +1,9 @@
+## P4 写入12.3–13.4s仍阻断；独立日常恢复修复#65 — 2026-10-18
+
+3cea864六CI PASS，原生run39102897438完整FAIL：本次审计/预测<15s，三写入仍>5s。解析复用本地data409/Period5/Privacy3已通过，未冒充P4完成。下一提交仅在原预算冻结后进行合成ART方法栈采样；Python179与原生源码编译PASS，实际采样NOT_RUN。新工具强制API26模拟器、固定路径/硬大小上限、保留失败退出码，不进入正式App。详见[阶段账本](ansm-integration/WORK-STATE.md)。
+
+另有#65独立回收站同毫秒引用冲突修复：4确定性红→data247/Python156/原生编译绿；当前26/29/35与最终六CI待验，不自动合并一般日常数据PR。未来与P4同一workflow行须取类名单并集。P4_BLOCKED，正式入口OFF，P5/P6未实施，Beta NO-GO，未发布。
+
 ## P4 消费解析复用本地通过；原生门仍待验收 — 2026-10-18
 
 65cf08e六CI PASS、原生四预算FAIL证据已核验。新候选仅在单次审核内复用完整解析结果，保留全部字段/链/摘要/数量/全局校验，不改Schema或库存语义。data409、Period5/Privacy3、Python169、原生源码编译及同规模JVM大库PASS；新原生NOT_RUN，正式入口OFF/P4_BLOCKED。另发现#64评分回收站时间戳引用冲突，独立分支正在确定性复现，不混入P4。详见[阶段账本](ansm-integration/WORK-STATE.md)。未签名、未发布、未合并，P5/P6未实施。

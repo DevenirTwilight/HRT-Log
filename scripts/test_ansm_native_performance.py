@@ -39,6 +39,8 @@ class NativePerformanceIsolationTest(unittest.TestCase):
             self.assertIn(name, text)
         diagnostic = text[text.index('val components=JSONObject()'):text.index('components.put("status","COMPLETE")')]
         self.assertNotIn('execSQL', diagnostic)
+        self.assertLess(text.index('val components=JSONObject()'),text.index('android.os.Debug.startMethodTracingSampling'))
+        self.assertIn('finally{android.os.Debug.stopMethodTracing()}',text)
         self.assertNotIn('exceeded.clear', text)
         self.assertIn('assertEquals(rawProjection,MeasuredConsumptionStore.auditStagedDataset(raw))', diagnostic)
 
@@ -71,6 +73,7 @@ class NativePerformanceExecutionTest(unittest.TestCase):
                 self.assertEqual(test_status or collection_status,runner.run(execute))
                 self.assertEqual(2,len(calls))
                 self.assertIn('connectedDebugAndroidTest',calls[0][1])
+                self.assertIn('-Pandroid.injected.androidTest.leaveApksInstalledAfterRun=true',calls[0])
                 self.assertTrue(calls[1][1].endswith('collect_ansm_native_performance.py'))
 
 
