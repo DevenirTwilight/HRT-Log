@@ -52,7 +52,8 @@ fun toCanonical(a: Analyte, value: Double, unit: String): Double? = a.units.firs
     else -> R.string.choice_other
 })
 
-@Composable fun LabsScreen(labs: List<LabValueEntity>, doseTimes: List<Instant>, onEdit: (LabValueEntity?) -> Unit, onDelete: (LabValueEntity) -> Unit, contentPadding: PaddingValues,contexts:List<net.plainnotes.app.data.LabContextEntity> = emptyList(),onRebuild:((LabValueEntity,Boolean)->Unit)?=null) {
+@Composable fun LabsScreen(labs: List<LabValueEntity>, doseTimes: List<Instant>, onEdit: (LabValueEntity?) -> Unit, onDelete: (LabValueEntity) -> Unit, contentPadding: PaddingValues,contexts:List<net.plainnotes.app.data.LabContextEntity> = emptyList(),onRebuild:((LabValueEntity,Boolean)->Unit)?=null,
+               panels:List<net.plainnotes.app.data.LabPanelEntity> = emptyList(),onPanel:((net.plainnotes.app.data.LabPanelEntity)->Unit)?=null,onSaveAsPanel:((List<LabValueEntity>)->Unit)?=null) {
     val present = ANALYTES.filter { a -> labs.any { it.analyte_code == a.code } }
     // LAB-01: "All" (the default) lists every result, one card per draw (same time and laboratory); an analyte chip shows its trend and rows as before.
     var selected by remember { mutableStateOf<String?>(null) }
@@ -85,9 +86,10 @@ fun toCanonical(a: Analyte, value: Double, unit: String): Double? = a.units.firs
                 }
             }
             items(values.reversed(), key = { it.id }) { v -> LabRow(v, { onEdit(v) }, { onDelete(v) },contexts.filter{it.lab_id==v.id},onRebuild) }
-        } else items(labGroups(labs), key = { g -> "draw:" + g.first().id }) { g ->
-            if (g.size == 1) g.first().let { v -> LabRow(v, { onEdit(v) }, { onDelete(v) },contexts.filter{it.lab_id==v.id},onRebuild) }
-            else LabGroupCard(g) { detail = it }
+        // LAB-02: real lab panels (even with one result) are cards; results without a panel keep the LAB-01 display grouping.
+        } else items(labDraws(labs, panels), key = { d -> d.panel?.let { "panel:${it.id}" } ?: ("draw:" + d.labs.first().id) }) { d ->
+            if (d.panel == null && d.labs.size == 1) d.labs.first().let { v -> LabRow(v, { onEdit(v) }, { onDelete(v) },contexts.filter{it.lab_id==v.id},onRebuild) }
+            else LabGroupCard(d.labs, { detail = it }, d.panel, d.panel?.let { p -> onPanel?.let { open -> { open(p) } } }, if (d.panel == null) onSaveAsPanel?.let { save -> { save(d.labs) } } else null)
         }
     }
     detail?.let { v -> LabDetailDialog(v, contexts.filter { it.lab_id == v.id }, { detail = null }) { detail = null; onEdit(v) } }

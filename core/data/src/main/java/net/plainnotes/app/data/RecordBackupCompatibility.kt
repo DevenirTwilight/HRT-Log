@@ -2,7 +2,7 @@ package net.plainnotes.app.data
 
 /** PNBAK1 business serialization has an independent version from Room; crypto framing is unchanged. */
 internal object RecordBackupCompatibility {
-    const val SCHEMA = 10
+    const val SCHEMA = 11
     /** Version gate runs before opening any database. The supported maximum is explicit for legacy-reader contract tests. */
     fun readVersion(json: org.json.JSONObject, supported: Int = SCHEMA): Int {
         require(supported>=1)
@@ -27,7 +27,8 @@ internal object RecordBackupCompatibility {
         "checkin_score" to listOf("date","item_id","value"),
         "day_note" to listOf("date","text"),
         "lab_analyte" to listOf("code","canonical_unit"),
-        "lab_value" to listOf("id","analyte_code","value","unit","sampled_utc","sampled_zone","reference_lower","reference_upper","reference_unit","laboratory","note"),
+        "lab_panel" to listOf("id","uuid","sampled_utc","sampled_zone","laboratory","note","created_utc"),
+        "lab_value" to listOf("id","analyte_code","value","unit","sampled_utc","sampled_zone","reference_lower","reference_upper","reference_unit","laboratory","note","panel_id"),
         "pk_settings" to listOf("id","current_weight_kg"),
         "retained_slot" to listOf("slot_key","rule_id","medication_id","original_utc","at_utc","zone","dose","soon_minutes","late_minutes","tracking_from_utc"),
         "stage_review" to listOf("id","date","effects_json","tolerance_note","risk_note","smoking","systolic","diastolic","weight_kg","satisfaction","satisfaction_note"),

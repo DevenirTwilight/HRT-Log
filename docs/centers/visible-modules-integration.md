@@ -28,3 +28,7 @@ PRODUCTION_IMPLEMENTED means only visible UI/status feedback and existing backen
 ### Future replacement interfaces
 
 ANSM approved catalogue replaces drug-center-catalogue; #58 independently replaces drug-center-rcp and drug-center-notice after review. ANSM05/06 replace safety/shortage/recall placeholders with sourced snapshots. MED02 security-approved APIs replace files/originals/link cards; practitioner profiles and organization/export need their own approved implementation. Existing visit pack PDF stays usable independently. Each unavailable card has only title/reason/tag; replace explicitly with an approved real callback when ready.
+
+## Reviewed production baseline advanced during CI
+
+#81 merged under branch protection as2dda533ba4d42d4317d1183f518a4a0226b084cf (source82c84659, all required checks complete without failure). Normally merge that approved mainline; preserve its labs/panel routing and both requirements/handoff records. Room12 and business backup11 are baseline changes from #81, not this center UI delta. Relative to2dda533b there are no core/data, PK, schema, backup, permissions or Gradle changes. Reverify actual NotesApp/Room/navigation on this new baseline and all required final-head CI. Existing component screenshots and170/56 receipts retain their original source hashes; do not relabel them as new database integration evidence.

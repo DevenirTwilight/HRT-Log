@@ -26,7 +26,7 @@ CSV, PDF report and visit pack exports are plain files. You choose where to save
 
 ## Encrypted backups (`.pnbak`)
 
-- Encrypted with the password you choose: Argon2id (32 MiB memory, 3 passes, parallelism 1) derives a 256-bit key; AES-256-GCM encrypts the backup (format `PNBAK1`, structured record serialization 9).
+- Encrypted with the password you choose: Argon2id (32 MiB memory, 3 passes, parallelism 1) derives a 256-bit key; AES-256-GCM encrypts the backup (format `PNBAK1`, structured record serialization 11).
 - Contains your structured records, including recycle-bin items until you purge them.
 - Does not contain private notes, Notes disguise text, settings or medical file attachments. The app does not store attachments: that feature is not available to users.
 - A forgotten backup password cannot be recovered.

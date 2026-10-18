@@ -224,7 +224,21 @@ data class AnalyteEntity(
     val canonical_unit: String,
 )
 
-@Entity(tableName = "lab_value", foreignKeys = [ForeignKey(entity = AnalyteEntity::class, parentColumns = ["code"], childColumns = ["analyte_code"], onDelete = ForeignKey.RESTRICT)], indices = [Index(value = ["analyte_code"], unique = false)])
+/** LAB-02 (docs/design/lab-panel-adr.md): one blood draw. Members keep their own time, zone and laboratory, always equal to these. */
+@Entity(tableName = "lab_panel", indices = [Index(value = ["uuid"], unique = true)])
+data class LabPanelEntity(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val uuid: String,
+    val sampled_utc: Long,
+    val sampled_zone: String,
+    val laboratory: String? = null,
+    val note: String? = null,
+    val created_utc: Long,
+)
+
+@Entity(tableName = "lab_value", foreignKeys = [ForeignKey(entity = AnalyteEntity::class, parentColumns = ["code"], childColumns = ["analyte_code"], onDelete = ForeignKey.RESTRICT),
+    ForeignKey(entity = LabPanelEntity::class, parentColumns = ["id"], childColumns = ["panel_id"], onDelete = ForeignKey.RESTRICT)],
+    indices = [Index(value = ["analyte_code"], unique = false), Index(value = ["panel_id"], unique = false)])
 data class LabValueEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val analyte_code: String,
@@ -237,7 +251,12 @@ data class LabValueEntity(
     val reference_unit: String? = null,
     val laboratory: String? = null,
     val note: String? = null,
-)
+    val panel_id: Long? = null,
+) {
+    /** The pre-LAB-02 text of this row (no panel_id), so digests of visit packs made before Room 12 stay the same. */
+    fun legacyString() = "LabValueEntity(id=$id, analyte_code=$analyte_code, value=$value, unit=$unit, sampled_utc=$sampled_utc, sampled_zone=$sampled_zone, " +
+        "reference_lower=$reference_lower, reference_upper=$reference_upper, reference_unit=$reference_unit, laboratory=$laboratory, note=$note)"
+}
 
 @Entity(tableName = "pk_settings")
 data class PkSettingsEntity(

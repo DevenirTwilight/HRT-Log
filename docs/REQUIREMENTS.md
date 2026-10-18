@@ -1026,6 +1026,8 @@ operation owned generation/UUID/暂存device wrap/hash及终态不可逆清理�
    - “保存为一次化验”只出现在 LAB-01 多项卡上，需要确认。
 3. 阶段 B 已获负责人批准（§110 第 2 条），阶段 A 合并后直接开始：Room 11→12，备份序列化版本 10→11。仍遵守任务书第 5 节的全部禁止项。
 4. 交付：LAB-02 阶段 B 合并、主线 CI 全绿后，出正式签名包 build 32（versionCode 32，versionName 0.2.0），按 §107 流程私密交付并登记账本；不新建或替换公开 Release，不移动 tag。
+5. 阶段 B 修改 `ui/LabsScreen.kt`（PK_DISPLAY_REVIEW），范围仅限：列表改用真实化验单分组（`labDraws`），新增打开化验单详情和“保存为一次化验”两个回调参数。这一范围包含在任务书第 3 节“化验页：卡片改由真实化验单决定……提供‘保存为一次化验’”中，属于负责人对阶段 B 的批准（§110 第 2 条）。追加式批准记录 id：`PD-2026-10-18-LAB02B-LABSSCREEN`，登记于 `docs/audits/product-quality-2026-10/display-approvals-after-archive.json`。
+
 
 ## 113. 两个中心完整 UI 与可点击未开放入口（2026-10-18）
 
