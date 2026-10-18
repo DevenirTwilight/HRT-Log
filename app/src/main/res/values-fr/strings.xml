@@ -1233,4 +1233,17 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="ref2_history_stale">Le jeu de données a changé. Fermez cette fenêtre et rouvrez la prise.</string>
 <string name="ref2_history_error">Impossible de lire la référence enregistrée. Fermer cette fenêtre ne modifie pas la prise.</string>
 <string name="ref2_history_saved_only">Cette vue concerne la prise enregistrée. Les modifications non enregistrées ne sont pas incluses.</string>
+<string name="test_now">Envoyer une notification de test maintenant</string>
+<string name="test_now_result">Test immédiat à %1$s : %2$s</string>
+<string name="test_scheduled">Rappel de test prévu à %1$s (%2$s). Vous pouvez quitter l’app en attendant.</string>
+<string name="test_mode_exact">alarme exacte</string>
+<string name="test_mode_high">haute fiabilité, réveil système</string>
+<string name="test_mode_inexact">alarmes exactes non autorisées : il peut arriver en retard</string>
+<string name="test_received">Alarme reçue à %1$s : %2$s</string>
+<string name="test_missing">L’heure prévue est passée et aucune alarme n’a été reçue. Le système retarde ou bloque peut-être les alarmes en arrière-plan de l’app.</string>
+<string name="test_out_shown">notification affichée</string>
+<string name="test_out_not_shown">envoyée, mais le système ne l’affiche pas</string>
+<string name="test_out_permission">bloquée : autorisation de notification non accordée</string>
+<string name="test_out_app">bloquée : les notifications de l’app sont désactivées</string>
+<string name="test_out_channel">bloquée : la catégorie de notification des rappels est désactivée</string>
 </resources>

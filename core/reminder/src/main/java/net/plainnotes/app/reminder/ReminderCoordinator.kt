@@ -26,7 +26,13 @@ import javax.inject.Singleton
     private val repo=repository.pinnedTo(Space.PRIMARY)
     private val store=CacheStore(context)
     private val manager=context.getSystemService(AlarmManager::class.java)
-    companion object { private val lock=Mutex() }
+    private val testLog=ReminderTestLog(context)
+    companion object {
+        private val lock=Mutex()
+        const val TEST_NOTIFICATION=101
+        /** A test that could not fire within this time after its trigger (device off) is dropped instead of arriving hours late. */
+        private const val TEST_GRACE=15*60_000L
+    }
     fun canExact()=Build.VERSION.SDK_INT<31 || manager.canScheduleExactAlarms()
     private fun request(generation:String,id:String)=PendingIntent.getBroadcast(context,0,
         Intent(context,AlarmReceiver::class.java).setAction("net.plainnotes.app.REMINDER").putExtra("generation",generation).putExtra("id",id),
@@ -45,12 +51,16 @@ import javax.inject.Singleton
         val old=store.read() ?: return
         repo.reconcileCache(old)
     }
+    /** The user's test reminder has no database mapping, so every rebuild carries it over until it fires. */
+    private fun pendingTests(now:Long)=store.read()?.alarms.orEmpty().filter{it.test && !it.consumed && it.triggerMillis>=now-TEST_GRACE}
     private fun invalidate() {
-        store.write(AlarmCache(UUID.randomUUID().toString(),System.currentTimeMillis(),emptyList()));cancel()
+        val now=System.currentTimeMillis();val tests=pendingTests(now)
+        store.write(AlarmCache(UUID.randomUUID().toString(),maxOf(now,tests.maxOfOrNull{it.triggerMillis} ?: 0L),tests));cancel()
     }
     private suspend fun rebuild() {
         if(!unlocked())return
         val now=Instant.now();val expires=now.plusSeconds(48*3600).toEpochMilli();val generation=UUID.randomUUID().toString()
+        val tests=pendingTests(now.toEpochMilli())
         val meds=repo.medications().associateBy{it.id}
         val candidates= mutableListOf<Pair<String,Long>>()
         repo.calendar(now).filter{it.state in listOf(SlotState.PENDING,SlotState.SOON,SlotState.OVERDUE)}.forEach { e ->
@@ -75,7 +85,7 @@ import javax.inject.Singleton
                 val id=UUID.randomUUID().toString();dao.mapping(ReminderMappingEntity(id,generation,identity,t,false));CachedAlarm(id,t,mode)
             }
         }
-        val cache=AlarmCache(generation,expires,alarms)
+        val cache=AlarmCache(generation,maxOf(expires,tests.maxOfOrNull{it.triggerMillis} ?: 0L),alarms+tests)
         store.write(cache)
         // Keep sent identities until their trigger ages out, including across repeated replans.
         repo.transaction { dao -> dao.pruneMappings(now.minusSeconds(48*3600).toEpochMilli()) }
@@ -104,11 +114,15 @@ import javax.inject.Singleton
         val current=store.read() ?: return@withLock
         val event=current.alarms.firstOrNull{it.opaqueId==id && !it.consumed} ?: return@withLock
         if(current.generation!=generation || System.currentTimeMillis()>current.expiresMillis || event.triggerMillis>System.currentTimeMillis()+1000)return@withLock
-        val consumed=current.consume(id,generation) ?: return@withLock
-        val batch=consumed.copy(alarms=consumed.alarms.map{if(!it.consumed&&it.triggerMillis<=System.currentTimeMillis()+1000)it.copy(consumed=true)else it})
+        current.consume(id,generation) ?: return@withLock
+        val now=System.currentTimeMillis()
+        val due=current.alarms.filter{!it.consumed && (it.opaqueId==id || it.triggerMillis<=now+1000)}
+        val batch=current.copy(alarms=current.alarms.map{if(it in due)it.copy(consumed=true)else it})
         // Persist before sending: after a crash we prefer no duplicate to an uncertain resend.
         store.write(batch)
-        notifyNeutral(generation,id,if(unlocked())detailText(id,generation) else null)
+        // A test never replaces or swallows a real reminder that falls due in the same batch, and vice versa.
+        due.firstOrNull{!it.test}?.let{real->notifyNeutral(generation,real.opaqueId,if(unlocked())detailText(real.opaqueId,generation) else null)}
+        if(due.any{it.test})testLog.received(now,postTest())
         if(unlocked()) { reconcileConsumed();invalidate();rebuild() } else scheduleCached()
     } }
     /** "Name · dose" for the notification body, only when the user opted in and the device is unlocked. */
@@ -118,10 +132,11 @@ import javax.inject.Singleton
             val m=repo.medications().firstOrNull{it.id==slot.medicationId} ?: return null
             "${m.name} · ${java.text.NumberFormat.getNumberInstance().apply{maximumFractionDigits=3}.format(slot.dose)} ${m.unit.lowercase()}" }.getOrNull()
     }
+    private fun channel(nm:NotificationManager)=nm.createNotificationChannel(NotificationChannel("reminders",context.getString(R.string.reminder_channel),NotificationManager.IMPORTANCE_HIGH))
     private fun notifyNeutral(generation:String,id:String,detail:String?=null) {
         val text=NotificationPrefs(context)
         val nm=context.getSystemService(NotificationManager::class.java)
-        nm.createNotificationChannel(NotificationChannel("reminders",context.getString(R.string.reminder_channel),NotificationManager.IMPORTANCE_HIGH))
+        channel(nm)
         if(Build.VERSION.SDK_INT>=33 && ContextCompat.checkSelfPermission(context,Manifest.permission.POST_NOTIFICATIONS)!=PackageManager.PERMISSION_GRANTED)return
         val launch=context.packageManager.getLaunchIntentForPackage(context.packageName)
         val open=launch?.let{PendingIntent.getActivity(context,1,it,PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)}
@@ -163,10 +178,34 @@ import javax.inject.Singleton
         }
         context.getSystemService(NotificationManager::class.java).cancel(100);scheduleCached()
     } }
-    suspend fun testReminder()=withContext(Dispatchers.IO){lock.withLock {
+    /**
+     * Scheduled test: the real AlarmManager → AlarmReceiver → dispatch → NotificationManager path, in the mode the user chose
+     * (HIGH uses the system alarm clock). A repeated tap replaces the pending test; real reminders are untouched.
+     */
+    suspend fun testReminder(delayMillis:Long=60_000)=withContext(Dispatchers.IO){lock.withLock {
         if(unlocked())reconcileConsumed()
-        val current=store.read() ?: AlarmCache(UUID.randomUUID().toString(),System.currentTimeMillis()+48*3600000L,emptyList())
-        val a=CachedAlarm(UUID.randomUUID().toString(),System.currentTimeMillis()+60000,"NORMAL")
-        store.write(current.copy(expiresMillis=maxOf(current.expiresMillis,a.triggerMillis),alarms=current.alarms+a));scheduleCached()
+        val now=System.currentTimeMillis()
+        val current=store.read() ?: AlarmCache(UUID.randomUUID().toString(),now+48*3600000L,emptyList())
+        val mode=if(context.getSharedPreferences("prefs",Context.MODE_PRIVATE).getBoolean("high_reliability",false))"HIGH" else "NORMAL"
+        val a=CachedAlarm(UUID.randomUUID().toString(),now+delayMillis,mode,test=true)
+        store.write(current.copy(expiresMillis=maxOf(current.expiresMillis,a.triggerMillis),alarms=current.alarms.filterNot{it.test}+a))
+        testLog.scheduled(now,a.triggerMillis,mode,canExact());scheduleCached()
+        testLog.read()
     }}
+    /** Immediate test: posts through the same channel now, without AlarmManager. Its result never stands in for the scheduled test. */
+    suspend fun testNow()=withContext(Dispatchers.IO){ postTest().also{testLog.immediate(System.currentTimeMillis(),it)} }
+    fun testStatus()=testLog.read()
+    private fun postTest():TestOutcome {
+        val nm=context.getSystemService(NotificationManager::class.java)
+        channel(nm)
+        if(Build.VERSION.SDK_INT>=33 && ContextCompat.checkSelfPermission(context,Manifest.permission.POST_NOTIFICATIONS)!=PackageManager.PERMISSION_GRANTED)return TestOutcome.BLOCKED_PERMISSION
+        if(!NotificationManagerCompat.from(context).areNotificationsEnabled())return TestOutcome.BLOCKED_APP
+        if(nm.getNotificationChannel("reminders")?.importance==NotificationManager.IMPORTANCE_NONE)return TestOutcome.BLOCKED_CHANNEL
+        val open=context.packageManager.getLaunchIntentForPackage(context.packageName)?.let{PendingIntent.getActivity(context,1,it,PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)}
+        NotificationManagerCompat.from(context).notify(TEST_NOTIFICATION,NotificationCompat.Builder(context,"reminders").setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
+            .setContentTitle(NotificationPrefs(context).title ?: context.getString(R.string.neutral_reminder)).setContentText(context.getString(R.string.test_notification_body))
+            .setVisibility(NotificationCompat.VISIBILITY_SECRET).setContentIntent(open).setAutoCancel(true).build())
+        // Posted is not the same as shown: the system may still drop it (e.g. a vendor block); only an active entry counts.
+        return if(nm.activeNotifications.any{it.id==TEST_NOTIFICATION})TestOutcome.SHOWN else TestOutcome.POSTED_NOT_SHOWN
+    }
 }

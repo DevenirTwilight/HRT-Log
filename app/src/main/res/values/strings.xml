@@ -1233,4 +1233,17 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="ref2_history_stale">The dataset changed. Close this window and reopen the record.</string>
 <string name="ref2_history_error">Could not read the saved reference. Closing this window leaves the record unchanged.</string>
 <string name="ref2_history_saved_only">This shows the saved record. Unsaved changes are not included.</string>
+<string name="test_now">Send a test notification now</string>
+<string name="test_now_result">Immediate test at %1$s: %2$s</string>
+<string name="test_scheduled">Test reminder set for %1$s (%2$s). You can leave the app while you wait.</string>
+<string name="test_mode_exact">exact alarm</string>
+<string name="test_mode_high">high reliability, system alarm clock</string>
+<string name="test_mode_inexact">exact alarms not allowed: it may arrive late</string>
+<string name="test_received">Alarm received at %1$s: %2$s</string>
+<string name="test_missing">The set time has passed and no alarm was received. The system may be delaying or blocking this app’s background alarms.</string>
+<string name="test_out_shown">notification shown</string>
+<string name="test_out_not_shown">sent, but the system is not showing it</string>
+<string name="test_out_permission">blocked: notification permission not granted</string>
+<string name="test_out_app">blocked: notifications are off for this app</string>
+<string name="test_out_channel">blocked: the reminder notification category is off</string>
 </resources>
