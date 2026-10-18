@@ -1,3 +1,9 @@
+## UI-first centers (2026-10-18) — candidate implementation
+
+Owner requests visible UI first; unfinished buttons say “not available yet.” Branch feature/medical-ansm-ui-skeleton-20261018 adds a medicine reference center drawer route, real navigation to medication plans, current stock and the existing per-medication user-reference editor, and inactive cards for French official catalogue, RCP/Notice, safety, supply/recall. The existing medical archive adds a real visits/visit-preparation route and inactive cards for encrypted originals, practitioners and record links. Nothing opens the attachment picker, bundles official data, modifies records or advises treatment.
+
+Four-language strings and navigation/placeholder Compose tests added; drawer contract expands from 12 to 13 entries without skipping previous cases. Status: CANDIDATE_CODED / CI_NOT_YET_VERIFIED, device NOT_RUN, no signed APK, no publication. PR remains separate from P4 #57 and ANSM-04A #58.
+
 ## CI独立候选：精确闹钟测试前置权限 — 2026-10-18
 
 主线417 run39122664759/job117661246072在ReminderTestDeviceTest第52行status.exact断言失败，发生在90s等待前；同源Beta设备绿不覆盖该失败。原fixture只关闭AppOps命令管道，未等命令完成；竞态原因仍HYPOTHESIS。独立分支仅改androidTest一个文件：读到EOF再关闭，并在API31+明确断言AlarmManager已看到grant后才运行原测试。三个用例、全部旧断言、5/8s输入和90s期限逐字保留，不轮询/延时/重跑掩盖。原生编译及三API/六CI待验；完整隔离计划见ci-stability/exact-alarm-preflight-20261018/README.md。按最新主线REQUIREMENTS106走受保护auto-merge，无prod提醒/UI/库存/Schema/PK/权限/版本/签名/发布变化，真机NOT_RUN。
