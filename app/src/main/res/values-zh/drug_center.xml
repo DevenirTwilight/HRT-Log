@@ -1,0 +1,23 @@
+<resources>
+    <string name="drug_center_title">药品资料中心</string>
+    <string name="drug_center_region">法国 · ANSM / BDPM 参考</string>
+    <string name="drug_center_official_off">官方目录暂未开放。目前仅可使用您已保存的产品来源。这不是中国药品目录。</string>
+    <string name="drug_center_user_sources">当前可用：搜索本地保存的用户填写产品来源，或将其关联到现有药物。这些资料尚未核验。</string>
+    <string name="drug_center_search">查询已保存的产品来源</string>
+    <string name="drug_center_medications">我的药物</string>
+    <string name="drug_center_empty">尚无药物。仍可浏览已保存来源；也可在“药物方案”中手动创建药物。</string>
+    <string name="drug_center_open_reference">查看或关联产品来源 · 不改变剂量</string>
+    <string name="drug_center_identity">产品身份与来源</string>
+    <string name="drug_center_identity_body">现有详情显示用户填写的成分、规格、剂型、途径、CIS/CIP、来源版本和日期。缺失字段保持未知；名称相同不代表等效。</string>
+    <string name="drug_center_packaging">包装信息</string>
+    <string name="drug_center_packaging_body">用户填写的 CIP 是所声明的包装身份，不代表已核实的可用库存。此处尚无结构化包装容量，不进行换算或库存扣减。</string>
+    <string name="drug_center_rcp">RCP · 专业产品资料</string>
+    <string name="drug_center_notice">Notice · 患者说明书</string>
+    <string name="drug_center_documents_off">此中心尚未启用。独立说明书核实与导航审查仍在进行。来源网页不等于已核验的说明书正文。</string>
+    <string name="drug_center_safety">安全信息</string>
+    <string name="drug_center_safety_off">尚未实现。不提供产品临床摘要或个人用药安全判断。</string>
+    <string name="drug_center_supply">供应、短缺、召回与监管公告</string>
+    <string name="drug_center_supply_off">尚未实现。当前供应状态未知，不代表正常供应或没有召回。不查询实时药房库存。</string>
+    <string name="drug_center_states">状态说明：资料缺失＝未提供字段；尚未核验＝已有资料但未完成核查；未知＝无法确定；尚未实现＝功能未开放。这些状态均不代表正常供应或安全。</string>
+    <string name="drug_center_short_scope">用户填写来源，尚未核验。官方目录未开放。</string>
+</resources>
