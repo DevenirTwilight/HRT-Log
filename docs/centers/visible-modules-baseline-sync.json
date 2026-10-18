@@ -1,0 +1,10 @@
+{
+  "base": "746bb2e91f86e1eccbccb852cdfecba0683aa5f7",
+  "priorHead": "5d2ac4e9b0f806312a104a0f2a93bdf38a08bcbb",
+  "inheritedChange": "Only owner-approved merged PR83 versionCode31 to32, not a new version change by this UI delta",
+  "appMainFilesCompared": 117,
+  "appMainDifferences": [],
+  "validation": "All app/src/main bytes identical to prior locally validated UI. Room12 and UI inputs unchanged; run all required final-head CI. No redundant local rerun for inherited version metadata.",
+  "physicalDevice": "NOT_RUN",
+  "talkBack": "NOT_RUN"
+}
