@@ -999,3 +999,30 @@ operation owned generation/UUID/暂存device wrap/hash及终态不可逆清理�
 保护文件：`ui/LabsScreen.kt` 属于 PK_DISPLAY_REVIEW。负责人在任务书第 1 节第 3 条明确批准本任务修改该文件，范围仅限批量录入入口、列表分组显示、单项编辑对话框中的分组提示。追加式批准记录 id：`PD-2026-10-18-LAB01-LABSSCREEN`（登记于 `docs/pk-research/p2/display-approvals.json`，证据为本节所在提交）。`LabContextSection.kt`、`Exports.kt`、`LabEstimate.kt`、`CalibrationEligibility.kt`、`LabFit.kt`、`ConcentrationCalculator.kt` 不改。
 
 实现决定（负责人可随时推翻）：化验页筛选标签前新增“全部”，默认选中，按次显示所有记录；选某个项目时仍显示该项目的趋势图和逐条记录（含编辑/删除菜单和上下文），与改动前相同。多项卡中的行点开现有的化验详情（`LabDetailDialog`），从详情进入编辑；删除仍在单项视图的 ⋮ 菜单里。新建时一行未动过的空行会被常用组合替换，其余情况只追加缺少的项目（任一孕酮检测方法都算已有孕酮）。
+
+
+## 112. LAB-02：“化验单”数据层（阶段 A 设计与合成验证，阶段 B 生产实施）（2026-10-18）
+
+任务书原文：`docs/audits/product-quality-2026-10/sources/lab02/lab02-prompt.md`（SHA-256 `b872713502309528c8a7ef56b153ccf8b5046df2ade338e82b5006d2a91c1718`），负责人 2026-10-18 上传。
+
+1. 阶段 A：
+   - ADR：`docs/design/lab-panel-adr.md`。
+   - 只在测试中运行的迁移、备份草案验证：`core/data/.../LabPanelDraftTest.kt`。
+   - PK 不变性验证：`app/.../Lab02PanelPkInvarianceTest.kt`。
+   - 报告 68。
+   - 阶段 A 不改生产代码。
+2. 待决问题：负责人看过 ADR 草稿后回复“你推荐吧，lab02做完给我个apk”。ADR 第 11 节 Q1–Q12 的推荐答案全部采纳；负责人可随时推翻，推翻后按新答案修改。主要内容：
+   - 单条改时间或机构时，自动移出化验单并先提示；
+   - 时间线不合并显示；
+   - 外键 RESTRICT；
+   - 时间、时区、机构在化验单和每条数值上各存一份，加一致性校验；
+   - 不加 `specimen`；
+   - 批量录入一律建化验单；
+   - 1 项化验单也显示为卡片；
+   - 新备份被旧应用读取时拒绝；
+   - 单条恢复时原化验单已不在，就作为单条恢复；
+   - 就诊资料包摘要不计入 `panel_id`；
+   - 保留化验单备注；
+   - “保存为一次化验”只出现在 LAB-01 多项卡上，需要确认。
+3. 阶段 B 已获负责人批准（§110 第 2 条），阶段 A 合并后直接开始：Room 11→12，备份序列化版本 10→11。仍遵守任务书第 5 节的全部禁止项。
+4. 交付：LAB-02 阶段 B 合并、主线 CI 全绿后，出正式签名包 build 32（versionCode 32，versionName 0.2.0），按 §107 流程私密交付并登记账本；不新建或替换公开 Release，不移动 tag。
