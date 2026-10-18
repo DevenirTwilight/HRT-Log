@@ -1,0 +1,124 @@
+{
+  "source": "9ec268ef7955303cab64c50efcf39a1e02b53909",
+  "classes": [
+    {
+      "name": "net.plainnotes.app.AppShellBackNavigationTest",
+      "tests": "16",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.DrugCenterNavigationTest",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.MedicalCenterMatrixTest",
+      "tests": "48",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.UnifiedConcentrationTranslationsTest",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.TranslationsTest",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.TimelineAndDrawerHierarchyTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.MedicalRecordsUiTest",
+      "tests": "40",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.DrugCenterMatrixTest",
+      "tests": "48",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.MedicalHomeTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.Ui05MedicalHomeTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.PeriodStabilityTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    }
+  ],
+  "tests": 170,
+  "status": "PASS",
+  "displayCases": 96,
+  "contrastsPerCase": 3,
+  "syntheticDataOnly": true,
+  "physicalDevice": "NOT_RUN",
+  "talkBack": "NOT_RUN",
+  "screenshots": [
+    {
+      "path": "docs/centers/visible-modules/medical-zh-rTW_320dp_2.0x_light_HIGH.png",
+      "sha256": "adb154fabd24226a9d41f6cffd08b7a760b5a38b3b60dc927467b2bfa80af72a"
+    },
+    {
+      "path": "docs/centers/visible-modules/medical-zh-rCN_320dp_2.0x_dark_HIGH.png",
+      "sha256": "3ce78369ec3e61df3e110d2dbfe5c20b82981db690fdce7dc166ebda4a105d89"
+    },
+    {
+      "path": "docs/centers/visible-modules/medical-zh-rCN_320dp_2.0x_light_HIGH.png",
+      "sha256": "2c85258270448fec35762d75fe7c7b7e9932dc5c8ad3f28287ebf690a40b3c85"
+    },
+    {
+      "path": "docs/centers/visible-modules/medical-en_320dp_2.0x_light_HIGH.png",
+      "sha256": "15eb0a4fc070a4009037041e4bd93384b2719492a50185a23a203555a6f51e60"
+    },
+    {
+      "path": "docs/centers/visible-modules/medical-fr-rFR_320dp_2.0x_light_HIGH.png",
+      "sha256": "0f8be88e31c904def8b680961459a414e6d806d00d95902bb5e1382137b50d36"
+    },
+    {
+      "path": "docs/centers/visible-modules/medical-zh-rTW_320dp_2.0x_dark_HIGH.png",
+      "sha256": "42b006c07d59b1fc8baa7f632f8383fd9fb002b352d6937d16d6228e3a6c82ad"
+    },
+    {
+      "path": "docs/centers/visible-modules/medical-en_320dp_2.0x_dark_HIGH.png",
+      "sha256": "bc3fe8205c126730ae9ec8988e5dc4a422500e50c06f3067b3f0e254ff954984"
+    },
+    {
+      "path": "docs/centers/visible-modules/medical-fr-rFR_320dp_2.0x_dark_HIGH.png",
+      "sha256": "22f4514b995aac214cc20966408017324ada07911af6e47fe94e01f098d07992"
+    }
+  ],
+  "invalidDrugCapture": "8 drug overview captures used latest dismissed dialog, yielding black images; excluded and regenerated with visible-dialog selection and pixel diversity guard."
+}

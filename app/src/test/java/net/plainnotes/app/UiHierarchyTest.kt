@@ -81,10 +81,14 @@ class TimelineAndDrawerHierarchyTest {
         ui.onAllNodesWithText("Asia/Tokyo", substring = true).assertCountEquals(0)        // a name, never the ID
     }
 
-    @Test @Config(qualifiers = "w320dp-h640dp") fun drawerKeepsAllTwelveEntriesUnderHeadings() {
+    @Test @Config(qualifiers = "w320dp-h640dp") fun drawerKeepsEveryOriginalEntryOnceUnderHeadings() {
         RuntimeEnvironment.setFontScale(2f)
         assertEquals(Destination.entries.toList().sortedBy { it.ordinal }, DRAWER_GROUPS.flatMap { it.items }.sortedBy { it.ordinal })
-        assertEquals(12, DRAWER_GROUPS.sumOf { it.items.size })
+        val original=setOf(Destination.CALENDAR,Destination.TIMELINE,Destination.HISTORY,Destination.WELLBEING,Destination.MEDICATIONS,Destination.STOCK,Destination.CONCENTRATION,Destination.MEDICAL,Destination.VISITS,Destination.LABS,Destination.SETTINGS,Destination.ABOUT)
+        val actual=DRAWER_GROUPS.flatMap {it.items}
+        assertTrue(actual.containsAll(original))
+        assertEquals(Destination.entries.size,actual.size)
+        assertEquals(actual.size,actual.distinct().size)
         var picked: Destination? = null
         ui.setContent { NotesTheme(ThemeMode.LIGHT) { DrawerContent(Destination.CALENDAR) { picked = it } } }
         val headings = ui.onAllNodes(SemanticsMatcher.keyIsDefined(SemanticsProperties.Heading)).fetchSemanticsNodes()

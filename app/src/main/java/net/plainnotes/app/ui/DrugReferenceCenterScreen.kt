@@ -16,7 +16,7 @@ import net.plainnotes.app.data.MedicationEntity
 
 /** A view over the existing medication/reference APIs. No catalogue, clinical advice or inventory writes. */
 @Composable fun DrugReferenceCenterScreen(medications:List<MedicationEntity>,onBrowse:()->Unit,
-    onReference:(MedicationEntity)->Unit,contentPadding:PaddingValues) {
+    onReference:(MedicationEntity)->Unit,contentPadding:PaddingValues,onPlans:(()->Unit)?=null,onStock:(()->Unit)?=null) {
     LazyColumn(Modifier.fillMaxSize().testTag("drug-center-list"),contentPadding=PaddingValues(
         start=16.dp,end=16.dp,top=contentPadding.calculateTopPadding()+8.dp,
         bottom=contentPadding.calculateBottomPadding()+32.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
@@ -27,6 +27,8 @@ import net.plainnotes.app.data.MedicationEntity
                 Text(stringResource(R.string.drug_center_search))
             }
         }
+        onPlans?.let { open -> item("plans") {OutlinedButton(open,Modifier.fillMaxWidth().heightIn(min=48.dp).testTag("drug-center-plans")){Text(stringResource(R.string.medications))}} }
+        onStock?.let { open -> item("stock") {OutlinedButton(open,Modifier.fillMaxWidth().heightIn(min=48.dp).testTag("drug-center-stock")){Text(stringResource(R.string.stock))}} }
         item("medications") { Text(stringResource(R.string.drug_center_medications),style=MaterialTheme.typography.titleMedium,modifier=Modifier.semantics{heading()}) }
         if(medications.isEmpty())item("empty") {Text(stringResource(R.string.drug_center_empty))}
         items(medications.sortedWith(compareByDescending<MedicationEntity>{it.active}.thenBy{it.sort_order}.thenBy{it.id}),key={"medication:${it.id}"}) {medication->
@@ -43,10 +45,14 @@ import net.plainnotes.app.data.MedicationEntity
         item("states") {Text(stringResource(R.string.drug_center_states),style=MaterialTheme.typography.bodySmall)}
         item("identity") { DrugCenterSection(R.string.drug_center_identity,R.string.drug_center_identity_body,"drug-center-identity") }
         item("packaging") { DrugCenterSection(R.string.drug_center_packaging,R.string.drug_center_packaging_body,"drug-center-packaging") }
-        item("rcp") { DrugCenterSection(R.string.drug_center_rcp,R.string.drug_center_documents_off,"drug-center-rcp") }
-        item("notice") { DrugCenterSection(R.string.drug_center_notice,R.string.drug_center_documents_off,"drug-center-notice") }
-        item("safety") { DrugCenterSection(R.string.drug_center_safety,R.string.drug_center_safety_off,"drug-center-safety") }
-        item("supply") { DrugCenterSection(R.string.drug_center_supply,R.string.drug_center_supply_off,"drug-center-supply") }
+        item("future-heading") {Text(stringResource(R.string.center_future_modules),style=MaterialTheme.typography.titleMedium,modifier=Modifier.semantics{heading()})}
+        item("catalogue") {UnavailableModuleCard(R.string.center_fr_catalogue,R.string.center_fr_catalogue_reason,"drug-center-catalogue")}
+        item("rcp") {UnavailableModuleCard(R.string.drug_center_rcp,R.string.drug_center_documents_off,"drug-center-rcp")}
+        item("notice") {UnavailableModuleCard(R.string.drug_center_notice,R.string.drug_center_documents_off,"drug-center-notice")}
+        item("safety") {UnavailableModuleCard(R.string.drug_center_safety,R.string.drug_center_safety_off,"drug-center-safety")}
+        item("supply") {UnavailableModuleCard(R.string.center_shortages,R.string.drug_center_supply_off,"drug-center-supply")}
+        item("recalls") {UnavailableModuleCard(R.string.center_recalls,R.string.drug_center_supply_off,"drug-center-recalls")}
+
     }
 }
 
@@ -62,7 +68,7 @@ import net.plainnotes.app.data.MedicationEntity
 /** Existing AppShell hosts this only inside the unlocked real application. Nested reference dialog owns its write state. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable fun DrugReferenceCenterDialog(medications:List<MedicationEntity>,onBrowse:()->Unit,
-    onReference:(MedicationEntity)->Unit,onDismiss:()->Unit) {
+    onReference:(MedicationEntity)->Unit,onStock:(()->Unit)?=null,onDismiss:()->Unit) {
     androidx.compose.ui.window.Dialog(onDismissRequest=onDismiss,
         properties=androidx.compose.ui.window.DialogProperties(usePlatformDefaultWidth=false)) {
         Scaffold(modifier=Modifier.testTag("drug-center-window"),topBar={Surface {
@@ -75,7 +81,7 @@ import net.plainnotes.app.data.MedicationEntity
             }
         }}) { padding ->
             Box(Modifier.fillMaxSize().padding(padding)) {
-                DrugReferenceCenterScreen(medications,onBrowse,onReference,PaddingValues())
+                DrugReferenceCenterScreen(medications,onBrowse,onReference,PaddingValues(),onPlans=onDismiss,onStock=onStock)
             }
         }
     }

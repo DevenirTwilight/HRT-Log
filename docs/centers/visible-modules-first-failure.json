@@ -1,0 +1,41 @@
+{
+  "source": "4c513cba",
+  "results": [
+    {
+      "name": "net.plainnotes.app.DrugCenterNavigationTest",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.TimelineAndDrawerHierarchyTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.MedicalHomeTest",
+      "tests": "4",
+      "failures": "1",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.Ui05MedicalHomeTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.PeriodStabilityTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    }
+  ],
+  "reason": "One test queried shared status text globally and matched visible cards plus dialog. Scope assertion to dialog ancestor; retain no-picker/no-callback assertions. Real NotesApp navigation and invariance PASS."
+}

@@ -62,14 +62,24 @@ class MedicalHomeTest {
         assertTrue("newest year first", y26 < y25)
     }
 
-    @Test fun noFileOrAttachmentEntry() {
-        ui.setContent { NotesTheme(ThemeMode.LIGHT) { MedicalRecordsScreen(listOf(visit(1, now.minusSeconds(86400), true), visit(2, now.plusSeconds(86400), false)),
-            {}, {}, {}, {}, {}, PaddingValues(), now = now) } }
-        list.performScrollToNode(hasTestTag("medical-bin"))
-        val tags = ui.onAllNodes(SemanticsMatcher.keyIsDefined(SemanticsProperties.TestTag), useUnmergedTree = true).fetchSemanticsNodes().map { it.config[SemanticsProperties.TestTag] }
-        assertTrue(tags.toString(), tags.none { it.contains("attach", true) || it.contains("file", true) || it.contains("document", true) })
-        for (word in listOf("attach", "file", "pdf", "upload", "附件", "文件")) ui.onAllNodes(hasText(word, substring = true, ignoreCase = true)).assertCountEquals(0)
+    @Test fun futureFileEntriesOnlyExplainStatusAndNeverLaunchImporter() {
+        var actions=0
+        ui.setContent { NotesTheme(ThemeMode.LIGHT) { MedicalRecordsScreen(emptyList(), {actions++}, {actions++}, {actions++}, {actions++}, {actions++}, PaddingValues(), now=now) } }
+        val intents=org.robolectric.Shadows.shadowOf(ui.activity)
+        for(tag in listOf("medical-future-files","medical-future-originals","medical-future-practitioners","medical-future-visit-links","medical-future-lab-links","medical-future-organize")) {
+            list.performScrollToNode(hasTestTag(tag))
+            ui.onNodeWithTag(tag).assertIsDisplayed().assertHasClickAction().performClick()
+            ui.onNodeWithTag("center-unavailable-dialog").assertExists()
+            ui.onNode(hasText(s(R.string.center_not_open)) and hasAnyAncestor(hasTestTag("center-unavailable-dialog"))).assertExists()
+            ui.onAllNodesWithTag("attachment-add").assertCountEquals(0)
+            ui.onAllNodesWithTag("medical-save").assertCountEquals(0)
+            assertNull("No picker, document viewer or external activity",intents.nextStartedActivity)
+            ui.onNodeWithTag("center-unavailable-close").performClick()
+            ui.onNodeWithTag("center-unavailable-dialog").assertDoesNotExist()
+        }
+        assertEquals("No real action callback",0,actions)
     }
+
 }
 
 /** UI-01 G: "Confirm visit" on the home is the detail's existing completed_utc write (saveMedicalVisit) and is undone there with Retract. */
