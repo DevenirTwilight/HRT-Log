@@ -20,12 +20,15 @@ import java.io.File
 /** Actual Compose render, synthetic empty state; no fixture health data or screenshot-only success. */
 @RunWith(ParameterizedRobolectricTestRunner::class) @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @Config(sdk=[35],application=android.app.Application::class)
-class DrugCenterMatrixTest(private val locale:String,private val width:Int,private val font:Float,private val dark:Boolean) {
-    companion object {@JvmStatic @ParameterizedRobolectricTestRunner.Parameters(name="{0}/{1}dp/{2}x/dark={3}") fun cases()=
-        listOf("en","fr-rFR","zh-rCN","zh-rTW").flatMap {l->listOf(320,411).flatMap {w->listOf(1f,2f).flatMap {f->listOf(false,true).map {d->arrayOf<Any>(l,w,f,d)}}}}}
+class DrugCenterMatrixTest(private val locale:String,private val width:Int,private val font:Float,private val dark:Boolean,private val landscape:Boolean) {
+    companion object {@JvmStatic @ParameterizedRobolectricTestRunner.Parameters(name="{0}/{1}dp/{2}x/dark={3}/landscape={4}") fun cases()=
+        listOf("en","fr-rFR","zh-rCN","zh-rTW").flatMap {l->listOf(320,411).flatMap {w->listOf(1f,2f).flatMap {f->listOf(false,true).flatMap {d->
+            (if(f==2f)listOf(false,true) else listOf(false)).map {land->arrayOf<Any>(l,w,f,d,land)}
+        }}}}}
     @get:Rule val ui=createAndroidComposeRule<ComponentActivity>()
     @Test fun allExistingModuleEntrancesRemainReachableAtEveryContrast() {
-        RuntimeEnvironment.setQualifiers("$locale-w${width}dp-h${if(width==320)640 else 891}dp-xxhdpi");RuntimeEnvironment.setFontScale(font)
+        val height=if(width==320)640 else 891
+        RuntimeEnvironment.setQualifiers("$locale-w${if(landscape)height else width}dp-h${if(landscape)width else height}dp-${if(landscape)"land" else "port"}-xxhdpi");RuntimeEnvironment.setFontScale(font)
         var contrast by mutableStateOf(Contrast.STANDARD)
         var browsed=0;var linked=0
         val medication=net.plainnotes.app.data.MedicationEntity(id=7,name="SYNTHETIC long product / 0.75 mg per pump / 1.25 g gel / compound, ester, hydrate",molecule="OTHER",unit="MG",dose_per_intake=1.0,container_capacity=1.0,soon_alert_minutes=0,late_after_minutes=60,site_rotation=false,notifications_on=false,active=true,sort_order=0)
@@ -46,11 +49,11 @@ class DrugCenterMatrixTest(private val locale:String,private val width:Int,priva
             for(tag in listOf("drug-center-catalogue","drug-center-rcp","drug-center-notice","drug-center-safety","drug-center-supply","drug-center-recalls")) {
                 list.performScrollToNode(hasTestTag(tag));ui.onNodeWithTag(tag).assertIsDisplayed().assertHasClickAction().performClick()
                 ui.onNodeWithTag("center-unavailable-dialog").assertExists()
-                ui.onNodeWithTag("center-unavailable-close").performClick()
+                ui.onNodeWithTag("center-unavailable-close").assertIsDisplayed().performClick()
                 ui.onNodeWithTag("center-unavailable-dialog").assertDoesNotExist()
             }
             list.performScrollToIndex(0)
-            if(System.getenv("CENTER_SHOTS")=="1" && width==320 && font==2f && mode==Contrast.HIGH) {
+            if(System.getenv("CENTER_SHOTS")=="1" && width==320 && font==2f && !landscape && mode==Contrast.HIGH) {
                 ui.waitForIdle();val view=requireNotNull(org.robolectric.shadows.ShadowDialog.getLatestDialog()?.window).decorView
                 check(view.width>0 && view.height>0)
                 val image=Bitmap.createBitmap(view.width,view.height,Bitmap.Config.ARGB_8888)

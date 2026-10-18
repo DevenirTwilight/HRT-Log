@@ -120,6 +120,25 @@ class AppShellBackNavigationTest {
         back();assertCalendar()
     }
 
+    @Test fun medicalFutureModulesKeepExistingDataAndBackOrigin() {
+        runBlocking {repo.appointment(AppointmentEntity(at_utc=Instant.now().plusSeconds(86400).toEpochMilli(),at_zone="UTC",type="CHECKUP",practitioner="Synthetic future-module audit",remind_minutes_before=0))}
+        val before=runBlocking{db.dao().appointments()}
+        model.sync();show();open(Destination.MEDICAL)
+        val intents=org.robolectric.Shadows.shadowOf(context)
+        for(tag in listOf("medical-future-files","medical-future-originals","medical-future-practitioners","medical-future-visit-links","medical-future-lab-links","medical-future-organize")) {
+            ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag(tag))
+            ui.onNodeWithTag(tag).performClick()
+            ui.onNodeWithTag("center-unavailable-dialog").assertExists()
+            ui.onNodeWithTag("center-unavailable-close").performClick()
+            ui.onNodeWithTag("medical-list").assertExists();assertNotCalendar()
+            assertNull("No external document action",intents.nextStartedActivity)
+        }
+        assertEquals(before,runBlocking{db.dao().appointments()})
+        assertTrue(runBlocking{db.dao().labs().isEmpty()})
+        assertEquals(0,activityBacks)
+        back();assertCalendar()
+    }
+
     @Test fun medicalCenterLabsAndTimelineReturnToTheirOrigin() {
         show();open(Destination.MEDICAL)
         for(tag in listOf("medical-labs","medical-history")) {

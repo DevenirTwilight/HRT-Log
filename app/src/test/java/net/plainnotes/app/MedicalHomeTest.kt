@@ -70,7 +70,7 @@ class MedicalHomeTest {
             list.performScrollToNode(hasTestTag(tag))
             ui.onNodeWithTag(tag).assertIsDisplayed().assertHasClickAction().performClick()
             ui.onNodeWithTag("center-unavailable-dialog").assertExists()
-            ui.onNodeWithText(s(R.string.center_not_open)).assertExists()
+            ui.onNode(hasText(s(R.string.center_not_open)) and hasAnyAncestor(hasTestTag("center-unavailable-dialog"))).assertExists()
             ui.onAllNodesWithTag("attachment-add").assertCountEquals(0)
             ui.onAllNodesWithTag("medical-save").assertCountEquals(0)
             assertNull("No picker, document viewer or external activity",intents.nextStartedActivity)
