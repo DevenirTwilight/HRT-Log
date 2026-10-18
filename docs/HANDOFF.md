@@ -1,3 +1,15 @@
+## 日常回收站修复#65：源代码CI与三API合同已核验 — 2026-10-18
+
+源88a60f1六项必需检查在push/PR全部PASS；已下载校验官方工件SHA/CRC。新DailyTrashCollisionAndroidTest在API26/29/35各4用例，零失败/跳过；完整JVM data247、reminder20零失败/跳过，app1379零失败/205既有条件跳过。原TrashDataTest断言未改。4确定性红→真实三API绿证明同毫秒冲突修复，非重跑掩盖。固定时间、加密备份与注入失败完整回滚证据见[报告](ci-stability/daily-trash-collision-20261018/README.md)。
+
+本提交仅证据/HANDOFF，最终新HEAD六CI待独立运行，不借源88a60f1绿灯冒充。未扩大ANSM自动合并权限到一般日常数据PR；仍待负责人审阅/普通受保护合并。与P4同一workflow行未来需保留daily+两个measured类并集。无Schema/备份格式/签名/版本/发布变化，物理真机NOT_RUN。
+
+## 日常回收站同毫秒冲突独立修复候选 — 2026-10-18
+
+在#64的CI run39069136997发现真实TrashDataTest UNIQUE(kind,ref)失败，非SDK下载。固定时间4新测试在原d13048b代码全部FAIL；修复只为冲突的新SCORE/NOTE/SYMPTOM快照分配独立ref，保留原内容/引用/删除时间，其他kind重复仍拒绝，事务失败完整回滚。不改Schema、PNBAK1、NotesRepository、库存、PK或UI。
+
+初始及最终共享文件库夹具全data247零fail/skip，Python156，SQLCipher原生源码编译PASS；新增4用例将覆盖26/29/35，当前执行NOT_RUN。既有26/29名单仅追加新类，保留旧14类/六检查。PR57也改同一名单，未来受审合并后须保留daily+两个measured类并复验，不自动合并本候选。证据、备份兼容及集成计划见[独立报告](ci-stability/daily-trash-collision-20261018/README.md)。无签名/发布/APK交付。
+
 ## CI：Robolectric 离线依赖（PR #63）— 2026-10-17
 
 - 主线 34f0e01 的 android 任务中 core:reminder 五个测试类因 Robolectric 运行期下载 android-all 失败（MavenArtifactFetcher/FileNotFoundException）；同代码 64db9b4 全绿，差异仅文档，判定为外部下载失败。

@@ -46,8 +46,17 @@ object Trash {
     fun payload(vararg parts:Pair<String,JSONArray>)=JSONObject().put("order",JSONArray(parts.map{it.first})).put("tables",JSONObject().apply{parts.forEach{(t,rows)->put(t,rows)}})
 
     fun insert(db:SupportSQLiteDatabase,kind:String,ref:String,date:String,payload:JSONObject,now:Long) {
-        val trashId=db.insert("trash_item",SQLiteDatabase.CONFLICT_ABORT,ContentValues().apply{put("kind",kind);put("ref",ref);put("item_date",date);put("deleted_utc",now);put("payload_json",payload.toString());put("state",TRASHED)})
-        AttachmentIdentity.trashed(db,kind,ref,trashId,payload.toString())
+        // Daily snapshot refs contain a millisecond timestamp, not an operation identity. A fast
+        // delete/re-enter/restore can use that timestamp twice. Keep the old snapshot and its time;
+        // only the newly displaced daily value needs a fresh opaque reference. Other kinds keep
+        // their stable reference and the original duplicate-rejection policy.
+        val collision=when(kind) {
+            SCORE,NOTE,SYMPTOM->db.query("SELECT 1 FROM trash_item WHERE kind=? AND ref=? LIMIT 1",arrayOf(kind,ref)).use{it.moveToFirst()}
+            else->false
+        }
+        val storedRef=if(collision)java.util.UUID.randomUUID().toString() else ref
+        val trashId=db.insert("trash_item",SQLiteDatabase.CONFLICT_ABORT,ContentValues().apply{put("kind",kind);put("ref",storedRef);put("item_date",date);put("deleted_utc",now);put("payload_json",payload.toString());put("state",TRASHED)})
+        AttachmentIdentity.trashed(db,kind,storedRef,trashId,payload.toString())
     }
 
     /**

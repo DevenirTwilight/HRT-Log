@@ -1,0 +1,15 @@
+{
+  "api": 29,
+  "head": "88a60f1d8df01671d8ea64b90117343974839012",
+  "run": 39103554604,
+  "artifact_id": 12127547307,
+  "artifact_sha256": "852e4da46d5f02cf5376aa6d162948c1e1b062fb5a6d6d69e8f5ac70a3ceb4ce",
+  "zip_crc": "PASS",
+  "class": "DailyTrashCollisionAndroidTest",
+  "counts": {
+    "tests": 4,
+    "failures": 0,
+    "skipped": 0
+  },
+  "scope": "ACTUAL_SQLCIPHER_EMULATOR_NOT_PHYSICAL"
+}
