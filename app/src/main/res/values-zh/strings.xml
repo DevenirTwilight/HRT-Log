@@ -1246,4 +1246,33 @@
 <string name="test_out_permission">被阻止：未授予通知权限</string>
 <string name="test_out_app">被阻止：本应用的通知已关闭</string>
 <string name="test_out_channel">被阻止：提醒通知类别已关闭</string>
+
+<!-- Medical and medicine center UI skeleton: no official assets or medical originals activated. -->
+<string name="ui_skeleton_ref_title">药品资料中心</string>
+<string name="ui_skeleton_coming_soon">尚未开放</string>
+<string name="ui_skeleton_unavailable">此功能尚未开放；本次操作不会保存或修改数据。</string>
+<string name="ui_skeleton_ref_intro">这里可以查看已保存的个人药品参考资料。法国官方药品目录目前尚未启用。</string>
+<string name="ui_skeleton_ready">现已可用</string>
+<string name="ui_skeleton_manage_existing">进入现有的药物方案与编辑功能</string>
+<string name="ui_skeleton_existing_stock">进入现有库存页面；新的精确包装计量尚未开放</string>
+<string name="ui_skeleton_no_medications">目前没有已保存的药物，请先在“药物方案”中添加。</string>
+<string name="ui_skeleton_saved_medications">我的药物与参考资料</string>
+<string name="ui_skeleton_user_reference">查看用户录入的资料，不代表官方核实</string>
+<string name="ui_skeleton_future">后续药品资料功能</string>
+<string name="ui_skeleton_official_catalogue">法国官方药品目录</string>
+<string name="ui_skeleton_official_desc">官方资料分发许可与产品身份核验尚未完成，这里不会打开或导入官方目录。</string>
+<string name="ui_skeleton_rcp_notice">药品说明书（RCP / Notice）</string>
+<string name="ui_skeleton_rcp_desc">说明书流程仍在独立审查；这里不会展示未经核实的医学正文或治疗建议。</string>
+<string name="ui_skeleton_safety">药品安全信息</string>
+<string name="ui_skeleton_safety_desc">来源核查及文案审查尚未完成，不提供个人风险判断或剂量建议。</string>
+<string name="ui_skeleton_supply">短缺、召回与监管公告</string>
+<string name="ui_skeleton_supply_desc">尚未接入经过核实的更新来源。状态未知不代表没有公告。</string>
+<string name="ui_skeleton_visit_pack">就诊与资料准备</string>
+<string name="ui_skeleton_med_future">后续医疗中心功能</string>
+<string name="ui_skeleton_med_documents">加密医疗文件库</string>
+<string name="ui_skeleton_med_documents_desc">文件原件加密存储、预览与完整恢复尚未通过安全验收；不会打开文件选择器，也不会保存文件或路径。</string>
+<string name="ui_skeleton_med_practitioners">医生与医疗机构档案</string>
+<string name="ui_skeleton_med_practitioners_desc">独立名录尚未开放；现有就诊记录中的医生和地点仍可在就诊页面查看。</string>
+<string name="ui_skeleton_med_links">医疗资料关联</string>
+<string name="ui_skeleton_med_links_desc">文件原件、化验和就诊记录之间的关联功能尚未开放；不会自动匹配或修改既有记录。</string>
 </resources>
