@@ -17,8 +17,8 @@ import org.junit.Assert.*
 
 /**
  * China beta P0-A on a real device (API 26/29/35, no health data): the scheduled test is delivered by the real
- * AlarmManager to the real AlarmReceiver (Hilt → dispatch) and ends as an active notification; the immediate test posts
- * without AlarmManager. Each stage is read back separately. A real vendor ROM, Doze and a killed process stay NOT_RUN here.
+ * AlarmManager to the real AlarmReceiver (Hilt → dispatch) and ends as an active notification. Each stage is read back
+ * separately. A real vendor ROM, Doze and a killed process stay NOT_RUN here.
  */
 class ReminderTestDeviceTest {
     private val instrumentation get() = InstrumentationRegistry.getInstrumentation()
@@ -47,14 +47,9 @@ class ReminderTestDeviceTest {
         assertTrue("the notification is active in the system", shown())
     }
 
-    @Test fun immediateTestPostsAndIsShownWithoutAnAlarm() {
-        assertEquals(TestOutcome.SHOWN, runBlocking { coordinator.testNow() })
-        assertTrue(shown())
-    }
-
     @Test fun scheduledTestTravelsTheRealAlarmChain() {
         val status = runBlocking { coordinator.testReminder(delayMillis = 5_000) }
-        assertEquals("NORMAL", status.mode); assertTrue(status.exact)
+        assertEquals("NORMAL", status.mode); assertTrue(status.exact); assertNull("nothing blocks notifications", status.blockedAtSchedule)
         assertFalse("nothing shown before the alarm", shown())
         awaitDelivery(status.scheduledAt)
     }

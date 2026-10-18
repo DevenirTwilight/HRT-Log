@@ -27,9 +27,9 @@ import java.time.ZoneId
 import java.util.UUID
 
 /**
- * China beta P0-A: the scheduled test goes through AlarmManager → dispatch → NotificationManager in the user's mode, the
- * immediate test posts without AlarmManager, and every stage is recorded separately: scheduled, broadcast received,
- * notification outcome. Synthetic data only. The receiver → Hilt → dispatch hop and real firing run on devices
+ * China beta P0-A: the one test reminder goes through AlarmManager → dispatch → NotificationManager in the user's mode;
+ * tapping only reads what would block notifications (posts nothing), and every stage is recorded separately: scheduled
+ * with that check, broadcast received, notification outcome. Synthetic data only. The receiver → Hilt → dispatch hop and real firing run on devices
  * (ReminderTestDeviceTest).
  */
 @RunWith(RobolectricTestRunner::class) @Config(sdk = [35], application = Application::class)
@@ -99,18 +99,17 @@ class ReminderTestChainTest {
         assertEquals(1, pendingTests().size)
     }
 
-    @Test fun immediateTestIsSeparateFromTheScheduledTest() {
-        assertEquals(TestOutcome.SHOWN, runBlocking { coordinator.testNow() })
-        val status = coordinator.testStatus()
-        assertEquals(TestOutcome.SHOWN, status.nowOutcome); assertTrue(status.nowAt > 0)
-        assertEquals("the immediate test never counts as a received alarm", 0L, status.receivedAt); assertNull(status.outcome)
-        assertTrue("and sets no alarm", shadowOf(manager).scheduledAlarms.isEmpty())
+    @Test fun tappingPostsNothingAndChecksTheNotificationSettings() {
+        val status = runBlocking { coordinator.testReminder() }
+        assertNull("nothing blocks notifications", status.blockedAtSchedule)
+        assertTrue("only the one-minute test: nothing is posted at the tap", notifications.activeNotifications.isEmpty())
+        assertEquals(0L, status.receivedAt); assertNull(status.outcome)
     }
 
     @Test fun deniedNotificationPermissionIsReportedAtEachStage() {
         shadowOf(context as Application).denyPermissions(Manifest.permission.POST_NOTIFICATIONS)
-        assertEquals(TestOutcome.BLOCKED_PERMISSION, runBlocking { coordinator.testNow() })
-        runBlocking { coordinator.testReminder(delayMillis = 0) }; fireNext()
+        assertEquals("seen at the tap", TestOutcome.BLOCKED_PERMISSION, runBlocking { coordinator.testReminder(delayMillis = 0) }.blockedAtSchedule)
+        fireNext()
         val status = coordinator.testStatus()
         assertTrue("the alarm still arrived", status.receivedAt > 0)
         assertEquals(TestOutcome.BLOCKED_PERMISSION, status.outcome)
@@ -119,14 +118,15 @@ class ReminderTestChainTest {
 
     @Test fun blockedAppNotificationsAreReported() {
         shadowOf(notifications).setNotificationsEnabled(false)
-        assertEquals(TestOutcome.BLOCKED_APP, runBlocking { coordinator.testNow() })
+        assertEquals(TestOutcome.BLOCKED_APP, runBlocking { coordinator.testReminder() }.blockedAtSchedule)
         shadowOf(notifications).setNotificationsEnabled(true)
     }
 
     @Test fun disabledReminderChannelIsReported() {
         // The user switched the channel off; an app cannot raise a channel's importance again.
         notifications.createNotificationChannel(NotificationChannel("reminders", "Reminders", NotificationManager.IMPORTANCE_NONE))
-        assertEquals(TestOutcome.BLOCKED_CHANNEL, runBlocking { coordinator.testNow() })
+        assertEquals(TestOutcome.BLOCKED_CHANNEL, runBlocking { coordinator.testReminder(delayMillis = 0) }.blockedAtSchedule)
+        fireNext(); assertEquals(TestOutcome.BLOCKED_CHANNEL, coordinator.testStatus().outcome)
     }
 
     @Test fun aRealReminderDueInTheSameBatchIsNotSwallowedByTheTest() {
