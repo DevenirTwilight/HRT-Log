@@ -1,3 +1,7 @@
+## P4本地检查点与产品骨架优先级调整 — 2026-10-18
+
+基线c8d7c18上的逐次审计canonical proof去重复编码候选：完整421项数据JVM测试0失败/跳过，Android测试源码编译PASS；同UUID不同正文/头部的负向保护保留，证据`ansm-integration/p4/performance/canonical-proof-local-evidence.json`。不持久缓存、不跳过全局校验；原生性能/设备验收待验，不宣称5秒门槛通过。新用户任务要求独立医疗中心/药品资料中心薄纵切片优先，转到主线ec61d53独立工作树实施，不等待P4。精确库存生产写入仍OFF。
+
 ## P4 流水联合读取本地420通过；原生写入仍>5s — 2026-10-18
 
 66ea8d5原生run39123897415完整FAIL：audit8836/forecast8836/restored8357ms本轮<15s，三写9347/9233/8923ms>5000。官方工件SHA/CRC与raw trace/gzip/parser复现PASS，61340采样/152边界帧、零未知/不匹配退出、无溢出，仍PARTIAL_DIAGNOSTIC；SQLCipher游标/GC/UTF8仍主要成本，见ansm-integration/p4/performance/native-profile-66ea8d5/。不删除0fd/3ee等旧失败，不按较快一次宣称稳定改善。

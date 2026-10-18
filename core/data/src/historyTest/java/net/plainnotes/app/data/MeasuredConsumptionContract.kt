@@ -139,6 +139,37 @@ abstract class MeasuredConsumptionContract {
             raw.query("SELECT 1 FROM sqlite_master WHERE type='trigger' AND name='immutable_supply_update'").use{assertTrue(it.moveToFirst())}
         }
     }
+    @Test fun auditedCanonicalEvidenceNeverAuthorizesDifferentTextOrHeadersForTheSameOperation()=runBlocking {
+        val m=med();val b=box(m);val r=record(m);consume(r,b,emptyList())
+        db.withTransaction {
+            val before=RawData.dump(raw).toString()
+            for(field in listOf("input_json","dataset_uuid")) {
+                var chainRead=false;var injected=0;val otherDataset=UUID.randomUUID().toString()
+                val forged=object:androidx.sqlite.db.SupportSQLiteDatabase by raw {
+                    private fun wrap(sql:String,cursor:android.database.Cursor):android.database.Cursor {
+                        if(sql=="SELECT operation_uuid,input_json FROM measured_operation")return object:android.database.CursorWrapper(cursor) {
+                            override fun close(){super.close();chainRead=true}
+                        }
+                        if(!chainRead || !sql.contains("measured_operation",ignoreCase=true) || cursor.getColumnIndex(field)<0)return cursor
+                        return object:android.database.CursorWrapper(cursor) {
+                            override fun getString(columnIndex:Int):String {
+                                val original=super.getString(columnIndex)
+                                if(getColumnName(columnIndex)==field) {injected++;return if(field=="input_json")" "+original else otherDataset}
+                                return original
+                            }
+                        }
+                    }
+                    override fun query(sql:String)=wrap(sql,raw.query(sql))
+                    override fun query(sql:String,bindArgs:Array<out Any?>)=wrap(sql,raw.query(sql,bindArgs))
+                }
+                val error=assertThrows(ReferenceFailure::class.java){MeasuredConsumptionStore.auditStagedDataset(forged)}
+                assertEquals(ReferenceError.INVALID_SOURCE,error.code)
+                assertTrue("Fixture must replace $field after the genuine complete chain read",chainRead && injected>0)
+                assertEquals(before,RawData.dump(raw).toString())
+                assertEquals(0L,MeasuredConsumptionStore.auditStagedDataset(raw).single().usedQuanta)
+            }
+        }
+    }
     @Test fun fractionalPhysicalUseWritesOneExactIntegerWithoutChangingTheDoseFact()=runBlocking {
         val m=med();val b=box(m);val r=record(m);val before=db.dao().medication(m)
         val receipt=consume(r,b,listOf(use(b)))
