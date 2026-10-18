@@ -1,3 +1,13 @@
+## 已获单独授权并普通合并 #65；主线复验待验 — 2026-10-18
+
+负责人明确答复“批准普通受保护合并 #65”，已复核e69490f六CI全部成功、无冲突/未解决讨论，以匹配HEAD的普通merge合入8ebb7198fe1dbd1d0c2a5f96e24cdecf7efac54c；无admin/force/auto。主线CI待验，后续P4基线合并保留双方共享workflow类名单/HANDOFF，不能将旧分支绿灯冒充新基线结果。P4原生7590cc7 attempt2仍运行，原失败保留。授权见REQUIREMENTS§108。
+
+## P4 原生恢复中进程退出；#65 最终六 CI 全绿 — 2026-10-18
+
+7590cc7原生run39106781296 attempt1在加密恢复中测试进程退出；官方工件SHA/CRC及原始部分报告、合成日志已归档。写入和采样未完成，不能拿先前耗时充当本轮结果；退出原因UNVERIFIED。相同源码/预算attempt2正在复查，保留原失败、不宣称根因修复。详见[阶段账本](ansm-integration/WORK-STATE.md)。
+
+独立#65最终e69490f六项必需CI在push/PR均PASS，已Ready for review并更新正文；未扩大ANSM自动合并授权。P4仍BLOCKED、正式入口OFF，P5/P6未实施、Beta NO-GO，无新APK或发布。
+
 ## P4 工具准备失败非性能结果；已修nonce隔离 — 2026-10-18
 
 0b7bf67原生run39106094875在测试前因新增logcat -c失败，PERFORMANCE_NOT_RUN/数值UNAVAILABLE。移除清日志依赖，以主机本轮nonce绑定Instrumentation、watcher及collector，旧ready/旧绿报告不能触发读取或冒充当前结果。Python188/原生源码编译PASS，实际运输待验；不改原预算/生产代码。详细故障/工件SHA/修正见[阶段账本](ansm-integration/WORK-STATE.md)。

@@ -1,3 +1,13 @@
+## #65 获单独批准后普通受保护合并 — 2026-10-18
+
+负责人明确批准#65普通受保护合并；重新核验最终e69490f六CI全PASS、无冲突或未解决讨论，使用--merge --match-head-commit合入8ebb7198fe1dbd1d0c2a5f96e24cdecf7efac54c。不用admin/force/auto，不扩张其他PR授权。主线新CI待验；P4将通过普通基线合并保留daily/measured测试类并集、双方交接，不复制未合并分支。P4仍BLOCKED/OFF、原生同源attempt2运行中、P5/P6未实施，未发布。明确批准记入REQUIREMENTS§108。
+
+## P4 最新同源原生进程退出；#65 最终六 CI 通过 — 2026-10-18
+
+7590cc7 run39106781296 attempt1 在 full_encrypted_restore 阶段测试进程退出。已核验官方工件12129061270 SHA/CRC，保留原始 IN_PROGRESS 报告、环境、exit 和合成日志（performance/native-7590cc7-attempt1-*）。退出前审计9120ms、预测8854ms、备份9835ms仅为已完成阶段；恢复后写入、最终审计、ART采样均未完成/UNAVAILABLE，不构成预算PASS。日志同时出现多个其他系统进程死亡，但没有本测试进程的明确OOM栈/tombstone，不把低内存杀进程写成已确认根因。相同源码/预算的attempt2通过job rerun endpoint启动，只用于复查退出和采样运输；旧失败必须保留，不以一次成功复跑声称根因修复。当前不新增生产优化，不改预算或入口。
+
+独立#65最终e69490f的push/PR全部六项必需CI均PASS（Android39106169277/39106171857，Science39106169223/39106171852）；源88a60f1的26/29/35各4新SQLCipher用例及完整工件核验已在其分支归档。#65已转Ready for review、正文更新最终证据，未自动合并：负责人任务§2.1不允许扩张ANSM授权到一般CI/日常数据修复。P4未复制其代码，共享workflow类名单未来须保留并集。P4_BLOCKED/OFF，P5/P6未实施，Beta NO-GO，未签名发布。
+
 ## P4 握手工具准备失败已定位修正；性能未运行 — 2026-10-18
 
 0b7bf67 run39106094875在测试前失败：我新增的强制adb logcat -c在API26返回failed to clear main log。工件12127979394仅source.json，官方SHA/CRC核验PASS；本轮PERFORMANCE_NOT_RUN，数值UNAVAILABLE，不拿上一轮数字充当本轮结果，也不归因生产库存。证据native-0b7bf67-preparation-failure.json。

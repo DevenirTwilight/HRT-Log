@@ -961,3 +961,7 @@ operation owned generation/UUID/暂存device wrap/hash及终态不可逆清理�
 ## 107. 后端收尾与中国 Beta 验收（2026-10-17）
 
 原文见 [任务书](ansm-completion/sources/owner-backend-beta-2026-10-17.md)，SHA256 `dd09002972f5aebb5cfecfd14fdf031da7a5f688e559a38bb25ad761277cb63e`。先复核主线 CI 修复，再完成现有 #57 原生性能与安全门、复用既有 UI 最小 P5 接线、P6 E2E 与中国 Beta readiness。#63 已由并行开发者提交，不重复修改其 Gradle/CI；不将 ANSM 合并授权扩大到 CI PR。原生性能不达标保持 P4_BLOCKED/OFF。不重新签名、发布、移动 build29 标签。原 §104 续作顺延 §105，原 §105 V4 顺延 §106，历史来源原文保留；主线 §104 一次性发布授权及已完成记录不变。
+
+## 108. 独立日常回收站修复 #65 普通合并（2026-10-18）
+
+负责人在核验最终e69490f六项必需CI全绿、无冲突/未解决讨论和API26/29/35 SQLCipher各4新增用例之后，明确答复“批准普通受保护合并 #65”。授权仅覆盖该独立修复的普通受保护合并及主线复验，不扩展ANSM自动合并、管理员绕过、发布或PK范围。已使用匹配最终HEAD的普通merge，合并提交8ebb7198fe1dbd1d0c2a5f96e24cdecf7efac54c；主线复验结果单独记录。
