@@ -1251,4 +1251,5 @@
 <string name="home_stock_more">還有 %1$d 種</string>
 <string name="stock_about_days">約 %1$d 天</string>
 <string name="period_since">%1$s 至今</string>
+<string name="drawer_stock_badge">庫存：%1$d 種即將用完</string>
 </resources>

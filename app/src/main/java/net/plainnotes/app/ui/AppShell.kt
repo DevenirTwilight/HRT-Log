@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -156,7 +157,7 @@ class UiPrefs(context: Context) {
     CompositionLocalProvider(LocalSimpleMode provides (simpleMode && state.medications.count { it.active } <= 1)) {
     ModalNavigationDrawer(drawerState = drawer, drawerContent = {
         ModalDrawerSheet {
-            DrawerContent(destination) { d -> destination = d; if (d == Destination.VISITS) { visitId = null; medicalOrigin=false }; if (d == Destination.SETTINGS) settingsPage = SettingsPage.OVERVIEW; scope.launch { drawer.close() } }
+            DrawerContent(destination, lowStockMedications(state.medications.filter { it.active }, extra.stockForecasts, today, java.time.ZoneId.systemDefault()).size) { d -> destination = d; if (d == Destination.VISITS) { visitId = null; medicalOrigin=false }; if (d == Destination.SETTINGS) settingsPage = SettingsPage.OVERVIEW; scope.launch { drawer.close() } }
         }
     }) {
         Scaffold(
@@ -294,7 +295,7 @@ internal val DRAWER_GROUPS: List<DrawerSection> = listOf(
     DrawerSection.Divider(listOf(Destination.SETTINGS, Destination.ABOUT)),
 )
 
-@Composable internal fun DrawerContent(selected: Destination, onSelect: (Destination) -> Unit) {
+@Composable internal fun DrawerContent(selected: Destination, stockLow: Int = 0, onSelect: (Destination) -> Unit) {
     Column(Modifier.verticalScroll(rememberScrollState()).padding(horizontal = 12.dp).testTag("drawer-content")) {
         Row(Modifier.padding(horizontal = 16.dp, vertical = 24.dp), verticalAlignment = Alignment.CenterVertically) {
             Surface(shape = MaterialTheme.shapes.medium, color = MaterialTheme.colorScheme.primary) {
@@ -312,8 +313,17 @@ internal val DRAWER_GROUPS: List<DrawerSection> = listOf(
                     modifier = Modifier.padding(start = 28.dp, end = 16.dp, top = 12.dp, bottom = 4.dp).semantics { heading() }.testTag("drawer-group:${section.key}"))
             }
             section.items.forEach { d ->
+                // UI-05 E: Stock shows how many medications are low (same set as the home strips), with a spoken description.
+                val stockBadge = d == Destination.STOCK && stockLow > 0
+                val badgeText = if (stockBadge) stringResource(R.string.drawer_stock_badge, stockLow) else ""
                 NavigationDrawerItem(label = { Text(stringResource(d.title)) }, icon = { Icon(d.icon, null) }, selected = selected == d,
-                    badge = if (!d.ready) ({ Text(stringResource(R.string.soon_badge), style = MaterialTheme.typography.labelSmall) }) else null,
+                    badge = if (!d.ready) ({ Text(stringResource(R.string.soon_badge), style = MaterialTheme.typography.labelSmall) })
+                        else if (stockBadge) ({
+                            Surface(color = MaterialTheme.colorScheme.tertiaryContainer, contentColor = MaterialTheme.colorScheme.onTertiaryContainer, shape = Corners.badge,
+                                modifier = Modifier.semantics { contentDescription = badgeText }.testTag("drawer-stock-badge")) {
+                                Text("$stockLow", style = MaterialTheme.typography.labelLarge.tnum(), modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp))
+                            }
+                        }) else null,
                     onClick = { onSelect(d) }, modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding))
             }
         }

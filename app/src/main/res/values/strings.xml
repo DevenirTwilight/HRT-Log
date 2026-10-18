@@ -1251,4 +1251,5 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="home_stock_more">%1$d more</string>
 <string name="stock_about_days">about %1$d days</string>
 <string name="period_since">Since %1$s</string>
+<string name="drawer_stock_badge">Stock: %1$d running low</string>
 </resources>

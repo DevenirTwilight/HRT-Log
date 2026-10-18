@@ -220,7 +220,7 @@ private val RoundedCornerShape24 = androidx.compose.foundation.shape.RoundedCorn
  */
 @Composable internal fun HomeStockCard(meds: List<MedicationEntity>, forecasts: Map<Long, StockForecast>, today: LocalDate, zone: ZoneId, onStock: () -> Unit,
                                        onAdd: (MedicationEntity) -> Unit = {}) {
-    val low = meds.filter { forecasts[it.id]?.isLow(today, zone) == true }
+    val low = lowStockMedications(meds, forecasts, today, zone)
     if (low.isEmpty()) return
     val c = MaterialTheme.colorScheme
     Column(Modifier.fillMaxWidth().testTag("home-stock"), verticalArrangement = Arrangement.spacedBy(Spacing.s)) {
@@ -250,3 +250,7 @@ private val RoundedCornerShape24 = androidx.compose.foundation.shape.RoundedCorn
         }
     }
 }
+
+/** UI-05 B/E: the medications the shared forecast calls low or out (StockForecast.isLow): home strips and the drawer count. */
+internal fun lowStockMedications(meds: List<MedicationEntity>, forecasts: Map<Long, StockForecast>, today: LocalDate, zone: ZoneId) =
+    meds.filter { forecasts[it.id]?.isLow(today, zone) == true }
