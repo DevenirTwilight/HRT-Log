@@ -1,0 +1,23 @@
+<resources>
+    <string name="drug_center_title">Drug reference center</string>
+    <string name="drug_center_region">France · ANSM / BDPM reference</string>
+    <string name="drug_center_official_off">The official catalogue is not available yet. Only your saved product sources are available here. This is not a catalogue of products sold in China.</string>
+    <string name="drug_center_user_sources">Available now: search your locally saved, user-entered product sources or link them to an existing medication. These sources are unverified.</string>
+    <string name="drug_center_search">Search saved product sources</string>
+    <string name="drug_center_medications">Your medications</string>
+    <string name="drug_center_empty">No medications yet. You can still browse saved sources. Create medications manually in Medication plans.</string>
+    <string name="drug_center_open_reference">View or link product source · no dose changes</string>
+    <string name="drug_center_identity">Product identity and source</string>
+    <string name="drug_center_identity_body">The existing product details show entered ingredients, strength, form, routes, CIS/CIP, source version and date. Missing fields remain unknown; matching names do not prove equivalence.</string>
+    <string name="drug_center_packaging">Packaging</string>
+    <string name="drug_center_packaging_body">Entered CIP identifies a claimed presentation, not verified usable stock. Structured packaging capacity is not available here. No conversion or stock deduction occurs.</string>
+    <string name="drug_center_rcp">RCP · professional product information</string>
+    <string name="drug_center_notice">Notice · patient leaflet</string>
+    <string name="drug_center_documents_off">Not enabled in this center. Separate document verification and navigation review are pending. A source page is not verified leaflet text.</string>
+    <string name="drug_center_safety">Safety information</string>
+    <string name="drug_center_safety_off">Not implemented. No product-specific clinical summaries or personal safety assessment are provided.</string>
+    <string name="drug_center_supply">Supply, shortages, recalls and regulatory notices</string>
+    <string name="drug_center_supply_off">Not implemented. Current availability is unknown; this does not mean normal supply or no recalls. There is no live pharmacy stock lookup.</string>
+    <string name="drug_center_states">Status meanings: missing information = no field supplied; unverified = supplied but not checked; unknown = cannot determine; not implemented = no feature available. None means normal supply or safety.</string>
+    <string name="drug_center_short_scope">Unverified user sources. Official catalogue unavailable.</string>
+</resources>

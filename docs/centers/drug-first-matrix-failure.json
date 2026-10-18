@@ -1,0 +1,8 @@
+{
+  "status": "FAIL",
+  "tests": 32,
+  "failures": 2,
+  "cases": "English 320dp 2x light/dark",
+  "failure": "Click callback count expected 3, actual 0; scrolling rows could be occluded by dynamic header",
+  "logSha256": "d67d3174122ee8158844c8444d133d9934ad59118c49b17bd88d179e234a5752"
+}

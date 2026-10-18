@@ -32,7 +32,7 @@
 <string name="data_error">Impossible d\'ouvrir les données chiffrées. Déverrouillez l\'appareil puis réessayez. Si la clé n\'est plus disponible, restaurez une sauvegarde ; les données existantes sont conservées.</string>
 <string name="operation_error">L\'opération n\'a pas pu aboutir. Vérifiez les champs puis réessayez.</string>
 <string name="invalid">Vérifiez la date, la dose et la fréquence.</string>
-<string name="test_reminder">Envoyer une notification de test (une maintenant, une dans 1 minute)</string>
+<string name="test_reminder">Envoyer un rappel de test dans 1 minute</string>
 <string name="high_reliability">Mode haute fiabilité</string>
 <string name="high_privacy">Ce mode peut afficher une icône d\'alarme et la prochaine alarme dans l\'interface du système. Il nécessite toujours l\'accès aux alarmes exactes.</string>
 <string name="reliability_limits">Aucun rappel n\'est possible lorsque l\'appareil est éteint ou que l\'application est arrêtée de force. Après un redémarrage et avant le premier déverrouillage, seul un cache neutre de 48 heures est utilisé ; au-delà, il faut déverrouiller l\'appareil. Avant le premier déverrouillage, un changement de fuseau horaire ne permet pas de recalculer les heures locales en cache.</string>
@@ -1233,7 +1233,8 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="ref2_history_stale">Le jeu de données a changé. Fermez cette fenêtre et rouvrez la prise.</string>
 <string name="ref2_history_error">Impossible de lire la référence enregistrée. Fermer cette fenêtre ne modifie pas la prise.</string>
 <string name="ref2_history_saved_only">Cette vue concerne la prise enregistrée. Les modifications non enregistrées ne sont pas incluses.</string>
-<string name="test_now_result">Test immédiat à %1$s : %2$s</string>
+<string name="test_check_ok">Vérification : rien ne bloque les notifications</string>
+<string name="test_check_blocked">Vérification : %1$s</string>
 <string name="test_scheduled">Rappel de test prévu à %1$s (%2$s). Vous pouvez quitter l’app en attendant.</string>
 <string name="test_mode_exact">alarme exacte</string>
 <string name="test_mode_high">haute fiabilité, réveil système</string>

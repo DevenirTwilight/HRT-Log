@@ -234,7 +234,7 @@ data class SettingsSummaries(val wellbeing: String = "", val privacy: String = "
     }
 }
 
-/** One line per observed stage; an immediate test and a scheduled test are never reported as each other. */
+/** One line per observed stage of the scheduled test; the settings check at tap time posts nothing. */
 @Composable private fun ReminderTestStatusText(status: ReminderTestStatus, onRefresh: () -> Unit) {
     val time = remember { java.time.format.DateTimeFormatter.ofLocalizedTime(java.time.format.FormatStyle.MEDIUM) }
     fun at(millis: Long) = java.time.Instant.ofEpochMilli(millis).atZone(java.time.ZoneId.systemDefault()).format(time)
@@ -246,10 +246,10 @@ data class SettingsSummaries(val wellbeing: String = "", val privacy: String = "
     // While a scheduled test is pending, re-read the recorded stages so a delivery shows up without leaving the page.
     LaunchedEffect(status) { while (pending) { kotlinx.coroutines.delay(5_000); now = System.currentTimeMillis(); onRefresh() } }
     val lines = buildList {
-        status.nowOutcome?.let { add(stringResource(R.string.test_now_result, at(status.nowAt), outcome(it))) }
         if (status.scheduledAt > 0) {
             val mode = stringResource(when { !status.exact -> R.string.test_mode_inexact; status.mode == "HIGH" -> R.string.test_mode_high; else -> R.string.test_mode_exact })
             add(stringResource(R.string.test_scheduled, at(status.triggerAt), mode))
+            add(status.blockedAtSchedule?.let { stringResource(R.string.test_check_blocked, outcome(it)) } ?: stringResource(R.string.test_check_ok))
             val received = status.outcome
             if (received != null) add(stringResource(R.string.test_received, at(status.receivedAt), outcome(received)))
             else if (now > status.triggerAt + 2 * 60_000) add(stringResource(R.string.test_missing))

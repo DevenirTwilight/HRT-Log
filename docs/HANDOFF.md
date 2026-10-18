@@ -1,4 +1,4 @@
-## UI-05 视觉精修（REQUIREMENTS §108，报告 66）— 2026-10-18
+## UI-05 视觉精修（REQUIREMENTS §109，报告 66）— 2026-10-18
 
 - 分支 `feature/ui05-visual-polish-20261018`，基于默认分支 1abfeea。任务书原文已归档 `docs/audits/product-quality-2026-10/sources/ui05/`。
 - 保护矩阵核对：TodayCard/MedicalRecordsScreen 不在矩阵；CalendarScreen、StockScreen、LongitudinalScreen、AppShell、Components 均为 HISTORY_ONLY；不触及 PK_DISPLAY_REVIEW 及更严格类别。
@@ -16,6 +16,18 @@
 - 收尾：报告 `audits/product-quality-2026-10/66-ui05-visual-polish.md`；截图 `ui-audit/2026-10-18-ui05/`（before/after 各 192、compare 12、hires 6）；真机清单第 10 节；STATUS 已更新。本地完整回归 0 失败。下一步：开 PR 按 §106 自动合并，合并后复验主线，再按负责人要求出正式签名包 build 31。
 - 新任务书已归档排队：LAB-01（`sources/lab01/`，UI-05 合并后开始）、LAB-02（`sources/lab02/`，LAB-01 合并且主线全绿后只做阶段 A；阶段 B 须负责人按任务书第 4 节原话批准）。
 
+## 药品资料中心 B 接线与医疗中心 A 合并 — 2026-10-18
+
+A #73最终3fd5b2f六项必需CI全部PASS、无评审讨论，已受保护自动合并为ff2a4e9。证据centers/medical-final-ci.json。B在该新主线上顺序增加AppShell一个browse回调，入口位于现有药物方案页面；复用同一MedicationReferenceController的查询、产品详情/当前药物关联，不另建Repository或数据源。独立显示32用例x3对比度PASS，首轮2例实际点击被标题栏遮挡已修复，保留失败证据与全部触控断言。真实AppShell、非空记录/库存流水/Profile不变性及既有回归共133项本地PASS（0失败/跳过），源哈希/逐类计数centers/drug-integration-test-evidence.json；截图复核后将真实查询入口前移，最终版式38项定向复验PASS（非另增38个独立用例），证据centers/drug-final-layout-evidence.json，旧133版截图另存未覆盖。此源码检查点CI待验，后续最终HEAD/CI/合并收据以PR #74为准，不能宣称设备或发布验收完成。官方分发、RCP/Notice独立审查#58、安全/监管、P4写入、医疗原件仍OFF；真机/TalkBack NOT_RUN。并行#72未修改或复制，实际旧守卫失败证据centers/parallel-pr72-review.json。
+
+## 医疗中心薄纵切片 A — 2026-10-18
+
+基线ec61d53（#71已合并）。文件级矩阵及验收见`docs/centers/implementation-matrix.md`。现有医疗档案聚合预约/历史就诊、问题准备、资料包入口，复用VisitsScreen和原有Repository；化验/时间线从此进入可返回医疗档案。保留独立复诊及所有旧入口。附件OFF，不等待P4，不改正式库存/Schema/备份/PK。已编码并通过97项本地Compose/时期稳定性回归（0失败/跳过），含32显示矩阵用例各跑3对比度；四语320dp/2x深浅共8张Robolectric组件截图与源哈希见centers/medical-test-evidence.json。首轮新增测试重复导致编译失败已修正，旧断言全部保留。CI待验；真机及TalkBack NOT_RUN。B须等A合并后再改同一导航文件；不动#58。
+
+## CI独立候选：精确闹钟测试前置权限 — 2026-10-18
+
+主线417 run39122664759/job117661246072在ReminderTestDeviceTest第52行status.exact断言失败，发生在90s等待前；同源Beta设备绿不覆盖该失败。原fixture只关闭AppOps命令管道，未等命令完成；竞态原因仍HYPOTHESIS。独立分支仅改androidTest一个文件：读到EOF再关闭，并在API31+明确断言AlarmManager已看到grant后才运行原测试。三个用例、全部旧断言、5/8s输入和90s期限逐字保留，不轮询/延时/重跑掩盖。原生编译及三API/六CI待验；完整隔离计划见ci-stability/exact-alarm-preflight-20261018/README.md。按最新主线REQUIREMENTS106走受保护auto-merge，无prod提醒/UI/库存/Schema/PK/权限/版本/签名/发布变化，真机NOT_RUN。
+
 ## build30 已交付（REQUIREMENTS §107）— 2026-10-18
 
 - 0.2.0 / versionCode 30 正式签名包，构建自 `dfb21c79`（#68 合并，含 #66 会话 P0-B 与 #67 提醒 P0-A），APK SHA-256 `f0e209f1a08c1bb6a2c65c907ecb20d365ab6c52d70127abe5e312c60c6703c8`，证书 989ba045…59379b1。
@@ -27,7 +39,7 @@
 - 根因（测试证实）：`testReminder()` 只把测试写入闹钟缓存，不进数据库；每次 `sync()`（MainActivity.onResume、开机、时间/时区变化、精确闹钟权限变化）和 `mutate()` 都按数据库重建缓存，测试被静默清除。用户检查三个系统开关后返回应用即触发。另：测试固定用 NORMAL，无法测试高可靠模式；权限/渠道被关时无任何反馈。
 - 修复：缓存中标记测试闹钟并在重建时保留直至触发（超时 15 分钟则丢弃）；重复点击只保留一个；按用户当前模式（HIGH 走 setAlarmClock）；同批到期时正式提醒与测试分别发出；新增“立即发送测试通知”（不经 AlarmManager）；`ReminderTestLog` 分别记录已安排/广播到达/通知结果（显示、已发未显示、权限/应用/渠道阻止），设置页显示。缓存格式双向兼容。
 - 证据：红测 7f01e82 CI 1382 项中仅新增 3 项失败（返回应用、数据修改、进程重建/开机后测试丢失）；修复后本地 `TestReminderSurvivalTest` 3/3、`ReminderTestChainTest` 12/12。设备测试 `ReminderTestDeviceTest`（真实 AlarmManager→AlarmReceiver→通知，含 HIGH 与返回应用）已加入 API26/29，API35 随完整套件。
-- 负责人要求只留一个按钮：一次点击先立即发一条（不经 AlarmManager），再安排 1 分钟后的定时测试；两者结果在设置页分行记录，互不冒充。
+- 负责人要求只留一个按钮、只发一条（2026-10-18，build 30 之后）：点击“1 分钟后发送一条测试提醒”时不发通知，只读取并显示通知检查结果（通知权限、应用通知、提醒类别是否阻止）；1 分钟后经完整链路发一条。立即通知测试已移除。
 - 设备测试发现并已修复：notify() 异步生效，立即读 activeNotifications 会误报“已发送但未显示”，现最多等待 3 秒再下结论。
 - NOT_RUN：国产 ROM 真机、Doze/息屏长时间等待、系统杀进程后真实触发（仪器测试结束时会强停包并清闹钟，无法可靠模拟）、通知栏视觉确认。
 

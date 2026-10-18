@@ -5,6 +5,7 @@ import android.app.AlarmManager
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import android.os.ParcelFileDescriptor
 import androidx.test.platform.app.InstrumentationRegistry
 import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.runBlocking
@@ -17,8 +18,8 @@ import org.junit.Assert.*
 
 /**
  * China beta P0-A on a real device (API 26/29/35, no health data): the scheduled test is delivered by the real
- * AlarmManager to the real AlarmReceiver (Hilt → dispatch) and ends as an active notification; the immediate test posts
- * without AlarmManager. Each stage is read back separately. A real vendor ROM, Doze and a killed process stay NOT_RUN here.
+ * AlarmManager to the real AlarmReceiver (Hilt → dispatch) and ends as an active notification. Each stage is read back
+ * separately. A real vendor ROM, Doze and a killed process stay NOT_RUN here.
  */
 class ReminderTestDeviceTest {
     private val instrumentation get() = InstrumentationRegistry.getInstrumentation()
@@ -26,12 +27,19 @@ class ReminderTestDeviceTest {
     private val coordinator: ReminderCoordinator get() = EntryPointAccessors.fromApplication(context.applicationContext, ReminderEntryPoint::class.java).coordinator()
     private val notifications get() = context.getSystemService(NotificationManager::class.java)
 
-    private fun shell(command: String) = instrumentation.uiAutomation.executeShellCommand(command).close()
+    private fun shell(command: String) {
+        // Closing the descriptor alone does not wait for AppOps to finish applying the grant.
+        ParcelFileDescriptor.AutoCloseInputStream(instrumentation.uiAutomation.executeShellCommand(command))
+            .bufferedReader().use { it.readText() }
+    }
     private fun highReliability(on: Boolean) = context.getSharedPreferences("prefs", Context.MODE_PRIVATE).edit().putBoolean("high_reliability", on).commit()
 
     @Before fun allow() {
         if (Build.VERSION.SDK_INT >= 33) instrumentation.uiAutomation.grantRuntimePermission(context.packageName, Manifest.permission.POST_NOTIFICATIONS)
-        if (Build.VERSION.SDK_INT >= 31) shell("appops set ${context.packageName} SCHEDULE_EXACT_ALARM allow")
+        if (Build.VERSION.SDK_INT >= 31) {
+            shell("appops set ${context.packageName} SCHEDULE_EXACT_ALARM allow")
+            assertTrue("test setup must grant exact alarms before scheduling", context.getSystemService(AlarmManager::class.java).canScheduleExactAlarms())
+        }
         notifications.cancelAll(); highReliability(false)
     }
     @After fun clean() { notifications.cancelAll(); highReliability(false) }
@@ -47,14 +55,9 @@ class ReminderTestDeviceTest {
         assertTrue("the notification is active in the system", shown())
     }
 
-    @Test fun immediateTestPostsAndIsShownWithoutAnAlarm() {
-        assertEquals(TestOutcome.SHOWN, runBlocking { coordinator.testNow() })
-        assertTrue(shown())
-    }
-
     @Test fun scheduledTestTravelsTheRealAlarmChain() {
         val status = runBlocking { coordinator.testReminder(delayMillis = 5_000) }
-        assertEquals("NORMAL", status.mode); assertTrue(status.exact)
+        assertEquals("NORMAL", status.mode); assertTrue(status.exact); assertNull("nothing blocks notifications", status.blockedAtSchedule)
         assertFalse("nothing shown before the alarm", shown())
         awaitDelivery(status.scheduledAt)
     }

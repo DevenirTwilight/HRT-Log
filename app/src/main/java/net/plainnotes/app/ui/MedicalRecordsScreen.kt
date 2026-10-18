@@ -41,7 +41,7 @@ import java.time.*
 @OptIn(ExperimentalLayoutApi::class)
 @Composable fun MedicalRecordsScreen(appointments:List<AppointmentEntity>,onVisit:(AppointmentEntity)->Unit,onAdd:()->Unit,
     onLabs:()->Unit,onHistory:()->Unit,onTrash:()->Unit,contentPadding:PaddingValues,onConfirm:(AppointmentEntity)->Unit={onVisit(it)},
-    questionCounts:Map<Long,Int> = emptyMap(),now:Instant=Instant.now()) {
+    questionCounts:Map<Long,Int> = emptyMap(),now:Instant=Instant.now(),onVisits:(()->Unit)?=null) {
     val past=MedicalRecordIndex.past(appointments,now)
     val confirmed=past.filter{it.completed_utc!=null}
     val unconfirmed=past.filter{it.completed_utc==null}
@@ -50,6 +50,13 @@ import java.time.*
     LazyColumn(Modifier.fillMaxSize().testTag("medical-list"),contentPadding=PaddingValues(start=16.dp,end=16.dp,
         top=contentPadding.calculateTopPadding()+8.dp,bottom=contentPadding.calculateBottomPadding()+32.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
         // UI-05 F: "Record a past visit" ([onAdd]) is AppShell's top bar "+" (MedicalAddAction), no longer a list button.
+        onVisits?.let { visits ->
+            item("center-heading") {MedicalHeading(stringResource(R.string.medical_center_overview))}
+            item("center-visits") {RelatedCard(Icons.AutoMirrored.Outlined.EventNote,stringResource(R.string.medical_center_visits),"medical-center-visits",visits)}
+            item("center-prepare") {RelatedCard(Icons.AutoMirrored.Outlined.EventNote,stringResource(R.string.medical_center_prepare),"medical-center-prepare",visits)}
+            item("center-pack") {RelatedCard(Icons.AutoMirrored.Outlined.EventNote,stringResource(R.string.medical_center_pack),"medical-center-pack",visits)}
+            item("center-help") {Text(stringResource(R.string.medical_center_choose_visit),style=MaterialTheme.typography.bodySmall)}
+        }
         next?.let{a->item("next"){NextVisitCard(a,questionCounts[a.id] ?: 0,now,onVisit)}}
         if(unconfirmed.isNotEmpty())item("unconfirmed"){MedicalHeading(stringResource(R.string.medical_were_you_there))}
         items(unconfirmed,key={"visit:${it.id}"}) { MedicalVisitCard(it,questionCounts[it.id] ?: 0,onVisit,onConfirm) }
