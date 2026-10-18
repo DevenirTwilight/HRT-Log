@@ -1,0 +1,76 @@
+{
+  "status": "PASS",
+  "source": "7d9c168b73509cc09408e681007d8136c6c8732a",
+  "baseline": "2dda533ba4d42d4317d1183f518a4a0226b084cf",
+  "room": 12,
+  "backupBusinessSchema": 11,
+  "tests": 76,
+  "classes": [
+    {
+      "name": "net.plainnotes.app.AppShellBackNavigationTest",
+      "tests": "16",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.DrugCenterNavigationTest",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.TimelineAndDrawerHierarchyTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.MedicalRecordsUiTest",
+      "tests": "40",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.MedicalHomeTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.Lab02PanelUiTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.Ui05MedicalHomeTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.PeriodStabilityTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    }
+  ],
+  "sourceFilesSha256": {
+    "app/src/main/java/net/plainnotes/app/ui/AppShell.kt": "59d5d5d58c151cd28556eef212e8d7177ff317bf1907de0049174fa2966d28db",
+    "app/src/main/java/net/plainnotes/app/ui/DrugReferenceCenterScreen.kt": "7a683a8a16413e063e9bb8cf2269f322a603ff5a9da7411e0ab9944f178474be",
+    "app/src/main/java/net/plainnotes/app/ui/MedicalRecordsScreen.kt": "2db74aa29b17c8cbd25af54aef1e5b41b41d0de72339ed6066b966bbe56c69b5",
+    "app/src/main/java/net/plainnotes/app/ui/MedicationsScreen.kt": "d8bd729bafd8d44e1d7d454b74f4b45611cca824707c0ec1c179e29613d36ac7",
+    "app/src/main/java/net/plainnotes/app/ui/UnavailableModuleCard.kt": "c7a97871eeb3e000b1492dc5986f6db0dde12482dd7b56ed857f13bfd64af331"
+  },
+  "note": "Reviewed mainline Room12/backup11 inherited from merged PR81; UI delta changes no schema, repository, backup or PK. Reverified real NotesApp navigation and nonempty record/ledger/Profile invariance. This is regression rerun coverage, not additional independent tests.",
+  "physicalDevice": "NOT_RUN",
+  "talkBack": "NOT_RUN"
+}
