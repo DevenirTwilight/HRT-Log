@@ -1,3 +1,10 @@
+## 中国 Beta P0-B：应用内重复认证（REQUIREMENTS §105）— 2026-10-18
+
+- 根因（已由设备测试证实）：`MainActivity.locked` 是 Activity 字段，任何配置变化重建（旋转、深浅色、字号、分屏/小窗等；Manifest 未声明 configChanges）都会在 `onCreate` 重新上锁；`leftAt` 也随之丢失，且“立即”自动锁定时配置变化被当成离开。纯页面切换（日历→库存→设置→历史→日历）在模拟器上本身不触发重新认证；用户机型上的具体触发源（配置变化或其他）尚未在真机上确认。
+- 修复：锁状态与离开时间放入 Activity 级 `LockState` ViewModel（只跨配置变化重建保留；进程死亡、finish、清空数据后的新 Activity 仍重新上锁）；配置变化不记为离开。伪装模式仍由 Session 管理，未改。
+- 证据：红测 4c27656 在 API26/29/35 均失败于“在库存页重建后再次要求 PIN”和“立即自动锁定 + 重建”；安全边界用例（立即自动锁定离开、后台重建、finish 后新启动）原本即通过并须保持。新测 `InAppNavigationLockAndroidTest` 已加入 API26/29 任务。
+- NOT_RUN：国产 ROM 真机、进程被系统杀死后的真机复现。
+
 ## 日常回收站修复#65：源代码CI与三API合同已核验 — 2026-10-18
 
 源88a60f1六项必需检查在push/PR全部PASS；已下载校验官方工件SHA/CRC。新DailyTrashCollisionAndroidTest在API26/29/35各4用例，零失败/跳过；完整JVM data247、reminder20零失败/跳过，app1379零失败/205既有条件跳过。原TrashDataTest断言未改。4确定性红→真实三API绿证明同毫秒冲突修复，非重跑掩盖。固定时间、加密备份与注入失败完整回滚证据见[报告](ci-stability/daily-trash-collision-20261018/README.md)。
