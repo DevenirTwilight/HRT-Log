@@ -296,6 +296,11 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     private suspend fun newEstimate(dao:net.plainnotes.app.data.NotesDao,lab:LabValueEntity)=
         net.plainnotes.app.conc.SublingualEstimatePolicy.apply(net.plainnotes.app.conc.LabEstimate.capture(dao,lab))
     fun saveLab(v:LabValueEntity,includeEstimate:Boolean=false)=change{repo.saveLab(v,recapture=includeEstimate,estimate={dao,lab->if(includeEstimate)newEstimate(dao,lab) else null})}
+    /** LAB-01 batch entry: [onDone] says whether all were saved (then the form closes) or none (the form keeps its content). */
+    fun saveLabs(values:List<LabValueEntity>,includeEstimate:Boolean,onDone:(Boolean)->Unit)=viewModelScope.launch {
+        try { mutate{repo.saveLabs(values,recapture=includeEstimate,estimate={dao,lab->if(includeEstimate)newEstimate(dao,lab) else null})}; refresh().join(); onDone(true) }
+        catch(e:CancellationException){throw e}catch(_:Exception){ mutable.value=mutable.value.copy(error=R.string.operation_error); onDone(false) }
+    }
     fun rebuildLabContext(v:LabValueEntity,includeEstimate:Boolean=false)=change{repo.rebuildLabContext(v.id,estimate={dao,lab->if(includeEstimate)newEstimate(dao,lab) else null})}
     fun deleteLab(v:LabValueEntity)=change{repo.deleteLab(v.id)}
     fun delete(id:Long)=change{repo.removeMedication(id)}

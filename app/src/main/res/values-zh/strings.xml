@@ -1256,4 +1256,21 @@
 <string name="medical_in_days">%1$d 天后</string>
 <string name="medical_next_questions">想问的问题 · %1$d 条</string>
 <string name="medical_next_pack">就诊资料包</string>
+<!-- LAB-01 batch lab entry -->
+<string name="lab_batch_title">记录一次化验</string>
+<string name="lab_batch_add_row">添加项目</string>
+<string name="lab_batch_presets">常用组合</string>
+<string name="lab_preset_hormones">激素六项</string>
+<string name="lab_preset_liver">肝功能</string>
+<string name="lab_preset_kidney">肾功能与电解质</string>
+<string name="lab_group_count">%1$d 项</string>
+<string name="lab_batch_duplicate">同一次化验中这个项目重复了</string>
+<string name="lab_group_split_hint">修改时间或机构后，这一项会从这次化验中单独显示</string>
+<string name="lab_flag_high">偏高</string>
+<string name="lab_flag_low">偏低</string>
+<string name="lab_filter_all">全部</string>
+<string name="lab_batch_remove_row">删除第 %1$d 项</string>
+<string name="lab_row_spoken">%1$s，%2$s，%3$s</string>
+<string name="lab_row_spoken_flag">，%1$s</string>
+<string name="lab_batch_failed">没有保存任何一项，填写的内容仍保留。</string>
 </resources>

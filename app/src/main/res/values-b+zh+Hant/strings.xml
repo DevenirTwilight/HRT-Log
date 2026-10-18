@@ -1256,4 +1256,21 @@
 <string name="medical_in_days">%1$d 天後</string>
 <string name="medical_next_questions">想問的問題 · %1$d 條</string>
 <string name="medical_next_pack">複診資料包</string>
+<!-- LAB-01 batch lab entry -->
+<string name="lab_batch_title">記錄一次檢驗</string>
+<string name="lab_batch_add_row">新增項目</string>
+<string name="lab_batch_presets">常用組合</string>
+<string name="lab_preset_hormones">激素六項</string>
+<string name="lab_preset_liver">肝功能</string>
+<string name="lab_preset_kidney">腎功能與電解質</string>
+<string name="lab_group_count">%1$d 項</string>
+<string name="lab_batch_duplicate">同一次檢驗中這個項目重複了</string>
+<string name="lab_group_split_hint">修改時間或機構後，這一項會從這次檢驗中單獨顯示</string>
+<string name="lab_flag_high">偏高</string>
+<string name="lab_flag_low">偏低</string>
+<string name="lab_filter_all">全部</string>
+<string name="lab_batch_remove_row">刪除第 %1$d 項</string>
+<string name="lab_row_spoken">%1$s，%2$s，%3$s</string>
+<string name="lab_row_spoken_flag">，%1$s</string>
+<string name="lab_batch_failed">沒有儲存任何一項，填寫的內容仍保留。</string>
 </resources>

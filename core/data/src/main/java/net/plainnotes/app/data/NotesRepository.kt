@@ -836,6 +836,14 @@ const val BACKFILL_MAX_DAYS=731L
         dao.labContext(LabContextEntity(lab_id=lab.id,revision=(old?.revision ?: 0)+1,captured_utc=captured,origin=origin,context_json=json))
     }
     suspend fun saveLab(value:LabValueEntity,now:Instant=Instant.now(),recapture:Boolean=false,estimate:suspend(NotesDao,LabValueEntity)->String?={_,_->null})=transaction { dao ->
+        writeLab(dao,value,now,recapture,estimate)
+    }
+    /** LAB-01: several new results from one sample in one transaction, each written exactly as [saveLab] writes it; any failure keeps none. */
+    suspend fun saveLabs(values:List<LabValueEntity>,now:Instant=Instant.now(),recapture:Boolean=false,estimate:suspend(NotesDao,LabValueEntity)->String?={_,_->null})=transaction { dao ->
+        require(values.isNotEmpty() && values.all{it.id==0L})
+        values.forEach{writeLab(dao,it,now,recapture,estimate)}
+    }
+    private suspend fun writeLab(dao:NotesDao,value:LabValueEntity,now:Instant,recapture:Boolean,estimate:suspend(NotesDao,LabValueEntity)->String?) {
         require(value.value.isFinite() && value.value>0 && value.analyte_code.isNotBlank() && value.unit.isNotBlank())
         ZoneId.of(value.sampled_zone)
         val old=if(value.id==0L)null else requireNotNull(dao.labs().singleOrNull{it.id==value.id})
