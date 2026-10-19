@@ -71,7 +71,7 @@ fun toCanonical(a: Analyte, value: Double, unit: String): Double? = a.units.firs
         bottom = contentPadding.calculateBottomPadding() + 96.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         item {
             Button(onClick = { onEdit(null) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("labs-home-add")) {
-                Icon(Icons.Outlined.Add, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.lab_batch_title))
+                Icon(Icons.Outlined.Add, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.lab_add))
             }
         }
         item {
