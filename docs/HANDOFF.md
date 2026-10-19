@@ -1,3 +1,7 @@
+## LAB-03 数据与单位扩展实施中 — 2026-10-19
+
+独立分支feature/lab03-analytes-20261019基于080094ae，UI并行#89不覆盖。已复用domain精确词典45项（原14+新增31），domain135测试PASS；新旧单位适配、分类/搜索选择器、血常规/血脂/代谢/扩展肝肾组合已编码，App编译及交互验证仍IN_PROGRESS。原14个Double换算逐位保留，未改PK/库存/Room12/业务备份11。共享LabPanelDataTest实际13/13 PASS（新增45项原始单位/范围/上下文→回收站→PNBAK1恢复，以及事务失败全回滚）；原生API26/29/35仍NOT_RUN，不混同JVM结果。内存草稿旋转保留/锁屏清除及旧回调隔离已编码待验，不用Bundle/磁盘。结构化方法/自定义项目/真实零及限定结果未实施，保留原严格正数约束；兼容字段与后续设计见lab03/compatibility-and-fields.md。无APK/签名/发布。
+
 ## build33 交付与中心原生测试复核完成 — 2026-10-19
 
 build33 已仅owner私密提供，源码219bbf32与合并42bfa99f的六必需CI均已通过；下方保留成品完整记录。#87 原文档源152f0908/API26确有返回断言FAIL，不能因只改文档而忽略。独立#88/source dfa7369b只将测试单次Back改为既有Espresso等待输入焦点，所有测试主体/断言保持；androidTestCompileOnly仅暴露原runtime3.5.0，Gradle实际解析图证明release无Espresso。
