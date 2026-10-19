@@ -88,6 +88,7 @@ import java.time.Instant
     }, saving = l.batchSaving, failed = l.batchFailed)
     else if (l.labEdit != null) LabDialog(l.labEdit, { l.labNew = false; l.labEdit = null }, { model.saveLab(it); l.labNew = false; l.labEdit = null },onSaveWithEstimate={v,estimate->model.saveLab(v,estimate);l.labNew=false;l.labEdit=null},
         inGroup = l.labEdit!!.let { e -> e.panel_id != null || labGroups(labs.filter { it.panel_id == null }).any { g -> g.size > 1 && g.any { it.id == e.id } } })
+    else if (l.labNew && l.labEdit == null) { l.labNew = false }
 }
 
 /** LAB-02: a lab panel's detail and the "save as one blood test" confirmation (docs/design/lab-panel-adr.md §10). */
