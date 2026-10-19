@@ -1,0 +1,46 @@
+{
+  "source_base": "1feacef41049cfca0d76e183d417373a171302f7",
+  "scope": "UNCOMMITTED_COLUMN_AGGREGATE_WORKTREE",
+  "data_tests": 450,
+  "app_tests": 43,
+  "app_suites": {
+    "net.plainnotes.app.PrivacyNoticeFactsTest": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "cf6f286f418fa028c379d4203b6d348ed9845fe4463b41d4d40da0a56ab90d9b"
+    },
+    "net.plainnotes.app.StockConsistencyTest": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "ee40cc28e7497a42bcbf0813d65d160603f067a078788c9b03c0399c12c7e330"
+    },
+    "net.plainnotes.app.MeasuredStockUnknownMatrixTest": {
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "3902e358ccdab34d062ac348465209ca1094d15cd40bca0e2d67bc9d59d95063"
+    },
+    "net.plainnotes.app.PeriodStabilityTest": {
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "cfa58f85812680c5791b68a9a029dbd60f579c41e6d5c9910eba1d7140d10217"
+    }
+  },
+  "source_sha256": {
+    "core/data/src/main/java/net/plainnotes/app/data/BackupValidation.kt": "af243969f00ca11d31451fdc960765c61c7a9e00666389525dd56587c151f3e8",
+    "core/data/src/main/java/net/plainnotes/app/data/ReferencePayload.kt": "0089ac879a9a6218a4a4892fd7823866140ddcd14c68c04f9e2c03b75c69f48b",
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredUsePayload.kt": "95ba3832c3106be843db610c245f41079c912d5652fb561df703fb78fe2fd22f",
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt": "32e42bb218c7cdcfa50b73181ac36d940b40afa65ab695801ac4048e71275501"
+  },
+  "native_generated_kotlin_compile": "PASS",
+  "large_diagnostic": "column-aggregate-query-diagnostic.json",
+  "native_performance": "NOT_RUN_NEW_CANDIDATE",
+  "production_admission": "BLOCKED"
+}

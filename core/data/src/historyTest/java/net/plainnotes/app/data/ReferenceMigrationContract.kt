@@ -57,6 +57,43 @@ abstract class ReferenceMigrationContract {
             }
         }.toString()
     }
+    @Test fun storedColumnFenceMatchesTheOriginalPerColumnOracleForNullTypesAndLateRows() {
+        val name="synthetic-column-oracle-${UUID.randomUUID()}.db";val key=ByteArray(32){(it+31).toByte()}
+        val helper=factory(key).create(SupportSQLiteOpenHelper.Configuration.builder(context).name(name)
+            .callback(object:SupportSQLiteOpenHelper.Callback(1) {
+                override fun onCreate(db:SupportSQLiteDatabase) {for(table in DOMAIN_TABLES)db.execSQL("CREATE TABLE `$table` (`i` INTEGER, `t` TEXT, `r` REAL)")}
+                override fun onUpgrade(db:SupportSQLiteDatabase,oldVersion:Int,newVersion:Int)=error("Isolated SQL fixture cannot migrate")
+            }).build())
+        try {
+            val raw=helper.writableDatabase;raw.beginTransaction()
+            try {
+                val good=arrayOf<Any?>(1L,"SYNTHETIC",1.25)
+                val cases=listOf(arrayOf<Any?>(null,null,null),good,arrayOf<Any?>("bad","SYNTHETIC",1.25),
+                    arrayOf<Any?>(0.25,"SYNTHETIC",1.25),arrayOf<Any?>(byteArrayOf(1),"SYNTHETIC",1.25),
+                    arrayOf<Any?>(Long.MAX_VALUE,"SYNTHETIC",1.25),arrayOf<Any?>(3.0,"SYNTHETIC",1.25),
+                    arrayOf<Any?>(1L,byteArrayOf(1),1.25),arrayOf<Any?>(1L,42,1.25),
+                    arrayOf<Any?>(1L,"SYNTHÉTIQUE 雌二醇\u0000text",1.25),arrayOf<Any?>(1L,"SYNTHETIC","bad"),
+                    arrayOf<Any?>(1L,"SYNTHETIC",byteArrayOf(1)),arrayOf<Any?>(1L,"SYNTHETIC",Double.POSITIVE_INFINITY),
+                    arrayOf<Any?>(1L,"SYNTHETIC",Double.NEGATIVE_INFINITY),arrayOf<Any?>(1L,"SYNTHETIC",Double.MAX_VALUE),
+                    arrayOf<Any?>(1L,"SYNTHETIC",-2.5),arrayOf<Any?>("bad",null,null),
+                    arrayOf<Any?>(null,byteArrayOf(1),null),arrayOf<Any?>(null,null,"bad"),
+                    arrayOf<Any?>(null,null,Double.NaN),arrayOf<Any?>(1L,"x".repeat(1048576),1.25),
+                    arrayOf<Any?>(1L,"x".repeat(1048577),1.25))
+                val batches=listOf(emptyList<Array<Any?>>())+cases.flatMap{listOf(listOf(it,good),listOf(good,it))}
+                var checked=0
+                for(rows in batches) {
+                    raw.execSQL("DELETE FROM dose_record")
+                    for(row in rows)raw.execSQL("INSERT INTO dose_record(i,t,r) VALUES(?,?,?)",row)
+                    // Frozen old predicate algebra, independent of the new aggregate composition.
+                    val expected=raw.query("SELECT COALESCE(MAX(CASE WHEN i IS NOT NULL AND NOT(typeof(i)='integer') THEN 1 ELSE 0 END),0), COALESCE(MAX(CASE WHEN t IS NOT NULL AND NOT(typeof(t)='text' AND length(t)<=1048576) THEN 1 ELSE 0 END),0), COALESCE(MAX(CASE WHEN r IS NOT NULL AND NOT(typeof(r) IN ('integer','real') AND r BETWEEN -1.7976931348623157e308 AND 1.7976931348623157e308) THEN 1 ELSE 0 END),0) FROM dose_record").use { c ->c.moveToFirst();(0..2).all{c.getLong(it)==0L}}
+                    val actual=try{BackupValidation.validateCandidateStoredColumns(raw);true}catch(_:IllegalArgumentException){false}
+                    assertEquals("Original stored-value oracle case ${checked++}",expected,actual)
+                }
+                assertEquals(45,checked)
+            } finally {raw.endTransaction()}
+        } finally {helper.close();context.deleteDatabase(name)}
+    }
+
     @Test fun canonicalUuidPredicateMatchesThePlatformOracleAcrossVersionsAndMalformedForms() {
         val random=java.util.Random(0x414e534dL)
         var checked=0

@@ -2073,3 +2073,10 @@ UUID旧谓词10716平台对照基线实际PASS（uuid-baseline-evidence.json）�
 UUID扫描候选全data449零失败/错误/跳过、共享原生合同源码编译PASS，平台10716对照包含其中（uuid-data-evidence.json）。最新生成原生探针已编译，原规模JVM场景完成，最终App回归仍运行中，未宣称整段最终PASS。前驱d57六必需CI已全部PASS，单独native5秒FAIL及窗口实际观测保存在native-profile-d57d04c5/（不把驱动配置大小当实际容量/内存）。没有实施分页或跨审计缓存；候选未推送，仍DRAFT/入口OFF。
 
 UUID等价校验候选最终本地449 data/43 App/10 Python全部PASS，零失败/错误/跳过，更新后的生成原生探针Kotlin编译PASS；原14600/2000/32603及185查询/完整结果一致PASS。uuid-final-local-evidence.json记录三个生产文件hash/生成探针/逐套XML。10716平台对照在共享原生合同中，最终API26/29实际执行仍需新HEAD CI，不把编译或JVM成功当设备执行。仅严格等价字符扫描与诊断字段明确命名，不实施分页、跨事务信任、库存算法/Schema/备份/PK/权限/版本变化。即将推送原#57，仍DRAFT/PRODUCTION_BLOCKED/入口OFF/P5P6未实施；精确最终HEAD/新六CI/原生预算结果在PR57维护，避免元数据提交循环。不签名/交付APK/Release。
+
+
+### P4 存储列等价聚合候选完成本地回归 — 2026-10-19
+
+1feacef4 六项必需工程检查均已完成 PASS；原生39226229051真实 FAIL，三写6.163/6.111/7.005秒>5，完整官方ZIP SHA/CRC/采样重放保留于 performance/native-profile-1feacef4/。API26/29报告证实10716项UUID平台对照实际 PASS，不冒称原生性能准入。
+
+新候选先在未改生产1fe实现上通过45批独立 SQL 列谓词oracle，随后仅将validateCandidateStoredColumns逐列MAX非法标记聚合为平衡OR树的单个MAX；原typeof/NULL/有限数/长度谓词、早期COUNT、UTF8字节和32MiB上限全部保留，不改Schema/格式/库存语义。完整data450、App43、生成原生探针编译及原14600/2000/32603本地大库均PASS，185查询/完整投影一致保留；收据column-aggregate-*。新源原生绝对5秒准入待验，仍DRAFT/PRODUCTION_BLOCKED/正式入口OFF，P5/P6未实施。负责人另要求APK：独立主线build33交付PR86正在CI/构建，不含此P4分支或#58，不与本性能候选混装。

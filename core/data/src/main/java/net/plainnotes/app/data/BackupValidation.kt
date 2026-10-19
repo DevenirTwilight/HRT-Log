@@ -106,15 +106,22 @@ internal object BackupValidation {
             // Trusted schema identifiers only. Aggregate all original column predicates in one table scan.
             val invalid=columns.map { (column,type) ->
                 val allowed=when(type){"INTEGER"->"typeof(`$column`)='integer'";"TEXT"->"typeof(`$column`)='text' AND length(`$column`)<=1048576";"REAL"->"typeof(`$column`) IN ('integer','real') AND `$column` BETWEEN -1.7976931348623157e308 AND 1.7976931348623157e308";else->error("Unknown trusted storage type")}
-                "COALESCE(MAX(CASE WHEN `$column` IS NOT NULL AND NOT ($allowed) THEN 1 ELSE 0 END),0)"
+                "`$column` IS NOT NULL AND NOT ($allowed)"
             }
             val lengths=columns.filter{it.second=="TEXT"}.map{(column,_)->"COALESCE(length(CAST(`$column` AS BLOB)),0)"}
             val bytes=if(lengths.isEmpty())"0" else "COALESCE(SUM(${lengths.joinToString("+")}),0)"
-            val projection=(listOf(bytes)+invalid).joinToString(",")
+            // Same invalid-cell truth values, one aggregate state instead of one per column.
+            // Balance the OR tree; no original field predicate or byte/row fence is removed.
+            var predicates=invalid
+            while(predicates.size>1)predicates=predicates.chunked(2).map { pair ->
+                if(pair.size==1)pair[0] else "(${pair[0]} OR ${pair[1]})"
+            }
+            val anyInvalid=predicates.singleOrNull() ?: "0"
+            val projection="$bytes,COALESCE(MAX(CASE WHEN $anyInvalid THEN 1 ELSE 0 END),0)"
             db.query("SELECT $projection FROM `$table`").use { c ->
                 require(c.moveToFirst())
                 textBytes+=c.getLong(0);require(textBytes<=BackupLimits.MAX_JSON_BYTES)
-                for(index in columns.indices)require(c.getLong(index+1)==0L)
+                require(c.getLong(1)==0L)
             }
         }
     }
