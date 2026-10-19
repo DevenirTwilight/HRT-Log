@@ -111,7 +111,7 @@ internal object PackageMeasurementPayload {
         catch(e:IllegalArgumentException){throw e}
         catch(e:Exception){throw IllegalArgumentException("Invalid package measurement payload",e)}
     private fun readCanonical(payload:String):FrozenPackageMeasurement {
-        require(payload.toByteArray(Charsets.UTF_8).size<=ReferencePayload.MAX_BYTES)
+        require(ReferencePayload.utf8Length(payload)<=ReferencePayload.MAX_BYTES)
         val json=JSONObject(payload);require(ReferencePayload.canonical(json)==payload)
         keys(json,fields)
         require(json.get("format") is Int && json.getInt("format")==1)

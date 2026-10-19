@@ -1,0 +1,14 @@
+{
+  "source_head": "e36c52db38d0b74b4c60c7e24e06d1a6224cba94",
+  "run": 39254914424,
+  "artifact_id": 12187063512,
+  "artifact_sha256": "30338ea7916fd689fd2cfcf24576f91bfdf003fc09b718414c5a5cdf20159b96",
+  "zip_crc": "PASS",
+  "parser_reproduction": "PASS",
+  "trace_sha256": "6e434544bfabe371353de6bc4b8fda628a03c9ef4b0b7e0a06c0ad63ea12d87f",
+  "parser_source_sha256": "b291a87edf240f5e93c6411a810c7f2ad5c946b373c0df1427d5aa42d09f6190",
+  "performance": "FAIL: writes5796.96347/5840.99653/6842.41092ms>5000",
+  "profile": "PARTIAL_DIAGNOSTIC",
+  "p4": "PRODUCTION_BLOCKED",
+  "physical": "NOT_RUN"
+}

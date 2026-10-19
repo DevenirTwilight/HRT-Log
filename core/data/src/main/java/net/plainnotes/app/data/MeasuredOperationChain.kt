@@ -39,7 +39,7 @@ internal object MeasuredOperationChain {
             require(c.count<=BackupLimits.MAX_ROWS)
             buildList {while(c.moveToNext()) {
                 val uuid=c.getString(0);require(ReferencePayload.uuid(uuid))
-                val text=c.getString(1);val size=text.toByteArray(Charsets.UTF_8).size;require(size<=ReferencePayload.MAX_BYTES)
+                val text=c.getString(1);val size=ReferencePayload.utf8Length(text);require(size<=ReferencePayload.MAX_BYTES)
                 if(retainCanonical){retainedBytes+=size;require(retainedBytes<=BackupLimits.MAX_JSON_BYTES)}
                 val input=JSONObject(text);require(ReferencePayload.canonical(input)==text)
                 val link=read(input);val chain=input.getJSONObject("chain");val sequence=link.sequence

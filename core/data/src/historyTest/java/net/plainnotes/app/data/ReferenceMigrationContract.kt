@@ -57,6 +57,24 @@ abstract class ReferenceMigrationContract {
             }
         }.toString()
     }
+    @Test fun utf8LengthMatchesPlatformForEveryCodeUnitPairsAndBoundaries() {
+        fun check(text:String) {
+            assertEquals(text.toByteArray(Charsets.UTF_8).size.toLong(),ReferencePayload.utf8Length(text))
+        }
+        for(code in 0..65535)check(code.toChar().toString())
+        val random=java.util.Random(0x55465438L)
+        repeat(10000) {check(String(CharArray(random.nextInt(65)){random.nextInt(65536).toChar()}))}
+        listOf("", "ASCII\u0000é中😀", "\uD800\uDC00", "\uD800\uD800\uDC00", "\uD800\uDC00\uDC00",
+            "\uDC00\uD800", "\uD800x\uDC00").forEach(::check)
+        for(count in listOf(65535,65536,65537)) {
+            check("a".repeat(count));check("é".repeat(count/2)+"a".repeat(count%2))
+            check("中".repeat(count/3)+"a".repeat(count%3))
+            check("😀".repeat(count/4)+"a".repeat(count%4))
+        }
+        assertEquals(4L,ReferencePayload.utf8Length("\uD800\uDC00"))
+        assertEquals(2L,ReferencePayload.utf8Length("\uD800")+ReferencePayload.utf8Length("\uDC00"))
+    }
+
     @Test fun storedColumnFenceMatchesTheOriginalPerColumnOracleForNullTypesAndLateRows() {
         val name="synthetic-column-oracle-${UUID.randomUUID()}.db";val key=ByteArray(32){(it+31).toByte()}
         val helper=factory(key).create(SupportSQLiteOpenHelper.Configuration.builder(context).name(name)

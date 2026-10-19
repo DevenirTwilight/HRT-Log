@@ -98,7 +98,7 @@ internal object MeasuredUsePayload {
         EmbeddedUseRequest(envelope,immutable,ReferencePayload.sha(canonical))
     } catch(e:IllegalArgumentException){throw e}catch(e:Exception){throw IllegalArgumentException("Invalid embedded measured-use request",e)}
     internal fun decode(payload:String):MeasuredConsumptionRequest {
-        require(payload.toByteArray(Charsets.UTF_8).size<=ReferencePayload.MAX_BYTES)
+        require(ReferencePayload.utf8Length(payload)<=ReferencePayload.MAX_BYTES)
         val json=JSONObject(payload);require(ReferencePayload.canonical(json)==payload)
         return decodeFields(json)
     }
