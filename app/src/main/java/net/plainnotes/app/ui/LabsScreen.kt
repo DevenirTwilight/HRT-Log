@@ -54,13 +54,35 @@ fun toCanonical(a: Analyte, value: Double, unit: String): Double? = a.units.firs
 
 @Composable fun LabsScreen(labs: List<LabValueEntity>, doseTimes: List<Instant>, onEdit: (LabValueEntity?) -> Unit, onDelete: (LabValueEntity) -> Unit, contentPadding: PaddingValues,contexts:List<net.plainnotes.app.data.LabContextEntity> = emptyList(),onRebuild:((LabValueEntity,Boolean)->Unit)?=null,
                panels:List<net.plainnotes.app.data.LabPanelEntity> = emptyList(),onPanel:((net.plainnotes.app.data.LabPanelEntity)->Unit)?=null,onSaveAsPanel:((List<LabValueEntity>)->Unit)?=null) {
-    val present = ANALYTES.filter { a -> labs.any { it.analyte_code == a.code } }
-    // LAB-01: "All" (the default) lists every result, one card per draw (same time and laboratory); an analyte chip shows its trend and rows as before.
+    var category by remember { mutableStateOf<LabHomeCategory?>(null) }
+    var query by remember { mutableStateOf("") }
+    var searchOpen by remember { mutableStateOf(false) }
+    val labels = labs.map { it.analyte_code }.distinct().associateWith { analyteLabel(it) }
+    val visible = labs.filter { v -> (category == null || labHomeCategory(v.analyte_code) == category) &&
+        (query.isBlank() || labels[v.analyte_code].orEmpty().contains(query.trim(), ignoreCase = true) || v.analyte_code.contains(query.trim(), ignoreCase = true) || v.laboratory.orEmpty().contains(query.trim(), ignoreCase = true)) }
+    val present = ANALYTES.filter { a -> visible.any { it.analyte_code == a.code } }
+    // Filters affect presentation only. Saved panel membership and legacy grouping are never rewritten.
     var selected by remember { mutableStateOf<String?>(null) }
     val code = selected?.takeIf { s -> present.any { it.code == s } }
     var detail by remember { mutableStateOf<LabValueEntity?>(null) }
-    LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = contentPadding.calculateTopPadding() + 8.dp,
+    LazyColumn(Modifier.fillMaxSize().testTag("labs-home"), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = contentPadding.calculateTopPadding() + 8.dp,
         bottom = contentPadding.calculateBottomPadding() + 96.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        item {
+            Button(onClick = { onEdit(null) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("labs-home-add")) {
+                Icon(Icons.Outlined.Add, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.lab_batch_title))
+            }
+        }
+        item {
+            TextButton(onClick = { searchOpen = !searchOpen }, modifier = Modifier.testTag("labs-home-search-toggle")) { Text(stringResource(R.string.lab_home_search)) }
+            if (searchOpen) OutlinedTextField(query, { query = it }, modifier = Modifier.fillMaxWidth().testTag("labs-home-search"),
+                label = { Text(stringResource(R.string.lab_home_search)) }, singleLine = true)
+            Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                FilterChip(category == null, { category = null; selected = null }, label = { Text(stringResource(R.string.lab_filter_all)) }, modifier = Modifier.testTag("lab-category-all"))
+                LabHomeCategory.entries.forEach { c -> FilterChip(category == c, { category = c; selected = null },
+                    label = { Text(stringResource(c.label)) }, modifier = Modifier.testTag("lab-category:${c.name}")) }
+            }
+        }
+        if (labs.isNotEmpty() && visible.isEmpty()) item { Text(stringResource(R.string.lab_home_no_results), modifier = Modifier.testTag("labs-home-no-results")) }
         if (labs.isEmpty()) item { EmptyState(Icons.Outlined.Science, stringResource(R.string.labs_empty_title), stringResource(R.string.labs_empty_body)) { Button(onClick = { onEdit(null) }) { Text(stringResource(R.string.lab_add)) } } }
         if (present.isNotEmpty()) item {
             Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -70,7 +92,7 @@ fun toCanonical(a: Analyte, value: Double, unit: String): Double? = a.units.firs
         }
         if (code != null) {
             val a = analyte(code)
-            val values = labs.filter { it.analyte_code == code }.sortedBy { it.sampled_utc }
+            val values = visible.filter { it.analyte_code == code }.sortedBy { it.sampled_utc }
             val points = values.mapNotNull { v -> toCanonical(a, v.value, v.unit)?.let { ConcentrationCalculator.hours(v.sampled_utc) to it } }
             if (points.size >= 2) item {
                 SectionCard(stringResource(R.string.lab_trend, analyteLabel(code))) {
@@ -85,42 +107,21 @@ fun toCanonical(a: Analyte, value: Double, unit: String): Double? = a.units.firs
                     if (latestRange != null) Text(stringResource(R.string.lab_range_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
-            items(values.reversed(), key = { it.id }) { v -> LabRow(v, { onEdit(v) }, { onDelete(v) },contexts.filter{it.lab_id==v.id},onRebuild) }
+            items(labDraws(values, panels), key = { d -> "filtered:" + (d.panel?.id ?: -d.labs.first().id) }) { d ->
+                LabHomeCard(d, { detail = it }, onEdit, onDelete, contexts, onRebuild,
+                    d.panel?.let { p -> onPanel?.let { open -> { open(p) } } }, null)
+            }
         // LAB-02: real lab panels (even with one result) are cards; results without a panel keep the LAB-01 display grouping.
-        } else items(labDraws(labs, panels), key = { d -> d.panel?.let { "panel:${it.id}" } ?: ("draw:" + d.labs.first().id) }) { d ->
-            if (d.panel == null && d.labs.size == 1) d.labs.first().let { v -> LabRow(v, { onEdit(v) }, { onDelete(v) },contexts.filter{it.lab_id==v.id},onRebuild) }
-            else LabGroupCard(d.labs, { detail = it }, d.panel, d.panel?.let { p -> onPanel?.let { open -> { open(p) } } }, if (d.panel == null) onSaveAsPanel?.let { save -> { save(d.labs) } } else null)
+        } else items(labDraws(visible, panels), key = { d -> d.panel?.let { "panel:${it.id}" } ?: ("draw:" + d.labs.first().id) }) { d ->
+            LabHomeCard(d, { detail = it }, onEdit, onDelete, contexts, onRebuild,
+                d.panel?.let { p -> onPanel?.let { open -> { open(p) } } },
+                if (d.panel == null && d.labs.size > 1) onSaveAsPanel?.let { save -> { save(d.labs) } } else null)
         }
     }
     detail?.let { v -> LabDetailDialog(v, contexts.filter { it.lab_id == v.id }, { detail = null }) { detail = null; onEdit(v) } }
 }
 
 private fun max(a: Double, b: Double) = if (a > b) a else b
-
-@Composable private fun LabRow(v: LabValueEntity, onEdit: () -> Unit, onDelete: () -> Unit,contexts:List<net.plainnotes.app.data.LabContextEntity>,onRebuild:((LabValueEntity,Boolean)->Unit)?) {
-    var menu by remember { mutableStateOf(false) }
-    val at = Instant.ofEpochMilli(v.sampled_utc)
-    ElevatedCard(onClick = onEdit, modifier = Modifier.fillMaxWidth(), colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.elevatedCardElevation(0.dp)) {
-        Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                Text("${displayNumber(v.value)} ${v.unit}", style = MaterialTheme.typography.titleLarge)
-                Text("${analyteLabel(v.analyte_code)} · ${formatDateTime(at)}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                if (v.reference_lower != null || v.reference_upper != null)
-                    Text(stringResource(R.string.lab_range_value, v.reference_lower?.let { displayNumber(it) } ?: "–", v.reference_upper?.let { displayNumber(it) } ?: "–", v.reference_unit ?: ""),
-                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                v.note?.takeIf { it.isNotBlank() }?.let { Text(it, style = MaterialTheme.typography.bodySmall) }
-            }
-            Box {
-                IconButton(onClick = { menu = true }) { Icon(Icons.Outlined.MoreVert, stringResource(R.string.more)) }
-                DropdownMenu(menu, { menu = false }) {
-                    DropdownMenuItem(text = { Text(stringResource(R.string.edit)) }, leadingIcon = { Icon(Icons.Outlined.Edit, null) }, onClick = { menu = false; onEdit() })
-                    DropdownMenuItem(text = { Text(stringResource(R.string.remove)) }, leadingIcon = { Icon(Icons.Outlined.Delete, null) }, onClick = { menu = false; onDelete() })
-                }
-            }
-        }
-        LabContextSection(v,contexts,onRebuild)
-    }
-}
 
 @Composable fun LabDialog(initial: LabValueEntity?, onDismiss: () -> Unit, onSave: (LabValueEntity) -> Unit,inGroup:Boolean=false,onSaveWithEstimate:((LabValueEntity,Boolean)->Unit)?=null) {
     var includeEstimate by remember { mutableStateOf(false) }

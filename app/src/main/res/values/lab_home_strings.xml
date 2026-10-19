@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lab_home_formal">Blood test panel</string>
+    <string name="lab_home_display_only">Display group · original records remain separate</string>
+    <string name="lab_home_expand">View all %1$d results and actions</string>
+    <string name="lab_home_collapse">Collapse results</string>
+    <string name="lab_home_range_missing">No report reference range</string>
+    <string name="lab_home_range_unknown">Reference units cannot be compared</string>
+    <string name="lab_home_range_within">Within the entered report range</string>
+    <string name="lab_home_search">Search tests or laboratory</string>
+    <string name="lab_home_no_results">No results match these filters.</string>
+    <string name="lab_home_category_hormones">Hormones</string>
+    <string name="lab_home_category_cbc">Blood count</string>
+    <string name="lab_home_category_liver">Liver</string>
+    <string name="lab_home_category_kidney">Kidney</string>
+    <string name="lab_home_category_lipids">Lipids</string>
+    <string name="lab_home_category_metabolism">Glucose and metabolism</string>
+    <string name="lab_home_category_other">Other</string>
+</resources>

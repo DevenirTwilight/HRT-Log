@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lab_home_formal">正式化驗單</string>
+    <string name="lab_home_display_only">顯示分組 · 原紀錄保持獨立</string>
+    <string name="lab_home_expand">查看全部 %1$d 項及操作</string>
+    <string name="lab_home_collapse">收起結果</string>
+    <string name="lab_home_range_missing">未提供報告參考範圍</string>
+    <string name="lab_home_range_unknown">參考範圍單位無法比較</string>
+    <string name="lab_home_range_within">在輸入的報告參考範圍內</string>
+    <string name="lab_home_search">搜尋項目或機構</string>
+    <string name="lab_home_no_results">沒有符合篩選條件的結果。</string>
+    <string name="lab_home_category_hormones">荷爾蒙</string>
+    <string name="lab_home_category_cbc">血球計數</string>
+    <string name="lab_home_category_liver">肝功能</string>
+    <string name="lab_home_category_kidney">腎功能</string>
+    <string name="lab_home_category_lipids">血脂</string>
+    <string name="lab_home_category_metabolism">血糖及代謝</string>
+    <string name="lab_home_category_other">其他</string>
+</resources>

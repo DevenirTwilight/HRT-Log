@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lab_home_formal">Bilan biologique</string>
+    <string name="lab_home_display_only">Groupe d’affichage · les résultats restent distincts</string>
+    <string name="lab_home_expand">Voir les %1$d résultats et les actions</string>
+    <string name="lab_home_collapse">Réduire les résultats</string>
+    <string name="lab_home_range_missing">Intervalle du laboratoire non fourni</string>
+    <string name="lab_home_range_unknown">Unités de référence non comparables</string>
+    <string name="lab_home_range_within">Dans l’intervalle saisi du laboratoire</string>
+    <string name="lab_home_search">Rechercher un examen ou laboratoire</string>
+    <string name="lab_home_no_results">Aucun résultat pour ces filtres.</string>
+    <string name="lab_home_category_hormones">Hormones</string>
+    <string name="lab_home_category_cbc">Hémogramme</string>
+    <string name="lab_home_category_liver">Foie</string>
+    <string name="lab_home_category_kidney">Reins</string>
+    <string name="lab_home_category_lipids">Lipides</string>
+    <string name="lab_home_category_metabolism">Glycémie et métabolisme</string>
+    <string name="lab_home_category_other">Autres</string>
+</resources>
