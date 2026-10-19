@@ -1,0 +1,128 @@
+{
+  "apk": "HRT-Log-build33-full-official.apk",
+  "package": {
+    "application_id": "net.plainnotes.app",
+    "version_code": 33,
+    "version_name": "0.2.0"
+  },
+  "apk_sha256": "cd824d4945acd7a02cea5fa7324b825443c2c3ed2c241bdb267e967abf3fce93",
+  "signing_cert_sha256": [
+    "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1"
+  ],
+  "source": {
+    "SOURCE_COMMIT_TIME_UTC": "2026-10-19T12:08:27Z",
+    "SOURCE_DIRTY": "false",
+    "SOURCE_ORIGIN": "git",
+    "SOURCE_SHA": "219bbf32b78196c611aca1199da27d85ebb469c5"
+  },
+  "status": "PRIVATE_FILE_PROVIDED_OWNER_DOWNLOAD_NOT_VERIFIED",
+  "size_bytes": 13245300,
+  "signature_v2": true,
+  "signature_v3": true,
+  "zipalign_16kb": true,
+  "elf_load_alignment": {
+    "lib/arm64-v8a/libandroidx.graphics.path.so": [
+      16384,
+      16384,
+      16384
+    ],
+    "lib/arm64-v8a/libsqlcipher.so": [
+      16384,
+      16384,
+      16384
+    ],
+    "lib/armeabi-v7a/libandroidx.graphics.path.so": [
+      16384,
+      16384,
+      16384
+    ],
+    "lib/armeabi-v7a/libsqlcipher.so": [
+      16384,
+      16384,
+      16384
+    ],
+    "lib/x86/libandroidx.graphics.path.so": [
+      16384,
+      16384,
+      16384
+    ],
+    "lib/x86/libsqlcipher.so": [
+      16384,
+      16384,
+      16384
+    ],
+    "lib/x86_64/libandroidx.graphics.path.so": [
+      16384,
+      16384,
+      16384
+    ],
+    "lib/x86_64/libsqlcipher.so": [
+      16384,
+      16384,
+      16384
+    ]
+  },
+  "abis": [
+    "arm64-v8a",
+    "armeabi-v7a",
+    "x86",
+    "x86_64"
+  ],
+  "internet_permission": false,
+  "debuggable": false,
+  "signed_unsigned_payload_identical": true,
+  "unsigned_apk_sha256": "0f4c4cfb3b49903d3b50ec8f62e4b0e6e8e66cda69299f9cab53275a35546700",
+  "attachment_release_isolation": "PASS",
+  "shadow_release_isolation": "PASS",
+  "room_version": 12,
+  "backup_schema": 11,
+  "physical_device": "NOT_RUN",
+  "talkback": "NOT_RUN",
+  "delivery_channel": "google-drive-owner-only",
+  "delivery_date": "2026-10-19T12:33:33.348781+00:00",
+  "temporary_credentials_removed": true,
+  "drive_shared": false,
+  "drive_owner_only": true,
+  "drive_size_verified": true,
+  "drive_independent_download_sha256_verified": true,
+  "download_links_in_public_repository": false,
+  "authorization": "负责人2026-10-19明确要求“给个apk”；REQUIREMENTS 两个中心主线测试包交付补充",
+  "source_ci": {
+    "head": "219bbf32b78196c611aca1199da27d85ebb469c5",
+    "six_required_categories": "PASS",
+    "push_run": 39249744889,
+    "pr_run": 39249772744,
+    "science_push_run": 39249744815,
+    "science_pr_run": 39249772735,
+    "pr": 86,
+    "merge_sha": "42bfa99f66b2246b2fb7ce1566023924f1556d6a",
+    "merge_tree_equals_built_source_tree": true,
+    "merge_ci": "PENDING_AT_DELIVERY"
+  },
+  "period_stability": {
+    "name": "net.plainnotes.app.PeriodStabilityTest",
+    "tests": "5",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "xml_sha256": "5cb22df6723a47b865f0483a5ccb0396a39d42e3e5aadcadf7e54ab23a6b4b3e"
+  },
+  "release_manifest_check": "PASS",
+  "release_changed_application_files": [
+    "app/build.gradle.kts: versionCode32->33"
+  ],
+  "p4_included": false,
+  "attachments_enabled": false,
+  "public_release_changed": false,
+  "post_delivery_followup": {
+    "original_merge_sha": "42bfa99f66b2246b2fb7ce1566023924f1556d6a",
+    "original_merge_ci": "SIX_REQUIRED_PASS",
+    "test_only_fix_pr": 88,
+    "test_fix_source": "dfa7369b9c6dcb88fc29ac325860109d51c6d985",
+    "test_fix_merge": "dd871cc67ff74cbca1239f29010af7d02c811822",
+    "test_fix_source_ci": "SIX_REQUIRED_PASS_AFTER_ONE_CANCELLED_JOB_REPLAY",
+    "new_apk_built": false,
+    "new_apk_delivered": false,
+    "owner_download": "NOT_VERIFIED"
+  }
+}

@@ -1,10 +1,16 @@
-## build33 交付及后续原生测试复核 — 2026-10-19
+## build33 交付与中心原生测试复核完成 — 2026-10-19
 
-build33原签名成品已通过仅owner Drive私密提供，独立下载SHA/证书一致（正式收据PR87待合并，不含私有链接）；源码219bbf32及受保护主线42bfa99f的六CI现全部PASS，未改公开Release。PR87后续API26有一次真实返回断言失败，不能因只改文档而忽略；下方历史“准备中”保留为当时记录。本分支仅修正测试输入准备：既有Espresso3.5.0等待焦点后单次Back，所有测试主体及断言逐字相同；compileOnly暴露既有runtime坐标，无新增运行时依赖。首次编译因runtime-only不可见实际FAIL，修正可见性后原生Kotlin编译PASS，尚待新源CI/26/29/35，不能宣称已修好原失败或产品缺陷。详见docs/centers/back-input-sync-*及同步说明，不新增APK。
+build33 已仅owner私密提供，源码219bbf32与合并42bfa99f的六必需CI均已通过；下方保留成品完整记录。#87 原文档源152f0908/API26确有返回断言FAIL，不能因只改文档而忽略。独立#88/source dfa7369b只将测试单次Back改为既有Espresso等待输入焦点，所有测试主体/断言保持；androidTestCompileOnly仅暴露原runtime3.5.0，Gradle实际解析图证明release无Espresso。
 
-## build33 两个中心测试包准备中 — 2026-10-19
+#88六项必需检查最终全PASS，已受保护合并dd871cc6；主线dd CI待验。其PR/API29第一轮在附件POC70 tests的65/70后停滞，45分钟取消，未进入后面的中心/提醒14 tests，取消原始工件SHA/CRC保留。仅一次同源完整job重放后全部通过，不改时限/断言。目标中心方法的API26/29/35报告与重放API29均实际下载核验PASS；中心输入焦点竞争仍不被宣称为原失败的唯一已证明原因，附件POC挂起原因未判定。原失败/取消与本次通过分别记录于centers/back-input-sync-final-evidence.json。
 
-负责人要求“给个apk”；独立交付分支 delivery/build33-centers-20261019，基线默认分支 86131172，包含 #82 中心与 #85 状态恢复，唯一应用变更 versionCode 32→33。未合并/复制 P4 #57 或 #58/#59，原 Room12/备份业务11/PK/权限与正式证书不变。需本 HEAD 六必需 CI、PeriodStability、fullRelease 干净来源、正式签名/16KB 对齐/无 INTERNET/附件隔离全部通过再交付；当前 BUILD_PENDING，签名/交付 NOT_RUN。只会话私密交付，不动公开 Release；完成后另追加真实证据及交付账本。独立 P4 工作树保留其未完成性能候选，不参与本包。
+本#87通过普通合并引入已验收#88，再重验最终HEAD，未拷贝未验收代码。仅文件账本和测试质量变更，不更换已提供APK、不触及生产UI/数据/PK/权限；P4仍独立DRAFT/OFF，医疗附件/未开放模块继续OFF。用户下载、真机、TalkBack NOT_RUN。
+
+## build33 两个中心正式签名测试包已提供 — 2026-10-19
+
+负责人要求“给个apk”。PR86源码219bbf32（默认基线86131172，仅versionCode32→33和交付文档）六类必需CI在push/PR全部PASS，已受保护合并为42bfa99f；合并树与成品源码树相同。主线合并CI在交付时PENDING，不冒称复验已完成。独立P4 #57 不在本包，Room12/备份业务11/原库存与PK不变；两个中心来自已审#82/#85，附件/未开放模块继续OFF。
+
+full Universal release0.2.0/build33，13245300B，APK SHA256 cd824d4945acd7a02cea5fa7324b825443c2c3ed2c241bdb267e967abf3fce93，原证书989ba045…59379b1。PeriodStability本地5/5、构建/来源/manifest/无INTERNET/附件及shadow隔离、v2/v3、16KB ZIP与8个native ELF、四ABI、签前后载荷相同全部PASS。上传既有授权Google Drive渠道，metadata读回shared=false/owner-only/尺寸相同；独立重新下载SHA256及证书相同，临时密钥副本已清除。私有链接不入Git，未改公开Release/tag。用户下载/真机安装/TalkBack NOT_RUN；先自行加密备份，仅覆盖安装，不卸载或清数据。交付账本与build33-centers-2026-10-19.json记录三种独立身份。
 
 ## build32 已交付（REQUIREMENTS §112 第 4 条）— 2026-10-18
 
