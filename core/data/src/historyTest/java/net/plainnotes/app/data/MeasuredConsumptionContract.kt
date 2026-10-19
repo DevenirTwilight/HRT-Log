@@ -37,6 +37,32 @@ abstract class MeasuredConsumptionContract {
     private suspend fun consume(r:RecordEntity,box:CreatedMeasuredContainer,uses:List<ConfirmedStockUse>,op:String=UUID.randomUUID().toString())=db.withTransaction{MeasuredConsumptionStore.consumeNewRecord(db,box.scope,r,op,uses,at)}
     private fun count(table:String)=raw.query("SELECT COUNT(*) FROM `$table`").use{it.moveToFirst();it.getInt(0)}
     private suspend fun rejects(code:ReferenceError,block:suspend()->Unit){try{block();fail("Expected $code")}catch(e:ReferenceFailure){assertEquals(code,e.code)}}
+    @Test fun fullAuditReadsContainerFactsWithoutPerContainerSql()=runBlocking {
+        val m=med();val a=box(m);val b=box(m);val r=record(m);consume(r,a,listOf(use(a),use(b)))
+        db.withTransaction {
+            val before=RawData.dump(raw).toString();var containerPointReads=0
+            val observed=object:androidx.sqlite.db.SupportSQLiteDatabase by raw {
+                override fun query(sql:String,bindArgs:Array<out Any?>):android.database.Cursor {
+                    if(sql=="SELECT id,medication_id,capacity,initial_used_amount,used_amount,inventory_encoding FROM supply_container WHERE id=?")containerPointReads++
+                    return raw.query(sql,bindArgs)
+                }
+            }
+            val projections=MeasuredConsumptionStore.auditStagedDataset(observed)
+            assertEquals(setOf(a.containerUuid,b.containerUuid),projections.map{it.containerUuid}.toSet())
+            assertTrue(projections.all{it.usedQuanta==1L && it.remaining.value.compareTo(BigDecimal("27.5"))==0 && it.cacheMatches})
+            assertEquals(before,RawData.dump(raw).toString())
+            assertEquals("Complete identity stream must retain typed container facts without per-container SQLite cursors",0,containerPointReads)
+            // Standalone audit deliberately uses the original per-container SQL path as the differential oracle.
+            val standalone=projections.map { projection ->
+                val result=MeasuredConsumptionStore.auditStagedProjection(raw,a.scope.dataset,projection.containerUuid)
+                assertTrue(result is net.plainnotes.app.domain.measurement.MeasureResult.Success)
+                (result as net.plainnotes.app.domain.measurement.MeasureResult.Success).value
+            }
+            assertEquals(standalone,projections)
+            assertEquals(before,RawData.dump(raw).toString())
+        }
+    }
+
     @Test fun fullAuditReusesCheckedProjectionLedgerForCausalPrefixes()=runBlocking {
         val m=med();val a=box(m);val b=box(m);val r=record(m);consume(r,a,listOf(use(a),use(b)))
         db.withTransaction {

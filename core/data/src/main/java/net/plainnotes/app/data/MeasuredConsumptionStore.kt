@@ -62,7 +62,7 @@ internal object MeasuredConsumptionStore {
     }
     internal fun auditStagedProjection(db:SupportSQLiteDatabase,dataset:String,containerUuid:String):MeasureResult<AuditedStockProjection> =
         auditStagedProjection(db,dataset,containerUuid,PresentationAudit())
-    private fun auditStagedProjection(db:SupportSQLiteDatabase,dataset:String,containerUuid:String,presentations:PresentationAudit):MeasureResult<AuditedStockProjection> {
+    private fun auditStagedProjection(db:SupportSQLiteDatabase,dataset:String,containerUuid:String,presentations:PresentationAudit,capturedBox:ProjectionBox?=null):MeasureResult<AuditedStockProjection> {
         check(db.inTransaction())
         try {
             require(ReferencePayload.uuid(dataset) && ReferencePayload.uuid(containerUuid))
@@ -72,7 +72,8 @@ internal object MeasuredConsumptionStore {
             if(identity.isNull("live_handle"))fail(ReferenceError.UNKNOWN_IDENTITY)
             val owner=identity.getString("owner_uuid");val medication=ReferenceStore.row(db,"reference_identity","uuid=?",arrayOf(owner))!!
             require(medication.getString("dataset_uuid")==dataset && medication.getString("kind")=="MEDICATION" && !medication.isNull("live_handle"))
-            val box=projectionBox(db,identity.getLong("live_handle"));require(box.medication_id==medication.getLong("live_handle"))
+            val box=capturedBox ?: projectionBox(db,identity.getLong("live_handle"))
+            require(box.id==identity.getLong("live_handle") && box.medication_id==medication.getLong("live_handle"))
             val first=ReferenceStore.row(db,"reference_event","subject_uuid=? ORDER BY revision LIMIT 1",arrayOf(containerUuid))
                 ?: return MeasureResult.Failure(MeasureError.MISSING_HISTORICAL_SNAPSHOT)
             require(first.getString("dataset_uuid")==dataset && !first.isNull("snapshot_uuid"))
@@ -173,19 +174,21 @@ internal object MeasuredConsumptionStore {
             db.query(EXACT_SOURCE_COVERAGE_QUERY).use{require(!it.moveToFirst())}
             db.query("SELECT 1 FROM measured_operation o JOIN reference_event e ON e.operation_uuid=o.operation_uuid LIMIT 1").use{require(!it.moveToFirst())}
             db.query("PRAGMA foreign_key_check").use{require(!it.moveToFirst())}
-            val identities=db.query("SELECT DISTINCT i.uuid,i.dataset_uuid FROM reference_identity i JOIN reference_event e ON e.subject_uuid=i.uuid JOIN reference_snapshot s ON s.uuid=e.snapshot_uuid WHERE i.kind='CONTAINER' AND s.kind='PRESENTATION' ORDER BY i.uuid").use { c ->
-                buildList {while(c.moveToNext())add(c.getString(0) to c.getString(1))}
+            // LEFT JOIN preserves retired/missing handles for the existing fail-closed identity checks.
+            // Typed container facts live only in this transaction; no scalar conversion or persisted trust.
+            val identities=db.query("SELECT DISTINCT i.uuid,i.dataset_uuid,c.id,c.medication_id,c.capacity,c.initial_used_amount,c.used_amount,c.inventory_encoding FROM reference_identity i JOIN reference_event e ON e.subject_uuid=i.uuid JOIN reference_snapshot s ON s.uuid=e.snapshot_uuid LEFT JOIN supply_container c ON c.id=i.live_handle WHERE i.kind='CONTAINER' AND s.kind='PRESENTATION' ORDER BY i.uuid").use { c ->
+                buildList {while(c.moveToNext())add(Triple(c.getString(0),c.getString(1),if(c.isNull(2))null else projectionBox(c,2)))}
             }
             val presentations=PresentationAudit()
             presentations.prepareOperations(db)
-            val projections=identities.mapNotNull { (uuid,dataset) ->
+            val projections=identities.mapNotNull { (uuid,dataset,capturedBox) ->
                 val identity=ReferenceStore.row(db,"reference_identity","uuid=?",arrayOf(uuid))!!
                 if(identity.isNull("live_handle")) {
                     // FK-linked history cannot survive physical removal by attaching to a reused integer ID.
                     db.query("SELECT 1 FROM measured_allocation WHERE container_uuid=? LIMIT 1",arrayOf(uuid)).use{require(!it.moveToFirst())}
                     null
                 } else {
-                    val result=auditStagedProjection(db,dataset,uuid,presentations);require(result is MeasureResult.Success)
+                    val result=auditStagedProjection(db,dataset,uuid,presentations,capturedBox);require(result is MeasureResult.Success)
                     require(result.value.cacheMatches);result.value
                 }
             }
@@ -415,8 +418,9 @@ internal object MeasuredConsumptionStore {
     }
     private fun projectionBox(db:SupportSQLiteDatabase,id:Long):ProjectionBox =
         db.query("SELECT id,medication_id,capacity,initial_used_amount,used_amount,inventory_encoding FROM supply_container WHERE id=?",arrayOf(id)).use { c ->
-            require(c.moveToFirst());ProjectionBox(integer(c,0),integer(c,1),scalar(c,2),scalar(c,3),scalar(c,4),c.getString(5))
+            require(c.moveToFirst());projectionBox(c,0)
         }
+    private fun projectionBox(c:Cursor,offset:Int)=ProjectionBox(integer(c,offset),integer(c,offset+1),scalar(c,offset+2),scalar(c,offset+3),scalar(c,offset+4),c.getString(offset+5))
     private val projectionOperationColumns=ReferenceSchema.columns.getValue("measured_operation")
     private val projectionOperationQuery="SELECT t.id,t.dose_record_id,t.dose_revision,t.operation_id,t.kind,t.used_delta,t.reversal_of_id,"+
         projectionOperationColumns.joinToString(","){"o.`$it`"}+

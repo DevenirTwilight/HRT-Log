@@ -1,0 +1,17 @@
+{
+  "source_head": "a3c695749b90aa47b85bd9c4350249ab6e9698a1",
+  "run": 39211937058,
+  "artifact_id": 12168700196,
+  "artifact_sha256": "d3bc3a536049bc79f7590adb951b4b57f6fd97ecc7703551fce00da4f220f38f",
+  "artifact_sha256_verification": "PASS",
+  "zip_crc": "PASS",
+  "trace_sha256": "28286db42bddaf692bd88ae7bd8470f301db73b6925408649a213920573ed685",
+  "trace_gzip_sha256": "25c8ef5b05dfb6d90249448d72483ce9859bc9557b2ec099600c1e044e8b18c2",
+  "parser_source_sha256": "b291a87edf240f5e93c6411a810c7f2ad5c946b373c0df1427d5aa42d09f6190",
+  "parser_reproduction": "PASS",
+  "profile": "PARTIAL_DIAGNOSTIC",
+  "records": 58686,
+  "performance": "FAIL: writes9160.392831/8334.476662/8084.496431ms exceed unchanged5000ms. Actual integrated-source result, not replaced by local tests.",
+  "physical": "NOT_RUN",
+  "p4": "PRODUCTION_BLOCKED"
+}

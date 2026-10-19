@@ -2035,3 +2035,15 @@ P4 Room13第二轮data439仅1失败，归档main861-room13-second-failure.json�
 普通合入批准main86131172到原#57，保留所有医疗/药品中心、UI05、LAB02及AppOps等待修正；兼容候选Room13/业务12在原§102/续作授权内非破坏演进。批准main12.json逐字保留，新13仅增加inventory_encoding，46表其余定义不变；原Schema11含化验单/旧标量恢复、1…12升级、旧12读者拒绝13、旧11备份读者拒绝12、故障DDL回滚并保留化验关联/库存原量/引用epoch等共data440零失败/错误/跳过，原生源码编译PASS；收据main861-room13-local-evidence.json。现有安全断言保留，仅当前输出版本期待和旧夹具口径按实际来源调整，并新增反向格式门测试；两轮真实失败保留。App库存UNKNOWN/UI05/中心/时期回归仍运行中，合并候选最新HEAD完整六CI/原生性能待验。
 
 cc7原生39209956991完整FAIL已归档performance/native-profile-cc7b182c：8.468/7.955/8.645秒>5；15秒审计/预测均本轮内，堆/磁盘观测如实保留，官方ZIP39c6355b…75065/CRC/52722采样parser重放核验PASS但仍PARTIAL_DIAGNOSTIC。不能拿本地4178查询或候选迁移通过替代实际5秒门，#57继续DRAFT/PRODUCTION_BLOCKED，正式写入口OFF，P5/P6未启用。不改PK/PNBAK1密码学/权限/签名/发布；版本32来自已审主线，非本任务另行改版或交付。
+
+## P4 原生集成复验与包装点查优化 — 2026-10-19
+
+主线兼容候选a3c69574本地App11套/67项零失败/错误/跳过，含时期、库存UNKNOWN/UI05和两个中心导航/状态恢复，App仪器源码编译PASS；main861-app-regression-evidence.json保留逐套XML摘要。其原生39211937058实际FAIL：写入9.160/8.334/8.084秒>5秒；其余实际指标见performance/native-profile-a3c69574，官方ZIP d3bc3a53…0f38f/CRC/58686采样parser重放均核验，仍PARTIAL_DIAGNOSTIC，不能当调用次数或临床验证。
+
+同一#57内下一优化先写两包装真实合成消费的反向测试，未改生产a3c即实际捕获2次包装点查；container-stream-red-evidence.json。候选将同事务完整身份查询LEFT JOIN包装原始字段，共用原typed decoder，独立审计保留点查/未知失败路径，仍逐一核对live_handle/owner/来源/账本/临床与缓存，未缓存跨事务信任。完整data回归及原生编译运行中，尚未宣称PASS/提速。主线最新仍86131172、#57仍DRAFT/PRODUCTION_BLOCKED，入口OFF；P5/P6未实施。完整六CI及最终原生门按PR57的精确HEAD收据交接，避免元数据提交触发循环；不合并、不发布、不交付APK。
+
+包装读取候选完整data441零失败/错误/跳过、原生合同源码编译PASS，production hash/逐套XML见container-stream-local-evidence.json。原14600/2000场景与计量后查询诊断运行中；a3c API26/29远端兼容已PASS，其余六CI未全部完成。最终优化的原生性能仍待验，绝不据本地数据启用。
+
+包装候选原规模本地诊断PASS，2184查询，完整结果一致；总量不可与主线LAB集成前cc7的4178直接宣称差值。新增原SQL独立投影对照，shared MeasuredConsumption123项零失败/错误/跳过、原生源码再编译PASS，生产hash与全data441相同。main861-privacy-ci-failure.json记录a3c远端实际失败：App1776中1失败/237既有跳过，唯一失败PrivacyNoticeFactsTest:22仍写死业务11/Room12；修正当前输出期待为业务12/Room13并同步privacy-evidence，KDF/cipher/四语原断言不动，局部隐私/时期回归运行中。不能说六CI全绿；设备和API26/29、JVM/科学实际已PASS，最终HEAD再验。
+
+本轮候选最终隐私/时期复验8项零失败/错误/跳过，container-privacy-period-evidence.json；所有加密参数/四语隐私原断言保留，完整data441/差分123/原生编译和14600/2000诊断均已PASS。当前a3c六CI完整结果为5类PASS/Android FAIL（版本过期断言），原生亦FAIL，已归档main861-ci-evidence.json；本轮修复与优化将推送原#57，新HEAD完整六CI/原生门必须重验，不能沿用a3c已通过部分作为最终准入。最终精确HEAD/远端结果记录PR57，仍DRAFT/入口OFF，不启用P5/P6。
