@@ -5,7 +5,6 @@ import org.json.JSONObject
 import java.net.URI
 import java.security.MessageDigest
 import java.time.LocalDate
-import java.util.UUID
 
 /** Canonical, bounded source facts. Not MedicationEntity, a prescription or a PK profile. */
 data class UserReferenceProduct(
@@ -69,7 +68,17 @@ internal object ReferencePayload {
     const val MAX_BYTES = 65536
     const val MAX_TEXT = 2048
     private val fields = setOf("format", "kind", "namespace", "source_version", "recorded_on", "name", "ingredients", "strength", "form", "routes", "cis", "cip", "source_url", "verification")
-    fun uuid(text: String): Boolean = runCatching { UUID.fromString(text).toString() == text }.getOrDefault(false)
+    /** Exactly the platform parse→canonical-format accepted set; never normalizes stored identities. */
+    fun uuid(text:String):Boolean {
+        if(text.length!=36)return false
+        for(index in text.indices) {
+            val c=text[index]
+            if(index==8 || index==13 || index==18 || index==23) {
+                if(c!='-')return false
+            } else if(c !in '0'..'9' && c !in 'a'..'f')return false
+        }
+        return true
+    }
     fun sha(text: String): String {
         val digest=MessageDigest.getInstance("SHA-256").digest(text.toByteArray(Charsets.UTF_8))
         // Same fixed lowercase ASCII bytes; avoid32 locale Formatter instances for every audited digest.

@@ -1,0 +1,68 @@
+{
+  "source_base": "d57d04c5fa600d026680e9c06f8853122a5efc1c",
+  "candidate_kind": "UNCOMMITTED_UUID_SCAN_WORKTREE",
+  "state": "PASS",
+  "data_tests": 449,
+  "app_tests": 43,
+  "app_failures": 0,
+  "app_errors": 0,
+  "app_skipped": 0,
+  "app_suites": [
+    {
+      "name": "net.plainnotes.app.MeasuredStockUnknownMatrixTest",
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "4683627545e522486f791c43fbe3d4707cfc2edcd94b94c36af2b7911be9373e"
+    },
+    {
+      "name": "net.plainnotes.app.PeriodStabilityTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "4691dba155b2cdfe7102972e2d28a8df7668beac1c4e9caa51c48893c00f0e13"
+    },
+    {
+      "name": "net.plainnotes.app.PrivacyNoticeFactsTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "355edc8a7163fc2079689be7300e3202a6d221f3730d0bca1c47f1f358377a02"
+    },
+    {
+      "name": "net.plainnotes.app.StockConsistencyTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "9b25f102a9b7336cd2f4bff46b7bedd9bd75eb076cff441cd7e2fb8dc887c0dd"
+    }
+  ],
+  "production_hashes": {
+    "ReferencePayload.kt": "0089ac879a9a6218a4a4892fd7823866140ddcd14c68c04f9e2c03b75c69f48b",
+    "MeasuredUsePayload.kt": "95ba3832c3106be843db610c245f41079c912d5652fb561df703fb78fe2fd22f",
+    "MeasuredConsumptionStore.kt": "32e42bb218c7cdcfa50b73181ac36d940b40afa65ab695801ac4048e71275501"
+  },
+  "python_tests": 10,
+  "generator_sha256": "a9bd56d2f112bb7332298876aea50040080098da16a896720d0e4587132b0f4e",
+  "generated_native_probe": {
+    "source_sha256": "9313167178989def0d4d89d785f84cdde764fba21033543cdf85e472c5511242",
+    "native_sha256": "04cc9f9f7a6ff3bdab1c179b8ab3ff2376a3a4b0d4e15036bbe0d2d6c40fa67c",
+    "status": "GENERATED_NOT_RUN"
+  },
+  "native_generated_kotlin_compile": "PASS",
+  "local_large": {
+    "records": 14600,
+    "containers": 2000,
+    "rows": 32603,
+    "queries": 185,
+    "full_projection_equality": true
+  },
+  "diagnostic_probe_sha256": "593589a24f473b0498af6cd209fef000fce13afddc37582799387334bbd97ef7",
+  "native_execution": "NOT_RUN_NEW_CANDIDATE",
+  "physical": "NOT_RUN",
+  "p4": "PRODUCTION_BLOCKED"
+}

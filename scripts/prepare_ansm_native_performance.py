@@ -150,7 +150,7 @@ def native_source(text):
                                     if(window!=null && lastStart!=window.startPosition) {
                                         windowStatus="AVAILABLE";lastStart=window.startPosition
                                         windows.put(JSONObject().put("start_row",window.startPosition)
-                                            .put("rows",window.numRows).put("capacity_bytes",window.windowSizeBytes))
+                                            .put("rows",window.numRows).put("driver_reported_size_bytes",window.windowSizeBytes))
                                     }
                                 }
                                 return result

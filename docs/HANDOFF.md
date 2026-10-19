@@ -2063,3 +2063,13 @@ e5a9b131已完成：六必需CI全PASS，native39216614238仍实际FAIL，三写
 嵌入请求候选全data448零失败/错误/跳过、原生合同源码编译PASS（embedded-request-data-evidence.json）；10有效哈希/事实与26非法对照/可变JSON及list别名隔离都成立。保持原字符串入口、byte/canonical约束与唯一字段validator，外层全部检查原样。现有sqlcipher4.10.0游标字节码确认会fillWindow，不能把185逻辑查询等同185底层读取；原生计时后计划诊断追加仅游标类/窗口起点/行数/容量及明确可用状态，先观察再决定分页，不改预算阶段或权限。Python10检查PASS，原规模大库存+最新生成探针编译+App隐私/时期/库存范围回归运行中（上个稳定候选为43项，当前实际项数待核对）；候选未推送，入口OFF/P5P6仍未实施。
 
 嵌入请求最终候选448 data/43 App/10 Python全部PASS，实际套零失败/错误/跳过；新增窗口元数据的生成原生探针Kotlin编译PASS。原规模14600/2000/32603本地PASS、185查询/完整投影相等保持；embedded-request-final-local-evidence.json记录两个生产文件hash/生成探针/逐套XML。仅减少请求编码再解析，旧字符串入口与所有外层/链/源/临床/库存检查保留，不缓存业务结果；生产未启用分页，待真实窗口证据。e5a9旧源六CI全PASS而原生5秒FAIL已完整归档。下一推送仍原#57，最终HEAD六CI/原生准入待新跑，精确收据在PR57维护，避免元数据提交循环；DRAFT/入口OFF/P5P6未实施/不签名不交付。
+
+d57d04c5原生39222489575实际FAIL：三写8.203/9.340/9.095秒>5，其余原门本轮内；5e95bea7…1187ead官方ZIP/SHA/CRC/采样parser重放核验，performance/native-profile-d57d04c5/待随下一源码检查点提交。新增窗口观测AVAILABLE：仅start0、2003行，未观察到前移换窗，不采用此前重复换窗假说来实施分页。capacity_bytes16384只是驱动配置报告，不代表实际占用或已证明硬容量，后续诊断字段将改清晰名称。不可声称源码改动已通过性能门。d57 JVM/科学及API26/29兼容已PASS，Android/设备仍按精确HEAD追踪。
+
+下一纯验证优化先做共享ReferenceMigrationContract的平台UUID对照（将同时在JVM与API26/29运行）。涵盖10000随机规范值、128版本/变体、576字符突变和12写法共10716对照；旧短写/大写/非ASCII/空值形式不得扩大接受范围。首轮只有最终语料计数误把128额外正向断言计入，10844→10716修正，不是生产谓词失败；uuid-oracle-fixture-count-correction.json保留说明。旧生产d57未改，修正计数后基线正在复验；通过后才实现等价ASCII谓词，不改快照/Schema/库存/PK。
+
+UUID旧谓词10716平台对照基线实际PASS（uuid-baseline-evidence.json），随后仅将ReferencePayload.uuid改为严格36位小写ASCII十六进制/固定连字符扫描。接受集合与平台parse→toString相同，保留全部版本/变体/nil/全1值，不正规化旧身份、不新加v4限制；完整证明及文件边界见uuid-validation-contract.md。共享合同将原封不动在JVM/API26/29执行，无Gradle/CI名单变更。当前全data/原生合同源码编译运行中，未宣称PASS或提速。诊断窗口字段仅改driver_reported_size_bytes，原始d57报告保持原样并解释旧capacity命名，不把配置值当实际内存。d57设备及API26/29/JVM/科学已PASS、Android仍待最终结果；P4仍DRAFT/原生5秒FAIL/入口OFF。
+
+UUID扫描候选全data449零失败/错误/跳过、共享原生合同源码编译PASS，平台10716对照包含其中（uuid-data-evidence.json）。最新生成原生探针已编译，原规模JVM场景完成，最终App回归仍运行中，未宣称整段最终PASS。前驱d57六必需CI已全部PASS，单独native5秒FAIL及窗口实际观测保存在native-profile-d57d04c5/（不把驱动配置大小当实际容量/内存）。没有实施分页或跨审计缓存；候选未推送，仍DRAFT/入口OFF。
+
+UUID等价校验候选最终本地449 data/43 App/10 Python全部PASS，零失败/错误/跳过，更新后的生成原生探针Kotlin编译PASS；原14600/2000/32603及185查询/完整结果一致PASS。uuid-final-local-evidence.json记录三个生产文件hash/生成探针/逐套XML。10716平台对照在共享原生合同中，最终API26/29实际执行仍需新HEAD CI，不把编译或JVM成功当设备执行。仅严格等价字符扫描与诊断字段明确命名，不实施分页、跨事务信任、库存算法/Schema/备份/PK/权限/版本变化。即将推送原#57，仍DRAFT/PRODUCTION_BLOCKED/入口OFF/P5P6未实施；精确最终HEAD/新六CI/原生预算结果在PR57维护，避免元数据提交循环。不签名/交付APK/Release。

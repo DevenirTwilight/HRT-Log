@@ -57,6 +57,29 @@ abstract class ReferenceMigrationContract {
             }
         }.toString()
     }
+    @Test fun canonicalUuidPredicateMatchesThePlatformOracleAcrossVersionsAndMalformedForms() {
+        val random=java.util.Random(0x414e534dL)
+        var checked=0
+        fun compare(text:String) {
+            val expected=runCatching{UUID.fromString(text).toString()==text}.getOrDefault(false)
+            assertEquals("Canonical UUID oracle case ${checked++}",expected,ReferencePayload.uuid(text))
+        }
+        repeat(10000){compare(UUID(random.nextLong(),random.nextLong()).toString())}
+        for(version in 0..15)for(variant in 0..7) {
+            val most=(random.nextLong() and (15L shl 12).inv()) or (version.toLong() shl 12)
+            val least=(random.nextLong() and 0x1fffffffffffffffL) or (variant.toLong() shl 61)
+            val text=UUID(most,least).toString()
+            assertTrue("Old canonical identifiers must not acquire a v4-only restriction",ReferencePayload.uuid(text));compare(text)
+        }
+        val base="00112233-4455-6677-8899-aabbccddeeff"
+        val chars=charArrayOf('0','9','a','f','A','F','g','-','_','+',' ', '\n','\u0000','\u0661','\uff11','\ud800')
+        for(index in base.indices)for(value in chars)compare(base.toCharArray().also{it[index]=value}.concatToString())
+        for(value in listOf("", "0-0-0-0-0",base.uppercase(java.util.Locale.ROOT)," "+base,base+" ",
+            base.replace("-",""),"000000000-0000-0000-0000-000000000000",base.dropLast(1),base+"0",
+            "00000000-0000-0000-0000-000000000000","ffffffff-ffff-ffff-ffff-ffffffffffff","x".repeat(100000)))compare(value)
+        assertEquals(10716,checked)
+    }
+
     @Test fun everyPublishedRoomOneThroughElevenUpgradesNonDestructivelyToTwelve() {
         for(version in 1..12) {
             val name="synthetic-reference-migration-$version-${UUID.randomUUID()}.db";val key=ByteArray(32){(version+it).toByte()}
