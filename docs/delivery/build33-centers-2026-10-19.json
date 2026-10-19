@@ -113,5 +113,16 @@
   ],
   "p4_included": false,
   "attachments_enabled": false,
-  "public_release_changed": false
+  "public_release_changed": false,
+  "post_delivery_followup": {
+    "original_merge_sha": "42bfa99f66b2246b2fb7ce1566023924f1556d6a",
+    "original_merge_ci": "SIX_REQUIRED_PASS",
+    "test_only_fix_pr": 88,
+    "test_fix_source": "dfa7369b9c6dcb88fc29ac325860109d51c6d985",
+    "test_fix_merge": "dd871cc67ff74cbca1239f29010af7d02c811822",
+    "test_fix_source_ci": "SIX_REQUIRED_PASS_AFTER_ONE_CANCELLED_JOB_REPLAY",
+    "new_apk_built": false,
+    "new_apk_delivered": false,
+    "owner_download": "NOT_VERIFIED"
+  }
 }

@@ -1,0 +1,22 @@
+{
+  "state": "FAIL_RETAINED",
+  "source": "152f0908a3d402408bb9eac882862cb2068dd2f2",
+  "run": 39253001557,
+  "job": 118061193730,
+  "api": 26,
+  "test": "centerDialogsBackNavigationKeepsSessionAndNeverLaunchesFiles",
+  "failure": [
+    "2026-10-19T12:43:57.4368007Z \tjava.lang.AssertionError: Failed: assertDoesNotExist.",
+    "2026-10-19T12:43:57.4368743Z \tReason: Did not expect any node but found '1' node that satisfies: (TestTag = 'reference-window')",
+    "2026-10-19T12:44:38.6367631Z java.lang.AssertionError: java.lang.AssertionError: Failed: assertDoesNotExist.",
+    "2026-10-19T12:44:38.6368942Z Reason: Did not expect any node but found '1' node that satisfies: (TestTag = 'reference-window')",
+    "2026-10-19T12:44:38.6370487Z Node #1018 at (l=0.0, t=0.0, r=320.0, b=616.0)px, Tag: 'reference-window'",
+    "2026-10-19T12:44:38.6375557Z at net.plainnotes.app.shell.InAppNavigationLockAndroidTest.centerDialogsBackNavigationKeepsSessionAndNeverLaunchesFiles(InAppNavigationLockAndroidTest.kt:184)",
+    "2026-10-19T12:44:38.6377405Z java.lang.AssertionError: Failed: assertDoesNotExist.",
+    "2026-10-19T12:44:38.6392439Z Reason: Did not expect any node but found '1' node that satisfies: (TestTag = 'reference-window')",
+    "2026-10-19T12:44:38.6394199Z Node #1018 at (l=0.0, t=0.0, r=320.0, b=616.0)px, Tag: 'reference-window'"
+  ],
+  "diagnosis": "Focus readiness hypothesis; original run does not itself prove the cause",
+  "fix_state": "CANDIDATE_NATIVE_NOT_RUN",
+  "production_changes": false
+}
