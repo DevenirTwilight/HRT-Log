@@ -1,6 +1,8 @@
-## build33 两个中心测试包准备中 — 2026-10-19
+## build33 两个中心正式签名测试包已提供 — 2026-10-19
 
-负责人要求“给个apk”；独立交付分支 delivery/build33-centers-20261019，基线默认分支 86131172，包含 #82 中心与 #85 状态恢复，唯一应用变更 versionCode 32→33。未合并/复制 P4 #57 或 #58/#59，原 Room12/备份业务11/PK/权限与正式证书不变。需本 HEAD 六必需 CI、PeriodStability、fullRelease 干净来源、正式签名/16KB 对齐/无 INTERNET/附件隔离全部通过再交付；当前 BUILD_PENDING，签名/交付 NOT_RUN。只会话私密交付，不动公开 Release；完成后另追加真实证据及交付账本。独立 P4 工作树保留其未完成性能候选，不参与本包。
+负责人要求“给个apk”。PR86源码219bbf32（默认基线86131172，仅versionCode32→33和交付文档）六类必需CI在push/PR全部PASS，已受保护合并为42bfa99f；合并树与成品源码树相同。主线合并CI在交付时PENDING，不冒称复验已完成。独立P4 #57 不在本包，Room12/备份业务11/原库存与PK不变；两个中心来自已审#82/#85，附件/未开放模块继续OFF。
+
+full Universal release0.2.0/build33，13245300B，APK SHA256 cd824d4945acd7a02cea5fa7324b825443c2c3ed2c241bdb267e967abf3fce93，原证书989ba045…59379b1。PeriodStability本地5/5、构建/来源/manifest/无INTERNET/附件及shadow隔离、v2/v3、16KB ZIP与8个native ELF、四ABI、签前后载荷相同全部PASS。上传既有授权Google Drive渠道，metadata读回shared=false/owner-only/尺寸相同；独立重新下载SHA256及证书相同，临时密钥副本已清除。私有链接不入Git，未改公开Release/tag。用户下载/真机安装/TalkBack NOT_RUN；先自行加密备份，仅覆盖安装，不卸载或清数据。交付账本与build33-centers-2026-10-19.json记录三种独立身份。
 
 ## build32 已交付（REQUIREMENTS §112 第 4 条）— 2026-10-18
 
