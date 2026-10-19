@@ -35,6 +35,7 @@ class Lab02PanelUiTest {
     @Test fun panelsAreCardsAndLooseResultsKeepTheLab01Grouping() {
         var opened: LabPanelEntity? = null; var saveAs: List<LabValueEntity>? = null
         ui.setContent { NotesTheme(ThemeMode.LIGHT) { LabsScreen(labs, emptyList(), {}, {}, PaddingValues(), panels = listOf(panel, solo), onPanel = { opened = it }, onSaveAsPanel = { saveAs = it }) } }
+        ui.onNode(hasScrollToIndexAction()).performScrollToNode(hasTestTag("lab-panel:5"))
         ui.onNodeWithTag("lab-panel:5").assertExists()
         ui.onNode(hasTestTag("lab-panel-note") and hasAnyAncestor(hasTestTag("lab-panel:5"))).assertTextEquals("Synthetic fasting note")
         ui.onAllNodes(hasTestTag("lab-save-as-panel") and hasAnyAncestor(hasTestTag("lab-panel:5"))).assertCountEquals(0)
@@ -45,8 +46,8 @@ class Lab02PanelUiTest {
         ui.onNode(hasScrollToIndexAction()).performScrollToNode(hasTestTag("lab-group:$t2:Old lab"))
         ui.onNode(hasTestTag("lab-save-as-panel") and hasAnyAncestor(hasTestTag("lab-group:$t2:Old lab"))).performScrollTo().performClick()
         assertEquals(listOf(4L, 5L), saveAs?.map { it.id })
-        ui.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("99 pg/mL"))
-        ui.onAllNodes(hasTestTag("lab-group:${t2 - 1}:")).assertCountEquals(0) // a lone result without panel stays a plain row
+        ui.onNode(hasScrollToIndexAction()).performScrollToNode(hasTestTag("lab-group-row:6"))
+        ui.onNodeWithTag("lab-group:${t2 - 1}:").assertExists() // lone legacy results now use the same card contract
     }
 
     @Test fun saveAsOneBloodTestNeedsTheConfirmation() {

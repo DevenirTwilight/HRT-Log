@@ -16,4 +16,7 @@
     <string name="lab_home_category_lipids">Lipids</string>
     <string name="lab_home_category_metabolism">Glucose and metabolism</string>
     <string name="lab_home_category_other">Other</string>
+    <string name="lab_home_range_high">Above the entered report range</string>
+    <string name="lab_home_range_low">Below the entered report range</string>
+    <string name="lab_home_more">Actions for %1$s</string>
 </resources>

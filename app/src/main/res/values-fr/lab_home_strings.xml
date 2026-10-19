@@ -16,4 +16,7 @@
     <string name="lab_home_category_lipids">Lipides</string>
     <string name="lab_home_category_metabolism">Glycémie et métabolisme</string>
     <string name="lab_home_category_other">Autres</string>
+    <string name="lab_home_range_high">Au-dessus de l’intervalle saisi du laboratoire</string>
+    <string name="lab_home_range_low">Au-dessous de l’intervalle saisi du laboratoire</string>
+    <string name="lab_home_more">Actions pour %1$s</string>
 </resources>

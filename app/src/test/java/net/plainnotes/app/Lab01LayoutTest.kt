@@ -68,6 +68,9 @@ class Lab01LayoutTest(private val locale: String, private val width: Int, privat
         val labs = listOf(lab(1, "FSH", 1.2, at(3, 9), "Lab placeholder", 1.5, 12.4), lab(2, "LH", 0.8, at(3, 9), "Lab placeholder"), lab(3, "E2", 245.0, at(3, 9), "Lab placeholder", 30.0, 200.0),
             lab(4, "T", 25.0, at(3, 9), "Lab placeholder"), lab(5, "PRL", 14.0, at(3, 9), "Lab placeholder", 4.0, 25.0), lab(6, "E2", 160.0, at(40, 10), null))
         rule.setContent { NotesTheme(if (dark) ThemeMode.DARK else ThemeMode.LIGHT) { androidx.compose.material3.Surface { LabsScreen(labs, emptyList(), {}, {}, PaddingValues()) } } }
+        rule.onNode(hasScrollToIndexAction()).performScrollToNode(hasTestTag("lab-home-expand:3"))
+        rule.onNodeWithTag("lab-home-expand:3").performClick()
+        rule.onNode(hasScrollToIndexAction()).performScrollToNode(hasTestTag("lab-group-row:1"))
         rule.onNodeWithTag("lab-group-row:1").assertExists()
         shot("1_labs")
     }

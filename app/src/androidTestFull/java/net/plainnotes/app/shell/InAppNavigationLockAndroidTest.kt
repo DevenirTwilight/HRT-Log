@@ -213,6 +213,34 @@ class InAppNavigationLockAndroidTest {
         ui.onNodeWithTag("drug-center-window").assertDoesNotExist()
     }
 
+    /** LAB-UI-03: every real entry selects the same production homepage and retains the unlocked session. */
+    @Test fun labsDrawerMedicalAndConcentrationShareNewHomeAndExistingBatchForm() {
+        launch(); unlock(); open(Destination.LABS)
+        ui.onNodeWithTag("labs-home").assertExists()
+        ui.onNodeWithTag("labs-home-add").performClick()
+        ui.onNodeWithTag("lab-batch").assertExists()
+        ui.onNodeWithTag("lab-batch-estimate").assertIsNotSelected()
+        back()
+        ui.onNodeWithTag("lab-batch").assertDoesNotExist()
+        ui.onNodeWithTag("labs-home").assertExists()
+        assertUnlocked("cancel new home batch")
+        open(Destination.MEDICAL)
+        ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag("medical-labs"))
+        ui.onNodeWithTag("medical-labs").performClick()
+        ui.onNodeWithTag("labs-home").assertExists()
+        assertUnlocked("medical center labs")
+        back()
+        ui.onNodeWithTag("medical-list").assertExists()
+        open(Destination.CONCENTRATION)
+        ui.onNodeWithText(context.getString(R.string.calib_manage_labs)).performScrollTo().performClick()
+        ui.onNodeWithTag("labs-home").assertExists()
+        scenario!!.recreate()
+        ui.onNodeWithTag("labs-home").assertExists()
+        assertUnlocked("labs rotation after concentration entry")
+        open(Destination.CALENDAR)
+        assertUnlocked("return to calendar from labs")
+    }
+
     private fun resumedMain(): MainActivity? {
         var found: MainActivity? = null
         InstrumentationRegistry.getInstrumentation().runOnMainSync {

@@ -68,7 +68,7 @@ import java.time.Instant
                                     var menu by remember { mutableStateOf(false) }
                                     Box {
                                         IconButton(onClick = { menu = true }, modifier = Modifier.testTag("lab-home-more:${result.id}")) {
-                                            Icon(Icons.Outlined.MoreVert, stringResource(R.string.more))
+                                            Icon(Icons.Outlined.MoreVert, stringResource(R.string.lab_home_more, analyteLabel(result.analyte_code)))
                                         }
                                         DropdownMenu(menu, { menu = false }) {
                                             DropdownMenuItem(text = { Text(stringResource(R.string.edit)) }, onClick = { menu = false; onEdit(result) })
@@ -95,13 +95,13 @@ import java.time.Instant
 
 /** Wording describes only the entered report range. Unknown conversion is never presented as in range. */
 internal fun labHomeRangeStatus(v: LabValueEntity): Int {
-    val ru = v.reference_unit ?: return R.string.lab_home_range_missing
     if (v.reference_lower == null && v.reference_upper == null) return R.string.lab_home_range_missing
+    val ru = v.reference_unit ?: return R.string.lab_home_range_unknown
     if (ru != v.unit && (toCanonical(analyte(v.analyte_code), v.value, v.unit) == null ||
         listOfNotNull(v.reference_lower, v.reference_upper).any { toCanonical(analyte(v.analyte_code), it, ru) == null })) return R.string.lab_home_range_unknown
     return when (labFlag(v)) {
-        LabFlag.HIGH -> R.string.lab_flag_high
-        LabFlag.LOW -> R.string.lab_flag_low
+        LabFlag.HIGH -> R.string.lab_home_range_high
+        LabFlag.LOW -> R.string.lab_home_range_low
         null -> R.string.lab_home_range_within
     }
 }

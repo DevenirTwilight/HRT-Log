@@ -1,0 +1,117 @@
+{
+  "status": "FAIL",
+  "source": "8fbac119 production home; tests uncommitted initial candidates",
+  "scope": "Synthetic Robolectric API35 tests, not physical device",
+  "totals": {
+    "tests": 17,
+    "failures": 2,
+    "skipped": 0
+  },
+  "reports": [
+    {
+      "file": "TEST-net.plainnotes.app.Lab01GroupDisplayTest.xml",
+      "sha256": "6f36d921a0bc9c327f40cdf2e150d1737d580b9101866a4bb6379d0c4955e914",
+      "tests": 7,
+      "failures": 1,
+      "skipped": 0,
+      "cases": [
+        {
+          "name": "aRowOpensTheExistingDetailThenEdit",
+          "status": "PASS"
+        },
+        {
+          "name": "cardsForDrawsSingleRowsOtherwise",
+          "status": "FAIL"
+        },
+        {
+          "name": "groupingRule",
+          "status": "PASS"
+        },
+        {
+          "name": "editingTimeOrLabOfAGroupedResultShowsTheHintAndItSplitsOut",
+          "status": "PASS"
+        },
+        {
+          "name": "flagsCompareInOneUnit",
+          "status": "PASS"
+        },
+        {
+          "name": "rowsReadTestValueUnitAndSayHighOrLowInWords",
+          "status": "PASS"
+        },
+        {
+          "name": "anAnalyteChipStillShowsItsTrendAndRows",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "file": "TEST-net.plainnotes.app.Lab02PanelUiTest.xml",
+      "sha256": "edf32dad5daa983d74a67470671a87a302000c9e384c9614cf6c823b2dfaa035",
+      "tests": 4,
+      "failures": 1,
+      "skipped": 0,
+      "cases": [
+        {
+          "name": "drawsOrderNewestFirstAndPanelsWinOverTheLab01Rule",
+          "status": "PASS"
+        },
+        {
+          "name": "saveAsOneBloodTestNeedsTheConfirmation",
+          "status": "PASS"
+        },
+        {
+          "name": "panelDetailEditsTheWholeDrawTakesOutAddsAndDeletes",
+          "status": "PASS"
+        },
+        {
+          "name": "panelsAreCardsAndLooseResultsKeepTheLab01Grouping",
+          "status": "FAIL"
+        }
+      ]
+    },
+    {
+      "file": "TEST-net.plainnotes.app.LabContextUiTest.xml",
+      "sha256": "c6690549b1597262b9c5955dbd843962a5f9a3aff5e80d4673e4603fed8f5237",
+      "tests": 1,
+      "failures": 0,
+      "skipped": 0,
+      "cases": [
+        {
+          "name": "historicalVersionCanBeViewedAndRebuildingRequiresExplicitAction",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "file": "TEST-net.plainnotes.app.LabUi03HomeTest.xml",
+      "sha256": "642f609fdc1c115076716e4ec59f3763ff6ac2f5eba9fe5e28de9b4d21d9f0f4",
+      "tests": 5,
+      "failures": 0,
+      "skipped": 0,
+      "cases": [
+        {
+          "name": "metricFilterRetainsUnifiedCardsAndExistingTrend",
+          "status": "PASS"
+        },
+        {
+          "name": "expansionExposesEveryOriginalResultAndDeleteUsesOriginalRow",
+          "status": "PASS"
+        },
+        {
+          "name": "oneSidedRangesUnknownUnitsAndFlagsAreNeverClinicalJudgements",
+          "status": "PASS"
+        },
+        {
+          "name": "formalSingletonAndLegacySingletonShareHomeCardsAndKeepOriginalIdentity",
+          "status": "PASS"
+        },
+        {
+          "name": "filtersAndNoResultsDoNotInvokeWritesAndBatchActionUsesExistingCallback",
+          "status": "PASS"
+        }
+      ]
+    }
+  ],
+  "finding": "Two prior singleton selectors expected plain text; new LabGroupRow intentionally uses merged spoken name/value/unit. No new-home or context failures. Replace selectors with exact original-id spoken-content checks; do not remove semantic/CRUD assertions."
+}

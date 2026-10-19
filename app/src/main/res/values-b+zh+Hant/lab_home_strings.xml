@@ -16,4 +16,7 @@
     <string name="lab_home_category_lipids">血脂</string>
     <string name="lab_home_category_metabolism">血糖及代謝</string>
     <string name="lab_home_category_other">其他</string>
+    <string name="lab_home_range_high">高於輸入的報告參考範圍</string>
+    <string name="lab_home_range_low">低於輸入的報告參考範圍</string>
+    <string name="lab_home_more">%1$s 的操作</string>
 </resources>
