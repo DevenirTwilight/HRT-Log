@@ -79,6 +79,8 @@ dependencies {
     androidTestCompileOnly(libs.room.runtime); androidTestCompileOnly(libs.sqlite)
     androidTestImplementation(libs.android.test.runner); androidTestImplementation(libs.android.test.core); androidTestImplementation(libs.junit4)
     androidTestImplementation(platform(libs.compose.bom)); androidTestImplementation(libs.compose.ui.test)
+    // Already a Compose ui-test runtime dependency; expose only its existing API to native tests.
+    androidTestCompileOnly("androidx.test.espresso:espresso-core:3.5.0") { isTransitive = false }
     // MED-02A synthetic POC: excluded from main/debug/release runtime dependencies.
     androidTestImplementation(project(":attachment-poc"))
     // B2-GATE comparison only: no application runtime or release dependency.
