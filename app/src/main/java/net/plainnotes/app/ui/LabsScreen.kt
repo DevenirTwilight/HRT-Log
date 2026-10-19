@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import net.plainnotes.app.R
 import net.plainnotes.app.conc.ConcentrationCalculator
 import net.plainnotes.app.data.LabPanelEntity
@@ -138,6 +139,7 @@ private fun max(a: Double, b: Double) = if (a > b) a else b
     val loV = lo.toDoubleOrNull(); val hiV = hi.toDoubleOrNull()
     val rangeOk = (lo.isBlank() || loV != null) && (hi.isBlank() || hiV != null) && (loV == null || hiV == null || loV <= hiV)
     AlertDialog(onDismissRequest = onDismiss, icon = { Icon(Icons.Outlined.Science, null) }, title = { Text(stringResource(if (initial == null) R.string.lab_add else R.string.lab_edit)) },
+        properties = DialogProperties(dismissOnBackPress = true),
         text = { Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             val p4 = code in P4_CODES
             DropdownField(stringResource(R.string.lab_analyte), ANALYTES.map { it.code }.filter { it !in P4_CODES || it == "P4" }, if (p4) "P4" else code,
@@ -184,7 +186,7 @@ private fun max(a: Double, b: Double) = if (a > b) a else b
 /** Read the original lab and its frozen context; no duplicate row, inferred visit association, or new estimate. */
 @Composable fun LabDetailDialog(v:LabValueEntity,contexts:List<net.plainnotes.app.data.LabContextEntity>,onDismiss:()->Unit,onEdit:()->Unit) {
     val local=Instant.ofEpochMilli(v.sampled_utc).atZone(ZoneId.of(v.sampled_zone))
-    AlertDialog(onDismissRequest=onDismiss,title={Text(analyteLabel(v.analyte_code))},text={Column(Modifier.heightIn(max=320.dp).verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(8.dp)) {
+    AlertDialog(onDismissRequest=onDismiss,title={Text(analyteLabel(v.analyte_code))},properties = DialogProperties(dismissOnBackPress = true),text={Column(Modifier.heightIn(max=320.dp).verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(8.dp)) {
         Text(displayNumber(v.value)+" "+v.unit)
         Text(formatDate(local.toLocalDate())+" · "+formatTime(local.toLocalTime())+" · "+v.sampled_zone)
         if(v.reference_lower!=null || v.reference_upper!=null)Text(stringResource(R.string.lab_range_value,v.reference_lower?.let{displayNumber(it)} ?: "–",v.reference_upper?.let{displayNumber(it)} ?: "–",v.reference_unit ?: ""))
