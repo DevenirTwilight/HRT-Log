@@ -38,6 +38,20 @@
     "diff": "+5/-3 lines in LabsScreen.kt; panel UI is in LabBatchEntry.kt and LabPanelDetail.kt"
    },
    "human_review": "recommended: check that the LabsScreen diff stays within the approved scope."
+  },
+  {
+   "id": "PD-2026-10-19-LAB03-CATALOG-ADAPTER",
+   "file": "app/src/main/java/net/plainnotes/app/ui/LabsScreen.kt",
+   "approver": "DevenirTwilight",
+   "date": "2026-10-19",
+   "scope": "LAB-03: extract catalogue adapters, add predefined analytes and per-analyte unit choices, searchable draft-only selector; preserve unchanged original numeric precision, sample instant/zone and independent reference unit during editing. Legacy fourteen Double factor pairs and PK/calibration/trend algorithm unchanged. No schema/backup/inventory changes.",
+   "previous_sha256": "22ed83c3edeaa2fd504ad4ff45e5dd5e3b4c7c3c9e406558bdeb991e6a4ebddb",
+   "new_sha256": "ed2340f3d19f6104e6f7b95968ee2cd1cb4975ac4bf4431754cb38b77422ac75",
+   "evidence": {
+    "commit": "7196422a60c4c56b4ce75300abfb129086d7d949",
+    "path": "docs/REQUIREMENTS.md"
+   },
+   "owner_decision": "REQUIREMENTS §114, user LAB-03 task sections 4, 5 and 8; exact source integrated with independent LAB-UI-03 requires final-file evidence, not an assumption that either branch validates the other."
   }
  ]
 }

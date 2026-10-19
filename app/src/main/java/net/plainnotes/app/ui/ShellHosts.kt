@@ -80,12 +80,20 @@ import java.time.Instant
     var saveAs by mutableStateOf<List<LabValueEntity>?>(null)
 }
 
-@Composable internal fun LabEditDialog(l: LabDialogs, model: NotesViewModel, labs: List<LabValueEntity> = emptyList()) {
+@Composable internal fun LabEditDialog(l: LabDialogs, model: NotesViewModel, labs: List<LabValueEntity> = emptyList(), retained:LabUiState?=null) {
     // LAB-01: "add" opens the batch form; editing one result keeps the single dialog, with the split hint when it is shown in a draw card.
-    if (l.labNew && l.labEdit == null) LabBatchDialog({ if (!l.batchSaving) { l.labNew = false; l.batchFailed = false } }, { values, estimate ->
+    if (l.labNew && l.labEdit == null) LabBatchDialog({ if (!l.batchSaving) { l.labNew = false; l.batchFailed = false;retained?.discardDraft() } }, submit@{ values, estimate ->
+        if(l.batchSaving)return@submit
+        val token=retained?.token
         l.batchSaving = true; l.batchFailed = false
-        model.saveLabs(values, estimate) { ok -> l.batchSaving = false; if (ok) l.labNew = false else l.batchFailed = true }
-    }, saving = l.batchSaving, failed = l.batchFailed)
+        model.saveLabs(values, estimate) { ok ->
+            // A result from a discarded/locked session cannot clear a newer draft (ABA).
+            if(retained==null || retained.token===token) {
+                l.batchSaving = false
+                if(ok){l.labNew=false;retained?.discardDraft()}else l.batchFailed=true
+            }
+        }
+    }, saving = l.batchSaving, failed = l.batchFailed, draft=retained?.draft)
     else if (l.labEdit != null) LabDialog(l.labEdit, { l.labNew = false; l.labEdit = null }, { model.saveLab(it); l.labNew = false; l.labEdit = null },onSaveWithEstimate={v,estimate->model.saveLab(v,estimate);l.labNew=false;l.labEdit=null},
         inGroup = l.labEdit!!.let { e -> e.panel_id != null || labGroups(labs.filter { it.panel_id == null }).any { g -> g.size > 1 && g.any { it.id == e.id } } })
 }
@@ -94,7 +102,7 @@ import java.time.Instant
 @Composable internal fun LabPanelHost(l: LabDialogs, model: NotesViewModel, extra: NotesViewModel.ExtraState) {
     l.panel?.let { id -> extra.labPanels.firstOrNull { it.id == id }?.let { p ->
         LabPanelDialog(p, extra.labs.filter { it.panel_id == id }.sortedBy { v -> ANALYTES.indexOfFirst { it.code == v.analyte_code }.let { if (it < 0) ANALYTES.size else it } },
-            { l.panel = null }, { time, lab, note -> model.saveLabPanel(id, time, lab, note) }, { l.labEdit = it }, { model.removeFromLabPanel(it) },
+            { l.panel = null }, { time, lab, note -> model.saveLabPanel(p, time, lab, note) }, { l.labEdit = it }, { model.removeFromLabPanel(it) },
             { values, estimate -> model.addToLabPanel(id, values, estimate) }, { l.panel = null; model.deleteLabPanel(id) })
     } ?: run { l.panel = null } }
     l.saveAs?.let { g -> LabSaveAsPanelDialog(g, { l.saveAs = null }) { l.saveAs = null; model.groupAsLabPanel(g) } }
