@@ -1,3 +1,13 @@
+## P4 与中心测试当前状态 — 2026-10-19
+
+P4当前基线95108693：451 data/43 App/44工具本地PASS，API26/29修正后的UTF8对照随工程检查通过；原生39262621431已完整跑完备份/恢复/采样，但三写11.076/10.263/10.928秒>5，仍DRAFT/PRODUCTION_BLOCKED/OFF。3b53编码回归与备份阶段进程退出的原证据继续保留；本轮未复现退出不等于根因已解决。下一步只增加票据捕获/复核的测试后分解，保持原始预算/fixture及所有全量检查。
+
+#88/source dfa7369b 已在全部必需CI和实际26/29/35后受保护合并dd871cc6；API29首次附件POC65/70后45分钟取消，单次完整同源job重放通过，原记录保留，不把挂起归因已证明。现普通同步已审dd主线，未复制未验收分支。build33已私密提供，源码219bbf32与原主线42六CI全PASS，正式收据#87新21a10430正在CI；以下“准备中/原生待验”为当时历史记录，不重做签名或交付。P5/P6、正式附件仍未启用，无新APK。
+
+## build33 交付及后续原生测试复核 — 2026-10-19
+
+build33原签名成品已通过仅owner Drive私密提供，独立下载SHA/证书一致（正式收据PR87待合并，不含私有链接）；源码219bbf32及受保护主线42bfa99f的六CI现全部PASS，未改公开Release。PR87后续API26有一次真实返回断言失败，不能因只改文档而忽略；下方历史“准备中”保留为当时记录。本分支仅修正测试输入准备：既有Espresso3.5.0等待焦点后单次Back，所有测试主体及断言逐字相同；compileOnly暴露既有runtime坐标，无新增运行时依赖。首次编译因runtime-only不可见实际FAIL，修正可见性后原生Kotlin编译PASS，尚待新源CI/26/29/35，不能宣称已修好原失败或产品缺陷。详见docs/centers/back-input-sync-*及同步说明，不新增APK。
+
 ## build33 两个中心测试包准备中 — 2026-10-19
 
 负责人要求“给个apk”；独立交付分支 delivery/build33-centers-20261019，基线默认分支 86131172，包含 #82 中心与 #85 状态恢复，唯一应用变更 versionCode 32→33。未合并/复制 P4 #57 或 #58/#59，原 Room12/备份业务11/PK/权限与正式证书不变。需本 HEAD 六必需 CI、PeriodStability、fullRelease 干净来源、正式签名/16KB 对齐/无 INTERNET/附件隔离全部通过再交付；当前 BUILD_PENDING，签名/交付 NOT_RUN。只会话私密交付，不动公开 Release；完成后另追加真实证据及交付账本。独立 P4 工作树保留其未完成性能候选，不参与本包。
@@ -2109,3 +2119,8 @@ b17178ec 六必需工程CI在push/PR全部PASS，原生39250115453仍真实FAIL�
 新增只在测试和原collector结束后才执行的内核尾部诊断：仅完成的失败退出才重验emulator/QEMU/API26并只读dmesg最后80行；成功或未完成退出不读，超时5秒、保留stdout<=64KiB/stderr<=8KiB并标明裁剪/拒绝/未知，不解析为OOM结论或预算PASS。5项新测试先RED后PASS，全部44项ANSMPython工具测试PASS；post-run-kernel-*保存证据。原fixture、512MiB/192MiB限制、原预算、原exit传播、生产备份密码学/格式均未改变。新的实际捕获仍待验。
 
 #57仍DRAFT/PRODUCTION_BLOCKED/正式入口OFF，P5P6未实施，无新APK。独立#88最新dfa7369b其余检查成功但仍有一轮API29未结束；另一次API29及两轮26/35已通过，26/29目标方法工件已实际核验，待全部结束后普通受保护合并再同步#87；不跳过、不复制未验收分支。
+
+
+### 中心原生 Back 测试输入同步复核 — 2026-10-19
+
+交付收据#87 source152f0908/API26 push39253001557 job118061193730真实FAIL：InAppNavigationLockAndroidTest:184，按Back后reference-window仍存在。build33成品source219bbf32本身push/PR六CI全PASS，不能用新失败改写旧通过，也不能忽略后续失败。隔离修复分支只将测试raw Back输入改用既有Espresso.pressBack，等待布局与焦点，原所有断言/单次Back/认证/文件拦截/真实离开锁定保持。焦点竞争目前为待原生复核假设，不声称已证明。Android测试编译与新源26/29/35验证待跑；不修改生产UI、不重新出APK。详细docs/centers/back-input-synchronization-2026-10-19.md。#87原失败保留，待本修复受保护合并后同步该分支再验。
