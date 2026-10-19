@@ -1,0 +1,26 @@
+{
+  "tests": 32,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "status": "PASS",
+  "integration": "NOT_IMPLEMENTED: production navigation hook waits for medical A",
+  "matrix": "4 locales x 320/411dp x 1/2 font x light/dark; all 3 contrasts per case",
+  "device": "NOT_RUN",
+  "TalkBack": "NOT_RUN",
+  "sourceBaseline": "ec61d536db3e82624c8921791764f7c064e56ef9",
+  "sourceSha256": {
+    "app/src/main/java/net/plainnotes/app/ui/DrugReferenceCenterScreen.kt": "6a7664360504bb2fce6f2ab68e407d7d11333af1ba9d12679fa3f4db47ba3f33",
+    "app/src/test/java/net/plainnotes/app/DrugCenterMatrixTest.kt": "a9eacf9f1c4aeba32bac30f209cd039de84696ac05b283cd42b8035f703877d4"
+  },
+  "screenshots": {
+    "zh-rTW_320dp_2.0x_light_HIGH.png": "cf35ab848d10e677dbc9ec87d8083957731609b78188e67400e5eb55266914e4",
+    "zh-rCN_320dp_2.0x_dark_HIGH.png": "23a7e296437d120ab79f987c3060b1ae122c3db3b083fbdad83cb4fb366e34cd",
+    "zh-rCN_320dp_2.0x_light_HIGH.png": "f53e7088b604b07a8b08eab90e0e3d4e9117812fb8d3c73d1d88ae20e615fb40",
+    "en_320dp_2.0x_light_HIGH.png": "f7b3b689be974f5491f7189b215a12c6f2b56c3a69caf413c3a1e271733150ec",
+    "fr-rFR_320dp_2.0x_light_HIGH.png": "fe16e4b3cd4e43437741ec395bd3d8cc23a3b956a92d9c922452c2a6c943cf0f",
+    "zh-rTW_320dp_2.0x_dark_HIGH.png": "96afbe64bf0100323ef84316e71a754ba3ec58e4d97275488e869d9091f64fbb",
+    "en_320dp_2.0x_dark_HIGH.png": "3e5f70704c60fb3d556440ba1e217215fa2a21803b51195aa83443b6a4d52cc0",
+    "fr-rFR_320dp_2.0x_dark_HIGH.png": "942f3a76443023d9272f71d30285348557b3167ccf5750fc85b71b77e1241cc8"
+  }
+}

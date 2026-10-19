@@ -2,7 +2,7 @@ package net.plainnotes.app.data
 
 /** PNBAK1 business serialization has an independent version from Room; crypto framing is unchanged. */
 internal object RecordBackupCompatibility {
-    const val SCHEMA = 11
+    const val SCHEMA = 12
     /** Version gate runs before opening any database. The supported maximum is explicit for legacy-reader contract tests. */
     fun readVersion(json: org.json.JSONObject, supported: Int = SCHEMA): Int {
         require(supported>=1)
@@ -17,7 +17,7 @@ internal object RecordBackupCompatibility {
         val rows=tables.optJSONArray("supply_container") ?: return
         for(i in 0 until rows.length()) {
             val row=rows.getJSONObject(i)
-            if(schema<11)require(!row.has("inventory_encoding")) {"Misdeclared inventory backup version"}
+            if(schema<12)require(!row.has("inventory_encoding")) {"Misdeclared inventory backup version"}
             else {
                 require(row.has("inventory_encoding") && row.get("inventory_encoding") is String && row.getString("inventory_encoding") in setOf(InventoryEncoding.LEGACY,InventoryEncoding.EXACT)) {"Missing or invalid inventory encoding"}
                 if(row.getString("inventory_encoding")==InventoryEncoding.EXACT)for(column in listOf("capacity","initial_used_amount","used_amount")) {
@@ -41,7 +41,8 @@ internal object RecordBackupCompatibility {
         "checkin_score" to listOf("date","item_id","value"),
         "day_note" to listOf("date","text"),
         "lab_analyte" to listOf("code","canonical_unit"),
-        "lab_value" to listOf("id","analyte_code","value","unit","sampled_utc","sampled_zone","reference_lower","reference_upper","reference_unit","laboratory","note"),
+        "lab_panel" to listOf("id","uuid","sampled_utc","sampled_zone","laboratory","note","created_utc"),
+        "lab_value" to listOf("id","analyte_code","value","unit","sampled_utc","sampled_zone","reference_lower","reference_upper","reference_unit","laboratory","note","panel_id"),
         "pk_settings" to listOf("id","current_weight_kg"),
         "retained_slot" to listOf("slot_key","rule_id","medication_id","original_utc","at_utc","zone","dose","soon_minutes","late_minutes","tracking_from_utc"),
         "stage_review" to listOf("id","date","effects_json","tolerance_note","risk_note","smoking","systolic","diastolic","weight_kg","satisfaction","satisfaction_note"),

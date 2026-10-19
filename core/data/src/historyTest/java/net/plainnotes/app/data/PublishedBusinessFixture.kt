@@ -7,9 +7,10 @@ import org.json.JSONObject
 
 /** Test-only reader for published pre-marker fixtures; never a production export/downgrade path. */
 internal object PublishedBusinessFixture {
-    fun dump(db:SupportSQLiteDatabase,tables:List<String> = DOMAIN_TABLES):JSONObject = JSONObject().apply {
+    fun dump(db:SupportSQLiteDatabase,tables:List<String> = DOMAIN_TABLES,schema:Int=10):JSONObject = JSONObject().apply {
         for(table in tables) {
-            val columns=RecordBackupCompatibility.columns.getValue(table).filterNot{table=="supply_container" && it=="inventory_encoding"}
+            if(schema<11 && table=="lab_panel")continue
+            val columns=RecordBackupCompatibility.columns.getValue(table).filterNot{(table=="supply_container" && it=="inventory_encoding") || (schema<11 && table=="lab_value" && it=="panel_id")}
             val rows=JSONArray()
             db.query("SELECT ${columns.joinToString(","){"`$it`"}} FROM `$table`").use { c ->while(c.moveToNext())rows.put(JSONObject().apply {
                 for(i in 0 until c.columnCount)put(c.getColumnName(i),when(c.getType(i)) {

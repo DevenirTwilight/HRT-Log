@@ -1247,4 +1247,44 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="test_out_permission">bloquée : autorisation de notification non accordée</string>
 <string name="test_out_app">bloquée : les notifications de l’app sont désactivées</string>
 <string name="test_out_channel">bloquée : la catégorie de notification des rappels est désactivée</string>
+<string name="today_in_hours">Dans %1$d h</string>
+<string name="today_in_minutes">Dans %1$d min</string>
+<string name="home_stock_low">%1$s : bientôt épuisé</string>
+<string name="home_stock_more">%1$d de plus</string>
+<string name="stock_about_days">environ %1$d jours</string>
+<string name="period_since">Depuis le %1$s</string>
+<string name="drawer_stock_badge">Stock : %1$d bientôt épuisé(s)</string>
+<string name="medical_in_days">dans %1$d jours</string>
+<string name="medical_next_questions">Questions à poser · %1$d</string>
+<string name="medical_next_pack">Dossier de consultation</string>
+<!-- LAB-01 batch lab entry -->
+<string name="lab_batch_title">Enregistrer une prise de sang</string>
+<string name="lab_batch_add_row">Ajouter une analyse</string>
+<string name="lab_batch_presets">Ensembles courants</string>
+<string name="lab_preset_hormones">Six hormones</string>
+<string name="lab_preset_liver">Foie</string>
+<string name="lab_preset_kidney">Rein et électrolytes</string>
+<string name="lab_group_count">%1$d analyses</string>
+<string name="lab_batch_duplicate">Cette analyse figure déjà dans cette saisie</string>
+<string name="lab_group_split_hint">Si vous modifiez l\'heure ou le laboratoire, ce résultat s\'affichera seul</string>
+<string name="lab_flag_high">Élevé</string>
+<string name="lab_flag_low">Bas</string>
+<string name="lab_filter_all">Tout</string>
+<string name="lab_batch_remove_row">Supprimer l\'analyse %1$d</string>
+<string name="lab_row_spoken">%1$s, %2$s, %3$s</string>
+<string name="lab_row_spoken_flag">, %1$s</string>
+<string name="lab_batch_failed">Rien n\'a été enregistré. Votre saisie est conservée.</string>
+<!-- LAB-02 lab panels -->
+<string name="trash_kind_lab_panel">Prise de sang</string>
+<string name="lab_panel_title">Prise de sang</string>
+<string name="lab_panel_save_as">Enregistrer comme une prise de sang</string>
+<string name="lab_panel_save_as_body">Ces résultats seront regroupés en une seule prise de sang. Leurs valeurs et heures ne changent pas.</string>
+<string name="lab_panel_note">Note pour cette prise de sang</string>
+<string name="lab_panel_save_changes">Enregistrer les modifications</string>
+<string name="lab_panel_save_added">Enregistrer les nouvelles analyses</string>
+<string name="lab_panel_remove_member">Retirer %1$s de cette prise de sang</string>
+<string name="lab_panel_delete">Supprimer cette prise de sang</string>
+<string name="lab_panel_delete_confirm">La prise de sang et ses %1$d résultats vont ensemble dans la corbeille.</string>
+<string name="lab_panel_open">Ouvrir cette prise de sang</string>
+<string name="lab_panel_members">Résultats</string>
 </resources>

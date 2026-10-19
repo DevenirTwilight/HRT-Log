@@ -1,0 +1,22 @@
+{
+  "status": "FAIL_SECOND_INTEGRATION_RUN",
+  "totals": {
+    "tests": 439,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0
+  },
+  "failures": [
+    {
+      "suite": "net.plainnotes.app.data.ReferenceMigrationTest",
+      "test": "failedMainTwelveToThirteenFenceKeepsPanelLinksLegacyBitsAndEpoch",
+      "message": "java.lang.IllegalArgumentException: Failed requirement.",
+      "frames": [
+        "at net.plainnotes.app.data.InventoryEncoding.install(InventoryEncoding.kt:19)",
+        "at net.plainnotes.app.data.SchemaGuards.install(SchemaGuards.kt:54)",
+        "at net.plainnotes.app.data.ReferenceMigrationContract.failedMainTwelveToThirteenFenceKeepsPanelLinksLegacyBitsAndEpoch(ReferenceMigrationContract.kt:179)"
+      ],
+      "xml_sha256": "1227097a620e226da7398533db7d07958a9f3ecda35cfa02a7a3afd40ae4754d"
+    }
+  ]
+}

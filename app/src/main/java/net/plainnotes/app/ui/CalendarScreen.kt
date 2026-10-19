@@ -102,8 +102,10 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
                 { MedicationSnapshot.decode(it.config_snapshot, it.medication_id)?.medication(it.medication_id) }, onComplete, onChange,
                 records = todayRecords, appointments = todayAppts, onAppointment = onAppointment)
         }
+        // UI-05 B: what needs doing stays at the top: low stock right under the today card, before the calendar.
+        item(key = "stock") { HomeStockCard(state.medications.filter { it.active }, runOut, today, zone, onStock, onAddStock) }
         item {
-            Surface(shape = MaterialTheme.shapes.extraLarge, color = MaterialTheme.colorScheme.surfaceContainerLow, modifier = Modifier.fillMaxWidth()) {
+            Surface(shape = MaterialTheme.shapes.extraLarge, color = MaterialTheme.colorScheme.surfaceContainerLow, modifier = Modifier.fillMaxWidth().testTag("calendar-card")) {
                 Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     PeriodBar(view, selected, today, { select(it) })
                     AdaptiveChoice(CalView.entries.map{stringResource(it.label)},CalView.entries.indexOf(view),{view=CalView.entries[it]},selectionIcon=false)
@@ -129,7 +131,6 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
             items(dayRecords, key = { "r${it.id}" }) { r -> Box(Modifier.testTag("day-record:${r.id}")) { RecordLine(r, MedicationSnapshot.decode(r.config_snapshot,r.medication_id)?.medication(r.medication_id)) } }
             items(dayAppts, key = { "a${it.id}" }) { a -> Box(Modifier.testTag("day-appt:${a.id}")) { AppointmentCard(a) { onAppointment(a) } } }
         }
-        item(key = "stock") { HomeStockCard(state.medications.filter { it.active }, runOut, today, zone, onStock, onAddStock) }
     }
 }
 

@@ -287,6 +287,7 @@ const val BACKFILL_MAX_DAYS=731L
                     Trash.NOTE->setNote(LocalDate.parse(row.getString("date")),"",now)
                     Trash.SYMPTOM->if(dao.symptomChecks(row.getString("date"),row.getString("date")).any{it.group_id==row.getString("group_id")})setSymptomCheck(LocalDate.parse(row.getString("date")),row.getString("group_id"),false)
                 }
+                if(t.kind==Trash.LAB)relinkLabPanel(dao,payload)
                 Trash.reinsert(sql(),payload)
             }
             Trash.RECORD->{val r=requireNotNull(dao.recordById(t.ref.toLong()));require(r.deleted_at_utc!=null)
@@ -326,6 +327,15 @@ const val BACKFILL_MAX_DAYS=731L
         }
         AttachmentIdentity.restored(sql(),t)
         sql().execSQL("DELETE FROM trash_item WHERE id=?",arrayOf(id))
+    }
+    /** LAB-02 §5: back into its panel only by the panel's uuid and only if time, zone and laboratory still match; otherwise on its own. */
+    private suspend fun relinkLabPanel(dao:NotesDao,payload:JSONObject) {
+        val tables=payload.getJSONObject("tables");if(tables.has("lab_panel"))return
+        val row=tables.getJSONArray("lab_value").getJSONObject(0);if(row.isNull("panel_id") && !payload.has("panel_uuid"))return
+        val p=payload.optString("panel_uuid").takeIf{it.isNotEmpty()}?.let{dao.labPanelByUuid(it)}
+        val fits=p!=null && p.sampled_utc==row.getLong("sampled_utc") && p.sampled_zone==row.getString("sampled_zone") &&
+            (if(row.isNull("laboratory"))null else row.getString("laboratory"))==p.laboratory
+        row.put("panel_id",if(fits)p!!.id else JSONObject.NULL)
     }
     private fun purgeKeys(keys:Collection<String>) {
         if(keys.isEmpty())return
@@ -797,8 +807,10 @@ const val BACKFILL_MAX_DAYS=731L
         val tables=json.getJSONObject("tables")
         require(schema>=10 || ReferenceSchema.businessTables.none {tables.has(it)}) { "Misdeclared reference backup version" }
         RecordBackupCompatibility.validateInventoryVersion(schema,tables)
-        val required=DOMAIN_TABLES.filterNot{(schema<2 && it in listOf("stage_review","symptom_check","review_effect")) || (schema<4 && it in listOf("regimen_version","regimen_rule_link","milestone")) || (schema<5 && it=="lab_context_revision") || (schema<6 && it in listOf("visit_question","visit_pack")) || (schema<7 && it in listOf("history_period_revision","record_annotation")) || (schema<9 && it=="trash_item") || (schema<10 && it in ReferenceSchema.businessTables)}
+        val required=DOMAIN_TABLES.filterNot{(schema<2 && it in listOf("stage_review","symptom_check","review_effect")) || (schema<4 && it in listOf("regimen_version","regimen_rule_link","milestone")) || (schema<5 && it=="lab_context_revision") || (schema<6 && it in listOf("visit_question","visit_pack")) || (schema<7 && it in listOf("history_period_revision","record_annotation")) || (schema<9 && it=="trash_item") || (schema<10 && it in ReferenceSchema.businessTables) || (schema<11 && it=="lab_panel")}
         require(required.all{tables.has(it)}) { "Incomplete backup" }
+        // LAB-02: an older backup has no panels; its results are restored ungrouped, never regrouped by time, laboratory or id.
+        require(schema>=11 || ((tables.optJSONArray("lab_panel")?.length() ?: 0)==0 && tables.optJSONArray("lab_value")?.let{a->(0 until a.length()).all{a.getJSONObject(it).isNull("panel_id")}}!=false)) { "Misdeclared lab panel backup version" }
         val db=access.get(target)
         db.withTransaction {
             val sql=db.openHelper.writableDatabase
@@ -974,14 +986,65 @@ const val BACKFILL_MAX_DAYS=731L
         dao.labContext(LabContextEntity(lab_id=lab.id,revision=(old?.revision ?: 0)+1,captured_utc=captured,origin=origin,context_json=json))
     }
     suspend fun saveLab(value:LabValueEntity,now:Instant=Instant.now(),recapture:Boolean=false,estimate:suspend(NotesDao,LabValueEntity)->String?={_,_->null})=transaction { dao ->
-        require(value.value.isFinite() && value.value>0 && value.analyte_code.isNotBlank() && value.unit.isNotBlank())
-        ZoneId.of(value.sampled_zone)
-        val old=if(value.id==0L)null else requireNotNull(dao.labs().singleOrNull{it.id==value.id})
+        writeLab(dao,value,now,recapture,estimate)
+    }
+    /**
+     * LAB-01 + LAB-02: several new results from one sample in one transaction, each written exactly as [saveLab] writes it,
+     * as one new lab panel (ADR Q6); any failure keeps none.
+     */
+    suspend fun saveLabs(values:List<LabValueEntity>,now:Instant=Instant.now(),recapture:Boolean=false,estimate:suspend(NotesDao,LabValueEntity)->String?={_,_->null})=transaction { dao ->
+        require(values.isNotEmpty() && values.all{it.id==0L && it.panel_id==null})
+        val first=values.first();val lab=first.laboratory?.trim()?.ifEmpty{null}
+        require(values.all{it.sampled_utc==first.sampled_utc && it.sampled_zone==first.sampled_zone && it.laboratory?.trim()?.ifEmpty{null}==lab})
+        val panel=dao.insertLabPanel(LabPanelEntity(uuid=java.util.UUID.randomUUID().toString(),sampled_utc=first.sampled_utc,sampled_zone=first.sampled_zone,laboratory=lab,created_utc=now.toEpochMilli()))
+        values.forEach{writeLab(dao,it.copy(laboratory=lab,panel_id=panel),now,recapture,estimate)}
+    }
+    suspend fun labPanels()=withContext(Dispatchers.IO){db().dao().labPanels()}
+    /** LAB-02: time, zone, laboratory and note of the whole draw; members follow in the same transaction (new SAMPLE_CHANGED contexts, old ones kept). */
+    suspend fun saveLabPanel(id:Long,sampledUtc:Long,zone:String,laboratory:String?,note:String?,now:Instant=Instant.now())=transaction { dao ->
+        ZoneId.of(zone);val p=requireNotNull(dao.labPanel(id));val lab=laboratory?.trim()?.ifEmpty{null}
+        dao.updateLabPanel(p.copy(sampled_utc=sampledUtc,sampled_zone=zone,laboratory=lab,note=note?.trim()?.ifEmpty{null}))
+        dao.panelMembers(id).forEach{writeLab(dao,it.copy(sampled_utc=sampledUtc,sampled_zone=zone,laboratory=lab),now,false){_,_->null}}
+    }
+    /** LAB-02: new results added to an existing draw take its time, zone and laboratory. */
+    suspend fun addToLabPanel(id:Long,values:List<LabValueEntity>,now:Instant=Instant.now(),recapture:Boolean=false,estimate:suspend(NotesDao,LabValueEntity)->String?={_,_->null})=transaction { dao ->
+        val p=requireNotNull(dao.labPanel(id));require(values.isNotEmpty() && values.all{it.id==0L})
+        values.forEach{writeLab(dao,it.copy(sampled_utc=p.sampled_utc,sampled_zone=p.sampled_zone,laboratory=p.laboratory,panel_id=id),now,recapture,estimate)}
+    }
+    /** LAB-02: the result stays, shown on its own; an emptied panel is removed (nothing in it to restore). */
+    suspend fun removeFromLabPanel(labId:Long)=transaction { dao ->
+        val l=requireNotNull(dao.labs().singleOrNull{it.id==labId});val panel=requireNotNull(l.panel_id)
+        dao.updateLab(l.copy(panel_id=null));dropEmptyPanel(dao,panel)
+    }
+    /**
+     * LAB-02 "save as one blood test" (ADR §3): only on the user's confirmation, only results that have no panel yet and
+     * share exactly the same sample time and zone and the same trimmed laboratory. Their sample does not change, so no new context.
+     */
+    suspend fun groupAsLabPanel(labIds:List<Long>,now:Instant=Instant.now())=transaction { dao ->
+        val labs=dao.labs().filter{it.id in labIds};require(labIds.distinct().size>=2 && labs.size==labIds.distinct().size && labs.all{it.panel_id==null})
+        val first=labs.first();val lab=first.laboratory?.trim()?.ifEmpty{null}
+        require(labs.all{it.sampled_utc==first.sampled_utc && it.sampled_zone==first.sampled_zone && it.laboratory?.trim()?.ifEmpty{null}==lab})
+        val panel=dao.insertLabPanel(LabPanelEntity(uuid=java.util.UUID.randomUUID().toString(),sampled_utc=first.sampled_utc,sampled_zone=first.sampled_zone,laboratory=lab,created_utc=now.toEpochMilli()))
+        labs.forEach{dao.updateLab(it.copy(laboratory=lab,panel_id=panel))}
+        panel
+    }
+    private suspend fun dropEmptyPanel(dao:NotesDao,panel:Long){if(dao.panelMembers(panel).isEmpty())dao.deleteLabPanel(panel)}
+    private suspend fun writeLab(dao:NotesDao,input:LabValueEntity,now:Instant,recapture:Boolean,estimate:suspend(NotesDao,LabValueEntity)->String?) {
+        require(input.value.isFinite() && input.value>0 && input.analyte_code.isNotBlank() && input.unit.isNotBlank())
+        ZoneId.of(input.sampled_zone)
+        val old=if(input.id==0L)null else requireNotNull(dao.labs().singleOrNull{it.id==input.id})
+        // LAB-02: an edit never changes membership by itself (the single dialog does not carry panel_id), except that a member
+        // whose time, zone or laboratory no longer matches its panel leaves it (ADR Q1).
+        val member=if(old==null)input.panel_id else old.panel_id
+        val panel=member?.let{requireNotNull(dao.labPanel(it))}
+        val same=panel!=null && input.sampled_utc==panel.sampled_utc && input.sampled_zone==panel.sampled_zone && input.laboratory?.trim()?.ifEmpty{null}==panel.laboratory
+        val value=if(panel==null)input.copy(panel_id=null) else if(same)input.copy(laboratory=panel.laboratory,panel_id=panel.id) else {require(old!=null);input.copy(panel_id=null)}
         dao.analyte(AnalyteEntity(value.analyte_code,value.unit))
         val saved=if(value.id==0L)value.copy(id=dao.insertLab(value)) else value.also{dao.updateLab(it)}
         val sampleChanged=old!=null && (old.sampled_utc!=value.sampled_utc || old.sampled_zone!=value.sampled_zone || old.analyte_code!=value.analyte_code)
         if(old==null || sampleChanged || recapture)
             captureLab(dao,saved,if(old==null)"AT_ENTRY" else if(sampleChanged)"SAMPLE_CHANGED" else "RECONSTRUCTED",now,estimate(dao,saved))
+        if(old?.panel_id!=null && value.panel_id==null)dropEmptyPanel(dao,old.panel_id)
     }
     suspend fun rebuildLabContext(id:Long,now:Instant=Instant.now(),estimate:suspend(NotesDao,LabValueEntity)->String?={_,_->null})=transaction { dao ->
         val lab=requireNotNull(dao.labs().singleOrNull{it.id==id})
@@ -991,8 +1054,23 @@ const val BACKFILL_MAX_DAYS=731L
     suspend fun deleteLab(id:Long,now:Instant=Instant.now())=transaction { dao ->
         val lab=Trash.rows(sql(),"lab_value","id=?",arrayOf(id));if(lab.length()==0)return@transaction
         val l=lab.getJSONObject(0);val day=Instant.ofEpochMilli(l.getLong("sampled_utc")).atZone(ZoneId.of(l.getString("sampled_zone"))).toLocalDate().toString()
-        Trash.insert(sql(),Trash.LAB,"$id",day,Trash.payload("lab_value" to lab,"lab_context_revision" to Trash.rows(sql(),"lab_context_revision","lab_id=? ORDER BY revision",arrayOf(id))),now.toEpochMilli())
-        dao.deleteLab(id) }
+        val contexts=Trash.rows(sql(),"lab_context_revision","lab_id=? ORDER BY revision",arrayOf(id))
+        // LAB-02 §5: a member remembers its panel by uuid; the last member takes the emptied panel with it.
+        val panel=if(l.isNull("panel_id"))null else requireNotNull(dao.labPanel(l.getLong("panel_id")))
+        val last=panel!=null && dao.panelMembers(panel.id).size==1
+        val payload=if(last)Trash.payload("lab_panel" to Trash.rows(sql(),"lab_panel","id=?",arrayOf(panel!!.id)),"lab_value" to lab,"lab_context_revision" to contexts)
+            else Trash.payload("lab_value" to lab,"lab_context_revision" to contexts).apply{panel?.let{put("panel_uuid",it.uuid)}}
+        Trash.insert(sql(),Trash.LAB,"$id",day,payload,now.toEpochMilli())
+        dao.deleteLab(id);if(last)dao.deleteLabPanel(panel!!.id) }
+    /** LAB-02 §5: the whole draw, its results and their frozen contexts as one bin item; restored and purged together. */
+    suspend fun deleteLabPanel(id:Long,now:Instant=Instant.now())=transaction { dao ->
+        val p=requireNotNull(dao.labPanel(id));val members=dao.panelMembers(id)
+        val day=Instant.ofEpochMilli(p.sampled_utc).atZone(ZoneId.of(p.sampled_zone)).toLocalDate().toString()
+        val ids=members.joinToString(","){it.id.toString()}
+        Trash.insert(sql(),Trash.LAB_PANEL,p.uuid,day,Trash.payload("lab_panel" to Trash.rows(sql(),"lab_panel","id=?",arrayOf(id)),
+            "lab_value" to Trash.rows(sql(),"lab_value","panel_id=? ORDER BY id",arrayOf(id)),
+            "lab_context_revision" to if(members.isEmpty())org.json.JSONArray() else Trash.rows(sql(),"lab_context_revision","lab_id IN ($ids) ORDER BY lab_id,revision",arrayOf())),now.toEpochMilli())
+        members.forEach{dao.deleteLab(it.id)};dao.deleteLabPanel(id) }
     /** Body weight is a single current PK parameter (no history in V1). */
     suspend fun weight()=withContext(Dispatchers.IO){db().dao().pkSettings()?.current_weight_kg}
     suspend fun setWeight(kg:Double)=transaction { require(kg.isFinite() && kg>0 && kg<1000); it.pkSettings(PkSettingsEntity(1,kg)) }

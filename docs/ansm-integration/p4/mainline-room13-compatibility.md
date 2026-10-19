@@ -1,6 +1,6 @@
 # P4 mainline version collision and compatibility integration — 2026-10-19
 
-Actual default86131172, source5fe9466f plus isolated prefix candidate. Existing owner joint-production/continuation/backend task authorizes necessary non-destructive Room/business-schema evolution; it does not authorize wiping, cryptographic change, catalogue distribution or a new release. This is the concrete compatibility contract before integration, not an implemented migration or admission receipt.
+Actual default86131172, source5fe9466f plus isolated prefix candidate. Existing owner joint-production/continuation/backend task authorizes necessary non-destructive Room/business-schema evolution; it does not authorize wiping, cryptographic change, catalogue distribution or a new release. This contract was frozen before integration. The candidate is now coded with440 local data tests PASS and native test compilation PASS; it is not native acceptance or production admission.
 
 | Boundary | Approved main | Unreleased P4 prototype | Integrated candidate |
 |---|---|---|---|
@@ -34,4 +34,6 @@ Do not replace main12.json or edit the approved11→12 LAB migration. Generate13
 
 Complete old upgrade chain and failed-DDL rollback, frozen approved12 schema hash, actual business11 panel backup/restore, old12-reader/new13 DB refusal, old11-backup-reader/new12 refusal, schema1…11 imports, all candidate measured contracts, lab contracts, backup/replacement/isolation and PeriodStability. Execute native SQLCipher26/29/35; rerun unchanged original API26 large-workload budgets on the final integrated source. Mainline already contains the AppOps grant-wait correction missing from old P4; integrate it ordinarily and execute the original scheduled reminder assertion, never copy an unmerged fix or call the old failure a flake.
 
-State: DESIGN_REVIEWABLE / NOT_IMPLEMENTED_INTEGRATION / PRODUCTION_BLOCKED. No schema or backup production change is implemented by this document. P5/P6 remain gated; physical device/TalkBack NOT_RUN; no signing/APK/Release.
+State: CANDIDATE_CODED / LOCAL_DATA_VERIFIED / PRODUCTION_BLOCKED. Candidate Room13/business12 changes are isolated on PR57; new native and all required CI are pending. P5/P6 remain gated; physical device/TalkBack NOT_RUN; no signing/APK/Release.
+
+Actual local receipts: main861-room13-schema-evidence.json (main12 preserved, only inventory column added), first/second failure receipts, then main861-room13-local-evidence.json (440/0/0/0). App stock/center/PeriodStability regression running; latest merged-head CI/native will be recorded in PR57 without a metadata-only CI loop.

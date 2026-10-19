@@ -886,12 +886,12 @@ abstract class MeasuredConsumptionContract {
         val m=med();val b=box(m)
         val guarded=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space):NotesDatabase {fail("Invalid inventory version opened destination");return db}})
         val password="SYNTHETIC inventory version fixture".toCharArray()
-        for(schema in listOf(10,11)) {
+        for(schema in listOf(10,11,12)) {
             val tables=RawData.dump(raw)
-            if(schema==11)tables.getJSONArray("supply_container").getJSONObject(0).remove("inventory_encoding")
+            if(schema==12)tables.getJSONArray("supply_container").getJSONObject(0).remove("inventory_encoding")
             val data=BackupCodec.encrypt(org.json.JSONObject().put("format",1).put("schema",schema).put("tables",tables).toString().toByteArray(),password)
             try {guarded.restoreBackup(data,password);fail("Inventory schema mismatch accepted")}
-            catch(e:IllegalArgumentException){assertTrue(e.message.orEmpty().contains(if(schema==10)"Misdeclared inventory" else "Missing or invalid inventory"))}
+            catch(e:IllegalArgumentException){assertTrue(e.message.orEmpty().contains(if(schema<12)"Misdeclared inventory" else "Missing or invalid inventory"))}
             finally {data.fill(0)}
         }
         password.fill('\u0000');assertEquals(InventoryEncoding.EXACT,db.dao().container(b.container.id).inventory_encoding)
@@ -905,7 +905,7 @@ abstract class MeasuredConsumptionContract {
         val password="SYNTHETIC schema10 fixture".toCharArray()
         val backup=repository.exportBackup(password)
         val old=org.json.JSONObject(String(BackupCodec.decrypt(backup,password),Charsets.UTF_8))
-        assertEquals(11,old.getInt("schema"));old.put("schema",10)
+        assertEquals(12,old.getInt("schema"));old.put("schema",10)
         PublishedBusinessFixture.stripLegacyEncoding(old.getJSONObject("tables"))
         val encoded=BackupCodec.encrypt(old.toString().toByteArray(),password)
         val before=RawData.dump(raw).toString();val ticket=repository.referenceScope()
@@ -951,11 +951,11 @@ abstract class MeasuredConsumptionContract {
         for(token in listOf("1.0000000000000001","1e0","-0")) {
             val source=RawData.dump(raw).toString().replace("\"used_amount\":0","\"used_amount\":"+token)
             val parsed=BackupJsonReader.read(source)
-            try {RecordBackupCompatibility.validateInventoryVersion(11,parsed);fail("Non-canonical projection accepted: $token")}
+            try {RecordBackupCompatibility.validateInventoryVersion(12,parsed);fail("Non-canonical projection accepted: $token")}
             catch(e:IllegalArgumentException){assertTrue(e.message.orEmpty().contains("Non-integer exact inventory"))}
         }
         val valid=BackupJsonReader.read(RawData.dump(raw).toString())
-        RecordBackupCompatibility.validateInventoryVersion(11,valid)
+        RecordBackupCompatibility.validateInventoryVersion(12,valid)
         assertTrue(valid.getJSONArray("supply_container").getJSONObject(0).get("capacity") is Int)
     }
 
@@ -1023,9 +1023,11 @@ abstract class MeasuredConsumptionContract {
         val backup=repository.exportMeasuredBackup(password,oldEpoch)
         val expected=RawData.dump(raw).toString()
         val header=BackupJsonReader.read(BackupCodec.decrypt(backup,password))
-        assertEquals(11,RecordBackupCompatibility.readVersion(header))
-        try {RecordBackupCompatibility.readVersion(header,10);fail("Old reader accepted new inventory business schema")}
-        catch(_:BackupCodec.NewerBackup){}
+        assertEquals(12,RecordBackupCompatibility.readVersion(header))
+        for(maximum in listOf(10,11)) {
+            try {RecordBackupCompatibility.readVersion(header,maximum);fail("Old reader accepted new inventory business schema")}
+            catch(_:BackupCodec.NewerBackup){}
+        }
         med("SYNTHETIC target-only medication")
         assertNotEquals(expected,RawData.dump(raw).toString())
         repository.restoreMeasuredBackup(backup,password,oldEpoch)

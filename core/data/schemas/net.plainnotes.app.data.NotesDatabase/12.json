@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 12,
-    "identityHash": "682b224fde7b074409afc1b7e53bf512",
+    "identityHash": "93b9eab9134d1ff5360df8c19461b5a5",
     "entities": [
       {
         "tableName": "medication",
@@ -666,7 +666,7 @@
       },
       {
         "tableName": "supply_container",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `medication_id` INTEGER NOT NULL, `capacity` REAL NOT NULL, `initial_used_amount` REAL NOT NULL, `used_amount` REAL NOT NULL, `opened_on` TEXT, `state` TEXT NOT NULL, `source_note` TEXT, `batch` TEXT, `inventory_encoding` TEXT NOT NULL DEFAULT 'LEGACY_SCALAR', FOREIGN KEY(`medication_id`) REFERENCES `medication`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `medication_id` INTEGER NOT NULL, `capacity` REAL NOT NULL, `initial_used_amount` REAL NOT NULL, `used_amount` REAL NOT NULL, `opened_on` TEXT, `state` TEXT NOT NULL, `source_note` TEXT, `batch` TEXT, FOREIGN KEY(`medication_id`) REFERENCES `medication`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
         "fields": [
           {
             "fieldPath": "id",
@@ -718,13 +718,6 @@
             "fieldPath": "batch",
             "columnName": "batch",
             "affinity": "TEXT"
-          },
-          {
-            "fieldPath": "inventory_encoding",
-            "columnName": "inventory_encoding",
-            "affinity": "TEXT",
-            "notNull": true,
-            "defaultValue": "'LEGACY_SCALAR'"
           }
         ],
         "primaryKey": {
@@ -1120,8 +1113,71 @@
         }
       },
       {
+        "tableName": "lab_panel",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `uuid` TEXT NOT NULL, `sampled_utc` INTEGER NOT NULL, `sampled_zone` TEXT NOT NULL, `laboratory` TEXT, `note` TEXT, `created_utc` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "uuid",
+            "columnName": "uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sampled_utc",
+            "columnName": "sampled_utc",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sampled_zone",
+            "columnName": "sampled_zone",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "laboratory",
+            "columnName": "laboratory",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "created_utc",
+            "columnName": "created_utc",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_lab_panel_uuid",
+            "unique": true,
+            "columnNames": [
+              "uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_lab_panel_uuid` ON `${TABLE_NAME}` (`uuid`)"
+          }
+        ]
+      },
+      {
         "tableName": "lab_value",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `analyte_code` TEXT NOT NULL, `value` REAL NOT NULL, `unit` TEXT NOT NULL, `sampled_utc` INTEGER NOT NULL, `sampled_zone` TEXT NOT NULL, `reference_lower` REAL, `reference_upper` REAL, `reference_unit` TEXT, `laboratory` TEXT, `note` TEXT, FOREIGN KEY(`analyte_code`) REFERENCES `lab_analyte`(`code`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `analyte_code` TEXT NOT NULL, `value` REAL NOT NULL, `unit` TEXT NOT NULL, `sampled_utc` INTEGER NOT NULL, `sampled_zone` TEXT NOT NULL, `reference_lower` REAL, `reference_upper` REAL, `reference_unit` TEXT, `laboratory` TEXT, `note` TEXT, `panel_id` INTEGER, FOREIGN KEY(`analyte_code`) REFERENCES `lab_analyte`(`code`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`panel_id`) REFERENCES `lab_panel`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
         "fields": [
           {
             "fieldPath": "id",
@@ -1183,6 +1239,11 @@
             "fieldPath": "note",
             "columnName": "note",
             "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "panel_id",
+            "columnName": "panel_id",
+            "affinity": "INTEGER"
           }
         ],
         "primaryKey": {
@@ -1200,6 +1261,15 @@
             ],
             "orders": [],
             "createSql": "CREATE INDEX IF NOT EXISTS `index_lab_value_analyte_code` ON `${TABLE_NAME}` (`analyte_code`)"
+          },
+          {
+            "name": "index_lab_value_panel_id",
+            "unique": false,
+            "columnNames": [
+              "panel_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_lab_value_panel_id` ON `${TABLE_NAME}` (`panel_id`)"
           }
         ],
         "foreignKeys": [
@@ -1212,6 +1282,17 @@
             ],
             "referencedColumns": [
               "code"
+            ]
+          },
+          {
+            "table": "lab_panel",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "panel_id"
+            ],
+            "referencedColumns": [
+              "id"
             ]
           }
         ]
@@ -3978,7 +4059,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '682b224fde7b074409afc1b7e53bf512')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '93b9eab9134d1ff5360df8c19461b5a5')"
     ]
   }
 }

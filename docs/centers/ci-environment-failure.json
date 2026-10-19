@@ -1,0 +1,20 @@
+{
+  "status": "FAIL",
+  "source": "c981276ecdad56b0858bfc5ff9401dda266f7da8",
+  "run": 39150539530,
+  "job": 117743332682,
+  "check": "attachment-poc-compatibility (29)",
+  "reportedFailures": 18,
+  "causeEvidence": "OutOfMemoryError from first existing core-data backup test; ART reports growth limit16777216 bytes. New center UI does not run in this test APK.",
+  "actualGrowthLimitBytes": 16777216,
+  "sameSourcePeer": {
+    "job": 117743116654,
+    "status": "PASS"
+  },
+  "precedent": "docs/audits/product-quality-2026-10/55-med02b5-b3-gate-design.md section10; prior documented API29 16MiB episode",
+  "manualRetry": "NOT_LAUNCHED: GitHub rejected a targeted job rerun while workflow was running. Then approved PR84 advanced mainline; strict BEHIND requires baseline sync and new final-head CI. No successful rerun has been claimed.",
+  "retainedRisk": "Real16MiB-device backup usability remains unresolved. No KDF/work factor, production largeHeap, emulator heap override, required check or assertion changed.",
+  "newReviewedBaseline": "14da0bdd",
+  "newFinalHeadCI": "PENDING",
+  "physicalDevice": "NOT_RUN"
+}

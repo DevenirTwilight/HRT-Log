@@ -4,6 +4,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Inventory2
 import androidx.compose.material.icons.outlined.MoreVert
+import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.Remove
+import androidx.compose.material.icons.automirrored.outlined.HelpOutline
+import androidx.compose.foundation.background
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.automirrored.outlined.EventNote
 import androidx.compose.foundation.clickable
 import androidx.compose.ui.draw.clip
@@ -31,6 +37,9 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 
+/** UI-05 A: "now" for the today card's countdown only (display, never written); tests provide a fixed instant. */
+internal val LocalTodayClock = staticCompositionLocalOf<() -> Instant> { Instant::now }
+
 /**
  * UI-01 A / UI-04: everything about today, shown once. Display only: [open] are today's open doses, [taken] today's taken
  * records (the progress count), [records] all of today's records and [appointments] today's appointments, all already
@@ -48,10 +57,14 @@ import java.time.ZoneId
     val simple = LocalSimpleMode.current
     Surface(color = c.primary, contentColor = c.onPrimary, shape = RoundedCornerShape24, modifier = Modifier.fillMaxWidth().testTag("today-card")) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            // UI-05 A: progress as a translucent pill at the right of the date row.
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s)) {
                 Text(stringResource(R.string.today) + " · " + formatShortDate(today), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.semantics { heading() }.testTag("today-date"))
-                if (total > 0) Text(stringResource(R.string.today_progress, taken.size, total), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.testTag("today-progress"))
+                    modifier = Modifier.weight(1f).semantics { heading() }.testTag("today-date"))
+                if (total > 0) Surface(color = c.onPrimary.copy(alpha = 0.16f), contentColor = c.onPrimary, shape = Corners.badge, modifier = Modifier.testTag("today-progress-pill")) {
+                    Text(stringResource(R.string.today_progress, taken.size, total), style = MaterialTheme.typography.labelLarge.tnum(),
+                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp).testTag("today-progress"))
+                }
             }
             val next = open.firstOrNull()
             when {
@@ -59,20 +72,26 @@ import java.time.ZoneId
                     val sameTime = open.filter { it.slot.at == next.slot.at }
                     Text(stringResource(R.string.today_next), style = MaterialTheme.typography.labelLarge)
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text(formatTime(next.slot.at), style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.SemiBold, modifier = Modifier.testTag("today-next-time"))
+                        Text(formatTime(next.slot.at), style = MaterialTheme.typography.headlineMedium.tnum(), fontWeight = FontWeight.SemiBold, modifier = Modifier.testTag("today-next-time"))
                         // OVERDUE is said in words, not only by colour.
                         if (next.state == SlotState.OVERDUE) Surface(color = c.errorContainer, contentColor = c.onErrorContainer, shape = MaterialTheme.shapes.small) {
                             Text(stringResource(R.string.today_overdue), style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp).testTag("today-next-status"))
-                        }
+                        } else Countdown(next.slot.at)
                     }
                     DoseLine(next, medOf(next), simple, Modifier.testTag("today-next-name"))
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Button({ onComplete(next) }, Modifier.weight(1f).testTag("today-take-now"),
-                            colors = ButtonDefaults.buttonColors(containerColor = c.onPrimary, contentColor = c.primary)) { Text(stringResource(R.string.today_take_now)) }
-                        DoseMenu(next, "today-more", onComplete, onChange)
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.m)) {
+                        Button({ onComplete(next) }, Modifier.weight(1f).heightIn(min = 52.dp).testTag("today-take-now"),
+                            colors = ButtonDefaults.buttonColors(containerColor = c.onPrimary, contentColor = c.primary)) {
+                            Icon(Icons.Outlined.Check, null, Modifier.size(20.dp).testTag("today-take-now-icon")); Spacer(Modifier.width(Spacing.s))
+                            Text(stringResource(R.string.today_take_now), fontWeight = FontWeight.SemiBold)
+                        }
+                        DoseMenu(next, "today-more", onComplete, onChange, round = true)
                     }
+                    // UI-05 A: a thin line between "next" and the sections below it (only when something follows).
+                    if (open.size > 1 || records.isNotEmpty() || appointments.isNotEmpty())
+                        HorizontalDivider(color = c.onPrimary.copy(alpha = 0.2f), modifier = Modifier.testTag("today-divider"))
                     if (sameTime.size > 1) {
-                        Text(stringResource(R.string.today_same_time), style = MaterialTheme.typography.labelLarge)
+                        Text(stringResource(R.string.today_same_time), style = sectionTitleStyle)
                         sameTime.drop(1).forEach { e ->
                             Row(Modifier.fillMaxWidth().testTag("today-also:${e.slot.key}"), verticalAlignment = Alignment.CenterVertically) {
                                 DoseLine(e, medOf(e), simple, Modifier.weight(1f))
@@ -99,11 +118,18 @@ import java.time.ZoneId
             // UI-04: all of today's records, each with its status in words (not only colour), as RecordLine said it.
             if (records.isNotEmpty()) Section(R.string.today_log_heading, "today-log", records) { r ->
                 val m = recordMed(r)
-                Column(Modifier.fillMaxWidth()) {
-                    Text(listOfNotNull(formatTime(Instant.ofEpochMilli(r.taken_utc ?: r.scheduled_utc ?: 0)), if (simple) null else m?.name,
-                        (r.actual_dose ?: r.planned_dose)?.let { formatDose(it, m?.unit) }, stringResource(recordStatus(r))).joinToString(" · "),
-                        style = MaterialTheme.typography.bodyMedium, modifier = Modifier.testTag("today-done:${r.id}"))
-                    if (r.unconfirmed) Text(stringResource(R.string.unconfirmed_help), style = MaterialTheme.typography.bodySmall)
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s)) {
+                    // UI-05 A: a small status icon before the unchanged status words (decorative: the words carry the meaning).
+                    val (kind, icon) = recordIcon(r)
+                    Box(Modifier.size(28.dp).clip(CircleShape).background(c.onPrimary.copy(alpha = 0.16f)).testTag("today-done-icon:${r.id}:$kind"), contentAlignment = Alignment.Center) {
+                        Icon(icon, null, Modifier.size(16.dp))
+                    }
+                    Column(Modifier.weight(1f)) {
+                        Text(listOfNotNull(formatTime(Instant.ofEpochMilli(r.taken_utc ?: r.scheduled_utc ?: 0)), if (simple) null else m?.name,
+                            (r.actual_dose ?: r.planned_dose)?.let { formatDose(it, m?.unit) }, stringResource(recordStatus(r))).joinToString(" · "),
+                            style = MaterialTheme.typography.bodyMedium.tnum(), modifier = Modifier.testTag("today-done:${r.id}"))
+                        if (r.unconfirmed) Text(stringResource(R.string.unconfirmed_help), style = MaterialTheme.typography.bodySmall)
+                    }
                 }
             }
             // UI-04: today's appointments, one row each; a tap opens the visit as the day list's AppointmentCard did.
@@ -123,12 +149,34 @@ import java.time.ZoneId
 @Composable private fun <T> Section(title: Int, tag: String, rows: List<T>, row: @Composable (T) -> Unit) {
     var all by rememberSaveable(tag) { mutableStateOf(false) }
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Text(stringResource(title), style = MaterialTheme.typography.labelLarge, modifier = Modifier.semantics { heading() }.testTag(tag))
+        Text(stringResource(title), style = sectionTitleStyle, modifier = Modifier.semantics { heading() }.testTag(tag))
         (if (all) rows else rows.take(3)).forEach { row(it) }
         if (!all && rows.size > 3) TextButton({ all = true }, Modifier.testTag("today-show-all:" + tag.removePrefix("today-")),
             colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.onPrimary)) { Text(stringResource(R.string.today_show_all, rows.size)) }
     }
 }
+
+/** UI-05 A: icon kind per record status, matching the words of [recordStatus]: taken ✓, missed ✕, skipped –, unconfirmed ?. */
+private fun recordIcon(r: RecordEntity) = when {
+    r.status == "ON_TIME" || r.status == "LATE" -> "TAKEN" to Icons.Outlined.Check
+    r.status == "MISSED" && r.unconfirmed -> "UNCONFIRMED" to Icons.AutoMirrored.Outlined.HelpOutline
+    r.status == "MISSED" -> "MISSED" to Icons.Outlined.Close
+    else -> "SKIPPED" to Icons.Outlined.Remove
+}
+
+/** UI-05 A: "in n h / in n min" to the next dose, from slot.at and now only; refreshed each minute, never written. */
+@Composable private fun Countdown(at: Instant) {
+    val clock = LocalTodayClock.current
+    var now by remember { mutableStateOf(clock()) }
+    LaunchedEffect(at) { while (true) { kotlinx.coroutines.delay(60_000 - now.toEpochMilli() % 60_000); now = clock() } }
+    val minutes = java.time.Duration.between(now, at).toMinutes()
+    if (minutes < 0) return
+    Text(if (minutes >= 60) stringResource(R.string.today_in_hours, (minutes / 60).toInt()) else stringResource(R.string.today_in_minutes, maxOf(1, minutes.toInt())),
+        style = MaterialTheme.typography.bodyMedium.tnum(), modifier = Modifier.testTag("today-countdown"))
+}
+
+/** UI-05 G: tabular figures so times and amounts line up. */
+internal fun androidx.compose.ui.text.TextStyle.tnum() = copy(fontFeatureSettings = "tnum")
 
 /** The same status words as RecordLine. */
 private fun recordStatus(r: RecordEntity) = when (r.status) {
@@ -147,10 +195,15 @@ private val RoundedCornerShape24 = androidx.compose.foundation.shape.RoundedCorn
     }
 }
 
-@Composable private fun DoseMenu(e: TimelineEntry, tag: String, onComplete: (TimelineEntry) -> Unit, onChange: (TimelineEntry) -> Unit) {
+@Composable private fun DoseMenu(e: TimelineEntry, tag: String, onComplete: (TimelineEntry) -> Unit, onChange: (TimelineEntry) -> Unit, round: Boolean = false) {
     var open by remember { mutableStateOf(false) }
     Box {
-        IconButton({ open = true }, Modifier.testTag(tag)) {
+        // UI-05 A: next to the main button the menu is a 52 dp round outlined button of the same height.
+        if (round) OutlinedIconButton({ open = true }, Modifier.size(52.dp).testTag(tag),
+            border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f))) {
+            Icon(Icons.Outlined.MoreVert, stringResource(R.string.today_more), tint = MaterialTheme.colorScheme.onPrimary)
+        }
+        else IconButton({ open = true }, Modifier.testTag(tag)) {
             Icon(Icons.Outlined.MoreVert, stringResource(R.string.today_more))
         }
         DropdownMenu(open, { open = false }) {
@@ -161,8 +214,9 @@ private val RoundedCornerShape24 = androidx.compose.foundation.shape.RoundedCorn
 }
 
 /**
- * UI-01 B: only medications the shared forecast calls low or out ([StockForecast.isLow], the stock page's and stock
- * reminder's rule; no new threshold). Nothing actionable, nothing shown: untracked or no-plan stays on the stock page.
+ * UI-01 B / UI-05 B: only medications the shared forecast calls low or out ([StockForecast.isLow], the stock page's and stock
+ * reminder's rule; no new threshold), each as a compact strip: the whole strip opens Stock, "Add stock" opens AppShell's
+ * existing AddStockDialog. At most three strips, then "n more" (also to Stock). Nothing low, nothing shown.
  */
 @Composable internal fun HomeStockCard(meds: List<MedicationEntity>, forecasts: Map<Long, StockForecast>, today: LocalDate, zone: ZoneId, onStock: () -> Unit,
                                        onAdd: (MedicationEntity) -> Unit = {}) {
@@ -174,28 +228,37 @@ private val RoundedCornerShape24 = androidx.compose.foundation.shape.RoundedCorn
             OutlinedButton(onStock,Modifier.heightIn(min=48.dp).testTag("home-stock-unknown-view")) {Text(stringResource(R.string.home_stock_view))}
         }
     }
-    val low = meds.filter { forecasts[it.id]?.isLow(today, zone) == true }
+    val low = lowStockMedications(meds, forecasts, today, zone)
     if (low.isEmpty()) return
     val c = MaterialTheme.colorScheme
-    Surface(color = c.tertiaryContainer, contentColor = c.onTertiaryContainer, shape = MaterialTheme.shapes.large, modifier = Modifier.fillMaxWidth().testTag("home-stock")) {
-        Column(Modifier.padding(Spacing.l), verticalArrangement = Arrangement.spacedBy(Spacing.s)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Outlined.Inventory2, null); Spacer(Modifier.width(8.dp))
-                Text(stringResource(R.string.home_stock_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
-            }
-            low.forEach { m ->
-                Column(Modifier.fillMaxWidth().testTag("home-stock-row:${m.id}"), verticalArrangement = Arrangement.spacedBy(Spacing.xs)) {
-                    Text(m.name, style = MaterialTheme.typography.titleSmall)
-                    Text(stockForecastText(forecasts[m.id], m, today, zone).first, style = MaterialTheme.typography.bodyMedium)
-                    // UI-02 A1: "Add stock" opens AppShell's existing AddStockDialog (the stock page's own wiring); side by side
-                    // when both fit, stacked otherwise.
-                    val labels = listOf(stringResource(R.string.home_stock_view), stringResource(R.string.stock_add))
-                    AdaptiveActions(labels, contentInset = 48.dp) { i, mod ->
-                        if (i == 0) OutlinedButton(onStock, mod.testTag("home-stock-view"), colors = ButtonDefaults.outlinedButtonColors(contentColor = c.onTertiaryContainer)) { Text(labels[0]) }
-                        else Button({ onAdd(m) }, mod.testTag("home-stock-add:${m.id}"), colors = ButtonDefaults.buttonColors(containerColor = c.tertiary, contentColor = c.onTertiary)) { Text(labels[1]) }
+    Column(Modifier.fillMaxWidth().testTag("home-stock"), verticalArrangement = Arrangement.spacedBy(Spacing.s)) {
+        low.take(3).forEach { m ->
+            val f = forecasts.getValue(m.id)
+            val days = f.daysUntilShort(today, zone)
+            Box(Modifier.testTag("home-stock-row:${m.id}")) {
+                Surface(onClick = onStock, color = c.tertiaryContainer, contentColor = c.onTertiaryContainer, shape = Corners.list,
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp).testTag("home-stock-view")) {
+                    Row(Modifier.padding(horizontal = Spacing.l, vertical = Spacing.m), verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(Spacing.m)) {
+                        Icon(Icons.Outlined.Inventory2, null)
+                        Column(Modifier.weight(1f)) {
+                            Text(stringResource(R.string.home_stock_low, m.name), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                            Text(if (f.lastCovered != null && days != null && days >= 1) stringResource(R.string.stock_runs_out_in, days) else stringResource(R.string.forecast_empty),
+                                style = MaterialTheme.typography.bodySmall.tnum())
+                        }
+                        Button({ onAdd(m) }, Modifier.testTag("home-stock-add:${m.id}"), colors = ButtonDefaults.buttonColors(containerColor = c.tertiary, contentColor = c.onTertiary)) {
+                            Text(stringResource(R.string.stock_add))
+                        }
                     }
                 }
             }
         }
+        if (low.size > 3) TextButton(onStock, Modifier.align(Alignment.End).testTag("home-stock-more")) {
+            Text(stringResource(R.string.home_stock_more, low.size - 3))
+        }
     }
 }
+
+/** UI-05 B/E: the medications the shared forecast calls low or out (StockForecast.isLow): home strips and the drawer count. */
+internal fun lowStockMedications(meds: List<MedicationEntity>, forecasts: Map<Long, StockForecast>, today: LocalDate, zone: ZoneId) =
+    meds.filter { forecasts[it.id]?.isLow(today, zone) == true }

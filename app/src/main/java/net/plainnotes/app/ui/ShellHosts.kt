@@ -73,10 +73,31 @@ import java.time.Instant
 @Stable class LabDialogs {
     var labEdit by mutableStateOf<LabValueEntity?>(null)
     var labNew by mutableStateOf(false)
+    var batchSaving by mutableStateOf(false)
+    var batchFailed by mutableStateOf(false)
+    /** LAB-02: the open lab panel, and results waiting for the "save as one blood test" confirmation. */
+    var panel by mutableStateOf<Long?>(null)
+    var saveAs by mutableStateOf<List<LabValueEntity>?>(null)
 }
 
-@Composable internal fun LabEditDialog(l: LabDialogs, model: NotesViewModel) {
-    if (l.labNew || l.labEdit != null) LabDialog(l.labEdit, { l.labNew = false; l.labEdit = null }, { model.saveLab(it); l.labNew = false; l.labEdit = null },onSaveWithEstimate={v,estimate->model.saveLab(v,estimate);l.labNew=false;l.labEdit=null})
+@Composable internal fun LabEditDialog(l: LabDialogs, model: NotesViewModel, labs: List<LabValueEntity> = emptyList()) {
+    // LAB-01: "add" opens the batch form; editing one result keeps the single dialog, with the split hint when it is shown in a draw card.
+    if (l.labNew && l.labEdit == null) LabBatchDialog({ if (!l.batchSaving) { l.labNew = false; l.batchFailed = false } }, { values, estimate ->
+        l.batchSaving = true; l.batchFailed = false
+        model.saveLabs(values, estimate) { ok -> l.batchSaving = false; if (ok) l.labNew = false else l.batchFailed = true }
+    }, saving = l.batchSaving, failed = l.batchFailed)
+    else if (l.labEdit != null) LabDialog(l.labEdit, { l.labNew = false; l.labEdit = null }, { model.saveLab(it); l.labNew = false; l.labEdit = null },onSaveWithEstimate={v,estimate->model.saveLab(v,estimate);l.labNew=false;l.labEdit=null},
+        inGroup = l.labEdit!!.let { e -> e.panel_id != null || labGroups(labs.filter { it.panel_id == null }).any { g -> g.size > 1 && g.any { it.id == e.id } } })
+}
+
+/** LAB-02: a lab panel's detail and the "save as one blood test" confirmation (docs/design/lab-panel-adr.md §10). */
+@Composable internal fun LabPanelHost(l: LabDialogs, model: NotesViewModel, extra: NotesViewModel.ExtraState) {
+    l.panel?.let { id -> extra.labPanels.firstOrNull { it.id == id }?.let { p ->
+        LabPanelDialog(p, extra.labs.filter { it.panel_id == id }.sortedBy { v -> ANALYTES.indexOfFirst { it.code == v.analyte_code }.let { if (it < 0) ANALYTES.size else it } },
+            { l.panel = null }, { time, lab, note -> model.saveLabPanel(id, time, lab, note) }, { l.labEdit = it }, { model.removeFromLabPanel(it) },
+            { values, estimate -> model.addToLabPanel(id, values, estimate) }, { l.panel = null; model.deleteLabPanel(id) })
+    } ?: run { l.panel = null } }
+    l.saveAs?.let { g -> LabSaveAsPanelDialog(g, { l.saveAs = null }) { l.saveAs = null; model.groupAsLabPanel(g) } }
 }
 
 /** Medical visit editor and lab detail, used by the medical records and the visit detail. */

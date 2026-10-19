@@ -45,8 +45,10 @@ abstract class AttachmentMigrationContract {
         return (0 until entities.length()).associate { i ->
             val t=entities.getJSONObject(i).getString("tableName")
             val canonical=buildString {
-                db.query("SELECT ${entities.getJSONObject(i).getJSONArray("fields").let{fields->(0 until fields.length()).map{fields.getJSONObject(it).getString("columnName")}}.joinToString(","){"`$it`"}} FROM `$t` ORDER BY rowid").use{c->while(c.moveToNext()){for(j in 0 until c.columnCount){append(c.getType(j));append(':');append(if(c.isNull(j))"<null>" else c.getString(j));append('|')};append('\n')}}
-                db.query("SELECT type,name,sql FROM sqlite_master WHERE tbl_name=? AND type IN('table','index') ORDER BY type,name",arrayOf(t)).use{c->while(c.moveToNext()){append(c.getString(0));append(c.getString(1));append(PublishedBusinessFixture.publishedDdl(db,t,c.getString(0),c.getString(2)));append('\n')}}
+                // LAB-02 (Room 12) adds lab_value.panel_id (NULL for legacy rows) and its index; every Room 9 column and DDL stays bit-exact.
+                val legacyColumns=entities.getJSONObject(i).getJSONArray("fields").let{f->(0 until f.length()).joinToString(","){"`"+f.getJSONObject(it).getString("columnName")+"`"}}
+                db.query("SELECT $legacyColumns FROM `$t` ORDER BY rowid").use{c->while(c.moveToNext()){for(j in 0 until c.columnCount){append(c.getType(j));append(':');append(if(c.isNull(j))"<null>" else c.getString(j));append('|')};append('\n')}}
+                db.query("SELECT type,name,sql FROM sqlite_master WHERE tbl_name=? AND type IN('table','index') AND name!='index_lab_value_panel_id' ORDER BY type,name",arrayOf(t)).use{c->while(c.moveToNext()){append(c.getString(0));append(c.getString(1));append(PublishedBusinessFixture.publishedDdl(db,t,c.getString(0),c.getString(2))?.replace(", `panel_id` INTEGER REFERENCES `lab_panel`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT",""));append('\n')}}
             }
             t to MessageDigest.getInstance("SHA-256").digest(canonical.toByteArray()).joinToString(""){"%02x".format(it)}
         }
@@ -82,7 +84,7 @@ abstract class AttachmentMigrationContract {
                 raw.execSQL("UPDATE supply_container SET state='VOIDED' WHERE id=2")
                 PackageCorrections.validate(raw)
                 assertEquals(9,raw.version)
-                val data=JSONObject().put("format",1).put("schema",9).put("tables",PublishedBusinessFixture.dump(raw,DOMAIN_TABLES.filterNot { it in ReferenceSchema.businessTables })).toString().toByteArray()
+                val data=JSONObject().put("format",1).put("schema",9).put("tables",PublishedBusinessFixture.dump(raw,DOMAIN_TABLES.filterNot { it in ReferenceSchema.businessTables || it=="lab_panel" })).toString().toByteArray()
                 try { backup=BackupCodec.encrypt(data,password) } finally { data.fill(0) }
                 fingerprint(raw)
             }
@@ -90,7 +92,7 @@ abstract class AttachmentMigrationContract {
             fun open()=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass))
                 .addMigrations(*allMigrations()).addCallback(SchemaGuards).build()
             room=open();val db=room!!;val raw=db.openHelper.writableDatabase
-            assertEquals(12,raw.version);assertEquals(before,fingerprint(raw));raw.query("SELECT inventory_encoding FROM supply_container").use{c->while(c.moveToNext())assertEquals(InventoryEncoding.LEGACY,c.getString(0))}
+            assertEquals(13,raw.version);assertEquals(before,fingerprint(raw));raw.query("SELECT inventory_encoding FROM supply_container").use{c->while(c.moveToNext())assertEquals(InventoryEncoding.LEGACY,c.getString(0))}
             raw.query("PRAGMA foreign_key_check").use{assertEquals(0,it.count)}
             raw.query("SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'attachment_%'").use{assertEquals(8,it.count)}
             val scope=db.withTransaction { requireNotNull(AttachmentIdentity.initialize(raw,true)) }
@@ -118,7 +120,7 @@ abstract class AttachmentMigrationContract {
             fixture(name,pass,1).use{it.writableDatabase.execSQL("INSERT INTO day_note(date,text) VALUES ('2026-01-01','synthetic oldest chain')")}
             room=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass))
                 .addMigrations(*allMigrations()).addCallback(SchemaGuards).build()
-            val raw=room!!.openHelper.writableDatabase;assertEquals(12,raw.version)
+            val raw=room!!.openHelper.writableDatabase;assertEquals(13,raw.version)
             raw.query("SELECT text FROM day_note").use{assertTrue(it.moveToFirst());assertEquals("synthetic oldest chain",it.getString(0))}
             raw.query("PRAGMA foreign_key_check").use{assertEquals(0,it.count)}
         } finally {room?.close();context.deleteDatabase(name);pass.fill(0)}
@@ -130,7 +132,7 @@ abstract class AttachmentMigrationContract {
             val fault=object:androidx.room.migration.Migration(9,10) {
                 override fun migrate(db:SupportSQLiteDatabase) {AttachmentSchema.migrate(db);error("synthetic migration interruption")}
             }
-            room=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(fault,migration10To11,migration11To12).build()
+            room=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(fault,migration10To11,migration11To12,migration12To13).build()
             try{room!!.openHelper.writableDatabase;fail("Interrupted migration reported success")}catch(_:IllegalStateException){}
             room!!.close();room=null
             fixture(name,pass,9).use {
@@ -138,8 +140,8 @@ abstract class AttachmentMigrationContract {
                 db.query("SELECT text FROM day_note").use{c->assertTrue(c.moveToFirst());assertEquals("synthetic rollback sentinel",c.getString(0))}
                 db.query("SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'attachment_%'").use{c->assertEquals(0,c.count)}
             }
-            room=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(migration9To10,migration10To11,migration11To12).addCallback(SchemaGuards).build()
-            assertEquals(12,room!!.openHelper.writableDatabase.version)
+            room=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(migration9To10,migration10To11,migration11To12,migration12To13).addCallback(SchemaGuards).build()
+            assertEquals(13,room!!.openHelper.writableDatabase.version)
         } finally {room?.close();context.deleteDatabase(name);pass.fill(0)}
     }
 

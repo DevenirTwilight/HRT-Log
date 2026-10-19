@@ -1,0 +1,43 @@
+{
+  "source_commit": "1e66587ebd58262b04111dc518a815dc6277e911",
+  "result": "PASS",
+  "suites": [
+    {
+      "suite": "net.plainnotes.app.DrugCenterNavigationTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "f729e84ef3a7af5be7ce95bc77413c0721d41bced9eb3805b64eca7f863a51e3"
+    },
+    {
+      "suite": "net.plainnotes.app.CenterStateRestorationTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "03b5926c51c104d7a931aea3b0cd7c11f62de68ed7ecb06cffa598143fb1d8d2"
+    },
+    {
+      "suite": "net.plainnotes.app.PeriodStabilityTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "48f7cb05b142a741280318102868ad51acbb047fac65b5cb1744684ffd5fbb04"
+    },
+    {
+      "suite": "net.plainnotes.app.AppShellBackNavigationTest",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "41535a06eac2867f03a8d7c8fcfc1aed1fdc499b34f813d6eec7956bb9e13f92"
+    }
+  ],
+  "android_test_compilation": "PASS",
+  "native_execution": "PENDING_CI",
+  "physical_device": "NOT_RUN",
+  "talkback": "NOT_RUN",
+  "total_tests": 23
+}

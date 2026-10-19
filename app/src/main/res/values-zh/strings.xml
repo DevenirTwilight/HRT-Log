@@ -1247,4 +1247,44 @@
 <string name="test_out_permission">被阻止：未授予通知权限</string>
 <string name="test_out_app">被阻止：本应用的通知已关闭</string>
 <string name="test_out_channel">被阻止：提醒通知类别已关闭</string>
+<string name="today_in_hours">还有 %1$d 小时</string>
+<string name="today_in_minutes">还有 %1$d 分钟</string>
+<string name="home_stock_low">%1$s快用完了</string>
+<string name="home_stock_more">还有 %1$d 种</string>
+<string name="stock_about_days">约 %1$d 天</string>
+<string name="period_since">%1$s 至今</string>
+<string name="drawer_stock_badge">库存：%1$d 种即将用完</string>
+<string name="medical_in_days">%1$d 天后</string>
+<string name="medical_next_questions">想问的问题 · %1$d 条</string>
+<string name="medical_next_pack">就诊资料包</string>
+<!-- LAB-01 batch lab entry -->
+<string name="lab_batch_title">记录一次化验</string>
+<string name="lab_batch_add_row">添加项目</string>
+<string name="lab_batch_presets">常用组合</string>
+<string name="lab_preset_hormones">激素六项</string>
+<string name="lab_preset_liver">肝功能</string>
+<string name="lab_preset_kidney">肾功能与电解质</string>
+<string name="lab_group_count">%1$d 项</string>
+<string name="lab_batch_duplicate">同一次化验中这个项目重复了</string>
+<string name="lab_group_split_hint">修改时间或机构后，这一项会从这次化验中单独显示</string>
+<string name="lab_flag_high">偏高</string>
+<string name="lab_flag_low">偏低</string>
+<string name="lab_filter_all">全部</string>
+<string name="lab_batch_remove_row">删除第 %1$d 项</string>
+<string name="lab_row_spoken">%1$s，%2$s，%3$s</string>
+<string name="lab_row_spoken_flag">，%1$s</string>
+<string name="lab_batch_failed">没有保存任何一项，填写的内容仍保留。</string>
+<!-- LAB-02 lab panels -->
+<string name="trash_kind_lab_panel">化验单</string>
+<string name="lab_panel_title">化验单</string>
+<string name="lab_panel_save_as">保存为一次化验</string>
+<string name="lab_panel_save_as_body">这些结果将作为同一次化验保存在一起，数值和时间都不变。</string>
+<string name="lab_panel_note">这次化验的备注</string>
+<string name="lab_panel_save_changes">保存修改</string>
+<string name="lab_panel_save_added">保存新增项目</string>
+<string name="lab_panel_remove_member">把%1$s从这次化验中移出</string>
+<string name="lab_panel_delete">删除这次化验</string>
+<string name="lab_panel_delete_confirm">这次化验和其中 %1$d 项会一起移到回收站。</string>
+<string name="lab_panel_open">打开这次化验</string>
+<string name="lab_panel_members">项目</string>
 </resources>

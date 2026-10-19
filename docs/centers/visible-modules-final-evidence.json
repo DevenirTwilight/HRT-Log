@@ -1,0 +1,240 @@
+{
+  "status": "PASS",
+  "baseline": "11664eda4122a2db331cce301e64738da4051ef2",
+  "mergedReviewedDesignBaseline": "58da398e3096ffe861039ebc65298a6ed233161e",
+  "sourceFilesSha256": {
+    "app/src/main/java/net/plainnotes/app/ui/AppShell.kt": "ace491c4db7fefa78263e3361aeb6920bbe2757554a0d19fb5136afed505901e",
+    "app/src/main/java/net/plainnotes/app/ui/DrugReferenceCenterScreen.kt": "7a683a8a16413e063e9bb8cf2269f322a603ff5a9da7411e0ab9944f178474be",
+    "app/src/main/java/net/plainnotes/app/ui/MedicalRecordsScreen.kt": "2db74aa29b17c8cbd25af54aef1e5b41b41d0de72339ed6066b966bbe56c69b5",
+    "app/src/main/java/net/plainnotes/app/ui/MedicationsScreen.kt": "d8bd729bafd8d44e1d7d454b74f4b45611cca824707c0ec1c179e29613d36ac7",
+    "app/src/main/java/net/plainnotes/app/ui/UnavailableModuleCard.kt": "c7a97871eeb3e000b1492dc5986f6db0dde12482dd7b56ed857f13bfd64af331",
+    "app/src/main/res/values-b+zh+Hant/center_modules.xml": "91d49e566c958ebbddc4e6bd798ec4744e3895f6930327ceaa1898b646a070d8",
+    "app/src/main/res/values-fr/center_modules.xml": "d1fbf845fa7d3782ee808e3abae2fcd04e074ab2c05255337d4f2f0a3d92b1f1",
+    "app/src/main/res/values-zh/center_modules.xml": "05ddf7e7ecc23a75520c9dc2abf7adaa3ab33bd1ee7ce731b56b22153cd68aec",
+    "app/src/main/res/values/center_modules.xml": "7d1e5d618c0f2d7494d9f482ed3f95917a29da6ff4f538bc320b25e092ebdd70",
+    "app/src/test/java/net/plainnotes/app/AppShellBackNavigationTest.kt": "52b177c0ff72584483b0f346d235dc1fb4f3075c5aedad1b46b296c5d6e99edb",
+    "app/src/test/java/net/plainnotes/app/DrugCenterMatrixTest.kt": "96bc3459ef8e0ae90e65a27c89fcb26ba31e5e8abd9908e6518667cf4b482351",
+    "app/src/test/java/net/plainnotes/app/DrugCenterNavigationTest.kt": "363a3de0473c4778c4131b7cb8acfdb73aceb98231020600d9abc307cfc73b89",
+    "app/src/test/java/net/plainnotes/app/Lab02PanelPkInvarianceTest.kt": "cecaa576c0a23ae0846041539a20ac8d350bfac0f99e7aa603be18709a1492a1",
+    "app/src/test/java/net/plainnotes/app/MedicalCenterMatrixTest.kt": "f6abcbcdec045dc0d8481ee585d3facdb20feef4a5733863fc263ce2faa765de",
+    "app/src/test/java/net/plainnotes/app/MedicalHomeTest.kt": "1d464c8ebb1da63615f1d8f9cb66060ef7c9ffa8830ae1de2a351313af5f4859",
+    "app/src/test/java/net/plainnotes/app/UiHierarchyTest.kt": "75c7332235ba1275982cb15ad0be8db63ce91b5d6bf557d0ee51628f08da5024",
+    "app/src/test/java/net/plainnotes/app/CenterModuleScreenshotsTest.kt": "eaa7f01b412f91e611d98c122da9eeb9d96c5843a6795588e117528b152cf801"
+  },
+  "classes": [
+    {
+      "name": "net.plainnotes.app.DrugCenterMatrixTest",
+      "tests": "48",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.CenterModuleScreenshotsTest",
+      "tests": "8",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    }
+  ],
+  "tests": 56,
+  "note": "56 final render tests include 48 drug matrix reruns plus 8 new screenshot cases; not 56 additional independent tests. Prior170 + new8 = 178 unique selected tests. No production source changed after prior170.",
+  "physicalDevice": "NOT_RUN",
+  "talkBack": "NOT_RUN",
+  "keyboardOnDevice": "NOT_RUN",
+  "screenshots": [
+    {
+      "path": "docs/centers/visible-modules/drug-dialog_en_dark.png",
+      "sha256": "9f9406c5197fe878dee65a72c51321db198d7ef40e54d9b842cb38c0d09aec11"
+    },
+    {
+      "path": "docs/centers/visible-modules/drug-dialog_en_light.png",
+      "sha256": "1ad052a331bb5e46fa5b2299ab293aee01a20f9e2a81bdfd85d1bdc95a7b41df"
+    },
+    {
+      "path": "docs/centers/visible-modules/drug-dialog_fr-rFR_dark.png",
+      "sha256": "34b3e31c39b2bca68a84a085a234aac8eb1cde226a7a2f8879fb48c979d1b335"
+    },
+    {
+      "path": "docs/centers/visible-modules/drug-dialog_fr-rFR_light.png",
+      "sha256": "0613a8ad9ca08f79c775d44a84cbeb1f73da6b52fff35df4cef3de31665d161b"
+    },
+    {
+      "path": "docs/centers/visible-modules/drug-dialog_zh-rCN_dark.png",
+      "sha256": "086e06d54f89b4ed257c2187e18e4cd9b6e92cfc3d03842561bbb5fa6543c5d0"
+    },
+    {
+      "path": "docs/centers/visible-modules/drug-dialog_zh-rCN_light.png",
+      "sha256": "42fba9b7a27986d4c5369e5203f04ddcd7f83155af94689e931e72a7ca1d9b25"
+    },
+    {
+      "path": "docs/centers/visible-modules/drug-dialog_zh-rTW_dark.png",
+      "sha256": "ee9eea9226ef024ce53aa9338cfd9a192e0a149bb1f55eb6f3d6e5636c6cf9a5"
+    },
+    {
+      "path": "docs/centers/visible-modules/drug-dialog_zh-rTW_light.png",
+      "sha256": "d0f3b0b49f7dbb76bcdd375a5f0dedd6f333a071ecd44bf39e67fe96477d7fb9"
+    },
+    {
+      "path": "docs/centers/visible-modules/drug-en_320dp_2.0x_dark_HIGH.png",
+      "sha256": "96f1ff3fc8c5564fe738a9f5c63e682961caf37c5b2d51ef97d2c6ce914d0b0e"
+    },
+    {
+      "path": "docs/centers/visible-modules/drug-en_320dp_2.0x_light_HIGH.png",
+      "sha256": "d842d0b8642d2d1bbb4e4cb832ea01a875ca889e99e58a5b3c25371ac21c98bb"
+    },
+    {
+      "path": "docs/centers/visible-modules/drug-fr-rFR_320dp_2.0x_dark_HIGH.png",
+      "sha256": "60c4bd61b23fc0d3f8a314f168e8567ba14af3e818d63a8ef4b8a4e6f734804f"
+    },
+    {
+      "path": "docs/centers/visible-modules/drug-fr-rFR_320dp_2.0x_light_HIGH.png",
+      "sha256": "a03a4ab9b8beda4e0e753c634babfc5b2149d79c0657e61be142861c40ddd6c7"
+    },
+    {
+      "path": "docs/centers/visible-modules/drug-future_en_dark.png",
+      "sha256": "1d1fb039804db6dc14102115197f7949f14687737578d3edb1e98e49ba9b4d5a"
+    },
+    {
+      "path": "docs/centers/visible-modules/drug-future_en_light.png",
+      "sha256": "36c3f2aca890784da410e9c97959663ed6dfabb00fa1a94761a59976eeeb811e"
+    },
+    {
+      "path": "docs/centers/visible-modules/drug-future_fr-rFR_dark.png",
+      "sha256": "200b2c84b2c0fe3a491eff0b9d7fbf7db9e6d5c53a988b7cd9917dde163271a6"
+    },
+    {
+      "path": "docs/centers/visible-modules/drug-future_fr-rFR_light.png",
+      "sha256": "fd3b20ae01d0e007e9321ad3d2b4e9fae48f4d80bebd2e11c981887683465423"
+    },
+    {
+      "path": "docs/centers/visible-modules/drug-future_zh-rCN_dark.png",
+      "sha256": "05890584450c37ea4d35c1f0b2267e1e0cb93dd77a38a3300fcdb20a97f7f348"
+    },
+    {
+      "path": "docs/centers/visible-modules/drug-future_zh-rCN_light.png",
+      "sha256": "6b1d5ec64ff5a1bbd3d2226435a07f7b3ff5706d134297e47a5b1d4fa08b31fc"
+    },
+    {
+      "path": "docs/centers/visible-modules/drug-future_zh-rTW_dark.png",
+      "sha256": "2622a51400189a4a852d5eb3ac5d79ad6362915ba0185209cd4eaa3aae0c2439"
+    },
+    {
+      "path": "docs/centers/visible-modules/drug-future_zh-rTW_light.png",
+      "sha256": "b2786fbba1a2fffcf7cbeb21dda624bd4424d36124aa8459ad85f0ab1ece6110"
+    },
+    {
+      "path": "docs/centers/visible-modules/drug-zh-rCN_320dp_2.0x_dark_HIGH.png",
+      "sha256": "35dca76276cd9f1478f5e2f13129a279c0a1bd9fc9e90d4ae5b72df144fa8e0f"
+    },
+    {
+      "path": "docs/centers/visible-modules/drug-zh-rCN_320dp_2.0x_light_HIGH.png",
+      "sha256": "3aa8a9cb18ba6163cbf5f675ecedf810aedbe88fc105a06b22f62fb698d89793"
+    },
+    {
+      "path": "docs/centers/visible-modules/drug-zh-rTW_320dp_2.0x_dark_HIGH.png",
+      "sha256": "aaece54ff359dc71e35b687c51d9454d2b2c31327a913025d7e1f0b7399b17f8"
+    },
+    {
+      "path": "docs/centers/visible-modules/drug-zh-rTW_320dp_2.0x_light_HIGH.png",
+      "sha256": "24fbe371d9d95c7e113e5f78e51bfbffeacac143ae9e593413fdf2b96421a8ee"
+    },
+    {
+      "path": "docs/centers/visible-modules/medical-dialog_en_dark.png",
+      "sha256": "b20198761f8cfd45e54f75c9f8061a7e2db725e25b4b595c57915c3e7dd12297"
+    },
+    {
+      "path": "docs/centers/visible-modules/medical-dialog_en_light.png",
+      "sha256": "fe5c4aac0b82d60258392eba71698d006eb353ffcaa45eb21439b2ddbac7a796"
+    },
+    {
+      "path": "docs/centers/visible-modules/medical-dialog_fr-rFR_dark.png",
+      "sha256": "f0758a4cc0fa11b348eb65adababe36d6057b33d2c3ea491e4ecb4130f42b3e6"
+    },
+    {
+      "path": "docs/centers/visible-modules/medical-dialog_fr-rFR_light.png",
+      "sha256": "2357068dbebe4d1ef7d50fe2058154abea2e373f4cf97785441b662c5ef262ba"
+    },
+    {
+      "path": "docs/centers/visible-modules/medical-dialog_zh-rCN_dark.png",
+      "sha256": "35a7e6bdff1d2f2293537d49bb2094954490c3dc2da895ce23d15917a8cb4044"
+    },
+    {
+      "path": "docs/centers/visible-modules/medical-dialog_zh-rCN_light.png",
+      "sha256": "3bf2e1ddf5caaa70fec210ea77378c99feafc3b13f498361f29d5e506a0f3246"
+    },
+    {
+      "path": "docs/centers/visible-modules/medical-dialog_zh-rTW_dark.png",
+      "sha256": "b9fb7d07d4a3d5651abb542a304885fc044f1cac2b4897402463204ae6b7ce42"
+    },
+    {
+      "path": "docs/centers/visible-modules/medical-dialog_zh-rTW_light.png",
+      "sha256": "62de33f10218a649de7f5b64ee5982438b19ee76c8ff018ec875713dada12420"
+    },
+    {
+      "path": "docs/centers/visible-modules/medical-en_320dp_2.0x_dark_HIGH.png",
+      "sha256": "bc3fe8205c126730ae9ec8988e5dc4a422500e50c06f3067b3f0e254ff954984"
+    },
+    {
+      "path": "docs/centers/visible-modules/medical-en_320dp_2.0x_light_HIGH.png",
+      "sha256": "15eb0a4fc070a4009037041e4bd93384b2719492a50185a23a203555a6f51e60"
+    },
+    {
+      "path": "docs/centers/visible-modules/medical-fr-rFR_320dp_2.0x_dark_HIGH.png",
+      "sha256": "22f4514b995aac214cc20966408017324ada07911af6e47fe94e01f098d07992"
+    },
+    {
+      "path": "docs/centers/visible-modules/medical-fr-rFR_320dp_2.0x_light_HIGH.png",
+      "sha256": "0f8be88e31c904def8b680961459a414e6d806d00d95902bb5e1382137b50d36"
+    },
+    {
+      "path": "docs/centers/visible-modules/medical-future_en_dark.png",
+      "sha256": "11fa084243cce2ecaddee3388243f15c1aaf6e68668f3622f0a313502b60f06e"
+    },
+    {
+      "path": "docs/centers/visible-modules/medical-future_en_light.png",
+      "sha256": "e12dc147db1dec55dbcaf3a94c1dad04609b8db96f6f3f4398eff9e4401d1c5e"
+    },
+    {
+      "path": "docs/centers/visible-modules/medical-future_fr-rFR_dark.png",
+      "sha256": "c0201c2551b1a3bba77e7f4bcbae1afb862be1bd743822d6c4f1f7c543304c81"
+    },
+    {
+      "path": "docs/centers/visible-modules/medical-future_fr-rFR_light.png",
+      "sha256": "8b93232aa5d5cdf4e5b18e4009311e31bfae86579432a4a1345fc97a868f5510"
+    },
+    {
+      "path": "docs/centers/visible-modules/medical-future_zh-rCN_dark.png",
+      "sha256": "0bf96d287ba653a358d60274d08bc5ad81bd31671d346f6daac5ae703a3d2139"
+    },
+    {
+      "path": "docs/centers/visible-modules/medical-future_zh-rCN_light.png",
+      "sha256": "5735aa86576880962ea1efaf702118ba85a37ba7e19dcfd1d340685888ef8754"
+    },
+    {
+      "path": "docs/centers/visible-modules/medical-future_zh-rTW_dark.png",
+      "sha256": "d7c98c02984967eb2baa661622554c3c91d0326a74e9c719823f51a3ef279d77"
+    },
+    {
+      "path": "docs/centers/visible-modules/medical-future_zh-rTW_light.png",
+      "sha256": "5df80d3bd73f54ba4c42e7596bd294ec09a4ef675644f1e084f934d2e1c75096"
+    },
+    {
+      "path": "docs/centers/visible-modules/medical-zh-rCN_320dp_2.0x_dark_HIGH.png",
+      "sha256": "3ce78369ec3e61df3e110d2dbfe5c20b82981db690fdce7dc166ebda4a105d89"
+    },
+    {
+      "path": "docs/centers/visible-modules/medical-zh-rCN_320dp_2.0x_light_HIGH.png",
+      "sha256": "2c85258270448fec35762d75fe7c7b7e9932dc5c8ad3f28287ebf690a40b3c85"
+    },
+    {
+      "path": "docs/centers/visible-modules/medical-zh-rTW_320dp_2.0x_dark_HIGH.png",
+      "sha256": "42b006c07d59b1fc8baa7f632f8383fd9fb002b352d6937d16d6228e3a6c82ad"
+    },
+    {
+      "path": "docs/centers/visible-modules/medical-zh-rTW_320dp_2.0x_light_HIGH.png",
+      "sha256": "adb154fabd24226a9d41f6cffd08b7a760b5a38b3b60dc927467b2bfa80af72a"
+    }
+  ],
+  "screenshotType": "Actual native-graphics Robolectric component renders, not physical-device screenshots. All final drug captures and module captures enforce pixel diversity >8 colors; select showing dialog only."
+}

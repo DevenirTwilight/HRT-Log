@@ -118,7 +118,7 @@ object VisitDigest {
                 VisitSection.REGIMEN -> d.medications.filter { it.active }.sortedBy { it.id }.map { it.toString() + d.scheduleText[it.id] } +
                     d.regimens.filter { it.effective_from_utc < end && (it.effective_until_utc ?: Long.MAX_VALUE) > start }.sortedBy { it.id }.map { it.toString() }
                 VisitSection.INTAKES -> d.records.filter { it.deleted_at_utc == null && inside(it.taken_utc ?: it.scheduled_utc) }.sortedBy { it.id }.map { it.toString() }
-                VisitSection.LABS -> d.labs.filter { inside(it.sampled_utc) }.sortedBy { it.id }.flatMap { l -> listOf(l.toString()) + d.labContexts.filter { it.lab_id == l.id }.maxByOrNull { it.revision }?.toString().orEmpty() }
+                VisitSection.LABS -> d.labs.filter { inside(it.sampled_utc) }.sortedBy { it.id }.flatMap { l -> listOf(l.legacyString()) + /* LAB-02 Q10: panel_id is not part of the digest */ d.labContexts.filter { it.lab_id == l.id }.maxByOrNull { it.revision }?.toString().orEmpty() }
                 VisitSection.SYMPTOMS -> d.symptoms.filter { day(it.date) }.sortedWith(compareBy({ it.date }, { it.group_id })).map { it.toString() }
                 VisitSection.REVIEWS -> d.reviews.filter { day(it.date) }.sortedBy { it.id }.map { it.toString() }
                 VisitSection.DAILY -> d.scores.filter { day(it.date) }.sortedWith(compareBy({ it.date }, { it.item_id })).map { it.toString() } + d.notes.filter { day(it.date) }.sortedBy { it.date }.map { it.toString() }

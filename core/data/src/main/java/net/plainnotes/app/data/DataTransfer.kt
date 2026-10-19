@@ -24,7 +24,7 @@ import javax.crypto.spec.SecretKeySpec
 
 /** Tables in foreign-key order (parents first). Reminder mappings are rebuilt by the scheduler and never exported. */
 internal val DOMAIN_TABLES = listOf("medication", "pk_profile", "schedule_rule", "rule_time", "slot_override", "dose_record", "supply_container", "supply_transaction",
-    "retained_slot", "appointment", "checkin_item", "checkin_score", "day_note", "lab_analyte", "lab_value", "pk_settings",
+    "retained_slot", "appointment", "checkin_item", "checkin_score", "day_note", "lab_analyte", "lab_panel", "lab_value", "pk_settings",
     "stage_review", "symptom_check", "review_effect", "regimen_version", "regimen_rule_link", "milestone", "lab_context_revision", "visit_question", "visit_pack", "history_period_revision", "record_annotation", "trash_item") + ReferenceSchema.businessTables
 
 /** Raw-SQL maintenance that has to bypass the append-only ledger triggers: full clear and backup restore. */
@@ -70,7 +70,11 @@ internal object RawData {
         val tables = JSONObject()
         tableNames.forEach { t ->
             val rows = JSONArray()
-            db.query("SELECT ${RecordBackupCompatibility.columns.getValue(t).joinToString(",") { "`$it`" }} FROM $t").use { c ->
+            // Fixture archives of older schemas (explicit subset) leave out columns their table does not have yet (e.g. LAB-02 panel_id).
+            val present = db.query("PRAGMA table_info(`$t`)").use { c -> buildSet { while (c.moveToNext()) add(c.getString(1)) } }
+            val wanted = RecordBackupCompatibility.columns.getValue(t)
+            if (tableNames == DOMAIN_TABLES) require(present.containsAll(wanted)) { "Incomplete table $t" }
+            db.query("SELECT ${wanted.filter { it in present }.joinToString(",") { "`$it`" }} FROM $t").use { c ->
                 while (c.moveToNext()) rows.put(JSONObject().apply {
                     for (i in 0 until c.columnCount) when (c.getType(i)) {
                         Cursor.FIELD_TYPE_NULL -> put(c.getColumnName(i), JSONObject.NULL)

@@ -81,7 +81,7 @@ fun stockSummary(m: MedicationEntity, containers: List<ContainerEntity>, forecas
             val unallocated = records.filter { it.medication_id == m.id && it.deleted_at_utc == null }.sumOf { it.unallocated_supply_amount ?: 0.0 }
             val packages = containers.count { it.medication_id == m.id && it.state != "VOIDED" }
             val checkable = containers.any { it.medication_id == m.id && it.state in CHECKABLE_STATES }
-            StockCard(m, sum, unallocated, today, zone, packages, checkable, { onReplace(m) }, { onCheck(m) }, { onAdd(m) }, { onManage(m) })
+            StockCard(m, sum, unallocated, today, zone, packages, checkable, { onReplace(m) }, { onCheck(m) }, { onAdd(m) }, { onManage(m) }, state.schedules[m.id])
         }
     }
 }
@@ -90,7 +90,7 @@ fun stockSummary(m: MedicationEntity, containers: List<ContainerEntity>, forecas
 val CHECKABLE_STATES = setOf("IN_USE", "EMPTY")
 
 @Composable private fun StockCard(m: MedicationEntity, s: StockSummary, unallocated: Double, today: LocalDate, zone: ZoneId, packages: Int, checkable: Boolean,
-                                  onReplace: () -> Unit, onCheck: () -> Unit, onAdd: () -> Unit, onManage: () -> Unit) {
+                                  onReplace: () -> Unit, onCheck: () -> Unit, onAdd: () -> Unit, onManage: () -> Unit, schedule: net.plainnotes.app.ScheduleSummary? = null) {
     val c = MaterialTheme.colorScheme
     if(s.forecast?.status==StockForecast.Status.UNKNOWN) {
         SectionCard(null,Modifier.testTag("stock-card-${m.id}")) {
@@ -108,7 +108,12 @@ val CHECKABLE_STATES = setOf("IN_USE", "EMPTY")
             (if (checkable) listOf(R.string.stock_check) else emptyList()) + (if (primary != R.string.stock_add) listOf(R.string.stock_add) else emptyList())
         val tracked = !(s.open == null && s.sealedCount == 0 && packages == 0)
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(m.name, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
+            Column(Modifier.weight(1f)) {
+                Text(m.name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                // UI-05 C: route · schedule, the existing labels (scheduleText as on the medications page); nothing recomputed.
+                Text(listOfNotNull(m.route?.let { choiceLabel(it) }, scheduleText(schedule)).joinToString(" · "), style = MaterialTheme.typography.bodySmall,
+                    color = if (s.low) c.onTertiaryContainer else c.onSurfaceVariant, modifier = Modifier.testTag("stock-sub-${m.id}"))
+            }
             if (tracked) StockMenu(m.id, menu, onReplace, onCheck, onAdd)
         }
         if (s.low) StatusPill(s.daysLeft?.takeIf { s.forecast?.lastCovered != null }?.let { stringResource(R.string.stock_runs_out_in, it) } ?: stringResource(R.string.forecast_empty),
@@ -123,15 +128,26 @@ val CHECKABLE_STATES = setOf("IN_USE", "EMPTY")
             // Only used-up or discarded packages: correcting one must not require adding a package that does not exist.
             Text(stringResource(R.string.stock_no_active), style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant)
         } else {
-            Text(formatDose(requireNotNull(s.remaining), m.unit), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold)
+            Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(Spacing.s)) {
+                Text(formatDose(requireNotNull(s.remaining), m.unit), style = MaterialTheme.typography.headlineSmall.tnum(), fontWeight = FontWeight.SemiBold)
+                // UI-05 C: the days the shared forecast already computed; nothing without a plan or when it lasts the whole window.
+                s.daysLeft?.takeIf { s.forecast?.lastCovered != null }?.let { d ->
+                    Text(stringResource(R.string.stock_about_days, d), style = MaterialTheme.typography.titleSmall.tnum(),
+                        color = if (s.low) c.onTertiaryContainer else c.onSurfaceVariant, modifier = Modifier.padding(bottom = 2.dp).testTag("stock-days-${m.id}"))
+                }
+            }
             // Same sentence and warning as the calendar's stock card, from the same shared forecast.
             val (detail, warn) = stockForecastText(s.forecast, m, today, zone)
             // On the tertiary low-stock card the label above already warns; keep the sentence at full contrast there.
-            Text(detail, style = MaterialTheme.typography.bodyMedium, color = if (s.low) c.onTertiaryContainer else if (warn) c.error else c.onSurfaceVariant)
+            @Composable fun Sentence() = Text(detail, style = MaterialTheme.typography.bodySmall, color = if (s.low) c.onTertiaryContainer else if (warn) c.error else c.onSurfaceVariant,
+                modifier = Modifier.testTag("stock-forecast-${m.id}"))
             val o = s.open
+            if (o == null) Sentence()
             if (o != null) {
                 val left = o.capacity - o.used_amount
-                LinearProgressIndicator(progress = { (left / o.capacity).toFloat().coerceIn(0f, 1f) }, modifier = Modifier.fillMaxWidth().height(8.dp), drawStopIndicator = {})
+                LinearProgressIndicator(progress = { (left / o.capacity).toFloat().coerceIn(0f, 1f) }, modifier = Modifier.fillMaxWidth().height(8.dp).testTag("stock-bar-${m.id}"), drawStopIndicator = {})
+                // UI-05 C: the long sentence is secondary small text under the bar.
+                Sentence()
                 Text(stringResource(R.string.stock_current, formatDose(left, m.unit), formatDose(o.capacity, m.unit)), style = MaterialTheme.typography.bodySmall)
                 o.opened_on?.let { Text(stringResource(R.string.stock_opened, formatShortDate(LocalDate.parse(it))), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant) }
                 s.expiresOn?.let { e -> Text(stringResource(if (e.isBefore(today)) R.string.stock_expired else R.string.stock_expires, formatShortDate(e)), style = MaterialTheme.typography.bodySmall,

@@ -142,7 +142,7 @@ internal object PackageCorrections {
             val action=if(parts[0]=="package-void")"void" else "restore";require(p.getString("action")==action)
             require(if(action=="void")last[id]?.first?.startsWith("package-void:")!=true else p.getString("restores")==last[id]?.first)
             if(action=="restore")require(sameBody(last.getValue(id).second,p)) {"Changed restore evidence body"}
-            val marker=if(InventoryEncoding.present(db))"inventory_encoding" else {require(db.version<12 && version(p)==1);"'LEGACY_SCALAR'"}
+            val marker=if(InventoryEncoding.present(db))"inventory_encoding" else {require(db.version<InventoryEncoding.ROOM_FORMAT_VERSION && version(p)==1);"'LEGACY_SCALAR'"}
             val encoding=db.query("SELECT $marker FROM supply_container WHERE id=? AND medication_id=?",arrayOf(id,before.getLong("medication_id"))).use{require(it.moveToFirst());it.getString(0)}
             if(version(p)==1)require(encoding==InventoryEncoding.LEGACY)
             else {
@@ -157,7 +157,7 @@ internal object PackageCorrections {
             require((state=="VOIDED")== (event?.first?.startsWith("package-void:")==true)){"Missing or inconsistent package correction"}
             if(state=="VOIDED") {
                 val current=rows(db,"supply_container","id=?",id).getJSONObject(0).put("state",event!!.second.getJSONObject("container").getString("state"))
-                val encoding=if(InventoryEncoding.present(db))"inventory_encoding" else {require(db.version<12 && version(event.second)==1);"'LEGACY_SCALAR'"}
+                val encoding=if(InventoryEncoding.present(db))"inventory_encoding" else {require(db.version<InventoryEncoding.ROOM_FORMAT_VERSION && version(event.second)==1);"'LEGACY_SCALAR'"}
                 val box=db.query("SELECT medication_id,$encoding FROM supply_container WHERE id=?",arrayOf(id)).use{q->require(q.moveToFirst());ContainerEntity(id=id,medication_id=q.getLong(0),capacity=current.getDouble("capacity"),initial_used_amount=current.getDouble("initial_used_amount"),used_amount=current.getDouble("used_amount"),state=state,inventory_encoding=q.getString(1))}
                 require(sameContainer(db,box,event.second,current))
                 require(ledger(db,id)==event.second.getString("ledger_sha256"))

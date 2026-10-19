@@ -181,7 +181,9 @@ class HomeStockCardTest {
         show(mapOf(1L to low, 2L to out))
         list().performScrollToNode(hasTestTag("home-stock"))
         ui.onNodeWithTag("home-stock").assertExists()
-        ui.onNode(hasAnyAncestor(hasTestTag("home-stock-row:1")) and hasText("Synthetic E2")).assertExists()
+        // UI-05 B: the name is now inside the strip's "<name> is running low" line, so the match is a substring; the meaning
+        // (this row is for that medication) is unchanged.
+        ui.onNode(hasAnyAncestor(hasTestTag("home-stock-row:1")) and hasText("Synthetic E2", substring = true)).assertExists()
         ui.onNode(hasTestTag("home-stock-row:2")).assertExists()
         ui.onNode(hasText(s(R.string.forecast_empty), substring = true) and hasAnyAncestor(hasTestTag("home-stock"))).assertExists()
         ui.onAllNodes(hasTestTag("home-stock-view")).assertCountEquals(2)

@@ -63,7 +63,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
                 val upcoming=(repo.planned(now,now.plus(Duration.ofDays(366)),now)+slots.filter{it.slot.at<now}).distinctBy{it.slot.key}.filter{it.state in net.plainnotes.app.ui.OPEN_STATES}
                 val stockForecasts=repo.stockForecasts(now)
                 NotesState(meds,slots,dao.appointments(),mutable.value.error,false,schedules,profiles,start,dao.rules().associate{it.id to it.config_snapshot}) to
-                    ExtraState(dao.records(),dao.containers(),repo.checkinItems(),dao.scores("0001-01-01",today.toString()),dao.notes("0001-01-01",today.toString()),upcoming,dao.stageReviews(),dao.symptomChecks("0001-01-01",today.toString()),dao.reviewEffects(),dao.regimens(),dao.regimenLinks(),dao.milestones(),dao.labs(),dao.labContexts(),dao.visitQuestions(),dao.visitPacks(),dao.historyPeriods(),dao.annotations(),dao.trash().filter{it.state==Trash.TRASHED},dao.deletedRecords(),stockForecasts,dao.containersWithLedger().toSet(),dao.voidedContainers(),dao.containersWithConsumption().toSet(),referenceEpoch=dao.referencePreviewEpoch())
+                    ExtraState(dao.records(),dao.containers(),repo.checkinItems(),dao.scores("0001-01-01",today.toString()),dao.notes("0001-01-01",today.toString()),upcoming,dao.stageReviews(),dao.symptomChecks("0001-01-01",today.toString()),dao.reviewEffects(),dao.regimens(),dao.regimenLinks(),dao.milestones(),dao.labs(),dao.labContexts(),dao.visitQuestions(),dao.visitPacks(),dao.historyPeriods(),dao.annotations(),dao.trash().filter{it.state==Trash.TRASHED},dao.deletedRecords(),stockForecasts,dao.containersWithLedger().toSet(),dao.voidedContainers(),dao.containersWithConsumption().toSet(),referenceEpoch=dao.referencePreviewEpoch(),labPanels=dao.labPanels())
             }
             ensureActive()
             mutable.value=snapshot.first.copy(error=mutable.value.error);extra.value=snapshot.second;refreshRevision++;readFailureShown=false
@@ -120,7 +120,8 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
                           /** Packages with ledger history; only the others can be undone as added by mistake. */
                           val containersWithLedger:Set<Long> = emptySet(),
                           val voidedContainers:List<ContainerEntity> = emptyList(),
-                          val containersWithConsumption:Set<Long> = emptySet(),val referenceEpoch:String?=null)
+                          val containersWithConsumption:Set<Long> = emptySet(),val referenceEpoch:String?=null,
+                          /** LAB-02 lab panels (one blood draw each). */ val labPanels:List<LabPanelEntity> = emptyList())
     val extra=MutableStateFlow(ExtraState())
     private fun guarded(block:suspend()->Unit)=viewModelScope.launch{try{block()}catch(e:kotlinx.coroutines.CancellationException){throw e}catch(e:Exception){mutable.value=mutable.value.copy(error=when(e){is MedicalVisitConflict->R.string.medical_stale;is PeriodRestoreConflict->R.string.period_restore_overlap;is PackageRestoreConflict->R.string.pkg_restore_conflict;is PackageConsumptionConflict->R.string.pkg_undo_locked;is SkipUndoStale->R.string.history_skip_stale;is SkipUndoUnavailable->R.string.history_skip_unavailable;is SkipUndoUnitConflict->R.string.history_skip_unit_changed;else->R.string.operation_error})}}
     fun loadExtra():Job=refresh()
@@ -296,6 +297,17 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     private suspend fun newEstimate(dao:net.plainnotes.app.data.NotesDao,lab:LabValueEntity)=
         net.plainnotes.app.conc.SublingualEstimatePolicy.apply(net.plainnotes.app.conc.LabEstimate.capture(dao,lab))
     fun saveLab(v:LabValueEntity,includeEstimate:Boolean=false)=change{repo.saveLab(v,recapture=includeEstimate,estimate={dao,lab->if(includeEstimate)newEstimate(dao,lab) else null})}
+    /** LAB-01 batch entry: [onDone] says whether all were saved (then the form closes) or none (the form keeps its content). */
+    fun saveLabs(values:List<LabValueEntity>,includeEstimate:Boolean,onDone:(Boolean)->Unit)=viewModelScope.launch {
+        try { mutate{repo.saveLabs(values,recapture=includeEstimate,estimate={dao,lab->if(includeEstimate)newEstimate(dao,lab) else null})}; refresh().join(); onDone(true) }
+        catch(e:CancellationException){throw e}catch(_:Exception){ mutable.value=mutable.value.copy(error=R.string.operation_error); onDone(false) }
+    }
+    // LAB-02 lab panels (docs/design/lab-panel-adr.md)
+    fun saveLabPanel(id:Long,time:java.time.LocalDateTime,laboratory:String,note:String)=change{repo.saveLabPanel(id,net.plainnotes.app.domain.ScheduleEngine.wallInstant(time,java.time.ZoneId.systemDefault()).toEpochMilli(),java.time.ZoneId.systemDefault().id,laboratory,note)}
+    fun addToLabPanel(id:Long,values:List<LabValueEntity>,includeEstimate:Boolean)=change{repo.addToLabPanel(id,values,recapture=includeEstimate,estimate={dao,lab->if(includeEstimate)newEstimate(dao,lab) else null})}
+    fun removeFromLabPanel(v:LabValueEntity)=change{repo.removeFromLabPanel(v.id)}
+    fun deleteLabPanel(id:Long)=change{repo.deleteLabPanel(id)}
+    fun groupAsLabPanel(labs:List<LabValueEntity>)=change{repo.groupAsLabPanel(labs.map{it.id})}
     fun rebuildLabContext(v:LabValueEntity,includeEstimate:Boolean=false)=change{repo.rebuildLabContext(v.id,estimate={dao,lab->if(includeEstimate)newEstimate(dao,lab) else null})}
     fun deleteLab(v:LabValueEntity)=change{repo.deleteLab(v.id)}
     fun delete(id:Long)=change{repo.removeMedication(id)}

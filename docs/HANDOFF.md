@@ -1,114 +1,70 @@
-## P4本地检查点与产品骨架优先级调整 — 2026-10-18
+## build32 已交付（REQUIREMENTS §112 第 4 条）— 2026-10-18
 
-基线c8d7c18上的逐次审计canonical proof去重复编码候选：完整421项数据JVM测试0失败/跳过，Android测试源码编译PASS；同UUID不同正文/头部的负向保护保留，证据`ansm-integration/p4/performance/canonical-proof-local-evidence.json`。不持久缓存、不跳过全局校验；原生性能/设备验收待验，不宣称5秒门槛通过。新用户任务要求独立医疗中心/药品资料中心薄纵切片优先，转到主线ec61d53独立工作树实施，不等待P4。精确库存生产写入仍OFF。
+- 0.2.0 / versionCode 32 正式签名包，构建自 `746bb2e9`（#83 合并；含 LAB-01 #78、归档修复 #79、LAB-02 A/B #80/#81；树与 PR #83 头相同，其全部必需检查通过，包括 API 26/29/35 的化验单迁移和重启测试）。
+- APK SHA-256 `b374ce232640dd100e326f15444b0b4cb8f8c32024c60235dd7cbdd937051b27`，证书 989ba045…59379b1，v2/v3、16KB 对齐、四 ABI、非 debug、无 INTERNET；manifest 和附件隔离检查 PASS，SOURCE_DIRTY=false。
+- Room 12，备份结构版本 11：旧版应用无法读取本版生成的备份。会话私密交付，临时签名材料已删除。记录 `delivery/build32-lab02-2026-10-18.json`。真机安装 NOT_RUN。
+- 当前没有排队的任务书。真机清单第 10、11 节待负责人回填。
 
-## P4 流水联合读取本地420通过；原生写入仍>5s — 2026-10-18
+## LAB-02 阶段 B（REQUIREMENTS §112，报告 69）— 2026-10-18
 
-66ea8d5原生run39123897415完整FAIL：audit8836/forecast8836/restored8357ms本轮<15s，三写9347/9233/8923ms>5000。官方工件SHA/CRC与raw trace/gzip/parser复现PASS，61340采样/152边界帧、零未知/不匹配退出、无溢出，仍PARTIAL_DIAGNOSTIC；SQLCipher游标/GC/UTF8仍主要成本，见ansm-integration/p4/performance/native-profile-66ea8d5/。不删除0fd/3ee等旧失败，不按较快一次宣称稳定改善。
+- 分支 `feature/lab02b-panel-impl-20261018`，已合入主线（含 #79）和阶段 A（#80）。Room 11→12，备份结构版本 10→11，化验单的增改删、回收站和按 uuid 恢复，化验单卡片和详情，“保存为一次化验”。
+- 批准记录 `PD-2026-10-18-LAB02B-LABSSCREEN` 登记在 `audits/product-quality-2026-10/display-approvals-after-archive.json`。
+- 本地：core:data 261、app 1634（唯一失败 PrivacyNoticeFactsTest 已更新到版本 11），Lab0* 172 项，lint 0 error。设备迁移和重启测试（API 26/29/35）以 CI 为准。
+- 合并、主线 CI 全绿后：build 32（versionCode 32）正式签名，私密交付并登记账本（§112 第 4 条）。
 
-新共享负向测试旧代码先实际expected0/actual1操作回读，再强化记录版本后expected[0,0]/actual[1,1]；非法operation_id+伪造零cache必须拒绝、回滚后账本/cache/immutable trigger完全还原的负向测试已PASS。生产候选只把同一流水的操作字段和临床revision纳入流式LEFT JOIN，所有字段类型、ID域、原消耗反向查找、临床事实和全局审计断言保留；历史查询只保留原来的primitive先前流水，不增加envelope缓存，不隐藏无匹配行。data420零fail/skip、Android合同编译PASS；相同大库备份/恢复/三真实Repo写入与完整投影一致，JVM SQL12186→8180，写1354/1424/1487ms仅诊断。原生新HEAD待验，不放宽5s或样本。
+## LAB-02（REQUIREMENTS §112）— 2026-10-18
 
-另在独立CI分支创建#71（95c8d3c）：最新主线417实际失败是ReminderTestDeviceTest行52 status.exact=false，发生在90s等待前；权限命令未读完的竞态只是HYPOTHESIS。仅测试准备读命令EOF并断言API31+真正grant；三个测试方法/全部旧断言/5/8s输入/90s期限逐字不变，无生产提醒逻辑改动，按主线最新REQUIREMENTS106开启保护auto-merge，六CI/三API待验，任何FAIL须保留处理。Beta #64的063861d自身六项CI已全PASS，但仍DRAFT/NO-GO，不等于主线417设备失败已修复或P4准入。P4 DRAFT/正式入口OFF，P5/P6未实施，本工作无签名/发布/APK交付。
+- 阶段 A：分支 `feature/lab02a-panel-design-20261018`（基于 LAB-01 分支，#78 合并后合入主线再开 PR）。ADR `docs/design/lab-panel-adr.md`（Q1–Q12 推荐答案已由负责人采纳），草案测试 `LabPanelDraftTest` 4/4、`Lab02PanelPkInvarianceTest` 1/1，报告 68。
+- 阶段 B：阶段 A 合并后开始（分支 `feature/lab02b-panel-impl-<日期>`），按 ADR 第 13、14 节文件和测试清单实施；完成后 build 32。
 
-## P4 原生排序索引仍FAIL；批量操作读取本地通过 — 2026-10-18
+## 修复：研究归档被误改（2026-10-18）
 
-已普通合并主线417e383（#66–#70）为0fd0ca3；四语冲突保留全部主线提醒文案和既有forecast_needs_check，workflow保留17数据类与2新增App类，双方交接保留。主线需求105–107原编号保留，旧P4的105–108映射108–111；新106普遍自动合并授权继承，草稿/外部审阅/发布例外不变。合并后Period5/Privacy3本地PASS，证据merged-main417-app-local-evidence.json；生产参数/PK/权限没有新增变动。
+- LAB-01（#78）把 LabsScreen 批准记录追加进了已冻结的 `docs/pk-research/p2/display-approvals.json`，导致 research-deep 失败：`Archived record changed or missing`。已恢复该文件到归档提交 1e584285 的原样，记录移到 `docs/audits/product-quality-2026-10/display-approvals-after-archive.json`。之后 PK 显示文件的批准记录都写在这个新文件里。
+- 本地验证：`verify_historical_archive.py` 通过；`tools/pk-research` 单元测试 261 项全部通过。
 
-0fd原生run39122744634官方工件SHA/CRC、1470239B trace及可复现parser已归档ansm-integration/p4/performance/native-profile-0fd0ca3/：完整audit14149/forecast13529/restored12720ms本轮<15s，但三次写入13726/13307/13938ms>5s仍FAIL。SQL减少不能宣称原生改善。97996采样、152边界未闭合帧、零未知方法/不匹配退出、无溢出，PARTIAL_DIAGNOSTIC；SQLCipher游标仍首要成本。相同SHA重复手动run39122741164取消，仅防重复、无验收结论；保留的PR原生运行不论成败完整记录。所有既有失败和预算保留。
+## build31 已交付（REQUIREMENTS §110）— 2026-10-18
 
-新增零分配操作负向测试：旧实现真实expected0/actual1逐操作回读；现在一次游标读取同一组完整操作字段，NULL/整数/String类型以及全部链/版本/来源/账本/历史校验保留，不增加持久或跨事务缓存、不接写入。data418零失败/跳过，Android测试源码编译PASS；原同规模JVM大库/完整投影相等、SQL14189→12186（三写1379/1388/1495ms）仅诊断，原生未验。对应bulk-operation-*证据与临时诊断patch已保存，生成源码已清理。候选六CI/原生待新HEAD验收。
+- 0.2.0 / versionCode 31 正式签名包，构建自 `2a6d0642`（#76 合并，含 #75 UI-05；树与 PR #76 头 d08aa3de 相同，其全部必需检查通过），APK SHA-256 `7217a2a74033c79fd272611a8e6e83b6536dadea2b1c34f0099d986e240b6741`，证书 989ba045…59379b1，v2/v3、16KB 对齐、四 ABI、非 debug、无 INTERNET；manifest/附件隔离 PASS，provenance SOURCE_DIRTY=false。会话私密文件交付，未进 Git/Release；临时签名材料已删除。记录 `delivery/build31-ui05-2026-10-18.json`。真机安装 NOT_RUN。
+- 下一个交付：LAB-02 阶段 B 合并后的 build 32（负责人 2026-10-18“lab02做完给我个apk”）。
 
-Beta #64只读同步main417为063861d；区分公开build29、由主线账本声明/其他开发线交付的私密build30（source dfb，不含#70或P4）与本P4候选；没有重新下载/验签/交付build30，真机/升级NOT_RUN。P4_BLOCKED/DRAFT、App入口OFF，P5/P6未实施，Beta NO-GO，本工作未签名发布。
 
-## P4 排序索引回归通过；写入性能仍待原生验收 — 2026-10-18
+## LAB-01 一次化验批量录入（REQUIREMENTS §111，报告 67）— 2026-10-18
 
-3ee5110六项必需CI全PASS，已核验官方工件SHA/CRC：API26/29/35的ReferencePersistenceAndroidTest各23用例、含2条新字节边界、零fail/skip。原生run39121269126完整FAIL，仅真实写入11959/11020/11524ms>5000；audit11286/forecast11600/restored audit10395ms本轮<15000，不能当稳定/因果证明。运输双ACK PASS；1155058B trace离线parser完全复现，76108样本、152边界未闭合帧、零未知/不匹配退出、无溢出，仍PARTIAL_DIAGNOSTIC。SQLCipher游标为主要采样成本。原始工件/报告/hash见ansm-integration/p4/performance/native-profile-3ee5110/，不删除早期失败。
+- 分支 `feature/lab01-batch-entry-20261018`（UI-05 #75 合并后已合入默认分支）。实现、测试、批准记录 `PD-2026-10-18-LAB01-LABSSCREEN` 已提交推送；LAB-01 新测试 103 项本地全过。待办：完整回归、截图（before/after/compare）、报告第 8 节、开 PR 自动合并。
+- 同时进行：build 31（REQUIREMENTS §110，PR #76 versionCode 31，合并后从合并提交构建签名、私密交付、登记账本）。
+- 负责人 2026-10-18：“你推荐吧，lab02做完给我个apk”——LAB-02 待决问题全部按 ADR 推荐答案；LAB-02 阶段 B 合并后出正式签名包（build 32，versionCode 32），写入 REQUIREMENTS §112。
+- 之后：LAB-02 阶段 A（ADR 草稿在会话临时目录，将放到 `docs/design/lab-panel-adr.md`），然后按 §110 第 2 条直接做阶段 B（负责人已批准，按 ADR 推荐答案，负责人可推翻）。
 
-先写共享SQL/边界负向测试，原实现真实expected0/actual8；第一个分组Map方案虽data417 PASS，却在相同大库查询20198→20811退化（挤掉原始行缓存），已拒绝且未推送，证据保留。替代方案仅按剩余8MiB预算为已完整缓存的不可变行建立排序引用索引，保留重复行、整数类型、原游标独立性；部分/未建索引回SQL，不缓存跨事务信任，不改审计或存量语义。新方案data417零失败/跳过、Android测试源码编译PASS；同规模JVM大库完整投影一致、查询20198→14189（少6009），真实Repository三写入1489/1561/1588ms仅JVM诊断，原生NOT_RUN。新增重复确认测试初次JUnit返回值声明错误已明确Unit修正并保留失败，未放松断言。原始fixture与所有预算不变；诊断patch只加在计时结束后的临时测试副本，生成文件已清理。
+## UI-05 视觉精修（REQUIREMENTS §109，报告 66）— 2026-10-18
 
-主线另有#66–#69到1abfeea，真实device-tests在定时提醒链FAIL；#70由另一开发者处理，避开提醒/UI/字符串共享文件。下一步普通合并主线并保留新旧需求/交接/设备类名单，再做最终CI及原生预算。P4保持DRAFT/PRODUCTION_BLOCKED、正式入口OFF，P5/P6未实施。主线私密build30是独立授权与交付，不含未合并P4；公开build29未改变。本轮未签名、发布或交付APK。
+- 分支 `feature/ui05-visual-polish-20261018`，基于默认分支 1abfeea。任务书原文已归档 `docs/audits/product-quality-2026-10/sources/ui05/`。
+- 保护矩阵核对：TodayCard/MedicalRecordsScreen 不在矩阵；CalendarScreen、StockScreen、LongitudinalScreen、AppShell、Components 均为 HISTORY_ONLY；不触及 PK_DISPLAY_REVIEW 及更严格类别。
+- 计划按 A（今天卡）→B（首页库存横条）→C（库存卡）→D（时间线展示）→E（抽屉角标）→F（医疗档案）→G（全局细节）逐节提交。
+- A 完成：进度胶囊、倒计时（仅显示，逾期不显示，每分钟刷新）、52dp 主按钮带勾与圆形 ⋮、分隔线、记录行状态图标（文字保留）。`Ui05TodayCardTest` 9/9（红测 6/7 失败），TodayCardTest/HomeStockCardTest/Ui04/CalendarSemantics/CalendarCoreFlow 通过。
+- B 完成：首页低库存改为每药一条紧凑横条（tertiaryContainer、圆角 16、整条点进库存页、“添加库存”仍开同一 AddStockDialog），移到今天卡正下方、月历之前；最多 3 条，其余“还有 n 种”。判定仍为 StockForecast.isLow。`Ui05HomeStockTest` 4/4（红测 2/4 失败）。断言迁移：HomeStockCardTest 中行内药名从完全匹配改为包含匹配（药名现在在“[药名]快用完了”句中，含义不变）；`home-stock-view` 标签现挂在整条横条上，原“2 个查看入口、点第一个进入库存页”断言原样通过。
+- C 完成：库存卡药名下加“途径 · 频率”（复用 choiceLabel/scheduleText）、余量旁“约 n 天”（取 forecast 已算出的天数，无计划或覆盖整个窗口时不显示）、长句改为进度条下方 bodySmall。主按钮、⋮ 菜单、低库存变色与胶囊、包装折叠/管理入口不变。`Ui05StockCardTest` 4/4（红测 3/4 失败），其余 8 个库存测试类通过，无断言迁移。
+- D 完成（只改展示层，投影/编辑逻辑未动）：“添加里程碑”“新建时期”移入顶栏 + 菜单（`TimelineAddHost` 登记原回调，启用规则同原按钮）；时期卡类型改为胶囊、标题“[起]–[止]”或“[起] 至今 · 第 n 天”、方案每行前加圆点；事件与导入摘要画成所属分组卡下方的白色内嵌列表（36dp 彩色类型图标 + 类型·名称/日期两行 + 右箭头），归属完全来自原投影块顺序；即将发生的事件为虚线卡。类型配色：化验 tertiary、就诊 secondary、里程碑 primary、阶段回顾 inverseSurface、其他 surfaceVariant（漏服保留 error 色），明暗×三档对比度均 ≥3:1。`Ui05TimelineTest` 8/8（红测 5/6 失败）。
+  - 断言迁移（逐条）：LongitudinalUiTest 两项“点击列表中的添加里程碑按钮”改为“点顶栏 + → 添加里程碑”，其后对话框断言全部不变；TimelineEditUiTest“简洁模式下仍有新建时期入口”改为“+ 存在且时间线登记的新建时期回调存在且可用”（菜单项调用该回调由 Ui05TimelineTest 证明）。焦点滚动索引因移除按钮项由 +3 改为 +2。
+  - 测试环境发现：Robolectric 在 `w411dp-h891dp` 限定符下打开时间线上的对话框会一直不空闲（原主线代码同样），去掉限定符即正常；不是应用缺陷。
+- E 完成：抽屉“库存”入口在有低库存药物时显示 tertiaryContainer 数字胶囊，语义描述“库存：n 种即将用完”，0 不显示；数量与首页横条同一集合（共用 `lowStockMedications`，即 StockForecast.isLow），首页最多 3 条 +“还有 n 种”，合计等于角标数。`Ui05DrawerBadgeTest` 3/3（红测 1/3 失败），抽屉相关既有测试通过，无断言迁移。
+- F 完成：“记录已发生的就诊”移到顶栏 +（`MedicalAddAction`，同一动作，tag `medical-add`、内容描述原文案）；下次就诊卡改为日期小方块（月/日/星期，白底圆角 14）+“下次就诊 · n 天后”+ 类型 + 时间·医生·地点，下方内嵌两行“想问的问题 · n 条”“就诊资料包”，都打开同一复诊详情（资料包状态本页读不到，不显示、不新增查询）；已确认就诊改为每年一个白色内嵌列表（40dp 图标、类型、日期·医生或机构、备注/问题数、右箭头）。“去过了吗？”卡只统一圆角。`Ui05MedicalHomeTest` 3/3（红测 3/3 失败）。
+  - 断言迁移：MedicalHomeTest 点击 `medical-next-open` 改为点击 `medical-next-questions`（原按钮被两行取代，“打开最近一次就诊”不变）；MedicalRecordsUiContract 对已确认就诊 701 的 `performScrollToKey("visit:701")` 改为按行标签滚动（已确认就诊成为年度内嵌列表的行），其后可见、Button 角色、可点击、打开该就诊的断言不变。
+- G 完成（只在本轮改过的文件中）：分区标题统一 15sp 粗体（`sectionTitleStyle`：今天卡分区、医疗档案分区）；卡片 24/内嵌列表 16/胶囊 10 使用 UI-02A `Corners`；时间和余量等数字用等宽数字（tnum）。`Ui05ContrastTest`：新增胶囊与图标底色在明暗 × 标准/中/高对比度下文字 ≥4.5:1、图标 ≥3:1 全部通过。
+- 收尾：报告 `audits/product-quality-2026-10/66-ui05-visual-polish.md`；截图 `ui-audit/2026-10-18-ui05/`（before/after 各 192、compare 12、hires 6）；真机清单第 10 节；STATUS 已更新。本地完整回归 0 失败。下一步：开 PR 按 §106 自动合并，合并后复验主线，再按负责人要求出正式签名包 build 31。
+- 新任务书已归档排队：LAB-01（`sources/lab01/`，UI-05 合并后开始）、LAB-02（`sources/lab02/`，LAB-01 合并且主线全绿后只做阶段 A；阶段 B 须负责人按任务书第 4 节原话批准）。
 
-## P4 采样运输已验证；全字符串追加优化本地回归通过 — 2026-10-18
+## 药品资料中心 B 接线与医疗中心 A 合并 — 2026-10-18
 
-原生0b3c703/run39109780636已取回2310261B ART采样；8字节预检与最终nonce ACK真实PASS，官方工件SHA/CRC、原始trace SHA和确定性gzip已保存，离线重跑parser与原摘要完全相同。采样158040条、152个边界未闭合帧、0未知方法/不匹配退出、无overflow，仅PARTIAL_DIAGNOSTIC，不是调用计数或完整CPU剖析。此前head失败保留，不再称运输待验。证据：ansm-integration/p4/performance/native-profile-0b3c703/。
+A #73最终3fd5b2f六项必需CI全部PASS、无评审讨论，已受保护自动合并为ff2a4e9。证据centers/medical-final-ci.json。B在该新主线上顺序增加AppShell一个browse回调，入口位于现有药物方案页面；复用同一MedicationReferenceController的查询、产品详情/当前药物关联，不另建Repository或数据源。独立显示32用例x3对比度PASS，首轮2例实际点击被标题栏遮挡已修复，保留失败证据与全部触控断言。真实AppShell、非空记录/库存流水/Profile不变性及既有回归共133项本地PASS（0失败/跳过），源哈希/逐类计数centers/drug-integration-test-evidence.json；截图复核后将真实查询入口前移，最终版式38项定向复验PASS（非另增38个独立用例），证据centers/drug-final-layout-evidence.json，旧133版截图另存未覆盖。此源码检查点CI待验，后续最终HEAD/CI/合并收据以PR #74为准，不能宣称设备或发布验收完成。官方分发、RCP/Notice独立审查#58、安全/监管、P4写入、医疗原件仍OFF；真机/TalkBack NOT_RUN。并行#72未修改或复制，实际旧守卫失败证据centers/parallel-pr72-review.json。
 
-同轮原始预算仍FAIL：audit15569ms、forecast16150ms、三次真实写入15939/15672/15662ms；恢复后audit14587ms。fixture/SQLCipher/512MiB模拟器/192MiB堆/全部预算不变。真实热点以SQLCipher游标读取和Android26 CharSequence区间追加为主，不按猜测改正则/UUID。新候选只在完整Unicode标量扫描后对未转义完整字符串调用String追加；转义区间及全部NUL/代理项/大小/摘要/历史字节约束保留。先新增2条共享边界测试，旧实现加新测试5项PASS，再改生产；全data415、Period5、Privacy3零失败/跳过，Python198全套PASS。环境重启后原Gradle日志不可用，保留实际JUnit时间戳/摘要；原生合同编译产物存在，真实新设备结果仍待CI，不冒充完整日志或实机通过。
+## 医疗中心薄纵切片 A — 2026-10-18
 
-主线8ebb719和Beta文档49236a2各六必需CI全PASS；#65已按单独授权合并，旧build29不含该修复。P4候选未合并、DRAFT/PRODUCTION_BLOCKED，App精确写入口OFF，P5/P6 NOT_IMPLEMENTED，Beta NO-GO。无Schema/备份格式/库存行为/PK/签名/版本/发布变化。下一步推送候选并用完全相同API26大库及六CI验收；未达5秒继续基于实际热点优化，不削预算或全量审计。
+基线ec61d53（#71已合并）。文件级矩阵及验收见`docs/centers/implementation-matrix.md`。现有医疗档案聚合预约/历史就诊、问题准备、资料包入口，复用VisitsScreen和原有Repository；化验/时间线从此进入可返回医疗档案。保留独立复诊及所有旧入口。附件OFF，不等待P4，不改正式库存/Schema/备份/PK。已编码并通过97项本地Compose/时期稳定性回归（0失败/跳过），含32显示矩阵用例各跑3对比度；四语320dp/2x深浅共8张Robolectric组件截图与源哈希见centers/medical-test-evidence.json。首轮新增测试重复导致编译失败已修正，旧断言全部保留。CI待验；真机及TalkBack NOT_RUN。B须等A合并后再改同一导航文件；不动#58。
 
-## P4 原生预检定位 API26 head 不支持字节模式 — 2026-10-18
+## CI独立候选：精确闹钟测试前置权限 — 2026-10-18
 
-ceb504d run39109323920在生成大库/加载SQLCipher前按设计停在TRANSPORT_PREFLIGHT_FAILED；PERFORMANCE_NOT_RUN，所有本轮性能数值UNAVAILABLE。官方工件12129374268 SHA/CRC已核验；原始逐路径错误明确：正确测试包的run-as执行head返回exit1/head: not integer: c，另一个候选包unknown。这是本次预检的已确认工具故障；前两轮未保存原始远端错误，不倒填为完全已确认。不会把fail-fast当预算通过，最后完整4dc写入15.6–16.3s仍FAIL/P4_BLOCKED。
+主线417 run39122664759/job117661246072在ReminderTestDeviceTest第52行status.exact断言失败，发生在90s等待前；同源Beta设备绿不覆盖该失败。原fixture只关闭AppOps命令管道，未等命令完成；竞态原因仍HYPOTHESIS。独立分支仅改androidTest一个文件：读到EOF再关闭，并在API31+明确断言AlarmManager已看到grant后才运行原测试。三个用例、全部旧断言、5/8s输入和90s期限逐字保留，不轮询/延时/重跑掩盖。原生编译及三API/六CI待验；完整隔离计划见ci-stability/exact-alarm-preflight-20261018/README.md。按最新主线REQUIREMENTS106走受保护auto-merge，无prod提醒/UI/库存/Schema/PK/权限/版本/签名/发布变化，真机NOT_RUN。
 
-新增API26错误响应负向测试在旧reader实际29项/1失败；改为有界dd（bs=字节上限、count=1），统一非PTY shell v2分离stderr，避免exec-out将dd统计文字混入二进制。JSON硬上限65537B、trace硬上限expected_size+1（<=32MiB+1）、8字节含NUL/CR/LF/高位字节探针最多读9B并逐字节验证；App-UID固定路径、nonce/ACK与预算阶段之间不轮询不变。Python198 PASS；生成的Kotlin未变，复用刚完成的原生编译证据，不重复编译。实际dd运输预检待验；无生产代码/预算/Schema/备份/PK变化。
-
-主线8ebb719已六CI PASS，26/29/35各4新增SQLCipher用例工件核验PASS。Beta #64已普通同步主线并推送49236a2，仅文档，准确区分主线修复与旧公开build29；新文档CI待验。P5/P6未实施，正式入口OFF，Beta NO-GO，未签名发布。
-
-## P4 测试运输改为 App 内部路径与大库前预检；主线六 CI 通过 — 2026-10-18
-
-#65 已获单独明确批准后普通合入主线8ebb719，合并后六项必需CI全PASS；官方工件SHA/CRC核验26/29/35各4个新SQLCipher用例真实PASS/0skip，见performance/main-8ebb719-*。本地P4通过普通merge同步主线（223aeff），workflow保留17类并集、双方HANDOFF保留。data413、Period5、PrivacyNoticeFacts3、Python190及原生合同编译PASS，Privacy初次过滤名误写后已实际按正确类名补跑3项，证据已更新。
-
-4dc09b8原生run39108085887完整FAIL：实际写入15604/15957/16339ms仍>5s，审计/预测/恢复后审计本次低于15s。ART文件生成2300664B，但host_ack=false、未取回，且没有逐路径错误信息；仅切换shell不足以完成运输，根因仍UNVERIFIED，不声称已分析方法热点。工件12129850807官方SHA/CRC及原始报告已归档native-4dc09b8-*；7590两次旧失败也保留。
-
-新候选只修改测试工具：使用debug测试App UID的run-as读取自己的内部固定路径，不依赖外部存储别名。完整计量库/SQLCipher加载前，验证8字节含NUL/高位字节探针和App自己读取的nonce ACK；失败15s内停在TRANSPORT_PREFLIGHT_FAILED/PERFORMANCE_NOT_RUN，保留有界逐路径退出码/stderr。成功预检后不轮询adb，等原预算全部冻结后的采样ready才取方法栈并回执，原性能断言/fixture/SHA/预算不变。先新增负向测试实际25项中1失败/3错误，再Python197 PASS；生成原生源码编译PASS并清理测试生成文件。实际新运输NOT_RUN，不能用合成预检冒充原生成功。
-
-P4_BLOCKED/DRAFT、正式入口OFF；P5/P6未实施，Beta NO-GO。无生产代码/Schema/备份/PK新增改动，无新签名、发布或APK交付。完整证据见docs/ansm-integration/p4/performance/与阶段账本。
-
-## 已获单独授权并普通合并 #65；主线复验待验 — 2026-10-18
-
-负责人明确答复“批准普通受保护合并 #65”，已复核e69490f六CI全部成功、无冲突/未解决讨论，以匹配HEAD的普通merge合入8ebb7198fe1dbd1d0c2a5f96e24cdecf7efac54c；无admin/force/auto。主线CI待验，后续P4基线合并保留双方共享workflow类名单/HANDOFF，不能将旧分支绿灯冒充新基线结果。P4原生7590cc7 attempt2仍运行，原失败保留。授权见REQUIREMENTS§108。
-
-## P4 原生恢复中进程退出；#65 最终六 CI 全绿 — 2026-10-18
-
-7590cc7原生run39106781296 attempt1在加密恢复中测试进程退出；官方工件SHA/CRC及原始部分报告、合成日志已归档。写入和采样未完成，不能拿先前耗时充当本轮结果；退出原因UNVERIFIED。相同源码/预算attempt2正在复查，保留原失败、不宣称根因修复。详见[阶段账本](ansm-integration/WORK-STATE.md)。
-
-独立#65最终e69490f六项必需CI在push/PR均PASS，已Ready for review并更新正文；未扩大ANSM自动合并授权。P4仍BLOCKED、正式入口OFF，P5/P6未实施、Beta NO-GO，无新APK或发布。
-
-## P4 工具准备失败非性能结果；已修nonce隔离 — 2026-10-18
-
-0b7bf67原生run39106094875在测试前因新增logcat -c失败，PERFORMANCE_NOT_RUN/数值UNAVAILABLE。移除清日志依赖，以主机本轮nonce绑定Instrumentation、watcher及collector，旧ready/旧绿报告不能触发读取或冒充当前结果。Python188/原生源码编译PASS，实际运输待验；不改原预算/生产代码。详细故障/工件SHA/修正见[阶段账本](ansm-integration/WORK-STATE.md)。
-
-#65源88a60f1六CI和26/29/35各4新用例实际SQLCipher成功已核验；e69490f仅证据的最终CI待跑，未擅自合并一般日常数据修复。P4_BLOCKED/OFF，P5/P6未实施，未签名发布。
-
-## P4 采样运输改为预算后握手；#65源CI全绿 — 2026-10-18
-
-efc7aba原生写入16.1–16.5s仍>5s，P4_BLOCKED；Trace实际生成但AGP清理导致未取回，分析UNAVAILABLE，不编造热点。后续仅测试工具：预算后ready/nonce/host ack，主机仅收到log标记后读固定合成路径，不在原计时阶段轮询adb，最多预算后等30s，保留原失败断言。Python184/原生源码编译PASS，实际握手NOT_RUN。详见[阶段账本](ansm-integration/WORK-STATE.md)。
-
-独立#65源88a60f1六CI全PASS，API26/29新4用例真实SQLCipher成功；原始工件/35报告继续核验。尚不自动合并一般日常修复。正式库存入口OFF，P5/P6未实施，未签名发布。
-
-## P4 写入12.3–13.4s仍阻断；独立日常恢复修复#65 — 2026-10-18
-
-3cea864六CI PASS，原生run39102897438完整FAIL：本次审计/预测<15s，三写入仍>5s。解析复用本地data409/Period5/Privacy3已通过，未冒充P4完成。下一提交仅在原预算冻结后进行合成ART方法栈采样；Python179与原生源码编译PASS，实际采样NOT_RUN。新工具强制API26模拟器、固定路径/硬大小上限、保留失败退出码，不进入正式App。详见[阶段账本](ansm-integration/WORK-STATE.md)。
-
-另有#65独立回收站同毫秒引用冲突修复：4确定性红→data247/Python156/原生编译绿；当前26/29/35与最终六CI待验，不自动合并一般日常数据PR。未来与P4同一workflow行须取类名单并集。P4_BLOCKED，正式入口OFF，P5/P6未实施，Beta NO-GO，未发布。
-
-## P4 消费解析复用本地通过；原生门仍待验收 — 2026-10-18
-
-65cf08e六CI PASS、原生四预算FAIL证据已核验。新候选仅在单次审核内复用完整解析结果，保留全部字段/链/摘要/数量/全局校验，不改Schema或库存语义。data409、Period5/Privacy3、Python169、原生源码编译及同规模JVM大库PASS；新原生NOT_RUN，正式入口OFF/P4_BLOCKED。另发现#64评分回收站时间戳引用冲突，独立分支正在确定性复现，不混入P4。详见[阶段账本](ansm-integration/WORK-STATE.md)。未签名、未发布、未合并，P5/P6未实施。
-
-## P4 同机对照明确收益；写入门仍FAIL — 2026-10-17
-
-cdc50b7原生run39068064156完整结束：本次审计/预测/恢复审计低于15s，但真实写入15.25–16.47s>5s，P4_BLOCKED，入口OFF。后置同机raw17s vs cached12–13s且完整投影相等；不是P4准入成功。保留同一生产源码此前四预算失败，避免将一次较快运行写为稳定修复。继续仅测试定位逐包装/逐操作方法耗时；生产未变。[阶段账本](ansm-integration/WORK-STATE.md)已记录工件SHA/完整失败与JVM诊断。P5/P6未实施，Beta #64仍NO-GO。
-
-## P4 原生复验仍阻断 — 2026-10-17
-
-原生db34e87四预算FAIL，真实写入19.16–19.76s>5s；未放宽门槛。data407/Period5/Privacy3/Python168 PASS；JVM查询减少67.5%不等于原生成功。主线d13048b合并后六CI已PASS。新增测试专用后置分段与同机raw/cache对照，保持原预算/峰值范围及全部断言；尚待原生运行。最新证据及限制见 [阶段账本](ansm-integration/WORK-STATE.md)。正式入口OFF，P4_BLOCKED，P5/P6未实施，#64 Beta仍NO-GO。
-
-## P4 只读行缓存优化待原生验收 — 2026-10-17
-
-发现完整审计62219次SQL查询，新增只在单次同步只读事务有效的有界标量行缓存，保持所有逐行/全图/账本校验，未命中回SQL，结束检查无数据/Schema变动。data407零fail/skip与原生源码编译已通过；同规模JVM写入约1.7–1.8s不等于原生成功。前一原生a3e95e4仍四预算FAIL，证据完整保留；当前源码原生门待跑，正式入口OFF。详细范围/兼容/未来步骤见 [阶段账本](ansm-integration/WORK-STATE.md)。#63已合并，主线复验仍须核实；#64 Beta仍NO-GO。
-
-## 主线 CI 修复已合并；P4 准入仍待实测 — 2026-10-17
-
-#63 自动合并为 d13048b，源80c31ce六项必需CI全部成功并核验工件；合并后主线复验仍在跑。P4 同步已合并修复，仅解决 HANDOFF 并保留双方记录。a3e95e4 最终 data402/Python168/Period5/Privacy3/原生源码编译成功，低内存原生性能仍待 run39064593821，不称 P4 已完成。阶段证据见 [集成账本](ansm-integration/WORK-STATE.md)。未重新发布、未开精确库存入口，P5/P6仅审计/待开发。
-
-## P4 批量审计与后端收尾 — 2026-10-17
-
-新增优化/负向验证已通过最终本地 data402、Python168；原生和最终 CI 尚待跑，不得称 P4 已完成或合并。完整失败证据、范围与当前报告见 [集成账本](ansm-integration/WORK-STATE.md)。#63 独立 CI 修复由 Claude 负责；#64 是仅文档 Beta NO-GO 清单，无发布授权。P5 完成真实代码接线审计，未实施 gateway/UI 写入，不重画 Claude UI，也未启用附件。官方资源/PK/发行边界不变。
-
-## ANSM 后端收尾续作 — 2026-10-17
-
-#57 合入最新默认 35600a0，保留 build29 发布账本与 Claude 八张 REFERENCE_ONLY 图。新任务见 REQUIREMENTS §107；旧 P4/V4 编号顺延 §105/106，主线发布 §104 不变。CI 修复 #63 已由 Claude 负责，避免重复开发。原生性能第五次运行完整 FAIL，四项超时；准确指标见 [阶段账本](ansm-integration/WORK-STATE.md) 及 performance/native-fifth-report.json。当前 P4_BLOCKED，正式精确库存入口 OFF，P5/P6 未实施，未发布。
 ## build30 已交付（REQUIREMENTS §107）— 2026-10-18
 
 - 0.2.0 / versionCode 30 正式签名包，构建自 `dfb21c79`（#68 合并，含 #66 会话 P0-B 与 #67 提醒 P0-A），APK SHA-256 `f0e209f1a08c1bb6a2c65c907ecb20d365ab6c52d70127abe5e312c60c6703c8`，证书 989ba045…59379b1。
@@ -1888,6 +1844,165 @@ B0/B1/D-1/D-2已经进入默认分支，不再列为待重复实现；本地再�
 
 本轮未签名、未交付新APK、未公开发布；build25/0.2.0/schema9不变，delivery ledger不增条目，下一次独立交付至少build26且原签名。P2-C HOLD、PR18个人绝对pg/mL能力false与条件性情景的证据张力保留。物理ARM/用户安装版本/真实覆盖升级NOT_RUN或UNKNOWN，模拟器不是实机。B2隐私、B4/B5质量、附件/LabPanel、旧公开包许可处置仍另案。完整元数据/计数/回滚分析见审计20；不因本次合并批准后续任务。
 
+## 中心 #82 跟进已合并 LAB-02 生产主线 — 2026-10-18
+
+#81已由仓库规则合并2dda533b，源82c84659六必需CI均完成且无失败。本分支正常合入该已审主线，非复制未合并代码；只处理两处文档冲突，保留双方记录与LabsScreen/LabPanelHost新接线。现基线Room12、备份业务11来自#81，本UI增量不修改其任何实现。AppShell相对新主线仍仅增加Stock导航回调。此前a4a9c4f8的两API/JVM/Science已过，剩余检查不能冒充新HEAD；新Room下真实医疗/药品导航与时期稳定性待本地复验，最终HEAD必需CI重跑。独立显示组件与48截图源码不变，原收据仍按旧源版本保存。
+
+## 两个中心 #82 本地验收完成 — 2026-10-18
+
+170项定向测试零失败/跳过（两个中心共96显示场景×三对比度、含横屏2x）；另8截图用例与48药品矩阵复验56项PASS，总178独立用例。48张有效原生渲染组件图与源码哈希见centers/visible-modules-final-evidence.json。截图首轮抓到已关闭弹窗的8张黑图已排除并以“仍显示窗口+非空像素”守卫重生成；不冒充真机/TalkBack，二者NOT_RUN。新医疗/药品占位只说明，原真实接口仍通。合入已审LAB-02设计#80的58da398e解决两处文档冲突并保留双方记录。#82待最终HEAD六CI及受保护自动合并；不合并#72整体，不改数据层/PK/库存/权限/发布。后续CI收据记PR82，避免仅为CI状态改源码反复触发构建。
+
+## 中心增量 #82 首轮验证 — 2026-10-18
+
+源码4c513cba：真实药品查询/关联/库存导航、原抽屉、时期稳定性通过；医疗占位新测试因全局查找共同状态文本匹配到背景卡片而失败1项，已改为限定弹窗祖先，未减少无导入/无回调断言。加入横屏2x矩阵与真实医疗DB不变性用例，正在复验；首轮结果centers/visible-modules-first-failure.json。#82仍草稿，待本地与必需CI验收。
+
+## 两个中心可见未开放模块整合 — 2026-10-18
+
+基线11664eda，#74已六CI全绿并合并07836294；保留#73、UI-05、LAB-01真实功能。新分支feature/centers-visible-modules-20261018按最新负责人§113实现六个药品与六个医疗占位入口，点击仅说明，现有查询/关联/方案/库存及医疗功能保持真实。文件矩阵见centers/visible-modules-integration.md。源码已实现，本地测试/截图/CI待验，不启用附件或官方分发，不改数据层/PK/库存/发布。#72不整体合并，后续由本增量取代。
+
+
+## 中心 #82 最新已审主线复验 PASS — 2026-10-18
+
+源7d9c168b、基线2dda533b，Room12下76项真实导航/记录库存Profile不变性/既有医疗编辑/化验单UI/时期稳定性回归PASS，零失败错误跳过，见centers/visible-modules-room12-evidence.json。显示组件与48截图仍与前述收据源码一致；真机与TalkBack NOT_RUN。本次仅补验收证据，生产源码冻结；最终HEAD六CI及合并后主线收据以PR82为准。新阶段交接追加于文末，保留并行开发者主线前缀，减少重复冲突；未复制未审代码、未启用附件/官方分发/P4、未改发布。
+
+## 中心 #82：同步已审版本号主线以满足保护规则 — 2026-10-18
+
+GitHub标记BEHIND，需合入已合并#83的746bb2e9；该主线仅将versionCode31改32。本分支正常合并已审主线，未自行改版本或交付APK；相对新基线仍无Gradle/Schema/备份/PK/库存/权限差异。全部app/src/main文件与已本地验收5d2ac4e9逐字节一致；旧源PR侧六检查已通过，push侧最后Android仍待完结，不能冒充新HEAD验收。只重跑新HEAD必需CI，不重复无关本地测试；最终收据以PR82为准。
+
+## 中心 #82：保留环境失败并同步已审交付记录 — 2026-10-18
+
+#84已合并14da0bdd，仅交付记录/HANDOFF/账本；严格BEHIND要求再次正常同步。本分支无APK/版本操作，UI与核心实现不变。原源c981276e的push/API29出现18项既有备份OOM，ART堆增长上限16777216字节；同源PR/API29通过，报告55§10有相同环境先例。原始失败见centers/ci-environment-failure.json及PR82，低内存真实设备风险未解决。定向重试因workflow运行中被GitHub拒绝，未实际启动；同步主线后的新最终HEAD需完整CI，不把新源通过伪称旧源重试通过。不改KDF、堆、断言、Schema或权限，仍不启用P4/附件/官方资料分发。最终HEAD/六CI/合并及主线收据以PR82为准。
+
+## 中心状态恢复收尾 — 2026-10-18
+
+基线491a910f（#82已合并，源与主线六项必需CI均PASS，完整收据见PR82）。独立分支fix/centers-state-restoration-20261018：新状态恢复测试先在未改生产源码上真实失败，恢复后drug-center-window丢失，见centers/state-restoration-red.json。仅将MedicationsScreen中心打开状态改为rememberSaveable；追加两个原生测试覆盖12占位弹窗实际Back、无文件Intent、真实参考窗口返回、旋转和离开后锁定。待本地GREEN及最新HEAD六CI，未声称设备测试成功；不改布局/文案/Room/库存/PK/附件权限或发布。
+
+## 中心状态恢复 #85 本地验收 PASS — 2026-10-18
+
+源码1e66587e：23项本地测试PASS、零失败错误跳过（状态恢复1、真实药品中心导航1、时期稳定性5、AppShell返回/伪装16），原生Kotlin编译PASS；见centers/state-restoration-green.json及state-restoration.md。未动现有断言，仅追加新测试。原生API26/29/35执行与最终六CI仍待验，真机/TalkBack NOT_RUN，未签名交付。最终HEAD/受保护合并/主线收据以PR85为准，避免只写CI元数据引发循环重跑。
+
+## 中心 #85 原生测试监控器修正 — 2026-10-18
+
+最终源d89e8b3d的push/API26出现新增测试失败：IntentFilter监控器误拦截action为空的MainActivity启动，发生在中心操作前，非环境重试。保留失败收据centers/state-restoration-native-first-failure.json。改用只匹配三种明确文件action的测试监控器，追加真实MIME文件Intent阳性对照，既有中心路径仍要求零文件启动；不放宽断言、不改生产源码。23项本地GREEN仍适用，修正后原生编译/新HEAD六CI待验，旧源未请求重试。
+
+监控器修正后的原生Kotlin编译PASS；将以新HEAD运行完整六CI和原生三项新增测试（监控器阳性对照、12占位实际Back与零文件启动、旋转/离开锁定）。23项本地测试对应的生产源码未变，无需重复渲染或无关本地回归。最新HEAD和最终CI/合并收据仍以PR85为准。
+
+
+## P4分支历史检查点保留（2026-10-19普通集成；不是当前主线状态）
+
+## P4本地检查点与产品骨架优先级调整 — 2026-10-18
+
+基线c8d7c18上的逐次审计canonical proof去重复编码候选：完整421项数据JVM测试0失败/跳过，Android测试源码编译PASS；同UUID不同正文/头部的负向保护保留，证据`ansm-integration/p4/performance/canonical-proof-local-evidence.json`。不持久缓存、不跳过全局校验；原生性能/设备验收待验，不宣称5秒门槛通过。新用户任务要求独立医疗中心/药品资料中心薄纵切片优先，转到主线ec61d53独立工作树实施，不等待P4。精确库存生产写入仍OFF。
+
+## P4 流水联合读取本地420通过；原生写入仍>5s — 2026-10-18
+
+66ea8d5原生run39123897415完整FAIL：audit8836/forecast8836/restored8357ms本轮<15s，三写9347/9233/8923ms>5000。官方工件SHA/CRC与raw trace/gzip/parser复现PASS，61340采样/152边界帧、零未知/不匹配退出、无溢出，仍PARTIAL_DIAGNOSTIC；SQLCipher游标/GC/UTF8仍主要成本，见ansm-integration/p4/performance/native-profile-66ea8d5/。不删除0fd/3ee等旧失败，不按较快一次宣称稳定改善。
+
+新共享负向测试旧代码先实际expected0/actual1操作回读，再强化记录版本后expected[0,0]/actual[1,1]；非法operation_id+伪造零cache必须拒绝、回滚后账本/cache/immutable trigger完全还原的负向测试已PASS。生产候选只把同一流水的操作字段和临床revision纳入流式LEFT JOIN，所有字段类型、ID域、原消耗反向查找、临床事实和全局审计断言保留；历史查询只保留原来的primitive先前流水，不增加envelope缓存，不隐藏无匹配行。data420零fail/skip、Android合同编译PASS；相同大库备份/恢复/三真实Repo写入与完整投影一致，JVM SQL12186→8180，写1354/1424/1487ms仅诊断。原生新HEAD待验，不放宽5s或样本。
+
+另在独立CI分支创建#71（95c8d3c）：最新主线417实际失败是ReminderTestDeviceTest行52 status.exact=false，发生在90s等待前；权限命令未读完的竞态只是HYPOTHESIS。仅测试准备读命令EOF并断言API31+真正grant；三个测试方法/全部旧断言/5/8s输入/90s期限逐字不变，无生产提醒逻辑改动，按主线最新REQUIREMENTS106开启保护auto-merge，六CI/三API待验，任何FAIL须保留处理。Beta #64的063861d自身六项CI已全PASS，但仍DRAFT/NO-GO，不等于主线417设备失败已修复或P4准入。P4 DRAFT/正式入口OFF，P5/P6未实施，本工作无签名/发布/APK交付。
+
+## P4 原生排序索引仍FAIL；批量操作读取本地通过 — 2026-10-18
+
+已普通合并主线417e383（#66–#70）为0fd0ca3；四语冲突保留全部主线提醒文案和既有forecast_needs_check，workflow保留17数据类与2新增App类，双方交接保留。主线需求105–107原编号保留，旧P4的105–108映射108–111；新106普遍自动合并授权继承，草稿/外部审阅/发布例外不变。合并后Period5/Privacy3本地PASS，证据merged-main417-app-local-evidence.json；生产参数/PK/权限没有新增变动。
+
+0fd原生run39122744634官方工件SHA/CRC、1470239B trace及可复现parser已归档ansm-integration/p4/performance/native-profile-0fd0ca3/：完整audit14149/forecast13529/restored12720ms本轮<15s，但三次写入13726/13307/13938ms>5s仍FAIL。SQL减少不能宣称原生改善。97996采样、152边界未闭合帧、零未知方法/不匹配退出、无溢出，PARTIAL_DIAGNOSTIC；SQLCipher游标仍首要成本。相同SHA重复手动run39122741164取消，仅防重复、无验收结论；保留的PR原生运行不论成败完整记录。所有既有失败和预算保留。
+
+新增零分配操作负向测试：旧实现真实expected0/actual1逐操作回读；现在一次游标读取同一组完整操作字段，NULL/整数/String类型以及全部链/版本/来源/账本/历史校验保留，不增加持久或跨事务缓存、不接写入。data418零失败/跳过，Android测试源码编译PASS；原同规模JVM大库/完整投影相等、SQL14189→12186（三写1379/1388/1495ms）仅诊断，原生未验。对应bulk-operation-*证据与临时诊断patch已保存，生成源码已清理。候选六CI/原生待新HEAD验收。
+
+Beta #64只读同步main417为063861d；区分公开build29、由主线账本声明/其他开发线交付的私密build30（source dfb，不含#70或P4）与本P4候选；没有重新下载/验签/交付build30，真机/升级NOT_RUN。P4_BLOCKED/DRAFT、App入口OFF，P5/P6未实施，Beta NO-GO，本工作未签名发布。
+
+## P4 排序索引回归通过；写入性能仍待原生验收 — 2026-10-18
+
+3ee5110六项必需CI全PASS，已核验官方工件SHA/CRC：API26/29/35的ReferencePersistenceAndroidTest各23用例、含2条新字节边界、零fail/skip。原生run39121269126完整FAIL，仅真实写入11959/11020/11524ms>5000；audit11286/forecast11600/restored audit10395ms本轮<15000，不能当稳定/因果证明。运输双ACK PASS；1155058B trace离线parser完全复现，76108样本、152边界未闭合帧、零未知/不匹配退出、无溢出，仍PARTIAL_DIAGNOSTIC。SQLCipher游标为主要采样成本。原始工件/报告/hash见ansm-integration/p4/performance/native-profile-3ee5110/，不删除早期失败。
+
+先写共享SQL/边界负向测试，原实现真实expected0/actual8；第一个分组Map方案虽data417 PASS，却在相同大库查询20198→20811退化（挤掉原始行缓存），已拒绝且未推送，证据保留。替代方案仅按剩余8MiB预算为已完整缓存的不可变行建立排序引用索引，保留重复行、整数类型、原游标独立性；部分/未建索引回SQL，不缓存跨事务信任，不改审计或存量语义。新方案data417零失败/跳过、Android测试源码编译PASS；同规模JVM大库完整投影一致、查询20198→14189（少6009），真实Repository三写入1489/1561/1588ms仅JVM诊断，原生NOT_RUN。新增重复确认测试初次JUnit返回值声明错误已明确Unit修正并保留失败，未放松断言。原始fixture与所有预算不变；诊断patch只加在计时结束后的临时测试副本，生成文件已清理。
+
+主线另有#66–#69到1abfeea，真实device-tests在定时提醒链FAIL；#70由另一开发者处理，避开提醒/UI/字符串共享文件。下一步普通合并主线并保留新旧需求/交接/设备类名单，再做最终CI及原生预算。P4保持DRAFT/PRODUCTION_BLOCKED、正式入口OFF，P5/P6未实施。主线私密build30是独立授权与交付，不含未合并P4；公开build29未改变。本轮未签名、发布或交付APK。
+
+## P4 采样运输已验证；全字符串追加优化本地回归通过 — 2026-10-18
+
+原生0b3c703/run39109780636已取回2310261B ART采样；8字节预检与最终nonce ACK真实PASS，官方工件SHA/CRC、原始trace SHA和确定性gzip已保存，离线重跑parser与原摘要完全相同。采样158040条、152个边界未闭合帧、0未知方法/不匹配退出、无overflow，仅PARTIAL_DIAGNOSTIC，不是调用计数或完整CPU剖析。此前head失败保留，不再称运输待验。证据：ansm-integration/p4/performance/native-profile-0b3c703/。
+
+同轮原始预算仍FAIL：audit15569ms、forecast16150ms、三次真实写入15939/15672/15662ms；恢复后audit14587ms。fixture/SQLCipher/512MiB模拟器/192MiB堆/全部预算不变。真实热点以SQLCipher游标读取和Android26 CharSequence区间追加为主，不按猜测改正则/UUID。新候选只在完整Unicode标量扫描后对未转义完整字符串调用String追加；转义区间及全部NUL/代理项/大小/摘要/历史字节约束保留。先新增2条共享边界测试，旧实现加新测试5项PASS，再改生产；全data415、Period5、Privacy3零失败/跳过，Python198全套PASS。环境重启后原Gradle日志不可用，保留实际JUnit时间戳/摘要；原生合同编译产物存在，真实新设备结果仍待CI，不冒充完整日志或实机通过。
+
+主线8ebb719和Beta文档49236a2各六必需CI全PASS；#65已按单独授权合并，旧build29不含该修复。P4候选未合并、DRAFT/PRODUCTION_BLOCKED，App精确写入口OFF，P5/P6 NOT_IMPLEMENTED，Beta NO-GO。无Schema/备份格式/库存行为/PK/签名/版本/发布变化。下一步推送候选并用完全相同API26大库及六CI验收；未达5秒继续基于实际热点优化，不削预算或全量审计。
+
+## P4 原生预检定位 API26 head 不支持字节模式 — 2026-10-18
+
+ceb504d run39109323920在生成大库/加载SQLCipher前按设计停在TRANSPORT_PREFLIGHT_FAILED；PERFORMANCE_NOT_RUN，所有本轮性能数值UNAVAILABLE。官方工件12129374268 SHA/CRC已核验；原始逐路径错误明确：正确测试包的run-as执行head返回exit1/head: not integer: c，另一个候选包unknown。这是本次预检的已确认工具故障；前两轮未保存原始远端错误，不倒填为完全已确认。不会把fail-fast当预算通过，最后完整4dc写入15.6–16.3s仍FAIL/P4_BLOCKED。
+
+新增API26错误响应负向测试在旧reader实际29项/1失败；改为有界dd（bs=字节上限、count=1），统一非PTY shell v2分离stderr，避免exec-out将dd统计文字混入二进制。JSON硬上限65537B、trace硬上限expected_size+1（<=32MiB+1）、8字节含NUL/CR/LF/高位字节探针最多读9B并逐字节验证；App-UID固定路径、nonce/ACK与预算阶段之间不轮询不变。Python198 PASS；生成的Kotlin未变，复用刚完成的原生编译证据，不重复编译。实际dd运输预检待验；无生产代码/预算/Schema/备份/PK变化。
+
+主线8ebb719已六CI PASS，26/29/35各4新增SQLCipher用例工件核验PASS。Beta #64已普通同步主线并推送49236a2，仅文档，准确区分主线修复与旧公开build29；新文档CI待验。P5/P6未实施，正式入口OFF，Beta NO-GO，未签名发布。
+
+## P4 测试运输改为 App 内部路径与大库前预检；主线六 CI 通过 — 2026-10-18
+
+#65 已获单独明确批准后普通合入主线8ebb719，合并后六项必需CI全PASS；官方工件SHA/CRC核验26/29/35各4个新SQLCipher用例真实PASS/0skip，见performance/main-8ebb719-*。本地P4通过普通merge同步主线（223aeff），workflow保留17类并集、双方HANDOFF保留。data413、Period5、PrivacyNoticeFacts3、Python190及原生合同编译PASS，Privacy初次过滤名误写后已实际按正确类名补跑3项，证据已更新。
+
+4dc09b8原生run39108085887完整FAIL：实际写入15604/15957/16339ms仍>5s，审计/预测/恢复后审计本次低于15s。ART文件生成2300664B，但host_ack=false、未取回，且没有逐路径错误信息；仅切换shell不足以完成运输，根因仍UNVERIFIED，不声称已分析方法热点。工件12129850807官方SHA/CRC及原始报告已归档native-4dc09b8-*；7590两次旧失败也保留。
+
+新候选只修改测试工具：使用debug测试App UID的run-as读取自己的内部固定路径，不依赖外部存储别名。完整计量库/SQLCipher加载前，验证8字节含NUL/高位字节探针和App自己读取的nonce ACK；失败15s内停在TRANSPORT_PREFLIGHT_FAILED/PERFORMANCE_NOT_RUN，保留有界逐路径退出码/stderr。成功预检后不轮询adb，等原预算全部冻结后的采样ready才取方法栈并回执，原性能断言/fixture/SHA/预算不变。先新增负向测试实际25项中1失败/3错误，再Python197 PASS；生成原生源码编译PASS并清理测试生成文件。实际新运输NOT_RUN，不能用合成预检冒充原生成功。
+
+P4_BLOCKED/DRAFT、正式入口OFF；P5/P6未实施，Beta NO-GO。无生产代码/Schema/备份/PK新增改动，无新签名、发布或APK交付。完整证据见docs/ansm-integration/p4/performance/与阶段账本。
+
+## 已获单独授权并普通合并 #65；主线复验待验 — 2026-10-18
+
+负责人明确答复“批准普通受保护合并 #65”，已复核e69490f六CI全部成功、无冲突/未解决讨论，以匹配HEAD的普通merge合入8ebb7198fe1dbd1d0c2a5f96e24cdecf7efac54c；无admin/force/auto。主线CI待验，后续P4基线合并保留双方共享workflow类名单/HANDOFF，不能将旧分支绿灯冒充新基线结果。P4原生7590cc7 attempt2仍运行，原失败保留。授权见REQUIREMENTS§108。
+
+## P4 原生恢复中进程退出；#65 最终六 CI 全绿 — 2026-10-18
+
+7590cc7原生run39106781296 attempt1在加密恢复中测试进程退出；官方工件SHA/CRC及原始部分报告、合成日志已归档。写入和采样未完成，不能拿先前耗时充当本轮结果；退出原因UNVERIFIED。相同源码/预算attempt2正在复查，保留原失败、不宣称根因修复。详见[阶段账本](ansm-integration/WORK-STATE.md)。
+
+独立#65最终e69490f六项必需CI在push/PR均PASS，已Ready for review并更新正文；未扩大ANSM自动合并授权。P4仍BLOCKED、正式入口OFF，P5/P6未实施、Beta NO-GO，无新APK或发布。
+
+## P4 工具准备失败非性能结果；已修nonce隔离 — 2026-10-18
+
+0b7bf67原生run39106094875在测试前因新增logcat -c失败，PERFORMANCE_NOT_RUN/数值UNAVAILABLE。移除清日志依赖，以主机本轮nonce绑定Instrumentation、watcher及collector，旧ready/旧绿报告不能触发读取或冒充当前结果。Python188/原生源码编译PASS，实际运输待验；不改原预算/生产代码。详细故障/工件SHA/修正见[阶段账本](ansm-integration/WORK-STATE.md)。
+
+#65源88a60f1六CI和26/29/35各4新用例实际SQLCipher成功已核验；e69490f仅证据的最终CI待跑，未擅自合并一般日常数据修复。P4_BLOCKED/OFF，P5/P6未实施，未签名发布。
+
+## P4 采样运输改为预算后握手；#65源CI全绿 — 2026-10-18
+
+efc7aba原生写入16.1–16.5s仍>5s，P4_BLOCKED；Trace实际生成但AGP清理导致未取回，分析UNAVAILABLE，不编造热点。后续仅测试工具：预算后ready/nonce/host ack，主机仅收到log标记后读固定合成路径，不在原计时阶段轮询adb，最多预算后等30s，保留原失败断言。Python184/原生源码编译PASS，实际握手NOT_RUN。详见[阶段账本](ansm-integration/WORK-STATE.md)。
+
+独立#65源88a60f1六CI全PASS，API26/29新4用例真实SQLCipher成功；原始工件/35报告继续核验。尚不自动合并一般日常修复。正式库存入口OFF，P5/P6未实施，未签名发布。
+
+## P4 写入12.3–13.4s仍阻断；独立日常恢复修复#65 — 2026-10-18
+
+3cea864六CI PASS，原生run39102897438完整FAIL：本次审计/预测<15s，三写入仍>5s。解析复用本地data409/Period5/Privacy3已通过，未冒充P4完成。下一提交仅在原预算冻结后进行合成ART方法栈采样；Python179与原生源码编译PASS，实际采样NOT_RUN。新工具强制API26模拟器、固定路径/硬大小上限、保留失败退出码，不进入正式App。详见[阶段账本](ansm-integration/WORK-STATE.md)。
+
+另有#65独立回收站同毫秒引用冲突修复：4确定性红→data247/Python156/原生编译绿；当前26/29/35与最终六CI待验，不自动合并一般日常数据PR。未来与P4同一workflow行须取类名单并集。P4_BLOCKED，正式入口OFF，P5/P6未实施，Beta NO-GO，未发布。
+
+## P4 消费解析复用本地通过；原生门仍待验收 — 2026-10-18
+
+65cf08e六CI PASS、原生四预算FAIL证据已核验。新候选仅在单次审核内复用完整解析结果，保留全部字段/链/摘要/数量/全局校验，不改Schema或库存语义。data409、Period5/Privacy3、Python169、原生源码编译及同规模JVM大库PASS；新原生NOT_RUN，正式入口OFF/P4_BLOCKED。另发现#64评分回收站时间戳引用冲突，独立分支正在确定性复现，不混入P4。详见[阶段账本](ansm-integration/WORK-STATE.md)。未签名、未发布、未合并，P5/P6未实施。
+
+## P4 同机对照明确收益；写入门仍FAIL — 2026-10-17
+
+cdc50b7原生run39068064156完整结束：本次审计/预测/恢复审计低于15s，但真实写入15.25–16.47s>5s，P4_BLOCKED，入口OFF。后置同机raw17s vs cached12–13s且完整投影相等；不是P4准入成功。保留同一生产源码此前四预算失败，避免将一次较快运行写为稳定修复。继续仅测试定位逐包装/逐操作方法耗时；生产未变。[阶段账本](ansm-integration/WORK-STATE.md)已记录工件SHA/完整失败与JVM诊断。P5/P6未实施，Beta #64仍NO-GO。
+
+## P4 原生复验仍阻断 — 2026-10-17
+
+原生db34e87四预算FAIL，真实写入19.16–19.76s>5s；未放宽门槛。data407/Period5/Privacy3/Python168 PASS；JVM查询减少67.5%不等于原生成功。主线d13048b合并后六CI已PASS。新增测试专用后置分段与同机raw/cache对照，保持原预算/峰值范围及全部断言；尚待原生运行。最新证据及限制见 [阶段账本](ansm-integration/WORK-STATE.md)。正式入口OFF，P4_BLOCKED，P5/P6未实施，#64 Beta仍NO-GO。
+
+## P4 只读行缓存优化待原生验收 — 2026-10-17
+
+发现完整审计62219次SQL查询，新增只在单次同步只读事务有效的有界标量行缓存，保持所有逐行/全图/账本校验，未命中回SQL，结束检查无数据/Schema变动。data407零fail/skip与原生源码编译已通过；同规模JVM写入约1.7–1.8s不等于原生成功。前一原生a3e95e4仍四预算FAIL，证据完整保留；当前源码原生门待跑，正式入口OFF。详细范围/兼容/未来步骤见 [阶段账本](ansm-integration/WORK-STATE.md)。#63已合并，主线复验仍须核实；#64 Beta仍NO-GO。
+
+## 主线 CI 修复已合并；P4 准入仍待实测 — 2026-10-17
+
+#63 自动合并为 d13048b，源80c31ce六项必需CI全部成功并核验工件；合并后主线复验仍在跑。P4 同步已合并修复，仅解决 HANDOFF 并保留双方记录。a3e95e4 最终 data402/Python168/Period5/Privacy3/原生源码编译成功，低内存原生性能仍待 run39064593821，不称 P4 已完成。阶段证据见 [集成账本](ansm-integration/WORK-STATE.md)。未重新发布、未开精确库存入口，P5/P6仅审计/待开发。
+
+## P4 批量审计与后端收尾 — 2026-10-17
+
+新增优化/负向验证已通过最终本地 data402、Python168；原生和最终 CI 尚待跑，不得称 P4 已完成或合并。完整失败证据、范围与当前报告见 [集成账本](ansm-integration/WORK-STATE.md)。#63 独立 CI 修复由 Claude 负责；#64 是仅文档 Beta NO-GO 清单，无发布授权。P5 完成真实代码接线审计，未实施 gateway/UI 写入，不重画 Claude UI，也未启用附件。官方资源/PK/发行边界不变。
+
+## ANSM 后端收尾续作 — 2026-10-17
+
+#57 合入最新默认 35600a0，保留 build29 发布账本与 Claude 八张 REFERENCE_ONLY 图。新任务见 REQUIREMENTS §107；旧 P4/V4 编号顺延 §105/106，主线发布 §104 不变。CI 修复 #63 已由 Claude 负责，避免重复开发。原生性能第五次运行完整 FAIL，四项超时；准确指标见 [阶段账本](ansm-integration/WORK-STATE.md) 及 performance/native-fifth-report.json。当前 P4_BLOCKED，正式精确库存入口 OFF，P5/P6 未实施，未发布。
+
+
 ## P4续作审计与临床读取负向测试 — 2026-10-18
 
 回到原#57/6c871bfd，不新建第二PR。最新主线86131172（#85）六必需CI全部PASS，已把主线收据补PR85。原生39130872641写入8.17/8.23/7.59秒仍FAIL，入口OFF。拟以保留缺失行的LEFT JOIN减少每操作实际记录点查，先运行共享负向测试；文件级合同见ansm-integration/p4/performance/clinical-stream-contract.md，尚未改生产实现。发现主线LAB02与P4旧候选Room12/业务11编号碰撞：后续必须保留主线已审版本、独立确定下一版本及完整兼容链，不可覆盖main12.json或声称旧候选已整合。新性能候选与兼容接线分开验收，仍PRODUCTION_BLOCKED。
@@ -1903,3 +2018,20 @@ B0/B1/D-1/D-2已经进入默认分支，不再列为待重复实现；本地再�
 后续前缀复用先共享负向测试真实FAIL（两包装重复读2次，预期0），再复用同次完整审计已验证流水：完整data423零失败/错误/跳过、原生源码编译PASS；同14600/2000负载完整投影一致、SQL6178→4178，原始量/因果head/sequence reducer不变。clinical-stream-*、prefix-reuse-*收据标明base/worktree源码hash，legacy scratch日志的git HEAD不能冒称未提交前缀实现source。格式化与空未使用包装不缓存的边界复验进行中；新候选原生性能尚未执行，入口OFF，主线Room12/业务11衔接未实施。未来集成具体方案mainline-room13-compatibility.md保留main12/LAB02，候选13/业务12并完整旧链/拒绝测试，不覆盖主线已审schema。
 
 前缀最终空包边界复验：共享MeasuredConsumptionStore 122项PASS，零失败/错误/跳过，原生编译PASS；源码hash与XML收据prefix-reuse-empty-boundary-evidence.json。完整423项收据对应先前等价前缀核心，后续仅空未用包不保留映射与格式化；相同大负载全为非空精确包。下一提交后新HEAD原生及完整CI待验，保持DRAFT/OFF，不用本地结果越过准入。
+
+
+## P4 / main861兼容集成进行中 — 2026-10-19
+
+保留主线已审中心/化验/提醒和Room12/业务11；当前未提交集成候选Room13/业务12，仅添加显式库存编码，不覆盖main12.json或LabPanel迁移，原PNBAK1密码学/PK/版本签名不变。旧P4 §108–111顺延114–117，源任务书不改。前缀候选cc7b182c已推送，原生39209956991仍待验；本地423及122目标合同PASS不代表集成验收。冲突逐项合并并扩展旧链/备份/拒绝测试；尚无编译/完整CI/主线合并或正式入口启用。
+
+## P4 集成首轮失败保留与新兼容合同 — 2026-10-19
+
+main861与cc7普通merge仍未提交。Room13已由KSP生成，与批准main12结构比较：46表中45表逐项相同，库存表仅新增inventory_encoding默认LEGACY；main12文件字节未改，收据main861-room13-schema-evidence.json。首轮data437实际13失败/0错误/0跳过：旧当前版本断言与备份夹具仍固定Room12/业务11等，原失败收据main861-room13-first-failure.json。逐项把“当前输出”期待改候选13/12，旧版本夹具保持原号；库存伪造版本负例扩到10/11/12，新旧读取拒绝保留；新增真实主线业务11含化验单和旧库存恢复、12→13故障DDL回滚保留化验关联/原量/引用epoch。完整第二轮与原生编译运行中，未宣称PASS。cc7原生39209956991亦实际FAIL（8.47/7.95/8.64秒>5秒），官方ZIP39c6355b…75065已下载/CRC核验，详细归档待本轮完成；正式入口仍OFF，不合并#57。
+
+P4 Room13第二轮data439仅1失败，归档main861-room13-second-failure.json：真实新增main12故障回滚夹具触发InventoryEncoding.install旧<12门。相应门改为Room格式版本13，PackageCorrections旧标量门同用该常量；主线LabPanel业务Schema11条件保持不变。新增反向合同：已发布Room12可无marker，伪称Room13仍缺marker必须拒绝；不是删除安全检查。第三轮全data及原生编译待验，仍无集成提交/生产启用。
+
+## P4 主线兼容候选440本地PASS — 2026-10-19
+
+普通合入批准main86131172到原#57，保留所有医疗/药品中心、UI05、LAB02及AppOps等待修正；兼容候选Room13/业务12在原§102/续作授权内非破坏演进。批准main12.json逐字保留，新13仅增加inventory_encoding，46表其余定义不变；原Schema11含化验单/旧标量恢复、1…12升级、旧12读者拒绝13、旧11备份读者拒绝12、故障DDL回滚并保留化验关联/库存原量/引用epoch等共data440零失败/错误/跳过，原生源码编译PASS；收据main861-room13-local-evidence.json。现有安全断言保留，仅当前输出版本期待和旧夹具口径按实际来源调整，并新增反向格式门测试；两轮真实失败保留。App库存UNKNOWN/UI05/中心/时期回归仍运行中，合并候选最新HEAD完整六CI/原生性能待验。
+
+cc7原生39209956991完整FAIL已归档performance/native-profile-cc7b182c：8.468/7.955/8.645秒>5；15秒审计/预测均本轮内，堆/磁盘观测如实保留，官方ZIP39c6355b…75065/CRC/52722采样parser重放核验PASS但仍PARTIAL_DIAGNOSTIC。不能拿本地4178查询或候选迁移通过替代实际5秒门，#57继续DRAFT/PRODUCTION_BLOCKED，正式写入口OFF，P5/P6未启用。不改PK/PNBAK1密码学/权限/签名/发布；版本32来自已审主线，非本任务另行改版或交付。

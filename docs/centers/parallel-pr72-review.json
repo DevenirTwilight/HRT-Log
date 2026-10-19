@@ -1,0 +1,13 @@
+{
+  "observedOn": "2026-10-18",
+  "pr": 72,
+  "head": "6da1b4114ad3759bc8d8b2ec86a2ad4cc4e897f6",
+  "workflowRun": 39127388329,
+  "job": 117675275961,
+  "status": "FAIL",
+  "failedTests": ["MedicalHomeTest.noFileOrAttachmentEntry", "TimelineAndDrawerHierarchyTest.drawerKeepsAllTwelveEntriesUnderHeadings"],
+  "appTests": 1397,
+  "appFailures": 2,
+  "appSkipped": 205,
+  "policy": "Evidence only. No source, assertion, PR status or branch of PR72 was changed. Continue current real-actions-only A/B instruction unless owner steers otherwise."
+}

@@ -1,0 +1,18 @@
+<resources>
+    <string name="center_not_open">This feature is not available yet.</string>
+    <string name="center_future_modules">Not available yet</string>
+    <string name="center_fr_catalogue">French official medicine catalogue</string>
+    <string name="center_fr_catalogue_reason">Official data distribution awaits source and reuse approval.</string>
+    <string name="center_shortages">Medicine shortages</string>
+    <string name="center_recalls">Recalls and regulatory notices</string>
+    <string name="center_med_files">Medical file library</string>
+    <string name="center_med_originals">Original PDFs, images, prescriptions and records</string>
+    <string name="center_med_practitioners">Doctor and institution profiles</string>
+    <string name="center_med_visit_links">Link files to visits</string>
+    <string name="center_med_lab_links">Link files to lab records</string>
+    <string name="center_med_organize">Organize, summarize and export medical files</string>
+    <string name="center_med_files_reason">Original-file import and storage await security review. No file is selected or saved here.</string>
+    <string name="center_med_practitioners_reason">Separate profiles are not implemented. Existing doctor and institution details remain in visits.</string>
+    <string name="center_med_links_reason">File associations are not implemented. No link is inferred from dates.</string>
+    <string name="center_med_organize_reason">File organization is not implemented. Existing visit pack PDF export remains available from a visit.</string>
+</resources>

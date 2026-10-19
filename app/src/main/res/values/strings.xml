@@ -1247,4 +1247,44 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="test_out_permission">blocked: notification permission not granted</string>
 <string name="test_out_app">blocked: notifications are off for this app</string>
 <string name="test_out_channel">blocked: the reminder notification category is off</string>
+<string name="today_in_hours">In %1$d h</string>
+<string name="today_in_minutes">In %1$d min</string>
+<string name="home_stock_low">%1$s is running low</string>
+<string name="home_stock_more">%1$d more</string>
+<string name="stock_about_days">about %1$d days</string>
+<string name="period_since">Since %1$s</string>
+<string name="drawer_stock_badge">Stock: %1$d running low</string>
+<string name="medical_in_days">in %1$d days</string>
+<string name="medical_next_questions">Questions to ask · %1$d</string>
+<string name="medical_next_pack">Visit pack</string>
+<!-- LAB-01 batch lab entry -->
+<string name="lab_batch_title">Record a blood test</string>
+<string name="lab_batch_add_row">Add a test</string>
+<string name="lab_batch_presets">Common sets</string>
+<string name="lab_preset_hormones">Six hormones</string>
+<string name="lab_preset_liver">Liver</string>
+<string name="lab_preset_kidney">Kidney and electrolytes</string>
+<string name="lab_group_count">%1$d tests</string>
+<string name="lab_batch_duplicate">This test is already in this entry</string>
+<string name="lab_group_split_hint">Changing the time or lab will show this result on its own</string>
+<string name="lab_flag_high">High</string>
+<string name="lab_flag_low">Low</string>
+<string name="lab_filter_all">All</string>
+<string name="lab_batch_remove_row">Remove test %1$d</string>
+<string name="lab_row_spoken">%1$s, %2$s, %3$s</string>
+<string name="lab_row_spoken_flag">, %1$s</string>
+<string name="lab_batch_failed">Nothing was saved. Your entries are still here.</string>
+<!-- LAB-02 lab panels -->
+<string name="trash_kind_lab_panel">Blood test</string>
+<string name="lab_panel_title">Blood test</string>
+<string name="lab_panel_save_as">Save as one blood test</string>
+<string name="lab_panel_save_as_body">These results will be kept together as one blood test. Their values and times do not change.</string>
+<string name="lab_panel_note">Note for this blood test</string>
+<string name="lab_panel_save_changes">Save changes</string>
+<string name="lab_panel_save_added">Save the new tests</string>
+<string name="lab_panel_remove_member">Take %1$s out of this blood test</string>
+<string name="lab_panel_delete">Delete this blood test</string>
+<string name="lab_panel_delete_confirm">The blood test and its %1$d results move to the recycle bin together.</string>
+<string name="lab_panel_open">Open this blood test</string>
+<string name="lab_panel_members">Results</string>
 </resources>

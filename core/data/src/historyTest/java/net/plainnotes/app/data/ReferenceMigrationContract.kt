@@ -12,8 +12,13 @@ import org.junit.Test
 import org.junit.Assert.*
 import java.util.UUID
 
-/** Authoritative exported schemas 1..11, then the real production migration and Room validation. */
+/** Authoritative exported schemas 1..12, then the real production migration and Room validation. */
 abstract class ReferenceMigrationContract {
+    private companion object {
+        /** The only DDL Room 11→12 (LAB-02) adds to a Room 10 table: exactly this column clause and this index. */
+        const val LAB_PANEL_COLUMN=", `panel_id` INTEGER REFERENCES `lab_panel`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT"
+        const val LAB_PANEL_INDEX="index_lab_value_panel_id"
+    }
     protected abstract fun factory(key:ByteArray):SupportSQLiteOpenHelper.Factory
     protected open val assetsContext:Context get()=context
     protected val context:Context get()=ApplicationProvider.getApplicationContext()
@@ -38,31 +43,28 @@ abstract class ReferenceMigrationContract {
         return JSONObject().apply {
             for(i in 0 until definitions.length()) {
                 val table=definitions.getJSONObject(i).getString("tableName");val rows=JSONArray()
-                db.query("SELECT ${definitions.getJSONObject(i).getJSONArray("fields").let{fields->(0 until fields.length()).map{fields.getJSONObject(it).getString("columnName")}}.joinToString(","){"`$it`"}} FROM `$table` ORDER BY rowid").use {c->while(c.moveToNext()) rows.put(JSONArray((0 until c.columnCount).map {column->
+                // LAB-02 (Room 12) adds lab_value.panel_id, always NULL for legacy rows (checked separately); every Room 10 column stays bit-exact.
+                val legacyColumns=definitions.getJSONObject(i).getJSONArray("fields").let{f->(0 until f.length()).joinToString(","){"`"+f.getJSONObject(it).getString("columnName")+"`"}}
+                db.query("SELECT $legacyColumns FROM `$table` ORDER BY rowid").use {c->while(c.moveToNext()) rows.put(JSONArray((0 until c.columnCount).map {column->
                     JSONArray().put(c.getType(column)).put(if(c.isNull(column)) JSONObject.NULL else if(c.getType(column)==android.database.Cursor.FIELD_TYPE_BLOB)
                         android.util.Base64.encodeToString(c.getBlob(column),android.util.Base64.NO_WRAP) else if(c.getType(column)==android.database.Cursor.FIELD_TYPE_FLOAT) java.lang.Double.doubleToRawLongBits(c.getDouble(column)).toString() else c.getString(column))
                 }))}
                 put(table,rows)
                 val ddl=JSONArray()
-                db.query("SELECT type,name,sql FROM sqlite_master WHERE tbl_name=? AND type IN ('table','index') ORDER BY type,name",arrayOf(table)).use {c->while(c.moveToNext())ddl.put(JSONArray().put(c.getString(0)).put(c.getString(1)).put(if(c.isNull(2))JSONObject.NULL else c.getString(2).let { sql ->
-                    if(table=="supply_container" && c.getString(0)=="table" && InventoryEncoding.present(db)) {
-                        val allowed=listOf(", inventory_encoding TEXT NOT NULL DEFAULT 'LEGACY_SCALAR'",", `inventory_encoding` TEXT NOT NULL DEFAULT 'LEGACY_SCALAR'")
-                        val fragment=allowed.single{sql.contains(it)}
-                        sql.replace(fragment,"")
-                    } else sql
-                }))}
+                db.query("SELECT type,name,sql FROM sqlite_master WHERE tbl_name=? AND type IN ('table','index') ORDER BY type,name",arrayOf(table)).use {c->while(c.moveToNext())if(c.getString(1)!=LAB_PANEL_INDEX)
+                    ddl.put(JSONArray().put(c.getString(0)).put(c.getString(1)).put(if(c.isNull(2))JSONObject.NULL else PublishedBusinessFixture.publishedDdl(db,table,c.getString(0),c.getString(2))!!.replace(LAB_PANEL_COLUMN,"")))}
                 put("ddl_$table",ddl)
             }
         }.toString()
     }
     @Test fun everyPublishedRoomOneThroughElevenUpgradesNonDestructivelyToTwelve() {
-        for(version in 1..11) {
+        for(version in 1..12) {
             val name="synthetic-reference-migration-$version-${UUID.randomUUID()}.db";val key=ByteArray(32){(version+it).toByte()}
             try {
                 fixture(name,key,version).use {it.writableDatabase.execSQL("INSERT INTO day_note(date,text) VALUES('2026-10-16',?)",arrayOf("SYNTHETIC schema $version"))}
                 Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(key.clone()))
                     .addMigrations(*allMigrations()).addCallback(SchemaGuards).allowMainThreadQueries().build().useRoom {room->
-                        val raw=room.openHelper.writableDatabase;assertEquals(12,raw.version)
+                        val raw=room.openHelper.writableDatabase;assertEquals(13,raw.version)
                         raw.query("SELECT text FROM day_note").use {assertTrue(it.moveToFirst());assertEquals("SYNTHETIC schema $version",it.getString(0));assertFalse(it.moveToNext())}
                         raw.query("PRAGMA foreign_key_check").use {assertFalse(it.moveToFirst())}
                         ReferenceSchema.businessTables.forEach {table->raw.query("SELECT COUNT(*) FROM `$table`").use {it.moveToFirst();assertEquals(0,it.getInt(0))}}
@@ -86,7 +88,7 @@ abstract class ReferenceMigrationContract {
                 fingerprint(raw)
             }
             fun open()=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(key.clone())).addMigrations(*allMigrations()).addCallback(SchemaGuards).build()
-            open().useRoom {assertEquals(before,fingerprint(it.openHelper.writableDatabase));assertEquals(12,it.openHelper.writableDatabase.version);it.openHelper.writableDatabase.query("SELECT inventory_encoding FROM supply_container").use{c->while(c.moveToNext())assertEquals(InventoryEncoding.LEGACY,c.getString(0))}}
+            open().useRoom {assertEquals(before,fingerprint(it.openHelper.writableDatabase));assertEquals(13,it.openHelper.writableDatabase.version);it.openHelper.writableDatabase.query("SELECT inventory_encoding FROM supply_container").use{c->while(c.moveToNext())assertEquals(InventoryEncoding.LEGACY,c.getString(0))}}
             fixture(name,key,10).use {old->
                 try {old.writableDatabase;fail("Old application silently downgraded new database")} catch(_:android.database.SQLException){}
             }
@@ -108,9 +110,11 @@ abstract class ReferenceMigrationContract {
                 }
                 RawData.dump(room.openHelper.writableDatabase).toString()
             }
-            var rejected=false
-            fixture(name,key,11).use {old->try{old.writableDatabase}catch(_:android.database.SQLException){rejected=true}}
-            assertTrue("Room11 reader opened the new measurement format and could misinterpret integer stock quanta",rejected)
+            for(maximum in listOf(11,12)) {
+                var rejected=false
+                fixture(name,key,maximum).use {old->try{old.writableDatabase}catch(_:android.database.SQLException){rejected=true}}
+                assertTrue("Old Room$maximum reader opened the new measurement format and could misinterpret integer stock quanta",rejected)
+            }
             open().useRoom {assertEquals(before,RawData.dump(it.openHelper.writableDatabase).toString())}
         } finally {context.deleteDatabase(name);key.fill(0)}
     }
@@ -132,7 +136,7 @@ abstract class ReferenceMigrationContract {
                     error("SYNTHETIC format fence interrupted")
                 }
             }
-            Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(key.clone())).addMigrations(injected).build().useRoom {room->
+            Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(key.clone())).addMigrations(injected,migration12To13).build().useRoom {room->
                 try{room.openHelper.writableDatabase;fail("Interrupted format fence succeeded")}catch(e:IllegalStateException){assertTrue(e.message.orEmpty().contains("SYNTHETIC format fence interrupted"))}
             }
             assertTrue(invoked)
@@ -142,7 +146,7 @@ abstract class ReferenceMigrationContract {
                 raw.query("SELECT dataset_uuid,epoch FROM reference_runtime").use{assertTrue(it.moveToFirst());assertEquals(before.second,it.getString(0) to it.getString(1))}
             }
             Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(key.clone())).addMigrations(*allMigrations()).addCallback(SchemaGuards).build().useRoom {room->
-                val raw=room.openHelper.writableDatabase;assertEquals(12,raw.version);assertEquals(before.first,PublishedBusinessFixture.dump(raw).toString())
+                val raw=room.openHelper.writableDatabase;assertEquals(13,raw.version);assertEquals(before.first,PublishedBusinessFixture.dump(raw).toString())
                 raw.query("SELECT dataset_uuid,epoch FROM reference_runtime").use{assertTrue(it.moveToFirst());assertEquals(before.second,it.getString(0) to it.getString(1))}
             }
         } finally {context.deleteDatabase(name);key.fill(0)}
@@ -168,6 +172,65 @@ abstract class ReferenceMigrationContract {
             fixture(name,key,11).use{assertEquals(11,it.writableDatabase.version);assertFalse(InventoryEncoding.present(it.writableDatabase));assertEquals(before,PublishedBusinessFixture.dump(it.writableDatabase).toString())}
         } finally {context.deleteDatabase(name);key.fill(0)}
     }
+    @Test fun publishedRoomTwelveMayLackEncodingButClaimedThirteenMustRejectIt() {
+        val name="synthetic-encoding-version-boundary-${UUID.randomUUID()}.db";val key=ByteArray(32){101}
+        try {
+            fixture(name,key,12).use {h->
+                val raw=h.writableDatabase;assertFalse(InventoryEncoding.present(raw));assertEquals(12,raw.version)
+                InventoryEncoding.install(raw)
+                raw.version=13
+                try {InventoryEncoding.install(raw);fail("Claimed current format accepted a missing encoding field")}
+                catch(_:IllegalArgumentException){}
+                finally {raw.version=12}
+                assertFalse(InventoryEncoding.present(raw));assertEquals(12,raw.version)
+            }
+        } finally {context.deleteDatabase(name);key.fill(0)}
+    }
+
+    @Test fun failedMainTwelveToThirteenFenceKeepsPanelLinksLegacyBitsAndEpoch() {
+        val name="synthetic-main12-fence-${UUID.randomUUID()}.db";val key=ByteArray(32){97};var invoked=false
+        try {
+            val before=fixture(name,key,12).use {h->
+                val raw=h.writableDatabase;SchemaGuards.install(raw);raw.beginTransaction()
+                try {
+                    raw.execSQL("INSERT INTO medication(id,name,molecule,unit,dose_per_intake,container_capacity,site_rotation,notifications_on,active,sort_order) VALUES(1,'SYNTHETIC main12','OTHER','MG',1,20.25,0,0,0,0)")
+                    raw.execSQL("INSERT INTO supply_container(id,medication_id,capacity,initial_used_amount,used_amount,state) VALUES(1,1,20.25,0.5,0.5,'SEALED')")
+                    raw.execSQL("INSERT INTO lab_analyte(code,canonical_unit) VALUES('E2','pg/mL')")
+                    raw.execSQL("INSERT INTO lab_panel(id,uuid,sampled_utc,sampled_zone,created_utc) VALUES(7,?,1000,'UTC',1000)",arrayOf(UUID.randomUUID().toString()))
+                    raw.execSQL("INSERT INTO lab_value(id,analyte_code,value,unit,sampled_utc,sampled_zone,panel_id) VALUES(1,'E2',100,'pg/mL',1000,'UTC',7)")
+                    ReferenceStore.initialAssociation(raw,1,UUID.randomUUID().toString(),UserReferenceProduct("SYNTHETIC unchanged reference",sourceVersion="synthetic-v1",recordedOn="2026-10-19"),ReferenceStore.previewEpoch(raw))
+                    raw.setTransactionSuccessful()
+                } finally {raw.endTransaction()}
+                PublishedBusinessFixture.dump(raw,schema=11).toString() to raw.query("SELECT dataset_uuid,epoch FROM reference_runtime").use{assertTrue(it.moveToFirst());it.getString(0) to it.getString(1)}
+            }
+            val fault=object:androidx.room.migration.Migration(12,13) {
+                override fun migrate(db:SupportSQLiteDatabase) {
+                    invoked=true;migration12To13.migrate(db)
+                    db.execSQL("CREATE TABLE synthetic_inventory_fence_interrupt(id INTEGER PRIMARY KEY)")
+                    error("SYNTHETIC main12 inventory fence interrupted")
+                }
+            }
+            Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(key.clone())).addMigrations(fault).build().useRoom {room->
+                try{room.openHelper.writableDatabase;fail("Interrupted main12 inventory fence succeeded")}
+                catch(e:Exception){assertTrue(generateSequence<Throwable>(e){it.cause}.any{it.message.orEmpty().contains("SYNTHETIC main12 inventory fence interrupted")})}
+            }
+            assertTrue(invoked)
+            fixture(name,key,12).use {h->
+                val raw=h.writableDatabase;assertEquals(12,raw.version);assertFalse(InventoryEncoding.present(raw))
+                assertEquals(before.first,PublishedBusinessFixture.dump(raw,schema=11).toString())
+                raw.query("SELECT name FROM sqlite_master WHERE name='synthetic_inventory_fence_interrupt'").use{assertFalse(it.moveToFirst())}
+                raw.query("SELECT dataset_uuid,epoch FROM reference_runtime").use{assertTrue(it.moveToFirst());assertEquals(before.second,it.getString(0) to it.getString(1))}
+            }
+            Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(key.clone())).addMigrations(*allMigrations()).addCallback(SchemaGuards).build().useRoom {room->
+                val raw=room.openHelper.writableDatabase;assertEquals(13,raw.version)
+                assertEquals(before.first,PublishedBusinessFixture.dump(raw,schema=11).toString())
+                raw.query("SELECT inventory_encoding,capacity,initial_used_amount,used_amount FROM supply_container").use{assertTrue(it.moveToFirst());assertEquals(InventoryEncoding.LEGACY,it.getString(0));assertEquals(20.25,it.getDouble(1),0.0);assertEquals(0.5,it.getDouble(2),0.0);assertEquals(0.5,it.getDouble(3),0.0)}
+                raw.query("SELECT panel_id FROM lab_value").use{assertTrue(it.moveToFirst());assertEquals(7,it.getInt(0))}
+                raw.query("SELECT dataset_uuid,epoch FROM reference_runtime").use{assertTrue(it.moveToFirst());assertEquals(before.second,it.getString(0) to it.getString(1))}
+            }
+        } finally {context.deleteDatabase(name);key.fill(0)}
+    }
+
     @Test fun failedTenToElevenMigrationRollsBackDdlAndKeepsOriginalEncryptedDatabaseReadable() {
         val name="synthetic-reference-failed-migration-${UUID.randomUUID()}.db";val key=ByteArray(32){63};var invoked=false
         try {
@@ -175,7 +238,7 @@ abstract class ReferenceMigrationContract {
             val injected=object:androidx.room.migration.Migration(10,11) {
                 override fun migrate(db:SupportSQLiteDatabase) {invoked=true;ReferenceSchema.migrate(db);error("SYNTHETIC reference migration interrupted")}
             }
-            Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(key.clone())).addMigrations(injected,migration11To12).build().useRoom {room->
+            Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(key.clone())).addMigrations(injected,migration11To12,migration12To13).build().useRoom {room->
                 try {room.openHelper.writableDatabase;fail("Interrupted migration succeeded")}catch(e:IllegalStateException){assertTrue(e.message.orEmpty().contains("SYNTHETIC reference migration interrupted"))}
             }
             assertTrue(invoked)
@@ -184,7 +247,7 @@ abstract class ReferenceMigrationContract {
                 raw.query("SELECT text FROM day_note").use {assertTrue(it.moveToFirst());assertEquals("SYNTHETIC intact Room10",it.getString(0))}
                 raw.query("SELECT name FROM sqlite_master WHERE type='table' AND name IN (${(ReferenceSchema.businessTables+"reference_runtime").joinToString(",") {"'"+it+"'"}})").use {assertEquals(0,it.count)}
             }
-            Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(key.clone())).addMigrations(*allMigrations()).addCallback(SchemaGuards).build().useRoom {assertEquals(12,it.openHelper.writableDatabase.version)}
+            Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(key.clone())).addMigrations(*allMigrations()).addCallback(SchemaGuards).build().useRoom {assertEquals(13,it.openHelper.writableDatabase.version)}
         } finally {context.deleteDatabase(name);key.fill(0)}
     }
 }
