@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.Lab01LayoutTest" tests="64" skipped="0" failures="0" errors="0" timestamp="2026-10-19T17:19:41.170Z" hostname="8a64197d37fe" time="104.057">
+  <properties/>
+  <testcase name="formScrollsToEveryRowWithSaveFixed[en/320dp/1x/dark=false]" classname="net.plainnotes.app.Lab01LayoutTest" time="21.988"/>
+  <testcase name="labsPageWithDrawCardsAndSingleRows[en/320dp/1x/dark=false]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.129"/>
+  <testcase name="formScrollsToEveryRowWithSaveFixed[en/320dp/1x/dark=true]" classname="net.plainnotes.app.Lab01LayoutTest" time="2.11"/>
+  <testcase name="labsPageWithDrawCardsAndSingleRows[en/320dp/1x/dark=true]" classname="net.plainnotes.app.Lab01LayoutTest" time="0.692"/>
+  <testcase name="formScrollsToEveryRowWithSaveFixed[en/320dp/2x/dark=false]" classname="net.plainnotes.app.Lab01LayoutTest" time="2.619"/>
+  <testcase name="labsPageWithDrawCardsAndSingleRows[en/320dp/2x/dark=false]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.413"/>
+  <testcase name="formScrollsToEveryRowWithSaveFixed[en/320dp/2x/dark=true]" classname="net.plainnotes.app.Lab01LayoutTest" time="2.888"/>
+  <testcase name="labsPageWithDrawCardsAndSingleRows[en/320dp/2x/dark=true]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.161"/>
+  <testcase name="formScrollsToEveryRowWithSaveFixed[en/411dp/1x/dark=false]" classname="net.plainnotes.app.Lab01LayoutTest" time="2.079"/>
+  <testcase name="labsPageWithDrawCardsAndSingleRows[en/411dp/1x/dark=false]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.017"/>
+  <testcase name="formScrollsToEveryRowWithSaveFixed[en/411dp/1x/dark=true]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.672"/>
+  <testcase name="labsPageWithDrawCardsAndSingleRows[en/411dp/1x/dark=true]" classname="net.plainnotes.app.Lab01LayoutTest" time="0.798"/>
+  <testcase name="formScrollsToEveryRowWithSaveFixed[en/411dp/2x/dark=false]" classname="net.plainnotes.app.Lab01LayoutTest" time="2.453"/>
+  <testcase name="labsPageWithDrawCardsAndSingleRows[en/411dp/2x/dark=false]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.097"/>
+  <testcase name="formScrollsToEveryRowWithSaveFixed[en/411dp/2x/dark=true]" classname="net.plainnotes.app.Lab01LayoutTest" time="2.045"/>
+  <testcase name="labsPageWithDrawCardsAndSingleRows[en/411dp/2x/dark=true]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.288"/>
+  <testcase name="formScrollsToEveryRowWithSaveFixed[zh-rCN/320dp/1x/dark=false]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.391"/>
+  <testcase name="labsPageWithDrawCardsAndSingleRows[zh-rCN/320dp/1x/dark=false]" classname="net.plainnotes.app.Lab01LayoutTest" time="0.904"/>
+  <testcase name="formScrollsToEveryRowWithSaveFixed[zh-rCN/320dp/1x/dark=true]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.613"/>
+  <testcase name="labsPageWithDrawCardsAndSingleRows[zh-rCN/320dp/1x/dark=true]" classname="net.plainnotes.app.Lab01LayoutTest" time="0.701"/>
+  <testcase name="formScrollsToEveryRowWithSaveFixed[zh-rCN/320dp/2x/dark=false]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.521"/>
+  <testcase name="labsPageWithDrawCardsAndSingleRows[zh-rCN/320dp/2x/dark=false]" classname="net.plainnotes.app.Lab01LayoutTest" time="0.9"/>
+  <testcase name="formScrollsToEveryRowWithSaveFixed[zh-rCN/320dp/2x/dark=true]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.284"/>
+  <testcase name="labsPageWithDrawCardsAndSingleRows[zh-rCN/320dp/2x/dark=true]" classname="net.plainnotes.app.Lab01LayoutTest" time="0.889"/>
+  <testcase name="formScrollsToEveryRowWithSaveFixed[zh-rCN/411dp/1x/dark=false]" classname="net.plainnotes.app.Lab01LayoutTest" time="0.75"/>
+  <testcase name="labsPageWithDrawCardsAndSingleRows[zh-rCN/411dp/1x/dark=false]" classname="net.plainnotes.app.Lab01LayoutTest" time="0.578"/>
+  <testcase name="formScrollsToEveryRowWithSaveFixed[zh-rCN/411dp/1x/dark=true]" classname="net.plainnotes.app.Lab01LayoutTest" time="0.861"/>
+  <testcase name="labsPageWithDrawCardsAndSingleRows[zh-rCN/411dp/1x/dark=true]" classname="net.plainnotes.app.Lab01LayoutTest" time="0.445"/>
+  <testcase name="formScrollsToEveryRowWithSaveFixed[zh-rCN/411dp/2x/dark=false]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.507"/>
+  <testcase name="labsPageWithDrawCardsAndSingleRows[zh-rCN/411dp/2x/dark=false]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.079"/>
+  <testcase name="formScrollsToEveryRowWithSaveFixed[zh-rCN/411dp/2x/dark=true]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.795"/>
+  <testcase name="labsPageWithDrawCardsAndSingleRows[zh-rCN/411dp/2x/dark=true]" classname="net.plainnotes.app.Lab01LayoutTest" time="0.905"/>
+  <testcase name="formScrollsToEveryRowWithSaveFixed[zh-rTW/320dp/1x/dark=false]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.461"/>
+  <testcase name="labsPageWithDrawCardsAndSingleRows[zh-rTW/320dp/1x/dark=false]" classname="net.plainnotes.app.Lab01LayoutTest" time="0.706"/>
+  <testcase name="formScrollsToEveryRowWithSaveFixed[zh-rTW/320dp/1x/dark=true]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.101"/>
+  <testcase name="labsPageWithDrawCardsAndSingleRows[zh-rTW/320dp/1x/dark=true]" classname="net.plainnotes.app.Lab01LayoutTest" time="0.583"/>
+  <testcase name="formScrollsToEveryRowWithSaveFixed[zh-rTW/320dp/2x/dark=false]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.58"/>
+  <testcase name="labsPageWithDrawCardsAndSingleRows[zh-rTW/320dp/2x/dark=false]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.218"/>
+  <testcase name="formScrollsToEveryRowWithSaveFixed[zh-rTW/320dp/2x/dark=true]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.667"/>
+  <testcase name="labsPageWithDrawCardsAndSingleRows[zh-rTW/320dp/2x/dark=true]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.259"/>
+  <testcase name="formScrollsToEveryRowWithSaveFixed[zh-rTW/411dp/1x/dark=false]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.204"/>
+  <testcase name="labsPageWithDrawCardsAndSingleRows[zh-rTW/411dp/1x/dark=false]" classname="net.plainnotes.app.Lab01LayoutTest" time="0.707"/>
+  <testcase name="formScrollsToEveryRowWithSaveFixed[zh-rTW/411dp/1x/dark=true]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.22"/>
+  <testcase name="labsPageWithDrawCardsAndSingleRows[zh-rTW/411dp/1x/dark=true]" classname="net.plainnotes.app.Lab01LayoutTest" time="0.574"/>
+  <testcase name="formScrollsToEveryRowWithSaveFixed[zh-rTW/411dp/2x/dark=false]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.885"/>
+  <testcase name="labsPageWithDrawCardsAndSingleRows[zh-rTW/411dp/2x/dark=false]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.375"/>
+  <testcase name="formScrollsToEveryRowWithSaveFixed[zh-rTW/411dp/2x/dark=true]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.7"/>
+  <testcase name="labsPageWithDrawCardsAndSingleRows[zh-rTW/411dp/2x/dark=true]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.145"/>
+  <testcase name="formScrollsToEveryRowWithSaveFixed[fr-rFR/320dp/1x/dark=false]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.289"/>
+  <testcase name="labsPageWithDrawCardsAndSingleRows[fr-rFR/320dp/1x/dark=false]" classname="net.plainnotes.app.Lab01LayoutTest" time="0.809"/>
+  <testcase name="formScrollsToEveryRowWithSaveFixed[fr-rFR/320dp/1x/dark=true]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.238"/>
+  <testcase name="labsPageWithDrawCardsAndSingleRows[fr-rFR/320dp/1x/dark=true]" classname="net.plainnotes.app.Lab01LayoutTest" time="0.676"/>
+  <testcase name="formScrollsToEveryRowWithSaveFixed[fr-rFR/320dp/2x/dark=false]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.766"/>
+  <testcase name="labsPageWithDrawCardsAndSingleRows[fr-rFR/320dp/2x/dark=false]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.433"/>
+  <testcase name="formScrollsToEveryRowWithSaveFixed[fr-rFR/320dp/2x/dark=true]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.692"/>
+  <testcase name="labsPageWithDrawCardsAndSingleRows[fr-rFR/320dp/2x/dark=true]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.39"/>
+  <testcase name="formScrollsToEveryRowWithSaveFixed[fr-rFR/411dp/1x/dark=false]" classname="net.plainnotes.app.Lab01LayoutTest" time="0.884"/>
+  <testcase name="labsPageWithDrawCardsAndSingleRows[fr-rFR/411dp/1x/dark=false]" classname="net.plainnotes.app.Lab01LayoutTest" time="0.633"/>
+  <testcase name="formScrollsToEveryRowWithSaveFixed[fr-rFR/411dp/1x/dark=true]" classname="net.plainnotes.app.Lab01LayoutTest" time="0.737"/>
+  <testcase name="labsPageWithDrawCardsAndSingleRows[fr-rFR/411dp/1x/dark=true]" classname="net.plainnotes.app.Lab01LayoutTest" time="0.612"/>
+  <testcase name="formScrollsToEveryRowWithSaveFixed[fr-rFR/411dp/2x/dark=false]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.465"/>
+  <testcase name="labsPageWithDrawCardsAndSingleRows[fr-rFR/411dp/2x/dark=false]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.299"/>
+  <testcase name="formScrollsToEveryRowWithSaveFixed[fr-rFR/411dp/2x/dark=true]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.805"/>
+  <testcase name="labsPageWithDrawCardsAndSingleRows[fr-rFR/411dp/2x/dark=true]" classname="net.plainnotes.app.Lab01LayoutTest" time="1.864"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

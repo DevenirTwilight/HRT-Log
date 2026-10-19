@@ -2,7 +2,7 @@
 
 独立 `feature/lab-ui03-home-20261019` 基于默认080094ae；用户最新任务登记 REQUIREMENTS §114，文件矩阵 `labs/ui03/implementation.md`。根因已定位：Destination.LABS 已正确调用 LabsScreen，但单项旧记录和指标筛选显式走私有 LabRow，因此新版批量/详情弹窗没有替换首页。现改统一 LabHomeCard，正式化验单/旧显示分组/单项/筛选历史共用视觉；已有业务回调、labDraws、趋势数值块保持。
 
-统一主页生产Kotlin编译已通过；首轮17项中2项旧纯文本定位FAIL已保留，改为精确原id及朗读值/单位断言后18项全PASS，原上下文测试通过；原生测试Kotlin编译PASS。新增真实入口原生回归及32组合前后截图/128布局回归正在执行，CI与真机尚未完成。正式入口仍沿用既有 AppShell，未建第二套数据库或入口。与独立 LAB-03 项目/单位扩展分工：本分支 LabsScreen/主页卡片/导航测试，数据分支 LabBatchEntry/词典/单位；未修改 Room12、业务备份11、PK、库存、权限、签名或 APK。CI/截图/真机/TalkBack 均尚未完成，不得据此声称已交付。P4独立Draft不阻塞本任务。
+统一主页生产Kotlin编译已通过；首轮17项中2项旧纯文本定位FAIL已保留，改为精确原id及朗读值/单位断言后18项全PASS，原上下文测试通过；原生测试Kotlin编译PASS。新增真实入口原生回归；新版32组合截图/128布局回归及时期稳定性均已实际通过：总171/171 PASS，64张截图已捕获、16张代表原图与六份JUnit XML保留，原生Kotlin编译再次PASS。独立Draft PR #89，待同夹具旧版截图、最终HEAD六必需CI与实际原生导航执行；真机/TalkBack NOT_RUN。正式入口仍沿用既有 AppShell，未建第二套数据库或入口。与独立 LAB-03 项目/单位扩展分工：本分支 LabsScreen/主页卡片/导航测试，数据分支 LabBatchEntry/词典/单位；未修改 Room12、业务备份11、PK、库存、权限、签名或 APK。CI/截图/真机/TalkBack 均尚未完成，不得据此声称已交付。P4独立Draft不阻塞本任务。
 
 ## build33 交付与中心原生测试复核完成 — 2026-10-19
 

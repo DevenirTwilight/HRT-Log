@@ -29,4 +29,10 @@ Navigation was already correct. `LabsScreen` deliberately rendered private `LabR
 
 ## Status
 
-Implementation in progress. Local compile/UI tests running. CI/native navigation/screenshots not yet verified. Physical device and TalkBack `NOT_RUN`. No APK, signing or Release authorized by this task.
+Implementation complete on independent draft PR [#89](https://github.com/DevenirTwilight/HRT-Log/pull/89), production source commit `1f49ce0b`. Focused18 UI/context/wiring tests PASS; the first17-test iteration retained2 stale-selector FAIL and their replacement assertions check exact original identity/name/value/unit. The after matrix171/171 PASS (128 four-language layout cases,32 screenshot cases,5 homepage cases,1 resource/wiring case,5 PeriodStability); native test Kotlin compile PASS. Actual native MainActivity navigation execution awaits CI and is not represented by the component screenshots.
+
+64 screenshots captured from the production `LabsScreen` with the same synthetic fixture;16 representative originals retained under `screenshots/after/`, all64 hashes recorded. These cover four languages ×320/411dp ×1/2×font ×light/dark; retained top/history cases show each locale at411dp normal light and320dp large-font dark. Visual inspection covered EN411normalLight, Simplified Chinese320largeDark and French320largeDark history. No critical value/unit clipping was observed in those inspected frames; this is not a claim of physical-device verification or pixel-golden validation. JUnit XML reports and exact source invariance receipts are retained beside this document.
+
+Identical-fixture baseline renders are pending the shared build slot. Exact final-head six CI, native route tests and protected merge remain pending. Physical device and TalkBack `NOT_RUN`. No APK, signing or Release authorized by this task.
+
+The independent LAB-03 branch owns expanded codes/units, batch selection/presets and memory-only batch draft retention. This UI PR intentionally uses the existing catalogue API and UI-only category lookup; integration must replace the lookup with the reviewed `LabCatalog.categoryFor` API without changing the home visual or introducing a second catalogue. The unused old `LabGroupCard` declaration remains in data-owned `LabBatchEntry.kt` until the reviewed UI/data integration can remove it; no production entry calls it from this branch.
