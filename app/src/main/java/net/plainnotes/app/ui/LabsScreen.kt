@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import net.plainnotes.app.R
 import net.plainnotes.app.conc.ConcentrationCalculator
+import net.plainnotes.app.data.LabPanelEntity
 import net.plainnotes.app.data.LabValueEntity
 import java.time.Duration
 import java.time.Instant

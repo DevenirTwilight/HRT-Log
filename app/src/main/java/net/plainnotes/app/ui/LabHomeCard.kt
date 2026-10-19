@@ -18,6 +18,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import net.plainnotes.app.R
 import net.plainnotes.app.data.LabContextEntity
+import net.plainnotes.app.data.LabPanelEntity
 import net.plainnotes.app.data.LabValueEntity
 import java.time.Instant
 
