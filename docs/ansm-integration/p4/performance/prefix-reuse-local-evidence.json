@@ -1,0 +1,309 @@
+{
+  "baseline": "5fe9466ffdcca956ce6551ef8bd4e764ddd8e9ea",
+  "status": "PASS_LOCAL_ONLY",
+  "tests": 423,
+  "suites": [
+    {
+      "suite": "net.plainnotes.app.data.BackupJsonReaderStreamingTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "8e192bb93fcbf1af8df19e8c6489e8c90a1e1991f99da7d500b4e9f4e8689373"
+    },
+    {
+      "suite": "net.plainnotes.app.data.ReferenceMigrationTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "899741480bd6d9ca607443b4bdd9ed138aaf2fb7771a90e9d13fcede8a270c07"
+    },
+    {
+      "suite": "net.plainnotes.app.data.LabContextTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "aca5570aeb08a36adfc8bd2aab7308a3a10cae90833282b63fc71c668593fcc1"
+    },
+    {
+      "suite": "net.plainnotes.app.data.HistoricalVisitTest",
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "62924ba64f1a22748c44323a584b1c9aaa93f61ddb0d138157005d617d1bb6cc"
+    },
+    {
+      "suite": "net.plainnotes.app.data.ReferenceCanonicalCompatibilityTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "d09f4905475717164916ebb710bc63419b63d8cb03d90cd4a0688000d44a9937"
+    },
+    {
+      "suite": "net.plainnotes.app.data.HistoryIntegrityTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "c68aa99b064d2d8a7269e87b6f4c3b07c4bb83f12a4b1533c4ed09d47ab757d2"
+    },
+    {
+      "suite": "net.plainnotes.app.data.SupplyLedgerTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "7480fc5cbe842eddeb0ecb1039222adc8e01b8631539ddfba380b0ba28b4f2e6"
+    },
+    {
+      "suite": "net.plainnotes.app.data.TrashDataTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "6af9896fff6ac75ad564cd1e5938a6733ef633704c068812862f715783c8b6f4"
+    },
+    {
+      "suite": "net.plainnotes.app.data.DailyTrashCollisionTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "8e93bc8358e9306e754bd975e51325cf9f30aa58e54bf8695dcef18bbf3f00b2"
+    },
+    {
+      "suite": "net.plainnotes.app.data.ReferenceCatalogTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "06ad353ad5516adc02ec65dc923d09a185b8ff9f17c4989b2c58964a9af6e1a0"
+    },
+    {
+      "suite": "net.plainnotes.app.data.SchemaConstraintTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "3a92f5bd4822ae76b135aa571a08c5c5016e7fa1c57dad90f0657ab4027296aa"
+    },
+    {
+      "suite": "net.plainnotes.app.data.ReferencePayloadTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "1adf27ac07c440a068c4a6b8b9638856d2a1ff1056300984f091104da8a16a6b"
+    },
+    {
+      "suite": "net.plainnotes.app.data.KeyBoundaryTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "15645fe687b0ef3684c100124bfcbfab85c50be24de4b655757612dc2c21a152"
+    },
+    {
+      "suite": "net.plainnotes.app.data.HrtTrackerImportTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "1077cd2c5480a15d2506e8c1ff32f4e8e1119fe03a58f1165f3539d74597bce8"
+    },
+    {
+      "suite": "net.plainnotes.app.data.RegimenHistoryTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "42c4cbc63207b8cd43b959539fb2bc73f5261df94917ee2adc3c97ac49b1a450"
+    },
+    {
+      "suite": "net.plainnotes.app.data.PlanEditTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "166357898305babdce9917a9a39c11b7a9c37ca19b8d4958eb6b8b0bd7e187a6"
+    },
+    {
+      "suite": "net.plainnotes.app.data.MeasuredConsumptionStoreTest",
+      "tests": 122,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "b284e487919a8d4034535cef82387687ed77e97812cbde5f54dafbba07f0749f"
+    },
+    {
+      "suite": "net.plainnotes.app.data.DataTransferTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "f37c0ee9b2b0b720d14bafcdb66902123ecc56871387f2509bd73c536c9d9624"
+    },
+    {
+      "suite": "net.plainnotes.app.data.HistoryPeriodDataTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "5774d4559f5b04c6e87dcee46da173ef7086f3db445d92c6d929bf7d7da90fdd"
+    },
+    {
+      "suite": "net.plainnotes.app.data.VisitPackDataTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "aa443756507e8ec8c14b898224e6cfdda379ef1bcb1679129f2ba887b01e36ec"
+    },
+    {
+      "suite": "net.plainnotes.app.data.WellbeingMigrationTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "39f07580e07b8cf671e7967b0aa01d500c104cfc0e6ce5e09bd935d39754a569"
+    },
+    {
+      "suite": "net.plainnotes.app.data.AttachmentFoundationTest",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "1c166d4ee67defac47099dfa58e607301d3ea756dd37a7d82c6bcbee235ad0a8"
+    },
+    {
+      "suite": "net.plainnotes.app.data.VoidedPackageTest",
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "57846d11532e49976742d0c22181c50863f8ab8be751f3332090650a3b0fe5e6"
+    },
+    {
+      "suite": "net.plainnotes.app.data.UndoSkippedTest",
+      "tests": 33,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "d66233d1faee084ffffa8e569d17af1e901004c793297610ac4bc620f816b179"
+    },
+    {
+      "suite": "net.plainnotes.app.data.StockForecastTest",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "6005e7cbfd6d18c9b7b84f6ed875f54f39e3b5be3e86642612c867c08b2852e8"
+    },
+    {
+      "suite": "net.plainnotes.app.data.BackfillTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "0eeadad5573af614cbef70aa88f1cb6e0d75f15722aed49541bbf7ddbaf8652d"
+    },
+    {
+      "suite": "net.plainnotes.app.data.AttachmentMigrationTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "cc2e4fe0e4637358a2e6572d1d227330a265e0ec153f64d948366978f437bcb6"
+    },
+    {
+      "suite": "net.plainnotes.app.data.BackupReplacementTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "bb158116e09d7b089c5a71da8516dd8274196af69654ac6efc9c52752f472dcf"
+    },
+    {
+      "suite": "net.plainnotes.app.data.LedgerReplacementTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "b3cd8db4dc0ff6051e87be2168748e044cec3de9d7c2e363fe3a1ea930d991fe"
+    },
+    {
+      "suite": "net.plainnotes.app.data.ReferencePersistenceTest",
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "5afd0bd6b7029cca73bb971854e8c2380169be5424275c1969068cbe87f701a2"
+    },
+    {
+      "suite": "net.plainnotes.app.data.HistoricalContextRepairTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "6e3bcb1b13329e4d4226ce48e8ba427161b006e68920d2251871f6ef46df5567"
+    },
+    {
+      "suite": "net.plainnotes.app.data.PackageMeasurementPayloadTest",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "118cc1af3e36cd7f0cdd327512cfd273ea01745b0ca18110a1de888d1cc81af0"
+    },
+    {
+      "suite": "net.plainnotes.app.data.Ansm03b0InventoryTest",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "20fac399b8ec25d2db17867e9b7fc4224cc301133d03439100cd61465a5dc16b"
+    },
+    {
+      "suite": "net.plainnotes.app.data.StockCorrectionTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "87c3fce7fa18de76ef69c340948bc372b6dc0722c5bea1f11e59286b04cff754"
+    },
+    {
+      "suite": "net.plainnotes.app.data.WellbeingRecordsTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "8f43ff0a247f679993d68594b5697a8cb5d73d6d23957b4ade364d41b5285875"
+    },
+    {
+      "suite": "net.plainnotes.app.data.MeasuredUsePayloadTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "81fc96f664cc7f45f94adc9f5ed0bdbad3616822ed6e985aa4193e1207159bb1"
+    },
+    {
+      "suite": "net.plainnotes.app.data.MeasuredContainerStoreTest",
+      "tests": 19,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "651ea8f1935334075189029e15cf5a61d3995e4147746e6d9e8b7a49e11018dc"
+    }
+  ],
+  "compiled_production_sha256": "d7f0a8b2acec9ad8cd583a50ee1fd87afe3697ac440a9254494d78d04409c2ee",
+  "formatted_source_sha256": "49d25a0921e936a8724c62fc0c12f5d26c6bfb50bebda32c8c44dabf7afed6ab",
+  "formatting_only_after_tests": "WHITESPACE_EQUIVALENT_VERIFIED",
+  "native_compilation": "PASS",
+  "native_execution": "NOT_RUN_NEW_CANDIDATE",
+  "production_entry": "OFF"
+}

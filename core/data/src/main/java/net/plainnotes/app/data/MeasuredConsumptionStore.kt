@@ -49,6 +49,12 @@ internal object MeasuredConsumptionStore {
     /** Pure payload reuse is confined to one read-only transaction, never a cross-write trust cache. */
     private class PresentationAudit {
         private val byPayload=HashMap<String,FrozenPackageMeasurement>()
+        val prefixes=HashMap<Pair<String,Long>,PrefixIndex>()
+        fun capturePrefix(uuid:String,scale:StockQuantum,entries:List<ProjectionEntry>) {
+            if(entries.isEmpty())return // Do not retain per-container maps for unused packages; original fallback remains.
+            val proof=operationProof ?: return
+            check(prefixes.put(uuid to scale.capacityQuanta,buildPrefixIndex(entries,scale,proof.nodes))==null)
+        }
         var operationProof:MeasuredOperationChain.AuditProof?=null
             private set
         fun prepareOperations(db:SupportSQLiteDatabase){check(operationProof==null);operationProof=MeasuredOperationChain.AuditProof.capture(db)}
@@ -148,6 +154,7 @@ internal object MeasuredConsumptionStore {
             }
             val reduced=scale.restoredUsed(0,deltas);require(reduced is MeasureResult.Success && reduced.value==used)
             val remaining=scale.remaining(used);require(remaining is MeasureResult.Success)
+            presentations.capturePrefix(containerUuid,scale,entries)
             return MeasureResult.Success(AuditedStockProjection(containerUuid,frozen.sha256,used,remaining.value,box.used_amount==used.toDouble()),algorithm=StockQuantum.ALGORITHM)
         } catch(e:ReferenceFailure){throw e} catch(e:Exception){fail(ReferenceError.INVALID_SOURCE)}
     }
@@ -254,27 +261,12 @@ internal object MeasuredConsumptionStore {
             box to frozen
         }
         val chain=presentations.operationProof?.nodes ?: MeasuredOperationChain.validate(db)
-        data class PrefixIndex(val usedAtHead:Map<Long,Long>,val headBeforeSequence:java.util.TreeMap<Int,Long>)
-        val prefixes=HashMap<Pair<String,Long>,PrefixIndex>()
+        val prefixes=presentations.prefixes
         fun prefix(box:JSONObject,scale:StockQuantum,head:Long,sequence:Int):Long {
             require(head>=0)
             if(box.isNull("live_handle")) {require(head==0L);return 0L}
             val index=prefixes.getOrPut(box.getString("uuid") to scale.capacityQuanta) {
-                val entries=projectionEntries(db,box.getLong("live_handle"))
-                val atHead=HashMap<Long,Long>().apply{put(0,0)}
-                val beforeSequence=java.util.TreeMap<Int,Long>()
-                var used=0L
-                for(e in entries) {
-                    require(e.used_delta.toLong().toDouble()==e.used_delta && kotlin.math.abs(e.used_delta)<=StockQuantum.MAX_QUANTA)
-                    // Same exact reducer and every bounded prefix, computed once rather than once per operation.
-                    val next=scale.restoredUsed(used,listOf(e.used_delta.toLong()));require(next is MeasureResult.Success)
-                    used=next.value;atHead[e.id]=used
-                    val seq=chain.getValue(e.operation_id).sequence
-                    beforeSequence[seq]=maxOf(beforeSequence[seq] ?: 0,e.id)
-                }
-                var maximum=0L
-                for(entry in beforeSequence.entries){maximum=maxOf(maximum,entry.value);entry.setValue(maximum)}
-                PrefixIndex(atHead,beforeSequence)
+                buildPrefixIndex(projectionEntries(db,box.getLong("live_handle")),scale,chain)
             }
             require(head==(index.headBeforeSequence.lowerEntry(sequence)?.value ?: 0L))
             return requireNotNull(index.usedAtHead[head])
@@ -450,6 +442,25 @@ internal object MeasuredConsumptionStore {
             }
         }
     }
+    private data class PrefixIndex(val usedAtHead:Map<Long,Long>,val headBeforeSequence:java.util.TreeMap<Int,Long>)
+    /** Same bounded reducer for either checked projection rows or the exact original SQL fallback. */
+    private fun buildPrefixIndex(entries:List<ProjectionEntry>,scale:StockQuantum,chain:Map<String,MeasuredOperationChain.Node>):PrefixIndex {
+        val atHead=HashMap<Long,Long>().apply{put(0,0)}
+        val beforeSequence=java.util.TreeMap<Int,Long>()
+        var used=0L
+        for(e in entries) {
+            require(e.used_delta.toLong().toDouble()==e.used_delta && kotlin.math.abs(e.used_delta)<=StockQuantum.MAX_QUANTA)
+            // Same exact reducer and every bounded prefix, computed once rather than once per operation.
+            val next=scale.restoredUsed(used,listOf(e.used_delta.toLong()));require(next is MeasureResult.Success)
+            used=next.value;atHead[e.id]=used
+            val seq=chain.getValue(e.operation_id).sequence
+            beforeSequence[seq]=maxOf(beforeSequence[seq] ?: 0,e.id)
+        }
+        var maximum=0L
+        for(entry in beforeSequence.entries){maximum=maxOf(maximum,entry.value);entry.setValue(maximum)}
+        return PrefixIndex(atHead,beforeSequence)
+    }
+
     private fun projectionEntries(db:SupportSQLiteDatabase,id:Long):List<ProjectionEntry> =
         db.query("SELECT id,dose_record_id,dose_revision,operation_id,kind,used_delta,reversal_of_id FROM supply_transaction WHERE container_id=? ORDER BY id",arrayOf(id)).use { c ->
             require(c.count<=100000)

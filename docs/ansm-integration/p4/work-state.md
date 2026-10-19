@@ -105,3 +105,5 @@ Room12检查点0843450六项CI在push/PR全部SUCCESS；当前仍DRAFT，不以�
 独立04A #58源码fda7782六CI及五报告官方SHA/CRC均已通过，384张CI合成截图；证据交接提交c43ae14自己的CI待验，官方分发OFF、真实浏览器/TalkBack NOT_RUN，未合并。独立PK #59源码3ec00f5六CI通过，18个生产文件与默认基线相同，仅完成11引用索引和3页实际来源观察；其余8引用/58商品完整科学复核未完成，不冒充ANSM模型验证，不自动合并。公众报告入口本次HTTP500继续UNVERIFIED。
 
 2026-10-18恢复P4：主线86131172六必需CI PASS。临床点查负向测试先实际FAIL，LEFT JOIN逐行读取候选完整data422零失败/错误/跳过、原生源码编译PASS。large fixture诊断/新源原生预算及完整CI待验，收据clinical-stream-*与PR57。主线LAB02已占Room12/业务11，后续必须保留主线旧版本并独立解决候选版本衔接；不可覆盖其schema/迁移/备份。原生旧6c写入8.17/8.23/7.59秒FAIL仍有效，PRODUCTION_BLOCKED，P5/P6未启动，无发布。
+
+2026-10-19：5fe原生39162004779实际写入10.47/10.31/10.17秒FAIL；完整报告、官方SHA/CRC、58067条trace重放与API35提醒assertTrue(status.exact)失败均归档native-profile-5fe9466f。后续前缀复用先红2次重复流水点查，再同审计已验证流水复用：data423 PASS、最终122共享合同/原生编译PASS；大负载完整投影一致、6178→4178 SQL。首个临床候选与前缀worktree实际source hash分开，证据prefix-reuse-*。主线兼容候选13/业务12仅设计，未覆盖main12/LAB02；入口OFF，P5/P6仍未开始，最终新HEAD原生及完整CI以PR57为准。

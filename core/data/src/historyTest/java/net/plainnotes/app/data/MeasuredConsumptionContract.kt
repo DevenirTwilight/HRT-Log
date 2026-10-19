@@ -37,6 +37,24 @@ abstract class MeasuredConsumptionContract {
     private suspend fun consume(r:RecordEntity,box:CreatedMeasuredContainer,uses:List<ConfirmedStockUse>,op:String=UUID.randomUUID().toString())=db.withTransaction{MeasuredConsumptionStore.consumeNewRecord(db,box.scope,r,op,uses,at)}
     private fun count(table:String)=raw.query("SELECT COUNT(*) FROM `$table`").use{it.moveToFirst();it.getInt(0)}
     private suspend fun rejects(code:ReferenceError,block:suspend()->Unit){try{block();fail("Expected $code")}catch(e:ReferenceFailure){assertEquals(code,e.code)}}
+    @Test fun fullAuditReusesCheckedProjectionLedgerForCausalPrefixes()=runBlocking {
+        val m=med();val a=box(m);val b=box(m);val r=record(m);consume(r,a,listOf(use(a),use(b)))
+        db.withTransaction {
+            val before=RawData.dump(raw).toString();var repeatedLedgerReads=0
+            val observed=object:androidx.sqlite.db.SupportSQLiteDatabase by raw {
+                override fun query(sql:String,bindArgs:Array<out Any?>):android.database.Cursor {
+                    if(sql=="SELECT id,dose_record_id,dose_revision,operation_id,kind,used_delta,reversal_of_id FROM supply_transaction WHERE container_id=? ORDER BY id")repeatedLedgerReads++
+                    return raw.query(sql,bindArgs)
+                }
+            }
+            val projections=MeasuredConsumptionStore.auditStagedDataset(observed)
+            assertEquals(setOf(a.containerUuid,b.containerUuid),projections.map{it.containerUuid}.toSet())
+            assertTrue(projections.all{it.usedQuanta==1L && it.remaining.value.compareTo(BigDecimal("27.5"))==0 && it.cacheMatches})
+            assertEquals(before,RawData.dump(raw).toString())
+            assertEquals("Causal prefixes must reuse the same fully checked ledger within one audit",0,repeatedLedgerReads)
+        }
+    }
+
     @Test fun fullAuditReadsLiveClinicalFactsWithoutPerRecordSql()=runBlocking {
         val m=med();val b=box(m);val r=record(m);consume(r,b,listOf(use(b)))
         db.withTransaction {

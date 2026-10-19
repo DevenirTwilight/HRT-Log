@@ -1895,3 +1895,11 @@ B0/B1/D-1/D-2已经进入默认分支，不再列为待重复实现；本地再�
 ## P4 临床批量读取本地422 PASS — 2026-10-18
 
 未改生产源码前，新共享负向测试实际FAIL（临床点查1次，预期0），收据clinical-stream-red-evidence.json；实现逐行typed LEFT JOIN后，完整数据JVM422零失败/错误/跳过，原生源码编译PASS，收据clinical-stream-local-evidence.json。保留现有剂量原始位/时间/状态/config与计划hash、退休身份、零分配操作、更正/冲销、完整全局审计；没有跨事务缓存、迁移或预算修改。相同14600事实/2000包装大负载本地诊断运行中；新HEAD原生性能及六CI仍待验。实际后续数值/原生收据固定PR57，避免CI元数据提交循环。Room12/业务11与主线LAB02的版本碰撞尚未集成，正式入口仍OFF。
+
+## P4 原生5fe失败归档、前缀复用423本地通过 — 2026-10-19
+
+执行环境恢复后核对#57仍5fe9466f/DRAFT，主线86131172未变。原生39162004779实际FAIL：写入10473.91615/10311.77029/10165.28703ms>5000；audit12762.79/forecast12648.41/restored9562.62ms本轮<15000。官方ZIP SHA b92f4862…59334/CRC和58067记录采样parser重放核验PASS，均存performance/native-profile-5fe9466f；采样PARTIAL_DIAGNOSTIC，不以不同runner对比推断稳定改善/回退。工程API35还在ReminderTestDeviceTest.kt52 assertTrue(status.exact)失败；旧分支缺主线已审AppOps等待修正，需正常整合后实际复验，不盲重试/归为flake。
+
+后续前缀复用先共享负向测试真实FAIL（两包装重复读2次，预期0），再复用同次完整审计已验证流水：完整data423零失败/错误/跳过、原生源码编译PASS；同14600/2000负载完整投影一致、SQL6178→4178，原始量/因果head/sequence reducer不变。clinical-stream-*、prefix-reuse-*收据标明base/worktree源码hash，legacy scratch日志的git HEAD不能冒称未提交前缀实现source。格式化与空未使用包装不缓存的边界复验进行中；新候选原生性能尚未执行，入口OFF，主线Room12/业务11衔接未实施。未来集成具体方案mainline-room13-compatibility.md保留main12/LAB02，候选13/业务12并完整旧链/拒绝测试，不覆盖主线已审schema。
+
+前缀最终空包边界复验：共享MeasuredConsumptionStore 122项PASS，零失败/错误/跳过，原生编译PASS；源码hash与XML收据prefix-reuse-empty-boundary-evidence.json。完整423项收据对应先前等价前缀核心，后续仅空未用包不保留映射与格式化；相同大负载全为非空精确包。下一提交后新HEAD原生及完整CI待验，保持DRAFT/OFF，不用本地结果越过准入。

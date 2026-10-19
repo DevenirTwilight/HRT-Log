@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "suite": "net.plainnotes.app.data.MeasuredConsumptionStoreTest",
+  "tests": 122,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "xml_sha256": "1393dedafc6b04e11a53f979dd4cd963d38fd49c540e34f17f139486c21cf057",
+  "production_sha256": "72e2308e03da846da5b66383ed4c42403abda5d20ab0bbe719506acc481187f7",
+  "native_compilation": "PASS",
+  "native_execution": "NOT_RUN_NEW_CANDIDATE",
+  "production_entry": "OFF"
+}
