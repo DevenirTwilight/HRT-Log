@@ -70,25 +70,7 @@ internal object RawData {
         val tables = JSONObject()
         tableNames.forEach { t ->
             val rows = JSONArray()
-            // Fixture archives of older schemas (explicit subset) leave out columns their table does not have yet (e.g. LAB-02 panel_id).
-            val present = db.query("PRAGMA table_info(`$t`)").use { c -> buildSet { while (c.moveToNext()) add(c.getString(1)) } }
-            val wanted = RecordBackupCompatibility.columns.getValue(t)
-            if (tableNames == DOMAIN_TABLES) require(present.containsAll(wanted)) { "Incomplete table $t" }
-            db.query("SELECT ${wanted.filter { it in present }.joinToString(",") { "`$it`" }} FROM $t").use { c ->
-                while (c.moveToNext()) rows.put(JSONObject().apply {
-                    for (i in 0 until c.columnCount) when (c.getType(i)) {
-                        Cursor.FIELD_TYPE_NULL -> put(c.getColumnName(i), JSONObject.NULL)
-                        Cursor.FIELD_TYPE_INTEGER -> put(c.getColumnName(i), c.getLong(i))
-                        Cursor.FIELD_TYPE_FLOAT -> {
-                            val exact= t=="supply_container" && c.getColumnIndex("inventory_encoding")>=0 && c.getString(c.getColumnIndex("inventory_encoding"))==InventoryEncoding.EXACT
-                            if(exact && c.getColumnName(i) in setOf("capacity","initial_used_amount","used_amount"))put(c.getColumnName(i),InventoryEncoding.exactInteger(c.getDouble(i)))
-                            else put(c.getColumnName(i),c.getDouble(i))
-                        }
-                        Cursor.FIELD_TYPE_BLOB -> put(c.getColumnName(i), "b64:" + Base64.encodeToString(c.getBlob(i), Base64.NO_WRAP))
-                        else -> put(c.getColumnName(i), c.getString(i))
-                    }
-                })
-            }
+            forEachBackupRow(db,t,tableNames == DOMAIN_TABLES){rows.put(it)}
             tables.put(t, rows)
         }
         return tables
@@ -158,6 +140,30 @@ internal object RawData {
                 db.insert(t, SQLiteDatabase.CONFLICT_ABORT, cv)
             }
         }
+    }
+
+    /** Same row/column/value encoding for DOM fixtures and bounded measured export. */
+    internal fun forEachBackupRow(db:SupportSQLiteDatabase,t:String,requireComplete:Boolean,consume:(JSONObject)->Unit) {
+        require(t in DOMAIN_TABLES)
+            // Fixture archives of older schemas (explicit subset) leave out columns their table does not have yet (e.g. LAB-02 panel_id).
+            val present = db.query("PRAGMA table_info(`$t`)").use { c -> buildSet { while (c.moveToNext()) add(c.getString(1)) } }
+            val wanted = RecordBackupCompatibility.columns.getValue(t)
+            if (requireComplete) require(present.containsAll(wanted)) { "Incomplete table $t" }
+            db.query("SELECT ${wanted.filter { it in present }.joinToString(",") { "`$it`" }} FROM $t").use { c ->
+                while (c.moveToNext()) consume(JSONObject().apply {
+                    for (i in 0 until c.columnCount) when (c.getType(i)) {
+                        Cursor.FIELD_TYPE_NULL -> put(c.getColumnName(i), JSONObject.NULL)
+                        Cursor.FIELD_TYPE_INTEGER -> put(c.getColumnName(i), c.getLong(i))
+                        Cursor.FIELD_TYPE_FLOAT -> {
+                            val exact= t=="supply_container" && c.getColumnIndex("inventory_encoding")>=0 && c.getString(c.getColumnIndex("inventory_encoding"))==InventoryEncoding.EXACT
+                            if(exact && c.getColumnName(i) in setOf("capacity","initial_used_amount","used_amount"))put(c.getColumnName(i),InventoryEncoding.exactInteger(c.getDouble(i)))
+                            else put(c.getColumnName(i),c.getDouble(i))
+                        }
+                        Cursor.FIELD_TYPE_BLOB -> put(c.getColumnName(i), "b64:" + Base64.encodeToString(c.getBlob(i), Base64.NO_WRAP))
+                        else -> put(c.getColumnName(i), c.getString(i))
+                    }
+                })
+            }
     }
 
     private fun finishRestore(db: SupportSQLiteDatabase, upgradeRegimens: Boolean, backfillTrash: Boolean, measured: Boolean) {

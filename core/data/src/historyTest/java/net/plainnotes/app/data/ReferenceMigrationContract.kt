@@ -113,6 +113,90 @@ abstract class ReferenceMigrationContract {
         } finally {helper.close();context.deleteDatabase(name)}
     }
 
+    // Frozen independent DOM oracle from bba9562d DataTransfer.kt, before the shared row-reader refactor.
+    private fun frozenDumpBeforeStreaming(db: SupportSQLiteDatabase, tableNames: List<String> = DOMAIN_TABLES): JSONObject {
+        // Explicit trusted subset is used to construct old-version fixture archives; production exports always use all tables.
+        require(tableNames.distinct().size == tableNames.size && tableNames.all { it in DOMAIN_TABLES })
+        val tables = JSONObject()
+        tableNames.forEach { t ->
+            val rows = JSONArray()
+            // Fixture archives of older schemas (explicit subset) leave out columns their table does not have yet (e.g. LAB-02 panel_id).
+            val present = db.query("PRAGMA table_info(`$t`)").use { c -> buildSet { while (c.moveToNext()) add(c.getString(1)) } }
+            val wanted = RecordBackupCompatibility.columns.getValue(t)
+            if (tableNames == DOMAIN_TABLES) require(present.containsAll(wanted)) { "Incomplete table $t" }
+            db.query("SELECT ${wanted.filter { it in present }.joinToString(",") { "`$it`" }} FROM $t").use { c ->
+                while (c.moveToNext()) rows.put(JSONObject().apply {
+                    for (i in 0 until c.columnCount) when (c.getType(i)) {
+                        android.database.Cursor.FIELD_TYPE_NULL -> put(c.getColumnName(i), JSONObject.NULL)
+                        android.database.Cursor.FIELD_TYPE_INTEGER -> put(c.getColumnName(i), c.getLong(i))
+                        android.database.Cursor.FIELD_TYPE_FLOAT -> {
+                            val exact= t=="supply_container" && c.getColumnIndex("inventory_encoding")>=0 && c.getString(c.getColumnIndex("inventory_encoding"))==InventoryEncoding.EXACT
+                            if(exact && c.getColumnName(i) in setOf("capacity","initial_used_amount","used_amount"))put(c.getColumnName(i),InventoryEncoding.exactInteger(c.getDouble(i)))
+                            else put(c.getColumnName(i),c.getDouble(i))
+                        }
+                        android.database.Cursor.FIELD_TYPE_BLOB -> put(c.getColumnName(i), "b64:" + android.util.Base64.encodeToString(c.getBlob(i), android.util.Base64.NO_WRAP))
+                        else -> put(c.getColumnName(i), c.getString(i))
+                    }
+                })
+            }
+            tables.put(t, rows)
+        }
+        return tables
+    }
+
+    @Test fun streamedMeasuredBackupMatchesWholeDocumentBytesAndRemainsReadOnly() {
+        val name="synthetic-backup-stream-${UUID.randomUUID()}.db";val key=ByteArray(32){(it+31).toByte()}
+        try {
+            Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(key))
+                .addCallback(SchemaGuards).allowMainThreadQueries().build().useRoom {room->
+                val raw=room.openHelper.writableDatabase
+                raw.beginTransaction()
+                try {
+                    raw.execSQL("INSERT INTO medication(id,name,molecule,route,unit,dose_per_intake,container_capacity,site_rotation,notifications_on,active,sort_order) VALUES(1,'SYNTHETIC','OTHER',NULL,'MG',0.125,28.0,0,0,1,0)")
+                    raw.execSQL("INSERT INTO supply_container(id,medication_id,capacity,initial_used_amount,used_amount,state,inventory_encoding) VALUES(1,1,28.5,0.25,0.25,'SEALED','LEGACY_SCALAR')")
+                    raw.execSQL("INSERT INTO supply_container(id,medication_id,capacity,initial_used_amount,used_amount,state,inventory_encoding) VALUES(2,1,56.0,1.0,1.0,'SEALED','INTEGER_QUANTA_V1')")
+                    val random=java.util.Random(0x42414bL)
+                    val texts=listOf("SYNTHETIC \" \\ \n é 法 藥 \u0000 \ud83d\ude00", "x".repeat(65535), "é".repeat(32769))+
+                        List(24){CharArray(127){random.nextInt(65536).toChar()}.concatToString()}
+                    texts.forEachIndexed{i,text->raw.execSQL("INSERT INTO day_note(date,text) VALUES(?,?)",arrayOf("synthetic-$i",text))}
+                    raw.execSQL("INSERT INTO day_note(date,text) VALUES('synthetic-blob',?)",arrayOf(byteArrayOf(0,1,-1,10)))
+                    val created=java.time.Instant.parse("2026-10-19T00:00:00Z")
+                    val old=JSONObject().put("format",BackupCodec.FORMAT_VERSION).put("schema",RecordBackupCompatibility.SCHEMA)
+                        .put("created",created.toString()).put("tables",frozenDumpBeforeStreaming(raw)).toString().toByteArray(Charsets.UTF_8)
+                    fun scalar(sql:String)=raw.query(sql).use{it.moveToFirst();it.getLong(0)}
+                    val before=scalar("SELECT total_changes()");val schema=scalar("PRAGMA schema_version")
+                    val streamed=MeasuredBackupJson.encode(raw,created)
+                    try {
+                        assertArrayEquals("Same full document bytes, including table/column order and blob encoding",old,streamed)
+                        val exact=MeasuredBackupJson.encode(raw,created,maxBytes=old.size)
+                        try{assertArrayEquals(old,exact)}finally{exact.fill(0)}
+                        try{MeasuredBackupJson.encode(raw,created,maxBytes=old.size-1);fail("One byte over limit accepted")}
+                        catch(_:BackupCodec.TooLarge){}
+                        assertEquals(before,scalar("SELECT total_changes()"));assertEquals(schema,scalar("PRAGMA schema_version"))
+                    } finally {old.fill(0);streamed.fill(0)}
+                } finally {raw.endTransaction()}
+            }
+        } finally {key.fill(0);context.deleteDatabase(name)}
+    }
+
+    @Test fun boundedBackupPlaintextChunksAreExactAndWipedOnSuccessAndFailure() {
+        for(limit in listOf(0,1,3,4,5,9,17)) {
+            val buffer=BackupPlainBytes(limit,4)
+            val field=buffer.javaClass.getDeclaredField("chunks").apply{isAccessible=true}
+            val input=ByteArray(limit){(it+1).toByte()}
+            buffer.append(input)
+            @Suppress("UNCHECKED_CAST") val held=(field.get(buffer) as List<ByteArray>).toList()
+            assertArrayEquals(input,buffer.finish())
+            try{buffer.append(byteArrayOf(77));fail("Over-limit append accepted")}
+            catch(_:BackupCodec.TooLarge){}
+            assertArrayEquals(input,buffer.finish())
+            buffer.close();buffer.close()
+            assertTrue(held.all{chunk->chunk.all{it==0.toByte()}})
+            try{buffer.append(byteArrayOf());fail("Closed plaintext buffer reused")}
+            catch(_:IllegalStateException){}
+        }
+    }
+
     @Test fun canonicalUuidPredicateMatchesThePlatformOracleAcrossVersionsAndMalformedForms() {
         val random=java.util.Random(0x414e534dL)
         var checked=0

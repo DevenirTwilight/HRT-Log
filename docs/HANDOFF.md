@@ -2132,3 +2132,13 @@ b17178ec 六必需工程CI在push/PR全部PASS，原生39250115453仍真实FAIL�
 补齐951官方工件的API26/29具体UTF8方法PASS（0.152/0.177秒，SHA/CRC/HTML行核验）。另重复push39262612979的android被取消，其他四job成功；原因未确定，不把该轮写成全PASS。951 PR事件六必需成功与其原生三写11.076/10.263/10.928秒FAIL分别保留。3b53备份进程退出仍UNDETERMINED；#57继续DRAFT/OFF/PRODUCTION_BLOCKED，P5P6未实施。
 
 独立交付记录#87已普通同步已合并的#88，最新21a10430完整CI仍运行、无已知新失败；旧152返回失败、#88附件POC取消及同源一次重放PASS证据不删。#88与build33各自是测试修复/既有成品，不与P4混同；无新签名、APK或Release。
+
+### P4 暂存交接：匹配目标 PID 的内核 OOM；负责人优先转向 LAB-03 — 2026-10-19
+
+bba9562d原生39267083400/artifact12193548500再次在full_encrypted_backup退出。此次后置dmesg明确杀死PID3915，与synthetic log的测试进程启动/退出精确匹配，确定本轮SYSTEM_OOM_KILL；anonRSS151160KiB仅被杀时观测不是峰值，具体DOM/字符串/UTF8/KDF子阶段仍未知，旧3b53不追认。原始IN_PROGRESS、内核尾部、压缩原始合成日志/SHA/CRC归档native-profile-bba9562d；写入、票据、采样NOT_RUN。
+
+暂存逐行编码候选：新增MeasuredBackupJson/BackupPlainBytes，RawData抽取原行编码，NotesRepository仅内部measured导出使用；ordinary legacy仍DOM，PNBAK1 BackupCodec逐字不变，格式/Schema/Room/恢复路径/全审计不变。原完整DOM与新编码的独立冻结旧实现字节对照、边界/只读/临时片段清零新测试通过；本地data453/App43（含PeriodStability）实际全PASS，精确已测源哈希在measured-backup-local-evidence。随后补强所有权finally：在捕获事务内把明文字节赋给外部受finally保护变量，以覆盖事务返回前取消。这个最后私有实现补丁尚未重编译：NOT_RUN_AFTER_SOURCE_FOLLOWUP，不能拿前一453/43冒充最终源通过。新的大规模/原生验证也NOT_RUN，仍DRAFT/OFF/PRODUCTION_BLOCKED。下一步恢复P4时先编译并重跑相关回归/原fixture+原生诊断，不直接Ready/合并，不改RAM/预算/crypto。measured-backup-memory-contract解释事务持有及失败回滚边界，无新迁移/库存算法/PK/发布。
+
+独立#87已在最终21a10430两轮六类CI全PASS、无冲突/未解决审查后受保护合并080094ae；build33成品/source219bbf32不变，没有新APK。主线080094ae science已PASS，Android/domain复验仍运行。
+
+负责人新任务明确优先LAB-UI-03/LAB-03，不等待P4。已从主线080094ae创建隔离工作树/workflows：/workspace/HRT-Log-lab-ui03（feature/lab-ui03-home-20261019）负责主页/真实导航；/workspace/HRT-Log-lab03（feature/lab03-analytes-20261019）负责目录/单位。禁止把本P4未准入源码带入LAB分支；不争用Room或备份版本，正式附件OFF。

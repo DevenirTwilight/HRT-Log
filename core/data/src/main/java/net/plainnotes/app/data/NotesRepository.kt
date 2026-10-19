@@ -776,16 +776,28 @@ const val BACKFILL_MAX_DAYS=731L
     }
     private suspend fun exportBackupFrom(target:Space,password:CharArray,measuredEpoch:String?):ByteArray=withContext(Dispatchers.IO) {
         val db=access.get(target)
-        val json=db.withTransaction {
+        var plain:ByteArray?=null
+        try {
+        if(measuredEpoch!=null) db.withTransaction {
             val raw=db.openHelper.writableDatabase
-            if(measuredEpoch!=null && ReferenceStore.previewEpoch(raw)!=measuredEpoch)throw ReferenceFailure(ReferenceError.STALE_SCOPE)
+            if(ReferenceStore.previewEpoch(raw)!=measuredEpoch)throw ReferenceFailure(ReferenceError.STALE_SCOPE)
             RegimenHistory.seed(raw)
-            if(measuredEpoch==null){InventoryEncoding.legacyOnly(raw);ReferenceSchema.validate(raw)}
-            else MeasuredConsumptionStore.auditStagedDataset(raw)
-            JSONObject().put("format",BackupCodec.FORMAT_VERSION).put("schema",RecordBackupCompatibility.SCHEMA)
-            .put("created",Instant.now().toString()).put("tables",RawData.dump(db.openHelper.writableDatabase)) }
-        val plain=json.toString().toByteArray(Charsets.UTF_8)
-        try{BackupCodec.encrypt(plain,password)}finally{plain.fill(0)}
+            MeasuredConsumptionStore.auditStagedDataset(raw)
+            // Keep the same read snapshot; only the byte buffer survives into the unchanged cipher.
+            plain=MeasuredBackupJson.encode(raw,Instant.now())
+        } else {
+            // Legacy exports retain their existing DOM and validation path.
+            val json=db.withTransaction {
+                val raw=db.openHelper.writableDatabase
+                RegimenHistory.seed(raw)
+                InventoryEncoding.legacyOnly(raw);ReferenceSchema.validate(raw)
+                JSONObject().put("format",BackupCodec.FORMAT_VERSION).put("schema",RecordBackupCompatibility.SCHEMA)
+                    .put("created",Instant.now().toString()).put("tables",RawData.dump(raw))
+            }
+            plain=json.toString().toByteArray(Charsets.UTF_8)
+        }
+        BackupCodec.encrypt(requireNotNull(plain),password)
+        } finally {plain?.fill(0);plain=null}
     }
     /** Replaces all data with the backup; throws [BackupCodec.WrongPassword] or [BackupCodec.BadFile] without touching anything. */
     /**
