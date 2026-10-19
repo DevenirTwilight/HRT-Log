@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import net.plainnotes.app.R
 
 /** Presentation only: this component has no business callback, repository, URI or importer. */
