@@ -1,0 +1,36 @@
+{
+  "source": "951086933664bb0cdf9a0872ebc9fec4f59e0f12",
+  "run_id": 39262621450,
+  "scope": "ACTUAL_NATIVE_UTF8_ORACLE_NOT_PERFORMANCE_ACCEPTANCE",
+  "platform_utf8_oracle": [
+    {
+      "api": 26,
+      "artifact_id": "12193100509",
+      "artifact_sha256": "bd90d7e34994a2fbddc5acb10b9a930da9f8c27b9da2e83f61ccfb01ece187e5",
+      "crc_verified": true,
+      "entry": "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.ReferenceMigrationAndroidTest.html",
+      "html_sha256": "dd78e8140c2d5f3834ccd733ec767813f9f8d568711b341f5503654d5b409d18",
+      "testcase": "utf8LengthMatchesPlatformForEveryCodeUnitPairsAndBoundaries",
+      "time": "0.152s",
+      "status": "PASS"
+    },
+    {
+      "api": 29,
+      "artifact_id": "12193315113",
+      "artifact_sha256": "51f8e60c841b4e4bf8f236760119a08a8b743b2ac52b0c06c1b01ed4936b6559",
+      "crc_verified": true,
+      "entry": "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.ReferenceMigrationAndroidTest.html",
+      "html_sha256": "6358dfed33b4375ee7347bf2b2eef6558a3535e9956193c851febbd1422edc2b",
+      "testcase": "utf8LengthMatchesPlatformForEveryCodeUnitPairsAndBoundaries",
+      "time": "0.177s",
+      "status": "PASS"
+    }
+  ],
+  "separate_push_run_39262612979": {
+    "status": "CANCELLED",
+    "android_job": 118093926807,
+    "other_four_jobs": "PASS",
+    "cause": "NOT_DETERMINED",
+    "cancelled_source_not_replayed": true
+  }
+}

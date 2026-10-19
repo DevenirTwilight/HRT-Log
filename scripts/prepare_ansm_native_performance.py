@@ -178,12 +178,33 @@ def native_source(text):
                 var matches=0;repeat(12000){if(Regex(numericPattern).matches(numericTokens[it%numericTokens.size]))matches++}
                 assertEquals(6000,matches)
             }
-            val trace=File(file.parentFile,"audit-sampling.trace")
-            component("sampled_cached_full_audit_ms") {
-                android.os.Debug.startMethodTracingSampling(trace.absolutePath,16*1024*1024,1000)
-                try{assertEquals(rawProjection,MeasuredConsumptionStore.auditStagedDataset(raw))}
-                finally{android.os.Debug.stopMethodTracing()}
+            // Measure the actual stale-write guard, never bypass it or use this ticket for a write.
+            var diagnosticTicket:MeasuredWriteTicket?=null
+            fun scalar(sql:String):Long=raw.query(sql).use{c->check(c.moveToFirst());c.getLong(0)}
+            fun readOnlyTicket(action:()->Unit) {
+                val beforeChanges=scalar("SELECT total_changes()")
+                val beforeSchema=scalar("PRAGMA schema_version")
+                action()
+                assertEquals(beforeChanges,scalar("SELECT total_changes()"))
+                assertEquals(beforeSchema,scalar("PRAGMA schema_version"))
             }
+            fun captureTicket()=readOnlyTicket {
+                diagnosticTicket=MeasuredUseIntegration.ticket(raw,requireNotNull(ReferenceStore.existingScope(raw)),m)
+            }
+            fun validateTicket()=readOnlyTicket {
+                MeasuredUseIntegration.validate(raw,requireNotNull(diagnosticTicket))
+            }
+            component("write_ticket_capture_ms"){captureTicket()}
+            component("write_ticket_validate_ms"){validateTicket()}
+            val trace=File(file.parentFile,"audit-sampling.trace")
+            android.os.Debug.startMethodTracingSampling(trace.absolutePath,16*1024*1024,1000)
+            try {
+                component("sampled_cached_full_audit_ms") {
+                    assertEquals(rawProjection,MeasuredConsumptionStore.auditStagedDataset(raw))
+                }
+                component("sampled_write_ticket_capture_ms"){captureTicket()}
+                component("sampled_write_ticket_validate_ms"){validateTicket()}
+            } finally{android.os.Debug.stopMethodTracing()}
             val traceToken=traceSessionToken ?: UUID.randomUUID().toString()
             components.put("sampling_trace",JSONObject().put("file","audit-sampling.trace").put("bytes",trace.length()).put("token",traceToken)
                 .put("interval_us",1000).put("scope","TEST_ONLY_POST_BUDGET_METHOD_STACKS_NO_ARGUMENTS"))

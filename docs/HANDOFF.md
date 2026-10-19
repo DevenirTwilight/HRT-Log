@@ -2124,3 +2124,11 @@ b17178ec 六必需工程CI在push/PR全部PASS，原生39250115453仍真实FAIL�
 ### 中心原生 Back 测试输入同步复核 — 2026-10-19
 
 交付收据#87 source152f0908/API26 push39253001557 job118061193730真实FAIL：InAppNavigationLockAndroidTest:184，按Back后reference-window仍存在。build33成品source219bbf32本身push/PR六CI全PASS，不能用新失败改写旧通过，也不能忽略后续失败。隔离修复分支只将测试raw Back输入改用既有Espresso.pressBack，等待布局与焦点，原所有断言/单次Back/认证/文件拦截/真实离开锁定保持。焦点竞争目前为待原生复核假设，不声称已证明。Android测试编译与新源26/29/35验证待跑；不修改生产UI、不重新出APK。详细docs/centers/back-input-synchronization-2026-10-19.md。#87原失败保留，待本修复受保护合并后同步该分支再验。
+
+### P4 真实票据后置只读诊断 — 2026-10-19
+
+在已验收主线dd871cc6/#88合入后的6be9c395上，仅增加生成合成原生探针的后预算诊断及便携JVM复现。不改生产core/app、原fixture、512MiB/192MiB或5秒门。真实ticket/validate调用分别计时，使用existingScope；每次断言total_changes/schema_version前后相同，不创建身份、不写记录、不绕开陈旧票据或全量审计。原1ms/16MiB方法栈采样新增这两项，原sampled_cached_full_audit仍只计全审计。新契约先RED后PASS，46工具测试全PASS；原规模185查询/完整投影相等PASS，真实票据只读断言PASS，JVM120.48/124.28ms仅诊断，生成Android Kotlin编译PASS。便携--write-ticket --emit与实际运行探针SHA相同；生产源码无diff的哈希证据、实际JSON与命令见write-ticket-*。新原生耗时待CI，不得说已优化成功。
+
+补齐951官方工件的API26/29具体UTF8方法PASS（0.152/0.177秒，SHA/CRC/HTML行核验）。另重复push39262612979的android被取消，其他四job成功；原因未确定，不把该轮写成全PASS。951 PR事件六必需成功与其原生三写11.076/10.263/10.928秒FAIL分别保留。3b53备份进程退出仍UNDETERMINED；#57继续DRAFT/OFF/PRODUCTION_BLOCKED，P5P6未实施。
+
+独立交付记录#87已普通同步已合并的#88，最新21a10430完整CI仍运行、无已知新失败；旧152返回失败、#88附件POC取消及同源一次重放PASS证据不删。#88与build33各自是测试修复/既有成品，不与P4混同；无新签名、APK或Release。

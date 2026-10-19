@@ -1,0 +1,25 @@
+            // TEST_ONLY post-budget ticket diagnostics; same calls and read-only fences as native.
+            val components=JSONObject().put("scope","TEST_ONLY_POST_BUDGET_READ_ONLY")
+            report.put("ticket_diagnostic",components)
+            suspend fun component(name:String,block:()->Unit) {
+                val start=System.nanoTime();db.withTransaction{block()}
+                components.put(name,(System.nanoTime()-start)/1_000_000.0)
+            }
+            // Measure the actual stale-write guard, never bypass it or use this ticket for a write.
+            var diagnosticTicket:MeasuredWriteTicket?=null
+            fun scalar(sql:String):Long=raw.query(sql).use{c->check(c.moveToFirst());c.getLong(0)}
+            fun readOnlyTicket(action:()->Unit) {
+                val beforeChanges=scalar("SELECT total_changes()")
+                val beforeSchema=scalar("PRAGMA schema_version")
+                action()
+                assertEquals(beforeChanges,scalar("SELECT total_changes()"))
+                assertEquals(beforeSchema,scalar("PRAGMA schema_version"))
+            }
+            fun captureTicket()=readOnlyTicket {
+                diagnosticTicket=MeasuredUseIntegration.ticket(raw,requireNotNull(ReferenceStore.existingScope(raw)),m)
+            }
+            fun validateTicket()=readOnlyTicket {
+                MeasuredUseIntegration.validate(raw,requireNotNull(diagnosticTicket))
+            }
+            component("write_ticket_capture_ms"){captureTicket()}
+            component("write_ticket_validate_ms"){validateTicket()}

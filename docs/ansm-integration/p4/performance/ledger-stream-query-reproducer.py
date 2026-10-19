@@ -18,10 +18,13 @@ added+=(base/'ledger-stream-query-plan.fragment.kt.txt').read_text()
 needle='            report.put("budget_exceeded",JSONArray(exceeded))'
 if source.count(needle)!=1:
     raise SystemExit('Reviewed fixture insertion point changed')
-probe=source.replace(needle,added+needle)
 parser=argparse.ArgumentParser()
 parser.add_argument('--emit',type=Path,help='Only emit the generated diagnostic test outside the build')
+parser.add_argument('--write-ticket',action='store_true',help='Add real post-budget read-only write-ticket capture/validation diagnostics')
 args=parser.parse_args()
+if args.write_ticket:
+    added+=(base/'write-ticket-diagnostic.fragment.kt.txt').read_text()
+probe=source.replace(needle,added+needle)
 if args.emit:
     if args.emit.exists():
         raise SystemExit('Refusing to overwrite an existing emitted source')
@@ -41,6 +44,9 @@ try:
     data=json.loads(report.read_text())
     assert data['diagnostic_query_stats']['full_projection_equality'] is True
     assert data['diagnostic_stream_query_plan']['scope']=='TEST_ONLY_POST_BUDGET_READ_ONLY'
+    if args.write_ticket:
+        assert data['ticket_diagnostic']['scope']=='TEST_ONLY_POST_BUDGET_READ_ONLY'
+        print(json.dumps({'ticket_diagnostic':data['ticket_diagnostic']}))
     print(json.dumps({'scope':'JVM_DIAGNOSTIC_NOT_NATIVE_ACCEPTANCE','report':str(report),
         'production_sha256':hashlib.sha256((root/'core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt').read_bytes()).hexdigest(),
         'probe_sha256':hashlib.sha256(probe.encode()).hexdigest(),

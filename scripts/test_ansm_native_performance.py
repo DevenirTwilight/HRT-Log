@@ -45,6 +45,35 @@ class NativePerformanceIsolationTest(unittest.TestCase):
         self.assertNotIn('exceeded.clear', text)
         self.assertIn('assertEquals(rawProjection,MeasuredConsumptionStore.auditStagedDataset(raw))', diagnostic)
 
+    def test_write_ticket_diagnostics_are_post_budget_read_only_and_keep_real_validation(self):
+        prepare = module('prepare_ansm_native_performance')
+        text = prepare.native_source(prepare.SOURCE.read_text())
+        start = text.index('val components=JSONObject()')
+        for name in ('write_ticket_capture_ms', 'write_ticket_validate_ms',
+                     'sampled_write_ticket_capture_ms', 'sampled_write_ticket_validate_ms'):
+            self.assertGreater(text.index('component("'+name+'")'), start)
+        diagnostic = text[start:text.index('components.put("status","COMPLETE")')]
+        for marker in ('SELECT total_changes()', 'PRAGMA schema_version',
+                       'MeasuredUseIntegration.ticket(raw,requireNotNull(ReferenceStore.existingScope(raw)),m)',
+                       'MeasuredUseIntegration.validate(raw,requireNotNull(diagnosticTicket))',
+                       'assertEquals(beforeChanges,scalar("SELECT total_changes()"))',
+                       'assertEquals(beforeSchema,scalar("PRAGMA schema_version"))'):
+            self.assertIn(marker, diagnostic)
+        self.assertNotIn('repo.referenceScope()', diagnostic)
+        self.assertNotIn('recordMeasuredUse', diagnostic)
+        self.assertLess(text.index('android.os.Debug.startMethodTracingSampling'),
+                        text.index('component("sampled_write_ticket_capture_ms")'))
+        self.assertLess(text.index('component("sampled_write_ticket_validate_ms")'),
+                        text.index('finally{android.os.Debug.stopMethodTracing()}'))
+
+    def test_portable_ticket_diagnostic_uses_identical_calls_and_fences(self):
+        prepare = module('prepare_ansm_native_performance')
+        text = prepare.native_source(prepare.SOURCE.read_text())
+        helper = text[text.index('            // Measure the actual stale-write guard'):
+                      text.index('            val trace=File')]
+        fragment = (ROOT / 'docs/ansm-integration/p4/performance/write-ticket-diagnostic.fragment.kt.txt').read_text()
+        self.assertTrue(fragment.endswith(helper))
+
     def test_projection_diagnostic_signature_matches_current_source_and_uses_uncaptured_path(self):
         prepare = module('prepare_ansm_native_performance')
         text = prepare.native_source(prepare.SOURCE.read_text())
