@@ -79,22 +79,20 @@ internal object ReferencePayload {
         }
         return true
     }
-    /** UTF-8 encoded size only. Mirrors the platform encoder's '?' for each unpaired surrogate.
-     * Does not normalize, hash, decode or validate text; canonical validation still rejects malformed Unicode.
-     * Long prevents overflow even at the maximum JVM String length. No shared state or byte-array allocation.
+    /** Encoded size only; common BMP text needs no temporary byte array.
+     * Delegate the complete original string on ANY surrogate: Android's handling of malformed
+     * sequences differs from the JVM and cannot be inferred from isolated-code-unit replacement.
+     * Hashing/canonical Unicode validation and every caller's original limit remain separate.
      */
     internal fun utf8Length(text:String):Long {
-        var bytes=0L;var index=0
-        while(index<text.length) {
-            val c=text[index]
+        var bytes=0L
+        for(c in text) {
             when {
                 c.code<0x80 -> bytes++
                 c.code<0x800 -> bytes+=2
-                c !in '\uD800'..'\uDFFF' -> bytes+=3
-                c in '\uD800'..'\uDBFF' && index+1<text.length && text[index+1] in '\uDC00'..'\uDFFF' -> {bytes+=4;index++}
-                else -> bytes++
+                c in '\uD800'..'\uDFFF' -> return text.toByteArray(Charsets.UTF_8).size.toLong()
+                else -> bytes+=3
             }
-            index++
         }
         return bytes
     }

@@ -3,6 +3,8 @@
 import json
 import re
 import threading
+import tempfile
+import hashlib
 import uuid
 from pathlib import Path
 import subprocess
@@ -36,6 +38,34 @@ def verify_emulator(execute=subprocess.check_output):
         raise ValueError('Synthetic performance runner requires an isolated API26 emulator')
 
 
+
+def collect_post_run_kernel(folder, exit_code, execute=subprocess.run, environment=subprocess.check_output):
+    """Bounded read-only kernel tail, after the test/collector ended; never a pass or cause classifier."""
+    if exit_code is None:
+        return {'status':'NOT_RUN_NO_COMPLETED_EXIT'}
+    if exit_code == 0:
+        return {'status':'NOT_RUN_SUCCESS'}
+    report={'status':'UNAVAILABLE','scope':'SYNTHETIC_API26_POST_TEST_ONLY','memory_rss':'NOT_MEASURED'}
+    try:
+        verify_emulator(environment)  # Never read kernel logs from a physical or unrelated device.
+        with tempfile.TemporaryFile() as output, tempfile.TemporaryFile() as errors:
+            result=execute(['adb','shell','-T','sh','-c','dmesg | tail -n 80'],
+                           stdout=output,stderr=errors,timeout=5)
+            size=output.tell();output.seek(max(0,size-65536));data=output.read(65536)
+            error_size=errors.tell();errors.seek(max(0,error_size-8192));error=errors.read(8192)
+        report.update(command_exit=result.returncode,stdout_bytes=size,clipped=size>65536,
+                      stderr_tail=error.decode('utf-8',errors='replace'))
+        if result.returncode==0 and data:
+            (folder/'post-run-kernel-tail.txt').write_bytes(data)
+            report.update(status='CAPTURED_DIAGNOSTIC_ONLY',bytes=len(data),sha256=hashlib.sha256(data).hexdigest())
+        else:
+            report['reason']='NO_KERNEL_PAYLOAD_OR_COMMAND_DENIED'
+    except (OSError,ValueError,subprocess.SubprocessError) as error:
+        report['reason']=type(error).__name__
+    (folder/'post-run-kernel-diagnostics.json').write_text(json.dumps(report,indent=2)+'\n')
+    return report
+
+
 def diagnostics():
     # This wrapper is used only by the fresh synthetic CI emulator, never the application/user device.
     verify_emulator()
@@ -54,13 +84,16 @@ def diagnostics():
         trace_token=str(uuid.uuid4())
         watcher=threading.Thread(target=watch_trace,args=(folder,stop),kwargs={'expected_token':trace_token},daemon=True)
         watcher.start()
+        exit_code=None
         try:
-            return run(trace_token=trace_token)
+            exit_code=run(trace_token=trace_token)
+            return exit_code
         finally:
             stop.set();watcher.join(timeout=10)
             capture.terminate()
             try: capture.wait(timeout=5)
             except subprocess.TimeoutExpired: capture.kill();capture.wait()
+            collect_post_run_kernel(folder,exit_code)
 
 if __name__ == '__main__':
     raise SystemExit(diagnostics())

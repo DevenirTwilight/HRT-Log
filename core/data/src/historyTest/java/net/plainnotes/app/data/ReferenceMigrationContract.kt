@@ -59,7 +59,8 @@ abstract class ReferenceMigrationContract {
     }
     @Test fun utf8LengthMatchesPlatformForEveryCodeUnitPairsAndBoundaries() {
         fun check(text:String) {
-            assertEquals(text.toByteArray(Charsets.UTF_8).size.toLong(),ReferencePayload.utf8Length(text))
+            val expected=text.toByteArray(Charsets.UTF_8).size.toLong();val actual=ReferencePayload.utf8Length(text)
+            assertEquals(if(expected==actual) "" else "UTF16 prefix="+text.take(64).map{it.code.toString(16)},expected,actual)
         }
         for(code in 0..65535)check(code.toChar().toString())
         val random=java.util.Random(0x55465438L)
