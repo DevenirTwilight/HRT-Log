@@ -37,6 +37,72 @@ abstract class MeasuredConsumptionContract {
     private suspend fun consume(r:RecordEntity,box:CreatedMeasuredContainer,uses:List<ConfirmedStockUse>,op:String=UUID.randomUUID().toString())=db.withTransaction{MeasuredConsumptionStore.consumeNewRecord(db,box.scope,r,op,uses,at)}
     private fun count(table:String)=raw.query("SELECT COUNT(*) FROM `$table`").use{it.moveToFirst();it.getInt(0)}
     private suspend fun rejects(code:ReferenceError,block:suspend()->Unit){try{block();fail("Expected $code")}catch(e:ReferenceFailure){assertEquals(code,e.code)}}
+    @Test fun fullLedgerStreamRejectsExtraDuplicateMissingAndUnorderedGroupsAndClosesItsCursor()=runBlocking {
+        val m=med();val a=box(m);val b=box(m);val r=record(m);consume(r,a,listOf(use(a),use(b)))
+        db.withTransaction {
+            val before=RawData.dump(raw).toString()
+            for(mode in listOf("extra","duplicate","missing","unordered")) {
+                var intercepted=0;var borrowed:android.database.MatrixCursor?=null
+                val observed=object:androidx.sqlite.db.SupportSQLiteDatabase by raw {
+                    override fun query(sql:String):android.database.Cursor {
+                        if(!sql.startsWith("SELECT i.uuid,t.id,t.dose_record_id"))return raw.query(sql)
+                        intercepted++
+                        val rows=ArrayList<Array<Any?>>()
+                        val columns=raw.query(sql).use { c ->
+                            while(c.moveToNext())rows.add(Array(c.columnCount){i->when(c.getType(i)) {
+                                android.database.Cursor.FIELD_TYPE_NULL->null
+                                android.database.Cursor.FIELD_TYPE_INTEGER->c.getLong(i)
+                                android.database.Cursor.FIELD_TYPE_FLOAT->c.getDouble(i)
+                                android.database.Cursor.FIELD_TYPE_STRING->c.getString(i)
+                                else->error("Unexpected synthetic column type")
+                            }})
+                            c.columnNames.copyOf()
+                        }
+                        assertEquals(2,rows.size)
+                        when(mode) {
+                            "extra"->rows.add(rows.last().copyOf().also{it[0]="ffffffff-ffff-ffff-ffff-ffffffffffff"})
+                            "duplicate"->rows.add(1,rows.first().copyOf())
+                            "missing"->rows.removeAt(0)
+                            "unordered"->rows.reverse()
+                        }
+                        return android.database.MatrixCursor(columns).also { c ->rows.forEach{c.addRow(it)};borrowed=c}
+                    }
+                }
+                rejects(ReferenceError.INVALID_SOURCE){MeasuredConsumptionStore.auditStagedDataset(observed)}
+                assertEquals("Synthetic corruption must reach the actual stream: $mode",1,intercepted)
+                assertTrue("Borrowed cursor must close on rejection: $mode",borrowed!!.isClosed)
+                assertEquals(before,RawData.dump(raw).toString())
+                val valid=MeasuredConsumptionStore.auditStagedDataset(raw)
+                assertEquals(2,valid.size);assertTrue(valid.all{it.usedQuanta==1L && it.cacheMatches})
+            }
+        }
+    }
+
+    @Test fun fullAuditStreamsCompleteLedgersIncludingEmptyPackagesWithoutPerContainerSql()=runBlocking {
+        val m=med();val a=box(m);val b=box(m);val empty=box(m);val r=record(m);consume(r,a,listOf(use(a),use(b)))
+        db.withTransaction {
+            val before=RawData.dump(raw).toString();var ledgerPointReads=0
+            val observed=object:androidx.sqlite.db.SupportSQLiteDatabase by raw {
+                override fun query(sql:String,bindArgs:Array<out Any?>):android.database.Cursor {
+                    if(sql.startsWith("SELECT t.id,t.dose_record_id,t.dose_revision") && sql.endsWith("WHERE t.container_id=? ORDER BY t.id"))ledgerPointReads++
+                    return raw.query(sql,bindArgs)
+                }
+            }
+            val projections=MeasuredConsumptionStore.auditStagedDataset(observed)
+            assertEquals(setOf(a.containerUuid,b.containerUuid,empty.containerUuid),projections.map{it.containerUuid}.toSet())
+            for(projection in projections) {
+                val result=MeasuredConsumptionStore.auditStagedProjection(raw,a.scope.dataset,projection.containerUuid)
+                assertTrue(result is MeasureResult.Success)
+                assertEquals((result as MeasureResult.Success).value,projection)
+                assertTrue(projection.cacheMatches)
+                assertEquals(if(projection.containerUuid==empty.containerUuid)0L else 1L,projection.usedQuanta)
+                assertEquals(0,projection.remaining.value.compareTo(BigDecimal(if(projection.containerUuid==empty.containerUuid)"28" else "27.5")))
+            }
+            assertEquals(before,RawData.dump(raw).toString())
+            assertEquals("Complete ledger stream must retain every row without per-container SQLite cursors",0,ledgerPointReads)
+        }
+    }
+
     @Test fun fullAuditReadsContainerFactsWithoutPerContainerSql()=runBlocking {
         val m=med();val a=box(m);val b=box(m);val r=record(m);consume(r,a,listOf(use(a),use(b)))
         db.withTransaction {

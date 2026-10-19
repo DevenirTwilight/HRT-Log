@@ -50,6 +50,7 @@ internal object MeasuredConsumptionStore {
     private class PresentationAudit {
         private val byPayload=HashMap<String,FrozenPackageMeasurement>()
         val prefixes=HashMap<Pair<String,Long>,PrefixIndex>()
+        var projectionStream:ProjectionOperationStream?=null
         fun capturePrefix(uuid:String,scale:StockQuantum,entries:List<ProjectionEntry>) {
             if(entries.isEmpty())return // Do not retain per-container maps for unused packages; original fallback remains.
             val proof=operationProof ?: return
@@ -87,7 +88,7 @@ internal object MeasuredConsumptionStore {
             val operationChain by lazy {presentations.operationProof?.nodes ?: MeasuredOperationChain.validate(db)}
             var used=0L;var previousId=0L;val deltas=ArrayList<Long>()
             fun same(a:Quantity,b:Quantity)=a.unit==b.unit && a.meaning==b.meaning && a.value.compareTo(b.value)==0
-            forEachProjectionOperation(db,box.id) { entry,operation,recordRevision ->
+            forEachProjectionOperation(db,box.id,containerUuid,presentations.projectionStream) { entry,operation,recordRevision ->
                 require(entry.id>previousId && entry.used_delta.isFinite() && entry.used_delta!=0.0 && kotlin.math.abs(entry.used_delta)<=StockQuantum.MAX_QUANTA && entry.used_delta.toLong().toDouble()==entry.used_delta)
                 val delta=entry.used_delta.toLong();val allocation=ReferenceStore.row(db,"measured_allocation","ledger_entry_id=?",arrayOf(entry.id))!!
                 require(allocation.getString("dataset_uuid")==dataset && allocation.getString("container_uuid")==containerUuid && allocation.getString("operation_uuid")==entry.operation_id)
@@ -181,16 +182,22 @@ internal object MeasuredConsumptionStore {
             }
             val presentations=PresentationAudit()
             presentations.prepareOperations(db)
-            val projections=identities.mapNotNull { (uuid,dataset,capturedBox) ->
-                val identity=ReferenceStore.row(db,"reference_identity","uuid=?",arrayOf(uuid))!!
-                if(identity.isNull("live_handle")) {
-                    // FK-linked history cannot survive physical removal by attaching to a reused integer ID.
-                    db.query("SELECT 1 FROM measured_allocation WHERE container_uuid=? LIMIT 1",arrayOf(uuid)).use{require(!it.moveToFirst())}
-                    null
-                } else {
-                    val result=auditStagedProjection(db,dataset,uuid,presentations,capturedBox);require(result is MeasureResult.Success)
-                    require(result.value.cacheMatches);result.value
-                }
+            val projections=db.query(allProjectionOperationQuery).use { cursor ->
+                val stream=ProjectionOperationStream(cursor)
+                check(presentations.projectionStream==null);presentations.projectionStream=stream
+                try {
+                    identities.mapNotNull { (uuid,dataset,capturedBox) ->
+                        val identity=ReferenceStore.row(db,"reference_identity","uuid=?",arrayOf(uuid))!!
+                        if(identity.isNull("live_handle")) {
+                            // FK-linked history cannot survive physical removal by attaching to a reused integer ID.
+                            db.query("SELECT 1 FROM measured_allocation WHERE container_uuid=? LIMIT 1",arrayOf(uuid)).use{require(!it.moveToFirst())}
+                            null
+                        } else {
+                            val result=auditStagedProjection(db,dataset,uuid,presentations,capturedBox);require(result is MeasureResult.Success)
+                            require(result.value.cacheMatches);result.value
+                        }
+                    }.also {stream.requireComplete()}
+                } finally {presentations.projectionStream=null}
             }
             auditOperations(db,presentations)
             return projections
@@ -422,29 +429,53 @@ internal object MeasuredConsumptionStore {
         }
     private fun projectionBox(c:Cursor,offset:Int)=ProjectionBox(integer(c,offset),integer(c,offset+1),scalar(c,offset+2),scalar(c,offset+3),scalar(c,offset+4),c.getString(offset+5))
     private val projectionOperationColumns=ReferenceSchema.columns.getValue("measured_operation")
-    private val projectionOperationQuery="SELECT t.id,t.dose_record_id,t.dose_revision,t.operation_id,t.kind,t.used_delta,t.reversal_of_id,"+
-        projectionOperationColumns.joinToString(","){"o.`$it`"}+
-        ",d.revision FROM supply_transaction t LEFT JOIN measured_operation o ON o.operation_uuid=t.operation_id LEFT JOIN dose_record d ON d.id=t.dose_record_id WHERE t.container_id=? ORDER BY t.id"
-    /** Keep unmatched ledger rows visible. Stream envelope fields; retain only the same primitive prior entries for inverse checks. */
-    private inline fun forEachProjectionOperation(db:SupportSQLiteDatabase,id:Long,block:(ProjectionEntry,JSONObject,Long?)->Unit) {
-        db.query(projectionOperationQuery,arrayOf(id)).use { c ->
-            require(c.count<=100000)
-            while(c.moveToNext()) {
-                require(c.getType(3)==Cursor.FIELD_TYPE_STRING && c.getType(4)==Cursor.FIELD_TYPE_STRING)
-                val entry=ProjectionEntry(integer(c,0),nullableInteger(c,1),nullableInteger(c,2),c.getString(3),c.getString(4),scalar(c,5),nullableInteger(c,6))
-                require(c.getType(7)==Cursor.FIELD_TYPE_STRING) {"Ledger operation missing"}
-                val operation=JSONObject().apply {
-                    for((index,name) in projectionOperationColumns.withIndex())put(name,when(c.getType(7+index)) {
-                        Cursor.FIELD_TYPE_NULL->JSONObject.NULL
-                        Cursor.FIELD_TYPE_INTEGER->c.getLong(7+index)
-                        Cursor.FIELD_TYPE_STRING->c.getString(7+index)
-                        else->error("Unexpected reference storage type")
-                    })
-                }
-                val revision=if(entry.kind=="ADJUST")null else nullableInteger(c,7+projectionOperationColumns.size)
-                block(entry,operation,revision)
+    private val projectionOperationFields="t.id,t.dose_record_id,t.dose_revision,t.operation_id,t.kind,t.used_delta,t.reversal_of_id,"+
+        projectionOperationColumns.joinToString(","){"o.`$it`"}+",d.revision"
+    private val projectionOperationJoins=" LEFT JOIN measured_operation o ON o.operation_uuid=t.operation_id LEFT JOIN dose_record d ON d.id=t.dose_record_id"
+    private val projectionOperationQuery="SELECT "+projectionOperationFields+" FROM supply_transaction t"+projectionOperationJoins+" WHERE t.container_id=? ORDER BY t.id"
+    private val allProjectionOperationQuery="SELECT i.uuid,"+projectionOperationFields+
+        " FROM supply_transaction t JOIN reference_identity i ON i.live_handle=t.container_id"+projectionOperationJoins+
+        " WHERE i.kind='CONTAINER' AND EXISTS(SELECT 1 FROM reference_event e JOIN reference_snapshot s ON s.uuid=e.snapshot_uuid WHERE e.subject_uuid=i.uuid AND s.kind='PRESENTATION') ORDER BY i.uuid,t.id"
+    /** Cursor is borrowed from the full-audit use block. No row/envelope survives its callback. */
+    private class ProjectionOperationStream(private val cursor:Cursor) {
+        private var positioned=cursor.moveToFirst()
+        private var previous:String?=null
+        private fun uuid():String {require(cursor.getType(0)==Cursor.FIELD_TYPE_STRING);return cursor.getString(0)}
+        fun forEach(containerUuid:String,block:(ProjectionEntry,JSONObject,Long?)->Unit) {
+            previous?.let {require(it<containerUuid)};previous=containerUuid
+            if(positioned)require(uuid()>=containerUuid) {"Unconsumed earlier ledger group"}
+            var count=0
+            while(positioned && uuid()==containerUuid) {
+                require(++count<=100000) // Same original per-container bound, not a new joined global limit.
+                readProjectionOperation(cursor,1,block)
+                positioned=cursor.moveToNext()
             }
         }
+        fun requireComplete(){require(!positioned) {"Unconsumed ledger group"}}
+    }
+    /** LEFT JOINs retain unmatched ledger rows; standalone projection keeps the original SQL path. */
+    private fun forEachProjectionOperation(db:SupportSQLiteDatabase,id:Long,uuid:String,stream:ProjectionOperationStream?,block:(ProjectionEntry,JSONObject,Long?)->Unit) {
+        if(stream!=null) {stream.forEach(uuid,block);return}
+        db.query(projectionOperationQuery,arrayOf(id)).use { c ->
+            require(c.count<=100000)
+            while(c.moveToNext())readProjectionOperation(c,0,block)
+        }
+    }
+    /** Identical typed decoder for standalone and complete streams; offset accounts only for grouping UUID. */
+    private fun readProjectionOperation(c:Cursor,offset:Int,block:(ProjectionEntry,JSONObject,Long?)->Unit) {
+        require(c.getType(offset+3)==Cursor.FIELD_TYPE_STRING && c.getType(offset+4)==Cursor.FIELD_TYPE_STRING)
+        val entry=ProjectionEntry(integer(c,offset),nullableInteger(c,offset+1),nullableInteger(c,offset+2),c.getString(offset+3),c.getString(offset+4),scalar(c,offset+5),nullableInteger(c,offset+6))
+        require(c.getType(offset+7)==Cursor.FIELD_TYPE_STRING) {"Ledger operation missing"}
+        val operation=JSONObject().apply {
+            for((index,name) in projectionOperationColumns.withIndex())put(name,when(c.getType(offset+7+index)) {
+                Cursor.FIELD_TYPE_NULL->JSONObject.NULL
+                Cursor.FIELD_TYPE_INTEGER->c.getLong(offset+7+index)
+                Cursor.FIELD_TYPE_STRING->c.getString(offset+7+index)
+                else->error("Unexpected reference storage type")
+            })
+        }
+        val revision=if(entry.kind=="ADJUST")null else nullableInteger(c,offset+7+projectionOperationColumns.size)
+        block(entry,operation,revision)
     }
     private data class PrefixIndex(val usedAtHead:Map<Long,Long>,val headBeforeSequence:java.util.TreeMap<Int,Long>)
     /** Same bounded reducer for either checked projection rows or the exact original SQL fallback. */

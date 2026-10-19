@@ -1,0 +1,7 @@
+{
+  "state": "FAIL_EXPECTED",
+  "generator_source": "492d7276917b108b2af789c2ab46c6c9c81d31ac",
+  "failure": "Actual private projection signature5 != old reflection selector4",
+  "log_sha256": "269e01d10e773a567e271d1bc02050c0bbefa98b7cacaf03606acb89679523e5",
+  "budget_changed": false
+}

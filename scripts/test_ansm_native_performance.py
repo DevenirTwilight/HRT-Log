@@ -1,4 +1,5 @@
 import importlib.util
+import re
 from pathlib import Path
 import unittest
 
@@ -34,7 +35,7 @@ class NativePerformanceIsolationTest(unittest.TestCase):
         self.assertLess(text.index('components.put("status","COMPLETE")'), text.index('assertEquals("Diagnostic budgets;'))
         for name in ('raw_full_first_ms', 'cached_full_second_ms', 'cached_full_first_ms',
                      'raw_full_second_ms', 'raw_state_including_references_ms', 'raw_operation_chain_ms',
-                     'cached_operations_with_setup_ms', 'cached_projections_with_setup_ms',
+                     'cached_operations_with_setup_ms', 'cached_projections_with_setup_ms', 'stream_query_plan_audit_ms',
                      'decimal_regex_compile_12000_ms', 'decimal_regex_reuse_12000_ms'):
             self.assertIn(name, text)
         diagnostic = text[text.index('val components=JSONObject()'):text.index('components.put("status","COMPLETE")')]
@@ -43,6 +44,18 @@ class NativePerformanceIsolationTest(unittest.TestCase):
         self.assertIn('finally{android.os.Debug.stopMethodTracing()}',text)
         self.assertNotIn('exceeded.clear', text)
         self.assertIn('assertEquals(rawProjection,MeasuredConsumptionStore.auditStagedDataset(raw))', diagnostic)
+
+    def test_projection_diagnostic_signature_matches_current_source_and_uses_uncaptured_path(self):
+        prepare = module('prepare_ansm_native_performance')
+        text = prepare.native_source(prepare.SOURCE.read_text())
+        production = (ROOT / 'core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt').read_text()
+        signature = re.search(r'private fun auditStagedProjection\(([^)]*)\)', production).group(1)
+        arity = len(signature.split(','))
+        selected = re.search(r'it.name=="auditStagedProjection" && it.parameterTypes.size==([0-9]+)', text)
+        self.assertEqual(arity, int(selected.group(1)), 'Post-budget reflection must follow the real private signature')
+        self.assertIn('projectionAuditor.invoke(MeasuredConsumptionStore,reads,dataset,uuid,presentations,null)', text)
+        self.assertLess(text.index('report.put("budget_exceeded"'), text.index('val projectionAuditor='))
+        self.assertIn('assertEquals(rawProjection,values)', text)
 
     def test_template_drift_fails_before_generating_a_misleading_native_test(self):
         prepare = module('prepare_ansm_native_performance')

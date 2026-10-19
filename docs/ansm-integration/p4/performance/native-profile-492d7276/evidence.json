@@ -1,0 +1,13 @@
+{
+  "source_head": "492d7276917b108b2af789c2ab46c6c9c81d31ac",
+  "run": 39214313446,
+  "artifact_id": 12169432018,
+  "artifact_sha256": "e84a1a9dba09f669212cbc3c8bdd7af75601762004f7022ee77936b65dedd4f9",
+  "artifact_sha256_verification": "PASS",
+  "zip_crc": "PASS",
+  "performance": "FAIL: writes9725.8521/9665.94164/9183.85872ms exceed unchanged5000ms, before the separate diagnostic failure.",
+  "diagnostic": "FAIL: post-budget projectionAuditor reflection still selects4 parameters; private method now has5 after container capture change. NoSuchElementException, no sampling trace produced. This is a generator defect, not missing device evidence reclassified as success.",
+  "profile": "NOT_RUN",
+  "physical": "NOT_RUN",
+  "p4": "PRODUCTION_BLOCKED"
+}

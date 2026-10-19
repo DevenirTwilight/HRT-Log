@@ -1,0 +1,327 @@
+{
+  "source_base": "492d7276917b108b2af789c2ab46c6c9c81d31ac",
+  "candidate_kind": "UNCOMMITTED_LEDGER_STREAM_WORKTREE",
+  "production_sha256": "24ef2fe9b45487948690002160b3dad996513b8e4031a15d87d907ebe9ee444c",
+  "state": "PASS",
+  "tests": 443,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "native_contract_kotlin_compile": "PASS",
+  "suites": [
+    {
+      "name": "net.plainnotes.app.data.Ansm03b0InventoryTest",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "4a8c074148abc9ec71604dd32797fe9db77ee0343254fbf22f5f6c3ab9c90be8"
+    },
+    {
+      "name": "net.plainnotes.app.data.AttachmentFoundationTest",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "e90d44c05700c6c091a91b1e2f7cc004db62e97d1ced3d149a4cc0820e1813fe"
+    },
+    {
+      "name": "net.plainnotes.app.data.AttachmentMigrationTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "1737ea8dec3c38b70d7762482e8dffc1019ebd72e28279871ce5bae6f7c73058"
+    },
+    {
+      "name": "net.plainnotes.app.data.BackfillTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "e5a035b06d393f47272c9b22698a1ef2625b75b0793868e332e38779c214777c"
+    },
+    {
+      "name": "net.plainnotes.app.data.BackupJsonReaderStreamingTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "af164eefa90d401f23ae4981c0fe6620cc7d6c3aaf16dc5e3f8326cd666d1e8d"
+    },
+    {
+      "name": "net.plainnotes.app.data.BackupReplacementTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "06ac0491fb1606801c8e7da70c8d2ac06f2b619812006e7a15d025c5283d9300"
+    },
+    {
+      "name": "net.plainnotes.app.data.DailyTrashCollisionTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "88f4f589222728eab851ea32bd9724fb8b2abf49f2ea1bf2374a4f70c677e1bb"
+    },
+    {
+      "name": "net.plainnotes.app.data.DataTransferTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "8a6947c46da670b866c3f7a88843da98795a52e8cfa0265d42ace9cf27e109ce"
+    },
+    {
+      "name": "net.plainnotes.app.data.HistoricalContextRepairTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "b534a69664b1f85df3c5ff230be860200d6ca3603746d6b2e3e52ac2868ccf65"
+    },
+    {
+      "name": "net.plainnotes.app.data.HistoricalVisitTest",
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "bc2cb543dcdfc759c04ab91a611dff39f18701cc83a57a0257b685d7a0984e5f"
+    },
+    {
+      "name": "net.plainnotes.app.data.HistoryIntegrityTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "e3c3c5e24bc4e81f41f28501be6a1bc27c13a3cb6cab8d7d67e2fd46774bb676"
+    },
+    {
+      "name": "net.plainnotes.app.data.HistoryPeriodDataTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "73a5540f0788c345474dab7b424da24f06481bf4a532e617535247a9d8d7ea57"
+    },
+    {
+      "name": "net.plainnotes.app.data.HrtTrackerImportTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "63b0222a25dfa65a28c44395ecc8cd6fd67b00aecbb479f0d1eeb5c461d6a602"
+    },
+    {
+      "name": "net.plainnotes.app.data.KeyBoundaryTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "5cbc5f4fff710a5f179923b974f821ac396a505d3d8bd5058f1af02ae43c9c68"
+    },
+    {
+      "name": "net.plainnotes.app.data.LabBatchSaveTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "b961510e34c713dbe12ec7bf2862215530fdfc0270cf9ac38f8392009c4a1bd0"
+    },
+    {
+      "name": "net.plainnotes.app.data.LabContextTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "dfb6c6a51503eef5826eeabf657252e69835b478dc831126ac435768ed289a99"
+    },
+    {
+      "name": "net.plainnotes.app.data.LabPanelDataTest",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "669c5becbe7ea119b1c3306f9f2ea6a4c49860549ba64a8d8746f309b8f816e1"
+    },
+    {
+      "name": "net.plainnotes.app.data.LedgerReplacementTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "1a48085fbe1e36dfc0b5adc74447badb2746bb8219e6b9e4b1d75fab256ae46f"
+    },
+    {
+      "name": "net.plainnotes.app.data.MeasuredConsumptionStoreTest",
+      "tests": 125,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "cf57c4999db52239a2c4d6e7d91b80dad4da668b99ce2cbc30ca98fb321c9a28"
+    },
+    {
+      "name": "net.plainnotes.app.data.MeasuredContainerStoreTest",
+      "tests": 19,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "ed8f0c5536dce56808ab40b8499909921767ec9f556c8e450d470453f825c60f"
+    },
+    {
+      "name": "net.plainnotes.app.data.MeasuredUsePayloadTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "14d8bc7bd013ccb65c5bcd71c6f746bdda5ad14fde02babaecee609382dda846"
+    },
+    {
+      "name": "net.plainnotes.app.data.PackageMeasurementPayloadTest",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "d9eed1dc4a404e8e3c369b4613535991f3c3561afb24069f4399a4a79cdc25ec"
+    },
+    {
+      "name": "net.plainnotes.app.data.PlanEditTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "dbd6ec6c4829c53dcc172403257e1b76fdca64f4a921021406a7bc05067a56a5"
+    },
+    {
+      "name": "net.plainnotes.app.data.ReferenceCanonicalCompatibilityTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "3f0e488e36006ff31ae0270b2f8b23ab4ccde637d7d7e245c802163515a86257"
+    },
+    {
+      "name": "net.plainnotes.app.data.ReferenceCatalogTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "9ad29d43f23c0b2d7792bab230b22c0b6412c998fd52b5c3ea56adf87e3827d0"
+    },
+    {
+      "name": "net.plainnotes.app.data.ReferenceMigrationTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "691d5f262e7ff8455ee0912aa926421cc1262bd502a4d578089101e06bf7bc73"
+    },
+    {
+      "name": "net.plainnotes.app.data.ReferencePayloadTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "6910b0c53e3c9b7216c64c60c5d608308f34ea708a3510cda26e5a1c22c82557"
+    },
+    {
+      "name": "net.plainnotes.app.data.ReferencePersistenceTest",
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "49dda4887b74a5a838b525182cfa9e461850ccc30a1aa5f376ba8514219ff655"
+    },
+    {
+      "name": "net.plainnotes.app.data.RegimenHistoryTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "664884607c0bc0bfefccb0b89d0d51d0da4ec391b7d6207dfb2e16e36add3989"
+    },
+    {
+      "name": "net.plainnotes.app.data.SchemaConstraintTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "bcc2105f5bd85b91e95d4dafa825a0bc2034bee31b248d676c2da31d94dfa1f1"
+    },
+    {
+      "name": "net.plainnotes.app.data.StockCorrectionTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "57705323cf73bccad9eec2f4d78f242e03cd0125d1ecf370849374d51969441a"
+    },
+    {
+      "name": "net.plainnotes.app.data.StockForecastTest",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "d3e015b735a889a4d5cc6c343e1b58e5824d09c136f91680bf108442b63dd8d0"
+    },
+    {
+      "name": "net.plainnotes.app.data.SupplyLedgerTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "bf129c0cf0402e4c32a36154fa3c2e6fbd46df15c039cca2dc9b7a2d742e4f3c"
+    },
+    {
+      "name": "net.plainnotes.app.data.TrashDataTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "c85d7910b17a6c620394e803a1132ba4e44a6a95c8f577bf05a1785b672df72c"
+    },
+    {
+      "name": "net.plainnotes.app.data.UndoSkippedTest",
+      "tests": 33,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "f4c44f5277e3df0fefaadcc5b94a4db30f7e7d8d1e89e95b2e08189d1a35da7f"
+    },
+    {
+      "name": "net.plainnotes.app.data.VisitPackDataTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "b237877d4b819545a6b4add3ee9ba8536b1e2e379c7274ec06bb9ef2e497cdd6"
+    },
+    {
+      "name": "net.plainnotes.app.data.VoidedPackageTest",
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "09fb02deb7f9db59f99324895076eb028b81b7c8eeb7aaa8cf8c1bdc873be2ad"
+    },
+    {
+      "name": "net.plainnotes.app.data.WellbeingMigrationTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "4da86b50bee64ff29a60f3ba686a1038e646ae0e136ddc335263bd71fad1be02"
+    },
+    {
+      "name": "net.plainnotes.app.data.WellbeingRecordsTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "3b7ba6705a4a4adcc2bff79ac7c516e040246142b13960c7b7ace02b7de1653c"
+    }
+  ],
+  "negative_cases": "Extra/duplicate/missing/unordered streamed groups all rejected, cursors closed, raw rows unchanged, subsequent actual audit valid.",
+  "native_large_budget": "NOT_RUN_NEW_CANDIDATE"
+}

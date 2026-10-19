@@ -67,7 +67,7 @@ def native_source(text):
     replace('fun stage(name:String){report.put("stage",name);file.writeText(report.toString(2))}',
             'fun stage(name:String){report.put("stage",name).put("observed_heap_bytes",Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory()).put("peak_observed_jvm_heap_bytes",peak.get()).put("peak_observed_database_disk_bytes",diskPeak.get());file.writeText(report.toString(2))}')
     # Diagnostics run only AFTER original timed phases and budget/peak capture.
-    # Reflection calls the unchanged private full auditor without the optional row cache;
+    # Reflection calls the real private full auditor without the optional row cache;
     # it is test-only and never participates in production acceptance or writes.
     replace('file.writeText(report.toString(2));assertEquals("Diagnostic budgets; device acceptance remains NOT_RUN",emptyList<String>(),exceeded)', '''file.writeText(report.toString(2))
             running.set(false);sampler.join(1000)
@@ -105,11 +105,12 @@ def native_source(text):
             val presentationType=MeasuredConsumptionStore::class.java.declaredClasses.single{it.simpleName=="PresentationAudit"}
             val presentationConstructor=presentationType.getDeclaredConstructor().apply{isAccessible=true}
             val operationsAuditor=MeasuredConsumptionStore::class.java.declaredMethods.single{it.name=="auditOperations"}.apply{isAccessible=true}
-            val projectionAuditor=MeasuredConsumptionStore::class.java.declaredMethods.single{it.name=="auditStagedProjection" && it.parameterTypes.size==4}.apply{isAccessible=true}
+            val projectionAuditor=MeasuredConsumptionStore::class.java.declaredMethods.single{it.name=="auditStagedProjection" && it.parameterTypes.size==5}.apply{isAccessible=true}
             component("cached_operations_with_setup_ms") {
                 val reads=ReferenceAuditReads(raw)
                 try{operationsAuditor.invoke(MeasuredConsumptionStore,reads,presentationConstructor.newInstance())}finally{reads.finish()}
             }
+            // Null capturedBox deliberately retains the original standalone SQL path for this component diagnostic.
             component("cached_projections_with_setup_ms") {
                 val reads=ReferenceAuditReads(raw)
                 try {
@@ -118,11 +119,30 @@ def native_source(text):
                         buildList{while(c.moveToNext())add(c.getString(0) to c.getString(1))}
                     }
                     val values=identities.map { (uuid,dataset) ->
-                        val result=projectionAuditor.invoke(MeasuredConsumptionStore,reads,dataset,uuid,presentations)
+                        val result=projectionAuditor.invoke(MeasuredConsumptionStore,reads,dataset,uuid,presentations,null)
                         require(result is MeasureResult.Success<*>);result.value as AuditedStockProjection
                     }
                     assertEquals(rawProjection,values)
                 } finally{reads.finish()}
+            }
+            // Verify the actual API26 stream plan after all original metrics are frozen.
+            component("stream_query_plan_audit_ms") {
+                var planned=0
+                val plans=JSONArray()
+                val observed=object:androidx.sqlite.db.SupportSQLiteDatabase by raw {
+                    override fun query(sql:String):android.database.Cursor {
+                        if(sql.startsWith("SELECT i.uuid,t.id,t.dose_record_id")) {
+                            planned++
+                            raw.query("EXPLAIN QUERY PLAN "+sql).use { c ->
+                                while(c.moveToNext())plans.put(c.getString(c.getColumnIndexOrThrow("detail")))
+                            }
+                        }
+                        return raw.query(sql)
+                    }
+                }
+                assertEquals(rawProjection,MeasuredConsumptionStore.auditStagedDataset(observed))
+                assertEquals(1,planned)
+                components.put("projection_stream_query_plan",plans)
             }
             // Diagnostic only: quantify Android decimal-pattern compilation cost before considering reuse.
             val numericTokens=arrayOf("0.5","1","2.00","bad","0,5","1e3")

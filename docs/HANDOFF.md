@@ -2047,3 +2047,11 @@ cc7原生39209956991完整FAIL已归档performance/native-profile-cc7b182c：8.4
 包装候选原规模本地诊断PASS，2184查询，完整结果一致；总量不可与主线LAB集成前cc7的4178直接宣称差值。新增原SQL独立投影对照，shared MeasuredConsumption123项零失败/错误/跳过、原生源码再编译PASS，生产hash与全data441相同。main861-privacy-ci-failure.json记录a3c远端实际失败：App1776中1失败/237既有跳过，唯一失败PrivacyNoticeFactsTest:22仍写死业务11/Room12；修正当前输出期待为业务12/Room13并同步privacy-evidence，KDF/cipher/四语原断言不动，局部隐私/时期回归运行中。不能说六CI全绿；设备和API26/29、JVM/科学实际已PASS，最终HEAD再验。
 
 本轮候选最终隐私/时期复验8项零失败/错误/跳过，container-privacy-period-evidence.json；所有加密参数/四语隐私原断言保留，完整data441/差分123/原生编译和14600/2000诊断均已PASS。当前a3c六CI完整结果为5类PASS/Android FAIL（版本过期断言），原生亦FAIL，已归档main861-ci-evidence.json；本轮修复与优化将推送原#57，新HEAD完整六CI/原生门必须重验，不能沿用a3c已通过部分作为最终准入。最终精确HEAD/远端结果记录PR57，仍DRAFT/入口OFF，不启用P5/P6。
+
+包装读取492d7276已推送#57：隐私/时期8PASS、完整data441、差分123、原生合同源码编译及原规模本地2184查询诊断PASS。原生39214313446/六CI已自动运行，不重复手动触发，仍DRAFT/入口OFF。继续针对剩余2000账本游标先写两消费+一空包装的真实合成反向测试，未改生产492即实际捕获3次点查；ledger-stream-red-evidence.json。新候选借用同事务单游标按UUID/id分组，原typed decoder/每包装100000界限/LEFT JOIN孤立行/完整余组检查及独立SQL对照保留，try/finally清理指针，不跨事务缓存或略过全局审核。候选完整data/原生编译运行中，未推送/未宣称PASS；仅在证据支持且仍有需要时采用，不抢先取消492原生诊断。
+
+账本流式候选最终data443项零失败/错误/跳过及原生合同源码编译PASS，四种篡改查询游标均拒绝/关闭/保持原始数据，之后真实审计恢复；首次442与最终443收据ledger-stream-{first,final}-evidence.json。发现并承认上轮容器参数新增遗漏同步计时后反射：492原生39214313446实际写入9.726/9.666/9.184秒>5，之后另因4/5参数签名不符失败，未产生采样(NOT_RUN)，ZIP e84a1a9d…dedd4f9/CRC已核验保留。不是仅诊断错误，更不是性能PASS。新增签名合同先RED5!=4，修正生成器只向私有5参数函数传null capturedBox，维持独立SQL组件/真实完整审计比较/原计时预算断言，10项Python测试PASS。生成原生探针编译与原规模账本查询计划诊断正在进行；候选未推送、#57仍草稿/入口OFF。
+
+账本候选原规模本地诊断PASS：185查询（原包装候选2184，2000逐包装账本读合为1），完整结果相等，JVM实际计划全部使用现有索引，无全量临时排序；ledger-stream-large-evidence.json记录精确hash/计划。此非原生计划或5秒准入。生成器在计时后只读诊断中新增原生EXPLAIN/恰好1次流查询/完整结果相等检查，不动任何原始阶段或预算；10项Python检查PASS。最新生成探针编译与最终App隐私/时期/库存UNKNOWN回归运行中，候选暂未推送；492六CI还未全部结束，失败与未运行内容保留。
+
+账本流式最终候选本地全部通过：data443、App隐私/Period/StockConsistency/UNKNOWN43、Python10，更新后的生成原生探针Kotlin编译PASS，所有实际套结果零失败/错误/跳过；ledger-stream-app-native-compile-evidence.json保留生产/生成器/探针/逐套XML hash。附可移植ledger-stream-query-reproducer.py，--emit实际复现同593589a2…7ef7探针hash。原规模185查询与现有索引计划成立，仅JVM诊断；不得替代原生5秒准入。492六类必需检查均已出现本源成功（重复事件设备任务可能尚在结束，原始rollup保留），native仍FAIL且计时后签名错误保留。新候选将推送原#57，不擅自就绪/合并；最终精确HEAD及完整六CI/原生结果按PR57收据交接，避免元数据提交循环。正式入口OFF、P5/P6未实施、不签名/改版/交付APK。
