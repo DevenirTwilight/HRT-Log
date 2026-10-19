@@ -1,3 +1,9 @@
+## LAB-UI-03：实际化验首页替换正在实施 — 2026-10-19
+
+独立 `feature/lab-ui03-home-20261019` 基于默认080094ae；用户最新任务登记 REQUIREMENTS §114，文件矩阵 `labs/ui03/implementation.md`。根因已定位：Destination.LABS 已正确调用 LabsScreen，但单项旧记录和指标筛选显式走私有 LabRow，因此新版批量/详情弹窗没有替换首页。现改统一 LabHomeCard，正式化验单/旧显示分组/单项/筛选历史共用视觉；已有业务回调、labDraws、趋势数值块保持。
+
+代码与四语资源正在编译及回归，当前未完成验收；正式入口仍沿用既有 AppShell，未建第二套数据库或入口。与独立 LAB-03 项目/单位扩展分工：本分支 LabsScreen/主页卡片/导航测试，数据分支 LabBatchEntry/词典/单位；未修改 Room12、业务备份11、PK、库存、权限、签名或 APK。CI/截图/真机/TalkBack 均尚未完成，不得据此声称已交付。P4独立Draft不阻塞本任务。
+
 ## build33 交付与中心原生测试复核完成 — 2026-10-19
 
 build33 已仅owner私密提供，源码219bbf32与合并42bfa99f的六必需CI均已通过；下方保留成品完整记录。#87 原文档源152f0908/API26确有返回断言FAIL，不能因只改文档而忽略。独立#88/source dfa7369b只将测试单次Back改为既有Espresso等待输入焦点，所有测试主体/断言保持；androidTestCompileOnly仅暴露原runtime3.5.0，Gradle实际解析图证明release无Espresso。
