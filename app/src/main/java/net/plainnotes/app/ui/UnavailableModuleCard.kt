@@ -28,6 +28,7 @@ import net.plainnotes.app.R
         }
     }
     if(open)AlertDialog(onDismissRequest={open=false},modifier=Modifier.testTag("center-unavailable-dialog"),
+        properties = DialogProperties(dismissOnBackPress = true),
         title={Text(stringResource(title))},
         text={Column(Modifier.heightIn(max=240.dp).verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(12.dp)) {
             Text(stringResource(R.string.center_not_open));Text(stringResource(reason))
