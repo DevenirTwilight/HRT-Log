@@ -1,0 +1,133 @@
+{
+  "status": "DIAGNOSTIC_BUDGET_PASS",
+  "environment": "Robolectric API35 framework SQLite; not SQLCipher\/low-memory API26\/hardware",
+  "stage": "post_write_full_audit",
+  "real_seed_generation_ms": 3148.730738,
+  "synthetic_fixture_expansion_ms": 1011.68225,
+  "raw_business_json_bytes": 19660924,
+  "records": 14600,
+  "containers": 2000,
+  "measured_operations": 2000,
+  "presentation_snapshots": 2000,
+  "distinct_synthetic_product_variants": 20,
+  "row_count": 32603,
+  "validated_staging_and_restore_ms": 3811.001992,
+  "full_audit_ms": 1082.95331,
+  "shared_forecast_ms": 1378.431178,
+  "full_encrypted_backup_ms": 2356.912888,
+  "encrypted_archive_bytes": 19661051,
+  "full_encrypted_restore_ms": 5226.910286,
+  "restored_full_audit_ms": 940.754393,
+  "three_post_restore_writes_ms": 3939.575273,
+  "post_restore_write_including_ticket_ms": [
+    1437.880523,
+    1308.667848,
+    1186.814819
+  ],
+  "post_write_full_audit_ms": 945.546357,
+  "peak_observed_jvm_heap_bytes": 536128848,
+  "heap_sample_interval_ms": 10,
+  "heap_is_not_native_rss": true,
+  "physical_device_acceptance": "NOT_RUN",
+  "api26_low_memory_acceptance": "NOT_RUN",
+  "diagnostic_query_stats": {
+    "scope": "POST_BUDGET_DIAGNOSTIC_COUNTED_SQL_NOT_ACCEPTANCE",
+    "full_projection_equality": true,
+    "queries": 185,
+    "top_query_templates": [
+      {
+        "sql": "PRAGMA foreign_key_check",
+        "count": 2
+      },
+      {
+        "sql": "PRAGMA schema_version",
+        "count": 2
+      },
+      {
+        "sql": "SELECT total_changes()",
+        "count": 2
+      },
+      {
+        "sql": "PRAGMA table_info(`regimen_rule_link`)",
+        "count": 1
+      },
+      {
+        "sql": "PRAGMA table_info(`visit_pack`)",
+        "count": 1
+      },
+      {
+        "sql": "SELECT COUNT(*) FROM `day_note`",
+        "count": 1
+      },
+      {
+        "sql": "SELECT 1 FROM `stage_review` AS NEW WHERE COALESCE((length(NEW.date)=10 AND length(NEW.effects_json)>=2 AND (NEW.smoking IS NULL OR NEW.smoking IN ('YES','NO')) AND (NEW.systolic IS NULL OR (NEW.systolic>0 AND NEW.systolic<1000)) AND (NEW.diastolic IS NULL OR (NEW.diastolic>0 AND NEW.diastolic<1000)) AND (NEW.weight_kg IS NULL OR (NEW.weight_kg>0 AND NEW.weight_kg<=1.7976931348623157e308)) AND (NEW.satisfaction IS NULL OR NEW.satisfaction BETWEEN 1 AND 5)),0)=0 LIMIT 1",
+        "count": 1
+      },
+      {
+        "sql": "SELECT COALESCE(SUM(COALESCE(length(CAST(`date` AS BLOB)),0)+COALESCE(length(CAST(`effects_json` AS BLOB)),0)+COALESCE(length(CAST(`tolerance_note` AS BLOB)),0)+COALESCE(length(CAST(`risk_note` AS BLOB)),0)+COALESCE(length(CAST(`smoking` AS BLOB)),0)+COALESCE(length(CAST(`satisfaction_note` AS BLOB)),0)),0),COALESCE(MAX(CASE WHEN `id` IS NOT NULL AND NOT (typeof(`id`)='integer') THEN 1 ELSE 0 END),0),COALESCE(MAX(CASE WHEN `date` IS NOT NULL AND NOT (typeof(`date`)='text' AND length(`date`)<=1048576) THEN 1 ELSE 0 END),0),COALESCE(MAX(CASE WHEN `effects_json` IS NOT NULL AND NOT (typeof(`effects_json`)='text' AND length(`effects_json`)<=1048576) THEN 1 ELSE 0 END),0),COALESCE(MAX(CASE WHEN `tolerance_note` IS NOT NULL AND NOT (typeof(`tolerance_note`)='text' AND length(`tolerance_note`)<=1048576) THEN 1 ELSE 0 END),0),COALESCE(MAX(CASE WHEN `risk_note` IS NOT NULL AND NOT (typeof(`risk_note`)='text' AND length(`risk_note`)<=1048576) THEN 1 ELSE 0 END),0),COALESCE(MAX(CASE WHEN `smoking` IS NOT NULL AND NOT (typeof(`smoking`)='text' AND length(`smoking`)<=1048576) THEN 1 ELSE 0 END),0),COALESCE(MAX(CASE WHEN `systolic` IS NOT NULL AND NOT (typeof(`systolic`)='integer') THEN 1 ELSE 0 END),0),COALESCE(MAX(CASE WHEN `diastolic` IS NOT NULL AND NOT (typeof(`diastolic`)='integer') THEN 1 ELSE 0 END),0),COALESCE(MAX(CASE WHEN `weight_kg` IS NOT NULL AND NOT (typeof(`weight_kg`) IN ('integer','real') AND `weight_kg` BETWEEN -1.7976931348623157e308 AND 1.7976931348623157e308) THEN 1 ELSE 0 END),0),COALESCE(MAX(CASE WHEN `satisfaction` IS NOT NULL AND NOT (typeof(`satisfaction`)='integer') THEN 1 ELSE 0 END),0),COALESCE(MAX(CASE WHEN `satisfaction_note` IS NOT NULL AND NOT (typeof(`satisfaction_note`)='text' AND length(`satisfaction_note`)<=1048576) THEN 1 ELSE 0 END),0) FROM `stage_review`",
+        "count": 1
+      },
+      {
+        "sql": "SELECT 1 FROM sqlite_master WHERE type='table' AND name='lab_panel'",
+        "count": 1
+      },
+      {
+        "sql": "PRAGMA table_info(`regimen_version`)",
+        "count": 1
+      },
+      {
+        "sql": "PRAGMA table_info(`history_period_revision`)",
+        "count": 1
+      },
+      {
+        "sql": "SELECT 1 FROM `trash_item` AS NEW WHERE COALESCE((NEW.kind IN ('MILESTONE','LAB','LAB_PANEL','APPOINTMENT','REVIEW','SYMPTOM','SCORE','NOTE','RECORD','PERIOD','CORRECTION') AND NEW.state IN ('TRASHED','HIDDEN') AND NEW.deleted_utc>0 AND length(NEW.ref)>0 AND length(NEW.item_date)=10 AND length(NEW.payload_json)>=2),0)=0 LIMIT 1",
+        "count": 1
+      },
+      {
+        "sql": "SELECT COUNT(*) FROM reference_dataset",
+        "count": 1
+      },
+      {
+        "sql": "SELECT COALESCE(SUM(COALESCE(length(CAST(`period_key` AS BLOB)),0)+COALESCE(length(CAST(`state` AS BLOB)),0)+COALESCE(length(CAST(`identity_json` AS BLOB)),0)+COALESCE(length(CAST(`standard_json` AS BLOB)),0)+COALESCE(length(CAST(`from_date` AS BLOB)),0)+COALESCE(length(CAST(`until_date` AS BLOB)),0)+COALESCE(length(CAST(`zone` AS BLOB)),0)+COALESCE(length(CAST(`evidence_json` AS BLOB)),0)+COALESCE(length(CAST(`origin` AS BLOB)),0)+COALESCE(length(CAST(`kind` AS BLOB)),0)+COALESCE(length(CAST(`group_key` AS BLOB)),0)),0),COALESCE(MAX(CASE WHEN `id` IS NOT NULL AND NOT (typeof(`id`)='integer') THEN 1 ELSE 0 END),0),COALESCE(MAX(CASE WHEN `period_key` IS NOT NULL AND NOT (typeof(`period_key`)='text' AND length(`period_key`)<=1048576) THEN 1 ELSE 0 END),0),COALESCE(MAX(CASE WHEN `revision` IS NOT NULL AND NOT (typeof(`revision`)='integer') THEN 1 ELSE 0 END),0),COALESCE(MAX(CASE WHEN `state` IS NOT NULL AND NOT (typeof(`state`)='text' AND length(`state`)<=1048576) THEN 1 ELSE 0 END),0),COALESCE(MAX(CASE WHEN `medication_id` IS NOT NULL AND NOT (typeof(`medication_id`)='integer') THEN 1 ELSE 0 END),0),COALESCE(MAX(CASE WHEN `identity_json` IS NOT NULL AND NOT (typeof(`identity_json`)='text' AND length(`identity_json`)<=1048576) THEN 1 ELSE 0 END),0),COALESCE(MAX(CASE WHEN `standard_json` IS NOT NULL AND NOT (typeof(`standard_json`)='text' AND length(`standard_json`)<=1048576) THEN 1 ELSE 0 END),0),COALESCE(MAX(CASE WHEN `from_date` IS NOT NULL AND NOT (typeof(`from_date`)='text' AND length(`from_date`)<=1048576) THEN 1 ELSE 0 END),0),COALESCE(MAX(CASE WHEN `until_date` IS NOT NULL AND NOT (typeof(`until_date`)='text' AND length(`until_date`)<=1048576) THEN 1 ELSE 0 END),0),COALESCE(MAX(CASE WHEN `zone` IS NOT NULL AND NOT (typeof(`zone`)='text' AND length(`zone`)<=1048576) THEN 1 ELSE 0 END),0),COALESCE(MAX(CASE WHEN `evidence_json` IS NOT NULL AND NOT (typeof(`evidence_json`)='text' AND length(`evidence_json`)<=1048576) THEN 1 ELSE 0 END),0),COALESCE(MAX(CASE WHEN `origin` IS NOT NULL AND NOT (typeof(`origin`)='text' AND length(`origin`)<=1048576) THEN 1 ELSE 0 END),0),COALESCE(MAX(CASE WHEN `created_utc` IS NOT NULL AND NOT (typeof(`created_utc`)='integer') THEN 1 ELSE 0 END),0),COALESCE(MAX(CASE WHEN `kind` IS NOT NULL AND NOT (typeof(`kind`)='text' AND length(`kind`)<=1048576) THEN 1 ELSE 0 END),0),COALESCE(MAX(CASE WHEN `group_key` IS NOT NULL AND NOT (typeof(`group_key`)='text' AND length(`group_key`)<=1048576) THEN 1 ELSE 0 END),0) FROM `history_period_revision`",
+        "count": 1
+      },
+      {
+        "sql": "SELECT COALESCE(SUM(COALESCE(length(CAST(`kind` AS BLOB)),0)+COALESCE(length(CAST(`ref` AS BLOB)),0)+COALESCE(length(CAST(`item_date` AS BLOB)),0)+COALESCE(length(CAST(`payload_json` AS BLOB)),0)+COALESCE(length(CAST(`state` AS BLOB)),0)),0),COALESCE(MAX(CASE WHEN `id` IS NOT NULL AND NOT (typeof(`id`)='integer') THEN 1 ELSE 0 END),0),COALESCE(MAX(CASE WHEN `kind` IS NOT NULL AND NOT (typeof(`kind`)='text' AND length(`kind`)<=1048576) THEN 1 ELSE 0 END),0),COALESCE(MAX(CASE WHEN `ref` IS NOT NULL AND NOT (typeof(`ref`)='text' AND length(`ref`)<=1048576) THEN 1 ELSE 0 END),0),COALESCE(MAX(CASE WHEN `item_date` IS NOT NULL AND NOT (typeof(`item_date`)='text' AND length(`item_date`)<=1048576) THEN 1 ELSE 0 END),0),COALESCE(MAX(CASE WHEN `deleted_utc` IS NOT NULL AND NOT (typeof(`deleted_utc`)='integer') THEN 1 ELSE 0 END),0),COALESCE(MAX(CASE WHEN `payload_json` IS NOT NULL AND NOT (typeof(`payload_json`)='text' AND length(`payload_json`)<=1048576) THEN 1 ELSE 0 END),0),COALESCE(MAX(CASE WHEN `state` IS NOT NULL AND NOT (typeof(`state`)='text' AND length(`state`)<=1048576) THEN 1 ELSE 0 END),0) FROM `trash_item`",
+        "count": 1
+      },
+      {
+        "sql": "PRAGMA table_info(`checkin_item`)",
+        "count": 1
+      },
+      {
+        "sql": "PRAGMA table_info(`reference_identity`)",
+        "count": 1
+      },
+      {
+        "sql": "PRAGMA table_info(`measured_operation`)",
+        "count": 1
+      },
+      {
+        "sql": "SELECT 1 FROM `appointment` AS NEW WHERE COALESCE((NEW.remind_minutes_before>=0 AND length(NEW.at_zone)>0 AND (NEW.completed_utc IS NULL OR NEW.completed_utc>0)),0)=0 LIMIT 1",
+        "count": 1
+      },
+      {
+        "sql": "SELECT COUNT(*) FROM `checkin_score`",
+        "count": 1
+      }
+    ]
+  },
+  "diagnostic_stream_query_plan": {
+    "scope": "TEST_ONLY_POST_BUDGET_READ_ONLY",
+    "plan": [
+      "SCAN i USING INDEX sqlite_autoindex_reference_identity_1",
+      "CORRELATED SCALAR SUBQUERY 1",
+      "SEARCH e USING INDEX index_reference_event_subject_uuid_revision (subject_uuid=?)",
+      "SEARCH s USING INDEX sqlite_autoindex_reference_snapshot_1 (uuid=?)",
+      "SEARCH t USING INDEX index_supply_transaction_container_id (container_id=?)",
+      "SEARCH o USING INDEX sqlite_autoindex_measured_operation_1 (operation_uuid=?) LEFT-JOIN",
+      "SEARCH d USING INTEGER PRIMARY KEY (rowid=?) LEFT-JOIN"
+    ]
+  },
+  "budget_exceeded": []
+}

@@ -38,10 +38,14 @@ internal class FrozenConsumptionRequest internal constructor(val json:String) {
     fun request():MeasuredConsumptionRequest=decoded
 }
 
+/** Partial request decoding only: the caller still validates the complete envelope, chain and row headers. */
+internal data class EmbeddedUseRequest(val envelope:JSONObject,val request:MeasuredConsumptionRequest,val sha256:String)
+
 /** Immutable input capture only. No database writes, actual-record creation, automatic allocation or dose inference. */
 internal object MeasuredUsePayload {
     const val FORMAT=1
     private val digest=Regex("[0-9a-f]{64}")
+    private val legacyBits=Regex("[0-9a-f]{16}")
     private val fields=setOf("format","kind","stock_algorithm","conversion_algorithm","dataset_uuid","medication_uuid","record","uses")
     private val recordFields=setOf("uuid","revision","taken_utc","taken_zone","status","legacy_actual_dose_bits","config_sha256")
     private val useFields=setOf("container_uuid","presentation_event_uuid","presentation_sha256","quantity","user_confirmed")
@@ -84,9 +88,21 @@ internal object MeasuredUsePayload {
         try {frozen.request()}catch(e:IllegalArgumentException){throw e}catch(e:Exception){throw IllegalArgumentException("Invalid measured-use input",e)}
         return frozen
     }
+    /** Own the fresh envelope parsed from immutable wire text; never accept an aliased mutable request object. */
+    internal fun readEmbeddedRequest(text:String):EmbeddedUseRequest = try {
+        val envelope=JSONObject(text)
+        val json=envelope.getJSONObject("request")
+        val canonical=ReferencePayload.canonical(json)
+        val decoded=decodeFields(json)
+        val immutable=decoded.copy(uses=java.util.Collections.unmodifiableList(decoded.uses.toList()))
+        EmbeddedUseRequest(envelope,immutable,ReferencePayload.sha(canonical))
+    } catch(e:IllegalArgumentException){throw e}catch(e:Exception){throw IllegalArgumentException("Invalid embedded measured-use request",e)}
     internal fun decode(payload:String):MeasuredConsumptionRequest {
         require(payload.toByteArray(Charsets.UTF_8).size<=ReferencePayload.MAX_BYTES)
         val json=JSONObject(payload);require(ReferencePayload.canonical(json)==payload)
+        return decodeFields(json)
+    }
+    private fun decodeFields(json:JSONObject):MeasuredConsumptionRequest {
         require(json.get("format") is Int && json.getInt("format") in 1..3 && string(json,"kind")=="CONSUME")
         val scheduled=json.getInt("format")==3
         val extended=json.getInt("format")>=2
@@ -103,7 +119,7 @@ internal object MeasuredUsePayload {
         val zone=if(r.isNull("taken_zone"))null else string(r,"taken_zone")
         if(zone!=null)java.time.ZoneId.of(zone)
         val status=string(r,"status");require(status in setOf("ON_TIME","LATE"))
-        val bits=string(r,"legacy_actual_dose_bits");require(Regex("[0-9a-f]{16}").matches(bits))
+        val bits=string(r,"legacy_actual_dose_bits");require(legacyBits.matches(bits))
         val legacy=java.lang.Double.longBitsToDouble(java.lang.Long.parseUnsignedLong(bits,16));require(legacy.isFinite() && legacy>0)
         val record=FrozenUseRecord(uuid(r,"uuid"),r.getInt("revision"),r.getLong("taken_utc"),zone,status,bits,hash(r,"config_sha256"),if(scheduled)hash(r,"schedule_sha256") else null)
         val rows=json.getJSONArray("uses");require(rows.length()<=64)

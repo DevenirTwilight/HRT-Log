@@ -2055,3 +2055,11 @@ cc7原生39209956991完整FAIL已归档performance/native-profile-cc7b182c：8.4
 账本候选原规模本地诊断PASS：185查询（原包装候选2184，2000逐包装账本读合为1），完整结果相等，JVM实际计划全部使用现有索引，无全量临时排序；ledger-stream-large-evidence.json记录精确hash/计划。此非原生计划或5秒准入。生成器在计时后只读诊断中新增原生EXPLAIN/恰好1次流查询/完整结果相等检查，不动任何原始阶段或预算；10项Python检查PASS。最新生成探针编译与最终App隐私/时期/库存UNKNOWN回归运行中，候选暂未推送；492六CI还未全部结束，失败与未运行内容保留。
 
 账本流式最终候选本地全部通过：data443、App隐私/Period/StockConsistency/UNKNOWN43、Python10，更新后的生成原生探针Kotlin编译PASS，所有实际套结果零失败/错误/跳过；ledger-stream-app-native-compile-evidence.json保留生产/生成器/探针/逐套XML hash。附可移植ledger-stream-query-reproducer.py，--emit实际复现同593589a2…7ef7探针hash。原规模185查询与现有索引计划成立，仅JVM诊断；不得替代原生5秒准入。492六类必需检查均已出现本源成功（重复事件设备任务可能尚在结束，原始rollup保留），native仍FAIL且计时后签名错误保留。新候选将推送原#57，不擅自就绪/合并；最终精确HEAD及完整六CI/原生结果按PR57收据交接，避免元数据提交循环。正式入口OFF、P5/P6未实施、不签名/改版/交付APK。
+
+e5a9b131已完成：六必需CI全PASS，native39216614238仍实际FAIL，三写10.263/10.678/9.665秒>5。原生完整索引计划/单流查询/结果一致检查成功，签名诊断已修复；官方ZIP1229c2cc…175a14f1/SHA/CRC/采样parser重放已核验，performance/native-profile-e5a9b131/保留全部证据。减少查询数不能冒充速度达标，仍DRAFT/入口OFF/P5P6未实施。
+
+继续针对真实采样readConsumption约2.04s包含请求编码再解析：先固定老字符串路径10有效/26非法wire语料，共9项现状测试PASS（embedded-request-baseline-evidence.json，不伪称RED）。新候选由不可变envelope字符串只解析一次，共用原private字段validator，保留旧字符串路径字节/规范化检查和所有原外层/链/row/hash/临床/来源/逆流水校验；局部请求返回不可变uses，不缓存跨记录。原位bit正则只预编译相同模式。有效/非法对照与JSON别名隔离测试已加入，全data/原生合同编译运行中；候选未推送，未宣称提速或准入。
+
+嵌入请求候选全data448零失败/错误/跳过、原生合同源码编译PASS（embedded-request-data-evidence.json）；10有效哈希/事实与26非法对照/可变JSON及list别名隔离都成立。保持原字符串入口、byte/canonical约束与唯一字段validator，外层全部检查原样。现有sqlcipher4.10.0游标字节码确认会fillWindow，不能把185逻辑查询等同185底层读取；原生计时后计划诊断追加仅游标类/窗口起点/行数/容量及明确可用状态，先观察再决定分页，不改预算阶段或权限。Python10检查PASS，原规模大库存+最新生成探针编译+App隐私/时期/库存范围回归运行中（上个稳定候选为43项，当前实际项数待核对）；候选未推送，入口OFF/P5P6仍未实施。
+
+嵌入请求最终候选448 data/43 App/10 Python全部PASS，实际套零失败/错误/跳过；新增窗口元数据的生成原生探针Kotlin编译PASS。原规模14600/2000/32603本地PASS、185查询/完整投影相等保持；embedded-request-final-local-evidence.json记录两个生产文件hash/生成探针/逐套XML。仅减少请求编码再解析，旧字符串入口与所有外层/链/源/临床/库存检查保留，不缓存业务结果；生产未启用分页，待真实窗口证据。e5a9旧源六CI全PASS而原生5秒FAIL已完整归档。下一推送仍原#57，最终HEAD六CI/原生准入待新跑，精确收据在PR57维护，避免元数据提交循环；DRAFT/入口OFF/P5P6未实施/不签名不交付。

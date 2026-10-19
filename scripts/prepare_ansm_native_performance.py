@@ -128,7 +128,8 @@ def native_source(text):
             // Verify the actual API26 stream plan after all original metrics are frozen.
             component("stream_query_plan_audit_ms") {
                 var planned=0
-                val plans=JSONArray()
+                val plans=JSONArray();val windows=JSONArray()
+                var windowStatus="UNAVAILABLE"
                 val observed=object:androidx.sqlite.db.SupportSQLiteDatabase by raw {
                     override fun query(sql:String):android.database.Cursor {
                         if(sql.startsWith("SELECT i.uuid,t.id,t.dose_record_id")) {
@@ -137,12 +138,33 @@ def native_source(text):
                                 while(c.moveToNext())plans.put(c.getString(c.getColumnIndexOrThrow("detail")))
                             }
                         }
-                        return raw.query(sql)
+                        val cursor=raw.query(sql)
+                        if(!sql.startsWith("SELECT i.uuid,t.id,t.dose_record_id"))return cursor
+                        components.put("projection_stream_cursor_type",cursor.javaClass.name)
+                        val windowed=cursor as? net.zetetic.database.AbstractWindowedCursor ?: return cursor
+                        return object:android.database.CursorWrapper(cursor) {
+                            private var lastStart:Int?=null
+                            private fun observe(result:Boolean):Boolean {
+                                if(result) {
+                                    val window=windowed.window
+                                    if(window!=null && lastStart!=window.startPosition) {
+                                        windowStatus="AVAILABLE";lastStart=window.startPosition
+                                        windows.put(JSONObject().put("start_row",window.startPosition)
+                                            .put("rows",window.numRows).put("capacity_bytes",window.windowSizeBytes))
+                                    }
+                                }
+                                return result
+                            }
+                            override fun moveToFirst()=observe(super.moveToFirst())
+                            override fun moveToNext()=observe(super.moveToNext())
+                        }
                     }
                 }
                 assertEquals(rawProjection,MeasuredConsumptionStore.auditStagedDataset(observed))
                 assertEquals(1,planned)
                 components.put("projection_stream_query_plan",plans)
+                components.put("projection_stream_cursor_windows_status",windowStatus)
+                components.put("projection_stream_cursor_windows",windows)
             }
             // Diagnostic only: quantify Android decimal-pattern compilation cost before considering reuse.
             val numericTokens=arrayOf("0.5","1","2.00","bad","0,5","1e3")

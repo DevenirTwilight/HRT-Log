@@ -552,11 +552,12 @@ internal object MeasuredConsumptionStore {
             val token=text(value,key);require(quantaPattern.matches(token))
             return token.toLong().also{require(it<=StockQuantum.MAX_QUANTA)}
         }
-        val envelope=JSONObject(row.getString("input_json"));keys(envelope,setOf("format","request","captures","chain"));MeasuredOperationChain.read(envelope)
-        val frozen=MeasuredUsePayload.read(ReferencePayload.canonical(envelope.getJSONObject("request")));val request=frozen.request()
+        val embedded=MeasuredUsePayload.readEmbeddedRequest(row.getString("input_json"))
+        val envelope=embedded.envelope;keys(envelope,setOf("format","request","captures","chain"));MeasuredOperationChain.read(envelope)
+        val request=embedded.request
         val canonicalEnvelope=proof?.matches(row.getString("operation_uuid"),row.getString("input_json")) ?: (ReferencePayload.canonical(envelope)==row.getString("input_json"))
         if(!canonicalEnvelope || envelope.get("format") !is Int || envelope.getInt("format")!=2 || row.getString("kind")!="CONSUME" ||
-            frozen.sha256!=row.getString("request_sha256") ||
+            embedded.sha256!=row.getString("request_sha256") ||
             row.getString("dataset_uuid")!=request.datasetUuid || row.getString("record_uuid")!=request.record.uuid || row.getInt("record_revision")!=request.record.revision)fail(ReferenceError.INVALID_SOURCE)
         val captures=envelope.getJSONArray("captures");require(captures.length()==request.uses.size)
         val lines=request.uses.mapIndexed {i,input->
