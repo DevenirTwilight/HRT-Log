@@ -1,3 +1,7 @@
+## build33 两个中心测试包准备中 — 2026-10-19
+
+负责人要求“给个apk”；独立交付分支 delivery/build33-centers-20261019，基线默认分支 86131172，包含 #82 中心与 #85 状态恢复，唯一应用变更 versionCode 32→33。未合并/复制 P4 #57 或 #58/#59，原 Room12/备份业务11/PK/权限与正式证书不变。需本 HEAD 六必需 CI、PeriodStability、fullRelease 干净来源、正式签名/16KB 对齐/无 INTERNET/附件隔离全部通过再交付；当前 BUILD_PENDING，签名/交付 NOT_RUN。只会话私密交付，不动公开 Release；完成后另追加真实证据及交付账本。独立 P4 工作树保留其未完成性能候选，不参与本包。
+
 ## build32 已交付（REQUIREMENTS §112 第 4 条）— 2026-10-18
 
 - 0.2.0 / versionCode 32 正式签名包，构建自 `746bb2e9`（#83 合并；含 LAB-01 #78、归档修复 #79、LAB-02 A/B #80/#81；树与 PR #83 头相同，其全部必需检查通过，包括 API 26/29/35 的化验单迁移和重启测试）。
@@ -2080,3 +2084,10 @@ UUID等价校验候选最终本地449 data/43 App/10 Python全部PASS，零失�
 1feacef4 六项必需工程检查均已完成 PASS；原生39226229051真实 FAIL，三写6.163/6.111/7.005秒>5，完整官方ZIP SHA/CRC/采样重放保留于 performance/native-profile-1feacef4/。API26/29报告证实10716项UUID平台对照实际 PASS，不冒称原生性能准入。
 
 新候选先在未改生产1fe实现上通过45批独立 SQL 列谓词oracle，随后仅将validateCandidateStoredColumns逐列MAX非法标记聚合为平衡OR树的单个MAX；原typeof/NULL/有限数/长度谓词、早期COUNT、UTF8字节和32MiB上限全部保留，不改Schema/格式/库存语义。完整data450、App43、生成原生探针编译及原14600/2000/32603本地大库均PASS，185查询/完整投影一致保留；收据column-aggregate-*。新源原生绝对5秒准入待验，仍DRAFT/PRODUCTION_BLOCKED/正式入口OFF，P5/P6未实施。负责人另要求APK：独立主线build33交付PR86正在CI/构建，不含此P4分支或#58，不与本性能候选混装。
+
+
+### P4 b171 原生失败保留及 build33 基线同步 — 2026-10-19
+
+b17178ec 六必需工程CI在push/PR全部PASS，原生39250115453仍真实FAIL：7.681/7.824/7.479秒>5；官方工件37f183ac…2499e1、CRC与采样parser重放核验PASS，native-profile-b17178ec/保留完整原始JSON与确定性gzip采样。仅采样诊断，不将宿主不同运行耗时差异当因果优化证据。原规模、门槛和全量审核不变。
+
+普通同步已审主线42bfa99f（#86/build33），保留所有P4代码和§114–117，以及主线独立APK交付授权；唯一应用变化为原已审versionCode32→33。没有将本分支打入build33，正式入口依旧OFF。主线合并CI尚待结束，#87交付收据正在受保护自动合并等待，不将其PENDING写成PASS。下一候选拟减少UTF8边界检查的临时字节分配，先建立平台编码对照，再替换纯长度计算；SHA摘要仍使用原UTF8字节，所有持久化/临床/量纲检查保留。候选尚未实施或验收。
