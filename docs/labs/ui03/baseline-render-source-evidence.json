@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "baseline_commit": "080094ae5adcd8fe65cb0bb1638ef71e0ebc1ec8",
+  "baseline_LabsScreen_sha256": "22ed83c3edeaa2fd504ad4ff45e5dd5e3b4c7c3c9e406558bdeb991e6a4ebddb",
+  "restored_current_LabsScreen_sha256": "4fe97048fd0e05bd8eabf98c863abf2dff5dd5289b4fe822c04f70964352cb8c",
+  "restored_byte_identically": true,
+  "command_exit_code": 0,
+  "scope": "Temporary test-only baseline render in isolated UI worktree; old source never committed, signed or released. Identical screenshot fixture; actual baseline LabsScreen and original unchanged LabBatchEntry render before visual."
+}

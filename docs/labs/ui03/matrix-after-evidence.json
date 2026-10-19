@@ -470,7 +470,9 @@
   "visual_review": [
     "top_en_411dp_1.0x_light.png",
     "top_zh-rCN_320dp_2.0x_dark.png",
-    "history_fr-rFR_320dp_2.0x_dark.png"
+    "history_fr-rFR_320dp_2.0x_dark.png",
+    "top_zh-rTW_411dp_1.0x_light.png",
+    "history_en_411dp_1.0x_light.png"
   ],
   "limits": [
     "Robolectric capture validates rendered Compose content and layout; native MainActivity navigation execution awaits exacthead CI.",
