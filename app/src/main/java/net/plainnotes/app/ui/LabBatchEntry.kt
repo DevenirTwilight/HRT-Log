@@ -180,7 +180,7 @@ internal fun labFlag(v: LabValueEntity): LabFlag? {
     var lab by remember { mutableStateOf("") }
     var includeEstimate by remember { mutableStateOf(false) }
     val duplicates = LabBatchRules.duplicates(rows)
-    Dialog(onDismissRequest = { if (!saving) onDismiss() }, properties = DialogProperties(usePlatformDefaultWidth = false, dismissOnBackPress = true)) {
+    Dialog(onDismissRequest = { if (!saving) onDismiss() }, properties = DialogProperties(usePlatformDefaultWidth = true, dismissOnBackPress = true)) {
         Surface(Modifier.fillMaxSize().testTag("lab-batch"), color = MaterialTheme.colorScheme.surface) {
             Column(Modifier.fillMaxSize().systemBarsPadding().imePadding()) {
                 Row(Modifier.fillMaxWidth().padding(start = 4.dp, end = 16.dp, top = 4.dp), verticalAlignment = Alignment.CenterVertically) {
