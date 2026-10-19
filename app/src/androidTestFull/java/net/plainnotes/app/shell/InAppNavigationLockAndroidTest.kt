@@ -4,7 +4,7 @@ import android.content.Intent
 import android.app.Activity
 import android.app.Instrumentation
 import java.util.concurrent.atomic.AtomicInteger
-import android.view.KeyEvent
+import androidx.test.espresso.Espresso
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
@@ -108,7 +108,9 @@ class InAppNavigationLockAndroidTest {
     }
 
     private fun back() {
-        InstrumentationRegistry.getInstrumentation().sendKeyDownUpSync(KeyEvent.KEYCODE_BACK)
+        // A visible Compose tree can precede the new Dialog's input-window focus on API26.
+        // Espresso waits for a resumed, laid-out, focused root before injecting the single Back.
+        Espresso.pressBack()
         ui.waitForIdle()
     }
 

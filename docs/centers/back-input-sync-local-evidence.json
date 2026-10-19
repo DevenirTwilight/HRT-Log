@@ -1,0 +1,17 @@
+{
+  "state": "LOCAL_COMPILE_PASS_NATIVE_PENDING",
+  "source_base": "42bfa99f66b2246b2fb7ce1566023924f1556d6a",
+  "test_assertions_and_test_bodies_unchanged": true,
+  "only_test_helper_and_import_changed": true,
+  "old_test_sha256": "fd3abf810a263b74aed82021086f639996f367e615e1e5ab18f6bd761369cd1a",
+  "candidate_test_sha256": "f9341e516aeb6942b8bb0910fad085102cdc27f3350d89fbe560eb169af10d6b",
+  "initial_compile": "FAIL_UNRESOLVED_ESPRESSO_RUNTIME_ONLY",
+  "initial_compile_log_sha256": "72e8d231b03ed00e883d60b5761e02bfee149a2bf0729fc73bfca11527b90993",
+  "final_compile": "PASS",
+  "final_compile_log_sha256": "05ee6b6a38fce3a1729c81407008095574b9a28737055e2843060f01af287554",
+  "compile_only_coordinate": "androidx.test.espresso:espresso-core:3.5.0",
+  "transitive": false,
+  "existing_compose_runtime_coordinate": "androidx.test.espresso:espresso-core:3.5.0",
+  "native_26_29_35": "NOT_RUN_NEW_SOURCE",
+  "physical": "NOT_RUN"
+}

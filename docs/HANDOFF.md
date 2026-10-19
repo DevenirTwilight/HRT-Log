@@ -1,3 +1,7 @@
+## build33 交付及后续原生测试复核 — 2026-10-19
+
+build33原签名成品已通过仅owner Drive私密提供，独立下载SHA/证书一致（正式收据PR87待合并，不含私有链接）；源码219bbf32及受保护主线42bfa99f的六CI现全部PASS，未改公开Release。PR87后续API26有一次真实返回断言失败，不能因只改文档而忽略；下方历史“准备中”保留为当时记录。本分支仅修正测试输入准备：既有Espresso3.5.0等待焦点后单次Back，所有测试主体及断言逐字相同；compileOnly暴露既有runtime坐标，无新增运行时依赖。首次编译因runtime-only不可见实际FAIL，修正可见性后原生Kotlin编译PASS，尚待新源CI/26/29/35，不能宣称已修好原失败或产品缺陷。详见docs/centers/back-input-sync-*及同步说明，不新增APK。
+
 ## build33 两个中心测试包准备中 — 2026-10-19
 
 负责人要求“给个apk”；独立交付分支 delivery/build33-centers-20261019，基线默认分支 86131172，包含 #82 中心与 #85 状态恢复，唯一应用变更 versionCode 32→33。未合并/复制 P4 #57 或 #58/#59，原 Room12/备份业务11/PK/权限与正式证书不变。需本 HEAD 六必需 CI、PeriodStability、fullRelease 干净来源、正式签名/16KB 对齐/无 INTERNET/附件隔离全部通过再交付；当前 BUILD_PENDING，签名/交付 NOT_RUN。只会话私密交付，不动公开 Release；完成后另追加真实证据及交付账本。独立 P4 工作树保留其未完成性能候选，不参与本包。
@@ -1890,3 +1894,8 @@ GitHub标记BEHIND，需合入已合并#83的746bb2e9；该主线仅将versionCo
 最终源d89e8b3d的push/API26出现新增测试失败：IntentFilter监控器误拦截action为空的MainActivity启动，发生在中心操作前，非环境重试。保留失败收据centers/state-restoration-native-first-failure.json。改用只匹配三种明确文件action的测试监控器，追加真实MIME文件Intent阳性对照，既有中心路径仍要求零文件启动；不放宽断言、不改生产源码。23项本地GREEN仍适用，修正后原生编译/新HEAD六CI待验，旧源未请求重试。
 
 监控器修正后的原生Kotlin编译PASS；将以新HEAD运行完整六CI和原生三项新增测试（监控器阳性对照、12占位实际Back与零文件启动、旋转/离开锁定）。23项本地测试对应的生产源码未变，无需重复渲染或无关本地回归。最新HEAD和最终CI/合并收据仍以PR85为准。
+
+
+### 中心原生 Back 测试输入同步复核 — 2026-10-19
+
+交付收据#87 source152f0908/API26 push39253001557 job118061193730真实FAIL：InAppNavigationLockAndroidTest:184，按Back后reference-window仍存在。build33成品source219bbf32本身push/PR六CI全PASS，不能用新失败改写旧通过，也不能忽略后续失败。隔离修复分支只将测试raw Back输入改用既有Espresso.pressBack，等待布局与焦点，原所有断言/单次Back/认证/文件拦截/真实离开锁定保持。焦点竞争目前为待原生复核假设，不声称已证明。Android测试编译与新源26/29/35验证待跑；不修改生产UI、不重新出APK。详细docs/centers/back-input-synchronization-2026-10-19.md。#87原失败保留，待本修复受保护合并后同步该分支再验。
