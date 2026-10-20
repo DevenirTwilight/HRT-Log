@@ -1,0 +1,18 @@
+{
+  "result": "IDENTICAL",
+  "trees": {
+    "core/data/src/main": {
+      "baseline_27135013": "cbca9ed40bd01cee672591708156cc16ec6e673d",
+      "source_87e9df95": "cbca9ed40bd01cee672591708156cc16ec6e673d"
+    },
+    "core/domain/src/main": {
+      "baseline_27135013": "f3d710b207e688f6666d3642ae8f341f08112d83",
+      "source_87e9df95": "f3d710b207e688f6666d3642ae8f341f08112d83"
+    },
+    "app/src/main": {
+      "baseline_27135013": "7417b3ed5c2f67a0567de0600977396c990d4392",
+      "source_87e9df95": "7417b3ed5c2f67a0567de0600977396c990d4392"
+    }
+  },
+  "p4_main_app_call_sites": []
+}

@@ -8,7 +8,7 @@
 
 正常新增仅1次完整审计，含票据共4次全操作链SELECT；没有第二次完整审计可删，不能宣称可省4.436s。第二个FK游标窗口149.704ms仅是重复工作的参考，非前后实测提速。集中报告write-path-timing/report.md列出同快照FK、append构造链头复用、scheduled以及跨中间态审计消重的最小方案/证明义务；没有接快验证器或跨事务缓存，A/B反例及C部分约束原型保留。
 
-本地data472/生成原生Kotlin/工具51 PASS，生产jar无观察器；API26/29实际SQLCipher库存合同各139全PASS（含本次观察器），工件SHA/CRC与HTML已存native-87e9df95-light-observer。源87其余android/device/API35仍运行中，不能把待验说成通过；新库/冷启动/重启/恢复冷首次/新架构规模增长/真机NOT_RUN。下一步只收集剩余CI结果并更新交接，不新增跑分、不合并；源源码不再变。证据文档提交[skip ci]只为避免重跑相同原生工作负载，不宣称该文档HEAD已有六门。
+本地data472/生成原生Kotlin/工具51 PASS，生产jar无观察器；API26/29/35实际SQLCipher库存合同各139全PASS、0skip（含本次观察器），工件SHA/CRC与HTML已存native-87e9df95-light-observer。源87 push/PR六类必需CI共12实例全部SUCCESS；最终build-results工件核验data472/reminder21/PeriodStability5 PASS，App1839总计1562 PASS/277 SKIPPED/0FAIL（不把skip当pass）；新库/冷启动/重启/恢复冷首次/新架构规模增长/真机NOT_RUN。本轮归因与CI收尾完成；后续只按集中报告评审语义消重/低历史依赖机制，未有新证据不启动重复跑分或未经证明的接线，不合并。证据文档提交[skip ci]只为避免重跑相同原生工作负载，不宣称该文档HEAD已有六门。
 
 ## 【换号必读】P4 写入分解 WIP 检查点 — 2026-10-20
 

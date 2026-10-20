@@ -6,9 +6,9 @@
 
 [run39478425938](https://github.com/DevenirTwilight/HRT-Log/actions/runs/39478425938)，job118820363674，artifact12290661559，ZIP121216B；官方及独立下载SHA256 `b26ca0e48292a9c817b64cec11adde7828b619738d8f91209f3dcdcc40f03b25`、CRC通过。原始JSON、确定性压缩ART及机器分解在 `native-87e9df95-light-observer/`。预清理完整报告与收集报告逐字段一致；ART原始SHA匹配、解析器重放结果相同，但ART仍是独立只读探针的近似采样，不能用于拆分这笔写入。
 
-真实API26 SQLCipher；AVD512MiB/ART192MiB，实际可用RAM520962048B、Runtime.maxMemory201326592B；14600记录、2000容器、32603行、19660924B原始JSON，冻结模板SHA93131671…不变。测试/收集退出码均0，预算列表为空。
+真实API26 SQLCipher；AVD512MiB/ART192MiB，实际可用RAM520962048B、Runtime.maxMemory201326592B；14600记录、2000容器、32603行、19660924B原始JSON，冻结模板SHA93131671…不变。测试/收集退出码均0，预算列表为空。原模板的api26_low_memory_acceptance与physical_device_acceptance字段仍为NOT_RUN，不改写成正式准入签认；此处PASS仅指本次实际低内存SQLCipher执行的冻结预算。
 
-|原冻结验收项目|本轮ms|门槛ms|结果|
+|原冻结预算项目|本轮ms|门槛ms|结果|
 |---|---:|---:|---|
 |完整审计|5381.742|15000|PASS本轮|
 |共享预测|7999.644|15000|PASS本轮|
@@ -78,6 +78,6 @@ A的SAVEPOINT指纹反例、B的合法FK/投影/链的零效果重复CONSUME均�
 
 本地完整data472 PASS（0FAIL/0SKIP）、生成native Kotlin编译PASS、工具51PASS；观察器不在生产jar。接手40408未完成的chain漏计、后台未结束帧、透明代理入口与只读窗口负向检查已有RED/GREEN证据，原业务断言未削弱。根因及修复只涉及historyTest，不改SQL、生产事务或数据。
 
-新代码六类必需CI及API26/29/35兼容状态以源提交87e9df95的最终机器收据为准，当前仍在收集中；原生分解与原冻结预算本轮PASS。无真机、冷启动/重启/冷恢复首写和规模增长曲线证据，标为NOT_RUN；恢复后三写之前已有独立完整audit，不冒充冷首次。
+源87e9df95的push/PR六类必需CI共12实例全部SUCCESS（final-ci-source-receipt.json）；API26/29/35实际SQLCipher库存合同各139项PASS/0SKIP，HTML及官方工件SHA/CRC已核验。最终build-results工件同样核验：data472 PASS、reminder21 PASS、PeriodStability5 PASS；App共1839项，1562 PASS、277 SKIPPED、0FAIL。277项不计作通过；未改测试注解或跳过配置。原生分解与原冻结预算本轮PASS。文档证据提交[skip ci]避免相同源码重复原生，不冒用源87检查为文档HEAD检查。无真机、冷启动/重启/冷恢复首写和规模增长曲线证据，标为NOT_RUN；恢复后三写之前已有独立完整audit，不冒充冷首次。
 
 P4仍Draft/OFF，不自动合并。主要剩余障碍是：尚无可证明完整、安全且能稳定满足预算的低历史依赖写入机制。此次解决的是归因证据缺口，没有生产提速、Schema/备份/加密/PK/UI/权限/版本/签名/发布变化。以前的FAIL/OOM/LMK、重观察器46.418s及全部原始预算/断言均保留。

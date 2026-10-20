@@ -17,5 +17,6 @@
   "production_speedup_causality": "NOT_ESTABLISHED",
   "stable_write_budget": "NOT_ESTABLISHED",
   "cold_lifecycle_performance": "NOT_RUN",
-  "production_change": false
+  "production_change": false,
+  "formal_acceptance_fields_preserved": "NOT_RUN"
 }

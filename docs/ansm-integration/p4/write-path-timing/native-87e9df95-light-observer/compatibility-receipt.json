@@ -26,7 +26,19 @@
       "failed": 0,
       "skipped": 0,
       "observer_contract_executed": "PASS"
+    },
+    {
+      "api": 35,
+      "run": 39478425945,
+      "artifact": 12291990250,
+      "official_archive_sha256": "f094f037d54d3ed71384f62525e6525fa5c6472233f3c3462d608502dff2c148",
+      "crc": "PASS",
+      "html_sha256": "fd51629d0f66e9146e265d0052ed1f61251192cc82e3790afd29b605295d0680",
+      "tests": 139,
+      "passed": 139,
+      "failed": 0,
+      "skipped": 0,
+      "observer_contract_executed": "PASS"
     }
-  ],
-  "api35": "PENDING"
+  ]
 }
