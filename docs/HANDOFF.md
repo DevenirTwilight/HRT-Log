@@ -1,3 +1,11 @@
+## P4 恢复专项实时测试检查点：仅探针事务修正编译PASS，安排唯一小型合同补验 — 2026-10-20
+
+冻结生产源码仍9d304e58，git diff9d --core/data/src/main为空。仅测试MeasuredRestoreDeathProbe把数据hash、epoch/FK/full oracle放入同一db.withTransaction，保留所有原断言；原两大库run中事务外API使用失败的日志不覆盖。修正Android编译PASS、工具4 PASS已保存`restore-memory/death-probe-fix/`。没有新恢复生产结构或第三次大库。
+
+已有ANSM性能workflow新增显式手动verification=restore-process-death-only，check名restore-process-death-api26-only、artifact名ansm-api26-restore-process-death-only，脚本只assemble/install合成test APK、执行两个小型kill合同，报告large_performance=NOT_RUN_CONTRACT_ONLY。pull_request及默认dispatch仍full并保留原预算，不可用only模式宣称性能通过。该源码提交[skip ci]避免新大库自动运行；下一步**唯一一次**gh workflow run ansm-inventory-performance.yml --ref feature/ansm03b-p4-exact-stock-20261016 -f verification=restore-process-death-only。若调度参数被拒绝，不得不带参数重试默认full。
+
+大库已结束：自动9d本轮恢复41.633s/整库摘要与oraclePASS、恢复heap114.81MiB/RSS119.07MiB；dispatch准备LMK，恢复NOT_RUN；稳定性尚未证明，三写8.041/7.511/7.804s FAIL。继续收常规API26/29/35，Draft/OFF，不合并发布；所有后续结果即时保存。
+
 ## P4 恢复专项实时原生结果2：一轮完整恢复PASS，稳定复验仍未证明 — 2026-10-20
 
 冻结生产源9d304e58。PR自动39495197608/job118878355913/artifact12298256693完整结束；官方/下载SHAb3c4e1b3bdf9fb1ac73fddd085c0e648172ba24e1936955f591d1ef9e178eca6、CRC、pre-cleanup/最终报告一致均核验，立即入库`restore-memory/native-auto/`。原API26 SQLCipher/RAM520962048B/ART201326592B、14600记录/2000容器/32603行/19660924B全部保持。

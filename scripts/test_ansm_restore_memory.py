@@ -22,6 +22,18 @@ class RestoreMemorySuiteTest(unittest.TestCase):
             self.assertEqual(1,mod.main());self.assertEqual(2,death.call_count)
             result=json.loads((Path(directory)/'core/data/build/reports/ansm-native-performance/restore-process-death.json').read_text())
             self.assertEqual(['FAIL','PASS'],[c['status'] for c in result['cases']])
+    def test_contract_only_mode_never_runs_or_claims_the_large_workload(self):
+        with tempfile.TemporaryDirectory() as directory,patch.object(mod,'ROOT',Path(directory)),patch.object(mod,'verify_emulator'),patch.object(mod.subprocess,'run',return_value=SimpleNamespace(returncode=0)) as run,patch.object(mod,'death_case',return_value={'status':'PASS'}):
+            apk=Path(directory)/'core/data/build/outputs/apk/androidTest/debug/synthetic-androidTest.apk'
+            apk.parent.mkdir(parents=True);apk.touch()
+            self.assertEqual(0,mod.main('restore-process-death-only'))
+            self.assertFalse(any('run_ansm_native_performance.py' in str(c.args) for c in run.call_args_list))
+            report=json.loads((Path(directory)/'core/data/build/reports/ansm-native-performance/restore-process-death.json').read_text())
+            self.assertEqual('NOT_RUN_CONTRACT_ONLY',report['large_performance'])
+        workflow=(ROOT/'.github/workflows/ansm-inventory-performance.yml').read_text()
+        self.assertIn('restore-process-death-api26-only',workflow)
+        self.assertIn('ansm-api26-restore-process-death-only',workflow)
+
     def test_memory_probe_and_restore_hooks_are_only_synthetic_and_keep_the_frozen_workload(self):
         from prepare_ansm_native_performance import native_source,SOURCE
         text=native_source(SOURCE.read_text())

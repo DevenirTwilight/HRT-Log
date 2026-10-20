@@ -60,10 +60,12 @@ class MeasuredRestoreDeathProbe {
         val db=open()
         try {
             val raw=db.openHelper.writableDatabase
-            assertEquals(saved.getString("expected_sha256"),ReferencePayload.sha(RawData.dump(raw).toString()))
-            assertEquals(saved.getString("epoch"),ReferenceStore.previewEpoch(raw))
-            raw.query("PRAGMA foreign_key_check").use{assertFalse(it.moveToFirst())}
-            db.withTransaction{val p=MeasuredConsumptionStore.auditStagedDataset(raw);assertEquals(1,p.size);assertEquals(1L,p.single().usedQuanta)}
+            db.withTransaction {
+                assertEquals(saved.getString("expected_sha256"),ReferencePayload.sha(RawData.dump(raw).toString()))
+                assertEquals(saved.getString("epoch"),ReferenceStore.previewEpoch(raw))
+                raw.query("PRAGMA foreign_key_check").use{assertFalse(it.moveToFirst())}
+                val p=MeasuredConsumptionStore.auditStagedDataset(raw);assertEquals(1,p.size);assertEquals(1L,p.single().usedQuanta)
+            }
             saved.put("new_pid",android.os.Process.myPid()).put("status","PASS_DATASET_EPOCH_AND_FULL_ORACLE")
             File(context.filesDir,"synthetic-restore-death-result.json").writeText(saved.toString())
         }finally{db.close()}

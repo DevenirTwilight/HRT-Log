@@ -23,3 +23,5 @@
 大库恢复前后额外按可信主键排序逐行计算整个DOMAIN_TABLES业务摘要（包括每行全部字段，使用原forEachBackupRow编码）；不构建全量对象/字节副本，前后hash读和资源采样均计入原120s恢复窗口，另报实际Repository+probe时段。旧运行无对应验证开销，不能以计时差宣称纯生产提速；原全审计/投影断言保留。
 
 检查点INPUT_VALIDATED仅指严格JSON/索引、版本、必需表及版本特定字段门已通过，不表示全字段/历史已经预检；真正完整候选预检以PREFLIGHT_VALIDATED为界。所有列和历史检查仍在其前的独立RAM staging中执行。
+
+原生发现手动探针在事务外调用previewEpoch而失败；保留原失败并只修测试事务作用域，生产树与9d完全一致。本地Android编译/工具4通过后，另固定一次只运行两个小型进程终止合同的手动job（mode=restore-process-death-only），不同check/artifact名、明确large_performance=NOT_RUN_CONTRACT_ONLY，不执行第三次大库，不作为恢复稳定复验，不覆盖原结果。若参数调度被拒绝，不能回退默认full。
