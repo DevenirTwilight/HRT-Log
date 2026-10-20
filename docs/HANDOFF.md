@@ -1,16 +1,72 @@
-## P4 与中心测试当前状态 — 2026-10-19
+## P4 有限收尾：主线整合通过，原生写入仍阻断 — 2026-10-20
+
+本地正常merge140c567c与已全六CI通过的默认320171cd；仅HANDOFF文字冲突，REQ保留LAB114/P4顺延115–118。新增化验共享合同初跑455项仅1FAIL（Room12断言遇候选13），完整原失败保留；只将P4版本期望改为13/12，原字段/备份/回滚断言不删，重跑data455/App61均0失败/0跳过，App原生编译PASS。主线仍Room12/业务11，P4未新增迁移或启用。
+
+140c567c原生39390433266/job118520371379/artifact12250080963已完整跑完：全审计7551ms、预测7207ms、备份8517ms、恢复30233ms，三写9535/9611/8816ms仍>5000，唯一预算失败为写入。样本堆峰198477312B<192MiB，数据库35957552B；这是本轮备份恢复完成，不宣称OOM永久解决。官方ZIP SHA/CRC、原始JSON、采样/合成日志和确定性重放均保存native-profile-140c567c。API26/29/35的140编码字节一致/分块清零/真实备份回归另存compat-140c567c。
+
+只补一次已编译的post-budget SQL驱动调用计时；不记录绑定值，不影响冻结预算/生产代码，所有ANSMPython64 PASS、生成原生Kotlin编译PASS。新增合同初轮13项1ERROR，新增块影响旧fragment边界时42项1FAIL，已保留日志说明并将旧helper对比终点严格移到新块之前，helper内容不变。下一步推送此完成检查点并跑最后一次原生分解，随后最多两轮有证据的后端实质修复；不能继续微优化。#57仍DRAFT/PRODUCTION_BLOCKED/OFF；新任务明确P5/P6、前端均不在本轮范围，无新APK。
+
+## P4 续作与 LAB 主线合并复核 — 2026-10-20
+
+负责人要求继续未完成工作；恢复已有 #57，不新开竞争分支。#90/#89 已分别受保护合并5a7d7c87/320171cd；最终38b的12个必需检查实例全部PASS，三API实际导航/化验备份合同与unsigned CI源码身份已核验。默认320主线复验仍在运行，未新增APK。
+
+P4源码140c567c的六项工程CI实际已全PASS（39290696775/39290696725），覆盖此前交接所称尚未重编译的finally补丁；不能继续把旧本地453/43记作最终源证据。独立原生低内存39390433266已以精确140c567c启动，512MiB/192MiB、原fixture与5秒门保持，结果PENDING；旧bba匹配OOM与951三写超时FAIL保持。当前正常合入已审320主线，仅HANDOFF冲突及需求编号去重；新增LAB合同与候选Room13/业务12的兼容验证待实际运行。#57保持DRAFT/PRODUCTION_BLOCKED/OFF，P5/P6、官方资料分发、MED-02和新签名发布均未启用。
+
+## 历史检查点：P4 与中心测试当前状态 — 2026-10-19
 
 P4当前基线95108693：451 data/43 App/44工具本地PASS，API26/29修正后的UTF8对照随工程检查通过；原生39262621431已完整跑完备份/恢复/采样，但三写11.076/10.263/10.928秒>5，仍DRAFT/PRODUCTION_BLOCKED/OFF。3b53编码回归与备份阶段进程退出的原证据继续保留；本轮未复现退出不等于根因已解决。下一步只增加票据捕获/复核的测试后分解，保持原始预算/fixture及所有全量检查。
 
 #88/source dfa7369b 已在全部必需CI和实际26/29/35后受保护合并dd871cc6；API29首次附件POC65/70后45分钟取消，单次完整同源job重放通过，原记录保留，不把挂起归因已证明。现普通同步已审dd主线，未复制未验收分支。build33已私密提供，源码219bbf32与原主线42六CI全PASS，正式收据#87新21a10430正在CI；以下“准备中/原生待验”为当时历史记录，不重做签名或交付。P5/P6、正式附件仍未启用，无新APK。
 
-## build33 交付及后续原生测试复核 — 2026-10-19
 
-build33原签名成品已通过仅owner Drive私密提供，独立下载SHA/证书一致（正式收据PR87待合并，不含私有链接）；源码219bbf32及受保护主线42bfa99f的六CI现全部PASS，未改公开Release。PR87后续API26有一次真实返回断言失败，不能因只改文档而忽略；下方历史“准备中”保留为当时记录。本分支仅修正测试输入准备：既有Espresso3.5.0等待焦点后单次Back，所有测试主体及断言逐字相同；compileOnly暴露既有runtime坐标，无新增运行时依赖。首次编译因runtime-only不可见实际FAIL，修正可见性后原生Kotlin编译PASS，尚待新源CI/26/29/35，不能宣称已修好原失败或产品缺陷。详见docs/centers/back-input-sync-*及同步说明，不新增APK。
+## LAB-03 与 LAB-UI-03 正常主线集成验收中 — 2026-10-20
 
-## build33 两个中心测试包准备中 — 2026-10-19
+#90最终ffb4c92c的push/PR六类共12必需检查全部SUCCESS，无未解决审查/冲突，普通受保护合并5a7d7c87（07:06:41Z），树与已验源码相同；最终检查URL快照labs/ui03/lab90-approved-final-checks.json。主线合并CI是另一项结果。#89已正常merge该已批准默认分支，未复制未合并源码；双方历史、需求及审批记录保留。AppShell保留Vibe的FAB清除labEdit和正式lab-open-batch标记，保留LabUiState/token/原panel快照和双方原生测试。
 
-负责人要求“给个apk”；独立交付分支 delivery/build33-centers-20261019，基线默认分支 86131172，包含 #82 中心与 #85 状态恢复，唯一应用变更 versionCode 32→33。未合并/复制 P4 #57 或 #58/#59，原 Room12/备份业务11/PK/权限与正式证书不变。需本 HEAD 六必需 CI、PeriodStability、fullRelease 干净来源、正式签名/16KB 对齐/无 INTERNET/附件隔离全部通过再交付；当前 BUILD_PENDING，签名/交付 NOT_RUN。只会话私密交付，不动公开 Release；完成后另追加真实证据及交付账本。独立 P4 工作树保留其未完成性能候选，不参与本包。
+分类已只委托LabCatalog，未知别名不猜；unitOptions轴/选择器保留，.units只在旧14项适配桥使用。确认零调用后删旧LabGroupCard，保留LabGroupRow。化验行/朗读/详情范围有限非零abs<0.001统一科学记数，避免0与0.0005舍入失真；仅此化验图提示abs<0.01同样保护，普通格式和曲线数值保持；不改全局Format、原Double或PK。首轮集成84/84 PASS后复核补入精确0.0005范围及微小趋势提示，最终85/85 PASS、0跳过，原生Kotlin编译PASS；96张真实Compose截图、48张最终原图与9份JUnit另存integrated-final证据，与历史6c分开。真机/TalkBack NOT_RUN，无签名/APK/Release。
+
+## LAB-UI-03：PR89 Android 失败已定位，修复回归中 — 2026-10-20
+
+远端从6c593a4c增加12个Vibe Nuage Agent提交到14ed5f91，已审计并正常快进保留，未覆盖他人修改。原本171/18项本地及四语截图证据仅属于原记录源码，不自动视为14ed通过。Android39337651994唯一失败发生在Back前：旧lab_add定位到470px视口外y480–532的空状态按钮，实际未打开弹窗。原始失败HTML、官方工件SHA/CRC及本地语义树复现已保留在labs/ui03；默认dismissOnBackPress=true不是已证明的修复原因。
+
+本次仅修测试：明确点击已显示的labs-home-add主操作，保留弹窗、返回、会话、零写入断言，另补滚动空状态入口回归；完整AppShellBackNavigationTest17/17 PASS（0失败/0跳过），原始JUnit已保留。正式生产行为未因该修复改变。PR90独立数据扩展仍待最终验收/普通保护合并；之后再正常合并主线并接LabCatalog分类，禁止拷贝未验收代码。最终CI/受保护合并尚未完成，真机/TalkBack NOT_RUN。
+
+## LAB-UI-03：实际化验首页替换正在实施 — 2026-10-19
+
+独立 `feature/lab-ui03-home-20261019` 基于默认080094ae；用户最新任务登记 REQUIREMENTS §114，文件矩阵 `labs/ui03/implementation.md`。根因已定位：Destination.LABS 已正确调用 LabsScreen，但单项旧记录和指标筛选显式走私有 LabRow，因此新版批量/详情弹窗没有替换首页。现改统一 LabHomeCard，正式化验单/旧显示分组/单项/筛选历史共用视觉；已有业务回调、labDraws、趋势数值块保持。
+
+统一主页生产Kotlin编译已通过；首轮17项中2项旧纯文本定位FAIL已保留，改为精确原id及朗读值/单位断言后18项全PASS，原上下文测试通过；原生测试Kotlin编译PASS。新增真实入口原生回归；新版32组合截图/128布局回归及时期稳定性均已实际通过：总171/171 PASS，64张截图已捕获、16张代表原图与六份JUnit XML保留，原生Kotlin编译再次PASS。独立PR #89：同夹具旧版32/32渲染亦PASS，已捕获64张并保留16张原图；LabsScreen已逐字节恢复新版、协议守卫通过，未提交临时旧源码。待最终HEAD六必需CI与实际原生导航执行及受保护合并；真机/TalkBack NOT_RUN。正式入口仍沿用既有 AppShell，未建第二套数据库或入口。与独立 LAB-03 项目/单位扩展分工：本分支 LabsScreen/主页卡片/导航测试，数据分支 LabBatchEntry/词典/单位；未修改 Room12、业务备份11、PK、库存、权限、签名或 APK。CI/截图/真机/TalkBack 均尚未完成，不得据此声称已交付。P4独立Draft不阻塞本任务。
+## LAB-03 #90 实现已通过 CI 与三 API 原生验证 — 2026-10-20
+
+源码403ae96015ea95f3379e4a95ea0b28e7f8d4c846的push/PR六项必需检查均PASS；PR run39296389355，science39296389637。实际下载核验API26/29/35报告：24项已填草稿recreate、实际横/竖方向变化、真正离开锁定后清空各PASS（22.170/25.670/18.295秒），45代码原单位/范围/上下文→回收站→PNBAK1恢复和无效事务全回滚也各PASS，均非仅编译。每API原导航/锁12项、化验单13项全部PASS。完整JVM App1751总项中1514PASS/237既有SKIPPED/0FAIL；data263PASS，reminder20PASS；11项新LAB03及Period5无跳过。此前本地取消定位FAIL原始XML保留，祖先内匹配修正后本地16PASS及原生Kotlin编译PASS。
+
+ci-403ae960.json及evidence/ci-403ae960保留原HTML/XML、archive SHA、来源run和check快照；verify-ci-evidence.py可离线复核，不把归档内旧报告当实时认证。此收据提交仅文档，最终HEAD仍需独立CI。#89已有其他开发者Vibe+owner的12次新提交，最新14ed5f91 Android失败；UI工作流已保留并核查，尚未合并，不复制未验收源码。根据实际门槛允许#90先独立合法合并，再由#89普通合入最新主线以统一分类，不假装当前数据PR已交付新版视觉。
+
+Room12/业务备份11、Repository/库存/PK/权限/Gradle/CI不变。自定义创建/结构化方法/真正零及限定结果仍NOT_IMPLEMENTED；物理真机、TalkBack、在途保存-锁屏-回调交错NOT_RUN。原单项编辑与整单新增行的旋转草稿未扩展；本轮验证的是批量表单。无签名、APK交付或Release。
+
+## LAB-03 实际录入/历史保护代码已提交待验 — 2026-10-19
+
+独立数据分支已实现45代码词典、四语51键、搜索/分类、8个原有及扩展组合，保留原14单位Double结果；单项编辑改用原Double精确预填并冻结未改的采血瞬间/时区和参考单位，整单备注编辑通过同一helper保留原始瞬间。不同项目选择清空数值/范围/项目备注，相同选择/取消保持草稿。批量表单仅Activity内存保留，旋转保留、锁/伪装卸载清除并以token隔离旧回调；不落盘。NotesViewModel仅saveLabPanel一处窄修改，ShellHosts用当前panel快照调用，不碰浓度/PK/Repository/库存/Room12/业务11。
+
+首轮App新增6/6 PASS；扩大回归187项中186PASS、1FAIL（新测试匹配父/子两个Cancel图标，原始XML留lab03/evidence/first-app-regression）。已改为选择器祖先内匹配，未删断言；新增28项录入/精确原值/单侧范围单位/DST及UNKNOWN显示三项在该轮实际PASS。当前跟进验证包含11项LAB03+时期稳定性及原生Kotlin编译IN_PROGRESS，不冒称CI/原生实机完成。新原生24项草稿recreate+横竖屏+真实离开锁定测试已写入，实际运行NOT_RUN。UI#89最终6c593a4c独立验收中，尚未整合其未合并源码；本分支页面视觉仍依赖后续合法合并#89。高级自定义/方法字段/真正零或限定结果、原有单项及整单新增行旋转草稿仍未实施；原生在途保存-锁屏交错NOT_RUN。无APK、签名或发布。
+
+## LAB-03 数据与单位扩展实施中 — 2026-10-19
+
+独立分支feature/lab03-analytes-20261019基于080094ae，UI并行#89不覆盖。已复用domain精确词典45项（原14+新增31），domain135测试PASS；新旧单位适配、分类/搜索选择器、血常规/血脂/代谢/扩展肝肾组合已编码，App编译及交互验证仍IN_PROGRESS。原14个Double换算逐位保留，未改PK/库存/Room12/业务备份11。共享LabPanelDataTest实际13/13 PASS（新增45项原始单位/范围/上下文→回收站→PNBAK1恢复，以及事务失败全回滚）；原生API26/29/35仍NOT_RUN，不混同JVM结果。内存草稿旋转保留/锁屏清除及旧回调隔离已编码待验，不用Bundle/磁盘。结构化方法/自定义项目/真实零及限定结果未实施，保留原严格正数约束；兼容字段与后续设计见lab03/compatibility-and-fields.md。无APK/签名/发布。
+
+## build33 交付与中心原生测试复核完成 — 2026-10-19
+
+build33 已仅owner私密提供，源码219bbf32与合并42bfa99f的六必需CI均已通过；下方保留成品完整记录。#87 原文档源152f0908/API26确有返回断言FAIL，不能因只改文档而忽略。独立#88/source dfa7369b只将测试单次Back改为既有Espresso等待输入焦点，所有测试主体/断言保持；androidTestCompileOnly仅暴露原runtime3.5.0，Gradle实际解析图证明release无Espresso。
+
+#88六项必需检查最终全PASS，已受保护合并dd871cc6；主线dd CI待验。其PR/API29第一轮在附件POC70 tests的65/70后停滞，45分钟取消，未进入后面的中心/提醒14 tests，取消原始工件SHA/CRC保留。仅一次同源完整job重放后全部通过，不改时限/断言。目标中心方法的API26/29/35报告与重放API29均实际下载核验PASS；中心输入焦点竞争仍不被宣称为原失败的唯一已证明原因，附件POC挂起原因未判定。原失败/取消与本次通过分别记录于centers/back-input-sync-final-evidence.json。
+
+本#87通过普通合并引入已验收#88，再重验最终HEAD，未拷贝未验收代码。仅文件账本和测试质量变更，不更换已提供APK、不触及生产UI/数据/PK/权限；P4仍独立DRAFT/OFF，医疗附件/未开放模块继续OFF。用户下载、真机、TalkBack NOT_RUN。
+
+## build33 两个中心正式签名测试包已提供 — 2026-10-19
+
+负责人要求“给个apk”。PR86源码219bbf32（默认基线86131172，仅versionCode32→33和交付文档）六类必需CI在push/PR全部PASS，已受保护合并为42bfa99f；合并树与成品源码树相同。主线合并CI在交付时PENDING，不冒称复验已完成。独立P4 #57 不在本包，Room12/备份业务11/原库存与PK不变；两个中心来自已审#82/#85，附件/未开放模块继续OFF。
+
+full Universal release0.2.0/build33，13245300B，APK SHA256 cd824d4945acd7a02cea5fa7324b825443c2c3ed2c241bdb267e967abf3fce93，原证书989ba045…59379b1。PeriodStability本地5/5、构建/来源/manifest/无INTERNET/附件及shadow隔离、v2/v3、16KB ZIP与8个native ELF、四ABI、签前后载荷相同全部PASS。上传既有授权Google Drive渠道，metadata读回shared=false/owner-only/尺寸相同；独立重新下载SHA256及证书相同，临时密钥副本已清除。私有链接不入Git，未改公开Release/tag。用户下载/真机安装/TalkBack NOT_RUN；先自行加密备份，仅覆盖安装，不卸载或清数据。交付账本与build33-centers-2026-10-19.json记录三种独立身份。
 
 ## build32 已交付（REQUIREMENTS §112 第 4 条）— 2026-10-18
 

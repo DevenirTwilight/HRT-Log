@@ -303,7 +303,10 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         catch(e:CancellationException){throw e}catch(_:Exception){ mutable.value=mutable.value.copy(error=R.string.operation_error); onDone(false) }
     }
     // LAB-02 lab panels (docs/design/lab-panel-adr.md)
-    fun saveLabPanel(id:Long,time:java.time.LocalDateTime,laboratory:String,note:String)=change{repo.saveLabPanel(id,net.plainnotes.app.domain.ScheduleEngine.wallInstant(time,java.time.ZoneId.systemDefault()).toEpochMilli(),java.time.ZoneId.systemDefault().id,laboratory,note)}
+    fun saveLabPanel(panel:LabPanelEntity,time:java.time.LocalDateTime,laboratory:String,note:String)=change{
+        val sample=net.plainnotes.app.ui.labSampleForEdit(panel.sampled_utc,panel.sampled_zone,time)
+        repo.saveLabPanel(panel.id,sample.utc,sample.zone,laboratory,note)
+    }
     fun addToLabPanel(id:Long,values:List<LabValueEntity>,includeEstimate:Boolean)=change{repo.addToLabPanel(id,values,recapture=includeEstimate,estimate={dao,lab->if(includeEstimate)newEstimate(dao,lab) else null})}
     fun removeFromLabPanel(v:LabValueEntity)=change{repo.removeFromLabPanel(v.id)}
     fun deleteLabPanel(id:Long)=change{repo.deleteLabPanel(id)}

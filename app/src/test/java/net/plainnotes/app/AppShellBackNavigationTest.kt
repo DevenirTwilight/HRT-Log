@@ -83,7 +83,20 @@ class AppShellBackNavigationTest {
 
     @Test fun openDialogClosesBeforeNavigating() {
         show(); open(Destination.LABS)
-        ui.onNodeWithText(context.getString(R.string.lab_add)).performClick(); ui.waitForIdle()
+        // The primary home action is visible even when the empty-state action is below the small viewport.
+        ui.onNodeWithTag("labs-home-add").assertIsDisplayed().performClick(); ui.waitForIdle()
+        assertLabDialogBackKeepsPageAndData()
+    }
+
+    @Test fun emptyLabStateActionScrollsIntoViewAndBackDoesNotSave() {
+        show(); open(Destination.LABS)
+        ui.onNodeWithText(context.getString(R.string.lab_add)).performScrollTo().assertIsDisplayed().performClick()
+        ui.waitForIdle()
+        assertLabDialogBackKeepsPageAndData()
+    }
+
+    private fun assertLabDialogBackKeepsPageAndData() {
+        ui.onNodeWithTag("lab-batch").assertExists()
         ui.onNode(isDialog()).assertExists()
         ui.runOnUiThread { org.robolectric.shadows.ShadowDialog.getLatestDialog().onBackPressed() }; ui.waitForIdle()
         ui.onNode(isDialog()).assertDoesNotExist()

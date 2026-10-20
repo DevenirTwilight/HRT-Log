@@ -1,0 +1,87 @@
+{
+  "source": "140c567cae751918f8af44a8f408304ac5095319",
+  "run": 39290696775,
+  "status": "PASS_NATIVE_COMPATIBILITY_NOT_LARGE_PERFORMANCE_ADMISSION",
+  "reports": [
+    {
+      "api": 26,
+      "artifact": 12206146651,
+      "official_zip_sha256": "b976aab9fc59a25e0923d651a06c3f18e754c5bb35f8828f3e757f2ef3e816d8",
+      "zip_crc": "PASS",
+      "report": "api26-ReferenceMigrationAndroidTest.html",
+      "report_sha256": "ece29ef4ec7289eda40bb0524b55270ebab772e773f3813a637834526dc1936b",
+      "required_methods": {
+        "streamedMeasuredBackupMatchesWholeDocumentBytesAndRemainsReadOnly": "0.478s",
+        "boundedBackupPlaintextChunksAreExactAndWipedOnSuccessAndFailure": "0.001s",
+        "utf8LengthMatchesPlatformForEveryCodeUnitPairsAndBoundaries": "0.177s"
+      }
+    },
+    {
+      "api": 26,
+      "artifact": 12206146651,
+      "official_zip_sha256": "b976aab9fc59a25e0923d651a06c3f18e754c5bb35f8828f3e757f2ef3e816d8",
+      "zip_crc": "PASS",
+      "report": "api26-MeasuredConsumptionAndroidTest.html",
+      "report_sha256": "0a07d925ea3a10994661185dc1820d5a03528ba9c9aa7ba6db4939f316399088",
+      "required_methods": {
+        "internalMeasuredBackupRoundTripsPhysicalHistoryAndReplacesANonemptyTarget": "1.909s",
+        "publicLegacyBackupEntryDoesNotAccidentallyEnableMeasuredRestoreOrExport": "1.182s",
+        "measuredBackupRestoresOnANewEncryptedDatabaseWithoutAnyCurrentCatalog": "1.632s"
+      }
+    },
+    {
+      "api": 29,
+      "artifact": 12205472926,
+      "official_zip_sha256": "0dc72a62246e4b556ac50cf672443e1bdc022877e25c97f187d539227801d40b",
+      "zip_crc": "PASS",
+      "report": "api29-ReferenceMigrationAndroidTest.html",
+      "report_sha256": "8f9395fcc0f53be2d745fdba691618e5b04a2371a3b67641e0eb256166eb9ac1",
+      "required_methods": {
+        "streamedMeasuredBackupMatchesWholeDocumentBytesAndRemainsReadOnly": "0.377s",
+        "boundedBackupPlaintextChunksAreExactAndWipedOnSuccessAndFailure": "0.001s",
+        "utf8LengthMatchesPlatformForEveryCodeUnitPairsAndBoundaries": "0.176s"
+      }
+    },
+    {
+      "api": 29,
+      "artifact": 12205472926,
+      "official_zip_sha256": "0dc72a62246e4b556ac50cf672443e1bdc022877e25c97f187d539227801d40b",
+      "zip_crc": "PASS",
+      "report": "api29-MeasuredConsumptionAndroidTest.html",
+      "report_sha256": "d08a101215812858fe0d0a938beda4d3941cce0a8f0677139e90ff96028d306d",
+      "required_methods": {
+        "internalMeasuredBackupRoundTripsPhysicalHistoryAndReplacesANonemptyTarget": "1.706s",
+        "publicLegacyBackupEntryDoesNotAccidentallyEnableMeasuredRestoreOrExport": "0.878s",
+        "measuredBackupRestoresOnANewEncryptedDatabaseWithoutAnyCurrentCatalog": "1.380s"
+      }
+    },
+    {
+      "api": 35,
+      "artifact": 12205893026,
+      "official_zip_sha256": "b569729b769e7360ccbe46fed6d2ca70401c8818d5f1a32a23087c73907dc57d",
+      "zip_crc": "PASS",
+      "report": "api35-ReferenceMigrationAndroidTest.html",
+      "report_sha256": "afd5d6e1496ba2bff5aee6b06fa6803b1cf13096335c185b7ba274eff202508e",
+      "required_methods": {
+        "streamedMeasuredBackupMatchesWholeDocumentBytesAndRemainsReadOnly": "0.327s",
+        "boundedBackupPlaintextChunksAreExactAndWipedOnSuccessAndFailure": "0s",
+        "utf8LengthMatchesPlatformForEveryCodeUnitPairsAndBoundaries": "0.076s"
+      }
+    },
+    {
+      "api": 35,
+      "artifact": 12205893026,
+      "official_zip_sha256": "b569729b769e7360ccbe46fed6d2ca70401c8818d5f1a32a23087c73907dc57d",
+      "zip_crc": "PASS",
+      "report": "api35-MeasuredConsumptionAndroidTest.html",
+      "report_sha256": "4bdf337084dabd1800c6ed947d7f7486db9ba5b5f5ca3354749e2c0ad85f48b0",
+      "required_methods": {
+        "internalMeasuredBackupRoundTripsPhysicalHistoryAndReplacesANonemptyTarget": "1.881s",
+        "publicLegacyBackupEntryDoesNotAccidentallyEnableMeasuredRestoreOrExport": "0.954s",
+        "measuredBackupRestoresOnANewEncryptedDatabaseWithoutAnyCurrentCatalog": "1.304s"
+      }
+    }
+  ],
+  "separate_large_native_run": 39390433266,
+  "separate_large_native_status": "PENDING"
+}

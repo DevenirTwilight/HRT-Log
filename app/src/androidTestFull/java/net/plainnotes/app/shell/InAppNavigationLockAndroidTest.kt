@@ -107,6 +107,58 @@ class InAppNavigationLockAndroidTest {
         assertLocked("recreated in background, then returned")
     }
 
+    /** LAB-03: populated real batch form survives activity recreation, but never crosses the lock boundary. */
+    @Test fun populatedLabDraftSurvivesRotationAndIsDiscardedOnActualLock() {
+        UiPrefs(context).lockAfterMillis = 0L
+        launch(); unlock(); open(Destination.LABS)
+        ui.onNodeWithTag("lab-open-batch").performClick()
+        ui.onNodeWithTag("lab-batch-lab").performTextInput("SYNTHETIC rotation lab")
+        Espresso.closeSoftKeyboard()
+        ui.onNodeWithTag("lab-preset:CBC").performScrollTo().performClick()
+        ui.onNodeWithTag("lab-preset:LIVER_EXTENDED").performScrollTo().performClick()
+        assertEquals(24, ui.onAllNodes(SemanticsMatcher("lab rows") {
+            it.config.getOrElseNullable(SemanticsProperties.TestTag) { null }?.startsWith("lab-batch-row:") == true
+        }).fetchSemanticsNodes().size)
+        repeat(24) { i ->
+            ui.onNodeWithTag("lab-batch-value:$i").performScrollTo().performTextInput((i + 1).toString())
+        }
+        Espresso.closeSoftKeyboard()
+        ui.onNodeWithTag("lab-batch-save").assertIsEnabled()
+        ui.onNodeWithTag("lab-batch-estimate").performScrollTo().assertIsNotSelected()
+        scenario!!.recreate(); assertUnlocked("rotate populated lab draft")
+        ui.onNodeWithTag("lab-batch").assertExists()
+        ui.onNodeWithTag("lab-batch-lab").performScrollTo().assertTextContains("SYNTHETIC rotation lab")
+        repeat(24) { i ->
+            ui.onNodeWithTag("lab-batch-value:$i").performScrollTo().assert(SemanticsMatcher.expectValue(
+                SemanticsProperties.EditableText, androidx.compose.ui.text.AnnotatedString((i + 1).toString())))
+        }
+        ui.onNodeWithTag("lab-batch-estimate").performScrollTo().assertIsNotSelected()
+        // Actual orientation changes, separate from the explicit recreation above.
+        listOf(android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE to android.content.res.Configuration.ORIENTATION_LANDSCAPE,
+            android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT to android.content.res.Configuration.ORIENTATION_PORTRAIT).forEach { (requested, expected) ->
+            scenario!!.onActivity { it.requestedOrientation = requested }
+            ui.waitUntil(15_000) { resumedMain()?.resources?.configuration?.orientation == expected }
+            assertUnlocked("orientation $expected with populated lab draft")
+            ui.onNodeWithTag("lab-batch").assertExists()
+            ui.onNodeWithTag("lab-batch-value:23").performScrollTo().assert(SemanticsMatcher.expectValue(
+                SemanticsProperties.EditableText, androidx.compose.ui.text.AnnotatedString("24")))
+        }
+        scenario!!.moveToState(Lifecycle.State.CREATED)
+        scenario!!.moveToState(Lifecycle.State.RESUMED)
+        assertLocked("actual leave discards unsaved lab input")
+        ui.onNodeWithTag("lab-batch").assertDoesNotExist()
+        unlock(); open(Destination.LABS)
+        ui.onNodeWithTag("lab-open-batch").performClick()
+        ui.onNodeWithTag("lab-batch-lab").assert(SemanticsMatcher.expectValue(
+            SemanticsProperties.EditableText, androidx.compose.ui.text.AnnotatedString("")))
+        ui.onNodeWithTag("lab-batch-value:0").performScrollTo().assert(SemanticsMatcher.expectValue(
+            SemanticsProperties.EditableText, androidx.compose.ui.text.AnnotatedString("")))
+        ui.onNodeWithTag("lab-batch-value:1").assertDoesNotExist()
+        ui.onNodeWithTag("lab-batch-estimate").performScrollTo().assertIsNotSelected()
+        ui.onNodeWithTag("lab-batch-cancel").performClick()
+        ui.onNodeWithTag("lab-batch").assertDoesNotExist()
+    }
+
     private fun back() {
         // A visible Compose tree can precede the new Dialog's input-window focus on API26.
         // Espresso waits for a resumed, laid-out, focused root before injecting the single Back.
@@ -211,6 +263,34 @@ class InAppNavigationLockAndroidTest {
         scenario!!.moveToState(Lifecycle.State.RESUMED)
         assertLocked("actual leave from drug center with immediate auto-lock")
         ui.onNodeWithTag("drug-center-window").assertDoesNotExist()
+    }
+
+    /** LAB-UI-03: every real entry selects the same production homepage and retains the unlocked session. */
+    @Test fun labsDrawerMedicalAndConcentrationShareNewHomeAndExistingBatchForm() {
+        launch(); unlock(); open(Destination.LABS)
+        ui.onNodeWithTag("labs-home").assertExists()
+        ui.onNodeWithTag("labs-home-add").performClick()
+        ui.onNodeWithTag("lab-batch").assertExists()
+        ui.onNodeWithTag("lab-batch-estimate").assertIsNotSelected()
+        back()
+        ui.onNodeWithTag("lab-batch").assertDoesNotExist()
+        ui.onNodeWithTag("labs-home").assertExists()
+        assertUnlocked("cancel new home batch")
+        open(Destination.MEDICAL)
+        ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag("medical-labs"))
+        ui.onNodeWithTag("medical-labs").performClick()
+        ui.onNodeWithTag("labs-home").assertExists()
+        assertUnlocked("medical center labs")
+        back()
+        ui.onNodeWithTag("medical-list").assertExists()
+        open(Destination.CONCENTRATION)
+        ui.onNodeWithText(context.getString(R.string.calib_manage_labs)).performScrollTo().performClick()
+        ui.onNodeWithTag("labs-home").assertExists()
+        scenario!!.recreate()
+        ui.onNodeWithTag("labs-home").assertExists()
+        assertUnlocked("labs rotation after concentration entry")
+        open(Destination.CALENDAR)
+        assertUnlocked("return to calendar from labs")
     }
 
     private fun resumedMain(): MainActivity? {

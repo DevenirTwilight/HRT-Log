@@ -12,6 +12,24 @@ def module(name):
     return value
 
 class NativePerformanceIsolationTest(unittest.TestCase):
+    def test_sql_driver_timing_is_read_only_post_budget_and_never_logs_bindings(self):
+        prepare = module('prepare_ansm_native_performance')
+        text = prepare.native_source(prepare.SOURCE.read_text())
+        start = text.index('val sqlReads=linkedMapOf<String,LongArray>()')
+        end = text.index('val trace=File(', start)
+        diagnostic = text[start:end]
+        self.assertLess(text.index('report.put("budget_exceeded"'), start)
+        self.assertLess(text.index('running.set(false);sampler.join(1000)'), start)
+        for marker in ('sql_driver_timing_audit_ms', 'SYNTHETIC_POST_BUDGET_DRIVER_CALL_TIMING',
+                       'readOnlyTicket {', 'assertEquals(rawProjection,MeasuredConsumptionStore.auditStagedDataset(profiled))',
+                       'override fun getCount()', 'override fun moveToNext()', 'override fun getString(',
+                       'override fun query(query:androidx.sqlite.db.SupportSQLiteQuery',
+                       'sql_sha256', 'sql_prefix_truncated', 'cursor_calls', 'driver_ns',
+                       'check(sqlReads.size<256)', 'check(sqlReads.isNotEmpty())'):
+            self.assertIn(marker, diagnostic)
+        for forbidden in ('execSQL', 'args.toString()', 'args.contentToString()', 'bindArgs.toString()', 'setTransactionSuccessful'):
+            self.assertNotIn(forbidden, diagnostic)
+
     def test_generation_keeps_full_large_contract_and_sqlcipher_only_in_test_source(self):
         prepare = module('prepare_ansm_native_performance')
         text = prepare.native_source(prepare.SOURCE.read_text())
@@ -70,7 +88,7 @@ class NativePerformanceIsolationTest(unittest.TestCase):
         prepare = module('prepare_ansm_native_performance')
         text = prepare.native_source(prepare.SOURCE.read_text())
         helper = text[text.index('            // Measure the actual stale-write guard'):
-                      text.index('            val trace=File')]
+                      text.index('            // Synthetic test only. Time driver calls')]
         fragment = (ROOT / 'docs/ansm-integration/p4/performance/write-ticket-diagnostic.fragment.kt.txt').read_text()
         self.assertTrue(fragment.endswith(helper))
 

@@ -1,0 +1,76 @@
+{
+  "status": "PASS_INTERMEDIATE_NOT_FINAL",
+  "reason": "Later review identified untested0.0005 bound rounding and tiny chart tooltip; final source rerun required.",
+  "tests": [
+    {
+      "name": "net.plainnotes.app.AppShellBackNavigationTest",
+      "tests": 17,
+      "failures": 0,
+      "skipped": 0,
+      "sha256": "dffe5145745f239c6d69242b811f2d021c45dbaeac519beefee0084e49af6771"
+    },
+    {
+      "name": "net.plainnotes.app.LabUi03ResourceAndWiringTest",
+      "tests": 1,
+      "failures": 0,
+      "skipped": 0,
+      "sha256": "ec2e7abaaf5511f328d015edab58f51a440c7c9fb534cc92667b777547156afd"
+    },
+    {
+      "name": "net.plainnotes.app.LabUi03ScreenshotsTest",
+      "tests": 32,
+      "failures": 0,
+      "skipped": 0,
+      "sha256": "49e8a6b84a7c3c33b98c55bf9a6f8f11e5fc1fac38d4612e14e0c57e1f04fece"
+    },
+    {
+      "name": "net.plainnotes.app.Lab01GroupDisplayTest",
+      "tests": 7,
+      "failures": 0,
+      "skipped": 0,
+      "sha256": "71219d0e1b06f34dddf2a6a68b0ad8db22a2761dfe5aa16f9519985a34f1cea4"
+    },
+    {
+      "name": "net.plainnotes.app.LabContextUiTest",
+      "tests": 1,
+      "failures": 0,
+      "skipped": 0,
+      "sha256": "a26c4c5caa5df5a0bcc1d7053e28cc59c9ffe97626d83855b50fc1cc9bc99152"
+    },
+    {
+      "name": "net.plainnotes.app.LabUi03HomeTest",
+      "tests": 9,
+      "failures": 0,
+      "skipped": 0,
+      "sha256": "1aeff5e4750756a5cec13d1e4ae75e6d668de525562835bcf9e01f242fba5225"
+    },
+    {
+      "name": "net.plainnotes.app.LabUi03CatalogScreenshotsTest",
+      "tests": 8,
+      "failures": 0,
+      "skipped": 0,
+      "sha256": "2e160c96b1605801f44b387adff47b35f15bc4d216ae757700a329398dccc562"
+    },
+    {
+      "name": "net.plainnotes.app.Lab02PanelUiTest",
+      "tests": 4,
+      "failures": 0,
+      "skipped": 0,
+      "sha256": "6a8707a53fe50a0d75b19cd7badd4a8dcc3aef6a6d7243f80eb27a28ee98e161"
+    },
+    {
+      "name": "net.plainnotes.app.PeriodStabilityTest",
+      "tests": 5,
+      "failures": 0,
+      "skipped": 0,
+      "sha256": "1753db2243e5bf300cec0c5873f6281b49facd4c84420d40c519bd5a3f402ced"
+    }
+  ],
+  "capture_count": 96,
+  "native_kotlin_compile": "PASS",
+  "production_hashes": {
+    "app/src/main/java/net/plainnotes/app/ui/LabsScreen.kt": "99a07eb67d868d793c908d19b67598952f9b611b2760ec48597ae465a1342a4d",
+    "app/src/main/java/net/plainnotes/app/ui/LabHomeCard.kt": "ee4985870877c24d75d204fc87a019575c5709eedeeb87c8abf53c71bb40629a",
+    "app/src/main/java/net/plainnotes/app/ui/LabBatchEntry.kt": "2fa590f7c61ce6d455121639c0e0767b392866f42a4fb9e635b680997ee7edc8"
+  }
+}

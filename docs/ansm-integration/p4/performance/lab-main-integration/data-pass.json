@@ -1,0 +1,15 @@
+{
+  "p4_parent": "140c567cae751918f8af44a8f408304ac5095319",
+  "default_parent": "320171cdc882ec0b62830b60e2329a4174ffa31c",
+  "counts": {
+    "tests": 455,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "source_patch": "P4 runtime version assertions only, production data source unchanged from140",
+  "raw_reports_sha256": {
+    "final-TEST-net.plainnotes.app.data.ReferenceMigrationTest.xml": "c13e098d195d0913f1aabc66c87d875c68bf6aa5cc73ef30b094ea6ae0c77309",
+    "final-TEST-net.plainnotes.app.data.LabPanelDataTest.xml": "301d4ed0d8f1cce74748f3c95fcab72fb58ceef74f077c7a120fe087829698a7"
+  }
+}

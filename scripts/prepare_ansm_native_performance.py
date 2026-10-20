@@ -196,6 +196,54 @@ def native_source(text):
             }
             component("write_ticket_capture_ms"){captureTicket()}
             component("write_ticket_validate_ms"){validateTicket()}
+            // Synthetic test only. Time driver calls, excluding processing between cursor calls.
+            // Keys are closed source SQL templates; bind arguments and row values are never recorded.
+            val sqlReads=linkedMapOf<String,LongArray>()
+            fun <T> sqlTimed(sql:String,opening:Boolean=false,action:()->T):T {
+                val counters=sqlReads[sql] ?: run {
+                    check(sqlReads.size<256)
+                    LongArray(3).also{sqlReads[sql]=it}
+                }
+                counters[if(opening)0 else 1]++
+                val start=System.nanoTime()
+                try{return action()}finally{counters[2]+=System.nanoTime()-start}
+            }
+            fun timedCursor(sql:String,open:()->android.database.Cursor):android.database.Cursor {
+                val cursor=sqlTimed(sql,true,open)
+                return object:android.database.CursorWrapper(cursor) {
+                    override fun getCount()=sqlTimed(sql){cursor.count}
+                    override fun moveToPosition(position:Int)=sqlTimed(sql){cursor.moveToPosition(position)}
+                    override fun moveToFirst()=sqlTimed(sql){cursor.moveToFirst()}
+                    override fun moveToNext()=sqlTimed(sql){cursor.moveToNext()}
+                    override fun getString(column:Int):String?=sqlTimed(sql){cursor.getString(column)}
+                    override fun getLong(column:Int)=sqlTimed(sql){cursor.getLong(column)}
+                    override fun getDouble(column:Int)=sqlTimed(sql){cursor.getDouble(column)}
+                    override fun getType(column:Int)=sqlTimed(sql){cursor.getType(column)}
+                    override fun isNull(column:Int)=sqlTimed(sql){cursor.isNull(column)}
+                    override fun getBlob(column:Int):ByteArray?=sqlTimed(sql){cursor.getBlob(column)}
+                    override fun close()=sqlTimed(sql){cursor.close()}
+                }
+            }
+            val profiled=object:androidx.sqlite.db.SupportSQLiteDatabase by raw {
+                override fun query(sql:String)=timedCursor(sql){raw.query(sql)}
+                override fun query(sql:String,bindArgs:Array<out Any?>)=timedCursor(sql){raw.query(sql,bindArgs)}
+                override fun query(query:androidx.sqlite.db.SupportSQLiteQuery)=timedCursor(query.sql){raw.query(query)}
+                override fun query(query:androidx.sqlite.db.SupportSQLiteQuery,cancellationSignal:android.os.CancellationSignal?)=
+                    timedCursor(query.sql){raw.query(query,cancellationSignal)}
+            }
+            component("sql_driver_timing_audit_ms") {readOnlyTicket {
+                assertEquals(rawProjection,MeasuredConsumptionStore.auditStagedDataset(profiled))
+            }}
+            check(sqlReads.isNotEmpty())
+            val sqlTimings=JSONArray()
+            sqlReads.entries.sortedByDescending{it.value[2]}.forEach{(sql,counters)->
+                check(counters[0]>0 && counters[1]>0 && counters[2]>=0)
+                sqlTimings.put(JSONObject().put("sql_sha256",ReferencePayload.sha(sql))
+                    .put("sql_prefix",sql.take(512)).put("sql_prefix_truncated",sql.length>512)
+                    .put("queries",counters[0]).put("cursor_calls",counters[1]).put("driver_ns",counters[2]))
+            }
+            components.put("sql_driver_timings",sqlTimings)
+                .put("sql_driver_timing_scope","SYNTHETIC_POST_BUDGET_DRIVER_CALL_TIMING")
             val trace=File(file.parentFile,"audit-sampling.trace")
             android.os.Debug.startMethodTracingSampling(trace.absolutePath,16*1024*1024,1000)
             try {

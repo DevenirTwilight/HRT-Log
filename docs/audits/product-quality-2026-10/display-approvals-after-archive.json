@@ -38,6 +38,78 @@
     "diff": "+5/-3 lines in LabsScreen.kt; panel UI is in LabBatchEntry.kt and LabPanelDetail.kt"
    },
    "human_review": "recommended: check that the LabsScreen diff stays within the approved scope."
+  },
+  {
+   "id": "PD-2026-10-19-LABUI03-LABSSCREEN",
+   "file": "app/src/main/java/net/plainnotes/app/ui/LabsScreen.kt",
+   "approver": "DevenirTwilight",
+   "date": "2026-10-19",
+   "scope": "LAB-UI-03 actual homepage: replace all legacy singleton and metric-filter LabRow branches with unified LabHomeCard; add existing batch-entry action and presentation-only category/search filters. Keep existing chart construction, numerical conversion, calibration, context and repository callbacks unchanged. Independent LAB-03 may subsequently extract top-level catalogue adapters under separate hash record.",
+   "previous_sha256": "22ed83c3edeaa2fd504ad4ff45e5dd5e3b4c7c3c9e406558bdeb991e6a4ebddb",
+   "new_sha256": "4fe97048fd0e05bd8eabf98c863abf2dff5dd5289b4fe822c04f70964352cb8c",
+   "evidence": {
+    "commit": "37d5678b69786953e77f9c6ebd4518766f3e382b",
+    "path": "docs/REQUIREMENTS.md"
+   },
+   "owner_decision": "REQUIREMENTS §114: owner LAB-03 + LAB-UI-03 task sections 3.1–3.2 expressly require replacing LabsScreen LabRow/group/filter visuals and wiring real Destination.LABS, without PK or persistence changes.",
+   "verification": {
+    "trend": "Existing code-selected points, canonical conversion, latestRange, ChartData and ConcChart block byte-identical to080094ae.",
+    "data": "No labDraws grouping, Room, backup, repository, PK or calibration file modified."
+   },
+   "human_review": "Verify homepage/body scope and unchanged numerical chart block; native route/session tests and four-language synthetic screenshot evidence tracked separately."
+  },
+  {
+   "id": "PD-2026-10-20-LABUI03-DIALOG-PROPS",
+   "file": "app/src/main/java/net/plainnotes/app/ui/LabsScreen.kt",
+   "approver": "DevenirTwilight",
+   "date": "2026-10-20",
+   "scope": "Preserve externally authored PR89 imports and explicit AlertDialog dismissOnBackPress=true (the platform default); no homepage numerical/chart/calibration or persistence change. This record does not attribute the stale offscreen test selector failure to dialog properties.",
+   "previous_sha256": "4fe97048fd0e05bd8eabf98c863abf2dff5dd5289b4fe822c04f70964352cb8c",
+   "new_sha256": "236b04534868167c2c7eee727658d57c1c8501db416c27c7684f540c2baad111",
+   "evidence": {
+    "commit": "37d5678b69786953e77f9c6ebd4518766f3e382b",
+    "path": "docs/REQUIREMENTS.md"
+   },
+   "owner_decision": "REQUIREMENTS §114 owner authorizes LAB-UI-03 actual homepage, minimal Compose/navigation/UI-test changes while preserving PK and persistence.",
+   "verification": {
+    "source": "Remote 14ed5f911a8c41c61af5d9f5f00452a190df0dd9 external commits preserved, not reverted.",
+    "failure": "ci-dialog-failure-2026-10-20.json records actual pre-Back failure and viewport proof."
+   },
+   "human_review": "Review the small external import/default-property diff independently of test-only visible-action fix."
+  },
+  {
+   "id": "PD-2026-10-19-LAB03-CATALOG-ADAPTER",
+   "file": "app/src/main/java/net/plainnotes/app/ui/LabsScreen.kt",
+   "approver": "DevenirTwilight",
+   "date": "2026-10-19",
+   "scope": "LAB-03: extract catalogue adapters, add predefined analytes and per-analyte unit choices, searchable draft-only selector; preserve unchanged original numeric precision, sample instant/zone and independent reference unit during editing. Legacy fourteen Double factor pairs and PK/calibration/trend algorithm unchanged. No schema/backup/inventory changes.",
+   "previous_sha256": "22ed83c3edeaa2fd504ad4ff45e5dd5e3b4c7c3c9e406558bdeb991e6a4ebddb",
+   "new_sha256": "ed2340f3d19f6104e6f7b95968ee2cd1cb4975ac4bf4431754cb38b77422ac75",
+   "evidence": {
+    "commit": "7196422a60c4c56b4ce75300abfb129086d7d949",
+    "path": "docs/REQUIREMENTS.md"
+   },
+   "owner_decision": "REQUIREMENTS §114, user LAB-03 task sections 4, 5 and 8; exact source integrated with independent LAB-UI-03 requires final-file evidence, not an assumption that either branch validates the other."
+  },
+  {
+   "id": "PD-2026-10-20-LAB03-UI03-INTEGRATED",
+   "file": "app/src/main/java/net/plainnotes/app/ui/LabsScreen.kt",
+   "approver": "DevenirTwilight",
+   "date": "2026-10-20",
+   "scope": "Integrate approved PR90 catalogue adapter/single-edit history safeguards with PR89 unified home. Preserve unitOptions chart axis and add stable metric/chart tags. Lab-only tiny-value formatting: finite nonzero abs<0.001 in lab rows/detail bounds and abs<0.01 in this lab chart value label use localized scientific Double.toString; normal formatting and all numerical points/curves remain unchanged. No global formatting, concentration caller, calibration or PK change.",
+   "previous_sha256": "236b04534868167c2c7eee727658d57c1c8501db416c27c7684f540c2baad111",
+   "new_sha256": "9669ea377049d79fe6fa2de740aae8fa11078b7545fed1eb141edec8ba916609",
+   "evidence": {
+    "commit": "37d5678b69786953e77f9c6ebd4518766f3e382b",
+    "path": "docs/REQUIREMENTS.md"
+   },
+   "owner_decision": "REQUIREMENTS §114 authorizes actual replacement home, expanded lab units and original report preservation; owner prohibits rounding reported nonzero results into measured zero.",
+   "verification": {
+    "approved_default": "5a7d7c87afd13636d7472a7235416e5273054afb, normal protected merge of PR90 ffb4c92c; parent adapter hash ed2340f3d19f6104e6f7b95968ee2cd1cb4975ac4bf4431754cb38b77422ac75 retained independently.",
+    "algorithm": "Original trend points, canonical conversion, range construction and curves unchanged. Approved unitOptions axis property, tags and this lab call-site tiny-number label guard are explicit presentation differences. Shared ConcChart unchanged.",
+    "test_scope": "Actual TG3.05g/L→305mg/dL and tinyNEUT0.0004→4.0E-4 canonical tooltip; all45 categories; exact0.0001–0.0005 bounds and French/normal/zero formatting; final four-language renders. Execution recorded separately."
+   },
+   "human_review": "Compare combined source against both parent approval entries; do not treat separate parent CI as final integration verification."
   }
  ]
 }

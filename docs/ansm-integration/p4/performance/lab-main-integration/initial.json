@@ -1,0 +1,13 @@
+{
+  "p4_parent": "140c567cae751918f8af44a8f408304ac5095319",
+  "default_parent": "320171cdc882ec0b62830b60e2329a4174ffa31c",
+  "tests": 455,
+  "pass": 454,
+  "failures": 1,
+  "errors": 0,
+  "skipped": 0,
+  "failure": "expandedReportKeepsEveryOriginalUnitPanelContextAndBackupThroughTrash: expected Room12 but actual P4 candidate13",
+  "raw_report": "initial-LabPanelDataTest.xml",
+  "sha256": "8a0b6e72377ca0a3451512d325d7357cbf4c849b2e82089a5b238306fafcfb17",
+  "scope": "P4_CANDIDATE_VERSION_ASSERTION_ONLY; no production migration change"
+}

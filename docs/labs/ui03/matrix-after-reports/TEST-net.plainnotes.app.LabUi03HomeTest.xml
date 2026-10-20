@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.LabUi03HomeTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-19T17:22:35.241Z" hostname="8a64197d37fe" time="19.833">
+  <properties/>
+  <testcase name="metricFilterRetainsUnifiedCardsAndExistingTrend" classname="net.plainnotes.app.LabUi03HomeTest" time="15.402"/>
+  <testcase name="expansionExposesEveryOriginalResultAndDeleteUsesOriginalRow" classname="net.plainnotes.app.LabUi03HomeTest" time="1.614"/>
+  <testcase name="oneSidedRangesUnknownUnitsAndFlagsAreNeverClinicalJudgements" classname="net.plainnotes.app.LabUi03HomeTest" time="0.301"/>
+  <testcase name="formalSingletonAndLegacySingletonShareHomeCardsAndKeepOriginalIdentity" classname="net.plainnotes.app.LabUi03HomeTest" time="0.777"/>
+  <testcase name="filtersAndNoResultsDoNotInvokeWritesAndBatchActionUsesExistingCallback" classname="net.plainnotes.app.LabUi03HomeTest" time="1.541"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

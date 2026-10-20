@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import net.plainnotes.app.R
 
 /** Presentation only: this component has no business callback, repository, URI or importer. */
@@ -28,6 +29,7 @@ import net.plainnotes.app.R
         }
     }
     if(open)AlertDialog(onDismissRequest={open=false},modifier=Modifier.testTag("center-unavailable-dialog"),
+        properties = DialogProperties(dismissOnBackPress = true),
         title={Text(stringResource(title))},
         text={Column(Modifier.heightIn(max=240.dp).verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(12.dp)) {
             Text(stringResource(R.string.center_not_open));Text(stringResource(reason))

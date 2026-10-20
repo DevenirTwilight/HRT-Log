@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.LabContextUiTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-10-20T07:19:42.279Z" hostname="2c2deac85eb5" time="4.723">
+  <properties/>
+  <testcase name="historicalVersionCanBeViewedAndRebuildingRequiresExplicitAction" classname="net.plainnotes.app.LabContextUiTest" time="4.662"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

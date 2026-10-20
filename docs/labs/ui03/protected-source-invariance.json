@@ -1,0 +1,71 @@
+{
+  "status": "PASS",
+  "scope": "Source identity only; does not pretend local focused tests replace full CI or physical device acceptance",
+  "baseline": "080094ae5adcd8fe65cb0bb1638ef71e0ebc1ec8",
+  "files": [
+    {
+      "file": "core/data/src/main/java/net/plainnotes/app/data/Entities.kt",
+      "sha256": "dac6468bd5d51ba65565c62fae9246602e67454e1317e753849d86b2072844a2",
+      "byte_identical_to_baseline": true
+    },
+    {
+      "file": "core/data/src/main/java/net/plainnotes/app/data/NotesDatabase.kt",
+      "sha256": "f55f29302d774d43ad2e9ced3f8eb424bc8b0e4bd583040413bf42619aebb3d4",
+      "byte_identical_to_baseline": true
+    },
+    {
+      "file": "core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt",
+      "sha256": "e683baa22be40bafe3bca9ee46e82aef10867da0105c208165ee8d181fcc3510",
+      "byte_identical_to_baseline": true
+    },
+    {
+      "file": "core/data/src/main/java/net/plainnotes/app/data/DataTransfer.kt",
+      "sha256": "065e5f99d9f688d659fad74e50c54de8949e9e35960142d25f3db276c3ce62a2",
+      "byte_identical_to_baseline": true
+    },
+    {
+      "file": "core/data/src/main/java/net/plainnotes/app/data/BackupValidation.kt",
+      "sha256": "cf55df65f601099583e59c0e359f8b2d7c0518820af7305a50a854347db2b8bb",
+      "byte_identical_to_baseline": true
+    },
+    {
+      "file": "core/data/src/main/java/net/plainnotes/app/data/SupplyLedger.kt",
+      "sha256": "57e131d54e886db37bfa3104023a5913a66797a753c0cab07ccd2c5270353a76",
+      "byte_identical_to_baseline": true
+    },
+    {
+      "file": "core/data/src/main/java/net/plainnotes/app/data/StockForecast.kt",
+      "sha256": "1a110d5ab8d206f094abf74794d4c26dd05591c41fe7862feb49cdc14bf77c0c",
+      "byte_identical_to_baseline": true
+    },
+    {
+      "file": "app/src/main/java/net/plainnotes/app/conc/LabEstimate.kt",
+      "sha256": "476097b3723db41361db379c23a5cb8ae454423c7b89e1b10a7e10fb106f7071",
+      "byte_identical_to_baseline": true
+    },
+    {
+      "file": "app/src/main/java/net/plainnotes/app/conc/CalibrationEligibility.kt",
+      "sha256": "f764ef63f2665d1c4040f2ecb9e1274eb32937383d1b4715b1e8490530ed3153",
+      "byte_identical_to_baseline": true
+    },
+    {
+      "file": "app/src/main/java/net/plainnotes/app/conc/ConcentrationCalculator.kt",
+      "sha256": "9a0ca71e55a49b05b614d247773a0c694716ce92f7272f79c5644a39e45e417e",
+      "byte_identical_to_baseline": true
+    },
+    {
+      "file": "app/src/main/AndroidManifest.xml",
+      "sha256": "2281d7ab5fe4ad4a858133728b40b20035cfb7e49b513bb6428994f14fd4c610",
+      "byte_identical_to_baseline": true
+    },
+    {
+      "file": "pk-engine/src/main/resources/pk-params.json",
+      "sha256": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b",
+      "byte_identical_to_baseline": true
+    }
+  ],
+  "room_version": 12,
+  "backup_business_schema": 11,
+  "physical_device": "NOT_RUN",
+  "talkback": "NOT_RUN"
+}

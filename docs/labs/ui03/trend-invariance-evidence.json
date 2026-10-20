@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "baseline": "080094ae5adcd8fe65cb0bb1638ef71e0ebc1ec8",
+  "current_home_commit": "8fbac119",
+  "comparison": "Exact UTF-8 bytes from val points through chart/range-note block before items",
+  "sha256": "1497ecf2419ca988e2949c24cde26d3590f7f465d111b25a6cc5463ca3734441",
+  "source_bytes": 1622,
+  "note": "Presentation filters choose rows. Existing point conversion, time base, range conversion, ChartData and ConcChart formatter remain identical; this does not replace final numerical regression CI."
+}

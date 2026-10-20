@@ -17,7 +17,7 @@ import java.time.Instant
 
 /**
  * LAB-01 C/D, synthetic results only: one card per draw (identical sampled_utc and identical trimmed laboratory, both empty
- * counts as equal), never merged by nearby dates or different laboratories; a single result keeps the existing row; a row reads
+ * counts as equal), never merged by nearby dates or different laboratories; a single result now uses the same card; a row reads
  * "test, value, unit" and says high/low in words; editing the time or laboratory of a grouped result shows the split hint.
  */
 @RunWith(RobolectricTestRunner::class) @Config(sdk = [35])
@@ -44,18 +44,21 @@ class Lab01GroupDisplayTest {
         var opened: LabValueEntity? = null
         ui.setContent { NotesTheme(ThemeMode.LIGHT) { LabsScreen(labs, emptyList(), { opened = it }, {}, PaddingValues()) } }
         ui.onNodeWithTag("lab-filter-all").assertIsSelected()
+        ui.onNode(hasScrollToIndexAction()).performScrollToNode(hasTestTag("lab-group:$t1:Synthetic lab A"))
         ui.onNodeWithTag("lab-group:$t1:Synthetic lab A").assertExists()
         ui.onNode(hasTestTag("lab-group-title") and hasAnyAncestor(hasTestTag("lab-group:$t1:Synthetic lab A")))
             .assertTextContains(s(R.string.lab_group_count, 3), substring = true).assertTextContains("Synthetic lab A", substring = true)
-        ui.onNodeWithText("140 pg/mL").assertExists() // the other laboratory's result keeps the existing single row
+        ui.onNode(hasScrollToIndexAction()).performScrollToNode(hasTestTag("lab-group-row:4"))
+        ui.onNodeWithTag("lab-group-row:4").assertContentDescriptionEquals(s(R.string.lab_row_spoken, s(R.string.lab_e2), "140", "pg/mL")) // original value remains accessible in the unified singleton card
         ui.onNode(hasScrollToIndexAction()).performScrollToNode(hasTestTag("lab-group:$t2:"))
         ui.onNode(hasTestTag("lab-group-title") and hasAnyAncestor(hasTestTag("lab-group:$t2:"))).assertTextContains(s(R.string.lab_group_count, 2), substring = true)
-        ui.onAllNodes(hasTestTag("lab-group-row:4") or hasTestTag("lab-group-row:7")).assertCountEquals(0)
+        assertTrue(labDraws(labs, emptyList()).all { it.panel == null }) // rendering never creates formal panels
         assertEquals(2, labGroups(labs).count { it.size > 1 })
     }
 
     @Test fun rowsReadTestValueUnitAndSayHighOrLowInWords() {
         ui.setContent { NotesTheme(ThemeMode.LIGHT) { LabsScreen(labs, emptyList(), {}, {}, PaddingValues()) } }
+        ui.onNode(hasScrollToIndexAction()).performScrollToNode(hasTestTag("lab-group-row:1"))
         ui.onNodeWithTag("lab-group-row:1").assertContentDescriptionEquals(s(R.string.lab_row_spoken, s(R.string.lab_e2), "250", "pg/mL") + s(R.string.lab_row_spoken_flag, s(R.string.lab_flag_high)))
             .assertHasClickAction()
         ui.onNodeWithTag("lab-group-row:2").assertContentDescriptionEquals(s(R.string.lab_row_spoken, s(R.string.lab_t), "20", "ng/dL"))
@@ -74,6 +77,7 @@ class Lab01GroupDisplayTest {
     @Test fun aRowOpensTheExistingDetailThenEdit() {
         var edited: LabValueEntity? = null
         ui.setContent { NotesTheme(ThemeMode.LIGHT) { LabsScreen(labs, emptyList(), { edited = it }, {}, PaddingValues()) } }
+        ui.onNode(hasScrollToIndexAction()).performScrollToNode(hasTestTag("lab-group-row:2"))
         ui.onNodeWithTag("lab-group-row:2").performClick()
         ui.onNode(isDialog()).assertExists()
         ui.onNode(hasClickAction() and hasText(s(R.string.edit)) and hasAnyAncestor(isDialog())).performClick()
@@ -85,7 +89,8 @@ class Lab01GroupDisplayTest {
         ui.setContent { NotesTheme(ThemeMode.LIGHT) { LabsScreen(labs, emptyList(), {}, {}, PaddingValues()) } }
         ui.onNodeWithText(s(R.string.lab_e2)).performClick()
         ui.onNodeWithText(s(R.string.lab_trend, s(R.string.lab_e2))).assertExists()
-        ui.onAllNodes(tagPrefix("lab-group:")).assertCountEquals(0)
+        ui.onNode(hasScrollToIndexAction()).performScrollToNode(hasTestTag("lab-group:$t1:Synthetic lab A"))
+        ui.onNodeWithTag("lab-group:$t1:Synthetic lab A").assertExists() // metric filters retain unified cards
     }
 
     @Test fun editingTimeOrLabOfAGroupedResultShowsTheHintAndItSplitsOut() {

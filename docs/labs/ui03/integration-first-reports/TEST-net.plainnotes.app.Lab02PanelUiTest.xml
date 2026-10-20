@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.Lab02PanelUiTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-20T07:12:45.231Z" hostname="2c2deac85eb5" time="0.963">
+  <properties/>
+  <testcase name="drawsOrderNewestFirstAndPanelsWinOverTheLab01Rule" classname="net.plainnotes.app.Lab02PanelUiTest" time="0.039"/>
+  <testcase name="saveAsOneBloodTestNeedsTheConfirmation" classname="net.plainnotes.app.Lab02PanelUiTest" time="0.179"/>
+  <testcase name="panelDetailEditsTheWholeDrawTakesOutAddsAndDeletes" classname="net.plainnotes.app.Lab02PanelUiTest" time="0.493"/>
+  <testcase name="panelsAreCardsAndLooseResultsKeepTheLab01Grouping" classname="net.plainnotes.app.Lab02PanelUiTest" time="0.246"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[System.logW: A resource failed to call SQLiteConnectionPool.close. 
+System.logW: A resource failed to call SQLiteConnection.close. 
+System.logW: A resource failed to call close. 
+System.logW: A resource failed to call SQLiteConnection.close. 
+System.logW: A resource failed to call SQLiteConnectionPool.close. 
+System.logW: A resource failed to call SQLiteConnection.close. 
+System.logW: A resource failed to call SQLiteConnection.close. 
+System.logW: A resource failed to call SQLiteConnection.close. 
+System.logW: A resource failed to call SQLiteConnectionPool.close. 
+System.logW: A resource failed to call SQLiteConnection.close. 
+]]></system-err>
+</testsuite>
