@@ -178,6 +178,40 @@ class ArtSamplingHandshakeTest(unittest.TestCase):
             report['post_budget_components']['sampling_trace']['token']='00000000-0000-4000-8000-000000000002'
             self.assertIsNone(collector.cached_trace(report,out))
 
+    def test_full_pre_cleanup_report_survives_truncated_log_without_promoting_failed_budget(self):
+        import os
+        from unittest.mock import patch
+        collector=module('collect_ansm_native_performance')
+        with TemporaryDirectory() as directory:
+            out=Path(directory)/'core/data/build/reports/ansm-native-performance';out.mkdir(parents=True)
+            execute,report=self.environment([])
+            report.update(status='DIAGNOSTIC_BUDGET_FAIL',api26_low_memory_acceptance='FAIL',budget_exceeded=['post_restore_write_including_ticket_ms'])
+            report['post_budget_components']['sql_driver_timings']=[{'sql_sha256':'SYNTHETIC','driver_ns':123}]
+            self.assertTrue(collector.watch_trace_once(out,self.token,execute))
+            self.assertEqual(report,collector.retained_report(out,self.token))
+            (out/'synthetic-crash-log.txt').write_text('I ANSM_PERF: {truncated')
+            previous=os.getcwd()
+            try:
+                os.chdir(directory)
+                with patch.object(collector.subprocess,'check_output',return_value=''):
+                    with self.assertRaises(SystemExit):collector.collect(self.token)
+            finally:os.chdir(previous)
+            actual=json.loads((out/'large-ten-year.json').read_text())
+            self.assertEqual(report['post_budget_components'],actual['post_budget_components'])
+            self.assertFalse(collector.budget_pass(actual))
+            self.assertEqual('VALIDATED_PRE_CLEANUP_REPORT',actual['collection_metadata_source'])
+
+    def test_retained_report_rejects_wrong_run_tampered_trace_and_oversized_metadata(self):
+        collector=module('collect_ansm_native_performance')
+        with TemporaryDirectory() as directory:
+            out=Path(directory);execute,report=self.environment([])
+            self.assertTrue(collector.watch_trace_once(out,self.token,execute))
+            self.assertIsNone(collector.retained_report(out,'00000000-0000-4000-8000-000000000002'))
+            (out/'audit-sampling.trace').write_bytes(b'changed')
+            self.assertIsNone(collector.retained_report(out,self.token))
+            (out/'pre-cleanup-report.json').write_bytes(b' '*65537)
+            self.assertIsNone(collector.retained_report(out,self.token))
+
     def test_mismatched_report_nonce_never_reads_binary_or_acknowledges(self):
         collector=module('collect_ansm_native_performance')
         with TemporaryDirectory() as directory:

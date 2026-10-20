@@ -28,7 +28,8 @@ APPROVED_USE_PAYLOAD = Path('core/data/src/main/java/net/plainnotes/app/data/Mea
 APPROVED_INVENTORY_ENCODING = Path('core/data/src/main/java/net/plainnotes/app/data/InventoryEncoding.kt')
 ENCODING_IMPORTS = ['import androidx.sqlite.db.SupportSQLiteDatabase']
 APPROVED_OPERATION_CHAIN = Path('core/data/src/main/java/net/plainnotes/app/data/MeasuredOperationChain.kt')
-CHAIN_IMPORTS = ['import androidx.sqlite.db.SupportSQLiteDatabase', 'import org.json.JSONObject']
+# Read-only cursor typing for the bounded whole-audit snapshot; no new IO/PK dependency.
+CHAIN_IMPORTS = ['import androidx.sqlite.db.SupportSQLiteDatabase', 'import android.database.Cursor', 'import org.json.JSONObject']
 APPROVED_CORRECTIONS = Path('core/data/src/main/java/net/plainnotes/app/data/PackageCorrections.kt')
 CORRECTION_IMPORTS = ['import android.content.ContentValues', 'import android.database.sqlite.SQLiteDatabase', 'import androidx.sqlite.db.SupportSQLiteDatabase', 'import org.json.JSONObject', 'import net.plainnotes.app.domain.measurement.MeasureResult', 'import java.security.MessageDigest', 'import java.time.Instant', 'import java.time.ZoneOffset', 'import java.util.UUID']
 APPROVED_CONSUMPTION_STORE = Path('core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt')

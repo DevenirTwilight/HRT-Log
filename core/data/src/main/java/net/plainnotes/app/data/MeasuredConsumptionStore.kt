@@ -58,7 +58,8 @@ internal object MeasuredConsumptionStore {
         }
         var operationProof:MeasuredOperationChain.AuditProof?=null
             private set
-        fun prepareOperations(db:SupportSQLiteDatabase){check(operationProof==null);operationProof=MeasuredOperationChain.AuditProof.capture(db)}
+        var operationRowByteBudget=MeasuredOperationChain.AuditProof.MAX_ROW_BYTES
+        fun prepareOperations(db:SupportSQLiteDatabase){check(operationProof==null);operationProof=MeasuredOperationChain.AuditProof.capture(db,operationRowByteBudget)}
         fun read(payload:String)=byPayload.getOrPut(payload){PackageMeasurementPayload.read(payload)}
     }
     internal fun auditStagedProjection(db:SupportSQLiteDatabase,dataset:String,containerUuid:String):MeasureResult<AuditedStockProjection> =
@@ -162,15 +163,21 @@ internal object MeasuredConsumptionStore {
     }
 
     /** Full read-only audit shared by internal Repository writes, staging and exact backup restore. */
-    internal fun auditStagedDataset(db:SupportSQLiteDatabase):List<AuditedStockProjection> {
+    internal fun auditStagedDataset(db:SupportSQLiteDatabase):List<AuditedStockProjection> =
+        auditStagedDataset(db,MeasuredOperationChain.AuditProof.MAX_ROW_BYTES)
+    /** Budget zero retains the complete original SQL path as a differential oracle; never skips validation. */
+    internal fun auditStagedDataset(db:SupportSQLiteDatabase,operationRowByteBudget:Long):List<AuditedStockProjection> {
+        require(operationRowByteBudget in 0..MeasuredOperationChain.AuditProof.MAX_ROW_BYTES)
         check(db.inTransaction())
         try {
             BackupValidation.validateCandidateStoredColumns(db)
             val reads=ReferenceAuditReads(db)
-            try {return auditReadSnapshot(reads)} finally {reads.finish()}
+            try {return auditReadSnapshot(reads,operationRowByteBudget)} finally {reads.finish()}
         } catch(e:ReferenceFailure){throw e} catch(e:Exception){fail(ReferenceError.INVALID_SOURCE)}
     }
-    private fun auditReadSnapshot(db:SupportSQLiteDatabase):List<AuditedStockProjection> {
+    private fun auditReadSnapshot(db:SupportSQLiteDatabase):List<AuditedStockProjection> =
+        auditReadSnapshot(db,MeasuredOperationChain.AuditProof.MAX_ROW_BYTES)
+    private fun auditReadSnapshot(db:SupportSQLiteDatabase,operationRowByteBudget:Long):List<AuditedStockProjection> {
             BackupValidation.validateMeasuredCandidateState(db)
             db.query(EXACT_SOURCE_COVERAGE_QUERY).use{require(!it.moveToFirst())}
             db.query("SELECT 1 FROM measured_operation o JOIN reference_event e ON e.operation_uuid=o.operation_uuid LIMIT 1").use{require(!it.moveToFirst())}
@@ -180,10 +187,12 @@ internal object MeasuredConsumptionStore {
             val identities=db.query("SELECT DISTINCT i.uuid,i.dataset_uuid,c.id,c.medication_id,c.capacity,c.initial_used_amount,c.used_amount,c.inventory_encoding FROM reference_identity i JOIN reference_event e ON e.subject_uuid=i.uuid JOIN reference_snapshot s ON s.uuid=e.snapshot_uuid LEFT JOIN supply_container c ON c.id=i.live_handle WHERE i.kind='CONTAINER' AND s.kind='PRESENTATION' ORDER BY i.uuid").use { c ->
                 buildList {while(c.moveToNext())add(Triple(c.getString(0),c.getString(1),if(c.isNull(2))null else projectionBox(c,2)))}
             }
-            val presentations=PresentationAudit()
+            val presentations=PresentationAudit().apply{this.operationRowByteBudget=operationRowByteBudget}
+            try {
             presentations.prepareOperations(db)
-            val projections=db.query(allProjectionOperationQuery).use { cursor ->
-                val stream=ProjectionOperationStream(cursor)
+            val shared=presentations.operationProof?.takeIf{it.hasCompleteRows}
+            val projections=db.query(if(shared==null)allProjectionOperationQuery else sharedProjectionOperationQuery).use { cursor ->
+                val stream=ProjectionOperationStream(cursor,shared)
                 check(presentations.projectionStream==null);presentations.projectionStream=stream
                 try {
                     identities.mapNotNull { (uuid,dataset,capturedBox) ->
@@ -201,6 +210,7 @@ internal object MeasuredConsumptionStore {
             }
             auditOperations(db,presentations)
             return projections
+            } finally {presentations.operationProof?.close()}
     }
 
     internal fun forecastBalances(db:SupportSQLiteDatabase,projections:List<AuditedStockProjection>):Map<Long,List<ConfirmedPhysicalStock>> {
@@ -226,22 +236,27 @@ internal object MeasuredConsumptionStore {
     private val operationClinicalColumns=listOf("revision","taken_utc","taken_zone","status","actual_dose","config_snapshot",
         "rule_version_id","slot_key","scheduled_utc","scheduled_zone","planned_dose","late_after_minutes_snapshot")
     /** LEFT JOINs preserve absent/retired clinical rows and zero-effect operations for the original fail-closed checks. */
-    private inline fun forEachOperation(db:SupportSQLiteDatabase,adjustmentsOnly:Boolean,block:(JSONObject,OperationClinicalRow)->Unit) {
+    private inline fun forEachOperation(db:SupportSQLiteDatabase,adjustmentsOnly:Boolean,proof:MeasuredOperationChain.AuditProof?=null,block:(JSONObject,OperationClinicalRow)->Unit) {
         val columns=ReferenceSchema.columns.getValue("measured_operation")
-        val sql="SELECT "+columns.joinToString(","){"o.`$it`"}+
+        val shared=proof?.takeIf{it.hasCompleteRows}
+        val offset=if(shared==null)columns.size else 1
+        val sql="SELECT "+(if(shared==null)columns.joinToString(","){"o.`$it`"} else "o.operation_uuid")+
             ",i.live_handle,d.id,"+operationClinicalColumns.joinToString(","){"d.`$it`"}+
             " FROM measured_operation o LEFT JOIN reference_identity i ON i.uuid=o.record_uuid LEFT JOIN dose_record d ON d.id=i.live_handle"+
             (if(adjustmentsOnly)" WHERE o.kind='ADJUST'" else "")+" ORDER BY o.operation_uuid"
         db.query(sql).use {c->
             require(c.count<=BackupLimits.MAX_ROWS)
-            while(c.moveToNext())block(JSONObject().apply {
+            while(c.moveToNext())block(if(shared!=null) {
+                require(c.getType(0)==Cursor.FIELD_TYPE_STRING)
+                requireNotNull(shared.row(c.getString(0))) {"Operation absent from complete audit snapshot"}
+            } else JSONObject().apply {
                 for((i,name) in columns.withIndex())put(name,when(c.getType(i)) {
                     Cursor.FIELD_TYPE_NULL->JSONObject.NULL
                     Cursor.FIELD_TYPE_INTEGER->c.getLong(i)
                     Cursor.FIELD_TYPE_STRING->c.getString(i)
                     else->error("Unexpected reference storage type")
                 })
-            },OperationClinicalRow(c,columns.size))
+            },OperationClinicalRow(c,offset))
         }
     }
     /** Verify operations that a ledger-only walk cannot see, including empty sources and no-op counts. */
@@ -285,14 +300,14 @@ internal object MeasuredConsumptionStore {
             physicalStock(frozen,scale,input)
         // Keep only narrow observation evidence; canonical strings already belong to the validated chain.
         val capturedObservations=ArrayList<Triple<String,Int,Long>>()
-        forEachOperation(db,true) {row,_->
+        forEachOperation(db,true,presentations.operationProof) {row,_->
             val capture=adjustmentCapture(row)
             if(capture.bridgeFor==null)capturedObservations.add(Triple(capture.request.getString("container_uuid"),chain.getValue(row.getString("operation_uuid")).sequence,capture.ledgerHead))
         }
         val observations=capturedObservations.groupBy{it.first}
         val consumed=HashSet<Pair<String,Int>>();val reversed=HashSet<String>();val confirmed=HashSet<String>()
         val allocated=HashSet<String>();val visited=HashSet<String>()
-        forEachOperation(db,false) {op,clinical->
+        forEachOperation(db,false,presentations.operationProof) {op,clinical->
             val id=op.getString("operation_uuid");val dataset=op.getString("dataset_uuid")
             require(visited.add(id))
             require(ReferencePayload.uuid(id) && ReferencePayload.uuid(dataset))
@@ -436,8 +451,12 @@ internal object MeasuredConsumptionStore {
     private val allProjectionOperationQuery="SELECT i.uuid,"+projectionOperationFields+
         " FROM supply_transaction t JOIN reference_identity i ON i.live_handle=t.container_id"+projectionOperationJoins+
         " WHERE i.kind='CONTAINER' AND EXISTS(SELECT 1 FROM reference_event e JOIN reference_snapshot s ON s.uuid=e.snapshot_uuid WHERE e.subject_uuid=i.uuid AND s.kind='PRESENTATION') ORDER BY i.uuid,t.id"
+    /** Same ledger/identity/clinical rows; operation headers come from the complete checked read snapshot. */
+    private val sharedProjectionOperationQuery="SELECT i.uuid,t.id,t.dose_record_id,t.dose_revision,t.operation_id,t.kind,t.used_delta,t.reversal_of_id,d.revision"+
+        " FROM supply_transaction t JOIN reference_identity i ON i.live_handle=t.container_id LEFT JOIN dose_record d ON d.id=t.dose_record_id"+
+        " WHERE i.kind='CONTAINER' AND EXISTS(SELECT 1 FROM reference_event e JOIN reference_snapshot s ON s.uuid=e.snapshot_uuid WHERE e.subject_uuid=i.uuid AND s.kind='PRESENTATION') ORDER BY i.uuid,t.id"
     /** Cursor is borrowed from the full-audit use block. No row/envelope survives its callback. */
-    private class ProjectionOperationStream(private val cursor:Cursor) {
+    private class ProjectionOperationStream(private val cursor:Cursor,private val shared:MeasuredOperationChain.AuditProof?=null) {
         private var positioned=cursor.moveToFirst()
         private var previous:String?=null
         private fun uuid():String {require(cursor.getType(0)==Cursor.FIELD_TYPE_STRING);return cursor.getString(0)}
@@ -447,7 +466,7 @@ internal object MeasuredConsumptionStore {
             var count=0
             while(positioned && uuid()==containerUuid) {
                 require(++count<=100000) // Same original per-container bound, not a new joined global limit.
-                readProjectionOperation(cursor,1,block)
+                readProjectionOperation(cursor,1,block,shared)
                 positioned=cursor.moveToNext()
             }
         }
@@ -462,11 +481,11 @@ internal object MeasuredConsumptionStore {
         }
     }
     /** Identical typed decoder for standalone and complete streams; offset accounts only for grouping UUID. */
-    private fun readProjectionOperation(c:Cursor,offset:Int,block:(ProjectionEntry,JSONObject,Long?)->Unit) {
+    private fun readProjectionOperation(c:Cursor,offset:Int,block:(ProjectionEntry,JSONObject,Long?)->Unit,shared:MeasuredOperationChain.AuditProof?=null) {
         require(c.getType(offset+3)==Cursor.FIELD_TYPE_STRING && c.getType(offset+4)==Cursor.FIELD_TYPE_STRING)
         val entry=ProjectionEntry(integer(c,offset),nullableInteger(c,offset+1),nullableInteger(c,offset+2),c.getString(offset+3),c.getString(offset+4),scalar(c,offset+5),nullableInteger(c,offset+6))
-        require(c.getType(offset+7)==Cursor.FIELD_TYPE_STRING) {"Ledger operation missing"}
-        val operation=JSONObject().apply {
+        if(shared==null)require(c.getType(offset+7)==Cursor.FIELD_TYPE_STRING) {"Ledger operation missing"}
+        val operation=if(shared!=null)requireNotNull(shared.row(entry.operation_id)) {"Ledger operation missing"} else JSONObject().apply {
             for((index,name) in projectionOperationColumns.withIndex())put(name,when(c.getType(offset+7+index)) {
                 Cursor.FIELD_TYPE_NULL->JSONObject.NULL
                 Cursor.FIELD_TYPE_INTEGER->c.getLong(offset+7+index)
@@ -474,7 +493,7 @@ internal object MeasuredConsumptionStore {
                 else->error("Unexpected reference storage type")
             })
         }
-        val revision=if(entry.kind=="ADJUST")null else nullableInteger(c,offset+7+projectionOperationColumns.size)
+        val revision=if(entry.kind=="ADJUST")null else nullableInteger(c,offset+7+(if(shared==null)projectionOperationColumns.size else 0))
         block(entry,operation,revision)
     }
     private data class PrefixIndex(val usedAtHead:Map<Long,Long>,val headBeforeSequence:java.util.TreeMap<Int,Long>)

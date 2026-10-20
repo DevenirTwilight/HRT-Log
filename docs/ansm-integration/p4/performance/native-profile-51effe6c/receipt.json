@@ -1,0 +1,20 @@
+{
+  "source_head": "51effe6ce05459606560b4e378eb8240b58ff7f6",
+  "run_id": 39423676688,
+  "artifact_id": 12264498759,
+  "official_archive_sha256": "145e900411216acf18bcb35176db1d94de7061e3c4337a32f7a6c2e9f4f8c060",
+  "archive_crc": "PASS",
+  "result": "FAIL_WRITE_BUDGET",
+  "collection_limitation": "Complete fixed-budget timings preserved, but final collector fell back to truncated logcat after successful internal trace transport. SQL detail unavailable; trace metadata in final collector overwritten UNAVAILABLE. Pre-cleanup report retention fix covered by new tests; not retroactive evidence.",
+  "raw_files_sha256": {
+    "audit-sampling-summary.json": "7d9e99eaf2382b6b7b77c9e814f9700a25c068a971bdbf6c6747d7eef5645e7e",
+    "audit-sampling.trace.gz": "46a7dd62f76957883225f9a49f9476bb632417b9463b851c0ac73b8903574c07",
+    "environment.json": "a68e874713decc4e4365e7d0b0f3b36ee5f942bddebaa4550d9ab744aaf39b8f",
+    "execution.json": "eaa487fc037f01391f82000f56c731769b6aa13c4ba324f4f4344cb7f525b434",
+    "large-ten-year.json": "37b096f95b3a9eb4584be6b0df9bfec1e32ee66f68b88f32112594157ed30ef8",
+    "post-run-kernel-diagnostics.json": "965778bbf9e93dc5621822e3cbae470210c6b51f46313e0da1a0b016d74435a7",
+    "source.json": "0803dbb5c0d5d5c69a3f10b5e4e9b80f21c0b276a06018132ab605c22dbf4ff7",
+    "synthetic-crash-log.txt.gz": "36a6b4c39f95fb4d357da3e095e683723f1af8b5598adcd08ab56e14e428a05b",
+    "trace-collection.json": "10b412c36bd54ba7f92e5dd8c373b1d10bbf758ede79529cd7b2a495e42265f7"
+  }
+}

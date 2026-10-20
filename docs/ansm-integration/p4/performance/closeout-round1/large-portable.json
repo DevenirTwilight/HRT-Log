@@ -1,0 +1,190 @@
+{
+  "status": "DIAGNOSTIC_BUDGET_PASS",
+  "environment": "Robolectric API35 framework SQLite; not SQLCipher\/low-memory API26\/hardware",
+  "stage": "post_write_full_audit",
+  "real_seed_generation_ms": 3349.905172,
+  "synthetic_fixture_expansion_ms": 950.381003,
+  "raw_business_json_bytes": 19660924,
+  "records": 14600,
+  "containers": 2000,
+  "measured_operations": 2000,
+  "presentation_snapshots": 2000,
+  "distinct_synthetic_product_variants": 20,
+  "row_count": 32603,
+  "validated_staging_and_restore_ms": 4626.314399,
+  "full_audit_ms": 1278.929799,
+  "shared_forecast_ms": 1573.437759,
+  "full_encrypted_backup_ms": 1823.393889,
+  "encrypted_archive_bytes": 19661051,
+  "full_encrypted_restore_ms": 4539.948266,
+  "restored_full_audit_ms": 1094.967502,
+  "three_post_restore_writes_ms": 4471.569541,
+  "post_restore_write_including_ticket_ms": [
+    1529.014582,
+    1523.286919,
+    1413.326034
+  ],
+  "post_write_full_audit_ms": 959.138822,
+  "diagnostic_query_stats": {
+    "scope": "DIAGNOSTIC_COUNTED_SQL_NOT_ACCEPTANCE",
+    "queries": 185,
+    "top_query_templates": [
+      {
+        "sql": "SELECT total_changes()",
+        "count": 2
+      },
+      {
+        "sql": "PRAGMA schema_version",
+        "count": 2
+      },
+      {
+        "sql": "PRAGMA foreign_key_check",
+        "count": 2
+      },
+      {
+        "sql": "SELECT COUNT(*) FROM `medication`",
+        "count": 1
+      },
+      {
+        "sql": "PRAGMA table_info(`medication`)",
+        "count": 1
+      },
+      {
+        "sql": "SELECT COALESCE(SUM(COALESCE(length(CAST(`name` AS BLOB)),0)+COALESCE(length(CAST(`molecule` AS BLOB)),0)+COALESCE(length(CAST(`route` AS BLOB)),0)+COALESCE(length(CAST(`unit` AS BLOB)),0)+COALESCE(length(CAST(`site_set` AS BLOB)),0)+COALESCE(length(CAST(`needs_review` AS BLOB)),0)),0),COALESCE(MAX(CASE WHEN ((((`id` IS NOT NULL AND NOT (typeof(`id`)='integer') OR `name` IS NOT NULL AND NOT (typeof(`name`)='text' AND length(`name`)<=1048576)) OR (`molecule` IS NOT NULL AND NOT (typeof(`molecule`)='text' AND length(`molecule`)<=1048576) OR `route` IS NOT NULL AND NOT (typeof(`route`)='text' AND length(`route`)<=1048576))) OR ((`unit` IS NOT NULL AND NOT (typeof(`unit`)='text' AND length(`unit`)<=1048576) OR `dose_per_intake` IS NOT NULL AND NOT (typeof(`dose_per_intake`) IN ('integer','real') AND `dose_per_intake` BETWEEN -1.7976931348623157e308 AND 1.7976931348623157e308)) OR (`container_capacity` IS NOT NULL AND NOT (typeof(`container_capacity`) IN ('integer','real') AND `container_capacity` BETWEEN -1.7976931348623157e308 AND 1.7976931348623157e308) OR `expiry_days_after_open` IS NOT NULL AND NOT (typeof(`expiry_days_after_open`)='integer')))) OR (((`soon_alert_minutes` IS NOT NULL AND NOT (typeof(`soon_alert_minutes`)='integer') OR `late_after_minutes` IS NOT NULL AND NOT (typeof(`late_after_minutes`)='integer')) OR (`site_rotation` IS NOT NULL AND NOT (typeof(`site_rotation`)='integer') OR `site_set` IS NOT NULL AND NOT (typeof(`site_set`)='text' AND length(`site_set`)<=1048576))) OR ((`notifications_on` IS NOT NULL AND NOT (typeof(`notifications_on`)='integer') OR `active` IS NOT NULL AND NOT (typeof(`active`)='integer')) OR (`sort_order` IS NOT NULL AND NOT (typeof(`sort_order`)='integer') OR `needs_review` IS NOT NULL AND NOT (typeof(`needs_review`)='text' AND length(`needs_review`)<=1048576))))) THEN 1 ELSE 0 END),0) FROM `medication`",
+        "count": 1
+      },
+      {
+        "sql": "SELECT COUNT(*) FROM `pk_profile`",
+        "count": 1
+      },
+      {
+        "sql": "PRAGMA table_info(`pk_profile`)",
+        "count": 1
+      },
+      {
+        "sql": "SELECT COALESCE(SUM(COALESCE(length(CAST(`ester` AS BLOB)),0)+COALESCE(length(CAST(`pk_route` AS BLOB)),0)+COALESCE(length(CAST(`gel_site` AS BLOB)),0)),0),COALESCE(MAX(CASE WHEN (((`medication_id` IS NOT NULL AND NOT (typeof(`medication_id`)='integer') OR `ester` IS NOT NULL AND NOT (typeof(`ester`)='text' AND length(`ester`)<=1048576)) OR (`pk_route` IS NOT NULL AND NOT (typeof(`pk_route`)='text' AND length(`pk_route`)<=1048576) OR `sl_tier` IS NOT NULL AND NOT (typeof(`sl_tier`)='integer'))) OR ((`gel_product_id` IS NOT NULL AND NOT (typeof(`gel_product_id`)='integer') OR `gel_site` IS NOT NULL AND NOT (typeof(`gel_site`)='text' AND length(`gel_site`)<=1048576)) OR (`gel_area_cm2` IS NOT NULL AND NOT (typeof(`gel_area_cm2`) IN ('integer','real') AND `gel_area_cm2` BETWEEN -1.7976931348623157e308 AND 1.7976931348623157e308) OR `patch_release_ug_day` IS NOT NULL AND NOT (typeof(`patch_release_ug_day`) IN ('integer','real') AND `patch_release_ug_day` BETWEEN -1.7976931348623157e308 AND 1.7976931348623157e308)))) THEN 1 ELSE 0 END),0) FROM `pk_profile`",
+        "count": 1
+      },
+      {
+        "sql": "SELECT COUNT(*) FROM `schedule_rule`",
+        "count": 1
+      },
+      {
+        "sql": "PRAGMA table_info(`schedule_rule`)",
+        "count": 1
+      },
+      {
+        "sql": "SELECT COALESCE(SUM(COALESCE(length(CAST(`kind` AS BLOB)),0)+COALESCE(length(CAST(`anchor_local` AS BLOB)),0)+COALESCE(length(CAST(`anchor_zone` AS BLOB)),0)+COALESCE(length(CAST(`effective_zone` AS BLOB)),0)+COALESCE(length(CAST(`config_snapshot` AS BLOB)),0)),0),COALESCE(MAX(CASE WHEN ((((`id` IS NOT NULL AND NOT (typeof(`id`)='integer') OR `medication_id` IS NOT NULL AND NOT (typeof(`medication_id`)='integer')) OR (`kind` IS NOT NULL AND NOT (typeof(`kind`)='text' AND length(`kind`)<=1048576) OR `interval` IS NOT NULL AND NOT (typeof(`interval`)='integer'))) OR ((`weekday_mask` IS NOT NULL AND NOT (typeof(`weekday_mask`)='integer') OR `anchor_local` IS NOT NULL AND NOT (typeof(`anchor_local`)='text' AND length(`anchor_local`)<=1048576)) OR (`anchor_zone` IS NOT NULL AND NOT (typeof(`anchor_zone`)='text' AND length(`anchor_zone`)<=1048576) OR `anchor_utc` IS NOT NULL AND NOT (typeof(`anchor_utc`)='integer')))) OR (((`effective_from_utc` IS NOT NULL AND NOT (typeof(`effective_from_utc`)='integer') OR `effective_until_utc` IS NOT NULL AND NOT (typeof(`effective_until_utc`)='integer')) OR (`effective_zone` IS NOT NULL AND NOT (typeof(`effective_zone`)='text' AND length(`effective_zone`)<=1048576) OR `missed_tracking_from_utc` IS NOT NULL AND NOT (typeof(`missed_tracking_from_utc`)='integer'))) OR ((`dose_snapshot` IS NOT NULL AND NOT (typeof(`dose_snapshot`) IN ('integer','real') AND `dose_snapshot` BETWEEN -1.7976931348623157e308 AND 1.7976931348623157e308) OR `soon_snapshot` IS NOT NULL AND NOT (typeof(`soon_snapshot`)='integer')) OR (`late_snapshot` IS NOT NULL AND NOT (typeof(`late_snapshot`)='integer') OR `config_snapshot` IS NOT NULL AND NOT (typeof(`config_snapshot`)='text' AND length(`config_snapshot`)<=1048576))))) THEN 1 ELSE 0 END),0) FROM `schedule_rule`",
+        "count": 1
+      },
+      {
+        "sql": "SELECT COUNT(*) FROM `rule_time`",
+        "count": 1
+      },
+      {
+        "sql": "PRAGMA table_info(`rule_time`)",
+        "count": 1
+      },
+      {
+        "sql": "SELECT COALESCE(SUM(COALESCE(length(CAST(`local_time` AS BLOB)),0)),0),COALESCE(MAX(CASE WHEN ((`id` IS NOT NULL AND NOT (typeof(`id`)='integer') OR `rule_id` IS NOT NULL AND NOT (typeof(`rule_id`)='integer')) OR (`local_time` IS NOT NULL AND NOT (typeof(`local_time`)='text' AND length(`local_time`)<=1048576) OR `dose_override` IS NOT NULL AND NOT (typeof(`dose_override`) IN ('integer','real') AND `dose_override` BETWEEN -1.7976931348623157e308 AND 1.7976931348623157e308))) THEN 1 ELSE 0 END),0) FROM `rule_time`",
+        "count": 1
+      },
+      {
+        "sql": "SELECT COUNT(*) FROM `slot_override`",
+        "count": 1
+      },
+      {
+        "sql": "PRAGMA table_info(`slot_override`)",
+        "count": 1
+      },
+      {
+        "sql": "SELECT COALESCE(SUM(COALESCE(length(CAST(`slot_key` AS BLOB)),0)+COALESCE(length(CAST(`rescheduled_zone` AS BLOB)),0)),0),COALESCE(MAX(CASE WHEN (((`id` IS NOT NULL AND NOT (typeof(`id`)='integer') OR `medication_id` IS NOT NULL AND NOT (typeof(`medication_id`)='integer')) OR (`rule_version_id` IS NOT NULL AND NOT (typeof(`rule_version_id`)='integer') OR `slot_key` IS NOT NULL AND NOT (typeof(`slot_key`)='text' AND length(`slot_key`)<=1048576))) OR ((`rescheduled_utc` IS NOT NULL AND NOT (typeof(`rescheduled_utc`)='integer') OR `rescheduled_zone` IS NOT NULL AND NOT (typeof(`rescheduled_zone`)='text' AND length(`rescheduled_zone`)<=1048576)) OR (`dose_override` IS NOT NULL AND NOT (typeof(`dose_override`) IN ('integer','real') AND `dose_override` BETWEEN -1.7976931348623157e308 AND 1.7976931348623157e308) OR `skipped` IS NOT NULL AND NOT (typeof(`skipped`)='integer')))) THEN 1 ELSE 0 END),0) FROM `slot_override`",
+        "count": 1
+      },
+      {
+        "sql": "SELECT COUNT(*) FROM `dose_record`",
+        "count": 1
+      },
+      {
+        "sql": "PRAGMA table_info(`dose_record`)",
+        "count": 1
+      },
+      {
+        "sql": "SELECT COALESCE(SUM(COALESCE(length(CAST(`slot_key` AS BLOB)),0)+COALESCE(length(CAST(`scheduled_zone` AS BLOB)),0)+COALESCE(length(CAST(`taken_zone` AS BLOB)),0)+COALESCE(length(CAST(`status` AS BLOB)),0)+COALESCE(length(CAST(`site` AS BLOB)),0)+COALESCE(length(CAST(`note` AS BLOB)),0)+COALESCE(length(CAST(`origin` AS BLOB)),0)+COALESCE(length(CAST(`source_record_key` AS BLOB)),0)+COALESCE(length(CAST(`config_snapshot` AS BLOB)),0)),0),COALESCE(MAX(CASE WHEN (((((`id` IS NOT NULL AND NOT (typeof(`id`)='integer') OR `medication_id` IS NOT NULL AND NOT (typeof(`medication_id`)='integer')) OR (`rule_version_id` IS NOT NULL AND NOT (typeof(`rule_version_id`)='integer') OR `slot_key` IS NOT NULL AND NOT (typeof(`slot_key`)='text' AND length(`slot_key`)<=1048576))) OR ((`scheduled_utc` IS NOT NULL AND NOT (typeof(`scheduled_utc`)='integer') OR `scheduled_zone` IS NOT NULL AND NOT (typeof(`scheduled_zone`)='text' AND length(`scheduled_zone`)<=1048576)) OR (`planned_dose` IS NOT NULL AND NOT (typeof(`planned_dose`) IN ('integer','real') AND `planned_dose` BETWEEN -1.7976931348623157e308 AND 1.7976931348623157e308) OR `late_after_minutes_snapshot` IS NOT NULL AND NOT (typeof(`late_after_minutes_snapshot`)='integer')))) OR (((`taken_utc` IS NOT NULL AND NOT (typeof(`taken_utc`)='integer') OR `taken_zone` IS NOT NULL AND NOT (typeof(`taken_zone`)='text' AND length(`taken_zone`)<=1048576)) OR (`actual_dose` IS NOT NULL AND NOT (typeof(`actual_dose`) IN ('integer','real') AND `actual_dose` BETWEEN -1.7976931348623157e308 AND 1.7976931348623157e308) OR `unallocated_supply_amount` IS NOT NULL AND NOT (typeof(`unallocated_supply_amount`) IN ('integer','real') AND `unallocated_supply_amount` BETWEEN -1.7976931348623157e308 AND 1.7976931348623157e308))) OR ((`status` IS NOT NULL AND NOT (typeof(`status`)='text' AND length(`status`)<=1048576) OR `site` IS NOT NULL AND NOT (typeof(`site`)='text' AND length(`site`)<=1048576)) OR (`note` IS NOT NULL AND NOT (typeof(`note`)='text' AND length(`note`)<=1048576) OR `origin` IS NOT NULL AND NOT (typeof(`origin`)='text' AND length(`origin`)<=1048576))))) OR ((`source_record_key` IS NOT NULL AND NOT (typeof(`source_record_key`)='text' AND length(`source_record_key`)<=1048576) OR `revision` IS NOT NULL AND NOT (typeof(`revision`)='integer')) OR (`deleted_at_utc` IS NOT NULL AND NOT (typeof(`deleted_at_utc`)='integer') OR `config_snapshot` IS NOT NULL AND NOT (typeof(`config_snapshot`)='text' AND length(`config_snapshot`)<=1048576)))) THEN 1 ELSE 0 END),0) FROM `dose_record`",
+        "count": 1
+      },
+      {
+        "sql": "SELECT COUNT(*) FROM `supply_container`",
+        "count": 1
+      },
+      {
+        "sql": "PRAGMA table_info(`supply_container`)",
+        "count": 1
+      },
+      {
+        "sql": "SELECT COALESCE(SUM(COALESCE(length(CAST(`opened_on` AS BLOB)),0)+COALESCE(length(CAST(`state` AS BLOB)),0)+COALESCE(length(CAST(`source_note` AS BLOB)),0)+COALESCE(length(CAST(`batch` AS BLOB)),0)+COALESCE(length(CAST(`inventory_encoding` AS BLOB)),0)),0),COALESCE(MAX(CASE WHEN ((((`id` IS NOT NULL AND NOT (typeof(`id`)='integer') OR `medication_id` IS NOT NULL AND NOT (typeof(`medication_id`)='integer')) OR (`capacity` IS NOT NULL AND NOT (typeof(`capacity`) IN ('integer','real') AND `capacity` BETWEEN -1.7976931348623157e308 AND 1.7976931348623157e308) OR `initial_used_amount` IS NOT NULL AND NOT (typeof(`initial_used_amount`) IN ('integer','real') AND `initial_used_amount` BETWEEN -1.7976931348623157e308 AND 1.7976931348623157e308))) OR ((`used_amount` IS NOT NULL AND NOT (typeof(`used_amount`) IN ('integer','real') AND `used_amount` BETWEEN -1.7976931348623157e308 AND 1.7976931348623157e308) OR `opened_on` IS NOT NULL AND NOT (typeof(`opened_on`)='text' AND length(`opened_on`)<=1048576)) OR (`state` IS NOT NULL AND NOT (typeof(`state`)='text' AND length(`state`)<=1048576) OR `source_note` IS NOT NULL AND NOT (typeof(`source_note`)='text' AND length(`source_note`)<=1048576)))) OR (`batch` IS NOT NULL AND NOT (typeof(`batch`)='text' AND length(`batch`)<=1048576) OR `inventory_encoding` IS NOT NULL AND NOT (typeof(`inventory_encoding`)='text' AND length(`inventory_encoding`)<=1048576))) THEN 1 ELSE 0 END),0) FROM `supply_container`",
+        "count": 1
+      },
+      {
+        "sql": "SELECT COUNT(*) FROM `supply_transaction`",
+        "count": 1
+      },
+      {
+        "sql": "PRAGMA table_info(`supply_transaction`)",
+        "count": 1
+      },
+      {
+        "sql": "SELECT COALESCE(SUM(COALESCE(length(CAST(`operation_id` AS BLOB)),0)+COALESCE(length(CAST(`kind` AS BLOB)),0)+COALESCE(length(CAST(`created_zone` AS BLOB)),0)+COALESCE(length(CAST(`reason` AS BLOB)),0)),0),COALESCE(MAX(CASE WHEN ((((`id` IS NOT NULL AND NOT (typeof(`id`)='integer') OR `container_id` IS NOT NULL AND NOT (typeof(`container_id`)='integer')) OR (`dose_record_id` IS NOT NULL AND NOT (typeof(`dose_record_id`)='integer') OR `dose_revision` IS NOT NULL AND NOT (typeof(`dose_revision`)='integer'))) OR ((`operation_id` IS NOT NULL AND NOT (typeof(`operation_id`)='text' AND length(`operation_id`)<=1048576) OR `kind` IS NOT NULL AND NOT (typeof(`kind`)='text' AND length(`kind`)<=1048576)) OR (`used_delta` IS NOT NULL AND NOT (typeof(`used_delta`) IN ('integer','real') AND `used_delta` BETWEEN -1.7976931348623157e308 AND 1.7976931348623157e308) OR `reversal_of_id` IS NOT NULL AND NOT (typeof(`reversal_of_id`)='integer')))) OR ((`created_utc` IS NOT NULL AND NOT (typeof(`created_utc`)='integer') OR `created_zone` IS NOT NULL AND NOT (typeof(`created_zone`)='text' AND length(`created_zone`)<=1048576)) OR `reason` IS NOT NULL AND NOT (typeof(`reason`)='text' AND length(`reason`)<=1048576))) THEN 1 ELSE 0 END),0) FROM `supply_transaction`",
+        "count": 1
+      },
+      {
+        "sql": "SELECT COUNT(*) FROM `retained_slot`",
+        "count": 1
+      },
+      {
+        "sql": "PRAGMA table_info(`retained_slot`)",
+        "count": 1
+      },
+      {
+        "sql": "SELECT COALESCE(SUM(COALESCE(length(CAST(`slot_key` AS BLOB)),0)+COALESCE(length(CAST(`zone` AS BLOB)),0)),0),COALESCE(MAX(CASE WHEN ((((`slot_key` IS NOT NULL AND NOT (typeof(`slot_key`)='text' AND length(`slot_key`)<=1048576) OR `rule_id` IS NOT NULL AND NOT (typeof(`rule_id`)='integer')) OR (`medication_id` IS NOT NULL AND NOT (typeof(`medication_id`)='integer') OR `original_utc` IS NOT NULL AND NOT (typeof(`original_utc`)='integer'))) OR ((`at_utc` IS NOT NULL AND NOT (typeof(`at_utc`)='integer') OR `zone` IS NOT NULL AND NOT (typeof(`zone`)='text' AND length(`zone`)<=1048576)) OR (`dose` IS NOT NULL AND NOT (typeof(`dose`) IN ('integer','real') AND `dose` BETWEEN -1.7976931348623157e308 AND 1.7976931348623157e308) OR `soon_minutes` IS NOT NULL AND NOT (typeof(`soon_minutes`)='integer')))) OR (`late_minutes` IS NOT NULL AND NOT (typeof(`late_minutes`)='integer') OR `tracking_from_utc` IS NOT NULL AND NOT (typeof(`tracking_from_utc`)='integer'))) THEN 1 ELSE 0 END),0) FROM `retained_slot`",
+        "count": 1
+      }
+    ],
+    "string_utf8_bytes_by_column": {
+      "name": 2894,
+      "type": 1454,
+      "uuid": 1369296,
+      "dataset_uuid": 576468,
+      "kind": 120091,
+      "owner_uuid": 144108,
+      "operation_uuid": 360324,
+      "subject_uuid": 72000,
+      "action": 8000,
+      "snapshot_uuid": 72000,
+      "request_sha256": 256192,
+      "namespace": 48000,
+      "source_version": 74000,
+      "payload_json": 3624000,
+      "payload_sha256": 384192,
+      "record_uuid": 144216,
+      "actual_snapshot_uuid": 72108,
+      "container_uuid": 144216,
+      "presentation_event_uuid": 72108,
+      "quantity": 6009,
+      "unit": 12018,
+      "state": 12000,
+      "inventory_encoding": 34000,
+      "input_json": 3580164,
+      "operation_id": 72108,
+      "taken_zone": 6009,
+      "status": 14021,
+      "config_snapshot": 280420
+    }
+  },
+  "peak_observed_jvm_heap_bytes": 465066808,
+  "heap_sample_interval_ms": 10,
+  "heap_is_not_native_rss": true,
+  "physical_device_acceptance": "NOT_RUN",
+  "api26_low_memory_acceptance": "NOT_RUN",
+  "budget_exceeded": []
+}

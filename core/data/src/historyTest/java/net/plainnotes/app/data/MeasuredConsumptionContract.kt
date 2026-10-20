@@ -37,6 +37,53 @@ abstract class MeasuredConsumptionContract {
     private suspend fun consume(r:RecordEntity,box:CreatedMeasuredContainer,uses:List<ConfirmedStockUse>,op:String=UUID.randomUUID().toString())=db.withTransaction{MeasuredConsumptionStore.consumeNewRecord(db,box.scope,r,op,uses,at)}
     private fun count(table:String)=raw.query("SELECT COUNT(*) FROM `$table`").use{it.moveToFirst();it.getInt(0)}
     private suspend fun rejects(code:ReferenceError,block:suspend()->Unit){try{block();fail("Expected $code")}catch(e:ReferenceFailure){assertEquals(code,e.code)}}
+    @Test fun operationAuditRowsAreBoundedFreshCopiesAndReleasedAtScopeEnd()=runBlocking {
+        val m=med();val b=box(m);val r=record(m);val op=UUID.randomUUID().toString()
+        consume(r,b,listOf(use(b)),op)
+        db.withTransaction {
+            val expected=ReferenceStore.row(raw,"measured_operation","operation_uuid=?",arrayOf(op))!!.toString()
+            val proof=MeasuredOperationChain.AuditProof.capture(raw)
+            assertTrue(proof.hasCompleteRows)
+            val first=proof.row(op)!!;assertEquals(expected,first.toString())
+            first.put("dataset_uuid","SYNTHETIC changed copy")
+            assertEquals(expected,proof.row(op)!!.toString())
+            assertNull(proof.row(UUID.randomUUID().toString()))
+            proof.close()
+            try{proof.row(op);fail("Released audit rows remained usable")}catch(_:IllegalStateException){}
+            MeasuredOperationChain.AuditProof.capture(raw,0).use {fallback->
+                assertFalse(fallback.hasCompleteRows);assertNull(fallback.row(op))
+            }
+        }
+    }
+    @Test fun fullAuditOperationRowReuseMatchesZeroAndInsufficientBudgetWithoutWrites()=runBlocking {
+        val m=med();val a=box(m);val b=box(m);val r=record(m)
+        consume(r,a,listOf(use(a),use(b)))
+        db.withTransaction {
+            val before=RawData.dump(raw).toString()
+            val uncached=MeasuredConsumptionStore.auditStagedDataset(raw,0)
+            assertEquals(uncached,MeasuredConsumptionStore.auditStagedDataset(raw,1))
+            assertEquals(uncached,MeasuredConsumptionStore.auditStagedDataset(raw))
+            assertEquals(before,RawData.dump(raw).toString())
+        }
+    }
+    @Test fun operationRowReuseCannotApproveChangesDuringItsReadOnlyAudit()=runBlocking {
+        val m=med();val b=box(m);consume(record(m),b,listOf(use(b)))
+        val before=RawData.dump(raw).toString();var injected=false
+        rejects(ReferenceError.INVALID_SOURCE) {db.withTransaction {
+            val observed=object:androidx.sqlite.db.SupportSQLiteDatabase by raw {
+                override fun query(sql:String):android.database.Cursor {
+                    if(!injected && sql.startsWith("SELECT i.uuid,t.id,") && !sql.contains("o.`operation_uuid`")) {
+                        injected=true
+                        raw.execSQL("INSERT INTO day_note(date,text) VALUES('2001-02-03','SYNTHETIC illicit audit write')")
+                    }
+                    return raw.query(sql)
+                }
+            }
+            MeasuredConsumptionStore.auditStagedDataset(observed)
+        }}
+        assertTrue("Probe never reached the shared-row stream",injected)
+        assertEquals(before,RawData.dump(raw).toString())
+    }
     @Test fun fullLedgerStreamRejectsExtraDuplicateMissingAndUnorderedGroupsAndClosesItsCursor()=runBlocking {
         val m=med();val a=box(m);val b=box(m);val r=record(m);consume(r,a,listOf(use(a),use(b)))
         db.withTransaction {
@@ -292,9 +339,37 @@ abstract class MeasuredConsumptionContract {
                     override fun query(sql:String)=wrap(sql,raw.query(sql))
                     override fun query(sql:String,bindArgs:Array<out Any?>)=wrap(sql,raw.query(sql,bindArgs))
                 }
-                val error=assertThrows(ReferenceFailure::class.java){MeasuredConsumptionStore.auditStagedDataset(forged)}
+                // Preserve the original post-chain SQL forgery oracle on the full uncached path.
+                val error=assertThrows(ReferenceFailure::class.java){MeasuredConsumptionStore.auditStagedDataset(forged,0)}
                 assertEquals(ReferenceError.INVALID_SOURCE,error.code)
                 assertTrue("Fixture must replace $field after the genuine complete chain read",chainRead && injected>0)
+                assertEquals(before,RawData.dump(raw).toString())
+                assertEquals(0L,MeasuredConsumptionStore.auditStagedDataset(raw).single().usedQuanta)
+            }
+        }
+    }
+    @Test fun capturedOperationRowsNeverTrustForgedTextOrHeadersInsteadOfCanonicalRequests()=runBlocking {
+        val m=med();val b=box(m);consume(record(m),b,emptyList())
+        db.withTransaction {
+            val before=RawData.dump(raw).toString()
+            for(field in listOf("input_json","dataset_uuid")) {
+                var injected=0;val otherDataset=UUID.randomUUID().toString()
+                val forged=object:androidx.sqlite.db.SupportSQLiteDatabase by raw {
+                    override fun query(sql:String):android.database.Cursor {
+                        val cursor=raw.query(sql)
+                        if(!sql.startsWith("SELECT `operation_uuid`,`dataset_uuid`,"))return cursor
+                        return object:android.database.CursorWrapper(cursor) {
+                            override fun getString(columnIndex:Int):String {
+                                val original=super.getString(columnIndex)
+                                if(getColumnName(columnIndex)==field){injected++;return if(field=="input_json")" "+original else otherDataset}
+                                return original
+                            }
+                        }
+                    }
+                }
+                val error=assertThrows(ReferenceFailure::class.java){MeasuredConsumptionStore.auditStagedDataset(forged)}
+                assertEquals(ReferenceError.INVALID_SOURCE,error.code)
+                assertTrue("Fixture must replace captured $field",injected>0)
                 assertEquals(before,RawData.dump(raw).toString())
                 assertEquals(0L,MeasuredConsumptionStore.auditStagedDataset(raw).single().usedQuanta)
             }

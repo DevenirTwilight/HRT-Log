@@ -163,6 +163,10 @@ def watch_trace_once(out, token, execute=subprocess.check_output, *, internal=Fa
     meta['source_token'] = token
     (out/'trace-collection.json').write_text(json.dumps(meta,indent=2)+'\n')
     if 'sha256' in meta:
+        retained = json.dumps(report,ensure_ascii=False,separators=(',',':')).encode('utf-8')
+        if len(retained)>65536:
+            raise ValueError('Synthetic report exceeds metadata limit')
+        (out/'pre-cleanup-report.json').write_bytes(retained)
         ack=out/'trace-collected.ack'
         ack.write_text(token)
         if internal:transport_ack(folder,'trace-collected.ack',token,execute)
@@ -221,6 +225,25 @@ def watch_trace(out, stop, execute=subprocess.check_output, *, expected_token):
         stop.wait(0.25)
 
 
+def retained_report(out, expected_token):
+    if not valid_token(expected_token):
+        return None
+    try:
+        with (out/'pre-cleanup-report.json').open('rb') as source:
+            data=source.read(65537)
+        if len(data)>65536:
+            return None
+        report=json.loads(data)
+        if (not isinstance(report,dict)
+                or report.get('environment') != 'Native API26 SQLCipher synthetic fixture; emulator, not physical hardware'
+                or report.get('diagnostic_run_token') != expected_token
+                or cached_trace(report,out) is None):
+            return None
+        return report
+    except (OSError,ValueError,KeyError,TypeError):
+        return None
+
+
 def collect(expected_token=None):
     out = Path('core/data/build/reports/ansm-native-performance')
     out.mkdir(parents=True, exist_ok=True)
@@ -232,10 +255,14 @@ def collect(expected_token=None):
         data = subprocess.check_output(['adb', 'exec-out', 'cat', paths[0]])
         report = json.loads(data)
     else:
-        try:
-            report = log_report((out / 'synthetic-crash-log.txt').read_text(),expected_token)
-        except (OSError, ValueError) as error:
-            raise SystemExit('Synthetic report unavailable in external files and logcat') from error
+        report=retained_report(out,expected_token)
+        if report is not None:
+            report['collection_metadata_source']='VALIDATED_PRE_CLEANUP_REPORT'
+        else:
+            try:
+                report = log_report((out / 'synthetic-crash-log.txt').read_text(),expected_token)
+            except (OSError, ValueError) as error:
+                raise SystemExit('Synthetic report unavailable in external files and logcat') from error
         data = (json.dumps(report, indent=2) + '\n').encode()
     if expected_token is not None and report.get('diagnostic_run_token') != expected_token:
         raise SystemExit('Synthetic report belongs to another run')
