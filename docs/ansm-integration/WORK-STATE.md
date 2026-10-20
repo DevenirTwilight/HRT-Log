@@ -1,3 +1,11 @@
+## P4 验证架构检查点：反例已复现，尚无生产增量验证证明 — 2026-10-20
+
+最新已推送证据基线948f8b9f、默认分支320171cd；#57保持Draft/入口OFF。新增REQUIREMENTS§120和validation-architecture/write-path-matrix.md。所有新增代码仅historyTest；没有生产、Schema、备份或UI修改。A（全审计+连接/epoch/SQLite计数）在savepoint回滚后错误匹配坏状态；B的事务TEMP seal可识别这个回滚，但FK依赖闭包+容器投影会漏掉有效链上的重复零消耗CONSUME。后者不是证明所有增量机制都不可行，而是明确该依赖规则不完整；不能接线。原始RED及错误准备夹具均保留，未增造跨表UUID唯一性。
+
+完整数据回归470项PASS（0失败/错误/跳过），其中8项架构测试PASS，Android测试源码编译PASS。63项Python边界/原生工具测试PASS，最初导入路径错误及新增测试枚举拼写编译错误保留，修正未改变断言。新API26/29/35执行待CI；进程强杀、池并发、完整转换差分与快验证器NOT_RUN/NOT_IMPLEMENTED。完整审计仍是独立oracle。
+
+最新948原生39430822597/artifact12268222179官方SHA/CRC已核验；audit5.63s/forecast5.26s/backup5.90s/restore27.25s通过，但三写7.51/7.16/6.70s仍FAIL。六常规CI通过不能覆盖原生失败；没有准入、Ready、合并或签名发布。本轮回归已保存，下一步等待新共享测试原生CI；完整语义依赖及可信发布边界未证明前，不再以微优化或不安全快路径冒充完成。
+
 ## 2026-10-20 有限收尾完成，P4仍PRODUCTION_BLOCKED
 
 生产/原生候选0f33ae66，原生39428902719完整原规模/内存/预算执行：audit7.53s、forecast7.92s、backup8.35s、restore44.56s，本轮无OOM/观测Java堆119.94MiB；三真实写7.87/7.68/7.57s FAIL。停止继续试探性优化，#57保持Draft、入口OFF，不合并。原OOM失败/后续NOT_RUN保留；缓存没有代替全审计或跨写信任。精确收据、三API实际129库存合同/15备份迁移合同、CI未齐和下一最小安全证明边界统一见[p4 closeout report](p4/closeout-report-2026-10-20.md)。这不是PRODUCTION_IMPLEMENTED或RELEASED；UI/P5/P6/PK/Schema/crypto/发布未扩张。

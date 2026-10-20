@@ -1,0 +1,30 @@
+{
+  "reviewed_baseline": "948f8b9f2524f953ed0302025ef582b5dc961ee1",
+  "production_diff_at_checkpoint": [],
+  "files": {
+    "core/data/src/main/java/net/plainnotes/app/data/BackupValidation.kt": "af243969f00ca11d31451fdc960765c61c7a9e00666389525dd56587c151f3e8",
+    "core/data/src/main/java/net/plainnotes/app/data/DataTransfer.kt": "20c90ae03b5e75200d1c753b6e4fb005abcdef15769363f95f5b9e7ebc53c496",
+    "core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt": "5d80b2f78fd5ef479d9922510a3632fbc1e87cf12d633444742b972efa18ccab",
+    "core/data/src/main/java/net/plainnotes/app/data/InventoryEncoding.kt": "69f2b69e4edde4b4e0b35a142c21be6fee1f04d18d9163fb5e65a842b9500898",
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt": "50d7be0284b463224ecbd93e88a86e7a71b8ed510ad353dcefaf3c85594d06bb",
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredContainerStore.kt": "109b77ba0da6ac3ff07958298881144193c345c7754ac0e913f1b1004e5d84c8",
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredOperationChain.kt": "24b4ffe6c0454e0f372a6b0edfd8a72abec98ba29a50bfda4db48e046ec0c940",
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredReconciliation.kt": "b0274acb62bd0bdf93731b1cb04cb3df085c68428abf08247a49352fb1ee854c",
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredUseIntegration.kt": "08f8f099882b2eddf5089852e0bd7ecbd6a03c114011bc6df01754616a38cb86",
+    "core/data/src/main/java/net/plainnotes/app/data/Migrations.kt": "fc1ecddd96aad403695ef9de745f5e2955d4d1cf6c7f792be8ae1cba34a3edb7",
+    "core/data/src/main/java/net/plainnotes/app/data/NotesDao.kt": "dba39f022b408cf58f83a2c122f5387fbc8e890110650691cdf6c7ab52149d5a",
+    "core/data/src/main/java/net/plainnotes/app/data/NotesDatabase.kt": "a55d7e2fb809700221be977f09c90d0335774d25b257e3fbe8ebd569f989f3ae",
+    "core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt": "b667c521270706e43b05f718604d1e681d99b79d9a775b8f3db0f5b1c124c050",
+    "core/data/src/main/java/net/plainnotes/app/data/PackageCorrections.kt": "31291bd1d83fc52de035f47d1fa37c72401e3a1771919a6c9632d70e6535cf6e",
+    "core/data/src/main/java/net/plainnotes/app/data/RecordBackupCompatibility.kt": "51376d35a31fc8e5c705280eca341232d5cc8431d2fbfe036df22b32a0b40e16",
+    "core/data/src/main/java/net/plainnotes/app/data/ReferenceAuditReads.kt": "212d15779fcb540075a1dc9682c509b7bc4e13ad812be5d9ed11a848d9fdea32",
+    "core/data/src/main/java/net/plainnotes/app/data/ReferenceDependencies.kt": "f1f913ad54d8ec4d2c3790ad20c710f29c6cd2f643f1c610565876a3d9b3962a",
+    "core/data/src/main/java/net/plainnotes/app/data/ReferenceSchema.kt": "c805f953794e1735015d689fb5bb2405cb9a66b91cda48545b914e5b5ba905c1",
+    "core/data/src/main/java/net/plainnotes/app/data/ReferenceStore.kt": "d5b2c6d6eb043188ee385c7314f5c1cf1d793162d7eff7cb44561ba565c09ec8",
+    "core/data/src/main/java/net/plainnotes/app/data/SchemaGuards.kt": "ce116e6533f0273730fe5428783424a0caa9150b6a68c95e562a05008eea5bd3",
+    "core/data/src/main/java/net/plainnotes/app/data/SupplyLedger.kt": "27997753e7f892918e5845abb9e24b10ac4401142fc15001acd051ad98f41d4e",
+    "core/data/src/main/java/net/plainnotes/app/data/Trash.kt": "ead5d510da00ab7a1cbaef64107e5d930d78b72c9b242a02434d2d9df36daca4",
+    "core/data/src/historyTest/java/net/plainnotes/app/data/ValidationArchitectureProbe.kt": "719554f0826aa7934bab75be3da8ae8057456dbd8749e26a34773026668e6814",
+    "core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt": "f0e163d71c6ce92a78513373ae769d6af4a0e7db42f2ac6d03b54f11781fe4ae"
+  }
+}

@@ -37,6 +37,164 @@ abstract class MeasuredConsumptionContract {
     private suspend fun consume(r:RecordEntity,box:CreatedMeasuredContainer,uses:List<ConfirmedStockUse>,op:String=UUID.randomUUID().toString())=db.withTransaction{MeasuredConsumptionStore.consumeNewRecord(db,box.scope,r,op,uses,at)}
     private fun count(table:String)=raw.query("SELECT COUNT(*) FROM `$table`").use{it.moveToFirst();it.getInt(0)}
     private suspend fun rejects(code:ReferenceError,block:suspend()->Unit){try{block();fail("Expected $code")}catch(e:ReferenceFailure){assertEquals(code,e.code)}}
+    @Test fun architectureCounterOnlyWitnessIsRefutedByRollbackWithoutAnyStampChange()=runBlocking {
+        val m=med();val b=box(m);val r=record(m);consume(r,b,listOf(use(b)))
+        val before=RawData.dump(raw).toString()
+        class SyntheticRollback:RuntimeException()
+        try {db.withTransaction {
+            raw.execSQL("UPDATE dose_record SET actual_dose=0.2 WHERE id=?",arrayOf(r.id))
+            val invalid=RawData.dump(raw).toString()
+            rejects(ReferenceError.INVALID_SOURCE){MeasuredConsumptionStore.auditStagedDataset(raw)}
+            raw.execSQL("SAVEPOINT synthetic_repair")
+            raw.execSQL("UPDATE dose_record SET actual_dose=0.1 WHERE id=?",arrayOf(r.id))
+            val witness=ValidationArchitectureProbe.auditAndCapture(raw)
+            assertTrue(witness.matches(raw))
+            raw.execSQL("ROLLBACK TO synthetic_repair");raw.execSQL("RELEASE synthetic_repair")
+            assertEquals(invalid,RawData.dump(raw).toString())
+            // The initial parity RED is retained. This asserts rejection of the hypothesis, not validator success.
+            assertTrue("All proposed counters really do match the wrong state",witness.matches(raw))
+            rejects(ReferenceError.INVALID_SOURCE){MeasuredConsumptionStore.auditStagedDataset(raw)}
+            throw SyntheticRollback()
+        }}catch(_:SyntheticRollback){}
+        assertEquals(before,RawData.dump(raw).toString())
+    }
+    @Test fun architectureForeignKeyAndBalanceHypothesisIsRefutedByZeroEffectDuplicateUse()=runBlocking {
+        val m=med();val b=box(m);val before=RawData.dump(raw).toString()
+        class SyntheticRollback:RuntimeException()
+        try {db.withTransaction {
+            ValidationArchitectureProbe.Journal(raw).use {journal->
+                val seal=journal.sealAfterFullAudit();assertTrue(journal.unchanged(seal))
+                val r=record(m)
+                val op=UUID.randomUUID().toString()
+                consume(r,b,emptyList(),op)
+                MeasuredConsumptionStore.auditStagedDataset(raw) // Genuine zero-stock-effect use is valid.
+                val duplicate=ReferenceStore.row(raw,"measured_operation","operation_uuid=?",arrayOf(op))!!
+                val envelope=org.json.JSONObject(duplicate.getString("input_json"))
+                envelope.put("chain",MeasuredOperationChain.next(raw))
+                duplicate.put("operation_uuid",UUID.randomUUID().toString()).put("input_json",ReferencePayload.canonical(envelope))
+                ReferenceStore.insert(raw,"measured_operation",duplicate)
+                val changes=journal.changes();assertEquals(2,changes.count{it.table=="measured_operation" && it.verb=="INSERT"})
+                val closure=journal.foreignKeyClosure(changes.map{it.table}.toSet())
+                assertTrue("Actual FK closure: $closure",closure.containsAll(setOf("measured_operation","dose_record","reference_identity")))
+                raw.query("PRAGMA foreign_key_check").use{assertFalse(it.moveToFirst())}
+                val local=MeasuredConsumptionStore.auditStagedProjection(raw,b.scope.dataset,b.containerUuid)
+                assertTrue(local is MeasureResult.Success)
+                // Real FK/balance acceptance disagrees with the unchanged full oracle; reject the hypothesis.
+                val staged=RawData.dump(raw).toString()
+                rejects(ReferenceError.INVALID_SOURCE){MeasuredConsumptionStore.auditStagedDataset(raw)}
+                assertEquals(staged,RawData.dump(raw).toString())
+            }
+            throw SyntheticRollback()
+        }}catch(_:SyntheticRollback){}
+        assertEquals(before,RawData.dump(raw).toString())
+    }
+    @Test fun architectureDoesNotInventUniversalCrossTableUuidUniqueness()=runBlocking {
+        val m=med();val b=box(m);consume(record(m),b,listOf(use(b)),b.containerUuid)
+        db.withTransaction {
+            assertEquals(1L,MeasuredConsumptionStore.auditStagedDataset(raw).single().usedQuanta)
+            assertNotNull(ReferenceStore.row(raw,"reference_identity","uuid=?",arrayOf(b.containerUuid)))
+            assertNotNull(ReferenceStore.row(raw,"measured_operation","operation_uuid=?",arrayOf(b.containerUuid)))
+        }
+    }
+    @Test fun architectureTransactionalSealRejectsTheCounterRollbackCounterexample()=runBlocking {
+        val m=med();val b=box(m);val r=record(m);consume(r,b,listOf(use(b)))
+        val before=RawData.dump(raw).toString();class SyntheticRollback:RuntimeException()
+        try {db.withTransaction {ValidationArchitectureProbe.Journal(raw).use {journal->
+            val initial=journal.sealAfterFullAudit();assertTrue(journal.unchanged(initial))
+            raw.execSQL("UPDATE dose_record SET actual_dose=0.2 WHERE id=?",arrayOf(r.id))
+            raw.execSQL("SAVEPOINT synthetic_sealed_repair")
+            raw.execSQL("UPDATE dose_record SET actual_dose=0.1 WHERE id=?",arrayOf(r.id))
+            val repaired=journal.sealAfterFullAudit();assertTrue(journal.unchanged(repaired))
+            raw.execSQL("ROLLBACK TO synthetic_sealed_repair");raw.execSQL("RELEASE synthetic_sealed_repair")
+            assertTrue(repaired.witness.matches(raw))
+            assertFalse(journal.markerMatches(repaired));assertFalse(journal.unchanged(repaired))
+            rejects(ReferenceError.INVALID_SOURCE){MeasuredConsumptionStore.auditStagedDataset(raw)}
+        };throw SyntheticRollback()}}catch(_:SyntheticRollback){}
+        assertEquals(before,RawData.dump(raw).toString())
+    }
+    @Test fun architectureJournalObservesDaoCompiledSqlUnrelatedHistoryAndLedgerTriggers()=runBlocking {
+        val m=med();val b=box(m);val r=record(m);consume(r,b,listOf(use(b)))
+        val other=med("SYNTHETIC unrelated");val otherBox=box(other);val otherRecord=record(other)
+        consume(otherRecord,otherBox,listOf(use(otherBox)))
+        val before=RawData.dump(raw).toString();class SyntheticRollback:RuntimeException()
+        try {db.withTransaction {ValidationArchitectureProbe.Journal(raw).use {journal->
+            for(mode in listOf("DAO","COMPILED","RAW")) {
+                val seal=journal.sealAfterFullAudit()
+                when(mode) {
+                    "DAO"->db.dao().updateRecord(otherRecord.copy(actual_dose=0.2))
+                    "COMPILED"->raw.compileStatement("UPDATE dose_record SET actual_dose=? WHERE id=?").use {s->
+                        s.bindDouble(1,0.2);s.bindLong(2,otherRecord.id);assertEquals(1,s.executeUpdateDelete())
+                    }
+                    else->raw.execSQL("UPDATE dose_record SET actual_dose=0.2 WHERE id=?",arrayOf(otherRecord.id))
+                }
+                assertFalse(journal.unchanged(seal))
+                assertTrue(journal.changes().any{it.table=="dose_record" && it.row==otherRecord.id && it.verb=="UPDATE"})
+                assertTrue(MeasuredConsumptionStore.auditStagedProjection(raw,b.scope.dataset,b.containerUuid) is MeasureResult.Success)
+                rejects(ReferenceError.INVALID_SOURCE){MeasuredConsumptionStore.auditStagedDataset(raw)}
+                raw.execSQL("UPDATE dose_record SET actual_dose=0.1 WHERE id=?",arrayOf(otherRecord.id))
+            }
+            val seal=journal.sealAfterFullAudit()
+            consume(record(m),b,listOf(use(b)))
+            val changed=journal.changes()
+            assertTrue(changed.any{it.table=="supply_transaction" && it.verb=="INSERT"})
+            assertTrue(changed.any{it.table=="supply_container" && it.verb=="UPDATE"})
+            assertFalse(journal.unchanged(seal))
+            MeasuredConsumptionStore.auditStagedDataset(raw)
+            assertTrue(journal.unchanged(journal.sealAfterFullAudit()))
+        };throw SyntheticRollback()}}catch(_:SyntheticRollback){}
+        assertEquals(before,RawData.dump(raw).toString())
+    }
+    @Test fun architectureJournalOverflowRequiresFullRebuildAndNeverMeansNoChanges()=runBlocking {
+        val m=med();box(m)
+        db.withTransaction {ValidationArchitectureProbe.Journal(raw).use {journal->
+            val before=journal.sealAfterFullAudit()
+            repeat(1100){i->raw.execSQL("INSERT INTO day_note(date,text) VALUES(?,?)",arrayOf(java.time.LocalDate.of(2000,1,1).plusDays(i.toLong()).toString(),"SYNTHETIC"))}
+            assertEquals(1024,journal.changes().size);assertTrue(journal.overflowed());assertFalse(journal.unchanged(before))
+            val business=RawData.dump(raw).toString()
+            val rebuilt=journal.sealAfterFullAudit();assertFalse(journal.overflowed());assertTrue(journal.changes().isEmpty())
+            assertTrue(journal.unchanged(rebuilt));assertEquals(business,RawData.dump(raw).toString())
+        }}
+    }
+    @Test fun architectureClearedJournalOrMissingMetadataDoesNotRestoreStampAuthority()=runBlocking {
+        val m=med();val b=box(m);val r=record(m);consume(r,b,listOf(use(b)))
+        val before=RawData.dump(raw).toString();class SyntheticRollback:RuntimeException()
+        try {db.withTransaction {ValidationArchitectureProbe.Journal(raw).use {journal->
+            val seal=journal.sealAfterFullAudit()
+            raw.execSQL("UPDATE dose_record SET actual_dose=0.2 WHERE id=?",arrayOf(r.id))
+            assertTrue(journal.changes().isNotEmpty())
+            raw.execSQL("DELETE FROM p4_probe_journal")
+            raw.execSQL("UPDATE p4_probe_seal SET token=?,overflow=0 WHERE id=1",arrayOf(seal.token))
+            assertTrue(journal.changes().isEmpty());assertTrue(journal.markerMatches(seal))
+            assertFalse(journal.unchanged(seal))
+            rejects(ReferenceError.INVALID_SOURCE){MeasuredConsumptionStore.auditStagedDataset(raw)}
+            raw.execSQL("DROP TABLE temp.p4_probe_journal")
+            assertFalse(journal.unchanged(seal))
+        };throw SyntheticRollback()}}catch(_:SyntheticRollback){}
+        assertEquals(before,RawData.dump(raw).toString())
+    }
+    @Test fun architectureRestoreAndReopenCannotReuseThePreviousBaselineOrTempMetadata()=runBlocking {
+        val m=med();val b=box(m);consume(record(m),b,listOf(use(b)))
+        val before=RawData.dump(raw).toString()
+        db.withTransaction {ValidationArchitectureProbe.Journal(raw).use {journal->
+            val seal=journal.sealAfterFullAudit();val epoch=ReferenceStore.previewEpoch(raw)
+            val tables=RawData.dump(raw)
+            assertFalse(tables.has("p4_probe_seal"));assertFalse(tables.has("p4_probe_journal"))
+            RawData.restore(context,raw,tables,measured=true)
+            assertNotEquals(epoch,ReferenceStore.previewEpoch(raw));assertFalse(journal.unchanged(seal))
+            assertEquals(before,RawData.dump(raw).toString())
+            assertTrue(journal.unchanged(journal.sealAfterFullAudit()))
+        }}
+        val oldRaw=raw
+        val old=db.withTransaction{ValidationArchitectureProbe.auditAndCapture(raw)}
+        db.close()
+        db=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(key.clone()))
+            .allowMainThreadQueries().addMigrations(*allMigrations()).addCallback(SchemaGuards).build()
+        db.withTransaction {
+            assertFalse(oldRaw===raw);assertFalse(old.matches(raw));assertEquals(before,RawData.dump(raw).toString())
+            ValidationArchitectureProbe.Journal(raw).use{assertTrue(it.unchanged(it.sealAfterFullAudit()))}
+        }
+        encrypted(name)
+    }
     @Test fun operationAuditRowsAreBoundedFreshCopiesAndReleasedAtScopeEnd()=runBlocking {
         val m=med();val b=box(m);val r=record(m);val op=UUID.randomUUID().toString()
         consume(r,b,listOf(use(b)),op)
