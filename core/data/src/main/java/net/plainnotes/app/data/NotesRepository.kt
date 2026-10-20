@@ -817,24 +817,24 @@ const val BACKFILL_MAX_DAYS=731L
         val restoreCheckpoint:(RestoreCheckpoint)->Unit={point->checkRestoreActive();checkpoint(point);checkRestoreActive()}
         BackupJsonReader.indexed(BackupCodec.decrypt(data,password),checkActive=checkRestoreActive,
             beforeParse={restoreCheckpoint(RestoreCheckpoint.PLAINTEXT_AUTHENTICATED)}).use { input ->
-        val json=input.metadata
-        val schema=RecordBackupCompatibility.readVersion(json)
-        val tables=input.tables
-        require(schema>=10 || ReferenceSchema.businessTables.none {tables.has(it)}) { "Misdeclared reference backup version" }
-        RecordBackupCompatibility.validateInventoryVersion(schema,tables)
-        val required=DOMAIN_TABLES.filterNot{(schema<2 && it in listOf("stage_review","symptom_check","review_effect")) || (schema<4 && it in listOf("regimen_version","regimen_rule_link","milestone")) || (schema<5 && it=="lab_context_revision") || (schema<6 && it in listOf("visit_question","visit_pack")) || (schema<7 && it in listOf("history_period_revision","record_annotation")) || (schema<9 && it=="trash_item") || (schema<10 && it in ReferenceSchema.businessTables) || (schema<11 && it=="lab_panel")}
-        require(required.all{tables.has(it)}) { "Incomplete backup" }
-        // LAB-02: an older backup has no panels; its results are restored ungrouped, never regrouped by time, laboratory or id.
-        require(schema>=11 || ((tables.optJSONArray("lab_panel")?.length() ?: 0)==0 && tables.optJSONArray("lab_value")?.let{a->(0 until a.length()).all{a.getJSONObject(it).isNull("panel_id")}}!=false)) { "Misdeclared lab panel backup version" }
-        restoreCheckpoint(RestoreCheckpoint.INPUT_VALIDATED)
-        val db=access.get(target)
-        db.withTransaction {
-            val sql=db.openHelper.writableDatabase
-            if(measuredEpoch!=null && ReferenceStore.previewEpoch(sql)!=measuredEpoch)throw ReferenceFailure(ReferenceError.STALE_SCOPE)
-            RawData.restoreRows(access.applicationContext,sql,tables,upgradeRegimens=schema<4,backfillTrash=schema<9,measured=measuredEpoch!=null,checkpoint=restoreCheckpoint)
-            if(schema<2) WellbeingUpgrade.apply(sql,today)
-            checkRestoreActive()
-        }
+            val json=input.metadata
+            val schema=RecordBackupCompatibility.readVersion(json)
+            val tables=input.tables
+            require(schema>=10 || ReferenceSchema.businessTables.none {tables.has(it)}) { "Misdeclared reference backup version" }
+            RecordBackupCompatibility.validateInventoryVersion(schema,tables)
+            val required=DOMAIN_TABLES.filterNot{(schema<2 && it in listOf("stage_review","symptom_check","review_effect")) || (schema<4 && it in listOf("regimen_version","regimen_rule_link","milestone")) || (schema<5 && it=="lab_context_revision") || (schema<6 && it in listOf("visit_question","visit_pack")) || (schema<7 && it in listOf("history_period_revision","record_annotation")) || (schema<9 && it=="trash_item") || (schema<10 && it in ReferenceSchema.businessTables) || (schema<11 && it=="lab_panel")}
+            require(required.all{tables.has(it)}) { "Incomplete backup" }
+            // LAB-02: an older backup has no panels; its results are restored ungrouped, never regrouped by time, laboratory or id.
+            require(schema>=11 || ((tables.optJSONArray("lab_panel")?.length() ?: 0)==0 && tables.optJSONArray("lab_value")?.let{a->(0 until a.length()).all{a.getJSONObject(it).isNull("panel_id")}}!=false)) { "Misdeclared lab panel backup version" }
+            restoreCheckpoint(RestoreCheckpoint.INPUT_VALIDATED)
+            val db=access.get(target)
+            db.withTransaction {
+                val sql=db.openHelper.writableDatabase
+                if(measuredEpoch!=null && ReferenceStore.previewEpoch(sql)!=measuredEpoch)throw ReferenceFailure(ReferenceError.STALE_SCOPE)
+                RawData.restoreRows(access.applicationContext,sql,tables,upgradeRegimens=schema<4,backfillTrash=schema<9,measured=measuredEpoch!=null,checkpoint=restoreCheckpoint)
+                if(schema<2) WellbeingUpgrade.apply(sql,today)
+                checkRestoreActive()
+            }
         }
     }
     /** Irreversibly deletes the database, its key file and Keystore key. */

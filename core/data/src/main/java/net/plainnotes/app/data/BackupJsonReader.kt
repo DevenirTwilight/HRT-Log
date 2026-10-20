@@ -37,9 +37,10 @@ internal object BackupJsonReader {
             return IndexedBackupDocument(bytes,header,checkActive)
         }catch(t:Throwable){bytes.fill(0);throw t}
     }
-    internal fun objectSlice(bytes:ByteArray,start:Int,end:Int):JSONObject = parse(InputStreamReader(
-        ByteArrayInputStream(bytes,start,end-start),Charsets.UTF_8.newDecoder()
-            .onMalformedInput(CodingErrorAction.REPORT).onUnmappableCharacter(CodingErrorAction.REPORT)))
+    // The entire owned document was strictly UTF-8-validated before offsets were exposed.
+    // Decode only this row, avoiding a fresh 8KiB StreamDecoder buffer for every replay.
+    internal fun objectSlice(bytes:ByteArray,start:Int,end:Int):JSONObject =
+        parse(StringReader(String(bytes,start,end-start,Charsets.UTF_8)))
     fun read(text:String):JSONObject {
         BackupLimits.checkJson(text)
         return parse(StringReader(text))

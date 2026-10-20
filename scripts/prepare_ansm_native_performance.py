@@ -16,6 +16,12 @@ def native_source(text):
         if text.count(old) != 1:
             raise ValueError('Performance template drift: expected one occurrence of ' + old[:70])
         text = text.replace(old, new, 1)
+    replace('timed("full_encrypted_restore") {repo.restoreMeasuredBackup(archive,password,repo.referencePreviewEpoch())}',
+            '''timed("full_encrypted_restore") {
+                    RestoreMemoryProbe { sample -> report.put("restore_memory",sample);file.writeText(report.toString(2)) }.use { memoryProbe ->
+                        repo.restoreMeasuredBackup(archive,password,repo.referencePreviewEpoch(),checkpoint={memoryProbe.checkpoint(it.name)})
+                    }
+                }''')
     # Only metadata sizing changes: preserve the frozen data, actual restore/export and budgets.
     replace('val bytes=fixture.toString().toByteArray(Charsets.UTF_8).size',
             'val bytes=SyntheticFixtureJsonSize.utf8Bytes(fixture)\n            assertEquals("Frozen full fixture byte size",19660924,bytes)')

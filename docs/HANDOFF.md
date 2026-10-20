@@ -1,3 +1,11 @@
+## P4 恢复专项实时测试检查点：第二聚焦组15 PASS，开始完整回归 — 2026-10-20
+
+已完成旧DOM/新输入整库恢复决定与全数据差分、真实协程取消和模拟OOME后的数据/epoch保留；第二组Indexed6+BackupReplacement8+恢复取消资源1=15 PASS，证据`restore-memory/focused-second/`立即保存。冻结旧解析器已移至historyTest供真实Android共同对照。原第一组19 PASS在focused-first，不覆盖本轮尚未跑的全回归。
+
+新test-only RestoreMemoryProbe（historyTest）与生成原生恢复检查点已编码：100ms采样Java/native malloc/RSS，检查点报告HWM明确是进程累计，记录IO算恢复预算内。没有改原冻结template。额外MeasuredRestoreDeathProbe+run_ansm_restore_memory_suite.py已加入候选，在大库测试/所有原断言之后做ROWS_DELETED/ROWS_INSERTED两个真实force-stop/新进程回滚验证；原native失败码仍保留，工具3项PASS。**新的Android probe尚待编译及原生执行，不能写成进程终止已通过。** 仅修改独立ANSM性能workflow调用同一原runner的有界包装器，RAM/heap/夹具/预算不变；无Claude/UI共享改动。
+
+下一步立即完整data+生成native Android编译（包括新资源/进程死亡probe）；一组结束就保存结果并提交推送。完成后冻结源码，仅预定两次原生+API26/29/35常规CI；专项恢复结果与旧写入FAIL必须分开。当前仍WIP、Draft/OFF，不合并/发布。原部分聚焦“执行中”已被这两段取代。
+
 ## P4 恢复专项实时测试检查点：聚焦组PASS — 2026-10-20
 
 已推送WIP源码e69e3b91；聚焦测试刚完成，证据即刻入库`docs/ansm-integration/p4/restore-memory/focused-first/`（XML/日志/receipt，按实际suite计数）。IndexedBackupDocumentTest6项、旧严格解析器5项及恢复检查点回滚测试均PASS；完整data/原生Android编译/API26/29/35/低内存恢复仍NOT_RUN，绝不把聚焦通过当专项完成。上一WIP的“聚焦执行中”已被本段取代。

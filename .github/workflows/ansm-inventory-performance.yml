@@ -46,7 +46,7 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -memory 512 -qemu -m 512
           script: |
             python3 scripts/configure_ansm_native_runtime.py
-            python3 scripts/run_ansm_native_performance.py
+            python3 scripts/run_ansm_restore_memory_suite.py
       - name: Remove generated test source
         if: always()
         run: python3 scripts/prepare_ansm_native_performance.py --clean
