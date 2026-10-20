@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.LabUi03ScreenshotsTest" tests="32" skipped="0" failures="0" errors="0" timestamp="2026-10-20T07:13:02.473Z" hostname="2c2deac85eb5" time="21.535">
+  <properties/>
+  <testcase name="actualLabsHome[en/320dp/1x/dark=false]" classname="net.plainnotes.app.LabUi03ScreenshotsTest" time="0.671"/>
+  <testcase name="actualLabsHome[en/320dp/1x/dark=true]" classname="net.plainnotes.app.LabUi03ScreenshotsTest" time="0.595"/>
+  <testcase name="actualLabsHome[en/320dp/2x/dark=false]" classname="net.plainnotes.app.LabUi03ScreenshotsTest" time="0.701"/>
+  <testcase name="actualLabsHome[en/320dp/2x/dark=true]" classname="net.plainnotes.app.LabUi03ScreenshotsTest" time="0.713"/>
+  <testcase name="actualLabsHome[en/411dp/1x/dark=false]" classname="net.plainnotes.app.LabUi03ScreenshotsTest" time="0.55"/>
+  <testcase name="actualLabsHome[en/411dp/1x/dark=true]" classname="net.plainnotes.app.LabUi03ScreenshotsTest" time="0.581"/>
+  <testcase name="actualLabsHome[en/411dp/2x/dark=false]" classname="net.plainnotes.app.LabUi03ScreenshotsTest" time="0.825"/>
+  <testcase name="actualLabsHome[en/411dp/2x/dark=true]" classname="net.plainnotes.app.LabUi03ScreenshotsTest" time="0.906"/>
+  <testcase name="actualLabsHome[zh-rCN/320dp/1x/dark=false]" classname="net.plainnotes.app.LabUi03ScreenshotsTest" time="0.46"/>
+  <testcase name="actualLabsHome[zh-rCN/320dp/1x/dark=true]" classname="net.plainnotes.app.LabUi03ScreenshotsTest" time="0.491"/>
+  <testcase name="actualLabsHome[zh-rCN/320dp/2x/dark=false]" classname="net.plainnotes.app.LabUi03ScreenshotsTest" time="0.663"/>
+  <testcase name="actualLabsHome[zh-rCN/320dp/2x/dark=true]" classname="net.plainnotes.app.LabUi03ScreenshotsTest" time="0.711"/>
+  <testcase name="actualLabsHome[zh-rCN/411dp/1x/dark=false]" classname="net.plainnotes.app.LabUi03ScreenshotsTest" time="0.611"/>
+  <testcase name="actualLabsHome[zh-rCN/411dp/1x/dark=true]" classname="net.plainnotes.app.LabUi03ScreenshotsTest" time="0.607"/>
+  <testcase name="actualLabsHome[zh-rCN/411dp/2x/dark=false]" classname="net.plainnotes.app.LabUi03ScreenshotsTest" time="0.903"/>
+  <testcase name="actualLabsHome[zh-rCN/411dp/2x/dark=true]" classname="net.plainnotes.app.LabUi03ScreenshotsTest" time="0.846"/>
+  <testcase name="actualLabsHome[zh-rTW/320dp/1x/dark=false]" classname="net.plainnotes.app.LabUi03ScreenshotsTest" time="0.566"/>
+  <testcase name="actualLabsHome[zh-rTW/320dp/1x/dark=true]" classname="net.plainnotes.app.LabUi03ScreenshotsTest" time="0.621"/>
+  <testcase name="actualLabsHome[zh-rTW/320dp/2x/dark=false]" classname="net.plainnotes.app.LabUi03ScreenshotsTest" time="0.746"/>
+  <testcase name="actualLabsHome[zh-rTW/320dp/2x/dark=true]" classname="net.plainnotes.app.LabUi03ScreenshotsTest" time="0.73"/>
+  <testcase name="actualLabsHome[zh-rTW/411dp/1x/dark=false]" classname="net.plainnotes.app.LabUi03ScreenshotsTest" time="0.602"/>
+  <testcase name="actualLabsHome[zh-rTW/411dp/1x/dark=true]" classname="net.plainnotes.app.LabUi03ScreenshotsTest" time="0.597"/>
+  <testcase name="actualLabsHome[zh-rTW/411dp/2x/dark=false]" classname="net.plainnotes.app.LabUi03ScreenshotsTest" time="0.804"/>
+  <testcase name="actualLabsHome[zh-rTW/411dp/2x/dark=true]" classname="net.plainnotes.app.LabUi03ScreenshotsTest" time="0.791"/>
+  <testcase name="actualLabsHome[fr-rFR/320dp/1x/dark=false]" classname="net.plainnotes.app.LabUi03ScreenshotsTest" time="0.475"/>
+  <testcase name="actualLabsHome[fr-rFR/320dp/1x/dark=true]" classname="net.plainnotes.app.LabUi03ScreenshotsTest" time="0.487"/>
+  <testcase name="actualLabsHome[fr-rFR/320dp/2x/dark=false]" classname="net.plainnotes.app.LabUi03ScreenshotsTest" time="0.695"/>
+  <testcase name="actualLabsHome[fr-rFR/320dp/2x/dark=true]" classname="net.plainnotes.app.LabUi03ScreenshotsTest" time="0.667"/>
+  <testcase name="actualLabsHome[fr-rFR/411dp/1x/dark=false]" classname="net.plainnotes.app.LabUi03ScreenshotsTest" time="0.581"/>
+  <testcase name="actualLabsHome[fr-rFR/411dp/1x/dark=true]" classname="net.plainnotes.app.LabUi03ScreenshotsTest" time="0.557"/>
+  <testcase name="actualLabsHome[fr-rFR/411dp/2x/dark=false]" classname="net.plainnotes.app.LabUi03ScreenshotsTest" time="0.831"/>
+  <testcase name="actualLabsHome[fr-rFR/411dp/2x/dark=true]" classname="net.plainnotes.app.LabUi03ScreenshotsTest" time="0.8"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

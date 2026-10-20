@@ -1,3 +1,20 @@
+## LAB-03 与 LAB-UI-03 正常主线集成验收中 — 2026-10-20
+
+#90最终ffb4c92c的push/PR六类共12必需检查全部SUCCESS，无未解决审查/冲突，普通受保护合并5a7d7c87（07:06:41Z），树与已验源码相同；最终检查URL快照labs/ui03/lab90-approved-final-checks.json。主线合并CI是另一项结果。#89已正常merge该已批准默认分支，未复制未合并源码；双方历史、需求及审批记录保留。AppShell保留Vibe的FAB清除labEdit和正式lab-open-batch标记，保留LabUiState/token/原panel快照和双方原生测试。
+
+分类已只委托LabCatalog，未知别名不猜；unitOptions轴/选择器保留，.units只在旧14项适配桥使用。确认零调用后删旧LabGroupCard，保留LabGroupRow。化验行/朗读/详情范围有限非零abs<0.001统一科学记数，避免0与0.0005舍入失真；仅此化验图提示abs<0.01同样保护，普通格式和曲线数值保持；不改全局Format、原Double或PK。首轮集成84/84 PASS后复核补入精确0.0005范围及微小趋势提示，最终85/85 PASS、0跳过，原生Kotlin编译PASS；96张真实Compose截图、48张最终原图与9份JUnit另存integrated-final证据，与历史6c分开。真机/TalkBack NOT_RUN，无签名/APK/Release。
+
+## LAB-UI-03：PR89 Android 失败已定位，修复回归中 — 2026-10-20
+
+远端从6c593a4c增加12个Vibe Nuage Agent提交到14ed5f91，已审计并正常快进保留，未覆盖他人修改。原本171/18项本地及四语截图证据仅属于原记录源码，不自动视为14ed通过。Android39337651994唯一失败发生在Back前：旧lab_add定位到470px视口外y480–532的空状态按钮，实际未打开弹窗。原始失败HTML、官方工件SHA/CRC及本地语义树复现已保留在labs/ui03；默认dismissOnBackPress=true不是已证明的修复原因。
+
+本次仅修测试：明确点击已显示的labs-home-add主操作，保留弹窗、返回、会话、零写入断言，另补滚动空状态入口回归；完整AppShellBackNavigationTest17/17 PASS（0失败/0跳过），原始JUnit已保留。正式生产行为未因该修复改变。PR90独立数据扩展仍待最终验收/普通保护合并；之后再正常合并主线并接LabCatalog分类，禁止拷贝未验收代码。最终CI/受保护合并尚未完成，真机/TalkBack NOT_RUN。
+
+## LAB-UI-03：实际化验首页替换正在实施 — 2026-10-19
+
+独立 `feature/lab-ui03-home-20261019` 基于默认080094ae；用户最新任务登记 REQUIREMENTS §114，文件矩阵 `labs/ui03/implementation.md`。根因已定位：Destination.LABS 已正确调用 LabsScreen，但单项旧记录和指标筛选显式走私有 LabRow，因此新版批量/详情弹窗没有替换首页。现改统一 LabHomeCard，正式化验单/旧显示分组/单项/筛选历史共用视觉；已有业务回调、labDraws、趋势数值块保持。
+
+统一主页生产Kotlin编译已通过；首轮17项中2项旧纯文本定位FAIL已保留，改为精确原id及朗读值/单位断言后18项全PASS，原上下文测试通过；原生测试Kotlin编译PASS。新增真实入口原生回归；新版32组合截图/128布局回归及时期稳定性均已实际通过：总171/171 PASS，64张截图已捕获、16张代表原图与六份JUnit XML保留，原生Kotlin编译再次PASS。独立PR #89：同夹具旧版32/32渲染亦PASS，已捕获64张并保留16张原图；LabsScreen已逐字节恢复新版、协议守卫通过，未提交临时旧源码。待最终HEAD六必需CI与实际原生导航执行及受保护合并；真机/TalkBack NOT_RUN。正式入口仍沿用既有 AppShell，未建第二套数据库或入口。与独立 LAB-03 项目/单位扩展分工：本分支 LabsScreen/主页卡片/导航测试，数据分支 LabBatchEntry/词典/单位；未修改 Room12、业务备份11、PK、库存、权限、签名或 APK。CI/截图/真机/TalkBack 均尚未完成，不得据此声称已交付。P4独立Draft不阻塞本任务。
 ## LAB-03 #90 实现已通过 CI 与三 API 原生验证 — 2026-10-20
 
 源码403ae96015ea95f3379e4a95ea0b28e7f8d4c846的push/PR六项必需检查均PASS；PR run39296389355，science39296389637。实际下载核验API26/29/35报告：24项已填草稿recreate、实际横/竖方向变化、真正离开锁定后清空各PASS（22.170/25.670/18.295秒），45代码原单位/范围/上下文→回收站→PNBAK1恢复和无效事务全回滚也各PASS，均非仅编译。每API原导航/锁12项、化验单13项全部PASS。完整JVM App1751总项中1514PASS/237既有SKIPPED/0FAIL；data263PASS，reminder20PASS；11项新LAB03及Period5无跳过。此前本地取消定位FAIL原始XML保留，祖先内匹配修正后本地16PASS及原生Kotlin编译PASS。

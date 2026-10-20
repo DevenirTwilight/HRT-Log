@@ -1,0 +1,790 @@
+{
+  "status": "PASS",
+  "tests": 32,
+  "failures": 0,
+  "skipped": 0,
+  "baseline": "080094ae5adcd8fe65cb0bb1638ef71e0ebc1ec8",
+  "scope": "Actual approved baseline LabsScreen temporarily rendered with identical synthetic fixture and same32 configurations; working source restored byte-for-byte afterward. No production baseline source committed.",
+  "elapsed": "6m22s",
+  "report": {
+    "file": "TEST-net.plainnotes.app.LabUi03ScreenshotsTest.xml",
+    "sha256": "2afe2a6588591c45f6944270a609790b0c2b482c2e8e91f2e19b69af2de81cdf"
+  },
+  "screenshots_captured": 64,
+  "screenshots_retained": 16,
+  "screenshots": [
+    {
+      "file": "history_en_320dp_1.0x_dark.png",
+      "sha256": "4b74d3cb1640271975e9937708ba969cf00205fe0bfd4b4687bce922da8cd861",
+      "bytes": 102588,
+      "dimensions": [
+        960,
+        1920
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "history_en_320dp_1.0x_light.png",
+      "sha256": "61ff53c99654b1657db36b8b564a702f6075cdb1aff27f1ef9d50347a3635008",
+      "bytes": 100788,
+      "dimensions": [
+        960,
+        1920
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "history_en_320dp_2.0x_dark.png",
+      "sha256": "531389e3f840311ae6712ea72150e71d46f466a70272ac25bdb60492a807f259",
+      "bytes": 103212,
+      "dimensions": [
+        960,
+        1920
+      ],
+      "retained_in_git": true,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "history_en_320dp_2.0x_light.png",
+      "sha256": "f2e17b3a08d2fc0a1239a8b0ad622415929c7c1921e3c3a253f4ed5f66d92ed6",
+      "bytes": 101921,
+      "dimensions": [
+        960,
+        1920
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "history_en_411dp_1.0x_dark.png",
+      "sha256": "02b997a59d7b7a2a59d205c05ee3a89a68326662cfdce629d5a628a17670a717",
+      "bytes": 156806,
+      "dimensions": [
+        1233,
+        2673
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "history_en_411dp_1.0x_light.png",
+      "sha256": "4e167964b3b3c051934a04fa50bd1e9940bec5656ba45b005548016bf397b42b",
+      "bytes": 154910,
+      "dimensions": [
+        1233,
+        2673
+      ],
+      "retained_in_git": true,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "history_en_411dp_2.0x_dark.png",
+      "sha256": "d54d4276e47c560a45020f9a0f7d94e36175f7e497bdade2175a3efe2b4ba424",
+      "bytes": 167727,
+      "dimensions": [
+        1233,
+        2673
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "history_en_411dp_2.0x_light.png",
+      "sha256": "5fc8604e9254cf1166af00578aaa7911196bd238a3d1d8cbc6552ab28aa163e9",
+      "bytes": 165110,
+      "dimensions": [
+        1233,
+        2673
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "history_fr-rFR_320dp_1.0x_dark.png",
+      "sha256": "4879227335e0602018e119e5efa9f0d16b09ea4d24c9e6905fc96dae197f8bd8",
+      "bytes": 107353,
+      "dimensions": [
+        960,
+        1920
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "history_fr-rFR_320dp_1.0x_light.png",
+      "sha256": "4fd2be5d2ec9087f8185ee67b4cd3fba98e93fcc35626e10e2d70ff467ec60a0",
+      "bytes": 105554,
+      "dimensions": [
+        960,
+        1920
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "history_fr-rFR_320dp_2.0x_dark.png",
+      "sha256": "e75f4a6508aa02715ec631c34f288a8fc54a03d8032010c444b556c0083f2e1c",
+      "bytes": 115096,
+      "dimensions": [
+        960,
+        1920
+      ],
+      "retained_in_git": true,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "history_fr-rFR_320dp_2.0x_light.png",
+      "sha256": "4f95d86e2d986faa1ec2b42ccc4f719dfc411afa8c3ef2acaf09746d3342b769",
+      "bytes": 113256,
+      "dimensions": [
+        960,
+        1920
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "history_fr-rFR_411dp_1.0x_dark.png",
+      "sha256": "978ac583eec3a86e4d07dcdff8f7e694226ac76873e4f837b4a84952afeeea40",
+      "bytes": 156506,
+      "dimensions": [
+        1233,
+        2673
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "history_fr-rFR_411dp_1.0x_light.png",
+      "sha256": "bce232afa44d40fec6e90b0112251ff73495aa36ece53ebbd74cf265c5fbae69",
+      "bytes": 154421,
+      "dimensions": [
+        1233,
+        2673
+      ],
+      "retained_in_git": true,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "history_fr-rFR_411dp_2.0x_dark.png",
+      "sha256": "03526896396ff1025d345d6c486edb2a08c31d134b43b0a5853e8aac705b3b03",
+      "bytes": 179188,
+      "dimensions": [
+        1233,
+        2673
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "history_fr-rFR_411dp_2.0x_light.png",
+      "sha256": "43153f487fd5f58d96bb5386738cc0aacca6c65c708e1f930eea41ba09dd8c2f",
+      "bytes": 176749,
+      "dimensions": [
+        1233,
+        2673
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "history_zh-rCN_320dp_1.0x_dark.png",
+      "sha256": "71b8b143d5139c7843f3b4d1155593fc6e880a1844ca040ed99b5eff986944f3",
+      "bytes": 121543,
+      "dimensions": [
+        960,
+        1920
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "history_zh-rCN_320dp_1.0x_light.png",
+      "sha256": "107ec81a34d51be7dc0690d1cd8c7fd2c9b2bf79e09fceee879c821a2043f8d4",
+      "bytes": 119474,
+      "dimensions": [
+        960,
+        1920
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "history_zh-rCN_320dp_2.0x_dark.png",
+      "sha256": "0a5210ca297e8e435befa5dca396b4e3a1c0a634081cdbbf133cc593f0abb686",
+      "bytes": 132770,
+      "dimensions": [
+        960,
+        1920
+      ],
+      "retained_in_git": true,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "history_zh-rCN_320dp_2.0x_light.png",
+      "sha256": "b2c87d612d7d0df819c5225213f90829b219828986e39097990cc553218e65bc",
+      "bytes": 131086,
+      "dimensions": [
+        960,
+        1920
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "history_zh-rCN_411dp_1.0x_dark.png",
+      "sha256": "fa4dd3617920afd0fc3957e226a05c24f74877b14edca31cfdffb4253efad3cd",
+      "bytes": 182786,
+      "dimensions": [
+        1233,
+        2673
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "history_zh-rCN_411dp_1.0x_light.png",
+      "sha256": "20730d15c79f335d0d4442809457dbfa5db07de9612eeeedeeab722e89cd81cc",
+      "bytes": 180162,
+      "dimensions": [
+        1233,
+        2673
+      ],
+      "retained_in_git": true,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "history_zh-rCN_411dp_2.0x_dark.png",
+      "sha256": "df290dc73f51a7c35b585f605026c4b148952091a06d062665c91c903712a001",
+      "bytes": 206675,
+      "dimensions": [
+        1233,
+        2673
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "history_zh-rCN_411dp_2.0x_light.png",
+      "sha256": "83fed5d2693c3f6004b84c5a988702f301b780e1530be5ce97bccd93add0026a",
+      "bytes": 204055,
+      "dimensions": [
+        1233,
+        2673
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "history_zh-rTW_320dp_1.0x_dark.png",
+      "sha256": "daa8d45e322c837bc046978b3cfd12f73aa421b1cd8a9b943b3bdec04f23f12a",
+      "bytes": 130920,
+      "dimensions": [
+        960,
+        1920
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "history_zh-rTW_320dp_1.0x_light.png",
+      "sha256": "7ebe4014d72cf8d28236dd686802eb57f13311dc9bb888f104d32d56da9a09cd",
+      "bytes": 128918,
+      "dimensions": [
+        960,
+        1920
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "history_zh-rTW_320dp_2.0x_dark.png",
+      "sha256": "8f6150203a816a30b15f4ed53930fa1cc52019b3ecee0e4ee12749ec12dfade2",
+      "bytes": 145926,
+      "dimensions": [
+        960,
+        1920
+      ],
+      "retained_in_git": true,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "history_zh-rTW_320dp_2.0x_light.png",
+      "sha256": "4b4f31ea3fbde167ce4681cc31bd08562979f83bffc95ded538198cd93bad156",
+      "bytes": 143982,
+      "dimensions": [
+        960,
+        1920
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "history_zh-rTW_411dp_1.0x_dark.png",
+      "sha256": "393a77d76071c1d268a734c63ad7d23c4aab053dfdbcb7a17dd595164111cfa8",
+      "bytes": 196743,
+      "dimensions": [
+        1233,
+        2673
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "history_zh-rTW_411dp_1.0x_light.png",
+      "sha256": "f939b3ea59e18ce3d10f4407e32984d7e1f2fbcec65b55d3b5a6b2fdf5c1bebc",
+      "bytes": 194139,
+      "dimensions": [
+        1233,
+        2673
+      ],
+      "retained_in_git": true,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "history_zh-rTW_411dp_2.0x_dark.png",
+      "sha256": "b701a9bbd3192b0ec87955139ec9d1361c868f9f712ccfa067e569003cb6ce49",
+      "bytes": 221362,
+      "dimensions": [
+        1233,
+        2673
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "history_zh-rTW_411dp_2.0x_light.png",
+      "sha256": "125cae4b19f788c1a7d331eda291ed007b43e398115685d213ac7e14961771ce",
+      "bytes": 218347,
+      "dimensions": [
+        1233,
+        2673
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "top_en_320dp_1.0x_dark.png",
+      "sha256": "dc504e63cd2cfe51f81cb5836c3bbb9fdfe2906a46b19d9c3cf0219047bb58e0",
+      "bytes": 103843,
+      "dimensions": [
+        960,
+        1920
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "top_en_320dp_1.0x_light.png",
+      "sha256": "af68226502c9d80e9adf4240c9691b4b4a3940cb685c31d1454c86a4c892a214",
+      "bytes": 102455,
+      "dimensions": [
+        960,
+        1920
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "top_en_320dp_2.0x_dark.png",
+      "sha256": "dc782a69e8fb0bc956bf4dd9ee918329814a8ffa4436229f54df51a3d320af2d",
+      "bytes": 130937,
+      "dimensions": [
+        960,
+        1920
+      ],
+      "retained_in_git": true,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "top_en_320dp_2.0x_light.png",
+      "sha256": "93cfdeaeb86ddb728fcde8d3ef10901adb29f525cfa92dba9c3ff4ab26d0a393",
+      "bytes": 129257,
+      "dimensions": [
+        960,
+        1920
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "top_en_411dp_1.0x_dark.png",
+      "sha256": "02b997a59d7b7a2a59d205c05ee3a89a68326662cfdce629d5a628a17670a717",
+      "bytes": 156806,
+      "dimensions": [
+        1233,
+        2673
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "top_en_411dp_1.0x_light.png",
+      "sha256": "4e167964b3b3c051934a04fa50bd1e9940bec5656ba45b005548016bf397b42b",
+      "bytes": 154910,
+      "dimensions": [
+        1233,
+        2673
+      ],
+      "retained_in_git": true,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "top_en_411dp_2.0x_dark.png",
+      "sha256": "27bad69ee4400b104945815d3b6b562139edc92a9c675ba50217ddbf2a5cab9d",
+      "bytes": 168572,
+      "dimensions": [
+        1233,
+        2673
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "top_en_411dp_2.0x_light.png",
+      "sha256": "b58da4f98f508b8918999cde92efdc5f90a3fa8791e35eae7d2a3c27a6218987",
+      "bytes": 166081,
+      "dimensions": [
+        1233,
+        2673
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "top_fr-rFR_320dp_1.0x_dark.png",
+      "sha256": "b2f55a105e2c162b24c99cd90e3c19827ba54359b19dc8bd5669c50349635f9e",
+      "bytes": 105787,
+      "dimensions": [
+        960,
+        1920
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "top_fr-rFR_320dp_1.0x_light.png",
+      "sha256": "a3ac353eaa4e40cb03d7a6968ee545bf3cb2660e6d23e2e29fa8d719bab057ef",
+      "bytes": 104191,
+      "dimensions": [
+        960,
+        1920
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "top_fr-rFR_320dp_2.0x_dark.png",
+      "sha256": "9c6b06df222f8ce49d2d22ed65b48b4e77914eb776f7404dbaaeb7edac5e6c53",
+      "bytes": 135646,
+      "dimensions": [
+        960,
+        1920
+      ],
+      "retained_in_git": true,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "top_fr-rFR_320dp_2.0x_light.png",
+      "sha256": "9e5263509fac394f5a30eb44711ab35eef5d8b16bf7e991c95765351116c0b41",
+      "bytes": 133844,
+      "dimensions": [
+        960,
+        1920
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "top_fr-rFR_411dp_1.0x_dark.png",
+      "sha256": "978ac583eec3a86e4d07dcdff8f7e694226ac76873e4f837b4a84952afeeea40",
+      "bytes": 156506,
+      "dimensions": [
+        1233,
+        2673
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "top_fr-rFR_411dp_1.0x_light.png",
+      "sha256": "bce232afa44d40fec6e90b0112251ff73495aa36ece53ebbd74cf265c5fbae69",
+      "bytes": 154421,
+      "dimensions": [
+        1233,
+        2673
+      ],
+      "retained_in_git": true,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "top_fr-rFR_411dp_2.0x_dark.png",
+      "sha256": "5a7729edeb04f0c8bc7da2feac2ea27b1040ac5c48f296c2d639133018885cc3",
+      "bytes": 172538,
+      "dimensions": [
+        1233,
+        2673
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "top_fr-rFR_411dp_2.0x_light.png",
+      "sha256": "3cfc993f45709511fd6d14cea60ee7fe4b248dea7f6007d249ef64b002da8dfc",
+      "bytes": 169487,
+      "dimensions": [
+        1233,
+        2673
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "top_zh-rCN_320dp_1.0x_dark.png",
+      "sha256": "cd667c5cc4676eb554295c830350cae04c77ef9a9be17321f509ded05e98529f",
+      "bytes": 121895,
+      "dimensions": [
+        960,
+        1920
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "top_zh-rCN_320dp_1.0x_light.png",
+      "sha256": "2b84e16649ca4716e0ba09e770311c225afacc493265adfe1bd0f22221b49da3",
+      "bytes": 120072,
+      "dimensions": [
+        960,
+        1920
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "top_zh-rCN_320dp_2.0x_dark.png",
+      "sha256": "03cbaf7f85970fa89ed000cb7b125529d0201a570b9b0e01b1b56ff8c4071010",
+      "bytes": 121083,
+      "dimensions": [
+        960,
+        1920
+      ],
+      "retained_in_git": true,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "top_zh-rCN_320dp_2.0x_light.png",
+      "sha256": "ab4ca9cd099cd4a23a33c13de0728da53f60d613da6c2aca0a222d5072a94966",
+      "bytes": 119278,
+      "dimensions": [
+        960,
+        1920
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "top_zh-rCN_411dp_1.0x_dark.png",
+      "sha256": "fa4dd3617920afd0fc3957e226a05c24f74877b14edca31cfdffb4253efad3cd",
+      "bytes": 182786,
+      "dimensions": [
+        1233,
+        2673
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "top_zh-rCN_411dp_1.0x_light.png",
+      "sha256": "20730d15c79f335d0d4442809457dbfa5db07de9612eeeedeeab722e89cd81cc",
+      "bytes": 180162,
+      "dimensions": [
+        1233,
+        2673
+      ],
+      "retained_in_git": true,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "top_zh-rCN_411dp_2.0x_dark.png",
+      "sha256": "18fd88b87ae9beaa99baddd1e002ea642e7f1983d94e0a030b64991d2a12ce07",
+      "bytes": 211485,
+      "dimensions": [
+        1233,
+        2673
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "top_zh-rCN_411dp_2.0x_light.png",
+      "sha256": "b534010bbc13cd2f9a408a27c3f8a34146953ca9a5012269688f8a8573195cf2",
+      "bytes": 208650,
+      "dimensions": [
+        1233,
+        2673
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "top_zh-rTW_320dp_1.0x_dark.png",
+      "sha256": "50e92f20550a9560a054c2a3c96185d68e47231be4010da298995e45922cc0bb",
+      "bytes": 129894,
+      "dimensions": [
+        960,
+        1920
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "top_zh-rTW_320dp_1.0x_light.png",
+      "sha256": "9571ef3d83783cdc4b27ef5c8132e592d0308f5709d9f90594edc9730afc0eb0",
+      "bytes": 127961,
+      "dimensions": [
+        960,
+        1920
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "top_zh-rTW_320dp_2.0x_dark.png",
+      "sha256": "a5305a6d11555f87093ca88975621b3020f59d5cb5e4883ad3cde42deac62277",
+      "bytes": 125424,
+      "dimensions": [
+        960,
+        1920
+      ],
+      "retained_in_git": true,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "top_zh-rTW_320dp_2.0x_light.png",
+      "sha256": "533392f8569f291b62ed771d324cc2eebc9af6be7a2f9957cbe45f8905a297ff",
+      "bytes": 123672,
+      "dimensions": [
+        960,
+        1920
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "top_zh-rTW_411dp_1.0x_dark.png",
+      "sha256": "393a77d76071c1d268a734c63ad7d23c4aab053dfdbcb7a17dd595164111cfa8",
+      "bytes": 196743,
+      "dimensions": [
+        1233,
+        2673
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "top_zh-rTW_411dp_1.0x_light.png",
+      "sha256": "f939b3ea59e18ce3d10f4407e32984d7e1f2fbcec65b55d3b5a6b2fdf5c1bebc",
+      "bytes": 194139,
+      "dimensions": [
+        1233,
+        2673
+      ],
+      "retained_in_git": true,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "top_zh-rTW_411dp_2.0x_dark.png",
+      "sha256": "8c0d82e0081525ead085ef631672f386458af81f903160becba4a8586297ab8e",
+      "bytes": 224127,
+      "dimensions": [
+        1233,
+        2673
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    },
+    {
+      "file": "top_zh-rTW_411dp_2.0x_light.png",
+      "sha256": "853c6f5ce7b2abc03a4459e3743b378b335c9a5e8ec7d734285cee629493b662",
+      "bytes": 221488,
+      "dimensions": [
+        1233,
+        2673
+      ],
+      "retained_in_git": false,
+      "same_dimensions_as_after": true,
+      "different_png_sha256_from_after": true
+    }
+  ],
+  "limits": [
+    "Robolectric native-graphics captures; physical device and TalkBack NOT_RUN.",
+    "PNG differences establish distinct captures, not pixel correctness or native navigation execution.",
+    "16 representative originals retained; remaining48 captures only local build output, hashes for reproducibility."
+  ]
+}

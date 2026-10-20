@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.LabUi03CatalogScreenshotsTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-10-20T07:19:47.013Z" hostname="2c2deac85eb5" time="9.28">
+  <properties/>
+  <testcase name="expandedCatalogOnActualHome[en/411dp/1x/dark=false]" classname="net.plainnotes.app.LabUi03CatalogScreenshotsTest" time="1.699"/>
+  <testcase name="expandedCatalogOnActualHome[en/320dp/2x/dark=true]" classname="net.plainnotes.app.LabUi03CatalogScreenshotsTest" time="1.105"/>
+  <testcase name="expandedCatalogOnActualHome[zh-rCN/411dp/1x/dark=false]" classname="net.plainnotes.app.LabUi03CatalogScreenshotsTest" time="1.069"/>
+  <testcase name="expandedCatalogOnActualHome[zh-rCN/320dp/2x/dark=true]" classname="net.plainnotes.app.LabUi03CatalogScreenshotsTest" time="1.138"/>
+  <testcase name="expandedCatalogOnActualHome[zh-rTW/411dp/1x/dark=false]" classname="net.plainnotes.app.LabUi03CatalogScreenshotsTest" time="1.115"/>
+  <testcase name="expandedCatalogOnActualHome[zh-rTW/320dp/2x/dark=true]" classname="net.plainnotes.app.LabUi03CatalogScreenshotsTest" time="1.082"/>
+  <testcase name="expandedCatalogOnActualHome[fr-rFR/411dp/1x/dark=false]" classname="net.plainnotes.app.LabUi03CatalogScreenshotsTest" time="1.018"/>
+  <testcase name="expandedCatalogOnActualHome[fr-rFR/320dp/2x/dark=true]" classname="net.plainnotes.app.LabUi03CatalogScreenshotsTest" time="1.023"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

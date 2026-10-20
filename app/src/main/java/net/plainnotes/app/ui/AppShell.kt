@@ -204,7 +204,7 @@ class UiPrefs(context: Context) {
                     }
                     Destination.MEDICATIONS -> ExtendedFloatingActionButton(onClick = { model.edit(null) }, icon = { Icon(Icons.Outlined.Add, null) }, text = { Text(stringResource(R.string.add_medication)) })
                     Destination.VISITS -> if (visitId == null) ExtendedFloatingActionButton(onClick = { appointment = true }, icon = { Icon(Icons.Outlined.Add, null) }, text = { Text(stringResource(R.string.appointment)) })
-                    Destination.LABS -> ExtendedFloatingActionButton(onClick = { labDialogs.labNew = true }, modifier=Modifier.testTag("lab-open-batch"), icon = { Icon(Icons.Outlined.Add, null) }, text = { Text(stringResource(R.string.lab_add)) })
+                    Destination.LABS -> ExtendedFloatingActionButton(onClick = { labDialogs.labNew = true; labDialogs.labEdit = null }, modifier=Modifier.testTag("lab-open-batch"), icon = { Icon(Icons.Outlined.Add, null) }, text = { Text(stringResource(R.string.lab_add)) })
                     else -> {}
                 }
             },

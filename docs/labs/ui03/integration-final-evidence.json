@@ -1,0 +1,867 @@
+{
+  "status": "PASS_LOCAL_ONLY",
+  "scope": "Actual final-source API35 Robolectric Compose. No physical phone/TalkBack/release certification. Final commit/CI source binding recorded in PR89 after commit.",
+  "parents": {
+    "ui": "0097ea5844bf33a0178aeeb03225cb3c2b4d9a88",
+    "approved_default": "5a7d7c87afd13636d7472a7235416e5273054afb",
+    "approved_data_head": "ffb4c92c302b11dfa2db4f160dfdbcc5d344f799"
+  },
+  "tests": 85,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "native_test_kotlin_compile": "PASS",
+  "elapsed": "4m28s",
+  "reports": [
+    {
+      "path": "docs/labs/ui03/integration-final-reports/TEST-net.plainnotes.app.AppShellBackNavigationTest.xml",
+      "sha256": "ea5ac2fc362a09c698ee2ac73423515057c26a3d46f19ed0079a92bc3fc350e6",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/labs/ui03/integration-final-reports/TEST-net.plainnotes.app.Lab01GroupDisplayTest.xml",
+      "sha256": "ad6c6a7f36ce44d28a43258ab3b9dfcf166e0cd5069734f487153db8942cf6ab",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/labs/ui03/integration-final-reports/TEST-net.plainnotes.app.Lab02PanelUiTest.xml",
+      "sha256": "ba409ca7692a8f4b517dbc6b9352c8642561ab49016132cf0d634082832f0188",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/labs/ui03/integration-final-reports/TEST-net.plainnotes.app.LabContextUiTest.xml",
+      "sha256": "b8c597874946a992a81cd37b0bbe4ab80459818540ec6cb1352f24d3911babb3",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/labs/ui03/integration-final-reports/TEST-net.plainnotes.app.LabUi03CatalogScreenshotsTest.xml",
+      "sha256": "751fd80da19cca95ed2e2c2a45400ba18a4e0ddd17e6af8131c654f371286c52",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/labs/ui03/integration-final-reports/TEST-net.plainnotes.app.LabUi03HomeTest.xml",
+      "sha256": "3b047ca47da7df61bab4fe97bc9341f73d256816e95f2c7c0ca7511d3a1e3b74",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/labs/ui03/integration-final-reports/TEST-net.plainnotes.app.LabUi03ResourceAndWiringTest.xml",
+      "sha256": "505c47a3c312ac65317853c6b4f91b1a2ca2fd1e1965e87cb4ecc0c0ec02bbcd",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/labs/ui03/integration-final-reports/TEST-net.plainnotes.app.LabUi03ScreenshotsTest.xml",
+      "sha256": "7a594f16041e9fdb5c9d543e9a6559bf7f75d352d56479ad48240842890a3243",
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/labs/ui03/integration-final-reports/TEST-net.plainnotes.app.PeriodStabilityTest.xml",
+      "sha256": "7c244cdf1756e542c40c4faf1834d591b15d243a12062485a0069b0b40556759",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "source_sha256": {
+    "app/src/main/java/net/plainnotes/app/ui/LabsScreen.kt": "9669ea377049d79fe6fa2de740aae8fa11078b7545fed1eb141edec8ba916609",
+    "app/src/main/java/net/plainnotes/app/ui/LabHomeCard.kt": "22e1fe72c71c22d4f0783c1f9f0efa19b6541acd6efafbbc04c9503c45ffd392",
+    "app/src/main/java/net/plainnotes/app/ui/LabBatchEntry.kt": "2fa590f7c61ce6d455121639c0e0767b392866f42a4fb9e635b680997ee7edc8",
+    "app/src/main/java/net/plainnotes/app/ui/LabAnalytes.kt": "79f7818d32ab4ab1179249523601c0a16d3fe2662b77c905810d40de91fcab89",
+    "app/src/main/java/net/plainnotes/app/ui/LabAnalytePicker.kt": "6526b92ff8bae0c4ff83b673d6b1fde20b107c9f8fa48ec5579bfef2ea009a8c",
+    "app/src/main/java/net/plainnotes/app/ui/LabDraftState.kt": "e680f07b39412d5c04b2c51f348ff163efca32c1514aa39f996de9f6c2cb430c",
+    "app/src/main/java/net/plainnotes/app/ui/LabSampleEdit.kt": "2d81d296bb7ea728d860987728dffa857925d3a4ac6b62bf821ee4a3ada0c8a8",
+    "app/src/main/java/net/plainnotes/app/ui/AppShell.kt": "30329fa45a3cca66789954e495676fe8c8cc99ab727bd7a60f9cb579a1729eb7",
+    "app/src/main/java/net/plainnotes/app/ui/ShellHosts.kt": "b9e98194c09ff6fc4255ee67885134709839862d49c8a16f9897a365e0278275"
+  },
+  "invariance_baseline": "080094ae5adcd8fe65cb0bb1638ef71e0ebc1ec8",
+  "protected_invariants": [
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/Entities.kt",
+      "sha256": "dac6468bd5d51ba65565c62fae9246602e67454e1317e753849d86b2072844a2",
+      "byte_identical_to_baseline": true
+    },
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/NotesDatabase.kt",
+      "sha256": "f55f29302d774d43ad2e9ced3f8eb424bc8b0e4bd583040413bf42619aebb3d4",
+      "byte_identical_to_baseline": true
+    },
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt",
+      "sha256": "e683baa22be40bafe3bca9ee46e82aef10867da0105c208165ee8d181fcc3510",
+      "byte_identical_to_baseline": true
+    },
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/DataTransfer.kt",
+      "sha256": "065e5f99d9f688d659fad74e50c54de8949e9e35960142d25f3db276c3ce62a2",
+      "byte_identical_to_baseline": true
+    },
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/BackupValidation.kt",
+      "sha256": "cf55df65f601099583e59c0e359f8b2d7c0518820af7305a50a854347db2b8bb",
+      "byte_identical_to_baseline": true
+    },
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/SupplyLedger.kt",
+      "sha256": "57e131d54e886db37bfa3104023a5913a66797a753c0cab07ccd2c5270353a76",
+      "byte_identical_to_baseline": true
+    },
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/StockForecast.kt",
+      "sha256": "1a110d5ab8d206f094abf74794d4c26dd05591c41fe7862feb49cdc14bf77c0c",
+      "byte_identical_to_baseline": true
+    },
+    {
+      "path": "app/src/main/java/net/plainnotes/app/conc/LabEstimate.kt",
+      "sha256": "476097b3723db41361db379c23a5cb8ae454423c7b89e1b10a7e10fb106f7071",
+      "byte_identical_to_baseline": true
+    },
+    {
+      "path": "app/src/main/java/net/plainnotes/app/conc/CalibrationEligibility.kt",
+      "sha256": "f764ef63f2665d1c4040f2ecb9e1274eb32937383d1b4715b1e8490530ed3153",
+      "byte_identical_to_baseline": true
+    },
+    {
+      "path": "app/src/main/java/net/plainnotes/app/conc/ConcentrationCalculator.kt",
+      "sha256": "9a0ca71e55a49b05b614d247773a0c694716ce92f7272f79c5644a39e45e417e",
+      "byte_identical_to_baseline": true
+    },
+    {
+      "path": "app/src/main/AndroidManifest.xml",
+      "sha256": "2281d7ab5fe4ad4a858133728b40b20035cfb7e49b513bb6428994f14fd4c610",
+      "byte_identical_to_baseline": true
+    },
+    {
+      "path": "pk-engine/src/main/resources/pk-params.json",
+      "sha256": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b",
+      "byte_identical_to_baseline": true
+    },
+    {
+      "path": "app/src/main/java/net/plainnotes/app/ui/ConcChart.kt",
+      "sha256": "51d0f88bf158113f9a08415a7498043930055096194b7f0f967e7bcb59b26c06",
+      "byte_identical_to_baseline": true
+    },
+    {
+      "path": "app/src/main/java/net/plainnotes/app/ui/Format.kt",
+      "sha256": "d0460e8f8c6149e64b52b731a6ca7aa00dc2dc057d03e9b06476bfecae9b8bf1",
+      "byte_identical_to_baseline": true
+    }
+  ],
+  "captured_pngs": 96,
+  "retained_pngs": 48,
+  "captures": [
+    {
+      "name": "catalog_all_en_320dp_2.0x_dark.png",
+      "sha256": "451b86ebd330d89b25521a182986122cb8cf6d2154fc4239a9aca6d5947a129d",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/catalog_all_en_320dp_2.0x_dark.png"
+    },
+    {
+      "name": "catalog_all_en_411dp_1.0x_light.png",
+      "sha256": "a208910f7f1f510c5f7c72de57afecc57b38924be134177877845a0618482084",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/catalog_all_en_411dp_1.0x_light.png"
+    },
+    {
+      "name": "catalog_all_fr-rFR_320dp_2.0x_dark.png",
+      "sha256": "278fd71bb6de7245c2da74696da2b5f9bcff365b04d20481a0cc2e640ca2d2af",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/catalog_all_fr-rFR_320dp_2.0x_dark.png"
+    },
+    {
+      "name": "catalog_all_fr-rFR_411dp_1.0x_light.png",
+      "sha256": "ca0a0d737464e94d86262a8a2d4e98c3bb29ca60a3ed68436de323373a6a44e5",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/catalog_all_fr-rFR_411dp_1.0x_light.png"
+    },
+    {
+      "name": "catalog_all_zh-rCN_320dp_2.0x_dark.png",
+      "sha256": "50b2facb486590376396c1f2b0bb188c52df12b5a7b054d448bc40729686c478",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/catalog_all_zh-rCN_320dp_2.0x_dark.png"
+    },
+    {
+      "name": "catalog_all_zh-rCN_411dp_1.0x_light.png",
+      "sha256": "22315932dce971ba492cd41b6de0c41d5e7cc239ada4ae29e72c0117980a18c1",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/catalog_all_zh-rCN_411dp_1.0x_light.png"
+    },
+    {
+      "name": "catalog_all_zh-rTW_320dp_2.0x_dark.png",
+      "sha256": "93e36870ff46f8690a2a25a86df081854846b39645d0b6ca90670e7cb6386d7d",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/catalog_all_zh-rTW_320dp_2.0x_dark.png"
+    },
+    {
+      "name": "catalog_all_zh-rTW_411dp_1.0x_light.png",
+      "sha256": "0b89ce7635f27bea843a3f305f6825c7cd4a6cfaaa1ef4d5a057b4f8fa1e495a",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/catalog_all_zh-rTW_411dp_1.0x_light.png"
+    },
+    {
+      "name": "catalog_cbc_en_320dp_2.0x_dark.png",
+      "sha256": "5c3c3ab96d0a899abd72661a8d2cb0fd85b0b43627a4138eee959dbbceec8718",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/catalog_cbc_en_320dp_2.0x_dark.png"
+    },
+    {
+      "name": "catalog_cbc_en_411dp_1.0x_light.png",
+      "sha256": "87b671a543b254596fb17de4cf3da574169c326af0cc52269e83ffbc1117f43d",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/catalog_cbc_en_411dp_1.0x_light.png"
+    },
+    {
+      "name": "catalog_cbc_fr-rFR_320dp_2.0x_dark.png",
+      "sha256": "8a7ee61fd9e588b4354963378e5a9bb3e978a3dc44a6db8401d4dac43501a950",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/catalog_cbc_fr-rFR_320dp_2.0x_dark.png"
+    },
+    {
+      "name": "catalog_cbc_fr-rFR_411dp_1.0x_light.png",
+      "sha256": "e3e43fac50f6ff39b77b628845368bfa87370c214b70e96047326ef855c5c8b3",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/catalog_cbc_fr-rFR_411dp_1.0x_light.png"
+    },
+    {
+      "name": "catalog_cbc_zh-rCN_320dp_2.0x_dark.png",
+      "sha256": "acc1af5c59cd16e799bac21d2b094e6eae6114f99ff595bc9cc9f226b2e1dee0",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/catalog_cbc_zh-rCN_320dp_2.0x_dark.png"
+    },
+    {
+      "name": "catalog_cbc_zh-rCN_411dp_1.0x_light.png",
+      "sha256": "b68e0809e1b888ae878771ce47c48fbc7192a321565fe8b0bdcb497eeaf83609",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/catalog_cbc_zh-rCN_411dp_1.0x_light.png"
+    },
+    {
+      "name": "catalog_cbc_zh-rTW_320dp_2.0x_dark.png",
+      "sha256": "d6259a808a5e9ee49babdb1511f5309182a06de098030c2915f95e57610ef296",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/catalog_cbc_zh-rTW_320dp_2.0x_dark.png"
+    },
+    {
+      "name": "catalog_cbc_zh-rTW_411dp_1.0x_light.png",
+      "sha256": "303cc36a19671e0340c836be5e693401b3ef4aa905380630b892a2c9763ba75a",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/catalog_cbc_zh-rTW_411dp_1.0x_light.png"
+    },
+    {
+      "name": "catalog_lipids_en_320dp_2.0x_dark.png",
+      "sha256": "456c1779a9e39e6d11762edf9a794858daf5c95853e541f15e353ff938af481b",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/catalog_lipids_en_320dp_2.0x_dark.png"
+    },
+    {
+      "name": "catalog_lipids_en_411dp_1.0x_light.png",
+      "sha256": "736acd63bdbeca7e5973e6ba8a236db2447a05aa5ec8cd86818cd58cebd1ebc4",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/catalog_lipids_en_411dp_1.0x_light.png"
+    },
+    {
+      "name": "catalog_lipids_fr-rFR_320dp_2.0x_dark.png",
+      "sha256": "9893a9447f442b7d5c6ab39db6a0ad293be6282aaf3917c5e5eb6e45798a69c4",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/catalog_lipids_fr-rFR_320dp_2.0x_dark.png"
+    },
+    {
+      "name": "catalog_lipids_fr-rFR_411dp_1.0x_light.png",
+      "sha256": "cad4b7d874d6e0f7e9c1bbdb36c4c23b148b28bd071ae81e4feda4dd176c8fcd",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/catalog_lipids_fr-rFR_411dp_1.0x_light.png"
+    },
+    {
+      "name": "catalog_lipids_zh-rCN_320dp_2.0x_dark.png",
+      "sha256": "1bdab0563313894e1c9c0793f65e0f0539623b2b2b03c059bcbc700eca4adb42",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/catalog_lipids_zh-rCN_320dp_2.0x_dark.png"
+    },
+    {
+      "name": "catalog_lipids_zh-rCN_411dp_1.0x_light.png",
+      "sha256": "45224357ee4e312e1bec44cf481857a69a1f8364cfa477d2baadc2969eff762c",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/catalog_lipids_zh-rCN_411dp_1.0x_light.png"
+    },
+    {
+      "name": "catalog_lipids_zh-rTW_320dp_2.0x_dark.png",
+      "sha256": "b027e302b79e6bf5d3b71855ba5622b6c82b6e3094fec58b80c2ff4b7e7da591",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/catalog_lipids_zh-rTW_320dp_2.0x_dark.png"
+    },
+    {
+      "name": "catalog_lipids_zh-rTW_411dp_1.0x_light.png",
+      "sha256": "e7f7e46dfde02a0b4d44eec671dc0de6f6e6b870b2a6650836bf477cd3424bb4",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/catalog_lipids_zh-rTW_411dp_1.0x_light.png"
+    },
+    {
+      "name": "catalog_metabolism_en_320dp_2.0x_dark.png",
+      "sha256": "54724ed5f95d0e6376b9967e022ca3cb25dd9461b48e41725306f50e414b4d61",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/catalog_metabolism_en_320dp_2.0x_dark.png"
+    },
+    {
+      "name": "catalog_metabolism_en_411dp_1.0x_light.png",
+      "sha256": "0ed2a45a687e0912fa56cb6013e5e4909961687d95d86fbb5ece764f0702a2fa",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/catalog_metabolism_en_411dp_1.0x_light.png"
+    },
+    {
+      "name": "catalog_metabolism_fr-rFR_320dp_2.0x_dark.png",
+      "sha256": "5aa12b0dc85d0207da3ae05dcf47abba5283d1b53dfd07e4387bb06d6cc2c1e1",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/catalog_metabolism_fr-rFR_320dp_2.0x_dark.png"
+    },
+    {
+      "name": "catalog_metabolism_fr-rFR_411dp_1.0x_light.png",
+      "sha256": "78092478c2f046be456fd93ad1df04a04d5ee0b25d0cec06866edc9ef7433cfe",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/catalog_metabolism_fr-rFR_411dp_1.0x_light.png"
+    },
+    {
+      "name": "catalog_metabolism_zh-rCN_320dp_2.0x_dark.png",
+      "sha256": "0c12369ef9175294faa855afaba210131bc53edc594c100be6510e4fff62608f",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/catalog_metabolism_zh-rCN_320dp_2.0x_dark.png"
+    },
+    {
+      "name": "catalog_metabolism_zh-rCN_411dp_1.0x_light.png",
+      "sha256": "db5d05c4147f2185f7265888a9b81c357d063711bec722363fea4c1c46fbc955",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/catalog_metabolism_zh-rCN_411dp_1.0x_light.png"
+    },
+    {
+      "name": "catalog_metabolism_zh-rTW_320dp_2.0x_dark.png",
+      "sha256": "c72a93fcd9b38ccae1dcf25757391d6957e839ea457cf14fd41acfd2e14fd420",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/catalog_metabolism_zh-rTW_320dp_2.0x_dark.png"
+    },
+    {
+      "name": "catalog_metabolism_zh-rTW_411dp_1.0x_light.png",
+      "sha256": "91dd3c3956618862350889f9a824732f22dbd87a09c1e12adaf7895de64bc4fc",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/catalog_metabolism_zh-rTW_411dp_1.0x_light.png"
+    },
+    {
+      "name": "history_en_320dp_1.0x_dark.png",
+      "sha256": "e583ea8fa457b9e899083f854a9c9c3c4a6345e49f5b043a5948b8a8da492990",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": null
+    },
+    {
+      "name": "history_en_320dp_1.0x_light.png",
+      "sha256": "86f6e311413c96e6f8f31d98c94d3f4ec1d8ad35fb4ef0a2ccec72b5bf99e3ad",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": null
+    },
+    {
+      "name": "history_en_320dp_2.0x_dark.png",
+      "sha256": "b92f12549e6409d82dfc1ab9ed5dac80e9890398baa8ebfa5c47888d94a1ca6b",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/history_en_320dp_2.0x_dark.png"
+    },
+    {
+      "name": "history_en_320dp_2.0x_light.png",
+      "sha256": "e51894fe7950b45c51ba649f76927fb7e174468bb303ad7f61c0ae4b2689d9a4",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": null
+    },
+    {
+      "name": "history_en_411dp_1.0x_dark.png",
+      "sha256": "36820c1e1f873b1afa8c25e7ab42830d1a4a012cb53c7636675375c15ca3ad1c",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": null
+    },
+    {
+      "name": "history_en_411dp_1.0x_light.png",
+      "sha256": "3d5cd9b28fdf7b4ca5d2cb9a2188e1d6d077ff93bfbeac559956e8b9116eff90",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/history_en_411dp_1.0x_light.png"
+    },
+    {
+      "name": "history_en_411dp_2.0x_dark.png",
+      "sha256": "aff613d38683af3d7afea3424aec45a87b2e187972be39025aa6e80d07c82f1a",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": null
+    },
+    {
+      "name": "history_en_411dp_2.0x_light.png",
+      "sha256": "6a1c84a3dc418b93207232636acaf3f1201c78cd2e56f20c5b8a0e203798b3f3",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": null
+    },
+    {
+      "name": "history_fr-rFR_320dp_1.0x_dark.png",
+      "sha256": "1dd0d46f5620e120d5e62526e03eeea7e9f80a3cecd10bc004b8e0efda7a08c0",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": null
+    },
+    {
+      "name": "history_fr-rFR_320dp_1.0x_light.png",
+      "sha256": "aa133b1112ef845ad50c50c6ff3fe8d13b9a7af642ac5c551a096872211f758a",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": null
+    },
+    {
+      "name": "history_fr-rFR_320dp_2.0x_dark.png",
+      "sha256": "c0216bc53b92fca86e371f9564f41171afd12fd700ff617db653d6a52fa66f5d",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/history_fr-rFR_320dp_2.0x_dark.png"
+    },
+    {
+      "name": "history_fr-rFR_320dp_2.0x_light.png",
+      "sha256": "bf1dd402ad41f74c28a6a4289bae96f94eeea00b5843af91bd6b094d5661ab31",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": null
+    },
+    {
+      "name": "history_fr-rFR_411dp_1.0x_dark.png",
+      "sha256": "0a071527baad15ea1e2566555b58a2795c3dc415c9714c71694ea004a58e9654",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": null
+    },
+    {
+      "name": "history_fr-rFR_411dp_1.0x_light.png",
+      "sha256": "b3cee919f73e9075b90208e0da0336265dd225e34d20e9f940f332e2ff55278f",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/history_fr-rFR_411dp_1.0x_light.png"
+    },
+    {
+      "name": "history_fr-rFR_411dp_2.0x_dark.png",
+      "sha256": "1450020e4acc81bb3703a98efaf2adb2ba98e480d6c32f3ac9ec8ff074fed1bd",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": null
+    },
+    {
+      "name": "history_fr-rFR_411dp_2.0x_light.png",
+      "sha256": "da494900b6cdcaad3896a0078b25f7e86e664c357a3849b011654f7da4922edb",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": null
+    },
+    {
+      "name": "history_zh-rCN_320dp_1.0x_dark.png",
+      "sha256": "d1ba894fb7e8aae5e02509f369b18d70e7c25671c9c80fb81f5b7f9af8395e2e",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": null
+    },
+    {
+      "name": "history_zh-rCN_320dp_1.0x_light.png",
+      "sha256": "c36321955b0143c366d421d84785067159a4d5a110b4c86fb71f17208167ce50",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": null
+    },
+    {
+      "name": "history_zh-rCN_320dp_2.0x_dark.png",
+      "sha256": "d60d8621eb2ea0c1b06170982735feddf77be46219bc497dd46e8835fd8c07f5",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/history_zh-rCN_320dp_2.0x_dark.png"
+    },
+    {
+      "name": "history_zh-rCN_320dp_2.0x_light.png",
+      "sha256": "c4447f945cbaf2c17c65d22282824e2fc86e0f809092528c7a0dff4f9d98a724",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": null
+    },
+    {
+      "name": "history_zh-rCN_411dp_1.0x_dark.png",
+      "sha256": "0524b7aed2bffb3db3eaaca8fcc8cd8c1bbc8ce52631b928352a2ac0d2d97c05",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": null
+    },
+    {
+      "name": "history_zh-rCN_411dp_1.0x_light.png",
+      "sha256": "8f1afcaf9882afe4306d28290e446a9987b53b34dc1e38d0fdca719e06fdd2c1",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/history_zh-rCN_411dp_1.0x_light.png"
+    },
+    {
+      "name": "history_zh-rCN_411dp_2.0x_dark.png",
+      "sha256": "80c868cb56b28f45319ebc25151d7c6c91bec98bc618e7eda8047e194aafb528",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": null
+    },
+    {
+      "name": "history_zh-rCN_411dp_2.0x_light.png",
+      "sha256": "8575cbc4c3ec75a3d35e9e80e9e2ca717241925c0a6e7a144ef571b327be3286",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": null
+    },
+    {
+      "name": "history_zh-rTW_320dp_1.0x_dark.png",
+      "sha256": "1c100a0fa7795f3832a237cf94b8332335812cfee90fe16732410df908f9ff5c",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": null
+    },
+    {
+      "name": "history_zh-rTW_320dp_1.0x_light.png",
+      "sha256": "97435a0eb2eea45ae0a44d9d44b691a4bf8fd705b1eccc82207d228eda73fa31",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": null
+    },
+    {
+      "name": "history_zh-rTW_320dp_2.0x_dark.png",
+      "sha256": "be897d60713e2555c496c26c30c106e7bd45d53c1ca92b3e63d1265c55f524af",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/history_zh-rTW_320dp_2.0x_dark.png"
+    },
+    {
+      "name": "history_zh-rTW_320dp_2.0x_light.png",
+      "sha256": "e63a60436b8e8a95172265fc45bbd487ce86871d2273113a9f1a4516157258f6",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": null
+    },
+    {
+      "name": "history_zh-rTW_411dp_1.0x_dark.png",
+      "sha256": "d06dfbd304e8b28a0b3251b5f714a446b2430dd06b3cc171b7352123595d5382",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": null
+    },
+    {
+      "name": "history_zh-rTW_411dp_1.0x_light.png",
+      "sha256": "dc0a9d6a8e9817c97e45154d990d53e3fc9906c24cd4660511dc907bbab068e2",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/history_zh-rTW_411dp_1.0x_light.png"
+    },
+    {
+      "name": "history_zh-rTW_411dp_2.0x_dark.png",
+      "sha256": "5c00907447e63b12ec75fa734985e9485d2a2c1dbf2bf11496cea8a4d40b74d2",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": null
+    },
+    {
+      "name": "history_zh-rTW_411dp_2.0x_light.png",
+      "sha256": "ca1e9f1385f865a22b179b4c601ba6c60b67fbddf2dc35f6de61e4dbf7fae0ed",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": null
+    },
+    {
+      "name": "top_en_320dp_1.0x_dark.png",
+      "sha256": "43c379778c1413c16bacfe2d2e42f906215c018aec093bdaf42d2a4ebfd438d4",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": null
+    },
+    {
+      "name": "top_en_320dp_1.0x_light.png",
+      "sha256": "8a6a1c73a616e1d4adfa88cfb1fe51b333b80364005c0f539d501b002addaff8",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": null
+    },
+    {
+      "name": "top_en_320dp_2.0x_dark.png",
+      "sha256": "9439a1a8c78b35983919250249729b08e379106b212df7e0b8b95e41ee00e244",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/top_en_320dp_2.0x_dark.png"
+    },
+    {
+      "name": "top_en_320dp_2.0x_light.png",
+      "sha256": "b2eb7c9a89fc7ed7521ab9c83a264d2c49cc36c15f5ac3ced9052633a4fbe7e8",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": null
+    },
+    {
+      "name": "top_en_411dp_1.0x_dark.png",
+      "sha256": "7d8376a64595155238bd4da57b55d7b1f30b53d03887d622a30b6bf5d95d18fe",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": null
+    },
+    {
+      "name": "top_en_411dp_1.0x_light.png",
+      "sha256": "05e1f6b0b2b2682cd20ffbea5c0804d8ba845a1ba0ecbe75c59d6222629a2ce6",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/top_en_411dp_1.0x_light.png"
+    },
+    {
+      "name": "top_en_411dp_2.0x_dark.png",
+      "sha256": "d9fe338f2367adb2368f9a9a319ae73332e330a58910f63f5e2d3f6ff6c988dd",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": null
+    },
+    {
+      "name": "top_en_411dp_2.0x_light.png",
+      "sha256": "ad50c9e2a5c08b3a5329ce4742bff14c4796a5cc9a2ba67fb6225faf679ed952",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": null
+    },
+    {
+      "name": "top_fr-rFR_320dp_1.0x_dark.png",
+      "sha256": "369f1267b218f280cc38344fbd5605cf5b6b8828368850b0f5b146f1d403982b",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": null
+    },
+    {
+      "name": "top_fr-rFR_320dp_1.0x_light.png",
+      "sha256": "009e6d2be4c4b571d1176da45024c2140a7db413033fcde9a28f7332ed5d28ea",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": null
+    },
+    {
+      "name": "top_fr-rFR_320dp_2.0x_dark.png",
+      "sha256": "8eaf8f243b83459677fd4cc4012e6d4f9ec68e0e67538969b36b8c2ddb26d4a8",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/top_fr-rFR_320dp_2.0x_dark.png"
+    },
+    {
+      "name": "top_fr-rFR_320dp_2.0x_light.png",
+      "sha256": "8e7e460e8f0f896bdf482bd7f2eaa4b82f81b9bffaea75a88e98906b04df37e2",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": null
+    },
+    {
+      "name": "top_fr-rFR_411dp_1.0x_dark.png",
+      "sha256": "84dde841aefdc78f4e647754688ba783d4d55dc3da22b82b15e2e5cbf48d5de1",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": null
+    },
+    {
+      "name": "top_fr-rFR_411dp_1.0x_light.png",
+      "sha256": "45c301b2c10869217b8fea2cae1b1feba53b7fcfef38c8d4286d62190e9e1388",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/top_fr-rFR_411dp_1.0x_light.png"
+    },
+    {
+      "name": "top_fr-rFR_411dp_2.0x_dark.png",
+      "sha256": "c8694b55353c6c186f175949537bb15d9fe6f4c9e1a0f5e7f1529af514e4a3a6",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": null
+    },
+    {
+      "name": "top_fr-rFR_411dp_2.0x_light.png",
+      "sha256": "43306e4b68c40d43bfe28dfd3a944368675a7da7c5138d620a3a0cb4ecc112a8",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": null
+    },
+    {
+      "name": "top_zh-rCN_320dp_1.0x_dark.png",
+      "sha256": "b21f38784e573adc89a19e0b70851d53f8157fdfa1127572993c872993438961",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": null
+    },
+    {
+      "name": "top_zh-rCN_320dp_1.0x_light.png",
+      "sha256": "727335ba19e12a278ca75521ac23a240e013f0f0c0e988e5f11324dfc9246a71",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": null
+    },
+    {
+      "name": "top_zh-rCN_320dp_2.0x_dark.png",
+      "sha256": "557a242f03648f9070378370158f43f8090c594bd434091578d541f3e8f250e6",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/top_zh-rCN_320dp_2.0x_dark.png"
+    },
+    {
+      "name": "top_zh-rCN_320dp_2.0x_light.png",
+      "sha256": "809b2233731c6e955bb94e55bb90fe60d5b66fcb859cc9d43aee7004b963d76b",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": null
+    },
+    {
+      "name": "top_zh-rCN_411dp_1.0x_dark.png",
+      "sha256": "a151189490586abfeaa5a08363af62d534d9fe89d39ade56e7035bd3498e8932",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": null
+    },
+    {
+      "name": "top_zh-rCN_411dp_1.0x_light.png",
+      "sha256": "cffa6832e460f453209892af8ea449932ecf2369871df045eafe5f85743d6b19",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/top_zh-rCN_411dp_1.0x_light.png"
+    },
+    {
+      "name": "top_zh-rCN_411dp_2.0x_dark.png",
+      "sha256": "541d7975cd1777f48fa2f3da094c8f456ad5d61c82db4243b91c9d93a89b4f94",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": null
+    },
+    {
+      "name": "top_zh-rCN_411dp_2.0x_light.png",
+      "sha256": "99344b4df93c7e3e43e97ebae8bab5e1b9965feab3813089ecceb41e2de9ef5a",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": null
+    },
+    {
+      "name": "top_zh-rTW_320dp_1.0x_dark.png",
+      "sha256": "84b47758826cdcc8ff970cd1eb5d3eb71805ea2b9f3fcf8b10aad1db41c458d1",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": null
+    },
+    {
+      "name": "top_zh-rTW_320dp_1.0x_light.png",
+      "sha256": "85f09452461a753747c6bc90115ee596cf84d13ac4159e9d1ffe82083e12b76e",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": null
+    },
+    {
+      "name": "top_zh-rTW_320dp_2.0x_dark.png",
+      "sha256": "5cc845da70d6e204b1e31b991f76c35f5cdb821de6da35f4f61367860de59dc1",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/top_zh-rTW_320dp_2.0x_dark.png"
+    },
+    {
+      "name": "top_zh-rTW_320dp_2.0x_light.png",
+      "sha256": "c451ea72d7312f3b3574963b1a02f500fb29db0d3dd66528d08e6ac3a653ce60",
+      "width_px": 960,
+      "height_px": 1920,
+      "retained_path": null
+    },
+    {
+      "name": "top_zh-rTW_411dp_1.0x_dark.png",
+      "sha256": "5db6ebe5d35f0b1767f69b1eb77a2facbd3d1a42b1a9fc4d2af387d9b8b7b02e",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": null
+    },
+    {
+      "name": "top_zh-rTW_411dp_1.0x_light.png",
+      "sha256": "62614cbd2b4938434f829a3287ca2a31a2edea975412022d01c5e8d208f35a97",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": "docs/labs/ui03/screenshots/integrated-final/top_zh-rTW_411dp_1.0x_light.png"
+    },
+    {
+      "name": "top_zh-rTW_411dp_2.0x_dark.png",
+      "sha256": "9521d70b318cbd3932a00194585126f9acfc680938f51f383a447203a8daedb5",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": null
+    },
+    {
+      "name": "top_zh-rTW_411dp_2.0x_light.png",
+      "sha256": "bd3fc2bdc7ac9c4601a27e063b21f81f30363ab6263068ac7adb4b24f154758c",
+      "width_px": 1233,
+      "height_px": 2673,
+      "retained_path": null
+    }
+  ],
+  "visual_review": {
+    "root_agent": [
+      "top_zh-rCN_320dp_2.0x_dark.png",
+      "catalog_cbc_fr-rFR_320dp_2.0x_dark.png",
+      "catalog_lipids_en_411dp_1.0x_light.png",
+      "catalog_metabolism_zh-rTW_411dp_1.0x_light.png"
+    ],
+    "scope": "Actual Compose render visual inspection; no critical value/unit clipping observed in those frames. Not a physical-device or pixel-golden claim.",
+    "ui_agent": [
+      "catalog_all_en_411dp_1.0x_light.png",
+      "catalog_lipids_zh-rTW_411dp_1.0x_light.png",
+      "catalog_metabolism_en_320dp_2.0x_dark.png"
+    ]
+  },
+  "final_exact_head_ci": "PENDING",
+  "physical_phone": "NOT_RUN",
+  "talkback": "NOT_RUN",
+  "signed_apk_release": "NOT_RUN"
+}

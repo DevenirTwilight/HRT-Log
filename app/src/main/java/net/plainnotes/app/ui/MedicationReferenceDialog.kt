@@ -37,7 +37,7 @@ import java.time.LocalDate
     var confirm by remember {mutableStateOf(false)};var unlink by remember {mutableStateOf(false)}
     LaunchedEffect(state.saved){if(state.saved){confirm=false;unlink=false;preview=null;editing=false}}
     val keyboard=LocalSoftwareKeyboardController.current
-    Dialog(onDismissRequest={if(controller.close())onDismiss()},properties=DialogProperties(usePlatformDefaultWidth=false)) {
+    Dialog(onDismissRequest={if(controller.close())onDismiss()},properties=DialogProperties(usePlatformDefaultWidth=false,dismissOnBackPress=true)) {
         Scaffold(modifier=Modifier.testTag("reference-window"),topBar={TopAppBar(title={Text(stringResource(R.string.ref2_title))},navigationIcon={
             IconButton(modifier=Modifier.testTag("reference-close"),enabled=!state.busy,onClick={if(controller.close())onDismiss()}){Icon(Icons.AutoMirrored.Outlined.ArrowBack,stringResource(R.string.cancel))}
         })}) {padding->

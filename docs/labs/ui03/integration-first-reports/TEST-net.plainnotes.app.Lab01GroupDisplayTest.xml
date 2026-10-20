@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.Lab01GroupDisplayTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-10-20T07:12:44.015Z" hostname="2c2deac85eb5" time="1.183">
+  <properties/>
+  <testcase name="aRowOpensTheExistingDetailThenEdit" classname="net.plainnotes.app.Lab01GroupDisplayTest" time="0.367"/>
+  <testcase name="cardsForDrawsSingleRowsOtherwise" classname="net.plainnotes.app.Lab01GroupDisplayTest" time="0.212"/>
+  <testcase name="groupingRule" classname="net.plainnotes.app.Lab01GroupDisplayTest" time="0.04"/>
+  <testcase name="editingTimeOrLabOfAGroupedResultShowsTheHintAndItSplitsOut" classname="net.plainnotes.app.Lab01GroupDisplayTest" time="0.23"/>
+  <testcase name="flagsCompareInOneUnit" classname="net.plainnotes.app.Lab01GroupDisplayTest" time="0.043"/>
+  <testcase name="rowsReadTestValueUnitAndSayHighOrLowInWords" classname="net.plainnotes.app.Lab01GroupDisplayTest" time="0.093"/>
+  <testcase name="anAnalyteChipStillShowsItsTrendAndRows" classname="net.plainnotes.app.Lab01GroupDisplayTest" time="0.132"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

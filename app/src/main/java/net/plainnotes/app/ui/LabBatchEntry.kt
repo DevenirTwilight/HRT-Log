@@ -122,39 +122,8 @@ internal fun labFlag(v: LabValueEntity): LabFlag? {
 }
 
 /** One draw with several results: "date time · laboratory · n tests" over an inset list; a row opens the existing detail. */
-/**
- * One draw: "date time · laboratory · n tests" over an inset list; a row opens the existing detail. A real lab panel (LAB-02)
- * shows its note and opens its own detail from the title; a LAB-01 display group without a panel offers "save as one blood test".
- */
-@Composable fun LabGroupCard(group: List<LabValueEntity>, onOpen: (LabValueEntity) -> Unit, panel: LabPanelEntity? = null,
-                             onPanel: (() -> Unit)? = null, onSaveAsPanel: (() -> Unit)? = null) {
-    val first = group.first()
-    val at = panel?.sampled_utc ?: first.sampled_utc; val place = (panel?.laboratory ?: first.laboratory)?.trim()?.takeIf { it.isNotEmpty() }
-    ElevatedCard(Modifier.fillMaxWidth().testTag(if (panel != null) "lab-panel:${panel.id}" else "lab-group:${first.sampled_utc}:${first.laboratory?.trim().orEmpty()}"), shape = CardDefaults.elevatedShape,
-        colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow), elevation = CardDefaults.elevatedCardElevation(0.dp)) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            val title = listOfNotNull(formatDateTime(Instant.ofEpochMilli(at)), place, stringResource(R.string.lab_group_count, group.size)).joinToString(" · ")
-            if (onPanel != null) Row(Modifier.fillMaxWidth().heightIn(min = 48.dp).clickable(role = Role.Button, onClickLabel = stringResource(R.string.lab_panel_open), onClick = onPanel)
-                .testTag("lab-panel-open"), verticalAlignment = Alignment.CenterVertically) {
-                Text(title, style = sectionTitleStyle, modifier = Modifier.weight(1f).semantics { heading() }.testTag("lab-group-title"))
-                Icon(Icons.AutoMirrored.Outlined.KeyboardArrowRight, null)
-            } else Text(title, style = sectionTitleStyle, modifier = Modifier.semantics { heading() }.testTag("lab-group-title"))
-            panel?.note?.let { Text(it, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.testTag("lab-panel-note")) }
-            Surface(color = MaterialTheme.colorScheme.surfaceContainerLowest, shape = Corners.list, modifier = Modifier.fillMaxWidth()) {
-                Column { group.forEachIndexed { i, v ->
-                    if (i > 0) HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant)
-                    LabGroupRow(v) { onOpen(v) }
-                } }
-            }
-            if (onSaveAsPanel != null) OutlinedButton(onClick = onSaveAsPanel, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("lab-save-as-panel")) {
-                Text(stringResource(R.string.lab_panel_save_as))
-            }
-        }
-    }
-}
-
 @Composable internal fun LabGroupRow(v: LabValueEntity, onOpen: () -> Unit) {
-    val name = analyteLabel(v.analyte_code); val number = displayNumber(v.value)
+    val name = analyteLabel(v.analyte_code); val number = labReportNumber(v.value)
     val flag = labFlag(v)?.let { stringResource(if (it == LabFlag.HIGH) R.string.lab_flag_high else R.string.lab_flag_low) }
     val spoken = stringResource(R.string.lab_row_spoken, name, number, v.unit) + (flag?.let { stringResource(R.string.lab_row_spoken_flag, it) } ?: "")
     Row(Modifier.fillMaxWidth().heightIn(min = 56.dp).testTag("lab-group-row:${v.id}").clickable(role = Role.Button, onClick = onOpen).clearAndSetSemantics {
@@ -182,7 +151,7 @@ internal fun labFlag(v: LabValueEntity): LabFlag? {
     val form=draft ?: remember {LabBatchDraft()}
     val rows=form.rows
     val duplicates = LabBatchRules.duplicates(rows)
-    Dialog(onDismissRequest = { if (!saving) onDismiss() }, properties = DialogProperties(usePlatformDefaultWidth = false)) {
+    Dialog(onDismissRequest = { if (!saving) onDismiss() }, properties = DialogProperties(usePlatformDefaultWidth = false, dismissOnBackPress = true)) {
         Surface(Modifier.fillMaxSize().testTag("lab-batch"), color = MaterialTheme.colorScheme.surface) {
             Column(Modifier.fillMaxSize().systemBarsPadding().imePadding()) {
                 Row(Modifier.fillMaxWidth().padding(start = 4.dp, end = 16.dp, top = 4.dp), verticalAlignment = Alignment.CenterVertically) {

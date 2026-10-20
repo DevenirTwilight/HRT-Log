@@ -1,0 +1,45 @@
+{
+  "status": "PASS",
+  "tests": 18,
+  "failures": 0,
+  "native_kotlin_compile": "PASS",
+  "log_scope": "Focused18 synthetic Robolectric tests plus compileFullDebugAndroidTestKotlin,3m50s; native execution NOT_RUN locally",
+  "source": "8fbac119 plus uncommitted home report-range wording and test updates",
+  "reports": [
+    {
+      "file": "TEST-net.plainnotes.app.Lab01GroupDisplayTest.xml",
+      "sha256": "23c164d80189c7b0e04cb253deb15cb479f929bb6baefa00319865e2473626c7",
+      "tests": 7,
+      "failures": 0,
+      "skipped": 0
+    },
+    {
+      "file": "TEST-net.plainnotes.app.Lab02PanelUiTest.xml",
+      "sha256": "0d8d7d36f07008837efb386a2db6ebff12652de27032b461f273e952d72403b6",
+      "tests": 4,
+      "failures": 0,
+      "skipped": 0
+    },
+    {
+      "file": "TEST-net.plainnotes.app.LabContextUiTest.xml",
+      "sha256": "83d2b6dd35f2ba958ad6102f43b4f98cee0829274c90eaf1c42961fa31f27d5c",
+      "tests": 1,
+      "failures": 0,
+      "skipped": 0
+    },
+    {
+      "file": "TEST-net.plainnotes.app.LabUi03HomeTest.xml",
+      "sha256": "41933ac5ef9838c03e9a93f2a36f81cbd9324eae8b30c4bd61cda7f5375e17a6",
+      "tests": 5,
+      "failures": 0,
+      "skipped": 0
+    },
+    {
+      "file": "TEST-net.plainnotes.app.LabUi03ResourceAndWiringTest.xml",
+      "sha256": "e7906c619138f2a5252632a389b24cf1209acf90dc641e5502f02f4632d1d28b",
+      "tests": 1,
+      "failures": 0,
+      "skipped": 0
+    }
+  ]
+}
