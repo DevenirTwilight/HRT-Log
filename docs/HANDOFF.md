@@ -1,3 +1,13 @@
+## P4 恢复专项实时原生结果1：准备阶段LMK，恢复未测，证据已保存 — 2026-10-20
+
+冻结源9d304e58。dispatch39495229423/job118878466555/artifact12297921201已结束FAIL；ZIP官方/下载SHA2bb20ac108ad6e34e6a051a2549ba697aef75deef3f86426842171be1e271ead、CRC已核验，原始报告/kernel/小型进程终止日志全部立即入库`restore-memory/native-manual/`。
+
+最后已保存阶段synthetic_fixture_expansion（已记录duration13279.559ms）到下一阶段/size报告之前，内核LMK杀测试PID3913，to free201148KiB仅终止参考非峰；**尚未调用实际加密恢复**，所以恢复时间/资源/大库一致性全部NOT_RUN，不能声称新恢复代码导致或修复了该准备阶段失败。原大库两次次数仍已占一次，不追加补跑筛绿。PR自动39495197608仍执行中，继续等待唯一剩余结果。
+
+小型ROWS_DELETED/ROWS_INSERTED两次准备与外部kill已执行，verify日志中整库hash与新PID断言已通过，但epoch检查在事务外调用ReferenceStore.previewEpoch触发check(db.inTransaction())，这是新探针的使用错误；epoch和完整oracle没有执行，不能当数据库损坏或测试通过。源9d保持不动，不能用新源码冒充这两个大库运行。后续如修正，仅限测试事务作用域，须另记小型合同验证，不重跑原大库，也不引入新的生产结构修复。
+
+本地485/工具49/生成Android编译通过证据仍有效但不覆盖原生未测。Draft/OFF/PRODUCTION_BLOCKED，不合并/发布；每个完成运行立即保存推送。
+
 ## P4 恢复专项实时原生检查点：两次固定运行进行中 — 2026-10-20
 
 候选源码9d304e58fd92f0171fd6ddd272f79dbe6ece3cb4，后续文档提交不改生产/测试源码。预定两次均已启动：PR run39495197608/job118878355913，dispatch run39495229423/job118878466555，均进入API26 emulator step，**暂无完成结果**。配置/次数/常规CI IDs已保存`restore-memory/native-run-plan.json`。这是唯一两个大库运行，不再增加第三次。
