@@ -1,3 +1,13 @@
+## P4 恢复专项实时原生结果2：一轮完整恢复PASS，稳定复验仍未证明 — 2026-10-20
+
+冻结生产源9d304e58。PR自动39495197608/job118878355913/artifact12298256693完整结束；官方/下载SHAb3c4e1b3bdf9fb1ac73fddd085c0e648172ba24e1936955f591d1ef9e178eca6、CRC、pre-cleanup/最终报告一致均核验，立即入库`restore-memory/native-auto/`。原API26 SQLCipher/RAM520962048B/ART201326592B、14600记录/2000容器/32603行/19660924B全部保持。
+
+本轮恢复41632.659ms（含整库hash前后读和资源观测），实际Repository+probe36984.967ms；全部DOMAIN业务字段/行按可信PK有序流式摘要前后相同baa5babe005a4e2c6b39b0c6201c4cc9c83b36691afd0d6c627e5219ae3467f7，独立完整oracle/投影通过。恢复窗口100ms采样heap120390160B、RSS124850176B、native malloc32348584B；staging关闭前后malloc30239080→10142472B，减少20096608B（约19.17MiB）；**RSS同一时点未同步下降**，不能等同物理释放。HWM包含此前夹具，100ms样本可漏瞬时峰，无旧恢复阶段RSS可直接比较。
+
+这只是本轮恢复PASS：另一固定dispatch39495229423在准备阶段LMK，未到恢复，故稳定性NOT_PROVEN。两个大库次数已用完，不再补跑。三写8040.550/7511.015/7804.042ms仍FAIL，所以原native整体DIAGNOSTIC_BUDGET_FAIL，不能把恢复PASS改成P4或整作业PASS。原小型进程死亡验证同样因previewEpoch事务外调用FAIL（数据hash已过，epoch/oracle未跑），原日志保留。
+
+后续仅修正**测试探针**事务作用域（不改任何生产源码），本地Android编译/工具验证后只执行一次包含两个小型kill合同的手动原生job，明确不同check/artifact和NOT_RUN_LARGE，不再跑大库。此验证不替换旧两个native结果，不计作第二轮恢复稳定性。常规API26/29/35 CI仍收集中；Draft/OFF，不合并/发布。
+
 ## P4 恢复专项实时原生结果1：准备阶段LMK，恢复未测，证据已保存 — 2026-10-20
 
 冻结源9d304e58。dispatch39495229423/job118878466555/artifact12297921201已结束FAIL；ZIP官方/下载SHA2bb20ac108ad6e34e6a051a2549ba697aef75deef3f86426842171be1e271ead、CRC已核验，原始报告/kernel/小型进程终止日志全部立即入库`restore-memory/native-manual/`。
