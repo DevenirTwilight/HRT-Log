@@ -1,6 +1,6 @@
 # LAB-03 compatibility and original report fields — 2026-10-19
 
-Status: IMPLEMENTATION_IN_PROGRESS. Base 080094ae5adcd8fe65cb0bb1638ef71e0ebc1ec8; independent of draft ANSM P4 #57 and UI #89. No Room or backup version is reserved. Runtime Room12 and PNBAK1 business Schema11 remain distinct and unchanged.
+Status: IMPLEMENTATION_VERIFIED_AT_403ae960; UI_INTEGRATION_PENDING. Base 080094ae5adcd8fe65cb0bb1638ef71e0ebc1ec8; independent of draft ANSM P4 #57 and UI #89. No Room or backup version is reserved. Runtime Room12 and PNBAK1 business Schema11 remain distinct and unchanged.
 
 ## Existing persistence contract
 
@@ -34,6 +34,8 @@ Derived non-HDL cholesterol, lipid ratios and FIB-4 are NOT_IMPLEMENTED; they ar
 
 - Domain catalogue: 135 tests PASS, including nine new source/conversion/boundary tests.
 - Focused LabPanelDataTest: 13 tests PASS, including 45-analyte original-field/backup/trash roundtrip and failed transaction with no partial writes. Shared contract is also scheduled through existing API26/29/35 native classes; native results are NOT_RUN at this checkpoint.
-- App catalogue/draft tests: IN_PROGRESS; not yet claimed PASS.
-- Native activity rotation, actual leave/lock, physical devices and TalkBack: NOT_RUN at this checkpoint.
-- Final exact-HEAD six required CI checks: NOT_RUN at this checkpoint.
+- App catalogue/draft tests: 11 PASS plus PeriodStability5 PASS; Android test Kotlin compile PASS. Full CI App1514PASS/237SKIPPED/0FAIL; data263PASS; reminders20PASS. Exact source403ae960, receipt ci-403ae960.json.
+- Native Activity recreation, actual landscape/portrait changes with24 populated rows and actual leave/lock draft clearing: PASS on API26/29/35. Expanded45-code raw backup/trash roundtrip and complete failed transaction rollback: PASS on the same three APIs. Physical devices and TalkBack: NOT_RUN; in-flight save/lock/completion race: NOT_RUN. Single-result and panel-addition unsaved forms keep their existing remember-only rotation behavior; batch form retention is the scope verified here.
+- Implementation403ae960: all six required CI categories PASS on both push and PR. A later receipt-only commit still needs its own latest-HEAD checks. #89 homepage integration is pending and is not asserted by these data-branch results. Reproduce retained report checks with python3 docs/lab03/verify-ci-evidence.py.
+
+Room/backup structure is unchanged. Older builds can lack the new display vocabulary despite accepting raw codes; downgrade UI support is not promised. Do not uninstall or clear data to work around vocabulary differences. New readers preserve old codes and unknown units.

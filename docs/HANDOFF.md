@@ -1,3 +1,11 @@
+## LAB-03 #90 实现已通过 CI 与三 API 原生验证 — 2026-10-20
+
+源码403ae96015ea95f3379e4a95ea0b28e7f8d4c846的push/PR六项必需检查均PASS；PR run39296389355，science39296389637。实际下载核验API26/29/35报告：24项已填草稿recreate、实际横/竖方向变化、真正离开锁定后清空各PASS（22.170/25.670/18.295秒），45代码原单位/范围/上下文→回收站→PNBAK1恢复和无效事务全回滚也各PASS，均非仅编译。每API原导航/锁12项、化验单13项全部PASS。完整JVM App1751总项中1514PASS/237既有SKIPPED/0FAIL；data263PASS，reminder20PASS；11项新LAB03及Period5无跳过。此前本地取消定位FAIL原始XML保留，祖先内匹配修正后本地16PASS及原生Kotlin编译PASS。
+
+ci-403ae960.json及evidence/ci-403ae960保留原HTML/XML、archive SHA、来源run和check快照；verify-ci-evidence.py可离线复核，不把归档内旧报告当实时认证。此收据提交仅文档，最终HEAD仍需独立CI。#89已有其他开发者Vibe+owner的12次新提交，最新14ed5f91 Android失败；UI工作流已保留并核查，尚未合并，不复制未验收源码。根据实际门槛允许#90先独立合法合并，再由#89普通合入最新主线以统一分类，不假装当前数据PR已交付新版视觉。
+
+Room12/业务备份11、Repository/库存/PK/权限/Gradle/CI不变。自定义创建/结构化方法/真正零及限定结果仍NOT_IMPLEMENTED；物理真机、TalkBack、在途保存-锁屏-回调交错NOT_RUN。原单项编辑与整单新增行的旋转草稿未扩展；本轮验证的是批量表单。无签名、APK交付或Release。
+
 ## LAB-03 实际录入/历史保护代码已提交待验 — 2026-10-19
 
 独立数据分支已实现45代码词典、四语51键、搜索/分类、8个原有及扩展组合，保留原14单位Double结果；单项编辑改用原Double精确预填并冻结未改的采血瞬间/时区和参考单位，整单备注编辑通过同一helper保留原始瞬间。不同项目选择清空数值/范围/项目备注，相同选择/取消保持草稿。批量表单仅Activity内存保留，旋转保留、锁/伪装卸载清除并以token隔离旧回调；不落盘。NotesViewModel仅saveLabPanel一处窄修改，ShellHosts用当前panel快照调用，不碰浓度/PK/Repository/库存/Room12/业务11。

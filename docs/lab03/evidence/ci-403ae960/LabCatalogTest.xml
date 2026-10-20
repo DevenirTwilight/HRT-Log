@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.domain.LabCatalogTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2026-10-19T17:43:06.275Z" hostname="runnervm8k3b6" time="0.108">
+  <properties/>
+  <testcase name="frozenLegacyFactorsAndAssayIdentitiesRemainSeparate()" classname="net.plainnotes.app.domain.LabCatalogTest" time="0.024"/>
+  <testcase name="syntheticFrenchMassVolumeAndCellCounts()" classname="net.plainnotes.app.domain.LabCatalogTest" time="0.001"/>
+  <testcase name="lipidAndGlucoseMolarFactorsAreAnalyteSpecific()" classname="net.plainnotes.app.domain.LabCatalogTest" time="0.001"/>
+  <testcase name="incompatibleAndUnknownUnitsCannotBeGuessed()" classname="net.plainnotes.app.domain.LabCatalogTest" time="0.0"/>
+  <testcase name="unsafeNumbersAreStructuredFailuresAndZeroIsNotMissing()" classname="net.plainnotes.app.domain.LabCatalogTest" time="0.001"/>
+  <testcase name="catalogueHasUniqueCodesAndUnitsWithCanonicalFirst()" classname="net.plainnotes.app.domain.LabCatalogTest" time="0.001"/>
+  <testcase name="repeatedExactDecimalConversionsDoNotDrift()" classname="net.plainnotes.app.domain.LabCatalogTest" time="0.034"/>
+  <testcase name="allUnitPairsRoundTripWithinDecimal128Precision()" classname="net.plainnotes.app.domain.LabCatalogTest" time="0.039"/>
+  <testcase name="hbA1cUsesAffineMasterEquationIncludingOneSidedBounds()" classname="net.plainnotes.app.domain.LabCatalogTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
