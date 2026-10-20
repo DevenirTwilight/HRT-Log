@@ -22,12 +22,17 @@ def death_case(stage):
             end=time.monotonic()+60
             while time.monotonic()<end:
                 ready=subprocess.run(['adb','shell','run-as',PACKAGE,'cat','files/synthetic-restore-death-ready.json'],capture_output=True,text=True)
-                if ready.returncode==0:
-                    marker=json.loads(ready.stdout);assert marker['stage']==stage;break
+                if ready.returncode==0 and ready.stdout.strip():
+                    try:marker=json.loads(ready.stdout)
+                    except ValueError:
+                        time.sleep(.2);continue  # Same attempt: a host read may race writeText.
+                    assert marker['stage']==stage;break
                 assert process.poll() is None,'Prepare ended before pending transaction'
                 time.sleep(.2)
             else:
                 raise AssertionError('No pending restore checkpoint')
+            alive=subprocess.run(['adb','shell','pidof',PACKAGE],capture_output=True,text=True)
+            assert str(marker['pid']) in alive.stdout.split(),'Process died before the deliberate kill'
             subprocess.run(['adb','shell','am','force-stop',PACKAGE],check=True)
             process.wait(timeout=20)
             live=subprocess.run(['adb','shell','pidof',PACKAGE],capture_output=True,text=True)

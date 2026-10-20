@@ -1,3 +1,11 @@
+## P4 恢复专项实时检查点：整库摘要合同9 PASS，最后源码验证待跑 — 2026-10-20
+
+新流式业务digest已证明主键排序后的恢复/原数据一致，且修改一个字段会改变摘要；BackupReplacement9 PASS证据立即保存`restore-memory/digest-contract/`。生产core仍基于2ae08986；该次Android编译成功但生成器保护拒绝覆盖旧文件，所以**不能当作含新摘要断言的最终生成源码编译成功**。后续先prepare --clean再重新generate，保持原frozen template不动。
+
+最后审查把IndexedBackupDocument.close改为无分配擦零/置null/清索引，避免资源不足时为了清理再创建数组/迭代器；尚需最新完整回归。生产不再计划其他结构变化。接下来直接最终完整data+新生成Android编译，成功后提交非skip的冻结生产候选，执行预定两个原生/API兼容，不再扩展研究工具。
+
+实时保存过的各组与失败均保留；不得把旧组成功算到最新未验证源码。#57 Draft/OFF，原生专项和普通写入均未解阻。
+
 ## P4 恢复专项实时测试检查点：完整data484及生成Android编译均PASS — 2026-10-20
 
 源码2ae08986完整本地484/0FAIL/0SKIP、生成的原生Android测试（含资源/真实进程终止probe）编译均PASS；立即保存`restore-memory/full-second/`日志、关键XML、逐suite计数和SHA、生成源码hash。旧483 PASS/探针编译FAIL在full-first完整保留；不得覆盖旧失败。第一19/第二15聚焦组均有独立证据。

@@ -6,7 +6,9 @@ import org.json.JSONObject
  * Indexing does not decide JSON validity. BackupJsonReader's unchanged strict parser does so first.
  * No decoded row/string is retained between calls; no plaintext temporary file exists.
  */
-internal class IndexedBackupDocument internal constructor(private var bytes:ByteArray,val metadata:JSONObject,private val checkActive:()->Unit={}):AutoCloseable {
+internal class IndexedBackupDocument internal constructor(plain:ByteArray,val metadata:JSONObject,private val checkActive:()->Unit={}):AutoCloseable {
+    private var owned:ByteArray?=plain
+    private val bytes get()=checkNotNull(owned)
     private var closed=false
     private var offset=0
     private val indexes=LinkedHashMap<String,Rows>()
@@ -27,7 +29,6 @@ internal class IndexedBackupDocument internal constructor(private var bytes:Byte
             check(!closed);checkActive();require(index in 0 until size)
             return BackupJsonReader.objectSlice(bytes,ranges[index*2],ranges[index*2+1])
         }
-        fun clear(){ranges=IntArray(0);size=0}
     }
     private fun space(){while(offset<bytes.size)when(bytes[offset].toInt()){9,10,13,32->offset++;else->return}}
     private fun expect(c:Char){space();require(offset<bytes.size && bytes[offset++].toInt()==c.code)}
@@ -90,6 +91,7 @@ internal class IndexedBackupDocument internal constructor(private var bytes:Byte
         // Header contains only empty table arrays, never rows or their payload strings.
     }
     override fun close() {
-        if(!closed){closed=true;bytes.fill(0);bytes=byteArrayOf();indexes.values.forEach{it.clear()};indexes.clear()}
+        // Allocation-free cleanup, including an actual resource-exhaustion path.
+        if(!closed){closed=true;owned?.fill(0);owned=null;indexes.clear()}
     }
 }

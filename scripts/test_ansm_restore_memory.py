@@ -26,9 +26,11 @@ class RestoreMemorySuiteTest(unittest.TestCase):
         from prepare_ansm_native_performance import native_source,SOURCE
         text=native_source(SOURCE.read_text())
         self.assertIn('RestoreMemoryProbe',text)
+        self.assertIn('SyntheticRestoreDigest.read(raw)',text)
+        self.assertIn('restore_business_equality',text)
         self.assertIn('repo.restoreMeasuredBackup(archive,password,repo.referencePreviewEpoch(),checkpoint=',text)
         self.assertIn('assertEquals("Frozen full fixture byte size",19660924,bytes)',text)
-        for name in ('RestoreMemoryProbe','MeasuredRestoreDeathProbe'):
+        for name in ('RestoreMemoryProbe','MeasuredRestoreDeathProbe','SyntheticRestoreDigest'):
             self.assertFalse((ROOT/f'core/data/src/main/java/net/plainnotes/app/data/{name}.kt').exists())
         self.assertNotIn('System.gc()',text)
         workflow=(ROOT/'.github/workflows/ansm-inventory-performance.yml').read_text()

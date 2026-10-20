@@ -18,9 +18,15 @@ def native_source(text):
         text = text.replace(old, new, 1)
     replace('timed("full_encrypted_restore") {repo.restoreMeasuredBackup(archive,password,repo.referencePreviewEpoch())}',
             '''timed("full_encrypted_restore") {
+                    val expectedBusiness=db.withTransaction{SyntheticRestoreDigest.read(raw)}
+                    val restoreCoreStart=System.nanoTime()
                     RestoreMemoryProbe { sample -> report.put("restore_memory",sample);file.writeText(report.toString(2)) }.use { memoryProbe ->
                         repo.restoreMeasuredBackup(archive,password,repo.referencePreviewEpoch(),checkpoint={memoryProbe.checkpoint(it.name)})
                     }
+                    report.put("restore_core_including_probe_ms",(System.nanoTime()-restoreCoreStart)/1_000_000.0)
+                    val restoredBusiness=db.withTransaction{SyntheticRestoreDigest.read(raw)}
+                    assertEquals("All business rows/fields must survive real encrypted restore",expectedBusiness,restoredBusiness)
+                    report.put("restore_business_sha256",restoredBusiness).put("restore_business_equality","PASS")
                 }''')
     # Only metadata sizing changes: preserve the frozen data, actual restore/export and budgets.
     replace('val bytes=fixture.toString().toByteArray(Charsets.UTF_8).size',

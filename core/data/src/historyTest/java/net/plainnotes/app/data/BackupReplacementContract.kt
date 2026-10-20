@@ -140,6 +140,17 @@ abstract class BackupReplacementContract {
         assertEquals(before, business()); foreignKeys(); assertImmutable()
     }
 
+    @Test fun streamedBusinessDigestIsStableAcrossReorderedRecoveryAndDetectsChangedFields()=runBlocking {
+        ledger("SYNTHETIC digest")
+        val before=db.withTransaction{SyntheticRestoreDigest.read(raw)}
+        val tables=RawData.dump(raw);val rows=tables.getJSONArray("supply_transaction")
+        tables.put("supply_transaction",org.json.JSONArray((rows.length()-1 downTo 0).map{rows.getJSONObject(it)}))
+        db.withTransaction{RawData.restore(context,raw,tables);assertEquals(before,SyntheticRestoreDigest.read(raw))}
+        db.withTransaction {
+            raw.execSQL("UPDATE medication SET name='SYNTHETIC changed field'")
+            assertNotEquals(before,SyntheticRestoreDigest.read(raw))
+        }
+    }
     @Test fun indexedInputMatchesFrozenDomRecoveryDecisionsAndWholeData()=runBlocking {
         ledger("SYNTHETIC differential target")
         val before=business();val guardsBefore=guards();val original=RawData.dump(raw)
