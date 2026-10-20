@@ -1,3 +1,9 @@
+## LAB-UI-03：PR89 Android 失败已定位，修复回归中 — 2026-10-20
+
+远端从6c593a4c增加12个Vibe Nuage Agent提交到14ed5f91，已审计并正常快进保留，未覆盖他人修改。原本171/18项本地及四语截图证据仅属于原记录源码，不自动视为14ed通过。Android39337651994唯一失败发生在Back前：旧lab_add定位到470px视口外y480–532的空状态按钮，实际未打开弹窗。原始失败HTML、官方工件SHA/CRC及本地语义树复现已保留在labs/ui03；默认dismissOnBackPress=true不是已证明的修复原因。
+
+本次仅修测试：明确点击已显示的labs-home-add主操作，保留弹窗、返回、会话、零写入断言，另补滚动空状态入口回归；完整AppShellBackNavigationTest17/17 PASS（0失败/0跳过），原始JUnit已保留。正式生产行为未因该修复改变。PR90独立数据扩展仍待最终验收/普通保护合并；之后再正常合并主线并接LabCatalog分类，禁止拷贝未验收代码。最终CI/受保护合并尚未完成，真机/TalkBack NOT_RUN。
+
 ## LAB-UI-03：实际化验首页替换正在实施 — 2026-10-19
 
 独立 `feature/lab-ui03-home-20261019` 基于默认080094ae；用户最新任务登记 REQUIREMENTS §114，文件矩阵 `labs/ui03/implementation.md`。根因已定位：Destination.LABS 已正确调用 LabsScreen，但单项旧记录和指标筛选显式走私有 LabRow，因此新版批量/详情弹窗没有替换首页。现改统一 LabHomeCard，正式化验单/旧显示分组/单项/筛选历史共用视觉；已有业务回调、labDraws、趋势数值块保持。

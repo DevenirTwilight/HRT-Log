@@ -57,6 +57,25 @@
     "data": "No labDraws grouping, Room, backup, repository, PK or calibration file modified."
    },
    "human_review": "Verify homepage/body scope and unchanged numerical chart block; native route/session tests and four-language synthetic screenshot evidence tracked separately."
+  },
+  {
+   "id": "PD-2026-10-20-LABUI03-DIALOG-PROPS",
+   "file": "app/src/main/java/net/plainnotes/app/ui/LabsScreen.kt",
+   "approver": "DevenirTwilight",
+   "date": "2026-10-20",
+   "scope": "Preserve externally authored PR89 imports and explicit AlertDialog dismissOnBackPress=true (the platform default); no homepage numerical/chart/calibration or persistence change. This record does not attribute the stale offscreen test selector failure to dialog properties.",
+   "previous_sha256": "4fe97048fd0e05bd8eabf98c863abf2dff5dd5289b4fe822c04f70964352cb8c",
+   "new_sha256": "236b04534868167c2c7eee727658d57c1c8501db416c27c7684f540c2baad111",
+   "evidence": {
+    "commit": "37d5678b69786953e77f9c6ebd4518766f3e382b",
+    "path": "docs/REQUIREMENTS.md"
+   },
+   "owner_decision": "REQUIREMENTS §114 owner authorizes LAB-UI-03 actual homepage, minimal Compose/navigation/UI-test changes while preserving PK and persistence.",
+   "verification": {
+    "source": "Remote 14ed5f911a8c41c61af5d9f5f00452a190df0dd9 external commits preserved, not reverted.",
+    "failure": "ci-dialog-failure-2026-10-20.json records actual pre-Back failure and viewport proof."
+   },
+   "human_review": "Review the small external import/default-property diff independently of test-only visible-action fix."
   }
  ]
 }

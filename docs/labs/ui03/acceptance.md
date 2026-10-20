@@ -1,6 +1,6 @@
 # LAB-UI-03 acceptance evidence
 
-Independent PR: https://github.com/DevenirTwilight/HRT-Log/pull/89. Default baseline080094ae; production homepage source1f49ce0b. Room12/business backup11 retained. This document is branch acceptance, not a signed APK or release receipt.
+Independent PR: https://github.com/DevenirTwilight/HRT-Log/pull/89. Default baseline080094ae; initial production homepage source1f49ce0b; remote14ed5f91 later adds externally authored default dialog properties/imports and shared-shell changes. Initial local171/18-case and screenshot evidence applies to its recorded source, not automatically to14ed or later. Room12/business backup11 retained. This document is branch acceptance, not a signed APK or release receipt.
 
 | Evidence | Actual result |
 |---|---|
@@ -31,3 +31,11 @@ These are actual Robolectric native-graphics Compose renders of the production h
 | Français320dp/2×/dark history |[before](screenshots/before/history_fr-rFR_320dp_2.0x_dark.png) |[after](screenshots/after/history_fr-rFR_320dp_2.0x_dark.png) |
 
 Reproduce new captures with `LABUI03_SHOTS=after ./gradlew :app:testFullDebugUnitTest --tests net.plainnotes.app.LabUi03ScreenshotsTest` using the repository's documented JDK21/SDK37 setup. Baseline comparison used exact approved080094ae `LabsScreen.kt` temporarily, restored in `finally`; it was never committed, signed or delivered. Local build outputs after that baseline run represent the comparison only and must not be reused as a delivery APK. Final CI builds from a clean checkout of the new homepage source.
+
+## 2026-10-20 CI failure investigation
+
+Remote PR89 advanced by12 Vibe Nuage Agent commits from6c593a4c to14ed5f91. They were audited and fast-forwarded, preserving their history; no external work was blindly reverted. The prior protected-source receipt remains historical and a separate exact LabsScreen hash approval records the external import/default-dialog-property diff.
+
+Android run39337651994/job118351067542 ran1778 cases with1 failure and269 skips. Its sole failure occurs before Back: `openDialogClosesBeforeNavigating` found no dialog. The original HTML is retained at [raw failure](ci-14ed-openDialogClosesBeforeNavigating.html); [machine receipt](ci-dialog-failure-2026-10-20.json) records the official artifact SHA256/CRC and local reproduction. The `lab_add` text selector matched the empty-state button at y480–532 outside a470px viewport, so touch injection opened nothing. The new visible homepage primary button is y72–124. Explicit default `dismissOnBackPress=true` was not demonstrated to fix this pre-Back failure.
+
+The test correction targets/asserts the visible actual `labs-home-add` primary action, retaining the dialog, Back, current page, zero Activity fallback and zero database-write assertions. A second test scrolls the empty-state action into view and verifies the same contract. This correction changes tests only. Corrected AppShellBackNavigationTest17/17 PASS (0 skipped); original JUnit is retained as back-navigation-regression-2026-10-20.xml. Final exact-head full CI remains pending; physical-phone/TalkBack remain NOT_RUN.

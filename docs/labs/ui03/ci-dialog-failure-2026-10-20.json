@@ -1,0 +1,49 @@
+{
+  "status": "FAIL_PRESERVED",
+  "source_head": "14ed5f911a8c41c61af5d9f5f00452a190df0dd9",
+  "run": 39337651994,
+  "job": 118351067542,
+  "artifact_id": 12227198522,
+  "artifact_sha256": "beebcf60dc0f25d0a82eec9b01e72e384df83669a42f06a2f5a4765913b4f2b8",
+  "artifact_crc": "PASS",
+  "failed_test": "AppShellBackNavigationTest.openDialogClosesBeforeNavigating",
+  "failure": "Expected exactly one IsDialog semantics node; found zero before Back",
+  "full_app_summary": {
+    "tests": 1778,
+    "failures": 1,
+    "skipped": 269
+  },
+  "local_diagnostic": {
+    "status": "FAIL_REPRODUCED",
+    "batch_nodes": 0,
+    "dialog_nodes": 0,
+    "shadow_dialog": null,
+    "viewport_bottom_px": 470,
+    "selected_empty_state_button_bounds_px": [
+      129,
+      480,
+      192,
+      532
+    ],
+    "visible_primary_action_bounds_px": [
+      16,
+      72,
+      304,
+      124
+    ]
+  },
+  "conclusion": "The merged lab_add selector targets an empty-state button below the viewport; touch injection opens no dialog. Explicit dismissOnBackPress=true does not establish a fix for this pre-Back failure.",
+  "fix_scope": "Test clicks/asserts displayed labs-home-add; separate test scrolls empty-state action into view. Original dialog closure, page, activityBacks and empty-database assertions retained.",
+  "production_changes_for_fix": false,
+  "external_commits": "12 Vibe Nuage Agent commits from 6c593a4c to 14ed5f91 preserved by normal fast-forward",
+  "raw_failure_html_sha256": "db51b9b07e07c59f42a744907dcc58d92b5065d5093860a44966e4ffe4631a38",
+  "local_corrected_regression": {
+    "status": "PASS",
+    "tests": 17,
+    "failures": 0,
+    "skipped": 0,
+    "report_sha256": "eadc2dc9ba36cd0e7feeac69af157171c8da3b7c068fe464255f6efdbc56a4e6",
+    "report": "back-navigation-regression-2026-10-20.xml",
+    "source_scope": "14ed5f91 plus test-only visible primary/scrolling correction; no production source edit"
+  }
+}
