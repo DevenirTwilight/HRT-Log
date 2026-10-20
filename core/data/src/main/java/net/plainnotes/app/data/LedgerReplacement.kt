@@ -44,7 +44,8 @@ internal object LedgerReplacement {
         return deletionLevels(links)
     }
 
-    fun insertionOrder(rows: JSONArray): List<Int> {
+    fun insertionOrder(rows:JSONArray)=insertionOrder(BackupRows.of(rows))
+    fun insertionOrder(rows: BackupRows): List<Int> {
         val links = (0 until rows.length()).map { i -> rows.getJSONObject(i).let {
             Link(it.getLong("id"), if (it.isNull("reversal_of_id")) null else it.getLong("reversal_of_id"))
         } }

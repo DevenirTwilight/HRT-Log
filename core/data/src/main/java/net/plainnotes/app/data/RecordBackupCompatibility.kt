@@ -13,7 +13,8 @@ internal object RecordBackupCompatibility {
         if(value>supported.toLong()) throw BackupCodec.NewerBackup()
         return value.toInt()
     }
-    fun validateInventoryVersion(schema:Int,tables:org.json.JSONObject) {
+    fun validateInventoryVersion(schema:Int,tables:org.json.JSONObject)=validateInventoryVersion(schema,BackupTables.of(tables))
+    fun validateInventoryVersion(schema:Int,tables:BackupTables) {
         val rows=tables.optJSONArray("supply_container") ?: return
         for(i in 0 until rows.length()) {
             val row=rows.getJSONObject(i)

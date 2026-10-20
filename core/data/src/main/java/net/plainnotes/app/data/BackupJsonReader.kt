@@ -24,11 +24,28 @@ internal object BackupJsonReader {
         catch(_:CharacterCodingException){throw BackupCodec.BadFile("invalid UTF-8")}
         return parse(reader())
     }
+    /** Owns authenticated plaintext until restore completes. Never creates a decoded whole-document String/DOM. */
+    fun indexed(bytes:ByteArray,checkActive:()->Unit={},beforeParse:()->Unit={}):IndexedBackupDocument {
+        try {
+            beforeParse();checkActive()
+            if(bytes.size>BackupLimits.MAX_JSON_BYTES)throw BackupCodec.TooLarge()
+            fun reader()=InputStreamReader(ByteArrayInputStream(bytes),Charsets.UTF_8.newDecoder()
+                .onMalformedInput(CodingErrorAction.REPORT).onUnmappableCharacter(CodingErrorAction.REPORT))
+            try {reader().use{BackupLimits.checkJson(it)}}
+            catch(_:CharacterCodingException){throw BackupCodec.BadFile("invalid UTF-8")}
+            val header=parse(reader(),releaseTableRows=true,checkActive=checkActive)
+            return IndexedBackupDocument(bytes,header,checkActive)
+        }catch(t:Throwable){bytes.fill(0);throw t}
+    }
+    internal fun objectSlice(bytes:ByteArray,start:Int,end:Int):JSONObject = parse(InputStreamReader(
+        ByteArrayInputStream(bytes,start,end-start),Charsets.UTF_8.newDecoder()
+            .onMalformedInput(CodingErrorAction.REPORT).onUnmappableCharacter(CodingErrorAction.REPORT)))
     fun read(text:String):JSONObject {
         BackupLimits.checkJson(text)
         return parse(StringReader(text))
     }
-    private fun parse(input:Reader):JSONObject {
+    /** Same strict parser and global budgets. Only direct table rows may be released after parsing. */
+    private fun parse(input:Reader,releaseTableRows:Boolean=false,checkActive:()->Unit={}):JSONObject {
         try {
             JsonReader(input).use { reader ->
                 reader.isLenient=false
@@ -39,7 +56,8 @@ internal object BackupJsonReader {
                     }
                     return BigDecimal(token)
                 }
-                fun value(depth:Int):Any {
+                fun value(depth:Int,isTables:Boolean=false,isRows:Boolean=false,retain:Boolean=true):Any {
+                    checkActive()
                     if(depth>32)throw BackupCodec.TooLarge()
                     return when(reader.peek()) {
                         JsonToken.BEGIN_OBJECT->{
@@ -48,7 +66,9 @@ internal object BackupJsonReader {
                             while(reader.hasNext()) {
                                 if(++fields>256)throw BackupCodec.TooLarge()
                                 val name=reader.nextName();require(!result.has(name)) {"Duplicate JSON field"}
-                                result.put(name,value(depth+1))
+                                val child=value(depth+1,isTables=releaseTableRows && depth==0 && name=="tables",isRows=isTables,
+                                    retain=retain && (!releaseTableRows || depth!=0 || name in setOf("format","schema","tables")))
+                                result.put(name,if(retain)child else JSONObject.NULL)
                             }
                             reader.endObject();result
                         }
@@ -56,11 +76,12 @@ internal object BackupJsonReader {
                             reader.beginArray();val result=JSONArray()
                             while(reader.hasNext()) {
                                 if(++arrays>BackupLimits.MAX_ROWS)throw BackupCodec.TooLarge()
-                                result.put(value(depth+1))
+                                val row=value(depth+1,retain=retain && (!releaseTableRows || !isRows))
+                                if(retain && (!releaseTableRows || !isRows))result.put(row)
                             }
                             reader.endArray();result
                         }
-                        JsonToken.STRING->reader.nextString()
+                        JsonToken.STRING->reader.nextString().let{if(retain)it else JSONObject.NULL}
                         JsonToken.NUMBER->number(reader.nextString())
                         JsonToken.BOOLEAN->reader.nextBoolean()
                         JsonToken.NULL->{reader.nextNull();JSONObject.NULL}
@@ -71,6 +92,7 @@ internal object BackupJsonReader {
                 return root
             }
         } catch(e:BackupCodec.TooLarge){throw e}
+        catch(e:kotlinx.coroutines.CancellationException){throw e}
         catch(e:Exception){throw BackupCodec.BadFile("invalid JSON")}
     }
 }

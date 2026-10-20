@@ -1,3 +1,31 @@
+## 【最新WIP，优先读取】P4 低内存恢复结构性候选已保存，尚未验收 — 2026-10-20
+
+负责人要求实时入库防止额度中断。本检查点仅保存未完成工程，不代表修复成功。基线352308b3（已验生产f1c638ba），主线320171cd；工作树`/workspace/HRT-Log-p4-attribution`，当前detached HEAD按git log最新为准，推送到#57原分支`feature/ansm03b-p4-exact-stock-20261016`。旧`/workspace/HRT-Log-p4`有他人/旧实验未提交内容，禁止覆盖。#57 Draft / PRODUCTION_BLOCKED / 入口OFF，不合并，不签名、不发布。安全FK去重保持。
+
+### 当前实际代码（WIP，不可当生产验收完成）
+
+- 新BackupRows/BackupTables只读输入接口，DOM适配保留供旧调用/对照；新IndexedBackupDocument持有认证后的byte[]和按表IntArray字节区间，按需重建一行，关闭/构造失败擦零owned plain、关闭后禁止读取，无明文临时文件。
+- BackupJsonReader沿原严格UTF8/JSON/重复键/数字精度/全局预算解析，新增releaseTableRows模式，严格扫描后释放表行DOM；索引仅定位已验证字节，不决定语法合法性。兼容BOM和转义表名。**原有full-DOM解析器已从352308b3冻结到test-only FrozenRestoreJsonReader，供独立差分。**
+- BackupValidation、RecordBackupCompatibility、LedgerReplacement、ReferenceDependencies和RawData的原字段/类型/版本/拓扑/预检/目标审计规则改为复用只读行接口；不改变Room13/业务12/PNBAK1或KDF。NotesRepository.restoreBackupTo采用indexed输入use作用域，取消检查与敏感缓冲finally清理。原DOM RawData.restore入口保留。
+- RestoreCheckpoint增加PLAINTEXT_AUTHENTICATED、INPUT_VALIDATED、STAGING_ROWS_INSERTED、STAGING_HISTORY_VALIDATED、STAGING_CLOSED；原每阶段失败回滚合同通过entries自动覆盖新检查点（**新结果未完成**）。预检仍RAM SQLite、目标仍SQLCipher，两次完整审计保留。
+- 新IndexedBackupDocumentTest覆盖冻结oracle精度/UTF8/转义/BOM、无全量行DOM、关闭擦零、错误/取消/模拟OOME擦零、全局行数/深度预算。
+
+### 证据与当前执行状态
+
+- 旧LMK run39486040353/PID3848/full_encrypted_restore和旧成功恢复但写入FAIL39486045081完整保留safe-dedup目录，不能将Java堆值当RSS峰，DOM重叠虽代码确认但不能宣称唯一LMK根因。
+- 首版compileDebugKotlin曾PASS；新增检查点时误扩finishRestore签名导致compile失败，完整日志已保存`docs/ansm-integration/p4/restore-memory/initial-compile-failure.log`，已修正调用签名。当前修正版本**聚焦测试仍执行中**，不能预填PASS。
+- 当前命令（session65105；若失效先查进程/日志，勿直接重复原生）：source /workspace/scratch/ansm-tools/gradle-env.sh；./gradlew --no-daemon -Dorg.gradle.jvmargs=-Xmx1536m -Pkotlin.compiler.execution.strategy=in-process --max-workers=1 --console=plain :core:data:testDebugUnitTest --tests '*IndexedBackupDocumentTest' --tests '*BackupJsonReaderStreamingTest' --tests '*BackupReplacementTest' --tests '*MeasuredConsumptionStoreTest.measuredRestoreRollsBackEveryReplacementCheckpointIncludingTheNewEpoch'；日志`/workspace/scratch/p4-restore-focused2.log`。不要在该模块编译期间改其源码。
+- 后续必须核验测试夹具、错误类型/接受集合、所有旧备份/回滚/库存投影、取消与资源不足；当前尚未进行完整data回归、原生测试编译或新的原生验收。
+
+### 接手后最小下一步
+
+1. 先读取聚焦日志/XML，修正真正失败；保留旧冻结oracle。核对索引没有保留整库对象且每个旧语义检查仍运行；可评估行切片用小StringReader减少每行InputStreamReader大缓冲，但需严守先全UTF8验证+不可变owned字节边界，不盲目微调。
+2. 增加最小test-only RestoreMemoryProbe，并仅在生成原生测试的实际恢复内接入：有限阶段Java heap/native malloc/当前RSS/累计HWM，明确采样范围、周期、开销包含预算；旧报告无阶段RSS，不伪造前后差值。此观察器**尚未编码**，原冻结template不修改。
+3. 完整本地回归+Android编译通过后才冻结真正生产候选。`restore-memory/contract.md`与REQUIREMENTS124已固定**最多两次**新候选原生：PR自动+同源码dispatch，不补跑筛绿。所有原API26/512MiB/192MiB/14600/2000/32603/19660924B、恢复120s/全部安全限制不变；写入5s原断言不删，写入仍单独BLOCKED。
+4. 一轮结构性方案仍失败则停止叠补丁；考虑独立审查加密临时stage等替代，不能改持久Schema/密码学或擅接方案C。无UI/P5/P6/PK/官方分发/权限签名发行变化。
+
+本WIP使用[skip ci]防止未验证中间源码自动跑完整原生，绝不当成CI通过或绕过合并门禁。后续每个完成检查点及时更新本节/提交推送，避免只留scratch成果。
+
 ## P4 安全去重收尾：生产改动已验证，有限原生两次FAIL — 2026-10-20
 
 候选f1c638ba622d28d90a6048c65055d7967cfb0465，基线6ee217f8/实测87e9df95，主线仍320171cd。#57保持Draft / PRODUCTION_BLOCKED / 入口OFF / autoMergeRequest=null，不合并。只改生产MeasuredConsumptionStore同步只读审计内重复第二FK，保留BackupValidation独立检查、最终全量oracle及操作链4次验证；无Schema/PNBAK1/UI/PK/P5/P6/权限签名发行变化。说明/机器证据在`docs/ansm-integration/p4/safe-dedup/result.md`，不要将下面旧的“原生待验”历史检查点当成当前状态。

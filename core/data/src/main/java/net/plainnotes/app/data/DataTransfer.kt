@@ -28,7 +28,7 @@ internal val DOMAIN_TABLES = listOf("medication", "pk_profile", "schedule_rule",
     "stage_review", "symptom_check", "review_effect", "regimen_version", "regimen_rule_link", "milestone", "lab_context_revision", "visit_question", "visit_pack", "history_period_revision", "record_annotation", "trash_item") + ReferenceSchema.businessTables
 
 /** Raw-SQL maintenance that has to bypass the append-only ledger triggers: full clear and backup restore. */
-internal enum class RestoreCheckpoint { PREFLIGHT_VALIDATED, IDENTITIES_RETIRED, ROWS_DELETED, ROWS_INSERTED, HISTORY_VALIDATED, EPOCH_REPLACED }
+internal enum class RestoreCheckpoint { PLAINTEXT_AUTHENTICATED, INPUT_VALIDATED, STAGING_ROWS_INSERTED, STAGING_HISTORY_VALIDATED, STAGING_CLOSED, PREFLIGHT_VALIDATED, IDENTITIES_RETIRED, ROWS_DELETED, ROWS_INSERTED, HISTORY_VALIDATED, EPOCH_REPLACED }
 
 internal object RawData {
     private data class Guard(val name: String, val sql: String)
@@ -77,12 +77,15 @@ internal object RawData {
     }
     /** Validate in memory before retiring identities or modifying the encrypted target. */
     fun restore(context: Context, db: SupportSQLiteDatabase, tables: JSONObject, upgradeRegimens: Boolean = false, backfillTrash: Boolean = false, measured: Boolean = false, checkpoint: (RestoreCheckpoint)->Unit = {}) {
+        restoreRows(context,db,BackupTables.of(tables),upgradeRegimens,backfillTrash,measured,checkpoint)
+    }
+    internal fun restoreRows(context:Context,db:SupportSQLiteDatabase,tables:BackupTables,upgradeRegimens:Boolean=false,backfillTrash:Boolean=false,measured:Boolean=false,checkpoint:(RestoreCheckpoint)->Unit={}) {
         check(db.inTransaction())
-        BackupValidation.validateTables(db, tables)
+        BackupValidation.validateRows(db, tables)
         val ledger = LedgerReplacement.current(db)
         val references = ReferenceDependencies.current(db)
         val supplyOrder = tables.optJSONArray("supply_transaction")?.let(LedgerReplacement::insertionOrder).orEmpty()
-        preflight(context, db, tables, supplyOrder, upgradeRegimens, backfillTrash, measured)
+        preflight(context, db, tables, supplyOrder, upgradeRegimens, backfillTrash, measured,checkpoint)
         checkpoint(RestoreCheckpoint.PREFLIGHT_VALIDATED)
         unguarded(db) {
             ReferenceSchema.retireRuntime(db)
@@ -102,7 +105,7 @@ internal object RawData {
     /** A transient RAM database uses only trusted current table/index definitions, never backup DDL.
      * No plaintext file is created; the actual destination remains SQLCipher with FK enforcement enabled.
      */
-    private fun preflight(context: Context, db: SupportSQLiteDatabase, tables: JSONObject, supplyOrder: List<Int>, upgradeRegimens: Boolean, backfillTrash: Boolean, measured: Boolean) {
+    private fun preflight(context: Context, db: SupportSQLiteDatabase, tables: BackupTables, supplyOrder: List<Int>, upgradeRegimens: Boolean, backfillTrash: Boolean, measured: Boolean,checkpoint:(RestoreCheckpoint)->Unit) {
         val definitions = db.query("SELECT type,tbl_name,sql FROM sqlite_master WHERE type IN ('table','index') AND sql IS NOT NULL ORDER BY CASE type WHEN 'table' THEN 0 ELSE 1 END,name").use { c -> buildList {
             while (c.moveToNext()) if (c.getString(1) in DOMAIN_TABLES) add(c.getString(2))
         } }
@@ -118,13 +121,16 @@ internal object RawData {
             staging.beginTransaction()
             try {
                 insertRows(staging, tables, supplyOrder)
+                checkpoint(RestoreCheckpoint.STAGING_ROWS_INSERTED)
                 finishRestore(staging, upgradeRegimens, backfillTrash, measured)
+                checkpoint(RestoreCheckpoint.STAGING_HISTORY_VALIDATED)
                 staging.setTransactionSuccessful()
             } finally { staging.endTransaction() }
         }
+        checkpoint(RestoreCheckpoint.STAGING_CLOSED)
     }
 
-    private fun insertRows(db: SupportSQLiteDatabase, tables: JSONObject, supplyOrder: List<Int>) {
+    private fun insertRows(db: SupportSQLiteDatabase, tables: BackupTables, supplyOrder: List<Int>) {
         DOMAIN_TABLES.forEach { t ->
             val rows = tables.optJSONArray(t) ?: return@forEach
             val order = if (t == "supply_transaction") supplyOrder else ReferenceDependencies.insertionOrder(t, rows)

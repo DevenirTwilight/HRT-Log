@@ -39,7 +39,8 @@ internal object ReferenceDependencies {
             })
         }
     }
-    fun insertionOrder(table: String, rows: JSONArray): List<Int> {
+    fun insertionOrder(table:String,rows:JSONArray)=insertionOrder(table,BackupRows.of(rows))
+    fun insertionOrder(table: String, rows: BackupRows): List<Int> {
         val edge = edges[table] ?: return (0 until rows.length()).toList()
         val links = (0 until rows.length()).map { i -> rows.getJSONObject(i).let { it.getString(edge.first) to ReferencePayload.optional(it, edge.second) } }
         val positions = links.mapIndexed { i, link -> link.first to i }.toMap()

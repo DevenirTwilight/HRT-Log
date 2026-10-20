@@ -58,8 +58,9 @@ object BackupLimits {
 
 internal object BackupValidation {
     /** Column allowlist/types taken from trusted schema, never used to construct SQL from backup keys. */
-    fun validateTables(db: SupportSQLiteDatabase, tables: JSONObject) {
-        require(tables.keys().asSequence().all { it in DOMAIN_TABLES }) { "Unknown table" }
+    fun validateTables(db: SupportSQLiteDatabase, tables: JSONObject) = validateRows(db,BackupTables.of(tables))
+    internal fun validateRows(db:SupportSQLiteDatabase,tables:BackupTables) {
+        require(tables.keys().all { it in DOMAIN_TABLES }) { "Unknown table" }
         var count = 0L
         DOMAIN_TABLES.forEach { table ->
             if (!tables.has(table)) return@forEach // Newly added tables absent in a supported old backup.
