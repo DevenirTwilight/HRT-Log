@@ -1,3 +1,11 @@
+## P4 恢复专项实时检查点：最终本地485/原生编译PASS，开始固定原生验收 — 2026-10-20
+
+生产与测试源码固定于b8c4d2a0（下一非skip证据提交与其生产源码一致）。完整本地data485/0FAIL/0SKIP、包含整库摘要/资源/真实终止probe的最终生成Android编译、工具49项均PASS，立即入库`restore-memory/local-final/`。原冻结template93131671未改，生成native SHA214f7b8ed3ead7d581191c268b34d3231896612ec9b610da3128d7107f1b6dc3。历史所有编译失败/各组结果保留，不用旧结果冒充新源码。
+
+正式实施仅移除恢复长期全量DOM，用已认证byte[]+有界索引按需解行，复用全部字段/类型/版本/依赖和两次完整审计；关闭无分配擦零。BackupCodec/KDF/PNBAK1与BackupLimits字节一致，Room Schema、StockForecast、MeasuredConsumptionStore（保留安全FK去重）、前端、PK均Git对象一致，生产jar不含5类测试探针/冻结oracle。证明/isolation及全部局部证据已落盘。
+
+现在只执行预定两次同源码原生（PR自动+dispatch），不再改生产候选/加第三次跑分。每次原大库结束后另有ROWS_DELETED/ROWS_INSERTED小型真实进程终止合同；原始native失败码、写入5s断言和全部预算保留。实际恢复窗口内的资源/整库hash读开销均算120s。尚无新的原生结果，不能宣称LMK修复；后续每个运行完成即验SHA/CRC/保存并推送，不攒到最后。普通写入/方案C仍独立BLOCKED，Draft/OFF，不合并、不签名/发布。
+
 ## P4 恢复专项实时检查点：整库摘要合同9 PASS，最后源码验证待跑 — 2026-10-20
 
 新流式业务digest已证明主键排序后的恢复/原数据一致，且修改一个字段会改变摘要；BackupReplacement9 PASS证据立即保存`restore-memory/digest-contract/`。生产core仍基于2ae08986；该次Android编译成功但生成器保护拒绝覆盖旧文件，所以**不能当作含新摘要断言的最终生成源码编译成功**。后续先prepare --clean再重新generate，保持原frozen template不动。

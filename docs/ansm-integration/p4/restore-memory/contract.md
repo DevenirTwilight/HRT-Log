@@ -21,3 +21,5 @@
 两个固定原生运行各在原大库计时/原断言之后，额外执行两个小型真实进程终止合同（ROWS_DELETED、ROWS_INSERTED）；全新进程核对目标整库hash、epoch、FK及精确库存oracle。不会重复大库，也不改变大库返回码；不把密码对话框进程死亡当恢复事务死亡。正常全设备CI中手动probe未传参会SKIPPED，原全部业务合同仍执行。
 
 大库恢复前后额外按可信主键排序逐行计算整个DOMAIN_TABLES业务摘要（包括每行全部字段，使用原forEachBackupRow编码）；不构建全量对象/字节副本，前后hash读和资源采样均计入原120s恢复窗口，另报实际Repository+probe时段。旧运行无对应验证开销，不能以计时差宣称纯生产提速；原全审计/投影断言保留。
+
+检查点INPUT_VALIDATED仅指严格JSON/索引、版本、必需表及版本特定字段门已通过，不表示全字段/历史已经预检；真正完整候选预检以PREFLIGHT_VALIDATED为界。所有列和历史检查仍在其前的独立RAM staging中执行。
