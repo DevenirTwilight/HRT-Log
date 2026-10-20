@@ -1,3 +1,9 @@
+## P4 恢复专项实时测试检查点：聚焦组PASS — 2026-10-20
+
+已推送WIP源码e69e3b91；聚焦测试刚完成，证据即刻入库`docs/ansm-integration/p4/restore-memory/focused-first/`（XML/日志/receipt，按实际suite计数）。IndexedBackupDocumentTest6项、旧严格解析器5项及恢复检查点回滚测试均PASS；完整data/原生Android编译/API26/29/35/低内存恢复仍NOT_RUN，绝不把聚焦通过当专项完成。上一WIP的“聚焦执行中”已被本段取代。
+
+继续：补充test-only资源探针、旧DOM与新输入恢复数据/错误决定差分及取消/资源故障合同；完成后立即保存测试结果，再开始完整回归。代码/测试每完成一组即更新并提交，不只保存代码快照。当前Draft/OFF，不合并、不发布，正式写入与方案C继续BLOCKED。
+
 ## 【最新WIP，优先读取】P4 低内存恢复结构性候选已保存，尚未验收 — 2026-10-20
 
 负责人要求实时入库防止额度中断。本检查点仅保存未完成工程，不代表修复成功。基线352308b3（已验生产f1c638ba），主线320171cd；工作树`/workspace/HRT-Log-p4-attribution`，当前detached HEAD按git log最新为准，推送到#57原分支`feature/ansm03b-p4-exact-stock-20261016`。旧`/workspace/HRT-Log-p4`有他人/旧实验未提交内容，禁止覆盖。#57 Draft / PRODUCTION_BLOCKED / 入口OFF，不合并，不签名、不发布。安全FK去重保持。
