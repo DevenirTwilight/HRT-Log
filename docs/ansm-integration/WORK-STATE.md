@@ -1,10 +1,14 @@
-## P4 写入分解接手：轻量观察器本地完成，原生分解待验 — 2026-10-20
+## P4 真实写入归因完成：本轮原预算PASS，不等于生产架构提速 — 2026-10-20
 
-接手实际远端40408b77（非旧27135013），主线320171cd；旧工作树未提交原型保留在原处，新隔离工作树/workspace/HRT-Log-p4-attribution继续#57。本批只修改historyTest观察器和共享合同，生产代码/Schema/备份/PK/UI未变；P4仍Draft/OFF，不自动合并。
+执行源码87e9df955f8132b58cd111c5188c295a0d4b0726，接手40408b77，主线320171cd。P4保持Draft/OFF，autoMergeRequest为空，不自动合并。只改historyTest观察器/共享合同及证据；生产代码、Room13/业务12、PNBAK1密码学、UI/PK/P5/P6/版本权限签名均不变。原工作树未提交内容保留，新工作树/workspace/HRT-Log-p4-attribution。
 
-修正链计数为冻结源码真实SELECT事件，audit期间不逐getter/重复inTransaction采栈，也不对每条query采栈；仍以真实finish的schema_version游标close闭合审计区间。明确记录invalid原因，metadata在同一短锁下快照化，锁不包围被测正常SQL动作。完整回归再次发现unfinished frame：前台回滚后同线程后台事务仍打开。新增确定性latch反例，仅未结束的受控前台帧使归因失败；后台帧数量单独报告，绝不算入前台commit。旧RED保留。透明inTransaction代理的入口识别也被负向测试定位并修复；审计窗口内零行UPDATE必须使归因无效。原提交/回滚/dump/独立全审计及计数断言均保留。
+唯一新原生run39478425938/job118820363674/artifact12290661559完成；官方/下载SHA b26ca0e48292a9c817b64cec11adde7828b619738d8f91209f3dcdcc40f03b25、CRC/完整预清理报告/ART重放全部核验。原512MiB/192MiB、14600/2000/32603/19660924B和全部预算断言未变。原三写4979.277/4804.102/4727.139ms本轮PASS；第一笔仅20.723ms裕量；审计5381.742/预测7999.644/备份7106.396/恢复24956.868ms PASS。观测Java堆199241928B，非RSS峰；历史全部FAIL/OOM/LMK保留，无同机受控生产提速或稳定性证明，不再重跑求绿。
 
-本地完整data472 PASS，0fail/error/skip，生成原生Kotlin编译PASS，工具51PASS，生产jar无观察器；收据local-validation/light-observer-result.json及原始XML/日志。原生新分解PENDING，本次计划只运行一次有新证据价值的轻量观察器版本；不手动重复自动任务，不因预算FAIL再跑求绿。原固定夹具、512MiB/192MiB、全部原三写/审计/备份恢复断言不变。重观察器46.418s只属其自身同次调用，不冒充自然7–9s；普通新增仅一次完整审计，理论可删0次完整审计，实测提速仍未证明。
+额外第四笔真实COMMIT+独立全审计PASS，同次互斥合计5734.912240ms：票据API414.363680、写validate下界502.387070、6条INSERT含trigger18.562620、显式UPDATE0.072400、写提交driver5.652330、完整audit下界4435.771450、其他driver7.147160、写内未归因322.851950、draft/UUID/观察器finish及间隔28.103580。纳秒精确相加、区间不重叠；触发器exclusive/纯COMMIT及部分游标/Java/调度无法独立归因。不能把第四笔、重观察器46s或独立ART探针赋给原三写。
+
+正常新增仅1次完整审计，含票据共4次全操作链SELECT；没有第二次完整审计可删，不能宣称可省4.436s。第二个FK游标窗口149.704ms仅是重复工作的参考，非前后实测提速。集中报告write-path-timing/report.md列出同快照FK、append构造链头复用、scheduled以及跨中间态审计消重的最小方案/证明义务；没有接快验证器或跨事务缓存，A/B反例及C部分约束原型保留。
+
+本地data472/生成原生Kotlin/工具51 PASS，生产jar无观察器；API26/29实际SQLCipher库存合同各139全PASS（含本次观察器），工件SHA/CRC与HTML已存native-87e9df95-light-observer。源87其余android/device/API35仍运行中，不能把待验说成通过；新库/冷启动/重启/恢复冷首次/新架构规模增长/真机NOT_RUN。下一步只收集剩余CI结果并更新交接，不新增跑分、不合并；源源码不再变。证据文档提交[skip ci]只为避免重跑相同原生工作负载，不宣称该文档HEAD已有六门。
 
 ## P4 验证架构检查点：反例已复现，尚无生产增量验证证明 — 2026-10-20
 

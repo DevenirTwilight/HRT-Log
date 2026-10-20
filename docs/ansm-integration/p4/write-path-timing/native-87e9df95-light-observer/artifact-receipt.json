@@ -1,0 +1,21 @@
+{
+  "tested_source": "87e9df955f8132b58cd111c5188c295a0d4b0726",
+  "run": 39478425938,
+  "job": 118820363674,
+  "artifact": 12290661559,
+  "archive_bytes": 121216,
+  "sha256": "b26ca0e48292a9c817b64cec11adde7828b619738d8f91209f3dcdcc40f03b25",
+  "official_sha_matches_download": true,
+  "zip_crc": "PASS",
+  "complete_precleanup_matches_report": true,
+  "trace_sha256": "71487002fb7cf1cf3653744144af3bc08d9d468c151a77dca10510376881030a",
+  "trace_replay": "MATCH",
+  "partition_sum_ns": 5734912240,
+  "diagnostic_total_ns": 5734912240,
+  "partition_equality": "PASS",
+  "original_budget_result": "PASS_THIS_RUN_ONLY",
+  "production_speedup_causality": "NOT_ESTABLISHED",
+  "stable_write_budget": "NOT_ESTABLISHED",
+  "cold_lifecycle_performance": "NOT_RUN",
+  "production_change": false
+}

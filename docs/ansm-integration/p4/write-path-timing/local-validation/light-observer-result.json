@@ -25,5 +25,7 @@
     "native_sha256": "967b73e97a77c9306753797619ba9446e14be7d4ee705c5da196ae71faa6fc0e",
     "status": "GENERATED_NOT_RUN"
   },
-  "native_measurement": "PENDING"
+  "native_measurement": "PASS_THIS_RUN_ONLY",
+  "native_source": "87e9df955f8132b58cd111c5188c295a0d4b0726",
+  "native_evidence": "../native-87e9df95-light-observer/artifact-receipt.json"
 }
