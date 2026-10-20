@@ -1,3 +1,9 @@
+## P4 恢复专项实时测试检查点：完整data484及生成Android编译均PASS — 2026-10-20
+
+源码2ae08986完整本地484/0FAIL/0SKIP、生成的原生Android测试（含资源/真实进程终止probe）编译均PASS；立即保存`restore-memory/full-second/`日志、关键XML、逐suite计数和SHA、生成源码hash。旧483 PASS/探针编译FAIL在full-first完整保留；不得覆盖旧失败。第一19/第二15聚焦组均有独立证据。
+
+后续仅补低内存友好的整库流式业务hash断言，避免在大库原生恢复时为比对再构建完整DOM；hash与资源/进程终止观测都只在test源码。完成其编译/差分后即冻结生产源码，启动此前固定的两个原生（自动PR+dispatch），不做第三轮结构性候选。当前无新原生结果，不能说LMK修好。每组完成即保存并推送。Draft/OFF/不合并发布，日常写入和方案C独立BLOCKED。
+
 ## P4 恢复专项实时测试检查点：完整data483 PASS，新增探针编译FAIL已修正待验 — 2026-10-20
 
 f480af2e的完整本地data483/0FAIL/0SKIP已跑完，立即保存`restore-memory/full-first/`（按suite计数+XML哈希、关键XML、完整日志）；Android编译在测试类MeasuredRestoreDeathProbe失败，原因Room数据库不实现Closeable，不能用use。此失败未删，已改显式try/finally close，**修正后的编译尚未验证**。不把unit成功冒充Android或原生成功。
