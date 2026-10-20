@@ -225,4 +225,54 @@ abstract class LabPanelDataContract {
             "reference_unit=pg/mL, laboratory=Synthetic lab, note=null)", v.legacyString())
         assertEquals(v.copy(panel_id = null).toString().replace(", panel_id=null)", ")"), v.legacyString())
     }
+    // LAB-03: synthetic report vocabulary only; no personal report or medical recommendation.
+    @Test fun expandedReportKeepsEveryOriginalUnitPanelContextAndBackupThroughTrash() = runBlocking {
+        val (db,repo)=memory()
+        val examples=mapOf("E2" to (210.0 to "pg/mL"),"T" to (9.0 to "ng/dL"),"LH" to (0.4 to "mIU/mL"),
+            "FSH" to (0.2 to "mIU/mL"),"ALT" to (54.0 to "U/L"),"AST" to (29.0 to "U/L"),
+            "TG" to (3.05 to "g/L"),"GLU_FASTING" to (0.95 to "g/L"),"HB" to (13.8 to "g/dL"),
+            "HCT" to (40.1 to "%"),"RBC" to (4.43 to "millions/mm³"),"PLT" to (224.0 to "× 10³/mm³"),"HBA1C" to (5.4 to "%"))
+        val source=net.plainnotes.app.domain.LabCatalog.all.map{definition->
+            val v=examples[definition.code] ?: (12.5 to definition.canonicalUnit)
+            LabValueEntity(analyte_code=definition.code,value=v.first,unit=v.second,sampled_utc=t0,sampled_zone="Europe/Paris",
+                reference_upper=if(definition.code=="ALT")31.0 else null,reference_unit=if(definition.code=="ALT")v.second else null,
+                laboratory="SYNTHETIC laboratoire",note=when(definition.code){
+                    "E2"->"SYNTHETIC primary 210 pg/mL; secondary rounded 771 pmol/L, same result"
+                    "T"->"SYNTHETIC primary 9 ng/dL; secondary rounded 0 nmol/L is not a measured zero"
+                    "EGFR"->"SYNTHETIC report value; formula/version unknown; no app calculation"
+                    else->"SYNTHETIC assay/instrument unknown; report date differs from sample date"
+                })
+        }
+        assertEquals(45,source.size)
+        repo.saveLabs(source,at)
+        val saved=repo.labs();val panel=repo.labPanels().single();val contexts=repo.labContexts()
+        assertEquals(source,saved.map{it.copy(id=0,panel_id=null)})
+        assertTrue(saved.all{it.panel_id==panel.id});assertEquals(45,contexts.size)
+        assertEquals(1,saved.count{it.analyte_code=="E2"});assertEquals(9.0,saved.single{it.analyte_code=="T"}.value,0.0)
+        contexts.forEach{val captured=JSONObject(it.context_json);assertTrue(captured.has("estimate"));assertTrue(captured.isNull("estimate"))}
+        val password="synthetic-lab03-backup".toCharArray()
+        val archive=repo.exportBackup(password)
+        try {
+            repo.deleteLabPanel(panel.id,at)
+            assertTrue(repo.labs().isEmpty());assertTrue(repo.labContexts().isEmpty())
+            repo.restoreTrash(repo.trash().single().id,at)
+            assertEquals(saved,repo.labs());assertEquals(contexts,repo.labContexts());assertEquals(listOf(panel),repo.labPanels())
+            repo.restoreBackup(archive,password)
+            assertEquals(saved,repo.labs());assertEquals(contexts,repo.labContexts());assertEquals(listOf(panel),repo.labPanels())
+            assertEquals(12,db.openHelper.writableDatabase.version);assertEquals(11,RecordBackupCompatibility.SCHEMA)
+        }finally{password.fill('\u0000');archive.fill(0)}
+    }
+
+    @Test fun expandedReportFailureKeepsOldPanelAndUnknownUnitsWithoutPartialWrites()=runBlocking {
+        val (db,repo)=memory();repo.batch()
+        repo.saveLab(LabValueEntity(analyte_code="SYNTHETIC_UNKNOWN",value=7.5,unit="opaque-unit",sampled_utc=t0,sampled_zone="UTC",
+            reference_upper=10.0,reference_unit="opaque-unit",note="SYNTHETIC original name and unknown method"),at)
+        val before=RawData.dump(db.openHelper.writableDatabase).toString()
+        val good=LabValueEntity(analyte_code="TC",value=2.1,unit="g/L",sampled_utc=t0,sampled_zone="UTC")
+        try{repo.saveLabs(listOf(good,good.copy(analyte_code="TG",unit="")),at);fail("Part of invalid report saved")}
+        catch(_:IllegalArgumentException){}
+        assertEquals(before,RawData.dump(db.openHelper.writableDatabase).toString())
+        assertEquals(7.5,repo.labs().single{it.analyte_code=="SYNTHETIC_UNKNOWN"}.value,0.0)
+    }
+
 }

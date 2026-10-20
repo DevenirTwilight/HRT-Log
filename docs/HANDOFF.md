@@ -1,3 +1,21 @@
+## LAB-03 #90 实现已通过 CI 与三 API 原生验证 — 2026-10-20
+
+源码403ae96015ea95f3379e4a95ea0b28e7f8d4c846的push/PR六项必需检查均PASS；PR run39296389355，science39296389637。实际下载核验API26/29/35报告：24项已填草稿recreate、实际横/竖方向变化、真正离开锁定后清空各PASS（22.170/25.670/18.295秒），45代码原单位/范围/上下文→回收站→PNBAK1恢复和无效事务全回滚也各PASS，均非仅编译。每API原导航/锁12项、化验单13项全部PASS。完整JVM App1751总项中1514PASS/237既有SKIPPED/0FAIL；data263PASS，reminder20PASS；11项新LAB03及Period5无跳过。此前本地取消定位FAIL原始XML保留，祖先内匹配修正后本地16PASS及原生Kotlin编译PASS。
+
+ci-403ae960.json及evidence/ci-403ae960保留原HTML/XML、archive SHA、来源run和check快照；verify-ci-evidence.py可离线复核，不把归档内旧报告当实时认证。此收据提交仅文档，最终HEAD仍需独立CI。#89已有其他开发者Vibe+owner的12次新提交，最新14ed5f91 Android失败；UI工作流已保留并核查，尚未合并，不复制未验收源码。根据实际门槛允许#90先独立合法合并，再由#89普通合入最新主线以统一分类，不假装当前数据PR已交付新版视觉。
+
+Room12/业务备份11、Repository/库存/PK/权限/Gradle/CI不变。自定义创建/结构化方法/真正零及限定结果仍NOT_IMPLEMENTED；物理真机、TalkBack、在途保存-锁屏-回调交错NOT_RUN。原单项编辑与整单新增行的旋转草稿未扩展；本轮验证的是批量表单。无签名、APK交付或Release。
+
+## LAB-03 实际录入/历史保护代码已提交待验 — 2026-10-19
+
+独立数据分支已实现45代码词典、四语51键、搜索/分类、8个原有及扩展组合，保留原14单位Double结果；单项编辑改用原Double精确预填并冻结未改的采血瞬间/时区和参考单位，整单备注编辑通过同一helper保留原始瞬间。不同项目选择清空数值/范围/项目备注，相同选择/取消保持草稿。批量表单仅Activity内存保留，旋转保留、锁/伪装卸载清除并以token隔离旧回调；不落盘。NotesViewModel仅saveLabPanel一处窄修改，ShellHosts用当前panel快照调用，不碰浓度/PK/Repository/库存/Room12/业务11。
+
+首轮App新增6/6 PASS；扩大回归187项中186PASS、1FAIL（新测试匹配父/子两个Cancel图标，原始XML留lab03/evidence/first-app-regression）。已改为选择器祖先内匹配，未删断言；新增28项录入/精确原值/单侧范围单位/DST及UNKNOWN显示三项在该轮实际PASS。当前跟进验证包含11项LAB03+时期稳定性及原生Kotlin编译IN_PROGRESS，不冒称CI/原生实机完成。新原生24项草稿recreate+横竖屏+真实离开锁定测试已写入，实际运行NOT_RUN。UI#89最终6c593a4c独立验收中，尚未整合其未合并源码；本分支页面视觉仍依赖后续合法合并#89。高级自定义/方法字段/真正零或限定结果、原有单项及整单新增行旋转草稿仍未实施；原生在途保存-锁屏交错NOT_RUN。无APK、签名或发布。
+
+## LAB-03 数据与单位扩展实施中 — 2026-10-19
+
+独立分支feature/lab03-analytes-20261019基于080094ae，UI并行#89不覆盖。已复用domain精确词典45项（原14+新增31），domain135测试PASS；新旧单位适配、分类/搜索选择器、血常规/血脂/代谢/扩展肝肾组合已编码，App编译及交互验证仍IN_PROGRESS。原14个Double换算逐位保留，未改PK/库存/Room12/业务备份11。共享LabPanelDataTest实际13/13 PASS（新增45项原始单位/范围/上下文→回收站→PNBAK1恢复，以及事务失败全回滚）；原生API26/29/35仍NOT_RUN，不混同JVM结果。内存草稿旋转保留/锁屏清除及旧回调隔离已编码待验，不用Bundle/磁盘。结构化方法/自定义项目/真实零及限定结果未实施，保留原严格正数约束；兼容字段与后续设计见lab03/compatibility-and-fields.md。无APK/签名/发布。
+
 ## build33 交付与中心原生测试复核完成 — 2026-10-19
 
 build33 已仅owner私密提供，源码219bbf32与合并42bfa99f的六必需CI均已通过；下方保留成品完整记录。#87 原文档源152f0908/API26确有返回断言FAIL，不能因只改文档而忽略。独立#88/source dfa7369b只将测试单次Back改为既有Espresso等待输入焦点，所有测试主体/断言保持；androidTestCompileOnly仅暴露原runtime3.5.0，Gradle实际解析图证明release无Espresso。
