@@ -1,3 +1,9 @@
+## P4 有限架构选择与原生证据修正 — 2026-10-20
+
+基于dc54c7fa/主线320171cd，最新原生39446282509官方工件12277252280 SHA/CRC已独立核验：三写5747/5694/5288ms仍全部FAIL，audit4939ms、backup5509ms、restore29836ms；不归因于新优化。精确dc54 API26两项SAVEPOINT共享测试在Room结束事务时报no current transaction；保留失败HTML/摘要，不将JVM470通过当原生全绿。本轮仅测试SQL传输加空语句，将同一ROLLBACK TO交给SQLite，反例和全部断言不删。
+
+架构比较/冷热/恢复计时边界及兼容义务集中在validation-architecture/decision-2026-10-20.md。保留A全审计生产安全路径；B计数/TEMP+FK局部投影不可信；C选作后继候选，仅测试现有CONSUME(record_uuid,revision)部分唯一索引及DDL/业务回滚。单个约束不证明完整快验证器；没有Repository接线/生产Schema变化，不预约Room号。共享新原型与修正的原生CI尚待，测试结果不预填；本机代理不可达且缺SDK，Android本地NOT_RUN。入口OFF/Draft/NOT_ELIGIBLE，UI/PK/P5/P6/签名发布不改。完成原生验证后保存最终result-receipt，不再无根因试探缓存或重复性能重跑。
+
 ## P4 验证架构检查点：反例已复现，尚无生产增量验证证明 — 2026-10-20
 
 最新已推送证据基线948f8b9f、默认分支320171cd；#57保持Draft/入口OFF。新增REQUIREMENTS§120和validation-architecture/write-path-matrix.md。所有新增代码仅historyTest；没有生产、Schema、备份或UI修改。A（全审计+连接/epoch/SQLite计数）在savepoint回滚后错误匹配坏状态；B的事务TEMP seal可识别这个回滚，但FK依赖闭包+容器投影会漏掉有效链上的重复零消耗CONSUME。后者不是证明所有增量机制都不可行，而是明确该依赖规则不完整；不能接线。原始RED及错误准备夹具均保留，未增造跨表UUID唯一性。

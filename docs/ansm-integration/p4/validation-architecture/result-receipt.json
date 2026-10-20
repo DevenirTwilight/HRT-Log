@@ -1,0 +1,38 @@
+{
+  "status": "PRODUCTION_BLOCKED",
+  "reviewed_head": "dc54c7fae1fe48c33be8aaecd51bd0dce1301597",
+  "main": "320171cdc882ec0b62830b60e2329a4174ffa31c",
+  "production_changed": false,
+  "local_android": "NOT_RUN_NO_SDK_PROXY_UNREACHABLE",
+  "prototype": "C_SINGLE_EXISTING_INVARIANT_NOT_COMPLETE_VERIFIER",
+  "ci": "PENDING",
+  "baseline_native": {
+    "run": 39446282509,
+    "artifact": 12277252280,
+    "sha256": "d9c127fd049a9d582b1afa926da46ad3cd7b0b62df0bd8d4208d1d993fcabb7b",
+    "crc": "PASS",
+    "writes_ms": [
+      5747.15754,
+      5694.17953,
+      5288.23621
+    ]
+  },
+  "baseline_api26": {
+    "run": 39446282528,
+    "job": 118708941618,
+    "artifact": 12275773373,
+    "sha256": "474d05b12fa0293e702ecef469f254e0fef3a3be74c60e5f743329b89eb0a0d5",
+    "crc": "PASS",
+    "failures": 2
+  },
+  "unmeasured": [
+    "new-database-first-write",
+    "restarted-process-first-write",
+    "cold-post-restore-first-write",
+    "trusted-fast-path",
+    "invalidation-fallback",
+    "new-architecture-growth",
+    "multi-connection",
+    "process-kill"
+  ]
+}

@@ -41,3 +41,8 @@ The useful B substrate covers rollback-coupled token, DAO/compiled/raw DML, indi
 The existing complete validator performs both structural and semantic checks over all participating historical rows. Ordinary writes have no reviewed trusted baseline/semantic-preservation certificate, so they must invoke that validator. Skipping it after merely noticing some changed rows would remove existing checks. Moving that entire audit to cold startup/first write does not establish the same interactive budget either.
 
 Production decision: PRODUCTION_BLOCKED. Preserve the original complete audit and OFF entry. No incremental production change has been made; the available proof does not authorize it. Further implementation would need a complete predicate/dependency registry (including negative/global predicates) and independently protected, commit-coupled writer authority, reviewed against all matrix paths. A durable authority adds migration/backup/old-reader risks and requires separate design approval. This is a concrete missing proof boundary, not a claim that incrementality is impossible.
+
+
+## 2026-10-20 finite A/B/C decision
+
+See [decision-2026-10-20.md](decision-2026-10-20.md) for the newer exact-dc54 native failures, cold-path accounting, mechanism comparison and constraint-only test prototype. This does not admit a fast production validator or supersede the retained counterexamples.

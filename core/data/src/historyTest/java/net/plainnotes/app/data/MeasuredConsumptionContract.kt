@@ -49,7 +49,10 @@ abstract class MeasuredConsumptionContract {
             raw.execSQL("UPDATE dose_record SET actual_dose=0.1 WHERE id=?",arrayOf(r.id))
             val witness=ValidationArchitectureProbe.auditAndCapture(raw)
             assertTrue(witness.matches(raw))
-            raw.execSQL("ROLLBACK TO synthetic_repair");raw.execSQL("RELEASE synthetic_repair")
+            // API26's SQL statement classifier treats a leading ROLLBACK as a whole
+            // transaction abort. An empty SQL statement lets SQLite execute the same
+            // ROLLBACK TO; keep every counter, invalid-state and final rollback assertion.
+            raw.execSQL(";ROLLBACK TO synthetic_repair");raw.execSQL("RELEASE synthetic_repair")
             assertEquals(invalid,RawData.dump(raw).toString())
             // The initial parity RED is retained. This asserts rejection of the hypothesis, not validator success.
             assertTrue("All proposed counters really do match the wrong state",witness.matches(raw))
@@ -105,12 +108,57 @@ abstract class MeasuredConsumptionContract {
             raw.execSQL("SAVEPOINT synthetic_sealed_repair")
             raw.execSQL("UPDATE dose_record SET actual_dose=0.1 WHERE id=?",arrayOf(r.id))
             val repaired=journal.sealAfterFullAudit();assertTrue(journal.unchanged(repaired))
-            raw.execSQL("ROLLBACK TO synthetic_sealed_repair");raw.execSQL("RELEASE synthetic_sealed_repair")
+            raw.execSQL(";ROLLBACK TO synthetic_sealed_repair");raw.execSQL("RELEASE synthetic_sealed_repair")
             assertTrue(repaired.witness.matches(raw))
             assertFalse(journal.markerMatches(repaired));assertFalse(journal.unchanged(repaired))
             rejects(ReferenceError.INVALID_SOURCE){MeasuredConsumptionStore.auditStagedDataset(raw)}
         };throw SyntheticRollback()}}catch(_:SyntheticRollback){}
         assertEquals(before,RawData.dump(raw).toString())
+    }
+    /** C prototype: one existing global predicate can be enforced by SQLite itself.
+     * The index is test-only and rolled back. This does not certify other predicates,
+     * a trusted baseline, migration compatibility, or an incremental production path.
+     */
+    @Test fun architectureConstraintRejectsZeroEffectDuplicateAndRollsBackWithSchema()=runBlocking {
+        val m=med();val b=box(m);val before=RawData.dump(raw).toString()
+        val schema=raw.query("SELECT type,name,tbl_name,sql FROM sqlite_master ORDER BY type,name").use { c ->
+            buildList {while(c.moveToNext())add((0..3).map{if(c.isNull(it))null else c.getString(it)})}
+        }
+        class SyntheticRollback:RuntimeException()
+        try {db.withTransaction {
+            val r=record(m);val op=UUID.randomUUID().toString()
+            consume(r,b,emptyList(),op)
+            MeasuredConsumptionStore.auditStagedDataset(raw)
+            val duplicate=ReferenceStore.row(raw,"measured_operation","operation_uuid=?",arrayOf(op))!!
+            val envelope=org.json.JSONObject(duplicate.getString("input_json"))
+            envelope.put("chain",MeasuredOperationChain.next(raw))
+            duplicate.put("operation_uuid",UUID.randomUUID().toString()).put("input_json",ReferencePayload.canonical(envelope))
+            val valid=RawData.dump(raw).toString()
+            // Same pair as auditOperations.consumed; no invented cross-table UUID rule.
+            raw.execSQL("SAVEPOINT synthetic_constraint")
+            raw.execSQL("CREATE UNIQUE INDEX p4_probe_consume_revision ON measured_operation(record_uuid,record_revision) WHERE kind='CONSUME'")
+            val failure=runCatching {ReferenceStore.insert(raw,"measured_operation",duplicate)}.exceptionOrNull()
+            assertNotNull("SQLite must reject a duplicate with no ledger effect",failure)
+            assertTrue("Require the actual uniqueness violation, not an unrelated error: $failure",
+                failure!!.message.orEmpty().contains("UNIQUE constraint failed"))
+            assertTrue("Constraint failure must leave the transaction active",raw.inTransaction())
+            assertEquals(valid,RawData.dump(raw).toString())
+            assertEquals(0L,MeasuredConsumptionStore.auditStagedDataset(raw).single().usedQuanta)
+            // Roll back only the DDL: a rejected insert has not changed the facts.
+            raw.execSQL(";ROLLBACK TO synthetic_constraint");raw.execSQL("RELEASE synthetic_constraint")
+            assertTrue(raw.inTransaction())
+            raw.query("SELECT name FROM sqlite_master WHERE name='p4_probe_consume_revision'").use{assertFalse(it.moveToFirst())}
+            ReferenceStore.insert(raw,"measured_operation",duplicate)
+            raw.query("PRAGMA foreign_key_check").use{assertFalse(it.moveToFirst())}
+            assertTrue(MeasuredConsumptionStore.auditStagedProjection(raw,b.scope.dataset,b.containerUuid) is MeasureResult.Success)
+            rejects(ReferenceError.INVALID_SOURCE){MeasuredConsumptionStore.auditStagedDataset(raw)}
+            throw SyntheticRollback()
+        }}catch(_:SyntheticRollback){}
+        assertEquals(before,RawData.dump(raw).toString())
+        val after=raw.query("SELECT type,name,tbl_name,sql FROM sqlite_master ORDER BY type,name").use { c ->
+            buildList {while(c.moveToNext())add((0..3).map{if(c.isNull(it))null else c.getString(it)})}
+        }
+        assertEquals(schema,after)
     }
     @Test fun architectureJournalObservesDaoCompiledSqlUnrelatedHistoryAndLedgerTriggers()=runBlocking {
         val m=med();val b=box(m);val r=record(m);consume(r,b,listOf(use(b)))
@@ -2001,3 +2049,4 @@ abstract class MeasuredConsumptionContract {
     }
 
 }
+
