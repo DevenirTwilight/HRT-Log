@@ -1,6 +1,6 @@
 {
   "base": "01534191bfc082fc98f0b95317fe77a08d884061",
-  "state": "LOCAL_ORACLE_AND_NATIVE_COMPILE_PASS_RUNTIME_PENDING",
+  "state": "NATIVE_BACKUP_COMPLETED_WRITE_STILL_BLOCKED",
   "memory_candidate": "B2_FINAL",
   "full_fixture_sha256": "9313167178989def0d4d89d785f84cdde764fba21033543cdf85e472c5511242",
   "expected_full_fixture_bytes": 19660924,
@@ -30,7 +30,21 @@
   "main_jar_sha256": "fb456adc47ab6a5322ee12bbe6b02ecf0bbe3958b2e91003cf498794311d8df8",
   "production_change_since_01534191": "NONE",
   "original_native_failure": "native-profile-01534191; no new writes or backup timings",
-  "actual_candidate_native": "NOT_RUN",
+  "actual_candidate_native": {
+    "run": 39428902719,
+    "status": "FULL_NATIVE_COMPLETED_WRITE_BUDGET_FAIL",
+    "peak_observed_jvm_heap_bytes": 125766304,
+    "raw_fixture_bytes": 19660924,
+    "backup_ms": 8349.68734,
+    "restore_ms": 44564.41776,
+    "write_ms": [
+      7867.72377,
+      7677.08439,
+      7570.02775
+    ],
+    "oom_this_run": "NOT_REPRODUCED",
+    "repeat_stability": "NOT_RUN"
+  },
   "physical_device": "NOT_RUN",
   "p4": "PRODUCTION_BLOCKED"
 }

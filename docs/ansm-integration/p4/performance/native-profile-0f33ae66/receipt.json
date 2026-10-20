@@ -1,0 +1,24 @@
+{
+  "source_head": "0f33ae664e657861d0f54d3f9e7e757370aa8917",
+  "run_id": 39428902719,
+  "job_id": 118648446184,
+  "artifact_id": 12267293264,
+  "official_archive_sha256": "6214b895413080cdf9a93f322223025e2e748a2a22adb95d0f602ade37a30774",
+  "crc": "PASS",
+  "status": "FAIL_WRITE_BUDGET_ONLY",
+  "trace_parser_replay": "BYTE_IDENTICAL",
+  "native_rss_peak": "NOT_MEASURED",
+  "physical": "NOT_RUN",
+  "files_sha256": {
+    "audit-sampling-summary.json": "ee04917e578c5567df607ecd5a3af4076c61bd2bea5bb4a960f954564b2ffbea",
+    "audit-sampling.trace.gz": "a08c87679bf4ed49c6ddc567d4da05fb252ec37a9657a1b08a2a9504935d57b3",
+    "environment.json": "a68e874713decc4e4365e7d0b0f3b36ee5f942bddebaa4550d9ab744aaf39b8f",
+    "execution.json": "1e098746602ade17b4552b8d3c0cac2d8dbe10e61021862d107bdfdbac1cb313",
+    "large-ten-year.json": "0a8c85e362c195eb56cd9d5dead1433c73251e6a5c8d3c04219db6a6fa1a4534",
+    "post-run-kernel-diagnostics.json": "2c5db643fd2dc8f655a16bcca683f639934d14a6fd96640fc5a3a44ac991d3de",
+    "pre-cleanup-report.json": "905cb49ac8c70879ff35a7a45a7c28f69408bd43fa895c35be095b4114a065ac",
+    "source.json": "29a951e48ec79c17d0d863be6219a97397b644dd005964a9e85738bb8d61a04c",
+    "synthetic-crash-log.txt.gz": "87d51780b194ba7b2acc26396c076dd6fe02720cd717f060e19998bf8aed4ab5",
+    "trace-collection.json": "c480daaef15811f954858ad26dc5aff53c0f8de36c3d11afa031f41ebe6cde76"
+  }
+}

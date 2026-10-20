@@ -1,3 +1,7 @@
+## 2026-10-20 有限收尾完成，P4仍PRODUCTION_BLOCKED
+
+生产/原生候选0f33ae66，原生39428902719完整原规模/内存/预算执行：audit7.53s、forecast7.92s、backup8.35s、restore44.56s，本轮无OOM/观测Java堆119.94MiB；三真实写7.87/7.68/7.57s FAIL。停止继续试探性优化，#57保持Draft、入口OFF，不合并。原OOM失败/后续NOT_RUN保留；缓存没有代替全审计或跨写信任。精确收据、三API实际129库存合同/15备份迁移合同、CI未齐和下一最小安全证明边界统一见[p4 closeout report](p4/closeout-report-2026-10-20.md)。这不是PRODUCTION_IMPLEMENTED或RELEASED；UI/P5/P6/PK/Schema/crypto/发布未扩张。
+
 ## P4 流水联合读取本地420通过；原生写入仍>5s — 2026-10-18
 
 66ea8d5原生run39123897415完整FAIL：audit8836/forecast8836/restored8357ms本轮<15s，三写9347/9233/8923ms>5000。官方工件SHA/CRC与raw trace/gzip/parser复现PASS，61340采样/152边界帧、零未知/不匹配退出、无溢出，仍PARTIAL_DIAGNOSTIC；SQLCipher游标/GC/UTF8仍主要成本，见performance/native-profile-66ea8d5/。不删除0fd/3ee等旧失败，不按较快一次宣称稳定改善。

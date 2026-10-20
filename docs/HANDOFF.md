@@ -1,3 +1,13 @@
+## P4 本轮收尾结论：完整原生跑完，写入仍FAIL，停止继续优化 — 2026-10-20
+
+最终候选0f33ae66（生产A1+测试内存B2）原生39428902719/job118648446184/artifact12267293264完整执行原512MiB/192MiB、14600/2000/32603和19660924字节夹具。全审计7.53s、预测7.92s、备份8.35s、恢复44.56s通过；真实三写7.87/7.68/7.57s仍>5，唯一预算FAIL。观测堆峰125766304B≈119.94MiB，本轮无OOM但RSS峰/独立稳定性复验NOT_RUN，不宣称永远修好。官方SHA/CRC/采样重放字节一致和完整SQL明细已核验归档performance/native-profile-0f33ae66；新预清理完整报告收集实际生效，未把FAIL改PASS。
+
+事务内有界证据复用未取消全量校验，仍有每次写入O(history)全审计。后预算隔离全审计6.45/6.67s、票据1.13/验证1.18s不能相加假装实际写入互斥分解；提交单独耗时尚未建立。缓存快路径确实执行但不足以达门槛。不继续堆缓存/字符串微调或未经证明的增量信任；按有限周期停止新增实现，交付PRODUCTION_BLOCKED。下一边界是可信全审计基线、所有合法变更与绕过路径的失效证明，完成独立Schema/备份/回滚审查前不实现跨写验证状态或占下个Room版本。
+
+本地data461/App43、最终focused16和工具67 PASS，原生生成Kotlin编译PASS；source015三API各129项真实库存合同PASS，原始HTML和官方工件摘要另存compat-01534191，不冒充该轮整体CI（后续push取消）。source51三API迁移/备份owner15项各PASS。最终0f33 JVM/science已PASS，Android/设备/兼容仍IN_PROGRESS，六门不齐；证据提交本身仍须精确HEAD检查，不回填绿色。
+
+完整简明报告docs/ansm-integration/p4/closeout-report-2026-10-20.md。主线仍320171cd，普通合入已审主线后没有新共享代码冲突，新增收尾不改既有P4 Room13/业务12或main12/11，不动UI/PK/crypto/库存分配/权限/签名。#57继续Draft/OFF/NOT_ELIGIBLE，P5/P6未实施，无APK或Release。之后由仓库自动触发的文档提交复验不代表第三轮生产修复；不手动重复派发或绕过原门。
+
 ## P4 首轮原生在初始恢复前后OOM；最后测试内存候选已完成本地对照 — 2026-10-20
 
 01534191原生39426820857/job118641359886/artifact12266606842在validated_staging_and_restore阶段被kernel杀PID3969，与测试进程匹配；119968KiB仅kill时anon RSS，不是峰值。后续完整审计/预测/备份/恢复/三写全部NOT_RUN，不能声称首轮A1提速成功。官方ZIP SHA/CRC和原始IN_PROGRESS/内核/日志归档performance/native-profile-01534191。具体restore子阶段及A1因果尚UNKNOWN；旧51完整三写超时不改写。
