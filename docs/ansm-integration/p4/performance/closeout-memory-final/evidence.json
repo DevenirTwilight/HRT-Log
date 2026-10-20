@@ -1,0 +1,36 @@
+{
+  "base": "01534191bfc082fc98f0b95317fe77a08d884061",
+  "state": "LOCAL_ORACLE_AND_NATIVE_COMPILE_PASS_RUNTIME_PENDING",
+  "memory_candidate": "B2_FINAL",
+  "full_fixture_sha256": "9313167178989def0d4d89d785f84cdde764fba21033543cdf85e472c5511242",
+  "expected_full_fixture_bytes": 19660924,
+  "whole_platform_oracle_cases": 134,
+  "nested_multirow_delimiters": "COVERED",
+  "contract": {
+    "tests": 16,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "xml_sha256": "e529ce48e031cbdb4f866da825e68a3b475a00b9d3d77248fe5070e3ed503f8b",
+  "tooling_tests": 67,
+  "source_sha256": {
+    "core/data/src/historyTest/java/net/plainnotes/app/data/SyntheticFixtureJsonSize.kt": "379d092c69785c590962aa0e22abec0684d03cb8f4f441af3d21d1a12d21e6cd",
+    "core/data/src/historyTest/java/net/plainnotes/app/data/ReferenceMigrationContract.kt": "51c3ef62f34cc9851e5263d071091559218da86ff935a12d7f8ba56428a44bfc",
+    "scripts/prepare_ansm_native_performance.py": "84acd95f697785b01d3920cbda88512de9a12dabfb6b11591b0d11f14eda0780",
+    "scripts/test_ansm_native_performance.py": "1997b80e69c3ff2086fa17e2d0c1b13079e9251f73f669942f4c402252bdcf24"
+  },
+  "generated_native": {
+    "source_sha256": "9313167178989def0d4d89d785f84cdde764fba21033543cdf85e472c5511242",
+    "native_sha256": "9d1188767c869eae15ae9414ad80df4ad1f135a65dd6a7925d67ca222c897a5c",
+    "status": "GENERATED_NOT_RUN"
+  },
+  "generated_android_compile": "PASS",
+  "helper_absent_from_production_jar": "PASS",
+  "main_jar_sha256": "fb456adc47ab6a5322ee12bbe6b02ecf0bbe3958b2e91003cf498794311d8df8",
+  "production_change_since_01534191": "NONE",
+  "original_native_failure": "native-profile-01534191; no new writes or backup timings",
+  "actual_candidate_native": "NOT_RUN",
+  "physical_device": "NOT_RUN",
+  "p4": "PRODUCTION_BLOCKED"
+}

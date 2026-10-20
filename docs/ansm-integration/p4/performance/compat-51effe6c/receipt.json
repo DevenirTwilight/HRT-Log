@@ -1,7 +1,7 @@
 {
   "source_head": "51effe6ce05459606560b4e378eb8240b58ff7f6",
-  "status": "ACTUAL_API26_API29_PASS",
-  "api35": "PENDING_NOT_CLAIMED",
+  "status": "ACTUAL_API26_API29_API35_PASS",
+  "api35": "PASS",
   "large_fixed_memory_performance": "SEPARATE_WRITE_BUDGET_FAIL",
   "evidence": [
     {
@@ -52,6 +52,31 @@
         "streamedMeasuredBackupMatchesWholeDocumentBytesAndRemainsReadOnly": "0.503s",
         "unsupportedMeasurementsInOldRoomElevenAreRejectedWithoutClearingAnything": "1.054s",
         "utf8LengthMatchesPlatformForEveryCodeUnitPairsAndBoundaries": "0.152s"
+      }
+    },
+    {
+      "api": 35,
+      "run": 39423667877,
+      "artifact": 12265314230,
+      "official_archive_sha256": "256ea2ac1346a28d0a792bac021bab4cbf8f3ccefbc9a4dae6d9c07c4dfe4b21",
+      "crc": "PASS",
+      "html_sha256": "238182b1da81e9bde0a5b9ef570c927156c334ab76b78ee706914ab7031f3ba3",
+      "methods": {
+        "backupPlaintextOwnerClearsSuccessFailureAndRejectedTransfers": "0s",
+        "boundedBackupPlaintextChunksAreExactAndWipedOnSuccessAndFailure": "0.001s",
+        "cancellationAfterPlaintextCaptureRollsBackAndClearsBeforeTransactionReturns": "0.302s",
+        "canonicalUuidPredicateMatchesThePlatformOracleAcrossVersionsAndMalformedForms": "0.252s",
+        "everyPublishedRoomOneThroughElevenUpgradesNonDestructivelyToTwelve": "6.120s",
+        "failedElevenToTwelveFenceRollsBackWithAllReferenceFactsAndEpochIntact": "1.204s",
+        "failedMainTwelveToThirteenFenceKeepsPanelLinksLegacyBitsAndEpoch": "1.204s",
+        "failedTenToElevenMigrationRollsBackDdlAndKeepsOriginalEncryptedDatabaseReadable": "0.903s",
+        "oldRoomElevenReaderCannotOpenTheNewMeasurementFormat": "1.230s",
+        "publishedRoomTwelveMayLackEncodingButClaimedThirteenMustRejectIt": "0.251s",
+        "roomTenReverseLedgerAndAllThirtySevenLegacyEntitiesRemainBitExactAndDowngradeRejects": "1.230s",
+        "storedColumnFenceMatchesTheOriginalPerColumnOracleForNullTypesAndLateRows": "0.377s",
+        "streamedMeasuredBackupMatchesWholeDocumentBytesAndRemainsReadOnly": "0.403s",
+        "unsupportedMeasurementsInOldRoomElevenAreRejectedWithoutClearingAnything": "0.879s",
+        "utf8LengthMatchesPlatformForEveryCodeUnitPairsAndBoundaries": "0.101s"
       }
     }
   ]

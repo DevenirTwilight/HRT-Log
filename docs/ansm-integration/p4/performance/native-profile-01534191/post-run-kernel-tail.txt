@@ -1,0 +1,80 @@
+[  180.717105] [ 1519]  1000  1519     3056      162       6        0         -1000 gatekeeperd
+[  180.718505] [ 1520]  1058  1520     1432       85       3        0         -1000 tombstoned
+[  180.719961] [ 1522]  1000  1522     2472      135       5        0         -1000 fingerprint@2.1
+[  180.721804] [ 1626]     0  1626     1334       78       4        0         -1000 dhcpclient
+[  180.723276] [ 1629]     0  1629      497        9       3        0         -1000 sh
+[  180.724494] [ 1637]     0  1637      694       13       3        0         -1000 sleep
+[  180.725796] [ 1665]     0  1665     1397       81       4        0         -1000 ipv6proxy
+[  180.727128] [ 1671]     0  1671     1993      128       4        0         -1000 hostapd
+[  180.728435] [ 1673]     0  1673     1365       78       4        0         -1000 dhcpserver
+[  180.729784] [ 2634]     0  2634     3925      417       7        0         -1000 adbd
+[  180.731089] [ 2637]  1020  2637      657       72       4        0         -1000 mdnsd
+[  180.732378] [ 2771]     0  2771     5387      222       8        0         -1000 Binder:2771_2
+[  180.733867] [ 2772]  1000  2772    17829      493      22        0         -1000 surfaceflinger
+[  180.735269] [ 2773]     0  2773   226785     2331      83        0         -1000 main
+[  180.737064] [ 2776]     0  2776     1626      156       4        0         -1000 iptables-restor
+[  180.738687] [ 2777]     0  2777     1629      169       4        0         -1000 ip6tables-resto
+[  180.740107] [ 2821]  1000  2821   277332     7438     132        0          -900 system_server
+[  180.741471] [ 2916] 10046  2916   249275     2752      80        0           200 putmethod.latin
+[  180.742874] [ 2932] 10023  2932   272934    14969     110        0          -800 ndroid.systemui
+[  180.744388] [ 2988]  1001  2988   254868     3626      86        0          -800 m.android.phone
+[  180.745782] [ 3107]  1010  3107     3896      192       7        0         -1000 wpa_supplicant
+[  180.747158] [ 3156] 10012  3156   250037     2585      79        0           100 .android.dialer
+[  180.748557] [ 3308] 10014  3308   256498     4641      96        0             0 droid.launcher3
+[  180.750005] [ 3504]     0  3504     1480      118       4        0         -1000 logcat
+[  180.751514] [ 3922]     0  3922     1406       86       4        0         -1000 sh
+[  180.752843] [ 3926]     0  3926     1480      119       3        0         -1000 logcat
+[  180.754183] [ 3958]     0  3958     1406       86       3        0         -1000 sh
+[  180.755649] [ 3960]     0  3960   198269     1285      62        0         -1000 main
+[  180.756918] [ 3969] 10065  3969   276095    29992     138        0             0 s.app.data.test
+[  180.758366] Out of memory: Kill process 3969 (s.app.data.test) score 313 or sacrifice child
+[  180.759790] Killed process 3969 (s.app.data.test) total-vm:1104380kB, anon-rss:119968kB, file-rss:0kB
+[  181.274032] ieee80211 phy0: hwsim hw_scan request
+[  181.274135] ieee80211 phy0: hw scan 2412 MHz
+[  181.300291] ieee80211 phy0: hw scan 2417 MHz
+[  181.330048] ieee80211 phy0: hw scan 2422 MHz
+[  181.360063] ieee80211 phy0: hw scan 2427 MHz
+[  181.390059] ieee80211 phy0: hw scan 2432 MHz
+[  181.420051] ieee80211 phy0: hw scan 2437 MHz
+[  181.450053] ieee80211 phy0: hw scan 2442 MHz
+[  181.480062] ieee80211 phy0: hw scan 2447 MHz
+[  181.510055] ieee80211 phy0: hw scan 2452 MHz
+[  181.540084] ieee80211 phy0: hw scan 2457 MHz
+[  181.570047] ieee80211 phy0: hw scan 2462 MHz
+[  181.600077] ieee80211 phy0: hw scan 2467 MHz
+[  181.720043] ieee80211 phy0: hw scan 2472 MHz
+[  181.840062] ieee80211 phy0: hw scan 2484 MHz
+[  181.960066] ieee80211 phy0: hw scan complete
+[  181.960103] ieee80211 phy0: hwsim hw_scan request
+[  181.960104] ieee80211 phy0: hw scan 5180 MHz
+[  181.990777] healthd: battery l=100 v=5000 t=25.0 h=2 st=2 chg=a
+[  182.080067] ieee80211 phy0: hw scan 5200 MHz
+[  182.200055] ieee80211 phy0: hw scan 5220 MHz
+[  182.320064] ieee80211 phy0: hw scan 5240 MHz
+[  182.440051] ieee80211 phy0: hw scan 5260 MHz
+[  182.560053] ieee80211 phy0: hw scan 5280 MHz
+[  182.680053] ieee80211 phy0: hw scan 5300 MHz
+[  182.800059] ieee80211 phy0: hw scan 5320 MHz
+[  182.920057] ieee80211 phy0: hw scan 5500 MHz
+[  183.040066] ieee80211 phy0: hw scan 5520 MHz
+[  183.160061] ieee80211 phy0: hw scan 5540 MHz
+[  183.280054] ieee80211 phy0: hw scan 5560 MHz
+[  183.400054] ieee80211 phy0: hw scan 5580 MHz
+[  183.520057] ieee80211 phy0: hw scan 5600 MHz
+[  183.640057] ieee80211 phy0: hw scan 5620 MHz
+[  183.760060] ieee80211 phy0: hw scan 5640 MHz
+[  183.880067] ieee80211 phy0: hw scan 5660 MHz
+[  184.000073] ieee80211 phy0: hw scan 5680 MHz
+[  184.120043] ieee80211 phy0: hw scan 5700 MHz
+[  184.240050] ieee80211 phy0: hw scan complete
+[  184.240076] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  184.241030] ieee80211 phy0: mac80211_hwsim_get_survey (idx=0)
+[  184.340059] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  192.054234] init: processing action (qemu.adbd=start)
+[  192.055249] init: processing action (sys.usb.config=adb && sys.usb.configfs=0)
+[  192.057723] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  192.059936] init: write_file: Unable to open '/sys/class/android_usb/android0/idVendor': No such file or directory
+[  192.062940] init: write_file: Unable to open '/sys/class/android_usb/android0/idProduct': No such file or directory
+[  192.065072] init: write_file: Unable to open '/sys/class/android_usb/android0/functions': No such file or directory
+[  192.067014] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  192.317844] init: Untracked pid 3926 killed by signal 1

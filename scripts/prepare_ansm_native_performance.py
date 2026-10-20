@@ -16,6 +16,9 @@ def native_source(text):
         if text.count(old) != 1:
             raise ValueError('Performance template drift: expected one occurrence of ' + old[:70])
         text = text.replace(old, new, 1)
+    # Only metadata sizing changes: preserve the frozen data, actual restore/export and budgets.
+    replace('val bytes=fixture.toString().toByteArray(Charsets.UTF_8).size',
+            'val bytes=SyntheticFixtureJsonSize.utf8Bytes(fixture)\n            assertEquals("Frozen full fixture byte size",19660924,bytes)')
     replace('import org.robolectric.RobolectricTestRunner\n', '')
     replace('import org.robolectric.annotation.Config\n', '')
     replace('@RunWith(RobolectricTestRunner::class) @Config(sdk=[35])', '')

@@ -12,6 +12,18 @@ def module(name):
     return value
 
 class NativePerformanceIsolationTest(unittest.TestCase):
+    def test_fixture_size_uses_bounded_test_only_counter_without_changing_frozen_fixture(self):
+        prepare = module('prepare_ansm_native_performance')
+        original=prepare.SOURCE.read_text()
+        self.assertIn('val bytes=fixture.toString().toByteArray(Charsets.UTF_8).size',original)
+        text=prepare.native_source(original)
+        self.assertIn('val bytes=SyntheticFixtureJsonSize.utf8Bytes(fixture)',text)
+        self.assertIn('assertEquals("Frozen full fixture byte size",19660924,bytes)',text)
+        self.assertNotIn('val bytes=fixture.toString().toByteArray(Charsets.UTF_8).size',text)
+        self.assertIn('RawData.restore(context,raw,fixture,measured=true)',text)
+        self.assertIn('repo.exportMeasuredBackup(password,repo.referencePreviewEpoch())',text)
+        self.assertFalse((ROOT/'core/data/src/main/java/net/plainnotes/app/data/SyntheticFixtureJsonSize.kt').exists())
+
     def test_sql_driver_timing_is_read_only_post_budget_and_never_logs_bindings(self):
         prepare = module('prepare_ansm_native_performance')
         text = prepare.native_source(prepare.SOURCE.read_text())

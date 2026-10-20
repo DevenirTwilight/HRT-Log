@@ -16,6 +16,23 @@ import kotlinx.coroutines.cancelAndJoin
 
 /** Authoritative exported schemas 1..12, then the real production migration and Room validation. */
 abstract class ReferenceMigrationContract {
+    @Test fun syntheticFixtureByteCounterMatchesWholePlatformDocumentWithoutMutatingRows() {
+        val random=java.util.Random(0x464958L)
+        val texts=listOf("", "é 法 藥 \u0000 \ud83d\ude00", "\"\\\n", "\ud800", "\udc00", "x".repeat(65537))+
+            List(128){CharArray(97){random.nextInt(65536).toChar()}.concatToString()}
+        for(text in texts) {
+            val tables=JSONObject().put("empty",JSONArray()).put("synthetic é",JSONArray()
+                .put(JSONObject().put("text",text).put("blob","b64:AAH/Cg==").put("null",JSONObject.NULL)
+                    .put("min",Long.MIN_VALUE).put("max",Long.MAX_VALUE).put("double",0.125).put("negativeZero",-0.0))
+                .put(JSONObject().put("nested",JSONArray().put(text).put(JSONObject.NULL)))).put("last",JSONArray())
+            val before=tables.toString();val expected=before.toByteArray(Charsets.UTF_8).size
+            assertEquals(expected,SyntheticFixtureJsonSize.utf8Bytes(tables))
+            assertEquals(before,tables.toString())
+            assertThrows(BackupCodec.TooLarge::class.java){SyntheticFixtureJsonSize.utf8Bytes(tables,expected-1)}
+            assertEquals(expected,SyntheticFixtureJsonSize.utf8Bytes(tables,expected))
+        }
+        assertEquals(2,SyntheticFixtureJsonSize.utf8Bytes(JSONObject()))
+    }
     private companion object {
         /** The only DDL Room 11→12 (LAB-02) adds to a Room 10 table: exactly this column clause and this index. */
         const val LAB_PANEL_COLUMN=", `panel_id` INTEGER REFERENCES `lab_panel`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT"

@@ -1,3 +1,13 @@
+## P4 首轮原生在初始恢复前后OOM；最后测试内存候选已完成本地对照 — 2026-10-20
+
+01534191原生39426820857/job118641359886/artifact12266606842在validated_staging_and_restore阶段被kernel杀PID3969，与测试进程匹配；119968KiB仅kill时anon RSS，不是峰值。后续完整审计/预测/备份/恢复/三写全部NOT_RUN，不能声称首轮A1提速成功。官方ZIP SHA/CRC和原始IN_PROGRESS/内核/日志归档performance/native-profile-01534191。具体restore子阶段及A1因果尚UNKNOWN；旧51完整三写超时不改写。
+
+静态生命周期审查发现测试自身仅统计fixture字节数就额外整体toString+UTF8数组，原报告从扩展前52.6MB堆到恢复入口161.6MB、观测峰198.5MB。最后内存候选B2仅在生成原生测试将此元数据统计改逐行同平台编码计数，原fixture SHA93131671不变，新增19660924字节断言；原数据/真实SQLCipher全恢复、全审计、真实加密备份/恢复、三真实Repo写入、32MiB/100000/512MiB/192MiB及所有预算不变，无强制GC。不是已证明修复kernel触发点，更不是生产备份通过。
+
+134组平台完整文档oracle覆盖Unicode/NUL/代理项/随机码元/数值/空值/Blob文本、多表/多行/嵌套/边界拒绝且原对象不变；最终共享ReferenceMigrationTest16/16、67工具及生成原生Kotlin编译PASS，helper实际不在production jar中。生产源码自015未改，A1原data461/App43/大库证据仍属该源；不冒称新增测试已随全462执行。API26/29/35 source51的15项实际迁移/取消清零/字节SHA对照现均归档compat-51effe6c。详见closeout-memory-final。
+
+下一步推送最后候选，由原PR自动native复验；如仍退出/超时，保留BLOCKED并停止进一步试探修改，报告安全的后续最小边界。当前必需CI尚在执行，不写全绿；#57继续Draft/入口OFF，P5/P6/UI/PK/crypto/Schema/签名发布均未扩张。
+
 ## P4 首轮事务内已验证操作复用：本地完整回归通过 — 2026-10-20
 
 基于51effe6c实施本次有限收尾的实质性能修复A1/最多2轮：一次捕获完整操作链和原始类型头字段，投影/临床/ADJUST流复用同一只读事务的证据。4MiB保守元数据预算，溢出整体回退原全SQL；原32MiB规范文本限制不变，缺行不当零，返回对象无可变别名，finally清空，total_changes/schema_version继续拒绝读审计内写入。没有跨写信任、增量代替全审计、新表或版本变化。完整data461、App43及ANSMPython66均PASS，原生共享合同Kotlin编译PASS；原规模14600/2000/32603便携大库已PASS（185查询/完整投影与只读断言），新候选实际原生性能仍待验，结果另见performance/closeout-round1。旧后链伪造负向测试保留在零缓存原路径，另加新捕获路径伪造/读中写入/生命周期/完整回退对照；初轮旧注入器未触达而失败的XML保留，未删除拒绝断言。
