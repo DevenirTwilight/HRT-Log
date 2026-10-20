@@ -1,0 +1,197 @@
+{
+  "status": "DIAGNOSTIC_BUDGET_FAIL",
+  "environment": "Native API26 SQLCipher synthetic fixture; emulator, not physical hardware",
+  "diagnostic_run_token": "c2445d65-5812-4223-b82d-f3b11bca0b39",
+  "stage": "post_write_full_audit",
+  "transport_preflight": "PASS",
+  "device_total_ram_bytes": 520962048,
+  "process_max_heap_bytes": 201326592,
+  "database_encryption": "SQLCipher",
+  "api": 26,
+  "observed_heap_bytes": 24199520,
+  "peak_observed_jvm_heap_bytes": 176967584,
+  "peak_observed_database_disk_bytes": 35924688,
+  "real_seed_generation_ms": 53975.61542,
+  "synthetic_fixture_expansion_ms": 16612.11997,
+  "raw_business_json_bytes": 19660924,
+  "records": 14600,
+  "containers": 2000,
+  "measured_operations": 2000,
+  "presentation_snapshots": 2000,
+  "distinct_synthetic_product_variants": 20,
+  "row_count": 32603,
+  "validated_staging_and_restore_ms": 37677.16286,
+  "full_audit_ms": 7843.28258,
+  "shared_forecast_ms": 8672.13108,
+  "full_encrypted_backup_ms": 10417.3558,
+  "encrypted_archive_bytes": 19661045,
+  "full_encrypted_restore_ms": 46808.81784,
+  "restored_full_audit_ms": 8291.65771,
+  "three_post_restore_writes_ms": 28011.78924,
+  "post_restore_write_including_ticket_ms": [
+    8670.21696,
+    9835.2257,
+    9458.94673
+  ],
+  "post_write_full_audit_ms": 7488.88724,
+  "heap_sample_interval_ms": 10,
+  "heap_is_not_native_rss": true,
+  "physical_device_acceptance": "NOT_RUN",
+  "api26_low_memory_acceptance": "FAIL",
+  "budget_exceeded": [
+    "post_restore_write_including_ticket_ms"
+  ],
+  "post_budget_components": {
+    "scope": "TEST_ONLY_POST_BUDGET_READ_ONLY",
+    "acceptance_metrics_frozen_before_diagnostics": true,
+    "raw_full_first_ms": 13608.67119,
+    "cached_full_second_ms": 6935.73164,
+    "cached_full_first_ms": 7582.02011,
+    "raw_full_second_ms": 13036.26022,
+    "stored_columns_ms": 1162.54283,
+    "raw_references_ms": 2219.04776,
+    "raw_state_including_references_ms": 2163.80436,
+    "raw_operation_chain_ms": 441.67829,
+    "row_cache_construction_finish_ms": 399.20324,
+    "cached_references_including_construction_ms": 2134.72368,
+    "cached_operations_with_setup_ms": 3776.17673,
+    "cached_projections_with_setup_ms": 2474.91728,
+    "projection_stream_cursor_type": "net.zetetic.database.sqlcipher.SQLiteCursor",
+    "projection_stream_query_plan": [
+      "SCAN i USING INDEX sqlite_autoindex_reference_identity_1",
+      "CORRELATED SCALAR SUBQUERY 1",
+      "SEARCH e USING INDEX index_reference_event_subject_uuid_revision (subject_uuid=?)",
+      "SEARCH s USING INDEX sqlite_autoindex_reference_snapshot_1 (uuid=?)",
+      "SEARCH t USING INDEX index_supply_transaction_container_id (container_id=?)",
+      "SEARCH d USING INTEGER PRIMARY KEY (rowid=?) LEFT-JOIN"
+    ],
+    "projection_stream_cursor_windows_status": "AVAILABLE",
+    "projection_stream_cursor_windows": [
+      {
+        "start_row": 0,
+        "rows": 2003,
+        "driver_reported_size_bytes": 16384
+      }
+    ],
+    "stream_query_plan_audit_ms": 6941.14509,
+    "decimal_regex_reuse_12000_ms": 80.75309,
+    "decimal_regex_compile_12000_ms": 212.24632,
+    "write_ticket_capture_ms": 1282.39464,
+    "write_ticket_validate_ms": 1044.13453,
+    "sql_driver_timing_audit_ms": 17015.61428,
+    "sql_driver_timings": [
+      {
+        "sql_sha256": "6c801ab9f65cc87f648485caade85d335ac9f8d1d52e3e8dad1d061153b255cb",
+        "sql_prefix": "SELECT i.uuid,t.id,t.dose_record_id,t.dose_revision,t.operation_id,t.kind,t.used_delta,t.reversal_of_id,d.revision FROM supply_transaction t JOIN reference_identity i ON i.live_handle=t.container_id LEFT JOIN dose_record d ON d.id=t.dose_record_id WHERE i.kind='CONTAINER' AND EXISTS(SELECT 1 FROM reference_event e JOIN reference_snapshot s ON s.uuid=e.snapshot_uuid WHERE e.subject_uuid=i.uuid AND s.kind='PRESENTATION') ORDER BY i.uuid,t.id",
+        "sql_prefix_truncated": false,
+        "queries": 1,
+        "cursor_calls": 50063,
+        "driver_ns": 847698360
+      },
+      {
+        "sql_sha256": "75d969201666ceebff397862f6a8b8d2eec57903f8ffbfbe0095a39cb3576f19",
+        "sql_prefix": "PRAGMA foreign_key_check",
+        "sql_prefix_truncated": false,
+        "queries": 2,
+        "cursor_calls": 4,
+        "driver_ns": 628566930
+      },
+      {
+        "sql_sha256": "e0ddd87dceeb46d23401917632f71f14bfa7cfc6083800c7ea7176afb598dad3",
+        "sql_prefix": "SELECT * FROM `reference_identity`",
+        "sql_prefix_truncated": false,
+        "queries": 1,
+        "cursor_calls": 52053,
+        "driver_ns": 621338480
+      },
+      {
+        "sql_sha256": "15e9106e4eff3d8878ba333cf2f3936877f17606655f641cb262e5e737abf790",
+        "sql_prefix": "SELECT o.operation_uuid,i.live_handle,d.id,d.`revision`,d.`taken_utc`,d.`taken_zone`,d.`status`,d.`actual_dose`,d.`config_snapshot`,d.`rule_version_id`,d.`slot_key`,d.`scheduled_utc`,d.`scheduled_zone`,d.`planned_dose`,d.`late_after_minutes_snapshot` FROM measured_operation o LEFT JOIN reference_identity i ON i.uuid=o.record_uuid LEFT JOIN dose_record d ON d.id=i.live_handle ORDER BY o.operation_uuid",
+        "sql_prefix_truncated": false,
+        "queries": 1,
+        "cursor_calls": 36057,
+        "driver_ns": 612171550
+      },
+      {
+        "sql_sha256": "1a09dc85993694bd0fa856a5df3a7405c45b9ca1904e1719fd352548f0e98755",
+        "sql_prefix": "SELECT `operation_uuid`,`dataset_uuid`,`record_uuid`,`record_revision`,`kind`,`request_sha256`,`input_json`,`unallocated_quantity`,`unallocated_unit`,`unknown_reason`,`created_utc` FROM measured_operation",
+        "sql_prefix_truncated": false,
+        "queries": 1,
+        "cursor_calls": 40063,
+        "driver_ns": 564577880
+      },
+      {
+        "sql_sha256": "7c800ba2a92d833341c763f63d9a164df730c7504242eac5bc8179319a9c899b",
+        "sql_prefix": "SELECT DISTINCT i.uuid,i.dataset_uuid,c.id,c.medication_id,c.capacity,c.initial_used_amount,c.used_amount,c.inventory_encoding FROM reference_identity i JOIN reference_event e ON e.subject_uuid=i.uuid JOIN reference_snapshot s ON s.uuid=e.snapshot_uuid LEFT JOIN supply_container c ON c.id=i.live_handle WHERE i.kind='CONTAINER' AND s.kind='PRESENTATION' ORDER BY i.uuid",
+        "sql_prefix_truncated": false,
+        "queries": 1,
+        "cursor_calls": 30002,
+        "driver_ns": 489140230
+      },
+      {
+        "sql_sha256": "84351bbcf4f8c9a1bae5d66d7033b965c028b537b666231dc03ec1429a744ebe",
+        "sql_prefix": "SELECT * FROM `record_reference_capture`",
+        "sql_prefix_truncated": false,
+        "queries": 1,
+        "cursor_calls": 40062,
+        "driver_ns": 480467510
+      },
+      {
+        "sql_sha256": "9876df95f745ee6e225ea71454d46feaa247be04e2f9d168d2bcb782058e0e93",
+        "sql_prefix": "SELECT * FROM `reference_event`",
+        "sql_prefix_truncated": false,
+        "queries": 1,
+        "cursor_calls": 36002,
+        "driver_ns": 426886230
+      },
+      {
+        "sql_sha256": "5a4b7e9c7009b838e7df4b05923639085c606d8d13f1b05a941bbe5a94a6bd94",
+        "sql_prefix": "SELECT COALESCE(SUM(COALESCE(length(CAST(`operation_uuid` AS BLOB)),0)+COALESCE(length(CAST(`dataset_uuid` AS BLOB)),0)+COALESCE(length(CAST(`record_uuid` AS BLOB)),0)+COALESCE(length(CAST(`kind` AS BLOB)),0)+COALESCE(length(CAST(`request_sha256` AS BLOB)),0)+COALESCE(length(CAST(`input_json` AS BLOB)),0)+COALESCE(length(CAST(`unallocated_quantity` AS BLOB)),0)+COALESCE(length(CAST(`unallocated_unit` AS BLOB)),0)+COALESCE(length(CAST(`unknown_reason` AS BLOB)),0)),0),COALESCE(MAX(CASE WHEN ((((`operation_uu",
+        "sql_prefix_truncated": true,
+        "queries": 1,
+        "cursor_calls": 4,
+        "driver_ns": 420731140
+      },
+      {
+        "sql_sha256": "5398410f61192ecda19e1bede6ad0a423a7ae9a7bcb574f94c7ab16e0cead72a",
+        "sql_prefix": "SELECT * FROM `measured_allocation`",
+        "sql_prefix_truncated": false,
+        "queries": 1,
+        "cursor_calls": 36056,
+        "driver_ns": 402815650
+      },
+      {
+        "sql_sha256": "e2ae5f320970422c6da9efa115182efcc6e5e44b2138805ab4711330184e9795",
+        "sql_prefix": "SELECT * FROM `reference_snapshot`",
+        "sql_prefix_truncated": false,
+        "queries": 1,
+        "cursor_calls": 30002,
+        "driver_ns": 389425600
+      },
+      {
+        "sql_sha256": "372732ca05dd2fc3c07421f1f8fadb412d6e4f1f06f487d7c6f6f200f17dea7b",
+        "sql_prefix": "SELECT o.operation_uuid,i.live_handle,d.id,d.`revision`,d.`taken_utc`,d.`taken_zone`,d.`status`,d.`actual_dose`,d.`config_snapshot`,d.`rule_version_id`,d.`slot_key`,d.`scheduled_utc`,d.`scheduled_zone`,d.`planned_dose`,d.`late_after_minutes_snapshot` FROM measured_operation o LEFT JOIN reference_identity i ON i.uuid=o.record_uuid LEFT JOIN dose_record d ON d.id=i.live_handle WHERE o.kind='ADJUST' ORDER BY o.operation_uuid",
+        "sql_prefix_truncated": false,
+        "queries": 1,
+        "cursor_calls": 3,
+        "driver_ns": 370686290
+      }
+    ],
+    "sql_driver_templates": 182,
+    "sql_driver_omitted_templates": 170,
+    "sql_driver_omitted_ns": 2313012000,
+    "sql_driver_timing_scope": "SYNTHETIC_POST_BUDGET_DRIVER_CALL_TIMING",
+    "sampled_cached_full_audit_ms": 11127.84677,
+    "sampled_write_ticket_capture_ms": 1308.72057,
+    "sampled_write_ticket_validate_ms": 841.64448,
+    "sampling_trace": {
+      "file": "audit-sampling.trace",
+      "bytes": 870407,
+      "token": "c2445d65-5812-4223-b82d-f3b11bca0b39",
+      "interval_us": 1000,
+      "scope": "TEST_ONLY_POST_BUDGET_METHOD_STACKS_NO_ARGUMENTS"
+    },
+    "status": "COMPLETE"
+  },
+  "collection_metadata_source": "VALIDATED_PRE_CLEANUP_REPORT"
+}

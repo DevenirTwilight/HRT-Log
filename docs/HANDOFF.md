@@ -1,3 +1,11 @@
+## P4 真实写入分解进行中（2026-10-20）
+
+基线27135013 / 主线320171cd；#57仍Draft、auto_merge=null、入口OFF。本轮没有生产或Schema/备份格式修改。新建recordMeasuredUse只有一次完整数据集审计；连ticket有4次全链验证。revise/restore/reconcile可能2–3次完整审计，但跨不同中间状态，尚不能安全删除。完整审计内确有同快照重复FK查询。决策与调用链已集中写入 `docs/ansm-integration/p4/write-path-timing/report.md`，不再复制旧报告。
+
+最新完成原生39465628009/artifact12286116312官方/下载SHA3df88d23…一致、CRC通过，原14600/2000/32603/19660924B与512MiB/192MiB不变：audit7.84s、forecast8.67s、backup10.42s、restore46.81s；三写8.67/9.84/9.46s全部FAIL。旧5.75/5.69/5.29s也全FAIL，没有曾经稳定通过5秒。原始报告及ART摘要已归档native-27135013；旧分离探针不能相加冒充真实写入分解。
+
+仅historyTest新增SupportSQLite适配器观测真实SQL、cursor、事务层级及提交/回滚；原始native阶段recorder关闭，全部原预算和只读/ART诊断后另做一笔真实提交诊断，保留独立全审计。共享小型合同检查SQL计时、审计/链次数、提交与异常全回滚。工具68项PASS；生成native Kotlin编译PASS；观察器首轮漏计Kotlin internal名导致RED，按$分段修复且原断言保留，提交/回滚共享合同1项PASS（原始RED/GREEN XML归档）；最终全data回归与修正后native编译进行中，新增原生同次分解目前待验证，不可宣称已取得分解或提速。触发器exclusive、纯原生COMMIT和部分receipt/Java尾部不能独立测量，需如实保留未知。下一步先完成编译与计时合同验证，之后仅一次有新证据价值的原生运行；无完整证明不接快验证器/不删中间全审计，不重复原失败跑分。
+
 ## P4 三方案有限决策与最终原生结果 — 2026-10-20
 
 验证源码0448fb83，主线320171cd；后续仅文档归档不改运行时。六类必需检查push/PR共12实例全部SUCCESS，PR临时merge07a3cf4b的树与0448相同。完整data471PASS/0skip，App1562PASS/277SKIPPED/0FAIL，reminder21PASS，Period5PASS。API26/29/35实际SQLCipher库存合同各138/138PASS、9架构用例各通过，原始HTML/官方SHA/CRC均已核验。修正仅测试ROLLBACK TO传输前缀，原计数/SAVEPOINT/重复零消耗反例与全部断言不删；新增C单谓词唯一索引及DDL/业务回滚原型，不是全历史快速验证器。

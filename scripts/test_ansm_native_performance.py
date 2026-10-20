@@ -12,6 +12,25 @@ def module(name):
     return value
 
 class NativePerformanceIsolationTest(unittest.TestCase):
+    def test_real_write_observation_is_separate_and_keeps_original_commit_and_oracle(self):
+        prepare=module('prepare_ansm_native_performance')
+        text=prepare.native_source(prepare.SOURCE.read_text())
+        start=text.index('// Separate MUTATING diagnostic')
+        diagnostic=text[start:text.index('File(file.parentFile,"trace-ready.json")',start)]
+        self.assertLess(text.index('components.put("status","COMPLETE")'),start)
+        self.assertLess(text.index('finally{android.os.Debug.stopMethodTracing()}'),start)
+        self.assertLess(text.index('report.put("budget_exceeded"'),start)
+        for marker in ('writeTiming.start("ticket")','writeTiming.start("write")',
+                       'repo.measuredWriteTicket(diagnosticScope,m)',
+                       'repo.recordMeasuredUse(observedTicket,diagnosticOperation,diagnosticDraft,now)',
+                       'getBoolean("accounting_valid")','getInt("audit_calls")',
+                       'MeasuredConsumptionStore.auditStagedDataset(raw)',
+                       'assertEquals(5L,verified.single', 'independent_post_commit_full_audit'):
+            self.assertIn(marker,diagnostic)
+        self.assertIn('writeTiming.factory(net.zetetic.database.sqlcipher.SupportOpenHelperFactory',text)
+        self.assertFalse((ROOT/'core/data/src/main/java/net/plainnotes/app/data/P4WritePathTiming.kt').exists())
+        self.assertIn('assertEquals("Diagnostic budgets;',text[text.index('independent_post_commit_full_audit'):])
+
     def test_fixture_size_uses_bounded_test_only_counter_without_changing_frozen_fixture(self):
         prepare = module('prepare_ansm_native_performance')
         original=prepare.SOURCE.read_text()

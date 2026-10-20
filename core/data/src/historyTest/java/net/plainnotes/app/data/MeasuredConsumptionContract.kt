@@ -37,6 +37,38 @@ abstract class MeasuredConsumptionContract {
     private suspend fun consume(r:RecordEntity,box:CreatedMeasuredContainer,uses:List<ConfirmedStockUse>,op:String=UUID.randomUUID().toString())=db.withTransaction{MeasuredConsumptionStore.consumeNewRecord(db,box.scope,r,op,uses,at)}
     private fun count(table:String)=raw.query("SELECT COUNT(*) FROM `$table`").use{it.moveToFirst();it.getInt(0)}
     private suspend fun rejects(code:ReferenceError,block:suspend()->Unit){try{block();fail("Expected $code")}catch(e:ReferenceFailure){assertEquals(code,e.code)}}
+    @Test fun writePathObserverAccountsRealCommitAndPreservesFaultRollbackAndFullAudit()=runBlocking {
+        val timing=P4WritePathTiming();val otherName="synthetic-write-timing-${UUID.randomUUID()}.db"
+        val observed=Room.databaseBuilder(context,NotesDatabase::class.java,otherName)
+            .openHelperFactory(timing.factory(factory(key.clone()))).allowMainThreadQueries().addCallback(SchemaGuards).build()
+        try {
+            val sql=observed.openHelper.writableDatabase;encrypted(otherName)
+            val repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=observed})
+            val med=MedicationEntity(name="SYNTHETIC timing",molecule="OTHER",unit="MG",dose_per_intake=0.1,container_capacity=28.0,site_rotation=false,notifications_on=false,active=false,sort_order=0)
+            val m=observed.dao().insertMedication(med)
+            val b=repo.createMeasuredPackage(repo.referencePreviewEpoch(),observed.dao().medication(m),UUID.randomUUID().toString(),
+                PackageMeasurementDraft(product,MeasureUnit.TABLET,meaning,"0.5","28",StockCapacityBasis.USER_COUNTED),at)
+            val draft=MeasuredActualUseDraft(at.toEpochMilli(),"UTC",0.1,listOf(use(b)),MeasuredStockEffect.DEDUCT_CURRENT,userConfirmed=true)
+            timing.start("ticket");val ticket=repo.measuredWriteTicket(b.scope,m);val capture=timing.finish()
+            assertTrue(capture.toString(),capture.getBoolean("accounting_valid"))
+            timing.start("write");repo.recordMeasuredUse(ticket,UUID.randomUUID().toString(),draft,at){timing.checkpoint(it.name)};val success=timing.finish()
+            assertTrue(success.toString(),success.getBoolean("accounting_valid"))
+            assertEquals(success.toString(),1,success.getInt("audit_calls"));assertEquals(success.toString(),1,success.getInt("validation_calls"))
+            assertEquals(3,success.getInt("chain_checks"));assertEquals(1,capture.getInt("chain_checks"))
+            assertTrue(success.getLong("insert_including_triggers_ns")>0);assertTrue(success.getLong("commit_driver_ns")>0)
+            assertEquals(2,success.getJSONArray("foreign_key_query_windows_nested_ns").length())
+            observed.withTransaction {assertEquals(1L,MeasuredConsumptionStore.auditStagedDataset(sql).single().usedQuanta)}
+            val before=RawData.dump(sql).toString();val next=repo.measuredWriteTicket(b.scope,m)
+            class SyntheticFault:RuntimeException()
+            timing.start("rollback")
+            try {repo.recordMeasuredUse(next,UUID.randomUUID().toString(),draft,at){if(it==ActualUseCheckpoint.STOCK_CAPTURED)throw SyntheticFault()};fail("Expected synthetic fault")}
+            catch(_:SyntheticFault){}
+            val failed=timing.finish();assertTrue(failed.toString(),failed.getBoolean("accounting_valid"))
+            assertTrue(failed.getLong("rollback_driver_ns")>0);assertEquals(0L,failed.getLong("commit_driver_ns"))
+            assertEquals(before,RawData.dump(sql).toString())
+            observed.withTransaction {assertEquals(1L,MeasuredConsumptionStore.auditStagedDataset(sql).single().usedQuanta)}
+        } finally {observed.close();context.deleteDatabase(otherName)}
+    }
     @Test fun architectureCounterOnlyWitnessIsRefutedByRollbackWithoutAnyStampChange()=runBlocking {
         val m=med();val b=box(m);val r=record(m);consume(r,b,listOf(use(b)))
         val before=RawData.dump(raw).toString()

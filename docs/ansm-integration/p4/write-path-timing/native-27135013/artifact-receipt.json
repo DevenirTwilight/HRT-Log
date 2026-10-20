@@ -1,0 +1,14 @@
+{
+  "repository": "DevenirTwilight/HRT-Log",
+  "head": "27135013ab19d617f5becc2d5cb5c2b7b9208142",
+  "run_id": 39465628009,
+  "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39465628009",
+  "artifact_id": 12286116312,
+  "artifact_name": "ansm-native-api26-large-inventory",
+  "zip_size": 197503,
+  "official_and_download_sha256": "3df88d23bcf68548548c9beeaeba82b2bbcdbc9f5fcce93766c5c9c52034a98a",
+  "zip_crc": "PASS",
+  "budget_status": "FAIL",
+  "unmodified_native_source_sha256": "9d1188767c869eae15ae9414ad80df4ad1f135a65dd6a7925d67ca222c897a5c",
+  "sampling_not_actual_write": "Approximate CPU samples of independent post-budget probes; not a wall-time partition."
+}
