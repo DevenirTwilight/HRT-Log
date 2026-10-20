@@ -1,3 +1,11 @@
+## P4 恢复专项实时原生检查点：两次固定运行进行中 — 2026-10-20
+
+候选源码9d304e58fd92f0171fd6ddd272f79dbe6ece3cb4，后续文档提交不改生产/测试源码。预定两次均已启动：PR run39495197608/job118878355913，dispatch run39495229423/job118878466555，均进入API26 emulator step，**暂无完成结果**。配置/次数/常规CI IDs已保存`restore-memory/native-run-plan.json`。这是唯一两个大库运行，不再增加第三次。
+
+先前最终本地485、工具49、最终生成Android编译均PASS并已入库local-final；不代表原生PASS。下一接手者应直接查以上run并下载原始工件，核SHA/CRC、restore_memory检查点与100ms RSS/heap、restore_business_equality、restore-process-death.json两种真实终止回滚、原restore120s及原写入5s各自结论；任一结果结束即保存提交推送。MCP github_download_workflow_artifact下载获得临时download_url，别打印其token；gh artifact直接下载曾403，不能用download_file处理这种非Sediment URL。
+
+本检查点仅文档[skip ci]避免重复启动相同大库；CI结果仍属于源9d，不宣称文档HEAD重新跑过门。主线320171cd、Room13/业务12/PNBAK1/原限制不变。正式入口OFF，Draft不合并/不发布；恢复专项与日常写入/C分开。若会话中断，代码与所有已完成测试已在远端，不必重做。
+
 ## P4 恢复专项实时检查点：最终本地485/原生编译PASS，开始固定原生验收 — 2026-10-20
 
 生产与测试源码固定于b8c4d2a0（下一非skip证据提交与其生产源码一致）。完整本地data485/0FAIL/0SKIP、包含整库摘要/资源/真实终止probe的最终生成Android编译、工具49项均PASS，立即入库`restore-memory/local-final/`。原冻结template93131671未改，生成native SHA214f7b8ed3ead7d581191c268b34d3231896612ec9b610da3128d7107f1b6dc3。历史所有编译失败/各组结果保留，不用旧结果冒充新源码。
