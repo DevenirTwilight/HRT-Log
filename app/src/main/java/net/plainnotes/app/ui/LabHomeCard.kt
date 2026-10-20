@@ -19,6 +19,8 @@ import androidx.compose.ui.unit.dp
 import net.plainnotes.app.R
 import net.plainnotes.app.data.LabContextEntity
 import net.plainnotes.app.data.LabPanelEntity
+import net.plainnotes.app.domain.LabCatalog
+import net.plainnotes.app.domain.LabCategory
 import net.plainnotes.app.data.LabValueEntity
 import java.time.Instant
 
@@ -113,12 +115,23 @@ internal enum class LabHomeCategory(val label: Int) {
     LIVER(R.string.lab_home_category_liver), KIDNEY(R.string.lab_home_category_kidney),
     LIPIDS(R.string.lab_home_category_lipids), METABOLISM(R.string.lab_home_category_metabolism), OTHER(R.string.lab_home_category_other)
 }
-internal fun labHomeCategory(code: String): LabHomeCategory = when (code) {
-    "E2", "T", "P4", "P4_IA", "P4_MS", "PRL", "LH", "FSH", "SHBG" -> LabHomeCategory.HORMONES
-    "RBC", "HB", "HGB", "HCT", "MCV", "MCH", "MCHC", "WBC", "PLT", "NEUT_ABS", "NEUT_PCT", "LYMPH_ABS", "LYMPH_PCT", "MONO_ABS", "MONO_PCT", "EOS_ABS", "EOS_PCT", "BASO_ABS", "BASO_PCT" -> LabHomeCategory.CBC
-    "ALT", "AST", "GGT", "ALP", "BILI", "TBIL", "ALB" -> LabHomeCategory.LIVER
-    "CREA", "K", "NA", "UREA", "EGFR" -> LabHomeCategory.KIDNEY
-    "TC", "TG", "HDL", "LDL", "NON_HDL" -> LabHomeCategory.LIPIDS
-    "GLU_FAST", "GLU_RANDOM", "GLU", "HBA1C" -> LabHomeCategory.METABOLISM
-    else -> LabHomeCategory.OTHER
+internal fun labHomeCategory(code: String): LabHomeCategory = when (LabCatalog.categoryFor(code)) {
+    LabCategory.HORMONES -> LabHomeCategory.HORMONES
+    LabCategory.CBC -> LabHomeCategory.CBC
+    LabCategory.LIVER -> LabHomeCategory.LIVER
+    LabCategory.KIDNEY -> LabHomeCategory.KIDNEY
+    LabCategory.LIPIDS -> LabHomeCategory.LIPIDS
+    LabCategory.GLUCOSE_METABOLISM -> LabHomeCategory.METABOLISM
+    LabCategory.OTHER -> LabHomeCategory.OTHER
+}
+
+/** Preserve sub-milli recorded results that three-decimal display would round to zero or distort.
+ * This changes presentation only; the stored Double does not recover the report's original precision.
+ */
+@Composable internal fun labReportNumber(value: Double): String {
+    val regular = displayNumber(value)
+    return if (value.isFinite() && value != 0.0 &&
+        kotlin.math.abs(value) < 0.001) {
+        value.toString().replace('.', java.text.DecimalFormatSymbols.getInstance(currentLocale()).decimalSeparator)
+    } else regular
 }

@@ -1,3 +1,9 @@
+## LAB-03 与 LAB-UI-03 正常主线集成验收中 — 2026-10-20
+
+#90最终ffb4c92c的push/PR六类共12必需检查全部SUCCESS，无未解决审查/冲突，普通受保护合并5a7d7c87（07:06:41Z），树与已验源码相同；最终检查URL快照labs/ui03/lab90-approved-final-checks.json。主线合并CI是另一项结果。#89已正常merge该已批准默认分支，未复制未合并源码；双方历史、需求及审批记录保留。AppShell保留Vibe的FAB清除labEdit和正式lab-open-batch标记，保留LabUiState/token/原panel快照和双方原生测试。
+
+分类已只委托LabCatalog，未知别名不猜；unitOptions轴/选择器保留，.units只在旧14项适配桥使用。确认零调用后删旧LabGroupCard，保留LabGroupRow。化验行/朗读/详情范围有限非零abs<0.001统一科学记数，避免0与0.0005舍入失真；仅此化验图提示abs<0.01同样保护，普通格式和曲线数值保持；不改全局Format、原Double或PK。首轮集成84/84 PASS后复核补入精确0.0005范围及微小趋势提示，最终85/85 PASS、0跳过，原生Kotlin编译PASS；96张真实Compose截图、48张最终原图与9份JUnit另存integrated-final证据，与历史6c分开。真机/TalkBack NOT_RUN，无签名/APK/Release。
+
 ## LAB-UI-03：PR89 Android 失败已定位，修复回归中 — 2026-10-20
 
 远端从6c593a4c增加12个Vibe Nuage Agent提交到14ed5f91，已审计并正常快进保留，未覆盖他人修改。原本171/18项本地及四语截图证据仅属于原记录源码，不自动视为14ed通过。Android39337651994唯一失败发生在Back前：旧lab_add定位到470px视口外y480–532的空状态按钮，实际未打开弹窗。原始失败HTML、官方工件SHA/CRC及本地语义树复现已保留在labs/ui03；默认dismissOnBackPress=true不是已证明的修复原因。
@@ -9,6 +15,23 @@
 独立 `feature/lab-ui03-home-20261019` 基于默认080094ae；用户最新任务登记 REQUIREMENTS §114，文件矩阵 `labs/ui03/implementation.md`。根因已定位：Destination.LABS 已正确调用 LabsScreen，但单项旧记录和指标筛选显式走私有 LabRow，因此新版批量/详情弹窗没有替换首页。现改统一 LabHomeCard，正式化验单/旧显示分组/单项/筛选历史共用视觉；已有业务回调、labDraws、趋势数值块保持。
 
 统一主页生产Kotlin编译已通过；首轮17项中2项旧纯文本定位FAIL已保留，改为精确原id及朗读值/单位断言后18项全PASS，原上下文测试通过；原生测试Kotlin编译PASS。新增真实入口原生回归；新版32组合截图/128布局回归及时期稳定性均已实际通过：总171/171 PASS，64张截图已捕获、16张代表原图与六份JUnit XML保留，原生Kotlin编译再次PASS。独立PR #89：同夹具旧版32/32渲染亦PASS，已捕获64张并保留16张原图；LabsScreen已逐字节恢复新版、协议守卫通过，未提交临时旧源码。待最终HEAD六必需CI与实际原生导航执行及受保护合并；真机/TalkBack NOT_RUN。正式入口仍沿用既有 AppShell，未建第二套数据库或入口。与独立 LAB-03 项目/单位扩展分工：本分支 LabsScreen/主页卡片/导航测试，数据分支 LabBatchEntry/词典/单位；未修改 Room12、业务备份11、PK、库存、权限、签名或 APK。CI/截图/真机/TalkBack 均尚未完成，不得据此声称已交付。P4独立Draft不阻塞本任务。
+## LAB-03 #90 实现已通过 CI 与三 API 原生验证 — 2026-10-20
+
+源码403ae96015ea95f3379e4a95ea0b28e7f8d4c846的push/PR六项必需检查均PASS；PR run39296389355，science39296389637。实际下载核验API26/29/35报告：24项已填草稿recreate、实际横/竖方向变化、真正离开锁定后清空各PASS（22.170/25.670/18.295秒），45代码原单位/范围/上下文→回收站→PNBAK1恢复和无效事务全回滚也各PASS，均非仅编译。每API原导航/锁12项、化验单13项全部PASS。完整JVM App1751总项中1514PASS/237既有SKIPPED/0FAIL；data263PASS，reminder20PASS；11项新LAB03及Period5无跳过。此前本地取消定位FAIL原始XML保留，祖先内匹配修正后本地16PASS及原生Kotlin编译PASS。
+
+ci-403ae960.json及evidence/ci-403ae960保留原HTML/XML、archive SHA、来源run和check快照；verify-ci-evidence.py可离线复核，不把归档内旧报告当实时认证。此收据提交仅文档，最终HEAD仍需独立CI。#89已有其他开发者Vibe+owner的12次新提交，最新14ed5f91 Android失败；UI工作流已保留并核查，尚未合并，不复制未验收源码。根据实际门槛允许#90先独立合法合并，再由#89普通合入最新主线以统一分类，不假装当前数据PR已交付新版视觉。
+
+Room12/业务备份11、Repository/库存/PK/权限/Gradle/CI不变。自定义创建/结构化方法/真正零及限定结果仍NOT_IMPLEMENTED；物理真机、TalkBack、在途保存-锁屏-回调交错NOT_RUN。原单项编辑与整单新增行的旋转草稿未扩展；本轮验证的是批量表单。无签名、APK交付或Release。
+
+## LAB-03 实际录入/历史保护代码已提交待验 — 2026-10-19
+
+独立数据分支已实现45代码词典、四语51键、搜索/分类、8个原有及扩展组合，保留原14单位Double结果；单项编辑改用原Double精确预填并冻结未改的采血瞬间/时区和参考单位，整单备注编辑通过同一helper保留原始瞬间。不同项目选择清空数值/范围/项目备注，相同选择/取消保持草稿。批量表单仅Activity内存保留，旋转保留、锁/伪装卸载清除并以token隔离旧回调；不落盘。NotesViewModel仅saveLabPanel一处窄修改，ShellHosts用当前panel快照调用，不碰浓度/PK/Repository/库存/Room12/业务11。
+
+首轮App新增6/6 PASS；扩大回归187项中186PASS、1FAIL（新测试匹配父/子两个Cancel图标，原始XML留lab03/evidence/first-app-regression）。已改为选择器祖先内匹配，未删断言；新增28项录入/精确原值/单侧范围单位/DST及UNKNOWN显示三项在该轮实际PASS。当前跟进验证包含11项LAB03+时期稳定性及原生Kotlin编译IN_PROGRESS，不冒称CI/原生实机完成。新原生24项草稿recreate+横竖屏+真实离开锁定测试已写入，实际运行NOT_RUN。UI#89最终6c593a4c独立验收中，尚未整合其未合并源码；本分支页面视觉仍依赖后续合法合并#89。高级自定义/方法字段/真正零或限定结果、原有单项及整单新增行旋转草稿仍未实施；原生在途保存-锁屏交错NOT_RUN。无APK、签名或发布。
+
+## LAB-03 数据与单位扩展实施中 — 2026-10-19
+
+独立分支feature/lab03-analytes-20261019基于080094ae，UI并行#89不覆盖。已复用domain精确词典45项（原14+新增31），domain135测试PASS；新旧单位适配、分类/搜索选择器、血常规/血脂/代谢/扩展肝肾组合已编码，App编译及交互验证仍IN_PROGRESS。原14个Double换算逐位保留，未改PK/库存/Room12/业务备份11。共享LabPanelDataTest实际13/13 PASS（新增45项原始单位/范围/上下文→回收站→PNBAK1恢复，以及事务失败全回滚）；原生API26/29/35仍NOT_RUN，不混同JVM结果。内存草稿旋转保留/锁屏清除及旧回调隔离已编码待验，不用Bundle/磁盘。结构化方法/自定义项目/真实零及限定结果未实施，保留原严格正数约束；兼容字段与后续设计见lab03/compatibility-and-fields.md。无APK/签名/发布。
 
 ## build33 交付与中心原生测试复核完成 — 2026-10-19
 

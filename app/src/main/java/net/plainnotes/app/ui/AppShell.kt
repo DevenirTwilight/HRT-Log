@@ -113,7 +113,8 @@ class UiPrefs(context: Context) {
     val medicationDialogs = remember { MedicationDialogs() }
     var referenceOpen by remember {mutableStateOf(false)}
     fun openReference(medication:net.plainnotes.app.data.MedicationEntity?){if(model.medicationReferences.open(medication?.id)!=null)referenceOpen=true}
-    val labDialogs = remember { LabDialogs() }
+    val labUi = rememberLabUiState()
+    val labDialogs = labUi.dialogs
     var pickStart by remember { mutableStateOf(false) }
     val today = LocalDate.now()
     var medicalOrigin by rememberSaveable { mutableStateOf(false) }
@@ -203,7 +204,7 @@ class UiPrefs(context: Context) {
                     }
                     Destination.MEDICATIONS -> ExtendedFloatingActionButton(onClick = { model.edit(null) }, icon = { Icon(Icons.Outlined.Add, null) }, text = { Text(stringResource(R.string.add_medication)) })
                     Destination.VISITS -> if (visitId == null) ExtendedFloatingActionButton(onClick = { appointment = true }, icon = { Icon(Icons.Outlined.Add, null) }, text = { Text(stringResource(R.string.appointment)) })
-                    Destination.LABS -> ExtendedFloatingActionButton(onClick = { labDialogs.labNew = true; labDialogs.labEdit = null }, icon = { Icon(Icons.Outlined.Add, null) }, text = { Text(stringResource(R.string.lab_add)) })
+                    Destination.LABS -> ExtendedFloatingActionButton(onClick = { labDialogs.labNew = true; labDialogs.labEdit = null }, modifier=Modifier.testTag("lab-open-batch"), icon = { Icon(Icons.Outlined.Add, null) }, text = { Text(stringResource(R.string.lab_add)) })
                     else -> {}
                 }
             },
@@ -283,7 +284,7 @@ class UiPrefs(context: Context) {
     MedicalLabDetail(medicalDialogs, labDialogs, extra)
     if (appointment) AppointmentDialog({ appointment = false }) { model.appointment(it); appointment = false }
     LabPanelHost(labDialogs, model, extra)
-    LabEditDialog(labDialogs, model, extra.labs)
+    LabEditDialog(labDialogs, model, extra.labs, labUi)
     if (pickStart) DatePickerModal(state.calendarStart, { pickStart = false }) { model.calendarFrom(it) }
     if (disclaimer) PkDisclaimerDialog({ prefs.disclaimerAccepted = true; disclaimer = false }) { disclaimer = false; destination = Destination.CALENDAR }
     ArchiveMedicationDialog(medicationDialogs, model)

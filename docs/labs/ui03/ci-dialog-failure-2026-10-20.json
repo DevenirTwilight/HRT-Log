@@ -45,5 +45,12 @@
     "report_sha256": "eadc2dc9ba36cd0e7feeac69af157171c8da3b7c068fe464255f6efdbc56a4e6",
     "report": "back-navigation-regression-2026-10-20.xml",
     "source_scope": "14ed5f91 plus test-only visible primary/scrolling correction; no production source edit"
+  },
+  "corrected_source_ci": {
+    "head": "0097ea5844bf33a0178aeeb03225cb3c2b4d9a88",
+    "status": "PASS",
+    "required_instances": 12,
+    "snapshot": "ci-0097ea58-final-checks.json",
+    "scope": "Historical viewport-selector fix before approved-default/catalogue integration; not final combined-head evidence."
   }
 }

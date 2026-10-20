@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.AppShellBackNavigationTest" tests="17" skipped="0" failures="0" errors="0" timestamp="2026-10-20T07:19:18.439Z" hostname="2c2deac85eb5" time="21.457">
+  <properties/>
+  <testcase name="disguiseModeKeepsTheImmediateExitToTheShell" classname="net.plainnotes.app.AppShellBackNavigationTest" time="9.046"/>
+  <testcase name="openDrawerClosesBeforeNavigating" classname="net.plainnotes.app.AppShellBackNavigationTest" time="0.839"/>
+  <testcase name="backNeverWritesRecords" classname="net.plainnotes.app.AppShellBackNavigationTest" time="1.252"/>
+  <testcase name="settingsTopBarArrowReturnsToOverview" classname="net.plainnotes.app.AppShellBackNavigationTest" time="0.675"/>
+  <testcase name="medicalCenterLabsAndTimelineReturnToTheirOrigin" classname="net.plainnotes.app.AppShellBackNavigationTest" time="0.87"/>
+  <testcase name="dialogOnASettingsPageClosesFirst" classname="net.plainnotes.app.AppShellBackNavigationTest" time="0.474"/>
+  <testcase name="visitDetailReturnsToTheListFirst" classname="net.plainnotes.app.AppShellBackNavigationTest" time="0.642"/>
+  <testcase name="disguiseModeBackOnASettingsPageStillReachesTheActivity" classname="net.plainnotes.app.AppShellBackNavigationTest" time="0.715"/>
+  <testcase name="medicalCenterOpensRealVisitsAndReturnsWithoutCreatingRecords" classname="net.plainnotes.app.AppShellBackNavigationTest" time="0.688"/>
+  <testcase name="medicalFutureModulesKeepExistingDataAndBackOrigin" classname="net.plainnotes.app.AppShellBackNavigationTest" time="0.984"/>
+  <testcase name="medicalCenterPreparationReachesRealQuestionsAndExportAndCancels" classname="net.plainnotes.app.AppShellBackNavigationTest" time="0.613"/>
+  <testcase name="settingsPageBackGoesToOverviewThenCalendar" classname="net.plainnotes.app.AppShellBackNavigationTest" time="0.866"/>
+  <testcase name="settingsPageSurvivesRecreation" classname="net.plainnotes.app.AppShellBackNavigationTest" time="0.341"/>
+  <testcase name="emptyLabStateActionScrollsIntoViewAndBackDoesNotSave" classname="net.plainnotes.app.AppShellBackNavigationTest" time="0.582"/>
+  <testcase name="appLockScreenDoesNotNavigateTheHiddenApp" classname="net.plainnotes.app.AppShellBackNavigationTest" time="0.324"/>
+  <testcase name="backFromEveryTopLevelPageReturnsToTheCalendarThenLeaves" classname="net.plainnotes.app.AppShellBackNavigationTest" time="1.827"/>
+  <testcase name="openDialogClosesBeforeNavigating" classname="net.plainnotes.app.AppShellBackNavigationTest" time="0.308"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[System.logW: A resource failed to call close. 
+System.logW: A resource failed to call close. 
+System.logW: A resource failed to call SQLiteConnection.close. 
+System.logW: A resource failed to call SQLiteConnectionPool.close. 
+System.logW: A resource failed to call close. 
+System.logW: A resource failed to call close. 
+System.logW: A resource failed to call SQLiteConnection.close. 
+System.logW: A resource failed to call SQLiteConnectionPool.close. 
+System.logW: A resource failed to call SQLiteConnection.close. 
+System.logW: A resource failed to call close. 
+System.logW: A resource failed to call SQLiteConnection.close. 
+System.logW: A resource failed to call SQLiteConnectionPool.close. 
+System.logW: A resource failed to call SQLiteConnection.close. 
+System.logW: A resource failed to call SQLiteConnection.close. 
+System.logW: A resource failed to call SQLiteConnectionPool.close. 
+System.logW: A resource failed to call SQLiteConnection.close. 
+]]></system-err>
+</testsuite>
