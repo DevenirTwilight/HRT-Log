@@ -236,13 +236,17 @@ def native_source(text):
             }}
             check(sqlReads.isNotEmpty())
             val sqlTimings=JSONArray()
-            sqlReads.entries.sortedByDescending{it.value[2]}.forEach{(sql,counters)->
+            val rankedSql=sqlReads.entries.sortedByDescending{it.value[2]}
+            rankedSql.take(12).forEach{(sql,counters)->
                 check(counters[0]>0 && counters[1]>0 && counters[2]>=0)
                 sqlTimings.put(JSONObject().put("sql_sha256",ReferencePayload.sha(sql))
                     .put("sql_prefix",sql.take(512)).put("sql_prefix_truncated",sql.length>512)
                     .put("queries",counters[0]).put("cursor_calls",counters[1]).put("driver_ns",counters[2]))
             }
             components.put("sql_driver_timings",sqlTimings)
+                .put("sql_driver_templates",rankedSql.size)
+                .put("sql_driver_omitted_templates",maxOf(0,rankedSql.size-12))
+                .put("sql_driver_omitted_ns",rankedSql.drop(12).sumOf{it.value[2]})
                 .put("sql_driver_timing_scope","SYNTHETIC_POST_BUDGET_DRIVER_CALL_TIMING")
             val trace=File(file.parentFile,"audit-sampling.trace")
             android.os.Debug.startMethodTracingSampling(trace.absolutePath,16*1024*1024,1000)

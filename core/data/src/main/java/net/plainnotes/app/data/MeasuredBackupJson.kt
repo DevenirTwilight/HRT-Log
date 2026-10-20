@@ -4,6 +4,29 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import org.json.JSONObject
 import java.time.Instant
 
+/** Transfer ownership before leaving a suspendable transaction; never retain plaintext after use.
+ * A rejected new buffer is wiped too; an alias of the already owned buffer stays owned.
+ * This owns bytes only, never keys or passwords.
+ */
+internal class BackupPlaintextOwner:AutoCloseable {
+    private var plaintext:ByteArray?=null
+    private var closed=false
+    fun capture(bytes:ByteArray) {
+        if(closed || plaintext!=null) {
+            if(bytes!==plaintext)bytes.fill(0)
+            error("Backup plaintext already owned or closed")
+        }
+        plaintext=bytes
+    }
+    fun bytes():ByteArray {
+        check(!closed)
+        return checkNotNull(plaintext)
+    }
+    override fun close() {
+        plaintext?.fill(0);plaintext=null;closed=true
+    }
+}
+
 /** Bounded plaintext staging, no files or cryptographic changes. Always wipe owned fragments. */
 internal class BackupPlainBytes(private val limit:Int,private val chunkSize:Int=64*1024):AutoCloseable {
     private val chunks=ArrayList<ByteArray>()

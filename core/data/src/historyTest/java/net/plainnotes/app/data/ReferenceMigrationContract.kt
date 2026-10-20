@@ -11,6 +11,8 @@ import org.json.JSONObject
 import org.junit.Test
 import org.junit.Assert.*
 import java.util.UUID
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.cancelAndJoin
 
 /** Authoritative exported schemas 1..12, then the real production migration and Room validation. */
 abstract class ReferenceMigrationContract {
@@ -168,6 +170,7 @@ abstract class ReferenceMigrationContract {
                     val streamed=MeasuredBackupJson.encode(raw,created)
                     try {
                         assertArrayEquals("Same full document bytes, including table/column order and blob encoding",old,streamed)
+                        assertArrayEquals(java.security.MessageDigest.getInstance("SHA-256").digest(old),java.security.MessageDigest.getInstance("SHA-256").digest(streamed))
                         val exact=MeasuredBackupJson.encode(raw,created,maxBytes=old.size)
                         try{assertArrayEquals(old,exact)}finally{exact.fill(0)}
                         try{MeasuredBackupJson.encode(raw,created,maxBytes=old.size-1);fail("One byte over limit accepted")}
@@ -195,6 +198,59 @@ abstract class ReferenceMigrationContract {
             try{buffer.append(byteArrayOf());fail("Closed plaintext buffer reused")}
             catch(_:IllegalStateException){}
         }
+    }
+
+    @Test fun backupPlaintextOwnerClearsSuccessFailureAndRejectedTransfers() {
+        for(failAfterCapture in listOf(false,true)) {
+            val bytes=byteArrayOf(1,2,3,4)
+            val owner=BackupPlaintextOwner()
+            try {
+                owner.use {
+                    it.capture(bytes);assertSame(bytes,it.bytes())
+                    if(failAfterCapture)throw IllegalStateException("SYNTHETIC cipher failure")
+                }
+                assertFalse(failAfterCapture)
+            } catch(e:IllegalStateException) {assertTrue(failAfterCapture)}
+            assertTrue(bytes.all{it==0.toByte()})
+            try{owner.bytes();fail("Closed plaintext remained accessible")}catch(_:IllegalStateException){}
+            val rejected=byteArrayOf(9,8)
+            try{owner.capture(rejected);fail("Closed owner accepted plaintext")}catch(_:IllegalStateException){}
+            assertTrue(rejected.all{it==0.toByte()})
+            owner.close()
+        }
+        val first=byteArrayOf(4,3);val second=byteArrayOf(2,1)
+        BackupPlaintextOwner().use {owner->
+            owner.capture(first)
+            try{owner.capture(first);fail("Duplicate ownership accepted")}catch(_:IllegalStateException){}
+            assertSame(first,owner.bytes());assertArrayEquals(byteArrayOf(4,3),first)
+            try{owner.capture(second);fail("Replaced live plaintext")}catch(_:IllegalStateException){}
+            assertTrue(second.all{it==0.toByte()});assertArrayEquals(byteArrayOf(4,3),first)
+        }
+        assertTrue(first.all{it==0.toByte()})
+    }
+
+    @Test fun cancellationAfterPlaintextCaptureRollsBackAndClearsBeforeTransactionReturns()=kotlinx.coroutines.runBlocking {
+        val name="synthetic-export-cancel-${UUID.randomUUID()}.db";val key=ByteArray(32){(it+43).toByte()}
+        try {
+            Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(key))
+                .addCallback(SchemaGuards).allowMainThreadQueries().build().useRoom {room->
+                val raw=room.openHelper.writableDatabase
+                val before=RawData.dump(raw).toString();val bytes=byteArrayOf(11,12,13)
+                val captured=kotlinx.coroutines.CompletableDeferred<Unit>();val owner=BackupPlaintextOwner()
+                val job=launch(kotlinx.coroutines.Dispatchers.Default) {
+                    owner.use {
+                        room.withTransaction {
+                            raw.execSQL("INSERT INTO day_note(date,text) VALUES('2001-01-02','SYNTHETIC cancelled seed')")
+                            it.capture(bytes);captured.complete(Unit)
+                            kotlinx.coroutines.awaitCancellation()
+                        }
+                    }
+                }
+                try{kotlinx.coroutines.withTimeout(10000){captured.await()}}finally{job.cancelAndJoin()}
+                assertTrue(bytes.all{it==0.toByte()});assertEquals(before,RawData.dump(raw).toString())
+                try{owner.bytes();fail("Cancelled owner remained accessible")}catch(_:IllegalStateException){}
+            }
+        } finally {key.fill(0);context.deleteDatabase(name)}
     }
 
     @Test fun canonicalUuidPredicateMatchesThePlatformOracleAcrossVersionsAndMalformedForms() {

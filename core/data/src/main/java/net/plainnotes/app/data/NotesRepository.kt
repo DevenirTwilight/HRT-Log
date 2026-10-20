@@ -776,15 +776,14 @@ const val BACKFILL_MAX_DAYS=731L
     }
     private suspend fun exportBackupFrom(target:Space,password:CharArray,measuredEpoch:String?):ByteArray=withContext(Dispatchers.IO) {
         val db=access.get(target)
-        var plain:ByteArray?=null
-        try {
+        BackupPlaintextOwner().use {owner->
         if(measuredEpoch!=null) db.withTransaction {
             val raw=db.openHelper.writableDatabase
             if(ReferenceStore.previewEpoch(raw)!=measuredEpoch)throw ReferenceFailure(ReferenceError.STALE_SCOPE)
             RegimenHistory.seed(raw)
             MeasuredConsumptionStore.auditStagedDataset(raw)
             // Keep the same read snapshot; only the byte buffer survives into the unchanged cipher.
-            plain=MeasuredBackupJson.encode(raw,Instant.now())
+            owner.capture(MeasuredBackupJson.encode(raw,Instant.now()))
         } else {
             // Legacy exports retain their existing DOM and validation path.
             val json=db.withTransaction {
@@ -794,10 +793,10 @@ const val BACKFILL_MAX_DAYS=731L
                 JSONObject().put("format",BackupCodec.FORMAT_VERSION).put("schema",RecordBackupCompatibility.SCHEMA)
                     .put("created",Instant.now().toString()).put("tables",RawData.dump(raw))
             }
-            plain=json.toString().toByteArray(Charsets.UTF_8)
+            owner.capture(json.toString().toByteArray(Charsets.UTF_8))
         }
-        BackupCodec.encrypt(requireNotNull(plain),password)
-        } finally {plain?.fill(0);plain=null}
+        BackupCodec.encrypt(owner.bytes(),password)
+        }
     }
     /** Replaces all data with the backup; throws [BackupCodec.WrongPassword] or [BackupCodec.BadFile] without touching anything. */
     /**

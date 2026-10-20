@@ -25,6 +25,7 @@ class NativePerformanceIsolationTest(unittest.TestCase):
                        'override fun getCount()', 'override fun moveToNext()', 'override fun getString(',
                        'override fun query(query:androidx.sqlite.db.SupportSQLiteQuery',
                        'sql_sha256', 'sql_prefix_truncated', 'cursor_calls', 'driver_ns',
+                       'rankedSql.take(12)', 'sql_driver_omitted_templates', 'sql_driver_omitted_ns',
                        'check(sqlReads.size<256)', 'check(sqlReads.isNotEmpty())'):
             self.assertIn(marker, diagnostic)
         for forbidden in ('execSQL', 'args.toString()', 'args.contentToString()', 'bindArgs.toString()', 'setTransactionSuccessful'):
