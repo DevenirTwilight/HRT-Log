@@ -36,6 +36,15 @@ class IndexedBackupDocumentTest {
         val expected=FrozenRestoreJsonReader.read(bytes).getJSONObject("tables").getJSONArray("day_note").getJSONObject(0)
         BackupJsonReader.indexed(bytes).use {assertEquals(expected.toString(),it.tables.getJSONArray("day_note").getJSONObject(0).toString())}
     }
+    @Test fun oldVersionGatePriorityIsPreservedBeforeInspectingTablesAndWipesOnRefusal() {
+        for(text in listOf("{\"format\":1,\"schema\":999,\"tables\":null}","{\"format\":2,\"schema\":12,\"tables\":{}}","{\"format\":1,\"schema\":0,\"tables\":{}}")) {
+            val bytes=text.toByteArray()
+            val old=runCatching {val json=FrozenRestoreJsonReader.read(bytes);RecordBackupCompatibility.readVersion(json);json.getJSONObject("tables")}.exceptionOrNull()
+            val current=runCatching{BackupJsonReader.indexed(bytes).close()}.exceptionOrNull()
+            assertNotNull(old);assertNotNull(current);assertEquals(old!!::class.java,current!!::class.java)
+            assertTrue(bytes.all{it==0.toByte()})
+        }
+    }
     @Test fun closedViewsCannotReadWipedPlaintextAndRepeatedCloseIsSafe() {
         val bytes="""{"format":1,"schema":12,"tables":{"day_note":[{"date":"2026-10-20","text":"SYNTHETIC"}]}}""".toByteArray()
         val indexed=BackupJsonReader.indexed(bytes);val rows=indexed.tables.getJSONArray("day_note")

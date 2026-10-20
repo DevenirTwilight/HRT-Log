@@ -1,3 +1,9 @@
+## P4 恢复专项实时测试检查点：完整data483 PASS，新增探针编译FAIL已修正待验 — 2026-10-20
+
+f480af2e的完整本地data483/0FAIL/0SKIP已跑完，立即保存`restore-memory/full-first/`（按suite计数+XML哈希、关键XML、完整日志）；Android编译在测试类MeasuredRestoreDeathProbe失败，原因Room数据库不实现Closeable，不能用use。此失败未删，已改显式try/finally close，**修正后的编译尚未验证**。不把unit成功冒充Android或原生成功。
+
+同时补上旧版本门顺序：严格JSON扫描后、索引表形状检查前执行同一RecordBackupCompatibility版本门，未来版本即使tables形状变化也保留NewerBackup拒绝；丢弃不参与恢复的根元数据，避免额外保留无关大字符串/对象。新增冻结oracle版本拒绝优先级测试。该小修正亦待复验，不能沿用483做当前源码结论。下一步完整data+生成Android编译，结束立即保存并推送；未启动新原生，仍最多两个固定候选运行。Draft/OFF不合并、不发布。
+
 ## P4 恢复专项实时测试检查点：第二聚焦组15 PASS，开始完整回归 — 2026-10-20
 
 已完成旧DOM/新输入整库恢复决定与全数据差分、真实协程取消和模拟OOME后的数据/epoch保留；第二组Indexed6+BackupReplacement8+恢复取消资源1=15 PASS，证据`restore-memory/focused-second/`立即保存。冻结旧解析器已移至historyTest供真实Android共同对照。原第一组19 PASS在focused-first，不覆盖本轮尚未跑的全回归。

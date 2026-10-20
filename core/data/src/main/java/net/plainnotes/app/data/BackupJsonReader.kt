@@ -34,6 +34,9 @@ internal object BackupJsonReader {
             try {reader().use{BackupLimits.checkJson(it)}}
             catch(_:CharacterCodingException){throw BackupCodec.BadFile("invalid UTF-8")}
             val header=parse(reader(),releaseTableRows=true,checkActive=checkActive)
+            // Preserve the old Repository's version-gate priority before inspecting table shape.
+            RecordBackupCompatibility.readVersion(header)
+            header.keys().asSequence().filter{it !in setOf("format","schema","tables")}.toList().forEach(header::remove)
             return IndexedBackupDocument(bytes,header,checkActive)
         }catch(t:Throwable){bytes.fill(0);throw t}
     }

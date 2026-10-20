@@ -27,12 +27,13 @@ class MeasuredRestoreDeathProbe {
             .openHelperFactory(net.zetetic.database.sqlcipher.SupportOpenHelperFactory(ByteArray(32){(it+13).toByte()}))
             .allowMainThreadQueries().addCallback(SchemaGuards).build()
     }
-    @Test fun prepareAndWaitForExternalKill()=runBlocking {
+    @Test fun prepareAndWaitForExternalKill():Unit=runBlocking {
         assumeTrue(args.getString("ansm_restore_death_action")=="prepare")
         val stage=requireNotNull(args.getString("ansm_restore_death_stage"))
         require(stage in setOf("ROWS_DELETED","ROWS_INSERTED"))
         marker.delete();context.deleteDatabase(name)
-        open().use {db->
+        val db=open()
+        try {
             val repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=db},Space.PRIMARY)
             val med=MedicationEntity(name="SYNTHETIC crash source",molecule="OTHER",unit="MG",dose_per_intake=0.1,container_capacity=28.0,site_rotation=false,notifications_on=false,active=false,sort_order=0)
             val m=db.dao().insertMedication(med);val at=Instant.parse("2026-10-20T12:00:00Z")
@@ -51,12 +52,13 @@ class MeasuredRestoreDeathProbe {
                 while(true)Thread.sleep(1000)
             }})}finally{archive.fill(0);password.fill('\u0000')}
             fail("Host did not interrupt the pending restore")
-        }
+        }finally{db.close()}
     }
-    @Test fun verifyFreshProcessRollsBackExactDataset()=runBlocking {
+    @Test fun verifyFreshProcessRollsBackExactDataset():Unit=runBlocking {
         assumeTrue(args.getString("ansm_restore_death_action")=="verify")
         val saved=JSONObject(marker.readText());assertNotEquals(saved.getInt("pid"),android.os.Process.myPid())
-        open().use {db->
+        val db=open()
+        try {
             val raw=db.openHelper.writableDatabase
             assertEquals(saved.getString("expected_sha256"),ReferencePayload.sha(RawData.dump(raw).toString()))
             assertEquals(saved.getString("epoch"),ReferenceStore.previewEpoch(raw))
@@ -64,7 +66,7 @@ class MeasuredRestoreDeathProbe {
             db.withTransaction{val p=MeasuredConsumptionStore.auditStagedDataset(raw);assertEquals(1,p.size);assertEquals(1L,p.single().usedQuanta)}
             saved.put("new_pid",android.os.Process.myPid()).put("status","PASS_DATASET_EPOCH_AND_FULL_ORACLE")
             File(context.filesDir,"synthetic-restore-death-result.json").writeText(saved.toString())
-        }
+        }finally{db.close()}
         context.deleteDatabase(name);marker.delete()
     }
 }
