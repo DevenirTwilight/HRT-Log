@@ -181,7 +181,10 @@ internal object MeasuredConsumptionStore {
             BackupValidation.validateMeasuredCandidateState(db)
             db.query(EXACT_SOURCE_COVERAGE_QUERY).use{require(!it.moveToFirst())}
             db.query("SELECT 1 FROM measured_operation o JOIN reference_event e ON e.operation_uuid=o.operation_uuid LIMIT 1").use{require(!it.moveToFirst())}
-            db.query("PRAGMA foreign_key_check").use{require(!it.moveToFirst())}
+            // validateMeasuredCandidateState already checked every FK in this same read-only
+            // transaction snapshot. No writes/callbacks occur before this point; the enclosing
+            // ReferenceAuditReads scope rejects mutation and verifies its fence in finally.
+            // Standalone backup/restore validation keeps its own mandatory FK check.
             // LEFT JOIN preserves retired/missing handles for the existing fail-closed identity checks.
             // Typed container facts live only in this transaction; no scalar conversion or persisted trust.
             val identities=db.query("SELECT DISTINCT i.uuid,i.dataset_uuid,c.id,c.medication_id,c.capacity,c.initial_used_amount,c.used_amount,c.inventory_encoding FROM reference_identity i JOIN reference_event e ON e.subject_uuid=i.uuid JOIN reference_snapshot s ON s.uuid=e.snapshot_uuid LEFT JOIN supply_container c ON c.id=i.live_handle WHERE i.kind='CONTAINER' AND s.kind='PRESENTATION' ORDER BY i.uuid").use { c ->

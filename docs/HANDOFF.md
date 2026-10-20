@@ -1,3 +1,11 @@
+## P4 安全去重候选：本地data475/原生编译PASS，原生待验 — 2026-10-20
+
+从6ee217f8/实测87e9df95接手，主线仍320171cd。真实生产修改仅MeasuredConsumptionStore私有只读审计内删除重复的第二次foreign_key_check；BackupValidation独立入口和最终完整审计不变。严格作用域证明/有限验收计划见`docs/ansm-integration/p4/safe-dedup/decision.md`。不是删除第二次全审计，没有跨事务可信状态；A/B反例、C测试原型保持不变，正式入口OFF、#57 Draft且不自动合并。
+
+新增3项共享合同：单FK及原位置重放双FK/全SQL oracle差分；真实孤儿在普通/候选/完整审计均拒绝并回滚；原删除点注入间接DML须拒绝并回滚。RED旧生产源码确切2次而失败，GREEN库存142/0失败/0跳过。完整data475/0失败/0跳过、生成native Android编译和工具46项均PASS；下一步固定源码后执行预定两次原生。观察器/生成器只把FK预期2改1，链读取仍票据1+写入3、最终全审计1。测试数据合成，无UI/Schema/备份密码学/PK/P5/P6/发行变化。
+
+操作链头复用NOT_IMPLEMENTED：票据验证至append之间有DML、callback，修订/协调还有合法新增节点；旧头保全及完整接受/错误差分未证明，不将最终oracle拦错视为接快路径的许可。源码固定后仅两次原生候选（自动PR一次、相同源码dispatch一次），不补跑求绿；与归档87基线同配置但非同宿主，不能宣称严格因果提速。冷启动/重启/恢复冷首次/真机仍NOT_RUN。当前尚无新性能证据、未达到合并条件；若收益不足停止毫秒微调，要求方案C完整谓词/迁移/备份安全审查或产品验收决策，预算不改。
+
 ## P4 真实写入归因完成：本轮原预算PASS，不等于生产架构提速 — 2026-10-20
 
 执行源码87e9df955f8132b58cd111c5188c295a0d4b0726，接手40408b77，主线320171cd。P4保持Draft/OFF，autoMergeRequest为空，不自动合并。只改historyTest观察器/共享合同及证据；生产代码、Room13/业务12、PNBAK1密码学、UI/PK/P5/P6/版本权限签名均不变。原工作树未提交内容保留，新工作树/workspace/HRT-Log-p4-attribution。

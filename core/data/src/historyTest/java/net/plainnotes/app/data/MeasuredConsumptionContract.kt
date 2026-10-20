@@ -37,6 +37,74 @@ abstract class MeasuredConsumptionContract {
     private suspend fun consume(r:RecordEntity,box:CreatedMeasuredContainer,uses:List<ConfirmedStockUse>,op:String=UUID.randomUUID().toString())=db.withTransaction{MeasuredConsumptionStore.consumeNewRecord(db,box.scope,r,op,uses,at)}
     private fun count(table:String)=raw.query("SELECT COUNT(*) FROM `$table`").use{it.moveToFirst();it.getInt(0)}
     private suspend fun rejects(code:ReferenceError,block:suspend()->Unit){try{block();fail("Expected $code")}catch(e:ReferenceFailure){assertEquals(code,e.code)}}
+    @Test fun oneForeignKeyScanPerReadOnlyAuditAndIndependentValidation()=runBlocking {
+        val m=med();val b=box(m);val r=record(m);consume(r,b,listOf(use(b)))
+        db.withTransaction {
+            var checks=0
+            val observed=object:androidx.sqlite.db.SupportSQLiteDatabase by raw {
+                override fun query(sql:String):android.database.Cursor {
+                    if(sql=="PRAGMA foreign_key_check")checks++
+                    return raw.query(sql)
+                }
+            }
+            val before=RawData.dump(raw).toString()
+            val actual=MeasuredConsumptionStore.auditStagedDataset(observed)
+            assertEquals("One mandatory FK scan, not zero or two",1,checks)
+            checks=0;BackupValidation.validateMeasuredCandidateState(observed);assertEquals(1,checks)
+            // Replay the removed query at its original position in a test-only frozen oracle.
+            checks=0
+            val original=object:androidx.sqlite.db.SupportSQLiteDatabase by observed {
+                override fun query(sql:String):android.database.Cursor {
+                    val cursor=observed.query(sql)
+                    if(!sql.startsWith("SELECT 1 FROM measured_operation o JOIN reference_event"))return cursor
+                    return object:android.database.CursorWrapper(cursor) {
+                        override fun close(){super.close();observed.query("PRAGMA foreign_key_check").use{require(!it.moveToFirst())}}
+                    }
+                }
+            }
+            assertEquals(actual,MeasuredConsumptionStore.auditStagedDataset(original));assertEquals(2,checks)
+            assertEquals(actual,MeasuredConsumptionStore.auditStagedDataset(raw,0))
+            assertEquals(before,RawData.dump(raw).toString())
+        }
+    }
+    @Test fun foreignKeyDedupStillRejectsOrphansAndRollsBackEveryValidationEntry()=runBlocking {
+        val before=RawData.dump(raw).toString()
+        class Rollback:RuntimeException()
+        for(entry in 0..2) {
+            try {db.withTransaction {
+                raw.execSQL("PRAGMA defer_foreign_keys=ON")
+                raw.execSQL("INSERT INTO visit_question(appointment_id,sort_order,text,status,answer_note) VALUES(999999,0,'SYNTHETIC orphan','OPEN',NULL)")
+                raw.query("PRAGMA foreign_key_check").use{assertTrue("Fixture must really have an orphan",it.moveToFirst())}
+                if(entry==0)rejects(ReferenceError.INVALID_SOURCE){MeasuredConsumptionStore.auditStagedDataset(raw)}
+                else {
+                    try {
+                        if(entry==1)BackupValidation.validateMeasuredCandidateState(raw) else BackupValidation.validateState(raw)
+                        fail("Standalone validator must retain its own FK check")
+                    }catch(e:IllegalArgumentException){assertEquals("Invalid reference",e.message)}
+                }
+                throw Rollback()
+            }}catch(_:Rollback){}
+            assertEquals(before,RawData.dump(raw).toString())
+        }
+    }
+    @Test fun auditRejectsIndirectDmlBetweenFirstForeignKeyScanAndRemovedScan()=runBlocking {
+        val before=RawData.dump(raw).toString()
+        class Rollback:RuntimeException()
+        try {db.withTransaction {
+            var injected=false
+            val indirect=object:androidx.sqlite.db.SupportSQLiteDatabase by raw {
+                override fun query(sql:String):android.database.Cursor {
+                    if(!injected && sql.startsWith("SELECT 1 FROM measured_operation o JOIN reference_event")) {
+                        injected=true;raw.execSQL("INSERT INTO day_note(date,text) VALUES('2026-10-20','SYNTHETIC indirect DML')")
+                    }
+                    return raw.query(sql)
+                }
+            }
+            rejects(ReferenceError.INVALID_SOURCE){MeasuredConsumptionStore.auditStagedDataset(indirect)}
+            assertTrue(injected);throw Rollback()
+        }}catch(_:Rollback){}
+        assertEquals(before,RawData.dump(raw).toString())
+    }
     @Test fun writePathObserverAccountsRealCommitAndPreservesFaultRollbackAndFullAudit()=runBlocking {
         val timing=P4WritePathTiming();val otherName="synthetic-write-timing-${UUID.randomUUID()}.db"
         val transactionThread=java.util.concurrent.Executors.newSingleThreadExecutor()
@@ -81,7 +149,7 @@ abstract class MeasuredConsumptionContract {
             assertEquals(1,success.getInt("audit_finish_markers"))
             assertEquals(3,success.getInt("chain_checks"));assertEquals(1,capture.getInt("chain_checks"))
             assertTrue(success.getLong("insert_including_triggers_ns")>0);assertTrue(success.getLong("commit_driver_ns")>0)
-            assertEquals(2,success.getJSONArray("foreign_key_query_windows_nested_ns").length())
+            assertEquals(1,success.getJSONArray("foreign_key_query_windows_nested_ns").length())
             observed.withTransaction {assertEquals(1L,MeasuredConsumptionStore.auditStagedDataset(sql).single().usedQuanta)}
             val before=RawData.dump(sql).toString();val next=repo.measuredWriteTicket(b.scope,m)
             class SyntheticFault:RuntimeException()

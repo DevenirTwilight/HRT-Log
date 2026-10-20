@@ -291,7 +291,7 @@ def native_source(text):
             assertEquals(1,capturedTicket.getInt("chain_checks"))
             assertEquals(1,capturedWrite.getInt("audit_calls"));assertEquals(1,capturedWrite.getInt("validation_calls"))
             assertEquals(3,capturedWrite.getInt("chain_checks"))
-            assertEquals(2,capturedWrite.getJSONArray("foreign_key_query_windows_nested_ns").length())
+            assertEquals(1,capturedWrite.getJSONArray("foreign_key_query_windows_nested_ns").length())
             // Independent full oracle AFTER the observed COMMIT; never subtracted from acceptance.
             db.withTransaction {
                 val verified=MeasuredConsumptionStore.auditStagedDataset(raw)
