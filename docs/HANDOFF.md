@@ -1,3 +1,11 @@
+## P4 写入分解接手：轻量观察器本地完成，原生分解待验 — 2026-10-20
+
+接手实际远端40408b77（非旧27135013），主线320171cd；旧工作树未提交原型保留在原处，新隔离工作树/workspace/HRT-Log-p4-attribution继续#57。本批只修改historyTest观察器和共享合同，生产代码/Schema/备份/PK/UI未变；P4仍Draft/OFF，不自动合并。
+
+修正链计数为冻结源码真实SELECT事件，audit期间不逐getter/重复inTransaction采栈，也不对每条query采栈；仍以真实finish的schema_version游标close闭合审计区间。明确记录invalid原因，metadata在同一短锁下快照化，锁不包围被测正常SQL动作。完整回归再次发现unfinished frame：前台回滚后同线程后台事务仍打开。新增确定性latch反例，仅未结束的受控前台帧使归因失败；后台帧数量单独报告，绝不算入前台commit。旧RED保留。透明inTransaction代理的入口识别也被负向测试定位并修复；审计窗口内零行UPDATE必须使归因无效。原提交/回滚/dump/独立全审计及计数断言均保留。
+
+本地完整data472 PASS，0fail/error/skip，生成原生Kotlin编译PASS，工具51PASS，生产jar无观察器；收据local-validation/light-observer-result.json及原始XML/日志。原生新分解PENDING，本次计划只运行一次有新证据价值的轻量观察器版本；不手动重复自动任务，不因预算FAIL再跑求绿。原固定夹具、512MiB/192MiB、全部原三写/审计/备份恢复断言不变。重观察器46.418s只属其自身同次调用，不冒充自然7–9s；普通新增仅一次完整审计，理论可删0次完整审计，实测提速仍未证明。
+
 ## 【换号必读】P4 写入分解 WIP 检查点 — 2026-10-20
 
 负责人明确要求停止当前工作、将进度写库以换号接手。本检查点只保存成果，不启动新实验/原生跑分，不合并#57。**当前包含未完成的测试观察器，新版本地测试1项失败，不能认定完成或可合并。** P4保持DRAFT / PRODUCTION_BLOCKED / 正式入口OFF；未改生产源码、Room Schema、PNBAK1或加密格式、UI、PK、P5/P6、签名发布。

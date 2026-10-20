@@ -1,4 +1,4 @@
-> **换号检查点：当前代码WIP，新增轻量观察器测试1失败，不是完成交付。** 最新完整状态、失败位置和下一步以 `docs/HANDOFF.md` 顶部【换号必读】为准。已完成的46.418秒分解来自重观察器，不能代表自然7–8秒。未改生产，P4 Draft/OFF/PRODUCTION_BLOCKED。本检查点不启动新跑分、不合并。
+> **接手进度：轻量观察器完整data472/原生源码编译/工具51 PASS；新原生分解PENDING。** 基线40408b77，原始WIP与新增RED保留，不将历史重观察器结果当作自然写入。详情见HANDOFF顶部及local-validation/light-observer-result.json。P4仍Draft/OFF，不自动合并。
 
 # P4 真实写入归因与重复审计决策（2026-10-20）
 

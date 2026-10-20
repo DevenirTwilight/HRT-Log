@@ -27,12 +27,15 @@ internal class P4WritePathTiming {
         val prefixes=HashMap<String,String>()
         val foreignKeys=ArrayList<Long>()
         var observer=0L;var chainChecks=0;var invalid=false;var untrackedTransactionSuccesses=0;var auditsClosed=0
+        val invalidReasons=linkedSetOf<String>()
+        fun invalidate(reason:String){invalid=true;invalidReasons.add(reason)}
     }
     private class Root(val label:String,val start:Long) {
         val threads=ConcurrentHashMap<Long,ThreadData>()
         @Volatile var owner:Long?=null
         @Volatile var closed=false
         var overflow=false
+        val overflowReasons=ConcurrentHashMap.newKeySet<String>()
         val checkpoints=linkedMapOf<String,Long>()
     }
     private data class Context(val root:Root,val thread:ThreadData,val span:Span?,val tag:String,val controlled:Boolean,val auditFinish:Boolean)
@@ -47,7 +50,11 @@ internal class P4WritePathTiming {
     fun start(label:String) {check(root==null);root=Root(label,System.nanoTime())}
     fun checkpoint(name:String) {root?.let {r->synchronized(r.checkpoints){check(r.checkpoints.size<16);r.checkpoints[name]=System.nanoTime()-r.start}}}
     fun finish():JSONObject {
-        val stop=System.nanoTime();val r=requireNotNull(root);r.closed=true;root=null
+        val r=requireNotNull(root)
+        return synchronized(r) {finishLocked(r)}
+    }
+    private fun finishLocked(r:Root):JSONObject {
+        val stop=System.nanoTime();r.closed=true;root=null
         val thread=r.owner?.let{r.threads[it]}
         val out=JSONObject().put("scope",r.label).put("wall_ns",stop-r.start)
             .put("checkpoint_offsets_nested_ns",JSONObject(r.checkpoints as Map<*,*>))
@@ -57,7 +64,7 @@ internal class P4WritePathTiming {
         if(thread==null)return out.put("accounting_valid",false)
         val spans=thread.spans.sortedBy{it.start}
         var previous=r.start
-        for(s in spans) {if(s.start<previous || s.end<s.start || s.end>stop)thread.invalid=true;previous=s.end}
+        for(s in spans) {if(s.start<previous || s.end<s.start || s.end>stop)thread.invalidate("overlapping_or_out_of_root_core");previous=s.end}
         val retainedKinds=setOf("insert","update","delete","commit","rollback","nested_finish","begin","background_finish","finish_unknown")
         val selected=thread.driver.entries.filter{it.key.split('|')[1] in retainedKinds}.take(40)+
             thread.driver.entries.filter{it.key.split('|')[1] !in retainedKinds}.sortedByDescending{it.value[1]}.take(8)
@@ -69,9 +76,15 @@ internal class P4WritePathTiming {
         val commit=outside("commit");val rollback=outside("rollback")
         val allOutside=thread.driver.filterKeys{it.startsWith("other|")}.values.sumOf{it[1]}
         val residual=stop-r.start-audit-validation-allOutside
-        if(residual<0 || thread.frames.isNotEmpty() || r.overflow || thread.auditsClosed!=spans.count{it.kind=="audit"})thread.invalid=true
+        if(residual<0)thread.invalidate("negative_residual")
+        if(thread.frames.any{it.controlled})thread.invalidate("unfinished_controlled_transaction_frame")
+        if(r.overflow)thread.invalidate("bounded_observer_overflow")
+        if(r.threads.values.any{it.invalid})thread.invalidate("invalid_observed_thread")
+        if(thread.auditsClosed!=spans.count{it.kind=="audit"})thread.invalidate("audit_finish_count_mismatch")
         return out.put("accounting_valid",!thread.invalid)
+            .put("accounting_invalid_reasons",JSONArray(thread.invalidReasons.toList()+r.overflowReasons.toList().sorted()))
             .put("transaction_success_without_observed_begin",thread.untrackedTransactionSuccesses)
+            .put("uncontrolled_frames_at_stop",thread.frames.count{!it.controlled})
             .put("audit_finish_markers",thread.auditsClosed)
             .put("audit_calls",spans.count{it.kind=="audit"}).put("validation_calls",spans.count{it.kind=="validation"})
             .put("chain_checks",thread.chainChecks).put("audit_core_lower_bound_ns",audit)
@@ -87,11 +100,22 @@ internal class P4WritePathTiming {
             .put("core_windows",JSONArray(spans.map{JSONObject().put("kind",it.kind).put("start_ns",it.start-r.start).put("end_ns",it.end-r.start)}))
     }
 
-    private fun context(entry:Boolean=false):Context? {
-        val r=root ?: return null;if(r.closed)return null
+    private fun context(entry:Boolean=false,forceStack:Boolean=false):Context? {
+        val r=root ?: return null
+        return synchronized(r) {contextLocked(r,entry,forceStack)}
+    }
+    private fun contextLocked(r:Root,entry:Boolean,forceStack:Boolean):Context? {
+        if(r.closed)return null
         val before=System.nanoTime();val id=Thread.currentThread().id
-        if(r.threads.size>=16 && !r.threads.containsKey(id)){r.overflow=true;return null}
+        if(r.threads.size>=16 && !r.threads.containsKey(id)){r.overflow=true;r.overflowReasons.add("thread_limit");return null}
         val t=r.threads.getOrPut(id){ThreadData()}
+        // The synchronous audit has a mandatory finish marker. Keep attribution until it
+        // closes, without sampling a Java stack on every SQL query. Writes still invalidate
+        // the read core in timed(); missing/exceptional finish markers reject accounting.
+        if(!entry && !forceStack && t.current?.kind=="audit") {
+            t.observer+=System.nanoTime()-before
+            return Context(r,t,t.current,"audit",t.frames.firstOrNull()?.controlled==true,false)
+        }
         val stack=Thread.currentThread().stackTrace
         val tag=when {
             stack.any{it.className==STORE && method(it,"auditStagedDataset")}->"audit"
@@ -100,21 +124,20 @@ internal class P4WritePathTiming {
             else->"other"
         }
         val caller=stack.firstOrNull{!it.className.startsWith(javaClass.name) && it.className!="java.lang.Thread" && it.className!="dalvik.system.VMStack" &&
-            !(it.className=="net.plainnotes.app.data.ReferenceAuditReads" && method(it,"inTransaction"))}
-        if(entry && caller?.className==CHAIN && method(caller,"checkedChain"))t.chainChecks++
+            !method(it,"inTransaction")}
         val begins=entry && ((caller?.className==STORE && method(caller,"auditStagedDataset")) ||
             (caller?.className==INTEGRATION && method(caller,"validate")))
         if(begins || (entry && r.label=="ticket" && caller?.className==INTEGRATION && method(caller,"ticket"))) {
             // Only a transaction containing the real controlled method owns our COMMIT/DML.
             // Earlier Room work can finish on the same executor while the caller is waiting.
-            if(t.frames.isEmpty())t.invalid=true else t.frames[0].controlled=true
+            if(t.frames.isEmpty())t.invalidate("controlled_entry_without_begin") else t.frames[0].controlled=true
         }
         if(tag!=t.current?.kind)t.current=null
         if(begins) {
-            if(t.spans.size>=32)r.overflow=true else Span(tag,before).also{t.spans.add(it);t.current=it}
+            if(t.spans.size>=32){r.overflow=true;r.overflowReasons.add("core_limit")} else Span(tag,before).also{t.spans.add(it);t.current=it}
         }
         if((r.label=="ticket" && tag=="ticket") || (r.label!="ticket" && tag in setOf("validation","audit"))) {
-            if(r.owner==null)r.owner=id else if(r.owner!=id)t.invalid=true
+            if(r.owner==null)r.owner=id else if(r.owner!=id)t.invalidate("controlled_owner_changed")
         }
         t.observer+=System.nanoTime()-before
         return Context(r,t,t.current,tag,t.frames.firstOrNull()?.controlled==true,
@@ -123,24 +146,28 @@ internal class P4WritePathTiming {
     private fun <T> timed(c:Context?,kind:String,sql:String="",action:()->T):T {
         if(c==null || c.root.closed)return action()
         // Only a static, bounded template digest; never SQL bindings, values or records.
+        val values=synchronized(c.root) {
+        if(c.root.closed)return action()
         val before=System.nanoTime()
         val digest=if(sql.isEmpty())"transaction" else c.thread.digests[sql] ?: ReferencePayload.sha(sql).also {
-            if(c.thread.digests.size<256) {c.thread.digests[sql]=it;c.thread.prefixes[it]=sql.take(160)} else c.root.overflow=true
+            if(c.thread.digests.size<256) {c.thread.digests[sql]=it;c.thread.prefixes[it]=sql.take(160)} else {c.root.overflow=true;c.root.overflowReasons.add("sql_template_limit")}
         }
         val observedKind=if(!c.controlled && kind in setOf("insert","update","delete"))"background_$kind" else kind
         val key=(if(c.span==null)"other" else c.span.kind)+"|$observedKind|"+digest
-        val values=c.thread.driver[key] ?: if(c.thread.driver.size<1024)LongArray(2).also{c.thread.driver[key]=it} else {
-            c.root.overflow=true;null
+        val result=c.thread.driver[key] ?: if(c.thread.driver.size<1024)LongArray(2).also{c.thread.driver[key]=it} else {
+            c.root.overflow=true;c.root.overflowReasons.add("driver_key_limit");null
         }
         c.thread.observer+=System.nanoTime()-before
+        result
+        }
         val start=System.nanoTime()
         try{return action()}finally {
             val end=System.nanoTime()
-            if(!c.root.closed) {
+            synchronized(c.root) {if(!c.root.closed) {
                 values?.let{it[0]++;it[1]+=end-start}
                 c.span?.let{it.end=maxOf(it.end,end)}
-                if(c.span!=null && kind in setOf("insert","update","delete","commit","rollback"))c.thread.invalid=true
-            }
+                if(c.span!=null && kind in setOf("insert","update","delete","commit","rollback"))c.thread.invalidate("write_inside_read_core")
+            }}
         }
     }
     private fun kind(sql:String):String {
@@ -167,7 +194,8 @@ internal class P4WritePathTiming {
             val c=context(true);return timed(c,"in_transaction"){db.inTransaction()}
         }
         private fun begin(kind:String,action:()->Unit) {
-            val c=context();timed(c,kind,action=action);c?.thread?.frames?.add(Frame())
+            val c=context();timed(c,kind,action=action)
+            if(c!=null)synchronized(c.root){if(!c.root.closed)c.thread.frames.add(Frame())}
         }
         override fun beginTransaction()=begin("begin"){db.beginTransaction()}
         override fun beginTransactionNonExclusive()=begin("begin"){db.beginTransactionNonExclusive()}
@@ -175,31 +203,40 @@ internal class P4WritePathTiming {
         override fun beginTransactionWithListenerNonExclusive(listener:SQLiteTransactionListener)=begin("begin"){db.beginTransactionWithListenerNonExclusive(listener)}
         override fun setTransactionSuccessful() {
             val c=context();timed(c,"mark_success"){db.setTransactionSuccessful()}
-            c?.thread?.frames?.let {
+            if(c!=null)synchronized(c.root){if(!c.root.closed)c.thread.frames.let {
                 if(it.isEmpty()) {
                     c.thread.untrackedTransactionSuccesses++
-                    if(c.span!=null)c.thread.invalid=true
+                    if(c.span!=null)c.thread.invalidate("untracked_success_inside_core")
                 } else it[it.lastIndex].successful=true
-            }
+            }}
         }
         override fun endTransaction() {
             val c=context();val frames=c?.thread?.frames
-            val kind=when {frames==null || frames.isEmpty()->"finish_unknown";frames.size>1->"nested_finish"
-                !frames[0].controlled->"background_finish";frames[0].successful->"commit";else->"rollback"}
-            try{timed(c,kind){db.endTransaction()}}finally{if(!frames.isNullOrEmpty())frames.removeAt(frames.lastIndex)}
+            val kind=if(c==null)"finish_unknown" else synchronized(c.root) {
+                when {frames==null || frames.isEmpty()->"finish_unknown";frames.size>1->"nested_finish"
+                    !frames[0].controlled->"background_finish";frames[0].successful->"commit";else->"rollback"}
+            }
+            try{timed(c,kind){db.endTransaction()}}finally{if(c!=null)synchronized(c.root){
+                if(!c.root.closed && !frames.isNullOrEmpty())frames.removeAt(frames.lastIndex)
+            }}
         }
         private fun cursor(sql:String,open:()->Cursor):Cursor {
-            val c=context();val opened=System.nanoTime();val cursor=timed(c,"query_open",sql,open)
+            val c=context(forceStack=sql=="PRAGMA schema_version");val opened=System.nanoTime();val cursor=timed(c,"query_open",sql,open)
             if(c==null)return cursor
+            // checkedChain has one SELECT in the frozen source, including the audit hot path
+            // whose repeated inTransaction calls intentionally do not collect stacks.
+            synchronized(c.root){if(!c.root.closed && (sql==CHAIN_SELECT || sql==CHAIN_HEADER_SELECT))c.thread.chainChecks++}
             return object:CursorWrapper(cursor) {
                 override fun close() {
                     timed(c,"cursor_close",sql){cursor.close()}
+                    synchronized(c.root) {
                     if(c.auditFinish && sql=="PRAGMA schema_version" && !c.root.closed) {
                         c.thread.auditsClosed++
                         if(c.thread.current===c.span)c.thread.current=null
                     }
                     if(sql=="PRAGMA foreign_key_check" && c.tag=="audit" && !c.root.closed) {
-                        if(c.thread.foreignKeys.size<32)c.thread.foreignKeys.add(System.nanoTime()-opened) else c.root.overflow=true
+                        if(c.thread.foreignKeys.size<32)c.thread.foreignKeys.add(System.nanoTime()-opened) else {c.root.overflow=true;c.root.overflowReasons.add("fk_window_limit")}
+                    }
                     }
                 }
             }
@@ -230,5 +267,7 @@ internal class P4WritePathTiming {
         private const val STORE="net.plainnotes.app.data.MeasuredConsumptionStore"
         private const val INTEGRATION="net.plainnotes.app.data.MeasuredUseIntegration"
         private const val CHAIN="net.plainnotes.app.data.MeasuredOperationChain"
+        private const val CHAIN_SELECT="SELECT operation_uuid,input_json FROM measured_operation"
+        private val CHAIN_HEADER_SELECT="SELECT "+ReferenceSchema.columns.getValue("measured_operation").joinToString(","){"`$it`"}+" FROM measured_operation"
     }
 }

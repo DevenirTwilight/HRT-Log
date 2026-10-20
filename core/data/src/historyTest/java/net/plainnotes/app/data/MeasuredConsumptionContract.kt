@@ -85,13 +85,48 @@ abstract class MeasuredConsumptionContract {
             observed.withTransaction {assertEquals(1L,MeasuredConsumptionStore.auditStagedDataset(sql).single().usedQuanta)}
             val before=RawData.dump(sql).toString();val next=repo.measuredWriteTicket(b.scope,m)
             class SyntheticFault:RuntimeException()
+            val trailingReady=java.util.concurrent.CountDownLatch(1);val trailingRelease=java.util.concurrent.CountDownLatch(1)
+            val trailingDone=java.util.concurrent.CompletableFuture<Unit>()
             timing.start("rollback")
-            try {repo.recordMeasuredUse(next,UUID.randomUUID().toString(),draft,at){if(it==ActualUseCheckpoint.STOCK_CAPTURED)throw SyntheticFault()};fail("Expected synthetic fault")}
+            try {repo.recordMeasuredUse(next,UUID.randomUUID().toString(),draft,at){if(it==ActualUseCheckpoint.STOCK_CAPTURED) {
+                // Hold a known unrelated transaction open after the real write has rolled back.
+                // An unfinished background frame cannot become a foreground COMMIT/rollback.
+                observed.transactionExecutor.execute {
+                    try {
+                        sql.beginTransaction()
+                        try{trailingReady.countDown();check(trailingRelease.await(10,java.util.concurrent.TimeUnit.SECONDS));sql.setTransactionSuccessful()}
+                        finally{sql.endTransaction()}
+                        trailingDone.complete(Unit)
+                    }catch(t:Throwable){trailingDone.completeExceptionally(t)}
+                }
+                throw SyntheticFault()
+            }};fail("Expected synthetic fault")}
             catch(_:SyntheticFault){}
-            val failed=timing.finish();assertTrue(failed.toString(),failed.getBoolean("accounting_valid"))
+            val failed=try{assertTrue(trailingReady.await(10,java.util.concurrent.TimeUnit.SECONDS));timing.finish()}
+                finally{trailingRelease.countDown()}
+            trailingDone.get(10,java.util.concurrent.TimeUnit.SECONDS)
+            assertTrue(failed.toString(),failed.getBoolean("accounting_valid"))
+            assertTrue(failed.getInt("uncontrolled_frames_at_stop")>=1)
             assertTrue(failed.getLong("rollback_driver_ns")>0);assertEquals(0L,failed.getLong("commit_driver_ns"))
             assertEquals(before,RawData.dump(sql).toString())
             observed.withTransaction {assertEquals(1L,MeasuredConsumptionStore.auditStagedDataset(sql).single().usedQuanta)}
+            // Even a zero-row write inside the synchronous audit invalidates attribution.
+            // No business fact changes, so the independent full oracle remains usable.
+            var injected=false
+            val readViolation=object:androidx.sqlite.db.SupportSQLiteDatabase by sql {
+                override fun query(query:String):android.database.Cursor {
+                    if(!injected && query.startsWith("SELECT 1 FROM measured_operation o JOIN reference_event")) {
+                        injected=true;sql.execSQL("UPDATE day_note SET text=text WHERE 0")
+                    }
+                    return sql.query(query)
+                }
+            }
+            timing.start("read-only-violation")
+            observed.withTransaction {MeasuredConsumptionStore.auditStagedDataset(readViolation)}
+            val invalid=timing.finish()
+            assertTrue(injected);assertFalse(invalid.toString(),invalid.getBoolean("accounting_valid"))
+            assertTrue(invalid.toString(),invalid.getJSONArray("accounting_invalid_reasons").toString().contains("write_inside_read_core"))
+            assertEquals(before,RawData.dump(sql).toString())
         } finally {observed.close();transactionThread.shutdownNow();context.deleteDatabase(otherName)}
     }
     @Test fun architectureCounterOnlyWitnessIsRefutedByRollbackWithoutAnyStampChange()=runBlocking {
