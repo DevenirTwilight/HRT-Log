@@ -1,3 +1,11 @@
+## P4 三方案有限决策与最终原生结果 — 2026-10-20
+
+验证源码0448fb83，主线320171cd；后续仅文档归档不改运行时。六类必需检查push/PR共12实例全部SUCCESS，PR临时merge07a3cf4b的树与0448相同。完整data471PASS/0skip，App1562PASS/277SKIPPED/0FAIL，reminder21PASS，Period5PASS。API26/29/35实际SQLCipher库存合同各138/138PASS、9架构用例各通过，原始HTML/官方SHA/CRC均已核验。修正仅测试ROLLBACK TO传输前缀，原计数/SAVEPOINT/重复零消耗反例与全部断言不删；新增C单谓词唯一索引及DDL/业务回滚原型，不是全历史快速验证器。
+
+本轮自动原生39462266792/artifact12284765032完成原512MiB/192MiB、14600/2000/32603和19660924B：audit8.47s/forecast8.30s/backup9.51s/restore38.98s通过；三写8.641/8.613/8.314s全部FAIL。与dc54的5.747/5.694/5.288s相比生产源码、夹具及生成源码SHA相同；没有新生产提速，差异原因未确定，不归因于代码退步或宿主负载，不重跑求绿。旧失败/OOM保留。
+
+决策集中于validation-architecture/decision-2026-10-20.md和result-receipt.json：A完整oracle继续作唯一生产安全机制；B计数/TEMP+FK局部推断不采用；C只作为需完整约束/转换和迁移审查的后继候选。单个CONSUME唯一索引不能证明其余语义、冷/恢复/失效生命周期，不接Repository。没有生产Schema/备份格式/PK/UI/P5/P6/权限/签名/Release变化；P4仍Draft/OFF/NOT_ELIGIBLE。本轮有限验证结束而解阻未完成；下一步需闭合C的明确证明与兼容义务，或负责人明确调整产品/验收政策，不能再叠微优化。新库/重启/冷恢复首次和新机制增长曲线NOT_RUN，不能用现有恢复后预审计三写冒充。会话后段已取得干净checkout，本地Android无SDK未运行；上述回归为实际GitHubCI结果。
+
 ## P4 有限架构选择与原生证据修正 — 2026-10-20
 
 基于dc54c7fa/主线320171cd，最新原生39446282509官方工件12277252280 SHA/CRC已独立核验：三写5747/5694/5288ms仍全部FAIL，audit4939ms、backup5509ms、restore29836ms；不归因于新优化。精确dc54 API26两项SAVEPOINT共享测试在Room结束事务时报no current transaction；保留失败HTML/摘要，不将JVM470通过当原生全绿。本轮仅测试SQL传输加空语句，将同一ROLLBACK TO交给SQLite，反例和全部断言不删。

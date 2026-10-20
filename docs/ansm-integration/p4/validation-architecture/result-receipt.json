@@ -1,30 +1,316 @@
 {
   "status": "PRODUCTION_BLOCKED",
-  "reviewed_head": "dc54c7fae1fe48c33be8aaecd51bd0dce1301597",
+  "merge_eligible": false,
+  "tested_head": "0448fb8340e6179d52c5081759028f34bc3fc3c2",
+  "reviewed_runtime_baseline": "dc54c7fae1fe48c33be8aaecd51bd0dce1301597",
   "main": "320171cdc882ec0b62830b60e2329a4174ffa31c",
+  "tested_pr_merge": {
+    "sha": "07a3cf4b444c97d867842887b40bf4177c59ccb0",
+    "tree": "3028d678df499f37db62055078828c1a38765b5c",
+    "head_tree": "3028d678df499f37db62055078828c1a38765b5c",
+    "parents": [
+      "320171cdc882ec0b62830b60e2329a4174ffa31c",
+      "0448fb8340e6179d52c5081759028f34bc3fc3c2"
+    ],
+    "equals_head_tree": true
+  },
   "production_changed": false,
-  "local_android": "NOT_RUN_NO_SDK_PROXY_UNREACHABLE",
   "prototype": "C_SINGLE_EXISTING_INVARIANT_NOT_COMPLETE_VERIFIER",
-  "ci": "PENDING",
-  "baseline_native": {
-    "run": 39446282509,
-    "artifact": 12277252280,
-    "sha256": "d9c127fd049a9d582b1afa926da46ad3cd7b0b62df0bd8d4208d1d993fcabb7b",
+  "production_strategy": "ORIGINAL_FULL_AUDIT_NO_TRUST_CACHE",
+  "local_android": "NOT_RUN_NO_SDK_PROXY_UNREACHABLE",
+  "required_categories": [
+    "jvm",
+    "android",
+    "device-tests",
+    "attachment-poc-compatibility (26)",
+    "attachment-poc-compatibility (29)",
+    "science-change-gate"
+  ],
+  "checks": [
+    {
+      "name": "research-deep",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39462266850/job/118764585110"
+    },
+    {
+      "name": "research-deep",
+      "status": "completed",
+      "conclusion": "skipped",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39462255880/job/118764546811"
+    },
+    {
+      "name": "native-api26-large-inventory",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39462266792/job/118764524238"
+    },
+    {
+      "name": "attachment-poc-compatibility (26)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39462266926/job/118764505474"
+    },
+    {
+      "name": "android",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39462266926/job/118764505389"
+    },
+    {
+      "name": "jvm",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39462266926/job/118764505277"
+    },
+    {
+      "name": "device-tests",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39462266926/job/118764505173"
+    },
+    {
+      "name": "attachment-poc-compatibility (29)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39462266926/job/118764504787"
+    },
+    {
+      "name": "science-change-gate",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39462266850/job/118764503673"
+    },
+    {
+      "name": "attachment-poc-compatibility (26)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39462255852/job/118764465759"
+    },
+    {
+      "name": "jvm",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39462255852/job/118764465503"
+    },
+    {
+      "name": "attachment-poc-compatibility (29)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39462255852/job/118764465452"
+    },
+    {
+      "name": "device-tests",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39462255852/job/118764465264"
+    },
+    {
+      "name": "android",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39462255852/job/118764465027"
+    },
+    {
+      "name": "science-change-gate",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39462255880/job/118764464742"
+    }
+  ],
+  "native": {
+    "run": 39462266792,
+    "job": 118764524238,
+    "artifact": 12284765032,
+    "official_and_download_sha256": "f5cca113181159e45c8dc786e393ff3d07a6b317282e0f2033e10e68d3467536",
     "crc": "PASS",
-    "writes_ms": [
-      5747.15754,
-      5694.17953,
-      5288.23621
-    ]
+    "runtime_source_unchanged": true,
+    "fixture_and_generated_source_hashes_equal_dc54": true,
+    "write_ms": [
+      8640.56622,
+      8612.52241,
+      8314.21522
+    ],
+    "full_audit_ms": 8466.30802,
+    "forecast_ms": 8304.46384,
+    "backup_ms": 9506.84496,
+    "restore_ms": 38982.15633,
+    "actual_environment": {
+      "api": 26,
+      "ram_bytes": 520962048,
+      "art_bytes": 201326592,
+      "records": 14600,
+      "containers": 2000,
+      "rows": 32603,
+      "business_bytes": 19660924
+    },
+    "result": "FAIL_WRITES",
+    "not_a_new_optimization": true
   },
-  "baseline_api26": {
-    "run": 39446282528,
-    "job": 118708941618,
-    "artifact": 12275773373,
-    "sha256": "474d05b12fa0293e702ecef469f254e0fef3a3be74c60e5f743329b89eb0a0d5",
-    "crc": "PASS",
-    "failures": 2
+  "actual_native_contracts": {
+    "26": {
+      "artifact": 12283853154,
+      "sha256": "ad335bf1c75bd6bd46a7efeac2e59a1aeccdc382b5bfae681b2e2879e21b0830",
+      "crc": "PASS",
+      "class": "MeasuredConsumptionAndroidTest",
+      "architecture_cases": [
+        [
+          "architectureClearedJournalOrMissingMetadataDoesNotRestoreStampAuthority",
+          "passed (0.327s)"
+        ],
+        [
+          "architectureConstraintRejectsZeroEffectDuplicateAndRollsBackWithSchema",
+          "passed (0.353s)"
+        ],
+        [
+          "architectureCounterOnlyWitnessIsRefutedByRollbackWithoutAnyStampChange",
+          "passed (0.352s)"
+        ],
+        [
+          "architectureDoesNotInventUniversalCrossTableUuidUniqueness",
+          "passed (0.302s)"
+        ],
+        [
+          "architectureForeignKeyAndBalanceHypothesisIsRefutedByZeroEffectDuplicateUse",
+          "passed (0.352s)"
+        ],
+        [
+          "architectureJournalObservesDaoCompiledSqlUnrelatedHistoryAndLedgerTriggers",
+          "passed (0.478s)"
+        ],
+        [
+          "architectureJournalOverflowRequiresFullRebuildAndNeverMeansNoChanges",
+          "passed (0.351s)"
+        ],
+        [
+          "architectureRestoreAndReopenCannotReuseThePreviousBaselineOrTempMetadata",
+          "passed (0.904s)"
+        ],
+        [
+          "architectureTransactionalSealRejectsTheCounterRollbackCounterexample",
+          "passed (0.352s)"
+        ]
+      ],
+      "report": "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.MeasuredConsumptionAndroidTest.html",
+      "counters": [
+        "138",
+        "0",
+        "0"
+      ]
+    },
+    "29": {
+      "artifact": 12284366048,
+      "sha256": "c0b09ee5ec69f2f8c3e094fc7076338f16860da69a50b1fa5732d43461668174",
+      "crc": "PASS",
+      "class": "MeasuredConsumptionAndroidTest",
+      "architecture_cases": [
+        [
+          "architectureClearedJournalOrMissingMetadataDoesNotRestoreStampAuthority",
+          "passed (0.603s)"
+        ],
+        [
+          "architectureConstraintRejectsZeroEffectDuplicateAndRollsBackWithSchema",
+          "passed (0.803s)"
+        ],
+        [
+          "architectureCounterOnlyWitnessIsRefutedByRollbackWithoutAnyStampChange",
+          "passed (0.828s)"
+        ],
+        [
+          "architectureDoesNotInventUniversalCrossTableUuidUniqueness",
+          "passed (0.453s)"
+        ],
+        [
+          "architectureForeignKeyAndBalanceHypothesisIsRefutedByZeroEffectDuplicateUse",
+          "passed (0.653s)"
+        ],
+        [
+          "architectureJournalObservesDaoCompiledSqlUnrelatedHistoryAndLedgerTriggers",
+          "passed (0.930s)"
+        ],
+        [
+          "architectureJournalOverflowRequiresFullRebuildAndNeverMeansNoChanges",
+          "passed (0.754s)"
+        ],
+        [
+          "architectureRestoreAndReopenCannotReuseThePreviousBaselineOrTempMetadata",
+          "passed (1.507s)"
+        ],
+        [
+          "architectureTransactionalSealRejectsTheCounterRollbackCounterexample",
+          "passed (0.653s)"
+        ]
+      ],
+      "report": "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.MeasuredConsumptionAndroidTest.html",
+      "counters": [
+        "138",
+        "0",
+        "0"
+      ]
+    },
+    "35": {
+      "artifact": 12284132417,
+      "sha256": "eb439d24f8d645302597c45414e5bbe68b0cf46f20c3670782c3888477e5a5f3",
+      "crc": "PASS",
+      "report": "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.MeasuredConsumptionAndroidTest.html",
+      "architecture_cases": [
+        [
+          "architectureClearedJournalOrMissingMetadataDoesNotRestoreStampAuthority",
+          "passed (0.227s)"
+        ],
+        [
+          "architectureConstraintRejectsZeroEffectDuplicateAndRollsBackWithSchema",
+          "passed (0.252s)"
+        ],
+        [
+          "architectureCounterOnlyWitnessIsRefutedByRollbackWithoutAnyStampChange",
+          "passed (0.377s)"
+        ],
+        [
+          "architectureDoesNotInventUniversalCrossTableUuidUniqueness",
+          "passed (0.177s)"
+        ],
+        [
+          "architectureForeignKeyAndBalanceHypothesisIsRefutedByZeroEffectDuplicateUse",
+          "passed (0.227s)"
+        ],
+        [
+          "architectureJournalObservesDaoCompiledSqlUnrelatedHistoryAndLedgerTriggers",
+          "passed (0.328s)"
+        ],
+        [
+          "architectureJournalOverflowRequiresFullRebuildAndNeverMeansNoChanges",
+          "passed (0.252s)"
+        ],
+        [
+          "architectureRestoreAndReopenCannotReuseThePreviousBaselineOrTempMetadata",
+          "passed (0.503s)"
+        ],
+        [
+          "architectureTransactionalSealRejectsTheCounterRollbackCounterexample",
+          "passed (0.227s)"
+        ]
+      ],
+      "counters": [
+        "138",
+        "0",
+        "0"
+      ]
+    }
   },
+  "architecture_test_durations_are_not_production_write_latency": true,
+  "unchanged_production": {
+    "room": 13,
+    "business_backup": 12,
+    "main_room": 12,
+    "main_business_backup": 11,
+    "new_schema": false,
+    "new_backup_format": false,
+    "crypto_changed": false,
+    "entrance": "OFF",
+    "p5p6": "NOT_IMPLEMENTED"
+  },
+  "invariant_proof_scope": "Full production oracle unchanged. Test index proves only uniqueness of CONSUME row (record_uuid,record_revision), conditional on the existing header/request invariant. It is not a complete history verifier.",
   "unmeasured": [
     "new-database-first-write",
     "restarted-process-first-write",
@@ -34,5 +320,62 @@
     "new-architecture-growth",
     "multi-connection",
     "process-kill"
-  ]
+  ],
+  "stop_reason": "No fully proven production verifier covering every historical semantic and cold/fallback lifecycle within the unchanged write budget. Do not wire an incomplete validator.",
+  "next_decision": "Complete and review the bounded C constraint/transition and migration design, or explicitly change cold-path/product/acceptance policy; otherwise keep OFF.",
+  "all_12_required_instances_success": true,
+  "regression": {
+    "artifact": {
+      "id": 12283953513,
+      "name": "build-results",
+      "size_in_bytes": 127339215,
+      "url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/artifacts/12283953513",
+      "archive_download_url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/artifacts/12283953513/zip",
+      "expired": false,
+      "created_at": "2026-10-20T17:15:55Z",
+      "expires_at": "2027-01-18T16:59:43Z",
+      "updated_at": "2026-10-20T17:15:55Z",
+      "digest": "sha256:b813cf8f88b1a6519bc2f9d45f4e5e9d6367123fd8476f211d165094add217d0",
+      "workflow_run": {
+        "id": 39462266926,
+        "repository_id": 1406091596,
+        "head_repository_id": 1406091596,
+        "head_branch": "feature/ansm03b-p4-exact-stock-20261016",
+        "head_sha": "0448fb8340e6179d52c5081759028f34bc3fc3c2"
+      }
+    },
+    "download_sha256": "b813cf8f88b1a6519bc2f9d45f4e5e9d6367123fd8476f211d165094add217d0",
+    "crc": "PASS",
+    "results": {
+      "app": {
+        "path": "app/build/reports/tests/testFullDebugUnitTest/index.html",
+        "tests": 1839,
+        "failures": 0,
+        "skipped": 277
+      },
+      "data": {
+        "path": "core/data/build/reports/tests/testDebugUnitTest/index.html",
+        "tests": 471,
+        "failures": 0,
+        "skipped": 0
+      },
+      "reminder": {
+        "path": "core/reminder/build/reports/tests/testDebugUnitTest/index.html",
+        "tests": 21,
+        "failures": 0,
+        "skipped": 0
+      },
+      "period": {
+        "path": "app/build/reports/tests/testFullDebugUnitTest/net.plainnotes.app.PeriodStabilityTest/index.html",
+        "tests": 5,
+        "failures": 0,
+        "skipped": 0
+      }
+    },
+    "app_pass": 1562,
+    "local_android": "NOT_RUN",
+    "execution": "GitHub CI; exact synthetic merge tree equals source HEAD"
+  },
+  "evidence_snapshot_utc": "2026-10-20T17:22:07Z",
+  "subsequent_documentation_checks": "Independent; not certified by these source-head results"
 }
