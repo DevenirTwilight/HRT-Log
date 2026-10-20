@@ -39,8 +39,10 @@ abstract class MeasuredConsumptionContract {
     private suspend fun rejects(code:ReferenceError,block:suspend()->Unit){try{block();fail("Expected $code")}catch(e:ReferenceFailure){assertEquals(code,e.code)}}
     @Test fun writePathObserverAccountsRealCommitAndPreservesFaultRollbackAndFullAudit()=runBlocking {
         val timing=P4WritePathTiming();val otherName="synthetic-write-timing-${UUID.randomUUID()}.db"
+        val transactionThread=java.util.concurrent.Executors.newSingleThreadExecutor()
         val observed=Room.databaseBuilder(context,NotesDatabase::class.java,otherName)
-            .openHelperFactory(timing.factory(factory(key.clone()))).allowMainThreadQueries().addCallback(SchemaGuards).build()
+            .openHelperFactory(timing.factory(factory(key.clone()))).setTransactionExecutor(transactionThread)
+            .allowMainThreadQueries().addCallback(SchemaGuards).build()
         try {
             val sql=observed.openHelper.writableDatabase;encrypted(otherName)
             val repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=observed})
@@ -51,9 +53,32 @@ abstract class MeasuredConsumptionContract {
             val draft=MeasuredActualUseDraft(at.toEpochMilli(),"UTC",0.1,listOf(use(b)),MeasuredStockEffect.DEDUCT_CURRENT,userConfirmed=true)
             timing.start("ticket");val ticket=repo.measuredWriteTicket(b.scope,m);val capture=timing.finish()
             assertTrue(capture.toString(),capture.getBoolean("accounting_valid"))
-            timing.start("write");repo.recordMeasuredUse(ticket,UUID.randomUUID().toString(),draft,at){timing.checkpoint(it.name)};val success=timing.finish()
+            // Room may finish earlier background work on the same executor after measurement starts.
+            // Its begin was outside the root; it must not masquerade as our foreground COMMIT.
+            val ready=java.util.concurrent.CountDownLatch(1);val release=java.util.concurrent.CountDownLatch(1)
+            val predecessor=java.util.concurrent.CompletableFuture<Unit>()
+            observed.transactionExecutor.execute {
+                try {
+                    sql.beginTransaction()
+                    try {ready.countDown();check(release.await(10,java.util.concurrent.TimeUnit.SECONDS));sql.setTransactionSuccessful()}
+                    finally {sql.endTransaction()}
+                    sql.beginTransaction()
+                    try {sql.setTransactionSuccessful()} finally {sql.endTransaction()}
+                    predecessor.complete(Unit)
+                } catch(t:Throwable){predecessor.completeExceptionally(t)}
+            }
+            assertTrue(ready.await(10,java.util.concurrent.TimeUnit.SECONDS))
+            timing.start("write");release.countDown()
+            repo.recordMeasuredUse(ticket,UUID.randomUUID().toString(),draft,at){timing.checkpoint(it.name)};val success=timing.finish()
+            predecessor.get(10,java.util.concurrent.TimeUnit.SECONDS)
             assertTrue(success.toString(),success.getBoolean("accounting_valid"))
+            assertEquals(1,success.getInt("transaction_success_without_observed_begin"))
+            val driver=success.getJSONObject("driver_detail_nested_do_not_add_to_cores")
+            assertEquals(1L,driver.getJSONObject("other|commit|transaction").getLong("calls"))
+            assertTrue(driver.getJSONObject("other|background_finish|transaction").getLong("calls")>=1L)
+            assertEquals(1L,driver.getJSONObject("other|finish_unknown|transaction").getLong("calls"))
             assertEquals(success.toString(),1,success.getInt("audit_calls"));assertEquals(success.toString(),1,success.getInt("validation_calls"))
+            assertEquals(1,success.getInt("audit_finish_markers"))
             assertEquals(3,success.getInt("chain_checks"));assertEquals(1,capture.getInt("chain_checks"))
             assertTrue(success.getLong("insert_including_triggers_ns")>0);assertTrue(success.getLong("commit_driver_ns")>0)
             assertEquals(2,success.getJSONArray("foreign_key_query_windows_nested_ns").length())
@@ -67,7 +92,7 @@ abstract class MeasuredConsumptionContract {
             assertTrue(failed.getLong("rollback_driver_ns")>0);assertEquals(0L,failed.getLong("commit_driver_ns"))
             assertEquals(before,RawData.dump(sql).toString())
             observed.withTransaction {assertEquals(1L,MeasuredConsumptionStore.auditStagedDataset(sql).single().usedQuanta)}
-        } finally {observed.close();context.deleteDatabase(otherName)}
+        } finally {observed.close();transactionThread.shutdownNow();context.deleteDatabase(otherName)}
     }
     @Test fun architectureCounterOnlyWitnessIsRefutedByRollbackWithoutAnyStampChange()=runBlocking {
         val m=med();val b=box(m);val r=record(m);consume(r,b,listOf(use(b)))

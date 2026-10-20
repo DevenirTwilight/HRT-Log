@@ -1,10 +1,86 @@
+## 【换号必读】P4 写入分解 WIP 检查点 — 2026-10-20
+
+负责人明确要求停止当前工作、将进度写库以换号接手。本检查点只保存成果，不启动新实验/原生跑分，不合并#57。**当前包含未完成的测试观察器，新版本地测试1项失败，不能认定完成或可合并。** P4保持DRAFT / PRODUCTION_BLOCKED / 正式入口OFF；未改生产源码、Room Schema、PNBAK1或加密格式、UI、PK、P5/P6、签名发布。
+
+### 分支、源码与证据
+
+- 仓库DevenirTwilight/HRT-Log，PR#57，分支feature/ansm03b-p4-exact-stock-20261016。已验证源码提交 `a697819e4c728b3e2802395d9ccc9023b1dd69b1`；本次WIP检查点是它的后继（以git log顶部实际SHA为准）。主线基线 `320171cdc882ec0b62830b60e2329a4174ffa31c`。
+- a697的PR合成merge `2b5146eac9f08cd4885ea6c1bb5b0c8e266e5480` 与源码tree完全相同：`75565f14ae4f3d2a0d73d12e90b557b0a1baafe6`。无未审分支合并/force push。
+- 集中报告 `docs/ansm-integration/p4/write-path-timing/report.md`；原始证据目录同级。报告后部含阶段性内容，**以本段最新WIP状态优先**；不要把中间GREEN当作当前HEAD GREEN。
+- 本次交接提交使用 `[skip ci]`，避免未验证的观察器又自动重复完整性能跑分。不是绕过合并门禁：PR继续Draft/NOT_ELIGIBLE，当前检查点没有声称CI通过，严禁据此合并。
+
+### 已有明确结论：新建记录没有第二次完整审计可删
+
+真实链：NotesRepository.measuredWriteTicket → Integration.ticket/state；另一个事务内recordMeasuredUse → Integration.create/validate → DAO临床记录、context、Store.consumeNewRecord/operation/allocation/ledger/receipt → 一次auditStagedDataset → 最外层COMMIT。
+
+正常新建记录最终只有**一次完整数据集审计**；连ticket共4次全操作链验证（ticket、validate、next、最终audit）。revise/restore/reconcile可有2–3次完整审计，但分别跨已冲销前态/bridge/count/新消费状态，尚无删除证明。scheduled路径有重复state检查但不属于新建验收路径。完整审计内部确有同快照第二次PRAGMA foreign_key_check，这是一个查询的重复，不是第二次全审计。
+
+A（SAVEPOINT后错误指纹仍匹配坏状态）、B（合法FK/投影/链的零效果重复CONSUME）原反例未修改；C部分UNIQUE索引仍仅test原型。未安装任何快验证器/跨事务信任缓存。最小可执行设计和证明义务在集中报告；新建路径理论可删0次完整审计，实测提速尚未证明。不同运行的独立探针禁止相加或相减冒充真实写入分解。
+
+### 原生已完成的事实（全部原始工件已入库）
+
+1. 最新起始基线27135013：run39465628009/artifact12286116312，SHA `3df88d23bcf68548548c9beeaeba82b2bbcdbc9f5fcce93766c5c9c52034a98a`、CRC通过。三写8.67/9.84/9.46s，全FAIL；audit7.84s/预测8.67s/backup10.42s/restore46.81s。`native-27135013/`。
+2. a697首次原生run39470688472/job118793653642/artifact12286459072，SHA `2110204250dad878a0bc95e8ab64f29cb9ce0b0fe698ff3af74dca5ffb1369a9`、CRC通过。准备阶段LMK杀测试PID3924，kill时RSS参考211112KiB，不是堆或RSS峰；所有验收与分段NOT_RUN，记录器尚关闭。死亡位于扩展完成到byte计数报告之前，具体分配及适配器因果UNKNOWN。`native-a697819-premeasurement-lmk/`。不能抹掉本轮内存失败。
+3. 只为补采缺失阶段，明确有界同源码workflow_dispatch run39472291324/job118799166208/artifact12287403857，SHA `3987741201492c61825fdd9e73daf807e3b26bba368d934a52aec78af9b63be1`、CRC通过。原始三写7.671/7.544/7.696s仍全部FAIL；audit9.021s/预测9.730s/backup9.989s/restore51.246s通过，峰值Java堆186937512B（非native RSS）。`native-a697819-heavy-observer/`。
+
+两次a697尝试均保留，原API26 SQLCipher、实际RAM520962048B / heap201326592B、14600记录/2000容器/32603行/19660924B、5s/15s/120s及全部原断言不变。没有生产提速或原预算通过；旧5.747/5.694/5.288s也全FAIL，不存在已稳定通过5秒的已验证基线。
+
+### 首次同次分解取得，但首版观察器过重，不能代表自然7–8秒
+
+同一补采调用完成真实COMMIT及独立post-commit完整audit；互斥分解数学核验通过。ticket begin1/commit1，write begin4/nested_finish3/commit1；6条domain INSERT、一条显式domain UPDATE，没有额外同线程完整事务混入该次COMMIT。下列数据只属于**过重观察器下的该笔真实调用**，不能推算原三写的各阶段：
+
+|项目|实测ms|
+|---|---:|
+|ticket API（含其自身事务）|6186.591|
+|写入validate core下界|6425.170|
+|6次INSERT（含同步触发器及驱动）|38.557|
+|显式UPDATE（含其触发器）|0.124|
+|写入最外层endTransaction/commit driver|7.269|
+|最终完整audit core下界|32387.339|
+|cores外其他driver|566.706|
+|未归因Java/调度/观察器/尾部|759.302|
+|draft/UUID及调用间观察器收尾|47.165|
+|合计|46418.225|
+
+其中dose_record INSERT6.553ms，supply_transaction INSERT4.910ms（含supply_cache的container UPDATE）；不能独立分离trigger exclusive、纯VM INSERT或纯原生COMMIT/fsync。两个FK游标窗口177.046/152.556ms是audit内嵌套值，不能再加总，第二个也不是已证实的消重提速。
+
+首版每个cursor getter计时、audit中约50126次inTransaction采集栈，观察开销极大：write仅可测观察器下界10673.451ms，ticket1452.923ms；其余GC/间接扰动无法扣除。**不得把46.4s或audit32.4s当作生产退步，不得做减法“校正”成自然7.5s。** 需要一次低开销计时才能完成原任务的自然写入归因；目前尚未取得。
+
+### 当前代码和验证状态（关键，尚未完成）
+
+- a697版本本地data472 PASS/0fail/0skip、native生成Kotlin编译PASS，工具68PASS。原始摘要/XML/日志在local-validation/。这些属于a697，不代表当前检查点。
+- a697 PR API29 job118793652357有新增observer合同失败（同源码push API29通过，具有调度依赖）。官方artifact12287247203，SHA `888e40ee2be35704032640fc87b3ed886d33391b27a3674d101fd2516a5daed5`、CRC通过，HTML及JSON已保存。Room可能在root.start后才在同一executor结束早先begin的后台事务，原观察器将线程身份混同事务身份。
+- 中间事务归属修正版：Frame区分controlled/successful，真正ticket/validate/audit入口绑定已观察外层begin；未知前置end及其他后台事务进入other_driver，不计入前台COMMIT/DML。新增单线程executor+latch反例，要求前台commit恰好1、完全在root内后台finish至少1、root前begin的未知finish1；原完整审计、库存、整笔异常回滚和dump一致断言均保留。focused RED→GREEN，随后全data命令及native源码编译PASS（`ownership-fixed-success-build.log`）；没有生产修改。
+- **当前最新轻量版WIP**：去掉cursor getter逐次计时，重用既有游标/ART证据；audit活跃期间重复inTransaction直接执行原db检查但不采栈；最后ReferenceAuditReads.finish的schema_version游标close作为audit边界，并要求finish marker数匹配。保留SQL变更/COMMIT/查询open-close与阶段边界；未单测游标读取放入未归因项，不隐藏。
+- 当前最新本地结果：native生成Kotlin编译PASS，**472 tests / 1 failure / 0 errors / 0 skipped（471通过）**。唯一失败为新增 `writePathObserverAccountsRealCommitAndPreservesFaultRollbackAndFullAudit`。已保存`light-observer-unfinished-red.xml`、`light-observer-unfinished-build.log`、summary、生成源码hash。输出audit_calls=1、finish_markers=1、validation_calls=1、chain_checks=2（期望3），且accounting_valid=false。**validity=false的具体触发尚未诊断，不能假称仅改链计数就一定解决。** 原业务和A/B/C断言没有删改。
+- 已知漏计原因：audit热路径跳过观察器inTransaction采栈，也漏掉checkedChain入口事件；实际数据库检查仍执行。建议接手把chain统计改为checkedChain实际SELECT query-open事件（冻结源码中每调用恰有一个SELECT），其他阶段也统一事件避免双计数；保留3+1原断言，不伪造计数。
+- 当前未验证轻量版不得直接跑下一轮大库，更不能接生产。首先用已有XML输出定位accounting_valid=false（span重叠、只读core写入、帧、超界等标记目前是Boolean，需最小、明确原因），修复计数并使现有强合同完整GREEN；再全data/编译/工具测试。没有新证据不得重复原重观察器跑分。
+
+### 接手步骤和停止边界
+
+1. 先读本段及集中报告、当前helper/共享合同；检查GitHub最新HEAD/CI，不能沿用此时的IN_PROGRESS当绿。
+2. 只处理测试层轻量观察器尚未通过的严格归因合同；保持生产完整oracle不动。先已有反例RED→GREEN，再完整回归；不要删除失败断言获取绿色。
+3. 低开销合同成立后才考虑一次必要原生测量。目标是同次真实写入的互斥区间，不能复用46s数据伪装自然路径；不改变固定夹具/原预算/原验证。若再次无新证据失败则停止、报告未知，不无限重跑。保留原样三写、所有预算、异常回滚、独立最终audit。新库/冷启动/重启/恢复首次基线性能本轮仍NOT_RUN，不得用预审计后第四笔写入冒充。
+4. 最终说明真正SQL变更、commit、ticket/身份、audit、其他与未知；新建只有一次全audit，不要虚构消除第二次可省数秒。FK或scheduled消重只有证明闭合才能进生产；当前无此生产改动。
+5. 若仍>5秒或安全证明不闭合，交付明确设计/阻塞并继续Draft/OFF，不自动合并，不动UI/P5/P6/PK/加密/权限/签名发布。
+
+交接前最后一次GitHub核对：a697 push完整Android/domain run39470678638已SUCCESS；PR run39470688230因上述API29观察器失败而FAIL；两次大库原生均FAIL（首次准备LMK，补采原预算超时）。snapshot已归档local-validation/ci-handoff-snapshot.json。当前检查点尚未验证，不能沿用a697的push绿色。
+
+### 命令/环境与持久性
+
+真实checkout：`/workspace/HRT-Log-checkout`（不要用旧部分镜像`/workspace/HRT-Log`）。本环境Java原装只有JRE；已装`/workspace/jdk21`与SDK`/workspace/android-sdk`，其他账号/环境可能需重装。执行示例：`JAVA_HOME=/workspace/jdk21 ANDROID_HOME=/workspace/android-sdk JAVA_TOOL_OPTIONS=-Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts ./gradlew :core:data:compileDebugAndroidTestKotlin :core:data:testDebugUnitTest -ProbolectricDir=/workspace/HRT-Log-checkout/build/robolectric-jars --no-daemon`。Robolectric jars通过`./gradlew robolectricJars`预取；Gradle网络需环境代理/系统CA。本地没有KVM，不把JVM结果当原生SQLCipher。
+
+native生成：`python scripts/prepare_ansm_native_performance.py`，生成文件不提交；结束`--clean`。模板SHA9313167178989def0d4d89d785f84cdde764fba21033543cdf85e472c5511242保持不变。工具测试：`python -m unittest discover -s scripts -p 'test_ansm*.py'`（最后68PASS）。本次仅交接，不启动新CI/性能验证；持久化原始证据和明确未完成状态，接手先核实际SHA与CI。
+
+---
+
 ## P4 真实写入分解进行中（2026-10-20）
 
 基线27135013 / 主线320171cd；#57仍Draft、auto_merge=null、入口OFF。本轮没有生产或Schema/备份格式修改。新建recordMeasuredUse只有一次完整数据集审计；连ticket有4次全链验证。revise/restore/reconcile可能2–3次完整审计，但跨不同中间状态，尚不能安全删除。完整审计内确有同快照重复FK查询。决策与调用链已集中写入 `docs/ansm-integration/p4/write-path-timing/report.md`，不再复制旧报告。
 
 最新完成原生39465628009/artifact12286116312官方/下载SHA3df88d23…一致、CRC通过，原14600/2000/32603/19660924B与512MiB/192MiB不变：audit7.84s、forecast8.67s、backup10.42s、restore46.81s；三写8.67/9.84/9.46s全部FAIL。旧5.75/5.69/5.29s也全FAIL，没有曾经稳定通过5秒。原始报告及ART摘要已归档native-27135013；旧分离探针不能相加冒充真实写入分解。
 
-仅historyTest新增SupportSQLite适配器观测真实SQL、cursor、事务层级及提交/回滚；原始native阶段recorder关闭，全部原预算和只读/ART诊断后另做一笔真实提交诊断，保留独立全审计。共享小型合同检查SQL计时、审计/链次数、提交与异常全回滚。工具68项PASS；生成native Kotlin编译PASS；观察器首轮漏计Kotlin internal名导致RED，按$分段修复且原断言保留，提交/回滚共享合同1项PASS（原始RED/GREEN XML归档）；最终全data回归与修正后native编译进行中，新增原生同次分解目前待验证，不可宣称已取得分解或提速。触发器exclusive、纯原生COMMIT和部分receipt/Java尾部不能独立测量，需如实保留未知。下一步先完成编译与计时合同验证，之后仅一次有新证据价值的原生运行；无完整证明不接快验证器/不删中间全审计，不重复原失败跑分。
+仅historyTest新增SupportSQLite适配器观测真实SQL、cursor、事务层级及提交/回滚；原始native阶段recorder关闭，全部原预算和只读/ART诊断后另做一笔真实提交诊断，保留独立全审计。共享小型合同检查SQL计时、审计/链次数、提交与异常全回滚。工具68项PASS；生成native Kotlin编译PASS；观察器首轮漏计Kotlin internal名导致RED，按$分段修复且原断言保留，提交/回滚共享合同1项PASS（原始RED/GREEN XML归档）；最终全data472项PASS（0失败/错误/跳过）与修正后生成native Kotlin编译PASS，新增原生首次39470688472在准备阶段被LMK杀PID3924，写入分解及所有验收NOT_RUN（完整原始证据已归档native-a697819-premeasurement-lmk）；限定一次同源码诊断补采39472291324运行中，第二次仍准备失败即停止，不可宣称已取得分解或提速。触发器exclusive、纯原生COMMIT和部分receipt/Java尾部不能独立测量，需如实保留未知。API29原生另暴露计时器把同线程先前Room后台事务当作当前操作的问题，原生RED和单线程latch复现已保存；仅测试层修正为受控事务帧归属，前台COMMIT/DML与背景收尾分开，并加强真实外层commit断言，正在做最终回归。下一步取得有界补采与归属修正功能证据；无完整证明不接快验证器/不删中间全审计，不重复原失败跑分。
 
 ## P4 三方案有限决策与最终原生结果 — 2026-10-20
 

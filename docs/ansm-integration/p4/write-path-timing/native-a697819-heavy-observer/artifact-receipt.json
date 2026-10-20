@@ -1,0 +1,14 @@
+{
+  "head": "a697819e4c728b3e2802395d9ccc9023b1dd69b1",
+  "run": 39472291324,
+  "job": 118799166208,
+  "artifact_id": 12287403857,
+  "zip_size": 200959,
+  "official_and_download_sha256": "3987741201492c61825fdd9e73daf807e3b26bba368d934a52aec78af9b63be1",
+  "zip_crc": "PASS",
+  "original_budget": "FAIL",
+  "post_budget_diagnostic": "COMPLETE_WITH_INDEPENDENT_POST_COMMIT_FULL_AUDIT_PASS",
+  "disjoint_arithmetic": "PASS",
+  "foreground_footprint": "ticket begin1/commit1; write begin4/nested_finish3/commit1, six domain INSERTs/one explicit domain UPDATE; no extra complete owner transaction",
+  "observational_limits": "Heavy observer inflates wall 46.418s vs original 7.54-7.70s. Never subtract its overhead or treat its audit32.387s as natural write cost."
+}

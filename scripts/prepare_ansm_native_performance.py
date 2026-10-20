@@ -287,6 +287,7 @@ def native_source(text):
             file.writeText(report.toString(2))
             assertTrue(capturedTicket.toString(),capturedTicket.getBoolean("accounting_valid"))
             assertTrue(capturedWrite.toString(),capturedWrite.getBoolean("accounting_valid"))
+            assertTrue("Real outer COMMIT must be observed",capturedWrite.getLong("commit_driver_ns")>0)
             assertEquals(1,capturedTicket.getInt("chain_checks"))
             assertEquals(1,capturedWrite.getInt("audit_calls"));assertEquals(1,capturedWrite.getInt("validation_calls"))
             assertEquals(3,capturedWrite.getInt("chain_checks"))
