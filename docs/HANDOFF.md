@@ -1,3 +1,15 @@
+## P4 安全去重收尾：生产改动已验证，有限原生两次FAIL — 2026-10-20
+
+候选f1c638ba622d28d90a6048c65055d7967cfb0465，基线6ee217f8/实测87e9df95，主线仍320171cd。#57保持Draft / PRODUCTION_BLOCKED / 入口OFF / autoMergeRequest=null，不合并。只改生产MeasuredConsumptionStore同步只读审计内重复第二FK，保留BackupValidation独立检查、最终全量oracle及操作链4次验证；无Schema/PNBAK1/UI/PK/P5/P6/权限签名发行变化。说明/机器证据在`docs/ansm-integration/p4/safe-dedup/result.md`，不要将下面旧的“原生待验”历史检查点当成当前状态。
+
+本地完整data475/库存142/工具46 PASS，生成native Android编译PASS；新增3项拒绝、回滚与旧双FK/全SQL oracle差分，RED与GREEN均保留。API26/29/35真实SQLCipher库存各142全PASS（工件SHA/CRC/HTML核验）；PR六类必需CI全SUCCESS，push重复Android暂PENDING，单独记录。构建工件核验data475/reminder21/PeriodStability5 PASS，App1839=1562 PASS+277 SKIPPED、0FAIL。PR合成merge546029f2与分支候选tree均d2d5f1f，源码一致；两个原生生成测试hash7a32a88f，原冻结模板hash93131671不变。
+
+预定两次候选原生均结束，**不再增加重试或毫秒优化**：
+- 自动run39486040353/job118846590122/artifact12292904917，在full_encrypted_restore阶段LMK杀测试PID3848；kernel to free213472KiB仅终止参考非峰值。恢复未完成、三写与额外分段NOT_RUN。已完成audit6328.717/forecast5845.611/backup6806.329ms PASS，不能把不完整budget表当通过。
+- 同源码dispatch39486045081/job118846611356/artifact12294676265，三写7423.083/7170.355/7335.245ms全部FAIL；audit9066.895/forecast11446.250/backup11660.860/restore42661.004ms PASS。Java观测峰198631952B=189.430MiB，仅2.570MiB余量，非连续RSS/native峰。额外第四笔9627.281ms，FK已减为1、audit1/chain票据1+写3、post-commit独立完整oracle PASS。原生环境/夹具/全部预算不变；ZIP官方SHA/独立下载/CRC、pre-cleanup与完整报告一致均核验。
+
+没有可证实的生产提速或稳定性；不同宿主/JIT/GC差异不归因于去重，旧149.704ms不是实测收益。操作链头复用NOT_IMPLEMENTED，跨callback/多节点追加的保全与完整差分未证明；没有引入快验证器/跨事务缓存。冷启动/重启/恢复冷首次/真机/连续RSS仍NOT_RUN。后续需独立处理恢复内存安全，并评审方案C的完整谓词/迁移/备份/生命周期证明或产品准入政策，不能把部分UNIQUE当全库证明或改原预算。当前不具备合并条件，P5/P6未实施，没有APK交付。证据收尾只提交文档[skip ci]以避免第三次相同源码性能运行，CI属于f1c638ba，不宣称文档HEAD重新通过；保留push重复job的实际状态。
+
 ## P4 安全去重候选：本地data475/原生编译PASS，原生待验 — 2026-10-20
 
 从6ee217f8/实测87e9df95接手，主线仍320171cd。真实生产修改仅MeasuredConsumptionStore私有只读审计内删除重复的第二次foreign_key_check；BackupValidation独立入口和最终完整审计不变。严格作用域证明/有限验收计划见`docs/ansm-integration/p4/safe-dedup/decision.md`。不是删除第二次全审计，没有跨事务可信状态；A/B反例、C测试原型保持不变，正式入口OFF、#57 Draft且不自动合并。

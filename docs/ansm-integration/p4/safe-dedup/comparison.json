@@ -1,0 +1,203 @@
+[
+  {
+    "status": "DIAGNOSTIC_BUDGET_PASS",
+    "stage": "post_write_full_audit",
+    "api": 26,
+    "device_total_ram_bytes": 520962048,
+    "process_max_heap_bytes": 201326592,
+    "records": 14600,
+    "containers": 2000,
+    "row_count": 32603,
+    "raw_business_json_bytes": 19660924,
+    "full_audit_ms": 5381.74239,
+    "shared_forecast_ms": 7999.64354,
+    "full_encrypted_backup_ms": 7106.39601,
+    "full_encrypted_restore_ms": 24956.86779,
+    "restored_full_audit_ms": 4620.51942,
+    "post_restore_write_including_ticket_ms": [
+      4979.27688,
+      4804.10209,
+      4727.1386
+    ],
+    "post_write_full_audit_ms": 3897.38695,
+    "peak_observed_jvm_heap_bytes": 199241928,
+    "peak_observed_database_disk_bytes": 35891824,
+    "heap_sample_interval_ms": 10,
+    "budget_exceeded": [],
+    "api26_low_memory_acceptance": "EMULATOR_BUDGET_PASS",
+    "physical_device_acceptance": "NOT_RUN",
+    "zip_sha256": "b26ca0e48292a9c817b64cec11adde7828b619738d8f91209f3dcdcc40f03b25",
+    "diagnostic": {
+      "total_ns": 5734912240,
+      "exclusive_partition_ns": {
+        "ticket_api": 414363680,
+        "validation_core_lower_bound": 502387070,
+        "insert_including_triggers": 18562620,
+        "update_including_triggers": 72400,
+        "delete_including_triggers": 0,
+        "commit_driver": 5652330,
+        "audit_core_lower_bound": 4435771450,
+        "other_driver": 7147160,
+        "write_unattributed": 322851950,
+        "outside_ticket_and_write": 28103580
+      },
+      "valid": [
+        true,
+        true
+      ],
+      "chain_checks": [
+        1,
+        3
+      ],
+      "audit_calls": 1,
+      "fk_windows_nested_ns": [
+        150785670,
+        149703910
+      ],
+      "post_commit_oracle": "PASS",
+      "status": "COMPLETE"
+    },
+    "environment": {
+      "dalvik.vm.heapsize": "192m",
+      "dalvik.vm.heapgrowthlimit": "192m",
+      "ro.config.low_ram": "",
+      "ro.product.cpu.abi": "x86",
+      "MemTotal": "MemTotal:         508752 kB"
+    },
+    "execution": {
+      "test_exit": 0,
+      "collection_exit": 0,
+      "run_token": "b9bafaed-406e-4a8d-b7b7-c846d790d9b1"
+    },
+    "source": {
+      "source_sha256": "9313167178989def0d4d89d785f84cdde764fba21033543cdf85e472c5511242",
+      "native_sha256": "967b73e97a77c9306753797619ba9446e14be7d4ee705c5da196ae71faa6fc0e",
+      "status": "GENERATED_NOT_RUN"
+    },
+    "run_id": 39478425938,
+    "artifact_id": 12290661559
+  },
+  {
+    "status": "IN_PROGRESS",
+    "stage": "full_encrypted_restore",
+    "api": 26,
+    "device_total_ram_bytes": 520962048,
+    "process_max_heap_bytes": 201326592,
+    "records": 14600,
+    "containers": 2000,
+    "row_count": 32603,
+    "raw_business_json_bytes": 19660924,
+    "full_audit_ms": 6328.71668,
+    "shared_forecast_ms": 5845.61112,
+    "full_encrypted_backup_ms": 6806.32879,
+    "full_encrypted_restore_ms": null,
+    "restored_full_audit_ms": null,
+    "post_restore_write_including_ticket_ms": null,
+    "post_write_full_audit_ms": null,
+    "peak_observed_jvm_heap_bytes": 178191976,
+    "peak_observed_database_disk_bytes": 36015064,
+    "heap_sample_interval_ms": null,
+    "budget_exceeded": null,
+    "api26_low_memory_acceptance": null,
+    "physical_device_acceptance": null,
+    "zip_sha256": "d41f18fdb2551981025e33facd5fb48b5dca0744ca7e37f46a4835e830710ae9",
+    "environment": {
+      "dalvik.vm.heapsize": "192m",
+      "dalvik.vm.heapgrowthlimit": "192m",
+      "ro.config.low_ram": "",
+      "ro.product.cpu.abi": "x86",
+      "MemTotal": "MemTotal:         508752 kB"
+    },
+    "execution": {
+      "test_exit": 1,
+      "collection_exit": 1,
+      "run_token": "1e7fdebd-64ce-4575-850b-d25bec4c681e"
+    },
+    "source": {
+      "source_sha256": "9313167178989def0d4d89d785f84cdde764fba21033543cdf85e472c5511242",
+      "native_sha256": "7a32a88fba6654782c0efed2ab6f1df368d670135ebb212542b4dae54533898e",
+      "status": "GENERATED_NOT_RUN"
+    },
+    "run_id": 39486040353,
+    "artifact_id": 12292904917
+  },
+  {
+    "status": "DIAGNOSTIC_BUDGET_FAIL",
+    "stage": "post_write_full_audit",
+    "api": 26,
+    "device_total_ram_bytes": 520962048,
+    "process_max_heap_bytes": 201326592,
+    "records": 14600,
+    "containers": 2000,
+    "row_count": 32603,
+    "raw_business_json_bytes": 19660924,
+    "full_audit_ms": 9066.89529,
+    "shared_forecast_ms": 11446.24971,
+    "full_encrypted_backup_ms": 11660.86048,
+    "full_encrypted_restore_ms": 42661.0038,
+    "restored_full_audit_ms": 7960.60921,
+    "post_restore_write_including_ticket_ms": [
+      7423.08343,
+      7170.35497,
+      7335.24536
+    ],
+    "post_write_full_audit_ms": 6504.69512,
+    "peak_observed_jvm_heap_bytes": 198631952,
+    "peak_observed_database_disk_bytes": 35908256,
+    "heap_sample_interval_ms": 10,
+    "budget_exceeded": [
+      "post_restore_write_including_ticket_ms"
+    ],
+    "api26_low_memory_acceptance": "FAIL",
+    "physical_device_acceptance": "NOT_RUN",
+    "zip_sha256": "873d055d6a857b71d0b6c6e31ff4b2c9766414997434e7e6d2cdb61396be7fd2",
+    "diagnostic": {
+      "total_ns": 9627281420,
+      "exclusive_partition_ns": {
+        "ticket_api": 746960610,
+        "validation_core_lower_bound": 472586600,
+        "insert_including_triggers": 26878760,
+        "update_including_triggers": 124460,
+        "delete_including_triggers": 0,
+        "commit_driver": 3994740,
+        "audit_core_lower_bound": 7686646950,
+        "other_driver": 14750640,
+        "write_unattributed": 636031040,
+        "outside_ticket_and_write": 39307620
+      },
+      "valid": [
+        true,
+        true
+      ],
+      "chain_checks": [
+        1,
+        3
+      ],
+      "audit_calls": 1,
+      "fk_windows_nested_ns": [
+        387737610
+      ],
+      "post_commit_oracle": "PASS",
+      "status": "COMPLETE"
+    },
+    "environment": {
+      "dalvik.vm.heapsize": "192m",
+      "dalvik.vm.heapgrowthlimit": "192m",
+      "ro.config.low_ram": "",
+      "ro.product.cpu.abi": "x86",
+      "MemTotal": "MemTotal:         508752 kB"
+    },
+    "execution": {
+      "test_exit": 1,
+      "collection_exit": 1,
+      "run_token": "267d8358-b7e3-401b-ace6-df6d987308de"
+    },
+    "source": {
+      "source_sha256": "9313167178989def0d4d89d785f84cdde764fba21033543cdf85e472c5511242",
+      "native_sha256": "7a32a88fba6654782c0efed2ab6f1df368d670135ebb212542b4dae54533898e",
+      "status": "GENERATED_NOT_RUN"
+    },
+    "run_id": 39486045081,
+    "artifact_id": 12294676265
+  }
+]

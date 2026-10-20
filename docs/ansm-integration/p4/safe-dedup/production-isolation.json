@@ -1,0 +1,45 @@
+{
+  "baseline": "6ee217f8e03be94c95aa50f724632c33c891cc39",
+  "candidate": "f1c638ba622d28d90a6048c65055d7967cfb0465",
+  "paths": {
+    "core/data/schemas": {
+      "before": "a9d0ee71c5e6c1968e2b2504c5b2da9d57eca87d",
+      "after": "a9d0ee71c5e6c1968e2b2504c5b2da9d57eca87d",
+      "unchanged": true
+    },
+    "core/data/src/main/java/net/plainnotes/app/data/BackupValidation.kt": {
+      "before": "c32844d051ee8831032a361591634c48922774bd",
+      "after": "c32844d051ee8831032a361591634c48922774bd",
+      "unchanged": true
+    },
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredOperationChain.kt": {
+      "before": "010fbed1d311615594c54a253f85bab9acadbdd7",
+      "after": "010fbed1d311615594c54a253f85bab9acadbdd7",
+      "unchanged": true
+    },
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredUseIntegration.kt": {
+      "before": "289968555d03901b1a63fa32abcdffd8c4106fa9",
+      "after": "289968555d03901b1a63fa32abcdffd8c4106fa9",
+      "unchanged": true
+    },
+    "core/data/src/main/java/net/plainnotes/app/data/DataTransfer.kt": {
+      "before": "8c949cea0410b3d7aaa592d217a46995db3053df",
+      "after": "8c949cea0410b3d7aaa592d217a46995db3053df",
+      "unchanged": true
+    },
+    "app/src/main": {
+      "before": "7417b3ed5c2f67a0567de0600977396c990d4392",
+      "after": "7417b3ed5c2f67a0567de0600977396c990d4392",
+      "unchanged": true
+    },
+    "pk-engine/src/main": {
+      "before": "d786d084afe475df67a42c17b5220790800d2aa4",
+      "after": "d786d084afe475df67a42c17b5220790800d2aa4",
+      "unchanged": true
+    }
+  },
+  "production_jar_contains_test_observer": false,
+  "pr_synthetic_merge": "546029f2f46dfcf3783b719e7b2e2c82b025e01d",
+  "pr_merge_and_candidate_tree": "d2d5f1f5019d45a225c42dde72b24e5df67f8e3d",
+  "pr_merge_candidate_tree_equal": true
+}

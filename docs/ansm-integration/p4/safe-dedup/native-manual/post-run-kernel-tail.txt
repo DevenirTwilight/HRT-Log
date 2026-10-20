@@ -1,0 +1,80 @@
+[  468.000141] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  468.100196] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  482.364370] healthd: battery l=100 v=5000 t=25.0 h=2 st=2 chg=a
+[  499.040225] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  499.140140] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  512.439420] init: processing action (qemu.adbd=start)
+[  512.440783] init: processing action (sys.usb.config=adb && sys.usb.configfs=0)
+[  512.450463] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  512.452838] init: write_file: Unable to open '/sys/class/android_usb/android0/idVendor': No such file or directory
+[  512.455422] init: write_file: Unable to open '/sys/class/android_usb/android0/idProduct': No such file or directory
+[  512.458529] init: write_file: Unable to open '/sys/class/android_usb/android0/functions': No such file or directory
+[  512.461208] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  523.170542] ieee80211 phy0: hwsim hw_scan request
+[  523.170641] ieee80211 phy0: hw scan 2412 MHz
+[  523.200232] ieee80211 phy0: hw scan 2417 MHz
+[  523.230143] ieee80211 phy0: hw scan 2422 MHz
+[  523.260188] ieee80211 phy0: hw scan 2427 MHz
+[  523.290190] ieee80211 phy0: hw scan 2432 MHz
+[  523.320134] ieee80211 phy0: hw scan 2437 MHz
+[  523.350110] ieee80211 phy0: hw scan 2442 MHz
+[  523.380159] ieee80211 phy0: hw scan 2447 MHz
+[  523.410188] ieee80211 phy0: hw scan 2452 MHz
+[  523.440105] ieee80211 phy0: hw scan 2457 MHz
+[  523.470099] ieee80211 phy0: hw scan 2462 MHz
+[  523.500135] ieee80211 phy0: hw scan 2467 MHz
+[  523.620110] ieee80211 phy0: hw scan 2472 MHz
+[  523.740135] ieee80211 phy0: hw scan 2484 MHz
+[  523.860190] ieee80211 phy0: hw scan complete
+[  523.860200] ieee80211 phy0: hwsim hw_scan request
+[  523.860203] ieee80211 phy0: hw scan 5180 MHz
+[  523.980106] ieee80211 phy0: hw scan 5200 MHz
+[  524.100180] ieee80211 phy0: hw scan 5220 MHz
+[  524.220118] ieee80211 phy0: hw scan 5240 MHz
+[  524.340190] ieee80211 phy0: hw scan 5260 MHz
+[  524.460209] ieee80211 phy0: hw scan 5280 MHz
+[  524.580464] ieee80211 phy0: hw scan 5300 MHz
+[  524.700105] ieee80211 phy0: hw scan 5320 MHz
+[  524.820136] ieee80211 phy0: hw scan 5500 MHz
+[  524.940189] ieee80211 phy0: hw scan 5520 MHz
+[  525.060193] ieee80211 phy0: hw scan 5540 MHz
+[  525.180186] ieee80211 phy0: hw scan 5560 MHz
+[  525.300136] ieee80211 phy0: hw scan 5580 MHz
+[  525.420136] ieee80211 phy0: hw scan 5600 MHz
+[  525.540190] ieee80211 phy0: hw scan 5620 MHz
+[  525.660137] ieee80211 phy0: hw scan 5640 MHz
+[  525.780152] ieee80211 phy0: hw scan 5660 MHz
+[  525.900108] ieee80211 phy0: hw scan 5680 MHz
+[  526.020188] ieee80211 phy0: hw scan 5700 MHz
+[  526.140156] ieee80211 phy0: hw scan complete
+[  526.140208] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  526.142928] ieee80211 phy0: mac80211_hwsim_get_survey (idx=0)
+[  526.240515] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  542.364488] healthd: battery l=100 v=5000 t=25.0 h=2 st=2 chg=a
+[  557.120219] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  557.220256] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  572.442332] init: processing action (qemu.adbd=start)
+[  572.443625] init: processing action (sys.usb.config=adb && sys.usb.configfs=0)
+[  572.445297] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  572.447614] init: write_file: Unable to open '/sys/class/android_usb/android0/idVendor': No such file or directory
+[  572.450005] init: write_file: Unable to open '/sys/class/android_usb/android0/idProduct': No such file or directory
+[  572.452665] init: write_file: Unable to open '/sys/class/android_usb/android0/functions': No such file or directory
+[  572.454813] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  588.000194] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  588.100110] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  602.365055] healthd: battery l=100 v=5000 t=25.0 h=2 st=2 chg=a
+[  619.040209] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  619.140227] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  632.444532] init: processing action (qemu.adbd=start)
+[  632.445997] init: processing action (sys.usb.config=adb && sys.usb.configfs=0)
+[  632.447573] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  632.449540] init: write_file: Unable to open '/sys/class/android_usb/android0/idVendor': No such file or directory
+[  632.452884] init: write_file: Unable to open '/sys/class/android_usb/android0/idProduct': No such file or directory
+[  632.455102] init: write_file: Unable to open '/sys/class/android_usb/android0/functions': No such file or directory
+[  632.457642] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  632.928925] binder_alloc: 3929: binder_alloc_buf, no vma
+[  632.930138] binder: 2790:2974 transaction failed 29189/-3, size 4-0 line 3124
+[  632.932987] binder: send failed reply for transaction 120723 to 3929:3948
+[  632.940446] binder: undelivered TRANSACTION_COMPLETE
+[  632.942053] binder: undelivered TRANSACTION_ERROR: 29189
+[  634.535429] init: Untracked pid 3886 killed by signal 1

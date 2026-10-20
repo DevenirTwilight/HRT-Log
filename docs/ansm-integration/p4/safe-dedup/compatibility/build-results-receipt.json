@@ -1,0 +1,28 @@
+{
+  "run_id": 39486040221,
+  "artifact_id": 12293319416,
+  "official_and_download_sha256": "80c7e12829b400a3067e57474a823e8df64922e2a694d9336e92cd8076acb401",
+  "zip_crc": "PASS",
+  "tests": {
+    "app": {
+      "tests": 1839,
+      "failures": 0,
+      "skipped": 277
+    },
+    "data": {
+      "tests": 475,
+      "failures": 0,
+      "skipped": 0
+    },
+    "reminder": {
+      "tests": 21,
+      "failures": 0,
+      "skipped": 0
+    },
+    "PeriodStabilityTest": {
+      "tests": 5,
+      "failures": 0,
+      "skipped": 0
+    }
+  }
+}
