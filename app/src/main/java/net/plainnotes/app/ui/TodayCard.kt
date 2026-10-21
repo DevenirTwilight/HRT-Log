@@ -82,9 +82,12 @@ internal val LocalTodayClock = staticCompositionLocalOf<() -> Instant> { Instant
     Surface(color = c.primary, contentColor = c.onPrimary, shape = Corners.xxl, modifier = Modifier.fillMaxWidth().testTag("today-card")) {
         Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             // UI-05 A: progress as a translucent pill at the right of the date row.
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s)) {
+            // The progress pill wraps under the date when both do not fit (2× font at 320 dp) instead of squeezing the date.
+            @OptIn(ExperimentalLayoutApi::class)
+            FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalArrangement = Arrangement.spacedBy(Spacing.xs),
+                itemVerticalAlignment = Alignment.CenterVertically) {
                 Text(stringResource(R.string.today) + " · " + formatShortDate(today), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.weight(1f).semantics { heading() }.testTag("today-date"))
+                    modifier = Modifier.padding(end = Spacing.s).semantics { heading() }.testTag("today-date"))
                 if (total > 0) Surface(color = c.onPrimary.copy(alpha = 0.16f), contentColor = c.onPrimary, shape = Corners.pill, modifier = Modifier.testTag("today-progress-pill")) {
                     Text(stringResource(R.string.today_progress, taken.size, total), style = MaterialTheme.typography.labelLarge.tnum(),
                         modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp).testTag("today-progress"))
@@ -293,19 +296,27 @@ private fun recordStatus(r: RecordEntity) = statusTextRes(StatusStyles.ofRecord(
                 // UI-07 B: home cards are 28 dp.
                 Surface(onClick = onStock, color = c.tertiaryContainer, contentColor = c.onTertiaryContainer, shape = Corners.xl,
                     modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp).testTag("home-stock-view")) {
+                    // Above 1.3× font the button goes under the text, so the name is not squeezed to one letter per line.
+                    val stacked = androidx.compose.ui.platform.LocalDensity.current.fontScale > NUMBER_FONT_SCALE_CAP
+                    @Composable fun Texts(modifier: Modifier) = Column(modifier) {
+                        Text(stringResource(R.string.home_stock_low, m.name), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                        Text(if (f.lastCovered != null && days != null && days >= 1) stringResource(R.string.stock_runs_out_in, days) else stringResource(R.string.forecast_empty),
+                            style = MaterialTheme.typography.bodySmall.tnum())
+                    }
+                    @Composable fun Add() {
+                        val press = remember { MutableInteractionSource() }; val morph = rememberPressMorph(press, rest = 24.dp)
+                        Button({ onAdd(m) }, Modifier.heightIn(min = 48.dp).pressMorph(morph).testTag("home-stock-add:${m.id}"), shape = morph.shape, interactionSource = press,
+                            colors = ButtonDefaults.buttonColors(containerColor = c.tertiary, contentColor = c.onTertiary)) { Text(stringResource(R.string.stock_add)) }
+                    }
+                    if (stacked) Column(Modifier.padding(horizontal = Spacing.l, vertical = Spacing.m), verticalArrangement = Arrangement.spacedBy(Spacing.s)) {
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.m)) { Icon(Icons.Outlined.Inventory2, null); Texts(Modifier.weight(1f)) }
+                        Add()
+                    } else
                     Row(Modifier.padding(horizontal = Spacing.l, vertical = Spacing.m), verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(Spacing.m)) {
                         Icon(Icons.Outlined.Inventory2, null)
-                        Column(Modifier.weight(1f)) {
-                            Text(stringResource(R.string.home_stock_low, m.name), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-                            Text(if (f.lastCovered != null && days != null && days >= 1) stringResource(R.string.stock_runs_out_in, days) else stringResource(R.string.forecast_empty),
-                                style = MaterialTheme.typography.bodySmall.tnum())
-                        }
-                        val press = remember { MutableInteractionSource() }; val morph = rememberPressMorph(press, rest = 24.dp)
-                        Button({ onAdd(m) }, Modifier.heightIn(min = 48.dp).pressMorph(morph).testTag("home-stock-add:${m.id}"), shape = morph.shape, interactionSource = press,
-                            colors = ButtonDefaults.buttonColors(containerColor = c.tertiary, contentColor = c.onTertiary)) {
-                            Text(stringResource(R.string.stock_add))
-                        }
+                        Texts(Modifier.weight(1f))
+                        Add()
                     }
                 }
             }
