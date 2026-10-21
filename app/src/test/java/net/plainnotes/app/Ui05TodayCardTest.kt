@@ -66,7 +66,7 @@ class Ui05TodayCardTest {
 
     @Test fun overdueShowsTheWordsAndNoCountdown() {
         show(listOf(entry(9, SlotState.OVERDUE)), now = at(10))
-        inCard(hasTestTag("today-next-status")).assertTextEquals(s(R.string.today_overdue))
+        inCard(hasTestTag("today-next-status")).assertTextEquals(s(R.string.status_past_time))  // UI-06: "Past time · you can still log it"
         inCard(hasTestTag("today-countdown")).assertDoesNotExist()
     }
 

@@ -50,6 +50,9 @@ private fun ColorScheme.withContrast(c: Contrast, dark: Boolean): ColorScheme = 
         background = if (dark) Color.Black else Color.White, surface = if (dark) Color.Black else Color.White)
 }
 
+/** The app's own (non-dynamic) scheme at a contrast level; what [NotesTheme] uses without dynamic colour. */
+fun notesColorScheme(dark: Boolean, contrast: Contrast = Contrast.STANDARD): ColorScheme = (if (dark) Dark else Light).withContrast(contrast, dark)
+
 @Composable fun NotesTheme(mode: ThemeMode = ThemeMode.SYSTEM, dynamicColor: Boolean = false, contrast: Contrast = Contrast.STANDARD, content: @Composable () -> Unit) {
     val dark = when (mode) { ThemeMode.SYSTEM -> isSystemInDarkTheme(); ThemeMode.LIGHT -> false; ThemeMode.DARK -> true }
     val scheme: ColorScheme = if (dynamicColor && Build.VERSION.SDK_INT >= 31) {

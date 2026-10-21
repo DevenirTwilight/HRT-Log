@@ -52,7 +52,8 @@ class CalendarDayMarkTest(private val locale: String) {
         assertNull(mark(today.plusDays(5)))
         // Words are still spoken; the shape is an extra, not a replacement.
         assertTrue(node(today.minusDays(2)).config[SemanticsProperties.ContentDescription].joinToString().contains(ui.activity.getString(R.string.legend_missed)))
-        assertEquals(mapOf(DayKind.TAKEN to DayMark.CHECK, DayKind.PARTIAL to DayMark.HALF, DayKind.MISSED to DayMark.CROSS),
+        // UI-06: unconfirmed days now have their own ? mark.
+        assertEquals(mapOf(DayKind.TAKEN to DayMark.CHECK, DayKind.PARTIAL to DayMark.HALF, DayKind.MISSED to DayMark.CROSS, DayKind.UNCONFIRMED to DayMark.QUESTION),
             DayKind.entries.mapNotNull { k -> dayMark(k)?.let { k to it } }.toMap())
     }
 }
