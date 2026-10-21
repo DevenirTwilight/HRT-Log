@@ -1049,3 +1049,12 @@ LAB-03 独立扩大常见激素、血常规、肝肾、血脂、血糖项目及�
 LAB-03 的同文件增量授权记录 `PD-2026-10-19-LAB03-CATALOG-ADAPTER`：依据本任务四、五、八节，抽离项目/单位适配，接入完整项目选择器，保持原14项既有 Double 换算不变；单项编辑保留原始结果单位、独立参考单位和未更改的采血瞬间/时区，允许未知原始代码/单位继续显示编辑，不猜测换算。无 PK/校准资格、趋势算法或持久化结构修改。与 LAB-UI-03 分支合并后需对最终文件另记 SHA，不以任一分支的局部通过冒充最终集成通过。
 
 本批历史保护补充：`NotesViewModel.saveLabPanel` 只接收当前打开的化验单原始快照；当编辑界面的本地采血时间未改变，保留其原 UTC 毫秒和时区，避免仅改备注/机构时重建夏令时重叠瞬间。用户明确改变时间时沿用既有 wallInstant 策略。不改 Repository、Schema、冻结估算、校准或其他 ViewModel 计算。
+
+
+## 115. UI-06：语义色与状态体系（2026-10-21）
+
+任务书原文：`docs/audits/product-quality-2026-10/sources/ui06/ui06-prompt.md`（SHA-256 `4807bae3c07abd73f3bbe338cad7de4c7a45f51f2f7ea581d462414cd661b542`），负责人 2026-10-21 上传，已确认画布上的 UI-06 样图（执行以任务书文字为准）。
+
+建立语义色令牌（action / attention / success / missed / unconfirmed / skipped / danger，浅深两套初值见任务书 A 节，中、高对比度派生，动态取色时 action、success 跟随 primary，danger 跟随 error，其余固定），所有服药状态通过 `core/ui` 的一个映射函数取得令牌、符号和文字。红色只留给真正的错误和不可撤销的删除：漏服改为中性暖灰加描边，未确认为虚线，已过时间与库存提醒改为 attention。首页新增“还没有记录”确认卡（最近 48 小时的未确认服药，最多 2 条；“我服过了”打开现有补记对话框，“没有服”调用现有 `confirmMissed`，不新增写入路径）。`Corners.badge` 改名 `Corners.tag`，新增 `Corners.pill`（完全圆角），`StatusPill` 与主按钮完全圆角。“部分漏服”文案改为“部分完成”。
+
+不改受保护的浓度页、`ConcChart`、化验页、`LabContextSection`、`Exports`（其中的红色列入报告留作后续）；不改 ViewModel、仓库、Room、备份、加密、锁、伪装、PK、提醒逻辑和任何状态判定规则；不升级 Compose、不用实验性 API；不新增依赖、权限、网络、埋点；“提醒未送达”不在日历显示；不改 versionCode、不交付 APK。按 §106 自动合并。
