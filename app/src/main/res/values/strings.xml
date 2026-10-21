@@ -1299,4 +1299,5 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="write_status_check">Check result</string>
 <string name="write_status_hide">Hide status</string>
 <string name="write_status_retry">Retry same operation</string>
+<string name="write_status_show">Show save status</string>
 </resources>

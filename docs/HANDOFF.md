@@ -1,3 +1,9 @@
+## 主壳非模态状态挂接已编码，真实导航小合同待验 — 2026-10-21
+
+NotesApp新增可选只读writeProgress参数（默认null，P4写入口仍OFF），在原TopAppBar下内联显示状态；收起只切为可展开状态条，不取消/重放任务，也不建立第二状态源。无新导航页/全屏遮罩，原返回handler不改。实际后端尚未绑定，参数只由将来经过验收的owner提供，不生成假保存成功。
+
+新增NonBlockingWriteShellTest2个真实NotesApp合同：pending收起后能抽屉进药物页再展开、返回日历；只有观察状态变化刷新文本，不重试/不写记录或账本。另保留原AppShellBackNavigationTest全体作回归。源码待编译/测试，不能预填PASS；四语状态条补了show文案。当前实渲染组件13 PASS仍属于c3源，非最新主壳结果。无大库/native/门槛修改。
+
 ## 四语Compose状态卡片13项PASS及8张实渲染截图已保存 — 2026-10-21
 
 源c3fd7799的App目标13 PASS/0SKIP：操作3、布局/截图8、四语完整性2；同次domain3和TEST_ONLY后台7亦通过。原始XML/完整日志/8 PNG及SHA已入库nonblocking-transition/ui-first/。实际查看法语320dp/2x/深色、繁中411dp/1x/浅色未见关键截断。覆盖是四语言各两组代表布局，不冒充完整交叉矩阵、真实设备或TalkBack（NOT_RUN）。

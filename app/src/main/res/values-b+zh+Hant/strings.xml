@@ -1299,4 +1299,5 @@
 <string name="write_status_check">核對結果</string>
 <string name="write_status_hide">收起狀態</string>
 <string name="write_status_retry">重試同一操作</string>
+<string name="write_status_show">展開儲存狀態</string>
 </resources>

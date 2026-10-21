@@ -1299,4 +1299,5 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="write_status_check">Vérifier le résultat</string>
 <string name="write_status_hide">Masquer le statut</string>
 <string name="write_status_retry">Réessayer la même opération</string>
+<string name="write_status_show">Afficher le statut</string>
 </resources>
