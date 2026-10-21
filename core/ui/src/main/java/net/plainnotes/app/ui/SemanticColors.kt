@@ -74,7 +74,8 @@ fun semanticColors(scheme: ColorScheme, dark: Boolean, contrast: Contrast = Cont
     )
 }
 
-val LocalSemanticColors = staticCompositionLocalOf<SemanticColors> { error("NotesTheme provides the semantic colours") }
+/** Outside [NotesTheme] (previews, tests wrapping a bare MaterialTheme) the light standard tokens apply. */
+val LocalSemanticColors = staticCompositionLocalOf { semanticColors(notesColorScheme(false), false) }
 
 /** `NotesTheme.semantic.missed` and so on, inside [NotesTheme]. */
 object NotesTheme {
