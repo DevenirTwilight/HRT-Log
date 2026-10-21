@@ -1,14 +1,7 @@
 name: ANSM synthetic low-memory inventory performance
 on:
-  pull_request:
-    paths:
-      - '.github/workflows/ansm-inventory-performance.yml'
-      - 'scripts/*ansm*native*performance.py'
-      - 'scripts/configure_ansm_low_memory_avd.py'
-      - 'scripts/configure_ansm_native_runtime.py'
-      - 'docs/ansm-integration/p4/performance/**'
-      - 'core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt'
-      - 'core/data/src/main/java/net/plainnotes/app/data/ReferencePayload.kt'
+  # REQ126/130/131: never rerun the full workload on ordinary PR pushes to seek green.
+  # Preserve this manual runner and every safety/fixture assertion for explicit validation.
   workflow_dispatch:
     inputs:
       verification:

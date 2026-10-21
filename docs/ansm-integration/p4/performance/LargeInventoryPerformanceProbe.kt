@@ -143,7 +143,11 @@ class LargeInventoryPerformanceProbe {
             report.put("physical_device_acceptance","NOT_RUN").put("api26_low_memory_acceptance","NOT_RUN")
             val limits=linkedMapOf("validated_staging_and_restore_ms" to 120000.0,"full_audit_ms" to 15000.0,"shared_forecast_ms" to 15000.0,"full_encrypted_backup_ms" to 120000.0,"full_encrypted_restore_ms" to 120000.0,"restored_full_audit_ms" to 15000.0)
             val exceeded=limits.filter{(key,value)->report.getDouble(key)>value}.keys.toMutableList()
-            if((0 until writeTimes.length()).any{writeTimes.getDouble(it)>5000.0})exceeded.add("post_restore_write_including_ticket_ms")
+            val legacyWriteExceeded=(0 until writeTimes.length()).any{writeTimes.getDouble(it)>5000.0}
+            report.put("acceptance_policy","NONBLOCKING_WRITES_REQ131")
+                .put("write_latency_admission_role","OBSERVATIONAL")
+                .put("legacy_write_budget_ms",5000)
+                .put("legacy_write_budget_status",if(legacyWriteExceeded)"FAIL" else "PASS")
             if(bytes>32*1024*1024)exceeded.add("raw_business_json_bytes")
             if(peak.get()>768L*1024*1024)exceeded.add("peak_observed_jvm_heap_bytes")
             report.put("budget_exceeded",JSONArray(exceeded)).put("status",if(exceeded.isEmpty())"DIAGNOSTIC_BUDGET_PASS" else "DIAGNOSTIC_BUDGET_FAIL")

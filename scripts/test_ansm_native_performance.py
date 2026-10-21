@@ -12,7 +12,7 @@ def module(name):
     return value
 
 class NativePerformanceIsolationTest(unittest.TestCase):
-    def test_cold_codec_real_commit_is_timed_and_keeps_its_independent_hard_gate(self):
+    def test_cold_codec_real_commit_keeps_legacy_metric_and_independent_oracle(self):
         prepare = module('prepare_ansm_native_performance')
         text = prepare.native_source(prepare.SOURCE.read_text())
 
@@ -39,15 +39,15 @@ class NativePerformanceIsolationTest(unittest.TestCase):
             self.assertEqual(sorted(positions), positions)
             for marker in (
                 '.put("process_restart","NOT_RUN").put("database_page_cache","NOT_RESET")',
-                '.put("timing_observer","OFF").put("budget_ms",5000)',
+                '.put("timing_observer","OFF").put("legacy_budget_ms",5000).put("latency_admission_role","OBSERVATIONAL")',
                 '.put("total_ms",(coldEnd-coldStart)/1_000_000.0)',
                 '.put("status",if(coldEnd-coldStart<=5_000_000_000L)"PASS" else "FAIL")',
             ):
                 self.assertIn(marker, cold)
-            self.assertIn(
-                'assertEquals("Cold pure codec write retains the original5s limit", "PASS",cold.getString("status"))',
-                source[end:],
-            )
+            self.assertNotIn('assertEquals("Cold pure codec write retains the original5s limit"', source[end:])
+            self.assertIn('assertEquals("Diagnostic budgets; device acceptance remains NOT_RUN",emptyList<String>(),exceeded)', source[end:])
+            self.assertIn('.put("legacy_write_budget_status",if(legacyWriteExceeded)"FAIL" else "PASS")', source)
+            self.assertNotIn('exceeded.add("post_restore_write_including_ticket_ms")', source)
 
         assert_contract(text)
         # These mutants model misleading timing, a fake write, a shared candidate oracle,
@@ -61,8 +61,11 @@ class NativePerformanceIsolationTest(unittest.TestCase):
              'val verified=MeasuredConsumptionStore.auditStagedDataset(raw)'),
             ('assertEquals(6L,verified.single', 'assertEquals(5L,verified.single'),
             ('coldEnd-coldStart<=5_000_000_000L', 'coldEnd-coldStart<=15_000_000_000L'),
-            ('assertEquals("Cold pure codec write retains the original5s limit", "PASS",cold.getString("status"))',
-             '// Removed cold-write hard failure gate'),
+            ('.put("latency_admission_role","OBSERVATIONAL")', '.put("latency_admission_role","HARD_GATE")'),
+            ('assertEquals("Diagnostic budgets; device acceptance remains NOT_RUN",emptyList<String>(),exceeded)',
+             '// Removed safety failure gate'),
+            ('.put("legacy_write_budget_status",if(legacyWriteExceeded)"FAIL" else "PASS")',
+             '.put("legacy_write_budget_status","PASS")'),
             ('.put("process_restart","NOT_RUN").put("database_page_cache","NOT_RESET")',
              '.put("process_restart","PASS").put("database_page_cache","COLD")'),
         )

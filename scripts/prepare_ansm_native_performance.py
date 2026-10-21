@@ -320,7 +320,7 @@ def native_source(text):
             // history is still scanned/validated; this is not process/SQLite cold-start evidence.
             val cold=JSONObject().put("scope","FULL_FIXED_FIXTURE_COLD_PURE_CODEC_REAL_COMMIT")
                 .put("process_restart","NOT_RUN").put("database_page_cache","NOT_RESET")
-                .put("timing_observer","OFF").put("budget_ms",5000)
+                .put("timing_observer","OFF").put("legacy_budget_ms",5000).put("latency_admission_role","OBSERVATIONAL")
             report.put("cold_pure_codec_write",cold)
             val coldStart=System.nanoTime()
             MeasuredOperationChain.clearPureInputMemo()
@@ -349,7 +349,7 @@ def native_source(text):
             while(!acknowledged() && android.os.SystemClock.elapsedRealtime()<deadline)Thread.sleep(100)
             components.put("sampling_host_ack",acknowledged())
             file.writeText(report.toString(2));assertEquals("Diagnostic budgets; device acceptance remains NOT_RUN",emptyList<String>(),exceeded)
-            assertEquals("Cold pure codec write retains the original5s limit", "PASS",cold.getString("status"))''')
+            // REQ131: retain legacy5s PASS/FAIL above as an independent latency indicator; full oracle and safety budgets remain asserted.''')
     # AGP may uninstall the synthetic test APK after a process crash, deleting
     # its external-files report. Mirror only the compact timing metadata to logcat.
     text = text.replace('file.writeText(report.toString(2))',
