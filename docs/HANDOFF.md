@@ -1,29 +1,22 @@
-## UI-07 Material 3 Expressive 表现层实施中 — 2026-10-21
+## UI-07 Material 3 Expressive 表现层：实现与验证完成，PR 待 CI — 2026-10-21
 
-UI-06 #91 已合并（4ec11437），主线 CI 复验进行中。UI-07 分支 feature/ui07-expressive-20261021（基于 4ec11437），任务书 sources/ui07/ui07-prompt.md，REQUIREMENTS §116。
+UI-06 #91 已合并（4ec11437），主线 CI 六项全绿。分支 feature/ui07-expressive-20261021，报告 71，REQUIREMENTS §116。
 
-**已提交（a9dd9342）：**
-- core/ui：
-  - `StatusIcon`（实心圆，4 档尺寸）；
-  - 形状档位 `Radii` / `Corners`；
-  - 按下形变 `rememberPressMorph`；
-  - 强调字体 `NotesTheme.typeExtra`（数字最多放大到 1.3 倍）；
-  - `LocalReduceMotion`、`motionSpec`；
-  - `GroupedList` / `GroupedItem`；
-  - 测试共 228+7 项通过。
-- app：
-  - 今天卡改为 32dp 圆角，下一次时间用 heroNumber，主按钮有按下形变，⋮ 改为 56dp 方块，“下一次”切换有动效；
-  - 今天的记录和预约移出今天卡，改为分组列表；
-  - 撤销：调用现有 deleteRecord（已核实会回退库存、提醒按日历重建、进度按未删除记录计算）；
-  - 确认卡回答后收起为一行结果；
-  - 库存余量用 statNumber，包装展开后显示分组列表；
-  - 服药记录、医疗档案改为分组列表；
-  - 时间线“第 n 天”用 statNumber；
-  - 首页“最近 7 天” + “完整日历”。
+**已完成：**
+- A 实心圆状态图标；B 形状与按下形变；C 强调字体；D 弹簧动效与减少动画；E 分组列表；F 最近 7 天。
+- 撤销已实现：调用已有 deleteRecord，与服药记录删除逐字段一致。
 
-**待做：** UI-07 测试、旧断言迁移（月视图前提的测试需显式切换；今天卡内记录改为 today-section）、全量回归、截图和动效视频、报告 71、真机清单、PR。
+**本地验证：**
+- 测试：core:ui 422、domain 135、data 263、reminder 20 全部 PASS；app 1935 项 0 失败。
+- lint 0 错误（修复了 1 个 AnimatedContent 问题）；androidTest 编译 PASS。
+- 断言迁移 10 处，均写入报告 71 §7.3，没有删除断言。
+- 测试发现 2× 字号下最近 7 天胶囊和法语标题被挤压，已修复产品代码，没有放宽断言。
 
-无 APK、签名或 versionCode 变更。
+**截图和动效：** docs/ui-audit/2026-10-21-ui07/。本环境没有模拟器，动效用 Robolectric 逐帧 GIF 代替。
+
+**下一步：** 开 PR 并开启自动合并；CI 全绿后合并，复验主线 CI。
+
+**NOT_RUN：** 真机 / TalkBack（清单第 13 节）。无 APK、签名或 versionCode 变更。
 
 ## UI-06 语义色与状态体系：实现与验证完成，PR 待 CI — 2026-10-21
 
