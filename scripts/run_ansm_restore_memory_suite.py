@@ -78,6 +78,11 @@ def write_lifecycle_only():
 
 def main(mode="full"):
     verify_emulator()
+    if mode=="p4-write-after-commit-only":
+        compiled=subprocess.run([str(ROOT/'gradlew'),':core:data:assembleDebugAndroidTest','--no-parallel','--max-workers=2'],cwd=ROOT)
+        if compiled.returncode:return compiled.returncode
+        # Failed checkpoint only. Do not repeat the verified 17, STOCK_CAPTURED, restore or large run.
+        return subprocess.run(['python3',str(ROOT/'scripts/run_ansm_write_process_death.py'),'--stage','AFTER_COMMIT'],cwd=ROOT).returncode
     if mode=="p4-write-lifecycle-only":
         return write_lifecycle_only()
     # No retries. Keep original native return code and every original assertion/budget.
@@ -106,5 +111,5 @@ def main(mode="full"):
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser()
-    parser.add_argument('--mode',choices=['full','restore-process-death-only','p4-write-lifecycle-only'],default='full')
+    parser.add_argument('--mode',choices=['full','restore-process-death-only','p4-write-lifecycle-only','p4-write-after-commit-only'],default='full')
     raise SystemExit(main(parser.parse_args().mode))

@@ -12,10 +12,10 @@ on:
   workflow_dispatch:
     inputs:
       verification:
-        description: 'Full frozen workload, restore death only, or new P4 write lifecycle correctness only'
+        description: 'Full workload, restore death, write lifecycle, or failed AFTER_COMMIT checkpoint only'
         type: choice
         default: full
-        options: [full, restore-process-death-only, p4-write-lifecycle-only]
+        options: [full, restore-process-death-only, p4-write-lifecycle-only, p4-write-after-commit-only]
 permissions:
   contents: read
 concurrency:
@@ -23,7 +23,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   native-api26-large-inventory:
-    name: ${{ inputs.verification == 'p4-write-lifecycle-only' && 'p4-write-lifecycle-api26-only' || inputs.verification == 'restore-process-death-only' && 'restore-process-death-api26-only' || 'native-api26-large-inventory' }}
+    name: ${{ inputs.verification == 'p4-write-after-commit-only' && 'p4-write-after-commit-api26-only' || inputs.verification == 'p4-write-lifecycle-only' && 'p4-write-lifecycle-api26-only' || inputs.verification == 'restore-process-death-only' && 'restore-process-death-api26-only' || 'native-api26-large-inventory' }}
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
@@ -60,7 +60,7 @@ jobs:
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
-          name: ${{ inputs.verification == 'p4-write-lifecycle-only' && 'ansm-api26-write-lifecycle-only' || inputs.verification == 'restore-process-death-only' && 'ansm-api26-restore-process-death-only' || 'ansm-native-api26-large-inventory' }}
+          name: ${{ inputs.verification == 'p4-write-after-commit-only' && 'ansm-api26-write-after-commit-only' || inputs.verification == 'p4-write-lifecycle-only' && 'ansm-api26-write-lifecycle-only' || inputs.verification == 'restore-process-death-only' && 'ansm-api26-restore-process-death-only' || 'ansm-native-api26-large-inventory' }}
           path: |
             core/data/build/reports/ansm-native-performance/
             core/data/build/reports/ansm-write-process-death/

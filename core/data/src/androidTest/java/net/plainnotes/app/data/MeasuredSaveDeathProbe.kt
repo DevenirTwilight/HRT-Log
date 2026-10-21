@@ -22,6 +22,19 @@ class MeasuredSaveDeathProbe {
     private val context get()=ApplicationProvider.getApplicationContext<android.content.Context>()
     private val name="synthetic-measured-save-death.db"
     private val marker get()=File(context.filesDir,"synthetic-write-death-ready.json")
+    private val trace get()=File(context.filesDir,"synthetic-write-death-stages.jsonl")
+    private val traceLock=Any()
+    private fun traceStage(point:String,failure:Throwable?=null)=synchronized(traceLock) {
+        // Synthetic checkpoint diagnostics only: no request, dose, SQL text or exception message.
+        val row=JSONObject().put("phase",point).put("pid",android.os.Process.myPid())
+            .put("elapsed_ms",android.os.SystemClock.elapsedRealtime())
+        failure?.let {
+            row.put("exception_class",it.javaClass.name)
+            if(it is ReferenceFailure)row.put("reference_code",it.code.name)
+            row.put("stack_locations",org.json.JSONArray(it.stackTrace.take(12).map{frame->"${frame.className}.${frame.methodName}:${frame.lineNumber}"}))
+        }
+        trace.appendText(row.toString()+"\n")
+    }
     private fun open():NotesDatabase {
         System.loadLibrary("sqlcipher")
         return Room.databaseBuilder(context,NotesDatabase::class.java,name)
@@ -32,7 +45,7 @@ class MeasuredSaveDeathProbe {
         assumeTrue(args.getString("ansm_write_death_action")=="prepare")
         val stage=requireNotNull(args.getString("ansm_write_death_stage"))
         require(stage in setOf("STOCK_CAPTURED","AFTER_COMMIT"))
-        marker.delete();context.deleteDatabase(name)
+        marker.delete();trace.delete();traceStage("FIXTURE_START");context.deleteDatabase(name)
         val db=open();val process=CoroutineScope(SupervisorJob()+Dispatchers.IO)
         try {
             val repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=db},Space.PRIMARY)
@@ -42,24 +55,39 @@ class MeasuredSaveDeathProbe {
             val box=repo.createMeasuredPackage(repo.referencePreviewEpoch(),db.dao().medication(m),UUID.randomUUID().toString(),
                 PackageMeasurementDraft(UserReferenceProduct("SYNTHETIC crash product",sourceVersion="synthetic-v1",recordedOn="2026-10-21"),
                     MeasureUnit.TABLET,meaning,"0.5","28",StockCapacityBasis.USER_COUNTED),at)
+            traceStage("PACKAGE_CREATED")
             val raw=db.openHelper.writableDatabase;val before=ReferencePayload.sha(RawData.dump(raw).toString())
             lateinit var owner:MeasuredSaveCoordinator
             fun waitForKill(expected:String) {
                 assertEquals(WriteStatus.PENDING,owner.latestTask.value!!.progress.value.status)
                 marker.writeText(JSONObject().put("stage",stage).put("pid",android.os.Process.myPid()).put("expected_sha256",expected)
                     .put("epoch",box.scope.epoch).put("expected_records",if(stage=="STOCK_CAPTURED")0 else 1).toString())
+                traceStage("READY_FOR_KILL")
                 while(true)Thread.sleep(1000)
             }
             owner=MeasuredSaveCoordinator(repo,process,Dispatchers.IO,writeOverride={expected->
+                traceStage("WRITER_ENTERED")
+                try {
                 val result=repo.recordMeasuredUse(expected.ticket,expected.operationUuid,expected.draft,expected.created){point->
+                    traceStage(point.name)
                     if(stage=="STOCK_CAPTURED" && point==ActualUseCheckpoint.STOCK_CAPTURED)waitForKill(before)
                 }
-                if(stage=="AFTER_COMMIT")waitForKill(ReferencePayload.sha(RawData.dump(raw).toString()))
+                traceStage("ROOT_REPOSITORY_RETURNED")
+                if(stage=="AFTER_COMMIT") {
+                    traceStage("COMMITTED_DUMP_START")
+                    val digest=ReferencePayload.sha(RawData.dump(raw).toString())
+                    traceStage("COMMITTED_DUMP_COMPLETE");waitForKill(digest)
+                }
                 result
+                }catch(failure:Throwable) {
+                    try{traceStage("WRITER_FAILED",failure)}catch(_:Throwable){}
+                    throw failure
+                }
             })
             val input=MeasuredActualUseDraft(at.toEpochMilli(),"UTC",0.1,listOf(ConfirmedStockUse(box.containerUuid,box.presentationEventUuid,
                 box.presentation.sha256,(box.presentation.stockScale() as MeasureResult.Success).value.quantum,true)),MeasuredStockEffect.DEDUCT_CURRENT,userConfirmed=true)
-            owner.start(owner.prepare(box.scope,m,UUID.randomUUID().toString(),input,at))
+            val prepared=owner.prepare(box.scope,m,UUID.randomUUID().toString(),input,at)
+            traceStage("PREPARED");owner.start(prepared)
             while(true)delay(1000) // Host must kill this process, including its real writer thread.
         }finally{process.cancel();db.close()}
     }

@@ -13,6 +13,18 @@ spec=importlib.util.spec_from_file_location('restore_memory_suite',ROOT/'scripts
 mod=importlib.util.module_from_spec(spec);spec.loader.exec_module(mod)
 
 class RestoreMemorySuiteTest(unittest.TestCase):
+    def test_after_commit_mode_runs_only_failed_checkpoint_and_propagates_failure(self):
+        for failed in (0,1):
+            with self.subTest(exit=failed),patch.object(mod,'verify_emulator'),patch.object(mod.subprocess,'run',side_effect=[SimpleNamespace(returncode=0),SimpleNamespace(returncode=failed)]) as run,patch.object(mod,'death_case') as restore:
+                self.assertEqual(failed,mod.main('p4-write-after-commit-only'))
+                restore.assert_not_called()
+                self.assertEqual(2,run.call_count)
+                self.assertEqual(['--stage','AFTER_COMMIT'],run.call_args_list[-1].args[0][-2:])
+                for call in run.call_args_list:
+                    text=str(call.args)
+                    self.assertNotIn('run_ansm_native_performance.py',text)
+                    self.assertNotIn('MeasuredSaveCoordinatorAndroidTest',text)
+                    self.assertNotIn('STOCK_CAPTURED',text)
     def test_original_native_failure_is_never_hidden_by_process_death_success(self):
         with tempfile.TemporaryDirectory() as directory,patch.object(mod,'ROOT',Path(directory)),patch.object(mod,'verify_emulator') as verify,patch.object(mod.subprocess,'run',return_value=SimpleNamespace(returncode=1)) as run,patch.object(mod,'death_case',side_effect=[{'status':'PASS'},{'status':'PASS'}]) as death:
             self.assertEqual(1,mod.main());verify.assert_called_once();self.assertEqual(1,run.call_count)
