@@ -92,6 +92,14 @@ const val BACKFILL_MAX_DAYS=731L
         if(target!=Space.PRIMARY)throw ReferenceFailure(ReferenceError.WRONG_SPACE)
         return withContext(Dispatchers.IO){val database=access.get(target);database.withTransaction{block(database)}}
     }
+    /** Internal until the runtime owner/conflict gateway is reviewed. No UI entry is enabled. */
+    internal suspend fun prepareMeasuredActualUse(scope:ReferenceScope,medication:Long,operationUuid:String,
+        draft:MeasuredActualUseDraft,created:Instant):PreparedMeasuredCreate {
+        val frozen=draft.copy(uses=draft.uses.toList())
+        return measuredTransaction{MeasuredUseIntegration.prepareCreate(it,scope,medication,operationUuid,frozen,created)}
+    }
+    internal suspend fun observeMeasuredActualUse(expected:PreparedMeasuredCreate):MeasuredCreateObservation =
+        transactionWithSql(Space.PRIMARY){_,raw->MeasuredUseIntegration.observeCreate(raw,expected)}
     private suspend fun currentMeasuredSlot(dao:NotesDao,slot:Slot,now:Instant):Slot {
         val entry=timeline(dao,now,slot.at.minusMillis(1),slot.at.plusMillis(1),slot.zone).singleOrNull{it.slot.key==slot.key}
             ?: throw ReferenceFailure(ReferenceError.STALE_REVISION)

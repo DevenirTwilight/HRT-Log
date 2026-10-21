@@ -58,6 +58,32 @@ internal object MeasuredUseIntegration {
         require(draft.takenUtc>=0 && draft.takenUtc<=created.plusSeconds(60).toEpochMilli())
         ZoneId.of(draft.takenZone)
     }
+    /** No write or UUID reservation. Freeze the same context the existing create path records. */
+    suspend fun prepareCreate(database:NotesDatabase,scope:ReferenceScope,medication:Long,operationUuid:String,
+        draft:MeasuredActualUseDraft,created:Instant):PreparedMeasuredCreate {
+        val db=database.openHelper.writableDatabase;check(db.inTransaction())
+        require(ReferencePayload.uuid(operationUuid));checkDraft(draft,created)
+        val ticket=ticket(db,scope,medication)
+        val dao=database.dao()
+        val config=MedicationSnapshot.encode(dao.medication(medication),dao.profile(medication))
+        return PreparedMeasuredCreate(ticket,operationUuid,
+            draft.copy(uses=java.util.Collections.unmodifiableList(draft.uses.toList())),created,ReferencePayload.sha(config))
+    }
+    /** Read-only reconciliation, not replay. Keep the independent complete audit and never
+     * validate an old ticket against current state: a successful commit itself changes that state. */
+    fun observeCreate(db:SupportSQLiteDatabase,expected:PreparedMeasuredCreate):MeasuredCreateObservation {
+        check(db.inTransaction());ReferenceStore.checkScope(db,expected.ticket.scope)
+        MeasuredConsumptionStore.auditStagedDataset(db)
+        val (original,receipt)=MeasuredConsumptionStore.existingConsumption(db,expected.operationUuid)
+            ?: return MeasuredCreateObservation.NotObserved
+        val header=ReferenceStore.row(db,"measured_operation","operation_uuid=?",arrayOf(expected.operationUuid))!!
+        if(expected.ticket.recordId!=null || original.datasetUuid!=expected.ticket.scope.dataset ||
+            original.medicationUuid!=expected.ticket.medicationUuid || original.record.revision!=1 ||
+            original.record.scheduleSha256!=null || original.record.configSha256!=expected.configSha256 ||
+            header.getLong("created_utc")!=expected.created.toEpochMilli() || !sameActual(original,expected.draft,"ON_TIME"))
+            fail(ReferenceError.OPERATION_CONFLICT)
+        return MeasuredCreateObservation.Committed(receipt)
+    }
     suspend fun create(database:NotesDatabase,ticket:MeasuredWriteTicket,operationUuid:String,draft:MeasuredActualUseDraft,created:Instant,
         checkpoint:(ActualUseCheckpoint)->Unit={}):RecordedMeasuredUse {
         val db=database.openHelper.writableDatabase;check(db.inTransaction());owner(db,ticket)

@@ -1,3 +1,9 @@
+## 原请求冻结与只读历史提交核对已编码，待验 — 2026-10-21
+
+新增internal PreparedMeasuredCreate与prepare/observe入口：同一事务冻结原票据、实际来源/用量（不可修改列表）、原时间和MedicationSnapshot SHA；prepare不写业务/不预留UUID。observe在固定PRIMARY/同dataset+epoch执行现有完整审计，比较原商品/药物身份、revision1非计划创建、配置SHA、原created时刻及原实际载荷后仅返回历史Committed回执；NotObserved不等于未提交，绝不据此FAILED/允许重试。不依赖当前记录仍存在或未更正，不验证已被原提交改变的旧票据状态，不重放任何写入。
+
+新增6合同（NonBlockingRepositoryWriteTest现10）：别名列表冻结与真实丢失响应核对、缺失操作UNKNOWN、同UUID异剂量/时间/库存效果/配置冲突、epoch/伪装隔离、原记录更正/删除后历史成功、无关历史损坏拒绝。原4个后台/事务合同保留。源码先提交，当前未测试不能填PASS。该接口仅独立实际用药创建，计划/修订/库存调整等不冒充已支持；仍无应用级运行owner/公开门面/完整冲突保护，P4 OFF。原资源清理506 PASS已保存；新源需回归，不新增大库/native，不改5秒断言。
+
 ## 两项资源退出RED已修正，完整core:data506项PASS — 2026-10-21
 
 生产31303e64的完整本地core:data回归506 PASS/0FAIL/0SKIP（含原两项未改断言的资源失败/恢复取消合同），44份原始XML/全日志/源码SHA存nonblocking-transition/resource-cleanup-applied/。此前saved-resource-wip原档与RED不改写。链读取Throwable后清空所有纯解码明文引用并重抛同一异常，恢复正常/失败/取消finally释放替换引用；原完整审计、故障回滚、独立oracle与FK去重保留。无Schema/PNBAK1/PK/正式入口变化。
