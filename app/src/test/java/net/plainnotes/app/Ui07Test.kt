@@ -363,7 +363,10 @@ class Ui07UndoShellTest {
     @After fun close() { androidx.lifecycle.ViewModelStore().apply { put("model", model); clear() }; db.close() }
 
     private data class Snapshot(val records: List<RecordEntity>, val containers: List<ContainerEntity>, val trash: Int, val progress: String)
-    private fun snapshot(): Snapshot {
+    private fun progressText() = ui.onAllNodesWithTag("today-progress").fetchSemanticsNodes().firstOrNull()?.config?.get(SemanticsProperties.Text)?.joinToString() ?: ""
+    /** The view model refreshes after the write; wait (up to 10 s) until the screen shows [expected] progress, then read everything. */
+    private fun snapshot(expected: String? = null): Snapshot {
+        if (expected != null) ui.waitUntil(10_000) { progressText() == expected }
         ui.waitForIdle()
         val progress = ui.onAllNodesWithTag("today-progress").fetchSemanticsNodes().firstOrNull()?.config?.get(SemanticsProperties.Text)?.joinToString() ?: ""
         return Snapshot(runBlocking { db.dao().records() + db.dao().deletedRecords() }.sortedBy { it.id }, runBlocking { db.dao().containers() }.sortedBy { it.id },
@@ -390,7 +393,7 @@ class Ui07UndoShellTest {
         val a = runBlocking { db.dao().records() }.single { it.status != "MISSED" }
         ui.onNodeWithTag("today-undo").performClick()
         ui.waitUntil(10_000) { runBlocking { db.dao().recordById(a.id) }!!.deleted_at_utc != null }
-        val afterUndo = snapshot()
+        val afterUndo = snapshot(before.progress)
         // B: log the same dose again, then delete it from the intake history (menu → Remove → confirm).
         log(); val b = runBlocking { db.dao().records() }.single { it.status != "MISSED" }
         ui.onNodeWithContentDescription(s(R.string.menu)).performClick(); ui.waitForIdle()
@@ -404,7 +407,7 @@ class Ui07UndoShellTest {
         ui.onNodeWithContentDescription(s(R.string.menu)).performClick(); ui.waitForIdle()
         ui.onNodeWithTag("drawer-content").performScrollToNode(hasText(s(Destination.CALENDAR.title)))
         ui.onNodeWithTag("drawer-content").onChildren().filterToOne(hasText(s(Destination.CALENDAR.title))).performClick(); ui.waitForIdle()
-        val afterDelete = snapshot()
+        val afterDelete = snapshot(before.progress)
         // Stock and today's progress are back where they were, both ways.
         assertEquals(before.containers, afterUndo.containers); assertEquals(before.containers, afterDelete.containers)
         assertEquals(before.progress, afterUndo.progress); assertEquals(before.progress, afterDelete.progress)
