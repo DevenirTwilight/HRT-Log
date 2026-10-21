@@ -48,8 +48,38 @@ def death_case(stage):
     result=subprocess.check_output(['adb','shell','run-as',PACKAGE,'cat','files/synthetic-restore-death-result.json'],text=True)
     return json.loads(result)
 
+def write_lifecycle_only():
+    """New API26 low-memory correctness cases only; never run/reclassify large timing metrics."""
+    folder=ROOT/'core/data/build/reports/ansm-native-performance'
+    folder.mkdir(parents=True,exist_ok=True)
+    compile_result=subprocess.run([str(ROOT/'gradlew'),':core:data:assembleDebugAndroidTest','--no-parallel','--max-workers=2'],cwd=ROOT)
+    if compile_result.returncode:return compile_result.returncode
+    apks=list((ROOT/'core/data/build/outputs/apk/androidTest/debug').glob('*androidTest.apk'))
+    assert len(apks)==1,'Expected the synthetic test APK only'
+    subprocess.run(['adb','install','-r','-t',str(apks[0])],check=True)
+    cases=[
+        'MeasuredConsumptionAndroidTest#completeFrozenAuditMatchesMultiSourceZeroEffectAndRollback',
+        'MeasuredConsumptionAndroidTest#completeFrozenAuditMatchesChangedEnvelopeAndRestoredSavepoint',
+        'ReferenceAuditStreamingAndroidTest#referenceScansDoNotRereadTheirOwnPrimaryKeysAndStillReadPredecessors',
+        'MeasuredSaveCoordinatorAndroidTest',
+    ]
+    classes=','.join('net.plainnotes.app.data.'+name for name in cases)
+    checked=subprocess.run(['adb','shell','am','instrument','-w','-e','class',classes,RUNNER],capture_output=True,text=True,timeout=300)
+    (folder/'write-lifecycle-selected.log').write_text(checked.stdout+checked.stderr)
+    passed=checked.returncode==0 and 'OK (17 tests)' in checked.stdout and 'FAILURES!!!' not in checked.stdout
+    # Actual process death is independent; preserve both outcomes without retries.
+    killed=subprocess.run(['python3',str(ROOT/'scripts/run_ansm_write_process_death.py')],cwd=ROOT)
+    (folder/'write-lifecycle-only.json').write_text(json.dumps({'scope':'API26_SQLCIPHER_LOW_MEMORY_CORRECTNESS_ONLY',
+        'large_performance':'NOT_RUN_CONTRACT_ONLY_LEGACY_RESULT_UNCHANGED','restore_process_death':'NOT_RERUN_ALREADY_VERIFIED',
+        'selected_test_count':17,'selected_tests':'PASS' if passed else 'FAIL','actual_writer_process_death_exit':killed.returncode,
+        'retries':0},indent=2)+'\n')
+    return int(not passed) or killed.returncode
+
+
 def main(mode="full"):
     verify_emulator()
+    if mode=="p4-write-lifecycle-only":
+        return write_lifecycle_only()
     # No retries. Keep original native return code and every original assertion/budget.
     if mode=="full":
         native=subprocess.run(['python3',str(ROOT/'scripts/run_ansm_native_performance.py')],cwd=ROOT)
@@ -76,5 +106,5 @@ def main(mode="full"):
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser()
-    parser.add_argument('--mode',choices=['full','restore-process-death-only'],default='full')
+    parser.add_argument('--mode',choices=['full','restore-process-death-only','p4-write-lifecycle-only'],default='full')
     raise SystemExit(main(parser.parse_args().mode))

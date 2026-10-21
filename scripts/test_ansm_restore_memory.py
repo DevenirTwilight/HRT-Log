@@ -34,6 +34,22 @@ class RestoreMemorySuiteTest(unittest.TestCase):
         self.assertIn('restore-process-death-api26-only',workflow)
         self.assertIn('ansm-api26-restore-process-death-only',workflow)
 
+    def test_write_lifecycle_mode_never_runs_large_or_repeats_restore_and_preserves_failures(self):
+        for transcript,killed_exit,expected_exit in [('OK (17 tests)',0,0),('FAILURES!!!',0,1),('OK (16 tests)',0,1),('OK (17 tests)',1,1)]:
+            with self.subTest(transcript=transcript,killed_exit=killed_exit),tempfile.TemporaryDirectory() as directory:
+                apk=Path(directory)/'core/data/build/outputs/apk/androidTest/debug/synthetic-androidTest.apk'
+                apk.parent.mkdir(parents=True);apk.touch()
+                results=[SimpleNamespace(returncode=0),SimpleNamespace(returncode=0),
+                         SimpleNamespace(returncode=0,stdout=transcript,stderr=''),SimpleNamespace(returncode=killed_exit)]
+                with patch.object(mod,'ROOT',Path(directory)),patch.object(mod,'verify_emulator'),patch.object(mod.subprocess,'run',side_effect=results) as run,patch.object(mod,'death_case') as restore:
+                    self.assertEqual(expected_exit,mod.main('p4-write-lifecycle-only'))
+                    restore.assert_not_called()
+                    self.assertFalse(any('run_ansm_native_performance.py' in str(c.args) for c in run.call_args_list))
+                    self.assertEqual(4,run.call_count) # compile/install/selected contracts/write death; no retries
+                    report=json.loads((Path(directory)/'core/data/build/reports/ansm-native-performance/write-lifecycle-only.json').read_text())
+                    self.assertEqual('NOT_RUN_CONTRACT_ONLY_LEGACY_RESULT_UNCHANGED',report['large_performance'])
+                    self.assertEqual('NOT_RERUN_ALREADY_VERIFIED',report['restore_process_death'])
+
     def test_memory_probe_and_restore_hooks_are_only_synthetic_and_keep_the_frozen_workload(self):
         from prepare_ansm_native_performance import native_source,SOURCE
         text=native_source(SOURCE.read_text())

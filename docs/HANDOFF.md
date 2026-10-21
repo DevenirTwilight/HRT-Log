@@ -1,3 +1,11 @@
+## 原始工件已取回；定位三个API26测试问题，针对性修正已本地通过 — 2026-10-21
+
+授权GitHub连接器成功取回原工件，绕过不了的CLI Azure CONNECT403不再阻塞证据读取；未改代理、未重跑性能。官方ZIP SHA/CRC核验通过。d582原大库真实三写6386.667/6284.662/5665.699ms仍FAIL5秒；审计5308.470ms、预测5786.830ms、备份6964.372ms、恢复44905.852ms在原预算内。两项原恢复真实进程kill均PASS。原报告正在集中归档，不改变旧失败。
+
+API26 owner共享14合同实际全部PASS。剩余3失败均新oracle测试的裸ROLLBACK TO被API26语句分类器误作根事务回滚，Room.endTransaction报无事务；与已保留A/B反例相同处理，3处加前置空语句，让原SQLite SAVEPOINT回滚实际执行。所有oracle/损坏/回滚断言原样。修正后JVM目标3项PASS，Android合同编译PASS，工具5测试PASS（含失败传播/不调用大库/不重跑恢复负向矩阵）。这不是已验证原生修复。
+
+新增p4-write-lifecycle-only手工模式只运行修正3项+owner14项及新增writer实际OS-kill2项，仍验证API26/512MiB/192MiB；不运行已完成大库或已验证恢复kill，不重分类原5秒FAIL。下一步对此实质变更做一次针对性验证并保存日志。fb43完整CI已结束：android/JVM/API29/API35 PASS，API26 FAIL；Science两项PASS。生产dc10ffef未改，P4仍Draft/OFF/autoMerge=null。
+
 ## 新候选Science/API29通过，API26仍失败；补齐OS-kill报告上传路径 — 2026-10-21
 
 fb43验收39622599139 Science gate+research-deep全SUCCESS；39622595007 JVM/API29 SUCCESS，API26 FAIL，android/API35仍在途。API26两候选都失败，但尚无可读完整日志，不能猜测同因或重跑碰运气。工件下载CONNECT403问题已问负责人，仍待网络解阻；只读元数据可用不等于原始报告已核验。

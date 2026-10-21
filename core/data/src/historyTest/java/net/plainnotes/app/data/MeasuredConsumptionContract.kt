@@ -57,6 +57,8 @@ abstract class MeasuredConsumptionContract {
             assertEquals("Auditors must be read only",before,RawData.dump(raw).toString())
         }
     }
+    // As in the preserved A/B counterexamples below, prefix ROLLBACK TO with an empty
+    // statement so API26 forwards the savepoint operation instead of ending Room's root transaction.
     @Test fun completeFrozenAuditMatchesMultiSourceZeroEffectAndRollback()=runBlocking {
         val m=med();val a=box(m);val b=box(m)
         val r=record(m);consume(r,a,listOf(use(a),use(b)))
@@ -72,7 +74,7 @@ abstract class MeasuredConsumptionContract {
                 raw.execSQL("UPDATE record_reference_capture SET payload_sha256=? WHERE kind='CONFIRM'",arrayOf("0".repeat(64)))
                 assertTrue(runCatching{FrozenFullAuditStore.auditStagedDataset(raw)}.isFailure)
                 assertFrozenFullAuditMatches()
-            }finally{raw.execSQL("ROLLBACK TO synthetic_frozen_audit");raw.execSQL("RELEASE synthetic_frozen_audit")}
+            }finally{raw.execSQL(";ROLLBACK TO synthetic_frozen_audit");raw.execSQL("RELEASE synthetic_frozen_audit")}
             assertFrozenFullAuditMatches()
         }
     }
@@ -96,7 +98,7 @@ abstract class MeasuredConsumptionContract {
                     raw.execSQL("UPDATE measured_operation SET input_json=? WHERE operation_uuid=?",arrayOf(ReferencePayload.canonical(altered),op))
                     assertTrue(runCatching{FrozenFullAuditStore.auditStagedDataset(raw)}.isFailure)
                     assertFrozenFullAuditMatches()
-                }finally{raw.execSQL("ROLLBACK TO synthetic_changed_envelope");raw.execSQL("RELEASE synthetic_changed_envelope")}
+                }finally{raw.execSQL(";ROLLBACK TO synthetic_changed_envelope");raw.execSQL("RELEASE synthetic_changed_envelope")}
                 assertFrozenFullAuditMatches()
             }
         }

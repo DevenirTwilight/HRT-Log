@@ -109,7 +109,7 @@ abstract class ReferenceAuditStreamingContract {
                 raw.execSQL("DROP TRIGGER reference_immutable_record_reference_capture_update")
                 raw.execSQL("UPDATE record_reference_capture SET payload_sha256=?",arrayOf("0".repeat(64)))
                 assertTrue(runCatching{ReferenceSchema.validateCandidateReferences(observed)}.isFailure)
-            } finally{raw.execSQL("ROLLBACK TO synthetic_bad_capture");raw.execSQL("RELEASE synthetic_bad_capture")}
+            } finally{raw.execSQL(";ROLLBACK TO synthetic_bad_capture");raw.execSQL("RELEASE synthetic_bad_capture")}
             ReferenceSchema.validateCandidateReferences(observed)
         }
     }
