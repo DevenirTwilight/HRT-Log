@@ -1,3 +1,9 @@
+## AFTER_COMMIT定向原生通过，转最终整合CI — 2026-10-21
+
+run39650341133/a9a1a8fd单场景无重试PASS：PID3850外部强杀→4008，1条真实记录/精确dump/epoch/SQLCipher完整性/独立冻结oracle/无重放均通过；verify6.254秒是整项验证时间，不是写入延迟。官方ZIP12370205997/SHA d63e3dd8…71f656/CRC已校验并存final-admission/after-commit-39650341133/。上次run39626720171超时原因仍未确定，不称诊断日志本身修复了生产问题；旧FAIL保留，最终三API继续验证现源码合同。
+
+已整合主线4ec11437，当前GitHub MERGEABLE且无未解决讨论。218工具/Android合同编译PASS；App整合回归在途。下一提交触发最终六项必需CI，非性能workflow不自动跑大库。正式入口OFF/Draft，全部安全验收完成前不合并发布。
+
 ## 当前验收检查点：Android测试编译和218工具通过 — 2026-10-21
 
 final-admission/保存实际日志/收据。Android测试编译PASS（编译期间只同步主线UI，data/测试源码未变）；全部Python工具218 PASS，未执行性能大库。整合主线后的ProcessMeasuredWriteShell/Period/UI06代表回归在途；单场景AFTER_COMMIT run39650341133仍在途，未声称安全通过。当前正式门仍为安全/最终CI，普通写入仅指标，不再恢复5秒攻关。

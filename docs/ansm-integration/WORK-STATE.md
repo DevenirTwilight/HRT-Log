@@ -1,3 +1,5 @@
+> 当前执行（2026-10-21，§131）：非阻塞延迟指标已落实，停止5秒攻关；完整安全门保留。主线4ec11437已整合；AFTER_COMMIT定向run39650341133实际强杀/新PID/精确历史/完整oracle通过，原超时原因未确定且FAIL保留。218工具/Android编译PASS；最终App/必需CI待结果。P4仍Draft/OFF。
+
 > **2026-10-21 最新负责人纠正**：停止5秒性能攻关，不重新调度大库或方案C。本轮仅方向冻结、最小后端评估和正式政策/测试提案；旧5秒失败为历史证据，不是要求继续优化的任务。详见[当前政策提案](p4/nonblocking-transition/policy-and-test-change.md)与REQUIREMENTS§130。完整审计/恢复安全不变，Draft/OFF，不合并发布。
 
 > 2026-10-21 当前状态（优先于下方历史记录）：生产dc10ffef已实现进程owner、真实NotesApp状态观察和busy时受限只读刷新；正式提交入口仍OFF。完整data528 PASS、修正后真实App2项PASS；原生owner14合同API26/29/35报告核验PASS。fb43 CI仅API26三个SAVEPOINT测试失败，d9fa9340修正后本地3项及Android编译PASS，针对性run39626720171的17合同PASS、事务内kill PASS，提交后kill未到60秒检查点而FAIL；不重跑大库。原大库三写6.387/6.285/5.666秒仍FAIL5秒，网络工件已通过授权连接器取回；全部实际耗时、证据及边界见 [verified-results.md](p4/nonblocking-transition/shell-integration/verified-results.md)。尚不可合并，Draft/OFF/autoMerge=null；无可信缓存或Schema/备份/加密/PK变更。

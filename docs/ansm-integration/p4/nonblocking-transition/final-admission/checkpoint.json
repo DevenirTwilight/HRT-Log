@@ -11,7 +11,9 @@
   "targeted_after_commit": {
     "run": 39650341133,
     "source": "a9a1a8fd",
-    "status": "IN_PROGRESS"
+    "status": "PASS_EXACT_DATASET_FULL_ORACLE_NO_REPLAY",
+    "artifact": 12370205997,
+    "previous_failure_cause": "NOT_ESTABLISHED; preserve original39626720171 failure"
   },
   "integrated_app": "IN_PROGRESS_NOT_PASS",
   "final_required_ci": "NOT_RUN",
