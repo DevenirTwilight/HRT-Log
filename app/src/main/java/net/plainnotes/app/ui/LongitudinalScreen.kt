@@ -1,5 +1,7 @@
 package net.plainnotes.app.ui
 
+import androidx.compose.ui.graphics.luminance
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -168,7 +170,7 @@ import java.time.*
                             val c=MaterialTheme.colorScheme
                             Box(Modifier.weight(1f)) {
                                 Surface(color=if(current && standards.isNotEmpty())c.primary else c.secondaryContainer,contentColor=if(current && standards.isNotEmpty())c.onPrimary else c.onSecondaryContainer,
-                                    shape=Corners.badge,modifier=Modifier.testTag("period-pill:${period.key}")) {
+                                    shape=Corners.pill,modifier=Modifier.testTag("period-pill:${period.key}")) {
                                     Text(stringResource(if(standards.isEmpty())R.string.timeline_epoch_unknown else if(current)R.string.period_current else R.string.period_past),
                                         style=MaterialTheme.typography.labelLarge,fontWeight=androidx.compose.ui.text.font.FontWeight.SemiBold,
                                         modifier=Modifier.padding(horizontal=10.dp,vertical=4.dp).semantics{heading()})
@@ -378,14 +380,15 @@ internal fun eventKindIcon(kind:EventKind):androidx.compose.ui.graphics.vector.I
 }
 /**
  * UI-05 D: one colour per type group (lab, visit, milestone, stage review, other), each a theme container/on-container pair
- * so the icon keeps ≥ 3:1 in light, dark and every contrast level (Ui05TimelineTest). A missed dose keeps the error colour.
+ * so the icon keeps ≥ 3:1 in light, dark and every contrast level (Ui05TimelineTest). UI-06: a missed dose uses the neutral
+ * missed token (never red).
  */
-internal fun eventTypeColors(kind:EventKind,c:ColorScheme)=when(kind){
+internal fun eventTypeColors(kind:EventKind,c:ColorScheme,sem:SemanticColors=semanticColors(c,c.surface.luminance()<0.5f))=when(kind){
     EventKind.LAB->c.tertiaryContainer to c.onTertiaryContainer;EventKind.APPOINTMENT->c.secondaryContainer to c.onSecondaryContainer
     EventKind.MILESTONE->c.primaryContainer to c.onPrimaryContainer;EventKind.REVIEW->c.inverseSurface to c.inverseOnSurface
-    EventKind.MISSED->c.errorContainer to c.onErrorContainer;else->c.surfaceVariant to c.onSurfaceVariant}
+    EventKind.MISSED->sem.missed.container to sem.missed.onContainer;else->c.surfaceVariant to c.onSurfaceVariant}
 @Composable internal fun EventTypeBadge(kind:EventKind) {
-    val (bg,fg)=eventTypeColors(kind,MaterialTheme.colorScheme)
+    val (bg,fg)=eventTypeColors(kind,MaterialTheme.colorScheme,NotesTheme.semantic)
     Surface(shape=androidx.compose.foundation.shape.CircleShape,color=bg,contentColor=fg,modifier=Modifier.size(36.dp).testTag("event-badge:${kind.name}")){
         Box(contentAlignment=androidx.compose.ui.Alignment.Center){Icon(eventKindIcon(kind),null,Modifier.size(20.dp))}}
 }

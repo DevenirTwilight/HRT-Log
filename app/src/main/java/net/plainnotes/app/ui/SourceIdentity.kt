@@ -53,7 +53,7 @@ data class SourceIdentity(val sha: String, val commitTimeUtc: String, val origin
             "declared-unverified" -> R.string.about_source_origin_declared
             else -> R.string.about_source_origin_unknown
         }), "about-source-origin")
-        if (identity.dirty) Text(stringResource(R.string.about_source_dirty), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.error,
+        if (identity.dirty) Text(stringResource(R.string.about_source_dirty), style = MaterialTheme.typography.bodyMedium, color = NotesTheme.semantic.attention.accent, // UI-06: attention
             modifier = Modifier.testTag("about-source-dirty"))
         OutlinedButton(onClick = {
             context.getSystemService(ClipboardManager::class.java)?.setPrimaryClip(ClipData.newPlainText(context.getString(R.string.about_source_title), identity.copyText()))

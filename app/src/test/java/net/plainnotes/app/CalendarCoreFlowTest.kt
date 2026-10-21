@@ -69,7 +69,9 @@ class CalendarCoreFlowTest {
     private fun cell(d: LocalDate) = ui.onNode(hasContentDescription(fullDate(d), substring = true) and hasClickAction())
     private val dateCell = hasClickAction() and SemanticsMatcher("date cell") { n -> n.config.getOrNull(SemanticsProperties.Role) == Role.Button && n.config.contains(SemanticsProperties.Selected) && n.config.contains(SemanticsProperties.ContentDescription) }
     private fun selectTomorrow() {
-        ui.waitUntil(10_000) { ui.onAllNodes(dateCell).fetchSemanticsNodes().isNotEmpty() }
+        // UI-06: the "no entry yet" card (this fixture's past slots are unconfirmed) sits under the today card, so on a
+        // 568dp screen the month grid is not composed until scrolled to; scroll to it as the user does.
+        ui.waitUntil(10_000) { runCatching { dayList.performScrollToNode(dateCell) }.isSuccess }
         if (ui.onAllNodes(hasContentDescription(fullDate(tomorrow), substring = true) and hasClickAction()).fetchSemanticsNodes().isEmpty())
             ui.onNodeWithContentDescription(s(R.string.calendar_next)).performClick()
         // UI-04: the today card now also lists today's records, so on a 568dp screen the grid row starts below the fold.
@@ -124,7 +126,7 @@ class CalendarCoreFlowTest {
         val width = ui.onRoot().fetchSemanticsNode().size.width
         for ((d, f) in listOf(false to 1f, false to 2f, true to 1f, true to 2f)) {
             dark = d; scale = f; ui.waitForIdle()
-            dayList.performScrollToIndex(0)
+            dayList.performScrollToIndex(0); dayList.performScrollToNode(dateCell)   // UI-06: the grid may start below the card
             val cells = ui.onAllNodes(dateCell).fetchSemanticsNodes()
             assertTrue("dark=$d scale=$f: ${cells.size}", cells.size in setOf(7, 35, 42))
             cells.forEach { n -> val x = n.positionInRoot.x; assertTrue("dark=$d scale=$f cell outside the width: $x+${n.size.width}/$width", x >= 0f && x + n.size.width <= width + 0.5f && n.size.height > 0) }

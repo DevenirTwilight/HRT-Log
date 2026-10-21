@@ -50,11 +50,19 @@ private fun ColorScheme.withContrast(c: Contrast, dark: Boolean): ColorScheme = 
         background = if (dark) Color.Black else Color.White, surface = if (dark) Color.Black else Color.White)
 }
 
+/** The app's own (non-dynamic) scheme at a contrast level; what [NotesTheme] uses without dynamic colour. */
+fun notesColorScheme(dark: Boolean, contrast: Contrast = Contrast.STANDARD): ColorScheme = (if (dark) Dark else Light).withContrast(contrast, dark)
+
 @Composable fun NotesTheme(mode: ThemeMode = ThemeMode.SYSTEM, dynamicColor: Boolean = false, contrast: Contrast = Contrast.STANDARD, content: @Composable () -> Unit) {
     val dark = when (mode) { ThemeMode.SYSTEM -> isSystemInDarkTheme(); ThemeMode.LIGHT -> false; ThemeMode.DARK -> true }
     val scheme: ColorScheme = if (dynamicColor && Build.VERSION.SDK_INT >= 31) {
         val context = LocalContext.current
         if (dark) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
     } else if (dark) Dark else Light
-    MaterialTheme(colorScheme = scheme.withContrast(contrast, dark), shapes = Shapes(small = androidx.compose.foundation.shape.RoundedCornerShape(10.dp), medium = androidx.compose.foundation.shape.RoundedCornerShape(16.dp), large = androidx.compose.foundation.shape.RoundedCornerShape(24.dp)), content = content)
+    val dynamic = dynamicColor && Build.VERSION.SDK_INT >= 31
+    val colors = scheme.withContrast(contrast, dark)
+    // UI-06: semantic status tokens next to the Material scheme, same contrast level and dynamic rule.
+    androidx.compose.runtime.CompositionLocalProvider(LocalSemanticColors provides semanticColors(colors, dark, contrast, dynamic)) {
+        MaterialTheme(colorScheme = colors, shapes = Shapes(small = androidx.compose.foundation.shape.RoundedCornerShape(10.dp), medium = androidx.compose.foundation.shape.RoundedCornerShape(16.dp), large = androidx.compose.foundation.shape.RoundedCornerShape(24.dp)), content = content)
+    }
 }

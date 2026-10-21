@@ -1,3 +1,24 @@
+## UI-06 语义色与状态体系：实现与验证完成，PR 待 CI — 2026-10-21
+
+分支 feature/ui06-semantic-status-20261021（基于 320171cd），报告 70，REQUIREMENTS §115。
+
+**已完成：**
+- A 令牌：7 个令牌 × 三档对比度；动态色只影响 action / success / danger。
+- B 状态表：日历、今天卡、服药记录、时间线、库存共用 core/ui `StatusStyles`；另有 7 处“需注意”的 error 改为 attention。
+- C 首页“还没有记录”卡：复用 history_backfill 对话框和 confirmMissed。
+- D 形状：`Corners.tag` / `Corners.pill`。
+
+**本地验证：**
+- 测试：core:ui 187、domain 135、data 263、reminder 20 全部 PASS；app 1873 项（319 个既有跳过），首轮 CalendarCoreFlowTest 4 项因确认卡把月历挤出首屏而失败，已改为先滚动，10/10 PASS。
+- lint 0 错误；androidTest 编译 PASS。
+- 截图：前后各 256 张，加高对比度、hi-res、灰度和并排对比，在 docs/ui-audit/2026-10-21-ui06/。
+
+**待 owner 确认：** 症状页紧急来源引用保持红色（安全警示）。
+
+**下一步：** 开 PR 并开启自动合并（§106）；CI 全绿后合并，复验主线 CI。
+
+**NOT_RUN：** 真机 / TalkBack（清单第 12 节）。无 APK、签名或 versionCode 变更。
+
 ## LAB-03 与 LAB-UI-03 正常主线集成验收中 — 2026-10-20
 
 #90最终ffb4c92c的push/PR六类共12必需检查全部SUCCESS，无未解决审查/冲突，普通受保护合并5a7d7c87（07:06:41Z），树与已验源码相同；最终检查URL快照labs/ui03/lab90-approved-final-checks.json。主线合并CI是另一项结果。#89已正常merge该已批准默认分支，未复制未合并源码；双方历史、需求及审批记录保留。AppShell保留Vibe的FAB清除labEdit和正式lab-open-batch标记，保留LabUiState/token/原panel快照和双方原生测试。

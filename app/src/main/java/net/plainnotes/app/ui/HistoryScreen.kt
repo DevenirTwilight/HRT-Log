@@ -156,14 +156,16 @@ fun routeIcon(route: String?): ImageVector = when (route) {
             Text(a.onTimeRate?.let { "${(it * 100).roundToInt()}%" } ?: "—", style = MaterialTheme.typography.displaySmall, fontWeight = FontWeight.SemiBold)
             Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.adherence_on_time_rate), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(bottom = 6.dp))
         }
-        val parts = listOf(a.onTime to c.primary, a.late to c.tertiary, a.missed to c.error, a.skipped to c.outline,a.unconfirmed to c.outlineVariant)
+        // UI-06: missed is the neutral missed token, never red; late is taken (success), told apart by its own words.
+        val sem = NotesTheme.semantic
+        val parts = listOf(a.onTime to c.primary, a.late to sem.success.container, a.missed to sem.missed.accent, a.skipped to c.outline,a.unconfirmed to c.outlineVariant)
         val total = parts.sumOf { it.first }
         if (total > 0) Row(Modifier.fillMaxWidth().height(12.dp).clip(MaterialTheme.shapes.small)) {
             parts.filter { it.first > 0 }.forEach { (n, col) -> Box(Modifier.weight(n.toFloat()).fillMaxHeight().background(col)) }
         }
         FlowRow(horizontalArrangement = Arrangement.spacedBy(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Count(stringResource(R.string.status_on_time), a.onTime, c.primary); Count(stringResource(R.string.status_late), a.late, c.tertiary)
-            Count(stringResource(R.string.status_missed), a.missed, c.error); Count(stringResource(R.string.status_skipped), a.skipped, c.outline)
+            Count(stringResource(R.string.status_missed), a.missed, sem.missed.accent); Count(stringResource(R.string.status_skipped), a.skipped, c.outline)
         }
     }
 }
@@ -209,10 +211,10 @@ fun routeIcon(route: String?): ImageVector = when (route) {
             Spacer(Modifier.width(8.dp))
             Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Chip(formatTime(r.at()))
+                // UI-06: status labels from the one status table.
                 when (r.status) {
-                    "LATE" -> StatusPill(stringResource(R.string.status_late), c.tertiaryContainer, c.onTertiaryContainer, null)
-                    "MISSED" -> StatusPill(stringResource(if(r.unconfirmed)R.string.status_unconfirmed else R.string.status_missed), if(r.unconfirmed)c.surfaceContainerHigh else c.errorContainer, c.onSurface, null)
-                    "SKIPPED" -> StatusPill(stringResource(R.string.status_skipped), c.surfaceContainerHighest, c.onSurfaceVariant, null)
+                    "LATE", "MISSED" -> StatusChip(StatusStyles.ofRecord(r.status, r.unconfirmed))
+                    "SKIPPED" -> StatusChip(StatusStyles.ofRecord(r.status, false), stringResource(R.string.status_you_skipped))
                     // REQUIREMENTS §35: no automatic "unplanned"; labels come from the confirmed or saved period, for every source.
                     else -> labels.sortedBy { it.ordinal }.forEach { Chip(stringResource(recordLabelText(it))) }
                 }
