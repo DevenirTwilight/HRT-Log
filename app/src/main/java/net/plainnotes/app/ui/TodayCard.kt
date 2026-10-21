@@ -101,11 +101,14 @@ internal val LocalTodayClock = staticCompositionLocalOf<() -> Instant> { Instant
             }
             val next = open.firstOrNull()
             // UI-07 D: when "next" changes the old content fades out and the new one fades in, rising a little.
-            AnimatedContent(next?.slot?.key to (if (next == null) (if (allDone) 1 else if (total == 0) 2 else 3) else 0), label = "todayNext",
+            AnimatedContent(NextView(next, open, if (next == null) (if (allDone) 1 else if (total == 0) 2 else 3) else 0), label = "todayNext",
+                contentKey = { it.next?.slot?.key to it.mode },
                 transitionSpec = {
                     if (reduce) EnterTransition.None togetherWith ExitTransition.None
                     else (fadeIn(motionSpec(false)) + slideInVertically(motionSpec(false)) { it / 8 }) togetherWith fadeOut(motionSpec(false))
-                }) { _ ->
+                }) { view ->
+            // The content draws the state it was given, so the outgoing "next" stays as it was while it fades out.
+            val next = view.next; val open = view.open
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             when {
                 next != null -> {
@@ -197,6 +200,9 @@ internal val LocalTodayClock = staticCompositionLocalOf<() -> Instant> { Instant
     }
     }
 }
+
+/** What the today card's "next" part shows; [mode] 0 next dose, 1 all done, 2 nothing today, 3 none open. */
+private data class NextView(val next: TimelineEntry?, val open: List<TimelineEntry>, val mode: Int)
 
 /** How long "Logged · Undo" stays after a dose is logged. */
 internal const val UNDO_WINDOW_MS = 4_000L
