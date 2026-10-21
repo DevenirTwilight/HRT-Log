@@ -1,3 +1,7 @@
+## 真实Repository小库异步合同已编码待验 — 2026-10-21
+
+新增NonBlockingRepositoryWriteTest4项：使用真实recordMeasuredUse事务、完整新旧oracle、原3个故障checkpoint、提交后结果丢失及owner取消窗口；复用TEST_ONLY任务原型，不新增生产门面/队列，不接UI正式保存。测试先保存源码，待运行不能填PASS。使用Robolectric35/framework SQLite小型合成数据，不替代SQLCipher/LMK/进程死亡验收，无性能预算调整。
+
 ## 真实主壳导航与状态34项PASS，截图已推送保存 — 2026-10-21
 
 源54b8a8e7：NonBlockingWriteShellTest2、原AppShellBackNavigationTest17、卡片3、四语代表布局8、翻译2，共34 PASS/0FAIL/0SKIP。原始XML/完整日志/真实NotesApp截图及SHA入库nonblocking-transition/shell-first/；截图为合成PENDING观察+真实药物页，不是假称实际库存后台保存。收起可展开、抽屉导航、返回日历及无业务写入断言均通过。已检查实际截图。真机/TalkBack/native及CI NOT_RUN；未启动大库，不改原预算。
