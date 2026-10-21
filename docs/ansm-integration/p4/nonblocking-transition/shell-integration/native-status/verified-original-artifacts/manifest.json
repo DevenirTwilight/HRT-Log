@@ -33,5 +33,12 @@
     "sha256": "b61b593724803f549decfdf170474e33780349ab506675a32c54e60c7feee7c0",
     "zip_crc": "PASS",
     "file": "12356083954.zip"
+  },
+  {
+    "artifact_id": 12358032004,
+    "size": 2571,
+    "sha256": "b710786ca6ca93764bdb03e0023c82934604ab9ed3b55efeedaf036825edba3d",
+    "zip_crc": "PASS",
+    "file": "12358032004.zip"
   }
 ]

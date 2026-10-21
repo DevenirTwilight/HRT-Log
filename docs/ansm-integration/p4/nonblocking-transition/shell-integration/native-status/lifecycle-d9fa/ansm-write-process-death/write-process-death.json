@@ -1,0 +1,20 @@
+{
+  "scope": "SYNTHETIC_ACTUAL_WRITER_PROCESS_KILL",
+  "performance": "NOT_MEASURED_NOT_A_REPLACEMENT",
+  "cases": [
+    {
+      "stage": "STOCK_CAPTURED",
+      "pid": 3977,
+      "expected_sha256": "b5298bb8884aa328b7e5f7c7f7671ce2b8597a910c3e30369d48faacb152c27f",
+      "epoch": "9b4979db-c621-4e74-83ae-9c868d44376b",
+      "expected_records": 0,
+      "new_pid": 4255,
+      "status": "PASS_EXACT_DATASET_FULL_ORACLE_NO_REPLAY"
+    },
+    {
+      "stage": "AFTER_COMMIT",
+      "status": "FAIL",
+      "reason": "AssertionError: No pending restore checkpoint"
+    }
+  ]
+}

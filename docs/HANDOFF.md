@@ -1,3 +1,11 @@
+## 针对性API26验收已结束并保存：17项PASS，提交后kill检查点FAIL — 2026-10-21
+
+run39626720171/d9fa9340整体FAIL；官方artifact12358032004的ZIP/SHA b710786c…edba3d/CRC及全部原文件、完整job日志已核验保存到shell-integration/native-status/。17项真实SQLCipher合同全部PASS（110.143s整套），包含3项SAVEPOINT修正与14项owner合同。新增writer STOCK_CAPTURED外部强杀→新PID/精确dump/epoch/0记录/完整oracle无重放PASS。AFTER_COMMIT在原60秒内没有marker，未执行fresh verify，不能声称安全通过。原host错误文字“restore checkpoint”实际是writer标签；Process crashed包含finally外部force-stop，不据此编造OOM根因。
+
+不重跑已完成大库/恢复/17项，也不放宽超时碰运气。当前证据无法区分prepare慢、提交异常、返回等待或调度；进一步仅应对失败AFTER_COMMIT增加最少阶段/异常证据，不对所有已验证阶段重复运行。原5秒硬门6.387/6.285/5.666秒FAIL是主要阻塞，另有此低内存生命周期证明缺口、真机/TalkBack范围；不能转Ready。无在途任务。生产dc10未改，主线320171cd；全部进度入库，PR57保持Draft/OFF/autoMerge=null，没有Schema/备份/加密/PK/发布变化。
+
+完整互斥耗时、原报告、证明范围及下一步决策见[核验报告](ansm-integration/p4/nonblocking-transition/shell-integration/verified-results.md)。仅后台化不能让原5秒通过；政策改指标仍未批准，不自动修改门槛或恢复已冻结架构攻关。
+
 ## 原生证据集中归档完成；真实写入瓶颈明确，针对性修复验证在途 — 2026-10-21
 
 [核验报告](ansm-integration/p4/nonblocking-transition/shell-integration/verified-results.md)及native-status/现保存5份官方原ZIP、官方SHA/CRC清单、完整大库JSON/恢复kill报告/本地修正证据。连接器已解除工件访问阻塞；保留历史CONNECT403，不要求负责人开放网络。无重跑大库。

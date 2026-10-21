@@ -10,7 +10,7 @@
 - 原API26 run39620822817的artifact12354653563及fb43完整CI39622595007的API26/29/35原ZIP也保存于同目录。CLI Azure CONNECT403保留；授权GitHub连接器已取回，网络不是当前证据阻塞。无凭据/签名下载URL入库，不重跑性能。
 - 本地完整data528 PASS/零跳过（first-local）；原18 App通过，另2项最初初始化超时原样保留，修正Main Looper测试驱动后2项PASS（looper-fixed）。生产未因测试改动。
 - fb43 CI39622595007：android/JVM/API29/API35 SUCCESS；API26 FAIL。Science39622599139两项SUCCESS。API26/29/35 owner14合同均原报告14/0fail/0skip；API26原d582耗时5.884s、fb43 API29 2.044s/API35 3.350s为整套小库合同时间，不是固定夹具单写性能。
-- API26三个失败是新oracle测试裸ROLLBACK TO的语句分类问题，Room随后报无当前事务；参照既存A/B反例在3处增加前置空语句，保留实际SQLite savepoint回滚及所有断言。d9fa9340目标JVM3项、Android合同编译、Python工具5项PASS（savepoint-fix-local）。原生修正尚待run39626720171，不拿编译或JVM替代。
+- API26三个失败是新oracle测试裸ROLLBACK TO的语句分类问题，Room随后报无当前事务；参照既存A/B反例在3处增加前置空语句，保留实际SQLite savepoint回滚及所有断言。d9fa9340目标JVM3项、Android合同编译、Python工具5项PASS（savepoint-fix-local）。run39626720171已核验原生17/17 PASS，含3项原失败及owner14；原始instrument输出及官方ZIP/SHA/CRC保存。整体仍FAIL，原因是下述新增writer进程kill第二场景未通过。
 
 ## 原冻结夹具的性能（同一次大库运行）
 
@@ -61,6 +61,18 @@ API26 SQLCipher，512MiB配置/192MiB ART heap；14600记录、2000容器、3260
 
 ## 当前合并判断
 
-**不可合并。主要可量化阻塞是原≤5秒硬门真实FAIL，网络已解除。** 测试修复原生核验进行中，TalkBack/真机及完整产品恢复范围未因此完成。正式P4提交入口仍OFF；状态观察绑定不等于整个P4表单已启用。
+**不可合并。主要可量化阻塞是原≤5秒硬门真实FAIL，网络已解除。** 测试修复原生17项已PASS；新增writer低内存AFTER_COMMIT进程kill检查点超时仍未验证，TalkBack/真机及完整产品恢复范围未因此完成。正式P4提交入口仍OFF；状态观察绑定不等于整个P4表单已启用。
 
 最小安全替代是保留完整审计、如实显示PENDING并在根提交后确认SUCCESS；已实现进程owner与真实App状态/受限只读刷新。其代价是O(历史)延迟、单空间保守互斥和未知结果人工核对；无Schema迁移或双验证器维护。它**不满足现5秒门**。将5秒改为非阻断延迟指标是proposal.md中的负责人待决政策，尚未批准、不修改断言；若继续坚持5秒，则需要明确重开具有不同正确性机制的架构范围和迁移证明工作，不能靠重复跑分解决。不存在“已经证明所有安全架构都不可能达到5秒”的结论；已证明的仅是当前方案/本次原生实测失败及特定A/B反例。
+
+## 针对性原生最终结果：17合同通过，提交后强杀检查点未到达
+
+run39626720171，源d9fa9340，artifact12358032004（2571B），SHA256 `b710786ca6ca93764bdb03e0023c82934604ab9ed3b55efeedaf036825edba3d`，CRC PASS。原ZIP、7个原文件及完整job日志压缩保存于native-status/。实际API26/512MiB/192MiB资源验证未变；本作业未运行大库性能或重跑恢复kill。
+
+- 3项SAVEPOINT修正+14项owner合同：原instrument输出 `OK (17 tests)`，110.143s整套耗时，不是单笔性能。原三个测试确实在SQLCipher原生通过，而非仅编译。
+- 新writer STOCK_CAPTURED：外部kill前PID3977，新PID4255，0记录/0消耗，精确dump/epoch/独立完整oracle、无重放PASS；fresh验证10.02s是小库正确性测试整体，不挪入预算表。
+- AFTER_COMMIT：60秒内未观察到marker，FAIL，原文 `AssertionError: No pending restore checkpoint` 是writer host复制来的错误标签，不表示重跑了恢复。prepare日志的 `Process crashed` 包含host finally force-stop，不能单凭它推断系统OOM、数据库损坏或自然崩溃。没有AFTER_COMMIT fresh-verify报告，因此提交后kill安全性在这个低内存运行仍NOT_VERIFIED。
+
+现有报告无法区分准备阶段慢、提交异常被owner保守捕获、提交返回等待或调度原因；完整job日志未保存该测试进程的logcat，不能猜定根因。不得扩大60秒等待求绿、删除断言、把API29作业成功替代这个资源环境。后续如继续这一问题，只针对AFTER_COMMIT失败场景增加不含健康载荷的阶段/异常证据并先定位；不重跑已通过17合同、STOCK_CAPTURED、旧大库或恢复kill。当前没有在途测试或新的跑分计划。
+
+原5秒硬门仍为主要架构/政策阻塞；此次失败另增加明确的低内存生命周期证明缺口。不存在“仅待网络开放即可合并”的状态。
