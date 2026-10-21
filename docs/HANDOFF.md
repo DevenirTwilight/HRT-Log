@@ -1,3 +1,9 @@
+## 真实主壳导航与状态34项PASS，截图已推送保存 — 2026-10-21
+
+源54b8a8e7：NonBlockingWriteShellTest2、原AppShellBackNavigationTest17、卡片3、四语代表布局8、翻译2，共34 PASS/0FAIL/0SKIP。原始XML/完整日志/真实NotesApp截图及SHA入库nonblocking-transition/shell-first/；截图为合成PENDING观察+真实药物页，不是假称实际库存后台保存。收起可展开、抽屉导航、返回日历及无业务写入断言均通过。已检查实际截图。真机/TalkBack/native及CI NOT_RUN；未启动大库，不改原预算。
+
+继续做真实Repository小库提交/回滚/结果丢失窗口的TEST_ONLY整合合同，尚未运行；生产公开门面、真实安全核对resolver及全部冲突入口仍未实现。原资源退出2 RED仍需独立处理，恢复稳定性未证明。P4 Draft/OFF，不合并发布。
+
 ## 主壳非模态状态挂接已编码，真实导航小合同待验 — 2026-10-21
 
 NotesApp新增可选只读writeProgress参数（默认null，P4写入口仍OFF），在原TopAppBar下内联显示状态；收起只切为可展开状态条，不取消/重放任务，也不建立第二状态源。无新导航页/全屏遮罩，原返回handler不改。实际后端尚未绑定，参数只由将来经过验收的owner提供，不生成假保存成功。
