@@ -1311,4 +1311,10 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="status_you_skipped">You skipped</string>
 <string name="confirm_title_date">No entry yet for %1$s</string>
 <string name="confirm_body_with">%1$s. If you remember, just add it.</string>
+<!-- UI-07 expressive -->
+<string name="today_logged">Logged</string>
+<string name="today_undo">Undo</string>
+<string name="confirm_result_not_taken">Noted: not taken</string>
+<string name="recent_7_days">Last 7 days</string>
+<string name="full_calendar">Full calendar</string>
 </resources>

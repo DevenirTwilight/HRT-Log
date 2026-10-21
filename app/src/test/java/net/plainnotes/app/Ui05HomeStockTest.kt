@@ -47,7 +47,8 @@ class Ui05HomeStockTest {
         ui.onNode(hasText(s(R.string.stock_runs_out_in, days), substring = true) and hasAnyAncestor(hasTestTag("home-stock-row:1"))).assertExists()
         val today = ui.onNodeWithTag("today-card").fetchSemanticsNode().boundsInRoot
         val strip = ui.onNodeWithTag("home-stock").fetchSemanticsNode().boundsInRoot
-        val calendar = ui.onNodeWithTag("calendar-card").fetchSemanticsNode().boundsInRoot
+        // UI-07 F: the home calendar is the "last 7 days" card (the full calendar opens from it).
+        val calendar = ui.onNodeWithTag("recent-card").fetchSemanticsNode().boundsInRoot
         assertTrue("strip under the today card", strip.top >= today.bottom)
         assertTrue("strip before the calendar", strip.bottom <= calendar.top)
         ui.onNodeWithTag("home-stock-more").assertDoesNotExist()

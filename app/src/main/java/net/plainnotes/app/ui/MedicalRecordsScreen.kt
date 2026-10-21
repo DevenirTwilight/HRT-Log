@@ -67,9 +67,9 @@ import java.time.*
             item("year:$year"){Text(year.toString(),style=MaterialTheme.typography.labelLarge,color=MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier=Modifier.semantics{heading()}.testTag("medical-year:$year"))}
             item("year-list:$year"){
-                Surface(color=MaterialTheme.colorScheme.surfaceContainerLowest,shape=Corners.list,modifier=Modifier.fillMaxWidth().testTag("medical-year-list:$year")) {
-                    Column { rows.forEachIndexed{i,a-> MedicalVisitRow(a,questionCounts[a.id] ?: 0,onVisit)
-                        if(i<rows.lastIndex)HorizontalDivider(Modifier.padding(start=68.dp),color=MaterialTheme.colorScheme.outlineVariant) } }
+                // UI-07 E: each visit its own container in a connected grouped list; the row keeps its own click and tag.
+                Column(Modifier.fillMaxWidth().testTag("medical-year-list:$year"),verticalArrangement=Arrangement.spacedBy(GroupedGap)) {
+                    rows.forEachIndexed{i,a-> GroupedItem(i,rows.size){MedicalVisitRow(a,questionCounts[a.id] ?: 0,onVisit)} }
                 }
             }
         }

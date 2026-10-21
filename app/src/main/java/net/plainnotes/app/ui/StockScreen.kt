@@ -81,7 +81,8 @@ fun stockSummary(m: MedicationEntity, containers: List<ContainerEntity>, forecas
             val unallocated = records.filter { it.medication_id == m.id && it.deleted_at_utc == null }.sumOf { it.unallocated_supply_amount ?: 0.0 }
             val packages = containers.count { it.medication_id == m.id && it.state != "VOIDED" }
             val checkable = containers.any { it.medication_id == m.id && it.state in CHECKABLE_STATES }
-            StockCard(m, sum, unallocated, today, zone, packages, checkable, { onReplace(m) }, { onCheck(m) }, { onAdd(m) }, { onManage(m) }, state.schedules[m.id])
+            StockCard(m, sum, unallocated, today, zone, packages, checkable, { onReplace(m) }, { onCheck(m) }, { onAdd(m) }, { onManage(m) }, state.schedules[m.id],
+                boxes = containers.filter { it.medication_id == m.id && it.state != "VOIDED" })
         }
     }
 }
@@ -90,7 +91,8 @@ fun stockSummary(m: MedicationEntity, containers: List<ContainerEntity>, forecas
 val CHECKABLE_STATES = setOf("IN_USE", "EMPTY")
 
 @Composable private fun StockCard(m: MedicationEntity, s: StockSummary, unallocated: Double, today: LocalDate, zone: ZoneId, packages: Int, checkable: Boolean,
-                                  onReplace: () -> Unit, onCheck: () -> Unit, onAdd: () -> Unit, onManage: () -> Unit, schedule: net.plainnotes.app.ScheduleSummary? = null) {
+                                  onReplace: () -> Unit, onCheck: () -> Unit, onAdd: () -> Unit, onManage: () -> Unit, schedule: net.plainnotes.app.ScheduleSummary? = null,
+                                  boxes: List<ContainerEntity> = emptyList()) {
     val c = MaterialTheme.colorScheme
     if(s.forecast?.status==StockForecast.Status.UNKNOWN) {
         SectionCard(null,Modifier.testTag("stock-card-${m.id}")) {
@@ -129,7 +131,8 @@ val CHECKABLE_STATES = setOf("IN_USE", "EMPTY")
             Text(stringResource(R.string.stock_no_active), style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant)
         } else {
             Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(Spacing.s)) {
-                Text(formatDose(requireNotNull(s.remaining), m.unit), style = MaterialTheme.typography.headlineSmall.tnum(), fontWeight = FontWeight.SemiBold)
+                // UI-07 C: the amount left in the stat style (28 sp, capped at 1.3× font size).
+                Text(formatDose(requireNotNull(s.remaining), m.unit), style = NotesTheme.typeExtra.statNumber, modifier = Modifier.testTag("stock-remaining-${m.id}"))
                 // UI-05 C: the days the shared forecast already computed; nothing without a plan or when it lasts the whole window.
                 s.daysLeft?.takeIf { s.forecast?.lastCovered != null }?.let { d ->
                     Text(stringResource(R.string.stock_about_days, d), style = MaterialTheme.typography.titleSmall.tnum(),
@@ -167,7 +170,20 @@ val CHECKABLE_STATES = setOf("IN_USE", "EMPTY")
                 Text(stringResource(R.string.stock_packages_section, packages), Modifier.weight(1f))
                 Icon(if (expanded) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore, null)
             }
-            if (expanded) TextButton(onClick = onManage, modifier = Modifier.heightIn(min = 48.dp).testTag("stock-manage-${m.id}")) { Text(stringResource(R.string.stock_manage, packages)) }
+            // UI-07 D/E: the packages spring open as a connected grouped list; each opens the same packages dialog as "Manage".
+            val reduce = LocalReduceMotion.current
+            androidx.compose.animation.AnimatedVisibility(expanded,
+                enter = if (reduce) androidx.compose.animation.EnterTransition.None else androidx.compose.animation.expandVertically(motionSpec(false)),
+                exit = if (reduce) androidx.compose.animation.ExitTransition.None else androidx.compose.animation.shrinkVertically(motionSpec(false))) {
+                Column(verticalArrangement = Arrangement.spacedBy(Spacing.s)) {
+                    GroupedList(boxes, Modifier.testTag("stock-package-list-${m.id}"), onClick = { onManage() }, itemModifier = { b -> Modifier.testTag("stock-package-${b.id}") }) { b ->
+                        Column(Modifier.padding(horizontal = Spacing.l, vertical = Spacing.m)) {
+                            Text(packageLabel(b, m), style = MaterialTheme.typography.bodyMedium.tnum())
+                        }
+                    }
+                    TextButton(onClick = onManage, modifier = Modifier.heightIn(min = 48.dp).testTag("stock-manage-${m.id}")) { Text(stringResource(R.string.stock_manage, packages)) }
+                }
+            }
         }
     }
 }

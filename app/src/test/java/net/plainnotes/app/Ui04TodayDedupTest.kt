@@ -51,15 +51,17 @@ class Ui04TodayDedupTest {
     private fun state(open: List<TimelineEntry>, appts: List<AppointmentEntity>, start: LocalDate) =
         NotesState(listOf(med), open, appts, loading = false, calendarStart = start)
     private fun extra(open: List<TimelineEntry>, records: List<RecordEntity>) = NotesViewModel.ExtraState(records = records, upcoming = open.filter { it.state in OPEN_STATES })
-    private fun show(open: List<TimelineEntry>, records: List<RecordEntity> = emptyList(), appts: List<AppointmentEntity> = emptyList(), start: LocalDate = today) {
+    private fun show(open: List<TimelineEntry>, records: List<RecordEntity> = emptyList(), appts: List<AppointmentEntity> = emptyList(), start: LocalDate = today, full: Boolean = false) {
         ui.setContent { NotesTheme(ThemeMode.LIGHT) { androidx.compose.material3.Surface {
             CalendarScreen(state(open, appts, start), today, { completed += it }, { changed += it }, {}, {}, PaddingValues(), extra = extra(open, records),
-                onAppointment = { opened += it })
+                onAppointment = { opened += it }, initialFull = full)
         } } }
         ui.waitForIdle()
     }
     private val list get() = ui.onNode(hasScrollToIndexAction())
-    private fun inCard(m: SemanticsMatcher) = ui.onNode(m and hasAnyAncestor(hasTestTag("today-card")))
+    // UI-07 E: today's records and appointments moved from inside the card to grouped lists right under it; "today-section"
+    // holds the card and those lists, so "shown once, in today's section" is still what is checked.
+    private fun inCard(m: SemanticsMatcher) = ui.onNode(m and hasAnyAncestor(hasTestTag("today-section")))
     private fun tags(prefix: String) = ui.onAllNodes(SemanticsMatcher("tag $prefix") { it.config.getOrNull(SemanticsProperties.TestTag)?.startsWith(prefix) == true }, useUnmergedTree = true)
         .fetchSemanticsNodes().map { it.config[SemanticsProperties.TestTag] }
     /** Every node in the list, composed or not: scroll through the whole list collecting tags. */
@@ -134,7 +136,8 @@ class Ui04TodayDedupTest {
 
     @Test @Config(qualifiers = "w320dp-h640dp") fun goingBackToTodayScrollsTheTodayCardIntoView() {
         val tomorrow = today.plusDays(1)
-        show((8..20 step 2).map { entry(it, tomorrow) } + entry(21), start = tomorrow)
+        // UI-07 F: the "Today" button is in the full calendar's period bar; open the full calendar explicitly.
+        show((8..20 step 2).map { entry(it, tomorrow) } + entry(21), start = tomorrow, full = true)
         list.performScrollToNode(hasTestTag("day-dose:${entry(20, tomorrow).slot.key}"))   // down in tomorrow's list
         list.performScrollToIndex(1)                                                          // the calendar at the top, the card above it
         assertTrue("precondition: the today card's title is out of view", runCatching { ui.onNodeWithTag("today-date").assertIsDisplayed() }.isFailure)
@@ -163,7 +166,8 @@ class Ui04TodayDedupTest {
 
     @Test fun talkBackReadsDateProgressNextButtonLaterLogAppointment() {
         show(listOf(entry(8), entry(21)), listOf(record(5, 6, "ON_TIME")), listOf(appt(9, 15)))
-        val order = traversal(ui.onNodeWithTag("today-card").fetchSemanticsNode()).map { it.config.getOrNull(SemanticsProperties.TestTag) }
+        // UI-07 E: the log and appointments follow the card in the same section; the reading order is unchanged.
+        val order = traversal(ui.onNodeWithTag("today-section").fetchSemanticsNode()).map { it.config.getOrNull(SemanticsProperties.TestTag) }
         val i = listOf("today-date", "today-progress", "today-next-time", "today-take-now", "today-later", "today-log", "today-appts").map { t ->
             order.indexOf(t).also { assertTrue("$t missing", it >= 0) } }
         assertEquals(i.sorted(), i)

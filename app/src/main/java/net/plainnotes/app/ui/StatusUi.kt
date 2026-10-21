@@ -75,9 +75,9 @@ fun Modifier.statusOutline(style: StatusStyle, tone: SemanticTone?, shape: Shape
     val content = tone?.onContainer ?: c.onSurfaceVariant
     Surface(color = container, contentColor = content, shape = Corners.pill,
         modifier = modifier.statusOutline(style, tone, Corners.pill).testTag("status:${style.state}")) {
-        Row(Modifier.padding(horizontal = 10.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-            statusIcon(style.symbol)?.let { Icon(it, null, Modifier.size(14.dp), tint = if (style.outlined || style.dashed) tone?.accent ?: content else content); Spacer(Modifier.width(4.dp)) }
-            if (style.symbol == StatusSymbol.HALF) { Text("½", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold); Spacer(Modifier.width(4.dp)) }
+        Row(Modifier.padding(start = if (statusIconKind(style.state) != null) 4.dp else 10.dp, end = 10.dp, top = 3.dp, bottom = 3.dp), verticalAlignment = Alignment.CenterVertically) {
+            // UI-07 A: the filled-circle status icon (decorative; the chip's words say the state).
+            statusIconKind(style.state)?.let { StatusIcon(it, StatusIconSizes.S); Spacer(Modifier.width(6.dp)) }
             Text(text, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Medium)
         }
     }

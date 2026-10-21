@@ -1,3 +1,25 @@
+## UI-07 Material 3 Expressive 表现层：实现与验证完成，PR 待 CI — 2026-10-21
+
+UI-06 #91 已合并（4ec11437），主线 CI 六项全绿。分支 feature/ui07-expressive-20261021，报告 71，REQUIREMENTS §133。
+
+**已完成：**
+- A 实心圆状态图标；B 形状与按下形变；C 强调字体；D 弹簧动效与减少动画；E 分组列表；F 最近 7 天。
+- 撤销已实现：调用已有 deleteRecord，与服药记录删除逐字段一致。
+
+**本地验证：**
+- 测试：core:ui 422、domain 135、data 263、reminder 20 全部 PASS；app 1935 项 0 失败。
+- lint 0 错误（修复了 1 个 AnimatedContent 问题）；androidTest 编译 PASS。
+- 断言迁移 10 处，均写入报告 71 §7.3，没有删除断言。
+- 测试发现 2× 字号下最近 7 天胶囊和法语标题被挤压，已修复产品代码，没有放宽断言。
+
+**截图和动效：** docs/ui-audit/2026-10-21-ui07/。本环境没有模拟器，动效用 Robolectric 逐帧 GIF 代替。
+
+**合并默认分支：** 已合并 #57 P4（b04358fd）；UI-07 需求改编号为 §133；合并后全量回归通过（domain 152、core:ui 422、data 528、reminder 21、app 1987 项 0 失败，lint 0 错误）。
+
+**下一步：** 开 PR 并开启自动合并；CI 全绿后合并，复验主线 CI。
+
+**NOT_RUN：** 真机 / TalkBack（清单第 13 节）。无 APK、签名或 versionCode 变更。
+
 ## f13技术验收全部通过，最终正常提交清除受保护CI的跳过状态 — 2026-10-21
 
 39653018592 Android/JVM/26/29/35全部SUCCESS，39653023713 Science gate/deep全部SUCCESS。三API真实192MiB进程前置探针通过；26/29各335合同0fail/0skip，35完整data407列项0fail/5个显式host探针skip、App282列项0fail/10个既有action探针skip，另有严格host调用验证；三API的两个writer OS-kill合同均精确数据/新PID/完整oracle/无重放PASS。详情technical-verification-f13.json，官方原ZIP/SHA/CRC与日志实时保存到独立evidence/p4-admission-4a67e96e分支，不以改写旧FAIL获取绿灯。

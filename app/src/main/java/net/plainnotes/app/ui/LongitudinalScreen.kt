@@ -194,12 +194,14 @@ import java.time.*
                         // UI-05 D: "[from] – [to]", or "since [from] · day n" for the current period. Display only: the day count is
                         // from the period's own start date, nothing is written.
                         val end=period.until?.minusNanos(1)?.atZone(zone)?.toLocalDate();val from=formatDate(period.from.atZone(zone).toLocalDate())
-                        Row(verticalAlignment=androidx.compose.ui.Alignment.CenterVertically) {
+                        // UI-07 C: "day n" in the stat style; it wraps under the date when both do not fit.
+                        @OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
+                        androidx.compose.foundation.layout.FlowRow(itemVerticalAlignment=androidx.compose.ui.Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(8.dp)) {
                             Text(if(end!=null)"$from – ${formatDate(end)}" else stringResource(R.string.period_since,from),style=MaterialTheme.typography.titleMedium.tnum(),
                                 fontWeight=androidx.compose.ui.text.font.FontWeight.Bold,modifier=Modifier.testTag("period-since:${period.key}"))
-                            if(current && standards.isNotEmpty())Text(" · "+stringResource(R.string.period_day_n,
+                            if(current && standards.isNotEmpty())Text(stringResource(R.string.period_day_n,
                                 java.time.temporal.ChronoUnit.DAYS.between(period.from.atZone(zone).toLocalDate(),now.atZone(zone).toLocalDate()).toInt()+1),
-                                style=MaterialTheme.typography.titleMedium.tnum(),modifier=Modifier.testTag("period-day:${period.key}"))
+                                style=NotesTheme.typeExtra.statNumber,modifier=Modifier.testTag("period-day:${period.key}"))
                         }
                         if(standards.isEmpty())Text(stringResource(R.string.epoch_no_plan))
                         // REQUIREMENTS §36: explicit stops and why this period differs from the previous one.
@@ -388,6 +390,8 @@ internal fun eventTypeColors(kind:EventKind,c:ColorScheme,sem:SemanticColors=sem
     EventKind.MILESTONE->c.primaryContainer to c.onPrimaryContainer;EventKind.REVIEW->c.inverseSurface to c.inverseOnSurface
     EventKind.MISSED->sem.missed.container to sem.missed.onContainer;else->c.surfaceVariant to c.onSurfaceVariant}
 @Composable internal fun EventTypeBadge(kind:EventKind) {
+    // UI-07 A: a missed dose is the same filled-circle status icon as everywhere else; the row's text names the type.
+    if(kind==EventKind.MISSED){Box(Modifier.size(36.dp).testTag("event-badge:${kind.name}"),contentAlignment=androidx.compose.ui.Alignment.Center){StatusIcon(StatusIconKind.MISSED,StatusIconSizes.L)};return}
     val (bg,fg)=eventTypeColors(kind,MaterialTheme.colorScheme,NotesTheme.semantic)
     Surface(shape=androidx.compose.foundation.shape.CircleShape,color=bg,contentColor=fg,modifier=Modifier.size(36.dp).testTag("event-badge:${kind.name}")){
         Box(contentAlignment=androidx.compose.ui.Alignment.Center){Icon(eventKindIcon(kind),null,Modifier.size(20.dp))}}

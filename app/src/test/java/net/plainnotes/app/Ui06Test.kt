@@ -129,7 +129,8 @@ class Ui06AccessibilityTest(private val locale: String, private val mode: ThemeM
             f.auto(3, f.now.minusSeconds(26 * 3600)), f.auto(4, f.now.minusSeconds(30 * 3600)))
         val state = NotesState(listOf(f.med), emptyList(), emptyList(), loading = false, calendarStart = f.today)
         ui.setContent { CompositionLocalProvider(LocalTodayClock provides { f.now }) { NotesTheme(mode) { androidx.compose.material3.Surface {
-            CalendarScreen(state, f.today, {}, {}, {}, {}, PaddingValues(), extra = NotesViewModel.ExtraState(records = records))
+            CalendarScreen(state, f.today, {}, {}, {}, {}, PaddingValues(), extra = NotesViewModel.ExtraState(records = records),
+                initialFull = true)  // UI-07 F: the month grid and legend are in the full calendar, opened explicitly
         } } } }
         ui.waitForIdle()
     }
@@ -140,7 +141,8 @@ class Ui06AccessibilityTest(private val locale: String, private val mode: ThemeM
         val list = ui.onNode(hasScrollToIndexAction())
         list.performScrollToNode(hasTestTag("unconfirmed-row:1"))
         assertEquals(listOf("unconfirmed-title:1", "unconfirmed-body:1", "unconfirmed-took:1", "unconfirmed-not-taken:1"),
-            tagsInOrder(ui.onNodeWithTag("unconfirmed-row:1").fetchSemanticsNode()).drop(1))
+            // UI-07 A: the row's ? is now a StatusIcon node (decorative, no words — Ui07StatusIconTest checks it is silent); it is not read.
+            tagsInOrder(ui.onNodeWithTag("unconfirmed-row:1").fetchSemanticsNode()).drop(1).filterNot { it.startsWith("unconfirmed-icon:") })
         ui.onNodeWithTag("unconfirmed-title:1").assert(SemanticsMatcher.keyIsDefined(SemanticsProperties.Heading))
         val density = context.resources.displayMetrics.density
         for (tag in listOf("unconfirmed-took:1", "unconfirmed-not-taken:1", "unconfirmed-took:3", "unconfirmed-not-taken:3", "unconfirmed-more")) {

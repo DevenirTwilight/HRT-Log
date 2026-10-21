@@ -41,7 +41,8 @@ class CalendarDayMarkTest(private val locale: String) {
         val med = MedicationEntity(1, "Synthetic E2", "E2", "ORAL", "MG", 2.0, 30.0, null, 15, 120, false, null, true, true, 0)
         val records = listOf(record(1, today.minusDays(1), "ON_TIME"), record(2, today.minusDays(1), "MISSED"), record(3, today.minusDays(2), "MISSED"), record(4, today.minusDays(3), "ON_TIME"))
         ui.setContent { NotesTheme(ThemeMode.DARK) { androidx.compose.material3.Surface {
-            CalendarScreen(NotesState(listOf(med), calendarStart = today), today, {}, {}, {}, {}, PaddingValues(), extra = NotesViewModel.ExtraState(records = records))
+            CalendarScreen(NotesState(listOf(med), calendarStart = today), today, {}, {}, {}, {}, PaddingValues(), extra = NotesViewModel.ExtraState(records = records),
+                initialFull = true)  // UI-07 F: month grid = full calendar, opened explicitly
         } } }
         val l = ui.activity.resources.configuration.locales[0]
         fun node(d: LocalDate) = ui.onNode(hasContentDescription(d.format(DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(l, "yMMMMdEEEE"), l)), substring = true) and hasClickAction()).fetchSemanticsNode()

@@ -32,11 +32,11 @@ class CalendarIntakeAndroidTest {
 
     private fun s(id: Int) = context.getString(id)
     private fun intakes() = runBlocking { context.repository.records() }.filter { it.status != "MISSED" && it.deleted_at_utc == null }
-    private fun cell(d: LocalDate): SemanticsNodeInteraction {
+    private fun cellName(d: LocalDate): String {
         val locale = context.resources.configuration.locales[0]
-        val name = d.format(DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, "yMMMMdEEEE"), locale))
-        return ui.onNode(hasContentDescription(name, substring = true) and hasClickAction())
+        return d.format(DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, "yMMMMdEEEE"), locale))
     }
+    private fun cell(d: LocalDate): SemanticsNodeInteraction = ui.onNode(hasContentDescription(cellName(d), substring = true) and hasClickAction() and !hasTestTag("recent-day:$d"))
     private fun selectTomorrow() {
         // Wait for the synthetic medication to load: the "Nothing planned yet" card above the calendar is shown only until
         // then, and removing it moves the grid. (Today's dose card may already be gone, so the name is no signal.)
@@ -45,7 +45,16 @@ class CalendarIntakeAndroidTest {
                 ui.onAllNodesWithText(s(R.string.empty_title)).fetchSemanticsNodes().isEmpty()
         }
         ui.waitForIdle()
-        if (runCatching { cell(tomorrow).fetchSemanticsNode() }.isFailure) ui.onNodeWithContentDescription(s(R.string.calendar_next)).performClick()
+        // UI-07 F: home opens on "last 7 days" (its 7 pills also satisfy the wait above); open the full calendar as the user
+        // does, then use the month grid as before.
+        val list = ui.onNode(hasScrollToIndexAction())
+        list.performScrollToNode(hasTestTag("calendar-full")); ui.onNodeWithTag("calendar-full").performSemanticsAction(SemanticsActions.OnClick)
+        ui.waitUntil(10_000) { ui.onAllNodesWithTag("recent-card").fetchSemanticsNodes().isEmpty() && runCatching { list.performScrollToNode(hasTestTag("calendar-card")) }.isSuccess }
+        if (runCatching { list.performScrollToNode(hasContentDescription(cellName(tomorrow), substring = true) and hasClickAction()) }.isFailure) {
+            list.performScrollToNode(hasContentDescription(s(R.string.calendar_next)))
+            ui.onNodeWithContentDescription(s(R.string.calendar_next)).performSemanticsAction(SemanticsActions.OnClick); ui.waitForIdle()
+            list.performScrollToNode(hasContentDescription(cellName(tomorrow), substring = true) and hasClickAction())
+        }
         // Activate the cell through its click action, not a touch at its centre: on the 320dp-wide CI emulator the
         // floating Add button covers the Friday/Saturday cells of the third week row, so a tap would hit the button.
         cell(tomorrow).performSemanticsAction(SemanticsActions.OnClick)

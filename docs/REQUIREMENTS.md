@@ -1151,3 +1151,24 @@ LAB-03 的同文件增量授权记录 `PD-2026-10-19-LAB03-CATALOG-ADAPTER`：�
 ## 132. P4 必需CI实际堆环境核验（2026-10-21）
 
 最终4a67e96e的API29备份合同在Argon2分配时实际Java heap上限仅16777216B（16MiB），不符既有192MiB环境；原日志/ZIP/SHA保留，不改写该FAIL。兼容矩阵显式选定原192MiB，并复用仅允许合成emulator/root/指定API的配置脚本，在安装业务测试前验证实际Runtime.maxMemory==201326592B。不是提高原冻结上限，不改Argon2id32MiB/三轮/并行1或PNBAK1，不删任何原测试。原API26性能专用512MiB/192MiB配置不变，不重跑大库；六必需检查保持。
+
+## 133. UI-07：Material 3 Expressive 表现层，只用稳定 API（2026-10-21）
+
+任务书原文：`docs/audits/product-quality-2026-10/sources/ui07/ui07-prompt.md`（SHA-256 `49cafbd97102024bdc41031970712a59028a84874966b0d8822c11cec4beb9f1`），负责人 2026-10-21 上传。负责人已在画布上确认 UI-07 样图，并选定状态图标用“实心圆”风格；执行以任务书文字为准。
+
+在 UI-06 语义令牌之上加入四项表现手法，所有颜色只取 UI-06 令牌：
+
+- **A 实心圆状态图标**：`core/ui` 新组件 `StatusIcon`，提供 40 / 32 / 22 / 18dp 四档，组件本身 `contentDescription = null`。用于今天的记录、确认卡、日历日格标记和图例、服药记录、时间线漏服事件。
+- **B 形状与按下形变**：形状档位 xs 8 / s 12 / m 16 / l 20 / xl 28 / xxl 32 / full；今天卡 32dp，首页其他卡 28dp。按下形变用 spring：圆角弹到 16dp、缩放到 96%。⋮ 按钮改为 56dp 描边方块。
+- **C 强调字体**：heroNumber 64sp、statNumber 28sp，两者随系统字号放大到 1.3 倍后不再放大；sectionTitle 16sp、cardTitle 20sp。
+- **D 弹簧动效**：用统一的 `LocalReduceMotion`，系统“移除动画”时全部立即切换。撤销按钮是条件项：只有现有删除路径能完整回退这次服药时才做。
+- **E 连接式分组列表**：`GroupedList`，项间缝 3dp，首尾圆角 24dp、中间 6dp，最小高度 56dp。“今天的记录”移出今天卡，单独显示。
+- **F 首页“最近 7 天”**：复用周视图数据；“完整日历”切换到现有视图。
+
+**禁止**：
+- 不升级 Compose，不用实验性 API，不新增依赖；
+- 不改 ViewModel 业务逻辑、仓库、Room、备份、加密、锁、伪装、PK、浓度页、化验页、导出 PDF、提醒、设置页；
+- 不改状态判定规则和色值；
+- 不改 versionCode，不交付 APK。
+
+按 §106 自动合并。

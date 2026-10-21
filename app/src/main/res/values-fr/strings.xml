@@ -1311,4 +1311,10 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="status_you_skipped">Vous avez sauté</string>
 <string name="confirm_title_date">Rien de noté pour %1$s</string>
 <string name="confirm_body_with">%1$s. Si vous vous en souvenez, ajoutez-le simplement.</string>
+<!-- UI-07 expressive -->
+<string name="today_logged">Noté</string>
+<string name="today_undo">Annuler</string>
+<string name="confirm_result_not_taken">Noté : non pris</string>
+<string name="recent_7_days">7 derniers jours</string>
+<string name="full_calendar">Calendrier complet</string>
 </resources>

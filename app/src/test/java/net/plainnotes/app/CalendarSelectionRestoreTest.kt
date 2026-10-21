@@ -39,7 +39,8 @@ class CalendarSelectionRestoreTest {
 
     private fun show(meds: List<MedicationEntity>, records: List<RecordEntity>) = restore.setContent {
         NotesTheme(ThemeMode.LIGHT) { androidx.compose.material3.Surface {
-            CalendarScreen(NotesState(meds, calendarStart = start), today, {}, {}, {}, {}, PaddingValues(), extra = NotesViewModel.ExtraState(records = records))
+            CalendarScreen(NotesState(meds, calendarStart = start), today, {}, {}, {}, {}, PaddingValues(), extra = NotesViewModel.ExtraState(records = records),
+                initialFull = true)  // UI-07 F: the month grid is in the full calendar, opened explicitly
         } }
     }
     private fun name(d: LocalDate) = d.format(DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(context.resources.configuration.locales[0], "yMMMMdEEEE"), context.resources.configuration.locales[0]))

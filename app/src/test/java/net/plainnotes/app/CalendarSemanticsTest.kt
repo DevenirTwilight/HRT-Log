@@ -44,7 +44,8 @@ class CalendarSemanticsTest {
         val appt = AppointmentEntity(1, "ENDO", at(today.plusDays(2), 10).toEpochMilli(), zone.id, null, "Synthetic clinic", null, 60)
         val state = NotesState(listOf(med), emptyList(), listOf(appt), calendarStart = today)
         ui.setContent { NotesTheme(ThemeMode.LIGHT) { androidx.compose.material3.Surface {
-            CalendarScreen(state, today, {}, {}, {}, {}, PaddingValues(), extra = NotesViewModel.ExtraState(records = records, upcoming = upcoming), initialView = view)
+            CalendarScreen(state, today, {}, {}, {}, {}, PaddingValues(), extra = NotesViewModel.ExtraState(records = records, upcoming = upcoming), initialView = view,
+                initialFull = true)  // UI-07 F: home opens on "last 7 days"; these checks are about the full calendar, opened explicitly
         } } }
         ui.waitForIdle()
     }
@@ -82,6 +83,8 @@ class CalendarSemanticsTest {
         // Clicking a date selects it: the selection moves and the day list follows.
         dayNode(today.plusDays(1)).assertHasClickAction().performClick(); ui.waitForIdle()
         assertEquals(true, selected(today.plusDays(1))); assertEquals(false, selected(today))
+        // UI-07: the taller today card (64 sp time) can push the day list below the fold; scroll to it as the user does.
+        ui.onNode(hasScrollToIndexAction()).performScrollToNode(hasText(s(R.string.tomorrow)))
         ui.onNodeWithText(s(R.string.tomorrow)).assertExists()
     }
 

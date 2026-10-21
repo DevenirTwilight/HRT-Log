@@ -69,11 +69,21 @@ class CalendarCoreFlowTest {
     private fun cell(d: LocalDate) = ui.onNode(hasContentDescription(fullDate(d), substring = true) and hasClickAction())
     private val dateCell = hasClickAction() and SemanticsMatcher("date cell") { n -> n.config.getOrNull(SemanticsProperties.Role) == Role.Button && n.config.contains(SemanticsProperties.Selected) && n.config.contains(SemanticsProperties.ContentDescription) }
     private fun selectTomorrow() {
+        // UI-07 F: home opens on "last 7 days"; open the full calendar as the user does, then pick the date on the month grid.
+        // First wait for the synthetic medication to load (the today card), so the list is not rebuilt under the click.
+        ui.waitUntil(10_000) { ui.onAllNodesWithTag("today-card").fetchSemanticsNodes().isNotEmpty() }
+        ui.waitUntil(10_000) { runCatching { dayList.performScrollToNode(hasTestTag("calendar-full")) }.isSuccess || ui.onAllNodesWithTag("calendar-card").fetchSemanticsNodes().isNotEmpty() }
+        // Through its click action, as for the date cells below: scrolled to the bottom edge, the floating Add button can cover it.
+        if (ui.onAllNodesWithTag("calendar-full").fetchSemanticsNodes().isNotEmpty()) { ui.onNodeWithTag("calendar-full").performSemanticsAction(SemanticsActions.OnClick); ui.waitForIdle() }
+        // The 7-day pills are date cells too: wait until the full calendar has replaced them before looking for the grid.
+        ui.waitUntil(10_000) { ui.onAllNodesWithTag("recent-card").fetchSemanticsNodes().isEmpty() && runCatching { dayList.performScrollToNode(hasTestTag("calendar-card")) }.isSuccess }
         // UI-06: the "no entry yet" card (this fixture's past slots are unconfirmed) sits under the today card, so on a
         // 568dp screen the month grid is not composed until scrolled to; scroll to it as the user does.
         ui.waitUntil(10_000) { runCatching { dayList.performScrollToNode(dateCell) }.isSuccess }
-        if (ui.onAllNodes(hasContentDescription(fullDate(tomorrow), substring = true) and hasClickAction()).fetchSemanticsNodes().isEmpty())
-            ui.onNodeWithContentDescription(s(R.string.calendar_next)).performClick()
+        if (ui.onAllNodes(hasContentDescription(fullDate(tomorrow), substring = true) and hasClickAction()).fetchSemanticsNodes().isEmpty()) {
+            dayList.performScrollToNode(hasContentDescription(s(R.string.calendar_next)))
+            ui.onNodeWithContentDescription(s(R.string.calendar_next)).performSemanticsAction(SemanticsActions.OnClick); ui.waitForIdle()
+        }
         // UI-04: the today card now also lists today's records, so on a 568dp screen the grid row starts below the fold.
         // Scroll to the cell as the user does, then activate it through its click action, as CalendarIntakeAndroidTest
         // does: scrolled to the bottom edge, the floating Add button covers the right-hand cells, so a tap would hit it.
