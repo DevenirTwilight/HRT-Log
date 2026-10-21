@@ -1,3 +1,9 @@
+## 负责人要求持续到可合并：开始真实运行接线与原生合同 — 2026-10-21
+
+接手9d1052ae，无远端更新。§128记录新指令：不以局部通过停止；保持原预算/历史证据/入口OFF/Draft/不自动合并。先把原13项owner安全合同提升为共享JVM/Android合同，SQLCipher子类断言cipher_version，加入既有三API必需CI；不删原断言、不减少旧测试、不启动取消的大库计划。当前只是源码已编码，未编译/执行，不能把此前527当新源通过。
+
+随后补真实状态源/任务核对和App读取与维护写入分离。无新Schema/格式/PK/发布；后续所有CI/native按精确源码保存。
+
 ## 后端运行owner最终本地验收完成并入库 — 2026-10-21
 
 最终生产8b24ccf5（后续仅证据/文档），主线320171cd：完整data527/PeriodStability5/reminder21全PASS、0FAIL/ERROR/SKIP，Android测试源码/App full debug编译PASS，同轮BUILD SUCCESSFUL 4m50s。runtime-owner/final-local/含实际45+1+7原XML/全日志/源码与主jar SHA/清单/收据；所有XML时间戳均核对本轮。space-red测试源码逐字相同，原2项UUID重放反例继续通过，主jar无TEST_ONLY原型/冻结oracle。无在途检查；当前有效成果均写库，待本证据提交推送后交接。
