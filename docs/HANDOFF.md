@@ -1,3 +1,9 @@
+## 非阻塞任务原型7项PASS，立即保存 — 2026-10-21
+
+源9b9e8e2a的NonBlockingWritePrototypeTest 7 PASS/0SKIP，原始XML/log/receipt已存nonblocking-transition/prototype-first/。覆盖IO后台、页面观察取消不取消写入、重复start、仅未开始可确认取消、执行异常不直接FAILED、同UUID/请求/epoch核对、未判定不自动重试。只是假Repository动作与核对port的协程合同，不是真实DB提交/恢复或原生验收，不代表当前PR全绿。
+
+本代理继续负责界面：接下来建立最小只读公共状态模型和四语M3状态卡片及组件测试，不开放P4写入口，不重做导航。不修改旧5秒门槛/LMK安全阻塞；所有生产接线与最终验收尚未完成，不能声称用户已获得非阻塞保存功能。
+
 ## 非阻塞保存实现检查点：后台任务原型已编码，针对性测试待执行 — 2026-10-21
 
 分工更正d2e18356已推送，本代理负责后端及UI，不等其他执行者。新增historyTest/NonBlockingWritePrototype.kt与test/NonBlockingWritePrototypeTest.kt，均TEST_ONLY，不编入生产；scope由应用owner提供，IO动作与页面观察生命周期分开，重复start只执行一次，未开始取消可确认无效果，任意执行异常不直接FAILED，必须同UUID/请求/数据集/epoch核对后结论。7个合成小合同已写但尚未运行；它不验证真实DB、不是提交证明、不接库存/不新建队列或Worker。
