@@ -211,6 +211,7 @@ val LocalReduceMotion; object ReduceMotion { fromSystem(context); override }; fu
   - 今天卡日期行被进度胶囊挤成每行几个字母：改为可换行的 FlowRow，胶囊放不下时换到下一行；
   - 首页库存条药名被“添加库存”挤成每行一个字：字号大于 1.3 倍时按钮移到文字下方。
   修复后相关测试 288/288 PASS。
+- 仍存在、未在本轮处理：法语“Prendre maintenant”在 2× 字号、320dp 下于主按钮内断词换行。按钮可见可点，文字没有截断；“之前”组同样如此。列为后续可选改进，未改主按钮布局。
 
 ### 7.3 断言迁移（未删除任何断言）
 
