@@ -160,8 +160,10 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
     val c = MaterialTheme.colorScheme
     Surface(shape = Corners.xl, color = c.surfaceContainerLow, modifier = Modifier.fillMaxWidth().testTag("recent-card")) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(stringResource(R.string.recent_7_days), style = NotesTheme.typeExtra.sectionTitle, modifier = Modifier.weight(1f).semantics { heading() })
+            // The title and "Full calendar" share a line when they fit and wrap otherwise (2× font, long translations).
+            @OptIn(ExperimentalLayoutApi::class)
+            FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, itemVerticalAlignment = Alignment.CenterVertically) {
+                Text(stringResource(R.string.recent_7_days), style = NotesTheme.typeExtra.sectionTitle, modifier = Modifier.semantics { heading() })
                 TextButton(onFull, Modifier.heightIn(min = 48.dp).testTag("calendar-full")) { Text(stringResource(R.string.full_calendar)) }
             }
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -176,8 +178,8 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
                         .semantics { contentDescription = description; mark?.let { dayMarkSemantics = it } }.testTag("recent-day:$date").padding(vertical = 10.dp),
                         horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         Column(Modifier.clearAndSetSemantics {}, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                            Text(weekdayShort(date.dayOfWeek), style = MaterialTheme.typography.labelSmall, color = fg, maxLines = 1)
-                            Text(date.dayOfMonth.toString(), style = MaterialTheme.typography.titleMedium.tnum(), fontWeight = FontWeight.Bold, color = fg)
+                            FitText(weekdayShort(date.dayOfWeek), MaterialTheme.typography.labelSmall, fg)
+                            FitText(date.dayOfMonth.toString(), MaterialTheme.typography.titleMedium.tnum().copy(fontWeight = FontWeight.Bold), fg)
                             when {
                                 mark != null -> StatusIcon(dayMarkIcon(mark), StatusIconSizes.S, Modifier.testTag("recent-icon:$date"))
                                 isToday -> StatusIcon(StatusIconKind.TODAY, StatusIconSizes.S, Modifier.testTag("recent-icon:$date"), ring = c.onPrimary)
@@ -188,6 +190,17 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
                 }
             }
         }
+    }
+}
+
+/** One line that shrinks to the pill's width instead of clipping (2× font at 320 dp), as the month grid's date badge does. */
+@Composable private fun FitText(text: String, style: androidx.compose.ui.text.TextStyle, color: Color) {
+    val measure = androidx.compose.ui.text.rememberTextMeasurer()
+    BoxWithConstraints(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+        val available = constraints.maxWidth.toFloat() - 2f
+        var fitted = style
+        repeat(30) { if (measure.measure(androidx.compose.ui.text.AnnotatedString(text), fitted, softWrap = false).size.width > available) fitted = fitted.copy(fontSize = fitted.fontSize * 0.92f) }
+        Text(text, style = fitted, color = color, maxLines = 1, softWrap = false)
     }
 }
 

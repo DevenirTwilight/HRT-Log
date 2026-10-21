@@ -51,7 +51,9 @@ class TodayCardTest {
         ui.waitForIdle()
     }
     private fun card() = ui.onNodeWithTag("today-card")
-    private fun inCard(m: SemanticsMatcher) = ui.onNode(m and hasAnyAncestor(hasTestTag("today-card")))
+    // UI-07 E: today's records and appointments moved from inside the card to grouped lists right under it; "today-section"
+    // holds the card and those lists, so "shown once, in today's section" is still what is checked.
+    private fun inCard(m: SemanticsMatcher) = ui.onNode(m and hasAnyAncestor(hasTestTag("today-section")))
 
     @Test fun noMedicationsShowsTheEmptyStateNotTheCard() {
         show(emptyList(), meds = emptyList())

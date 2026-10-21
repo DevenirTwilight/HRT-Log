@@ -69,6 +69,9 @@ class CalendarCoreFlowTest {
     private fun cell(d: LocalDate) = ui.onNode(hasContentDescription(fullDate(d), substring = true) and hasClickAction())
     private val dateCell = hasClickAction() and SemanticsMatcher("date cell") { n -> n.config.getOrNull(SemanticsProperties.Role) == Role.Button && n.config.contains(SemanticsProperties.Selected) && n.config.contains(SemanticsProperties.ContentDescription) }
     private fun selectTomorrow() {
+        // UI-07 F: home opens on "last 7 days"; open the full calendar as the user does, then pick the date on the month grid.
+        ui.waitUntil(10_000) { runCatching { dayList.performScrollToNode(hasTestTag("calendar-full")) }.isSuccess || ui.onAllNodesWithTag("calendar-card").fetchSemanticsNodes().isNotEmpty() }
+        if (ui.onAllNodesWithTag("calendar-full").fetchSemanticsNodes().isNotEmpty()) { ui.onNodeWithTag("calendar-full").performClick(); ui.waitForIdle() }
         // UI-06: the "no entry yet" card (this fixture's past slots are unconfirmed) sits under the today card, so on a
         // 568dp screen the month grid is not composed until scrolled to; scroll to it as the user does.
         ui.waitUntil(10_000) { runCatching { dayList.performScrollToNode(dateCell) }.isSuccess }

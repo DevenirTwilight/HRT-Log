@@ -19,7 +19,7 @@ import java.time.*
 
 /**
  * UI-05 A, synthetic data on the real CalendarScreen: the today card's progress pill, the countdown to the next dose
- * (display only, never shown when overdue), the 52 dp main button and round menu, the divider, and a status icon on each
+ * (display only, never shown when overdue), the main button and menu (52 dp in UI-05, 56 dp since UI-07), the divider, and a status icon on each
  * record row next to the unchanged status words. Callbacks are the same as UI-01/UI-04 (TodayCardTest keeps covering them).
  */
 @RunWith(RobolectricTestRunner::class) @Config(sdk = [35], qualifiers = "w411dp-h891dp")
@@ -44,7 +44,9 @@ class Ui05TodayCardTest {
         } } } }
         ui.waitForIdle()
     }
-    private fun inCard(m: SemanticsMatcher) = ui.onNode(m and hasAnyAncestor(hasTestTag("today-card")))
+    // UI-07 E: today's records and appointments moved from inside the card to grouped lists right under it; "today-section"
+    // holds the card and those lists, so "shown once, in today's section" is still what is checked.
+    private fun inCard(m: SemanticsMatcher) = ui.onNode(m and hasAnyAncestor(hasTestTag("today-section")))
 
     @Test fun progressIsAPillOnTheDateRow() {
         show(listOf(entry(20)), listOf(record(5, 8, "ON_TIME")))
@@ -70,12 +72,13 @@ class Ui05TodayCardTest {
         inCard(hasTestTag("today-countdown")).assertDoesNotExist()
     }
 
-    @Test fun mainButtonAndRoundMenuAreFiftyTwoDpOnOneRow() {
+    // UI-07 B: the main button and the ⋮ menu are now 56 dp (the menu a square with 18 dp corners), still on one row.
+    @Test fun mainButtonAndMenuAreFiftySixDpOnOneRow() {
         show(listOf(entry(20)))
         val button = inCard(hasTestTag("today-take-now")).fetchSemanticsNode().boundsInRoot
         val menu = inCard(hasTestTag("today-more")).fetchSemanticsNode().boundsInRoot
         with(ui.density) {
-            assertTrue("button ≥ 52dp", button.height >= 52.dp.toPx() - 1); assertEquals(52.dp.toPx(), menu.height, 1f); assertEquals(52.dp.toPx(), menu.width, 1f)
+            assertTrue("button ≥ 56dp", button.height >= 56.dp.toPx() - 1); assertEquals(56.dp.toPx(), menu.height, 1f); assertEquals(56.dp.toPx(), menu.width, 1f)
         }
         assertEquals("same row", button.center.y, menu.center.y, 1f)
         ui.onNode(hasTestTag("today-take-now-icon"), useUnmergedTree = true).assertExists()
