@@ -1,3 +1,9 @@
+## 提交观察的关联来源边界待补：两项负向合同先保存 — 2026-10-21
+
+复核发现4111c0b8的预备描述符只冻结config SHA/实际载荷/时间，尚未单独冻结MedicationReference的关联事件。已保存2项合成负向合同：关联A→B/解除关联、原无关联→新关联，在配置与实际载荷完全相同/同UUID时必须拒绝匹配新请求，旧请求仍能确认。当前尚未执行这2项，不能将此前512 PASS当作已覆盖该边界。无App运行调用，接口不准接正式owner。
+
+当前同一次Gradle的core:data512及Android测试编译已结束通过，App选定回归还在编译；新合同只改已完成数据阶段之外的src/test，不纳入该次512。下一步在途App结束后先跑两项RED，再按原context capture冻结事件UUID修复，不引入第二验证器/Schema/格式/性能快路。P4 Draft/OFF，原审计保留，无新大库/native。
+
 ## 原请求冻结/历史提交核对完整数据层512项PASS — 2026-10-21
 
 源4111c0b8：完整core:data512 PASS/0FAIL/0SKIP，NonBlockingRepositoryWriteTest由4增为10项均通过，原资源退出2项保留GREEN。44份原始XML/截至数据层完成的日志/源码SHA已保存nonblocking-transition/frozen-outcome-data/。匹配原配置/时间/实际载荷和完整独立审计才确认历史Committed；缺失操作NotObserved不允许自动重试；后续更正/删除不改原提交事实，无关历史损坏会拒绝。数据dump只读/回滚和冻结oracle合同通过。

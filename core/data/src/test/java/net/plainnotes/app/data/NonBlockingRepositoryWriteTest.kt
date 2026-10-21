@@ -195,4 +195,31 @@ class NonBlockingRepositoryWriteTest {
         raw.execSQL("UPDATE dose_record SET actual_dose=0.125 WHERE id=?",arrayOf(otherResult.record.id))
         assertTrue(repo.observeMeasuredActualUse(expected) is MeasuredCreateObservation.Committed)
     }
+    private fun reference(name:String)=UserReferenceProduct("SYNTHETIC context $name",sourceVersion="synthetic-v1",recordedOn="2026-10-16")
+    @Test fun changedReferenceContextAndUnlinkCannotAuthorizeTheOldUuid()=runCase {_->
+        val (box,_)=fixture();val medication=box.container.medication_id
+        repo.associateMedication(box.scope,medication,0,UUID.randomUUID().toString(),reference("A"))
+        val expected=prepare(box);submit(expected)
+        repo.associateMedication(box.scope,medication,1,UUID.randomUUID().toString(),reference("B"))
+        val changed=prepare(box,expected.operationUuid)
+        assertEquals(expected.configSha256,changed.configSha256);assertEquals(expected.draft,changed.draft)
+        val before=RawData.dump(raw).toString()
+        rejected(ReferenceError.OPERATION_CONFLICT){repo.observeMeasuredActualUse(changed)}
+        assertTrue(repo.observeMeasuredActualUse(expected) is MeasuredCreateObservation.Committed)
+        assertEquals(before,RawData.dump(raw).toString())
+        repo.associateMedication(box.scope,medication,2,UUID.randomUUID().toString(),null)
+        val unlinked=prepare(box,expected.operationUuid)
+        rejected(ReferenceError.OPERATION_CONFLICT){repo.observeMeasuredActualUse(unlinked)}
+        assertTrue(repo.observeMeasuredActualUse(expected) is MeasuredCreateObservation.Committed)
+    }
+    @Test fun newReferenceContextCannotAuthorizePreviouslyUnlinkedUuid()=runCase {_->
+        val (box,_)=fixture();val expected=prepare(box);submit(expected)
+        repo.associateMedication(box.scope,box.container.medication_id,0,UUID.randomUUID().toString(),reference("new"))
+        val later=prepare(box,expected.operationUuid)
+        assertEquals(expected.configSha256,later.configSha256);assertEquals(expected.draft,later.draft)
+        val before=RawData.dump(raw).toString()
+        rejected(ReferenceError.OPERATION_CONFLICT){repo.observeMeasuredActualUse(later)}
+        assertTrue(repo.observeMeasuredActualUse(expected) is MeasuredCreateObservation.Committed)
+        assertEquals(before,RawData.dump(raw).toString())
+    }
 }
