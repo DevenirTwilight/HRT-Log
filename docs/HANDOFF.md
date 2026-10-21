@@ -1,3 +1,9 @@
+## P4 恢复收尾继续：唯一小型进程终止合同已启动 — 2026-10-21
+
+已从远端快进至47f11551，未重复旧观察器研究。最新生产仍冻结9d304e58，主线320171cd，diff9d --core/data/src/main为空；#57 Draft/OFF，auto_merge=null。已确认47源此前没有运行记录，按唯一允许的显式verification=restore-process-death-only启动run39555630970；check应为restore-process-death-api26-only，large_performance=NOT_RUN_CONTRACT_ONLY，仅两个小型真实终止/新进程回滚合同，不执行第三次大库。调度成功，不再派发另一轮。计划已保存death-probe-fix/native-plan.json。
+
+常规9d CI现已结束：PR Android/domain39495197495 SUCCESS；push39495191719 FAILURE，原因待核，不能写全部CI绿。正在核验PR API26/29/35及完整data/App/Period工件SHA、CRC和原始报告，之后写统一恢复专项收尾报告。已有两个大库结果仍是一轮完整恢复PASS、另一轮准备LMK；写入约7.5–8秒FAIL，不改预算/不筛绿、不认定稳定。小合同尚IN_PROGRESS，不能预填PASS。
+
 ## P4 恢复专项实时测试检查点：仅探针事务修正编译PASS，安排唯一小型合同补验 — 2026-10-20
 
 冻结生产源码仍9d304e58，git diff9d --core/data/src/main为空。仅测试MeasuredRestoreDeathProbe把数据hash、epoch/FK/full oracle放入同一db.withTransaction，保留所有原断言；原两大库run中事务外API使用失败的日志不覆盖。修正Android编译PASS、工具4 PASS已保存`restore-memory/death-probe-fix/`。没有新恢复生产结构或第三次大库。
