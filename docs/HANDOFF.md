@@ -1,3 +1,9 @@
+## 两项资源退出RED已修正，完整core:data506项PASS — 2026-10-21
+
+生产31303e64的完整本地core:data回归506 PASS/0FAIL/0SKIP（含原两项未改断言的资源失败/恢复取消合同），44份原始XML/全日志/源码SHA存nonblocking-transition/resource-cleanup-applied/。此前saved-resource-wip原档与RED不改写。链读取Throwable后清空所有纯解码明文引用并重抛同一异常，恢复正常/失败/取消finally释放替换引用；原完整审计、故障回滚、独立oracle与FK去重保留。无Schema/PNBAK1/PK/正式入口变化。
+
+这只证明本地退出清理与数据回归通过，不能宣称低内存LMK稳定修复；原生/API26/29/35/远端CI本组NOT_RUN。UI旧人工34项更正为32（原始XML/receipt一直32）。下一步补固定原请求的只读提交观察，缺失操作保留UNKNOWN，不允许重试；不运行性能/大库。P4 Draft/OFF，不合并发布。
+
 ## 上次UI人工汇总数更正：实际32项 — 2026-10-21
 
 逐项核对shell-first/六个原始XML：17+1+1+3+2+8=32，receipt.json.total原已正确为32；前次人工文字和PR写34是加总错误，已改32。没有增加/删除/跳过测试或改原始证据。当前资源清理31303e64的完整core:data本地回归仍在运行，结果未定；不提前填PASS。

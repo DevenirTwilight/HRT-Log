@@ -17,7 +17,7 @@
 |真实提交核对/进程死亡恢复|NOT_IMPLEMENTED|不能凭UUID存在/不存在判定；未批准持久token，不自动补写|
 |验收政策/正式入口|PROPOSED / OFF|原5秒断言未变，Draft不合并；恢复稳定性NOT_PROVEN|
 
-源55fcf2d5的旧通过数不代表当前分支整体绿色：新增资源退出合同仍有2项已知RED，归档修正patch尚未应用。新组CI/native/真机/TalkBack均NOT_RUN，不重跑大库。下文保留政策与尚未实施的门面设计；其中“本轮不新增”指最初方向冻结检查点，不否认后续已授权UI和TEST_ONLY实现。
+资源退出修正31303e64已接入：完整本地core:data506 PASS/0SKIP，原两项RED断言保持并转GREEN；证据resource-cleanup-applied/，旧RED仍保存。这不构成完整P4准入或LMK稳定证明。新组CI/native/真机/TalkBack均NOT_RUN，不重跑大库。下文保留政策与尚未实施的门面设计；其中“本轮不新增”指最初方向冻结检查点，不否认后续已授权UI和TEST_ONLY实现。
 
 ## 立即冻结与保留
 
