@@ -1,3 +1,7 @@
+## 换账号接手入口（2026-10-21）
+
+先读 [TAKEOVER](p4/nonblocking-transition/TAKEOVER.md) 和 HANDOFF 顶部，随后查最新GitHub。方案、源码、原始RED/GREEN/截图/编译证据和旧WIP档案已远端保存；无在途测试。当前不是可合并状态，不自动恢复下方历史性能计划。
+
 ## 2026-10-21：非阻塞后端继续实施，最新候选ae7688da（仍OFF）
 
 当前单一执行代理负责前后端。原资源退出两项RED已在31303e64修正，全数据506 PASS；继续实现内部原请求冻结/完整审计后的历史提交观察，并保留来源context两项真实RED后修正，最新全数据514 PASS。真实UI/导航/四语32与PeriodStability5在4111c0b8通过，截图/日志已保存；最终ae7688da的Android测试/App源码编译均PASS，最新精确源与边界见HANDOFF。

@@ -1,0 +1,13 @@
+package net.plainnotes.app.data
+
+import androidx.sqlite.db.SupportSQLiteDatabase
+
+/** TEST_ONLY disposable database experiment, not a production migration or validation authority. */
+internal object DatabaseInvariantProbe {
+    const val INDEX="p4_probe_one_consume_revision"
+    fun install(db:SupportSQLiteDatabase) {
+        check(db.inTransaction())
+        db.execSQL("CREATE UNIQUE INDEX `$INDEX` ON measured_operation(record_uuid,record_revision) WHERE kind='CONSUME'")
+    }
+    fun remove(db:SupportSQLiteDatabase) {db.execSQL("DROP INDEX IF EXISTS `$INDEX`")}
+}

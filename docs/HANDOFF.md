@@ -1,3 +1,11 @@
+## 换账号接手已核验：方案、源码、证据与旧WIP均已入库 — 2026-10-21
+
+接手入口：`docs/ansm-integration/p4/nonblocking-transition/TAKEOVER.md`。准确分支feature/ansm03b-p4-exact-stock-20261016，交接前HEAD307a1093、已测生产ae7688da、默认分支claude/new-session-1959qb/320171cd；新账号重新核GitHub后从远端该分支继续，不从旧本地worktree或默认分支误起。前后端均由接手代理负责，不等待外部前端。
+
+最新非阻塞方案proposal.md、WORK-STATE及514数据/编译证据已确认存在。修正proposal中两个可能误导的历史表述：资源2 RED是55fc历史状态（现已GREEN），状态组件已实现但运行owner仍未接通。TAKEOVER列出下一步门面/任务/提交确认/全冲突覆盖和完整验收门；P4仍不能合并，Draft/OFF，原5秒硬门改指标待批，LMK稳定性NOT_PROVEN，新CI/native NOT_RUN。没有在途测试，本轮不重跑。
+
+旧HRT-Log-p4少量未提交研究源码/文档已原样归档takeover-old-wip/（ARCHIVE_ONLY_NOT_APPLIED_SUPERSEDED），不是准许恢复A/B/C或性能攻关。resource-check旧源码SHA与saved-resource-wip远端归档一致，已在当前生产接入，无需重复应用。原目录未reset/丢弃；凭据/密钥/真实健康数据不随交接保存。构建工具缓存非版本化，新账号按仓库规范准备。
+
 ## 本组收尾：资源退出修正+原请求提交观察，514数据回归及最终编译PASS — 2026-10-21
 
 生产ae7688da（证据提交仅文档）：完整core:data514 PASS/0FAIL/0SKIP、compileDebugAndroidTestKotlin PASS、compileFullDebugKotlin PASS。全日志/44 XML/源码SHA/主jar隔离及未改Schema/PK/加密格式/权限证明存nonblocking-transition/reference-context-green/。原关联来源2 RED完整保留，测试源码未改，现GREEN；原资源退出2 RED亦在完整回归中GREEN。UI/导航/四语32+PeriodStability5共37在先前生产4111c0b8实跑PASS，之后App源码未再改，本轮最后的context字段修正后只重编译App，不伪称又运行37。无新大库/SQLCipher原生/API26/29/35/CI/真机/TalkBack，无APK。
