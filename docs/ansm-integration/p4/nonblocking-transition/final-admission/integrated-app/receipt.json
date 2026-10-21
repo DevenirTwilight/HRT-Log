@@ -1,0 +1,23 @@
+{
+  "source": "ee6ae9a3",
+  "mainline": "4ec11437",
+  "status": "PASS",
+  "results": [
+    {
+      "name": "net.plainnotes.app.ProcessMeasuredWriteShellTest",
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.PeriodStabilityTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    }
+  ],
+  "ui06_filter": "No class named Ui06Test; not claimed as run. Final CI runs all actual Ui06 classes.",
+  "device": "NOT_RUN_LOCAL_ROBOLECTRIC_ONLY"
+}

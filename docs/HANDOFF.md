@@ -1,3 +1,9 @@
+## 最终源码4a67e96e验收证据分支（非生产集成分支） — 2026-10-21
+
+本分支evidence/p4-admission-4a67e96e仅存实际结果，不合并到生产，不改变PR57源码HEAD，避免每次保存证据重启相同全量CI。真正待审源码4a67e96e，已合主线4ec11437。当前本地整合App7项PASS（owner/navigation2+Period5）；Ui06Test过滤未匹配类，不声称额外UI06已跑。原XML/完整log存final-admission/integrated-app/。
+
+最终Android/domain run39651425834仍IN_PROGRESS；Science39651425817两项已PASS。同SHA重复push run39651413653为防重复已取消，保留CANCELLED而非测试FAIL/PASS，不取消保留的完整PR验收。没有新大库跑分。AFTER_COMMIT定向安全39650341133通过，原超时原因未确定。后续仅把完成结果追加本证据分支与PR，待审源码不因文档写入反复变化。
+
 ## AFTER_COMMIT定向原生通过，转最终整合CI — 2026-10-21
 
 run39650341133/a9a1a8fd单场景无重试PASS：PID3850外部强杀→4008，1条真实记录/精确dump/epoch/SQLCipher完整性/独立冻结oracle/无重放均通过；verify6.254秒是整项验证时间，不是写入延迟。官方ZIP12370205997/SHA d63e3dd8…71f656/CRC已校验并存final-admission/after-commit-39650341133/。上次run39626720171超时原因仍未确定，不称诊断日志本身修复了生产问题；旧FAIL保留，最终三API继续验证现源码合同。
