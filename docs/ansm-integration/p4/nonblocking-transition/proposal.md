@@ -12,7 +12,7 @@
 |Material 3四语内联状态卡片|IMPLEMENTED；操作3/布局8/翻译2 PASS|四语言各320dp/2x/深色与411dp/1x/浅色代表布局，非全矩阵|
 |实际NotesApp状态区及导航|IMPLEMENTED；主壳2/原返回17 PASS|默认null；收起可展开，不取消业务；截图与34项同次结果见shell-first/|
 |后台任务owner原型|TEST_ONLY；7项PASS|页面观察取消独立、结果不明不重试；不在runtime/release|
-|真实Repository小库连接原型|TEST_ONLY；4项待验|ecc6671b已保存，真实事务/完整oracle/回滚/丢失结果窗口；不是SQLCipher原生|
+|真实Repository小库连接原型|TEST_ONLY；4项PASS|ecc6671b，真实事务/完整oracle/回滚/丢失结果窗口；原型7项同次PASS，repository-first/；不是SQLCipher原生|
 |应用级真实任务服务与公开门面|NOT_IMPLEMENTED|需固定PRIMARY/scope、无重复请求及冲突入口覆盖|
 |真实提交核对/进程死亡恢复|NOT_IMPLEMENTED|不能凭UUID存在/不存在判定；未批准持久token，不自动补写|
 |验收政策/正式入口|PROPOSED / OFF|原5秒断言未变，Draft不合并；恢复稳定性NOT_PROVEN|

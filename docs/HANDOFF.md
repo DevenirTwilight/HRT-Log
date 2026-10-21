@@ -1,3 +1,9 @@
+## 真实Repository异步小库4项+原型7项PASS已保存 — 2026-10-21
+
+源ecc6671b，NonBlockingRepositoryWriteTest4 PASS及NonBlockingWritePrototypeTest7 PASS（0FAIL/0SKIP），原始XML/日志/SHA及release-source隔离核验存nonblocking-transition/repository-first/。真实recordMeasuredUse完成后才交付SUCCESS；离开观察不取消任务/不双扣；原3个checkpoint故障完整dump一致回滚；提交后丢响应和owner取消保持待核对，不误报未保存/不重试；成功案例当前全审计与冻结完整oracle一致。框架SQLite/Robolectric35小库，不能冒充SQLCipher/进程死亡/LMK验收。
+
+本组没有修改生产core:data源码（相对55fcf2d5为空）；TEST_ONLY owner不在主classes.jar。生产仅公共显示协议/只读状态卡片/NotesApp可选host，无运行任务门面或真实保存绑定。前后端均由当前代理负责，后续缺口是固定作用域公开门面、完整结果核对与跨写入口冲突保护；无队列/WorkManager/持久token。原资源退出2 RED/恢复稳定性未证明/旧5秒失败仍保留，不能称P4准入。Draft/OFF，不合并发布；无新大库/native/CI。
+
 ## 真实Repository小库异步合同已编码待验 — 2026-10-21
 
 新增NonBlockingRepositoryWriteTest4项：使用真实recordMeasuredUse事务、完整新旧oracle、原3个故障checkpoint、提交后结果丢失及owner取消窗口；复用TEST_ONLY任务原型，不新增生产门面/队列，不接UI正式保存。测试先保存源码，待运行不能填PASS。使用Robolectric35/framework SQLite小型合成数据，不替代SQLCipher/LMK/进程死亡验收，无性能预算调整。
