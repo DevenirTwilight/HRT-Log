@@ -1,3 +1,9 @@
+## 最终CI发现真实环境漂移：API29实际16MiB导致Argon2 OOM — 2026-10-21
+
+4a67e96e的run39651425834/API29失败，first OOM明确growth_limit16777216B/Argon2Block1040B；32MiB KDF无法容纳在16MiB，不能把它混为原192MiB恢复LMK已复发。原完整日志与官方ZIP12369333065/SHA c348e28b…fd32a8/CRC存独立证据分支，原FAIL保留；其他有效job继续，不取消以掩盖失败。
+
+必要CI修正仅显式设原192MiB并核对实际进程heap：复用受限emulator/root脚本支持26/29/35明确矩阵，新增TEST_ONLY NativeCiHeapProbe在业务测试之前assert201326592B。生产、KDF、RAM冻结预算/备份/Schema/业务断言均不改；219工具回归PASS，探针Android编译在途。旧完整CI余项仍运行，当前不Ready。
+
 ## AFTER_COMMIT定向原生通过，转最终整合CI — 2026-10-21
 
 run39650341133/a9a1a8fd单场景无重试PASS：PID3850外部强杀→4008，1条真实记录/精确dump/epoch/SQLCipher完整性/独立冻结oracle/无重放均通过；verify6.254秒是整项验证时间，不是写入延迟。官方ZIP12370205997/SHA d63e3dd8…71f656/CRC已校验并存final-admission/after-commit-39650341133/。上次run39626720171超时原因仍未确定，不称诊断日志本身修复了生产问题；旧FAIL保留，最终三API继续验证现源码合同。

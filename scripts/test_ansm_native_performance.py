@@ -293,3 +293,28 @@ class NativeRuntimeConfigurationTest(unittest.TestCase):
         self.assertLess(calls.index(['adb','shell','setprop','dalvik.vm.heapsize','192m']),stop)
         self.assertLess(stop,calls.index(['adb','shell','start']))
         self.assertIn(['adb','shell','getprop','dalvik.vm.heapsize'], calls[stop+1:])
+
+
+class NativeMatrixRuntimeSafetyTest(unittest.TestCase):
+    def test_explicit_matrix_selection_does_not_accept_another_device_or_heap(self):
+        runtime=module('configure_ansm_native_runtime')
+        for api in ('26','29','35'):
+            calls=[]
+            def execute(command,**kwargs):
+                calls.append(command)
+                return {'get-serialno':'emulator-5554','ro.kernel.qemu':'1','ro.build.version.sdk':api,
+                        '-u':'0','sys.boot_completed':'1','dalvik.vm.heapsize':'192m','dalvik.vm.heapgrowthlimit':'192m'}.get(command[-1],'')
+            runtime.configure(execute,lambda _:None,expected_api=api)
+            setters=[c for c in calls if 'setprop' in c and 'dalvik.vm.' in c[-2]]
+            self.assertEqual(2,len(setters))
+            self.assertEqual({'192m'},{c[-1] for c in setters})
+        calls=[]
+        with self.assertRaises(ValueError):
+            runtime.configure(lambda *a,**k:calls.append(a),expected_api='27')
+        self.assertEqual([],calls)
+        def wrong(command,**kwargs):
+            calls.append(command)
+            return {'get-serialno':'emulator-5554','ro.kernel.qemu':'1','ro.build.version.sdk':'26'}.get(command[-1],'')
+        with self.assertRaises(RuntimeError):
+            runtime.configure(wrong,expected_api='29')
+        self.assertFalse(any('setprop' in c for c in calls))

@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
 """Bound the disposable API26 CI emulator's real ART heap; refuses physical devices."""
+import argparse
 import subprocess
 import time
 
 
-def configure(execute=subprocess.check_output, pause=time.sleep, clock=time.monotonic):
+def configure(execute=subprocess.check_output, pause=time.sleep, clock=time.monotonic, expected_api="26"):
+    if expected_api not in ("26", "29", "35"):
+        raise ValueError("Only the explicit synthetic CI API matrix is allowed")
     def adb(*args):
         return execute(['adb', *args], text=True).strip()
     serial = adb('get-serialno')
-    if not serial.startswith('emulator-') or adb('shell', 'getprop', 'ro.kernel.qemu') != '1' or adb('shell', 'getprop', 'ro.build.version.sdk') != '26':
-        raise RuntimeError('Refusing runtime configuration outside the disposable API26 emulator')
+    if not serial.startswith('emulator-') or adb('shell', 'getprop', 'ro.kernel.qemu') != '1' or adb('shell', 'getprop', 'ro.build.version.sdk') != expected_api:
+        raise RuntimeError('Refusing runtime configuration outside the explicitly selected disposable CI emulator')
     adb('root')
     adb('wait-for-device')
     if adb('shell', 'id', '-u') != '0':
@@ -29,8 +32,10 @@ def configure(execute=subprocess.check_output, pause=time.sleep, clock=time.mono
     for key in ('dalvik.vm.heapsize', 'dalvik.vm.heapgrowthlimit'):
         if adb('shell', 'getprop', key) != '192m':
             raise RuntimeError('Actual ART heap configuration did not take effect: ' + key)
-    print('Synthetic API26 emulator ART heap properties verified192m; test Runtime.maxMemory and measured budgets still required')
+    print('Synthetic API'+expected_api+' emulator ART heap properties verified192m; test Runtime.maxMemory and measured budgets still required')
 
 
 if __name__ == '__main__':
-    configure()
+    parser=argparse.ArgumentParser()
+    parser.add_argument("--api",choices=("26","29","35"),default="26")
+    configure(expected_api=parser.parse_args().api)

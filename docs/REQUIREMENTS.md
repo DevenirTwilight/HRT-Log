@@ -1146,3 +1146,8 @@ LAB-03 的同文件增量授权记录 `PD-2026-10-19-LAB03-CATALOG-ADAPTER`：�
 建立语义色令牌（action / attention / success / missed / unconfirmed / skipped / danger，浅深两套初值见任务书 A 节，中、高对比度派生，动态取色时 action、success 跟随 primary，danger 跟随 error，其余固定），所有服药状态通过 `core/ui` 的一个映射函数取得令牌、符号和文字。红色只留给真正的错误和不可撤销的删除：漏服改为中性暖灰加描边，未确认为虚线，已过时间与库存提醒改为 attention。首页新增“还没有记录”确认卡（最近 48 小时的未确认服药，最多 2 条；“我服过了”打开现有补记对话框，“没有服”调用现有 `confirmMissed`，不新增写入路径）。`Corners.badge` 改名 `Corners.tag`，新增 `Corners.pill`（完全圆角），`StatusPill` 与主按钮完全圆角。“部分漏服”文案改为“部分完成”。
 
 不改受保护的浓度页、`ConcChart`、化验页、`LabContextSection`、`Exports`（其中的红色列入报告留作后续）；不改 ViewModel、仓库、Room、备份、加密、锁、伪装、PK、提醒逻辑和任何状态判定规则；不升级 Compose、不用实验性 API；不新增依赖、权限、网络、埋点；“提醒未送达”不在日历显示；不改 versionCode、不交付 APK。按 §106 自动合并。
+
+
+## 132. P4 必需CI实际堆环境核验（2026-10-21）
+
+最终4a67e96e的API29备份合同在Argon2分配时实际Java heap上限仅16777216B（16MiB），不符既有192MiB环境；原日志/ZIP/SHA保留，不改写该FAIL。兼容矩阵显式选定原192MiB，并复用仅允许合成emulator/root/指定API的配置脚本，在安装业务测试前验证实际Runtime.maxMemory==201326592B。不是提高原冻结上限，不改Argon2id32MiB/三轮/并行1或PNBAK1，不删任何原测试。原API26性能专用512MiB/192MiB配置不变，不重跑大库；六必需检查保持。
