@@ -183,6 +183,20 @@ class MeasuredSaveCoordinatorTest {
         task.progress.first{it.status==WriteStatus.SUCCESS}
         assertEquals(before,RawData.dump(raw).toString());oneCommit(box)
     }
+    @Test fun legacySqlHelperCannotRetargetADecoyTransactionIntoReservedPrimary()=runCase {process->
+        val box=fixture();val entered=CompletableDeferred<Unit>();val release=CompletableDeferred<Unit>()
+        val owner=MeasuredSaveCoordinator(repo,process,Dispatchers.IO,writeOverride={expected->entered.complete(Unit);release.await();write(expected)})
+        val task=owner.start(prepare(owner,box));entered.await();repo.select(Space.DECOY)
+        repo.transaction { dao ->
+            repo.select(Space.PRIMARY) // Deterministic UI selection switch inside the suspended legacy transaction.
+            val helper=NotesRepository::class.java.getDeclaredMethod("sql").apply{isAccessible=true}
+            val selected=helper.invoke(repo) as androidx.sqlite.db.SupportSQLiteDatabase
+            selected.execSQL("INSERT INTO day_note(date,text) VALUES (?,?)",arrayOf("2026-10-21","SYNTHETIC scoped SQL"))
+            assertTrue("Legacy helper escaped its reserved transaction target",primary.dao().notes("2026-10-21","2026-10-21").isEmpty())
+            assertEquals(1,dao.notes("2026-10-21","2026-10-21").size)
+        }
+        release.complete(Unit);task.progress.first{it.status==WriteStatus.SUCCESS};oneCommit(box)
+    }
     private class PausedDispatcher:CoroutineDispatcher() {
         private val queue=ConcurrentLinkedQueue<Runnable>()
         override fun dispatch(context:CoroutineContext,block:Runnable){queue.add(block)}
