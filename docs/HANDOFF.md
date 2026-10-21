@@ -1,3 +1,7 @@
+## 原完整CI的API26已核验，不只是job绿 — 2026-10-21
+
+4a67e96e/run39651425834/API26官方ZIP12370910305/SHA8609ec72…bce1e63/CRC已保存核验：owner14/0fail/0skip，STOCK_CAPTURED和AFTER_COMMIT两项OS-kill→新PID/精确数据/完整oracle/无重放均PASS。AFTER_COMMIT除定向39650341133之外已有第二次完整合同观测通过，原超时仍保留且不编造根因。它不是大库低内存重复跑分；最终f13明确192MiB的API矩阵仍运行，不能拿旧job替代新HEAD准入。
+
 ## 当前正式候选f13e7f52：环境修正后最终必需CI在途 — 2026-10-21
 
 当前待审源码f13e7f52（PR57），证据分支保持独立避免反复改变正在验收的HEAD。219工具测试、NativeCiHeapProbe Android编译PASS，日志已保存；39653018592/39653023713是同源码最终Android与Science验收，未结束不填PASS。

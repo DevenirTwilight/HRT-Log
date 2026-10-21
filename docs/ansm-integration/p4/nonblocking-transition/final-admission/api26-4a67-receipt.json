@@ -1,0 +1,18 @@
+{
+  "source": "4a67e96e",
+  "run": 39651425834,
+  "artifact": 12370910305,
+  "sha256": "8609ec723572ff87dddd4ce4587f5779685b9bb0e5b7759377154de57bce1e63",
+  "crc": "PASS",
+  "owner_contracts": {
+    "tests": 14,
+    "failures": 0,
+    "skips": 0
+  },
+  "actual_writer_death": {
+    "STOCK_CAPTURED": "PASS",
+    "AFTER_COMMIT": "PASS"
+  },
+  "scope": "API26 SQLCipher correctness, not frozen full memory or latency benchmark",
+  "previous_after_commit_timeout": "still retained; no proven root cause"
+}
