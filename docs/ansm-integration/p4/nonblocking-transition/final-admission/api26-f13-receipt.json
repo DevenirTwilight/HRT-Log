@@ -1,0 +1,24 @@
+{
+  "source": "f13e7f521862739e23b9928bba2a82e08eb42fe9",
+  "run": 39653018592,
+  "job": 119405991538,
+  "api": 26,
+  "status": "PASS",
+  "heap_preflight": {
+    "selected_tests": 1,
+    "asserted_max_heap_bytes": 201326592
+  },
+  "contracts": {
+    "tests": 335,
+    "failures": 0,
+    "skips": 0
+  },
+  "writer_death": {
+    "STOCK_CAPTURED": "PASS",
+    "AFTER_COMMIT": "PASS"
+  },
+  "artifact": 12370792554,
+  "sha256": "de74a3e827b9dedf542e0add70f66d2dc65144b75693da00c12f71fa68aeb810",
+  "crc": "PASS",
+  "scope": "compatibility correctness, not a rerun of large timing benchmark"
+}

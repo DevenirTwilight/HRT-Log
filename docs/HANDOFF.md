@@ -1,3 +1,9 @@
+## 最终f13三个API原生均已核验通过，余Android全量检查 — 2026-10-21
+
+最终39653018592 API26/29各335合同0fail/0skip，API35全data407列项0fail/5个显式host action探针在常规扫描时skip（已单独执行，不是删改既有assert）；三API实际192MiB进程前置探针通过。每API的STOCK_CAPTURED/AFTER_COMMIT实际OS-kill→新PID/精确dump/完整oracle/无重放均PASS，官方原ZIP/SHA/CRC及完整job日志已保存。API35其他App/隐私/恢复/附件隔离等既有host合同整体通过。
+
+Science/JVM已PASS，最终Android构建/Robolectric/lint/发行隔离仍在途，不能提前声称全部完成。原16MiB OOM和先前AFTER_COMMIT超时保留；未放宽192MiB、密码学或安全预算。当前所有实际成果持续落证据分支，真实来源f13，正式入口OFF、不合并发布。
+
 ## 最终f13候选API29已核验PASS，实际192MiB且335合同零失败 — 2026-10-21
 
 run39653018592/job119405991687/API29：192MiB属性校验+真实进程HeapProbe1项执行通过，随后335合同0fail/0skip（含所有原先因16MiB失败的KDF/备份/恢复合同）、两个writer OS-kill/新PID/精确dump/完整oracle/无重放均PASS。原ZIP12370771887/SHAfb02ec1b…6f248f81/CRC及完整job日志gz已存final-admission。不是提高冻结上限或改KDF，旧16MiB失败保留。最终26/35/Android仍在途，当前不能提前Ready。

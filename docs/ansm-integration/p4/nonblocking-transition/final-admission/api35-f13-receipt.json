@@ -1,0 +1,26 @@
+{
+  "source": "f13e7f521862739e23b9928bba2a82e08eb42fe9",
+  "run": 39653018592,
+  "job": 119405991717,
+  "api": 35,
+  "status": "PASS",
+  "heap_preflight": {
+    "selected_tests": 1,
+    "asserted_max_heap_bytes": 201326592
+  },
+  "data_suite": {
+    "listed_tests": 407,
+    "failures": 0,
+    "skipped": 5,
+    "skip_scope": "explicit action-driven death probes and heap probe; separately invoked by host; not original correctness assertions"
+  },
+  "writer_death": {
+    "STOCK_CAPTURED": "PASS",
+    "AFTER_COMMIT": "PASS"
+  },
+  "artifact": 12371636048,
+  "sha256": "7bc2a394eeaaedd055d9cb0d3db282dee79a1f4e38c3870f7fbe1591473e41ff",
+  "crc": "PASS",
+  "physical_device": "NOT_RUN",
+  "talkback_manual": "NOT_RUN"
+}
