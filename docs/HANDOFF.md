@@ -1,3 +1,7 @@
+## 当前验收检查点：Android测试编译和218工具通过 — 2026-10-21
+
+final-admission/保存实际日志/收据。Android测试编译PASS（编译期间只同步主线UI，data/测试源码未变）；全部Python工具218 PASS，未执行性能大库。整合主线后的ProcessMeasuredWriteShell/Period/UI06代表回归在途；单场景AFTER_COMMIT run39650341133仍在途，未声称安全通过。当前正式门仍为安全/最终CI，普通写入仅指标，不再恢复5秒攻关。
+
 ## 同步已合并主线4ec11437，保留UI06和P4状态能力 — 2026-10-21
 
 正常合并主线，仅四语资源/需求/交接产生内容冲突，双方独立新增内容全部保留；XML解析及重复key检查通过。AppShell/TodayCard/StockScreen等自动合并须最终App回归，不声称已验收；无数据库/备份版本冲突。主线UI06§115编号按主线来源理解，与此前P4历史§115不同，不改原任务书。AFTER_COMMIT诊断run39650341133仍在途，不另开大库。
