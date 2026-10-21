@@ -26,3 +26,7 @@
 ## 纯文本codec扩展（尚待最终验证）
 
 旧链计算为G(currentRows.map(uuid,F(text)))，候选仅将F换为MemoF。精确不可变全文键只保存原canonical/read/SHA成功计算的不可变Link+digest；无JSONObject、数据库UUID/Node或链有效性结果。同步发布/淘汰保持每项v=F(t)，失败不缓存；G每次仍读全库并检查当前UUID、逐行字节/总预算、序列、前驱和重复。SAVEPOINT/并发连接改变currentRows而不改变F；重启丢失memo只增加计算。因此不是B式数据库信任缓存。固定16MiB保守分配估值，关闭/恢复解密前清空；资源lifetime token阻止清空前读者重新保留旧明文，不参与信任判断。冻结原Chain作为独立对照，须完成暖缓存坏链、并发、淘汰、关闭期间的差分与原生内存验收。
+
+### 清理分配反例及最小修正（2026-10-21）
+
+独立审查指出clear内Any()轮换若OOM，旧token仍在，旧reader可回填明文。旧源码新合同实际RED（不是数据库语义失败），证据resumed-verification/clear-red/。最小修正为nullable生命周期：clear锁内清空并置null，无新分配；正常新reader才在同锁内建立非空token，分配失败仍保持null。旧reader的非空token不能匹配null或后来的新token。保留原in-flight query清理合同；新增null断言。此机制只释放缓存强引用，不擦除不可变String/在途局部值；清理后真正新启动的读取可重新缓存。全部数据库验证规则不变。GREEN及最终回归尚待完成。

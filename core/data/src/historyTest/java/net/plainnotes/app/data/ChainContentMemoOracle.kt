@@ -44,6 +44,7 @@ internal object ChainContentMemoOracle {
     private val entries=type.getDeclaredField("checkedInputs").apply{isAccessible=true}
     private val used=type.getDeclaredField("checkedInputBytes").apply{isAccessible=true}
     private val budget=type.getDeclaredField("checkedInputByteBudget").apply{isAccessible=true}
+    private val lifetime=type.getDeclaredField("checkedInputLifetime").apply{isAccessible=true}
     @Suppress("UNCHECKED_CAST") private fun contents()=entries.get(owner) as MutableMap<String,Any>
     private fun reset(bytes:Long)=synchronized(lock) {contents().clear();used.setLong(owner,0);budget.setLong(owner,bytes)}
     fun check() {
@@ -84,7 +85,12 @@ internal object ChainContentMemoOracle {
             // An empty access instance closes without loading keys or opening a database, but must
             // still release the process codec's plaintext references through the production lifecycle.
             DatabaseAccess(androidx.test.core.app.ApplicationProvider.getApplicationContext()).close()
-            synchronized(lock){assertTrue(contents().isEmpty());assertEquals(0L,used.getLong(owner))}
+            synchronized(lock){
+                assertTrue(contents().isEmpty());assertEquals(0L,used.getLong(owner))
+                // Cleanup must not need a fresh token allocation: it must remain reliable at
+                // memory exhaustion and invalidate readers that captured the old owner token.
+                assertNull("Cleanup must invalidate ownership without allocating a replacement",lifetime.get(owner))
+            }
             compare(a)
             // A read already in progress must not retain old plaintext after the owner closes.
             // Clear at the query boundary, after validate captured its resource lifetime token.
@@ -100,7 +106,7 @@ internal object ChainContentMemoOracle {
             synchronized(lock){assertTrue("In-flight old reader repopulated cleared plaintext",contents().isEmpty());assertEquals(0L,used.getLong(owner))}
             compare(a)
             MeasuredOperationChain.clearPureInputMemo()
-            synchronized(lock){assertTrue(contents().isEmpty());assertEquals(0L,used.getLong(owner))}
+            synchronized(lock){assertTrue(contents().isEmpty());assertEquals(0L,used.getLong(owner));assertNull(lifetime.get(owner))}
             // Reflection only resets this pure optimization, without changing or establishing DB trust.
             reset(0);compare(a)
         } finally {reset(originalBudget)}

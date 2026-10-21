@@ -1,3 +1,9 @@
+## P4 清理边界RED已实证，无分配修正已入库待GREEN — 2026-10-21
+
+新增clear后lifetime必须null的合同在旧生产f220上实际运行：1项FAIL，断言Cleanup must invalidate ownership without allocating a replacement，日志/XML已入库resumed-verification/clear-red/，不是编译失败。原in-flight query清空后不能回填断言保留。
+
+最小生产修正：checkedInputLifetime改nullable，初始null；clear在原锁内清map/bytes/置null，不创建对象；正常reader才锁内创建非空token。分配失败不发布，旧token不能与null/新token相等，不影响数据库信任或任何规则。独立只读审阅认为覆盖并发/OOM边界；强引用释放不等于String擦除。现在GREEN与最终完整data/App/reminder/生成Android编译待跑，不能沿用前495当本修正通过。无新原生，#57 Draft/OFF。
+
 ## P4 实时结果：修正DTO后完整data495/生成Android编译PASS — 2026-10-21
 
 source00d7c18d生产与f220一致，完整data495/0FAIL/0SKIP及含最新生成大库探针Android编译实际PASS。XML/逐suite计数/SHA/日志和生成SHA立即入库full-audit-reuse/resumed-verification/pre-cleanup-fix/；旧编译FAIL仍在initial-compile-failure.log。此组在无分配clear修正之前，不能当下一源码通过。

@@ -75,11 +75,11 @@ internal object MeasuredOperationChain {
     private var checkedInputBytes=0L
     // Resource ownership only: clearing forbids in-flight readers from retaining old plaintext.
     // This token never establishes database validity or changes any chain check.
-    private var checkedInputLifetime=Any()
+    private var checkedInputLifetime:Any?=null
     /** Release owned plaintext references at close/destruction and before authenticated restore.
      * Clearing affects performance only; it neither establishes nor invalidates database trust. */
     internal fun clearPureInputMemo()=synchronized(checkedInputLock) {
-        checkedInputs.clear();checkedInputBytes=0;checkedInputLifetime=Any()
+        checkedInputs.clear();checkedInputBytes=0;checkedInputLifetime=null
     }
     private fun checkedInputCost(text:String,value:CheckedInput):Long {
         fun string(s:String?)=if(s==null)0L else 112L+s.length*2L
@@ -104,7 +104,9 @@ internal object MeasuredOperationChain {
     fun validate(db:SupportSQLiteDatabase):Map<String,Node> = checkedChain(db,false).first
     private fun checkedChain(db:SupportSQLiteDatabase,retainCanonical:Boolean,headers:HeaderCapture?=null):Pair<Map<String,Node>,Map<String,String>> {
         check(db.inTransaction())
-        val lifetime=synchronized(checkedInputLock){checkedInputLifetime}
+        // Allocation belongs to a new read, never to cleanup. If it fails, the old
+        // readers still cannot retain plaintext because clear has already set the token to null.
+        val lifetime=synchronized(checkedInputLock){checkedInputLifetime ?: Any().also{checkedInputLifetime=it}}
         data class Captured(val uuid:String,val json:String,val checked:CheckedInput)
         var retainedBytes=0L
         val query=if(headers==null)"SELECT operation_uuid,input_json FROM measured_operation"
