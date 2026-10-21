@@ -64,4 +64,6 @@ Room13/业务备份12/PNBAK1/加密参数/PK/权限/签名/版本/P5/P6均未变
 
 ## 当前验证
 
-984219a3首轮完整数据526、时期5、提醒21及两项编译PASS已保存在 `final-local/`，原始提交fb9f2c30。8b24ccf5在空间修正后重新完整回归中，预期527项，尚未结束；不得用此前526或514代替最终源。最终结果会在同一目录更新，并保留前轮日志及Git历史。
+最终生产8b24ccf5：完整data **527 PASS**（owner13项）、PeriodStability **5 PASS**、reminder **21 PASS**，均0 FAIL/ERROR/SKIP；compileDebugAndroidTestKotlin、compileFullDebugKotlin **PASS**。同轮Gradle BUILD SUCCESSFUL，4m50s；各套XML时间戳均属于本轮。完整日志、45+1+7 XML、源码/主jar SHA、SHA256SUMS与范围收据集中在 `final-local/`。主jar包含运行owner，不含TEST_ONLY原型/冻结oracle。space-red测试源码SHA逐字一致，原重放反例也保留通过。
+
+前轮984219a3的526/5/21及编译PASS在fb9f2c30，旧日志保留为984219a3-*；不覆盖真实RED或借旧结果冒充最终源。没有在途测试；最终必需CI/native/LMK仍NOT_RUN/NOT_PROVEN，无原预算新结论。

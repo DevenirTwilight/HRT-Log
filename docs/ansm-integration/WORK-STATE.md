@@ -1,3 +1,9 @@
+## 2026-10-21 运行owner最终后端527/5/21本地PASS，仍非P4准入
+
+最终生产8b24ccf5，主线320171cd；进程owner/共享冲突门完成，并修复已有UUID不完整确认和旧SQL助手跨空间绕门。真实2+1 RED保留，最终data527/Period5/reminder21零FAIL/SKIP，Android测试源码/App编译PASS；证据runtime-owner/final-local/，完整边界runtime-owner/implementation.md。无在途测试，无新native/CI/大库跑分。
+
+App未绑定，混合刷新读写分离和人工核对流程未完成；原5秒硬门/LMK/最终CI-native仍阻塞。Draft/OFF/autoMerge=null，不合并发布；Schema/格式/PK/UI/P5P6未变。先前检查点与失效WIP按历史理解。
+
 ## 2026-10-21 后端运行owner编码完成，重放2 RED已修正、完整回归待验
 
 接手c2fffbb0/主线320171cd，新增MeasuredSaveCoordinator/MeasuredSaveGate，根提交确认、进程作用域、固定PRIMARY、完整冻结请求去重及全部已知Repository/导入/导出补写/恢复/关闭销毁冲突保护。首轮21 PASS；随后旧部分UUID replay误报成功2 RED已保存，生产984219a3改用prepared专用提交，已有UUID复用现有observe全审计，不改普通新增最终全审计或原写入口。runtime-owner/implementation.md说明范围与证明边界。

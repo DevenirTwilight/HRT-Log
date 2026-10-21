@@ -1,3 +1,11 @@
+## 后端运行owner最终本地验收完成并入库 — 2026-10-21
+
+最终生产8b24ccf5（后续仅证据/文档），主线320171cd：完整data527/PeriodStability5/reminder21全PASS、0FAIL/ERROR/SKIP，Android测试源码/App full debug编译PASS，同轮BUILD SUCCESSFUL 4m50s。runtime-owner/final-local/含实际45+1+7原XML/全日志/源码与主jar SHA/清单/收据；所有XML时间戳均核对本轮。space-red测试源码逐字相同，原2项UUID重放反例继续通过，主jar无TEST_ONLY原型/冻结oracle。无在途检查；当前有效成果均写库，待本证据提交推送后交接。
+
+本组新增进程内MeasuredSaveCoordinator+同DatabaseAccess共用冲突门：固定PRIMARY与原确认、页面取消不取消提交、根Room提交后SUCCESS、丢响应writer结束后独立全审计核对、未知结果PENDING/MANUAL_CHECK不重放；旧写入口/导入/含补写的导出/恢复/关闭销毁保护。另修正已有UUID部分匹配会误报SUCCESS、旧sql()在选择切换时逃出原事务空间的问题；真实RED均保存，不删反例。普通新增仍原最终一次全审计，未增加可信缓存/快验证器，也没有性能提速结论。完整说明runtime-owner/implementation.md。
+
+**P4仍Draft/OFF/autoMerge=null，不可合并。** App尚未绑定owner；混合DAO刷新/维护需受限只读合同，MANUAL_CHECK/进程死亡人工核对流程尚待接线。原≤5秒硬门未改、独立指标提案未获批准；恢复LMK NOT_PROVEN，精确HEAD必需CI/native/真机/TalkBack NOT_RUN。依§126不恢复大库/native/性能攻关。无Schema/备份格式/PNBAK1/PK/UI/P5/P6/权限/签名/版本/发布变化；无APK/合并。后续接手先看本节和TAKEOVER更新，不能恢复旧WIP或把本地安全合同当原生准入。
+
 ## 8b24ccf5完整数据527项PASS，空间绕门反例GREEN已保存 — 2026-10-21
 
 当前最终生产8b24ccf5：data527 PASS/0FAIL/0ERROR/0SKIP，45原XML/源码SHA/截至数据日志更新同runtime-owner/final-local/；owner13项全通过。space-red测试源码SHA逐字相同，原断言不改；DECOY事务内全局select PRIMARY后私有SQL助手仍在DECOY，PRIMARY不被绕门写入。原两项UUID重放反例也仍通过。前526最终日志以984219a3-*保留、原XML在fb9f2c30提交可独立核对。
