@@ -1,8 +1,12 @@
+## 上次UI人工汇总数更正：实际32项 — 2026-10-21
+
+逐项核对shell-first/六个原始XML：17+1+1+3+2+8=32，receipt.json.total原已正确为32；前次人工文字和PR写34是加总错误，已改32。没有增加/删除/跳过测试或改原始证据。当前资源清理31303e64的完整core:data本地回归仍在运行，结果未定；不提前填PASS。
+
 ## 已归档资源退出修正接入当前源码，完整本地数据回归待验 — 2026-10-21
 
 复核后接入saved-resource-wip/changes.patch原样两文件修正，SHA与原归档逐字一致：链读取失败清理纯解码明文引用并原样重抛；restoreBackupTo在所有正常/异常/取消出口finally释放引用。不是性能优化/可信缓存/增量验证，不改完整审计、事务、解密、格式或Schema。未回退原FK去重。原RED/旧归档证据原样保留，本组先保存源码再做完整本地core:data回归，当前不能填PASS。
 
-已完成非阻塞UI34 PASS及小库owner/Repository11 PASS仅对应之前源；当前变更后需回归。没有新大库/native计划，不以本地清理测试宣称LMK修复。真实保存门面、核对及冲突保护仍未接通；P4 Draft/OFF，政策硬门未改，不合并发布。
+已完成非阻塞UI32 PASS及小库owner/Repository11 PASS仅对应之前源；当前变更后需回归。没有新大库/native计划，不以本地清理测试宣称LMK修复。真实保存门面、核对及冲突保护仍未接通；P4 Draft/OFF，政策硬门未改，不合并发布。
 
 ## 真实Repository异步小库4项+原型7项PASS已保存 — 2026-10-21
 
@@ -14,9 +18,9 @@
 
 新增NonBlockingRepositoryWriteTest4项：使用真实recordMeasuredUse事务、完整新旧oracle、原3个故障checkpoint、提交后结果丢失及owner取消窗口；复用TEST_ONLY任务原型，不新增生产门面/队列，不接UI正式保存。测试先保存源码，待运行不能填PASS。使用Robolectric35/framework SQLite小型合成数据，不替代SQLCipher/LMK/进程死亡验收，无性能预算调整。
 
-## 真实主壳导航与状态34项PASS，截图已推送保存 — 2026-10-21
+## 真实主壳导航与状态32项PASS，截图已推送保存 — 2026-10-21
 
-源54b8a8e7：NonBlockingWriteShellTest2、原AppShellBackNavigationTest17、卡片3、四语代表布局8、翻译2，共34 PASS/0FAIL/0SKIP。原始XML/完整日志/真实NotesApp截图及SHA入库nonblocking-transition/shell-first/；截图为合成PENDING观察+真实药物页，不是假称实际库存后台保存。收起可展开、抽屉导航、返回日历及无业务写入断言均通过。已检查实际截图。真机/TalkBack/native及CI NOT_RUN；未启动大库，不改原预算。
+源54b8a8e7：NonBlockingWriteShellTest2、原AppShellBackNavigationTest17、卡片3、四语代表布局8、翻译2，共32 PASS/0FAIL/0SKIP。原始XML/完整日志/真实NotesApp截图及SHA入库nonblocking-transition/shell-first/；截图为合成PENDING观察+真实药物页，不是假称实际库存后台保存。收起可展开、抽屉导航、返回日历及无业务写入断言均通过。已检查实际截图。真机/TalkBack/native及CI NOT_RUN；未启动大库，不改原预算。
 
 继续做真实Repository小库提交/回滚/结果丢失窗口的TEST_ONLY整合合同，尚未运行；生产公开门面、真实安全核对resolver及全部冲突入口仍未实现。原资源退出2 RED仍需独立处理，恢复稳定性未证明。P4 Draft/OFF，不合并发布。
 

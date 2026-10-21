@@ -10,7 +10,7 @@
 |---|---|---|
 |共享三状态与phase显示协议|IMPLEMENTED；3项PASS|domain/write/WriteProgress；只是显示协议，不是提交证明|
 |Material 3四语内联状态卡片|IMPLEMENTED；操作3/布局8/翻译2 PASS|四语言各320dp/2x/深色与411dp/1x/浅色代表布局，非全矩阵|
-|实际NotesApp状态区及导航|IMPLEMENTED；主壳2/原返回17 PASS|默认null；收起可展开，不取消业务；截图与34项同次结果见shell-first/|
+|实际NotesApp状态区及导航|IMPLEMENTED；主壳2/原返回17 PASS|默认null；收起可展开，不取消业务；截图与32项同次结果见shell-first/|
 |后台任务owner原型|TEST_ONLY；7项PASS|页面观察取消独立、结果不明不重试；不在runtime/release|
 |真实Repository小库连接原型|TEST_ONLY；4项PASS|ecc6671b，真实事务/完整oracle/回滚/丢失结果窗口；原型7项同次PASS，repository-first/；不是SQLCipher原生|
 |应用级真实任务服务与公开门面|NOT_IMPLEMENTED|需固定PRIMARY/scope、无重复请求及冲突入口覆盖|
