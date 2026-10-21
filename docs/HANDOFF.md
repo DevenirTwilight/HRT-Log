@@ -1,3 +1,9 @@
+## 接线首轮：528数据/原18App通过，2项新App初始化超时已保存 — 2026-10-21
+
+全data528 PASS；选定App20项中18 PASS，2新测试均@Before第68行等待初始ViewModel刷新超时，未进入保存断言。原XML/log/SHA存shell-integration/first-local/；不是把超时称业务RED，也不丢弃。当前怀疑无Compose内容时Android主Looper未驱动，下一步按既有DataRefreshTest做法显式idle主Looper，保留30秒/原所有断言，不改生产写入来迎合测试。
+
+Android源码编译PASS仅指d582测试集合，不含后来新OS-kill probe；后者须另编译。两个远端run仍进行中，原d582 CI可能包含同一初始化失败，完整保留，不为隐藏失败取消。
+
 ## 实际writer OS进程死亡合同已编码待编译 — 2026-10-21
 
 新增androidTest MeasuredSaveDeathProbe和host run_ansm_write_process_death.py，复用已验收恢复probe的外部force-stop握手：STOCK_CAPTURED持有真实事务时kill→新PID精确dump/epoch不变、0记录/0消耗；AFTER_COMMIT丢交付窗口kill→新PID精确已提交dump、1记录/1量子。两个路径均SQLCipher header/integrity/FK/完整新旧oracle及fresh owner无任务、无自动重放；测试marker仅合成摘要，不是生产持久token。接入现有API26/29/35 CI的小库合同阶段，不更改原预算/fixture。当前仅Python语法通过，Android源码未编译或执行，不能填PASS。

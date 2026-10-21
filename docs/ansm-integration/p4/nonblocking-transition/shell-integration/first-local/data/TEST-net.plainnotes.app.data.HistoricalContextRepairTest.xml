@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.HistoricalContextRepairTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-21T14:53:33.373Z" hostname="506c18a63d5b" time="0.636">
+  <properties/>
+  <testcase name="explicitConfirmationAlsoRespectsFactsFromLinkedOldRule" classname="net.plainnotes.app.data.HistoricalContextRepairTest" time="0.089"/>
+  <testcase name="savedConflictingChemistryCannotBeOverwrittenByConfirmation" classname="net.plainnotes.app.data.HistoricalContextRepairTest" time="0.02"/>
+  <testcase name="explicitContextConfirmationIsDateScopedFrozenAndDoesNotTouchStockOrDoses" classname="net.plainnotes.app.data.HistoricalContextRepairTest" time="0.438"/>
+  <testcase name="originalTrackerReimportRepairsOnlyMatchingMissingRecords" classname="net.plainnotes.app.data.HistoricalContextRepairTest" time="0.084"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
