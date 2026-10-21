@@ -1,3 +1,11 @@
+## P4 并行资源异常检查已启动，App仍运行 — 2026-10-21
+
+主树最新5e12e2b6，源55fc的data495/Android编译/reminder21与工具73已保存。App full unit session55570仍运行且进程有CPU活动，日志/workspace/scratch/p4-reuse-latest-final.log，不能预填PASS或当卡死。主树有唯一生成LargeInventoryPerformanceProbe.kt未提交，全部构建结束后clean。
+
+为避免在编译中改共享源码，另建detached worktree /workspace/HRT-Log-p4-resource-check (base5e12e2b6)做两个资源退出合同，代理resource_failure_cleanup，目标仅chain读失败和restore所有出口的memo释放。RED已启动session74879，日志直接写该树docs/ansm-integration/p4/full-audit-reuse/resource-failure/red/gradle.log；只指定pureChainContentMemoNeverCachesDatabaseValidity、indexedRestoreCancellationAndResourceFaultsPreserveTargetAndEpoch，不动原断言、Schema/crypto/UI，不跑原生。
+
+目前生产仅clear前置/close释放：需实证异常中途是否留候选memo。候选最小修正若RED确认：checkedChain失败清memo原样重抛Throwable；restore整个输入作用域finally清memo，覆盖成功/失败/取消，时间仍算实际API。代理每组提交并给SHA，root在App结束后cherry-pick正常推送并跑最终data/Android，避免丢代码或把模拟OOME当实际LMK证明。不创建新持久状态，不是快验证器，不改普通写入规则。新候选原生仍NOT_RUN，#57 Draft/OFF。
+
 ## P4 提醒回归21 PASS及隔离核验已入库 — 2026-10-21
 
 最新55fc生产源的reminder21/0FAIL/0SKIP实际通过，逐suite/XML已存resumed-verification/reminder/。源码与生产data jar隔离核验PASS：无冻结oracle/测试探针类；App main/PK/Schema/BackupCodec/BackupLimits/NotesDatabase/StockForecast与99e一致，正式UI没有新增measured写入口，证据source-isolation.json。App full unit仍编译执行中，未预填；下一组完成即时保存。当前无新原生性能结论，Draft/OFF不合并发布。
