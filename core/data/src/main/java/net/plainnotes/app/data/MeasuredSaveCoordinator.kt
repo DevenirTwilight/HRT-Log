@@ -99,6 +99,7 @@ class MeasuredSaveCoordinator internal constructor(
     }
     private fun success(task:ActualSaveTask,receipt:MeasuredConsumptionReceipt) {
         check(active===task)
+        require(receipt.operationUuid==task.prepared.operationUuid && receipt.recordRevision==1)
         gate.release(task.lease);active=null
         task.mutableResult.value=ConfirmedActualSave(receipt.operationUuid,receipt.recordUuid,receipt.recordRevision)
         // Root Repository return/independent observation, never a checkpoint, establishes this.

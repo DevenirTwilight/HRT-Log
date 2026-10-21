@@ -1,3 +1,9 @@
+## 后端运行owner首轮21项合同PASS，重放边界继续验证 — 2026-10-21
+
+实际运行MeasuredSaveCoordinatorTest9 + NonBlockingRepositoryWriteTest12，共21 PASS/0FAIL/0SKIP；原始XML/日志/源码SHA在nonblocking-transition/runtime-owner/first-focused/。覆盖独立根提交、页面取消、丢响应只读核对、真实故障回滚、同UUID/异载荷、旧写/恢复/关闭销毁/导入冲突、PRIMARY固定与外层Room回滚。补充发现exportBackup会RegimenHistory.seed，已纳入冲突门并负向验证。仅Robolectric35小库，不是SQLCipher/LMK/预算或最终全回归。
+
+继续复核旧create的同UUID replay分支：该分支不全审计也不比较原created/config/context，新owner必须避免直接把这种返回当作完整原请求确认。下一步针对性反例，再只在预备请求重放路径复用现有observe完整规则；保留普通新建原最终审计，不引入第二验证器。尚未接App、未启用入口，正式政策/恢复LMK/CI仍阻塞。泛型DAO transaction保守按可变更入口拦截；现有ViewModel.refresh混合读取/迁移，后续UI绑定前须分离受限只读合同，不能给任意DAO callback开读绕门。未核对任务继续MANUAL_CHECK占门，没有自动重放/解锁。
+
 ## 运行owner/后端冲突门已编码，安全合同待验 — 2026-10-21
 
 接手c2fffbb0后不恢复性能任务。新增MeasuredSaveCoordinator（进程SupervisorJob/IO、仅独立实际用药、opaque原确认、同UUID/完整输入复用、根事务返回后SUCCESS、writer结束后只读核对、不存在/异常保留MANUAL_CHECK不重放）与同DatabaseAccess共享的MeasuredSaveGate。后端generic/SQL/measured事务、TransMemo导入、恢复、close/destroy已接协调；读接口分离，PRIMARY与DECOY不混投，无队列/持久token。无App运行调用，UI不改，入口OFF。

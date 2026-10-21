@@ -791,7 +791,7 @@ const val BACKFILL_MAX_DAYS=731L
         if(target!=Space.PRIMARY)throw ReferenceFailure(ReferenceError.WRONG_SPACE)
         return exportBackupFrom(target,password,expectedEpoch)
     }
-    private suspend fun exportBackupFrom(target:Space,password:CharArray,measuredEpoch:String?):ByteArray=withContext(Dispatchers.IO) {
+    private suspend fun exportBackupFrom(target:Space,password:CharArray,measuredEpoch:String?):ByteArray=measuredSaveGate.mutation(target){withContext(Dispatchers.IO) {
         val db=access.get(target)
         BackupPlaintextOwner().use {owner->
         if(measuredEpoch!=null) db.withTransaction {
@@ -814,7 +814,7 @@ const val BACKFILL_MAX_DAYS=731L
         }
         BackupCodec.encrypt(owner.bytes(),password)
         }
-    }
+    }}
     /** Replaces all data with the backup; throws [BackupCodec.WrongPassword] or [BackupCodec.BadFile] without touching anything. */
     /**
      * Restores a backup from this schema or an older one (older ones are upgraded right after the rows are written, with the
