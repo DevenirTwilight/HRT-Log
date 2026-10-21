@@ -1,3 +1,7 @@
+## 保留原API29环境失败，不掩盖并修复环境合同 — 2026-10-21
+
+final-admission/api29-16m-failure.log.gz与原ZIP/SHA/CRC保存run39651425834/job119400450802真实FAIL。首个失败在Argon2 Block申请1040B，实际growth_limit16MiB；固定KDF32MiB不能在其中运行。这是Java OOM，不是原192MiB恢复LMK的再次证明。源码修正只显式还原原192MiB并增加实际进程heap前置断言；不改生产/密码学/内存上限/测试断言。219工具与Android探针编译已PASS，真实原生尚待新源码验收。原其他有效CI仍运行，未强行取消掩盖结果。
+
 ## 最终源码4a67e96e验收证据分支（非生产集成分支） — 2026-10-21
 
 本分支evidence/p4-admission-4a67e96e仅存实际结果，不合并到生产，不改变PR57源码HEAD，避免每次保存证据重启相同全量CI。真正待审源码4a67e96e，已合主线4ec11437。当前本地整合App7项PASS（owner/navigation2+Period5）；Ui06Test过滤未匹配类，不声称额外UI06已跑。原XML/完整log存final-admission/integrated-app/。

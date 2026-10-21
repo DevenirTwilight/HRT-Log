@@ -1,0 +1,16 @@
+{
+  "source": "4a67e96e",
+  "run": 39651425834,
+  "job": 119400450802,
+  "api": 29,
+  "result": "FAIL",
+  "first_error": "java.lang.OutOfMemoryError at Argon2BytesGenerator$Block",
+  "observed_heap_growth_limit_bytes": 16777216,
+  "frozen_heap_limit_bytes": 201326592,
+  "crypto_kdf_memory_kib": 32768,
+  "is_lmk_evidence": false,
+  "artifact": 12369333065,
+  "artifact_sha256": "c348e28b2e15630cba558ea6882b898e3b98536bd7e68ebd350ab48f9cfd32a8",
+  "crc": "PASS",
+  "next_change": "explicit existing192MiB runtime plus actual process preflight; no production/KDF change"
+}
