@@ -41,10 +41,10 @@ internal object FrozenFullAuditStore {
             val proof=operationProof ?: return
             check(prefixes.put(uuid to scale.capacityQuanta,buildPrefixIndex(entries,scale,proof.nodes))==null)
         }
-        var operationProof:MeasuredOperationChain.AuditProof?=null
+        var operationProof:FrozenFullAuditChain.AuditProof?=null
             private set
-        var operationRowByteBudget=MeasuredOperationChain.AuditProof.MAX_ROW_BYTES
-        fun prepareOperations(db:SupportSQLiteDatabase){check(operationProof==null);operationProof=MeasuredOperationChain.AuditProof.capture(db,operationRowByteBudget)}
+        var operationRowByteBudget=FrozenFullAuditChain.AuditProof.MAX_ROW_BYTES
+        fun prepareOperations(db:SupportSQLiteDatabase){check(operationProof==null);operationProof=FrozenFullAuditChain.AuditProof.capture(db,operationRowByteBudget)}
         fun read(payload:String)=byPayload.getOrPut(payload){PackageMeasurementPayload.read(payload)}
     }
     internal fun auditStagedProjection(db:SupportSQLiteDatabase,dataset:String,containerUuid:String):MeasureResult<AuditedStockProjection> =
@@ -71,7 +71,7 @@ internal object FrozenFullAuditStore {
             val scale=(result as MeasureResult.Success).value
             require(box.inventory_encoding==InventoryEncoding.EXACT && box.capacity==scale.capacityQuanta.toDouble() && box.initial_used_amount==0.0)
             val entries=ArrayList<ProjectionEntry>()
-            val operationChain by lazy {presentations.operationProof?.nodes ?: MeasuredOperationChain.validate(db)}
+            val operationChain by lazy {presentations.operationProof?.nodes ?: FrozenFullAuditChain.validate(db)}
             var used=0L;var previousId=0L;val deltas=ArrayList<Long>()
             fun same(a:Quantity,b:Quantity)=a.unit==b.unit && a.meaning==b.meaning && a.value.compareTo(b.value)==0
             forEachProjectionOperation(db,box.id,containerUuid,presentations.projectionStream) { entry,operation,recordRevision ->
@@ -149,10 +149,10 @@ internal object FrozenFullAuditStore {
 
     /** Full read-only audit shared by internal Repository writes, staging and exact backup restore. */
     internal fun auditStagedDataset(db:SupportSQLiteDatabase):List<AuditedStockProjection> =
-        auditStagedDataset(db,MeasuredOperationChain.AuditProof.MAX_ROW_BYTES)
+        auditStagedDataset(db,FrozenFullAuditChain.AuditProof.MAX_ROW_BYTES)
     /** Budget zero retains the complete original SQL path as a differential oracle; never skips validation. */
     internal fun auditStagedDataset(db:SupportSQLiteDatabase,operationRowByteBudget:Long):List<AuditedStockProjection> {
-        require(operationRowByteBudget in 0..MeasuredOperationChain.AuditProof.MAX_ROW_BYTES)
+        require(operationRowByteBudget in 0..FrozenFullAuditChain.AuditProof.MAX_ROW_BYTES)
         check(db.inTransaction())
         try {
             FrozenFullAuditValidation.validateCandidateStoredColumns(db)
@@ -161,7 +161,7 @@ internal object FrozenFullAuditStore {
         } catch(e:ReferenceFailure){throw e} catch(e:Exception){fail(ReferenceError.INVALID_SOURCE)}
     }
     private fun auditReadSnapshot(db:SupportSQLiteDatabase):List<AuditedStockProjection> =
-        auditReadSnapshot(db,MeasuredOperationChain.AuditProof.MAX_ROW_BYTES)
+        auditReadSnapshot(db,FrozenFullAuditChain.AuditProof.MAX_ROW_BYTES)
     private fun auditReadSnapshot(db:SupportSQLiteDatabase,operationRowByteBudget:Long):List<AuditedStockProjection> {
             FrozenFullAuditValidation.validateMeasuredCandidateState(db)
             db.query(EXACT_SOURCE_COVERAGE_QUERY).use{require(!it.moveToFirst())}
@@ -224,7 +224,7 @@ internal object FrozenFullAuditStore {
     private val operationClinicalColumns=listOf("revision","taken_utc","taken_zone","status","actual_dose","config_snapshot",
         "rule_version_id","slot_key","scheduled_utc","scheduled_zone","planned_dose","late_after_minutes_snapshot")
     /** LEFT JOINs preserve absent/retired clinical rows and zero-effect operations for the original fail-closed checks. */
-    private inline fun forEachOperation(db:SupportSQLiteDatabase,adjustmentsOnly:Boolean,proof:MeasuredOperationChain.AuditProof?=null,block:(JSONObject,OperationClinicalRow)->Unit) {
+    private inline fun forEachOperation(db:SupportSQLiteDatabase,adjustmentsOnly:Boolean,proof:FrozenFullAuditChain.AuditProof?=null,block:(JSONObject,OperationClinicalRow)->Unit) {
         val columns=FrozenFullAuditReferences.columns.getValue("measured_operation")
         val shared=proof?.takeIf{it.hasCompleteRows}
         val offset=if(shared==null)columns.size else 1
@@ -273,7 +273,7 @@ internal object FrozenFullAuditStore {
             val frozen=presentations.read(snap.getString("payload_json"));require(frozen.sha256==sha)
             box to frozen
         }
-        val chain=presentations.operationProof?.nodes ?: MeasuredOperationChain.validate(db)
+        val chain=presentations.operationProof?.nodes ?: FrozenFullAuditChain.validate(db)
         val prefixes=presentations.prefixes
         fun prefix(box:JSONObject,scale:StockQuantum,head:Long,sequence:Int):Long {
             require(head>=0)
@@ -444,7 +444,7 @@ internal object FrozenFullAuditStore {
         " FROM supply_transaction t JOIN reference_identity i ON i.live_handle=t.container_id LEFT JOIN dose_record d ON d.id=t.dose_record_id"+
         " WHERE i.kind='CONTAINER' AND EXISTS(SELECT 1 FROM reference_event e JOIN reference_snapshot s ON s.uuid=e.snapshot_uuid WHERE e.subject_uuid=i.uuid AND s.kind='PRESENTATION') ORDER BY i.uuid,t.id"
     /** Cursor is borrowed from the full-audit use block. No row/envelope survives its callback. */
-    private class ProjectionOperationStream(private val cursor:Cursor,private val shared:MeasuredOperationChain.AuditProof?=null) {
+    private class ProjectionOperationStream(private val cursor:Cursor,private val shared:FrozenFullAuditChain.AuditProof?=null) {
         private var positioned=cursor.moveToFirst()
         private var previous:String?=null
         private fun uuid():String {require(cursor.getType(0)==Cursor.FIELD_TYPE_STRING);return cursor.getString(0)}
@@ -469,7 +469,7 @@ internal object FrozenFullAuditStore {
         }
     }
     /** Identical typed decoder for standalone and complete streams; offset accounts only for grouping UUID. */
-    private fun readProjectionOperation(c:Cursor,offset:Int,block:(ProjectionEntry,JSONObject,Long?)->Unit,shared:MeasuredOperationChain.AuditProof?=null) {
+    private fun readProjectionOperation(c:Cursor,offset:Int,block:(ProjectionEntry,JSONObject,Long?)->Unit,shared:FrozenFullAuditChain.AuditProof?=null) {
         require(c.getType(offset+3)==Cursor.FIELD_TYPE_STRING && c.getType(offset+4)==Cursor.FIELD_TYPE_STRING)
         val entry=ProjectionEntry(integer(c,offset),nullableInteger(c,offset+1),nullableInteger(c,offset+2),c.getString(offset+3),c.getString(offset+4),scalar(c,offset+5),nullableInteger(c,offset+6))
         if(shared==null)require(c.getType(offset+7)==Cursor.FIELD_TYPE_STRING) {"Ledger operation missing"}
@@ -486,7 +486,7 @@ internal object FrozenFullAuditStore {
     }
     private data class PrefixIndex(val usedAtHead:Map<Long,Long>,val headBeforeSequence:java.util.TreeMap<Int,Long>)
     /** Same bounded reducer for either checked projection rows or the exact original SQL fallback. */
-    private fun buildPrefixIndex(entries:List<ProjectionEntry>,scale:StockQuantum,chain:Map<String,MeasuredOperationChain.Node>):PrefixIndex {
+    private fun buildPrefixIndex(entries:List<ProjectionEntry>,scale:StockQuantum,chain:Map<String,FrozenFullAuditChain.Node>):PrefixIndex {
         val atHead=HashMap<Long,Long>().apply{put(0,0)}
         val beforeSequence=java.util.TreeMap<Int,Long>()
         var used=0L
@@ -551,8 +551,8 @@ internal object FrozenFullAuditStore {
     /** One call-local parse, including all original checks. Not retained across rows, audits or writes. */
     private data class DecodedConsumption(val envelope:JSONObject,val request:MeasuredConsumptionRequest,val receipt:MeasuredConsumptionReceipt)
     private fun receipt(row:JSONObject):MeasuredConsumptionReceipt = consumption(row).receipt
-    private fun consumption(row:JSONObject,proof:MeasuredOperationChain.AuditProof?=null):DecodedConsumption = try {readConsumption(row,proof)} catch(e:Exception){fail(ReferenceError.INVALID_SOURCE)}
-    private fun readConsumption(row:JSONObject,proof:MeasuredOperationChain.AuditProof?):DecodedConsumption {
+    private fun consumption(row:JSONObject,proof:FrozenFullAuditChain.AuditProof?=null):DecodedConsumption = try {readConsumption(row,proof)} catch(e:Exception){fail(ReferenceError.INVALID_SOURCE)}
+    private fun readConsumption(row:JSONObject,proof:FrozenFullAuditChain.AuditProof?):DecodedConsumption {
         fun keys(value:JSONObject,expected:Set<String>)=require(value.keys().asSequence().toSet()==expected)
         fun text(value:JSONObject,key:String):String {require(value.get(key) is String);return value.getString(key)}
         fun quanta(value:JSONObject,key:String):Long {
@@ -560,7 +560,7 @@ internal object FrozenFullAuditStore {
             return token.toLong().also{require(it<=StockQuantum.MAX_QUANTA)}
         }
         val embedded=MeasuredUsePayload.readEmbeddedRequest(row.getString("input_json"))
-        val envelope=embedded.envelope;keys(envelope,setOf("format","request","captures","chain"));MeasuredOperationChain.read(envelope)
+        val envelope=embedded.envelope;keys(envelope,setOf("format","request","captures","chain"));FrozenFullAuditChain.read(envelope)
         val request=embedded.request
         val canonicalEnvelope=proof?.matches(row.getString("operation_uuid"),row.getString("input_json")) ?: (ReferencePayload.canonical(envelope)==row.getString("input_json"))
         if(!canonicalEnvelope || envelope.get("format") !is Int || envelope.getInt("format")!=2 || row.getString("kind")!="CONSUME" ||
@@ -595,7 +595,7 @@ internal object FrozenFullAuditStore {
     internal fun reverseCapture(row:JSONObject):JSONObject = try {
         val encoded=row.getString("input_json");val envelope=JSONObject(encoded)
         require(envelope.keys().asSequence().toSet()==setOf("format","request","chain") && envelope.get("format") is Int && envelope.getInt("format")==2)
-        require(ReferencePayload.canonical(envelope)==encoded);MeasuredOperationChain.read(envelope)
+        require(ReferencePayload.canonical(envelope)==encoded);FrozenFullAuditChain.read(envelope)
         val input=envelope.getJSONObject("request")
         val coordinated=input.has("reconciliation")
         require(input.keys().asSequence().toSet()==setOf("format","kind","dataset_uuid","medication_uuid","record_uuid","record_revision","source_operation_uuid","source_request_sha256","source_allocation_uuids")+if(coordinated)setOf("reconciliation") else emptySet())
@@ -624,7 +624,7 @@ internal object FrozenFullAuditStore {
             return token.toLong().also{require(it<=max)}
         }
         val encoded=row.getString("input_json");val envelope=JSONObject(encoded)
-        keys(envelope,setOf("format","request","execution","chain"));MeasuredOperationChain.read(envelope)
+        keys(envelope,setOf("format","request","execution","chain"));FrozenFullAuditChain.read(envelope)
         require(envelope.get("format") is Int && envelope.getInt("format")==2 && ReferencePayload.canonical(envelope)==encoded)
         val request=envelope.getJSONObject("request")
         val bridge=request.has("accounting_bridge_for")
@@ -706,7 +706,7 @@ internal object FrozenFullAuditStore {
             }
         }}
         ReferenceStore.insert(db,"measured_operation",JSONObject().put("operation_uuid",operationUuid).put("dataset_uuid",scope.dataset).put("record_uuid",record)
-            .put("record_revision",current.revision).put("kind","REVERSE").put("request_sha256",hash).put("input_json",ReferencePayload.canonical(JSONObject().put("format",2).put("request",input).put("chain",MeasuredOperationChain.next(db))))
+            .put("record_revision",current.revision).put("kind","REVERSE").put("request_sha256",hash).put("input_json",ReferencePayload.canonical(JSONObject().put("format",2).put("request",input).put("chain",FrozenFullAuditChain.next(db))))
             .put("unallocated_quantity",JSONObject.NULL).put("unallocated_unit",JSONObject.NULL).put("unknown_reason",JSONObject.NULL).put("created_utc",created.toEpochMilli()))
         originals.forEach {(a,entry,box)->
             val reverse=dao.supply(SupplyEntryEntity(container_id=entry.container_id,dose_record_id=current.id,dose_revision=current.revision,operation_id=operationUuid,
@@ -767,7 +767,7 @@ internal object FrozenFullAuditStore {
         if(current.state=="VOIDED")return MeasureResult.Failure(MeasureError.VOIDED)
         val newUsed=stock.capacityQuanta-remainingQuanta;val delta=newUsed-current.used_amount.toLong()
         val ledgerHead=db.query("SELECT COALESCE(MAX(id),0) FROM supply_transaction WHERE container_id=?",arrayOf(current.id)).use{it.moveToFirst();it.getLong(0)}
-        val envelope=JSONObject().put("format",2).put("request",input).put("execution",JSONObject().put("ledger_head_id",ledgerHead.toString())).put("chain",MeasuredOperationChain.next(db))
+        val envelope=JSONObject().put("format",2).put("request",input).put("execution",JSONObject().put("ledger_head_id",ledgerHead.toString())).put("chain",FrozenFullAuditChain.next(db))
         ReferenceStore.insert(db,"measured_operation",JSONObject().put("operation_uuid",operationUuid).put("dataset_uuid",scope.dataset).put("record_uuid",JSONObject.NULL)
             .put("record_revision",JSONObject.NULL).put("kind","ADJUST").put("request_sha256",hash).put("input_json",ReferencePayload.canonical(envelope))
             .put("unallocated_quantity",JSONObject.NULL).put("unallocated_unit",JSONObject.NULL).put("unknown_reason",JSONObject.NULL).put("created_utc",created.toEpochMilli()))
@@ -789,7 +789,7 @@ internal object FrozenFullAuditStore {
         val input=reverseCapture(row)
         if(row.getString("dataset_uuid")!=scope.dataset || input.getString("source_operation_uuid")!=source || !input.has("reconciliation") ||
             !MeasuredReconciliation.sameInputs(input.getJSONObject("reconciliation"),counts))fail(ReferenceError.OPERATION_CONFLICT)
-        MeasuredReconciliation.verify(db,row,input,MeasuredOperationChain.validate(db));return true
+        MeasuredReconciliation.verify(db,row,input,FrozenFullAuditChain.validate(db));return true
     }
     /** Private bridge/reverse writes are committed only with complete confirmed final counts and full audit. */
     internal suspend fun reconcileOriginal(database:NotesDatabase,scope:ReferenceScope,expected:RecordEntity,source:String,operation:String,
@@ -880,7 +880,7 @@ internal object FrozenFullAuditStore {
         }
         val issue=when {stockEffect==MeasuredStockEffect.ALREADY_ACCOUNTED->null;stockEffect==MeasuredStockEffect.UNKNOWN->"STOCK_EFFECT_NOT_CONFIRMED";plans.isEmpty()->"ACTUAL_PACKAGE_NOT_CONFIRMED";plans.size==1->plans.single().issue;plans.any{it.issue!=null}->"MULTIPLE_SOURCE_BALANCES";else->null}
         val left=(plans.singleOrNull()?.let {p->if(p.requested==null)p.input.quantity else amount(p.scale!!,p.wanted!!-p.take)} ?: unlinkedActual)?.takeIf{issue!=null}
-        val envelope=JSONObject().put("format",2).put("request",JSONObject(frozen.json)).put("captures",JSONArray(plans.map{captureJson(db,it)})).put("chain",MeasuredOperationChain.next(db))
+        val envelope=JSONObject().put("format",2).put("request",JSONObject(frozen.json)).put("captures",JSONArray(plans.map{captureJson(db,it)})).put("chain",FrozenFullAuditChain.next(db))
         ReferenceStore.insert(db,"measured_operation",JSONObject().put("operation_uuid",operationUuid).put("dataset_uuid",scope.dataset).put("record_uuid",record)
             .put("record_revision",current.revision).put("kind","CONSUME").put("request_sha256",frozen.sha256).put("input_json",ReferencePayload.canonical(envelope))
             .put("unallocated_quantity",left?.let{(Measurements.decimalText(it.value) as MeasureResult.Success).value} ?: JSONObject.NULL)

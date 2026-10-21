@@ -63,8 +63,12 @@ enum class Space(val file:String,val wrap:String,val alias:String) {
         } catch(e:Throwable) { passphrase.fill(0); throw e }
     }
     @Synchronized fun close(space:Space=current) {
-        instances.remove(space)?.close()
-        passphrases.remove(space)?.fill(0)
+        try {
+            instances.remove(space)?.close()
+            passphrases.remove(space)?.fill(0)
+        } finally {
+            MeasuredOperationChain.clearPureInputMemo()
+        }
     }
     /** Closes and deletes one space's database, wrapped key and Keystore alias ("delete all data"). */
     @Synchronized fun destroy(space:Space=current) {

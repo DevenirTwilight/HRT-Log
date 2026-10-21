@@ -40,6 +40,7 @@ abstract class MeasuredConsumptionContract {
     private suspend fun consume(r:RecordEntity,box:CreatedMeasuredContainer,uses:List<ConfirmedStockUse>,op:String=UUID.randomUUID().toString())=db.withTransaction{MeasuredConsumptionStore.consumeNewRecord(db,box.scope,r,op,uses,at)}
     private fun count(table:String)=raw.query("SELECT COUNT(*) FROM `$table`").use{it.moveToFirst();it.getInt(0)}
     private suspend fun rejects(code:ReferenceError,block:suspend()->Unit){try{block();fail("Expected $code")}catch(e:ReferenceFailure){assertEquals(code,e.code)}}
+    @Test fun pureChainContentMemoNeverCachesDatabaseValidity(){ChainContentMemoOracle.check()}
     @Test fun canonicalOperationBudgetProofMatchesLexicalGate(){CanonicalOperationBudgetOracle.check()}
     @Test fun compactConsumptionMemoPreservesPureAndRowContracts(){ConsumptionMemoOracle.check()}
     private fun assertFrozenFullAuditMatches() {

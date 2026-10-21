@@ -316,6 +316,29 @@ def native_source(text):
             }
             writePath.put("independent_post_commit_full_audit","PASS").put("status","COMPLETE")
             file.writeText(report.toString(2))
+            // Additional unobserved real write with a cold pure-text codec. The entire current
+            // history is still scanned/validated; this is not process/SQLite cold-start evidence.
+            val cold=JSONObject().put("scope","FULL_FIXED_FIXTURE_COLD_PURE_CODEC_REAL_COMMIT")
+                .put("process_restart","NOT_RUN").put("database_page_cache","NOT_RESET")
+                .put("timing_observer","OFF").put("budget_ms",5000)
+            report.put("cold_pure_codec_write",cold)
+            val coldStart=System.nanoTime()
+            MeasuredOperationChain.clearPureInputMemo()
+            val coldTicket=repo.measuredWriteTicket(diagnosticScope,m)
+            val coldTicketEnd=System.nanoTime()
+            repo.recordMeasuredUse(coldTicket,UUID.randomUUID().toString(),diagnosticDraft,now)
+            val coldEnd=System.nanoTime()
+            cold.put("ticket_including_clear_ms",(coldTicketEnd-coldStart)/1_000_000.0)
+                .put("write_including_final_audit_ms",(coldEnd-coldTicketEnd)/1_000_000.0)
+                .put("total_ms",(coldEnd-coldStart)/1_000_000.0)
+                .put("status",if(coldEnd-coldStart<=5_000_000_000L)"PASS" else "FAIL")
+            db.withTransaction {
+                val verified=FrozenFullAuditStore.auditStagedDataset(raw)
+                assertEquals(count,verified.size)
+                assertEquals(6L,verified.single{it.containerUuid==containerIdentity.getString("uuid")}.usedQuanta)
+            }
+            cold.put("independent_frozen_post_commit_oracle","PASS")
+            file.writeText(report.toString(2))
             File(file.parentFile,"trace-ready.json").writeText(JSONObject().put("scope","SYNTHETIC_ART_INTERNAL_TRACE_READY_V1")
                 .put("token",traceToken).put("bytes",trace.length()).toString())
             android.util.Log.i("ANSM_TRACE",JSONObject().put("scope","SYNTHETIC_ART_INTERNAL_TRACE_READY_V1")
@@ -325,7 +348,8 @@ def native_source(text):
             fun acknowledged()=runCatching{ack.readText()==traceToken}.getOrDefault(false)
             while(!acknowledged() && android.os.SystemClock.elapsedRealtime()<deadline)Thread.sleep(100)
             components.put("sampling_host_ack",acknowledged())
-            file.writeText(report.toString(2));assertEquals("Diagnostic budgets; device acceptance remains NOT_RUN",emptyList<String>(),exceeded)''')
+            file.writeText(report.toString(2));assertEquals("Diagnostic budgets; device acceptance remains NOT_RUN",emptyList<String>(),exceeded)
+            assertEquals("Cold pure codec write retains the original5s limit", "PASS",cold.getString("status"))''')
     # AGP may uninstall the synthetic test APK after a process crash, deleting
     # its external-files report. Mirror only the compact timing metadata to logcat.
     text = text.replace('file.writeText(report.toString(2))',

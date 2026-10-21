@@ -1,8 +1,18 @@
+## P4 实时换号检查点：执行复用已入库，最新纯codec仍待最终验收 — 2026-10-21
+
+已推送实现检查点0dd02a80，普通完整审计内复用候选针对性151项PASS。随后完整data494/0FAIL/0SKIP已实际通过（含原反例、新old/new全审计差分与单容器生命周期）；App/reminder/含生成大库探针Android编译仍在本地Gradle session31631执行，日志/workspace/scratch/p4-reuse-final-full.log。这一组data结果属于加入跨调用纯文本codec之前的中间源码，不能冒充最新实现通过。实际禁用行头保护的临时mutant获RED，源码已恢复；证据header-mutant-red/。原生新候选尚未启动，旧大库不重跑。
+
+为减少同笔写入ticket/validate/append/最终audit重复parse，新增**纯文本codec**精确全文→不可变Link+SHA的16MiB有界同步LRU；这不是数据库合法性/可信基线缓存。每次仍读取全部当前行并重新检查UUID/序列/前驱/全局历史，A/B反例仍保留。独立旧Chain也已冻结（FrozenFullAuditChain）并绑定old full oracle，避免对照共享新codec。完整F(text)等价证明经独立审阅，ChainContentMemoOracle已写但尚未运行。DatabaseAccess.close finally和restore解密前清空；资源生命周期token只防止关闭前的in-flight读者清空后重新保留旧明文，不参与数据库合法性判断。**该最后token改动尚未编译/测试**，不得认定完成。
+
+下一步：等31631结束并保存中间结果；检查新的clear/in-flight合同（必要时补负例），重跑最新完整data/App/reminder和生成原生编译，保存最终证据。生成器新增原预算结束后的额外第五笔真实提交：先清纯codec，票据+写入独立计时、5秒硬断言、冻结old oracle确认used6；明确不是进程/数据库页缓存冷启动，原三写和所有门槛保持。生成器修改中一次Python语法错误已修正，工具19项通过，最新生成摘要在/workspace/scratch/p4-reuse-generated-final-2.json；要保存失败日志并核验最终生成Kotlin编译。
+
+全部正确性/原生编译通过后才冻结新源码触发**首轮**新候选原生（最多2次，首轮失败不补跑筛绿）；当前仍无新原生性能数字，不宣称5秒通过。P4 Draft/OFF/PRODUCTION_BLOCKED，不合并，不改Schema/备份/密码学/UI/P5/P6/PK/权限/签名发布。此次提交skip ci，防止WIP自动跑大库。
+
 ## P4 新一轮有界执行复用候选：设计/独立旧oracle冻结 — 2026-10-21
 
 负责人再次要求实际解阻，最新源99e536fe/主线320171cd已核。旧恢复专项已结束，不重跑旧源码。新候选仅完整审计执行复用：同审计纯消费payload解码、reference已有扫描行直接验证、primitive captureHash去序列化往返；保留全部全局规则/行头依赖/最终全审计，缓存不跨事务。已排除跨回调链头复用：追加可能修复预先无效的future-child前缀且收益约数百ms，不足以解阻。冻结99e536fe旧Store/BackupValidation/ReferenceSchema独立全审计到historyTest，原SHA存full-audit-reuse/frozen-oracle.json。
 
-当前生产候选和冻结old oracle已实现，reference新增4合同/Android编译PASS；首次综合构建因未指定本地Robolectric缓存导致依赖下载失败（不是业务测试FAIL），已保留日志并使用现有离线jar重跑。最终16MiB候选针对性151项全部PASS（库存147/reference4），Android test编译PASS、工具19PASS，日志/失败尝试已保存在full-audit-reuse/focused/。尚未完成完整回归或冻结，不能称提速PASS。下一步先旧新差分/反例/完整data/原生编译，通过再冻结新候选；最多两次原生，首轮失败即停止同源补跑，旧恢复两次次数不挪用。原5s/15s/120s/夹具/内存不变，Draft/OFF不合并。进度持续写库。
+当前生产候选和冻结old oracle已实现，reference新增4合同/Android编译PASS；首次综合构建因未指定本地Robolectric缓存导致依赖下载失败（不是业务测试FAIL），已保留日志并使用现有离线jar重跑。最终16MiB候选针对性151项全部PASS（库存147/reference4），Android test编译PASS、工具19PASS，日志/失败尝试已保存在full-audit-reuse/focused/。尚未完成完整回归或冻结，不能称提速PASS。已提交并推送实现检查点0dd02a80（skip ci，未触发大库）。临时关闭行头保护的实际mutant被新合同捕获RED，源码已恢复，证据在full-audit-reuse/header-mutant-red/；完整data/App/reminder与含frozen大库对照的原生编译正在执行。新增单容器0/365/3650行生命周期合同，不冒充2000操作/容器增长或进程重启。下一步完整验证通过再冻结新候选；最多两次原生，首轮失败即停止同源补跑，旧恢复两次次数不挪用。原5s/15s/120s/夹具/内存不变，Draft/OFF不合并。进度持续写库。
 
 ## P4 恢复专项收尾：两个实际终止合同PASS，整体仍BLOCKED — 2026-10-21
 

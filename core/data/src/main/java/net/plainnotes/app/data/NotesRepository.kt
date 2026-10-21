@@ -815,6 +815,9 @@ const val BACKFILL_MAX_DAYS=731L
         val restoreContext=kotlin.coroutines.coroutineContext
         val checkRestoreActive:()->Unit={restoreContext.ensureActive()}
         val restoreCheckpoint:(RestoreCheckpoint)->Unit={point->checkRestoreActive();checkpoint(point);checkRestoreActive()}
+        // Pure codec entries own plaintext strings; release old input before decrypting a replacement.
+        // This changes no trust state: every restored row and full invariant is still revalidated.
+        MeasuredOperationChain.clearPureInputMemo()
         BackupJsonReader.indexed(BackupCodec.decrypt(data,password),checkActive=checkRestoreActive,
             beforeParse={restoreCheckpoint(RestoreCheckpoint.PLAINTEXT_AUTHENTICATED)}).use { input ->
             val json=input.metadata

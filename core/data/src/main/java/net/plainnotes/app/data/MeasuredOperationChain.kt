@@ -64,10 +64,48 @@ internal object MeasuredOperationChain {
         require(if(sequence==1)previous==null && hash==null else previous!=null && hash!=null)
         return Link(sequence,previous,hash)
     }
+    /** Pure content codec, never a chain/database validity cache. No UUID, connection, epoch,
+     * transaction, row header or acceptance result is retained. Every caller still reads every
+     * current row and checks the complete sequence/predecessor graph below. */
+    private data class CheckedInput(val link:Link,val sha256:String)
+    private const val MAX_CHECKED_INPUT_BYTES=16L*1024*1024
+    private val checkedInputLock=Any()
+    private val checkedInputs=LinkedHashMap<String,CheckedInput>(16,0.75f,true)
+    private var checkedInputByteBudget=MAX_CHECKED_INPUT_BYTES
+    private var checkedInputBytes=0L
+    // Resource ownership only: clearing forbids in-flight readers from retaining old plaintext.
+    // This token never establishes database validity or changes any chain check.
+    private var checkedInputLifetime=Any()
+    /** Release owned plaintext references at close/destruction and before authenticated restore.
+     * Clearing affects performance only; it neither establishes nor invalidates database trust. */
+    internal fun clearPureInputMemo()=synchronized(checkedInputLock) {
+        checkedInputs.clear();checkedInputBytes=0
+    }
+    private fun checkedInputCost(text:String,value:CheckedInput):Long {
+        fun string(s:String?)=if(s==null)0L else 112L+s.length*2L
+        // Complete UTF-16 key, two immutable DTOs, map node/table reserve and all retained strings.
+        // This conservative allocation reservation is not an exact heap/RSS measurement.
+        return 512L+string(text)+string(value.link.previousUuid)+string(value.link.previousSha256)+string(value.sha256)
+    }
+    private fun checkedInput(text:String,lifetime:Any):CheckedInput = synchronized(checkedInputLock) {
+        if(lifetime===checkedInputLifetime)checkedInputs[text]?.let{return@synchronized it}
+        val input=JSONObject(text);require(ReferencePayload.canonical(input)==text)
+        val value=CheckedInput(read(input),ReferencePayload.sha(text))
+        val cost=checkedInputCost(text,value)
+        if(lifetime===checkedInputLifetime && cost<=checkedInputByteBudget) {
+            val iterator=checkedInputs.entries.iterator()
+            while(checkedInputBytes>checkedInputByteBudget-cost && iterator.hasNext()) {
+                val entry=iterator.next();checkedInputBytes-=checkedInputCost(entry.key,entry.value);iterator.remove()
+            }
+            checkedInputs[text]=value;checkedInputBytes+=cost
+        }
+        value
+    }
     fun validate(db:SupportSQLiteDatabase):Map<String,Node> = checkedChain(db,false).first
     private fun checkedChain(db:SupportSQLiteDatabase,retainCanonical:Boolean,headers:HeaderCapture?=null):Pair<Map<String,Node>,Map<String,String>> {
         check(db.inTransaction())
-        data class Captured(val uuid:String,val json:String,val chain:JSONObject,val sequence:Int)
+        val lifetime=synchronized(checkedInputLock){checkedInputLifetime}
+        data class Captured(val uuid:String,val json:String,val checked:CheckedInput)
         var retainedBytes=0L
         val query=if(headers==null)"SELECT operation_uuid,input_json FROM measured_operation"
             else "SELECT "+operationColumns.joinToString(","){"`$it`"}+" FROM measured_operation"
@@ -86,22 +124,21 @@ internal object MeasuredOperationChain {
                     else c.getString(if(headers==null)1 else operationColumns.indexOf("input_json"))
                 val size=ReferencePayload.utf8Length(text);require(size<=ReferencePayload.MAX_BYTES)
                 if(retainCanonical){retainedBytes+=size;require(retainedBytes<=BackupLimits.MAX_JSON_BYTES)}
-                val input=JSONObject(text);require(ReferencePayload.canonical(input)==text)
-                val link=read(input);val chain=input.getJSONObject("chain");val sequence=link.sequence
+                val checked=checkedInput(text,lifetime)
                 if(row!=null)headers!!.accept(uuid,row)
-                add(Captured(uuid,text,chain,sequence))
+                add(Captured(uuid,text,checked))
             } }
-        }.sortedBy{it.sequence}
+        }.sortedBy{it.checked.link.sequence}
         val result=LinkedHashMap<String,Node>();val canonical=if(retainCanonical)LinkedHashMap<String,String>() else null;var previous:Node?=null
         for((index,value) in values.withIndex()) {
-            require(value.sequence==index+1)
-            val chain=value.chain
-            if(previous==null)require(chain.isNull("previous_operation_uuid") && chain.isNull("previous_payload_sha256"))
+            val link=value.checked.link
+            require(link.sequence==index+1)
+            if(previous==null)require(link.previousUuid==null && link.previousSha256==null)
             else {
-                require(chain.get("previous_operation_uuid") is String && chain.getString("previous_operation_uuid")==previous.operationUuid)
-                require(chain.get("previous_payload_sha256") is String && chain.getString("previous_payload_sha256")==previous.payloadSha256)
+                require(link.previousUuid==previous.operationUuid)
+                require(link.previousSha256==previous.payloadSha256)
             }
-            val node=Node(value.uuid,value.sequence,ReferencePayload.sha(value.json));require(result.put(node.operationUuid,node)==null)
+            val node=Node(value.uuid,link.sequence,value.checked.sha256);require(result.put(node.operationUuid,node)==null)
             canonical?.put(value.uuid,value.json)
             previous=node
         }
