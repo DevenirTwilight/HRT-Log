@@ -138,5 +138,5 @@ class SemanticContrastTest(private val name: String, private val fg: Int, privat
             return out
         }
     }
-    @Test fun meetsMinimum() { val r = ratio(Color(fg), Color(bg)); assertTrue("$name ${"%.2f".format(r)} < $min", r >= min) }
+    @Test fun meetsMinimum() { val r = ratio(Color(fg), Color(bg)); println("CONTRAST\t$name\t${"%.2f".format(r)}\t$min"); assertTrue("$name ${"%.2f".format(r)} < $min", r >= min) }
 }

@@ -1,7 +1,23 @@
-## UI-06 语义色与状态体系实施中 — 2026-10-21
+## UI-06 语义色与状态体系：实现与验证完成，PR 待 CI — 2026-10-21
 
-分支 feature/ui06-semantic-status-20261021（基于320171cd），任务书归档 sources/ui06/ui06-prompt.md，REQUIREMENTS §115。已提交：core/ui SemanticColors（7令牌×浅/深×三档对比度、动态色仅action/success/danger跟随）与唯一状态表StatusStyles；app StatusUi（StatusChip/statusOutline/dayStyle）；日历/TodayCard/历史/纵向时间线/库存/设置/就诊/来源/化验标记的"需注意"红色改为attention或missed；Corners.badge→tag，新增pill；首页"还没有记录"卡（48h内最多2条+更多→服药记录，"我服过了"复用history_backfill弹窗，"没有服"复用confirmMissed）。受保护PK_DISPLAY_REVIEW文件、ViewModel/Repository/Room/备份/提醒逻辑未改。症状页紧急来源引用保持红色（安全警示，报告中提请owner确认）。
-待做：UI-06测试（映射穷举、对比度、源码守卫、确认卡、形状、TalkBack、触控、2×字体、灰度）、旧断言迁移、全量回归、截图、报告70、真机清单、PR自动合并。无APK、签名或版本号变更。
+分支 feature/ui06-semantic-status-20261021（基于 320171cd），报告 70，REQUIREMENTS §115。
+
+**已完成：**
+- A 令牌：7 个令牌 × 三档对比度；动态色只影响 action / success / danger。
+- B 状态表：日历、今天卡、服药记录、时间线、库存共用 core/ui `StatusStyles`；另有 7 处“需注意”的 error 改为 attention。
+- C 首页“还没有记录”卡：复用 history_backfill 对话框和 confirmMissed。
+- D 形状：`Corners.tag` / `Corners.pill`。
+
+**本地验证：**
+- 测试：core:ui 187、domain 135、data 263、reminder 20 全部 PASS；app 1873 项（319 个既有跳过），首轮 CalendarCoreFlowTest 4 项因确认卡把月历挤出首屏而失败，已改为先滚动，10/10 PASS。
+- lint 0 错误；androidTest 编译 PASS。
+- 截图：前后各 256 张，加高对比度、hi-res、灰度和并排对比，在 docs/ui-audit/2026-10-21-ui06/。
+
+**待 owner 确认：** 症状页紧急来源引用保持红色（安全警示）。
+
+**下一步：** 开 PR 并开启自动合并（§106）；CI 全绿后合并，复验主线 CI。
+
+**NOT_RUN：** 真机 / TalkBack（清单第 12 节）。无 APK、签名或 versionCode 变更。
 
 ## LAB-03 与 LAB-UI-03 正常主线集成验收中 — 2026-10-20
 

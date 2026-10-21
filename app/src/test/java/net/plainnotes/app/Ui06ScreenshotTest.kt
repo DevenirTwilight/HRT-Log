@@ -79,7 +79,7 @@ class Ui06ScreenshotTest(private val locale: String, private val width: Int, pri
         RuntimeEnvironment.setQualifiers("$locale-w${width}dp-h${if (width == 320) 640 else 891}dp-$dpi"); RuntimeEnvironment.setFontScale(font)
         val contrast = if (variant == "hc") Contrast.HIGH else Contrast.STANDARD
         var page by mutableIntStateOf(0)
-        val state = NotesState(meds, open, emptyList(), loading = false, calendarStart = today.minusDays(40))
+        val state = NotesState(meds, open, emptyList(), loading = false, calendarStart = today)
         rule.setContent { NotesTheme(if (dark) ThemeMode.DARK else ThemeMode.LIGHT, contrast = contrast) { androidx.compose.material3.Surface {
             androidx.compose.runtime.key(page) { when (page) {
                 0 -> CalendarScreen(state, today, {}, {}, {}, {}, PaddingValues(), extra = NotesViewModel.ExtraState(records = records, upcoming = open, stockForecasts = forecasts))
