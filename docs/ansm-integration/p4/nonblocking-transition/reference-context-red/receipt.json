@@ -1,0 +1,21 @@
+{
+  "production_source": "4111c0b8",
+  "counterexample_test_source": "280bf615",
+  "head_during_red": "8a1dc86a",
+  "status": "FAIL_EXPECTED_RED",
+  "summary": {
+    "tests": 2,
+    "failures": 2,
+    "errors": 0,
+    "skipped": 0
+  },
+  "finding": "Config SHA + same actual payload/time/UUID omit initial medication reference context. Changed linkage (including previously unlinked) is incorrectly confirmed. No runtime caller; must fix before admission.",
+  "cases": [
+    "changedReferenceContextAndUnlinkCannotAuthorizeTheOldUuid",
+    "newReferenceContextCannotAuthorizePreviouslyUnlinkedUuid"
+  ],
+  "files": {
+    "gradle.log": "43418023cfe8fedca4b690389283d217aba2beec5d87a503f1d086cfefff2fc8",
+    "TEST-net.plainnotes.app.data.NonBlockingRepositoryWriteTest.xml": "a11ab8149f7aba77a77fb4b5a2ec7d4ed746e44f7fd5b2b1dff04f7c397b8ed0"
+  }
+}

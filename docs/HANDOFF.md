@@ -1,3 +1,9 @@
+## 关联来源反例2项RED已复现并保存，接口保持隔离 — 2026-10-21
+
+280bf615新增两合同在生产4111c0b8上2 FAIL，均在Expected OPERATION_CONFLICT处失败，非夹具/编译错误；原始XML/日志/来源记录存nonblocking-transition/reference-context-red/。证明仅冻结config SHA+相同实际用量/时间/UUID仍会错认改变后的关联参考请求；不能把此前512 PASS当安全等价证明。接口无App运行调用，P4 OFF。
+
+下一步仅最小补充：同事务冻结原关联context事件UUID（无product时null），全审计后按记录原revision1/capture1的CONTEXT核对。不改变任何现有写路径、历史、Schema/备份或验证架构；原RED保留，原测试不改期望。修正后跑完整数据与Android测试编译，不追加性能/native。
+
 ## 当前生产候选的Android编译与App37项PASS已保存 — 2026-10-21
 
 生产4111c0b8（本轮生成任务开始时源码）：全数据512 PASS、compileDebugAndroidTestKotlin PASS、App选定37 PASS/0SKIP（原UI/导航/翻译32+PeriodStability5）均已完成。完整日志/XML/实际渲染截图/SHA存nonblocking-transition/frozen-outcome-android-ui/；数据阶段另已实时保存。没有模拟器/真机/TalkBack/新CI，不冒充原生稳定性或P4准入。
