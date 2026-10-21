@@ -1,3 +1,5 @@
+> **2026-10-21 负责人再次纠正后的当前决策（优先于下方历史检查点）**：停止强攻5秒和新的大库跑分已经生效。普通写入异步、非全屏阻塞为产品方向；耗时完整保留，原5秒失败不改写。正式验收断言调整按[政策与测试提案](policy-and-test-change.md)单列审批，不再以“继续优化到5秒”推进开发。本轮只完成方向冻结、现有接口评估和提案；恢复安全、提交后进程死亡及最终CI独立保留未完成状态。当前代理负责全部工作，Draft/OFF、不合并发布。
+
 > 2026-10-21 当前状态（优先于下方历史记录）：生产dc10ffef已实现进程owner、真实NotesApp状态观察和busy时受限只读刷新；正式提交入口仍OFF。完整data528 PASS、修正后真实App2项PASS；原生owner14合同API26/29/35报告核验PASS。fb43 CI仅API26三个SAVEPOINT测试失败，d9fa9340修正后本地3项及Android编译PASS，针对性run39626720171的17合同PASS、事务内kill PASS，提交后kill未到60秒检查点而FAIL；不重跑大库。原大库三写6.387/6.285/5.666秒仍FAIL5秒，网络工件已通过授权连接器取回；全部实际耗时、证据及边界见 [verified-results.md](shell-integration/verified-results.md)。尚不可合并，Draft/OFF/autoMerge=null；无可信缓存或Schema/备份/加密/PK变更。
 
 > 2026-10-21 最新：运行owner/冲突门及2项重放+1项空间绕门修正已实现；最终生产8b24ccf5，data527/Period5/reminder21、Android测试源码/App编译全PASS。详见 [runtime-owner/implementation.md](runtime-owner/implementation.md) 与final-local收据、HANDOFF顶部。当前工作树/workspace/HRT-Log-checkout，分支同下；无在途测试。App仍未绑定、入口OFF/Draft/autoMerge=null，≤5秒政策未批/LMK未证明/最终CI/native未跑，停止性能攻关继续有效。以下ae7688da/514/“未实现owner”均为此前历史检查点，勿重复实现。

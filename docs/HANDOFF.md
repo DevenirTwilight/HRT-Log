@@ -1,3 +1,17 @@
+## 负责人再次纠正：冻结5秒攻关，本轮仅非阻塞政策与最小接口评估 — 2026-10-21
+
+最新指令见REQUIREMENTS§130及[政策/测试调整提案](ansm-integration/p4/nonblocking-transition/policy-and-test-change.md)。不能再以普通写入超过5秒为由恢复优化、方案C或大库重跑；历史6.387/6.285/5.666秒及原FAIL保留，未来改独立指标的测试变更单列审批，本次未删改断言。下方“5秒主要阻塞”等是旧政策检查点，不是当前开发方向。
+
+核实当前已有进程级SupervisorJob/IO owner、真实提交后SUCCESS、UUID请求去重、共享冲突门、受限只读浏览和App状态观察，不重做。原528本地数据、三API owner14、API26定向17等证据仍按对应SHA解释，本轮未新跑。AFTER_COMMIT检查点原FAIL未修复，恢复内存稳定性不能因UI异步而放行；最终CI尚未齐。原生/Gradle进程无在途任务，没有取消有效工作或新触发测试。
+
+尚未运行的诊断改动原样保存到deferred-after-commit-diagnostics/unexecuted-test-only.patch，未接可执行源码；过时23703969重复写门原型及4项局部PASS也保留归档。生产代码仍dc10ffef，当前基线87202a4e。本轮无Schema/备份/PK/权限/签名变化。P4 Draft/入口OFF/autoMerge=null，不合并发布。
+
+## 当前代理继续至合并门：接纳远端87202a4e，避免重复写门实现 — 2026-10-21
+
+重新核远端发现接手者已完成真实owner/共享gate/只读快照与App观察，并保存528本地数据、三API owner14合同、API26定向17 PASS及大库/恢复原始证据；本代理早先从c2起的23703969写许可原型推送被正常拒绝，未force push，代码/4项局部PASS仅归档superseded-local-admission-23703969/，不接当前生产。新工作树/workspace/HRT-Log-p4-final从87202a4e独立继续，原树未丢弃。REQUIREMENTS128/129及最新负责人“到能合并再停”生效，不以交接或局部通过结束。
+
+当前实际工程缺口：AFTER_COMMIT小库外部kill未到检查点（原60秒不改）；正常创建全审计只有一次且原三写6.387/6.285/5.666秒FAIL5秒，政策改指标仍待明确批准。先仅对AFTER_COMMIT增加最少阶段/异常证据并单场景验证，不重跑已过17/STOCK_CAPTURED/恢复kill/大库，不编造OOM或marker超时根因。正式入口OFF/Draft，不能提前合并发布。
+
 ## 针对性API26验收已结束并保存：17项PASS，提交后kill检查点FAIL — 2026-10-21
 
 run39626720171/d9fa9340整体FAIL；官方artifact12358032004的ZIP/SHA b710786c…edba3d/CRC及全部原文件、完整job日志已核验保存到shell-integration/native-status/。17项真实SQLCipher合同全部PASS（110.143s整套），包含3项SAVEPOINT修正与14项owner合同。新增writer STOCK_CAPTURED外部强杀→新PID/精确dump/epoch/0记录/完整oracle无重放PASS。AFTER_COMMIT在原60秒内没有marker，未执行fresh verify，不能声称安全通过。原host错误文字“restore checkpoint”实际是writer标签；Process crashed包含finally外部force-stop，不据此编造OOM根因。

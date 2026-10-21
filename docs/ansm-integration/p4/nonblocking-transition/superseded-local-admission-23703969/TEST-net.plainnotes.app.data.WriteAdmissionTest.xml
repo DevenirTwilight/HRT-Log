@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.WriteAdmissionTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-21T18:01:39.228Z" hostname="4f13d57d08c1" time="0.2">
+  <properties/>
+  <testcase name="ordinaryWriteCannotBeOvertakenAndReleasesAfterFailure" classname="net.plainnotes.app.data.WriteAdmissionTest" time="0.053"/>
+  <testcase name="reservationRejectsOtherWritersButDoesNotGrantDatabaseTrust" classname="net.plainnotes.app.data.WriteAdmissionTest" time="0.04"/>
+  <testcase name="ownerCancellationDoesNotSilentlyUnlockAnUncertainOperation" classname="net.plainnotes.app.data.WriteAdmissionTest" time="0.064"/>
+  <testcase name="staleAndForeignPermitsCannotWriteOrReleaseNewReservations" classname="net.plainnotes.app.data.WriteAdmissionTest" time="0.038"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
