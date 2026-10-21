@@ -1,3 +1,7 @@
+## P4 提醒回归21 PASS及隔离核验已入库 — 2026-10-21
+
+最新55fc生产源的reminder21/0FAIL/0SKIP实际通过，逐suite/XML已存resumed-verification/reminder/。源码与生产data jar隔离核验PASS：无冻结oracle/测试探针类；App main/PK/Schema/BackupCodec/BackupLimits/NotesDatabase/StockForecast与99e一致，正式UI没有新增measured写入口，证据source-isolation.json。App full unit仍编译执行中，未预填；下一组完成即时保存。当前无新原生性能结论，Draft/OFF不合并发布。
+
 ## P4 清理GREEN与最终data495/生成Android编译PASS已保存 — 2026-10-21
 
 源55fcf2d5的完整data495/0FAIL/0SKIP已实际PASS，旧clear反例对应pureChainContentMemoNeverCachesDatabaseValidity同一断言GREEN；生成大库Android测试编译PASS。XML、全suite计数/SHA及截至reminder构建的日志已立即入库resumed-verification/clear-green-data/。这组覆盖最新nullable token源码，与之前仅旧token生产通过的组明确区分；原RED/编译FAIL均保留。

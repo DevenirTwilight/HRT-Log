@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.reminder.LockedBootAlarmTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-10-21T07:49:31.765Z" hostname="4f13d57d08c1" time="0.376">
+  <properties/>
+  <testcase name="simultaneousRemindersAreConsumedAsOneBatch" classname="net.plainnotes.app.reminder.LockedBootAlarmTest" time="0.198"/>
+  <testcase name="oldGenerationCannotSend" classname="net.plainnotes.app.reminder.LockedBootAlarmTest" time="0.032"/>
+  <testcase name="dispatchConsumesOnceAndKeepsDatabaseClosed" classname="net.plainnotes.app.reminder.LockedBootAlarmTest" time="0.041"/>
+  <testcase name="canceledAndRescheduledOldAlarmCannotResurrect" classname="net.plainnotes.app.reminder.LockedBootAlarmTest" time="0.024"/>
+  <testcase name="lockedBootReschedulesWithoutDatabase" classname="net.plainnotes.app.reminder.LockedBootAlarmTest" time="0.039"/>
+  <testcase name="lockedCompletionDoesNotOpenDatabaseOrInvalidateAlarms" classname="net.plainnotes.app.reminder.LockedBootAlarmTest" time="0.038"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,62 @@
+{
+  "source": "55fcf2d5",
+  "status": "PASS_REMINDER",
+  "totals": {
+    "tests": 21,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "suites": [
+    {
+      "suite": "net.plainnotes.app.reminder.Ansm03b0ForecastBoundaryTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "net.plainnotes.app.reminder.CacheStoreTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "net.plainnotes.app.reminder.ExactAlarmTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "net.plainnotes.app.reminder.LockedBootAlarmTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "net.plainnotes.app.reminder.NotificationPrivacyTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "net.plainnotes.app.reminder.StockAlertsClearTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "net.plainnotes.app.reminder.StockAlertsTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "app": "IN_PROGRESS"
+}
