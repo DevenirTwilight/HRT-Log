@@ -1,0 +1,20 @@
+{
+  "status": "ARCHIVE_ONLY_NOT_APPLIED_SUPERSEDED",
+  "tested_old_source": "f220b1f2 plus frozen Node DTO binding correction",
+  "current_takeover_source": "c2fffbb0",
+  "authority": "REQUIREMENTS 126 cancels all unexecuted native/performance work",
+  "isolated_data": {
+    "tests": 495,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "android_test_compile": "PASS_OLD_SOURCE",
+  "latest_period_reminder": "PASS_OLD_SOURCE_NOT_CURRENT514",
+  "native_runs_started": 0,
+  "local_stash": "preserved; do not reapply",
+  "files": {
+    "superseded-local.patch": "626684653bce58409afa783e49ca82d9d115c677cec56e81baca98a559bebabd",
+    "historical-evidence.zip": "97fc004b1f982ba15be9f447c7d31abe2506ef5aa5f3c1085e8902b0732236bf"
+  }
+}

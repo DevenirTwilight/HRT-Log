@@ -1,3 +1,9 @@
+## 本地旧会话已对齐最新远端，旧跑分计划未启动 — 2026-10-21
+
+已核GitHub #57当前c2fffbb0、主线320171cd、Draft/auto_merge=null，快进接手最新非阻塞方案。此前本地f220候选的旧完整data495/原生编译和旧App/Period/提醒结果已结束，仅作为ARCHIVE_ONLY_NOT_APPLIED_SUPERSEDED归档`nonblocking-transition/takeover-old-wip/f220-finished-checks/`，含原始XML/日志、初始绑定编译错误、SHA及旧WIP差异；不覆盖ae7688da的514项，也不冒充当前native/CI。旧本地差异stash保留未应用，原目录未reset；没有启动新原生或恢复已取消§125计划。
+
+继续依据TAKEOVER推进**后台运行owner/最薄门面、根事务提交后状态、固定PRIMARY/scope与所有Repository/恢复/reset冲突保护**；前端已存在只读状态区，本组先不改UI。现有prepare/observe及来源context反例复用，不实现快验证器/新缓存/队列/Schema，不批准改5秒硬门，不合并/发布。当前尚未编码新的runtime owner，所有后续安全合同须先验证；原P4/LMK阻塞保持。
+
 ## 换账号接手已核验：方案、源码、证据与旧WIP均已入库 — 2026-10-21
 
 接手入口：`docs/ansm-integration/p4/nonblocking-transition/TAKEOVER.md`。准确分支feature/ansm03b-p4-exact-stock-20261016，交接前HEAD307a1093、已测生产ae7688da、默认分支claude/new-session-1959qb/320171cd；新账号重新核GitHub后从远端该分支继续，不从旧本地worktree或默认分支误起。前后端均由接手代理负责，不等待外部前端。
