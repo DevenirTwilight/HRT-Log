@@ -1683,7 +1683,7 @@ abstract class MeasuredConsumptionContract {
         val repository=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=db})
         val m=med();val b=box(m);consume(record(m),b,listOf(use(b)))
         val password="SYNTHETIC resource failure".toCharArray();val epoch=repository.referencePreviewEpoch()
-        val backup=repository.exportMeasuredBackup(password,epoch);med("SYNTHETIC target-only")
+        val backup=repository.exportMeasuredBackup(password,epoch);val expected=RawData.dump(raw).toString();med("SYNTHETIC target-only")
         val before=RawData.dump(raw).toString()
         try {
             for(stage in listOf(RestoreCheckpoint.INPUT_VALIDATED,RestoreCheckpoint.STAGING_ROWS_INSERTED,RestoreCheckpoint.ROWS_DELETED,RestoreCheckpoint.ROWS_INSERTED)) {
@@ -1693,16 +1693,23 @@ abstract class MeasuredConsumptionContract {
                     repository.restoreMeasuredBackup(backup,password,epoch,checkpoint={if(it==stage){reached=true;owner.cancel()}})
                 }
                 worker.join();assertTrue(reached);assertTrue(worker.isCancelled)
+                ChainContentMemoOracle.assertEmpty("Cancelled restore at $stage must release candidate plaintext")
                 assertEquals(before,RawData.dump(raw).toString());assertEquals(epoch,repository.referencePreviewEpoch())
                 reached=false
                 try {
                     repository.restoreMeasuredBackup(backup,password,epoch,checkpoint={if(it==stage){reached=true;throw OutOfMemoryError("SYNTHETIC resource exhaustion")}})
                     fail("Resource fault must escape")
                 }catch(e:OutOfMemoryError){assertEquals("SYNTHETIC resource exhaustion",e.message)}
+                ChainContentMemoOracle.assertEmpty("Failed restore at $stage must release candidate plaintext")
                 assertTrue(reached);assertEquals(before,RawData.dump(raw).toString());assertEquals(epoch,repository.referencePreviewEpoch())
                 raw.query("PRAGMA foreign_key_check").use{assertFalse(it.moveToFirst())}
                 db.withTransaction{assertEquals(1,MeasuredConsumptionStore.auditStagedDataset(raw).size)}
             }
+            repository.restoreMeasuredBackup(backup,password,epoch)
+            ChainContentMemoOracle.assertEmpty("Successful restore must release candidate plaintext")
+            assertEquals(expected,RawData.dump(raw).toString());assertNotEquals(epoch,repository.referencePreviewEpoch())
+            raw.query("PRAGMA foreign_key_check").use{assertFalse(it.moveToFirst())}
+            db.withTransaction{assertEquals(1,MeasuredConsumptionStore.auditStagedDataset(raw).size)}
         }finally{backup.fill(0);password.fill('\u0000')}
     }
     @Test fun measuredRestoreRollsBackEveryReplacementCheckpointIncludingTheNewEpoch()=runBlocking {

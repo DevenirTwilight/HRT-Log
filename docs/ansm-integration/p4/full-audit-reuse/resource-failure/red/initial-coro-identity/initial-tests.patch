@@ -1,0 +1,100 @@
+--- a/core/data/src/historyTest/java/net/plainnotes/app/data/ChainContentMemoOracle.kt
++++ b/core/data/src/historyTest/java/net/plainnotes/app/data/ChainContentMemoOracle.kt
+@@ -1,6 +1,8 @@
+ package net.plainnotes.app.data
+ 
+ import android.database.MatrixCursor
++import android.database.Cursor
++import android.database.CursorWrapper
+ import androidx.sqlite.db.SupportSQLiteDatabase
+ import java.lang.reflect.Proxy
+ import java.util.concurrent.Callable
+@@ -47,6 +49,32 @@
+     private val lifetime=type.getDeclaredField("checkedInputLifetime").apply{isAccessible=true}
+     @Suppress("UNCHECKED_CAST") private fun contents()=entries.get(owner) as MutableMap<String,Any>
+     private fun reset(bytes:Long)=synchronized(lock) {contents().clear();used.setLong(owner,0);budget.setLong(owner,bytes)}
++    fun assertEmpty(message:String)=synchronized(lock) {
++        assertEquals("$message (entries, reserved bytes, lifetime cleared)",Triple(0,0L,true),
++            Triple(contents().size,used.getLong(owner),lifetime.get(owner)==null))
++    }
++    private fun checkResourceFailure(rows:List<Pair<String,String>>,old:Boolean) {
++        MeasuredOperationChain.clearPureInputMemo()
++        val failure=OutOfMemoryError("SYNTHETIC cursor resource exhaustion")
++        var closed=false
++        val underlying=db(rows)
++        val failing=object:SupportSQLiteDatabase by underlying {
++            override fun query(sql:String):Cursor=object:CursorWrapper(underlying.query(sql)) {
++                override fun getString(columnIndex:Int):String {
++                    // The first payload was already consumed before this resource failure.
++                    if(position==1 && columnIndex==1)throw failure
++                    return super.getString(columnIndex)
++                }
++                override fun close(){try{super.close()}finally{closed=true}}
++            }
++        }
++        var escaped:Throwable?=null
++        try {if(old)FrozenFullAuditChain.validate(failing) else MeasuredOperationChain.validate(failing)}
++        catch(t:Throwable){escaped=t}
++        assertSame("Resource failure must escape unchanged (frozen=$old)",failure,escaped)
++        assertTrue("Resource failure must close its cursor (frozen=$old)",closed)
++        if(!old)assertEmpty("Failed current-chain read must clear its content memo")
++    }
+     fun check() {
+         val originalBudget=synchronized(lock){budget.getLong(owner)}
+         try {
+@@ -81,6 +109,7 @@
+                 val jobs=(0 until 48).map{n->Callable{compare(cases[n%cases.size]);true}}
+                 assertTrue(pool.invokeAll(jobs).all{it.get()})
+             } finally {pool.shutdown();assertTrue(pool.awaitTermination(30,TimeUnit.SECONDS))}
++            compare(a) // A failed concurrent validation may correctly discard the pure memo.
+             synchronized(lock){assertTrue(used.getLong(owner)<=16L*1024*1024);assertTrue(contents().isNotEmpty())}
+             // An empty access instance closes without loading keys or opening a database, but must
+             // still release the process codec's plaintext references through the production lifecycle.
+@@ -107,6 +136,9 @@
+             compare(a)
+             MeasuredOperationChain.clearPureInputMemo()
+             synchronized(lock){assertTrue(contents().isEmpty());assertEquals(0L,used.getLong(owner));assertNull(lifetime.get(owner))}
++            checkResourceFailure(a,true) // The frozen reader independently owns exception behavior.
++            checkResourceFailure(a,false)
++            compare(a) // Resource cleanup must leave subsequent valid reads equivalent.
+             // Reflection only resets this pure optimization, without changing or establishing DB trust.
+             reset(0);compare(a)
+         } finally {reset(originalBudget)}
+--- a/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt
++++ b/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt
+@@ -1683,7 +1683,7 @@
+         val repository=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=db})
+         val m=med();val b=box(m);consume(record(m),b,listOf(use(b)))
+         val password="SYNTHETIC resource failure".toCharArray();val epoch=repository.referencePreviewEpoch()
+-        val backup=repository.exportMeasuredBackup(password,epoch);med("SYNTHETIC target-only")
++        val backup=repository.exportMeasuredBackup(password,epoch);val expected=RawData.dump(raw).toString();med("SYNTHETIC target-only")
+         val before=RawData.dump(raw).toString()
+         try {
+             for(stage in listOf(RestoreCheckpoint.INPUT_VALIDATED,RestoreCheckpoint.STAGING_ROWS_INSERTED,RestoreCheckpoint.ROWS_DELETED,RestoreCheckpoint.ROWS_INSERTED)) {
+@@ -1693,16 +1693,24 @@
+                     repository.restoreMeasuredBackup(backup,password,epoch,checkpoint={if(it==stage){reached=true;owner.cancel()}})
+                 }
+                 worker.join();assertTrue(reached);assertTrue(worker.isCancelled)
++                ChainContentMemoOracle.assertEmpty("Cancelled restore at $stage must release candidate plaintext")
+                 assertEquals(before,RawData.dump(raw).toString());assertEquals(epoch,repository.referencePreviewEpoch())
+                 reached=false
++                val resourceFailure=OutOfMemoryError("SYNTHETIC resource exhaustion")
+                 try {
+-                    repository.restoreMeasuredBackup(backup,password,epoch,checkpoint={if(it==stage){reached=true;throw OutOfMemoryError("SYNTHETIC resource exhaustion")}})
++                    repository.restoreMeasuredBackup(backup,password,epoch,checkpoint={if(it==stage){reached=true;throw resourceFailure}})
+                     fail("Resource fault must escape")
+-                }catch(e:OutOfMemoryError){assertEquals("SYNTHETIC resource exhaustion",e.message)}
++                }catch(e:OutOfMemoryError){assertSame(resourceFailure,e);assertEquals("SYNTHETIC resource exhaustion",e.message)}
++                ChainContentMemoOracle.assertEmpty("Failed restore at $stage must release candidate plaintext")
+                 assertTrue(reached);assertEquals(before,RawData.dump(raw).toString());assertEquals(epoch,repository.referencePreviewEpoch())
+                 raw.query("PRAGMA foreign_key_check").use{assertFalse(it.moveToFirst())}
+                 db.withTransaction{assertEquals(1,MeasuredConsumptionStore.auditStagedDataset(raw).size)}
+             }
++            repository.restoreMeasuredBackup(backup,password,epoch)
++            ChainContentMemoOracle.assertEmpty("Successful restore must release candidate plaintext")
++            assertEquals(expected,RawData.dump(raw).toString());assertNotEquals(epoch,repository.referencePreviewEpoch())
++            raw.query("PRAGMA foreign_key_check").use{assertFalse(it.moveToFirst())}
++            db.withTransaction{assertEquals(1,MeasuredConsumptionStore.auditStagedDataset(raw).size)}
+         }finally{backup.fill(0);password.fill('\u0000')}
+     }
+     @Test fun measuredRestoreRollsBackEveryReplacementCheckpointIncludingTheNewEpoch()=runBlocking {

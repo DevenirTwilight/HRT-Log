@@ -1,0 +1,22 @@
+{
+  "phase": "INITIAL_RED_ATTEMPT",
+  "exit_code": 1,
+  "tests": 2,
+  "failures": 2,
+  "interpretation": {
+    "chain": "Intended cleanup RED: all prior exception-identity and cursor-close assertions passed; retained entries=1, bytes=1130, lifetime cleared=false.",
+    "restore": "Extra same-object assertion failed because coroutine exception recovery may copy the injected OOME. This was not the original restore contract and is removed before the intended restore cleanup RED; production is unchanged."
+  },
+  "artifacts": {
+    "gradle.log": "56604f1ec616f8a182a2e7a9a40b787010c8cc2611bc786bdffb3e6d4dc2130f",
+    "TEST-net.plainnotes.app.data.MeasuredConsumptionStoreTest.xml": "c86be35d27d05bd73132bd04414d48385d0650f3d2da96887610cb4f2a862fae",
+    "initial-tests.patch": "1ddef61e146f7185cc5fcdd56946244a7164feab7bf71c33bfc4df2701cc05f2"
+  },
+  "baseline_commit": "5e12e2b632dd31ce7c3d451664387cf08dc4c659",
+  "production_changed": false,
+  "initial_test_source_sha256": {
+    "core/data/src/historyTest/java/net/plainnotes/app/data/ChainContentMemoOracle.kt": "887787f46808ee0bc02cca3376f7eee02ea43b0049f9e8181c80623baabfa136",
+    "core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt": "5079c1525ca6a6de51ac3392a03c6a1e0ceb0e13d147e7370e84de9f1322ec8d"
+  },
+  "initial_test_sources": "Reconstruct exact initial test sources by applying initial-tests.patch to baseline_commit. The checkpoint commit contains corrected restore type/message assertions, prior to the second RED run."
+}
