@@ -68,4 +68,19 @@ class ReferencePayloadTest {
             rejects {ReferencePayload.canonical(JSONObject().put(String(charArrayOf(c)),"value"))}
         }
     }
+    @Test fun sha256AsciiEncodingMatchesIndependentKnownVectorsUnderEveryLocale() {
+        val vectors=listOf(
+            "" to "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "abc" to "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
+            "SYNTHETIC œstrogène µg 雌二醇 / estradiol" to "d22329c8b165f79bb642743dab080c13f4d6359dff8e961d20243b6109cf9f12",
+            "SYNTHETIC 11" to "008315e4e7abfe2022854bf88184ad243c2884f5fe804cfa8d20241918938dcf",
+            "SYNTHETIC ".repeat(4096) to "05c7b561bc358857359420772a8cf477e26e6c889c1d11556dd14a42886ae258"
+        )
+        val original=java.util.Locale.getDefault()
+        try {for(locale in listOf(java.util.Locale.ROOT,java.util.Locale.FRANCE,java.util.Locale("tr","TR"),java.util.Locale("ar","SA"))) {
+            java.util.Locale.setDefault(locale)
+            vectors.forEach{(input,expected)->assertEquals(expected,ReferencePayload.sha(input))}
+        }} finally{java.util.Locale.setDefault(original)}
+    }
+
 }

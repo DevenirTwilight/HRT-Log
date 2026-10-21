@@ -1,0 +1,8 @@
+{
+  "parent": "10480c6199107803993e2d80f81053fa808e157c",
+  "status": "EXPECTED_FAIL",
+  "test": "globalAuditRejectsForgedUnknownOutcomeEvenWithoutALedgerEntry",
+  "failure": "java.lang.AssertionError: Unallocated operation escaped global audit",
+  "log_sha256": "80de010f77bed32a91d03889c8ac32adeead7f877cae465335a54bf896d0ad55",
+  "scope": "Per-container traversal misses forged UNKNOWN operation with no allocations"
+}

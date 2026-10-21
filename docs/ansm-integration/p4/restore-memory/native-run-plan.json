@@ -1,0 +1,25 @@
+{
+  "source": "9d304e58fd92f0171fd6ddd272f79dbe6ece3cb4",
+  "max_large_native_runs": 2,
+  "additional_retry_allowed": false,
+  "runs": [
+    {
+      "run": 39495197608,
+      "job": 118878355913,
+      "event": "pull_request",
+      "status_at_checkpoint": "IN_PROGRESS"
+    },
+    {
+      "run": 39495229423,
+      "job": 118878466555,
+      "event": "workflow_dispatch",
+      "status_at_checkpoint": "IN_PROGRESS"
+    }
+  ],
+  "regular_android_pr": 39495197495,
+  "regular_android_push": 39495191719,
+  "science_pr": 39495197475,
+  "science_push": 39495191750,
+  "memory_and_restore_result": "PENDING",
+  "daily_writes_and_C": "BLOCKED"
+}

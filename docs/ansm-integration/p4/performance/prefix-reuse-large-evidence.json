@@ -1,0 +1,15 @@
+{
+  "source_base": "5fe9466ffdcca956ce6551ef8bd4e764ddd8e9ea",
+  "candidate_kind": "UNCOMMITTED_PREFIX_REUSE_WORKTREE",
+  "measured_production_sha256": "49d25a0921e936a8724c62fc0c12f5d26c6bfb50bebda32c8c44dabf7afed6ab",
+  "diagnostic_probe_sha256": "73a43ba3aacddc3bdc2b2bdd8a22b0a94e0b07cd47e497adef2075187e0d5faf",
+  "diagnostic_patch": "post-budget-query-diagnostic.patch",
+  "fixture_sha256": "9313167178989def0d4d89d785f84cdde764fba21033543cdf85e472c5511242",
+  "full_projection_equality": "PASS",
+  "clinical_candidate_queries": 6178,
+  "prefix_candidate_queries": 4178,
+  "removed_repeated_ledger_queries": 2000,
+  "native_acceptance": "NOT_RUN_NEW_CANDIDATE",
+  "post_measurement_changes": "Whitespace-only helper formatting verified; skip empty unused-package prefix-map retention (targeted regression/compile pending). Workload has only nonempty exact packages; budgets/rows unchanged.",
+  "note": "Legacy scratch launcher printed git HEAD as source even with a worktree patch; the measured source is identified by the explicit production hash above, not by claiming5fe contains prefix reuse."
+}

@@ -1,0 +1,33 @@
+{
+  "status": "PASS",
+  "base": "701fb522d574facac6895d4a052f221ed2ab7030",
+  "tested_working_tree": {
+    "core/data/src/main/java/net/plainnotes/app/data/NotesDao.kt": "51a469d8613499d7baf9a2e9912a065fb94a4610b31be95850b630fce337bcfc",
+    "core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt": "9ebb0e3c3fe8fceb74e76ccad10f60e46636f626728cc1f643cab4ee91d53a84",
+    "core/data/src/main/java/net/plainnotes/app/data/SupplyLedger.kt": "27997753e7f892918e5845abb9e24b10ac4401142fc15001acd051ad98f41d4e",
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt": "0250deb85bf9c70e9f32e9a36987c9ab09210ad6153ca1ee3201d7d1bef8ef96",
+    "core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt": "57dbd4667b8c61bb0a5bb5f2e4f7c749de1aa11297a927cd649a4e3cbfcf50af"
+  },
+  "data": {
+    "tests": 290,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "shared_consumption_contract": {
+    "tests": 16,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "native_test_compilation": "PASS",
+  "native_new_contract_execution": "PENDING_CI",
+  "boundary_python": {
+    "tests": 157,
+    "status": "PASS"
+  },
+  "replacement_discard_guard": "NOT_IMPLEMENTED",
+  "production_entry": "NOT_IMPLEMENTED",
+  "business_backup_acceptance": "OFF",
+  "physical_and_talkback": "NOT_RUN"
+}

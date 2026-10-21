@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.PeriodStabilityTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-21T13:44:15.757Z" hostname="506c18a63d5b" time="75.491">
+  <properties/>
+  <testcase name="goldenDiagnosticsStructureIsOnePeriodWithEveryRecordInIt" classname="net.plainnotes.app.PeriodStabilityTest" time="5.225"/>
+  <testcase name="orderOfStockEditsAndConfirmationsDoesNotMatter" classname="net.plainnotes.app.PeriodStabilityTest" time="1.764"/>
+  <testcase name="dstChangeAndDosesAroundMidnightStayInOnePeriodBeforeTheStop" classname="net.plainnotes.app.PeriodStabilityTest" time="0.416"/>
+  <testcase name="aDeletedDayIsNeverAPlanWithoutPartsAndAnExactDeleteKeepsTheDay" classname="net.plainnotes.app.PeriodStabilityTest" time="0.736"/>
+  <testcase name="nonTreatmentOperationsNeverChangePeriodsOrLabels" classname="net.plainnotes.app.PeriodStabilityTest" time="67.061"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

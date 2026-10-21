@@ -1,0 +1,11 @@
+{
+  "tests": 475,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "android_generated_test_compile": "PASS",
+  "tools_tests": 46,
+  "source_baseline": "6ee217f8e03be94c95aa50f724632c33c891cc39",
+  "native": "NOT_RUN",
+  "schema_change": false
+}

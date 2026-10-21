@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "scope": "PRE_REFACTOR_BASELINE",
+  "production_base": "65cf08e748e424d2639bac8f4264ac2d7414d75b",
+  "tests": 2,
+  "valid_fixtures": 39,
+  "invalid_fixtures": 33,
+  "production_file_sha256": "de5594d5c01e09e134a02b89232a74d477e190c4a7ccb46509b232868900a5c4",
+  "oracle_sha256": "72c294261b461a4ed2b6afe5966f0a21f7e7d4babb8b0d9081829b1af05bdbc6",
+  "junit_xml_sha256": "ddf2f9d3288ec0615e82d05d34d3613e544b99627a838bf8cd2d427e5757a67e",
+  "log_sha256": "015848a6320a13c77a22a9986f68c5420f304f3bd9caed652ee5f1b805984964",
+  "environment_initial_failure": "JRE lacked JAVA_COMPILER; tests NOT_RUN for that attempt. Official checksum-verified Temurin JDK21 installed and offline Robolectric jars prefetched; baseline then passed."
+}

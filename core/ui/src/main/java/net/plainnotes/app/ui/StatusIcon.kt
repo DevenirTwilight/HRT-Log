@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.size
 
-/** UI-07 A (REQUIREMENTS §116): the filled-circle status icon. The kinds a dose or a calendar day can show. */
+/** UI-07 A (REQUIREMENTS §133): the filled-circle status icon. The kinds a dose or a calendar day can show. */
 enum class StatusIconKind { TAKEN, PARTIAL, MISSED, SKIPPED, UNCONFIRMED, TODAY }
 enum class StatusGlyph { CHECK, CROSS, DASH, QUESTION, DOT, NONE }
 

@@ -1,0 +1,12 @@
+{
+  "scope": "TEST_ONLY",
+  "python_tests": 197,
+  "python_result": "PASS",
+  "initial_negative_run": "25 tests,1 failure,3 errors before new internal/preflight API",
+  "native_generated_contract_compile": "PASS",
+  "compile_log_sha256": "569a9c5d197412199f09309244dfb03617a1d28dbc1147f728ebda98079d68ff",
+  "original_fixture_sha256": "9313167178989def0d4d89d785f84cdde764fba21033543cdf85e472c5511242",
+  "original_budgets": "UNCHANGED",
+  "actual_native_transport": "NOT_RUN",
+  "production_changes": "NONE"
+}

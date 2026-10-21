@@ -1,0 +1,26 @@
+{
+  "source_base": "bba9562d4990ce5f9407ed92818c9a459f38c044",
+  "scope": "PRE_OWNERSHIP_FINALLY_SNAPSHOT",
+  "results": {
+    "core/data": {
+      "tests": 453,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "app": {
+      "tests": 43,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "tested_sha256": {
+    "DataTransfer.kt": "20c90ae03b5e75200d1c753b6e4fb005abcdef15769363f95f5b9e7ebc53c496",
+    "NotesRepository.kt": "288ee3ef600cbcef226d744e91b04e1683d7cfff642e80ce8aa7f1282c47cd5d",
+    "MeasuredBackupJson.kt": "31ba38b9fc6b134713746d408ecfa0ff9d30229457c0483d574da8bf1a322a36"
+  },
+  "ownership_finally_followup": "NOT_RUN_AFTER_SOURCE_FOLLOWUP",
+  "native_runtime": "NOT_RUN_FOR_CANDIDATE",
+  "full_log_sha256": "78d77f4192ab88f12841f98bd0e855a4d3cea1e1e029e432a34b598daf1921e3"
+}

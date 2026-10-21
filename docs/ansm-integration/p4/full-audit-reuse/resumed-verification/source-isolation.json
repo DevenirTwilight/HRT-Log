@@ -1,0 +1,18 @@
+{
+  "source": "55fcf2d5d38400307c6bb8b13a6a1dadd6c625ec",
+  "status": "PASS_SOURCE_AND_PRODUCTION_DATA_JAR_ISOLATION",
+  "production_data_jar_sha256": "e9a99afadc41da0b0de35e0a949344d7e62597d06343fa658957dcdfed9b8b5d",
+  "forbidden_test_classes": [],
+  "protected_paths_unchanged_since": "99e536fe",
+  "protected_paths": [
+    "app/src/main",
+    "pk-engine/src/main",
+    "core/data/schemas",
+    "core/data/src/main/java/net/plainnotes/app/data/BackupCodec.kt",
+    "core/data/src/main/java/net/plainnotes/app/data/BackupLimits.kt",
+    "core/data/src/main/java/net/plainnotes/app/data/NotesDatabase.kt",
+    "core/data/src/main/java/net/plainnotes/app/data/StockForecast.kt"
+  ],
+  "app_measured_write_entry_search": "NO_MATCH",
+  "scope": "Static source and debug domain jar isolation; does not prove native performance or release approval."
+}

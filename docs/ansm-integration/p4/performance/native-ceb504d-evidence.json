@@ -1,0 +1,25 @@
+{
+  "status": "TRANSPORT_PREFLIGHT_FAILED_PERFORMANCE_NOT_RUN",
+  "source_head": "ceb504d87748b1ef9d70a750c86e1bbb287ced9d",
+  "run": 39109323920,
+  "job": 117621840009,
+  "artifact_id": 12129374268,
+  "artifact_sha256": "984b53011f30d111322e80698e58f79df3efa126ad515ca203c542e74df80ba7",
+  "sha256_verification": "PASS",
+  "zip_crc": "PASS",
+  "measured_failure": "Primary test package run-as succeeded far enough to execute head, which returned exit1 stderr head: not integer: c. API26 head does not implement the assumed byte-count option. Alternate package was explicitly unknown.",
+  "performance": "NOT_RUN",
+  "numeric_performance_metrics": "UNAVAILABLE",
+  "prior_failures": "This runtime response directly establishes the preflight failure. Prior external-read response bytes were not saved, so their exact error response remains unverified; their failed budget/trace outcomes are preserved.",
+  "fix": "Bounded dd bs=(byte_limit) count=1 through non-PTY shell v2; separate stderr from binary stdout. JSON cap65537B, trace cap expected_size+1<=32MiB+1, probe9B/expected8 exact. Keep App-UID read/write scope, nonce ACK and fail-fast preflight.",
+  "local_tests": {
+    "red": "29 tests,1 new failure reproducing API26 head response against old reader",
+    "green": "198 Python PASS",
+    "generated_native_kotlin": "Unchanged from a32301ea compiled PASS at prior checkpoint; no redundant compilation",
+    "actual_dd_preflight": "NOT_RUN",
+    "red_log_sha256": "fc739c09fb6d749583b39af4c2564f01c274b2e668159f1153a0506b9f32bb8e",
+    "green_log_sha256": "cc5dc9dc32b350b9cd823852836c27831f27938884c40489becf7fbec49f33f7"
+  },
+  "production_changes": "NONE",
+  "p4_admission": "PRODUCTION_BLOCKED"
+}

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.LabUi03HomeTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-10-20T08:14:05.384Z" hostname="2c2deac85eb5" time="1.876">
+  <properties/>
+  <testcase name="metricFilterRetainsUnifiedCardsAndExistingTrend" classname="net.plainnotes.app.LabUi03HomeTest" time="0.375"/>
+  <testcase name="reviewedCatalogCategoriesCoverEveryStableCodeWithoutGuessingAliases" classname="net.plainnotes.app.LabUi03HomeTest" time="0.082"/>
+  <testcase name="tinyReportFallbackUsesLocaleWithoutChangingRegularLabFormatting" classname="net.plainnotes.app.LabUi03HomeTest" time="0.091"/>
+  <testcase name="tinyActualMetricTooltipDoesNotRoundNonzeroResultToZero" classname="net.plainnotes.app.LabUi03HomeTest" time="0.186"/>
+  <testcase name="expansionExposesEveryOriginalResultAndDeleteUsesOriginalRow" classname="net.plainnotes.app.LabUi03HomeTest" time="0.262"/>
+  <testcase name="tinyPositiveResultAndItsReportBoundsNeverDisplayOrSpeakAsMeasuredZero" classname="net.plainnotes.app.LabUi03HomeTest" time="0.161"/>
+  <testcase name="oneSidedRangesUnknownUnitsAndFlagsAreNeverClinicalJudgements" classname="net.plainnotes.app.LabUi03HomeTest" time="0.077"/>
+  <testcase name="newMetricFilterUsesCanonicalTrendUnitAndKeepsOriginalRawCard" classname="net.plainnotes.app.LabUi03HomeTest" time="0.159"/>
+  <testcase name="formalSingletonAndLegacySingletonShareHomeCardsAndKeepOriginalIdentity" classname="net.plainnotes.app.LabUi03HomeTest" time="0.192"/>
+  <testcase name="filtersAndNoResultsDoNotInvokeWritesAndBatchActionUsesExistingCallback" classname="net.plainnotes.app.LabUi03HomeTest" time="0.28"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

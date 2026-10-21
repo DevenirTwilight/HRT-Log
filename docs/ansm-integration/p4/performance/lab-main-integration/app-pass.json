@@ -1,0 +1,18 @@
+{
+  "counts": {
+    "tests": 61,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "native_app_compile": "PASS",
+  "raw_reports_sha256": {
+    "app-TEST-net.plainnotes.app.PrivacyNoticeFactsTest.xml": "dca6cd8ff86141a306d3a1f933b75ebb72cb4f1d66c9006aa5cee98d19d5cfd5",
+    "app-TEST-net.plainnotes.app.Lab03EntryUiTest.xml": "0abc87260ad403e30fad9c7218283eae159e662aac6595834ae079436583fe25",
+    "app-TEST-net.plainnotes.app.Lab03DraftStateTest.xml": "77fc5fc6442ba122ac30c2aad6fc71378d589e1a7d0c69921bc4f1978b4b9162",
+    "app-TEST-net.plainnotes.app.MeasuredStockUnknownMatrixTest.xml": "4554efb6ad9bbabbf5f9437e27283f6a7fe1414b1563e592c658665e49a13a27",
+    "app-TEST-net.plainnotes.app.LabUi03HomeTest.xml": "40eb44b0043385fe50392452797ffc6ce1426b61daa4cfed9e9cc9dcfca9c098",
+    "app-TEST-net.plainnotes.app.Lab03CatalogIntegrationTest.xml": "cfeae0da7b1b5367c5ab1bc7702f53609a2976413dfe7bc2d208ac0879c975d2",
+    "app-TEST-net.plainnotes.app.PeriodStabilityTest.xml": "7e4f819b9d4b1299f828d97bfb7fbfea6eb3fff712db06378ea951edb59d04fd"
+  }
+}

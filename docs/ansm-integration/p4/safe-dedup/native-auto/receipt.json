@@ -1,0 +1,12 @@
+{
+  "source_commit": "f1c638ba622d28d90a6048c65055d7967cfb0465",
+  "run_id": 39486040353,
+  "job_id": 118846590122,
+  "artifact_id": 12292904917,
+  "official_sha256": "d41f18fdb2551981025e33facd5fb48b5dca0744ca7e37f46a4835e830710ae9",
+  "download_sha256": "d41f18fdb2551981025e33facd5fb48b5dca0744ca7e37f46a4835e830710ae9",
+  "zip_crc": "PASS",
+  "result": "FAIL_LMK_DURING_ENCRYPTED_RESTORE",
+  "write_measurements": "NOT_RUN",
+  "terminal_observation_not_peak": "lowmemorykiller killed test PID3848, to free213472KiB; last saved Java sample is not final peak"
+}

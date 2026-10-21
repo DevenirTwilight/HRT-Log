@@ -1,0 +1,98 @@
+{
+  "source": "a3c695749b90aa47b85bd9c4350249ab6e9698a1",
+  "status": "PASS",
+  "tests": 67,
+  "android_test_kotlin_compile": "PASS",
+  "physical_device": "NOT_RUN",
+  "talkback": "NOT_RUN",
+  "suites": [
+    {
+      "name": "net.plainnotes.app.CenterStateRestorationTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "1a1fa404eedaff7f35dc17e140313eb449050ce6f6fa9d2df98ee1633de6bb57"
+    },
+    {
+      "name": "net.plainnotes.app.DrugCenterNavigationTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "4d06f0bcda29088d0b1efb8c69c710696ebd2c5573864c249d7823c10550d126"
+    },
+    {
+      "name": "net.plainnotes.app.Lab02PanelUiTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "e1b4a39cd328d65728212e9f36f7b312ebca2d29acc4c5c7cd4b80a99daf09e3"
+    },
+    {
+      "name": "net.plainnotes.app.MeasuredStockUnknownMatrixTest",
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "c4a014b93d51dd0faf2ca577a8a03820a7185759e5a6204ac22cde3c66fab640"
+    },
+    {
+      "name": "net.plainnotes.app.PeriodStabilityTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "235fb4390a44a69be5f8e827ae70043d8404d7a6be82054a2b1037387b01bc7a"
+    },
+    {
+      "name": "net.plainnotes.app.StockCardActionsTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "71f6203bc1632f95e4de957b08f9c32c0ac20be7a07565683ccf3c54b98a0611"
+    },
+    {
+      "name": "net.plainnotes.app.StockConsistencyTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "e4c68a13709f934e974fd367cbbc0174151f92d0b5882576b436d87e077879d8"
+    },
+    {
+      "name": "net.plainnotes.app.Ui05DrawerBadgeTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "3c3f3e4de30bb23658d08acee8d7d773b5baf9a33d5305318937d7ed5f4909fa"
+    },
+    {
+      "name": "net.plainnotes.app.Ui05HomeStockTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "dc9e94c597d8a112e2d617a163aa30b54957af4887d8cec8699875751881195c"
+    },
+    {
+      "name": "net.plainnotes.app.Ui05MedicalHomeTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "9c726263e3b1db5650005b7049d6a7795bcf0223c4b3d245d5f0887c178fda19"
+    },
+    {
+      "name": "net.plainnotes.app.Ui05StockCardTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "391108062cf78f8a2b167af0a0865cb2a481477e5cc74a4b09d261b55dd49786"
+    }
+  ]
+}

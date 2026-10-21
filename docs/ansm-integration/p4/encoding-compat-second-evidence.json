@@ -1,0 +1,11 @@
+{
+  "status": "FAIL",
+  "totals": {
+    "tests": 326,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0
+  },
+  "remaining": "Published Room9 fixture validation must project absent inventory encoding as legacy, not query a new-schema column",
+  "log_sha256": "cf660814ab6a9786ded107b767c80b9def4c244098bf123a6eaaaac4a66cd88c"
+}

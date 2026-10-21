@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.MeasuredConsumptionStoreTest" tests="128" skipped="0" failures="1" errors="0" timestamp="2026-10-20T12:43:11.329Z" hostname="2c2deac85eb5" time="35.994">
+  <properties/>
+  <testcase name="repositoryActualUseRetainsAlreadyAccountedAndUnknownStockEffectsWithoutDeducting" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.949"/>
+  <testcase name="readOnlyProjectionAuditsPhysicalAmountsFromFrozenLedgerEvidence" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.258"/>
+  <testcase name="reconciliationKeepsTwoExplicitlyConfirmedStrengthsSeparateAndRequiresBothCounts" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.746"/>
+  <testcase name="fullAuditReadsLiveClinicalFactsWithoutPerRecordSql" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.259"/>
+  <testcase name="oldUnscopedPackageVoidCannotMutateExactInventory" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.212"/>
+  <testcase name="reconciliationDeleteRestoreAndEncryptedBackupRetainTheObservedCurrentStock" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="1.052"/>
+  <testcase name="globalAuditRejectsInvalidExactCapacityInPreviouslyRestoredLifecycleEvidence" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.337"/>
+  <testcase name="globalAuditRejectsOperationUuidCollidingWithAReferenceEvent" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.261"/>
+  <testcase name="projectionAuditNeverHidesAnOrphanLedgerWhenTheScalarCacheIsForged" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.212"/>
+  <testcase name="stagingRejectsForeignDatasetAndTextInANumericLedgerColumnWithoutAffectingSource" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.235"/>
+  <testcase name="projectionAuditReadsLedgerAndOperationTogetherWithoutPointLookups" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.227"/>
+  <testcase name="reconciliationNeverDeductsASecondDoseAfterTheConfirmedCurrentCount" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.229"/>
+  <testcase name="reconciliationAuditRejectsAnOrphanAccountingBridgeWithAnOtherwiseValidChain" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.274"/>
+  <testcase name="scheduledWriteRollsBackRecordContextAndStockAtEachFailureBoundary" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.262"/>
+  <testcase name="legacyActualUseCannotSilentlyChooseScalarStockWhenTypedStockAlsoExists" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.189"/>
+  <testcase name="reconciliationPreservesCurrentCountEvenWhenOriginalInverseWouldBeNegative" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.269"/>
+  <testcase name="fullAuditStreamsCompleteLedgersIncludingEmptyPackagesWithoutPerContainerSql" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.236"/>
+  <testcase name="globalAuditValidatesNoopCountAndCompleteInverseHistory" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.246"/>
+  <testcase name="repositoryWritesActualClinicalFactAndPhysicalConsumptionAtomicallyAndIdempotently" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.211"/>
+  <testcase name="globalAuditIncludesEmptyAndIncompatibleUsesAlongsideExactConsumption" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.234"/>
+  <testcase name="reconciliationFailureAtEveryBoundaryRollsBackBridgeInverseCountsAndClinicalFact" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.432"/>
+  <testcase name="fullAuditReadsContainerFactsWithoutPerContainerSql" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.233"/>
+  <testcase name="reconciliationRejectsMissingIncompatibleUnconfirmedOrForeignCurrentCounts" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.277"/>
+  <testcase name="fullAuditOperationRowReuseMatchesZeroAndInsufficientBudgetWithoutWrites" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.201"/>
+  <testcase name="reconciliationUsesFrozenPackagingAfterCurrentMedicationAndProductReferenceChanges" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.375"/>
+  <testcase name="globalAuditRejectsRetiredIdentityAttachedToLiveIntegerLedgerHistory" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.286"/>
+  <testcase name="scheduledParisSpringGapPreservesActualAndPlannedZonesWithoutExtraStock" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.216"/>
+  <testcase name="correctionFaultAfterNewConsumptionRollsBackBothInverseAndClinicalRevision" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.231"/>
+  <testcase name="formalRepositoryCreatesAConfirmedPackageWithoutChangingTheMedicationOrProfile" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.206"/>
+  <testcase name="earlierCountDoesNotBlockTheInverseOfALaterPhysicalUse" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.236"/>
+  <testcase name="reconciliationAuditRejectsMissingNoOpFinalCountEvenWhenBalancesAndChainRemainValid" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.408"/>
+  <testcase name="materializedSourceCoverageIsReadOnlyAndMatchesOriginalExistencePredicate" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.265"/>
+  <testcase name="globalAuditAcceptsRealVoidedUnallocatedUseWithoutInventingConsumption" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.235"/>
+  <testcase name="repositoryActualUseRollsBackRecordReferenceAndStockAtEveryFaultCheckpoint" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.203"/>
+  <testcase name="actualUseRejectsStaleDatasetBeforeLookingUpReusedIdsAndNeverTargetsDecoy" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.213"/>
+  <testcase name="globalAuditKeepsRetiredRecordFactsSeparateFromAnotherMedicationsReusedId" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.222"/>
+  <testcase name="internalMeasuredBackupRoundTripsPhysicalHistoryAndReplacesANonemptyTarget" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.715"/>
+  <testcase name="internalMeasuredRestoreRejectsCorruptCacheWithoutReplacingAnyTargetFactOrEpoch" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.676"/>
+  <testcase name="projectionReportsACacheMismatchWithoutRepairingOrRewritingAnything" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.176"/>
+  <testcase name="zeroAllocationAuditScansOperationRowsWithoutRepeatedPrimaryQueries" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.164"/>
+  <testcase name="stagingProjectionReusesTheLiveAuditWithoutRuntimeIdentityOrAnyWrites" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.204"/>
+  <testcase name="operationRowReuseCannotApproveChangesDuringItsReadOnlyAudit" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.208"/>
+  <testcase name="auditedCanonicalEvidenceNeverAuthorizesDifferentTextOrHeadersForTheSameOperation" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.189">
+    <failure message="java.lang.AssertionError: expected net.plainnotes.app.data.ReferenceFailure to be thrown, but nothing was thrown" type="java.lang.AssertionError">java.lang.AssertionError: expected net.plainnotes.app.data.ReferenceFailure to be thrown, but nothing was thrown
+	at org.junit.Assert.assertThrows(Assert.java:1028)
+	at org.junit.Assert.assertThrows(Assert.java:981)
+	at net.plainnotes.app.data.MeasuredConsumptionContract$auditedCanonicalEvidenceNeverAuthorizesDifferentTextOrHeadersForTheSameOperation$1$1.invokeSuspend(MeasuredConsumptionContract.kt:342)
+	at net.plainnotes.app.data.MeasuredConsumptionContract$auditedCanonicalEvidenceNeverAuthorizesDifferentTextOrHeadersForTheSameOperation$1$1.invoke(MeasuredConsumptionContract.kt)
+	at net.plainnotes.app.data.MeasuredConsumptionContract$auditedCanonicalEvidenceNeverAuthorizesDifferentTextOrHeadersForTheSameOperation$1$1.invoke(MeasuredConsumptionContract.kt)
+	at androidx.room.RoomDatabaseKt__RoomDatabase_androidKt$withTransaction$2.invokeSuspend(RoomDatabase.android.kt:2044)
+	at androidx.room.RoomDatabaseKt__RoomDatabase_androidKt$withTransaction$2.invoke(RoomDatabase.android.kt)
+	at androidx.room.RoomDatabaseKt__RoomDatabase_androidKt$withTransaction$2.invoke(RoomDatabase.android.kt)
+	at androidx.room.RoomDatabaseKt__RoomDatabase_androidKt$withTransactionContext$transactionBlock$1.invokeSuspend(RoomDatabase.android.kt:2058)
+	at androidx.room.RoomDatabaseKt__RoomDatabase_androidKt$withTransactionContext$transactionBlock$1.invoke(RoomDatabase.android.kt)
+	at androidx.room.RoomDatabaseKt__RoomDatabase_androidKt$withTransactionContext$transactionBlock$1.invoke(RoomDatabase.android.kt)
+	at kotlinx.coroutines.intrinsics.UndispatchedKt.startUndspatched(Undispatched.kt:66)
+	at kotlinx.coroutines.intrinsics.UndispatchedKt.startUndispatchedOrReturn(Undispatched.kt:43)
+	at kotlinx.coroutines.BuildersKt__Builders_commonKt.withContext(Builders.common.kt:165)
+	at kotlinx.coroutines.BuildersKt.withContext(Unknown Source)
+	at androidx.room.RoomDatabaseKt__RoomDatabase_androidKt$startTransactionCoroutine$2$1$1.invokeSuspend(RoomDatabase.android.kt:2087)
+	at _COROUTINE._BOUNDARY._(CoroutineDebugging.kt:42)
+	at androidx.room.RoomDatabaseKt__RoomDatabase_androidKt$startTransactionCoroutine$2$1$1.invokeSuspend(RoomDatabase.android.kt:2087)
+	at net.plainnotes.app.data.MeasuredConsumptionContract$auditedCanonicalEvidenceNeverAuthorizesDifferentTextOrHeadersForTheSameOperation$1.invokeSuspend(MeasuredConsumptionContract.kt:321)
+Caused by: java.lang.AssertionError: expected net.plainnotes.app.data.ReferenceFailure to be thrown, but nothing was thrown
+	at org.junit.Assert.assertThrows(Assert.java:1028)
+	at org.junit.Assert.assertThrows(Assert.java:981)
+	at net.plainnotes.app.data.MeasuredConsumptionContract$auditedCanonicalEvidenceNeverAuthorizesDifferentTextOrHeadersForTheSameOperation$1$1.invokeSuspend(MeasuredConsumptionContract.kt:342)
+	at net.plainnotes.app.data.MeasuredConsumptionContract$auditedCanonicalEvidenceNeverAuthorizesDifferentTextOrHeadersForTheSameOperation$1$1.invoke(MeasuredConsumptionContract.kt)
+	at net.plainnotes.app.data.MeasuredConsumptionContract$auditedCanonicalEvidenceNeverAuthorizesDifferentTextOrHeadersForTheSameOperation$1$1.invoke(MeasuredConsumptionContract.kt)
+	at androidx.room.RoomDatabaseKt__RoomDatabase_androidKt$withTransaction$2.invokeSuspend(RoomDatabase.android.kt:2044)
+	at androidx.room.RoomDatabaseKt__RoomDatabase_androidKt$withTransaction$2.invoke(RoomDatabase.android.kt)
+	at androidx.room.RoomDatabaseKt__RoomDatabase_androidKt$withTransaction$2.invoke(RoomDatabase.android.kt)
+	at androidx.room.RoomDatabaseKt__RoomDatabase_androidKt$withTransactionContext$transactionBlock$1.invokeSuspend(RoomDatabase.android.kt:2058)
+	at androidx.room.RoomDatabaseKt__RoomDatabase_androidKt$withTransactionContext$transactionBlock$1.invoke(RoomDatabase.android.kt)
+	at androidx.room.RoomDatabaseKt__RoomDatabase_androidKt$withTransactionContext$transactionBlock$1.invoke(RoomDatabase.android.kt)
+	at kotlinx.coroutines.intrinsics.UndispatchedKt.startUndspatched(Undispatched.kt:66)
+	at kotlinx.coroutines.intrinsics.UndispatchedKt.startUndispatchedOrReturn(Undispatched.kt:43)
+	at kotlinx.coroutines.BuildersKt__Builders_commonKt.withContext(Builders.common.kt:165)
+	at kotlinx.coroutines.BuildersKt.withContext(Unknown Source)
+	at androidx.room.RoomDatabaseKt__RoomDatabase_androidKt$startTransactionCoroutine$2$1$1.invokeSuspend(RoomDatabase.android.kt:2087)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:94)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:70)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source)
+	at androidx.room.RoomDatabaseKt__RoomDatabase_androidKt$startTransactionCoroutine$2$1.run(RoomDatabase.android.kt:2084)
+	at androidx.room.TransactionExecutor.execute$lambda$1$lambda$0(TransactionExecutor.android.kt:38)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+</failure>
+  </testcase>
+  <testcase name="reconciliationWithoutBridgeStillRequiresTheConfirmedFinalCount" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.371"/>
+  <testcase name="internalMeasuredBackupRequiresCurrentLocalEpochAndPrimaryBeforeLookingUpIds" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.495"/>
+  <testcase name="realRepositoryCorrectionUsesOriginalInverseAndCreatesOneNewRevisionWithFrozenHistory" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.26"/>
+  <testcase name="sharedRepositoryForecastKeepsExactPhysicalBalancesSeparateFromClinicalDoseAndChangesVersionOnZeroCount" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.272"/>
+  <testcase name="scheduledBackfillReusesMissedIdAndSnapshotAndDoesNotGuessStockEffect" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.214"/>
+  <testcase name="reconciliationPreservesUnknownStockEffectWithoutApplyingAnotherConsumption" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.25"/>
+  <testcase name="noOpRemainingObservationAlsoRequiresReconciliationBeforeAnInverse" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.182"/>
+  <testcase name="correctionCannotReuseAnotherRecordsOperationOrAnOlderSourceRevision" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.228"/>
+  <testcase name="scheduledActualUseKeepsPlannedFieldsAndRetriesWithoutSecondConsumption" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.19"/>
+  <testcase name="reconciliationAuditRejectsChangedTargetEvenWithValidRequestHashesAndExecutionChain" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.34"/>
+  <testcase name="fractionalPhysicalUseWritesOneExactIntegerWithoutChangingTheDoseFact" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.17"/>
+  <testcase name="changedScheduledFactCannotPassFullAuditWithOnlyTheClinicalDoseUnchanged" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.236"/>
+  <testcase name="globalAuditRejectsRestoredEvidenceWhoseBodyDiffersFromTheOriginalVoid" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.184"/>
+  <testcase name="projectionRejectsAnIncompleteInverseEvenWhenAnotherContainerIsMissingEvidence" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.206"/>
+  <testcase name="scheduledDoseOverrideInvalidatesOldTicketAndKeepsClinicalDoseIndependent" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.263"/>
+  <testcase name="legacyAdjustmentAndReverseMustRefuseMeasuredHistory" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.322"/>
+  <testcase name="measurementIdentityDoesNotFollowAReusedIntegerHandle" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.181"/>
+  <testcase name="noOpCountBeforeAUseDoesNotBlockItsLaterInverse" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.183"/>
+  <testcase name="staleRemainingCountCannotOverwriteAConcurrentActualUseAndUnitsNeverMix" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.199"/>
+  <testcase name="inventoryVersionErrorsAreRejectedBeforeOpeningTheDestination" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.723"/>
+  <testcase name="measuredBackupRestoresOnANewEncryptedDatabaseWithoutAnyCurrentCatalog" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.562"/>
+  <testcase name="retriesAreIdempotentAndConflictingOrSecondOperationsCannotDeductAgain" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.171"/>
+  <testcase name="publicLegacyBackupEntryDoesNotAccidentallyEnableMeasuredRestoreOrExport" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.422"/>
+  <testcase name="realRepositoryDeleteAndRestoreAppendExactHistoryAndPreserveTheOriginalClinicalSnapshot" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.51"/>
+  <testcase name="reversalFailureRollsBackAllInverseEntriesAndLeavesOriginalConsumption" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.169"/>
+  <testcase name="partialExhaustionKeepsAnExactPhysicalRemainder" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.17"/>
+  <testcase name="typedStockOfAnotherMedicationDoesNotBlockLegacyOnlyActualUse" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.212"/>
+  <testcase name="publishedBusinessSchemaTenRestoresLegacyAmountsAndProductReferencesWithoutInferringUnits" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.714"/>
+  <testcase name="globalAuditRejectsMissingActualConfirmationAndDoesNotRepairCorruptCache" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.302"/>
+  <testcase name="globalAuditRejectsForgedUnknownOutcomeEvenWithoutALedgerEntry" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.232"/>
+  <testcase name="repositoryCorrectionRefusesToOverrideAnIndependentLaterStockCount" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.312"/>
+  <testcase name="scopedPackageVoidRestoreIsIdempotentAndDoesNotReviveAnOldConfirmationTicket" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.292"/>
+  <testcase name="explicitlyConfirmedDifferentStrengthsRemainSeparatePhysicalFacts" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.241"/>
+  <testcase name="legacyReplacementAndDiscardCannotMutateMeasuredPackaging" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.243"/>
+  <testcase name="syntheticPumpStockUsesOnlyExplicitDirectedContentAndConfirmedCapacity" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.276"/>
+  <testcase name="foreignMedicationSourceAndStaleDatasetAreRejectedBeforeAnyStockWrite" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.263"/>
+  <testcase name="globalAuditRejectsCurrentActualRecordThatDisagreesWithFrozenInput" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.242"/>
+  <testcase name="operationAuditRowsAreBoundedFreshCopiesAndReleasedAtScopeEnd" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.219"/>
+  <testcase name="scheduledEvidenceSurvivesEncryptedBackupWithoutTheCurrentCatalog" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.602"/>
+  <testcase name="measuredRestoreRollsBackEveryReplacementCheckpointIncludingTheNewEpoch" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="1.542"/>
+  <testcase name="malformedFrozenReceiptsCannotBeAcceptedAsSuccessfulRetries" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.232"/>
+  <testcase name="replayedRemainingCountKeepsItsOriginalCausalAnchorAfterLaterUse" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.213"/>
+  <testcase name="repositoryCountIsIdempotentAndOldTicketsCannotOverwriteEvenAZeroObservation" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.22"/>
+  <testcase name="legacyAllocationCannotReapplyAnAlreadyCapturedPhysicalUse" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.173"/>
+  <testcase name="repositoryPreservesUnlinkedPhysicalActualQuantityAcrossExactBackupRestore" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.414"/>
+  <testcase name="malformedOrNonexistentAdjustmentAnchorsCannotBeReplayed" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.228"/>
+  <testcase name="reverseCannotRewriteALaterConfirmedRemainingObservation" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.188"/>
+  <testcase name="fullLedgerStreamRejectsExtraDuplicateMissingAndUnorderedGroupsAndClosesItsCursor" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.241"/>
+  <testcase name="projectionRejectsAnUnpairedLegacyEntryInsideMeasuredStock" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.161"/>
+  <testcase name="zeroDifferenceCountInvalidatesAnActualUseTicketEvenWithIdenticalContainerAndLedger" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.161"/>
+  <testcase name="projectionChecksTheCompleteInverseSetAcrossTwoExplicitSources" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.17"/>
+  <testcase name="liveAuditStillRejectsStaleEpochBeforeDelegatingToBusinessOnlyStaging" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.182"/>
+  <testcase name="reconciliationReplaysOriginalConfirmedInputsWithoutRecountingTodaysBalance" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.278"/>
+  <testcase name="unconfirmedSourceRemainsUnknownWithoutInventingConsumption" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.153"/>
+  <testcase name="fullAuditReusesCheckedProjectionLedgerForCausalPrefixes" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.176"/>
+  <testcase name="globalAuditRejectsNoopCountWithAMissingCausalAnchor" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.16"/>
+  <testcase name="legacyAllocationMustSkipMeasuredContainersWhileKeepingLegacyBehavior" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.147"/>
+  <testcase name="reversingUsesOriginalQuantaAfterCurrentMedicationAndReferenceChange" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.162"/>
+  <testcase name="unsupportedMassConversionPreservesTheActualRecordAndNeverUsesZeroAsUnknown" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.177"/>
+  <testcase name="globalAuditRejectsConsumedPackageMarkedVoidedWithoutLegalLifecycleEvidence" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.212"/>
+  <testcase name="globalAuditRejectsForgedIdentityInAnAlreadyRestoredPackageAudit" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.184"/>
+  <testcase name="returnedBalanceAfterAnAbaAdjustmentDoesNotReviveAnOldActualUseTicket" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.154"/>
+  <testcase name="secondaryConfirmationIndexRetainsDuplicateRowsSoTheWholeAuditStillRejectsAmbiguity" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.165"/>
+  <testcase name="globalAuditKeepsRetiredContainerEvidenceSeparateFromAReusedLegacyIntegerId" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.186"/>
+  <testcase name="globalAuditRejectsNoopObservationPointingAtAFutureSameBalanceHead" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.185"/>
+  <testcase name="oldUnscopedPackageRestoreCannotMutateExactInventory" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.18"/>
+  <testcase name="malformedTrailingJsonCannotRestoreOrRetireTheActiveDataset" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.597"/>
+  <testcase name="strictInputRetainsProjectionLexemesUntilTheirIntegerContractIsChecked" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.233"/>
+  <testcase name="allocationFailureRollsBackTheNewRecordSourceAndLedgerTogether" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.163"/>
+  <testcase name="oldAllocatorCannotAddScalarConsumptionToAnExplicitUnknownStockEffect" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.194"/>
+  <testcase name="reconciliationRejectsStaleZeroCountTicketWrongEpochAndDecoyBeforeAnyWrite" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.245"/>
+  <testcase name="strictJsonEnforcesArrayFieldAndDepthBudgetsBeforeBuildingAnUnboundedTree" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.324"/>
+  <testcase name="projectionAuditsCountConsumeAndInverseWithoutUsingCurrentMedicationStrength" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.219"/>
+  <testcase name="publishedLegacyVoidEvidenceStillRestoresAfterTheStorageMarkerIsAdded" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.201"/>
+  <testcase name="inventoryEncodingCannotBeChangedThroughOrdinarySqlInEitherDirection" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.159"/>
+  <testcase name="globalAuditRejectsOverflowedRevisionEvenWhenAnOperationHasNoAllocation" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.199"/>
+  <testcase name="remainingAdjustmentIsExactAndIdempotentWithRealZeroAndNoOpTargets" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.178"/>
+  <testcase name="reconciliationAtFullRemainingCountHasBoundedBridgeAndNoInventedPhysicalUse" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.251"/>
+  <testcase name="legacyMedicationResizeMustLeaveFrozenPackagingUntouched" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.167"/>
+  <testcase name="globalAuditRejectsInverseThatWouldRewriteALaterIndependentNoopCount" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.206"/>
+  <testcase name="globalAuditCannotTreatAnExactContainerWithAllReferencesMissingAsLegacyScalar" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.179"/>
+  <testcase name="strictJsonRejectsAmbiguousSyntaxDuplicateFieldsAndInvalidUtf8" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.158"/>
+  <testcase name="scopedPackageCorrectionRetainsTheConsumptionGuardAndRejectsForeignIdentity" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.188"/>
+  <testcase name="scheduledWriteRejectsCanceledSlotWithoutMutation" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.183"/>
+  <testcase name="completeSecondaryAuditIndexesAvoidRepeatedSqlButPartialIndexesNeverProveAbsence" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.154"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

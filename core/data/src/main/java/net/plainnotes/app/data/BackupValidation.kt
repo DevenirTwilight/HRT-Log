@@ -26,27 +26,41 @@ object BackupLimits {
     }
 
     /** Lexical budget for JSON including embedded snapshot/effects strings; semantic checks follow. */
-    fun checkJson(text: String) {
-        if (text.length > MAX_JSON_BYTES) throw BackupCodec.TooLarge()
-        var depth = 0; var quoted = false; var escaped = false; var length = 0
-        text.forEach { c ->
-            if (quoted) {
-                if (++length > MAX_STRING) throw BackupCodec.TooLarge()
-                if (escaped) escaped = false else if (c == '\\') escaped = true else if (c == '"') quoted = false
-            } else when (c) {
-                '"' -> { quoted = true; length = 0 }
-                '{', '[' -> if (++depth > MAX_DEPTH) throw BackupCodec.TooLarge()
-                '}', ']' -> if (--depth < 0) throw BackupCodec.BadFile("invalid structure")
+    private class JsonBudget {
+        private var depth=0;private var quoted=false;private var escaped=false;private var length=0
+        fun accept(c:Char) {
+            if(quoted) {
+                if(++length>MAX_STRING)throw BackupCodec.TooLarge()
+                if(escaped)escaped=false else if(c=='\\')escaped=true else if(c=='"')quoted=false
+            } else when(c) {
+                '"'->{quoted=true;length=0}
+                '{','['->if(++depth>MAX_DEPTH)throw BackupCodec.TooLarge()
+                '}',']'->if(--depth<0)throw BackupCodec.BadFile("invalid structure")
             }
         }
-        if (quoted || depth != 0) throw BackupCodec.BadFile("invalid structure")
+        fun complete(){if(quoted || depth!=0)throw BackupCodec.BadFile("invalid structure")}
+    }
+    fun checkJson(text: String) {
+        if(text.length>MAX_JSON_BYTES)throw BackupCodec.TooLarge()
+        val budget=JsonBudget();text.forEach(budget::accept);budget.complete()
+    }
+    /** Same lexical contract without retaining an additional whole decoded document. */
+    internal fun checkJson(reader:java.io.Reader) {
+        val budget=JsonBudget();val buffer=CharArray(8192);var total=0L
+        while(true) {
+            val count=reader.read(buffer);if(count<0)break
+            total+=count;if(total>MAX_JSON_BYTES)throw BackupCodec.TooLarge()
+            for(i in 0 until count)budget.accept(buffer[i])
+        }
+        budget.complete()
     }
 }
 
 internal object BackupValidation {
     /** Column allowlist/types taken from trusted schema, never used to construct SQL from backup keys. */
-    fun validateTables(db: SupportSQLiteDatabase, tables: JSONObject) {
-        require(tables.keys().asSequence().all { it in DOMAIN_TABLES }) { "Unknown table" }
+    fun validateTables(db: SupportSQLiteDatabase, tables: JSONObject) = validateRows(db,BackupTables.of(tables))
+    internal fun validateRows(db:SupportSQLiteDatabase,tables:BackupTables) {
+        require(tables.keys().all { it in DOMAIN_TABLES }) { "Unknown table" }
         var count = 0L
         DOMAIN_TABLES.forEach { table ->
             if (!tables.has(table)) return@forEach // Newly added tables absent in a supported old backup.
@@ -82,11 +96,47 @@ internal object BackupValidation {
         }
     }
 
+    /** Trusted-column SQL checks on an already parsed isolated candidate, before any destination changes. */
+    internal fun validateCandidateStoredColumns(db:SupportSQLiteDatabase) {
+        check(db.inTransaction());var total=0L;var textBytes=0L
+        for(table in DOMAIN_TABLES) {
+            // Retain the original early row fence before scanning stored values.
+            total+=db.query("SELECT COUNT(*) FROM `$table`").use{it.moveToFirst();it.getLong(0)}
+            require(total<=BackupLimits.MAX_ROWS)
+            val columns=db.query("PRAGMA table_info(`$table`)").use{c->buildList{while(c.moveToNext())add(c.getString(1) to c.getString(2))}}
+            // Trusted schema identifiers only. Aggregate all original column predicates in one table scan.
+            val invalid=columns.map { (column,type) ->
+                val allowed=when(type){"INTEGER"->"typeof(`$column`)='integer'";"TEXT"->"typeof(`$column`)='text' AND length(`$column`)<=1048576";"REAL"->"typeof(`$column`) IN ('integer','real') AND `$column` BETWEEN -1.7976931348623157e308 AND 1.7976931348623157e308";else->error("Unknown trusted storage type")}
+                "`$column` IS NOT NULL AND NOT ($allowed)"
+            }
+            val lengths=columns.filter{it.second=="TEXT"}.map{(column,_)->"COALESCE(length(CAST(`$column` AS BLOB)),0)"}
+            val bytes=if(lengths.isEmpty())"0" else "COALESCE(SUM(${lengths.joinToString("+")}),0)"
+            // Same invalid-cell truth values, one aggregate state instead of one per column.
+            // Balance the OR tree; no original field predicate or byte/row fence is removed.
+            var predicates=invalid
+            while(predicates.size>1)predicates=predicates.chunked(2).map { pair ->
+                if(pair.size==1)pair[0] else "(${pair[0]} OR ${pair[1]})"
+            }
+            val anyInvalid=predicates.singleOrNull() ?: "0"
+            val projection="$bytes,COALESCE(MAX(CASE WHEN $anyInvalid THEN 1 ELSE 0 END),0)"
+            db.query("SELECT $projection FROM `$table`").use { c ->
+                require(c.moveToFirst())
+                textBytes+=c.getLong(0);require(textBytes<=BackupLimits.MAX_JSON_BYTES)
+                require(c.getLong(1)==0L)
+            }
+        }
+    }
+
     /** Checks the whole restored state, including values inserted while append-only triggers were disabled. */
-    fun validateState(db: SupportSQLiteDatabase) {
+    fun validateState(db: SupportSQLiteDatabase) = validateState(db, false)
+
+    /** Shared legacy domain checks plus candidate references; measured coverage is checked by the global auditor. */
+    internal fun validateMeasuredCandidateState(db: SupportSQLiteDatabase) = validateState(db, true)
+
+    private fun validateState(db: SupportSQLiteDatabase, candidate: Boolean) {
         db.query("PRAGMA foreign_key_check").use { require(!it.moveToFirst()) { "Invalid reference" } }
         SchemaGuards.validateRestored(db)
-        ReferenceSchema.validate(db)
+        if(candidate) ReferenceSchema.validateCandidateReferences(db) else {ReferenceSchema.validate(db);InventoryEncoding.legacyOnly(db)}
         LabContext.validateState(db)
         db.query("SELECT id,definition_json,clinical_signature,zone FROM regimen_version").use{c->while(c.moveToNext()) {
             val definition=RegimenDefinition.read(c.getString(1));require(definition.signature()==c.getString(2) && definition.zone==c.getString(3)){"Invalid regimen snapshot"}

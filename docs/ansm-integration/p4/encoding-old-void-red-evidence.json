@@ -1,0 +1,6 @@
+{
+  "status": "EXPECTED_FAIL",
+  "failure": "net.plainnotes.app.data.PackageRestoreConflict: Stock or intake history changed after voiding this package",
+  "scope": "Published v1 void evidence omits the newly added storage column; unchanged old package must still restore",
+  "log_sha256": "cba147224fe77c61040b02daf9c5acc5c28cd2981f38eb7471f6f2c048f60fb5"
+}

@@ -1,0 +1,80 @@
+[  247.597342] [ 1637]     0  1637     1334       78       4        0         -1000 dhcpclient
+[  247.599137] [ 1653]     0  1653      497        9       3        0         -1000 sh
+[  247.600846] [ 1655]     0  1655      694       13       3        0         -1000 sleep
+[  247.602546] [ 1679]     0  1679     1397       92       4        0         -1000 ipv6proxy
+[  247.604369] [ 1682]     0  1682     1993      129       4        0         -1000 hostapd
+[  247.606070] [ 1684]     0  1684     1365       79       4        0         -1000 dhcpserver
+[  247.607882] [ 2608]     0  2608     3797      400       6        0         -1000 adbd
+[  247.609710] [ 2611]  1020  2611      657       71       3        0         -1000 mdnsd
+[  247.611091] [ 2744]     0  2744     5387      220       8        0         -1000 Binder:2744_2
+[  247.613069] [ 2745]  1000  2745    17829      497      23        0         -1000 surfaceflinger
+[  247.614884] [ 2746]     0  2746   226785     2326      83        0         -1000 main
+[  247.616364] [ 2749]     0  2749     1626      157       4        0         -1000 iptables-restor
+[  247.617996] [ 2760]     0  2760     1629      167       4        0         -1000 ip6tables-resto
+[  247.619592] [ 2793]  1000  2793   275879     7562     131        0          -900 system_server
+[  247.621329] [ 2887] 10046  2887   249010     2750      79        0           200 putmethod.latin
+[  247.622909] [ 2904] 10023  2904   272396    15060     109        0          -800 ndroid.systemui
+[  247.624618] [ 2955]  1001  2955   254333     3532      86        0          -800 m.android.phone
+[  247.626354] [ 3034]  1010  3034     3896      193       7        0         -1000 wpa_supplicant
+[  247.628228] [ 3088] 10001  3088   245689     2319      71        0           902 oadcastreceiver
+[  247.629827] [ 3127] 10012  3127   249765     2529      78        0           100 .android.dialer
+[  247.631887] [ 3186] 10036  3186   247287     2450      75        0           904 droid.deskclock
+[  247.633693] [ 3272] 10052  3272   245850     2299      73        0           902 id.printspooler
+[  247.635526] [ 3281] 10003  3281   246093     2478      75        0           900 viders.calendar
+[  247.637349] [ 3311]     0  3311     1480      118       4        0         -1000 logcat
+[  247.639279] [ 3316] 10008  3316   248047     3161      83        0           902 d.process.media
+[  247.644056] [ 3342] 10015  3342   256924     4637      95        0             0 droid.launcher3
+[  247.645898] [ 3370]  1000  3370   245632     2268      73        0           902 ndroid.keychain
+[  247.647614] [ 3434] 10014  3434   245559     2321      73        0           904 gedprovisioning
+[  247.649653] [ 3496] 10002  3496   247065     3411      87        0           700 d.process.acore
+[  247.651429] [ 3607] 10030  3607   246013     2295      73        0           904 android.camera2
+[  247.653749] [ 3625] 10007  3625   246794     2332      74        0           904 ndroid.contacts
+[  247.656598] [ 3644] 10043  3644   248163     2625      79        0           900 m.android.email
+[  247.659134] [ 3671] 10042  3671   246609     2338      75        0           900 droid.gallery3d
+[  247.676913] [ 3690] 10057  3690   248672     3191      83        0           900 droid.messaging
+[  247.678696] [ 3723] 10016  3723   246216     2303      75        0           904 ackageinstaller
+[  247.680765] [ 3747] 10011  3747   245336     2287      73        0           902 id.ext.services
+[  247.682809] [ 3833] 10006  3833   245730     2322      74        0           900 id.defcontainer
+[  247.684672] [ 3876]     0  3876     1406       85       4        0         -1000 sh
+[  247.686305] [ 3880]     0  3880     1480      118       4        0         -1000 logcat
+[  247.688009] [ 3913]     0  3913     1406       84       4        0         -1000 sh
+[  247.689653] [ 3915]     0  3915   198269     1293      61        0         -1000 main
+[  247.691483] [ 3924] 10065  3924   262613    18793      98        0             0 s.app.data.test
+[  247.693338] Out of memory: Kill process 3316 (d.process.media) score 926 or sacrifice child
+[  247.695106] Killed process 3316 (d.process.media) total-vm:992188kB, anon-rss:12644kB, file-rss:0kB
+[  254.905770] lowmemorykiller: Killing 'droid.deskclock' (3186), adj 906,\x0a   to free 9800kB on behalf of 'kswapd0' (525) because\x0a   cache 19964kB is below limit 105536kB for oom_score_adj 906\x0a   Free memory is 105532kB above reserved
+[  255.964209] lowmemorykiller: Killing 'ndroid.contacts' (3625), adj 906,\x0a   to free 9328kB on behalf of 'kswapd0' (525) because\x0a   cache 21276kB is below limit 105536kB for oom_score_adj 906\x0a   Free memory is 103720kB above reserved
+[  255.968889] lowmemorykiller: Killing 'android.camera2' (3607), adj 906,\x0a   to free 9180kB on behalf of 'kswapd0' (525) because\x0a   cache 21428kB is below limit 105536kB for oom_score_adj 906\x0a   Free memory is 103540kB above reserved
+[  255.973547] lowmemorykiller: Killing 'Binder:3607_2' (3620), adj 906,\x0a   to free 9296kB on behalf of 'kswapd0' (525) because\x0a   cache 21712kB is below limit 105536kB for oom_score_adj 906\x0a   Free memory is 104548kB above reserved
+[  256.110702] lowmemorykiller: Killing 'gedprovisioning' (3434), adj 904,\x0a   to free 9284kB on behalf of 'kswapd0' (525) because\x0a   cache 28736kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 86560kB above reserved
+[  256.118951] lowmemorykiller: Killing 'ackageinstaller' (3723), adj 904,\x0a   to free 9212kB on behalf of 'kswapd0' (525) because\x0a   cache 30180kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 86508kB above reserved
+[  256.146348] lowmemorykiller: Killing 'ndroid.keychain' (3370), adj 906,\x0a   to free 9072kB on behalf of 'kswapd0' (525) because\x0a   cache 30208kB is below limit 105536kB for oom_score_adj 906\x0a   Free memory is 103896kB above reserved
+[  256.619779] lowmemorykiller: Killing 'oadcastreceiver' (3088), adj 904,\x0a   to free 9276kB on behalf of 'kswapd0' (525) because\x0a   cache 7696kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 86332kB above reserved
+[  256.664963] lowmemorykiller: Killing 'id.printspooler' (3272), adj 904,\x0a   to free 9196kB on behalf of 'kswapd0' (525) because\x0a   cache 13948kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 82456kB above reserved
+[  256.670541] lowmemorykiller: Killing 'Binder:3272_1' (3299), adj 904,\x0a   to free 9536kB on behalf of 'kswapd0' (525) because\x0a   cache 14456kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 82096kB above reserved
+[  256.675877] lowmemorykiller: Killing 'id.ext.services' (3747), adj 904,\x0a   to free 9148kB on behalf of 'kswapd0' (525) because\x0a   cache 14760kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 84168kB above reserved
+[  256.680972] lowmemorykiller: Killing 'Jit thread pool' (3754), adj 904,\x0a   to free 9176kB on behalf of 'kswapd0' (525) because\x0a   cache 14788kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 84144kB above reserved
+[  256.685690] lowmemorykiller: Killing 'droid.messaging' (3690), adj 902,\x0a   to free 12764kB on behalf of 'kswapd0' (525) because\x0a   cache 14788kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 84084kB above reserved
+[  256.793637] lowmemorykiller: Killing 'm.android.email' (3644), adj 906,\x0a   to free 10504kB on behalf of 'kswapd0' (525) because\x0a   cache 46384kB is below limit 105536kB for oom_score_adj 906\x0a   Free memory is 90984kB above reserved
+[  256.800328] lowmemorykiller: Killing 'viders.calendar' (3281), adj 906,\x0a   to free 9912kB on behalf of 'kswapd0' (525) because\x0a   cache 47828kB is below limit 105536kB for oom_score_adj 906\x0a   Free memory is 93264kB above reserved
+[  257.048346] lowmemorykiller: Killing 'droid.gallery3d' (3671), adj 904,\x0a   to free 9364kB on behalf of 'kswapd0' (525) because\x0a   cache 6676kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 86176kB above reserved
+[  257.058303] lowmemorykiller: Killing 'id.defcontainer' (3833), adj 902,\x0a   to free 9288kB on behalf of 'kswapd0' (525) because\x0a   cache 8444kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 84788kB above reserved
+[  257.080339] lowmemorykiller: Killing 'd.process.acore' (3496), adj 900,\x0a   to free 13668kB on behalf of 'kswapd0' (525) because\x0a   cache 12016kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 78556kB above reserved
+[  257.086015] lowmemorykiller: Killing 'Jit thread pool' (3502), adj 900,\x0a   to free 14000kB on behalf of 'kswapd0' (525) because\x0a   cache 12016kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 80684kB above reserved
+[  257.156873] lowmemorykiller: Killing 'putmethod.latin' (2887), adj 200,\x0a   to free 11000kB on behalf of 'kswapd0' (525) because\x0a   cache 19424kB is below limit 60456kB for oom_score_adj 200\x0a   Free memory is 56836kB above reserved
+[  257.164262] lowmemorykiller: Killing 'Jit thread pool' (2892), adj 200,\x0a   to free 11012kB on behalf of 'kswapd0' (525) because\x0a   cache 20032kB is below limit 60456kB for oom_score_adj 200\x0a   Free memory is 53596kB above reserved
+[  257.193848] lowmemorykiller: Killing '.android.dialer' (3127), adj 100,\x0a   to free 10124kB on behalf of 'kswapd0' (525) because\x0a   cache 28392kB is below limit 49184kB for oom_score_adj 100\x0a   Free memory is 40308kB above reserved
+[  257.203895] lowmemorykiller: Killing 's.app.data.test' (3924), adj 0,\x0a   to free 211112kB on behalf of 'kswapd0' (525) because\x0a   cache 29228kB is below limit 37916kB for oom_score_adj 0\x0a   Free memory is 37700kB above reserved
+[  257.242138] binder: 2793:2793 transaction failed 29189/-22, size 100-0 line 3001
+[  257.325745] binder: release 3915:3923 transaction 103059 in, still active
+[  257.327116] binder: send failed reply for transaction 103059 to 2793:3975
+[  262.080261] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  262.180124] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  267.186865] init: processing action (qemu.adbd=start)
+[  267.188200] init: processing action (sys.usb.config=adb && sys.usb.configfs=0)
+[  267.189786] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  267.191852] init: write_file: Unable to open '/sys/class/android_usb/android0/idVendor': No such file or directory
+[  267.193842] init: write_file: Unable to open '/sys/class/android_usb/android0/idProduct': No such file or directory
+[  267.195967] init: write_file: Unable to open '/sys/class/android_usb/android0/functions': No such file or directory
+[  267.198149] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  268.823917] init: Untracked pid 3880 killed by signal 1

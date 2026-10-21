@@ -1,0 +1,6 @@
+            // Additional diagnostic only, after all acceptance metrics are frozen.
+            val streamSql=queryCounts.keys.single{it.startsWith("SELECT i.uuid,t.id,t.dose_record_id")}
+            val streamPlan=raw.query("EXPLAIN QUERY PLAN "+streamSql).use { c ->
+                JSONArray().apply{while(c.moveToNext())put(c.getString(c.getColumnIndexOrThrow("detail")))}
+            }
+            report.put("diagnostic_stream_query_plan",JSONObject().put("scope","TEST_ONLY_POST_BUDGET_READ_ONLY").put("plan",streamPlan))

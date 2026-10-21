@@ -1,0 +1,8 @@
+{
+  "run_id": 39430822597,
+  "artifact_id": 12268222179,
+  "sha256": "82ba91920e7875b50f29b982a52cae9031bd32a3e376d1604ee4d2184da7ce4c",
+  "zip_crc": "PASS",
+  "source_head": "948f8b9f2524f953ed0302025ef582b5dc961ee1",
+  "meaning": "Unchanged full-audit production baseline, not an incremental validator result"
+}

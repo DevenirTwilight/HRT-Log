@@ -1,0 +1,9 @@
+{
+  "github_api": "AVAILABLE",
+  "cli_actions_storage": "BLOCKED_PROXY_CONNECT_403",
+  "artifact_access": "RESOLVED_VIA_AUTHORIZED_GITHUB_CONNECTOR",
+  "official_zip_sha_crc": "PASS",
+  "user_network_action_required": false,
+  "signed_urls_or_credentials_stored": false,
+  "performance_reruns": 0
+}

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.MeasuredUsePayloadTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2026-10-21T09:10:44.756Z" hostname="4f13d57d08c1" time="0.243">
+  <properties/>
+  <testcase name="canonicalOrderIsDeterministicAndKeepsDifferentStockQuantitiesSeparate" classname="net.plainnotes.app.data.MeasuredUsePayloadTest" time="0.017"/>
+  <testcase name="callerMutationCannotAlterFrozenInput" classname="net.plainnotes.app.data.MeasuredUsePayloadTest" time="0.017"/>
+  <testcase name="unsupportedAlgorithmsFloatsAndInvalidClinicalContextAreRejected" classname="net.plainnotes.app.data.MeasuredUsePayloadTest" time="0.018"/>
+  <testcase name="embeddedDecoderKeepsEveryMalformedWireRejection" classname="net.plainnotes.app.data.MeasuredUsePayloadTest" time="0.021"/>
+  <testcase name="decodedFrozenRequestHasNoMutableCollectionAliases" classname="net.plainnotes.app.data.MeasuredUsePayloadTest" time="0.017"/>
+  <testcase name="absentActualSourceIsUnknownAndCannotBeReplacedWithZero" classname="net.plainnotes.app.data.MeasuredUsePayloadTest" time="0.018"/>
+  <testcase name="legacyBinaryFactIsCapturedWithoutBecomingADecimalStockAmount" classname="net.plainnotes.app.data.MeasuredUsePayloadTest" time="0.015"/>
+  <testcase name="originalEmbeddedRequestPathKeepsTheWireCorpusAndExactHashes" classname="net.plainnotes.app.data.MeasuredUsePayloadTest" time="0.024"/>
+  <testcase name="embeddedDecoderMatchesTheOriginalStringOracleForEveryWireCase" classname="net.plainnotes.app.data.MeasuredUsePayloadTest" time="0.028"/>
+  <testcase name="originalEmbeddedRequestPathRejectsMalformedAndAmbiguousFacts" classname="net.plainnotes.app.data.MeasuredUsePayloadTest" time="0.024"/>
+  <testcase name="embeddedTypedFactsCannotBeChangedThroughTheReturnedJsonOrUsesList" classname="net.plainnotes.app.data.MeasuredUsePayloadTest" time="0.022"/>
+  <testcase name="duplicatesUnconfirmedSourcesAndInvalidIdentityAreRejected" classname="net.plainnotes.app.data.MeasuredUsePayloadTest" time="0.019"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

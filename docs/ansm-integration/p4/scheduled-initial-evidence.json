@@ -1,0 +1,33 @@
+{
+  "status": "FAIL",
+  "totals": {
+    "tests": 370,
+    "failures": 5,
+    "errors": 0,
+    "skipped": 0
+  },
+  "failed_cases": [
+    {
+      "name": "scheduledWriteRollsBackRecordContextAndStockAtEachFailureBoundary",
+      "message": "java.lang.IllegalArgumentException: Required value was null."
+    },
+    {
+      "name": "scheduledBackfillReusesMissedIdAndSnapshotAndDoesNotGuessStockEffect",
+      "message": "java.lang.IllegalArgumentException: Required value was null."
+    },
+    {
+      "name": "scheduledActualUseKeepsPlannedFieldsAndRetriesWithoutSecondConsumption",
+      "message": "java.lang.IllegalArgumentException: Required value was null."
+    },
+    {
+      "name": "changedScheduledFactCannotPassFullAuditWithOnlyTheClinicalDoseUnchanged",
+      "message": "java.lang.IllegalArgumentException: Required value was null."
+    },
+    {
+      "name": "scheduledWriteRejectsChangedPlanOrCanceledSlotWithoutMutation",
+      "message": "java.lang.IllegalArgumentException: Required value was null."
+    }
+  ],
+  "reason": "Five new scheduled fixtures used an active medication without required soon/late minute fields; all failed in existing saveMedication before scheduled integration. Fix fixture to explicit 0/60, keep production validation.",
+  "log_sha256": "0671ad72b669c5ee1fd81b94991579c9b4a31c9a4e5ee963b2da044ca8349a0f"
+}

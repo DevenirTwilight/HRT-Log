@@ -1,0 +1,9 @@
+{
+  "result": "PASS",
+  "production_diff_from_948": [],
+  "checked_main_jars": [
+    "core/data/build/intermediates/compile_library_classes_jar/debug/bundleLibCompileToJarDebug/classes.jar",
+    "core/data/build/intermediates/runtime_library_classes_jar/debug/bundleLibRuntimeToJarDebug/classes.jar"
+  ],
+  "prototype_class_entries": []
+}

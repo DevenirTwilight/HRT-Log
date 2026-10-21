@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.Lab03CatalogIntegrationTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-20T08:13:46.972Z" hostname="2c2deac85eb5" time="0.184">
+  <properties/>
+  <testcase name="unchangedSamplePreservesTheOriginalInstantAndZoneAcrossDstOverlap" classname="net.plainnotes.app.Lab03CatalogIntegrationTest" time="0.058"/>
+  <testcase name="nonHormonalAndCustomCodesCannotEnterE2PointsOrCalibration" classname="net.plainnotes.app.Lab03CatalogIntegrationTest" time="0.038"/>
+  <testcase name="everyLegacyFactorRetainsItsExactDoubleResult" classname="net.plainnotes.app.Lab03CatalogIntegrationTest" time="0.014"/>
+  <testcase name="expandedAdaptersKeepRawIdentityAndUseAffineOrAnalyteSpecificConversions" classname="net.plainnotes.app.Lab03CatalogIntegrationTest" time="0.005"/>
+  <testcase name="searchKeepsCodeIdentityAccentsAndCategoryBoundaries" classname="net.plainnotes.app.Lab03CatalogIntegrationTest" time="0.027"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

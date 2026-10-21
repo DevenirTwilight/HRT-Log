@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "tests": 123,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "xml_sha256": "1894edebc2f0b525ab8fd8790abf0bd2476c11d882e65c0442ee05ad5cb6666a",
+  "native_contract_kotlin_compile": "PASS",
+  "production_sha256": "4ed43b4db12aaa33ab1328aacde377949bbf2638c143754ca97c2173dd685af5",
+  "differential_oracle": "Standalone original SQL projection equals captured full-audit projection for both real synthetic consumed packages; raw rows unchanged."
+}

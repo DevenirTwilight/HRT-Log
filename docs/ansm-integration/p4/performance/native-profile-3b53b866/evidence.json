@@ -1,0 +1,17 @@
+{
+  "source_head": "3b53b866870fca8ebc0e46f3124d2754b5ef4ee6",
+  "run": 39257570583,
+  "artifact_id": 12189760869,
+  "artifact_sha256": "b507a8b683bd74949478f645baf64f1ff3a35b8248a24d982561ed389c8f7098",
+  "zip_crc": "PASS",
+  "status": "INCOMPLETE_PROCESS_CRASH",
+  "last_stage": "full_encrypted_backup",
+  "post_restore_write_performance": "NOT_RUN",
+  "art_sampling": "NOT_RUN",
+  "crash_log_sha256": "5f1eeeadc0f92c2510be8ad19936959622d9a73f4873d70eb1e8ff65b91e1485",
+  "root_cause": "UNDETERMINED: process3914 died; low-memory messages present but no explicit causal kernel or Java OOM evidence",
+  "native_rss": "NOT_MEASURED",
+  "p4": "PRODUCTION_BLOCKED",
+  "release": "NOT_RUN",
+  "last_saved_peak_jvm_heap_bytes": 178666664
+}

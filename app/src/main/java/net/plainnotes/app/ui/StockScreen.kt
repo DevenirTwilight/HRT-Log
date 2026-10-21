@@ -38,7 +38,7 @@ const val EXPIRY_WARNING_DAYS = net.plainnotes.app.reminder.StockAlerts.EXPIRY_W
  * What the stock page shows for one medication. Days and the low-stock label come from the shared per-dose
  * [StockForecast] (B4), the same one the calendar and stock reminders use; packages and expiry come from containers.
  */
-class StockSummary(val open: ContainerEntity?, val remaining: Double, val sealedCount: Int, val forecast: StockForecast?,
+class StockSummary(val open: ContainerEntity?, val remaining: Double?, val sealedCount: Int, val forecast: StockForecast?,
                    val daysLeft: Int?, val low: Boolean, val expiresOn: LocalDate?) {
     val tracked get() = open != null || sealedCount > 0
     fun expiringSoon(today: LocalDate) = expiresOn != null && ChronoUnit.DAYS.between(today, expiresOn) <= EXPIRY_WARNING_DAYS
@@ -46,15 +46,17 @@ class StockSummary(val open: ContainerEntity?, val remaining: Double, val sealed
 fun stockSummary(m: MedicationEntity, containers: List<ContainerEntity>, forecast: StockForecast?, today: LocalDate, zone: ZoneId): StockSummary {
     val mine = containers.filter { it.medication_id == m.id }
     val open = mine.filter { it.state == "IN_USE" }.minByOrNull { it.opened_on ?: "" }
-    val remaining = StockForecasts.available(m.id, containers) ?: 0.0
-    val expires = open?.opened_on?.let { d -> m.expiry_days_after_open?.let { LocalDate.parse(d).plusDays(it.toLong()) } }
-    return StockSummary(open, remaining, mine.count { it.state == "SEALED" }, forecast, forecast?.daysUntilShort(today, zone),
-        forecast?.isLow(today, zone) == true, expires)
+    val effectiveForecast=if(mine.any{it.inventory_encoding!="LEGACY_SCALAR" && it.state in setOf("SEALED","IN_USE","EMPTY")} && forecast?.status!=StockForecast.Status.UNKNOWN)StockForecasts.forecast(m.id,containers,emptyList()) else forecast
+    val remaining = if(effectiveForecast?.status==StockForecast.Status.UNKNOWN)null else StockForecasts.available(m.id, containers)
+    val expires = open?.takeIf{it.inventory_encoding=="LEGACY_SCALAR"}?.opened_on?.let { d -> m.expiry_days_after_open?.let { LocalDate.parse(d).plusDays(it.toLong()) } }
+    return StockSummary(open, remaining, mine.count { it.state == "SEALED" }, effectiveForecast, effectiveForecast?.daysUntilShort(today, zone),
+        effectiveForecast?.isLow(today, zone) == true, expires)
 }
 
 /** One sentence for a medication's shared forecast, plus whether it is a warning (calendar card and stock page). */
 @Composable fun stockForecastText(f: StockForecast?, m: MedicationEntity, today: LocalDate, zone: ZoneId): Pair<String, Boolean> =
     when (f?.status ?: StockForecast.Status.UNTRACKED) {
+        StockForecast.Status.UNKNOWN -> stringResource(R.string.forecast_needs_check) to false
         StockForecast.Status.UNTRACKED -> stringResource(R.string.forecast_untracked) to false
         StockForecast.Status.NO_PLAN -> stringResource(R.string.forecast_no_plan, formatDose(f!!.available ?: 0.0, m.unit)) to false
         // Date and day count both name the first dose the stock cannot cover, in calendar days.
@@ -92,6 +94,13 @@ val CHECKABLE_STATES = setOf("IN_USE", "EMPTY")
                                   onReplace: () -> Unit, onCheck: () -> Unit, onAdd: () -> Unit, onManage: () -> Unit, schedule: net.plainnotes.app.ScheduleSummary? = null,
                                   boxes: List<ContainerEntity> = emptyList()) {
     val c = MaterialTheme.colorScheme
+    if(s.forecast?.status==StockForecast.Status.UNKNOWN) {
+        SectionCard(null,Modifier.testTag("stock-card-${m.id}")) {
+            Text(m.name,style=MaterialTheme.typography.titleMedium)
+            Text(stringResource(R.string.forecast_needs_check),style=MaterialTheme.typography.bodyMedium,modifier=Modifier.testTag("stock-unknown-${m.id}"))
+        }
+        return
+    }
     // UI-01 D: low stock (the shared forecast's rule) is a tertiary card with the days in words, not only a colour.
     SectionCard(null, Modifier.testTag("stock-card-${m.id}"), container = if (s.low) c.tertiaryContainer else c.surfaceContainerLow) {
         // Three different things: open the next real package, correct an existing one, add packages really obtained.
@@ -123,7 +132,7 @@ val CHECKABLE_STATES = setOf("IN_USE", "EMPTY")
         } else {
             Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(Spacing.s)) {
                 // UI-07 C: the amount left in the stat style (28 sp, capped at 1.3× font size).
-                Text(formatDose(s.remaining, m.unit), style = NotesTheme.typeExtra.statNumber, modifier = Modifier.testTag("stock-remaining-${m.id}"))
+                Text(formatDose(requireNotNull(s.remaining), m.unit), style = NotesTheme.typeExtra.statNumber, modifier = Modifier.testTag("stock-remaining-${m.id}"))
                 // UI-05 C: the days the shared forecast already computed; nothing without a plan or when it lasts the whole window.
                 s.daysLeft?.takeIf { s.forecast?.lastCovered != null }?.let { d ->
                     Text(stringResource(R.string.stock_about_days, d), style = MaterialTheme.typography.titleSmall.tnum(),

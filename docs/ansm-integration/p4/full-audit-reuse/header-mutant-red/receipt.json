@@ -1,0 +1,12 @@
+{
+  "mutant": "Temporarily disable all fresh row-header guards after pure memo hit",
+  "expected": "RED",
+  "actual": "RED",
+  "failure": "java.lang.AssertionError: Malformed row survived pure memo",
+  "restored_source": "0dd02a80",
+  "production_mutant_committed": false,
+  "files": {
+    "gradle.log": "028572f14c5e4212328451ddb8f8b17e1495afec8f7bcb904d2177abbb1bd311",
+    "TEST-net.plainnotes.app.data.MeasuredConsumptionStoreTest.xml": "43777c0194ee5e25212ede81bf76a72c109039010d925c8c083cedfd1505d6ff"
+  }
+}

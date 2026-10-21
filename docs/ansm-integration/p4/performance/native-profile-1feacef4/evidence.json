@@ -1,0 +1,17 @@
+{
+  "source_head": "1feacef41049cfca0d76e183d417373a171302f7",
+  "run": 39226229051,
+  "artifact_id": 12175550041,
+  "artifact_sha256": "08ae367b94b1c6ddcab4cb00db557118a5b44a378c9742fa966693ba4b52d851",
+  "artifact_sha256_verification": "PASS",
+  "zip_crc": "PASS",
+  "trace_sha256": "0b8782a0d4832a27e2eddac5eedf9f5fad8b2d8748c37b7244c5f257c9368c87",
+  "trace_gzip_sha256": "626605e133be9be9fedecf93124871dd902d9c864aff5aee91f9455dd1693e79",
+  "parser_source_sha256": "b291a87edf240f5e93c6411a810c7f2ad5c946b373c0df1427d5aa42d09f6190",
+  "parser_reproduction": "PASS",
+  "profile": "PARTIAL_DIAGNOSTIC",
+  "records": 18694,
+  "performance": "FAIL: writes6163.48682/6110.58547/7005.45267ms>5000. Indexed plan and full projection equality retained; no causal timing claim across hosted runs.",
+  "physical": "NOT_RUN",
+  "p4": "PRODUCTION_BLOCKED"
+}

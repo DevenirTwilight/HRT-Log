@@ -1,0 +1,10 @@
+{
+  "base_head": "66ea8d56f96b80b72247475109bbc222658fb2e8",
+  "production_change": "NOT_APPLIED",
+  "result": "EXPECTED_RED",
+  "tests": 1,
+  "failures": 1,
+  "failure_message": "java.lang.AssertionError: Projection must retain both operation and clinical revision checks without separate point queries expected:<[0, 0]> but was:<[1, 1]>",
+  "log_sha256": "776ce0842fb2eef92b344892137053a25a9cfecedb27b325af43c29ad9a149a5",
+  "junit_sha256": "1a9822bc21d6624f4ca32b6c19a11a0ca3c175f62ae4f23b18ba91e7adf94984"
+}

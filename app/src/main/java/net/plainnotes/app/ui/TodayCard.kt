@@ -285,6 +285,14 @@ private fun recordStatus(r: RecordEntity) = statusTextRes(StatusStyles.ofRecord(
  */
 @Composable internal fun HomeStockCard(meds: List<MedicationEntity>, forecasts: Map<Long, StockForecast>, today: LocalDate, zone: ZoneId, onStock: () -> Unit,
                                        onAdd: (MedicationEntity) -> Unit = {}) {
+    val unknown=meds.filter {forecasts[it.id]?.status==StockForecast.Status.UNKNOWN}
+    if(unknown.isNotEmpty()) Surface(color=MaterialTheme.colorScheme.surfaceContainerLow,shape=MaterialTheme.shapes.large,modifier=Modifier.fillMaxWidth().testTag("home-stock-unknown")) {
+        Column(Modifier.padding(Spacing.l),verticalArrangement=Arrangement.spacedBy(Spacing.s)) {
+            Text(stringResource(R.string.forecast_needs_check),style=MaterialTheme.typography.bodyMedium)
+            unknown.forEach {Text(it.name,style=MaterialTheme.typography.titleSmall)}
+            OutlinedButton(onStock,Modifier.heightIn(min=48.dp).testTag("home-stock-unknown-view")) {Text(stringResource(R.string.home_stock_view))}
+        }
+    }
     val low = lowStockMedications(meds, forecasts, today, zone)
     if (low.isEmpty()) return
     val c = MaterialTheme.colorScheme

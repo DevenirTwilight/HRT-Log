@@ -1,0 +1,15 @@
+{
+  "source": "47f115515d6010f93fef2cea047d7dc8e4c8bbb4",
+  "production_source": "9d304e58fd92f0171fd6ddd272f79dbe6ece3cb4",
+  "run": 39555630970,
+  "mode": "restore-process-death-only",
+  "expected_check_name": "restore-process-death-api26-only",
+  "large_performance": "NOT_RUN_CONTRACT_ONLY",
+  "max_small_contract_jobs": 1,
+  "cases": [
+    "ROWS_DELETED",
+    "ROWS_INSERTED"
+  ],
+  "status_at_checkpoint": "IN_PROGRESS",
+  "additional_large_runs_allowed": false
+}

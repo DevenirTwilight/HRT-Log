@@ -21,10 +21,16 @@ data class NotesState(val medications:List<MedicationEntity> = emptyList(),val s
 data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEntity?,val rule:RuleEntity?,val times:List<TimeEntity>,
                           val recognized:net.plainnotes.app.timeline.RecognizedSchedule?=null)
 @HiltViewModel class NotesViewModel @Inject constructor(repository:NotesRepository,private val reminders:ReminderCoordinator,
-    @dagger.hilt.android.qualifiers.ApplicationContext private val app:android.content.Context):ViewModel() {
+    @dagger.hilt.android.qualifiers.ApplicationContext private val app:android.content.Context,
+    private val measuredSaves:MeasuredSaveCoordinator=MeasuredSaveCoordinator(repository)):ViewModel() {
     // One activity owns one data space; an old activity must never follow a shell switch.
     private val repo=repository.pinnedTo(Space.PRIMARY)
     val medicationReferences=net.plainnotes.app.reference.MedicationReferenceController(repo,viewModelScope)
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val measuredWriteProgress=measuredSaves.latestTask.flatMapLatest { task ->
+        task?.progress ?: flowOf(null)
+    }.stateIn(viewModelScope,SharingStarted.Eagerly,null)
+    fun checkMeasuredSave():Boolean=measuredSaves.latestTask.value?.let{measuredSaves.reconcile(it)} ?: false
     private var refreshJob:Job?=null
     private var refreshRevision=0L
     private var concJob:Job?=null
@@ -41,13 +47,20 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     var override=MutableStateFlow<SlotOverride?>(null);private set
     private var calendarStart=LocalDate.now()
     fun calendarFrom(value:LocalDate?){calendarStart=value ?: LocalDate.now();refresh()}
-    init { refresh();viewModelScope.launch{while(isActive){delay(30000);if(!readFailureShown)refresh()}} }
+    init {
+        refresh()
+        viewModelScope.launch { measuredSaves.latestTask.filterNotNull().collectLatest { task ->
+            task.progress.first{it.status!=net.plainnotes.app.domain.write.WriteStatus.PENDING}
+            if(task.progress.value.status==net.plainnotes.app.domain.write.WriteStatus.SUCCESS)refresh().join()
+        }}
+        viewModelScope.launch{while(isActive){delay(30000);if(!readFailureShown)refresh()}}
+    }
     /** All pages read the same committed snapshot; a newer refresh cancels older work. */
     fun refresh():Job {
         refreshJob?.cancel();concJob?.cancel()
         return viewModelScope.launch { try {
             val today=LocalDate.now();val now=Instant.now();val start=calendarStart
-            val snapshot=repo.transaction { dao ->
+            val snapshot=try { repo.transaction { dao ->
                 val slots=repo.calendar(now,displayFrom=start)
                 val meds=dao.medications()
                 val schedules=dao.rules().filter{it.effective_until_utc==null}.associate { r ->
@@ -64,11 +77,26 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
                 val stockForecasts=repo.stockForecasts(now)
                 NotesState(meds,slots,dao.appointments(),mutable.value.error,false,schedules,profiles,start,dao.rules().associate{it.id to it.config_snapshot}) to
                     ExtraState(dao.records(),dao.containers(),repo.checkinItems(),dao.scores("0001-01-01",today.toString()),dao.notes("0001-01-01",today.toString()),upcoming,dao.stageReviews(),dao.symptomChecks("0001-01-01",today.toString()),dao.reviewEffects(),dao.regimens(),dao.regimenLinks(),dao.milestones(),dao.labs(),dao.labContexts(),dao.visitQuestions(),dao.visitPacks(),dao.historyPeriods(),dao.annotations(),dao.trash().filter{it.state==Trash.TRASHED},dao.deletedRecords(),stockForecasts,dao.containersWithLedger().toSet(),dao.voidedContainers(),dao.containersWithConsumption().toSet(),referenceEpoch=dao.referencePreviewEpoch(),labPanels=dao.labPanels())
+            }}catch(_:MeasuredSaveBusyException) {
+                displaySnapshot(repo.readNotesSnapshot(now,ZoneId.systemDefault(),start,today),start)
             }
             ensureActive()
             mutable.value=snapshot.first.copy(error=mutable.value.error);extra.value=snapshot.second;refreshRevision++;readFailureShown=false
             loadConcentration()
         }catch(e:CancellationException){throw e}catch(e:Exception){readFailure(e)} }.also{refreshJob=it}
+    }
+    /** Same display DTOs; the read path has no maintenance or arbitrary DAO write capability. */
+    private fun displaySnapshot(s:NotesReadSnapshot,start:LocalDate):Pair<NotesState,ExtraState> {
+        val schedules=s.rules.filter{it.effective_until_utc==null}.associate { r ->
+            val times=s.times.getValue(r.id)
+            r.medication_id to ScheduleSummary(RuleKind.valueOf(r.kind),r.interval,
+                DayOfWeek.entries.filter{r.weekday_mask and (1 shl (it.value-1))!=0}.toSet(),
+                times.map{LocalTime.parse(it.local_time)},r.dose_snapshot,times.map{it.dose_override})
+        }
+        return NotesState(s.medications,s.slots,s.appointments,mutable.value.error,false,schedules,s.profiles,start,s.rules.associate{it.id to it.config_snapshot}) to
+            ExtraState(s.records,s.containers,s.items,s.scores,s.notes,s.upcoming,s.reviews,s.symptoms,s.effects,s.regimens,s.regimenLinks,
+                s.milestones,s.labs,s.labContexts,s.visitQuestions,s.visitPacks,s.historyPeriods,s.annotations,s.trash,s.trashedRecords,
+                s.stockForecasts,s.containersWithLedger,s.voidedContainers,s.containersWithConsumption,s.referenceEpoch,s.labPanels)
     }
     suspend fun recordedReferenceHistory(epoch:String,record:Long)=repo.recordedReferenceHistory(epoch,record)
     fun clearError(){mutable.value=mutable.value.copy(error=null)}
@@ -93,10 +121,13 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         conc.value=conc.value.copy(loading=true)
         val now=Instant.now()
         data class Inputs(val meds:List<MedicationEntity>,val profiles:Map<Long,ProfileEntity>,val records:List<RecordEntity>,val labs:List<LabValueEntity>,val weight:Double?,val planned:List<TimelineEntry>,val snapshots:Map<Long,String>)
-        val inputs=repo.transaction { dao ->
+        val inputs=try { repo.transaction { dao ->
             val meds=dao.medications()
             Inputs(meds,meds.mapNotNull{m->dao.profile(m.id)?.let{m.id to it}}.toMap(),dao.records(),dao.labs(),dao.pkSettings()?.current_weight_kg,
                 repo.planned(now.minusSeconds(3600),now.plusSeconds(ConcentrationCalculator.FORECAST_DAYS*86400),now),dao.rules().associate{it.id to it.config_snapshot})
+        }}catch(_:MeasuredSaveBusyException) {
+            val read=repo.readCalculationInputs(now,now.minusSeconds(3600),now.plusSeconds(ConcentrationCalculator.FORECAST_DAYS*86400),ZoneId.systemDefault())
+            Inputs(read.medications,read.profiles,read.records,read.labs,read.weight,read.planned,read.snapshots)
         }
         val (meds,profiles,records,labs,weight,planned,snapshots)=inputs
         val settings=concSettings

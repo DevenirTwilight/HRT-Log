@@ -1,0 +1,9 @@
+{
+  "source": "6c871bfdbf7354825f1d6c7edb2dbfad96424a74",
+  "status": "FAIL_EXPECTED",
+  "tests": 1,
+  "failures": 1,
+  "failure": "java.lang.AssertionError: Complete operation stream must retain clinical validation without per-record SQLite cursors expected:<0> but was:<1>",
+  "xml_sha256": "22f753ad29491c69d5e449772a47206a52c9604883cdb45e23654507b532638c",
+  "production_changed_before_red": false
+}

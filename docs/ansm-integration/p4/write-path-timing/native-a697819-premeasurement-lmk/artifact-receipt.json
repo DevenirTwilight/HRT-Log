@@ -1,0 +1,18 @@
+{
+  "head": "a697819e4c728b3e2802395d9ccc9023b1dd69b1",
+  "run": 39470688472,
+  "job": 118793653642,
+  "artifact_id": 12286459072,
+  "zip_size": 18254,
+  "official_and_download_sha256": "2110204250dad878a0bc95e8ab64f29cb9ce0b0fe698ff3af74dca5ffb1369a9",
+  "zip_crc": "PASS",
+  "scope": "PRE_MEASUREMENT_FAILURE",
+  "actual_write_decomposition": "NOT_RUN",
+  "all_acceptance_phases": "NOT_RUN",
+  "last_reported_stage": "synthetic_fixture_expansion",
+  "test_pid": 3924,
+  "lmk_reported_rss_kib_at_kill": 211112,
+  "rss_is_not_peak_or_java_heap": true,
+  "observer_recording_started": false,
+  "causality_of_new_adapter": "UNKNOWN"
+}

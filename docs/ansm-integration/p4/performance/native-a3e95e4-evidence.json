@@ -1,0 +1,11 @@
+{
+  "status": "FAIL",
+  "head": "a3e95e48251a8fe39399f77acab8ebd5fb8aa6ec",
+  "run": 39064593821,
+  "artifact_id": 12112802889,
+  "artifact_sha256": "2d03a2f43170bad6dcf676ba15313dd3772969cd57f65faf8eda93940bb34f1c",
+  "zip_crc": "PASS",
+  "report": "native-a3e95e4-report.json",
+  "cause": "Four measured budgets still exceeded. Full encrypted restore now81.10s below120s; writes17.6\u201317.8s still exceed5s. Completed run, not a crash.",
+  "budgets_changed": false
+}

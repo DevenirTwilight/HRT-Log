@@ -1,0 +1,103 @@
+{
+  "scope": "DIAGNOSTIC_COUNTED_SQL_NOT_ACCEPTANCE",
+  "queries": 62219,
+  "top_query_templates": [
+    {
+      "sql": "SELECT * FROM `reference_identity` WHERE uuid=?",
+      "count": 12007
+    },
+    {
+      "sql": "SELECT * FROM `reference_event` WHERE operation_uuid=?",
+      "count": 8006
+    },
+    {
+      "sql": "SELECT * FROM `record_reference_capture` WHERE uuid=?",
+      "count": 6009
+    },
+    {
+      "sql": "SELECT * FROM `reference_snapshot` WHERE uuid=?",
+      "count": 6000
+    },
+    {
+      "sql": "SELECT * FROM `measured_operation` WHERE operation_uuid=?",
+      "count": 4006
+    },
+    {
+      "sql": "SELECT * FROM `measured_allocation` WHERE uuid=?",
+      "count": 4006
+    },
+    {
+      "sql": "SELECT id,dose_record_id,dose_revision,operation_id,kind,used_delta,reversal_of_id FROM supply_transaction WHERE container_id=? ORDER BY id",
+      "count": 4000
+    },
+    {
+      "sql": "SELECT * FROM `measured_allocation` WHERE ledger_entry_id=?",
+      "count": 2003
+    },
+    {
+      "sql": "SELECT revision FROM dose_record WHERE id=?",
+      "count": 2003
+    },
+    {
+      "sql": "SELECT COUNT(*) FROM measured_allocation WHERE operation_uuid=? AND container_uuid=?",
+      "count": 2003
+    },
+    {
+      "sql": "SELECT uuid FROM `measured_allocation` WHERE operation_uuid=?",
+      "count": 2003
+    },
+    {
+      "sql": "SELECT revision,taken_utc,taken_zone,status,actual_dose,config_snapshot,rule_version_id,slot_key,scheduled_utc,scheduled_zone,planned_dose,late_after_minutes_snapshot FROM dose_record WHERE id=?",
+      "count": 2003
+    },
+    {
+      "sql": "SELECT uuid FROM `record_reference_capture` WHERE record_uuid=? AND record_revision=? AND kind='CONFIRM' AND container_uuid=?",
+      "count": 2003
+    },
+    {
+      "sql": "SELECT * FROM `reference_dataset` WHERE uuid=?",
+      "count": 2000
+    },
+    {
+      "sql": "SELECT id,medication_id,capacity,initial_used_amount,used_amount,inventory_encoding FROM supply_container WHERE id=?",
+      "count": 2000
+    },
+    {
+      "sql": "SELECT * FROM `reference_event` WHERE subject_uuid=? ORDER BY revision LIMIT 1",
+      "count": 2000
+    }
+  ],
+  "string_utf8_bytes_by_column": {
+    "name": 2832,
+    "type": 1410,
+    "uuid": 2089944,
+    "payload_json": 7248000,
+    "payload_sha256": 896576,
+    "kind": 292193,
+    "namespace": 96000,
+    "source_version": 148000,
+    "operation_uuid": 936972,
+    "dataset_uuid": 1657332,
+    "subject_uuid": 360216,
+    "action": 40024,
+    "snapshot_uuid": 360216,
+    "request_sha256": 896768,
+    "record_uuid": 360540,
+    "actual_snapshot_uuid": 216324,
+    "container_uuid": 432648,
+    "state": 12000,
+    "owner_uuid": 360216,
+    "inventory_encoding": 34000,
+    "operation_id": 144216,
+    "presentation_event_uuid": 216324,
+    "quantity": 18027,
+    "unit": 36054,
+    "input_json": 10740492,
+    "taken_zone": 6009,
+    "status": 14021,
+    "config_snapshot": 280420
+  },
+  "head_before_read_cache": "2c2dcbc98bd9e5e291441480d282623c532f4fa3",
+  "fixture": "14600 initial records,2000 containers; counted after three real post-restore writes",
+  "report_sha256": "59b033cd7b44e4a393f008e16bb18b379ee2796dbfee2d0f6af5ee72037d16f9"
+}

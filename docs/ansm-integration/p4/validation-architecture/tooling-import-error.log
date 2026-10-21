@@ -1,0 +1,140 @@
+EE.....................EE..E.EEEE.................E.
+======================================================================
+ERROR: test_ansm03_boundary (unittest.loader._FailedTest.test_ansm03_boundary)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_ansm03_boundary
+Traceback (most recent call last):
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/loader.py", line 137, in loadTestsFromName
+    module = __import__(module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/HRT-Log-p4/scripts/test_ansm03_boundary.py", line 3, in <module>
+    import ansm03_report as report
+ModuleNotFoundError: No module named 'ansm03_report'
+
+
+======================================================================
+ERROR: test_ansm03b0_isolation (unittest.loader._FailedTest.test_ansm03b0_isolation)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_ansm03b0_isolation
+Traceback (most recent call last):
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/loader.py", line 137, in loadTestsFromName
+    module = __import__(module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/HRT-Log-p4/scripts/test_ansm03b0_isolation.py", line 5, in <module>
+    import check_ansm03b0_isolation as guard
+ModuleNotFoundError: No module named 'check_ansm03b0_isolation'
+
+
+======================================================================
+ERROR: test_size_fence_and_incomplete_transfer_do_not_create_a_profile (scripts.test_ansm_native_trace.ArtSamplingCollectionTest.test_size_fence_and_incomplete_transfer_do_not_create_a_profile)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/HRT-Log-p4/scripts/test_ansm_native_trace.py", line 91, in test_size_fence_and_incomplete_transfer_do_not_create_a_profile
+    with self.assertRaises(ValueError):collector.collect_trace(self.path,Path(directory),self.fake(calls,size=33*1024*1024))
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/HRT-Log-p4/scripts/collect_ansm_native_performance.py", line 74, in collect_trace
+    from summarize_ansm_method_trace import MAX_TRACE_BYTES, summarize
+ModuleNotFoundError: No module named 'summarize_ansm_method_trace'
+
+======================================================================
+ERROR: test_synthetic_trace_is_hashed_and_summarized_without_affecting_budget_failure (scripts.test_ansm_native_trace.ArtSamplingCollectionTest.test_synthetic_trace_is_hashed_and_summarized_without_affecting_budget_failure)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/HRT-Log-p4/scripts/test_ansm_native_trace.py", line 102, in test_synthetic_trace_is_hashed_and_summarized_without_affecting_budget_failure
+    out=collector.collect_trace(self.path,Path(directory),self.fake([]))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/HRT-Log-p4/scripts/collect_ansm_native_performance.py", line 74, in collect_trace
+    from summarize_ansm_method_trace import MAX_TRACE_BYTES, summarize
+ModuleNotFoundError: No module named 'summarize_ansm_method_trace'
+
+======================================================================
+ERROR: test_full_pre_cleanup_report_survives_truncated_log_without_promoting_failed_budget (scripts.test_ansm_native_trace.ArtSamplingHandshakeTest.test_full_pre_cleanup_report_survives_truncated_log_without_promoting_failed_budget)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/HRT-Log-p4/scripts/test_ansm_native_trace.py", line 190, in test_full_pre_cleanup_report_survives_truncated_log_without_promoting_failed_budget
+    self.assertTrue(collector.watch_trace_once(out,self.token,execute))
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/HRT-Log-p4/scripts/collect_ansm_native_performance.py", line 160, in watch_trace_once
+    meta = collect_trace(folder+'large-ten-year.json', out, execute, expected_size=value['bytes'])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/HRT-Log-p4/scripts/collect_ansm_native_performance.py", line 74, in collect_trace
+    from summarize_ansm_method_trace import MAX_TRACE_BYTES, summarize
+ModuleNotFoundError: No module named 'summarize_ansm_method_trace'
+
+======================================================================
+ERROR: test_pre_cleanup_capture_ack_and_post_cleanup_cache_are_bound_to_same_nonce (scripts.test_ansm_native_trace.ArtSamplingHandshakeTest.test_pre_cleanup_capture_ack_and_post_cleanup_cache_are_bound_to_same_nonce)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/HRT-Log-p4/scripts/test_ansm_native_trace.py", line 174, in test_pre_cleanup_capture_ack_and_post_cleanup_cache_are_bound_to_same_nonce
+    self.assertTrue(collector.watch_trace_once(out,self.token,execute))
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/HRT-Log-p4/scripts/collect_ansm_native_performance.py", line 160, in watch_trace_once
+    meta = collect_trace(folder+'large-ten-year.json', out, execute, expected_size=value['bytes'])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/HRT-Log-p4/scripts/collect_ansm_native_performance.py", line 74, in collect_trace
+    from summarize_ansm_method_trace import MAX_TRACE_BYTES, summarize
+ModuleNotFoundError: No module named 'summarize_ansm_method_trace'
+
+======================================================================
+ERROR: test_ready_log_signal_drives_capture_before_test_can_exit (scripts.test_ansm_native_trace.ArtSamplingHandshakeTest.test_ready_log_signal_drives_capture_before_test_can_exit)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/HRT-Log-p4/scripts/test_ansm_native_trace.py", line 250, in test_ready_log_signal_drives_capture_before_test_can_exit
+    collector.watch_trace(out,threading.Event(),execute,expected_token=self.token)
+  File "/workspace/HRT-Log-p4/scripts/collect_ansm_native_performance.py", line 221, in watch_trace
+    elif watch_trace_once(out,token,execute,internal=scope=='SYNTHETIC_ART_INTERNAL_TRACE_READY_V1'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/HRT-Log-p4/scripts/collect_ansm_native_performance.py", line 160, in watch_trace_once
+    meta = collect_trace(folder+'large-ten-year.json', out, execute, expected_size=value['bytes'])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/HRT-Log-p4/scripts/collect_ansm_native_performance.py", line 74, in collect_trace
+    from summarize_ansm_method_trace import MAX_TRACE_BYTES, summarize
+ModuleNotFoundError: No module named 'summarize_ansm_method_trace'
+
+======================================================================
+ERROR: test_retained_report_rejects_wrong_run_tampered_trace_and_oversized_metadata (scripts.test_ansm_native_trace.ArtSamplingHandshakeTest.test_retained_report_rejects_wrong_run_tampered_trace_and_oversized_metadata)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/HRT-Log-p4/scripts/test_ansm_native_trace.py", line 208, in test_retained_report_rejects_wrong_run_tampered_trace_and_oversized_metadata
+    self.assertTrue(collector.watch_trace_once(out,self.token,execute))
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/HRT-Log-p4/scripts/collect_ansm_native_performance.py", line 160, in watch_trace_once
+    meta = collect_trace(folder+'large-ten-year.json', out, execute, expected_size=value['bytes'])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/HRT-Log-p4/scripts/collect_ansm_native_performance.py", line 74, in collect_trace
+    from summarize_ansm_method_trace import MAX_TRACE_BYTES, summarize
+ModuleNotFoundError: No module named 'summarize_ansm_method_trace'
+
+======================================================================
+ERROR: test_unsupported_format_preserves_raw_trace_but_cannot_claim_parsed_profile (scripts.test_ansm_native_trace.ArtSamplingHandshakeTest.test_unsupported_format_preserves_raw_trace_but_cannot_claim_parsed_profile)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/HRT-Log-p4/scripts/test_ansm_native_trace.py", line 226, in test_unsupported_format_preserves_raw_trace_but_cannot_claim_parsed_profile
+    self.assertTrue(collector.watch_trace_once(out,self.token,execute))
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/HRT-Log-p4/scripts/collect_ansm_native_performance.py", line 160, in watch_trace_once
+    meta = collect_trace(folder+'large-ten-year.json', out, execute, expected_size=value['bytes'])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/HRT-Log-p4/scripts/collect_ansm_native_performance.py", line 74, in collect_trace
+    from summarize_ansm_method_trace import MAX_TRACE_BYTES, summarize
+ModuleNotFoundError: No module named 'summarize_ansm_method_trace'
+
+======================================================================
+ERROR: test_internal_trace_and_ack_are_complete_before_cleanup_and_reusable_after_it (scripts.test_ansm_native_trace.InternalTransportPreflightTest.test_internal_trace_and_ack_are_complete_before_cleanup_and_reusable_after_it)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/HRT-Log-p4/scripts/test_ansm_native_trace.py", line 377, in test_internal_trace_and_ack_are_complete_before_cleanup_and_reusable_after_it
+    self.assertTrue(collector.watch_trace_once(out,self.token,execute,internal=True))
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/HRT-Log-p4/scripts/collect_ansm_native_performance.py", line 160, in watch_trace_once
+    meta = collect_trace(folder+'large-ten-year.json', out, execute, expected_size=value['bytes'])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/HRT-Log-p4/scripts/collect_ansm_native_performance.py", line 74, in collect_trace
+    from summarize_ansm_method_trace import MAX_TRACE_BYTES, summarize
+ModuleNotFoundError: No module named 'summarize_ansm_method_trace'
+
+----------------------------------------------------------------------
+Ran 52 tests in 0.119s
+
+FAILED (errors=10)
+Synthetic API26 emulator ART heap properties verified192m; test Runtime.maxMemory and measured budgets still required

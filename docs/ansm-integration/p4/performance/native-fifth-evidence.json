@@ -1,0 +1,13 @@
+{
+  "status": "P4_BLOCKED",
+  "run": 39047684726,
+  "head": "6e05960be2c754387bff2d8e8be397c6fbce381d",
+  "artifact_id": 12106831786,
+  "artifact_sha256": "9845b7a62779a434de4677535a92980b073370ae19135ea86f0e8e07693866ac",
+  "zip_crc": "PASS",
+  "report": "native-fifth-report.json",
+  "cause": "Four measured time budgets exceeded; run completed, not a process crash. No budgets changed.",
+  "physical_hardware": "NOT_RUN",
+  "rss_pss": "UNAVAILABLE",
+  "full_saf_export_disk": "NOT_RUN"
+}

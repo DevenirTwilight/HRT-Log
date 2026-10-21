@@ -1,0 +1,665 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>Test results - Class net.plainnotes.app.data.MeasuredConsumptionAndroidTest</title>
+<link href="css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="css/style.css" rel="stylesheet" type="text/css"/>
+<script src="js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>Class net.plainnotes.app.data.MeasuredConsumptionAndroidTest</h1>
+<div class="breadcrumbs">
+<a href="index.html">all</a> &gt; 
+<a href="net.plainnotes.app.data.html">net.plainnotes.app.data</a> &gt; MeasuredConsumptionAndroidTest</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">139</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">1</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="skipped">
+<div class="counter">0</div>
+<p>skipped</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">1m0.65s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox failures" id="successRate">
+<div class="percent">99%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div id="tabs">
+<ul class="tabLinks">
+<li>
+<a href="#tab0">Failed tests</a>
+</li>
+<li>
+<a href="#tab1">Tests</a>
+</li>
+</ul>
+<div id="tab0" class="tab">
+<h2>Failed tests</h2>
+<div class="test">
+<a name="writePathObserverAccountsRealCommitAndPreservesFaultRollbackAndFullAudit"></a>
+<h3 class="failures">writePathObserverAccountsRealCommitAndPreservesFaultRollbackAndFullAudit</h3>
+<span class="code">
+<pre>java.lang.AssertionError: {&quot;scope&quot;:&quot;rollback&quot;,&quot;wall_ns&quot;:51814550,&quot;checkpoint_offsets_nested_ns&quot;:{},&quot;owner_thread_observed&quot;:true,&quot;background_threads&quot;:1,&quot;trigger_exclusive_ns&quot;:null,&quot;pure_native_commit_ns&quot;:null,&quot;accounting_valid&quot;:false,&quot;audit_calls&quot;:0,&quot;validation_calls&quot;:1,&quot;chain_checks&quot;:2,&quot;audit_core_lower_bound_ns&quot;:0,&quot;validation_core_lower_bound_ns&quot;:13366080,&quot;insert_including_triggers_ns&quot;:1707980,&quot;update_including_triggers_ns&quot;:80930,&quot;delete_including_triggers_ns&quot;:0,&quot;commit_driver_ns&quot;:0,&quot;rollback_driver_ns&quot;:88460,&quot;other_driver_outside_cores_ns&quot;:10062920,&quot;unattributed_java_dispatch_observer_and_method_tails_ns&quot;:26508180,&quot;observer_accounting_lower_bound_ns&quot;:13912040,&quot;foreign_key_query_windows_nested_ns&quot;:[],&quot;driver_detail_omitted_keys&quot;:63,&quot;driver_detail_nested_do_not_add_to_cores&quot;:{&quot;other|begin|transaction&quot;:{&quot;calls&quot;:4,&quot;ns&quot;:592330,&quot;sql_prefix&quot;:&quot;&quot;},&quot;other|insert|1dd98e81a8fedd66d0dd4ec08eccf51a07bfc7130c8a7b4e2b6edd67b3db9196&quot;:{&quot;calls&quot;:1,&quot;ns&quot;:142170,&quot;sql_prefix&quot;:&quot;INSERT OR ABORT INTO `dose_record` (`id`,`medication_id`,`rule_version_id`,`slot_key`,`scheduled_utc`,`scheduled_zone`,`planned_dose`,`late_after_minutes_snapsh&quot;},&quot;other|nested_finish|transaction&quot;:{&quot;calls&quot;:3,&quot;ns&quot;:43230,&quot;sql_prefix&quot;:&quot;&quot;},&quot;other|insert|e497e5b483c51d2a112bc7499d3d6cde10d054dc329ca4cea9ac362d006cfadd&quot;:{&quot;calls&quot;:1,&quot;ns&quot;:359060,&quot;sql_prefix&quot;:&quot;INSERT reference_identity&quot;},&quot;other|insert|de73fbdb8cc78ddf6359a8a499d06537e88fcc57b8088bbe439e262433cc66a6&quot;:{&quot;calls&quot;:1,&quot;ns&quot;:356080,&quot;sql_prefix&quot;:&quot;INSERT measured_operation&quot;},&quot;other|insert|05099f9f8ededd691d040beb51c5352b1d3fe56b32758c00284fc11786b904ba&quot;:{&quot;calls&quot;:1,&quot;ns&quot;:145830,&quot;sql_prefix&quot;:&quot;INSERT OR ABORT INTO `supply_transaction` (`id`,`container_id`,`dose_record_id`,`dose_revision`,`operation_id`,`kind`,`used_delta`,`reversal_of_id`,`created_utc&quot;},&quot;other|insert|e96c941776e8ac4990279fc101787e3fca1687c2bde7a47551c1e55c4b8af48e&quot;:{&quot;calls&quot;:1,&quot;ns&quot;:356410,&quot;sql_prefix&quot;:&quot;INSERT measured_allocation&quot;},&quot;other|update|c78749dd49461e8231f773c458a68e4bdcd96a9a9da4b32f8f2baeccbb7960fa&quot;:{&quot;calls&quot;:1,&quot;ns&quot;:80930,&quot;sql_prefix&quot;:&quot;UPDATE supply_container SET state = ?, opened_on = ? WHERE id = ?&quot;},&quot;other|insert|a3609041f06418081b81329391444e4bba7b6e427074d95a1959b8aa0bc913d3&quot;:{&quot;calls&quot;:1,&quot;ns&quot;:348430,&quot;sql_prefix&quot;:&quot;INSERT record_reference_capture&quot;},&quot;other|rollback|transaction&quot;:{&quot;calls&quot;:1,&quot;ns&quot;:88460,&quot;sql_prefix&quot;:&quot;&quot;},&quot;other|cursor|c214120f210f75451173d85a5a8948c6f14b551d9fc8a9cbc8abfb2594ef45e4&quot;:{&quot;calls&quot;:48,&quot;ns&quot;:949580,&quot;sql_prefix&quot;:&quot;SELECT * FROM `reference_runtime` WHERE id=1&quot;},&quot;validation|cursor|63827d7bf2bf3919fb045d79cb3985bb9e812c840bb89ddc8bb61c504ada4a06&quot;:{&quot;calls&quot;:26,&quot;ns&quot;:588660,&quot;sql_prefix&quot;:&quot;SELECT * FROM `reference_identity` WHERE dataset_uuid=? AND kind='MEDICATION' AND live_handle=?&quot;},&quot;other|cursor|947406f1ce71a3f4a4e93fcb3f5178667b28796995731914728c12a3ae6ffdf0&quot;:{&quot;calls&quot;:25,&quot;ns&quot;:488490,&quot;sql_prefix&quot;:&quot;SELECT * FROM `measured_operation` WHERE operation_uuid=?&quot;},&quot;other|cursor|47976dec4073a7583f086e5b979f766d4b72db2d1f6bc894eb97a9a952dc1103&quot;:{&quot;calls&quot;:27,&quot;ns&quot;:474320,&quot;sql_prefix&quot;:&quot;SELECT * FROM `reference_identity` WHERE uuid=?&quot;},&quot;other|in_transaction|transaction&quot;:{&quot;calls&quot;:29,&quot;ns&quot;:468140,&quot;sql_prefix&quot;:&quot;&quot;},&quot;validation|cursor|fcad923262d2569e52dbfa4c3ef4f105d9e74ebf535eb5ffb962e464b053b13c&quot;:{&quot;calls&quot;:24,&quot;ns&quot;:426000,&quot;sql_prefix&quot;:&quot;SELECT * FROM `supply_transaction` WHERE container_id IN (SELECT id FROM supply_container WHERE medication_id=?) ORDER BY id&quot;},&quot;validation|cursor|a979a964399e03c9545a16d7301db28a103c47c11c3569c64cfef102f72d46e8&quot;:{&quot;calls&quot;:29,&quot;ns&quot;:425680,&quot;sql_prefix&quot;:&quot;SELECT * FROM `medication` WHERE id=?&quot;},&quot;other|cursor|33829348aef5dd48af046b12a7cf64c1715293e1c3cb4238f4b628b79963f93b&quot;:{&quot;calls&quot;:21,&quot;ns&quot;:391730,&quot;sql_prefix&quot;:&quot;SELECT * FROM `reference_event` WHERE operation_uuid=?&quot;}},&quot;core_windows&quot;:[{&quot;kind&quot;:&quot;validation&quot;,&quot;start_ns&quot;:3822640,&quot;end_ns&quot;:17188720}]}
+at org.junit.Assert.fail(Assert.java:89)
+at org.junit.Assert.assertTrue(Assert.java:42)
+at net.plainnotes.app.data.MeasuredConsumptionContract$writePathObserverAccountsRealCommitAndPreservesFaultRollbackAndFullAudit$1.invokeSuspend(MeasuredConsumptionContract.kt:66)
+at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:98)
+at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:94)
+at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:70)
+at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:48)
+at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+at net.plainnotes.app.data.MeasuredConsumptionContract.writePathObserverAccountsRealCommitAndPreservesFaultRollbackAndFullAudit(MeasuredConsumptionContract.kt:40)
+</pre>
+</span>
+</div>
+</div>
+<div id="tab1" class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>emulator-5554 - 10</th>
+</tr>
+</thead>
+<tr>
+<td>actualUseRejectsStaleDatasetBeforeLookingUpReusedIdsAndNeverTargetsDecoy</td>
+<td class="success">passed (0.252s)</td>
+</tr>
+<tr>
+<td>allocationFailureRollsBackTheNewRecordSourceAndLedgerTogether</td>
+<td class="success">passed (0.352s)</td>
+</tr>
+<tr>
+<td>architectureClearedJournalOrMissingMetadataDoesNotRestoreStampAuthority</td>
+<td class="success">passed (0.352s)</td>
+</tr>
+<tr>
+<td>architectureConstraintRejectsZeroEffectDuplicateAndRollsBackWithSchema</td>
+<td class="success">passed (0.352s)</td>
+</tr>
+<tr>
+<td>architectureCounterOnlyWitnessIsRefutedByRollbackWithoutAnyStampChange</td>
+<td class="success">passed (0.478s)</td>
+</tr>
+<tr>
+<td>architectureDoesNotInventUniversalCrossTableUuidUniqueness</td>
+<td class="success">passed (0.277s)</td>
+</tr>
+<tr>
+<td>architectureForeignKeyAndBalanceHypothesisIsRefutedByZeroEffectDuplicateUse</td>
+<td class="success">passed (0.427s)</td>
+</tr>
+<tr>
+<td>architectureJournalObservesDaoCompiledSqlUnrelatedHistoryAndLedgerTriggers</td>
+<td class="success">passed (0.578s)</td>
+</tr>
+<tr>
+<td>architectureJournalOverflowRequiresFullRebuildAndNeverMeansNoChanges</td>
+<td class="success">passed (0.477s)</td>
+</tr>
+<tr>
+<td>architectureRestoreAndReopenCannotReuseThePreviousBaselineOrTempMetadata</td>
+<td class="success">passed (0.753s)</td>
+</tr>
+<tr>
+<td>architectureTransactionalSealRejectsTheCounterRollbackCounterexample</td>
+<td class="success">passed (0.377s)</td>
+</tr>
+<tr>
+<td>auditedCanonicalEvidenceNeverAuthorizesDifferentTextOrHeadersForTheSameOperation</td>
+<td class="success">passed (0.377s)</td>
+</tr>
+<tr>
+<td>capturedOperationRowsNeverTrustForgedTextOrHeadersInsteadOfCanonicalRequests</td>
+<td class="success">passed (0.402s)</td>
+</tr>
+<tr>
+<td>changedScheduledFactCannotPassFullAuditWithOnlyTheClinicalDoseUnchanged</td>
+<td class="success">passed (0.377s)</td>
+</tr>
+<tr>
+<td>completeSecondaryAuditIndexesAvoidRepeatedSqlButPartialIndexesNeverProveAbsence</td>
+<td class="success">passed (0.277s)</td>
+</tr>
+<tr>
+<td>correctionCannotReuseAnotherRecordsOperationOrAnOlderSourceRevision</td>
+<td class="success">passed (0.402s)</td>
+</tr>
+<tr>
+<td>correctionFaultAfterNewConsumptionRollsBackBothInverseAndClinicalRevision</td>
+<td class="success">passed (0.376s)</td>
+</tr>
+<tr>
+<td>earlierCountDoesNotBlockTheInverseOfALaterPhysicalUse</td>
+<td class="success">passed (0.377s)</td>
+</tr>
+<tr>
+<td>explicitlyConfirmedDifferentStrengthsRemainSeparatePhysicalFacts</td>
+<td class="success">passed (0.377s)</td>
+</tr>
+<tr>
+<td>foreignMedicationSourceAndStaleDatasetAreRejectedBeforeAnyStockWrite</td>
+<td class="success">passed (0.377s)</td>
+</tr>
+<tr>
+<td>formalRepositoryCreatesAConfirmedPackageWithoutChangingTheMedicationOrProfile</td>
+<td class="success">passed (0.326s)</td>
+</tr>
+<tr>
+<td>fractionalPhysicalUseWritesOneExactIntegerWithoutChangingTheDoseFact</td>
+<td class="success">passed (0.251s)</td>
+</tr>
+<tr>
+<td>fullAuditOperationRowReuseMatchesZeroAndInsufficientBudgetWithoutWrites</td>
+<td class="success">passed (0.351s)</td>
+</tr>
+<tr>
+<td>fullAuditReadsContainerFactsWithoutPerContainerSql</td>
+<td class="success">passed (0.302s)</td>
+</tr>
+<tr>
+<td>fullAuditReadsLiveClinicalFactsWithoutPerRecordSql</td>
+<td class="success">passed (0.277s)</td>
+</tr>
+<tr>
+<td>fullAuditReusesCheckedProjectionLedgerForCausalPrefixes</td>
+<td class="success">passed (0.302s)</td>
+</tr>
+<tr>
+<td>fullAuditStreamsCompleteLedgersIncludingEmptyPackagesWithoutPerContainerSql</td>
+<td class="success">passed (0.301s)</td>
+</tr>
+<tr>
+<td>fullLedgerStreamRejectsExtraDuplicateMissingAndUnorderedGroupsAndClosesItsCursor</td>
+<td class="success">passed (0.478s)</td>
+</tr>
+<tr>
+<td>globalAuditAcceptsRealVoidedUnallocatedUseWithoutInventingConsumption</td>
+<td class="success">passed (0.302s)</td>
+</tr>
+<tr>
+<td>globalAuditCannotTreatAnExactContainerWithAllReferencesMissingAsLegacyScalar</td>
+<td class="success">passed (0.302s)</td>
+</tr>
+<tr>
+<td>globalAuditIncludesEmptyAndIncompatibleUsesAlongsideExactConsumption</td>
+<td class="success">passed (0.351s)</td>
+</tr>
+<tr>
+<td>globalAuditKeepsRetiredContainerEvidenceSeparateFromAReusedLegacyIntegerId</td>
+<td class="success">passed (0.327s)</td>
+</tr>
+<tr>
+<td>globalAuditKeepsRetiredRecordFactsSeparateFromAnotherMedicationsReusedId</td>
+<td class="success">passed (0.302s)</td>
+</tr>
+<tr>
+<td>globalAuditRejectsConsumedPackageMarkedVoidedWithoutLegalLifecycleEvidence</td>
+<td class="success">passed (0.402s)</td>
+</tr>
+<tr>
+<td>globalAuditRejectsCurrentActualRecordThatDisagreesWithFrozenInput</td>
+<td class="success">passed (0.327s)</td>
+</tr>
+<tr>
+<td>globalAuditRejectsForgedIdentityInAnAlreadyRestoredPackageAudit</td>
+<td class="success">passed (0.302s)</td>
+</tr>
+<tr>
+<td>globalAuditRejectsForgedUnknownOutcomeEvenWithoutALedgerEntry</td>
+<td class="success">passed (0.452s)</td>
+</tr>
+<tr>
+<td>globalAuditRejectsInvalidExactCapacityInPreviouslyRestoredLifecycleEvidence</td>
+<td class="success">passed (0.427s)</td>
+</tr>
+<tr>
+<td>globalAuditRejectsInverseThatWouldRewriteALaterIndependentNoopCount</td>
+<td class="success">passed (0.502s)</td>
+</tr>
+<tr>
+<td>globalAuditRejectsMissingActualConfirmationAndDoesNotRepairCorruptCache</td>
+<td class="success">passed (0.352s)</td>
+</tr>
+<tr>
+<td>globalAuditRejectsNoopCountWithAMissingCausalAnchor</td>
+<td class="success">passed (0.327s)</td>
+</tr>
+<tr>
+<td>globalAuditRejectsNoopObservationPointingAtAFutureSameBalanceHead</td>
+<td class="success">passed (0.477s)</td>
+</tr>
+<tr>
+<td>globalAuditRejectsOperationUuidCollidingWithAReferenceEvent</td>
+<td class="success">passed (0.427s)</td>
+</tr>
+<tr>
+<td>globalAuditRejectsOverflowedRevisionEvenWhenAnOperationHasNoAllocation</td>
+<td class="success">passed (0.402s)</td>
+</tr>
+<tr>
+<td>globalAuditRejectsRestoredEvidenceWhoseBodyDiffersFromTheOriginalVoid</td>
+<td class="success">passed (0.326s)</td>
+</tr>
+<tr>
+<td>globalAuditRejectsRetiredIdentityAttachedToLiveIntegerLedgerHistory</td>
+<td class="success">passed (0.427s)</td>
+</tr>
+<tr>
+<td>globalAuditValidatesNoopCountAndCompleteInverseHistory</td>
+<td class="success">passed (0.327s)</td>
+</tr>
+<tr>
+<td>internalMeasuredBackupRequiresCurrentLocalEpochAndPrimaryBeforeLookingUpIds</td>
+<td class="success">passed (0.628s)</td>
+</tr>
+<tr>
+<td>internalMeasuredBackupRoundTripsPhysicalHistoryAndReplacesANonemptyTarget</td>
+<td class="success">passed (1.380s)</td>
+</tr>
+<tr>
+<td>internalMeasuredRestoreRejectsCorruptCacheWithoutReplacingAnyTargetFactOrEpoch</td>
+<td class="success">passed (0.979s)</td>
+</tr>
+<tr>
+<td>inventoryEncodingCannotBeChangedThroughOrdinarySqlInEitherDirection</td>
+<td class="success">passed (0.226s)</td>
+</tr>
+<tr>
+<td>inventoryVersionErrorsAreRejectedBeforeOpeningTheDestination</td>
+<td class="success">passed (1.179s)</td>
+</tr>
+<tr>
+<td>legacyActualUseCannotSilentlyChooseScalarStockWhenTypedStockAlsoExists</td>
+<td class="success">passed (0.252s)</td>
+</tr>
+<tr>
+<td>legacyAdjustmentAndReverseMustRefuseMeasuredHistory</td>
+<td class="success">passed (0.226s)</td>
+</tr>
+<tr>
+<td>legacyAllocationCannotReapplyAnAlreadyCapturedPhysicalUse</td>
+<td class="success">passed (0.377s)</td>
+</tr>
+<tr>
+<td>legacyAllocationMustSkipMeasuredContainersWhileKeepingLegacyBehavior</td>
+<td class="success">passed (0.252s)</td>
+</tr>
+<tr>
+<td>legacyMedicationResizeMustLeaveFrozenPackagingUntouched</td>
+<td class="success">passed (0.352s)</td>
+</tr>
+<tr>
+<td>legacyReplacementAndDiscardCannotMutateMeasuredPackaging</td>
+<td class="success">passed (0.251s)</td>
+</tr>
+<tr>
+<td>liveAuditStillRejectsStaleEpochBeforeDelegatingToBusinessOnlyStaging</td>
+<td class="success">passed (0.277s)</td>
+</tr>
+<tr>
+<td>malformedFrozenReceiptsCannotBeAcceptedAsSuccessfulRetries</td>
+<td class="success">passed (0.252s)</td>
+</tr>
+<tr>
+<td>malformedOrNonexistentAdjustmentAnchorsCannotBeReplayed</td>
+<td class="success">passed (0.376s)</td>
+</tr>
+<tr>
+<td>malformedTrailingJsonCannotRestoreOrRetireTheActiveDataset</td>
+<td class="success">passed (0.853s)</td>
+</tr>
+<tr>
+<td>materializedSourceCoverageIsReadOnlyAndMatchesOriginalExistencePredicate</td>
+<td class="success">passed (0.326s)</td>
+</tr>
+<tr>
+<td>measuredBackupRestoresOnANewEncryptedDatabaseWithoutAnyCurrentCatalog</td>
+<td class="success">passed (1.029s)</td>
+</tr>
+<tr>
+<td>measuredRestoreRollsBackEveryReplacementCheckpointIncludingTheNewEpoch</td>
+<td class="success">passed (2.884s)</td>
+</tr>
+<tr>
+<td>measurementIdentityDoesNotFollowAReusedIntegerHandle</td>
+<td class="success">passed (0.251s)</td>
+</tr>
+<tr>
+<td>noOpCountBeforeAUseDoesNotBlockItsLaterInverse</td>
+<td class="success">passed (0.252s)</td>
+</tr>
+<tr>
+<td>noOpRemainingObservationAlsoRequiresReconciliationBeforeAnInverse</td>
+<td class="success">passed (0.377s)</td>
+</tr>
+<tr>
+<td>oldAllocatorCannotAddScalarConsumptionToAnExplicitUnknownStockEffect</td>
+<td class="success">passed (0.301s)</td>
+</tr>
+<tr>
+<td>oldUnscopedPackageRestoreCannotMutateExactInventory</td>
+<td class="success">passed (0.252s)</td>
+</tr>
+<tr>
+<td>oldUnscopedPackageVoidCannotMutateExactInventory</td>
+<td class="success">passed (0.252s)</td>
+</tr>
+<tr>
+<td>operationAuditRowsAreBoundedFreshCopiesAndReleasedAtScopeEnd</td>
+<td class="success">passed (0.226s)</td>
+</tr>
+<tr>
+<td>operationRowReuseCannotApproveChangesDuringItsReadOnlyAudit</td>
+<td class="success">passed (0.302s)</td>
+</tr>
+<tr>
+<td>partialExhaustionKeepsAnExactPhysicalRemainder</td>
+<td class="success">passed (0.377s)</td>
+</tr>
+<tr>
+<td>projectionAuditNeverHidesAnOrphanLedgerWhenTheScalarCacheIsForged</td>
+<td class="success">passed (0.277s)</td>
+</tr>
+<tr>
+<td>projectionAuditReadsLedgerAndOperationTogetherWithoutPointLookups</td>
+<td class="success">passed (0.277s)</td>
+</tr>
+<tr>
+<td>projectionAuditsCountConsumeAndInverseWithoutUsingCurrentMedicationStrength</td>
+<td class="success">passed (0.251s)</td>
+</tr>
+<tr>
+<td>projectionChecksTheCompleteInverseSetAcrossTwoExplicitSources</td>
+<td class="success">passed (0.377s)</td>
+</tr>
+<tr>
+<td>projectionRejectsAnIncompleteInverseEvenWhenAnotherContainerIsMissingEvidence</td>
+<td class="success">passed (0.452s)</td>
+</tr>
+<tr>
+<td>projectionRejectsAnUnpairedLegacyEntryInsideMeasuredStock</td>
+<td class="success">passed (0.352s)</td>
+</tr>
+<tr>
+<td>projectionReportsACacheMismatchWithoutRepairingOrRewritingAnything</td>
+<td class="success">passed (0.227s)</td>
+</tr>
+<tr>
+<td>publicLegacyBackupEntryDoesNotAccidentallyEnableMeasuredRestoreOrExport</td>
+<td class="success">passed (0.653s)</td>
+</tr>
+<tr>
+<td>publishedBusinessSchemaTenRestoresLegacyAmountsAndProductReferencesWithoutInferringUnits</td>
+<td class="success">passed (1.004s)</td>
+</tr>
+<tr>
+<td>publishedLegacyVoidEvidenceStillRestoresAfterTheStorageMarkerIsAdded</td>
+<td class="success">passed (0.326s)</td>
+</tr>
+<tr>
+<td>readOnlyProjectionAuditsPhysicalAmountsFromFrozenLedgerEvidence</td>
+<td class="success">passed (0.251s)</td>
+</tr>
+<tr>
+<td>realRepositoryCorrectionUsesOriginalInverseAndCreatesOneNewRevisionWithFrozenHistory</td>
+<td class="success">passed (0.477s)</td>
+</tr>
+<tr>
+<td>realRepositoryDeleteAndRestoreAppendExactHistoryAndPreserveTheOriginalClinicalSnapshot</td>
+<td class="success">passed (1.129s)</td>
+</tr>
+<tr>
+<td>reconciliationAtFullRemainingCountHasBoundedBridgeAndNoInventedPhysicalUse</td>
+<td class="success">passed (0.477s)</td>
+</tr>
+<tr>
+<td>reconciliationAuditRejectsAnOrphanAccountingBridgeWithAnOtherwiseValidChain</td>
+<td class="success">passed (0.502s)</td>
+</tr>
+<tr>
+<td>reconciliationAuditRejectsChangedTargetEvenWithValidRequestHashesAndExecutionChain</td>
+<td class="success">passed (0.502s)</td>
+</tr>
+<tr>
+<td>reconciliationAuditRejectsMissingNoOpFinalCountEvenWhenBalancesAndChainRemainValid</td>
+<td class="success">passed (0.528s)</td>
+</tr>
+<tr>
+<td>reconciliationDeleteRestoreAndEncryptedBackupRetainTheObservedCurrentStock</td>
+<td class="success">passed (1.104s)</td>
+</tr>
+<tr>
+<td>reconciliationFailureAtEveryBoundaryRollsBackBridgeInverseCountsAndClinicalFact</td>
+<td class="success">passed (0.679s)</td>
+</tr>
+<tr>
+<td>reconciliationKeepsTwoExplicitlyConfirmedStrengthsSeparateAndRequiresBothCounts</td>
+<td class="success">passed (0.778s)</td>
+</tr>
+<tr>
+<td>reconciliationNeverDeductsASecondDoseAfterTheConfirmedCurrentCount</td>
+<td class="success">passed (0.352s)</td>
+</tr>
+<tr>
+<td>reconciliationPreservesCurrentCountEvenWhenOriginalInverseWouldBeNegative</td>
+<td class="success">passed (0.502s)</td>
+</tr>
+<tr>
+<td>reconciliationPreservesUnknownStockEffectWithoutApplyingAnotherConsumption</td>
+<td class="success">passed (0.503s)</td>
+</tr>
+<tr>
+<td>reconciliationRejectsMissingIncompatibleUnconfirmedOrForeignCurrentCounts</td>
+<td class="success">passed (0.577s)</td>
+</tr>
+<tr>
+<td>reconciliationRejectsStaleZeroCountTicketWrongEpochAndDecoyBeforeAnyWrite</td>
+<td class="success">passed (0.377s)</td>
+</tr>
+<tr>
+<td>reconciliationReplaysOriginalConfirmedInputsWithoutRecountingTodaysBalance</td>
+<td class="success">passed (0.627s)</td>
+</tr>
+<tr>
+<td>reconciliationUsesFrozenPackagingAfterCurrentMedicationAndProductReferenceChanges</td>
+<td class="success">passed (0.427s)</td>
+</tr>
+<tr>
+<td>reconciliationWithoutBridgeStillRequiresTheConfirmedFinalCount</td>
+<td class="success">passed (0.477s)</td>
+</tr>
+<tr>
+<td>remainingAdjustmentIsExactAndIdempotentWithRealZeroAndNoOpTargets</td>
+<td class="success">passed (0.404s)</td>
+</tr>
+<tr>
+<td>replayedRemainingCountKeepsItsOriginalCausalAnchorAfterLaterUse</td>
+<td class="success">passed (0.251s)</td>
+</tr>
+<tr>
+<td>repositoryActualUseRetainsAlreadyAccountedAndUnknownStockEffectsWithoutDeducting</td>
+<td class="success">passed (0.376s)</td>
+</tr>
+<tr>
+<td>repositoryActualUseRollsBackRecordReferenceAndStockAtEveryFaultCheckpoint</td>
+<td class="success">passed (0.402s)</td>
+</tr>
+<tr>
+<td>repositoryCorrectionRefusesToOverrideAnIndependentLaterStockCount</td>
+<td class="success">passed (0.327s)</td>
+</tr>
+<tr>
+<td>repositoryCountIsIdempotentAndOldTicketsCannotOverwriteEvenAZeroObservation</td>
+<td class="success">passed (0.277s)</td>
+</tr>
+<tr>
+<td>repositoryPreservesUnlinkedPhysicalActualQuantityAcrossExactBackupRestore</td>
+<td class="success">passed (0.752s)</td>
+</tr>
+<tr>
+<td>repositoryWritesActualClinicalFactAndPhysicalConsumptionAtomicallyAndIdempotently</td>
+<td class="success">passed (0.276s)</td>
+</tr>
+<tr>
+<td>retriesAreIdempotentAndConflictingOrSecondOperationsCannotDeductAgain</td>
+<td class="success">passed (0.377s)</td>
+</tr>
+<tr>
+<td>returnedBalanceAfterAnAbaAdjustmentDoesNotReviveAnOldActualUseTicket</td>
+<td class="success">passed (0.352s)</td>
+</tr>
+<tr>
+<td>reversalFailureRollsBackAllInverseEntriesAndLeavesOriginalConsumption</td>
+<td class="success">passed (0.252s)</td>
+</tr>
+<tr>
+<td>reverseCannotRewriteALaterConfirmedRemainingObservation</td>
+<td class="success">passed (0.376s)</td>
+</tr>
+<tr>
+<td>reversingUsesOriginalQuantaAfterCurrentMedicationAndReferenceChange</td>
+<td class="success">passed (0.377s)</td>
+</tr>
+<tr>
+<td>scheduledActualUseKeepsPlannedFieldsAndRetriesWithoutSecondConsumption</td>
+<td class="success">passed (0.302s)</td>
+</tr>
+<tr>
+<td>scheduledBackfillReusesMissedIdAndSnapshotAndDoesNotGuessStockEffect</td>
+<td class="success">passed (0.427s)</td>
+</tr>
+<tr>
+<td>scheduledDoseOverrideInvalidatesOldTicketAndKeepsClinicalDoseIndependent</td>
+<td class="success">passed (0.357s)</td>
+</tr>
+<tr>
+<td>scheduledEvidenceSurvivesEncryptedBackupWithoutTheCurrentCatalog</td>
+<td class="success">passed (0.803s)</td>
+</tr>
+<tr>
+<td>scheduledParisSpringGapPreservesActualAndPlannedZonesWithoutExtraStock</td>
+<td class="success">passed (0.276s)</td>
+</tr>
+<tr>
+<td>scheduledWriteRejectsCanceledSlotWithoutMutation</td>
+<td class="success">passed (0.276s)</td>
+</tr>
+<tr>
+<td>scheduledWriteRollsBackRecordContextAndStockAtEachFailureBoundary</td>
+<td class="success">passed (0.352s)</td>
+</tr>
+<tr>
+<td>scopedPackageCorrectionRetainsTheConsumptionGuardAndRejectsForeignIdentity</td>
+<td class="success">passed (0.301s)</td>
+</tr>
+<tr>
+<td>scopedPackageVoidRestoreIsIdempotentAndDoesNotReviveAnOldConfirmationTicket</td>
+<td class="success">passed (0.428s)</td>
+</tr>
+<tr>
+<td>secondaryConfirmationIndexRetainsDuplicateRowsSoTheWholeAuditStillRejectsAmbiguity</td>
+<td class="success">passed (0.251s)</td>
+</tr>
+<tr>
+<td>sharedRepositoryForecastKeepsExactPhysicalBalancesSeparateFromClinicalDoseAndChangesVersionOnZeroCount</td>
+<td class="success">passed (0.502s)</td>
+</tr>
+<tr>
+<td>stagingProjectionReusesTheLiveAuditWithoutRuntimeIdentityOrAnyWrites</td>
+<td class="success">passed (0.377s)</td>
+</tr>
+<tr>
+<td>stagingRejectsForeignDatasetAndTextInANumericLedgerColumnWithoutAffectingSource</td>
+<td class="success">passed (0.277s)</td>
+</tr>
+<tr>
+<td>staleRemainingCountCannotOverwriteAConcurrentActualUseAndUnitsNeverMix</td>
+<td class="success">passed (0.377s)</td>
+</tr>
+<tr>
+<td>strictInputRetainsProjectionLexemesUntilTheirIntegerContractIsChecked</td>
+<td class="success">passed (0.277s)</td>
+</tr>
+<tr>
+<td>strictJsonEnforcesArrayFieldAndDepthBudgetsBeforeBuildingAnUnboundedTree</td>
+<td class="success">passed (0.528s)</td>
+</tr>
+<tr>
+<td>strictJsonRejectsAmbiguousSyntaxDuplicateFieldsAndInvalidUtf8</td>
+<td class="success">passed (0.251s)</td>
+</tr>
+<tr>
+<td>syntheticPumpStockUsesOnlyExplicitDirectedContentAndConfirmedCapacity</td>
+<td class="success">passed (0.377s)</td>
+</tr>
+<tr>
+<td>typedStockOfAnotherMedicationDoesNotBlockLegacyOnlyActualUse</td>
+<td class="success">passed (0.252s)</td>
+</tr>
+<tr>
+<td>unconfirmedSourceRemainsUnknownWithoutInventingConsumption</td>
+<td class="success">passed (0.226s)</td>
+</tr>
+<tr>
+<td>unsupportedMassConversionPreservesTheActualRecordAndNeverUsesZeroAsUnknown</td>
+<td class="success">passed (0.252s)</td>
+</tr>
+<tr>
+<td>writePathObserverAccountsRealCommitAndPreservesFaultRollbackAndFullAudit</td>
+<td class="failures">failed (0.931s)</td>
+</tr>
+<tr>
+<td>zeroAllocationAuditScansOperationRowsWithoutRepeatedPrimaryQueries</td>
+<td class="success">passed (0.277s)</td>
+</tr>
+<tr>
+<td>zeroDifferenceCountInvalidatesAnActualUseTicketEvenWithIdenticalContainerAndLedger</td>
+<td class="success">passed (0.352s)</td>
+</tr>
+</table>
+</div>
+</div>
+<div id="footer">
+<p>Generated by 
+<a href="http://www.gradle.org">Gradle 9.3.1</a> at Oct 20, 2026, 6:04:11 PM</p>
+</div>
+</div>
+</body>

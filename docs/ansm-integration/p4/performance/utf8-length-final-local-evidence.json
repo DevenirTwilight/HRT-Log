@@ -1,0 +1,63 @@
+{
+  "source_base": "e36c52db38d0b74b4c60c7e24e06d1a6224cba94",
+  "candidate_kind": "UNCOMMITTED_UTF8_LENGTH_WORKTREE",
+  "state": "PASS_LOCAL_ONLY",
+  "data_tests": 451,
+  "app_tests": 43,
+  "app_suites": {
+    "net.plainnotes.app.PrivacyNoticeFactsTest": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "8acbe45af22c5958ea1c320295dd3f8014ad6a1775d74710a2b843cc93c74658"
+    },
+    "net.plainnotes.app.StockConsistencyTest": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "eb39560c219cbad5b8357129268a81251e8b00f5934b5bfff89c95970442c98e"
+    },
+    "net.plainnotes.app.MeasuredStockUnknownMatrixTest": {
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "f0f74e6ba7408622ca658281dee8434e5cf625eb709f0a22b5d0aeb052818bb7"
+    },
+    "net.plainnotes.app.PeriodStabilityTest": {
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "d3046df875e9cc7a592d8e6781d5e44eba4f805e6cf2a81d8aea9e8eaad672f7"
+    }
+  },
+  "production_sha256": {
+    "core/data/src/main/java/net/plainnotes/app/data/ReferencePayload.kt": "6a62b808f77f18468544f55351ffe49c58e669b9835292aad527f3d8dbcff824",
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredUsePayload.kt": "aa02cd672e337a64a5f8d5a1fbedbc95838c90f840ea340a4ba252743b269955",
+    "core/data/src/main/java/net/plainnotes/app/data/PackageMeasurementPayload.kt": "aa66f2fda93b5a079da687f2252aa240c64fbc0809417e35439e043dc45b3a96",
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredOperationChain.kt": "51ff850a0e19dcfb363213b4ed01f142555bc6d6f39becbc9414838f5eef34c4",
+    "core/data/src/main/java/net/plainnotes/app/data/BackupValidation.kt": "af243969f00ca11d31451fdc960765c61c7a9e00666389525dd56587c151f3e8",
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt": "32e42bb218c7cdcfa50b73181ac36d940b40afa65ab695801ac4048e71275501"
+  },
+  "python_tests": 10,
+  "generator_sha256": "a9bd56d2f112bb7332298876aea50040080098da16a896720d0e4587132b0f4e",
+  "generated_native_probe": {
+    "source_sha256": "9313167178989def0d4d89d785f84cdde764fba21033543cdf85e472c5511242",
+    "native_sha256": "04cc9f9f7a6ff3bdab1c179b8ab3ff2376a3a4b0d4e15036bbe0d2d6c40fa67c",
+    "status": "GENERATED_NOT_RUN"
+  },
+  "native_generated_kotlin_compile": "PASS",
+  "local_large": {
+    "records": 14600,
+    "containers": 2000,
+    "rows": 32603,
+    "queries": 185,
+    "full_projection_equality": true
+  },
+  "native_execution": "NOT_RUN_NEW_CANDIDATE",
+  "physical": "NOT_RUN",
+  "p4": "PRODUCTION_BLOCKED"
+}

@@ -1,6 +1,6 @@
 # 71 — UI-07：Material 3 Expressive 表现层，只用稳定 API（2026-10-21）
 
-- **任务书**：`sources/ui07/ui07-prompt.md`（SHA-256 `49cafbd9…eb9f1`），REQUIREMENTS §116。
+- **任务书**：`sources/ui07/ui07-prompt.md`（SHA-256 `49cafbd9…eb9f1`），REQUIREMENTS §133。
 - **前置**：UI-06 #91 合并为 4ec11437；该提交在默认分支上的 CI 六项必需检查全部 PASS（另有 research-deep 按规则 skipped）。
 - **分支**：`feature/ui07-expressive-20261021`，基于 4ec11437。
 - **性质**：只改表现层。

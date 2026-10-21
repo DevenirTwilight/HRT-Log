@@ -1,0 +1,10 @@
+{
+  "source": "1feacef41049cfca0d76e183d417373a171302f7",
+  "state": "PASS_CHARACTERIZATION",
+  "tests": 1,
+  "oracle_batches": 45,
+  "xml_sha256": "1d6d347888df389bcdf1231f83a21c16d40253dfd1977eccae3a6b14082d85ec",
+  "production_sha256": "3d34915d0daeb71aff4a609522315f4b7959750bfe5db3178d704b0d9b43e4f3",
+  "fixture": "Isolated factory SQL database with synthetic three-type tables, not Room migration or business backup evidence.",
+  "note": "Old per-column aggregate is unchanged at this baseline. Not a production RED claim."
+}

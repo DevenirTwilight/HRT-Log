@@ -1,0 +1,26 @@
+{
+  "state": "PASS",
+  "tests": 8,
+  "suites": [
+    {
+      "name": "net.plainnotes.app.PeriodStabilityTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "703d028259ee96e2c1c65d246d5276f04f82e2f20d90b2cb54b2a0ac09117a41"
+    },
+    {
+      "name": "net.plainnotes.app.PrivacyNoticeFactsTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "14c4d1d05a369275440f7a469c15dc737f4e9f90dd0b8c75a35db54ca671fb13"
+    }
+  ],
+  "test_source_sha256": "f93722347a3277e240ca35d8d9e80fd1e80e92fbd68156b0d7357412c987ce51",
+  "production_sha256": "4ed43b4db12aaa33ab1328aacde377949bbf2638c143754ca97c2173dd685af5",
+  "scope": "PrivacyNoticeFactsTest and PeriodStabilityTest on final container-join candidate",
+  "ci": "PENDING_NEW_HEAD"
+}

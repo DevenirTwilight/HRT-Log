@@ -1,0 +1,44 @@
+{
+  "status": "DIAGNOSTIC_ONLY",
+  "source_head": "f20cf7945181f334be89cb083efdd2d182eecdfe",
+  "environment": "Local Robolectric API35 framework SQLite; hardware/SQLCipher NOT_RUN",
+  "percentile_method": "nearest-rank",
+  "cases": [
+    {
+      "file": "years-0-exact-200.json",
+      "legacy_facts": 0,
+      "exact_facts": 200,
+      "write_median_ms": 168.85586849999999,
+      "write_p95_ms": 280.930719,
+      "write_max_ms": 345.297849,
+      "forecast_ms": 294.600927,
+      "audit_ms": 275.649079,
+      "sha256": "c57037855f19787c4bc6766e1b1214032c5fe181ea4dcf9c55a4b11060d75ae5"
+    },
+    {
+      "file": "years-10-exact-100.json",
+      "legacy_facts": 14500,
+      "exact_facts": 100,
+      "write_median_ms": 120.0924295,
+      "write_p95_ms": 186.794927,
+      "write_max_ms": 207.602506,
+      "forecast_ms": 299.739062,
+      "audit_ms": 168.304372,
+      "sha256": "4d5a094efaa1232d8fa5839688be68b9b28c7f29261a08cc42ae6c0e795663dc"
+    },
+    {
+      "file": "years-5-exact-100.json",
+      "legacy_facts": 7200,
+      "exact_facts": 100,
+      "write_median_ms": 117.441464,
+      "write_p95_ms": 181.670554,
+      "write_max_ms": 199.144578,
+      "forecast_ms": 224.135937,
+      "audit_ms": 154.03812,
+      "sha256": "b5c4ab9f8b05bffd8241971e0239c0bd64fc87d5883f2d73d7336dda264392e9"
+    }
+  ],
+  "log_sha256": "4abe18011dcd44804d16ab12463246529b4013dd771bb63db970b69a7d63aa12",
+  "full_exact_ten_year_acceptance": "NOT_RUN",
+  "capacity_limit_acceptance": "NOT_RUN"
+}

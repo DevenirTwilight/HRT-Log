@@ -1,0 +1,56 @@
+{
+  "status": "LOCAL_PASS_NATIVE_NOT_RUN",
+  "production_base": "65cf08e748e424d2639bac8f4264ac2d7414d75b",
+  "full_data_suite": {
+    "tests": 409,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "reports_observed": 36,
+    "xml_preservation": "Counters read from36 actual JUnit files immediately after full task. Subsequent isolated large fixture replaced that Gradle report directory; original XMLs not archived."
+  },
+  "full_regression_and_native_contract_compilation": "PASS",
+  "generated_native_probe_compilation": "PASS",
+  "app_regressions": [
+    {
+      "name": "net.plainnotes.app.PeriodStabilityTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "8756323ff50ed8e7f004e366f816e899bf3c1d36d8b3cef925c4f7ebaac75294"
+    },
+    {
+      "name": "net.plainnotes.app.PrivacyNoticeFactsTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "3551f1a1340c35432d3a4289a66dd6ae695b7b3ddc5df326460bbfc0c9764bb6"
+    }
+  ],
+  "python_tests": 169,
+  "large_jvm_fixture": "PASS_DIAGNOSTIC_ONLY",
+  "native_low_memory_result": "NOT_RUN",
+  "production_entry": "OFF",
+  "schema_backup_pk_and_permission_files_unchanged": true,
+  "generated_native_source": {
+    "source_sha256": "9313167178989def0d4d89d785f84cdde764fba21033543cdf85e472c5511242",
+    "native_sha256": "44ef1974a439b7cc9dc0647a373c6b303b834b989654a54417350b7d59ff4712",
+    "status": "GENERATED_NOT_RUN"
+  },
+  "source_sha256": {
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt": "fce3cacf1a33eeabd81ac6e84addf6e11088c810911f8586a3815b6d9ed2c59f",
+    "core/data/src/historyTest/java/net/plainnotes/app/data/ConsumptionReceiptOracle.kt": "9171947a202b3c91f41faae81f878b7fd84ac3df07854c6e8ba26430c692abd0"
+  },
+  "logs_sha256": {
+    "ansm-receipt-regression.log": "e0381fbd888b3bd131dcbe75765ed27a16b4033620cd1b19e7edd87008bfc4c1",
+    "ansm-receipt-app-native-v2.log": "e7891eeac223024e2b2a210fa81fd286be5871744634411d6655def65a6418d2",
+    "ansm-receipt-large.log": "6238b470e9fbaf4d34106f79e91e6eca1157b9712b33f46d243611bb494dd0d6",
+    "ansm-receipt-python.log": "6798ce6b13a1f131c235d4d0838d27990d9a1f286e4348fd968b521db1417586"
+  },
+  "initial_failures": [
+    "Environment initially had JRE without JAVA_COMPILER; no tests ran. Checksum-verified official JDK installed, then baseline passed.",
+    "New test-only decimal microprobe initially generated an invalid Kotlin escape. Corrected to a raw Kotlin string and added generation guard; regenerated native source and app8 compile/tests passed."
+  ]
+}

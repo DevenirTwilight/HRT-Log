@@ -1,0 +1,159 @@
+{
+  "source": "10480c6199107803993e2d80f81053fa808e157c",
+  "pr": 57,
+  "run": 39012680352,
+  "six_required_checks": "PASS",
+  "scope": "Shared SQL staging audit; not full-dataset validation or activation",
+  "artifacts": [
+    {
+      "id": 12094380086,
+      "name": "attachment-poc-api29",
+      "sha256": "7f42cbac1a52a5d49bd3f7c1e8f0a5d57e9ad8cd7c1a1978092c5381cdf53042",
+      "zip_crc": "PASS",
+      "apk_entries": 0,
+      "reports": {
+        "core/data/build/reports/androidTests/connected/debug/index.html": {
+          "tests": 162,
+          "failures": 0,
+          "skipped": 0
+        },
+        "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.MeasuredConsumptionAndroidTest.html": {
+          "tests": 35,
+          "failures": 0,
+          "skipped": 0
+        },
+        "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.ReferenceMigrationAndroidTest.html": {
+          "tests": 6,
+          "failures": 0,
+          "skipped": 0
+        },
+        "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.MeasuredContainerAndroidTest.html": {
+          "tests": 10,
+          "failures": 0,
+          "skipped": 0
+        },
+        "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.ReferencePersistenceAndroidTest.html": {
+          "tests": 21,
+          "failures": 0,
+          "skipped": 0
+        },
+        "app/build/reports/androidTests/connected/debug/flavors/full/index.html": {
+          "tests": 70,
+          "failures": 0,
+          "skipped": 0
+        }
+      }
+    },
+    {
+      "id": 12093736337,
+      "name": "jvm-test-results",
+      "sha256": "f39bb97af5ee5a83908c3d32a7abf86340e5cc8463bf946fab6a6e57541a74fc",
+      "zip_crc": "PASS",
+      "apk_entries": 0,
+      "reports": {
+        "core/domain/": {
+          "tests": 140,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "pk-engine/": {
+          "tests": 124,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "importer/": {
+          "tests": 12,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "tools/attachment-poc/": {
+          "tests": 63,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    },
+    {
+      "id": 12093582588,
+      "name": "device-test-results",
+      "sha256": "2f8d51cb4da78c304b1be9d323df1aaa80681be2c957c8717f75b0c7b8242673",
+      "zip_crc": "PASS",
+      "apk_entries": 0,
+      "reports": {
+        "core/data/build/reports/androidTests/connected/debug/index.html": {
+          "tests": 229,
+          "failures": 0,
+          "skipped": 0
+        },
+        "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.MeasuredConsumptionAndroidTest.html": {
+          "tests": 35,
+          "failures": 0,
+          "skipped": 0
+        },
+        "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.MeasuredContainerAndroidTest.html": {
+          "tests": 10,
+          "failures": 0,
+          "skipped": 0
+        },
+        "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.ReferenceMigrationAndroidTest.html": {
+          "tests": 6,
+          "failures": 0,
+          "skipped": 0
+        },
+        "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.ReferencePersistenceAndroidTest.html": {
+          "tests": 21,
+          "failures": 0,
+          "skipped": 0
+        },
+        "app/build/reports/androidTests/connected/debug/flavors/full/index.html": {
+          "tests": 264,
+          "failures": 0,
+          "skipped": 8
+        }
+      }
+    },
+    {
+      "id": 12093287544,
+      "name": "attachment-poc-api26",
+      "sha256": "beb028f032f5bcf98be9a6e964cf3da34664bad3f8a7ec026ab84913f08d4d5b",
+      "zip_crc": "PASS",
+      "apk_entries": 0,
+      "reports": {
+        "core/data/build/reports/androidTests/connected/debug/index.html": {
+          "tests": 162,
+          "failures": 0,
+          "skipped": 0
+        },
+        "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.MeasuredConsumptionAndroidTest.html": {
+          "tests": 35,
+          "failures": 0,
+          "skipped": 0
+        },
+        "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.MeasuredContainerAndroidTest.html": {
+          "tests": 10,
+          "failures": 0,
+          "skipped": 0
+        },
+        "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.ReferenceMigrationAndroidTest.html": {
+          "tests": 6,
+          "failures": 0,
+          "skipped": 0
+        },
+        "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.ReferencePersistenceAndroidTest.html": {
+          "tests": 21,
+          "failures": 0,
+          "skipped": 0
+        },
+        "app/build/reports/androidTests/connected/debug/flavors/full/index.html": {
+          "tests": 70,
+          "failures": 0,
+          "skipped": 0
+        }
+      }
+    }
+  ]
+}

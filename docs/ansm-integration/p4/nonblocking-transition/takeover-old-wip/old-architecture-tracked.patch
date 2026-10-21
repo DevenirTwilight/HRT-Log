@@ -1,0 +1,144 @@
+diff --git a/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt b/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt
+index 3f5ec04e..f49224d4 100644
+--- a/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt
++++ b/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt
+@@ -37,6 +37,109 @@ abstract class MeasuredConsumptionContract {
+     private suspend fun consume(r:RecordEntity,box:CreatedMeasuredContainer,uses:List<ConfirmedStockUse>,op:String=UUID.randomUUID().toString())=db.withTransaction{MeasuredConsumptionStore.consumeNewRecord(db,box.scope,r,op,uses,at)}
+     private fun count(table:String)=raw.query("SELECT COUNT(*) FROM `$table`").use{it.moveToFirst();it.getInt(0)}
+     private suspend fun rejects(code:ReferenceError,block:suspend()->Unit){try{block();fail("Expected $code")}catch(e:ReferenceFailure){assertEquals(code,e.code)}}
++    private fun rollbackSavepoint(name:String) {
++        require(name.matches(Regex("synthetic_[a-z_]+")))
++        // API26 DatabaseUtils classifies a leading ROL as whole-transaction ABORT.
++        // A SQL comment routes the unchanged ROLLBACK TO statement to SQLite itself.
++        raw.execSQL("/* SYNTHETIC savepoint, not outer rollback */ ROLLBACK TO $name")
++        check(raw.inTransaction())
++        raw.execSQL("RELEASE $name")
++    }
++    private fun nextZeroEffectOperation(source:String,recordUuid:String?=null):org.json.JSONObject {
++        val row=ReferenceStore.row(raw,"measured_operation","operation_uuid=?",arrayOf(source))!!
++        val envelope=org.json.JSONObject(row.getString("input_json"))
++        envelope.put("chain",MeasuredOperationChain.next(raw))
++        row.put("operation_uuid",UUID.randomUUID().toString()).put("input_json",ReferencePayload.canonical(envelope))
++        if(recordUuid!=null)row.put("record_uuid",recordUuid)
++        return row
++    }
++    private fun uniqueConstraintRejects(block:()->Unit) {
++        try{block();fail("Database accepted duplicate CONSUME revision")}
++        catch(e:Exception){assertTrue("Unexpected database error: $e",e.javaClass.simpleName=="SQLiteConstraintException" && e.message.orEmpty().contains("UNIQUE constraint failed"))}
++    }
++    @Test fun constraintPrototypeRejectsZeroEffectDuplicateViaRawAndCompiledWrites()=runBlocking {
++        val m=med();val b=box(m);val op=UUID.randomUUID().toString();consume(record(m),b,emptyList(),op)
++        val before=RawData.dump(raw).toString()
++        db.withTransaction {
++            DatabaseInvariantProbe.install(raw)
++            try {
++                uniqueConstraintRejects{ReferenceStore.insert(raw,"measured_operation",nextZeroEffectOperation(op))}
++                assertEquals(before,RawData.dump(raw).toString())
++                val row=nextZeroEffectOperation(op);val columns=ReferenceSchema.columns.getValue("measured_operation")
++                raw.compileStatement("INSERT INTO measured_operation ("+columns.joinToString(",")+") VALUES ("+columns.joinToString(","){"?"}+")").use { statement->
++                    columns.forEachIndexed {i,column->val v=row.get(column);when(v){org.json.JSONObject.NULL->statement.bindNull(i+1);is Number->statement.bindLong(i+1,v.toLong());is String->statement.bindString(i+1,v);else->error("Unexpected synthetic header")}}
++                    uniqueConstraintRejects{statement.executeInsert()}
++                }
++                assertEquals(before,RawData.dump(raw).toString());MeasuredConsumptionStore.auditStagedDataset(raw);Unit
++            } finally {DatabaseInvariantProbe.remove(raw)}
++        }
++    }
++    @Test fun constraintPrototypeRefusesExistingDuplicatesWithoutRepairingHistory()=runBlocking {
++        val m=med();val b=box(m);val op=UUID.randomUUID().toString();consume(record(m),b,emptyList(),op)
++        val before=RawData.dump(raw).toString();class SyntheticRollback:RuntimeException()
++        try{db.withTransaction {
++            ReferenceStore.insert(raw,"measured_operation",nextZeroEffectOperation(op))
++            val invalid=RawData.dump(raw).toString()
++            rejects(ReferenceError.INVALID_SOURCE){MeasuredConsumptionStore.auditStagedDataset(raw)}
++            uniqueConstraintRejects{DatabaseInvariantProbe.install(raw)}
++            raw.query("SELECT 1 FROM sqlite_master WHERE type='index' AND name=?",arrayOf(DatabaseInvariantProbe.INDEX)).use{assertFalse(it.moveToFirst())}
++            assertEquals(invalid,RawData.dump(raw).toString());throw SyntheticRollback()
++        }}catch(_:SyntheticRollback){}
++        assertEquals(before,RawData.dump(raw).toString())
++    }
++    @Test fun constraintPrototypeRollsBackIndexAndConsumptionTogetherWithoutCounterTrust()=runBlocking {
++        val m=med();val b=box(m);val before=RawData.dump(raw).toString()
++        db.withTransaction {
++            raw.execSQL("SAVEPOINT synthetic_constraint_install")
++            DatabaseInvariantProbe.install(raw)
++            raw.query("SELECT 1 FROM sqlite_master WHERE type='index' AND name=?",arrayOf(DatabaseInvariantProbe.INDEX)).use{assertTrue(it.moveToFirst())}
++            rollbackSavepoint("synthetic_constraint_install")
++            raw.query("SELECT 1 FROM sqlite_master WHERE type='index' AND name=?",arrayOf(DatabaseInvariantProbe.INDEX)).use{assertFalse(it.moveToFirst())}
++            DatabaseInvariantProbe.install(raw)
++            try {
++                val r=record(m);val initial=RawData.dump(raw).toString();val op=UUID.randomUUID().toString()
++                raw.execSQL("SAVEPOINT synthetic_constraint_use")
++                consume(r,b,emptyList(),op);MeasuredConsumptionStore.auditStagedDataset(raw)
++                rollbackSavepoint("synthetic_constraint_use")
++                assertEquals(initial,RawData.dump(raw).toString())
++                consume(r,b,emptyList(),op);MeasuredConsumptionStore.auditStagedDataset(raw)
++            } finally {DatabaseInvariantProbe.remove(raw)}
++        }
++        assertNotEquals(before,RawData.dump(raw).toString())
++    }
++    @Test fun constraintPrototypeDoesNotMistakeUniqueHeaderForVerifiedPayload()=runBlocking {
++        val m=med();val b=box(m);val op=UUID.randomUUID().toString();consume(record(m),b,emptyList(),op)
++        val before=RawData.dump(raw).toString();class SyntheticRollback:RuntimeException()
++        try{db.withTransaction {
++            DatabaseInvariantProbe.install(raw)
++            try {
++                val other=record(m);val owner=ReferenceStore.identity(raw,b.scope,"MEDICATION",m,null)
++                val otherUuid=ReferenceStore.identity(raw,b.scope,"RECORD",other.id,owner)
++                ReferenceStore.insert(raw,"measured_operation",nextZeroEffectOperation(op,otherUuid))
++                raw.query("PRAGMA foreign_key_check").use{assertFalse(it.moveToFirst())}
++                val staged=RawData.dump(raw).toString()
++                rejects(ReferenceError.INVALID_SOURCE){MeasuredConsumptionStore.auditStagedDataset(raw)}
++                assertEquals(staged,RawData.dump(raw).toString())
++            } finally {DatabaseInvariantProbe.remove(raw)}
++            throw SyntheticRollback()
++        }}catch(_:SyntheticRollback){}
++        assertEquals(before,RawData.dump(raw).toString())
++    }
++    @Test fun constraintPrototypeRemainsEnforcedAfterEncryptedDatabaseReopen()=runBlocking {
++        val m=med();val b=box(m);val op=UUID.randomUUID().toString();consume(record(m),b,emptyList(),op)
++        val before=RawData.dump(raw).toString()
++        db.withTransaction{DatabaseInvariantProbe.install(raw)}
++        db.close()
++        db=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(key.clone()))
++            .allowMainThreadQueries().addMigrations(*allMigrations()).addCallback(SchemaGuards).build()
++        db.withTransaction {
++            try {
++                uniqueConstraintRejects{ReferenceStore.insert(raw,"measured_operation",nextZeroEffectOperation(op))}
++                assertEquals(before,RawData.dump(raw).toString());MeasuredConsumptionStore.auditStagedDataset(raw)
++            } finally {DatabaseInvariantProbe.remove(raw)}
++        }
++        encrypted(name)
++    }
+     @Test fun architectureCounterOnlyWitnessIsRefutedByRollbackWithoutAnyStampChange()=runBlocking {
+         val m=med();val b=box(m);val r=record(m);consume(r,b,listOf(use(b)))
+         val before=RawData.dump(raw).toString()
+@@ -49,7 +152,7 @@ abstract class MeasuredConsumptionContract {
+             raw.execSQL("UPDATE dose_record SET actual_dose=0.1 WHERE id=?",arrayOf(r.id))
+             val witness=ValidationArchitectureProbe.auditAndCapture(raw)
+             assertTrue(witness.matches(raw))
+-            raw.execSQL("ROLLBACK TO synthetic_repair");raw.execSQL("RELEASE synthetic_repair")
++            rollbackSavepoint("synthetic_repair")
+             assertEquals(invalid,RawData.dump(raw).toString())
+             // The initial parity RED is retained. This asserts rejection of the hypothesis, not validator success.
+             assertTrue("All proposed counters really do match the wrong state",witness.matches(raw))
+@@ -105,7 +208,7 @@ abstract class MeasuredConsumptionContract {
+             raw.execSQL("SAVEPOINT synthetic_sealed_repair")
+             raw.execSQL("UPDATE dose_record SET actual_dose=0.1 WHERE id=?",arrayOf(r.id))
+             val repaired=journal.sealAfterFullAudit();assertTrue(journal.unchanged(repaired))
+-            raw.execSQL("ROLLBACK TO synthetic_sealed_repair");raw.execSQL("RELEASE synthetic_sealed_repair")
++            rollbackSavepoint("synthetic_sealed_repair")
+             assertTrue(repaired.witness.matches(raw))
+             assertFalse(journal.markerMatches(repaired));assertFalse(journal.unchanged(repaired))
+             rejects(ReferenceError.INVALID_SOURCE){MeasuredConsumptionStore.auditStagedDataset(raw)}
+diff --git a/docs/REQUIREMENTS.md b/docs/REQUIREMENTS.md
+index 7af8bfc5..64f36096 100644
+--- a/docs/REQUIREMENTS.md
++++ b/docs/REQUIREMENTS.md
+@@ -1079,3 +1079,7 @@ LAB-03 的同文件增量授权记录 `PD-2026-10-19-LAB03-CATALOG-ADAPTER`：
+ ## 120. P4 验证架构重构与最终攻关（2026-10-20）
+ 
+ 负责人重新授权在原#57开展一轮全写入路径/不变式审计，评估可信全量基线、事务变更集及可靠失效机制；先RED→GREEN反例/差分测试，证明成立才接生产。首方案关键反例须审查假设，最多再评估一个机制实质不同的替代；无法证明则保留原实现并维持BLOCKED。保留独立全审计、原API26 SQLCipher512MiB/192MiB/14600记录/2000容器/32603行与5秒写入门，另测300ms/1秒非硬性目标和规模增长，不把独立诊断相加冒充实际写入分解，不隐藏冷启动/失效回退等待。若需表/触发器/Schema，先完成原子性、失效、迁移、备份、旧版拒绝/回滚设计，不占下个Room号或擅自合并。UI/P5/P6/PK/PNBAK1密码学/官方内容/权限/版本/签名/发布不在范围，入口OFF；全部准入通过后按既有保护/审核授权合并。
++
++## 121. P4 架构选择与最终解阻（2026-10-20）
++
++负责人要求用已有反例与原生证据比较三条方案：A保留全审计并重构执行、B可信基线与完整语义增量、C调整数据/约束边界；明确正确性、冷启动、热写、恢复、复杂度、维护、成本与回退。先选最小可信候选并验证，证明完整才接生产；不重新包装已证伪指纹/FK方案，不将TEMP journal升为生产权威，不维护未经证明的第二套复杂审计。首次使用、重启、恢复首写、失效、连续写与回滚分别计时，绝不隐藏准备成本或改变冻结预算。确需Schema/持久约束须先给迁移、备份、旧版拒绝及回滚设计，不擅自变更。若合理候选仍无法证明兼顾安全与预算，停止重复实验并提交明确的证据、缺失证明、最小安全替代及负责人需决定的取舍。仍只限P4后端，入口OFF、不动UI/LAB/PK/P5/P6/权限/签名/发布。

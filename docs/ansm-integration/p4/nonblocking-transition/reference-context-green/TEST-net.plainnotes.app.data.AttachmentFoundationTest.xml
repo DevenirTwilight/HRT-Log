@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.AttachmentFoundationTest" tests="16" skipped="0" failures="0" errors="0" timestamp="2026-10-21T09:29:42.130Z" hostname="4f13d57d08c1" time="2.485">
+  <properties/>
+  <testcase name="failedDatasetSwitchRollsBackAndStaleHandlesCannotBind" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.085"/>
+  <testcase name="actualRoomCommitIsInsideAuthorityAndStaleCapabilityCannotPublish" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.102"/>
+  <testcase name="realIntakeUuidSurvivesEditsDuplicateDeleteAndRestoreWithoutStockCreation" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.124"/>
+  <testcase name="operationReplayOwnershipAndTerminalStateAreProtected" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.083"/>
+  <testcase name="wrongPasswordCorruptionAndFailedRestoreDoNotChangeRowsOrEpoch" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.638"/>
+  <testcase name="clearFailureRollsBackDataDatasetAndReinstallsAllProtection" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.112"/>
+  <testcase name="room11KeepsThreeAttachmentDomainsDefaultDisabled" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.063"/>
+  <testcase name="visitTrashRestoreKeepsUuidThenPurgePreventsIntegerReuse" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.083"/>
+  <testcase name="pnBakBusinessSchemaTenStillExcludesAttachmentsAndRestoreRetiresIdentity" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.433"/>
+  <testcase name="typedIdentityIsStableAndMissingOrSkippedTargetsReject" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.079"/>
+  <testcase name="draftLinksAreScopedAndOldRestoreQuarantinesEvenSameIntegerTargets" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.319"/>
+  <testcase name="journalReplayCancelAndFailedTransactionKeepReservationsConsistent" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.076"/>
+  <testcase name="keyRolesPrivateSpaceAndMissingKeyCannotPretendRecovery" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.079"/>
+  <testcase name="unauthenticatedVersionsAndOperationsCannotBecomeReady" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.056"/>
+  <testcase name="labTrashRestoreKeepsTypedUuidAndContext" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.066"/>
+  <testcase name="changedTrashEvidenceFailsAndRestorationRollsBack" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.068"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

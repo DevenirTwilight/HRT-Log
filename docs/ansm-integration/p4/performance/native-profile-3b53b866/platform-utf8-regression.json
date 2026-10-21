@@ -1,0 +1,23 @@
+{
+  "source": "3b53b866870fca8ebc0e46f3124d2754b5ef4ee6",
+  "state": "FAIL_RETAINED",
+  "test": "ReferenceMigrationAndroidTest.utf8LengthMatchesPlatformForEveryCodeUnitPairsAndBoundaries",
+  "verified_job_failures": [
+    {
+      "api": 26,
+      "run": 39257569916,
+      "job": 118076789389,
+      "expected": 180,
+      "actual": 179
+    },
+    {
+      "api": 29,
+      "run": 39257569916,
+      "job": 118076789250,
+      "expected": 180,
+      "actual": 179
+    }
+  ],
+  "correction": "Delegate whole original text on any surrogate; all oracle inputs and expected values unchanged",
+  "correction_native_state": "NOT_RUN"
+}

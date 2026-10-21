@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "totals": {
+    "tests": 388,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "android_test_source_compilation": "PASS",
+  "new_native113_runtime": "NOT_RUN",
+  "scope": "Transaction-local source/scale/prefix indexing; no cached state survives an audit call",
+  "source_sha256": "e92cf3ec28b8b79d495101a69ce3e81a66474676366197e92525cd4ab11fec2b",
+  "log_sha256": "90be086f79482153f49e9691c64959de9a5e3efe5782580e28403537579ba132"
+}

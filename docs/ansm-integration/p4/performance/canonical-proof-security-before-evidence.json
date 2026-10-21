@@ -1,0 +1,12 @@
+{
+  "base_head": "c8d7c18",
+  "result": "FROZEN_SECURITY_REGRESSION_PASS_BEFORE_OPTIMIZATION",
+  "tests": 1,
+  "variants": [
+    "same operation UUID, noncanonical input text after genuine chain read",
+    "same operation UUID, different dataset header after genuine chain read"
+  ],
+  "database_write": "NONE - read-only cursor injection; real data/trigger state unchanged",
+  "junit_sha256": "a220ce47bc83385619d6588b9cf03027f7d9d63e783bcc6232ac2772ff927665",
+  "log_sha256": "7a921ead87b8f5413040e94fe3b07c176223a0f3a255993a90b7bafb5e46960c"
+}

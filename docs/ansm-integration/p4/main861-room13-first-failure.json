@@ -1,0 +1,144 @@
+{
+  "base_main": "86131172c6ebefe064c059efc296ff1883836aa9",
+  "p4_head": "cc7b182c6a2d06258b6104492e54efffe4a3870b",
+  "state": "UNCOMMITTED_ROOM13_BUSINESS12_MERGE_CANDIDATE",
+  "totals": {
+    "tests": 437,
+    "failures": 13,
+    "errors": 0,
+    "skipped": 0
+  },
+  "failures": [
+    {
+      "suite": "net.plainnotes.app.data.HistoricalVisitTest",
+      "test": "encryptedBackupRetainsVisitsAndTrashAcrossAdditiveReferenceSchema",
+      "message": "java.lang.AssertionError: expected:<12> but was:<13>",
+      "frames": [
+        "at net.plainnotes.app.data.HistoricalVisitContract$encryptedBackupRetainsVisitsAndTrashAcrossAdditiveReferenceSchema$1.invokeSuspend(HistoricalVisitContract.kt:33)",
+        "at net.plainnotes.app.data.HistoricalVisitContract.encryptedBackupRetainsVisitsAndTrashAcrossAdditiveReferenceSchema(HistoricalVisitContract.kt:33)"
+      ],
+      "xml_sha256": "704056c91ab2335bc3402c1c1ff43c4a38c65f9334654b9664cb1a35112f7c7d"
+    },
+    {
+      "suite": "net.plainnotes.app.data.LabPanelDataTest",
+      "test": "backupsRoundTripPanelsOldOnesRestoreUngroupedAndAnOldReaderRefusesNewOnes",
+      "message": "java.lang.AssertionError: expected:<11> but was:<12>",
+      "frames": [
+        "at net.plainnotes.app.data.LabPanelDataContract$backupsRoundTripPanelsOldOnesRestoreUngroupedAndAnOldReaderRefusesNewOnes$1.invokeSuspend(LabPanelDataContract.kt:200)",
+        "at net.plainnotes.app.data.LabPanelDataContract.backupsRoundTripPanelsOldOnesRestoreUngroupedAndAnOldReaderRefusesNewOnes(LabPanelDataContract.kt:194)"
+      ],
+      "xml_sha256": "e6c5641f01130680de4c1a7a1f40a3b7974d45f1af3b662e0be27e8c16b99c85"
+    },
+    {
+      "suite": "net.plainnotes.app.data.MeasuredConsumptionStoreTest",
+      "test": "internalMeasuredBackupRoundTripsPhysicalHistoryAndReplacesANonemptyTarget",
+      "message": "java.lang.AssertionError: expected:<11> but was:<12>",
+      "frames": [
+        "at net.plainnotes.app.data.MeasuredConsumptionContract$internalMeasuredBackupRoundTripsPhysicalHistoryAndReplacesANonemptyTarget$1.invokeSuspend(MeasuredConsumptionContract.kt:1026)",
+        "at net.plainnotes.app.data.MeasuredConsumptionContract.internalMeasuredBackupRoundTripsPhysicalHistoryAndReplacesANonemptyTarget(MeasuredConsumptionContract.kt:1015)"
+      ],
+      "xml_sha256": "91ed6d7155b29fc740cc98df449a32d429ebf7bcedc9d605095b53f3e5567cc7"
+    },
+    {
+      "suite": "net.plainnotes.app.data.MeasuredConsumptionStoreTest",
+      "test": "inventoryVersionErrorsAreRejectedBeforeOpeningTheDestination",
+      "message": "java.lang.AssertionError: Invalid inventory version opened destination",
+      "frames": [
+        "at net.plainnotes.app.data.MeasuredConsumptionContract$inventoryVersionErrorsAreRejectedBeforeOpeningTheDestination$1$guarded$1.get(MeasuredConsumptionContract.kt:887)",
+        "at net.plainnotes.app.data.NotesRepository$restoreBackupTo$3.invokeSuspend(NotesRepository.kt:814)",
+        "at net.plainnotes.app.data.MeasuredConsumptionContract$inventoryVersionErrorsAreRejectedBeforeOpeningTheDestination$1.invokeSuspend(MeasuredConsumptionContract.kt:893)"
+      ],
+      "xml_sha256": "91ed6d7155b29fc740cc98df449a32d429ebf7bcedc9d605095b53f3e5567cc7"
+    },
+    {
+      "suite": "net.plainnotes.app.data.MeasuredConsumptionStoreTest",
+      "test": "publishedBusinessSchemaTenRestoresLegacyAmountsAndProductReferencesWithoutInferringUnits",
+      "message": "java.lang.AssertionError: expected:<11> but was:<12>",
+      "frames": [
+        "at net.plainnotes.app.data.MeasuredConsumptionContract$publishedBusinessSchemaTenRestoresLegacyAmountsAndProductReferencesWithoutInferringUnits$1.invokeSuspend(MeasuredConsumptionContract.kt:908)",
+        "at net.plainnotes.app.data.MeasuredConsumptionContract.publishedBusinessSchemaTenRestoresLegacyAmountsAndProductReferencesWithoutInferringUnits(MeasuredConsumptionContract.kt:900)"
+      ],
+      "xml_sha256": "91ed6d7155b29fc740cc98df449a32d429ebf7bcedc9d605095b53f3e5567cc7"
+    },
+    {
+      "suite": "net.plainnotes.app.data.MeasuredConsumptionStoreTest",
+      "test": "strictInputRetainsProjectionLexemesUntilTheirIntegerContractIsChecked",
+      "message": "java.lang.AssertionError",
+      "frames": [
+        "at net.plainnotes.app.data.MeasuredConsumptionContract$strictInputRetainsProjectionLexemesUntilTheirIntegerContractIsChecked$1.invokeSuspend(MeasuredConsumptionContract.kt:955)",
+        "at net.plainnotes.app.data.MeasuredConsumptionContract.strictInputRetainsProjectionLexemesUntilTheirIntegerContractIsChecked(MeasuredConsumptionContract.kt:948)"
+      ],
+      "xml_sha256": "91ed6d7155b29fc740cc98df449a32d429ebf7bcedc9d605095b53f3e5567cc7"
+    },
+    {
+      "suite": "net.plainnotes.app.data.AttachmentFoundationTest",
+      "test": "room11KeepsThreeAttachmentDomainsDefaultDisabled",
+      "message": "java.lang.AssertionError: expected:<12> but was:<13>",
+      "frames": [
+        "at net.plainnotes.app.data.AttachmentFoundationContract$room11KeepsThreeAttachmentDomainsDefaultDisabled$1.invokeSuspend(AttachmentFoundationContract.kt:31)",
+        "at net.plainnotes.app.data.AttachmentFoundationContract.room11KeepsThreeAttachmentDomainsDefaultDisabled(AttachmentFoundationContract.kt:30)"
+      ],
+      "xml_sha256": "cf9c5bf20c15e2fcd7fd34c0f32b32bdb99f32e2a18fc811b523138cac996840"
+    },
+    {
+      "suite": "net.plainnotes.app.data.AttachmentFoundationTest",
+      "test": "pnBakBusinessSchemaTenStillExcludesAttachmentsAndRestoreRetiresIdentity",
+      "message": "java.lang.AssertionError: expected:<11> but was:<12>",
+      "frames": [
+        "at net.plainnotes.app.data.AttachmentFoundationContract$pnBakBusinessSchemaTenStillExcludesAttachmentsAndRestoreRetiresIdentity$1.invokeSuspend(AttachmentFoundationContract.kt:79)",
+        "at net.plainnotes.app.data.AttachmentFoundationContract.pnBakBusinessSchemaTenStillExcludesAttachmentsAndRestoreRetiresIdentity(AttachmentFoundationContract.kt:74)"
+      ],
+      "xml_sha256": "cf9c5bf20c15e2fcd7fd34c0f32b32bdb99f32e2a18fc811b523138cac996840"
+    },
+    {
+      "suite": "net.plainnotes.app.data.ReferencePersistenceTest",
+      "test": "futureHeaderIsRejectedBeforeOpeningDatabaseAndLegacyMaximumCannotReadNewBackup",
+      "message": "java.lang.AssertionError: expected:<11> but was:<12>",
+      "frames": [
+        "at net.plainnotes.app.data.ReferencePersistenceContract$futureHeaderIsRejectedBeforeOpeningDatabaseAndLegacyMaximumCannotReadNewBackup$1.invokeSuspend(ReferencePersistenceContract.kt:317)",
+        "at net.plainnotes.app.data.ReferencePersistenceContract.futureHeaderIsRejectedBeforeOpeningDatabaseAndLegacyMaximumCannotReadNewBackup(ReferencePersistenceContract.kt:313)"
+      ],
+      "xml_sha256": "002e0966f78064e2695044aaf13a59c4bacfbd31a19052aaae5945d3a63c67ec"
+    },
+    {
+      "suite": "net.plainnotes.app.data.ReferencePersistenceTest",
+      "test": "completeNewBackupRoundtripRetiresOldEditingEpochAndReopensWithoutCatalog",
+      "message": "java.lang.AssertionError: expected:<11> but was:<12>",
+      "frames": [
+        "at net.plainnotes.app.data.ReferencePersistenceContract$completeNewBackupRoundtripRetiresOldEditingEpochAndReopensWithoutCatalog$1.invokeSuspend(ReferencePersistenceContract.kt:120)",
+        "at net.plainnotes.app.data.ReferencePersistenceContract.completeNewBackupRoundtripRetiresOldEditingEpochAndReopensWithoutCatalog(ReferencePersistenceContract.kt:114)"
+      ],
+      "xml_sha256": "002e0966f78064e2695044aaf13a59c4bacfbd31a19052aaae5945d3a63c67ec"
+    },
+    {
+      "suite": "net.plainnotes.app.data.Ansm03b0InventoryTest",
+      "test": "allOldRoomVersionsUpgradeThenAcceptSeparateCandidateWithoutBackfillingInventory",
+      "message": "java.lang.AssertionError: expected:<12> but was:<13>",
+      "frames": [
+        "at net.plainnotes.app.data.Ansm03b0InventoryContract.allOldRoomVersionsUpgradeThenAcceptSeparateCandidateWithoutBackfillingInventory(Ansm03b0InventoryContract.kt:366)"
+      ],
+      "xml_sha256": "c503130044d9017821f16a2c93caa540ce81eaa813e8b375472e3e8787c47258"
+    },
+    {
+      "suite": "net.plainnotes.app.data.Ansm03b0InventoryTest",
+      "test": "candidateDDLFailureRollsBackWithoutChangingRoomVersionOrLegacyRows",
+      "message": "java.lang.AssertionError: expected:<12> but was:<13>",
+      "frames": [
+        "at net.plainnotes.app.data.Ansm03b0InventoryContract$candidateDDLFailureRollsBackWithoutChangingRoomVersionOrLegacyRows$1.invokeSuspend(Ansm03b0InventoryContract.kt:342)",
+        "at net.plainnotes.app.data.Ansm03b0InventoryContract.candidateDDLFailureRollsBackWithoutChangingRoomVersionOrLegacyRows(Ansm03b0InventoryContract.kt:336)"
+      ],
+      "xml_sha256": "c503130044d9017821f16a2c93caa540ce81eaa813e8b375472e3e8787c47258"
+    },
+    {
+      "suite": "net.plainnotes.app.data.Ansm03b0InventoryTest",
+      "test": "baselinePublicRecordEditReverseAdjustmentAndBackupPreserveAppendOnlyHistory",
+      "message": "java.lang.AssertionError: expected:<11> but was:<12>",
+      "frames": [
+        "at net.plainnotes.app.data.Ansm03b0InventoryContract$baselinePublicRecordEditReverseAdjustmentAndBackupPreserveAppendOnlyHistory$1.invokeSuspend(Ansm03b0InventoryContract.kt:150)",
+        "at net.plainnotes.app.data.Ansm03b0InventoryContract.baselinePublicRecordEditReverseAdjustmentAndBackupPreserveAppendOnlyHistory(Ansm03b0InventoryContract.kt:124)"
+      ],
+      "xml_sha256": "c503130044d9017821f16a2c93caa540ce81eaa813e8b375472e3e8787c47258"
+    }
+  ],
+  "status": "FAIL_FIRST_INTEGRATION_RUN"
+}

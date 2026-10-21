@@ -1,0 +1,77 @@
+{
+  "source": "3ee511043182eb9b3a81721d2f853fe9b6273664",
+  "required": "ALL_SIX_PASS",
+  "checks": [
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-18T10:57:16Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39121212580/job/117657030997",
+      "name": "jvm",
+      "startedAt": "2026-10-18T10:56:20Z",
+      "status": "COMPLETED",
+      "workflowName": "Android and domain checks"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-18T10:56:27Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39121212578/job/117657030799",
+      "name": "science-change-gate",
+      "startedAt": "2026-10-18T10:56:20Z",
+      "status": "COMPLETED",
+      "workflowName": "Science validation"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-18T10:56:27Z",
+      "conclusion": "SKIPPED",
+      "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39121212578/job/117657060904",
+      "name": "research-deep",
+      "startedAt": "2026-10-18T10:56:28Z",
+      "status": "COMPLETED",
+      "workflowName": "Science validation"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-18T11:12:31Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39121212580/job/117657031122",
+      "name": "android",
+      "startedAt": "2026-10-18T10:56:21Z",
+      "status": "COMPLETED",
+      "workflowName": "Android and domain checks"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-18T11:13:49Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39121212580/job/117657031093",
+      "name": "device-tests",
+      "startedAt": "2026-10-18T10:56:20Z",
+      "status": "COMPLETED",
+      "workflowName": "Android and domain checks"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-18T11:04:55Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39121212580/job/117657030893",
+      "name": "attachment-poc-compatibility (26)",
+      "startedAt": "2026-10-18T10:56:20Z",
+      "status": "COMPLETED",
+      "workflowName": "Android and domain checks"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-18T11:05:04Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39121212580/job/117657031097",
+      "name": "attachment-poc-compatibility (29)",
+      "startedAt": "2026-10-18T10:56:21Z",
+      "status": "COMPLETED",
+      "workflowName": "Android and domain checks"
+    }
+  ],
+  "native_budget": "FAIL - tracked separately in native-profile-3ee5110/evidence.json"
+}

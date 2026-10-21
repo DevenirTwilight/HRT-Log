@@ -52,6 +52,22 @@ abstract class ReferencePersistenceContract {
         val value=JSONObject().put("b","0.125").put("a","SYNTHETIC œstrogène µg 片 🧪 / \"\n")
         assertEquals("5ca17d160cc3848455eaad77fa7f180c0aebdf7e440b1406a0d46131fe92a2f1",ReferencePayload.sha(ReferencePayload.canonical(value)))
     }
+    @Test fun wholeUnescapedStringsKeepExplicitCanonicalBytesAcrossAndroidVersions() {
+        val values=listOf("","SYNTHETIC plain ASCII 0123456789 / -", "SYNTHETIC français œ µg 简体中文 繁體中文", "x".repeat(2048),"🧪".repeat(1024))
+        for(value in values) {
+            val expected="{\"value\":\"$value\"}"
+            assertArrayEquals(expected.toByteArray(Charsets.UTF_8),ReferencePayload.canonical(JSONObject().put("value",value)).toByteArray(Charsets.UTF_8))
+        }
+    }
+    @Test fun escapedRunsAndInvalidScalarsPreserveCanonicalBoundariesAcrossAndroidVersions() {
+        val values=listOf("\nabc" to "\\nabc", "abc\"" to "abc\\\"", "a\\b" to "a\\\\b", "a\u0001b" to "a\\u0001b",
+            "prefix\tmiddle\rend" to "prefix\\tmiddle\\rend", "🧪\n片" to "🧪\\n片")
+        for((value,escaped) in values)assertEquals("{\"value\":\"$escaped\"}",ReferencePayload.canonical(JSONObject().put("value",value)))
+        for(value in listOf("\u0000","a\ud800","a\udc00","\ud800x","x".repeat(2047)+"\ud800")) {
+            assertTrue("Invalid scalar must reject even after a long safe prefix",runCatching{ReferencePayload.canonical(JSONObject().put("value",value))}.isFailure)
+        }
+        assertTrue(runCatching{ReferencePayload.canonical(JSONObject().put("\ud800","SYNTHETIC"))}.isFailure)
+    }
     @Test fun linkingCorrectingAndUnlinkingNeverRewritesLegacyFactsOrStock()=runBlocking {
         val medication=med();repo.addContainers(medication,10.0,1,true);repo.unscheduled(medication,at,1.0)
         val before=legacy();val scope=repo.referenceScope()
@@ -101,7 +117,7 @@ abstract class ReferencePersistenceContract {
         repo.unscheduled(medication,at,1.0);val record=db.dao().records().single();repo.editRecord(record.id,at.plusSeconds(60),1.5,at.plusSeconds(86400))
         val before=business();val expectedGuards=guards();val backup=repo.exportBackup(password)
         val decoded=JSONObject(String(BackupCodec.decrypt(backup,password),Charsets.UTF_8))
-        assertEquals(11,decoded.getInt("schema"));assertFalse(decoded.getJSONObject("tables").has("reference_runtime"))
+        assertEquals(12,decoded.getInt("schema"));assertFalse(decoded.getJSONObject("tables").has("reference_runtime"))
         repeat(2) {
             repo.restoreBackup(backup,password)
             assertEquals(before,business());assertEquals(expectedGuards,guards())
@@ -117,6 +133,7 @@ abstract class ReferencePersistenceContract {
     @Test fun oldSchemaNineBackupClearsNewReferencesAndKeepsLegacyStockUnknown()=runBlocking {
         val medication=med();repo.addContainers(medication,10.0,1,true);repo.unscheduled(medication,at,1.0)
         val legacy=legacy();val oldTables=RawData.dump(raw,DOMAIN_TABLES.filterNot {it in ReferenceSchema.businessTables})
+        PublishedBusinessFixture.stripLegacyEncoding(oldTables)
         val archive=BackupCodec.encrypt(JSONObject().put("format",1).put("schema",9).put("tables",oldTables).toString().toByteArray(),password)
         val scope=repo.referenceScope();repo.associateMedication(scope,medication,0,id(),product())
         repo.restoreBackup(archive,password)
@@ -297,9 +314,11 @@ abstract class ReferencePersistenceContract {
         val medication=med();initial(medication,id(),product())
         val backup=repo.exportBackup(password)
         val decoded=JSONObject(String(BackupCodec.decrypt(backup,password),Charsets.UTF_8))
-        assertEquals(11,decoded.getInt("schema"))
-        try {RecordBackupCompatibility.readVersion(decoded,9);fail("Legacy maximum accepted schema10")}
-        catch(_:BackupCodec.NewerBackup){}
+        assertEquals(12,decoded.getInt("schema"))
+        for(maximum in listOf(9,10,11)) {
+            try {RecordBackupCompatibility.readVersion(decoded,maximum);fail("Legacy maximum accepted candidate schema12")}
+            catch(_:BackupCodec.NewerBackup){}
+        }
         val guarded=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space):NotesDatabase {fail("Future header must be refused before opening database");return db}})
         decoded.put("schema",RecordBackupCompatibility.SCHEMA+1)
         val future=BackupCodec.encrypt(decoded.toString().toByteArray(),password)

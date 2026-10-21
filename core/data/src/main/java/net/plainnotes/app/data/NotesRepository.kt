@@ -4,6 +4,7 @@ import androidx.room.withTransaction
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.asContextElement
 import net.plainnotes.app.domain.*
 import org.json.JSONObject
 import java.time.*
@@ -18,23 +19,31 @@ const val BACKFILL_MAX_DAYS=731L
     @Inject constructor(access: DatabaseAccess) : this(access, null)
     /** A repository that always works on [space], whatever the UI has selected (used by background reminders). */
     fun pinnedTo(space: Space) = NotesRepository(access, space)
-    val space get() = pinned ?: access.current
+    // Coroutine-local transaction routing, not a database-validity cache. Legacy sql()/db()
+    // helpers must stay on the same target as their DAO when global UI selection changes.
+    private val transactionSpace=ThreadLocal<Space?>()
+    val space get() = pinned ?: transactionSpace.get() ?: access.current
     fun select(space: Space) = access.select(space)
     private fun db() = access.get(space)
-    suspend fun <T> transaction(block: suspend (NotesDao) -> T): T = withContext(Dispatchers.IO) {
-        val db=db();db.withTransaction { block(db.dao()) }
+    internal val measuredSaveGate get()=access.measuredSaveGate
+    suspend fun <T> transaction(block: suspend (NotesDao) -> T): T {
+        val target=space
+        return measuredSaveGate.mutation(target) {withContext(Dispatchers.IO+transactionSpace.asContextElement(target)) {
+            val database=access.get(target);database.withTransaction {block(database.dao())}
+        }}
     }
     /** Capture the database once: changing the selected space cannot redirect a suspended reference transaction. */
-    private suspend fun <T> transactionWithSql(required: Space? = null, block: suspend (NotesDao, androidx.sqlite.db.SupportSQLiteDatabase) -> T): T {
+    private suspend fun <T> transactionWithSql(required: Space? = null, mutation:Boolean=true, block: suspend (NotesDao, androidx.sqlite.db.SupportSQLiteDatabase) -> T): T {
         val target=space
         if(required!=null && target!=required) throw ReferenceFailure(ReferenceError.WRONG_SPACE)
-        return withContext(Dispatchers.IO) {
+        val action:suspend()->T={withContext(Dispatchers.IO+transactionSpace.asContextElement(target)) {
             val database=access.get(target)
-            database.withTransaction { block(database.dao(),database.openHelper.writableDatabase) }
-        }
+            database.withTransaction {block(database.dao(),database.openHelper.writableDatabase)}
+        }}
+        return if(mutation)measuredSaveGate.mutation(target,action) else action()
     }
     /** Offline scan over immutable user-entered snapshots; bounded results, no product/name coalescing. */
-    suspend fun savedReferenceProducts(query:String="",form:String="",route:String="",strength:String=""):SavedReferencePage = transactionWithSql(Space.PRIMARY) { _,raw ->
+    suspend fun savedReferenceProducts(query:String="",form:String="",route:String="",strength:String=""):SavedReferencePage = transactionWithSql(Space.PRIMARY, mutation=false) { _,raw ->
         require(listOf(query,form,route,strength).all {it.length<=256})
         val entries=mutableListOf<SavedReferenceProduct>()
         var limited=false
@@ -50,15 +59,15 @@ const val BACKFILL_MAX_DAYS=731L
         }
         SavedReferencePage(entries.toList(),limited)
     }
-    suspend fun referencePreviewEpoch():String = transactionWithSql(Space.PRIMARY) { _,raw -> ReferenceStore.previewEpoch(raw) }
+    suspend fun referencePreviewEpoch():String = transactionWithSql(Space.PRIMARY, mutation=false) { _,raw -> ReferenceStore.previewEpoch(raw) }
     /** The caller's epoch was captured with its displayed record list, before any asynchronous restore or ID reuse. */
-    suspend fun recordedReferenceHistory(expectedEpoch:String,record:Long):RecordedReferenceHistory = transactionWithSql(Space.PRIMARY) { dao,raw ->
+    suspend fun recordedReferenceHistory(expectedEpoch:String,record:Long):RecordedReferenceHistory = transactionWithSql(Space.PRIMARY, mutation=false) { dao,raw ->
         if(ReferenceStore.previewEpoch(raw)!=expectedEpoch)throw ReferenceFailure(ReferenceError.STALE_SCOPE)
         val stored=dao.recordById(record) ?: throw ReferenceFailure(ReferenceError.UNKNOWN_IDENTITY)
         val scope=ReferenceStore.existingScope(raw)
         RecordedReferenceHistory(stored.revision,scope?.let{ReferenceStore.recordContexts(raw,it,record)} ?: emptyList())
     }
-    suspend fun medicationReferenceState(medication: Long): MedicationReferenceState = transactionWithSql(Space.PRIMARY) { _, raw ->
+    suspend fun medicationReferenceState(medication: Long): MedicationReferenceState = transactionWithSql(Space.PRIMARY, mutation=false) { _, raw ->
         val scope=ReferenceStore.existingScope(raw)
         MedicationReferenceState(scope,scope?.let {ReferenceStore.current(raw,it,medication)},ReferenceStore.previewEpoch(raw))
     }
@@ -66,15 +75,113 @@ const val BACKFILL_MAX_DAYS=731L
         ReferenceStore.initialAssociation(raw,medication,operationUuid,product,expectedPreviewEpoch)
     }
     suspend fun referenceScope(): ReferenceScope = transactionWithSql(Space.PRIMARY) { _, raw -> ReferenceStore.scope(raw) }
-    suspend fun medicationReference(scope: ReferenceScope, medication: Long): MedicationReference? = transactionWithSql(Space.PRIMARY) { _, raw ->
+    suspend fun medicationReference(scope: ReferenceScope, medication: Long): MedicationReference? = transactionWithSql(Space.PRIMARY, mutation=false) { _, raw ->
         ReferenceStore.current(raw,scope,medication)
     }
-    suspend fun recordReferenceContexts(scope: ReferenceScope, record: Long): List<RecordReferenceContext> = transactionWithSql(Space.PRIMARY) { _, raw ->
+    suspend fun recordReferenceContexts(scope: ReferenceScope, record: Long): List<RecordReferenceContext> = transactionWithSql(Space.PRIMARY, mutation=false) { _, raw ->
         ReferenceStore.recordContexts(raw,scope,record)
     }
     suspend fun associateMedication(scope: ReferenceScope, medication: Long, expectedRevision: Int, operationUuid: String, product: UserReferenceProduct?): MedicationReference = transactionWithSql(Space.PRIMARY) { _, raw ->
         ReferenceStore.associate(raw,scope,medication,expectedRevision,operationUuid,product)
     }
+    // Internal production integration; UI activation waits for shared forecast admission.
+    internal suspend fun measuredWriteTicket(scope:ReferenceScope,medication:Long,record:Long?=null):MeasuredWriteTicket = transactionWithSql(Space.PRIMARY, mutation=false) { _,raw ->
+        MeasuredUseIntegration.ticket(raw,scope,medication,record)
+    }
+    internal suspend fun recordMeasuredUse(ticket:MeasuredWriteTicket,operationUuid:String,draft:MeasuredActualUseDraft,created:Instant=Instant.now(),checkpoint:(ActualUseCheckpoint)->Unit={}):RecordedMeasuredUse {
+        val target=space
+        if(target!=Space.PRIMARY)throw ReferenceFailure(ReferenceError.WRONG_SPACE)
+        val frozenDraft=draft.copy(uses=draft.uses.toList())
+        return measuredSaveGate.mutation(target) {withContext(Dispatchers.IO+transactionSpace.asContextElement(target)) {val database=access.get(target);database.withTransaction {
+            MeasuredUseIntegration.create(database,ticket,operationUuid,frozenDraft,created,checkpoint)
+        }}}
+    }
+    private suspend fun <T> measuredTransaction(mutation:Boolean=true,block:suspend(NotesDatabase)->T):T {
+        val target=space
+        if(target!=Space.PRIMARY)throw ReferenceFailure(ReferenceError.WRONG_SPACE)
+        val action:suspend()->T={withContext(Dispatchers.IO+transactionSpace.asContextElement(target)){val database=access.get(target);database.withTransaction{block(database)}}}
+        return if(mutation)measuredSaveGate.mutation(target,action) else action()
+    }
+    /** Internal until the runtime owner/conflict gateway is reviewed. No UI entry is enabled. */
+    internal suspend fun prepareMeasuredActualUse(scope:ReferenceScope,medication:Long,operationUuid:String,
+        draft:MeasuredActualUseDraft,created:Instant):PreparedMeasuredCreate {
+        val frozen=draft.copy(uses=draft.uses.toList())
+        return measuredTransaction(mutation=false){MeasuredUseIntegration.prepareCreate(it,scope,medication,operationUuid,frozen,created)}
+    }
+    /** Owner-only root submission. Existing UUIDs need the same full frozen-input observation;
+     * the legacy create replay shortcut is not a complete original-request confirmation. */
+    internal suspend fun submitPreparedMeasuredActualUse(expected:PreparedMeasuredCreate):MeasuredConsumptionReceipt =
+        measuredTransaction { database ->
+            val raw=database.openHelper.writableDatabase
+            if(MeasuredConsumptionStore.existingConsumption(raw,expected.operationUuid)!=null) {
+                when(val observation=MeasuredUseIntegration.observeCreate(raw,expected)) {
+                    is MeasuredCreateObservation.Committed->observation.receipt
+                    MeasuredCreateObservation.NotObserved->throw ReferenceFailure(ReferenceError.OPERATION_CONFLICT)
+                }
+            } else MeasuredUseIntegration.create(database,expected.ticket,expected.operationUuid,expected.draft,expected.created).receipt
+        }
+    internal suspend fun observeMeasuredActualUse(expected:PreparedMeasuredCreate):MeasuredCreateObservation =
+        transactionWithSql(Space.PRIMARY, mutation=false){_,raw->MeasuredUseIntegration.observeCreate(raw,expected)}
+    private suspend fun currentMeasuredSlot(dao:NotesDao,slot:Slot,now:Instant):Slot {
+        val entry=timeline(dao,now,slot.at.minusMillis(1),slot.at.plusMillis(1),slot.zone).singleOrNull{it.slot.key==slot.key}
+            ?: throw ReferenceFailure(ReferenceError.STALE_REVISION)
+        if(entry.slot!=slot || slot.skipped || entry.state in setOf(SlotState.ON_TIME,SlotState.LATE,SlotState.SKIPPED))throw ReferenceFailure(ReferenceError.STALE_REVISION)
+        return entry.slot
+    }
+    internal suspend fun measuredScheduledTicket(scope:ReferenceScope,slot:Slot,now:Instant=Instant.now()):MeasuredScheduledTicket = measuredTransaction(mutation=false) { database ->
+        val raw=database.openHelper.writableDatabase
+        MeasuredUseIntegration.ticket(raw,scope,slot.medicationId) // Scope/owner before any integer slot lookup.
+        currentMeasuredSlot(database.dao(),slot,now)
+        val existing=MeasuredUseIntegration.slotRecord(database,slot.key)
+        if(existing!=null && (existing.deleted_at_utc!=null || existing.status !in setOf("MISSED","UNCONFIRMED")))throw ReferenceFailure(ReferenceError.STALE_REVISION)
+        MeasuredScheduledTicket(MeasuredUseIntegration.ticket(raw,scope,slot.medicationId,existing?.id),slot)
+    }
+    internal suspend fun completeMeasuredSlot(ticket:MeasuredScheduledTicket,operationUuid:String,draft:MeasuredActualUseDraft,created:Instant=Instant.now(),checkpoint:(ActualUseCheckpoint)->Unit={}):RecordedMeasuredUse {
+        val frozen=draft.copy(uses=draft.uses.toList())
+        return measuredTransaction {database ->
+            val raw=database.openHelper.writableDatabase
+            ReferenceStore.checkScope(raw,ticket.write.scope)
+            if(MeasuredConsumptionStore.existingConsumption(raw,operationUuid)==null) {
+                MeasuredUseIntegration.validate(raw,ticket.write)
+                currentMeasuredSlot(database.dao(),ticket.slot,created)
+            }
+            MeasuredUseIntegration.completeScheduled(database,ticket,operationUuid,frozen,created,checkpoint)
+        }
+    }
+    internal suspend fun createMeasuredPackage(expectedEpoch:String,expectedMedication:MedicationEntity,operationUuid:String,draft:PackageMeasurementDraft,created:Instant=Instant.now()):CreatedMeasuredContainer {
+        val frozenDraft=draft.copy(product=draft.product.copy(ingredients=draft.product.ingredients.toList(),routes=draft.product.routes.toList()),relations=draft.relations.toList())
+        return measuredTransaction {database->
+            val raw=database.openHelper.writableDatabase
+            if(ReferenceStore.previewEpoch(raw)!=expectedEpoch)throw ReferenceFailure(ReferenceError.STALE_SCOPE)
+            if(database.dao().medication(expectedMedication.id)!=expectedMedication)throw ReferenceFailure(ReferenceError.STALE_REVISION)
+            val result=MeasuredContainerStore.create(database,expectedEpoch,expectedMedication.id,operationUuid,frozenDraft,created)
+            MeasuredConsumptionStore.auditStagedDataset(raw);result
+        }
+    }
+    internal suspend fun countMeasuredStock(ticket:MeasuredWriteTicket,operationUuid:String,input:ConfirmedStockCount,created:Instant=Instant.now()):MeasuredCountReceipt =
+        measuredTransaction{MeasuredUseIntegration.count(it,ticket,operationUuid,input,created)}
+    internal suspend fun reviseMeasuredUse(ticket:MeasuredWriteTicket,sourceOperation:String,reverseOperation:String,newOperation:String,draft:MeasuredActualUseDraft,created:Instant=Instant.now(),checkpoint:(ActualUseCheckpoint)->Unit={}):RecordedMeasuredUse {
+        val frozenDraft=draft.copy(uses=draft.uses.toList())
+        return measuredTransaction{MeasuredUseIntegration.revise(it,ticket,sourceOperation,reverseOperation,newOperation,frozenDraft,created,checkpoint)}
+    }
+    internal suspend fun reconcileMeasuredUse(ticket:MeasuredWriteTicket,sourceOperation:String,reverseOperation:String,newOperation:String,
+        counts:List<ConfirmedStockCount>,draft:MeasuredActualUseDraft,created:Instant=Instant.now(),checkpoint:(ReconciliationCheckpoint)->Unit={}):RecordedMeasuredUse {
+        val frozenDraft=draft.copy(uses=draft.uses.toList());val frozenCounts=counts.toList()
+        return measuredTransaction{MeasuredUseIntegration.reconcileRevise(it,ticket,sourceOperation,reverseOperation,newOperation,frozenCounts,frozenDraft,created,checkpoint)}
+    }
+    internal suspend fun reconcileDeleteMeasuredUse(ticket:MeasuredWriteTicket,sourceOperation:String,reverseOperation:String,
+        counts:List<ConfirmedStockCount>,created:Instant=Instant.now(),checkpoint:(ReconciliationCheckpoint)->Unit={}):RecordEntity {
+        val frozenCounts=counts.toList()
+        return measuredTransaction{MeasuredUseIntegration.reconcileDelete(it,ticket,sourceOperation,reverseOperation,frozenCounts,created,checkpoint)}
+    }
+    internal suspend fun deleteMeasuredUse(ticket:MeasuredWriteTicket,sourceOperation:String,reverseOperation:String,created:Instant=Instant.now()):RecordEntity =
+        measuredTransaction{MeasuredUseIntegration.delete(it,ticket,sourceOperation,reverseOperation,created)}
+    internal suspend fun restoreMeasuredUse(ticket:MeasuredWriteTicket,newOperation:String,draft:MeasuredActualUseDraft,created:Instant=Instant.now(),checkpoint:(ActualUseCheckpoint)->Unit={}):RecordedMeasuredUse {
+        val frozenDraft=draft.copy(uses=draft.uses.toList())
+        return measuredTransaction{MeasuredUseIntegration.restore(it,ticket,newOperation,frozenDraft,created,checkpoint)}
+    }
+    internal suspend fun correctMeasuredPackage(ticket:MeasuredWriteTicket,operationUuid:String,containerUuid:String,action:MeasuredPackageAction,userConfirmed:Boolean,created:Instant=Instant.now()):MeasuredPackageReceipt =
+        measuredTransaction{MeasuredUseIntegration.packageAction(it,ticket,operationUuid,containerUuid,action,userConfirmed,created)}
     suspend fun medications()=withContext(Dispatchers.IO){db().dao().medications()}
     suspend fun saveMilestone(value:MilestoneEntity)=transaction{dao->
         LocalDate.parse(value.date);require(value.kind in MILESTONE_KINDS)
@@ -215,7 +322,7 @@ const val BACKFILL_MAX_DAYS=731L
             }
             Trash.RECORD->{val r=requireNotNull(dao.recordById(t.ref.toLong()));require(r.deleted_at_utc!=null)
                 val back=r.copy(deleted_at_utc=null,revision=r.revision+1);dao.updateRecord(back)
-                if(back.status in listOf("ON_TIME","LATE"))SupplyLedger.allocate(dao,dao.recordById(back.id)!!)}
+                if(back.status in listOf("ON_TIME","LATE"))allocateLegacyActualUse(dao,dao.recordById(back.id)!!)}
             Trash.PERIOD->{
                 val all=dao.historyPeriods();val deleted=HistoryPeriods.userEdits(all).filter{it.group_key==t.ref}
                 val users=HistoryPeriods.userEdits(all).filter{it.kind==HistoryPeriods.PERIOD && it.group_key!=t.ref};val versions=dao.regimens()
@@ -320,12 +427,36 @@ const val BACKFILL_MAX_DAYS=731L
     }
     suspend fun calendar(now:Instant=Instant.now(),zone:ZoneId=ZoneId.systemDefault(),displayFrom:LocalDate=LocalDate.now(zone)):List<TimelineEntry> = transaction { dao ->
         reconcile(dao,now,zone)
+        calendarProjection(dao,now,zone,displayFrom)
+    }
+    private suspend fun calendarProjection(dao:NotesDao,now:Instant,zone:ZoneId,displayFrom:LocalDate):List<TimelineEntry> {
         val from=dao.rules().minOfOrNull{it.missed_tracking_from_utc}?.let(Instant::ofEpochMilli) ?: now
         val window=timeline(dao,now,displayFrom.atStartOfDay(zone).toInstant(),displayFrom.plusDays(14).atStartOfDay(zone).toInstant(),zone)
         val unfinished=timeline(dao,now,minOf(from,now),now.plusMillis(1),zone)
             .filter{it.state in listOf(SlotState.PENDING,SlotState.SOON,SlotState.OVERDUE)}
-        (window+unfinished).distinctBy{it.slot.key}.sortedWith(compareBy<TimelineEntry>{it.slot.at}.thenBy{it.slot.key})
+        return (window+unfinished).distinctBy{it.slot.key}.sortedWith(compareBy<TimelineEntry>{it.slot.at}.thenBy{it.slot.key})
     }
+    /** Explicit read surface for browsing while an accepted save excludes maintenance writes. */
+    suspend fun readNotesSnapshot(now:Instant,zone:ZoneId,displayFrom:LocalDate,today:LocalDate):NotesReadSnapshot =
+        transactionWithSql(mutation=false) { dao,_ ->
+            val meds=dao.medications();val rules=dao.rules()
+            val slots=calendarProjection(dao,now,zone,displayFrom)
+            val upcoming=(timeline(dao,now,now,now.plus(Duration.ofDays(366)),zone)+slots.filter{it.slot.at<now})
+                .distinctBy{it.slot.key}.filter{it.state in listOf(SlotState.PENDING,SlotState.SOON,SlotState.OVERDUE)}
+            NotesReadSnapshot(meds,rules,rules.associate{it.id to dao.times(it.id).sortedBy{t->t.local_time}},
+                meds.mapNotNull{m->dao.profile(m.id)?.let{m.id to it}}.toMap(),dao.appointments(),slots,upcoming,
+                dao.records(),dao.containers(),dao.checkinItems(),dao.scores("0001-01-01",today.toString()),dao.notes("0001-01-01",today.toString()),
+                dao.stageReviews(),dao.symptomChecks("0001-01-01",today.toString()),dao.reviewEffects(),dao.regimens(),dao.regimenLinks(),
+                dao.milestones(),dao.labs(),dao.labContexts(),dao.visitQuestions(),dao.visitPacks(),dao.historyPeriods(),dao.annotations(),
+                dao.trash().filter{it.state==Trash.TRASHED},dao.deletedRecords(),stockForecasts(now,zone),dao.containersWithLedger().toSet(),
+                dao.voidedContainers(),dao.containersWithConsumption().toSet(),dao.referencePreviewEpoch(),dao.labPanels())
+        }
+    suspend fun readCalculationInputs(now:Instant,from:Instant,to:Instant,zone:ZoneId):CalculationReadInputs =
+        transactionWithSql(mutation=false) { dao,_ ->
+            val meds=dao.medications()
+            CalculationReadInputs(meds,meds.mapNotNull{m->dao.profile(m.id)?.let{m.id to it}}.toMap(),dao.records(),dao.labs(),
+                dao.pkSettings()?.current_weight_kg,timeline(dao,now,from,to,zone),dao.rules().associate{it.id to it.config_snapshot})
+        }
     /** Pending delays made before first unlock are reconciled without domain data in DPS. */
     suspend fun reconcileCache(cache:AlarmCache)=transaction { dao ->
         cache.alarms.forEach { alarm ->
@@ -361,7 +492,10 @@ const val BACKFILL_MAX_DAYS=731L
         require(value.name.isNotBlank() && value.dose_per_intake.isFinite() && value.dose_per_intake>0)
         val zone=ZoneId.systemDefault();reconcile(dao,effectiveNow,zone)
         val id=if(value.id==0L)dao.insertMedication(value) else {dao.updateMedication(value);value.id}
-        if(resizeContainers) resizableContainers(dao.containers(),id,value.container_capacity).forEach{dao.setContainerCapacity(it.id,value.container_capacity)}
+        if(resizeContainers) {
+            val measured=dao.measuredContainerIds().toSet()
+            resizableContainers(dao.containers().filter{it.id !in measured},id,value.container_capacity).forEach{dao.setContainerCapacity(it.id,value.container_capacity)}
+        }
         val cut=effectiveNow.toEpochMilli()
         val newProfile=profileFor(id,value,ester,pk)
         val snapshot=MedicationSnapshot.encode(value,newProfile)
@@ -485,6 +619,14 @@ const val BACKFILL_MAX_DAYS=731L
         dao.updateRecord(record.copy(rule_version_id=slot.ruleId,slot_key=key,scheduled_utc=slot.at.toEpochMilli(),scheduled_zone=slot.zone.id,
             planned_dose=slot.dose,late_after_minutes_snapshot=slot.lateMinutes,status=status,revision=record.revision+1))
     }
+    /** User entry guard: clinical dose alone never selects a physical package in mixed stock. */
+    private suspend fun allocateLegacyActualUse(dao:NotesDao,record:RecordEntity):Double {
+        val measured=dao.measuredContainerIds().toSet()
+        require(dao.containers().none {it.medication_id==record.medication_id && it.id in measured}) {
+            "Mixed or measured stock requires explicit physical-use confirmation"
+        }
+        return SupplyLedger.allocate(dao,record)
+    }
     suspend fun complete(slot:Slot,taken:Instant,dose:Double,site:String?=null)=transactionWithSql { dao, raw ->
         val existing=dao.records().singleOrNull{it.slot_key==slot.key}
         if(existing?.status in listOf("ON_TIME","LATE"))return@transactionWithSql
@@ -492,7 +634,7 @@ const val BACKFILL_MAX_DAYS=731L
         val status=ScheduleEngine.complete(slot,taken,ZoneId.systemDefault(),dose).status.name
         val result=recordFor(dao,slot,status,taken,dose).copy(unallocated_supply_amount=dose,site=site?.takeIf{it.isNotBlank()})
         val id=if(existing==null)dao.record(result) else {dao.updateRecord(result.copy(id=existing.id,revision=existing.revision+1,config_snapshot=existing.config_snapshot));existing.id}
-        val remaining=SupplyLedger.allocate(dao,dao.recordById(id)!!)
+        val remaining=allocateLegacyActualUse(dao,dao.recordById(id)!!)
 
         ReferenceStore.captureContext(raw,dao.recordById(id)!!)
         remaining
@@ -533,7 +675,7 @@ const val BACKFILL_MAX_DAYS=731L
         val snap=MedicationSnapshot.encode(m,dao.profile(id))
         val rid=dao.record(RecordEntity(medication_id=id,taken_utc=taken.toEpochMilli(),taken_zone=ZoneId.systemDefault().id,actual_dose=dose,unallocated_supply_amount=dose,site=site?.takeIf{it.isNotBlank()},
             status="ON_TIME",origin="APP",revision=1,config_snapshot=snap))
-        SupplyLedger.allocate(dao,dao.recordById(rid)!!)
+        allocateLegacyActualUse(dao,dao.recordById(rid)!!)
         ReferenceStore.captureContext(raw,dao.recordById(rid)!!)
         if(extra)dao.insertAnnotation(RecordAnnotationEntity(rid,HistoryPeriods.EXTRA,System.currentTimeMillis()))
     }
@@ -672,42 +814,94 @@ const val BACKFILL_MAX_DAYS=731L
     suspend fun records()=withContext(Dispatchers.IO){db().dao().records()}
 
     // --- Import / backup / wipe ---
-    suspend fun importTransMemo(plan:net.plainnotes.app.importer.TransMemo.Plan,overwrite:Boolean,zone:ZoneId=ZoneId.systemDefault())=withContext(Dispatchers.IO) {
-        val db=db();db.withTransaction { TransMemoWriter.write(db.dao(),db.openHelper.writableDatabase,plan,overwrite,zone) }
+    suspend fun importTransMemo(plan:net.plainnotes.app.importer.TransMemo.Plan,overwrite:Boolean,zone:ZoneId=ZoneId.systemDefault()):ImportSummary {
+        val target=space
+        return measuredSaveGate.mutation(target){withContext(Dispatchers.IO) {
+            val database=access.get(target);database.withTransaction {TransMemoWriter.write(database.dao(),database.openHelper.writableDatabase,plan,overwrite,zone)}
+        }}
     }
     suspend fun importHrtTracker(plan:net.plainnotes.app.importer.HrtTracker.Plan,targets:Map<net.plainnotes.app.importer.HrtTracker.Group,Long?>,
                                  names:Map<net.plainnotes.app.importer.HrtTracker.Group,String>,weightKg:Double?,zone:ZoneId=ZoneId.systemDefault())=transaction { dao ->
         HrtTrackerWriter.write(dao,plan,targets,names,weightKg,zone)
     }
-    suspend fun exportBackup(password:CharArray):ByteArray=withContext(Dispatchers.IO) {
-        val db=db()
-        val json=db.withTransaction { RegimenHistory.seed(db.openHelper.writableDatabase);ReferenceSchema.validate(db.openHelper.writableDatabase);JSONObject().put("format",BackupCodec.FORMAT_VERSION).put("schema",RecordBackupCompatibility.SCHEMA)
-            .put("created",Instant.now().toString()).put("tables",RawData.dump(db.openHelper.writableDatabase)) }
-        val plain=json.toString().toByteArray(Charsets.UTF_8)
-        try{BackupCodec.encrypt(plain,password)}finally{plain.fill(0)}
+    suspend fun exportBackup(password:CharArray):ByteArray=exportBackupFrom(space,password,null)
+    /** No UI caller until measured restore and forecast admission is complete. */
+    internal suspend fun exportMeasuredBackup(password:CharArray,expectedEpoch:String):ByteArray {
+        val target=space
+        if(target!=Space.PRIMARY)throw ReferenceFailure(ReferenceError.WRONG_SPACE)
+        return exportBackupFrom(target,password,expectedEpoch)
     }
+    private suspend fun exportBackupFrom(target:Space,password:CharArray,measuredEpoch:String?):ByteArray=measuredSaveGate.mutation(target){withContext(Dispatchers.IO) {
+        val db=access.get(target)
+        BackupPlaintextOwner().use {owner->
+        if(measuredEpoch!=null) db.withTransaction {
+            val raw=db.openHelper.writableDatabase
+            if(ReferenceStore.previewEpoch(raw)!=measuredEpoch)throw ReferenceFailure(ReferenceError.STALE_SCOPE)
+            RegimenHistory.seed(raw)
+            MeasuredConsumptionStore.auditStagedDataset(raw)
+            // Keep the same read snapshot; only the byte buffer survives into the unchanged cipher.
+            owner.capture(MeasuredBackupJson.encode(raw,Instant.now()))
+        } else {
+            // Legacy exports retain their existing DOM and validation path.
+            val json=db.withTransaction {
+                val raw=db.openHelper.writableDatabase
+                RegimenHistory.seed(raw)
+                InventoryEncoding.legacyOnly(raw);ReferenceSchema.validate(raw)
+                JSONObject().put("format",BackupCodec.FORMAT_VERSION).put("schema",RecordBackupCompatibility.SCHEMA)
+                    .put("created",Instant.now().toString()).put("tables",RawData.dump(raw))
+            }
+            owner.capture(json.toString().toByteArray(Charsets.UTF_8))
+        }
+        BackupCodec.encrypt(owner.bytes(),password)
+        }
+    }}
     /** Replaces all data with the backup; throws [BackupCodec.WrongPassword] or [BackupCodec.BadFile] without touching anything. */
     /**
      * Restores a backup from this schema or an older one (older ones are upgraded right after the rows are written, with the
      * same steps as the Room migration). A backup from a newer schema is refused.
      */
-    suspend fun restoreBackup(data:ByteArray,password:CharArray,today:LocalDate=LocalDate.now())=withContext(Dispatchers.IO) {
-        val plain=BackupCodec.decrypt(data,password)
-        val json=try{String(plain,Charsets.UTF_8).let{BackupLimits.checkJson(it);JSONObject(it)}}finally{plain.fill(0)}
-        val schema=RecordBackupCompatibility.readVersion(json)
-        val tables=json.getJSONObject("tables")
-        require(schema>=10 || ReferenceSchema.businessTables.none {tables.has(it)}) { "Misdeclared reference backup version" }
-        val required=DOMAIN_TABLES.filterNot{(schema<2 && it in listOf("stage_review","symptom_check","review_effect")) || (schema<4 && it in listOf("regimen_version","regimen_rule_link","milestone")) || (schema<5 && it=="lab_context_revision") || (schema<6 && it in listOf("visit_question","visit_pack")) || (schema<7 && it in listOf("history_period_revision","record_annotation")) || (schema<9 && it=="trash_item") || (schema<10 && it in ReferenceSchema.businessTables) || (schema<11 && it=="lab_panel")}
-        require(required.all{tables.has(it)}) { "Incomplete backup" }
-        // LAB-02: an older backup has no panels; its results are restored ungrouped, never regrouped by time, laboratory or id.
-        require(schema>=11 || ((tables.optJSONArray("lab_panel")?.length() ?: 0)==0 && tables.optJSONArray("lab_value")?.let{a->(0 until a.length()).all{a.getJSONObject(it).isNull("panel_id")}}!=false)) { "Misdeclared lab panel backup version" }
-        val db=db()
-        db.withTransaction {
-            val sql=db.openHelper.writableDatabase
-            RawData.restore(access.applicationContext,sql,tables,upgradeRegimens=schema<4,backfillTrash=schema<9)
-            if(schema<2) WellbeingUpgrade.apply(sql,today)
-        }
+    suspend fun restoreBackup(data:ByteArray,password:CharArray,today:LocalDate=LocalDate.now())=
+        restoreBackupTo(space,data,password,today,null)
+    /** Internal integration entry; shares strict parsing and the atomic legacy replacement implementation. */
+    internal suspend fun restoreMeasuredBackup(data:ByteArray,password:CharArray,expectedEpoch:String,today:LocalDate=LocalDate.now(),checkpoint:(RestoreCheckpoint)->Unit = {}) {
+        val target=space
+        if(target!=Space.PRIMARY)throw ReferenceFailure(ReferenceError.WRONG_SPACE)
+        restoreBackupTo(target,data,password,today,expectedEpoch,checkpoint)
     }
+    private suspend fun restoreBackupTo(target:Space,data:ByteArray,password:CharArray,today:LocalDate,measuredEpoch:String?,checkpoint:(RestoreCheckpoint)->Unit = {})=measuredSaveGate.mutation(target){withContext(Dispatchers.IO) {
+        try {
+            val restoreContext=kotlin.coroutines.coroutineContext
+            val checkRestoreActive:()->Unit={restoreContext.ensureActive()}
+            val restoreCheckpoint:(RestoreCheckpoint)->Unit={point->checkRestoreActive();checkpoint(point);checkRestoreActive()}
+            // Pure codec entries own plaintext strings; release old input before decrypting a replacement.
+            // This changes no trust state: every restored row and full invariant is still revalidated.
+            MeasuredOperationChain.clearPureInputMemo()
+            BackupJsonReader.indexed(BackupCodec.decrypt(data,password),checkActive=checkRestoreActive,
+                beforeParse={restoreCheckpoint(RestoreCheckpoint.PLAINTEXT_AUTHENTICATED)}).use { input ->
+                val json=input.metadata
+                val schema=RecordBackupCompatibility.readVersion(json)
+                val tables=input.tables
+                require(schema>=10 || ReferenceSchema.businessTables.none {tables.has(it)}) { "Misdeclared reference backup version" }
+                RecordBackupCompatibility.validateInventoryVersion(schema,tables)
+                val required=DOMAIN_TABLES.filterNot{(schema<2 && it in listOf("stage_review","symptom_check","review_effect")) || (schema<4 && it in listOf("regimen_version","regimen_rule_link","milestone")) || (schema<5 && it=="lab_context_revision") || (schema<6 && it in listOf("visit_question","visit_pack")) || (schema<7 && it in listOf("history_period_revision","record_annotation")) || (schema<9 && it=="trash_item") || (schema<10 && it in ReferenceSchema.businessTables) || (schema<11 && it=="lab_panel")}
+                require(required.all{tables.has(it)}) { "Incomplete backup" }
+                // LAB-02: an older backup has no panels; its results are restored ungrouped, never regrouped by time, laboratory or id.
+                require(schema>=11 || ((tables.optJSONArray("lab_panel")?.length() ?: 0)==0 && tables.optJSONArray("lab_value")?.let{a->(0 until a.length()).all{a.getJSONObject(it).isNull("panel_id")}}!=false)) { "Misdeclared lab panel backup version" }
+                restoreCheckpoint(RestoreCheckpoint.INPUT_VALIDATED)
+                val db=access.get(target)
+                db.withTransaction {
+                    val sql=db.openHelper.writableDatabase
+                    if(measuredEpoch!=null && ReferenceStore.previewEpoch(sql)!=measuredEpoch)throw ReferenceFailure(ReferenceError.STALE_SCOPE)
+                    RawData.restoreRows(access.applicationContext,sql,tables,upgradeRegimens=schema<4,backfillTrash=schema<9,measured=measuredEpoch!=null,checkpoint=restoreCheckpoint)
+                    if(schema<2) WellbeingUpgrade.apply(sql,today)
+                    checkRestoreActive()
+                }
+            }
+        } finally {
+            // Staging and destination audits may retain replacement plaintext in the pure codec.
+            MeasuredOperationChain.clearPureInputMemo()
+        }
+    }}
     /** Irreversibly deletes the database, its key file and Keystore key. */
     fun destroyAll()=access.destroy(space)
     fun destroy(space: Space)=access.destroy(space)
@@ -720,7 +914,7 @@ const val BACKFILL_MAX_DAYS=731L
         SupplyLedger.reverse(dao,id)
         val late=r.scheduled_utc?.let{s->r.late_after_minutes_snapshot?.let{l->taken.toEpochMilli()>s+l*60_000L}} ?: false
         val next=r.copy(taken_utc=taken.toEpochMilli(),taken_zone=ZoneId.systemDefault().id,actual_dose=dose,status=if(late)"LATE" else "ON_TIME",revision=r.revision+1)
-        dao.updateRecord(next);SupplyLedger.allocate(dao,dao.recordById(id)!!)
+        dao.updateRecord(next);allocateLegacyActualUse(dao,dao.recordById(id)!!)
     }
     /** Soft-deletes a taken intake; a scheduled slot becomes due again and may later be marked missed. */
     suspend fun deleteRecord(id:Long,now:Instant=Instant.now())=transaction { dao ->
@@ -745,13 +939,18 @@ const val BACKFILL_MAX_DAYS=731L
     /** Closes the open container(s) of a medication and opens a sealed one (or a new one with [capacity]). */
     suspend fun replaceContainer(medicationId:Long,capacity:Double)=transaction { dao ->
         val all=dao.containers().filter{it.medication_id==medicationId}
+        val measured=dao.measuredContainerIds().toSet()
+        require(all.none{it.id in measured}) { "Measured containers require explicit package replacement" }
         all.filter{it.state=="IN_USE"}.forEach{dao.setContainerState(it.id,if(it.capacity-it.used_amount<=1e-9)"EMPTY" else "DISCARDED",it.opened_on)}
         val sealed=all.filter{it.state=="SEALED"}.minByOrNull{it.id}
         if(sealed!=null)dao.setContainerState(sealed.id,"IN_USE",LocalDate.now().toString())
         else dao.insertContainer(ContainerEntity(medication_id=medicationId,capacity=capacity,initial_used_amount=0.0,used_amount=0.0,opened_on=LocalDate.now().toString(),state="IN_USE"))
     }
     suspend fun setRemaining(containerId:Long,remaining:Double)=transaction { SupplyLedger.setRemaining(it,containerId,remaining) }
-    suspend fun discardContainer(containerId:Long)=transaction { dao -> val c=dao.container(containerId);require(c.state!="VOIDED");dao.setContainerState(c.id,"DISCARDED",c.opened_on) }
+    suspend fun discardContainer(containerId:Long)=transaction { dao ->
+        require(containerId !in dao.measuredContainerIds()) { "Measured container requires explicit package discard" }
+        val c=dao.container(containerId);require(c.state!="VOIDED");dao.setContainerState(c.id,"DISCARDED",c.opened_on)
+    }
     /**
      * B4 "check stock": sets what is really left in an open or used-up package through the ledger's ADJUST entry. A
      * used-up package with something left becomes open again; no package is created, no dose record changes. Sealed
@@ -765,8 +964,14 @@ const val BACKFILL_MAX_DAYS=731L
     /** Packages with at least one ledger entry (consumption, reversal or adjustment). */
     suspend fun containersWithLedger()=transaction { dao -> dao.containersWithLedger().toSet() }
     /** Logical correction: ADJUST is audit history, not evidence of an actual intake. */
-    suspend fun removeMistakenContainer(containerId:Long)=transaction { dao -> PackageCorrections.void(sql(),dao,containerId,Instant.now()) }
-    suspend fun restoreVoidedContainer(containerId:Long)=transaction { dao -> PackageCorrections.restore(sql(),dao,containerId,Instant.now()) }
+    suspend fun removeMistakenContainer(containerId:Long)=transactionWithSql { dao,raw ->
+        require(containerId !in dao.measuredContainerIds()) {"Exact package correction requires a current confirmation ticket"}
+        PackageCorrections.void(raw,dao,containerId,Instant.now())
+    }
+    suspend fun restoreVoidedContainer(containerId:Long)=transactionWithSql { dao,raw ->
+        require(containerId !in dao.measuredContainerIds()) {"Exact package correction requires a current confirmation ticket"}
+        PackageCorrections.restore(raw,dao,containerId,Instant.now())
+    }
     suspend fun voidedContainers()=transaction { it.voidedContainers() }
 
     // --- Well-being ---
@@ -830,14 +1035,30 @@ const val BACKFILL_MAX_DAYS=731L
      * The open doses the stock forecast walks (B4): unfinished doses since tracking began plus the next
      * [StockForecasts.WINDOW_DAYS] days. The stock page, the calendar and stock reminders all use this one input.
      */
-    suspend fun stockDemand(now:Instant=Instant.now(),zone:ZoneId=ZoneId.systemDefault())=transaction { dao ->
+    private suspend fun stockDemandFrom(dao:NotesDao,now:Instant,zone:ZoneId):List<TimelineEntry> {
         val from=dao.rules().minOfOrNull{it.missed_tracking_from_utc}?.let(Instant::ofEpochMilli) ?: now
-        (timeline(dao,now,minOf(from,now),now.plusMillis(1),zone)+timeline(dao,now,now,now.plus(java.time.Duration.ofDays(StockForecasts.WINDOW_DAYS)),zone))
+        return (timeline(dao,now,minOf(from,now),now.plusMillis(1),zone)+timeline(dao,now,now,now.plus(java.time.Duration.ofDays(StockForecasts.WINDOW_DAYS)),zone))
             .filter{it.state in listOf(SlotState.PENDING,SlotState.SOON,SlotState.OVERDUE)}.distinctBy{it.slot.key}
     }
-    /** Shared stock forecasts for the active medications (B4). */
-    suspend fun stockForecasts(now:Instant=Instant.now(),zone:ZoneId=ZoneId.systemDefault())=transaction { dao ->
-        StockForecasts.forecastAll(dao.medications(),dao.containers(),stockDemand(now,zone))
+    suspend fun stockDemand(now:Instant=Instant.now(),zone:ZoneId=ZoneId.systemDefault())=transaction { dao ->stockDemandFrom(dao,now,zone)}
+    /** One captured SQL transaction; integer quanta never enter the legacy scalar forecast. */
+    suspend fun stockForecasts(now:Instant=Instant.now(),zone:ZoneId=ZoneId.systemDefault())=transactionWithSql(mutation=false) { dao,raw ->
+        val meds=dao.medications();val containers=dao.containers();val demand=stockDemandFrom(dao,now,zone)
+        val forecasts=StockForecasts.forecastAll(meds,containers,demand)
+        val modern=containers.any{it.inventory_encoding!=InventoryEncoding.LEGACY} || raw.query("SELECT 1 FROM measured_operation LIMIT 1").use{it.moveToFirst()}
+        if(!modern)return@transactionWithSql forecasts
+        val balances=try {MeasuredConsumptionStore.forecastBalances(raw,MeasuredConsumptionStore.auditStagedDataset(raw))}
+            catch(_:ReferenceFailure){return@transactionWithSql forecasts.mapValues{(_,f)->f.copy(available=null,lastCovered=null,firstShort=null,uncertainty=setOf(StockUnknownReason.INVALID_NEEDS_REVIEW))}}
+        val unresolved=raw.query("SELECT r.medication_id,o.unknown_reason FROM measured_operation o JOIN reference_identity i ON i.uuid=o.record_uuid AND i.dataset_uuid=o.dataset_uuid AND i.kind='RECORD' JOIN dose_record r ON r.id=i.live_handle WHERE o.kind='CONSUME' AND o.record_revision=r.revision AND r.deleted_at_utc IS NULL AND (o.unknown_reason IS NOT NULL OR o.unallocated_quantity IS NOT NULL)").use{c->buildList{while(c.moveToNext())add(c.getLong(0) to if(c.isNull(1))null else c.getString(1))}}
+        val version=ReferencePayload.sha(ReferenceStore.previewEpoch(raw)+Trash.rows(raw,"supply_container","1 ORDER BY id",emptyArray()).toString()+Trash.rows(raw,"measured_operation","1 ORDER BY operation_uuid",emptyArray()).toString()+
+            demand.joinToString("|"){it.slot.key+":"+it.slot.at.toEpochMilli()+":"+it.slot.dose.toRawBits()})
+        forecasts.mapValues { (id,f) ->
+            val issues=unresolved.filter{it.first==id}.map{if(it.second=="STOCK_EFFECT_NOT_CONFIRMED")StockUnknownReason.STOCK_EFFECT_UNKNOWN else StockUnknownReason.UNALLOCATED}.toSet()
+            val physical=balances[id].orEmpty()
+            val reasons=(if(physical.isEmpty())f.uncertainty else (f.uncertainty-StockUnknownReason.UNKNOWN_SOURCE))+issues
+            if(reasons.isEmpty())f.copy(snapshotSha256=version)
+            else f.copy(available=null,lastCovered=null,firstShort=null,uncertainty=reasons,physicalBalances=physical,snapshotSha256=version)
+        }
     }
     suspend fun labs()=withContext(Dispatchers.IO){db().dao().labs()}
     suspend fun labContexts()=withContext(Dispatchers.IO){db().dao().labContexts()}

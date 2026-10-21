@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.RegimenHistoryTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-10-21T14:54:55.945Z" hostname="506c18a63d5b" time="2.817">
+  <properties/>
+  <testcase name="oldBackupIsReconstructedWithoutCurrentProfileAndNewTablesRoundtrip" classname="net.plainnotes.app.data.RegimenHistoryTest" time="0.671"/>
+  <testcase name="pauseResumeAndFormulationChangeAreRecordedAsDifferentStages" classname="net.plainnotes.app.data.RegimenHistoryTest" time="0.084"/>
+  <testcase name="historicalLifecycleTypesRoundTripWithoutChangingCurrentPlans" classname="net.plainnotes.app.data.RegimenHistoryTest" time="0.36"/>
+  <testcase name="startedMilestoneCRUDUsesCommittedIdsAllowsEmptyTitleAndRollsBackFailure" classname="net.plainnotes.app.data.RegimenHistoryTest" time="0.074"/>
+  <testcase name="reminderChangesKeepCadenceAndVersionWhileDoseChangesFreezeNewContext" classname="net.plainnotes.app.data.RegimenHistoryTest" time="0.072"/>
+  <testcase name="invalidRegimenSnapshotRollsBackAndDoesNotReplaceMilestones" classname="net.plainnotes.app.data.RegimenHistoryTest" time="0.78"/>
+  <testcase name="nonuniformReminderMovePreservesSlotDosesFrozenVersionsAndBackupLinks" classname="net.plainnotes.app.data.RegimenHistoryTest" time="0.273"/>
+  <testcase name="forgedRuleLinkIsRejectedAndFrozenDefinitionCannotBeUpdated" classname="net.plainnotes.app.data.RegimenHistoryTest" time="0.499"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

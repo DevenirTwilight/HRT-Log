@@ -1,0 +1,9 @@
+# Post-test kernel diagnostics; no admission change
+
+3b53 native39257570583: actual instrumentation Process crashed during full_encrypted_backup. Last report remains IN_PROGRESS; post-restore writes and sampling NOT_RUN. Preserve artifactb507a8b6…8f7098/SHA/CRC and raw synthetic crash log in native-profile-3b53b866. Process3914 died; Android low-memory messages exist but do not establish Java OOM, kernel OOM, native RSS or an infrastructure-only failure. Last observed heap178666664 is not a final/native-memory peak. P4 remains blocked by this unresolved exit and the last complete5-second FAIL.
+
+Add only post-run host diagnostics, after both test and original collector returned and capture/watcher stopped. Success performs no kernel read. Failure re-verifies emulator serial/QEMU/API26 before fixed read-only dmesg|tail-n80,5-second timeout, tempfile streaming, retained stdout<=65536B and stderr<=8192B; clipping/denial/timeout remain explicit. No kernel/settings mutation, root restart, memory increase, backup/key access, polling within metrics, fixture/budget/production/crypto change. Capture does not classify the crash cause and can never produce budget PASS. Existing run exit propagation unchanged.
+
+Five tests first actually RED (missing helper and outside-run contract), then PASS; entire test_ansm_*.py44 PASS. Tests cover wrong/physical devices before kernel read, success no reads, clipping, zero/nonzero denial exit, timeout, and call placement only in diagnostics.finally after run. Initial RED is a new diagnostic contract, not a manufactured production failure. Native capture is NOT_RUN until new source workflow completes. Do not label replayed results as proof that the original crash was benign or resolved.
+
+An interrupted wrapper with no completed run exit also performs no kernel read; the new negative test covers this explicitly. The optional capture never starts while a measured test may still be running.

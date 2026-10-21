@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.DataRefreshTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-10-21T14:56:11.229Z" hostname="506c18a63d5b" time="8.826">
+  <properties/>
+  <testcase name="completedTwiceDailyIntakesStayCompletedAcrossReloadsAndHistoryEdits" classname="net.plainnotes.app.DataRefreshTest" time="5.229"/>
+  <testcase name="milestoneAcknowledgementIsCommittedVisibleAndDuplicateClickDoesNotInsertTwice" classname="net.plainnotes.app.DataRefreshTest" time="0.38"/>
+  <testcase name="importedAndClickedIntakesCompleteBothSlotsWithoutDoubleStockDeduction" classname="net.plainnotes.app.DataRefreshTest" time="0.48"/>
+  <testcase name="linkingUnknownDoseReplacesMissedPlaceholderAndRejectsOccupiedSlot" classname="net.plainnotes.app.DataRefreshTest" time="0.259"/>
+  <testcase name="medicalRetractionDeletionAndRecoveryRefreshWithoutDroppingQuestions" classname="net.plainnotes.app.DataRefreshTest" time="0.633"/>
+  <testcase name="stockAndCalendarRefreshTogetherAfterAdjustmentAndScheduleEdit" classname="net.plainnotes.app.DataRefreshTest" time="0.319"/>
+  <testcase name="voidedAdjustmentOnlyPackageRefreshesStockCalendarAndSharedForecastImmediately" classname="net.plainnotes.app.DataRefreshTest" time="0.345"/>
+  <testcase name="medicalVisitCommitRefreshesSharedStateWithoutDuplicateOrInventoryChange" classname="net.plainnotes.app.DataRefreshTest" time="0.285"/>
+  <testcase name="undoRestoresOneDueReminderAndRepeatedSelectionDoesNotRebuildIt" classname="net.plainnotes.app.DataRefreshTest" time="0.274"/>
+  <testcase name="undoSkippedRefreshesHistoryCalendarAndSharedForecastWithoutStockMovement" classname="net.plainnotes.app.DataRefreshTest" time="0.288"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

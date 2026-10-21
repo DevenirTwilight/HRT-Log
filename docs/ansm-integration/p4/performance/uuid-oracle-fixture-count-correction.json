@@ -1,0 +1,7 @@
+{
+  "state": "FAIL_TEST_FIXTURE_EXPECTATION",
+  "production": "UNCHANGED_d57d04c5",
+  "failure": "java.lang.AssertionError: expected:<10844> but was:<10716>",
+  "xml_sha256": "6b68927291781e11a9fc7bd12e78c1720ce06d3fa8c8d7db12289f294bf6b483",
+  "correction": "10000 random +128 version/variant +576 character mutations +12 forms =10716 oracle comparisons. The explicit128 positive assertions had been double-counted in the final expected counter, not in the corpus. No identifier mismatch occurred. This is not a RED claim against production."
+}

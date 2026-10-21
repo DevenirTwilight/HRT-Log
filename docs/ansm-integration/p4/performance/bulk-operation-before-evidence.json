@@ -1,0 +1,11 @@
+{
+  "base_head": "0fd0ca38bd94db910632067bffb17e2fe2f96f9a",
+  "production_change": "NOT_APPLIED",
+  "result": "EXPECTED_RED",
+  "tests": 1,
+  "failures": 1,
+  "message": "java.lang.AssertionError: Zero-effect operation must be fully audited from its bulk row rather than point-fetched expected:<0> but was:<1>",
+  "log_sha256": "94bf44e237b535546fd34646a2e92066442367c526d4ecbf389b5774799ce543",
+  "junit_sha256": "7251430b946e2bab391115af182a5542afb9637aed6bdd1a9037b836921b509c",
+  "contract": "Zero-allocation operations are still fully audited, but a bulk read must not perform a bound primary operation lookup for each operation. Physical stock/dose/history unchanged."
+}

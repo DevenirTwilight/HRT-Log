@@ -1,0 +1,9 @@
+{
+  "production_head": "14dda1ecebecc7b13e09e5ce7b11ad63dacb2b73",
+  "tests": 3,
+  "failures": 2,
+  "passed": 1,
+  "test_sha256": "df490ffbcf0848ed7d7af565fca3a1a178235cd6cc407781be197313188d1053",
+  "expected_failure": "Both invalid replay cases report SUCCESS instead of PENDING/MANUAL_CHECK; valid original replay passes",
+  "native": "NOT_RUN"
+}

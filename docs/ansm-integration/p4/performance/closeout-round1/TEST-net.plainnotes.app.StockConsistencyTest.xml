@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.StockConsistencyTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-20T12:58:27.628Z" hostname="2c2deac85eb5" time="0.109">
+  <properties/>
+  <testcase name="exactUnitsStayUnknownAcrossStockPageCalendarAndReminderAndNeverBorrowExpiry" classname="net.plainnotes.app.StockConsistencyTest" time="0.015"/>
+  <testcase name="staleLegacyForecastCannotFormatNewExactQuantaAsTheMedicationUnit" classname="net.plainnotes.app.StockConsistencyTest" time="0.001"/>
+  <testcase name="pageCalendarAndReminderAgreeForEveryScenario" classname="net.plainnotes.app.StockConsistencyTest" time="0.093"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

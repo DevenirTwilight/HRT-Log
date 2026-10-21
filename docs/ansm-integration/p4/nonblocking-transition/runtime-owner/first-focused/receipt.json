@@ -1,0 +1,14 @@
+{
+  "base": "993c89ceb488d0cd38a5e9e4ec3daca449958ee7",
+  "tests": 21,
+  "failures": 0,
+  "skipped": 0,
+  "environment": "Robolectric35/framework SQLite small synthetic fixture; not SQLCipher/native/LMK/performance acceptance",
+  "source_sha256": {
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredSaveGate.kt": "dcc09b9b0de04cfe47e4c46cf3253d82feb401826da8f385d8c20fa9d6aba995",
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredSaveCoordinator.kt": "4850884313bbec0ec76aed1acfce61ac2e20dbcc147d7802a384d3046c1a43e0",
+    "core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt": "0e510aef3cb1983c0591aeb7aa69453fb3ab2a37f869030a270dcc64f885e46e",
+    "core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt": "0ceca5032e70f8b05b5799df7a2b658aec08ec288de7bcb4a3013758ced1f3ba",
+    "core/data/src/test/java/net/plainnotes/app/data/MeasuredSaveCoordinatorTest.kt": "abe0d39cf0feaacae3b544b0e746058f9b1b2eefdbef0c173bbbccd202cda41e"
+  }
+}

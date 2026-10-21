@@ -1,0 +1,65 @@
+{
+  "source": "54b8a8e763a07f0868c5dbf27c9bbf10b90c7a61",
+  "status": "PASS",
+  "tests": [
+    {
+      "name": "net.plainnotes.app.AppShellBackNavigationTest",
+      "tests": "17",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.UnifiedConcentrationTranslationsTest",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.TranslationsTest",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.WriteStatusCardTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.NonBlockingWriteShellTest",
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.WriteStatusCardLayoutTest",
+      "tests": "8",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    }
+  ],
+  "total": 32,
+  "environment": "Robolectric API35; framework SQLite; actual NotesApp with injected synthetic observations",
+  "scope": "Real shell routes/back/status UI only. No Repository save submitted by shell tests. Not P4 admission.",
+  "native_sqlcipher": "NOT_RUN",
+  "device_talkback": "NOT_RUN",
+  "ci": "NOT_RUN [skip ci]",
+  "known_branch_failures": "Archived resource cleanup patch not applied; two prior RED assertions remain. Recovery stability NOT_PROVEN.",
+  "files": {
+    "TEST-net.plainnotes.app.AppShellBackNavigationTest.xml": "2741e6e9202b04b2ed8551285ec28fd4d467b841cdbaf3a7944e68b2b74fa30d",
+    "TEST-net.plainnotes.app.UnifiedConcentrationTranslationsTest.xml": "3b14dbde5c16e17a1eb556b90af292f0713e7b1c44f4a53cc147814799f0cdfe",
+    "TEST-net.plainnotes.app.TranslationsTest.xml": "8bc95bc9f0759c68b015e906cfadfe397c622a229333dcbe9bf6a4504ecc5eaf",
+    "gradle.log": "7774ce45b84413bdfa1eeaed28b2d3b03c76ad18b0305f0b067a41b0cc1afffe",
+    "actual-shell-pending-medications.png": "38b55e0c80078b9b6555010ba3fd95692a90b4ec7a7d38b7cf02e35b3d6bbd0c",
+    "TEST-net.plainnotes.app.WriteStatusCardTest.xml": "30b5da6c19792c32e3a551aa71d239ee128749641dc54411c401a7d95bb6890e",
+    "TEST-net.plainnotes.app.NonBlockingWriteShellTest.xml": "ad5ff8666c67366b7ca3d97bd9f47e4ae41eab6918a1d26ff0ac7d7342d3fab5",
+    "TEST-net.plainnotes.app.WriteStatusCardLayoutTest.xml": "e80cb4420b4a8b1531fe1883f7edb2fa9bdaeab3e0164f1b4e5cb0f4b7f794ee"
+  }
+}

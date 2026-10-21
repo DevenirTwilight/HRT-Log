@@ -1,0 +1,29 @@
+{
+  "status": "FAIL_WRITE_BUDGET_TRACE_UNAVAILABLE",
+  "source_head": "7590cc7891f05a3a3448176c80db9e91bf385b4e",
+  "run": 39106781296,
+  "attempt": 2,
+  "job": 117615781929,
+  "artifact_id": 12129236982,
+  "artifact_sha256": "667f49d9c1379bc13eb70dbf39b8b4ffbc063250fec040c0c91bc0e8ba50764c",
+  "sha256_verification": "PASS",
+  "zip_crc": "PASS",
+  "trace_generated_bytes": 1026403,
+  "trace_collected": "UNAVAILABLE",
+  "sampling_host_ack": false,
+  "watcher_error": "JSONDecodeError",
+  "cause_scope": "Actual watcher JSON error; exact device response was not captured. Code inspection identified exec-out missing-file diagnostics can be returned as success stdout while checking an absent alternate package. A synthetic test reproduces that boundary; replace only JSON handshake reads with exit-status-aware adb shell -T. Actual fix awaits native verification.",
+  "crash_root_cause": "Attempt1 remains UNVERIFIED; this completed repeat is not a crash fix.",
+  "post_restore_write_ms": [
+    10444.745865,
+    10459.21969,
+    10201.259327
+  ],
+  "write_budget_ms": 5000,
+  "production_admission": "PRODUCTION_BLOCKED",
+  "local_transport_test": {
+    "before": "21 tests,1 error (new missing-file case)",
+    "after": "190 Python tests PASS; malformed existing JSON still rejected",
+    "production_changes": "NONE"
+  }
+}

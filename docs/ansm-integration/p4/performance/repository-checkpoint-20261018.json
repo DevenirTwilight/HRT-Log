@@ -1,0 +1,64 @@
+{
+  "observed_on": "2026-10-18",
+  "default_branch": "claude/new-session-1959qb",
+  "default_head": "d13048b18ad15eb4e7aba70f63c3c5d94a705660",
+  "prs": [
+    {
+      "headRefOid": "55e246b5c8dfcec0cbd21e35f20a4465fb201b27",
+      "isDraft": false,
+      "mergeCommit": {
+        "oid": "6a4f03ad00510a2ec1b1f677bf9eeda593c81526"
+      },
+      "mergedAt": "2026-10-16T14:22:45Z",
+      "number": 45,
+      "state": "MERGED"
+    },
+    {
+      "headRefOid": "fe28a53b6c4d84437c4a1926fb6da66c14c01f89",
+      "isDraft": false,
+      "mergeCommit": {
+        "oid": "0dca778396619a005144dab044eaf4eafeafad40"
+      },
+      "mergedAt": "2026-10-16T15:02:09Z",
+      "number": 48,
+      "state": "MERGED"
+    },
+    {
+      "headRefOid": "606696edbccd6583a50d1fc28d6ed8069b2fcb5c",
+      "isDraft": false,
+      "mergeCommit": {
+        "oid": "b1b2d93be2b6d002faaf842f2519fc3958aef85a"
+      },
+      "mergedAt": "2026-10-16T12:48:53Z",
+      "number": 50,
+      "state": "MERGED"
+    },
+    {
+      "headRefOid": "7590cc7891f05a3a3448176c80db9e91bf385b4e",
+      "isDraft": true,
+      "mergeCommit": null,
+      "mergedAt": null,
+      "number": 57,
+      "state": "OPEN"
+    },
+    {
+      "headRefOid": "80c31ce5d5c7fbfb7e4d6f0b48dd873b37d7486d",
+      "isDraft": false,
+      "mergeCommit": {
+        "oid": "d13048b18ad15eb4e7aba70f63c3c5d94a705660"
+      },
+      "mergedAt": "2026-10-17T20:02:38Z",
+      "number": 63,
+      "state": "MERGED"
+    },
+    {
+      "headRefOid": "e69490fecc0e964764f449a3bf1a4ad84abbfe57",
+      "isDraft": false,
+      "mergeCommit": null,
+      "mergedAt": null,
+      "number": 65,
+      "state": "OPEN"
+    }
+  ],
+  "note": "Point-in-time remote observation; no merge, forced update or production activation performed."
+}

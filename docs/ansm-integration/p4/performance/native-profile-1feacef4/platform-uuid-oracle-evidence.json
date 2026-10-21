@@ -1,0 +1,24 @@
+{
+  "source": "1feacef41049cfca0d76e183d417373a171302f7",
+  "run_id": 39226228899,
+  "results": [
+    {
+      "api": 26,
+      "status": "PASS",
+      "test": "canonicalUuidPredicateMatchesThePlatformOracleAcrossVersionsAndMalformedForms",
+      "duration": "0.102s",
+      "zip_sha256": "46ceaaa44782c522b7facace2a0db84fda12270504ffdb902b58eaf01c955a8d",
+      "report_path": "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.ReferenceMigrationAndroidTest.html",
+      "report_sha256": "554cb3c8d0f6e21116dbce24948a9bde70d8b9408cfb563d6a380085808aa943"
+    },
+    {
+      "api": 29,
+      "status": "PASS",
+      "test": "canonicalUuidPredicateMatchesThePlatformOracleAcrossVersionsAndMalformedForms",
+      "duration": "0.127s",
+      "zip_sha256": "871a6a98a1b4c31e1687f7dfd39a555c41af177f2edd573429b9690a6ab3edb7",
+      "report_path": "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.ReferenceMigrationAndroidTest.html",
+      "report_sha256": "515600500bd65357d6dd8603aed0eea88322c8d5ea2bc50f8a7b463e5c169d7b"
+    }
+  ]
+}

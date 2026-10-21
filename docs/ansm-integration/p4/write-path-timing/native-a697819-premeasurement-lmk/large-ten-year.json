@@ -1,0 +1,16 @@
+{
+  "status": "IN_PROGRESS",
+  "environment": "Native API26 SQLCipher synthetic fixture; emulator, not physical hardware",
+  "diagnostic_run_token": "1098d847-0443-40b2-850a-50c0e4b10a9d",
+  "stage": "synthetic_fixture_expansion",
+  "transport_preflight": "PASS",
+  "device_total_ram_bytes": 520962048,
+  "process_max_heap_bytes": 201326592,
+  "database_encryption": "SQLCipher",
+  "api": 26,
+  "observed_heap_bytes": 42039880,
+  "peak_observed_jvm_heap_bytes": 42039880,
+  "peak_observed_database_disk_bytes": 4984912,
+  "real_seed_generation_ms": 51327.08752,
+  "synthetic_fixture_expansion_ms": 13077.4778
+}

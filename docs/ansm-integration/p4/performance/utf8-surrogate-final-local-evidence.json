@@ -1,0 +1,65 @@
+{
+  "source_base": "3b53b866870fca8ebc0e46f3124d2754b5ef4ee6",
+  "candidate_kind": "UNCOMMITTED_WHOLE_STRING_SURROGATE_FALLBACK",
+  "state": "PASS_LOCAL_ONLY",
+  "data_tests": 451,
+  "app_tests": 43,
+  "app_suites": {
+    "net.plainnotes.app.PrivacyNoticeFactsTest": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "9554cffe9e00537c33fae05a571851bd2d698e953b8ab1792763c85c6da9b742"
+    },
+    "net.plainnotes.app.StockConsistencyTest": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "9dd8d286a66ab72b2c94fad2dbd4ad2477e2b8641cb086151fa658556636749a"
+    },
+    "net.plainnotes.app.MeasuredStockUnknownMatrixTest": {
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "afb3d39ee8718f3b270f0f9449fdf7120a49fe094ec1b65c2663326c863abb72"
+    },
+    "net.plainnotes.app.PeriodStabilityTest": {
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "5c227d013ea745f986b6ad4c85cf6cdac26cb4396bf000927af5180ff21ee4f7"
+    }
+  },
+  "production_sha256": {
+    "core/data/src/main/java/net/plainnotes/app/data/ReferencePayload.kt": "43828dc2538022a740b5b1b12906190cd3a2427549b843de331fa1cddf296d1b",
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredUsePayload.kt": "aa02cd672e337a64a5f8d5a1fbedbc95838c90f840ea340a4ba252743b269955",
+    "core/data/src/main/java/net/plainnotes/app/data/PackageMeasurementPayload.kt": "aa66f2fda93b5a079da687f2252aa240c64fbc0809417e35439e043dc45b3a96",
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredOperationChain.kt": "51ff850a0e19dcfb363213b4ed01f142555bc6d6f39becbc9414838f5eef34c4",
+    "core/data/src/main/java/net/plainnotes/app/data/BackupValidation.kt": "af243969f00ca11d31451fdc960765c61c7a9e00666389525dd56587c151f3e8",
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt": "32e42bb218c7cdcfa50b73181ac36d940b40afa65ab695801ac4048e71275501"
+  },
+  "python_tests": 44,
+  "python_log_sha256": "3c07e169d24502a3ff8d631cc84f62e6d55e1d3d6d33ed19fa61866eb2d3abcf",
+  "generated_native_probe": {
+    "source_sha256": "9313167178989def0d4d89d785f84cdde764fba21033543cdf85e472c5511242",
+    "native_sha256": "04cc9f9f7a6ff3bdab1c179b8ab3ff2376a3a4b0d4e15036bbe0d2d6c40fa67c",
+    "status": "GENERATED_NOT_RUN"
+  },
+  "native_generated_kotlin_compile": "PASS",
+  "local_large": {
+    "records": 14600,
+    "containers": 2000,
+    "rows": 32603,
+    "queries": 185,
+    "full_projection_equality": true
+  },
+  "native_platform_oracle": "NOT_RUN_CORRECTION",
+  "native_backup_process_exit": "UNRESOLVED",
+  "native_performance": "NOT_RUN_CORRECTION",
+  "physical": "NOT_RUN",
+  "p4": "PRODUCTION_BLOCKED"
+}

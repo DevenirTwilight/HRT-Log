@@ -1,0 +1,15 @@
+{
+  "scope": "SYNTHETIC_API26_ACTUAL_PROCESS_KILL_AFTER_LARGE_BUDGET",
+  "cases": [
+    {
+      "stage": "ROWS_DELETED",
+      "status": "FAIL",
+      "reason": "AssertionError"
+    },
+    {
+      "stage": "ROWS_INSERTED",
+      "status": "FAIL",
+      "reason": "AssertionError"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "source": "9b9e8e2a980bd47588603bc20b80bcc38ed1ac7e",
+  "status": "PASS_TEST_ONLY_COROUTINE_CONTRACTS",
+  "totals": {
+    "tests": 7,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "scope": "No database writes or SQLCipher/native/performance validation; no runtime API/entry enabled.",
+  "full_regression": "NOT_RUN",
+  "production_integration": "NOT_IMPLEMENTED"
+}

@@ -1,0 +1,50 @@
+{
+  "source": "c3fd7799",
+  "status": "PASS_REAL_COMPOSE_COMPONENT_AND_TRANSLATIONS",
+  "counts": [
+    {
+      "suite": "net.plainnotes.app.TranslationsTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "net.plainnotes.app.UnifiedConcentrationTranslationsTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "net.plainnotes.app.WriteStatusCardLayoutTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "net.plainnotes.app.WriteStatusCardTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "screenshots": {
+    "zh-rCN_320dp_2.0x_dark.png": "aca2188e899ca1f0e50505036a27d89330e1872ffcbd1c5dc111ea815dd9b4f8",
+    "zh-rTW_320dp_2.0x_dark.png": "be7309ac918ddaa94085d0615daba6ba0cd8a08e9d518e07c59351cb4f0173a7",
+    "fr-rFR_411dp_1.0x_light.png": "a8323b4df73d4a68311d2af7bc22d7909322b960880d70dd9d6846ef31c1785a",
+    "fr-rFR_320dp_2.0x_dark.png": "55c988069c7fbae1e1bc055abb2d6c779386570b1181bbe8cc086cff072f02ef",
+    "en_411dp_1.0x_light.png": "757138053f5c3db8a1ace13b8b03ecf6dc16f187a06ef656a0ed2428b73d3745",
+    "zh-rCN_411dp_1.0x_light.png": "dcc285df13ae5c2ba126eef18343a85dee569eb0347be7106751d6649fa7346e",
+    "zh-rTW_411dp_1.0x_light.png": "fab7667d77fcca6129261d36ff1a31ec35a77568803deea1d7a0a90a41bfd7c5",
+    "en_320dp_2.0x_dark.png": "7d835909b80760d42c42fbbf5787e17bc5e2f549dc8eed1974115521bcaa3bc0"
+  },
+  "matrix": "Four languages × (320dp/2x/dark OR 411dp/1x/light): 8 representative cases, not full cross product.",
+  "visual_review": "French320/2x/dark and TraditionalChinese411/1x/light inspected; no critical clipping seen.",
+  "actual_shell_navigation": "NOT_IMPLEMENTED_THIS_CHECKPOINT",
+  "real_repository_binding": "NOT_IMPLEMENTED",
+  "device_talkback": "NOT_RUN",
+  "native_large_workload": "NOT_RUN_NO_NEW_RUN"
+}

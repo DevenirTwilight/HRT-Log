@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.HistoricalVisitTest" tests="18" skipped="0" failures="0" errors="0" timestamp="2026-10-21T09:29:52.923Z" hostname="4f13d57d08c1" time="1.665">
+  <properties/>
+  <testcase name="insertionAndDeletionFailuresRollBack" classname="net.plainnotes.app.data.HistoricalVisitTest" time="0.07"/>
+  <testcase name="editingKeepsIdOriginalZoneAndConfirmation" classname="net.plainnotes.app.data.HistoricalVisitTest" time="0.061"/>
+  <testcase name="legacyUnknownVisitCategoryIsPreservedUntilExplicitlyChanged" classname="net.plainnotes.app.data.HistoricalVisitTest" time="0.054"/>
+  <testcase name="labsContextsAndOtherAppointmentsStayIntact" classname="net.plainnotes.app.data.HistoricalVisitTest" time="0.075"/>
+  <testcase name="existingUnconfirmedVisitCanBeExplicitlyConfirmedWithoutChangingOtherFields" classname="net.plainnotes.app.data.HistoricalVisitTest" time="0.066"/>
+  <testcase name="newPastVisitIsExplicitlyConfirmedAndNormalized" classname="net.plainnotes.app.data.HistoricalVisitTest" time="0.051"/>
+  <testcase name="ordinaryPastAppointmentIsNeverAutomaticallyConfirmed" classname="net.plainnotes.app.data.HistoricalVisitTest" time="0.064"/>
+  <testcase name="pinnedMedicalStoreCannotWriteToOtherSpace" classname="net.plainnotes.app.data.HistoricalVisitTest" time="0.09"/>
+  <testcase name="staleDeleteAndDeletedEditCannotTouchOtherRows" classname="net.plainnotes.app.data.HistoricalVisitTest" time="0.08"/>
+  <testcase name="deletionRestoresSameVisitQuestionsAnswersAndFrozenPack" classname="net.plainnotes.app.data.HistoricalVisitTest" time="0.063"/>
+  <testcase name="staleEditCannotOverwriteNewerData" classname="net.plainnotes.app.data.HistoricalVisitTest" time="0.068"/>
+  <testcase name="deletingTwiceDoesNotDuplicateTrash" classname="net.plainnotes.app.data.HistoricalVisitTest" time="0.058"/>
+  <testcase name="existingAppointmentIsReusedNotDuplicated" classname="net.plainnotes.app.data.HistoricalVisitTest" time="0.052"/>
+  <testcase name="editsCannotMoveConfirmedVisitIntoFuture" classname="net.plainnotes.app.data.HistoricalVisitTest" time="0.056"/>
+  <testcase name="futureVisitAndInvalidZoneAndTypeRejectWithoutWrites" classname="net.plainnotes.app.data.HistoricalVisitTest" time="0.062"/>
+  <testcase name="retractOnlyConfirmationAndRepeatedRetractionIsSafe" classname="net.plainnotes.app.data.HistoricalVisitTest" time="0.062"/>
+  <testcase name="encryptedBackupRetainsVisitsAndTrashAcrossAdditiveReferenceSchema" classname="net.plainnotes.app.data.HistoricalVisitTest" time="0.356"/>
+  <testcase name="fileDatabaseReopenRetainsOccurrenceZoneAndConfirmation" classname="net.plainnotes.app.data.HistoricalVisitTest" time="0.269"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

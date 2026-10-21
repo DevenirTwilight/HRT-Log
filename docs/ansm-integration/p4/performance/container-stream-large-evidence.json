@@ -1,0 +1,15 @@
+{
+  "source_base": "a3c695749b90aa47b85bd9c4350249ab6e9698a1",
+  "candidate_kind": "UNCOMMITTED_CONTAINER_JOIN_WORKTREE",
+  "measured_production_sha256": "4ed43b4db12aaa33ab1328aacde377949bbf2638c143754ca97c2173dd685af5",
+  "diagnostic_probe_sha256": "73a43ba3aacddc3bdc2b2bdd8a22b0a94e0b07cd47e497adef2075187e0d5faf",
+  "fixture_sha256": "9313167178989def0d4d89d785f84cdde764fba21033543cdf85e472c5511242",
+  "queries": 2184,
+  "full_projection_equality": true,
+  "records": 14600,
+  "containers": 2000,
+  "rows": 32603,
+  "status": "DIAGNOSTIC_BUDGET_PASS",
+  "native_acceptance": "NOT_RUN_NEW_CANDIDATE",
+  "note": "Query totals are this integrated candidate. cc7 total4178 predates main LAB integration; do not claim a controlled1994/2000 total delta from different source versions. Test directly proves container point reads2 to0. Equality checks counted-wrapper transparency; new shared test separately compares standalone original SQL projections."
+}

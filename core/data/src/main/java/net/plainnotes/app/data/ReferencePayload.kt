@@ -5,7 +5,6 @@ import org.json.JSONObject
 import java.net.URI
 import java.security.MessageDigest
 import java.time.LocalDate
-import java.util.UUID
 
 /** Canonical, bounded source facts. Not MedicationEntity, a prescription or a PK profile. */
 data class UserReferenceProduct(
@@ -69,56 +68,110 @@ internal object ReferencePayload {
     const val MAX_BYTES = 65536
     const val MAX_TEXT = 2048
     private val fields = setOf("format", "kind", "namespace", "source_version", "recorded_on", "name", "ingredients", "strength", "form", "routes", "cis", "cip", "source_url", "verification")
-    fun uuid(text: String): Boolean = runCatching { UUID.fromString(text).toString() == text }.getOrDefault(false)
-    fun sha(text: String): String = MessageDigest.getInstance("SHA-256").digest(text.toByteArray(Charsets.UTF_8)).joinToString("") { "%02x".format(it.toInt() and 255) }
-    /** Fixed JSON escaping and scalar Unicode validation; independent of Android's JSONObject writer version. */
-    private fun quote(text: String): String = buildString {
-        append('"')
-        var index=0
-        while(index<text.length) {
-            val c=text[index++]
-            require(c!='\u0000')
+    /** Exactly the platform parse→canonical-format accepted set; never normalizes stored identities. */
+    fun uuid(text:String):Boolean {
+        if(text.length!=36)return false
+        for(index in text.indices) {
+            val c=text[index]
+            if(index==8 || index==13 || index==18 || index==23) {
+                if(c!='-')return false
+            } else if(c !in '0'..'9' && c !in 'a'..'f')return false
+        }
+        return true
+    }
+    /** Encoded size only; common BMP text needs no temporary byte array.
+     * Delegate the complete original string on ANY surrogate: Android's handling of malformed
+     * sequences differs from the JVM and cannot be inferred from isolated-code-unit replacement.
+     * Hashing/canonical Unicode validation and every caller's original limit remain separate.
+     */
+    internal fun utf8Length(text:String):Long {
+        var bytes=0L
+        for(c in text) {
             when {
-                Character.isHighSurrogate(c) -> {
-                    require(index<text.length && Character.isLowSurrogate(text[index]))
-                    append(c);append(text[index++])
-                }
-                Character.isLowSurrogate(c) -> error("Unpaired Unicode surrogate")
-                c=='"' -> append("\\\"")
-                c=='\\' -> append("\\\\")
-                c=='\b' -> append("\\b")
-                c=='\t' -> append("\\t")
-                c=='\n' -> append("\\n")
-                c=='\u000c' -> append("\\f")
-                c=='\r' -> append("\\r")
-                c.code<32 -> append("\\u"+c.code.toString(16).padStart(4,'0'))
-                else -> append(c)
+                c.code<0x80 -> bytes++
+                c.code<0x800 -> bytes+=2
+                c in '\uD800'..'\uDFFF' -> return text.toByteArray(Charsets.UTF_8).size.toLong()
+                else -> bytes+=3
             }
         }
-        append('"')
+        return bytes
+    }
+    fun sha(text: String): String {
+        val digest=MessageDigest.getInstance("SHA-256").digest(text.toByteArray(Charsets.UTF_8))
+        // Same fixed lowercase ASCII bytes; avoid32 locale Formatter instances for every audited digest.
+        val alphabet="0123456789abcdef";val out=CharArray(digest.size*2)
+        digest.forEachIndexed {index,byte->val n=byte.toInt() and 255;out[index*2]=alphabet[n ushr 4];out[index*2+1]=alphabet[n and 15]}
+        return String(out)
+    }
+    /** Byte-identical scalar escaping, appending safe runs without per-character builder calls. */
+    private fun StringBuilder.quote(text: String) {
+        append(34.toChar())
+        var index=0
+        var run=0
+        while(index<text.length) {
+            val c=text[index]
+            require(c.code!=0)
+            when {
+                Character.isHighSurrogate(c) -> {
+                    require(index+1<text.length && Character.isLowSurrogate(text[index+1]))
+                    index+=2
+                }
+                Character.isLowSurrogate(c) -> error("Unpaired Unicode surrogate")
+                c.code==34 || c.code==92 || c.code<32 -> {
+                    append(text,run,index)
+                    when {
+                        c=='"' -> append("\\\"")
+                        c=='\\' -> append("\\\\")
+                        c=='\b' -> append("\\b")
+                        c=='\t' -> append("\\t")
+                        c=='\n' -> append("\\n")
+                        c=='\u000c' -> append("\\f")
+                        c=='\r' -> append("\\r")
+                        c.code<32 -> append("\\u"+c.code.toString(16).padStart(4,'0'))
+                    }
+                    index++;run=index
+                }
+                else -> index++
+            }
+        }
+        // Android26's CharSequence range append copies character by character.
+        // The whole String overload is safe only after the complete scalar scan above.
+        if(run==0)append(text) else append(text,run,text.length)
+        append(34.toChar())
     }
     fun canonical(json: JSONObject): String {
-        fun encode(value: Any, depth: Int): String {
+        // One builder for the whole tree; no intermediate encoded subtree strings.
+        val out=StringBuilder()
+        fun encode(value: Any, depth: Int) {
             require(depth <= 16) { "Reference nesting limit" }
-            return when (value) {
-                JSONObject.NULL -> "null"
+            when (value) {
+                JSONObject.NULL -> out.append("null")
                 is JSONObject -> {
                     require(value.length() <= 64)
-                    value.keys().asSequence().toList().sorted().joinToString(",", "{", "}") { key ->
+                    out.append('{')
+                    value.keys().asSequence().toList().sorted().forEachIndexed { index,key ->
                         require(key.length <= 64)
-                        quote(key) + ":" + encode(value.get(key), depth + 1)
+                        if(index>0)out.append(',')
+                        out.quote(key);out.append(':');encode(value.get(key),depth+1)
                     }
+                    out.append('}')
                 }
                 is JSONArray -> {
                     require(value.length() <= 128)
-                    (0 until value.length()).joinToString(",", "[", "]") { encode(value.get(it), depth + 1) }
+                    out.append('[')
+                    for(index in 0 until value.length()) {
+                        if(index>0)out.append(',')
+                        encode(value.get(index),depth+1)
+                    }
+                    out.append(']')
                 }
-                is String -> { require(value.length <= MAX_TEXT); quote(value) }
-                is Int, is Long, is Boolean -> value.toString()
+                is String -> {require(value.length <= MAX_TEXT);out.quote(value)}
+                is Int, is Long, is Boolean -> out.append(value.toString())
                 else -> error("Exact reference values must use decimal strings, not floating point")
             }
         }
-        return encode(json, 0).also { require(it.toByteArray(Charsets.UTF_8).size <= MAX_BYTES) }
+        encode(json,0)
+        return out.toString().also { require(utf8Length(it) <= MAX_BYTES) }
     }
     fun userProduct(product: UserReferenceProduct): JSONObject = JSONObject().apply {
         put("format", 1); put("kind", "PRODUCT"); put("namespace", "USER_ENTERED")

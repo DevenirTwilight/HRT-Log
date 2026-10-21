@@ -1,0 +1,11 @@
+{
+  "status": "FAIL",
+  "totals": {
+    "tests": 5,
+    "failures": 5,
+    "errors": 0,
+    "skipped": 0
+  },
+  "reason": "Scheduled lookup incorrectly reused reference-only row helper for dose_record; existing allowlist correctly rejected it. Replace with bound SQL id query and the real record DAO; do not broaden the allowlist.",
+  "log_sha256": "a1ac8962cb0bfcdf5c9beeaa34b7a3cdb0979440c5feb5ab4d9db1601954b8a4"
+}

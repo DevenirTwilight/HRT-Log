@@ -1,0 +1,96 @@
+diff --git a/core/data/src/main/java/net/plainnotes/app/data/WriteAdmission.kt b/core/data/src/main/java/net/plainnotes/app/data/WriteAdmission.kt
+new file mode 100644
+index 00000000..b855442b
+--- /dev/null
++++ b/core/data/src/main/java/net/plainnotes/app/data/WriteAdmission.kt
+@@ -0,0 +1,46 @@
++package net.plainnotes.app.data
++
++import kotlinx.coroutines.currentCoroutineContext
++import kotlin.coroutines.AbstractCoroutineContextElement
++import kotlin.coroutines.CoroutineContext
++
++/** A conflicting operation is rejected before work starts, never queued or reported as saved. */
++class WriteInProgressException:IllegalStateException("Another write requires confirmation")
++
++/** Process-local exclusion, NOT a database validity cache. Every accepted write still uses its
++ * original transaction, ticket and full audit. Shared by pinned repositories through DatabaseAccess.
++ * A reservation covers all health spaces conservatively; ordinary private notes use another store. */
++internal class WriteAdmission {
++    private val monitor=Any()
++    private var writers=0
++    private var reserved:Reservation?=null
++    val pending:Boolean get()=synchronized(monitor){reserved!=null}
++
++    internal class Permit(val reservation:Reservation):AbstractCoroutineContextElement(Key) {
++        companion object Key:CoroutineContext.Key<Permit>
++    }
++    internal class Reservation internal constructor(private val gate:WriteAdmission) {
++        val context:CoroutineContext=Permit(this)
++        fun release()=gate.release(this)
++    }
++    fun reserve():Reservation=synchronized(monitor) {
++        if(reserved!=null || writers!=0)throw WriteInProgressException()
++        Reservation(this).also{reserved=it}
++    }
++    private fun release(lease:Reservation)=synchronized(monitor) {
++        if(reserved===lease)reserved=null
++    }
++    private fun enter(permit:Permit?):Boolean=synchronized(monitor) {
++        if(permit!=null) {
++            if(reserved!==permit.reservation)throw WriteInProgressException()
++            false
++        } else {
++            if(reserved!=null)throw WriteInProgressException()
++            writers++;true
++        }
++    }
++    suspend fun <T> write(block:suspend()->T):T {
++        val counted=enter(currentCoroutineContext()[Permit])
++        try{return block()}finally{if(counted)synchronized(monitor){writers--}}
++    }
++}
+diff --git a/core/data/src/test/java/net/plainnotes/app/data/WriteAdmissionTest.kt b/core/data/src/test/java/net/plainnotes/app/data/WriteAdmissionTest.kt
+new file mode 100644
+index 00000000..1b02f770
+--- /dev/null
++++ b/core/data/src/test/java/net/plainnotes/app/data/WriteAdmissionTest.kt
+@@ -0,0 +1,38 @@
++package net.plainnotes.app.data
++
++import kotlinx.coroutines.*
++import org.junit.Assert.*
++import org.junit.Test
++
++class WriteAdmissionTest {
++    private fun busy(block:()->Unit){try{block();fail("Conflicting write admitted")}catch(_:WriteInProgressException){}}
++    @Test fun ordinaryWriteCannotBeOvertakenAndReleasesAfterFailure()=runBlocking {
++        val gate=WriteAdmission();val entered=CompletableDeferred<Unit>();val finish=CompletableDeferred<Unit>()
++        val writer=launch{try{gate.write{entered.complete(Unit);finish.await();throw IllegalStateException("SYNTHETIC rollback")}}catch(_:IllegalStateException){}}
++        entered.await();busy{gate.reserve()};finish.complete(Unit);writer.join()
++        gate.reserve().release();assertFalse(gate.pending)
++    }
++    @Test fun reservationRejectsOtherWritersButDoesNotGrantDatabaseTrust()=runBlocking {
++        val gate=WriteAdmission();val lease=gate.reserve();var called=false
++        try{gate.write{called=true};fail("Reservation bypassed")}catch(_:WriteInProgressException){}
++        assertFalse(called);busy{gate.reserve()}
++        withContext(lease.context){gate.write{called=true}}
++        assertTrue(called);assertTrue(gate.pending)
++        lease.release();assertFalse(gate.pending);gate.write{}
++    }
++    @Test fun staleAndForeignPermitsCannotWriteOrReleaseNewReservations()=runBlocking {
++        val gate=WriteAdmission();val old=gate.reserve();old.release();val current=gate.reserve()
++        old.release();assertTrue(gate.pending)
++        for(permit in listOf(old.context,WriteAdmission().reserve().context)) {
++            try{withContext(permit){gate.write{fail("Stale owner wrote")}};fail("Permit accepted")}catch(_:WriteInProgressException){}
++        }
++        current.release();gate.write{}
++    }
++    @Test fun ownerCancellationDoesNotSilentlyUnlockAnUncertainOperation()=runBlocking {
++        val gate=WriteAdmission();val lease=gate.reserve();val entered=CompletableDeferred<Unit>()
++        val owner=launch(lease.context){gate.write{entered.complete(Unit);awaitCancellation()}}
++        entered.await();owner.cancelAndJoin()
++        assertTrue(gate.pending);busy{gate.reserve()}
++        lease.release();assertFalse(gate.pending)
++    }
++}

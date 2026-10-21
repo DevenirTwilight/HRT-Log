@@ -1,0 +1,139 @@
+{
+  "production_source": "9d304e58fd92f0171fd6ddd272f79dbe6ece3cb4",
+  "regular_jobs": [
+    {
+      "run": 39495197495,
+      "jobs": [
+        {
+          "id": 118878352620,
+          "name": "android",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39495197495/job/118878352620",
+          "active": []
+        },
+        {
+          "id": 118878352767,
+          "name": "attachment-poc-compatibility (29)",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39495197495/job/118878352767",
+          "active": []
+        },
+        {
+          "id": 118878352778,
+          "name": "jvm",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39495197495/job/118878352778",
+          "active": []
+        },
+        {
+          "id": 118878352963,
+          "name": "attachment-poc-compatibility (26)",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39495197495/job/118878352963",
+          "active": []
+        },
+        {
+          "id": 118878353160,
+          "name": "device-tests",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39495197495/job/118878353160",
+          "active": []
+        }
+      ]
+    },
+    {
+      "run": 39495191719,
+      "jobs": [
+        {
+          "id": 118878332727,
+          "name": "device-tests",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39495191719/job/118878332727",
+          "active": []
+        },
+        {
+          "id": 118878333113,
+          "name": "android",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39495191719/job/118878333113",
+          "active": []
+        },
+        {
+          "id": 118878333122,
+          "name": "attachment-poc-compatibility (29)",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39495191719/job/118878333122",
+          "active": []
+        },
+        {
+          "id": 118878333153,
+          "name": "jvm",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39495191719/job/118878333153",
+          "active": []
+        },
+        {
+          "id": 118878333313,
+          "name": "attachment-poc-compatibility (26)",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39495191719/job/118878333313",
+          "active": []
+        }
+      ]
+    },
+    {
+      "run": 39495197475,
+      "jobs": [
+        {
+          "id": 118878351571,
+          "name": "science-change-gate",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39495197475/job/118878351571",
+          "active": []
+        },
+        {
+          "id": 118878441518,
+          "name": "research-deep",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39495197475/job/118878441518",
+          "active": []
+        }
+      ]
+    },
+    {
+      "run": 39495191750,
+      "jobs": [
+        {
+          "id": 118878332120,
+          "name": "science-change-gate",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39495191750/job/118878332120",
+          "active": []
+        },
+        {
+          "id": 118878414922,
+          "name": "research-deep",
+          "status": "completed",
+          "conclusion": "skipped",
+          "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39495191750/job/118878414922",
+          "active": []
+        }
+      ]
+    }
+  ],
+  "head_checkpoint_is_docs_and_probe_only": true,
+  "all_ci_instances_passed": false
+}

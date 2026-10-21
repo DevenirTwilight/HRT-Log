@@ -140,4 +140,46 @@ abstract class BackupReplacementContract {
         assertEquals(before, business()); foreignKeys(); assertImmutable()
     }
 
+    @Test fun streamedBusinessDigestIsStableAcrossReorderedRecoveryAndDetectsChangedFields()=runBlocking {
+        ledger("SYNTHETIC digest")
+        val before=db.withTransaction{SyntheticRestoreDigest.read(raw)}
+        val tables=RawData.dump(raw);val rows=tables.getJSONArray("supply_transaction")
+        tables.put("supply_transaction",org.json.JSONArray((rows.length()-1 downTo 0).map{rows.getJSONObject(it)}))
+        db.withTransaction{RawData.restore(context,raw,tables);assertEquals(before,SyntheticRestoreDigest.read(raw))}
+        db.withTransaction {
+            raw.execSQL("UPDATE medication SET name='SYNTHETIC changed field'")
+            assertNotEquals(before,SyntheticRestoreDigest.read(raw))
+        }
+    }
+    @Test fun indexedInputMatchesFrozenDomRecoveryDecisionsAndWholeData()=runBlocking {
+        ledger("SYNTHETIC differential target")
+        val before=business();val guardsBefore=guards();val original=RawData.dump(raw)
+        class Rollback:RuntimeException()
+        suspend fun outcome(tables:BackupTables):Pair<Boolean,String> {
+            var result:Pair<Boolean,String>?=null
+            try {db.withTransaction {
+                try {RawData.restoreRows(context,raw,tables);result=true to business()}
+                catch(e:Exception){result=false to e.javaClass.name}
+                throw Rollback()
+            }}catch(_:Rollback){}
+            assertEquals(before,business());assertEquals(guardsBefore,guards());foreignKeys()
+            return checkNotNull(result)
+        }
+        val variants=listOf<(JSONObject)->Unit>(
+            {},
+            {val rows=it.getJSONArray("supply_transaction");it.put("supply_transaction",org.json.JSONArray((rows.length()-1 downTo 0).map{n->rows.getJSONObject(n)}));Unit},
+            {it.getJSONArray("medication").getJSONObject(0).put("unknown_column",1);Unit},
+            {it.getJSONArray("supply_transaction").getJSONObject(1).put("reversal_of_id",9999999);Unit},
+            {it.getJSONArray("medication").put(JSONObject(it.getJSONArray("medication").getJSONObject(0).toString()));Unit},
+            {it.getJSONArray("medication").getJSONObject(0).put("dose_per_intake","not a number");Unit})
+        for(mutate in variants) {
+            val candidate=JSONObject(original.toString());mutate(candidate)
+            val bytes=JSONObject().put("format",1).put("schema",12).put("tables",candidate).toString().toByteArray()
+            val frozen=FrozenRestoreJsonReader.read(bytes).getJSONObject("tables")
+            val old=outcome(BackupTables.of(frozen))
+            BackupJsonReader.indexed(bytes).use {assertEquals(old,outcome(it.tables))}
+            assertTrue(bytes.all{it==0.toByte()})
+        }
+    }
+
 }

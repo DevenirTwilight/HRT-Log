@@ -1,0 +1,43 @@
+{
+  "code_source": "ecc6671bc75673366bc7b0b189ff5ce78b31f6d7",
+  "head_during_run": "547c58781fb103847451b2cd549aae7b61db7478",
+  "status": "PASS",
+  "tests": [
+    {
+      "name": "net.plainnotes.app.data.NonBlockingWritePrototypeTest",
+      "tests": "7",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.NonBlockingRepositoryWriteTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    }
+  ],
+  "scope": "Actual NotesRepository/Room transactions connected to TEST_ONLY coroutine owner, small synthetic fixtures, framework SQLite on Robolectric API35. No runtime facade, production resolver or app save binding.",
+  "covered": [
+    "observer departure and one committed consumption",
+    "all three original failure checkpoints with byte-equivalent complete database rollback",
+    "lost result after real commit remains uncertain without replay",
+    "owner cancellation after real commit cannot claim rollback",
+    "current and frozen full oracle equality after successful cases"
+  ],
+  "not_covered": [
+    "native SQLCipher",
+    "actual OS process death",
+    "LMK stability",
+    "runtime cross-entrypoint conflict coverage",
+    "protected CI",
+    "real device and TalkBack"
+  ],
+  "files": {
+    "TEST-net.plainnotes.app.data.NonBlockingWritePrototypeTest.xml": "1d2e4af569e9dc6f0c6ed4f35ea499a82c409dce0e4351c97cf15d727691dbac",
+    "gradle.log": "5ffea6b5c2827928c8d44b157c4c269e1632414da3963ef18efe21d65425f443",
+    "TEST-net.plainnotes.app.data.NonBlockingRepositoryWriteTest.xml": "e9ff14aff44cb61514c944037e97646b1587ca963781115061b3b8dab66f8405",
+    "isolation.json": "a86716d81151683ee1c7616584f9cf3ccc5c75cb14903346da8c5f1b73b265d0"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "source": "e5a9b1315f919ed35a7a14f62f163e1f0a2d2985",
+  "state": "PASS_CHARACTERIZATION",
+  "tests": 9,
+  "valid_wire_cases": 10,
+  "invalid_wire_cases": 26,
+  "xml_sha256": "9fd7d968e29a39fef28341a6338db4f6877de9b5e8311be12ca719ebca38de9e",
+  "payload_source_sha256": "710a5e04c4d9408d21b7b08250748c7e798f62e333fddd57e0f44fe634190206",
+  "store_source_sha256": "24ef2fe9b45487948690002160b3dad996513b8e4031a15d87d907ebe9ee444c",
+  "new_path": "NOT_IMPLEMENTED_AT_CHARACTERIZATION",
+  "note": "Existing string roundtrip is the oracle. This is a passing baseline, not an invented RED result."
+}

@@ -13,6 +13,8 @@ import java.time.temporal.ChronoUnit
  * dose overrides, plan versions and taken records are applied there) in time order and subtracts each planned dose
  * from the tracked stock. Taken doses are not subtracted again: they were already allocated to the packages.
  */
+enum class StockUnknownReason { UNKNOWN_UNIT, UNKNOWN_SOURCE, MIXED_UNITS, UNALLOCATED, STOCK_EFFECT_UNKNOWN, INVALID_NEEDS_REVIEW, EXPIRY_NOT_FROZEN }
+
 data class StockForecast(
     val medicationId: Long,
     /** Remaining amount in open and sealed packages, or null when no package is tracked. */
@@ -23,8 +25,13 @@ data class StockForecast(
     val lastCovered: Instant?,
     /** Time of the first dose the stock cannot cover. */
     val firstShort: Instant?,
+    val uncertainty:Set<StockUnknownReason> = emptySet(),
+    val physicalBalances:List<ConfirmedPhysicalStock> = emptyList(),
+    /** Same immutable projection version is consumed by pages and reminders; not a claim of medical verification. */
+    val snapshotSha256:String?=null,
 ) {
     enum class Status {
+        UNKNOWN,
         /** No open or sealed package: nothing to compare against. */
         UNTRACKED,
         /** Stock is tracked but no dose is planned in the window: no estimate. */
@@ -36,6 +43,7 @@ data class StockForecast(
     }
 
     val status: Status get() = when {
+        uncertainty.isNotEmpty() -> Status.UNKNOWN
         available == null -> Status.UNTRACKED
         firstShort != null -> Status.SHORT
         plannedDoses == 0 -> Status.NO_PLAN
@@ -47,7 +55,7 @@ data class StockForecast(
      * 1 tomorrow. Calendar dates (not 24-hour blocks) so the number matches the date shown next to it.
      */
     fun daysUntilShort(today: LocalDate, zone: ZoneId): Int? =
-        firstShort?.let { ChronoUnit.DAYS.between(today, it.atZone(zone).toLocalDate()).coerceAtLeast(0).toInt() }
+        firstShort?.takeIf {uncertainty.isEmpty()}?.let { ChronoUnit.DAYS.between(today, it.atZone(zone).toLocalDate()).coerceAtLeast(0).toInt() }
 
     /** Low stock: a planned dose from today through the next [StockForecasts.LOW_STOCK_DAYS] - 1 days is not covered. */
     fun isLow(today: LocalDate, zone: ZoneId): Boolean = daysUntilShort(today, zone)?.let { it < StockForecasts.LOW_STOCK_DAYS } == true
@@ -63,6 +71,7 @@ object StockForecasts {
 
     /** Remaining amount across open (capacity minus used) and sealed (full) packages; null when none is tracked. */
     fun available(medicationId: Long, containers: List<ContainerEntity>): Double? {
+        if(containers.any {it.medication_id==medicationId && it.state in setOf("SEALED","IN_USE","EMPTY") && it.inventory_encoding!=InventoryEncoding.LEGACY})return null
         val mine = containers.filter { it.medication_id == medicationId && it.state in setOf("IN_USE", "SEALED") }
         if (mine.isEmpty()) return null
         return mine.sumOf { if (it.state == "IN_USE") it.capacity - it.used_amount else it.capacity }.coerceAtLeast(0.0)
@@ -72,6 +81,12 @@ object StockForecasts {
         val start = available(medicationId, containers)
         val mine = doses.filter { it.slot.medicationId == medicationId && it.state in OPEN && !it.slot.skipped }
             .distinctBy { it.slot.key }.sortedWith(compareBy<TimelineEntry> { it.slot.at }.thenBy { it.slot.key })
+        val tracked=containers.filter{it.medication_id==medicationId && it.state in setOf("SEALED","IN_USE","EMPTY")}
+        if(tracked.any{it.inventory_encoding!=InventoryEncoding.LEGACY}) {
+            val reasons=setOf(StockUnknownReason.UNKNOWN_UNIT,StockUnknownReason.UNKNOWN_SOURCE,StockUnknownReason.EXPIRY_NOT_FROZEN)+
+                if(tracked.any{it.inventory_encoding==InventoryEncoding.LEGACY})setOf(StockUnknownReason.MIXED_UNITS) else emptySet()
+            return StockForecast(medicationId,null,mine.size,null,null,reasons)
+        }
         if (start == null) return StockForecast(medicationId, null, mine.size, null, null)
         var left = start; var last: Instant? = null; var short: Instant? = null
         for (e in mine) {

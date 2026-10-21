@@ -1,0 +1,26 @@
+{
+  "baseline_checkpoint": "74953707",
+  "status": "PASS_FOCUSED_ONLY",
+  "suites": {
+    "net.plainnotes.app.data.MeasuredConsumptionStoreTest": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "net.plainnotes.app.data.BackupReplacementTest": {
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "net.plainnotes.app.data.IndexedBackupDocumentTest": {
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "native": "NOT_RUN",
+  "full_data_regression": "NOT_RUN"
+}

@@ -1,0 +1,22 @@
+{
+  "status": "LOCAL_VALIDATION_PASS_NATIVE_RETRY_PENDING",
+  "production_baseline": "617c9dd8636b386676ebd4a2166fccd27f162d3a",
+  "python": {
+    "tests": 165,
+    "failures": 0,
+    "errors": 0
+  },
+  "native_test_compile": "PASS",
+  "logs": {
+    "/tmp/ansm-p4-native-init-compile.log": "af067fec9f97b301a93c42370be3fa04990898184c326bbd2719ff60e23388a8",
+    "/tmp/ansm-p4-native-config-python.log": "6949b85eefd8e805ac886ef9e793a87c6bd55e78682817a6bf82bfcd39b8aefa"
+  },
+  "source_sha256": {
+    "scripts/configure_ansm_low_memory_avd.py": "5c495bc756c641b8547ca7ce44b938128acbee2b38690a7198c908fea0290880",
+    "scripts/prepare_ansm_native_performance.py": "9b4da12aded8228b63a9ddd312c0313d8040c0df5b91b214bf216b85253a31c0",
+    "scripts/run_ansm_native_performance.py": "25fe15d0617779a4638a726069cc530c7568b54aa4bcd936032a70fdac624a51",
+    "scripts/test_ansm_native_performance.py": "74c24fb35f69580f98aac0828f2cc3b92761e1a2fe5adf8bf15efd64da56ab67",
+    ".github/workflows/ansm-inventory-performance.yml": "c1620f7b5f28daf2fdf206aa9760eac7ddc6f48fb578201067414da41aa5408b"
+  },
+  "scope": "Test/CI configuration only. Runtime RAM, heap and crash cause still require actual emulator evidence. No budgets relaxed."
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "3343724",
+  "status": "EXPECTED_FAIL",
+  "failure": "java.lang.AssertionError: Trailing JSON content was accepted as a complete backup",
+  "scope": "Public restore accepted content after the closing root object instead of refusing before dataset replacement",
+  "log_sha256": "5464f01decb904e542bf7cb35d5e6f9e576e69d164c941c3578c7f6253a2043e"
+}

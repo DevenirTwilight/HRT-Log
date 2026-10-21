@@ -70,7 +70,7 @@ abstract class LabPanelDataContract {
                 "lab_context_revision" to "*", "trash_item" to "*", "lab_analyte" to "*").associate { (t, c) -> t to rows(db, t, c) } }
         val room = Room.databaseBuilder(context, NotesDatabase::class.java, name).addMigrations(*allMigrations()).addCallback(SchemaGuards).allowMainThreadQueries().build().also { opened += it }
         val raw = room.openHelper.writableDatabase
-        assertEquals(12, raw.version)
+        assertEquals(13, raw.version)
         before.forEach { (t, r) -> assertEquals(t, r, rows(raw, t, if (t == "lab_value") "id,analyte_code,value,unit,sampled_utc,sampled_zone,reference_lower,reference_upper,reference_unit,laboratory,note" else "*")) }
         assertEquals(0, raw.count("SELECT COUNT(*) FROM lab_value WHERE panel_id IS NOT NULL"))
         assertEquals(0, raw.count("SELECT COUNT(*) FROM lab_panel"))
@@ -197,7 +197,7 @@ abstract class LabPanelDataContract {
         val labs = repo.labs(); val panels = repo.labPanels(); val contexts = repo.labContexts()
         val backup = repo.exportBackup(pw)
         val json = JSONObject(String(BackupCodec.decrypt(backup, pw), Charsets.UTF_8))
-        assertEquals(11, json.getInt("schema")); assertTrue(json.getJSONObject("tables").has("lab_panel"))
+        assertEquals(12, json.getInt("schema")); assertTrue(json.getJSONObject("tables").has("lab_panel"))
         try { RecordBackupCompatibility.readVersion(json, supported = 10); fail("a Room 11 reader accepted a panel backup") } catch (_: BackupCodec.NewerBackup) {}
         repo.deleteLabPanel(panels.single().id, at)
         repo.restoreBackup(backup, pw)
@@ -217,6 +217,32 @@ abstract class LabPanelDataContract {
         try { repo.restoreBackup(BackupCodec.encrypt(drift.toString().toByteArray(), pw), pw); fail("inconsistent panel restored") } catch (_: Exception) {}
         assertEquals(labs.map { it.copy(panel_id = null) }, repo.labs()); assertTrue(repo.labPanels().isEmpty())
         db.openHelper.writableDatabase.query("PRAGMA foreign_key_check").use { assertFalse(it.moveToFirst()) }
+    }
+
+    @Test fun publishedBusinessElevenRestoresPanelsAndLegacyInventoryWithoutInferringIdentity() = runBlocking {
+        val (db, repo) = memory(); repo.batch()
+        val m = db.dao().insertMedication(MedicationEntity(name="SYNTHETIC legacy panel backup",molecule="OTHER",unit="MG",dose_per_intake=1.0,
+            container_capacity=20.25,site_rotation=false,notifications_on=false,active=false,sort_order=0))
+        val box = db.dao().insertContainer(ContainerEntity(medication_id=m,capacity=20.25,initial_used_amount=0.5,used_amount=0.5,state="SEALED"))
+        val panels=repo.labPanels();val labs=repo.labs();val contexts=repo.labContexts();val original=db.dao().container(box)
+        val raw=db.openHelper.writableDatabase
+        val tables=PublishedBusinessFixture.dump(raw,schema=11)
+        assertTrue(tables.has("lab_panel"));assertEquals(panels.single().id,tables.getJSONArray("lab_value").getJSONObject(0).getLong("panel_id"))
+        assertFalse(tables.getJSONArray("supply_container").getJSONObject(0).has("inventory_encoding"))
+        val header=JSONObject().put("format",1).put("schema",11).put("tables",tables)
+        assertEquals(11,RecordBackupCompatibility.readVersion(header,11))
+        val password="SYNTHETIC published schema11".toCharArray()
+        val archive=BackupCodec.encrypt(header.toString().toByteArray(),password)
+        try {
+            repo.deleteLabPanel(panels.single().id,at)
+            assertTrue(repo.labPanels().isEmpty())
+            repo.restoreBackup(archive,password)
+            assertEquals(panels,repo.labPanels());assertEquals(labs,repo.labs());assertEquals(contexts,repo.labContexts())
+            assertEquals(original,db.dao().container(box))
+            assertEquals(InventoryEncoding.LEGACY,db.dao().container(box).inventory_encoding)
+            assertEquals(0,raw.count("SELECT COUNT(*) FROM reference_identity WHERE kind='CONTAINER'"))
+            raw.query("PRAGMA foreign_key_check").use {assertFalse(it.moveToFirst())}
+        } finally {archive.fill(0);password.fill('\u0000')}
     }
 
     @Test fun legacyStringIsTheRoom11Text() {
@@ -259,7 +285,8 @@ abstract class LabPanelDataContract {
             assertEquals(saved,repo.labs());assertEquals(contexts,repo.labContexts());assertEquals(listOf(panel),repo.labPanels())
             repo.restoreBackup(archive,password)
             assertEquals(saved,repo.labs());assertEquals(contexts,repo.labContexts());assertEquals(listOf(panel),repo.labPanels())
-            assertEquals(12,db.openHelper.writableDatabase.version);assertEquals(11,RecordBackupCompatibility.SCHEMA)
+            // P4 candidate already advances Room12/business11 to13/12; all raw lab assertions stay intact.
+            assertEquals(13,db.openHelper.writableDatabase.version);assertEquals(12,RecordBackupCompatibility.SCHEMA)
         }finally{password.fill('\u0000');archive.fill(0)}
     }
 

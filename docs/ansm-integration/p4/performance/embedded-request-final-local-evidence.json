@@ -1,0 +1,66 @@
+{
+  "source_base": "e5a9b1315f919ed35a7a14f62f163e1f0a2d2985",
+  "candidate_kind": "UNCOMMITTED_EMBEDDED_REQUEST_WORKTREE",
+  "state": "PASS",
+  "app_tests": 43,
+  "app_failures": 0,
+  "app_errors": 0,
+  "app_skipped": 0,
+  "app_suites": [
+    {
+      "name": "net.plainnotes.app.MeasuredStockUnknownMatrixTest",
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "5b3abf16b8a1b91b5a608627a3d8dbe0e613c44b40f6cd7e74aad51d8f84c9f4"
+    },
+    {
+      "name": "net.plainnotes.app.PeriodStabilityTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "9fe0a593545b17247c750de189fff98d0510047a01168ba8bb87db50d82c4755"
+    },
+    {
+      "name": "net.plainnotes.app.PrivacyNoticeFactsTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "d651df5791c6f71f8f43a90adec2200ceb02e145a60920eb2c969aadc1ff242b"
+    },
+    {
+      "name": "net.plainnotes.app.StockConsistencyTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "13bed038b2b390caf2d7ee340f9bb7ba1ec5e7b00534065657daa0bff468dad4"
+    }
+  ],
+  "production_hashes": {
+    "MeasuredUsePayload.kt": "95ba3832c3106be843db610c245f41079c912d5652fb561df703fb78fe2fd22f",
+    "MeasuredConsumptionStore.kt": "32e42bb218c7cdcfa50b73181ac36d940b40afa65ab695801ac4048e71275501"
+  },
+  "python_tests": 10,
+  "generator_sha256": "6c3584609c1dec4dc4a913a4415ad187deab05d0a4514acefb6bbf00626bdbff",
+  "generated_native_probe": {
+    "source_sha256": "9313167178989def0d4d89d785f84cdde764fba21033543cdf85e472c5511242",
+    "native_sha256": "809f33449ce0e86e6ecdf5a834556eb8664f901a22861080729398959b6fb6cb",
+    "status": "GENERATED_NOT_RUN"
+  },
+  "native_generated_kotlin_compile": "PASS",
+  "local_large": {
+    "records": 14600,
+    "containers": 2000,
+    "rows": 32603,
+    "queries": 185,
+    "full_projection_equality": true
+  },
+  "diagnostic_probe_sha256": "593589a24f473b0498af6cd209fef000fce13afddc37582799387334bbd97ef7",
+  "native_execution": "NOT_RUN_NEW_CANDIDATE",
+  "physical": "NOT_RUN",
+  "p4": "PRODUCTION_BLOCKED"
+}

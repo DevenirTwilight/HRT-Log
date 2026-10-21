@@ -1,0 +1,36 @@
+{
+  "source": "140c567cae751918f8af44a8f408304ac5095319",
+  "run": 39390433266,
+  "job": 118520371379,
+  "artifact": 12250080963,
+  "official_zip_sha256": "0e39be8a02691fca36df0be8ce631c0cb83607871df24c5e52fa3e9e50ba7810",
+  "zip_crc": "PASS",
+  "status": "FAIL_WRITE_BUDGET_COMPLETE_RUN",
+  "backup_restore": "COMPLETED_THIS_RUN_NOT_A_GENERAL_OOM_RESOLUTION_CLAIM",
+  "write_ms": [
+    9535.217343,
+    9611.308828,
+    8815.72086
+  ],
+  "unchanged_write_budget_ms": 5000,
+  "heap_peak_sampled_bytes": 198477312,
+  "heap_budget_bytes": 201326592,
+  "physical_device": "NOT_RUN",
+  "sampling": "POST_BUDGET_DIAGNOSTIC_ONLY",
+  "trace_replay_byte_identical": true,
+  "files_sha256": {
+    "audit-sampling-summary.json": "4d3f1596276d96759526ba62997eff5fd25ace492016b70ef051eabd0cf097e3",
+    "trace-path-attempts.json": "751ae568e1232a7f13aba7853621051cf3f8b514aba4f14efbfe3d98e3ca0f26",
+    "execution.json": "afd175a270fb74e997d8b8731602c9a41613edf45c857a0f1e00668a6fbd8b99",
+    "preflight-path-attempts.json": "9127af72af53aef274a0b04667e2ac84bc3f2493a8d396fda5ed7ad3f56150f5",
+    "transport-preflight.json": "db67f82b290e3c07c0d255694bb8a2d54e9c55c8d2e22cee0003f2f7e6139571",
+    "trace-collection.json": "70a7d530967988a6ee14e11f6f1eb8f41fdceea0bb6804bdd172a21657c7363d",
+    "post-run-kernel-tail.txt": "b64b11a57584604c4889597d713c0151d0a36d2acb15c321591b60732f648ac4",
+    "post-run-kernel-diagnostics.json": "f626a2c150eb94c09ca91de88a55dca737adc07dd00a038d3c04f86c54483c9a",
+    "large-ten-year.json": "0248b3720baedcb087380f1c31afb73e970099035b6496f3ecaafeb669309503",
+    "environment.json": "a68e874713decc4e4365e7d0b0f3b36ee5f942bddebaa4550d9ab744aaf39b8f",
+    "source.json": "9cbac3b87adbc0fb2c8ce0bc30a63ec7bd4e668256387914f4a2efb8f0d76497",
+    "audit-sampling.trace.gz": "2559c736de116aa865a20ed0b1af3511c8c1c64ec6efb5631133a2c32be3cca4",
+    "synthetic-crash-log.txt.gz": "12f25cc205939afba4e5a1a8b8cc91629247d016788bc3e42cc68038b33355f7"
+  }
+}

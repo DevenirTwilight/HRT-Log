@@ -53,4 +53,9 @@ class StockAlertsTest {
         assertTrue(StockAlerts.due(listOf(med),hidden,stale,today,utc).isEmpty())
     }
 
+    @Test fun exactPackagingCannotBorrowCurrentLegacyExpiryOrDoseUnitsForAnAlert() {
+        val exact=box(20.0,"2026-02-01").copy(inventory_encoding="INTEGER_QUANTA_V1")
+        assertEquals("Unknown exact-stock forecast/expiry must not become a definite refill or expiry claim",emptyList<StockAlerts.Kind>(),kinds(listOf(med),listOf(exact)))
+    }
+
 }

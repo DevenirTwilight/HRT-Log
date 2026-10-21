@@ -1,0 +1,329 @@
+{
+  "source_base": "e5a9b1315f919ed35a7a14f62f163e1f0a2d2985",
+  "candidate_kind": "UNCOMMITTED_EMBEDDED_REQUEST_WORKTREE",
+  "state": "PASS",
+  "tests": 448,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "native_contract_kotlin_compile": "PASS",
+  "production_hashes": {
+    "MeasuredUsePayload.kt": "95ba3832c3106be843db610c245f41079c912d5652fb561df703fb78fe2fd22f",
+    "MeasuredConsumptionStore.kt": "32e42bb218c7cdcfa50b73181ac36d940b40afa65ab695801ac4048e71275501"
+  },
+  "suites": [
+    {
+      "name": "net.plainnotes.app.data.Ansm03b0InventoryTest",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "64cc3dcb87854ce9104dac97bd9484241d4018e2e4e6df01519bb565069c53c2"
+    },
+    {
+      "name": "net.plainnotes.app.data.AttachmentFoundationTest",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "a9839f8d3dd83734d47413ea92af9dfb6bc6c9e67c244eb03eab77b289cd9d21"
+    },
+    {
+      "name": "net.plainnotes.app.data.AttachmentMigrationTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "f87a3a977d4d86d79205719ba19ba861e1d3eba8cf135f44f326f482d3852e47"
+    },
+    {
+      "name": "net.plainnotes.app.data.BackfillTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "7b99eee2570ea0e02a324224e845559b14334039983a3a2ec33eaa6aef3b8491"
+    },
+    {
+      "name": "net.plainnotes.app.data.BackupJsonReaderStreamingTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "cc7da9b6c584ee0f8401fff4c3c8a8c836d29c7763f5c0e0c57fb354a5de1d71"
+    },
+    {
+      "name": "net.plainnotes.app.data.BackupReplacementTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "fa8afd30c711cfb1535b5ca691a3320f2b0198494648e8474a112904a643baef"
+    },
+    {
+      "name": "net.plainnotes.app.data.DailyTrashCollisionTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "f5747cf6a2c9af561678fd271ee563a1e2833b3538100334113cd56c8b35dffa"
+    },
+    {
+      "name": "net.plainnotes.app.data.DataTransferTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "3906903650f6f80bb7a590029ee75542b19f789b2c565324da885753fc0f162f"
+    },
+    {
+      "name": "net.plainnotes.app.data.HistoricalContextRepairTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "7ae99c69d5a55b06bc9529032c98f815d9d81c26d4730dcee0927ce0dccfa984"
+    },
+    {
+      "name": "net.plainnotes.app.data.HistoricalVisitTest",
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "3aad9d4b5401aa0425e82dcfa234a050f30a91916f7547128b25f8a1dc97f443"
+    },
+    {
+      "name": "net.plainnotes.app.data.HistoryIntegrityTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "965b327d9d33e6dc141dd84dd8ba9b98e55eff268acc79c7f435bad2248053e2"
+    },
+    {
+      "name": "net.plainnotes.app.data.HistoryPeriodDataTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "91d7fd271a2b864fca608b633cc460057746c18ac818bad5e8f2c1f94d7b6908"
+    },
+    {
+      "name": "net.plainnotes.app.data.HrtTrackerImportTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "832a97d33e6ac0defb93401d8d34da6ca01e2f476ccd8af0ccfb491525a9ee32"
+    },
+    {
+      "name": "net.plainnotes.app.data.KeyBoundaryTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "b9a22836aaed20717710bd38581a52e9ff71bc74471c99e3f9d219c5db95c8c5"
+    },
+    {
+      "name": "net.plainnotes.app.data.LabBatchSaveTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "c6c87cafc53066be94fd738db600060a30a1be846ffd1edb8cdce3e8c36f7432"
+    },
+    {
+      "name": "net.plainnotes.app.data.LabContextTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "41e5cee1015e8e75cba9ada86de0dfb58c261f5478032f32e836f675c3954914"
+    },
+    {
+      "name": "net.plainnotes.app.data.LabPanelDataTest",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "83907d20b09543590c6fed97ee68520d3f0f2c951fde446fd1a1a5e4f570b91b"
+    },
+    {
+      "name": "net.plainnotes.app.data.LedgerReplacementTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "5b4ec9dea8551fcb2fdb3afd9cb07cc1f1ad6b539112c429cb55e816ab7357a2"
+    },
+    {
+      "name": "net.plainnotes.app.data.MeasuredConsumptionStoreTest",
+      "tests": 125,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "13e5253e1e08e1c3acbabe52fbc2b74ee3d239eb13f21cb029142666fb02827a"
+    },
+    {
+      "name": "net.plainnotes.app.data.MeasuredContainerStoreTest",
+      "tests": 19,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "ff68da9c595467d44953475f031fce40915ad8da3ed8a6dac7e9612c89e999bb"
+    },
+    {
+      "name": "net.plainnotes.app.data.MeasuredUsePayloadTest",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "ebea8eb47bd200aedcf897d20a75280ac39dbf284628ae0da412ce57075c0427"
+    },
+    {
+      "name": "net.plainnotes.app.data.PackageMeasurementPayloadTest",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "36b0ac750e8cf4f7050910daab413c116be5cc3e327b1732af36f07a115e3870"
+    },
+    {
+      "name": "net.plainnotes.app.data.PlanEditTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "2c9878c9bc91cffe9a255adb6a35e573582306808e09f12378e136ed69c34736"
+    },
+    {
+      "name": "net.plainnotes.app.data.ReferenceCanonicalCompatibilityTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "eadff2ece60615596531155d0019a3a6fefa54c41cbee8c3adc817562e43bd36"
+    },
+    {
+      "name": "net.plainnotes.app.data.ReferenceCatalogTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "a1f89dfa4659df7e1e1565b79a9b8da89681e22acefb80d7b9bd90bfa280e38b"
+    },
+    {
+      "name": "net.plainnotes.app.data.ReferenceMigrationTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "2afd0a2b691d4212a0347783398a6d7ceebe9347d2e4c7ae653fc7b4f962b4b1"
+    },
+    {
+      "name": "net.plainnotes.app.data.ReferencePayloadTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "d5d9aa6be0a032a08b81915d62900eaca8a4c74813546d039ceb7a9bf0b6e4b0"
+    },
+    {
+      "name": "net.plainnotes.app.data.ReferencePersistenceTest",
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "ae8f03502653b41b9269abd6d65c00c449db103af63257d57cd73b7ba1a19e76"
+    },
+    {
+      "name": "net.plainnotes.app.data.RegimenHistoryTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "ecf9e4273582122d41e20a5b51e43f8f5ac068380a3d1bfc13b033605a64b776"
+    },
+    {
+      "name": "net.plainnotes.app.data.SchemaConstraintTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "8ab2c9289c7ee45d2f60a911c057d4a2ef706ed91c95565dbe31b6a39eb19653"
+    },
+    {
+      "name": "net.plainnotes.app.data.StockCorrectionTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "ebdce64d55c9b04ed9087982ce0b2251eb6ee5dbf719f7c17ef8f332cafdd606"
+    },
+    {
+      "name": "net.plainnotes.app.data.StockForecastTest",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "781b3bc7b4ca56e299a9e11b28044b5dd32dd963f558549fedb021d63cf67c12"
+    },
+    {
+      "name": "net.plainnotes.app.data.SupplyLedgerTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "df3a31bce62a8eb935775a6b38c00110425bfeb1769133d02970f8af1ab3a7a0"
+    },
+    {
+      "name": "net.plainnotes.app.data.TrashDataTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "0440b9fb149cc3052d22c5e1b0fd2e8811a4fa98d7d097106afc4c5cd75010e5"
+    },
+    {
+      "name": "net.plainnotes.app.data.UndoSkippedTest",
+      "tests": 33,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "34bec9814494e7122a6010b00e4562bb510122decc171caa5a405b8302bae7a1"
+    },
+    {
+      "name": "net.plainnotes.app.data.VisitPackDataTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "418263db32f4209a44a7f16a1cabedd87c1b453c709076e45bf8b503d85572bb"
+    },
+    {
+      "name": "net.plainnotes.app.data.VoidedPackageTest",
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "3a47983660b168a0bb2d7560abe6d2d2af27bb8181e99f112318baba3a2c1d82"
+    },
+    {
+      "name": "net.plainnotes.app.data.WellbeingMigrationTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "dd6408b7c834272388fc909170174be943f7712d0da1e2802875d4f1a389098e"
+    },
+    {
+      "name": "net.plainnotes.app.data.WellbeingRecordsTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "c37fa4bd18e0f1ed804a688b01e6ba227ff784c82f7031cf444da52b20a91b54"
+    }
+  ],
+  "differential": "Same10 valid canonical hashes/typed facts and26 malformed-wire rejections; returned envelope/list alias mutations cannot alter typed facts."
+}

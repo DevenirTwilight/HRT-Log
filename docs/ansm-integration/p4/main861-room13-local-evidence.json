@@ -1,0 +1,337 @@
+{
+  "main": "86131172c6ebefe064c059efc296ff1883836aa9",
+  "p4_base": "cc7b182c6a2d06258b6104492e54efffe4a3870b",
+  "state": "UNCOMMITTED_ROOM13_BUSINESS12_MERGE_CANDIDATE",
+  "result": "PASS_LOCAL_DATA",
+  "tests": 440,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "suites": [
+    {
+      "suite": "net.plainnotes.app.data.BackupJsonReaderStreamingTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "26f021abd940ea5a6186c1e18bfe2942cde2247e5a2a0236eca73b64b67badc6"
+    },
+    {
+      "suite": "net.plainnotes.app.data.ReferenceMigrationTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "3601edde2d8a51001324e6a465e44926fb41cd652de6a255b2e78b181014e448"
+    },
+    {
+      "suite": "net.plainnotes.app.data.LabContextTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "32e35a14c55187c0994f9b077da9659cd312d3e09553c65acff2f22f08d6bf08"
+    },
+    {
+      "suite": "net.plainnotes.app.data.HistoricalVisitTest",
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "0a2b53f2afbb1e1bb47410f48652f1c34b60065aea264eb458b97892a624f0c6"
+    },
+    {
+      "suite": "net.plainnotes.app.data.ReferenceCanonicalCompatibilityTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "fa5418afa79ab2af21a60eabfde7096dd09659de2309f04a673628dd0bc5766a"
+    },
+    {
+      "suite": "net.plainnotes.app.data.HistoryIntegrityTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "6c621aafd0455d88acdd6cc0c05e2184946b61863a2b695699a1ec134062e9e6"
+    },
+    {
+      "suite": "net.plainnotes.app.data.SupplyLedgerTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "cb2f177a72ae174d114ce2b7a09fa7b820c45fd7905576e526fd84528c74ebdd"
+    },
+    {
+      "suite": "net.plainnotes.app.data.TrashDataTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "342570a7c13c90eda095919db770668ee6a324cf7f3d25c91b984ca7605d6bd1"
+    },
+    {
+      "suite": "net.plainnotes.app.data.DailyTrashCollisionTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "29f4608a145939fb97f5906035d785a5b3ec25c3176183bdb824e347369240de"
+    },
+    {
+      "suite": "net.plainnotes.app.data.ReferenceCatalogTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "ff7a6eed0dfa5de3fcbab061cded0261facff34df0bb15ab32dcd9136a80acc8"
+    },
+    {
+      "suite": "net.plainnotes.app.data.SchemaConstraintTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "bec19f6ff10c7fa313cd0d782ddffa736ce8e49c7f9c3d2cdde200e469781bd1"
+    },
+    {
+      "suite": "net.plainnotes.app.data.ReferencePayloadTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "e53c37d56090faaa32a13dd78d361ba40a8d390b1a7d5088dc81991d32c01862"
+    },
+    {
+      "suite": "net.plainnotes.app.data.KeyBoundaryTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "79c7b9a6b9faeab0805d41c82cb1e168b22f1aca240d2d2f598d50010495cc5c"
+    },
+    {
+      "suite": "net.plainnotes.app.data.LabPanelDataTest",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "dd58ddf4931b08a6ff57554880b71df57626c4403e9db5489cf76caa27a6f5e0"
+    },
+    {
+      "suite": "net.plainnotes.app.data.HrtTrackerImportTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "2441779c53ca5fe16cbd4d0368ec0cc7048a9ca8d601b41b351bdb45ab52862c"
+    },
+    {
+      "suite": "net.plainnotes.app.data.RegimenHistoryTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "d3f536ea018e7e3dc53419593dd28d8404f6cd85e968b52a6796e02457e8d56d"
+    },
+    {
+      "suite": "net.plainnotes.app.data.LabBatchSaveTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "e095c1615edbd1ad9887ae2af679e12c30d081677ea4773119c4fc87890f418c"
+    },
+    {
+      "suite": "net.plainnotes.app.data.PlanEditTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "9cd8c299ad974972e44fc755c14ded3dc2a6b87d099c6658f031a2e144bb1f62"
+    },
+    {
+      "suite": "net.plainnotes.app.data.MeasuredConsumptionStoreTest",
+      "tests": 122,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "2cafa6a07eec831f2ad5b499c04cbc15a03beef95815d3acebe8358ef4760a6a"
+    },
+    {
+      "suite": "net.plainnotes.app.data.DataTransferTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "bd36af90f04b1933e3102b2412951870a034c8681621eda56c0454f785ea764f"
+    },
+    {
+      "suite": "net.plainnotes.app.data.HistoryPeriodDataTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "a812e606f4f962fc62e25381ce0e507a2aa3232603c83deafb1b66965949df40"
+    },
+    {
+      "suite": "net.plainnotes.app.data.VisitPackDataTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "50010b9027dca2fad2cd84c8988d778ab4ba2673ff61822e6b92ff723b28c587"
+    },
+    {
+      "suite": "net.plainnotes.app.data.WellbeingMigrationTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "75bf2a7580e84f8a8383cc5a948a0e405b0712e646f9e783177834c28503cc7a"
+    },
+    {
+      "suite": "net.plainnotes.app.data.AttachmentFoundationTest",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "9e2d70b665d9684ac413b50f40bc9def600699636ebf0c31bfa8dfb654a558a4"
+    },
+    {
+      "suite": "net.plainnotes.app.data.VoidedPackageTest",
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "0ea9c38b114cc4205da824d2d4b1d06aaf5f79ea2deca89d86cba73a56fe15ce"
+    },
+    {
+      "suite": "net.plainnotes.app.data.UndoSkippedTest",
+      "tests": 33,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "275b7c64f4de9d08b1e8b76c7ebeebe43dbe79ed69d60732c04d78c20cef9fe5"
+    },
+    {
+      "suite": "net.plainnotes.app.data.StockForecastTest",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "a54a09aba25b409c449d284882bcdc56f84f8c1bae845f4209c724fa7bd857e3"
+    },
+    {
+      "suite": "net.plainnotes.app.data.BackfillTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "c266ac57048b541ba7e9b4ce63ab4426e2018b5196e0d104875e4c231da8e122"
+    },
+    {
+      "suite": "net.plainnotes.app.data.AttachmentMigrationTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "c80058fe1471a31bcc9ceb28580227dc6c7653bead96e054613baaf4f788e59d"
+    },
+    {
+      "suite": "net.plainnotes.app.data.BackupReplacementTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "e565ba5dd237d1bfc334412dd5caa6d36082282c1f79908db5bcfab4c3d61aae"
+    },
+    {
+      "suite": "net.plainnotes.app.data.LedgerReplacementTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "ed940ad05f4756ac0a3a899291015f1ae48ab76e24a9231f548e47c75134138b"
+    },
+    {
+      "suite": "net.plainnotes.app.data.ReferencePersistenceTest",
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "caed6e225a95983c9c85160dd9b36f6bc3afb124eeb0ca67127cd85fab82b902"
+    },
+    {
+      "suite": "net.plainnotes.app.data.HistoricalContextRepairTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "798e417d880f2f4c3a4de6f42936264ccd683695aac568a7236fb9fa92608fc6"
+    },
+    {
+      "suite": "net.plainnotes.app.data.PackageMeasurementPayloadTest",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "b468aab08a8fd7e97b9f33037b148ef14d4b8cdeeec53331a8f4d33d6f4dd395"
+    },
+    {
+      "suite": "net.plainnotes.app.data.Ansm03b0InventoryTest",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "a33a823481ebcfaae6d2b2e63d73e454ad213d018b6e4dbe64a7fb4eb1600154"
+    },
+    {
+      "suite": "net.plainnotes.app.data.StockCorrectionTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "46fd54f1a0b65f93ef481f623a04f1e54c3e84cf7933ea3cab586a509f520fc7"
+    },
+    {
+      "suite": "net.plainnotes.app.data.WellbeingRecordsTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "fa3dc00ea20a0512e70ea29c2634b75070ef02dadc91d529a4af28a4cb8339c4"
+    },
+    {
+      "suite": "net.plainnotes.app.data.MeasuredUsePayloadTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "bed9c882cc7f029cce4d4fd83882a8145849c41083e756b64b0718fcc65b28c5"
+    },
+    {
+      "suite": "net.plainnotes.app.data.MeasuredContainerStoreTest",
+      "tests": 19,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "226678343df33b9f13b162e96e1036e8af1f49b14a5a5f3974cc3a27a067481b"
+    }
+  ],
+  "production_hashes": {
+    "NotesDatabase.kt": "a55d7e2fb809700221be977f09c90d0335774d25b257e3fbe8ebd569f989f3ae",
+    "Migrations.kt": "fc1ecddd96aad403695ef9de745f5e2955d4d1cf6c7f792be8ae1cba34a3edb7",
+    "InventoryEncoding.kt": "69f2b69e4edde4b4e0b35a142c21be6fee1f04d18d9163fb5e65a842b9500898",
+    "RecordBackupCompatibility.kt": "51376d35a31fc8e5c705280eca341232d5cc8431d2fbfe036df22b32a0b40e16",
+    "NotesRepository.kt": "0e679c75af574ea0d0b688b2fff07d75765c2c40c12ea5d015555bc730266d13",
+    "PackageCorrections.kt": "31291bd1d83fc52de035f47d1fa37c72401e3a1771919a6c9632d70e6535cf6e",
+    "MeasuredConsumptionStore.kt": "72e2308e03da846da5b66383ed4c42403abda5d20ab0bbe719506acc481187f7"
+  },
+  "native_compilation": "PASS",
+  "native_execution_new_integration": "NOT_RUN",
+  "app_regression": "PENDING",
+  "production_entry": "OFF"
+}

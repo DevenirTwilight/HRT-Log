@@ -28,6 +28,8 @@ internal val DOMAIN_TABLES = listOf("medication", "pk_profile", "schedule_rule",
     "stage_review", "symptom_check", "review_effect", "regimen_version", "regimen_rule_link", "milestone", "lab_context_revision", "visit_question", "visit_pack", "history_period_revision", "record_annotation", "trash_item") + ReferenceSchema.businessTables
 
 /** Raw-SQL maintenance that has to bypass the append-only ledger triggers: full clear and backup restore. */
+internal enum class RestoreCheckpoint { PLAINTEXT_AUTHENTICATED, INPUT_VALIDATED, STAGING_ROWS_INSERTED, STAGING_HISTORY_VALIDATED, STAGING_CLOSED, PREFLIGHT_VALIDATED, IDENTITIES_RETIRED, ROWS_DELETED, ROWS_INSERTED, HISTORY_VALIDATED, EPOCH_REPLACED }
+
 internal object RawData {
     private data class Guard(val name: String, val sql: String)
     private fun triggers(db: SupportSQLiteDatabase): List<Guard> = db.query("SELECT name,sql FROM sqlite_master WHERE type='trigger' AND tbl_name NOT LIKE 'attachment_%'").use { c ->
@@ -68,47 +70,42 @@ internal object RawData {
         val tables = JSONObject()
         tableNames.forEach { t ->
             val rows = JSONArray()
-            // Fixture archives of older schemas (explicit subset) leave out columns their table does not have yet (e.g. LAB-02 panel_id).
-            val present = db.query("PRAGMA table_info(`$t`)").use { c -> buildSet { while (c.moveToNext()) add(c.getString(1)) } }
-            val wanted = RecordBackupCompatibility.columns.getValue(t)
-            if (tableNames == DOMAIN_TABLES) require(present.containsAll(wanted)) { "Incomplete table $t" }
-            db.query("SELECT ${wanted.filter { it in present }.joinToString(",") { "`$it`" }} FROM $t").use { c ->
-                while (c.moveToNext()) rows.put(JSONObject().apply {
-                    for (i in 0 until c.columnCount) when (c.getType(i)) {
-                        Cursor.FIELD_TYPE_NULL -> put(c.getColumnName(i), JSONObject.NULL)
-                        Cursor.FIELD_TYPE_INTEGER -> put(c.getColumnName(i), c.getLong(i))
-                        Cursor.FIELD_TYPE_FLOAT -> put(c.getColumnName(i), c.getDouble(i))
-                        Cursor.FIELD_TYPE_BLOB -> put(c.getColumnName(i), "b64:" + Base64.encodeToString(c.getBlob(i), Base64.NO_WRAP))
-                        else -> put(c.getColumnName(i), c.getString(i))
-                    }
-                })
-            }
+            forEachBackupRow(db,t,tableNames == DOMAIN_TABLES){rows.put(it)}
             tables.put(t, rows)
         }
         return tables
     }
     /** Validate in memory before retiring identities or modifying the encrypted target. */
-    fun restore(context: Context, db: SupportSQLiteDatabase, tables: JSONObject, upgradeRegimens: Boolean = false, backfillTrash: Boolean = false) {
+    fun restore(context: Context, db: SupportSQLiteDatabase, tables: JSONObject, upgradeRegimens: Boolean = false, backfillTrash: Boolean = false, measured: Boolean = false, checkpoint: (RestoreCheckpoint)->Unit = {}) {
+        restoreRows(context,db,BackupTables.of(tables),upgradeRegimens,backfillTrash,measured,checkpoint)
+    }
+    internal fun restoreRows(context:Context,db:SupportSQLiteDatabase,tables:BackupTables,upgradeRegimens:Boolean=false,backfillTrash:Boolean=false,measured:Boolean=false,checkpoint:(RestoreCheckpoint)->Unit={}) {
         check(db.inTransaction())
-        BackupValidation.validateTables(db, tables)
+        BackupValidation.validateRows(db, tables)
         val ledger = LedgerReplacement.current(db)
         val references = ReferenceDependencies.current(db)
         val supplyOrder = tables.optJSONArray("supply_transaction")?.let(LedgerReplacement::insertionOrder).orEmpty()
-        preflight(context, db, tables, supplyOrder, upgradeRegimens, backfillTrash)
+        preflight(context, db, tables, supplyOrder, upgradeRegimens, backfillTrash, measured,checkpoint)
+        checkpoint(RestoreCheckpoint.PREFLIGHT_VALIDATED)
         unguarded(db) {
             ReferenceSchema.retireRuntime(db)
             AttachmentIdentity.replaceStructuredDataset(db)
+            checkpoint(RestoreCheckpoint.IDENTITIES_RETIRED)
             deleteRows(db, ledger, references)
+            checkpoint(RestoreCheckpoint.ROWS_DELETED)
             insertRows(db, tables, supplyOrder)
-            finishRestore(db, upgradeRegimens, backfillTrash)
+            checkpoint(RestoreCheckpoint.ROWS_INSERTED)
+            finishRestore(db, upgradeRegimens, backfillTrash, measured)
+            checkpoint(RestoreCheckpoint.HISTORY_VALIDATED)
             ReferenceSchema.restoreRuntime(db)
+            checkpoint(RestoreCheckpoint.EPOCH_REPLACED)
         }
     }
 
     /** A transient RAM database uses only trusted current table/index definitions, never backup DDL.
      * No plaintext file is created; the actual destination remains SQLCipher with FK enforcement enabled.
      */
-    private fun preflight(context: Context, db: SupportSQLiteDatabase, tables: JSONObject, supplyOrder: List<Int>, upgradeRegimens: Boolean, backfillTrash: Boolean) {
+    private fun preflight(context: Context, db: SupportSQLiteDatabase, tables: BackupTables, supplyOrder: List<Int>, upgradeRegimens: Boolean, backfillTrash: Boolean, measured: Boolean,checkpoint:(RestoreCheckpoint)->Unit) {
         val definitions = db.query("SELECT type,tbl_name,sql FROM sqlite_master WHERE type IN ('table','index') AND sql IS NOT NULL ORDER BY CASE type WHEN 'table' THEN 0 ELSE 1 END,name").use { c -> buildList {
             while (c.moveToNext()) if (c.getString(1) in DOMAIN_TABLES) add(c.getString(2))
         } }
@@ -124,13 +121,16 @@ internal object RawData {
             staging.beginTransaction()
             try {
                 insertRows(staging, tables, supplyOrder)
-                finishRestore(staging, upgradeRegimens, backfillTrash)
+                checkpoint(RestoreCheckpoint.STAGING_ROWS_INSERTED)
+                finishRestore(staging, upgradeRegimens, backfillTrash, measured)
+                checkpoint(RestoreCheckpoint.STAGING_HISTORY_VALIDATED)
                 staging.setTransactionSuccessful()
             } finally { staging.endTransaction() }
         }
+        checkpoint(RestoreCheckpoint.STAGING_CLOSED)
     }
 
-    private fun insertRows(db: SupportSQLiteDatabase, tables: JSONObject, supplyOrder: List<Int>) {
+    private fun insertRows(db: SupportSQLiteDatabase, tables: BackupTables, supplyOrder: List<Int>) {
         DOMAIN_TABLES.forEach { t ->
             val rows = tables.optJSONArray(t) ?: return@forEach
             val order = if (t == "supply_transaction") supplyOrder else ReferenceDependencies.insertionOrder(t, rows)
@@ -148,11 +148,35 @@ internal object RawData {
         }
     }
 
-    private fun finishRestore(db: SupportSQLiteDatabase, upgradeRegimens: Boolean, backfillTrash: Boolean) {
-        db.execSQL("UPDATE supply_container SET used_amount = initial_used_amount + COALESCE((SELECT SUM(used_delta) FROM supply_transaction WHERE container_id = supply_container.id), 0)")
+    /** Same row/column/value encoding for DOM fixtures and bounded measured export. */
+    internal fun forEachBackupRow(db:SupportSQLiteDatabase,t:String,requireComplete:Boolean,consume:(JSONObject)->Unit) {
+        require(t in DOMAIN_TABLES)
+            // Fixture archives of older schemas (explicit subset) leave out columns their table does not have yet (e.g. LAB-02 panel_id).
+            val present = db.query("PRAGMA table_info(`$t`)").use { c -> buildSet { while (c.moveToNext()) add(c.getString(1)) } }
+            val wanted = RecordBackupCompatibility.columns.getValue(t)
+            if (requireComplete) require(present.containsAll(wanted)) { "Incomplete table $t" }
+            db.query("SELECT ${wanted.filter { it in present }.joinToString(",") { "`$it`" }} FROM $t").use { c ->
+                while (c.moveToNext()) consume(JSONObject().apply {
+                    for (i in 0 until c.columnCount) when (c.getType(i)) {
+                        Cursor.FIELD_TYPE_NULL -> put(c.getColumnName(i), JSONObject.NULL)
+                        Cursor.FIELD_TYPE_INTEGER -> put(c.getColumnName(i), c.getLong(i))
+                        Cursor.FIELD_TYPE_FLOAT -> {
+                            val exact= t=="supply_container" && c.getColumnIndex("inventory_encoding")>=0 && c.getString(c.getColumnIndex("inventory_encoding"))==InventoryEncoding.EXACT
+                            if(exact && c.getColumnName(i) in setOf("capacity","initial_used_amount","used_amount"))put(c.getColumnName(i),InventoryEncoding.exactInteger(c.getDouble(i)))
+                            else put(c.getColumnName(i),c.getDouble(i))
+                        }
+                        Cursor.FIELD_TYPE_BLOB -> put(c.getColumnName(i), "b64:" + Base64.encodeToString(c.getBlob(i), Base64.NO_WRAP))
+                        else -> put(c.getColumnName(i), c.getString(i))
+                    }
+                })
+            }
+    }
+
+    private fun finishRestore(db: SupportSQLiteDatabase, upgradeRegimens: Boolean, backfillTrash: Boolean, measured: Boolean) {
+        db.execSQL("UPDATE supply_container SET used_amount = initial_used_amount + COALESCE((SELECT SUM(used_delta) FROM supply_transaction WHERE container_id = supply_container.id), 0) WHERE inventory_encoding='LEGACY_SCALAR'")
         if (upgradeRegimens) RegimenHistory.seed(db)
         if (backfillTrash) Trash.backfill(db)
-        BackupValidation.validateState(db)
+        if(measured) MeasuredConsumptionStore.auditStagedDataset(db) else BackupValidation.validateState(db)
     }
 
 }

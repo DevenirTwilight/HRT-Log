@@ -1,0 +1,273 @@
+--------- beginning of main
+--------- beginning of system
+10-18 07:13:40.877  1402  1402 I lowmemorykiller: Using in-kernel low memory killer interface
+10-18 07:13:59.972  1635  1635 I ActivityManager: Memory class: 384
+10-18 07:14:01.021  1402  1402 I lowmemorykiller: ActivityManager connected
+10-18 07:14:01.195  1635  1635 I ActivityManager: Config changes=5df8 {1.0 ?mcc?mnc [en_US] ldltr sw320dp w320dp h640dp 160dpi nrml long port ?uimode ?night -touch -keyb/h/h -nav/h appBounds=Rect(0, 0 - 320, 640) s.2}
+10-18 07:14:01.196  1635  1635 I ActivityManager: Override config changes=40007dfc {1.0 ?mcc?mnc [en_US] ldltr sw320dp w320dp h640dp 160dpi nrml long port ?uimode ?night -touch -keyb/h/h -nav/h appBounds=Rect(0, 0 - 320, 640) s.2} for displayId=0
+10-18 07:14:01.211  1635  1635 I ActivityManager: Config changes=400 {1.0 ?mcc?mnc [en_US] ldltr sw320dp w320dp h616dp 160dpi nrml long port ?uimode ?night -touch -keyb/h/h -nav/h appBounds=Rect(0, 0 - 320, 640) s.3}
+10-18 07:14:01.212  1635  1635 I ActivityManager: Override config changes=400 {1.0 ?mcc?mnc [en_US] ldltr sw320dp w320dp h616dp 160dpi nrml long port ?uimode ?night -touch -keyb/h/h -nav/h appBounds=Rect(0, 0 - 320, 640) s.3} for displayId=0
+10-18 07:14:01.219  1635  1713 I ActivityManager: Config changes=200 {1.0 ?mcc?mnc [en_US] ldltr sw320dp w320dp h616dp 160dpi nrml long port -touch -keyb/h/h -nav/h appBounds=Rect(0, 0 - 320, 640) s.4}
+10-18 07:14:01.220  1635  1713 I ActivityManager: Override config changes=200 {1.0 ?mcc?mnc [en_US] ldltr sw320dp w320dp h616dp 160dpi nrml long port -touch -keyb/h/h -nav/h appBounds=Rect(0, 0 - 320, 640) s.4} for displayId=0
+10-18 07:14:01.471  1635  1729 I ActivityManager: Config changes=68 {1.0 ?mcc?mnc [en_US] ldltr sw320dp w320dp h616dp 160dpi nrml long port finger -keyb/h/h tball/v appBounds=Rect(0, 0 - 320, 640) s.5}
+10-18 07:14:01.472  1635  1729 I ActivityManager: Override config changes=68 {1.0 ?mcc?mnc [en_US] ldltr sw320dp w320dp h616dp 160dpi nrml long port finger -keyb/h/h tball/v appBounds=Rect(0, 0 - 320, 640) s.5} for displayId=0
+10-18 07:14:02.448  1635  1635 I ActivityManager: System now ready
+10-18 07:14:02.471  1635  1635 I ActivityManager: Start proc 1790:com.android.inputmethod.latin/u0a45 for service com.android.inputmethod.latin/.LatinIME
+10-18 07:14:02.477  1635  1664 I ActivityManager: Force stopping com.android.providers.media appid=10010 user=-1: vold reset
+10-18 07:14:02.499  1635  1635 I ActivityManager: Start proc 1807:com.android.systemui/u0a22 for service com.android.systemui/.SystemUIService
+10-18 07:14:02.705  1635  1635 I ActivityManager: Start proc 1894:com.android.phone/1001 for added application com.android.phone
+10-18 07:14:02.707  1635  1635 I ActivityManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.HOME] flg=0x10000100 cmp=com.android.settings/.CryptKeeper} from uid 0
+10-18 07:14:02.718  1635  1635 I ActivityManager: Loaded persisted task ids for user 0
+10-18 07:14:02.734  1635  1635 I ActivityManager: Start proc 1916:com.android.settings:CryptKeeper/1000 for activity com.android.settings/.CryptKeeper
+10-18 07:14:03.066  1635  1867 I ActivityManager: user 0 is still locked. Cannot load recents
+10-18 07:14:03.069  1635  1867 I ActivityManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.HOME] flg=0x10000100 cmp=com.android.settings/.FallbackHome} from uid 0
+10-18 07:14:03.087  1635  1867 I ActivityManager: Start proc 1988:com.android.settings/1000 for activity com.android.settings/.FallbackHome
+10-18 07:14:03.203  1635  1936 I ActivityManager: user 0 is still locked. Cannot load recents
+10-18 07:14:03.406  1635  1671 I ActivityManager: Displayed com.android.settings/.FallbackHome: +326ms (total +677ms)
+10-18 07:14:00.227  1635  1664 I ActivityManager: Start proc 2091:com.android.deskclock/u0a36 for broadcast com.android.deskclock/.AlarmInitReceiver
+10-18 07:14:00.543  1635  1936 I ActivityManager: Config changes=3 {1.0 310mcc260mnc [en_US] ldltr sw320dp w320dp h616dp 160dpi nrml long port finger -keyb/h/h tball/v appBounds=Rect(0, 0 - 320, 640) s.6}
+10-18 07:14:00.558  1635  1936 I ActivityManager: Override config changes=3 {1.0 310mcc260mnc [en_US] ldltr sw320dp w320dp h616dp 160dpi nrml long port finger -keyb/h/h tball/v appBounds=Rect(0, 0 - 320, 640) s.6} for displayId=0
+10-18 07:14:00.641  1635  1664 I ActivityManager: Start proc 2133:com.android.cellbroadcastreceiver/u0a1 for broadcast com.android.cellbroadcastreceiver/.CellBroadcastReceiver
+10-18 07:14:00.956  1635  1936 I ActivityManager: user 0 is still locked. Cannot load recents
+10-18 07:14:01.012  1635  1671 W ActivityManager: Unable to mark boot complete for abi: x86 (android.os.ServiceSpecificException: Failed to unlink /data//dalvik-cache/x86/.booting (code 2))
+10-18 07:14:01.022  1635  1936 I ActivityManager: Start proc 2169:com.android.carrierconfig/u0a3 for service com.android.carrierconfig/.DefaultCarrierConfigService
+10-18 07:14:01.056  1635  1664 I ActivityManager: Start proc 2185:com.android.dialer/u0a14 for broadcast com.android.dialer/.app.voicemail.LegacyVoicemailNotificationReceiver
+10-18 07:14:01.068  1635  1671 I ActivityManager: Start proc 2192:android.ext.services/u0a11 for on-hold
+10-18 07:14:01.091  1635  1671 I ActivityManager: User 0 state changed from BOOTING to RUNNING_LOCKED
+10-18 07:14:01.093  1635  1671 I ActivityManager: User 0 state changed from RUNNING_LOCKED to RUNNING_UNLOCKING
+10-18 07:14:01.335  1635  1665 I ActivityManager: Config changes=20 {1.0 310mcc260mnc [en_US] ldltr sw320dp w320dp h616dp 160dpi nrml long port finger -keyb/v/h tball/v appBounds=Rect(0, 0 - 320, 640) s.7}
+10-18 07:14:01.344  1635  1665 I ActivityManager: Override config changes=20 {1.0 310mcc260mnc [en_US] ldltr sw320dp w320dp h616dp 160dpi nrml long port finger -keyb/v/h tball/v appBounds=Rect(0, 0 - 320, 640) s.7} for displayId=0
+10-18 07:14:01.421  1635  1949 I ActivityManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.HOME] flg=0x10000100 cmp=com.android.sdksetup/.DefaultActivity} from uid 0
+10-18 07:14:01.435  1635  1949 I ActivityManager: Start proc 2248:com.android.sdksetup/u0a18 for activity com.android.sdksetup/.DefaultActivity
+10-18 07:14:01.561  1635  1676 I ActivityManager: Killing 2248:com.android.sdksetup/u0a18 (adj 0): change com.android.sdksetup
+10-18 07:14:01.567  1635  1676 I ActivityManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.HOME] flg=0x10000100 cmp=com.android.launcher3/.Launcher} from uid 0
+10-18 07:14:01.581  1635  1676 I ActivityManager: Start proc 2279:com.android.launcher3/u0a15 for activity com.android.launcher3/.Launcher
+10-18 07:14:01.607  1635  1663 I ActivityManager: Start proc 2286:com.android.printspooler/u0a52 for service com.android.printspooler/.model.PrintSpoolerService
+10-18 07:14:01.607  1635  1664 I ActivityManager: Loading recents for user 0 into memory.
+10-18 07:14:01.609  1635  1664 I ActivityManager: User 0 state changed from RUNNING_UNLOCKING to RUNNING_UNLOCKED
+10-18 07:14:01.635  1635  1936 I ActivityManager: Start proc 2303:android.process.acore/u0a5 for content provider com.android.providers.blockednumber/.BlockedNumberProvider
+10-18 07:14:01.637  1635  1646 W ActivityManager: Finishing task with all activities already finished
+10-18 07:14:01.637  1635  1646 W ActivityManager: Duplicate finish request for ActivityRecord{35467be u0 com.android.settings/.FallbackHome t2 f}
+10-18 07:14:01.672  1635  1646 I ActivityManager: Start proc 2316:android.process.media/u0a10 for broadcast com.android.providers.downloads/.DownloadReceiver
+10-18 07:14:01.905  1635  1646 I ActivityManager: Start proc 2365:com.android.launcher3:wallpaper_chooser/u0a15 for service com.android.launcher3/.dynamicui.ColorExtractionService
+10-18 07:14:02.292  1635  1671 I ActivityManager: Displayed com.android.launcher3/.Launcher: +716ms (total +862ms)
+10-18 07:14:02.577  1635  1663 W ActivityManager: Slow operation: 79ms so far, now at startProcess: returned from zygote!
+10-18 07:14:02.578  1635  1663 W ActivityManager: Slow operation: 80ms so far, now at startProcess: done updating battery stats
+10-18 07:14:02.578  1635  1663 W ActivityManager: Slow operation: 80ms so far, now at startProcess: building log message
+10-18 07:14:02.578  1635  1663 I ActivityManager: Start proc 2444:com.android.keychain/1000 for service com.android.keychain/.KeyChainService
+10-18 07:14:02.578  1635  1663 W ActivityManager: Slow operation: 81ms so far, now at startProcess: starting to update pids map
+10-18 07:14:02.578  1635  1663 W ActivityManager: Slow operation: 81ms so far, now at startProcess: done updating pids map
+10-18 07:14:02.578  1635  1663 W ActivityManager: Slow operation: 81ms so far, now at startProcess: done starting proc!
+10-18 07:14:03.044  1635  2470 I ActivityManager: Start proc 2487:com.android.managedprovisioning/u0a13 for broadcast com.android.managedprovisioning/.ota.PreBootListener
+10-18 07:14:03.998  1635  1873 I ActivityManager: Start proc 2547:com.android.quicksearchbox/u0a54 for broadcast com.android.quicksearchbox/.SearchWidgetProvider
+10-18 07:14:04.300  1635  1867 I ActivityManager: Start proc 2570:com.android.providers.calendar/u0a2 for broadcast com.android.providers.calendar/.CalendarUpgradeReceiver
+10-18 07:14:05.200  1635  1867 I ActivityManager: Sending BOOT_COMPLETE user #0
+10-18 07:14:05.441  1635  1873 I ActivityManager: Start proc 2630:com.android.calendar/u0a27 for broadcast com.android.calendar/.UpgradeReceiver
+10-18 07:14:05.733  1635  1873 I ActivityManager: Start proc 2666:com.android.camera2/u0a30 for broadcast com.android.camera2/com.android.camera.DisableCameraReceiver
+10-18 07:14:05.851  1635  2470 I ActivityManager: Start proc 2686:com.android.contacts/u0a4 for broadcast com.android.contacts/.interactions.OnBootOrUpgradeReceiver
+10-18 07:14:06.045  1635  1867 I ActivityManager: Start proc 2707:com.android.email/u0a42 for broadcast com.android.email/.service.EmailUpgradeBroadcastReceiver
+10-18 07:14:06.169  1635  2470 W ActivityManager: Unable to start service Intent { act=com.android.email.EXCHANGE_INTENT pkg=com.android.exchange } U=0: not found
+10-18 07:14:06.192  1635  1873 W ActivityManager: Unable to start service Intent { act=com.android.email.EXCHANGE_INTENT pkg=com.android.exchange } U=0: not found
+10-18 07:14:06.192  1635  1873 W ActivityManager: Unable to start service Intent { act=com.android.email.EXCHANGE_INTENT pkg=com.android.exchange } U=0: not found
+10-18 07:14:06.193  1635  1873 W ActivityManager: Unable to start service Intent { act=com.android.email.EXCHANGE_INTENT pkg=com.android.exchange } U=0: not found
+10-18 07:14:06.258  1635  1873 W ActivityManager: Unable to start service Intent { act=com.android.mail.action.BACKUP_DATA_CHANGED pkg=com.android.email } U=0: not found
+10-18 07:14:06.262  1635  1873 W ActivityManager: Unable to start service Intent { act=com.android.mail.action.BACKUP_DATA_CHANGED pkg=com.android.email } U=0: not found
+10-18 07:14:06.279  1635  1873 W ActivityManager: Unable to start service Intent { act=com.android.email.EXCHANGE_INTENT pkg=com.android.exchange } U=0: not found
+10-18 07:14:06.279  1635  1867 W ActivityManager: Unable to start service Intent { cmp=com.android.email/.service.AttachmentService } U=0: not found
+10-18 07:14:06.294  1635  2470 W ActivityManager: Unable to start service Intent { cmp=com.android.email/.service.AttachmentService } U=0: not found
+10-18 07:14:06.295  1635  1646 W ActivityManager: Unable to start service Intent { cmp=com.android.email/.service.AttachmentService } U=0: not found
+10-18 07:14:06.319  1635  2470 I ActivityManager: Start proc 2733:com.android.gallery3d/u0a43 for broadcast com.android.gallery3d/com.android.camera.DisableCameraReceiver
+10-18 07:14:06.319  1635  1646 W ActivityManager: Unable to start service Intent { act=com.android.email.EXCHANGE_INTENT pkg=com.android.exchange } U=0: not found
+10-18 07:14:06.343  1635  1935 W ActivityManager: Unable to start service Intent { cmp=com.android.email/.service.AttachmentService } U=0: not found
+10-18 07:14:06.343  1635  1867 W ActivityManager: Unable to start service Intent { act=com.android.email.EXCHANGE_INTENT pkg=com.android.exchange } U=0: not found
+10-18 07:14:06.349  1635  1935 W ActivityManager: Unable to start service Intent { act=com.android.email.EXCHANGE_INTENT pkg=com.android.exchange } U=0: not found
+10-18 07:14:06.350  1635  1935 W ActivityManager: Unable to start service Intent { act=com.android.email.EXCHANGE_INTENT pkg=com.android.exchange } U=0: not found
+10-18 07:14:06.360  1635  1935 W ActivityManager: Unbind failed: could not find connection for android.os.BinderProxy@58293b2
+10-18 07:14:06.364  1635  1935 W ActivityManager: Unable to start service Intent { act=com.android.email.EXCHANGE_INTENT pkg=com.android.exchange } U=0: not found
+10-18 07:14:06.558  1635  1646 I ActivityManager: Start proc 2750:com.android.messaging/u0a56 for broadcast com.android.messaging/.receiver.BootAndPackageReplacedReceiver
+10-18 07:14:06.857  1635  1646 I ActivityManager: Start proc 2775:com.android.packageinstaller/u0a17 for broadcast com.android.packageinstaller/.TemporaryFileManager
+10-18 07:14:07.438  1635  1873 I ActivityManager: Finished processing BOOT_COMPLETED for u0
+10-18 07:14:07.673  1402  1402 I lowmemorykiller: ActivityManager disconnected
+10-18 07:14:07.673  1402  1402 I lowmemorykiller: Closing Activity Manager data connection
+--------- beginning of crash
+10-18 07:14:07.682  1894  2077 E AndroidRuntime: FATAL EXCEPTION: DcHandlerThread
+10-18 07:14:07.682  1894  2077 E AndroidRuntime: Process: com.android.phone, PID: 1894
+10-18 07:14:07.682  1894  2077 E AndroidRuntime: DeadSystemException: The system died; earlier logs will point to the root cause
+10-18 07:14:07.713  2185  2238 E AndroidRuntime: FATAL EXCEPTION: PersistentLogger
+10-18 07:14:07.713  2185  2238 E AndroidRuntime: Process: com.android.dialer, PID: 2185
+10-18 07:14:07.713  2185  2238 E AndroidRuntime: DeadSystemException: The system died; earlier logs will point to the root cause
+10-18 07:14:08.869  2894  2894 I ActivityManager: Memory class: 192
+10-18 07:14:09.130  1402  1402 I lowmemorykiller: ActivityManager connected
+10-18 07:14:09.261  2894  2894 I ActivityManager: Config changes=5df8 {1.0 ?mcc?mnc [en_US] ldltr sw320dp w320dp h640dp 160dpi nrml long port ?uimode ?night -touch -keyb/v/h -nav/h appBounds=Rect(0, 0 - 320, 640) s.2}
+10-18 07:14:09.261  2894  2894 I ActivityManager: Override config changes=40007dfc {1.0 ?mcc?mnc [en_US] ldltr sw320dp w320dp h640dp 160dpi nrml long port ?uimode ?night -touch -keyb/v/h -nav/h appBounds=Rect(0, 0 - 320, 640) s.2} for displayId=0
+10-18 07:14:09.268  2894  2894 I ActivityManager: Config changes=400 {1.0 ?mcc?mnc [en_US] ldltr sw320dp w320dp h616dp 160dpi nrml long port ?uimode ?night -touch -keyb/v/h -nav/h appBounds=Rect(0, 0 - 320, 640) s.3}
+10-18 07:14:09.268  2894  2894 I ActivityManager: Override config changes=400 {1.0 ?mcc?mnc [en_US] ldltr sw320dp w320dp h616dp 160dpi nrml long port ?uimode ?night -touch -keyb/v/h -nav/h appBounds=Rect(0, 0 - 320, 640) s.3} for displayId=0
+10-18 07:14:09.277  2894  2941 I ActivityManager: Config changes=200 {1.0 ?mcc?mnc [en_US] ldltr sw320dp w320dp h616dp 160dpi nrml long port -touch -keyb/v/h -nav/h appBounds=Rect(0, 0 - 320, 640) s.4}
+10-18 07:14:09.290  2894  2941 I ActivityManager: Override config changes=200 {1.0 ?mcc?mnc [en_US] ldltr sw320dp w320dp h616dp 160dpi nrml long port -touch -keyb/v/h -nav/h appBounds=Rect(0, 0 - 320, 640) s.4} for displayId=0
+10-18 07:14:09.481  2894  2955 I ActivityManager: Config changes=68 {1.0 ?mcc?mnc [en_US] ldltr sw320dp w320dp h616dp 160dpi nrml long port finger -keyb/v/h tball/v appBounds=Rect(0, 0 - 320, 640) s.5}
+10-18 07:14:09.481  2894  2955 I ActivityManager: Override config changes=68 {1.0 ?mcc?mnc [en_US] ldltr sw320dp w320dp h616dp 160dpi nrml long port finger -keyb/v/h tball/v appBounds=Rect(0, 0 - 320, 640) s.5} for displayId=0
+10-18 07:14:09.661  2894  2894 I ActivityManager: System now ready
+10-18 07:14:09.705  2894  2894 I ActivityManager: Start proc 2987:com.android.inputmethod.latin/u0a45 for service com.android.inputmethod.latin/.LatinIME
+10-18 07:14:09.715  2894  2909 I ActivityManager: Force stopping com.android.providers.media appid=10010 user=-1: vold reset
+10-18 07:14:09.723  2894  2894 I ActivityManager: Start proc 3004:com.android.systemui/u0a22 for service com.android.systemui/.ImageWallpaper
+10-18 07:14:09.888  2894  2894 I ActivityManager: Start proc 3050:com.android.phone/1001 for added application com.android.phone
+10-18 07:14:09.889  2894  2894 I ActivityManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.HOME] flg=0x10000100 cmp=com.android.settings/.FallbackHome} from uid 0
+10-18 07:14:09.903  2894  2894 I ActivityManager: Loaded persisted task ids for user 0
+10-18 07:14:09.919  2894  2894 I ActivityManager: Start proc 3065:com.android.settings/1000 for activity com.android.settings/.FallbackHome
+10-18 07:14:10.126  3050  3114 W System.err: java.util.NoSuchElementException
+10-18 07:14:10.129  3050  3114 W System.err: 	at android.os.HwParcel.readEmbeddedBuffer(Native Method)
+10-18 07:14:10.131  3050  3114 W System.err: 	at android.hardware.radio.V1_0.HardwareConfig.readEmbeddedFromParcel(HardwareConfig.java:100)
+10-18 07:14:10.131  3050  3114 W System.err: 	at android.hardware.radio.V1_0.HardwareConfig.readVectorFromParcel(HardwareConfig.java:87)
+10-18 07:14:10.132  3050  3114 W System.err: 	at android.hardware.radio.V1_0.IRadioResponse$Stub.onTransact(IRadioResponse.java:3951)
+10-18 07:14:10.289  2894  2916 I ActivityManager: Displayed com.android.settings/.FallbackHome: +378ms
+10-18 07:14:10.634  2894  3131 I ActivityManager: Config changes=3 {1.0 310mcc260mnc [en_US] ldltr sw320dp w320dp h616dp 160dpi nrml long port finger -keyb/v/h tball/v appBounds=Rect(0, 0 - 320, 640) s.6}
+10-18 07:14:10.650  2894  3131 I ActivityManager: Override config changes=3 {1.0 310mcc260mnc [en_US] ldltr sw320dp w320dp h616dp 160dpi nrml long port finger -keyb/v/h tball/v appBounds=Rect(0, 0 - 320, 640) s.6} for displayId=0
+10-18 07:14:10.731  2894  2909 I ActivityManager: Start proc 3186:com.android.cellbroadcastreceiver/u0a1 for broadcast com.android.cellbroadcastreceiver/.CellBroadcastReceiver
+10-18 07:14:11.050  2894  2909 I ActivityManager: Start proc 3220:com.android.dialer/u0a14 for broadcast com.android.dialer/.app.voicemail.LegacyVoicemailNotificationReceiver
+10-18 07:14:11.543  2894  3031 I ActivityManager: user 0 is still locked. Cannot load recents
+10-18 07:14:11.820  2894  2916 I ActivityManager: User 0 state changed from BOOTING to RUNNING_LOCKED
+10-18 07:14:11.824  2894  2916 I ActivityManager: User 0 state changed from RUNNING_LOCKED to RUNNING_UNLOCKING
+10-18 07:14:11.900  2894  2894 I ActivityManager: Start proc 3279:com.android.deskclock/u0a36 for broadcast com.android.deskclock/.AlarmInitReceiver
+10-18 07:14:12.025  2894  2909 I ActivityManager: Loading recents for user 0 into memory.
+10-18 07:14:12.033  2894  2909 I ActivityManager: User 0 state changed from RUNNING_UNLOCKING to RUNNING_UNLOCKED
+10-18 07:14:12.034  2894  2909 I ActivityManager: Sending BOOT_COMPLETE user #0
+10-18 07:14:12.168  2894  2908 I ActivityManager: Start proc 3339:com.android.printspooler/u0a52 for service com.android.printspooler/.model.PrintSpoolerService
+10-18 07:14:12.183  2894  3031 I ActivityManager: Start proc 3355:android.process.media/u0a10 for broadcast com.android.providers.downloads/.DownloadReceiver
+10-18 07:14:12.260  2894  3079 I ActivityManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.HOME] flg=0x10000100 cmp=com.android.launcher3/.Launcher} from uid 0
+10-18 07:14:12.279  2894  3079 I ActivityManager: Start proc 3391:com.android.launcher3/u0a15 for activity com.android.launcher3/.Launcher
+10-18 07:14:12.286  2894  2908 I ActivityManager: Start proc 3397:com.android.keychain/1000 for service com.android.keychain/.KeyChainService
+10-18 07:14:16.469  2894  3031 I ActivityManager: Start proc 3437:com.android.quicksearchbox/u0a54 for broadcast com.android.quicksearchbox/.SearchWidgetProvider
+10-18 07:14:16.493  2894  2976 I ActivityManager: Start proc 3448:com.android.providers.calendar/u0a2 for content provider com.android.providers.calendar/.CalendarProvider2
+10-18 07:14:16.512  2894  2906 I ActivityManager: Start proc 3456:com.android.launcher3:wallpaper_chooser/u0a15 for service com.android.launcher3/.dynamicui.ColorExtractionService
+10-18 07:14:17.097  2894  2916 I ActivityManager: Displayed com.android.launcher3/.Launcher: +780ms
+10-18 07:14:17.277  2894  3031 I ActivityManager: Start proc 3535:android.process.acore/u0a5 for content provider com.android.providers.contacts/.CallLogProvider
+10-18 07:14:18.439  2894  3031 I ActivityManager: Start proc 3560:com.android.calendar/u0a27 for broadcast com.android.calendar/.alerts.AlertReceiver
+10-18 07:14:18.443  2894  3031 W ActivityManager: Slow operation: 52ms so far, now at startProcess: done starting proc!
+10-18 07:14:18.810  2894  3031 I ActivityManager: Start proc 3583:com.android.contacts/u0a4 for broadcast com.android.contacts/.interactions.OnBootOrUpgradeReceiver
+10-18 07:14:18.976  2894  3031 W ActivityManager: Slow operation: 58ms so far, now at attachApplicationLocked: after sendPendingBroadcastsLocked
+10-18 07:14:19.522  2894  2906 I ActivityManager: Start proc 3611:com.android.email/u0a42 for broadcast com.android.email/.service.EmailBroadcastReceiver
+10-18 07:14:21.444  2894  2906 W ActivityManager: Unable to start service Intent { act=com.android.email.EXCHANGE_INTENT pkg=com.android.exchange } U=0: not found
+10-18 07:14:21.713  2894  3031 W ActivityManager: Unable to start service Intent { act=com.android.email.EXCHANGE_INTENT pkg=com.android.exchange } U=0: not found
+10-18 07:14:21.717  2894  3037 W ActivityManager: Unable to start service Intent { act=com.android.email.EXCHANGE_INTENT pkg=com.android.exchange } U=0: not found
+10-18 07:14:22.034  2894  3031 W ActivityManager: Unable to start service Intent { cmp=com.android.email/.service.AttachmentService } U=0: not found
+10-18 07:14:22.047  2894  3031 W ActivityManager: Unable to start service Intent { act=com.android.email.EXCHANGE_INTENT pkg=com.android.exchange } U=0: not found
+10-18 07:14:22.104  2894  3031 W ActivityManager: Unable to start service Intent { cmp=com.android.email/.service.AttachmentService } U=0: not found
+10-18 07:14:22.146  2894  2906 W ActivityManager: Unable to start service Intent { act=com.android.email.EXCHANGE_INTENT pkg=com.android.exchange } U=0: not found
+10-18 07:14:22.201  2894  2906 I ActivityManager: Start proc 3709:com.android.managedprovisioning/u0a13 for broadcast com.android.managedprovisioning/.preprovisioning.BootReminder
+10-18 07:14:22.207  2894  3131 W ActivityManager: Unable to start service Intent { act=com.android.email.EXCHANGE_INTENT pkg=com.android.exchange } U=0: not found
+10-18 07:14:22.238  2894  3037 W ActivityManager: Unable to start service Intent { act=com.android.email.EXCHANGE_INTENT pkg=com.android.exchange } U=0: not found
+10-18 07:14:22.347  2894  3037 W ActivityManager: Unbind failed: could not find connection for android.os.BinderProxy@138aae9
+10-18 07:14:22.548  2894  3031 W ActivityManager: Slow operation: 85ms so far, now at attachApplicationLocked: immediately after bindApplication
+10-18 07:14:22.549  2894  3031 W ActivityManager: Slow operation: 88ms so far, now at attachApplicationLocked: after updateLruProcessLocked
+10-18 07:14:22.579  2894  3031 W ActivityManager: Slow operation: 117ms so far, now at attachApplicationLocked: after mServices.attachApplicationLocked
+10-18 07:14:22.607  2894  3031 W ActivityManager: Slow operation: 146ms so far, now at attachApplicationLocked: after sendPendingBroadcastsLocked
+10-18 07:14:22.777  2894  3037 W ActivityManager: Unable to start service Intent { act=com.android.email.EXCHANGE_INTENT pkg=com.android.exchange } U=0: not found
+10-18 07:14:23.055  2894  3037 I ActivityManager: Start proc 3727:com.android.messaging/u0a56 for broadcast com.android.messaging/.receiver.BootAndPackageReplacedReceiver
+10-18 07:14:23.226  2894  3037 W ActivityManager: Slow operation: 56ms so far, now at attachApplicationLocked: after sendPendingBroadcastsLocked
+10-18 07:14:24.232  2894  3037 I ActivityManager: Start proc 3748:com.android.packageinstaller/u0a17 for broadcast com.android.packageinstaller/.TemporaryFileManager
+10-18 07:14:24.232  2894  3037 W ActivityManager: Slow operation: 51ms so far, now at startProcess: done starting proc!
+10-18 07:14:24.550  2894  3031 W ActivityManager: Slow operation: 95ms so far, now at attachApplicationLocked: before bindApplication
+10-18 07:14:24.555  2894  3031 W ActivityManager: Slow operation: 100ms so far, now at attachApplicationLocked: immediately before bindApplication
+10-18 07:14:24.586  2894  3031 W ActivityManager: Slow operation: 131ms so far, now at attachApplicationLocked: immediately after bindApplication
+10-18 07:14:24.586  2894  3031 W ActivityManager: Slow operation: 131ms so far, now at attachApplicationLocked: after updateLruProcessLocked
+10-18 07:14:24.609  2894  3031 W ActivityManager: Slow operation: 154ms so far, now at attachApplicationLocked: after mServices.attachApplicationLocked
+10-18 07:14:24.623  2894  3031 W ActivityManager: Slow operation: 168ms so far, now at attachApplicationLocked: after sendPendingBroadcastsLocked
+10-18 07:14:25.929  2894  3037 I ActivityManager: Finished processing BOOT_COMPLETED for u0
+10-18 07:14:33.851  2894  2909 I ActivityManager: Waited long enough for: ServiceRecord{99e0b2d u0 com.android.calendar/.alerts.InitAlarmsService}
+10-18 07:14:40.119  2894  2909 I ActivityManager: Waited long enough for: ServiceRecord{385542a u0 com.android.providers.media/.MediaScannerService}
+10-18 07:14:43.002  2894  2915 W ActivityManager: Slow operation: 66ms so far, now at startProcess: returned from zygote!
+10-18 07:14:43.013  2894  2915 W ActivityManager: Slow operation: 77ms so far, now at startProcess: done updating battery stats
+10-18 07:14:43.018  2894  2915 W ActivityManager: Slow operation: 83ms so far, now at startProcess: building log message
+10-18 07:14:43.018  2894  2915 I ActivityManager: Start proc 3792:android.ext.services/u0a11 for service android.ext.services/.storage.CacheQuotaServiceImpl
+10-18 07:14:43.019  2894  2915 W ActivityManager: Slow operation: 83ms so far, now at startProcess: starting to update pids map
+10-18 07:14:43.021  2894  2915 W ActivityManager: Slow operation: 85ms so far, now at startProcess: done updating pids map
+10-18 07:14:43.021  2894  2915 W ActivityManager: Slow operation: 99ms so far, now at startProcess: done starting proc!
+10-18 07:14:43.569  2894  3131 W ActivityManager: Slow operation: 60ms so far, now at attachApplicationLocked: after mServices.attachApplicationLocked
+10-18 07:15:29.336  2894  2909 I ActivityManager: Killing 3437:com.android.quicksearchbox/u0a54 (adj 906): empty #17
+10-18 07:15:58.599  2894  2921 I ActivityManager: Start proc 3864:com.android.defcontainer/u0a7 for service com.android.defcontainer/.DefaultContainerService
+10-18 07:16:04.841  2894  3131 W ActivityManager: Slow operation: 66ms so far, now at startProcess: returned from zygote!
+10-18 07:16:04.842  2894  3131 W ActivityManager: Slow operation: 67ms so far, now at startProcess: done updating battery stats
+10-18 07:16:04.842  2894  3131 W ActivityManager: Slow operation: 68ms so far, now at startProcess: building log message
+10-18 07:16:04.842  2894  3131 I ActivityManager: Start proc 3887:com.android.gallery3d/u0a43 for broadcast com.android.gallery3d/.app.PackagesMonitor
+10-18 07:16:04.843  2894  3131 W ActivityManager: Slow operation: 68ms so far, now at startProcess: starting to update pids map
+10-18 07:16:04.843  2894  3131 W ActivityManager: Slow operation: 68ms so far, now at startProcess: done updating pids map
+10-18 07:16:04.843  2894  3131 W ActivityManager: Slow operation: 71ms so far, now at startProcess: done starting proc!
+10-18 07:16:05.811  2894  2905 I ActivityManager: Killing 3456:com.android.launcher3:wallpaper_chooser/u0a15 (adj 906): empty #17
+10-18 07:16:07.739  2894  3131 I ActivityManager: Force stopping net.plainnotes.app.data.test appid=10065 user=0: start instr
+10-18 07:16:07.770  2894  3131 I ActivityManager: Start proc 3969:net.plainnotes.app.data.test/u0a65 for added application net.plainnotes.app.data.test
+10-18 07:16:08.993  2894  3131 I ActivityManager: Killing 3583:com.android.contacts/u0a4 (adj 906): empty #17
+10-18 07:16:09.052  3969  3988 I ANSM_PERF: {"status":"IN_PROGRESS","environment":"Native API26 SQLCipher synthetic fixture; emulator, not physical hardware","diagnostic_run_token":"3a3a7874-a7e9-46fb-a2c8-a50a199e1607","stage":"BEFORE_SQLCIPHER_LOAD"}
+10-18 07:16:09.158  3969  3988 I ANSM_PERF: {"status":"IN_PROGRESS","environment":"Native API26 SQLCipher synthetic fixture; emulator, not physical hardware","diagnostic_run_token":"3a3a7874-a7e9-46fb-a2c8-a50a199e1607","stage":"BEFORE_DATABASE_OPEN"}
+10-18 07:16:10.958  3969  3988 I ANSM_PERF: {"status":"IN_PROGRESS","environment":"Native API26 SQLCipher synthetic fixture; emulator, not physical hardware","diagnostic_run_token":"3a3a7874-a7e9-46fb-a2c8-a50a199e1607","stage":"real_seed_generation","device_total_ram_bytes":520962048,"process_max_heap_bytes":201326592,"database_encryption":"SQLCipher","api":26,"observed_heap_bytes":1634160,"peak_observed_jvm_heap_bytes":3456664,"peak_observed_database_disk_bytes":3106296}
+10-18 07:16:36.288  3969  3988 I ANSM_PERF: {"status":"IN_PROGRESS","environment":"Native API26 SQLCipher synthetic fixture; emulator, not physical hardware","diagnostic_run_token":"3a3a7874-a7e9-46fb-a2c8-a50a199e1607","stage":"real_seed_generation","device_total_ram_bytes":520962048,"process_max_heap_bytes":201326592,"database_encryption":"SQLCipher","api":26,"observed_heap_bytes":1634160,"peak_observed_jvm_heap_bytes":3456664,"peak_observed_database_disk_bytes":3106296,"real_seed_generation_ms":25314.22985}
+10-18 07:16:38.035  3969  3988 I ANSM_PERF: {"status":"IN_PROGRESS","environment":"Native API26 SQLCipher synthetic fixture; emulator, not physical hardware","diagnostic_run_token":"3a3a7874-a7e9-46fb-a2c8-a50a199e1607","stage":"synthetic_fixture_expansion","device_total_ram_bytes":520962048,"process_max_heap_bytes":201326592,"database_encryption":"SQLCipher","api":26,"observed_heap_bytes":31280096,"peak_observed_jvm_heap_bytes":51404512,"peak_observed_database_disk_bytes":4902608,"real_seed_generation_ms":25314.22985}
+10-18 07:16:41.310  2894  3131 I ActivityManager: Process com.android.printspooler (pid 3339) has died: cch+6CEM 
+10-18 07:16:41.463  2894  2905 I ActivityManager: Process com.android.packageinstaller (pid 3748) has died: cch+6CEM 
+10-18 07:16:41.503  2894  3031 I ActivityManager: Process com.android.managedprovisioning (pid 3709) has died: cch+6CEM 
+10-18 07:16:45.137  3969  3988 I ANSM_PERF: {"status":"IN_PROGRESS","environment":"Native API26 SQLCipher synthetic fixture; emulator, not physical hardware","diagnostic_run_token":"3a3a7874-a7e9-46fb-a2c8-a50a199e1607","stage":"synthetic_fixture_expansion","device_total_ram_bytes":520962048,"process_max_heap_bytes":201326592,"database_encryption":"SQLCipher","api":26,"observed_heap_bytes":31280096,"peak_observed_jvm_heap_bytes":51404512,"peak_observed_database_disk_bytes":4902608,"real_seed_generation_ms":25314.22985,"synthetic_fixture_expansion_ms":7048.97262}
+10-18 07:16:45.604  2894  2905 I ActivityManager: Process android.process.media (pid 3355) has died: cch+4CEM 
+10-18 07:16:45.679  1402  1402 E lowmemorykiller: Error opening /proc/3611/oom_score_adj; errno=2
+10-18 07:16:45.679  1402  1402 E lowmemorykiller: Error writing /proc/3186/oom_score_adj; errno=22
+10-18 07:16:45.679  1402  1402 E lowmemorykiller: Error opening /proc/3065/oom_score_adj; errno=2
+10-18 07:16:45.679  1402  1402 E lowmemorykiller: Error opening /proc/3727/oom_score_adj; errno=2
+10-18 07:16:45.686  2894  3031 I ActivityManager: Process com.android.messaging (pid 3727) has died: cch+6CEM 
+10-18 07:16:45.690  2894  2906 I ActivityManager: Process com.android.settings (pid 3065) has died: cch+6CEM 
+10-18 07:16:45.694  2894  4005 I ActivityManager: Process com.android.deskclock (pid 3279) has died: cch+4CEM 
+10-18 07:16:45.695  1402  1402 E lowmemorykiller: Error opening /proc/3448/oom_score_adj; errno=2
+10-18 07:16:45.695  1402  1402 E lowmemorykiller: Error opening /proc/3397/oom_score_adj; errno=2
+10-18 07:16:45.695  1402  1402 E lowmemorykiller: Error opening /proc/3560/oom_score_adj; errno=2
+10-18 07:16:45.695  1402  1402 E lowmemorykiller: Error opening /proc/3611/oom_score_adj; errno=2
+10-18 07:16:45.695  1402  1402 E lowmemorykiller: Error opening /proc/3186/oom_score_adj; errno=2
+10-18 07:16:45.783  2894  2916 W ActivityManager: setHasOverlayUi called on unknown pid: 3065
+10-18 07:16:45.785  2894  3030 I ActivityManager: Process com.android.email (pid 3611) has died: cch+6CEM 
+10-18 07:16:45.832  2894  3131 I ActivityManager: Process com.android.calendar (pid 3560) has died: cch+4CEM 
+10-18 07:16:45.850  1402  1402 E lowmemorykiller: Error opening /proc/3186/oom_score_adj; errno=2
+10-18 07:16:45.850  2894  4006 I ActivityManager: Process com.android.cellbroadcastreceiver (pid 3186) has died: cch+4CEM 
+10-18 07:16:45.851  1402  1402 E lowmemorykiller: Error opening /proc/3887/oom_score_adj; errno=2
+10-18 07:16:45.851  1402  1402 E lowmemorykiller: Error opening /proc/3448/oom_score_adj; errno=2
+10-18 07:16:45.851  1402  1402 E lowmemorykiller: Error opening /proc/3792/oom_score_adj; errno=2
+10-18 07:16:45.851  1402  1402 E lowmemorykiller: Error opening /proc/3397/oom_score_adj; errno=2
+10-18 07:16:45.858  2894  3031 I ActivityManager: Process com.android.gallery3d (pid 3887) has died: cch+2CEM 
+10-18 07:16:45.861  1402  1402 E lowmemorykiller: Error opening /proc/3448/oom_score_adj; errno=2
+10-18 07:16:45.861  1402  1402 E lowmemorykiller: Error opening /proc/3792/oom_score_adj; errno=2
+10-18 07:16:45.873  2894  3037 I ActivityManager: Process com.android.defcontainer (pid 3864) has died: cch  CEM 
+10-18 07:16:45.875  1402  1402 E lowmemorykiller: Error opening /proc/3448/oom_score_adj; errno=2
+10-18 07:16:45.875  1402  1402 E lowmemorykiller: Error opening /proc/3792/oom_score_adj; errno=2
+10-18 07:16:45.875  1402  1402 E lowmemorykiller: Error opening /proc/3397/oom_score_adj; errno=2
+10-18 07:16:45.876  2894  2905 I ActivityManager: Process com.android.providers.calendar (pid 3448) has died: cch  CEM 
+10-18 07:16:45.877  1402  1402 E lowmemorykiller: Error opening /proc/3792/oom_score_adj; errno=2
+10-18 07:16:45.877  1402  1402 E lowmemorykiller: Error opening /proc/3397/oom_score_adj; errno=2
+10-18 07:16:45.878  2894  2906 I ActivityManager: Process com.android.keychain (pid 3397) has died: cch+2CEM 
+10-18 07:16:45.879  2894  3079 I ActivityManager: Process android.ext.services (pid 3792) has died: cch  CEM 
+10-18 07:16:45.903  2894  4008 I ActivityManager: Process android.process.acore (pid 3535) has died: prev LAST
+10-18 07:16:45.925  2894  3079 I ActivityManager: Process com.android.dialer (pid 3220) has died: vis  TRNB
+10-18 07:16:45.928  2894  3079 W ActivityManager: Scheduling restart of crashed service com.android.dialer/com.android.voicemail.impl.scheduling.TaskSchedulerJobService in 1000ms
+10-18 07:16:45.929  2894  4006 I ActivityManager: Process com.android.inputmethod.latin (pid 2987) has died: prcp IMPB
+10-18 07:16:45.929  2894  4006 W ActivityManager: Scheduling restart of crashed service com.android.inputmethod.latin/.LatinIME in 10997ms
+10-18 07:16:46.069  3969  3988 I ANSM_PERF: {"status":"IN_PROGRESS","environment":"Native API26 SQLCipher synthetic fixture; emulator, not physical hardware","diagnostic_run_token":"3a3a7874-a7e9-46fb-a2c8-a50a199e1607","stage":"validated_staging_and_restore","device_total_ram_bytes":520962048,"process_max_heap_bytes":201326592,"database_encryption":"SQLCipher","api":26,"observed_heap_bytes":161783912,"peak_observed_jvm_heap_bytes":198711872,"peak_observed_database_disk_bytes":4902608,"real_seed_generation_ms":25314.22985,"synthetic_fixture_expansion_ms":7048.97262,"raw_business_json_bytes":19660909,"records":14600,"containers":2000,"measured_operations":2000,"presentation_snapshots":2000,"distinct_synthetic_product_variants":20,"row_count":32603}
+10-18 07:16:56.971  2894  2909 I ActivityManager: Start proc 4014:com.android.inputmethod.latin/u0a45 for service com.android.inputmethod.latin/.LatinIME
+10-18 07:16:57.960  2894  4006 I ActivityManager: Start proc 4034:android.process.acore/u0a5 for content provider com.android.providers.userdictionary/.UserDictionaryProvider
+10-18 07:17:14.926  3969  3988 I ANSM_PERF: {"status":"IN_PROGRESS","environment":"Native API26 SQLCipher synthetic fixture; emulator, not physical hardware","diagnostic_run_token":"3a3a7874-a7e9-46fb-a2c8-a50a199e1607","stage":"validated_staging_and_restore","device_total_ram_bytes":520962048,"process_max_heap_bytes":201326592,"database_encryption":"SQLCipher","api":26,"observed_heap_bytes":161783912,"peak_observed_jvm_heap_bytes":198711872,"peak_observed_database_disk_bytes":4902608,"real_seed_generation_ms":25314.22985,"synthetic_fixture_expansion_ms":7048.97262,"raw_business_json_bytes":19660909,"records":14600,"containers":2000,"measured_operations":2000,"presentation_snapshots":2000,"distinct_synthetic_product_variants":20,"row_count":32603,"validated_staging_and_restore_ms":28842.91748}
+10-18 07:17:14.935  3969  3988 I ANSM_PERF: {"status":"IN_PROGRESS","environment":"Native API26 SQLCipher synthetic fixture; emulator, not physical hardware","diagnostic_run_token":"3a3a7874-a7e9-46fb-a2c8-a50a199e1607","stage":"full_audit","device_total_ram_bytes":520962048,"process_max_heap_bytes":201326592,"database_encryption":"SQLCipher","api":26,"observed_heap_bytes":69906872,"peak_observed_jvm_heap_bytes":198711872,"peak_observed_database_disk_bytes":35879536,"real_seed_generation_ms":25314.22985,"synthetic_fixture_expansion_ms":7048.97262,"raw_business_json_bytes":19660909,"records":14600,"containers":2000,"measured_operations":2000,"presentation_snapshots":2000,"distinct_synthetic_product_variants":20,"row_count":32603,"validated_staging_and_restore_ms":28842.91748}
+10-18 07:17:15.998  2894  2894 I ActivityManager: Start proc 4057:com.android.dialer/u0a14 for service com.android.dialer/com.android.voicemail.impl.scheduling.TaskSchedulerJobService
+10-18 07:17:24.064  3969  3988 I ANSM_PERF: {"status":"IN_PROGRESS","environment":"Native API26 SQLCipher synthetic fixture; emulator, not physical hardware","diagnostic_run_token":"3a3a7874-a7e9-46fb-a2c8-a50a199e1607","stage":"full_audit","device_total_ram_bytes":520962048,"process_max_heap_bytes":201326592,"database_encryption":"SQLCipher","api":26,"observed_heap_bytes":69906872,"peak_observed_jvm_heap_bytes":198711872,"peak_observed_database_disk_bytes":35879536,"real_seed_generation_ms":25314.22985,"synthetic_fixture_expansion_ms":7048.97262,"raw_business_json_bytes":19660909,"records":14600,"containers":2000,"measured_operations":2000,"presentation_snapshots":2000,"distinct_synthetic_product_variants":20,"row_count":32603,"validated_staging_and_restore_ms":28842.91748,"full_audit_ms":9119.77798}
+10-18 07:17:24.091  3969  3988 I ANSM_PERF: {"status":"IN_PROGRESS","environment":"Native API26 SQLCipher synthetic fixture; emulator, not physical hardware","diagnostic_run_token":"3a3a7874-a7e9-46fb-a2c8-a50a199e1607","stage":"shared_forecast","device_total_ram_bytes":520962048,"process_max_heap_bytes":201326592,"database_encryption":"SQLCipher","api":26,"observed_heap_bytes":77783736,"peak_observed_jvm_heap_bytes":198711872,"peak_observed_database_disk_bytes":35879536,"real_seed_generation_ms":25314.22985,"synthetic_fixture_expansion_ms":7048.97262,"raw_business_json_bytes":19660909,"records":14600,"containers":2000,"measured_operations":2000,"presentation_snapshots":2000,"distinct_synthetic_product_variants":20,"row_count":32603,"validated_staging_and_restore_ms":28842.91748,"full_audit_ms":9119.77798}
+10-18 07:17:32.951  3969  3988 I ANSM_PERF: {"status":"IN_PROGRESS","environment":"Native API26 SQLCipher synthetic fixture; emulator, not physical hardware","diagnostic_run_token":"3a3a7874-a7e9-46fb-a2c8-a50a199e1607","stage":"shared_forecast","device_total_ram_bytes":520962048,"process_max_heap_bytes":201326592,"database_encryption":"SQLCipher","api":26,"observed_heap_bytes":77783736,"peak_observed_jvm_heap_bytes":198711872,"peak_observed_database_disk_bytes":35879536,"real_seed_generation_ms":25314.22985,"synthetic_fixture_expansion_ms":7048.97262,"raw_business_json_bytes":19660909,"records":14600,"containers":2000,"measured_operations":2000,"presentation_snapshots":2000,"distinct_synthetic_product_variants":20,"row_count":32603,"validated_staging_and_restore_ms":28842.91748,"full_audit_ms":9119.77798,"shared_forecast_ms":8854.42513}
+10-18 07:17:32.956  3969  3988 I ANSM_PERF: {"status":"IN_PROGRESS","environment":"Native API26 SQLCipher synthetic fixture; emulator, not physical hardware","diagnostic_run_token":"3a3a7874-a7e9-46fb-a2c8-a50a199e1607","stage":"full_encrypted_backup","device_total_ram_bytes":520962048,"process_max_heap_bytes":201326592,"database_encryption":"SQLCipher","api":26,"observed_heap_bytes":45511984,"peak_observed_jvm_heap_bytes":198711872,"peak_observed_database_disk_bytes":35879536,"real_seed_generation_ms":25314.22985,"synthetic_fixture_expansion_ms":7048.97262,"raw_business_json_bytes":19660909,"records":14600,"containers":2000,"measured_operations":2000,"presentation_snapshots":2000,"distinct_synthetic_product_variants":20,"row_count":32603,"validated_staging_and_restore_ms":28842.91748,"full_audit_ms":9119.77798,"shared_forecast_ms":8854.42513}
+10-18 07:17:41.571  2894  4006 I ActivityManager: Process android.process.acore (pid 4034) has died: prev LAST
+10-18 07:17:41.680  2894  3079 I ActivityManager: Process com.android.inputmethod.latin (pid 4014) has died: prcp IMPB
+10-18 07:17:41.688  2894  3079 W ActivityManager: Scheduling restart of crashed service com.android.inputmethod.latin/.LatinIME in 43988ms
+10-18 07:17:42.801  3969  3988 I ANSM_PERF: {"status":"IN_PROGRESS","environment":"Native API26 SQLCipher synthetic fixture; emulator, not physical hardware","diagnostic_run_token":"3a3a7874-a7e9-46fb-a2c8-a50a199e1607","stage":"full_encrypted_backup","device_total_ram_bytes":520962048,"process_max_heap_bytes":201326592,"database_encryption":"SQLCipher","api":26,"observed_heap_bytes":45511984,"peak_observed_jvm_heap_bytes":198711872,"peak_observed_database_disk_bytes":35879536,"real_seed_generation_ms":25314.22985,"synthetic_fixture_expansion_ms":7048.97262,"raw_business_json_bytes":19660909,"records":14600,"containers":2000,"measured_operations":2000,"presentation_snapshots":2000,"distinct_synthetic_product_variants":20,"row_count":32603,"validated_staging_and_restore_ms":28842.91748,"full_audit_ms":9119.77798,"shared_forecast_ms":8854.42513,"full_encrypted_backup_ms":9834.65328}
+10-18 07:17:42.868  3969  3988 I ANSM_PERF: {"status":"IN_PROGRESS","environment":"Native API26 SQLCipher synthetic fixture; emulator, not physical hardware","diagnostic_run_token":"3a3a7874-a7e9-46fb-a2c8-a50a199e1607","stage":"full_encrypted_restore","device_total_ram_bytes":520962048,"process_max_heap_bytes":201326592,"database_encryption":"SQLCipher","api":26,"observed_heap_bytes":122589688,"peak_observed_jvm_heap_bytes":198711872,"peak_observed_database_disk_bytes":35879536,"real_seed_generation_ms":25314.22985,"synthetic_fixture_expansion_ms":7048.97262,"raw_business_json_bytes":19660909,"records":14600,"containers":2000,"measured_operations":2000,"presentation_snapshots":2000,"distinct_synthetic_product_variants":20,"row_count":32603,"validated_staging_and_restore_ms":28842.91748,"full_audit_ms":9119.77798,"shared_forecast_ms":8854.42513,"full_encrypted_backup_ms":9834.65328,"encrypted_archive_bytes":19661030}
+10-18 07:17:45.713  2894  4007 I ActivityManager: Process com.android.dialer (pid 4057) has died: vis  TRNB
+10-18 07:17:45.732  2894  4007 W ActivityManager: Scheduling restart of crashed service com.android.dialer/com.android.voicemail.impl.scheduling.TaskSchedulerJobService in 1000ms
+10-18 07:17:45.803  2894  2906 I ActivityManager: Process com.android.launcher3 (pid 3391) has died: fore TOP 
+10-18 07:17:45.827  2894  2906 I ActivityManager: Start proc 4084:com.android.launcher3/u0a15 for activity com.android.launcher3/.Launcher
+10-18 07:17:45.830  2894  4082 I ActivityManager: Process net.plainnotes.app.data.test (pid 3969) has died: fore FGS 
+10-18 07:17:45.832  2894  4082 W ActivityManager: Crash of app net.plainnotes.app.data.test running instrumentation ComponentInfo{net.plainnotes.app.data.test/androidx.test.runner.AndroidJUnitRunner}
+10-18 07:17:45.835  2894  4082 I ActivityManager: Force stopping net.plainnotes.app.data.test appid=10065 user=0: finished inst
+10-18 07:17:45.842  2894  2916 W ActivityManager: setHasOverlayUi called on unknown pid: 3391
+10-18 07:17:45.890  2894  4089 I ActivityManager: Failure reporting to instrumentation watcher: comp=ComponentInfo{net.plainnotes.app.data.test/androidx.test.runner.AndroidJUnitRunner} results=Bundle[{shortMsg=Process crashed.}]
+10-18 07:17:46.234  2894  2916 I ActivityManager: Displayed com.android.launcher3/.Launcher: +417ms
+10-18 07:17:46.252  2894  4006 I ActivityManager: Start proc 4122:com.android.inputmethod.latin/u0a45 for service com.android.inputmethod.latin/.LatinIME
+10-18 07:17:46.533  2894  4006 I ActivityManager: Start proc 4144:android.process.acore/u0a5 for content provider com.android.providers.userdictionary/.UserDictionaryProvider

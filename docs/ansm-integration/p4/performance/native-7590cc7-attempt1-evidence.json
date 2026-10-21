@@ -1,0 +1,25 @@
+{
+  "status": "FAIL_PROCESS_EXIT_INCOMPLETE",
+  "source_head": "7590cc7891f05a3a3448176c80db9e91bf385b4e",
+  "run": 39106781296,
+  "attempt": 1,
+  "job": 117614233967,
+  "artifact_id": 12129061270,
+  "artifact_sha256": "01dca60ba0b426aaaa74b8af9b358b2f7fb51bb7b2c241c7c638f990f2257dfa",
+  "sha256_verification": "PASS",
+  "zip_crc": "PASS",
+  "last_report_status": "IN_PROGRESS",
+  "last_stage": "full_encrypted_restore",
+  "cause": "UNVERIFIED: instrumentation process exited; ActivityManager also reports multiple other processes dying. No test-process Java exception, OOM stack or native tombstone was captured; do not infer a confirmed low-memory kill.",
+  "observed_completed_phases": {
+    "full_audit_ms": 9119.77798,
+    "shared_forecast_ms": 8854.42513,
+    "full_encrypted_backup_ms": 9834.65328
+  },
+  "remaining_phases": "NOT_COMPLETED",
+  "post_restore_write_ms": "UNAVAILABLE",
+  "sampled_method_profile": "NOT_RUN",
+  "p4_admission": "PRODUCTION_BLOCKED",
+  "followup": "Run attempt2 uses exactly the same source, emulator constraints and budgets to investigate incomplete execution/trace transport. A successful repeat cannot erase this failure or prove crash root cause fixed.",
+  "rerun_transport": "gh run rerun --failed returned cannot be rerun; direct GitHub job rerun endpoint accepted, attempt2 in progress."
+}

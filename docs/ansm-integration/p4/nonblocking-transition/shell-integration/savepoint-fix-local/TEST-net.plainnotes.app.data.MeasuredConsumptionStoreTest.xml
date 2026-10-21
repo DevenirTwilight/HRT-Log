@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.MeasuredConsumptionStoreTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-10-21T15:29:11.806Z" hostname="506c18a63d5b" time="8.102">
+  <properties/>
+  <testcase name="completeFrozenAuditMatchesMultiSourceZeroEffectAndRollback" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="6.331"/>
+  <testcase name="completeFrozenAuditMatchesChangedEnvelopeAndRestoredSavepoint" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="1.415"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

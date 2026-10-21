@@ -1,0 +1,92 @@
+{
+  "status": "FAIL",
+  "environment": "Native API26 SQLCipher synthetic fixture; emulator, not physical hardware",
+  "diagnostic_run_token": "d61241ca-bffb-4d20-949f-fb46fe7efb91",
+  "stage": "post_write_full_audit",
+  "transport_preflight": "PASS",
+  "device_total_ram_bytes": 520962048,
+  "process_max_heap_bytes": 201326592,
+  "database_encryption": "SQLCipher",
+  "api": 26,
+  "observed_heap_bytes": 21614976,
+  "peak_observed_jvm_heap_bytes": 198632088,
+  "peak_observed_database_disk_bytes": 35941120,
+  "real_seed_generation_ms": 45513.421929,
+  "synthetic_fixture_expansion_ms": 11878.314347,
+  "raw_business_json_bytes": 19660924,
+  "records": 14600,
+  "containers": 2000,
+  "measured_operations": 2000,
+  "presentation_snapshots": 2000,
+  "distinct_synthetic_product_variants": 20,
+  "row_count": 32603,
+  "validated_staging_and_restore_ms": 27122.269332,
+  "full_audit_ms": 8595.567337,
+  "shared_forecast_ms": 10223.334389,
+  "full_encrypted_backup_ms": 11429.605226,
+  "encrypted_archive_bytes": 19661045,
+  "full_encrypted_restore_ms": 36951.887831,
+  "restored_full_audit_ms": 7581.452067,
+  "three_post_restore_writes_ms": 32354.490795,
+  "post_restore_write_including_ticket_ms": [
+    11076.194786,
+    10263.291778,
+    10928.359059
+  ],
+  "post_write_full_audit_ms": 7356.370535,
+  "heap_sample_interval_ms": 10,
+  "heap_is_not_native_rss": true,
+  "physical_device_acceptance": "NOT_RUN",
+  "api26_low_memory_acceptance": "FAIL",
+  "budget_exceeded": [
+    "post_restore_write_including_ticket_ms"
+  ],
+  "post_budget_components": {
+    "scope": "TEST_ONLY_POST_BUDGET_READ_ONLY",
+    "acceptance_metrics_frozen_before_diagnostics": true,
+    "raw_full_first_ms": 7645.29191,
+    "cached_full_second_ms": 5056.853916,
+    "cached_full_first_ms": 4746.838451,
+    "raw_full_second_ms": 6251.266305,
+    "stored_columns_ms": 445.990785,
+    "raw_references_ms": 890.782741,
+    "raw_state_including_references_ms": 1121.264785,
+    "raw_operation_chain_ms": 330.397439,
+    "row_cache_construction_finish_ms": 156.624675,
+    "cached_references_including_construction_ms": 943.293817,
+    "cached_operations_with_setup_ms": 2186.364987,
+    "cached_projections_with_setup_ms": 1394.092638,
+    "projection_stream_cursor_type": "net.zetetic.database.sqlcipher.SQLiteCursor",
+    "projection_stream_query_plan": [
+      "SCAN i USING INDEX sqlite_autoindex_reference_identity_1",
+      "CORRELATED SCALAR SUBQUERY 1",
+      "SEARCH e USING INDEX index_reference_event_subject_uuid_revision (subject_uuid=?)",
+      "SEARCH s USING INDEX sqlite_autoindex_reference_snapshot_1 (uuid=?)",
+      "SEARCH t USING INDEX index_supply_transaction_container_id (container_id=?)",
+      "SEARCH o USING INDEX sqlite_autoindex_measured_operation_1 (operation_uuid=?) LEFT-JOIN",
+      "SEARCH d USING INTEGER PRIMARY KEY (rowid=?) LEFT-JOIN"
+    ],
+    "projection_stream_cursor_windows_status": "AVAILABLE",
+    "projection_stream_cursor_windows": [
+      {
+        "start_row": 0,
+        "rows": 2003,
+        "driver_reported_size_bytes": 16384
+      }
+    ],
+    "stream_query_plan_audit_ms": 4953.349711,
+    "decimal_regex_reuse_12000_ms": 38.435497,
+    "decimal_regex_compile_12000_ms": 158.791458,
+    "sampled_cached_full_audit_ms": 6782.523896,
+    "sampling_trace": {
+      "file": "audit-sampling.trace",
+      "bytes": 484870,
+      "token": "d61241ca-bffb-4d20-949f-fb46fe7efb91",
+      "interval_us": 1000,
+      "scope": "TEST_ONLY_POST_BUDGET_METHOD_STACKS_NO_ARGUMENTS"
+    },
+    "status": "COMPLETE",
+    "sampling_host_ack": true
+  },
+  "failure": "java.lang.AssertionError: Diagnostic budgets; device acceptance remains NOT_RUN expected:<[]> but was:<[post_restore_write_including_ticket_ms]>"
+}

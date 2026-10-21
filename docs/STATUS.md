@@ -1,6 +1,6 @@
 ## UI-07 Material 3 Expressive 表现层 — 2026-10-21
 
-只用稳定 API 加入四项表现手法（REQUIREMENTS §116，报告 71）：
+只用稳定 API 加入四项表现手法（REQUIREMENTS §133，报告 71）：
 - 实心圆状态图标 `StatusIcon`；
 - 形状档位和按下形变；
 - 强调字体：时间 64sp，数字最多放大到 1.3 倍；

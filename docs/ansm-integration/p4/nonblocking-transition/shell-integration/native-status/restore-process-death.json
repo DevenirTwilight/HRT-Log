@@ -1,0 +1,23 @@
+{
+  "scope": "SYNTHETIC_API26_ACTUAL_PROCESS_KILL",
+  "mode": "full",
+  "large_performance": "PRESERVED_ORIGINAL_RESULT",
+  "cases": [
+    {
+      "stage": "ROWS_DELETED",
+      "pid": 4095,
+      "expected_sha256": "14ec265d03dd6b6ffd69a2a110c4bfc4874df0105ac5719c47b92a9aad4d6302",
+      "epoch": "ebc7e04f-df87-4420-9c71-64865a34c1d5",
+      "new_pid": 4179,
+      "status": "PASS_DATASET_EPOCH_AND_FULL_ORACLE"
+    },
+    {
+      "stage": "ROWS_INSERTED",
+      "pid": 4222,
+      "expected_sha256": "e75fa062dc79f0a11bd8566ec8be3c036bb968d35b4729dc38c1e6bbbd525bac",
+      "epoch": "348c9ec3-dba8-42ae-8dd9-f43ae3663638",
+      "new_pid": 4302,
+      "status": "PASS_DATASET_EPOCH_AND_FULL_ORACLE"
+    }
+  ]
+}

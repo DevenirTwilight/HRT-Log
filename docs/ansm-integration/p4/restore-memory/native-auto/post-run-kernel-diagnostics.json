@@ -1,0 +1,11 @@
+{
+  "status": "CAPTURED_DIAGNOSTIC_ONLY",
+  "scope": "SYNTHETIC_API26_POST_TEST_ONLY",
+  "memory_rss": "NOT_MEASURED",
+  "command_exit": 0,
+  "stdout_bytes": 5527,
+  "clipped": false,
+  "stderr_tail": "",
+  "bytes": 5527,
+  "sha256": "c250f2d782f264d94e6b5262bafb835ae271de4843fe3e63f0bfa37fd6a9a2bd"
+}

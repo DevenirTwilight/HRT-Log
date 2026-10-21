@@ -1,0 +1,392 @@
+{
+  "status": "PASS",
+  "scope": "LOCAL_ONLY; current matrix and new native runtime pending",
+  "suites": {
+    "data": {
+      "totals": {
+        "tests": 362,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "classes": [
+        {
+          "class": "net.plainnotes.app.data.Ansm03b0InventoryTest",
+          "tests": 13,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.data.AttachmentFoundationTest",
+          "tests": 16,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.data.AttachmentMigrationTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.data.BackfillTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.data.BackupReplacementTest",
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.data.DataTransferTest",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.data.HistoricalContextRepairTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.data.HistoricalVisitTest",
+          "tests": 18,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.data.HistoryIntegrityTest",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.data.HistoryPeriodDataTest",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.data.HrtTrackerImportTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.data.KeyBoundaryTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.data.LabContextTest",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.data.LedgerReplacementTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.data.MeasuredConsumptionStoreTest",
+          "tests": 87,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.data.MeasuredContainerStoreTest",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.data.MeasuredUsePayloadTest",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.data.PackageMeasurementPayloadTest",
+          "tests": 12,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.data.PlanEditTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.data.ReferenceCatalogTest",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.data.ReferenceMigrationTest",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.data.ReferencePayloadTest",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.data.ReferencePersistenceTest",
+          "tests": 21,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.data.RegimenHistoryTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.data.SchemaConstraintTest",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.data.StockCorrectionTest",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.data.StockForecastTest",
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.data.SupplyLedgerTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.data.TrashDataTest",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.data.UndoSkippedTest",
+          "tests": 33,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.data.VisitPackDataTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.data.VoidedPackageTest",
+          "tests": 18,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.data.WellbeingMigrationTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.data.WellbeingRecordsTest",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      ]
+    },
+    "reminder": {
+      "totals": {
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "classes": [
+        {
+          "class": "net.plainnotes.app.reminder.Ansm03b0ForecastBoundaryTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.reminder.CacheStoreTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.reminder.ExactAlarmTest",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.reminder.LockedBootAlarmTest",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.reminder.NotificationPrivacyTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.reminder.StockAlertsClearTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.reminder.StockAlertsTest",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      ]
+    },
+    "app_selected": {
+      "totals": {
+        "tests": 40,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "classes": [
+        {
+          "class": "net.plainnotes.app.ConcentrationCalculatorTest",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.PeriodStabilityTest",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.PrivacyNoticeFactsTest",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.StockCardActionsTest",
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.StockCheckUiTest",
+          "tests": 12,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.StockConsistencyTest",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "class": "net.plainnotes.app.StockSummaryTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      ]
+    }
+  },
+  "data_reminder_initial": {
+    "file": "ansm-p4-unknown-lifecycle-initial.log",
+    "sha256": "83605a1f2f3b6f22d0b908ab28d59a7c9f96d7507c16deadfbe3005b8c99a99e"
+  },
+  "data_reminder_second": {
+    "file": "ansm-p4-unknown-lifecycle-second.log",
+    "sha256": "e158e1dde84ec799fb3194770f165026eab3d396b4b85337b422d1bde441ce13"
+  },
+  "app_corrected": {
+    "file": "ansm-p4-unknown-app-final.log",
+    "sha256": "e2f5a6ed3e7ec293afda2c8324c8b8515038bb299ecac282bff6e33176b81be2"
+  },
+  "python": {
+    "file": "ansm-p4-unknown-boundary-final.log",
+    "sha256": "52f701c3d67775fb920a0ff8a85790f016eb46f5b1c6d1ad390c32323c63dd46"
+  },
+  "intermediate_failures": [
+    "Initial private ReferenceSchema.exists compile failure; replaced with trusted sqlite_master presence query for old schema compatibility.",
+    "App compile rejected nullable StockSummary.remaining in old stock assertion; requireNotNull preserves original 38.0/epsilon and strengthens unknown rejection."
+  ]
+}

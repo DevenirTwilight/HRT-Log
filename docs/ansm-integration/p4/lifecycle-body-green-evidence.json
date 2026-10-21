@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "totals": {
+    "tests": 336,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "native_source_compile": "PASS",
+  "new_native_runtime": "NOT_RUN",
+  "log_sha256": "853e4bd738711dc236d0870040098bfb0fb1b1c12e5c308c789d8708602ac6c0"
+}

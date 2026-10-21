@@ -1,0 +1,40 @@
+{
+  "baseline": "352308b3f5090596ebdc7b5a3a348708cd2a85ff",
+  "checkpoint": "b8c4d2a0dc6a21852331203115fda0db53878076",
+  "paths": {
+    "core/data/schemas": {
+      "before": "a9d0ee71c5e6c1968e2b2504c5b2da9d57eca87d",
+      "after": "a9d0ee71c5e6c1968e2b2504c5b2da9d57eca87d",
+      "unchanged": true
+    },
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt": {
+      "before": "f0954678e435d78a61a4147661d6b64b0d0b93a7",
+      "after": "f0954678e435d78a61a4147661d6b64b0d0b93a7",
+      "unchanged": true
+    },
+    "core/data/src/main/java/net/plainnotes/app/data/StockForecast.kt": {
+      "before": "aae44377eb2700ac7a8f6e7b64b4a36234a1867c",
+      "after": "aae44377eb2700ac7a8f6e7b64b4a36234a1867c",
+      "unchanged": true
+    },
+    "app/src/main": {
+      "before": "7417b3ed5c2f67a0567de0600977396c990d4392",
+      "after": "7417b3ed5c2f67a0567de0600977396c990d4392",
+      "unchanged": true
+    },
+    "pk-engine/src/main": {
+      "before": "d786d084afe475df67a42c17b5220790800d2aa4",
+      "after": "d786d084afe475df67a42c17b5220790800d2aa4",
+      "unchanged": true
+    }
+  },
+  "pnBak1_codec": {
+    "byte_identical": true,
+    "sha256": "e87ce55896b64a248e80db3614037f9b7d9e27946d3063fa5cd192e69d529500"
+  },
+  "input_limits": {
+    "byte_identical": true,
+    "sha256": "28296b2187dc053ae9adafc449265296c70efa342eed9f163afe693a9c5c0e92"
+  },
+  "test_probes_absent_from_production_jar": true
+}

@@ -1,0 +1,178 @@
+[
+  {
+    "name": "CIS_bdpm.txt",
+    "requested_url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_bdpm.txt",
+    "source_page_label": "Fichier des spécialités\n                                                          (Date de mise à jour : 29/09/2026, 3101 Ko)",
+    "retrieved_at_utc": "2026-10-17T12:36:56.252901+00:00",
+    "status": "RETRIEVED_NOT_DISTRIBUTION_APPROVED",
+    "rights_status": "OWNER_DISTRIBUTION_NOT_APPROVED",
+    "dynamic_generated_at_utc": null,
+    "http_status": 200,
+    "final_url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_bdpm.txt",
+    "sha256": "332b95926f76f1a2ab3d70cdf64205397fc13e74b7cc9afad9b625fbb6961640",
+    "bytes": 3175357,
+    "http_last_modified": null,
+    "http_date": "Sat, 17 Oct 2026 12:36:56 GMT",
+    "raw_rows": 15883,
+    "raw_field_counts": {
+      "12": 15883
+    },
+    "raw_column_12_values_without_interpreting_missing_as_no": {
+      "Non": 15375,
+      "Oui": 508
+    }
+  },
+  {
+    "name": "CIS_CIP_bdpm.txt",
+    "requested_url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_CIP_bdpm.txt",
+    "source_page_label": "Fichier des présentations\n                                                          (Date de mise à jour : 16/10/2026, 4053 Ko)",
+    "retrieved_at_utc": "2026-10-17T12:36:56.253510+00:00",
+    "status": "RETRIEVED_NOT_DISTRIBUTION_APPROVED",
+    "rights_status": "OWNER_DISTRIBUTION_NOT_APPROVED",
+    "dynamic_generated_at_utc": null,
+    "http_status": 200,
+    "final_url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_CIP_bdpm.txt",
+    "sha256": "b011fa0bcf5d1ae3fcf85d2a35e1a4b7496006c09d973bf207db1f7dccf32d9a",
+    "bytes": 4150376,
+    "http_last_modified": null,
+    "http_date": "Sat, 17 Oct 2026 12:36:57 GMT",
+    "raw_rows": 20907,
+    "raw_field_counts": {
+      "13": 20907
+    }
+  },
+  {
+    "name": "CIS_HAS_SMR_bdpm.txt",
+    "requested_url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_HAS_SMR_bdpm.txt",
+    "source_page_label": "Fichier des avis SMR de la HAS\n                                                          (Date de mise à jour : 29/09/2026, 4522 Ko)",
+    "retrieved_at_utc": "2026-10-17T12:36:56.253861+00:00",
+    "status": "RETRIEVED_NOT_DISTRIBUTION_APPROVED",
+    "rights_status": "OWNER_DISTRIBUTION_NOT_APPROVED",
+    "dynamic_generated_at_utc": null,
+    "http_status": 200,
+    "final_url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_HAS_SMR_bdpm.txt",
+    "sha256": "c2215af6b20705bb8b8eb6f447ebb2a45000c40e5cd8d3f575149832c639ffdd",
+    "bytes": 4630126,
+    "http_last_modified": null,
+    "http_date": "Sat, 17 Oct 2026 12:36:56 GMT",
+    "raw_rows": 15547,
+    "raw_field_counts": {
+      "6": 15547
+    }
+  },
+  {
+    "name": "CIS_HAS_ASMR_bdpm.txt",
+    "requested_url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_HAS_ASMR_bdpm.txt",
+    "source_page_label": "Fichier des avis ASMR de la HAS\n                                                          (Date de mise à jour : 29/09/2026, 4497 Ko)",
+    "retrieved_at_utc": "2026-10-17T12:36:57.968179+00:00",
+    "status": "RETRIEVED_NOT_DISTRIBUTION_APPROVED",
+    "rights_status": "OWNER_DISTRIBUTION_NOT_APPROVED",
+    "dynamic_generated_at_utc": null,
+    "http_status": 200,
+    "final_url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_HAS_ASMR_bdpm.txt",
+    "sha256": "f849554030c7dafdaf9ccf604dcdb8393590302f7a28f869a71a3fd798ae0a69",
+    "bytes": 4605173,
+    "http_last_modified": null,
+    "http_date": "Sat, 17 Oct 2026 12:36:58 GMT",
+    "raw_rows": 10117,
+    "raw_field_counts": {
+      "6": 10117
+    }
+  },
+  {
+    "name": "CIS_GENER_bdpm.txt",
+    "requested_url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_GENER_bdpm.txt",
+    "source_page_label": "Fichier des groupes génèriques\n                                                          (Date de mise à jour : 29/09/2026, 1191 Ko)",
+    "retrieved_at_utc": "2026-10-17T12:36:58.041775+00:00",
+    "status": "RETRIEVED_NOT_DISTRIBUTION_APPROVED",
+    "rights_status": "OWNER_DISTRIBUTION_NOT_APPROVED",
+    "dynamic_generated_at_utc": null,
+    "http_status": 200,
+    "final_url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_GENER_bdpm.txt",
+    "sha256": "04ea92fb3d2e7682ed0720daea48ecf65f3459b4b0b61fe9160bb7cce82f152c",
+    "bytes": 1219514,
+    "http_last_modified": null,
+    "http_date": "Sat, 17 Oct 2026 12:36:58 GMT",
+    "raw_rows": 10737,
+    "raw_field_counts": {
+      "5": 10737
+    }
+  },
+  {
+    "name": "CIS_CPD_bdpm.txt",
+    "requested_url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_CPD_bdpm.txt",
+    "source_page_label": "Fichier des conditions de prescription et de délivrance\n                                                          (Date de mise à jour : 29/09/2026, 1305 Ko)",
+    "retrieved_at_utc": "2026-10-17T12:36:58.272784+00:00",
+    "status": "RETRIEVED_NOT_DISTRIBUTION_APPROVED",
+    "rights_status": "OWNER_DISTRIBUTION_NOT_APPROVED",
+    "dynamic_generated_at_utc": null,
+    "http_status": 200,
+    "final_url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_CPD_bdpm.txt",
+    "sha256": "e92ca48f83f54f6e2bca7248d3e8c24d7399402fd6b5b9058c41ad730529c237",
+    "bytes": 1336246,
+    "http_last_modified": null,
+    "http_date": "Sat, 17 Oct 2026 12:36:58 GMT",
+    "raw_rows": 28541,
+    "raw_field_counts": {
+      "2": 28532,
+      "1": 9
+    }
+  },
+  {
+    "name": "CIS_CIP_Dispo_Spec.txt",
+    "requested_url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_CIP_Dispo_Spec.txt",
+    "source_page_label": "Fichier des ruptures de stocks\n                                                          (Date de mise à jour : 12/10/2026, 151 Ko)",
+    "retrieved_at_utc": "2026-10-17T12:36:58.353836+00:00",
+    "status": "RETRIEVED_NOT_DISTRIBUTION_APPROVED",
+    "rights_status": "OWNER_DISTRIBUTION_NOT_APPROVED",
+    "dynamic_generated_at_utc": null,
+    "http_status": 200,
+    "final_url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_CIP_Dispo_Spec.txt",
+    "sha256": "554613ea8348810c32cf8872a97c9f5ccd8828c45a8eb873a0479a800663a72e",
+    "bytes": 154918,
+    "http_last_modified": null,
+    "http_date": "Sat, 17 Oct 2026 12:36:58 GMT",
+    "raw_rows": 710,
+    "raw_field_counts": {
+      "8": 710
+    }
+  },
+  {
+    "name": "CIS_MITM.txt",
+    "requested_url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_MITM.txt",
+    "source_page_label": "Fichier des médicaments d&#039;intérêt thérapeutique majeur\n                                                          (Date de mise à jour : 13/10/2026, 1581 Ko)",
+    "retrieved_at_utc": "2026-10-17T12:36:58.518054+00:00",
+    "status": "RETRIEVED_NOT_DISTRIBUTION_APPROVED",
+    "rights_status": "OWNER_DISTRIBUTION_NOT_APPROVED",
+    "dynamic_generated_at_utc": null,
+    "http_status": 200,
+    "final_url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_MITM.txt",
+    "sha256": "300f24c39e84466c617eedce9edfd491870259fd5abd2092b3f8296a3b6245fa",
+    "bytes": 1618769,
+    "http_last_modified": null,
+    "http_date": "Sat, 17 Oct 2026 12:36:58 GMT",
+    "raw_rows": 7855,
+    "raw_field_counts": {
+      "7": 7855
+    }
+  },
+  {
+    "name": "CIS_InfoImportantes.txt",
+    "requested_url": "https://base-donnees-publique.medicaments.gouv.fr/download/CIS_InfoImportantes.txt",
+    "source_page_label": "Fichier des Informations importantes (génération en direct)",
+    "retrieved_at_utc": "2026-10-17T12:36:58.616266+00:00",
+    "status": "RETRIEVED_NOT_DISTRIBUTION_APPROVED",
+    "rights_status": "OWNER_DISTRIBUTION_NOT_APPROVED",
+    "dynamic_generated_at_utc": null,
+    "http_status": 200,
+    "final_url": "https://base-donnees-publique.medicaments.gouv.fr/download/CIS_InfoImportantes.txt",
+    "sha256": "d16224e1f64acf72473f157bda6f24f3045e7087f5ac9f62a3fcc5098eec364b",
+    "bytes": 4645746,
+    "http_last_modified": null,
+    "http_date": "Sat, 17 Oct 2026 12:36:59 GMT",
+    "raw_rows": 11279,
+    "raw_field_counts": {
+      "4": 11279
+    }
+  }
+]

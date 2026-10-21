@@ -1,0 +1,17 @@
+{
+  "status": "LOCAL_PASS_NATIVE_PENDING",
+  "tests": {
+    "tests": 407,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "reports_sha256": "7ea894e08144bbb5ad31251218adca19b1afe675f36b1f166f3f57254d87d3a9",
+  "native_source_compilation": "PASS",
+  "log_sha256": "14280784de632327029e9198ef84b21764463d9c950e05da1862ba14dc1b97d5",
+  "source_sha256": {
+    "core/data/src/main/java/net/plainnotes/app/data/ReferenceAuditReads.kt": "53cffcba5d317fad823c27737e78b3567dfcc378be77536ac0d9f5fff0c50c9c",
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt": "de5594d5c01e09e134a02b89232a74d477e190c4a7ccb46509b232868900a5c4",
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredUsePayload.kt": "710a5e04c4d9408d21b7b08250748c7e798f62e333fddd57e0f44fe634190206"
+  }
+}
