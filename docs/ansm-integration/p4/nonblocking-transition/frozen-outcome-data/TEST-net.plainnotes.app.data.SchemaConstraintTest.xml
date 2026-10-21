@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.SchemaConstraintTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-10-21T09:18:28.846Z" hostname="4f13d57d08c1" time="0.587">
+  <properties/>
+  <testcase name="failedVersionSwitchRollsBack" classname="net.plainnotes.app.data.SchemaConstraintTest" time="0.066"/>
+  <testcase name="takenNeedsZoneAndPositiveDose" classname="net.plainnotes.app.data.SchemaConstraintTest" time="0.054"/>
+  <testcase name="activeSlotUniqueButSoftDeletedHistoryAllowed" classname="net.plainnotes.app.data.SchemaConstraintTest" time="0.057"/>
+  <testcase name="ledgerSpansContainersAndIsAppendOnly" classname="net.plainnotes.app.data.SchemaConstraintTest" time="0.061"/>
+  <testcase name="foreignKeysRejectDanglingOverride" classname="net.plainnotes.app.data.SchemaConstraintTest" time="0.055"/>
+  <testcase name="labBoundsArePerSampleAndInvalidOrderingRejected" classname="net.plainnotes.app.data.SchemaConstraintTest" time="0.053"/>
+  <testcase name="unknownImportActualRemainsNull" classname="net.plainnotes.app.data.SchemaConstraintTest" time="0.062"/>
+  <testcase name="overridesComposeButEmptyAndUnpairedAreRejected" classname="net.plainnotes.app.data.SchemaConstraintTest" time="0.066"/>
+  <testcase name="overlappingVersionsRejectedAndHalfOpenAccepted" classname="net.plainnotes.app.data.SchemaConstraintTest" time="0.057"/>
+  <testcase name="missedHasNoActualValues" classname="net.plainnotes.app.data.SchemaConstraintTest" time="0.051"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

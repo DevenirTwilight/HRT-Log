@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.StockForecastTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2026-10-21T09:18:30.024Z" hostname="4f13d57d08c1" time="0.083">
+  <properties/>
+  <testcase name="openAndSealedPackagesAndEdgeAmounts" classname="net.plainnotes.app.data.StockForecastTest" time="0.019"/>
+  <testcase name="dailyFixedDose" classname="net.plainnotes.app.data.StockForecastTest" time="0.01"/>
+  <testcase name="skipRescheduleAndDoseOverrideComeFromTheTimeline" classname="net.plainnotes.app.data.StockForecastTest" time="0.011"/>
+  <testcase name="takenDosesAreNotSubtractedTwice" classname="net.plainnotes.app.data.StockForecastTest" time="0.007"/>
+  <testcase name="planChangeUsesTheNewVersionFromItsStart" classname="net.plainnotes.app.data.StockForecastTest" time="0.004"/>
+  <testcase name="severalDosesPerDayWithDifferentAmounts" classname="net.plainnotes.app.data.StockForecastTest" time="0.007"/>
+  <testcase name="daylightSavingSwitchKeepsLocalDates" classname="net.plainnotes.app.data.StockForecastTest" time="0.003"/>
+  <testcase name="integerQuantaCannotBeTreatedAsLegacyMedicationDoseUnits" classname="net.plainnotes.app.data.StockForecastTest" time="0.005"/>
+  <testcase name="everyOtherDayAndWeekdaysAndEveryNHours" classname="net.plainnotes.app.data.StockForecastTest" time="0.011"/>
+  <testcase name="coveredThroughTheWholeWindowIsNotInfinite" classname="net.plainnotes.app.data.StockForecastTest" time="0.002"/>
+  <testcase name="sevenDayBoundaryUsesCalendarDays" classname="net.plainnotes.app.data.StockForecastTest" time="0.004"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

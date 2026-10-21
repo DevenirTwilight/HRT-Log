@@ -1,3 +1,9 @@
+## 原请求冻结/历史提交核对完整数据层512项PASS — 2026-10-21
+
+源4111c0b8：完整core:data512 PASS/0FAIL/0SKIP，NonBlockingRepositoryWriteTest由4增为10项均通过，原资源退出2项保留GREEN。44份原始XML/截至数据层完成的日志/源码SHA已保存nonblocking-transition/frozen-outcome-data/。匹配原配置/时间/实际载荷和完整独立审计才确认历史Committed；缺失操作NotObserved不允许自动重试；后续更正/删除不改原提交事实，无关历史损坏会拒绝。数据dump只读/回滚和冻结oracle合同通过。
+
+同次Gradle继续进行compileDebugAndroidTestKotlin及选定App/时期稳定性测试，当前尚未完成，不预填PASS。没有API26/29/35原生或大库跑分，恢复稳定性未证明，原延迟门槛未改。当前新增接口是internal且App无调用，不等于正式运行owner/公开门面/全冲突接线完成，P4 Draft/OFF，不合并发布。
+
 ## 原请求冻结与只读历史提交核对已编码，待验 — 2026-10-21
 
 新增internal PreparedMeasuredCreate与prepare/observe入口：同一事务冻结原票据、实际来源/用量（不可修改列表）、原时间和MedicationSnapshot SHA；prepare不写业务/不预留UUID。observe在固定PRIMARY/同dataset+epoch执行现有完整审计，比较原商品/药物身份、revision1非计划创建、配置SHA、原created时刻及原实际载荷后仅返回历史Committed回执；NotObserved不等于未提交，绝不据此FAILED/允许重试。不依赖当前记录仍存在或未更正，不验证已被原提交改变的旧票据状态，不重放任何写入。
