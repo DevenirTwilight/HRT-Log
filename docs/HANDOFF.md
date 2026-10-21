@@ -1,3 +1,9 @@
+## P4 接手实时检查点：复核通过，工具72 PASS，最新完整回归执行中 — 2026-10-21
+
+已正常快进至远端f220b1f2，未覆盖其他模型成果。旧恢复专项结果/三API证据/唯一小型kill合同已于99e536fe完成，不重新派发旧运行。此环境没有上一模型36943/31631进程和scratch结果，不能凭旧IN_PROGRESS写PASS；重新运行最新源码data全回归和生成Android编译（日志/workspace/scratch/p4-reuse-resumed-data-android.log，session3813）。构建前恢复已存在的离线Robolectric jar，仅宿主构建配置，不改原生预算。
+
+新候选工具72项实际PASS、独立只读源码审查未见关键反例，立即保存full-audit-reuse/resumed-verification/。审查强调纯codec与单审计缓存16MiB各自估值可能叠加，仍需原生内存证据；不等同数据库信任，不跳过完整历史。data/Android当前IN_PROGRESS，App/reminder待跑，新候选大库NOT_RUN，不声称准入。完成每组即保存提交；保持#57 Draft/OFF，不合并/发布。
+
 ## P4 实时换号检查点：执行复用已入库，最新纯codec仍待最终验收 — 2026-10-21
 
 已推送实现检查点0dd02a80，普通完整审计内复用候选针对性151项PASS。随后完整data494/0FAIL/0SKIP已实际通过（含原反例、新old/new全审计差分与单容器生命周期）；App/reminder/含生成大库探针Android编译仍在本地Gradle session31631执行，日志/workspace/scratch/p4-reuse-final-full.log。这一组data结果属于加入跨调用纯文本codec之前的中间源码，不能冒充最新实现通过。实际禁用行头保护的临时mutant获RED，源码已恢复；证据header-mutant-red/。原生新候选尚未启动，旧大库不重跑。
