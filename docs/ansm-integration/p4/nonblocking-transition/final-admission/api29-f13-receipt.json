@@ -1,0 +1,25 @@
+{
+  "source": "f13e7f521862739e23b9928bba2a82e08eb42fe9",
+  "run": 39653018592,
+  "job": 119405991687,
+  "api": 29,
+  "status": "PASS",
+  "heap_preflight": {
+    "selected_tests": 1,
+    "process_max_heap_asserted_bytes": 201326592,
+    "frozen_limit_changed": false
+  },
+  "contracts": {
+    "tests": 335,
+    "failures": 0,
+    "skips": 0
+  },
+  "writer_process_death": {
+    "STOCK_CAPTURED": "PASS",
+    "AFTER_COMMIT": "PASS"
+  },
+  "artifact": 12370771887,
+  "sha256": "fb02ec1b26688795e332a48518cab6cccd192a2c04c76711a1627d9c6f248f81",
+  "crc": "PASS",
+  "prior_16m_oom": "retained, not relabeled; originalKDF32MiB unchanged"
+}

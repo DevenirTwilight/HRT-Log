@@ -1,3 +1,7 @@
+## 最终f13候选API29已核验PASS，实际192MiB且335合同零失败 — 2026-10-21
+
+run39653018592/job119405991687/API29：192MiB属性校验+真实进程HeapProbe1项执行通过，随后335合同0fail/0skip（含所有原先因16MiB失败的KDF/备份/恢复合同）、两个writer OS-kill/新PID/精确dump/完整oracle/无重放均PASS。原ZIP12370771887/SHAfb02ec1b…6f248f81/CRC及完整job日志gz已存final-admission。不是提高冻结上限或改KDF，旧16MiB失败保留。最终26/35/Android仍在途，当前不能提前Ready。
+
 ## 原完整CI的API26已核验，不只是job绿 — 2026-10-21
 
 4a67e96e/run39651425834/API26官方ZIP12370910305/SHA8609ec72…bce1e63/CRC已保存核验：owner14/0fail/0skip，STOCK_CAPTURED和AFTER_COMMIT两项OS-kill→新PID/精确数据/完整oracle/无重放均PASS。AFTER_COMMIT除定向39650341133之外已有第二次完整合同观测通过，原超时仍保留且不编造根因。它不是大库低内存重复跑分；最终f13明确192MiB的API矩阵仍运行，不能拿旧job替代新HEAD准入。
