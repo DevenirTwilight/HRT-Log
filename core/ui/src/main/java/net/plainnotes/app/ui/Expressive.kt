@@ -1,7 +1,7 @@
 package net.plainnotes.app.ui
 
 import android.provider.Settings
-import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -67,7 +67,7 @@ object Motion {
 }
 
 /** The UI-07 spring, or an instant switch when motion is reduced. */
-fun <T> motionSpec(reduce: Boolean, damping: Float = Motion.DAMPING, stiffness: Float = Motion.STIFFNESS): AnimationSpec<T> =
+fun <T> motionSpec(reduce: Boolean, damping: Float = Motion.DAMPING, stiffness: Float = Motion.STIFFNESS): FiniteAnimationSpec<T> =
     if (reduce) snap() else spring(dampingRatio = damping, stiffness = stiffness)
 
 // --- UI-07 B: press morph --------------------------------------------------------------------------------------------

@@ -122,14 +122,14 @@ private fun RecordEntity.at(): Instant = Instant.ofEpochMilli(taken_utc ?: sched
 @Composable private fun DayCard(day: LocalDate, list: List<RecordEntity>, meds: Map<Long, MedicationEntity>, profiles: Map<Long, ProfileEntity>,
                                 onEdit: (RecordEntity) -> Unit, onDelete: (RecordEntity) -> Unit, onConfirmMissed:(RecordEntity)->Unit, labels: Map<Long, Set<RecordLabel>>, onExtra: (RecordEntity, Boolean) -> Unit, onUndoSkip:(RecordEntity)->Unit) {
     val c = MaterialTheme.colorScheme
-    Surface(shape = MaterialTheme.shapes.extraLarge, color = c.surfaceContainerLow, modifier = Modifier.fillMaxWidth()) {
-        Column {
-            Row(Modifier.fillMaxWidth().background(c.surfaceContainer).padding(horizontal = 20.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically) {
-                Box(Modifier.size(8.dp).clip(CircleShape).background(c.primary)); Spacer(Modifier.width(10.dp))
-                Text(formatDate(day), style = MaterialTheme.typography.labelLarge, color = c.onSurfaceVariant)
-            }
-            list.forEachIndexed { i, r ->
-                if (i > 0) HorizontalDivider(Modifier.padding(horizontal = 16.dp), color = c.outlineVariant.copy(alpha = 0.5f))
+    // UI-07 E: the day's date, then its records as a connected grouped list (each record its own container, 3 dp apart).
+    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(GroupedGap)) {
+        Row(Modifier.fillMaxWidth().padding(start = 8.dp, top = 4.dp, bottom = 6.dp), verticalAlignment = Alignment.CenterVertically) {
+            Box(Modifier.size(8.dp).clip(CircleShape).background(c.primary)); Spacer(Modifier.width(10.dp))
+            Text(formatDate(day), style = NotesTheme.typeExtra.sectionTitle, color = c.onSurfaceVariant)
+        }
+        list.forEachIndexed { i, r ->
+            GroupedItem(i, list.size, color = c.surfaceContainerLow, modifier = Modifier.testTag("history-item:${r.id}")) {
                 RecordRow(r, meds[r.medication_id], profiles[r.medication_id], { onEdit(r) }, { onDelete(r) }, {onConfirmMissed(r)}, labels[r.id].orEmpty(), {onUndoSkip(r)}) { onExtra(r, it) }
             }
         }
@@ -213,6 +213,8 @@ fun routeIcon(route: String?): ImageVector = when (route) {
                 Chip(formatTime(r.at()))
                 // UI-06: status labels from the one status table.
                 when (r.status) {
+                    "ON_TIME" -> { StatusIcon(StatusIconKind.TAKEN, StatusIconSizes.M, Modifier.testTag("history-icon:${r.id}"))   // UI-07 A
+                        labels.sortedBy { it.ordinal }.forEach { Chip(stringResource(recordLabelText(it))) } }
                     "LATE", "MISSED" -> StatusChip(StatusStyles.ofRecord(r.status, r.unconfirmed))
                     "SKIPPED" -> StatusChip(StatusStyles.ofRecord(r.status, false), stringResource(R.string.status_you_skipped))
                     // REQUIREMENTS §35: no automatic "unplanned"; labels come from the confirmed or saved period, for every source.

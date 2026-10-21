@@ -11,6 +11,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.heading
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.*
@@ -56,11 +57,16 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
                                onAddMedication: () -> Unit, onResetStart: () -> Unit, contentPadding: PaddingValues, onReview: () -> Unit = {},
                                extra: NotesViewModel.ExtraState = NotesViewModel.ExtraState(), onStock: () -> Unit = {}, initialView: CalView = CalView.MONTH,
                                onAppointment: (AppointmentEntity) -> Unit = {}, onAddStock: (MedicationEntity) -> Unit = {},
-                               onBackfill: (RecordEntity) -> Unit = {}, onConfirmMissed: (RecordEntity) -> Unit = {}, onUnconfirmedMore: (List<RecordEntity>) -> Unit = {}) {
+                               onBackfill: (RecordEntity) -> Unit = {}, onConfirmMissed: (RecordEntity) -> Unit = {}, onUnconfirmedMore: (List<RecordEntity>) -> Unit = {},
+                               onUndoRecord: (RecordEntity) -> Unit = {}, initialFull: Boolean = false) {
     val zone = ZoneId.systemDefault()
     val meds = state.medications.associateBy { it.id }
     val unconfirmed = recentUnconfirmed(extra.records, LocalTodayClock.current())
+    val answers = remember { mutableStateMapOf<Long, ConfirmAnswer>() }
+    val answeredRecords = remember { mutableStateMapOf<Long, RecordEntity>() }
     var view by rememberSaveable { mutableStateOf(initialView) }
+    // UI-07 F: home shows the last 7 days; "Full calendar" opens the existing day/week/month/year calendar. Kept across recreation.
+    var full by rememberSaveable { mutableStateOf(initialFull) }
     var selectedText by rememberSaveable { mutableStateOf(state.calendarStart.toString()) }
     val selected = LocalDate.parse(selectedText)
     // Follow a new start date only when it actually changes; recreation (rotation) keeps the user's selected day.
@@ -102,18 +108,23 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
             TodayCard(today, todayOpen, taken, todayOpen.size + todayRecords.size,
                 todayOpen.isEmpty() && todayRecords.isNotEmpty() && todayRecords.none { it.status == "MISSED" }, ::medOf,
                 { MedicationSnapshot.decode(it.config_snapshot, it.medication_id)?.medication(it.medication_id) }, onComplete, onChange,
-                records = todayRecords, appointments = todayAppts, onAppointment = onAppointment)
+                records = todayRecords, appointments = todayAppts, onAppointment = onAppointment, onUndo = onUndoRecord)
         }
         // UI-06 C: doses from the last 48 hours with no entry yet, right under the today card (not shown when there are none).
-        unconfirmed.takeIf { it.isNotEmpty() }?.let { rows -> item(key = "unconfirmed") {
-            UnconfirmedCard(rows, today, zone, { r -> MedicationSnapshot.decode(r.config_snapshot, r.medication_id)?.medication(r.medication_id) ?: meds[r.medication_id] },
-                onBackfill, onConfirmMissed, onUnconfirmedMore)
-        } }
+        // UI-07 D: rows answered here and no longer unconfirmed stay as one-line results while the calendar is shown.
+        val answeredRows = answers.mapNotNull { (id, a) -> answeredRecords[id]?.takeIf { r -> unconfirmed.none { it.id == r.id } }?.let { it to a } }
+        if (unconfirmed.isNotEmpty() || answeredRows.isNotEmpty()) item(key = "unconfirmed") {
+            UnconfirmedCard(unconfirmed, today, zone, { r -> MedicationSnapshot.decode(r.config_snapshot, r.medication_id)?.medication(r.medication_id) ?: meds[r.medication_id] },
+                { r -> answers[r.id] = ConfirmAnswer.TOOK; answeredRecords[r.id] = r; onBackfill(r) },
+                { r -> answers[r.id] = ConfirmAnswer.NOT_TAKEN; answeredRecords[r.id] = r; onConfirmMissed(r) }, onUnconfirmedMore, answeredRows)
+        }
         // UI-05 B: what needs doing stays at the top: low stock right under the today card, before the calendar.
         item(key = "stock") { HomeStockCard(state.medications.filter { it.active }, runOut, today, zone, onStock, onAddStock) }
-        item {
+        if (!full) item(key = "recent") { RecentDays(today, selected, infos, { select(it) }) { full = true; view = CalView.MONTH } }
+        else item(key = "calendar") {
             Surface(shape = MaterialTheme.shapes.extraLarge, color = MaterialTheme.colorScheme.surfaceContainerLow, modifier = Modifier.fillMaxWidth().testTag("calendar-card")) {
                 Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    TextButton({ full = false }, Modifier.align(Alignment.End).heightIn(min = 48.dp).testTag("calendar-recent")) { Text(stringResource(R.string.recent_7_days)) }
                     PeriodBar(view, selected, today, { select(it) })
                     AdaptiveChoice(CalView.entries.map{stringResource(it.label)},CalView.entries.indexOf(view),{view=CalView.entries[it]},selectionIcon=false)
                     when (view) {
@@ -127,7 +138,7 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
             }
         }
         // UI-04: the day list is for other dates; today's doses, records and appointments are in the today card above.
-        if (view != CalView.YEAR && (selected != today || state.medications.isEmpty())) {
+        if ((!full || view != CalView.YEAR) && (selected != today || state.medications.isEmpty())) {
             item(key = "dayhead") { Box(Modifier.testTag("day-head")) { DayHeader(selected, today) } }
             val dayRecords = extra.records.filter { r -> r.deleted_at_utc == null && (r.taken_utc ?: r.scheduled_utc)?.let { Instant.ofEpochMilli(it).atZone(zone).toLocalDate() } == selected }
                 .sortedBy { it.taken_utc ?: it.scheduled_utc }
@@ -137,6 +148,45 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
             items(dayOpen, key = { it.slot.key }) { e -> Box(Modifier.testTag("day-dose:${e.slot.key}")) { DoseCard(e, medOf(e), { onComplete(e) }, { onChange(e) }) } }
             items(dayRecords, key = { "r${it.id}" }) { r -> Box(Modifier.testTag("day-record:${r.id}")) { RecordLine(r, MedicationSnapshot.decode(r.config_snapshot,r.medication_id)?.medication(r.medication_id)) } }
             items(dayAppts, key = { "a${it.id}" }) { a -> Box(Modifier.testTag("day-appt:${a.id}")) { AppointmentCard(a) { onAppointment(a) } } }
+        }
+    }
+}
+
+/**
+ * UI-07 F: the last seven days ending today as vertical pills (weekday, date, 18 dp status icon), today filled with the primary
+ * colour. Same day data, same spoken names and same day selection as the month grid; "Full calendar" opens the full one.
+ */
+@Composable private fun RecentDays(today: LocalDate, selected: LocalDate, infos: Map<LocalDate, DayInfo>, onSelect: (LocalDate) -> Unit, onFull: () -> Unit) {
+    val c = MaterialTheme.colorScheme
+    Surface(shape = Corners.xl, color = c.surfaceContainerLow, modifier = Modifier.fillMaxWidth().testTag("recent-card")) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(stringResource(R.string.recent_7_days), style = NotesTheme.typeExtra.sectionTitle, modifier = Modifier.weight(1f).semantics { heading() })
+                TextButton(onFull, Modifier.heightIn(min = 48.dp).testTag("calendar-full")) { Text(stringResource(R.string.full_calendar)) }
+            }
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                (6 downTo 0).forEach { back ->
+                    val date = today.minusDays(back.toLong()); val info = infos[date]; val isToday = date == today
+                    val mark = dayMark(info?.kind ?: DayKind.NONE)
+                    val description = dayDescription(date, info, isToday)
+                    val bg = if (isToday) c.primary else c.surfaceContainerHighest; val fg = if (isToday) c.onPrimary else c.onSurface
+                    Column(Modifier.weight(1f).heightIn(min = 88.dp).clip(Corners.pill).background(bg)
+                        .then(if (date == selected && !isToday) Modifier.border(2.dp, c.primary, Corners.pill) else Modifier)
+                        .selectable(date == selected, role = Role.Button) { onSelect(date) }
+                        .semantics { contentDescription = description; mark?.let { dayMarkSemantics = it } }.testTag("recent-day:$date").padding(vertical = 10.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        Column(Modifier.clearAndSetSemantics {}, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                            Text(weekdayShort(date.dayOfWeek), style = MaterialTheme.typography.labelSmall, color = fg, maxLines = 1)
+                            Text(date.dayOfMonth.toString(), style = MaterialTheme.typography.titleMedium.tnum(), fontWeight = FontWeight.Bold, color = fg)
+                            when {
+                                mark != null -> StatusIcon(dayMarkIcon(mark), StatusIconSizes.S, Modifier.testTag("recent-icon:$date"))
+                                isToday -> StatusIcon(StatusIconKind.TODAY, StatusIconSizes.S, Modifier.testTag("recent-icon:$date"), ring = c.onPrimary)
+                                else -> Spacer(Modifier.size(StatusIconSizes.S))
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -202,9 +252,10 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
         // The digit and dots are decorative here; the cell's name already says them in words.
         Column(Modifier.clearAndSetSemantics {}, horizontalAlignment=Alignment.CenterHorizontally,verticalArrangement=Arrangement.spacedBy(4.dp)) {
         CalendarDateBadge(date.dayOfMonth,isToday,fg)
-        Row(Modifier.heightIn(min=12.dp), horizontalArrangement = Arrangement.spacedBy(2.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(Modifier.heightIn(min=18.dp), horizontalArrangement = Arrangement.spacedBy(2.dp), verticalAlignment = Alignment.CenterVertically) {
             // UI-01 C: a shape for the day's state as well as its colour (✓ taken, ½ some missed, ✕ missed); drawn, so it never clips.
-            mark?.let { DayMarkIcon(it, if (style.outlined || style.dashed) tone?.accent ?: fg else fg) }
+            // UI-07 A: the mark is the 18 dp filled-circle status icon; the cell colour keeps the UI-06 rule.
+            mark?.let { StatusIcon(dayMarkIcon(it), StatusIconSizes.S, Modifier.testTag("day-icon:$date")) }
             if (info != null) {
                 if (info.runOut.isNotEmpty()) Icon(Icons.Outlined.Inventory2, null, Modifier.size(12.dp), tint = sem.attention.accent)
                 else repeat(minOf(info.open, 3)) { Box(Modifier.size(5.dp).clip(CircleShape).background(if (info.short > 0) sem.attention.accent else c.primary)) }
@@ -234,6 +285,7 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
                 horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(3.dp)) {
                 Text(weekdayShort(date.dayOfWeek), style = MaterialTheme.typography.labelSmall, color = fg)
                 CalendarDateBadge(date.dayOfMonth,date==today,fg)
+                dayMark(info?.kind ?: DayKind.NONE)?.let { StatusIcon(dayMarkIcon(it), StatusIconSizes.S, Modifier.testTag("week-icon:$date")) }
                 marks.sortedBy { it.first }.take(5).forEach { (t, st) ->
                     // UI-06: the time text keeps readable contrast; missed and not-covered are told by their tokens, never red.
                     val col = when (st) { "ON_TIME", "LATE" -> c.primary; "MISSED" -> sem.missed.onContainer; "SKIPPED" -> c.outline; "SHORT" -> sem.attention.onContainer; else -> c.onSurfaceVariant }
@@ -320,11 +372,11 @@ private fun markLabel(status: String) = when (status) {
                 DayKind.UNCONFIRMED -> c.outline; else -> c.outlineVariant } else dayTone(kind).first
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.testTag("legend:$kind")) {
                 val mark = if (year) null else dayMark(kind)
-                Box(Modifier.size(14.dp).clip(RoundedCornerShape(3.dp)).background(fill)
-                    .then(if (style.outlined || style.dashed) Modifier.statusOutline(style, tone, RoundedCornerShape(3.dp), 1.dp) else Modifier.border(0.5.dp, c.outlineVariant, RoundedCornerShape(3.dp))),
-                    contentAlignment = Alignment.Center) {
-                    mark?.let { DayMarkIcon(it, if (style.outlined || style.dashed) tone?.accent ?: c.onSurface else tone?.onContainer ?: c.onSurface) }
-                }; Spacer(Modifier.width(4.dp))
+                // UI-07 A: month and week show the same 18 dp status icon as the day cells; the year view keeps its colour squares.
+                if (mark != null) StatusIcon(dayMarkIcon(mark), StatusIconSizes.S)
+                else Box(Modifier.size(14.dp).clip(RoundedCornerShape(3.dp)).background(fill)
+                    .then(if (style.outlined || style.dashed) Modifier.statusOutline(style, tone, RoundedCornerShape(3.dp), 1.dp) else Modifier.border(0.5.dp, c.outlineVariant, RoundedCornerShape(3.dp))))
+                Spacer(Modifier.width(4.dp))
                 Text(stringResource(label), style = MaterialTheme.typography.labelSmall, color = c.onSurfaceVariant)
             }
         }
@@ -443,20 +495,7 @@ fun dayMark(kind: DayKind): DayMark? = when (dayStyle(kind).symbol) {
 val DayMarkKey = androidx.compose.ui.semantics.SemanticsPropertyKey<DayMark>("DayMark")
 var androidx.compose.ui.semantics.SemanticsPropertyReceiver.dayMarkSemantics by DayMarkKey
 
-@Composable private fun DayMarkIcon(mark: DayMark, color: Color) {
-    androidx.compose.foundation.Canvas(Modifier.size(10.dp)) {
-        val w = size.width; val stroke = w * 0.16f
-        when (mark) {
-            DayMark.CHECK -> { drawLine(color, androidx.compose.ui.geometry.Offset(w * 0.12f, w * 0.55f), androidx.compose.ui.geometry.Offset(w * 0.4f, w * 0.82f), stroke)
-                drawLine(color, androidx.compose.ui.geometry.Offset(w * 0.4f, w * 0.82f), androidx.compose.ui.geometry.Offset(w * 0.9f, w * 0.2f), stroke) }
-            DayMark.HALF -> { drawCircle(color, w * 0.42f, style = androidx.compose.ui.graphics.drawscope.Stroke(stroke * 0.8f))
-                drawArc(color, 90f, 180f, true, topLeft = androidx.compose.ui.geometry.Offset(w * 0.08f, w * 0.08f), size = androidx.compose.ui.geometry.Size(w * 0.84f, w * 0.84f)) }
-            DayMark.CROSS -> { drawLine(color, androidx.compose.ui.geometry.Offset(w * 0.15f, w * 0.15f), androidx.compose.ui.geometry.Offset(w * 0.85f, w * 0.85f), stroke)
-                drawLine(color, androidx.compose.ui.geometry.Offset(w * 0.85f, w * 0.15f), androidx.compose.ui.geometry.Offset(w * 0.15f, w * 0.85f), stroke) }
-            DayMark.QUESTION -> { drawArc(color, 180f, 270f, false, topLeft = androidx.compose.ui.geometry.Offset(w * 0.25f, w * 0.05f),
-                    size = androidx.compose.ui.geometry.Size(w * 0.5f, w * 0.45f), style = androidx.compose.ui.graphics.drawscope.Stroke(stroke))
-                drawLine(color, androidx.compose.ui.geometry.Offset(w * 0.5f, w * 0.5f), androidx.compose.ui.geometry.Offset(w * 0.5f, w * 0.68f), stroke)
-                drawCircle(color, stroke * 0.7f, androidx.compose.ui.geometry.Offset(w * 0.5f, w * 0.9f)) }
-        }
-    }
+/** UI-07 A: the day mark drawn as the status icon of the same state. */
+fun dayMarkIcon(mark: DayMark): StatusIconKind = when (mark) {
+    DayMark.CHECK -> StatusIconKind.TAKEN; DayMark.HALF -> StatusIconKind.PARTIAL; DayMark.CROSS -> StatusIconKind.MISSED; DayMark.QUESTION -> StatusIconKind.UNCONFIRMED
 }

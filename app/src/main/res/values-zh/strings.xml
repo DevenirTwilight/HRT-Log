@@ -1297,4 +1297,10 @@
 <string name="status_you_skipped">你跳过了</string>
 <string name="confirm_title_date">%1$s 还没有记录</string>
 <string name="confirm_body_with">%1$s。记得的话补上就好。</string>
+<!-- UI-07 expressive -->
+<string name="today_logged">已记录</string>
+<string name="today_undo">撤销</string>
+<string name="confirm_result_not_taken">已记下：没有服</string>
+<string name="recent_7_days">最近 7 天</string>
+<string name="full_calendar">完整日历</string>
 </resources>
