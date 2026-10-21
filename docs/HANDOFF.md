@@ -1,3 +1,7 @@
+## 984219a3完整本地检查PASS，另发现旧私有SQL助手目标需固定 — 2026-10-21
+
+完整同轮BUILD SUCCESSFUL：data526/Period5/reminder21全PASS、零FAIL/SKIP，Android测试源码/App源码编译PASS。完整日志及本轮新时间戳XML存runtime-owner/final-local/，源984219a3；不是native/CI/LMK证据。最后复核发现generic transaction虽捕获target，但私有sql()/db()仍重读全局选择，DECOY事务执行途中select PRIMARY可能访问另一库。正式入口尚OFF；下一步先固定此反例，再仅使旧事务内的helper继承原目标，不改数据语义/验证/Schema。此前“全部冲突保护”应限于已验证路径，不能据首轮合同宣称空间切换闭包已证明。
+
 ## 当前运行owner源完整数据526项PASS已入库 — 2026-10-21
 
 实际生产984219a3，完整core:data526 PASS/0FAIL/0ERROR/0SKIP，45份原XML/截至数据阶段日志/源码SHA存runtime-owner/final-local/。MeasuredSaveCoordinatorTest12项通过，replay-red测试源码SHA逐字一致，原2项误报SUCCESS现正确保持PENDING/MANUAL_CHECK，合法已有UUID确认不再扣减。独立冻结oracle/原事务回滚等全部保留通过。

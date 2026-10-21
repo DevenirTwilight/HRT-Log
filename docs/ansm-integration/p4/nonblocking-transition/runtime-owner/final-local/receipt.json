@@ -7,7 +7,7 @@
     "errors": 0,
     "skipped": 0
   },
-  "remaining_build": "IN_PROGRESS; XML from older app/reminder runs not treated as final yet",
+  "remaining_build": "COMPLETE PASS",
   "source_sha256": {
     "core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt": "0ceca5032e70f8b05b5799df7a2b658aec08ec288de7bcb4a3013758ced1f3ba",
     "core/data/src/main/java/net/plainnotes/app/data/MeasuredSaveCoordinator.kt": "de38d167bbf1d878985a180d8daf3d97e7c588191370a6f32ded2e9b45342d14",
@@ -17,5 +17,17 @@
   },
   "native": "NOT_RUN",
   "ci": "NOT_RUN",
-  "environment": "Robolectric35/framework SQLite; small synthetic correctness tests; no performance/LMK claim"
+  "environment": "Robolectric35/framework SQLite; small synthetic correctness tests; no performance/LMK claim",
+  "app_period": {
+    "tests": 5,
+    "failures": 0,
+    "skipped": 0
+  },
+  "reminder": {
+    "tests": 21,
+    "failures": 0,
+    "skipped": 0
+  },
+  "android_test_source_compile": "PASS",
+  "app_full_debug_source_compile": "PASS"
 }
