@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="net.plainnotes.app.data.LabContextTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-21T13:33:34.604Z" hostname="506c18a63d5b" time="1.368">
+<testsuite name="net.plainnotes.app.data.LabContextTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-21T13:42:16.982Z" hostname="506c18a63d5b" time="1.518">
   <properties/>
-  <testcase name="simultaneousLastIntakesAreBothPreservedAndNoCurrentConfigurationRewritesTheirContext" classname="net.plainnotes.app.data.LabContextTest" time="0.086"/>
-  <testcase name="schema4BackupNeedsNoContextAndMalformedContextFailsWithoutChangingData" classname="net.plainnotes.app.data.LabContextTest" time="0.819"/>
-  <testcase name="ingredientContextExcludesFutureAndDeletedAndNeverUsesCurrentProfileForImports" classname="net.plainnotes.app.data.LabContextTest" time="0.063"/>
-  <testcase name="windowCountsDistinguishLateMissedAndUnconfirmedAndLegacyLabsStayUnknown" classname="net.plainnotes.app.data.LabContextTest" time="0.062"/>
-  <testcase name="revisionsStayFrozenAcrossEditsRebuildAndBackupAndDeleteCascades" classname="net.plainnotes.app.data.LabContextTest" time="0.334"/>
+  <testcase name="simultaneousLastIntakesAreBothPreservedAndNoCurrentConfigurationRewritesTheirContext" classname="net.plainnotes.app.data.LabContextTest" time="0.085"/>
+  <testcase name="schema4BackupNeedsNoContextAndMalformedContextFailsWithoutChangingData" classname="net.plainnotes.app.data.LabContextTest" time="0.953"/>
+  <testcase name="ingredientContextExcludesFutureAndDeletedAndNeverUsesCurrentProfileForImports" classname="net.plainnotes.app.data.LabContextTest" time="0.082"/>
+  <testcase name="windowCountsDistinguishLateMissedAndUnconfirmedAndLegacyLabsStayUnknown" classname="net.plainnotes.app.data.LabContextTest" time="0.066"/>
+  <testcase name="revisionsStayFrozenAcrossEditsRebuildAndBackupAndDeleteCascades" classname="net.plainnotes.app.data.LabContextTest" time="0.327"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

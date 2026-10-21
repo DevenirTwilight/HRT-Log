@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="net.plainnotes.app.data.MeasuredUsePayloadTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2026-10-21T13:34:24.558Z" hostname="506c18a63d5b" time="0.264">
+<testsuite name="net.plainnotes.app.data.MeasuredUsePayloadTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2026-10-21T13:43:06.046Z" hostname="506c18a63d5b" time="0.255">
   <properties/>
-  <testcase name="canonicalOrderIsDeterministicAndKeepsDifferentStockQuantitiesSeparate" classname="net.plainnotes.app.data.MeasuredUsePayloadTest" time="0.025"/>
-  <testcase name="callerMutationCannotAlterFrozenInput" classname="net.plainnotes.app.data.MeasuredUsePayloadTest" time="0.021"/>
-  <testcase name="unsupportedAlgorithmsFloatsAndInvalidClinicalContextAreRejected" classname="net.plainnotes.app.data.MeasuredUsePayloadTest" time="0.023"/>
-  <testcase name="embeddedDecoderKeepsEveryMalformedWireRejection" classname="net.plainnotes.app.data.MeasuredUsePayloadTest" time="0.028"/>
-  <testcase name="decodedFrozenRequestHasNoMutableCollectionAliases" classname="net.plainnotes.app.data.MeasuredUsePayloadTest" time="0.021"/>
-  <testcase name="absentActualSourceIsUnknownAndCannotBeReplacedWithZero" classname="net.plainnotes.app.data.MeasuredUsePayloadTest" time="0.02"/>
-  <testcase name="legacyBinaryFactIsCapturedWithoutBecomingADecimalStockAmount" classname="net.plainnotes.app.data.MeasuredUsePayloadTest" time="0.019"/>
+  <testcase name="canonicalOrderIsDeterministicAndKeepsDifferentStockQuantitiesSeparate" classname="net.plainnotes.app.data.MeasuredUsePayloadTest" time="0.021"/>
+  <testcase name="callerMutationCannotAlterFrozenInput" classname="net.plainnotes.app.data.MeasuredUsePayloadTest" time="0.019"/>
+  <testcase name="unsupportedAlgorithmsFloatsAndInvalidClinicalContextAreRejected" classname="net.plainnotes.app.data.MeasuredUsePayloadTest" time="0.018"/>
+  <testcase name="embeddedDecoderKeepsEveryMalformedWireRejection" classname="net.plainnotes.app.data.MeasuredUsePayloadTest" time="0.024"/>
+  <testcase name="decodedFrozenRequestHasNoMutableCollectionAliases" classname="net.plainnotes.app.data.MeasuredUsePayloadTest" time="0.016"/>
+  <testcase name="absentActualSourceIsUnknownAndCannotBeReplacedWithZero" classname="net.plainnotes.app.data.MeasuredUsePayloadTest" time="0.038"/>
+  <testcase name="legacyBinaryFactIsCapturedWithoutBecomingADecimalStockAmount" classname="net.plainnotes.app.data.MeasuredUsePayloadTest" time="0.018"/>
   <testcase name="originalEmbeddedRequestPathKeepsTheWireCorpusAndExactHashes" classname="net.plainnotes.app.data.MeasuredUsePayloadTest" time="0.02"/>
-  <testcase name="embeddedDecoderMatchesTheOriginalStringOracleForEveryWireCase" classname="net.plainnotes.app.data.MeasuredUsePayloadTest" time="0.022"/>
+  <testcase name="embeddedDecoderMatchesTheOriginalStringOracleForEveryWireCase" classname="net.plainnotes.app.data.MeasuredUsePayloadTest" time="0.021"/>
   <testcase name="originalEmbeddedRequestPathRejectsMalformedAndAmbiguousFacts" classname="net.plainnotes.app.data.MeasuredUsePayloadTest" time="0.018"/>
-  <testcase name="embeddedTypedFactsCannotBeChangedThroughTheReturnedJsonOrUsesList" classname="net.plainnotes.app.data.MeasuredUsePayloadTest" time="0.017"/>
+  <testcase name="embeddedTypedFactsCannotBeChangedThroughTheReturnedJsonOrUsesList" classname="net.plainnotes.app.data.MeasuredUsePayloadTest" time="0.02"/>
   <testcase name="duplicatesUnconfirmedSourcesAndInvalidIdentityAreRejected" classname="net.plainnotes.app.data.MeasuredUsePayloadTest" time="0.018"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>

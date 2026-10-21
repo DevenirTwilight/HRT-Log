@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2026-10-21T13:34:24.826Z" hostname="506c18a63d5b" time="1.219">
+<testsuite name="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2026-10-21T13:43:06.305Z" hostname="506c18a63d5b" time="1.629">
   <properties/>
-  <testcase name="sameUuidWithChangedActualPayloadContextOrCreationTimeCannotConfirmThisRequest" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.143"/>
-  <testcase name="oldEpochAndDecoyCannotResolveOriginalOperation" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.089"/>
-  <testcase name="changedReferenceContextAndUnlinkCannotAuthorizeTheOldUuid" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.1"/>
-  <testcase name="unrelatedHistoryCorruptionBlocksObservationAndCannotBeMistakenForSuccess" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.096"/>
-  <testcase name="leavingObserverDoesNotCancelRealCommitAndSuccessWaitsForResultDelivery" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.118"/>
-  <testcase name="lostDeliveryAfterCommitRemainsUncertainAndDoesNotConsumeAgain" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.084"/>
-  <testcase name="absentOperationCannotEstablishNoCommitOrAuthorizeRetry" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.065"/>
-  <testcase name="frozenRequestAndFullReadOnlyObservationResolveLostCommittedResponse" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.098"/>
-  <testcase name="ownerCancellationInCommittedDeliveryWindowCannotClaimRollback" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.113"/>
-  <testcase name="observationConfirmsHistoricalReceiptAfterRevisionAndDeletionWithoutRewritingHistory" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.14"/>
-  <testcase name="everyRepositoryFaultRollsBackButOwnerNeverGuessesNoCommitOrRetries" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.07"/>
-  <testcase name="newReferenceContextCannotAuthorizePreviouslyUnlinkedUuid" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.091"/>
+  <testcase name="sameUuidWithChangedActualPayloadContextOrCreationTimeCannotConfirmThisRequest" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.178"/>
+  <testcase name="oldEpochAndDecoyCannotResolveOriginalOperation" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.086"/>
+  <testcase name="changedReferenceContextAndUnlinkCannotAuthorizeTheOldUuid" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.146"/>
+  <testcase name="unrelatedHistoryCorruptionBlocksObservationAndCannotBeMistakenForSuccess" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.147"/>
+  <testcase name="leavingObserverDoesNotCancelRealCommitAndSuccessWaitsForResultDelivery" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.109"/>
+  <testcase name="lostDeliveryAfterCommitRemainsUncertainAndDoesNotConsumeAgain" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.099"/>
+  <testcase name="absentOperationCannotEstablishNoCommitOrAuthorizeRetry" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.085"/>
+  <testcase name="frozenRequestAndFullReadOnlyObservationResolveLostCommittedResponse" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.114"/>
+  <testcase name="ownerCancellationInCommittedDeliveryWindowCannotClaimRollback" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.098"/>
+  <testcase name="observationConfirmsHistoricalReceiptAfterRevisionAndDeletionWithoutRewritingHistory" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.183"/>
+  <testcase name="everyRepositoryFaultRollsBackButOwnerNeverGuessesNoCommitOrRetries" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.153"/>
+  <testcase name="newReferenceContextCannotAuthorizePreviouslyUnlinkedUuid" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.224"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

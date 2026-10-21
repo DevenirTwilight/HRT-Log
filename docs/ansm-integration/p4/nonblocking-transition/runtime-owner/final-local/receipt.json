@@ -1,33 +1,28 @@
 {
-  "production_source_commit": "984219a3",
-  "evidence_head_at_data_completion": "4d56f1a964f2a759706ce253f1713e81da5dc2f1",
+  "production_source_commit": "8b24ccf5a0b0150438c66afce658230867aa68f5",
+  "evidence_head_at_data_completion": "8b24ccf5a0b0150438c66afce658230867aa68f5",
   "core_data": {
-    "tests": 526,
+    "tests": 527,
     "failures": 0,
     "errors": 0,
     "skipped": 0
   },
-  "remaining_build": "COMPLETE PASS",
+  "remaining_build": "IN_PROGRESS after latest space fix",
   "source_sha256": {
     "core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt": "0ceca5032e70f8b05b5799df7a2b658aec08ec288de7bcb4a3013758ced1f3ba",
     "core/data/src/main/java/net/plainnotes/app/data/MeasuredSaveCoordinator.kt": "de38d167bbf1d878985a180d8daf3d97e7c588191370a6f32ded2e9b45342d14",
     "core/data/src/main/java/net/plainnotes/app/data/MeasuredSaveGate.kt": "dcc09b9b0de04cfe47e4c46cf3253d82feb401826da8f385d8c20fa9d6aba995",
-    "core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt": "b657a6185855bac24b461281e1a685b52c28ef536e246144908275073beb2ef8",
-    "core/data/src/test/java/net/plainnotes/app/data/MeasuredSaveCoordinatorTest.kt": "df490ffbcf0848ed7d7af565fca3a1a178235cd6cc407781be197313188d1053"
+    "core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt": "8c5b28e7d56cf3590af903437a0e5b9ba3941fc753a9a7e3c13add9f14d55b1a",
+    "core/data/src/test/java/net/plainnotes/app/data/MeasuredSaveCoordinatorTest.kt": "e9622ed284e625adc25041caa5e567474affc3c33e0745a25ef3f4d2939e83d4"
   },
   "native": "NOT_RUN",
   "ci": "NOT_RUN",
   "environment": "Robolectric35/framework SQLite; small synthetic correctness tests; no performance/LMK claim",
-  "app_period": {
-    "tests": 5,
-    "failures": 0,
-    "skipped": 0
-  },
-  "reminder": {
-    "tests": 21,
-    "failures": 0,
-    "skipped": 0
-  },
-  "android_test_source_compile": "PASS",
-  "app_full_debug_source_compile": "PASS"
+  "app_period": "PENDING latest source",
+  "reminder": "PENDING latest source",
+  "android_test_source_compile": "PENDING latest source",
+  "app_full_debug_source_compile": "PENDING latest source",
+  "previous_complete_verification": "984219a3: 526 data,5 period,21 reminder and both compiles PASS; immutable evidence commit fb9f2c30; prior logs named 984219a3-*",
+  "owner_tests": 13,
+  "space_red_test_unchanged": true
 }

@@ -1,3 +1,9 @@
+## 8b24ccf5完整数据527项PASS，空间绕门反例GREEN已保存 — 2026-10-21
+
+当前最终生产8b24ccf5：data527 PASS/0FAIL/0ERROR/0SKIP，45原XML/源码SHA/截至数据日志更新同runtime-owner/final-local/；owner13项全通过。space-red测试源码SHA逐字相同，原断言不改；DECOY事务内全局select PRIMARY后私有SQL助手仍在DECOY，PRIMARY不被绕门写入。原两项UUID重放反例也仍通过。前526最终日志以984219a3-*保留、原XML在fb9f2c30提交可独立核对。
+
+同轮后续Android测试源码/App编译、Period5/reminder21仍进行中；收据明确PENDING不冒充此前结果。入口OFF、PR Draft，无UI/native/CI/LMK/预算变化；完整实现边界见runtime-owner/implementation.md。
+
 ## 事务空间绑定最小修正已编码，最终527项回归待验 — 2026-10-21
 
 Repository每实例ThreadLocal经asContextElement绑定捕获target，覆盖generic/SQL/measured根事务；space/db()/sql()在同实例事务内不再读取后来全局选择，协程上下文退出恢复，不缓存数据有效性。固定pinned仓库继续优先自己的空间，不将owner重定向。原space-red测试逐字保留。

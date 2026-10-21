@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="net.plainnotes.app.data.RegimenHistoryTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-10-21T13:34:46.986Z" hostname="506c18a63d5b" time="2.983">
+<testsuite name="net.plainnotes.app.data.RegimenHistoryTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-10-21T13:43:28.950Z" hostname="506c18a63d5b" time="2.896">
   <properties/>
-  <testcase name="oldBackupIsReconstructedWithoutCurrentProfileAndNewTablesRoundtrip" classname="net.plainnotes.app.data.RegimenHistoryTest" time="0.789"/>
-  <testcase name="pauseResumeAndFormulationChangeAreRecordedAsDifferentStages" classname="net.plainnotes.app.data.RegimenHistoryTest" time="0.083"/>
-  <testcase name="historicalLifecycleTypesRoundTripWithoutChangingCurrentPlans" classname="net.plainnotes.app.data.RegimenHistoryTest" time="0.321"/>
-  <testcase name="startedMilestoneCRUDUsesCommittedIdsAllowsEmptyTitleAndRollsBackFailure" classname="net.plainnotes.app.data.RegimenHistoryTest" time="0.07"/>
-  <testcase name="reminderChangesKeepCadenceAndVersionWhileDoseChangesFreezeNewContext" classname="net.plainnotes.app.data.RegimenHistoryTest" time="0.1"/>
-  <testcase name="invalidRegimenSnapshotRollsBackAndDoesNotReplaceMilestones" classname="net.plainnotes.app.data.RegimenHistoryTest" time="0.786"/>
-  <testcase name="nonuniformReminderMovePreservesSlotDosesFrozenVersionsAndBackupLinks" classname="net.plainnotes.app.data.RegimenHistoryTest" time="0.323"/>
-  <testcase name="forgedRuleLinkIsRejectedAndFrozenDefinitionCannotBeUpdated" classname="net.plainnotes.app.data.RegimenHistoryTest" time="0.509"/>
+  <testcase name="oldBackupIsReconstructedWithoutCurrentProfileAndNewTablesRoundtrip" classname="net.plainnotes.app.data.RegimenHistoryTest" time="0.764"/>
+  <testcase name="pauseResumeAndFormulationChangeAreRecordedAsDifferentStages" classname="net.plainnotes.app.data.RegimenHistoryTest" time="0.084"/>
+  <testcase name="historicalLifecycleTypesRoundTripWithoutChangingCurrentPlans" classname="net.plainnotes.app.data.RegimenHistoryTest" time="0.306"/>
+  <testcase name="startedMilestoneCRUDUsesCommittedIdsAllowsEmptyTitleAndRollsBackFailure" classname="net.plainnotes.app.data.RegimenHistoryTest" time="0.061"/>
+  <testcase name="reminderChangesKeepCadenceAndVersionWhileDoseChangesFreezeNewContext" classname="net.plainnotes.app.data.RegimenHistoryTest" time="0.065"/>
+  <testcase name="invalidRegimenSnapshotRollsBackAndDoesNotReplaceMilestones" classname="net.plainnotes.app.data.RegimenHistoryTest" time="0.728"/>
+  <testcase name="nonuniformReminderMovePreservesSlotDosesFrozenVersionsAndBackupLinks" classname="net.plainnotes.app.data.RegimenHistoryTest" time="0.421"/>
+  <testcase name="forgedRuleLinkIsRejectedAndFrozenDefinitionCannotBeUpdated" classname="net.plainnotes.app.data.RegimenHistoryTest" time="0.465"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="net.plainnotes.app.data.LabBatchSaveTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-21T13:33:34.242Z" hostname="506c18a63d5b" time="0.343">
+<testsuite name="net.plainnotes.app.data.LabBatchSaveTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-21T13:42:16.612Z" hostname="506c18a63d5b" time="0.365">
   <properties/>
-  <testcase name="onlyNewResultsAndAtLeastOne" classname="net.plainnotes.app.data.LabBatchSaveTest" time="0.094"/>
-  <testcase name="aFailureOnTheFourthKeepsNone" classname="net.plainnotes.app.data.LabBatchSaveTest" time="0.088"/>
-  <testcase name="batchOfSixEqualsSixSingleSavesFieldByField" classname="net.plainnotes.app.data.LabBatchSaveTest" time="0.156"/>
+  <testcase name="onlyNewResultsAndAtLeastOne" classname="net.plainnotes.app.data.LabBatchSaveTest" time="0.091"/>
+  <testcase name="aFailureOnTheFourthKeepsNone" classname="net.plainnotes.app.data.LabBatchSaveTest" time="0.111"/>
+  <testcase name="batchOfSixEqualsSixSingleSavesFieldByField" classname="net.plainnotes.app.data.LabBatchSaveTest" time="0.161"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

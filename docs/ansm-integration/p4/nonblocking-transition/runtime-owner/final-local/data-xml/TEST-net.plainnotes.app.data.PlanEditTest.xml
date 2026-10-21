@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="net.plainnotes.app.data.PlanEditTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-10-21T13:34:28.979Z" hostname="506c18a63d5b" time="0.201">
+<testsuite name="net.plainnotes.app.data.PlanEditTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-10-21T13:43:11.225Z" hostname="506c18a63d5b" time="0.203">
   <properties/>
-  <testcase name="earlyDoseStaysDoneAcrossMetadataAndPlanEdits" classname="net.plainnotes.app.data.PlanEditTest" time="0.121"/>
-  <testcase name="packageSizesStayWhenNotRequestedOrWhenMoreIsUsed" classname="net.plainnotes.app.data.PlanEditTest" time="0.078"/>
+  <testcase name="earlyDoseStaysDoneAcrossMetadataAndPlanEdits" classname="net.plainnotes.app.data.PlanEditTest" time="0.119"/>
+  <testcase name="packageSizesStayWhenNotRequestedOrWhenMoreIsUsed" classname="net.plainnotes.app.data.PlanEditTest" time="0.082"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
