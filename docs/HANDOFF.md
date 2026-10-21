@@ -1,3 +1,9 @@
+## App真实owner接线合同已编码，首轮完整数据与选定App回归运行中 — 2026-10-21
+
+新增ProcessMeasuredWriteShellTest2项，真实Coordinator/Repository/NotesApp（只控测试Dispatcher，不伪造状态/回执/写入）：排队保存中换ViewModel/真实导航后仍同任务且只提交一次；已提交异created请求进入MANUAL_CHECK，核对按钮不重放/不误报FAILED/无重试。fixture为合成未确认库存用药，不改正式入口。另运行原NonBlockingWriteShell/DataRefresh/Period/UnifiedConcentrationDataPath，检查普通刷新及原计算事实不变。
+
+当前:core:data完整回归+Android合同编译+App选定回归运行中，日志/workspace/scratch/p4-real-binding-focused.log；尚不能写PASS。此前早期core/Android编译完成，但不代表随后补全字段和当前App接线通过。继续保留预算/LMK/正式入口门。
+
 ## 真实状态源与受限只读刷新已编码，测试待验 — 2026-10-21
 
 Coordinator.latestTask提供单一进程状态源（不入磁盘/Bundle）；NotesViewModel注入同singleton，NotesApp认证壳观察真实状态，人工核对按钮仅调用原只读reconcile。没有新增正式提交入口，P4 OFF。页面销毁不拥有writer。Repository增加NotesReadSnapshot/CalculationReadInputs受限typed读取；原维护式refresh保留，busy时走无迁移/seed/reconcile的只读快照；同一calendarProjection/timeline规则复用。计算模型/参数/边界不改，仅busy时读取相同事实输入。
