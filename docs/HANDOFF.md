@@ -1,3 +1,13 @@
+## 本组收尾：资源退出修正+原请求提交观察，514数据回归及最终编译PASS — 2026-10-21
+
+生产ae7688da（证据提交仅文档）：完整core:data514 PASS/0FAIL/0SKIP、compileDebugAndroidTestKotlin PASS、compileFullDebugKotlin PASS。全日志/44 XML/源码SHA/主jar隔离及未改Schema/PK/加密格式/权限证明存nonblocking-transition/reference-context-green/。原关联来源2 RED完整保留，测试源码未改，现GREEN；原资源退出2 RED亦在完整回归中GREEN。UI/导航/四语32+PeriodStability5共37在先前生产4111c0b8实跑PASS，之后App源码未再改，本轮最后的context字段修正后只重编译App，不伪称又运行37。无新大库/SQLCipher原生/API26/29/35/CI/真机/TalkBack，无APK。
+
+实际源码修改仅4个core:data文件：MeasuredOperationChain失败时清明文并原样重抛；NotesRepository恢复所有出口finally清理、固定PRIMARY事务的prepare/observe内部接口；PreparedMeasuredCreate冻结原票据/实际用量/配置SHA/原created/原关联CONTEXT事件；观察继续完整审计并匹配历史创建，不重放，不把缺失当未提交。独立实际用药创建之外的操作没有此完整观察支持。新接口无App运行调用，TEST_ONLY owner/oracle不在主jar。
+
+下一步（尚未实施）：应用级进程owner/最薄公开门面，保证根事务真实提交后才交付SUCCESS、同UUID+完整原请求去重、固定dataset/epoch以及所有冲突写入口/restore/reset隔离；核对必须在writer结束后的独立读取事务进行，内部观察不是任意嵌套外层未提交事务的独立耐久证书。当前UI只读host默认null，正式非阻塞保存未绑定。进程死亡无获批token时人工核对，不自动重放。
+
+P4仍Draft/OFF、autoMerge=null，不合并/发布。原5秒FAIL与硬断言不动，改独立指标仍待产品明确批准；恢复LMK稳定性NOT_PROVEN，生命周期清理通过不等于峰值安全。主线仍320171cd，当前只正常推送#57，不同步或覆盖其他开发树。当前无在途测试；所有有效结果已保存。
+
 ## 关联来源反例修正后完整数据514项PASS已实时保存 — 2026-10-21
 
 生产ae7688da：完整core:data514 PASS/0FAIL/0SKIP，NonBlockingRepositoryWriteTest12项全部通过（包括原2个context反例）；测试源码与RED源280bf615逐字一致。原始44 XML/数据阶段日志/源码SHA和RED链接存nonblocking-transition/reference-context-green/，原RED不改写。当前正继续Android测试/App源码编译，未结束不能填PASS；UI/时期37 PASS仍仅标先前4111c0b8源，App源码未再改。

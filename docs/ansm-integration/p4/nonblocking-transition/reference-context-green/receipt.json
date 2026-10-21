@@ -336,7 +336,7 @@
     "core/data/schemas",
     "core/data/src/main/java/net/plainnotes/app/data/BackupCodec.kt"
   ],
-  "android_test_and_app_compile": "IN_PROGRESS",
+  "android_test_and_app_compile": "PASS",
   "prior_app_tests": {
     "source": "4111c0b8",
     "passed": 37,
@@ -358,6 +358,7 @@
     "TEST-net.plainnotes.app.data.LabContextTest.xml": "00bd893c91638790074ab352f06a75b24b42133b13b528e5054e23ad2a0ae5cc",
     "TEST-net.plainnotes.app.data.HistoricalVisitTest.xml": "137de0733871a40bab79286333cd046819aadcca4ee14049aa70b2173e7ccf26",
     "TEST-net.plainnotes.app.data.ReferenceCanonicalCompatibilityTest.xml": "ee50268b3950bd6b77d9dab5bc2e5cb4ae0029a843b16f03428baf5de87f46dd",
+    "isolation-and-scope.json": "c0e8d99c2f6194680df09bbc516d7424475457dc86e73b7f15195bdf6776820a",
     "gradle-through-data.log": "5c1f92fbefa991f4f2d3e503f1cf59f00603dbb536d4c8f0b2b0146d65b69fd9",
     "TEST-net.plainnotes.app.data.NonBlockingWritePrototypeTest.xml": "4b2c48fa03987757ea3519a94cfeb77ef29bbce59db0a69bdc2d43268878db1e",
     "TEST-net.plainnotes.app.data.HistoryIntegrityTest.xml": "4bdf06e26e303560f2b10331bd0ab23ea9d7c33a0239a87947e5666d26562b60",
@@ -369,6 +370,7 @@
     "TEST-net.plainnotes.app.data.ReferencePayloadTest.xml": "0ffbab98d8f4d1ebac51a91be5107ad47ba9090627f8cb7e78ac0e6b008455e2",
     "TEST-net.plainnotes.app.data.KeyBoundaryTest.xml": "0bec35fdb111c0d6e5207fc8a538c202740456e79290c64b07e423520fd5bcf3",
     "TEST-net.plainnotes.app.data.LabPanelDataTest.xml": "221b8fa46e04168e5e7c901504ce5df62f78d90b6bd29c79519c1771f2ae30ca",
+    "gradle.log": "a106c6f546626d97a7c5edf6fd55c8f551875f2abcaddce6eec1b0d589f25f85",
     "TEST-net.plainnotes.app.data.HrtTrackerImportTest.xml": "6f92b5e23fabec855477ecfcac7e6d3db35a33e1d1025b362a89245410260dbe",
     "TEST-net.plainnotes.app.data.NonBlockingRepositoryWriteTest.xml": "e46007672b2c33029fc304bd6d7a3480a4fee674488d6f93391c2aa46baac218",
     "TEST-net.plainnotes.app.data.RegimenHistoryTest.xml": "6deaf25484c4a0c269103004208100c35e2a5c264e247df3b0dbea8a558e74a9",
@@ -396,5 +398,7 @@
     "TEST-net.plainnotes.app.data.IndexedBackupDocumentTest.xml": "87ec265bf446e10aa7f9385bbc663d20380f44c3428330bbe8ed5e574476a6fa",
     "TEST-net.plainnotes.app.data.MeasuredUsePayloadTest.xml": "4d862f746a48719aa0cfd6c511345e568586d0ff2a482a2d3936f290eb493bc9",
     "TEST-net.plainnotes.app.data.MeasuredContainerStoreTest.xml": "07f1ed42d9683a906e118164e8a32b9b22371d8ceb2dcb8bcbeb790ec28f1667"
-  }
+  },
+  "app_main_compilation": "PASS",
+  "full_gradle_invocation": "BUILD SUCCESSFUL"
 }
