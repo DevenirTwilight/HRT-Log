@@ -64,7 +64,7 @@ internal object MeasuredOperationChain {
         require(if(sequence==1)previous==null && hash==null else previous!=null && hash!=null)
         return Link(sequence,previous,hash)
     }
-    /** Pure content codec, never a chain/database validity cache. No UUID, connection, epoch,
+    /** Pure content codec, never a chain/database validity cache. No current-row UUID/Node, connection, epoch,
      * transaction, row header or acceptance result is retained. Every caller still reads every
      * current row and checks the complete sequence/predecessor graph below. */
     private data class CheckedInput(val link:Link,val sha256:String)
@@ -102,7 +102,15 @@ internal object MeasuredOperationChain {
         value
     }
     fun validate(db:SupportSQLiteDatabase):Map<String,Node> = checkedChain(db,false).first
-    private fun checkedChain(db:SupportSQLiteDatabase,retainCanonical:Boolean,headers:HeaderCapture?=null):Pair<Map<String,Node>,Map<String,String>> {
+    private fun checkedChain(db:SupportSQLiteDatabase,retainCanonical:Boolean,headers:HeaderCapture?=null):Pair<Map<String,Node>,Map<String,String>> = try {
+        checkedChainInput(db,retainCanonical,headers)
+    } catch(failure:Throwable) {
+        // A resource failure may leave a map insertion ahead of its byte accounting.
+        // Discard the whole pure memo and invalidate in-flight owners before rethrowing.
+        clearPureInputMemo()
+        throw failure
+    }
+    private fun checkedChainInput(db:SupportSQLiteDatabase,retainCanonical:Boolean,headers:HeaderCapture?):Pair<Map<String,Node>,Map<String,String>> {
         check(db.inTransaction())
         // Allocation belongs to a new read, never to cleanup. If it fails, the old
         // readers still cannot retain plaintext because clear has already set the token to null.

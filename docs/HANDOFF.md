@@ -1,3 +1,9 @@
+## 已归档资源退出修正接入当前源码，完整本地数据回归待验 — 2026-10-21
+
+复核后接入saved-resource-wip/changes.patch原样两文件修正，SHA与原归档逐字一致：链读取失败清理纯解码明文引用并原样重抛；restoreBackupTo在所有正常/异常/取消出口finally释放引用。不是性能优化/可信缓存/增量验证，不改完整审计、事务、解密、格式或Schema。未回退原FK去重。原RED/旧归档证据原样保留，本组先保存源码再做完整本地core:data回归，当前不能填PASS。
+
+已完成非阻塞UI34 PASS及小库owner/Repository11 PASS仅对应之前源；当前变更后需回归。没有新大库/native计划，不以本地清理测试宣称LMK修复。真实保存门面、核对及冲突保护仍未接通；P4 Draft/OFF，政策硬门未改，不合并发布。
+
 ## 真实Repository异步小库4项+原型7项PASS已保存 — 2026-10-21
 
 源ecc6671b，NonBlockingRepositoryWriteTest4 PASS及NonBlockingWritePrototypeTest7 PASS（0FAIL/0SKIP），原始XML/日志/SHA及release-source隔离核验存nonblocking-transition/repository-first/。真实recordMeasuredUse完成后才交付SUCCESS；离开观察不取消任务/不双扣；原3个checkpoint故障完整dump一致回滚；提交后丢响应和owner取消保持待核对，不误报未保存/不重试；成功案例当前全审计与冻结完整oracle一致。框架SQLite/Robolectric35小库，不能冒充SQLCipher/进程死亡/LMK验收。
