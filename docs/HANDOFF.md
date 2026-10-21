@@ -1,3 +1,9 @@
+## 必要原生验收已启动，不能当PASS — 2026-10-21
+
+源d582bf7d的两项一次性验收运行中：Android/domain workflow39620822817（含新增MeasuredSaveCoordinatorAndroidTest共享14合同的API26/29/35 SQLCipher），冻结低内存全工作负载39620827648（512MiB/192MiB、原fixture、原5/15/120秒断言及真实恢复process-death合同不变）。依据§128推进到可合并的必要验收，不恢复已取消的重复跑分或微优化研究；不为求绿重复调度。两者均IN_PROGRESS，未有结果不能填PASS。
+
+本地完整数据/选定App回归仍在执行，日志p4-real-binding-focused.log；当前新源码不能引用旧527结果。本轮进度持续保存，P4仍OFF/Draft、autoMerge=null。
+
 ## App真实owner接线合同已编码，首轮完整数据与选定App回归运行中 — 2026-10-21
 
 新增ProcessMeasuredWriteShellTest2项，真实Coordinator/Repository/NotesApp（只控测试Dispatcher，不伪造状态/回执/写入）：排队保存中换ViewModel/真实导航后仍同任务且只提交一次；已提交异created请求进入MANUAL_CHECK，核对按钮不重放/不误报FAILED/无重试。fixture为合成未确认库存用药，不改正式入口。另运行原NonBlockingWriteShell/DataRefresh/Period/UnifiedConcentrationDataPath，检查普通刷新及原计算事实不变。
