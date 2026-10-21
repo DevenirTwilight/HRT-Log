@@ -1,0 +1,27 @@
+{
+  "source": "f420fbf1",
+  "pr_workflow": 39656387819,
+  "artifact": 12373360958,
+  "sha256": "21029fa6fb12c76551193d9d7543a317642dbdd7c07c4305b3e01cbcd6a5dd35",
+  "crc": "PASS",
+  "summaries": [
+    {
+      "path": "core/data/build/reports/androidTests/connected/debug/index.html",
+      "counts": [
+        407,
+        0,
+        5
+      ]
+    },
+    {
+      "path": "app/build/reports/androidTests/connected/debug/flavors/full/index.html",
+      "counts": [
+        282,
+        0,
+        10
+      ]
+    }
+  ],
+  "actual_writer_death": "BOTH_PASS",
+  "scope": "CI emulators, not physical phone or manual TalkBack"
+}

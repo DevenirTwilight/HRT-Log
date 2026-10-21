@@ -1,7 +1,7 @@
 {
   "source": "f420fbf1c4fec4b989f2694fd85e0b6b59dbbfc2",
   "mainline": "4ec11437acb257ecc0e9c92ed59907d954cbacae",
-  "status": "PROTECTED_AUTOMATIC_CI_PENDING",
+  "status": "WAIT_ANDROID_ONLY",
   "entry": "OFF",
   "policy": "NONBLOCKING_WRITES_LATENCY_OBSERVATIONAL",
   "tool_tests": 219,
@@ -79,5 +79,29 @@
   "scope_of_skip_counts": "listed exactly; action-driven/manual probes are not claimed as ordinarily executed",
   "ordinary_write": "LEGACY5S_FAIL_RETAINED_OBSERVATIONAL",
   "formal_entry": "OFF",
-  "merge": "NOT_PERFORMED"
+  "merge": "NOT_PERFORMED",
+  "protected_native": {
+    "api26": [
+      335,
+      0,
+      0
+    ],
+    "api29": [
+      335,
+      0,
+      0
+    ],
+    "api35_data": [
+      407,
+      0,
+      5
+    ],
+    "api35_app": [
+      282,
+      0,
+      10
+    ],
+    "writer_external_kill_each_api": "BOTH_PASS",
+    "original_artifacts": "protected-f420/"
+  }
 }

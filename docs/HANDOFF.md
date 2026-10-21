@@ -1,3 +1,7 @@
+## f420三个API的受保护原始工件全核验通过，最后等待Android job — 2026-10-21
+
+普通PR39656387819的API35官方artifact12373360958/SHA21029fa6…6a5dd35/CRC核验，data407/0fail/5显式探针skip、App282/0fail/10action probe skip；Stock和AfterCommit实际外部强杀/精确数据/epoch/完整oracle/无重放均PASS。与当前受保护HEAD的26/29两工件一同存protected-f420/，不拿旧source结果替代。push对应三个API也SUCCESS。现在只剩两套标准Android全量job在途；不取消/不绕过、不更改HEAD、不重跑性能实验。当前仍Draft/OFF，完整结束后再确认CLEAN/Ready。
+
 ## 最终受保护HEAD f420的API26/29原始结果已核验 — 2026-10-21
 
 普通PR自动run39656387819的26/29各335/0fail/0skip，两个writer真实kill/newPID/精确dump/完整oracle/无重放均PASS。protected-f420/保存原ZIP与官方SHA/CRC及逐场景JSON；没有用f13手动结果冒充新HEAD。PR测试合并575eef74的tree与HEAD tree均4d85ff4668b0156c7c41219e8743fd6bfd71d460，源码完全相同；f13→f420仅文档变化。
