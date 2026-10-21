@@ -160,6 +160,7 @@ jobs:
           name: device-test-results
           path: |
             core/data/build/reports/androidTests/
+            core/data/build/reports/ansm-write-process-death/
             core/data/build/reports/gate2/
             core/data/build/reports/gate3/
             core/data/build/reports/b3/
@@ -228,6 +229,7 @@ jobs:
           path: |
             app/build/reports/demo/
             core/data/build/reports/androidTests/
+            core/data/build/reports/ansm-write-process-death/
             core/data/build/reports/gate2/
             core/data/build/reports/gate3/
             core/data/build/reports/b3/

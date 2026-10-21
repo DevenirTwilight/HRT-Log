@@ -1,3 +1,9 @@
+## 新候选Science/API29通过，API26仍失败；补齐OS-kill报告上传路径 — 2026-10-21
+
+fb43验收39622599139 Science gate+research-deep全SUCCESS；39622595007 JVM/API29 SUCCESS，API26 FAIL，android/API35仍在途。API26两候选都失败，但尚无可读完整日志，不能猜测同因或重跑碰运气。工件下载CONNECT403问题已问负责人，仍待网络解阻；只读元数据可用不等于原始报告已核验。
+
+复核发现新增ansm-write-process-death报告目录尚未加入现有上传路径，这是证据保存遗漏，已给API35及API26/29的always工件清单各补一行。未变业务/原断言/预算/合同代码，不另触发重复完整验收；待已知失败查因修正后相应验证。当前API29整体成功说明其host脚本退出0，但尚不能把缺原报告的结果升级为完整证据核验。
+
 ## 原候选CI/预算FAIL及真实工件访问阻塞已保存；新候选验收继续 — 2026-10-21
 
 旧d582：39620822817已结束，JVM/API29/API35成功，android/API26失败；39620827648低内存全原预算运行FAIL，官方artifact12355511849/digest4ce0beac…cabf6f4/150184B。尚未下载原报告，不能推断FAIL是5秒、LMK或别的规则。GitHub API正常，但日志/工件重定向Azure storage时代理CONNECT403，environment_status确认unrestricted/enforced不等于该域可达；未绕过代理、未去重跑。已异步请负责人在云环境配置允许productionresultssa*.blob.core.windows.net或切换可达环境，问题仍待答复。无signed URL/凭据入库。
