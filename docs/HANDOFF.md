@@ -1,3 +1,8 @@
+## UI-06 语义色与状态体系实施中 — 2026-10-21
+
+分支 feature/ui06-semantic-status-20261021（基于320171cd），任务书归档 sources/ui06/ui06-prompt.md，REQUIREMENTS §115。已提交：core/ui SemanticColors（7令牌×浅/深×三档对比度、动态色仅action/success/danger跟随）与唯一状态表StatusStyles；app StatusUi（StatusChip/statusOutline/dayStyle）；日历/TodayCard/历史/纵向时间线/库存/设置/就诊/来源/化验标记的"需注意"红色改为attention或missed；Corners.badge→tag，新增pill；首页"还没有记录"卡（48h内最多2条+更多→服药记录，"我服过了"复用history_backfill弹窗，"没有服"复用confirmMissed）。受保护PK_DISPLAY_REVIEW文件、ViewModel/Repository/Room/备份/提醒逻辑未改。症状页紧急来源引用保持红色（安全警示，报告中提请owner确认）。
+待做：UI-06测试（映射穷举、对比度、源码守卫、确认卡、形状、TalkBack、触控、2×字体、灰度）、旧断言迁移、全量回归、截图、报告70、真机清单、PR自动合并。无APK、签名或版本号变更。
+
 ## LAB-03 与 LAB-UI-03 正常主线集成验收中 — 2026-10-20
 
 #90最终ffb4c92c的push/PR六类共12必需检查全部SUCCESS，无未解决审查/冲突，普通受保护合并5a7d7c87（07:06:41Z），树与已验源码相同；最终检查URL快照labs/ui03/lab90-approved-final-checks.json。主线合并CI是另一项结果。#89已正常merge该已批准默认分支，未复制未合并源码；双方历史、需求及审批记录保留。AppShell保留Vibe的FAB清除labEdit和正式lab-open-batch标记，保留LabUiState/token/原panel快照和双方原生测试。
