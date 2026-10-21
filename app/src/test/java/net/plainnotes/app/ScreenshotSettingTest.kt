@@ -25,8 +25,8 @@ import org.robolectric.annotation.Config
 
 /**
  * REQUIREMENTS §135: "Allow screenshots" in Settings → Privacy & security. Off by default (FLAG_SECURE, as before); turning it
- * on clears FLAG_SECURE on the current window at once and is remembered; turning it off sets it again. Disguise mode keeps
- * screenshots blocked whatever the setting, and the switch is then disabled with a note. Four languages.
+ * on clears FLAG_SECURE on the current window at once and is remembered; turning it off sets it again. In disguise mode the
+ * switch works the same inside the real app, with a note on the recents preview. Four languages.
  */
 @RunWith(ParameterizedRobolectricTestRunner::class) @Config(sdk = [35])
 class ScreenshotSettingTest(private val locale: String) {
@@ -59,30 +59,48 @@ class ScreenshotSettingTest(private val locale: String) {
         assertFalse(UiPrefs(context).allowScreenshots); assertTrue("blocked again", secure())
     }
 
-    @Test fun disguiseModeAlwaysBlocks() {
-        UiPrefs(context).allowScreenshots = true
+    @Test fun disguiseModeFollowsTheSettingInsideTheApp() {
         context.packageManager.setComponentEnabledSetting(ComponentName(context.packageName, "net.plainnotes.app.CalculatorLauncher"),
             PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP)
         try {
             show()
-            assertTrue("disguised: FLAG_SECURE although allowed", secure())
-            row().performScrollTo().assertIsNotEnabled()
-                .assert(SemanticsMatcher.expectValue(SemanticsProperties.ToggleableState, ToggleableState.Off))
-                .assert(hasText(s(R.string.screenshots_allow_disguised), substring = true))
+            assertTrue("disguised, default: blocked", secure())
+            // The switch works in disguise mode too; the note says what happens to the recents preview (Android 15 here: hidden).
+            row().performScrollTo().assertIsEnabled().assert(hasText(s(R.string.screenshots_allow_desc), substring = true))
+            ui.onNodeWithTag("privacy-screenshots-disguise", useUnmergedTree = true).assertExists()
+            row().assert(hasText(s(R.string.screenshots_disguise_preview_hidden), substring = true))
+            row().performClick(); ui.waitForIdle()
+            assertTrue(UiPrefs(context).allowScreenshots); assertFalse("disguised, allowed: FLAG_SECURE cleared", secure())
+            row().performClick(); ui.waitForIdle()
+            assertTrue("disguised, turned off: blocked", secure())
         } finally {
             context.packageManager.setComponentEnabledSetting(ComponentName(context.packageName, "net.plainnotes.app.CalculatorLauncher"),
                 PackageManager.COMPONENT_ENABLED_STATE_DEFAULT, PackageManager.DONT_KILL_APP)
         }
+    }
+
+    @Test fun noDisguiseNoteWithoutDisguise() {
+        show(); row().performScrollTo()
+        ui.onNodeWithTag("privacy-screenshots-disguise", useUnmergedTree = true).assertDoesNotExist()
     }
 }
 
 /** §135: the rule itself. */
 @RunWith(RobolectricTestRunner::class) @Config(sdk = [35])
 class ScreenCaptureRuleTest {
-    @Test fun blockedUnlessAllowedAndNotDisguised() {
-        assertTrue(ScreenCapture.blocked(allowed = false, disguised = false))
-        assertFalse(ScreenCapture.blocked(allowed = true, disguised = false))
-        assertTrue(ScreenCapture.blocked(allowed = true, disguised = true))
-        assertTrue(ScreenCapture.blocked(allowed = false, disguised = true))
+    @Test fun blockedUnlessAllowed() {
+        assertTrue(ScreenCapture.blocked(allowed = false)); assertFalse(ScreenCapture.blocked(allowed = true))
+    }
+
+    @Test fun recentsPreviewInDisguiseMode() {
+        // Android 13+: allowed screenshots in disguise mode still hide the recents preview.
+        assertTrue(ScreenCapture.hideRecentsPreview(allowed = true, disguised = true, sdk = 33))
+        assertFalse(ScreenCapture.hideRecentsPreview(allowed = true, disguised = false, sdk = 35))
+        assertFalse("blocked anyway by FLAG_SECURE", ScreenCapture.hideRecentsPreview(allowed = false, disguised = true, sdk = 35))
+        // Below 13 there is no separate switch: the preview is exposed only when allowed and disguised.
+        assertTrue(ScreenCapture.previewExposed(allowed = true, disguised = true, sdk = 32))
+        assertFalse(ScreenCapture.previewExposed(allowed = true, disguised = true, sdk = 33))
+        assertFalse(ScreenCapture.previewExposed(allowed = false, disguised = true, sdk = 26))
+        assertFalse(ScreenCapture.previewExposed(allowed = true, disguised = false, sdk = 26))
     }
 }

@@ -1320,5 +1320,6 @@
 <!-- §135 screenshots -->
 <string name="screenshots_allow">允許截圖</string>
 <string name="screenshots_allow_desc">關閉時，截圖和錄影只會得到空白畫面，最近使用的應用程式也不顯示內容。開啟後，應用程式畫面可以被截圖，也會顯示在最近使用的應用程式中。</string>
-<string name="screenshots_allow_disguised">偽裝模式已開啟，截圖一律禁止。</string>
+<string name="screenshots_disguise_preview_hidden">偽裝模式：本機最近使用的應用程式中仍然不會顯示真實應用程式的畫面。</string>
+<string name="screenshots_disguise_preview_shown">偽裝模式：在這個 Android 版本上，允許截圖後最近使用的應用程式中也會顯示真實應用程式的畫面。</string>
 </resources>

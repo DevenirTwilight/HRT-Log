@@ -23,7 +23,7 @@ PRIMARY 只进入 MainActivity，NotesViewModel 固定 PRIMARY；提醒一直固
 
 真实伪装认证后的 PRIMARY 不再立刻要求普通 PIN；非伪装模式仍遵守普通 PIN、后台超时和生物识别。MainActivity 的 create/start/resume/newIntent 均验证会话，PRIVATE 不能通过它。PRIMARY 只有 system document picker 在前台时免于离开即锁，例外按代次持有、返回只消费一次、launch 失败撤销；配置重建不锁定，进程重启不保留例外。PRIVATE 无 picker 例外。
 
-Shell/Main/Private 使用同一 task affinity。切换和退出通过 NEW_TASK | CLEAR_TASK 替换整个任务，不把 MainActivity 留在私人空间下面，也不在启动替代任务后调用 finishAndRemoveTask 删除新任务。PRIVATE 的 Back/Close 回当前 shell，编辑页 Back 取消草稿回列表；摇动也退出。后台清会话，恢复时回 shell；配置重建保留当前有效目标。禁用伪装后私人 Activity 直接结束，不跳到 Main。真实/私人屏幕都有 FLAG_SECURE。§135（2026-10-21）起，用户可在“设置 → 隐私与安全”打开“允许截屏”，此时真实屏幕（MainActivity）不设 FLAG_SECURE；伪装模式开启时始终设置，私人笔记页始终设置。
+Shell/Main/Private 使用同一 task affinity。切换和退出通过 NEW_TASK | CLEAR_TASK 替换整个任务，不把 MainActivity 留在私人空间下面，也不在启动替代任务后调用 finishAndRemoveTask 删除新任务。PRIVATE 的 Back/Close 回当前 shell，编辑页 Back 取消草稿回列表；摇动也退出。后台清会话，恢复时回 shell；配置重建保留当前有效目标。禁用伪装后私人 Activity 直接结束，不跳到 Main。真实/私人屏幕都有 FLAG_SECURE。§135（2026-10-21）起，用户可在“设置 → 隐私与安全”打开“允许截屏”，此时真实屏幕（MainActivity）不设 FLAG_SECURE，伪装模式下进入真实应用后也一样；伪装模式且已允许截屏时，Android 13+ 用 setRecentsScreenshotEnabled(false) 单独隐藏最近任务预览，Android 12 及以下预览会显示真实画面（设置中有说明）。私人笔记页始终设置 FLAG_SECURE。
 
 ## 普通 UI 身份审计
 

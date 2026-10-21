@@ -1320,5 +1320,6 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <!-- §135 screenshots -->
 <string name="screenshots_allow">Autoriser les captures d\'écran</string>
 <string name="screenshots_allow_desc">Désactivé : les captures et enregistrements d\'écran sont vides et les applications récentes masquent le contenu. Activé : les écrans de l\'application peuvent être capturés et apparaissent dans les applications récentes.</string>
-<string name="screenshots_allow_disguised">Le mode déguisé est activé : les captures d\'écran restent bloquées.</string>
+<string name="screenshots_disguise_preview_hidden">Mode déguisé : les applications récentes masquent toujours la vraie application sur ce téléphone.</string>
+<string name="screenshots_disguise_preview_shown">Mode déguisé : sur cette version d\'Android, autoriser les captures affiche aussi la vraie application dans les applications récentes.</string>
 </resources>
