@@ -1,3 +1,9 @@
+## 真实App接线2项PASS，OS-kill合同编译PASS；原生验收继续 — 2026-10-21
+
+ProcessMeasuredWriteShellTest2项当前PASS，原@Before超时确认为未驱动Android Main Looper；按既有DataRefreshTest显式idle后原30秒与全部保存/导航/重建/手工核对断言不变。shell-integration/looper-fixed/保留XML/日志/测试SHA及仅harness差异；first-local的2个初始化失败不改写。同一生产dc10ffef（main diff为空）此前完整data528/原选定18App已PASS，本次只重跑修正2项，不冒充同次20项。Android编译包含新增真实writer进程死亡probe已PASS。
+
+远端d582两run39620822817/39620827648仍IN_PROGRESS（旧CI含初始化失败版测试，结果照实留）；需要后续对修正harness与新OS-kill合同的实质变化做CI验证，不重复原大库求绿。状态读取已接真实owner，正式提交入口仍OFF；原预算、LMK及最终CI门仍未解除。本地无在途Gradle。
+
 ## 接线首轮：528数据/原18App通过，2项新App初始化超时已保存 — 2026-10-21
 
 全data528 PASS；选定App20项中18 PASS，2新测试均@Before第68行等待初始ViewModel刷新超时，未进入保存断言。原XML/log/SHA存shell-integration/first-local/；不是把超时称业务RED，也不丢弃。当前怀疑无Compose内容时Android主Looper未驱动，下一步按既有DataRefreshTest做法显式idle主Looper，保留30秒/原所有断言，不改生产写入来迎合测试。

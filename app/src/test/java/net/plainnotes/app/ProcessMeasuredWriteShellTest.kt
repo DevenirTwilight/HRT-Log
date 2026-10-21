@@ -18,6 +18,7 @@ import org.junit.*
 import org.junit.Assert.*
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 import java.math.BigDecimal
@@ -65,13 +66,13 @@ class ProcessMeasuredWriteShellTest {
         owner=constructor.newInstance(repo,process,dispatcher,null,null) as MeasuredSaveCoordinator
         expected=runBlocking{owner.prepare(scope,medication,UUID.randomUUID().toString(),draft,at)}
         model=newModel();UiPrefs(ui.activity).disclaimerAccepted=true
-        ui.waitUntil(30000){!model.state.value.loading && !model.conc.value.loading}
+        ui.waitUntil(30000){shadowOf(android.os.Looper.getMainLooper()).idle();!model.state.value.loading && !model.conc.value.loading}
     }
     private fun newModel()=NotesViewModel(repo,ReminderCoordinator(ui.activity,repo),ui.activity,owner)
     private fun clearModel(){ViewModelStore().apply{put("model",model);clear()}}
     @After fun close(){clearModel();process.cancel();dispatcher.runAll();runBlocking{process.coroutineContext[Job]!!.join()};db.close()}
     private fun await(check:()->Boolean) {
-        ui.waitUntil(30000){dispatcher.runAll();check()}
+        ui.waitUntil(30000){shadowOf(android.os.Looper.getMainLooper()).idle();dispatcher.runAll();check()}
     }
     private fun navigate(target:Destination) {
         ui.onNodeWithContentDescription(ui.activity.getString(R.string.menu)).performClick()
@@ -88,7 +89,7 @@ class ProcessMeasuredWriteShellTest {
         navigate(Destination.MEDICATIONS)
         ui.onNodeWithTag("write-status-title").assertIsDisplayed()
         ui.runOnIdle{clearModel();model=newModel();modelState.value=model;model.refresh()}
-        ui.waitUntil(30000){!model.state.value.loading && model.state.value.medications.size==1}
+        ui.waitUntil(30000){shadowOf(android.os.Looper.getMainLooper()).idle();!model.state.value.loading && model.state.value.medications.size==1}
         assertNull(model.state.value.error);assertSame(task,owner.latestTask.value)
         assertEquals(WriteStatus.PENDING,task.progress.value.status)
         assertSame(task,owner.start(expected))
