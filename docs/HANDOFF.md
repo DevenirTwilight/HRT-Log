@@ -1,3 +1,11 @@
+## P4 恢复专项收尾：两个实际终止合同PASS，整体仍BLOCKED — 2026-10-21
+
+唯一小型run39555630970/job119074632992 SUCCESS；源47f11551，生产仍9d304e58。工件12325738217/2183B，官方与下载SHA0204f52b41f8f8ae08b65b17dbc12f67f9add63e70c6ee96cfe21452a3f24227、CRC均通过；原始日志/报告已存restore-memory/death-probe-fix/native/。ROWS_DELETED PID3784→4021、ROWS_INSERTED PID4065→4226，两次外部终止后新进程整库hash、原epoch、FK、完整oracle均PASS。prepare日志Process crashed为有意终止；verify各OK(1 test)。明确large_performance=NOT_RUN_CONTRACT_ONLY，生成大库探针GENERATED_NOT_RUN；不冒充第二轮大库恢复或性能通过。
+
+统一结论见`docs/ansm-integration/p4/restore-memory/result.md`。9d完整恢复41.633s及整库一致性通过；另一大库准备LMK/恢复NOT_RUN，稳定性NOT_PROVEN。原三写8.041/7.511/7.804s FAIL；唯一主阻塞仍为保留全部语义时不能稳定满足5s写入预算。两个大库和唯一小合同额度已用完：停止相同实验，不新增跑分、不继续叠加恢复实现。需要负责人选择是否单独审查最小操作链前缀复用，或另立约束/检查点架构决策；不能默认批准跳过全量审计或修改预算。
+
+常规data485、API26/29/35库存143+恢复9+迁移16各PASS；原push API26安装器失败及App277 SKIP保留。Room13/业务12/PNBAK1不变，没有可信缓存、Schema、加密、UI、PK、P5/P6变更。PR #57保持Draft/OFF/PRODUCTION_BLOCKED，不自动合并。下列较早IN_PROGRESS仅历史检查点，以本节和统一结果为准。
+
 ## P4 恢复收尾：9d常规回归与三API原始工件已独立核验 — 2026-10-21
 
 PR9d Android39495197495与science39495197475已SUCCESS；API26/29/35分别库存143、BackupReplacement9、ReferenceMigration16，全0FAIL/0SKIP。build工件12297419002/127343213B，官方及下载SHAebc0f3f98c4a8e1566ba383cdcc6cf85287ba767f580b0bf4f77341f764db7af、CRC通过；data485、reminder21、Period5全部PASS，App1839=1562PASS+277已有SKIP/0FAIL，Indexed输入7PASS。各API工件摘要、SHA/CRC、原始HTML和CI快照已存restore-memory/compatibility/。不把skip计PASS，也不冒充当前文档HEAD重跑。

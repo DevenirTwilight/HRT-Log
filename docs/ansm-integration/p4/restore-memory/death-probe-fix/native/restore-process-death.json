@@ -1,0 +1,23 @@
+{
+  "scope": "SYNTHETIC_API26_ACTUAL_PROCESS_KILL",
+  "mode": "restore-process-death-only",
+  "large_performance": "NOT_RUN_CONTRACT_ONLY",
+  "cases": [
+    {
+      "stage": "ROWS_DELETED",
+      "pid": 3784,
+      "expected_sha256": "f3a86cc6f0d10de48efb7d627120cb8064e51cafa2d36508d5c48de80fdf8729",
+      "epoch": "2f63ad24-55be-45fd-8b93-4b3b686a23f6",
+      "new_pid": 4021,
+      "status": "PASS_DATASET_EPOCH_AND_FULL_ORACLE"
+    },
+    {
+      "stage": "ROWS_INSERTED",
+      "pid": 4065,
+      "expected_sha256": "4237f7ca4f4d82b0e125043daa4776d828ad002beaa95c14ec5e0fe0fc2d8875",
+      "epoch": "da2e4761-6794-4280-80ee-c23bae52c053",
+      "new_pid": 4226,
+      "status": "PASS_DATASET_EPOCH_AND_FULL_ORACLE"
+    }
+  ]
+}
