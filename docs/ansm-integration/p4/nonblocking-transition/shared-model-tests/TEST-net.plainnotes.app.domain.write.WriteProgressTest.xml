@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.domain.write.WriteProgressTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-21T08:38:10.511Z" hostname="4f13d57d08c1" time="0.059">
+  <properties/>
+  <testcase name="successCannotOfferASecondSubmission()" classname="net.plainnotes.app.domain.write.WriteProgressTest" time="0.024"/>
+  <testcase name="unresolvedOutcomeNeverPermitsRetryOrPretendsToBeTerminal()" classname="net.plainnotes.app.domain.write.WriteProgressTest" time="0.014"/>
+  <testcase name="failureRequiresTerminalObservationAndRetryIsExplicit()" classname="net.plainnotes.app.domain.write.WriteProgressTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
