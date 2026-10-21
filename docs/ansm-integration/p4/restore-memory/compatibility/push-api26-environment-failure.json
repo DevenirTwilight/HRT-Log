@@ -1,0 +1,14 @@
+{
+  "source": "9d304e58fd92f0171fd6ddd272f79dbe6ece3cb4",
+  "run": 39495191719,
+  "job": 118878333313,
+  "status": "FAILURE_BEFORE_TEST_EXECUTION",
+  "cause_observed": "SDK emulator package installation: Error on ZipFile unknown archive",
+  "tests": "NOT_RUN_IN_THIS_JOB",
+  "do_not_override_with_other_run_success": true,
+  "log_excerpts": [
+    "2026-10-20T20:49:55.2621630Z [command]/usr/bin/sh -c \\sdkmanager --install emulator --channel=0 > /dev/null",
+    "2026-10-20T20:50:11.7036363Z Warning: An error occurred while preparing SDK package Android Emulator: Error on ZipFile unknown archive.",
+    "2026-10-20T20:50:12.1075235Z ##[error]The process '/usr/bin/sh' failed with exit code 1"
+  ]
+}

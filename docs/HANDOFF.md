@@ -1,3 +1,9 @@
+## P4 恢复收尾：9d常规回归与三API原始工件已独立核验 — 2026-10-21
+
+PR9d Android39495197495与science39495197475已SUCCESS；API26/29/35分别库存143、BackupReplacement9、ReferenceMigration16，全0FAIL/0SKIP。build工件12297419002/127343213B，官方及下载SHAebc0f3f98c4a8e1566ba383cdcc6cf85287ba767f580b0bf4f77341f764db7af、CRC通过；data485、reminder21、Period5全部PASS，App1839=1562PASS+277已有SKIP/0FAIL，Indexed输入7PASS。各API工件摘要、SHA/CRC、原始HTML和CI快照已存restore-memory/compatibility/。不把skip计PASS，也不冒充当前文档HEAD重跑。
+
+push39495191719失败项已核：API26 job118878333313安装Android Emulator SDK时Error on ZipFile unknown archive，尚未执行测试；其他4类push Android job均SUCCESS，research-deep push SKIPPED/PR SUCCESS。原失败日志摘录保留，不宣称所有CI实例绿、不重跑该作业。唯一小型恢复进程终止合同39555630970仍IN_PROGRESS，check名已确认restore-process-death-api26-only，不执行大库。下一步只收该结果、官方SHA/CRC/实际两个kill与新PID/epoch/全库hash/FK/oracle证据，随后统一收尾报告；生产9d冻结不动、#57 Draft/OFF不合并。
+
 ## P4 恢复收尾继续：唯一小型进程终止合同已启动 — 2026-10-21
 
 已从远端快进至47f11551，未重复旧观察器研究。最新生产仍冻结9d304e58，主线320171cd，diff9d --core/data/src/main为空；#57 Draft/OFF，auto_merge=null。已确认47源此前没有运行记录，按唯一允许的显式verification=restore-process-death-only启动run39555630970；check应为restore-process-death-api26-only，large_performance=NOT_RUN_CONTRACT_ONLY，仅两个小型真实终止/新进程回滚合同，不执行第三次大库。调度成功，不再派发另一轮。计划已保存death-probe-fix/native-plan.json。
