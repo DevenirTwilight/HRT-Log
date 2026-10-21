@@ -1,3 +1,9 @@
+## P4 实时结果：修正DTO后完整data495/生成Android编译PASS — 2026-10-21
+
+source00d7c18d生产与f220一致，完整data495/0FAIL/0SKIP及含最新生成大库探针Android编译实际PASS。XML/逐suite计数/SHA/日志和生成SHA立即入库full-audit-reuse/resumed-verification/pre-cleanup-fix/；旧编译FAIL仍在initial-compile-failure.log。此组在无分配clear修正之前，不能当下一源码通过。
+
+下一步只针对审查发现的清理OOM边界写RED：清理后lifetime必须null，既有in-flight合同保留；然后最小生产改为clear置null、正常reader新建token，GREEN/完整data/App/reminder/Android再验证。未启动新原生、仍Draft/OFF。
+
 ## P4 工具保护完成：73 PASS，发现清理分配边界待修正 — 2026-10-21
 
 仅新增生成器测试，验证额外冷pure-codec真实提交计时包含clear、真实ticket+record、冻结used6 oracle、独立5s硬断言，以及不是进程/页缓存冷启动；7类实际文本mutant均被拒绝。全套ANSM工具73 PASS（目标脚本16），证据resumed-verification/tools-final.log与cold-commit-contract.json。
