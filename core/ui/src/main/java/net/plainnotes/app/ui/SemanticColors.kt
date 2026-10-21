@@ -31,6 +31,10 @@ import net.plainnotes.app.domain.SlotState
     val skipped: SemanticTone,
     /** Only real errors and irreversible deletes. */
     val danger: SemanticTone,
+    /** The contrast level these tokens were derived for (UI-07: high contrast draws icon outlines and glyphs in onSurface). */
+    val contrast: Contrast = Contrast.STANDARD,
+    /** The scheme's onSurface, for those high-contrast outlines and glyphs. */
+    val onSurface: Color = Color.Unspecified,
 )
 
 private val LightFixed = mapOf(
@@ -71,6 +75,7 @@ fun semanticColors(scheme: ColorScheme, dark: Boolean, contrast: Contrast = Cont
         unconfirmed = fixed.getValue("unconfirmed").raised(),
         skipped = fixed.getValue("skipped").raised(),
         danger = SemanticTone(scheme.errorContainer, scheme.onErrorContainer, scheme.error),
+        contrast = contrast, onSurface = scheme.onSurface,
     )
 }
 
@@ -80,6 +85,8 @@ val LocalSemanticColors = staticCompositionLocalOf { semanticColors(notesColorSc
 /** `NotesTheme.semantic.missed` and so on, inside [NotesTheme]. */
 object NotesTheme {
     val semantic: SemanticColors @Composable @ReadOnlyComposable get() = LocalSemanticColors.current
+    /** UI-07 C: heroNumber, statNumber, sectionTitle, cardTitle. */
+    val typeExtra: TypeExtra @Composable @ReadOnlyComposable get() = currentTypeExtra()
 }
 
 // --- One status mapping for the whole app ---
