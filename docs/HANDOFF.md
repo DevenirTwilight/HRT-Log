@@ -1,3 +1,9 @@
+## 最终正常源码f420fbf1在受保护自动验收中；f13完整原始结果已归档 — 2026-10-21
+
+f13手动技术验收两workflow全SUCCESS，实际源码all7项均绿；正式保护却因[skip ci]的两项自动suite仍queued/statusCheckRollup=null而BLOCKED，未绕过或伪造检查。试Ready核对后恢复Draft；正常文档提交f420fbf1（生产代码完全同f13）已让保护正确识别PENDING。最终标准自动CI：Android PR39656387819/push39656377056，Science PR39656387915/push39656376924；等真实全部通过，期间不再改候选，不取消标准所需检查，不重跑性能大库。
+
+f13官方build artifact12371087920（127541674B）SHA/CRC核验，永久保存必要原HTML摘要，避免巨型截图ZIP进Git。data528 PASS/0SKIP；App1924列项、1605执行PASS、319 SKIPPED，不把skip冒充通过；Period5、actual-owner/navigation2明确PASS；reminder21 PASS。原ZIP仍在官方工件和workspace scratch。已有当前26/29各335零fail/skip、35 data407/0fail/5skip、App282/0fail/10skip以及逐API两个OS-kill合同严格PASS，全部source/digest/log在final-admission，真实手机/TalkBack仍NOT_RUN。
+
 ## 最终f13三个API原生均已核验通过，余Android全量检查 — 2026-10-21
 
 最终39653018592 API26/29各335合同0fail/0skip，API35全data407列项0fail/5个显式host action探针在常规扫描时skip（已单独执行，不是删改既有assert）；三API实际192MiB进程前置探针通过。每API的STOCK_CAPTURED/AFTER_COMMIT实际OS-kill→新PID/精确dump/完整oracle/无重放均PASS，官方原ZIP/SHA/CRC及完整job日志已保存。API35其他App/隐私/恢复/附件隔离等既有host合同整体通过。

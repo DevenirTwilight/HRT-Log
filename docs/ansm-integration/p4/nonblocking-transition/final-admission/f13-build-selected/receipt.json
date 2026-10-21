@@ -1,0 +1,73 @@
+{
+  "source": "f13e7f52",
+  "run": 39653018592,
+  "artifact": 12371087920,
+  "zip_sha256": "cc548b770ca76eafa4c93406bd6cb45e0d45f5fccd83cd34a93619c537e19e8b",
+  "crc": "PASS",
+  "selected": [
+    {
+      "path": "app/build/reports/tests/testFullDebugUnitTest/index.html",
+      "sha256": "b6ae02f35365abc760836069057e5638b1b627d0397c94856f923627dcef4291",
+      "counts": [
+        1924,
+        0,
+        319
+      ]
+    },
+    {
+      "path": "app/build/reports/tests/testFullDebugUnitTest/net.plainnotes.app.PeriodStabilityTest/index.html",
+      "sha256": "088ded013810eb5d3df2e07aec10bfcf1d30adbca9aeff70e86c30e6ef108fb0",
+      "counts": [
+        5,
+        0,
+        0
+      ]
+    },
+    {
+      "path": "app/build/reports/tests/testFullDebugUnitTest/net.plainnotes.app.ProcessMeasuredWriteShellTest/index.html",
+      "sha256": "71efad0708f44a80fdb9871b500a3c667c9087842e9685c0fb430a89e7e6b294",
+      "counts": [
+        2,
+        0,
+        0
+      ]
+    },
+    {
+      "path": "core/data/build/reports/tests/testDebugUnitTest/index.html",
+      "sha256": "8b08a19eeac155f7b4ecda70388fdb286f50760e8673f2efc0bcc9b59b652554",
+      "counts": [
+        528,
+        0,
+        0
+      ]
+    },
+    {
+      "path": "core/data/build/reports/tests/testDebugUnitTest/net.plainnotes.app.data.MeasuredSaveCoordinatorTest/index.html",
+      "sha256": "387cd5cb0e592c5e67bac30a76c60170cd36a2c34016a09cd2e14c0adff422b5",
+      "counts": [
+        14,
+        0,
+        0
+      ]
+    },
+    {
+      "path": "core/reminder/build/reports/tests/testDebugUnitTest/index.html",
+      "sha256": "6458077dd52a1a9aae967d9768e679ea6ed4f3d8bfd8d567c5d6e064dfd61a2c",
+      "counts": [
+        21,
+        0,
+        0
+      ]
+    },
+    {
+      "path": "pk-engine/build/reports/tests/test/index.html",
+      "sha256": "bfb45e6042b8a3bf06c98477c0da057c8c0a172d48c769c469b87ad10a41bb80",
+      "counts": [
+        40,
+        0,
+        0
+      ]
+    }
+  ],
+  "retention": "Only selected original summaries; full127MB official ZIP retained outside Git and official artifact. No giant screenshot dump."
+}

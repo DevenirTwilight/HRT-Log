@@ -1,7 +1,7 @@
 {
-  "source": "f13e7f521862739e23b9928bba2a82e08eb42fe9",
+  "source": "f420fbf1c4fec4b989f2694fd85e0b6b59dbbfc2",
   "mainline": "4ec11437acb257ecc0e9c92ed59907d954cbacae",
-  "status": "ADMISSION_PENDING",
+  "status": "PROTECTED_AUTOMATIC_CI_PENDING",
   "entry": "OFF",
   "policy": "NONBLOCKING_WRITES_LATENCY_OBSERVATIONAL",
   "tool_tests": 219,
@@ -22,5 +22,62 @@
   },
   "memory_policy": "Recovery safety remains mandatory; no changes to192MiB/512MiB frozen performance limits or crypto",
   "full_performance": "NOT_RERUN",
-  "release": "NOT_AUTHORIZED"
+  "release": "NOT_AUTHORIZED",
+  "code_identical_to_technical_candidate": "f13e7f521862739e23b9928bba2a82e08eb42fe9 except verification docs",
+  "technical_candidate_manual_checks": "ALL_PASS",
+  "normal_ci": {
+    "android_pr": 39656387819,
+    "android_push": 39656377056,
+    "science_pr": 39656387915,
+    "science_push": 39656376924
+  },
+  "manual_f13_units": {
+    "data": {
+      "tests": 528,
+      "failures": 0,
+      "skips": 0
+    },
+    "app": {
+      "listed": 1924,
+      "failures": 0,
+      "skips": 319,
+      "executed": 1605
+    },
+    "reminder": {
+      "tests": 21,
+      "failures": 0,
+      "skips": 0
+    }
+  },
+  "actual_heap_preflight": {
+    "api26": "PASS192MiB",
+    "api29": "PASS192MiB",
+    "api35": "PASS192MiB"
+  },
+  "native_contracts": {
+    "api26": [
+      335,
+      0,
+      0
+    ],
+    "api29": [
+      335,
+      0,
+      0
+    ],
+    "api35_data": [
+      407,
+      0,
+      5
+    ],
+    "api35_app": [
+      282,
+      0,
+      10
+    ]
+  },
+  "scope_of_skip_counts": "listed exactly; action-driven/manual probes are not claimed as ordinarily executed",
+  "ordinary_write": "LEGACY5S_FAIL_RETAINED_OBSERVATIONAL",
+  "formal_entry": "OFF",
+  "merge": "NOT_PERFORMED"
 }
