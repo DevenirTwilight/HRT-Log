@@ -1,6 +1,14 @@
+## 【最新方向冻结】停止性能攻关，非阻塞产品方案待批准 — 2026-10-21
+
+负责人最新指令覆盖下方所有“下一步完整回归/冻结新候选/启动原生”计划：**不再执行这些计划**。不新增缓存优化/方案C/大库跑分，不为获得绿色续跑。#57 Draft/OFF、autoMerge=null，不合并/发布。详细最小后端评估、三状态/UUID/取消/进程死亡核对及测试政策提案见`docs/ansm-integration/p4/nonblocking-transition/proposal.md`，冻结清单freeze.json；REQUIREMENTS126已记录。方向停止已生效，5秒硬门改性能指标尚待明确批准，原断言/失败/六CI均保留。
+
+当前主树生产仍55fcf2d5；data495/Android编译/reminder21/App1562 PASS+277既有SKIP/Period5 PASS均已保存，属该源，不等于当前新增资源退出RED合同整体通过。旧恢复41.633s仅一轮成功，另一准备LMK/恢复NOT_RUN，稳定性未证明，安全阻塞不因非阻塞UI移除。新候选原生0次，不启动。主树无运行构建；此前生成probe的精确SHA/复现命令已保存，可清理自有衍生文件。
+
+隔离树/workspace/HRT-Log-p4-resource-check的resource_failure_cleanup已有两目标GREEN在途（session54049）。已通知停止任何新增实现/预热补测/Gradle/原生，只收在途结果并保存当前WIP；将以可复现patch+原始日志保存，不把未全面验收的修正推广成新生产候选。旧工作树/workspace/HRT-Log-p4未提交实验仍保留，不覆盖。新方向后台协调器、公开DTO与提交结果resolver/UI均NOT_IMPLEMENTED；本轮只提案，不接线、不加队列/WorkManager。下一步仅收在途保存结果、更新PR政策记录，完成本轮交付。
+
 ## P4 资源退出两项有效RED均已实证并推送 — 2026-10-21
 
-隔离树纠正后的RED0c32a87f已正常接入。证据full-audit-reuse/resource-failure/red/corrected/（按实际目录查看）显示两个真实目标均执行并失败：chain模拟OOME后cache=(1项,1130B,token非null)；restore取消ROWS_DELETED后cache=(1项,3634B,token非null)。这些B是保留预算估值，不是RSS/实际LMK证据。原生产两个文件与5e基线相同，错误类型/消息、原数据/epoch/FK/oracle断言均保留；RED停在新清理断言，不谎称后续断言已执行。首轮额外协程identity的harness错误保留在red/initial-coro-identity/。
+隔离树纠正后的RED0c32a87f已正常接入。证据full-audit-reuse/resource-failure/red/显示两个真实目标均执行并失败：chain模拟OOME后cache=(1项,1130B,token非null)；restore取消ROWS_DELETED后cache=(1项,3634B,token非null)。这些B是保留预算估值，不是RSS/实际LMK证据。原生产两个文件与5e基线相同，错误类型/消息、原数据/epoch/FK/oracle断言均保留；RED停在新清理断言，不谎称后续断言已执行。首轮额外协程identity的harness错误保留在red/initial-coro-identity/。
 
 主App已结束、源55fc的495/21/1562PASS+277SKIP/Period5/生成Android编译证据已保存。隔离代理现在只实现chain异常清理/restore finally释放，目标GREEN尚待验证；完成接入后root跑最终data/Android，最终必需CI覆盖新源码。当前无运行主树Gradle、无新原生。Draft/OFF，不合并发布。
 

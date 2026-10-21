@@ -1,3 +1,7 @@
+## 2026-10-21：产品方向冻结，停止后续性能跑分（优先于下方历史计划）
+
+负责人已停止缓存/全审计微优化/增量与方案C攻关；§125未执行原生计划取消。只保存已有及在途结果，后端最小评估与非阻塞验收提案见[p4/nonblocking-transition/proposal.md](p4/nonblocking-transition/proposal.md)。≤5秒硬门改独立指标尚待批准，旧FAIL/LMK/所有安全门不变。无新后台协调器/UI/任务队列实施。恢复LMK继续独立阻塞；#57 Draft/OFF，不合并发布。最新交接见HANDOFF顶部，以下均为历史检查点。
+
 ## P4 真实写入归因完成：本轮原预算PASS，不等于生产架构提速 — 2026-10-20
 
 执行源码87e9df955f8132b58cd111c5188c295a0d4b0726，接手40408b77，主线320171cd。P4保持Draft/OFF，autoMergeRequest为空，不自动合并。只改historyTest观察器/共享合同及证据；生产代码、Room13/业务12、PNBAK1密码学、UI/PK/P5/P6/版本权限签名均不变。原工作树未提交内容保留，新工作树/workspace/HRT-Log-p4-attribution。
