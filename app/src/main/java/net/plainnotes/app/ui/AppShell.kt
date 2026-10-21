@@ -72,6 +72,9 @@ class UiPrefs(context: Context) {
 @Composable fun NotesApp(model: NotesViewModel, appearance: Appearance, onAppearance: (Appearance) -> Unit, backToCalendar: Boolean = true,
     writeProgress:net.plainnotes.app.domain.write.WriteProgressSummary?=null,
     onWriteResultCheck:(()->Unit)?=null,onWriteRetry:(()->Unit)?=null) {
+    val ownedWriteProgress by model.measuredWriteProgress.collectAsStateWithLifecycle()
+    val effectiveWriteProgress=writeProgress ?: ownedWriteProgress
+    val checkWriteResult=onWriteResultCheck ?: {model.checkMeasuredSave();Unit}
     val context = LocalContext.current
     val prefs = remember { UiPrefs(context) }
     var region by remember { mutableStateOf(prefs.region) }
@@ -192,9 +195,8 @@ class UiPrefs(context: Context) {
                         // UI-05 F: "Record a past visit", the same action as the former list button.
                         if (destination == Destination.MEDICAL) MedicalAddAction { model.clearMedicalVisitSave();medicalDialogs.edit=null;medicalDialogs.editing=true }
                     })
-                // The authenticated shell renders one supplied owner observation, never a new write.
-                // Default null keeps P4 admission OFF until its actual backend is approved and bound.
-                writeProgress?.let{WriteStatusArea(it,onWriteResultCheck,onWriteRetry)}
+                // Observe the process owner only inside the authenticated shell. No submission entry is enabled.
+                effectiveWriteProgress?.let{WriteStatusArea(it,checkWriteResult,onWriteRetry)}
                 }
             },
             snackbarHost = { SnackbarHost(snackbar) },

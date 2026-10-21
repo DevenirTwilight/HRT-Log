@@ -51,6 +51,9 @@ class MeasuredSaveCoordinator internal constructor(
     private val lock=Any()
     private val tasks=HashMap<String,WeakReference<ActualSaveTask>>()
     private var active:ActualSaveTask?=null
+    private val mutableLatest=MutableStateFlow<ActualSaveTask?>(null)
+    /** One process observation, including its terminal result. Never saved to disk or a Bundle. */
+    val latestTask:StateFlow<ActualSaveTask?> = mutableLatest.asStateFlow()
 
     suspend fun prepare(scope:ReferenceScope,medication:Long,operationUuid:String,draft:MeasuredActualUseDraft,created:Instant):PreparedActualSave =
         PreparedActualSave(identity,repo.prepareMeasuredActualUse(scope,medication,operationUuid,draft,created))
@@ -89,6 +92,7 @@ class MeasuredSaveCoordinator internal constructor(
             // Completion precedes any independent resolver transaction, including lost delivery.
             if(needsReconcile)reconcile(task)
         }
+        mutableLatest.value=task
         writer.start();task
     }
     private fun publish(task:ActualSaveTask,phase:WritePhase) {

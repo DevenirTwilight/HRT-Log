@@ -1,3 +1,9 @@
+## 真实状态源与受限只读刷新已编码，测试待验 — 2026-10-21
+
+Coordinator.latestTask提供单一进程状态源（不入磁盘/Bundle）；NotesViewModel注入同singleton，NotesApp认证壳观察真实状态，人工核对按钮仅调用原只读reconcile。没有新增正式提交入口，P4 OFF。页面销毁不拥有writer。Repository增加NotesReadSnapshot/CalculationReadInputs受限typed读取；原维护式refresh保留，busy时走无迁移/seed/reconcile的只读快照；同一calendarProjection/timeline规则复用。计算模型/参数/边界不改，仅busy时读取相同事实输入。
+
+新增共享合同确认真实pending期间typed读不改RawData.dump、不补默认项、页面观察取消后同一任务仍可见。原13合同升为JVM/native共用，native强制SQLCipher cipher_version；当前修改尚未做最终编译/回归，不能借旧527宣称通过。一次早期core编译尚在完成，随后已补DTO appointments字段及统一calendarProjection，须最终重新验证。继续补App真实运行合同，进度先保存。
+
 ## 负责人要求持续到可合并：开始真实运行接线与原生合同 — 2026-10-21
 
 接手9d1052ae，无远端更新。§128记录新指令：不以局部通过停止；保持原预算/历史证据/入口OFF/Draft/不自动合并。先把原13项owner安全合同提升为共享JVM/Android合同，SQLCipher子类断言cipher_version，加入既有三API必需CI；不删原断言、不减少旧测试、不启动取消的大库计划。当前只是源码已编码，未编译/执行，不能把此前527当新源通过。

@@ -427,12 +427,36 @@ const val BACKFILL_MAX_DAYS=731L
     }
     suspend fun calendar(now:Instant=Instant.now(),zone:ZoneId=ZoneId.systemDefault(),displayFrom:LocalDate=LocalDate.now(zone)):List<TimelineEntry> = transaction { dao ->
         reconcile(dao,now,zone)
+        calendarProjection(dao,now,zone,displayFrom)
+    }
+    private suspend fun calendarProjection(dao:NotesDao,now:Instant,zone:ZoneId,displayFrom:LocalDate):List<TimelineEntry> {
         val from=dao.rules().minOfOrNull{it.missed_tracking_from_utc}?.let(Instant::ofEpochMilli) ?: now
         val window=timeline(dao,now,displayFrom.atStartOfDay(zone).toInstant(),displayFrom.plusDays(14).atStartOfDay(zone).toInstant(),zone)
         val unfinished=timeline(dao,now,minOf(from,now),now.plusMillis(1),zone)
             .filter{it.state in listOf(SlotState.PENDING,SlotState.SOON,SlotState.OVERDUE)}
-        (window+unfinished).distinctBy{it.slot.key}.sortedWith(compareBy<TimelineEntry>{it.slot.at}.thenBy{it.slot.key})
+        return (window+unfinished).distinctBy{it.slot.key}.sortedWith(compareBy<TimelineEntry>{it.slot.at}.thenBy{it.slot.key})
     }
+    /** Explicit read surface for browsing while an accepted save excludes maintenance writes. */
+    suspend fun readNotesSnapshot(now:Instant,zone:ZoneId,displayFrom:LocalDate,today:LocalDate):NotesReadSnapshot =
+        transactionWithSql(mutation=false) { dao,_ ->
+            val meds=dao.medications();val rules=dao.rules()
+            val slots=calendarProjection(dao,now,zone,displayFrom)
+            val upcoming=(timeline(dao,now,now,now.plus(Duration.ofDays(366)),zone)+slots.filter{it.slot.at<now})
+                .distinctBy{it.slot.key}.filter{it.state in listOf(SlotState.PENDING,SlotState.SOON,SlotState.OVERDUE)}
+            NotesReadSnapshot(meds,rules,rules.associate{it.id to dao.times(it.id).sortedBy{t->t.local_time}},
+                meds.mapNotNull{m->dao.profile(m.id)?.let{m.id to it}}.toMap(),dao.appointments(),slots,upcoming,
+                dao.records(),dao.containers(),dao.checkinItems(),dao.scores("0001-01-01",today.toString()),dao.notes("0001-01-01",today.toString()),
+                dao.stageReviews(),dao.symptomChecks("0001-01-01",today.toString()),dao.reviewEffects(),dao.regimens(),dao.regimenLinks(),
+                dao.milestones(),dao.labs(),dao.labContexts(),dao.visitQuestions(),dao.visitPacks(),dao.historyPeriods(),dao.annotations(),
+                dao.trash().filter{it.state==Trash.TRASHED},dao.deletedRecords(),stockForecasts(now,zone),dao.containersWithLedger().toSet(),
+                dao.voidedContainers(),dao.containersWithConsumption().toSet(),dao.referencePreviewEpoch(),dao.labPanels())
+        }
+    suspend fun readCalculationInputs(now:Instant,from:Instant,to:Instant,zone:ZoneId):CalculationReadInputs =
+        transactionWithSql(mutation=false) { dao,_ ->
+            val meds=dao.medications()
+            CalculationReadInputs(meds,meds.mapNotNull{m->dao.profile(m.id)?.let{m.id to it}}.toMap(),dao.records(),dao.labs(),
+                dao.pkSettings()?.current_weight_kg,timeline(dao,now,from,to,zone),dao.rules().associate{it.id to it.config_snapshot})
+        }
     /** Pending delays made before first unlock are reconciled without domain data in DPS. */
     suspend fun reconcileCache(cache:AlarmCache)=transaction { dao ->
         cache.alarms.forEach { alarm ->

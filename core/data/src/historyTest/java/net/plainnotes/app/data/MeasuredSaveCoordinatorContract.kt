@@ -196,6 +196,23 @@ abstract class MeasuredSaveCoordinatorContract {
         }
         release.complete(Unit);task.progress.first{it.status==WriteStatus.SUCCESS};oneCommit(box)
     }
+    @Test fun processObservationAndTypedSnapshotSurvivePageDetachWithoutMaintenanceWrites()=runCase {process->
+        val box=fixture();val entered=CompletableDeferred<Unit>();val release=CompletableDeferred<Unit>()
+        val owner=MeasuredSaveCoordinator(repo,process,Dispatchers.IO,writeOverride={expected->entered.complete(Unit);release.await();write(expected)})
+        assertNull(owner.latestTask.value)
+        val task=owner.start(prepare(owner,box));entered.await();assertSame(task,owner.latestTask.value)
+        val page=launch{owner.latestTask.first{it===task}};page.cancelAndJoin()
+        val before=RawData.dump(raw).toString()
+        val date=at.atZone(java.time.ZoneOffset.UTC).toLocalDate()
+        val read=repo.readNotesSnapshot(at,java.time.ZoneOffset.UTC,date,date)
+        val calculation=repo.readCalculationInputs(at,at.minusSeconds(3600),at.plusSeconds(86400),java.time.ZoneOffset.UTC)
+        assertEquals(1,read.medications.size);assertEquals(1,read.containers.size)
+        assertTrue(read.items.isEmpty());assertTrue(read.records.isEmpty());assertTrue(calculation.records.isEmpty())
+        assertEquals(read.medications,calculation.medications);assertEquals(before,RawData.dump(raw).toString())
+        assertSame(task,owner.latestTask.value);assertEquals(WriteStatus.PENDING,task.progress.value.status)
+        release.complete(Unit);task.progress.first{it.status==WriteStatus.SUCCESS}
+        assertSame(task,owner.latestTask.value);oneCommit(box)
+    }
     private class PausedDispatcher:CoroutineDispatcher() {
         private val queue=ConcurrentLinkedQueue<Runnable>()
         override fun dispatch(context:CoroutineContext,block:Runnable){queue.add(block)}
