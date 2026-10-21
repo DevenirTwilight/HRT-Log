@@ -24,6 +24,7 @@ import net.plainnotes.app.security.UnlockTarget
 import net.plainnotes.app.security.taskIdentity
 import net.plainnotes.app.security.Session
 import net.plainnotes.app.security.ShakeDetector
+import net.plainnotes.app.security.ScreenCapture
 import net.plainnotes.app.ui.LockScreen
 import net.plainnotes.app.ui.NotesApp
 import net.plainnotes.app.ui.NotesTheme
@@ -55,7 +56,9 @@ class LockState : androidx.lifecycle.ViewModel() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+        // §135: secure unless the user allowed screenshots (and never while disguised); set before any content is drawn.
         window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        ScreenCapture.apply(this, UiPrefs(this).allowScreenshots, Disguise.enabled(this))
         // In disguise mode the app is only reachable through the shell code; recents and stale tasks go back to the shell.
         if (!authorized()) return
         sessionGeneration = Session.generation
@@ -95,7 +98,7 @@ class LockState : androidx.lifecycle.ViewModel() {
         // Disguise mode locks as soon as the app leaves the screen; only a system file picker is exempt.
         if (Disguise.enabled(this) && !Session.pickerActive(sessionGeneration) && !isChangingConfigurations) { Session.lock(sessionGeneration);contentVisible=false }
     }
-    override fun onResume() { super.onResume(); if(!initialized || !authorized())return; model.sync(); if (Disguise.enabled(this)) shake.register(getSystemService(SensorManager::class.java)) }
+    override fun onResume() { super.onResume(); ScreenCapture.apply(this, UiPrefs(this).allowScreenshots, Disguise.enabled(this)); if(!initialized || !authorized())return; model.sync(); if (Disguise.enabled(this)) shake.register(getSystemService(SensorManager::class.java)) }
     override fun onPause() { super.onPause(); shake.unregister(getSystemService(SensorManager::class.java)) }
 
     /** An old task cannot redirect a newer PRIVATE/PRIMARY session during task replacement. */

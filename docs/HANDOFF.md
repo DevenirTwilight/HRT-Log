@@ -1,3 +1,17 @@
+## “禁止截屏”开关实施中，build34 暂停等待 — 2026-10-21
+
+负责人在 build34 签名前要求：先把是否允许截屏做成可选开关，再出 APK（REQUIREMENTS §135）。
+
+- **分支**：feature/screenshot-toggle-20261021，基于 1baa6cbe。
+- **实现**：
+  - 设置 → 隐私与安全新增“禁止截屏”，默认开，即保持原 `FLAG_SECURE` 行为（负责人要求从“允许截屏”改为“禁止截屏”）；
+  - 关闭后立即清除当前窗口的 `FLAG_SECURE`，`MainActivity` 每次创建和恢复时按设置重新应用；
+  - 伪装模式下进入真实应用后同样跟随开关（负责人追问后修改）；Android 13+ 在关闭时仍单独隐藏最近任务预览；Android 12 及以下会显示预览，设置中有说明；私人笔记页也跟随开关（负责人追问后修改）；
+  - 设置只存在本机 prefs，不进备份。
+- **测试**：Robolectric `ScreenshotSettingTest`（4 语，12 项 PASS）和 `ScreenCaptureRuleTest`（2 项 PASS）；新增原生 `ScreenshotSettingAndroidTest`（本地仅编译）。
+- **build34 现状**：交付 PR #93（versionCode 34）的自动合并已暂停。本功能合并后，把主线合入 #93，再从新的头部提交构建并签名交付。
+- **已作废**：在 /home/user/wt-rel 用 fa278880 构建的未签名包不再使用。
+
 ## UI-07 Material 3 Expressive 表现层：实现与验证完成，PR 待 CI — 2026-10-21
 
 UI-06 #91 已合并（4ec11437），主线 CI 六项全绿。分支 feature/ui07-expressive-20261021，报告 71，REQUIREMENTS §133。

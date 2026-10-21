@@ -35,6 +35,8 @@ class PrivateNotesActivity:ComponentActivity() {
     override fun onCreate(savedInstanceState:Bundle?) {
         enableEdgeToEdge();super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        // §135: follows "Allow screenshots" like the real app in disguise mode (Android 13+ still hides the recents preview).
+        net.plainnotes.app.security.ScreenCapture.apply(this, net.plainnotes.app.ui.UiPrefs(this).allowScreenshots, disguised = true)
         setTaskDescription(taskIdentity(getString(R.string.private_notes),R.mipmap.ic_shell_notes))
         if(!authorized())return
         contentVisible=true;initialized=true
