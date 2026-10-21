@@ -104,3 +104,19 @@ class ScreenCaptureRuleTest {
         assertFalse(ScreenCapture.previewExposed(allowed = true, disguised = false, sdk = 26))
     }
 }
+
+/** §135: the disguise's private notes screen follows the same setting (owner, 2026-10-21); secure by default. */
+@RunWith(RobolectricTestRunner::class) @Config(sdk = [35])
+class PrivateNotesScreenshotTest {
+    private fun secureWith(allowed: Boolean): Boolean {
+        val app = androidx.test.core.app.ApplicationProvider.getApplicationContext<android.app.Application>()
+        UiPrefs(app).allowScreenshots = allowed
+        val a = org.robolectric.Robolectric.buildActivity(net.plainnotes.app.disguise.privatenotes.PrivateNotesActivity::class.java).create().get()
+        return a.window.attributes.flags and WindowManager.LayoutParams.FLAG_SECURE != 0
+    }
+    @Test fun defaultBlockedAllowedFollows() {
+        assertTrue("default: blocked", secureWith(false))
+        assertFalse("allowed: FLAG_SECURE cleared", secureWith(true))
+        assertTrue("off again: blocked", secureWith(false))
+    }
+}

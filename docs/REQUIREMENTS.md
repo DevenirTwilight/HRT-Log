@@ -1184,7 +1184,7 @@ LAB-03 的同文件增量授权记录 `PD-2026-10-19-LAB03-CATALOG-ADAPTER`：�
   - 解锁进入真实应用后，截屏同样跟随此开关；
   - 已允许截屏时，Android 13 及以上用 `setRecentsScreenshotEnabled(false)` 单独隐藏最近任务预览，伪装不露馅；
   - Android 12 及以下没有单独接口，允许截屏后最近任务也会显示真实画面，开关下方的说明会写明；
-  - 伪装私人笔记页 `PrivateNotesActivity` 仍无条件设置 `FLAG_SECURE`，不受此开关影响。
+  - 伪装私人笔记页 `PrivateNotesActivity` 也跟随此开关（负责人 2026-10-21“私人笔记页也跟随开关吧”），规则与伪装模式下的真实应用相同。
 - **存储**：只存在本机 `prefs`（`allow_screenshots`），不进入备份。
 - **不改**：数据库、备份、加密、应用锁、伪装逻辑、权限、依赖。
 

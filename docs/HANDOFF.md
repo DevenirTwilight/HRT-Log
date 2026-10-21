@@ -6,7 +6,7 @@
 - **实现**：
   - 设置 → 隐私与安全新增“允许截屏”，默认关，即保持原 `FLAG_SECURE` 行为；
   - 打开后立即清除当前窗口的 `FLAG_SECURE`，`MainActivity` 每次创建和恢复时按设置重新应用；
-  - 伪装模式下进入真实应用后同样跟随开关（负责人追问后修改）；Android 13+ 在允许截屏时仍单独隐藏最近任务预览；Android 12 及以下会显示预览，设置中有说明；私人笔记页始终禁止截屏；
+  - 伪装模式下进入真实应用后同样跟随开关（负责人追问后修改）；Android 13+ 在允许截屏时仍单独隐藏最近任务预览；Android 12 及以下会显示预览，设置中有说明；私人笔记页也跟随开关（负责人追问后修改）；
   - 设置只存在本机 prefs，不进备份。
 - **测试**：Robolectric `ScreenshotSettingTest`（4 语，12 项 PASS）和 `ScreenCaptureRuleTest`（2 项 PASS）；新增原生 `ScreenshotSettingAndroidTest`（本地仅编译）。
 - **build34 现状**：交付 PR #93（versionCode 34）的自动合并已暂停。本功能合并后，把主线合入 #93，再从新的头部提交构建并签名交付。
