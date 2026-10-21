@@ -5,9 +5,10 @@
     "core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt": {
       "base_sha256": "6ade3dae736c72a0f851bd3c4592f9f55209b6657052b6fb3fd1b5f48a09fc2b",
       "frozen_file": "core/data/src/historyTest/java/net/plainnotes/app/data/FrozenFullAuditStore.kt",
-      "frozen_sha256": "1b9d6447088f641ddd9123c6a3c7a6d01b5f4d316b335c30cd86d71a0e18a056",
+      "frozen_sha256": "1ce19e71ab0b55781d9155067c558910705325baeb9b99c16233fb4fc32e3162",
       "initial_frozen_sha256": "9a3d570fa0362e23ce42c21d787cd905b11e0c12d54f30b33be6a4b483142e90",
-      "binding_only": "Replace MeasuredOperationChain with independently frozen original FrozenFullAuditChain; no audit logic changes"
+      "binding_only": "Independent FrozenFullAuditChain reader; original immutable Node DTO is shared (nested aliases are not exported); no audit rule changes",
+      "prior_binding_sha256": "1b9d6447088f641ddd9123c6a3c7a6d01b5f4d316b335c30cd86d71a0e18a056"
     },
     "core/data/src/main/java/net/plainnotes/app/data/BackupValidation.kt": {
       "base_sha256": "5a65ae13564faf8aa6120702cf141f7f4324a604b6effc5426c0c63719e7d9f1",

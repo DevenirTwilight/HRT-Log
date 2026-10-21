@@ -486,7 +486,7 @@ internal object FrozenFullAuditStore {
     }
     private data class PrefixIndex(val usedAtHead:Map<Long,Long>,val headBeforeSequence:java.util.TreeMap<Int,Long>)
     /** Same bounded reducer for either checked projection rows or the exact original SQL fallback. */
-    private fun buildPrefixIndex(entries:List<ProjectionEntry>,scale:StockQuantum,chain:Map<String,FrozenFullAuditChain.Node>):PrefixIndex {
+    private fun buildPrefixIndex(entries:List<ProjectionEntry>,scale:StockQuantum,chain:Map<String,MeasuredOperationChain.Node>):PrefixIndex {
         val atHead=HashMap<Long,Long>().apply{put(0,0)}
         val beforeSequence=java.util.TreeMap<Int,Long>()
         var used=0L

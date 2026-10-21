@@ -1,3 +1,7 @@
+## P4 接手实时检查点：最新完整编译FAIL已保存，冻结DTO引用已修正待验 — 2026-10-21
+
+f220b1f2源码恢复验证于compileDebugUnitTestKotlin失败：FrozenFullAuditStore的一个参数仍写FrozenFullAuditChain.Node，但冻结链只私有typealias到原不可变DTO；Node不是其嵌套类。日志已保留full-audit-reuse/resumed-verification/initial-compile-failure.log。仅把该参数恢复MeasuredOperationChain.Node引用，独立冻结reader/全部规则未变，frozen-oracle.json保留前binding SHA与新SHA。修正尚未验证，不能把旧494或聚焦151当最新完整通过。工具72 PASS仍有效；尚无新大库。马上重跑最新data/生成Android编译，结束立即保存。#57 Draft/OFF，不合并。
+
 ## P4 接手实时检查点：复核通过，工具72 PASS，最新完整回归执行中 — 2026-10-21
 
 已正常快进至远端f220b1f2，未覆盖其他模型成果。旧恢复专项结果/三API证据/唯一小型kill合同已于99e536fe完成，不重新派发旧运行。此环境没有上一模型36943/31631进程和scratch结果，不能凭旧IN_PROGRESS写PASS；重新运行最新源码data全回归和生成Android编译（日志/workspace/scratch/p4-reuse-resumed-data-android.log，session3813）。构建前恢复已存在的离线Robolectric jar，仅宿主构建配置，不改原生预算。
