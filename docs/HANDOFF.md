@@ -1,3 +1,9 @@
+## P4 清理GREEN与最终data495/生成Android编译PASS已保存 — 2026-10-21
+
+源55fcf2d5的完整data495/0FAIL/0SKIP已实际PASS，旧clear反例对应pureChainContentMemoNeverCachesDatabaseValidity同一断言GREEN；生成大库Android测试编译PASS。XML、全suite计数/SHA及截至reminder构建的日志已立即入库resumed-verification/clear-green-data/。这组覆盖最新nullable token源码，与之前仅旧token生产通过的组明确区分；原RED/编译FAIL均保留。
+
+同一Gradle继续App/reminder（session55570；日志/workspace/scratch/p4-reuse-latest-final.log），尚未结束，不预填其结果。工具73 PASS、旧完整oracle独立性复核均保存；待这一组完毕进行最终源码/测试原型隔离核验，再冻结预定有界新候选原生。#57 Draft/OFF，不合并发布。
+
 ## P4 清理边界RED已实证，无分配修正已入库待GREEN — 2026-10-21
 
 新增clear后lifetime必须null的合同在旧生产f220上实际运行：1项FAIL，断言Cleanup must invalidate ownership without allocating a replacement，日志/XML已入库resumed-verification/clear-red/，不是编译失败。原in-flight query清空后不能回填断言保留。
