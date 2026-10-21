@@ -1,3 +1,9 @@
+## 事务空间绑定最小修正已编码，最终527项回归待验 — 2026-10-21
+
+Repository每实例ThreadLocal经asContextElement绑定捕获target，覆盖generic/SQL/measured根事务；space/db()/sql()在同实例事务内不再读取后来全局选择，协程上下文退出恢复，不缓存数据有效性。固定pinned仓库继续优先自己的空间，不将owner重定向。原space-red测试逐字保留。
+
+最终全core:data（预期527）、Android测试源码/App源码编译、Period5/reminder21重新执行中；旧526结果仅属984219a3。没有UI绑定/native/性能测试或格式变化，仍Draft/OFF；最终源通过后再更新集中收据与TAKEOVER。
+
 ## 旧SQL助手切换空间绕门1项真实RED已入库 — 2026-10-21
 
 生产984219a3上新合同实跑1 FAIL：PRIMARY owner占门时允许DECOY事务；事务中全局select PRIMARY，私有sql()确实把SYNTHETIC day_note写入PRIMARY，断言“Legacy helper escaped its reserved transaction target”失败。原XML/log/SHA存runtime-owner/space-red/。前526/5/21通过不覆盖这个新边界，正式入口仍OFF。

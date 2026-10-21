@@ -4,6 +4,7 @@ import androidx.room.withTransaction
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.asContextElement
 import net.plainnotes.app.domain.*
 import org.json.JSONObject
 import java.time.*
@@ -18,13 +19,16 @@ const val BACKFILL_MAX_DAYS=731L
     @Inject constructor(access: DatabaseAccess) : this(access, null)
     /** A repository that always works on [space], whatever the UI has selected (used by background reminders). */
     fun pinnedTo(space: Space) = NotesRepository(access, space)
-    val space get() = pinned ?: access.current
+    // Coroutine-local transaction routing, not a database-validity cache. Legacy sql()/db()
+    // helpers must stay on the same target as their DAO when global UI selection changes.
+    private val transactionSpace=ThreadLocal<Space?>()
+    val space get() = pinned ?: transactionSpace.get() ?: access.current
     fun select(space: Space) = access.select(space)
     private fun db() = access.get(space)
     internal val measuredSaveGate get()=access.measuredSaveGate
     suspend fun <T> transaction(block: suspend (NotesDao) -> T): T {
         val target=space
-        return measuredSaveGate.mutation(target) {withContext(Dispatchers.IO) {
+        return measuredSaveGate.mutation(target) {withContext(Dispatchers.IO+transactionSpace.asContextElement(target)) {
             val database=access.get(target);database.withTransaction {block(database.dao())}
         }}
     }
@@ -32,7 +36,7 @@ const val BACKFILL_MAX_DAYS=731L
     private suspend fun <T> transactionWithSql(required: Space? = null, mutation:Boolean=true, block: suspend (NotesDao, androidx.sqlite.db.SupportSQLiteDatabase) -> T): T {
         val target=space
         if(required!=null && target!=required) throw ReferenceFailure(ReferenceError.WRONG_SPACE)
-        val action:suspend()->T={withContext(Dispatchers.IO) {
+        val action:suspend()->T={withContext(Dispatchers.IO+transactionSpace.asContextElement(target)) {
             val database=access.get(target)
             database.withTransaction {block(database.dao(),database.openHelper.writableDatabase)}
         }}
@@ -88,14 +92,14 @@ const val BACKFILL_MAX_DAYS=731L
         val target=space
         if(target!=Space.PRIMARY)throw ReferenceFailure(ReferenceError.WRONG_SPACE)
         val frozenDraft=draft.copy(uses=draft.uses.toList())
-        return measuredSaveGate.mutation(target) {withContext(Dispatchers.IO) {val database=access.get(target);database.withTransaction {
+        return measuredSaveGate.mutation(target) {withContext(Dispatchers.IO+transactionSpace.asContextElement(target)) {val database=access.get(target);database.withTransaction {
             MeasuredUseIntegration.create(database,ticket,operationUuid,frozenDraft,created,checkpoint)
         }}}
     }
     private suspend fun <T> measuredTransaction(mutation:Boolean=true,block:suspend(NotesDatabase)->T):T {
         val target=space
         if(target!=Space.PRIMARY)throw ReferenceFailure(ReferenceError.WRONG_SPACE)
-        val action:suspend()->T={withContext(Dispatchers.IO){val database=access.get(target);database.withTransaction{block(database)}}}
+        val action:suspend()->T={withContext(Dispatchers.IO+transactionSpace.asContextElement(target)){val database=access.get(target);database.withTransaction{block(database)}}}
         return if(mutation)measuredSaveGate.mutation(target,action) else action()
     }
     /** Internal until the runtime owner/conflict gateway is reviewed. No UI entry is enabled. */
