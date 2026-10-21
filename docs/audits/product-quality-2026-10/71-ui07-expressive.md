@@ -232,6 +232,7 @@ val LocalReduceMotion; object ReduceMotion { fromSystem(context); override }; fu
 | `CalendarSemanticsTest`、`CalendarSelectionRestoreTest`、`CalendarDayMarkTest`、`Ui06AccessibilityTest` | 默认月视图 | `initialFull = true` | 按任务书，先显式切换到完整日历再断言 |
 | `CalendarSemanticsTest` 选择明天后 | 直接断言“明天” | 先滚动到“明天” | 今天卡更高（64sp），日列表可能在首屏以下 |
 | `CalendarCoreFlowTest` | 等月历日格出现 | 先点“完整日历” | 用户的实际路径；7/35/42 格、宽度内、主操作可达等断言不变 |
+| `CalendarIntakeAndroidTest`（原生设备测试，CI 首轮因此 FAIL） | 等待 7 个可选日格后直接在月历上找明天和“下一页” | 先点“完整日历”并滚动到月历和“下一页”；日格匹配排除最近 7 天胶囊 | 最近 7 天的 7 个胶囊也满足原等待条件，月历在完整日历里；保存一次 / 取消 / 返回都不重复写入的断言不变 |
 | `Ui06AccessibilityTest` 卡片朗读顺序 | 行内标签顺序 | 过滤掉装饰性的 `unconfirmed-icon` | 图标没有文字、不被朗读（`Ui07StatusIconTest` 已断言）；标题 → 药名 → 我服过了 → 没有服 的顺序不变 |
 
 ## 8. 截图与动效
