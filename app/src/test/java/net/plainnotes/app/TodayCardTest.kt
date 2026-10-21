@@ -87,7 +87,7 @@ class TodayCardTest {
 
     @Test fun overdueSaysSoInWords() {
         show(listOf(entry(1, 8, SlotState.OVERDUE)))
-        inCard(hasTestTag("today-next-status")).assertTextEquals(s(R.string.today_overdue))
+        inCard(hasTestTag("today-next-status")).assertTextEquals(s(R.string.status_past_time))  // UI-06: "Past time · you can still log it"
     }
 
     @Test fun severalMedicationsAtTheSameTimeEachHaveAnAction() {

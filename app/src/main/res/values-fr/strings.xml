@@ -519,7 +519,7 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="forecast_no_plan">Reste %1$s · aucun planning pour prévoir</string>
 <string name="forecast_untracked">Stock non suivi</string>
 <string name="legend_missed">Oublié</string>
-<string name="legend_partial">Oublis partiels</string>
+<string name="legend_partial">Partiellement fait</string>
 <string name="legend_planned">Prévu</string>
 <string name="legend_runout">Fin du stock</string>
 <string name="legend_taken">Tout pris</string>
@@ -1300,4 +1300,15 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="write_status_hide">Masquer le statut</string>
 <string name="write_status_retry">Réessayer la même opération</string>
 <string name="write_status_show">Afficher le statut</string>
+<!-- UI-06 semantic status -->
+<string name="status_past_time">Heure passée · vous pouvez encore la noter</string>
+<string name="confirm_title_yesterday">Rien de noté pour hier à %1$s</string>
+<string name="confirm_title_today">Rien de noté pour aujourd\'hui à %1$s</string>
+<string name="confirm_body">Si vous vous en souvenez, ajoutez-le simplement.</string>
+<string name="confirm_took">Je l\'ai pris</string>
+<string name="confirm_not_taken">Je ne l\'ai pas pris</string>
+<string name="confirm_more">%1$d de plus</string>
+<string name="status_you_skipped">Vous avez sauté</string>
+<string name="confirm_title_date">Rien de noté pour %1$s</string>
+<string name="confirm_body_with">%1$s. Si vous vous en souvenez, ajoutez-le simplement.</string>
 </resources>

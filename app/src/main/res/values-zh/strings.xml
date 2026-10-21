@@ -519,7 +519,7 @@
 <string name="forecast_no_plan">剩余 %1$s · 没有服药计划，无法预测</string>
 <string name="forecast_untracked">还没有记录库存</string>
 <string name="legend_missed">已漏服</string>
-<string name="legend_partial">部分漏服</string>
+<string name="legend_partial">部分完成</string>
 <string name="legend_planned">计划服药</string>
 <string name="legend_runout">库存用完</string>
 <string name="legend_taken">已服</string>
@@ -1300,4 +1300,15 @@
 <string name="write_status_hide">收起状态</string>
 <string name="write_status_retry">重试同一操作</string>
 <string name="write_status_show">展开保存状态</string>
+<!-- UI-06 semantic status -->
+<string name="status_past_time">已过时间 · 可以补记</string>
+<string name="confirm_title_yesterday">昨天 %1$s 还没有记录</string>
+<string name="confirm_title_today">今天 %1$s 还没有记录</string>
+<string name="confirm_body">记得的话补上就好。</string>
+<string name="confirm_took">我服过了</string>
+<string name="confirm_not_taken">没有服</string>
+<string name="confirm_more">还有 %1$d 条</string>
+<string name="status_you_skipped">你跳过了</string>
+<string name="confirm_title_date">%1$s 还没有记录</string>
+<string name="confirm_body_with">%1$s。记得的话补上就好。</string>
 </resources>

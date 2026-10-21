@@ -139,7 +139,7 @@ val CHECKABLE_STATES = setOf("IN_USE", "EMPTY")
             // Same sentence and warning as the calendar's stock card, from the same shared forecast.
             val (detail, warn) = stockForecastText(s.forecast, m, today, zone)
             // On the tertiary low-stock card the label above already warns; keep the sentence at full contrast there.
-            @Composable fun Sentence() = Text(detail, style = MaterialTheme.typography.bodySmall, color = if (s.low) c.onTertiaryContainer else if (warn) c.error else c.onSurfaceVariant,
+            @Composable fun Sentence() = Text(detail, style = MaterialTheme.typography.bodySmall, color = if (s.low) c.onTertiaryContainer else if (warn) NotesTheme.semantic.attention.accent else c.onSurfaceVariant,
                 modifier = Modifier.testTag("stock-forecast-${m.id}"))
             val o = s.open
             if (o == null) Sentence()
@@ -151,8 +151,9 @@ val CHECKABLE_STATES = setOf("IN_USE", "EMPTY")
                 Text(stringResource(R.string.stock_current, formatDose(left, m.unit), formatDose(o.capacity, m.unit)), style = MaterialTheme.typography.bodySmall)
                 o.opened_on?.let { Text(stringResource(R.string.stock_opened, formatShortDate(LocalDate.parse(it))), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant) }
                 s.expiresOn?.let { e -> Text(stringResource(if (e.isBefore(today)) R.string.stock_expired else R.string.stock_expires, formatShortDate(e)), style = MaterialTheme.typography.bodySmall,
-                    color = if (s.expiringSoon(today)) c.error else c.onSurfaceVariant) }
-            } else Text(stringResource(R.string.stock_none_open), style = MaterialTheme.typography.bodySmall, color = c.error)
+                    // UI-06: expiring soon and "no opened package" need a look but are not errors: attention, not red.
+                    color = if (s.expiringSoon(today)) NotesTheme.semantic.attention.accent else c.onSurfaceVariant, modifier = Modifier.testTag("stock-expiry-${m.id}")) }
+            } else Text(stringResource(R.string.stock_none_open), style = MaterialTheme.typography.bodySmall, color = NotesTheme.semantic.attention.accent, modifier = Modifier.testTag("stock-none-open-${m.id}"))
             if (s.sealedCount > 0) Text(stringResource(R.string.stock_sealed, s.sealedCount), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
         }
         if (unallocated > 0) Text(stringResource(R.string.stock_unallocated, formatDose(unallocated, m.unit)), style = MaterialTheme.typography.bodySmall, color = c.tertiary)

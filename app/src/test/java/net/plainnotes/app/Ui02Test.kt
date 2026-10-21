@@ -89,17 +89,18 @@ class Ui02ContrastTest {
         var mode by mutableStateOf(ThemeMode.LIGHT); var contrast by mutableStateOf(Contrast.STANDARD)
         val seen = mutableMapOf<String, List<Pair<String, Double>>>()
         ui.setContent { NotesTheme(mode, contrast = contrast) {
-            val c = MaterialTheme.colorScheme
+            val c = MaterialTheme.colorScheme; val sem = NotesTheme.semantic
+            // UI-06: today overdue now attention, missed badge/mark now the missed token (were errorContainer/error).
             // (name, foreground, background, minimum): text 4.5; large/bold text and graphical marks 3.0.
             val pairs = listOf(
                 Triple("today text", c.onPrimary to c.primary, 4.5), Triple("today button", c.primary to c.onPrimary, 4.5),
-                Triple("today overdue", c.onErrorContainer to c.errorContainer, 4.5),
+                Triple("today overdue", sem.attention.onContainer to sem.attention.container, 4.5),
                 Triple("low-stock text", c.onTertiaryContainer to c.tertiaryContainer, 4.5), Triple("low-stock add", c.onTertiary to c.tertiary, 4.5),
                 Triple("low-stock view", c.onTertiaryContainer to c.tertiaryContainer, 4.5),
                 Triple("badge default", c.onPrimaryContainer to c.primaryContainer, 3.0), Triple("badge lab", c.onTertiaryContainer to c.tertiaryContainer, 3.0),
-                Triple("badge visit", c.onSecondaryContainer to c.secondaryContainer, 3.0), Triple("badge missed", c.onErrorContainer to c.errorContainer, 3.0),
+                Triple("badge visit", c.onSecondaryContainer to c.secondaryContainer, 3.0), Triple("badge missed", sem.missed.onContainer to sem.missed.container, 3.0),
                 Triple("mark taken", c.onPrimaryContainer to c.primaryContainer, 3.0), Triple("mark partial", c.onTertiaryContainer to c.tertiaryContainer, 3.0),
-                Triple("mark missed", c.error to c.errorContainer, 3.0), Triple("today date", c.onPrimary to c.primary, 3.0),
+                Triple("mark missed", sem.missed.accent to sem.missed.container, 3.0), Triple("today date", c.onPrimary to c.primary, 3.0),
                 Triple("settings attention", c.tertiary to c.surfaceContainerLow, 4.5))
             seen["$mode/$contrast"] = pairs.map { (n, fb, min) -> n to ratio(fb.first, fb.second).also { r -> if (r < min) failures += "$mode/$contrast $n ${"%.2f".format(r)} < $min" } }
             Text("x")

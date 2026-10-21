@@ -12,9 +12,13 @@ object Spacing {
     val xl = 24.dp
 }
 
-/** UI-02 A3: semantic corner radii (large cards, nested lists, small badges). */
+/**
+ * UI-02 A3 / UI-06 D: semantic corner radii. [tag] (10dp) is a rounded rectangle for filter tags and small marks, not a pill;
+ * [pill] is fully rounded, for pill buttons and status labels.
+ */
 object Corners {
     val card = RoundedCornerShape(24.dp)
     val list = RoundedCornerShape(16.dp)
-    val badge = RoundedCornerShape(10.dp)
+    val tag = RoundedCornerShape(10.dp)
+    val pill = RoundedCornerShape(percent = 50)
 }

@@ -1,3 +1,7 @@
+## 同步已合并主线4ec11437，保留UI06和P4状态能力 — 2026-10-21
+
+正常合并主线，仅四语资源/需求/交接产生内容冲突，双方独立新增内容全部保留；XML解析及重复key检查通过。AppShell/TodayCard/StockScreen等自动合并须最终App回归，不声称已验收；无数据库/备份版本冲突。主线UI06§115编号按主线来源理解，与此前P4历史§115不同，不改原任务书。AFTER_COMMIT诊断run39650341133仍在途，不另开大库。
+
 ## 非阻塞延迟指标已落实，失败安全场景单次诊断在途 — 2026-10-21
 
 依据§131，普通写入原5秒判定保留为legacy FAIL/PASS观测，不再进入当前硬门列表；cold-codec仍计真实耗时、独立完整oracle，安全/大小/资源/恢复硬断言保留。对应工具22项PASS（包含报告角色和安全门负向mutant），未运行大库。额外性能workflow改为显式dispatch，避免PR后续推送自动重复大库筛绿；六项必需CI没有删改。
@@ -726,6 +730,26 @@ P4当前基线95108693：451 data/43 App/44工具本地PASS，API26/29修正后�
 
 #88/source dfa7369b 已在全部必需CI和实际26/29/35后受保护合并dd871cc6；API29首次附件POC65/70后45分钟取消，单次完整同源job重放通过，原记录保留，不把挂起归因已证明。现普通同步已审dd主线，未复制未验收分支。build33已私密提供，源码219bbf32与原主线42六CI全PASS，正式收据#87新21a10430正在CI；以下“准备中/原生待验”为当时历史记录，不重做签名或交付。P5/P6、正式附件仍未启用，无新APK。
 
+## UI-06 语义色与状态体系：实现与验证完成，PR 待 CI — 2026-10-21
+
+分支 feature/ui06-semantic-status-20261021（基于 320171cd），报告 70，REQUIREMENTS §115。
+
+**已完成：**
+- A 令牌：7 个令牌 × 三档对比度；动态色只影响 action / success / danger。
+- B 状态表：日历、今天卡、服药记录、时间线、库存共用 core/ui `StatusStyles`；另有 7 处“需注意”的 error 改为 attention。
+- C 首页“还没有记录”卡：复用 history_backfill 对话框和 confirmMissed。
+- D 形状：`Corners.tag` / `Corners.pill`。
+
+**本地验证：**
+- 测试：core:ui 187、domain 135、data 263、reminder 20 全部 PASS；app 1873 项（319 个既有跳过），首轮 CalendarCoreFlowTest 4 项因确认卡把月历挤出首屏而失败，已改为先滚动，10/10 PASS。
+- lint 0 错误；androidTest 编译 PASS。
+- 截图：前后各 256 张，加高对比度、hi-res、灰度和并排对比，在 docs/ui-audit/2026-10-21-ui06/。
+
+**待 owner 确认：** 症状页紧急来源引用保持红色（安全警示）。
+
+**下一步：** 开 PR 并开启自动合并（§106）；CI 全绿后合并，复验主线 CI。
+
+**NOT_RUN：** 真机 / TalkBack（清单第 12 节）。无 APK、签名或 versionCode 变更。
 
 ## LAB-03 与 LAB-UI-03 正常主线集成验收中 — 2026-10-20
 
