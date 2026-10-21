@@ -104,6 +104,18 @@ const val BACKFILL_MAX_DAYS=731L
         val frozen=draft.copy(uses=draft.uses.toList())
         return measuredTransaction(mutation=false){MeasuredUseIntegration.prepareCreate(it,scope,medication,operationUuid,frozen,created)}
     }
+    /** Owner-only root submission. Existing UUIDs need the same full frozen-input observation;
+     * the legacy create replay shortcut is not a complete original-request confirmation. */
+    internal suspend fun submitPreparedMeasuredActualUse(expected:PreparedMeasuredCreate):MeasuredConsumptionReceipt =
+        measuredTransaction { database ->
+            val raw=database.openHelper.writableDatabase
+            if(MeasuredConsumptionStore.existingConsumption(raw,expected.operationUuid)!=null) {
+                when(val observation=MeasuredUseIntegration.observeCreate(raw,expected)) {
+                    is MeasuredCreateObservation.Committed->observation.receipt
+                    MeasuredCreateObservation.NotObserved->throw ReferenceFailure(ReferenceError.OPERATION_CONFLICT)
+                }
+            } else MeasuredUseIntegration.create(database,expected.ticket,expected.operationUuid,expected.draft,expected.created).receipt
+        }
     internal suspend fun observeMeasuredActualUse(expected:PreparedMeasuredCreate):MeasuredCreateObservation =
         transactionWithSql(Space.PRIMARY, mutation=false){_,raw->MeasuredUseIntegration.observeCreate(raw,expected)}
     private suspend fun currentMeasuredSlot(dao:NotesDao,slot:Slot,now:Instant):Slot {

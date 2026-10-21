@@ -73,9 +73,9 @@ class MeasuredSaveCoordinator internal constructor(
             }
             try {
                 val expected=prepared.value
-                val result=writeOverride?.invoke(expected) ?: repo.recordMeasuredUse(expected.ticket,expected.operationUuid,expected.draft,expected.created)
-                require(result.receipt.operationUuid==expected.operationUuid)
-                synchronized(lock){success(task,result.receipt)}
+                val receipt=writeOverride?.invoke(expected)?.receipt ?: repo.submitPreparedMeasuredActualUse(expected)
+                require(receipt.operationUuid==expected.operationUuid)
+                synchronized(lock){success(task,receipt)}
             }catch(e:CancellationException){synchronized(lock){uncertain(task)};throw e}
             catch(_:Exception){synchronized(lock){uncertain(task)}}
         }

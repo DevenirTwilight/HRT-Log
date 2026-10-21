@@ -1,3 +1,9 @@
+## 重放反例最小修正已编码，最终全回归运行中 — 2026-10-21
+
+新增NotesRepository.submitPreparedMeasuredActualUse，仅owner调用：同UUID已有操作则在独立根事务内复用observeCreate全审计/原冻结输入确认并返回历史回执，不调用旧create重放；没有操作则原create（含最终全量审计）不变。MeasuredSaveCoordinator正常结果改用此接口，丢响应后仍须writer完成后独立只读核对。原RED测试源码和期望不改。
+
+正在运行完整core:data（预期526项）、compileDebugAndroidTestKotlin、compileFullDebugKotlin、PeriodStability5、core:reminder回归，日志/workspace/scratch/p4-runtime-owner-full.log。尚未完成，不预填PASS；无新的native/CI/预算测试。App源码/Schema/加密格式/PK未改。后端运行门面尚无App调用，正式入口OFF/PR Draft，政策与LMK阻塞保留。后续接线前解决mixed DAO refresh读写分离与MANUAL_CHECK人工核对流程，不以此后台化宣称原5秒通过。
+
 ## 新owner同UUID重放2项真实RED已保存 — 2026-10-21
 
 当前生产14dda1ec上执行3个existing*合同：原请求合法重放1 PASS；错误原创建时间、无关历史损坏2 FAIL（实际SUCCESS而期望PENDING），见runtime-owner/replay-red/原XML/日志/SHA。不是夹具/编译故障；旧Repository重放对载荷的部分匹配不等于新opaque冻结请求的完整确认。无UI运行调用，入口OFF。
