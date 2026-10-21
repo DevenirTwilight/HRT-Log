@@ -1058,3 +1058,24 @@ LAB-03 的同文件增量授权记录 `PD-2026-10-19-LAB03-CATALOG-ADAPTER`：�
 建立语义色令牌（action / attention / success / missed / unconfirmed / skipped / danger，浅深两套初值见任务书 A 节，中、高对比度派生，动态取色时 action、success 跟随 primary，danger 跟随 error，其余固定），所有服药状态通过 `core/ui` 的一个映射函数取得令牌、符号和文字。红色只留给真正的错误和不可撤销的删除：漏服改为中性暖灰加描边，未确认为虚线，已过时间与库存提醒改为 attention。首页新增“还没有记录”确认卡（最近 48 小时的未确认服药，最多 2 条；“我服过了”打开现有补记对话框，“没有服”调用现有 `confirmMissed`，不新增写入路径）。`Corners.badge` 改名 `Corners.tag`，新增 `Corners.pill`（完全圆角），`StatusPill` 与主按钮完全圆角。“部分漏服”文案改为“部分完成”。
 
 不改受保护的浓度页、`ConcChart`、化验页、`LabContextSection`、`Exports`（其中的红色列入报告留作后续）；不改 ViewModel、仓库、Room、备份、加密、锁、伪装、PK、提醒逻辑和任何状态判定规则；不升级 Compose、不用实验性 API；不新增依赖、权限、网络、埋点；“提醒未送达”不在日历显示；不改 versionCode、不交付 APK。按 §106 自动合并。
+
+## 116. UI-07：Material 3 Expressive 表现层，只用稳定 API（2026-10-21）
+
+任务书原文：`docs/audits/product-quality-2026-10/sources/ui07/ui07-prompt.md`（SHA-256 `49cafbd97102024bdc41031970712a59028a84874966b0d8822c11cec4beb9f1`），负责人 2026-10-21 上传。负责人已在画布上确认 UI-07 样图，并选定状态图标用“实心圆”风格；执行以任务书文字为准。
+
+在 UI-06 语义令牌之上加入四项表现手法，所有颜色只取 UI-06 令牌：
+
+- **A 实心圆状态图标**：`core/ui` 新组件 `StatusIcon`，提供 40 / 32 / 22 / 18dp 四档，组件本身 `contentDescription = null`。用于今天的记录、确认卡、日历日格标记和图例、服药记录、时间线漏服事件。
+- **B 形状与按下形变**：形状档位 xs 8 / s 12 / m 16 / l 20 / xl 28 / xxl 32 / full；今天卡 32dp，首页其他卡 28dp。按下形变用 spring：圆角弹到 16dp、缩放到 96%。⋮ 按钮改为 56dp 描边方块。
+- **C 强调字体**：heroNumber 64sp、statNumber 28sp，两者随系统字号放大到 1.3 倍后不再放大；sectionTitle 16sp、cardTitle 20sp。
+- **D 弹簧动效**：用统一的 `LocalReduceMotion`，系统“移除动画”时全部立即切换。撤销按钮是条件项：只有现有删除路径能完整回退这次服药时才做。
+- **E 连接式分组列表**：`GroupedList`，项间缝 3dp，首尾圆角 24dp、中间 6dp，最小高度 56dp。“今天的记录”移出今天卡，单独显示。
+- **F 首页“最近 7 天”**：复用周视图数据；“完整日历”切换到现有视图。
+
+**禁止**：
+- 不升级 Compose，不用实验性 API，不新增依赖；
+- 不改 ViewModel 业务逻辑、仓库、Room、备份、加密、锁、伪装、PK、浓度页、化验页、导出 PDF、提醒、设置页；
+- 不改状态判定规则和色值；
+- 不改 versionCode，不交付 APK。
+
+按 §106 自动合并。
