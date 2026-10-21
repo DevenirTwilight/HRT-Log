@@ -1317,4 +1317,8 @@
 <string name="confirm_result_not_taken">已记下：没有服</string>
 <string name="recent_7_days">最近 7 天</string>
 <string name="full_calendar">完整日历</string>
+<!-- §135 screenshots -->
+<string name="screenshots_allow">允许截屏</string>
+<string name="screenshots_allow_desc">关闭时，截屏和录屏只得到空白画面，最近任务里也不显示内容。打开后，应用画面可以被截屏，也会显示在最近任务里。</string>
+<string name="screenshots_allow_disguised">伪装模式已开启，截屏始终被禁止。</string>
 </resources>

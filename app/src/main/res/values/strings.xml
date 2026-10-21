@@ -1317,4 +1317,8 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="confirm_result_not_taken">Noted: not taken</string>
 <string name="recent_7_days">Last 7 days</string>
 <string name="full_calendar">Full calendar</string>
+<!-- §135 screenshots -->
+<string name="screenshots_allow">Allow screenshots</string>
+<string name="screenshots_allow_desc">Off: screenshots and screen recordings are blank, and recent apps hide the content. On: the app\'s screens can be captured and appear in recent apps.</string>
+<string name="screenshots_allow_disguised">Disguise mode is on, so screenshots stay blocked.</string>
 </resources>

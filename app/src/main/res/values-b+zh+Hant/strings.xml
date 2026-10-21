@@ -1317,4 +1317,8 @@
 <string name="confirm_result_not_taken">已記下：沒有服</string>
 <string name="recent_7_days">最近 7 天</string>
 <string name="full_calendar">完整日曆</string>
+<!-- §135 screenshots -->
+<string name="screenshots_allow">允許截圖</string>
+<string name="screenshots_allow_desc">關閉時，截圖和錄影只會得到空白畫面，最近使用的應用程式也不顯示內容。開啟後，應用程式畫面可以被截圖，也會顯示在最近使用的應用程式中。</string>
+<string name="screenshots_allow_disguised">偽裝模式已開啟，截圖一律禁止。</string>
 </resources>

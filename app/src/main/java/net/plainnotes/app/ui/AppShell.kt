@@ -66,6 +66,8 @@ class UiPrefs(context: Context) {
     var disclaimerAccepted: Boolean get() = p.getBoolean("pk_disclaimer_ack", false); set(v) { p.edit().putBoolean("pk_disclaimer_ack", v).apply() }
     var region:String? get()=p.getString("wellbeing_region",null);set(v){p.edit{putString("wellbeing_region",v)}}
     var wellbeingPrompt: Boolean get() = p.getBoolean("wellbeing_prompt", true); set(v) { p.edit().putBoolean("wellbeing_prompt", v).apply() }
+    /** REQUIREMENTS §135: the user allows screenshots of the app (off by default: FLAG_SECURE). Device-only, not in backups. */
+    var allowScreenshots: Boolean get() = p.getBoolean("allow_screenshots", false); set(v) { p.edit().putBoolean("allow_screenshots", v).apply() }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

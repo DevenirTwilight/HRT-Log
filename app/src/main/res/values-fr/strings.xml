@@ -1317,4 +1317,8 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="confirm_result_not_taken">Noté : non pris</string>
 <string name="recent_7_days">7 derniers jours</string>
 <string name="full_calendar">Calendrier complet</string>
+<!-- §135 screenshots -->
+<string name="screenshots_allow">Autoriser les captures d\'écran</string>
+<string name="screenshots_allow_desc">Désactivé : les captures et enregistrements d\'écran sont vides et les applications récentes masquent le contenu. Activé : les écrans de l\'application peuvent être capturés et apparaissent dans les applications récentes.</string>
+<string name="screenshots_allow_disguised">Le mode déguisé est activé : les captures d\'écran restent bloquées.</string>
 </resources>
