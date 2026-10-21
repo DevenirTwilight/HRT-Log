@@ -1,3 +1,9 @@
+## 非阻塞界面源码WIP已保存：公共状态协议、四语卡片与测试待验 — 2026-10-21
+
+新增domain/write/WriteProgress只读显示协议（不是数据库可信证明），TEST_ONLY任务原型改用同一状态/phase枚举，避免前后端状态漂移。新增WriteStatusCard M3内联卡片，区分写入/结果核对/人工核对/真实成功/确认无提交失败；收起不取消业务，未核对不显示重试。四语文案完整源码已写，尚未执行本组编译/测试。
+
+新增3个Compose操作合同与8个代表性布局/截图测试（四语言分别320dp/2x/深色、411dp/1x/浅色），明确不等于全交叉矩阵或真实App导航。模型3测试、原型7测试需因公共模型调整重验。卡片尚未接AppShell，P4正式写入口保持OFF；门面、冲突入口覆盖和真实提交resolver仍未实现，不能称端到端完成。下一步仅上述有限测试，不重跑大库或改5秒门。
+
 ## 非阻塞任务原型7项PASS，立即保存 — 2026-10-21
 
 源9b9e8e2a的NonBlockingWritePrototypeTest 7 PASS/0SKIP，原始XML/log/receipt已存nonblocking-transition/prototype-first/。覆盖IO后台、页面观察取消不取消写入、重复start、仅未开始可确认取消、执行异常不直接FAILED、同UUID/请求/epoch核对、未判定不自动重试。只是假Repository动作与核对port的协程合同，不是真实DB提交/恢复或原生验收，不代表当前PR全绿。

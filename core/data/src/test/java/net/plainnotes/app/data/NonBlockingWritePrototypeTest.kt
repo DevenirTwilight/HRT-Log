@@ -1,5 +1,8 @@
 package net.plainnotes.app.data
 
+import net.plainnotes.app.domain.write.WriteStatus as Status
+import net.plainnotes.app.domain.write.WritePhase as Phase
+
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.collect

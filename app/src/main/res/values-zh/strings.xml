@@ -1287,4 +1287,16 @@
 <string name="lab_panel_delete_confirm">这次化验和其中 %1$d 项会一起移到回收站。</string>
 <string name="lab_panel_open">打开这次化验</string>
 <string name="lab_panel_members">项目</string>
+<string name="write_status_pending">正在保存</string>
+<string name="write_status_pending_body">你可以继续浏览。本次保存尚未确认。</string>
+<string name="write_status_reconciling">正在核对保存结果</string>
+<string name="write_status_reconciling_body">核对结果期间，请勿重复提交。</string>
+<string name="write_status_manual">保存结果待核对</string>
+<string name="write_status_manual_body">请先核对已有记录，再决定是否重新提交。</string>
+<string name="write_status_success">已保存</string>
+<string name="write_status_failed">未保存</string>
+<string name="write_status_failed_body">本次没有提交新的更改。请先核对结果，再重试。</string>
+<string name="write_status_check">核对结果</string>
+<string name="write_status_hide">收起状态</string>
+<string name="write_status_retry">重试同一操作</string>
 </resources>

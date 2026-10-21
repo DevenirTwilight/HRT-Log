@@ -1287,4 +1287,16 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="lab_panel_delete_confirm">La prise de sang et ses %1$d résultats vont ensemble dans la corbeille.</string>
 <string name="lab_panel_open">Ouvrir cette prise de sang</string>
 <string name="lab_panel_members">Résultats</string>
+<string name="write_status_pending">Enregistrement en cours</string>
+<string name="write_status_pending_body">Vous pouvez continuer à consulter les pages. Cet enregistrement reste à confirmer.</string>
+<string name="write_status_reconciling">Vérification du résultat</string>
+<string name="write_status_reconciling_body">Ne soumettez pas à nouveau pendant la vérification.</string>
+<string name="write_status_manual">Résultat à vérifier</string>
+<string name="write_status_manual_body">Vérifiez les données enregistrées avant une nouvelle soumission.</string>
+<string name="write_status_success">Enregistré</string>
+<string name="write_status_failed">Non enregistré</string>
+<string name="write_status_failed_body">Aucune nouvelle modification validée. Vérifiez le résultat avant de réessayer.</string>
+<string name="write_status_check">Vérifier le résultat</string>
+<string name="write_status_hide">Masquer le statut</string>
+<string name="write_status_retry">Réessayer la même opération</string>
 </resources>

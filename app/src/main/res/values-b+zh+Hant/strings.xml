@@ -1287,4 +1287,16 @@
 <string name="lab_panel_delete_confirm">這次檢驗和其中 %1$d 項會一起移到回收筒。</string>
 <string name="lab_panel_open">開啟這次檢驗</string>
 <string name="lab_panel_members">項目</string>
+<string name="write_status_pending">正在儲存</string>
+<string name="write_status_pending_body">你可以繼續瀏覽。本次儲存尚未確認。</string>
+<string name="write_status_reconciling">正在核對儲存結果</string>
+<string name="write_status_reconciling_body">核對結果期間，請勿重複提交。</string>
+<string name="write_status_manual">儲存結果待核對</string>
+<string name="write_status_manual_body">請先核對已有記錄，再決定是否重新提交。</string>
+<string name="write_status_success">已儲存</string>
+<string name="write_status_failed">未儲存</string>
+<string name="write_status_failed_body">本次沒有提交新的變更。請先核對結果，再重試。</string>
+<string name="write_status_check">核對結果</string>
+<string name="write_status_hide">收起狀態</string>
+<string name="write_status_retry">重試同一操作</string>
 </resources>

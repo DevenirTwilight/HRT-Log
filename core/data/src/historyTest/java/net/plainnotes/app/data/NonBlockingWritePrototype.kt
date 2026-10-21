@@ -1,5 +1,8 @@
 package net.plainnotes.app.data
 
+import net.plainnotes.app.domain.write.WriteStatus as Status
+import net.plainnotes.app.domain.write.WritePhase as Phase
+
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,8 +19,6 @@ internal class NonBlockingWritePrototype<T>(
     private val clock:()->Long=System::nanoTime,
 ) {
     data class Key(val dataset:String,val epoch:String,val operationUuid:String,val requestSha:String)
-    enum class Status { PENDING, SUCCESS, FAILED }
-    enum class Phase { QUEUED, WRITING, RECONCILING, MANUAL_CHECK, TERMINAL }
     enum class Reason { CANCELLED_BEFORE_START, OUTCOME_UNCERTAIN, NOT_COMMITTED, NEEDS_MANUAL_CHECK }
     data class Progress<T>(val status:Status,val phase:Phase,val result:T?=null,val reason:Reason?=null,val elapsedNanos:Long=0)
     sealed interface Resolution<out T> {
