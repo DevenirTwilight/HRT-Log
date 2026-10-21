@@ -1,3 +1,9 @@
+## 关联来源反例修正后完整数据514项PASS已实时保存 — 2026-10-21
+
+生产ae7688da：完整core:data514 PASS/0FAIL/0SKIP，NonBlockingRepositoryWriteTest12项全部通过（包括原2个context反例）；测试源码与RED源280bf615逐字一致。原始44 XML/数据阶段日志/源码SHA和RED链接存nonblocking-transition/reference-context-green/，原RED不改写。当前正继续Android测试/App源码编译，未结束不能填PASS；UI/时期37 PASS仍仅标先前4111c0b8源，App源码未再改。
+
+新内部接口范围只限独立实际用药创建：同scope/epoch、配置/时间/实际载荷与原CONTEXT匹配、完整审计成功才确认历史回执；缺失不判未提交/不自动重试。运行owner需在writer退出后以独立读事务核对；该内部帮助函数不构成嵌在未提交外层写事务时的独立耐久提交证书。正式门面必须保证根事务生命周期、固定作用域与全冲突保护，本轮尚未接App。原资源退出合同GREEN、LMK稳定性仍未证明；无新native/大库/预算修改，Draft/OFF，不合并发布。
+
 ## 关联context的最小修正已编码，完整回归待验 — 2026-10-21
 
 PreparedMeasuredCreate补原referenceContextEventUuid；prepare在原事务从ReferenceStore.current冻结有效product的事件UUID/无product时null。observe在完整审计之后比较历史record revision1/capture revision1的CONTEXT事件，而不是当前关联；原关联A的请求不会因当前B/解除关联被重解释。只改两个新增内部接口文件，没有接正式写入口，也没有更改原create/replay/审计行为。

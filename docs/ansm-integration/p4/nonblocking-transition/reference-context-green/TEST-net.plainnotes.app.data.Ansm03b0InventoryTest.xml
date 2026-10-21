@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.Ansm03b0InventoryTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2026-10-21T09:29:30.944Z" hostname="4f13d57d08c1" time="11.176">
+  <properties/>
+  <testcase name="oldBackupCannotSilentlyPreserveNewAssociationsOrGuardState" classname="net.plainnotes.app.data.Ansm03b0InventoryTest" time="4.669"/>
+  <testcase name="patchRemovalDoesNotConsumeAndRevisionReversesOriginalApplication" classname="net.plainnotes.app.data.Ansm03b0InventoryTest" time="0.38"/>
+  <testcase name="allOldRoomVersionsUpgradeThenAcceptSeparateCandidateWithoutBackfillingInventory" classname="net.plainnotes.app.data.Ansm03b0InventoryTest" time="2.705"/>
+  <testcase name="realScalarPoolCannotProveMixedStrengthPackageSelection" classname="net.plainnotes.app.data.Ansm03b0InventoryTest" time="0.224"/>
+  <testcase name="candidateDDLFailureRollsBackWithoutChangingRoomVersionOrLegacyRows" classname="net.plainnotes.app.data.Ansm03b0InventoryTest" time="0.35"/>
+  <testcase name="recordLedgerAndCandidateCaptureRollBackAtEveryTestTransactionBoundary" classname="net.plainnotes.app.data.Ansm03b0InventoryTest" time="0.254"/>
+  <testcase name="baselinePublicRecordEditReverseAdjustmentAndBackupPreserveAppendOnlyHistory" classname="net.plainnotes.app.data.Ansm03b0InventoryTest" time="1.174"/>
+  <testcase name="gelPumpAndMassRecordsNeedIndependentFrozenUnitsAndActualCapacity" classname="net.plainnotes.app.data.Ansm03b0InventoryTest" time="0.239"/>
+  <testcase name="unsafeMassScalarBridgeIsDetectedAgainstRealContainerConsumption" classname="net.plainnotes.app.data.Ansm03b0InventoryTest" time="0.204"/>
+  <testcase name="ledgerGuardsAndBusinessUuidConflictDetectActualBadWrites" classname="net.plainnotes.app.data.Ansm03b0InventoryTest" time="0.214"/>
+  <testcase name="unknownLegacyContainersStayUnknownAfterRenamingAndCurrentStrengthChanges" classname="net.plainnotes.app.data.Ansm03b0InventoryTest" time="0.2"/>
+  <testcase name="snapshotCaptureForeignKeysTombstonesAndRestoreWithoutCatalogAreIsolated" classname="net.plainnotes.app.data.Ansm03b0InventoryTest" time="0.217"/>
+  <testcase name="voidRestoreAndConsumedPackageRejectionKeepOriginalLedger" classname="net.plainnotes.app.data.Ansm03b0InventoryTest" time="0.244"/>
+  <system-out><![CDATA[ANSM03B0 patch-history.json 18d5a8ba5ac7a9162b4613a43d450cb7c98098234eb86e0af7c52e183f919877
+ANSM03B0 mixed-strength-unknown.json 36a38406783ebbd5ad9351af25413e2a4d1d94ba5700cefe8fa10ab4ec7b796f
+ANSM03B0 ledger-baseline.json 474bc371665373be3f7a806384b908084764f045f27781a774e831010a9db894
+ANSM03B0 gel-capacity.json a13b21ab495372d4705da04e234176cf53caa165079a150cb6358f279be5516f
+ANSM03B0 unsafe-bridge-difference.json 48b41c394032f904406c64edd1e9196ac346d493e0d58c76ab04fe1fc2914c66
+ANSM03B0 void-restore.json 9d71dfa500575b29b54b2029271af603b59fdde88f7f674d562524aba29c8fb1
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

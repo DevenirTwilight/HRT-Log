@@ -15,7 +15,7 @@
 |真实Repository小库连接原型|TEST_ONLY；4项PASS|ecc6671b，真实事务/完整oracle/回滚/丢失结果窗口；原型7项同次PASS，repository-first/；不是SQLCipher原生|
 |应用级真实任务服务与公开门面|NOT_IMPLEMENTED|需固定PRIMARY/scope、无重复请求及冲突入口覆盖|
 |完整运行结果核对/进程死亡恢复|NOT_IMPLEMENTED|目前仅internal独立实际用药的历史观察；不能凭UUID存在/不存在判定。其他操作与持久token未接通，不自动补写|
-|独立实际用药的原请求冻结/历史提交观察|IMPLEMENTED internal；全数据512 PASS|4111c0b8，完整审计及配置/时间/实际载荷精确核对；NotObserved不授权重试；frozen-outcome-data/。尚无App运行调用，其他操作未支持|
+|独立实际用药的原请求冻结/历史提交观察|IMPLEMENTED internal；全数据514 PASS|ae7688da，完整审计及原CONTEXT/配置/时间/实际载荷精确核对；NotObserved不授权重试；reference-context-red/及-green/。尚无App运行调用，其他操作未支持|
 |验收政策/正式入口|PROPOSED / OFF|原5秒断言未变，Draft不合并；恢复稳定性NOT_PROVEN|
 
 资源退出修正31303e64已接入：完整本地core:data506 PASS/0SKIP，原两项RED断言保持并转GREEN；证据resource-cleanup-applied/，旧RED仍保存。这不构成完整P4准入或LMK稳定证明。新组CI/native/真机/TalkBack均NOT_RUN，不重跑大库。下文保留政策与尚未实施的门面设计；其中“本轮不新增”指最初方向冻结检查点，不否认后续已授权UI和TEST_ONLY实现。
