@@ -1,3 +1,13 @@
+## 【冻结交付】非阻塞验收提案已保存，在途修正归档后停止 — 2026-10-21
+
+负责人最新方向已记录REQUIREMENTS126及nonblocking-transition/proposal.md；所有旧“再跑完整/原生/继续优化”计划作废。本轮无新大库/原生调度、没有实施后台队列/协调器/UI，也没有修改5秒硬断言。新验收政策仍待批准，旧FAIL保持FAIL。PR #57仍Draft/OFF，不合并、不发布。
+
+停止前唯一在途资源GREEN已结束，两目标2 PASS/0FAIL/0SKIP；原始XML/日志、两文件源码patch、SHA和原body等价证据已归档nonblocking-transition/saved-resource-wip/。git apply --check只读核验可应用。**patch没有应用到PR生产源码**，未跑patch的完整回归/Android编译/原生，预热补测已取消；不能把2 PASS当当前PR全面通过。隔离树/workspace/HRT-Log-p4-resource-check及其本地提交/工作未清除，原2项RED/首轮harness失败保留。root已将可复现代码和结果远端保存，无需为补丁完整验收继续消耗额度。
+
+主树生产仍55fcf2d5，历史data495/Android编译/reminder21/App1562 PASS+277 SKIP/Period5 PASS仍仅对应其当时测试源；随后新增资源退出测试对未应用patch的当前生产为已知RED，整体不能称全绿。最新文档提交用skip ci避免违背停止跑分要求，不视作新CI通过。恢复稳定性NOT_PROVEN/LMK独立阻塞，普通延迟在新政策未批前不重分类。当前无运行构建/原生任务。
+
+后续仅待负责人批准政策及最小后端/UI合同后另行实施：app级IO owner与三状态、UUID核对/取消/重试、同数据集冲突保护；core:data internal边界需最薄公开门面，读取既有操作不等于已经有安全提交resolver。不得接着运行旧性能计划或擅自接线。
+
 ## 【最新方向冻结】停止性能攻关，非阻塞产品方案待批准 — 2026-10-21
 
 负责人最新指令覆盖下方所有“下一步完整回归/冻结新候选/启动原生”计划：**不再执行这些计划**。不新增缓存优化/方案C/大库跑分，不为获得绿色续跑。#57 Draft/OFF、autoMerge=null，不合并/发布。详细最小后端评估、三状态/UUID/取消/进程死亡核对及测试政策提案见`docs/ansm-integration/p4/nonblocking-transition/proposal.md`，冻结清单freeze.json；REQUIREMENTS126已记录。方向停止已生效，5秒硬门改性能指标尚待明确批准，原断言/失败/六CI均保留。

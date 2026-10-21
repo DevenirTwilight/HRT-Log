@@ -1,0 +1,31 @@
+{
+  "status": "SAVED_INFLIGHT_WIP_NOT_APPLIED_TO_PR_PRODUCTION",
+  "production_base": "55fcf2d5d38400307c6bb8b13a6a1dadd6c625ec",
+  "worktree_base": "5e12e2b632dd31ce7c3d451664387cf08dc4c659",
+  "preserved_worktree": "/workspace/HRT-Log-p4-resource-check",
+  "scope": "Two pre-stop targeted tests finished; no subsequent tests, full regressions, Android compilation or native runs launched. WIP catch/finally source saved as patch only.",
+  "targeted_test_results": {
+    "tests": 2,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    "indexedRestoreCancellationAndResourceFaultsPreserveTargetAndEpoch",
+    "pureChainContentMemoNeverCachesDatabaseValidity"
+  ],
+  "full_regression_for_patch": "NOT_RUN",
+  "native_for_patch": "NOT_RUN",
+  "warm_case_supplement": "CANCELLED_NOT_IMPLEMENTED",
+  "apply_check_at_archive_head": "PASS_READ_ONLY_GIT_APPLY_CHECK",
+  "source_sha256": {
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredOperationChain.kt": "785d84ad7749b1dfba47ac0f5a361564a95659157cedd9fcc7f2c32664077771",
+    "core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt": "120b79de6bb718546625f7d95c5618074b368fc17665dd35171718bd38de8282"
+  },
+  "files": {
+    "source-equivalence.json": "f9c4b5ca6a3313d3ad6356b31ca8b84a2321f6e3e802c17fa170a57a40c9db44",
+    "changes.patch": "626c8a1491511951bb4c3892f9e433050aa6735ce9d51fca7e658cf7cede46ad",
+    "green/gradle.log": "16a731eae635c27ed51d15fb1e9597ec1ec6aca0b9253f1a20ed645d485a994e",
+    "green/TEST-net.plainnotes.app.data.MeasuredConsumptionStoreTest.xml": "2586659106dd2abf86c6f9b13ad8a3eb92cd4f0f4f88155f1b4dec74bc28a37a"
+  }
+}

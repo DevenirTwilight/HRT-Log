@@ -1,0 +1,24 @@
+{
+  "baseline_commit": "5e12e2b632dd31ce7c3d451664387cf08dc4c659",
+  "original_checked_chain_body_equals_new_private_helper_body": true,
+  "checked_chain_body_sha256": "532ae116b5f3aa63e5019743678d3710251e733ff39712477076869772bc6d6d",
+  "original_restore_body_equals_new_try_body_after_indent_only": true,
+  "restore_body_sha256": "c04a7cd9d303a893ccd26631d1d90e19148f7e1a4311a7d67b08a91ec3a45165",
+  "all_production_changes": [
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredOperationChain.kt",
+    "core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt"
+  ],
+  "original_frozen_chain_unchanged": true,
+  "frozen_chain_sha256": "2c4a81558fc75449d33edb0984989ce319fb91ad5d7fd417447deef5d644fe31",
+  "new_behavior_only": [
+    "checkedChain entry clears the entire pure input memo on any Throwable and rethrows the same Throwable.",
+    "restoreBackupTo clears the memo in finally after every completed restore scope, including success, error and cancellation.",
+    "The original pre-decrypt clear is retained.",
+    "The memo documentation excludes current-row UUID/Node rather than all UUID payload strings."
+  ],
+  "source_sha256": {
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredOperationChain.kt": "785d84ad7749b1dfba47ac0f5a361564a95659157cedd9fcc7f2c32664077771",
+    "core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt": "120b79de6bb718546625f7d95c5618074b368fc17665dd35171718bd38de8282"
+  },
+  "timing": "Both cleanup sites execute synchronously inside the existing APIs; restore finally executes before withContext returns."
+}

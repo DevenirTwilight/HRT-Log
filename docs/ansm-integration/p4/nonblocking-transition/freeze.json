@@ -6,7 +6,7 @@
   "new_candidate_native_runs": 0,
   "new_native_runs": "CANCELLED_DO_NOT_DISPATCH",
   "root_gradle": "FINISHED_SUCCESS_SOURCE_55fcf2d5",
-  "inflight_task": "resource_failure_cleanup: only existing two-case GREEN may finish; no new tests, code or native",
+  "inflight_task": "FINISHED_TWO_TARGETS_PASS_PATCH_ARCHIVED_NOT_APPLIED",
   "backend_coordinator": "NOT_IMPLEMENTED",
   "ui": "NOT_IMPLEMENTED_BY_THIS_TASK",
   "legacy_5s_gate": "UNCHANGED_PENDING_EXPLICIT_POLICY_APPROVAL",
@@ -19,6 +19,8 @@
     "file": "core/data/src/androidTest/java/net/plainnotes/app/data/LargeInventoryPerformanceProbe.kt",
     "sha256": "c173c98185edb9a837c6cf4b0e76c7b8c137278fc6a2c09a77b5e8998332cccf",
     "reproduce": "python3 scripts/prepare_ansm_native_performance.py",
-    "scope": "Generated and compiled previously; NOT_RUN_NEW_NATIVE. Safe to clean deterministic untracked output."
-  }
+    "scope": "Generated and compiled previously; NOT_RUN_NEW_NATIVE. Safe to clean deterministic untracked output.",
+    "cleaned_after_preserving_sha": true
+  },
+  "resource_wip": "saved-resource-wip/receipt.json"
 }

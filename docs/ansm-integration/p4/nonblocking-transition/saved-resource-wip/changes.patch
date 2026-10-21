@@ -1,0 +1,97 @@
+diff --git a/core/data/src/main/java/net/plainnotes/app/data/MeasuredOperationChain.kt b/core/data/src/main/java/net/plainnotes/app/data/MeasuredOperationChain.kt
+index 8dbd2b2f..f5930285 100644
+--- a/core/data/src/main/java/net/plainnotes/app/data/MeasuredOperationChain.kt
++++ b/core/data/src/main/java/net/plainnotes/app/data/MeasuredOperationChain.kt
+@@ -64,7 +64,7 @@ internal object MeasuredOperationChain {
+         require(if(sequence==1)previous==null && hash==null else previous!=null && hash!=null)
+         return Link(sequence,previous,hash)
+     }
+-    /** Pure content codec, never a chain/database validity cache. No UUID, connection, epoch,
++    /** Pure content codec, never a chain/database validity cache. No current-row UUID/Node, connection, epoch,
+      * transaction, row header or acceptance result is retained. Every caller still reads every
+      * current row and checks the complete sequence/predecessor graph below. */
+     private data class CheckedInput(val link:Link,val sha256:String)
+@@ -102,7 +102,15 @@ internal object MeasuredOperationChain {
+         value
+     }
+     fun validate(db:SupportSQLiteDatabase):Map<String,Node> = checkedChain(db,false).first
+-    private fun checkedChain(db:SupportSQLiteDatabase,retainCanonical:Boolean,headers:HeaderCapture?=null):Pair<Map<String,Node>,Map<String,String>> {
++    private fun checkedChain(db:SupportSQLiteDatabase,retainCanonical:Boolean,headers:HeaderCapture?=null):Pair<Map<String,Node>,Map<String,String>> = try {
++        checkedChainInput(db,retainCanonical,headers)
++    } catch(failure:Throwable) {
++        // A resource failure may leave a map insertion ahead of its byte accounting.
++        // Discard the whole pure memo and invalidate in-flight owners before rethrowing.
++        clearPureInputMemo()
++        throw failure
++    }
++    private fun checkedChainInput(db:SupportSQLiteDatabase,retainCanonical:Boolean,headers:HeaderCapture?):Pair<Map<String,Node>,Map<String,String>> {
+         check(db.inTransaction())
+         // Allocation belongs to a new read, never to cleanup. If it fails, the old
+         // readers still cannot retain plaintext because clear has already set the token to null.
+diff --git a/core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt b/core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt
+index 580dbfac..95c02dda 100644
+--- a/core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt
++++ b/core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt
+@@ -812,32 +812,37 @@ const val BACKFILL_MAX_DAYS=731L
+         restoreBackupTo(target,data,password,today,expectedEpoch,checkpoint)
+     }
+     private suspend fun restoreBackupTo(target:Space,data:ByteArray,password:CharArray,today:LocalDate,measuredEpoch:String?,checkpoint:(RestoreCheckpoint)->Unit = {})=withContext(Dispatchers.IO) {
+-        val restoreContext=kotlin.coroutines.coroutineContext
+-        val checkRestoreActive:()->Unit={restoreContext.ensureActive()}
+-        val restoreCheckpoint:(RestoreCheckpoint)->Unit={point->checkRestoreActive();checkpoint(point);checkRestoreActive()}
+-        // Pure codec entries own plaintext strings; release old input before decrypting a replacement.
+-        // This changes no trust state: every restored row and full invariant is still revalidated.
+-        MeasuredOperationChain.clearPureInputMemo()
+-        BackupJsonReader.indexed(BackupCodec.decrypt(data,password),checkActive=checkRestoreActive,
+-            beforeParse={restoreCheckpoint(RestoreCheckpoint.PLAINTEXT_AUTHENTICATED)}).use { input ->
+-            val json=input.metadata
+-            val schema=RecordBackupCompatibility.readVersion(json)
+-            val tables=input.tables
+-            require(schema>=10 || ReferenceSchema.businessTables.none {tables.has(it)}) { "Misdeclared reference backup version" }
+-            RecordBackupCompatibility.validateInventoryVersion(schema,tables)
+-            val required=DOMAIN_TABLES.filterNot{(schema<2 && it in listOf("stage_review","symptom_check","review_effect")) || (schema<4 && it in listOf("regimen_version","regimen_rule_link","milestone")) || (schema<5 && it=="lab_context_revision") || (schema<6 && it in listOf("visit_question","visit_pack")) || (schema<7 && it in listOf("history_period_revision","record_annotation")) || (schema<9 && it=="trash_item") || (schema<10 && it in ReferenceSchema.businessTables) || (schema<11 && it=="lab_panel")}
+-            require(required.all{tables.has(it)}) { "Incomplete backup" }
+-            // LAB-02: an older backup has no panels; its results are restored ungrouped, never regrouped by time, laboratory or id.
+-            require(schema>=11 || ((tables.optJSONArray("lab_panel")?.length() ?: 0)==0 && tables.optJSONArray("lab_value")?.let{a->(0 until a.length()).all{a.getJSONObject(it).isNull("panel_id")}}!=false)) { "Misdeclared lab panel backup version" }
+-            restoreCheckpoint(RestoreCheckpoint.INPUT_VALIDATED)
+-            val db=access.get(target)
+-            db.withTransaction {
+-                val sql=db.openHelper.writableDatabase
+-                if(measuredEpoch!=null && ReferenceStore.previewEpoch(sql)!=measuredEpoch)throw ReferenceFailure(ReferenceError.STALE_SCOPE)
+-                RawData.restoreRows(access.applicationContext,sql,tables,upgradeRegimens=schema<4,backfillTrash=schema<9,measured=measuredEpoch!=null,checkpoint=restoreCheckpoint)
+-                if(schema<2) WellbeingUpgrade.apply(sql,today)
+-                checkRestoreActive()
++        try {
++            val restoreContext=kotlin.coroutines.coroutineContext
++            val checkRestoreActive:()->Unit={restoreContext.ensureActive()}
++            val restoreCheckpoint:(RestoreCheckpoint)->Unit={point->checkRestoreActive();checkpoint(point);checkRestoreActive()}
++            // Pure codec entries own plaintext strings; release old input before decrypting a replacement.
++            // This changes no trust state: every restored row and full invariant is still revalidated.
++            MeasuredOperationChain.clearPureInputMemo()
++            BackupJsonReader.indexed(BackupCodec.decrypt(data,password),checkActive=checkRestoreActive,
++                beforeParse={restoreCheckpoint(RestoreCheckpoint.PLAINTEXT_AUTHENTICATED)}).use { input ->
++                val json=input.metadata
++                val schema=RecordBackupCompatibility.readVersion(json)
++                val tables=input.tables
++                require(schema>=10 || ReferenceSchema.businessTables.none {tables.has(it)}) { "Misdeclared reference backup version" }
++                RecordBackupCompatibility.validateInventoryVersion(schema,tables)
++                val required=DOMAIN_TABLES.filterNot{(schema<2 && it in listOf("stage_review","symptom_check","review_effect")) || (schema<4 && it in listOf("regimen_version","regimen_rule_link","milestone")) || (schema<5 && it=="lab_context_revision") || (schema<6 && it in listOf("visit_question","visit_pack")) || (schema<7 && it in listOf("history_period_revision","record_annotation")) || (schema<9 && it=="trash_item") || (schema<10 && it in ReferenceSchema.businessTables) || (schema<11 && it=="lab_panel")}
++                require(required.all{tables.has(it)}) { "Incomplete backup" }
++                // LAB-02: an older backup has no panels; its results are restored ungrouped, never regrouped by time, laboratory or id.
++                require(schema>=11 || ((tables.optJSONArray("lab_panel")?.length() ?: 0)==0 && tables.optJSONArray("lab_value")?.let{a->(0 until a.length()).all{a.getJSONObject(it).isNull("panel_id")}}!=false)) { "Misdeclared lab panel backup version" }
++                restoreCheckpoint(RestoreCheckpoint.INPUT_VALIDATED)
++                val db=access.get(target)
++                db.withTransaction {
++                    val sql=db.openHelper.writableDatabase
++                    if(measuredEpoch!=null && ReferenceStore.previewEpoch(sql)!=measuredEpoch)throw ReferenceFailure(ReferenceError.STALE_SCOPE)
++                    RawData.restoreRows(access.applicationContext,sql,tables,upgradeRegimens=schema<4,backfillTrash=schema<9,measured=measuredEpoch!=null,checkpoint=restoreCheckpoint)
++                    if(schema<2) WellbeingUpgrade.apply(sql,today)
++                    checkRestoreActive()
++                }
+             }
++        } finally {
++            // Staging and destination audits may retain replacement plaintext in the pure codec.
++            MeasuredOperationChain.clearPureInputMemo()
+         }
+     }
+     /** Irreversibly deletes the database, its key file and Keystore key. */
