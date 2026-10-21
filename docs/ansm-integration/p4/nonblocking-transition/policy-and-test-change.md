@@ -15,7 +15,7 @@
 |备份/恢复|仍各≤120秒|恢复LMK是独立安全阻塞；原子替换、回滚和认证不变|
 |资源/格式|原API26、512MiB RAM、192MiB heap、32MiB、100000行|不改PNBAK1/密码学/业务Schema/数据库版本|
 
-审批对象仅为普通写入延迟的验收角色及下述测试改动；不请求批准忽略安全失败，不宣称原预算通过。无需新的持久任务队列或WorkManager。
+§131落实范围仅为普通写入延迟的验收角色及下述测试改动；不包含忽略安全失败，不宣称原预算通过。无需新的持久任务队列或WorkManager。
 
 ## 最小接口评估：已有能力应复用
 
@@ -40,7 +40,7 @@
 
 ## 测试调整范围（§131落实）
 
-1. `performance/LargeInventoryPerformanceProbe.kt`：保留真实计时、审计、预测、恢复、大小/内存和全状态断言；未来只将普通三笔写入的5秒判断移到独立`legacy_write_budget`观测字段，不删除原报告。
+1. `performance/LargeInventoryPerformanceProbe.kt`：保留真实计时、审计、预测、恢复、大小/内存和全状态断言；已将普通三笔写入的5秒判断移到独立`legacy_write_budget_status`观测字段，不删除原报告。
 2. `scripts/prepare_ansm_native_performance.py`：冷codec写入保持真实计时及旧5秒PASS/FAIL字段，另标其为性能指标；保留完整oracle，不宣称冷codec代表进程冷启动。
 3. native host报告：分别输出安全验收、交互验收和延迟指标，不能用总PASS掩盖旧FAIL；审计/恢复/内存等失败仍使对应安全验收失败。
 4. 正向/负向合同：PENDING导航与返回、真实提交SUCCESS、冲突保护、相同UUID异载荷、错误/取消/未知结果、进程死亡核对。复用已有合同和报告，不重复已过场景求绿；仅对实质变更做必要验证。
