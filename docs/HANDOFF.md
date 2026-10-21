@@ -1,3 +1,9 @@
+## 新owner同UUID重放2项真实RED已保存 — 2026-10-21
+
+当前生产14dda1ec上执行3个existing*合同：原请求合法重放1 PASS；错误原创建时间、无关历史损坏2 FAIL（实际SUCCESS而期望PENDING），见runtime-owner/replay-red/原XML/日志/SHA。不是夹具/编译故障；旧Repository重放对载荷的部分匹配不等于新opaque冻结请求的完整确认。无UI运行调用，入口OFF。
+
+最小修正：新增仅供owner使用的prepared提交包装，在同一真实Repository根事务内检查是否已有同UUID操作；若已有，复用现有observeCreate完整审计及原配置/context/created匹配后才能返回历史回执，且不再调用写入重放；若没有，继续原create及最终全量审计。正常新增不追加第二次全审计。原旧写入口和独立冻结oracle不改。下一步修正并原测试不改运行完整数据/Android测试/App编译及时期门；不做native/性能计划。
+
 ## 后端运行owner首轮21项合同PASS，重放边界继续验证 — 2026-10-21
 
 实际运行MeasuredSaveCoordinatorTest9 + NonBlockingRepositoryWriteTest12，共21 PASS/0FAIL/0SKIP；原始XML/日志/源码SHA在nonblocking-transition/runtime-owner/first-focused/。覆盖独立根提交、页面取消、丢响应只读核对、真实故障回滚、同UUID/异载荷、旧写/恢复/关闭销毁/导入冲突、PRIMARY固定与外层Room回滚。补充发现exportBackup会RegimenHistory.seed，已纳入冲突门并负向验证。仅Robolectric35小库，不是SQLCipher/LMK/预算或最终全回归。

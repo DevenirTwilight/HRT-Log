@@ -153,6 +153,36 @@ class MeasuredSaveCoordinatorTest {
         val task=owner.start(prepare(owner,box));entered.await();repo.select(Space.DECOY)
         release.complete(Unit);task.progress.first{it.status==WriteStatus.SUCCESS};oneCommit(box)
     }
+    @Test fun existingUuidWithDifferentOriginalCreationTimeCannotBecomeRuntimeSuccess()=runCase {process->
+        val box=fixture();val owner=MeasuredSaveCoordinator(repo,process,Dispatchers.IO)
+        val expected=prepare(owner,box);val frozen=expected.value
+        repo.recordMeasuredUse(frozen.ticket,frozen.operationUuid,frozen.draft,frozen.created.plusSeconds(1))
+        val before=RawData.dump(raw).toString();val task=owner.start(expected)
+        task.progress.first{it.phase==WritePhase.MANUAL_CHECK || it.status!=WriteStatus.PENDING}
+        assertEquals(WriteStatus.PENDING,task.progress.value.status)
+        assertEquals(WritePhase.MANUAL_CHECK,task.progress.value.phase);assertNull(task.confirmed.value)
+        assertEquals(before,RawData.dump(raw).toString());oneCommit(box)
+    }
+    @Test fun existingUuidCannotBypassCompleteAuditOfUnrelatedCorruption()=runCase {process->
+        val box=fixture();val owner=MeasuredSaveCoordinator(repo,process,Dispatchers.IO)
+        val expected=prepare(owner,box);write(expected.value)
+        val other=fixture();val otherExpected=prepare(owner,other);val otherResult=write(otherExpected.value)
+        raw.execSQL("UPDATE dose_record SET actual_dose=7 WHERE id=?",arrayOf(otherResult.record.id))
+        val before=RawData.dump(raw).toString()
+        primary.withTransaction{assertTrue(runCatching{FrozenFullAuditStore.auditStagedDataset(raw)}.isFailure)}
+        val task=owner.start(expected)
+        task.progress.first{it.phase==WritePhase.MANUAL_CHECK || it.status!=WriteStatus.PENDING}
+        assertEquals(WriteStatus.PENDING,task.progress.value.status)
+        assertEquals(WritePhase.MANUAL_CHECK,task.progress.value.phase);assertNull(task.confirmed.value)
+        assertEquals(before,RawData.dump(raw).toString())
+    }
+    @Test fun existingExactOriginalRequestCanConfirmWithoutAnotherDeduction()=runCase {process->
+        val box=fixture();val owner=MeasuredSaveCoordinator(repo,process,Dispatchers.IO)
+        val expected=prepare(owner,box);write(expected.value)
+        val before=RawData.dump(raw).toString();val task=owner.start(expected)
+        task.progress.first{it.status==WriteStatus.SUCCESS}
+        assertEquals(before,RawData.dump(raw).toString());oneCommit(box)
+    }
     private class PausedDispatcher:CoroutineDispatcher() {
         private val queue=ConcurrentLinkedQueue<Runnable>()
         override fun dispatch(context:CoroutineContext,block:Runnable){queue.add(block)}
