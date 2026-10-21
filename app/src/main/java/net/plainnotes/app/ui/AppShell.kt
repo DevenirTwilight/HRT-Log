@@ -335,7 +335,7 @@ internal val DRAWER_GROUPS: List<DrawerSection> = listOf(
                 NavigationDrawerItem(label = { Text(stringResource(d.title)) }, icon = { Icon(d.icon, null) }, selected = selected == d,
                     badge = if (!d.ready) ({ Text(stringResource(R.string.soon_badge), style = MaterialTheme.typography.labelSmall) })
                         else if (stockBadge) ({
-                            Surface(color = MaterialTheme.colorScheme.tertiaryContainer, contentColor = MaterialTheme.colorScheme.onTertiaryContainer, shape = Corners.badge,
+                            Surface(color = MaterialTheme.colorScheme.tertiaryContainer, contentColor = MaterialTheme.colorScheme.onTertiaryContainer, shape = Corners.pill,
                                 modifier = Modifier.semantics { contentDescription = badgeText }.testTag("drawer-stock-badge")) {
                                 Text("$stockLow", style = MaterialTheme.typography.labelLarge.tnum(), modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp))
                             }

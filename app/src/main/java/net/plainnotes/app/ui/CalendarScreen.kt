@@ -154,17 +154,8 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
 
 @Composable private fun weekStart(d: LocalDate): LocalDate = d.with(TemporalAdjusters.previousOrSame(WeekFields.of(currentLocale()).firstDayOfWeek))
 
-@Composable private fun kindColors(kind: DayKind): Pair<Color, Color> {
-    val c = MaterialTheme.colorScheme
-    return when (kind) {
-        DayKind.TAKEN -> c.primaryContainer to c.onPrimaryContainer
-        DayKind.PARTIAL -> c.tertiaryContainer to c.onTertiaryContainer
-        DayKind.MISSED -> c.errorContainer to c.onErrorContainer
-        DayKind.UNCONFIRMED -> c.surfaceContainerHigh to c.onSurfaceVariant
-        DayKind.PLANNED -> c.surfaceContainerHighest to c.onSurface
-        DayKind.NONE -> Color.Transparent to c.onSurface
-    }
-}
+/** UI-06: day colours come from the one status table (taken, partly done, missed, unconfirmed); no error red. */
+@Composable private fun kindColors(kind: DayKind): Pair<Color, Color> = dayTone(kind)
 
 @Composable private fun WeekdayHeader() {
     val first = WeekFields.of(currentLocale()).firstDayOfWeek
@@ -195,8 +186,10 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
     val description = dayDescription(date, info, isToday)
     val kind = info?.kind ?: DayKind.NONE
     val mark = dayMark(kind)
+    val style = dayStyle(kind); val tone = NotesTheme.semantic.of(style.tone); val sem = NotesTheme.semantic
+    // UI-06: missed is outlined, unconfirmed dashed (the table's accent); a selected day keeps the primary outline.
     Box(modifier.clip(RoundedCornerShape(12.dp)).background(bg).then(if (isSelected) Modifier.border(2.dp, c.primary, RoundedCornerShape(12.dp))
-            else if (kind == DayKind.MISSED) Modifier.border(1.5.dp, c.error, RoundedCornerShape(12.dp)) else Modifier)
+            else Modifier.statusOutline(style, tone, RoundedCornerShape(12.dp)))
         .selectable(isSelected, role = Role.Button, onClick = onClick).semantics { contentDescription = description; mark?.let { dayMarkSemantics = it } }
         .alpha(if (inMonth) 1f else 0.4f).padding(4.dp)) {
         // The digit and dots are decorative here; the cell's name already says them in words.
@@ -204,10 +197,10 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
         CalendarDateBadge(date.dayOfMonth,isToday,fg)
         Row(Modifier.heightIn(min=12.dp), horizontalArrangement = Arrangement.spacedBy(2.dp), verticalAlignment = Alignment.CenterVertically) {
             // UI-01 C: a shape for the day's state as well as its colour (✓ taken, ½ some missed, ✕ missed); drawn, so it never clips.
-            mark?.let { DayMarkIcon(it, if (kind == DayKind.MISSED) c.error else fg) }
+            mark?.let { DayMarkIcon(it, if (style.outlined || style.dashed) tone?.accent ?: fg else fg) }
             if (info != null) {
-                if (info.runOut.isNotEmpty()) Icon(Icons.Outlined.Inventory2, null, Modifier.size(12.dp), tint = c.error)
-                else repeat(minOf(info.open, 3)) { Box(Modifier.size(5.dp).clip(CircleShape).background(if (info.short > 0) c.error else c.primary)) }
+                if (info.runOut.isNotEmpty()) Icon(Icons.Outlined.Inventory2, null, Modifier.size(12.dp), tint = sem.attention.accent)
+                else repeat(minOf(info.open, 3)) { Box(Modifier.size(5.dp).clip(CircleShape).background(if (info.short > 0) sem.attention.accent else c.primary)) }
                 if (info.appointments > 0) Box(Modifier.size(5.dp).clip(RoundedCornerShape(1.dp)).background(c.secondary))
             }
         }
@@ -216,7 +209,7 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
 }
 
 @Composable private fun WeekStrip(selected: LocalDate, infos: Map<LocalDate, DayInfo>, today: LocalDate, records: List<RecordEntity>, upcoming: List<TimelineEntry>, runOut: Map<Long, net.plainnotes.app.data.StockForecast>, zone: ZoneId, onSelect: (LocalDate) -> Unit) {
-    val start = weekStart(selected); val c = MaterialTheme.colorScheme
+    val start = weekStart(selected); val c = MaterialTheme.colorScheme; val sem = NotesTheme.semantic
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
         (0 until 7).forEach { i ->
             val date = start.plusDays(i.toLong()); val info = infos[date]
@@ -227,24 +220,26 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
                     .map { e -> e.slot.at to (if (runOut[e.slot.medicationId]?.firstShort?.let { !e.slot.at.isBefore(it) } == true) "SHORT" else "OPEN") }
             val doses = marks.sortedBy { it.first }.map { (t, st) -> formatTime(t) + " " + stringResource(markLabel(st)) }
             val description = dayDescription(date, info, date == today, doses)
+            val dayStyle = dayStyle(info?.kind ?: DayKind.NONE)
             Column(Modifier.weight(1f).heightIn(min = 140.dp).clip(RoundedCornerShape(12.dp)).background(bg)
-                .then(if (date == selected) Modifier.border(2.dp, c.primary, RoundedCornerShape(12.dp)) else Modifier)
+                .then(if (date == selected) Modifier.border(2.dp, c.primary, RoundedCornerShape(12.dp)) else Modifier.statusOutline(dayStyle, sem.of(dayStyle.tone), RoundedCornerShape(12.dp)))
                 .selectable(date == selected, role = Role.Button) { onSelect(date) }.clearAndSetSemantics { contentDescription = description }.padding(vertical = 6.dp),
                 horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(3.dp)) {
                 Text(weekdayShort(date.dayOfWeek), style = MaterialTheme.typography.labelSmall, color = fg)
                 CalendarDateBadge(date.dayOfMonth,date==today,fg)
                 marks.sortedBy { it.first }.take(5).forEach { (t, st) ->
-                    val col = when (st) { "ON_TIME", "LATE" -> c.primary; "MISSED" -> c.error; "SKIPPED" -> c.outline; "SHORT" -> c.error; else -> c.onSurfaceVariant }
+                    // UI-06: the time text keeps readable contrast; missed and not-covered are told by their tokens, never red.
+                    val col = when (st) { "ON_TIME", "LATE" -> c.primary; "MISSED" -> sem.missed.onContainer; "SKIPPED" -> c.outline; "SHORT" -> sem.attention.onContainer; else -> c.onSurfaceVariant }
                     Text(formatTime(t), style = MaterialTheme.typography.labelSmall, color = col)
                 }
-                if (info?.runOut?.isNotEmpty() == true) Icon(Icons.Outlined.Inventory2, null, Modifier.size(14.dp), tint = c.error)
+                if (info?.runOut?.isNotEmpty() == true) Icon(Icons.Outlined.Inventory2, null, Modifier.size(14.dp), tint = sem.attention.accent)
             }
         }
     }
 }
 
 @Composable private fun YearGrid(year: Int, infos: Map<LocalDate, DayInfo>, today: LocalDate, onMonth: (LocalDate) -> Unit) {
-    val c = MaterialTheme.colorScheme
+    val c = MaterialTheme.colorScheme; val sem = NotesTheme.semantic
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         (1..12).chunked(3).forEach { row ->
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -262,7 +257,7 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
                                 (0 until 7).forEach { d ->
                                     val date = start.plusDays(w * 7L + d)
                                     val color = if (YearMonth.from(date) != ym) Color.Transparent else when (infos[date]?.kind ?: DayKind.NONE) {
-                                        DayKind.TAKEN -> c.primary; DayKind.PARTIAL -> c.tertiary; DayKind.MISSED -> c.error; DayKind.UNCONFIRMED -> c.outline; DayKind.PLANNED -> c.outlineVariant; DayKind.NONE -> c.surfaceContainerHigh
+                                        DayKind.TAKEN -> c.primary; DayKind.PARTIAL -> sem.missed.container; DayKind.MISSED -> sem.missed.accent; DayKind.UNCONFIRMED -> c.outline; DayKind.PLANNED -> c.outlineVariant; DayKind.NONE -> c.surfaceContainerHigh
                                     }
                                     Box(Modifier.weight(1f).aspectRatio(1f).clip(RoundedCornerShape(2.dp)).background(color)
                                         .then(if (date == today) Modifier.border(1.dp, c.onSurface, RoundedCornerShape(2.dp)) else Modifier))
@@ -304,24 +299,30 @@ private fun markLabel(status: String) = when (status) {
     return parts.joinToString(stringResource(R.string.calendar_a11y_join))
 }
 
+/** UI-06: one swatch per state from the status table, each with its symbol; unconfirmed is dashed, missed outlined. */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable private fun Legend(year: Boolean) {
-    val c = MaterialTheme.colorScheme
+    val c = MaterialTheme.colorScheme; val sem = NotesTheme.semantic
     FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        val swatches = listOf(c.outline to R.string.status_unconfirmed) + if (year) listOf(c.primary to R.string.legend_taken, c.tertiary to R.string.legend_partial, c.error to R.string.legend_missed, c.outlineVariant to R.string.legend_planned)
-            else listOf(c.primaryContainer to R.string.legend_taken, c.tertiaryContainer to R.string.legend_partial, c.errorContainer to R.string.legend_missed, c.surfaceContainerHighest to R.string.legend_planned)
-        swatches.forEach { (col, label) ->
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                val mark = if (year) null else when (label) { R.string.legend_taken -> DayMark.CHECK; R.string.legend_partial -> DayMark.HALF; R.string.legend_missed -> DayMark.CROSS; else -> null }
-                Box(Modifier.size(14.dp).clip(RoundedCornerShape(3.dp)).background(col).border(if (mark == DayMark.CROSS) 1.dp else 0.5.dp,
-                    if (mark == DayMark.CROSS) c.error else c.outlineVariant, RoundedCornerShape(3.dp)), contentAlignment = Alignment.Center) {
-                    mark?.let { DayMarkIcon(it, if (it == DayMark.CROSS) c.error else c.onSurface) }
+        val kinds = listOf(DayKind.UNCONFIRMED, DayKind.TAKEN, DayKind.PARTIAL, DayKind.MISSED, DayKind.PLANNED)
+        kinds.forEach { kind ->
+            val style = dayStyle(kind); val tone = sem.of(style.tone)
+            val label = when (kind) { DayKind.TAKEN -> R.string.legend_taken; DayKind.PARTIAL -> R.string.legend_partial; DayKind.MISSED -> R.string.legend_missed
+                DayKind.UNCONFIRMED -> R.string.status_unconfirmed; else -> R.string.legend_planned }
+            val fill = if (year) when (kind) { DayKind.TAKEN -> c.primary; DayKind.PARTIAL -> sem.missed.container; DayKind.MISSED -> sem.missed.accent
+                DayKind.UNCONFIRMED -> c.outline; else -> c.outlineVariant } else dayTone(kind).first
+            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.testTag("legend:$kind")) {
+                val mark = if (year) null else dayMark(kind)
+                Box(Modifier.size(14.dp).clip(RoundedCornerShape(3.dp)).background(fill)
+                    .then(if (style.outlined || style.dashed) Modifier.statusOutline(style, tone, RoundedCornerShape(3.dp), 1.dp) else Modifier.border(0.5.dp, c.outlineVariant, RoundedCornerShape(3.dp))),
+                    contentAlignment = Alignment.Center) {
+                    mark?.let { DayMarkIcon(it, if (style.outlined || style.dashed) tone?.accent ?: c.onSurface else tone?.onContainer ?: c.onSurface) }
                 }; Spacer(Modifier.width(4.dp))
                 Text(stringResource(label), style = MaterialTheme.typography.labelSmall, color = c.onSurfaceVariant)
             }
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(Icons.Outlined.Inventory2, null, Modifier.size(12.dp), tint = c.error); Spacer(Modifier.width(4.dp))
+            Icon(Icons.Outlined.Inventory2, null, Modifier.size(12.dp), tint = sem.attention.accent); Spacer(Modifier.width(4.dp))
             Text(stringResource(R.string.legend_runout), style = MaterialTheme.typography.labelSmall, color = c.onSurfaceVariant)
         }
     }
@@ -329,12 +330,7 @@ private fun markLabel(status: String) = when (status) {
 
 @Composable private fun RecordLine(r: RecordEntity, med: MedicationEntity?) {
     val c = MaterialTheme.colorScheme
-    val (bg, fg, label) = when (r.status) {
-        "ON_TIME" -> Triple(c.primaryContainer, c.onPrimaryContainer, R.string.status_on_time)
-        "LATE" -> Triple(c.tertiaryContainer, c.onTertiaryContainer, R.string.status_late)
-        "MISSED" -> if(r.unconfirmed)Triple(c.surfaceContainerHigh,c.onSurfaceVariant,R.string.status_unconfirmed) else Triple(c.errorContainer, c.onErrorContainer, R.string.status_missed)
-        else -> Triple(c.surfaceContainerHighest, c.onSurfaceVariant, R.string.status_skipped)
-    }
+    val style = StatusStyles.ofRecord(r.status, r.unconfirmed)
     Surface(color = c.surfaceContainerLow, shape = MaterialTheme.shapes.large, modifier = Modifier.fillMaxWidth()) {
         FlowRow(Modifier.padding(horizontal=16.dp,vertical=12.dp),horizontalArrangement=Arrangement.spacedBy(8.dp),verticalArrangement=Arrangement.spacedBy(8.dp),itemVerticalAlignment=Alignment.CenterVertically) {
             Text(formatTime(Instant.ofEpochMilli(r.taken_utc ?: r.scheduled_utc ?: 0)),style=MaterialTheme.typography.titleMedium)
@@ -342,7 +338,7 @@ private fun markLabel(status: String) = when (status) {
                 if (!LocalSimpleMode.current) Text(med?.name ?: stringResource(R.string.history_context_unknown), style = MaterialTheme.typography.bodyLarge)
                 (r.actual_dose ?: r.planned_dose)?.let { Text(formatDose(it, med?.unit), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant) }
             }
-            StatusPill(stringResource(label), bg, fg, if (r.status in listOf("ON_TIME", "LATE")) Icons.Rounded.Check else null)
+            StatusChip(style, if (r.status == "SKIPPED") stringResource(R.string.status_you_skipped) else statusText(style))
         }
     }
 }
@@ -362,38 +358,30 @@ private fun markLabel(status: String) = when (status) {
     }
 }
 
-@Composable fun stateLabel(state: SlotState) = stringResource(when (state) {
-    SlotState.PENDING -> R.string.status_pending; SlotState.SOON -> R.string.status_soon; SlotState.OVERDUE -> R.string.status_overdue
-    SlotState.ON_TIME -> R.string.status_on_time; SlotState.LATE -> R.string.status_late; SlotState.MISSED -> R.string.status_missed; SlotState.UNCONFIRMED -> R.string.status_unconfirmed; SlotState.SKIPPED -> R.string.status_skipped
-})
+/** A slot's state in words, from the one status table (UI-06). */
+@Composable fun stateLabel(state: SlotState) = statusText(StatusStyles.of(state))
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable private fun DoseCard(entry: TimelineEntry, med: MedicationEntity?, onComplete: () -> Unit, onChange: () -> Unit) {
     val s = entry.slot; val st = entry.state; val c = MaterialTheme.colorScheme
     val done = st == SlotState.ON_TIME || st == SlotState.LATE || st == SlotState.SKIPPED
-    val (pillBg, pillFg) = when (st) {
-        SlotState.OVERDUE -> c.error to c.onError
-        SlotState.SOON -> c.primary to c.onPrimary
-        SlotState.ON_TIME -> c.primaryContainer to c.onPrimaryContainer
-        SlotState.LATE -> c.tertiaryContainer to c.onTertiaryContainer
-        SlotState.MISSED -> c.errorContainer to c.onErrorContainer
-        else -> c.surfaceContainerHighest to c.onSurfaceVariant
-    }
-    val border = if (st == SlotState.OVERDUE) BorderStroke(1.5.dp, c.error) else null
+    // UI-06: past time is attention (not red); done, missed and unconfirmed come from the status table.
+    val style = StatusStyles.of(st); val attention = NotesTheme.semantic.attention
+    val border = if (st == SlotState.OVERDUE) BorderStroke(1.5.dp, attention.accent) else null
     OutlinedCard(Modifier.fillMaxWidth().alpha(if (done) 0.72f else 1f), border = border ?: CardDefaults.outlinedCardBorder(),
-        colors = CardDefaults.outlinedCardColors(containerColor = if (st == SlotState.OVERDUE) c.errorContainer.copy(alpha = 0.35f) else c.surfaceContainerLowest)) {
+        colors = CardDefaults.outlinedCardColors(containerColor = if (st == SlotState.OVERDUE) attention.container.copy(alpha = 0.35f) else c.surfaceContainerLowest)) {
         // UI-01 A: time above the name, so a long name uses the card's full width instead of a narrow column.
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), itemVerticalAlignment = Alignment.CenterVertically) {
                 Text(formatTime(s.at), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold,
-                    color = if (st == SlotState.OVERDUE) c.error else c.onSurface)
+                    color = if (st == SlotState.OVERDUE) attention.accent else c.onSurface)
                 if (s.at != s.original) Text(stringResource(R.string.moved_from, formatTime(s.original)), style = MaterialTheme.typography.labelSmall, color = c.onSurfaceVariant)
             }
             Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 if (!LocalSimpleMode.current) Text(med?.name ?: "", style = MaterialTheme.typography.titleMedium)
                 Text(listOfNotNull(formatDose(s.dose, med?.unit), med?.route?.let { choiceLabel(it) }).joinToString(" · "),
                     style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant)
-                StatusPill(stateLabel(st), pillBg, pillFg, if (done && st != SlotState.SKIPPED) Icons.Rounded.Check else if (st == SlotState.OVERDUE) Icons.Outlined.ErrorOutline else null)
+                if (st == SlotState.SOON) StatusPill(stateLabel(st), c.primary, c.onPrimary) else StatusChip(style)
                 if(st==SlotState.UNCONFIRMED)Text(stringResource(R.string.unconfirmed_help),style=MaterialTheme.typography.bodySmall)
                 if (st == SlotState.MISSED) Text(stringResource(R.string.missed_note), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
                 if (!done) Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(top = 4.dp)) {
@@ -441,8 +429,10 @@ private fun markLabel(status: String) = when (status) {
 }
 
 /** UI-01 C: non-colour mark for a day's state. Exposed to tests as [dayMarkSemantics]; TalkBack reads the day's description instead. */
-enum class DayMark { CHECK, HALF, CROSS }
-fun dayMark(kind: DayKind): DayMark? = when (kind) { DayKind.TAKEN -> DayMark.CHECK; DayKind.PARTIAL -> DayMark.HALF; DayKind.MISSED -> DayMark.CROSS; else -> null }
+enum class DayMark { CHECK, HALF, CROSS, QUESTION }
+/** UI-06: the symbol from the status table (✓ ½ ✕ ?); planned and empty days have none. */
+fun dayMark(kind: DayKind): DayMark? = when (dayStyle(kind).symbol) {
+    StatusSymbol.CHECK -> DayMark.CHECK; StatusSymbol.HALF -> DayMark.HALF; StatusSymbol.CROSS -> DayMark.CROSS; StatusSymbol.QUESTION -> DayMark.QUESTION; else -> null }
 val DayMarkKey = androidx.compose.ui.semantics.SemanticsPropertyKey<DayMark>("DayMark")
 var androidx.compose.ui.semantics.SemanticsPropertyReceiver.dayMarkSemantics by DayMarkKey
 
@@ -456,6 +446,10 @@ var androidx.compose.ui.semantics.SemanticsPropertyReceiver.dayMarkSemantics by 
                 drawArc(color, 90f, 180f, true, topLeft = androidx.compose.ui.geometry.Offset(w * 0.08f, w * 0.08f), size = androidx.compose.ui.geometry.Size(w * 0.84f, w * 0.84f)) }
             DayMark.CROSS -> { drawLine(color, androidx.compose.ui.geometry.Offset(w * 0.15f, w * 0.15f), androidx.compose.ui.geometry.Offset(w * 0.85f, w * 0.85f), stroke)
                 drawLine(color, androidx.compose.ui.geometry.Offset(w * 0.85f, w * 0.15f), androidx.compose.ui.geometry.Offset(w * 0.15f, w * 0.85f), stroke) }
+            DayMark.QUESTION -> { drawArc(color, 180f, 270f, false, topLeft = androidx.compose.ui.geometry.Offset(w * 0.25f, w * 0.05f),
+                    size = androidx.compose.ui.geometry.Size(w * 0.5f, w * 0.45f), style = androidx.compose.ui.graphics.drawscope.Stroke(stroke))
+                drawLine(color, androidx.compose.ui.geometry.Offset(w * 0.5f, w * 0.5f), androidx.compose.ui.geometry.Offset(w * 0.5f, w * 0.68f), stroke)
+                drawCircle(color, stroke * 0.7f, androidx.compose.ui.geometry.Offset(w * 0.5f, w * 0.9f)) }
         }
     }
 }

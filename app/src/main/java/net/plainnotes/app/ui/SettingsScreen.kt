@@ -176,11 +176,12 @@ data class SettingsSummaries(val wellbeing: String = "", val privacy: String = "
 @Composable private fun CheckRow(icon: ImageVector, label: String, ok: Boolean, bad: String, onFix: () -> Unit) {
     val c = MaterialTheme.colorScheme
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(icon, null, tint = if (ok) c.primary else c.error)
+        // UI-06: a check that needs fixing asks for a look; it is not an error (attention, not red).
+        Icon(icon, null, tint = if (ok) c.primary else NotesTheme.semantic.attention.accent)
         Spacer(Modifier.width(12.dp))
         Column(Modifier.weight(1f)) {
             Text(label, style = MaterialTheme.typography.bodyLarge)
-            Text(if (ok) stringResource(R.string.check_ok) else bad, style = MaterialTheme.typography.bodySmall, color = if (ok) c.onSurfaceVariant else c.error)
+            Text(if (ok) stringResource(R.string.check_ok) else bad, style = MaterialTheme.typography.bodySmall, color = if (ok) c.onSurfaceVariant else NotesTheme.semantic.attention.accent)
         }
         if (!ok) TextButton(onClick = onFix) { Text(stringResource(R.string.fix)) }
         else Icon(Icons.Outlined.CheckCircle, null, tint = c.primary)

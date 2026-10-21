@@ -202,7 +202,7 @@ class VisitExportRequest(val from: LocalDate, val to: LocalDate, val sections: S
         Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             ExportPrivacyNotice()
             Text(range.previous?.let { stringResource(R.string.visit_range_previous, formatDate(Instant.ofEpochMilli(it.at_utc).atZone(zone).toLocalDate())) } ?: stringResource(R.string.visit_range_none),
-                style = MaterialTheme.typography.bodySmall, color = if (range.previous == null) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant)
+                style = MaterialTheme.typography.bodySmall, color = if (range.previous == null) NotesTheme.semantic.attention.accent else MaterialTheme.colorScheme.onSurfaceVariant) // UI-06: a note, not an error
             TextButton(onClick = { pick = 1 }) { Text(stringResource(R.string.batch_from) + ": " + from) }
             TextButton(onClick = { pick = 2 }) { Text(stringResource(R.string.batch_to) + ": " + to) }
             Text(stringResource(R.string.visit_sections), style = MaterialTheme.typography.titleSmall)

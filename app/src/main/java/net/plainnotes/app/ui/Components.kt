@@ -10,6 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -137,8 +138,9 @@ val sectionTitleStyle: androidx.compose.ui.text.TextStyle
     }
 }
 
+/** A status label; UI-06: fully rounded ([Corners.pill]). States use [StatusChip], which picks colours from the status table. */
 @Composable fun StatusPill(text: String, container: androidx.compose.ui.graphics.Color, content: androidx.compose.ui.graphics.Color, icon: ImageVector? = null) {
-    Surface(color = container, contentColor = content, shape = MaterialTheme.shapes.small) {
+    Surface(color = container, contentColor = content, shape = Corners.pill, modifier = Modifier.testTag("status-pill")) {
         Row(Modifier.padding(horizontal = 10.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
             icon?.let { Icon(it, null, Modifier.size(14.dp)); Spacer(Modifier.width(4.dp)) }
             Text(text, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Medium)

@@ -61,7 +61,7 @@ internal val LocalTodayClock = staticCompositionLocalOf<() -> Instant> { Instant
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s)) {
                 Text(stringResource(R.string.today) + " · " + formatShortDate(today), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.weight(1f).semantics { heading() }.testTag("today-date"))
-                if (total > 0) Surface(color = c.onPrimary.copy(alpha = 0.16f), contentColor = c.onPrimary, shape = Corners.badge, modifier = Modifier.testTag("today-progress-pill")) {
+                if (total > 0) Surface(color = c.onPrimary.copy(alpha = 0.16f), contentColor = c.onPrimary, shape = Corners.pill, modifier = Modifier.testTag("today-progress-pill")) {
                     Text(stringResource(R.string.today_progress, taken.size, total), style = MaterialTheme.typography.labelLarge.tnum(),
                         modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp).testTag("today-progress"))
                 }
@@ -73,9 +73,9 @@ internal val LocalTodayClock = staticCompositionLocalOf<() -> Instant> { Instant
                     Text(stringResource(R.string.today_next), style = MaterialTheme.typography.labelLarge)
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text(formatTime(next.slot.at), style = MaterialTheme.typography.headlineMedium.tnum(), fontWeight = FontWeight.SemiBold, modifier = Modifier.testTag("today-next-time"))
-                        // OVERDUE is said in words, not only by colour.
-                        if (next.state == SlotState.OVERDUE) Surface(color = c.errorContainer, contentColor = c.onErrorContainer, shape = MaterialTheme.shapes.small) {
-                            Text(stringResource(R.string.today_overdue), style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp).testTag("today-next-status"))
+                        // OVERDUE is said in words, not only by colour; UI-06: attention, not red ("past time · you can still log it").
+                        if (next.state == SlotState.OVERDUE) Surface(color = NotesTheme.semantic.attention.container, contentColor = NotesTheme.semantic.attention.onContainer, shape = Corners.pill) {
+                            Text(statusText(StatusStyles.of(SlotState.OVERDUE)), style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp).testTag("today-next-status"))
                         } else Countdown(next.slot.at)
                     }
                     DoseLine(next, medOf(next), simple, Modifier.testTag("today-next-name"))
@@ -120,9 +120,12 @@ internal val LocalTodayClock = staticCompositionLocalOf<() -> Instant> { Instant
                 val m = recordMed(r)
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s)) {
                     // UI-05 A: a small status icon before the unchanged status words (decorative: the words carry the meaning).
-                    val (kind, icon) = recordIcon(r)
-                    Box(Modifier.size(28.dp).clip(CircleShape).background(c.onPrimary.copy(alpha = 0.16f)).testTag("today-done-icon:${r.id}:$kind"), contentAlignment = Alignment.Center) {
-                        Icon(icon, null, Modifier.size(16.dp))
+                    // UI-06: colours and symbol from the status table; unconfirmed is a dashed ring (on the card's own colour).
+                    val (kind, icon) = recordIcon(r); val style = StatusStyles.ofRecord(r.status, r.unconfirmed); val tone = statusTone(style)
+                    Box(Modifier.size(28.dp).clip(CircleShape).background(if (style.dashed) androidx.compose.ui.graphics.Color.Transparent else tone?.container ?: c.onPrimary.copy(alpha = 0.16f))
+                        .statusOutline(style, tone?.copy(accent = if (style.dashed) c.onPrimary else tone.accent), CircleShape)
+                        .testTag("today-done-icon:${r.id}:$kind"), contentAlignment = Alignment.Center) {
+                        Icon(icon, null, Modifier.size(16.dp), tint = if (style.dashed) c.onPrimary else tone?.onContainer ?: c.onPrimary)
                     }
                     Column(Modifier.weight(1f)) {
                         Text(listOfNotNull(formatTime(Instant.ofEpochMilli(r.taken_utc ?: r.scheduled_utc ?: 0)), if (simple) null else m?.name,
@@ -156,12 +159,11 @@ internal val LocalTodayClock = staticCompositionLocalOf<() -> Instant> { Instant
     }
 }
 
-/** UI-05 A: icon kind per record status, matching the words of [recordStatus]: taken ✓, missed ✕, skipped –, unconfirmed ?. */
-private fun recordIcon(r: RecordEntity) = when {
-    r.status == "ON_TIME" || r.status == "LATE" -> "TAKEN" to Icons.Outlined.Check
-    r.status == "MISSED" && r.unconfirmed -> "UNCONFIRMED" to Icons.AutoMirrored.Outlined.HelpOutline
-    r.status == "MISSED" -> "MISSED" to Icons.Outlined.Close
-    else -> "SKIPPED" to Icons.Outlined.Remove
+/** UI-05 A / UI-06: icon kind per record status from the status table: taken ✓, missed ✕, skipped –, unconfirmed ?. */
+private fun recordIcon(r: RecordEntity): Pair<String, androidx.compose.ui.graphics.vector.ImageVector> {
+    val style = StatusStyles.ofRecord(r.status, r.unconfirmed)
+    val kind = when (style.state) { DoseState.ON_TIME, DoseState.LATE -> "TAKEN"; DoseState.UNCONFIRMED -> "UNCONFIRMED"; DoseState.MISSED -> "MISSED"; else -> "SKIPPED" }
+    return kind to statusIcon(style.symbol)!!
 }
 
 /** UI-05 A: "in n h / in n min" to the next dose, from slot.at and now only; refreshed each minute, never written. */
@@ -178,12 +180,8 @@ private fun recordIcon(r: RecordEntity) = when {
 /** UI-05 G: tabular figures so times and amounts line up. */
 internal fun androidx.compose.ui.text.TextStyle.tnum() = copy(fontFeatureSettings = "tnum")
 
-/** The same status words as RecordLine. */
-private fun recordStatus(r: RecordEntity) = when (r.status) {
-    "ON_TIME" -> R.string.status_on_time; "LATE" -> R.string.status_late
-    "MISSED" -> if (r.unconfirmed) R.string.status_unconfirmed else R.string.status_missed
-    else -> R.string.status_skipped
-}
+/** The same status words as RecordLine (UI-06: from the status table). */
+private fun recordStatus(r: RecordEntity) = statusTextRes(StatusStyles.ofRecord(r.status, r.unconfirmed))
 
 private val RoundedCornerShape24 = androidx.compose.foundation.shape.RoundedCornerShape(24.dp)
 

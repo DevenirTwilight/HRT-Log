@@ -519,7 +519,7 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="forecast_no_plan">%1$s left · no schedule to forecast from</string>
 <string name="forecast_untracked">Stock not tracked yet</string>
 <string name="legend_missed">Missed</string>
-<string name="legend_partial">Some missed</string>
+<string name="legend_partial">Partly done</string>
 <string name="legend_planned">Planned</string>
 <string name="legend_runout">Stock runs out</string>
 <string name="legend_taken">All taken</string>
@@ -1286,4 +1286,13 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="lab_panel_delete_confirm">The blood test and its %1$d results move to the recycle bin together.</string>
 <string name="lab_panel_open">Open this blood test</string>
 <string name="lab_panel_members">Results</string>
+<!-- UI-06 semantic status -->
+<string name="status_past_time">Past time · you can still log it</string>
+<string name="confirm_title_yesterday">No entry yet for %1$s yesterday</string>
+<string name="confirm_title_today">No entry yet for %1$s today</string>
+<string name="confirm_body">If you remember, just add it.</string>
+<string name="confirm_took">I took it</string>
+<string name="confirm_not_taken">I didn\'t take it</string>
+<string name="confirm_more">%1$d more</string>
+<string name="status_you_skipped">You skipped</string>
 </resources>
