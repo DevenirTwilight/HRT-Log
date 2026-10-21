@@ -135,7 +135,7 @@ internal object ReferenceSchema {
             require(header.sha==c.getString(4) && header.kind==c.getString(0) && header.namespace==c.getString(1) && header.version==c.getString(2))
         } }
         db.query("SELECT * FROM reference_event").use { c -> while(c.moveToNext()) {
-            val event=ReferenceStore.row(db,"reference_event","operation_uuid=?",arrayOf(c.getString(c.getColumnIndexOrThrow("operation_uuid"))))!!
+            val event=ReferenceStore.row(c)
             val snapshot=ReferencePayload.optional(event,"snapshot_uuid")?.let { ReferenceStore.row(db,"reference_snapshot","uuid=?",arrayOf(it))!! }
             val payload=snapshot?.let { JSONObject(it.getString("payload_json")) }
             val previous=ReferencePayload.optional(event,"previous_uuid")?.let { ReferenceStore.row(db,"reference_event","operation_uuid=?",arrayOf(it))!! }
@@ -145,7 +145,7 @@ internal object ReferenceSchema {
             require(ReferenceStore.requestHash(event.getString("dataset_uuid"),event.getString("subject_uuid"),event.getInt("revision")-1,action,payload)==event.getString("request_sha256"))
         } }
         db.query("SELECT * FROM record_reference_capture").use { c -> while(c.moveToNext()) {
-            val row=ReferenceStore.row(db,"record_reference_capture","uuid=?",arrayOf(c.getString(c.getColumnIndexOrThrow("uuid"))))!!
+            val row=ReferenceStore.row(c)
             require(ReferenceStore.captureHash(row)==row.getString("payload_sha256"))
         } }
         if(!candidate) db.query("SELECT 1 FROM measured_operation LIMIT 1").use { require(!it.moveToFirst()) { "Measured inventory not yet enabled" } }

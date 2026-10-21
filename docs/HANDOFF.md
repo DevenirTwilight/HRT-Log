@@ -1,3 +1,9 @@
+## P4 新一轮有界执行复用候选：设计/独立旧oracle冻结 — 2026-10-21
+
+负责人再次要求实际解阻，最新源99e536fe/主线320171cd已核。旧恢复专项已结束，不重跑旧源码。新候选仅完整审计执行复用：同审计纯消费payload解码、reference已有扫描行直接验证、primitive captureHash去序列化往返；保留全部全局规则/行头依赖/最终全审计，缓存不跨事务。已排除跨回调链头复用：追加可能修复预先无效的future-child前缀且收益约数百ms，不足以解阻。冻结99e536fe旧Store/BackupValidation/ReferenceSchema独立全审计到historyTest，原SHA存full-audit-reuse/frozen-oracle.json。
+
+当前生产候选和冻结old oracle已实现，reference新增4合同/Android编译PASS；首次综合构建因未指定本地Robolectric缓存导致依赖下载失败（不是业务测试FAIL），已保留日志并使用现有离线jar重跑。最终16MiB候选针对性151项全部PASS（库存147/reference4），Android test编译PASS、工具19PASS，日志/失败尝试已保存在full-audit-reuse/focused/。尚未完成完整回归或冻结，不能称提速PASS。下一步先旧新差分/反例/完整data/原生编译，通过再冻结新候选；最多两次原生，首轮失败即停止同源补跑，旧恢复两次次数不挪用。原5s/15s/120s/夹具/内存不变，Draft/OFF不合并。进度持续写库。
+
 ## P4 恢复专项收尾：两个实际终止合同PASS，整体仍BLOCKED — 2026-10-21
 
 唯一小型run39555630970/job119074632992 SUCCESS；源47f11551，生产仍9d304e58。工件12325738217/2183B，官方与下载SHA0204f52b41f8f8ae08b65b17dbc12f67f9add63e70c6ee96cfe21452a3f24227、CRC均通过；原始日志/报告已存restore-memory/death-probe-fix/native/。ROWS_DELETED PID3784→4021、ROWS_INSERTED PID4065→4226，两次外部终止后新进程整库hash、原epoch、FK、完整oracle均PASS。prepare日志Process crashed为有意终止；verify各OK(1 test)。明确large_performance=NOT_RUN_CONTRACT_ONLY，生成大库探针GENERATED_NOT_RUN；不冒充第二轮大库恢复或性能通过。

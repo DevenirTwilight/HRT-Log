@@ -14,15 +14,17 @@ internal object ReferenceStore {
     internal fun row(db: SupportSQLiteDatabase, table: String, where: String, args: Array<out Any?>): JSONObject? {
         require(table in ReferenceSchema.businessTables || table == "reference_runtime")
         return db.query("SELECT * FROM `$table` WHERE $where", args).use { c ->
-            if (!c.moveToFirst()) null else JSONObject().apply {
-                for (i in 0 until c.columnCount) put(c.getColumnName(i), when (c.getType(i)) {
-                    Cursor.FIELD_TYPE_NULL -> JSONObject.NULL
-                    Cursor.FIELD_TYPE_INTEGER -> c.getLong(i)
-                    Cursor.FIELD_TYPE_STRING -> c.getString(i)
-                    else -> error("Unexpected reference storage type")
-                })
-            }
+            if (!c.moveToFirst()) null else row(c)
         }
+    }
+    /** Decode the exact positioned row; callers own the cursor and the returned fresh object. */
+    internal fun row(c:Cursor):JSONObject = JSONObject().apply {
+        for (i in 0 until c.columnCount) put(c.getColumnName(i), when (c.getType(i)) {
+            Cursor.FIELD_TYPE_NULL -> JSONObject.NULL
+            Cursor.FIELD_TYPE_INTEGER -> c.getLong(i)
+            Cursor.FIELD_TYPE_STRING -> c.getString(i)
+            else -> error("Unexpected reference storage type")
+        })
     }
     internal fun insert(db: SupportSQLiteDatabase, table: String, value: JSONObject) {
         val allowed = if(table == "reference_runtime") setOf("id","dataset_uuid","epoch") else ReferenceSchema.columns.getValue(table).toSet()
@@ -154,7 +156,17 @@ internal object ReferenceStore {
         return ReferencePayload.sha(ReferencePayload.canonical(request))
     }
     fun captureHash(capture: JSONObject): String {
-        val facts=JSONObject(capture.toString()).apply { remove("payload_sha256") }
+        // Stored reference rows contain only exact primitives. Copying those immutable values
+        // preserves the old JSON round-trip bytes without serializing and parsing every capture.
+        // Other callers retain the old round-trip behavior, including its numeric coercions.
+        val primitives=JSONObject()
+        var exact=true
+        for(key in capture.keys()) {
+            val value=capture.get(key)
+            if(value!==JSONObject.NULL && value !is String && value !is Int && value !is Long) {exact=false;break}
+            primitives.put(key,value)
+        }
+        val facts=(if(exact)primitives else JSONObject(capture.toString())).apply { remove("payload_sha256") }
         return ReferencePayload.sha(ReferencePayload.canonical(facts))
     }
     /** Only called for newly recorded actual facts, never by link/correct or legacy migration/import. */

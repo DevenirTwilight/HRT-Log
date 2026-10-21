@@ -40,6 +40,66 @@ abstract class MeasuredConsumptionContract {
     private suspend fun consume(r:RecordEntity,box:CreatedMeasuredContainer,uses:List<ConfirmedStockUse>,op:String=UUID.randomUUID().toString())=db.withTransaction{MeasuredConsumptionStore.consumeNewRecord(db,box.scope,r,op,uses,at)}
     private fun count(table:String)=raw.query("SELECT COUNT(*) FROM `$table`").use{it.moveToFirst();it.getInt(0)}
     private suspend fun rejects(code:ReferenceError,block:suspend()->Unit){try{block();fail("Expected $code")}catch(e:ReferenceFailure){assertEquals(code,e.code)}}
+    @Test fun canonicalOperationBudgetProofMatchesLexicalGate(){CanonicalOperationBudgetOracle.check()}
+    @Test fun compactConsumptionMemoPreservesPureAndRowContracts(){ConsumptionMemoOracle.check()}
+    private fun assertFrozenFullAuditMatches() {
+        val before=RawData.dump(raw).toString()
+        val old=runCatching{FrozenFullAuditStore.auditStagedDataset(raw)}
+        for(budget in listOf(0L,1L,8L*1024*1024,16L*1024*1024)) {
+            val current=runCatching{MeasuredConsumptionStore.auditStagedDataset(raw,MeasuredOperationChain.AuditProof.MAX_ROW_BYTES,budget)}
+            assertEquals("Full old/new accepted set at memo budget $budget",old.isSuccess,current.isSuccess)
+            if(old.isSuccess)assertEquals(old.getOrThrow(),current.getOrThrow())
+            else {
+                assertTrue(old.exceptionOrNull() is ReferenceFailure)
+                assertEquals((old.exceptionOrNull() as ReferenceFailure).code,(current.exceptionOrNull() as ReferenceFailure).code)
+            }
+            assertEquals("Auditors must be read only",before,RawData.dump(raw).toString())
+        }
+    }
+    @Test fun completeFrozenAuditMatchesMultiSourceZeroEffectAndRollback()=runBlocking {
+        val m=med();val a=box(m);val b=box(m)
+        val r=record(m);consume(r,a,listOf(use(a),use(b)))
+        for(effect in listOf(MeasuredStockEffect.ALREADY_ACCOUNTED,MeasuredStockEffect.UNKNOWN)) {
+            val next=record(m)
+            db.withTransaction{MeasuredConsumptionStore.consumeNewRecord(db,a.scope,next,UUID.randomUUID().toString(),listOf(use(a)),at,effect)}
+        }
+        db.withTransaction {
+            assertFrozenFullAuditMatches()
+            raw.execSQL("SAVEPOINT synthetic_frozen_audit")
+            try {
+                raw.execSQL("DROP TRIGGER reference_immutable_record_reference_capture_update")
+                raw.execSQL("UPDATE record_reference_capture SET payload_sha256=? WHERE kind='CONFIRM'",arrayOf("0".repeat(64)))
+                assertTrue(runCatching{FrozenFullAuditStore.auditStagedDataset(raw)}.isFailure)
+                assertFrozenFullAuditMatches()
+            }finally{raw.execSQL("ROLLBACK TO synthetic_frozen_audit");raw.execSQL("RELEASE synthetic_frozen_audit")}
+            assertFrozenFullAuditMatches()
+        }
+    }
+    @Test fun completeFrozenAuditMatchesChangedEnvelopeAndRestoredSavepoint()=runBlocking {
+        val m=med();val b=box(m);val op=UUID.randomUUID().toString()
+        consume(record(m),b,listOf(use(b)),op)
+        db.withTransaction {
+            assertFrozenFullAuditMatches()
+            val row=ReferenceStore.row(raw,"measured_operation","operation_uuid=?",arrayOf(op))!!
+            val original=org.json.JSONObject(row.getString("input_json"))
+            val changes=listOf<(org.json.JSONObject)->Unit>(
+                {it.getJSONArray("captures").getJSONObject(0).put("used_before_quanta","01")},
+                {it.getJSONArray("captures").getJSONObject(0).put("snapshot_uuid",UUID.randomUUID().toString())},
+                {it.getJSONArray("captures").getJSONObject(0).put("requested_quanta",org.json.JSONObject.NULL)},
+                {it.getJSONObject("chain").put("previous_operation_uuid",UUID.randomUUID().toString())})
+            for(change in changes) {
+                raw.execSQL("SAVEPOINT synthetic_changed_envelope")
+                try {
+                    raw.execSQL("DROP TRIGGER reference_immutable_measured_operation_update")
+                    val altered=org.json.JSONObject(original.toString()).also(change)
+                    raw.execSQL("UPDATE measured_operation SET input_json=? WHERE operation_uuid=?",arrayOf(ReferencePayload.canonical(altered),op))
+                    assertTrue(runCatching{FrozenFullAuditStore.auditStagedDataset(raw)}.isFailure)
+                    assertFrozenFullAuditMatches()
+                }finally{raw.execSQL("ROLLBACK TO synthetic_changed_envelope");raw.execSQL("RELEASE synthetic_changed_envelope")}
+                assertFrozenFullAuditMatches()
+            }
+        }
+    }
     @Test fun oneForeignKeyScanPerReadOnlyAuditAndIndependentValidation()=runBlocking {
         val m=med();val b=box(m);val r=record(m);consume(r,b,listOf(use(b)))
         db.withTransaction {

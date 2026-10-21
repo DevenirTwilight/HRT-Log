@@ -106,6 +106,10 @@ def native_source(text):
             var rawProjection:List<*>?=null
             component("raw_full_first_ms"){rawProjection=rawAudit();assertEquals(count,rawProjection!!.size)}
             component("cached_full_second_ms"){assertEquals(rawProjection,MeasuredConsumptionStore.auditStagedDataset(raw))}
+            component("frozen_pre_reuse_full_ms") {
+                assertEquals(rawProjection,FrozenFullAuditStore.auditStagedDataset(raw))
+                components.put("frozen_pre_reuse_full_equivalence","PASS")
+            }
             component("cached_full_first_ms"){assertEquals(rawProjection,MeasuredConsumptionStore.auditStagedDataset(raw))}
             component("raw_full_second_ms"){assertEquals(rawProjection,rawAudit())}
             component("stored_columns_ms"){BackupValidation.validateCandidateStoredColumns(raw)}

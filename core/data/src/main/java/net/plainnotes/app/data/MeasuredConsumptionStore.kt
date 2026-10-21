@@ -47,7 +47,26 @@ internal object MeasuredConsumptionStore {
      * The live wrapper above checks its epoch before calling this same read-only SQL implementation.
      */
     /** Pure payload reuse is confined to one read-only transaction, never a cross-write trust cache. */
-    private class PresentationAudit {
+    private class PresentationAudit(private val consumptionByteBudget:Long=MAX_CONSUMPTION_BYTES):AutoCloseable {
+        private val decodedConsumption=HashMap<String,ConsumptionInput>()
+        private var consumptionBytes=0L
+        private var active=true
+        init {require(consumptionByteBudget in 0..MAX_CONSUMPTION_BYTES)}
+        /** Exact immutable wire text keys only. This memo proves no database fact or row header. */
+        fun consumption(text:String):ConsumptionInput {
+            check(active)
+            decodedConsumption[text]?.let{return it}
+            val decoded=readConsumptionInput(text,false)
+            val cost=decoded.retainedBytes(text)
+            if(cost<=consumptionByteBudget-consumptionBytes) {
+                decodedConsumption[text]=decoded;consumptionBytes+=cost
+            }
+            return decoded
+        }
+        override fun close() {
+            active=false;decodedConsumption.clear();consumptionBytes=0
+            byPayload.clear();prefixes.clear();operationProof?.close()
+        }
         private val byPayload=HashMap<String,FrozenPackageMeasurement>()
         val prefixes=HashMap<Pair<String,Long>,PrefixIndex>()
         var projectionStream:ProjectionOperationStream?=null
@@ -63,7 +82,7 @@ internal object MeasuredConsumptionStore {
         fun read(payload:String)=byPayload.getOrPut(payload){PackageMeasurementPayload.read(payload)}
     }
     internal fun auditStagedProjection(db:SupportSQLiteDatabase,dataset:String,containerUuid:String):MeasureResult<AuditedStockProjection> =
-        auditStagedProjection(db,dataset,containerUuid,PresentationAudit())
+        PresentationAudit().use {auditStagedProjection(db,dataset,containerUuid,it)}
     private fun auditStagedProjection(db:SupportSQLiteDatabase,dataset:String,containerUuid:String,presentations:PresentationAudit,capturedBox:ProjectionBox?=null):MeasureResult<AuditedStockProjection> {
         check(db.inTransaction())
         try {
@@ -110,16 +129,16 @@ internal object MeasuredConsumptionStore {
                 when(entry.kind) {
                     "CONSUME"->{
                         require(delta>0 && allocation.isNull("reverses_uuid"))
-                        val decoded=consumption(operation,presentations.operationProof);val envelope=decoded.envelope;val request=decoded.request
+                        val decoded=consumption(operation,presentations.operationProof,presentations);val request=decoded.request
                         require(request.medicationUuid==owner)
                         val input=request.uses.single{it.containerUuid==containerUuid};require(input.presentationEventUuid==event.getString("operation_uuid") && input.presentationSha256==frozen.sha256)
                         val expected=physicalStock(frozen,scale,input.quantity)
                         require(expected is MeasureResult.Success)
                         val wanted=scale.toQuanta(expected.value,ActualPackage(scale.ref,true));require(wanted is MeasureResult.Success)
                         val line=decoded.receipt.lines.single{it.containerUuid==containerUuid};require(line is PhysicalUseResult.Known && same(line.requested,expected.value) && same(line.allocated,physical))
-                        val captures=envelope.getJSONArray("captures");val capture=(0 until captures.length()).map{captures.getJSONObject(it)}.single{it.getString("container_uuid")==containerUuid}
-                        require(capture.getString("snapshot_uuid")==snapshot.getString("uuid") && capture.getString("used_before_quanta")==used.toString() && capture.getString("take_quanta")==delta.toString())
-                        require(capture.getString("requested_quanta")==wanted.value.toString() && delta==minOf(wanted.value,scale.capacityQuanta-used))
+                        val capture=decoded.captures.single{it.containerUuid==containerUuid}
+                        require(capture.snapshotUuid==snapshot.getString("uuid") && capture.usedBefore==used && capture.take==delta)
+                        require(capture.requestedQuanta==wanted.value && delta==minOf(wanted.value,scale.capacityQuanta-used))
                         val count=db.query("SELECT COUNT(*) FROM measured_allocation WHERE operation_uuid=? AND container_uuid=?",arrayOf(entry.operation_id,containerUuid)).use{it.moveToFirst();it.getLong(0)};require(count==1L)
                     }
                     "ADJUST"->{
@@ -166,18 +185,24 @@ internal object MeasuredConsumptionStore {
     internal fun auditStagedDataset(db:SupportSQLiteDatabase):List<AuditedStockProjection> =
         auditStagedDataset(db,MeasuredOperationChain.AuditProof.MAX_ROW_BYTES)
     /** Budget zero retains the complete original SQL path as a differential oracle; never skips validation. */
-    internal fun auditStagedDataset(db:SupportSQLiteDatabase,operationRowByteBudget:Long):List<AuditedStockProjection> {
+    internal fun auditStagedDataset(db:SupportSQLiteDatabase,operationRowByteBudget:Long):List<AuditedStockProjection> =
+        auditStagedDataset(db,operationRowByteBudget,MAX_CONSUMPTION_BYTES)
+    /** Zero disables only pure decoding reuse; all history, row and dependency checks still execute. */
+    internal fun auditStagedDataset(db:SupportSQLiteDatabase,operationRowByteBudget:Long,consumptionByteBudget:Long):List<AuditedStockProjection> {
         require(operationRowByteBudget in 0..MeasuredOperationChain.AuditProof.MAX_ROW_BYTES)
+        require(consumptionByteBudget in 0..MAX_CONSUMPTION_BYTES)
         check(db.inTransaction())
         try {
             BackupValidation.validateCandidateStoredColumns(db)
             val reads=ReferenceAuditReads(db)
-            try {return auditReadSnapshot(reads,operationRowByteBudget)} finally {reads.finish()}
+            try {return auditReadSnapshot(reads,operationRowByteBudget,consumptionByteBudget)} finally {reads.finish()}
         } catch(e:ReferenceFailure){throw e} catch(e:Exception){fail(ReferenceError.INVALID_SOURCE)}
     }
     private fun auditReadSnapshot(db:SupportSQLiteDatabase):List<AuditedStockProjection> =
         auditReadSnapshot(db,MeasuredOperationChain.AuditProof.MAX_ROW_BYTES)
-    private fun auditReadSnapshot(db:SupportSQLiteDatabase,operationRowByteBudget:Long):List<AuditedStockProjection> {
+    private fun auditReadSnapshot(db:SupportSQLiteDatabase,operationRowByteBudget:Long):List<AuditedStockProjection> =
+        auditReadSnapshot(db,operationRowByteBudget,MAX_CONSUMPTION_BYTES)
+    private fun auditReadSnapshot(db:SupportSQLiteDatabase,operationRowByteBudget:Long,consumptionByteBudget:Long):List<AuditedStockProjection> {
             BackupValidation.validateMeasuredCandidateState(db)
             db.query(EXACT_SOURCE_COVERAGE_QUERY).use{require(!it.moveToFirst())}
             db.query("SELECT 1 FROM measured_operation o JOIN reference_event e ON e.operation_uuid=o.operation_uuid LIMIT 1").use{require(!it.moveToFirst())}
@@ -190,7 +215,7 @@ internal object MeasuredConsumptionStore {
             val identities=db.query("SELECT DISTINCT i.uuid,i.dataset_uuid,c.id,c.medication_id,c.capacity,c.initial_used_amount,c.used_amount,c.inventory_encoding FROM reference_identity i JOIN reference_event e ON e.subject_uuid=i.uuid JOIN reference_snapshot s ON s.uuid=e.snapshot_uuid LEFT JOIN supply_container c ON c.id=i.live_handle WHERE i.kind='CONTAINER' AND s.kind='PRESENTATION' ORDER BY i.uuid").use { c ->
                 buildList {while(c.moveToNext())add(Triple(c.getString(0),c.getString(1),if(c.isNull(2))null else projectionBox(c,2)))}
             }
-            val presentations=PresentationAudit().apply{this.operationRowByteBudget=operationRowByteBudget}
+            val presentations=PresentationAudit(consumptionByteBudget).apply{this.operationRowByteBudget=operationRowByteBudget}
             try {
             presentations.prepareOperations(db)
             val shared=presentations.operationProof?.takeIf{it.hasCompleteRows}
@@ -213,7 +238,7 @@ internal object MeasuredConsumptionStore {
             }
             auditOperations(db,presentations)
             return projections
-            } finally {presentations.operationProof?.close()}
+            } finally {presentations.close()}
     }
 
     internal fun forecastBalances(db:SupportSQLiteDatabase,projections:List<AuditedStockProjection>):Map<Long,List<ConfirmedPhysicalStock>> {
@@ -314,13 +339,18 @@ internal object MeasuredConsumptionStore {
             val id=op.getString("operation_uuid");val dataset=op.getString("dataset_uuid")
             require(visited.add(id))
             require(ReferencePayload.uuid(id) && ReferencePayload.uuid(dataset))
-            require(op.getString("input_json").toByteArray(Charsets.UTF_8).size<=ReferencePayload.MAX_BYTES)
-            BackupLimits.checkJson(op.getString("input_json"))
+            val inputText=op.getString("input_json")
+            // The exact UUID/text was already parsed, bounded and canonicalized by this audit's chain.
+            // No hash-only certificate or persisted trust: unmatched rows keep both original gates.
+            if(presentations.operationProof?.matches(id,inputText)!=true) {
+                require(inputText.toByteArray(Charsets.UTF_8).size<=ReferencePayload.MAX_BYTES)
+                BackupLimits.checkJson(inputText)
+            }
             val allocations=rows("measured_allocation","operation_uuid=?",arrayOf(id))
             allocations.forEach{require(allocated.add(it.getString("uuid")))}
             when(op.getString("kind")) {
                 "CONSUME"->{
-                    val decoded=consumption(op,presentations.operationProof);val result=decoded.receipt;val envelope=decoded.envelope;val request=decoded.request
+                    val decoded=consumption(op,presentations.operationProof,presentations);val result=decoded.receipt;val request=decoded.request
                     require(consumed.add(request.record.uuid to request.record.revision))
                     identity(request.medicationUuid,"MEDICATION",dataset)
                     val record=identity(request.record.uuid,"RECORD",dataset,request.medicationUuid)
@@ -339,43 +369,43 @@ internal object MeasuredConsumptionStore {
                             }
                         }
                     }
-                    val captures=envelope.getJSONArray("captures")
+                    val captures=decoded.captures
                     val expectedAllocations=HashSet<String>();val issues=ArrayList<String?>();val left=ArrayList<Quantity>()
                     for((i,input) in request.uses.withIndex()) {
-                        val c=captures.getJSONObject(i)
+                        val c=captures[i]
                         val (box,frozen)=source(input.containerUuid,input.presentationEventUuid,input.presentationSha256,dataset,request.medicationUuid)
                         val event=ReferenceStore.row(db,"reference_event","operation_uuid=?",arrayOf(input.presentationEventUuid))!!
-                        require(c.getString("snapshot_uuid")==event.getString("snapshot_uuid"))
+                        require(c.snapshotUuid==event.getString("snapshot_uuid"))
                         val confirmations=rows("record_reference_capture","record_uuid=? AND record_revision=? AND kind='CONFIRM' AND container_uuid=?",arrayOf(request.record.uuid,request.record.revision,input.containerUuid))
                         require(confirmations.size==1)
-                        val confirmation=confirmations.single();require(confirmation.getString("dataset_uuid")==dataset && confirmation.getString("actual_snapshot_uuid")==c.getString("snapshot_uuid"))
+                        val confirmation=confirmations.single();require(confirmation.getString("dataset_uuid")==dataset && confirmation.getString("actual_snapshot_uuid")==c.snapshotUuid)
                         require(confirmed.add(confirmation.getString("uuid")))
                         val scaleResult=stockScale(frozen);require(scaleResult is MeasureResult.Success);val scale=scaleResult.value
-                        val head=if(c.isNull("ledger_head_id"))null else c.getString("ledger_head_id").toLong()
-                        val state=ReferencePayload.optional(c,"stock_state")
-                        val used=if(state==null) {require(box.isNull("live_handle") && head==null && c.isNull("used_before_quanta"));null}
-                            else {require(head!=null && state in setOf("SEALED","IN_USE","EMPTY","VOIDED","DISCARDED"));prefix(box,scale,head,chain.getValue(id).sequence).also{require(c.getString("used_before_quanta")==it.toString())}}
+                        val head=c.ledgerHead
+                        val state=c.stockState
+                        val used=if(state==null) {require(box.isNull("live_handle") && head==null && c.usedBefore==null);null}
+                            else {require(head!=null && state in setOf("SEALED","IN_USE","EMPTY","VOIDED","DISCARDED"));prefix(box,scale,head,chain.getValue(id).sequence).also{require(c.usedBefore==it)}}
                         val conversion=physical(frozen,scale,input.quantity)
                         val wanted:MeasureResult<Long> = when(conversion) {is MeasureResult.Success->scale.toQuanta(conversion.value,ActualPackage(scale.ref,true));is MeasureResult.Failure->conversion}
                         val take:Long;val issue:String?
                         if(request.stockEffect!=MeasuredStockEffect.DEDUCT_CURRENT) {
                             take=0;issue=if(request.stockEffect==MeasuredStockEffect.ALREADY_ACCOUNTED)"ALREADY_ACCOUNTED" else "STOCK_EFFECT_NOT_CONFIRMED"
-                            require(c.isNull("requested_stock") && c.isNull("requested_quanta"))
+                            require(c.requestedStock==null && c.requestedQuanta==null)
                             if(request.stockEffect==MeasuredStockEffect.UNKNOWN)left+=input.quantity
                         } else if(wanted is MeasureResult.Failure) {
                             take=0;issue=wanted.error.name
-                            require(c.isNull("requested_stock") && c.isNull("requested_quanta"))
+                            require(c.requestedStock==null && c.requestedQuanta==null)
                             left+=input.quantity
                         } else {
                             require(conversion is MeasureResult.Success && wanted is MeasureResult.Success)
-                            require(sameQuantity(PackageMeasurementPayload.quantity(c.getJSONObject("requested_stock")),conversion.value))
-                            require(c.getString("requested_quanta")==wanted.value.toString())
+                            require(sameQuantity(requireNotNull(c.requestedStock),conversion.value))
+                            require(c.requestedQuanta==wanted.value)
                             val available=if(used!=null && state in setOf("SEALED","IN_USE","EMPTY"))scale.capacityQuanta-used else 0L
                             take=minOf(wanted.value,available)
                             issue=when {used==null->"CONTAINER_MISSING";state=="VOIDED"->"VOIDED";state=="DISCARDED"->"DISCARDED";take<wanted.value->"INSUFFICIENT_STOCK";else->null}
                             left+=amount(scale,wanted.value-take)
                         }
-                        require(c.getString("take_quanta")==take.toString() && ReferencePayload.optional(c,"issue")==issue)
+                        require(c.take==take && c.issue==issue)
                         issues+=issue
                         val matching=allocations.filter{it.getString("container_uuid")==input.containerUuid}
                         if(take==0L)require(matching.isEmpty()) else {require(matching.size==1);expectedAllocations+=matching.single().getString("uuid")}
@@ -563,49 +593,96 @@ internal object MeasuredConsumptionStore {
     internal fun sourceOfInverse(db:SupportSQLiteDatabase,operationUuid:String):JSONObject? =
         ReferenceStore.row(db,"measured_operation","operation_uuid=?",arrayOf(operationUuid))?.let{if(it.getString("kind")!="REVERSE")fail(ReferenceError.OPERATION_CONFLICT);reverseCapture(it)}
 
-    /** One call-local parse, including all original checks. Not retained across rows, audits or writes. */
-    private data class DecodedConsumption(val envelope:JSONObject,val request:MeasuredConsumptionRequest,val receipt:MeasuredConsumptionReceipt)
+    private const val MAX_CONSUMPTION_BYTES=16L*1024*1024
+    /** Immutable values only. Original canonical numeric tokens forbid leading zeros, so Long is lossless. */
+    private data class ConsumptionCapture(
+        val containerUuid:String,val presentationEventUuid:String,val snapshotUuid:String,
+        val requestedStock:Quantity?,val requestedQuanta:Long?,val usedBefore:Long?,val take:Long,
+        val issue:String?,val stockState:String?,val ledgerHead:Long?,
+    )
+    /** Only pure input results live here. Operation UUID, row headers and issue are never memoized. */
+    private data class ConsumptionInput(
+        val request:MeasuredConsumptionRequest,val sha256:String,
+        val captures:List<ConsumptionCapture>,val lines:List<PhysicalUseResult>,
+    ) {
+        fun retainedBytes(text:String):Long {
+            fun string(s:String?)=if(s==null)0L else 112L+s.length*2L
+            fun quantity(q:Quantity?)=if(q==null)0L else 256L+string(q.meaning.identity)
+            val r=request.record
+            // Reserve complete UTF-16 text/strings, DTO/BigDecimal overhead, maps/lists and references.
+            // Count the known aliases once: capture source IDs refer to request IDs; receipt lines
+            // refer to those same IDs, quantities and meanings. Other possible sharing is overcounted.
+            // This conservative allocation reservation is not an exact RSS bound.
+            return 1024L+string(text)+string(sha256)+string(request.datasetUuid)+string(request.medicationUuid)+
+                string(r.uuid)+string(r.takenZone)+string(r.status)+string(r.legacyActualDoseBits)+string(r.configSha256)+string(r.scheduleSha256)+quantity(request.unlinkedActual)+
+                request.uses.sumOf {256L+string(it.containerUuid)+string(it.presentationEventUuid)+string(it.presentationSha256)+quantity(it.quantity)}+
+                captures.sumOf {256L+string(it.snapshotUuid)+string(it.issue)+string(it.stockState)+quantity(it.requestedStock)}+
+                lines.sumOf {line->256L+when(line) {
+                    // requested is the capture quantity; both new values share its immutable meaning.
+                    is PhysicalUseResult.Known->512L
+                    is PhysicalUseResult.Unknown,is PhysicalUseResult.AlreadyAccounted->0L
+                }}
+        }
+    }
+    private data class DecodedConsumption(val captures:List<ConsumptionCapture>,val request:MeasuredConsumptionRequest,val receipt:MeasuredConsumptionReceipt)
     private fun receipt(row:JSONObject):MeasuredConsumptionReceipt = consumption(row).receipt
-    private fun consumption(row:JSONObject,proof:MeasuredOperationChain.AuditProof?=null):DecodedConsumption = try {readConsumption(row,proof)} catch(e:Exception){fail(ReferenceError.INVALID_SOURCE)}
-    private fun readConsumption(row:JSONObject,proof:MeasuredOperationChain.AuditProof?):DecodedConsumption {
+    private fun consumption(row:JSONObject,proof:MeasuredOperationChain.AuditProof?=null,presentations:PresentationAudit?=null):DecodedConsumption =
+        try {readConsumption(row,proof,presentations)} catch(e:Exception){fail(ReferenceError.INVALID_SOURCE)}
+    private fun readConsumption(row:JSONObject,proof:MeasuredOperationChain.AuditProof?,presentations:PresentationAudit?):DecodedConsumption {
+        val text=row.getString("input_json")
+        // Always check this row's UUID/text relationship; a memo hit authorizes no row or database state.
+        if(proof!=null && !proof.matches(row.getString("operation_uuid"),text))fail(ReferenceError.INVALID_SOURCE)
+        val input=if(proof!=null && presentations!=null)presentations.consumption(text) else readConsumptionInput(text,proof==null)
+        val request=input.request
+        if(row.getString("kind")!="CONSUME" || input.sha256!=row.getString("request_sha256") ||
+            row.getString("dataset_uuid")!=request.datasetUuid || row.getString("record_uuid")!=request.record.uuid || row.getInt("record_revision")!=request.record.revision)fail(ReferenceError.INVALID_SOURCE)
+        return DecodedConsumption(input.captures,request,MeasuredConsumptionReceipt(row.getString("operation_uuid"),request.record.uuid,request.record.revision,input.lines,ReferencePayload.optional(row,"unknown_reason")))
+    }
+    /** Same parser and checks as the standalone decoder. No JSONObject escapes this call. */
+    private fun readConsumptionInput(text:String,checkCanonical:Boolean):ConsumptionInput {
         fun keys(value:JSONObject,expected:Set<String>)=require(value.keys().asSequence().toSet()==expected)
-        fun text(value:JSONObject,key:String):String {require(value.get(key) is String);return value.getString(key)}
+        fun string(value:JSONObject,key:String):String {require(value.get(key) is String);return value.getString(key)}
         fun quanta(value:JSONObject,key:String):Long {
-            val token=text(value,key);require(quantaPattern.matches(token))
+            val token=string(value,key);require(quantaPattern.matches(token))
             return token.toLong().also{require(it<=StockQuantum.MAX_QUANTA)}
         }
-        val embedded=MeasuredUsePayload.readEmbeddedRequest(row.getString("input_json"))
+        val embedded=MeasuredUsePayload.readEmbeddedRequest(text)
         val envelope=embedded.envelope;keys(envelope,setOf("format","request","captures","chain"));MeasuredOperationChain.read(envelope)
+        if(checkCanonical)require(ReferencePayload.canonical(envelope)==text)
+        require(envelope.get("format") is Int && envelope.getInt("format")==2)
         val request=embedded.request
-        val canonicalEnvelope=proof?.matches(row.getString("operation_uuid"),row.getString("input_json")) ?: (ReferencePayload.canonical(envelope)==row.getString("input_json"))
-        if(!canonicalEnvelope || envelope.get("format") !is Int || envelope.getInt("format")!=2 || row.getString("kind")!="CONSUME" ||
-            embedded.sha256!=row.getString("request_sha256") ||
-            row.getString("dataset_uuid")!=request.datasetUuid || row.getString("record_uuid")!=request.record.uuid || row.getInt("record_revision")!=request.record.revision)fail(ReferenceError.INVALID_SOURCE)
         val captures=envelope.getJSONArray("captures");require(captures.length()==request.uses.size)
+        val typed=ArrayList<ConsumptionCapture>(captures.length())
         val lines=request.uses.mapIndexed {i,input->
             val c=captures.getJSONObject(i)
             keys(c,setOf("container_uuid","presentation_event_uuid","snapshot_uuid","requested_stock","requested_quanta","used_before_quanta","take_quanta","issue","stock_state","ledger_head_id"))
-            require(text(c,"container_uuid")==input.containerUuid && text(c,"presentation_event_uuid")==input.presentationEventUuid)
-            require(ReferencePayload.uuid(text(c,"snapshot_uuid")))
-            if(!c.isNull("stock_state"))require(text(c,"stock_state") in setOf("SEALED","IN_USE","EMPTY","VOIDED","DISCARDED"))
-            if(!c.isNull("ledger_head_id")) {val token=text(c,"ledger_head_id");require(ledgerHeadPattern.matches(token));require(token.toLong()>=0)}
-            require(c.isNull("stock_state")==c.isNull("ledger_head_id"))
-            if(!c.isNull("used_before_quanta"))quanta(c,"used_before_quanta")
-            val takeCount=quanta(c,"take_quanta")
-            val issue=if(c.isNull("issue"))null else text(c,"issue").also{require(it.isNotBlank() && it.length<=128)}
-            if(c.isNull("requested_stock")) {
-                require(c.isNull("requested_quanta") && takeCount==0L && issue!=null)
+            require(string(c,"container_uuid")==input.containerUuid && string(c,"presentation_event_uuid")==input.presentationEventUuid)
+            val snapshot=string(c,"snapshot_uuid");require(ReferencePayload.uuid(snapshot))
+            val state=if(c.isNull("stock_state"))null else string(c,"stock_state").also{require(it in setOf("SEALED","IN_USE","EMPTY","VOIDED","DISCARDED"))}
+            val head=if(c.isNull("ledger_head_id"))null else {
+                val token=string(c,"ledger_head_id");require(ledgerHeadPattern.matches(token));token.toLong().also{require(it>=0)}
+            }
+            require((state==null)==(head==null))
+            val before=if(c.isNull("used_before_quanta"))null else quanta(c,"used_before_quanta")
+            val take=quanta(c,"take_quanta")
+            val issue=if(c.isNull("issue"))null else string(c,"issue").also{require(it.isNotBlank() && it.length<=128)}
+            val requested:Quantity?;val wanted:Long?
+            val line=if(c.isNull("requested_stock")) {
+                require(c.isNull("requested_quanta") && take==0L && issue!=null)
+                requested=null;wanted=null
                 if(request.stockEffect==MeasuredStockEffect.ALREADY_ACCOUNTED) {require(issue=="ALREADY_ACCOUNTED");PhysicalUseResult.AlreadyAccounted(input.containerUuid,input.quantity)}
                 else PhysicalUseResult.Unknown(input.containerUuid,input.quantity,issue)
             } else {
                 val q=PackageMeasurementPayload.quantity(c.getJSONObject("requested_stock"));require(q.value.signum()>0)
-                val wantedCount=quanta(c,"requested_quanta");require(wantedCount>0 && takeCount<=wantedCount)
-                val wanted=BigDecimal.valueOf(wantedCount);val take=BigDecimal.valueOf(takeCount)
-                val allocated=q.copy(value=if(take.signum()==0)BigDecimal.ZERO else q.value.multiply(take).divide(wanted).stripTrailingZeros())
+                val wantedCount=quanta(c,"requested_quanta");require(wantedCount>0 && take<=wantedCount)
+                requested=q;wanted=wantedCount
+                val allocated=q.copy(value=if(take==0L)BigDecimal.ZERO else q.value.multiply(BigDecimal.valueOf(take)).divide(BigDecimal.valueOf(wantedCount)).stripTrailingZeros())
                 PhysicalUseResult.Known(input.containerUuid,q,allocated,q.copy(value=q.value.subtract(allocated.value).stripTrailingZeros()))
             }
+            typed+=ConsumptionCapture(input.containerUuid,input.presentationEventUuid,snapshot,requested,wanted,before,take,issue,state,head)
+            line
         }
-        return DecodedConsumption(envelope,request,MeasuredConsumptionReceipt(row.getString("operation_uuid"),request.record.uuid,request.record.revision,lines,ReferencePayload.optional(row,"unknown_reason")))
+        return ConsumptionInput(request,embedded.sha256,java.util.Collections.unmodifiableList(typed),java.util.Collections.unmodifiableList(lines))
     }
     internal fun reverseCapture(row:JSONObject):JSONObject = try {
         val encoded=row.getString("input_json");val envelope=JSONObject(encoded)
