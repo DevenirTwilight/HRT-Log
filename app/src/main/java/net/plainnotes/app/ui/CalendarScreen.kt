@@ -55,9 +55,11 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
 @Composable fun CalendarScreen(state: NotesState, today: LocalDate, onComplete: (TimelineEntry) -> Unit, onChange: (TimelineEntry) -> Unit,
                                onAddMedication: () -> Unit, onResetStart: () -> Unit, contentPadding: PaddingValues, onReview: () -> Unit = {},
                                extra: NotesViewModel.ExtraState = NotesViewModel.ExtraState(), onStock: () -> Unit = {}, initialView: CalView = CalView.MONTH,
-                               onAppointment: (AppointmentEntity) -> Unit = {}, onAddStock: (MedicationEntity) -> Unit = {}) {
+                               onAppointment: (AppointmentEntity) -> Unit = {}, onAddStock: (MedicationEntity) -> Unit = {},
+                               onBackfill: (RecordEntity) -> Unit = {}, onConfirmMissed: (RecordEntity) -> Unit = {}, onUnconfirmedMore: (List<RecordEntity>) -> Unit = {}) {
     val zone = ZoneId.systemDefault()
     val meds = state.medications.associateBy { it.id }
+    val unconfirmed = recentUnconfirmed(extra.records, LocalTodayClock.current())
     var view by rememberSaveable { mutableStateOf(initialView) }
     var selectedText by rememberSaveable { mutableStateOf(state.calendarStart.toString()) }
     val selected = LocalDate.parse(selectedText)
@@ -102,6 +104,11 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
                 { MedicationSnapshot.decode(it.config_snapshot, it.medication_id)?.medication(it.medication_id) }, onComplete, onChange,
                 records = todayRecords, appointments = todayAppts, onAppointment = onAppointment)
         }
+        // UI-06 C: doses from the last 48 hours with no entry yet, right under the today card (not shown when there are none).
+        unconfirmed.takeIf { it.isNotEmpty() }?.let { rows -> item(key = "unconfirmed") {
+            UnconfirmedCard(rows, today, zone, { r -> MedicationSnapshot.decode(r.config_snapshot, r.medication_id)?.medication(r.medication_id) ?: meds[r.medication_id] },
+                onBackfill, onConfirmMissed, onUnconfirmedMore)
+        } }
         // UI-05 B: what needs doing stays at the top: low stock right under the today card, before the calendar.
         item(key = "stock") { HomeStockCard(state.medications.filter { it.active }, runOut, today, zone, onStock, onAddStock) }
         item {

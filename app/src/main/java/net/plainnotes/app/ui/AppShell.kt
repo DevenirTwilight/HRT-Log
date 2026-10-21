@@ -212,7 +212,10 @@ class UiPrefs(context: Context) {
             when (destination) {
                 Destination.CALENDAR -> CalendarScreen(state, today, { completeEntry = it }, { overrideEntry = it; model.loadOverride(it.slot.key) }, { model.edit(null) },
                     { model.calendarFrom(null) }, pad, onReview = { destination = Destination.MEDICATIONS }, extra = extra, onStock = { destination = Destination.STOCK },
-                    onAppointment = { visitId = it.id; medicalOrigin=false; destination = Destination.VISITS }, onAddStock = { stockDialogs.addStock = it })
+                    onAppointment = { visitId = it.id; medicalOrigin=false; destination = Destination.VISITS }, onAddStock = { stockDialogs.addStock = it },
+                    // UI-06 C: the same backfill dialog and confirm-missed as the intake history; "more" opens the history filtered to them.
+                    onBackfill = { historyDialogs.referenceEpoch = extra.referenceEpoch; historyDialogs.editRecord = it }, onConfirmMissed = { model.confirmMissed(it.id) },
+                    onUnconfirmedMore = { rows -> destination = Destination.HISTORY; importedRecordIds = rows.map { it.id }.toSet() })
                 Destination.MEDICATIONS -> MedicationsScreen(state, { model.edit(null) }, { model.edit(it) }, { medicationDialogs.archive = it }, pad,onReference={openReference(it)},onBrowseReference={openReference(null)},onStock={destination=Destination.STOCK})
                 Destination.CONCENTRATION -> net.plainnotes.app.experimental.UnifiedConcentrationScreen(extra.records, state.ruleSnapshots, extra.labs, pad,
                     content = { innerPad, preview, selector -> ConcentrationScreen(state, conc.result, conc.loading, conc.weight, concSettings, { concSettings = it; prefs.conc = it },

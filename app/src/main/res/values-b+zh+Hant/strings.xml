@@ -1295,4 +1295,6 @@
 <string name="confirm_not_taken">沒有服</string>
 <string name="confirm_more">還有 %1$d 筆</string>
 <string name="status_you_skipped">你跳過了</string>
+<string name="confirm_title_date">%1$s 還沒有記錄</string>
+<string name="confirm_body_with">%1$s。記得的話補上就好。</string>
 </resources>

@@ -1295,4 +1295,6 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="confirm_not_taken">I didn\'t take it</string>
 <string name="confirm_more">%1$d more</string>
 <string name="status_you_skipped">You skipped</string>
+<string name="confirm_title_date">No entry yet for %1$s</string>
+<string name="confirm_body_with">%1$s. If you remember, just add it.</string>
 </resources>

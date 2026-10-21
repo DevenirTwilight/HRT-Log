@@ -1295,4 +1295,6 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="confirm_not_taken">Je ne l\'ai pas pris</string>
 <string name="confirm_more">%1$d de plus</string>
 <string name="status_you_skipped">Vous avez sauté</string>
+<string name="confirm_title_date">Rien de noté pour %1$s</string>
+<string name="confirm_body_with">%1$s. Si vous vous en souvenez, ajoutez-le simplement.</string>
 </resources>

@@ -1295,4 +1295,6 @@
 <string name="confirm_not_taken">没有服</string>
 <string name="confirm_more">还有 %1$d 条</string>
 <string name="status_you_skipped">你跳过了</string>
+<string name="confirm_title_date">%1$s 还没有记录</string>
+<string name="confirm_body_with">%1$s。记得的话补上就好。</string>
 </resources>
