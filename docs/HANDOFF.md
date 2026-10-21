@@ -1,3 +1,9 @@
+## 当前正式候选f13e7f52：环境修正后最终必需CI在途 — 2026-10-21
+
+当前待审源码f13e7f52（PR57），证据分支保持独立避免反复改变正在验收的HEAD。219工具测试、NativeCiHeapProbe Android编译PASS，日志已保存；39653018592/39653023713是同源码最终Android与Science验收，未结束不填PASS。
+
+旧4a最终CI继续保留，API29实际16MiB时的Java OOM不能当作192MiB测试结果；修正显式原192MiB+真实Runtime.maxMemory前置断言，无生产/密码学/预算放宽。完整回滚、全审计、版本/旧备份和所有既有assert均未改。普通写入延迟独立指标已落实，未重启性能攻关。单场景after-commit PASS而原超时原因未确定；最终三API需要分别核验，不能只看job绿。
+
 ## 保留原API29环境失败，不掩盖并修复环境合同 — 2026-10-21
 
 final-admission/api29-16m-failure.log.gz与原ZIP/SHA/CRC保存run39651425834/job119400450802真实FAIL。首个失败在Argon2 Block申请1040B，实际growth_limit16MiB；固定KDF32MiB不能在其中运行。这是Java OOM，不是原192MiB恢复LMK的再次证明。源码修正只显式还原原192MiB并增加实际进程heap前置断言；不改生产/密码学/内存上限/测试断言。219工具与Android探针编译已PASS，真实原生尚待新源码验收。原其他有效CI仍运行，未强行取消掩盖结果。

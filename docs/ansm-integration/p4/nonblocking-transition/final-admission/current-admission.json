@@ -1,0 +1,26 @@
+{
+  "source": "f13e7f521862739e23b9928bba2a82e08eb42fe9",
+  "mainline": "4ec11437acb257ecc0e9c92ed59907d954cbacae",
+  "status": "ADMISSION_PENDING",
+  "entry": "OFF",
+  "policy": "NONBLOCKING_WRITES_LATENCY_OBSERVATIONAL",
+  "tool_tests": 219,
+  "tool_status": "PASS",
+  "heap_probe_android_compile": "PASS",
+  "native_actual_heap_contract": "192MiB assertion before existing suites; verification in progress",
+  "android_ci": 39653018592,
+  "science_ci": 39653023713,
+  "previous_ci_failure": {
+    "run": 39651425834,
+    "api29_actual_heap_bytes": 16777216,
+    "status": "FAIL_RETAINED"
+  },
+  "after_commit_observation": {
+    "run": 39650341133,
+    "status": "PASS",
+    "prior_timeout": "39626720171 retained; cause unresolved"
+  },
+  "memory_policy": "Recovery safety remains mandatory; no changes to192MiB/512MiB frozen performance limits or crypto",
+  "full_performance": "NOT_RERUN",
+  "release": "NOT_AUTHORIZED"
+}
