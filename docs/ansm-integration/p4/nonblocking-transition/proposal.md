@@ -2,6 +2,23 @@
 
 状态：**停止性能攻关继续有效；验收政策细节待负责人批准；当前执行代理负责后端与UI，继续推进。** PR #57仍Draft，正式入口OFF，不合并、不发布。本文不是原5秒预算PASS证明。
 
+## 实施检查点（2026-10-21）
+
+当前执行代理同时负责前后端。以下是已编码/已测范围，不是P4准入：
+
+|部分|状态|证据/剩余边界|
+|---|---|---|
+|共享三状态与phase显示协议|IMPLEMENTED；3项PASS|domain/write/WriteProgress；只是显示协议，不是提交证明|
+|Material 3四语内联状态卡片|IMPLEMENTED；操作3/布局8/翻译2 PASS|四语言各320dp/2x/深色与411dp/1x/浅色代表布局，非全矩阵|
+|实际NotesApp状态区及导航|IMPLEMENTED；主壳2/原返回17 PASS|默认null；收起可展开，不取消业务；截图与34项同次结果见shell-first/|
+|后台任务owner原型|TEST_ONLY；7项PASS|页面观察取消独立、结果不明不重试；不在runtime/release|
+|真实Repository小库连接原型|TEST_ONLY；4项待验|ecc6671b已保存，真实事务/完整oracle/回滚/丢失结果窗口；不是SQLCipher原生|
+|应用级真实任务服务与公开门面|NOT_IMPLEMENTED|需固定PRIMARY/scope、无重复请求及冲突入口覆盖|
+|真实提交核对/进程死亡恢复|NOT_IMPLEMENTED|不能凭UUID存在/不存在判定；未批准持久token，不自动补写|
+|验收政策/正式入口|PROPOSED / OFF|原5秒断言未变，Draft不合并；恢复稳定性NOT_PROVEN|
+
+源55fcf2d5的旧通过数不代表当前分支整体绿色：新增资源退出合同仍有2项已知RED，归档修正patch尚未应用。新组CI/native/真机/TalkBack均NOT_RUN，不重跑大库。下文保留政策与尚未实施的门面设计；其中“本轮不新增”指最初方向冻结检查点，不否认后续已授权UI和TEST_ONLY实现。
+
 ## 立即冻结与保留
 
 停止缓存/全审计微优化、增量验证、方案C研究和新的大库跑分；取消§125“冻结后再启动两轮”的未执行计划。旧原生、LMK、RED和工具/编译失败全部保留。完整审计、票据、UUID/epoch/revision/ABA、追加流水、原子提交/回滚、SQLCipher及PNBAK1均不改变。
