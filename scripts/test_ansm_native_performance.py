@@ -12,6 +12,66 @@ def module(name):
     return value
 
 class NativePerformanceIsolationTest(unittest.TestCase):
+    def test_cold_codec_real_commit_is_timed_and_keeps_its_independent_hard_gate(self):
+        prepare = module('prepare_ansm_native_performance')
+        text = prepare.native_source(prepare.SOURCE.read_text())
+
+        def assert_contract(source):
+            start = source.index('val cold=JSONObject()')
+            end = source.index('File(file.parentFile,"trace-ready.json")', start)
+            cold = source[start:end]
+            self.assertLess(source.index('report.put("budget_exceeded"'), start)
+            self.assertLess(source.index('writePath.put("independent_post_commit_full_audit"'), start)
+            markers = (
+                'val coldStart=System.nanoTime()',
+                'MeasuredOperationChain.clearPureInputMemo()',
+                'val coldTicket=repo.measuredWriteTicket(diagnosticScope,m)',
+                'val coldTicketEnd=System.nanoTime()',
+                'repo.recordMeasuredUse(coldTicket,UUID.randomUUID().toString(),diagnosticDraft,now)',
+                'val coldEnd=System.nanoTime()',
+                'val verified=FrozenFullAuditStore.auditStagedDataset(raw)',
+                'assertEquals(6L,verified.single{it.containerUuid==containerIdentity.getString("uuid")}.usedQuanta)',
+                'cold.put("independent_frozen_post_commit_oracle","PASS")',
+            )
+            for marker in markers:
+                self.assertEqual(1, cold.count(marker), marker)
+            positions = [cold.index(marker) for marker in markers]
+            self.assertEqual(sorted(positions), positions)
+            for marker in (
+                '.put("process_restart","NOT_RUN").put("database_page_cache","NOT_RESET")',
+                '.put("timing_observer","OFF").put("budget_ms",5000)',
+                '.put("total_ms",(coldEnd-coldStart)/1_000_000.0)',
+                '.put("status",if(coldEnd-coldStart<=5_000_000_000L)"PASS" else "FAIL")',
+            ):
+                self.assertIn(marker, cold)
+            self.assertIn(
+                'assertEquals("Cold pure codec write retains the original5s limit", "PASS",cold.getString("status"))',
+                source[end:],
+            )
+
+        assert_contract(text)
+        # These mutants model misleading timing, a fake write, a shared candidate oracle,
+        # a stale balance, a relaxed budget and mislabelling process/page-cache warmth.
+        # Each must be caught by the contract above, without changing the frozen workload.
+        mutations = (
+            ('val coldStart=System.nanoTime()\n            MeasuredOperationChain.clearPureInputMemo()',
+             'MeasuredOperationChain.clearPureInputMemo()\n            val coldStart=System.nanoTime()'),
+            ('repo.recordMeasuredUse(coldTicket,UUID.randomUUID().toString(),diagnosticDraft,now)', 'Unit'),
+            ('val verified=FrozenFullAuditStore.auditStagedDataset(raw)',
+             'val verified=MeasuredConsumptionStore.auditStagedDataset(raw)'),
+            ('assertEquals(6L,verified.single', 'assertEquals(5L,verified.single'),
+            ('coldEnd-coldStart<=5_000_000_000L', 'coldEnd-coldStart<=15_000_000_000L'),
+            ('assertEquals("Cold pure codec write retains the original5s limit", "PASS",cold.getString("status"))',
+             '// Removed cold-write hard failure gate'),
+            ('.put("process_restart","NOT_RUN").put("database_page_cache","NOT_RESET")',
+             '.put("process_restart","PASS").put("database_page_cache","COLD")'),
+        )
+        for before, after in mutations:
+            with self.subTest(mutation=before):
+                self.assertIn(before, text)
+                with self.assertRaises(AssertionError):
+                    assert_contract(text.replace(before, after))
+
     def test_real_write_observation_is_separate_and_keeps_original_commit_and_oracle(self):
         prepare=module('prepare_ansm_native_performance')
         text=prepare.native_source(prepare.SOURCE.read_text())

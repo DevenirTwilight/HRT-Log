@@ -1,3 +1,9 @@
+## P4 工具保护完成：73 PASS，发现清理分配边界待修正 — 2026-10-21
+
+仅新增生成器测试，验证额外冷pure-codec真实提交计时包含clear、真实ticket+record、冻结used6 oracle、独立5s硬断言，以及不是进程/页缓存冷启动；7类实际文本mutant均被拒绝。全套ANSM工具73 PASS（目标脚本16），证据resumed-verification/tools-final.log与cold-commit-contract.json。
+
+独立审查新发现：clearPureInputMemo末尾Any()在清理时可能OOM，导致旧token保持并允许in-flight回填；不影响数据库正确性，但破坏资源清理保证。待当前data构建结束后，最小改为nullable token，clear无分配置null，下一正常reader才新建；补先RED后GREEN合同，不掩盖已保存编译FAIL。尚无新原生，不扩大本轮方案。#57 Draft/OFF。
+
 ## P4 接手实时检查点：最新完整编译FAIL已保存，冻结DTO引用已修正待验 — 2026-10-21
 
 f220b1f2源码恢复验证于compileDebugUnitTestKotlin失败：FrozenFullAuditStore的一个参数仍写FrozenFullAuditChain.Node，但冻结链只私有typealias到原不可变DTO；Node不是其嵌套类。日志已保留full-audit-reuse/resumed-verification/initial-compile-failure.log。仅把该参数恢复MeasuredOperationChain.Node引用，独立冻结reader/全部规则未变，frozen-oracle.json保留前binding SHA与新SHA。修正尚未验证，不能把旧494或聚焦151当最新完整通过。工具72 PASS仍有效；尚无新大库。马上重跑最新data/生成Android编译，结束立即保存。#57 Draft/OFF，不合并。
