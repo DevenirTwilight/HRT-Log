@@ -1,3 +1,11 @@
+## 原候选CI/预算FAIL及真实工件访问阻塞已保存；新候选验收继续 — 2026-10-21
+
+旧d582：39620822817已结束，JVM/API29/API35成功，android/API26失败；39620827648低内存全原预算运行FAIL，官方artifact12355511849/digest4ce0beac…cabf6f4/150184B。尚未下载原报告，不能推断FAIL是5秒、LMK或别的规则。GitHub API正常，但日志/工件重定向Azure storage时代理CONNECT403，environment_status确认unrestricted/enforced不等于该域可达；未绕过代理、未去重跑。已异步请负责人在云环境配置允许productionresultssa*.blob.core.windows.net或切换可达环境，问题仍待答复。无signed URL/凭据入库。
+
+元数据和明确NOT_VERIFIED状态存shell-integration/native-status/；ZIP/SHA/CRC/原生断言和耗时必须通路恢复后读取原工件核验。当前无法声称原生14合同整体通过，虽然29/35 job成功也须具体XML核对。
+
+为不取消旧有效运行，新实质合同（2个OS-kill probe+harness修正）在同SHA独立validation/p4-save-fb43b86a验收引用运行：Android/domain39622595007、Science39622599139，均fb43b86a；没有PR/合并/force push，原大库仅保留d582一次。这个引用与工作分支代码相同，不是合并未审查分支。后续先读取现有证据、修复实际失败，再决定唯一必要验证；P4仍Draft/OFF/autoMerge=null。
+
 ## 真实App接线2项PASS，OS-kill合同编译PASS；原生验收继续 — 2026-10-21
 
 ProcessMeasuredWriteShellTest2项当前PASS，原@Before超时确认为未驱动Android Main Looper；按既有DataRefreshTest显式idle后原30秒与全部保存/导航/重建/手工核对断言不变。shell-integration/looper-fixed/保留XML/日志/测试SHA及仅harness差异；first-local的2个初始化失败不改写。同一生产dc10ffef（main diff为空）此前完整data528/原选定18App已PASS，本次只重跑修正2项，不冒充同次20项。Android编译包含新增真实writer进程死亡probe已PASS。
