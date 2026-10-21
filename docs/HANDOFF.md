@@ -1,3 +1,13 @@
+## build34（UI-07 后）正式签名测试包准备中 — 2026-10-21
+
+负责人要求“合了给我出个正式签名apk”（REQUIREMENTS §134）。
+
+- **分支**：独立交付分支 delivery/build34-ui07-20261021，基线默认分支 1baa6cbe（#92 合并）。
+- **唯一应用变更**：versionCode 33 → 34。
+- **交付前需要**：本 HEAD 必需 CI 全绿、时期稳定性测试通过、干净来源的 fullRelease、正式签名（989ba045…59379b1）、16KB 对齐、清单 / 附件隔离 / 来源 SHA 检查，然后私密交付并提交账本回执。
+
+不移动 tag，不发布 Release。
+
 ## UI-07 Material 3 Expressive 表现层：实现与验证完成，PR 待 CI — 2026-10-21
 
 UI-06 #91 已合并（4ec11437），主线 CI 六项全绿。分支 feature/ui07-expressive-20261021，报告 71，REQUIREMENTS §133。
