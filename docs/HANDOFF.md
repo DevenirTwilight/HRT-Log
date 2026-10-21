@@ -1,3 +1,9 @@
+## 四语Compose状态卡片13项PASS及8张实渲染截图已保存 — 2026-10-21
+
+源c3fd7799的App目标13 PASS/0SKIP：操作3、布局/截图8、四语完整性2；同次domain3和TEST_ONLY后台7亦通过。原始XML/完整日志/8 PNG及SHA已入库nonblocking-transition/ui-first/。实际查看法语320dp/2x/深色、繁中411dp/1x/浅色未见关键截断。覆盖是四语言各两组代表布局，不冒充完整交叉矩阵、真实设备或TalkBack（NOT_RUN）。
+
+当前已有实际M3内联卡片与公共状态协议，但AppShell导航挂接和实际Repository后端绑定仍未完成。继续由本代理做主壳非模态挂接/导航合同；生产写入口仍OFF、5秒门不改、原资源退出RED仍保持明确状态，不把组件通过当P4准入。无新大库/native。
+
 ## 公共协议3项/后台原型7项重验PASS，UI仍执行中 — 2026-10-21
 
 源c3fd7799：WriteProgressTest3 PASS、使用公共枚举后的NonBlockingWritePrototypeTest7 PASS，均0FAIL/0SKIP；原始XML/log/receipt已立即保存nonblocking-transition/shared-model-tests/。当前同一Gradle session30273进入App编译，UI3操作+8布局/截图+四语测试尚未结束，不能预填结果。无正式P4写入口/DB接线，也无5秒门修改、原生或大库跑分；职责由本代理全部承担。
