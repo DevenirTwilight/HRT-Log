@@ -1,3 +1,9 @@
+## 关联context的最小修正已编码，完整回归待验 — 2026-10-21
+
+PreparedMeasuredCreate补原referenceContextEventUuid；prepare在原事务从ReferenceStore.current冻结有效product的事件UUID/无product时null。observe在完整审计之后比较历史record revision1/capture revision1的CONTEXT事件，而不是当前关联；原关联A的请求不会因当前B/解除关联被重解释。只改两个新增内部接口文件，没有接正式写入口，也没有更改原create/replay/审计行为。
+
+两项已保存RED合同原样保留，不改成接受错误结果；下一步全数据（应514项）、Android测试与App源码编译。此前37项UI/时期回归对应4111c0b8，当前修正后不能冒称已运行同一组。无native/大库/性能微优化，Draft/OFF，不合并发布。
+
 ## 关联来源反例2项RED已复现并保存，接口保持隔离 — 2026-10-21
 
 280bf615新增两合同在生产4111c0b8上2 FAIL，均在Expected OPERATION_CONFLICT处失败，非夹具/编译错误；原始XML/日志/来源记录存nonblocking-transition/reference-context-red/。证明仅冻结config SHA+相同实际用量/时间/UUID仍会错认改变后的关联参考请求；不能把此前512 PASS当安全等价证明。接口无App运行调用，P4 OFF。

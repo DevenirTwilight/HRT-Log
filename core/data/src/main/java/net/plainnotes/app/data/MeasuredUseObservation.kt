@@ -10,6 +10,7 @@ internal class PreparedMeasuredCreate internal constructor(
     val draft:MeasuredActualUseDraft,
     val created:Instant,
     val configSha256:String,
+    val referenceContextEventUuid:String?,
 )
 
 /** Historical commitment only: the record may have since been revised, reversed or deleted.

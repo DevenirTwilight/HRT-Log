@@ -66,8 +66,10 @@ internal object MeasuredUseIntegration {
         val ticket=ticket(db,scope,medication)
         val dao=database.dao()
         val config=MedicationSnapshot.encode(dao.medication(medication),dao.profile(medication))
+        val reference=ReferenceStore.current(db,scope,medication)
         return PreparedMeasuredCreate(ticket,operationUuid,
-            draft.copy(uses=java.util.Collections.unmodifiableList(draft.uses.toList())),created,ReferencePayload.sha(config))
+            draft.copy(uses=java.util.Collections.unmodifiableList(draft.uses.toList())),created,ReferencePayload.sha(config),
+            reference?.takeIf{it.snapshotUuid!=null}?.operationUuid)
     }
     /** Read-only reconciliation, not replay. Keep the independent complete audit and never
      * validate an old ticket against current state: a successful commit itself changes that state. */
@@ -77,9 +79,14 @@ internal object MeasuredUseIntegration {
         val (original,receipt)=MeasuredConsumptionStore.existingConsumption(db,expected.operationUuid)
             ?: return MeasuredCreateObservation.NotObserved
         val header=ReferenceStore.row(db,"measured_operation","operation_uuid=?",arrayOf(expected.operationUuid))!!
+        // captureContext writes this initial CONTEXT before the physical CONFIRM captures.
+        // Compare the original creation context, never the medication's mutable current link.
+        val context=ReferenceStore.row(db,"record_reference_capture",
+            "record_uuid=? AND record_revision=1 AND capture_revision=1 AND kind='CONTEXT'",arrayOf(original.record.uuid))
         if(expected.ticket.recordId!=null || original.datasetUuid!=expected.ticket.scope.dataset ||
             original.medicationUuid!=expected.ticket.medicationUuid || original.record.revision!=1 ||
             original.record.scheduleSha256!=null || original.record.configSha256!=expected.configSha256 ||
+            context?.let{ReferencePayload.optional(it,"context_event_uuid")}!=expected.referenceContextEventUuid ||
             header.getLong("created_utc")!=expected.created.toEpochMilli() || !sameActual(original,expected.draft,"ON_TIME"))
             fail(ReferenceError.OPERATION_CONFLICT)
         return MeasuredCreateObservation.Committed(receipt)
