@@ -1,3 +1,9 @@
+## 当前生产候选的Android编译与App37项PASS已保存 — 2026-10-21
+
+生产4111c0b8（本轮生成任务开始时源码）：全数据512 PASS、compileDebugAndroidTestKotlin PASS、App选定37 PASS/0SKIP（原UI/导航/翻译32+PeriodStability5）均已完成。完整日志/XML/实际渲染截图/SHA存nonblocking-transition/frozen-outcome-android-ui/；数据阶段另已实时保存。没有模拟器/真机/TalkBack/新CI，不冒充原生稳定性或P4准入。
+
+已提交的关联来源反例280bf615未包含在这次512/37之中，需单独RED→GREEN；尚未核对该来源边界前接口不准接正式运行owner。继续仅小库正确性验证，不跑性能/原生，不改Schema或预算，Draft/OFF。
+
 ## 提交观察的关联来源边界待补：两项负向合同先保存 — 2026-10-21
 
 复核发现4111c0b8的预备描述符只冻结config SHA/实际载荷/时间，尚未单独冻结MedicationReference的关联事件。已保存2项合成负向合同：关联A→B/解除关联、原无关联→新关联，在配置与实际载荷完全相同/同UUID时必须拒绝匹配新请求，旧请求仍能确认。当前尚未执行这2项，不能将此前512 PASS当作已覆盖该边界。无App运行调用，接口不准接正式owner。

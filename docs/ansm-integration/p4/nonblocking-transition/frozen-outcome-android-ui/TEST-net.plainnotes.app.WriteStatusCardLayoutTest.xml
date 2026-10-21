@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.WriteStatusCardLayoutTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-10-21T09:24:13.380Z" hostname="4f13d57d08c1" time="4.572">
+  <properties/>
+  <testcase name="manualResultCanBeReadAndCheckedWithoutAFullScreenBlock[en/320dp/2x/dark=true]" classname="net.plainnotes.app.WriteStatusCardLayoutTest" time="1.076"/>
+  <testcase name="manualResultCanBeReadAndCheckedWithoutAFullScreenBlock[en/411dp/1x/dark=false]" classname="net.plainnotes.app.WriteStatusCardLayoutTest" time="0.444"/>
+  <testcase name="manualResultCanBeReadAndCheckedWithoutAFullScreenBlock[zh-rCN/320dp/2x/dark=true]" classname="net.plainnotes.app.WriteStatusCardLayoutTest" time="0.613"/>
+  <testcase name="manualResultCanBeReadAndCheckedWithoutAFullScreenBlock[zh-rCN/411dp/1x/dark=false]" classname="net.plainnotes.app.WriteStatusCardLayoutTest" time="0.435"/>
+  <testcase name="manualResultCanBeReadAndCheckedWithoutAFullScreenBlock[zh-rTW/320dp/2x/dark=true]" classname="net.plainnotes.app.WriteStatusCardLayoutTest" time="0.592"/>
+  <testcase name="manualResultCanBeReadAndCheckedWithoutAFullScreenBlock[zh-rTW/411dp/1x/dark=false]" classname="net.plainnotes.app.WriteStatusCardLayoutTest" time="0.396"/>
+  <testcase name="manualResultCanBeReadAndCheckedWithoutAFullScreenBlock[fr-rFR/320dp/2x/dark=true]" classname="net.plainnotes.app.WriteStatusCardLayoutTest" time="0.551"/>
+  <testcase name="manualResultCanBeReadAndCheckedWithoutAFullScreenBlock[fr-rFR/411dp/1x/dark=false]" classname="net.plainnotes.app.WriteStatusCardLayoutTest" time="0.427"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

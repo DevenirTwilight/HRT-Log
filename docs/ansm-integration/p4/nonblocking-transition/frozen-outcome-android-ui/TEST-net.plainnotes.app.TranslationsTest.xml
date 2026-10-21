@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.TranslationsTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-10-21T09:24:12.939Z" hostname="4f13d57d08c1" time="0.053">
+  <properties/>
+  <testcase name="translationsAreComplete" classname="net.plainnotes.app.TranslationsTest" time="0.053"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

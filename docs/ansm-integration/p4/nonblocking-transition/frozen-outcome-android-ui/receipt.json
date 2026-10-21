@@ -1,0 +1,87 @@
+{
+  "production_source": "4111c0b8",
+  "data_stage_evidence": "../frozen-outcome-data/",
+  "status": "PASS",
+  "core_data_tests": 512,
+  "core_data_android_test_compilation": "PASS",
+  "app_summary": {
+    "tests": 37,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "app_suites": [
+    {
+      "name": "net.plainnotes.app.AppShellBackNavigationTest",
+      "tests": "17",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.UnifiedConcentrationTranslationsTest",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.TranslationsTest",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.WriteStatusCardTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.NonBlockingWriteShellTest",
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.WriteStatusCardLayoutTest",
+      "tests": "8",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.PeriodStabilityTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    }
+  ],
+  "scope": "Robolectric35 only; original 32 UI/shell/translation contracts plus 5 unchanged PeriodStability tests. New context RED tests committed after completed data stage are not included in 512.",
+  "native_api26_29_35": "NOT_RUN",
+  "device_talkback": "NOT_RUN",
+  "ci": "NOT_RUN",
+  "files": {
+    "TEST-net.plainnotes.app.AppShellBackNavigationTest.xml": "add9c5c3b8b155943a90fd8fc95c2770a4b33006e8fdbc5acf5fb5a480120401",
+    "TEST-net.plainnotes.app.UnifiedConcentrationTranslationsTest.xml": "26af30d2669a48fdf90bb461480c2d2f9dec3c09944796e02e9ee35f07352bc3",
+    "TEST-net.plainnotes.app.TranslationsTest.xml": "7b4fec6ab53cc0fb9ee818b8650f684089377d4f5a5318764508ee906066d4ad",
+    "gradle.log": "1a02f11e470d804bd862570ce96de8a048651ca76f57fd55284bec87f9988f69",
+    "TEST-net.plainnotes.app.WriteStatusCardTest.xml": "5cb349056727a4e42ad4441d2a05276313b32b2d5019d09c75e90e377f03dc9c",
+    "TEST-net.plainnotes.app.NonBlockingWriteShellTest.xml": "817224c16eaf74c6850a44ef912f2570ff4b8aacf211ac98580647ab4798a081",
+    "TEST-net.plainnotes.app.WriteStatusCardLayoutTest.xml": "d78c68e76586f0292cfeb1ea81adabd15c5445c034bd136a14b572e4850e2641",
+    "TEST-net.plainnotes.app.PeriodStabilityTest.xml": "05122e33bf1b92149f7432c7eeb5f69cbafc6aa095a456cbabe4d08539538a51",
+    "screenshots/zh-rCN_320dp_2.0x_dark.png": "aca2188e899ca1f0e50505036a27d89330e1872ffcbd1c5dc111ea815dd9b4f8",
+    "screenshots/zh-rTW_320dp_2.0x_dark.png": "be7309ac918ddaa94085d0615daba6ba0cd8a08e9d518e07c59351cb4f0173a7",
+    "screenshots/fr-rFR_411dp_1.0x_light.png": "a8323b4df73d4a68311d2af7bc22d7909322b960880d70dd9d6846ef31c1785a",
+    "screenshots/fr-rFR_320dp_2.0x_dark.png": "55c988069c7fbae1e1bc055abb2d6c779386570b1181bbe8cc086cff072f02ef",
+    "screenshots/en_411dp_1.0x_light.png": "757138053f5c3db8a1ace13b8b03ecf6dc16f187a06ef656a0ed2428b73d3745",
+    "screenshots/zh-rCN_411dp_1.0x_light.png": "dcc285df13ae5c2ba126eef18343a85dee569eb0347be7106751d6649fa7346e",
+    "screenshots/zh-rTW_411dp_1.0x_light.png": "fab7667d77fcca6129261d36ff1a31ec35a77568803deea1d7a0a90a41bfd7c5",
+    "screenshots/actual-shell-pending-medications.png": "38b55e0c80078b9b6555010ba3fd95692a90b4ec7a7d38b7cf02e35b3d6bbd0c",
+    "screenshots/en_320dp_2.0x_dark.png": "7d835909b80760d42c42fbbf5787e17bc5e2f549dc8eed1974115521bcaa3bc0"
+  }
+}
