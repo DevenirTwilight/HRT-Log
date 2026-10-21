@@ -4,7 +4,9 @@
 
 为减少同笔写入ticket/validate/append/最终audit重复parse，新增**纯文本codec**精确全文→不可变Link+SHA的16MiB有界同步LRU；这不是数据库合法性/可信基线缓存。每次仍读取全部当前行并重新检查UUID/序列/前驱/全局历史，A/B反例仍保留。独立旧Chain也已冻结（FrozenFullAuditChain）并绑定old full oracle，避免对照共享新codec。完整F(text)等价证明经独立审阅，ChainContentMemoOracle已写但尚未运行。DatabaseAccess.close finally和restore解密前清空；资源生命周期token只防止关闭前的in-flight读者清空后重新保留旧明文，不参与数据库合法性判断。**该最后token改动尚未编译/测试**，不得认定完成。
 
-下一步：等31631结束并保存中间结果；检查新的clear/in-flight合同（必要时补负例），重跑最新完整data/App/reminder和生成原生编译，保存最终证据。生成器新增原预算结束后的额外第五笔真实提交：先清纯codec，票据+写入独立计时、5秒硬断言、冻结old oracle确认used6；明确不是进程/数据库页缓存冷启动，原三写和所有门槛保持。生成器修改中一次Python语法错误已修正，工具19项通过，最新生成摘要在/workspace/scratch/p4-reuse-generated-final-2.json；要保存失败日志并核验最终生成Kotlin编译。
+已另建隔离worktree `/workspace/HRT-Log-p4-verify`（detached d390a4ac加当前源码diff）执行最新完整data＋生成大库Android编译，session36943，日志`/workspace/scratch/p4-reuse-isolated-final.log`；Gradle1536MiB/in-process/单worker仅宿主编译设置，不改原生512/192限制。原31631仍跑App，不与其共享构建输出。最后资源token现在已在clear实际轮换，并补“query中clear后旧reader不得回填”合同，仍待最新编译/测试。生成器当前已修正并工具19PASS，root生成源已clean，不提交生成文件。
+
+下一步：先收36943最新结果及31631中间App结果，保存源码SHA、生成源SHA和XML；检查新的clear/in-flight合同（必要时补负例），重跑最新完整data/App/reminder和生成原生编译，保存最终证据。生成器新增原预算结束后的额外第五笔真实提交：先清纯codec，票据+写入独立计时、5秒硬断言、冻结old oracle确认used6；明确不是进程/数据库页缓存冷启动，原三写和所有门槛保持。生成器修改中一次Python语法错误已修正，工具19项通过，最新生成摘要在/workspace/scratch/p4-reuse-generated-final-2.json；要保存失败日志并核验最终生成Kotlin编译。
 
 全部正确性/原生编译通过后才冻结新源码触发**首轮**新候选原生（最多2次，首轮失败不补跑筛绿）；当前仍无新原生性能数字，不宣称5秒通过。P4 Draft/OFF/PRODUCTION_BLOCKED，不合并，不改Schema/备份/密码学/UI/P5/P6/PK/权限/签名发布。此次提交skip ci，防止WIP自动跑大库。
 

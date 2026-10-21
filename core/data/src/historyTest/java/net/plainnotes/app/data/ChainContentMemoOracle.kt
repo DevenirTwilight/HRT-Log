@@ -86,6 +86,19 @@ internal object ChainContentMemoOracle {
             DatabaseAccess(androidx.test.core.app.ApplicationProvider.getApplicationContext()).close()
             synchronized(lock){assertTrue(contents().isEmpty());assertEquals(0L,used.getLong(owner))}
             compare(a)
+            // A read already in progress must not retain old plaintext after the owner closes.
+            // Clear at the query boundary, after validate captured its resource lifetime token.
+            MeasuredOperationChain.clearPureInputMemo()
+            val underlying=db(a)
+            val closing=object:SupportSQLiteDatabase by underlying {
+                override fun query(sql:String):android.database.Cursor {
+                    MeasuredOperationChain.clearPureInputMemo()
+                    return underlying.query(sql)
+                }
+            }
+            assertEquals(FrozenFullAuditChain.validate(db(a)),MeasuredOperationChain.validate(closing))
+            synchronized(lock){assertTrue("In-flight old reader repopulated cleared plaintext",contents().isEmpty());assertEquals(0L,used.getLong(owner))}
+            compare(a)
             MeasuredOperationChain.clearPureInputMemo()
             synchronized(lock){assertTrue(contents().isEmpty());assertEquals(0L,used.getLong(owner))}
             // Reflection only resets this pure optimization, without changing or establishing DB trust.

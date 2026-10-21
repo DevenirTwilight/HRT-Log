@@ -79,7 +79,7 @@ internal object MeasuredOperationChain {
     /** Release owned plaintext references at close/destruction and before authenticated restore.
      * Clearing affects performance only; it neither establishes nor invalidates database trust. */
     internal fun clearPureInputMemo()=synchronized(checkedInputLock) {
-        checkedInputs.clear();checkedInputBytes=0
+        checkedInputs.clear();checkedInputBytes=0;checkedInputLifetime=Any()
     }
     private fun checkedInputCost(text:String,value:CheckedInput):Long {
         fun string(s:String?)=if(s==null)0L else 112L+s.length*2L
