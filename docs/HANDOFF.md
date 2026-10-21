@@ -1,3 +1,9 @@
+## P4 资源失败首组证据已保存：chain有效RED，restore测试断言修正 — 2026-10-21
+
+从隔离树接入c8458bc0（只测试/证据，无生产改动），即刻推送。初始两个目标日志/XML及原始tests.patch在full-audit-reuse/resource-failure/initial-coro-identity/：chain在模拟OOME后已证同一错误对象逃逸、cursor关闭，随后清理断言实际FAIL（entries1/bytes1130/token非null），属于有效RED。restore首轮被额外assertSame拦截；协程可复制异常对象，身份不是原业务要求，已仅撤回此额外断言，保留原type/message/全数据/epoch/FK/oracle合同，原失败不覆盖。纠正RED正在隔离session95150执行，尚无GREEN或新生产修改。
+
+主App session55570仍运行；不要把测试源码checkpoint当App已完成或P4完成。生产仍55fc；#57 Draft/OFF，无新原生、无合并发布。
+
 ## P4 并行资源异常检查已启动，App仍运行 — 2026-10-21
 
 主树最新5e12e2b6，源55fc的data495/Android编译/reminder21与工具73已保存。App full unit session55570仍运行且进程有CPU活动，日志/workspace/scratch/p4-reuse-latest-final.log，不能预填PASS或当卡死。主树有唯一生成LargeInventoryPerformanceProbe.kt未提交，全部构建结束后clean。
