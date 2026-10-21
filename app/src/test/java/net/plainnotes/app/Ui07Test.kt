@@ -419,3 +419,24 @@ class Ui07UndoShellTest {
         assertEquals(before.records.size + 1, afterUndo.records.size); assertEquals(before.records.size + 2, afterDelete.records.size)
     }
 }
+
+/** UI-07 F: the full-calendar choice is kept when the data arrives after the user opened it (start-up, refresh). */
+@RunWith(RobolectricTestRunner::class) @Config(sdk = [35], qualifiers = "w320dp-h568dp")
+class Ui07FullCalendarKeptTest {
+    @get:Rule val ui = createAndroidComposeRule<ComponentActivity>()
+    @Test fun choiceSurvivesTheMedicationsLoading() {
+        val f = Ui07Fixture
+        var meds by mutableStateOf(emptyList<MedicationEntity>())
+        ui.setContent { CompositionLocalProvider(LocalTodayClock provides { f.now }) { NotesTheme(ThemeMode.LIGHT) { androidx.compose.material3.Surface {
+            CalendarScreen(NotesState(meds, emptyList(), emptyList(), loading = false, calendarStart = f.today), f.today, {}, {}, {}, {}, PaddingValues(),
+                extra = NotesViewModel.ExtraState(records = if (meds.isEmpty()) emptyList() else listOf(f.record(1, f.medA, f.at(f.today, 8), "ON_TIME"))))
+        } } } }
+        ui.onNode(hasScrollToIndexAction()).performScrollToNode(hasTestTag("calendar-full"))
+        ui.onNodeWithTag("calendar-full").performSemanticsAction(SemanticsActions.OnClick); ui.waitForIdle()
+        ui.onNodeWithTag("recent-card").assertDoesNotExist()
+        meds = listOf(f.medA); ui.waitForIdle()
+        ui.onNodeWithTag("recent-card").assertDoesNotExist()
+        ui.onNode(hasScrollToIndexAction()).performScrollToNode(hasTestTag("calendar-card"))
+        ui.onNodeWithTag("calendar-card").assertExists()
+    }
+}

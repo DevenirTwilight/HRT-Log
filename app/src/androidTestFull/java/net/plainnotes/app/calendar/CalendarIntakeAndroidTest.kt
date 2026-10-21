@@ -48,11 +48,11 @@ class CalendarIntakeAndroidTest {
         // UI-07 F: home opens on "last 7 days" (its 7 pills also satisfy the wait above); open the full calendar as the user
         // does, then use the month grid as before.
         val list = ui.onNode(hasScrollToIndexAction())
-        list.performScrollToNode(hasTestTag("calendar-full")); ui.onNodeWithTag("calendar-full").performClick()
-        ui.waitUntil(10_000) { ui.onAllNodesWithTag("calendar-card").fetchSemanticsNodes().isNotEmpty() }
+        list.performScrollToNode(hasTestTag("calendar-full")); ui.onNodeWithTag("calendar-full").performSemanticsAction(SemanticsActions.OnClick)
+        ui.waitUntil(10_000) { ui.onAllNodesWithTag("recent-card").fetchSemanticsNodes().isEmpty() && runCatching { list.performScrollToNode(hasTestTag("calendar-card")) }.isSuccess }
         if (runCatching { list.performScrollToNode(hasContentDescription(cellName(tomorrow), substring = true) and hasClickAction()) }.isFailure) {
             list.performScrollToNode(hasContentDescription(s(R.string.calendar_next)))
-            ui.onNodeWithContentDescription(s(R.string.calendar_next)).performClick(); ui.waitForIdle()
+            ui.onNodeWithContentDescription(s(R.string.calendar_next)).performSemanticsAction(SemanticsActions.OnClick); ui.waitForIdle()
             list.performScrollToNode(hasContentDescription(cellName(tomorrow), substring = true) and hasClickAction())
         }
         // Activate the cell through its click action, not a touch at its centre: on the 320dp-wide CI emulator the

@@ -120,7 +120,8 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
         }
         // UI-05 B: what needs doing stays at the top: low stock right under the today card, before the calendar.
         item(key = "stock") { HomeStockCard(state.medications.filter { it.active }, runOut, today, zone, onStock, onAddStock) }
-        if (!full) item(key = "recent") { RecentDays(today, selected, infos, { select(it) }) { full = true; view = CalView.MONTH } }
+        // One list key for both forms, so switching between "last 7 days" and the full calendar keeps the list where it is.
+        if (!full) item(key = "calendar") { RecentDays(today, selected, infos, { select(it) }) { full = true; view = CalView.MONTH } }
         else item(key = "calendar") {
             Surface(shape = MaterialTheme.shapes.extraLarge, color = MaterialTheme.colorScheme.surfaceContainerLow, modifier = Modifier.fillMaxWidth().testTag("calendar-card")) {
                 Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
