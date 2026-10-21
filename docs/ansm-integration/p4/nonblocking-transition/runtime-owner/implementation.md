@@ -1,3 +1,5 @@
+> 2026-10-21 当前状态（优先于下方历史记录）：生产dc10ffef已实现进程owner、真实NotesApp状态观察和busy时受限只读刷新；正式提交入口仍OFF。完整data528 PASS、修正后真实App2项PASS；原生owner14合同API26/29/35报告核验PASS。fb43 CI仅API26三个SAVEPOINT测试失败，d9fa9340修正后本地3项及Android编译PASS，针对性run39626720171在途，不重跑大库。原大库三写6.387/6.285/5.666秒仍FAIL5秒，网络工件已通过授权连接器取回；全部实际耗时、证据及边界见 [verified-results.md](../shell-integration/verified-results.md)。尚不可合并，Draft/OFF/autoMerge=null；无可信缓存或Schema/备份/加密/PK变更。
+
 # 进程内实际用药保存 owner：实现与剩余边界
 
 2026-10-21。接手 c2fffbb0，主线基线 320171cdc882ec0b62830b60e2329a4174ffa31c。
@@ -50,7 +52,7 @@ PR #57 必须保持 Draft / OFF / autoMerge=null。
 
 既有 A（SAVEPOINT/指纹）、B（零消耗重复 revision）与 C 唯一索引原型不改；不新增信任缓存、增量验证器、Schema 或迁移。原冻结全审计继续独立对照。
 
-## 尚未完成，不能据此启用
+## 历史8b24检查点的剩余边界（当前进展见文件顶部）
 
 - **App 未绑定 owner**，NotesApp 状态 host 仍默认 null；现有状态 UI 不代表真实保存流程已接通。
 - NotesViewModel.refresh 及提醒等 generic transaction 混合读取和可能的迁移/对账。owner 活跃时这些入口会保守 busy。接线前应建立受限 typed snapshot/读取合同及明确延后维护的行为，不能放行任意 DAO 回调，也不能声称所有页面已可无冲突浏览。

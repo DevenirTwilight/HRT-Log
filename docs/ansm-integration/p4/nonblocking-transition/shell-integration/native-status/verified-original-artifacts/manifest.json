@@ -1,0 +1,37 @@
+[
+  {
+    "artifact_id": 12355511849,
+    "size": 150184,
+    "sha256": "4ce0beacdba4dcf3b31d3e349685091e983ee0857ded159c0f09a8285cabf6f4",
+    "zip_crc": "PASS",
+    "file": "12355511849.zip"
+  },
+  {
+    "artifact_id": 12354653563,
+    "size": 41004,
+    "sha256": "322fab8ab255e1b0427e4f05a0d4f4443642460053c409042042b16ff635e73d",
+    "zip_crc": "PASS",
+    "file": "12354653563.zip"
+  },
+  {
+    "artifact_id": 12356605555,
+    "size": 60208,
+    "sha256": "91ed8b020a6530806f0502a9c65a77523859bca50b68c7df57a88a19f09062a0",
+    "zip_crc": "PASS",
+    "file": "12356605555.zip"
+  },
+  {
+    "artifact_id": 12356092012,
+    "size": 40850,
+    "sha256": "2490b895b7e5b06a36a52a195939ddb0781e499d4a87733110689f7634d6b80d",
+    "zip_crc": "PASS",
+    "file": "12356092012.zip"
+  },
+  {
+    "artifact_id": 12356083954,
+    "size": 141066,
+    "sha256": "b61b593724803f549decfdf170474e33780349ab506675a32c54e60c7feee7c0",
+    "zip_crc": "PASS",
+    "file": "12356083954.zip"
+  }
+]

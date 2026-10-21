@@ -1,3 +1,11 @@
+## 原生证据集中归档完成；真实写入瓶颈明确，针对性修复验证在途 — 2026-10-21
+
+[核验报告](ansm-integration/p4/nonblocking-transition/shell-integration/verified-results.md)及native-status/现保存5份官方原ZIP、官方SHA/CRC清单、完整大库JSON/恢复kill报告/本地修正证据。连接器已解除工件访问阻塞；保留历史CONNECT403，不要求负责人开放网络。无重跑大库。
+
+同次额外诊断6512.762ms：票据756.595、验证593.343、INSERT/UPDATE含trigger27.215、写commit driver9.485、必要全审计4805.047，其余互斥区间见报告。正常新建audit_calls=1；没有重复完整审计可删，可证明节省0。原5秒门仍实际FAIL，不把非阻塞状态UI当性能通过。完整原生owner14在26/29/35均PASS；fb43 CI其余四job成功，仅26三个测试失败。d9fa9340只修对应SAVEPOINT测试并添加不重复跑分的模式，run39626720171针对性17合同+2 writer OS-kill在途。生产dc10未变；当前不能声称最终HEAD全CI绿。
+
+更新proposal/TAKEOVER/WORK-STATE/runtime说明顶部，防止旧“App未绑定/owner未实现/证据不可达”误导接手。正式提交入口仍OFF；5秒政策提案未批，真机/TalkBack及完整产品恢复验证不因本次成功而完成。P4继续Draft，不自动合并。
+
 ## 原始工件已取回；定位三个API26测试问题，针对性修正已本地通过 — 2026-10-21
 
 授权GitHub连接器成功取回原工件，绕过不了的CLI Azure CONNECT403不再阻塞证据读取；未改代理、未重跑性能。官方ZIP SHA/CRC核验通过。d582原大库真实三写6386.667/6284.662/5665.699ms仍FAIL5秒；审计5308.470ms、预测5786.830ms、备份6964.372ms、恢复44905.852ms在原预算内。两项原恢复真实进程kill均PASS。原报告正在集中归档，不改变旧失败。

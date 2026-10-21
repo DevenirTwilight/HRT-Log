@@ -1,3 +1,5 @@
+> 2026-10-21 当前状态（优先于下方历史记录）：生产dc10ffef已实现进程owner、真实NotesApp状态观察和busy时受限只读刷新；正式提交入口仍OFF。完整data528 PASS、修正后真实App2项PASS；原生owner14合同API26/29/35报告核验PASS。fb43 CI仅API26三个SAVEPOINT测试失败，d9fa9340修正后本地3项及Android编译PASS，针对性run39626720171在途，不重跑大库。原大库三写6.387/6.285/5.666秒仍FAIL5秒，网络工件已通过授权连接器取回；全部实际耗时、证据及边界见 [verified-results.md](shell-integration/verified-results.md)。尚不可合并，Draft/OFF/autoMerge=null；无可信缓存或Schema/备份/加密/PK变更。
+
 > 2026-10-21 后续实现：进程owner与共享冲突门、已有UUID完整确认及事务空间固定已完成；生产8b24ccf5完整data527/Period5/reminder21和Android测试源码/App编译PASS，见 [runtime-owner/implementation.md](runtime-owner/implementation.md)。App未绑定，政策/LMK/原生及CI门槛不因此获批。以下原型/初始接口记录按历史源码理解。
 
 # P4 非阻塞保存：产品验收变更提案（2026-10-21）

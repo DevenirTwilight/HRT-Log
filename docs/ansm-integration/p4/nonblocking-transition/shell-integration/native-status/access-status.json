@@ -1,9 +1,9 @@
 {
   "github_api": "AVAILABLE",
-  "github_actions_storage_download": "BLOCKED_PROXY_CONNECT_403",
-  "observed_network_policy": "unrestricted/enforced; does not establish storage reachability",
+  "cli_actions_storage": "BLOCKED_PROXY_CONNECT_403",
+  "artifact_access": "RESOLVED_VIA_AUTHORIZED_GITHUB_CONNECTOR",
+  "official_zip_sha_crc": "PASS",
+  "user_network_action_required": false,
   "signed_urls_or_credentials_stored": false,
-  "local_zip_sha_crc_report_verification": "NOT_POSSIBLE_UNTIL_ACCESS_RESTORED",
-  "failed_native_timings_and_root_cause": "UNKNOWN_NOT_INFERRED_FROM_CHECK_CONCLUSION",
-  "user_action": "Network settings must allow GitHub Actions storage or supply an environment that can reach it; asked asynchronously; no bypass/no retry run"
+  "performance_reruns": 0
 }
