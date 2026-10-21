@@ -1,3 +1,11 @@
+## P4 已达到受保护可合并状态，Ready/CLEAN — 2026-10-21
+
+最终源f420fbf1c4fec4b989f2694fd85e0b6b59dbbfc2，默认基线4ec11437已正常整合。两套正常Android PR39656387819/push39656377056全部SUCCESS，Science PR39656387915 gate/deep SUCCESS、push39656376924 gate SUCCESS/deep依既有分类器SKIPPED。六项必需检查全部通过，GitHub检查汇总SUCCESS、MERGEABLE/CLEAN，无未解决讨论；PR57已Ready，autoMerge=null，没有合并、签名、发布或启用正式入口。
+
+最终完整工件核验：data528/0fail/0skip，App1924列项/1605执行PASS/319SKIPPED，Period5和真实owner/navigation2明确PASS；26/29各335/0/0，35 data407/0fail/5显式probe skip、App282/0fail/10 action skip，三API两个外部kill精确恢复/无重放全部PASS。原ZIP/SHA/CRC/必要原HTML/当前GitHub准入JSON均在final-admission/protected-f420；完整结论见final-admission/final-report.md。源码不因证据保存反复变化，证据分支不作生产集成。
+
+按§131非阻塞策略，5秒仍记录为历史FAIL和独立指标，不再攻关；完整安全审计及恢复门没有取消。原16MiB CI OOM、旧LMK和AFTER_COMMIT超时都保留并标明证明范围；当前192MiB实测与全部正常保护检查通过，无当前工程准入阻塞。P5/P6/正式入口OFF、真实设备及人工TalkBack NOT_RUN，未声称发布或所有设备稳定。
+
 ## f420三个API的受保护原始工件全核验通过，最后等待Android job — 2026-10-21
 
 普通PR39656387819的API35官方artifact12373360958/SHA21029fa6…6a5dd35/CRC核验，data407/0fail/5显式探针skip、App282/0fail/10action probe skip；Stock和AfterCommit实际外部强杀/精确数据/epoch/完整oracle/无重放均PASS。与当前受保护HEAD的26/29两工件一同存protected-f420/，不拿旧source结果替代。push对应三个API也SUCCESS。现在只剩两套标准Android全量job在途；不取消/不绕过、不更改HEAD、不重跑性能实验。当前仍Draft/OFF，完整结束后再确认CLEAN/Ready。

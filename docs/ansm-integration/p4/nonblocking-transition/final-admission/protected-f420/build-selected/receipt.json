@@ -1,0 +1,64 @@
+{
+  "head": "f420fbf1c4fec4b989f2694fd85e0b6b59dbbfc2",
+  "run": 39656387819,
+  "artifact": 12373970840,
+  "official_zip_sha256": "754a56ce30338297b39477054d9b2c6490abfb054680507263f0dea8b0c062a4",
+  "crc": "PASS",
+  "selected": [
+    {
+      "path": "app/build/reports/tests/testFullDebugUnitTest/index.html",
+      "sha256": "05ea0ac69f4be459a1ad83fdbc585f9d76c71696346336325bae7578692957a2",
+      "counts": [
+        1924,
+        0,
+        319
+      ]
+    },
+    {
+      "path": "app/build/reports/tests/testFullDebugUnitTest/net.plainnotes.app.PeriodStabilityTest/index.html",
+      "sha256": "dfde3c845104b8274f4fd323fc6f635dffe509c31601a68caab88fa04eac81e4",
+      "counts": [
+        5,
+        0,
+        0
+      ]
+    },
+    {
+      "path": "app/build/reports/tests/testFullDebugUnitTest/net.plainnotes.app.ProcessMeasuredWriteShellTest/index.html",
+      "sha256": "db8687c003e25192d9a8ff07ee60f77f23b0ac5bb4ae3b1216145310cce81ca2",
+      "counts": [
+        2,
+        0,
+        0
+      ]
+    },
+    {
+      "path": "core/data/build/reports/tests/testDebugUnitTest/index.html",
+      "sha256": "3559326b8bdb3485cb87236a9aa051b144c9e1b0bbabeb0ecd20c8d961c6813d",
+      "counts": [
+        528,
+        0,
+        0
+      ]
+    },
+    {
+      "path": "core/data/build/reports/tests/testDebugUnitTest/net.plainnotes.app.data.MeasuredSaveCoordinatorTest/index.html",
+      "sha256": "c4930e2db5d86f93631b4afc7246004846f4a1cafed0450bbe868ab29b960023",
+      "counts": [
+        14,
+        0,
+        0
+      ]
+    },
+    {
+      "path": "core/reminder/build/reports/tests/testDebugUnitTest/index.html",
+      "sha256": "f54b065a33909bd85ac7f65352c5053e10bc0df7e7ecd0dc1b12c90bc171ec71",
+      "counts": [
+        21,
+        0,
+        0
+      ]
+    }
+  ],
+  "retention": "selected original HTML retained; entire127MB ZIP in official artifact and workspace scratch"
+}

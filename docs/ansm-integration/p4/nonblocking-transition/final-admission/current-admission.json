@@ -1,7 +1,7 @@
 {
   "source": "f420fbf1c4fec4b989f2694fd85e0b6b59dbbfc2",
   "mainline": "4ec11437acb257ecc0e9c92ed59907d954cbacae",
-  "status": "WAIT_ANDROID_ONLY",
+  "status": "MERGE_READY",
   "entry": "OFF",
   "policy": "NONBLOCKING_WRITES_LATENCY_OBSERVATIONAL",
   "tool_tests": 219,
@@ -22,14 +22,28 @@
   },
   "memory_policy": "Recovery safety remains mandatory; no changes to192MiB/512MiB frozen performance limits or crypto",
   "full_performance": "NOT_RERUN",
-  "release": "NOT_AUTHORIZED",
+  "release": "NOT_PERFORMED",
   "code_identical_to_technical_candidate": "f13e7f521862739e23b9928bba2a82e08eb42fe9 except verification docs",
   "technical_candidate_manual_checks": "ALL_PASS",
   "normal_ci": {
-    "android_pr": 39656387819,
-    "android_push": 39656377056,
-    "science_pr": 39656387915,
-    "science_push": 39656376924
+    "android_pr": {
+      "run": 39656387819,
+      "status": "SUCCESS"
+    },
+    "android_push": {
+      "run": 39656377056,
+      "status": "SUCCESS"
+    },
+    "science_pr": {
+      "run": 39656387915,
+      "gate": "SUCCESS",
+      "deep": "SUCCESS"
+    },
+    "science_push": {
+      "run": 39656376924,
+      "gate": "SUCCESS",
+      "deep": "SKIPPED_BY_EXISTING_CLASSIFIER"
+    }
   },
   "manual_f13_units": {
     "data": {
@@ -103,5 +117,25 @@
     ],
     "writer_external_kill_each_api": "BOTH_PASS",
     "original_artifacts": "protected-f420/"
-  }
+  },
+  "is_draft": false,
+  "github_merge_state": "CLEAN",
+  "github_mergeable": "MERGEABLE",
+  "head_status_check_rollup": "SUCCESS",
+  "required_unique_checks": 6,
+  "unresolved_review_threads": 0,
+  "auto_merge": null,
+  "latest_protected_app": {
+    "listed": 1924,
+    "executed": 1605,
+    "failed": 0,
+    "skipped": 319
+  },
+  "latest_protected_data": {
+    "tests": 528,
+    "failed": 0,
+    "skipped": 0
+  },
+  "physical_phone": "NOT_RUN",
+  "talkback_manual": "NOT_RUN"
 }
