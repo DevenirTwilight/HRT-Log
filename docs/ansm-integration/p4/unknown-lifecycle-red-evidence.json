@@ -1,0 +1,40 @@
+{
+  "data": {
+    "totals": {
+      "tests": 3,
+      "failures": 3,
+      "errors": 0,
+      "skipped": 0
+    },
+    "failures": [
+      {
+        "test": "oldUnscopedPackageVoidCannotMutateExactInventory",
+        "message": "java.lang.AssertionError: Old integer-only void bypassed the exact-stock confirmation ticket"
+      },
+      {
+        "test": "oldUnscopedPackageRestoreCannotMutateExactInventory",
+        "message": "java.lang.AssertionError: Old integer-only restore bypassed the exact-stock confirmation ticket"
+      },
+      {
+        "test": "integerQuantaCannotBeTreatedAsLegacyMedicationDoseUnits",
+        "message": "java.lang.AssertionError: Integer quanta were presented as mg stock expected null, but was:<10.0>"
+      }
+    ]
+  },
+  "reminder": {
+    "totals": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "failures": [
+      {
+        "test": "exactPackagingCannotBorrowCurrentLegacyExpiryOrDoseUnitsForAnAlert",
+        "message": "java.lang.AssertionError: Unknown exact-stock forecast/expiry must not become a definite refill or expiry claim expected:<[]> but was:<[LOW, EXPIRY]>"
+      }
+    ]
+  },
+  "status": "FAIL_EXPECTED",
+  "log_sha256": "a23e8a4009fde4300c15139fde12c32967c6260bae7199816dcde8d342974b92"
+}

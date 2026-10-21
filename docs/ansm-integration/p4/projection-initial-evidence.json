@@ -1,0 +1,16 @@
+{
+  "base": "2d2a289731a871833b6a981fbb227d0f04e3d7fb",
+  "status": "PASS",
+  "data": {
+    "tests": 305,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "shared_contract_tests": 31,
+  "native_test_compilation": "PASS",
+  "native_current_audit_execution": "PENDING_CI",
+  "log_sha256": "8e422c10a713405f35c105df8b7136eac49672c4f83bf54f5d6aaecac397b662",
+  "actor_sha256": "6c3bf29de479d4c86ac5d786d125d0df83cfeef1dfe75de4ddd436f583ae8f79",
+  "scope": "Read-only per-container projection; NOT full backup history acceptance"
+}

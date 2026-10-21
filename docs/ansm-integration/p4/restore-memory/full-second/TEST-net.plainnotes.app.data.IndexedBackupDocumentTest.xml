@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.IndexedBackupDocumentTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-10-20T20:36:02.081Z" hostname="2c2deac85eb5" time="0.558">
+  <properties/>
+  <testcase name="bomEscapedPayloadAndReorderedTablesMatchTheFrozenOracle" classname="net.plainnotes.app.data.IndexedBackupDocumentTest" time="0.024"/>
+  <testcase name="indexedRowsAreExactlyTheOriginalStrictParserValuesWithNoRetainedRowTree" classname="net.plainnotes.app.data.IndexedBackupDocumentTest" time="0.021"/>
+  <testcase name="globalArrayAndObjectBudgetsDoNotResetAtRowBoundaries" classname="net.plainnotes.app.data.IndexedBackupDocumentTest" time="0.406"/>
+  <testcase name="closedViewsCannotReadWipedPlaintextAndRepeatedCloseIsSafe" classname="net.plainnotes.app.data.IndexedBackupDocumentTest" time="0.021"/>
+  <testcase name="cancellationAndResourceFailuresDuringParseWipeAuthenticatedBytes" classname="net.plainnotes.app.data.IndexedBackupDocumentTest" time="0.021"/>
+  <testcase name="oldVersionGatePriorityIsPreservedBeforeInspectingTablesAndWipesOnRefusal" classname="net.plainnotes.app.data.IndexedBackupDocumentTest" time="0.019"/>
+  <testcase name="malformedDocumentsMatchOldRejectionAndWipeOwnedBuffer" classname="net.plainnotes.app.data.IndexedBackupDocumentTest" time="0.041"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

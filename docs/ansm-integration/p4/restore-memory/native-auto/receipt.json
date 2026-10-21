@@ -1,0 +1,29 @@
+{
+  "source": "9d304e58fd92f0171fd6ddd272f79dbe6ece3cb4",
+  "run": 39495197608,
+  "job": 118878355913,
+  "artifact": 12298256693,
+  "official_and_download_sha256": "b3c4e1b3bdf9fb1ac73fddd085c0e648172ba24e1936955f591d1ef9e178eca6",
+  "zip_crc": "PASS",
+  "pre_cleanup_report_equal": true,
+  "overall_native": "FAIL_WRITE_BUDGET; small death verification harness also FAIL",
+  "large_restore": "PASS_THIS_RUN_ONLY",
+  "restore_stability": "NOT_PROVEN_OTHER_FIXED_RUN_NEVER_REACHED_RESTORE",
+  "restore_ms_including_digests_and_probe": 41632.65932,
+  "restore_core_including_probe_ms": 36984.96747,
+  "business_equality": "PASS",
+  "business_sha256": "baa5babe005a4e2c6b39b0c6201c4cc9c83b36691afd0d6c627e5219ae3467f7",
+  "restore_observed_heap_bytes": 120390160,
+  "restore_observed_rss_bytes": 124850176,
+  "restore_observed_native_malloc_bytes": 32348584,
+  "sample_ms": 100,
+  "malloc_drop_at_staging_close_bytes": 20096608,
+  "current_rss_did_not_drop_at_that_same_checkpoint": true,
+  "frozen_writes_ms": [
+    8040.55006,
+    7511.01469,
+    7804.04204
+  ],
+  "small_process_death": "FAIL_TEST_HARNESS_PREVIEW_EPOCH_OUTSIDE_TRANSACTION; retained raw logs",
+  "third_large_run": "NOT_ALLOWED"
+}

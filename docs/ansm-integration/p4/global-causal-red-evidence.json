@@ -1,0 +1,7 @@
+{
+  "status": "EXPECTED_FAIL",
+  "test": "globalAuditRejectsNoopObservationPointingAtAFutureSameBalanceHead",
+  "failure": "java.lang.AssertionError: Future no-op anchor escaped the global audit",
+  "log_sha256": "eccebf78bed30ec229183f0aa5b6559c4a037ce33a50776a0d139bf7ae61b152",
+  "reason": "Same balance and a valid per-container head do not prove the head predates a no-op observation"
+}

@@ -1,0 +1,37 @@
+{
+  "source_head": "0b3c7038780ade649655247eadcd59676b545eff",
+  "baseline": "8ebb7198fe1dbd1d0c2a5f96e24cdecf7efac54c",
+  "native_workflow": {
+    "status": "PASS",
+    "original_classes": 15,
+    "current_classes": 17,
+    "all_original_classes_retained": true,
+    "only_line_changed": "append both measured classes; all other workflow bytes equal merged main",
+    "original_blob": "5403ac6aa92449be1464f65f1bf4d4e3b8b9f33e5acbb3728f35479254ebd922",
+    "candidate_blob": "f6a2ee5b11dab6b39c5cf6dddc1e5b9c778cdad8195f1858fc1446f69bc9c75f"
+  },
+  "pk_source_and_parameter_blobs": {
+    "status": "UNCHANGED",
+    "scope": "All pk-engine/src/main files, including experimental; every tracked pk-params.json",
+    "files": [
+      "pk-engine/src/main/kotlin/net/plainnotes/app/pk/Engine.kt",
+      "pk-engine/src/main/kotlin/net/plainnotes/app/pk/FittedModels.kt",
+      "pk-engine/src/main/kotlin/net/plainnotes/app/pk/LabFit.kt",
+      "pk-engine/src/main/kotlin/net/plainnotes/app/pk/Types.kt",
+      "pk-engine/src/main/kotlin/net/plainnotes/app/pk/Units.kt",
+      "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ConcentrationModelComparison.kt",
+      "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ExperimentalSlModelView.kt",
+      "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/PreparedResearchHistory.kt",
+      "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchDisplayProtocol.kt",
+      "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchExtrema.kt",
+      "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchM1Catalog.kt",
+      "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchShapeComparisonV01.kt",
+      "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchSublingualV01.kt",
+      "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/StudyAnchors.kt",
+      "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/UnifiedModelComparison.kt",
+      "pk-engine/src/main/resources/pk-params.json"
+    ]
+  },
+  "main_android_manifests": "UNCHANGED",
+  "meaning": "Source invariance/isolation evidence only; not native performance or physical acceptance."
+}

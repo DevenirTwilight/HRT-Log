@@ -1,0 +1,78 @@
+# P4 真实运行接线与既有原生验收核验（2026-10-21）
+
+本报告更新当前状态；早期提案/冻结/交接文件中的 NOT_IMPLEMENTED、未接App、未读取原工件等均是历史检查点。PR57仍Draft/OFF/autoMerge=null；没有合并、签名或发布。
+
+## 精确来源与证据
+
+主线基线320171cdc882ec0b62830b60e2329a4174ffa31c。生产源码dc10ffef，后续至d9fa9340仅测试/工具/文档；原大库执行d582bf7d，完整工程CI执行fb43b86a，API26 SAVEPOINT测试修正d9fa9340。不能将不同提交的结果混成一次最终HEAD全绿。
+
+- 大库run39620827648原始FAIL，artifact12355511849：SHA256 `4ce0beacdba4dcf3b31d3e349685091e983ee0857ded159c0f09a8285cabf6f4`；原ZIP及所有日志保存在native-status/verified-original-artifacts/。manifest逐项官方SHA与ZIP CRC核验PASS。
+- 原API26 run39620822817的artifact12354653563及fb43完整CI39622595007的API26/29/35原ZIP也保存于同目录。CLI Azure CONNECT403保留；授权GitHub连接器已取回，网络不是当前证据阻塞。无凭据/签名下载URL入库，不重跑性能。
+- 本地完整data528 PASS/零跳过（first-local）；原18 App通过，另2项最初初始化超时原样保留，修正Main Looper测试驱动后2项PASS（looper-fixed）。生产未因测试改动。
+- fb43 CI39622595007：android/JVM/API29/API35 SUCCESS；API26 FAIL。Science39622599139两项SUCCESS。API26/29/35 owner14合同均原报告14/0fail/0skip；API26原d582耗时5.884s、fb43 API29 2.044s/API35 3.350s为整套小库合同时间，不是固定夹具单写性能。
+- API26三个失败是新oracle测试裸ROLLBACK TO的语句分类问题，Room随后报无当前事务；参照既存A/B反例在3处增加前置空语句，保留实际SQLite savepoint回滚及所有断言。d9fa9340目标JVM3项、Android合同编译、Python工具5项PASS（savepoint-fix-local）。run39626720171已核验原生17/17 PASS，含3项原失败及owner14；原始instrument输出及官方ZIP/SHA/CRC保存。整体仍FAIL，原因是下述新增writer进程kill第二场景未通过。
+
+## 原冻结夹具的性能（同一次大库运行）
+
+API26 SQLCipher，512MiB配置/192MiB ART heap；14600记录、2000容器、32603行、19660924业务字节，未改变夹具/断言/预算。报告设备总RAM520962048B，ART上限201326592B。
+
+|阶段|实测毫秒|原预算|结果|
+|---|---:|---:|---|
+|恢复后连续真实写入含票据1/2/3|6386.667 / 6284.662 / 5665.699|各5000|FAIL三笔|
+|完整审计|5308.470|15000|PASS|
+|预测|5786.830|15000|PASS|
+|加密备份|6964.372|120000|PASS|
+|加密恢复全流程|44905.852|120000|PASS，业务完全相等|
+|恢复后完整审计|5060.397|15000|PASS|
+|额外冷纯codec真实写入|7315.547|5000|FAIL；独立冻结oracle PASS|
+
+冷纯codec只清编解码器状态：票据含清理1272.076ms，写入含审计6043.471ms；**没有重启进程或重置数据库页缓存**。不可把它称作应用冷启动。新库首次、真实进程重启首写、大库信任失效回退的独立延迟本轮NOT_MEASURED；没有可信基线，也不把启动/预热移出预算。已有小库/增长测试不能外推这些固定大库延迟；本轮不重复跑分。
+
+本次恢复100ms采样Java峰119895008B、native malloc峰34166360B、RSS峰125243392B，各自观测不能相加；可能漏掉瞬态。进程HWM142163968B包括恢复前fixture/export。全工作负载采样Java峰135826432B，数据库磁盘35924688B。原恢复ROWS_DELETED/ROWS_INSERTED外部kill两项均新PID精确dump/epoch/完整oracle PASS。此次没有OOM，不抹去以前LMK/异常或证明所有真机生命周期稳定。
+
+## 单次真实写入的互斥分解
+
+以下只来自同次额外第四笔诊断，真实提交后独立全量oracle PASS。它不是上述三笔之一，不把独立审计/ART探针或另次运行相加。
+
+|互斥区间|毫秒|含义/边界|
+|---|---:|---|
+|票据API完整墙钟|756.594500|含身份/全局链读取及读事务提交0.563770ms；不可再加该提交|
+|写入票据验证核心下界|593.342960|含原链与依赖核对；方法尾部未强行归因|
+|INSERT含相关触发器|27.117880|原6条INSERT驱动调用；不拆触发器独占|
+|UPDATE含相关触发器|0.097550|实际驱动调用|
+|写事务提交驱动调用|9.484990|非纯native COMMIT独占；无观测到额外根提交|
+|最终完整审计核心下界|4805.046770|同次只调用1次，全部历史语义保留|
+|其他审计/验证核心外驱动|14.617660|不重复计入核心|
+|写入内未独立归因|271.248740|Java/游标/调度/观察器及方法尾部等混合|
+|draft/UUID/观察器结束及API间隔|35.210760|实测剩余互斥区间|
+|合计|6512.761810|纳秒精确相加等于total_ns|
+
+票据墙钟756.594500+写入墙钟5720.956550+间隔35.210760=6512.761810ms。观察器成本下界、FK查询窗口155.960200ms及checkpoint偏移均是上述区间的子集，不能再加。触发器独占、纯native COMMIT、完整身份成本和游标Java尾部仍不能独立分离；不编造精度。
+
+## 架构结论与证明边界
+
+正常独立新建：NotesRepository根事务→MeasuredUseIntegration.create验证票据→记录/上下文→MeasuredConsumptionStore.consumeNewRecord→最终auditStagedDataset→根提交。新记录prior为空，不进入consumeNewRecord的历史先审计分支；本次audit_calls=1、validation_calls=1。已有UUID的owner确认走observeCreate完整审计，不重放写入。scheduled/修订/冲销/实盘等不同中间状态的审计不能套用普通新建的计数，完整清单仍见write-path-timing/report.md及validation-architecture/write-path-matrix.md。
+
+**删除重复完整审计的可证明节省=0ms，实测改进=没有。** 不能删除4805ms必需审计，也没有同次前后对照证明局部链/FK消重收益。现有索引/FK/追加约束维护部分结构；UUID/revision/来源/反向依赖/历史因果/完整CONFIRM与allocation集合等业务规则仍由操作检查及独立全审计共同保证。C唯一索引仅覆盖部分唯一性，不覆盖全部历史。
+
+继续选择保留全审计和原子事务，进程owner仅负责任务生命周期/真实结果交付，**不是使5秒通过的优化**。A完整审计仍O(全部历史)，常数微优化不能证明长期扩展性；B可信基线缺完整语义依赖/提交原子信任发布/所有连接与写入口覆盖证明，A/B反例保持有效；C涉及新的约束边界/迁移/旧备份/旧读者/恢复证明，不在当前冻结方向中擅自实施。详见原决策和非阻塞提案；不重复已失败假设。
+
+本实现没有可信基线或跨事务有效性缓存。每次正常新建仍完整最终审计；失败原Room回滚，SAVEPOINT不发布信任；writer结束后独立全审计核对；未知/损坏/异请求PENDING/MANUAL_CHECK，门不释放、不自动重放。进程重启清空内存状态，刷新持久事实并人工核对，不用旧票据/标志推断成功。Room13、业务备份12、PNBAK1与加密参数均未改变。
+
+## 当前合并判断
+
+**不可合并。主要可量化阻塞是原≤5秒硬门真实FAIL，网络已解除。** 测试修复原生17项已PASS；新增writer低内存AFTER_COMMIT进程kill检查点超时仍未验证，TalkBack/真机及完整产品恢复范围未因此完成。正式P4提交入口仍OFF；状态观察绑定不等于整个P4表单已启用。
+
+最小安全替代是保留完整审计、如实显示PENDING并在根提交后确认SUCCESS；已实现进程owner与真实App状态/受限只读刷新。其代价是O(历史)延迟、单空间保守互斥和未知结果人工核对；无Schema迁移或双验证器维护。它**不满足现5秒门**。将5秒改为非阻断延迟指标是proposal.md中的负责人待决政策，尚未批准、不修改断言；若继续坚持5秒，则需要明确重开具有不同正确性机制的架构范围和迁移证明工作，不能靠重复跑分解决。不存在“已经证明所有安全架构都不可能达到5秒”的结论；已证明的仅是当前方案/本次原生实测失败及特定A/B反例。
+
+## 针对性原生最终结果：17合同通过，提交后强杀检查点未到达
+
+run39626720171，源d9fa9340，artifact12358032004（2571B），SHA256 `b710786ca6ca93764bdb03e0023c82934604ab9ed3b55efeedaf036825edba3d`，CRC PASS。原ZIP、7个原文件及完整job日志压缩保存于native-status/。实际API26/512MiB/192MiB资源验证未变；本作业未运行大库性能或重跑恢复kill。
+
+- 3项SAVEPOINT修正+14项owner合同：原instrument输出 `OK (17 tests)`，110.143s整套耗时，不是单笔性能。原三个测试确实在SQLCipher原生通过，而非仅编译。
+- 新writer STOCK_CAPTURED：外部kill前PID3977，新PID4255，0记录/0消耗，精确dump/epoch/独立完整oracle、无重放PASS；fresh验证10.02s是小库正确性测试整体，不挪入预算表。
+- AFTER_COMMIT：60秒内未观察到marker，FAIL，原文 `AssertionError: No pending restore checkpoint` 是writer host复制来的错误标签，不表示重跑了恢复。prepare日志的 `Process crashed` 包含host finally force-stop，不能单凭它推断系统OOM、数据库损坏或自然崩溃。没有AFTER_COMMIT fresh-verify报告，因此提交后kill安全性在这个低内存运行仍NOT_VERIFIED。
+
+现有报告无法区分准备阶段慢、提交异常被owner保守捕获、提交返回等待或调度原因；完整job日志未保存该测试进程的logcat，不能猜定根因。不得扩大60秒等待求绿、删除断言、把API29作业成功替代这个资源环境。后续如继续这一问题，只针对AFTER_COMMIT失败场景增加不含健康载荷的阶段/异常证据并先定位；不重跑已通过17合同、STOCK_CAPTURED、旧大库或恢复kill。当前没有在途测试或新的跑分计划。
+
+原5秒硬门仍为主要架构/政策阻塞；此次失败另增加明确的低内存生命周期证明缺口。不存在“仅待网络开放即可合并”的状态。

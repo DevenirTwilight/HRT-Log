@@ -1,0 +1,45 @@
+diff --git a/.github/workflows/ansm-inventory-performance.yml b/.github/workflows/ansm-inventory-performance.yml
+index 2e9eee20..879489b9 100644
+--- a/.github/workflows/ansm-inventory-performance.yml
++++ b/.github/workflows/ansm-inventory-performance.yml
+@@ -8,6 +8,11 @@ on:
+       - 'scripts/configure_ansm_native_runtime.py'
+       - 'docs/ansm-integration/p4/performance/**'
+       - 'core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt'
++      - 'core/data/src/main/java/net/plainnotes/app/data/MeasuredOperationChain.kt'
++      - 'core/data/src/main/java/net/plainnotes/app/data/ReferenceStore.kt'
++      - 'core/data/src/main/java/net/plainnotes/app/data/ReferenceSchema.kt'
++      - 'core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt'
++      - 'core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt'
+       - 'core/data/src/main/java/net/plainnotes/app/data/ReferencePayload.kt'
+   workflow_dispatch:
+     inputs:
+diff --git a/core/data/src/historyTest/java/net/plainnotes/app/data/FrozenFullAuditStore.kt b/core/data/src/historyTest/java/net/plainnotes/app/data/FrozenFullAuditStore.kt
+index 1ad429ab..6cb01bd9 100644
+--- a/core/data/src/historyTest/java/net/plainnotes/app/data/FrozenFullAuditStore.kt
++++ b/core/data/src/historyTest/java/net/plainnotes/app/data/FrozenFullAuditStore.kt
+@@ -486,7 +486,7 @@ internal object FrozenFullAuditStore {
+     }
+     private data class PrefixIndex(val usedAtHead:Map<Long,Long>,val headBeforeSequence:java.util.TreeMap<Int,Long>)
+     /** Same bounded reducer for either checked projection rows or the exact original SQL fallback. */
+-    private fun buildPrefixIndex(entries:List<ProjectionEntry>,scale:StockQuantum,chain:Map<String,FrozenFullAuditChain.Node>):PrefixIndex {
++    private fun buildPrefixIndex(entries:List<ProjectionEntry>,scale:StockQuantum,chain:Map<String,MeasuredOperationChain.Node>):PrefixIndex {
+         val atHead=HashMap<Long,Long>().apply{put(0,0)}
+         val beforeSequence=java.util.TreeMap<Int,Long>()
+         var used=0L
+diff --git a/docs/ansm-integration/p4/full-audit-reuse/frozen-oracle.json b/docs/ansm-integration/p4/full-audit-reuse/frozen-oracle.json
+index f4efc80a..1136ceea 100644
+--- a/docs/ansm-integration/p4/full-audit-reuse/frozen-oracle.json
++++ b/docs/ansm-integration/p4/full-audit-reuse/frozen-oracle.json
+@@ -5,9 +5,9 @@
+     "core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt": {
+       "base_sha256": "6ade3dae736c72a0f851bd3c4592f9f55209b6657052b6fb3fd1b5f48a09fc2b",
+       "frozen_file": "core/data/src/historyTest/java/net/plainnotes/app/data/FrozenFullAuditStore.kt",
+-      "frozen_sha256": "1b9d6447088f641ddd9123c6a3c7a6d01b5f4d316b335c30cd86d71a0e18a056",
++      "frozen_sha256": "1ce19e71ab0b55781d9155067c558910705325baeb9b99c16233fb4fc32e3162",
+       "initial_frozen_sha256": "9a3d570fa0362e23ce42c21d787cd905b11e0c12d54f30b33be6a4b483142e90",
+-      "binding_only": "Replace MeasuredOperationChain with independently frozen original FrozenFullAuditChain; no audit logic changes"
++      "binding_only": "Independent FrozenFullAuditChain codec; original immutable MeasuredOperationChain.Node DTO type retained for reconciliation compatibility; no audit logic change"
+     },
+     "core/data/src/main/java/net/plainnotes/app/data/BackupValidation.kt": {
+       "base_sha256": "5a65ae13564faf8aa6120702cf141f7f4324a604b6effc5426c0c63719e7d9f1",

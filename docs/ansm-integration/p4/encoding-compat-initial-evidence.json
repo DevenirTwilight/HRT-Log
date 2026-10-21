@@ -1,0 +1,73 @@
+{
+  "status": "FAIL",
+  "scope": "Initial inventory-encoding/Schema11 compatibility run",
+  "totals": {
+    "tests": 325,
+    "failures": 12,
+    "errors": 0,
+    "skipped": 0
+  },
+  "failures": [
+    {
+      "suite": "net.plainnotes.app.data.ReferenceMigrationTest",
+      "test": "failedElevenToTwelveFenceRollsBackWithAllReferenceFactsAndEpochIntact",
+      "message": "android.database.sqlite.SQLiteException: no such column: inventory_encoding (code 1 SQLITE_ERROR): , while compiling: SELECT `id`,`medication_id`,`capacity`,`initial_used_amount`,`used_amount`,`opened_on`,`state`,`source_note`,`batch`,`inventory_encoding` FROM supply_container"
+    },
+    {
+      "suite": "net.plainnotes.app.data.ReferenceMigrationTest",
+      "test": "unsupportedMeasurementsInOldRoomElevenAreRejectedWithoutClearingAnything",
+      "message": "android.database.sqlite.SQLiteException: no such column: inventory_encoding (code 1 SQLITE_ERROR): , while compiling: SELECT `id`,`medication_id`,`capacity`,`initial_used_amount`,`used_amount`,`opened_on`,`state`,`source_note`,`batch`,`inventory_encoding` FROM supply_container"
+    },
+    {
+      "suite": "net.plainnotes.app.data.ReferenceMigrationTest",
+      "test": "roomTenReverseLedgerAndAllThirtySevenLegacyEntitiesRemainBitExactAndDowngradeRejects",
+      "message": "org.junit.ComparisonFailure: expected:<...\"],[0,null],[0,null][]],\"ddl_supply_container\":[[\"index\",\"index_supply_container_medication_id\",\"CREATE INDEX `index_supply_container_medication_id` ON `supply_container` (`medication_id`)\"],[\"table\",\"supply_container\",\"CREATE TABLE `supply_container` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `medication_id` INTEGER NOT NULL, `capacity` REAL NOT NULL, `initial_used_amount` REAL NOT NULL, `used_amount` REAL NOT NULL, `opened_on` TEXT, `state` TEXT"
+    },
+    {
+      "suite": "net.plainnotes.app.data.HistoricalVisitTest",
+      "test": "encryptedBackupRetainsVisitsAndTrashAcrossAdditiveReferenceSchema",
+      "message": "java.lang.AssertionError: expected:<10> but was:<11>"
+    },
+    {
+      "suite": "net.plainnotes.app.data.AttachmentFoundationTest",
+      "test": "pnBakBusinessSchemaTenStillExcludesAttachmentsAndRestoreRetiresIdentity",
+      "message": "java.lang.AssertionError: expected:<10> but was:<11>"
+    },
+    {
+      "suite": "net.plainnotes.app.data.AttachmentMigrationTest",
+      "test": "encryptedRoom9MigratesAllLegacyRowsIndicesGuardsAndReopens",
+      "message": "android.database.sqlite.SQLiteException: no such column: inventory_encoding (code 1 SQLITE_ERROR): , while compiling: SELECT `id`,`medication_id`,`capacity`,`initial_used_amount`,`used_amount`,`opened_on`,`state`,`source_note`,`batch`,`inventory_encoding` FROM supply_container"
+    },
+    {
+      "suite": "net.plainnotes.app.data.ReferencePersistenceTest",
+      "test": "futureHeaderIsRejectedBeforeOpeningDatabaseAndLegacyMaximumCannotReadNewBackup",
+      "message": "java.lang.AssertionError: expected:<10> but was:<11>"
+    },
+    {
+      "suite": "net.plainnotes.app.data.ReferencePersistenceTest",
+      "test": "completeNewBackupRoundtripRetiresOldEditingEpochAndReopensWithoutCatalog",
+      "message": "java.lang.AssertionError: expected:<10> but was:<11>"
+    },
+    {
+      "suite": "net.plainnotes.app.data.ReferencePersistenceTest",
+      "test": "oldSchemaNineBackupClearsNewReferencesAndKeepsLegacyStockUnknown",
+      "message": "java.lang.IllegalArgumentException: Misdeclared inventory backup version"
+    },
+    {
+      "suite": "net.plainnotes.app.data.Ansm03b0InventoryTest",
+      "test": "oldBackupCannotSilentlyPreserveNewAssociationsOrGuardState",
+      "message": "java.lang.AssertionError: Old reader must reject candidate newer business schema"
+    },
+    {
+      "suite": "net.plainnotes.app.data.Ansm03b0InventoryTest",
+      "test": "baselinePublicRecordEditReverseAdjustmentAndBackupPreserveAppendOnlyHistory",
+      "message": "java.lang.AssertionError: expected:<10> but was:<11>"
+    },
+    {
+      "suite": "net.plainnotes.app.data.MeasuredContainerStoreTest",
+      "test": "inactiveFormatRemainsBlockedFromCurrentBackupAcceptance",
+      "message": "java.lang.AssertionError"
+    }
+  ],
+  "log_sha256": "0419b2a962665f0f99837a4dae41f4421014c4c9d46f7e05df3b6653bf797393"
+}

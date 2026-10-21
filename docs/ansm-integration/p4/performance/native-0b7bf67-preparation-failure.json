@@ -1,0 +1,16 @@
+{
+  "status": "PREPARATION_FAILED_PERFORMANCE_NOT_RUN",
+  "head": "0b7bf6779a5dd9e849a2be94a918108faec97466",
+  "run": 39106094875,
+  "job": 117612132421,
+  "artifact_id": 12127979394,
+  "artifact_sha256": "cf08cb9966c97085d7a4abbd49b1ffcf9b7664db44c007097d1251af489a4d47",
+  "zip_crc": "PASS",
+  "artifact_files": [
+    "ansm-native-performance/source.json"
+  ],
+  "cause": "New diagnostic runner required adb logcat -c; API26 reported failed to clear main log and exited1 before Gradle/test/metrics. This is a tooling regression, not a measured inventory budget result.",
+  "performance": "NOT_RUN",
+  "numeric_metrics": "UNAVAILABLE",
+  "fix": "Remove log clearing. Host supplies one fresh nonce to instrumentation, watcher and collector. Ignore all stale ready markers and reports by nonce, without clearing logs or adb polling before the matching ready signal."
+}

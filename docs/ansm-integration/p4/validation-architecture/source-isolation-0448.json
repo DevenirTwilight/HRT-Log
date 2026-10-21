@@ -1,0 +1,25 @@
+{
+  "reviewed_head": "dc54c7fae1fe48c33be8aaecd51bd0dce1301597",
+  "tested_head": "0448fb8340e6179d52c5081759028f34bc3fc3c2",
+  "base": "320171cdc882ec0b62830b60e2329a4174ffa31c",
+  "changed_paths": [
+    "core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt",
+    "docs/HANDOFF.md",
+    "docs/REQUIREMENTS.md",
+    "docs/ansm-integration/p4/validation-architecture/baseline-dc54/api26-MeasuredConsumptionAndroidTest.html",
+    "docs/ansm-integration/p4/validation-architecture/baseline-dc54/environment.json",
+    "docs/ansm-integration/p4/validation-architecture/baseline-dc54/execution.json",
+    "docs/ansm-integration/p4/validation-architecture/baseline-dc54/large-ten-year.json",
+    "docs/ansm-integration/p4/validation-architecture/baseline-dc54/source.json",
+    "docs/ansm-integration/p4/validation-architecture/decision-2026-10-20.md",
+    "docs/ansm-integration/p4/validation-architecture/decision.md",
+    "docs/ansm-integration/p4/validation-architecture/result-receipt.json"
+  ],
+  "production_source_changes": [],
+  "original_counterexamples_retained": true,
+  "rollback_sql_change": "Leading empty statement only; same SQLite ROLLBACK TO and all original assertions",
+  "new_cases": [
+    "architectureConstraintRejectsZeroEffectDuplicateAndRollsBackWithSchema"
+  ],
+  "prototype_bounds": "Only one necessary predicate. Not sufficient for history validity or fast-path authorization."
+}

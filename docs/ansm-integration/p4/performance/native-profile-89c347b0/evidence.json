@@ -1,0 +1,36 @@
+{
+  "runs": [
+    {
+      "run": 39421221334,
+      "artifact": 12264241608,
+      "official_zip_sha256": "3e8433a61e9c4ca30096997f07bb52f7f739bfbf0a5cdc86a0edf3f8f8e8eebb",
+      "crc": "PASS",
+      "write_ms": [
+        8643.16113,
+        7634.35699,
+        9384.89379
+      ],
+      "backup_ms": 9783.82756,
+      "restore_ms": 61769.3833,
+      "status": "WRITE_BUDGET_FAIL; SQL_DETAIL_TRANSPORT_UNAVAILABLE",
+      "source": "89c347b01192f19bb01f53f3f019e9f98e0741f9"
+    },
+    {
+      "run": 39421243828,
+      "artifact": 12263758816,
+      "official_zip_sha256": "458dafed8e3c31d325afe60ac1ac0382248bfdf4901b6470173fa22deb965f09",
+      "crc": "PASS",
+      "write_ms": [
+        8478.50293,
+        8178.56823,
+        8451.85275
+      ],
+      "backup_ms": 10446.4246,
+      "restore_ms": 47716.97455,
+      "status": "WRITE_BUDGET_FAIL; SQL_DETAIL_TRANSPORT_UNAVAILABLE",
+      "source": "89c347b01192f19bb01f53f3f019e9f98e0741f9"
+    }
+  ],
+  "diagnostic_fix": "cap at12 slowest SQL templates, retain omitted count/ns; preserve65536-byte report limit",
+  "no_new_independent_diagnostic_round": true
+}

@@ -1,0 +1,20 @@
+{
+  "status": "FAIL_EXPECTED",
+  "tests": {
+    "tests": 2,
+    "failures": 2,
+    "errors": 0,
+    "skipped": 0
+  },
+  "failures": [
+    {
+      "case": "globalAuditRejectsInvalidExactCapacityInPreviouslyRestoredLifecycleEvidence",
+      "message": "java.lang.AssertionError: Historical exact capacity was never validated"
+    },
+    {
+      "case": "globalAuditRejectsRestoredEvidenceWhoseBodyDiffersFromTheOriginalVoid",
+      "message": "java.lang.AssertionError: Restore body changed the original voided physical facts"
+    }
+  ],
+  "log_sha256": "c446f2995d935f0e4694f1352a92e139839f4092809402513caf3744bcacadfd"
+}

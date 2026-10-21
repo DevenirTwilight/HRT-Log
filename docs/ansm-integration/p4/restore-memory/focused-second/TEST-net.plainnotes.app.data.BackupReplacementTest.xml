@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.BackupReplacementTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-10-20T20:29:03.098Z" hostname="2c2deac85eb5" time="9.272">
+  <properties/>
+  <testcase name="inputLedgerOrderDoesNotChangeIdentityOrFrozenConsumption" classname="net.plainnotes.app.data.BackupReplacementTest" time="4.708"/>
+  <testcase name="nonemptyReverseLedgerRestoresIntoItselfTwiceAndReopens" classname="net.plainnotes.app.data.BackupReplacementTest" time="1.327"/>
+  <testcase name="maintenancePreservesPreviouslyInstalledNonAttachmentGuards" classname="net.plainnotes.app.data.BackupReplacementTest" time="0.465"/>
+  <testcase name="indexedInputMatchesFrozenDomRecoveryDecisionsAndWholeData" classname="net.plainnotes.app.data.BackupReplacementTest" time="0.692"/>
+  <testcase name="invalidSourceRelationshipsAndDuplicateIdsLeaveEveryTargetRowAndGuardUntouched" classname="net.plainnotes.app.data.BackupReplacementTest" time="0.314"/>
+  <testcase name="deleteAllStructuredRowsAlsoHonoursTheSelfReference" classname="net.plainnotes.app.data.BackupReplacementTest" time="0.272"/>
+  <testcase name="failureAfterReplacementRollsBackRowsIdentitiesAndTriggerDefinitions" classname="net.plainnotes.app.data.BackupReplacementTest" time="0.441"/>
+  <testcase name="nonemptyDifferentTargetIsCompletelyReplacedWithoutMixingIds" classname="net.plainnotes.app.data.BackupReplacementTest" time="0.58"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

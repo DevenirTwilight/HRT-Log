@@ -1,0 +1,20 @@
+{
+  "status": "LOCAL_PASS_NATIVE_NOT_RUN",
+  "scope": "TEST_ONLY_POST_BUDGET_ART_METHOD_SAMPLING",
+  "production_files_changed": false,
+  "python_tests": 179,
+  "generated_native_source_compilation": "PASS",
+  "generated_source": {
+    "source_sha256": "9313167178989def0d4d89d785f84cdde764fba21033543cdf85e472c5511242",
+    "native_sha256": "3d015d4d42d6b3c4cc11ef8c72427c50baf62d08b76727593e1762c479ba86c6",
+    "status": "GENERATED_NOT_RUN"
+  },
+  "log_sha256": {
+    "ansm-native-sampling-python.log": "155e211611a8b99c3fc5aaefe156ee0fa45d90815be2562a4071ac37eca7d800",
+    "ansm-native-sampling-compile.log": "1ca745c68659501fa6f0f70652050709464d57f82bc7dd8d1c91ce949f4dbe62"
+  },
+  "native_trace_collection": "NOT_RUN",
+  "native_trace_format_support": "Version3 dual/thread-cpu/wall. Unsupported, malformed, unknown frames, overflow and incomplete frames are rejected or explicitly PARTIAL, never complete timing proof.",
+  "acceptance": "P4_BLOCKED",
+  "budget_phases_or_limits_changed": false
+}

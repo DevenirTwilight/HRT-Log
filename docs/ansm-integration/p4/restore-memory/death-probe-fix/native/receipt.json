@@ -1,0 +1,20 @@
+{
+  "source": "47f115515d6010f93fef2cea047d7dc8e4c8bbb4",
+  "production_source": "9d304e58fd92f0171fd6ddd272f79dbe6ece3cb4",
+  "run": 39555630970,
+  "job": 119074632992,
+  "conclusion": "SUCCESS",
+  "artifact": 12325738217,
+  "bytes": 2183,
+  "official_download_sha256": "0204f52b41f8f8ae08b65b17dbc12f67f9add63e70c6ee96cfe21452a3f24227",
+  "zip_crc": "PASS",
+  "large_performance": "NOT_RUN_CONTRACT_ONLY",
+  "files": {
+    "restore-death-ROWS_DELETED-prepare.log": "cfc002e0cb3f06f7d20a2fdb295185bfe68ae07212a599ba80096d3784620b46",
+    "restore-death-ROWS_DELETED-verify.log": "93cd3098b4abafda927a1822bfbfef366309c027ac287154981b0245582c491f",
+    "restore-death-ROWS_INSERTED-prepare.log": "cfc002e0cb3f06f7d20a2fdb295185bfe68ae07212a599ba80096d3784620b46",
+    "restore-death-ROWS_INSERTED-verify.log": "cba470116ed9ffdd6d23bc3d51186fcfc0678fcd0c30ab349f1e92031aec4f48",
+    "restore-process-death.json": "f629b948b7da842aece3e6e5dd71dcf817456a2884020643a1948e12f7fe15a0",
+    "source.json": "1aaeb3efd603f8a9e01715e3f44ca5f4cf1e59e76c2390bc7192ea187d8abbb4"
+  }
+}

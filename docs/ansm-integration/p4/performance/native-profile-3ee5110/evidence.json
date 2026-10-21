@@ -1,0 +1,19 @@
+{
+  "source_head": "3ee511043182eb9b3a81721d2f853fe9b6273664",
+  "run": 39121269126,
+  "job": 117657200611,
+  "artifact_id": 12135110442,
+  "artifact_sha256": "80cfee16e9f41857bcf330e8929a8b982cab26a0cfa4d2ec631d4e94c60771ef",
+  "artifact_sha256_verification": "PASS",
+  "zip_crc": "PASS",
+  "trace_sha256": "4cadcd42e1a9006169e74cf5f425af0a89a1da31b68458930629e17486c31237",
+  "trace_gzip_sha256": "4a986b107aacbb03d307dca5b32f743fe618afff407cc86ad015d8540023b374",
+  "parser_source_sha256": "b291a87edf240f5e93c6411a810c7f2ad5c946b373c0df1427d5aa42d09f6190",
+  "parser_reproduction": "PASS",
+  "transport": "NATIVE_PREFLIGHT_AND_SAMPLE_ACK_PASS",
+  "profile": "PARTIAL_DIAGNOSTIC:152 clipped boundary frames,0 unknown methods/unmatched exits,overflow=false; sampled segments not invocation counts",
+  "performance": "FAIL:actual writes11959/11020/11524ms exceed unchanged5000ms. Audit/forecast/restored audit pass this run. Cross-run timing differences do not alone prove causal or stable improvement.",
+  "physical": "NOT_RUN",
+  "p4": "PRODUCTION_BLOCKED",
+  "next": "SQLCipher nativeExecuteForCursorWindow dominates; secondary immutable-row query indexes under local test, not yet native-validated."
+}

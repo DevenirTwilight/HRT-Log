@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.MeasuredConsumptionStoreTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-10-20T15:02:05.644Z" hostname="2c2deac85eb5" time="10.138">
+  <properties/>
+  <testcase name="architectureJournalOverflowRequiresFullRebuildAndNeverMeansNoChanges" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="6.002"/>
+  <testcase name="architectureDoesNotInventUniversalCrossTableUuidUniqueness" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.422"/>
+  <testcase name="architectureRestoreAndReopenCannotReuseThePreviousBaselineOrTempMetadata" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="1.061"/>
+  <testcase name="architectureForeignKeyAndBalanceHypothesisIsRefutedByZeroEffectDuplicateUse" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.53"/>
+  <testcase name="architectureCounterOnlyWitnessIsRefutedByRollbackWithoutAnyStampChange" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.462"/>
+  <testcase name="architectureJournalObservesDaoCompiledSqlUnrelatedHistoryAndLedgerTriggers" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.831"/>
+  <testcase name="architectureTransactionalSealRejectsTheCounterRollbackCounterexample" classname="net.plainnotes.app.data.MeasuredConsumptionStoreTest" time="0.308"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

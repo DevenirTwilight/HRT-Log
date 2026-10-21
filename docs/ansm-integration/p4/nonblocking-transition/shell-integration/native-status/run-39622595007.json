@@ -1,0 +1,466 @@
+{
+  "conclusion": "",
+  "databaseId": 39622595007,
+  "headSha": "fb43b86ab07fb6a65fc5f6442e5ff1ddd6ed35e6",
+  "jobs": [
+    {
+      "completedAt": "0001-01-01T00:00:00Z",
+      "conclusion": "",
+      "databaseId": 119299683445,
+      "name": "attachment-poc-compatibility (26)",
+      "startedAt": "2026-10-21T15:05:42Z",
+      "status": "in_progress",
+      "steps": [
+        {
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "number": 2,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3",
+          "number": 3,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407",
+          "number": 4,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run sdkmanager 'platforms;android-37.0' 'build-tools;37.0.0'",
+          "number": 5,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run gradle/actions/setup-gradle@0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d",
+          "number": 6,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run sudo chmod a+rw /dev/kvm",
+          "number": 7,
+          "status": "completed"
+        },
+        {
+          "conclusion": "",
+          "name": "Run ReactiveCircus/android-emulator-runner@4c44018e59b437e86cdfc41da381398f93ed8808",
+          "number": 8,
+          "status": "in_progress"
+        },
+        {
+          "conclusion": "",
+          "name": "Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "number": 9,
+          "status": "pending"
+        },
+        {
+          "conclusion": "",
+          "name": "Post Run gradle/actions/setup-gradle@0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d",
+          "number": 16,
+          "status": "pending"
+        },
+        {
+          "conclusion": "",
+          "name": "Post Run actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3",
+          "number": 17,
+          "status": "pending"
+        },
+        {
+          "conclusion": "",
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "number": 18,
+          "status": "pending"
+        }
+      ],
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39622595007/job/119299683445"
+    },
+    {
+      "completedAt": "0001-01-01T00:00:00Z",
+      "conclusion": "",
+      "databaseId": 119299683456,
+      "name": "device-tests",
+      "startedAt": "2026-10-21T15:05:42Z",
+      "status": "in_progress",
+      "steps": [
+        {
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "number": 2,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3",
+          "number": 3,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407",
+          "number": 4,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run sdkmanager 'platforms;android-37.0' 'build-tools;37.0.0'",
+          "number": 5,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run gradle/actions/setup-gradle@0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d",
+          "number": 6,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run sudo chmod a+rw /dev/kvm",
+          "number": 7,
+          "status": "completed"
+        },
+        {
+          "conclusion": "",
+          "name": "Run ReactiveCircus/android-emulator-runner@4c44018e59b437e86cdfc41da381398f93ed8808",
+          "number": 8,
+          "status": "in_progress"
+        },
+        {
+          "conclusion": "",
+          "name": "Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "number": 9,
+          "status": "pending"
+        },
+        {
+          "conclusion": "",
+          "name": "Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "number": 10,
+          "status": "pending"
+        },
+        {
+          "conclusion": "",
+          "name": "Post Run gradle/actions/setup-gradle@0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d",
+          "number": 18,
+          "status": "pending"
+        },
+        {
+          "conclusion": "",
+          "name": "Post Run actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3",
+          "number": 19,
+          "status": "pending"
+        },
+        {
+          "conclusion": "",
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "number": 20,
+          "status": "pending"
+        }
+      ],
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39622595007/job/119299683456"
+    },
+    {
+      "completedAt": "0001-01-01T00:00:00Z",
+      "conclusion": "",
+      "databaseId": 119299683468,
+      "name": "android",
+      "startedAt": "2026-10-21T15:05:41Z",
+      "status": "in_progress",
+      "steps": [
+        {
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "number": 2,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3",
+          "number": 3,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407",
+          "number": 4,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run sdkmanager 'platforms;android-37.0' 'build-tools;37.0.0'",
+          "number": 5,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run gradle/actions/setup-gradle@0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d",
+          "number": 6,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Resolve Robolectric android-all jars through Gradle (no download at test time)",
+          "number": 7,
+          "status": "completed"
+        },
+        {
+          "conclusion": "",
+          "name": "Run ./gradlew -ProbolectricDir=\"$GITHUB_WORKSPACE/build/robolectric-jars\" :core:data:testDebugUnitTest --rerun :core:reminder:testDebugUnitTest --rerun :app:testFullDebugUnitTest --rerun lintFullDebug :app:assembleFullDebug :app:assembleFullRelease :core:data:assembleDebugAndroidTest :app:assembleFullDebugAndroidTest",
+          "number": 8,
+          "status": "in_progress"
+        },
+        {
+          "conclusion": "",
+          "name": "Sublingual immutable P0/P1-A/P1-B/P1-C1 replay and P1-C2 disposition acceptance",
+          "number": 9,
+          "status": "pending"
+        },
+        {
+          "conclusion": "",
+          "name": "Run python3 scripts/check_release_manifest.py",
+          "number": 10,
+          "status": "pending"
+        },
+        {
+          "conclusion": "",
+          "name": "Exclude experimental attachment code and providers from release payload",
+          "number": 11,
+          "status": "pending"
+        },
+        {
+          "conclusion": "",
+          "name": "Exclude ANSM test-only measurement and shadow integration from release",
+          "number": 12,
+          "status": "pending"
+        },
+        {
+          "conclusion": "",
+          "name": "Release APK source identity and delivery ledger",
+          "number": 13,
+          "status": "pending"
+        },
+        {
+          "conclusion": "",
+          "name": "Run git diff --exit-code -- core/data/schemas docs/PLAN.md",
+          "number": 14,
+          "status": "pending"
+        },
+        {
+          "conclusion": "",
+          "name": "Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "number": 15,
+          "status": "pending"
+        },
+        {
+          "conclusion": "",
+          "name": "Post Run gradle/actions/setup-gradle@0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d",
+          "number": 28,
+          "status": "pending"
+        },
+        {
+          "conclusion": "",
+          "name": "Post Run actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3",
+          "number": 29,
+          "status": "pending"
+        },
+        {
+          "conclusion": "",
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "number": 30,
+          "status": "pending"
+        }
+      ],
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39622595007/job/119299683468"
+    },
+    {
+      "completedAt": "2026-10-21T15:06:47Z",
+      "conclusion": "success",
+      "databaseId": 119299683494,
+      "name": "jvm",
+      "startedAt": "2026-10-21T15:05:46Z",
+      "status": "completed",
+      "steps": [
+        {
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "number": 2,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3",
+          "number": 3,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run gradle/actions/setup-gradle@0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d",
+          "number": 4,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run ./gradlew -PjvmOnly :core:domain:test :pk-engine:test :importer:test :attachment-poc:test --rerun-tasks --no-parallel --max-workers=2",
+          "number": 5,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Lightweight scientific contracts and four-language checks",
+          "number": 6,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "number": 7,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "number": 8,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Run gradle/actions/setup-gradle@0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d",
+          "number": 14,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Run actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3",
+          "number": 15,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "number": 16,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 17,
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39622595007/job/119299683494"
+    },
+    {
+      "completedAt": "0001-01-01T00:00:00Z",
+      "conclusion": "",
+      "databaseId": 119299683552,
+      "name": "attachment-poc-compatibility (29)",
+      "startedAt": "2026-10-21T15:05:41Z",
+      "status": "in_progress",
+      "steps": [
+        {
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "number": 2,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3",
+          "number": 3,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407",
+          "number": 4,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run sdkmanager 'platforms;android-37.0' 'build-tools;37.0.0'",
+          "number": 5,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run gradle/actions/setup-gradle@0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d",
+          "number": 6,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run sudo chmod a+rw /dev/kvm",
+          "number": 7,
+          "status": "completed"
+        },
+        {
+          "conclusion": "",
+          "name": "Run ReactiveCircus/android-emulator-runner@4c44018e59b437e86cdfc41da381398f93ed8808",
+          "number": 8,
+          "status": "in_progress"
+        },
+        {
+          "conclusion": "",
+          "name": "Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "number": 9,
+          "status": "pending"
+        },
+        {
+          "conclusion": "",
+          "name": "Post Run gradle/actions/setup-gradle@0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d",
+          "number": 16,
+          "status": "pending"
+        },
+        {
+          "conclusion": "",
+          "name": "Post Run actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3",
+          "number": 17,
+          "status": "pending"
+        },
+        {
+          "conclusion": "",
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "number": 18,
+          "status": "pending"
+        }
+      ],
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39622595007/job/119299683552"
+    }
+  ],
+  "status": "in_progress",
+  "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39622595007"
+}

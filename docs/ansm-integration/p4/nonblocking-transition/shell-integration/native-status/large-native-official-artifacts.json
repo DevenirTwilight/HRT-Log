@@ -1,0 +1,25 @@
+{
+  "total_count": 1,
+  "artifacts": [
+    {
+      "id": 12355511849,
+      "node_id": "MDg6QXJ0aWZhY3QxMjM1NTUxMTg0OQ==",
+      "name": "ansm-native-api26-large-inventory",
+      "size_in_bytes": 150184,
+      "url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/artifacts/12355511849",
+      "archive_download_url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/artifacts/12355511849/zip",
+      "expired": false,
+      "digest": "sha256:4ce0beacdba4dcf3b31d3e349685091e983ee0857ded159c0f09a8285cabf6f4",
+      "created_at": "2026-10-21T15:05:55Z",
+      "updated_at": "2026-10-21T15:05:55Z",
+      "expires_at": "2027-01-19T14:53:25Z",
+      "workflow_run": {
+        "id": 39620827648,
+        "repository_id": 1406091596,
+        "head_repository_id": 1406091596,
+        "head_branch": "feature/ansm03b-p4-exact-stock-20261016",
+        "head_sha": "d582bf7d759d53cf9d6e15b48651c32c1d6b6f1f"
+      }
+    }
+  ]
+}

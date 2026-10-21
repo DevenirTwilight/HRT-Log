@@ -1,0 +1,21 @@
+{
+  "status": "ARCHIVE_ONLY_NOT_APPLIED_SUPERSEDED",
+  "purpose": "Preserve old dirty worktree evidence across account change; do not resume stopped A/B/C/performance work or apply old REQUIREMENTS changes over current policy.",
+  "old_architecture_worktree": "/workspace/HRT-Log-p4",
+  "base": "dc54c7fae1fe48c33be8aaecd51bd0dce1301597",
+  "old_architecture_status": " M core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt\n M docs/REQUIREMENTS.md\n?? core/data/src/historyTest/java/net/plainnotes/app/data/DatabaseInvariantProbe.kt\n?? docs/ansm-integration/p4/validation-architecture/architecture-selection.md\n",
+  "resource_worktree": "/workspace/HRT-Log-p4-resource-check",
+  "resource_status": " M core/data/src/main/java/net/plainnotes/app/data/MeasuredOperationChain.kt\n M core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt\n?? docs/ansm-integration/p4/full-audit-reuse/resource-failure/green/\n?? docs/ansm-integration/p4/full-audit-reuse/resource-failure/source-equivalence.json\n",
+  "resource_source_exactly_matches_remote_archive": "docs/ansm-integration/p4/nonblocking-transition/saved-resource-wip",
+  "resource_source_sha256": {
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredOperationChain.kt": "785d84ad7749b1dfba47ac0f5a361564a95659157cedd9fcc7f2c32664077771",
+    "core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt": "120b79de6bb718546625f7d95c5618074b368fc17665dd35171718bd38de8282"
+  },
+  "resource_fix_current_status": "Already applied in 31303e64 and retained in tested production ae7688da; do not reapply old patch.",
+  "original_worktrees": "Preserved without reset or discard. Not the current continuation checkout.",
+  "files": {
+    "old-architecture-tracked.patch": "1deb2ca2de2035934b52df5b207f02db03e22a6296aa7b4c1a9e8f7ad98aa4f3",
+    "DatabaseInvariantProbe.kt.txt": "a4fd0c1330695876d9e0546df6ccd33d4ee023ee40a5f68cc9450375e9b097ee",
+    "architecture-selection.md.txt": "66568f98da5f830f9ae29165c46676963758932771df2fd795014647e5de00b6"
+  }
+}

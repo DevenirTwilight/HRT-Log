@@ -1,0 +1,19 @@
+{
+  "scope": "SYNTHETIC_ACTUAL_WRITER_PROCESS_KILL",
+  "performance": "NOT_MEASURED_NOT_A_REPLACEMENT",
+  "selected_stages": [
+    "AFTER_COMMIT"
+  ],
+  "retries": 0,
+  "cases": [
+    {
+      "stage": "AFTER_COMMIT",
+      "pid": 3850,
+      "expected_sha256": "4c52881ffa7b26b1c08d6178c77a3e6fa9f819f5401aa3e0a7cdb7ba973bfbd4",
+      "epoch": "17197793-cb7c-41e1-84db-9de5b59f0266",
+      "expected_records": 1,
+      "new_pid": 4008,
+      "status": "PASS_EXACT_DATASET_FULL_ORACLE_NO_REPLAY"
+    }
+  ]
+}

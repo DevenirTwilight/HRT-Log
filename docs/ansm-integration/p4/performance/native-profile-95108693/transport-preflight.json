@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "source_token": "d61241ca-bffb-4d20-949f-fb46fe7efb91",
+  "bytes": 8,
+  "sha256": "1dc70ef8cde6b98f0b511be620f0e95df1385dc17f6078c9d65f15f0791933d7",
+  "scope": "BEFORE_LARGE_FIXTURE_TRANSPORT_ONLY"
+}

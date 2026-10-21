@@ -1,0 +1,9 @@
+{
+  "status": "WIP_NOT_READY",
+  "tests": 472,
+  "failures": 1,
+  "errors": 0,
+  "skipped": 0,
+  "known_failure": "New write observer: accounting_valid=false and chain_checks=2 (expected3); audit_finish_markers=1. Root validity cause NOT_YET_DIAGNOSED. Business assertions unchanged.",
+  "production_changes": false
+}

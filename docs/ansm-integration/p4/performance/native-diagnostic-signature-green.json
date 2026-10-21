@@ -1,0 +1,12 @@
+{
+  "state": "PASS",
+  "tests": 10,
+  "failures": 0,
+  "errors": 0,
+  "log_sha256": "cded31b2712d08b084a93fd4b2bdc0c7b1906585121b212906fe9244532e9563",
+  "generator_sha256": "8d558f94c71b23f7c3ce52067c36377353c9bc3edfd523c08e721dc54637c92d",
+  "test_sha256": "46f18c0b5b3ee44871a287ef8667b1944bcfebdcdbe8c9f206778e61c7d4a3bf",
+  "budget_changed": false,
+  "native_generated_compile": "PENDING",
+  "native_execution": "NOT_RUN_NEW_CANDIDATE"
+}

@@ -1,0 +1,17 @@
+{
+  "current_production_source": "ae7688da",
+  "data_main_jar": "core/data/build/intermediates/compile_library_classes_jar/debug/bundleLibCompileToJarDebug/classes.jar",
+  "jar_sha256": "f202226375f78e332f42a984b58b575d111513c2f21d46b62c301908fd9f2040",
+  "test_only_prototype_and_oracles_in_main": [],
+  "prepared_input_api_intentionally_in_main": true,
+  "app_runtime_callers_of_new_api": [],
+  "unchanged_since_turn_start_d0b2b241": [
+    "app/src/main",
+    "pk-engine",
+    "core/data/schemas",
+    "core/data/src/main/java/net/plainnotes/app/data/BackupCodec.kt",
+    "core/data/src/main/java/net/plainnotes/app/data/DataTransfer.kt"
+  ],
+  "compile_only_no_assemble_sign_release": true,
+  "git_status_before_evidence_update": "?? docs/ansm-integration/p4/nonblocking-transition/reference-context-green/gradle.log\n"
+}

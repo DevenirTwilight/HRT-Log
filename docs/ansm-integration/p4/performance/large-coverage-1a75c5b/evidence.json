@@ -1,0 +1,21 @@
+{
+  "status": "LOCAL_DIAGNOSTIC_BUDGET_PASS",
+  "base_head": "1a75c5be7bb7c6615ff2d08ce551e56e52bcc49b",
+  "source_sha256": {
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt": "6f0aa087bb1a9e82f3968450d8cca137c72248c24576d50aef558adee38249d4",
+    "core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt": "f2a16d95771dccb859085ce5c5ce91f00f1bbbfb190f7e49c2221ac31a5573e2",
+    "docs/ansm-integration/p4/performance/LargeInventoryPerformanceProbe.kt": "705db597b7c00f2efdb16d3fd9f842f3a10a6eb488d2bd373996fcc6459a8547",
+    "scripts/prepare_ansm_native_performance.py": "68c77514da92f6e70603611032c391ecb56c879ebe263044316ca668ced55b41"
+  },
+  "report_sha256": "2f43774aea47f4928f4b9c6a285e7b5cfdbb59fe75603fff32fcc7dbc8f3abe2",
+  "log_sha256": "7e15ccf47cb1e7eeeedbe7e8aa49b464ad73a7308a8aac86edd18064cb568798",
+  "generated_native_source": {
+    "source_sha256": "705db597b7c00f2efdb16d3fd9f842f3a10a6eb488d2bd373996fcc6459a8547",
+    "native_sha256": "ad2e7074f67827733999668c24ee674f4dae0891461ffefaa23bc305a4757502",
+    "status": "GENERATED_NOT_RUN"
+  },
+  "android_source_compilation": "PASS",
+  "native_execution": "NOT_RUN",
+  "physical_device": "NOT_RUN",
+  "thresholds_changed": false
+}

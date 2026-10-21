@@ -1,0 +1,9 @@
+{
+  "scope": "API26_SQLCIPHER_LOW_MEMORY_CORRECTNESS_ONLY",
+  "large_performance": "NOT_RUN_CONTRACT_ONLY_LEGACY_RESULT_UNCHANGED",
+  "restore_process_death": "NOT_RERUN_ALREADY_VERIFIED",
+  "selected_test_count": 17,
+  "selected_tests": "PASS",
+  "actual_writer_process_death_exit": 1,
+  "retries": 0
+}

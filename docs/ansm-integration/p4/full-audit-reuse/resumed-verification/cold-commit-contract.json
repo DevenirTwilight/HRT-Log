@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "tools_total": 73,
+  "targeted_script_tests": 16,
+  "negative_mutants": 7,
+  "scope": "TEST_ONLY_GENERATOR_GATES_NO_NATIVE_RUN",
+  "log_sha256": "a1a4dd3dde89cc1068f33cb2e5026b4843431659c64f86079b795c842a845880",
+  "remaining": "Production clear allocation discovered during review; source fix and latest tests pending."
+}

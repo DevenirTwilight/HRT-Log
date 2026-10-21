@@ -1,0 +1,14 @@
+{
+  "command": ":core:data:testDebugUnitTest :core:data:compileDebugAndroidTestKotlin",
+  "result": "PASS",
+  "junit": {
+    "tests": 470,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "architecture_test_count": 8,
+  "android_source_compile": "PASS",
+  "new_native_tests": "NOT_RUN",
+  "production_fast_verifier": "NOT_IMPLEMENTED"
+}

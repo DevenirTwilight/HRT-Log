@@ -1233,6 +1233,7 @@
 <string name="ref2_history_stale">数据集已变化，请关闭窗口并重新打开记录。</string>
 <string name="ref2_history_error">无法读取已保存的来源，关闭窗口不会更改记录。</string>
 <string name="ref2_history_saved_only">此处显示已保存的记录，不包含尚未保存的修改。</string>
+    <string name="forecast_needs_check">库存需核对，暂时无法可靠计算用尽日期。</string>
 <string name="test_check_ok">通知检查：没有设置阻止通知</string>
 <string name="test_check_blocked">通知检查：%1$s</string>
 <string name="test_scheduled">测试提醒已安排在 %1$s（%2$s）。等待期间可以离开应用。</string>
@@ -1286,6 +1287,19 @@
 <string name="lab_panel_delete_confirm">这次化验和其中 %1$d 项会一起移到回收站。</string>
 <string name="lab_panel_open">打开这次化验</string>
 <string name="lab_panel_members">项目</string>
+<string name="write_status_pending">正在保存</string>
+<string name="write_status_pending_body">你可以继续浏览。本次保存尚未确认。</string>
+<string name="write_status_reconciling">正在核对保存结果</string>
+<string name="write_status_reconciling_body">核对结果期间，请勿重复提交。</string>
+<string name="write_status_manual">保存结果待核对</string>
+<string name="write_status_manual_body">请先核对已有记录，再决定是否重新提交。</string>
+<string name="write_status_success">已保存</string>
+<string name="write_status_failed">未保存</string>
+<string name="write_status_failed_body">本次没有提交新的更改。请先核对结果，再重试。</string>
+<string name="write_status_check">核对结果</string>
+<string name="write_status_hide">收起状态</string>
+<string name="write_status_retry">重试同一操作</string>
+<string name="write_status_show">展开保存状态</string>
 <!-- UI-06 semantic status -->
 <string name="status_past_time">已过时间 · 可以补记</string>
 <string name="confirm_title_yesterday">昨天 %1$s 还没有记录</string>

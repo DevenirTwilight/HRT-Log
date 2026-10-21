@@ -1,0 +1,138 @@
+{
+  "status": "DIAGNOSTIC_BUDGET_PASS",
+  "environment": "Robolectric API35 framework SQLite; not SQLCipher\/low-memory API26\/hardware",
+  "stage": "post_write_full_audit",
+  "real_seed_generation_ms": 3390.396657,
+  "synthetic_fixture_expansion_ms": 1119.184275,
+  "raw_business_json_bytes": 19660924,
+  "records": 14600,
+  "containers": 2000,
+  "measured_operations": 2000,
+  "presentation_snapshots": 2000,
+  "distinct_synthetic_product_variants": 20,
+  "row_count": 32603,
+  "validated_staging_and_restore_ms": 4355.832246,
+  "full_audit_ms": 1376.260726,
+  "shared_forecast_ms": 1800.145163,
+  "full_encrypted_backup_ms": 1895.921239,
+  "encrypted_archive_bytes": 19661051,
+  "full_encrypted_restore_ms": 4555.446386,
+  "restored_full_audit_ms": 1168.455982,
+  "three_post_restore_writes_ms": 3773.757194,
+  "post_restore_write_including_ticket_ms": [
+    1201.164806,
+    1356.848969,
+    1208.82131
+  ],
+  "post_write_full_audit_ms": 828.869366,
+  "peak_observed_jvm_heap_bytes": 509391528,
+  "heap_sample_interval_ms": 10,
+  "heap_is_not_native_rss": true,
+  "physical_device_acceptance": "NOT_RUN",
+  "api26_low_memory_acceptance": "NOT_RUN",
+  "diagnostic_query_stats": {
+    "scope": "POST_BUDGET_DIAGNOSTIC_COUNTED_SQL_NOT_ACCEPTANCE",
+    "full_projection_equality": true,
+    "queries": 185,
+    "top_query_templates": [
+      {
+        "sql": "PRAGMA foreign_key_check",
+        "count": 2
+      },
+      {
+        "sql": "PRAGMA schema_version",
+        "count": 2
+      },
+      {
+        "sql": "SELECT total_changes()",
+        "count": 2
+      },
+      {
+        "sql": "PRAGMA table_info(`regimen_rule_link`)",
+        "count": 1
+      },
+      {
+        "sql": "PRAGMA table_info(`visit_pack`)",
+        "count": 1
+      },
+      {
+        "sql": "SELECT COUNT(*) FROM `day_note`",
+        "count": 1
+      },
+      {
+        "sql": "SELECT 1 FROM `stage_review` AS NEW WHERE COALESCE((length(NEW.date)=10 AND length(NEW.effects_json)>=2 AND (NEW.smoking IS NULL OR NEW.smoking IN ('YES','NO')) AND (NEW.systolic IS NULL OR (NEW.systolic>0 AND NEW.systolic<1000)) AND (NEW.diastolic IS NULL OR (NEW.diastolic>0 AND NEW.diastolic<1000)) AND (NEW.weight_kg IS NULL OR (NEW.weight_kg>0 AND NEW.weight_kg<=1.7976931348623157e308)) AND (NEW.satisfaction IS NULL OR NEW.satisfaction BETWEEN 1 AND 5)),0)=0 LIMIT 1",
+        "count": 1
+      },
+      {
+        "sql": "SELECT COALESCE(SUM(COALESCE(length(CAST(`zone` AS BLOB)),0)+COALESCE(length(CAST(`range_from` AS BLOB)),0)+COALESCE(length(CAST(`range_to` AS BLOB)),0)+COALESCE(length(CAST(`sections` AS BLOB)),0)+COALESCE(length(CAST(`language` AS BLOB)),0)+COALESCE(length(CAST(`input_digest` AS BLOB)),0)+COALESCE(length(CAST(`facts_json` AS BLOB)),0)),0),COALESCE(MAX(CASE WHEN ((((`id` IS NOT NULL AND NOT (typeof(`id`)='integer') OR `appointment_id` IS NOT NULL AND NOT (typeof(`appointment_id`)='integer')) OR (`generated_utc` IS NOT NULL AND NOT (typeof(`generated_utc`)='integer') OR `zone` IS NOT NULL AND NOT (typeof(`zone`)='text' AND length(`zone`)<=1048576))) OR ((`range_from` IS NOT NULL AND NOT (typeof(`range_from`)='text' AND length(`range_from`)<=1048576) OR `range_to` IS NOT NULL AND NOT (typeof(`range_to`)='text' AND length(`range_to`)<=1048576)) OR (`sections` IS NOT NULL AND NOT (typeof(`sections`)='text' AND length(`sections`)<=1048576) OR `language` IS NOT NULL AND NOT (typeof(`language`)='text' AND length(`language`)<=1048576)))) OR ((`template_version` IS NOT NULL AND NOT (typeof(`template_version`)='integer') OR `input_digest` IS NOT NULL AND NOT (typeof(`input_digest`)='text' AND length(`input_digest`)<=1048576)) OR `facts_json` IS NOT NULL AND NOT (typeof(`facts_json`)='text' AND length(`facts_json`)<=1048576))) THEN 1 ELSE 0 END),0) FROM `visit_pack`",
+        "count": 1
+      },
+      {
+        "sql": "SELECT 1 FROM sqlite_master WHERE type='table' AND name='lab_panel'",
+        "count": 1
+      },
+      {
+        "sql": "PRAGMA table_info(`regimen_version`)",
+        "count": 1
+      },
+      {
+        "sql": "SELECT COALESCE(SUM(COALESCE(length(CAST(`analyte_code` AS BLOB)),0)+COALESCE(length(CAST(`unit` AS BLOB)),0)+COALESCE(length(CAST(`sampled_zone` AS BLOB)),0)+COALESCE(length(CAST(`reference_unit` AS BLOB)),0)+COALESCE(length(CAST(`laboratory` AS BLOB)),0)+COALESCE(length(CAST(`note` AS BLOB)),0)),0),COALESCE(MAX(CASE WHEN ((((`id` IS NOT NULL AND NOT (typeof(`id`)='integer') OR `analyte_code` IS NOT NULL AND NOT (typeof(`analyte_code`)='text' AND length(`analyte_code`)<=1048576)) OR (`value` IS NOT NULL AND NOT (typeof(`value`) IN ('integer','real') AND `value` BETWEEN -1.7976931348623157e308 AND 1.7976931348623157e308) OR `unit` IS NOT NULL AND NOT (typeof(`unit`)='text' AND length(`unit`)<=1048576))) OR ((`sampled_utc` IS NOT NULL AND NOT (typeof(`sampled_utc`)='integer') OR `sampled_zone` IS NOT NULL AND NOT (typeof(`sampled_zone`)='text' AND length(`sampled_zone`)<=1048576)) OR (`reference_lower` IS NOT NULL AND NOT (typeof(`reference_lower`) IN ('integer','real') AND `reference_lower` BETWEEN -1.7976931348623157e308 AND 1.7976931348623157e308) OR `reference_upper` IS NOT NULL AND NOT (typeof(`reference_upper`) IN ('integer','real') AND `reference_upper` BETWEEN -1.7976931348623157e308 AND 1.7976931348623157e308)))) OR ((`reference_unit` IS NOT NULL AND NOT (typeof(`reference_unit`)='text' AND length(`reference_unit`)<=1048576) OR `laboratory` IS NOT NULL AND NOT (typeof(`laboratory`)='text' AND length(`laboratory`)<=1048576)) OR (`note` IS NOT NULL AND NOT (typeof(`note`)='text' AND length(`note`)<=1048576) OR `panel_id` IS NOT NULL AND NOT (typeof(`panel_id`)='integer')))) THEN 1 ELSE 0 END),0) FROM `lab_value`",
+        "count": 1
+      },
+      {
+        "sql": "PRAGMA table_info(`history_period_revision`)",
+        "count": 1
+      },
+      {
+        "sql": "SELECT 1 FROM `trash_item` AS NEW WHERE COALESCE((NEW.kind IN ('MILESTONE','LAB','LAB_PANEL','APPOINTMENT','REVIEW','SYMPTOM','SCORE','NOTE','RECORD','PERIOD','CORRECTION') AND NEW.state IN ('TRASHED','HIDDEN') AND NEW.deleted_utc>0 AND length(NEW.ref)>0 AND length(NEW.item_date)=10 AND length(NEW.payload_json)>=2),0)=0 LIMIT 1",
+        "count": 1
+      },
+      {
+        "sql": "SELECT COUNT(*) FROM reference_dataset",
+        "count": 1
+      },
+      {
+        "sql": "PRAGMA table_info(`checkin_item`)",
+        "count": 1
+      },
+      {
+        "sql": "PRAGMA table_info(`reference_identity`)",
+        "count": 1
+      },
+      {
+        "sql": "PRAGMA table_info(`measured_operation`)",
+        "count": 1
+      },
+      {
+        "sql": "SELECT 1 FROM `appointment` AS NEW WHERE COALESCE((NEW.remind_minutes_before>=0 AND length(NEW.at_zone)>0 AND (NEW.completed_utc IS NULL OR NEW.completed_utc>0)),0)=0 LIMIT 1",
+        "count": 1
+      },
+      {
+        "sql": "SELECT COUNT(*) FROM `checkin_score`",
+        "count": 1
+      },
+      {
+        "sql": "SELECT COALESCE(SUM(COALESCE(length(CAST(`date` AS BLOB)),0)+COALESCE(length(CAST(`text` AS BLOB)),0)),0),COALESCE(MAX(CASE WHEN (`date` IS NOT NULL AND NOT (typeof(`date`)='text' AND length(`date`)<=1048576) OR `text` IS NOT NULL AND NOT (typeof(`text`)='text' AND length(`text`)<=1048576)) THEN 1 ELSE 0 END),0) FROM `day_note`",
+        "count": 1
+      }
+    ]
+  },
+  "diagnostic_stream_query_plan": {
+    "scope": "TEST_ONLY_POST_BUDGET_READ_ONLY",
+    "plan": [
+      "SCAN i USING INDEX sqlite_autoindex_reference_identity_1",
+      "CORRELATED SCALAR SUBQUERY 1",
+      "SEARCH e USING INDEX index_reference_event_subject_uuid_revision (subject_uuid=?)",
+      "SEARCH s USING INDEX sqlite_autoindex_reference_snapshot_1 (uuid=?)",
+      "SEARCH t USING INDEX index_supply_transaction_container_id (container_id=?)",
+      "SEARCH o USING INDEX sqlite_autoindex_measured_operation_1 (operation_uuid=?) LEFT-JOIN",
+      "SEARCH d USING INTEGER PRIMARY KEY (rowid=?) LEFT-JOIN"
+    ]
+  },
+  "ticket_diagnostic": {
+    "scope": "TEST_ONLY_POST_BUDGET_READ_ONLY",
+    "write_ticket_capture_ms": 120.480022,
+    "write_ticket_validate_ms": 124.284893
+  },
+  "budget_exceeded": []
+}

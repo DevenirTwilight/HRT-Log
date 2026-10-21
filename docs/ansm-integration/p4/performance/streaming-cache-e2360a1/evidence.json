@@ -1,0 +1,14 @@
+{
+  "status": "LOCAL_DIAGNOSTIC_BUDGET_PASS_NATIVE_NOT_RUN_FOR_NEW_SOURCE",
+  "native_source_compile": "PASS",
+  "source_production_parent": "e2360a13b300945ad8b42576125f2f44b51030aa",
+  "log_sha256": "588f5efd6b934cfcea547b7349f85abf515c73507c6c35af4ab7cac22adb09ca",
+  "generated_native_source": {
+    "source_sha256": "9313167178989def0d4d89d785f84cdde764fba21033543cdf85e472c5511242",
+    "native_sha256": "21df36c91a5b0cd17c31df5aab905d8618e59c53d23540687fdef9c911a01d6a",
+    "status": "GENERATED_NOT_RUN"
+  },
+  "report_sha256": "7ed49825cac70ca0e17c69fc353298672a7cc5e42592ddd87428d267ecf243d4",
+  "budgets_changed": false,
+  "inputs_changed": false
+}

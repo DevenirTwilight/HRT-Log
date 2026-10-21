@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "tests": 1,
+  "scope": "Previously failing stripped-reference case now rejects using independent container encoding",
+  "business_schema_candidate": 11,
+  "exact_restore": "OFF",
+  "log_sha256": "70b3fd8014062ff25b0c90c6b5db27dc91fec53071790d0f7b0b2356dac60d60"
+}

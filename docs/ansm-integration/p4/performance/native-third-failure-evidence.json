@@ -1,0 +1,28 @@
+{
+  "status": "FAIL",
+  "source_head": "dd7e61c64768ce562ea4ee5a9a94607293a949ce",
+  "run_id": 39045008821,
+  "artifact_id": 12105915908,
+  "artifact_sha256": "3df411b72083c802bd1cee62bb1601061bba32691592f4331a14075309bf1b32",
+  "zip_crc": "PASS",
+  "environment": {
+    "dalvik.vm.heapsize": "384m",
+    "dalvik.vm.heapgrowthlimit": "",
+    "ro.config.low_ram": "",
+    "ro.product.cpu.abi": "x86",
+    "MemTotal": "MemTotal:         508752 kB"
+  },
+  "execution": {
+    "test_exit": 1,
+    "collection_exit": 1
+  },
+  "crash_log_sha256": "dae3c3725297031e9ab66890399adc4825215abbc049f780250d1343de7af0c1",
+  "test_duration_seconds": 55.596,
+  "measurement_json": "UNAVAILABLE",
+  "observations": [
+    "Actual RAM508752kB; actual ART property384m despite configured vm.heapSize192.",
+    "Log contains lowmemorykiller errors and ActivityManager instrumentation crash; no conclusive Java/native root-cause stack.",
+    "External-files report absent after Gradle exits; crash-before-initialization versus test-uninstall cleanup remains unproven."
+  ],
+  "next": "Configure actual ART properties only on verified disposable API26 emulator, restart framework before tests, verify properties. Mirror compact synthetic stage reports to logcat to preserve diagnostic metadata if AGP uninstalls test APK. Original budgets unchanged."
+}

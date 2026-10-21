@@ -1,0 +1,50 @@
+{
+  "state": "PASS",
+  "tests": 43,
+  "suites": [
+    {
+      "name": "net.plainnotes.app.MeasuredStockUnknownMatrixTest",
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "f778855f82e6920ca9cf168eb7e63e9bdc8b73659f33e62a6736715f9bc15cbc"
+    },
+    {
+      "name": "net.plainnotes.app.PeriodStabilityTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "83e18049e825005da649ca2e09c9edd5ffd9d31c87f491ed5de647cfd89dae46"
+    },
+    {
+      "name": "net.plainnotes.app.PrivacyNoticeFactsTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "406ca4bf7e66c323896fc36cd2fc2ec177ca94b958aeef6ceac1bc1b2264a55a"
+    },
+    {
+      "name": "net.plainnotes.app.StockConsistencyTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "9a9b02b1d9f19f523bc78a4591da1f5d3c38c759d004c576d03a33ea68c8c120"
+    }
+  ],
+  "production_sha256": "24ef2fe9b45487948690002160b3dad996513b8e4031a15d87d907ebe9ee444c",
+  "python_tests": 10,
+  "generator_sha256": "119506cba31b3f8565be437b0f56aef9358f787e719da18a28f44d4ec6552d8c",
+  "generator_test_sha256": "2927eb34f2ca86127367e5cd7480f662b105b9edeaab761785f2b90d5030f37e",
+  "generated_native_probe": {
+    "source_sha256": "9313167178989def0d4d89d785f84cdde764fba21033543cdf85e472c5511242",
+    "native_sha256": "1699dfcbe8671023115292b52305252bfcb68ea7528bbee2b53d1529a52bdf6e",
+    "status": "GENERATED_NOT_RUN"
+  },
+  "native_generated_kotlin_compile": "PASS",
+  "native_execution": "NOT_RUN_NEW_CANDIDATE",
+  "scope": "Final privacy, PeriodStability, stock consistency and measured UNKNOWN App tests; synthetic data only"
+}

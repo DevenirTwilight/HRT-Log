@@ -1,0 +1,18 @@
+{
+  "source_head": "0b3c7038780ade649655247eadcd59676b545eff",
+  "run": 39109780636,
+  "job": 117623217240,
+  "artifact_id": 12129718330,
+  "artifact_sha256": "d29f8075ce73327e7e4b396ca6b171ba253a2eb11701dc0fbb4bc82b12a52b23",
+  "artifact_sha256_verification": "PASS",
+  "zip_crc": "PASS",
+  "trace_sha256": "8cf4a611a10d86777be9698c786c1ab956c61fe17d376ae87aed25ab6c3e441b",
+  "trace_gzip_sha256": "07f369ed50a2abf0aa04c6301fdb3f978e87d80ec08274b291576c8fee075e2b",
+  "parser_source_sha256": "b291a87edf240f5e93c6411a810c7f2ad5c946b373c0df1427d5aa42d09f6190",
+  "transport": "NATIVE_PREFLIGHT_AND_SAMPLE_ACK_PASS",
+  "profile": "PARTIAL_DIAGNOSTIC:152 clipped boundary frames,0 unknown methods/unmatched exits,overflow=false; sampled segments not invocation counts",
+  "performance": "FAIL:full_audit/shared_forecast/actual_writes exceed unchanged limits",
+  "physical": "NOT_RUN",
+  "p4": "PRODUCTION_BLOCKED",
+  "next": "Measured common StringBuilder CharSequence range append is expensive; preserve complete Unicode/size/byte validation and use String append only for an already scanned whole unescaped string. SQLCipher row-query cost remains a separate target."
+}

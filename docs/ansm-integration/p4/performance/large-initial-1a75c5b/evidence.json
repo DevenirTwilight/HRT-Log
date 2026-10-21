@@ -1,0 +1,9 @@
+{
+  "status": "DIAGNOSTIC_BUDGET_PASS",
+  "source_head": "1a75c5be7bb7c6615ff2d08ce551e56e52bcc49b",
+  "template_sha256": "ce63ec3e5de4593271d1b0bbd42c380982ff8f1a6bf6f7da705f8669e2cf1800",
+  "report_sha256": "46adf6ef4a9a7117f63729096a93befb4fedd112dda60a505810b51f0cb3ce47",
+  "log_sha256": "c1523daa9fb0858fef43fb566c3ef2f70d9f576413c6cf929651c326ed1b7403",
+  "post_restore_interactive_write": "NOT_RUN",
+  "native_low_memory": "NOT_RUN"
+}

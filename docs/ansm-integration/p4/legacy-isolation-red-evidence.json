@@ -1,0 +1,22 @@
+{
+  "base": "701fb522d574facac6895d4a052f221ed2ab7030",
+  "status": "FAIL",
+  "tests": 3,
+  "failures": 3,
+  "cases": [
+    {
+      "name": "legacyAdjustmentAndReverseMustRefuseMeasuredHistory",
+      "failure": "java.lang.AssertionError: Legacy correction accepted internal quanta"
+    },
+    {
+      "name": "legacyAllocationMustSkipMeasuredContainersWhileKeepingLegacyBehavior",
+      "failure": "java.lang.AssertionError: expected:<0.0> but was:<0.1>"
+    },
+    {
+      "name": "legacyMedicationResizeMustLeaveFrozenPackagingUntouched",
+      "failure": "java.lang.AssertionError: expected:<56.0> but was:<100.0>"
+    }
+  ],
+  "log_sha256": "a96bd391e2605bd91cb73e63fe3fe4122d43b799a0335b9c70eff13fd9760300",
+  "production_modified_to_force_failure": false
+}

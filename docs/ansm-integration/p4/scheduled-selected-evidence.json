@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "scope": "Eight selected scheduled integration contracts only; full regression pending",
+  "totals": {
+    "tests": 8,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    "scheduledWriteRollsBackRecordContextAndStockAtEachFailureBoundary",
+    "scheduledParisSpringGapPreservesActualAndPlannedZonesWithoutExtraStock",
+    "scheduledBackfillReusesMissedIdAndSnapshotAndDoesNotGuessStockEffect",
+    "scheduledActualUseKeepsPlannedFieldsAndRetriesWithoutSecondConsumption",
+    "changedScheduledFactCannotPassFullAuditWithOnlyTheClinicalDoseUnchanged",
+    "scheduledDoseOverrideInvalidatesOldTicketAndKeepsClinicalDoseIndependent",
+    "scheduledEvidenceSurvivesEncryptedBackupWithoutTheCurrentCatalog",
+    "scheduledWriteRejectsCanceledSlotWithoutMutation"
+  ],
+  "log_sha256": "e508247df3ac4b3d8a68de1f84dcda3e3ff7a98cb637ca874276b6a17f0cc004"
+}

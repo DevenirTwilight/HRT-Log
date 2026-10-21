@@ -1,0 +1,377 @@
+{
+  "source": "4111c0b8a632b828c04979b6e551494c7c631931",
+  "scope": "Completed full core:data test task; same Gradle invocation continues with Android-test compilation and selected app tests. Framework SQLite/Robolectric35; not native acceptance.",
+  "summary": {
+    "tests": 512,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "suites": [
+    {
+      "name": "net.plainnotes.app.data.BackupJsonReaderStreamingTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.P4LifecycleGrowthTest",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.ReferenceAuditStreamingTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.ReferenceMigrationTest",
+      "tests": "16",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.LabContextTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.HistoricalVisitTest",
+      "tests": "18",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.ReferenceCanonicalCompatibilityTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.NonBlockingWritePrototypeTest",
+      "tests": "7",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.HistoryIntegrityTest",
+      "tests": "6",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.SupplyLedgerTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.TrashDataTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.DailyTrashCollisionTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.ReferenceCatalogTest",
+      "tests": "6",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.SchemaConstraintTest",
+      "tests": "10",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.ReferencePayloadTest",
+      "tests": "10",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.KeyBoundaryTest",
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.LabPanelDataTest",
+      "tests": "14",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.HrtTrackerImportTest",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.NonBlockingRepositoryWriteTest",
+      "tests": "10",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.RegimenHistoryTest",
+      "tests": "8",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.LabBatchSaveTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.PlanEditTest",
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.MeasuredConsumptionStoreTest",
+      "tests": "148",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.DataTransferTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.HistoryPeriodDataTest",
+      "tests": "9",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.VisitPackDataTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.WellbeingMigrationTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.AttachmentFoundationTest",
+      "tests": "16",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.VoidedPackageTest",
+      "tests": "18",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.UndoSkippedTest",
+      "tests": "33",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.StockForecastTest",
+      "tests": "11",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.BackfillTest",
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.AttachmentMigrationTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.BackupReplacementTest",
+      "tests": "9",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.LedgerReplacementTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.ReferencePersistenceTest",
+      "tests": "23",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.HistoricalContextRepairTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.PackageMeasurementPayloadTest",
+      "tests": "13",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.Ansm03b0InventoryTest",
+      "tests": "13",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.StockCorrectionTest",
+      "tests": "9",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.WellbeingRecordsTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.IndexedBackupDocumentTest",
+      "tests": "7",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.MeasuredUsePayloadTest",
+      "tests": "12",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.MeasuredContainerStoreTest",
+      "tests": "19",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    }
+  ],
+  "source_sha256": {
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredUseObservation.kt": "17cdd31066d1044609c11b590b780682d45807ecf4e398676779015c9aac30c3",
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredUseIntegration.kt": "b430d5fe411f5e24630f36bd50f1d6b4680d6dc762f62cddfd2ae832e953c29f",
+    "core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt": "77af7eab58ace3dda8cff28ce7a1f589d145526d85ceda3a7f14bea0e6cd0c56"
+  },
+  "android_test_compilation": "IN_PROGRESS",
+  "selected_app_tests": "NOT_FINISHED",
+  "native_api26_29_35": "NOT_RUN",
+  "recovery_stability": "NOT_PROVEN",
+  "ci": "NOT_RUN",
+  "files": {
+    "TEST-net.plainnotes.app.data.BackupJsonReaderStreamingTest.xml": "6e8d3074fe38564536f079d21566decaea4e40f0232b42442028fa7a122c39f8",
+    "TEST-net.plainnotes.app.data.P4LifecycleGrowthTest.xml": "d378333eb17218d3681a1b2d712beacbfbc4e231bee85cbe852e7798f83fc777",
+    "TEST-net.plainnotes.app.data.ReferenceAuditStreamingTest.xml": "a29b28b32b3d44c1364a2c3fe23c9f86ed3ea5068027a9429b6f824285106dd6",
+    "TEST-net.plainnotes.app.data.ReferenceMigrationTest.xml": "697b7102fba73c9400d3fa384a8cee12e50fd71f21fb0524160a66a99c48d78a",
+    "TEST-net.plainnotes.app.data.LabContextTest.xml": "9cc3b7727cf0602d1b8c29f41e0012bb94f1a8a63f392e8ded4e5a05d2abedd9",
+    "TEST-net.plainnotes.app.data.HistoricalVisitTest.xml": "0501de1b5674a1631d09c6dc65bc3107e6258026145d4c9652faa42479562ec9",
+    "TEST-net.plainnotes.app.data.ReferenceCanonicalCompatibilityTest.xml": "24d520e5492215753f96c3aee35a7bf35ac57f8cf1897b85389363512dad6f16",
+    "gradle-through-data.log": "a7f31b57b595aab8961d17fc5c0372b7ccd4f3355a922dd4c2c77d2c8b868aa0",
+    "TEST-net.plainnotes.app.data.NonBlockingWritePrototypeTest.xml": "8a9b447707af814161d7ea4bb2143a349d41a5681020f6a4c7ee7ea9f84a3181",
+    "TEST-net.plainnotes.app.data.HistoryIntegrityTest.xml": "b9f82cb36e3fbb381675a4a8ee1a4a5474a69954e0d2e0f22dbf279d184d9dad",
+    "TEST-net.plainnotes.app.data.SupplyLedgerTest.xml": "f8374c730115ae216cc0505d4281bdfdeb35cebbda3fb58885fc30769784e006",
+    "TEST-net.plainnotes.app.data.TrashDataTest.xml": "3738a1be6b9a393969a31350e53064f16d44d2ee0afd7ecc7774b4558ae00d3c",
+    "TEST-net.plainnotes.app.data.DailyTrashCollisionTest.xml": "61dc72252de2b45258e209afc07fba077d8ae1a084cfc455bf516a3c8a392921",
+    "TEST-net.plainnotes.app.data.ReferenceCatalogTest.xml": "f7d3c612676b67fd6cd52b25e1f7688274f917cbd4aa3bab432982b15d8828de",
+    "TEST-net.plainnotes.app.data.SchemaConstraintTest.xml": "c7e954069a578b326b89ada4cb65723f9167f3976469427ef4a0f398e94ef94a",
+    "TEST-net.plainnotes.app.data.ReferencePayloadTest.xml": "d48c7c96865267d3242633d3b571f41aa77af5fd87b9c4a008e0d46d0450d305",
+    "TEST-net.plainnotes.app.data.KeyBoundaryTest.xml": "a1755f4ef628a9cf60384905a265e49ec2e378f81481212ad22afaa8639b3a95",
+    "TEST-net.plainnotes.app.data.LabPanelDataTest.xml": "0951113a183e5f03c515180f8ee3f9c065439bdabe116b9650c104c1da92cfd4",
+    "TEST-net.plainnotes.app.data.HrtTrackerImportTest.xml": "a1084a2b3b8d01037616bc730dd6b3a82e2fc6c89e33e9aa1804266c24421040",
+    "TEST-net.plainnotes.app.data.NonBlockingRepositoryWriteTest.xml": "14cc0c0a70a20005323ef338249c514739928bc84b23ebec0591bca64e343a90",
+    "TEST-net.plainnotes.app.data.RegimenHistoryTest.xml": "1f70d7dc7725b3512eeb7e8c114b895a4361e27a89ba535f8dd7056565c4433f",
+    "TEST-net.plainnotes.app.data.LabBatchSaveTest.xml": "9cb046c218d3e0aacd40d5db3b2534914e2f23ecbf78feea500a44257883c1f7",
+    "TEST-net.plainnotes.app.data.PlanEditTest.xml": "027f910c909e9f5b42fc4571b368c5c33cd3c215387b266ecd2ae4edee9cbaee",
+    "TEST-net.plainnotes.app.data.MeasuredConsumptionStoreTest.xml": "c6b9e07e3230a05bff05eb591dc9868d3d10dd2b436042f71581f797275729cf",
+    "TEST-net.plainnotes.app.data.DataTransferTest.xml": "279b8cd70f167c017214f2c0383db7b96cc721811a78c167b5b1338d70aa5ed3",
+    "TEST-net.plainnotes.app.data.HistoryPeriodDataTest.xml": "34bfe96feafb0f3da093e3d53635c3409127c4557f199493001c47e34186ba02",
+    "TEST-net.plainnotes.app.data.VisitPackDataTest.xml": "40982b9945c2612302c8a2dd23ad30a875d7696e9aa824e5e2f15d640963cf0b",
+    "TEST-net.plainnotes.app.data.WellbeingMigrationTest.xml": "179d991145aafe406b7463e72908931c4b72907e47634bac5df65d4c2c0e6772",
+    "TEST-net.plainnotes.app.data.AttachmentFoundationTest.xml": "a9c6fb1d8fb41bf2a6932316ac83aebaa899ac40516eacb910f3820088939f18",
+    "TEST-net.plainnotes.app.data.VoidedPackageTest.xml": "4b642f1dbc2cbb9de37978832603555684a2891188015ec2ba7fe038605d67c2",
+    "TEST-net.plainnotes.app.data.UndoSkippedTest.xml": "b5a65bee02ac4eaa963e00056b1fb2d19654eed5db6cea6712ce255306dd801b",
+    "TEST-net.plainnotes.app.data.StockForecastTest.xml": "27f4280c23d471603596113f2fbaa758cacc7e8e66bd428cca46b6ddacc6e74e",
+    "TEST-net.plainnotes.app.data.BackfillTest.xml": "095e825676a34c1ea42f5eec5078f24876f2f561e6b7dd2a6ecf80374ac310fc",
+    "TEST-net.plainnotes.app.data.AttachmentMigrationTest.xml": "9851506c59ee4d7c107ce871a188c931420a26e9f9c2126844c59a19d7cb280d",
+    "TEST-net.plainnotes.app.data.BackupReplacementTest.xml": "14db7fbc57365a8c6bda95648ae536132dd8d92d77bd9bddf079c41d7fe296b7",
+    "TEST-net.plainnotes.app.data.LedgerReplacementTest.xml": "0bb55a07a19677b7dbfee27efa8c99275e841ce0e96a6d37070150bf084b4d52",
+    "TEST-net.plainnotes.app.data.ReferencePersistenceTest.xml": "cd047c9cb68dc2fc3270d01cd6a1e6ecc923122e95c585f7a8bb928fffea3b53",
+    "TEST-net.plainnotes.app.data.HistoricalContextRepairTest.xml": "da01319eadede05462922b6b1377a687dfc2e73f46c30cd08000506584ca0bf4",
+    "TEST-net.plainnotes.app.data.PackageMeasurementPayloadTest.xml": "9d8cbc100a25f2f0357a74c550187a4c6450639ef9f26749674b177526eeb664",
+    "TEST-net.plainnotes.app.data.Ansm03b0InventoryTest.xml": "ed628c4074748ea44cd0b70e74138bbcc3dd1623656ec33591aaf9e6269a6d32",
+    "TEST-net.plainnotes.app.data.StockCorrectionTest.xml": "300ce6b163d576d4173567fc7300be595a896b0629f1d8c8098e7237203c0e76",
+    "TEST-net.plainnotes.app.data.WellbeingRecordsTest.xml": "4f0fb88f5ff2267e79ce86933e0e699c7a2bc928967738a0a58463b34de40dcc",
+    "TEST-net.plainnotes.app.data.IndexedBackupDocumentTest.xml": "a305ac4dd653aee114d01322a9d937948363cb00dbc9b2d039363badcf3081e0",
+    "TEST-net.plainnotes.app.data.MeasuredUsePayloadTest.xml": "5adacaf272e959b5571f3e2354c756091dfced1a54bdbbc8ea85f4db579e32e0",
+    "TEST-net.plainnotes.app.data.MeasuredContainerStoreTest.xml": "d39cf4ba4a03ca6d39b0a861ab8f4ec1de1f6ce9d607cb4e4da25ddeaf76b493"
+  }
+}

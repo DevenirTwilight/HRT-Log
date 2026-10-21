@@ -1,0 +1,15 @@
+{
+  "source": "9d304e58fd92f0171fd6ddd272f79dbe6ece3cb4",
+  "run": 39495229423,
+  "job": 118878466555,
+  "artifact": 12297921201,
+  "official_and_download_sha256": "2bb20ac108ad6e34e6a051a2549ba697aef75deef3f86426842171be1e271ead",
+  "zip_crc": "PASS",
+  "overall": "FAIL_LMK_BEFORE_REAL_ENCRYPTED_RESTORE",
+  "last_persisted_stage": "synthetic_fixture_expansion (duration recorded); before next stage/size report",
+  "kernel": "LMK killed test PID3913 to free201148KiB; terminal reference not peak",
+  "restore_memory": "NOT_RUN",
+  "restore_correctness_large_fixture": "NOT_RUN",
+  "small_process_death": "FAIL_TEST_HARNESS_EPOCH_API_REQUIRES_TRANSACTION; hash assertion already passed, epoch/full-oracle not reached",
+  "additional_large_retry": "NOT_ALLOWED"
+}

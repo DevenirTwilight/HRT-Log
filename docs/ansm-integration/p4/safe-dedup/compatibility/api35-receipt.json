@@ -1,0 +1,13 @@
+{
+  "run_id": 39486032875,
+  "artifact_id": 12294597695,
+  "official_and_download_sha256": "3eaf6ac0e4d08ca3e80442e33e66d6141d2dd8bbd0394871e235181596530f40",
+  "zip_crc": "PASS",
+  "html_member": "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.MeasuredConsumptionAndroidTest.html",
+  "passed_rows": 142,
+  "summary": {
+    "tests": "142",
+    "failures": "0",
+    "skipped": "0"
+  }
+}

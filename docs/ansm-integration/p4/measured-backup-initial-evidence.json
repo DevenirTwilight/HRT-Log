@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "data_tests": 340,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "shared_measurement_contracts": 66,
+  "android_source_compile": "PASS",
+  "android_runtime_new_cases": "NOT_RUN",
+  "log_sha256": "3792f9b050bbbacad34a9c95467259934f73c07fb763e5d7158cf4d932f1642e",
+  "scope": "Internal actual Repository encrypted-backup implementation with real SQL staging/atomic replacement; public measured UI remains OFF"
+}

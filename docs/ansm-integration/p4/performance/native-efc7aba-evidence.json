@@ -1,0 +1,15 @@
+{
+  "status": "FAIL",
+  "head": "efc7aba841132c415c6e3f52325e3ce06b2c9c42",
+  "run": 39104315237,
+  "artifact_id": 12127614905,
+  "artifact_sha256": "4c6ec345cc93370a1406f3cd3ddaae54df7636d315ba1a361b41f953cedd7835",
+  "zip_crc": "PASS",
+  "report": "native-efc7aba-report.json",
+  "budget_exceeded": [
+    "post_restore_write_including_ticket_ms"
+  ],
+  "sampling_execution": "Trace file creation observed2302566bytes; complete projection assertion passed",
+  "sampling_analysis": "UNAVAILABLE: AGP removed test APK/external files despite leave-APKs option; no method timings inferred",
+  "budgets_changed": false
+}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.StockCorrectionTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2026-10-21T09:31:13.400Z" hostname="4f13d57d08c1" time="0.557">
+  <properties/>
+  <testcase name="usedUpPackageWithOneTabletLeftIsCorrectedWithoutANewPackage" classname="net.plainnotes.app.data.StockCorrectionTest" time="0.064"/>
+  <testcase name="fixingTheDoseRecordFirstThenCheckingStockLandsOnTheCount" classname="net.plainnotes.app.data.StockCorrectionTest" time="0.063"/>
+  <testcase name="anUnusedPackageAddedByMistakeCanBeUndone" classname="net.plainnotes.app.data.StockCorrectionTest" time="0.06"/>
+  <testcase name="restoredPackageIsUsedNextAndNotCountedTwice" classname="net.plainnotes.app.data.StockCorrectionTest" time="0.077"/>
+  <testcase name="openPackageCorrectionAndTotalChangesOnlyByTheRealDifference" classname="net.plainnotes.app.data.StockCorrectionTest" time="0.056"/>
+  <testcase name="aPackageWithStockHistoryIsNeverDeleted" classname="net.plainnotes.app.data.StockCorrectionTest" time="0.064"/>
+  <testcase name="theChosenOldPackageIsCorrectedAndTheOthersStayAsTheyAre" classname="net.plainnotes.app.data.StockCorrectionTest" time="0.056"/>
+  <testcase name="sealedAndDiscardedPackagesAreNotCorrectedThisWay" classname="net.plainnotes.app.data.StockCorrectionTest" time="0.065"/>
+  <testcase name="noPackagesAndNoRecords" classname="net.plainnotes.app.data.StockCorrectionTest" time="0.049"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

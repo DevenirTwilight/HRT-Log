@@ -1,0 +1,9 @@
+{
+  "source": "a3c695749b90aa47b85bd9c4350249ab6e9698a1",
+  "status": "FAIL_EXPECTED",
+  "tests": 1,
+  "failures": 1,
+  "failure": "java.lang.AssertionError: Complete identity stream must retain typed container facts without per-container SQLite cursors expected:<0> but was:<2>",
+  "xml_sha256": "b51a857ad93a324578fb2068897043cb8955895437a67c33998f061e74237b56",
+  "production_changed_before_red": false
+}

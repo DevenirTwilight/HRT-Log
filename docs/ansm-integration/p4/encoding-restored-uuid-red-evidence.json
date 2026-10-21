@@ -1,0 +1,6 @@
+{
+  "status": "EXPECTED_FAIL",
+  "failure": "java.lang.AssertionError: Restored package hid a forged historical UUID",
+  "log_sha256": "c3049990f3bea6d392379525172856d8ba84b0828ce41605d11d494749530f26",
+  "scope": "Every historical v2 lifecycle entry must bind its UUID even when current state is restored"
+}

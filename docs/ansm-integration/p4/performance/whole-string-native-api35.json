@@ -1,0 +1,19 @@
+{
+  "source": "3ee511043182eb9b3a81721d2f853fe9b6273664",
+  "run": 39121212580,
+  "api": 35,
+  "artifact": 12135195634,
+  "artifact_sha256": "e1204535fadc8ec0042d91fc0019990d86d4b9edb16aea68270a3ac4234bc9fc",
+  "zip_crc": "PASS",
+  "report_sha256": "e772d4089061bce4f48888b32abc6e425d7d6abcab37268462e451caf696ef98",
+  "counts": {
+    "tests": 23,
+    "failures": 0,
+    "skipped": 0
+  },
+  "explicit_new_cases": {
+    "wholeUnescapedStringsKeepExplicitCanonicalBytesAcrossAndroidVersions": "PASS",
+    "escapedRunsAndInvalidScalarsPreserveCanonicalBoundariesAcrossAndroidVersions": "PASS"
+  },
+  "scope": "SQLCipher emulator canonical compatibility; not low-memory performance or physical-device admission"
+}

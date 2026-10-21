@@ -1,0 +1,19 @@
+{
+  "status": "PASS_FOCUSED_FINAL_16MIB_CANDIDATE",
+  "totals": {
+    "tests": 151,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "tools_tests": 19,
+  "android_test_compile": "PASS",
+  "prior_attempt": "DEPENDENCY_FETCH_BEFORE_TESTS_FAILURE_PRESERVED",
+  "files": {
+    "TEST-net.plainnotes.app.data.ReferenceAuditStreamingTest.xml": "713825d45427a42c9f698bdb199ca2ea2819b8582e8cbb98f8adb5c6a1e7f45e",
+    "TEST-net.plainnotes.app.data.MeasuredConsumptionStoreTest.xml": "08595361335b5e64934d30c8152effea8080c9085830ed3bde3072586e761da4",
+    "p4-full-audit-reuse-focused-offline.log": "a77254e371a0fc8c11c0809b7a084cc2b66ffb0750d667051bc47dbe0ddbe32b",
+    "p4-reuse-python-first.log": "038d0f9dc02a6dd326f58d928f9c43fa0b9beb59d8a2d21e30a4243fd14f5320",
+    "p4-full-audit-reuse-focused.log": "0dbceeb0209b10d487d2e1f429d46d760951b6a26157ea126244080b813bfbd5"
+  }
+}

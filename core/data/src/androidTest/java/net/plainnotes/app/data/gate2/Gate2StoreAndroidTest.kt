@@ -135,12 +135,12 @@ class Gate2StoreAndroidTest {
             kotlinx.coroutines.runBlocking {
                 val backup=repo.exportBackup(password);val clear=BackupCodec.decrypt(backup,password)
                 val legacy=try{
-                    val j=org.json.JSONObject(String(clear,Charsets.UTF_8));assertEquals(11,j.getInt("schema"))
+                    val j=org.json.JSONObject(String(clear,Charsets.UTF_8));assertEquals(12,j.getInt("schema"))
                     val tables=j.getJSONObject("tables")
                     assertFalse(tables.keys().asSequence().any{it.startsWith("attachment_")||it.startsWith("synthetic_")})
                     // Preserve genuine Schema9 coverage: strip only the newly introduced, explicitly empty reference tables.
                     ReferenceSchema.businessTables.forEach {table->assertEquals(0,tables.getJSONArray(table).length());tables.remove(table)}
-                    j.put("schema",9)
+                    net.plainnotes.app.data.PublishedBusinessFixture.stripLegacyEncoding(j.getJSONObject("tables"));j.put("schema",9)
                     val plain=j.toString().toByteArray(Charsets.UTF_8)
                     try {BackupCodec.encrypt(plain,password)}finally{plain.fill(0)}
                 }finally{clear.fill(0)}

@@ -125,8 +125,13 @@ jobs:
         with:
           api-level: 35
           arch: x86_64
+          heap-size: 192M
           disable-animations: true
           script: |
+            python3 scripts/configure_ansm_native_runtime.py --api 35
+            adb shell input keyevent 82
+            adb shell wm dismiss-keyguard
+            ./gradlew :core:data:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.data.NativeCiHeapProbe -Pandroid.testInstrumentationRunnerArguments.ansmExpectedHeapMb=192 --no-parallel --max-workers=2
             ./gradlew :core:data:connectedDebugAndroidTest --no-parallel --max-workers=2
             python3 scripts/run_attachment_foundation_restart.py
             python3 scripts/run_attachment_gate2_red.py
@@ -146,6 +151,7 @@ jobs:
             python3 scripts/run_import_cleanup_restart.py
             python3 scripts/run_restore_process_death.py
             python3 scripts/run_voided_package_restart.py
+            python3 scripts/run_ansm_write_process_death.py
             python3 scripts/run_lab_panel_restart.py
             python3 scripts/run_undo_skipped_restart.py
             python3 scripts/run_medical_records_restart.py
@@ -159,6 +165,7 @@ jobs:
           name: device-test-results
           path: |
             core/data/build/reports/androidTests/
+            core/data/build/reports/ansm-write-process-death/
             core/data/build/reports/gate2/
             core/data/build/reports/gate3/
             core/data/build/reports/b3/
@@ -198,10 +205,15 @@ jobs:
         with:
           api-level: ${{ matrix.api }}
           arch: x86_64
+          heap-size: 192M
           disable-animations: true
           script: |
+            python3 scripts/configure_ansm_native_runtime.py --api ${{ matrix.api }}
+            adb shell input keyevent 82
+            adb shell wm dismiss-keyguard
+            ./gradlew :core:data:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.data.NativeCiHeapProbe -Pandroid.testInstrumentationRunnerArguments.ansmExpectedHeapMb=192 --no-parallel --max-workers=2
             adb logcat -G 16M
-            ./gradlew :core:data:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.data.AttachmentFoundationAndroidTest,net.plainnotes.app.data.AttachmentSqlCipherMigrationTest,net.plainnotes.app.data.AttachmentKeyAndroidTest,net.plainnotes.app.data.Gate2StoreAndroidTest,net.plainnotes.app.data.Gate2RestartAndroidTest,net.plainnotes.app.data.Gate2SafAndroidTest,net.plainnotes.app.data.Gate2ContextAndroidTest,net.plainnotes.app.data.Gate3ProcessLockAndroidTest,net.plainnotes.app.data.B3GateAndroidTest,net.plainnotes.app.data.B3RestartAndroidTest,net.plainnotes.app.data.Ansm03b0InventoryAndroidTest,net.plainnotes.app.data.BackupReplacementAndroidTest,net.plainnotes.app.data.ReferencePersistenceAndroidTest,net.plainnotes.app.data.ReferenceMigrationAndroidTest,net.plainnotes.app.data.DailyTrashCollisionAndroidTest,net.plainnotes.app.data.LabPanelDataAndroidTest --no-parallel --max-workers=2
+            ./gradlew :core:data:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.data.AttachmentFoundationAndroidTest,net.plainnotes.app.data.AttachmentSqlCipherMigrationTest,net.plainnotes.app.data.AttachmentKeyAndroidTest,net.plainnotes.app.data.Gate2StoreAndroidTest,net.plainnotes.app.data.Gate2RestartAndroidTest,net.plainnotes.app.data.Gate2SafAndroidTest,net.plainnotes.app.data.Gate2ContextAndroidTest,net.plainnotes.app.data.Gate3ProcessLockAndroidTest,net.plainnotes.app.data.B3GateAndroidTest,net.plainnotes.app.data.B3RestartAndroidTest,net.plainnotes.app.data.Ansm03b0InventoryAndroidTest,net.plainnotes.app.data.BackupReplacementAndroidTest,net.plainnotes.app.data.ReferencePersistenceAndroidTest,net.plainnotes.app.data.ReferenceMigrationAndroidTest,net.plainnotes.app.data.MeasuredContainerAndroidTest,net.plainnotes.app.data.MeasuredConsumptionAndroidTest,net.plainnotes.app.data.MeasuredSaveCoordinatorAndroidTest,net.plainnotes.app.data.ReferenceAuditStreamingAndroidTest,net.plainnotes.app.data.P4LifecycleGrowthAndroidTest,net.plainnotes.app.data.DailyTrashCollisionAndroidTest,net.plainnotes.app.data.LabPanelDataAndroidTest --no-parallel --max-workers=2
             python3 scripts/run_attachment_foundation_restart.py
             python3 scripts/run_attachment_gate2_red.py
             python3 scripts/run_attachment_gate2_restart.py AFTER_CREATE
@@ -217,6 +229,7 @@ jobs:
             python3 scripts/run_attachment_poc_restart.py
             python3 scripts/collect_attachment_poc_evidence.py --output app/build/reports/attachment-poc-evidence.json
             python3 scripts/run_attachment_gate3_red.py
+            python3 scripts/run_ansm_write_process_death.py
             python3 scripts/run_lab_panel_restart.py
             python3 scripts/run_demo_compat.py
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -226,6 +239,7 @@ jobs:
           path: |
             app/build/reports/demo/
             core/data/build/reports/androidTests/
+            core/data/build/reports/ansm-write-process-death/
             core/data/build/reports/gate2/
             core/data/build/reports/gate3/
             core/data/build/reports/b3/

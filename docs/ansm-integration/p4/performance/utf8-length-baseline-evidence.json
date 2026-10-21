@@ -1,0 +1,11 @@
+{
+  "source_base": "e36c52db38d0b74b4c60c7e24e06d1a6224cba94",
+  "baseline_kind": "UNCOMMITTED_PLATFORM_DELEGATING_HELPER_NO_CHANGED_CALLERS",
+  "status": "PASS_CHARACTERIZATION",
+  "tests": 1,
+  "platform_oracle_comparisons": 75555,
+  "additional_pairing_assertions": 2,
+  "xml_sha256": "19a22da7dd0fd5d42d52f4ac9d2f08b68b090f9780d83023592a436a14fe4f98",
+  "reference_payload_source_sha256": "72b7a318d2bd463f6098f2d3699c78476c1e4a403700d4e5acb37d0c9c1d33f0",
+  "native_execution": "NOT_RUN_NEW_CORPUS"
+}

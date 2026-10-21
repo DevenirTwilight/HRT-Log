@@ -1,0 +1,22 @@
+{
+  "source": "7320a89bdf301e8e96531a3b02bb06b05c79fcad",
+  "scope": "JVM isolated synthetic Room transaction adapters; no Repository/App caller",
+  "test_status": "PASS",
+  "suites": {
+    "MeasuredConsumptionStoreTest": {
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "boundary_guard": {
+    "tests": 157,
+    "status": "PASS",
+    "log_sha256": "6629ee7be4400940cab3d4afaa4f063013ffe1713ba3897fa235283543304fc8"
+  },
+  "production_entry": "NOT_IMPLEMENTED",
+  "backup_acceptance": "OFF",
+  "native_consumption_contract": "NOT_RUN",
+  "physical_device_and_talkback": "NOT_RUN"
+}

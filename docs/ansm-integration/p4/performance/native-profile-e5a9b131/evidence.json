@@ -1,0 +1,17 @@
+{
+  "source_head": "e5a9b1315f919ed35a7a14f62f163e1f0a2d2985",
+  "run": 39216614238,
+  "artifact_id": 12169279963,
+  "artifact_sha256": "1229c2cceb7fc042a6d7d1a1819ab578cfdd4cf98f4102b4632dc101175a14f1",
+  "artifact_sha256_verification": "PASS",
+  "zip_crc": "PASS",
+  "trace_sha256": "98b46120f9d8b7552b9606184a42b8cb8b1aa3256848b35a806c095dfac93f5f",
+  "trace_gzip_sha256": "6a91ed6fc039f6f83fabe15da02ef6781002797620a77739eef00199c47e29ff",
+  "parser_source_sha256": "b291a87edf240f5e93c6411a810c7f2ad5c946b373c0df1427d5aa42d09f6190",
+  "parser_reproduction": "PASS",
+  "profile": "PARTIAL_DIAGNOSTIC",
+  "records": 55760,
+  "performance": "FAIL: writes10263.31029/10678.05596/9664.51201ms>5000. Complete native indexed plan and full projection equality confirmed; query reduction alone has not demonstrated admission.",
+  "physical": "NOT_RUN",
+  "p4": "PRODUCTION_BLOCKED"
+}

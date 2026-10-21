@@ -111,6 +111,8 @@ data class ContainerEntity(
     /** Optional, user-entered; never evaluated. */
     val source_note: String? = null,
     val batch: String? = null,
+    /** Explicit storage representation; old stock retains its original scalar semantics. */
+    @ColumnInfo(defaultValue="'LEGACY_SCALAR'") val inventory_encoding:String="LEGACY_SCALAR",
 )
 
 @Entity(tableName = "supply_transaction", foreignKeys = [ForeignKey(entity = ContainerEntity::class, parentColumns = ["id"], childColumns = ["container_id"], onDelete = ForeignKey.RESTRICT), ForeignKey(entity = RecordEntity::class, parentColumns = ["id"], childColumns = ["dose_record_id"], onDelete = ForeignKey.RESTRICT), ForeignKey(entity = SupplyEntryEntity::class, parentColumns = ["id"], childColumns = ["reversal_of_id"], onDelete = ForeignKey.RESTRICT)], indices = [Index(value = ["operation_id", "container_id", "kind"], unique = true), Index(value = ["reversal_of_id"], unique = true), Index(value = ["container_id"], unique = false), Index(value = ["dose_record_id"], unique = false)])

@@ -1,0 +1,16 @@
+{
+  "base_head": "3ee511043182eb9b3a81721d2f853fe9b6273664",
+  "result": "JVM_DIAGNOSTIC_PASS_NOT_NATIVE_ADMISSION",
+  "previous_queries": 20198,
+  "sorted_queries": 14189,
+  "removed_queries": 6009,
+  "complete_projection_equality": "PASS",
+  "original_fixture_sha256": "9313167178989def0d4d89d785f84cdde764fba21033543cdf85e472c5511242",
+  "post_budget_diagnostic_patch": "post-budget-query-diagnostic.patch",
+  "generated_probe_source_sha256": "73a43ba3aacddc3bdc2b2bdd8a22b0a94e0b07cd47e497adef2075187e0d5faf",
+  "log_sha256": "f353785c7a03e1cf945ed28f6dfe6f31a409653e183a5b92e8bc6bc790ad7df3",
+  "physical": "NOT_RUN",
+  "native_sorted_candidate": "NOT_RUN",
+  "main_pending_integration": "1abfeea8640ef66852092213efbec0e58b7e4e58",
+  "main_device_failure": "ReminderTestDeviceTest.scheduledTestTravelsTheRealAlarmChain;run39120871006/job117656041418. Separate reminder PR70 remains another developer lane; no changes here."
+}

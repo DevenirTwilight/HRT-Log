@@ -1,0 +1,10 @@
+{
+  "source": "5fe9466ffdcca956ce6551ef8bd4e764ddd8e9ea",
+  "job": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39161930423/job/117776850722",
+  "result": "FAIL",
+  "test": "ReminderTestDeviceTest.scheduledTestTravelsTheRealAlarmChain",
+  "assertion": "assertTrue(status.exact) at ReminderTestDeviceTest.kt:52",
+  "mainline_difference": "Approved main86131172 drains executeShellCommand output before asserting canScheduleExactAlarms. Old P4 branch only closes the descriptor.",
+  "causality": "Known code/setup difference, not independently established as the only cause of this run. Must integrate mainline and execute the same test; no blind rerun or relaxed assertion.",
+  "native_inventory_failure": "Separate run39162004779, writes exceed5000ms. Do not conflate causes."
+}

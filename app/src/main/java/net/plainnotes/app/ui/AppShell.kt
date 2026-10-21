@@ -69,7 +69,12 @@ class UiPrefs(context: Context) {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Composable fun NotesApp(model: NotesViewModel, appearance: Appearance, onAppearance: (Appearance) -> Unit, backToCalendar: Boolean = true) {
+@Composable fun NotesApp(model: NotesViewModel, appearance: Appearance, onAppearance: (Appearance) -> Unit, backToCalendar: Boolean = true,
+    writeProgress:net.plainnotes.app.domain.write.WriteProgressSummary?=null,
+    onWriteResultCheck:(()->Unit)?=null,onWriteRetry:(()->Unit)?=null) {
+    val ownedWriteProgress by model.measuredWriteProgress.collectAsStateWithLifecycle()
+    val effectiveWriteProgress=writeProgress ?: ownedWriteProgress
+    val checkWriteResult=onWriteResultCheck ?: {model.checkMeasuredSave();Unit}
     val context = LocalContext.current
     val prefs = remember { UiPrefs(context) }
     var region by remember { mutableStateOf(prefs.region) }
@@ -172,6 +177,7 @@ class UiPrefs(context: Context) {
     }) {
         Scaffold(
             topBar = {
+                Column {
                 TopAppBar(title = { Text(stringResource(if (settingsSub) settingsPage.title else if (destination == Destination.CALENDAR) R.string.app_name else destination.title), Modifier.testTag("top-title")) },
                     navigationIcon = {
                         if (destination==medicalChild) IconButton(onClick = { returnFromMedicalChild() }, modifier=Modifier.testTag("medical-center-back")) {
@@ -189,6 +195,9 @@ class UiPrefs(context: Context) {
                         // UI-05 F: "Record a past visit", the same action as the former list button.
                         if (destination == Destination.MEDICAL) MedicalAddAction { model.clearMedicalVisitSave();medicalDialogs.edit=null;medicalDialogs.editing=true }
                     })
+                // Observe the process owner only inside the authenticated shell. No submission entry is enabled.
+                effectiveWriteProgress?.let{WriteStatusArea(it,checkWriteResult,onWriteRetry)}
+                }
             },
             snackbarHost = { SnackbarHost(snackbar) },
             floatingActionButton = {

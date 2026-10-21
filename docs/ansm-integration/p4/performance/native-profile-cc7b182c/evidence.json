@@ -1,0 +1,21 @@
+{
+  "source_head": "cc7b182c6a2d06258b6104492e54efffe4a3870b",
+  "run": 39209956991,
+  "artifact_id": 12167082843,
+  "artifact_sha256": "39c6355b6c62a6e83df043121927146090791029eacb2dfc2f05080613a75065",
+  "artifact_sha256_verification": "PASS",
+  "zip_crc": "PASS",
+  "trace_sha256": "9cbac2e1119d6066c5f5504321c168e41ddef31bbcbc7a65506a9421b50676fa",
+  "trace_gzip_sha256": "64d1ab8aaa5c65d2bf8800312d67929407312acc408169c1fb944c3d549c2ec3",
+  "parser_source_sha256": "b291a87edf240f5e93c6411a810c7f2ad5c946b373c0df1427d5aa42d09f6190",
+  "parser_reproduction": "PASS",
+  "profile": "PARTIAL_DIAGNOSTIC",
+  "records": 52722,
+  "clipped_open_frames": 152,
+  "unknown_method_records": 0,
+  "unmatched_exits": 0,
+  "overflow": "false",
+  "performance": "FAIL: writes8468.00325/7954.6746/8644.99025ms exceed unchanged5000ms. Prior isolated clinical candidate failure retained; cross-run differences do not establish a stable causal improvement.",
+  "physical": "NOT_RUN",
+  "p4": "PRODUCTION_BLOCKED"
+}

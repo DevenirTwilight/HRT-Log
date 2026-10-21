@@ -1,0 +1,41 @@
+{
+  "source": "87e9df955f8132b58cd111c5188c295a0d4b0726",
+  "run": 39478425945,
+  "artifact": 12291113191,
+  "sha256": "81b55dc1d1b824f6e8fbd7957288e9e1d663362c95ad0048bde0618a22e71692",
+  "zip_crc": "PASS",
+  "summary": {
+    "period": {
+      "archive_entry": "app/build/reports/tests/testFullDebugUnitTest/net.plainnotes.app.PeriodStabilityTest/index.html",
+      "html_sha256": "2beb987ec8194fc9eed0bc91a6f6e397bb61601aace6b51f6a81508291f9d547",
+      "tests": 5,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 5
+    },
+    "app": {
+      "archive_entry": "app/build/reports/tests/testFullDebugUnitTest/index.html",
+      "html_sha256": "3cfa0d32268a3bb2e8b4371f0a4742a3c77cef9581d2e0a0c2a6601ea67f2aef",
+      "tests": 1839,
+      "failures": 0,
+      "skipped": 277,
+      "passed": 1562
+    },
+    "data": {
+      "archive_entry": "core/data/build/reports/tests/testDebugUnitTest/index.html",
+      "html_sha256": "d47deb7087cfc0ccb9c82525389919ddff5d524c40ab5caf390004f6750db29f",
+      "tests": 472,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 472
+    },
+    "reminder": {
+      "archive_entry": "core/reminder/build/reports/tests/testDebugUnitTest/index.html",
+      "html_sha256": "9c7af47475614671b85ac8593ae3ab8498177ebeba3037c726794e69a4fb1fa4",
+      "tests": 21,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 21
+    }
+  }
+}

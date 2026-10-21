@@ -20,6 +20,7 @@ internal object SupplyLedger {
 
     /** Allocates [record]'s actual dose; returns the amount that could not be allocated. */
     suspend fun allocate(dao: NotesDao, record: RecordEntity): Double {
+        require(!dao.hasMeasuredRecord(record.id)) { "Measured record requires its frozen physical-use workflow" }
         val dose = record.actual_dose ?: return 0.0
         if (record.status !in listOf("ON_TIME", "LATE") || record.deleted_at_utc != null) return 0.0
         val snapshotUnit=MedicationSnapshot.decode(record.config_snapshot,record.medication_id)?.unit
@@ -27,9 +28,10 @@ internal object SupplyLedger {
             dao.updateRecord(record.copy(unallocated_supply_amount=dose))
             return dose // No implicit conversion between historical and current inventory units.
         }
+        val measured = dao.measuredContainerIds().toSet()
         var remaining = dose
         while (remaining > EPS) {
-            val all = dao.containers().filter { it.medication_id == record.medication_id }
+            val all = dao.containers().filter { it.medication_id == record.medication_id && it.id !in measured }
             val open = all.filter { it.state == "IN_USE" && it.capacity - it.used_amount > EPS }.sortedWith(compareBy<ContainerEntity>({ it.opened_on ?: "" }, { it.id })).firstOrNull()
                 ?: all.filter { it.state == "SEALED" }.minByOrNull { it.id }?.also { dao.setContainerState(it.id, "IN_USE", LocalDate.now().toString()) }
                 ?: break
@@ -45,6 +47,7 @@ internal object SupplyLedger {
 
     /** Undoes every not-yet-reversed consumption of [recordId]. */
     suspend fun reverse(dao: NotesDao, recordId: Long) {
+        require(!dao.hasMeasuredRecord(recordId)) { "Measured record requires its frozen physical-use inverse" }
         val entries = dao.supplyFor(recordId)
         val reversed = entries.mapNotNull { it.reversal_of_id }.toSet()
         val record = dao.recordById(recordId)
@@ -58,6 +61,7 @@ internal object SupplyLedger {
 
     /** Sets the remaining amount of a container through an ADJUST entry (manual correction). */
     suspend fun setRemaining(dao: NotesDao, containerId: Long, remaining: Double) {
+        require(containerId !in dao.measuredContainerIds()) { "Measured container requires an explicit physical-unit correction" }
         val c = dao.container(containerId)
         require(c.state != "VOIDED") { "Voided package cannot be corrected" }
         require(remaining.isFinite() && remaining >= 0 && remaining <= c.capacity)

@@ -1,0 +1,30 @@
+{
+  "source_base": "492d7276917b108b2af789c2ab46c6c9c81d31ac",
+  "candidate_kind": "UNCOMMITTED_LEDGER_STREAM_WORKTREE",
+  "production_sha256": "24ef2fe9b45487948690002160b3dad996513b8e4031a15d87d907ebe9ee444c",
+  "diagnostic_probe_sha256": "593589a24f473b0498af6cd209fef000fce13afddc37582799387334bbd97ef7",
+  "fixture_sha256": "9313167178989def0d4d89d785f84cdde764fba21033543cdf85e472c5511242",
+  "scope": "JVM_POST_BUDGET_DIAGNOSTIC_NOT_NATIVE_ACCEPTANCE",
+  "state": "DIAGNOSTIC_BUDGET_PASS",
+  "records": 14600,
+  "containers": 2000,
+  "rows": 32603,
+  "full_projection_equality": true,
+  "queries": 185,
+  "previous_container_candidate_queries": 2184,
+  "eliminated_cursors": 1999,
+  "plan": {
+    "scope": "TEST_ONLY_POST_BUDGET_READ_ONLY",
+    "plan": [
+      "SCAN i USING INDEX sqlite_autoindex_reference_identity_1",
+      "CORRELATED SCALAR SUBQUERY 1",
+      "SEARCH e USING INDEX index_reference_event_subject_uuid_revision (subject_uuid=?)",
+      "SEARCH s USING INDEX sqlite_autoindex_reference_snapshot_1 (uuid=?)",
+      "SEARCH t USING INDEX index_supply_transaction_container_id (container_id=?)",
+      "SEARCH o USING INDEX sqlite_autoindex_measured_operation_1 (operation_uuid=?) LEFT-JOIN",
+      "SEARCH d USING INTEGER PRIMARY KEY (rowid=?) LEFT-JOIN"
+    ]
+  },
+  "native_plan": "NOT_RUN_NEW_CANDIDATE",
+  "native_budget": "NOT_RUN_NEW_CANDIDATE"
+}

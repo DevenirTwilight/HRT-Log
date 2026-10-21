@@ -1,0 +1,13 @@
+{
+  "parent": "10480c6199107803993e2d80f81053fa808e157c",
+  "status": "PASS",
+  "jvm_shared_tests": 41,
+  "native_execution": "NOT_RUN",
+  "log_sha256": "2bae93aefe89d766679e9ac118ab20a40b85465f12eade518de4954d706078cc",
+  "source_sha256": {
+    "MeasuredConsumptionStore.kt": "b377d35fd4aca14d6bebf91a7f99a14843170c8edf87dbeb1ed60f32dfee12e5",
+    "MeasuredOperationChain.kt": "804861d17ded5d06fe312a29f2bbc102ffe37fc784ce88d105ce567b08c18f47",
+    "ReferenceSchema.kt": "872017a6cdaf1acd17d10e89fc86d5f3ff26eb3d36136cb0c045ad221d50f613"
+  },
+  "scope": "Serialized causal-chain and initial operation scan, not full admission"
+}

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.VisitPackDataTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-21T09:31:18.513Z" hostname="4f13d57d08c1" time="2.706">
+  <properties/>
+  <testcase name="backupRoundTripAndOldSchemaAndMalformedPackRollBack" classname="net.plainnotes.app.data.VisitPackDataTest" time="2.497"/>
+  <testcase name="questionsKeepDenseOrderAndRejectBlankText" classname="net.plainnotes.app.data.VisitPackDataTest" time="0.081"/>
+  <testcase name="packRecordsAreImmutableAndDeletedWithTheirAppointment" classname="net.plainnotes.app.data.VisitPackDataTest" time="0.062"/>
+  <testcase name="editingKeepsConfirmationWhichIsOnlySetExplicitly" classname="net.plainnotes.app.data.VisitPackDataTest" time="0.062"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

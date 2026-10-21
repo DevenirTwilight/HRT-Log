@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.MeasuredStockUnknownMatrixTest" tests="32" skipped="0" failures="0" errors="0" timestamp="2026-10-20T12:56:38.262Z" hostname="2c2deac85eb5" time="29.628">
+  <properties/>
+  <testcase name="unknownNeverBecomesScalarStockOrAnUnscopedWrite[en/320dp/1x/dark=false]" classname="net.plainnotes.app.MeasuredStockUnknownMatrixTest" time="14.116"/>
+  <testcase name="unknownNeverBecomesScalarStockOrAnUnscopedWrite[en/320dp/1x/dark=true]" classname="net.plainnotes.app.MeasuredStockUnknownMatrixTest" time="0.479"/>
+  <testcase name="unknownNeverBecomesScalarStockOrAnUnscopedWrite[en/320dp/2x/dark=false]" classname="net.plainnotes.app.MeasuredStockUnknownMatrixTest" time="0.579"/>
+  <testcase name="unknownNeverBecomesScalarStockOrAnUnscopedWrite[en/320dp/2x/dark=true]" classname="net.plainnotes.app.MeasuredStockUnknownMatrixTest" time="0.536"/>
+  <testcase name="unknownNeverBecomesScalarStockOrAnUnscopedWrite[en/411dp/1x/dark=false]" classname="net.plainnotes.app.MeasuredStockUnknownMatrixTest" time="0.393"/>
+  <testcase name="unknownNeverBecomesScalarStockOrAnUnscopedWrite[en/411dp/1x/dark=true]" classname="net.plainnotes.app.MeasuredStockUnknownMatrixTest" time="0.433"/>
+  <testcase name="unknownNeverBecomesScalarStockOrAnUnscopedWrite[en/411dp/2x/dark=false]" classname="net.plainnotes.app.MeasuredStockUnknownMatrixTest" time="0.525"/>
+  <testcase name="unknownNeverBecomesScalarStockOrAnUnscopedWrite[en/411dp/2x/dark=true]" classname="net.plainnotes.app.MeasuredStockUnknownMatrixTest" time="0.498"/>
+  <testcase name="unknownNeverBecomesScalarStockOrAnUnscopedWrite[fr-rFR/320dp/1x/dark=false]" classname="net.plainnotes.app.MeasuredStockUnknownMatrixTest" time="0.315"/>
+  <testcase name="unknownNeverBecomesScalarStockOrAnUnscopedWrite[fr-rFR/320dp/1x/dark=true]" classname="net.plainnotes.app.MeasuredStockUnknownMatrixTest" time="0.313"/>
+  <testcase name="unknownNeverBecomesScalarStockOrAnUnscopedWrite[fr-rFR/320dp/2x/dark=false]" classname="net.plainnotes.app.MeasuredStockUnknownMatrixTest" time="0.534"/>
+  <testcase name="unknownNeverBecomesScalarStockOrAnUnscopedWrite[fr-rFR/320dp/2x/dark=true]" classname="net.plainnotes.app.MeasuredStockUnknownMatrixTest" time="0.535"/>
+  <testcase name="unknownNeverBecomesScalarStockOrAnUnscopedWrite[fr-rFR/411dp/1x/dark=false]" classname="net.plainnotes.app.MeasuredStockUnknownMatrixTest" time="0.454"/>
+  <testcase name="unknownNeverBecomesScalarStockOrAnUnscopedWrite[fr-rFR/411dp/1x/dark=true]" classname="net.plainnotes.app.MeasuredStockUnknownMatrixTest" time="0.445"/>
+  <testcase name="unknownNeverBecomesScalarStockOrAnUnscopedWrite[fr-rFR/411dp/2x/dark=false]" classname="net.plainnotes.app.MeasuredStockUnknownMatrixTest" time="0.588"/>
+  <testcase name="unknownNeverBecomesScalarStockOrAnUnscopedWrite[fr-rFR/411dp/2x/dark=true]" classname="net.plainnotes.app.MeasuredStockUnknownMatrixTest" time="0.584"/>
+  <testcase name="unknownNeverBecomesScalarStockOrAnUnscopedWrite[zh-rCN/320dp/1x/dark=false]" classname="net.plainnotes.app.MeasuredStockUnknownMatrixTest" time="0.39"/>
+  <testcase name="unknownNeverBecomesScalarStockOrAnUnscopedWrite[zh-rCN/320dp/1x/dark=true]" classname="net.plainnotes.app.MeasuredStockUnknownMatrixTest" time="0.374"/>
+  <testcase name="unknownNeverBecomesScalarStockOrAnUnscopedWrite[zh-rCN/320dp/2x/dark=false]" classname="net.plainnotes.app.MeasuredStockUnknownMatrixTest" time="0.534"/>
+  <testcase name="unknownNeverBecomesScalarStockOrAnUnscopedWrite[zh-rCN/320dp/2x/dark=true]" classname="net.plainnotes.app.MeasuredStockUnknownMatrixTest" time="0.565"/>
+  <testcase name="unknownNeverBecomesScalarStockOrAnUnscopedWrite[zh-rCN/411dp/1x/dark=false]" classname="net.plainnotes.app.MeasuredStockUnknownMatrixTest" time="0.409"/>
+  <testcase name="unknownNeverBecomesScalarStockOrAnUnscopedWrite[zh-rCN/411dp/1x/dark=true]" classname="net.plainnotes.app.MeasuredStockUnknownMatrixTest" time="0.476"/>
+  <testcase name="unknownNeverBecomesScalarStockOrAnUnscopedWrite[zh-rCN/411dp/2x/dark=false]" classname="net.plainnotes.app.MeasuredStockUnknownMatrixTest" time="0.597"/>
+  <testcase name="unknownNeverBecomesScalarStockOrAnUnscopedWrite[zh-rCN/411dp/2x/dark=true]" classname="net.plainnotes.app.MeasuredStockUnknownMatrixTest" time="0.547"/>
+  <testcase name="unknownNeverBecomesScalarStockOrAnUnscopedWrite[zh-rTW/320dp/1x/dark=false]" classname="net.plainnotes.app.MeasuredStockUnknownMatrixTest" time="0.344"/>
+  <testcase name="unknownNeverBecomesScalarStockOrAnUnscopedWrite[zh-rTW/320dp/1x/dark=true]" classname="net.plainnotes.app.MeasuredStockUnknownMatrixTest" time="0.321"/>
+  <testcase name="unknownNeverBecomesScalarStockOrAnUnscopedWrite[zh-rTW/320dp/2x/dark=false]" classname="net.plainnotes.app.MeasuredStockUnknownMatrixTest" time="0.533"/>
+  <testcase name="unknownNeverBecomesScalarStockOrAnUnscopedWrite[zh-rTW/320dp/2x/dark=true]" classname="net.plainnotes.app.MeasuredStockUnknownMatrixTest" time="0.547"/>
+  <testcase name="unknownNeverBecomesScalarStockOrAnUnscopedWrite[zh-rTW/411dp/1x/dark=false]" classname="net.plainnotes.app.MeasuredStockUnknownMatrixTest" time="0.387"/>
+  <testcase name="unknownNeverBecomesScalarStockOrAnUnscopedWrite[zh-rTW/411dp/1x/dark=true]" classname="net.plainnotes.app.MeasuredStockUnknownMatrixTest" time="0.35"/>
+  <testcase name="unknownNeverBecomesScalarStockOrAnUnscopedWrite[zh-rTW/411dp/2x/dark=false]" classname="net.plainnotes.app.MeasuredStockUnknownMatrixTest" time="0.516"/>
+  <testcase name="unknownNeverBecomesScalarStockOrAnUnscopedWrite[zh-rTW/411dp/2x/dark=true]" classname="net.plainnotes.app.MeasuredStockUnknownMatrixTest" time="0.517"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

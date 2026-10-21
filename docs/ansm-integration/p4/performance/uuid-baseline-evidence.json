@@ -1,0 +1,10 @@
+{
+  "source": "d57d04c5fa600d026680e9c06f8853122a5efc1c",
+  "state": "PASS_CHARACTERIZATION",
+  "tests": 1,
+  "oracle_comparisons": 10716,
+  "positive_version_variant_assertions": 128,
+  "xml_sha256": "a09dffbe47a630716ae1cc1529d4ac7a980b7b45bc1f477ff1cafb00590b8873",
+  "production_sha256": "518a53d37a79bc9795f28f2687dc08f4a2b9776031b377b51673662ab487f21e",
+  "note": "Original platform parser is unchanged at this baseline. Fixture counter was corrected separately, with no identifier mismatch. Not a fabricated RED."
+}

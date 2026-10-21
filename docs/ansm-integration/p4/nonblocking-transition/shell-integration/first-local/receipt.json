@@ -1,0 +1,23 @@
+{
+  "production": "dc10ffef",
+  "test_source": "d582bf7d",
+  "native": "IN_PROGRESS; independent runs39620822817/39620827648",
+  "result": "528 data PASS;18 selected App PASS;2 App setup timeouts before business assertions",
+  "data": {
+    "tests": 528,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "app": {
+    "tests": 20,
+    "failures": 2,
+    "errors": 0,
+    "skipped": 0
+  },
+  "source_sha256": {
+    "app/src/test/java/net/plainnotes/app/ProcessMeasuredWriteShellTest.kt": "be7909fcb64d0ee23dd9b751051a3b7851de15f4c4b492579be88c0d46f23320",
+    "app/src/main/java/net/plainnotes/app/NotesViewModel.kt": "ee16f8d96abc405b604c8665291e76428eed83218611bf822731b081a74009a6",
+    "app/src/main/java/net/plainnotes/app/ui/AppShell.kt": "6e16b25ba0c6fd01ebf6b108a7f913d85f658dc8e960cdd5c70dc5e995c13178"
+  }
+}

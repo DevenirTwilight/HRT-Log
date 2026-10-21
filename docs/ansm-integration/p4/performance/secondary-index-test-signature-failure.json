@@ -1,0 +1,8 @@
+{
+  "result": "FAIL_TEST_DECLARATION",
+  "message": [
+    "org.junit.runners.model.InvalidTestClassError: Invalid test class 'net.plainnotes.app.data.MeasuredConsumptionStoreTest':\n  1. Method secondaryConfirmationIndexRetainsDuplicateRowsSoTheWholeAuditStillRejectsAmbiguity() should be void"
+  ],
+  "log_sha256": "57568e35ad8bd44d8d9cf5303f0b2a47cd50d8e362cdad64223844dda788f95f",
+  "correction": "JUnit4 test must return Unit; assertThrows returns its exception, so append explicit Unit. No production change or relaxed assertion."
+}

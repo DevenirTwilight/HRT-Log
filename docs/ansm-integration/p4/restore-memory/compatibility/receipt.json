@@ -1,0 +1,155 @@
+{
+  "source": "9d304e58fd92f0171fd6ddd272f79dbe6ece3cb4",
+  "pr_run": 39495197495,
+  "regular_pr": "SUCCESS",
+  "regular_push": "FAILURE_API26_EMULATOR_INSTALL_BEFORE_TESTS",
+  "artifacts": [
+    {
+      "platform": "api26",
+      "artifact_id": 12297439682,
+      "bytes": 56354,
+      "official_download_sha256": "2306028f6f0bb8047147f9186085617a51a957dac55572185e30efe8e5abad4a",
+      "zip_crc": "PASS",
+      "suites": [
+        {
+          "name": "MeasuredConsumptionAndroidTest",
+          "tests": 143,
+          "failures": 0,
+          "skipped": 0,
+          "passed": 143,
+          "html_sha256": "07f7a759068eeb9a68214162b503987e7b4797ad52ac8b39c7bb359d7c78e002"
+        },
+        {
+          "name": "BackupReplacementAndroidTest",
+          "tests": 9,
+          "failures": 0,
+          "skipped": 0,
+          "passed": 9,
+          "html_sha256": "c0b2805112687bae28048ad445b90ca4166e9c072893e6660b906aa88d160448"
+        },
+        {
+          "name": "ReferenceMigrationAndroidTest",
+          "tests": 16,
+          "failures": 0,
+          "skipped": 0,
+          "passed": 16,
+          "html_sha256": "7ade69c35696a25bb0be014da8ddfbfcae4d480bb32da73506a0961988d409a5"
+        }
+      ]
+    },
+    {
+      "platform": "api29",
+      "artifact_id": 12298196293,
+      "bytes": 56194,
+      "official_download_sha256": "473d1ef4709a88ed99486e59a2d1719c2c504a4fd1f26e85a6fd30ea9283fa22",
+      "zip_crc": "PASS",
+      "suites": [
+        {
+          "name": "MeasuredConsumptionAndroidTest",
+          "tests": 143,
+          "failures": 0,
+          "skipped": 0,
+          "passed": 143,
+          "html_sha256": "67d54e58554face6dc76143128c1c9656d58ea1564e5726575f28787dd1f9598"
+        },
+        {
+          "name": "BackupReplacementAndroidTest",
+          "tests": 9,
+          "failures": 0,
+          "skipped": 0,
+          "passed": 9,
+          "html_sha256": "ee622e6225530c4a47497e900765ce84ce786f950389d6cd489ecdc1fb673823"
+        },
+        {
+          "name": "ReferenceMigrationAndroidTest",
+          "tests": 16,
+          "failures": 0,
+          "skipped": 0,
+          "passed": 16,
+          "html_sha256": "59e7e3b5a8c467d6be1f20a70440564d8dd7ce3347b6f49eb4eb8e3a060e7b5f"
+        }
+      ]
+    },
+    {
+      "platform": "api35",
+      "artifact_id": 12299160211,
+      "bytes": 135754,
+      "official_download_sha256": "80b2211e7fd5f516efddf173e96ad07fb8103952eb4a0cf3c4e20a477cb33ca6",
+      "zip_crc": "PASS",
+      "suites": [
+        {
+          "name": "MeasuredConsumptionAndroidTest",
+          "tests": 143,
+          "failures": 0,
+          "skipped": 0,
+          "passed": 143,
+          "html_sha256": "059b9a67a0534657b8ebead22dfa44db83d67d725697fd862b6037c3dfe3ea3c"
+        },
+        {
+          "name": "BackupReplacementAndroidTest",
+          "tests": 9,
+          "failures": 0,
+          "skipped": 0,
+          "passed": 9,
+          "html_sha256": "51433977c9dbad6a0dc1ee570a5a73e102f4ffa8aa200427870aeef6c26887b5"
+        },
+        {
+          "name": "ReferenceMigrationAndroidTest",
+          "tests": 16,
+          "failures": 0,
+          "skipped": 0,
+          "passed": 16,
+          "html_sha256": "61257e862f5594a6ef3ffd1aa9d7403442904e7c141dc5f70850fd0bc80f44d6"
+        }
+      ]
+    },
+    {
+      "artifact_id": 12297419002,
+      "bytes": 127343213,
+      "official_download_sha256": "ebc0f3f98c4a8e1566ba383cdcc6cf85287ba767f580b0bf4f77341f764db7af",
+      "zip_crc": "PASS",
+      "suites": [
+        {
+          "name": "data",
+          "tests": 485,
+          "failures": 0,
+          "skipped": 0,
+          "passed": 485,
+          "html_sha256": "40496524c0b8e50d0a4b3059a10caed6ac75b227143d8b975c15aa75f3cf6dc8"
+        },
+        {
+          "name": "app",
+          "tests": 1839,
+          "failures": 0,
+          "skipped": 277,
+          "passed": 1562,
+          "html_sha256": "e5c8ffb7b55ffa9553c36f19ba5d71a960b8ffda45e1377741e9f18449739aac"
+        },
+        {
+          "name": "reminder",
+          "tests": 21,
+          "failures": 0,
+          "skipped": 0,
+          "passed": 21,
+          "html_sha256": "1e0565b499b8035a3a8d61838d133f26f397e35a871c75067260b4ad278a1419"
+        },
+        {
+          "name": "period",
+          "tests": 5,
+          "failures": 0,
+          "skipped": 0,
+          "passed": 5,
+          "html_sha256": "4dfc7ed444f4365c1b9b58db8a12ea9f11d1910a5226ad1d53d46b28e5f51f4a"
+        },
+        {
+          "name": "indexed-input",
+          "tests": 7,
+          "failures": 0,
+          "skipped": 0,
+          "passed": 7,
+          "html_sha256": "e8144fd91f37e4779c77523b899dd6d88bf6d89d166befa6f90f6d04810a0142"
+        }
+      ]
+    }
+  ]
+}

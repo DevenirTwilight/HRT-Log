@@ -1,0 +1,11 @@
+{
+  "status": "SUPERSEDED_NOT_APPLIED",
+  "local_source": "23703969",
+  "authoritative_remote": "87202a4e",
+  "reason": "Normal push rejected because successor runtime-owner/gate/UI implementation already existed remotely. Preserve local 4 PASS only as unused work, not as validation for current production. No force push or overwrite.",
+  "files": {
+    "gradle.log": "51da3e73d15ea2f88c37a616d6e1a0faee96b2e79a49feca8d7c78e886e45b6c",
+    "TEST-net.plainnotes.app.data.WriteAdmissionTest.xml": "e5278096c8f29df9c66045200a2540e0c2677d5805aabbfb7e73961ebfd6714e",
+    "unused-local.patch": "1e825ea21b61100823ba44060590256947bbf3453d694cf1146edc1aedc4bf88"
+  }
+}

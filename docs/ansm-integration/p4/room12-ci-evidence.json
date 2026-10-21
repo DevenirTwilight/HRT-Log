@@ -1,0 +1,119 @@
+{
+  "source": "08434503f28134cffc1ffc769c2c1d3ea1ddc5dd",
+  "pr": 57,
+  "run": 38957693955,
+  "six_required_checks": "PASS",
+  "scope": "Room12 checkpoint before new consumption adapters",
+  "artifacts": [
+    {
+      "id": 12071388332,
+      "sha256": "b934d412a0a66d93444e423964c5d27b771560c34d0fb5e37b8299204663702d",
+      "zip_crc": "PASS",
+      "reports": {
+        "core/data/build/reports/androidTests/connected/debug/index.html": {
+          "tests": 127,
+          "failures": 0,
+          "skipped": 0
+        },
+        "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.MeasuredContainerAndroidTest.html": {
+          "tests": 10,
+          "failures": 0,
+          "skipped": 0
+        },
+        "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.ReferenceMigrationAndroidTest.html": {
+          "tests": 6,
+          "failures": 0,
+          "skipped": 0
+        },
+        "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.ReferencePersistenceAndroidTest.html": {
+          "tests": 21,
+          "failures": 0,
+          "skipped": 0
+        }
+      }
+    },
+    {
+      "sha256": "b99c8cb21ba3fb140845cf2be60f02bb5bd2151080e81d9943a2266d43ba646c",
+      "reports": {
+        "core/data/build/reports/androidTests/connected/debug/index.html": {
+          "tests": 127,
+          "failures": 0,
+          "skipped": 0
+        },
+        "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.MeasuredContainerAndroidTest.html": {
+          "tests": 10,
+          "failures": 0,
+          "skipped": 0
+        },
+        "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.ReferenceMigrationAndroidTest.html": {
+          "tests": 6,
+          "failures": 0,
+          "skipped": 0
+        },
+        "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.ReferencePersistenceAndroidTest.html": {
+          "tests": 21,
+          "failures": 0,
+          "skipped": 0
+        }
+      },
+      "id": 12071527369,
+      "zip_crc": "PASS"
+    },
+    {
+      "sha256": "e393678e869749e9dc84b461b5a982ce17869ac0409891ad9e44e529c1c7c04b",
+      "reports": {
+        "core/data/build/reports/androidTests/connected/debug/index.html": {
+          "tests": 194,
+          "failures": 0,
+          "skipped": 0
+        },
+        "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.MeasuredContainerAndroidTest.html": {
+          "tests": 10,
+          "failures": 0,
+          "skipped": 0
+        },
+        "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.ReferenceMigrationAndroidTest.html": {
+          "tests": 6,
+          "failures": 0,
+          "skipped": 0
+        },
+        "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.ReferencePersistenceAndroidTest.html": {
+          "tests": 21,
+          "failures": 0,
+          "skipped": 0
+        }
+      },
+      "id": 12071978026,
+      "zip_crc": "PASS"
+    },
+    {
+      "sha256": "eb17e98914ffb54b399e096910fb98639dd20f50d2d95417d467365768360e4e",
+      "reports": {
+        "app/build/reports/tests/testFullDebugUnitTest/index.html": {
+          "tests": 1379,
+          "failures": 0,
+          "skipped": 205
+        },
+        "core/data/build/reports/tests/testDebugUnitTest/index.html": {
+          "tests": 268,
+          "failures": 0,
+          "skipped": 0
+        },
+        "core/reminder/build/reports/tests/testDebugUnitTest/index.html": {
+          "tests": 20,
+          "failures": 0,
+          "skipped": 0
+        },
+        "pk-engine/build/reports/tests/test/index.html": {
+          "tests": 40,
+          "failures": 0,
+          "skipped": 0
+        }
+      },
+      "id": 12071693922,
+      "zip_crc": "PASS"
+    }
+  ],
+  "physical_device_and_talkback": "NOT_RUN",
+  "new_consumption_native_contract": "NOT_INCLUDED_AT_THIS_SOURCE"
+}

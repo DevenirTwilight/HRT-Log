@@ -1,0 +1,405 @@
+Picked up JAVA_TOOL_OPTIONS: -Dhttp.proxyHost=proxy -Dhttp.proxyPort=8080 -Dhttps.proxyHost=proxy -Dhttps.proxyPort=8080 -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.3.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :app
+WARNING: The option setting 'android.builtInKotlin=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+WARNING: The option setting 'android.newDsl=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+Warning: SDK processing. This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+
+> Task :importer:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:domain:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:domain:compileKotlin UP-TO-DATE
+> Task :core:domain:compileJava NO-SOURCE
+> Task :core:domain:processResources NO-SOURCE
+> Task :core:domain:classes UP-TO-DATE
+> Task :core:domain:jar UP-TO-DATE
+> Task :importer:compileKotlin UP-TO-DATE
+> Task :importer:compileJava NO-SOURCE
+> Task :importer:processResources NO-SOURCE
+> Task :importer:classes UP-TO-DATE
+> Task :importer:jar UP-TO-DATE
+> Task :core:data:preBuild UP-TO-DATE
+> Task :core:data:preDebugBuild UP-TO-DATE
+> Task :core:data:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:data:generateDebugResources UP-TO-DATE
+> Task :core:data:packageDebugResources UP-TO-DATE
+> Task :core:data:processDebugNavigationResources UP-TO-DATE
+> Task :core:data:parseDebugLocalResources UP-TO-DATE
+> Task :core:data:generateDebugRFile UP-TO-DATE
+> Task :core:data:kspDebugKotlin
+> Task :core:data:compileDebugKotlin
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/main/java/net/plainnotes/app/data/AttachmentIdentity.kt:32:148 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/main/java/net/plainnotes/app/data/AttachmentIdentity.kt:49:169 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/main/java/net/plainnotes/app/data/AttachmentIdentity.kt:66:251 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/main/java/net/plainnotes/app/data/AttachmentIdentity.kt:71:148 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/main/java/net/plainnotes/app/data/AttachmentIdentity.kt:74:162 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/main/java/net/plainnotes/app/data/AttachmentIdentity.kt:79:162 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/main/java/net/plainnotes/app/data/AttachmentOperations.kt:24:13 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/main/java/net/plainnotes/app/data/AttachmentOperations.kt:31:13 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt:32:58 This annotation is currently applied to the value parameter only, but in the future it will also be applied to field.
+- To opt in to applying to both value parameter and field, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt:379:153 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt:933:103 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt:991:152 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/main/java/net/plainnotes/app/data/MeasuredUseIntegration.kt:25:109 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/main/java/net/plainnotes/app/data/ReferenceAuditReads.kt:163:24 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/main/java/net/plainnotes/app/data/ReferenceAuditReads.kt:164:24 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/main/java/net/plainnotes/app/data/ReferenceStore.kt:85:83 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/main/java/net/plainnotes/app/data/ReferenceStore.kt:108:106 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/main/java/net/plainnotes/app/data/ReferenceStore.kt:114:103 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/main/java/net/plainnotes/app/data/ReferenceStore.kt:133:113 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/main/java/net/plainnotes/app/data/ReferenceStore.kt:180:84 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/main/java/net/plainnotes/app/data/WellbeingUpgrade.kt:25:108 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/main/java/net/plainnotes/app/data/WellbeingUpgrade.kt:35:120 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/main/java/net/plainnotes/app/data/WellbeingUpgrade.kt:36:97 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/main/java/net/plainnotes/app/data/WellbeingUpgrade.kt:40:135 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+
+> Task :core:data:javaPreCompileDebug UP-TO-DATE
+> Task :core:data:compileDebugJavaWithJavac UP-TO-DATE
+> Task :core:data:transformDebugClassesWithAsm
+> Task :core:data:bundleLibRuntimeToJarDebug
+> Task :core:data:generateDebugUnitTestAssets UP-TO-DATE
+> Task :core:data:generateDebugAssets UP-TO-DATE
+> Task :core:data:mergeDebugAssets UP-TO-DATE
+> Task :core:data:preDebugUnitTestBuild UP-TO-DATE
+> Task :core:data:mergeDebugUnitTestAssets UP-TO-DATE
+> Task :core:data:writeDebugAarMetadata UP-TO-DATE
+> Task :core:data:checkDebugUnitTestAarMetadata UP-TO-DATE
+> Task :core:data:mapDebugSourceSetPaths UP-TO-DATE
+> Task :core:data:compileDebugLibraryResources UP-TO-DATE
+> Task :core:data:mapDebugUnitTestSourceSetPaths UP-TO-DATE
+> Task :core:data:generateDebugUnitTestResources UP-TO-DATE
+> Task :core:data:mergeDebugUnitTestResources UP-TO-DATE
+> Task :core:data:extractDeepLinksDebug UP-TO-DATE
+> Task :core:data:processDebugManifest UP-TO-DATE
+> Task :core:data:processDebugUnitTestManifest UP-TO-DATE
+> Task :core:data:processDebugUnitTestResources UP-TO-DATE
+> Task :core:data:packageDebugUnitTestForUnitTest UP-TO-DATE
+> Task :core:data:generateDebugUnitTestConfig UP-TO-DATE
+> Task :core:data:processDebugJavaRes UP-TO-DATE
+> Task :core:data:bundleLibCompileToJarDebug
+> Task :core:data:prepareAnsm03b0TestSources UP-TO-DATE
+> Task :core:data:kspDebugUnitTestKotlin
+> Task :core:data:compileDebugUnitTestKotlin
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/attachmentTest/java/net/plainnotes/app/data/AttachmentFoundationContract.kt:70:71 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/CandidateColumnScanOracle.kt:49:69 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/ChainContentMemoOracle.kt:49:48 Java type mismatch: inferred type is 'Any?', but 'Any' was expected.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/ChainContentMemoOracle.kt:51:41 Java type mismatch: inferred type is 'Any?', but 'Any' was expected.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/ChainContentMemoOracle.kt:69:30 Java type mismatch: inferred type is 'Any?', but 'Any' was expected.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/ChainContentMemoOracle.kt:84:26 Java type mismatch: inferred type is 'Any?', but 'Any' was expected.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/ChainContentMemoOracle.kt:88:26 Java type mismatch: inferred type is 'Any?', but 'Any' was expected.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/ChainContentMemoOracle.kt:100:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/ChainContentMemoOracle.kt:106:26 Java type mismatch: inferred type is 'Any?', but 'Any' was expected.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/ChainContentMemoOracle.kt:109:26 Java type mismatch: inferred type is 'Any?', but 'Any' was expected.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/FrozenFullAuditStore.kt:334:153 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/FrozenFullAuditStore.kt:841:103 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/FrozenFullAuditStore.kt:899:152 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:109:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:121:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:160:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:504:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:524:40 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:563:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:588:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:614:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:632:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:667:40 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:699:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:718:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:738:95 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:769:40 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:770:40 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:788:40 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:1464:113 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:1475:92 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:1523:79 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:1589:79 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:1604:83 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/P4WritePathTiming.kt:109:68 'val id: Long' is deprecated. Deprecated in Java.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/P4WritePathTiming.kt:193:73 'val id: Long' is deprecated. Deprecated in Java.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/P4WritePathTiming.kt:202:51 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'transactionListener'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/P4WritePathTiming.kt:203:63 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'transactionListener'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/P4WritePathTiming.kt:244:28 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/P4WritePathTiming.kt:245:28 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/ReferenceAuditStreamingContract.kt:70:27 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>?' & 'Serializable?']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/ReferenceAuditStreamingContract.kt:71:27 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>?' & 'Serializable?']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/ReferenceAuditStreamingContract.kt:97:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/ReferenceAuditStreamingContract.kt:98:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/SyntheticRestoreDigest.kt:20:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/test/java/net/plainnotes/app/data/ReferencePayloadTest.kt:80:91 'constructor(p0: String!, p1: String!): Locale' is deprecated. Deprecated in Java.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/test/java/net/plainnotes/app/data/ReferencePayloadTest.kt:80:119 'constructor(p0: String!, p1: String!): Locale' is deprecated. Deprecated in Java.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/test/shared/java/net/plainnotes/app/data/Ansm03b0CandidateStore.kt:89:75 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/test/shared/java/net/plainnotes/app/data/Ansm03b0InventoryContract.kt:112:33 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type 'File?'.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/test/shared/java/net/plainnotes/app/data/Ansm03b0InventoryContract.kt:269:64 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/test/shared/java/net/plainnotes/app/data/Ansm03b0InventoryContract.kt:270:81 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>?' & 'Serializable?']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/test/shared/java/net/plainnotes/app/data/Ansm03b0InventoryContract.kt:271:71 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/test/shared/java/net/plainnotes/app/data/Ansm03b0InventoryContract.kt:350:39 The corresponding parameter in the supertype 'Callback' is named 'db'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/test/shared/java/net/plainnotes/app/data/Ansm03b0InventoryContract.kt:357:40 The corresponding parameter in the supertype 'Callback' is named 'db'. This may cause problems when calling this function with named arguments.
+
+> Task :core:data:createFullJarDebug
+> Task :core:data:javaPreCompileDebugUnitTest UP-TO-DATE
+> Task :core:data:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :core:data:hiltAggregateDepsDebugUnitTest UP-TO-DATE
+> Task :core:data:hiltJavaCompileDebugUnitTest NO-SOURCE
+> Task :core:data:processDebugUnitTestJavaRes UP-TO-DATE
+> Task :core:data:transformDebugUnitTestClassesWithAsm
+
+> Task :core:data:testDebugUnitTest
+Picked up JAVA_TOOL_OPTIONS: -Dhttp.proxyHost=proxy -Dhttp.proxyPort=8080 -Dhttps.proxyHost=proxy -Dhttps.proxyPort=8080 -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts
+
+> Task :attachment-poc:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :attachment-poc:compileKotlin UP-TO-DATE
+> Task :attachment-poc:compileJava NO-SOURCE
+> Task :attachment-poc:processResources NO-SOURCE
+> Task :attachment-poc:classes UP-TO-DATE
+> Task :attachment-poc:jar UP-TO-DATE
+> Task :core:data:preDebugAndroidTestBuild UP-TO-DATE
+> Task :core:data:generateDebugAndroidTestResources UP-TO-DATE
+> Task :core:data:packageDebugAndroidTestResources UP-TO-DATE
+> Task :core:data:processDebugAndroidTestNavigationResources UP-TO-DATE
+> Task :core:data:parseDebugAndroidTestLocalResources UP-TO-DATE
+> Task :core:data:generateDebugAndroidTestRFile UP-TO-DATE
+> Task :core:data:kspDebugAndroidTestKotlin
+> Task :core:data:compileDebugAndroidTestKotlin
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/androidTest/java/net/plainnotes/app/data/HistoricalVisitAndroidTest.kt:3:8 'class AndroidJUnit4 : Runner, Filterable, Sortable' is deprecated. Deprecated in Java.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/androidTest/java/net/plainnotes/app/data/LabPanelDataAndroidTest.kt:5:8 'class AndroidJUnit4 : Runner, Filterable, Sortable' is deprecated. Deprecated in Java.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/androidTest/java/net/plainnotes/app/data/LargeInventoryPerformanceProbe.kt:37:86 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type 'File?'.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/androidTest/java/net/plainnotes/app/data/LargeInventoryPerformanceProbe.kt:263:40 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/androidTest/java/net/plainnotes/app/data/LargeInventoryPerformanceProbe.kt:357:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/androidTest/java/net/plainnotes/app/data/LargeInventoryPerformanceProbe.kt:358:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/androidTest/java/net/plainnotes/app/data/UndoSkippedAndroidTest.kt:2:8 'class AndroidJUnit4 : Runner, Filterable, Sortable' is deprecated. Deprecated in Java.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/androidTest/java/net/plainnotes/app/data/UndoSkippedAndroidTest.kt:4:10 'class AndroidJUnit4 : Runner, Filterable, Sortable' is deprecated. Deprecated in Java.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/androidTest/java/net/plainnotes/app/data/b3/B3Gate.kt:207:62 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>?' & 'Serializable?']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/androidTest/java/net/plainnotes/app/data/b3/B3Gate.kt:406:13 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>?' & 'Serializable?']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/androidTest/java/net/plainnotes/app/data/b3/B3Gate.kt:552:102 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>?' & 'Serializable?']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/androidTest/java/net/plainnotes/app/data/gate2/Gate2Store.kt:151:157 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/androidTest/java/net/plainnotes/app/data/gate2/Gate2Store.kt:178:17 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>?' & 'Serializable?']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/androidTest/java/net/plainnotes/app/data/gate2/Gate2Store.kt:182:181 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/androidTest/java/net/plainnotes/app/data/gate2/Gate2Store.kt:206:121 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/attachmentTest/java/net/plainnotes/app/data/AttachmentFoundationContract.kt:70:71 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/CandidateColumnScanOracle.kt:49:69 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/ChainContentMemoOracle.kt:49:48 Java type mismatch: inferred type is 'Any?', but 'Any' was expected.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/ChainContentMemoOracle.kt:51:41 Java type mismatch: inferred type is 'Any?', but 'Any' was expected.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/ChainContentMemoOracle.kt:69:30 Java type mismatch: inferred type is 'Any?', but 'Any' was expected.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/ChainContentMemoOracle.kt:84:26 Java type mismatch: inferred type is 'Any?', but 'Any' was expected.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/ChainContentMemoOracle.kt:88:26 Java type mismatch: inferred type is 'Any?', but 'Any' was expected.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/ChainContentMemoOracle.kt:100:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/ChainContentMemoOracle.kt:106:26 Java type mismatch: inferred type is 'Any?', but 'Any' was expected.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/ChainContentMemoOracle.kt:109:26 Java type mismatch: inferred type is 'Any?', but 'Any' was expected.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/FrozenFullAuditStore.kt:334:153 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/FrozenFullAuditStore.kt:841:103 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/FrozenFullAuditStore.kt:899:152 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:109:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:121:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:160:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:504:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:524:40 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:563:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:588:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:614:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:632:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:667:40 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:699:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:718:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:738:95 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:769:40 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:770:40 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:788:40 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:1464:113 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:1475:92 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:1523:79 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:1589:79 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:1604:83 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/P4WritePathTiming.kt:109:68 'val id: Long' is deprecated. Deprecated in Java.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/P4WritePathTiming.kt:193:73 'val id: Long' is deprecated. Deprecated in Java.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/P4WritePathTiming.kt:202:51 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'transactionListener'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/P4WritePathTiming.kt:203:63 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'transactionListener'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/P4WritePathTiming.kt:244:28 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/P4WritePathTiming.kt:245:28 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/ReferenceAuditStreamingContract.kt:70:27 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>?' & 'Serializable?']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/ReferenceAuditStreamingContract.kt:71:27 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>?' & 'Serializable?']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/ReferenceAuditStreamingContract.kt:97:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/ReferenceAuditStreamingContract.kt:98:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/historyTest/java/net/plainnotes/app/data/SyntheticRestoreDigest.kt:20:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/test/shared/java/net/plainnotes/app/data/Ansm03b0CandidateStore.kt:89:75 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/test/shared/java/net/plainnotes/app/data/Ansm03b0InventoryContract.kt:112:33 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type 'File?'.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/test/shared/java/net/plainnotes/app/data/Ansm03b0InventoryContract.kt:269:64 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/test/shared/java/net/plainnotes/app/data/Ansm03b0InventoryContract.kt:270:81 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>?' & 'Serializable?']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/test/shared/java/net/plainnotes/app/data/Ansm03b0InventoryContract.kt:271:71 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/test/shared/java/net/plainnotes/app/data/Ansm03b0InventoryContract.kt:350:39 The corresponding parameter in the supertype 'Callback' is named 'db'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/core/data/src/test/shared/java/net/plainnotes/app/data/Ansm03b0InventoryContract.kt:357:40 The corresponding parameter in the supertype 'Callback' is named 'db'. This may cause problems when calling this function with named arguments.
+
+> Task :core:reminder:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:reminder:preBuild UP-TO-DATE
+> Task :core:reminder:preDebugBuild UP-TO-DATE
+> Task :core:reminder:generateDebugResources
+> Task :core:reminder:packageDebugResources
+> Task :core:reminder:processDebugNavigationResources
+> Task :core:reminder:parseDebugLocalResources
+> Task :core:reminder:generateDebugRFile
+> Task :core:reminder:kspDebugKotlin
+
+> Task :core:reminder:compileDebugKotlin
+w: file:///workspace/HRT-Log-p4-attribution/core/reminder/src/main/java/net/plainnotes/app/reminder/ReminderCoordinator.kt:24:58 This annotation is currently applied to the value parameter only, but in the future it will also be applied to field.
+- To opt in to applying to both value parameter and field, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+
+> Task :core:reminder:javaPreCompileDebug
+> Task :core:reminder:compileDebugJavaWithJavac
+> Task :core:reminder:bundleLibRuntimeToJarDebug
+> Task :core:reminder:bundleLibCompileToJarDebug
+> Task :core:reminder:preDebugUnitTestBuild UP-TO-DATE
+> Task :core:reminder:writeDebugAarMetadata
+> Task :core:reminder:checkDebugUnitTestAarMetadata
+> Task :core:reminder:mapDebugSourceSetPaths
+> Task :core:reminder:compileDebugLibraryResources
+> Task :core:reminder:mapDebugUnitTestSourceSetPaths
+> Task :core:reminder:generateDebugUnitTestResources
+> Task :core:reminder:mergeDebugUnitTestResources
+> Task :core:reminder:extractDeepLinksDebug
+> Task :core:reminder:processDebugManifest
+> Task :core:reminder:processDebugUnitTestManifest
+> Task :core:reminder:processDebugUnitTestResources
+> Task :core:reminder:kspDebugUnitTestKotlin
+
+> Task :core:reminder:compileDebugUnitTestKotlin
+w: file:///workspace/HRT-Log-p4-attribution/core/reminder/src/test/java/net/plainnotes/app/reminder/ExactAlarmTest.kt:26:253 'val nextScheduledAlarm: ShadowAlarmManager.ScheduledAlarm?' is deprecated. Deprecated in Java.
+w: file:///workspace/HRT-Log-p4-attribution/core/reminder/src/test/java/net/plainnotes/app/reminder/ExactAlarmTest.kt:28:347 'val nextScheduledAlarm: ShadowAlarmManager.ScheduledAlarm?' is deprecated. Deprecated in Java.
+w: file:///workspace/HRT-Log-p4-attribution/core/reminder/src/test/java/net/plainnotes/app/reminder/LockedBootAlarmTest.kt:29:161 'val nextScheduledAlarm: ShadowAlarmManager.ScheduledAlarm?' is deprecated. Deprecated in Java.
+
+> Task :core:reminder:javaPreCompileDebugUnitTest
+> Task :core:reminder:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :core:reminder:generateDebugUnitTestAssets UP-TO-DATE
+> Task :core:reminder:generateDebugAssets UP-TO-DATE
+> Task :core:reminder:mergeDebugAssets
+> Task :core:reminder:mergeDebugUnitTestAssets
+> Task :core:reminder:packageDebugUnitTestForUnitTest
+> Task :core:reminder:generateDebugUnitTestConfig
+> Task :core:reminder:processDebugJavaRes
+> Task :core:reminder:processDebugUnitTestJavaRes
+
+> Task :core:reminder:testDebugUnitTest
+Picked up JAVA_TOOL_OPTIONS: -Dhttp.proxyHost=proxy -Dhttp.proxyPort=8080 -Dhttps.proxyHost=proxy -Dhttps.proxyPort=8080 -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts
+
+> Task :pk-engine:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :pk-engine:compileKotlin
+> Task :pk-engine:compileJava NO-SOURCE
+> Task :pk-engine:processResources
+> Task :pk-engine:classes
+> Task :pk-engine:jar
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preFullDebugBuild UP-TO-DATE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:generateFullDebugBuildConfig
+> Task :app:generateFullDebugResources
+> Task :app:packageFullDebugResources
+> Task :core:ui:preBuild UP-TO-DATE
+> Task :core:ui:preDebugBuild UP-TO-DATE
+> Task :core:ui:processDebugNavigationResources
+> Task :app:processFullDebugNavigationResources
+> Task :app:parseFullDebugLocalResources
+> Task :app:generateFullDebugRFile
+> Task :core:ui:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:ui:generateDebugResources
+> Task :core:ui:packageDebugResources
+> Task :core:ui:parseDebugLocalResources
+> Task :core:ui:generateDebugRFile
+> Task :core:ui:compileDebugKotlin
+> Task :core:ui:javaPreCompileDebug
+> Task :core:ui:compileDebugJavaWithJavac NO-SOURCE
+> Task :core:ui:bundleLibCompileToJarDebug
+> Task :app:kspFullDebugKotlin
+> Task :app:compileFullDebugKotlin
+w: file:///workspace/HRT-Log-p4-attribution/app/src/debug/java/net/plainnotes/app/debug/AboutTestActivity.kt:15:27 The corresponding parameter in the supertype 'ComponentActivity' is named 'savedInstanceState'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/app/src/debug/java/net/plainnotes/app/debug/CalendarTestActivity.kt:32:27 The corresponding parameter in the supertype 'ComponentActivity' is named 'savedInstanceState'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/app/src/debug/java/net/plainnotes/app/debug/DataPrivacyTestActivity.kt:28:27 The corresponding parameter in the supertype 'ComponentActivity' is named 'savedInstanceState'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/app/src/debug/java/net/plainnotes/app/debug/demo/DemoArchiveScreen.kt:35:27 The corresponding parameter in the supertype 'ComponentActivity' is named 'savedInstanceState'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-p4-attribution/app/src/debug/java/net/plainnotes/app/debug/demo/DemoArchiveScreen.kt:93:5 'fun ScrollableTabRow(selectedTabIndex: Int, modifier: Modifier = ..., containerColor: Color = ..., contentColor: Color = ..., edgePadding: Dp = ..., indicator: ComposableFunction1<List<TabPosition>, Unit> = ..., divider: ComposableFunction0<Unit> = ..., tabs: ComposableFunction0<Unit>): Unit' is deprecated. Replaced with PrimaryScrollableTabRow and SecondaryScrollableTabRow tab variants.
+w: file:///workspace/HRT-Log-p4-attribution/app/src/main/java/net/plainnotes/app/NotesViewModel.kt:24:5 This annotation is currently applied to the value parameter only, but in the future it will also be applied to field.
+- To opt in to applying to both value parameter and field, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+w: file:///workspace/HRT-Log-p4-attribution/app/src/main/java/net/plainnotes/app/ui/AppShell.kt:259:17 'when' is exhaustive so 'else' is redundant here.
+w: file:///workspace/HRT-Log-p4-attribution/app/src/main/java/net/plainnotes/app/ui/HistoryScreen.kt:223:123 'val Icons.Outlined.Undo: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Outlined.Undo.
+
+> Task :app:javaPreCompileFullDebug
+> Task :app:compileFullDebugJavaWithJavac
+> Task :core:reminder:createFullJarDebug
+> Task :core:ui:bundleLibRuntimeToJarDebug
+> Task :core:ui:processDebugJavaRes
+> Task :core:ui:createFullJarDebug
+> Task :app:hiltAggregateDepsFullDebug
+> Task :app:hiltJavaCompileFullDebug
+> Task :core:ui:writeDebugAarMetadata
+> Task :app:checkFullDebugAarMetadata
+> Task :app:mapFullDebugSourceSetPaths
+> Task :app:compileFullDebugNavigationResources
+
+> Task :app:mergeFullDebugResources
+/workspace/HRT-Log-p4-attribution/app/src/main/res/values/strings.xml:220:0: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-p4-attribution/app/src/main/res/values-b+zh+Hant/strings.xml:549:0: Multiple substitutions specified in non-positional format of string resource string/legend_band_inner. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-p4-attribution/app/src/main/res/values-b+zh+Hant/strings.xml:192:0: Multiple substitutions specified in non-positional format of string resource string/legend_band_outer. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-p4-attribution/app/src/main/res/values-b+zh+Hant/strings.xml:220:0: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-p4-attribution/app/src/main/res/values-zh/strings.xml:549:0: Multiple substitutions specified in non-positional format of string resource string/legend_band_inner. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-p4-attribution/app/src/main/res/values-zh/strings.xml:192:0: Multiple substitutions specified in non-positional format of string resource string/legend_band_outer. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-p4-attribution/app/src/main/res/values-zh/strings.xml:220:0: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-p4-attribution/app/src/main/res/values-fr/strings.xml:220:0: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+
+> Task :app:createFullDebugCompatibleScreenManifests
+> Task :app:extractDeepLinksFullDebug
+> Task :core:ui:extractDeepLinksDebug
+> Task :core:ui:processDebugManifest
+> Task :app:processFullDebugMainManifest
+> Task :app:processFullDebugManifest
+> Task :app:processFullDebugManifestForPackage
+> Task :core:ui:mapDebugSourceSetPaths
+> Task :core:ui:compileDebugLibraryResources
+> Task :app:processFullDebugResources
+> Task :app:transformFullDebugClassesWithAsm
+> Task :app:bundleFullDebugClassesToRuntimeJar
+> Task :app:generateFullDebugAssets UP-TO-DATE
+> Task :core:ui:generateDebugAssets UP-TO-DATE
+> Task :core:ui:mergeDebugAssets
+> Task :app:mergeFullDebugAssets
+> Task :app:preFullDebugUnitTestBuild UP-TO-DATE
+> Task :app:packageFullDebugUnitTestForUnitTest
+
+> Task :app:processFullDebugUnitTestManifest
+/workspace/HRT-Log-p4-attribution/app/src/debug/AndroidManifest.xml Warning:
+	meta-data#androidx.work.WorkManagerInitializer was tagged at AndroidManifest.xml:0 to remove other declarations but no other declaration present
+
+> Task :app:generateFullDebugUnitTestConfig
+> Task :app:processFullDebugJavaRes
+> Task :app:bundleFullDebugClassesToCompileJar
+> Task :app:kspFullDebugUnitTestKotlin
+> Task :app:compileFullDebugUnitTestKotlin
+w: file:///workspace/HRT-Log-p4-attribution/app/src/test/java/net/plainnotes/app/AppShellBackNavigationTest.kt:101:83 'fun onBackPressed(): Unit' is deprecated. Deprecated in Java.
+w: file:///workspace/HRT-Log-p4-attribution/app/src/test/java/net/plainnotes/app/AppShellBackNavigationTest.kt:236:83 'fun onBackPressed(): Unit' is deprecated. Deprecated in Java.
+w: file:///workspace/HRT-Log-p4-attribution/app/src/test/java/net/plainnotes/app/OutlierDispositionTest.kt:31:59 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type 'File?'.
+w: file:///workspace/HRT-Log-p4-attribution/app/src/test/java/net/plainnotes/app/ReminderTestChainTest.kt:58:37 'field operation: PendingIntent?' is deprecated. Deprecated in Java.
+w: file:///workspace/HRT-Log-p4-attribution/app/src/test/java/net/plainnotes/app/TestReminderSurvivalTest.kt:45:68 'field operation: PendingIntent?' is deprecated. Deprecated in Java.
+
+> Task :app:javaPreCompileFullDebugUnitTest
+> Task :app:compileFullDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :app:hiltAggregateDepsFullDebugUnitTest
+> Task :app:hiltJavaCompileFullDebugUnitTest NO-SOURCE
+> Task :app:processFullDebugUnitTestJavaRes
+> Task :app:transformFullDebugUnitTestClassesWithAsm
+
+> Task :app:testFullDebugUnitTest
+Picked up JAVA_TOOL_OPTIONS: -Dhttp.proxyHost=proxy -Dhttp.proxyPort=8080 -Dhttps.proxyHost=proxy -Dhttps.proxyPort=8080 -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts
+
+BUILD SUCCESSFUL in 22m 50s
+140 actionable tasks: 102 executed, 38 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.3.1/userguide/configuration_cache_enabling.html

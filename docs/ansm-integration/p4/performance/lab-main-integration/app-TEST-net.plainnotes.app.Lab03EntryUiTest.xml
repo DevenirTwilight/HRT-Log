@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.Lab03EntryUiTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-20T08:13:47.536Z" hostname="2c2deac85eb5" time="17.835">
+  <properties/>
+  <testcase name="anImportedUnknownCodeAndUnitStayEditableWithoutGuessedConversion" classname="net.plainnotes.app.Lab03EntryUiTest" time="10.879"/>
+  <testcase name="twentyEightResultsRemainScrollableAndSaveOnceWithoutAnEstimate" classname="net.plainnotes.app.Lab03EntryUiTest" time="5.418"/>
+  <testcase name="pickerSearchCancelAndSameSelectionPreserveTypedDraft" classname="net.plainnotes.app.Lab03EntryUiTest" time="0.796"/>
+  <testcase name="noteOnlyEditPreservesOriginalInstantZoneAndDistinctReferenceUnit" classname="net.plainnotes.app.Lab03EntryUiTest" time="0.206"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,19 @@
+{
+  "base_main": "86131172c6ebefe064c059efc296ff1883836aa9",
+  "approved_room12_sha256": "7ca882879c32e0eb443c26d5dabbb77f786dff293ddf47dcee012b7dd8611488",
+  "candidate_room13_sha256": "e239c07232e4c7b9ca82a351bcca43a283762a1b923a9fa4110032b129199e9e",
+  "tables": 46,
+  "all_other_entities_equal": true,
+  "new_fields": [
+    {
+      "fieldPath": "inventory_encoding",
+      "columnName": "inventory_encoding",
+      "affinity": "TEXT",
+      "notNull": true,
+      "defaultValue": "'LEGACY_SCALAR'"
+    }
+  ],
+  "lab_panel_entity": "UNCHANGED",
+  "lab_value_entity": "UNCHANGED",
+  "status": "STRUCTURAL_COMPARISON_PASS_NOT_MIGRATION_ACCEPTANCE"
+}

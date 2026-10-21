@@ -1,0 +1,19 @@
+{
+  "source": "bba9562d4990ce5f9407ed92818c9a459f38c044",
+  "run": 39267083400,
+  "job": 118109495854,
+  "artifact": 12193548500,
+  "artifact_sha256": "2dfb8fec41528422f0f5d2fe55c305d21f6d9ae3f06caa0c67f67b68ce4afc42",
+  "crc_verified": true,
+  "status": "INCOMPLETE_PROCESS_CRASH",
+  "last_stage": "full_encrypted_backup",
+  "kernel_cause": "CONFIRMED_SYSTEM_OOM_KILL_OF_MATCHED_TARGET_PID",
+  "target_pid": 3915,
+  "kernel_anon_rss_at_kill_kib": 151160,
+  "rss_observation_is_not_peak": true,
+  "previous_3b53_cause": "STILL_UNDETERMINED_NOT_RETROACTIVELY_CLASSIFIED",
+  "post_restore_writes": "NOT_RUN",
+  "ticket_diagnostics": "NOT_RUN",
+  "sampling": "NOT_RUN",
+  "subphase_serialization_vs_kdf": "NOT_DETERMINED"
+}

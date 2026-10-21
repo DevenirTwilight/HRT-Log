@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.NonBlockingWriteShellTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-10-21T09:22:53.231Z" hostname="4f13d57d08c1" time="6.713">
+  <properties/>
+  <testcase name="pendingRemainsReachableWhileRealRoutesAndBackStillWorkWithoutWriting" classname="net.plainnotes.app.NonBlockingWriteShellTest" time="6.241"/>
+  <testcase name="completedObservationChangesTextWithoutReplayingAnyAction" classname="net.plainnotes.app.NonBlockingWriteShellTest" time="0.409"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[System.logW: A resource failed to call close. 
+System.logW: A resource failed to call SQLiteConnection.close. 
+System.logW: A resource failed to call SQLiteConnection.close. 
+System.logW: A resource failed to call SQLiteConnectionPool.close. 
+System.logW: A resource failed to call SQLiteConnection.close. 
+System.logW: A resource failed to call SQLiteConnectionPool.close. 
+System.logW: A resource failed to call SQLiteConnection.close. 
+System.logW: A resource failed to call SQLiteConnection.close. 
+System.logW: A resource failed to call SQLiteConnectionPool.close. 
+System.logW: A resource failed to call SQLiteConnection.close. 
+System.logW: A resource failed to call SQLiteConnection.close. 
+]]></system-err>
+</testsuite>

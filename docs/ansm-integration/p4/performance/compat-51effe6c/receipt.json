@@ -1,0 +1,83 @@
+{
+  "source_head": "51effe6ce05459606560b4e378eb8240b58ff7f6",
+  "status": "ACTUAL_API26_API29_API35_PASS",
+  "api35": "PASS",
+  "large_fixed_memory_performance": "SEPARATE_WRITE_BUDGET_FAIL",
+  "evidence": [
+    {
+      "api": 26,
+      "run": 39423667877,
+      "artifact": 12265223702,
+      "official_archive_sha256": "c9b2f74d32743bacd766b4d8ae612bd07857b50596926993ccf9098489cd54d0",
+      "crc": "PASS",
+      "html_sha256": "ff3f5ca6de50e61a4fbac3d57f6370897f11376dfc3ca67a469521a83d05da9f",
+      "methods": {
+        "backupPlaintextOwnerClearsSuccessFailureAndRejectedTransfers": "0.001s",
+        "boundedBackupPlaintextChunksAreExactAndWipedOnSuccessAndFailure": "0s",
+        "cancellationAfterPlaintextCaptureRollsBackAndClearsBeforeTransactionReturns": "0.302s",
+        "canonicalUuidPredicateMatchesThePlatformOracleAcrossVersionsAndMalformedForms": "0.101s",
+        "everyPublishedRoomOneThroughElevenUpgradesNonDestructivelyToTwelve": "5.868s",
+        "failedElevenToTwelveFenceRollsBackWithAllReferenceFactsAndEpochIntact": "1.305s",
+        "failedMainTwelveToThirteenFenceKeepsPanelLinksLegacyBitsAndEpoch": "1.330s",
+        "failedTenToElevenMigrationRollsBackDdlAndKeepsOriginalEncryptedDatabaseReadable": "0.903s",
+        "oldRoomElevenReaderCannotOpenTheNewMeasurementFormat": "1.179s",
+        "publishedRoomTwelveMayLackEncodingButClaimedThirteenMustRejectIt": "0.226s",
+        "roomTenReverseLedgerAndAllThirtySevenLegacyEntitiesRemainBitExactAndDowngradeRejects": "1.305s",
+        "storedColumnFenceMatchesTheOriginalPerColumnOracleForNullTypesAndLateRows": "0.301s",
+        "streamedMeasuredBackupMatchesWholeDocumentBytesAndRemainsReadOnly": "0.302s",
+        "unsupportedMeasurementsInOldRoomElevenAreRejectedWithoutClearingAnything": "1.003s",
+        "utf8LengthMatchesPlatformForEveryCodeUnitPairsAndBoundaries": "0.151s"
+      }
+    },
+    {
+      "api": 29,
+      "run": 39423667877,
+      "artifact": 12265323216,
+      "official_archive_sha256": "acabd22e16410321af777e38528a71bc3387d3bcc51b73012ba8aaf6f25a8de6",
+      "crc": "PASS",
+      "html_sha256": "417c619a34015b1734a4a866f1f985ff3dbdbb378b645ec8cf6aeeed0396d7de",
+      "methods": {
+        "backupPlaintextOwnerClearsSuccessFailureAndRejectedTransfers": "0s",
+        "boundedBackupPlaintextChunksAreExactAndWipedOnSuccessAndFailure": "0.001s",
+        "cancellationAfterPlaintextCaptureRollsBackAndClearsBeforeTransactionReturns": "0.428s",
+        "canonicalUuidPredicateMatchesThePlatformOracleAcrossVersionsAndMalformedForms": "0.177s",
+        "everyPublishedRoomOneThroughElevenUpgradesNonDestructivelyToTwelve": "7.729s",
+        "failedElevenToTwelveFenceRollsBackWithAllReferenceFactsAndEpochIntact": "1.482s",
+        "failedMainTwelveToThirteenFenceKeepsPanelLinksLegacyBitsAndEpoch": "1.432s",
+        "failedTenToElevenMigrationRollsBackDdlAndKeepsOriginalEncryptedDatabaseReadable": "1.080s",
+        "oldRoomElevenReaderCannotOpenTheNewMeasurementFormat": "1.682s",
+        "publishedRoomTwelveMayLackEncodingButClaimedThirteenMustRejectIt": "0.251s",
+        "roomTenReverseLedgerAndAllThirtySevenLegacyEntitiesRemainBitExactAndDowngradeRejects": "1.482s",
+        "storedColumnFenceMatchesTheOriginalPerColumnOracleForNullTypesAndLateRows": "0.729s",
+        "streamedMeasuredBackupMatchesWholeDocumentBytesAndRemainsReadOnly": "0.503s",
+        "unsupportedMeasurementsInOldRoomElevenAreRejectedWithoutClearingAnything": "1.054s",
+        "utf8LengthMatchesPlatformForEveryCodeUnitPairsAndBoundaries": "0.152s"
+      }
+    },
+    {
+      "api": 35,
+      "run": 39423667877,
+      "artifact": 12265314230,
+      "official_archive_sha256": "256ea2ac1346a28d0a792bac021bab4cbf8f3ccefbc9a4dae6d9c07c4dfe4b21",
+      "crc": "PASS",
+      "html_sha256": "238182b1da81e9bde0a5b9ef570c927156c334ab76b78ee706914ab7031f3ba3",
+      "methods": {
+        "backupPlaintextOwnerClearsSuccessFailureAndRejectedTransfers": "0s",
+        "boundedBackupPlaintextChunksAreExactAndWipedOnSuccessAndFailure": "0.001s",
+        "cancellationAfterPlaintextCaptureRollsBackAndClearsBeforeTransactionReturns": "0.302s",
+        "canonicalUuidPredicateMatchesThePlatformOracleAcrossVersionsAndMalformedForms": "0.252s",
+        "everyPublishedRoomOneThroughElevenUpgradesNonDestructivelyToTwelve": "6.120s",
+        "failedElevenToTwelveFenceRollsBackWithAllReferenceFactsAndEpochIntact": "1.204s",
+        "failedMainTwelveToThirteenFenceKeepsPanelLinksLegacyBitsAndEpoch": "1.204s",
+        "failedTenToElevenMigrationRollsBackDdlAndKeepsOriginalEncryptedDatabaseReadable": "0.903s",
+        "oldRoomElevenReaderCannotOpenTheNewMeasurementFormat": "1.230s",
+        "publishedRoomTwelveMayLackEncodingButClaimedThirteenMustRejectIt": "0.251s",
+        "roomTenReverseLedgerAndAllThirtySevenLegacyEntitiesRemainBitExactAndDowngradeRejects": "1.230s",
+        "storedColumnFenceMatchesTheOriginalPerColumnOracleForNullTypesAndLateRows": "0.377s",
+        "streamedMeasuredBackupMatchesWholeDocumentBytesAndRemainsReadOnly": "0.403s",
+        "unsupportedMeasurementsInOldRoomElevenAreRejectedWithoutClearingAnything": "0.879s",
+        "utf8LengthMatchesPlatformForEveryCodeUnitPairsAndBoundaries": "0.101s"
+      }
+    }
+  ]
+}

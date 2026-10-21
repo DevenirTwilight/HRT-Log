@@ -1,0 +1,50 @@
+{
+  "parent": "0a418eb5bd40de53ee736b9b027ac2463b72c727",
+  "status": "LOCAL_PASS_EXACT_RESTORE_AND_ENTRY_OFF",
+  "scope": "Explicit inventory encoding, candidate business Schema11 legacy-only gates and published v1/v2 package audit compatibility",
+  "data": {
+    "tests": 330,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "shared_tests": 56,
+  "native_source_compilation": "PASS",
+  "native_execution": "NOT_RUN",
+  "python_tests": 159,
+  "exact_backup_restore": "OFF",
+  "production_measurement_entry": "OFF",
+  "source_sha256": {
+    "core/data/src/main/java/net/plainnotes/app/data/InventoryEncoding.kt": "749de78a45e36ece51d93183a03e78d0e15765bbfec2ec083b3dcf2680bc9855",
+    "core/data/src/main/java/net/plainnotes/app/data/Entities.kt": "f3dc8dc1ce8c0b14b7e3e358b5a834d63518c99828f29d8b5d50e3cc43c71060",
+    "core/data/src/main/java/net/plainnotes/app/data/Migrations.kt": "d79644b9d8398bc54a10c4f69079e8da5c4e7a232e913a0a469eccce47ccd969",
+    "core/data/src/main/java/net/plainnotes/app/data/NotesDao.kt": "6e15c5f94c834e8e4d30d5914ce9d33dbaff04859bee544cb12b0cd7bc15fb4e",
+    "core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt": "b9901e6c7d002038cd5f0bb8f7009f9b18ae6e9fbe1cb1302109d876ac369ca9",
+    "core/data/src/main/java/net/plainnotes/app/data/BackupValidation.kt": "9ab407da92d3f223a96cac9a12c524d9b6821817d5aca7ea3dd70cad3f978d5d",
+    "core/data/src/main/java/net/plainnotes/app/data/RecordBackupCompatibility.kt": "c9638a0bc9b7d40d121f87136ae6c190789e3397f0e5d9d2f99d08b46b18591f",
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt": "ac27e1ac15c6b93d61f2f638adb5e8a530872911f2f1834291839f83621ea474",
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredContainerStore.kt": "109b77ba0da6ac3ff07958298881144193c345c7754ac0e913f1b1004e5d84c8",
+    "core/data/src/main/java/net/plainnotes/app/data/PackageCorrections.kt": "1f3aec8e31bb7f5f470d6b39eef9df806d80687f0b28d29f07bbe5179f33c92a"
+  },
+  "log_sha256": {
+    "ansm-p4-encoding-final-data.log": "71b3757c0f23e01efce904a7269cc570100988ced141d9748f25da5d1b538623",
+    "ansm-p4-encoding-python.log": "9fcc5495b986ec5de7703a4abe089ba463c8c270fc31e72792df3457d82dbe59",
+    "ansm-p4-encoding-app.log": "b3ac72bc99143acc428cb38ae89194c88f3bdb96b685b100a0412c0284ff7d88"
+  },
+  "PeriodStabilityTest": {
+    "tests": 5,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "timestamp": "2026-10-17T09:33:37.855Z",
+    "xml_sha256": "5eb8802aca296c52df6b5bd6e6c99e768ff491f8312c407c5435fa7d0f93abf9"
+  },
+  "PrivacyNoticeFactsTest": {
+    "tests": 3,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "timestamp": "2026-10-17T09:34:45.393Z",
+    "xml_sha256": "ca6dfb3c6ac354dd32c74da1903992c7b289a5155dc79e2ecdedf7684c57d578"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "production_source_commit": "8b24ccf5a0b0150438c66afce658230867aa68f5",
+  "evidence_head_at_data_completion": "8b24ccf5a0b0150438c66afce658230867aa68f5",
+  "core_data": {
+    "tests": 527,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "remaining_build": "COMPLETE PASS",
+  "source_sha256": {
+    "core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt": "0ceca5032e70f8b05b5799df7a2b658aec08ec288de7bcb4a3013758ced1f3ba",
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredSaveCoordinator.kt": "de38d167bbf1d878985a180d8daf3d97e7c588191370a6f32ded2e9b45342d14",
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredSaveGate.kt": "dcc09b9b0de04cfe47e4c46cf3253d82feb401826da8f385d8c20fa9d6aba995",
+    "core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt": "8c5b28e7d56cf3590af903437a0e5b9ba3941fc753a9a7e3c13add9f14d55b1a",
+    "core/data/src/test/java/net/plainnotes/app/data/MeasuredSaveCoordinatorTest.kt": "e9622ed284e625adc25041caa5e567474affc3c33e0745a25ef3f4d2939e83d4"
+  },
+  "native": "NOT_RUN",
+  "ci": "NOT_RUN",
+  "environment": "Robolectric35/framework SQLite; small synthetic correctness tests; no performance/LMK claim",
+  "app_period": {
+    "tests": 5,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "reminder": {
+    "tests": 21,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "android_test_source_compile": "PASS",
+  "app_full_debug_source_compile": "PASS",
+  "previous_complete_verification": "984219a3: 526 data,5 period,21 reminder and both compiles PASS; immutable evidence commit fb9f2c30; prior logs named 984219a3-*",
+  "owner_tests": 13,
+  "space_red_test_unchanged": true,
+  "command": ":core:data:testDebugUnitTest :core:data:compileDebugAndroidTestKotlin :app:compileFullDebugKotlin :app:testFullDebugUnitTest --tests *PeriodStabilityTest :core:reminder:testDebugUnitTest -ProbolectricDir=/workspace/robolectric-jars --no-daemon --no-parallel --max-workers=2",
+  "main_jar": {
+    "core/data/build/intermediates/runtime_library_classes_jar/debug/bundleLibRuntimeToJarDebug/classes.jar": {
+      "sha256": "479641914320a1a8cf341534d5e56de1f5406bcb1677729ebf2edf627ed2c103",
+      "runtime_owner_present": true,
+      "test_prototype_frozen_oracle_absent": true
+    },
+    "core/data/build/intermediates/compile_library_classes_jar/debug/bundleLibCompileToJarDebug/classes.jar": {
+      "sha256": "bc207fe1cc8c2a29ac5f71e3ab77ae6e078cc9d6f5cc9aa1d043b3bbf5b55a59",
+      "runtime_owner_present": true,
+      "test_prototype_frozen_oracle_absent": true
+    }
+  },
+  "baseline": "320171cdc882ec0b62830b60e2329a4174ffa31c",
+  "entry": "OFF",
+  "PR": "57 Draft autoMerge=null",
+  "schema_backup_crypto_pk_changes": "NONE",
+  "remaining_blockers": [
+    "App integration and restricted read/maintenance separation",
+    "manual-review/process-death product flow",
+    "original <=5s gate unchanged; independent-metric proposal NOT APPROVED",
+    "restore LMK NOT_PROVEN",
+    "exact-head required CI/native acceptance NOT_RUN"
+  ]
+}

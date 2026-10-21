@@ -1,0 +1,18 @@
+{
+  "source_head": "d57d04c5fa600d026680e9c06f8853122a5efc1c",
+  "run": 39222489575,
+  "artifact_id": 12172937131,
+  "artifact_sha256": "5e95bea7e4a45c4d280211480cf3a6b9c1da4798289900be6a9fb9b4c1187ead",
+  "artifact_sha256_verification": "PASS",
+  "zip_crc": "PASS",
+  "trace_sha256": "0497a5347e3e000b57dcb89c3407d61502e139d9ffe2d967f3a34160fbacfa6b",
+  "trace_gzip_sha256": "b89907d7879c1aa4e974a46838e790d9d5ffac071a6a6ffa078b3e1bd42a7ba6",
+  "parser_source_sha256": "b291a87edf240f5e93c6411a810c7f2ad5c946b373c0df1427d5aa42d09f6190",
+  "parser_reproduction": "PASS",
+  "profile": "PARTIAL_DIAGNOSTIC",
+  "records": 43184,
+  "performance": "FAIL: writes8202.96701/9340.18761/9095.35459ms>5000. Do not claim a controlled causal timing gain across hosted runs.",
+  "window_observation": "One observed start0 window reports2003 rows: no forward-movement window change observed. Reported size16384 is driver metadata, not actual allocated/native RSS or a proven hard capacity. Do not adopt pagination from the rejected refill hypothesis.",
+  "physical": "NOT_RUN",
+  "p4": "PRODUCTION_BLOCKED"
+}

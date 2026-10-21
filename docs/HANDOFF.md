@@ -1,3 +1,757 @@
+## f13技术验收全部通过，最终正常提交清除受保护CI的跳过状态 — 2026-10-21
+
+39653018592 Android/JVM/26/29/35全部SUCCESS，39653023713 Science gate/deep全部SUCCESS。三API真实192MiB进程前置探针通过；26/29各335合同0fail/0skip，35完整data407列项0fail/5个显式host探针skip、App282列项0fail/10个既有action探针skip，另有严格host调用验证；三API的两个writer OS-kill合同均精确数据/新PID/完整oracle/无重放PASS。详情technical-verification-f13.json，官方原ZIP/SHA/CRC与日志实时保存到独立evidence/p4-admission-4a67e96e分支，不以改写旧FAIL获取绿灯。
+
+最后核对发现[skip ci]提交留下两项QUEUED自动check suite，手动suite虽成功但PR statusCheckRollup=null且BLOCKED。短暂Ready核对后已恢复Draft；不伪造status或绕保护。此普通、无skip标记的最终文档提交让既有自动CI真正覆盖最新HEAD；生产代码完全不变。保留正常workflow全部检查，不修改其断言或5秒指标政策，不重跑性能大库。正常受保护CI全部通过且无冲突/未解决讨论后才转Ready，不自动合并/发布，入口仍OFF。
+
+## 最终CI发现真实环境漂移：API29实际16MiB导致Argon2 OOM — 2026-10-21
+
+4a67e96e的run39651425834/API29失败，first OOM明确growth_limit16777216B/Argon2Block1040B；32MiB KDF无法容纳在16MiB，不能把它混为原192MiB恢复LMK已复发。原完整日志与官方ZIP12369333065/SHA c348e28b…fd32a8/CRC存独立证据分支，原FAIL保留；其他有效job继续，不取消以掩盖失败。
+
+必要CI修正仅显式设原192MiB并核对实际进程heap：复用受限emulator/root脚本支持26/29/35明确矩阵，新增TEST_ONLY NativeCiHeapProbe在业务测试之前assert201326592B。生产、KDF、RAM冻结预算/备份/Schema/业务断言均不改；219工具回归PASS，探针Android编译在途。旧完整CI余项仍运行，当前不Ready。
+
+## AFTER_COMMIT定向原生通过，转最终整合CI — 2026-10-21
+
+run39650341133/a9a1a8fd单场景无重试PASS：PID3850外部强杀→4008，1条真实记录/精确dump/epoch/SQLCipher完整性/独立冻结oracle/无重放均通过；verify6.254秒是整项验证时间，不是写入延迟。官方ZIP12370205997/SHA d63e3dd8…71f656/CRC已校验并存final-admission/after-commit-39650341133/。上次run39626720171超时原因仍未确定，不称诊断日志本身修复了生产问题；旧FAIL保留，最终三API继续验证现源码合同。
+
+已整合主线4ec11437，当前GitHub MERGEABLE且无未解决讨论。218工具/Android合同编译PASS；App整合回归在途。下一提交触发最终六项必需CI，非性能workflow不自动跑大库。正式入口OFF/Draft，全部安全验收完成前不合并发布。
+
+## 当前验收检查点：Android测试编译和218工具通过 — 2026-10-21
+
+final-admission/保存实际日志/收据。Android测试编译PASS（编译期间只同步主线UI，data/测试源码未变）；全部Python工具218 PASS，未执行性能大库。整合主线后的ProcessMeasuredWriteShell/Period/UI06代表回归在途；单场景AFTER_COMMIT run39650341133仍在途，未声称安全通过。当前正式门仍为安全/最终CI，普通写入仅指标，不再恢复5秒攻关。
+
+## 同步已合并主线4ec11437，保留UI06和P4状态能力 — 2026-10-21
+
+正常合并主线，仅四语资源/需求/交接产生内容冲突，双方独立新增内容全部保留；XML解析及重复key检查通过。AppShell/TodayCard/StockScreen等自动合并须最终App回归，不声称已验收；无数据库/备份版本冲突。主线UI06§115编号按主线来源理解，与此前P4历史§115不同，不改原任务书。AFTER_COMMIT诊断run39650341133仍在途，不另开大库。
+
+## 非阻塞延迟指标已落实，失败安全场景单次诊断在途 — 2026-10-21
+
+依据§131，普通写入原5秒判定保留为legacy FAIL/PASS观测，不再进入当前硬门列表；cold-codec仍计真实耗时、独立完整oracle，安全/大小/资源/恢复硬断言保留。对应工具22项PASS（包含报告角色和安全门负向mutant），未运行大库。额外性能workflow改为显式dispatch，避免PR后续推送自动重复大库筛绿；六项必需CI没有删改。
+
+单次针对性run39650341133（源码a9a1a8fd）只诊断原AFTER_COMMIT失败，原60秒不改，尚IN_PROGRESS。没有重复已过17合同/STOCK_CAPTURED/恢复kill。Android编译在途不能算PASS。主线现4ec11437，预检冲突仅四语资源和需求/交接，正常集成时须双方内容都保留。
+
+## 负责人要求按非阻塞方向持续完成至可合并 — 2026-10-21
+
+REQUIREMENTS§131生效：落实延迟独立指标及对应测试，不再停留于提案；不恢复5秒攻关。恢复/生命周期安全及最终CI不降低。仅恢复归档中未运行的AFTER_COMMIT诊断，单场景验证，不重跑大库或已过17/STOCK/恢复kill。当前PR有主线冲突，待安全问题确定后正常同步已合并主线。代码/状态持续保存，不提前合并发布。
+
+## 负责人再次纠正：冻结5秒攻关，本轮仅非阻塞政策与最小接口评估 — 2026-10-21
+
+最新指令见REQUIREMENTS§130及[政策/测试调整提案](ansm-integration/p4/nonblocking-transition/policy-and-test-change.md)。不能再以普通写入超过5秒为由恢复优化、方案C或大库重跑；历史6.387/6.285/5.666秒及原FAIL保留，未来改独立指标的测试变更单列审批，本次未删改断言。下方“5秒主要阻塞”等是旧政策检查点，不是当前开发方向。
+
+核实当前已有进程级SupervisorJob/IO owner、真实提交后SUCCESS、UUID请求去重、共享冲突门、受限只读浏览和App状态观察，不重做。原528本地数据、三API owner14、API26定向17等证据仍按对应SHA解释，本轮未新跑。AFTER_COMMIT检查点原FAIL未修复，恢复内存稳定性不能因UI异步而放行；最终CI尚未齐。原生/Gradle进程无在途任务，没有取消有效工作或新触发测试。
+
+尚未运行的诊断改动原样保存到deferred-after-commit-diagnostics/unexecuted-test-only.patch，未接可执行源码；过时23703969重复写门原型及4项局部PASS也保留归档。生产代码仍dc10ffef，当前基线87202a4e。本轮无Schema/备份/PK/权限/签名变化。P4 Draft/入口OFF/autoMerge=null，不合并发布。
+
+## 当前代理继续至合并门：接纳远端87202a4e，避免重复写门实现 — 2026-10-21
+
+重新核远端发现接手者已完成真实owner/共享gate/只读快照与App观察，并保存528本地数据、三API owner14合同、API26定向17 PASS及大库/恢复原始证据；本代理早先从c2起的23703969写许可原型推送被正常拒绝，未force push，代码/4项局部PASS仅归档superseded-local-admission-23703969/，不接当前生产。新工作树/workspace/HRT-Log-p4-final从87202a4e独立继续，原树未丢弃。REQUIREMENTS128/129及最新负责人“到能合并再停”生效，不以交接或局部通过结束。
+
+当前实际工程缺口：AFTER_COMMIT小库外部kill未到检查点（原60秒不改）；正常创建全审计只有一次且原三写6.387/6.285/5.666秒FAIL5秒，政策改指标仍待明确批准。先仅对AFTER_COMMIT增加最少阶段/异常证据并单场景验证，不重跑已过17/STOCK_CAPTURED/恢复kill/大库，不编造OOM或marker超时根因。正式入口OFF/Draft，不能提前合并发布。
+
+## 针对性API26验收已结束并保存：17项PASS，提交后kill检查点FAIL — 2026-10-21
+
+run39626720171/d9fa9340整体FAIL；官方artifact12358032004的ZIP/SHA b710786c…edba3d/CRC及全部原文件、完整job日志已核验保存到shell-integration/native-status/。17项真实SQLCipher合同全部PASS（110.143s整套），包含3项SAVEPOINT修正与14项owner合同。新增writer STOCK_CAPTURED外部强杀→新PID/精确dump/epoch/0记录/完整oracle无重放PASS。AFTER_COMMIT在原60秒内没有marker，未执行fresh verify，不能声称安全通过。原host错误文字“restore checkpoint”实际是writer标签；Process crashed包含finally外部force-stop，不据此编造OOM根因。
+
+不重跑已完成大库/恢复/17项，也不放宽超时碰运气。当前证据无法区分prepare慢、提交异常、返回等待或调度；进一步仅应对失败AFTER_COMMIT增加最少阶段/异常证据，不对所有已验证阶段重复运行。原5秒硬门6.387/6.285/5.666秒FAIL是主要阻塞，另有此低内存生命周期证明缺口、真机/TalkBack范围；不能转Ready。无在途任务。生产dc10未改，主线320171cd；全部进度入库，PR57保持Draft/OFF/autoMerge=null，没有Schema/备份/加密/PK/发布变化。
+
+完整互斥耗时、原报告、证明范围及下一步决策见[核验报告](ansm-integration/p4/nonblocking-transition/shell-integration/verified-results.md)。仅后台化不能让原5秒通过；政策改指标仍未批准，不自动修改门槛或恢复已冻结架构攻关。
+
+## 原生证据集中归档完成；真实写入瓶颈明确，针对性修复验证在途 — 2026-10-21
+
+[核验报告](ansm-integration/p4/nonblocking-transition/shell-integration/verified-results.md)及native-status/现保存5份官方原ZIP、官方SHA/CRC清单、完整大库JSON/恢复kill报告/本地修正证据。连接器已解除工件访问阻塞；保留历史CONNECT403，不要求负责人开放网络。无重跑大库。
+
+同次额外诊断6512.762ms：票据756.595、验证593.343、INSERT/UPDATE含trigger27.215、写commit driver9.485、必要全审计4805.047，其余互斥区间见报告。正常新建audit_calls=1；没有重复完整审计可删，可证明节省0。原5秒门仍实际FAIL，不把非阻塞状态UI当性能通过。完整原生owner14在26/29/35均PASS；fb43 CI其余四job成功，仅26三个测试失败。d9fa9340只修对应SAVEPOINT测试并添加不重复跑分的模式，run39626720171针对性17合同+2 writer OS-kill在途。生产dc10未变；当前不能声称最终HEAD全CI绿。
+
+更新proposal/TAKEOVER/WORK-STATE/runtime说明顶部，防止旧“App未绑定/owner未实现/证据不可达”误导接手。正式提交入口仍OFF；5秒政策提案未批，真机/TalkBack及完整产品恢复验证不因本次成功而完成。P4继续Draft，不自动合并。
+
+## 原始工件已取回；定位三个API26测试问题，针对性修正已本地通过 — 2026-10-21
+
+授权GitHub连接器成功取回原工件，绕过不了的CLI Azure CONNECT403不再阻塞证据读取；未改代理、未重跑性能。官方ZIP SHA/CRC核验通过。d582原大库真实三写6386.667/6284.662/5665.699ms仍FAIL5秒；审计5308.470ms、预测5786.830ms、备份6964.372ms、恢复44905.852ms在原预算内。两项原恢复真实进程kill均PASS。原报告正在集中归档，不改变旧失败。
+
+API26 owner共享14合同实际全部PASS。剩余3失败均新oracle测试的裸ROLLBACK TO被API26语句分类器误作根事务回滚，Room.endTransaction报无事务；与已保留A/B反例相同处理，3处加前置空语句，让原SQLite SAVEPOINT回滚实际执行。所有oracle/损坏/回滚断言原样。修正后JVM目标3项PASS，Android合同编译PASS，工具5测试PASS（含失败传播/不调用大库/不重跑恢复负向矩阵）。这不是已验证原生修复。
+
+新增p4-write-lifecycle-only手工模式只运行修正3项+owner14项及新增writer实际OS-kill2项，仍验证API26/512MiB/192MiB；不运行已完成大库或已验证恢复kill，不重分类原5秒FAIL。下一步对此实质变更做一次针对性验证并保存日志。fb43完整CI已结束：android/JVM/API29/API35 PASS，API26 FAIL；Science两项PASS。生产dc10ffef未改，P4仍Draft/OFF/autoMerge=null。
+
+## 新候选Science/API29通过，API26仍失败；补齐OS-kill报告上传路径 — 2026-10-21
+
+fb43验收39622599139 Science gate+research-deep全SUCCESS；39622595007 JVM/API29 SUCCESS，API26 FAIL，android/API35仍在途。API26两候选都失败，但尚无可读完整日志，不能猜测同因或重跑碰运气。工件下载CONNECT403问题已问负责人，仍待网络解阻；只读元数据可用不等于原始报告已核验。
+
+复核发现新增ansm-write-process-death报告目录尚未加入现有上传路径，这是证据保存遗漏，已给API35及API26/29的always工件清单各补一行。未变业务/原断言/预算/合同代码，不另触发重复完整验收；待已知失败查因修正后相应验证。当前API29整体成功说明其host脚本退出0，但尚不能把缺原报告的结果升级为完整证据核验。
+
+## 原候选CI/预算FAIL及真实工件访问阻塞已保存；新候选验收继续 — 2026-10-21
+
+旧d582：39620822817已结束，JVM/API29/API35成功，android/API26失败；39620827648低内存全原预算运行FAIL，官方artifact12355511849/digest4ce0beac…cabf6f4/150184B。尚未下载原报告，不能推断FAIL是5秒、LMK或别的规则。GitHub API正常，但日志/工件重定向Azure storage时代理CONNECT403，environment_status确认unrestricted/enforced不等于该域可达；未绕过代理、未去重跑。已异步请负责人在云环境配置允许productionresultssa*.blob.core.windows.net或切换可达环境，问题仍待答复。无signed URL/凭据入库。
+
+元数据和明确NOT_VERIFIED状态存shell-integration/native-status/；ZIP/SHA/CRC/原生断言和耗时必须通路恢复后读取原工件核验。当前无法声称原生14合同整体通过，虽然29/35 job成功也须具体XML核对。
+
+为不取消旧有效运行，新实质合同（2个OS-kill probe+harness修正）在同SHA独立validation/p4-save-fb43b86a验收引用运行：Android/domain39622595007、Science39622599139，均fb43b86a；没有PR/合并/force push，原大库仅保留d582一次。这个引用与工作分支代码相同，不是合并未审查分支。后续先读取现有证据、修复实际失败，再决定唯一必要验证；P4仍Draft/OFF/autoMerge=null。
+
+## 真实App接线2项PASS，OS-kill合同编译PASS；原生验收继续 — 2026-10-21
+
+ProcessMeasuredWriteShellTest2项当前PASS，原@Before超时确认为未驱动Android Main Looper；按既有DataRefreshTest显式idle后原30秒与全部保存/导航/重建/手工核对断言不变。shell-integration/looper-fixed/保留XML/日志/测试SHA及仅harness差异；first-local的2个初始化失败不改写。同一生产dc10ffef（main diff为空）此前完整data528/原选定18App已PASS，本次只重跑修正2项，不冒充同次20项。Android编译包含新增真实writer进程死亡probe已PASS。
+
+远端d582两run39620822817/39620827648仍IN_PROGRESS（旧CI含初始化失败版测试，结果照实留）；需要后续对修正harness与新OS-kill合同的实质变化做CI验证，不重复原大库求绿。状态读取已接真实owner，正式提交入口仍OFF；原预算、LMK及最终CI门仍未解除。本地无在途Gradle。
+
+## 接线首轮：528数据/原18App通过，2项新App初始化超时已保存 — 2026-10-21
+
+全data528 PASS；选定App20项中18 PASS，2新测试均@Before第68行等待初始ViewModel刷新超时，未进入保存断言。原XML/log/SHA存shell-integration/first-local/；不是把超时称业务RED，也不丢弃。当前怀疑无Compose内容时Android主Looper未驱动，下一步按既有DataRefreshTest做法显式idle主Looper，保留30秒/原所有断言，不改生产写入来迎合测试。
+
+Android源码编译PASS仅指d582测试集合，不含后来新OS-kill probe；后者须另编译。两个远端run仍进行中，原d582 CI可能包含同一初始化失败，完整保留，不为隐藏失败取消。
+
+## 实际writer OS进程死亡合同已编码待编译 — 2026-10-21
+
+新增androidTest MeasuredSaveDeathProbe和host run_ansm_write_process_death.py，复用已验收恢复probe的外部force-stop握手：STOCK_CAPTURED持有真实事务时kill→新PID精确dump/epoch不变、0记录/0消耗；AFTER_COMMIT丢交付窗口kill→新PID精确已提交dump、1记录/1量子。两个路径均SQLCipher header/integrity/FK/完整新旧oracle及fresh owner无任务、无自动重放；测试marker仅合成摘要，不是生产持久token。接入现有API26/29/35 CI的小库合同阶段，不更改原预算/fixture。当前仅Python语法通过，Android源码未编译或执行，不能填PASS。
+
+在途原生39620822817/39620827648仍为d582源，不包含这两个新增probe；后者原冻结预算结果仍需保留。App当前选定回归仍运行。不要为metadata反复重跑native，后续仅对新实质合同做相应验证。
+
+## 必要原生验收已启动，不能当PASS — 2026-10-21
+
+源d582bf7d的两项一次性验收运行中：Android/domain workflow39620822817（含新增MeasuredSaveCoordinatorAndroidTest共享14合同的API26/29/35 SQLCipher），冻结低内存全工作负载39620827648（512MiB/192MiB、原fixture、原5/15/120秒断言及真实恢复process-death合同不变）。依据§128推进到可合并的必要验收，不恢复已取消的重复跑分或微优化研究；不为求绿重复调度。两者均IN_PROGRESS，未有结果不能填PASS。
+
+本地完整数据/选定App回归仍在执行，日志p4-real-binding-focused.log；当前新源码不能引用旧527结果。本轮进度持续保存，P4仍OFF/Draft、autoMerge=null。
+
+## App真实owner接线合同已编码，首轮完整数据与选定App回归运行中 — 2026-10-21
+
+新增ProcessMeasuredWriteShellTest2项，真实Coordinator/Repository/NotesApp（只控测试Dispatcher，不伪造状态/回执/写入）：排队保存中换ViewModel/真实导航后仍同任务且只提交一次；已提交异created请求进入MANUAL_CHECK，核对按钮不重放/不误报FAILED/无重试。fixture为合成未确认库存用药，不改正式入口。另运行原NonBlockingWriteShell/DataRefresh/Period/UnifiedConcentrationDataPath，检查普通刷新及原计算事实不变。
+
+当前:core:data完整回归+Android合同编译+App选定回归运行中，日志/workspace/scratch/p4-real-binding-focused.log；尚不能写PASS。此前早期core/Android编译完成，但不代表随后补全字段和当前App接线通过。继续保留预算/LMK/正式入口门。
+
+## 真实状态源与受限只读刷新已编码，测试待验 — 2026-10-21
+
+Coordinator.latestTask提供单一进程状态源（不入磁盘/Bundle）；NotesViewModel注入同singleton，NotesApp认证壳观察真实状态，人工核对按钮仅调用原只读reconcile。没有新增正式提交入口，P4 OFF。页面销毁不拥有writer。Repository增加NotesReadSnapshot/CalculationReadInputs受限typed读取；原维护式refresh保留，busy时走无迁移/seed/reconcile的只读快照；同一calendarProjection/timeline规则复用。计算模型/参数/边界不改，仅busy时读取相同事实输入。
+
+新增共享合同确认真实pending期间typed读不改RawData.dump、不补默认项、页面观察取消后同一任务仍可见。原13合同升为JVM/native共用，native强制SQLCipher cipher_version；当前修改尚未做最终编译/回归，不能借旧527宣称通过。一次早期core编译尚在完成，随后已补DTO appointments字段及统一calendarProjection，须最终重新验证。继续补App真实运行合同，进度先保存。
+
+## 负责人要求持续到可合并：开始真实运行接线与原生合同 — 2026-10-21
+
+接手9d1052ae，无远端更新。§128记录新指令：不以局部通过停止；保持原预算/历史证据/入口OFF/Draft/不自动合并。先把原13项owner安全合同提升为共享JVM/Android合同，SQLCipher子类断言cipher_version，加入既有三API必需CI；不删原断言、不减少旧测试、不启动取消的大库计划。当前只是源码已编码，未编译/执行，不能把此前527当新源通过。
+
+随后补真实状态源/任务核对和App读取与维护写入分离。无新Schema/格式/PK/发布；后续所有CI/native按精确源码保存。
+
+## 后端运行owner最终本地验收完成并入库 — 2026-10-21
+
+最终生产8b24ccf5（后续仅证据/文档），主线320171cd：完整data527/PeriodStability5/reminder21全PASS、0FAIL/ERROR/SKIP，Android测试源码/App full debug编译PASS，同轮BUILD SUCCESSFUL 4m50s。runtime-owner/final-local/含实际45+1+7原XML/全日志/源码与主jar SHA/清单/收据；所有XML时间戳均核对本轮。space-red测试源码逐字相同，原2项UUID重放反例继续通过，主jar无TEST_ONLY原型/冻结oracle。无在途检查；当前有效成果均写库，待本证据提交推送后交接。
+
+本组新增进程内MeasuredSaveCoordinator+同DatabaseAccess共用冲突门：固定PRIMARY与原确认、页面取消不取消提交、根Room提交后SUCCESS、丢响应writer结束后独立全审计核对、未知结果PENDING/MANUAL_CHECK不重放；旧写入口/导入/含补写的导出/恢复/关闭销毁保护。另修正已有UUID部分匹配会误报SUCCESS、旧sql()在选择切换时逃出原事务空间的问题；真实RED均保存，不删反例。普通新增仍原最终一次全审计，未增加可信缓存/快验证器，也没有性能提速结论。完整说明runtime-owner/implementation.md。
+
+**P4仍Draft/OFF/autoMerge=null，不可合并。** App尚未绑定owner；混合DAO刷新/维护需受限只读合同，MANUAL_CHECK/进程死亡人工核对流程尚待接线。原≤5秒硬门未改、独立指标提案未获批准；恢复LMK NOT_PROVEN，精确HEAD必需CI/native/真机/TalkBack NOT_RUN。依§126不恢复大库/native/性能攻关。无Schema/备份格式/PNBAK1/PK/UI/P5/P6/权限/签名/版本/发布变化；无APK/合并。后续接手先看本节和TAKEOVER更新，不能恢复旧WIP或把本地安全合同当原生准入。
+
+## 8b24ccf5完整数据527项PASS，空间绕门反例GREEN已保存 — 2026-10-21
+
+当前最终生产8b24ccf5：data527 PASS/0FAIL/0ERROR/0SKIP，45原XML/源码SHA/截至数据日志更新同runtime-owner/final-local/；owner13项全通过。space-red测试源码SHA逐字相同，原断言不改；DECOY事务内全局select PRIMARY后私有SQL助手仍在DECOY，PRIMARY不被绕门写入。原两项UUID重放反例也仍通过。前526最终日志以984219a3-*保留、原XML在fb9f2c30提交可独立核对。
+
+同轮后续Android测试源码/App编译、Period5/reminder21仍进行中；收据明确PENDING不冒充此前结果。入口OFF、PR Draft，无UI/native/CI/LMK/预算变化；完整实现边界见runtime-owner/implementation.md。
+
+## 事务空间绑定最小修正已编码，最终527项回归待验 — 2026-10-21
+
+Repository每实例ThreadLocal经asContextElement绑定捕获target，覆盖generic/SQL/measured根事务；space/db()/sql()在同实例事务内不再读取后来全局选择，协程上下文退出恢复，不缓存数据有效性。固定pinned仓库继续优先自己的空间，不将owner重定向。原space-red测试逐字保留。
+
+最终全core:data（预期527）、Android测试源码/App源码编译、Period5/reminder21重新执行中；旧526结果仅属984219a3。没有UI绑定/native/性能测试或格式变化，仍Draft/OFF；最终源通过后再更新集中收据与TAKEOVER。
+
+## 旧SQL助手切换空间绕门1项真实RED已入库 — 2026-10-21
+
+生产984219a3上新合同实跑1 FAIL：PRIMARY owner占门时允许DECOY事务；事务中全局select PRIMARY，私有sql()确实把SYNTHETIC day_note写入PRIMARY，断言“Legacy helper escaped its reserved transaction target”失败。原XML/log/SHA存runtime-owner/space-red/。前526/5/21通过不覆盖这个新边界，正式入口仍OFF。
+
+最小修正仅在Repository事务协程上下文绑定原target，使同实例db()/sql()/space在事务内不能重解释选择；离开事务恢复上下文，其他页面/明确pinned仓库独立。不引入数据库可信缓存/新规则。原反例不改，随后完整回归；没有native/性能重启。
+
+## 984219a3完整本地检查PASS，另发现旧私有SQL助手目标需固定 — 2026-10-21
+
+完整同轮BUILD SUCCESSFUL：data526/Period5/reminder21全PASS、零FAIL/SKIP，Android测试源码/App源码编译PASS。完整日志及本轮新时间戳XML存runtime-owner/final-local/，源984219a3；不是native/CI/LMK证据。最后复核发现generic transaction虽捕获target，但私有sql()/db()仍重读全局选择，DECOY事务执行途中select PRIMARY可能访问另一库。正式入口尚OFF；下一步先固定此反例，再仅使旧事务内的helper继承原目标，不改数据语义/验证/Schema。此前“全部冲突保护”应限于已验证路径，不能据首轮合同宣称空间切换闭包已证明。
+
+## 当前运行owner源完整数据526项PASS已入库 — 2026-10-21
+
+实际生产984219a3，完整core:data526 PASS/0FAIL/0ERROR/0SKIP，45份原XML/截至数据阶段日志/源码SHA存runtime-owner/final-local/。MeasuredSaveCoordinatorTest12项通过，replay-red测试源码SHA逐字一致，原2项误报SUCCESS现正确保持PENDING/MANUAL_CHECK，合法已有UUID确认不再扣减。独立冻结oracle/原事务回滚等全部保留通过。
+
+同轮继续Android测试/App编译及PeriodStability/提醒回归，当前不把旧XML当其本轮最终通过。无native/CI/LMK或预算修改，未绑定App；P4 Draft/OFF。实现及明确剩余边界见runtime-owner/implementation.md。后续账号以最终收据phase为准，不据数据阶段完成推断所有门通过。
+
+## 重放反例最小修正已编码，最终全回归运行中 — 2026-10-21
+
+新增NotesRepository.submitPreparedMeasuredActualUse，仅owner调用：同UUID已有操作则在独立根事务内复用observeCreate全审计/原冻结输入确认并返回历史回执，不调用旧create重放；没有操作则原create（含最终全量审计）不变。MeasuredSaveCoordinator正常结果改用此接口，丢响应后仍须writer完成后独立只读核对。原RED测试源码和期望不改。
+
+正在运行完整core:data（预期526项）、compileDebugAndroidTestKotlin、compileFullDebugKotlin、PeriodStability5、core:reminder回归，日志/workspace/scratch/p4-runtime-owner-full.log。尚未完成，不预填PASS；无新的native/CI/预算测试。App源码/Schema/加密格式/PK未改。后端运行门面尚无App调用，正式入口OFF/PR Draft，政策与LMK阻塞保留。后续接线前解决mixed DAO refresh读写分离与MANUAL_CHECK人工核对流程，不以此后台化宣称原5秒通过。
+
+## 新owner同UUID重放2项真实RED已保存 — 2026-10-21
+
+当前生产14dda1ec上执行3个existing*合同：原请求合法重放1 PASS；错误原创建时间、无关历史损坏2 FAIL（实际SUCCESS而期望PENDING），见runtime-owner/replay-red/原XML/日志/SHA。不是夹具/编译故障；旧Repository重放对载荷的部分匹配不等于新opaque冻结请求的完整确认。无UI运行调用，入口OFF。
+
+最小修正：新增仅供owner使用的prepared提交包装，在同一真实Repository根事务内检查是否已有同UUID操作；若已有，复用现有observeCreate完整审计及原配置/context/created匹配后才能返回历史回执，且不再调用写入重放；若没有，继续原create及最终全量审计。正常新增不追加第二次全审计。原旧写入口和独立冻结oracle不改。下一步修正并原测试不改运行完整数据/Android测试/App编译及时期门；不做native/性能计划。
+
+## 后端运行owner首轮21项合同PASS，重放边界继续验证 — 2026-10-21
+
+实际运行MeasuredSaveCoordinatorTest9 + NonBlockingRepositoryWriteTest12，共21 PASS/0FAIL/0SKIP；原始XML/日志/源码SHA在nonblocking-transition/runtime-owner/first-focused/。覆盖独立根提交、页面取消、丢响应只读核对、真实故障回滚、同UUID/异载荷、旧写/恢复/关闭销毁/导入冲突、PRIMARY固定与外层Room回滚。补充发现exportBackup会RegimenHistory.seed，已纳入冲突门并负向验证。仅Robolectric35小库，不是SQLCipher/LMK/预算或最终全回归。
+
+继续复核旧create的同UUID replay分支：该分支不全审计也不比较原created/config/context，新owner必须避免直接把这种返回当作完整原请求确认。下一步针对性反例，再只在预备请求重放路径复用现有observe完整规则；保留普通新建原最终审计，不引入第二验证器。尚未接App、未启用入口，正式政策/恢复LMK/CI仍阻塞。泛型DAO transaction保守按可变更入口拦截；现有ViewModel.refresh混合读取/迁移，后续UI绑定前须分离受限只读合同，不能给任意DAO callback开读绕门。未核对任务继续MANUAL_CHECK占门，没有自动重放/解锁。
+
+## 运行owner/后端冲突门已编码，安全合同待验 — 2026-10-21
+
+接手c2fffbb0后不恢复性能任务。新增MeasuredSaveCoordinator（进程SupervisorJob/IO、仅独立实际用药、opaque原确认、同UUID/完整输入复用、根事务返回后SUCCESS、writer结束后只读核对、不存在/异常保留MANUAL_CHECK不重放）与同DatabaseAccess共享的MeasuredSaveGate。后端generic/SQL/measured事务、TransMemo导入、恢复、close/destroy已接协调；读接口分离，PRIMARY与DECOY不混投，无队列/持久token。无App运行调用，UI不改，入口OFF。
+
+首轮未接完Repository property的编译失败已留本地log；接完后compileDebugKotlin PASS。随后只修正ImportSummary返回类型保持旧公开合同，**当前尚未做针对性/完整回归或最终编译**。正在编写实际Repository的提交/结果丢失/取消/全冲突/外层事务等反例。最新代码不是P4准入，也不是原514项覆盖；须通过新合同后再完整数据/App编译，原5秒/LMK/CI阻塞保持。手工核对尚未确认的任务保守持有冲突门，不提供虚假的失败/自动重试；UI绑定及正式政策仍未生效。
+
+## 本地旧会话已对齐最新远端，旧跑分计划未启动 — 2026-10-21
+
+已核GitHub #57当前c2fffbb0、主线320171cd、Draft/auto_merge=null，快进接手最新非阻塞方案。此前本地f220候选的旧完整data495/原生编译和旧App/Period/提醒结果已结束，仅作为ARCHIVE_ONLY_NOT_APPLIED_SUPERSEDED归档`nonblocking-transition/takeover-old-wip/f220-finished-checks/`，含原始XML/日志、初始绑定编译错误、SHA及旧WIP差异；不覆盖ae7688da的514项，也不冒充当前native/CI。旧本地差异stash保留未应用，原目录未reset；没有启动新原生或恢复已取消§125计划。
+
+继续依据TAKEOVER推进**后台运行owner/最薄门面、根事务提交后状态、固定PRIMARY/scope与所有Repository/恢复/reset冲突保护**；前端已存在只读状态区，本组先不改UI。现有prepare/observe及来源context反例复用，不实现快验证器/新缓存/队列/Schema，不批准改5秒硬门，不合并/发布。当前尚未编码新的runtime owner，所有后续安全合同须先验证；原P4/LMK阻塞保持。
+
+## 换账号接手已核验：方案、源码、证据与旧WIP均已入库 — 2026-10-21
+
+接手入口：`docs/ansm-integration/p4/nonblocking-transition/TAKEOVER.md`。准确分支feature/ansm03b-p4-exact-stock-20261016，交接前HEAD307a1093、已测生产ae7688da、默认分支claude/new-session-1959qb/320171cd；新账号重新核GitHub后从远端该分支继续，不从旧本地worktree或默认分支误起。前后端均由接手代理负责，不等待外部前端。
+
+最新非阻塞方案proposal.md、WORK-STATE及514数据/编译证据已确认存在。修正proposal中两个可能误导的历史表述：资源2 RED是55fc历史状态（现已GREEN），状态组件已实现但运行owner仍未接通。TAKEOVER列出下一步门面/任务/提交确认/全冲突覆盖和完整验收门；P4仍不能合并，Draft/OFF，原5秒硬门改指标待批，LMK稳定性NOT_PROVEN，新CI/native NOT_RUN。没有在途测试，本轮不重跑。
+
+旧HRT-Log-p4少量未提交研究源码/文档已原样归档takeover-old-wip/（ARCHIVE_ONLY_NOT_APPLIED_SUPERSEDED），不是准许恢复A/B/C或性能攻关。resource-check旧源码SHA与saved-resource-wip远端归档一致，已在当前生产接入，无需重复应用。原目录未reset/丢弃；凭据/密钥/真实健康数据不随交接保存。构建工具缓存非版本化，新账号按仓库规范准备。
+
+## 本组收尾：资源退出修正+原请求提交观察，514数据回归及最终编译PASS — 2026-10-21
+
+生产ae7688da（证据提交仅文档）：完整core:data514 PASS/0FAIL/0SKIP、compileDebugAndroidTestKotlin PASS、compileFullDebugKotlin PASS。全日志/44 XML/源码SHA/主jar隔离及未改Schema/PK/加密格式/权限证明存nonblocking-transition/reference-context-green/。原关联来源2 RED完整保留，测试源码未改，现GREEN；原资源退出2 RED亦在完整回归中GREEN。UI/导航/四语32+PeriodStability5共37在先前生产4111c0b8实跑PASS，之后App源码未再改，本轮最后的context字段修正后只重编译App，不伪称又运行37。无新大库/SQLCipher原生/API26/29/35/CI/真机/TalkBack，无APK。
+
+实际源码修改仅4个core:data文件：MeasuredOperationChain失败时清明文并原样重抛；NotesRepository恢复所有出口finally清理、固定PRIMARY事务的prepare/observe内部接口；PreparedMeasuredCreate冻结原票据/实际用量/配置SHA/原created/原关联CONTEXT事件；观察继续完整审计并匹配历史创建，不重放，不把缺失当未提交。独立实际用药创建之外的操作没有此完整观察支持。新接口无App运行调用，TEST_ONLY owner/oracle不在主jar。
+
+下一步（尚未实施）：应用级进程owner/最薄公开门面，保证根事务真实提交后才交付SUCCESS、同UUID+完整原请求去重、固定dataset/epoch以及所有冲突写入口/restore/reset隔离；核对必须在writer结束后的独立读取事务进行，内部观察不是任意嵌套外层未提交事务的独立耐久证书。当前UI只读host默认null，正式非阻塞保存未绑定。进程死亡无获批token时人工核对，不自动重放。
+
+P4仍Draft/OFF、autoMerge=null，不合并/发布。原5秒FAIL与硬断言不动，改独立指标仍待产品明确批准；恢复LMK稳定性NOT_PROVEN，生命周期清理通过不等于峰值安全。主线仍320171cd，当前只正常推送#57，不同步或覆盖其他开发树。当前无在途测试；所有有效结果已保存。
+
+## 关联来源反例修正后完整数据514项PASS已实时保存 — 2026-10-21
+
+生产ae7688da：完整core:data514 PASS/0FAIL/0SKIP，NonBlockingRepositoryWriteTest12项全部通过（包括原2个context反例）；测试源码与RED源280bf615逐字一致。原始44 XML/数据阶段日志/源码SHA和RED链接存nonblocking-transition/reference-context-green/，原RED不改写。当前正继续Android测试/App源码编译，未结束不能填PASS；UI/时期37 PASS仍仅标先前4111c0b8源，App源码未再改。
+
+新内部接口范围只限独立实际用药创建：同scope/epoch、配置/时间/实际载荷与原CONTEXT匹配、完整审计成功才确认历史回执；缺失不判未提交/不自动重试。运行owner需在writer退出后以独立读事务核对；该内部帮助函数不构成嵌在未提交外层写事务时的独立耐久提交证书。正式门面必须保证根事务生命周期、固定作用域与全冲突保护，本轮尚未接App。原资源退出合同GREEN、LMK稳定性仍未证明；无新native/大库/预算修改，Draft/OFF，不合并发布。
+
+## 关联context的最小修正已编码，完整回归待验 — 2026-10-21
+
+PreparedMeasuredCreate补原referenceContextEventUuid；prepare在原事务从ReferenceStore.current冻结有效product的事件UUID/无product时null。observe在完整审计之后比较历史record revision1/capture revision1的CONTEXT事件，而不是当前关联；原关联A的请求不会因当前B/解除关联被重解释。只改两个新增内部接口文件，没有接正式写入口，也没有更改原create/replay/审计行为。
+
+两项已保存RED合同原样保留，不改成接受错误结果；下一步全数据（应514项）、Android测试与App源码编译。此前37项UI/时期回归对应4111c0b8，当前修正后不能冒称已运行同一组。无native/大库/性能微优化，Draft/OFF，不合并发布。
+
+## 关联来源反例2项RED已复现并保存，接口保持隔离 — 2026-10-21
+
+280bf615新增两合同在生产4111c0b8上2 FAIL，均在Expected OPERATION_CONFLICT处失败，非夹具/编译错误；原始XML/日志/来源记录存nonblocking-transition/reference-context-red/。证明仅冻结config SHA+相同实际用量/时间/UUID仍会错认改变后的关联参考请求；不能把此前512 PASS当安全等价证明。接口无App运行调用，P4 OFF。
+
+下一步仅最小补充：同事务冻结原关联context事件UUID（无product时null），全审计后按记录原revision1/capture1的CONTEXT核对。不改变任何现有写路径、历史、Schema/备份或验证架构；原RED保留，原测试不改期望。修正后跑完整数据与Android测试编译，不追加性能/native。
+
+## 当前生产候选的Android编译与App37项PASS已保存 — 2026-10-21
+
+生产4111c0b8（本轮生成任务开始时源码）：全数据512 PASS、compileDebugAndroidTestKotlin PASS、App选定37 PASS/0SKIP（原UI/导航/翻译32+PeriodStability5）均已完成。完整日志/XML/实际渲染截图/SHA存nonblocking-transition/frozen-outcome-android-ui/；数据阶段另已实时保存。没有模拟器/真机/TalkBack/新CI，不冒充原生稳定性或P4准入。
+
+已提交的关联来源反例280bf615未包含在这次512/37之中，需单独RED→GREEN；尚未核对该来源边界前接口不准接正式运行owner。继续仅小库正确性验证，不跑性能/原生，不改Schema或预算，Draft/OFF。
+
+## 提交观察的关联来源边界待补：两项负向合同先保存 — 2026-10-21
+
+复核发现4111c0b8的预备描述符只冻结config SHA/实际载荷/时间，尚未单独冻结MedicationReference的关联事件。已保存2项合成负向合同：关联A→B/解除关联、原无关联→新关联，在配置与实际载荷完全相同/同UUID时必须拒绝匹配新请求，旧请求仍能确认。当前尚未执行这2项，不能将此前512 PASS当作已覆盖该边界。无App运行调用，接口不准接正式owner。
+
+当前同一次Gradle的core:data512及Android测试编译已结束通过，App选定回归还在编译；新合同只改已完成数据阶段之外的src/test，不纳入该次512。下一步在途App结束后先跑两项RED，再按原context capture冻结事件UUID修复，不引入第二验证器/Schema/格式/性能快路。P4 Draft/OFF，原审计保留，无新大库/native。
+
+## 原请求冻结/历史提交核对完整数据层512项PASS — 2026-10-21
+
+源4111c0b8：完整core:data512 PASS/0FAIL/0SKIP，NonBlockingRepositoryWriteTest由4增为10项均通过，原资源退出2项保留GREEN。44份原始XML/截至数据层完成的日志/源码SHA已保存nonblocking-transition/frozen-outcome-data/。匹配原配置/时间/实际载荷和完整独立审计才确认历史Committed；缺失操作NotObserved不允许自动重试；后续更正/删除不改原提交事实，无关历史损坏会拒绝。数据dump只读/回滚和冻结oracle合同通过。
+
+同次Gradle继续进行compileDebugAndroidTestKotlin及选定App/时期稳定性测试，当前尚未完成，不预填PASS。没有API26/29/35原生或大库跑分，恢复稳定性未证明，原延迟门槛未改。当前新增接口是internal且App无调用，不等于正式运行owner/公开门面/全冲突接线完成，P4 Draft/OFF，不合并发布。
+
+## 原请求冻结与只读历史提交核对已编码，待验 — 2026-10-21
+
+新增internal PreparedMeasuredCreate与prepare/observe入口：同一事务冻结原票据、实际来源/用量（不可修改列表）、原时间和MedicationSnapshot SHA；prepare不写业务/不预留UUID。observe在固定PRIMARY/同dataset+epoch执行现有完整审计，比较原商品/药物身份、revision1非计划创建、配置SHA、原created时刻及原实际载荷后仅返回历史Committed回执；NotObserved不等于未提交，绝不据此FAILED/允许重试。不依赖当前记录仍存在或未更正，不验证已被原提交改变的旧票据状态，不重放任何写入。
+
+新增6合同（NonBlockingRepositoryWriteTest现10）：别名列表冻结与真实丢失响应核对、缺失操作UNKNOWN、同UUID异剂量/时间/库存效果/配置冲突、epoch/伪装隔离、原记录更正/删除后历史成功、无关历史损坏拒绝。原4个后台/事务合同保留。源码先提交，当前未测试不能填PASS。该接口仅独立实际用药创建，计划/修订/库存调整等不冒充已支持；仍无应用级运行owner/公开门面/完整冲突保护，P4 OFF。原资源清理506 PASS已保存；新源需回归，不新增大库/native，不改5秒断言。
+
+## 两项资源退出RED已修正，完整core:data506项PASS — 2026-10-21
+
+生产31303e64的完整本地core:data回归506 PASS/0FAIL/0SKIP（含原两项未改断言的资源失败/恢复取消合同），44份原始XML/全日志/源码SHA存nonblocking-transition/resource-cleanup-applied/。此前saved-resource-wip原档与RED不改写。链读取Throwable后清空所有纯解码明文引用并重抛同一异常，恢复正常/失败/取消finally释放替换引用；原完整审计、故障回滚、独立oracle与FK去重保留。无Schema/PNBAK1/PK/正式入口变化。
+
+这只证明本地退出清理与数据回归通过，不能宣称低内存LMK稳定修复；原生/API26/29/35/远端CI本组NOT_RUN。UI旧人工34项更正为32（原始XML/receipt一直32）。下一步补固定原请求的只读提交观察，缺失操作保留UNKNOWN，不允许重试；不运行性能/大库。P4 Draft/OFF，不合并发布。
+
+## 上次UI人工汇总数更正：实际32项 — 2026-10-21
+
+逐项核对shell-first/六个原始XML：17+1+1+3+2+8=32，receipt.json.total原已正确为32；前次人工文字和PR写34是加总错误，已改32。没有增加/删除/跳过测试或改原始证据。当前资源清理31303e64的完整core:data本地回归仍在运行，结果未定；不提前填PASS。
+
+## 已归档资源退出修正接入当前源码，完整本地数据回归待验 — 2026-10-21
+
+复核后接入saved-resource-wip/changes.patch原样两文件修正，SHA与原归档逐字一致：链读取失败清理纯解码明文引用并原样重抛；restoreBackupTo在所有正常/异常/取消出口finally释放引用。不是性能优化/可信缓存/增量验证，不改完整审计、事务、解密、格式或Schema。未回退原FK去重。原RED/旧归档证据原样保留，本组先保存源码再做完整本地core:data回归，当前不能填PASS。
+
+已完成非阻塞UI32 PASS及小库owner/Repository11 PASS仅对应之前源；当前变更后需回归。没有新大库/native计划，不以本地清理测试宣称LMK修复。真实保存门面、核对及冲突保护仍未接通；P4 Draft/OFF，政策硬门未改，不合并发布。
+
+## 真实Repository异步小库4项+原型7项PASS已保存 — 2026-10-21
+
+源ecc6671b，NonBlockingRepositoryWriteTest4 PASS及NonBlockingWritePrototypeTest7 PASS（0FAIL/0SKIP），原始XML/日志/SHA及release-source隔离核验存nonblocking-transition/repository-first/。真实recordMeasuredUse完成后才交付SUCCESS；离开观察不取消任务/不双扣；原3个checkpoint故障完整dump一致回滚；提交后丢响应和owner取消保持待核对，不误报未保存/不重试；成功案例当前全审计与冻结完整oracle一致。框架SQLite/Robolectric35小库，不能冒充SQLCipher/进程死亡/LMK验收。
+
+本组没有修改生产core:data源码（相对55fcf2d5为空）；TEST_ONLY owner不在主classes.jar。生产仅公共显示协议/只读状态卡片/NotesApp可选host，无运行任务门面或真实保存绑定。前后端均由当前代理负责，后续缺口是固定作用域公开门面、完整结果核对与跨写入口冲突保护；无队列/WorkManager/持久token。原资源退出2 RED/恢复稳定性未证明/旧5秒失败仍保留，不能称P4准入。Draft/OFF，不合并发布；无新大库/native/CI。
+
+## 真实Repository小库异步合同已编码待验 — 2026-10-21
+
+新增NonBlockingRepositoryWriteTest4项：使用真实recordMeasuredUse事务、完整新旧oracle、原3个故障checkpoint、提交后结果丢失及owner取消窗口；复用TEST_ONLY任务原型，不新增生产门面/队列，不接UI正式保存。测试先保存源码，待运行不能填PASS。使用Robolectric35/framework SQLite小型合成数据，不替代SQLCipher/LMK/进程死亡验收，无性能预算调整。
+
+## 真实主壳导航与状态32项PASS，截图已推送保存 — 2026-10-21
+
+源54b8a8e7：NonBlockingWriteShellTest2、原AppShellBackNavigationTest17、卡片3、四语代表布局8、翻译2，共32 PASS/0FAIL/0SKIP。原始XML/完整日志/真实NotesApp截图及SHA入库nonblocking-transition/shell-first/；截图为合成PENDING观察+真实药物页，不是假称实际库存后台保存。收起可展开、抽屉导航、返回日历及无业务写入断言均通过。已检查实际截图。真机/TalkBack/native及CI NOT_RUN；未启动大库，不改原预算。
+
+继续做真实Repository小库提交/回滚/结果丢失窗口的TEST_ONLY整合合同，尚未运行；生产公开门面、真实安全核对resolver及全部冲突入口仍未实现。原资源退出2 RED仍需独立处理，恢复稳定性未证明。P4 Draft/OFF，不合并发布。
+
+## 主壳非模态状态挂接已编码，真实导航小合同待验 — 2026-10-21
+
+NotesApp新增可选只读writeProgress参数（默认null，P4写入口仍OFF），在原TopAppBar下内联显示状态；收起只切为可展开状态条，不取消/重放任务，也不建立第二状态源。无新导航页/全屏遮罩，原返回handler不改。实际后端尚未绑定，参数只由将来经过验收的owner提供，不生成假保存成功。
+
+新增NonBlockingWriteShellTest2个真实NotesApp合同：pending收起后能抽屉进药物页再展开、返回日历；只有观察状态变化刷新文本，不重试/不写记录或账本。另保留原AppShellBackNavigationTest全体作回归。源码待编译/测试，不能预填PASS；四语状态条补了show文案。当前实渲染组件13 PASS仍属于c3源，非最新主壳结果。无大库/native/门槛修改。
+
+## 四语Compose状态卡片13项PASS及8张实渲染截图已保存 — 2026-10-21
+
+源c3fd7799的App目标13 PASS/0SKIP：操作3、布局/截图8、四语完整性2；同次domain3和TEST_ONLY后台7亦通过。原始XML/完整日志/8 PNG及SHA已入库nonblocking-transition/ui-first/。实际查看法语320dp/2x/深色、繁中411dp/1x/浅色未见关键截断。覆盖是四语言各两组代表布局，不冒充完整交叉矩阵、真实设备或TalkBack（NOT_RUN）。
+
+当前已有实际M3内联卡片与公共状态协议，但AppShell导航挂接和实际Repository后端绑定仍未完成。继续由本代理做主壳非模态挂接/导航合同；生产写入口仍OFF、5秒门不改、原资源退出RED仍保持明确状态，不把组件通过当P4准入。无新大库/native。
+
+## 公共协议3项/后台原型7项重验PASS，UI仍执行中 — 2026-10-21
+
+源c3fd7799：WriteProgressTest3 PASS、使用公共枚举后的NonBlockingWritePrototypeTest7 PASS，均0FAIL/0SKIP；原始XML/log/receipt已立即保存nonblocking-transition/shared-model-tests/。当前同一Gradle session30273进入App编译，UI3操作+8布局/截图+四语测试尚未结束，不能预填结果。无正式P4写入口/DB接线，也无5秒门修改、原生或大库跑分；职责由本代理全部承担。
+
+## 非阻塞界面源码WIP已保存：公共状态协议、四语卡片与测试待验 — 2026-10-21
+
+新增domain/write/WriteProgress只读显示协议（不是数据库可信证明），TEST_ONLY任务原型改用同一状态/phase枚举，避免前后端状态漂移。新增WriteStatusCard M3内联卡片，区分写入/结果核对/人工核对/真实成功/确认无提交失败；收起不取消业务，未核对不显示重试。四语文案完整源码已写，尚未执行本组编译/测试。
+
+新增3个Compose操作合同与8个代表性布局/截图测试（四语言分别320dp/2x/深色、411dp/1x/浅色），明确不等于全交叉矩阵或真实App导航。模型3测试、原型7测试需因公共模型调整重验。卡片尚未接AppShell，P4正式写入口保持OFF；门面、冲突入口覆盖和真实提交resolver仍未实现，不能称端到端完成。下一步仅上述有限测试，不重跑大库或改5秒门。
+
+## 非阻塞任务原型7项PASS，立即保存 — 2026-10-21
+
+源9b9e8e2a的NonBlockingWritePrototypeTest 7 PASS/0SKIP，原始XML/log/receipt已存nonblocking-transition/prototype-first/。覆盖IO后台、页面观察取消不取消写入、重复start、仅未开始可确认取消、执行异常不直接FAILED、同UUID/请求/epoch核对、未判定不自动重试。只是假Repository动作与核对port的协程合同，不是真实DB提交/恢复或原生验收，不代表当前PR全绿。
+
+本代理继续负责界面：接下来建立最小只读公共状态模型和四语M3状态卡片及组件测试，不开放P4写入口，不重做导航。不修改旧5秒门槛/LMK安全阻塞；所有生产接线与最终验收尚未完成，不能声称用户已获得非阻塞保存功能。
+
+## 非阻塞保存实现检查点：后台任务原型已编码，针对性测试待执行 — 2026-10-21
+
+分工更正d2e18356已推送，本代理负责后端及UI，不等其他执行者。新增historyTest/NonBlockingWritePrototype.kt与test/NonBlockingWritePrototypeTest.kt，均TEST_ONLY，不编入生产；scope由应用owner提供，IO动作与页面观察生命周期分开，重复start只执行一次，未开始取消可确认无效果，任意执行异常不直接FAILED，必须同UUID/请求/数据集/epoch核对后结论。7个合成小合同已写但尚未运行；它不验证真实DB、不是提交证明、不接库存/不新建队列或Worker。
+
+本阶段不修改5秒断言/政策，也不重跑大库。先运行唯一目标测试类，保留编译/失败/结果，每组完成即保存推送。原PR资源退出两项RED与WIP补丁都保留；不把选择性新合同测试当全套原断言通过。后台门面、正式状态源和UI真实接线还未实施，P4 Draft/OFF、LMK独立阻塞。
+
+## 【最新责任更正，继续推进】全部后端及交互由当前执行代理负责 — 2026-10-21
+
+负责人更正：非阻塞交互并未指派给其他代理，目前全部工作由当前执行代理负责。REQUIREMENTS127与产品提案已移除不成立的前端分工，不再等待外部前端负责人。继续以可独立验证的小步实现/测试推进非阻塞保存，不重启缓存/方案C/大库攻关；5秒政策变更、生产入口及发布仍受原审批门约束，恢复LMK仍独立阻塞。
+
+已重新核远端#57/b7b211a1、默认主线320171cd及开放PR，主树干净，无新共享UI PR；旧隔离工作树/源码patch均保留。先实现隔离的应用级保存任务与状态合同原型，用有限小测试验证跨页面观察取消、真实返回才SUCCESS、异常结果不明先核对、UUID/作用域隔离。此阶段不接正式库存，不替代真实DB审计/幂等证明，不新建队列/WorkManager；通过后再推进后端门面与本代理负责的界面状态。下方“本轮结束/等待外部前端”均属历史，不能作为当前分工。
+
+## 【当前交付完成／等待政策批准】P4停止性能攻关 — 2026-10-21
+
+方向冻结提交3e5d5526、在途工作归档b5cf998f均已正常推送；PR #57标题与产品决策正文已更新，Draft/OFF/autoMerge=null。非阻塞产品与最小后端合同在nonblocking-transition/proposal.md，交付清单delivery.json；旧5秒硬断言未改、FAIL未重标，详细政策尚待负责人批准。停止后只改docs和WIP证据，没有新生产实现/UI/队列/WorkManager/Schema/加密或新的大库/native。
+
+已有在途两目标GREEN2 PASS已收齐并以patch/XML/log/SHA保存；补丁不应用、不推广，原隔离工作树内容保留。root无运行Gradle或原生任务，最后原生仍39555630970（旧小型进程终止合同），不再派发。档案SHA、仅文档diff、自有生成文件清理已只读核验；最后文档HEAD未跑CI，不称六门通过。
+
+本轮到此结束：下一工作必须先明确批准非阻塞验收政策及后端/UI合同，不能恢复下方任何旧微优化/完整回归/原生攻关计划。恢复LMK/稳定性仍独立BLOCKED，应用级状态owner与安全结果resolver/UI尚未实现，P4不能合并发布。现有安全审计/事务/票据/加密措施保留，旧工作和失败证据不删除。
+
+## 【冻结交付】非阻塞验收提案已保存，在途修正归档后停止 — 2026-10-21
+
+负责人最新方向已记录REQUIREMENTS126及nonblocking-transition/proposal.md；所有旧“再跑完整/原生/继续优化”计划作废。本轮无新大库/原生调度、没有实施后台队列/协调器/UI，也没有修改5秒硬断言。新验收政策仍待批准，旧FAIL保持FAIL。PR #57仍Draft/OFF，不合并、不发布。
+
+停止前唯一在途资源GREEN已结束，两目标2 PASS/0FAIL/0SKIP；原始XML/日志、两文件源码patch、SHA和原body等价证据已归档nonblocking-transition/saved-resource-wip/。git apply --check只读核验可应用。**patch没有应用到PR生产源码**，未跑patch的完整回归/Android编译/原生，预热补测已取消；不能把2 PASS当当前PR全面通过。隔离树/workspace/HRT-Log-p4-resource-check及其本地提交/工作未清除，原2项RED/首轮harness失败保留。root已将可复现代码和结果远端保存，无需为补丁完整验收继续消耗额度。
+
+主树生产仍55fcf2d5，历史data495/Android编译/reminder21/App1562 PASS+277 SKIP/Period5 PASS仍仅对应其当时测试源；随后新增资源退出测试对未应用patch的当前生产为已知RED，整体不能称全绿。最新文档提交用skip ci避免违背停止跑分要求，不视作新CI通过。恢复稳定性NOT_PROVEN/LMK独立阻塞，普通延迟在新政策未批前不重分类。当前无运行构建/原生任务。
+
+后续仅待负责人批准政策及最小后端/UI合同后另行实施：app级IO owner与三状态、UUID核对/取消/重试、同数据集冲突保护；core:data internal边界需最薄公开门面，读取既有操作不等于已经有安全提交resolver。不得接着运行旧性能计划或擅自接线。
+
+## 【最新方向冻结】停止性能攻关，非阻塞产品方案待批准 — 2026-10-21
+
+负责人最新指令覆盖下方所有“下一步完整回归/冻结新候选/启动原生”计划：**不再执行这些计划**。不新增缓存优化/方案C/大库跑分，不为获得绿色续跑。#57 Draft/OFF、autoMerge=null，不合并/发布。详细最小后端评估、三状态/UUID/取消/进程死亡核对及测试政策提案见`docs/ansm-integration/p4/nonblocking-transition/proposal.md`，冻结清单freeze.json；REQUIREMENTS126已记录。方向停止已生效，5秒硬门改性能指标尚待明确批准，原断言/失败/六CI均保留。
+
+当前主树生产仍55fcf2d5；data495/Android编译/reminder21/App1562 PASS+277既有SKIP/Period5 PASS均已保存，属该源，不等于当前新增资源退出RED合同整体通过。旧恢复41.633s仅一轮成功，另一准备LMK/恢复NOT_RUN，稳定性未证明，安全阻塞不因非阻塞UI移除。新候选原生0次，不启动。主树无运行构建；此前生成probe的精确SHA/复现命令已保存，可清理自有衍生文件。
+
+隔离树/workspace/HRT-Log-p4-resource-check的resource_failure_cleanup已有两目标GREEN在途（session54049）。已通知停止任何新增实现/预热补测/Gradle/原生，只收在途结果并保存当前WIP；将以可复现patch+原始日志保存，不把未全面验收的修正推广成新生产候选。旧工作树/workspace/HRT-Log-p4未提交实验仍保留，不覆盖。新方向后台协调器、公开DTO与提交结果resolver/UI均NOT_IMPLEMENTED；本轮只提案，不接线、不加队列/WorkManager。下一步仅收在途保存结果、更新PR政策记录，完成本轮交付。
+
+## P4 资源退出两项有效RED均已实证并推送 — 2026-10-21
+
+隔离树纠正后的RED0c32a87f已正常接入。证据full-audit-reuse/resource-failure/red/显示两个真实目标均执行并失败：chain模拟OOME后cache=(1项,1130B,token非null)；restore取消ROWS_DELETED后cache=(1项,3634B,token非null)。这些B是保留预算估值，不是RSS/实际LMK证据。原生产两个文件与5e基线相同，错误类型/消息、原数据/epoch/FK/oracle断言均保留；RED停在新清理断言，不谎称后续断言已执行。首轮额外协程identity的harness错误保留在red/initial-coro-identity/。
+
+主App已结束、源55fc的495/21/1562PASS+277SKIP/Period5/生成Android编译证据已保存。隔离代理现在只实现chain异常清理/restore finally释放，目标GREEN尚待验证；完成接入后root跑最终data/Android，最终必需CI覆盖新源码。当前无运行主树Gradle、无新原生。Draft/OFF，不合并发布。
+
+## P4 App完整回归结束：1562 PASS/277既有SKIP，Period5 PASS — 2026-10-21
+
+主树Gradle session55570已实际BUILD SUCCESSFUL（22m50s），源55fc生产。App1839=1562 PASS+277既有SKIP/0FAIL/0ERROR，PeriodStability5/0SKIP，四语合同包含在本组；原XML/逐suite计数/SHA/完整log已入库resumed-verification/app-before-exit-cleanup/。同组data495、提醒21、生成Android编译均PASS。不要把277 SKIP计PASS，也不把本组冒充后续资源退出修正源码的全量CI。
+
+接下来隔离资源组纠正RED/最小GREEN完成后接入主树（当前root已无运行构建），再跑最新完整data/Android和必要工具，冻结源触发新候选有界原生与必需CI。旧失败/旧恢复两个run均保留不重跑，正式入口OFF、Draft不合并发布。
+
+## P4 资源失败首组证据已保存：chain有效RED，restore测试断言修正 — 2026-10-21
+
+从隔离树接入c8458bc0（只测试/证据，无生产改动），即刻推送。初始两个目标日志/XML及原始tests.patch在full-audit-reuse/resource-failure/red/initial-coro-identity/：chain在模拟OOME后已证同一错误对象逃逸、cursor关闭，随后清理断言实际FAIL（entries1/bytes1130/token非null），属于有效RED。restore首轮被额外assertSame拦截；协程可复制异常对象，身份不是原业务要求，已仅撤回此额外断言，保留原type/message/全数据/epoch/FK/oracle合同，原失败不覆盖。纠正RED正在隔离session95150执行，尚无GREEN或新生产修改。
+
+主App session55570仍运行；不要把测试源码checkpoint当App已完成或P4完成。生产仍55fc；#57 Draft/OFF，无新原生、无合并发布。
+
+## P4 并行资源异常检查已启动，App仍运行 — 2026-10-21
+
+主树最新5e12e2b6，源55fc的data495/Android编译/reminder21与工具73已保存。App full unit session55570仍运行且进程有CPU活动，日志/workspace/scratch/p4-reuse-latest-final.log，不能预填PASS或当卡死。主树有唯一生成LargeInventoryPerformanceProbe.kt未提交，全部构建结束后clean。
+
+为避免在编译中改共享源码，另建detached worktree /workspace/HRT-Log-p4-resource-check (base5e12e2b6)做两个资源退出合同，代理resource_failure_cleanup，目标仅chain读失败和restore所有出口的memo释放。RED已启动session74879，日志直接写该树docs/ansm-integration/p4/full-audit-reuse/resource-failure/red/gradle.log；只指定pureChainContentMemoNeverCachesDatabaseValidity、indexedRestoreCancellationAndResourceFaultsPreserveTargetAndEpoch，不动原断言、Schema/crypto/UI，不跑原生。
+
+目前生产仅clear前置/close释放：需实证异常中途是否留候选memo。候选最小修正若RED确认：checkedChain失败清memo原样重抛Throwable；restore整个输入作用域finally清memo，覆盖成功/失败/取消，时间仍算实际API。代理每组提交并给SHA，root在App结束后cherry-pick正常推送并跑最终data/Android，避免丢代码或把模拟OOME当实际LMK证明。不创建新持久状态，不是快验证器，不改普通写入规则。新候选原生仍NOT_RUN，#57 Draft/OFF。
+
+## P4 提醒回归21 PASS及隔离核验已入库 — 2026-10-21
+
+最新55fc生产源的reminder21/0FAIL/0SKIP实际通过，逐suite/XML已存resumed-verification/reminder/。源码与生产data jar隔离核验PASS：无冻结oracle/测试探针类；App main/PK/Schema/BackupCodec/BackupLimits/NotesDatabase/StockForecast与99e一致，正式UI没有新增measured写入口，证据source-isolation.json。App full unit仍编译执行中，未预填；下一组完成即时保存。当前无新原生性能结论，Draft/OFF不合并发布。
+
+## P4 清理GREEN与最终data495/生成Android编译PASS已保存 — 2026-10-21
+
+源55fcf2d5的完整data495/0FAIL/0SKIP已实际PASS，旧clear反例对应pureChainContentMemoNeverCachesDatabaseValidity同一断言GREEN；生成大库Android测试编译PASS。XML、全suite计数/SHA及截至reminder构建的日志已立即入库resumed-verification/clear-green-data/。这组覆盖最新nullable token源码，与之前仅旧token生产通过的组明确区分；原RED/编译FAIL均保留。
+
+同一Gradle继续App/reminder（session55570；日志/workspace/scratch/p4-reuse-latest-final.log），尚未结束，不预填其结果。工具73 PASS、旧完整oracle独立性复核均保存；待这一组完毕进行最终源码/测试原型隔离核验，再冻结预定有界新候选原生。#57 Draft/OFF，不合并发布。
+
+## P4 清理边界RED已实证，无分配修正已入库待GREEN — 2026-10-21
+
+新增clear后lifetime必须null的合同在旧生产f220上实际运行：1项FAIL，断言Cleanup must invalidate ownership without allocating a replacement，日志/XML已入库resumed-verification/clear-red/，不是编译失败。原in-flight query清空后不能回填断言保留。
+
+最小生产修正：checkedInputLifetime改nullable，初始null；clear在原锁内清map/bytes/置null，不创建对象；正常reader才锁内创建非空token。分配失败不发布，旧token不能与null/新token相等，不影响数据库信任或任何规则。独立只读审阅认为覆盖并发/OOM边界；强引用释放不等于String擦除。现在GREEN与最终完整data/App/reminder/生成Android编译待跑，不能沿用前495当本修正通过。无新原生，#57 Draft/OFF。
+
+## P4 实时结果：修正DTO后完整data495/生成Android编译PASS — 2026-10-21
+
+source00d7c18d生产与f220一致，完整data495/0FAIL/0SKIP及含最新生成大库探针Android编译实际PASS。XML/逐suite计数/SHA/日志和生成SHA立即入库full-audit-reuse/resumed-verification/pre-cleanup-fix/；旧编译FAIL仍在initial-compile-failure.log。此组在无分配clear修正之前，不能当下一源码通过。
+
+下一步只针对审查发现的清理OOM边界写RED：清理后lifetime必须null，既有in-flight合同保留；然后最小生产改为clear置null、正常reader新建token，GREEN/完整data/App/reminder/Android再验证。未启动新原生、仍Draft/OFF。
+
+## P4 工具保护完成：73 PASS，发现清理分配边界待修正 — 2026-10-21
+
+仅新增生成器测试，验证额外冷pure-codec真实提交计时包含clear、真实ticket+record、冻结used6 oracle、独立5s硬断言，以及不是进程/页缓存冷启动；7类实际文本mutant均被拒绝。全套ANSM工具73 PASS（目标脚本16），证据resumed-verification/tools-final.log与cold-commit-contract.json。
+
+独立审查新发现：clearPureInputMemo末尾Any()在清理时可能OOM，导致旧token保持并允许in-flight回填；不影响数据库正确性，但破坏资源清理保证。待当前data构建结束后，最小改为nullable token，clear无分配置null，下一正常reader才新建；补先RED后GREEN合同，不掩盖已保存编译FAIL。尚无新原生，不扩大本轮方案。#57 Draft/OFF。
+
+## P4 接手实时检查点：最新完整编译FAIL已保存，冻结DTO引用已修正待验 — 2026-10-21
+
+f220b1f2源码恢复验证于compileDebugUnitTestKotlin失败：FrozenFullAuditStore的一个参数仍写FrozenFullAuditChain.Node，但冻结链只私有typealias到原不可变DTO；Node不是其嵌套类。日志已保留full-audit-reuse/resumed-verification/initial-compile-failure.log。仅把该参数恢复MeasuredOperationChain.Node引用，独立冻结reader/全部规则未变，frozen-oracle.json保留前binding SHA与新SHA。修正尚未验证，不能把旧494或聚焦151当最新完整通过。工具72 PASS仍有效；尚无新大库。马上重跑最新data/生成Android编译，结束立即保存。#57 Draft/OFF，不合并。
+
+## P4 接手实时检查点：复核通过，工具72 PASS，最新完整回归执行中 — 2026-10-21
+
+已正常快进至远端f220b1f2，未覆盖其他模型成果。旧恢复专项结果/三API证据/唯一小型kill合同已于99e536fe完成，不重新派发旧运行。此环境没有上一模型36943/31631进程和scratch结果，不能凭旧IN_PROGRESS写PASS；重新运行最新源码data全回归和生成Android编译（日志/workspace/scratch/p4-reuse-resumed-data-android.log，session3813）。构建前恢复已存在的离线Robolectric jar，仅宿主构建配置，不改原生预算。
+
+新候选工具72项实际PASS、独立只读源码审查未见关键反例，立即保存full-audit-reuse/resumed-verification/。审查强调纯codec与单审计缓存16MiB各自估值可能叠加，仍需原生内存证据；不等同数据库信任，不跳过完整历史。data/Android当前IN_PROGRESS，App/reminder待跑，新候选大库NOT_RUN，不声称准入。完成每组即保存提交；保持#57 Draft/OFF，不合并/发布。
+
+## P4 实时换号检查点：执行复用已入库，最新纯codec仍待最终验收 — 2026-10-21
+
+已推送实现检查点0dd02a80，普通完整审计内复用候选针对性151项PASS。随后完整data494/0FAIL/0SKIP已实际通过（含原反例、新old/new全审计差分与单容器生命周期）；App/reminder/含生成大库探针Android编译仍在本地Gradle session31631执行，日志/workspace/scratch/p4-reuse-final-full.log。这一组data结果属于加入跨调用纯文本codec之前的中间源码，不能冒充最新实现通过。实际禁用行头保护的临时mutant获RED，源码已恢复；证据header-mutant-red/。原生新候选尚未启动，旧大库不重跑。
+
+为减少同笔写入ticket/validate/append/最终audit重复parse，新增**纯文本codec**精确全文→不可变Link+SHA的16MiB有界同步LRU；这不是数据库合法性/可信基线缓存。每次仍读取全部当前行并重新检查UUID/序列/前驱/全局历史，A/B反例仍保留。独立旧Chain也已冻结（FrozenFullAuditChain）并绑定old full oracle，避免对照共享新codec。完整F(text)等价证明经独立审阅，ChainContentMemoOracle已写但尚未运行。DatabaseAccess.close finally和restore解密前清空；资源生命周期token只防止关闭前的in-flight读者清空后重新保留旧明文，不参与数据库合法性判断。**该最后token改动尚未编译/测试**，不得认定完成。
+
+已另建隔离worktree `/workspace/HRT-Log-p4-verify`（detached d390a4ac加当前源码diff）执行最新完整data＋生成大库Android编译，session36943，日志`/workspace/scratch/p4-reuse-isolated-final.log`；Gradle1536MiB/in-process/单worker仅宿主编译设置，不改原生512/192限制。原31631仍跑App，不与其共享构建输出。最后资源token现在已在clear实际轮换，并补“query中clear后旧reader不得回填”合同，仍待最新编译/测试。生成器当前已修正并工具19PASS，root生成源已clean，不提交生成文件。
+
+下一步：先收36943最新结果及31631中间App结果，保存源码SHA、生成源SHA和XML；检查新的clear/in-flight合同（必要时补负例），重跑最新完整data/App/reminder和生成原生编译，保存最终证据。生成器新增原预算结束后的额外第五笔真实提交：先清纯codec，票据+写入独立计时、5秒硬断言、冻结old oracle确认used6；明确不是进程/数据库页缓存冷启动，原三写和所有门槛保持。生成器修改中一次Python语法错误已修正，工具19项通过，最新生成摘要在/workspace/scratch/p4-reuse-generated-final-2.json；要保存失败日志并核验最终生成Kotlin编译。
+
+全部正确性/原生编译通过后才冻结新源码触发**首轮**新候选原生（最多2次，首轮失败不补跑筛绿）；当前仍无新原生性能数字，不宣称5秒通过。P4 Draft/OFF/PRODUCTION_BLOCKED，不合并，不改Schema/备份/密码学/UI/P5/P6/PK/权限/签名发布。此次提交skip ci，防止WIP自动跑大库。
+
+## P4 新一轮有界执行复用候选：设计/独立旧oracle冻结 — 2026-10-21
+
+负责人再次要求实际解阻，最新源99e536fe/主线320171cd已核。旧恢复专项已结束，不重跑旧源码。新候选仅完整审计执行复用：同审计纯消费payload解码、reference已有扫描行直接验证、primitive captureHash去序列化往返；保留全部全局规则/行头依赖/最终全审计，缓存不跨事务。已排除跨回调链头复用：追加可能修复预先无效的future-child前缀且收益约数百ms，不足以解阻。冻结99e536fe旧Store/BackupValidation/ReferenceSchema独立全审计到historyTest，原SHA存full-audit-reuse/frozen-oracle.json。
+
+当前生产候选和冻结old oracle已实现，reference新增4合同/Android编译PASS；首次综合构建因未指定本地Robolectric缓存导致依赖下载失败（不是业务测试FAIL），已保留日志并使用现有离线jar重跑。最终16MiB候选针对性151项全部PASS（库存147/reference4），Android test编译PASS、工具19PASS，日志/失败尝试已保存在full-audit-reuse/focused/。尚未完成完整回归或冻结，不能称提速PASS。已提交并推送实现检查点0dd02a80（skip ci，未触发大库）。临时关闭行头保护的实际mutant被新合同捕获RED，源码已恢复，证据在full-audit-reuse/header-mutant-red/；完整data/App/reminder与含frozen大库对照的原生编译正在执行。新增单容器0/365/3650行生命周期合同，不冒充2000操作/容器增长或进程重启。下一步完整验证通过再冻结新候选；最多两次原生，首轮失败即停止同源补跑，旧恢复两次次数不挪用。原5s/15s/120s/夹具/内存不变，Draft/OFF不合并。进度持续写库。
+
+## P4 恢复专项收尾：两个实际终止合同PASS，整体仍BLOCKED — 2026-10-21
+
+唯一小型run39555630970/job119074632992 SUCCESS；源47f11551，生产仍9d304e58。工件12325738217/2183B，官方与下载SHA0204f52b41f8f8ae08b65b17dbc12f67f9add63e70c6ee96cfe21452a3f24227、CRC均通过；原始日志/报告已存restore-memory/death-probe-fix/native/。ROWS_DELETED PID3784→4021、ROWS_INSERTED PID4065→4226，两次外部终止后新进程整库hash、原epoch、FK、完整oracle均PASS。prepare日志Process crashed为有意终止；verify各OK(1 test)。明确large_performance=NOT_RUN_CONTRACT_ONLY，生成大库探针GENERATED_NOT_RUN；不冒充第二轮大库恢复或性能通过。
+
+统一结论见`docs/ansm-integration/p4/restore-memory/result.md`。9d完整恢复41.633s及整库一致性通过；另一大库准备LMK/恢复NOT_RUN，稳定性NOT_PROVEN。原三写8.041/7.511/7.804s FAIL；唯一主阻塞仍为保留全部语义时不能稳定满足5s写入预算。两个大库和唯一小合同额度已用完：停止相同实验，不新增跑分、不继续叠加恢复实现。需要负责人选择是否单独审查最小操作链前缀复用，或另立约束/检查点架构决策；不能默认批准跳过全量审计或修改预算。
+
+常规data485、API26/29/35库存143+恢复9+迁移16各PASS；原push API26安装器失败及App277 SKIP保留。Room13/业务12/PNBAK1不变，没有可信缓存、Schema、加密、UI、PK、P5/P6变更。PR #57保持Draft/OFF/PRODUCTION_BLOCKED，不自动合并。下列较早IN_PROGRESS仅历史检查点，以本节和统一结果为准。
+
+## P4 恢复收尾：9d常规回归与三API原始工件已独立核验 — 2026-10-21
+
+PR9d Android39495197495与science39495197475已SUCCESS；API26/29/35分别库存143、BackupReplacement9、ReferenceMigration16，全0FAIL/0SKIP。build工件12297419002/127343213B，官方及下载SHAebc0f3f98c4a8e1566ba383cdcc6cf85287ba767f580b0bf4f77341f764db7af、CRC通过；data485、reminder21、Period5全部PASS，App1839=1562PASS+277已有SKIP/0FAIL，Indexed输入7PASS。各API工件摘要、SHA/CRC、原始HTML和CI快照已存restore-memory/compatibility/。不把skip计PASS，也不冒充当前文档HEAD重跑。
+
+push39495191719失败项已核：API26 job118878333313安装Android Emulator SDK时Error on ZipFile unknown archive，尚未执行测试；其他4类push Android job均SUCCESS，research-deep push SKIPPED/PR SUCCESS。原失败日志摘录保留，不宣称所有CI实例绿、不重跑该作业。唯一小型恢复进程终止合同39555630970仍IN_PROGRESS，check名已确认restore-process-death-api26-only，不执行大库。下一步只收该结果、官方SHA/CRC/实际两个kill与新PID/epoch/全库hash/FK/oracle证据，随后统一收尾报告；生产9d冻结不动、#57 Draft/OFF不合并。
+
+## P4 恢复收尾继续：唯一小型进程终止合同已启动 — 2026-10-21
+
+已从远端快进至47f11551，未重复旧观察器研究。最新生产仍冻结9d304e58，主线320171cd，diff9d --core/data/src/main为空；#57 Draft/OFF，auto_merge=null。已确认47源此前没有运行记录，按唯一允许的显式verification=restore-process-death-only启动run39555630970；check应为restore-process-death-api26-only，large_performance=NOT_RUN_CONTRACT_ONLY，仅两个小型真实终止/新进程回滚合同，不执行第三次大库。调度成功，不再派发另一轮。计划已保存death-probe-fix/native-plan.json。
+
+常规9d CI现已结束：PR Android/domain39495197495 SUCCESS；push39495191719 FAILURE，原因待核，不能写全部CI绿。正在核验PR API26/29/35及完整data/App/Period工件SHA、CRC和原始报告，之后写统一恢复专项收尾报告。已有两个大库结果仍是一轮完整恢复PASS、另一轮准备LMK；写入约7.5–8秒FAIL，不改预算/不筛绿、不认定稳定。小合同尚IN_PROGRESS，不能预填PASS。
+
+## P4 恢复专项实时测试检查点：仅探针事务修正编译PASS，安排唯一小型合同补验 — 2026-10-20
+
+冻结生产源码仍9d304e58，git diff9d --core/data/src/main为空。仅测试MeasuredRestoreDeathProbe把数据hash、epoch/FK/full oracle放入同一db.withTransaction，保留所有原断言；原两大库run中事务外API使用失败的日志不覆盖。修正Android编译PASS、工具4 PASS已保存`restore-memory/death-probe-fix/`。没有新恢复生产结构或第三次大库。
+
+已有ANSM性能workflow新增显式手动verification=restore-process-death-only，check名restore-process-death-api26-only、artifact名ansm-api26-restore-process-death-only，脚本只assemble/install合成test APK、执行两个小型kill合同，报告large_performance=NOT_RUN_CONTRACT_ONLY。pull_request及默认dispatch仍full并保留原预算，不可用only模式宣称性能通过。该源码提交[skip ci]避免新大库自动运行；下一步**唯一一次**gh workflow run ansm-inventory-performance.yml --ref feature/ansm03b-p4-exact-stock-20261016 -f verification=restore-process-death-only。若调度参数被拒绝，不得不带参数重试默认full。
+
+大库已结束：自动9d本轮恢复41.633s/整库摘要与oraclePASS、恢复heap114.81MiB/RSS119.07MiB；dispatch准备LMK，恢复NOT_RUN；稳定性尚未证明，三写8.041/7.511/7.804s FAIL。继续收常规API26/29/35，Draft/OFF，不合并发布；所有后续结果即时保存。
+
+## P4 恢复专项实时原生结果2：一轮完整恢复PASS，稳定复验仍未证明 — 2026-10-20
+
+冻结生产源9d304e58。PR自动39495197608/job118878355913/artifact12298256693完整结束；官方/下载SHAb3c4e1b3bdf9fb1ac73fddd085c0e648172ba24e1936955f591d1ef9e178eca6、CRC、pre-cleanup/最终报告一致均核验，立即入库`restore-memory/native-auto/`。原API26 SQLCipher/RAM520962048B/ART201326592B、14600记录/2000容器/32603行/19660924B全部保持。
+
+本轮恢复41632.659ms（含整库hash前后读和资源观测），实际Repository+probe36984.967ms；全部DOMAIN业务字段/行按可信PK有序流式摘要前后相同baa5babe005a4e2c6b39b0c6201c4cc9c83b36691afd0d6c627e5219ae3467f7，独立完整oracle/投影通过。恢复窗口100ms采样heap120390160B、RSS124850176B、native malloc32348584B；staging关闭前后malloc30239080→10142472B，减少20096608B（约19.17MiB）；**RSS同一时点未同步下降**，不能等同物理释放。HWM包含此前夹具，100ms样本可漏瞬时峰，无旧恢复阶段RSS可直接比较。
+
+这只是本轮恢复PASS：另一固定dispatch39495229423在准备阶段LMK，未到恢复，故稳定性NOT_PROVEN。两个大库次数已用完，不再补跑。三写8040.550/7511.015/7804.042ms仍FAIL，所以原native整体DIAGNOSTIC_BUDGET_FAIL，不能把恢复PASS改成P4或整作业PASS。原小型进程死亡验证同样因previewEpoch事务外调用FAIL（数据hash已过，epoch/oracle未跑），原日志保留。
+
+后续仅修正**测试探针**事务作用域（不改任何生产源码），本地Android编译/工具验证后只执行一次包含两个小型kill合同的手动原生job，明确不同check/artifact和NOT_RUN_LARGE，不再跑大库。此验证不替换旧两个native结果，不计作第二轮恢复稳定性。常规API26/29/35 CI仍收集中；Draft/OFF，不合并/发布。
+
+## P4 恢复专项实时原生结果1：准备阶段LMK，恢复未测，证据已保存 — 2026-10-20
+
+冻结源9d304e58。dispatch39495229423/job118878466555/artifact12297921201已结束FAIL；ZIP官方/下载SHA2bb20ac108ad6e34e6a051a2549ba697aef75deef3f86426842171be1e271ead、CRC已核验，原始报告/kernel/小型进程终止日志全部立即入库`restore-memory/native-manual/`。
+
+最后已保存阶段synthetic_fixture_expansion（已记录duration13279.559ms）到下一阶段/size报告之前，内核LMK杀测试PID3913，to free201148KiB仅终止参考非峰；**尚未调用实际加密恢复**，所以恢复时间/资源/大库一致性全部NOT_RUN，不能声称新恢复代码导致或修复了该准备阶段失败。原大库两次次数仍已占一次，不追加补跑筛绿。PR自动39495197608仍执行中，继续等待唯一剩余结果。
+
+小型ROWS_DELETED/ROWS_INSERTED两次准备与外部kill已执行，verify日志中整库hash与新PID断言已通过，但epoch检查在事务外调用ReferenceStore.previewEpoch触发check(db.inTransaction())，这是新探针的使用错误；epoch和完整oracle没有执行，不能当数据库损坏或测试通过。源9d保持不动，不能用新源码冒充这两个大库运行。后续如修正，仅限测试事务作用域，须另记小型合同验证，不重跑原大库，也不引入新的生产结构修复。
+
+本地485/工具49/生成Android编译通过证据仍有效但不覆盖原生未测。Draft/OFF/PRODUCTION_BLOCKED，不合并/发布；每个完成运行立即保存推送。
+
+## P4 恢复专项实时原生检查点：两次固定运行进行中 — 2026-10-20
+
+候选源码9d304e58fd92f0171fd6ddd272f79dbe6ece3cb4，后续文档提交不改生产/测试源码。预定两次均已启动：PR run39495197608/job118878355913，dispatch run39495229423/job118878466555，均进入API26 emulator step，**暂无完成结果**。配置/次数/常规CI IDs已保存`restore-memory/native-run-plan.json`。这是唯一两个大库运行，不再增加第三次。
+
+先前最终本地485、工具49、最终生成Android编译均PASS并已入库local-final；不代表原生PASS。下一接手者应直接查以上run并下载原始工件，核SHA/CRC、restore_memory检查点与100ms RSS/heap、restore_business_equality、restore-process-death.json两种真实终止回滚、原restore120s及原写入5s各自结论；任一结果结束即保存提交推送。MCP github_download_workflow_artifact下载获得临时download_url，别打印其token；gh artifact直接下载曾403，不能用download_file处理这种非Sediment URL。
+
+本检查点仅文档[skip ci]避免重复启动相同大库；CI结果仍属于源9d，不宣称文档HEAD重新跑过门。主线320171cd、Room13/业务12/PNBAK1/原限制不变。正式入口OFF，Draft不合并/不发布；恢复专项与日常写入/C分开。若会话中断，代码与所有已完成测试已在远端，不必重做。
+
+## P4 恢复专项实时检查点：最终本地485/原生编译PASS，开始固定原生验收 — 2026-10-20
+
+生产与测试源码固定于b8c4d2a0（下一非skip证据提交与其生产源码一致）。完整本地data485/0FAIL/0SKIP、包含整库摘要/资源/真实终止probe的最终生成Android编译、工具49项均PASS，立即入库`restore-memory/local-final/`。原冻结template93131671未改，生成native SHA214f7b8ed3ead7d581191c268b34d3231896612ec9b610da3128d7107f1b6dc3。历史所有编译失败/各组结果保留，不用旧结果冒充新源码。
+
+正式实施仅移除恢复长期全量DOM，用已认证byte[]+有界索引按需解行，复用全部字段/类型/版本/依赖和两次完整审计；关闭无分配擦零。BackupCodec/KDF/PNBAK1与BackupLimits字节一致，Room Schema、StockForecast、MeasuredConsumptionStore（保留安全FK去重）、前端、PK均Git对象一致，生产jar不含5类测试探针/冻结oracle。证明/isolation及全部局部证据已落盘。
+
+现在只执行预定两次同源码原生（PR自动+dispatch），不再改生产候选/加第三次跑分。每次原大库结束后另有ROWS_DELETED/ROWS_INSERTED小型真实进程终止合同；原始native失败码、写入5s断言和全部预算保留。实际恢复窗口内的资源/整库hash读开销均算120s。尚无新的原生结果，不能宣称LMK修复；后续每个运行完成即验SHA/CRC/保存并推送，不攒到最后。普通写入/方案C仍独立BLOCKED，Draft/OFF，不合并、不签名/发布。
+
+## P4 恢复专项实时检查点：整库摘要合同9 PASS，最后源码验证待跑 — 2026-10-20
+
+新流式业务digest已证明主键排序后的恢复/原数据一致，且修改一个字段会改变摘要；BackupReplacement9 PASS证据立即保存`restore-memory/digest-contract/`。生产core仍基于2ae08986；该次Android编译成功但生成器保护拒绝覆盖旧文件，所以**不能当作含新摘要断言的最终生成源码编译成功**。后续先prepare --clean再重新generate，保持原frozen template不动。
+
+最后审查把IndexedBackupDocument.close改为无分配擦零/置null/清索引，避免资源不足时为了清理再创建数组/迭代器；尚需最新完整回归。生产不再计划其他结构变化。接下来直接最终完整data+新生成Android编译，成功后提交非skip的冻结生产候选，执行预定两个原生/API兼容，不再扩展研究工具。
+
+实时保存过的各组与失败均保留；不得把旧组成功算到最新未验证源码。#57 Draft/OFF，原生专项和普通写入均未解阻。
+
+## P4 恢复专项实时测试检查点：完整data484及生成Android编译均PASS — 2026-10-20
+
+源码2ae08986完整本地484/0FAIL/0SKIP、生成的原生Android测试（含资源/真实进程终止probe）编译均PASS；立即保存`restore-memory/full-second/`日志、关键XML、逐suite计数和SHA、生成源码hash。旧483 PASS/探针编译FAIL在full-first完整保留；不得覆盖旧失败。第一19/第二15聚焦组均有独立证据。
+
+后续仅补低内存友好的整库流式业务hash断言，避免在大库原生恢复时为比对再构建完整DOM；hash与资源/进程终止观测都只在test源码。完成其编译/差分后即冻结生产源码，启动此前固定的两个原生（自动PR+dispatch），不做第三轮结构性候选。当前无新原生结果，不能说LMK修好。每组完成即保存并推送。Draft/OFF/不合并发布，日常写入和方案C独立BLOCKED。
+
+## P4 恢复专项实时测试检查点：完整data483 PASS，新增探针编译FAIL已修正待验 — 2026-10-20
+
+f480af2e的完整本地data483/0FAIL/0SKIP已跑完，立即保存`restore-memory/full-first/`（按suite计数+XML哈希、关键XML、完整日志）；Android编译在测试类MeasuredRestoreDeathProbe失败，原因Room数据库不实现Closeable，不能用use。此失败未删，已改显式try/finally close，**修正后的编译尚未验证**。不把unit成功冒充Android或原生成功。
+
+同时补上旧版本门顺序：严格JSON扫描后、索引表形状检查前执行同一RecordBackupCompatibility版本门，未来版本即使tables形状变化也保留NewerBackup拒绝；丢弃不参与恢复的根元数据，避免额外保留无关大字符串/对象。新增冻结oracle版本拒绝优先级测试。该小修正亦待复验，不能沿用483做当前源码结论。下一步完整data+生成Android编译，结束立即保存并推送；未启动新原生，仍最多两个固定候选运行。Draft/OFF不合并、不发布。
+
+## P4 恢复专项实时测试检查点：第二聚焦组15 PASS，开始完整回归 — 2026-10-20
+
+已完成旧DOM/新输入整库恢复决定与全数据差分、真实协程取消和模拟OOME后的数据/epoch保留；第二组Indexed6+BackupReplacement8+恢复取消资源1=15 PASS，证据`restore-memory/focused-second/`立即保存。冻结旧解析器已移至historyTest供真实Android共同对照。原第一组19 PASS在focused-first，不覆盖本轮尚未跑的全回归。
+
+新test-only RestoreMemoryProbe（historyTest）与生成原生恢复检查点已编码：100ms采样Java/native malloc/RSS，检查点报告HWM明确是进程累计，记录IO算恢复预算内。没有改原冻结template。额外MeasuredRestoreDeathProbe+run_ansm_restore_memory_suite.py已加入候选，在大库测试/所有原断言之后做ROWS_DELETED/ROWS_INSERTED两个真实force-stop/新进程回滚验证；原native失败码仍保留，工具3项PASS。**新的Android probe尚待编译及原生执行，不能写成进程终止已通过。** 仅修改独立ANSM性能workflow调用同一原runner的有界包装器，RAM/heap/夹具/预算不变；无Claude/UI共享改动。
+
+下一步立即完整data+生成native Android编译（包括新资源/进程死亡probe）；一组结束就保存结果并提交推送。完成后冻结源码，仅预定两次原生+API26/29/35常规CI；专项恢复结果与旧写入FAIL必须分开。当前仍WIP、Draft/OFF，不合并/发布。原部分聚焦“执行中”已被这两段取代。
+
+## P4 恢复专项实时测试检查点：聚焦组PASS — 2026-10-20
+
+已推送WIP源码e69e3b91；聚焦测试刚完成，证据即刻入库`docs/ansm-integration/p4/restore-memory/focused-first/`（XML/日志/receipt，按实际suite计数）。IndexedBackupDocumentTest6项、旧严格解析器5项及恢复检查点回滚测试均PASS；完整data/原生Android编译/API26/29/35/低内存恢复仍NOT_RUN，绝不把聚焦通过当专项完成。上一WIP的“聚焦执行中”已被本段取代。
+
+继续：补充test-only资源探针、旧DOM与新输入恢复数据/错误决定差分及取消/资源故障合同；完成后立即保存测试结果，再开始完整回归。代码/测试每完成一组即更新并提交，不只保存代码快照。当前Draft/OFF，不合并、不发布，正式写入与方案C继续BLOCKED。
+
+## 【最新WIP，优先读取】P4 低内存恢复结构性候选已保存，尚未验收 — 2026-10-20
+
+负责人要求实时入库防止额度中断。本检查点仅保存未完成工程，不代表修复成功。基线352308b3（已验生产f1c638ba），主线320171cd；工作树`/workspace/HRT-Log-p4-attribution`，当前detached HEAD按git log最新为准，推送到#57原分支`feature/ansm03b-p4-exact-stock-20261016`。旧`/workspace/HRT-Log-p4`有他人/旧实验未提交内容，禁止覆盖。#57 Draft / PRODUCTION_BLOCKED / 入口OFF，不合并，不签名、不发布。安全FK去重保持。
+
+### 当前实际代码（WIP，不可当生产验收完成）
+
+- 新BackupRows/BackupTables只读输入接口，DOM适配保留供旧调用/对照；新IndexedBackupDocument持有认证后的byte[]和按表IntArray字节区间，按需重建一行，关闭/构造失败擦零owned plain、关闭后禁止读取，无明文临时文件。
+- BackupJsonReader沿原严格UTF8/JSON/重复键/数字精度/全局预算解析，新增releaseTableRows模式，严格扫描后释放表行DOM；索引仅定位已验证字节，不决定语法合法性。兼容BOM和转义表名。**原有full-DOM解析器已从352308b3冻结到test-only FrozenRestoreJsonReader，供独立差分。**
+- BackupValidation、RecordBackupCompatibility、LedgerReplacement、ReferenceDependencies和RawData的原字段/类型/版本/拓扑/预检/目标审计规则改为复用只读行接口；不改变Room13/业务12/PNBAK1或KDF。NotesRepository.restoreBackupTo采用indexed输入use作用域，取消检查与敏感缓冲finally清理。原DOM RawData.restore入口保留。
+- RestoreCheckpoint增加PLAINTEXT_AUTHENTICATED、INPUT_VALIDATED、STAGING_ROWS_INSERTED、STAGING_HISTORY_VALIDATED、STAGING_CLOSED；原每阶段失败回滚合同通过entries自动覆盖新检查点（**新结果未完成**）。预检仍RAM SQLite、目标仍SQLCipher，两次完整审计保留。
+- 新IndexedBackupDocumentTest覆盖冻结oracle精度/UTF8/转义/BOM、无全量行DOM、关闭擦零、错误/取消/模拟OOME擦零、全局行数/深度预算。
+
+### 证据与当前执行状态
+
+- 旧LMK run39486040353/PID3848/full_encrypted_restore和旧成功恢复但写入FAIL39486045081完整保留safe-dedup目录，不能将Java堆值当RSS峰，DOM重叠虽代码确认但不能宣称唯一LMK根因。
+- 首版compileDebugKotlin曾PASS；新增检查点时误扩finishRestore签名导致compile失败，完整日志已保存`docs/ansm-integration/p4/restore-memory/initial-compile-failure.log`，已修正调用签名。当前修正版本**聚焦测试仍执行中**，不能预填PASS。
+- 当前命令（session65105；若失效先查进程/日志，勿直接重复原生）：source /workspace/scratch/ansm-tools/gradle-env.sh；./gradlew --no-daemon -Dorg.gradle.jvmargs=-Xmx1536m -Pkotlin.compiler.execution.strategy=in-process --max-workers=1 --console=plain :core:data:testDebugUnitTest --tests '*IndexedBackupDocumentTest' --tests '*BackupJsonReaderStreamingTest' --tests '*BackupReplacementTest' --tests '*MeasuredConsumptionStoreTest.measuredRestoreRollsBackEveryReplacementCheckpointIncludingTheNewEpoch'；日志`/workspace/scratch/p4-restore-focused2.log`。不要在该模块编译期间改其源码。
+- 后续必须核验测试夹具、错误类型/接受集合、所有旧备份/回滚/库存投影、取消与资源不足；当前尚未进行完整data回归、原生测试编译或新的原生验收。
+
+### 接手后最小下一步
+
+1. 先读取聚焦日志/XML，修正真正失败；保留旧冻结oracle。核对索引没有保留整库对象且每个旧语义检查仍运行；可评估行切片用小StringReader减少每行InputStreamReader大缓冲，但需严守先全UTF8验证+不可变owned字节边界，不盲目微调。
+2. 增加最小test-only RestoreMemoryProbe，并仅在生成原生测试的实际恢复内接入：有限阶段Java heap/native malloc/当前RSS/累计HWM，明确采样范围、周期、开销包含预算；旧报告无阶段RSS，不伪造前后差值。此观察器**尚未编码**，原冻结template不修改。
+3. 完整本地回归+Android编译通过后才冻结真正生产候选。`restore-memory/contract.md`与REQUIREMENTS124已固定**最多两次**新候选原生：PR自动+同源码dispatch，不补跑筛绿。所有原API26/512MiB/192MiB/14600/2000/32603/19660924B、恢复120s/全部安全限制不变；写入5s原断言不删，写入仍单独BLOCKED。
+4. 一轮结构性方案仍失败则停止叠补丁；考虑独立审查加密临时stage等替代，不能改持久Schema/密码学或擅接方案C。无UI/P5/P6/PK/官方分发/权限签名发行变化。
+
+本WIP使用[skip ci]防止未验证中间源码自动跑完整原生，绝不当成CI通过或绕过合并门禁。后续每个完成检查点及时更新本节/提交推送，避免只留scratch成果。
+
+## P4 安全去重收尾：生产改动已验证，有限原生两次FAIL — 2026-10-20
+
+候选f1c638ba622d28d90a6048c65055d7967cfb0465，基线6ee217f8/实测87e9df95，主线仍320171cd。#57保持Draft / PRODUCTION_BLOCKED / 入口OFF / autoMergeRequest=null，不合并。只改生产MeasuredConsumptionStore同步只读审计内重复第二FK，保留BackupValidation独立检查、最终全量oracle及操作链4次验证；无Schema/PNBAK1/UI/PK/P5/P6/权限签名发行变化。说明/机器证据在`docs/ansm-integration/p4/safe-dedup/result.md`，不要将下面旧的“原生待验”历史检查点当成当前状态。
+
+本地完整data475/库存142/工具46 PASS，生成native Android编译PASS；新增3项拒绝、回滚与旧双FK/全SQL oracle差分，RED与GREEN均保留。API26/29/35真实SQLCipher库存各142全PASS（工件SHA/CRC/HTML核验）；PR六类必需CI全SUCCESS，push重复Android暂PENDING，单独记录。构建工件核验data475/reminder21/PeriodStability5 PASS，App1839=1562 PASS+277 SKIPPED、0FAIL。PR合成merge546029f2与分支候选tree均d2d5f1f，源码一致；两个原生生成测试hash7a32a88f，原冻结模板hash93131671不变。
+
+预定两次候选原生均结束，**不再增加重试或毫秒优化**：
+- 自动run39486040353/job118846590122/artifact12292904917，在full_encrypted_restore阶段LMK杀测试PID3848；kernel to free213472KiB仅终止参考非峰值。恢复未完成、三写与额外分段NOT_RUN。已完成audit6328.717/forecast5845.611/backup6806.329ms PASS，不能把不完整budget表当通过。
+- 同源码dispatch39486045081/job118846611356/artifact12294676265，三写7423.083/7170.355/7335.245ms全部FAIL；audit9066.895/forecast11446.250/backup11660.860/restore42661.004ms PASS。Java观测峰198631952B=189.430MiB，仅2.570MiB余量，非连续RSS/native峰。额外第四笔9627.281ms，FK已减为1、audit1/chain票据1+写3、post-commit独立完整oracle PASS。原生环境/夹具/全部预算不变；ZIP官方SHA/独立下载/CRC、pre-cleanup与完整报告一致均核验。
+
+没有可证实的生产提速或稳定性；不同宿主/JIT/GC差异不归因于去重，旧149.704ms不是实测收益。操作链头复用NOT_IMPLEMENTED，跨callback/多节点追加的保全与完整差分未证明；没有引入快验证器/跨事务缓存。冷启动/重启/恢复冷首次/真机/连续RSS仍NOT_RUN。后续需独立处理恢复内存安全，并评审方案C的完整谓词/迁移/备份/生命周期证明或产品准入政策，不能把部分UNIQUE当全库证明或改原预算。当前不具备合并条件，P5/P6未实施，没有APK交付。证据收尾只提交文档[skip ci]以避免第三次相同源码性能运行，CI属于f1c638ba，不宣称文档HEAD重新通过；保留push重复job的实际状态。
+
+## P4 安全去重候选：本地data475/原生编译PASS，原生待验 — 2026-10-20
+
+从6ee217f8/实测87e9df95接手，主线仍320171cd。真实生产修改仅MeasuredConsumptionStore私有只读审计内删除重复的第二次foreign_key_check；BackupValidation独立入口和最终完整审计不变。严格作用域证明/有限验收计划见`docs/ansm-integration/p4/safe-dedup/decision.md`。不是删除第二次全审计，没有跨事务可信状态；A/B反例、C测试原型保持不变，正式入口OFF、#57 Draft且不自动合并。
+
+新增3项共享合同：单FK及原位置重放双FK/全SQL oracle差分；真实孤儿在普通/候选/完整审计均拒绝并回滚；原删除点注入间接DML须拒绝并回滚。RED旧生产源码确切2次而失败，GREEN库存142/0失败/0跳过。完整data475/0失败/0跳过、生成native Android编译和工具46项均PASS；下一步固定源码后执行预定两次原生。观察器/生成器只把FK预期2改1，链读取仍票据1+写入3、最终全审计1。测试数据合成，无UI/Schema/备份密码学/PK/P5/P6/发行变化。
+
+操作链头复用NOT_IMPLEMENTED：票据验证至append之间有DML、callback，修订/协调还有合法新增节点；旧头保全及完整接受/错误差分未证明，不将最终oracle拦错视为接快路径的许可。源码固定后仅两次原生候选（自动PR一次、相同源码dispatch一次），不补跑求绿；与归档87基线同配置但非同宿主，不能宣称严格因果提速。冷启动/重启/恢复冷首次/真机仍NOT_RUN。当前尚无新性能证据、未达到合并条件；若收益不足停止毫秒微调，要求方案C完整谓词/迁移/备份安全审查或产品验收决策，预算不改。
+
+## P4 真实写入归因完成：本轮原预算PASS，不等于生产架构提速 — 2026-10-20
+
+执行源码87e9df955f8132b58cd111c5188c295a0d4b0726，接手40408b77，主线320171cd。P4保持Draft/OFF，autoMergeRequest为空，不自动合并。只改historyTest观察器/共享合同及证据；生产代码、Room13/业务12、PNBAK1密码学、UI/PK/P5/P6/版本权限签名均不变。原工作树未提交内容保留，新工作树/workspace/HRT-Log-p4-attribution。
+
+唯一新原生run39478425938/job118820363674/artifact12290661559完成；官方/下载SHA b26ca0e48292a9c817b64cec11adde7828b619738d8f91209f3dcdcc40f03b25、CRC/完整预清理报告/ART重放全部核验。原512MiB/192MiB、14600/2000/32603/19660924B和全部预算断言未变。原三写4979.277/4804.102/4727.139ms本轮PASS；第一笔仅20.723ms裕量；审计5381.742/预测7999.644/备份7106.396/恢复24956.868ms PASS。观测Java堆199241928B，非RSS峰；历史全部FAIL/OOM/LMK保留，无同机受控生产提速或稳定性证明，不再重跑求绿。
+
+额外第四笔真实COMMIT+独立全审计PASS，同次互斥合计5734.912240ms：票据API414.363680、写validate下界502.387070、6条INSERT含trigger18.562620、显式UPDATE0.072400、写提交driver5.652330、完整audit下界4435.771450、其他driver7.147160、写内未归因322.851950、draft/UUID/观察器finish及间隔28.103580。纳秒精确相加、区间不重叠；触发器exclusive/纯COMMIT及部分游标/Java/调度无法独立归因。不能把第四笔、重观察器46s或独立ART探针赋给原三写。
+
+正常新增仅1次完整审计，含票据共4次全操作链SELECT；没有第二次完整审计可删，不能宣称可省4.436s。第二个FK游标窗口149.704ms仅是重复工作的参考，非前后实测提速。集中报告write-path-timing/report.md列出同快照FK、append构造链头复用、scheduled以及跨中间态审计消重的最小方案/证明义务；没有接快验证器或跨事务缓存，A/B反例及C部分约束原型保留。
+
+本地data472/生成原生Kotlin/工具51 PASS，生产jar无观察器；API26/29/35实际SQLCipher库存合同各139全PASS、0skip（含本次观察器），工件SHA/CRC与HTML已存native-87e9df95-light-observer。源87 push/PR六类必需CI共12实例全部SUCCESS；最终build-results工件核验data472/reminder21/PeriodStability5 PASS，App1839总计1562 PASS/277 SKIPPED/0FAIL（不把skip当pass）；新库/冷启动/重启/恢复冷首次/新架构规模增长/真机NOT_RUN。本轮归因与CI收尾完成；后续只按集中报告评审语义消重/低历史依赖机制，未有新证据不启动重复跑分或未经证明的接线，不合并。证据文档提交[skip ci]只为避免重跑相同原生工作负载，不宣称该文档HEAD已有六门。
+
+## 【换号必读】P4 写入分解 WIP 检查点 — 2026-10-20
+
+负责人明确要求停止当前工作、将进度写库以换号接手。本检查点只保存成果，不启动新实验/原生跑分，不合并#57。**当前包含未完成的测试观察器，新版本地测试1项失败，不能认定完成或可合并。** P4保持DRAFT / PRODUCTION_BLOCKED / 正式入口OFF；未改生产源码、Room Schema、PNBAK1或加密格式、UI、PK、P5/P6、签名发布。
+
+### 分支、源码与证据
+
+- 仓库DevenirTwilight/HRT-Log，PR#57，分支feature/ansm03b-p4-exact-stock-20261016。已验证源码提交 `a697819e4c728b3e2802395d9ccc9023b1dd69b1`；本次WIP检查点是它的后继（以git log顶部实际SHA为准）。主线基线 `320171cdc882ec0b62830b60e2329a4174ffa31c`。
+- a697的PR合成merge `2b5146eac9f08cd4885ea6c1bb5b0c8e266e5480` 与源码tree完全相同：`75565f14ae4f3d2a0d73d12e90b557b0a1baafe6`。无未审分支合并/force push。
+- 集中报告 `docs/ansm-integration/p4/write-path-timing/report.md`；原始证据目录同级。报告后部含阶段性内容，**以本段最新WIP状态优先**；不要把中间GREEN当作当前HEAD GREEN。
+- 本次交接提交使用 `[skip ci]`，避免未验证的观察器又自动重复完整性能跑分。不是绕过合并门禁：PR继续Draft/NOT_ELIGIBLE，当前检查点没有声称CI通过，严禁据此合并。
+
+### 已有明确结论：新建记录没有第二次完整审计可删
+
+真实链：NotesRepository.measuredWriteTicket → Integration.ticket/state；另一个事务内recordMeasuredUse → Integration.create/validate → DAO临床记录、context、Store.consumeNewRecord/operation/allocation/ledger/receipt → 一次auditStagedDataset → 最外层COMMIT。
+
+正常新建记录最终只有**一次完整数据集审计**；连ticket共4次全操作链验证（ticket、validate、next、最终audit）。revise/restore/reconcile可有2–3次完整审计，但分别跨已冲销前态/bridge/count/新消费状态，尚无删除证明。scheduled路径有重复state检查但不属于新建验收路径。完整审计内部确有同快照第二次PRAGMA foreign_key_check，这是一个查询的重复，不是第二次全审计。
+
+A（SAVEPOINT后错误指纹仍匹配坏状态）、B（合法FK/投影/链的零效果重复CONSUME）原反例未修改；C部分UNIQUE索引仍仅test原型。未安装任何快验证器/跨事务信任缓存。最小可执行设计和证明义务在集中报告；新建路径理论可删0次完整审计，实测提速尚未证明。不同运行的独立探针禁止相加或相减冒充真实写入分解。
+
+### 原生已完成的事实（全部原始工件已入库）
+
+1. 最新起始基线27135013：run39465628009/artifact12286116312，SHA `3df88d23bcf68548548c9beeaeba82b2bbcdbc9f5fcce93766c5c9c52034a98a`、CRC通过。三写8.67/9.84/9.46s，全FAIL；audit7.84s/预测8.67s/backup10.42s/restore46.81s。`native-27135013/`。
+2. a697首次原生run39470688472/job118793653642/artifact12286459072，SHA `2110204250dad878a0bc95e8ab64f29cb9ce0b0fe698ff3af74dca5ffb1369a9`、CRC通过。准备阶段LMK杀测试PID3924，kill时RSS参考211112KiB，不是堆或RSS峰；所有验收与分段NOT_RUN，记录器尚关闭。死亡位于扩展完成到byte计数报告之前，具体分配及适配器因果UNKNOWN。`native-a697819-premeasurement-lmk/`。不能抹掉本轮内存失败。
+3. 只为补采缺失阶段，明确有界同源码workflow_dispatch run39472291324/job118799166208/artifact12287403857，SHA `3987741201492c61825fdd9e73daf807e3b26bba368d934a52aec78af9b63be1`、CRC通过。原始三写7.671/7.544/7.696s仍全部FAIL；audit9.021s/预测9.730s/backup9.989s/restore51.246s通过，峰值Java堆186937512B（非native RSS）。`native-a697819-heavy-observer/`。
+
+两次a697尝试均保留，原API26 SQLCipher、实际RAM520962048B / heap201326592B、14600记录/2000容器/32603行/19660924B、5s/15s/120s及全部原断言不变。没有生产提速或原预算通过；旧5.747/5.694/5.288s也全FAIL，不存在已稳定通过5秒的已验证基线。
+
+### 首次同次分解取得，但首版观察器过重，不能代表自然7–8秒
+
+同一补采调用完成真实COMMIT及独立post-commit完整audit；互斥分解数学核验通过。ticket begin1/commit1，write begin4/nested_finish3/commit1；6条domain INSERT、一条显式domain UPDATE，没有额外同线程完整事务混入该次COMMIT。下列数据只属于**过重观察器下的该笔真实调用**，不能推算原三写的各阶段：
+
+|项目|实测ms|
+|---|---:|
+|ticket API（含其自身事务）|6186.591|
+|写入validate core下界|6425.170|
+|6次INSERT（含同步触发器及驱动）|38.557|
+|显式UPDATE（含其触发器）|0.124|
+|写入最外层endTransaction/commit driver|7.269|
+|最终完整audit core下界|32387.339|
+|cores外其他driver|566.706|
+|未归因Java/调度/观察器/尾部|759.302|
+|draft/UUID及调用间观察器收尾|47.165|
+|合计|46418.225|
+
+其中dose_record INSERT6.553ms，supply_transaction INSERT4.910ms（含supply_cache的container UPDATE）；不能独立分离trigger exclusive、纯VM INSERT或纯原生COMMIT/fsync。两个FK游标窗口177.046/152.556ms是audit内嵌套值，不能再加总，第二个也不是已证实的消重提速。
+
+首版每个cursor getter计时、audit中约50126次inTransaction采集栈，观察开销极大：write仅可测观察器下界10673.451ms，ticket1452.923ms；其余GC/间接扰动无法扣除。**不得把46.4s或audit32.4s当作生产退步，不得做减法“校正”成自然7.5s。** 需要一次低开销计时才能完成原任务的自然写入归因；目前尚未取得。
+
+### 当前代码和验证状态（关键，尚未完成）
+
+- a697版本本地data472 PASS/0fail/0skip、native生成Kotlin编译PASS，工具68PASS。原始摘要/XML/日志在local-validation/。这些属于a697，不代表当前检查点。
+- a697 PR API29 job118793652357有新增observer合同失败（同源码push API29通过，具有调度依赖）。官方artifact12287247203，SHA `888e40ee2be35704032640fc87b3ed886d33391b27a3674d101fd2516a5daed5`、CRC通过，HTML及JSON已保存。Room可能在root.start后才在同一executor结束早先begin的后台事务，原观察器将线程身份混同事务身份。
+- 中间事务归属修正版：Frame区分controlled/successful，真正ticket/validate/audit入口绑定已观察外层begin；未知前置end及其他后台事务进入other_driver，不计入前台COMMIT/DML。新增单线程executor+latch反例，要求前台commit恰好1、完全在root内后台finish至少1、root前begin的未知finish1；原完整审计、库存、整笔异常回滚和dump一致断言均保留。focused RED→GREEN，随后全data命令及native源码编译PASS（`ownership-fixed-success-build.log`）；没有生产修改。
+- **当前最新轻量版WIP**：去掉cursor getter逐次计时，重用既有游标/ART证据；audit活跃期间重复inTransaction直接执行原db检查但不采栈；最后ReferenceAuditReads.finish的schema_version游标close作为audit边界，并要求finish marker数匹配。保留SQL变更/COMMIT/查询open-close与阶段边界；未单测游标读取放入未归因项，不隐藏。
+- 当前最新本地结果：native生成Kotlin编译PASS，**472 tests / 1 failure / 0 errors / 0 skipped（471通过）**。唯一失败为新增 `writePathObserverAccountsRealCommitAndPreservesFaultRollbackAndFullAudit`。已保存`light-observer-unfinished-red.xml`、`light-observer-unfinished-build.log`、summary、生成源码hash。输出audit_calls=1、finish_markers=1、validation_calls=1、chain_checks=2（期望3），且accounting_valid=false。**validity=false的具体触发尚未诊断，不能假称仅改链计数就一定解决。** 原业务和A/B/C断言没有删改。
+- 已知漏计原因：audit热路径跳过观察器inTransaction采栈，也漏掉checkedChain入口事件；实际数据库检查仍执行。建议接手把chain统计改为checkedChain实际SELECT query-open事件（冻结源码中每调用恰有一个SELECT），其他阶段也统一事件避免双计数；保留3+1原断言，不伪造计数。
+- 当前未验证轻量版不得直接跑下一轮大库，更不能接生产。首先用已有XML输出定位accounting_valid=false（span重叠、只读core写入、帧、超界等标记目前是Boolean，需最小、明确原因），修复计数并使现有强合同完整GREEN；再全data/编译/工具测试。没有新证据不得重复原重观察器跑分。
+
+### 接手步骤和停止边界
+
+1. 先读本段及集中报告、当前helper/共享合同；检查GitHub最新HEAD/CI，不能沿用此时的IN_PROGRESS当绿。
+2. 只处理测试层轻量观察器尚未通过的严格归因合同；保持生产完整oracle不动。先已有反例RED→GREEN，再完整回归；不要删除失败断言获取绿色。
+3. 低开销合同成立后才考虑一次必要原生测量。目标是同次真实写入的互斥区间，不能复用46s数据伪装自然路径；不改变固定夹具/原预算/原验证。若再次无新证据失败则停止、报告未知，不无限重跑。保留原样三写、所有预算、异常回滚、独立最终audit。新库/冷启动/重启/恢复首次基线性能本轮仍NOT_RUN，不得用预审计后第四笔写入冒充。
+4. 最终说明真正SQL变更、commit、ticket/身份、audit、其他与未知；新建只有一次全audit，不要虚构消除第二次可省数秒。FK或scheduled消重只有证明闭合才能进生产；当前无此生产改动。
+5. 若仍>5秒或安全证明不闭合，交付明确设计/阻塞并继续Draft/OFF，不自动合并，不动UI/P5/P6/PK/加密/权限/签名发布。
+
+交接前最后一次GitHub核对：a697 push完整Android/domain run39470678638已SUCCESS；PR run39470688230因上述API29观察器失败而FAIL；两次大库原生均FAIL（首次准备LMK，补采原预算超时）。snapshot已归档local-validation/ci-handoff-snapshot.json。当前检查点尚未验证，不能沿用a697的push绿色。
+
+### 命令/环境与持久性
+
+真实checkout：`/workspace/HRT-Log-checkout`（不要用旧部分镜像`/workspace/HRT-Log`）。本环境Java原装只有JRE；已装`/workspace/jdk21`与SDK`/workspace/android-sdk`，其他账号/环境可能需重装。执行示例：`JAVA_HOME=/workspace/jdk21 ANDROID_HOME=/workspace/android-sdk JAVA_TOOL_OPTIONS=-Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts ./gradlew :core:data:compileDebugAndroidTestKotlin :core:data:testDebugUnitTest -ProbolectricDir=/workspace/HRT-Log-checkout/build/robolectric-jars --no-daemon`。Robolectric jars通过`./gradlew robolectricJars`预取；Gradle网络需环境代理/系统CA。本地没有KVM，不把JVM结果当原生SQLCipher。
+
+native生成：`python scripts/prepare_ansm_native_performance.py`，生成文件不提交；结束`--clean`。模板SHA9313167178989def0d4d89d785f84cdde764fba21033543cdf85e472c5511242保持不变。工具测试：`python -m unittest discover -s scripts -p 'test_ansm*.py'`（最后68PASS）。本次仅交接，不启动新CI/性能验证；持久化原始证据和明确未完成状态，接手先核实际SHA与CI。
+
+---
+
+## P4 真实写入分解进行中（2026-10-20）
+
+基线27135013 / 主线320171cd；#57仍Draft、auto_merge=null、入口OFF。本轮没有生产或Schema/备份格式修改。新建recordMeasuredUse只有一次完整数据集审计；连ticket有4次全链验证。revise/restore/reconcile可能2–3次完整审计，但跨不同中间状态，尚不能安全删除。完整审计内确有同快照重复FK查询。决策与调用链已集中写入 `docs/ansm-integration/p4/write-path-timing/report.md`，不再复制旧报告。
+
+最新完成原生39465628009/artifact12286116312官方/下载SHA3df88d23…一致、CRC通过，原14600/2000/32603/19660924B与512MiB/192MiB不变：audit7.84s、forecast8.67s、backup10.42s、restore46.81s；三写8.67/9.84/9.46s全部FAIL。旧5.75/5.69/5.29s也全FAIL，没有曾经稳定通过5秒。原始报告及ART摘要已归档native-27135013；旧分离探针不能相加冒充真实写入分解。
+
+仅historyTest新增SupportSQLite适配器观测真实SQL、cursor、事务层级及提交/回滚；原始native阶段recorder关闭，全部原预算和只读/ART诊断后另做一笔真实提交诊断，保留独立全审计。共享小型合同检查SQL计时、审计/链次数、提交与异常全回滚。工具68项PASS；生成native Kotlin编译PASS；观察器首轮漏计Kotlin internal名导致RED，按$分段修复且原断言保留，提交/回滚共享合同1项PASS（原始RED/GREEN XML归档）；最终全data472项PASS（0失败/错误/跳过）与修正后生成native Kotlin编译PASS，新增原生首次39470688472在准备阶段被LMK杀PID3924，写入分解及所有验收NOT_RUN（完整原始证据已归档native-a697819-premeasurement-lmk）；限定一次同源码诊断补采39472291324运行中，第二次仍准备失败即停止，不可宣称已取得分解或提速。触发器exclusive、纯原生COMMIT和部分receipt/Java尾部不能独立测量，需如实保留未知。API29原生另暴露计时器把同线程先前Room后台事务当作当前操作的问题，原生RED和单线程latch复现已保存；仅测试层修正为受控事务帧归属，前台COMMIT/DML与背景收尾分开，并加强真实外层commit断言，正在做最终回归。下一步取得有界补采与归属修正功能证据；无完整证明不接快验证器/不删中间全审计，不重复原失败跑分。
+
+## P4 三方案有限决策与最终原生结果 — 2026-10-20
+
+验证源码0448fb83，主线320171cd；后续仅文档归档不改运行时。六类必需检查push/PR共12实例全部SUCCESS，PR临时merge07a3cf4b的树与0448相同。完整data471PASS/0skip，App1562PASS/277SKIPPED/0FAIL，reminder21PASS，Period5PASS。API26/29/35实际SQLCipher库存合同各138/138PASS、9架构用例各通过，原始HTML/官方SHA/CRC均已核验。修正仅测试ROLLBACK TO传输前缀，原计数/SAVEPOINT/重复零消耗反例与全部断言不删；新增C单谓词唯一索引及DDL/业务回滚原型，不是全历史快速验证器。
+
+本轮自动原生39462266792/artifact12284765032完成原512MiB/192MiB、14600/2000/32603和19660924B：audit8.47s/forecast8.30s/backup9.51s/restore38.98s通过；三写8.641/8.613/8.314s全部FAIL。与dc54的5.747/5.694/5.288s相比生产源码、夹具及生成源码SHA相同；没有新生产提速，差异原因未确定，不归因于代码退步或宿主负载，不重跑求绿。旧失败/OOM保留。
+
+决策集中于validation-architecture/decision-2026-10-20.md和result-receipt.json：A完整oracle继续作唯一生产安全机制；B计数/TEMP+FK局部推断不采用；C只作为需完整约束/转换和迁移审查的后继候选。单个CONSUME唯一索引不能证明其余语义、冷/恢复/失效生命周期，不接Repository。没有生产Schema/备份格式/PK/UI/P5/P6/权限/签名/Release变化；P4仍Draft/OFF/NOT_ELIGIBLE。本轮有限验证结束而解阻未完成；下一步需闭合C的明确证明与兼容义务，或负责人明确调整产品/验收政策，不能再叠微优化。新库/重启/冷恢复首次和新机制增长曲线NOT_RUN，不能用现有恢复后预审计三写冒充。会话后段已取得干净checkout，本地Android无SDK未运行；上述回归为实际GitHubCI结果。
+
+## P4 有限架构选择与原生证据修正 — 2026-10-20
+
+基于dc54c7fa/主线320171cd，最新原生39446282509官方工件12277252280 SHA/CRC已独立核验：三写5747/5694/5288ms仍全部FAIL，audit4939ms、backup5509ms、restore29836ms；不归因于新优化。精确dc54 API26两项SAVEPOINT共享测试在Room结束事务时报no current transaction；保留失败HTML/摘要，不将JVM470通过当原生全绿。本轮仅测试SQL传输加空语句，将同一ROLLBACK TO交给SQLite，反例和全部断言不删。
+
+架构比较/冷热/恢复计时边界及兼容义务集中在validation-architecture/decision-2026-10-20.md。保留A全审计生产安全路径；B计数/TEMP+FK局部投影不可信；C选作后继候选，仅测试现有CONSUME(record_uuid,revision)部分唯一索引及DDL/业务回滚。单个约束不证明完整快验证器；没有Repository接线/生产Schema变化，不预约Room号。共享新原型与修正的原生CI尚待，测试结果不预填；本机代理不可达且缺SDK，Android本地NOT_RUN。入口OFF/Draft/NOT_ELIGIBLE，UI/PK/P5/P6/签名发布不改。完成原生验证后保存最终result-receipt，不再无根因试探缓存或重复性能重跑。
+
+## P4 验证架构检查点：反例已复现，尚无生产增量验证证明 — 2026-10-20
+
+最新已推送证据基线948f8b9f、默认分支320171cd；#57保持Draft/入口OFF。新增REQUIREMENTS§120和validation-architecture/write-path-matrix.md。所有新增代码仅historyTest；没有生产、Schema、备份或UI修改。A（全审计+连接/epoch/SQLite计数）在savepoint回滚后错误匹配坏状态；B的事务TEMP seal可识别这个回滚，但FK依赖闭包+容器投影会漏掉有效链上的重复零消耗CONSUME。后者不是证明所有增量机制都不可行，而是明确该依赖规则不完整；不能接线。原始RED及错误准备夹具均保留，未增造跨表UUID唯一性。
+
+完整数据回归470项PASS（0失败/错误/跳过），其中8项架构测试PASS，Android测试源码编译PASS。63项Python边界/原生工具测试PASS，最初导入路径错误及新增测试枚举拼写编译错误保留，修正未改变断言。新API26/29/35执行待CI；进程强杀、池并发、完整转换差分与快验证器NOT_RUN/NOT_IMPLEMENTED。完整审计仍是独立oracle。
+
+最新948原生39430822597/artifact12268222179官方SHA/CRC已核验；audit5.63s/forecast5.26s/backup5.90s/restore27.25s通过，但三写7.51/7.16/6.70s仍FAIL。六常规CI通过不能覆盖原生失败；没有准入、Ready、合并或签名发布。本轮回归已保存，下一步等待新共享测试原生CI；完整语义依赖及可信发布边界未证明前，不再以微优化或不安全快路径冒充完成。
+
+## P4 本轮收尾结论：完整原生跑完，写入仍FAIL，停止继续优化 — 2026-10-20
+
+最终候选0f33ae66（生产A1+测试内存B2）原生39428902719/job118648446184/artifact12267293264完整执行原512MiB/192MiB、14600/2000/32603和19660924字节夹具。全审计7.53s、预测7.92s、备份8.35s、恢复44.56s通过；真实三写7.87/7.68/7.57s仍>5，唯一预算FAIL。观测堆峰125766304B≈119.94MiB，本轮无OOM但RSS峰/独立稳定性复验NOT_RUN，不宣称永远修好。官方SHA/CRC/采样重放字节一致和完整SQL明细已核验归档performance/native-profile-0f33ae66；新预清理完整报告收集实际生效，未把FAIL改PASS。
+
+事务内有界证据复用未取消全量校验，仍有每次写入O(history)全审计。后预算隔离全审计6.45/6.67s、票据1.13/验证1.18s不能相加假装实际写入互斥分解；提交单独耗时尚未建立。缓存快路径确实执行但不足以达门槛。不继续堆缓存/字符串微调或未经证明的增量信任；按有限周期停止新增实现，交付PRODUCTION_BLOCKED。下一边界是可信全审计基线、所有合法变更与绕过路径的失效证明，完成独立Schema/备份/回滚审查前不实现跨写验证状态或占下个Room版本。
+
+本地data461/App43、最终focused16和工具67 PASS，原生生成Kotlin编译PASS；source015三API各129项真实库存合同PASS，原始HTML和官方工件摘要另存compat-01534191，不冒充该轮整体CI（后续push取消）。source51三API迁移/备份owner15项各PASS。最终0f33 JVM/science已PASS，Android/设备/兼容仍IN_PROGRESS，六门不齐；证据提交本身仍须精确HEAD检查，不回填绿色。
+
+完整简明报告docs/ansm-integration/p4/closeout-report-2026-10-20.md。主线仍320171cd，普通合入已审主线后没有新共享代码冲突，新增收尾不改既有P4 Room13/业务12或main12/11，不动UI/PK/crypto/库存分配/权限/签名。#57继续Draft/OFF/NOT_ELIGIBLE，P5/P6未实施，无APK或Release。之后由仓库自动触发的文档提交复验不代表第三轮生产修复；不手动重复派发或绕过原门。
+
+## P4 首轮原生在初始恢复前后OOM；最后测试内存候选已完成本地对照 — 2026-10-20
+
+01534191原生39426820857/job118641359886/artifact12266606842在validated_staging_and_restore阶段被kernel杀PID3969，与测试进程匹配；119968KiB仅kill时anon RSS，不是峰值。后续完整审计/预测/备份/恢复/三写全部NOT_RUN，不能声称首轮A1提速成功。官方ZIP SHA/CRC和原始IN_PROGRESS/内核/日志归档performance/native-profile-01534191。具体restore子阶段及A1因果尚UNKNOWN；旧51完整三写超时不改写。
+
+静态生命周期审查发现测试自身仅统计fixture字节数就额外整体toString+UTF8数组，原报告从扩展前52.6MB堆到恢复入口161.6MB、观测峰198.5MB。最后内存候选B2仅在生成原生测试将此元数据统计改逐行同平台编码计数，原fixture SHA93131671不变，新增19660924字节断言；原数据/真实SQLCipher全恢复、全审计、真实加密备份/恢复、三真实Repo写入、32MiB/100000/512MiB/192MiB及所有预算不变，无强制GC。不是已证明修复kernel触发点，更不是生产备份通过。
+
+134组平台完整文档oracle覆盖Unicode/NUL/代理项/随机码元/数值/空值/Blob文本、多表/多行/嵌套/边界拒绝且原对象不变；最终共享ReferenceMigrationTest16/16、67工具及生成原生Kotlin编译PASS，helper实际不在production jar中。生产源码自015未改，A1原data461/App43/大库证据仍属该源；不冒称新增测试已随全462执行。API26/29/35 source51的15项实际迁移/取消清零/字节SHA对照现均归档compat-51effe6c。详见closeout-memory-final。
+
+下一步推送最后候选，由原PR自动native复验；如仍退出/超时，保留BLOCKED并停止进一步试探修改，报告安全的后续最小边界。当前必需CI尚在执行，不写全绿；#57继续Draft/入口OFF，P5/P6/UI/PK/crypto/Schema/签名发布均未扩张。
+
+## P4 首轮事务内已验证操作复用：本地完整回归通过 — 2026-10-20
+
+基于51effe6c实施本次有限收尾的实质性能修复A1/最多2轮：一次捕获完整操作链和原始类型头字段，投影/临床/ADJUST流复用同一只读事务的证据。4MiB保守元数据预算，溢出整体回退原全SQL；原32MiB规范文本限制不变，缺行不当零，返回对象无可变别名，finally清空，total_changes/schema_version继续拒绝读审计内写入。没有跨写信任、增量代替全审计、新表或版本变化。完整data461、App43及ANSMPython66均PASS，原生共享合同Kotlin编译PASS；原规模14600/2000/32603便携大库已PASS（185查询/完整投影与只读断言），新候选实际原生性能仍待验，结果另见performance/closeout-round1。旧后链伪造负向测试保留在零缓存原路径，另加新捕获路径伪造/读中写入/生命周期/完整回退对照；初轮旧注入器未触达而失败的XML保留，未删除拒绝断言。
+
+51effe6c原生39423676688仍FAIL：三写6955/7421/7244ms；备份8661/恢复34240ms完成，观测堆198579344B，本轮无OOM不宣称永久解决。官方ZIP SHA/CRC、原始JSON/采样保留native-profile-51effe6c。该源实际API26/29共享迁移15项各PASS，明文owner正常/异常/取消清零+事务回滚和冻结旧编码字节/SHA对照见compat-51effe6c；API35尚待核验。
+
+报告收集修复：watcher已读到合规完整报告却未持久化，最终回退截断日志丢SQL细节。现只保留已验nonce/环境/trace摘要的预清理报告，原64KiB限额不变；错run/篡改/超大拒绝，预算FAIL不被提升，2项先RED后PASS，工具66全PASS。不增加另一诊断框架或放宽预算。#57继续Draft/PRODUCTION_BLOCKED/正式入口OFF，UI/P5/P6/PK/备份密码学/签名发布不变。下一步原HEAD自动native复验；最多再一轮有根因证据的实质修复，无法证明安全等价时停BLOCKED。
+
+## P4 备份所有权闭环本地通过；第1轮性能修复待实施 — 2026-10-20
+
+已推送89c347b0完成主线整合。该源两次独立原生39421221334/39421243828均完成备份/恢复且仅写入预算FAIL（三写8.64/7.63/9.38秒与8.48/8.18/8.45秒）；原始报告和官方工件SHA/CRC保留native-profile-89c347b0。SQL明细使最终报告超过原传输上限，未完整取回；不能声称完整SQL剖析成功，现只保留最慢12项与省略数量/总耗时，保留原64KiB传输限制。已有原生ART与已取回首项表明全审计两条流重复读取操作载荷，先做事务内有界已验证状态复用，不先引入未经证明的跨写信任或关闭全审计。
+
+备份生产改动：BackupPlaintextOwner单次交接与use释放，正常/异常/取消/关闭后交接清零；别名重复交接拒绝但不提前破坏已持有字节。真实Room事务捕获后取消，整库业务dump不变且数组清零；冻结旧实现字节及SHA相同，Unicode/代理/Blob/浮点/边界原测试不删。共享ReferenceMigrationTest15/15 PASS、原生Kotlin编译PASS，ANSMPython64 PASS，证据performance/backup-owner。新所有权版本的实际原生运行PENDING，不能冒充旧候选原生通过；无密钥/KDF/格式/限额变化。性能实质修复轮数A=0，最多2；P4仍DRAFT/OFF，P5/P6和UI不在本轮。
+
+## P4 有限收尾：主线整合通过，原生写入仍阻断 — 2026-10-20
+
+本地正常merge140c567c与已全六CI通过的默认320171cd；仅HANDOFF文字冲突，REQ保留LAB114/P4顺延115–118。新增化验共享合同初跑455项仅1FAIL（Room12断言遇候选13），完整原失败保留；只将P4版本期望改为13/12，原字段/备份/回滚断言不删，重跑data455/App61均0失败/0跳过，App原生编译PASS。主线仍Room12/业务11，P4未新增迁移或启用。
+
+140c567c原生39390433266/job118520371379/artifact12250080963已完整跑完：全审计7551ms、预测7207ms、备份8517ms、恢复30233ms，三写9535/9611/8816ms仍>5000，唯一预算失败为写入。样本堆峰198477312B<192MiB，数据库35957552B；这是本轮备份恢复完成，不宣称OOM永久解决。官方ZIP SHA/CRC、原始JSON、采样/合成日志和确定性重放均保存native-profile-140c567c。API26/29/35的140编码字节一致/分块清零/真实备份回归另存compat-140c567c。
+
+只补一次已编译的post-budget SQL驱动调用计时；不记录绑定值，不影响冻结预算/生产代码，所有ANSMPython64 PASS、生成原生Kotlin编译PASS。新增合同初轮13项1ERROR，新增块影响旧fragment边界时42项1FAIL，已保留日志说明并将旧helper对比终点严格移到新块之前，helper内容不变。下一步推送此完成检查点并跑最后一次原生分解，随后最多两轮有证据的后端实质修复；不能继续微优化。#57仍DRAFT/PRODUCTION_BLOCKED/OFF；新任务明确P5/P6、前端均不在本轮范围，无新APK。
+
+## P4 续作与 LAB 主线合并复核 — 2026-10-20
+
+负责人要求继续未完成工作；恢复已有 #57，不新开竞争分支。#90/#89 已分别受保护合并5a7d7c87/320171cd；最终38b的12个必需检查实例全部PASS，三API实际导航/化验备份合同与unsigned CI源码身份已核验。默认320主线复验仍在运行，未新增APK。
+
+P4源码140c567c的六项工程CI实际已全PASS（39290696775/39290696725），覆盖此前交接所称尚未重编译的finally补丁；不能继续把旧本地453/43记作最终源证据。独立原生低内存39390433266已以精确140c567c启动，512MiB/192MiB、原fixture与5秒门保持，结果PENDING；旧bba匹配OOM与951三写超时FAIL保持。当前正常合入已审320主线，仅HANDOFF冲突及需求编号去重；新增LAB合同与候选Room13/业务12的兼容验证待实际运行。#57保持DRAFT/PRODUCTION_BLOCKED/OFF，P5/P6、官方资料分发、MED-02和新签名发布均未启用。
+
+## 历史检查点：P4 与中心测试当前状态 — 2026-10-19
+
+P4当前基线95108693：451 data/43 App/44工具本地PASS，API26/29修正后的UTF8对照随工程检查通过；原生39262621431已完整跑完备份/恢复/采样，但三写11.076/10.263/10.928秒>5，仍DRAFT/PRODUCTION_BLOCKED/OFF。3b53编码回归与备份阶段进程退出的原证据继续保留；本轮未复现退出不等于根因已解决。下一步只增加票据捕获/复核的测试后分解，保持原始预算/fixture及所有全量检查。
+
+#88/source dfa7369b 已在全部必需CI和实际26/29/35后受保护合并dd871cc6；API29首次附件POC65/70后45分钟取消，单次完整同源job重放通过，原记录保留，不把挂起归因已证明。现普通同步已审dd主线，未复制未验收分支。build33已私密提供，源码219bbf32与原主线42六CI全PASS，正式收据#87新21a10430正在CI；以下“准备中/原生待验”为当时历史记录，不重做签名或交付。P5/P6、正式附件仍未启用，无新APK。
+
 ## UI-06 语义色与状态体系：实现与验证完成，PR 待 CI — 2026-10-21
 
 分支 feature/ui06-semantic-status-20261021（基于 320171cd），报告 70，REQUIREMENTS §115。
@@ -1958,6 +2712,243 @@ GitHub标记BEHIND，需合入已合并#83的746bb2e9；该主线仅将versionCo
 监控器修正后的原生Kotlin编译PASS；将以新HEAD运行完整六CI和原生三项新增测试（监控器阳性对照、12占位实际Back与零文件启动、旋转/离开锁定）。23项本地测试对应的生产源码未变，无需重复渲染或无关本地回归。最新HEAD和最终CI/合并收据仍以PR85为准。
 
 
+## P4分支历史检查点保留（2026-10-19普通集成；不是当前主线状态）
+
+## P4本地检查点与产品骨架优先级调整 — 2026-10-18
+
+基线c8d7c18上的逐次审计canonical proof去重复编码候选：完整421项数据JVM测试0失败/跳过，Android测试源码编译PASS；同UUID不同正文/头部的负向保护保留，证据`ansm-integration/p4/performance/canonical-proof-local-evidence.json`。不持久缓存、不跳过全局校验；原生性能/设备验收待验，不宣称5秒门槛通过。新用户任务要求独立医疗中心/药品资料中心薄纵切片优先，转到主线ec61d53独立工作树实施，不等待P4。精确库存生产写入仍OFF。
+
+## P4 流水联合读取本地420通过；原生写入仍>5s — 2026-10-18
+
+66ea8d5原生run39123897415完整FAIL：audit8836/forecast8836/restored8357ms本轮<15s，三写9347/9233/8923ms>5000。官方工件SHA/CRC与raw trace/gzip/parser复现PASS，61340采样/152边界帧、零未知/不匹配退出、无溢出，仍PARTIAL_DIAGNOSTIC；SQLCipher游标/GC/UTF8仍主要成本，见ansm-integration/p4/performance/native-profile-66ea8d5/。不删除0fd/3ee等旧失败，不按较快一次宣称稳定改善。
+
+新共享负向测试旧代码先实际expected0/actual1操作回读，再强化记录版本后expected[0,0]/actual[1,1]；非法operation_id+伪造零cache必须拒绝、回滚后账本/cache/immutable trigger完全还原的负向测试已PASS。生产候选只把同一流水的操作字段和临床revision纳入流式LEFT JOIN，所有字段类型、ID域、原消耗反向查找、临床事实和全局审计断言保留；历史查询只保留原来的primitive先前流水，不增加envelope缓存，不隐藏无匹配行。data420零fail/skip、Android合同编译PASS；相同大库备份/恢复/三真实Repo写入与完整投影一致，JVM SQL12186→8180，写1354/1424/1487ms仅诊断。原生新HEAD待验，不放宽5s或样本。
+
+另在独立CI分支创建#71（95c8d3c）：最新主线417实际失败是ReminderTestDeviceTest行52 status.exact=false，发生在90s等待前；权限命令未读完的竞态只是HYPOTHESIS。仅测试准备读命令EOF并断言API31+真正grant；三个测试方法/全部旧断言/5/8s输入/90s期限逐字不变，无生产提醒逻辑改动，按主线最新REQUIREMENTS106开启保护auto-merge，六CI/三API待验，任何FAIL须保留处理。Beta #64的063861d自身六项CI已全PASS，但仍DRAFT/NO-GO，不等于主线417设备失败已修复或P4准入。P4 DRAFT/正式入口OFF，P5/P6未实施，本工作无签名/发布/APK交付。
+
+## P4 原生排序索引仍FAIL；批量操作读取本地通过 — 2026-10-18
+
+已普通合并主线417e383（#66–#70）为0fd0ca3；四语冲突保留全部主线提醒文案和既有forecast_needs_check，workflow保留17数据类与2新增App类，双方交接保留。主线需求105–107原编号保留，旧P4的105–108映射108–111；新106普遍自动合并授权继承，草稿/外部审阅/发布例外不变。合并后Period5/Privacy3本地PASS，证据merged-main417-app-local-evidence.json；生产参数/PK/权限没有新增变动。
+
+0fd原生run39122744634官方工件SHA/CRC、1470239B trace及可复现parser已归档ansm-integration/p4/performance/native-profile-0fd0ca3/：完整audit14149/forecast13529/restored12720ms本轮<15s，但三次写入13726/13307/13938ms>5s仍FAIL。SQL减少不能宣称原生改善。97996采样、152边界未闭合帧、零未知方法/不匹配退出、无溢出，PARTIAL_DIAGNOSTIC；SQLCipher游标仍首要成本。相同SHA重复手动run39122741164取消，仅防重复、无验收结论；保留的PR原生运行不论成败完整记录。所有既有失败和预算保留。
+
+新增零分配操作负向测试：旧实现真实expected0/actual1逐操作回读；现在一次游标读取同一组完整操作字段，NULL/整数/String类型以及全部链/版本/来源/账本/历史校验保留，不增加持久或跨事务缓存、不接写入。data418零失败/跳过，Android测试源码编译PASS；原同规模JVM大库/完整投影相等、SQL14189→12186（三写1379/1388/1495ms）仅诊断，原生未验。对应bulk-operation-*证据与临时诊断patch已保存，生成源码已清理。候选六CI/原生待新HEAD验收。
+
+Beta #64只读同步main417为063861d；区分公开build29、由主线账本声明/其他开发线交付的私密build30（source dfb，不含#70或P4）与本P4候选；没有重新下载/验签/交付build30，真机/升级NOT_RUN。P4_BLOCKED/DRAFT、App入口OFF，P5/P6未实施，Beta NO-GO，本工作未签名发布。
+
+## P4 排序索引回归通过；写入性能仍待原生验收 — 2026-10-18
+
+3ee5110六项必需CI全PASS，已核验官方工件SHA/CRC：API26/29/35的ReferencePersistenceAndroidTest各23用例、含2条新字节边界、零fail/skip。原生run39121269126完整FAIL，仅真实写入11959/11020/11524ms>5000；audit11286/forecast11600/restored audit10395ms本轮<15000，不能当稳定/因果证明。运输双ACK PASS；1155058B trace离线parser完全复现，76108样本、152边界未闭合帧、零未知/不匹配退出、无溢出，仍PARTIAL_DIAGNOSTIC。SQLCipher游标为主要采样成本。原始工件/报告/hash见ansm-integration/p4/performance/native-profile-3ee5110/，不删除早期失败。
+
+先写共享SQL/边界负向测试，原实现真实expected0/actual8；第一个分组Map方案虽data417 PASS，却在相同大库查询20198→20811退化（挤掉原始行缓存），已拒绝且未推送，证据保留。替代方案仅按剩余8MiB预算为已完整缓存的不可变行建立排序引用索引，保留重复行、整数类型、原游标独立性；部分/未建索引回SQL，不缓存跨事务信任，不改审计或存量语义。新方案data417零失败/跳过、Android测试源码编译PASS；同规模JVM大库完整投影一致、查询20198→14189（少6009），真实Repository三写入1489/1561/1588ms仅JVM诊断，原生NOT_RUN。新增重复确认测试初次JUnit返回值声明错误已明确Unit修正并保留失败，未放松断言。原始fixture与所有预算不变；诊断patch只加在计时结束后的临时测试副本，生成文件已清理。
+
+主线另有#66–#69到1abfeea，真实device-tests在定时提醒链FAIL；#70由另一开发者处理，避开提醒/UI/字符串共享文件。下一步普通合并主线并保留新旧需求/交接/设备类名单，再做最终CI及原生预算。P4保持DRAFT/PRODUCTION_BLOCKED、正式入口OFF，P5/P6未实施。主线私密build30是独立授权与交付，不含未合并P4；公开build29未改变。本轮未签名、发布或交付APK。
+
+## P4 采样运输已验证；全字符串追加优化本地回归通过 — 2026-10-18
+
+原生0b3c703/run39109780636已取回2310261B ART采样；8字节预检与最终nonce ACK真实PASS，官方工件SHA/CRC、原始trace SHA和确定性gzip已保存，离线重跑parser与原摘要完全相同。采样158040条、152个边界未闭合帧、0未知方法/不匹配退出、无overflow，仅PARTIAL_DIAGNOSTIC，不是调用计数或完整CPU剖析。此前head失败保留，不再称运输待验。证据：ansm-integration/p4/performance/native-profile-0b3c703/。
+
+同轮原始预算仍FAIL：audit15569ms、forecast16150ms、三次真实写入15939/15672/15662ms；恢复后audit14587ms。fixture/SQLCipher/512MiB模拟器/192MiB堆/全部预算不变。真实热点以SQLCipher游标读取和Android26 CharSequence区间追加为主，不按猜测改正则/UUID。新候选只在完整Unicode标量扫描后对未转义完整字符串调用String追加；转义区间及全部NUL/代理项/大小/摘要/历史字节约束保留。先新增2条共享边界测试，旧实现加新测试5项PASS，再改生产；全data415、Period5、Privacy3零失败/跳过，Python198全套PASS。环境重启后原Gradle日志不可用，保留实际JUnit时间戳/摘要；原生合同编译产物存在，真实新设备结果仍待CI，不冒充完整日志或实机通过。
+
+主线8ebb719和Beta文档49236a2各六必需CI全PASS；#65已按单独授权合并，旧build29不含该修复。P4候选未合并、DRAFT/PRODUCTION_BLOCKED，App精确写入口OFF，P5/P6 NOT_IMPLEMENTED，Beta NO-GO。无Schema/备份格式/库存行为/PK/签名/版本/发布变化。下一步推送候选并用完全相同API26大库及六CI验收；未达5秒继续基于实际热点优化，不削预算或全量审计。
+
+## P4 原生预检定位 API26 head 不支持字节模式 — 2026-10-18
+
+ceb504d run39109323920在生成大库/加载SQLCipher前按设计停在TRANSPORT_PREFLIGHT_FAILED；PERFORMANCE_NOT_RUN，所有本轮性能数值UNAVAILABLE。官方工件12129374268 SHA/CRC已核验；原始逐路径错误明确：正确测试包的run-as执行head返回exit1/head: not integer: c，另一个候选包unknown。这是本次预检的已确认工具故障；前两轮未保存原始远端错误，不倒填为完全已确认。不会把fail-fast当预算通过，最后完整4dc写入15.6–16.3s仍FAIL/P4_BLOCKED。
+
+新增API26错误响应负向测试在旧reader实际29项/1失败；改为有界dd（bs=字节上限、count=1），统一非PTY shell v2分离stderr，避免exec-out将dd统计文字混入二进制。JSON硬上限65537B、trace硬上限expected_size+1（<=32MiB+1）、8字节含NUL/CR/LF/高位字节探针最多读9B并逐字节验证；App-UID固定路径、nonce/ACK与预算阶段之间不轮询不变。Python198 PASS；生成的Kotlin未变，复用刚完成的原生编译证据，不重复编译。实际dd运输预检待验；无生产代码/预算/Schema/备份/PK变化。
+
+主线8ebb719已六CI PASS，26/29/35各4新增SQLCipher用例工件核验PASS。Beta #64已普通同步主线并推送49236a2，仅文档，准确区分主线修复与旧公开build29；新文档CI待验。P5/P6未实施，正式入口OFF，Beta NO-GO，未签名发布。
+
+## P4 测试运输改为 App 内部路径与大库前预检；主线六 CI 通过 — 2026-10-18
+
+#65 已获单独明确批准后普通合入主线8ebb719，合并后六项必需CI全PASS；官方工件SHA/CRC核验26/29/35各4个新SQLCipher用例真实PASS/0skip，见performance/main-8ebb719-*。本地P4通过普通merge同步主线（223aeff），workflow保留17类并集、双方HANDOFF保留。data413、Period5、PrivacyNoticeFacts3、Python190及原生合同编译PASS，Privacy初次过滤名误写后已实际按正确类名补跑3项，证据已更新。
+
+4dc09b8原生run39108085887完整FAIL：实际写入15604/15957/16339ms仍>5s，审计/预测/恢复后审计本次低于15s。ART文件生成2300664B，但host_ack=false、未取回，且没有逐路径错误信息；仅切换shell不足以完成运输，根因仍UNVERIFIED，不声称已分析方法热点。工件12129850807官方SHA/CRC及原始报告已归档native-4dc09b8-*；7590两次旧失败也保留。
+
+新候选只修改测试工具：使用debug测试App UID的run-as读取自己的内部固定路径，不依赖外部存储别名。完整计量库/SQLCipher加载前，验证8字节含NUL/高位字节探针和App自己读取的nonce ACK；失败15s内停在TRANSPORT_PREFLIGHT_FAILED/PERFORMANCE_NOT_RUN，保留有界逐路径退出码/stderr。成功预检后不轮询adb，等原预算全部冻结后的采样ready才取方法栈并回执，原性能断言/fixture/SHA/预算不变。先新增负向测试实际25项中1失败/3错误，再Python197 PASS；生成原生源码编译PASS并清理测试生成文件。实际新运输NOT_RUN，不能用合成预检冒充原生成功。
+
+P4_BLOCKED/DRAFT、正式入口OFF；P5/P6未实施，Beta NO-GO。无生产代码/Schema/备份/PK新增改动，无新签名、发布或APK交付。完整证据见docs/ansm-integration/p4/performance/与阶段账本。
+
+## 已获单独授权并普通合并 #65；主线复验待验 — 2026-10-18
+
+负责人明确答复“批准普通受保护合并 #65”，已复核e69490f六CI全部成功、无冲突/未解决讨论，以匹配HEAD的普通merge合入8ebb7198fe1dbd1d0c2a5f96e24cdecf7efac54c；无admin/force/auto。主线CI待验，后续P4基线合并保留双方共享workflow类名单/HANDOFF，不能将旧分支绿灯冒充新基线结果。P4原生7590cc7 attempt2仍运行，原失败保留。授权见REQUIREMENTS§108。
+
+## P4 原生恢复中进程退出；#65 最终六 CI 全绿 — 2026-10-18
+
+7590cc7原生run39106781296 attempt1在加密恢复中测试进程退出；官方工件SHA/CRC及原始部分报告、合成日志已归档。写入和采样未完成，不能拿先前耗时充当本轮结果；退出原因UNVERIFIED。相同源码/预算attempt2正在复查，保留原失败、不宣称根因修复。详见[阶段账本](ansm-integration/WORK-STATE.md)。
+
+独立#65最终e69490f六项必需CI在push/PR均PASS，已Ready for review并更新正文；未扩大ANSM自动合并授权。P4仍BLOCKED、正式入口OFF，P5/P6未实施、Beta NO-GO，无新APK或发布。
+
+## P4 工具准备失败非性能结果；已修nonce隔离 — 2026-10-18
+
+0b7bf67原生run39106094875在测试前因新增logcat -c失败，PERFORMANCE_NOT_RUN/数值UNAVAILABLE。移除清日志依赖，以主机本轮nonce绑定Instrumentation、watcher及collector，旧ready/旧绿报告不能触发读取或冒充当前结果。Python188/原生源码编译PASS，实际运输待验；不改原预算/生产代码。详细故障/工件SHA/修正见[阶段账本](ansm-integration/WORK-STATE.md)。
+
+#65源88a60f1六CI和26/29/35各4新用例实际SQLCipher成功已核验；e69490f仅证据的最终CI待跑，未擅自合并一般日常数据修复。P4_BLOCKED/OFF，P5/P6未实施，未签名发布。
+
+## P4 采样运输改为预算后握手；#65源CI全绿 — 2026-10-18
+
+efc7aba原生写入16.1–16.5s仍>5s，P4_BLOCKED；Trace实际生成但AGP清理导致未取回，分析UNAVAILABLE，不编造热点。后续仅测试工具：预算后ready/nonce/host ack，主机仅收到log标记后读固定合成路径，不在原计时阶段轮询adb，最多预算后等30s，保留原失败断言。Python184/原生源码编译PASS，实际握手NOT_RUN。详见[阶段账本](ansm-integration/WORK-STATE.md)。
+
+独立#65源88a60f1六CI全PASS，API26/29新4用例真实SQLCipher成功；原始工件/35报告继续核验。尚不自动合并一般日常修复。正式库存入口OFF，P5/P6未实施，未签名发布。
+
+## P4 写入12.3–13.4s仍阻断；独立日常恢复修复#65 — 2026-10-18
+
+3cea864六CI PASS，原生run39102897438完整FAIL：本次审计/预测<15s，三写入仍>5s。解析复用本地data409/Period5/Privacy3已通过，未冒充P4完成。下一提交仅在原预算冻结后进行合成ART方法栈采样；Python179与原生源码编译PASS，实际采样NOT_RUN。新工具强制API26模拟器、固定路径/硬大小上限、保留失败退出码，不进入正式App。详见[阶段账本](ansm-integration/WORK-STATE.md)。
+
+另有#65独立回收站同毫秒引用冲突修复：4确定性红→data247/Python156/原生编译绿；当前26/29/35与最终六CI待验，不自动合并一般日常数据PR。未来与P4同一workflow行须取类名单并集。P4_BLOCKED，正式入口OFF，P5/P6未实施，Beta NO-GO，未发布。
+
+## P4 消费解析复用本地通过；原生门仍待验收 — 2026-10-18
+
+65cf08e六CI PASS、原生四预算FAIL证据已核验。新候选仅在单次审核内复用完整解析结果，保留全部字段/链/摘要/数量/全局校验，不改Schema或库存语义。data409、Period5/Privacy3、Python169、原生源码编译及同规模JVM大库PASS；新原生NOT_RUN，正式入口OFF/P4_BLOCKED。另发现#64评分回收站时间戳引用冲突，独立分支正在确定性复现，不混入P4。详见[阶段账本](ansm-integration/WORK-STATE.md)。未签名、未发布、未合并，P5/P6未实施。
+
+## P4 同机对照明确收益；写入门仍FAIL — 2026-10-17
+
+cdc50b7原生run39068064156完整结束：本次审计/预测/恢复审计低于15s，但真实写入15.25–16.47s>5s，P4_BLOCKED，入口OFF。后置同机raw17s vs cached12–13s且完整投影相等；不是P4准入成功。保留同一生产源码此前四预算失败，避免将一次较快运行写为稳定修复。继续仅测试定位逐包装/逐操作方法耗时；生产未变。[阶段账本](ansm-integration/WORK-STATE.md)已记录工件SHA/完整失败与JVM诊断。P5/P6未实施，Beta #64仍NO-GO。
+
+## P4 原生复验仍阻断 — 2026-10-17
+
+原生db34e87四预算FAIL，真实写入19.16–19.76s>5s；未放宽门槛。data407/Period5/Privacy3/Python168 PASS；JVM查询减少67.5%不等于原生成功。主线d13048b合并后六CI已PASS。新增测试专用后置分段与同机raw/cache对照，保持原预算/峰值范围及全部断言；尚待原生运行。最新证据及限制见 [阶段账本](ansm-integration/WORK-STATE.md)。正式入口OFF，P4_BLOCKED，P5/P6未实施，#64 Beta仍NO-GO。
+
+## P4 只读行缓存优化待原生验收 — 2026-10-17
+
+发现完整审计62219次SQL查询，新增只在单次同步只读事务有效的有界标量行缓存，保持所有逐行/全图/账本校验，未命中回SQL，结束检查无数据/Schema变动。data407零fail/skip与原生源码编译已通过；同规模JVM写入约1.7–1.8s不等于原生成功。前一原生a3e95e4仍四预算FAIL，证据完整保留；当前源码原生门待跑，正式入口OFF。详细范围/兼容/未来步骤见 [阶段账本](ansm-integration/WORK-STATE.md)。#63已合并，主线复验仍须核实；#64 Beta仍NO-GO。
+
+## 主线 CI 修复已合并；P4 准入仍待实测 — 2026-10-17
+
+#63 自动合并为 d13048b，源80c31ce六项必需CI全部成功并核验工件；合并后主线复验仍在跑。P4 同步已合并修复，仅解决 HANDOFF 并保留双方记录。a3e95e4 最终 data402/Python168/Period5/Privacy3/原生源码编译成功，低内存原生性能仍待 run39064593821，不称 P4 已完成。阶段证据见 [集成账本](ansm-integration/WORK-STATE.md)。未重新发布、未开精确库存入口，P5/P6仅审计/待开发。
+
+## P4 批量审计与后端收尾 — 2026-10-17
+
+新增优化/负向验证已通过最终本地 data402、Python168；原生和最终 CI 尚待跑，不得称 P4 已完成或合并。完整失败证据、范围与当前报告见 [集成账本](ansm-integration/WORK-STATE.md)。#63 独立 CI 修复由 Claude 负责；#64 是仅文档 Beta NO-GO 清单，无发布授权。P5 完成真实代码接线审计，未实施 gateway/UI 写入，不重画 Claude UI，也未启用附件。官方资源/PK/发行边界不变。
+
+## ANSM 后端收尾续作 — 2026-10-17
+
+#57 合入最新默认 35600a0，保留 build29 发布账本与 Claude 八张 REFERENCE_ONLY 图。新任务见 REQUIREMENTS §107；旧 P4/V4 编号顺延 §105/106，主线发布 §104 不变。CI 修复 #63 已由 Claude 负责，避免重复开发。原生性能第五次运行完整 FAIL，四项超时；准确指标见 [阶段账本](ansm-integration/WORK-STATE.md) 及 performance/native-fifth-report.json。当前 P4_BLOCKED，正式精确库存入口 OFF，P5/P6 未实施，未发布。
+
+
+## P4续作审计与临床读取负向测试 — 2026-10-18
+
+回到原#57/6c871bfd，不新建第二PR。最新主线86131172（#85）六必需CI全部PASS，已把主线收据补PR85。原生39130872641写入8.17/8.23/7.59秒仍FAIL，入口OFF。拟以保留缺失行的LEFT JOIN减少每操作实际记录点查，先运行共享负向测试；文件级合同见ansm-integration/p4/performance/clinical-stream-contract.md，尚未改生产实现。发现主线LAB02与P4旧候选Room12/业务11编号碰撞：后续必须保留主线已审版本、独立确定下一版本及完整兼容链，不可覆盖main12.json或声称旧候选已整合。新性能候选与兼容接线分开验收，仍PRODUCTION_BLOCKED。
+
+## P4 临床批量读取本地422 PASS — 2026-10-18
+
+未改生产源码前，新共享负向测试实际FAIL（临床点查1次，预期0），收据clinical-stream-red-evidence.json；实现逐行typed LEFT JOIN后，完整数据JVM422零失败/错误/跳过，原生源码编译PASS，收据clinical-stream-local-evidence.json。保留现有剂量原始位/时间/状态/config与计划hash、退休身份、零分配操作、更正/冲销、完整全局审计；没有跨事务缓存、迁移或预算修改。相同14600事实/2000包装大负载本地诊断运行中；新HEAD原生性能及六CI仍待验。实际后续数值/原生收据固定PR57，避免CI元数据提交循环。Room12/业务11与主线LAB02的版本碰撞尚未集成，正式入口仍OFF。
+
+## P4 原生5fe失败归档、前缀复用423本地通过 — 2026-10-19
+
+执行环境恢复后核对#57仍5fe9466f/DRAFT，主线86131172未变。原生39162004779实际FAIL：写入10473.91615/10311.77029/10165.28703ms>5000；audit12762.79/forecast12648.41/restored9562.62ms本轮<15000。官方ZIP SHA b92f4862…59334/CRC和58067记录采样parser重放核验PASS，均存performance/native-profile-5fe9466f；采样PARTIAL_DIAGNOSTIC，不以不同runner对比推断稳定改善/回退。工程API35还在ReminderTestDeviceTest.kt52 assertTrue(status.exact)失败；旧分支缺主线已审AppOps等待修正，需正常整合后实际复验，不盲重试/归为flake。
+
+后续前缀复用先共享负向测试真实FAIL（两包装重复读2次，预期0），再复用同次完整审计已验证流水：完整data423零失败/错误/跳过、原生源码编译PASS；同14600/2000负载完整投影一致、SQL6178→4178，原始量/因果head/sequence reducer不变。clinical-stream-*、prefix-reuse-*收据标明base/worktree源码hash，legacy scratch日志的git HEAD不能冒称未提交前缀实现source。格式化与空未使用包装不缓存的边界复验进行中；新候选原生性能尚未执行，入口OFF，主线Room12/业务11衔接未实施。未来集成具体方案mainline-room13-compatibility.md保留main12/LAB02，候选13/业务12并完整旧链/拒绝测试，不覆盖主线已审schema。
+
+前缀最终空包边界复验：共享MeasuredConsumptionStore 122项PASS，零失败/错误/跳过，原生编译PASS；源码hash与XML收据prefix-reuse-empty-boundary-evidence.json。完整423项收据对应先前等价前缀核心，后续仅空未用包不保留映射与格式化；相同大负载全为非空精确包。下一提交后新HEAD原生及完整CI待验，保持DRAFT/OFF，不用本地结果越过准入。
+
+
+## P4 / main861兼容集成进行中 — 2026-10-19
+
+保留主线已审中心/化验/提醒和Room12/业务11；当前未提交集成候选Room13/业务12，仅添加显式库存编码，不覆盖main12.json或LabPanel迁移，原PNBAK1密码学/PK/版本签名不变。旧P4 §108–111顺延114–117，源任务书不改。前缀候选cc7b182c已推送，原生39209956991仍待验；本地423及122目标合同PASS不代表集成验收。冲突逐项合并并扩展旧链/备份/拒绝测试；尚无编译/完整CI/主线合并或正式入口启用。
+
+## P4 集成首轮失败保留与新兼容合同 — 2026-10-19
+
+main861与cc7普通merge仍未提交。Room13已由KSP生成，与批准main12结构比较：46表中45表逐项相同，库存表仅新增inventory_encoding默认LEGACY；main12文件字节未改，收据main861-room13-schema-evidence.json。首轮data437实际13失败/0错误/0跳过：旧当前版本断言与备份夹具仍固定Room12/业务11等，原失败收据main861-room13-first-failure.json。逐项把“当前输出”期待改候选13/12，旧版本夹具保持原号；库存伪造版本负例扩到10/11/12，新旧读取拒绝保留；新增真实主线业务11含化验单和旧库存恢复、12→13故障DDL回滚保留化验关联/原量/引用epoch。完整第二轮与原生编译运行中，未宣称PASS。cc7原生39209956991亦实际FAIL（8.47/7.95/8.64秒>5秒），官方ZIP39c6355b…75065已下载/CRC核验，详细归档待本轮完成；正式入口仍OFF，不合并#57。
+
+P4 Room13第二轮data439仅1失败，归档main861-room13-second-failure.json：真实新增main12故障回滚夹具触发InventoryEncoding.install旧<12门。相应门改为Room格式版本13，PackageCorrections旧标量门同用该常量；主线LabPanel业务Schema11条件保持不变。新增反向合同：已发布Room12可无marker，伪称Room13仍缺marker必须拒绝；不是删除安全检查。第三轮全data及原生编译待验，仍无集成提交/生产启用。
+
+## P4 主线兼容候选440本地PASS — 2026-10-19
+
+普通合入批准main86131172到原#57，保留所有医疗/药品中心、UI05、LAB02及AppOps等待修正；兼容候选Room13/业务12在原§102/续作授权内非破坏演进。批准main12.json逐字保留，新13仅增加inventory_encoding，46表其余定义不变；原Schema11含化验单/旧标量恢复、1…12升级、旧12读者拒绝13、旧11备份读者拒绝12、故障DDL回滚并保留化验关联/库存原量/引用epoch等共data440零失败/错误/跳过，原生源码编译PASS；收据main861-room13-local-evidence.json。现有安全断言保留，仅当前输出版本期待和旧夹具口径按实际来源调整，并新增反向格式门测试；两轮真实失败保留。App库存UNKNOWN/UI05/中心/时期回归仍运行中，合并候选最新HEAD完整六CI/原生性能待验。
+
+cc7原生39209956991完整FAIL已归档performance/native-profile-cc7b182c：8.468/7.955/8.645秒>5；15秒审计/预测均本轮内，堆/磁盘观测如实保留，官方ZIP39c6355b…75065/CRC/52722采样parser重放核验PASS但仍PARTIAL_DIAGNOSTIC。不能拿本地4178查询或候选迁移通过替代实际5秒门，#57继续DRAFT/PRODUCTION_BLOCKED，正式写入口OFF，P5/P6未启用。不改PK/PNBAK1密码学/权限/签名/发布；版本32来自已审主线，非本任务另行改版或交付。
+
+## P4 原生集成复验与包装点查优化 — 2026-10-19
+
+主线兼容候选a3c69574本地App11套/67项零失败/错误/跳过，含时期、库存UNKNOWN/UI05和两个中心导航/状态恢复，App仪器源码编译PASS；main861-app-regression-evidence.json保留逐套XML摘要。其原生39211937058实际FAIL：写入9.160/8.334/8.084秒>5秒；其余实际指标见performance/native-profile-a3c69574，官方ZIP d3bc3a53…0f38f/CRC/58686采样parser重放均核验，仍PARTIAL_DIAGNOSTIC，不能当调用次数或临床验证。
+
+同一#57内下一优化先写两包装真实合成消费的反向测试，未改生产a3c即实际捕获2次包装点查；container-stream-red-evidence.json。候选将同事务完整身份查询LEFT JOIN包装原始字段，共用原typed decoder，独立审计保留点查/未知失败路径，仍逐一核对live_handle/owner/来源/账本/临床与缓存，未缓存跨事务信任。完整data回归及原生编译运行中，尚未宣称PASS/提速。主线最新仍86131172、#57仍DRAFT/PRODUCTION_BLOCKED，入口OFF；P5/P6未实施。完整六CI及最终原生门按PR57的精确HEAD收据交接，避免元数据提交触发循环；不合并、不发布、不交付APK。
+
+包装读取候选完整data441零失败/错误/跳过、原生合同源码编译PASS，production hash/逐套XML见container-stream-local-evidence.json。原14600/2000场景与计量后查询诊断运行中；a3c API26/29远端兼容已PASS，其余六CI未全部完成。最终优化的原生性能仍待验，绝不据本地数据启用。
+
+包装候选原规模本地诊断PASS，2184查询，完整结果一致；总量不可与主线LAB集成前cc7的4178直接宣称差值。新增原SQL独立投影对照，shared MeasuredConsumption123项零失败/错误/跳过、原生源码再编译PASS，生产hash与全data441相同。main861-privacy-ci-failure.json记录a3c远端实际失败：App1776中1失败/237既有跳过，唯一失败PrivacyNoticeFactsTest:22仍写死业务11/Room12；修正当前输出期待为业务12/Room13并同步privacy-evidence，KDF/cipher/四语原断言不动，局部隐私/时期回归运行中。不能说六CI全绿；设备和API26/29、JVM/科学实际已PASS，最终HEAD再验。
+
+本轮候选最终隐私/时期复验8项零失败/错误/跳过，container-privacy-period-evidence.json；所有加密参数/四语隐私原断言保留，完整data441/差分123/原生编译和14600/2000诊断均已PASS。当前a3c六CI完整结果为5类PASS/Android FAIL（版本过期断言），原生亦FAIL，已归档main861-ci-evidence.json；本轮修复与优化将推送原#57，新HEAD完整六CI/原生门必须重验，不能沿用a3c已通过部分作为最终准入。最终精确HEAD/远端结果记录PR57，仍DRAFT/入口OFF，不启用P5/P6。
+
+包装读取492d7276已推送#57：隐私/时期8PASS、完整data441、差分123、原生合同源码编译及原规模本地2184查询诊断PASS。原生39214313446/六CI已自动运行，不重复手动触发，仍DRAFT/入口OFF。继续针对剩余2000账本游标先写两消费+一空包装的真实合成反向测试，未改生产492即实际捕获3次点查；ledger-stream-red-evidence.json。新候选借用同事务单游标按UUID/id分组，原typed decoder/每包装100000界限/LEFT JOIN孤立行/完整余组检查及独立SQL对照保留，try/finally清理指针，不跨事务缓存或略过全局审核。候选完整data/原生编译运行中，未推送/未宣称PASS；仅在证据支持且仍有需要时采用，不抢先取消492原生诊断。
+
+账本流式候选最终data443项零失败/错误/跳过及原生合同源码编译PASS，四种篡改查询游标均拒绝/关闭/保持原始数据，之后真实审计恢复；首次442与最终443收据ledger-stream-{first,final}-evidence.json。发现并承认上轮容器参数新增遗漏同步计时后反射：492原生39214313446实际写入9.726/9.666/9.184秒>5，之后另因4/5参数签名不符失败，未产生采样(NOT_RUN)，ZIP e84a1a9d…dedd4f9/CRC已核验保留。不是仅诊断错误，更不是性能PASS。新增签名合同先RED5!=4，修正生成器只向私有5参数函数传null capturedBox，维持独立SQL组件/真实完整审计比较/原计时预算断言，10项Python测试PASS。生成原生探针编译与原规模账本查询计划诊断正在进行；候选未推送、#57仍草稿/入口OFF。
+
+账本候选原规模本地诊断PASS：185查询（原包装候选2184，2000逐包装账本读合为1），完整结果相等，JVM实际计划全部使用现有索引，无全量临时排序；ledger-stream-large-evidence.json记录精确hash/计划。此非原生计划或5秒准入。生成器在计时后只读诊断中新增原生EXPLAIN/恰好1次流查询/完整结果相等检查，不动任何原始阶段或预算；10项Python检查PASS。最新生成探针编译与最终App隐私/时期/库存UNKNOWN回归运行中，候选暂未推送；492六CI还未全部结束，失败与未运行内容保留。
+
+账本流式最终候选本地全部通过：data443、App隐私/Period/StockConsistency/UNKNOWN43、Python10，更新后的生成原生探针Kotlin编译PASS，所有实际套结果零失败/错误/跳过；ledger-stream-app-native-compile-evidence.json保留生产/生成器/探针/逐套XML hash。附可移植ledger-stream-query-reproducer.py，--emit实际复现同593589a2…7ef7探针hash。原规模185查询与现有索引计划成立，仅JVM诊断；不得替代原生5秒准入。492六类必需检查均已出现本源成功（重复事件设备任务可能尚在结束，原始rollup保留），native仍FAIL且计时后签名错误保留。新候选将推送原#57，不擅自就绪/合并；最终精确HEAD及完整六CI/原生结果按PR57收据交接，避免元数据提交循环。正式入口OFF、P5/P6未实施、不签名/改版/交付APK。
+
+e5a9b131已完成：六必需CI全PASS，native39216614238仍实际FAIL，三写10.263/10.678/9.665秒>5。原生完整索引计划/单流查询/结果一致检查成功，签名诊断已修复；官方ZIP1229c2cc…175a14f1/SHA/CRC/采样parser重放已核验，performance/native-profile-e5a9b131/保留全部证据。减少查询数不能冒充速度达标，仍DRAFT/入口OFF/P5P6未实施。
+
+继续针对真实采样readConsumption约2.04s包含请求编码再解析：先固定老字符串路径10有效/26非法wire语料，共9项现状测试PASS（embedded-request-baseline-evidence.json，不伪称RED）。新候选由不可变envelope字符串只解析一次，共用原private字段validator，保留旧字符串路径字节/规范化检查和所有原外层/链/row/hash/临床/来源/逆流水校验；局部请求返回不可变uses，不缓存跨记录。原位bit正则只预编译相同模式。有效/非法对照与JSON别名隔离测试已加入，全data/原生合同编译运行中；候选未推送，未宣称提速或准入。
+
+嵌入请求候选全data448零失败/错误/跳过、原生合同源码编译PASS（embedded-request-data-evidence.json）；10有效哈希/事实与26非法对照/可变JSON及list别名隔离都成立。保持原字符串入口、byte/canonical约束与唯一字段validator，外层全部检查原样。现有sqlcipher4.10.0游标字节码确认会fillWindow，不能把185逻辑查询等同185底层读取；原生计时后计划诊断追加仅游标类/窗口起点/行数/容量及明确可用状态，先观察再决定分页，不改预算阶段或权限。Python10检查PASS，原规模大库存+最新生成探针编译+App隐私/时期/库存范围回归运行中（上个稳定候选为43项，当前实际项数待核对）；候选未推送，入口OFF/P5P6仍未实施。
+
+嵌入请求最终候选448 data/43 App/10 Python全部PASS，实际套零失败/错误/跳过；新增窗口元数据的生成原生探针Kotlin编译PASS。原规模14600/2000/32603本地PASS、185查询/完整投影相等保持；embedded-request-final-local-evidence.json记录两个生产文件hash/生成探针/逐套XML。仅减少请求编码再解析，旧字符串入口与所有外层/链/源/临床/库存检查保留，不缓存业务结果；生产未启用分页，待真实窗口证据。e5a9旧源六CI全PASS而原生5秒FAIL已完整归档。下一推送仍原#57，最终HEAD六CI/原生准入待新跑，精确收据在PR57维护，避免元数据提交循环；DRAFT/入口OFF/P5P6未实施/不签名不交付。
+
+d57d04c5原生39222489575实际FAIL：三写8.203/9.340/9.095秒>5，其余原门本轮内；5e95bea7…1187ead官方ZIP/SHA/CRC/采样parser重放核验，performance/native-profile-d57d04c5/待随下一源码检查点提交。新增窗口观测AVAILABLE：仅start0、2003行，未观察到前移换窗，不采用此前重复换窗假说来实施分页。capacity_bytes16384只是驱动配置报告，不代表实际占用或已证明硬容量，后续诊断字段将改清晰名称。不可声称源码改动已通过性能门。d57 JVM/科学及API26/29兼容已PASS，Android/设备仍按精确HEAD追踪。
+
+下一纯验证优化先做共享ReferenceMigrationContract的平台UUID对照（将同时在JVM与API26/29运行）。涵盖10000随机规范值、128版本/变体、576字符突变和12写法共10716对照；旧短写/大写/非ASCII/空值形式不得扩大接受范围。首轮只有最终语料计数误把128额外正向断言计入，10844→10716修正，不是生产谓词失败；uuid-oracle-fixture-count-correction.json保留说明。旧生产d57未改，修正计数后基线正在复验；通过后才实现等价ASCII谓词，不改快照/Schema/库存/PK。
+
+UUID旧谓词10716平台对照基线实际PASS（uuid-baseline-evidence.json），随后仅将ReferencePayload.uuid改为严格36位小写ASCII十六进制/固定连字符扫描。接受集合与平台parse→toString相同，保留全部版本/变体/nil/全1值，不正规化旧身份、不新加v4限制；完整证明及文件边界见uuid-validation-contract.md。共享合同将原封不动在JVM/API26/29执行，无Gradle/CI名单变更。当前全data/原生合同源码编译运行中，未宣称PASS或提速。诊断窗口字段仅改driver_reported_size_bytes，原始d57报告保持原样并解释旧capacity命名，不把配置值当实际内存。d57设备及API26/29/JVM/科学已PASS、Android仍待最终结果；P4仍DRAFT/原生5秒FAIL/入口OFF。
+
+UUID扫描候选全data449零失败/错误/跳过、共享原生合同源码编译PASS，平台10716对照包含其中（uuid-data-evidence.json）。最新生成原生探针已编译，原规模JVM场景完成，最终App回归仍运行中，未宣称整段最终PASS。前驱d57六必需CI已全部PASS，单独native5秒FAIL及窗口实际观测保存在native-profile-d57d04c5/（不把驱动配置大小当实际容量/内存）。没有实施分页或跨审计缓存；候选未推送，仍DRAFT/入口OFF。
+
+UUID等价校验候选最终本地449 data/43 App/10 Python全部PASS，零失败/错误/跳过，更新后的生成原生探针Kotlin编译PASS；原14600/2000/32603及185查询/完整结果一致PASS。uuid-final-local-evidence.json记录三个生产文件hash/生成探针/逐套XML。10716平台对照在共享原生合同中，最终API26/29实际执行仍需新HEAD CI，不把编译或JVM成功当设备执行。仅严格等价字符扫描与诊断字段明确命名，不实施分页、跨事务信任、库存算法/Schema/备份/PK/权限/版本变化。即将推送原#57，仍DRAFT/PRODUCTION_BLOCKED/入口OFF/P5P6未实施；精确最终HEAD/新六CI/原生预算结果在PR57维护，避免元数据提交循环。不签名/交付APK/Release。
+
+
+### P4 存储列等价聚合候选完成本地回归 — 2026-10-19
+
+1feacef4 六项必需工程检查均已完成 PASS；原生39226229051真实 FAIL，三写6.163/6.111/7.005秒>5，完整官方ZIP SHA/CRC/采样重放保留于 performance/native-profile-1feacef4/。API26/29报告证实10716项UUID平台对照实际 PASS，不冒称原生性能准入。
+
+新候选先在未改生产1fe实现上通过45批独立 SQL 列谓词oracle，随后仅将validateCandidateStoredColumns逐列MAX非法标记聚合为平衡OR树的单个MAX；原typeof/NULL/有限数/长度谓词、早期COUNT、UTF8字节和32MiB上限全部保留，不改Schema/格式/库存语义。完整data450、App43、生成原生探针编译及原14600/2000/32603本地大库均PASS，185查询/完整投影一致保留；收据column-aggregate-*。新源原生绝对5秒准入待验，仍DRAFT/PRODUCTION_BLOCKED/正式入口OFF，P5/P6未实施。负责人另要求APK：独立主线build33交付PR86正在CI/构建，不含此P4分支或#58，不与本性能候选混装。
+
+
+### P4 b171 原生失败保留及 build33 基线同步 — 2026-10-19
+
+b17178ec 六必需工程CI在push/PR全部PASS，原生39250115453仍真实FAIL：7.681/7.824/7.479秒>5；官方工件37f183ac…2499e1、CRC与采样parser重放核验PASS，native-profile-b17178ec/保留完整原始JSON与确定性gzip采样。仅采样诊断，不将宿主不同运行耗时差异当因果优化证据。原规模、门槛和全量审核不变。
+
+普通同步已审主线42bfa99f（#86/build33），保留所有P4代码和§114–117，以及主线独立APK交付授权；唯一应用变化为原已审versionCode32→33。没有将本分支打入build33，正式入口依旧OFF。主线合并CI尚待结束，#87交付收据正在受保护自动合并等待，不将其PENDING写成PASS。下一候选拟减少UTF8边界检查的临时字节分配，先建立平台编码对照，再替换纯长度计算；SHA摘要仍使用原UTF8字节，所有持久化/临床/量纲检查保留。候选尚未实施或验收。
+
+
+### P4 UTF8长度等价计数候选完成本地验证 — 2026-10-19
+
+先以未改变旧调用方的platform-delegating helper实际通过75555组平台编码对照（含全部65536个单码元、10000种子字符串、代理对/孤立代理项、65535/65536/65537字节边界，另2个组合断言）。随后只将四处长度检查的临时UTF8字节数组替换为Long无分配计数，SHA256仍取原平台字节，原规范化/NUL/孤立代理项拒绝、64KiB及链32MiB限额全部保留；不改线格式、库存/历史/单位、PK或密码学。完整data451、App43、Python10及生成原生Kotlin编译PASS，原14600/2000/32603本地大库PASS/185查询/完整投影一致，详见performance/utf8-length-*。新的原生编码对照、绝对性能及最终六CI尚待本HEAD执行；不把本地成功当准入。
+
+基线e36c52db原生39254914424仍FAIL：5.797/5.841/6.842秒>5；官方ZIP30338ea7…159b96/SHA/CRC/parser重放保留native-profile-e36c52db。宿主不同轮次差异不被当作因果提速。#57仍DRAFT/正式入口OFF/P5P6未实施。独立UI测试修复#88/source dfa7369b已编译并提交，原生CI待验；#87旧API26返回断言失败保留，待已审修复合并后同步，不拷贝未验收分支绕门。独立已交付build33不含本P4候选；无新签名/版本/发布。
+
+
+### P4 原生编码回归与备份进程退出分开处理 — 2026-10-19
+
+3b53b866 的原生平台对照实际在API26/29失败：expected180/actual179（已核验PR两Job118076789389/118076789250，push同类检查亦FAIL）。原先由JVM/孤立码元推断整串代理项替换的假设不成立；保留75555输入/全部期望/断言，新增仅失败时的有界UTF16前缀消息。修正为遇到任何代理项时对整个原字符串委托原平台UTF8编码，仅常见BMP文本采用无分配长度计数。SHA仍原字节、所有规范化和限额不变。新修正本地data451/App43、原规模14600/2000/32603用例/185查询与完整投影相等、生成原生Kotlin编译均PASS；utf8-surrogate-*记录精确源码和XML哈希。新的原生对照尚待最终HEAD，不把JVM成功当平台等价。
+
+另原生性能39257570583实际在full_encrypted_backup阶段Process crashed；最后JSON原样IN_PROGRESS，恢复后三写和采样NOT_RUN，不得写成新的5秒结论。官方工件b507a8b6…8f7098/SHA/CRC、原始crash日志及实际API26/29编码回归分别归档native-profile-3b53b866/。目标PID3914退出、系统低内存日志存在，但未确定Java/native/kernel根因，178666664只是最后保存的堆观测，不是最终峰值或RSS；先前完成的e36写入5.797/5.841/6.842秒FAIL仍是最后完整证据。
+
+新增只在测试和原collector结束后才执行的内核尾部诊断：仅完成的失败退出才重验emulator/QEMU/API26并只读dmesg最后80行；成功或未完成退出不读，超时5秒、保留stdout<=64KiB/stderr<=8KiB并标明裁剪/拒绝/未知，不解析为OOM结论或预算PASS。5项新测试先RED后PASS，全部44项ANSMPython工具测试PASS；post-run-kernel-*保存证据。原fixture、512MiB/192MiB限制、原预算、原exit传播、生产备份密码学/格式均未改变。新的实际捕获仍待验。
+
+#57仍DRAFT/PRODUCTION_BLOCKED/正式入口OFF，P5P6未实施，无新APK。独立#88最新dfa7369b其余检查成功但仍有一轮API29未结束；另一次API29及两轮26/35已通过，26/29目标方法工件已实际核验，待全部结束后普通受保护合并再同步#87；不跳过、不复制未验收分支。
+
+
 ### 中心原生 Back 测试输入同步复核 — 2026-10-19
 
 交付收据#87 source152f0908/API26 push39253001557 job118061193730真实FAIL：InAppNavigationLockAndroidTest:184，按Back后reference-window仍存在。build33成品source219bbf32本身push/PR六CI全PASS，不能用新失败改写旧通过，也不能忽略后续失败。隔离修复分支只将测试raw Back输入改用既有Espresso.pressBack，等待布局与焦点，原所有断言/单次Back/认证/文件拦截/真实离开锁定保持。焦点竞争目前为待原生复核假设，不声称已证明。Android测试编译与新源26/29/35验证待跑；不修改生产UI、不重新出APK。详细docs/centers/back-input-synchronization-2026-10-19.md。#87原失败保留，待本修复受保护合并后同步该分支再验。
+
+### P4 真实票据后置只读诊断 — 2026-10-19
+
+在已验收主线dd871cc6/#88合入后的6be9c395上，仅增加生成合成原生探针的后预算诊断及便携JVM复现。不改生产core/app、原fixture、512MiB/192MiB或5秒门。真实ticket/validate调用分别计时，使用existingScope；每次断言total_changes/schema_version前后相同，不创建身份、不写记录、不绕开陈旧票据或全量审计。原1ms/16MiB方法栈采样新增这两项，原sampled_cached_full_audit仍只计全审计。新契约先RED后PASS，46工具测试全PASS；原规模185查询/完整投影相等PASS，真实票据只读断言PASS，JVM120.48/124.28ms仅诊断，生成Android Kotlin编译PASS。便携--write-ticket --emit与实际运行探针SHA相同；生产源码无diff的哈希证据、实际JSON与命令见write-ticket-*。新原生耗时待CI，不得说已优化成功。
+
+补齐951官方工件的API26/29具体UTF8方法PASS（0.152/0.177秒，SHA/CRC/HTML行核验）。另重复push39262612979的android被取消，其他四job成功；原因未确定，不把该轮写成全PASS。951 PR事件六必需成功与其原生三写11.076/10.263/10.928秒FAIL分别保留。3b53备份进程退出仍UNDETERMINED；#57继续DRAFT/OFF/PRODUCTION_BLOCKED，P5P6未实施。
+
+独立交付记录#87已普通同步已合并的#88，最新21a10430完整CI仍运行、无已知新失败；旧152返回失败、#88附件POC取消及同源一次重放PASS证据不删。#88与build33各自是测试修复/既有成品，不与P4混同；无新签名、APK或Release。
+
+### P4 暂存交接：匹配目标 PID 的内核 OOM；负责人优先转向 LAB-03 — 2026-10-19
+
+bba9562d原生39267083400/artifact12193548500再次在full_encrypted_backup退出。此次后置dmesg明确杀死PID3915，与synthetic log的测试进程启动/退出精确匹配，确定本轮SYSTEM_OOM_KILL；anonRSS151160KiB仅被杀时观测不是峰值，具体DOM/字符串/UTF8/KDF子阶段仍未知，旧3b53不追认。原始IN_PROGRESS、内核尾部、压缩原始合成日志/SHA/CRC归档native-profile-bba9562d；写入、票据、采样NOT_RUN。
+
+暂存逐行编码候选：新增MeasuredBackupJson/BackupPlainBytes，RawData抽取原行编码，NotesRepository仅内部measured导出使用；ordinary legacy仍DOM，PNBAK1 BackupCodec逐字不变，格式/Schema/Room/恢复路径/全审计不变。原完整DOM与新编码的独立冻结旧实现字节对照、边界/只读/临时片段清零新测试通过；本地data453/App43（含PeriodStability）实际全PASS，精确已测源哈希在measured-backup-local-evidence。随后补强所有权finally：在捕获事务内把明文字节赋给外部受finally保护变量，以覆盖事务返回前取消。这个最后私有实现补丁尚未重编译：NOT_RUN_AFTER_SOURCE_FOLLOWUP，不能拿前一453/43冒充最终源通过。新的大规模/原生验证也NOT_RUN，仍DRAFT/OFF/PRODUCTION_BLOCKED。下一步恢复P4时先编译并重跑相关回归/原fixture+原生诊断，不直接Ready/合并，不改RAM/预算/crypto。measured-backup-memory-contract解释事务持有及失败回滚边界，无新迁移/库存算法/PK/发布。
+
+独立#87已在最终21a10430两轮六类CI全PASS、无冲突/未解决审查后受保护合并080094ae；build33成品/source219bbf32不变，没有新APK。主线080094ae science已PASS，Android/domain复验仍运行。
+
+负责人新任务明确优先LAB-UI-03/LAB-03，不等待P4。已从主线080094ae创建隔离工作树/workflows：/workspace/HRT-Log-lab-ui03（feature/lab-ui03-home-20261019）负责主页/真实导航；/workspace/HRT-Log-lab03（feature/lab03-analytes-20261019）负责目录/单位。禁止把本P4未准入源码带入LAB分支；不争用Room或备份版本，正式附件OFF。

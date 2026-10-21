@@ -1,0 +1,15 @@
+{
+  "status": "LOCAL_PASS_NATIVE_COMPILE_PASS_RUNTIME_PENDING",
+  "tests": 15,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "raw_xml_sha256": "dae36bd7a3474a4f99b1d34ecf7e7108b55d34289e15771f9c885c60c27c5e96",
+  "source_sha256": {
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredBackupJson.kt": "8a657f778d2007070e893465d5db5a1e289959e3be68621ed5818c280b0f0f0c",
+    "core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt": "b667c521270706e43b05f718604d1e681d99b79d9a775b8f3db0f5b1c124c050",
+    "core/data/src/historyTest/java/net/plainnotes/app/data/ReferenceMigrationContract.kt": "786a0d532a41cacb421ebbc4d9706a761c64878f92136e411f33921deda52ed6"
+  },
+  "original_red": "compile failed: missing BackupPlaintextOwner; no production fault manufactured",
+  "scope": "single-owner cleanup, cancellation rollback, immutable bytes/sha oracle, rejected buffer and alias handling; no crypto change"
+}

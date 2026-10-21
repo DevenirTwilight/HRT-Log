@@ -1,0 +1,15 @@
+{
+  "source": "f220b1f2e8e01da83add411e0e9701cdf645b17f",
+  "status": "TOOLS_PASS_DATA_AND_ANDROID_IN_PROGRESS",
+  "tools_tests": 72,
+  "tools_failures": 0,
+  "tools_log_sha256": "81c7e6e6a7b2211cb2474da7f685ad1240302dc54a8a2aa1c0337d939ec8ca6e",
+  "large_native": "NOT_RUN_NEW_CANDIDATE",
+  "old_native": "PRESERVED_NOT_REPEATED",
+  "generated_source": {
+    "source_sha256": "9313167178989def0d4d89d785f84cdde764fba21033543cdf85e472c5511242",
+    "native_sha256": "c173c98185edb9a837c6cf4b0e76c7b8c137278fc6a2c09a77b5e8998332cccf",
+    "status": "GENERATED_NOT_RUN"
+  },
+  "environment": "Fresh resumed executor; prior in-flight scratch logs and verification worktree unavailable, so final source validation restarted using restored offline Robolectric jars."
+}

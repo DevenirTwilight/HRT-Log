@@ -1,0 +1,16 @@
+{
+  "production_source": "9d304e58fd92f0171fd6ddd272f79dbe6ece3cb4",
+  "production_changes_after_freeze": false,
+  "scope": "TEST_ONLY_FIX_EPOCH_READ_TRANSACTION",
+  "android_compile": "PASS",
+  "tool_tests": 4,
+  "large_workloads_completed": 2,
+  "large_workloads_remaining": 0,
+  "manual_small_contract_jobs_allowed": 1,
+  "small_cases": [
+    "ROWS_DELETED",
+    "ROWS_INSERTED"
+  ],
+  "manual_mode": "restore-process-death-only",
+  "native_result": "NOT_RUN"
+}

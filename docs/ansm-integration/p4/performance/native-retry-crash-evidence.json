@@ -1,0 +1,15 @@
+{
+  "status": "FAIL",
+  "source_head": "617c9dd8636b386676ebd4a2166fccd27f162d3a",
+  "run_id": 39044178114,
+  "artifact_id": 12104454043,
+  "artifact_sha256": "810b811189ba9d2028f07ecaacf9f16a0fa592ed75e6b1a85b5d1e32234a4adf",
+  "zip_crc": "PASS",
+  "observed": "One test ran19.193s, instrumentation process crashed; no successful large timing result.",
+  "configuration": "AVD input emittedhw.heapSize=192M but emulator loggedqemu.dalvik.vm.heapsize384m; actual app max heap/RAM unknown.",
+  "measurement_json": "UNAVAILABLE",
+  "test_exit": 1,
+  "collection_exit": 1,
+  "log_sha256": "9a4b6d750a04ae867b17a11b6c2c0adc243df19487ba4d8a5de804d5dde1676e",
+  "next": "Set correct vm.heapSize in pre-launch config; initialize metadata before SQLCipher load and capture crash log/environment while emulator lives."
+}

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.VoidedPackageTest" tests="18" skipped="0" failures="0" errors="0" timestamp="2026-10-21T09:31:21.228Z" hostname="4f13d57d08c1" time="1.763">
+  <properties/>
+  <testcase name="restoreOriginalStateAndAmountWithoutAdditionalSupplyEntry" classname="net.plainnotes.app.data.VoidedPackageTest" time="0.065"/>
+  <testcase name="replacementSkipsVoidedSealedPackage" classname="net.plainnotes.app.data.VoidedPackageTest" time="0.053"/>
+  <testcase name="backupWithoutVoidEvidenceIsRejectedAtomically" classname="net.plainnotes.app.data.VoidedPackageTest" time="0.501"/>
+  <testcase name="automaticAllocationAndReversalNeverUseOrReviveVoided" classname="net.plainnotes.app.data.VoidedPackageTest" time="0.072"/>
+  <testcase name="laterStockOrIntakeChangesBlockRestorationAndRollBack" classname="net.plainnotes.app.data.VoidedPackageTest" time="0.057"/>
+  <testcase name="adjustmentOnlyMistakeCanBeVoidedWithoutChangingLedgerOrOtherStock" classname="net.plainnotes.app.data.VoidedPackageTest" time="0.057"/>
+  <testcase name="multipleAdjustmentsAndRepeatedVoidAreIdempotent" classname="net.plainnotes.app.data.VoidedPackageTest" time="0.054"/>
+  <testcase name="failedVoidRollsBackItsEvidence" classname="net.plainnotes.app.data.VoidedPackageTest" time="0.061"/>
+  <testcase name="backupRoundTripRetainsVoidEvidenceAndSafeRestore" classname="net.plainnotes.app.data.VoidedPackageTest" time="0.298"/>
+  <testcase name="voidedCannotBeAdjustedDiscardedModifiedOrRevivedByDirectStateUpdate" classname="net.plainnotes.app.data.VoidedPackageTest" time="0.077"/>
+  <testcase name="newActualIntakeBlocksUnsafeAutomaticRestore" classname="net.plainnotes.app.data.VoidedPackageTest" time="0.053"/>
+  <testcase name="mistakenExtraBoxIsRemovedAfterCorrectingTheOriginalOneTabletBox" classname="net.plainnotes.app.data.VoidedPackageTest" time="0.053"/>
+  <testcase name="realConsumptionAndEvenReversedConsumptionCannotBeDirectlyVoided" classname="net.plainnotes.app.data.VoidedPackageTest" time="0.054"/>
+  <testcase name="originalAdjustmentAndCorrectionEvidenceStayImmutable" classname="net.plainnotes.app.data.VoidedPackageTest" time="0.05"/>
+  <testcase name="forecastAndCountsTreatOnlyVoidedAsUntracked" classname="net.plainnotes.app.data.VoidedPackageTest" time="0.062"/>
+  <testcase name="unusedMistakeIsRetainedAsVoidedInsteadOfDeleted" classname="net.plainnotes.app.data.VoidedPackageTest" time="0.058"/>
+  <testcase name="restorationDoesNotAlwaysOpenThePackage" classname="net.plainnotes.app.data.VoidedPackageTest" time="0.072"/>
+  <testcase name="editingAndDeletingIntakeDoesNotReviveTheMistakenPackage" classname="net.plainnotes.app.data.VoidedPackageTest" time="0.06"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

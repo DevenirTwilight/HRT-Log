@@ -1,0 +1,8 @@
+{
+  "status": "EXPECTED_RED",
+  "tests": 1,
+  "failures": 1,
+  "production_before_fix": "f220b1f2",
+  "assertion": "Cleanup must invalidate ownership without allocating a replacement",
+  "scope": "CACHE_RESOURCE_LIFECYCLE_NOT_DATABASE_TRUST"
+}

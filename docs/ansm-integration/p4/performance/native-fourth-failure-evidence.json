@@ -1,0 +1,35 @@
+{
+  "status": "FAIL",
+  "source_head": "e2360a13b300945ad8b42576125f2f44b51030aa",
+  "run_id": 39045707219,
+  "artifact_id": 12105504129,
+  "artifact_sha256": "3af7e86921c1d76c425d7eb44d11aa0390bf371eaf995ff34d76be0d3347e5b4",
+  "zip_crc": "PASS",
+  "environment": {
+    "dalvik.vm.heapsize": "192m",
+    "dalvik.vm.heapgrowthlimit": "192m",
+    "ro.config.low_ram": "",
+    "ro.product.cpu.abi": "x86",
+    "MemTotal": "MemTotal:         508752 kB"
+  },
+  "test_exit": 1,
+  "collection_exit": 1,
+  "known_budget_failures": {
+    "full_audit_ms": 32571.05011,
+    "shared_forecast_ms": 22904.04795,
+    "limit_ms": 15000
+  },
+  "last_stage": "full_encrypted_restore",
+  "restore_failure_cause": "UNVERIFIED_PROCESS_EXIT",
+  "peak_heap_bytes": "UNAVAILABLE",
+  "database_disk_peak_bytes": "UNAVAILABLE",
+  "crash_log_sha256": "70e2d9054dc8700cb8b2680ffbba5a0d41e45d026ecf4485eb63bd0b14316ae6",
+  "observations": [
+    "Actual ART192MiB and RAM520962048bytes now verified.",
+    "Full validated staging86.91s and backup24.46s completed; both within120s.",
+    "Audit32.57s and shared forecast22.90s exceed original15s budget.",
+    "Process exited during full encrypted restore. No conclusive Java/native exception stack captured.",
+    "Stage metadata recovered from synthetic logcat after test APK removal; incomplete status remains FAIL."
+  ],
+  "next": "Preserve original budgets and inputs. Reduce repeat pure immutable payload work and full-document UTF8 decode copies, then run unchanged safety regressions and actual native benchmark again."
+}

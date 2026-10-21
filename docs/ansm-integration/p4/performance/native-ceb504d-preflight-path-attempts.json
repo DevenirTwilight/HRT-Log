@@ -1,0 +1,15 @@
+{
+  "matching_paths": 0,
+  "remote_failures": [
+    {
+      "path": "/data/user/0/net.plainnotes.app.data.test/files/ansm-performance/transport-preflight.json",
+      "returncode": 1,
+      "stderr": "head: not integer: c\n"
+    },
+    {
+      "path": "/data/user/0/net.plainnotes.app.data/files/ansm-performance/transport-preflight.json",
+      "returncode": 1,
+      "stderr": "run-as: unknown package: net.plainnotes.app.data\n"
+    }
+  ]
+}

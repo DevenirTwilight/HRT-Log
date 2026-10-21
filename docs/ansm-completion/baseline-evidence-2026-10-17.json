@@ -1,0 +1,216 @@
+{
+  "repository": {
+    "default_branch": "claude/new-session-1959qb"
+  },
+  "default": {
+    "name": "claude/new-session-1959qb",
+    "sha": "f1e9b4de1c97e73966b4af8900b78391eada5c43"
+  },
+  "pr57": {
+    "baseRefName": "claude/new-session-1959qb",
+    "headRefOid": "b95a0d92e390e60fd73f1ae0a28e13186a198e92",
+    "isDraft": true,
+    "state": "OPEN",
+    "statusCheckRollup": [
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-17T10:17:39Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39024203778/job/117372097557",
+        "name": "jvm",
+        "startedAt": "2026-10-17T10:16:48Z",
+        "status": "COMPLETED",
+        "workflowName": "Android and domain checks"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-17T10:17:01Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39024200903/job/117371903839",
+        "name": "jvm",
+        "startedAt": "2026-10-17T10:15:44Z",
+        "status": "COMPLETED",
+        "workflowName": "Android and domain checks"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-17T10:15:32Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39024203740/job/117371853328",
+        "name": "science-change-gate",
+        "startedAt": "2026-10-17T10:15:27Z",
+        "status": "COMPLETED",
+        "workflowName": "Science validation"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-17T10:15:30Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39024200701/job/117371844405",
+        "name": "science-change-gate",
+        "startedAt": "2026-10-17T10:15:24Z",
+        "status": "COMPLETED",
+        "workflowName": "Science validation"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-17T10:15:30Z",
+        "conclusion": "SKIPPED",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39024200701/job/117371870396",
+        "name": "research-deep",
+        "startedAt": "2026-10-17T10:15:30Z",
+        "status": "COMPLETED",
+        "workflowName": "Science validation"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-17T10:36:20Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39024203778/job/117372097533",
+        "name": "android",
+        "startedAt": "2026-10-17T10:16:48Z",
+        "status": "COMPLETED",
+        "workflowName": "Android and domain checks"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-17T10:32:21Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39024200903/job/117371903832",
+        "name": "android",
+        "startedAt": "2026-10-17T10:15:44Z",
+        "status": "COMPLETED",
+        "workflowName": "Android and domain checks"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-17T10:16:47Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39024203740/job/117371878405",
+        "name": "research-deep",
+        "startedAt": "2026-10-17T10:15:35Z",
+        "status": "COMPLETED",
+        "workflowName": "Science validation"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-17T10:33:47Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39024203778/job/117372097529",
+        "name": "device-tests",
+        "startedAt": "2026-10-17T10:16:48Z",
+        "status": "COMPLETED",
+        "workflowName": "Android and domain checks"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-17T10:30:23Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39024200903/job/117371903826",
+        "name": "device-tests",
+        "startedAt": "2026-10-17T10:15:43Z",
+        "status": "COMPLETED",
+        "workflowName": "Android and domain checks"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-17T10:23:43Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39024203778/job/117372097405",
+        "name": "attachment-poc-compatibility (26)",
+        "startedAt": "2026-10-17T10:16:48Z",
+        "status": "COMPLETED",
+        "workflowName": "Android and domain checks"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-17T10:25:15Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39024200903/job/117371903667",
+        "name": "attachment-poc-compatibility (26)",
+        "startedAt": "2026-10-17T10:15:43Z",
+        "status": "COMPLETED",
+        "workflowName": "Android and domain checks"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-17T10:26:39Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39024203778/job/117372097498",
+        "name": "attachment-poc-compatibility (29)",
+        "startedAt": "2026-10-17T10:16:48Z",
+        "status": "COMPLETED",
+        "workflowName": "Android and domain checks"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-17T10:25:35Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39024200903/job/117371903807",
+        "name": "attachment-poc-compatibility (29)",
+        "startedAt": "2026-10-17T10:15:44Z",
+        "status": "COMPLETED",
+        "workflowName": "Android and domain checks"
+      }
+    ],
+    "url": "https://github.com/DevenirTwilight/HRT-Log/pull/57"
+  },
+  "open_prs": [
+    {
+      "headRefName": "feature/ansm03b-p4-exact-stock-20261016",
+      "number": 57,
+      "title": "ANSM P4: exact stock projection and ledger integration (in progress)"
+    },
+    {
+      "headRefName": "docs/med02b4-merge-record-20261014",
+      "number": 34,
+      "title": "docs: MED-02B4 merge record for #32 and #33"
+    },
+    {
+      "headRefName": "research/p2-ba-evidence-use-case-20261011",
+      "number": 18,
+      "title": "research(pk): P2-BA three-study robust evidence and fail-closed model-use capability matrix"
+    },
+    {
+      "headRefName": "research/p2-az-retrospective-study-transfer-20261011",
+      "number": 17,
+      "title": "research(pk): P2-AZ retrospective leave-one-study-out model family transfer and complexity audit"
+    },
+    {
+      "headRefName": "research/p2-ay-anchor-ratio-observability-20261011",
+      "number": 16,
+      "title": "research(pk): P2-AY frozen Legacy/M2 concentration-scale observability and anchor-noise audit"
+    },
+    {
+      "headRefName": "docs/p2-historical-research-consolidation-20261011",
+      "number": 15,
+      "title": "docs(pk): consolidate historical P2 research, verify 23 archived ZIPs, preserve provenance"
+    },
+    {
+      "headRefName": "research/p2-au-clock-grid-robustness-20261011",
+      "number": 10,
+      "title": "research(pk): P2-AU VNC54 64-clock sensitivity audit (no individual data)"
+    },
+    {
+      "headRefName": "research/p2-r-through-at-complete-archive-20261010",
+      "number": 6,
+      "title": "docs(pk-research): 完整归档 P2-R 至 P2-AT 的全部已完成研究报告"
+    },
+    {
+      "headRefName": "p2ar/unified-concentration-comparison",
+      "number": 3,
+      "title": "P2-AR: unified concentration model comparison and Price 1997 study scenario"
+    },
+    {
+      "headRefName": "ccr-8cffa954-5gedc0",
+      "number": 2,
+      "title": "M2 舌下 E2 实验药代模型：可选实验页与限定导航入口（PD-2026-10-10-M2-ENTRY）"
+    },
+    {
+      "headRefName": "research/experimental-sl-v01",
+      "number": 1,
+      "title": "feat(pk): isolated SL ensemble v0.1 + reproducible P2-X 40-fit evidence (research only)"
+    }
+  ],
+  "owner_task_sha256": "c6728ed10f66b61bf19df6253bc591bc325ac6a8a1ab9604e5b41226967fcd48"
+}

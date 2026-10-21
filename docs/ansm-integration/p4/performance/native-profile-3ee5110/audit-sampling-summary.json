@@ -1,0 +1,806 @@
+{
+  "status": "PARTIAL_DIAGNOSTIC",
+  "scope": "SYNTHETIC_POST_BUDGET_SAMPLING_ONLY",
+  "trace_sha256": "4cadcd42e1a9006169e74cf5f425af0a89a1da31b68458930629e17486c31237",
+  "trace_bytes": 1155058,
+  "clock": "dual",
+  "timings": "approximate sampled thread CPU microseconds",
+  "sampled_segments_are_not_invocation_counts": true,
+  "overflow": "false",
+  "records": 76108,
+  "unknown_method_records": 0,
+  "unmatched_exits_or_unwinds": 0,
+  "clipped_open_frames": 152,
+  "observed_wall_span_us": 14394959,
+  "threads": [
+    {
+      "id": 3913,
+      "name": "main",
+      "observed_span_us": 0
+    },
+    {
+      "id": 3921,
+      "name": "ReferenceQueueDaemon",
+      "observed_span_us": 232088
+    },
+    {
+      "id": 3922,
+      "name": "FinalizerDaemon",
+      "observed_span_us": 37506
+    },
+    {
+      "id": 3923,
+      "name": "FinalizerWatchdogDaemon",
+      "observed_span_us": 964
+    },
+    {
+      "id": 3924,
+      "name": "HeapTaskDaemon",
+      "observed_span_us": 918831
+    },
+    {
+      "id": 3932,
+      "name": "Instr: androidx.test.runner.AndroidJUnitRunner",
+      "observed_span_us": 0
+    },
+    {
+      "id": 3933,
+      "name": "InstrumentationConnectionThread",
+      "observed_span_us": 0
+    },
+    {
+      "id": 3950,
+      "name": "arch_disk_io_0",
+      "observed_span_us": 0
+    },
+    {
+      "id": 3951,
+      "name": "arch_disk_io_1",
+      "observed_span_us": 8286210
+    },
+    {
+      "id": 3952,
+      "name": "arch_disk_io_2",
+      "observed_span_us": 0
+    },
+    {
+      "id": 3953,
+      "name": "DefaultDispatcher-worker-1",
+      "observed_span_us": 0
+    },
+    {
+      "id": 3955,
+      "name": "DefaultDispatcher-worker-2",
+      "observed_span_us": 0
+    },
+    {
+      "id": 3956,
+      "name": "arch_disk_io_3",
+      "observed_span_us": 0
+    }
+  ],
+  "top_exclusive": [
+    {
+      "method": "net.zetetic.database.sqlcipher.SQLiteConnection.nativeExecuteForCursorWindow(JJJIIZ)J",
+      "inclusive_sampled_us": 2634230,
+      "exclusive_sampled_us": 2634230,
+      "sampled_segments": 579
+    },
+    {
+      "method": "dalvik.system.VMRuntime.runHeapTasks()V",
+      "inclusive_sampled_us": 918831,
+      "exclusive_sampled_us": 918657,
+      "sampled_segments": 1
+    },
+    {
+      "method": "libcore.util.CharsetUtils.toUtf8Bytes(Ljava/lang/String;II)[B",
+      "inclusive_sampled_us": 590422,
+      "exclusive_sampled_us": 590422,
+      "sampled_segments": 415
+    },
+    {
+      "method": "java.lang.System.currentTimeMillis()J",
+      "inclusive_sampled_us": 431828,
+      "exclusive_sampled_us": 431828,
+      "sampled_segments": 384
+    },
+    {
+      "method": "net.plainnotes.app.data.BackupLimits$JsonBudget.accept(C)V",
+      "inclusive_sampled_us": 377836,
+      "exclusive_sampled_us": 377836,
+      "sampled_segments": 243
+    },
+    {
+      "method": "java.util.regex.Pattern.compileImpl(Ljava/lang/String;I)J",
+      "inclusive_sampled_us": 333433,
+      "exclusive_sampled_us": 333433,
+      "sampled_segments": 298
+    },
+    {
+      "method": "net.zetetic.database.sqlcipher.SQLiteConnection$OperationLog.newOperationCookieLocked(I)I",
+      "inclusive_sampled_us": 198924,
+      "exclusive_sampled_us": 198924,
+      "sampled_segments": 172
+    },
+    {
+      "method": "java.lang.StringFactory.newStringFromString(Ljava/lang/String;)Ljava/lang/String;",
+      "inclusive_sampled_us": 190815,
+      "exclusive_sampled_us": 190815,
+      "sampled_segments": 164
+    },
+    {
+      "method": "java.util.ArrayList.clear()V",
+      "inclusive_sampled_us": 179015,
+      "exclusive_sampled_us": 179015,
+      "sampled_segments": 158
+    },
+    {
+      "method": "net.zetetic.database.sqlcipher.SQLiteSession.releaseConnection()V",
+      "inclusive_sampled_us": 177767,
+      "exclusive_sampled_us": 177767,
+      "sampled_segments": 166
+    },
+    {
+      "method": "net.zetetic.database.sqlcipher.SQLiteClosable.releaseReference()V",
+      "inclusive_sampled_us": 181905,
+      "exclusive_sampled_us": 173927,
+      "sampled_segments": 171
+    },
+    {
+      "method": "net.zetetic.database.sqlcipher.SQLiteConnection.nativeBindString(JJILjava/lang/String;)V",
+      "inclusive_sampled_us": 161590,
+      "exclusive_sampled_us": 161590,
+      "sampled_segments": 150
+    },
+    {
+      "method": "java.lang.Object.wait()V",
+      "inclusive_sampled_us": 119355,
+      "exclusive_sampled_us": 119355,
+      "sampled_segments": 82
+    },
+    {
+      "method": "java.lang.String.fastSubstring(II)Ljava/lang/String;",
+      "inclusive_sampled_us": 105754,
+      "exclusive_sampled_us": 105754,
+      "sampled_segments": 83
+    },
+    {
+      "method": "org.json.JSONTokener.nextCleanInternal()I",
+      "inclusive_sampled_us": 86293,
+      "exclusive_sampled_us": 86293,
+      "sampled_segments": 79
+    },
+    {
+      "method": "libcore.util.NativeAllocationRegistry.applyFreeFunction(JJ)V",
+      "inclusive_sampled_us": 85760,
+      "exclusive_sampled_us": 85760,
+      "sampled_segments": 63
+    },
+    {
+      "method": "net.plainnotes.app.data.ReferencePayload.quote(Ljava/lang/StringBuilder;Ljava/lang/String;)V",
+      "inclusive_sampled_us": 135831,
+      "exclusive_sampled_us": 82813,
+      "sampled_segments": 124
+    },
+    {
+      "method": "java.lang.StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;",
+      "inclusive_sampled_us": 132391,
+      "exclusive_sampled_us": 78942,
+      "sampled_segments": 116
+    },
+    {
+      "method": "java.lang.String.charAt(I)C",
+      "inclusive_sampled_us": 74510,
+      "exclusive_sampled_us": 74510,
+      "sampled_segments": 70
+    },
+    {
+      "method": "org.json.JSONObject.put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;",
+      "inclusive_sampled_us": 154947,
+      "exclusive_sampled_us": 68878,
+      "sampled_segments": 140
+    },
+    {
+      "method": "java.util.regex.Matcher.matchesImpl(J[I)Z",
+      "inclusive_sampled_us": 61345,
+      "exclusive_sampled_us": 61345,
+      "sampled_segments": 56
+    },
+    {
+      "method": "net.zetetic.database.CursorWindow.nativeGetString(JII)Ljava/lang/String;",
+      "inclusive_sampled_us": 59515,
+      "exclusive_sampled_us": 59515,
+      "sampled_segments": 50
+    },
+    {
+      "method": "java.lang.String.equals(Ljava/lang/Object;)Z",
+      "inclusive_sampled_us": 56702,
+      "exclusive_sampled_us": 56702,
+      "sampled_segments": 54
+    },
+    {
+      "method": "java.lang.Long.valueOf(Ljava/lang/String;I)Ljava/lang/Long;",
+      "inclusive_sampled_us": 80101,
+      "exclusive_sampled_us": 55078,
+      "sampled_segments": 61
+    },
+    {
+      "method": "java.util.LinkedHashMap.afterNodeInsertion(Z)V",
+      "inclusive_sampled_us": 52129,
+      "exclusive_sampled_us": 52129,
+      "sampled_segments": 48
+    },
+    {
+      "method": "kotlin.jvm.internal.Intrinsics.checkNotNullExpressionValue(Ljava/lang/Object;Ljava/lang/String;)V",
+      "inclusive_sampled_us": 44983,
+      "exclusive_sampled_us": 44983,
+      "sampled_segments": 40
+    },
+    {
+      "method": "java.util.regex.Pattern.fastSplit(Ljava/lang/String;Ljava/lang/String;I)[Ljava/lang/String;",
+      "inclusive_sampled_us": 57753,
+      "exclusive_sampled_us": 42185,
+      "sampled_segments": 52
+    },
+    {
+      "method": "org.json.JSONTokener.nextString(C)Ljava/lang/String;",
+      "inclusive_sampled_us": 308742,
+      "exclusive_sampled_us": 41888,
+      "sampled_segments": 245
+    },
+    {
+      "method": "java.math.NativeBN.bn2litEndInts(J)[I",
+      "inclusive_sampled_us": 41846,
+      "exclusive_sampled_us": 41846,
+      "sampled_segments": 24
+    },
+    {
+      "method": "java.math.NativeBN.BN_div(JJJJ)V",
+      "inclusive_sampled_us": 41330,
+      "exclusive_sampled_us": 41330,
+      "sampled_segments": 39
+    },
+    {
+      "method": "java.lang.String.getChars(II[CI)V",
+      "inclusive_sampled_us": 38106,
+      "exclusive_sampled_us": 38106,
+      "sampled_segments": 35
+    },
+    {
+      "method": "java.util.regex.Matcher.setInputImpl(JLjava/lang/String;II)V",
+      "inclusive_sampled_us": 37914,
+      "exclusive_sampled_us": 37914,
+      "sampled_segments": 33
+    },
+    {
+      "method": "java.lang.Object.wait(JI)V",
+      "inclusive_sampled_us": 33713,
+      "exclusive_sampled_us": 33713,
+      "sampled_segments": 24
+    },
+    {
+      "method": "java.util.LinkedHashMap$LinkedHashMapEntry.<init>(ILjava/lang/Object;Ljava/lang/Object;Ljava/util/HashMap$Node;)V",
+      "inclusive_sampled_us": 35416,
+      "exclusive_sampled_us": 33151,
+      "sampled_segments": 32
+    },
+    {
+      "method": "java.util.regex.Matcher.openImpl(J)J",
+      "inclusive_sampled_us": 32895,
+      "exclusive_sampled_us": 32895,
+      "sampled_segments": 31
+    },
+    {
+      "method": "java.lang.System.arraycopy(Ljava/lang/Object;ILjava/lang/Object;II)V",
+      "inclusive_sampled_us": 30223,
+      "exclusive_sampled_us": 30223,
+      "sampled_segments": 28
+    },
+    {
+      "method": "android.util.Log.isLoggable(Ljava/lang/String;I)Z",
+      "inclusive_sampled_us": 29456,
+      "exclusive_sampled_us": 29456,
+      "sampled_segments": 30
+    },
+    {
+      "method": "net.zetetic.database.sqlcipher.SQLiteConnection.prepare(Ljava/lang/String;Lnet/zetetic/database/sqlcipher/SQLiteStatementInfo;)V",
+      "inclusive_sampled_us": 488677,
+      "exclusive_sampled_us": 29263,
+      "sampled_segments": 424
+    },
+    {
+      "method": "java.lang.String.hashCode()I",
+      "inclusive_sampled_us": 28387,
+      "exclusive_sampled_us": 28387,
+      "sampled_segments": 23
+    },
+    {
+      "method": "java.util.LinkedHashMap.newNode(ILjava/lang/Object;Ljava/lang/Object;Ljava/util/HashMap$Node;)Ljava/util/HashMap$Node;",
+      "inclusive_sampled_us": 66191,
+      "exclusive_sampled_us": 23538,
+      "sampled_segments": 61
+    },
+    {
+      "method": "kotlin.text.CharsKt__CharJVMKt.isWhitespace(C)Z",
+      "inclusive_sampled_us": 24652,
+      "exclusive_sampled_us": 23433,
+      "sampled_segments": 23
+    },
+    {
+      "method": "libcore.util.NativeAllocationRegistry$CleanerThunk.<init>(Llibcore/util/NativeAllocationRegistry;J)V",
+      "inclusive_sampled_us": 23402,
+      "exclusive_sampled_us": 23402,
+      "sampled_segments": 22
+    },
+    {
+      "method": "net.zetetic.database.CursorWindow.nativeCreate(Ljava/lang/String;I)J",
+      "inclusive_sampled_us": 23312,
+      "exclusive_sampled_us": 23312,
+      "sampled_segments": 22
+    },
+    {
+      "method": "net.zetetic.database.sqlcipher.SQLiteDatabase.getThreadSession()Lnet/zetetic/database/sqlcipher/SQLiteSession;",
+      "inclusive_sampled_us": 40906,
+      "exclusive_sampled_us": 21508,
+      "sampled_segments": 36
+    },
+    {
+      "method": "java.lang.String.length()I",
+      "inclusive_sampled_us": 21488,
+      "exclusive_sampled_us": 21488,
+      "sampled_segments": 20
+    },
+    {
+      "method": "net.zetetic.database.sqlcipher.SQLiteSession.hasTransaction()Z",
+      "inclusive_sampled_us": 21256,
+      "exclusive_sampled_us": 21256,
+      "sampled_segments": 20
+    },
+    {
+      "method": "net.zetetic.database.sqlcipher.SQLiteConnection.nativeGetColumnName(JJI)Ljava/lang/String;",
+      "inclusive_sampled_us": 21173,
+      "exclusive_sampled_us": 21173,
+      "sampled_segments": 23
+    },
+    {
+      "method": "java.lang.StringBuilder.append(C)Ljava/lang/StringBuilder;",
+      "inclusive_sampled_us": 27564,
+      "exclusive_sampled_us": 21131,
+      "sampled_segments": 25
+    },
+    {
+      "method": "net.plainnotes.app.data.ReferenceAuditReads.<init>(Landroidx/sqlite/db/SupportSQLiteDatabase;J)V",
+      "inclusive_sampled_us": 220010,
+      "exclusive_sampled_us": 20773,
+      "sampled_segments": 1
+    },
+    {
+      "method": "java.math.NativeBN.BN_bn2dec(J)Ljava/lang/String;",
+      "inclusive_sampled_us": 20327,
+      "exclusive_sampled_us": 20327,
+      "sampled_segments": 17
+    },
+    {
+      "method": "net.zetetic.database.AbstractWindowedCursor.getString(I)Ljava/lang/String;",
+      "inclusive_sampled_us": 82916,
+      "exclusive_sampled_us": 20134,
+      "sampled_segments": 69
+    },
+    {
+      "method": "java.lang.String.substring(II)Ljava/lang/String;",
+      "inclusive_sampled_us": 98351,
+      "exclusive_sampled_us": 17725,
+      "sampled_segments": 79
+    },
+    {
+      "method": "libcore.util.NativeAllocationRegistry.registerNativeAllocation(Ljava/lang/Object;J)Ljava/lang/Runnable;",
+      "inclusive_sampled_us": 62333,
+      "exclusive_sampled_us": 16633,
+      "sampled_segments": 56
+    },
+    {
+      "method": "java.lang.ref.Reference.getReferent()Ljava/lang/Object;",
+      "inclusive_sampled_us": 15902,
+      "exclusive_sampled_us": 15902,
+      "sampled_segments": 17
+    },
+    {
+      "method": "java.lang.Character.digit(CI)I",
+      "inclusive_sampled_us": 17749,
+      "exclusive_sampled_us": 15554,
+      "sampled_segments": 16
+    },
+    {
+      "method": "net.zetetic.database.sqlcipher.SQLiteConnection.nativePrepareStatement(JLjava/lang/String;)J",
+      "inclusive_sampled_us": 15406,
+      "exclusive_sampled_us": 15406,
+      "sampled_segments": 14
+    },
+    {
+      "method": "java.lang.reflect.Array.createObjectArray(Ljava/lang/Class;I)Ljava/lang/Object;",
+      "inclusive_sampled_us": 15074,
+      "exclusive_sampled_us": 15074,
+      "sampled_segments": 17
+    },
+    {
+      "method": "kotlin.text.StringsKt__StringsKt.trim(Ljava/lang/CharSequence;)Ljava/lang/CharSequence;",
+      "inclusive_sampled_us": 34884,
+      "exclusive_sampled_us": 15057,
+      "sampled_segments": 34
+    },
+    {
+      "method": "com.android.org.conscrypt.NativeCrypto.EVP_DigestUpdate(Lcom/android/org/conscrypt/NativeRef$EVP_MD_CTX;[BII)V",
+      "inclusive_sampled_us": 15040,
+      "exclusive_sampled_us": 15040,
+      "sampled_segments": 14
+    },
+    {
+      "method": "net.plainnotes.app.domain.measurement.MeasureResult$Success.<init>(Ljava/lang/Object;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V",
+      "inclusive_sampled_us": 14817,
+      "exclusive_sampled_us": 14736,
+      "sampled_segments": 8
+    }
+  ],
+  "top_application": [
+    {
+      "method": "net.plainnotes.app.data.LargeInventoryPerformanceProbe$thousandsOfFrozenPackagesAndTenYearHistory$1$$ExternalSyntheticLambda6.invoke()Ljava/lang/Object;",
+      "inclusive_sampled_us": 8286210,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 1
+    },
+    {
+      "method": "net.plainnotes.app.data.LargeInventoryPerformanceProbe$thousandsOfFrozenPackagesAndTenYearHistory$1$component$2.invoke(Ljava/lang/Object;)Ljava/lang/Object;",
+      "inclusive_sampled_us": 8286210,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 1
+    },
+    {
+      "method": "net.plainnotes.app.data.LargeInventoryPerformanceProbe$thousandsOfFrozenPackagesAndTenYearHistory$1$component$2.invoke(Lkotlin/coroutines/Continuation;)Ljava/lang/Object;",
+      "inclusive_sampled_us": 8286210,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 1
+    },
+    {
+      "method": "net.plainnotes.app.data.LargeInventoryPerformanceProbe$thousandsOfFrozenPackagesAndTenYearHistory$1$component$2.invokeSuspend(Ljava/lang/Object;)Ljava/lang/Object;",
+      "inclusive_sampled_us": 8286210,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 1
+    },
+    {
+      "method": "net.plainnotes.app.data.LargeInventoryPerformanceProbe$thousandsOfFrozenPackagesAndTenYearHistory$1.invokeSuspend$lambda$38(Ljava/io/File;Lkotlin/jvm/internal/Ref$ObjectRef;Landroidx/sqlite/db/SupportSQLiteDatabase;)Lkotlin/Unit;",
+      "inclusive_sampled_us": 8286210,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 1
+    },
+    {
+      "method": "net.plainnotes.app.data.MeasuredConsumptionStore.auditStagedDataset$data_debug(Landroidx/sqlite/db/SupportSQLiteDatabase;)Ljava/util/List;",
+      "inclusive_sampled_us": 8283618,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 1
+    },
+    {
+      "method": "net.plainnotes.app.data.MeasuredConsumptionStore.auditReadSnapshot(Landroidx/sqlite/db/SupportSQLiteDatabase;)Ljava/util/List;",
+      "inclusive_sampled_us": 7620295,
+      "exclusive_sampled_us": 1705,
+      "sampled_segments": 1
+    },
+    {
+      "method": "net.plainnotes.app.data.MeasuredConsumptionStore.auditOperations(Landroidx/sqlite/db/SupportSQLiteDatabase;Lnet/plainnotes/app/data/MeasuredConsumptionStore$PresentationAudit;)V",
+      "inclusive_sampled_us": 3542669,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 1
+    },
+    {
+      "method": "net.plainnotes.app.data.MeasuredConsumptionStore.auditStagedProjection(Landroidx/sqlite/db/SupportSQLiteDatabase;Ljava/lang/String;Ljava/lang/String;Lnet/plainnotes/app/data/MeasuredConsumptionStore$PresentationAudit;)Lnet/plainnotes/app/domain/measurement/MeasureResult;",
+      "inclusive_sampled_us": 2453115,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 13
+    },
+    {
+      "method": "net.plainnotes.app.data.MeasuredConsumptionStore.consumption(Lorg/json/JSONObject;)Lnet/plainnotes/app/data/MeasuredConsumptionStore$DecodedConsumption;",
+      "inclusive_sampled_us": 1731021,
+      "exclusive_sampled_us": 2202,
+      "sampled_segments": 611
+    },
+    {
+      "method": "net.plainnotes.app.data.MeasuredConsumptionStore.readConsumption(Lorg/json/JSONObject;)Lnet/plainnotes/app/data/MeasuredConsumptionStore$DecodedConsumption;",
+      "inclusive_sampled_us": 1728819,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 611
+    },
+    {
+      "method": "net.plainnotes.app.data.BackupValidation.validateMeasuredCandidateState$data_debug(Landroidx/sqlite/db/SupportSQLiteDatabase;)V",
+      "inclusive_sampled_us": 1209029,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 1
+    },
+    {
+      "method": "net.plainnotes.app.data.BackupValidation.validateState(Landroidx/sqlite/db/SupportSQLiteDatabase;Z)V",
+      "inclusive_sampled_us": 1208401,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 1
+    },
+    {
+      "method": "net.plainnotes.app.data.ReferenceStore.row$data_debug(Landroidx/sqlite/db/SupportSQLiteDatabase;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lorg/json/JSONObject;",
+      "inclusive_sampled_us": 1190806,
+      "exclusive_sampled_us": 6264,
+      "sampled_segments": 384
+    },
+    {
+      "method": "net.plainnotes.app.data.MeasuredConsumptionStore.auditOperations$rows(Landroidx/sqlite/db/SupportSQLiteDatabase;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Ljava/util/List;",
+      "inclusive_sampled_us": 929999,
+      "exclusive_sampled_us": 3869,
+      "sampled_segments": 428
+    },
+    {
+      "method": "net.plainnotes.app.data.ReferencePayload.canonical$encode(Ljava/lang/StringBuilder;Ljava/lang/Object;I)V",
+      "inclusive_sampled_us": 905840,
+      "exclusive_sampled_us": 5473,
+      "sampled_segments": 783
+    },
+    {
+      "method": "net.plainnotes.app.data.ReferenceAuditReads.query(Ljava/lang/String;[Ljava/lang/Object;)Landroid/database/Cursor;",
+      "inclusive_sampled_us": 877902,
+      "exclusive_sampled_us": 8187,
+      "sampled_segments": 732
+    },
+    {
+      "method": "net.plainnotes.app.data.ReferenceSchema.validateCandidateReferences$data_debug(Landroidx/sqlite/db/SupportSQLiteDatabase;)V",
+      "inclusive_sampled_us": 828177,
+      "exclusive_sampled_us": 317,
+      "sampled_segments": 1
+    },
+    {
+      "method": "net.plainnotes.app.data.ReferenceSchema.validateReferences(Landroidx/sqlite/db/SupportSQLiteDatabase;Z)V",
+      "inclusive_sampled_us": 827860,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 1
+    },
+    {
+      "method": "net.plainnotes.app.data.ReferencePayload.canonical(Lorg/json/JSONObject;)Ljava/lang/String;",
+      "inclusive_sampled_us": 627353,
+      "exclusive_sampled_us": 1233,
+      "sampled_segments": 452
+    },
+    {
+      "method": "net.plainnotes.app.data.MeasuredUsePayload.read(Ljava/lang/String;)Lnet/plainnotes/app/data/FrozenConsumptionRequest;",
+      "inclusive_sampled_us": 593387,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 400
+    },
+    {
+      "method": "net.plainnotes.app.data.FrozenConsumptionRequest.request()Lnet/plainnotes/app/data/MeasuredConsumptionRequest;",
+      "inclusive_sampled_us": 592318,
+      "exclusive_sampled_us": 1080,
+      "sampled_segments": 400
+    },
+    {
+      "method": "net.plainnotes.app.data.FrozenConsumptionRequest$$ExternalSyntheticLambda1.invoke()Ljava/lang/Object;",
+      "inclusive_sampled_us": 591238,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 401
+    },
+    {
+      "method": "net.plainnotes.app.data.FrozenConsumptionRequest.decoded_delegate$lambda$0(Lnet/plainnotes/app/data/FrozenConsumptionRequest;)Lnet/plainnotes/app/data/MeasuredConsumptionRequest;",
+      "inclusive_sampled_us": 591238,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 401
+    },
+    {
+      "method": "net.plainnotes.app.data.FrozenConsumptionRequest.getDecoded()Lnet/plainnotes/app/data/MeasuredConsumptionRequest;",
+      "inclusive_sampled_us": 591238,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 401
+    },
+    {
+      "method": "net.plainnotes.app.data.MeasuredUsePayload.decode$data_debug(Ljava/lang/String;)Lnet/plainnotes/app/data/MeasuredConsumptionRequest;",
+      "inclusive_sampled_us": 590115,
+      "exclusive_sampled_us": 2046,
+      "sampled_segments": 401
+    },
+    {
+      "method": "net.plainnotes.app.data.BackupLimits.checkJson(Ljava/lang/String;)V",
+      "inclusive_sampled_us": 461069,
+      "exclusive_sampled_us": 1105,
+      "sampled_segments": 276
+    },
+    {
+      "method": "net.plainnotes.app.data.MeasuredOperationChain.validate(Landroidx/sqlite/db/SupportSQLiteDatabase;)Ljava/util/Map;",
+      "inclusive_sampled_us": 445189,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 1
+    },
+    {
+      "method": "net.plainnotes.app.data.BackupValidation.validateCandidateStoredColumns$data_debug(Landroidx/sqlite/db/SupportSQLiteDatabase;)V",
+      "inclusive_sampled_us": 440066,
+      "exclusive_sampled_us": 137,
+      "sampled_segments": 1
+    },
+    {
+      "method": "net.plainnotes.app.data.MeasuredConsumptionStore.auditOperations$rows$default(Landroidx/sqlite/db/SupportSQLiteDatabase;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;ILjava/lang/Object;)Ljava/util/List;",
+      "inclusive_sampled_us": 402163,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 3
+    },
+    {
+      "method": "net.plainnotes.app.data.BackupLimits$JsonBudget.accept(C)V",
+      "inclusive_sampled_us": 377836,
+      "exclusive_sampled_us": 377836,
+      "sampled_segments": 243
+    },
+    {
+      "method": "net.plainnotes.app.data.MeasuredConsumptionStore.projectionEntries(Landroidx/sqlite/db/SupportSQLiteDatabase;J)Ljava/util/List;",
+      "inclusive_sampled_us": 322818,
+      "exclusive_sampled_us": 1113,
+      "sampled_segments": 258
+    },
+    {
+      "method": "net.plainnotes.app.data.ReferencePayload.uuid(Ljava/lang/String;)Z",
+      "inclusive_sampled_us": 319700,
+      "exclusive_sampled_us": 1439,
+      "sampled_segments": 209
+    },
+    {
+      "method": "net.plainnotes.app.data.PackageMeasurementPayload.quantity$data_debug(Lorg/json/JSONObject;)Lnet/plainnotes/app/domain/measurement/Quantity;",
+      "inclusive_sampled_us": 248887,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 214
+    },
+    {
+      "method": "net.plainnotes.app.data.ReferenceAuditReads.<init>(Landroidx/sqlite/db/SupportSQLiteDatabase;JILkotlin/jvm/internal/DefaultConstructorMarker;)V",
+      "inclusive_sampled_us": 220439,
+      "exclusive_sampled_us": 429,
+      "sampled_segments": 1
+    },
+    {
+      "method": "net.plainnotes.app.data.ReferenceAuditReads.<init>(Landroidx/sqlite/db/SupportSQLiteDatabase;J)V",
+      "inclusive_sampled_us": 220010,
+      "exclusive_sampled_us": 20773,
+      "sampled_segments": 1
+    },
+    {
+      "method": "net.plainnotes.app.domain.measurement.Measurements.parse(Ljava/lang/String;)Lnet/plainnotes/app/domain/measurement/MeasureResult;",
+      "inclusive_sampled_us": 214239,
+      "exclusive_sampled_us": 4118,
+      "sampled_segments": 190
+    },
+    {
+      "method": "net.plainnotes.app.data.ReferencePayload.sha(Ljava/lang/String;)Ljava/lang/String;",
+      "inclusive_sampled_us": 195881,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 129
+    },
+    {
+      "method": "net.plainnotes.app.data.MeasuredConsumptionStore.auditOperations$prefix(Ljava/util/HashMap;Landroidx/sqlite/db/SupportSQLiteDatabase;Ljava/util/Map;Lorg/json/JSONObject;Lnet/plainnotes/app/domain/stock/StockQuantum;JI)J",
+      "inclusive_sampled_us": 190792,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 176
+    },
+    {
+      "method": "net.plainnotes.app.data.PackageMeasurementPayload.exact(Ljava/lang/String;)Ljava/math/BigDecimal;",
+      "inclusive_sampled_us": 174200,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 161
+    },
+    {
+      "method": "net.plainnotes.app.data.MeasuredOperationChain.read(Lorg/json/JSONObject;)Lnet/plainnotes/app/data/MeasuredOperationChain$Link;",
+      "inclusive_sampled_us": 169247,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 141
+    },
+    {
+      "method": "net.plainnotes.app.data.ReferencePayload.quote(Ljava/lang/StringBuilder;Ljava/lang/String;)V",
+      "inclusive_sampled_us": 135831,
+      "exclusive_sampled_us": 82813,
+      "sampled_segments": 124
+    },
+    {
+      "method": "net.plainnotes.app.data.MeasuredConsumptionStore.projectionBox(Landroidx/sqlite/db/SupportSQLiteDatabase;J)Lnet/plainnotes/app/data/MeasuredConsumptionStore$ProjectionBox;",
+      "inclusive_sampled_us": 131077,
+      "exclusive_sampled_us": 1127,
+      "sampled_segments": 78
+    },
+    {
+      "method": "net.plainnotes.app.data.MeasuredConsumptionStore.readConsumption$quanta(Lorg/json/JSONObject;Ljava/lang/String;)J",
+      "inclusive_sampled_us": 127122,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 116
+    },
+    {
+      "method": "net.plainnotes.app.domain.stock.StockQuantum.toQuanta(Lnet/plainnotes/app/domain/measurement/Quantity;Lnet/plainnotes/app/domain/measurement/ActualPackage;)Lnet/plainnotes/app/domain/measurement/MeasureResult;",
+      "inclusive_sampled_us": 126888,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 103
+    },
+    {
+      "method": "net.plainnotes.app.domain.measurement.Measurements.inUnit(Lnet/plainnotes/app/domain/measurement/Quantity;Lnet/plainnotes/app/domain/measurement/MeasureUnit;)Lnet/plainnotes/app/domain/measurement/MeasureResult;",
+      "inclusive_sampled_us": 124922,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 103
+    },
+    {
+      "method": "net.plainnotes.app.data.MeasuredUsePayload.uuid(Lorg/json/JSONObject;Ljava/lang/String;)Ljava/lang/String;",
+      "inclusive_sampled_us": 104773,
+      "exclusive_sampled_us": 909,
+      "sampled_segments": 90
+    },
+    {
+      "method": "net.plainnotes.app.data.ReferenceAuditReads.checkRead(Ljava/lang/String;)V",
+      "inclusive_sampled_us": 100311,
+      "exclusive_sampled_us": 1094,
+      "sampled_segments": 93
+    },
+    {
+      "method": "net.plainnotes.app.data.ReferenceStore.requestHash(Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;Lorg/json/JSONObject;)Ljava/lang/String;",
+      "inclusive_sampled_us": 92578,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 39
+    },
+    {
+      "method": "net.plainnotes.app.data.ReferenceAuditReads.cached(Ljava/lang/String;[Ljava/lang/Object;)Landroid/database/Cursor;",
+      "inclusive_sampled_us": 74188,
+      "exclusive_sampled_us": 6258,
+      "sampled_segments": 67
+    },
+    {
+      "method": "net.plainnotes.app.domain.measurement.Measurements.bounded(Ljava/math/BigDecimal;)Lnet/plainnotes/app/domain/measurement/MeasureResult;",
+      "inclusive_sampled_us": 73686,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 63
+    },
+    {
+      "method": "net.plainnotes.app.domain.measurement.Measurements.error(Lnet/plainnotes/app/domain/measurement/Quantity;)Lnet/plainnotes/app/domain/measurement/MeasureError;",
+      "inclusive_sampled_us": 72500,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 59
+    },
+    {
+      "method": "net.plainnotes.app.data.SchemaGuards.validateRestored(Landroidx/sqlite/db/SupportSQLiteDatabase;)V",
+      "inclusive_sampled_us": 72079,
+      "exclusive_sampled_us": 375,
+      "sampled_segments": 1
+    },
+    {
+      "method": "net.plainnotes.app.data.ReferenceStore.captureHash(Lorg/json/JSONObject;)Ljava/lang/String;",
+      "inclusive_sampled_us": 71016,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 8
+    },
+    {
+      "method": "net.plainnotes.app.data.FrozenConsumptionRequest$$ExternalSyntheticLambda0.invoke()Ljava/lang/Object;",
+      "inclusive_sampled_us": 65308,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 57
+    },
+    {
+      "method": "net.plainnotes.app.data.FrozenConsumptionRequest.getSha256()Ljava/lang/String;",
+      "inclusive_sampled_us": 65308,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 57
+    },
+    {
+      "method": "net.plainnotes.app.data.FrozenConsumptionRequest.sha256_delegate$lambda$0(Lnet/plainnotes/app/data/FrozenConsumptionRequest;)Ljava/lang/String;",
+      "inclusive_sampled_us": 65308,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 57
+    },
+    {
+      "method": "net.plainnotes.app.domain.stock.StockQuantum$Companion.same(Lnet/plainnotes/app/domain/measurement/Quantity;Lnet/plainnotes/app/domain/measurement/Quantity;)Lnet/plainnotes/app/domain/measurement/MeasureResult;",
+      "inclusive_sampled_us": 61604,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 50
+    },
+    {
+      "method": "net.plainnotes.app.domain.stock.StockQuantum$Companion.access$same(Lnet/plainnotes/app/domain/stock/StockQuantum$Companion;Lnet/plainnotes/app/domain/measurement/Quantity;Lnet/plainnotes/app/domain/measurement/Quantity;)Lnet/plainnotes/app/domain/measurement/MeasureResult;",
+      "inclusive_sampled_us": 60540,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 49
+    },
+    {
+      "method": "net.plainnotes.app.domain.measurement.Measurements.add(Lnet/plainnotes/app/domain/measurement/Quantity;Lnet/plainnotes/app/domain/measurement/Quantity;)Lnet/plainnotes/app/domain/measurement/MeasureResult;",
+      "inclusive_sampled_us": 60474,
+      "exclusive_sampled_us": 0,
+      "sampled_segments": 49
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "production_core": "2ae08986",
+  "tests": {
+    "tests": 9,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "status": "PASS_BACKUP_CONTRACT_WITH_STREAMED_DIGEST",
+  "native_compilation": "PASS_PRE_DIGEST_GENERATED_SOURCE; FINAL_REGEN_REQUIRED",
+  "native": "NOT_RUN",
+  "note": "Generator overwrite guard prevented replacing old generated file; final generation must clean first."
+}

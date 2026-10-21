@@ -1,0 +1,15 @@
+{
+  "production": "dc10ffef",
+  "production_main_diff_from_dc10ffef": "EMPTY",
+  "app_real_owner": {
+    "tests": 2,
+    "failures": 0,
+    "skipped": 0
+  },
+  "existing_app_18": "PASS first-local same production; not rerun in this invocation",
+  "data_528": "PASS first-local same production; not rerun in this invocation",
+  "android_source_compile": "PASS includes new MeasuredSaveDeathProbe",
+  "initial_failure": "first-local retains 2 setup timeouts; explicit main Looper idle, unchanged 30s and business assertions",
+  "native": "IN_PROGRESS d582 runs; new actual write death probes not yet executed",
+  "test_sha256": "4d26aa4aea5da7119e349148455bd95cc292458e87e16f5d397417110e6f1181"
+}

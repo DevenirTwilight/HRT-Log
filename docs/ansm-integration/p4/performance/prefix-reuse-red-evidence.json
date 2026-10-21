@@ -1,0 +1,9 @@
+{
+  "source": "5fe9466ffdcca956ce6551ef8bd4e764ddd8e9ea",
+  "status": "FAIL_EXPECTED",
+  "tests": 1,
+  "failures": 1,
+  "failure": "java.lang.AssertionError: Causal prefixes must reuse the same fully checked ledger within one audit expected:<0> but was:<2>",
+  "xml_sha256": "77d021ce4b4c568004b0998f9d8ddb941d6bd3fcf1c48bba0b21ea08ed43dddd",
+  "prefix_implementation_changed_before_red": false
+}

@@ -1,0 +1,15 @@
+{
+  "state": "PASS_LOCAL_ONLY",
+  "new_tests": 5,
+  "whole_ansm_python_suite": 44,
+  "red": {
+    "failures": 1,
+    "errors": 4,
+    "kind": "NEW_DIAGNOSTIC_CONTRACT_NOT_IMPLEMENTED",
+    "log_sha256": "cacca8f16e4d52e1e6d74abeddc4c3d6475e96c89010ca2fccb48172cba673e9"
+  },
+  "green_log_sha256": "3c07e169d24502a3ff8d631cc84f62e6d55e1d3d6d33ed19fa61866eb2d3abcf",
+  "runner_sha256": "f99d0f505edab81b9278e5d36c0174e36149614c44ffeafb1383f8439b8483f9",
+  "test_sha256": "7c1fdf63f76043a8bc6f4e071252dd713f4c898ee8a643bc01b9edff2a150c40",
+  "native_capture": "NOT_RUN"
+}

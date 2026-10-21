@@ -1233,6 +1233,7 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="ref2_history_stale">The dataset changed. Close this window and reopen the record.</string>
 <string name="ref2_history_error">Could not read the saved reference. Closing this window leaves the record unchanged.</string>
 <string name="ref2_history_saved_only">This shows the saved record. Unsaved changes are not included.</string>
+    <string name="forecast_needs_check">Stock needs checking. A reliable depletion date is unavailable.</string>
 <string name="test_check_ok">Notification check: nothing blocks notifications</string>
 <string name="test_check_blocked">Notification check: %1$s</string>
 <string name="test_scheduled">Test reminder set for %1$s (%2$s). You can leave the app while you wait.</string>
@@ -1286,6 +1287,19 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="lab_panel_delete_confirm">The blood test and its %1$d results move to the recycle bin together.</string>
 <string name="lab_panel_open">Open this blood test</string>
 <string name="lab_panel_members">Results</string>
+<string name="write_status_pending">Saving</string>
+<string name="write_status_pending_body">You can continue browsing. This save is not yet confirmed.</string>
+<string name="write_status_reconciling">Checking save result</string>
+<string name="write_status_reconciling_body">Do not submit again while the result is being checked.</string>
+<string name="write_status_manual">Save result needs checking</string>
+<string name="write_status_manual_body">Check the recorded data before submitting again.</string>
+<string name="write_status_success">Saved</string>
+<string name="write_status_failed">Not saved</string>
+<string name="write_status_failed_body">No new changes were committed. Review the result before retrying.</string>
+<string name="write_status_check">Check result</string>
+<string name="write_status_hide">Hide status</string>
+<string name="write_status_retry">Retry same operation</string>
+<string name="write_status_show">Show save status</string>
 <!-- UI-06 semantic status -->
 <string name="status_past_time">Past time · you can still log it</string>
 <string name="confirm_title_yesterday">No entry yet for %1$s yesterday</string>

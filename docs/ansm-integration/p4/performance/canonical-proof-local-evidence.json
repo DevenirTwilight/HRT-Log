@@ -1,0 +1,15 @@
+{
+  "tests": 421,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "status": "PASS",
+  "scope": "local JVM data tests and Android test source compilation; NOT native device acceptance",
+  "sourceBaseline": "c8d7c18",
+  "logSha256": "06245eb73f0521c64c18309b679b7f76b967aec060d99d7292fdebc2cdb4a636",
+  "sources": {
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredOperationChain.kt": "76ce4ff50da5de201d18c2779326c2eab165851f8ac28dcd09682876a76f7071",
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt": "849b604180f6caddecb912ece39f9d2a2bc736e00e14bd8d02ba530788d74c04",
+    "core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt": "840a7ba46e1e0bce5fa596292a54986864df6ff9a8c9fb26abecdadcf53a7830"
+  }
+}

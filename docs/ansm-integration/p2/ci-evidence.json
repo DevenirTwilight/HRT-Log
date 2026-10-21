@@ -1,0 +1,296 @@
+{
+  "checked_at": "2026-10-16T19:22:39.600251+00:00",
+  "status": "MERGED_PR_CHECKS_PASS",
+  "pr": {
+    "headRefOid": "79eed75670de99f0e1f1b0ba7421454e2c6ca17d",
+    "mergeCommit": {
+      "oid": "b5d97510f517d830b881b037d0d3ca7c32395f51"
+    },
+    "mergedAt": "2026-10-16T19:14:34Z",
+    "number": 56,
+    "state": "MERGED",
+    "statusCheckRollup": [
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-16T18:55:13Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38950858738/job/117141567639",
+        "name": "jvm",
+        "startedAt": "2026-10-16T18:54:02Z",
+        "status": "COMPLETED",
+        "workflowName": "Android and domain checks"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-16T18:55:13Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38950852443/job/117141546382",
+        "name": "jvm",
+        "startedAt": "2026-10-16T18:53:59Z",
+        "status": "COMPLETED",
+        "workflowName": "Android and domain checks"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-16T18:54:08Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38950858759/job/117141566560",
+        "name": "science-change-gate",
+        "startedAt": "2026-10-16T18:54:03Z",
+        "status": "COMPLETED",
+        "workflowName": "Science validation"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-16T18:54:06Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38950852439/job/117141545193",
+        "name": "science-change-gate",
+        "startedAt": "2026-10-16T18:53:59Z",
+        "status": "COMPLETED",
+        "workflowName": "Science validation"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-16T18:54:06Z",
+        "conclusion": "SKIPPED",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38950852439/job/117141620564",
+        "name": "research-deep",
+        "startedAt": "2026-10-16T18:54:07Z",
+        "status": "COMPLETED",
+        "workflowName": "Science validation"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-16T19:11:07Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38950858738/job/117141567704",
+        "name": "android",
+        "startedAt": "2026-10-16T18:54:03Z",
+        "status": "COMPLETED",
+        "workflowName": "Android and domain checks"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-16T19:14:07Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38950852443/job/117141546170",
+        "name": "android",
+        "startedAt": "2026-10-16T18:53:59Z",
+        "status": "COMPLETED",
+        "workflowName": "Android and domain checks"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-16T18:55:48Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38950858759/job/117141632345",
+        "name": "research-deep",
+        "startedAt": "2026-10-16T18:54:11Z",
+        "status": "COMPLETED",
+        "workflowName": "Science validation"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-16T19:08:09Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38950858738/job/117141567539",
+        "name": "device-tests",
+        "startedAt": "2026-10-16T18:54:02Z",
+        "status": "COMPLETED",
+        "workflowName": "Android and domain checks"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-16T19:10:05Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38950852443/job/117141546102",
+        "name": "device-tests",
+        "startedAt": "2026-10-16T18:53:59Z",
+        "status": "COMPLETED",
+        "workflowName": "Android and domain checks"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-16T19:01:21Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38950858738/job/117141567678",
+        "name": "attachment-poc-compatibility (26)",
+        "startedAt": "2026-10-16T18:54:02Z",
+        "status": "COMPLETED",
+        "workflowName": "Android and domain checks"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-16T19:02:34Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38950852443/job/117141546163",
+        "name": "attachment-poc-compatibility (26)",
+        "startedAt": "2026-10-16T18:53:59Z",
+        "status": "COMPLETED",
+        "workflowName": "Android and domain checks"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-16T19:02:37Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38950858738/job/117141567200",
+        "name": "attachment-poc-compatibility (29)",
+        "startedAt": "2026-10-16T18:54:02Z",
+        "status": "COMPLETED",
+        "workflowName": "Android and domain checks"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-16T19:02:46Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/38950852443/job/117141545976",
+        "name": "attachment-poc-compatibility (29)",
+        "startedAt": "2026-10-16T18:53:59Z",
+        "status": "COMPLETED",
+        "workflowName": "Android and domain checks"
+      }
+    ]
+  },
+  "artifacts": [
+    {
+      "artifact": 12069233207,
+      "sha256": "b17e3dffa1139706335db771df9309aa996b30827fdd343fd3ef9a3d6c1bfd90",
+      "crc": "PASS",
+      "no_apk": "PASS",
+      "screenshots": 192,
+      "reports": [
+        {
+          "report": "app/build/reports/tests/testFullDebugUnitTest/index.html",
+          "tests": 1379,
+          "failures": 0,
+          "skipped": 205
+        },
+        {
+          "report": "core/data/build/reports/tests/testDebugUnitTest/index.html",
+          "tests": 243,
+          "failures": 0,
+          "skipped": 0
+        },
+        {
+          "report": "core/reminder/build/reports/tests/testDebugUnitTest/index.html",
+          "tests": 20,
+          "failures": 0,
+          "skipped": 0
+        },
+        {
+          "report": "app/build/reports/tests/testFullDebugUnitTest/net.plainnotes.app.PeriodStabilityTest/index.html",
+          "tests": 5,
+          "failures": 0,
+          "skipped": 0
+        }
+      ]
+    },
+    {
+      "artifact": 12068292591,
+      "sha256": "84ae0cea41659d0cc3e40f353038f1868ec1028ded5401e8b1e59c857e4a3ef9",
+      "crc": "PASS",
+      "no_apk": "PASS",
+      "screenshots": 0,
+      "reports": [
+        {
+          "report": "core/data/build/reports/androidTests/connected/debug/index.html",
+          "tests": 114,
+          "failures": 0,
+          "skipped": 0
+        },
+        {
+          "report": "app/build/reports/androidTests/connected/debug/flavors/full/index.html",
+          "tests": 70,
+          "failures": 0,
+          "skipped": 0
+        },
+        {
+          "report": "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.ReferenceMigrationAndroidTest.html",
+          "tests": 3,
+          "failures": 0,
+          "skipped": 0
+        },
+        {
+          "report": "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.ReferencePersistenceAndroidTest.html",
+          "tests": 21,
+          "failures": 0,
+          "skipped": 0
+        }
+      ]
+    },
+    {
+      "artifact": 12068108307,
+      "sha256": "b99f655cd7f6e1e5ddc911c332065b3aaa34904eb27d36ce81fae316c878e6fb",
+      "crc": "PASS",
+      "no_apk": "PASS",
+      "screenshots": 0,
+      "reports": [
+        {
+          "report": "core/data/build/reports/androidTests/connected/debug/index.html",
+          "tests": 114,
+          "failures": 0,
+          "skipped": 0
+        },
+        {
+          "report": "app/build/reports/androidTests/connected/debug/flavors/full/index.html",
+          "tests": 70,
+          "failures": 0,
+          "skipped": 0
+        },
+        {
+          "report": "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.ReferenceMigrationAndroidTest.html",
+          "tests": 3,
+          "failures": 0,
+          "skipped": 0
+        },
+        {
+          "report": "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.ReferencePersistenceAndroidTest.html",
+          "tests": 21,
+          "failures": 0,
+          "skipped": 0
+        }
+      ]
+    },
+    {
+      "artifact": 12067949351,
+      "sha256": "4e095cc20228584499d8f027447596502b601c5d7bd2e8e7660df0c859e895cb",
+      "crc": "PASS",
+      "no_apk": "PASS",
+      "screenshots": 0,
+      "reports": [
+        {
+          "report": "core/data/build/reports/androidTests/connected/debug/index.html",
+          "tests": 181,
+          "failures": 0,
+          "skipped": 0
+        },
+        {
+          "report": "app/build/reports/androidTests/connected/debug/flavors/full/index.html",
+          "tests": 264,
+          "failures": 0,
+          "skipped": 8
+        },
+        {
+          "report": "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.ReferenceMigrationAndroidTest.html",
+          "tests": 3,
+          "failures": 0,
+          "skipped": 0
+        },
+        {
+          "report": "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.ReferencePersistenceAndroidTest.html",
+          "tests": 21,
+          "failures": 0,
+          "skipped": 0
+        }
+      ]
+    }
+  ],
+  "merged_default_ci": "PENDING",
+  "native_new_reference_ui": "NOT_RUN",
+  "physical_device": "NOT_RUN",
+  "TalkBack": "NOT_RUN",
+  "official_packaging": "OFF",
+  "production_inventory_changed": false,
+  "released": false
+}

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.MeasuredContainerStoreTest" tests="19" skipped="0" failures="0" errors="0" timestamp="2026-10-21T14:54:29.081Z" hostname="506c18a63d5b" time="3.709">
+  <properties/>
+  <testcase name="auditReadScopeRejectsWritesAndCannotBeReusedInAnotherTransaction" classname="net.plainnotes.app.data.MeasuredContainerStoreTest" time="0.141"/>
+  <testcase name="consumptionDecoderMatchesFrozenReceiptOracleForValidAndInterleavedRows" classname="net.plainnotes.app.data.MeasuredContainerStoreTest" time="0.141"/>
+  <testcase name="consumptionDecoderPreservesFrozenMalformedReceiptRejections" classname="net.plainnotes.app.data.MeasuredContainerStoreTest" time="0.138"/>
+  <testcase name="sameOperationReplaysOriginalContainerButDifferentPayloadOrOwnerIsRejected" classname="net.plainnotes.app.data.MeasuredContainerStoreTest" time="0.144"/>
+  <testcase name="auditDetectsUnderlyingWritesBeforeReturningAndTheCallerRollsBack" classname="net.plainnotes.app.data.MeasuredContainerStoreTest" time="0.141"/>
+  <testcase name="insufficientAuditCacheNeverTurnsExistingRowsIntoAbsence" classname="net.plainnotes.app.data.MeasuredContainerStoreTest" time="0.14"/>
+  <testcase name="repeatedPayloadValidationStillChecksEveryRowsHeaderDigestAndCompleteText" classname="net.plainnotes.app.data.MeasuredContainerStoreTest" time="0.182"/>
+  <testcase name="productLinkOperationCannotBeReusedAsContainerCreation" classname="net.plainnotes.app.data.MeasuredContainerStoreTest" time="0.145"/>
+  <testcase name="auditPrimitiveRowsReturnFreshObjectsAndIndependentCursorHeaders" classname="net.plainnotes.app.data.MeasuredContainerStoreTest" time="0.147"/>
+  <testcase name="explicitContainerCreationFreezesASeparateUnitWithoutChangingMedicationOrLegacyStock" classname="net.plainnotes.app.data.MeasuredContainerStoreTest" time="0.155"/>
+  <testcase name="adapterRequiresTheCallersRealDatabaseTransaction" classname="net.plainnotes.app.data.MeasuredContainerStoreTest" time="0.157"/>
+  <testcase name="physicalDeletionAndReusedIntegerIdNeverReattachOldSource" classname="net.plainnotes.app.data.MeasuredContainerStoreTest" time="0.174"/>
+  <testcase name="inactiveFormatRemainsBlockedFromCurrentBackupAcceptance" classname="net.plainnotes.app.data.MeasuredContainerStoreTest" time="0.16"/>
+  <testcase name="voidedReplayDoesNotCreateOrRestoreStock" classname="net.plainnotes.app.data.MeasuredContainerStoreTest" time="0.177"/>
+  <testcase name="frozenContainerSurvivesCloseAndReopenWithoutRebinding" classname="net.plainnotes.app.data.MeasuredContainerStoreTest" time="0.338"/>
+  <testcase name="anotherDatasetWithTheSameIntegerIdCannotSupplyTheCreationTicket" classname="net.plainnotes.app.data.MeasuredContainerStoreTest" time="0.332"/>
+  <testcase name="failureAfterContainerInsertionRollsBackIdentitySnapshotAndContainerTogether" classname="net.plainnotes.app.data.MeasuredContainerStoreTest" time="0.17"/>
+  <testcase name="candidateColumnScanPreservesEveryStorageTypeAndTextBoundaryPredicate" classname="net.plainnotes.app.data.MeasuredContainerStoreTest" time="0.238"/>
+  <testcase name="candidateColumnScanPreservesGlobalRowAndUtf8ByteBudgets" classname="net.plainnotes.app.data.MeasuredContainerStoreTest" time="0.483"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,10 @@
+test_contract_only_mode_never_runs_or_claims_the_large_workload (test_ansm_restore_memory.RestoreMemorySuiteTest.test_contract_only_mode_never_runs_or_claims_the_large_workload) ... ok
+test_failure_in_one_death_case_does_not_skip_the_other_or_create_retries (test_ansm_restore_memory.RestoreMemorySuiteTest.test_failure_in_one_death_case_does_not_skip_the_other_or_create_retries) ... ok
+test_memory_probe_and_restore_hooks_are_only_synthetic_and_keep_the_frozen_workload (test_ansm_restore_memory.RestoreMemorySuiteTest.test_memory_probe_and_restore_hooks_are_only_synthetic_and_keep_the_frozen_workload) ... ok
+test_original_native_failure_is_never_hidden_by_process_death_success (test_ansm_restore_memory.RestoreMemorySuiteTest.test_original_native_failure_is_never_hidden_by_process_death_success) ... ok
+test_write_lifecycle_mode_never_runs_large_or_repeats_restore_and_preserves_failures (test_ansm_restore_memory.RestoreMemorySuiteTest.test_write_lifecycle_mode_never_runs_large_or_repeats_restore_and_preserves_failures) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.006s
+
+OK

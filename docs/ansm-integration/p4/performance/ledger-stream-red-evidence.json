@@ -1,0 +1,10 @@
+{
+  "source": "492d7276917b108b2af789c2ab46c6c9c81d31ac",
+  "production_sha256": "4ed43b4db12aaa33ab1328aacde377949bbf2638c143754ca97c2173dd685af5",
+  "status": "FAIL_EXPECTED",
+  "tests": 1,
+  "failures": 1,
+  "failure": "java.lang.AssertionError: Complete ledger stream must retain every row without per-container SQLite cursors expected:<0> but was:<3>",
+  "xml_sha256": "07210533dbbb46d2a937a80f575978d79c7342ee0ed4bb4b92d29feaf96044b8",
+  "ledger_production_changed_before_red": false
+}

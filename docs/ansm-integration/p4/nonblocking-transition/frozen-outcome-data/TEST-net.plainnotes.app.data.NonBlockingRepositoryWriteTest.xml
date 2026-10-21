@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-10-21T09:18:04.697Z" hostname="4f13d57d08c1" time="1.157">
+  <properties/>
+  <testcase name="sameUuidWithChangedActualPayloadContextOrCreationTimeCannotConfirmThisRequest" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.168"/>
+  <testcase name="oldEpochAndDecoyCannotResolveOriginalOperation" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.084"/>
+  <testcase name="unrelatedHistoryCorruptionBlocksObservationAndCannotBeMistakenForSuccess" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.142"/>
+  <testcase name="leavingObserverDoesNotCancelRealCommitAndSuccessWaitsForResultDelivery" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.143"/>
+  <testcase name="lostDeliveryAfterCommitRemainsUncertainAndDoesNotConsumeAgain" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.094"/>
+  <testcase name="absentOperationCannotEstablishNoCommitOrAuthorizeRetry" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.078"/>
+  <testcase name="frozenRequestAndFullReadOnlyObservationResolveLostCommittedResponse" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.106"/>
+  <testcase name="ownerCancellationInCommittedDeliveryWindowCannotClaimRollback" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.095"/>
+  <testcase name="observationConfirmsHistoricalReceiptAfterRevisionAndDeletionWithoutRewritingHistory" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.147"/>
+  <testcase name="everyRepositoryFaultRollsBackButOwnerNeverGuessesNoCommitOrRetries" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.088"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

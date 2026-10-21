@@ -30,6 +30,7 @@ enum class Space(val file:String,val wrap:String,val alias:String) {
 }
 
 @Singleton open class DatabaseAccess @Inject constructor(@ApplicationContext private val context: Context) {
+    internal val measuredSaveGate=MeasuredSaveGate()
     private val instances=mutableMapOf<Space,NotesDatabase>()
     private val passphrases=mutableMapOf<Space,ByteArray>()
     /** The space the UI works on. Background reminders always use PRIMARY. Not persisted: a new process starts in PRIMARY. */
@@ -63,15 +64,23 @@ enum class Space(val file:String,val wrap:String,val alias:String) {
         } catch(e:Throwable) { passphrase.fill(0); throw e }
     }
     @Synchronized fun close(space:Space=current) {
-        instances.remove(space)?.close()
-        passphrases.remove(space)?.fill(0)
+        measuredSaveGate.synchronousMutation(space) {
+            try {
+                instances.remove(space)?.close()
+                passphrases.remove(space)?.fill(0)
+            } finally {
+                MeasuredOperationChain.clearPureInputMemo()
+            }
+        }
     }
     /** Closes and deletes one space's database, wrapped key and Keystore alias ("delete all data"). */
     @Synchronized fun destroy(space:Space=current) {
-        close(space)
-        listOf("","-wal","-shm","-journal").forEach { context.getDatabasePath(space.file+it).delete() }
-        File(context.noBackupFilesDir,space.wrap).delete(); File(context.noBackupFilesDir,space.wrap+".bak").delete()
-        runCatching { KeyStore.getInstance("AndroidKeyStore").apply { load(null) }.deleteEntry(space.alias) }
+        measuredSaveGate.synchronousMutation(space) {
+            close(space)
+            listOf("","-wal","-shm","-journal").forEach { context.getDatabasePath(space.file+it).delete() }
+            File(context.noBackupFilesDir,space.wrap).delete(); File(context.noBackupFilesDir,space.wrap+".bak").delete()
+            runCatching { KeyStore.getInstance("AndroidKeyStore").apply { load(null) }.deleteEntry(space.alias) }
+        }
     }
     private fun loadPassphrase(space:Space): ByteArray {
         val atomic=AtomicFile(File(context.noBackupFilesDir,space.wrap))

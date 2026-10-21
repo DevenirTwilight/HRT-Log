@@ -19,6 +19,70 @@ class MeasurementIsolationTest(unittest.TestCase):
         self.assertIn('ansm03-exact-v1', (report.ROOT / report.MODEL / 'MeasurementCore.kt').read_text())
         self.assertIn('kotlin.exclude("net/plainnotes/app/domain/measurement/MeasurementCore.kt")', (report.ROOT / 'core/domain/build.gradle.kts').read_text())
 
+    def test_quantum_adapter_has_a_narrow_pure_boundary(self):
+        import tempfile
+        from unittest.mock import patch
+        original_root = report.ROOT
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for relative in (report.MODEL / 'MeasurementCore.kt', report.APPROVED_CORE, report.APPROVED_STOCK_QUANTUM, report.APPROVED_PACKAGE_CODEC, report.APPROVED_CONTAINER_STORE, report.APPROVED_USE_PAYLOAD, report.APPROVED_CONSUMPTION_STORE, report.APPROVED_CORRECTIONS):
+                target = root / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_text((original_root / relative).read_text())
+            stock = root / report.APPROVED_STOCK_QUANTUM
+            original = stock.read_text()
+            with patch.object(report, 'ROOT', root):
+                self.assertEqual('PASS', report.isolation()['status'])
+                for token in report.FORBIDDEN_CORE_APIS:
+                    stock.write_text(original + '\n' + token)
+                    self.assertEqual('FAIL', report.isolation()['status'], token)
+                stock.write_text(original)
+                rogue = stock.parent / 'Unreviewed.kt'
+                rogue.write_text('package net.plainnotes.app.domain.stock')
+                self.assertEqual('FAIL', report.isolation()['status'])
+                rogue.unlink()
+                stock.write_text(original + '\nimport java.math.RoundingMode')
+                self.assertEqual('FAIL', report.isolation()['status'])
+                stock.write_text(original)
+                codec = root / report.APPROVED_PACKAGE_CODEC
+                content = codec.read_text()
+                for token in report.FORBIDDEN_CORE_APIS:
+                    codec.write_text(content + '\n' + token)
+                    self.assertEqual('FAIL', report.isolation()['status'], token)
+                codec.write_text(content)
+                self.assertEqual('PASS', report.isolation()['status'])
+                store = root / report.APPROVED_CONTAINER_STORE
+                original_store = store.read_text()
+                for token in report.STORE_FORBIDDEN_APIS:
+                    store.write_text(original_store + '\n' + token)
+                    self.assertEqual('FAIL', report.isolation()['status'], token)
+                store.write_text(original_store)
+                self.assertEqual('PASS', report.isolation()['status'])
+                use_payload = root / report.APPROVED_USE_PAYLOAD
+                original_use = use_payload.read_text()
+                for token in report.FORBIDDEN_CORE_APIS:
+                    use_payload.write_text(original_use + '\n' + token)
+                    self.assertEqual('FAIL', report.isolation()['status'], token)
+                use_payload.write_text(original_use)
+                self.assertEqual('PASS', report.isolation()['status'])
+                consumption = root / report.APPROVED_CONSUMPTION_STORE
+                original_consumption = consumption.read_text()
+                for token in report.STORE_FORBIDDEN_APIS:
+                    consumption.write_text(original_consumption + '\n' + token)
+                    self.assertEqual('FAIL', report.isolation()['status'], token)
+                consumption.write_text(original_consumption)
+                self.assertEqual('PASS', report.isolation()['status'])
+
+                corrections = root / report.APPROVED_CORRECTIONS
+                original_corrections = corrections.read_text()
+                for token in report.STORE_FORBIDDEN_APIS:
+                    corrections.write_text(original_corrections + '\n' + token)
+                    self.assertEqual('FAIL', report.isolation()['status'], token)
+                corrections.write_text(original_corrections + '\nimport java.math.RoundingMode')
+                self.assertEqual('FAIL', report.isolation()['status'])
+                corrections.write_text(original_corrections)
+                self.assertEqual('PASS', report.isolation()['status'])
+
     def test_frozen_contract_and_production_gate_are_separate(self):
         docs = report.ROOT / 'docs/ansm03'
         self.assertIn('ansm03-exact-v1', (docs / 'measurement-contract.md').read_text())
@@ -58,3 +122,81 @@ class MeasurementIsolationTest(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class OperationChainIsolationTest(unittest.TestCase):
+    def test_chain_rejects_io_pk_and_unreviewed_imports(self):
+        import tempfile
+        from unittest.mock import patch
+        original_root = report.ROOT
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for relative in (report.MODEL / 'MeasurementCore.kt', report.APPROVED_CORE, report.APPROVED_STOCK_QUANTUM,
+                             report.APPROVED_PACKAGE_CODEC, report.APPROVED_CONTAINER_STORE, report.APPROVED_USE_PAYLOAD,
+                             report.APPROVED_CONSUMPTION_STORE, report.APPROVED_OPERATION_CHAIN):
+                target = root / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_text((original_root / relative).read_text())
+            chain = root / report.APPROVED_OPERATION_CHAIN
+            content = chain.read_text()
+            with patch.object(report, 'ROOT', root):
+                self.assertEqual('PASS', report.isolation()['status'])
+                for token in report.STORE_FORBIDDEN_APIS:
+                    chain.write_text(content + '\n' + token)
+                    self.assertEqual('FAIL', report.isolation()['status'], token)
+                chain.write_text(content + '\nimport java.time.Clock')
+                self.assertEqual('FAIL', report.isolation()['status'])
+                chain.write_text(content)
+                self.assertEqual('PASS', report.isolation()['status'])
+
+
+class InventoryEncodingIsolationTest(unittest.TestCase):
+    def test_encoding_rejects_io_pk_and_unreviewed_imports(self):
+        import tempfile
+        from unittest.mock import patch
+        original_root = report.ROOT
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for relative in (report.MODEL / 'MeasurementCore.kt', report.APPROVED_CORE, report.APPROVED_STOCK_QUANTUM,
+                             report.APPROVED_PACKAGE_CODEC, report.APPROVED_CONTAINER_STORE, report.APPROVED_USE_PAYLOAD,
+                             report.APPROVED_CONSUMPTION_STORE, report.APPROVED_OPERATION_CHAIN, report.APPROVED_INVENTORY_ENCODING):
+                target = root / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_text((original_root / relative).read_text())
+            encoding = root / report.APPROVED_INVENTORY_ENCODING
+            content = encoding.read_text()
+            with patch.object(report, 'ROOT', root):
+                self.assertEqual('PASS', report.isolation()['status'])
+                for token in report.STORE_FORBIDDEN_APIS:
+                    encoding.write_text(content + '\n' + token)
+                    self.assertEqual('FAIL', report.isolation()['status'], token)
+                encoding.write_text(content + '\nimport java.time.Clock')
+                self.assertEqual('FAIL', report.isolation()['status'])
+                encoding.write_text(content)
+                self.assertEqual('PASS', report.isolation()['status'])
+
+
+class ReconciliationIsolationTest(unittest.TestCase):
+    def test_reconciliation_rejects_io_pk_and_unreviewed_imports(self):
+        import tempfile
+        from unittest.mock import patch
+        original_root = report.ROOT
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for relative in (report.MODEL / 'MeasurementCore.kt', report.APPROVED_CORE, report.APPROVED_STOCK_QUANTUM,
+                             report.APPROVED_PACKAGE_CODEC, report.APPROVED_CONTAINER_STORE, report.APPROVED_USE_PAYLOAD,
+                             report.APPROVED_CONSUMPTION_STORE, report.APPROVED_OPERATION_CHAIN, report.APPROVED_RECONCILIATION):
+                target = root / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_text((original_root / relative).read_text())
+            reconciliation = root / report.APPROVED_RECONCILIATION
+            content = reconciliation.read_text()
+            with patch.object(report, 'ROOT', root):
+                self.assertEqual('PASS', report.isolation()['status'])
+                for token in report.STORE_FORBIDDEN_APIS:
+                    reconciliation.write_text(content + '\n' + token)
+                    self.assertEqual('FAIL', report.isolation()['status'], token)
+                reconciliation.write_text(content + '\nimport java.time.Clock')
+                self.assertEqual('FAIL', report.isolation()['status'])
+                reconciliation.write_text(content)
+                self.assertEqual('PASS', report.isolation()['status'])

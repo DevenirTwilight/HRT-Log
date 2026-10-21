@@ -1,0 +1,11 @@
+{
+  "status": "FAIL",
+  "totals": {
+    "tests": 5,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0
+  },
+  "reason": "Four real scheduled contracts passed. Tamper test called transaction-only global auditor outside a transaction, so it did not reach its intended assertion. Wrap in real Room transaction; keep audit precondition.",
+  "log_sha256": "b469f7118c33ea8b6abbced6b5031b19b66645be7416069f10038695fa08f2e9"
+}

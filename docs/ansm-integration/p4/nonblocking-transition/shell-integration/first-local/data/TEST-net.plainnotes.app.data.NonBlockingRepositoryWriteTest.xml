@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2026-10-21T14:54:35.142Z" hostname="506c18a63d5b" time="1.201">
+  <properties/>
+  <testcase name="sameUuidWithChangedActualPayloadContextOrCreationTimeCannotConfirmThisRequest" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.144"/>
+  <testcase name="oldEpochAndDecoyCannotResolveOriginalOperation" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.069"/>
+  <testcase name="changedReferenceContextAndUnlinkCannotAuthorizeTheOldUuid" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.124"/>
+  <testcase name="unrelatedHistoryCorruptionBlocksObservationAndCannotBeMistakenForSuccess" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.14"/>
+  <testcase name="leavingObserverDoesNotCancelRealCommitAndSuccessWaitsForResultDelivery" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.101"/>
+  <testcase name="lostDeliveryAfterCommitRemainsUncertainAndDoesNotConsumeAgain" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.082"/>
+  <testcase name="absentOperationCannotEstablishNoCommitOrAuthorizeRetry" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.06"/>
+  <testcase name="frozenRequestAndFullReadOnlyObservationResolveLostCommittedResponse" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.087"/>
+  <testcase name="ownerCancellationInCommittedDeliveryWindowCannotClaimRollback" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.084"/>
+  <testcase name="observationConfirmsHistoricalReceiptAfterRevisionAndDeletionWithoutRewritingHistory" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.135"/>
+  <testcase name="everyRepositoryFaultRollsBackButOwnerNeverGuessesNoCommitOrRetries" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.077"/>
+  <testcase name="newReferenceContextCannotAuthorizePreviouslyUnlinkedUuid" classname="net.plainnotes.app.data.NonBlockingRepositoryWriteTest" time="0.091"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

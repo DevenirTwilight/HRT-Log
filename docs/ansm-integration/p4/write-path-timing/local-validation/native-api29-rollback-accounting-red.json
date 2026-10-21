@@ -1,0 +1,124 @@
+{
+  "scope": "rollback",
+  "wall_ns": 51814550,
+  "checkpoint_offsets_nested_ns": {},
+  "owner_thread_observed": true,
+  "background_threads": 1,
+  "trigger_exclusive_ns": null,
+  "pure_native_commit_ns": null,
+  "accounting_valid": false,
+  "audit_calls": 0,
+  "validation_calls": 1,
+  "chain_checks": 2,
+  "audit_core_lower_bound_ns": 0,
+  "validation_core_lower_bound_ns": 13366080,
+  "insert_including_triggers_ns": 1707980,
+  "update_including_triggers_ns": 80930,
+  "delete_including_triggers_ns": 0,
+  "commit_driver_ns": 0,
+  "rollback_driver_ns": 88460,
+  "other_driver_outside_cores_ns": 10062920,
+  "unattributed_java_dispatch_observer_and_method_tails_ns": 26508180,
+  "observer_accounting_lower_bound_ns": 13912040,
+  "foreign_key_query_windows_nested_ns": [],
+  "driver_detail_omitted_keys": 63,
+  "driver_detail_nested_do_not_add_to_cores": {
+    "other|begin|transaction": {
+      "calls": 4,
+      "ns": 592330,
+      "sql_prefix": ""
+    },
+    "other|insert|1dd98e81a8fedd66d0dd4ec08eccf51a07bfc7130c8a7b4e2b6edd67b3db9196": {
+      "calls": 1,
+      "ns": 142170,
+      "sql_prefix": "INSERT OR ABORT INTO `dose_record` (`id`,`medication_id`,`rule_version_id`,`slot_key`,`scheduled_utc`,`scheduled_zone`,`planned_dose`,`late_after_minutes_snapsh"
+    },
+    "other|nested_finish|transaction": {
+      "calls": 3,
+      "ns": 43230,
+      "sql_prefix": ""
+    },
+    "other|insert|e497e5b483c51d2a112bc7499d3d6cde10d054dc329ca4cea9ac362d006cfadd": {
+      "calls": 1,
+      "ns": 359060,
+      "sql_prefix": "INSERT reference_identity"
+    },
+    "other|insert|de73fbdb8cc78ddf6359a8a499d06537e88fcc57b8088bbe439e262433cc66a6": {
+      "calls": 1,
+      "ns": 356080,
+      "sql_prefix": "INSERT measured_operation"
+    },
+    "other|insert|05099f9f8ededd691d040beb51c5352b1d3fe56b32758c00284fc11786b904ba": {
+      "calls": 1,
+      "ns": 145830,
+      "sql_prefix": "INSERT OR ABORT INTO `supply_transaction` (`id`,`container_id`,`dose_record_id`,`dose_revision`,`operation_id`,`kind`,`used_delta`,`reversal_of_id`,`created_utc"
+    },
+    "other|insert|e96c941776e8ac4990279fc101787e3fca1687c2bde7a47551c1e55c4b8af48e": {
+      "calls": 1,
+      "ns": 356410,
+      "sql_prefix": "INSERT measured_allocation"
+    },
+    "other|update|c78749dd49461e8231f773c458a68e4bdcd96a9a9da4b32f8f2baeccbb7960fa": {
+      "calls": 1,
+      "ns": 80930,
+      "sql_prefix": "UPDATE supply_container SET state = ?, opened_on = ? WHERE id = ?"
+    },
+    "other|insert|a3609041f06418081b81329391444e4bba7b6e427074d95a1959b8aa0bc913d3": {
+      "calls": 1,
+      "ns": 348430,
+      "sql_prefix": "INSERT record_reference_capture"
+    },
+    "other|rollback|transaction": {
+      "calls": 1,
+      "ns": 88460,
+      "sql_prefix": ""
+    },
+    "other|cursor|c214120f210f75451173d85a5a8948c6f14b551d9fc8a9cbc8abfb2594ef45e4": {
+      "calls": 48,
+      "ns": 949580,
+      "sql_prefix": "SELECT * FROM `reference_runtime` WHERE id=1"
+    },
+    "validation|cursor|63827d7bf2bf3919fb045d79cb3985bb9e812c840bb89ddc8bb61c504ada4a06": {
+      "calls": 26,
+      "ns": 588660,
+      "sql_prefix": "SELECT * FROM `reference_identity` WHERE dataset_uuid=? AND kind='MEDICATION' AND live_handle=?"
+    },
+    "other|cursor|947406f1ce71a3f4a4e93fcb3f5178667b28796995731914728c12a3ae6ffdf0": {
+      "calls": 25,
+      "ns": 488490,
+      "sql_prefix": "SELECT * FROM `measured_operation` WHERE operation_uuid=?"
+    },
+    "other|cursor|47976dec4073a7583f086e5b979f766d4b72db2d1f6bc894eb97a9a952dc1103": {
+      "calls": 27,
+      "ns": 474320,
+      "sql_prefix": "SELECT * FROM `reference_identity` WHERE uuid=?"
+    },
+    "other|in_transaction|transaction": {
+      "calls": 29,
+      "ns": 468140,
+      "sql_prefix": ""
+    },
+    "validation|cursor|fcad923262d2569e52dbfa4c3ef4f105d9e74ebf535eb5ffb962e464b053b13c": {
+      "calls": 24,
+      "ns": 426000,
+      "sql_prefix": "SELECT * FROM `supply_transaction` WHERE container_id IN (SELECT id FROM supply_container WHERE medication_id=?) ORDER BY id"
+    },
+    "validation|cursor|a979a964399e03c9545a16d7301db28a103c47c11c3569c64cfef102f72d46e8": {
+      "calls": 29,
+      "ns": 425680,
+      "sql_prefix": "SELECT * FROM `medication` WHERE id=?"
+    },
+    "other|cursor|33829348aef5dd48af046b12a7cf64c1715293e1c3cb4238f4b628b79963f93b": {
+      "calls": 21,
+      "ns": 391730,
+      "sql_prefix": "SELECT * FROM `reference_event` WHERE operation_uuid=?"
+    }
+  },
+  "core_windows": [
+    {
+      "kind": "validation",
+      "start_ns": 3822640,
+      "end_ns": 17188720
+    }
+  ]
+}

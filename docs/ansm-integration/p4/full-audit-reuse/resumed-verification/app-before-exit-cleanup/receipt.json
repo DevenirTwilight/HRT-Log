@@ -1,0 +1,1310 @@
+{
+  "production_source": "55fcf2d5d38400307c6bb8b13a6a1dadd6c625ec",
+  "status": "PASS_APP_BEFORE_RESOURCE_EXIT_FIX",
+  "totals": {
+    "tests": 1839,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 277
+  },
+  "passed": 1562,
+  "period": {
+    "suite": "net.plainnotes.app.PeriodStabilityTest",
+    "tests": 5,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "sha256": "0a31542c1706ecd4ca72ce38431b82077e29e78c9d632b7a41640f2b553ef69b"
+  },
+  "scope": "App main unchanged; source before planned resource failure/finally cleanup, not final candidate CI. Existing skips retained, never counted PASS.",
+  "suites": [
+    {
+      "suite": "net.plainnotes.app.AppShellBackNavigationTest",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "66166dcdcb525d5a558d9581fce4d6b9c07156748cbb9793fb7519bef6556d7c"
+    },
+    {
+      "suite": "net.plainnotes.app.BackupExportFlowTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "0e386f81981bc3cfd977a16119fdd0f8b895b639ea39874e8620ef90e89db427"
+    },
+    {
+      "suite": "net.plainnotes.app.BackupHistoryTest",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "9239e307702602dcffd95a6ecb05e5cafd9962d76adcc752166c3b9ea001697a"
+    },
+    {
+      "suite": "net.plainnotes.app.BackupStatusLayoutTest",
+      "tests": 48,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "e5533cbfd026cc2ee127bb1e15d9718b7d9ddea1b2617d484ae0420aa0101d7d"
+    },
+    {
+      "suite": "net.plainnotes.app.BuildProvenanceTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "205dd923550e97c364dcacebf270c477cc44ae0c0786e2575e06ad923e7f356b"
+    },
+    {
+      "suite": "net.plainnotes.app.CalendarCoreFlowTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "606be41121ef9da2003a33442cd544200279927202b4455bf03a231e30bde1c6"
+    },
+    {
+      "suite": "net.plainnotes.app.CalendarDayMarkTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "72e08a56ccb77deb91b83b69f228b02a85d753878c351226ec4a8557e090598a"
+    },
+    {
+      "suite": "net.plainnotes.app.CalendarModelTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "4b30349b5a366d57f24e49c3f15fcbe7c5221a69f248c4191e516f152deec6a5"
+    },
+    {
+      "suite": "net.plainnotes.app.CalendarSelectionRestoreTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "e48860691b0d473dfb542fae37ff96d803b1945fa2f5e0960bb1010dedca1047"
+    },
+    {
+      "suite": "net.plainnotes.app.CalendarSemanticsTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "230623ff0b4b021b0c6508d1d5a1e8ab57431af1c16ee7821c78c5b4e9459544"
+    },
+    {
+      "suite": "net.plainnotes.app.CalibrationEligibilityTest",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "74d4fd8005ce69055b5adfd57a93c4b9aa639669ce679f74ef28ad7b259d6a71"
+    },
+    {
+      "suite": "net.plainnotes.app.CalibrationEligibilityUiTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "73ea6b9ce7c2231646a2787ddd70363fdb563dfbe41e1e33cae98ebc486988e9"
+    },
+    {
+      "suite": "net.plainnotes.app.CausalTimeBoundaryTest",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "ebb74345f3c95483ded395fef6ac6260e80d70b6e8ef2acd3277be84a110346c"
+    },
+    {
+      "suite": "net.plainnotes.app.CausalTimeUiTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "e6f52d7292b5c3af6358f966d99ab41aad4af04888b631ada89bea15c2fbd6e4"
+    },
+    {
+      "suite": "net.plainnotes.app.CenterModuleScreenshotsTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "b28b7f7859260bc88d0b8bc599310b1336e3dab2a5d8c0f5db2c6b4a3acc38ac"
+    },
+    {
+      "suite": "net.plainnotes.app.CenterStateRestorationTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "27d2e0f6b7466b3b1d84fc342448f48469da0c7850cf0c16c557ce1b6611f79f"
+    },
+    {
+      "suite": "net.plainnotes.app.ChartViewportTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "83746390f0f0477821bd785ab1cce41eb93caae2da6d6314aec6a0f3f93b950a"
+    },
+    {
+      "suite": "net.plainnotes.app.ComparisonAxisLayoutTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "2b3f5343b119ffe7db509a5e63429c1384788e6e8c87be6579fc60c68e425800"
+    },
+    {
+      "suite": "net.plainnotes.app.ConcentrationCalculatorTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "c6dc1092fa616fd754d98dec78cf3deb1c84bb3681e3aed784df15f831c8cd6e"
+    },
+    {
+      "suite": "net.plainnotes.app.ConcentrationPreviewTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "db1f97f167fcafa0c01473d3b979e39578243ec8b29eb48dd81cff51ef66e4ea"
+    },
+    {
+      "suite": "net.plainnotes.app.DataRefreshTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "4675fe0e06662ba26b2639ad316cd5c4ba77390691167b9f763e7327063b472c"
+    },
+    {
+      "suite": "net.plainnotes.app.DrawerScrollUiTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "c53b34cf2476f2cd53ddb825a86276946067eb27760020d51ec480651d273ab4"
+    },
+    {
+      "suite": "net.plainnotes.app.DrugCenterMatrixTest",
+      "tests": 48,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "86d99900565b887f6be0539828c2df1169283fc7700f1f96700e8438356b7f10"
+    },
+    {
+      "suite": "net.plainnotes.app.DrugCenterNavigationTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "d8560847e4464202b19d02d7d86d1da21ee720baff940d0207ac7bba87c5e997"
+    },
+    {
+      "suite": "net.plainnotes.app.ExportNoticeLayoutTest",
+      "tests": 48,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "de5b18924b49c7c282511c38c3bc850318ddcb169d408443a6295c9e6b3489f8"
+    },
+    {
+      "suite": "net.plainnotes.app.ExportTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1,
+      "sha256": "1a48acd16bb5451216262646431445fd6cf79520d2c59e96e408b9512c91e486"
+    },
+    {
+      "suite": "net.plainnotes.app.HistoricalContextTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "bdfa9165696c4a05c69476489f719fb9a3fc6fdb0780c73ec359813bced6443e"
+    },
+    {
+      "suite": "net.plainnotes.app.HistoricalContextUiTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "d1500018ad64228ba659efc5ec8fe3fcad18e9f9237d952d4dd6d869ce2cd4bd"
+    },
+    {
+      "suite": "net.plainnotes.app.HistoryAttributionTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "e94c41508b3c251f7a03b24bb545ddc43f5d6545b6f774d2dd4a628f7deb235c"
+    },
+    {
+      "suite": "net.plainnotes.app.HistoryPeriodDialogTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "c28b682e5a0762a6ddf42fe0fe880ec3da197ddf1ec39aebcc3f086a6017d95b"
+    },
+    {
+      "suite": "net.plainnotes.app.HomeStockCardTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "ec908f65d1c0911f875784776c8ceb255bb456290c9e8aa61f769ac1b6a3f2ab"
+    },
+    {
+      "suite": "net.plainnotes.app.HtImportWizardTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "327622d56919af0e37201d7e4cf829236af9864f3749ac97864ae86359734383"
+    },
+    {
+      "suite": "net.plainnotes.app.ImportReviewScheduleTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "44efba79693de167890f9b6065c026e808c27ba1920cf1d86aa78796c9a3ebac"
+    },
+    {
+      "suite": "net.plainnotes.app.ImportedHistoryIntegrationTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "1fc67b97a39ac0c896e7557334fa91cbf5307b253ac163d04c7ab3a485b7b96a"
+    },
+    {
+      "suite": "net.plainnotes.app.ImportedHistoryTimelineTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "ba9bd1ef81460a0f9332ef8615b2284c51f21fd32ef7f41e1d575fc5e05b2577"
+    },
+    {
+      "suite": "net.plainnotes.app.ImportedTimelineUiTest",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "5fd374ffc2e741464c7f1e0162168f3d2bbe68e9ee52b9672403da7b6d45c71a"
+    },
+    {
+      "suite": "net.plainnotes.app.Lab01BatchEntryTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "7e30f4c7b1553c915556f1b7a55c715d8fa25f178eb1afe7c8caedcce144b928"
+    },
+    {
+      "suite": "net.plainnotes.app.Lab01GroupDisplayTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "4cb9d3b5153566f33faef8a1e2357c581d6e486eced90ff3af99dc5e741d1c9d"
+    },
+    {
+      "suite": "net.plainnotes.app.Lab01LayoutTest",
+      "tests": 64,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "1d9f6b2012496c0c1813756a68daaa2fec02eb502b2395475a978fa2fde0ee01"
+    },
+    {
+      "suite": "net.plainnotes.app.Lab01UnaffectedTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "c2538da62c5a2de7ecde60559dcafdf2ed7692420d8d744557a8f6cbe1739b3b"
+    },
+    {
+      "suite": "net.plainnotes.app.Lab01ValidationParityTest",
+      "tests": 24,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "2db190f81398a01446409b5821382f64a1bdf681fc0a0dda41e089294d29707c"
+    },
+    {
+      "suite": "net.plainnotes.app.Lab02LayoutTest",
+      "tests": 64,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "cd229a8ca06b5278634ff6755fd2c879e9d7d2bad24cf750dca7686f310dbd9b"
+    },
+    {
+      "suite": "net.plainnotes.app.Lab02PanelPkInvarianceTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "5f4bf581984d8ed308a4e07b8205e91a7980d4716b21bc282fd91168c35494a7"
+    },
+    {
+      "suite": "net.plainnotes.app.Lab02PanelUiTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "65930efd268a0e85cba7109d97d1387d1ac69181e44a9e661ea45d2cf7f01203"
+    },
+    {
+      "suite": "net.plainnotes.app.Lab03CatalogIntegrationTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "f7cf648b20a8c60056ff92ac4880d5def4c2d4fce4bdceb3c9a01186358e66be"
+    },
+    {
+      "suite": "net.plainnotes.app.Lab03DraftStateTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "0053fa825dabe64418d77dfd8c0ff0e7965c55d2d0352098987e2eaf55b7420a"
+    },
+    {
+      "suite": "net.plainnotes.app.Lab03EntryUiTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "07d359cc207ec433772028367d5e0863b8f0b3e635aaa6ae2dcd7048adbc5d36"
+    },
+    {
+      "suite": "net.plainnotes.app.LabContextUiTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "9426458d8905440f6fa8debde9228714168f58758d279e151c87ec1f396bb61f"
+    },
+    {
+      "suite": "net.plainnotes.app.LabEstimateTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "5ac17dfceeac5dbb05d44842553535df59d6b0a50cc8866d4a4bb8e215ec72aa"
+    },
+    {
+      "suite": "net.plainnotes.app.LabUi03CatalogScreenshotsTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 8,
+      "sha256": "bac12576755e57aac47bff862ec01869cd8df251c2d1e7990133d37f2cef71ac"
+    },
+    {
+      "suite": "net.plainnotes.app.LabUi03HomeTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "8c1cf2705541bf46b8023af901b4aa6bb807e47e422720d3bc47674cd0dd8303"
+    },
+    {
+      "suite": "net.plainnotes.app.LabUi03ResourceAndWiringTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "976b563631bdd1fc64f839fef579b1dba77dfc5dc5de30af858ae5244d290c10"
+    },
+    {
+      "suite": "net.plainnotes.app.LabUi03ScreenshotsTest",
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 32,
+      "sha256": "78ecc2d1bc3918d3c112922aad6011067c0cf7687e56226813637bb1e00ed7d6"
+    },
+    {
+      "suite": "net.plainnotes.app.LocalDataWipeCoverageTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "878a5c366ccfcea7e52cbe4e417bb6b566d6278b3e92baa8c7f1044f17ecdd1c"
+    },
+    {
+      "suite": "net.plainnotes.app.LongitudinalProjectionTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "5961d50b0eace1de8ee84b3417c4b32211af5d6c41e0dae20029ea86c0ec08e2"
+    },
+    {
+      "suite": "net.plainnotes.app.LongitudinalUiTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "4ebef450b4a820471ac46c912c5f6f3261c40c57200739094dafe4e375b6eb71"
+    },
+    {
+      "suite": "net.plainnotes.app.M2ScenarioDisplayTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "2a7fbc42d9e2130ce73b942e2bb01a4d695f0016264c928638fd2b90ff69913f"
+    },
+    {
+      "suite": "net.plainnotes.app.M2ScenarioVisualAuditTest",
+      "tests": 48,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 48,
+      "sha256": "7419590935b39f2c3098dd756373c1bb67ff6a3878e349ce56ae4cc20f3c24d5"
+    },
+    {
+      "suite": "net.plainnotes.app.MeasuredStockUnknownMatrixTest",
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "f4bb8cdfb0dd43b2a0f5eca1180b8ffc30dc89d5593be9a604e82676fa8d1a71"
+    },
+    {
+      "suite": "net.plainnotes.app.MedicalCenterMatrixTest",
+      "tests": 48,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "b81a3cd94f745b5fd778e2a1c522b4e67a1b64fd43e3302d84e545c4929fa753"
+    },
+    {
+      "suite": "net.plainnotes.app.MedicalHomeConfirmFlowTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "8258019a0f4739f0e2e61eec04929b7da40e0aece4201486838fc05ab8528004"
+    },
+    {
+      "suite": "net.plainnotes.app.MedicalHomeTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "9742b71606f3c6d167badddf8666d3e61064b2049679bf0c7762b43761c0ac81"
+    },
+    {
+      "suite": "net.plainnotes.app.MedicalRecordIndexTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "0d9065874558d18f40df20390935cf1e47e90c9259befb887a82c2c49af3c668"
+    },
+    {
+      "suite": "net.plainnotes.app.MedicalRecordsUiTest",
+      "tests": 40,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "c028c6e11ea5a4725f7805af38b970cf98797ee6f961304a90349ecbd8050801"
+    },
+    {
+      "suite": "net.plainnotes.app.MedicalVisitSavingTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "a7a23f575d8685881b9fb2c71a7ef6c81201a2da3456243a7254b1beb77c63a4"
+    },
+    {
+      "suite": "net.plainnotes.app.MedicationReferenceControllerTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "785938cb51f9686ade280a4aebce15cff1efaaa6bd186a127e0bd05b35d22377"
+    },
+    {
+      "suite": "net.plainnotes.app.MedicationReferenceMatrixTest",
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "30f27d5adb3ea5029ba2fc45a0bce24123f8c9e4cc25ac0bc1ca74c62870f89b"
+    },
+    {
+      "suite": "net.plainnotes.app.MedicationReferenceUiTest",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "ca31603bf2f6e3bba6a59fe78b1314c37f8fb5abb2e87b9a9e9ddb2d32cf8388"
+    },
+    {
+      "suite": "net.plainnotes.app.MilestoneSavingTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "0dc7f4cb9e671399546299997927951a62ca3c121436828c4500e8f1fdf63791"
+    },
+    {
+      "suite": "net.plainnotes.app.NotesAppCrossPageFlowTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "c202cbec561aba24bfd03a11ad30d4c6c81e7152d00363bd30442f01b3a7544b"
+    },
+    {
+      "suite": "net.plainnotes.app.NotesAppShotTest",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 16,
+      "sha256": "4b2d90f3123d90bea9599fc7d9185972cb8de134e7fac7e81441421108776fdf"
+    },
+    {
+      "suite": "net.plainnotes.app.ObservedTreatmentHistoryTest",
+      "tests": 28,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "68c8ef341cffa3724b396b8f0b95d64c9b3e0f99095b8d1a606a29cab9bfb806"
+    },
+    {
+      "suite": "net.plainnotes.app.OutlierDispositionTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "0573a8e82694f61be9ed2690beeb768decbc8b83557d2b3e0cf6ef5819bd58c8"
+    },
+    {
+      "suite": "net.plainnotes.app.OutlierDispositionUiTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "c798618f5c94fd7d11e0b1dfc7bf2d19d8839a5a9fbbb4180777679717caac4d"
+    },
+    {
+      "suite": "net.plainnotes.app.PackageHistoryPaginationTest",
+      "tests": 24,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "b8412772ecaddb7cd9e8688901476b96b5cc7ee65db7f522b45c9f3ec457e066"
+    },
+    {
+      "suite": "net.plainnotes.app.PausedPlanTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "41924ce2b0620c0ec0abe367e2040232da058f43de5918ebcb3128c8f01a2956"
+    },
+    {
+      "suite": "net.plainnotes.app.PeriodMergeAcrossImportTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "c0913fd89aa71e7a3274082e9c49ce219daa667dce26085c7121e960e9160736"
+    },
+    {
+      "suite": "net.plainnotes.app.PeriodStabilityTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "0a31542c1706ecd4ca72ce38431b82077e29e78c9d632b7a41640f2b553ef69b"
+    },
+    {
+      "suite": "net.plainnotes.app.PeriodTimelineTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "ff179951b93482b3b7a6b5ebc09b823d5f5b67baa88709afcccc0bf3e159c52c"
+    },
+    {
+      "suite": "net.plainnotes.app.PlainExportEntryTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "4803f3aa08fe79e648ad1513f9196910be5c5b666f5f438ec43ab50b5a5ff763"
+    },
+    {
+      "suite": "net.plainnotes.app.PrivacyNoticeFactsTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "4c42a71cdb2d5ffcb5e8f7d54e87ae6a6f9da4b405f02af15dbec9c21df2e9d3"
+    },
+    {
+      "suite": "net.plainnotes.app.PrivacyNoticeLayoutTest",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "451af0c31981de5e3c59ce7e694315d54cd013410e964002b7773a82f6e04f50"
+    },
+    {
+      "suite": "net.plainnotes.app.PrivacyNoticeOlderApiTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "b1e52d217aa8a87d77709d967cab0f396e0afec571007e1f62e17ce955b2bd67"
+    },
+    {
+      "suite": "net.plainnotes.app.RecordedReferenceUiTest",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "5be6f4d19949728f6bcab97315af276c4325566e2e02ae061159fda9a05d8df7"
+    },
+    {
+      "suite": "net.plainnotes.app.RecycleBinUiTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "99897c115a1303efdbf0073012991eab07f2d4e31e627bc687a24821b5c7c3f4"
+    },
+    {
+      "suite": "net.plainnotes.app.ReminderTestChainTest",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "4811bcdb8d6cab98f1a84158fd8b61c6f65d684279933a99eab03d1f88bd6ab5"
+    },
+    {
+      "suite": "net.plainnotes.app.ResearchHistoricalSlAdapterTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "77f016c53a1407dea8f78d288ef2c220c08b1218089e7576a92388825d0e6a45"
+    },
+    {
+      "suite": "net.plainnotes.app.ResearchHistoryScopeTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "be0dd4b2c3aa51390ade1d03039f4686097892e6bff1fe8594b91f83772c6292"
+    },
+    {
+      "suite": "net.plainnotes.app.RestoreProtectionLayoutTest",
+      "tests": 48,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "30e77c107de898538bb47427c21eaf6ea96a7315df4b23fe8bb99784fbadae23"
+    },
+    {
+      "suite": "net.plainnotes.app.RestoreProtectionTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "7b2d4cb683ba757194421e44bc39e0c70860e1cc324e8c17ce2de021bc48f3ed"
+    },
+    {
+      "suite": "net.plainnotes.app.SameCardSplitTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "fc2e4deda82fea50b0cc948675d66553531691b871e65f0efa39ca80e79e6109"
+    },
+    {
+      "suite": "net.plainnotes.app.ScreenshotTest",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "e4316d9d8f7d4ef438894c719df8d012c499c0178beb06cce52fdfa3419d253c"
+    },
+    {
+      "suite": "net.plainnotes.app.SettingsOverviewTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "4f873fb89ed93250fb60a5fceec29f55c4fa99666a3ba2455b733e17161af0c7"
+    },
+    {
+      "suite": "net.plainnotes.app.SourceIdentityUiTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "f6d07780a3e7db2ef225a0c8df705a534e894ea66da5b38a07e0985013010ebd"
+    },
+    {
+      "suite": "net.plainnotes.app.SourceNeutralContinuityTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "970b656ece1920057875844fcfdb73f993241027a1154f1947c358b5094d49b8"
+    },
+    {
+      "suite": "net.plainnotes.app.StockCardActionsTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "3ab0c9e8513410bea4ed756cf6c5cfdf33ed3b5d6bd39d575d8f911d8b2fcee9"
+    },
+    {
+      "suite": "net.plainnotes.app.StockCheckUiTest",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "0deeb6066f7ec6fff8e0563b747a261764e185df46a2a087c576362fd5ecabc1"
+    },
+    {
+      "suite": "net.plainnotes.app.StockConsistencyTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "a432be7689d7641b0a0c1a8e53cbeb200a050915449f6fafdc93651a857a6d81"
+    },
+    {
+      "suite": "net.plainnotes.app.StockSummaryTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "9e62513988a3bfd204bd29eea8bfa0650333767d84743299e09f422bd70857e7"
+    },
+    {
+      "suite": "net.plainnotes.app.SublingualCalibrationAuditTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "78a125e00f46d8a51713aa205df470fa5c8dbbbd783d330d89ed17a0ff09202b"
+    },
+    {
+      "suite": "net.plainnotes.app.SublingualEstimatePolicyTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "32a13c8f5269ab9d230ded435de799660ca4e58c85ff68a0a6d74fae14eb9712"
+    },
+    {
+      "suite": "net.plainnotes.app.SymptomCatalogTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "4f3cc82fe8d5e379ee140cd1d84411adef53056d538b7f5b3a045b1cf243a119"
+    },
+    {
+      "suite": "net.plainnotes.app.TestReminderSurvivalTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "a4e8c7c750f413e810670a8349de616a0de8ef00df6ddbd477d1f388ddc7c031"
+    },
+    {
+      "suite": "net.plainnotes.app.ThirdPartyNoticesTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "753c10f29efaa2081a25f68f78c091de396b402be2a1619c039747be7e9cd9a3"
+    },
+    {
+      "suite": "net.plainnotes.app.TimelineAndDrawerHierarchyTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "a105821745c1983170ee4b43039049719a9fc625668f436001a29adf163b61fb"
+    },
+    {
+      "suite": "net.plainnotes.app.TimelineEditFlowTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "3dbc4e67730fc63f121d679b310272dadfd8cbe45eee30d324e56bac25558961"
+    },
+    {
+      "suite": "net.plainnotes.app.TimelineEditProjectionTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "518aac3d01d1047447f5fae3eb60c4f21c05ebdb9dc8bc51625b08e4efb6b066"
+    },
+    {
+      "suite": "net.plainnotes.app.TimelineEditUiTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "832a7ba766a54776db202a0f8d7a2822c99a51605ea62d46e4992cac12595141"
+    },
+    {
+      "suite": "net.plainnotes.app.TimelineFilterAndHomeStockTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "669a14ba7a1ddc240db2232f4b2db0732ebe6a3cafde9f50af849d1ea9ea823d"
+    },
+    {
+      "suite": "net.plainnotes.app.TimelineV2FlowTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "994cc0c2b6da2d58bb26f1c03dd6cd93200ed41c8050601523ccb89f78fefca5"
+    },
+    {
+      "suite": "net.plainnotes.app.TimelineV2Test",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "a8c745a006a09769ecc18ea20ef14f47fc4d9fff2741828b39321fef28cebdca"
+    },
+    {
+      "suite": "net.plainnotes.app.TimesPerDayTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "aeffb0724c7ad20c0d5958d755070dca39ab81bc8ffe86f027d1865f408b6670"
+    },
+    {
+      "suite": "net.plainnotes.app.TodayCardTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "96a6b83c2572acf4e42be588eab8bd4db362f9dbe44bde032cf1d33ea2877bce"
+    },
+    {
+      "suite": "net.plainnotes.app.TransMemoImportCopiesTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "a2a62cbddaff4cbad2ef85f0e79421520a07f46e747156bd5b138241d956a423"
+    },
+    {
+      "suite": "net.plainnotes.app.TransMemoImportFlowTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "fba5325277c263628167e5888152b074d4274167363c537a02f2c86af634d3d7"
+    },
+    {
+      "suite": "net.plainnotes.app.TranslationsTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "3dbdd1201e7726b1e49a246924eda86a8a08645cbb6cd6d9501dfd2f27e43c0a"
+    },
+    {
+      "suite": "net.plainnotes.app.Ui01ScreenshotTest",
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 32,
+      "sha256": "06bb37e6eb9ccab65fade50244ff8b0687aaf900f563275775ed6c6e995d035e"
+    },
+    {
+      "suite": "net.plainnotes.app.Ui02ContrastTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "a95fd79cd8757b7d46356c4b814ae20c231e5ae8e81ecebdece95f0fc3a5f4ba"
+    },
+    {
+      "suite": "net.plainnotes.app.Ui02ScreenshotTest",
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 32,
+      "sha256": "0c7322ba636c47ca1a107809d6543ed1e21b3ded9e9b96bb9b3b1b83ec1f50d2"
+    },
+    {
+      "suite": "net.plainnotes.app.Ui03DrawerTest",
+      "tests": 64,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "d1093e358a5545807bee32e0d6096e5c27530027942867e1a4e26dab05e6d21c"
+    },
+    {
+      "suite": "net.plainnotes.app.Ui03ScreenshotTest",
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 32,
+      "sha256": "a65d163a21587a8a636ec0da6471fed8e7accc60eea83fe8d8753fa04cf28a15"
+    },
+    {
+      "suite": "net.plainnotes.app.Ui03ShellTitleTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "25a1db78e47b2bb7480b262d62514e667c8b6e5edb07dbd46388f468b6429991"
+    },
+    {
+      "suite": "net.plainnotes.app.Ui04ScreenshotTest",
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 32,
+      "sha256": "b4d2c7903bf611a97ae06f7d3a20e1a5a40f986c003edbc7956e16beacd0f204"
+    },
+    {
+      "suite": "net.plainnotes.app.Ui04TodayDedupTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "bb756ccea0e7a88b46fc6cd7072686c6b79a9f3b24ef546068eaeb8c9d55f237"
+    },
+    {
+      "suite": "net.plainnotes.app.Ui05ContrastTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "f184208c31cfb015ce8559ccea266d7cca69e455d638fad6660d8329c662a99b"
+    },
+    {
+      "suite": "net.plainnotes.app.Ui05DrawerBadgeTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "e5fe4c22bb564bdc5d15874280bbf3fac3e32639959fbcf545428fd7c0828f14"
+    },
+    {
+      "suite": "net.plainnotes.app.Ui05HomeStockTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "aa75d0c57a570185c12ad3735172972c5c3a2039d40445cadf9f969a2c2ddb3e"
+    },
+    {
+      "suite": "net.plainnotes.app.Ui05MedicalHomeTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "ec7f5d438de2ec3e46ea2d60012a7580a4091b7f828d94121eda154acdf7829e"
+    },
+    {
+      "suite": "net.plainnotes.app.Ui05ScreenshotTest",
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 32,
+      "sha256": "58d7488f702f8896d70b6e86c82f47f4fd29612e7be7437258ab5f8b1e5d98ad"
+    },
+    {
+      "suite": "net.plainnotes.app.Ui05StockCardTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "8d5de44a57d1f8b3dd8d3aa2aa60e85c499caedd91d24b5e0cdeedaedb505bbb"
+    },
+    {
+      "suite": "net.plainnotes.app.Ui05TimelineTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "2985a92b59b6c5370f65c81a6798e47379a98e7c6eac3588a58c9b328c315581"
+    },
+    {
+      "suite": "net.plainnotes.app.Ui05TodayCardTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "f5d531a736ca98e0edf673a8266d424a68a5c6b20a7bdfffa3fbc7a37cee4a5c"
+    },
+    {
+      "suite": "net.plainnotes.app.UndoSkippedHistoryUiTest",
+      "tests": 24,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "b1bcb608da9d09a17d7e94d3d978df6c554a40f2aeb3da787a02e3fe3003921c"
+    },
+    {
+      "suite": "net.plainnotes.app.UnifiedConcentrationDataPathTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "cbf99ef76f4795b26eb7a763e8b58d76f878c013fe8695a22c8764b85f7d8a49"
+    },
+    {
+      "suite": "net.plainnotes.app.UnifiedConcentrationNavigationTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "31ae85b0bcca1091877de1095a3b0a16921ba014809fb6dbc8c017a100409b08"
+    },
+    {
+      "suite": "net.plainnotes.app.UnifiedConcentrationObservationTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "0a35f6b66daf62f92630f0e0656ce95642f23716b47d7bed7a3c8a80f63f25b7"
+    },
+    {
+      "suite": "net.plainnotes.app.UnifiedConcentrationTranslationsTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "5b6fd5947a2bfd9975f6002d0ae07611819a24c7958631d7d5d74bc6a6d1c362"
+    },
+    {
+      "suite": "net.plainnotes.app.UnifiedConcentrationUiTest",
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "b3c594e62552c635dafbb6792469698817a14cb4b3fda2f122eb56d9f0f55673"
+    },
+    {
+      "suite": "net.plainnotes.app.UserDiagnosticRegressionTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "ff321dafa6e98671e54d9bc6ff816b2f256e65f6cae66549b6093ad44a33ff20"
+    },
+    {
+      "suite": "net.plainnotes.app.VisitPackTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "d8c8a2cdf1ee7b99f24328db5b182cc1353cfabe9ae458562a7c309c80427014"
+    },
+    {
+      "suite": "net.plainnotes.app.VoidedPackagesUiTest",
+      "tests": 20,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "b602dd72bc5d812cb36600bb717fed9106c3ebbc893f5f11002a9aca2463ad3e"
+    },
+    {
+      "suite": "net.plainnotes.app.WellbeingSummaryTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "472be4d8c40ca9c7f390770ba3fc5fe43afe71c1c48048126ac5d578891fb9be"
+    },
+    {
+      "suite": "net.plainnotes.app.WellbeingUiTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "2090516ad047cf863cfb13fa41cc665c25b33d5100d9d76bb4cf452c769405f2"
+    },
+    {
+      "suite": "net.plainnotes.app.audit.ButtonAuditTest",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 12,
+      "sha256": "9eba396e3a88d14a8986ca4bd49aecb1cc7ae9c57ad6f3628f0a774bdbf07251"
+    },
+    {
+      "suite": "net.plainnotes.app.audit.ButtonLayoutRegressionTest",
+      "tests": 64,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "803e348736e22385bccc80321dec956868c36b804a77e790066e2ca7b182e588"
+    },
+    {
+      "suite": "net.plainnotes.app.audit.SettingsButtonInteractionTest",
+      "tests": 48,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "99bbff7b241b8604c6c2c40b03a2b08ceb812b6dde958966c0b6cf90f53bea40"
+    },
+    {
+      "suite": "net.plainnotes.app.catalog.CatalogPrototypeFlowTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "09a0203462a2af051a54624143c671df9d03038025fab9514212ed77c9284d85"
+    },
+    {
+      "suite": "net.plainnotes.app.catalog.CatalogPrototypeHostTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "65dd3d34bfe2d90aa4b13f8c58a87dc5d056fd98ed6a6417a93388f0c1f5184d"
+    },
+    {
+      "suite": "net.plainnotes.app.catalog.CatalogPrototypeLayoutTest",
+      "tests": 96,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "8a145f2b4c683e76e125568cd12496f1d0ae357263068e30d288e3bc42ffa532"
+    },
+    {
+      "suite": "net.plainnotes.app.catalog.SyntheticCatalogTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "d4590c621f0c670d7a02fba5cc31f85dd195cd43d031d74503beddcc7efba282"
+    },
+    {
+      "suite": "net.plainnotes.app.demo.DemoArchiveLayoutTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "4e79f5f792e5eb5edfaae3b6d9ca144abe7a155f31e539460a7902c17bc7e738"
+    },
+    {
+      "suite": "net.plainnotes.app.demo.DemoFixtureTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "e5c1b62988e09bf9684c976dd8105b7681ef00f2d989fd11fc883400941dc4d0"
+    },
+    {
+      "suite": "net.plainnotes.app.demo.DemoFlowsUiTest",
+      "tests": 20,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "469a0b1df8d0d9ff20f4efcf4193ed8b6fb11a5268549ddd5b77c8c345a643c3"
+    },
+    {
+      "suite": "net.plainnotes.app.demo.DemoRepositoryFlowTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "6eee57396671a8ca11844ff8c871f6c050e6395568b33c991d779dab750ed087"
+    },
+    {
+      "suite": "net.plainnotes.app.disguise.CalcTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "fb80d3a0bed413840a9f66c9cee1bc6bc74a3628f41d45badd0c695faafbae50"
+    },
+    {
+      "suite": "net.plainnotes.app.disguise.PrivateBoundaryTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "a918cded8c12f38eab4035f207052583124e10191ff721349ece719d82d54c35"
+    },
+    {
+      "suite": "net.plainnotes.app.disguise.PrivateStoreTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "cdafa65b3641007e78d46b08d7f73ae761975b4d73820c876ae75e164afa2439"
+    },
+    {
+      "suite": "net.plainnotes.app.disguise.ShellPrivacyBoundaryTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "15f52194b86171d363a1719974f6c4d33f9142b33d1ba772de8561545e957816"
+    },
+    {
+      "suite": "net.plainnotes.app.disguise.ShellScreenshotTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "606e755da0200164b8c632a6a698fb5546c8ec787d1f2d612839d912a376318f"
+    },
+    {
+      "suite": "net.plainnotes.app.security.AppLockTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "cef08735d8c98cd69d7f3d654277a38906b2951928d1bb45ff96b7bb97f44e2e"
+    },
+    {
+      "suite": "net.plainnotes.app.security.SessionTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "3461181a9a9bcaba885de7ec7101e9c9c30e9dc39c37bc446205c4cbebf172e4"
+    }
+  ]
+}

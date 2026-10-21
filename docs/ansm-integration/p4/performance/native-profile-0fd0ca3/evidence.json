@@ -1,0 +1,30 @@
+{
+  "source_head": "0fd0ca38bd94db910632067bffb17e2fe2f96f9a",
+  "run": 39122744634,
+  "job": 117661487765,
+  "artifact_id": 12135217805,
+  "artifact_sha256": "626e05ada570af1fa10853a84995885df23358254e54f33d5dd9c3187131c1b9",
+  "artifact_sha256_verification": "PASS",
+  "zip_crc": "PASS",
+  "trace_sha256": "a8debd02c5ade50844f729fed32b50a8dfcd821baf41047bc75b4525c3eed1bc",
+  "trace_gzip_sha256": "41688c99be526a8478263a0af37c374f88d5aeb87bd4ed827602e4cc6a6a99b1",
+  "parser_source_sha256": "b291a87edf240f5e93c6411a810c7f2ad5c946b373c0df1427d5aa42d09f6190",
+  "parser_reproduction": "PASS",
+  "transport": "NATIVE_PREFLIGHT_AND_SAMPLE_ACK_PASS",
+  "profile": "PARTIAL_DIAGNOSTIC",
+  "records": 97996,
+  "clipped_open_frames": 152,
+  "unknown_method_records": 0,
+  "unmatched_exits": 0,
+  "overflow": "false",
+  "performance": "FAIL:actual writes13726/13307/13938ms exceed unchanged5000ms. Audit/forecast/restored audit pass this run. Query reduction does not establish native improvement or stable latency.",
+  "physical": "NOT_RUN",
+  "p4": "PRODUCTION_BLOCKED",
+  "duplicate_run": {
+    "run": 39122741164,
+    "event": "workflow_dispatch",
+    "status": "CANCELLED_DUPLICATE_SAME_SHA",
+    "acceptance_claim": "NONE; PR-triggered39122744634 was retained regardless of outcome"
+  },
+  "next": "Further remove encrypted point queries while preserving field/type/full chain/global source auditing. Bulk operation scan local418/full projection equality/query12186 PASS, native not yet tested."
+}

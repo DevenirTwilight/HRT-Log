@@ -1,0 +1,27 @@
+{
+  "scope": "SOURCE_a697819_NOT_CURRENT_WIP_HEAD",
+  "runs": [
+    {
+      "id": 39470678638,
+      "status": "completed",
+      "conclusion": "success",
+      "head": "a697819e4c728b3e2802395d9ccc9023b1dd69b1",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39470678638"
+    },
+    {
+      "id": 39470688230,
+      "status": "completed",
+      "conclusion": "failure",
+      "head": "a697819e4c728b3e2802395d9ccc9023b1dd69b1",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39470688230"
+    },
+    {
+      "id": 39472291324,
+      "status": "completed",
+      "conclusion": "failure",
+      "head": "a697819e4c728b3e2802395d9ccc9023b1dd69b1",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39472291324"
+    }
+  ],
+  "current_wip_head": "NOT_VALIDATED; 472 local tests, one new observer failure; checkpoint skips CI to avoid duplicate benchmark"
+}

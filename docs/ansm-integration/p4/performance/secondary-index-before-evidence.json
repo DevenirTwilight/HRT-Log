@@ -1,0 +1,10 @@
+{
+  "base_head": "3ee511043182eb9b3a81721d2f853fe9b6273664",
+  "production_change": "NOT_APPLIED",
+  "result": "EXPECTED_RED",
+  "tests": 1,
+  "failures": 1,
+  "message": "Complete secondary indexes must serve these queries without repeated SQL expected:<0> but was:<8>",
+  "log_sha256": "b58036d1be25b5c3a7720fe0c7a4d9ebaa6d1e15866de7fc5b912287d21b1e4e",
+  "junit_sha256": "f4a251ed65eaca9002d846f7721e92a46560d94102f688b7807d10fbe7d681d9"
+}

@@ -1,0 +1,47 @@
+{
+  "source": "f13e7f521862739e23b9928bba2a82e08eb42fe9",
+  "base": "4ec11437acb257ecc0e9c92ed59907d954cbacae",
+  "technical_checks": {
+    "android_workflow": 39653018592,
+    "science_workflow": 39653023713,
+    "jvm": "PASS",
+    "android": "PASS",
+    "api26": "PASS",
+    "api29": "PASS",
+    "api35": "PASS",
+    "science_gate": "PASS",
+    "research_deep": "PASS"
+  },
+  "native_heap": {
+    "actual_process_preflight": 201326592,
+    "original_frozen_limit_changed": false
+  },
+  "compatibility": {
+    "api26_tests": 335,
+    "api29_tests": 335,
+    "failures": 0,
+    "skips": 0,
+    "api35_data_listed": 407,
+    "api35_data_skipped_host_probes": 5,
+    "api35_app_listed": 282,
+    "api35_app_skipped_action_probes": 10
+  },
+  "each_api_writer_death": [
+    "STOCK_CAPTURED_PASS",
+    "AFTER_COMMIT_PASS"
+  ],
+  "policy": "write latency observational; prior5sFAIL preserved; full audits and safety limits unchanged",
+  "production_changes_in_ci_fix": "NONE",
+  "additional_schema_or_crypto_changes": "NONE",
+  "candidate_existing_versions": {
+    "room": 13,
+    "business_backup": 12,
+    "pnBak": "PNBAK1 unchanged"
+  },
+  "formal_entry": "OFF",
+  "protected_admission": "PENDING_NORMAL_CI: skip-ci left queued automatic suites despite successful manual suites; do not bypass",
+  "evidence_branch": "evidence/p4-admission-4a67e96e",
+  "previous_failures": "original after-commit timeout and API29 actual16MiB OOM retained",
+  "device_manual": "NOT_RUN",
+  "talkback_manual": "NOT_RUN"
+}

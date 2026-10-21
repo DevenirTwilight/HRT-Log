@@ -1,0 +1,9 @@
+{
+  "base": "fc5df5b82eac600800a5ea261179f2ae88636e98",
+  "status": "FAIL",
+  "tests": 1,
+  "failures": 1,
+  "message": "java.lang.AssertionError: Expected OPERATION_CONFLICT",
+  "risk": "Inverse changed an independently confirmed physical remaining count without reconciliation",
+  "log_sha256": "99e5b2c98c6aafcc20b5efab8e6ece5997f6793eb243732c3cb084133e16ab90"
+}

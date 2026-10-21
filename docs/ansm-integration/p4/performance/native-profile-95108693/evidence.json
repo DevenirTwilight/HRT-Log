@@ -1,0 +1,16 @@
+{
+  "source_head": "951086933664bb0cdf9a0872ebc9fec4f59e0f12",
+  "run": 39262621431,
+  "artifact_id": 12191614506,
+  "artifact_sha256": "be7e16990ea23f209dd697e82bd2e0d16960be42ec0142b67b64aaa92ed4b286",
+  "zip_crc": "PASS",
+  "parser_reproduction": "PASS",
+  "trace_sha256": "80ed436115e1093c1db05887d90328e583555af3b580e4d218d504df25f5737f",
+  "performance": "FAIL: writes11076.194786/10263.291778/10928.359059ms>5000",
+  "backup_restore_this_run": "COMPLETE",
+  "prior_process_exit_cause": "UNRESOLVED_NOT_REPRODUCED_THIS_RUN",
+  "kernel_tail": "CAPTURED_DIAGNOSTIC_ONLY_NOT_RSS",
+  "profile": "PARTIAL_DIAGNOSTIC",
+  "p4": "PRODUCTION_BLOCKED",
+  "physical": "NOT_RUN"
+}

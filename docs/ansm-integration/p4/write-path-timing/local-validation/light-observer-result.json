@@ -1,0 +1,31 @@
+{
+  "baseline": "40408b77e67d21e74f9128fd47a1e1f29f58bb76",
+  "command": ":core:data:testDebugUnitTest :core:data:compileDebugAndroidTestKotlin",
+  "result": "PASS",
+  "junit": {
+    "tests": 472,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "android_generated_source_compile": "PASS",
+  "tooling_tests": 51,
+  "tooling_result": "PASS",
+  "main_jars_without_observer": [
+    "core/data/build/intermediates/compile_library_classes_jar/debug/bundleLibCompileToJarDebug/classes.jar",
+    "core/data/build/intermediates/runtime_library_classes_jar/debug/bundleLibRuntimeToJarDebug/classes.jar"
+  ],
+  "production_diff": [],
+  "source_sha256": {
+    "core/data/src/historyTest/java/net/plainnotes/app/data/P4WritePathTiming.kt": "297870a1783255625803672231c2dc20eec2ef01481e895c45602712fea0c0be",
+    "core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt": "f79105781f0213e7a04154bd024f6bfac28243cb75c3191b1201bf9d9eb95d54"
+  },
+  "generated_source": {
+    "source_sha256": "9313167178989def0d4d89d785f84cdde764fba21033543cdf85e472c5511242",
+    "native_sha256": "967b73e97a77c9306753797619ba9446e14be7d4ee705c5da196ae71faa6fc0e",
+    "status": "GENERATED_NOT_RUN"
+  },
+  "native_measurement": "PASS_THIS_RUN_ONLY",
+  "native_source": "87e9df955f8132b58cd111c5188c295a0d4b0726",
+  "native_evidence": "../native-87e9df95-light-observer/artifact-receipt.json"
+}

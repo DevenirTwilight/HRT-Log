@@ -1,0 +1,22 @@
+{
+  "status": "FAIL_WRITE_BUDGET_TRACE_UNAVAILABLE",
+  "source_head": "4dc09b80f6c9d16d4bf784d388f12c3262b493fd",
+  "run": 39108085887,
+  "job": 117618168367,
+  "artifact_id": 12129850807,
+  "artifact_sha256": "8479cf99c5d7a9c712be346a0284a627047ede656d188b28fda48b8d1dce3ebd",
+  "sha256_verification": "PASS",
+  "zip_crc": "PASS",
+  "post_restore_write_ms": [
+    15604.38148,
+    15957.01594,
+    16338.55516
+  ],
+  "write_budget_ms": 5000,
+  "trace_generated_bytes": 2300664,
+  "sampling_host_ack": false,
+  "trace_collected": "UNAVAILABLE",
+  "watcher_error_file": "ABSENT",
+  "root_cause": "UNVERIFIED: ready marker and nonce are valid; no per-path failure response was preserved, so changing shell exit-status handling did not establish working transport. Do not infer an analyzed method hotspot.",
+  "next": "App-UID internal fixed-path transport with binary/ACK preflight before SQLCipher/large fixture; only post-budget method sample contributes to profile, no adb polling between phase signals. Preflight failures mark PERFORMANCE_NOT_RUN and preserve bounded remote path diagnostics."
+}

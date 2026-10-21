@@ -1,0 +1,19 @@
+{
+  "status": "LOCAL_PASS_NATIVE_NOT_RUN",
+  "scope": "TEST_ONLY_POST_BUDGET_PRIVATE_METHOD_TIMINGS",
+  "production_files_changed": false,
+  "native_generated_source_compilation": "PASS",
+  "python_tests": {
+    "tests": 169,
+    "failures": 0,
+    "errors": 0
+  },
+  "complete_jvm_fixture_with_all_component_assertions": "PASS_DIAGNOSTIC_ONLY",
+  "compile_log_sha256": "010f7f7f17444c574318cc83fd95406ff05d696b4dfcf1b0c642b1585ea85e4d",
+  "jvm_log_sha256": "d2763b362977b05ea74e6f35b3a311afcea368a8e0176f81d977732840c5b821",
+  "python_log_sha256": "42658a1eef8ccc88acdc28cd1309d8f504ca9835dceb6aacf3201a9ca8e7fae4",
+  "native_source_sha256": "9368ab43aadda982117201daaceaf0214c9202af222c0a20de8e6f96071918b3",
+  "native_result": "NOT_RUN",
+  "acceptance": "P4_BLOCKED",
+  "limits_changed": false
+}

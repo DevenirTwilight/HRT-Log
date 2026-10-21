@@ -1,0 +1,18 @@
+{
+  "source": "a3c695749b90aa47b85bd9c4350249ab6e9698a1",
+  "run": 39211937056,
+  "job": 117927052147,
+  "status": "FAIL",
+  "test": "PrivacyNoticeFactsTest.backupKdfAndCipherMatchTheNotice",
+  "line": 22,
+  "app_tests": 1776,
+  "app_failures": 1,
+  "app_skipped": 237,
+  "cause": "Current-output source guard still asserts business11 independent of Room12; candidate is business12/Room13. KDF/cipher assertions before line22 passed. Correct explicit current-version guard and privacy evidence; no cryptographic or four-language notice fact changed.",
+  "excerpts": [
+    "2026-10-19T07:00:42.1319185Z PrivacyNoticeFactsTest > backupKdfAndCipherMatchTheNotice FAILED",
+    "2026-10-19T07:00:42.1320334Z     java.lang.AssertionError at PrivacyNoticeFactsTest.kt:22",
+    "2026-10-19T07:04:00.8299304Z 1776 tests completed, 1 failed, 237 skipped",
+    "2026-10-19T07:04:01.8259037Z > Task :app:testFullDebugUnitTest FAILED"
+  ]
+}

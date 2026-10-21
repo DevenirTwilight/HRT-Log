@@ -1,0 +1,25 @@
+{
+  "status": "PASS",
+  "totals": {
+    "tests": 349,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "shared_measurement_contracts": 75,
+  "android_test_source_compile": "PASS",
+  "android_runtime_75": "NOT_RUN",
+  "python": {
+    "tests": 159,
+    "failures": 0
+  },
+  "initial_compile": "FAIL: nullable dose_revision / Array variance; corrected without dropping assertions",
+  "log_sha256": "d26be4107168cb656374b2d84c8a38bad11886543623a1d205a215997e2e45d7",
+  "app_regression_after_actual_use": "NOT_RUN",
+  "source_sha256": {
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredUseIntegration.kt": "df1c2adc00f0058b859339af0254f0b02bb98567940e40bed5b3b4526c31e10b",
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredUsePayload.kt": "82efa56f4286cce45d817bdb968cc50a59d053bd65ca292c8c2f9a6955495e03",
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt": "b591260786067f93a57be953e0e03fb7c760a9b3a9394899b0bdbd959242c3e2",
+    "core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt": "30d6dd5e08ba99ffb52e51aa1b8ef297e8c90d17cf86e82069c35117518f1ce1"
+  }
+}

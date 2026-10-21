@@ -1,0 +1,27 @@
+{
+  "source_head": "01534191bfc082fc98f0b95317fe77a08d884061",
+  "run_id": 39426820857,
+  "job_id": 118641359886,
+  "artifact_id": 12266606842,
+  "official_archive_sha256": "d1cdb3eb0d0a9b3983d5e05e06a9b2d4e23ff7e41412363bcd83d527916f37db",
+  "archive_crc": "PASS",
+  "status": "FAIL_SYSTEM_OOM_KILL",
+  "pid": 3969,
+  "last_stage": "validated_staging_and_restore",
+  "kill_observation_anon_rss_kib": 119968,
+  "rss_peak": "NOT_MEASURED",
+  "specific_allocation_subphase": "UNKNOWN",
+  "write_performance": "NOT_RUN",
+  "backup_restore_performance": "NOT_RUN",
+  "source_regression_causality": "NOT_ESTABLISHED; death shortly after stage entry, cannot attribute to operation header cache or backup encoder",
+  "files_sha256": {
+    "environment.json": "a68e874713decc4e4365e7d0b0f3b36ee5f942bddebaa4550d9ab744aaf39b8f",
+    "execution.json": "4d9564d6b1195fb0fdeba03c29b7c82e2bd7754b91f7fbb3c1e0931787e16a81",
+    "large-ten-year.json": "a350843afb02aea190cc9cf1c235f309aef0f96da43a14d4045197aa874a43f6",
+    "post-run-kernel-diagnostics.json": "9e7690c39db68db3db6ac4b737789989a7164905482c084c60cc1b579b646f23",
+    "post-run-kernel-tail.txt": "16c43179e901db48af19af22759af2df4f2ae0fb8475992f1322549d87398db3",
+    "source.json": "0803dbb5c0d5d5c69a3f10b5e4e9b80f21c0b276a06018132ab605c22dbf4ff7",
+    "synthetic-crash-log.txt.gz": "b611d2384367c9fe716e0f7fac194387c50e7e488d5a2a22f0961223b92622a5",
+    "trace-collection.json": "10b412c36bd54ba7f92e5dd8c373b1d10bbf758ede79529cd7b2a495e42265f7"
+  }
+}

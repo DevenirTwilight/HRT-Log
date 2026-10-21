@@ -1,0 +1,76 @@
+{
+  "unit": "ns",
+  "same_call_parts": {
+    "ticket_api_including_own_transaction_ns": 414363680,
+    "write_validation_core_lower_bound_ns": 502387070,
+    "write_insert_including_triggers_ns": 18562620,
+    "write_explicit_update_including_triggers_ns": 72400,
+    "write_delete_ns": 0,
+    "write_commit_driver_ns": 5652330,
+    "write_full_audit_core_lower_bound_ns": 4435771450,
+    "write_other_driver_ns": 7147160,
+    "write_unattributed_ns": 322851950,
+    "draft_uuid_finish_between_calls_ns": 28103580
+  },
+  "total_ns": 5734912240,
+  "additive_equality": true,
+  "explicit_statement_details": [
+    {
+      "key": "other|insert|1dd98e81a8fedd66d0dd4ec08eccf51a07bfc7130c8a7b4e2b6edd67b3db9196",
+      "calls": 1,
+      "ns": 3697300,
+      "sql_prefix": "INSERT OR ABORT INTO `dose_record` (`id`,`medication_id`,`rule_version_id`,`slot_key`,`scheduled_utc`,`scheduled_zone`,`planned_dose`,`late_after_minutes_snapsh"
+    },
+    {
+      "key": "other|insert|e497e5b483c51d2a112bc7499d3d6cde10d054dc329ca4cea9ac362d006cfadd",
+      "calls": 1,
+      "ns": 1826300,
+      "sql_prefix": "INSERT reference_identity"
+    },
+    {
+      "key": "other|insert|de73fbdb8cc78ddf6359a8a499d06537e88fcc57b8088bbe439e262433cc66a6",
+      "calls": 1,
+      "ns": 1947620,
+      "sql_prefix": "INSERT measured_operation"
+    },
+    {
+      "key": "other|insert|05099f9f8ededd691d040beb51c5352b1d3fe56b32758c00284fc11786b904ba",
+      "calls": 1,
+      "ns": 1118730,
+      "sql_prefix": "INSERT OR ABORT INTO `supply_transaction` (`id`,`container_id`,`dose_record_id`,`dose_revision`,`operation_id`,`kind`,`used_delta`,`reversal_of_id`,`created_utc"
+    },
+    {
+      "key": "other|insert|e96c941776e8ac4990279fc101787e3fca1687c2bde7a47551c1e55c4b8af48e",
+      "calls": 1,
+      "ns": 5232240,
+      "sql_prefix": "INSERT measured_allocation"
+    },
+    {
+      "key": "other|update|c78749dd49461e8231f773c458a68e4bdcd96a9a9da4b32f8f2baeccbb7960fa",
+      "calls": 1,
+      "ns": 72400,
+      "sql_prefix": "UPDATE supply_container SET state = ?, opened_on = ? WHERE id = ?"
+    },
+    {
+      "key": "other|insert|a3609041f06418081b81329391444e4bba7b6e427074d95a1959b8aa0bc913d3",
+      "calls": 1,
+      "ns": 4740430,
+      "sql_prefix": "INSERT record_reference_capture"
+    }
+  ],
+  "nested_not_additive": {
+    "foreign_key_query_windows_ns": [
+      150785670,
+      149703910
+    ],
+    "observer_lower_bound_ticket_ns": 14294860,
+    "observer_lower_bound_write_ns": 41647110,
+    "ticket_commit_already_in_ticket_api_ns": 126910
+  },
+  "unknown": [
+    "pure native COMMIT/fsync",
+    "trigger-exclusive cost",
+    "individual read cursor iteration outside cores",
+    "method tails/receipt construction/Java scheduling/indirect observer cost"
+  ]
+}

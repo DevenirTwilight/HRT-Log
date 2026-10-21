@@ -1,0 +1,14 @@
+{
+  "source_head": "0b3c7038780ade649655247eadcd59676b545eff",
+  "production_change": "NOT_APPLIED",
+  "tests": 5,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "cases": "Frozen encoder corpus3 + new shared whole-string/escaped-invalid boundary2",
+  "junit_sha256": {
+    "TEST-net.plainnotes.app.data.ReferenceCanonicalCompatibilityTest.xml": "0f2897076175ea1e9503277705ea2520d6640be1881cd58e3f793bcc125929f6",
+    "TEST-net.plainnotes.app.data.ReferencePersistenceTest.xml": "728e35f5d62d4e8be9a0534120b81ee271c47472eb9525ccaf5f526075299666"
+  },
+  "log_sha256": "673a04d591e0cebe4dab99f81c8f165711e7ef8c393956b997b390dee6b32d82"
+}

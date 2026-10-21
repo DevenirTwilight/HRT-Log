@@ -1,0 +1,80 @@
+[  189.476920] lowmemorykiller: Killing 'HeapTaskDaemon' (3645), adj 904,\x0a   to free 9236kB on behalf of 'kswapd0' (529) because\x0a   cache 11100kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 84368kB above reserved
+[  189.490685] lowmemorykiller: Killing 'droid.messaging' (3614), adj 902,\x0a   to free 12648kB on behalf of 'roidJUnitRunner' (3867) because\x0a   cache 11304kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 86400kB above reserved
+[  189.640195] lowmemorykiller: Killing 'ndroid.calendar' (3429), adj 906,\x0a   to free 9496kB on behalf of 'Binder:2715_5' (2862) because\x0a   cache 25612kB is below limit 105536kB for oom_score_adj 906\x0a   Free memory is 95152kB above reserved
+[  189.646156] lowmemorykiller: Killing 'Jit thread pool' (3435), adj 906,\x0a   to free 9592kB on behalf of 'Binder:2715_5' (2862) because\x0a   cache 25764kB is below limit 105536kB for oom_score_adj 906\x0a   Free memory is 93432kB above reserved
+[  189.658496] binder_alloc: 3429: binder_alloc_buf, no vma
+[  189.659575] binder: 2715:2862 transaction failed 29189/-3, size 76-0 line 3124
+[  189.699724] lowmemorykiller: Killing 'id.printspooler' (3133), adj 904,\x0a   to free 9188kB on behalf of 'kswapd0' (529) because\x0a   cache 37412kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 74516kB above reserved
+[  189.714566] lowmemorykiller: Killing 'ndroid.keychain' (3233), adj 904,\x0a   to free 9036kB on behalf of 'kswapd0' (529) because\x0a   cache 36120kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 74852kB above reserved
+[  189.723235] lowmemorykiller: Killing 'HeapTaskDaemon' (3244), adj 904,\x0a   to free 13820kB on behalf of 'kswapd0' (529) because\x0a   cache 36120kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 72752kB above reserved
+[  189.727840] lowmemorykiller: Killing 'viders.calendar' (3372), adj 902,\x0a   to free 9936kB on behalf of 'kswapd0' (529) because\x0a   cache 36120kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 72572kB above reserved
+[  189.738042] lowmemorykiller: Killing 'id.ext.services' (3686), adj 902,\x0a   to free 9104kB on behalf of 'kswapd0' (529) because\x0a   cache 31180kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 80596kB above reserved
+[  189.747038] lowmemorykiller: Killing 'HeapTaskDaemon' (3697), adj 906,\x0a   to free 11928kB on behalf of 'kswapd0' (529) because\x0a   cache 31484kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 78560kB above reserved
+[  189.753302] lowmemorykiller: Killing 'droid.gallery3d' (3596), adj 902,\x0a   to free 9320kB on behalf of 'kswapd0' (529) because\x0a   cache 32396kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 78948kB above reserved
+[  189.761553] lowmemorykiller: Killing 'id.defcontainer' (3759), adj 900,\x0a   to free 9316kB on behalf of 'kswapd0' (529) because\x0a   cache 32624kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 80724kB above reserved
+[  193.801574] ieee80211 phy0: hwsim hw_scan request
+[  193.801740] ieee80211 phy0: hw scan 2412 MHz
+[  193.830087] ieee80211 phy0: hw scan 2417 MHz
+[  193.860122] ieee80211 phy0: hw scan 2422 MHz
+[  193.890101] ieee80211 phy0: hw scan 2427 MHz
+[  193.920078] ieee80211 phy0: hw scan 2432 MHz
+[  193.950152] ieee80211 phy0: hw scan 2437 MHz
+[  193.980066] ieee80211 phy0: hw scan 2442 MHz
+[  194.020069] ieee80211 phy0: hw scan 2447 MHz
+[  194.050066] ieee80211 phy0: hw scan 2452 MHz
+[  194.080066] ieee80211 phy0: hw scan 2457 MHz
+[  194.110063] ieee80211 phy0: hw scan 2462 MHz
+[  194.140077] ieee80211 phy0: hw scan 2467 MHz
+[  194.260095] ieee80211 phy0: hw scan 2472 MHz
+[  194.390065] ieee80211 phy0: hw scan 2484 MHz
+[  194.520084] ieee80211 phy0: hw scan complete
+[  194.520121] ieee80211 phy0: hwsim hw_scan request
+[  194.520123] ieee80211 phy0: hw scan 5180 MHz
+[  194.650106] ieee80211 phy0: hw scan 5200 MHz
+[  194.770078] ieee80211 phy0: hw scan 5220 MHz
+[  194.890082] ieee80211 phy0: hw scan 5240 MHz
+[  195.010142] ieee80211 phy0: hw scan 5260 MHz
+[  195.130095] ieee80211 phy0: hw scan 5280 MHz
+[  195.250091] ieee80211 phy0: hw scan 5300 MHz
+[  195.370100] ieee80211 phy0: hw scan 5320 MHz
+[  195.490098] ieee80211 phy0: hw scan 5500 MHz
+[  195.610097] ieee80211 phy0: hw scan 5520 MHz
+[  195.730140] ieee80211 phy0: hw scan 5540 MHz
+[  195.850139] ieee80211 phy0: hw scan 5560 MHz
+[  195.970105] ieee80211 phy0: hw scan 5580 MHz
+[  196.090073] ieee80211 phy0: hw scan 5600 MHz
+[  196.210098] ieee80211 phy0: hw scan 5620 MHz
+[  196.330088] ieee80211 phy0: hw scan 5640 MHz
+[  196.450089] ieee80211 phy0: hw scan 5660 MHz
+[  196.570107] ieee80211 phy0: hw scan 5680 MHz
+[  196.690086] ieee80211 phy0: hw scan 5700 MHz
+[  196.810099] ieee80211 phy0: hw scan complete
+[  196.810144] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  196.813198] ieee80211 phy0: mac80211_hwsim_get_survey (idx=0)
+[  196.910104] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  199.379575] lowmemorykiller: Killing 'd.process.acore' (3386), adj 900,\x0a   to free 13908kB on behalf of 'kswapd0' (529) because\x0a   cache 30176kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 85196kB above reserved
+[  206.943854] init: processing action (qemu.adbd=start)
+[  206.944925] init: processing action (sys.usb.config=adb && sys.usb.configfs=0)
+[  206.946353] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  206.948292] init: write_file: Unable to open '/sys/class/android_usb/android0/idVendor': No such file or directory
+[  206.950500] init: write_file: Unable to open '/sys/class/android_usb/android0/idProduct': No such file or directory
+[  206.952541] init: write_file: Unable to open '/sys/class/android_usb/android0/functions': No such file or directory
+[  206.954698] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  210.159133] lowmemorykiller: Killing 'putmethod.latin' (2813), adj 200,\x0a   to free 10980kB on behalf of 'kswapd0' (529) because\x0a   cache 16892kB is below limit 49184kB for oom_score_adj 100\x0a   Free memory is 49104kB above reserved
+[  210.163897] lowmemorykiller: Killing 'Jit thread pool' (2818), adj 200,\x0a   to free 11128kB on behalf of 'kswapd0' (529) because\x0a   cache 16892kB is below limit 49184kB for oom_score_adj 100\x0a   Free memory is 48984kB above reserved
+[  210.221445] lowmemorykiller: Killing '.android.dialer' (3054), adj 100,\x0a   to free 10112kB on behalf of 'kswapd0' (529) because\x0a   cache 20456kB is below limit 49184kB for oom_score_adj 100\x0a   Free memory is 47788kB above reserved
+[  210.240649] binder: 2715:2715 transaction failed 29189/-22, size 100-0 line 3001
+[  214.528139] lowmemorykiller: Killing 'd.process.acore' (3925), adj 700,\x0a   to free 13276kB on behalf of 'kswapd0' (529) because\x0a   cache 8496kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 67828kB above reserved
+[  214.533409] lowmemorykiller: Killing 'Jit thread pool' (3930), adj 700,\x0a   to free 14340kB on behalf of 'kswapd0' (529) because\x0a   cache 8496kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 66688kB above reserved
+[  214.627608] lowmemorykiller: Killing 'putmethod.latin' (3905), adj 200,\x0a   to free 12020kB on behalf of 'kswapd0' (529) because\x0a   cache 11700kB is below limit 60456kB for oom_score_adj 200\x0a   Free memory is 59212kB above reserved
+[  214.685378] binder: 2715:2715 transaction failed 29189/-22, size 100-0 line 3001
+[  220.974321] lowmemorykiller: Killing 'd.process.acore' (3968), adj 700,\x0a   to free 13172kB on behalf of 'kswapd0' (529) because\x0a   cache 19924kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 60572kB above reserved
+[  220.979643] lowmemorykiller: Killing 'Jit thread pool' (3973), adj 700,\x0a   to free 13180kB on behalf of 'kswapd0' (529) because\x0a   cache 20152kB is below limit 60456kB for oom_score_adj 200\x0a   Free memory is 59492kB above reserved
+[  227.120095] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  227.220203] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  236.614616] lowmemorykiller: Killing 'putmethod.latin' (3948), adj 200,\x0a   to free 10764kB on behalf of 'kswapd0' (529) because\x0a   cache 8068kB is below limit 60456kB for oom_score_adj 200\x0a   Free memory is 59628kB above reserved
+[  236.619284] lowmemorykiller: Killing 'Signal Catcher' (3954), adj 200,\x0a   to free 10784kB on behalf of 'kswapd0' (529) because\x0a   cache 8408kB is below limit 60456kB for oom_score_adj 200\x0a   Free memory is 59268kB above reserved
+[  236.684144] binder: 2715:2715 transaction failed 29189/-22, size 100-0 line 3001
+[  236.828179] lowmemorykiller: Killing 's.app.data.test' (3848), adj 0,\x0a   to free 213472kB on behalf of 'kswapd0' (529) because\x0a   cache 36548kB is below limit 37916kB for oom_score_adj 0\x0a   Free memory is 33912kB above reserved
+[  241.898736] healthd: battery l=100 v=5000 t=25.0 h=2 st=2 chg=a
+[  248.372268] init: Untracked pid 3804 killed by signal 1

@@ -1,0 +1,52 @@
+{
+  "phase": "RED",
+  "baseline_commit": "5e12e2b632dd31ce7c3d451664387cf08dc4c659",
+  "tested_checkpoint_commit": "c8458bc063db0deaddd6dbeaacf3959fc8b05349",
+  "production_unmodified": true,
+  "exit_code": 1,
+  "scope": "Only the two requested MeasuredConsumptionStoreTest cases; no complete data/App/native run.",
+  "command": "source /workspace/scratch/ansm-tools/gradle-env.sh; ./gradlew --no-daemon -Dorg.gradle.jvmargs=-Xmx1536m -Pkotlin.compiler.execution.strategy=in-process --max-workers=1 --console=plain -ProbolectricDir=/workspace/HRT-Log-p4-attribution/build/robolectric-jars :core:data:testDebugUnitTest --tests '*MeasuredConsumptionStoreTest.pureChainContentMemoNeverCachesDatabaseValidity' --tests '*MeasuredConsumptionStoreTest.indexedRestoreCancellationAndResourceFaultsPreserveTargetAndEpoch'",
+  "suite": {
+    "name": "net.plainnotes.app.data.MeasuredConsumptionStoreTest",
+    "tests": "2",
+    "skipped": "0",
+    "failures": "2",
+    "errors": "0",
+    "timestamp": "2026-10-21T08:07:46.380Z",
+    "hostname": "4f13d57d08c1",
+    "time": "8.2"
+  },
+  "cases": [
+    {
+      "name": "indexedRestoreCancellationAndResourceFaultsPreserveTargetAndEpoch",
+      "failures": [
+        {
+          "message": "java.lang.AssertionError: Cancelled restore at ROWS_DELETED must release candidate plaintext (entries, reserved bytes, lifetime cleared) expected:<(0, 0, true)> but was:<(1, 3634, false)>",
+          "type": "java.lang.AssertionError"
+        }
+      ]
+    },
+    {
+      "name": "pureChainContentMemoNeverCachesDatabaseValidity",
+      "failures": [
+        {
+          "message": "java.lang.AssertionError: Failed current-chain read must clear its content memo (entries, reserved bytes, lifetime cleared) expected:<(0, 0, true)> but was:<(1, 1130, false)>",
+          "type": "java.lang.AssertionError"
+        }
+      ]
+    }
+  ],
+  "source_sha256": {
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredOperationChain.kt": "f7fba8dad03b36bb2d6acb4458106b428b0428e22b37f0e15511a994cb23c76d",
+    "core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt": "35ce7df2503100f85e3732d2d253d2d6a8216a6072d409aa75024d189271991e",
+    "core/data/src/historyTest/java/net/plainnotes/app/data/ChainContentMemoOracle.kt": "887787f46808ee0bc02cca3376f7eee02ea43b0049f9e8181c80623baabfa136",
+    "core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt": "21c77b66495f42c39ab7f9d591705bed9d68e58377d84d9ea9f28c95393f95d0"
+  },
+  "frozen_chain_sha256": "2c4a81558fc75449d33edb0984989ce319fb91ad5d7fd417447deef5d644fe31",
+  "evidence_sha256": {
+    "java-version.log": "1008439d21b69ca73715cf1671d96fe68f1e9587b91e43b6a2a74c1e84cf9fbe",
+    "gradle.log": "f54523796a9bf93ef57d31f1eb817e1286eae58ae2cb60e10a6aed0ca20fe743",
+    "TEST-net.plainnotes.app.data.MeasuredConsumptionStoreTest.xml": "e3750ab70c401ef7e90a4a3817781f744dcd1ecabfe77a14d60abc061dbe90c5"
+  },
+  "interpretation": "Both failures are the new content-memo cleanup assertion against unchanged production. Chain identical-OOME and cursor-close checks precede its failed assertion. Restore original type/message and invariant assertions remain; no coroutine exception-identity requirement."
+}
