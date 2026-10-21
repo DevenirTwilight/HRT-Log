@@ -1,13 +1,13 @@
 {
   "source": "f420fbf1c4fec4b989f2694fd85e0b6b59dbbfc2",
   "mainline": "4ec11437acb257ecc0e9c92ed59907d954cbacae",
-  "status": "MERGE_READY",
+  "status": "MERGED",
   "entry": "OFF",
   "policy": "NONBLOCKING_WRITES_LATENCY_OBSERVATIONAL",
   "tool_tests": 219,
   "tool_status": "PASS",
   "heap_probe_android_compile": "PASS",
-  "native_actual_heap_contract": "192MiB assertion before existing suites; verification in progress",
+  "native_actual_heap_contract": "API26/29/35 real process 192MiB preflight PASS",
   "android_ci": 39653018592,
   "science_ci": 39653023713,
   "previous_ci_failure": {
@@ -93,7 +93,7 @@
   "scope_of_skip_counts": "listed exactly; action-driven/manual probes are not claimed as ordinarily executed",
   "ordinary_write": "LEGACY5S_FAIL_RETAINED_OBSERVATIONAL",
   "formal_entry": "OFF",
-  "merge": "NOT_PERFORMED",
+  "merge": "PROTECTED_MERGE_COMPLETED",
   "protected_native": {
     "api26": [
       335,
@@ -137,5 +137,12 @@
     "skipped": 0
   },
   "physical_phone": "NOT_RUN",
-  "talkback_manual": "NOT_RUN"
+  "talkback_manual": "NOT_RUN",
+  "merge_commit": "b04358fdb1c79f04136afdf46865e9941c980deb",
+  "merged_at": "2026-10-21T19:54:16Z",
+  "merge_authorization": "Owner explicitly instructed merge after final protected checks passed",
+  "post_merge_ci": {
+    "run": 39665680148,
+    "status": "QUEUED_AT_RECORDING"
+  }
 }

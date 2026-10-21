@@ -1,3 +1,11 @@
+## PR #57 已完成受保护合并 — 2026-10-21
+
+负责人明确指示“合并”后，复核最终源 `f420fbf1c4fec4b989f2694fd85e0b6b59dbbfc2` 为 Ready/CLEAN/MERGEABLE，六项必需检查全部通过、无未解决讨论，使用匹配 HEAD 的普通 merge 完成；未使用 admin、force push 或绕过保护。
+
+实际合并提交：`b04358fdb1c79f04136afdf46865e9941c980deb`，时间 `2026-10-21T19:54:16Z`，默认分支 `claude/new-session-1959qb`。合并后 Android/domain run `39665680148` 记录时 QUEUED；合并前通过与合并后运行明确区分。原失败和未实测项目全部保留。
+
+正式入口仍 OFF，P5/P6 未启用；没有签名、交付 APK 或发布 Release。原 5 秒失败作为历史及独立指标保留，非阻塞产品策略不豁免恢复安全。真机及人工 TalkBack 仍 NOT_RUN。
+
 # P4 合并准入结论（2026-10-21）
 
 **MERGE_READY。** PR #57 已转 Ready；GitHub 实际状态 `CLEAN / MERGEABLE`、检查汇总 `SUCCESS`、六项必需检查全部通过、零未解决审查讨论。没有自动合并、发布或开启正式入口。
