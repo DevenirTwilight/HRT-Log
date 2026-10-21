@@ -1,6 +1,12 @@
+## P4 App完整回归结束：1562 PASS/277既有SKIP，Period5 PASS — 2026-10-21
+
+主树Gradle session55570已实际BUILD SUCCESSFUL（22m50s），源55fc生产。App1839=1562 PASS+277既有SKIP/0FAIL/0ERROR，PeriodStability5/0SKIP，四语合同包含在本组；原XML/逐suite计数/SHA/完整log已入库resumed-verification/app-before-exit-cleanup/。同组data495、提醒21、生成Android编译均PASS。不要把277 SKIP计PASS，也不把本组冒充后续资源退出修正源码的全量CI。
+
+接下来隔离资源组纠正RED/最小GREEN完成后接入主树（当前root已无运行构建），再跑最新完整data/Android和必要工具，冻结源触发新候选有界原生与必需CI。旧失败/旧恢复两个run均保留不重跑，正式入口OFF、Draft不合并发布。
+
 ## P4 资源失败首组证据已保存：chain有效RED，restore测试断言修正 — 2026-10-21
 
-从隔离树接入c8458bc0（只测试/证据，无生产改动），即刻推送。初始两个目标日志/XML及原始tests.patch在full-audit-reuse/resource-failure/initial-coro-identity/：chain在模拟OOME后已证同一错误对象逃逸、cursor关闭，随后清理断言实际FAIL（entries1/bytes1130/token非null），属于有效RED。restore首轮被额外assertSame拦截；协程可复制异常对象，身份不是原业务要求，已仅撤回此额外断言，保留原type/message/全数据/epoch/FK/oracle合同，原失败不覆盖。纠正RED正在隔离session95150执行，尚无GREEN或新生产修改。
+从隔离树接入c8458bc0（只测试/证据，无生产改动），即刻推送。初始两个目标日志/XML及原始tests.patch在full-audit-reuse/resource-failure/red/initial-coro-identity/：chain在模拟OOME后已证同一错误对象逃逸、cursor关闭，随后清理断言实际FAIL（entries1/bytes1130/token非null），属于有效RED。restore首轮被额外assertSame拦截；协程可复制异常对象，身份不是原业务要求，已仅撤回此额外断言，保留原type/message/全数据/epoch/FK/oracle合同，原失败不覆盖。纠正RED正在隔离session95150执行，尚无GREEN或新生产修改。
 
 主App session55570仍运行；不要把测试源码checkpoint当App已完成或P4完成。生产仍55fc；#57 Draft/OFF，无新原生、无合并发布。
 
