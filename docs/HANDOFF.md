@@ -1,3 +1,9 @@
+## f13技术验收全部通过，最终正常提交清除受保护CI的跳过状态 — 2026-10-21
+
+39653018592 Android/JVM/26/29/35全部SUCCESS，39653023713 Science gate/deep全部SUCCESS。三API真实192MiB进程前置探针通过；26/29各335合同0fail/0skip，35完整data407列项0fail/5个显式host探针skip、App282列项0fail/10个既有action探针skip，另有严格host调用验证；三API的两个writer OS-kill合同均精确数据/新PID/完整oracle/无重放PASS。详情technical-verification-f13.json，官方原ZIP/SHA/CRC与日志实时保存到独立evidence/p4-admission-4a67e96e分支，不以改写旧FAIL获取绿灯。
+
+最后核对发现[skip ci]提交留下两项QUEUED自动check suite，手动suite虽成功但PR statusCheckRollup=null且BLOCKED。短暂Ready核对后已恢复Draft；不伪造status或绕保护。此普通、无skip标记的最终文档提交让既有自动CI真正覆盖最新HEAD；生产代码完全不变。保留正常workflow全部检查，不修改其断言或5秒指标政策，不重跑性能大库。正常受保护CI全部通过且无冲突/未解决讨论后才转Ready，不自动合并/发布，入口仍OFF。
+
 ## 最终CI发现真实环境漂移：API29实际16MiB导致Argon2 OOM — 2026-10-21
 
 4a67e96e的run39651425834/API29失败，first OOM明确growth_limit16777216B/Argon2Block1040B；32MiB KDF无法容纳在16MiB，不能把它混为原192MiB恢复LMK已复发。原完整日志与官方ZIP12369333065/SHA c348e28b…fd32a8/CRC存独立证据分支，原FAIL保留；其他有效job继续，不取消以掩盖失败。
