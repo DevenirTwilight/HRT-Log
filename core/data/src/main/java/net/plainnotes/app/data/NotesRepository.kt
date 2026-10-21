@@ -21,20 +21,25 @@ const val BACKFILL_MAX_DAYS=731L
     val space get() = pinned ?: access.current
     fun select(space: Space) = access.select(space)
     private fun db() = access.get(space)
-    suspend fun <T> transaction(block: suspend (NotesDao) -> T): T = withContext(Dispatchers.IO) {
-        val db=db();db.withTransaction { block(db.dao()) }
+    internal val measuredSaveGate get()=access.measuredSaveGate
+    suspend fun <T> transaction(block: suspend (NotesDao) -> T): T {
+        val target=space
+        return measuredSaveGate.mutation(target) {withContext(Dispatchers.IO) {
+            val database=access.get(target);database.withTransaction {block(database.dao())}
+        }}
     }
     /** Capture the database once: changing the selected space cannot redirect a suspended reference transaction. */
-    private suspend fun <T> transactionWithSql(required: Space? = null, block: suspend (NotesDao, androidx.sqlite.db.SupportSQLiteDatabase) -> T): T {
+    private suspend fun <T> transactionWithSql(required: Space? = null, mutation:Boolean=true, block: suspend (NotesDao, androidx.sqlite.db.SupportSQLiteDatabase) -> T): T {
         val target=space
         if(required!=null && target!=required) throw ReferenceFailure(ReferenceError.WRONG_SPACE)
-        return withContext(Dispatchers.IO) {
+        val action:suspend()->T={withContext(Dispatchers.IO) {
             val database=access.get(target)
-            database.withTransaction { block(database.dao(),database.openHelper.writableDatabase) }
-        }
+            database.withTransaction {block(database.dao(),database.openHelper.writableDatabase)}
+        }}
+        return if(mutation)measuredSaveGate.mutation(target,action) else action()
     }
     /** Offline scan over immutable user-entered snapshots; bounded results, no product/name coalescing. */
-    suspend fun savedReferenceProducts(query:String="",form:String="",route:String="",strength:String=""):SavedReferencePage = transactionWithSql(Space.PRIMARY) { _,raw ->
+    suspend fun savedReferenceProducts(query:String="",form:String="",route:String="",strength:String=""):SavedReferencePage = transactionWithSql(Space.PRIMARY, mutation=false) { _,raw ->
         require(listOf(query,form,route,strength).all {it.length<=256})
         val entries=mutableListOf<SavedReferenceProduct>()
         var limited=false
@@ -50,15 +55,15 @@ const val BACKFILL_MAX_DAYS=731L
         }
         SavedReferencePage(entries.toList(),limited)
     }
-    suspend fun referencePreviewEpoch():String = transactionWithSql(Space.PRIMARY) { _,raw -> ReferenceStore.previewEpoch(raw) }
+    suspend fun referencePreviewEpoch():String = transactionWithSql(Space.PRIMARY, mutation=false) { _,raw -> ReferenceStore.previewEpoch(raw) }
     /** The caller's epoch was captured with its displayed record list, before any asynchronous restore or ID reuse. */
-    suspend fun recordedReferenceHistory(expectedEpoch:String,record:Long):RecordedReferenceHistory = transactionWithSql(Space.PRIMARY) { dao,raw ->
+    suspend fun recordedReferenceHistory(expectedEpoch:String,record:Long):RecordedReferenceHistory = transactionWithSql(Space.PRIMARY, mutation=false) { dao,raw ->
         if(ReferenceStore.previewEpoch(raw)!=expectedEpoch)throw ReferenceFailure(ReferenceError.STALE_SCOPE)
         val stored=dao.recordById(record) ?: throw ReferenceFailure(ReferenceError.UNKNOWN_IDENTITY)
         val scope=ReferenceStore.existingScope(raw)
         RecordedReferenceHistory(stored.revision,scope?.let{ReferenceStore.recordContexts(raw,it,record)} ?: emptyList())
     }
-    suspend fun medicationReferenceState(medication: Long): MedicationReferenceState = transactionWithSql(Space.PRIMARY) { _, raw ->
+    suspend fun medicationReferenceState(medication: Long): MedicationReferenceState = transactionWithSql(Space.PRIMARY, mutation=false) { _, raw ->
         val scope=ReferenceStore.existingScope(raw)
         MedicationReferenceState(scope,scope?.let {ReferenceStore.current(raw,it,medication)},ReferenceStore.previewEpoch(raw))
     }
@@ -66,47 +71,48 @@ const val BACKFILL_MAX_DAYS=731L
         ReferenceStore.initialAssociation(raw,medication,operationUuid,product,expectedPreviewEpoch)
     }
     suspend fun referenceScope(): ReferenceScope = transactionWithSql(Space.PRIMARY) { _, raw -> ReferenceStore.scope(raw) }
-    suspend fun medicationReference(scope: ReferenceScope, medication: Long): MedicationReference? = transactionWithSql(Space.PRIMARY) { _, raw ->
+    suspend fun medicationReference(scope: ReferenceScope, medication: Long): MedicationReference? = transactionWithSql(Space.PRIMARY, mutation=false) { _, raw ->
         ReferenceStore.current(raw,scope,medication)
     }
-    suspend fun recordReferenceContexts(scope: ReferenceScope, record: Long): List<RecordReferenceContext> = transactionWithSql(Space.PRIMARY) { _, raw ->
+    suspend fun recordReferenceContexts(scope: ReferenceScope, record: Long): List<RecordReferenceContext> = transactionWithSql(Space.PRIMARY, mutation=false) { _, raw ->
         ReferenceStore.recordContexts(raw,scope,record)
     }
     suspend fun associateMedication(scope: ReferenceScope, medication: Long, expectedRevision: Int, operationUuid: String, product: UserReferenceProduct?): MedicationReference = transactionWithSql(Space.PRIMARY) { _, raw ->
         ReferenceStore.associate(raw,scope,medication,expectedRevision,operationUuid,product)
     }
     // Internal production integration; UI activation waits for shared forecast admission.
-    internal suspend fun measuredWriteTicket(scope:ReferenceScope,medication:Long,record:Long?=null):MeasuredWriteTicket = transactionWithSql(Space.PRIMARY) { _,raw ->
+    internal suspend fun measuredWriteTicket(scope:ReferenceScope,medication:Long,record:Long?=null):MeasuredWriteTicket = transactionWithSql(Space.PRIMARY, mutation=false) { _,raw ->
         MeasuredUseIntegration.ticket(raw,scope,medication,record)
     }
     internal suspend fun recordMeasuredUse(ticket:MeasuredWriteTicket,operationUuid:String,draft:MeasuredActualUseDraft,created:Instant=Instant.now(),checkpoint:(ActualUseCheckpoint)->Unit={}):RecordedMeasuredUse {
         val target=space
         if(target!=Space.PRIMARY)throw ReferenceFailure(ReferenceError.WRONG_SPACE)
         val frozenDraft=draft.copy(uses=draft.uses.toList())
-        return withContext(Dispatchers.IO) {val database=access.get(target);database.withTransaction {
+        return measuredSaveGate.mutation(target) {withContext(Dispatchers.IO) {val database=access.get(target);database.withTransaction {
             MeasuredUseIntegration.create(database,ticket,operationUuid,frozenDraft,created,checkpoint)
-        }}
+        }}}
     }
-    private suspend fun <T> measuredTransaction(block:suspend(NotesDatabase)->T):T {
+    private suspend fun <T> measuredTransaction(mutation:Boolean=true,block:suspend(NotesDatabase)->T):T {
         val target=space
         if(target!=Space.PRIMARY)throw ReferenceFailure(ReferenceError.WRONG_SPACE)
-        return withContext(Dispatchers.IO){val database=access.get(target);database.withTransaction{block(database)}}
+        val action:suspend()->T={withContext(Dispatchers.IO){val database=access.get(target);database.withTransaction{block(database)}}}
+        return if(mutation)measuredSaveGate.mutation(target,action) else action()
     }
     /** Internal until the runtime owner/conflict gateway is reviewed. No UI entry is enabled. */
     internal suspend fun prepareMeasuredActualUse(scope:ReferenceScope,medication:Long,operationUuid:String,
         draft:MeasuredActualUseDraft,created:Instant):PreparedMeasuredCreate {
         val frozen=draft.copy(uses=draft.uses.toList())
-        return measuredTransaction{MeasuredUseIntegration.prepareCreate(it,scope,medication,operationUuid,frozen,created)}
+        return measuredTransaction(mutation=false){MeasuredUseIntegration.prepareCreate(it,scope,medication,operationUuid,frozen,created)}
     }
     internal suspend fun observeMeasuredActualUse(expected:PreparedMeasuredCreate):MeasuredCreateObservation =
-        transactionWithSql(Space.PRIMARY){_,raw->MeasuredUseIntegration.observeCreate(raw,expected)}
+        transactionWithSql(Space.PRIMARY, mutation=false){_,raw->MeasuredUseIntegration.observeCreate(raw,expected)}
     private suspend fun currentMeasuredSlot(dao:NotesDao,slot:Slot,now:Instant):Slot {
         val entry=timeline(dao,now,slot.at.minusMillis(1),slot.at.plusMillis(1),slot.zone).singleOrNull{it.slot.key==slot.key}
             ?: throw ReferenceFailure(ReferenceError.STALE_REVISION)
         if(entry.slot!=slot || slot.skipped || entry.state in setOf(SlotState.ON_TIME,SlotState.LATE,SlotState.SKIPPED))throw ReferenceFailure(ReferenceError.STALE_REVISION)
         return entry.slot
     }
-    internal suspend fun measuredScheduledTicket(scope:ReferenceScope,slot:Slot,now:Instant=Instant.now()):MeasuredScheduledTicket = measuredTransaction { database ->
+    internal suspend fun measuredScheduledTicket(scope:ReferenceScope,slot:Slot,now:Instant=Instant.now()):MeasuredScheduledTicket = measuredTransaction(mutation=false) { database ->
         val raw=database.openHelper.writableDatabase
         MeasuredUseIntegration.ticket(raw,scope,slot.medicationId) // Scope/owner before any integer slot lookup.
         currentMeasuredSlot(database.dao(),slot,now)
@@ -768,8 +774,11 @@ const val BACKFILL_MAX_DAYS=731L
     suspend fun records()=withContext(Dispatchers.IO){db().dao().records()}
 
     // --- Import / backup / wipe ---
-    suspend fun importTransMemo(plan:net.plainnotes.app.importer.TransMemo.Plan,overwrite:Boolean,zone:ZoneId=ZoneId.systemDefault())=withContext(Dispatchers.IO) {
-        val db=db();db.withTransaction { TransMemoWriter.write(db.dao(),db.openHelper.writableDatabase,plan,overwrite,zone) }
+    suspend fun importTransMemo(plan:net.plainnotes.app.importer.TransMemo.Plan,overwrite:Boolean,zone:ZoneId=ZoneId.systemDefault()):ImportSummary {
+        val target=space
+        return measuredSaveGate.mutation(target){withContext(Dispatchers.IO) {
+            val database=access.get(target);database.withTransaction {TransMemoWriter.write(database.dao(),database.openHelper.writableDatabase,plan,overwrite,zone)}
+        }}
     }
     suspend fun importHrtTracker(plan:net.plainnotes.app.importer.HrtTracker.Plan,targets:Map<net.plainnotes.app.importer.HrtTracker.Group,Long?>,
                                  names:Map<net.plainnotes.app.importer.HrtTracker.Group,String>,weightKg:Double?,zone:ZoneId=ZoneId.systemDefault())=transaction { dao ->
@@ -819,7 +828,7 @@ const val BACKFILL_MAX_DAYS=731L
         if(target!=Space.PRIMARY)throw ReferenceFailure(ReferenceError.WRONG_SPACE)
         restoreBackupTo(target,data,password,today,expectedEpoch,checkpoint)
     }
-    private suspend fun restoreBackupTo(target:Space,data:ByteArray,password:CharArray,today:LocalDate,measuredEpoch:String?,checkpoint:(RestoreCheckpoint)->Unit = {})=withContext(Dispatchers.IO) {
+    private suspend fun restoreBackupTo(target:Space,data:ByteArray,password:CharArray,today:LocalDate,measuredEpoch:String?,checkpoint:(RestoreCheckpoint)->Unit = {})=measuredSaveGate.mutation(target){withContext(Dispatchers.IO) {
         try {
             val restoreContext=kotlin.coroutines.coroutineContext
             val checkRestoreActive:()->Unit={restoreContext.ensureActive()}
@@ -852,7 +861,7 @@ const val BACKFILL_MAX_DAYS=731L
             // Staging and destination audits may retain replacement plaintext in the pure codec.
             MeasuredOperationChain.clearPureInputMemo()
         }
-    }
+    }}
     /** Irreversibly deletes the database, its key file and Keystore key. */
     fun destroyAll()=access.destroy(space)
     fun destroy(space: Space)=access.destroy(space)
@@ -993,7 +1002,7 @@ const val BACKFILL_MAX_DAYS=731L
     }
     suspend fun stockDemand(now:Instant=Instant.now(),zone:ZoneId=ZoneId.systemDefault())=transaction { dao ->stockDemandFrom(dao,now,zone)}
     /** One captured SQL transaction; integer quanta never enter the legacy scalar forecast. */
-    suspend fun stockForecasts(now:Instant=Instant.now(),zone:ZoneId=ZoneId.systemDefault())=transactionWithSql { dao,raw ->
+    suspend fun stockForecasts(now:Instant=Instant.now(),zone:ZoneId=ZoneId.systemDefault())=transactionWithSql(mutation=false) { dao,raw ->
         val meds=dao.medications();val containers=dao.containers();val demand=stockDemandFrom(dao,now,zone)
         val forecasts=StockForecasts.forecastAll(meds,containers,demand)
         val modern=containers.any{it.inventory_encoding!=InventoryEncoding.LEGACY} || raw.query("SELECT 1 FROM measured_operation LIMIT 1").use{it.moveToFirst()}

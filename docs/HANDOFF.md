@@ -1,3 +1,9 @@
+## 运行owner/后端冲突门已编码，安全合同待验 — 2026-10-21
+
+接手c2fffbb0后不恢复性能任务。新增MeasuredSaveCoordinator（进程SupervisorJob/IO、仅独立实际用药、opaque原确认、同UUID/完整输入复用、根事务返回后SUCCESS、writer结束后只读核对、不存在/异常保留MANUAL_CHECK不重放）与同DatabaseAccess共享的MeasuredSaveGate。后端generic/SQL/measured事务、TransMemo导入、恢复、close/destroy已接协调；读接口分离，PRIMARY与DECOY不混投，无队列/持久token。无App运行调用，UI不改，入口OFF。
+
+首轮未接完Repository property的编译失败已留本地log；接完后compileDebugKotlin PASS。随后只修正ImportSummary返回类型保持旧公开合同，**当前尚未做针对性/完整回归或最终编译**。正在编写实际Repository的提交/结果丢失/取消/全冲突/外层事务等反例。最新代码不是P4准入，也不是原514项覆盖；须通过新合同后再完整数据/App编译，原5秒/LMK/CI阻塞保持。手工核对尚未确认的任务保守持有冲突门，不提供虚假的失败/自动重试；UI绑定及正式政策仍未生效。
+
 ## 本地旧会话已对齐最新远端，旧跑分计划未启动 — 2026-10-21
 
 已核GitHub #57当前c2fffbb0、主线320171cd、Draft/auto_merge=null，快进接手最新非阻塞方案。此前本地f220候选的旧完整data495/原生编译和旧App/Period/提醒结果已结束，仅作为ARCHIVE_ONLY_NOT_APPLIED_SUPERSEDED归档`nonblocking-transition/takeover-old-wip/f220-finished-checks/`，含原始XML/日志、初始绑定编译错误、SHA及旧WIP差异；不覆盖ae7688da的514项，也不冒充当前native/CI。旧本地差异stash保留未应用，原目录未reset；没有启动新原生或恢复已取消§125计划。
