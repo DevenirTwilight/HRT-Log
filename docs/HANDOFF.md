@@ -1,3 +1,9 @@
+## P4 资源退出两项有效RED均已实证并推送 — 2026-10-21
+
+隔离树纠正后的RED0c32a87f已正常接入。证据full-audit-reuse/resource-failure/red/corrected/（按实际目录查看）显示两个真实目标均执行并失败：chain模拟OOME后cache=(1项,1130B,token非null)；restore取消ROWS_DELETED后cache=(1项,3634B,token非null)。这些B是保留预算估值，不是RSS/实际LMK证据。原生产两个文件与5e基线相同，错误类型/消息、原数据/epoch/FK/oracle断言均保留；RED停在新清理断言，不谎称后续断言已执行。首轮额外协程identity的harness错误保留在red/initial-coro-identity/。
+
+主App已结束、源55fc的495/21/1562PASS+277SKIP/Period5/生成Android编译证据已保存。隔离代理现在只实现chain异常清理/restore finally释放，目标GREEN尚待验证；完成接入后root跑最终data/Android，最终必需CI覆盖新源码。当前无运行主树Gradle、无新原生。Draft/OFF，不合并发布。
+
 ## P4 App完整回归结束：1562 PASS/277既有SKIP，Period5 PASS — 2026-10-21
 
 主树Gradle session55570已实际BUILD SUCCESSFUL（22m50s），源55fc生产。App1839=1562 PASS+277既有SKIP/0FAIL/0ERROR，PeriodStability5/0SKIP，四语合同包含在本组；原XML/逐suite计数/SHA/完整log已入库resumed-verification/app-before-exit-cleanup/。同组data495、提醒21、生成Android编译均PASS。不要把277 SKIP计PASS，也不把本组冒充后续资源退出修正源码的全量CI。
