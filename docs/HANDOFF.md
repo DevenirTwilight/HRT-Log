@@ -1,3 +1,11 @@
+## 【当前交付完成／等待政策批准】P4停止性能攻关 — 2026-10-21
+
+方向冻结提交3e5d5526、在途工作归档b5cf998f均已正常推送；PR #57标题与产品决策正文已更新，Draft/OFF/autoMerge=null。非阻塞产品与最小后端合同在nonblocking-transition/proposal.md，交付清单delivery.json；旧5秒硬断言未改、FAIL未重标，详细政策尚待负责人批准。停止后只改docs和WIP证据，没有新生产实现/UI/队列/WorkManager/Schema/加密或新的大库/native。
+
+已有在途两目标GREEN2 PASS已收齐并以patch/XML/log/SHA保存；补丁不应用、不推广，原隔离工作树内容保留。root无运行Gradle或原生任务，最后原生仍39555630970（旧小型进程终止合同），不再派发。档案SHA、仅文档diff、自有生成文件清理已只读核验；最后文档HEAD未跑CI，不称六门通过。
+
+本轮到此结束：下一工作必须先明确批准非阻塞验收政策及后端/UI合同，不能恢复下方任何旧微优化/完整回归/原生攻关计划。恢复LMK/稳定性仍独立BLOCKED，应用级状态owner与安全结果resolver/UI尚未实现，P4不能合并发布。现有安全审计/事务/票据/加密措施保留，旧工作和失败证据不删除。
+
 ## 【冻结交付】非阻塞验收提案已保存，在途修正归档后停止 — 2026-10-21
 
 负责人最新方向已记录REQUIREMENTS126及nonblocking-transition/proposal.md；所有旧“再跑完整/原生/继续优化”计划作废。本轮无新大库/原生调度、没有实施后台队列/协调器/UI，也没有修改5秒硬断言。新验收政策仍待批准，旧FAIL保持FAIL。PR #57仍Draft/OFF，不合并、不发布。

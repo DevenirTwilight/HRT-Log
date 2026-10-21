@@ -1,0 +1,20 @@
+{
+  "status": "FREEZE_AND_PROPOSAL_DELIVERED",
+  "proposal_commit": "3e5d552642ca68e680acb10fa183a7dc936975fc",
+  "archive_commit": "b5cf998f73691e29911a60b346f6ce802989282d",
+  "pr": 57,
+  "pr_title_and_decision_record": "UPDATED",
+  "draft": true,
+  "production_entry": "OFF",
+  "auto_merge": false,
+  "new_native_or_large_tests": 0,
+  "source_changes_after_owner_stop": "NONE_DOCS_AND_WIP_ARCHIVE_ONLY",
+  "policy_5s_to_indicator": "PROPOSED_NOT_APPROVED_OR_IMPLEMENTED",
+  "old_5s_assertions": "UNCHANGED",
+  "restore_lmk": "INDEPENDENT_BLOCKER_STABILITY_NOT_PROVEN",
+  "pending_backend_and_frontend": "NOT_IMPLEMENTED_THIS_ROUND",
+  "running_gradle_or_native_tasks": "NONE_AT_CLOSE",
+  "preserved_resource_wip": "Two-case GREEN finished before archival; patch not applied; original worktree preserved; no further tests.",
+  "document_checks": "PASS_ARCHIVED_SHA_AND_DOCS_ONLY_DIFF_READONLY",
+  "ci_for_final_document_head": "NOT_RUN_SKIP_CI_NO_MERGE_AUTHORITY"
+}
