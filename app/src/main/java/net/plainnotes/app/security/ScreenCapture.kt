@@ -7,9 +7,9 @@ import android.os.Build
 import android.view.WindowManager
 
 /**
- * REQUIREMENTS §135: whether the app's own screens may be captured (screenshots, screen recording). Off by default, which
- * keeps FLAG_SECURE as before; the owner can allow it in Settings → Privacy & security, also in disguise mode once inside
- * the real app. In disguise mode the recents preview must still not show the real app: on Android 13+ it is turned off on
+ * REQUIREMENTS §135: whether the app's own screens may be captured (screenshots, screen recording). "Block screenshots" in
+ * Settings → Privacy & security is on by default, which keeps FLAG_SECURE as before; turning it off allows capture, also in
+ * disguise mode once inside the real app. In disguise mode the recents preview must still not show the real app: on Android 13+ it is turned off on
  * its own ([Activity.setRecentsScreenshotEnabled]); below 13 only FLAG_SECURE hides it, so allowing screenshots there also
  * shows the preview (the setting says so). The disguise's private notes screen follows the same rule (owner, 2026-10-21).
  */

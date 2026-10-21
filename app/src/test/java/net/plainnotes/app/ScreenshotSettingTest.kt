@@ -24,8 +24,8 @@ import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
 /**
- * REQUIREMENTS §135: "Allow screenshots" in Settings → Privacy & security. Off by default (FLAG_SECURE, as before); turning it
- * on clears FLAG_SECURE on the current window at once and is remembered; turning it off sets it again. In disguise mode the
+ * REQUIREMENTS §135: "Block screenshots" in Settings → Privacy & security. On by default (FLAG_SECURE, as before); turning it
+ * off clears FLAG_SECURE on the current window at once and is remembered; turning it on sets it again. In disguise mode the
  * switch works the same inside the real app, with a note on the recents preview. Four languages.
  */
 @RunWith(ParameterizedRobolectricTestRunner::class) @Config(sdk = [35])
@@ -48,15 +48,16 @@ class ScreenshotSettingTest(private val locale: String) {
         assertFalse("default: not allowed", UiPrefs(context).allowScreenshots)
         show()
         assertTrue("default keeps FLAG_SECURE", secure())
+        // "Block screenshots" is on by default.
         row().performScrollTo().assertIsDisplayed().assertIsEnabled()
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.ToggleableState, ToggleableState.Off))
-            .assert(hasText(s(R.string.screenshots_allow), substring = true)).assert(hasText(s(R.string.screenshots_allow_desc), substring = true))
+            .assert(SemanticsMatcher.expectValue(SemanticsProperties.ToggleableState, ToggleableState.On))
+            .assert(hasText(s(R.string.screenshots_block), substring = true)).assert(hasText(s(R.string.screenshots_block_desc), substring = true))
         val b = row().fetchSemanticsNode().boundsInRoot; assertTrue(b.height / context.resources.displayMetrics.density >= 47.5f)
         row().performClick(); ui.waitForIdle()
-        assertTrue(UiPrefs(context).allowScreenshots); assertFalse("allowed: FLAG_SECURE cleared at once", secure())
-        row().assert(SemanticsMatcher.expectValue(SemanticsProperties.ToggleableState, ToggleableState.On))
+        assertTrue(UiPrefs(context).allowScreenshots); assertFalse("turned off: FLAG_SECURE cleared at once", secure())
+        row().assert(SemanticsMatcher.expectValue(SemanticsProperties.ToggleableState, ToggleableState.Off))
         row().performClick(); ui.waitForIdle()
-        assertFalse(UiPrefs(context).allowScreenshots); assertTrue("blocked again", secure())
+        assertFalse(UiPrefs(context).allowScreenshots); assertTrue("turned on again: blocked", secure())
     }
 
     @Test fun disguiseModeFollowsTheSettingInsideTheApp() {
@@ -66,7 +67,7 @@ class ScreenshotSettingTest(private val locale: String) {
             show()
             assertTrue("disguised, default: blocked", secure())
             // The switch works in disguise mode too; the note says what happens to the recents preview (Android 15 here: hidden).
-            row().performScrollTo().assertIsEnabled().assert(hasText(s(R.string.screenshots_allow_desc), substring = true))
+            row().performScrollTo().assertIsEnabled().assert(hasText(s(R.string.screenshots_block_desc), substring = true))
             ui.onNodeWithTag("privacy-screenshots-disguise", useUnmergedTree = true).assertExists()
             row().assert(hasText(s(R.string.screenshots_disguise_preview_hidden), substring = true))
             row().performClick(); ui.waitForIdle()
