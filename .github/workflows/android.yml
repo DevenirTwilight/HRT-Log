@@ -146,6 +146,7 @@ jobs:
             python3 scripts/run_import_cleanup_restart.py
             python3 scripts/run_restore_process_death.py
             python3 scripts/run_voided_package_restart.py
+            python3 scripts/run_ansm_write_process_death.py
             python3 scripts/run_lab_panel_restart.py
             python3 scripts/run_undo_skipped_restart.py
             python3 scripts/run_medical_records_restart.py
@@ -217,6 +218,7 @@ jobs:
             python3 scripts/run_attachment_poc_restart.py
             python3 scripts/collect_attachment_poc_evidence.py --output app/build/reports/attachment-poc-evidence.json
             python3 scripts/run_attachment_gate3_red.py
+            python3 scripts/run_ansm_write_process_death.py
             python3 scripts/run_lab_panel_restart.py
             python3 scripts/run_demo_compat.py
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

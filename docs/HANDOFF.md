@@ -1,3 +1,9 @@
+## 实际writer OS进程死亡合同已编码待编译 — 2026-10-21
+
+新增androidTest MeasuredSaveDeathProbe和host run_ansm_write_process_death.py，复用已验收恢复probe的外部force-stop握手：STOCK_CAPTURED持有真实事务时kill→新PID精确dump/epoch不变、0记录/0消耗；AFTER_COMMIT丢交付窗口kill→新PID精确已提交dump、1记录/1量子。两个路径均SQLCipher header/integrity/FK/完整新旧oracle及fresh owner无任务、无自动重放；测试marker仅合成摘要，不是生产持久token。接入现有API26/29/35 CI的小库合同阶段，不更改原预算/fixture。当前仅Python语法通过，Android源码未编译或执行，不能填PASS。
+
+在途原生39620822817/39620827648仍为d582源，不包含这两个新增probe；后者原冻结预算结果仍需保留。App当前选定回归仍运行。不要为metadata反复重跑native，后续仅对新实质合同做相应验证。
+
 ## 必要原生验收已启动，不能当PASS — 2026-10-21
 
 源d582bf7d的两项一次性验收运行中：Android/domain workflow39620822817（含新增MeasuredSaveCoordinatorAndroidTest共享14合同的API26/29/35 SQLCipher），冻结低内存全工作负载39620827648（512MiB/192MiB、原fixture、原5/15/120秒断言及真实恢复process-death合同不变）。依据§128推进到可合并的必要验收，不恢复已取消的重复跑分或微优化研究；不为求绿重复调度。两者均IN_PROGRESS，未有结果不能填PASS。
