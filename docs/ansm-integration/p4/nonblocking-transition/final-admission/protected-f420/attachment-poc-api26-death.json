@@ -1,0 +1,29 @@
+{
+  "scope": "SYNTHETIC_ACTUAL_WRITER_PROCESS_KILL",
+  "performance": "NOT_MEASURED_NOT_A_REPLACEMENT",
+  "selected_stages": [
+    "STOCK_CAPTURED",
+    "AFTER_COMMIT"
+  ],
+  "retries": 0,
+  "cases": [
+    {
+      "stage": "STOCK_CAPTURED",
+      "pid": 6575,
+      "expected_sha256": "e06285efb79aee25335cd6fd484b392eebec5cb8ab1bfcb59b5fd1441d79e0c8",
+      "epoch": "7f57ea0d-7585-43cc-855b-d1d09b28ed6c",
+      "expected_records": 0,
+      "new_pid": 6630,
+      "status": "PASS_EXACT_DATASET_FULL_ORACLE_NO_REPLAY"
+    },
+    {
+      "stage": "AFTER_COMMIT",
+      "pid": 6671,
+      "expected_sha256": "b9836aa687b8beebfd489a7fdc6f972b5a3c02f6eb32d62f4560e83093eb1296",
+      "epoch": "c03e2438-d432-43b2-81d0-e6057d45a4d0",
+      "expected_records": 1,
+      "new_pid": 6724,
+      "status": "PASS_EXACT_DATASET_FULL_ORACLE_NO_REPLAY"
+    }
+  ]
+}

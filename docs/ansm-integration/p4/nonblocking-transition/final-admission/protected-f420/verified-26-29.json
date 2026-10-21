@@ -1,0 +1,30 @@
+[
+  {
+    "artifact": 12372636881,
+    "name": "attachment-poc-api29",
+    "sha256": "sha256:465e322d1502ece37a0a620a68410c3a2fff654a92c8c16bf82a24799d4eb80f",
+    "crc": "PASS",
+    "contracts": [
+      335,
+      0,
+      0
+    ],
+    "actual_writer_process_death": "BOTH_PASS",
+    "source": "f420fbf1",
+    "pr_workflow": 39656387819
+  },
+  {
+    "artifact": 12371958810,
+    "name": "attachment-poc-api26",
+    "sha256": "sha256:3842fbc7c6c6626653265928a608a9ab6828faeb0a81dbd1de0a79e6cc81d2c8",
+    "crc": "PASS",
+    "contracts": [
+      335,
+      0,
+      0
+    ],
+    "actual_writer_process_death": "BOTH_PASS",
+    "source": "f420fbf1",
+    "pr_workflow": 39656387819
+  }
+]

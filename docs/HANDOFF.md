@@ -1,3 +1,9 @@
+## 最终受保护HEAD f420的API26/29原始结果已核验 — 2026-10-21
+
+普通PR自动run39656387819的26/29各335/0fail/0skip，两个writer真实kill/newPID/精确dump/完整oracle/无重放均PASS。protected-f420/保存原ZIP与官方SHA/CRC及逐场景JSON；没有用f13手动结果冒充新HEAD。PR测试合并575eef74的tree与HEAD tree均4d85ff4668b0156c7c41219e8743fd6bfd71d460，源码完全相同；f13→f420仅文档变化。
+
+最终35与Android仍在途，push标准检查也保留完成，不伪造/跳过分支保护，不重复性能大库。只往证据分支追加结果，待审源码HEAD不变；当前Draft/OFF，不合并发布。
+
 ## 最终正常源码f420fbf1在受保护自动验收中；f13完整原始结果已归档 — 2026-10-21
 
 f13手动技术验收两workflow全SUCCESS，实际源码all7项均绿；正式保护却因[skip ci]的两项自动suite仍queued/statusCheckRollup=null而BLOCKED，未绕过或伪造检查。试Ready核对后恢复Draft；正常文档提交f420fbf1（生产代码完全同f13）已让保护正确识别PENDING。最终标准自动CI：Android PR39656387819/push39656377056，Science PR39656387915/push39656376924；等真实全部通过，期间不再改候选，不取消标准所需检查，不重跑性能大库。
