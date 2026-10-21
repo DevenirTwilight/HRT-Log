@@ -197,6 +197,13 @@ val LocalReduceMotion; object ReduceMotion { fromSystem(context); override }; fu
 
 ### 7.1 全量回归（本地）
 
+合并默认分支（#57 P4，b04358fd）后，在合并提交 7ea1bb4d 上重跑：
+- core:domain 152、core:ui 422、core:data 528、core:reminder 21：全部 PASS；
+- app：1987 项，0 失败（362 项为截图类测试，按设计跳过）；
+- lint 0 错误；androidTest 编译 PASS。
+
+合并前的结果：
+
 - core:domain 135、core:ui 422、core:data 263、core:reminder 20：全部 PASS。
 - app：1935 项，0 失败；跳过的 361 项是截图类测试，需要环境变量才运行。
 - `PeriodStabilityTest` 未改动，已运行。

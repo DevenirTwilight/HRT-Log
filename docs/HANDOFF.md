@@ -14,6 +14,8 @@ UI-06 #91 已合并（4ec11437），主线 CI 六项全绿。分支 feature/ui07
 
 **截图和动效：** docs/ui-audit/2026-10-21-ui07/。本环境没有模拟器，动效用 Robolectric 逐帧 GIF 代替。
 
+**合并默认分支：** 已合并 #57 P4（b04358fd）；UI-07 需求改编号为 §133；合并后全量回归通过（domain 152、core:ui 422、data 528、reminder 21、app 1987 项 0 失败，lint 0 错误）。
+
 **下一步：** 开 PR 并开启自动合并；CI 全绿后合并，复验主线 CI。
 
 **NOT_RUN：** 真机 / TalkBack（清单第 13 节）。无 APK、签名或 versionCode 变更。
