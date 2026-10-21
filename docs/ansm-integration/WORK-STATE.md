@@ -1,3 +1,9 @@
+## 2026-10-21 后端运行owner编码完成，重放2 RED已修正、完整回归待验
+
+接手c2fffbb0/主线320171cd，新增MeasuredSaveCoordinator/MeasuredSaveGate，根提交确认、进程作用域、固定PRIMARY、完整冻结请求去重及全部已知Repository/导入/导出补写/恢复/关闭销毁冲突保护。首轮21 PASS；随后旧部分UUID replay误报成功2 RED已保存，生产984219a3改用prepared专用提交，已有UUID复用现有observe全审计，不改普通新增最终全审计或原写入口。runtime-owner/implementation.md说明范围与证明边界。
+
+最终core:data/Android测试/App编译/PeriodStability/提醒回归运行中，尚不写PASS。App仍未绑定；mixed DAO refresh读写分离和MANUAL_CHECK人工核对流程待实施。仍Draft/OFF/autoMerge=null；§126停止native/性能研究生效，≤5秒政策未批、LMK NOT_PROVEN、精确HEAD CI/native NOT_RUN。无Schema/备份格式/加密/PK/UI/发布变化。
+
 ## 换账号接手入口（2026-10-21）
 
 先读 [TAKEOVER](p4/nonblocking-transition/TAKEOVER.md) 和 HANDOFF 顶部，随后查最新GitHub。方案、源码、原始RED/GREEN/截图/编译证据和旧WIP档案已远端保存；无在途测试。当前不是可合并状态，不自动恢复下方历史性能计划。

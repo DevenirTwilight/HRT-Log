@@ -1,3 +1,5 @@
+> 2026-10-21 后续实现检查点：新增进程内 MeasuredSaveCoordinator 和 DatabaseAccess 共用冲突门；尚无 App 运行调用。重放误报成功的两项真实 RED 与最小修正见 [runtime-owner/implementation.md](runtime-owner/implementation.md)。最终全回归运行中；本提案的政策、LMK与正式入口门槛没有因此获批。以下原型历史记录按其源码理解，不再代表“完全没有运行owner源码”。
+
 # P4 非阻塞保存：产品验收变更提案（2026-10-21）
 
 状态：**停止性能攻关继续有效；验收政策细节待负责人批准；当前执行代理负责后端与UI，继续推进。** PR #57仍Draft，正式入口OFF，不合并、不发布。本文不是原5秒预算PASS证明。
@@ -51,9 +53,9 @@
 
 P4接口及票据/回执多为core:data的internal类型，App模块不能直接调用。后续建议在core:data内部复用它们，提供最薄public facade/DTO；应用只注入一个进程级SupervisorJob作用域并观察StateFlow。不创建第二业务数据库、持久任务表、WorkManager或复杂调度器。本轮不新增这些类，也不把所有内部API改public。
 
-该作用域只承诺**当前进程内**跨页面继续，不保证退后台后Android不杀进程；离开页面不取消提交，锁屏/伪装仅停止显示敏感状态，不能改投其他数据集。现有普通transaction在IO内部取space，故新门面必须使用pinned仓库及已捕获目标的P4方法，不泛用未固定空间的入口。
+该作用域只承诺**当前进程内**跨页面继续，不保证退后台后Android不杀进程；离开页面不取消提交，锁屏/伪装仅停止显示敏感状态，不能改投其他数据集。本组已将普通transaction目标也改为切换IO前捕获；新门面仍固定pinned PRIMARY，不依赖可变页面选择。
 
-## 最小状态合同（显示协议/组件已实现，运行owner与完整流程未接通）
+## 最小状态合同（显示协议/组件已实现，运行owner已编码待完整回归，App未接通）
 
 每个事件含operationUuid、operationKind、受控space/dataset/epoch、稳定药物/记录/容器引用、请求指纹、状态及安全错误码；健康内容不进日志或未加密状态存储。实际剂量、来源、原请求和时间冻结，不因重试按当前规格重建。修订/协调含多个既有UUID时须保留原UUID组与原子性，不能靠其中一行猜整体完成。
 
