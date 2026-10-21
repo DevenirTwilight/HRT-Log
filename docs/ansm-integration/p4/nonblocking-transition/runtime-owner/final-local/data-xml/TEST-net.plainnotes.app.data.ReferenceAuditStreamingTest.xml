@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.ReferenceAuditStreamingTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-21T13:34:29.184Z" hostname="506c18a63d5b" time="0.765">
+  <properties/>
+  <testcase name="referenceScansDoNotRereadTheirOwnPrimaryKeysAndStillReadPredecessors" classname="net.plainnotes.app.data.ReferenceAuditStreamingTest" time="0.176"/>
+  <testcase name="primitiveCaptureHashPreservesFrozenBytesAndRejections" classname="net.plainnotes.app.data.ReferenceAuditStreamingTest" time="0.184"/>
+  <testcase name="nonPrimitiveCaptureHashRetainsFrozenRoundTripFallback" classname="net.plainnotes.app.data.ReferenceAuditStreamingTest" time="0.208"/>
+  <testcase name="positionedDecoderPreservesTypesAndReturnsIndependentObjects" classname="net.plainnotes.app.data.ReferenceAuditStreamingTest" time="0.194"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

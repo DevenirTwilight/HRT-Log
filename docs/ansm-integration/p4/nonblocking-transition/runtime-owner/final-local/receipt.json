@@ -1,0 +1,21 @@
+{
+  "production_source_commit": "984219a3",
+  "evidence_head_at_data_completion": "4d56f1a964f2a759706ce253f1713e81da5dc2f1",
+  "core_data": {
+    "tests": 526,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "remaining_build": "IN_PROGRESS; XML from older app/reminder runs not treated as final yet",
+  "source_sha256": {
+    "core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt": "0ceca5032e70f8b05b5799df7a2b658aec08ec288de7bcb4a3013758ced1f3ba",
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredSaveCoordinator.kt": "de38d167bbf1d878985a180d8daf3d97e7c588191370a6f32ded2e9b45342d14",
+    "core/data/src/main/java/net/plainnotes/app/data/MeasuredSaveGate.kt": "dcc09b9b0de04cfe47e4c46cf3253d82feb401826da8f385d8c20fa9d6aba995",
+    "core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt": "b657a6185855bac24b461281e1a685b52c28ef536e246144908275073beb2ef8",
+    "core/data/src/test/java/net/plainnotes/app/data/MeasuredSaveCoordinatorTest.kt": "df490ffbcf0848ed7d7af565fca3a1a178235cd6cc407781be197313188d1053"
+  },
+  "native": "NOT_RUN",
+  "ci": "NOT_RUN",
+  "environment": "Robolectric35/framework SQLite; small synthetic correctness tests; no performance/LMK claim"
+}

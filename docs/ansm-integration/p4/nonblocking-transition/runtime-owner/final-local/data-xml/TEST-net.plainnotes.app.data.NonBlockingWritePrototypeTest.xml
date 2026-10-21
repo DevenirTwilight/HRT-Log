@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.NonBlockingWritePrototypeTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-10-21T13:34:26.046Z" hostname="506c18a63d5b" time="0.045">
+  <properties/>
+  <testcase name="ownerCancellationAfterEntryCannotClaimNoCommit" classname="net.plainnotes.app.data.NonBlockingWritePrototypeTest" time="0.032"/>
+  <testcase name="failedRequiresExplicitNoCommitObservation" classname="net.plainnotes.app.data.NonBlockingWritePrototypeTest" time="0.003"/>
+  <testcase name="observerCanLeaveWhileOneWriteContinuesOnIoAndSuccessWaitsForReturn" classname="net.plainnotes.app.data.NonBlockingWritePrototypeTest" time="0.003"/>
+  <testcase name="exceptionCannotMeanRollbackAndUnknownDoesNotRetry" classname="net.plainnotes.app.data.NonBlockingWritePrototypeTest" time="0.002"/>
+  <testcase name="otherEpochOperationAndPayloadCannotResolveThisTask" classname="net.plainnotes.app.data.NonBlockingWritePrototypeTest" time="0.001"/>
+  <testcase name="matchingCommitObservationCanResolveAmbiguousDelivery" classname="net.plainnotes.app.data.NonBlockingWritePrototypeTest" time="0.002"/>
+  <testcase name="confirmedCancelBeforeSubmissionNeverCallsAction" classname="net.plainnotes.app.data.NonBlockingWritePrototypeTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

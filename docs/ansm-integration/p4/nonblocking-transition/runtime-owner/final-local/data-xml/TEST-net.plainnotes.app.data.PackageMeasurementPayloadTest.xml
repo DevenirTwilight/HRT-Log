@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.PackageMeasurementPayloadTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2026-10-21T13:34:28.696Z" hostname="506c18a63d5b" time="0.281">
+  <properties/>
+  <testcase name="copiedCallerListsCannotMutateFrozenSourceFacts" classname="net.plainnotes.app.data.PackageMeasurementPayloadTest" time="0.037"/>
+  <testcase name="fractionalPhysicalTabletsDoNotVerifyUniformIngredientContent" classname="net.plainnotes.app.data.PackageMeasurementPayloadTest" time="0.022"/>
+  <testcase name="canonicalRoundTripRetainsOriginalUnitsAndRoleDescriptions" classname="net.plainnotes.app.data.PackageMeasurementPayloadTest" time="0.019"/>
+  <testcase name="extraFieldsFloatingPointAndInvalidEnumsOrDecimalsAreRejected" classname="net.plainnotes.app.data.PackageMeasurementPayloadTest" time="0.019"/>
+  <testcase name="returnedRelationsStayImmutableAndCannotChangeMemoizedIdentityOrScale" classname="net.plainnotes.app.data.PackageMeasurementPayloadTest" time="0.017"/>
+  <testcase name="sameSpecificationCanHaveDifferentConfirmedContainerCapacities" classname="net.plainnotes.app.data.PackageMeasurementPayloadTest" time="0.015"/>
+  <testcase name="unknownVolumeConcentrationIsNotInferredFromProductStrengthText" classname="net.plainnotes.app.data.PackageMeasurementPayloadTest" time="0.018"/>
+  <testcase name="unconfirmedConversionEvidenceRemainsUnusable" classname="net.plainnotes.app.data.PackageMeasurementPayloadTest" time="0.025"/>
+  <testcase name="historicalPayloadDoesNotChangeAfterCurrentProductOrCapacityChanges" classname="net.plainnotes.app.data.PackageMeasurementPayloadTest" time="0.02"/>
+  <testcase name="directedLabelContentDoesNotClaimAbsorptionOrAllowAnImplicitReverse" classname="net.plainnotes.app.data.PackageMeasurementPayloadTest" time="0.02"/>
+  <testcase name="nominalPumpsNeverBecomeConfirmedUsableCapacity" classname="net.plainnotes.app.data.PackageMeasurementPayloadTest" time="0.024"/>
+  <testcase name="userDeclaredCapacityRemainsDistinguishableFromCountedCapacity" classname="net.plainnotes.app.data.PackageMeasurementPayloadTest" time="0.021"/>
+  <testcase name="sourceVersionIsFrozenAndRequiredOnActualUse" classname="net.plainnotes.app.data.PackageMeasurementPayloadTest" time="0.018"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

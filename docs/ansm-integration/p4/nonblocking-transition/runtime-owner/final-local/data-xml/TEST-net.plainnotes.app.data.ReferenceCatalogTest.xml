@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.ReferenceCatalogTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-10-21T13:34:30.110Z" hostname="506c18a63d5b" time="0.749">
+  <properties/>
+  <testcase name="differentCisStrengthsRoutesAndVersionsRemainSeparateSnapshots" classname="net.plainnotes.app.data.ReferenceCatalogTest" time="0.099"/>
+  <testcase name="boundedMatchingResultsStillSearchPastTheFirstTwoHundredStoredSnapshots" classname="net.plainnotes.app.data.ReferenceCatalogTest" time="0.429"/>
+  <testcase name="privateSpaceCannotReadReferenceLibraryBeforeDatabaseAccess" classname="net.plainnotes.app.data.ReferenceCatalogTest" time="0.022"/>
+  <testcase name="publicDraftValidationRejectsInvalidDatesAndDoesNotCreateReferenceFacts" classname="net.plainnotes.app.data.ReferenceCatalogTest" time="0.074"/>
+  <testcase name="accentsCaseAndLigaturesAreSearchOnlyAndNeverChangeStoredNames" classname="net.plainnotes.app.data.ReferenceCatalogTest" time="0.069"/>
+  <testcase name="loadingEmptyLibraryAndCancelledPreviewDoNotCreateDatasetOrIdentity" classname="net.plainnotes.app.data.ReferenceCatalogTest" time="0.054"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

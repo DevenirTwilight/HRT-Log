@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.MeasuredSaveCoordinatorTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2026-10-21T13:32:36.761Z" hostname="506c18a63d5b" time="20.697">
+  <properties/>
+  <testcase name="existingUuidWithDifferentOriginalCreationTimeCannotBecomeRuntimeSuccess" classname="net.plainnotes.app.data.MeasuredSaveCoordinatorTest" time="11.729"/>
+  <testcase name="existingExactOriginalRequestCanConfirmWithoutAnotherDeduction" classname="net.plainnotes.app.data.MeasuredSaveCoordinatorTest" time="0.865"/>
+  <testcase name="originalPayloadConflictAndForeignOwnerAreRejectedWhileSameConfirmationReusesTask" classname="net.plainnotes.app.data.MeasuredSaveCoordinatorTest" time="0.813"/>
+  <testcase name="alreadyRunningLegacyTransactionRejectsReservationAndExceptionReleasesItsCount" classname="net.plainnotes.app.data.MeasuredSaveCoordinatorTest" time="0.707"/>
+  <testcase name="selectedDecoyCannotRedirectAcceptedPrimaryWrite" classname="net.plainnotes.app.data.MeasuredSaveCoordinatorTest" time="0.524"/>
+  <testcase name="existingUuidCannotBypassCompleteAuditOfUnrelatedCorruption" classname="net.plainnotes.app.data.MeasuredSaveCoordinatorTest" time="1.293"/>
+  <testcase name="lostCommitResponseIsObservedOnlyAfterWriterCompletionWithoutReplay" classname="net.plainnotes.app.data.MeasuredSaveCoordinatorTest" time="0.97"/>
+  <testcase name="conflictGateCoversLegacyMeasuredRestoreImportAndDestructionButAllowsReadsAndDecoy" classname="net.plainnotes.app.data.MeasuredSaveCoordinatorTest" time="0.789"/>
+  <testcase name="ownerDropsInheritedRoomContextAndCannotReportNestedCommitBeforeOuterRollback" classname="net.plainnotes.app.data.MeasuredSaveCoordinatorTest" time="0.896"/>
+  <testcase name="realRollbackAndAbsentObservationStayManualAndKeepConflictsBlocked" classname="net.plainnotes.app.data.MeasuredSaveCoordinatorTest" time="0.498"/>
+  <testcase name="pageCancellationAndRepeatedStartDoNotDuplicateOrPublishBeforeCommitDelivery" classname="net.plainnotes.app.data.MeasuredSaveCoordinatorTest" time="0.617"/>
+  <testcase name="queuedCancellationIsTheOnlyImmediateFailedOutcomeAndNeverCallsRepository" classname="net.plainnotes.app.data.MeasuredSaveCoordinatorTest" time="0.328"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
