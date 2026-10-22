@@ -1,3 +1,9 @@
+## 默认OFF附件crypto writer/reader与设备key适配已编码，测试在途 — 2026-10-22
+
+分支feature/med02-object-store-20261022；先行设计13fbf748已推送。新增AttachmentObjectContext、AttachmentObjectStreams和AttachmentDeviceKeys：使用Tink1.23公共key/primitive API，流式密文写出，完整cipher/plain承诺和AEAD严格EOF后才给同channel reader；设备stage/active独立alias、显式provision、unwrap绝不创建key。原型subtle API只作独立测试oracle。没有文件路径协调器/SQL发布/持久quota、AppLock接线或正式备份，不能声称完整文件库已可用。
+
+初次生产Kotlin编译PASS；随后追加cipher增长界限，最终回归尚在运行。新增12个共享crypto合同（被Foundation JVM与三API现有runner继承），以及实际Keystore新adapter测试。尚不能报这些测试PASS。Room13/业务备份/PNBAK1、feature0、权限/PK/签名版本均不变。发布隔离断言不放宽，R8仍须删去未接线的Tink路径。当前仅设计兼容性，无新migration。继续检查测试、修复真实失败并提交PR，不能在此停止。
+
 ## #103已合并；负责人批准默认OFF正式存储实现 — 2026-10-22
 
 #103最终8dd60c435d924abafd3aabf8d7947b7691eae520六必需门PASS，受保护自动合并d2223c0a（20:36:11Z）。API26/29/35原始ZIP、SHA/CRC、实际Foundation20及Saf5全部PASS；35另有真实Tink sandbox8项PASS。26/29的app逐类HTML被后续suite覆盖，不能声称该逐类证据保留。完整证据在docs/med02-resource-evidence-20261022，旧首轮平台断言失败保留。
