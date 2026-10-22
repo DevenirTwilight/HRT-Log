@@ -32,7 +32,8 @@
   - 太阳是自绘的圆加 8 条圆头射线，150dp，放在右上角并超出卡片被裁掉；颜色由 `sunColor()` 取比卡片略浅（深色主题下略深）的色，不朗读；
   - 角度 = 已记项数 × 22°，用弹簧动画过渡；`LocalReduceMotion` 开启时直接到位。
 - **`WellbeingTrendLine`**：
-  - `trendShape()` 只在相邻两天都有值时连线，前后都没有相邻值的日子画圆点；
+  - `trendShape()` 只在相邻两天都有值时连线，缺记录的日子断开；
+  - 每个数值画一个与线同色的小点（半径为线宽的 0.9 倍）；单独一天的点稍大（1.2 倍）。负责人 2026-10-22 看过截图后要求点要小、与线同色，不要大圆点或色差大的点；`Ui08TrendDrawingTest` 检查点的大小和颜色；
   - 纵轴只在左侧标“5”和“1”；用主色绘制；
   - 整行朗读为一句，例如“今天的心情，最近 30 天记录了 12 天”。
 - **共享日期**：`WellbeingHubContent` 持有一个 `rememberSaveable` 日期，“每日”和“症状”都用它。日期文字可点，打开现有的日期选择器。
@@ -125,14 +126,20 @@ zh-TW 和 fr 沿用现有术语：“記錄”“renseigner”与 `wb_recorded_d
 - `hc/`：高对比度，zh-CN 和 en，浅色/深色，前后各一组。
 - `hires/`：411dp、zh-CN、浅色/深色的原尺寸高清 PNG。
 - `compare/`：前后并排。
+- `grayscale/`：zh-CN 411dp 的灰度前后图。
+- “管理条目”对话框：对话框是独立窗口，所以用 `manageDialog()` 直接画它自己的窗口。只有 320dp 的 16 组；411dp 下 Robolectric 打开对话框后一直等不到空闲（改前改后都一样，与 UI-08 无关），所以 411dp 的对话框截图记为 NOT_RUN。
 
 before 是在基线上用同一份截图测试渲染的；因为那时还没有 `WellbeingHubContent`，基线版本用旧的标签行加旧的 `WellbeingScreen` 拼出页面。
 
 ## 9. 验证
 
-本地完整 `:app:testFullDebugUnitTest` 和 `lintFullDebug` 的结果见 HANDOFF；CI 全部 job 见 PR。
+- 本地 `:core:ui:testDebugUnitTest` 加完整 `:app:testFullDebugUnitTest`：共 2941 项，0 失败。另有 492 项跳过，是默认关闭的截图测试等，按设计不跑。
+- 时期稳定性测试、UI-01 至 UI-07b、LAB-01 至 LAB-04、`ButtonLayoutRegressionTest`、`TranslationsTest` 和各项对比度断言都在上面的测试中，全部通过。
+- `lintFullDebug` 通过。
+- CI 全部 job 的结果见 PR。
 
 ## 10. NOT_RUN
 
 - 真机：按钮手感、太阳转动、TalkBack 朗读、大字号下的大卡片。已加入真机清单第 17 节，由负责人回填。
 - 负责人核对 zh-TW 和 fr 的语气。
+- “管理条目”对话框 411dp 的截图（Robolectric 限制）。
