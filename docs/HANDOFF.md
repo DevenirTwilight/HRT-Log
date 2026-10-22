@@ -1,3 +1,9 @@
+## BDPM资产已纳入Git，首轮真实数据与UI回归继续 — 2026-10-22
+
+修正通用*.sqlite忽略导致首提交未跟踪生成资产，现显式纳入公开只读catalogue.sqlite（非用户数据）。4项Python来源/全量/PROVAMES/只读/孤立记录检查PASS；生产main编译PASS。首轮新增数据类被JUnit因Boolean返回声明拒绝执行，修Unit后3项通过，关联合同新增完整审计断言因测试未入事务失败；现按原审计要求进入Room事务，不改审计或断言。原两轮XML/日志保存docs/bdpm/validation，非业务RED不伪称安全反例。
+
+相同4合同已提升共享JVM/Android源码，native版本使用SQLCipher用户DB；加入既有API26/29名单，API35自动执行，不启动新性能流程。新的真实NotesApp→药物→资料→PROVAMES→28片→明确确认→重开及未保存草稿浏览返回，覆盖四语言320dp/2x，正在与原关联/时期/翻译测试一起执行。旧中心placeholder测试只把已实现目录入口改测真实callback，其余5不可用模块断言保留。尚无新最终PASS/CI结论，后续先完成当前测试。
+
 ## BDPM全量资产与首条真实UI路径已编码，验证未完成 — 2026-10-22
 
 正式官方源15883/20908/32439条已构建只读SQLite11116544B，资产SHA38cd2b6a…60030，PROVAMES65421374及28片3400935479341从数据校验通过。源原字节gzip/编码/日期/URL/SHA/许可与v4/v5证据随库保存。真实FT与文档ST不一致、4条孤立CIP均明确处理，详见docs/bdpm/README.md；替代站TEST环境标记不隐瞒。

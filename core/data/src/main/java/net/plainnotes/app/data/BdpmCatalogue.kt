@@ -47,7 +47,7 @@ class BdpmCatalogue(context:Context) {
     }
     suspend fun search(query:String):BdpmPage=withContext(Dispatchers.IO) {
         require(query.length<=256)
-        val words=fold(query.trim()).split(Regex("\\s+")).filter{it.isNotEmpty()}.take(16)
+        val words=fold(query.trim()).split(Regex("\\s+")).filter{it.isNotEmpty()}
         if(words.isEmpty())return@withContext BdpmPage(emptyList(),false,metadata())
         open().use {db->
             val where=words.joinToString(" AND "){"instr(search,?)>0"}
@@ -80,7 +80,7 @@ class BdpmCatalogue(context:Context) {
         val dates=listOf("CIS_bdpm.txt","CIS_CIP_bdpm.txt","CIS_COMPO_bdpm.txt").map{inputs.getJSONObject(it).getString("source_updated_on")}.distinct()
         UserReferenceProduct(product.name,product.composition.map{it.display()},null,product.form,product.routes,product.cis,
             pack?.cip13?.takeIf{it.isNotEmpty()},null,m.getString("catalogue_version"),m.getString("downloaded_on"),
-            BdpmProvenance(m.getString("database_sha256"),dates.joinToString(" / "),pack?.cip7,pack?.description,m.getString("download_page")))
+            BdpmProvenance(m.getString("database_sha256"),dates.joinToString(" / "),pack?.cip7?.takeIf{it.isNotEmpty()},pack?.description,m.getString("download_page")))
             .also {ReferencePayload.userProduct(it)}
     }
 }
