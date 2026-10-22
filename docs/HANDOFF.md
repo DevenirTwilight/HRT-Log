@@ -1,4 +1,18 @@
-## build35 正式签名测试包准备中 — 2026-10-22
+## build35 已私密交付 — 2026-10-22
+
+- **APK**：`HRT-Log-build35-full-official.apk`，13,532,165 bytes，SHA-256 `cd4f32c14472d1fc71ad2c4b48548c9af0ff302123ed486a9a4c88c2bff24931`；经会话私有文件发送。
+- **源码**：4d24121e（PR #100 的 HEAD），必需 CI 全部通过。
+- **核验**：
+  - 证书 989ba045…59379b1，v2/v3 签名；
+  - 16KB 对齐；
+  - 清单检查 PASS（无 INTERNET）；附件隔离 PASS；
+  - 来源 SOURCE_DIRTY=false；
+  - versionCode 35。
+- **签名材料**：临时密钥目录已删除。
+- **记录**：账本已追加；回执 `docs/delivery/build35-ui07b-lab04-ui08-2026-10-22.json`。
+- **NOT_RUN**：真机安装、TalkBack、真机清单第 15–17 节。
+
+## build35 正式签名测试包准备中（已完成，见上）— 2026-10-22
 
 - **依据**：§141。
 - **分支**：`delivery/build35-20261022`，基于 0eb79ef8（#99 合并后），包含 UI-07b、LAB-04、BDPM（#98）、UI-08。

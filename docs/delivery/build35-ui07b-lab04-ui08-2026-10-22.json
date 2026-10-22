@@ -1,0 +1,34 @@
+{
+  "apk": "HRT-Log-build35-full-official.apk",
+  "package": {
+    "application_id": "net.plainnotes.app",
+    "version_code": 35,
+    "version_name": "0.2.0"
+  },
+  "apk_sha256": "cd4f32c14472d1fc71ad2c4b48548c9af0ff302123ed486a9a4c88c2bff24931",
+  "signing_cert_sha256": [
+    "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1"
+  ],
+  "source": {
+    "SOURCE_DIRTY": "false",
+    "SOURCE_ORIGIN": "git",
+    "SOURCE_SHA": "4d24121e4b3ca5b727f147a2a8c2ac49bc9dea14",
+    "SOURCE_COMMIT_TIME_UTC": "2026-10-22T15:52:50Z"
+  },
+  "status": "PRIVATE_FILE_PROVIDED_OWNER_INSTALL_NOT_VERIFIED",
+  "size_bytes": 13532165,
+  "signature_v2": true,
+  "signature_v3": true,
+  "zipalign_16kb": true,
+  "internet_permission": false,
+  "release_manifest_check": "PASS",
+  "attachment_release_isolation": "PASS",
+  "source_ci": "PR #100 head 4d24121e: android, jvm, device-tests, attachment-poc-compatibility 26/29, science-change-gate all success (research-deep skipped/success)",
+  "contents": "UI-07b line status icons (#96), LAB-04 timeline lab draws (#97), BDPM offline HRT catalogue (#98, owner-merged), UI-08 wellbeing redo (#99); versionCode 34 -> 35 only (#100)",
+  "authorization": "Owner 2026-10-22: UI-07b task book APK clause ('做完给apk'), then '整完这个再给apk' (LAB-04) and '这个做完再给APK' (UI-08) (REQUIREMENTS §136, §141)",
+  "delivery_channel": "Claude session private file (SendUserFile); no public link; no tag or Release moved",
+  "delivery_date": "2026-10-22",
+  "temporary_credentials_removed": true,
+  "physical_device": "NOT_RUN",
+  "talkback": "NOT_RUN"
+}
