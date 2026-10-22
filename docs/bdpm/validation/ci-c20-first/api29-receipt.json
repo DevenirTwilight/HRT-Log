@@ -1,0 +1,8 @@
+{
+  "source_sha": "c20ec8d6d8f5d6c456eee208f5b88337fee9c30c",
+  "artifact": 12424555043,
+  "sha256": "e2d8a8e4efa8d1b6848d6b92119f90b0093c73f2b6cae2a758686cb43b63c7ad",
+  "crc": "PASS",
+  "overall": "FAIL",
+  "reason": "Native navigation still expected unavailable for newly opened official catalogue; app suite not green"
+}

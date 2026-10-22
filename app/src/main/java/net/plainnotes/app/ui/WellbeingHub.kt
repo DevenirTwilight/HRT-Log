@@ -16,7 +16,7 @@ import net.plainnotes.app.data.StageReviewEntity
 import java.time.LocalDate
 
 /**
- * UI-08 (§138): the wellbeing hub. Pill tabs; the daily and symptoms tabs share one day (saved across recreation); "Choose
+ * UI-08 (§140): the wellbeing hub. Pill tabs; the daily and symptoms tabs share one day (saved across recreation); "Choose
  * items" is in the top bar now (AppShell), not at the bottom of the page.
  */
 @Composable fun WellbeingHub(state:NotesState,extra:NotesViewModel.ExtraState,model:NotesViewModel,region:String?,padding:PaddingValues)=

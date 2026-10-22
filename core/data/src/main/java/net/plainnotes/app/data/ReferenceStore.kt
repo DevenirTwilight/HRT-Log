@@ -143,7 +143,7 @@ internal object ReferenceStore {
         if(product==null && head?.snapshotUuid==null) fail(ReferenceError.INVALID_SOURCE)
         val snapshot=canonical?.let { value -> id().also { uuid ->
             insert(db,"reference_snapshot",JSONObject().put("uuid",uuid).put("dataset_uuid",scope.dataset).put("kind","PRODUCT")
-                .put("namespace","USER_ENTERED").put("source_version",product!!.sourceVersion).put("payload_json",value).put("payload_sha256",ReferencePayload.sha(value)))
+                .put("namespace",payload!!.getString("namespace")).put("source_version",product!!.sourceVersion).put("payload_json",value).put("payload_sha256",ReferencePayload.sha(value)))
         } }
         val event=JSONObject().put("operation_uuid",operation).put("dataset_uuid",scope.dataset).put("subject_uuid",subject)
             .put("revision",expectedRevision+1).put("previous_uuid",head?.operationUuid ?: JSONObject.NULL).put("action",action)

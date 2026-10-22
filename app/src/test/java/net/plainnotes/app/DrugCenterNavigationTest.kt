@@ -50,6 +50,8 @@ class DrugCenterNavigationTest {
             ui.onNodeWithTag("drug-center-open").performClick()
             ui.onNodeWithTag("drug-center-list").performScrollToNode(hasTestTag("drug-center-browse"))
             ui.onNodeWithTag("drug-center-browse").performClick()
+            ui.onNodeWithTag("reference-screen").performScrollToNode(hasTestTag("reference-saved-tab"))
+            ui.onNodeWithTag("reference-saved-tab").performClick()
             ui.onNodeWithTag("reference-screen").performScrollToNode(hasTestTag("reference-search"))
             ui.onNodeWithTag("reference-search").performTextInput("SYNTHETIC")
             ui.onNodeWithTag("reference-screen").performScrollToNode(hasTestTag("reference-search-go"))
@@ -64,7 +66,12 @@ class DrugCenterNavigationTest {
             ui.onNodeWithTag("reference-screen").performScrollToNode(hasTestTag("reference-details"))
             ui.onAllNodesWithText("SYNTHETIC saved source").onFirst().assertExists()
             ui.onNodeWithTag("reference-close").performClick()
-            for(tag in listOf("drug-center-catalogue","drug-center-rcp","drug-center-notice","drug-center-safety","drug-center-supply","drug-center-recalls")) {
+            ui.onNodeWithTag("drug-center-list").performScrollToNode(hasTestTag("drug-center-catalogue"))
+            ui.onNodeWithTag("drug-center-catalogue").performClick()
+            ui.onNodeWithTag("reference-screen").performScrollToNode(hasTestTag("bdpm-panel"))
+            ui.onNodeWithTag("bdpm-panel").assertExists()
+            ui.onNodeWithTag("reference-close").performClick()
+            for(tag in listOf("drug-center-rcp","drug-center-notice","drug-center-safety","drug-center-supply","drug-center-recalls")) {
                 ui.onNodeWithTag("drug-center-list").performScrollToNode(hasTestTag(tag))
                 ui.onNodeWithTag(tag).performClick()
                 ui.onNodeWithTag("center-unavailable-close").performClick()

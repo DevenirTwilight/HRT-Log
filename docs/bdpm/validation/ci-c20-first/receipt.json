@@ -1,0 +1,13 @@
+{
+  "source": "c20ec8d6d8f5d6c456eee208f5b88337fee9c30c",
+  "workflow_run": 39772975132,
+  "job": 119804830487,
+  "artifact": 12422514628,
+  "official_sha256": "64b0bea963ca5337932a17c15744225af8a5a45481ca3b70242db0d358113549",
+  "download_sha256": "MATCH",
+  "zip_crc": "PASS",
+  "new_bdpm_native_tests": "4 PASS, 0 FAIL, 0 SKIP, 1.284 seconds for small correctness suite; not a performance acceptance",
+  "failure": "MigrationBaselineTest.existingSchemaNineOpensWithExtendedStateGuardsAndRetainsVoided: obsolete maximum business schema assertion expected 12, actual 13",
+  "native_app_flow": "NOT_RUN_IN_THIS_JOB_CORE_STAGE_FAILED",
+  "other_jobs": "STILL_RUNNING_NOT_CANCELLED"
+}

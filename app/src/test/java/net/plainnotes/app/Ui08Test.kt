@@ -140,7 +140,7 @@ class Ui08DayCardTest {
     @Test fun noStreaksBadgesOrJudgementWords() {
         val forbidden = listOf("坚持", "打卡", "连续", "得分", "正常", "异常", "偏低", "偏高", "堅持", "打卡", "連續", "得分", "正常", "異常")
         for (dir in listOf("values-zh", "values-b+zh+Hant")) {
-            val text = File("src/main/res/$dir/strings.xml").readText().substringAfter("<!-- UI-08 (REQUIREMENTS §138)")
+            val text = File("src/main/res/$dir/strings.xml").readText().substringAfter("<!-- UI-08 (REQUIREMENTS §140)")
             forbidden.forEach { w -> assertFalse("$dir: $w", text.contains(w)) }
         }
     }
@@ -304,7 +304,7 @@ class Ui08PdfSummaryUnchangedTest {
             "values-b+zh+Hant" to "2c53efeec7e47153485abac6f345dd11f43047849e9ebc140067b991be459a29", "values-fr" to "b12b41def544ec6069e8e941af03589bb9837403cb8426b4a1c16975c254eaf0")
         for ((dir, digest) in base) {
             val text = File("src/main/res/$dir/strings.xml").readText()
-            val a = text.indexOf("<!-- UI-08 (REQUIREMENTS §138)"); val b = text.lastIndexOf("</resources>")
+            val a = text.indexOf("<!-- UI-08 (REQUIREMENTS §140)"); val b = text.lastIndexOf("</resources>")
             assertTrue(dir, a in 0 until b)
             assertEquals(dir, digest, sha((text.substring(0, a) + text.substring(b)).toByteArray()))
         }

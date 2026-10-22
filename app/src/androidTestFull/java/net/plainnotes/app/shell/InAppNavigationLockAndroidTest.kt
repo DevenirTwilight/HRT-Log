@@ -5,6 +5,7 @@ import android.app.Activity
 import android.app.Instrumentation
 import java.util.concurrent.atomic.AtomicInteger
 import androidx.test.espresso.Espresso
+import androidx.compose.ui.platform.ViewRootForTest
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
@@ -159,11 +160,26 @@ class InAppNavigationLockAndroidTest {
         ui.onNodeWithTag("lab-batch").assertDoesNotExist()
     }
 
-    private fun back() {
-        // A visible Compose tree can precede the new Dialog's input-window focus on API26.
-        // Espresso waits for a resumed, laid-out, focused root before injecting the single Back.
+    private fun back(dialogTag: String? = null) {
+        // Composition does not prove that THIS dialog owns input focus: nested roots can
+        // leave Espresso seeing the preceding focused window on API26. Observe the exact
+        // tagged window before injecting one Back. Never retry a key or waive dismissal.
+        if (dialogTag != null) {
+            val view = (ui.onNodeWithTag(dialogTag).fetchSemanticsNode().root as ViewRootForTest).view
+            ui.waitUntil(10_000) {
+                var focused = false
+                ui.runOnUiThread { focused = view.isAttachedToWindow && view.hasWindowFocus() }
+                focused
+            }
+            // A visible IME consumes Back before a dialog does. This test checks dialog
+            // dismissal, with the keyboard closed, rather than issuing a second Back.
+            Espresso.closeSoftKeyboard()
+        }
         Espresso.pressBack()
         ui.waitForIdle()
+        if (dialogTag != null) {
+            ui.waitUntil(10_000) { ui.onAllNodesWithTag(dialogTag).fetchSemanticsNodes().isEmpty() }
+        }
     }
 
     /** Inspect the raw action: IntentFilter monitors also match actionless explicit launches and miss MIME types. */
@@ -214,19 +230,26 @@ class InAppNavigationLockAndroidTest {
                 ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag(tag))
                 ui.onNodeWithTag(tag).performClick()
                 ui.onNodeWithTag("center-unavailable-dialog").assertExists()
-                back()
+                back("center-unavailable-dialog")
                 ui.onNodeWithTag("center-unavailable-dialog").assertDoesNotExist()
                 ui.onNodeWithTag("medical-list").assertExists()
                 assertUnlocked("Back from $tag")
             }
             open(Destination.MEDICATIONS)
             ui.onNodeWithTag("drug-center-open").performClick()
-            listOf("catalogue", "rcp", "notice", "safety", "supply", "recalls").forEach { suffix ->
+            ui.onNodeWithTag("drug-center-list").performScrollToNode(hasTestTag("drug-center-catalogue"))
+            ui.onNodeWithTag("drug-center-catalogue").performClick()
+            ui.onNodeWithTag("reference-window").assertExists()
+            back("reference-window")
+            ui.onNodeWithTag("reference-window").assertDoesNotExist()
+            ui.onNodeWithTag("drug-center-window").assertExists()
+            assertUnlocked("Back from offline catalogue")
+            listOf("rcp", "notice", "safety", "supply", "recalls").forEach { suffix ->
                 val tag = "drug-center-$suffix"
                 ui.onNodeWithTag("drug-center-list").performScrollToNode(hasTestTag(tag))
                 ui.onNodeWithTag(tag).performClick()
                 ui.onNodeWithTag("center-unavailable-dialog").assertExists()
-                back()
+                back("center-unavailable-dialog")
                 ui.onNodeWithTag("center-unavailable-dialog").assertDoesNotExist()
                 ui.onNodeWithTag("drug-center-window").assertExists()
                 assertUnlocked("Back from $tag")
@@ -234,10 +257,10 @@ class InAppNavigationLockAndroidTest {
             ui.onNodeWithTag("drug-center-list").performScrollToNode(hasTestTag("drug-center-browse"))
             ui.onNodeWithTag("drug-center-browse").performClick()
             ui.onNodeWithTag("reference-screen").assertExists()
-            back()
+            back("reference-window")
             ui.onNodeWithTag("reference-window").assertDoesNotExist()
             ui.onNodeWithTag("drug-center-window").assertExists()
-            back()
+            back("drug-center-window")
             ui.onNodeWithTag("drug-center-window").assertDoesNotExist()
             title().assertTextEquals(context.getString(R.string.medications))
             assertUnlocked("Back to medication plans")
@@ -254,7 +277,7 @@ class InAppNavigationLockAndroidTest {
         scenario!!.recreate()
         assertUnlocked("recreate inside drug center")
         ui.onNodeWithTag("drug-center-window").assertExists()
-        back()
+        back("drug-center-window")
         ui.onNodeWithTag("drug-center-window").assertDoesNotExist()
         title().assertTextEquals(context.getString(R.string.medications))
         ui.onNodeWithTag("drug-center-open").performClick()
@@ -272,7 +295,7 @@ class InAppNavigationLockAndroidTest {
         ui.onNodeWithTag("labs-home-add").performClick()
         ui.onNodeWithTag("lab-batch").assertExists()
         ui.onNodeWithTag("lab-batch-estimate").assertIsNotSelected()
-        back()
+        back("lab-batch")
         ui.onNodeWithTag("lab-batch").assertDoesNotExist()
         ui.onNodeWithTag("labs-home").assertExists()
         assertUnlocked("cancel new home batch")

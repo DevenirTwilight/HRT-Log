@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.BackupReplacementTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2026-10-22T11:13:21.880Z" hostname="0a7cae0c7757" time="3.724">
+  <properties/>
+  <testcase name="inputLedgerOrderDoesNotChangeIdentityOrFrozenConsumption" classname="net.plainnotes.app.data.BackupReplacementTest" time="0.243"/>
+  <testcase name="streamedBusinessDigestIsStableAcrossReorderedRecoveryAndDetectsChangedFields" classname="net.plainnotes.app.data.BackupReplacementTest" time="0.232"/>
+  <testcase name="nonemptyReverseLedgerRestoresIntoItselfTwiceAndReopens" classname="net.plainnotes.app.data.BackupReplacementTest" time="0.799"/>
+  <testcase name="maintenancePreservesPreviouslyInstalledNonAttachmentGuards" classname="net.plainnotes.app.data.BackupReplacementTest" time="0.465"/>
+  <testcase name="indexedInputMatchesFrozenDomRecoveryDecisionsAndWholeData" classname="net.plainnotes.app.data.BackupReplacementTest" time="0.53"/>
+  <testcase name="invalidSourceRelationshipsAndDuplicateIdsLeaveEveryTargetRowAndGuardUntouched" classname="net.plainnotes.app.data.BackupReplacementTest" time="0.253"/>
+  <testcase name="deleteAllStructuredRowsAlsoHonoursTheSelfReference" classname="net.plainnotes.app.data.BackupReplacementTest" time="0.23"/>
+  <testcase name="failureAfterReplacementRollsBackRowsIdentitiesAndTriggerDefinitions" classname="net.plainnotes.app.data.BackupReplacementTest" time="0.387"/>
+  <testcase name="nonemptyDifferentTargetIsCompletelyReplacedWithoutMixingIds" classname="net.plainnotes.app.data.BackupReplacementTest" time="0.576"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

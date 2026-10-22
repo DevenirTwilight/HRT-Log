@@ -1,6 +1,6 @@
 ## UI-08 身心状态页重做：本地验证通过，PR 待 CI — 2026-10-22
 
-负责人上传 UI-08 任务书（§138），并要求“这个做完再给APK”：build35 在 UI-08 合并后出包，包含 UI-07b（#96）、LAB-04（#97）和 UI-08。
+负责人上传 UI-08 任务书（§140），并要求“这个做完再给APK”：build35 在 UI-08 合并后出包，包含 UI-07b（#96）、LAB-04（#97）和 UI-08。
 
 - **分支**：`feature/ui08-wellbeing-20261022`，基于 aaab9669（#97 合并后）。
 - **新文件**：`ui/WellbeingDaily.kt`，包括胶囊标签、日期行、大卡片和太阳、条目行、5 个按钮、趋势线。
@@ -15,6 +15,94 @@
 - **下一步**：
   1. 开 PR 并自动合并；
   4. 合并、主线 CI 全绿后出 build35：versionCode 35，正式签名，私密交付，登记账本。
+
+## BDPM 收尾证据位置与冻结规则 — 2026-10-22
+
+最终候选提交后仅等待必需CI及受保护集成；新功能或发现真实失败才修改代码，不跑同SHA碰绿。收尾完成时的原始工件/精确源码SHA/最终HANDOFF拟保存独立证据分支 `docs/bdpm-final-evidence-20261022` 并从PR98链接，避免为了给通过结果写自引用SHA而反复改变功能候选、重复触发原生。该分支尚未生成，不提前称CI通过或完成合并。
+
+## BDPM 原生054：API35核心4/真实App3均PASS，断网后续入口缺安装已修 — 2026-10-22
+
+API35 job119827753614：全套App阶段BUILD SUCCESSFUL，BdpmCatalogueAndroidTest4/0FAIL/0SKIP、BdpmReferenceFlowAndroidTest3/0FAIL/0SKIP；整体FAIL在独立断网后续，原始fresh-offline.log为Unable to find instrumentation，测试NOT_RUN，不能报离线重启PASS。AGP connected结束会卸载target/test APK；按仓库run_lab_panel_restart等现有做法，在断网/force-stop前安装同次两个APK，并拒绝skip状态。原artifact12427307059 ZIP/SHA/CRC和原始失败都保留scope-closeout。
+
+API26目标窗口焦点前置条件及单次Back的测试修正源码编译PASS，仍待最终原生；未改生产锁/化验/UI行为。API29整体SUCCESS，主Android检查继续运行，等待其完整结果后统一推收尾候选；不取消有效作业。最新生产仅四语明确子集，数据库与后端仍054；收尾包括容量/途径不同的合成断言、上述两处有明确证据的测试执行修正，不跑P4性能。
+
+## BDPM 原生054：API29 PASS；API26目录4 PASS但两项Back断言失败 — 2026-10-22
+
+API29 job119827754192整体SUCCESS；API26 job119827753971 FAIL：reference-window与原有lab-batch在单次Back后仍存在，不能视作通过。两个artifact原ZIP/SHA/CRC和各自真实BdpmCatalogueAndroidTest4/0FAIL/0SKIP在scope-closeout/native-054-receipt.json；不重跑同SHA。API35与主Android仍在跑，保留运行。
+
+下一候选：测试按目标语义节点对应的ViewRootForTest观察真实窗口焦点、显式关闭IME后只发送一次Back，保持原消失/锁/文件启动断言；仅待原生验证的时序修正，不预报已解决。另将合成药物设为SUBLINGUAL/37容量，与真实PROVAMES口服2mg/28片明确不同，防止错误覆盖仍碰巧等于原值：核心4+四语流程12及两个native编译全部PASS（different-route-capacity-flow.log）。生产变更只有四语目录范围说明，数据/事务未改。当前标签本地提交73b42862，后续安全测试/原生证据待同一收尾提交推送。
+
+## BDPM 收尾检查：四语范围说明补齐，设备CI在运行 — 2026-10-22
+
+054c30ad已推送，PR98 Draft；PR Android run39779777659正在API26/29/35原生与完整Android检查，JVM和Science已通过。重复push Android run39779771566已取消，仅保留PR有效运行，不运行P4性能。核查发现界面标题/范围尚未说明“HRT相关子集”，已补四语明确边界；相关翻译2项和目录导航1项本地PASS。README改为当前实现/验证状态，不再混合初始未实现待办。标签改动后四语320dp/2x真实App流程12项再次PASS；本地fullDebug构建确认目录与来源清单压缩合计107407B，非全功能APK增量/未交付。证据scope-closeout。标签与当前状态本地提交，等有效CI运行结束后推送最终候选，避免取消在跑原生；当前原生结果只属于054c30ad，不能提前归属于后续标签提交。
+
+剩余：读取本次API26/29/35真实报告，确认App关联3合同和断网新进程1合同；原生成功后冻结最终标签候选并运行其必需CI；符合§106条件才正常受保护合并（不绕过检查/评审）。真机/TalkBack仍NOT_RUN，不签名交付APK或发布。
+
+## BDPM 范围改为已确认的宽范围HRT子集 — 2026-10-22
+
+负责人确认雌激素/孕激素/睾酮/抗雄/GnRH宽范围。独立BDPM分支继续；默认构建从真实完整官方归档按SA有效成分代码选中420个CIS、550条包装、702条组成，资产360448B（352KiB），不再随APK分发15,883产品全库。规则tools/bdpm/hrt-selection.json；完整组成/包装逐行保留，非仅匹配成分。原始数据、日期/许可/TEST替代站限制不变；--profile full可复建完整库，不能称全球所有HRT或适应证认证。见docs/bdpm/hrt-subset.md。Python7项PASS；新子集真实资产核心查询/加密备份恢复4项及四语言实际Compose关联/取消/重开/解除/草稿返回/失败重试12项JVM复验全部PASS（1m50s）。隐私事实3项PASS，data/App原生源码编译PASS；原生尚未在子集执行，必需CI待新提交；证据hrt-subset。
+
+此前c20必需Android run39772975132已结束FAIL，不能合并：API35旧最高备份版本断言12；API29旧导航把已开放目录当未开放。另有android单元测试PrivacyNoticeFactsTest旧最高版本12断言，已更新最高13及user-only12两个明确断言，密码学/权限断言保留；三处测试按真实合同修正，原迁移数据和5项其他OFF/锁定/不启动文件界面断言保留。不是原生性能重跑；功能候选更新后正常CI，PR98保持Draft。P4/PK/Room/加密/签名发布不改。
+
+## BDPM PR98首轮API35：目录4合同PASS，旧最高版本断言FAIL已定位 — 2026-10-22
+
+候选c20ec8d6，PR98 Draft；必需Android run39772975132/Science39772975024，后者两项SUCCESS，JVM SUCCESS，android/API26/API29尚在运行，不取消有效任务。重复push任务已取消，P4手工性能流程未调度。API35 device job119804830487停在core阶段：新增BdpmCatalogueAndroidTest4/0FAIL/0SKIP已真实执行通过（1.284s小库正确性套，非性能指标）；唯一失败MigrationBaselineTest仍断言最高支持业务版本12，实际新增官方后13。已将该native-only断言明确13，Room13/旧user-only导出12/原迁移数据与VOIDED断言均保留。
+
+官方artifact12422514628（51063B）SHA64b0bea9…3549/CRC核验PASS，原ZIP和范围收据保存在docs/bdpm/validation/ci-c20-first；App原生流程未执行，不能称整个native PASS。其余作业完成后保存结果，再对实质测试修正做最终CI；不盲重跑同SHA、不改生产查询/事务/预算。当前工作树只有这项测试与证据进展修改，功能生产仍c20。
+
+## BDPM最终本地核心14/官方完整关联4与原生编译PASS，功能冻结待PR CI — 2026-10-22
+
+170345c7最后本地：BDPM4+原Payload10共14PASS，真实NotesApp四语言320dp/2x从搜索→包装→取消确认→确认关联→重开→解除关联4PASS，0FAIL/SKIP；data/App native源码编译PASS。final-local保存实际XML/log/SHA收据。加上此前草稿返回4和故障/重试/空结果4各自PASS，实际用户路径均有真实来源与非模拟响应证据；不将不同执行相加成同轮全套PASS。最后只修正官方详情标签（目录版本/下载日/原始途径，状态字段未展示而非用户未核实）及CI命令单行兼容，不改事务/查询；精确最终源码由接下来的必需CI验收。
+
+功能冻结：全量官方目录11,116,544B并非仅HRT子集，APK内压缩增量尚未测量；三个源完整计数与真实PROVAMES/CIP/成分原文均验证。来源替代TEST站及日期限制如实显示，CIS/COMPO与既有生产SHA匹配、96包装身份原文匹配；不宣称最新生产导出。无RCP正文/临床建议/库存推断；P4写入/正式入口边界、Room13/SQLCipher/PNBAK1/PK不改，备份业务13仅用于含官方历史快照。准备独立PR与6必需CI，取消可选P4性能工作流，不运行大库。真机/TalkBack/原生执行当前NOT_RUN；未签名交付APK或发布。
+
+## BDPM不可用/重试/空结果四语言验证PASS，准备最终候选CI — 2026-10-22
+
+新增真实文件系统故障合同四语言4项全部PASS（error-recovery-green）；不是伪造搜索结果：故障noBackup父路径导致真实目录打开失败，原用户行保留，恢复正常路径后重试真实PROVAMES成功，再查不存在词显示明确空结果。原生App源码编译PASS。加上之前8项保存/取消/重开/未保存草稿路径，目前新流程12项分别通过；最终官方解除关联已加最后目标复验，未冒充已经执行。
+
+CI离线重启用直接instrumentation保存独立日志，不用第二次Gradle connected任务覆盖完整App报告；主线原6必需检查保留。正式PR前只复验新增解除/手工来源拒绝官方标记及源码编译；不恢复P4性能。主线仍aaab9669，无其他分支合并或APK/发布动作。
+
+## BDPM真实App四语言保存/取消/重开与草稿路径8项全部PASS — 2026-10-22
+
+已定位并修复真实查询丢失：旧LazyColumn动态加载行移除改变无key目录项的位置，组件内remember状态重建，fr/zh未保存草稿输入关键词被清空，状态停INITIAL，原语义树/失败XML保留query-state-red。查询/结果/选择/IO作用域现由整个Dialog持有，目录项固定key，不等初始用户库加载、不在滚出列表时取消查询。修后相同未保存路径与真实NotesApp关联路径共8项四语言320dp/2x全部PASS；后者加入官方最终确认取消→无关联→再确认，原剂量/库存/记录/Profile均不变。dialog-state-green保存XML/log。
+
+官方核心4项（新增实际用药记录的历史来源捕获，在重新关联/备份恢复后仍精确不变）、翻译3项同轮PASS；App和data原生合同源码编译PASS。无原生执行结论。现补最后一个真实文件系统不可用→重试恢复→无匹配的共享UI合同及选中页签TalkBack语义，随后仅跑新场景和必要编译，再冻结源码进入PR必需CI。没有P4性能任务或签名发布。
+
+## BDPM备份兼容目标52项通过；UI测试平台调度修正待验 — 2026-10-22
+
+受影响的HistoricalVisit18/LabPanelData14/ReferenceMigration16/BDPM4共52项当前全部PASS，原532回归另外529项通过证据仍保留；不把两次运行合成一次全绿。5项Python来源/查询/只读/重建（两次同环境字节一致、逻辑全表相同）PASS，工具链版本独立记录。
+
+第二轮App原32项仍PASS；新增8项中英草稿浏览1PASS，其余7FAIL。保存4例已点击真实确认，但仅轮询viewModel state未驱动Robolectric暂停的Android Main Looper，现复用DataRefreshTest方式通过平台hook驱动，native hook为空；所有原超时及成功/数据不变断言保留。未保存fr/zh搜索超时增加实际状态节点报告，避免猜测原因。原XML/log完整保留second-compose，不伪称业务RED或成功。native App编译缺SQLCipher编译可见性，现加androidTestCompileOnly现有sqlcipher库（运行时core:data早已包含，不新增release依赖），待编译确认。
+
+目前App/核心均无在途旧任务；下一步只重验变更8项及native源码编译，不重跑52/529已通过项。真实App路径/native断网重启尚未完成，整项功能不得宣布完成；不运行P4性能。
+
+## BDPM核心23项PASS；全回归版本断言与异步UI等待正在修正 — 2026-10-22
+
+目标数据23项（BDPM4/原Payload10/原用户目录6/规范字节3）已全部PASS；Android合同源码编译PASS。App原有关联16、controller7、时期5、旧中心导航1、翻译3共32项PASS；新增8项失败原样保存first-compose，主要是点击包装后未等待IO快照、立即找尚不存在的确认框，另有未保存草稿搜索超时待复核。测试增加等待真实预览节点（不伪造结果/降低断言），UI加入选择进度并把搜索移到长说明前。相同真实流程已抽共享contract，新增native SQLCipher App子类及断网force-stop后只读目录验证，尚未执行，不称PASS。
+
+完整data532中529PASS/3FAIL（full-data-first原XML/log），3处旧测试将全局最高支持版本与实际user-only导出版本混用。已使两项最高版本断言明确13，冻结旧逐字JSON对照明确保持原12；没有改原字节/只读/回滚/数据断言。新增BDPM合同同时明确无官方快照导出12、有官方历史导出13及旧读者拒绝。接下来只重验受影响三类和App流程、编译新增native，不重复已通过的其他529项；最终CI仍会正常跑全部。
+
+来源补强：本次CIS/COMPO完整SHA匹配仓库已记录的10月17日生产下载；原96包装身份/原文全匹配。CIP全文件不同，仍如实标替代TEST站及其公布日期，不称最新生产。32项App与532数据结果不是同次最终全绿；全部SHA/原日志随提交保存。
+
+## BDPM资产已纳入Git，首轮真实数据与UI回归继续 — 2026-10-22
+
+修正通用*.sqlite忽略导致首提交未跟踪生成资产，现显式纳入公开只读catalogue.sqlite（非用户数据）。4项Python来源/全量/PROVAMES/只读/孤立记录检查PASS；生产main编译PASS。首轮新增数据类被JUnit因Boolean返回声明拒绝执行，修Unit后3项通过，关联合同新增完整审计断言因测试未入事务失败；现按原审计要求进入Room事务，不改审计或断言。原两轮XML/日志保存docs/bdpm/validation，非业务RED不伪称安全反例。
+
+相同4合同已提升共享JVM/Android源码，native版本使用SQLCipher用户DB；加入既有API26/29名单，API35自动执行，不启动新性能流程。新的真实NotesApp→药物→资料→PROVAMES→28片→明确确认→重开及未保存草稿浏览返回，覆盖四语言320dp/2x，正在与原关联/时期/翻译测试一起执行。旧中心placeholder测试只把已实现目录入口改测真实callback，其余5不可用模块断言保留。尚无新最终PASS/CI结论，后续先完成当前测试。
+
+## BDPM全量资产与首条真实UI路径已编码，验证未完成 — 2026-10-22
+
+正式官方源15883/20908/32439条已构建只读SQLite11116544B，资产SHA38cd2b6a…60030，PROVAMES65421374及28片3400935479341从数据校验通过。源原字节gzip/编码/日期/URL/SHA/许可与v4/v5证据随库保存。真实FT与文档ST不一致、4条孤立CIP均明确处理，详见docs/bdpm/README.md；替代站TEST环境标记不隐瞒。
+
+已编码独立IO只读查询、官方/用户页签、搜索五状态、包装与产品选择接原确认流程；format2 BDPM_FR来源与旧format1 USER_ENTERED区分，现有快照表无需Room迁移。含官方快照备份拟schema13/旧资料仍12，PNBAK1不变；旧读者提前拒绝。编译首轮发现MeasuredBackupJson导出变量名误用raw，已修db；当前源码尚待最终编译与风险测试，不能宣称PASS或正式完成。P4不改策略/性能，其他工作树不动。
+
+## BDPM真实全量离线目录开发开始（独立于P4）— 2026-10-22
+
+工作树/workspace/HRT-Log-bdpm，独立分支feature/bdpm-offline-catalogue-20261022，最新主线aaab9669（#97）。已读#58/#74/#82；它们的OFF是此前许可/内容范围状态，本次授权核实并实施结构化身份目录，不合入未审#58。P4后续已在主线，不使用旧87202分支作基线。
+
+生产BDPM域返回503；ANSM替代host bdpmt.ansm.sante.fr可读取真实全量及格式v4/下载许可。替代站带TEST横幅，明确记录，不谎称最新生产导出。已核实PROVAMES65421374/28片3400935479341，3份源15883/20908/32439行、cp1252/UTF8/cp1252。新全量转换脚本和只读数据层编码中，尚未验证/接UI；所有未完成不得当交付。来源文件版本日期按各文件页面单列；SA/ST不做聚合。旧scripts/bdpm_reference.py是部分药物研究摘录，不替代全量目录。
+
+下一步：完成资产可重复构建、最小官方快照兼容、真实搜索/包装/关联UI和风险测试；不跑P4大库，不签名发布。
 
 ## LAB-04 时间线合并化验：本地验证通过，PR 待 CI — 2026-10-22
 

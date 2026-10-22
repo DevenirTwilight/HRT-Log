@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.WellbeingRecordsTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-22T11:15:04.446Z" hostname="0a7cae0c7757" time="0.348">
+  <properties/>
+  <testcase name="invalidReviewCannotReplaceExistingPersonalRecord" classname="net.plainnotes.app.data.WellbeingRecordsTest" time="0.05"/>
+  <testcase name="reviewSymptomAndVisibilityRoundTripThroughEncryptedBackup" classname="net.plainnotes.app.data.WellbeingRecordsTest" time="0.234"/>
+  <testcase name="orderingDoesNotChangeScoresAndRejectsMissingItems" classname="net.plainnotes.app.data.WellbeingRecordsTest" time="0.062"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

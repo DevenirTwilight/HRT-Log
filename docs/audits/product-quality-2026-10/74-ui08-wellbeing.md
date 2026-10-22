@@ -1,6 +1,6 @@
 # 74 — UI-08：身心状态页重做（2026-10-22）
 
-- **任务书**：`sources/ui08/ui08-prompt.md`（SHA-256 `c026c7b6…52749a9f5`），REQUIREMENTS §138。
+- **任务书**：`sources/ui08/ui08-prompt.md`（SHA-256 `c026c7b6…52749a9f5`），REQUIREMENTS §140。
 - **前置**：UI-07b（#96）和 LAB-04（#97）都已合并，本分支基于默认分支 aaab9669。
 - **分支**：`feature/ui08-wellbeing-20261022`。
 - **性质**：只改身心状态的界面。

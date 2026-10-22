@@ -1,0 +1,18 @@
+{
+  "purpose": "Asset compressed contribution only; local fullDebug build with pending resource edits, not a delivered APK or clean final-source acceptance",
+  "asset_source_commit": "054c30ad8beac2449a560f58bc9a9524cf66624e",
+  "entries": {
+    "assets/bdpm/catalogue.sqlite": {
+      "uncompressed_bytes": 360448,
+      "compressed_bytes": 98386,
+      "sha256": "052cc33e0d3f3aa11ffa941d86580f25aa35e288aeead0abb8b45847d18d8a5b"
+    },
+    "assets/bdpm/manifest.json": {
+      "uncompressed_bytes": 94823,
+      "compressed_bytes": 9021,
+      "sha256": "17bd6f2984f0c0de1da0dcf9d296ee4eb7f3a23454382ad3e83f958c615362c5"
+    }
+  },
+  "combined_compressed_bytes": 107407,
+  "excludes": "APK ZIP headers/signature/directory and general app code; not full feature APK size delta"
+}

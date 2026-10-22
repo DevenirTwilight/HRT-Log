@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="bdpm_title">法国 HRT 相关药品目录</string>
+    <string name="bdpm_available">法国 BDPM 身份目录已内置，可离线搜索。RCP/说明书及监控服务独立，尚未开放。</string>
+    <string name="bdpm_source">来源：BDPM（ANSM / HAS / UNCAM），复制的官方结构化记录。不代表官方背书或临床核验。</string>
+    <string name="bdpm_scope">按成分筛选的 HRT 相关子集，不包含法国全部药品；收录不代表治疗建议。来源：BDPM，Licence Ouverte 1.0。来自 ANSM 替代站点（测试环境）的注明日期离线副本，未能核实最新生产导出。不表示实时供应、处方建议或 ANSM 背书。SA 和 FT/ST 行分别展示，绝不相加。</string>
+    <string name="bdpm_search_label">商品名、有效成分、CIS 或 CIP13</string>
+    <string name="bdpm_initial">输入关键词，搜索内置目录。</string>
+    <string name="bdpm_searching">正在离线搜索…</string>
+    <string name="bdpm_empty">没有匹配的官方记录。请尝试其他拼写或成分名。</string>
+    <string name="bdpm_unavailable">目录暂不可用。重试可修复本地目录副本，不影响原有加密记录。</string>
+    <string name="bdpm_results">官方目录搜索结果</string>
+    <string name="bdpm_dates">来源日期：身份 %1$s · 包装 %2$s · 成分 %3$s。下载于 %4$s。</string>
+    <string name="bdpm_snapshot_dates">来源日期：%1$s · 下载于 %2$s。历史副本不会被目录更新改写。</string>
+    <string name="bdpm_packages">查看包装与选择</string>
+    <string name="bdpm_package_boundary">选择包装仅保存资料关联，不确认实际使用、容量或库存。</string>
+    <string name="bdpm_choose_package">选择此资料包装</string>
+    <string name="bdpm_product_only">仅选择产品，不指定包装</string>
+    <string name="bdpm_limited">显示前 50 条匹配产品。请细化关键词查找更多。</string>
+    <string name="bdpm_routes">给药途径（官方原文）</string>
+    <string name="bdpm_version">目录快照版本</string>
+    <string name="bdpm_downloaded">下载日期</string>
+    <string name="bdpm_status_omitted">此身份目录不展示许可、上市及供应状态，不应据此推断可获得性或安全性。</string>
+</resources>

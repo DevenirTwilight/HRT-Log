@@ -1,0 +1,3778 @@
+{
+  "downloaded_on": "2026-10-22",
+  "source": "Base de Données Publique des Médicaments (ANSM / HAS / UNCAM)",
+  "download_page": "https://bdpmt.ansm.sante.fr/telechargement",
+  "source_environment": "ANSM alternative host; download page displays TEST banner; not certified latest production export",
+  "production_download_attempt": "503 from base-donnees-publique.medicaments.gouv.fr on 2026-10-22",
+  "date_semantics": "Dates displayed beside individual files; HTTP Last-Modified/export timestamp not supplied",
+  "license": "Licence Ouverte 1.0 (download contract); data.gouv.fr identifies fr-lo; footer 2.0 link is not substituted for the supplied contract",
+  "license_url": "https://bdpmt.ansm.sante.fr/docs/telechargement/licence_bdpm.pdf",
+  "inputs": {
+    "CIS_bdpm.txt": {
+      "url": "https://bdpmt.ansm.sante.fr/download/file/CIS_bdpm.txt",
+      "encoding": "cp1252",
+      "sha256": "332b95926f76f1a2ab3d70cdf64205397fc13e74b7cc9afad9b625fbb6961640",
+      "bytes": 3175357,
+      "rows": 15883,
+      "source_updated_on": "2026-09-29"
+    },
+    "CIS_CIP_bdpm.txt": {
+      "url": "https://bdpmt.ansm.sante.fr/download/file/CIS_CIP_bdpm.txt",
+      "encoding": "utf-8",
+      "sha256": "fa50ec934445c2f6c0c74ee18c9df41d2de68861c4751d1650774504d56742ec",
+      "bytes": 4148432,
+      "rows": 20908,
+      "source_updated_on": "2026-10-13"
+    },
+    "CIS_COMPO_bdpm.txt": {
+      "url": "https://bdpmt.ansm.sante.fr/download/file/CIS_COMPO_bdpm.txt",
+      "encoding": "cp1252",
+      "sha256": "90a6e8ee286b6245c3938dd417ac75d1135a61b15ba50cfad70ee6b3bd181b7a",
+      "bytes": 2735840,
+      "rows": 32439,
+      "source_updated_on": "2026-09-29"
+    }
+  },
+  "orphan_packages": {
+    "count": 4,
+    "cis": [
+      "63278664",
+      "64917175",
+      "65999410",
+      "69912584"
+    ],
+    "handling": "preserved in orphan_package; not presented as identified products"
+  },
+  "composition_kinds": {
+    "FT": 5524,
+    "SA": 26915
+  },
+  "composition_semantics": "Raw SA/FT/ST codes preserved, never merged or summed; v4 describes ST whereas supplied rows use FT",
+  "selection": {
+    "profile": "hrt",
+    "rules_sha256": "049d4d0e6512c852030c1e95645442bcccd34f142ca073669e0ddfb353a1a821",
+    "rules": {
+      "version": 1,
+      "scope": "Broad HRT-related ingredient catalogue: feminising, masculinising, menopausal replacement and suppression adjuncts. Ingredient membership is not an indication or recommendation. Includes combinations, local formulations and contraceptive presentations sharing these ingredients.",
+      "selection": "Exact BDPM substance_code on SA rows only. Retain every product, all of its composition rows and all linked packages. No name matching, dose arithmetic or availability inference.",
+      "coverage_limit": "Only the archived French BDPM export. Not all medicines worldwide, not a clinical certification of HRT suitability; absent substances and future codes require review.",
+      "groups": {
+        "estrogen": {
+          "01786": "estradiol",
+          "04287": "estradiol valerate",
+          "71064": "estradiol hemihydrate",
+          "01778": "estriol",
+          "00588": "promestriene",
+          "01807": "ethinylestradiol",
+          "24247": "ethinylestradiol betadex-clathrate",
+          "52209": "estetrol monohydrate"
+        },
+        "progestogen": {
+          "02229": "progesterone",
+          "00557": "medroxyprogesterone acetate",
+          "03344": "hydroxyprogesterone caproate",
+          "01765": "dydrogesterone",
+          "03940": "norethisterone acetate",
+          "00196": "levonorgestrel",
+          "27380": "desogestrel",
+          "36376": "etonogestrel",
+          "04400": "norgestimate",
+          "17048": "norelgestromin",
+          "08237": "gestodene",
+          "18867": "drospirenone",
+          "49665": "dienogest",
+          "28293": "nomegestrol acetate",
+          "02576": "medrogestone",
+          "02245": "chlormadinone acetate",
+          "19481": "megestrol acetate"
+        },
+        "androgen": {
+          "02934": "testosterone",
+          "22217": "testosterone undecanoate",
+          "05477": "testosterone enanthate",
+          "00050": "androstanolone",
+          "24140": "prasterone"
+        },
+        "antiandrogen_adjunct": {
+          "00987": "cyproterone acetate",
+          "00977": "spironolactone",
+          "17637": "bicalutamide",
+          "02132": "nilutamide",
+          "32743": "finasteride",
+          "36065": "dutasteride"
+        },
+        "gnrh_suppression": {
+          "05534": "goserelin acetate",
+          "88822": "leuprorelin acetate",
+          "07277": "leuprorelin",
+          "64615": "leuprorelin mesilate",
+          "82435": "nafarelin acetate",
+          "57670": "triptorelin acetate",
+          "48674": "triptorelin pamoate",
+          "06197": "triptorelin",
+          "93978": "degarelix acetate",
+          "15989": "relugolix"
+        },
+        "other_replacement": {
+          "81834": "tibolone"
+        }
+      }
+    },
+    "unmatched_codes": [],
+    "matches": [
+      {
+        "cis": "60008724",
+        "substance_code": "36065",
+        "name": "DUTASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "60021127",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "60051234",
+        "substance_code": "36065",
+        "name": "DUTASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "60054077",
+        "substance_code": "88822",
+        "name": "ACÉTATE DE LEUPRORÉLINE",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "60058378",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "60071379",
+        "substance_code": "71064",
+        "name": "BÊTA-ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "60073960",
+        "substance_code": "24140",
+        "name": "PRASTÉRONE",
+        "group": "androgen"
+      },
+      {
+        "cis": "60078078",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "60092811",
+        "substance_code": "48674",
+        "name": "PAMOATE DE TRIPTORÉLINE",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "60106848",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "60106848",
+        "substance_code": "18867",
+        "name": "DROSPIRÉNONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "60123363",
+        "substance_code": "32743",
+        "name": "FINASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "60156089",
+        "substance_code": "17637",
+        "name": "BICALUTAMIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "60221042",
+        "substance_code": "32743",
+        "name": "FINASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "60239706",
+        "substance_code": "01778",
+        "name": "ESTRIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "60239802",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "60239802",
+        "substance_code": "27380",
+        "name": "DÉSOGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "60311746",
+        "substance_code": "88822",
+        "name": "ACÉTATE DE LEUPRORÉLINE",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "60337762",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "60397542",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "60397542",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "60429851",
+        "substance_code": "36065",
+        "name": "DUTASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "60464076",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "60535331",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "60555469",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "60555469",
+        "substance_code": "18867",
+        "name": "DROSPIRÉNONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "60580369",
+        "substance_code": "32743",
+        "name": "FINASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "60625921",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "60639255",
+        "substance_code": "88822",
+        "name": "ACÉTATE DE LEUPRORÉLINE",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "60658750",
+        "substance_code": "32743",
+        "name": "FINASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "60661312",
+        "substance_code": "28293",
+        "name": "ACÉTATE DE NOMÉGESTROL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "60689468",
+        "substance_code": "18867",
+        "name": "DROSPIRÉNONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "60689468",
+        "substance_code": "52209",
+        "name": "ESTÉTROL MONOHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "60719986",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "60719986",
+        "substance_code": "08237",
+        "name": "GESTODÈNE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "60734372",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "60747099",
+        "substance_code": "01778",
+        "name": "ESTRIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "60812935",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "60828074",
+        "substance_code": "48674",
+        "name": "PAMOATE DE TRIPTORÉLINE",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "60880975",
+        "substance_code": "02229",
+        "name": "PROGESTÉRONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "60899178",
+        "substance_code": "00987",
+        "name": "ACÉTATE DE CYPROTÉRONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "60928199",
+        "substance_code": "48674",
+        "name": "PAMOATE DE TRIPTORÉLINE",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "60928936",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "60928936",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "60928936",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "60928936",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "60940721",
+        "substance_code": "04287",
+        "name": "VALÉRATE D'ESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "60946980",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "60946980",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "61087799",
+        "substance_code": "28293",
+        "name": "ACÉTATE DE NOMÉGESTROL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "61106705",
+        "substance_code": "27380",
+        "name": "DÉSOGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "61109509",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "61109509",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "61109509",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "61109509",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "61109509",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "61109509",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "61117406",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "61117406",
+        "substance_code": "18867",
+        "name": "DROSPIRÉNONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "61145551",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "61145551",
+        "substance_code": "18867",
+        "name": "DROSPIRÉNONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "61171418",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "61171418",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "61192519",
+        "substance_code": "32743",
+        "name": "FINASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "61255738",
+        "substance_code": "00987",
+        "name": "CYPROTÉRONE (ACÉTATE DE)",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "61273686",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "61273686",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "61294680",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "61294680",
+        "substance_code": "08237",
+        "name": "GESTODÈNE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "61325649",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "61325649",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "61335127",
+        "substance_code": "28293",
+        "name": "ACÉTATE DE NOMÉGESTROL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "61335127",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "61398768",
+        "substance_code": "36065",
+        "name": "DUTASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "61400411",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "61400411",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "61419568",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "61419568",
+        "substance_code": "27380",
+        "name": "DÉSOGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "61444482",
+        "substance_code": "04287",
+        "name": "VALÉRATE D'ESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "61444482",
+        "substance_code": "00557",
+        "name": "ACÉTATE DE MÉDROXYPROGESTÉRONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "61444482",
+        "substance_code": "04287",
+        "name": "VALÉRATE D'ESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "61452187",
+        "substance_code": "27380",
+        "name": "DÉSOGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "61457558",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "61485148",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "61485148",
+        "substance_code": "08237",
+        "name": "GESTODÈNE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "61497143",
+        "substance_code": "02229",
+        "name": "PROGESTÉRONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "61536144",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "61536144",
+        "substance_code": "08237",
+        "name": "GESTODÈNE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "61564097",
+        "substance_code": "00588",
+        "name": "PROMESTRIÈNE",
+        "group": "estrogen"
+      },
+      {
+        "cis": "61599842",
+        "substance_code": "17637",
+        "name": "BICALUTAMIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "61614600",
+        "substance_code": "22217",
+        "name": "UNDÉCANOATE DE TESTOSTÉRONE",
+        "group": "androgen"
+      },
+      {
+        "cis": "61614618",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "61653489",
+        "substance_code": "36065",
+        "name": "DUTASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "61662029",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "61662634",
+        "substance_code": "17637",
+        "name": "BICALUTAMIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "61672151",
+        "substance_code": "32743",
+        "name": "FINASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "61673424",
+        "substance_code": "02229",
+        "name": "PROGESTÉRONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "61699383",
+        "substance_code": "32743",
+        "name": "FINASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "61727306",
+        "substance_code": "18867",
+        "name": "DROSPIRÉNONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "61727306",
+        "substance_code": "24247",
+        "name": "ÉTHINYLESTRADIOL BÉTADEX-CLATHRATE",
+        "group": "estrogen"
+      },
+      {
+        "cis": "61743794",
+        "substance_code": "36065",
+        "name": "DUTASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "61774149",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "61797183",
+        "substance_code": "01778",
+        "name": "ESTRIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "61798869",
+        "substance_code": "32743",
+        "name": "FINASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "61847608",
+        "substance_code": "04287",
+        "name": "ESTRADIOL (VALÉRATE D')",
+        "group": "estrogen"
+      },
+      {
+        "cis": "61847608",
+        "substance_code": "00987",
+        "name": "ACÉTATE DE CYPROTÉRONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "61847608",
+        "substance_code": "04287",
+        "name": "ESTRADIOL (VALÉRATE D')",
+        "group": "estrogen"
+      },
+      {
+        "cis": "61848286",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "61848286",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "61848286",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "61848286",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "61848286",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "61848286",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "61912244",
+        "substance_code": "48674",
+        "name": "PAMOATE DE TRIPTORÉLINE",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "61924200",
+        "substance_code": "17637",
+        "name": "BICALUTAMIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "61938189",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "61997052",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "62003590",
+        "substance_code": "00987",
+        "name": "ACÉTATE DE CYPROTÉRONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "62003590",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "62022046",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "62022046",
+        "substance_code": "27380",
+        "name": "DÉSOGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "62025626",
+        "substance_code": "36065",
+        "name": "DUTASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "62028953",
+        "substance_code": "00987",
+        "name": "ACÉTATE DE CYPROTÉRONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "62043026",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "62043026",
+        "substance_code": "08237",
+        "name": "GESTODÈNE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "62044231",
+        "substance_code": "00987",
+        "name": "CYPROTÉRONE (ACÉTATE DE)",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "62044231",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "62075038",
+        "substance_code": "02229",
+        "name": "PROGESTÉRONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "62079905",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "62079905",
+        "substance_code": "27380",
+        "name": "DÉSOGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "62120177",
+        "substance_code": "32743",
+        "name": "FINASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "62127360",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "62148867",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "62148867",
+        "substance_code": "36376",
+        "name": "ÉTONOGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "62210849",
+        "substance_code": "03940",
+        "name": "ACÉTATE DE NORÉTHISTÉRONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "62210849",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "62223483",
+        "substance_code": "27380",
+        "name": "DÉSOGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "62251707",
+        "substance_code": "18867",
+        "name": "DROSPIRÉNONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "62251707",
+        "substance_code": "24247",
+        "name": "ÉTHINYLESTRADIOL BÉTADEX-CLATHRATE",
+        "group": "estrogen"
+      },
+      {
+        "cis": "62263257",
+        "substance_code": "01778",
+        "name": "ESTRIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "62271624",
+        "substance_code": "49665",
+        "name": "DIÉNOGEST",
+        "group": "progestogen"
+      },
+      {
+        "cis": "62290927",
+        "substance_code": "00987",
+        "name": "CYPROTÉRONE (ACÉTATE DE)",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "62290927",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "62316507",
+        "substance_code": "32743",
+        "name": "FINASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "62351344",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "62351344",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "62363396",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "62398529",
+        "substance_code": "17637",
+        "name": "BICALUTAMIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "62402447",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "62403976",
+        "substance_code": "88822",
+        "name": "ACÉTATE DE LEUPRORÉLINE",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "62429736",
+        "substance_code": "00557",
+        "name": "ACÉTATE DE MÉDROXYPROGESTÉRONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "62450997",
+        "substance_code": "00987",
+        "name": "ACÉTATE DE CYPROTÉRONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "62465928",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "62479447",
+        "substance_code": "88822",
+        "name": "ACÉTATE DE LEUPRORÉLINE",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "62512491",
+        "substance_code": "04287",
+        "name": "VALÉRATE D'ESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "62517392",
+        "substance_code": "32743",
+        "name": "FINASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "62582326",
+        "substance_code": "00557",
+        "name": "ACÉTATE DE MÉDROXYPROGESTÉRONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "62617300",
+        "substance_code": "00557",
+        "name": "ACÉTATE DE MÉDROXYPROGESTÉRONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "62617300",
+        "substance_code": "04287",
+        "name": "ESTRADIOL (VALÉRATE D')",
+        "group": "estrogen"
+      },
+      {
+        "cis": "62619486",
+        "substance_code": "32743",
+        "name": "FINASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "62673263",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "62673690",
+        "substance_code": "28293",
+        "name": "ACÉTATE DE NOMÉGESTROL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "62684797",
+        "substance_code": "02229",
+        "name": "PROGESTÉRONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "62700550",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "62700550",
+        "substance_code": "08237",
+        "name": "GESTODÈNE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "62716818",
+        "substance_code": "36065",
+        "name": "DUTASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "62753154",
+        "substance_code": "00987",
+        "name": "ACÉTATE DE CYPROTÉRONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "62753154",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "62770926",
+        "substance_code": "28293",
+        "name": "ACÉTATE DE NOMÉGESTROL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "62794254",
+        "substance_code": "17637",
+        "name": "BICALUTAMIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "62828991",
+        "substance_code": "32743",
+        "name": "FINASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "62842966",
+        "substance_code": "06197",
+        "name": "TRIPTORÉLINE",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "62972842",
+        "substance_code": "00588",
+        "name": "PROMESTRIÈNE",
+        "group": "estrogen"
+      },
+      {
+        "cis": "63048955",
+        "substance_code": "36065",
+        "name": "DUTASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "63066273",
+        "substance_code": "05477",
+        "name": "ÉNANTATE DE TESTOSTÉRONE",
+        "group": "androgen"
+      },
+      {
+        "cis": "63068064",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "63068064",
+        "substance_code": "18867",
+        "name": "DROSPIRÉNONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "63071085",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "63071085",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "63071975",
+        "substance_code": "01786",
+        "name": "ESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "63099572",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "63099572",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "63127452",
+        "substance_code": "32743",
+        "name": "FINASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "63145849",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "63157698",
+        "substance_code": "02229",
+        "name": "PROGESTÉRONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "63216075",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "63226258",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "63226258",
+        "substance_code": "27380",
+        "name": "DÉSOGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "63235054",
+        "substance_code": "71064",
+        "name": "BÊTA-ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "63295699",
+        "substance_code": "36065",
+        "name": "DUTASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "63308748",
+        "substance_code": "49665",
+        "name": "DIÉNOGEST",
+        "group": "progestogen"
+      },
+      {
+        "cis": "63329030",
+        "substance_code": "93978",
+        "name": "DÉGARÉLIX (ACÉTATE DE)",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "63393104",
+        "substance_code": "02229",
+        "name": "PROGESTÉRONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "63408595",
+        "substance_code": "28293",
+        "name": "NOMÉGESTROL (ACÉTATE DE)",
+        "group": "progestogen"
+      },
+      {
+        "cis": "63436228",
+        "substance_code": "01786",
+        "name": "ESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "63443190",
+        "substance_code": "28293",
+        "name": "ACÉTATE DE NOMÉGESTROL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "63449204",
+        "substance_code": "81834",
+        "name": "TIBOLONE",
+        "group": "other_replacement"
+      },
+      {
+        "cis": "63463104",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "63468941",
+        "substance_code": "81834",
+        "name": "TIBOLONE",
+        "group": "other_replacement"
+      },
+      {
+        "cis": "63560165",
+        "substance_code": "32743",
+        "name": "FINASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "63589409",
+        "substance_code": "07277",
+        "name": "LEUPRORÉLINE",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "63591253",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "63591253",
+        "substance_code": "08237",
+        "name": "GESTODÈNE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "63603104",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "63609655",
+        "substance_code": "28293",
+        "name": "ACÉTATE DE NOMÉGESTROL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "63609655",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "63615576",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "63615576",
+        "substance_code": "08237",
+        "name": "GESTODÈNE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "63686819",
+        "substance_code": "36065",
+        "name": "DUTASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "63713522",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "63713522",
+        "substance_code": "36376",
+        "name": "ÉTONOGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "63822272",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "63822272",
+        "substance_code": "18867",
+        "name": "DROSPIRÉNONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "63873854",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "63905960",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "63907395",
+        "substance_code": "03344",
+        "name": "HYDROXYPROGESTÉRONE (CAPROATE D')",
+        "group": "progestogen"
+      },
+      {
+        "cis": "63914596",
+        "substance_code": "02934",
+        "name": "TESTOSTÉRONE",
+        "group": "androgen"
+      },
+      {
+        "cis": "63941294",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "63941294",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "63941294",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "63941294",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "63941294",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "63941294",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "63954950",
+        "substance_code": "82435",
+        "name": "ACÉTATE DE NAFARÉLINE",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "64018267",
+        "substance_code": "02229",
+        "name": "PROGESTÉRONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "64049405",
+        "substance_code": "03940",
+        "name": "ACÉTATE DE NORÉTHISTÉRONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "64049405",
+        "substance_code": "15989",
+        "name": "RÉLUGOLIX",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "64049405",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "64053460",
+        "substance_code": "02245",
+        "name": "ACÉTATE DE CHLORMADINONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "64061667",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "64061941",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "64066269",
+        "substance_code": "00987",
+        "name": "CYPROTÉRONE (ACÉTATE DE)",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "64066269",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "64069322",
+        "substance_code": "17637",
+        "name": "BICALUTAMIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "64091062",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "64091062",
+        "substance_code": "49665",
+        "name": "DIÉNOGEST",
+        "group": "progestogen"
+      },
+      {
+        "cis": "64099785",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "64099785",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "64108056",
+        "substance_code": "36065",
+        "name": "DUTASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "64115976",
+        "substance_code": "18867",
+        "name": "DROSPIRÉNONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "64115976",
+        "substance_code": "24247",
+        "name": "ÉTHINYLESTRADIOL BÉTADEX-CLATHRATE",
+        "group": "estrogen"
+      },
+      {
+        "cis": "64126499",
+        "substance_code": "27380",
+        "name": "DÉSOGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "64128450",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "64183183",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "64194443",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "64199102",
+        "substance_code": "93978",
+        "name": "ACÉTATE DE DÉGARÉLIX",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "64205548",
+        "substance_code": "02934",
+        "name": "TESTOSTÉRONE",
+        "group": "androgen"
+      },
+      {
+        "cis": "64226503",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "64226503",
+        "substance_code": "08237",
+        "name": "GESTODÈNE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "64231450",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "64231450",
+        "substance_code": "36376",
+        "name": "ÉTONOGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "64268630",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "64268630",
+        "substance_code": "08237",
+        "name": "GESTODÈNE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "64270784",
+        "substance_code": "17637",
+        "name": "BICALUTAMIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "64322708",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "64347259",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "64358280",
+        "substance_code": "02229",
+        "name": "PROGESTÉRONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "64392076",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "64392076",
+        "substance_code": "18867",
+        "name": "DROSPIRÉNONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "64398047",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "64399761",
+        "substance_code": "36065",
+        "name": "DUTASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "64425341",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "64431166",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "64460075",
+        "substance_code": "48674",
+        "name": "PAMOATE DE TRIPTORÉLINE",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "64519196",
+        "substance_code": "81834",
+        "name": "TIBOLONE",
+        "group": "other_replacement"
+      },
+      {
+        "cis": "64520387",
+        "substance_code": "27380",
+        "name": "DÉSOGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "64528487",
+        "substance_code": "06197",
+        "name": "TRIPTORÉLINE",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "64558256",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "64558256",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "64559600",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "64565845",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "64590841",
+        "substance_code": "81834",
+        "name": "TIBOLONE",
+        "group": "other_replacement"
+      },
+      {
+        "cis": "64593766",
+        "substance_code": "81834",
+        "name": "TIBOLONE",
+        "group": "other_replacement"
+      },
+      {
+        "cis": "64640867",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "64671670",
+        "substance_code": "28293",
+        "name": "ACÉTATE DE NOMÉGESTROL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "64725221",
+        "substance_code": "01786",
+        "name": "ESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "64725221",
+        "substance_code": "03940",
+        "name": "ACÉTATE DE NORÉTHISTÉRONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "64725221",
+        "substance_code": "01786",
+        "name": "ESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "64725221",
+        "substance_code": "01786",
+        "name": "ESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "64758851",
+        "substance_code": "36065",
+        "name": "DUTASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "64783616",
+        "substance_code": "02245",
+        "name": "ACÉTATE DE CHLORMADINONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "64802027",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "64833859",
+        "substance_code": "01786",
+        "name": "ESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "64849436",
+        "substance_code": "48674",
+        "name": "PAMOATE DE TRIPTORÉLINE",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "64866204",
+        "substance_code": "01765",
+        "name": "DYDROGESTÉRONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "64875438",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "64875438",
+        "substance_code": "02245",
+        "name": "ACÉTATE DE CHLORMADINONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "64889224",
+        "substance_code": "36065",
+        "name": "DUTASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "64941404",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "64941404",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "64969873",
+        "substance_code": "27380",
+        "name": "DÉSOGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "64977368",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "64977368",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "64977368",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "64993924",
+        "substance_code": "32743",
+        "name": "FINASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "65001897",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "65015968",
+        "substance_code": "02229",
+        "name": "PROGESTÉRONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "65052799",
+        "substance_code": "18867",
+        "name": "DROSPIRÉNONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "65052799",
+        "substance_code": "24247",
+        "name": "ÉTHINYLESTRADIOL BÉTADEX-CLATHRATE",
+        "group": "estrogen"
+      },
+      {
+        "cis": "65083759",
+        "substance_code": "15989",
+        "name": "RÉLUGOLIX",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "65085347",
+        "substance_code": "48674",
+        "name": "PAMOATE DE TRIPTORÉLINE",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "65148623",
+        "substance_code": "00987",
+        "name": "CYPROTÉRONE (ACÉTATE DE)",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "65148623",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "65149401",
+        "substance_code": "17637",
+        "name": "BICALUTAMIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "65154252",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "65154252",
+        "substance_code": "08237",
+        "name": "GESTODÈNE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "65154252",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "65154252",
+        "substance_code": "08237",
+        "name": "GESTODÈNE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "65154252",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "65154252",
+        "substance_code": "08237",
+        "name": "GESTODÈNE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "65166500",
+        "substance_code": "36065",
+        "name": "DUTASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "65218235",
+        "substance_code": "36065",
+        "name": "DUTASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "65281285",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "65316156",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "65316156",
+        "substance_code": "08237",
+        "name": "GESTODÈNE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "65346644",
+        "substance_code": "36065",
+        "name": "DUTASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "65357943",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "65421374",
+        "substance_code": "01786",
+        "name": "ESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "65459503",
+        "substance_code": "48674",
+        "name": "TRIPTORÉLINE (EMBONATE DE)",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "65464991",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "65464991",
+        "substance_code": "04400",
+        "name": "NORGESTIMATE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "65505947",
+        "substance_code": "93978",
+        "name": "ACÉTATE DE DÉGARÉLIX",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "65533569",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "65533569",
+        "substance_code": "18867",
+        "name": "DROSPIRÉNONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "65571737",
+        "substance_code": "27380",
+        "name": "DÉSOGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "65618628",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "65662980",
+        "substance_code": "01786",
+        "name": "ESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "65678792",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "65696662",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "65701038",
+        "substance_code": "02245",
+        "name": "ACÉTATE DE CHLORMADINONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "65708335",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "65738047",
+        "substance_code": "88822",
+        "name": "ACÉTATE DE LEUPRORÉLINE",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "65745006",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "65745006",
+        "substance_code": "08237",
+        "name": "GESTODÈNE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "65819809",
+        "substance_code": "17637",
+        "name": "BICALUTAMIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "65867330",
+        "substance_code": "64615",
+        "name": "MÉSILATE DE LEUPRORÉLINE",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "65871581",
+        "substance_code": "02934",
+        "name": "TESTOSTÉRONE",
+        "group": "androgen"
+      },
+      {
+        "cis": "65900339",
+        "substance_code": "00987",
+        "name": "ACÉTATE DE CYPROTÉRONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "65904501",
+        "substance_code": "02245",
+        "name": "ACÉTATE DE CHLORMADINONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "65913639",
+        "substance_code": "36065",
+        "name": "DUTASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "65921931",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "65921931",
+        "substance_code": "08237",
+        "name": "GESTODÈNE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "65940166",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "65940166",
+        "substance_code": "08237",
+        "name": "GESTODÈNE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "65982553",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "65982642",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "65994267",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "66032486",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "66036285",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "66036285",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "66043358",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "66155948",
+        "substance_code": "01778",
+        "name": "ESTRIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "66155948",
+        "substance_code": "02229",
+        "name": "PROGESTÉRONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "66156975",
+        "substance_code": "02229",
+        "name": "PROGESTÉRONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "66165262",
+        "substance_code": "49665",
+        "name": "DIÉNOGEST",
+        "group": "progestogen"
+      },
+      {
+        "cis": "66189217",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "66196083",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "66196083",
+        "substance_code": "18867",
+        "name": "DROSPIRÉNONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "66257038",
+        "substance_code": "01765",
+        "name": "DYDROGESTÉRONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "66257038",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "66283307",
+        "substance_code": "01786",
+        "name": "ESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "66288222",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "66288222",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "66288222",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "66288222",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "66349230",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "66378659",
+        "substance_code": "32743",
+        "name": "FINASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "66399945",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "66399945",
+        "substance_code": "49665",
+        "name": "DIÉNOGEST",
+        "group": "progestogen"
+      },
+      {
+        "cis": "66426680",
+        "substance_code": "02229",
+        "name": "PROGESTÉRONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "66428489",
+        "substance_code": "27380",
+        "name": "DÉSOGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "66441440",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "66441440",
+        "substance_code": "02245",
+        "name": "ACÉTATE DE CHLORMADINONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "66449857",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "66449857",
+        "substance_code": "04400",
+        "name": "NORGESTIMATE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "66501802",
+        "substance_code": "01786",
+        "name": "ESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "66565790",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "66565790",
+        "substance_code": "08237",
+        "name": "GESTODÈNE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "66595328",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "66595328",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "66613840",
+        "substance_code": "27380",
+        "name": "DÉSOGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "66620660",
+        "substance_code": "00557",
+        "name": "ACÉTATE DE MÉDROXYPROGESTÉRONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "66620660",
+        "substance_code": "04287",
+        "name": "ESTRADIOL (VALÉRATE D')",
+        "group": "estrogen"
+      },
+      {
+        "cis": "66669173",
+        "substance_code": "05534",
+        "name": "ACÉTATE DE GOSÉRÉLINE",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "66681414",
+        "substance_code": "48674",
+        "name": "PAMOATE DE TRIPTORÉLINE",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "66771751",
+        "substance_code": "01778",
+        "name": "ESTRIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "66774427",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "66774427",
+        "substance_code": "08237",
+        "name": "GESTODÈNE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "66791234",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "66819566",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "66819566",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "66845924",
+        "substance_code": "36376",
+        "name": "ÉTONOGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "66879969",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "66879969",
+        "substance_code": "18867",
+        "name": "DROSPIRÉNONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "66921845",
+        "substance_code": "32743",
+        "name": "FINASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "66942259",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "66942259",
+        "substance_code": "49665",
+        "name": "DIÉNOGEST",
+        "group": "progestogen"
+      },
+      {
+        "cis": "66942362",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "66942362",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "66987336",
+        "substance_code": "49665",
+        "name": "DIÉNOGEST",
+        "group": "progestogen"
+      },
+      {
+        "cis": "67037162",
+        "substance_code": "05534",
+        "name": "GOSÉRÉLINE (ACÉTATE DE)",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "67136370",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "67136370",
+        "substance_code": "08237",
+        "name": "GESTODÈNE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "67136573",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "67136573",
+        "substance_code": "08237",
+        "name": "GESTODÈNE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "67144004",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "67145743",
+        "substance_code": "32743",
+        "name": "FINASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "67172690",
+        "substance_code": "18867",
+        "name": "DROSPIRÉNONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "67172690",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "67203730",
+        "substance_code": "27380",
+        "name": "DÉSOGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "67259309",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "67259309",
+        "substance_code": "08237",
+        "name": "GESTODÈNE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "67294185",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "67294185",
+        "substance_code": "36376",
+        "name": "ÉTONOGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "67324714",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "67324714",
+        "substance_code": "18867",
+        "name": "DROSPIRÉNONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "67361246",
+        "substance_code": "04287",
+        "name": "VALÉRATE D'ESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "67361246",
+        "substance_code": "49665",
+        "name": "DIÉNOGEST",
+        "group": "progestogen"
+      },
+      {
+        "cis": "67361246",
+        "substance_code": "04287",
+        "name": "VALÉRATE D'ESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "67361246",
+        "substance_code": "04287",
+        "name": "VALÉRATE D'ESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "67361246",
+        "substance_code": "49665",
+        "name": "DIÉNOGEST",
+        "group": "progestogen"
+      },
+      {
+        "cis": "67361246",
+        "substance_code": "04287",
+        "name": "VALÉRATE D'ESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "67365650",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "67365650",
+        "substance_code": "01765",
+        "name": "DYDROGESTÉRONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "67365650",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "67368301",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "67402230",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "67402230",
+        "substance_code": "08237",
+        "name": "GESTODÈNE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "67407099",
+        "substance_code": "02229",
+        "name": "PROGESTÉRONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "67421348",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "67421348",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "67443608",
+        "substance_code": "00987",
+        "name": "ACÉTATE DE CYPROTÉRONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "67448384",
+        "substance_code": "19481",
+        "name": "MÉGESTROL (ACÉTATE DE)",
+        "group": "progestogen"
+      },
+      {
+        "cis": "67476946",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "67476946",
+        "substance_code": "27380",
+        "name": "DÉSOGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "67487622",
+        "substance_code": "01778",
+        "name": "ESTRIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "67487622",
+        "substance_code": "02229",
+        "name": "PROGESTÉRONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "67513654",
+        "substance_code": "36065",
+        "name": "DUTASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "67517898",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "67541333",
+        "substance_code": "02132",
+        "name": "NILUTAMIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "67541828",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "67552319",
+        "substance_code": "00987",
+        "name": "ACÉTATE DE CYPROTÉRONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "67588728",
+        "substance_code": "00987",
+        "name": "ACÉTATE DE CYPROTÉRONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "67592737",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "67592737",
+        "substance_code": "04400",
+        "name": "NORGESTIMATE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "67592737",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "67592737",
+        "substance_code": "04400",
+        "name": "NORGESTIMATE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "67592737",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "67592737",
+        "substance_code": "04400",
+        "name": "NORGESTIMATE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "67623353",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "67684580",
+        "substance_code": "02245",
+        "name": "CHLORMADINONE (ACÉTATE DE)",
+        "group": "progestogen"
+      },
+      {
+        "cis": "67685458",
+        "substance_code": "32743",
+        "name": "FINASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "67699931",
+        "substance_code": "48674",
+        "name": "PAMOATE DE TRIPTORÉLINE",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "67772596",
+        "substance_code": "48674",
+        "name": "PAMOATE DE TRIPTORÉLINE",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "67780949",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "67780949",
+        "substance_code": "27380",
+        "name": "DÉSOGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "67815510",
+        "substance_code": "88822",
+        "name": "ACÉTATE DE LEUPRORÉLINE",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "67825052",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "67825052",
+        "substance_code": "18867",
+        "name": "DROSPIRÉNONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "67836928",
+        "substance_code": "32743",
+        "name": "FINASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "67859371",
+        "substance_code": "32743",
+        "name": "FINASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "67907535",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "67918695",
+        "substance_code": "48674",
+        "name": "TRIPTORÉLINE (EMBONATE DE)",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "67941726",
+        "substance_code": "00987",
+        "name": "ACÉTATE DE CYPROTÉRONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "67949737",
+        "substance_code": "17637",
+        "name": "BICALUTAMIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "67954321",
+        "substance_code": "32743",
+        "name": "FINASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "68001518",
+        "substance_code": "00050",
+        "name": "ANDROSTANOLONE",
+        "group": "androgen"
+      },
+      {
+        "cis": "68025857",
+        "substance_code": "02229",
+        "name": "PROGESTÉRONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "68097237",
+        "substance_code": "02934",
+        "name": "TESTOSTÉRONE",
+        "group": "androgen"
+      },
+      {
+        "cis": "68123988",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "68123988",
+        "substance_code": "27380",
+        "name": "DÉSOGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "68129457",
+        "substance_code": "36065",
+        "name": "DUTASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "68144936",
+        "substance_code": "36065",
+        "name": "DUTASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "68160698",
+        "substance_code": "06197",
+        "name": "TRIPTORÉLINE",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "68174324",
+        "substance_code": "01778",
+        "name": "ESTRIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "68178899",
+        "substance_code": "05477",
+        "name": "ÉNANTATE DE TESTOSTÉRONE",
+        "group": "androgen"
+      },
+      {
+        "cis": "68188295",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "68188295",
+        "substance_code": "08237",
+        "name": "GESTODÈNE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "68194451",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "68208043",
+        "substance_code": "01765",
+        "name": "DYDROGESTÉRONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "68208043",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "68216773",
+        "substance_code": "01786",
+        "name": "ESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "68216773",
+        "substance_code": "03940",
+        "name": "NORÉTHISTÉRONE (ACÉTATE DE)",
+        "group": "progestogen"
+      },
+      {
+        "cis": "68259696",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "68259696",
+        "substance_code": "18867",
+        "name": "DROSPIRÉNONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "68281778",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "68322762",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "68322762",
+        "substance_code": "04400",
+        "name": "NORGESTIMATE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "68322762",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "68322762",
+        "substance_code": "04400",
+        "name": "NORGESTIMATE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "68322762",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "68322762",
+        "substance_code": "04400",
+        "name": "NORGESTIMATE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "68347107",
+        "substance_code": "32743",
+        "name": "FINASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "68371204",
+        "substance_code": "02229",
+        "name": "PROGESTÉRONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "68373924",
+        "substance_code": "36065",
+        "name": "DUTASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "68457870",
+        "substance_code": "00557",
+        "name": "ACÉTATE DE MÉDROXYPROGESTÉRONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "68457870",
+        "substance_code": "04287",
+        "name": "VALÉRATE D'ESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "68486929",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "68489829",
+        "substance_code": "36065",
+        "name": "DUTASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "68492540",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "68494153",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "68494153",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "68502753",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "68502753",
+        "substance_code": "27380",
+        "name": "DÉSOGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "68514951",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "68520840",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "68540501",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "68540501",
+        "substance_code": "27380",
+        "name": "DÉSOGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "68589847",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "68589847",
+        "substance_code": "18867",
+        "name": "DROSPIRÉNONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "68594221",
+        "substance_code": "88822",
+        "name": "ACÉTATE DE LEUPRORÉLINE",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "68628809",
+        "substance_code": "57670",
+        "name": "ACÉTATE DE TRIPTORÉLINE",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "68632558",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "68632558",
+        "substance_code": "27380",
+        "name": "DÉSOGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "68646198",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "68646198",
+        "substance_code": "18867",
+        "name": "DROSPIRÉNONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "68662722",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "68662722",
+        "substance_code": "18867",
+        "name": "DROSPIRÉNONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "68700817",
+        "substance_code": "17637",
+        "name": "BICALUTAMIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "68710067",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "68710067",
+        "substance_code": "18867",
+        "name": "DROSPIRÉNONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "68710989",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "68710989",
+        "substance_code": "18867",
+        "name": "DROSPIRÉNONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "68727159",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "68727159",
+        "substance_code": "18867",
+        "name": "DROSPIRÉNONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "68751765",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "68751765",
+        "substance_code": "18867",
+        "name": "DROSPIRÉNONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "68765170",
+        "substance_code": "02245",
+        "name": "ACÉTATE DE CHLORMADINONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "68778431",
+        "substance_code": "03940",
+        "name": "ACÉTATE DE NORÉTHISTÉRONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "68778431",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "68778431",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "68800618",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "68810320",
+        "substance_code": "81834",
+        "name": "TIBOLONE",
+        "group": "other_replacement"
+      },
+      {
+        "cis": "68916754",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "68946021",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "68946021",
+        "substance_code": "18867",
+        "name": "DROSPIRÉNONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "68971188",
+        "substance_code": "18867",
+        "name": "DROSPIRÉNONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "69006984",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "69033757",
+        "substance_code": "22217",
+        "name": "UNDÉCANOATE DE TESTOSTÉRONE",
+        "group": "androgen"
+      },
+      {
+        "cis": "69060099",
+        "substance_code": "02132",
+        "name": "NILUTAMIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "69089389",
+        "substance_code": "36065",
+        "name": "DUTASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "69090320",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "69090320",
+        "substance_code": "04400",
+        "name": "NORGESTIMATE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "69090320",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "69090320",
+        "substance_code": "04400",
+        "name": "NORGESTIMATE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "69090320",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "69090320",
+        "substance_code": "04400",
+        "name": "NORGESTIMATE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "69122540",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "69122540",
+        "substance_code": "08237",
+        "name": "GESTODÈNE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "69140061",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "69140061",
+        "substance_code": "04400",
+        "name": "NORGESTIMATE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "69153913",
+        "substance_code": "32743",
+        "name": "FINASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "69193861",
+        "substance_code": "17637",
+        "name": "BICALUTAMIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "69204699",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "69204699",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "69230270",
+        "substance_code": "07277",
+        "name": "LEUPRORÉLINE",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "69249210",
+        "substance_code": "32743",
+        "name": "FINASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "69267482",
+        "substance_code": "88822",
+        "name": "ACÉTATE DE LEUPRORÉLINE",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "69274060",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "69274060",
+        "substance_code": "04400",
+        "name": "NORGESTIMATE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "69274060",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "69274060",
+        "substance_code": "04400",
+        "name": "NORGESTIMATE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "69274060",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "69274060",
+        "substance_code": "04400",
+        "name": "NORGESTIMATE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "69278094",
+        "substance_code": "06197",
+        "name": "TRIPTORÉLINE",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "69304991",
+        "substance_code": "49665",
+        "name": "DIÉNOGEST",
+        "group": "progestogen"
+      },
+      {
+        "cis": "69311110",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "69346531",
+        "substance_code": "02576",
+        "name": "MÉDROGESTONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "69356486",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "69356486",
+        "substance_code": "36376",
+        "name": "ÉTONOGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "69360552",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "69374160",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "69374160",
+        "substance_code": "27380",
+        "name": "DÉSOGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "69414046",
+        "substance_code": "36065",
+        "name": "DUTASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "69480060",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "69480060",
+        "substance_code": "08237",
+        "name": "GESTODÈNE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "69480950",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "69480950",
+        "substance_code": "27380",
+        "name": "DÉSOGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "69491847",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "69491847",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "69497597",
+        "substance_code": "49665",
+        "name": "DIÉNOGEST",
+        "group": "progestogen"
+      },
+      {
+        "cis": "69552766",
+        "substance_code": "36065",
+        "name": "DUTASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "69562874",
+        "substance_code": "00196",
+        "name": "LÉVONORGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "69562874",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "69594548",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "69633353",
+        "substance_code": "07277",
+        "name": "LEUPRORÉLINE",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "69652396",
+        "substance_code": "01765",
+        "name": "DYDROGESTÉRONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "69652396",
+        "substance_code": "01786",
+        "name": "ESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "69652396",
+        "substance_code": "01786",
+        "name": "ESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "69693507",
+        "substance_code": "32743",
+        "name": "FINASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "69699613",
+        "substance_code": "32743",
+        "name": "FINASTÉRIDE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "69715754",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "69715754",
+        "substance_code": "08237",
+        "name": "GESTODÈNE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "69724251",
+        "substance_code": "00977",
+        "name": "SPIRONOLACTONE",
+        "group": "antiandrogen_adjunct"
+      },
+      {
+        "cis": "69729088",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "69729088",
+        "substance_code": "17048",
+        "name": "NORELGESTROMINE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "69733236",
+        "substance_code": "81834",
+        "name": "TIBOLONE",
+        "group": "other_replacement"
+      },
+      {
+        "cis": "69765390",
+        "substance_code": "02245",
+        "name": "ACÉTATE DE CHLORMADINONE",
+        "group": "progestogen"
+      },
+      {
+        "cis": "69784330",
+        "substance_code": "93978",
+        "name": "DÉGARÉLIX (ACÉTATE DE)",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "69797801",
+        "substance_code": "01807",
+        "name": "ÉTHINYLESTRADIOL",
+        "group": "estrogen"
+      },
+      {
+        "cis": "69797801",
+        "substance_code": "27380",
+        "name": "DÉSOGESTREL",
+        "group": "progestogen"
+      },
+      {
+        "cis": "69847994",
+        "substance_code": "48674",
+        "name": "TRIPTORÉLINE (EMBONATE DE)",
+        "group": "gnrh_suppression"
+      },
+      {
+        "cis": "69875342",
+        "substance_code": "49665",
+        "name": "DIÉNOGEST",
+        "group": "progestogen"
+      },
+      {
+        "cis": "69936592",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      },
+      {
+        "cis": "69953524",
+        "substance_code": "71064",
+        "name": "ESTRADIOL HÉMIHYDRATÉ",
+        "group": "estrogen"
+      }
+    ]
+  },
+  "source_counts": {
+    "CIS_bdpm.txt": 15883,
+    "CIS_CIP_bdpm.txt": 20908,
+    "CIS_COMPO_bdpm.txt": 32439
+  },
+  "included_counts": {
+    "CIS_bdpm.txt": 420,
+    "CIS_CIP_bdpm.txt": 550,
+    "CIS_COMPO_bdpm.txt": 702
+  },
+  "included_composition_kinds": {
+    "FT": 79,
+    "SA": 623
+  },
+  "catalogue_version": "bdpm-hrt-2026-10-22-578dc64b2261b840",
+  "database_sha256": "052cc33e0d3f3aa11ffa941d86580f25aa35e288aeead0abb8b45847d18d8a5b",
+  "database_bytes": 360448,
+  "counts": {
+    "CIS_bdpm.txt": 420,
+    "CIS_CIP_bdpm.txt": 550,
+    "CIS_COMPO_bdpm.txt": 702
+  },
+  "generator": 2
+}

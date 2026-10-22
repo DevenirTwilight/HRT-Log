@@ -44,7 +44,7 @@ import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
 /*
- * UI-08 (REQUIREMENTS §138): the wellbeing page's daily tab. No scores, no judgement, no advice (wellbeing-design.md §0):
+ * UI-08 (REQUIREMENTS §140): the wellbeing page's daily tab. No scores, no judgement, no advice (wellbeing-design.md §0):
  * nothing here adds values up, compares them with a norm, colours a level as good or bad, or counts streaks.
  */
 

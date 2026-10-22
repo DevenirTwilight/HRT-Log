@@ -1328,7 +1328,7 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="timeline_lab_draw_spoken_title">Lab test, %1$d results</string>
 <string name="timeline_lab_draw_spoken_out">%1$d outside the reference range</string>
 <string name="lab_names_join">", "</string>
-<!-- UI-08 (REQUIREMENTS §138): wellbeing daily tab. No scores, no judgement. -->
+<!-- UI-08 (REQUIREMENTS §140): wellbeing daily tab. No scores, no judgement. -->
 <string name="wb_card_title_none_today">How are you feeling today?</string>
 <string name="wb_card_title_none_other">How did you feel that day?</string>
 <string name="wb_card_title_some">You\'ve noted some</string>

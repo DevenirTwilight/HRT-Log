@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.LabBatchSaveTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-22T11:13:38.695Z" hostname="0a7cae0c7757" time="0.303">
+  <properties/>
+  <testcase name="onlyNewResultsAndAtLeastOne" classname="net.plainnotes.app.data.LabBatchSaveTest" time="0.098"/>
+  <testcase name="aFailureOnTheFourthKeepsNone" classname="net.plainnotes.app.data.LabBatchSaveTest" time="0.074"/>
+  <testcase name="batchOfSixEqualsSixSingleSavesFieldByField" classname="net.plainnotes.app.data.LabBatchSaveTest" time="0.127"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

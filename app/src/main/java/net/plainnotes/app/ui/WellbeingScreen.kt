@@ -34,7 +34,7 @@ import java.time.LocalDate
 })
 
 /**
- * UI-08 (§138) daily tab: the day card, the items as a grouped list of five-pill inputs, the day's note and recent entries.
+ * UI-08 (§140) daily tab: the day card, the items as a grouped list of five-pill inputs, the day's note and recent entries.
  * [date] / [onDate] come from the hub so the symptoms tab shares the day; without them the screen keeps its own.
  */
 @Composable fun WellbeingScreen(items: List<CheckinItemEntity>, scores: List<CheckinScoreEntity>, notes: List<DayNoteEntity>, onScore: (LocalDate, Long, Int?) -> Unit,

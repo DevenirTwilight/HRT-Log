@@ -1328,7 +1328,7 @@
 <string name="timeline_lab_draw_spoken_title">檢驗，%1$d 項</string>
 <string name="timeline_lab_draw_spoken_out">%1$d 項超出參考範圍</string>
 <string name="lab_names_join">、</string>
-<!-- UI-08 (REQUIREMENTS §138): wellbeing daily tab. No scores, no judgement. -->
+<!-- UI-08 (REQUIREMENTS §140): wellbeing daily tab. No scores, no judgement. -->
 <string name="wb_card_title_none_today">今天感覺怎麼樣？</string>
 <string name="wb_card_title_none_other">這天感覺怎麼樣？</string>
 <string name="wb_card_title_some">已經記了一些</string>

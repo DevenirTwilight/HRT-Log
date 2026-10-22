@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.KeyBoundaryTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-10-22T11:13:38.632Z" hostname="0a7cae0c7757" time="0.054">
+  <properties/>
+  <testcase name="existingDatabaseWithoutKeyIsNeverReplaced" classname="net.plainnotes.app.data.KeyBoundaryTest" time="0.03"/>
+  <testcase name="lockedBootCannotOpenCredentialDatabase" classname="net.plainnotes.app.data.KeyBoundaryTest" time="0.02"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

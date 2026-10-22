@@ -3,7 +3,7 @@
     <string name="drug_center_region">法國 · ANSM / BDPM 參考</string>
     <string name="drug_center_official_off">官方目錄暫未開放。目前僅可使用您已儲存的產品來源。這不是中國藥品目錄。</string>
     <string name="drug_center_user_sources">目前可用：搜尋本地儲存的使用者填寫產品來源，或將其關聯到現有藥物。這些資料尚未核驗。</string>
-    <string name="drug_center_search">查詢已儲存的產品來源</string>
+    <string name="drug_center_search">離線搜尋商品資料</string>
     <string name="drug_center_medications">我的藥物</string>
     <string name="drug_center_empty">尚無藥物。仍可瀏覽已儲存來源；也可在「藥物方案」中手動建立藥物。</string>
     <string name="drug_center_open_reference">檢視或關聯產品來源 · 不改變劑量</string>
@@ -19,5 +19,5 @@
     <string name="drug_center_supply">供應、短缺、召回與監管公告</string>
     <string name="drug_center_supply_off">尚未實現。目前供應狀態未知，不代表正常供應或沒有召回。不查詢即時藥房庫存。</string>
     <string name="drug_center_states">狀態說明：資料缺失＝未提供欄位；尚未核驗＝已有資料但未完成核查；未知＝無法確定；尚未實現＝功能未開放。這些狀態均不代表正常供應或安全。</string>
-    <string name="drug_center_short_scope">使用者填寫來源，尚未核驗。官方目錄未開放。</string>
+    <string name="drug_center_short_scope">官方 BDPM 身分與已儲存的使用者資料，來源明確區分。</string>
 </resources>

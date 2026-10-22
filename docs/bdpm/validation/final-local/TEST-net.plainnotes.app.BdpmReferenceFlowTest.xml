@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.BdpmReferenceFlowTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-22T11:42:00.982Z" hostname="0a7cae0c7757" time="16.984">
+  <properties/>
+  <testcase name="realAppEntrySelectsOfficialPackageConfirmsAndReopensWithoutDoseStockOrProfileChanges[en/320dp/2x]" classname="net.plainnotes.app.BdpmReferenceFlowTest" time="10.789"/>
+  <testcase name="realAppEntrySelectsOfficialPackageConfirmsAndReopensWithoutDoseStockOrProfileChanges[fr-rFR/320dp/2x]" classname="net.plainnotes.app.BdpmReferenceFlowTest" time="2.254"/>
+  <testcase name="realAppEntrySelectsOfficialPackageConfirmsAndReopensWithoutDoseStockOrProfileChanges[zh-rCN/320dp/2x]" classname="net.plainnotes.app.BdpmReferenceFlowTest" time="1.905"/>
+  <testcase name="realAppEntrySelectsOfficialPackageConfirmsAndReopensWithoutDoseStockOrProfileChanges[zh-rTW/320dp/2x]" classname="net.plainnotes.app.BdpmReferenceFlowTest" time="1.714"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

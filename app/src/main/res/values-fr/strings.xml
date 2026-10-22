@@ -1328,7 +1328,7 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="timeline_lab_draw_spoken_title">Analyse, %1$d résultats</string>
 <string name="timeline_lab_draw_spoken_out">%1$d en dehors de l’intervalle de référence</string>
 <string name="lab_names_join">", "</string>
-<!-- UI-08 (REQUIREMENTS §138): wellbeing daily tab. No scores, no judgement. -->
+<!-- UI-08 (REQUIREMENTS §140): wellbeing daily tab. No scores, no judgement. -->
 <string name="wb_card_title_none_today">Comment vous sentez-vous aujourd’hui ?</string>
 <string name="wb_card_title_none_other">Comment vous sentiez-vous ce jour-là ?</string>
 <string name="wb_card_title_some">Vous en avez renseigné quelques-uns</string>

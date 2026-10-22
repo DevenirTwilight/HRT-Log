@@ -219,7 +219,7 @@ MOOD、ENERGY、SLEEP_QUALITY 并入新条目，不在此列。
 
 ---
 
-## UI-08 界面更新（2026-10-22，REQUIREMENTS §138）
+## UI-08 界面更新（2026-10-22，REQUIREMENTS §140）
 
 只改界面，第 0 节原则不变。
 
