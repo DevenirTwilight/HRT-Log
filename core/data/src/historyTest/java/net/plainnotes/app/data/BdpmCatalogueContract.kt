@@ -38,7 +38,7 @@ abstract class BdpmCatalogueContract {
         val db=builder.build()
         try {
             val repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=db})
-            val med=db.dao().insertMedication(MedicationEntity(name="SYNTHETIC owned medication",molecule="OTHER",unit="MG",dose_per_intake=0.5,container_capacity=28.0,site_rotation=false,notifications_on=false,active=false,sort_order=0))
+            val med=db.dao().insertMedication(MedicationEntity(name="SYNTHETIC owned medication",molecule="OTHER",unit="MG",dose_per_intake=0.5,container_capacity=37.0,site_rotation=false,notifications_on=false,active=false,sort_order=0))
             val before=db.dao().medication(med)
             assertEquals(12,RecordBackupCompatibility.exportSchema(db.openHelper.writableDatabase))
             val catalogue=BdpmCatalogue(context);val p=catalogue.search("65421374").entries.single();val snapshot=catalogue.snapshot(p,p.packages.single())

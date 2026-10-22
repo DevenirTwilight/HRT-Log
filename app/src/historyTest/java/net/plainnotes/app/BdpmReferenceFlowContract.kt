@@ -47,9 +47,10 @@ abstract class BdpmReferenceFlowContract {
         val model=NotesViewModel(repo,ReminderCoordinator(ui.activity,repo),ui.activity)
         UiPrefs(ui.activity).disclaimerAccepted=true
         try {
+            // Deliberately differs from the official oral 2 mg / 28-tablet product.
             val id=runBlocking{
-                val id=repo.saveMedication(MedicationEntity(name="SYNTHETIC saved medication",molecule="E2",route="ORAL",unit="MG",dose_per_intake=0.5,container_capacity=28.0,soon_alert_minutes=0,late_after_minutes=60,site_rotation=false,notifications_on=false,active=true,sort_order=0),"E2",RuleKind.EVERY_N_DAYS,1,listOf(LocalTime.NOON),emptySet(),Instant.now().minusSeconds(86400))
-                repo.addContainers(id,28.0,1,true);repo.unscheduled(id,Instant.now().minusSeconds(3600),0.5);id
+                val id=repo.saveMedication(MedicationEntity(name="SYNTHETIC saved medication",molecule="E2",route="SUBLINGUAL",unit="MG",dose_per_intake=0.5,container_capacity=37.0,soon_alert_minutes=0,late_after_minutes=60,site_rotation=false,notifications_on=false,active=true,sort_order=0),"E2",RuleKind.EVERY_N_DAYS,1,listOf(LocalTime.NOON),emptySet(),Instant.now().minusSeconds(86400))
+                repo.addContainers(id,37.0,1,true);repo.unscheduled(id,Instant.now().minusSeconds(3600),0.5);id
             }
             val med=runBlocking{repo.medications()};val stock=runBlocking{repo.containers()};val records=runBlocking{repo.records()};val profile=runBlocking{repo.profile(id)}
             model.sync()

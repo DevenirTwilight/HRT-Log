@@ -26,7 +26,7 @@ Room仍13，无迁移或SQLCipher表变化。备份业务格式：含官方历�
 
 子集候选054c30ad：Python7项PASS；真实资产核心查询/快照/备份恢复4项、四语言Compose实际App/草稿/故障重试12项JVM PASS；隐私事实3项PASS，data/App原生源码编译PASS。原生和必需CI独立记录，不能将编译/JVM当设备通过。`validation/hrt-subset/receipt.json`绑定测试文件SHA；原始失败/RED及修复证据保留，不相加冒称同次全套通过。
 
-PR98当前Draft，设备运行和最终候选必需CI待核实。真机/TalkBack NOT_RUN；不签名交付APK或发布Release，不运行P4性能任务。最新状态以HANDOFF及PR运行SHA为准。
+054c30ad原生：API26/29/35目录4项各自PASS，API35真实App3项PASS，API29整体SUCCESS；API26两个单次Back断言FAIL，API35独立断网后续因AGP卸载instrumentation而NOT_RUN。两个原始失败及有证据的执行修正均保留，PR98当前Draft，最终候选必需CI待核实。真机/TalkBack NOT_RUN；不签名交付APK或发布Release，不运行P4性能任务。最新状态以HANDOFF及PR运行SHA为准。
 
 ## 协作
 

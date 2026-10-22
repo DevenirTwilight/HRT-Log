@@ -18,5 +18,29 @@
     "evidence": "Previous test result XML counts observed before rerun; command stdout retained"
   },
   "asset": "Same SHA and SQLite as 054c30ad; no backend changes",
-  "required_ci": "Pending for this label candidate"
+  "required_ci": "Pending for this label candidate",
+  "stronger_fixture": {
+    "purpose": "SUBLINGUAL and capacity37 differ from official oral 2mg / package28; same unchanged-medication/stock/records/profile assertions",
+    "core_tests": 4,
+    "app_tests": 12,
+    "failures": 0,
+    "native_source_compile": "PASS",
+    "native_execution": "Pending",
+    "log": "different-route-capacity-flow.log",
+    "xml": [
+      "TEST-net.plainnotes.app.data.BdpmCatalogueTest.xml",
+      "TEST-net.plainnotes.app.BdpmReferenceFlowTest.xml"
+    ]
+  },
+  "single_back_precondition": {
+    "source_compile": "PASS",
+    "native_execution": "Pending",
+    "behavior": "Wait for exact tagged dialog window focus, close IME, inject one Back, await dismissal within 10s; no key retries and unchanged dismissal/lock/file assertions"
+  },
+  "source_files": {
+    ".github/workflows/android.yml": "a29be6c6addb3d504e69ce90748c56d10e328d9594c5b2254a63eee8e1224072",
+    "app/src/androidTestFull/java/net/plainnotes/app/shell/InAppNavigationLockAndroidTest.kt": "eed5cfc590bc887d5cc8ab08d9a1923561d95d0ef55187bcc6626717af2fa2ba",
+    "app/src/historyTest/java/net/plainnotes/app/BdpmReferenceFlowContract.kt": "7912e66b57d32a7f604d0dcc672ec48344bb4bbfcd58e81521e5ca79c34fbdb5",
+    "core/data/src/historyTest/java/net/plainnotes/app/data/BdpmCatalogueContract.kt": "665f8e18d5d62d401cafe09a1623e7bfaf1a1a72b3c17c8c9c96ecee3ee3b996"
+  }
 }

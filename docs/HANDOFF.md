@@ -1,3 +1,19 @@
+## BDPM 收尾证据位置与冻结规则 — 2026-10-22
+
+最终候选提交后仅等待必需CI及受保护集成；新功能或发现真实失败才修改代码，不跑同SHA碰绿。收尾完成时的原始工件/精确源码SHA/最终HANDOFF拟保存独立证据分支 `docs/bdpm-final-evidence-20261022` 并从PR98链接，避免为了给通过结果写自引用SHA而反复改变功能候选、重复触发原生。该分支尚未生成，不提前称CI通过或完成合并。
+
+## BDPM 原生054：API35核心4/真实App3均PASS，断网后续入口缺安装已修 — 2026-10-22
+
+API35 job119827753614：全套App阶段BUILD SUCCESSFUL，BdpmCatalogueAndroidTest4/0FAIL/0SKIP、BdpmReferenceFlowAndroidTest3/0FAIL/0SKIP；整体FAIL在独立断网后续，原始fresh-offline.log为Unable to find instrumentation，测试NOT_RUN，不能报离线重启PASS。AGP connected结束会卸载target/test APK；按仓库run_lab_panel_restart等现有做法，在断网/force-stop前安装同次两个APK，并拒绝skip状态。原artifact12427307059 ZIP/SHA/CRC和原始失败都保留scope-closeout。
+
+API26目标窗口焦点前置条件及单次Back的测试修正源码编译PASS，仍待最终原生；未改生产锁/化验/UI行为。API29整体SUCCESS，主Android检查继续运行，等待其完整结果后统一推收尾候选；不取消有效作业。最新生产仅四语明确子集，数据库与后端仍054；收尾包括容量/途径不同的合成断言、上述两处有明确证据的测试执行修正，不跑P4性能。
+
+## BDPM 原生054：API29 PASS；API26目录4 PASS但两项Back断言失败 — 2026-10-22
+
+API29 job119827754192整体SUCCESS；API26 job119827753971 FAIL：reference-window与原有lab-batch在单次Back后仍存在，不能视作通过。两个artifact原ZIP/SHA/CRC和各自真实BdpmCatalogueAndroidTest4/0FAIL/0SKIP在scope-closeout/native-054-receipt.json；不重跑同SHA。API35与主Android仍在跑，保留运行。
+
+下一候选：测试按目标语义节点对应的ViewRootForTest观察真实窗口焦点、显式关闭IME后只发送一次Back，保持原消失/锁/文件启动断言；仅待原生验证的时序修正，不预报已解决。另将合成药物设为SUBLINGUAL/37容量，与真实PROVAMES口服2mg/28片明确不同，防止错误覆盖仍碰巧等于原值：核心4+四语流程12及两个native编译全部PASS（different-route-capacity-flow.log）。生产变更只有四语目录范围说明，数据/事务未改。当前标签本地提交73b42862，后续安全测试/原生证据待同一收尾提交推送。
+
 ## BDPM 收尾检查：四语范围说明补齐，设备CI在运行 — 2026-10-22
 
 054c30ad已推送，PR98 Draft；PR Android run39779777659正在API26/29/35原生与完整Android检查，JVM和Science已通过。重复push Android run39779771566已取消，仅保留PR有效运行，不运行P4性能。核查发现界面标题/范围尚未说明“HRT相关子集”，已补四语明确边界；相关翻译2项和目录导航1项本地PASS。README改为当前实现/验证状态，不再混合初始未实现待办。标签改动后四语320dp/2x真实App流程12项再次PASS；本地fullDebug构建确认目录与来源清单压缩合计107407B，非全功能APK增量/未交付。证据scope-closeout。标签与当前状态本地提交，等有效CI运行结束后推送最终候选，避免取消在跑原生；当前原生结果只属于054c30ad，不能提前归属于后续标签提交。
