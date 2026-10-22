@@ -1,3 +1,20 @@
+## UI-08 身心状态页重做：实现完成，截图和完整验证中 — 2026-10-22
+
+负责人上传 UI-08 任务书（§138），并要求“这个做完再给APK”：build35 在 UI-08 合并后出包，包含 UI-07b（#96）、LAB-04（#97）和 UI-08。
+
+- **分支**：`feature/ui08-wellbeing-20261022`，基于 aaab9669（#97 合并后）。
+- **新文件**：`ui/WellbeingDaily.kt`，包括胶囊标签、日期行、大卡片和太阳、条目行、5 个按钮、趋势线。
+- **改动文件**：`WellbeingScreen.kt`、`WellbeingHub.kt`（拆出 `WellbeingHubContent`，共享日期）、`AppShell.kt`（顶栏“管理条目”按钮）、四种语言的文案。
+- **未改**：ConcChart、WellbeingSummary、Exports 的字节；有 `Ui08PdfSummaryUnchangedTest` 固定。
+- **测试**：`Ui08Test.kt`（按钮、大卡片、趋势、共享日期、32 组布局、42 组对比度、PDF 不变）全部通过；已有的滑杆断言迁移为按钮（WellbeingUiTest、WellbeingAndroidTest）。
+- **截图**：`Ui08ScreenshotTest`，环境变量 `UI08_SHOTS` 和 `UI08_DIALOG_SHOTS`。before 在 /home/user/wt-rem 的 aaab9669 上渲染：把测试复制过去，`daily()` 和 `symptoms()` 改用旧 API，渲染完删掉。
+- **报告**：74 草稿已提交。
+- **下一步**：
+  1. 整理截图到 `docs/ui-audit/2026-10-22-ui08/`；
+  2. 完整测试和 lint；
+  3. 开 PR 并自动合并；
+  4. 合并、主线 CI 全绿后出 build35：versionCode 35，正式签名，私密交付，登记账本。
+
 ## LAB-04 时间线合并化验：本地验证通过，PR 待 CI — 2026-10-22
 
 负责人上传 LAB-04 任务书（§137），并要求“整完这个再给apk”，即 build35 同时包含 UI-07b（#96）和 LAB-04。

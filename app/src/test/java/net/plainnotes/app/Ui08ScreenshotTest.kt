@@ -14,6 +14,8 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.swipeUp
+import androidx.compose.ui.test.captureToImage
+import androidx.compose.ui.graphics.asAndroidBitmap
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -67,7 +69,25 @@ class Ui08ScreenshotTest(private val locale: String, private val width: Int, pri
         rule.runOnIdle { page = 1 }; shot("2_daily_some")
         rule.runOnIdle { page = 2 }; shot("3_daily_all_top"); scrollDown(); scrollDown(); shot("3_daily_all_recent")
         rule.runOnIdle { page = 3 }; rule.waitForIdle(); runCatching { rule.onNodeWithTag("wb-tab:1").performClick() }; shot("4_symptoms_top")
-        rule.runOnIdle { page = 4 }; shot("5_manage_items")
+    }
+
+    /**
+     * The "Choose items" dialog on its own: the dialog is a separate window, captured from its node with a paused clock
+     * (waiting for idle with the dialog open does not settle on Robolectric). Run with UI08_DIALOG_SHOTS=<label>.
+     */
+    @Test fun manageDialog() {
+        val label = System.getenv("UI08_DIALOG_SHOTS")
+        assumeTrue("set UI08_DIALOG_SHOTS to render", !label.isNullOrBlank())
+        val dpi = if (variant == "hires") "xxxhdpi" else "xxhdpi"
+        RuntimeEnvironment.setQualifiers("$locale-w${width}dp-h${if (width == 320) 640 else 891}dp-$dpi"); RuntimeEnvironment.setFontScale(font)
+        rule.mainClock.autoAdvance = false
+        rule.setContent { NotesTheme(if (dark) ThemeMode.DARK else ThemeMode.LIGHT, contrast = if (variant == "hc") Contrast.HIGH else Contrast.STANDARD) {
+            androidx.compose.material3.Surface { page(4) } } }
+        rule.mainClock.advanceTimeBy(2_000)
+        val dir = File("build/ui08-shots/$label").apply { mkdirs() }
+        val suffix = "${locale}_${width}dp_${if (font == 1f) "1x" else "2x"}_${if (dark) "dark" else "light"}${if (variant == "std") "" else "_$variant"}"
+        val img = rule.onNode(androidx.compose.ui.test.isDialog()).captureToImage().asAndroidBitmap()
+        File(dir, "5_manage_items_$suffix.png").outputStream().use { img.compress(Bitmap.CompressFormat.PNG, 100, it) }
     }
 
     @Composable private fun page(p: Int) {

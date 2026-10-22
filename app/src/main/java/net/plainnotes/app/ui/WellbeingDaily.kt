@@ -221,7 +221,7 @@ fun trendShape(points: Map<LocalDate, Int>): TrendShape {
     return TrendShape(lines, days.filter { it !in joined })
 }
 
-/** Draws [points] (1–5) from [from] to [to]: lines only between consecutive days, dots for lone days; no mean, band or reference. */
+/** Draws [points] (1–5) from [from] to [to]: a dot per value, lines only between consecutive days; no mean, band or reference. */
 fun DrawScope.drawWellbeingTrend(points: Map<LocalDate, Int>, from: LocalDate, to: LocalDate, color: Color, width: Float) {
     val span = ChronoUnit.DAYS.between(from, to).coerceAtLeast(1).toFloat()
     val pad = width * 2
@@ -229,7 +229,8 @@ fun DrawScope.drawWellbeingTrend(points: Map<LocalDate, Int>, from: LocalDate, t
         pad + (size.height - 2 * pad) * (5 - points.getValue(d)) / 4f)
     val shape = trendShape(points.filterKeys { it in from..to })
     shape.lines.forEach { (a, b) -> drawLine(color, at(a), at(b), width, StrokeCap.Round) }
-    shape.dots.forEach { drawCircle(color, width * 1.4f, at(it)) }
+    // Every value is a dot, so the ends of each segment read as days; a lone day is just its dot.
+    points.keys.filter { it in from..to }.sorted().forEach { drawCircle(color, width * 1.4f, at(it)) }
 }
 
 /** F: one item's thin line: "5" and "1" on the left, the line beside; read as "<item>, n days noted in the last 30 days". */

@@ -171,7 +171,8 @@ class Ui08TrendDrawingTest {
             when (m.returnType) { java.lang.Boolean.TYPE -> false; java.lang.Integer.TYPE -> 0; java.lang.Float.TYPE -> 0f; else -> null } } as Canvas
         CanvasDrawScope().draw(Density(2f), LayoutDirection.Ltr, canvas, Size(600f, 128f)) { drawWellbeingTrend(pts, d0, d0.plusDays(29), Color.Blue, 4f) }
         val draws = calls.filter { it.name.startsWith("draw") }
-        assertEquals(listOf("drawLine", "drawLine", "drawCircle"), draws.map { it.name })   // 1→2 and 21→22 joined; day 6 alone
+        // 1→2 and 21→22 joined, nothing across the gaps; a dot for each of the five values (day 6 has only its dot).
+        assertEquals(listOf("drawLine", "drawLine") + List(5) { "drawCircle" }, draws.map { it.name })
         draws.forEach { c -> assertEquals(Color.Blue, (c.args.last() as Paint).color) }
         assertEquals(PaintingStyle.Fill, (draws.last().args.last() as Paint).style)
         // No horizontal line across the chart (a mean or reference line would span it).
