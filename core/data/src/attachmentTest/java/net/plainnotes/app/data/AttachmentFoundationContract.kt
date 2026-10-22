@@ -13,6 +13,8 @@ import java.util.UUID
 
 /** Real Room transactions and guards, synthetic clinical records only. */
 abstract class AttachmentFoundationContract {
+    // Real Android pipes report unknown (-1). Robolectric's pipe shadow reports a false zero.
+    protected open val pipeStatSize: Long get() = -1L
     private lateinit var db:NotesDatabase
     private lateinit var repo:NotesRepository
     private val raw get()=db.openHelper.writableDatabase
@@ -60,7 +62,7 @@ abstract class AttachmentFoundationContract {
         val parent=session.issue();val pipe=android.os.ParcelFileDescriptor.createPipe()
         val rawInput=android.os.ParcelFileDescriptor.AutoCloseInputStream(pipe[0]);val fd=pipe[0].fileDescriptor
         try {
-            assertEquals(-1L,pipe[0].statSize)
+            assertEquals(pipeStatSize,pipe[0].statSize)
             android.os.ParcelFileDescriptor.AutoCloseOutputStream(pipe[1]).use {it.write(byteArrayOf(1,2,3))}
             net.plainnotes.app.domain.AttachmentInputStream.open(parent,rawInput,3).use { input ->
                 val bytes=ByteArray(8);assertEquals(3,input.read(bytes));assertEquals(-1,input.read(bytes))

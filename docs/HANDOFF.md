@@ -1,3 +1,9 @@
+## 附件受限输入本地256项通过，真实密文sandbox集成通过；首轮平台断言失败保留 — 2026-10-22
+
+生产传输层未变；ce902c89的Foundation20项中1FAIL是新测试把Robolectric管道statSize误断言为-1，实际为0，发生在读取前。原日志/XML保留input-platform-red。改为JVM精确0/真实Android仍精确-1的平台hook，读取/限量/清理/feature0原断言全保留。修正后Foundation20/0/0，domain172/0/0、附件原型64/0/0（新增一项新输入层接既有Tink真实密文sandbox：超限旧cipher/pointer/revision不变、精确上限完整认证后才CAS）；Python69 PASS。不是正式Room文件writer或新格式审核。
+
+源在同一PR103继续，旧ce的全部运行/失败保留，不将其结果归给后续源；最终代码提交后冻结，按全部六门和三API实证收尾。最后新增POC合同后的Android增量编译仍在途，不提前报最终编译PASS。未放宽原测试，未开启附件，没有创建真实医疗文件、Schema/密钥/备份格式或AppLock变更。
+
 ## #102已合并并核验三API，继续附件输入边界 — 2026-10-22
 
 #102六必需检查全PASS、无未解决讨论，普通受保护合并e4ebab2ec4af1ed1b98038c1be1dc4e9c9a4672c。原PR39839523615官方26/29/35 ZIP的SHA/CRC与Foundation原HTML均已核验：每API18/0fail/0skip，新增两个实际PFD测试及原Room真实提交/撤权/备份/feature0合同实际执行。完整原始证据在docs/med02-resource-evidence-20261022分支的docs/medical-attachments/2026-10-22/native；合并后Android39843996907在途、Science39843996985 SUCCESS，后续状态需继续查。

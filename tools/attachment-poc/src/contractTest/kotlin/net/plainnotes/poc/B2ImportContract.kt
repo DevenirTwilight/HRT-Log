@@ -20,6 +20,25 @@ abstract class B2ImportContract {
         try{block(root,session,B2ImportSandbox.Database(active=old))}finally{session.revoke();check(root.deleteRecursively())}
     }
     private fun reject(block:()->Unit) {var failed=false;try{block()}catch(_:IOException){failed=true}catch(_:IllegalStateException){failed=true};assertTrue("Expected safe refusal",failed)}
+    @Test fun boundedTransportIntegratesWithoutPublishingOversizedSource()=fixture { root,session,db ->
+        val owner=session.issue();val old=db.active!!;val original=old.readBytes()
+        val bad=B2ImportSandbox.Operation()
+        net.plainnotes.app.domain.AttachmentInputStream.open(owner,ByteArrayInputStream(ByteArray(10){7}),8).use { input ->
+            reject {B2ImportSandbox.import(root,input,owner,db,bad)}
+        }
+        assertEquals(B2ImportSandbox.Phase.ABORTED,bad.phase);assertEquals(0L,db.revision)
+        assertEquals(old,db.active);assertArrayEquals(original,old.readBytes());assertEquals(1,root.listFiles()!!.size)
+        owner.check()
+        val good=B2ImportSandbox.Operation();var closed=0
+        val source=object:ByteArrayInputStream(ByteArray(8){3}) {override fun close(){closed++}}
+        net.plainnotes.app.domain.AttachmentInputStream.open(owner,source,8).use { input ->
+            B2ImportSandbox.import(root,input,owner,db,good)
+            assertEquals(8L,input.bytesRead)
+        }
+        owner.check();assertEquals(1,closed);assertEquals(1L,db.revision)
+        assertEquals(B2ImportSandbox.Phase.COMMITTED,good.phase);assertEquals(good.file,db.active)
+        assertEquals(2,root.listFiles()!!.size)
+    }
     @Test fun everyPrecommitFailureKeepsOldPointerAndCipher()=fixture {root,session,db ->
         val old=db.active;val original=old!!.readBytes()
         for(point in B2ImportSandbox.Seam.entries.filter{it!=B2ImportSandbox.Seam.AFTER_COMMIT}) {
