@@ -79,6 +79,7 @@ abstract class BdpmCatalogueContract {
         val payload=ReferencePayload.userProduct(snapshot)
         assertEquals("BDPM_FR",payload.getString("namespace"));assertEquals(2,payload.getInt("format"))
         fun reject(block:()->Unit){try{block();fail("Accepted invalid provenance")}catch(_:IllegalArgumentException){}}
+        reject{validatedUserReferenceProduct(snapshot)}
         reject{ReferencePayload.validateProduct(JSONObject(payload.toString()).put("namespace","USER_ENTERED"))}
         reject{ReferencePayload.validateProduct(JSONObject(payload.toString()).put("verification","UNVERIFIED"))}
         try{catalogue.snapshot(p.copy(name="SYNTHETIC fabricated official name"),null);fail("Accepted altered official row")}catch(_:IllegalArgumentException){}

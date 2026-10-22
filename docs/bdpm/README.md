@@ -1,4 +1,4 @@
-# BDPM 离线身份目录（进行中，非交付声明）
+# BDPM 离线身份目录（实现与验收）
 
 基线 aaab9669；独立 feature/bdpm-offline-catalogue-20261022，不使用/覆盖库存工作树。真实全量三份数据已下载转换；本次明确授权结构化身份和关联，不延续此前部分摘录的分发OFF，也不开放#58正文。
 
@@ -15,3 +15,7 @@
 当前编码已接搜索→包装选择→现有明确确认关联；尚未完成编译、测试及PR CI，不能视作整项功能完成。首次无资料、estradiol成分、真实Compose入口、保存/取消/重开/错误/恢复、用户资料及备份回归待验证；真机/TalkBack/断网模拟器均NOT_RUN。不签名、交付APK或发布Release，不跑P4性能。
 
 来源交叉核对：本次CIS和COMPO的完整SHA与仓库10月17日从生产域记录的SHA逐字相同；此前从生产域保存的96条选中包装，其CIS/CIP7/CIP13/包装原文亦全部一致。当前CIP全文件SHA不同，仍按实际替代源及13/10公布日期记录，不追认最新生产快照。见source-evidence/prior-production-crosscheck.json。
+
+文件所有权：本分支拥有BdpmCataloguePanel、MedicationReferenceDialog、DrugReferenceCenterScreen及专用资源/构建脚本；不改AppShell、NotesViewModel、P4 writer/验证架构或未合并#58。共享数据文件仅增加官方payload与备份版本选择/拒绝规则；差分随独立PR审查，不拷贝其他工作树。测试专用SQLCipher编译依赖复用已在core:data运行时存在的库，不新增release依赖。
+
+当前本地：真实App四语言320dp/2x关联/取消/重开和未保存草稿返回8项PASS；真实文件系统失败→明确不可用→重试恢复→无匹配4项PASS；官方核心4项与译文3项PASS，native源码编译PASS。新增官方解除关联最后验证及最终PR必需CI尚待完成；不把JVM或编译称作设备执行，真机/TalkBack NOT_RUN。历史失败及实际输入清空的RED保留。

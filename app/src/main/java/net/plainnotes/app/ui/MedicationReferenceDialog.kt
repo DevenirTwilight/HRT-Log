@@ -56,7 +56,7 @@ import java.time.LocalDate
                 state.current?.reference?.product?.let { product->
                     item {Text(stringResource(R.string.ref2_linked),style=MaterialTheme.typography.titleMedium,modifier=Modifier.semantics{heading()})}
                     item {ReferenceProductDetails(product)}
-                    item {TextButton(enabled=!state.busy && !state.loading,onClick={unlink=true;confirm=true}){Text(stringResource(R.string.ref2_unlink))}}
+                    item {TextButton(enabled=!state.busy && !state.loading,onClick={unlink=true;confirm=true},modifier=Modifier.testTag("reference-unlink")){Text(stringResource(R.string.ref2_unlink))}}
                 }
                 if(state.busy)item {Text(stringResource(R.string.ref2_saving),modifier=Modifier.testTag("reference-saving"))}
                 item {Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(8.dp)) {

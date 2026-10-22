@@ -79,6 +79,10 @@ abstract class BdpmReferenceFlowContract {
             ui.onAllNodesWithText("PROVAMES 2 mg, comprimé pelliculé").onFirst().assertExists()
             assertEquals(med,runBlocking{repo.medications()});assertEquals(stock,runBlocking{repo.containers()});assertEquals(records,runBlocking{repo.records()});assertEquals(profile,runBlocking{repo.profile(id)})
             assertTrue(runBlocking{repo.savedReferenceProducts()}.entries.isEmpty())
+            click("reference-unlink");ui.onNodeWithTag("reference-confirm").performClick()
+            ui.waitUntil(15000){idlePlatform();ui.onAllNodesWithTag("reference-saving").fetchSemanticsNodes();model.medicationReferences.state.value.let{it.saved || it.failed}}
+            assertNull(runBlocking{repo.medicationReferenceState(id)}.reference!!.product)
+            assertEquals(med,runBlocking{repo.medications()});assertEquals(stock,runBlocking{repo.containers()});assertEquals(records,runBlocking{repo.records()});assertEquals(profile,runBlocking{repo.profile(id)})
         }finally{androidx.lifecycle.ViewModelStore().apply{put("model",model);clear()}}
     }
     @Test fun unsavedDraftCanBrowseGenuineProductButCannotLinkAndReturnsUnchanged() {

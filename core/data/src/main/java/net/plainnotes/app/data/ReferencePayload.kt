@@ -26,7 +26,7 @@ data class UserReferenceProduct(
 
 /** User-entered snapshots only. A matching name is never an equivalence or an official identity claim. */
 fun validatedUserReferenceProduct(product:UserReferenceProduct):UserReferenceProduct {
-    try { ReferencePayload.userProduct(product) } catch(_:Exception) {throw ReferenceFailure(ReferenceError.INVALID_SOURCE)}
+    try { require(product.bdpm==null); ReferencePayload.userProduct(product) } catch(_:Exception) {throw ReferenceFailure(ReferenceError.INVALID_SOURCE)}
     return product.copy(ingredients=product.ingredients.toList(),routes=product.routes.toList())
 }
 data class SavedReferenceProduct(val snapshotUuid: String, val product: UserReferenceProduct)
