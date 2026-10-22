@@ -1,3 +1,11 @@
+## 医疗附件资源生命周期PR #102：本地243项JVM/Room合同与69隔离PASS — 2026-10-22
+
+源1dc584f821e5560bb4420df9e7bc4310b65725b9；PR102受保护auto-merge已开启。domain162+attachment-poc63+Foundation18均0fail/error/skip；后者包括两项真实PFD pipe关闭与取消后交接拒绝及原Room/备份合同；Android测试源码编译PASS。已保存原先登记无hook的5FAIL和真实锁顺序死锁1FAIL，未弱化断言。
+
+最终PR Android39839523615/push39839461269与Science39839523679/39839461282正常执行，当前JVM/Science gate通过、三API/完整Android在途，不提前声称原生通过或已合并。源码冻结，不通过写CI结果改变候选；本证据分支docs/med02-resource-evidence-20261022仅保存结果，不合入产品来触发重复测试。原日志/XML/源文件SHA在docs/medical-attachments/2026-10-22。
+
+下一步先读取三API原始Foundation报告并核对两新PFD测试、旧提交/撤权/身份/备份/feature0合同实际执行；待全部六门/无冲突/无未解决讨论后正常auto-merge并核主线。附件仍OFF；本批仅通用资源所有权API，当前AppLock/导入/预览无新接线。独立协议与密钥审核、正式B2/B3文件和备份服务、实际消费者/界面接线及ARM仍未完成，不能将本批称为医疗附件库已可用。
+
 ## 医疗附件资源生命周期：225项JVM与69隔离PASS；Android验证在途 — 2026-10-22
 
 已实现登记资源的撤权清理、父子取消、一次关闭、晚到注册拒绝并清理、异常汇总与失败保留；清理在权限监视器外执行。初轮7项5FAIL和新增锁顺序反例1FAIL均保留；修复后domain162（新10+原session5包含在内）与attachment-poc63全部0fail/error/skip，隔离Python69 PASS。未改AppLock、Room、备份、密码协议或入口，非完整文件库实现。当前共享Foundation合同另增两项真实PFD pipe关闭/拒绝交接检查，Robolectric与native源码编译在途，未验不报PASS。证据docs/medical-attachments/2026-10-22；当前已完成组及时推送，不等全轮结束才保存。
