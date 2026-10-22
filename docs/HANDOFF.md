@@ -1,3 +1,9 @@
+## #103三API原生工件已全部核验，API35加密sandbox新合同真实PASS — 2026-10-22
+
+最终源8dd60c43：26/29各Foundation20+Gate2Saf5无fail/skip；API35原artifact12456621592/SHA6634c4a0…8fbf050/CRC核验后原HTML显示Foundation20、SAF5、App B2Import8均0fail/0skip，所有新增输入/可靠pipe/真实密文sandbox合同实际执行PASS。原ZIP、HTML及逐方法验证receipt均保存input-native/。26/29的App单类HTML覆盖限制保留，不虚构逐方法结果。
+
+当前唯一剩余必需类别为完整Android单元/lint/构建检查，PR103尚未合并，不提前报完成。环境短暂不可用后工作树和远端源码/此前证据均保留；现继续保存最新API35证据并等待保护检查，不重跑通过设备、不改候选SHA。下一批生产storage具体批准仍待负责人回应，不据沉默实施wire/key/Schema/完整备份变更。
+
 ## #103最终API26/29原始工件核验PASS，继续等35/完整Android — 2026-10-22
 
 最终源8dd60c43的PR39845789203：26/29两个job SUCCESS；官方artifact12456810082/12456565917的SHA/CRC核验PASS，原ZIP及Foundation20、Gate2Saf5的原HTML和新测试逐项成功断言均保存在input-native/。没有用job绿灯冒充方法执行；三项新增core输入/可靠pipe方法均真实PASS。26/29的App POC HTML被后续导航套覆盖，未从这两包声称新cipher-sandbox单方法实际通过；API35全套原App报告待读取。CI本身保留原所有脚本与断言，不为此重跑已过设备。

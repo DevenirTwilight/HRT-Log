@@ -26,7 +26,7 @@
     "errors": 0,
     "skipped": 0
   },
-  "api26_29_35": "NOT_RUN",
+  "api26_29_35": "PASS: original core Foundation/SAF methods verified in all three; app POC per-class HTML retained only on35",
   "formal_import": "OFF_NOT_IMPLEMENTED",
   "format_schema_backup_permissions_version": "UNCHANGED",
   "physical_arm": "NOT_RUN",
@@ -73,5 +73,25 @@
     ],
     "originals": "../input-native/",
     "app_individual_report": "NOT_RETAINED_IN_26_29_ARTIFACT; no per-class assertion"
+  },
+  "native_api35": {
+    "status": "PASS_ORIGINAL_HTML_VERIFIED",
+    "foundation": [
+      20,
+      0,
+      0
+    ],
+    "saf": [
+      5,
+      0,
+      0
+    ],
+    "app_cipher_integration": [
+      8,
+      0,
+      0
+    ],
+    "artifact": 12456621592,
+    "sha256": "6634c4a0d7ff04a1c6e0e06d8ed451076568c3a7a3d9ca21f5178f2b18fbf050"
   }
 }

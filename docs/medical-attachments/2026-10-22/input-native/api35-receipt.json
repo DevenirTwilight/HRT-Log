@@ -1,0 +1,25 @@
+{
+  "source": "8dd60c435d924abafd3aabf8d7947b7691eae520",
+  "api": 35,
+  "artifact": 12456621592,
+  "sha256": "6634c4a0d7ff04a1c6e0e06d8ed451076568c3a7a3d9ca21f5178f2b18fbf050",
+  "zip_crc": "PASS",
+  "contracts": {
+    "AttachmentFoundationAndroidTest": {
+      "tests": 20,
+      "failures": 0,
+      "skipped": 0
+    },
+    "Gate2SafAndroidTest": {
+      "tests": 5,
+      "failures": 0,
+      "skipped": 0
+    },
+    "B2ImportAndroidTest": {
+      "tests": 8,
+      "failures": 0,
+      "skipped": 0
+    }
+  },
+  "new_tests_actually_executed": "ALL_PASS"
+}
