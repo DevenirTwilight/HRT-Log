@@ -260,7 +260,7 @@ class UiPrefs(context: Context) {
                     net.plainnotes.app.timeline.EventKind.APPOINTMENT->Destination.VISITS
                     else->Destination.HISTORY
                 }},pad,onAppointment={visitId=it;medicalOrigin=false;destination=Destination.VISITS},saveState=milestoneSave,onSaveHandled=model::clearMilestoneSave,onImportedHistory={importedRecordIds=it.toSet();destination=Destination.HISTORY},
-                    timelineActions=TimelineActions(model::editTimeline,model::deletePeriod),addHost=timelineAdd)
+                    timelineActions=TimelineActions(model::editTimeline,model::deletePeriod),addHost=timelineAdd,onLabPanel={labDialogs.panel=it})
                 Destination.MEDICAL -> MedicalRecordsScreen(state.appointments,{visitId=it.id;medicalOrigin=true;destination=Destination.VISITS},
                     {model.clearMedicalVisitSave();medicalDialogs.edit=null;medicalDialogs.editing=true},{openMedicalChild(Destination.LABS)},{openMedicalChild(Destination.TIMELINE)},{destination=Destination.SETTINGS},pad,
                     onConfirm={model.clearMedicalVisitSave();model.saveMedicalVisit(it,it)},questionCounts=extra.visitQuestions.groupingBy{it.appointment_id}.eachCount(),onVisits={openMedicalChild(Destination.VISITS)})

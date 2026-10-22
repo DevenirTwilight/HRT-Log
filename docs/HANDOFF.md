@@ -1,4 +1,23 @@
-## UI-07b 纯线条状态图标：实现与本地验证 — 2026-10-22
+## LAB-04 时间线合并化验：本地验证通过，PR 待 CI — 2026-10-22
+
+负责人上传 LAB-04 任务书（§137），并要求“整完这个再给apk”，即 build35 同时包含 UI-07b（#96）和 LAB-04。
+
+- **分支**：`feature/lab04-timeline-draws-20261022`，基于 bdba7e45，工作区 /home/user/wt-lab04。
+- **改动**：
+  - 新文件 `ui/TimelineLabDraws.kt`；
+  - `LongitudinalScreen` 折叠化验；
+  - `AppShell` 接 `onLabPanel`；
+  - 四种语言各 5 条文案。
+- **未改**：投影文件（SHA 已固定）。
+- **测试**：`Lab04GroupingTest`、`Lab04TimelineUiTest`、`Lab04SpokenTest`、`Lab04ProjectionUnchangedTest`（期望摘要来自在基线上运行），本地全部通过。
+- **截图**：`docs/ui-audit/2026-10-22-lab04/`。before 是把 `Lab04Fixture.kt` 和 `Lab04ScreenshotTest.kt` 复制到 /home/user/wt-rem 的 bdba7e45 上渲染的。
+- **报告**：73。
+- **本地验证**：完整 `:app:testFullDebugUnitTest` 2049 项，0 失败（394 项为默认关闭的截图测试等，按设计跳过），通过的包括 PeriodStabilityTest、时间线五项、Lab01UnaffectedTest、ButtonLayoutRegressionTest、TranslationsTest；`lintFullDebug` 通过。
+- **下一步**：
+  1. 开 PR 并自动合并（若 #96 先合，REQUIREMENTS 和 HANDOFF 末尾会有并列追加的冲突，两边都保留）；
+  3. 两者都合并、主线 CI 全绿后，出 build35：versionCode 35，正式签名，私密交付，登记账本。
+
+## UI-07b 纯线条状态图标：已合并（#96）— 2026-10-22
 
 负责人上传 UI-07b 任务书（§136），并要求“做完给apk”；随后又上传 LAB-04 任务书，要求“整完这个再给apk”。顺序：
 1. UI-07b 合并；

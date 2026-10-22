@@ -1322,4 +1322,10 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="screenshots_block_desc">Activé (par défaut) : les captures et enregistrements d\'écran sont vides et les applications récentes masquent le contenu. Désactivé : les écrans de l\'application peuvent être capturés et apparaissent dans les applications récentes.</string>
 <string name="screenshots_disguise_preview_hidden">Mode déguisé : une fois désactivé, les applications récentes masquent toujours la vraie application sur ce téléphone.</string>
 <string name="screenshots_disguise_preview_shown">Mode déguisé : sur cette version d\'Android, le désactiver affiche aussi la vraie application dans les applications récentes.</string>
+<!-- LAB-04 (REQUIREMENTS §137): one lab draw as one timeline row. -->
+<string name="timeline_lab_draw_title">Analyse · %1$d résultats</string>
+<string name="timeline_lab_draw_out_of_range">%1$d hors intervalle</string>
+<string name="timeline_lab_draw_spoken_title">Analyse, %1$d résultats</string>
+<string name="timeline_lab_draw_spoken_out">%1$d en dehors de l’intervalle de référence</string>
+<string name="lab_names_join">", "</string>
 </resources>

@@ -1322,4 +1322,10 @@
 <string name="screenshots_block_desc">开启时（默认），截屏和录屏只得到空白画面，最近任务里也不显示内容。关闭后，应用画面可以被截屏，也会显示在最近任务里。</string>
 <string name="screenshots_disguise_preview_hidden">伪装模式：关闭后，本机的最近任务里仍然不会显示真实应用的画面。</string>
 <string name="screenshots_disguise_preview_shown">伪装模式：在这个 Android 版本上，关闭后最近任务里也会显示真实应用的画面。</string>
+<!-- LAB-04 (REQUIREMENTS §137): one lab draw as one timeline row. -->
+<string name="timeline_lab_draw_title">化验 · %1$d 项</string>
+<string name="timeline_lab_draw_out_of_range">%1$d 项超出范围</string>
+<string name="timeline_lab_draw_spoken_title">化验，%1$d 项</string>
+<string name="timeline_lab_draw_spoken_out">%1$d 项超出参考范围</string>
+<string name="lab_names_join">、</string>
 </resources>
