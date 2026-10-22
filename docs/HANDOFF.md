@@ -1,3 +1,21 @@
+## UI-07b 纯线条状态图标：实现与本地验证 — 2026-10-22
+
+负责人上传 UI-07b 任务书（§136），并要求“做完给apk”；随后又上传 LAB-04 任务书，要求“整完这个再给apk”。顺序：
+1. UI-07b 合并；
+2. LAB-04（§137）合并；
+3. 出 build35（versionCode 35，包含两者）。
+
+UI-07b 当前状态：
+- **分支**：`feature/ui07b-line-icons-20261022`，基于 de0c4e55。
+- **改动**：`core/ui/StatusIcon.kt` 改为纯线条；调用点只改了传入的颜色参数（TodayCard、CalendarScreen、StatusChip）。
+- **测试**：
+  - `StatusIconSpecTest`、`StatusIconContrastTest`（504 组，最低 3.46）；
+  - `Ui07bDrawingRecordTest`、`Ui07bSmallIconTest`、`Ui07bCallSiteColourTest`。
+- **截图**：`docs/ui-audit/2026-10-22-ui07b/`，前后对比，渲染方式是把截图测试复制到 /home/user/wt-rem 的 de0c4e55 上运行。
+- **报告**：72。
+- **本地验证**：`:core:ui:testDebugUnitTest` + 完整 `:app:testFullDebugUnitTest` 共 2733 项，0 失败（384 项为默认关闭的截图测试等，按设计跳过；PeriodStabilityTest 通过），`lintFullDebug` 通过。
+- **PR**：#96，已开启自动合并；合并了默认分支 bdba7e45（#95 交付回执）。LAB-04 已在 /home/user/wt-lab04 并行进行。
+
 ## build34 已私密交付 — 2026-10-22
 
 负责人要求先加入“禁止截屏”开关再出包（§134、§135）。

@@ -76,8 +76,8 @@ fun Modifier.statusOutline(style: StatusStyle, tone: SemanticTone?, shape: Shape
     Surface(color = container, contentColor = content, shape = Corners.pill,
         modifier = modifier.statusOutline(style, tone, Corners.pill).testTag("status:${style.state}")) {
         Row(Modifier.padding(start = if (statusIconKind(style.state) != null) 4.dp else 10.dp, end = 10.dp, top = 3.dp, bottom = 3.dp), verticalAlignment = Alignment.CenterVertically) {
-            // UI-07 A: the filled-circle status icon (decorative; the chip's words say the state).
-            statusIconKind(style.state)?.let { StatusIcon(it, StatusIconSizes.S); Spacer(Modifier.width(6.dp)) }
+            // UI-07 A: the status icon (decorative; the chip's words say the state). UI-07b: on the chip's own container.
+            statusIconKind(style.state)?.let { StatusIcon(it, StatusIconSizes.S, onOwnContainer = true); Spacer(Modifier.width(6.dp)) }
             Text(text, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Medium)
         }
     }
