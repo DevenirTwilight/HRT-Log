@@ -229,8 +229,10 @@ fun DrawScope.drawWellbeingTrend(points: Map<LocalDate, Int>, from: LocalDate, t
         pad + (size.height - 2 * pad) * (5 - points.getValue(d)) / 4f)
     val shape = trendShape(points.filterKeys { it in from..to })
     shape.lines.forEach { (a, b) -> drawLine(color, at(a), at(b), width, StrokeCap.Round) }
-    // Every value is a dot, so the ends of each segment read as days; a lone day is just its dot.
-    points.keys.filter { it in from..to }.sorted().forEach { drawCircle(color, width * 1.4f, at(it)) }
+    // Every value is a small dot in the line's own colour (owner, 2026-10-22: no big or contrasting dots); a lone day, with no
+    // segment beside it, gets a slightly larger dot so it stays visible.
+    val lone = shape.dots.toSet()
+    points.keys.filter { it in from..to }.sorted().forEach { drawCircle(color, width * if (it in lone) 1.2f else 0.9f, at(it)) }
 }
 
 /** F: one item's thin line: "5" and "1" on the left, the line beside; read as "<item>, n days noted in the last 30 days". */

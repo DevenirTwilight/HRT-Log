@@ -175,6 +175,8 @@ class Ui08TrendDrawingTest {
         assertEquals(listOf("drawLine", "drawLine") + List(5) { "drawCircle" }, draws.map { it.name })
         draws.forEach { c -> assertEquals(Color.Blue, (c.args.last() as Paint).color) }
         assertEquals(PaintingStyle.Fill, (draws.last().args.last() as Paint).style)
+        // Small dots in the line's colour: at most 1.2 × the line width (owner, 2026-10-22).
+        draws.filter { it.name == "drawCircle" }.forEach { c -> assertTrue("small dot", (c.args[1] as Float) <= 4f * 1.2f + 0.01f) }
         // No horizontal line across the chart (a mean or reference line would span it).
         draws.filter { it.name == "drawLine" }.forEach { c ->
             val a = c.args[0] as Long; val b = c.args[1] as Long
