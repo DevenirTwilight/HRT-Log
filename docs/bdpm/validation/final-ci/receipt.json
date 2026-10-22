@@ -7,9 +7,49 @@
   "tree_equality": "PASS (GitHub merge checkout tree equals source head tree)",
   "android_run": 39783311218,
   "science_run": 39783311197,
-  "status": "IN_PROGRESS; not accepted or merged",
+  "status": "API26/API29/JVM/Science PASS; API35/host IN_PROGRESS",
   "prior_source": "054c30ad8beac2449a560f58bc9a9524cf66624e",
   "prior_checkout_merge": "ce2e10378a52eb6544d4e8fdfa33d5c335b95f13",
   "prior_result": "FAIL native follow-up/setup; host cancelled at R8 after superseding source, not host PASS",
-  "evidence_branch_policy": "Documentation/artifacts only; never the production candidate. [skip ci] avoids rerunning runtime gates for results metadata."
+  "evidence_branch_policy": "Documentation/artifacts only; never the production candidate. [skip ci] avoids rerunning runtime gates for results metadata.",
+  "native_reports": [
+    {
+      "api": 26,
+      "artifact": 12429255369,
+      "sha256": "5619e11eabba5cdb2ba955d4fe19d4485c7c248e9e2eebe32fb36608dd922a10",
+      "crc": "PASS",
+      "job_result": "SUCCESS",
+      "classes": {
+        "net.plainnotes.app.data.BdpmCatalogueAndroidTest": {
+          "tests": "4",
+          "failures": "0",
+          "skipped": "0"
+        },
+        "net.plainnotes.app.shell.InAppNavigationLockAndroidTest": {
+          "tests": "13",
+          "failures": "0",
+          "skipped": "0"
+        }
+      }
+    },
+    {
+      "api": 29,
+      "artifact": 12429300292,
+      "sha256": "a52bcb5174ffd496e02da297c76c9c8721b7f23b5daacfa2089388412536dded",
+      "crc": "PASS",
+      "job_result": "SUCCESS",
+      "classes": {
+        "net.plainnotes.app.data.BdpmCatalogueAndroidTest": {
+          "tests": "4",
+          "failures": "0",
+          "skipped": "0"
+        },
+        "net.plainnotes.app.shell.InAppNavigationLockAndroidTest": {
+          "tests": "13",
+          "failures": "0",
+          "skipped": "0"
+        }
+      }
+    }
+  ]
 }

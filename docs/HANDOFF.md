@@ -1,3 +1,7 @@
+## BDPM 最终92337735：API26/29整体PASS；等待API35与主机 — 2026-10-22
+
+最终Android run39783311218，API26 job119840692986/API29 job119840692975整体SUCCESS。两份实际checkout均4d080993e34b268c6c157aa808462fdef7295bf3，tree等于92337735；原始ZIP/CRC/SHA/压缩job日志及目录4项和导航合同的真实计数在final-ci/receipt.json。API26单次Back修正已在本次设备执行验证，不是重跑旧054筛绿。JVM/Science也PASS；API35与完整主机尚在跑，PR98保持Draft，不提前合并。真实TalkBack/实体机仍NOT_RUN。
+
 ## BDPM 冻结候选92337735；当前证据分支，非生产候选 — 2026-10-22
 
 生产PR98 HEAD9233773533a7a110fbaa822c478d6ce1ad13b32b（含73b42862四语子集说明及收尾测试修正）已推送，工作树干净。最终Android run39783311218、Science39783311197正在执行，不预报通过/合并。PR实际checkout为4d080993e34b268c6c157aa808462fdef7295bf3，两者Git tree相同6a76761d…523a；报告会同时记录head和实际checkout，避免混淆PR合并引用与源码SHA。
