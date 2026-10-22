@@ -1,0 +1,48 @@
+Picked up JAVA_TOOL_OPTIONS: -Dhttp.proxyHost=proxy -Dhttp.proxyPort=8080 -Dhttps.proxyHost=proxy -Dhttps.proxyPort=8080 -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.3.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :core:domain:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:domain:processResources NO-SOURCE
+> Task :core:domain:prepareMeasurementOracle
+> Task :core:domain:processTestResources NO-SOURCE
+> Task :core:domain:compileKotlin
+> Task :core:domain:compileJava NO-SOURCE
+> Task :core:domain:classes UP-TO-DATE
+> Task :core:domain:jar
+> Task :core:domain:compileTestKotlin
+> Task :core:domain:compileTestJava NO-SOURCE
+> Task :core:domain:testClasses UP-TO-DATE
+
+> Task :core:domain:test
+Picked up JAVA_TOOL_OPTIONS: -Dhttp.proxyHost=proxy -Dhttp.proxyPort=8080 -Dhttps.proxyHost=proxy -Dhttps.proxyPort=8080 -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts
+
+AttachmentResourceLifecycleTest > oneFailedCleanupDoesNotSkipOtherResourcesOrReenableSession() FAILED
+    org.opentest4j.AssertionFailedError at AttachmentResourceLifecycleTest.kt:49
+
+AttachmentResourceLifecycleTest > closingParentReleasesDescendantsButNotIndependentReaders() FAILED
+    org.opentest4j.AssertionFailedError at AttachmentResourceLifecycleTest.kt:30
+
+AttachmentResourceLifecycleTest > revocationRejectsNewWorkWhileSlowCleanupRunsWithoutHoldingPublicationMonitor() FAILED
+    org.opentest4j.AssertionFailedError at AttachmentResourceLifecycleTest.kt:69
+
+AttachmentResourceLifecycleTest > revokeReleasesEveryHandleAndClearsOwnedBuffer() FAILED
+    org.opentest4j.AssertionFailedError at AttachmentResourceLifecycleTest.kt:19
+
+AttachmentResourceLifecycleTest > concurrentCloseAndRevokeWaitForTheSameCleanupExactlyOnce() FAILED
+    org.opentest4j.AssertionFailedError at AttachmentResourceLifecycleTest.kt:87
+
+7 tests completed, 5 failed
+
+> Task :core:domain:test FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':core:domain:test'.
+> There were failing tests. See the report at: file:///workspace/HRT-Log-reference-draft/core/domain/build/reports/tests/test/index.html
+
+* Try:
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+
+BUILD FAILED in 40s
+5 actionable tasks: 5 executed

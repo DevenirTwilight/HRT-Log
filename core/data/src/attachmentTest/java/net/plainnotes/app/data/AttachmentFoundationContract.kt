@@ -27,6 +27,34 @@ abstract class AttachmentFoundationContract {
     private fun reject(block:()->Unit) { try { block();fail("Unsafe metadata accepted") } catch(_:IllegalStateException){} catch(_:IllegalArgumentException){} catch(_:android.database.SQLException){} }
     private suspend fun visit(id:Long=1)=db.dao().appointment(AppointmentEntity(id=id,type="ENDO",at_utc=1000,at_zone="UTC",location="Synthetic",practitioner="Synthetic",note="Synthetic",remind_minutes_before=0))
     private suspend fun bind(kind:String="APPOINTMENT",id:Long=1)=db.withTransaction { AttachmentIdentity.bind(raw,scope,kind,id) }
+    @Test fun resourceRevocationClosesActualPipeAndClearsOnlyOwnedBuffer() {
+        val session=net.plainnotes.app.domain.AttachmentSession(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch))
+        val capability=session.issue()
+        val pipe=android.os.ParcelFileDescriptor.createPipe()
+        val input=android.os.ParcelFileDescriptor.AutoCloseInputStream(pipe[0])
+        val fd=pipe[0].fileDescriptor
+        val owned=byteArrayOf(9,8,7);val independentCopy=owned.copyOf()
+        try {
+            capability.own(input);capability.ownBytes(owned)
+            android.os.ParcelFileDescriptor.AutoCloseOutputStream(pipe[1]).use {it.write(42)}
+            assertEquals(42,input.read());assertTrue(fd.valid())
+            session.revoke()
+            assertFalse(fd.valid());assertArrayEquals(ByteArray(3),owned)
+            assertArrayEquals(byteArrayOf(9,8,7),independentCopy)
+            reject {capability.check()}
+            assertEquals(0L,runBlocking {db.attachments().current().single().feature_enabled})
+        } finally { input.close();pipe[1].close();session.revoke();independentCopy.fill(0) }
+    }
+    @Test fun cancelledReaderRejectsLatePipeOwnershipAndClosesIncomingDescriptor() {
+        val session=net.plainnotes.app.domain.AttachmentSession(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch))
+        val capability=session.issue();capability.close()
+        val pipe=android.os.ParcelFileDescriptor.createPipe()
+        val input=android.os.ParcelFileDescriptor.AutoCloseInputStream(pipe[0]);val fd=pipe[0].fileDescriptor
+        try {
+            assertTrue(fd.valid());reject {capability.own(input)};assertFalse(fd.valid())
+            assertEquals(0L,runBlocking {db.attachments().current().single().feature_enabled})
+        } finally { input.close();pipe[1].close();session.revoke() }
+    }
     @Test fun room11KeepsThreeAttachmentDomainsDefaultDisabled()=runBlocking {
         assertEquals(13,raw.version)
         assertNotEquals(scope.dataset,scope.logicalVault);assertNotEquals(scope.dataset,scope.epoch)

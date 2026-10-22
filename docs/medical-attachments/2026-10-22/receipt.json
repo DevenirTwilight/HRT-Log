@@ -1,0 +1,46 @@
+{
+  "baseline": "4e31afcd",
+  "scope": "SESSION_RESOURCE_OWNERSHIP_NOT_FILE_LIBRARY",
+  "first_red": {
+    "tests": 7,
+    "failures": 5,
+    "description": "registration prototype without cleanup hooks"
+  },
+  "lock_order_red": {
+    "tests": 1,
+    "failures": 1,
+    "description": "deterministic lease/publication lock-order deadlock timeout"
+  },
+  "final_jvm": {
+    "domain": {
+      "tests": 162,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "attachment_poc": {
+      "tests": 63,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "resource_tests": 10,
+  "existing_session_tests": 5,
+  "python_isolation_tests": 69,
+  "python_isolation_status": "PASS",
+  "android_local": "IN_PROGRESS",
+  "native_api26_29_35": "NOT_RUN",
+  "physical_arm": "NOT_RUN",
+  "talkback": "NOT_RUN",
+  "feature": "OFF",
+  "production_import_backup": "NOT_IMPLEMENTED",
+  "external_review": "NOT_REVIEWED_EXTERNALLY",
+  "crypto_schema_backup_permissions_version": "UNCHANGED",
+  "initial_unproxied_gradle": "STOPPED_BEFORE_TESTS_NETWORK_CONNECT_STALL_NOT_A_RED_TEST",
+  "source_sha256": {
+    "core/domain/src/main/kotlin/net/plainnotes/app/domain/AttachmentSession.kt": "6619382e91f4cde89dcc810019204bbbeda9365b9a52bcb19b3477b23d880331",
+    "core/domain/src/test/kotlin/net/plainnotes/app/domain/AttachmentResourceLifecycleTest.kt": "7cf96e5e1a2f4ae379eeac929f78ee7ca4d44d26a987042d8381ad7eefe59894",
+    "core/data/src/attachmentTest/java/net/plainnotes/app/data/AttachmentFoundationContract.kt": "3668f04d67b5eb7c1a06b5088e9011572a6eeec9465591c3a1be6fc0454420b4"
+  }
+}

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.domain.AttachmentResourceLifecycleTest" tests="7" skipped="0" failures="5" errors="0" timestamp="2026-10-22T19:18:25.314Z" hostname="8a3f875cab28" time="5.112">
+  <properties/>
+  <testcase name="oneFailedCleanupDoesNotSkipOtherResourcesOrReenableSession()" classname="net.plainnotes.app.domain.AttachmentResourceLifecycleTest" time="0.024">
+    <failure message="org.opentest4j.AssertionFailedError: Expected java.lang.IllegalStateException to be thrown, but nothing was thrown." type="org.opentest4j.AssertionFailedError">org.opentest4j.AssertionFailedError: Expected java.lang.IllegalStateException to be thrown, but nothing was thrown.
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:152)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:73)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
+	at org.junit.jupiter.api.Assertions.assertThrows(Assertions.java:3128)
+	at net.plainnotes.app.domain.AttachmentResourceLifecycleTest.oneFailedCleanupDoesNotSkipOtherResourcesOrReenableSession(AttachmentResourceLifecycleTest.kt:49)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+</failure>
+  </testcase>
+  <testcase name="individualCloseIsIdempotentAndDoesNotCancelSibling()" classname="net.plainnotes.app.domain.AttachmentResourceLifecycleTest" time="0.001"/>
+  <testcase name="closingParentReleasesDescendantsButNotIndependentReaders()" classname="net.plainnotes.app.domain.AttachmentResourceLifecycleTest" time="0.049">
+    <failure message="org.opentest4j.AssertionFailedError: expected: &lt;[parent, child, grandchild]&gt; but was: &lt;[]&gt;" type="org.opentest4j.AssertionFailedError">org.opentest4j.AssertionFailedError: expected: &lt;[parent, child, grandchild]&gt; but was: &lt;[]&gt;
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:197)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:182)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:177)
+	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:1145)
+	at net.plainnotes.app.domain.AttachmentResourceLifecycleTest.closingParentReleasesDescendantsButNotIndependentReaders(AttachmentResourceLifecycleTest.kt:30)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+</failure>
+  </testcase>
+  <testcase name="revocationRejectsNewWorkWhileSlowCleanupRunsWithoutHoldingPublicationMonitor()" classname="net.plainnotes.app.domain.AttachmentResourceLifecycleTest" time="5.005">
+    <failure message="org.opentest4j.AssertionFailedError: expected: &lt;true&gt; but was: &lt;false&gt;" type="org.opentest4j.AssertionFailedError">org.opentest4j.AssertionFailedError: expected: &lt;true&gt; but was: &lt;false&gt;
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertTrue.failNotTrue(AssertTrue.java:63)
+	at org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:36)
+	at org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:31)
+	at org.junit.jupiter.api.Assertions.assertTrue(Assertions.java:183)
+	at net.plainnotes.app.domain.AttachmentResourceLifecycleTest.revocationRejectsNewWorkWhileSlowCleanupRunsWithoutHoldingPublicationMonitor(AttachmentResourceLifecycleTest.kt:69)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+</failure>
+  </testcase>
+  <testcase name="rejectedRegistrationReleasesResourceAndPreservesBothErrors()" classname="net.plainnotes.app.domain.AttachmentResourceLifecycleTest" time="0.008"/>
+  <testcase name="revokeReleasesEveryHandleAndClearsOwnedBuffer()" classname="net.plainnotes.app.domain.AttachmentResourceLifecycleTest" time="0.002">
+    <failure message="org.opentest4j.AssertionFailedError: expected: &lt;1&gt; but was: &lt;0&gt;" type="org.opentest4j.AssertionFailedError">org.opentest4j.AssertionFailedError: expected: &lt;1&gt; but was: &lt;0&gt;
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:197)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:150)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:145)
+	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:531)
+	at net.plainnotes.app.domain.AttachmentResourceLifecycleTest.revokeReleasesEveryHandleAndClearsOwnedBuffer(AttachmentResourceLifecycleTest.kt:19)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+</failure>
+  </testcase>
+  <testcase name="concurrentCloseAndRevokeWaitForTheSameCleanupExactlyOnce()" classname="net.plainnotes.app.domain.AttachmentResourceLifecycleTest" time="0.004">
+    <failure message="org.opentest4j.AssertionFailedError: expected: &lt;false&gt; but was: &lt;true&gt;" type="org.opentest4j.AssertionFailedError">org.opentest4j.AssertionFailedError: expected: &lt;false&gt; but was: &lt;true&gt;
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertFalse.failNotFalse(AssertFalse.java:63)
+	at org.junit.jupiter.api.AssertFalse.assertFalse(AssertFalse.java:36)
+	at org.junit.jupiter.api.AssertFalse.assertFalse(AssertFalse.java:31)
+	at org.junit.jupiter.api.Assertions.assertFalse(Assertions.java:231)
+	at net.plainnotes.app.domain.AttachmentResourceLifecycleTest.concurrentCloseAndRevokeWaitForTheSameCleanupExactlyOnce(AttachmentResourceLifecycleTest.kt:87)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+</failure>
+  </testcase>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
