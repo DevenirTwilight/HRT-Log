@@ -55,8 +55,23 @@
     "android_push": 39845782550,
     "science_pr": 39845789227,
     "science_push": 39845782504,
-    "android": "PENDING",
+    "android": "IN_PROGRESS",
     "science": "SUCCESS"
   },
-  "auto_merge": "ENABLED_PROTECTED"
+  "auto_merge": "ENABLED_PROTECTED",
+  "native_api26_29": {
+    "status": "PASS",
+    "each_foundation": [
+      20,
+      0,
+      0
+    ],
+    "each_saf": [
+      5,
+      0,
+      0
+    ],
+    "originals": "../input-native/",
+    "app_individual_report": "NOT_RETAINED_IN_26_29_ARTIFACT; no per-class assertion"
+  }
 }

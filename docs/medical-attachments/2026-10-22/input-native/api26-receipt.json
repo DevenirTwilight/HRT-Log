@@ -1,0 +1,21 @@
+{
+  "api": 26,
+  "artifact": 12456810082,
+  "sha256": "0c2de673d2ea248c7a579598d65f2cad724cb8fa310bbfee80aa1ab26fd830f0",
+  "source": "8dd60c435d924abafd3aabf8d7947b7691eae520",
+  "zip_crc": "PASS",
+  "contracts": {
+    "AttachmentFoundationAndroidTest": {
+      "tests": 20,
+      "failures": 0,
+      "skipped": 0
+    },
+    "Gate2SafAndroidTest": {
+      "tests": 5,
+      "failures": 0,
+      "skipped": 0
+    }
+  },
+  "new_core_tests_actually_executed": "PASS",
+  "app_poc_per_class_report": "NOT_RETAINED: later navigation suite overwrites app HTML; no per-class PASS claimed from this artifact"
+}

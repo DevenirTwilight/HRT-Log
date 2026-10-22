@@ -1,3 +1,9 @@
+## #103最终API26/29原始工件核验PASS，继续等35/完整Android — 2026-10-22
+
+最终源8dd60c43的PR39845789203：26/29两个job SUCCESS；官方artifact12456810082/12456565917的SHA/CRC核验PASS，原ZIP及Foundation20、Gate2Saf5的原HTML和新测试逐项成功断言均保存在input-native/。没有用job绿灯冒充方法执行；三项新增core输入/可靠pipe方法均真实PASS。26/29的App POC HTML被后续导航套覆盖，未从这两包声称新cipher-sandbox单方法实际通过；API35全套原App报告待读取。CI本身保留原所有脚本与断言，不为此重跑已过设备。
+
+35和完整Android尚在运行，不填最终合并/主线PASS。#102此前已合并且合并后主线全SUCCESS。源码冻结，独立证据持续推送，不新触发P4性能或签名出包。
+
 ## #102合并后完整主线通过，#103最终原生回归继续 — 2026-10-22
 
 主线e4ebab2e的Android39843996907已完整SUCCESS，Science39843996985此前SUCCESS；#102不再有待收尾CI。#103源8dd60c43保持冻结，JVM与Science成功，三API及完整Android仍运行中，无新源码改动或重复跑分。当前明确待决的是production-storage-next-slice.md所列具体生产writer/reader、key/迁移授权与外部审核时序；已通过异步问题请负责人决定，尚无答复，不把等待当批准，不因此中断#103独立验收。
