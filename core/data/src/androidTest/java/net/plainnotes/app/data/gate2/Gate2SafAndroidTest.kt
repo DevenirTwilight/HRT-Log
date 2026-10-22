@@ -11,6 +11,22 @@ import org.junit.Test
 class Gate2SafAndroidTest {
     private val context get()=InstrumentationRegistry.getInstrumentation().targetContext
     private fun uri(kind:String)=Uri.parse("content://net.plainnotes.app.data.test.synthetic.gate2/$kind")
+    @Test fun boundedTransportPreservesRealReliablePipeFailureInsteadOfAcceptingEof() {
+        val session=net.plainnotes.app.domain.AttachmentSession(java.util.UUID.randomUUID(),java.util.UUID.randomUUID())
+        val parent=session.issue();val bytes=ByteArray(256) {9}
+        try {
+            val fd=context.contentResolver.openFileDescriptor(uri("failure"),"r")!!
+            val input=net.plainnotes.app.domain.AttachmentInputStream.open(parent,ParcelFileDescriptor.AutoCloseInputStream(fd),8192)
+            input.use { source ->
+                failsWith("Synthetic provider read failure") {
+                    while(source.read(bytes)>=0) { }
+                    fail("Reliable pipe error was turned into successful EOF")
+                }
+                assertArrayEquals(ByteArray(bytes.size),bytes)
+            }
+            parent.check()
+        } finally {bytes.fill(0);session.revoke()}
+    }
     @Test fun actualUnknownLengthAndFalseDeclaredLengthAreNotAuthority() {
         val s=Gate2Store(context)
         try{for(kind in listOf("unknown","false")) {
