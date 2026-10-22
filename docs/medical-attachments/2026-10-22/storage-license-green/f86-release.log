@@ -1,0 +1,238 @@
+Picked up JAVA_TOOL_OPTIONS: -Dhttp.proxyHost=proxy -Dhttp.proxyPort=8080 -Dhttps.proxyHost=proxy -Dhttps.proxyPort=8080 -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.3.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :app
+WARNING: The option setting 'android.builtInKotlin=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+WARNING: The option setting 'android.newDsl=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+Warning: SDK processing. This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+
+> Task :importer:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:domain:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :importer:processResources NO-SOURCE
+> Task :pk-engine:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :pk-engine:compileKotlin UP-TO-DATE
+> Task :core:domain:compileKotlin UP-TO-DATE
+> Task :pk-engine:compileJava NO-SOURCE
+> Task :core:domain:compileJava NO-SOURCE
+> Task :core:domain:processResources NO-SOURCE
+> Task :core:domain:classes UP-TO-DATE
+> Task :pk-engine:processResources UP-TO-DATE
+> Task :pk-engine:classes UP-TO-DATE
+> Task :core:domain:jar UP-TO-DATE
+> Task :pk-engine:jar UP-TO-DATE
+> Task :app:preBuild UP-TO-DATE
+> Task :importer:compileKotlin UP-TO-DATE
+> Task :app:verifyReleaseProvenance
+> Task :app:preFullReleaseBuild
+> Task :app:mergeFullReleaseJniLibFolders UP-TO-DATE
+> Task :core:data:preBuild UP-TO-DATE
+> Task :core:data:preReleaseBuild UP-TO-DATE
+> Task :importer:compileJava NO-SOURCE
+> Task :importer:classes UP-TO-DATE
+> Task :core:data:mergeReleaseJniLibFolders UP-TO-DATE
+> Task :core:data:mergeReleaseNativeLibs NO-SOURCE
+> Task :core:data:copyReleaseJniLibsProjectOnly UP-TO-DATE
+> Task :core:reminder:preBuild UP-TO-DATE
+> Task :core:reminder:preReleaseBuild UP-TO-DATE
+> Task :importer:jar UP-TO-DATE
+> Task :core:reminder:mergeReleaseJniLibFolders UP-TO-DATE
+> Task :core:reminder:mergeReleaseNativeLibs NO-SOURCE
+> Task :core:ui:preBuild UP-TO-DATE
+> Task :core:reminder:copyReleaseJniLibsProjectOnly UP-TO-DATE
+> Task :core:ui:preReleaseBuild UP-TO-DATE
+> Task :core:ui:mergeReleaseJniLibFolders UP-TO-DATE
+> Task :core:data:generateReleaseResources UP-TO-DATE
+> Task :core:ui:mergeReleaseNativeLibs NO-SOURCE
+> Task :core:data:packageReleaseResources UP-TO-DATE
+> Task :core:ui:copyReleaseJniLibsProjectOnly UP-TO-DATE
+> Task :core:data:processReleaseNavigationResources UP-TO-DATE
+> Task :core:data:parseReleaseLocalResources UP-TO-DATE
+> Task :core:data:generateReleaseRFile UP-TO-DATE
+> Task :core:data:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:data:kspReleaseKotlin UP-TO-DATE
+> Task :app:mergeFullReleaseNativeLibs UP-TO-DATE
+> Task :app:stripFullReleaseDebugSymbols UP-TO-DATE
+> Task :core:data:compileReleaseKotlin UP-TO-DATE
+> Task :app:extractFullReleaseNativeSymbolTables UP-TO-DATE
+> Task :core:data:javaPreCompileRelease UP-TO-DATE
+> Task :app:mergeFullReleaseNativeDebugMetadata NO-SOURCE
+> Task :core:reminder:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:reminder:generateReleaseResources UP-TO-DATE
+> Task :core:reminder:packageReleaseResources UP-TO-DATE
+> Task :core:data:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :core:reminder:processReleaseNavigationResources UP-TO-DATE
+> Task :core:reminder:parseReleaseLocalResources UP-TO-DATE
+> Task :core:reminder:generateReleaseRFile UP-TO-DATE
+> Task :core:reminder:javaPreCompileRelease UP-TO-DATE
+> Task :core:data:transformReleaseClassesWithAsm UP-TO-DATE
+> Task :core:ui:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:data:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :core:ui:generateReleaseResources UP-TO-DATE
+> Task :core:data:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :core:data:exportReleaseConsumerProguardFiles UP-TO-DATE
+> Task :core:ui:packageReleaseResources UP-TO-DATE
+> Task :core:ui:processReleaseNavigationResources UP-TO-DATE
+> Task :core:ui:parseReleaseLocalResources UP-TO-DATE
+> Task :core:ui:generateReleaseRFile UP-TO-DATE
+> Task :core:reminder:kspReleaseKotlin UP-TO-DATE
+> Task :core:ui:compileReleaseKotlin UP-TO-DATE
+> Task :core:ui:javaPreCompileRelease UP-TO-DATE
+> Task :core:reminder:compileReleaseKotlin UP-TO-DATE
+> Task :core:ui:compileReleaseJavaWithJavac NO-SOURCE
+> Task :core:ui:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :core:ui:exportReleaseConsumerProguardFiles UP-TO-DATE
+> Task :core:reminder:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :core:reminder:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :core:reminder:exportReleaseConsumerProguardFiles UP-TO-DATE
+> Task :core:data:prepareReleaseArtProfile UP-TO-DATE
+> Task :core:reminder:prepareReleaseArtProfile UP-TO-DATE
+> Task :core:ui:prepareReleaseArtProfile UP-TO-DATE
+> Task :core:reminder:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :core:ui:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :core:reminder:bundleLibRuntimeToJarRelease UP-TO-DATE
+> Task :core:reminder:processReleaseJavaRes UP-TO-DATE
+> Task :core:reminder:createFullJarRelease UP-TO-DATE
+> Task :core:data:bundleLibRuntimeToJarRelease UP-TO-DATE
+> Task :core:data:processReleaseJavaRes UP-TO-DATE
+> Task :core:data:createFullJarRelease UP-TO-DATE
+> Task :core:ui:bundleLibRuntimeToJarRelease UP-TO-DATE
+> Task :core:ui:processReleaseJavaRes UP-TO-DATE
+> Task :core:ui:createFullJarRelease UP-TO-DATE
+> Task :core:data:writeReleaseAarMetadata UP-TO-DATE
+> Task :core:reminder:writeReleaseAarMetadata UP-TO-DATE
+> Task :core:ui:writeReleaseAarMetadata UP-TO-DATE
+> Task :core:data:extractDeepLinksRelease UP-TO-DATE
+> Task :core:data:processReleaseManifest UP-TO-DATE
+> Task :core:reminder:extractDeepLinksRelease UP-TO-DATE
+> Task :core:reminder:processReleaseManifest UP-TO-DATE
+> Task :core:ui:extractDeepLinksRelease UP-TO-DATE
+> Task :core:ui:processReleaseManifest UP-TO-DATE
+> Task :core:data:mapReleaseSourceSetPaths UP-TO-DATE
+> Task :core:data:compileReleaseLibraryResources UP-TO-DATE
+> Task :core:reminder:mapReleaseSourceSetPaths UP-TO-DATE
+> Task :core:reminder:compileReleaseLibraryResources UP-TO-DATE
+> Task :core:ui:mapReleaseSourceSetPaths UP-TO-DATE
+> Task :core:ui:compileReleaseLibraryResources UP-TO-DATE
+> Task :core:data:generateReleaseAssets UP-TO-DATE
+> Task :core:data:mergeReleaseAssets UP-TO-DATE
+> Task :core:reminder:generateReleaseAssets UP-TO-DATE
+> Task :core:reminder:mergeReleaseAssets UP-TO-DATE
+> Task :core:ui:generateReleaseAssets UP-TO-DATE
+> Task :core:ui:mergeReleaseAssets UP-TO-DATE
+> Task :core:data:extractProguardFiles UP-TO-DATE
+> Task :core:data:prepareAnsm03b0TestSources UP-TO-DATE
+> Task :app:checkFullReleaseDuplicateClasses UP-TO-DATE
+> Task :app:mergeFullReleaseArtProfile UP-TO-DATE
+> Task :core:data:generateReleaseLintModel UP-TO-DATE
+> Task :app:buildKotlinToolingMetadata UP-TO-DATE
+> Task :core:data:prepareLintJarForPublish UP-TO-DATE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:reminder:extractProguardFiles UP-TO-DATE
+> Task :app:generateFullReleaseBuildConfig
+> Task :app:generateFullReleaseResources
+> Task :core:reminder:generateReleaseLintModel UP-TO-DATE
+> Task :core:reminder:prepareLintJarForPublish UP-TO-DATE
+> Task :core:ui:extractProguardFiles UP-TO-DATE
+> Task :core:ui:generateReleaseLintModel UP-TO-DATE
+> Task :core:ui:prepareLintJarForPublish UP-TO-DATE
+> Task :core:reminder:checkReleaseAarMetadata UP-TO-DATE
+> Task :core:reminder:stripReleaseDebugSymbols NO-SOURCE
+> Task :core:reminder:copyReleaseJniLibsProjectAndLocalJars UP-TO-DATE
+> Task :core:reminder:extractDeepLinksForAarRelease UP-TO-DATE
+> Task :core:reminder:extractReleaseAnnotations UP-TO-DATE
+> Task :core:reminder:mergeReleaseConsumerProguardFiles UP-TO-DATE
+> Task :core:reminder:mergeReleaseJavaResource UP-TO-DATE
+> Task :core:reminder:syncReleaseLibJars UP-TO-DATE
+> Task :core:reminder:bundleReleaseLocalLintAar UP-TO-DATE
+> Task :core:data:checkReleaseAarMetadata UP-TO-DATE
+> Task :core:data:stripReleaseDebugSymbols NO-SOURCE
+> Task :core:data:copyReleaseJniLibsProjectAndLocalJars UP-TO-DATE
+> Task :core:data:extractDeepLinksForAarRelease UP-TO-DATE
+> Task :core:data:extractReleaseAnnotations UP-TO-DATE
+> Task :core:data:mergeReleaseConsumerProguardFiles UP-TO-DATE
+> Task :core:data:mergeReleaseJavaResource UP-TO-DATE
+> Task :core:data:syncReleaseLibJars UP-TO-DATE
+> Task :core:data:bundleReleaseLocalLintAar UP-TO-DATE
+> Task :app:packageFullReleaseResources
+> Task :core:ui:checkReleaseAarMetadata UP-TO-DATE
+> Task :core:ui:stripReleaseDebugSymbols NO-SOURCE
+> Task :app:processFullReleaseNavigationResources
+> Task :core:ui:copyReleaseJniLibsProjectAndLocalJars UP-TO-DATE
+> Task :core:ui:extractDeepLinksForAarRelease UP-TO-DATE
+> Task :core:ui:extractReleaseAnnotations UP-TO-DATE
+> Task :app:javaPreCompileFullRelease UP-TO-DATE
+> Task :app:checkFullReleaseAarMetadata UP-TO-DATE
+> Task :app:mapFullReleaseSourceSetPaths
+> Task :app:compileFullReleaseNavigationResources UP-TO-DATE
+> Task :app:parseFullReleaseLocalResources
+> Task :core:ui:mergeReleaseConsumerProguardFiles UP-TO-DATE
+> Task :core:ui:mergeReleaseJavaResource UP-TO-DATE
+> Task :core:ui:syncReleaseLibJars UP-TO-DATE
+> Task :core:ui:bundleReleaseLocalLintAar UP-TO-DATE
+> Task :core:data:lintVitalAnalyzeRelease UP-TO-DATE
+> Task :core:data:writeReleaseLintModelMetadata UP-TO-DATE
+> Task :core:reminder:lintVitalAnalyzeRelease UP-TO-DATE
+> Task :core:reminder:writeReleaseLintModelMetadata UP-TO-DATE
+> Task :core:ui:lintVitalAnalyzeRelease UP-TO-DATE
+> Task :core:ui:writeReleaseLintModelMetadata UP-TO-DATE
+> Task :core:data:generateReleaseLintVitalModel UP-TO-DATE
+> Task :core:reminder:generateReleaseLintVitalModel UP-TO-DATE
+> Task :core:ui:generateReleaseLintVitalModel UP-TO-DATE
+> Task :app:generateFullReleaseRFile UP-TO-DATE
+
+> Task :app:mergeFullReleaseResources
+/workspace/HRT-Log-med02-store/app/src/main/res/values-b+zh+Hant/strings.xml: Multiple substitutions specified in non-positional format of string resource string/legend_band_inner. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med02-store/app/src/main/res/values-b+zh+Hant/strings.xml: Multiple substitutions specified in non-positional format of string resource string/legend_band_outer. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med02-store/app/src/main/res/values-b+zh+Hant/strings.xml: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med02-store/app/src/main/res/values/strings.xml: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med02-store/app/src/main/res/values-fr/strings.xml: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med02-store/app/src/main/res/values-zh/strings.xml: Multiple substitutions specified in non-positional format of string resource string/legend_band_inner. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med02-store/app/src/main/res/values-zh/strings.xml: Multiple substitutions specified in non-positional format of string resource string/legend_band_outer. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med02-store/app/src/main/res/values-zh/strings.xml: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+
+> Task :app:createFullReleaseCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksFullRelease UP-TO-DATE
+> Task :app:processFullReleaseMainManifest UP-TO-DATE
+> Task :app:processFullReleaseManifest UP-TO-DATE
+> Task :app:processFullReleaseManifestForPackage UP-TO-DATE
+> Task :app:processFullReleaseResources
+> Task :app:extractProguardFiles UP-TO-DATE
+> Task :app:mergeFullReleaseStartupProfile UP-TO-DATE
+> Task :app:generateFullReleaseAssets UP-TO-DATE
+> Task :app:mergeFullReleaseAssets UP-TO-DATE
+> Task :app:compressFullReleaseAssets UP-TO-DATE
+> Task :app:extractFullReleaseVersionControlInfo UP-TO-DATE
+> Task :app:collectFullReleaseDependencies UP-TO-DATE
+> Task :app:sdkFullReleaseDependencyData UP-TO-DATE
+> Task :app:writeFullReleaseAppMetadata UP-TO-DATE
+> Task :app:writeFullReleaseSigningConfigVersions UP-TO-DATE
+> Task :app:kspFullReleaseKotlin
+> Task :app:compileFullReleaseKotlin
+> Task :app:compileFullReleaseJavaWithJavac
+> Task :app:hiltAggregateDepsFullRelease UP-TO-DATE
+> Task :app:hiltJavaCompileFullRelease UP-TO-DATE
+> Task :app:processFullReleaseJavaRes UP-TO-DATE
+> Task :app:mergeFullReleaseJavaResource UP-TO-DATE
+> Task :app:transformFullReleaseClassesWithAsm
+> Task :app:generateFullReleaseLintVitalReportModel
+> Task :app:mergeFullReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :app:expandFullReleaseArtProfileWildcards
+> Task :app:lintVitalAnalyzeFullRelease
+> Task :app:minifyFullReleaseWithR8
+> Task :app:lintVitalReportFullRelease
+> Task :app:lintVitalFullRelease
+> Task :app:convertShrunkResourcesToBinaryFullRelease
+> Task :app:compileFullReleaseArtProfile
+> Task :app:optimizeFullReleaseResources
+> Task :app:packageFullRelease
+> Task :app:createFullReleaseApkListingFileRedirect UP-TO-DATE
+> Task :app:assembleFullRelease
+
+BUILD SUCCESSFUL in 4m 58s
+175 actionable tasks: 23 executed, 152 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.3.1/userguide/configuration_cache_enabling.html

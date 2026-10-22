@@ -1,3 +1,7 @@
+## #104修正后精确f86源码：内部R8/发布隔离同样PASS — 2026-10-22
+
+本地8项许可/时期守卫后，f86d4a5e内部unsigned fullRelease构建PASS，源码标识完整f86d4a5e904758bcb646d56eedbbefe620d28fe2且SOURCE_DIRTY=false。原发布隔离与No INTERNET守卫PASS；mapping中Tink/新adapter保留0类，usage整类移除。原日志、移除清单、mapping/usage SHA保留storage-license-green。没有签名、交付或发布。CI还在运行，PR原生26的pre-test设备离线失败待工作流结束后单任务重试；不把本地R8当成完整六门通过。
+
 ## #104许可修正本地8项全PASS；原生26环境失败待单任务重试 — 2026-10-22
 
 f86d4a5e：ThirdPartyNoticesTest3与PeriodStabilityTest5，零fail/error/skip，原XML/日志保留storage-license-green；未削弱原许可guard或时期黄金断言。749的许可红原件仍保留。

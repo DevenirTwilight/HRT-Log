@@ -16,5 +16,16 @@
     }
   },
   "original_749_license_failure": "../storage-license-red/",
-  "final_ci": "IN_PROGRESS"
+  "final_ci": "IN_PROGRESS",
+  "unsigned_internal_release": {
+    "source_sha": "f86d4a5e904758bcb646d56eedbbefe620d28fe2",
+    "source_dirty": false,
+    "r8_build": "PASS",
+    "all_dex_and_manifest_isolation": "PASS_UNCHANGED_GUARD",
+    "no_internet": "PASS",
+    "retained_tink_or_adapter_classes": 0,
+    "mapping_sha256": "423083f4a841c33e86c9d194991597f1eec13564ec9daa6acbc568d1f0eef2d0",
+    "usage_sha256": "932659a58d3393ef29039152a947d77b764bcfc099078336e88d05bec0f54edc",
+    "official_signing_delivery_release": false
+  }
 }
