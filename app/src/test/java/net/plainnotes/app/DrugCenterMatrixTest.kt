@@ -46,7 +46,9 @@ class DrugCenterMatrixTest(private val locale:String,private val width:Int,priva
             for(tag in listOf("drug-center-identity","drug-center-packaging")) {
                 list.performScrollToNode(hasTestTag(tag));ui.onNodeWithTag(tag).assertIsDisplayed().assert(hasClickAction().not())
             }
-            for(tag in listOf("drug-center-catalogue","drug-center-rcp","drug-center-notice","drug-center-safety","drug-center-supply","drug-center-recalls")) {
+            list.performScrollToNode(hasTestTag("drug-center-catalogue"))
+            ui.onNodeWithTag("drug-center-catalogue").assertIsDisplayed().assertHasClickAction().performClick()
+            for(tag in listOf("drug-center-rcp","drug-center-notice","drug-center-safety","drug-center-supply","drug-center-recalls")) {
                 list.performScrollToNode(hasTestTag(tag));ui.onNodeWithTag(tag).assertIsDisplayed().assertHasClickAction().performClick()
                 ui.onNodeWithTag("center-unavailable-dialog").assertExists()
                 ui.onNodeWithTag("center-unavailable-close").assertIsDisplayed().performClick()
@@ -65,7 +67,7 @@ class DrugCenterMatrixTest(private val locale:String,private val width:Int,priva
                 File(folder,"${locale}_${width}dp_${font}x_${if(dark)"dark" else "light"}_${mode.name}.png").outputStream().use{image.compress(Bitmap.CompressFormat.PNG,100,it)}
             }
         }
-        assertEquals("browse callback",3,browsed);assertEquals("medication callback",3,linked)
+        assertEquals("browse and official catalogue callbacks",6,browsed);assertEquals("medication callback",3,linked)
         ui.onAllNodesWithTag("attachment-add").assertCountEquals(0)
     }
 }

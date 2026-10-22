@@ -17,6 +17,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -26,13 +27,15 @@ import net.plainnotes.app.data.*
 import net.plainnotes.app.reference.MedicationReferenceController
 import java.time.LocalDate
 
-/** Real reference editing. No official resource is packaged, and no medication fields are prefilled. */
+/** Explicit reference association; catalogue browsing never prefills medication or inventory fields. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable fun MedicationReferenceDialog(controller:MedicationReferenceController,onDismiss:()->Unit) {
     val state by controller.state.collectAsState()
+    val catalogueState=rememberBdpmCatalogueUiState()
     var query by remember {mutableStateOf("")};var form by remember {mutableStateOf("")};var route by remember {mutableStateOf("")}
     var strengthFilter by remember {mutableStateOf("")}
     var editing by remember {mutableStateOf(false)}
+    var official by remember {mutableStateOf(true)}
     var preview by remember {mutableStateOf<UserReferenceProduct?>(null)}
     var confirm by remember {mutableStateOf(false)};var unlink by remember {mutableStateOf(false)}
     LaunchedEffect(state.saved){if(state.saved){confirm=false;unlink=false;preview=null;editing=false}}
@@ -42,7 +45,7 @@ import java.time.LocalDate
             IconButton(modifier=Modifier.testTag("reference-close"),enabled=!state.busy,onClick={if(controller.close())onDismiss()}){Icon(Icons.AutoMirrored.Outlined.ArrowBack,stringResource(R.string.cancel))}
         })}) {padding->
             LazyColumn(Modifier.fillMaxSize().padding(padding).testTag("reference-screen"),contentPadding=PaddingValues(16.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
-                item {Text(stringResource(R.string.ref2_official_off),style=MaterialTheme.typography.bodyMedium)}
+                item {Text(stringResource(R.string.bdpm_available),style=MaterialTheme.typography.bodyMedium)}
                 item {Text(stringResource(R.string.ref2_boundary))}
                 if(state.target==null)item {Text(stringResource(R.string.ref2_save_first))}
                 if(state.loading)item {LinearProgressIndicator(Modifier.fillMaxWidth().testTag("reference-loading"))}
@@ -53,9 +56,15 @@ import java.time.LocalDate
                 state.current?.reference?.product?.let { product->
                     item {Text(stringResource(R.string.ref2_linked),style=MaterialTheme.typography.titleMedium,modifier=Modifier.semantics{heading()})}
                     item {ReferenceProductDetails(product)}
-                    item {TextButton(enabled=!state.busy && !state.loading,onClick={unlink=true;confirm=true}){Text(stringResource(R.string.ref2_unlink))}}
+                    item {TextButton(enabled=!state.busy && !state.loading,onClick={unlink=true;confirm=true},modifier=Modifier.testTag("reference-unlink")){Text(stringResource(R.string.ref2_unlink))}}
                 }
                 if(state.busy)item {Text(stringResource(R.string.ref2_saving),modifier=Modifier.testTag("reference-saving"))}
+                item {Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+                    TextButton(onClick={official=true},enabled=!state.busy,modifier=Modifier.weight(1f).heightIn(min=48.dp).testTag("reference-official-tab").semantics{selected=official}){Text(stringResource(R.string.bdpm_title))}
+                    TextButton(onClick={official=false},enabled=!state.busy,modifier=Modifier.weight(1f).heightIn(min=48.dp).testTag("reference-saved-tab").semantics{selected=!official}){Text(stringResource(R.string.ref2_saved_library))}
+                }}
+                if(official) item(key="bdpm-catalogue") {BdpmCataloguePanel(catalogueState){preview=it}}
+                if(!official) {
                 item {Text(stringResource(R.string.ref2_saved_library),style=MaterialTheme.typography.titleMedium,modifier=Modifier.semantics{heading()})}
                 item {ReferenceField(query,{query=it.take(256)},R.string.ref2_search,"reference-search")}
                 item {ReferenceField(form,{form=it.take(256)},R.string.ref2_filter_form,"reference-form-filter")}
@@ -72,12 +81,13 @@ import java.time.LocalDate
                             listOfNotNull(entry.product.strength,entry.product.form).forEach {Text(it)}
                             Text(entry.product.routes.joinToString("\n"))
                             Text(stringResource(R.string.ref2_identifiers,entry.product.cis ?: stringResource(R.string.ref2_unknown),entry.product.cip ?: stringResource(R.string.ref2_unknown)))
-                            Text(stringResource(R.string.ref2_unverified))
+                            Text(stringResource(if(entry.product.bdpm==null)R.string.ref2_unverified else R.string.bdpm_source))
                             Text(stringResource(R.string.ref2_version_value,entry.product.sourceVersion))
                             Text(stringResource(R.string.ref2_date_value,entry.product.recordedOn))
                         }
                     }
                 } }
+                }
                 item {OutlinedButton(enabled=!state.busy && !state.loading,onClick={editing=true},modifier=Modifier.fillMaxWidth().heightIn(min=48.dp).testTag("reference-manual")){Text(stringResource(R.string.ref2_manual))}}
             }
         }
@@ -110,15 +120,20 @@ import java.time.LocalDate
     var external by remember {mutableStateOf(false)};var failed by remember {mutableStateOf(false)}
     Column(verticalArrangement=Arrangement.spacedBy(8.dp),modifier=Modifier.fillMaxWidth().testTag("reference-details")) {
         Text(product.name,style=MaterialTheme.typography.titleLarge)
-        Text(stringResource(R.string.ref2_unverified))
+        Text(stringResource(if(product.bdpm==null)R.string.ref2_unverified else R.string.bdpm_source))
+        product.bdpm?.let{b->
+            Text(stringResource(R.string.bdpm_scope));Text(stringResource(R.string.bdpm_snapshot_dates,b.sourceDates,product.recordedOn))
+            b.packageDescription?.let{Text(it)};b.cip7?.let{Text("CIP7 $it")}
+            Text(b.downloadUrl)
+        }
         listOf(R.string.ref2_ingredients to product.ingredients.joinToString("\n"),R.string.ref2_strength to product.strength,
-            R.string.ref2_form to product.form,R.string.ref2_routes to product.routes.joinToString("\n"),
-            R.string.ref2_cis to product.cis,R.string.ref2_cip to product.cip,R.string.ref2_version to product.sourceVersion,
-            R.string.ref2_date to product.recordedOn).forEach { (label,value)->
+            R.string.ref2_form to product.form,(if(product.bdpm==null)R.string.ref2_routes else R.string.bdpm_routes) to product.routes.joinToString("\n"),
+            R.string.ref2_cis to product.cis,R.string.ref2_cip to product.cip,(if(product.bdpm==null)R.string.ref2_version else R.string.bdpm_version) to product.sourceVersion,
+            (if(product.bdpm==null)R.string.ref2_date else R.string.bdpm_downloaded) to product.recordedOn).forEach { (label,value)->
             Text(stringResource(label),style=MaterialTheme.typography.labelLarge)
             Text(value?.takeIf {it.isNotBlank()} ?: stringResource(R.string.ref2_unknown))
         }
-        Text(stringResource(R.string.ref2_status_unknown));Text(stringResource(R.string.ref2_documents_unknown))
+        Text(stringResource(if(product.bdpm==null)R.string.ref2_status_unknown else R.string.bdpm_status_omitted));Text(stringResource(R.string.ref2_documents_unknown))
         product.sourceUrl?.let { url->
             Text(url)
             TextButton(onClick={external=true}){Text(stringResource(R.string.ref2_open_source))}

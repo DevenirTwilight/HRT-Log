@@ -1,0 +1,46 @@
+[
+  {
+    "api": 26,
+    "artifact": 12426902098,
+    "sha256": "1b6034773f69ab6338782fab367b84730f4af8d4754c420155cabe7d08183081",
+    "crc": "PASS",
+    "source_sha": "054c30ad8beac2449a560f58bc9a9524cf66624e",
+    "bdpm_core": {
+      "tests": "4",
+      "failures": "0",
+      "skipped": "0"
+    },
+    "overall": "FAIL: 2 Back dismissal assertions"
+  },
+  {
+    "api": 29,
+    "artifact": 12427296116,
+    "sha256": "02d634891e6328cf055e54c6ba657f5275fac836d8fc380240292f79f18f5bac",
+    "crc": "PASS",
+    "source_sha": "054c30ad8beac2449a560f58bc9a9524cf66624e",
+    "bdpm_core": {
+      "tests": "4",
+      "failures": "0",
+      "skipped": "0"
+    },
+    "overall": "PASS"
+  },
+  {
+    "api": 35,
+    "artifact": 12427307059,
+    "sha256": "e9120c6fbc3eecb148ddbab869fcb8dab0f4f32254f3281499a566a9086816fc",
+    "crc": "PASS",
+    "source_sha": "054c30ad8beac2449a560f58bc9a9524cf66624e",
+    "bdpm_core": {
+      "tests": 4,
+      "failures": 0,
+      "skipped": 0
+    },
+    "bdpm_app": {
+      "tests": 3,
+      "failures": 0,
+      "skipped": 0
+    },
+    "overall": "FAIL: offline follow-up could not find instrumentation after AGP uninstall; test NOT_RUN"
+  }
+]

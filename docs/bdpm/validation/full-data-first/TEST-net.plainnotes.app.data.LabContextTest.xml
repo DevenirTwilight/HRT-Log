@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.LabContextTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-22T11:13:39.004Z" hostname="0a7cae0c7757" time="1.365">
+  <properties/>
+  <testcase name="simultaneousLastIntakesAreBothPreservedAndNoCurrentConfigurationRewritesTheirContext" classname="net.plainnotes.app.data.LabContextTest" time="0.103"/>
+  <testcase name="schema4BackupNeedsNoContextAndMalformedContextFailsWithoutChangingData" classname="net.plainnotes.app.data.LabContextTest" time="0.746"/>
+  <testcase name="ingredientContextExcludesFutureAndDeletedAndNeverUsesCurrentProfileForImports" classname="net.plainnotes.app.data.LabContextTest" time="0.155"/>
+  <testcase name="windowCountsDistinguishLateMissedAndUnconfirmedAndLegacyLabsStayUnknown" classname="net.plainnotes.app.data.LabContextTest" time="0.095"/>
+  <testcase name="revisionsStayFrozenAcrossEditsRebuildAndBackupAndDeleteCascades" classname="net.plainnotes.app.data.LabContextTest" time="0.261"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

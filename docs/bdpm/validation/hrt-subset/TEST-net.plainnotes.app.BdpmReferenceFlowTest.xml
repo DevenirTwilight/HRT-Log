@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.BdpmReferenceFlowTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2026-10-22T12:34:44.345Z" hostname="0a7cae0c7757" time="24.338">
+  <properties/>
+  <testcase name="realAppEntrySelectsOfficialPackageConfirmsAndReopensWithoutDoseStockOrProfileChanges[en/320dp/2x]" classname="net.plainnotes.app.BdpmReferenceFlowTest" time="10.865"/>
+  <testcase name="unsavedDraftCanBrowseGenuineProductButCannotLinkAndReturnsUnchanged[en/320dp/2x]" classname="net.plainnotes.app.BdpmReferenceFlowTest" time="1.461"/>
+  <testcase name="realFilesystemFailureRetryAndNoMatchAreDistinctAndPreserveUserData[en/320dp/2x]" classname="net.plainnotes.app.BdpmReferenceFlowTest" time="0.873"/>
+  <testcase name="realAppEntrySelectsOfficialPackageConfirmsAndReopensWithoutDoseStockOrProfileChanges[fr-rFR/320dp/2x]" classname="net.plainnotes.app.BdpmReferenceFlowTest" time="2.035"/>
+  <testcase name="unsavedDraftCanBrowseGenuineProductButCannotLinkAndReturnsUnchanged[fr-rFR/320dp/2x]" classname="net.plainnotes.app.BdpmReferenceFlowTest" time="1.055"/>
+  <testcase name="realFilesystemFailureRetryAndNoMatchAreDistinctAndPreserveUserData[fr-rFR/320dp/2x]" classname="net.plainnotes.app.BdpmReferenceFlowTest" time="0.699"/>
+  <testcase name="realAppEntrySelectsOfficialPackageConfirmsAndReopensWithoutDoseStockOrProfileChanges[zh-rCN/320dp/2x]" classname="net.plainnotes.app.BdpmReferenceFlowTest" time="1.81"/>
+  <testcase name="unsavedDraftCanBrowseGenuineProductButCannotLinkAndReturnsUnchanged[zh-rCN/320dp/2x]" classname="net.plainnotes.app.BdpmReferenceFlowTest" time="1.088"/>
+  <testcase name="realFilesystemFailureRetryAndNoMatchAreDistinctAndPreserveUserData[zh-rCN/320dp/2x]" classname="net.plainnotes.app.BdpmReferenceFlowTest" time="0.753"/>
+  <testcase name="realAppEntrySelectsOfficialPackageConfirmsAndReopensWithoutDoseStockOrProfileChanges[zh-rTW/320dp/2x]" classname="net.plainnotes.app.BdpmReferenceFlowTest" time="1.751"/>
+  <testcase name="unsavedDraftCanBrowseGenuineProductButCannotLinkAndReturnsUnchanged[zh-rTW/320dp/2x]" classname="net.plainnotes.app.BdpmReferenceFlowTest" time="0.98"/>
+  <testcase name="realFilesystemFailureRetryAndNoMatchAreDistinctAndPreserveUserData[zh-rTW/320dp/2x]" classname="net.plainnotes.app.BdpmReferenceFlowTest" time="0.668"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

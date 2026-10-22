@@ -34,7 +34,7 @@ class CenterModuleScreenshotsTest(private val locale:String,private val dark:Boo
         for(kind in listOf("medical","drug")) {
             ui.runOnIdle{medical=kind=="medical"}
             val list=ui.onNodeWithTag(if(medical)"medical-list" else "drug-center-list")
-            val tag=if(medical)"medical-future-files" else "drug-center-catalogue"
+            val tag=if(medical)"medical-future-files" else "drug-center-rcp"
             list.performScrollToNode(hasTestTag(tag))
             ui.onNodeWithTag(tag).assertIsDisplayed().assertHasClickAction()
             capture("$kind-future",!medical)

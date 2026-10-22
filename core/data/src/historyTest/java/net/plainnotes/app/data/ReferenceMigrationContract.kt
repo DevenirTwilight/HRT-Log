@@ -180,7 +180,8 @@ abstract class ReferenceMigrationContract {
                     texts.forEachIndexed{i,text->raw.execSQL("INSERT INTO day_note(date,text) VALUES(?,?)",arrayOf("synthetic-$i",text))}
                     raw.execSQL("INSERT INTO day_note(date,text) VALUES('synthetic-blob',?)",arrayOf(byteArrayOf(0,1,-1,10)))
                     val created=java.time.Instant.parse("2026-10-19T00:00:00Z")
-                    val old=JSONObject().put("format",BackupCodec.FORMAT_VERSION).put("schema",RecordBackupCompatibility.SCHEMA)
+                    // Freeze the pre-BDPM user-only wire version; maximum reader version is now 13.
+                    val old=JSONObject().put("format",BackupCodec.FORMAT_VERSION).put("schema",12)
                         .put("created",created.toString()).put("tables",frozenDumpBeforeStreaming(raw)).toString().toByteArray(Charsets.UTF_8)
                     fun scalar(sql:String)=raw.query(sql).use{it.moveToFirst();it.getLong(0)}
                     val before=scalar("SELECT total_changes()");val schema=scalar("PRAGMA schema_version")

@@ -2,7 +2,14 @@ package net.plainnotes.app.data
 
 /** PNBAK1 business serialization has an independent version from Room; crypto framing is unchanged. */
 internal object RecordBackupCompatibility {
-    const val SCHEMA = 12
+    const val SCHEMA = 13
+    /** Official format-2 snapshots require a newer reader. User-only backups retain schema 12. */
+    fun exportSchema(db:androidx.sqlite.db.SupportSQLiteDatabase):Int = db.query("SELECT 1 FROM reference_snapshot WHERE namespace='BDPM_FR' LIMIT 1").use{if(it.moveToFirst())13 else 12}
+    fun validateReferenceVersion(schema:Int,tables:BackupTables) {
+        if(schema>=13)return
+        val snapshots=tables.optJSONArray("reference_snapshot") ?: return
+        for(index in 0 until snapshots.length())require(snapshots.getJSONObject(index).getString("namespace")!="BDPM_FR") {"Misdeclared BDPM backup version"}
+    }
     /** Version gate runs before opening any database. The supported maximum is explicit for legacy-reader contract tests. */
     fun readVersion(json: org.json.JSONObject, supported: Int = SCHEMA): Int {
         require(supported>=1)

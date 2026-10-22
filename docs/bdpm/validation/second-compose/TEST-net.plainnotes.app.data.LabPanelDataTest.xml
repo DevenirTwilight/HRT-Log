@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.LabPanelDataTest" tests="14" skipped="0" failures="0" errors="0" timestamp="2026-10-22T11:16:56.269Z" hostname="0a7cae0c7757" time="3.699">
+  <properties/>
+  <testcase name="backupsRoundTripPanelsOldOnesRestoreUngroupedAndAnOldReaderRefusesNewOnes" classname="net.plainnotes.app.data.LabPanelDataTest" time="1.422"/>
+  <testcase name="room11To12KeepsEveryRowAndGroupsNothing" classname="net.plainnotes.app.data.LabPanelDataTest" time="0.238"/>
+  <testcase name="saveAsOneBloodTestOnlyForUngroupedResultsOfOneExactSample" classname="net.plainnotes.app.data.LabPanelDataTest" time="0.117"/>
+  <testcase name="theLastResultTakesItsEmptiedPanelAlong" classname="net.plainnotes.app.data.LabPanelDataTest" time="0.083"/>
+  <testcase name="aSingleResultReturnsToItsPanelByUuidOrOnItsOwn" classname="net.plainnotes.app.data.LabPanelDataTest" time="0.085"/>
+  <testcase name="aWholePanelGoesToTheBinAndComesBackTogether" classname="net.plainnotes.app.data.LabPanelDataTest" time="0.075"/>
+  <testcase name="addingTakesThePanelSampleAndTheDatabaseRefusesADriftingMember" classname="net.plainnotes.app.data.LabPanelDataTest" time="0.072"/>
+  <testcase name="legacyStringIsTheRoom11Text" classname="net.plainnotes.app.data.LabPanelDataTest" time="0.023"/>
+  <testcase name="expandedReportFailureKeepsOldPanelAndUnknownUnitsWithoutPartialWrites" classname="net.plainnotes.app.data.LabPanelDataTest" time="0.085"/>
+  <testcase name="publishedBusinessElevenRestoresPanelsAndLegacyInventoryWithoutInferringIdentity" classname="net.plainnotes.app.data.LabPanelDataTest" time="0.277"/>
+  <testcase name="batchMakesOnePanelAndThePanelEditKeepsMembersInStep" classname="net.plainnotes.app.data.LabPanelDataTest" time="0.074"/>
+  <testcase name="aMemberEditedOnItsOwnLeavesOnlyWhenTimeOrLaboratoryChanges" classname="net.plainnotes.app.data.LabPanelDataTest" time="0.077"/>
+  <testcase name="aFailedRoom11To12MigrationLeavesRoom11" classname="net.plainnotes.app.data.LabPanelDataTest" time="0.566"/>
+  <testcase name="expandedReportKeepsEveryOriginalUnitPanelContextAndBackupThroughTrash" classname="net.plainnotes.app.data.LabPanelDataTest" time="0.493"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

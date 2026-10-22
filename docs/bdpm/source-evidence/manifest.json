@@ -1,0 +1,27 @@
+[
+  {
+    "file": "download.html",
+    "sha256": "8d0784079e1e98db7f86b655e11fcdfd8015d846a4c46c511b65a192bca1f0f8",
+    "bytes": 49152
+  },
+  {
+    "file": "Contenu_et_format_des_fichiers_telechargeables_dans_la_BDM_v4.pdf",
+    "sha256": "ee7f8a0c0a42117cbf4cb89508f77a7c67f8db7fc7b7184bfa575bafa8a10330",
+    "bytes": 594938
+  },
+  {
+    "file": "format-v5.pdf",
+    "sha256": "db10d5a62bc640c227405bcb11cef5db9ad2a2d9a6b4b547198ee19978b6bc8b",
+    "bytes": 295557
+  },
+  {
+    "file": "licence_bdpm.pdf",
+    "sha256": "44ff23ae2b5cce0d729d1b53b20d17aae625189b131c2dd9cb98d1fe0d0a2a90",
+    "bytes": 540249
+  },
+  {
+    "file": "datagouv.json",
+    "sha256": "604bf58e1240db404236420d627be7e6c0498ca6ba0bcd89a84884997e302d82",
+    "bytes": 5743
+  }
+]

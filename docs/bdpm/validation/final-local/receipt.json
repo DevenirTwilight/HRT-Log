@@ -1,0 +1,34 @@
+{
+  "source": "170345c7",
+  "mainline": "aaab9669",
+  "scope": "Final local targeted official link/cancel/reopen/unlink path; later source-specific label corrections await final CI",
+  "suites": [
+    {
+      "name": "net.plainnotes.app.data.BdpmCatalogueTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "xml_sha256": "eabc2059165c529eb18fe8786000ebd212a3dbee76fcfed1f2adeb7ff4950fec"
+    },
+    {
+      "name": "net.plainnotes.app.data.ReferencePayloadTest",
+      "tests": "10",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "xml_sha256": "d8ea9e4d4a3fba9fea0da1512b0685e46807c4e69258f423acc72f6b5fa3e745"
+    },
+    {
+      "name": "net.plainnotes.app.BdpmReferenceFlowTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "xml_sha256": "6939af9af6657b91196c706841de827c70e431975857f8c19ac752103d61d1ae"
+    }
+  ],
+  "native_source_compile": "PASS_NOT_EXECUTED_LOCALLY",
+  "physical_device": "NOT_RUN",
+  "talkback": "NOT_RUN"
+}

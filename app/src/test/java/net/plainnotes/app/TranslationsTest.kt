@@ -10,6 +10,13 @@ class TranslationsTest {
     private val placeholder=Regex("""%\d+\$[sd]""")
     private fun read(file:File)=entry.findAll(file.readText()).associate{it.groupValues[1] to placeholder.findAll(it.groupValues[2]).map{m->m.value}.sorted().toList()}
 
+    @Test fun bdpmTranslationsAreComplete() {
+        val base=read(File("src/main/res/values/bdpm_strings.xml"))
+        for(locale in listOf("values-zh","values-b+zh+Hant","values-fr")) {
+            val translated=read(File("src/main/res/$locale/bdpm_strings.xml"))
+            assertEquals(base,translated)
+        }
+    }
     @Test fun translationsAreComplete() {
         for(res in listOf(File("src/main/res"),File("src/full/res"),File("../core/reminder/src/main/res"))) {
             val base=read(File(res,"values/strings.xml"))

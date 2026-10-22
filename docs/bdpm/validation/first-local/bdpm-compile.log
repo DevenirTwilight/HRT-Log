@@ -1,0 +1,96 @@
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.3.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :app
+WARNING: The option setting 'android.builtInKotlin=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+WARNING: The option setting 'android.newDsl=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+w: file:///workspace/HRT-Log-bdpm/app/build.gradle.kts:26:1: 'fun Project.android(configure: Action<BaseAppModuleExtension>): Unit' is deprecated. Replaced by com.android.build.api.dsl.ApplicationExtension.
+This class is not used for the public extensions in AGP when android.newDsl=true, which is the default in AGP 9.0, and will be removed in AGP 10.0.
+w: file:///workspace/HRT-Log-bdpm/app/build.gradle.kts:50:32: 'fun srcDirs(vararg srcDirs: Any): Any' is deprecated. Use `directories` mutable set instead.
+w: file:///workspace/HRT-Log-bdpm/app/build.gradle.kts:51:39: 'fun srcDirs(vararg srcDirs: Any): Any' is deprecated. Use `directories` mutable set instead.
+w: file:///workspace/HRT-Log-bdpm/app/build.gradle.kts:89:1: 'val Project.android: BaseAppModuleExtension' is deprecated. Replaced by com.android.build.api.dsl.ApplicationExtension.
+This class is not used for the public extensions in AGP when android.newDsl=true, which is the default in AGP 9.0, and will be removed in AGP 10.0.
+Warning: SDK processing. This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+
+> Task :core:domain:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:domain:processResources NO-SOURCE
+> Task :importer:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :importer:processResources NO-SOURCE
+> Task :core:data:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:data:preBuild UP-TO-DATE
+> Task :core:data:preDebugBuild UP-TO-DATE
+> Task :core:data:generateDebugResources
+> Task :core:data:packageDebugResources
+> Task :core:data:processDebugNavigationResources
+> Task :core:data:parseDebugLocalResources
+> Task :core:data:generateDebugRFile
+> Task :pk-engine:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:domain:compileKotlin
+> Task :core:domain:compileJava NO-SOURCE
+> Task :core:domain:classes UP-TO-DATE
+> Task :pk-engine:compileKotlin
+> Task :core:domain:jar
+> Task :pk-engine:compileJava NO-SOURCE
+> Task :pk-engine:processResources
+> Task :pk-engine:classes
+> Task :pk-engine:jar
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preFullDebugBuild UP-TO-DATE
+> Task :app:generateFullDebugBuildConfig
+> Task :app:generateFullDebugResources
+> Task :app:packageFullDebugResources
+> Task :core:reminder:preBuild UP-TO-DATE
+> Task :core:reminder:preDebugBuild UP-TO-DATE
+> Task :core:reminder:processDebugNavigationResources
+> Task :core:ui:preBuild UP-TO-DATE
+> Task :core:ui:preDebugBuild UP-TO-DATE
+> Task :core:ui:processDebugNavigationResources
+> Task :app:processFullDebugNavigationResources
+> Task :app:parseFullDebugLocalResources
+> Task :app:generateFullDebugRFile
+> Task :core:data:javaPreCompileDebug
+> Task :core:reminder:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:reminder:generateDebugResources
+> Task :core:reminder:packageDebugResources
+> Task :core:reminder:parseDebugLocalResources
+> Task :core:reminder:generateDebugRFile
+> Task :core:reminder:javaPreCompileDebug
+> Task :core:ui:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:ui:generateDebugResources
+> Task :core:ui:packageDebugResources
+> Task :core:ui:parseDebugLocalResources
+> Task :core:ui:generateDebugRFile
+> Task :importer:compileKotlin
+> Task :importer:compileJava NO-SOURCE
+> Task :importer:classes UP-TO-DATE
+> Task :importer:jar
+> Task :core:ui:compileDebugKotlin
+> Task :core:ui:javaPreCompileDebug
+> Task :core:ui:compileDebugJavaWithJavac NO-SOURCE
+> Task :core:ui:bundleLibCompileToJarDebug
+> Task :core:data:kspDebugKotlin
+
+> Task :core:data:compileDebugKotlin FAILED
+e: file:///workspace/HRT-Log-bdpm/core/data/src/main/java/net/plainnotes/app/data/MeasuredBackupJson.kt:75:130 Unresolved reference 'raw'.
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':core:data:compileDebugKotlin'.
+> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+   > Compilation error. See log for more details
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 1m 17s
+35 actionable tasks: 35 executed

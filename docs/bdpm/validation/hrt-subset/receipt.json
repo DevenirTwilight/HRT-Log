@@ -1,0 +1,38 @@
+{
+  "parent_sha": "c20ec8d6d8f5d6c456eee208f5b88337fee9c30c",
+  "source_state": "HRT subset candidate; exact committed files SHA256 below",
+  "files": {
+    "scripts/build_bdpm_catalogue.py": "ef9fbe27f8cf010278608cac1fc9f0facf43368929f093525501c07598def68b",
+    "scripts/test_bdpm_catalogue.py": "56ab7530345823063ad2b905e3c1f7379dc5f05ef0f593fe19ee6999875d748c",
+    "tools/bdpm/hrt-selection.json": "049d4d0e6512c852030c1e95645442bcccd34f142ca073669e0ddfb353a1a821",
+    "core/data/src/main/assets/bdpm/catalogue.sqlite": "052cc33e0d3f3aa11ffa941d86580f25aa35e288aeead0abb8b45847d18d8a5b",
+    "core/data/src/main/assets/bdpm/manifest.json": "17bd6f2984f0c0de1da0dcf9d296ee4eb7f3a23454382ad3e83f958c615362c5"
+  },
+  "database_bytes": 360448,
+  "counts": {
+    "CIS_bdpm.txt": 420,
+    "CIS_CIP_bdpm.txt": 550,
+    "CIS_COMPO_bdpm.txt": 702
+  },
+  "python": "7 PASS",
+  "jvm_suites": [
+    {
+      "name": "net.plainnotes.app.data.BdpmCatalogueTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.BdpmReferenceFlowTest",
+      "tests": "12",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    }
+  ],
+  "native": "NOT_RUN on this subset; prior full-source native evidence is not subset acceptance",
+  "required_ci": "PENDING",
+  "privacy_guard": "3 PASS",
+  "native_compile": "data/App PASS; not device execution"
+}

@@ -1,0 +1,36 @@
+{
+  "downloaded_on": "2026-10-22",
+  "source": "Base de Données Publique des Médicaments (ANSM / HAS / UNCAM)",
+  "download_page": "https://bdpmt.ansm.sante.fr/telechargement",
+  "source_environment": "ANSM alternative host; download page displays TEST banner; not certified latest production export",
+  "production_download_attempt": "503 from base-donnees-publique.medicaments.gouv.fr on 2026-10-22",
+  "date_semantics": "Dates displayed beside individual files; HTTP Last-Modified/export timestamp not supplied",
+  "license": "Licence Ouverte 1.0 (download contract); data.gouv.fr identifies fr-lo; footer 2.0 link is not substituted for the supplied contract",
+  "license_url": "https://bdpmt.ansm.sante.fr/docs/telechargement/licence_bdpm.pdf",
+  "inputs": {
+    "CIS_bdpm.txt": {
+      "url": "https://bdpmt.ansm.sante.fr/download/file/CIS_bdpm.txt",
+      "encoding": "cp1252",
+      "sha256": "332b95926f76f1a2ab3d70cdf64205397fc13e74b7cc9afad9b625fbb6961640",
+      "bytes": 3175357,
+      "rows": 15883,
+      "source_updated_on": "2026-09-29"
+    },
+    "CIS_CIP_bdpm.txt": {
+      "url": "https://bdpmt.ansm.sante.fr/download/file/CIS_CIP_bdpm.txt",
+      "encoding": "utf-8",
+      "sha256": "fa50ec934445c2f6c0c74ee18c9df41d2de68861c4751d1650774504d56742ec",
+      "bytes": 4148432,
+      "rows": 20908,
+      "source_updated_on": "2026-10-13"
+    },
+    "CIS_COMPO_bdpm.txt": {
+      "url": "https://bdpmt.ansm.sante.fr/download/file/CIS_COMPO_bdpm.txt",
+      "encoding": "cp1252",
+      "sha256": "90a6e8ee286b6245c3938dd417ac75d1135a61b15ba50cfad70ee6b3bd181b7a",
+      "bytes": 2735840,
+      "rows": 32439,
+      "source_updated_on": "2026-09-29"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.ReferencePayloadTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-10-22T11:03:31.092Z" hostname="0a7cae0c7757" time="0.269">
+  <properties/>
+  <testcase name="userEnteredFactsNeverClaimOfficialValidationOrEquivalentIngredients" classname="net.plainnotes.app.data.ReferencePayloadTest" time="0.034"/>
+  <testcase name="unpairedSurrogatesCannotProduceAmbiguousUtf8Digests" classname="net.plainnotes.app.data.ReferencePayloadTest" time="0.021"/>
+  <testcase name="snapshotHeaderAndRequiredTextCannotUseJsonTypeCoercion" classname="net.plainnotes.app.data.ReferencePayloadTest" time="0.023"/>
+  <testcase name="cipCannotExistWithoutCisAndIdentifiersRemainStrings" classname="net.plainnotes.app.data.ReferencePayloadTest" time="0.019"/>
+  <testcase name="canonicalOrderingAndHashAreIndependentOfObjectInsertionOrder" classname="net.plainnotes.app.data.ReferencePayloadTest" time="0.038"/>
+  <testcase name="missingVersionInvalidDateAndUnreviewedClinicalFieldsAreRejected" classname="net.plainnotes.app.data.ReferencePayloadTest" time="0.021"/>
+  <testcase name="sha256AsciiEncodingMatchesIndependentKnownVectorsUnderEveryLocale" classname="net.plainnotes.app.data.ReferencePayloadTest" time="0.033"/>
+  <testcase name="suppliedProductLinkMustMatchExactIdentityAndCannotCarryUserQueryOrForeignAuthority" classname="net.plainnotes.app.data.ReferencePayloadTest" time="0.037"/>
+  <testcase name="floatingPointAndExcessiveDepthOrTextCannotEnterCanonicalSnapshots" classname="net.plainnotes.app.data.ReferencePayloadTest" time="0.017"/>
+  <testcase name="nullAndStringsWithUnicodeOrQuotesRoundtripWithoutChangingIdentity" classname="net.plainnotes.app.data.ReferencePayloadTest" time="0.018"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

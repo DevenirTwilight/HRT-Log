@@ -72,7 +72,7 @@ internal object MeasuredBackupJson {
     fun encode(db:SupportSQLiteDatabase,created:Instant,maxBytes:Int=BackupLimits.MAX_JSON_BYTES):ByteArray {
         check(db.inTransaction())
         return BackupPlainBytes(maxBytes).use {output->
-            val header=JSONObject().put("format",BackupCodec.FORMAT_VERSION).put("schema",RecordBackupCompatibility.SCHEMA)
+            val header=JSONObject().put("format",BackupCodec.FORMAT_VERSION).put("schema",RecordBackupCompatibility.exportSchema(db))
                 .put("created",created.toString()).toString()
             check(header.endsWith("}"))
             output.text(header.dropLast(1)+",\"tables\":{")

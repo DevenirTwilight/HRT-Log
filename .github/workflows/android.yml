@@ -144,6 +144,15 @@ jobs:
             python3 scripts/run_b3_gate_red.py
             adb logcat -G 16M
             ./gradlew :app:connectedFullDebugAndroidTest --no-parallel --max-workers=2
+            # AGP can uninstall target/instrumentation APKs after connected tests (same as existing restart scripts).
+            adb install -r -t app/build/outputs/apk/full/debug/app-full-debug.apk
+            adb install -r -t app/build/outputs/apk/androidTest/full/debug/app-full-debug-androidTest.apk
+            # BDPM offline acceptance: a new target process, installed data only, no app INTERNET permission.
+            adb shell svc wifi disable
+            adb shell svc data disable
+            adb shell am force-stop net.plainnotes.app
+            # Direct instrumentation retains the preceding complete suite's HTML/XML reports.
+            python3 -c 'import pathlib, subprocess; report=pathlib.Path("app/build/reports/bdpm"); report.mkdir(parents=True,exist_ok=True); result=subprocess.run(["adb","shell","am","instrument","-w","-e","class","net.plainnotes.app.BdpmOfflineRestartAndroidTest","-e","bdpm_fresh_offline","1","net.plainnotes.app.test/androidx.test.runner.AndroidJUnitRunner"],capture_output=True,text=True,timeout=90); (report/"fresh-offline.log").write_text(result.stdout+result.stderr); assert result.returncode==0 and "OK (1 test)" in result.stdout and "FAILURES!!!" not in result.stdout and "INSTRUMENTATION_STATUS_CODE: -3" not in result.stdout, "Fresh offline catalogue failed"'
             python3 scripts/collect_package_history_evidence.py --output app/build/reports/package-history-evidence.json
             python3 scripts/collect_unified_device_performance.py --output app/build/reports/unified-device-performance.json
             python3 scripts/collect_pr19_display_performance.py
@@ -170,6 +179,7 @@ jobs:
             core/data/build/reports/gate3/
             core/data/build/reports/b3/
             app/build/reports/androidTests/
+            app/build/reports/bdpm/
             app/build/reports/unified-device-performance.json
             app/build/reports/pr19-display-performance.json
             app/build/reports/package-history-evidence.json
@@ -213,7 +223,7 @@ jobs:
             adb shell wm dismiss-keyguard
             ./gradlew :core:data:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.data.NativeCiHeapProbe -Pandroid.testInstrumentationRunnerArguments.ansmExpectedHeapMb=192 --no-parallel --max-workers=2
             adb logcat -G 16M
-            ./gradlew :core:data:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.data.AttachmentFoundationAndroidTest,net.plainnotes.app.data.AttachmentSqlCipherMigrationTest,net.plainnotes.app.data.AttachmentKeyAndroidTest,net.plainnotes.app.data.Gate2StoreAndroidTest,net.plainnotes.app.data.Gate2RestartAndroidTest,net.plainnotes.app.data.Gate2SafAndroidTest,net.plainnotes.app.data.Gate2ContextAndroidTest,net.plainnotes.app.data.Gate3ProcessLockAndroidTest,net.plainnotes.app.data.B3GateAndroidTest,net.plainnotes.app.data.B3RestartAndroidTest,net.plainnotes.app.data.Ansm03b0InventoryAndroidTest,net.plainnotes.app.data.BackupReplacementAndroidTest,net.plainnotes.app.data.ReferencePersistenceAndroidTest,net.plainnotes.app.data.ReferenceMigrationAndroidTest,net.plainnotes.app.data.MeasuredContainerAndroidTest,net.plainnotes.app.data.MeasuredConsumptionAndroidTest,net.plainnotes.app.data.MeasuredSaveCoordinatorAndroidTest,net.plainnotes.app.data.ReferenceAuditStreamingAndroidTest,net.plainnotes.app.data.P4LifecycleGrowthAndroidTest,net.plainnotes.app.data.DailyTrashCollisionAndroidTest,net.plainnotes.app.data.LabPanelDataAndroidTest --no-parallel --max-workers=2
+            ./gradlew :core:data:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.data.AttachmentFoundationAndroidTest,net.plainnotes.app.data.AttachmentSqlCipherMigrationTest,net.plainnotes.app.data.AttachmentKeyAndroidTest,net.plainnotes.app.data.Gate2StoreAndroidTest,net.plainnotes.app.data.Gate2RestartAndroidTest,net.plainnotes.app.data.Gate2SafAndroidTest,net.plainnotes.app.data.Gate2ContextAndroidTest,net.plainnotes.app.data.Gate3ProcessLockAndroidTest,net.plainnotes.app.data.B3GateAndroidTest,net.plainnotes.app.data.B3RestartAndroidTest,net.plainnotes.app.data.Ansm03b0InventoryAndroidTest,net.plainnotes.app.data.BackupReplacementAndroidTest,net.plainnotes.app.data.ReferencePersistenceAndroidTest,net.plainnotes.app.data.BdpmCatalogueAndroidTest,net.plainnotes.app.data.ReferenceMigrationAndroidTest,net.plainnotes.app.data.MeasuredContainerAndroidTest,net.plainnotes.app.data.MeasuredConsumptionAndroidTest,net.plainnotes.app.data.MeasuredSaveCoordinatorAndroidTest,net.plainnotes.app.data.ReferenceAuditStreamingAndroidTest,net.plainnotes.app.data.P4LifecycleGrowthAndroidTest,net.plainnotes.app.data.DailyTrashCollisionAndroidTest,net.plainnotes.app.data.LabPanelDataAndroidTest --no-parallel --max-workers=2
             python3 scripts/run_attachment_foundation_restart.py
             python3 scripts/run_attachment_gate2_red.py
             python3 scripts/run_attachment_gate2_restart.py AFTER_CREATE

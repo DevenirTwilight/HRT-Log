@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.BdpmReferenceFlowTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-22T11:34:11.560Z" hostname="0a7cae0c7757" time="10.589">
+  <properties/>
+  <testcase name="realFilesystemFailureRetryAndNoMatchAreDistinctAndPreserveUserData[en/320dp/2x]" classname="net.plainnotes.app.BdpmReferenceFlowTest" time="7.668"/>
+  <testcase name="realFilesystemFailureRetryAndNoMatchAreDistinctAndPreserveUserData[fr-rFR/320dp/2x]" classname="net.plainnotes.app.BdpmReferenceFlowTest" time="0.93"/>
+  <testcase name="realFilesystemFailureRetryAndNoMatchAreDistinctAndPreserveUserData[zh-rCN/320dp/2x]" classname="net.plainnotes.app.BdpmReferenceFlowTest" time="0.768"/>
+  <testcase name="realFilesystemFailureRetryAndNoMatchAreDistinctAndPreserveUserData[zh-rTW/320dp/2x]" classname="net.plainnotes.app.BdpmReferenceFlowTest" time="0.846"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
