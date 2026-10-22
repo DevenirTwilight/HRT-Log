@@ -1,3 +1,9 @@
+## #103已合并；负责人批准默认OFF正式存储实现 — 2026-10-22
+
+#103最终8dd60c435d924abafd3aabf8d7947b7691eae520六必需门PASS，受保护自动合并d2223c0a（20:36:11Z）。API26/29/35原始ZIP、SHA/CRC、实际Foundation20及Saf5全部PASS；35另有真实Tink sandbox8项PASS。26/29的app逐类HTML被后续suite覆盖，不能声称该逐类证据保留。完整证据在docs/med02-resource-evidence-20261022，旧首轮平台断言失败保留。
+
+最新明确批准见REQUIREMENTS§144。接下来独立feature/med02-object-store-20261022，基线d2223c0a；先提交storage-compatibility设计，然后实现默认关闭的Tink公共API流式writer/全认证reader和设备key适配。尚无新Room迁移/完整备份格式授权，不开放UI/文件选择器/正式发布。外部审核改为启用前完成，目前NOT_REVIEWED_EXTERNALLY。不得继续将旧“实施前外审”当作阻断授权范围内代码的理由。
+
 ## 附件受限输入本地256项通过，真实密文sandbox集成通过；首轮平台断言失败保留 — 2026-10-22
 
 生产传输层未变；ce902c89的Foundation20项中1FAIL是新测试把Robolectric管道statSize误断言为-1，实际为0，发生在读取前。原日志/XML保留input-platform-red。改为JVM精确0/真实Android仍精确-1的平台hook，读取/限量/清理/feature0原断言全保留。修正后Foundation20/0/0，domain172/0/0、附件原型64/0/0（新增一项新输入层接既有Tink真实密文sandbox：超限旧cipher/pointer/revision不变、精确上限完整认证后才CAS）；Python69 PASS。不是正式Room文件writer或新格式审核。
