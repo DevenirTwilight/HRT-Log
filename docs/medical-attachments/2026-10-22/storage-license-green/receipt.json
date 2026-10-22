@@ -1,0 +1,20 @@
+{
+  "source": "f86d4a5e904758bcb646d56eedbbefe620d28fe2",
+  "environment": "local JVM targeted regression; not native or release provenance",
+  "results": {
+    "ThirdPartyNoticesTest": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "PeriodStabilityTest": {
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "original_749_license_failure": "../storage-license-red/",
+  "final_ci": "IN_PROGRESS"
+}

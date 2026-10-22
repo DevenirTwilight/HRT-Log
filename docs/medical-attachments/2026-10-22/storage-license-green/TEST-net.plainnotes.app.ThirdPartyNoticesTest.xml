@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.ThirdPartyNoticesTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-22T21:09:21.839Z" hostname="8a3f875cab28" time="0.04">
+  <properties/>
+  <testcase name="tinkRuntimeDependencyHasFourLanguageAttribution" classname="net.plainnotes.app.ThirdPartyNoticesTest" time="0.015"/>
+  <testcase name="everyRuntimeLibraryHasANotice" classname="net.plainnotes.app.ThirdPartyNoticesTest" time="0.016"/>
+  <testcase name="bouncyCastleNoticeMatchesTheShippedArtifact" classname="net.plainnotes.app.ThirdPartyNoticesTest" time="0.008"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

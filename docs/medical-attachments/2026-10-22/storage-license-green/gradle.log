@@ -1,0 +1,192 @@
+Picked up JAVA_TOOL_OPTIONS: -Dhttp.proxyHost=proxy -Dhttp.proxyPort=8080 -Dhttps.proxyHost=proxy -Dhttps.proxyPort=8080 -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.3.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :app
+WARNING: The option setting 'android.builtInKotlin=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+WARNING: The option setting 'android.newDsl=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+Warning: SDK processing. This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+
+> Task :importer:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:domain:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :importer:processResources NO-SOURCE
+> Task :pk-engine:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :pk-engine:compileKotlin UP-TO-DATE
+> Task :core:domain:compileKotlin UP-TO-DATE
+> Task :pk-engine:compileJava NO-SOURCE
+> Task :core:domain:compileJava NO-SOURCE
+> Task :pk-engine:processResources UP-TO-DATE
+> Task :core:domain:processResources NO-SOURCE
+> Task :core:domain:classes UP-TO-DATE
+> Task :pk-engine:classes UP-TO-DATE
+> Task :core:domain:jar UP-TO-DATE
+> Task :pk-engine:jar UP-TO-DATE
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preFullDebugBuild UP-TO-DATE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :importer:compileKotlin UP-TO-DATE
+> Task :importer:compileJava NO-SOURCE
+> Task :importer:classes UP-TO-DATE
+> Task :importer:jar UP-TO-DATE
+> Task :core:data:preBuild UP-TO-DATE
+> Task :core:data:preDebugBuild UP-TO-DATE
+> Task :core:data:processDebugNavigationResources UP-TO-DATE
+> Task :core:reminder:preBuild UP-TO-DATE
+> Task :core:reminder:preDebugBuild UP-TO-DATE
+> Task :core:reminder:processDebugNavigationResources
+> Task :app:generateFullDebugBuildConfig
+> Task :core:ui:preBuild UP-TO-DATE
+> Task :core:ui:preDebugBuild UP-TO-DATE
+> Task :core:ui:processDebugNavigationResources
+> Task :core:data:generateDebugResources UP-TO-DATE
+> Task :app:generateFullDebugResources
+> Task :core:data:packageDebugResources UP-TO-DATE
+> Task :core:data:parseDebugLocalResources UP-TO-DATE
+> Task :core:data:generateDebugRFile UP-TO-DATE
+> Task :core:data:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:processFullDebugNavigationResources
+> Task :core:data:kspDebugKotlin UP-TO-DATE
+> Task :core:data:compileDebugKotlin UP-TO-DATE
+> Task :core:data:javaPreCompileDebug UP-TO-DATE
+> Task :core:data:compileDebugJavaWithJavac UP-TO-DATE
+> Task :core:data:transformDebugClassesWithAsm UP-TO-DATE
+> Task :core:data:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :core:reminder:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:packageFullDebugResources
+> Task :core:reminder:generateDebugResources
+> Task :core:reminder:packageDebugResources
+> Task :core:reminder:parseDebugLocalResources
+> Task :app:parseFullDebugLocalResources
+> Task :core:reminder:generateDebugRFile
+> Task :app:generateFullDebugRFile
+> Task :core:ui:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:ui:generateDebugResources
+> Task :core:ui:packageDebugResources
+> Task :core:ui:parseDebugLocalResources
+> Task :core:ui:generateDebugRFile
+> Task :core:reminder:kspDebugKotlin
+
+> Task :core:reminder:compileDebugKotlin
+w: file:///workspace/HRT-Log-med02-store/core/reminder/src/main/java/net/plainnotes/app/reminder/ReminderCoordinator.kt:24:58 This annotation is currently applied to the value parameter only, but in the future it will also be applied to field.
+- To opt in to applying to both value parameter and field, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+
+> Task :core:ui:compileDebugKotlin
+> Task :core:ui:javaPreCompileDebug
+> Task :core:reminder:javaPreCompileDebug
+> Task :core:ui:compileDebugJavaWithJavac NO-SOURCE
+> Task :core:ui:bundleLibCompileToJarDebug
+> Task :app:javaPreCompileFullDebug
+> Task :core:data:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :core:data:processDebugJavaRes UP-TO-DATE
+> Task :core:data:createFullJarDebug UP-TO-DATE
+> Task :core:ui:bundleLibRuntimeToJarDebug
+> Task :core:ui:processDebugJavaRes
+> Task :core:ui:createFullJarDebug
+> Task :core:data:writeDebugAarMetadata UP-TO-DATE
+> Task :core:ui:writeDebugAarMetadata
+> Task :app:mapFullDebugSourceSetPaths
+> Task :app:compileFullDebugNavigationResources
+> Task :core:reminder:compileDebugJavaWithJavac
+> Task :core:reminder:bundleLibCompileToJarDebug
+> Task :core:reminder:bundleLibRuntimeToJarDebug
+> Task :core:reminder:processDebugJavaRes
+> Task :core:reminder:createFullJarDebug
+> Task :core:reminder:writeDebugAarMetadata
+> Task :core:data:extractDeepLinksDebug UP-TO-DATE
+> Task :core:data:processDebugManifest UP-TO-DATE
+> Task :core:reminder:extractDeepLinksDebug
+> Task :core:reminder:processDebugManifest
+> Task :core:ui:extractDeepLinksDebug
+> Task :core:ui:processDebugManifest
+> Task :core:data:mapDebugSourceSetPaths UP-TO-DATE
+> Task :core:reminder:mapDebugSourceSetPaths
+> Task :core:ui:mapDebugSourceSetPaths
+> Task :core:data:generateDebugAssets UP-TO-DATE
+> Task :core:data:mergeDebugAssets UP-TO-DATE
+> Task :core:reminder:generateDebugAssets UP-TO-DATE
+> Task :core:reminder:mergeDebugAssets
+> Task :core:ui:generateDebugAssets UP-TO-DATE
+> Task :core:ui:mergeDebugAssets
+
+> Task :app:mergeFullDebugResources
+/workspace/HRT-Log-med02-store/app/src/main/res/values/strings.xml:220:0: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med02-store/app/src/main/res/values-b+zh+Hant/strings.xml:549:0: Multiple substitutions specified in non-positional format of string resource string/legend_band_inner. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med02-store/app/src/main/res/values-b+zh+Hant/strings.xml:192:0: Multiple substitutions specified in non-positional format of string resource string/legend_band_outer. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med02-store/app/src/main/res/values-b+zh+Hant/strings.xml:220:0: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med02-store/app/src/main/res/values-zh/strings.xml:549:0: Multiple substitutions specified in non-positional format of string resource string/legend_band_inner. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med02-store/app/src/main/res/values-zh/strings.xml:192:0: Multiple substitutions specified in non-positional format of string resource string/legend_band_outer. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med02-store/app/src/main/res/values-zh/strings.xml:220:0: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med02-store/app/src/main/res/values-fr/strings.xml:220:0: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+
+> Task :core:data:compileDebugLibraryResources UP-TO-DATE
+> Task :core:reminder:compileDebugLibraryResources
+> Task :core:ui:compileDebugLibraryResources
+> Task :app:checkFullDebugAarMetadata
+> Task :app:createFullDebugCompatibleScreenManifests
+> Task :app:extractDeepLinksFullDebug
+> Task :app:processFullDebugMainManifest
+> Task :app:processFullDebugManifest
+> Task :app:processFullDebugManifestForPackage
+> Task :app:processFullDebugResources
+> Task :app:generateFullDebugAssets UP-TO-DATE
+> Task :app:mergeFullDebugAssets
+> Task :app:preFullDebugUnitTestBuild UP-TO-DATE
+> Task :app:packageFullDebugUnitTestForUnitTest
+
+> Task :app:processFullDebugUnitTestManifest
+/workspace/HRT-Log-med02-store/app/src/debug/AndroidManifest.xml Warning:
+	meta-data#androidx.work.WorkManagerInitializer was tagged at AndroidManifest.xml:0 to remove other declarations but no other declaration present
+
+> Task :app:generateFullDebugUnitTestConfig
+> Task :app:javaPreCompileFullDebugUnitTest
+> Task :app:kspFullDebugKotlin
+> Task :app:compileFullDebugKotlin
+w: file:///workspace/HRT-Log-med02-store/app/src/debug/java/net/plainnotes/app/debug/AboutTestActivity.kt:15:27 The corresponding parameter in the supertype 'ComponentActivity' is named 'savedInstanceState'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-med02-store/app/src/debug/java/net/plainnotes/app/debug/CalendarTestActivity.kt:32:27 The corresponding parameter in the supertype 'ComponentActivity' is named 'savedInstanceState'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-med02-store/app/src/debug/java/net/plainnotes/app/debug/DataPrivacyTestActivity.kt:28:27 The corresponding parameter in the supertype 'ComponentActivity' is named 'savedInstanceState'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-med02-store/app/src/debug/java/net/plainnotes/app/debug/demo/DemoArchiveScreen.kt:35:27 The corresponding parameter in the supertype 'ComponentActivity' is named 'savedInstanceState'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-med02-store/app/src/debug/java/net/plainnotes/app/debug/demo/DemoArchiveScreen.kt:93:5 'fun ScrollableTabRow(selectedTabIndex: Int, modifier: Modifier = ..., containerColor: Color = ..., contentColor: Color = ..., edgePadding: Dp = ..., indicator: ComposableFunction1<List<TabPosition>, Unit> = ..., divider: ComposableFunction0<Unit> = ..., tabs: ComposableFunction0<Unit>): Unit' is deprecated. Replaced with PrimaryScrollableTabRow and SecondaryScrollableTabRow tab variants.
+w: file:///workspace/HRT-Log-med02-store/app/src/main/java/net/plainnotes/app/NotesViewModel.kt:24:5 This annotation is currently applied to the value parameter only, but in the future it will also be applied to field.
+- To opt in to applying to both value parameter and field, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+w: file:///workspace/HRT-Log-med02-store/app/src/main/java/net/plainnotes/app/ui/AppShell.kt:275:17 'when' is exhaustive so 'else' is redundant here.
+w: file:///workspace/HRT-Log-med02-store/app/src/main/java/net/plainnotes/app/ui/HistoryScreen.kt:227:123 'val Icons.Outlined.Undo: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Outlined.Undo.
+
+> Task :app:compileFullDebugJavaWithJavac
+> Task :app:hiltAggregateDepsFullDebug
+> Task :app:hiltJavaCompileFullDebug
+> Task :app:processFullDebugJavaRes
+> Task :app:bundleFullDebugClassesToCompileJar
+> Task :app:transformFullDebugClassesWithAsm
+> Task :app:bundleFullDebugClassesToRuntimeJar
+> Task :app:kspFullDebugUnitTestKotlin
+
+> Task :app:compileFullDebugUnitTestKotlin
+w: file:///workspace/HRT-Log-med02-store/app/src/test/java/net/plainnotes/app/AppShellBackNavigationTest.kt:101:83 'fun onBackPressed(): Unit' is deprecated. Deprecated in Java.
+w: file:///workspace/HRT-Log-med02-store/app/src/test/java/net/plainnotes/app/AppShellBackNavigationTest.kt:236:83 'fun onBackPressed(): Unit' is deprecated. Deprecated in Java.
+w: file:///workspace/HRT-Log-med02-store/app/src/test/java/net/plainnotes/app/OutlierDispositionTest.kt:31:59 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type 'File?'.
+w: file:///workspace/HRT-Log-med02-store/app/src/test/java/net/plainnotes/app/ReminderTestChainTest.kt:58:37 'field operation: PendingIntent?' is deprecated. Deprecated in Java.
+w: file:///workspace/HRT-Log-med02-store/app/src/test/java/net/plainnotes/app/TestReminderSurvivalTest.kt:45:68 'field operation: PendingIntent?' is deprecated. Deprecated in Java.
+w: file:///workspace/HRT-Log-med02-store/app/src/test/java/net/plainnotes/app/WriteStatusCardLayoutTest.kt:58:13 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type 'File?'.
+
+> Task :app:compileFullDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :app:hiltAggregateDepsFullDebugUnitTest
+> Task :app:hiltJavaCompileFullDebugUnitTest NO-SOURCE
+> Task :app:processFullDebugUnitTestJavaRes
+> Task :app:transformFullDebugUnitTestClassesWithAsm
+
+> Task :app:testFullDebugUnitTest
+Picked up JAVA_TOOL_OPTIONS: -Dhttp.proxyHost=proxy -Dhttp.proxyPort=8080 -Dhttps.proxyHost=proxy -Dhttps.proxyPort=8080 -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts
+
+BUILD SUCCESSFUL in 3m 43s
+100 actionable tasks: 73 executed, 27 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.3.1/userguide/configuration_cache_enabling.html

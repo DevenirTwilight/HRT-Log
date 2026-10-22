@@ -1,3 +1,9 @@
+## #104许可修正本地8项全PASS；原生26环境失败待单任务重试 — 2026-10-22
+
+f86d4a5e：ThirdPartyNoticesTest3与PeriodStabilityTest5，零fail/error/skip，原XML/日志保留storage-license-green；未削弱原许可guard或时期黄金断言。749的许可红原件仍保留。
+
+最终PR39854454660的API26 job120089049019在Gradle之前模拟器device offline，adb root失败；实际测试NOT_RUN。原日志摘录和planned one-job retry在storage-infra-red。GitHub当前工作流未结束，gh拒绝单job rerun（没有实际触发新测试）；待工作流完成仅重试该失败job一次，不扩大内存/放宽条件、不重跑其他绿job。push39854445523另有独立原生在途，但不能冒充PR失败任务成功。继续全CI/原件核验，auto-merge仍按保护等待，不提前宣布合并。
+
 ## #104旧候选许可FAIL已留原件；修正f86d4a5e继续验收 — 2026-10-22
 
 749bacb5的三API（26/29/35）Foundation32+Key2全PASS、原ZIP/SHA/CRC/方法HTML均已保存，但整体CI FAIL：ThirdPartyNoticesTest runtime alias映射缺tink.android。129MB build-results官方SHA/CRC核验，原失败class及method HTML、原日志失败摘录留storage-license-red；绝不把三API绿改写成整PR绿。
