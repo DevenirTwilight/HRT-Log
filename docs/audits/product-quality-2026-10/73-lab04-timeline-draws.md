@@ -89,11 +89,10 @@ zh-TW 和 fr 沿用现有术语：“檢驗”与 `labs` 一致；“intervalle 
 
 ## 8. 验证
 
-见 HANDOFF。内容包括：
-
-- 本地完整 `:app:testFullDebugUnitTest` 和 `lintFullDebug`；
+- 本地完整 `:app:testFullDebugUnitTest` 2049 项，0 失败；394 项为默认关闭的截图测试等，按设计跳过。
+- `lintFullDebug` 通过。
 - LAB-04 新增测试 14 项：Grouping 6 项、ProjectionUnchanged 2 项、TimelineUi 2 项、Spoken 4 种语言；
-- 必须通过的测试：PeriodStabilityTest、时间线五项、LAB-01 至 LAB-03、`Lab01UnaffectedTest`、`ButtonLayoutRegressionTest`、`TranslationsTest`。
+- 必须通过的测试全部 PASS：PeriodStabilityTest、时间线五项、LAB-01 至 LAB-03、`Lab01UnaffectedTest`、`ButtonLayoutRegressionTest`、`TranslationsTest`。
 
 CI 全部 job 见 PR。
 
