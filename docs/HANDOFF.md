@@ -1,3 +1,9 @@
+## #104旧候选许可FAIL已留原件；修正f86d4a5e继续验收 — 2026-10-22
+
+749bacb5的三API（26/29/35）Foundation32+Key2全PASS、原ZIP/SHA/CRC/方法HTML均已保存，但整体CI FAIL：ThirdPartyNoticesTest runtime alias映射缺tink.android。129MB build-results官方SHA/CRC核验，原失败class及method HTML、原日志失败摘录留storage-license-red；绝不把三API绿改写成整PR绿。
+
+新源f86d4a5e904758bcb646d56eedbbefe620d28fe2仅补四语许可、原mapping和正向许可检查，所有旧断言保持；core/data生产crypto字节未变。目标本地许可/PeriodStability在途，六门真实复验Android PR39854454660/push39854445523，Science PR39854454772/push39854445318 SUCCESS。源码再次冻结，仍不提前报新源PASS，auto-merge继续受保护。
+
 ## #104最终源真实API29同样通过 — 2026-10-22
 
 749bacb5 PR39851830683，API29官方artifact12458776734 SHA256/CRC及原HTML核验：Foundation32/0fail/0skip、Key2/0/0，新增完整认证/oracle/key绑定方法实际passed；原件保留storage-native/api29*。真实26与29都通过，不等于35或完整Android已过，后两者仍在途。源没有再改，未重新跑分，保护自动合并等待全部最终检查。

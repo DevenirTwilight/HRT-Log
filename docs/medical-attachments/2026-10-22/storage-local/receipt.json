@@ -80,5 +80,30 @@
     "skipped": 0,
     "artifact": 12458776734,
     "receipt": "../storage-native/api29-receipt.json"
+  },
+  "native_api35": {
+    "source": "749bacb5",
+    "status": "PASS_ORIGINAL_REPORTS_VERIFIED",
+    "foundation": 32,
+    "keystore": 2,
+    "failures": 0,
+    "skipped": 0,
+    "artifact": 12458043437,
+    "receipt": "../storage-native/api35-receipt.json"
+  },
+  "overall_749bacb5": {
+    "status": "FAIL",
+    "reason": "runtime license guard missing tink.android mapping",
+    "evidence": "../storage-license-red/receipt.json"
+  },
+  "current_candidate": {
+    "sha": "f86d4a5e904758bcb646d56eedbbefe620d28fe2",
+    "changes": "4 locale license text + mapping + positive attribution test; crypto production code unchanged",
+    "local_licenses_period_tests": "IN_PROGRESS",
+    "android_pr": 39854454660,
+    "android_push": 39854445523,
+    "science_pr": 39854454772,
+    "science_push": 39854445318,
+    "status": "PENDING_FINAL_CI"
   }
 }

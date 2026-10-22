@@ -1,0 +1,25 @@
+{
+  "source": "749bacb50e202b7589493c697b2f1ddf1a788b4b",
+  "run": 39851830683,
+  "artifact": 12458043437,
+  "sha256": "eb61a3a0b05514e4e5fa41bf4b6f73c55c5c29bbd578f55e889de1c8b385b6ed",
+  "crc": "PASS",
+  "environment": "actual API35 emulator",
+  "original_html_verified": {
+    "AttachmentFoundationAndroidTest": {
+      "tests": 32,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentKeyAndroidTest": {
+      "tests": 2,
+      "failures": 0,
+      "skipped": 0
+    }
+  },
+  "not_run": [
+    "physical ARM",
+    "hardware power loss",
+    "external review"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "source": "749bacb50e202b7589493c697b2f1ddf1a788b4b",
+  "run": 39851821726,
+  "job": 120080459643,
+  "artifact": 12458557007,
+  "sha256": "2e657db4f2710003cbb7199ffc0b2c1725f8c8cdb645dccacd17a2cd3d071308",
+  "zip_crc": "PASS",
+  "status": "FAIL",
+  "failure": "ThirdPartyNoticesTest.everyRuntimeLibraryHasANotice: missing runtime mapping tink.android",
+  "corrective_source": "f86d4a5e (local and CI pending)",
+  "job_log": "selected unmodified failure lines; full log remains on job URL",
+  "old_evidence_retained": true
+}

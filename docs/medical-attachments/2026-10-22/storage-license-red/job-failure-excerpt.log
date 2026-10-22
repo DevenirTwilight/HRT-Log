@@ -1,0 +1,29 @@
+2026-10-22T21:00:52.7359614Z > Task :app:testFullDebugUnitTest
+2026-10-22T21:00:52.7379619Z 
+2026-10-22T21:00:52.7380782Z ThirdPartyNoticesTest > everyRuntimeLibraryHasANotice FAILED
+2026-10-22T21:00:52.7381404Z     java.lang.AssertionError at ThirdPartyNoticesTest.kt:28
+2026-10-22T21:03:26.2353043Z 
+2026-10-22T21:03:26.2374384Z 2254 tests completed, 1 failed, 492 skipped
+2026-10-22T21:03:27.0331227Z 
+2026-10-22T21:03:27.0331381Z 
+2026-10-22T21:03:27.0332137Z > Task :app:testFullDebugUnitTest FAILED
+2026-10-22T21:03:27.0333069Z FAILURE: Build failed with an exception.
+2026-10-22T21:03:27.0334241Z gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_3-1792702181810.json
+2026-10-22T21:03:27.0335400Z 
+2026-10-22T21:03:27.0338483Z * What went wrong:
+2026-10-22T21:03:27.0338908Z 346 actionable tasks: 346 executed
+2026-10-22T21:03:27.0339821Z Execution failed for task ':app:testFullDebugUnitTest'.
+2026-10-22T21:03:27.0340934Z > There were failing tests. See the report at: file:///home/runner/work/HRT-Log/HRT-Log/app/build/reports/tests/testFullDebugUnitTest/index.html
+2026-10-22T21:03:27.0341631Z 
+2026-10-22T21:03:27.0341865Z * Try:
+2026-10-22T21:03:27.0342501Z > Run with --scan to get full insights from a Build Scan (powered by Develocity).
+2026-10-22T21:03:27.0343018Z 
+2026-10-22T21:03:27.0343288Z BUILD FAILED in 13m 45s
+2026-10-22T21:03:27.1348723Z ##[error]Process completed with exit code 1.
+2026-10-22T21:03:27.1413621Z ##[group]Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+2026-10-22T21:03:27.1413983Z with:
+2026-10-22T21:03:27.1414183Z   name: build-results
+2026-10-22T21:03:27.1415972Z   path: app/build/reports/tests/
+app/build/ansm-p2-ui-shots/ci/
+app/build/reports/pk-p0/
+app/build/reports/pk-p0-comparison/
