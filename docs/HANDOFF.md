@@ -1,3 +1,20 @@
+## UI-07b 纯线条状态图标：实现与本地验证 — 2026-10-22
+
+负责人上传 UI-07b 任务书（§136），并要求“做完给apk”；随后又上传 LAB-04 任务书，要求“整完这个再给apk”。顺序：
+1. UI-07b 合并；
+2. LAB-04（§137）合并；
+3. 出 build35（versionCode 35，包含两者）。
+
+UI-07b 当前状态：
+- **分支**：`feature/ui07b-line-icons-20261022`，基于 de0c4e55。
+- **改动**：`core/ui/StatusIcon.kt` 改为纯线条；调用点只改了传入的颜色参数（TodayCard、CalendarScreen、StatusChip）。
+- **测试**：
+  - `StatusIconSpecTest`、`StatusIconContrastTest`（504 组，最低 3.46）；
+  - `Ui07bDrawingRecordTest`、`Ui07bSmallIconTest`、`Ui07bCallSiteColourTest`。
+- **截图**：`docs/ui-audit/2026-10-22-ui07b/`，前后对比，渲染方式是把截图测试复制到 /home/user/wt-rem 的 de0c4e55 上运行。
+- **报告**：72。
+- **下一步**：完整单元测试和 lint → 提交 → PR 自动合并 → 开始 LAB-04。
+
 ## build34（UI-07 后）正式签名测试包准备中 — 2026-10-21
 
 负责人要求“合了给我出个正式签名apk”（REQUIREMENTS §134）。

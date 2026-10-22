@@ -182,7 +182,7 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
                             FitText(weekdayShort(date.dayOfWeek), MaterialTheme.typography.labelSmall, fg)
                             FitText(date.dayOfMonth.toString(), MaterialTheme.typography.titleMedium.tnum().copy(fontWeight = FontWeight.Bold), fg)
                             when {
-                                mark != null -> StatusIcon(dayMarkIcon(mark), StatusIconSizes.S, Modifier.testTag("recent-icon:$date"))
+                                mark != null -> StatusIcon(dayMarkIcon(mark), StatusIconSizes.S, Modifier.testTag("recent-icon:$date"), tint = if (isToday) c.onPrimary else null)
                                 isToday -> StatusIcon(StatusIconKind.TODAY, StatusIconSizes.S, Modifier.testTag("recent-icon:$date"), ring = c.onPrimary)
                                 else -> Spacer(Modifier.size(StatusIconSizes.S))
                             }
@@ -268,8 +268,9 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
         CalendarDateBadge(date.dayOfMonth,isToday,fg)
         Row(Modifier.heightIn(min=18.dp), horizontalArrangement = Arrangement.spacedBy(2.dp), verticalAlignment = Alignment.CenterVertically) {
             // UI-01 C: a shape for the day's state as well as its colour (✓ taken, ½ some missed, ✕ missed); drawn, so it never clips.
-            // UI-07 A: the mark is the 18 dp filled-circle status icon; the cell colour keeps the UI-06 rule.
-            mark?.let { StatusIcon(dayMarkIcon(it), StatusIconSizes.S, Modifier.testTag("day-icon:$date")) }
+            // UI-07 A: the mark is the 18 dp status icon; the cell colour keeps the UI-06 rule. UI-07b: the line sits on the
+            // state's own tinted cell, so it takes that token's onContainer.
+            mark?.let { StatusIcon(dayMarkIcon(it), StatusIconSizes.S, Modifier.testTag("day-icon:$date"), onOwnContainer = true) }
             if (info != null) {
                 if (info.runOut.isNotEmpty()) Icon(Icons.Outlined.Inventory2, null, Modifier.size(12.dp), tint = sem.attention.accent)
                 else repeat(minOf(info.open, 3)) { Box(Modifier.size(5.dp).clip(CircleShape).background(if (info.short > 0) sem.attention.accent else c.primary)) }
@@ -299,7 +300,7 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
                 horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(3.dp)) {
                 Text(weekdayShort(date.dayOfWeek), style = MaterialTheme.typography.labelSmall, color = fg)
                 CalendarDateBadge(date.dayOfMonth,date==today,fg)
-                dayMark(info?.kind ?: DayKind.NONE)?.let { StatusIcon(dayMarkIcon(it), StatusIconSizes.S, Modifier.testTag("week-icon:$date")) }
+                dayMark(info?.kind ?: DayKind.NONE)?.let { StatusIcon(dayMarkIcon(it), StatusIconSizes.S, Modifier.testTag("week-icon:$date"), onOwnContainer = true) }
                 marks.sortedBy { it.first }.take(5).forEach { (t, st) ->
                     // UI-06: the time text keeps readable contrast; missed and not-covered are told by their tokens, never red.
                     val col = when (st) { "ON_TIME", "LATE" -> c.primary; "MISSED" -> sem.missed.onContainer; "SKIPPED" -> c.outline; "SHORT" -> sem.attention.onContainer; else -> c.onSurfaceVariant }

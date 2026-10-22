@@ -44,7 +44,7 @@ enum class ConfirmAnswer { TOOK, NOT_TAKEN }
  * "n more" (the intake history, filtered to them). "I took it" opens the existing backfill dialog; "I didn't take it" is the
  * existing confirm-missed. Calm wording only. Not shown when nothing is unconfirmed.
  *
- * UI-07: 28 dp corners, press-morph buttons, the filled-circle ? icon, and [answered] rows — ones answered here that are no
+ * UI-07: 28 dp corners, press-morph buttons, the ? status icon, and [answered] rows — ones answered here that are no
  * longer unconfirmed — shrink into a one-line result ("Logged" / "Noted: not taken"). A row whose dialog was cancelled
  * stays open, because it is still unconfirmed.
  */
