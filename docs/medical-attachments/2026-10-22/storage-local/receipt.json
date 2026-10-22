@@ -1,0 +1,21 @@
+{
+  "source": "bbc89d7aa9f2db04a6c1b3aa54cdeaa01bb2aec6",
+  "pr": 104,
+  "baseline": "d2223c0a21dcabd091c0ebf8e182b301840f036c",
+  "foundation_local": {
+    "tests": 32,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "new_crypto_contracts": 12,
+    "environment": "Robolectric SDK28; not native"
+  },
+  "production_compile": "PASS",
+  "full_data_regression": "IN_PROGRESS",
+  "android_compile": "IN_PROGRESS",
+  "api26_29_35": "IN_PROGRESS_IN_CI_NOT_CLAIMED_PASS",
+  "external_review": "NOT_REVIEWED_EXTERNALLY",
+  "feature_enabled": false,
+  "new_migration": "NOT_IMPLEMENTED_DESIGN_SUBMITTED",
+  "new_complete_backup": "NOT_IMPLEMENTED_DESIGN_SUBMITTED"
+}

@@ -1,3 +1,9 @@
+## #104默认OFF正式加密流与设备key适配：本地32项PASS，CI在途 — 2026-10-22
+
+PR104源bbc89d7aa9f2db04a6c1b3aa54cdeaa01bb2aec6，auto-merge已按§106启用。Foundation32/0fail/error/skip（20旧+12新，真实Tink公共API及独立subtle双向wire oracle），原XML在storage-local。全部data回归及Android新key测试编译在途；不能提前标PASS，三API原生同样待证据。授权/设计已经先提交，实际Room及PNBAK1不变；无应用调用、无SQL成功发布、无feature激活。
+
+设计边界：stream adapter不能独自保证immutable inode、durable wrap budget、后台journal或AppLock消费者接线；这些是下一正式集成条件。不得把公开hash当认证（需真实AEAD完整EOF及可信SQL承诺），不得将key丢失时重建当恢复。外审仍NOT_REVIEWED_EXTERNALLY。后续继续跟进104，不重复请求已经批准的默认OFF实现。
+
 ## #103最终全CI、原HTML与合并回执核验 — 2026-10-22
 
 最终8dd60c43，Android PR39845789203/Push39845782550六必需门全部PASS，science gate PASS/deep按既有classifier SKIPPED。受保护自动合并d2223c0a（20:36:11Z），无admin旁路。129326755B build-results SHA/CRC核验，input-ci分别保存Foundation20和PeriodStability原HTML，零fail/skip。三API原证据此前已留。提取脚本首轮误用旧HTML布局导致解析错误，随后按实际新布局核验；不是测试失败，不以错误解析声称PASS。主线39850289528在途、science39850289447 PASS。
