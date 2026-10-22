@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.LabPanelDataTest" tests="14" skipped="0" failures="1" errors="0" timestamp="2026-10-22T11:13:40.381Z" hostname="0a7cae0c7757" time="2.958">
+  <properties/>
+  <testcase name="backupsRoundTripPanelsOldOnesRestoreUngroupedAndAnOldReaderRefusesNewOnes" classname="net.plainnotes.app.data.LabPanelDataTest" time="0.899"/>
+  <testcase name="room11To12KeepsEveryRowAndGroupsNothing" classname="net.plainnotes.app.data.LabPanelDataTest" time="0.201"/>
+  <testcase name="saveAsOneBloodTestOnlyForUngroupedResultsOfOneExactSample" classname="net.plainnotes.app.data.LabPanelDataTest" time="0.065"/>
+  <testcase name="theLastResultTakesItsEmptiedPanelAlong" classname="net.plainnotes.app.data.LabPanelDataTest" time="0.058"/>
+  <testcase name="aSingleResultReturnsToItsPanelByUuidOrOnItsOwn" classname="net.plainnotes.app.data.LabPanelDataTest" time="0.071"/>
+  <testcase name="aWholePanelGoesToTheBinAndComesBackTogether" classname="net.plainnotes.app.data.LabPanelDataTest" time="0.065"/>
+  <testcase name="addingTakesThePanelSampleAndTheDatabaseRefusesADriftingMember" classname="net.plainnotes.app.data.LabPanelDataTest" time="0.061"/>
+  <testcase name="legacyStringIsTheRoom11Text" classname="net.plainnotes.app.data.LabPanelDataTest" time="0.026"/>
+  <testcase name="expandedReportFailureKeepsOldPanelAndUnknownUnitsWithoutPartialWrites" classname="net.plainnotes.app.data.LabPanelDataTest" time="0.059"/>
+  <testcase name="publishedBusinessElevenRestoresPanelsAndLegacyInventoryWithoutInferringIdentity" classname="net.plainnotes.app.data.LabPanelDataTest" time="0.349"/>
+  <testcase name="batchMakesOnePanelAndThePanelEditKeepsMembersInStep" classname="net.plainnotes.app.data.LabPanelDataTest" time="0.094"/>
+  <testcase name="aMemberEditedOnItsOwnLeavesOnlyWhenTimeOrLaboratoryChanges" classname="net.plainnotes.app.data.LabPanelDataTest" time="0.071"/>
+  <testcase name="aFailedRoom11To12MigrationLeavesRoom11" classname="net.plainnotes.app.data.LabPanelDataTest" time="0.573"/>
+  <testcase name="expandedReportKeepsEveryOriginalUnitPanelContextAndBackupThroughTrash" classname="net.plainnotes.app.data.LabPanelDataTest" time="0.355">
+    <failure message="java.lang.AssertionError: expected:&lt;12&gt; but was:&lt;13&gt;" type="java.lang.AssertionError">java.lang.AssertionError: expected:&lt;12&gt; but was:&lt;13&gt;
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at net.plainnotes.app.data.LabPanelDataContract$expandedReportKeepsEveryOriginalUnitPanelContextAndBackupThroughTrash$1.invokeSuspend(LabPanelDataContract.kt:289)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:94)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:70)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:48)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source)
+	at net.plainnotes.app.data.LabPanelDataContract.expandedReportKeepsEveryOriginalUnitPanelContextAndBackupThroughTrash(LabPanelDataContract.kt:255)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:27)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.robolectric.RobolectricTestRunner$HelperTestRunner$1.evaluate(RobolectricTestRunner.java:524)
+	at org.robolectric.internal.SandboxTestRunner.executeInSandbox(SandboxTestRunner.java:494)
+	at org.robolectric.internal.SandboxTestRunner.access$900(SandboxTestRunner.java:67)
+	at org.robolectric.internal.SandboxTestRunner$7.evaluate(SandboxTestRunner.java:442)
+	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+	at org.robolectric.internal.SandboxTestRunner.access$600(SandboxTestRunner.java:67)
+	at org.robolectric.internal.SandboxTestRunner$6.evaluate(SandboxTestRunner.java:333)
+	at org.robolectric.internal.SandboxTestRunner$3.evaluate(SandboxTestRunner.java:233)
+	at org.robolectric.internal.SandboxTestRunner$5.lambda$evaluate$0(SandboxTestRunner.java:317)
+	at org.robolectric.internal.bytecode.Sandbox.lambda$runOnMainThread$0(Sandbox.java:101)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+</failure>
+  </testcase>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

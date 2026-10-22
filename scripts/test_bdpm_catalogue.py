@@ -29,4 +29,18 @@ class FullCatalogueTest(unittest.TestCase):
   self.assertEqual(32439,self.db.execute('SELECT count(*) FROM composition').fetchone()[0])
   self.assertEqual({'SA':26915,'FT':5524},dict(self.db.execute('SELECT kind,count(*) FROM composition GROUP BY kind')))
   with self.assertRaises(sqlite3.OperationalError):self.db.execute("DELETE FROM product")
+ def test_rebuild_is_deterministic_without_network(self):
+  import contextlib,io,tempfile
+  old=build.ASSETS
+  try:
+   with tempfile.TemporaryDirectory() as folder,contextlib.redirect_stdout(io.StringIO()):
+    build.ASSETS=Path(folder)
+    build.build();first=(build.ASSETS/'catalogue.sqlite').read_bytes()
+    build.build();self.assertEqual(first,(build.ASSETS/'catalogue.sqlite').read_bytes())
+    rebuilt=sqlite3.connect(build.ASSETS/'catalogue.sqlite')
+    try:
+     for table in ['product','composition','package','orphan_package','metadata']:
+      self.assertEqual(self.db.execute('SELECT * FROM '+table+' ORDER BY rowid').fetchall(),rebuilt.execute('SELECT * FROM '+table+' ORDER BY rowid').fetchall())
+    finally:rebuilt.close()
+  finally:build.ASSETS=old
 if __name__=='__main__':unittest.main()

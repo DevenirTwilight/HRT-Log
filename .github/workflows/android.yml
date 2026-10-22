@@ -144,6 +144,11 @@ jobs:
             python3 scripts/run_b3_gate_red.py
             adb logcat -G 16M
             ./gradlew :app:connectedFullDebugAndroidTest --no-parallel --max-workers=2
+            # BDPM offline acceptance: a new target process, installed data only, no app INTERNET permission.
+            adb shell svc wifi disable
+            adb shell svc data disable
+            adb shell am force-stop net.plainnotes.app
+            ./gradlew :app:connectedFullDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.BdpmOfflineRestartAndroidTest -Pandroid.testInstrumentationRunnerArguments.bdpm_fresh_offline=1 --no-parallel --max-workers=2
             python3 scripts/collect_package_history_evidence.py --output app/build/reports/package-history-evidence.json
             python3 scripts/collect_unified_device_performance.py --output app/build/reports/unified-device-performance.json
             python3 scripts/collect_pr19_display_performance.py

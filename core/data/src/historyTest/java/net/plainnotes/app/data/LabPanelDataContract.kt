@@ -286,7 +286,7 @@ abstract class LabPanelDataContract {
             repo.restoreBackup(archive,password)
             assertEquals(saved,repo.labs());assertEquals(contexts,repo.labContexts());assertEquals(listOf(panel),repo.labPanels())
             // P4 candidate already advances Room12/business11 to13/12; all raw lab assertions stay intact.
-            assertEquals(13,db.openHelper.writableDatabase.version);assertEquals(12,RecordBackupCompatibility.SCHEMA)
+            assertEquals(13,db.openHelper.writableDatabase.version);assertEquals(13,RecordBackupCompatibility.SCHEMA)
         }finally{password.fill('\u0000');archive.fill(0)}
     }
 

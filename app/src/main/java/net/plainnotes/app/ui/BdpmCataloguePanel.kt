@@ -37,13 +37,14 @@ import org.json.JSONObject
         }
     }
     Column(verticalArrangement=Arrangement.spacedBy(12.dp),modifier=Modifier.fillMaxWidth().testTag("bdpm-panel")) {
-        Text(stringResource(R.string.bdpm_scope))
         OutlinedTextField(query,{if(phase!="SEARCHING")query=it.take(256)},label={Text(stringResource(R.string.bdpm_search_label))},
             singleLine=true,modifier=Modifier.fillMaxWidth().testTag("bdpm-search"))
         Button(onClick={search()},enabled=query.isNotBlank() && phase!="SEARCHING" && !busy,modifier=Modifier.heightIn(min=48.dp).testTag("bdpm-search-go")) {Text(stringResource(R.string.ref2_find))}
         if(phase=="SEARCHING")LinearProgressIndicator(Modifier.fillMaxWidth())
         Text(stringResource(when(phase){"SEARCHING"->R.string.bdpm_searching;"EMPTY"->R.string.bdpm_empty;"UNAVAILABLE"->R.string.bdpm_unavailable;"RESULTS"->R.string.bdpm_results;else->R.string.bdpm_initial}),
             modifier=Modifier.testTag("bdpm-status").semantics{liveRegion=LiveRegionMode.Polite})
+        Text(stringResource(R.string.bdpm_scope),style=MaterialTheme.typography.bodySmall)
+        if(busy)LinearProgressIndicator(Modifier.fillMaxWidth().testTag("bdpm-selection-loading"))
         if(phase=="UNAVAILABLE")TextButton(onClick={search()},modifier=Modifier.heightIn(min=48.dp)){Text(stringResource(R.string.ref2_reload))}
         if(phase=="RESULTS") {
             val m=JSONObject(requireNotNull(page).metadata)

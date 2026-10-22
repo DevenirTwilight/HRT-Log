@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.BackupJsonReaderStreamingTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-22T11:13:18.949Z" hostname="0a7cae0c7757" time="2.926">
+  <properties/>
+  <testcase name="originalLexicalStringAndDepthBudgetsAreNotRelaxed" classname="net.plainnotes.app.data.BackupJsonReaderStreamingTest" time="2.763"/>
+  <testcase name="utf8BufferBoundariesAndNumericLexemesRemainExact" classname="net.plainnotes.app.data.BackupJsonReaderStreamingTest" time="0.039"/>
+  <testcase name="malformedUtf8IsRejectedEvenAfterACompleteRootAndAcrossTheDecoderBuffer" classname="net.plainnotes.app.data.BackupJsonReaderStreamingTest" time="0.026"/>
+  <testcase name="lexicalStateSurvivesReaderChunksIncludingEscapesAndNestedSnapshotText" classname="net.plainnotes.app.data.BackupJsonReaderStreamingTest" time="0.028"/>
+  <testcase name="duplicateKeysTrailingDocumentsAndNonObjectRootsStillFail" classname="net.plainnotes.app.data.BackupJsonReaderStreamingTest" time="0.022"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

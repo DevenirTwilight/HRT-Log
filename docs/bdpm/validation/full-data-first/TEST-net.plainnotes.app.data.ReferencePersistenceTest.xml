@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.ReferencePersistenceTest" tests="23" skipped="0" failures="0" errors="0" timestamp="2026-10-22T11:14:45.345Z" hostname="0a7cae0c7757" time="6.811">
+  <properties/>
+  <testcase name="futureHeaderIsRejectedBeforeOpeningDatabaseAndLegacyMaximumCannotReadNewBackup" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.668"/>
+  <testcase name="completeNewBackupRoundtripRetiresOldEditingEpochAndReopensWithoutCatalog" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.827"/>
+  <testcase name="corruptDigestOrEventChainFailsWithoutChangingTargetOrEpochOrGuards" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.27"/>
+  <testcase name="openingAndCancellingReferencePreviewWritesNothingAndFirstConfirmationIsAtomic" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.186"/>
+  <testcase name="sameIntegerIdInAnotherDatabaseOrImportedDatasetNeverAcceptsOldScope" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.573"/>
+  <testcase name="linkingCorrectingAndUnlinkingNeverRewritesLegacyFactsOrStock" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.185"/>
+  <testcase name="canonicalUnicodeDigestIsIdenticalAcrossAndroidVersions" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.169"/>
+  <testcase name="futureOrOutOfRangeCaptureRevisionsRejectEvenWithRecomputedDigest" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.226"/>
+  <testcase name="staleAndRacingEditorsCannotAppendTwoHeadsOrOrphanSnapshots" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.192"/>
+  <testcase name="historyReaderUsesFrozenSourceAndRetiresEvenAnEmptyDatasetTicket" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.473"/>
+  <testcase name="referenceCallsAreRejectedInLegacyPrivateSpaceBeforeOpeningAnyDatabase" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.223"/>
+  <testcase name="escapedRunsAndInvalidScalarsPreserveCanonicalBoundariesAcrossAndroidVersions" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.16"/>
+  <testcase name="replacementOfIdentifiedSubjectRejectsWithoutRetiringItsValidEpoch" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.181"/>
+  <testcase name="archivedMedicationRemainsAssociatedAndReferenceHistoryIsAppendOnly" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.19"/>
+  <testcase name="futureRecordCapturesContextNotActualPackageAndCorrectionsLeaveItFrozen" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.19"/>
+  <testcase name="sameOperationIsIdempotentEvenAfterLaterUnlinkButChangedPayloadIsRejected" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.21"/>
+  <testcase name="injectedFailureRollsBackReferenceBusinessRuntimeAndLegacyRows" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.214"/>
+  <testcase name="emptyReferenceRestoreRetiresPreviewWithoutCreatingAnyBusinessIdentity" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.57"/>
+  <testcase name="deletingAndReusingMedicationHandleRetiresEmptyPreview" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.189"/>
+  <testcase name="oldSchemaNineBackupClearsNewReferencesAndKeepsLegacyStockUnknown" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.389"/>
+  <testcase name="wholeUnescapedStringsKeepExplicitCanonicalBytesAcrossAndroidVersions" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.187"/>
+  <testcase name="tombstoneCannotRebindReusedIntegerRecordIdOrRewriteOriginalCapture" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.164"/>
+  <testcase name="sourceHistoryReadsFrozenContextAndDoesNotBackfillTheOlderRecord" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.166"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

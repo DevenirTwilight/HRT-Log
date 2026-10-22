@@ -55,6 +55,8 @@ def build():
  meta['composition_semantics']='Raw SA/FT/ST codes preserved, never merged or summed; v4 describes ST whereas supplied rows use FT'
  assert all(not r[1] or re.fullmatch('[0-9]{7}',r[1]) for r in parsed['CIS_CIP_bdpm.txt'])
  assert all(not r[6] or re.fullmatch('[0-9]{13}',r[6]) for r in parsed['CIS_CIP_bdpm.txt'])
+ codes=[r[6] for r in parsed['CIS_CIP_bdpm.txt'] if r[6]]
+ assert len(codes)==len(set(codes)),'Conflicting CIP13 identities require review'
  ASSETS.mkdir(parents=True,exist_ok=True);path=ASSETS/'catalogue.sqlite';path.unlink(missing_ok=True)
  db=sqlite3.connect(path)
  db.executescript('''PRAGMA page_size=4096; PRAGMA user_version=1;

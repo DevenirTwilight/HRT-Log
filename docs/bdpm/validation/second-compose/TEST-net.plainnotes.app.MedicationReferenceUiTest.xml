@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.MedicationReferenceUiTest" tests="16" skipped="0" failures="0" errors="0" timestamp="2026-10-22T11:20:03.157Z" hostname="0a7cae0c7757" time="18.576">
+  <properties/>
+  <testcase name="confirmingActuallyPersistsAndCancellingDoesNotCreateExtraMedication[en/320dp/2x]" classname="net.plainnotes.app.MedicationReferenceUiTest" time="5.566"/>
+  <testcase name="browsingFromNewMedicationReturnsToUnchangedDraft[en/320dp/2x]" classname="net.plainnotes.app.MedicationReferenceUiTest" time="1.197"/>
+  <testcase name="cancellingFinalConfirmationWritesNoDatasetOrAssociation[en/320dp/2x]" classname="net.plainnotes.app.MedicationReferenceUiTest" time="0.926"/>
+  <testcase name="invalidIdentifierIsNotTruncatedToAnotherProductAndDraftRemainsEditable[en/320dp/2x]" classname="net.plainnotes.app.MedicationReferenceUiTest" time="0.936"/>
+  <testcase name="confirmingActuallyPersistsAndCancellingDoesNotCreateExtraMedication[fr-rFR/320dp/2x]" classname="net.plainnotes.app.MedicationReferenceUiTest" time="0.999"/>
+  <testcase name="browsingFromNewMedicationReturnsToUnchangedDraft[fr-rFR/320dp/2x]" classname="net.plainnotes.app.MedicationReferenceUiTest" time="0.838"/>
+  <testcase name="cancellingFinalConfirmationWritesNoDatasetOrAssociation[fr-rFR/320dp/2x]" classname="net.plainnotes.app.MedicationReferenceUiTest" time="0.793"/>
+  <testcase name="invalidIdentifierIsNotTruncatedToAnotherProductAndDraftRemainsEditable[fr-rFR/320dp/2x]" classname="net.plainnotes.app.MedicationReferenceUiTest" time="0.802"/>
+  <testcase name="confirmingActuallyPersistsAndCancellingDoesNotCreateExtraMedication[zh-rCN/320dp/2x]" classname="net.plainnotes.app.MedicationReferenceUiTest" time="0.868"/>
+  <testcase name="browsingFromNewMedicationReturnsToUnchangedDraft[zh-rCN/320dp/2x]" classname="net.plainnotes.app.MedicationReferenceUiTest" time="0.723"/>
+  <testcase name="cancellingFinalConfirmationWritesNoDatasetOrAssociation[zh-rCN/320dp/2x]" classname="net.plainnotes.app.MedicationReferenceUiTest" time="0.712"/>
+  <testcase name="invalidIdentifierIsNotTruncatedToAnotherProductAndDraftRemainsEditable[zh-rCN/320dp/2x]" classname="net.plainnotes.app.MedicationReferenceUiTest" time="0.768"/>
+  <testcase name="confirmingActuallyPersistsAndCancellingDoesNotCreateExtraMedication[zh-rTW/320dp/2x]" classname="net.plainnotes.app.MedicationReferenceUiTest" time="1.014"/>
+  <testcase name="browsingFromNewMedicationReturnsToUnchangedDraft[zh-rTW/320dp/2x]" classname="net.plainnotes.app.MedicationReferenceUiTest" time="0.713"/>
+  <testcase name="cancellingFinalConfirmationWritesNoDatasetOrAssociation[zh-rTW/320dp/2x]" classname="net.plainnotes.app.MedicationReferenceUiTest" time="0.806"/>
+  <testcase name="invalidIdentifierIsNotTruncatedToAnotherProductAndDraftRemainsEditable[zh-rTW/320dp/2x]" classname="net.plainnotes.app.MedicationReferenceUiTest" time="0.765"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

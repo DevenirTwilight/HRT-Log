@@ -1,3 +1,19 @@
+## BDPM备份兼容目标52项通过；UI测试平台调度修正待验 — 2026-10-22
+
+受影响的HistoricalVisit18/LabPanelData14/ReferenceMigration16/BDPM4共52项当前全部PASS，原532回归另外529项通过证据仍保留；不把两次运行合成一次全绿。5项Python来源/查询/只读/重建（两次同环境字节一致、逻辑全表相同）PASS，工具链版本独立记录。
+
+第二轮App原32项仍PASS；新增8项中英草稿浏览1PASS，其余7FAIL。保存4例已点击真实确认，但仅轮询viewModel state未驱动Robolectric暂停的Android Main Looper，现复用DataRefreshTest方式通过平台hook驱动，native hook为空；所有原超时及成功/数据不变断言保留。未保存fr/zh搜索超时增加实际状态节点报告，避免猜测原因。原XML/log完整保留second-compose，不伪称业务RED或成功。native App编译缺SQLCipher编译可见性，现加androidTestCompileOnly现有sqlcipher库（运行时core:data早已包含，不新增release依赖），待编译确认。
+
+目前App/核心均无在途旧任务；下一步只重验变更8项及native源码编译，不重跑52/529已通过项。真实App路径/native断网重启尚未完成，整项功能不得宣布完成；不运行P4性能。
+
+## BDPM核心23项PASS；全回归版本断言与异步UI等待正在修正 — 2026-10-22
+
+目标数据23项（BDPM4/原Payload10/原用户目录6/规范字节3）已全部PASS；Android合同源码编译PASS。App原有关联16、controller7、时期5、旧中心导航1、翻译3共32项PASS；新增8项失败原样保存first-compose，主要是点击包装后未等待IO快照、立即找尚不存在的确认框，另有未保存草稿搜索超时待复核。测试增加等待真实预览节点（不伪造结果/降低断言），UI加入选择进度并把搜索移到长说明前。相同真实流程已抽共享contract，新增native SQLCipher App子类及断网force-stop后只读目录验证，尚未执行，不称PASS。
+
+完整data532中529PASS/3FAIL（full-data-first原XML/log），3处旧测试将全局最高支持版本与实际user-only导出版本混用。已使两项最高版本断言明确13，冻结旧逐字JSON对照明确保持原12；没有改原字节/只读/回滚/数据断言。新增BDPM合同同时明确无官方快照导出12、有官方历史导出13及旧读者拒绝。接下来只重验受影响三类和App流程、编译新增native，不重复已通过的其他529项；最终CI仍会正常跑全部。
+
+来源补强：本次CIS/COMPO完整SHA匹配仓库已记录的10月17日生产下载；原96包装身份/原文全匹配。CIP全文件不同，仍如实标替代TEST站及其公布日期，不称最新生产。32项App与532数据结果不是同次最终全绿；全部SHA/原日志随提交保存。
+
 ## BDPM资产已纳入Git，首轮真实数据与UI回归继续 — 2026-10-22
 
 修正通用*.sqlite忽略导致首提交未跟踪生成资产，现显式纳入公开只读catalogue.sqlite（非用户数据）。4项Python来源/全量/PROVAMES/只读/孤立记录检查PASS；生产main编译PASS。首轮新增数据类被JUnit因Boolean返回声明拒绝执行，修Unit后3项通过，关联合同新增完整审计断言因测试未入事务失败；现按原审计要求进入Room事务，不改审计或断言。原两轮XML/日志保存docs/bdpm/validation，非业务RED不伪称安全反例。

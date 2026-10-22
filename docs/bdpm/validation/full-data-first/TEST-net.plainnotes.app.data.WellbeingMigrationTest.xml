@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.WellbeingMigrationTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-22T11:15:03.771Z" hostname="0a7cae0c7757" time="0.674">
+  <properties/>
+  <testcase name="roomMigrationMergesAndHidesByRecentUse" classname="net.plainnotes.app.data.WellbeingMigrationTest" time="0.178"/>
+  <testcase name="restoringA020BackupUpgradesItAndKeepsEverything" classname="net.plainnotes.app.data.WellbeingMigrationTest" time="0.269"/>
+  <testcase name="schema2SymptomMigrationPreservesUnknownContext" classname="net.plainnotes.app.data.WellbeingMigrationTest" time="0.029"/>
+  <testcase name="aBackupFromANewerSchemaIsRefused" classname="net.plainnotes.app.data.WellbeingMigrationTest" time="0.196"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

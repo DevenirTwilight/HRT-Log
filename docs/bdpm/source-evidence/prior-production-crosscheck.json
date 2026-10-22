@@ -1,0 +1,34 @@
+{
+  "scope": "Matches previously recorded production hashes, not a fresh production retrieval or a claim of latest data",
+  "datasets": [
+    {
+      "file": "CIS_bdpm.txt",
+      "prior_production_metadata": "docs/ansm-completion/additional-dataset-metadata.json",
+      "prior_retrieved_at": "2026-10-17T12:36:56.252901+00:00",
+      "prior_url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_bdpm.txt",
+      "prior_sha256": "332b95926f76f1a2ab3d70cdf64205397fc13e74b7cc9afad9b625fbb6961640",
+      "downloaded_sha256": "332b95926f76f1a2ab3d70cdf64205397fc13e74b7cc9afad9b625fbb6961640",
+      "byte_identical_to_prior_production_digest": true
+    },
+    {
+      "file": "CIS_CIP_bdpm.txt",
+      "prior_production_metadata": "docs/ansm-completion/additional-dataset-metadata.json",
+      "prior_retrieved_at": "2026-10-17T12:36:56.253510+00:00",
+      "prior_url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_CIP_bdpm.txt",
+      "prior_sha256": "b011fa0bcf5d1ae3fcf85d2a35e1a4b7496006c09d973bf207db1f7dccf32d9a",
+      "downloaded_sha256": "fa50ec934445c2f6c0c74ee18c9df41d2de68861c4751d1650774504d56742ec",
+      "byte_identical_to_prior_production_digest": false
+    },
+    {
+      "file": "CIS_COMPO_bdpm.txt",
+      "prior_production_metadata": "docs/ansm-completion/downloaded-source-metadata.json",
+      "prior_retrieved_at": "2026-10-17T12:34:36.580559+00:00",
+      "prior_url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_COMPO_bdpm.txt",
+      "prior_sha256": "90a6e8ee286b6245c3938dd417ac75d1135a61b15ba50cfad70ee6b3bd181b7a",
+      "downloaded_sha256": "90a6e8ee286b6245c3938dd417ac75d1135a61b15ba50cfad70ee6b3bd181b7a",
+      "byte_identical_to_prior_production_digest": true
+    }
+  ],
+  "prior_selected_packages": 96,
+  "prior_package_identity_description_matches": 96
+}

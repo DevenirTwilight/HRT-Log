@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.HistoryPeriodDataTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2026-10-22T11:13:34.151Z" hostname="0a7cae0c7757" time="3.54">
+  <properties/>
+  <testcase name="extraAnnotationIsSeparateFromTheRecord" classname="net.plainnotes.app.data.HistoryPeriodDataTest" time="0.065"/>
+  <testcase name="confirmEditRevokeReconfirmIsAppendOnlyAndLeavesRecordsAlone" classname="net.plainnotes.app.data.HistoryPeriodDataTest" time="0.058"/>
+  <testcase name="overlapIsRefusedForTheSameMedicineOnly" classname="net.plainnotes.app.data.HistoryPeriodDataTest" time="0.06"/>
+  <testcase name="backupRoundTripOldSchemaAndMalformedRowsRollBack" classname="net.plainnotes.app.data.HistoryPeriodDataTest" time="1.952"/>
+  <testcase name="labContextCarriesUserPeriodSourceAndValidatesItsBounds" classname="net.plainnotes.app.data.HistoryPeriodDataTest" time="0.081"/>
+  <testcase name="userEditsAreAppendOnlyUndoableAndNeverTouchRecordsOrPlans" classname="net.plainnotes.app.data.HistoryPeriodDataTest" time="0.067"/>
+  <testcase name="splitAndMergeKeepOneConfirmedCoverage" classname="net.plainnotes.app.data.HistoryPeriodDataTest" time="0.065"/>
+  <testcase name="invalidPeriodsAreRejected" classname="net.plainnotes.app.data.HistoryPeriodDataTest" time="0.068"/>
+  <testcase name="userEditsSurviveBackupRestoreAndSchemaSevenBackupsStillRestore" classname="net.plainnotes.app.data.HistoryPeriodDataTest" time="1.117"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

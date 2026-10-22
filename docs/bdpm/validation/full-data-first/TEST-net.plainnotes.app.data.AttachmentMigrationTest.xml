@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.AttachmentMigrationTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-22T11:13:16.927Z" hostname="0a7cae0c7757" time="1.866">
+  <properties/>
+  <testcase name="twoEncryptedDatabasesKeepSameIntegerTargetsAndAttachmentNamespaceSeparate" classname="net.plainnotes.app.data.AttachmentMigrationTest" time="0.414"/>
+  <testcase name="nativeMigrationFailureRollsBackDDLAndLeavesOriginalRoom9Readable" classname="net.plainnotes.app.data.AttachmentMigrationTest" time="0.719"/>
+  <testcase name="nativeOldestSchemaMigrationChainValidatesRoom10" classname="net.plainnotes.app.data.AttachmentMigrationTest" time="0.212"/>
+  <testcase name="encryptedRoom9MigratesAllLegacyRowsIndicesGuardsAndReopens" classname="net.plainnotes.app.data.AttachmentMigrationTest" time="0.518"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

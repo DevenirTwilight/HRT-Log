@@ -95,3 +95,8 @@ Copyright Google LLC; Apache License 2.0. Upstream source and license:
 https://github.com/tink-crypto/tink-java/tree/v1.23.0
 https://github.com/tink-crypto/tink-java/blob/v1.23.0/LICENSE
 No upstream source is copied into production. Library use is not project security certification.
+
+
+## French BDPM structured identity catalogue
+
+Source: Base de Données Publique des Médicaments (ANSM / HAS / UNCAM). The bundled dated identity, presentation and composition facts are reused under the supplied Licence Ouverte / Open Licence 1.0 contract, not this project's MIT licence. See `core/data/src/main/assets/bdpm/manifest.json` for individual source dates, actual acquisition URLs, SHA-256 and counts; `docs/bdpm/README.md` describes conversion and the alternative-host limitation. No endorsement by ANSM, HAS or UNCAM is claimed. No RCP/Notice body is bundled.

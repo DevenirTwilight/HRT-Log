@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.MedicationReferenceControllerTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-10-22T11:10:03.287Z" hostname="0a7cae0c7757" time="4.551">
+  <properties/>
+  <testcase name="staleEditorCannotOverwriteNewerAssociationAndReloadIsExplicit" classname="net.plainnotes.app.MedicationReferenceControllerTest" time="2.825"/>
+  <testcase name="openingSearchingAndCancellingMakesNoReferenceWrites" classname="net.plainnotes.app.MedicationReferenceControllerTest" time="0.173"/>
+  <testcase name="restoringAnEmptyReferenceDatasetRetiresTheFirstAssociationPreview" classname="net.plainnotes.app.MedicationReferenceControllerTest" time="0.563"/>
+  <testcase name="duplicateConfirmationAndCloseAreRejectedWhileTheRealWriteIsPending" classname="net.plainnotes.app.MedicationReferenceControllerTest" time="0.122"/>
+  <testcase name="unsavedMedicationCanBrowseButCannotCreateOrLinkOne" classname="net.plainnotes.app.MedicationReferenceControllerTest" time="0.114"/>
+  <testcase name="actualConfirmationUnlinkAndReopenPreserveMedicationStockAndRecordContext" classname="net.plainnotes.app.MedicationReferenceControllerTest" time="0.163"/>
+  <testcase name="backupRestoreRetiresOpenEditorWithoutChangingImportedReference" classname="net.plainnotes.app.MedicationReferenceControllerTest" time="0.421"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

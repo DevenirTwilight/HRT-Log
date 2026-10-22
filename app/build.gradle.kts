@@ -77,6 +77,7 @@ dependencies {
     testImplementation(libs.junit4); testImplementation(libs.org.json); testImplementation(libs.robolectric); testImplementation(libs.android.test.core)
     testImplementation(platform(libs.compose.bom)); testImplementation(libs.compose.ui.test); debugImplementation(libs.compose.ui.test.manifest)
     androidTestCompileOnly(libs.room.runtime); androidTestCompileOnly(libs.sqlite)
+    androidTestCompileOnly(libs.sqlcipher) // Already present at runtime through core:data; native BDPM uses the real cipher factory.
     androidTestImplementation(libs.android.test.runner); androidTestImplementation(libs.android.test.core); androidTestImplementation(libs.junit4)
     androidTestImplementation(platform(libs.compose.bom)); androidTestImplementation(libs.compose.ui.test)
     // Already a Compose ui-test runtime dependency; expose only its existing API to native tests.
