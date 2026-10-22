@@ -108,7 +108,7 @@ class ScreenshotTest {
     @Test fun wellbeingScreen() {
         val items = net.plainnotes.app.data.CHECKIN_DEFAULTS.mapIndexed { i, k -> CheckinItemEntity(i + 1L, k, null, i < 6, i) }
         val scores = (0 until 20).flatMap { d -> (1..3).map { it -> CheckinScoreEntity(today.minusDays(d.toLong()).toString(), it.toLong(), 1 + (d * it + 2) % 5) } }
-        shoot("wellbeing") { WellbeingScreen(items, scores, listOf(DayNoteEntity(today.toString(), "Synthetic note")), { _, _, _ -> }, { _, _ -> }, {}, PaddingValues()) }
+        shoot("wellbeing") { WellbeingScreen(items, scores, listOf(DayNoteEntity(today.toString(), "Synthetic note")), { _, _, _ -> }, { _, _ -> }, PaddingValues()) }
     }
     @Test fun longitudinalTimeline() {
         val r=RuleEntity(id=1,medication_id=1,kind="EVERY_N_DAYS",interval=1,weekday_mask=0,anchor_local=today.minusDays(30).toString(),anchor_zone=zone.id,effective_from_utc=now.minusSeconds(30*86400).toEpochMilli(),effective_zone=zone.id,missed_tracking_from_utc=now.minusSeconds(30*86400).toEpochMilli(),dose_snapshot=2.0,soon_snapshot=15,late_snapshot=120,config_snapshot=MedicationSnapshot.encode(meds[0],profiles[1]))

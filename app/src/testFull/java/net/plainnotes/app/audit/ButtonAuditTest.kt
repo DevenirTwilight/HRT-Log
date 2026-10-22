@@ -167,9 +167,9 @@ class ButtonAuditTest(private val locale: String, private val scale: Float, priv
             Case("history") { HistoryScreen(s, records(), {}, {}, padding) },
             Case("stock") { StockScreen(s, containers, records(), {}, {}, {}, padding) },
             Case("medications") { MedicationsScreen(s, {}, {}, {}, padding) },
-            Case("wellbeing_daily") { WellbeingHub(s, x, m, "FR", {}, padding) },
-            Case("wellbeing_symptoms", click(R.string.wb_symptoms)) { WellbeingHub(s, x, m, "FR", {}, padding) },
-            Case("wellbeing_reviews", click(R.string.wb_reviews)) { WellbeingHub(s, x, m, "FR", {}, padding) },
+            Case("wellbeing_daily") { WellbeingHub(s, x, m, "FR", padding) },
+            Case("wellbeing_symptoms", click(R.string.wb_symptoms)) { WellbeingHub(s, x, m, "FR", padding) },
+            Case("wellbeing_reviews", click(R.string.wb_reviews)) { WellbeingHub(s, x, m, "FR", padding) },
             Case("concentration_unified", {
                 val deadline=System.nanoTime()+30_000_000_000L
                 while(roots().flatMap { all(it.semanticsOwner.rootSemanticsNode) }.none { it.config.getOrNull(SemanticsProperties.TestTag)=="unified-chart" }) {

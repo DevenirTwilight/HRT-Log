@@ -1328,4 +1328,20 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="timeline_lab_draw_spoken_title">Lab test, %1$d results</string>
 <string name="timeline_lab_draw_spoken_out">%1$d outside the reference range</string>
 <string name="lab_names_join">", "</string>
+<!-- UI-08 (REQUIREMENTS §138): wellbeing daily tab. No scores, no judgement. -->
+<string name="wb_card_title_none_today">How are you feeling today?</string>
+<string name="wb_card_title_none_other">How did you feel that day?</string>
+<string name="wb_card_title_some">You\'ve noted some</string>
+<string name="wb_card_title_all">All noted</string>
+<string name="wb_card_subtitle">Note a few, no need to fill everything. No scores, no judgement.</string>
+<string name="wb_card_count">%1$d of %2$d noted</string>
+<string name="wb_item_unrecorded">Not noted yet</string>
+<string name="wb_item_value">Noted %1$d of 5</string>
+<string name="wb_level_spoken">%1$s, %2$d of 5</string>
+<string name="wb_note_title">Today\'s note</string>
+<string name="wb_note_placeholder">Write anything you like. Only you can see it.</string>
+<string name="wb_recent_title">Recent entries</string>
+<string name="wb_recent_note">Only values you noted are shown; days without an entry are left blank.</string>
+<string name="wb_trend_spoken">%1$s, noted on %3$d of the last %2$d days</string>
+<string name="wb_trend_spoken_all">%1$s, noted on %2$d days</string>
 </resources>
