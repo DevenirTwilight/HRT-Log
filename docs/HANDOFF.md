@@ -1,3 +1,7 @@
+## #104最终源发布隔离实证PASS，未签名未交付 — 2026-10-22
+
+749bacb5内部fullRelease/R8构建PASS；原发布隔离脚本及No INTERNET manifest守卫PASS，断言没有放宽。额外核验R8 mapping中Tink与三个新adapter保留类数为0，usage原文含三个整类及嵌套类移除；SHA和原始移除清单/构建日志保存在storage-local。不能仅凭DEX里没有原类名（可能被混淆）就声称移除，这里同时核对mapping+usage。没有正式签名、交付APK或Release，也不把本地构建说成原生三API验收。Python隔离4+设计61全PASS。最终JVM原始artifact/ZIP CRC/SHA也已保存storage-native/jvm，domain172/PK124/importer12/POC64全零fail/skip。三API/完整Android CI仍待最终结果。
+
 ## #104最终源749bacb5：548项全data和Android测试编译PASS — 2026-10-22
 
 最终源码749bacb50e202b7589493c697b2f1ddf1a788b4b，完整46套/548项、0fail/error/skip，Android新key测试源码编译PASS。原XML全量ZIP/SHA及Gradle日志已留storage-local。这里的API为本地Robolectric，不是实际三API PASS。准确最终Android PR39851830683、push39851821726；Science PR39851830571/push39851821800 SUCCESS。先前checkpoint把science run误写为Android，以上修正，不用错链接做验收证据。源码冻结，R8与三API仍在途，保护自动合并只在六门通过且无未解决讨论后发生。

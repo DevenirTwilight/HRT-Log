@@ -46,6 +46,21 @@
     "android_ci_push": 39851821726,
     "science_pr": 39851830571,
     "science_push": 39851821800,
-    "release_r8_check": "IN_PROGRESS"
+    "release_r8_check": {
+      "status": "PASS_UNSIGNED_INTERNAL_BUILD",
+      "retained_tink_and_adapter_classes": 0,
+      "adapter_roots_in_removed_usage": true,
+      "mapping_sha256": "423083f4a841c33e86c9d194991597f1eec13564ec9daa6acbc568d1f0eef2d0",
+      "usage_sha256": "932659a58d3393ef29039152a947d77b764bcfc099078336e88d05bec0f54edc",
+      "all_dex_and_manifest_guard": "PASS_UNCHANGED_ASSERTIONS",
+      "no_internet_manifest": "PASS",
+      "signed_or_delivered": false,
+      "apk_size_delta": "NOT_MEASURED_NO_BASELINE_APK"
+    },
+    "python_checks": {
+      "release_isolation_tests": 4,
+      "design_validation_tests": 61,
+      "failures": 0
+    }
   }
 }

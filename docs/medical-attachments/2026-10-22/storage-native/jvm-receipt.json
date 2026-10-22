@@ -1,0 +1,34 @@
+{
+  "source": "749bacb50e202b7589493c697b2f1ddf1a788b4b",
+  "run": 39851830683,
+  "artifact": 12457737118,
+  "sha256": "5671b899ecd4d6a95d37016d81a832efdd94d30f284c28ab1ec940a30f40ae73",
+  "crc": "PASS",
+  "environment": "CI JVM, not native Android",
+  "tests_failures_errors_skips": {
+    "core/domain": [
+      172,
+      0,
+      0,
+      0
+    ],
+    "pk-engine/build": [
+      124,
+      0,
+      0,
+      0
+    ],
+    "importer/build": [
+      12,
+      0,
+      0,
+      0
+    ],
+    "tools/attachment-poc": [
+      64,
+      0,
+      0,
+      0
+    ]
+  }
+}
