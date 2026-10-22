@@ -30,5 +30,22 @@
     "change": "bounded allocations inside owned cleanup; dependency notice accuracy",
     "local_regression": "IN_PROGRESS",
     "native_ci": "IN_PROGRESS"
+  },
+  "final_source": {
+    "sha": "749bacb50e202b7589493c697b2f1ddf1a788b4b",
+    "full_data_regression": {
+      "tests": 548,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "android_test_compile": "PASS",
+    "xml_archive": "749bacb5-data-tests.zip",
+    "sha256": "0be31ad6cfee5443912ed604e7a5a17c246ff4e9c46f3e22ea79fbb9ab6e2551",
+    "android_ci_pr": 39851830683,
+    "android_ci_push": 39851821726,
+    "science_pr": 39851830571,
+    "science_push": 39851821800,
+    "release_r8_check": "IN_PROGRESS"
   }
 }
