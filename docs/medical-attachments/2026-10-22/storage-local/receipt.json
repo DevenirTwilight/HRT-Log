@@ -62,5 +62,14 @@
       "design_validation_tests": 61,
       "failures": 0
     }
+  },
+  "native_api26": {
+    "status": "PASS_ORIGINAL_REPORTS_VERIFIED",
+    "foundation": 32,
+    "keystore": 2,
+    "failures": 0,
+    "skipped": 0,
+    "artifact": 12458182375,
+    "receipt": "../storage-native/api26-receipt.json"
   }
 }

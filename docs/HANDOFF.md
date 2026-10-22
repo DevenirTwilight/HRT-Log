@@ -1,3 +1,9 @@
+## #104最终源真实API26通过，原始报告已核验 — 2026-10-22
+
+749bacb5 PR39851830683的API26 job120080379010 SUCCESS；官方artifact12458182375 SHA256/CRC均核验。Foundation32/0fail/0skip、AttachmentKeyAndroidTest2/0/0，新增生产adapter Keystore角色/绑定/错tag/alias丢失/轮换以及完整认证与双向oracle方法原HTML明确passed，已保存storage-native。不是仅凭job绿计数。提取脚本首轮用了不存在的ignored标签，随后按实际skipped标签核验；不是Android测试失败。API29/35与完整android仍在途，不能提前报整PR通过。父主线#103合并后Android39850289528及Science39850289447最终SUCCESS。
+
+独立证据分支旧docs-only运行39852611428为避免重复已取消；源PR及push全必需门保留。后续仅证据分支提交skip-ci不用于生产PR，不绕过任何保护。
+
 ## #104最终源发布隔离实证PASS，未签名未交付 — 2026-10-22
 
 749bacb5内部fullRelease/R8构建PASS；原发布隔离脚本及No INTERNET manifest守卫PASS，断言没有放宽。额外核验R8 mapping中Tink与三个新adapter保留类数为0，usage原文含三个整类及嵌套类移除；SHA和原始移除清单/构建日志保存在storage-local。不能仅凭DEX里没有原类名（可能被混淆）就声称移除，这里同时核对mapping+usage。没有正式签名、交付APK或Release，也不把本地构建说成原生三API验收。Python隔离4+设计61全PASS。最终JVM原始artifact/ZIP CRC/SHA也已保存storage-native/jvm，domain172/PK124/importer12/POC64全零fail/skip。三API/完整Android CI仍待最终结果。
