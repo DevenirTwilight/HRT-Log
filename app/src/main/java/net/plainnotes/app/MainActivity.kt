@@ -101,6 +101,13 @@ class LockState : androidx.lifecycle.ViewModel() {
     override fun onResume() { super.onResume(); ScreenCapture.apply(this, UiPrefs(this).allowScreenshots, Disguise.enabled(this)); if(!initialized || !authorized())return; model.sync(); if (Disguise.enabled(this)) shake.register(getSystemService(SensorManager::class.java)) }
     override fun onPause() { super.onPause(); shake.unregister(getSystemService(SensorManager::class.java)) }
 
+    /** Read-only external-navigation admission; no lock/session mutation or picker exemption. */
+    internal val documentNavigationGeneration get()=sessionGeneration
+    internal fun documentNavigationAllowed(owner:Long)=net.plainnotes.app.reference.DocumentNavigationState(
+        initialized, lifecycle.currentState==androidx.lifecycle.Lifecycle.State.RESUMED, contentVisible, locked,
+        sessionGeneration, Session.generation, Session.target==UnlockTarget.PRIVATE, Disguise.enabled(this),
+        Session.allows(UnlockTarget.PRIMARY,sessionGeneration)).allows(owner)
+
     /** An old task cannot redirect a newer PRIVATE/PRIMARY session during task replacement. */
     private fun authorized():Boolean {
         if(!Disguise.enabled(this) || Session.allows(UnlockTarget.PRIMARY,sessionGeneration))return true

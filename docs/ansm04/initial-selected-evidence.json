@@ -1,0 +1,62 @@
+{
+  "status": "PASS",
+  "source_head": "89b8f59",
+  "environment": "Local JVM/Robolectric synthetic",
+  "totals": {
+    "tests": 19,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "classes": [
+    {
+      "name": "net.plainnotes.app.PrivacyNoticeFactsTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "net.plainnotes.app.PublicDocumentNavigationTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "net.plainnotes.app.UnifiedConcentrationTranslationsTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "net.plainnotes.app.DrugDocumentsTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "net.plainnotes.app.TranslationsTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "net.plainnotes.app.PeriodStabilityTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "log_sha256": "2da1b4bb802c442a6c44e7b563f8e207fa5248fea79f16d5c395cdc737d2b357",
+  "filter_note": "*TranslationsTest also matched UnifiedConcentrationTranslationsTest; all actual19 included, preliminary expected18 corrected before publishing evidence.",
+  "four_language_ui_matrix": "NOT_RUN",
+  "native_navigation": "NOT_RUN",
+  "hardware_talkback": "NOT_RUN",
+  "official_data_distribution": "OFF",
+  "production_schema": "Room11/business10 unchanged"
+}

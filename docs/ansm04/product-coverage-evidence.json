@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "scope": "DOCUMENTATION_ONLY_NOT_CLINICAL_VALIDATION",
+  "python_tests": 160,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "counts": {
+    "products": 58,
+    "ingredient_rows": 64,
+    "presentations": 96
+  },
+  "source_sha256": {
+    "scripts/build_ansm_product_coverage.py": "e5fbd67f4944dc749291d025e6a6a39795f0b8816bc465b2a7a41d27278c6484",
+    "scripts/test_ansm_product_coverage.py": "4039944ff3fde22eb67dea618eaa105529d755af8cba84e0325663b5a8994689",
+    "docs/ansm04/product-coverage.json": "12ae0036af69f5970af977a6681390b09df88fef7d939c3b71702e9f3c20c503"
+  },
+  "log_sha256": "ca3d70c026a2552394a4625e21242146e365810eee82aab5d064c58753afd70e",
+  "official_distribution": "OFF",
+  "body_and_translation_review": "UNVERIFIED"
+}

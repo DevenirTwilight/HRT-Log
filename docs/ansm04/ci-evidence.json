@@ -1,0 +1,627 @@
+{
+  "status": "SOURCE_FDA7782_SIX_REQUIRED_CI_PASS_METADATA_HEAD_PENDING",
+  "source_head": "fda7782c81f81481e93688fe62bd2788c8be5f47",
+  "run_id": 39045146864,
+  "artifact_checks": [
+    {
+      "artifact_id": 12105551912,
+      "sha256": "90a49edf0f4e8cf8ae3f4c6389c144dc31878482b9a6a061ef312f78f424a357",
+      "zip_crc": "PASS",
+      "suites": [],
+      "html_summary": [
+        {
+          "path": "core/data/build/reports/androidTests/connected/debug/index.html",
+          "tests": 114,
+          "failures": 0,
+          "skipped": 0
+        },
+        {
+          "path": "app/build/reports/androidTests/connected/debug/flavors/full/index.html",
+          "tests": 70,
+          "failures": 0,
+          "skipped": 0
+        }
+      ]
+    },
+    {
+      "artifact_id": 12104704977,
+      "sha256": "880433cb3b1c1f2cf8b150be4af78b48d5c502c46380d92b4e1ca6aa03fdb5a6",
+      "zip_crc": "PASS",
+      "suites": [],
+      "html_summary": [
+        {
+          "path": "core/data/build/reports/androidTests/connected/debug/index.html",
+          "tests": 114,
+          "failures": 0,
+          "skipped": 0
+        },
+        {
+          "path": "app/build/reports/androidTests/connected/debug/flavors/full/index.html",
+          "tests": 70,
+          "failures": 0,
+          "skipped": 0
+        }
+      ]
+    },
+    {
+      "artifact_id": 12105094488,
+      "sha256": "f3c44f9e20129c5cccd056c8af78a1d7004ad17e3ede70f94ee6cf5839edaf6d",
+      "zip_crc": "PASS",
+      "suites": [
+        {
+          "path": "core/domain/build/test-results/test/TEST-net.plainnotes.app.domain.AttachmentSessionTest.xml",
+          "name": "net.plainnotes.app.domain.AttachmentSessionTest",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "core/domain/build/test-results/test/TEST-net.plainnotes.app.domain.ScheduleTest.xml",
+          "name": "net.plainnotes.app.domain.ScheduleTest",
+          "tests": 30,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "core/domain/build/test-results/test/TEST-net.plainnotes.app.domain.PeriodAttributionTest.xml",
+          "name": "net.plainnotes.app.domain.PeriodAttributionTest",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "core/domain/build/test-results/test/TEST-net.plainnotes.app.domain.SustainedPatternsTest.xml",
+          "name": "net.plainnotes.app.domain.SustainedPatternsTest",
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "core/domain/build/test-results/test/TEST-net.plainnotes.app.domain.TreatmentEpochsTest.xml",
+          "name": "net.plainnotes.app.domain.TreatmentEpochsTest",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "core/domain/build/test-results/test/TEST-net.plainnotes.app.domain.TreatmentPeriodsTest.xml",
+          "name": "net.plainnotes.app.domain.TreatmentPeriodsTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "core/domain/build/test-results/test/TEST-net.plainnotes.app.domain.measurement.LegacyBoundaryTest.xml",
+          "name": "net.plainnotes.app.domain.measurement.LegacyBoundaryTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "core/domain/build/test-results/test/TEST-net.plainnotes.app.domain.measurement.MeasurementCoreTest.xml",
+          "name": "net.plainnotes.app.domain.measurement.MeasurementCoreTest",
+          "tests": 26,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "core/domain/build/test-results/test/TEST-net.plainnotes.app.domain.measurement.ProductionMeasurementTest.xml",
+          "name": "net.plainnotes.app.domain.measurement.ProductionMeasurementTest",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "core/domain/build/test-results/test/TEST-net.plainnotes.app.domain.measurement.SyntheticHistoryContractTest.xml",
+          "name": "net.plainnotes.app.domain.measurement.SyntheticHistoryContractTest",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "core/domain/build/test-results/test/TEST-net.plainnotes.app.domain.shadow.ShadowMeasurementAllocatorTest.xml",
+          "name": "net.plainnotes.app.domain.shadow.ShadowMeasurementAllocatorTest",
+          "tests": 23,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "pk-engine/build/test-results/test/TEST-net.plainnotes.app.pk.BaselineEligibilityTest.xml",
+          "name": "net.plainnotes.app.pk.BaselineEligibilityTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "pk-engine/build/test-results/test/TEST-net.plainnotes.app.pk.CausalEvaluationTest.xml",
+          "name": "net.plainnotes.app.pk.CausalEvaluationTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "pk-engine/build/test-results/test/TEST-net.plainnotes.app.pk.EngineTest.xml",
+          "name": "net.plainnotes.app.pk.EngineTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "pk-engine/build/test-results/test/TEST-net.plainnotes.app.pk.LabDispositionTest.xml",
+          "name": "net.plainnotes.app.pk.LabDispositionTest",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "pk-engine/build/test-results/test/TEST-net.plainnotes.app.pk.LabFitTest.xml",
+          "name": "net.plainnotes.app.pk.LabFitTest",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "pk-engine/build/test-results/test/TEST-net.plainnotes.app.pk.LiteratureValidationTest.xml",
+          "name": "net.plainnotes.app.pk.LiteratureValidationTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "pk-engine/build/test-results/test/TEST-net.plainnotes.app.pk.SublingualP0AuditTest.xml",
+          "name": "net.plainnotes.app.pk.SublingualP0AuditTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "pk-engine/build/test-results/test/TEST-net.plainnotes.app.pk.SublingualP1ATest.xml",
+          "name": "net.plainnotes.app.pk.SublingualP1ATest",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "pk-engine/build/test-results/test/TEST-net.plainnotes.app.pk.experimental.ConcentrationModelComparisonTest.xml",
+          "name": "net.plainnotes.app.pk.experimental.ConcentrationModelComparisonTest",
+          "tests": 14,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "pk-engine/build/test-results/test/TEST-net.plainnotes.app.pk.experimental.ExperimentalSlModelViewTest.xml",
+          "name": "net.plainnotes.app.pk.experimental.ExperimentalSlModelViewTest",
+          "tests": 12,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "pk-engine/build/test-results/test/TEST-net.plainnotes.app.pk.experimental.M2OnlyNumericalContractTest.xml",
+          "name": "net.plainnotes.app.pk.experimental.M2OnlyNumericalContractTest",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "pk-engine/build/test-results/test/TEST-net.plainnotes.app.pk.experimental.PreparedResearchHistoryTest.xml",
+          "name": "net.plainnotes.app.pk.experimental.PreparedResearchHistoryTest",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "pk-engine/build/test-results/test/TEST-net.plainnotes.app.pk.experimental.ResearchDisplayProtocolTest.xml",
+          "name": "net.plainnotes.app.pk.experimental.ResearchDisplayProtocolTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "pk-engine/build/test-results/test/TEST-net.plainnotes.app.pk.experimental.ResearchShapeComparisonV01Test.xml",
+          "name": "net.plainnotes.app.pk.experimental.ResearchShapeComparisonV01Test",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "pk-engine/build/test-results/test/TEST-net.plainnotes.app.pk.experimental.ResearchSublingualV01Test.xml",
+          "name": "net.plainnotes.app.pk.experimental.ResearchSublingualV01Test",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "pk-engine/build/test-results/test/TEST-net.plainnotes.app.pk.experimental.StudyAnchorsTest.xml",
+          "name": "net.plainnotes.app.pk.experimental.StudyAnchorsTest",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "pk-engine/build/test-results/test/TEST-net.plainnotes.app.pk.experimental.UnifiedComparisonPerformanceTest.xml",
+          "name": "net.plainnotes.app.pk.experimental.UnifiedComparisonPerformanceTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "pk-engine/build/test-results/test/TEST-net.plainnotes.app.pk.experimental.UnifiedModelComparisonTest.xml",
+          "name": "net.plainnotes.app.pk.experimental.UnifiedModelComparisonTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "importer/build/test-results/test/TEST-net.plainnotes.app.importer.HrtTrackerTest.xml",
+          "name": "net.plainnotes.app.importer.HrtTrackerTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "importer/build/test-results/test/TEST-net.plainnotes.app.importer.TransMemoTest.xml",
+          "name": "net.plainnotes.app.importer.TransMemoTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "tools/attachment-poc/build/test-results/test/TEST-net.plainnotes.poc.B2ImportTest.xml",
+          "name": "net.plainnotes.poc.B2ImportTest",
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "tools/attachment-poc/build/test-results/test/TEST-net.plainnotes.poc.B2InputPolicyTest.xml",
+          "name": "net.plainnotes.poc.B2InputPolicyTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "tools/attachment-poc/build/test-results/test/TEST-net.plainnotes.poc.B2StreamingMatrixTest.xml",
+          "name": "net.plainnotes.poc.B2StreamingMatrixTest",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "tools/attachment-poc/build/test-results/test/TEST-net.plainnotes.poc.B2StreamingTest.xml",
+          "name": "net.plainnotes.poc.B2StreamingTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "tools/attachment-poc/build/test-results/test/TEST-net.plainnotes.poc.CapabilityObjectTest.xml",
+          "name": "net.plainnotes.poc.CapabilityObjectTest",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "tools/attachment-poc/build/test-results/test/TEST-net.plainnotes.poc.ChunkTest.xml",
+          "name": "net.plainnotes.poc.ChunkTest",
+          "tests": 20,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "tools/attachment-poc/build/test-results/test/TEST-net.plainnotes.poc.Gate2ContextTest.xml",
+          "name": "net.plainnotes.poc.Gate2ContextTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "tools/attachment-poc/build/test-results/test/TEST-net.plainnotes.poc.ProductionDraftVectorsTest.xml",
+          "name": "net.plainnotes.poc.ProductionDraftVectorsTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "tools/attachment-poc/build/test-results/test/TEST-net.plainnotes.poc.RecoveryTest.xml",
+          "name": "net.plainnotes.poc.RecoveryTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "tools/attachment-poc/build/test-results/test/TEST-net.plainnotes.poc.SecurityReviewEvidenceTest.xml",
+          "name": "net.plainnotes.poc.SecurityReviewEvidenceTest",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      ],
+      "html_summary": []
+    },
+    {
+      "artifact_id": 12105617585,
+      "sha256": "293d0e9fa01f7621f4720bb2ba0b00108dadbd1803504ebbc4b74ec253ad2283",
+      "zip_crc": "PASS",
+      "html_summary": [
+        {
+          "path": "core/data/build/reports/androidTests/connected/debug/index.html",
+          "tests": 181,
+          "failures": 0,
+          "skipped": 0
+        },
+        {
+          "path": "app/build/reports/androidTests/connected/debug/flavors/full/index.html",
+          "tests": 264,
+          "failures": 0,
+          "skipped": 8
+        }
+      ],
+      "suites": []
+    },
+    {
+      "artifact_id": 12105623061,
+      "sha256": "5a4eb1e59d004bacc86e9ce392cb59ec3faabc1052aff288dd1e42efb6f93d64",
+      "zip_crc": "PASS",
+      "html_summary": [
+        {
+          "path": "app/build/reports/tests/testFullDebugUnitTest/index.html",
+          "tests": 1400,
+          "failures": 0,
+          "skipped": 205
+        },
+        {
+          "path": "core/data/build/reports/tests/testDebugUnitTest/index.html",
+          "tests": 243,
+          "failures": 0,
+          "skipped": 0
+        },
+        {
+          "path": "core/reminder/build/reports/tests/testDebugUnitTest/index.html",
+          "tests": 20,
+          "failures": 0,
+          "skipped": 0
+        },
+        {
+          "path": "pk-engine/build/reports/tests/test/index.html",
+          "tests": 40,
+          "failures": 0,
+          "skipped": 0
+        }
+      ],
+      "focused_classes": [
+        {
+          "path": "app/build/reports/tests/testFullDebugUnitTest/net.plainnotes.app.DrugDocumentUiTest/index.html",
+          "tests": 12,
+          "failures": 0,
+          "skipped": 0
+        },
+        {
+          "path": "app/build/reports/tests/testFullDebugUnitTest/net.plainnotes.app.DrugDocumentsTest/index.html",
+          "tests": 6,
+          "failures": 0,
+          "skipped": 0
+        },
+        {
+          "path": "app/build/reports/tests/testFullDebugUnitTest/net.plainnotes.app.MedicationReferenceMatrixTest/index.html",
+          "tests": 32,
+          "failures": 0,
+          "skipped": 0
+        },
+        {
+          "path": "app/build/reports/tests/testFullDebugUnitTest/net.plainnotes.app.PeriodStabilityTest/index.html",
+          "tests": 5,
+          "failures": 0,
+          "skipped": 0
+        },
+        {
+          "path": "app/build/reports/tests/testFullDebugUnitTest/net.plainnotes.app.PrivacyNoticeFactsTest/index.html",
+          "tests": 3,
+          "failures": 0,
+          "skipped": 0
+        },
+        {
+          "path": "app/build/reports/tests/testFullDebugUnitTest/net.plainnotes.app.PublicDocumentNavigationTest/index.html",
+          "tests": 3,
+          "failures": 0,
+          "skipped": 0
+        }
+      ],
+      "ci_screenshot_count": 384
+    }
+  ],
+  "native_browser_navigation": "NOT_RUN",
+  "manual_talkback": "NOT_RUN",
+  "physical_device": "NOT_RUN",
+  "official_distribution": "OFF",
+  "limitations": [
+    "Native suites are existing compatibility/lock/backup regressions; no claim of new document browser flow on device.",
+    "API35 App264 includes8 existing conditional skips; App full1400 includes205 existing conditional skips. Those are not PASS.",
+    "Code/sourcefda7782 passed six required checks. A later evidence-only commit still needs its own final checks."
+  ],
+  "required_check_rollup": {
+    "headRefOid": "fda7782c81f81481e93688fe62bd2788c8be5f47",
+    "statusCheckRollup": [
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-17T15:30:05Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39045146864/job/117432498252",
+        "name": "jvm",
+        "startedAt": "2026-10-17T15:28:56Z",
+        "status": "COMPLETED",
+        "workflowName": "Android and domain checks"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-17T15:30:07Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39045144160/job/117432471864",
+        "name": "jvm",
+        "startedAt": "2026-10-17T15:28:48Z",
+        "status": "COMPLETED",
+        "workflowName": "Android and domain checks"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-17T15:27:57Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39045146848/job/117432277816",
+        "name": "science-change-gate",
+        "startedAt": "2026-10-17T15:27:52Z",
+        "status": "COMPLETED",
+        "workflowName": "Science validation"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-17T15:27:57Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39045144189/job/117432270092",
+        "name": "science-change-gate",
+        "startedAt": "2026-10-17T15:27:50Z",
+        "status": "COMPLETED",
+        "workflowName": "Science validation"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-17T15:27:57Z",
+        "conclusion": "SKIPPED",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39045146848/job/117432305336",
+        "name": "research-deep",
+        "startedAt": "2026-10-17T15:27:58Z",
+        "status": "COMPLETED",
+        "workflowName": "Science validation"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-17T15:27:57Z",
+        "conclusion": "SKIPPED",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39045144189/job/117432304582",
+        "name": "research-deep",
+        "startedAt": "2026-10-17T15:27:57Z",
+        "status": "COMPLETED",
+        "workflowName": "Science validation"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-17T15:49:19Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39045146864/job/117432498192",
+        "name": "android",
+        "startedAt": "2026-10-17T15:28:56Z",
+        "status": "COMPLETED",
+        "workflowName": "Android and domain checks"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-17T15:48:51Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39045144160/job/117432471691",
+        "name": "android",
+        "startedAt": "2026-10-17T15:28:48Z",
+        "status": "COMPLETED",
+        "workflowName": "Android and domain checks"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-17T15:45:15Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39045146864/job/117432498269",
+        "name": "device-tests",
+        "startedAt": "2026-10-17T15:28:56Z",
+        "status": "COMPLETED",
+        "workflowName": "Android and domain checks"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-17T15:44:51Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39045144160/job/117432471938",
+        "name": "device-tests",
+        "startedAt": "2026-10-17T15:28:48Z",
+        "status": "COMPLETED",
+        "workflowName": "Android and domain checks"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-17T15:35:57Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39045146864/job/117432497938",
+        "name": "attachment-poc-compatibility (26)",
+        "startedAt": "2026-10-17T15:28:55Z",
+        "status": "COMPLETED",
+        "workflowName": "Android and domain checks"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-17T15:36:27Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39045144160/job/117432471944",
+        "name": "attachment-poc-compatibility (26)",
+        "startedAt": "2026-10-17T15:28:48Z",
+        "status": "COMPLETED",
+        "workflowName": "Android and domain checks"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-17T15:36:23Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39045146864/job/117432498145",
+        "name": "attachment-poc-compatibility (29)",
+        "startedAt": "2026-10-17T15:28:56Z",
+        "status": "COMPLETED",
+        "workflowName": "Android and domain checks"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-17T15:36:16Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39045144160/job/117432471889",
+        "name": "attachment-poc-compatibility (29)",
+        "startedAt": "2026-10-17T15:28:48Z",
+        "status": "COMPLETED",
+        "workflowName": "Android and domain checks"
+      }
+    ]
+  }
+}

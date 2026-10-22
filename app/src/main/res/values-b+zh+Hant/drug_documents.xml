@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="drug_docs_title">商品文件</string>
+    <string name="drug_docs_rcp">RCP — 產品特性概要</string>
+    <string name="drug_docs_notice">Notice — 患者說明書</string>
+    <string name="drug_docs_unverified">尚未核實這份已儲存引用的文件入口及正文。</string>
+    <string name="drug_docs_entry_verified">商品頁面入口核實日期：%1$s。</string>
+    <string name="drug_docs_body_not_verified">入口核實不代表文件全文已經核實。</string>
+    <string name="drug_docs_distribution_off">官方離線文件尚未啟用。使用者填寫的引用不代表官方核實。</string>
+    <string name="drug_docs_no_advice">這些引用不會設定您的劑量、給藥途徑或治療計畫。</string>
+    <string name="drug_docs_invalid_link">填寫的連結不符合允許的公共商品頁面位址。</string>
+    <string name="drug_docs_access_changed">存取狀態已改變。請返回已解鎖的應用程式後重試。</string>
+    <string name="drug_docs_external">將使用瀏覽器開啟填寫的公共商品頁面。連結不包含服藥記錄。瀏覽器與網站可以得知您瀏覽的頁面，並依其隱私條款處理您在網站填寫的資訊。後續重新導向不受本應用程式控制。頁面可能已變更或無法存取。</string>
+</resources>

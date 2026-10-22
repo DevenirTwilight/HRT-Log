@@ -1,0 +1,18 @@
+{
+  "request_url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/60021127/extrait",
+  "checked_on": "2026-10-17",
+  "http_status_lines": [
+    "HTTP/1.1 200 OK",
+    "HTTP/2 200 "
+  ],
+  "bytes": 175755,
+  "sha256": "1bae0b95c3a2de070975cb9609a73c2d99fa528c0f7f5a267bfc4220fbf77315",
+  "rcp_panel_id_present": true,
+  "notice_panel_id_present": true,
+  "page_identity_review": "UNVERIFIED_IN_THIS_CHECK",
+  "body_medical_review": "UNVERIFIED",
+  "body_translation_review": "UNVERIFIED",
+  "text_redistribution_rights": "UNKNOWN",
+  "android_distribution": "OFF",
+  "note": "Maintainer-only page availability/DOM-marker check. HTTP200/panel presence is not a content or medical review. No original clinical body copied into git/APK."
+}

@@ -1,7 +1,5 @@
 package net.plainnotes.app.ui
 
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
@@ -12,7 +10,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -106,8 +103,6 @@ import java.time.LocalDate
 }
 
 @Composable fun ReferenceProductDetails(product:UserReferenceProduct) {
-    val context=LocalContext.current
-    var external by remember {mutableStateOf(false)};var failed by remember {mutableStateOf(false)}
     Column(verticalArrangement=Arrangement.spacedBy(8.dp),modifier=Modifier.fillMaxWidth().testTag("reference-details")) {
         Text(product.name,style=MaterialTheme.typography.titleLarge)
         Text(stringResource(R.string.ref2_unverified))
@@ -118,16 +113,10 @@ import java.time.LocalDate
             Text(stringResource(label),style=MaterialTheme.typography.labelLarge)
             Text(value?.takeIf {it.isNotBlank()} ?: stringResource(R.string.ref2_unknown))
         }
-        Text(stringResource(R.string.ref2_status_unknown));Text(stringResource(R.string.ref2_documents_unknown))
-        product.sourceUrl?.let { url->
-            Text(url)
-            TextButton(onClick={external=true}){Text(stringResource(R.string.ref2_open_source))}
-        }
-        if(failed)Text(stringResource(R.string.ref2_browser_error),color=MaterialTheme.colorScheme.error)
+        Text(stringResource(R.string.ref2_status_unknown))
+        DrugDocumentPanel(product)
+        PublicProductPageAction(product)
     }
-    if(external)AlertDialog(onDismissRequest={external=false},title={Text(stringResource(R.string.ref2_open_source))},text={Text(stringResource(R.string.ref2_external))},
-        confirmButton={TextButton(onClick={external=false;failed=runCatching {context.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(product.sourceUrl)))}.isFailure}){Text(stringResource(R.string.ref2_open))}},
-        dismissButton={TextButton(onClick={external=false}){Text(stringResource(R.string.cancel))}})
 }
 
 @Composable private fun UserReferenceForm(onCancel:()->Unit,onPreview:(UserReferenceProduct)->Unit) {
