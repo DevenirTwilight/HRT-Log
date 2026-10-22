@@ -1,3 +1,11 @@
+## #102已合并并核验三API，继续附件输入边界 — 2026-10-22
+
+#102六必需检查全PASS、无未解决讨论，普通受保护合并e4ebab2ec4af1ed1b98038c1be1dc4e9c9a4672c。原PR39839523615官方26/29/35 ZIP的SHA/CRC与Foundation原HTML均已核验：每API18/0fail/0skip，新增两个实际PFD测试及原Room真实提交/撤权/备份/feature0合同实际执行。完整原始证据在docs/med02-resource-evidence-20261022分支的docs/medical-attachments/2026-10-22/native；合并后Android39843996907在途、Science39843996985 SUCCESS，后续状态需继续查。
+
+继续从该主线独立分支feature/med02-bounded-input-20261022（/workspace/HRT-Log-med02-input）实施AttachmentInputStream。已有实际字节上限、最多一字节超限探测、零进度/非法返回拒绝、迟到读取清零、单reader取消不误伤父级/兄弟及错误清理；不使用provider size，不创建磁盘明文或持久URI。首轮9输入+10资源+5原session测试通过，完整domain171/poc63零fail/skip；随后补一项1872情景的独立边界oracle，最终domain回归在途，尚不能报最终计数。新增共享Foundation两真实管道输入合同与native-only可靠管道closeWithError传播合同，Robolectric/Android源码编译在途。
+
+未变正式协议/key/Room/备份/AppLock或文件选择器，附件功能仍OFF。输入传输成功不是格式安全、完整认证或数据库提交，不能据此宣称文件库开放。下一步核本地新合同→提交/PR/六必需CI及三API证据→保护合并，不取消有效任务、不挑绿、不以另写方案代替可做的实现。
+
 ## 医疗附件资源生命周期：225项JVM与69隔离PASS；Android验证在途 — 2026-10-22
 
 已实现登记资源的撤权清理、父子取消、一次关闭、晚到注册拒绝并清理、异常汇总与失败保留；清理在权限监视器外执行。初轮7项5FAIL和新增锁顺序反例1FAIL均保留；修复后domain162（新10+原session5包含在内）与attachment-poc63全部0fail/error/skip，隔离Python69 PASS。未改AppLock、Room、备份、密码协议或入口，非完整文件库实现。当前共享Foundation合同另增两项真实PFD pipe关闭/拒绝交接检查，Robolectric与native源码编译在途，未验不报PASS。证据docs/medical-attachments/2026-10-22；当前已完成组及时推送，不等全轮结束才保存。

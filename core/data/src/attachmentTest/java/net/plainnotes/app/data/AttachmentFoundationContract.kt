@@ -55,6 +55,37 @@ abstract class AttachmentFoundationContract {
             assertEquals(0L,runBlocking {db.attachments().current().single().feature_enabled})
         } finally { input.close();pipe[1].close();session.revoke() }
     }
+    @Test fun boundedUnknownLengthPipeReadsActualBytesWithoutActivatingAttachments() {
+        val session=net.plainnotes.app.domain.AttachmentSession(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch))
+        val parent=session.issue();val pipe=android.os.ParcelFileDescriptor.createPipe()
+        val rawInput=android.os.ParcelFileDescriptor.AutoCloseInputStream(pipe[0]);val fd=pipe[0].fileDescriptor
+        try {
+            assertEquals(-1L,pipe[0].statSize)
+            android.os.ParcelFileDescriptor.AutoCloseOutputStream(pipe[1]).use {it.write(byteArrayOf(1,2,3))}
+            net.plainnotes.app.domain.AttachmentInputStream.open(parent,rawInput,3).use { input ->
+                val bytes=ByteArray(8);assertEquals(3,input.read(bytes));assertEquals(-1,input.read(bytes))
+                assertEquals(3L,input.bytesRead)
+            }
+            assertFalse(fd.valid());parent.check()
+            assertEquals(0L,runBlocking {db.attachments().current().single().feature_enabled})
+        } finally {rawInput.close();pipe[1].close();session.revoke()}
+    }
+    @Test fun boundedPipeRejectsOversizeAndDoesNotLeakPartialRead() {
+        val session=net.plainnotes.app.domain.AttachmentSession(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch))
+        val pipe=android.os.ParcelFileDescriptor.createPipe()
+        val rawInput=android.os.ParcelFileDescriptor.AutoCloseInputStream(pipe[0]);val fd=pipe[0].fileDescriptor
+        try {
+            android.os.ParcelFileDescriptor.AutoCloseOutputStream(pipe[1]).use {it.write(byteArrayOf(1,2,3,4,5))}
+            val input=net.plainnotes.app.domain.AttachmentInputStream.open(session.issue(),rawInput,4)
+            val bytes=ByteArray(8) {9}
+            try {input.read(bytes);fail("Oversized pipe accepted")} catch(expected:java.io.IOException) {
+                assertEquals("Attachment input limit exceeded",expected.message)
+            }
+            assertArrayEquals(ByteArray(5),bytes.copyOfRange(0,5));assertEquals(0L,input.bytesRead)
+            assertFalse(fd.valid())
+            assertEquals(0L,runBlocking {db.attachments().current().single().feature_enabled})
+        } finally {rawInput.close();pipe[1].close();session.revoke()}
+    }
     @Test fun room11KeepsThreeAttachmentDomainsDefaultDisabled()=runBlocking {
         assertEquals(13,raw.version)
         assertNotEquals(scope.dataset,scope.logicalVault);assertNotEquals(scope.dataset,scope.epoch)

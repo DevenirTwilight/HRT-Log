@@ -1,0 +1,35 @@
+{
+  "baseline": "e4ebab2ec4af1ed1b98038c1be1dc4e9c9a4672c",
+  "state": "CODED_LOCAL_JVM_PASS_ANDROID_PENDING",
+  "tests": {
+    "domain": {
+      "tests": 172,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "attachment_poc": {
+      "tests": 63,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "boundary_oracle_scenarios": 1872,
+  "python_isolation": {
+    "tests": 69,
+    "status": "PASS"
+  },
+  "android_local": "IN_PROGRESS",
+  "api26_29_35": "NOT_RUN",
+  "formal_import": "OFF_NOT_IMPLEMENTED",
+  "format_schema_backup_permissions_version": "UNCHANGED",
+  "physical_arm": "NOT_RUN",
+  "crypto_external_review": "NOT_REVIEWED_EXTERNALLY",
+  "source_sha256": {
+    "core/domain/src/main/kotlin/net/plainnotes/app/domain/AttachmentInputStream.kt": "f997cead5d471bb886e8c0829610aea99286d243285f803f88054106f4a39266",
+    "core/domain/src/test/kotlin/net/plainnotes/app/domain/AttachmentInputStreamTest.kt": "c52420533fa6882fab6649c7bf29370beea0c8e2758d545e40ac8f07d9d010f2",
+    "core/data/src/attachmentTest/java/net/plainnotes/app/data/AttachmentFoundationContract.kt": "e6511bdecabefbc22d59fadc1aa5add4d98ed0d62696d5a439f2011cf1aef761",
+    "core/data/src/androidTest/java/net/plainnotes/app/data/gate2/Gate2SafAndroidTest.kt": "d2ac3f55480073c0c4d27c458618462439fe0c3b06659b7bf561b6a52c183f51"
+  }
+}
