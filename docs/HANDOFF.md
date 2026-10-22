@@ -1,3 +1,7 @@
+## #104最终源真实API29同样通过 — 2026-10-22
+
+749bacb5 PR39851830683，API29官方artifact12458776734 SHA256/CRC及原HTML核验：Foundation32/0fail/0skip、Key2/0/0，新增完整认证/oracle/key绑定方法实际passed；原件保留storage-native/api29*。真实26与29都通过，不等于35或完整Android已过，后两者仍在途。源没有再改，未重新跑分，保护自动合并等待全部最终检查。
+
 ## #104最终源真实API26通过，原始报告已核验 — 2026-10-22
 
 749bacb5 PR39851830683的API26 job120080379010 SUCCESS；官方artifact12458182375 SHA256/CRC均核验。Foundation32/0fail/0skip、AttachmentKeyAndroidTest2/0/0，新增生产adapter Keystore角色/绑定/错tag/alias丢失/轮换以及完整认证与双向oracle方法原HTML明确passed，已保存storage-native。不是仅凭job绿计数。提取脚本首轮用了不存在的ignored标签，随后按实际skipped标签核验；不是Android测试失败。API29/35与完整android仍在途，不能提前报整PR通过。父主线#103合并后Android39850289528及Science39850289447最终SUCCESS。
