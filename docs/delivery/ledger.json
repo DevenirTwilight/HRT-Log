@@ -1,121 +1,134 @@
 {
- "policy": "Owner decision D-4 (REQUIREMENTS §67, 2026-10-12): every APK actually delivered to the owner gets a strictly larger versionCode than every earlier delivery, keeps applicationId and the original signing certificate, and is recorded here with its source commit, APK SHA-256 and certificate SHA-256. Append-only; checked by scripts/delivery_ledger.py. Development commits that are never delivered do not bump versionCode. Private download links, keys and passwords never go here.",
- "application_id": "net.plainnotes.app",
- "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
- "pre_policy": {
-  "max_version_code": 25,
-  "note": "Before D-4, several different privately delivered APKs (2026-10-09 to 2026-10-12, e.g. APK 6cda8775…, 2a34afa0…, d9d874e8…) all used versionCode 25 / versionName 0.2.0, so the installed build cannot be told apart by version alone. The public GitHub Release v0.2.0 (2026-10-06) used versionCode 5. Their source and APK hashes stay in the cited records; they are not copied here.",
-  "evidence": [
-   "docs/releases/0.2.0-hotfix.md (public v0.2.0: versionCode 5)",
-   "docs/delivery/full-apk-owner-test-2026-10.json (default branch, source 5133a61, APK 6cda8775…)",
-   "docs/HANDOFF.md on the default branch (build25 universal/arm64/compact deliveries)",
-   "docs/HANDOFF.md on PR #19 branch feature/unified-concentration-20261011 (last: source e98d5e0, APK d9d874e8…)"
+  "policy": "Owner decision D-4 (REQUIREMENTS §67, 2026-10-12): every APK actually delivered to the owner gets a strictly larger versionCode than every earlier delivery, keeps applicationId and the original signing certificate, and is recorded here with its source commit, APK SHA-256 and certificate SHA-256. Append-only; checked by scripts/delivery_ledger.py. Development commits that are never delivered do not bump versionCode. Private download links, keys and passwords never go here.",
+  "application_id": "net.plainnotes.app",
+  "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
+  "pre_policy": {
+    "max_version_code": 25,
+    "note": "Before D-4, several different privately delivered APKs (2026-10-09 to 2026-10-12, e.g. APK 6cda8775…, 2a34afa0…, d9d874e8…) all used versionCode 25 / versionName 0.2.0, so the installed build cannot be told apart by version alone. The public GitHub Release v0.2.0 (2026-10-06) used versionCode 5. Their source and APK hashes stay in the cited records; they are not copied here.",
+    "evidence": [
+      "docs/releases/0.2.0-hotfix.md (public v0.2.0: versionCode 5)",
+      "docs/delivery/full-apk-owner-test-2026-10.json (default branch, source 5133a61, APK 6cda8775…)",
+      "docs/HANDOFF.md on the default branch (build25 universal/arm64/compact deliveries)",
+      "docs/HANDOFF.md on PR #19 branch feature/unified-concentration-20261011 (last: source e98d5e0, APK d9d874e8…)"
+    ]
+  },
+  "deliveries": [
+    {
+      "date": "2026-10-13T16:22:36.182278Z",
+      "version_code": 26,
+      "version_name": "0.2.0",
+      "application_id": "net.plainnotes.app",
+      "source_sha": "c72531027a4d9782ea0a31dc181acd238e1c83fe",
+      "source_origin": "git",
+      "source_dirty": false,
+      "apk_sha256": "0c6bd9132ab15ca7625f1da19b59c1c9450cf4cb0518b15100e30396c5ed3fa0",
+      "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
+      "file_name": "HRT-Log-build26-B4D-full-official.apk",
+      "channel": "google-drive-owner-only"
+    },
+    {
+      "date": "2026-10-16T02:57:00Z",
+      "version_code": 27,
+      "version_name": "0.2.0",
+      "application_id": "net.plainnotes.app",
+      "source_sha": "2ab7a0c84aab47d38fb84d90520e67d86b8a5de1",
+      "source_origin": "git",
+      "source_dirty": false,
+      "apk_sha256": "6944546a6fb2285fbb7cbeaa038dd0340cd1a1bd8237acc0b10b0cd5b1798f56",
+      "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
+      "file_name": "HRT-Log-build27-UI-phase-full-official.apk",
+      "channel": "claude-session-private-file"
+    },
+    {
+      "date": "2026-10-16T06:25:12Z",
+      "version_code": 28,
+      "version_name": "0.2.0",
+      "application_id": "net.plainnotes.app",
+      "source_sha": "1e8754e9bab8b01034cb3de22ceaf9dc61a1438a",
+      "source_origin": "git",
+      "source_dirty": false,
+      "apk_sha256": "bc5bbcf0f4e1ae6865e16c2fba7a550e0828b290ed89b7180fd90bdd7930b210",
+      "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
+      "file_name": "HRT-Log-build28-UI04-full-official.apk",
+      "channel": "claude-session-private-file"
+    },
+    {
+      "date": "2026-10-17T18:00:00Z",
+      "version_code": 29,
+      "version_name": "0.2.0",
+      "application_id": "net.plainnotes.app",
+      "source_sha": "76627bfe215987122666b38ea7a42ee08731cdde",
+      "source_origin": "git",
+      "source_dirty": false,
+      "apk_sha256": "0d950bbb4bb281089318e080e3272400498b48cd094f4ffb4675fbabe6f93201",
+      "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
+      "file_name": "plainnotes-0.2.0-full.apk",
+      "channel": "public-github-release-v0.2.0"
+    },
+    {
+      "date": "2026-10-18T11:00:00Z",
+      "version_code": 30,
+      "version_name": "0.2.0",
+      "application_id": "net.plainnotes.app",
+      "source_sha": "dfb21c79d23c053f0d0e0f40242aa85db12f6a1c",
+      "source_origin": "git",
+      "source_dirty": false,
+      "apk_sha256": "f0e209f1a08c1bb6a2c65c907ecb20d365ab6c52d70127abe5e312c60c6703c8",
+      "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
+      "file_name": "HRT-Log-build30-ChinaBetaP0-full-official.apk",
+      "channel": "claude-session-private-file"
+    },
+    {
+      "date": "2026-10-18T15:10:00Z",
+      "version_code": 31,
+      "version_name": "0.2.0",
+      "application_id": "net.plainnotes.app",
+      "source_sha": "2a6d0642d273e12c8c64f8896bfa07fb5c8246a0",
+      "source_origin": "git",
+      "source_dirty": false,
+      "apk_sha256": "7217a2a74033c79fd272611a8e6e83b6536dadea2b1c34f0099d986e240b6741",
+      "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
+      "file_name": "hrt-log-build31-full-universal-official-2a6d0642.apk",
+      "channel": "claude-session-private-file"
+    },
+    {
+      "date": "2026-10-18T17:40:00Z",
+      "version_code": 32,
+      "version_name": "0.2.0",
+      "application_id": "net.plainnotes.app",
+      "source_sha": "746bb2e91f86e1eccbccb852cdfecba0683aa5f7",
+      "source_origin": "git",
+      "source_dirty": false,
+      "apk_sha256": "b374ce232640dd100e326f15444b0b4cb8f8c32024c60235dd7cbdd937051b27",
+      "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
+      "file_name": "hrt-log-build32-full-universal-official-746bb2e9.apk",
+      "channel": "claude-session-private-file"
+    },
+    {
+      "date": "2026-10-19T12:33:33.348781+00:00",
+      "version_code": 33,
+      "version_name": "0.2.0",
+      "application_id": "net.plainnotes.app",
+      "source_sha": "219bbf32b78196c611aca1199da27d85ebb469c5",
+      "source_origin": "git",
+      "source_dirty": false,
+      "apk_sha256": "cd824d4945acd7a02cea5fa7324b825443c2c3ed2c241bdb267e967abf3fce93",
+      "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
+      "file_name": "HRT-Log-build33-full-official.apk",
+      "channel": "google-drive-owner-only"
+    },
+    {
+      "date": "2026-10-22T08:08:02.119197+00:00",
+      "version_code": 34,
+      "version_name": "0.2.0",
+      "application_id": "net.plainnotes.app",
+      "source_sha": "7e0a894767281c06f5e8dbed4dced2aa926d8d76",
+      "source_origin": "git",
+      "source_dirty": false,
+      "apk_sha256": "e0a9cffab6bc9e0d55228f866a096e2b47fc25352a3920cdc5d331a4d0335e41",
+      "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
+      "file_name": "HRT-Log-build34-full-official.apk",
+      "channel": "claude-session-private-file"
+    }
   ]
- },
- "deliveries": [
-  {
-   "date": "2026-10-13T16:22:36.182278Z",
-   "version_code": 26,
-   "version_name": "0.2.0",
-   "application_id": "net.plainnotes.app",
-   "source_sha": "c72531027a4d9782ea0a31dc181acd238e1c83fe",
-   "source_origin": "git",
-   "source_dirty": false,
-   "apk_sha256": "0c6bd9132ab15ca7625f1da19b59c1c9450cf4cb0518b15100e30396c5ed3fa0",
-   "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
-   "file_name": "HRT-Log-build26-B4D-full-official.apk",
-   "channel": "google-drive-owner-only"
-  },
-  {
-   "date": "2026-10-16T02:57:00Z",
-   "version_code": 27,
-   "version_name": "0.2.0",
-   "application_id": "net.plainnotes.app",
-   "source_sha": "2ab7a0c84aab47d38fb84d90520e67d86b8a5de1",
-   "source_origin": "git",
-   "source_dirty": false,
-   "apk_sha256": "6944546a6fb2285fbb7cbeaa038dd0340cd1a1bd8237acc0b10b0cd5b1798f56",
-   "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
-   "file_name": "HRT-Log-build27-UI-phase-full-official.apk",
-   "channel": "claude-session-private-file"
-  },
-  {
-   "date": "2026-10-16T06:25:12Z",
-   "version_code": 28,
-   "version_name": "0.2.0",
-   "application_id": "net.plainnotes.app",
-   "source_sha": "1e8754e9bab8b01034cb3de22ceaf9dc61a1438a",
-   "source_origin": "git",
-   "source_dirty": false,
-   "apk_sha256": "bc5bbcf0f4e1ae6865e16c2fba7a550e0828b290ed89b7180fd90bdd7930b210",
-   "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
-   "file_name": "HRT-Log-build28-UI04-full-official.apk",
-   "channel": "claude-session-private-file"
-  },
-  {
-   "date": "2026-10-17T18:00:00Z",
-   "version_code": 29,
-   "version_name": "0.2.0",
-   "application_id": "net.plainnotes.app",
-   "source_sha": "76627bfe215987122666b38ea7a42ee08731cdde",
-   "source_origin": "git",
-   "source_dirty": false,
-   "apk_sha256": "0d950bbb4bb281089318e080e3272400498b48cd094f4ffb4675fbabe6f93201",
-   "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
-   "file_name": "plainnotes-0.2.0-full.apk",
-   "channel": "public-github-release-v0.2.0"
-  },
-  {
-   "date": "2026-10-18T11:00:00Z",
-   "version_code": 30,
-   "version_name": "0.2.0",
-   "application_id": "net.plainnotes.app",
-   "source_sha": "dfb21c79d23c053f0d0e0f40242aa85db12f6a1c",
-   "source_origin": "git",
-   "source_dirty": false,
-   "apk_sha256": "f0e209f1a08c1bb6a2c65c907ecb20d365ab6c52d70127abe5e312c60c6703c8",
-   "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
-   "file_name": "HRT-Log-build30-ChinaBetaP0-full-official.apk",
-   "channel": "claude-session-private-file"
-  },
-  {
-   "date": "2026-10-18T15:10:00Z",
-   "version_code": 31,
-   "version_name": "0.2.0",
-   "application_id": "net.plainnotes.app",
-   "source_sha": "2a6d0642d273e12c8c64f8896bfa07fb5c8246a0",
-   "source_origin": "git",
-   "source_dirty": false,
-   "apk_sha256": "7217a2a74033c79fd272611a8e6e83b6536dadea2b1c34f0099d986e240b6741",
-   "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
-   "file_name": "hrt-log-build31-full-universal-official-2a6d0642.apk",
-   "channel": "claude-session-private-file"
-  },
-  {
-   "date": "2026-10-18T17:40:00Z",
-   "version_code": 32,
-   "version_name": "0.2.0",
-   "application_id": "net.plainnotes.app",
-   "source_sha": "746bb2e91f86e1eccbccb852cdfecba0683aa5f7",
-   "source_origin": "git",
-   "source_dirty": false,
-   "apk_sha256": "b374ce232640dd100e326f15444b0b4cb8f8c32024c60235dd7cbdd937051b27",
-   "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
-   "file_name": "hrt-log-build32-full-universal-official-746bb2e9.apk",
-   "channel": "claude-session-private-file"
-  },
-  {
-   "date": "2026-10-19T12:33:33.348781+00:00",
-   "version_code": 33,
-   "version_name": "0.2.0",
-   "application_id": "net.plainnotes.app",
-   "source_sha": "219bbf32b78196c611aca1199da27d85ebb469c5",
-   "source_origin": "git",
-   "source_dirty": false,
-   "apk_sha256": "cd824d4945acd7a02cea5fa7324b825443c2c3ed2c241bdb267e967abf3fce93",
-   "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
-   "file_name": "HRT-Log-build33-full-official.apk",
-   "channel": "google-drive-owner-only"
-  }
- ]
 }
