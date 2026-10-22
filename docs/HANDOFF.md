@@ -1,3 +1,7 @@
+## #104代码复核：资源边界与依赖声明 — 2026-10-22
+
+复核将64KiB工作缓冲分配移到资源已登记且有finally清理的范围内；分配异常也会关闭移交的源/目标/channel并清除原始DEK，不以System.gc或扩大heap解决。THIRD_PARTY_NOTICES同步反映新runtime声明，未放宽现有R8发布隔离守卫；正式启用时仍需补齐适用应用内许可。此为必要源码调整，旧bbc的本地32项仍只归属旧源码，新最终提交需重跑相关回归和完整CI，不借旧绿冒充新源通过。
+
 ## 默认OFF附件crypto writer/reader与设备key适配已编码，测试在途 — 2026-10-22
 
 分支feature/med02-object-store-20261022；先行设计13fbf748已推送。新增AttachmentObjectContext、AttachmentObjectStreams和AttachmentDeviceKeys：使用Tink1.23公共key/primitive API，流式密文写出，完整cipher/plain承诺和AEAD严格EOF后才给同channel reader；设备stage/active独立alias、显式provision、unwrap绝不创建key。原型subtle API只作独立测试oracle。没有文件路径协调器/SQL发布/持久quota、AppLock接线或正式备份，不能声称完整文件库已可用。

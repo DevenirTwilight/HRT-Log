@@ -72,12 +72,13 @@ internal object AttachmentObjectStreams {
             @Synchronized override fun close() { if (!closed) { closed=true; source.close() } }
         }
         var primary: Throwable? = null
-        val buffer = ByteArray(65536)
+        var ownedBuffer: ByteArray? = null
         try {
             val owner = parent.fork().also { child = it }
             owner.own(sink)
             input = AttachmentInputStream.open(owner, ownedSource, maximum)
             require(maximum in 1..MAXIMUM_BYTES)
+            val buffer = ByteArray(65536).also { ownedBuffer = it }
             val sha = digest()
             primitive(rawDek).newEncryptingStream(sink, context.encode()).use { encrypted ->
                 while (true) {
@@ -91,7 +92,7 @@ internal object AttachmentObjectStreams {
         } catch (failure: Throwable) {
             primary = failure; throw failure
         } finally {
-            rawDek.fill(0); buffer.fill(0)
+            rawDek.fill(0); ownedBuffer?.fill(0)
             // Never mask an IO/auth error, and never let one cleanup stop the others.
             try { cleanup(child?.let { AutoCloseable { it.close() } }, input, ownedSource, sink) }
             catch (failure: Throwable) { if (primary == null) throw failure else primary.addSuppressed(failure) }
@@ -105,9 +106,10 @@ internal object AttachmentObjectStreams {
         channel: SeekableByteChannel): Reader {
         var child: AttachmentSession.Capability? = null
         val owned = OwnedChannel(channel)
-        val buffer = ByteArray(65536)
+        var ownedBuffer: ByteArray? = null
         try {
             val owner = parent.fork().also { child = it }; owner.own(owned)
+            val buffer = ByteArray(65536).also { ownedBuffer = it }
             val aead = primitive(rawDek)
             if (owned.size() != expected.ciphertextBytes) throw IOException("Ciphertext length mismatch")
             owned.position(0)
@@ -144,7 +146,7 @@ internal object AttachmentObjectStreams {
         } catch (failure: Throwable) {
             try { cleanup(child?.let { AutoCloseable { it.close() } }, owned) } catch (error: Throwable) { failure.addSuppressed(error) }
             throw failure
-        } finally { rawDek.fill(0); buffer.fill(0) }
+        } finally { rawDek.fill(0); ownedBuffer?.fill(0) }
     }
     class Reader internal constructor(private val authority: AttachmentSession.Capability,
         private val channel: SeekableByteChannel, val size: Long) : AutoCloseable {
