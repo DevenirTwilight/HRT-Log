@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.BdpmReferenceFlowTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-10-22T11:30:01.689Z" hostname="0a7cae0c7757" time="19.731">
+  <properties/>
+  <testcase name="realAppEntrySelectsOfficialPackageConfirmsAndReopensWithoutDoseStockOrProfileChanges[en/320dp/2x]" classname="net.plainnotes.app.BdpmReferenceFlowTest" time="10.126"/>
+  <testcase name="unsavedDraftCanBrowseGenuineProductButCannotLinkAndReturnsUnchanged[en/320dp/2x]" classname="net.plainnotes.app.BdpmReferenceFlowTest" time="1.435"/>
+  <testcase name="realAppEntrySelectsOfficialPackageConfirmsAndReopensWithoutDoseStockOrProfileChanges[fr-rFR/320dp/2x]" classname="net.plainnotes.app.BdpmReferenceFlowTest" time="1.805"/>
+  <testcase name="unsavedDraftCanBrowseGenuineProductButCannotLinkAndReturnsUnchanged[fr-rFR/320dp/2x]" classname="net.plainnotes.app.BdpmReferenceFlowTest" time="1.108"/>
+  <testcase name="realAppEntrySelectsOfficialPackageConfirmsAndReopensWithoutDoseStockOrProfileChanges[zh-rCN/320dp/2x]" classname="net.plainnotes.app.BdpmReferenceFlowTest" time="1.576"/>
+  <testcase name="unsavedDraftCanBrowseGenuineProductButCannotLinkAndReturnsUnchanged[zh-rCN/320dp/2x]" classname="net.plainnotes.app.BdpmReferenceFlowTest" time="0.991"/>
+  <testcase name="realAppEntrySelectsOfficialPackageConfirmsAndReopensWithoutDoseStockOrProfileChanges[zh-rTW/320dp/2x]" classname="net.plainnotes.app.BdpmReferenceFlowTest" time="1.391"/>
+  <testcase name="unsavedDraftCanBrowseGenuineProductButCannotLinkAndReturnsUnchanged[zh-rTW/320dp/2x]" classname="net.plainnotes.app.BdpmReferenceFlowTest" time="0.98"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

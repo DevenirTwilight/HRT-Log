@@ -1,6 +1,8 @@
 package net.plainnotes.app
 
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.ui.platform.testTag
 import androidx.compose.runtime.*
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -59,6 +61,9 @@ abstract class BdpmReferenceFlowContract {
             ui.onNodeWithTag("drug-center-list").performScrollToNode(hasTestTag("drug-center-medication:$id"));ui.onNodeWithTag("drug-center-medication:$id").performClick()
             search("PROVAMES");click("bdpm-result:65421374");click("bdpm-package:3400935479341")
             ui.waitUntil(30000){idlePlatform();ui.onAllNodesWithTag("reference-select").fetchSemanticsNodes().isNotEmpty()}
+            ui.onNodeWithTag("reference-select").performClick()
+            ui.onNodeWithTag("reference-confirm-cancel").performClick()
+            assertNull(runBlocking{repo.medicationReferenceState(id)}.reference)
             ui.onNodeWithTag("reference-select").performClick();ui.onNodeWithTag("reference-confirm").performClick()
             ui.waitUntil(15000){
                 idlePlatform()
@@ -95,4 +100,47 @@ abstract class BdpmReferenceFlowContract {
             assertTrue(runBlocking{repo.medications()}.isEmpty())
         }finally{scope.cancel()}
     }
+    @Test fun realFilesystemFailureRetryAndNoMatchAreDistinctAndPreserveUserData() {
+        val context=ui.activity
+        val scope=CoroutineScope(SupervisorJob()+Dispatchers.Main)
+        val sentinel=java.io.File(context.cacheDir,"synthetic-bdpm-parent-${System.nanoTime()}").apply{writeText("SYNTHETIC sentinel")}
+        var ready=false
+        val guarded=object:android.content.ContextWrapper(context) {
+            override fun getApplicationContext():android.content.Context=this
+            override fun getNoBackupFilesDir():java.io.File=if(ready)context.noBackupFilesDir else sentinel
+        }
+        val catalogue=net.plainnotes.app.ui.BdpmCatalogueUiState(BdpmCatalogue(guarded),scope)
+        val before=runBlocking {
+            db.dao().insertMedication(MedicationEntity(name="SYNTHETIC preserved during catalogue failure",molecule="OTHER",unit="MG",dose_per_intake=0.5,container_capacity=28.0,site_rotation=false,notifications_on=false,active=false,sort_order=0))
+            repo.medications()
+        }
+        try {
+            ui.setContent{NotesTheme(ThemeMode.LIGHT){
+                androidx.compose.foundation.lazy.LazyColumn(androidx.compose.ui.Modifier.fillMaxSize().testTag("reference-screen")) {
+                    item("catalogue"){net.plainnotes.app.ui.BdpmCataloguePanel(catalogue){error("No association requested")}}
+                }
+            }}
+            ui.onNodeWithTag("reference-screen").performScrollToNode(hasTestTag("bdpm-status"))
+            ui.onNodeWithTag("bdpm-status").assertTextEquals(context.getString(R.string.bdpm_initial))
+            ui.onNodeWithTag("reference-screen").performScrollToNode(hasTestTag("bdpm-search"))
+            ui.onNodeWithTag("bdpm-search").performTextInput("PROVAMES");click("bdpm-search-go")
+            ui.waitUntil(15000){idlePlatform();catalogue.phase=="UNAVAILABLE"}
+            ui.onNodeWithTag("reference-screen").performScrollToNode(hasTestTag("bdpm-status"))
+            ui.onNodeWithTag("bdpm-status").assertTextEquals(context.getString(R.string.bdpm_unavailable))
+            assertEquals("SYNTHETIC sentinel",sentinel.readText())
+            ready=true
+            ui.onNodeWithTag("reference-screen").performScrollToNode(hasText(context.getString(R.string.ref2_reload)))
+            ui.onNodeWithText(context.getString(R.string.ref2_reload)).performClick()
+            ui.waitUntil(30000){idlePlatform();catalogue.phase=="RESULTS"}
+            ui.onNodeWithTag("bdpm-result:65421374").assertExists()
+            ui.onNodeWithTag("reference-screen").performScrollToNode(hasTestTag("bdpm-search"))
+            ui.onNodeWithTag("bdpm-search").performTextReplacement("NO_MATCH_SYNTHETIC_473029");click("bdpm-search-go")
+            ui.waitUntil(15000){idlePlatform();catalogue.phase=="EMPTY"}
+            ui.onNodeWithTag("reference-screen").performScrollToNode(hasTestTag("bdpm-status"))
+            ui.onNodeWithTag("bdpm-status").assertTextEquals(context.getString(R.string.bdpm_empty))
+            ui.onNodeWithTag("bdpm-result:65421374").assertDoesNotExist()
+            assertEquals(before,runBlocking{repo.medications()});assertTrue(runBlocking{repo.records()}.isEmpty())
+        }finally{scope.cancel();sentinel.delete()}
+    }
+
 }

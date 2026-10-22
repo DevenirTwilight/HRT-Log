@@ -16,4 +16,5 @@
     <string name="bdpm_package_boundary">选择包装仅保存资料关联，不确认实际使用、容量或库存。</string>
     <string name="bdpm_choose_package">选择此资料包装</string>
     <string name="bdpm_product_only">仅选择产品，不指定包装</string>
+    <string name="bdpm_limited">显示前 50 条匹配产品。请细化关键词查找更多。</string>
 </resources>

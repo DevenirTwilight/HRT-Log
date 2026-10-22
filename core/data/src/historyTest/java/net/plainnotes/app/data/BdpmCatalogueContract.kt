@@ -51,6 +51,11 @@ abstract class BdpmCatalogueContract {
             db.withTransaction {assertTrue(MeasuredConsumptionStore.auditStagedDataset(raw).isEmpty())}
             assertEquals(13,RecordBackupCompatibility.exportSchema(raw))
             try{RecordBackupCompatibility.readVersion(JSONObject().put("format",1).put("schema",13),12);fail("Old reader accepted official schema")}catch(_:BackupCodec.NewerBackup){}
+            assertEquals(0,repo.records().size) // Association did not create a medical record.
+            repo.unscheduled(med,java.time.Instant.parse("2026-10-22T10:00:00Z"),0.5)
+            val recordedBefore=repo.records()
+            val historyBefore=repo.recordReferenceContexts(repo.referenceScope(),recordedBefore.single().id)
+            assertEquals(snapshot,historyBefore.single().product)
             val user=UserReferenceProduct("SYNTHETIC manual source",sourceVersion="manual-v1",recordedOn="2026-10-22")
             repo.associateMedication(original.let{repo.referenceScope()},med,1,UUID.randomUUID().toString(),user)
             assertEquals(user,repo.savedReferenceProducts().entries.single().product)
@@ -63,7 +68,8 @@ abstract class BdpmCatalogueContract {
                 assertEquals(snapshot,ReferencePayload.readProduct(JSONObject(old)))
                 assertEquals(before,db.dao().medication(med))
                 assertEquals(0,db.dao().containers().size)
-                assertEquals(0,db.dao().records().size)
+                assertEquals(recordedBefore,db.dao().records())
+                assertEquals(historyBefore,repo.recordReferenceContexts(repo.referenceScope(),recordedBefore.single().id))
                 ReferenceSchema.validateCandidateReferences(raw)
             }finally{archive.fill(0);password.fill('\u0000')}
         }finally{db.close()}

@@ -17,6 +17,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -30,6 +31,7 @@ import java.time.LocalDate
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable fun MedicationReferenceDialog(controller:MedicationReferenceController,onDismiss:()->Unit) {
     val state by controller.state.collectAsState()
+    val catalogueState=rememberBdpmCatalogueUiState()
     var query by remember {mutableStateOf("")};var form by remember {mutableStateOf("")};var route by remember {mutableStateOf("")}
     var strengthFilter by remember {mutableStateOf("")}
     var editing by remember {mutableStateOf(false)}
@@ -58,10 +60,10 @@ import java.time.LocalDate
                 }
                 if(state.busy)item {Text(stringResource(R.string.ref2_saving),modifier=Modifier.testTag("reference-saving"))}
                 item {Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(8.dp)) {
-                    TextButton(onClick={official=true},enabled=!state.busy,modifier=Modifier.weight(1f).heightIn(min=48.dp).testTag("reference-official-tab")){Text(stringResource(R.string.bdpm_title))}
-                    TextButton(onClick={official=false},enabled=!state.busy,modifier=Modifier.weight(1f).heightIn(min=48.dp).testTag("reference-saved-tab")){Text(stringResource(R.string.ref2_saved_library))}
+                    TextButton(onClick={official=true},enabled=!state.busy,modifier=Modifier.weight(1f).heightIn(min=48.dp).testTag("reference-official-tab").semantics{selected=official}){Text(stringResource(R.string.bdpm_title))}
+                    TextButton(onClick={official=false},enabled=!state.busy,modifier=Modifier.weight(1f).heightIn(min=48.dp).testTag("reference-saved-tab").semantics{selected=!official}){Text(stringResource(R.string.ref2_saved_library))}
                 }}
-                if(official) item {BdpmCataloguePanel{preview=it}}
+                if(official) item(key="bdpm-catalogue") {BdpmCataloguePanel(catalogueState){preview=it}}
                 if(!official) {
                 item {Text(stringResource(R.string.ref2_saved_library),style=MaterialTheme.typography.titleMedium,modifier=Modifier.semantics{heading()})}
                 item {ReferenceField(query,{query=it.take(256)},R.string.ref2_search,"reference-search")}

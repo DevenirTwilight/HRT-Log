@@ -16,4 +16,5 @@
     <string name="bdpm_package_boundary">選擇包裝僅儲存資料關聯，不確認實際使用、容量或庫存。</string>
     <string name="bdpm_choose_package">選擇此資料包裝</string>
     <string name="bdpm_product_only">僅選擇產品，不指定包裝</string>
+    <string name="bdpm_limited">顯示前 50 條符合產品。請細化關鍵字查找更多。</string>
 </resources>

@@ -16,4 +16,5 @@
     <string name="bdpm_package_boundary">Selecting a package records a reference only. It does not confirm actual use, capacity or inventory.</string>
     <string name="bdpm_choose_package">Choose this reference package</string>
     <string name="bdpm_product_only">Choose product without a package</string>
+    <string name="bdpm_limited">Showing the first 50 matching products. Refine the keywords for more.</string>
 </resources>
