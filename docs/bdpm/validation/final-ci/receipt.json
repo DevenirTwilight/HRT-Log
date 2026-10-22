@@ -7,7 +7,7 @@
   "tree_equality": "PASS (GitHub merge checkout tree equals source head tree)",
   "android_run": 39783311218,
   "science_run": 39783311197,
-  "status": "API26/API29/JVM/Science PASS; API35/host IN_PROGRESS",
+  "status": "All native/JVM/Science PASS; full host Android IN_PROGRESS",
   "prior_source": "054c30ad8beac2449a560f58bc9a9524cf66624e",
   "prior_checkout_merge": "ce2e10378a52eb6544d4e8fdfa33d5c335b95f13",
   "prior_result": "FAIL native follow-up/setup; host cancelled at R8 after superseding source, not host PASS",
@@ -49,6 +49,36 @@
           "failures": "0",
           "skipped": "0"
         }
+      }
+    },
+    {
+      "api": 35,
+      "artifact": 12428439230,
+      "sha256": "cdf4fb042c294efeea7310c0b1e90553d0daf7dfae5a8e86eab377207b970d88",
+      "crc": "PASS",
+      "job_result": "SUCCESS",
+      "classes": {
+        "net.plainnotes.app.data.BdpmCatalogueAndroidTest": {
+          "tests": "4",
+          "failures": "0",
+          "skipped": "0"
+        },
+        "net.plainnotes.app.BdpmReferenceFlowAndroidTest": {
+          "tests": "3",
+          "failures": "0",
+          "skipped": "0"
+        },
+        "net.plainnotes.app.shell.InAppNavigationLockAndroidTest": {
+          "tests": "13",
+          "failures": "0",
+          "skipped": "0"
+        }
+      },
+      "fresh_offline": {
+        "tests": 1,
+        "failures": 0,
+        "skipped": 0,
+        "log": "fresh-offline.log"
       }
     }
   ]

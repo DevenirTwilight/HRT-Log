@@ -1,3 +1,9 @@
+## BDPM 最终92337735：三API原生/真实关联/断网新进程全部PASS — 2026-10-22
+
+最终Android run39783311218：API26/29整体SUCCESS；API35 job119840692678整体SUCCESS。每个API的目录4项、导航锁定13项均0失败0跳过；API35实际App关联/取消/解除/草稿/故障恢复共享合同3项PASS，断网后重装同次APK并force-stop的新进程实际执行1项PASS（非skip，fresh-offline.log原文OK(1 test)，0.116s为小查询正确性测试，非性能验收）。全部绑定HEAD92337735/实际checkout4d080993，文件树相等；原ZIP/SHA/CRC和压缩job日志在final-ci。
+
+JVM/Science PASS；主Android完整单元/lint/构建仍在跑，是唯一剩余必需检查。准备将PR98转ready并按§106开启受保护auto-merge，不用admin/force/跳过检查；检查未通过前不合并。实体真机/TalkBack仍NOT_RUN；来源TEST替代站/日期限制不消除，不签名交付APK或发布。
+
 ## BDPM 最终92337735：API26/29整体PASS；等待API35与主机 — 2026-10-22
 
 最终Android run39783311218，API26 job119840692986/API29 job119840692975整体SUCCESS。两份实际checkout均4d080993e34b268c6c157aa808462fdef7295bf3，tree等于92337735；原始ZIP/CRC/SHA/压缩job日志及目录4项和导航合同的真实计数在final-ci/receipt.json。API26单次Back修正已在本次设备执行验证，不是重跑旧054筛绿。JVM/Science也PASS；API35与完整主机尚在跑，PR98保持Draft，不提前合并。真实TalkBack/实体机仍NOT_RUN。
