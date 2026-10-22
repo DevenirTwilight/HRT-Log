@@ -19,11 +19,12 @@ import java.time.LocalDate
 /** Synthetic records only. Android's native PDF backend verifies pagination, unlike Robolectric. */
 class WellbeingAndroidTest {
     @get:Rule val ui=createAndroidComposeRule<ComponentActivity>()
-    @Test fun optionalDailySliderDoesNotWriteUntilTheUserChooses(){
+    // UI-08: five buttons instead of the slider; untouched still writes nothing, a choice records, "Clear" clears.
+    @Test fun optionalDailyLevelsDoNotWriteUntilTheUserChooses(){
         var value by mutableStateOf<Int?>(null);val writes=mutableListOf<Int?>()
-        ui.setContent{MaterialTheme{FiveLevelInput(value,"Low","High","Synthetic entry"){value=it;writes+=it}}}
+        ui.setContent{MaterialTheme{androidx.compose.foundation.layout.Column{FiveLevelInput(value,"Low","High","Synthetic entry"){value=it;writes+=it}}}}
         ui.runOnIdle{assertTrue(writes.isEmpty())}
-        ui.onNodeWithContentDescription("Synthetic entry").performSemanticsAction(SemanticsActions.SetProgress){it(5f)}
+        ui.onNodeWithContentDescription(ui.activity.getString(R.string.wb_level_spoken,"Synthetic entry",5)).performClick()
         ui.runOnIdle{assertEquals(5,value)}
         ui.onNodeWithText(ui.activity.getString(R.string.wb_clear)).performClick()
         ui.runOnIdle{assertNull(value);assertEquals(listOf(5,null),writes)}

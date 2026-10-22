@@ -1328,4 +1328,20 @@
 <string name="timeline_lab_draw_spoken_title">化验，%1$d 项</string>
 <string name="timeline_lab_draw_spoken_out">%1$d 项超出参考范围</string>
 <string name="lab_names_join">、</string>
+<!-- UI-08 (REQUIREMENTS §140): wellbeing daily tab. No scores, no judgement. -->
+<string name="wb_card_title_none_today">今天感觉怎么样？</string>
+<string name="wb_card_title_none_other">这天感觉怎么样？</string>
+<string name="wb_card_title_some">已经记了一些</string>
+<string name="wb_card_title_all">都记好了</string>
+<string name="wb_card_subtitle">记几项就好，不需要全填。不打分，也不评判。</string>
+<string name="wb_card_count">已记录 %1$d / %2$d 项</string>
+<string name="wb_item_unrecorded">还没记录</string>
+<string name="wb_item_value">记为 %1$d / 5</string>
+<string name="wb_level_spoken">%1$s，%2$d，共 5 级</string>
+<string name="wb_note_title">今天的备注</string>
+<string name="wb_note_placeholder">想写什么都可以，只有你自己能看到。</string>
+<string name="wb_recent_title">最近的记录</string>
+<string name="wb_recent_note">只显示你自己记下的数值，没有记录的日子留空。</string>
+<string name="wb_trend_spoken">%1$s，最近 %2$d 天记录了 %3$d 天</string>
+<string name="wb_trend_spoken_all">%1$s，记录了 %2$d 天</string>
 </resources>

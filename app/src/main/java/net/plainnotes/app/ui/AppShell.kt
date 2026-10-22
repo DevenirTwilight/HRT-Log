@@ -189,6 +189,8 @@ class UiPrefs(context: Context) {
                         else IconButton(onClick = { scope.launch { drawer.open() } }) { Icon(Icons.Outlined.Menu, stringResource(R.string.menu)) }
                     },
                     actions = {
+                        // UI-08: "Choose items" moved here from the bottom of the wellbeing page.
+                        if (destination == Destination.WELLBEING) IconButton(onClick={wellbeingDialogs.manageItems=true},modifier=Modifier.testTag("wb-manage")) { Icon(Icons.Outlined.Tune,stringResource(R.string.wb_manage)) }
                         if (destination == Destination.WELLBEING) IconButton(onClick={wellbeingDialogs.summary=true}) { Icon(Icons.Outlined.PictureAsPdf,stringResource(R.string.wb_summary)) }
                         if (destination == Destination.CALENDAR) IconButton(onClick = { pickStart = true }) { Icon(Icons.Outlined.EditCalendar, stringResource(R.string.calendar_pick_start)) }
                         if (destination == Destination.CONCENTRATION) IconButton(onClick = { model.loadConcentration() }) { Icon(Icons.Outlined.Refresh, stringResource(R.string.refresh)) }
@@ -269,7 +271,7 @@ class UiPrefs(context: Context) {
                 Destination.HISTORY -> { val historySnapshot=extra;HistoryScreen(state, historySnapshot.records, { historyDialogs.referenceEpoch=historySnapshot.referenceEpoch;historyDialogs.editRecord = it }, { historyDialogs.deleteRecord = it }, pad, onAdd = { manual = true }, onBatch = { historyDialogs.batch = true }, onConfirmMissed={model.confirmMissed(it.id)},selectedRecordIds=importedRecordIds,labels=historyLabels,onExtra={r,on->model.setExtra(r.id,on)},onClearSelection={importedRecordIds=null},onUndoSkip={model.undoSkipped(it)}) }
                 Destination.STOCK -> StockScreen(state, extra.containers, extra.records, { m -> model.replaceContainer(m.id, m.container_capacity) }, { stockDialogs.checkStock = it }, { stockDialogs.addStock = it }, pad,
                     onManage = { stockDialogs.managePackages = it }, forecasts = extra.stockForecasts)
-                Destination.WELLBEING -> WellbeingHub(state,extra,model,region,{wellbeingDialogs.manageItems=true},pad)
+                Destination.WELLBEING -> WellbeingHub(state,extra,model,region,pad)
                 else -> ComingSoonScreen(destination.icon, stringResource(destination.title), pad)
             }
         }

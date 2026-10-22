@@ -1,3 +1,21 @@
+## UI-08 身心状态页重做：本地验证通过，PR 待 CI — 2026-10-22
+
+负责人上传 UI-08 任务书（§140），并要求“这个做完再给APK”：build35 在 UI-08 合并后出包，包含 UI-07b（#96）、LAB-04（#97）和 UI-08。
+
+- **分支**：`feature/ui08-wellbeing-20261022`，基于 aaab9669（#97 合并后）。
+- **新文件**：`ui/WellbeingDaily.kt`，包括胶囊标签、日期行、大卡片和太阳、条目行、5 个按钮、趋势线。
+- **改动文件**：`WellbeingScreen.kt`、`WellbeingHub.kt`（拆出 `WellbeingHubContent`，共享日期）、`AppShell.kt`（顶栏“管理条目”按钮）、四种语言的文案。
+- **未改**：ConcChart、WellbeingSummary、Exports 的字节；有 `Ui08PdfSummaryUnchangedTest` 固定。
+- **测试**：`Ui08Test.kt`（按钮、大卡片、趋势、共享日期、32 组布局、42 组对比度、PDF 不变）全部通过；已有的滑杆断言迁移为按钮（WellbeingUiTest、WellbeingAndroidTest）。
+- **截图**：`Ui08ScreenshotTest`，环境变量 `UI08_SHOTS` 和 `UI08_DIALOG_SHOTS`。before 在 /home/user/wt-rem 的 aaab9669 上渲染：把测试复制过去，`daily()` 和 `symptoms()` 改用旧 API，渲染完删掉。
+- **报告**：74 草稿已提交。
+- **负责人反馈（2026-10-22）**：趋势线的点要小、与线同色，已改。
+- **截图**：已整理到 `docs/ui-audit/2026-10-22-ui08/`。“管理条目”对话框只有 320dp 的截图，411dp 在 Robolectric 下卡住，记为 NOT_RUN。
+- **本地验证**：2941 项测试，0 失败；lint 通过。
+- **下一步**：
+  1. 开 PR 并自动合并；
+  4. 合并、主线 CI 全绿后出 build35：versionCode 35，正式签名，私密交付，登记账本。
+
 ## BDPM 收尾证据位置与冻结规则 — 2026-10-22
 
 最终候选提交后仅等待必需CI及受保护集成；新功能或发现真实失败才修改代码，不跑同SHA碰绿。收尾完成时的原始工件/精确源码SHA/最终HANDOFF拟保存独立证据分支 `docs/bdpm-final-evidence-20261022` 并从PR98链接，避免为了给通过结果写自引用SHA而反复改变功能候选、重复触发原生。该分支尚未生成，不提前称CI通过或完成合并。

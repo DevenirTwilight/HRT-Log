@@ -1328,4 +1328,20 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="timeline_lab_draw_spoken_title">Analyse, %1$d résultats</string>
 <string name="timeline_lab_draw_spoken_out">%1$d en dehors de l’intervalle de référence</string>
 <string name="lab_names_join">", "</string>
+<!-- UI-08 (REQUIREMENTS §140): wellbeing daily tab. No scores, no judgement. -->
+<string name="wb_card_title_none_today">Comment vous sentez-vous aujourd’hui ?</string>
+<string name="wb_card_title_none_other">Comment vous sentiez-vous ce jour-là ?</string>
+<string name="wb_card_title_some">Vous en avez renseigné quelques-uns</string>
+<string name="wb_card_title_all">Tout est renseigné</string>
+<string name="wb_card_subtitle">Quelques éléments suffisent, inutile de tout remplir. Pas de score, pas de jugement.</string>
+<string name="wb_card_count">%1$d sur %2$d renseignés</string>
+<string name="wb_item_unrecorded">Pas encore renseigné</string>
+<string name="wb_item_value">Renseigné : %1$d sur 5</string>
+<string name="wb_level_spoken">%1$s, %2$d sur 5</string>
+<string name="wb_note_title">Note du jour</string>
+<string name="wb_note_placeholder">Écrivez ce que vous voulez. Vous seul·e pouvez la voir.</string>
+<string name="wb_recent_title">Saisies récentes</string>
+<string name="wb_recent_note">Seules les valeurs que vous avez saisies sont affichées ; les jours sans saisie restent vides.</string>
+<string name="wb_trend_spoken">%1$s, renseigné %3$d jours sur les %2$d derniers</string>
+<string name="wb_trend_spoken_all">%1$s, renseigné %2$d jours</string>
 </resources>

@@ -18,18 +18,19 @@ import java.time.LocalDate
 @RunWith(RobolectricTestRunner::class) @Config(sdk=[35],application=android.app.Application::class)
 class WellbeingUiTest {
     @get:Rule val ui=createAndroidComposeRule<ComponentActivity>()
-    @Test fun untouchedSliderIsUnrecordedAndCanBeRecordedThenCleared() {
+    // UI-08: the slider became five buttons; the meaning is the same: untouched writes nothing, a level can be recorded, then cleared.
+    @Test fun untouchedLevelsAreUnrecordedAndCanBeRecordedThenCleared() {
         var value by mutableStateOf<Int?>(null);val writes=mutableListOf<Int?>()
-        ui.setContent{MaterialTheme{FiveLevelInput(value,"Low","High","Synthetic daily item"){value=it;writes+=it}}}
-        ui.onNodeWithText(ui.activity.getString(R.string.wb_unrecorded)).assertIsDisplayed();assertTrue(writes.isEmpty())
-        ui.onNodeWithContentDescription("Synthetic daily item").performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.SetProgress){it(4f)}
+        ui.setContent{MaterialTheme{androidx.compose.foundation.layout.Column{FiveLevelInput(value,"Low","High","Synthetic daily item"){value=it;writes+=it}}}}
+        ui.onNodeWithText(ui.activity.getString(R.string.wb_item_unrecorded)).assertIsDisplayed();assertTrue(writes.isEmpty())
+        ui.onNodeWithContentDescription(ui.activity.getString(R.string.wb_level_spoken,"Synthetic daily item",4)).performClick()
         ui.runOnIdle{assertEquals(4,value)}
         ui.onNodeWithText(ui.activity.getString(R.string.wb_clear)).performClick()
         ui.runOnIdle{assertNull(value);assertEquals(listOf(4,null),writes)}
     }
     @Test fun newDailyKeysHaveLabelsAndHistoricalItemsHaveNoAverage() {
         val day=LocalDate.now().toString();val item=CheckinItemEntity(1,"DAY_MOOD",null,true,0)
-        ui.setContent{MaterialTheme{WellbeingScreen(listOf(item),listOf(CheckinScoreEntity(day,1,4)),emptyList(),{_,_,_->},{_,_->},{},PaddingValues())}}
+        ui.setContent{MaterialTheme{WellbeingScreen(listOf(item),listOf(CheckinScoreEntity(day,1,4)),emptyList(),{_,_,_->},{_,_->},PaddingValues())}}
         ui.onAllNodesWithText(ui.activity.getString(R.string.wb_day_mood)).assertCountEquals(1)
         ui.onAllNodesWithText("Average",substring=true).assertCountEquals(0)
     }
