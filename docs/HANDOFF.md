@@ -1,3 +1,13 @@
+## 医疗附件资源生命周期：225项JVM与69隔离PASS；Android验证在途 — 2026-10-22
+
+已实现登记资源的撤权清理、父子取消、一次关闭、晚到注册拒绝并清理、异常汇总与失败保留；清理在权限监视器外执行。初轮7项5FAIL和新增锁顺序反例1FAIL均保留；修复后domain162（新10+原session5包含在内）与attachment-poc63全部0fail/error/skip，隔离Python69 PASS。未改AppLock、Room、备份、密码协议或入口，非完整文件库实现。当前共享Foundation合同另增两项真实PFD pipe关闭/拒绝交接检查，Robolectric与native源码编译在途，未验不报PASS。证据docs/medical-attachments/2026-10-22；当前已完成组及时推送，不等全轮结束才保存。
+
+## 医疗附件库续作：资源生命周期底座 RED 在运行 — 2026-10-22
+
+负责人要求继续正式附件库未完成工作。基线4e31afcd（含build35回执），新独立分支feature/med02-resource-lifecycle-20261022，工作树/workspace/HRT-Log-reference-draft；之前药物关联反馈已由负责人澄清为未选药物，没有修改药物UI或保存路径。
+
+复核发现：已有AttachmentSession只撤销权限，不持有或清理注册资源；B2/B3仍NO-GO/NOT_REVIEWED_EXTERNALLY，正式导入/协议/备份不能照搬test-only候选。当前首批仅添加资源所有权接口和负向生命周期测试，不改变Room13/业务备份13/PNBAK1或应用锁、不开放附件入口。先运行缺少撤权清理hook的RED，再补hook，保留全部原5项session测试及新异常/并发检查。当前测试尚未结束，不填PASS；原始日志/workspace/scratch/med02-resource-red.log。后续完成证据写docs/medical-attachments/2026-10-22并独立PR/六必需CI，默认自动合并遵守§106；功能开启/正式加密存储/真实文件仍须独立满足既有门。
+
 ## build35 已私密交付 — 2026-10-22
 
 - **APK**：`HRT-Log-build35-full-official.apk`，13,532,165 bytes，SHA-256 `cd4f32c14472d1fc71ad2c4b48548c9af0ff302123ed486a9a4c88c2bff24931`；经会话私有文件发送。

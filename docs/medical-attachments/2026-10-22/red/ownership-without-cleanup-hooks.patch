@@ -1,0 +1,46 @@
+diff --git a/core/domain/src/main/kotlin/net/plainnotes/app/domain/AttachmentSession.kt b/core/domain/src/main/kotlin/net/plainnotes/app/domain/AttachmentSession.kt
+index 5cf1002f..d943b20f 100644
+--- a/core/domain/src/main/kotlin/net/plainnotes/app/domain/AttachmentSession.kt
++++ b/core/domain/src/main/kotlin/net/plainnotes/app/domain/AttachmentSession.kt
+@@ -12,6 +12,21 @@ class AttachmentSession(private val dataset: UUID, private val recordEpoch: UUID
+     private val processEpoch = UUID.randomUUID()
+     private var epoch = 0L
+     private var active = true
++    private val resources = LinkedHashMap<ResourceLease, Capability>()
++
++    /** Sole ownership of a resource, not permission to read it. All reads still require a capability.
++     * Cleanup must only release resources; it must not publish work or acquire other leases.
++     */
++    inner class ResourceLease internal constructor(private val resource: AutoCloseable) : AutoCloseable {
++        private var closed = false
++        override fun close() = synchronized(this) {
++            if (!closed) {
++                closed = true
++                try { resource.close() }
++                finally { synchronized(monitor) { resources.remove(this) } }
++            }
++        }
++    }
+     inner class Capability internal constructor(private val issuedEpoch: Long, private val parent: Capability? = null) {
+         private var closed = false
+         private fun valid(): Boolean = !closed && (parent?.valid() ?: true)
+@@ -25,6 +40,19 @@ class AttachmentSession(private val dataset: UUID, private val recordEpoch: UUID
+             block()
+         }
+         fun check() = publish { Unit }
++        /** Transfer a newly created handle. Rejected ownership closes it, including after revocation.
++         * Never register the same handle twice. Closing the lease does not revoke its capability.
++         */
++        fun own(resource: AutoCloseable): ResourceLease {
++            try {
++                return publish { ResourceLease(resource).also { resources[it] = this } }
++            } catch (failure: Throwable) {
++                try { resource.close() } catch (cleanup: Throwable) { if (cleanup !== failure) failure.addSuppressed(cleanup) }
++                throw failure
++            }
++        }
++        /** Clears this array only; it cannot erase copies or revoke a native consumer's own buffer. */
++        fun ownBytes(bytes: ByteArray): ResourceLease = own(AutoCloseable { bytes.fill(0) })
+         fun close() = synchronized(monitor) { closed = true }
+     }
+     fun issue(expectedDataset: UUID = dataset, expectedRecordEpoch: UUID = recordEpoch,

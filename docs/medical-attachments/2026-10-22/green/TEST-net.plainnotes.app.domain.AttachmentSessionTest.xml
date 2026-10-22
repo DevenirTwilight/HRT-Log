@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.domain.AttachmentSessionTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-22T19:21:30.556Z" hostname="8a3f875cab28" time="0.125">
+  <properties/>
+  <testcase name="slowPreparationDoesNotBlockRevocation()" classname="net.plainnotes.app.domain.AttachmentSessionTest" time="0.004"/>
+  <testcase name="childCloseDoesNotRevokeSiblingButOwnerCloseRevokesAllDescendants()" classname="net.plainnotes.app.domain.AttachmentSessionTest" time="0.004"/>
+  <testcase name="oldProcessWrongDatasetPrivateSpaceAndClosedReaderAreDenied()" classname="net.plainnotes.app.domain.AttachmentSessionTest" time="0.002"/>
+  <testcase name="commitAndRevokeHaveOneLinearizationOrder()" classname="net.plainnotes.app.domain.AttachmentSessionTest" time="0.108"/>
+  <testcase name="revokeBeforeCommitRejectsWithoutCallingCommit()" classname="net.plainnotes.app.domain.AttachmentSessionTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
