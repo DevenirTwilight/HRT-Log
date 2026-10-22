@@ -68,7 +68,7 @@
   "merged_at": "2026-10-22T19:53:12Z",
   "post_merge_android": {
     "run": 39843996907,
-    "status": "IN_PROGRESS"
+    "status": "SUCCESS"
   },
   "post_merge_science": {
     "run": 39843996985,
