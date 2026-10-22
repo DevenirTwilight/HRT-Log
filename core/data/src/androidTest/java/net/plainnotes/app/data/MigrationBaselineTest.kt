@@ -131,7 +131,7 @@ class MigrationBaselineTest {
         try { kotlinx.coroutines.runBlocking {
             assertEquals("VOIDED",second.dao().voidedContainers().single().state)
             assertTrue(second.dao().containers().isEmpty())
-            assertEquals(13,second.openHelper.writableDatabase.version);assertEquals(12,RecordBackupCompatibility.SCHEMA)
+            assertEquals(13,second.openHelper.writableDatabase.version);assertEquals("Maximum supported business backup version; user-only exports remain 12",13,RecordBackupCompatibility.SCHEMA)
             assertEquals(InventoryEncoding.LEGACY,second.dao().voidedContainers().single().inventory_encoding)
         }} finally {second.close();context.deleteDatabase(name)}
     }

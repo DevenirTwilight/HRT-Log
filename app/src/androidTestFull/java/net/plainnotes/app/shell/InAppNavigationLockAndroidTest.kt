@@ -221,7 +221,14 @@ class InAppNavigationLockAndroidTest {
             }
             open(Destination.MEDICATIONS)
             ui.onNodeWithTag("drug-center-open").performClick()
-            listOf("catalogue", "rcp", "notice", "safety", "supply", "recalls").forEach { suffix ->
+            ui.onNodeWithTag("drug-center-list").performScrollToNode(hasTestTag("drug-center-catalogue"))
+            ui.onNodeWithTag("drug-center-catalogue").performClick()
+            ui.onNodeWithTag("reference-window").assertExists()
+            back()
+            ui.onNodeWithTag("reference-window").assertDoesNotExist()
+            ui.onNodeWithTag("drug-center-window").assertExists()
+            assertUnlocked("Back from offline catalogue")
+            listOf("rcp", "notice", "safety", "supply", "recalls").forEach { suffix ->
                 val tag = "drug-center-$suffix"
                 ui.onNodeWithTag("drug-center-list").performScrollToNode(hasTestTag(tag))
                 ui.onNodeWithTag(tag).performClick()

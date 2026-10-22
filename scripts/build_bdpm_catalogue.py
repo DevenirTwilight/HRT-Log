@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reproducible full BDPM identity catalogue; stdlib only. No clinical text or arithmetic.
+"""Reproducible BDPM HRT-related identity catalogue (or --profile full); stdlib only. No clinical text or arithmetic.
 Run --download to explicitly refresh the ANSM alternative published snapshot, then review dates.
 Without --download builds offline from hash-pinned gzip source bytes in tools/bdpm/sources.
 """
@@ -40,7 +40,8 @@ def download():
   license_url=BASE+'/docs/telechargement/licence_bdpm.pdf',inputs=inputs)
  (SOURCES/'manifest.json').write_text(json.dumps(meta,ensure_ascii=False,indent=2)+'\n')
 
-def build():
+def build(profile="hrt"):
+ assert profile in ("hrt","full")
  meta=json.loads((SOURCES/'manifest.json').read_text()); parsed={}
  for name in FILES:
   data=gzip.decompress((SOURCES/(name+'.gz')).read_bytes());assert sha(data)==meta['inputs'][name]['sha256'],name+' digest'
@@ -57,6 +58,24 @@ def build():
  assert all(not r[6] or re.fullmatch('[0-9]{13}',r[6]) for r in parsed['CIS_CIP_bdpm.txt'])
  codes=[r[6] for r in parsed['CIS_CIP_bdpm.txt'] if r[6]]
  assert len(codes)==len(set(codes)),'Conflicting CIP13 identities require review'
+ # Selection is an auditable public-reference subset, never a user-data validator.
+ source_counts={n:len(parsed[n]) for n in FILES}
+ if profile=="hrt":
+  rules_bytes=(ROOT/'tools/bdpm/hrt-selection.json').read_bytes()
+  rules=json.loads(rules_bytes)
+  code_groups={code:group for group,codes in rules['groups'].items() for code in codes}
+  selected={r[0] for r in parsed['CIS_COMPO_bdpm.txt'] if r[6]=='SA' and r[2] in code_groups}
+  matched=[dict(cis=r[0],substance_code=r[2],name=r[3],group=code_groups[r[2]]) for r in parsed['CIS_COMPO_bdpm.txt'] if r[0] in selected and r[6]=='SA' and r[2] in code_groups]
+  observed={r['substance_code'] for r in matched}
+  meta['selection']=dict(profile=profile,rules_sha256=sha(rules_bytes),rules=rules,
+   unmatched_codes=sorted(set(code_groups)-observed),matches=matched)
+  parsed={n:[r for r in data if r[0] in selected] for n,data in parsed.items()}
+  identities=selected;orphans=[]
+ else:
+  meta['selection']={'profile':'full'}
+ meta['source_counts']=source_counts
+ meta['included_counts']={n:len(parsed[n]) for n in FILES}
+ meta['included_composition_kinds']={k:sum(r[6]==k for r in parsed['CIS_COMPO_bdpm.txt']) for k in sorted({r[6] for r in parsed['CIS_COMPO_bdpm.txt']})}
  ASSETS.mkdir(parents=True,exist_ok=True);path=ASSETS/'catalogue.sqlite';path.unlink(missing_ok=True)
  db=sqlite3.connect(path)
  db.executescript('''PRAGMA page_size=4096; PRAGMA user_version=1;
@@ -76,7 +95,7 @@ def build():
  db.executemany('INSERT INTO composition VALUES(?,?,?,?,?,?,?,?)',parsed['CIS_COMPO_bdpm.txt'])
  db.executemany('INSERT INTO package VALUES(?,?,?,?)',[(r[0],r[1],r[2],r[6]) for r in parsed['CIS_CIP_bdpm.txt'] if r[0] in identities])
  db.executemany('INSERT INTO orphan_package VALUES(?,?,?,?)',[(r[0],r[1],r[2],r[6]) for r in orphans])
- meta['catalogue_version']='bdpm-'+meta['downloaded_on']+'-'+sha(''.join(meta['inputs'][n]['sha256'] for n in FILES).encode())[:16]
+ meta['catalogue_version']='bdpm-'+profile+'-'+meta['downloaded_on']+'-'+sha((''.join(meta['inputs'][n]['sha256'] for n in FILES)+meta.get('selection',{}).get('rules_sha256','')).encode())[:16]
  db.execute('INSERT INTO metadata VALUES(?)',(json.dumps(meta,sort_keys=True,ensure_ascii=False,separators=(',',':')),))
  db.commit();assert db.execute('PRAGMA integrity_check').fetchone()==('ok',);assert not db.execute('PRAGMA foreign_key_check').fetchall()
  # Acceptance against downloaded records, never inserted fixtures.
@@ -85,10 +104,10 @@ def build():
  assert db.execute("SELECT count(DISTINCT cis) FROM composition WHERE lower(name) LIKE '%estradiol%'").fetchone()[0]>10
  db.execute('VACUUM');db.close()
  receipt=dict(meta,database_sha256=sha(path.read_bytes()),database_bytes=path.stat().st_size,
-  counts={n:len(parsed[n]) for n in FILES},generator=1)
+  counts={n:len(parsed[n]) for n in FILES},generator=2)
  (ASSETS/'manifest.json').write_text(json.dumps(receipt,ensure_ascii=False,indent=2)+'\n')
  print(json.dumps({k:receipt[k] for k in ['catalogue_version','counts','database_bytes','database_sha256']},indent=2))
 if __name__=='__main__':
- p=argparse.ArgumentParser();p.add_argument('--download',action='store_true');args=p.parse_args()
+ p=argparse.ArgumentParser();p.add_argument('--download',action='store_true');p.add_argument('--profile',choices=['hrt','full'],default='hrt');args=p.parse_args()
  if args.download:download()
- build()
+ build(args.profile)

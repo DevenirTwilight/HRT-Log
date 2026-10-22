@@ -1,3 +1,15 @@
+## BDPM 范围改为已确认的宽范围HRT子集 — 2026-10-22
+
+负责人确认雌激素/孕激素/睾酮/抗雄/GnRH宽范围。独立BDPM分支继续；默认构建从真实完整官方归档按SA有效成分代码选中420个CIS、550条包装、702条组成，资产360448B（352KiB），不再随APK分发15,883产品全库。规则tools/bdpm/hrt-selection.json；完整组成/包装逐行保留，非仅匹配成分。原始数据、日期/许可/TEST替代站限制不变；--profile full可复建完整库，不能称全球所有HRT或适应证认证。见docs/bdpm/hrt-subset.md。Python7项PASS；新子集真实资产核心查询/加密备份恢复4项及四语言实际Compose关联/取消/重开/解除/草稿返回/失败重试12项JVM复验全部PASS（1m50s）。隐私事实3项PASS，data/App原生源码编译PASS；原生尚未在子集执行，必需CI待新提交；证据hrt-subset。
+
+此前c20必需Android run39772975132已结束FAIL，不能合并：API35旧最高备份版本断言12；API29旧导航把已开放目录当未开放。另有android单元测试PrivacyNoticeFactsTest旧最高版本12断言，已更新最高13及user-only12两个明确断言，密码学/权限断言保留；三处测试按真实合同修正，原迁移数据和5项其他OFF/锁定/不启动文件界面断言保留。不是原生性能重跑；功能候选更新后正常CI，PR98保持Draft。P4/PK/Room/加密/签名发布不改。
+
+## BDPM PR98首轮API35：目录4合同PASS，旧最高版本断言FAIL已定位 — 2026-10-22
+
+候选c20ec8d6，PR98 Draft；必需Android run39772975132/Science39772975024，后者两项SUCCESS，JVM SUCCESS，android/API26/API29尚在运行，不取消有效任务。重复push任务已取消，P4手工性能流程未调度。API35 device job119804830487停在core阶段：新增BdpmCatalogueAndroidTest4/0FAIL/0SKIP已真实执行通过（1.284s小库正确性套，非性能指标）；唯一失败MigrationBaselineTest仍断言最高支持业务版本12，实际新增官方后13。已将该native-only断言明确13，Room13/旧user-only导出12/原迁移数据与VOIDED断言均保留。
+
+官方artifact12422514628（51063B）SHA64b0bea9…3549/CRC核验PASS，原ZIP和范围收据保存在docs/bdpm/validation/ci-c20-first；App原生流程未执行，不能称整个native PASS。其余作业完成后保存结果，再对实质测试修正做最终CI；不盲重跑同SHA、不改生产查询/事务/预算。当前工作树只有这项测试与证据进展修改，功能生产仍c20。
+
 ## BDPM最终本地核心14/官方完整关联4与原生编译PASS，功能冻结待PR CI — 2026-10-22
 
 170345c7最后本地：BDPM4+原Payload10共14PASS，真实NotesApp四语言320dp/2x从搜索→包装→取消确认→确认关联→重开→解除关联4PASS，0FAIL/SKIP；data/App native源码编译PASS。final-local保存实际XML/log/SHA收据。加上此前草稿返回4和故障/重试/空结果4各自PASS，实际用户路径均有真实来源与非模拟响应证据；不将不同执行相加成同轮全套PASS。最后只修正官方详情标签（目录版本/下载日/原始途径，状态字段未展示而非用户未核实）及CI命令单行兼容，不改事务/查询；精确最终源码由接下来的必需CI验收。
