@@ -13,7 +13,20 @@ UI-07b 当前状态：
   - `Ui07bDrawingRecordTest`、`Ui07bSmallIconTest`、`Ui07bCallSiteColourTest`。
 - **截图**：`docs/ui-audit/2026-10-22-ui07b/`，前后对比，渲染方式是把截图测试复制到 /home/user/wt-rem 的 de0c4e55 上运行。
 - **报告**：72。
-- **下一步**：完整单元测试和 lint → 提交 → PR 自动合并 → 开始 LAB-04。
+- **本地验证**：`:core:ui:testDebugUnitTest` + 完整 `:app:testFullDebugUnitTest` 共 2733 项，0 失败（384 项为默认关闭的截图测试等，按设计跳过；PeriodStabilityTest 通过），`lintFullDebug` 通过。
+- **PR**：#96，已开启自动合并；合并了默认分支 bdba7e45（#95 交付回执）。LAB-04 已在 /home/user/wt-lab04 并行进行。
+
+## build34 已私密交付 — 2026-10-22
+
+负责人要求先加入“禁止截屏”开关再出包（§134、§135）。
+
+- **源码**：7e0a8947（PR #93，合并为 de0c4e55），含 UI-06、UI-07、P4、#94 截屏开关；唯一的版本改动是 versionCode 34。
+- **CI**：#93 头部全部必需检查通过。
+- **成品**：HRT-Log-build34-full-official.apk，13,413,236 字节，SHA-256 `e0a9cffab6bc9e0d55228f866a096e2b47fc25352a3920cdc5d331a4d0335e41`。
+- **签名与检查**：原正式证书 989ba045…59379b1（v3）；zipalign 16KB、清单无 INTERNET、附件隔离、来源 SHA 全部 PASS。
+- **交付方式**：本会话私密文件交付，未上传 Drive，不移动 tag，不发布 Release。签名临时文件已删除。
+- **账本**：已登记，下次交付需 versionCode ≥ 35。
+- **NOT_RUN**：真机安装、TalkBack（清单第 13、14 节）。
 
 ## build34（UI-07 后）正式签名测试包准备中 — 2026-10-21
 
