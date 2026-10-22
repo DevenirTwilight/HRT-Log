@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.AttachmentFoundationTest" tests="20" skipped="0" failures="0" errors="0" timestamp="2026-10-22T20:03:44.330Z" hostname="8a3f875cab28" time="7.867">
+  <properties/>
+  <testcase name="failedDatasetSwitchRollsBackAndStaleHandlesCannotBind" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="3.742"/>
+  <testcase name="cancelledReaderRejectsLatePipeOwnershipAndClosesIncomingDescriptor" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.248"/>
+  <testcase name="resourceRevocationClosesActualPipeAndClearsOnlyOwnedBuffer" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.135"/>
+  <testcase name="actualRoomCommitIsInsideAuthorityAndStaleCapabilityCannotPublish" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.119"/>
+  <testcase name="realIntakeUuidSurvivesEditsDuplicateDeleteAndRestoreWithoutStockCreation" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.206"/>
+  <testcase name="operationReplayOwnershipAndTerminalStateAreProtected" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.148"/>
+  <testcase name="wrongPasswordCorruptionAndFailedRestoreDoNotChangeRowsOrEpoch" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.916"/>
+  <testcase name="clearFailureRollsBackDataDatasetAndReinstallsAllProtection" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.133"/>
+  <testcase name="boundedUnknownLengthPipeReadsActualBytesWithoutActivatingAttachments" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.094"/>
+  <testcase name="room11KeepsThreeAttachmentDomainsDefaultDisabled" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.083"/>
+  <testcase name="boundedPipeRejectsOversizeAndDoesNotLeakPartialRead" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.114"/>
+  <testcase name="visitTrashRestoreKeepsUuidThenPurgePreventsIntegerReuse" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.096"/>
+  <testcase name="pnBakBusinessSchemaTenStillExcludesAttachmentsAndRestoreRetiresIdentity" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.513"/>
+  <testcase name="typedIdentityIsStableAndMissingOrSkippedTargetsReject" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.101"/>
+  <testcase name="draftLinksAreScopedAndOldRestoreQuarantinesEvenSameIntegerTargets" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.414"/>
+  <testcase name="journalReplayCancelAndFailedTransactionKeepReservationsConsistent" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.111"/>
+  <testcase name="keyRolesPrivateSpaceAndMissingKeyCannotPretendRecovery" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.073"/>
+  <testcase name="unauthenticatedVersionsAndOperationsCannotBecomeReady" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.067"/>
+  <testcase name="labTrashRestoreKeepsTypedUuidAndContext" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.099"/>
+  <testcase name="changedTrashEvidenceFailsAndRestorationRollsBack" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.061"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

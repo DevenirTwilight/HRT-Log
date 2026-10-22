@@ -1,0 +1,62 @@
+{
+  "baseline": "e4ebab2ec4af1ed1b98038c1be1dc4e9c9a4672c",
+  "state": "FINAL_SOURCE_CI_PENDING",
+  "tests": {
+    "domain": {
+      "tests": 172,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "attachment_poc": {
+      "tests": 64,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "boundary_oracle_scenarios": 1872,
+  "python_isolation": {
+    "tests": 69,
+    "status": "PASS"
+  },
+  "android_local": {
+    "tests": 20,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "api26_29_35": "NOT_RUN",
+  "formal_import": "OFF_NOT_IMPLEMENTED",
+  "format_schema_backup_permissions_version": "UNCHANGED",
+  "physical_arm": "NOT_RUN",
+  "crypto_external_review": "NOT_REVIEWED_EXTERNALLY",
+  "source_sha256": {
+    "core/domain/src/main/kotlin/net/plainnotes/app/domain/AttachmentInputStream.kt": "f997cead5d471bb886e8c0829610aea99286d243285f803f88054106f4a39266",
+    "core/domain/src/test/kotlin/net/plainnotes/app/domain/AttachmentInputStreamTest.kt": "c52420533fa6882fab6649c7bf29370beea0c8e2758d545e40ac8f07d9d010f2",
+    "core/data/src/attachmentTest/java/net/plainnotes/app/data/AttachmentFoundationContract.kt": "03eece0e87e7b5fc24b02154de5ae42225637b54fc5803bed6515ead0065da38",
+    "core/data/src/androidTest/java/net/plainnotes/app/data/gate2/Gate2SafAndroidTest.kt": "d2ac3f55480073c0c4d27c458618462439fe0c3b06659b7bf561b6a52c183f51",
+    "core/data/src/test/java/net/plainnotes/app/data/AttachmentFoundationTest.kt": "ec6777879e7fa897b632f417c464e684e933c7bc8863efa055a71aa6300a911b",
+    "tools/attachment-poc/src/contractTest/kotlin/net/plainnotes/poc/B2ImportContract.kt": "413f4ebc49c00d1db8900f59e62f78dea1d5ebbfb9fbce8d60a1d9802eef859f"
+  },
+  "android_test_compile": "PASS_FINAL_SOURCE",
+  "native_api26_29_35": "PENDING_FINAL_SOURCE_CI",
+  "input_platform_red": {
+    "source": "ce902c89",
+    "tests": 20,
+    "failures": 1,
+    "reason": "Robolectric pipe statSize=0 versus real Android=-1; platform-specific precise expectations now retained"
+  },
+  "cipher_sandbox_integration": "PASS: oversize keeps original ciphertext/pointer/revision; exact limit passes existing full authentication and CAS; TEST_ONLY_NOT_ROOM_WRITER",
+  "source": "8dd60c435d924abafd3aabf8d7947b7691eae520",
+  "pr": 103,
+  "ci": {
+    "android_pr": 39845789203,
+    "android_push": 39845782550,
+    "science_pr": 39845789227,
+    "science_push": 39845782504,
+    "android": "PENDING",
+    "science": "SUCCESS"
+  },
+  "auto_merge": "ENABLED_PROTECTED"
+}
