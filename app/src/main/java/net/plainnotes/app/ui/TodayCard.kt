@@ -96,7 +96,7 @@ internal val LocalTodayClock = staticCompositionLocalOf<() -> Instant> { Instant
             // UI-07 D: "Logged · Undo" for 4 s after a dose is logged here; Undo is the existing delete of that record.
             undoable?.let { r ->
                 Row(Modifier.fillMaxWidth().testTag("today-logged"), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s)) {
-                    StatusIcon(StatusIconKind.TAKEN, StatusIconSizes.M, ring = c.onPrimary)
+                    StatusIcon(StatusIconKind.TAKEN, StatusIconSizes.M, tint = c.onPrimary)   // UI-07b: line on primary
                     Text(stringResource(R.string.today_logged), style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f))
                     TextButton({ justLogged = null; onUndo(r) }, Modifier.heightIn(min = 48.dp).testTag("today-undo"),
                         colors = ButtonDefaults.textButtonColors(contentColor = c.onPrimary)) { Text(stringResource(R.string.today_undo), fontWeight = FontWeight.SemiBold) }
@@ -226,7 +226,7 @@ internal const val UNDO_WINDOW_MS = 4_000L
     }
 }
 
-/** UI-05 A / UI-06 / UI-07: kind per record status from the status table, and its filled-circle icon. */
+/** UI-05 A / UI-06 / UI-07: kind per record status from the status table, and its status icon. */
 private fun recordIcon(r: RecordEntity): Pair<String, StatusIconKind> {
     val style = StatusStyles.ofRecord(r.status, r.unconfirmed)
     val kind = when (style.state) { DoseState.ON_TIME, DoseState.LATE -> "TAKEN"; DoseState.UNCONFIRMED -> "UNCONFIRMED"; DoseState.MISSED -> "MISSED"; else -> "SKIPPED" }

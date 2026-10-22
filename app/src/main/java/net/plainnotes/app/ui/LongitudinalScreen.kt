@@ -397,7 +397,7 @@ internal fun eventTypeColors(kind:EventKind,c:ColorScheme,sem:SemanticColors=sem
     EventKind.MILESTONE->c.primaryContainer to c.onPrimaryContainer;EventKind.REVIEW->c.inverseSurface to c.inverseOnSurface
     EventKind.MISSED->sem.missed.container to sem.missed.onContainer;else->c.surfaceVariant to c.onSurfaceVariant}
 @Composable internal fun EventTypeBadge(kind:EventKind) {
-    // UI-07 A: a missed dose is the same filled-circle status icon as everywhere else; the row's text names the type.
+    // UI-07 A: a missed dose is the same status icon as everywhere else; the row's text names the type.
     if(kind==EventKind.MISSED){Box(Modifier.size(36.dp).testTag("event-badge:${kind.name}"),contentAlignment=androidx.compose.ui.Alignment.Center){StatusIcon(StatusIconKind.MISSED,StatusIconSizes.L)};return}
     val (bg,fg)=eventTypeColors(kind,MaterialTheme.colorScheme,NotesTheme.semantic)
     Surface(shape=androidx.compose.foundation.shape.CircleShape,color=bg,contentColor=fg,modifier=Modifier.size(36.dp).testTag("event-badge:${kind.name}")){

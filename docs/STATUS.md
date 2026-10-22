@@ -8,6 +8,15 @@
 
 医疗档案、复诊、PDF、浓度页仍逐条显示。截图见 `docs/ui-audit/2026-10-22-lab04/`；真机清单第 16 节 NOT_RUN。
 
+## UI-07b 纯线条状态图标 — 2026-10-22
+
+状态图标从实心圆改为纯线条（REQUIREMENTS §136，报告 72）：
+- 线条直接画在背景上，颜色按背景选择：主色上用 onPrimary，着色日格和状态标签上用 onContainer，其余用 accent，高对比度用 onSurface；
+- 全部调用点的对比度矩阵 ≥ 3:1；
+- 状态判定、令牌、日历格底色都不变。
+
+截图见 `docs/ui-audit/2026-10-22-ui07b/`；真机清单第 15 节 NOT_RUN。
+
 ## UI-07 Material 3 Expressive 表现层 — 2026-10-21
 
 只用稳定 API 加入四项表现手法（REQUIREMENTS §133，报告 71）：
