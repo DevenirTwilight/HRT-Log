@@ -1,3 +1,7 @@
+## #104全data548通过，最终资源修正749bacb5复验在途 — 2026-10-22
+
+旧bbc候选46个suite/548项，0fail/error/skip；实际生产编译与Android新key测试源码编译PASS。最终749bacb50e202b7589493c697b2f1ddf1a788b4b将64KiB分配移入已登记资源清理范围、同步Tink许可声明；正在复验完整data+Android编译，不能把旧结果算给新源。最终CI：PR Android39851830571、push39851821800；各六门/三API仍在途。源码冻结后证据继续写此分支，避免证据提交改变被测试源码。
+
 ## #104默认OFF正式加密流与设备key适配：本地32项PASS，CI在途 — 2026-10-22
 
 PR104源bbc89d7aa9f2db04a6c1b3aa54cdeaa01bb2aec6，auto-merge已按§106启用。Foundation32/0fail/error/skip（20旧+12新，真实Tink公共API及独立subtle双向wire oracle），原XML在storage-local。全部data回归及Android新key测试编译在途；不能提前标PASS，三API原生同样待证据。授权/设计已经先提交，实际Room及PNBAK1不变；无应用调用、无SQL成功发布、无feature激活。

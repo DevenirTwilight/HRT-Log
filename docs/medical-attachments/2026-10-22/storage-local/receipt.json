@@ -11,11 +11,24 @@
     "environment": "Robolectric SDK28; not native"
   },
   "production_compile": "PASS",
-  "full_data_regression": "IN_PROGRESS",
-  "android_compile": "IN_PROGRESS",
+  "full_data_regression": {
+    "source": "bbc89d7aa9f2db04a6c1b3aa54cdeaa01bb2aec6",
+    "tests": 548,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suite_files": 46
+  },
+  "android_compile": "PASS_FOR_bbc89d7a",
   "api26_29_35": "IN_PROGRESS_IN_CI_NOT_CLAIMED_PASS",
   "external_review": "NOT_REVIEWED_EXTERNALLY",
   "feature_enabled": false,
   "new_migration": "NOT_IMPLEMENTED_DESIGN_SUBMITTED",
-  "new_complete_backup": "NOT_IMPLEMENTED_DESIGN_SUBMITTED"
+  "new_complete_backup": "NOT_IMPLEMENTED_DESIGN_SUBMITTED",
+  "next_source": {
+    "sha": "749bacb50e202b7589493c697b2f1ddf1a788b4b",
+    "change": "bounded allocations inside owned cleanup; dependency notice accuracy",
+    "local_regression": "IN_PROGRESS",
+    "native_ci": "IN_PROGRESS"
+  }
 }
