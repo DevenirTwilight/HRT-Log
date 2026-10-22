@@ -847,7 +847,7 @@ const val BACKFILL_MAX_DAYS=731L
                 val raw=db.openHelper.writableDatabase
                 RegimenHistory.seed(raw)
                 InventoryEncoding.legacyOnly(raw);ReferenceSchema.validate(raw)
-                JSONObject().put("format",BackupCodec.FORMAT_VERSION).put("schema",RecordBackupCompatibility.SCHEMA)
+                JSONObject().put("format",BackupCodec.FORMAT_VERSION).put("schema",RecordBackupCompatibility.exportSchema(raw))
                     .put("created",Instant.now().toString()).put("tables",RawData.dump(raw))
             }
             owner.capture(json.toString().toByteArray(Charsets.UTF_8))
@@ -883,6 +883,7 @@ const val BACKFILL_MAX_DAYS=731L
                 val tables=input.tables
                 require(schema>=10 || ReferenceSchema.businessTables.none {tables.has(it)}) { "Misdeclared reference backup version" }
                 RecordBackupCompatibility.validateInventoryVersion(schema,tables)
+                RecordBackupCompatibility.validateReferenceVersion(schema,tables)
                 val required=DOMAIN_TABLES.filterNot{(schema<2 && it in listOf("stage_review","symptom_check","review_effect")) || (schema<4 && it in listOf("regimen_version","regimen_rule_link","milestone")) || (schema<5 && it=="lab_context_revision") || (schema<6 && it in listOf("visit_question","visit_pack")) || (schema<7 && it in listOf("history_period_revision","record_annotation")) || (schema<9 && it=="trash_item") || (schema<10 && it in ReferenceSchema.businessTables) || (schema<11 && it=="lab_panel")}
                 require(required.all{tables.has(it)}) { "Incomplete backup" }
                 // LAB-02: an older backup has no panels; its results are restored ungrouped, never regrouped by time, laboratory or id.

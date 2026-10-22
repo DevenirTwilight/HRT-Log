@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="bdpm_title">French official catalogue</string>
+    <string name="bdpm_available">French BDPM identity catalogue is available offline. RCP/leaflet and monitoring services are separate and remain unavailable.</string>
+    <string name="bdpm_source">Source: BDPM (ANSM / HAS / UNCAM), copied official structured record. This is not authority endorsement or clinical verification.</string>
+    <string name="bdpm_scope">Source: BDPM, Licence Ouverte 1.0. Dated offline copy from the ANSM alternative host (test environment); latest production export could not be verified. No live availability, prescribing advice or ANSM endorsement. SA and FT/ST rows are displayed separately and never added together.</string>
+    <string name="bdpm_search_label">Name, ingredient, CIS or CIP13</string>
+    <string name="bdpm_initial">Enter keywords to search the built-in catalogue.</string>
+    <string name="bdpm_searching">Searching offline…</string>
+    <string name="bdpm_empty">No matching official records. Try another spelling or ingredient.</string>
+    <string name="bdpm_unavailable">Catalogue unavailable. Retry to repair its local copy. Your encrypted records are unaffected.</string>
+    <string name="bdpm_results">Official catalogue results</string>
+    <string name="bdpm_dates">Source dates: identity %1$s · packaging %2$s · composition %3$s. Retrieved %4$s.</string>
+    <string name="bdpm_snapshot_dates">Source dates: %1$s · retrieved %2$s. Historical copy; catalogue updates do not rewrite this association.</string>
+    <string name="bdpm_packages">View packaging and select</string>
+    <string name="bdpm_package_boundary">Selecting a package records a reference only. It does not confirm actual use, capacity or inventory.</string>
+    <string name="bdpm_choose_package">Choose this reference package</string>
+    <string name="bdpm_product_only">Choose product without a package</string>
+</resources>

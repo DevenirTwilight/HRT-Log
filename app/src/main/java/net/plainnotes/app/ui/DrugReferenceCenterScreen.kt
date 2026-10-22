@@ -40,13 +40,13 @@ import net.plainnotes.app.data.MedicationEntity
                 }
             }
         }
-        item("official") {Text(stringResource(R.string.drug_center_official_off))}
+        item("official") {Text(stringResource(R.string.bdpm_available))}
         item("user-sources") {Text(stringResource(R.string.drug_center_user_sources))}
         item("states") {Text(stringResource(R.string.drug_center_states),style=MaterialTheme.typography.bodySmall)}
         item("identity") { DrugCenterSection(R.string.drug_center_identity,R.string.drug_center_identity_body,"drug-center-identity") }
         item("packaging") { DrugCenterSection(R.string.drug_center_packaging,R.string.drug_center_packaging_body,"drug-center-packaging") }
         item("future-heading") {Text(stringResource(R.string.center_future_modules),style=MaterialTheme.typography.titleMedium,modifier=Modifier.semantics{heading()})}
-        item("catalogue") {UnavailableModuleCard(R.string.center_fr_catalogue,R.string.center_fr_catalogue_reason,"drug-center-catalogue")}
+        item("catalogue") {OutlinedButton(onClick=onBrowse,modifier=Modifier.fillMaxWidth().heightIn(min=56.dp).testTag("drug-center-catalogue")){Text(stringResource(R.string.bdpm_title))}}
         item("rcp") {UnavailableModuleCard(R.string.drug_center_rcp,R.string.drug_center_documents_off,"drug-center-rcp")}
         item("notice") {UnavailableModuleCard(R.string.drug_center_notice,R.string.drug_center_documents_off,"drug-center-notice")}
         item("safety") {UnavailableModuleCard(R.string.drug_center_safety,R.string.drug_center_safety_off,"drug-center-safety")}

@@ -6,6 +6,9 @@ import java.net.URI
 import java.security.MessageDigest
 import java.time.LocalDate
 
+/** Provenance of copied structured official facts; no authority endorsement or clinical verification. */
+data class BdpmProvenance(val databaseSha256:String,val sourceDates:String,val cip7:String?,val packageDescription:String?,val downloadUrl:String)
+
 /** Canonical, bounded source facts. Not MedicationEntity, a prescription or a PK profile. */
 data class UserReferenceProduct(
     val name: String,
@@ -18,6 +21,7 @@ data class UserReferenceProduct(
     val sourceUrl: String? = null,
     val sourceVersion: String,
     val recordedOn: String,
+    val bdpm:BdpmProvenance? = null,
 )
 
 /** User-entered snapshots only. A matching name is never an equivalence or an official identity claim. */
@@ -174,20 +178,34 @@ internal object ReferencePayload {
         return out.toString().also { require(utf8Length(it) <= MAX_BYTES) }
     }
     fun userProduct(product: UserReferenceProduct): JSONObject = JSONObject().apply {
-        put("format", 1); put("kind", "PRODUCT"); put("namespace", "USER_ENTERED")
+        put("format", if(product.bdpm==null)1 else 2); put("kind", "PRODUCT"); put("namespace", if(product.bdpm==null)"USER_ENTERED" else "BDPM_FR")
         put("source_version", product.sourceVersion); put("recorded_on", product.recordedOn)
         put("name", product.name); put("ingredients", JSONArray(product.ingredients)); put("routes", JSONArray(product.routes))
         put("strength", product.strength ?: JSONObject.NULL); put("form", product.form ?: JSONObject.NULL)
         put("cis", product.cis ?: JSONObject.NULL); put("cip", product.cip ?: JSONObject.NULL)
-        put("source_url", product.sourceUrl ?: JSONObject.NULL); put("verification", "UNVERIFIED")
+        put("source_url", product.sourceUrl ?: JSONObject.NULL); put("verification", if(product.bdpm==null)"UNVERIFIED" else "SOURCE_RECORD")
+        product.bdpm?.let{b->put("bdpm",JSONObject().put("database_sha256",b.databaseSha256).put("source_dates",b.sourceDates)
+            .put("cip7",b.cip7 ?: JSONObject.NULL).put("package_description",b.packageDescription ?: JSONObject.NULL).put("download_url",b.downloadUrl))}
     }.also(::validateProduct)
 
     fun validateProduct(json: JSONObject) {
         canonical(json)
-        require(json.keys().asSequence().toSet() == fields)
-        require(json.get("format") is Int && json.getInt("format") == 1 && json.getString("kind") == "PRODUCT")
-        // Official snapshot adapter is a separate gated feature. User-entered facts never claim official verification.
-        require(json.getString("namespace") == "USER_ENTERED" && json.getString("verification") == "UNVERIFIED")
+        val official=json.opt("namespace")=="BDPM_FR"
+        require(json.keys().asSequence().toSet() == if(official)fields+"bdpm" else fields)
+        require(json.get("format") is Int && json.getInt("format") == if(official)2 else 1)
+        require(json.getString("kind")=="PRODUCT")
+        if(official) {
+            require(json.getString("verification")=="SOURCE_RECORD" && !json.isNull("cis"))
+            val b=json.getJSONObject("bdpm")
+            require(b.keys().asSequence().toSet()==setOf("database_sha256","source_dates","cip7","package_description","download_url"))
+            require(b.get("database_sha256") is String && b.getString("database_sha256").matches(Regex("[0-9a-f]{64}")))
+            require(b.get("download_url")=="https://bdpmt.ansm.sante.fr/telechargement")
+            require(b.get("source_dates") is String)
+            b.getString("source_dates").split(" / ").also{require(it.size in 1..3)}.forEach{LocalDate.parse(it)}
+            require(b.isNull("cip7") || b.get("cip7") is String && b.getString("cip7").matches(Regex("[0-9]{7}")))
+            require(b.isNull("package_description") || b.get("package_description") is String && b.getString("package_description").isNotBlank())
+            require(json.isNull("cip") || !b.isNull("package_description"))
+        } else require(json.getString("namespace")=="USER_ENTERED" && json.getString("verification")=="UNVERIFIED")
         listOf("name", "source_version", "recorded_on").forEach { require(json.get(it) is String && json.getString(it).isNotBlank()) }
         LocalDate.parse(json.getString("recorded_on"))
         listOf("strength", "form", "cis", "cip", "source_url").forEach { require(json.isNull(it) || json.get(it) is String) }
@@ -210,6 +228,7 @@ internal object ReferencePayload {
         validateProduct(json)
         fun strings(key: String) = json.getJSONArray(key).let { a -> (0 until a.length()).map { a.getString(it) } }
         return UserReferenceProduct(json.getString("name"), strings("ingredients"), optional(json,"strength"), optional(json,"form"),
-            strings("routes"), optional(json,"cis"), optional(json,"cip"), optional(json,"source_url"), json.getString("source_version"), json.getString("recorded_on"))
+            strings("routes"), optional(json,"cis"), optional(json,"cip"), optional(json,"source_url"), json.getString("source_version"), json.getString("recorded_on"),
+            json.optJSONObject("bdpm")?.let{b->BdpmProvenance(b.getString("database_sha256"),b.getString("source_dates"),optional(b,"cip7"),optional(b,"package_description"),b.getString("download_url"))})
     }
 }
