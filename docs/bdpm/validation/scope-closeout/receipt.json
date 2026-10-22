@@ -1,0 +1,22 @@
+{
+  "parent_source_sha": "054c30ad8beac2449a560f58bc9a9524cf66624e",
+  "changed_production_files": {
+    "app/src/main/res/values-zh/bdpm_strings.xml": "6c1386ef37a422ba6e81a4fb8d5f8ecc00e40be3d3a4958d10ca902a977c3e35",
+    "app/src/main/res/values-fr/bdpm_strings.xml": "665d9b6ba687e3871f453f349be80a68cf91df3357cbc5e9be3f5ceb7854c910",
+    "app/src/main/res/values-b+zh+Hant/bdpm_strings.xml": "4da0f7aea1fdb9b6ed3edb9a2f788c405d7c5a53ad0d0a6dd8f8fee06252e465",
+    "app/src/main/res/values/bdpm_strings.xml": "59f9d56e95f88746550700716d39f7bfe3f8fa1ffb4984badc58fe1001798629"
+  },
+  "four_language_real_app_flow": {
+    "tests": 12,
+    "failures": 0,
+    "skipped": 0,
+    "environment": "Robolectric API35; 320dp, 2x font; native not inferred"
+  },
+  "translation_navigation": {
+    "tests": 3,
+    "failures": 0,
+    "evidence": "Previous test result XML counts observed before rerun; command stdout retained"
+  },
+  "asset": "Same SHA and SQLite as 054c30ad; no backend changes",
+  "required_ci": "Pending for this label candidate"
+}

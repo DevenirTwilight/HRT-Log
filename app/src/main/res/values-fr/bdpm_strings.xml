@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="bdpm_title">Catalogue officiel français</string>
+    <string name="bdpm_title">Catalogue français lié au THS</string>
     <string name="bdpm_available">Le catalogue d’identités BDPM est intégré hors ligne. RCP/notice et surveillance restent distincts et indisponibles.</string>
     <string name="bdpm_source">Source : BDPM (ANSM / HAS / UNCAM), copie structurée officielle, sans caution ni validation clinique.</string>
-    <string name="bdpm_scope">Source : BDPM, Licence Ouverte 1.0. Copie datée du site alternatif ANSM (environnement de test) ; dernier export de production non vérifié. Ni disponibilité en temps réel, ni conseil de prescription, ni caution ANSM. Les lignes SA et FT/ST restent distinctes, sans addition.</string>
+    <string name="bdpm_scope">Sous-ensemble BDPM par substance lié aux traitements hormonaux substitutifs, sans couvrir tous les médicaments français. Inclusion sans recommandation thérapeutique. Source : BDPM, Licence Ouverte 1.0. Copie datée du site alternatif ANSM (environnement de test) ; dernier export de production non vérifié. Ni disponibilité en temps réel, ni conseil de prescription, ni caution ANSM. Les lignes SA et FT/ST restent distinctes, sans addition.</string>
     <string name="bdpm_search_label">Nom, substance, CIS ou CIP13</string>
     <string name="bdpm_initial">Saisissez des mots pour rechercher dans le catalogue intégré.</string>
     <string name="bdpm_searching">Recherche hors ligne…</string>

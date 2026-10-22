@@ -11,3 +11,5 @@
 “全部”的证明范围是：**规则表中每个成分代码，在此法国BDPM快照内命中的所有产品及其全部组成/包装**。不是全球HRT全集；法国源未收录的海外商品和此快照不存在的成分不伪造补齐。顺势疗法TESTOSTERONE/PROGESTERONUM与放射性FLUOROESTRADIOL不因名字相似入选。现有源TEST横幅、更新时间和许可限制详见README及原始manifest，没有被新筛选消除。
 
 完整官方原字节仅保留tools源归档供维护者复建，不放Android assets，不进入用户SQLCipher库。Room/PNBAK1/关联UUID及不可变快照合同均不改变。尚未签名交付或发布；PR98需新候选必需CI和设备证据，不以Python替代设备验收。
+
+本地fullDebug构建实测：APK ZIP内SQLite压缩98386B、来源manifest9021B，合计107407B（约105KiB），不含ZIP头/签名/公共代码，不能等同整个功能APK增量。见validation/scope-closeout/apk-asset-size.json；未交付该构建。
