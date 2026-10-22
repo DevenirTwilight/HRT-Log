@@ -17,6 +17,11 @@ import androidx.biometric.BiometricManager
 import net.plainnotes.app.R
 import net.plainnotes.app.reminder.NotificationPrefs
 import net.plainnotes.app.security.AppLock
+import net.plainnotes.app.security.ScreenCapture
+import androidx.compose.ui.platform.testTag
+import androidx.compose.foundation.selection.toggleable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.semantics.Role
 
 /** True when simple mode hides multi-medication UI. */
 val LocalSimpleMode = compositionLocalOf { false }
@@ -48,6 +53,24 @@ val LocalSimpleMode = compositionLocalOf { false }
         OutlinedTextField(title, { title = it; notify.title = it }, Modifier.fillMaxWidth(), label = { Text(stringResource(R.string.notif_title)) }, placeholder = { Text(stringResource(R.string.neutral_reminder_default)) }, singleLine = true)
         OutlinedTextField(body, { body = it; notify.body = it }, Modifier.fillMaxWidth(), label = { Text(stringResource(R.string.notif_body)) }, placeholder = { Text(stringResource(R.string.neutral_open_default)) }, singleLine = true)
         SwitchRow(stringResource(R.string.notif_details), details, stringResource(if (notify.disguised) R.string.notif_details_disguised else R.string.notif_details_desc)) { details = it; notify.details = it }
+        HorizontalDivider()
+        // §135: "Block screenshots", on by default; turning it off allows them at once, also in disguise mode inside the app.
+        val disguised = remember { net.plainnotes.app.disguise.Disguise.enabled(context) }
+        var block by remember { mutableStateOf(!prefs.allowScreenshots) }
+        Row(Modifier.fillMaxWidth().heightIn(min = 48.dp).toggleable(block, role = Role.Switch) {
+                block = it; prefs.allowScreenshots = !it
+                ScreenCapture.activityOf(context)?.let { a -> ScreenCapture.apply(a, !it, disguised) }
+            }.testTag("privacy-screenshots"), verticalAlignment = Alignment.CenterVertically) {
+            Column(Modifier.weight(1f)) {
+                Text(stringResource(R.string.screenshots_block), style = MaterialTheme.typography.bodyLarge)
+                Text(stringResource(R.string.screenshots_block_desc), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                // In disguise mode, say what happens to the recents preview on this phone when screenshots are allowed.
+                if (disguised) Text(stringResource(if (ScreenCapture.previewExposed(true, true)) R.string.screenshots_disguise_preview_shown else R.string.screenshots_disguise_preview_hidden),
+                    style = MaterialTheme.typography.bodySmall, color = if (ScreenCapture.previewExposed(true, true)) NotesTheme.semantic.attention.accent else MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.testTag("privacy-screenshots-disguise"))
+            }
+            Switch(block, null)
+        }
         HorizontalDivider()
         SwitchRow(stringResource(R.string.simple_mode), simpleMode && activeMedications <= 1, stringResource(if (activeMedications <= 1) R.string.simple_mode_desc else R.string.simple_mode_unavailable)) {
             if (activeMedications <= 1) onSimpleMode(it) }
