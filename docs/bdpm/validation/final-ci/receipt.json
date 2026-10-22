@@ -1,0 +1,15 @@
+{
+  "source_head": "9233773533a7a110fbaa822c478d6ce1ad13b32b",
+  "mainline_base": "aaab9669dec7c52805be95fb46ca2a44464fea81",
+  "pr_checkout_merge": "4d080993e34b268c6c157aa808462fdef7295bf3",
+  "source_tree": "6a76761ddf5cb08e8780be7bff5da79be5e5523a",
+  "pr_checkout_tree": "6a76761ddf5cb08e8780be7bff5da79be5e5523a",
+  "tree_equality": "PASS (GitHub merge checkout tree equals source head tree)",
+  "android_run": 39783311218,
+  "science_run": 39783311197,
+  "status": "IN_PROGRESS; not accepted or merged",
+  "prior_source": "054c30ad8beac2449a560f58bc9a9524cf66624e",
+  "prior_checkout_merge": "ce2e10378a52eb6544d4e8fdfa33d5c335b95f13",
+  "prior_result": "FAIL native follow-up/setup; host cancelled at R8 after superseding source, not host PASS",
+  "evidence_branch_policy": "Documentation/artifacts only; never the production candidate. [skip ci] avoids rerunning runtime gates for results metadata."
+}

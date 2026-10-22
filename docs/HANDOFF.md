@@ -1,3 +1,11 @@
+## BDPM 冻结候选92337735；当前证据分支，非生产候选 — 2026-10-22
+
+生产PR98 HEAD9233773533a7a110fbaa822c478d6ce1ad13b32b（含73b42862四语子集说明及收尾测试修正）已推送，工作树干净。最终Android run39783311218、Science39783311197正在执行，不预报通过/合并。PR实际checkout为4d080993e34b268c6c157aa808462fdef7295bf3，两者Git tree相同6a76761d…523a；报告会同时记录head和实际checkout，避免混淆PR合并引用与源码SHA。
+
+本分支docs/bdpm-final-evidence-20261022只追加原始结果/最终HANDOFF，提交使用[skip ci]，不作为生产候选、不合入来替代必需检查；功能PR源保持冻结。当前尚无最终结果，见final-ci/receipt.json。上一054主机作业已取消，完成到R8阶段；原生API26两Back失败、API35独立断网测试入口未安装导致NOT_RUN，API29整体PASS，原始工件已保留。没有重复跑同SHA碰绿，没有P4性能/PK/Room/签名/Release动作。
+
+下一步：等最终6必需检查及附加research-deep；下载三个小原生工件及job日志，确认API26单次Back、API35真实关联3和断网新进程1实际PASS；若失败只按具体新证据修复。全绿/无冲突/无未解决评审后按§106受保护集成，再查默认分支CI。真机/TalkBack NOT_RUN，未交付APK。
+
 ## BDPM 收尾证据位置与冻结规则 — 2026-10-22
 
 最终候选提交后仅等待必需CI及受保护集成；新功能或发现真实失败才修改代码，不跑同SHA碰绿。收尾完成时的原始工件/精确源码SHA/最终HANDOFF拟保存独立证据分支 `docs/bdpm-final-evidence-20261022` 并从PR98链接，避免为了给通过结果写自引用SHA而反复改变功能候选、重复触发原生。该分支尚未生成，不提前称CI通过或完成合并。
