@@ -1,0 +1,33 @@
+{
+  "apk": "HRT-Log-build34-full-official.apk",
+  "package": {
+    "application_id": "net.plainnotes.app",
+    "version_code": 34,
+    "version_name": "0.2.0"
+  },
+  "apk_sha256": "e0a9cffab6bc9e0d55228f866a096e2b47fc25352a3920cdc5d331a4d0335e41",
+  "signing_cert_sha256": [
+    "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1"
+  ],
+  "source": {
+    "SOURCE_COMMIT_TIME_UTC": "2026-10-22T00:08:42Z",
+    "SOURCE_DIRTY": "false",
+    "SOURCE_ORIGIN": "git",
+    "SOURCE_SHA": "7e0a894767281c06f5e8dbed4dced2aa926d8d76"
+  },
+  "status": "PRIVATE_FILE_PROVIDED_OWNER_INSTALL_NOT_VERIFIED",
+  "size_bytes": 13413236,
+  "signature_v3": true,
+  "zipalign_16kb": true,
+  "internet_permission": false,
+  "release_manifest_check": "PASS",
+  "attachment_release_isolation": "PASS",
+  "source_ci": "PR #93 head 7e0a8947: android, jvm, device-tests, attachment-poc-compatibility 26/29, science-change-gate all success (research-deep skipped by rule); merged as de0c4e55",
+  "contents": "UI-06 (#91), UI-07 (#92), P4 (#57), Block screenshots switch (#94, §135); versionCode 33 -> 34 only (#93)",
+  "authorization": "Owner 2026-10-21: '合了给我出个正式签名apk', then '先把是否允许截屏做成可以自己选择开关的选项，加进应用里之后再做apk' / '做完给包' (REQUIREMENTS §134, §135)",
+  "delivery_channel": "Claude session private file (SendUserFile), not Drive; no public link; no tag or Release moved",
+  "delivery_date": "2026-10-22",
+  "temporary_credentials_removed": true,
+  "physical_device": "NOT_RUN",
+  "talkback": "NOT_RUN"
+}
