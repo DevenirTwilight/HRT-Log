@@ -17,4 +17,8 @@
     <string name="bdpm_choose_package">Choose this reference package</string>
     <string name="bdpm_product_only">Choose product without a package</string>
     <string name="bdpm_limited">Showing the first 50 matching products. Refine the keywords for more.</string>
+    <string name="bdpm_routes">Routes (official original text)</string>
+    <string name="bdpm_version">Catalogue snapshot version</string>
+    <string name="bdpm_downloaded">Download date</string>
+    <string name="bdpm_status_omitted">Authorisation, marketing and supply status are not displayed in this identity catalogue. Do not infer availability or safety.</string>
 </resources>

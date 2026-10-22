@@ -17,4 +17,8 @@
     <string name="bdpm_choose_package">選擇此資料包裝</string>
     <string name="bdpm_product_only">僅選擇產品，不指定包裝</string>
     <string name="bdpm_limited">顯示前 50 條符合產品。請細化關鍵字查找更多。</string>
+    <string name="bdpm_routes">給藥途徑（官方原文）</string>
+    <string name="bdpm_version">目錄快照版本</string>
+    <string name="bdpm_downloaded">下載日期</string>
+    <string name="bdpm_status_omitted">此身分目錄不顯示許可、上市及供應狀態，不應據此推斷可取得性或安全性。</string>
 </resources>

@@ -17,4 +17,8 @@
     <string name="bdpm_choose_package">选择此资料包装</string>
     <string name="bdpm_product_only">仅选择产品，不指定包装</string>
     <string name="bdpm_limited">显示前 50 条匹配产品。请细化关键词查找更多。</string>
+    <string name="bdpm_routes">给药途径（官方原文）</string>
+    <string name="bdpm_version">目录快照版本</string>
+    <string name="bdpm_downloaded">下载日期</string>
+    <string name="bdpm_status_omitted">此身份目录不展示许可、上市及供应状态，不应据此推断可获得性或安全性。</string>
 </resources>

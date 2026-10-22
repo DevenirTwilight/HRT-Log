@@ -17,4 +17,8 @@
     <string name="bdpm_choose_package">Choisir cette présentation de référence</string>
     <string name="bdpm_product_only">Choisir le produit sans présentation</string>
     <string name="bdpm_limited">Les 50 premiers produits correspondants sont affichés. Précisez les mots pour en trouver d’autres.</string>
+    <string name="bdpm_routes">Voies (texte officiel original)</string>
+    <string name="bdpm_version">Version de la copie du catalogue</string>
+    <string name="bdpm_downloaded">Date d’extraction</string>
+    <string name="bdpm_status_omitted">Ce catalogue d’identités n’affiche pas les statuts d’autorisation, de commercialisation ou de disponibilité. Aucune conclusion de disponibilité ou de sécurité ne doit en être tirée.</string>
 </resources>

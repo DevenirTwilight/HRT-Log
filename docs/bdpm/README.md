@@ -19,3 +19,5 @@
 文件所有权：本分支拥有BdpmCataloguePanel、MedicationReferenceDialog、DrugReferenceCenterScreen及专用资源/构建脚本；不改AppShell、NotesViewModel、P4 writer/验证架构或未合并#58。共享数据文件仅增加官方payload与备份版本选择/拒绝规则；差分随独立PR审查，不拷贝其他工作树。测试专用SQLCipher编译依赖复用已在core:data运行时存在的库，不新增release依赖。
 
 当前本地：真实App四语言320dp/2x关联/取消/重开和未保存草稿返回8项PASS；真实文件系统失败→明确不可用→重试恢复→无匹配4项PASS；官方核心4项与译文3项PASS，native源码编译PASS。新增官方解除关联最后验证及最终PR必需CI尚待完成；不把JVM或编译称作设备执行，真机/TalkBack NOT_RUN。历史失败及实际输入清空的RED保留。
+
+最终本地源码170345c7：新来源4+旧Payload10、四语言官方完整关联/取消/重开/解除4、两个native合同源码编译PASS（final-local收据）。最后来源标签校正随最终PR CI验收；此前草稿/故障8项各自的通过和原始失败均保留，不冒充同次或真机结果。

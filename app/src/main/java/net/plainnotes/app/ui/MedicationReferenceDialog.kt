@@ -127,13 +127,13 @@ import java.time.LocalDate
             Text(b.downloadUrl)
         }
         listOf(R.string.ref2_ingredients to product.ingredients.joinToString("\n"),R.string.ref2_strength to product.strength,
-            R.string.ref2_form to product.form,R.string.ref2_routes to product.routes.joinToString("\n"),
-            R.string.ref2_cis to product.cis,R.string.ref2_cip to product.cip,R.string.ref2_version to product.sourceVersion,
-            R.string.ref2_date to product.recordedOn).forEach { (label,value)->
+            R.string.ref2_form to product.form,(if(product.bdpm==null)R.string.ref2_routes else R.string.bdpm_routes) to product.routes.joinToString("\n"),
+            R.string.ref2_cis to product.cis,R.string.ref2_cip to product.cip,(if(product.bdpm==null)R.string.ref2_version else R.string.bdpm_version) to product.sourceVersion,
+            (if(product.bdpm==null)R.string.ref2_date else R.string.bdpm_downloaded) to product.recordedOn).forEach { (label,value)->
             Text(stringResource(label),style=MaterialTheme.typography.labelLarge)
             Text(value?.takeIf {it.isNotBlank()} ?: stringResource(R.string.ref2_unknown))
         }
-        Text(stringResource(R.string.ref2_status_unknown));Text(stringResource(R.string.ref2_documents_unknown))
+        Text(stringResource(if(product.bdpm==null)R.string.ref2_status_unknown else R.string.bdpm_status_omitted));Text(stringResource(R.string.ref2_documents_unknown))
         product.sourceUrl?.let { url->
             Text(url)
             TextButton(onClick={external=true}){Text(stringResource(R.string.ref2_open_source))}
