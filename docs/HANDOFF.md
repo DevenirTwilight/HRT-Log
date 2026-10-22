@@ -1,3 +1,7 @@
+## #104发现并修复运行依赖许可守卫FAIL，旧失败保留 — 2026-10-22
+
+749bacb5的push Android39851821726/job120080459643中ThirdPartyNoticesTest.everyRuntimeLibraryHasANotice FAIL（新增runtime alias tink.android不在许可映射）；不是加密合同或数据层失败。三API先前PASS仍仅归旧源，不能宣称全CI通过。补齐原许可映射和四语licenses_body里的Tink Apache-2.0归属，并新增四语归属正向检查，所有旧断言保持；未改页面布局/导航或开启功能。原失败日志/工件保留并写证据分支，PR保持自动合并待全部最终门。新最终源需要复验许可、时期稳定性与六门，不靠重跑旧源挑绿色。
+
 ## #104代码复核：资源边界与依赖声明 — 2026-10-22
 
 复核将64KiB工作缓冲分配移到资源已登记且有finally清理的范围内；分配异常也会关闭移交的源/目标/channel并清除原始DEK，不以System.gc或扩大heap解决。THIRD_PARTY_NOTICES同步反映新runtime声明，未放宽现有R8发布隔离守卫；正式启用时仍需补齐适用应用内许可。此为必要源码调整，旧bbc的本地32项仍只归属旧源码，新最终提交需重跑相关回归和完整CI，不借旧绿冒充新源通过。
