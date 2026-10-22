@@ -53,7 +53,7 @@ import java.time.*
 @Composable fun LongitudinalScreen(state:NotesState,extra:NotesViewModel.ExtraState,onSave:(MilestoneEntity)->Unit,
     onDelete:(Long)->Unit,onOpen:(EventKind)->Unit,contentPadding:PaddingValues,onAppointment:(Long)->Unit={},
     saveState:MilestoneSaveState=MilestoneSaveState(),onSaveHandled:()->Unit={},onImportedHistory:(List<Long>)->Unit={onOpen(EventKind.DOSE)},
-    timelineActions:TimelineActions=TimelineActions(),addHost:TimelineAddHost?=null) {
+    timelineActions:TimelineActions=TimelineActions(),addHost:TimelineAddHost?=null,onLabPanel:(Long)->Unit={}) {
     var now by remember{mutableStateOf(Instant.now())}
     LaunchedEffect(Unit){while(true){kotlinx.coroutines.delay(60_000);now=Instant.now()}}
     val record=remember(extra.records,extra.regimens,extra.labs,extra.reviews,extra.milestones,extra.historyPeriods,state.appointments,state.ruleSnapshots,now){PeriodTimelineProjection.build(extra,state.appointments,now,ruleSnapshots=state.ruleSnapshots)}
@@ -79,22 +79,26 @@ import java.time.*
             apply(TimelineEdits.saveV2(extra.historyPeriods,projection,m,std,r,identity(m),target,exact,exact?.takeIf{r==range}))}
     }
     val periods=projection.periods.filter{it.from<=Instant.now()}.asReversed()
+    // LAB-04: a lab draw (a panel, or results with the same time and laboratory) is one row, grouped as the labs page groups.
+    val draws=remember(record,extra.labPanels){TimelineLabDraws.mergeable(record.events,record.upcoming,extra.labPanels)}
+    fun MutableList<StoryBlock>.addEvents(events:List<PeriodEvent>)=TimelineLabDraws.fold(events,draws).forEach{row->when(row){
+        is TimelineRow.One->add(StoryBlock(row.event.key,event=row.event));is TimelineRow.Draw->add(StoryBlock(row.draw.key,draw=row.draw))}}
     val blocks=buildList<StoryBlock> {
         if(record.upcoming.isNotEmpty() || record.importedHistory.any{it.future}){
-            add(StoryBlock("upcoming"));record.upcoming.forEach{add(StoryBlock(it.key,event=it))}
+            add(StoryBlock("upcoming"));addEvents(record.upcoming)
             record.importedHistory.filter{it.future}.forEach{add(StoryBlock(it.key,imported=it))}
         }
-        periods.forEach{period->add(StoryBlock(period.key,period=period));record.eventsIn(period).forEach{add(StoryBlock(it.key,event=it))}
+        periods.forEach{period->add(StoryBlock(period.key,period=period));addEvents(record.eventsIn(period))
             record.importedHistory.filter{!it.future && it.displayPeriodKey==period.key}.forEach{add(StoryBlock(it.key,imported=it))}
         }
         if(record.unknownEvents.isNotEmpty() || periods.isEmpty() || record.importedHistory.any{!it.future && it.displayPeriodKey==null}){
-            add(StoryBlock("unknown"));record.unknownEvents.forEach{add(StoryBlock(it.key,event=it))}
+            add(StoryBlock("unknown"));addEvents(record.unknownEvents)
             record.importedHistory.filter{!it.future && it.displayPeriodKey==null}.forEach{add(StoryBlock(it.key,imported=it))}
         }
     }
     // UI-02 A1: front-end type filter only; the projection and period cards are unchanged.
     var filter by rememberSaveable { mutableStateOf(TimelineFilter.ALL) }
-    val shown=remember(blocks,filter){if(filter==TimelineFilter.ALL)blocks else blocks.filter{b->b.event?.let{filter.matches(it.kind)} ?: (b.imported==null || filter==TimelineFilter.OTHER)}}
+    val shown=remember(blocks,filter){if(filter==TimelineFilter.ALL)blocks else blocks.filter{b->b.event?.let{filter.matches(it.kind)} ?: b.draw?.let{filter.matches(EventKind.LAB)} ?: (b.imported==null || filter==TimelineFilter.OTHER)}}
     LaunchedEffect(saveState.saved?.id) {
         saveState.saved?.let{saved->
             edit=null;focusKey="milestone:${saved.id}"
@@ -105,8 +109,9 @@ import java.time.*
     LaunchedEffect(focusKey,record) {
         val target=focusKey?.let{key->(record.events+record.upcoming).firstOrNull{it.key==key}} ?: return@LaunchedEffect
         // A focused event hidden by the filter brings the full list back first.
-        val visible=if(shown.any{it.event?.key==target.key})shown else {filter=TimelineFilter.ALL;blocks}
-        val index=visible.indexOfFirst{it.event?.key==target.key}+2 // after the intro and filter items
+        fun StoryBlock.holds()=event?.key==target.key || draw?.events?.any{it.key==target.key}==true
+        val visible=if(shown.any{it.holds()})shown else {filter=TimelineFilter.ALL;blocks}
+        val index=visible.indexOfFirst{it.holds()}+2 // after the intro and filter items
         list.animateScrollToItem(index)
         detailKey=target.key // exact source is visible even inside a large historical period
         focusKey=null
@@ -125,7 +130,7 @@ import java.time.*
     }
     // UI-05 D: events (and imported summaries) are drawn as the inset list of the group card above them: a period, the
     // upcoming card or the unknown card. Group membership is only the order of the unchanged projection's blocks.
-    fun isChild(b:StoryBlock)=b.event!=null || b.imported!=null
+    fun isChild(b:StoryBlock)=b.event!=null || b.draw!=null || b.imported!=null
     val groups=remember(shown){var group="";shown.map{b->if(!isChild(b))group=b.period?.key ?: b.key;group}}
     LazyColumn(Modifier.fillMaxSize().testTag("period-timeline"),state=list,contentPadding=PaddingValues(start=16.dp,end=16.dp,
         top=contentPadding.calculateTopPadding()+8.dp,bottom=contentPadding.calculateBottomPadding()+32.dp),verticalArrangement=Arrangement.Top) {
@@ -158,6 +163,8 @@ import java.time.*
                     }
                 }
                 event!=null->GroupChild(group,first,last){EventRow(event,::open)}
+                // LAB-04: a panel opens its detail; a display-only group opens the labs page (it has no scroll-to-draw).
+                block.draw!=null->{val d=block.draw;GroupChild(group,first,last){TimelineLabDrawRow(d){d.draw.panel?.let{onLabPanel(it.id)} ?: onOpen(EventKind.LAB)}}}
                 period!=null->{
                     val current=period.contains(now)
                     val standards=projection.standards.filter{it.key in period.finalStandardSpanKeys}
@@ -459,7 +466,7 @@ private val milestoneSaver=androidx.compose.runtime.saveable.Saver<MilestoneEnti
     save={v->v?.let{listOf(it.id.toString(),it.date,it.kind,it.title.orEmpty(),it.note.orEmpty())} ?: emptyList()},
     restore={v->v.takeIf{it.isNotEmpty()}?.let{MilestoneEntity(it[0].toLong(),it[1],it[2],it[3].takeIf(String::isNotEmpty),it[4].takeIf(String::isNotEmpty))}})
 
-private data class StoryBlock(val key:String,val period:DisplayPeriod?=null,val event:PeriodEvent?=null,val imported:ImportedHistorySummary?=null)
+private data class StoryBlock(val key:String,val period:DisplayPeriod?=null,val event:PeriodEvent?=null,val imported:ImportedHistorySummary?=null,val draw:TimelineLabDraw?=null)
 
 @Composable private fun importedRange(summary:ImportedHistorySummary,zone:ZoneId)=
     formatDate(summary.from.atZone(zone).toLocalDate())+" → "+formatDate(summary.through.atZone(zone).toLocalDate())

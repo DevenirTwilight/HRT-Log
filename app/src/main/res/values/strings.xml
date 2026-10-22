@@ -1322,4 +1322,10 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="screenshots_block_desc">On (default): screenshots and screen recordings are blank, and recent apps hide the content. Off: the app\'s screens can be captured and appear in recent apps.</string>
 <string name="screenshots_disguise_preview_hidden">Disguise mode: with this off, recent apps still hide the real app on this phone.</string>
 <string name="screenshots_disguise_preview_shown">Disguise mode: on this Android version, turning this off also shows the real app in recent apps.</string>
+<!-- LAB-04 (REQUIREMENTS §137): one lab draw as one timeline row. -->
+<string name="timeline_lab_draw_title">Lab test · %1$d results</string>
+<string name="timeline_lab_draw_out_of_range">%1$d out of range</string>
+<string name="timeline_lab_draw_spoken_title">Lab test, %1$d results</string>
+<string name="timeline_lab_draw_spoken_out">%1$d outside the reference range</string>
+<string name="lab_names_join">", "</string>
 </resources>
