@@ -1,0 +1,48 @@
+{
+  "recorded_at": "2026-10-22T13:44:10.373230+00:00",
+  "default_branch": "claude/new-session-1959qb",
+  "baseline": "aaab9669dec7c52805be95fb46ca2a44464fea81",
+  "p4": {
+    "pr": 57,
+    "state": "MERGED",
+    "merge": "b04358fdb1c79f04136afdf46865e9941c980deb",
+    "post_merge_android_run": 39665680148,
+    "post_merge_android_result": "SUCCESS",
+    "entry": "OFF",
+    "p5_p6": "NOT_IMPLEMENTED"
+  },
+  "bdpm": {
+    "pr": 98,
+    "head": "9233773533a7a110fbaa822c478d6ce1ad13b32b",
+    "pr_android_run": 39783311218,
+    "pr_required_checks": "ALL_PASS",
+    "auto_merge": true,
+    "protection_state": "BLOCKED",
+    "push_run": 39783306424,
+    "push_previous": "CANCELLED",
+    "completion_attempt": 2,
+    "science_push_run": 39783306297,
+    "science_completion_attempt": 2,
+    "action": "Complete interrupted normal checks once; no admin or new source changes"
+  },
+  "ui08": {
+    "pr": 99,
+    "head": "a5d5aaac45aa5b42f7d4f6e1afa15606351dde53",
+    "auto_merge": true,
+    "pr_run": 39786782675,
+    "pr_api26_api29_api35": "SUCCESS",
+    "pr_android": "IN_PROGRESS",
+    "push_failed_job": 119851859277,
+    "failure_phase": "Before test installation at adb root: unable to connect for root: closed",
+    "original_log_sha256": "7e672d8a7a64347fc5c989ea8652dfd1b006f713889b6ba14b0cc62ed4e8b07d",
+    "failed_tests": "NOT_RUN in failed job",
+    "job_only_rerun_request": "REFUSED job cannot be rerun while run remains in progress; no retry started"
+  },
+  "delivery": {
+    "build34": "ALREADY_DELIVERED_PER_MAINLINE_RECEIPT_NOT_REDELIVERED",
+    "build35": "AUTHORIZED_BUT_WAIT_FOR_UI08_MERGE_AND_MAINLINE_CHECKS",
+    "new_apk": "NOT_BUILT_OR_SIGNED"
+  },
+  "physical_device": "NOT_RUN",
+  "manual_talkback": "NOT_RUN"
+}

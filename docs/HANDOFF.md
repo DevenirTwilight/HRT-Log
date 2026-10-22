@@ -1,3 +1,15 @@
+## 2026-10-22 接手核对：P4已合并；当前收尾为#98/#99与build35
+
+从GitHub重新核验默认分支 `claude/new-session-1959qb` / `aaab9669`。#57实际合并 `b04358fd`，合并后Android run39665680148 SUCCESS；正式入口仍OFF，不能按下方历史Draft/5秒攻关检查点继续工作。
+
+主线已合入#96线条状态图标和#97化验时间线显示合并；build34已有正式签名私密交付回执，本次没有重新交付。最新UI08分支任务书要求build35等#99合并且主线检查通过，不能只按旧HANDOFF“LAB04完成后”提前出包。
+
+#98 HEAD92337735的PR run39783311218六必需检查全部PASS，三API原始证据见独立 `docs/bdpm-final-evidence-20261022`；push run39783306424此前被取消导致保护仍BLOCKED。保留现有auto-merge；普通merge被保护拒绝后未用admin，现仅补完被中断的push Android与Science各一次（attempt2），不修改源码、不重跑P4性能。
+
+#99 HEADa5d5aaac的PR run39786782675三API均SUCCESS、主Android仍IN_PROGRESS。push job119851859277原日志明确失败在测试安装前的adb root连接关闭，不是已执行的业务断言失败；原日志gzip和SHA见 `docs/takeover/2026-10-22/`。单job重跑请求被GitHub拒绝，未启动重跑；等原run结束后只补真实失败的环境job一次，不取消其他在途检查、不把失败改成PASS。
+
+下一步：核完两PR最终精确HEAD/检查与未解决讨论，保持正常auto-merge；任一先合后另一须按strict保护整合新主线，四语/需求/交接双方内容保留（两分支均使用§138，集成时保留来源并消除编号歧义）。随后核主线并按已批准流程交付build35。未启用P5/P6、附件或#58说明书；不改PK或密码学。不触旧dirty worktree，接手独立树 `/workspace/HRT-Log-takeover-20261022`。当前文档分支仅保存接手证据，不抢先合并使两功能PR反复失效。
+
 ## LAB-04 时间线合并化验：本地验证通过，PR 待 CI — 2026-10-22
 
 负责人上传 LAB-04 任务书（§137），并要求“整完这个再给apk”，即 build35 同时包含 UI-07b（#96）和 LAB-04。

@@ -1,3 +1,5 @@
+> **2026-10-22已核验状态**：P4 #57已于2026-10-21受保护合并为`b04358fd`，合并后Android39665680148 SUCCESS。正式入口OFF，P5/P6未启用；普通写入按§131独立观测，不恢复旧5秒攻关。最终原始证据在`evidence/p4-admission-4a67e96e`分支的`final-admission/`。以下Draft/待验/未合并均是保留的历史检查点；最新接手状态见HANDOFF顶部与`docs/takeover/2026-10-22/receipt.json`。
+
 > 当前执行（2026-10-21，§131）：非阻塞延迟指标已落实，停止5秒攻关；完整安全门保留。主线4ec11437已整合；AFTER_COMMIT定向run39650341133实际强杀/新PID/精确历史/完整oracle通过，原超时原因未确定且FAIL保留。218工具/Android编译PASS；最终App/必需CI待结果。P4仍Draft/OFF。
 
 > **2026-10-21 最新负责人纠正**：停止5秒性能攻关，不重新调度大库或方案C。本轮仅方向冻结、最小后端评估和正式政策/测试提案；旧5秒失败为历史证据，不是要求继续优化的任务。详见[当前政策提案](p4/nonblocking-transition/policy-and-test-change.md)与REQUIREMENTS§130。完整审计/恢复安全不变，Draft/OFF，不合并发布。
