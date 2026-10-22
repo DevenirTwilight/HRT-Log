@@ -14,8 +14,6 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.swipeUp
-import androidx.compose.ui.test.captureToImage
-import androidx.compose.ui.graphics.asAndroidBitmap
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -72,7 +70,7 @@ class Ui08ScreenshotTest(private val locale: String, private val width: Int, pri
     }
 
     /**
-     * The "Choose items" dialog on its own: the dialog is a separate window, captured from its node with a paused clock
+     * The "Choose items" dialog on its own: the dialog is a separate window, drawn from its own decor view with a paused clock
      * (waiting for idle with the dialog open does not settle on Robolectric). Run with UI08_DIALOG_SHOTS=<label>.
      */
     @Test fun manageDialog() {
@@ -86,7 +84,8 @@ class Ui08ScreenshotTest(private val locale: String, private val width: Int, pri
         rule.mainClock.advanceTimeBy(2_000)
         val dir = File("build/ui08-shots/$label").apply { mkdirs() }
         val suffix = "${locale}_${width}dp_${if (font == 1f) "1x" else "2x"}_${if (dark) "dark" else "light"}${if (variant == "std") "" else "_$variant"}"
-        val img = rule.onNode(androidx.compose.ui.test.isDialog()).captureToImage().asAndroidBitmap()
+        val view = org.robolectric.shadows.ShadowDialog.getLatestDialog().window!!.decorView
+        val img = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888); view.draw(android.graphics.Canvas(img))
         File(dir, "5_manage_items_$suffix.png").outputStream().use { img.compress(Bitmap.CompressFormat.PNG, 100, it) }
     }
 
