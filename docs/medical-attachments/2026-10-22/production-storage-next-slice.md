@@ -1,7 +1,12 @@
-# Next executable storage slice — owner decision boundary
+# Next executable storage slice — owner decision recorded
 
-This is the short current-baseline supplement to reports 44/45/55. It does not
-approve a format, migration or production importer.
+Owner answer received on2026-10-22: **“批准默认关闭的实现，外部审核在启用前完成”**.
+This supersedes the pending-decision wording below for the default-OFF production
+writer/reader/key adapter. See REQUIREMENTS§144 and PR104. External review remains
+NOT_REVIEWED_EXTERNALLY and is required before activation. Actual new migrations
+and complete-backup format changes still require their compatibility design/review;
+this decision is not feature activation. The original request below is retained
+as history, not an unresolved repeat permission question.
 
 ## What has actually advanced
 
