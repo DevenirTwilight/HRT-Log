@@ -1,3 +1,9 @@
+## #102已受保护合并，三API原始Foundation18项逐项核验 — 2026-10-22
+
+六项必需检查在源1dc584f8全部通过、无未解决讨论，普通合并为e4ebab2ec4af1ed1b98038c1be1dc4e9c9a4672c（19:53:12Z），未绕保护。已下载PR39839523615的API26/29/35三份官方ZIP、匹配官方SHA及CRC，并保存原Foundation HTML；每API18项、0fail/0skip，两个新PFD测试与原Room真实提交/失效capability测试均实际PASS。路径docs/medical-attachments/2026-10-22/native，receipt含工件ID及SHA。主线Android39843996907在途、Science39843996985 SUCCESS，不能将合并前结果冒充合并后完成。
+
+按负责人“继续干”，接着从该合并主线实施纯输入传输层：feature/med02-bounded-input-20261022，工作树/workspace/HRT-Log-med02-input；显式上限而非SAF声明size、超限一字节探测、错误/撤权清理，仍不定义密码学协议、冻结产品配额或启用导入。测试和具体结果以新分支为准，不把实验候选作为格式审核结论。
+
 ## 医疗附件资源生命周期PR #102：本地243项JVM/Room合同与69隔离PASS — 2026-10-22
 
 源1dc584f821e5560bb4420df9e7bc4310b65725b9；PR102受保护auto-merge已开启。domain162+attachment-poc63+Foundation18均0fail/error/skip；后者包括两项真实PFD pipe关闭与取消后交接拒绝及原Room/备份合同；Android测试源码编译PASS。已保存原先登记无hook的5FAIL和真实锁顺序死锁1FAIL，未弱化断言。

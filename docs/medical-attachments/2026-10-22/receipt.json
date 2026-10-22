@@ -37,7 +37,7 @@
     "skipped": 0,
     "scope": "Robolectric API28, actual ParcelFileDescriptor pipe and existing Room/backup contracts"
   },
-  "native_api26_29_35": "IN_PROGRESS_NOT_YET_VERIFIED",
+  "native_api26_29_35": "PASS: each Foundation18, zero failure/skip; both new pipe tests and original commit oracle executed",
   "physical_arm": "NOT_RUN",
   "talkback": "NOT_RUN",
   "feature": "OFF",
@@ -58,9 +58,37 @@
     "android_pr": 39839523615,
     "science_push": 39839461282,
     "science_pr": 39839523679,
-    "state": "IN_PROGRESS",
-    "jvm": "SUCCESS",
-    "science_gate": "SUCCESS"
+    "six_required": "ALL_PASS",
+    "deep_push": "SUCCESS",
+    "deep_pr": "SKIPPED_BY_EXISTING_CLASSIFIER"
   },
-  "auto_merge": "ENABLED_PROTECTED"
+  "auto_merge": "ENABLED_PROTECTED",
+  "state": "MERGED",
+  "merge_commit": "e4ebab2ec4af1ed1b98038c1be1dc4e9c9a4672c",
+  "merged_at": "2026-10-22T19:53:12Z",
+  "post_merge_android": {
+    "run": 39843996907,
+    "status": "IN_PROGRESS"
+  },
+  "post_merge_science": {
+    "run": 39843996985,
+    "status": "SUCCESS"
+  },
+  "native_artifacts": [
+    {
+      "api": 26,
+      "id": 12452648102,
+      "sha256": "71fbf46b39e4f0729432addc8b83db87094c38293fa5713b53621c5bf31448e6"
+    },
+    {
+      "api": 29,
+      "id": 12452189151,
+      "sha256": "9dfc1b2ba3faf95334880ae2df0b171205fd071477608087ace1c799fafd3797"
+    },
+    {
+      "api": 35,
+      "id": 12452859554,
+      "sha256": "53bd5b36170f2f703f006231d8d0043231c153a3cb0e6468ca26ef6b796b1d47"
+    }
+  ]
 }
