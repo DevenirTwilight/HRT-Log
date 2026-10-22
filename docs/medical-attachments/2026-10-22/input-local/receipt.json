@@ -93,5 +93,15 @@
     ],
     "artifact": 12456621592,
     "sha256": "6634c4a0d7ff04a1c6e0e06d8ed451076568c3a7a3d9ca21f5178f2b18fbf050"
+  },
+  "final_ci": {
+    "source": "8dd60c435d924abafd3aabf8d7947b7691eae520",
+    "android_run": 39845789203,
+    "status": "PASS",
+    "six_required": "PASS",
+    "science_deep": "SKIPPED_EXISTING_CLASSIFIER",
+    "merged": "d2223c0a21dcabd091c0ebf8e182b301840f036c",
+    "merged_at": "2026-10-22T20:36:11Z",
+    "build_artifact": "../input-ci/artifact.json"
   }
 }

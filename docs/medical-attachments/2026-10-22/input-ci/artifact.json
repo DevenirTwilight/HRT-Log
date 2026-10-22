@@ -4,5 +4,19 @@
   "sha256": "9b80bf8902b27cc3362563c80666235ae516f7b7d67292b23c8c1883ef0378e2",
   "source": "8dd60c435d924abafd3aabf8d7947b7691eae520",
   "zip_crc": "PASS",
-  "whole_zip": "scratch only (129MB); selected original HTML retained"
+  "whole_zip": "scratch only (129MB); selected original HTML retained",
+  "selected_reports": {
+    "AttachmentFoundationTest": {
+      "original_path": "core/data/build/reports/tests/testDebugUnitTest/net.plainnotes.app.data.AttachmentFoundationTest/index.html",
+      "tests": 20,
+      "failures": 0,
+      "skipped": 0
+    },
+    "PeriodStabilityTest": {
+      "original_path": "app/build/reports/tests/testFullDebugUnitTest/net.plainnotes.app.PeriodStabilityTest/index.html",
+      "tests": 5,
+      "failures": 0,
+      "skipped": 0
+    }
+  }
 }
