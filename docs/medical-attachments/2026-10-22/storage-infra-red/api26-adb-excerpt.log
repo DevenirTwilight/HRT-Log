@@ -1,0 +1,69 @@
+2026-10-22T21:08:02.3012239Z [command]/usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 shell getprop sys.boot_completed
+2026-10-22T21:08:02.3221250Z 
+2026-10-22T21:08:04.3274732Z [command]/usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 shell getprop sys.boot_completed
+2026-10-22T21:08:04.3976279Z 1
+2026-10-22T21:08:04.4025820Z Emulator booted.
+2026-10-22T21:08:04.4056113Z [command]/usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 shell input keyevent 82
+2026-10-22T21:08:05.6710247Z Disabling animations.
+2026-10-22T21:08:05.6779734Z [command]/usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 shell settings put global window_animation_scale 0.0
+2026-10-22T21:08:05.7516957Z [command]/usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 shell settings put global transition_animation_scale 0.0
+2026-10-22T21:08:05.8277086Z [command]/usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 shell settings put global animator_duration_scale 0.0
+2026-10-22T21:08:05.8561293Z ##[endgroup]
+2026-10-22T21:08:05.8614166Z [command]/usr/bin/sh -c python3 scripts/configure_ansm_native_runtime.py --api 26
+2026-10-22T21:08:05.9455786Z adb: unable to connect for root: closed
+2026-10-22T21:08:06.7656515Z INFO         | Boot completed in 34767 ms
+2026-10-22T21:08:06.7657286Z INFO         | Increasing screen off timeout, logcat buffer size to 2M.
+2026-10-22T21:08:06.7940158Z WARNING      | adb command '/usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 shell settings put system screen_off_timeout 2147483647 ' failed: 'adb: device 'emulator-5554' not found'
+2026-10-22T21:08:06.8929574Z WARNING      | adb command '/usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 shell settings put system screen_off_timeout 2147483647 ' failed: 'adb: device 'emulator-5554' not found'
+2026-10-22T21:08:06.9788603Z Traceback (most recent call last):
+2026-10-22T21:08:06.9790187Z   File "/home/runner/work/HRT-Log/HRT-Log/scripts/configure_ansm_native_runtime.py", line 41, in <module>
+2026-10-22T21:08:06.9792885Z     configure(expected_api=parser.parse_args().api)
+2026-10-22T21:08:06.9794275Z   File "/home/runner/work/HRT-Log/HRT-Log/scripts/configure_ansm_native_runtime.py", line 16, in configure
+2026-10-22T21:08:06.9795598Z     adb('root')
+2026-10-22T21:08:06.9796698Z   File "/home/runner/work/HRT-Log/HRT-Log/scripts/configure_ansm_native_runtime.py", line 12, in adb
+2026-10-22T21:08:06.9797862Z     return execute(['adb', *args], text=True).strip()
+2026-10-22T21:08:06.9798655Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-22T21:08:06.9799604Z   File "/usr/lib/python3.12/subprocess.py", line 466, in check_output
+2026-10-22T21:08:06.9800700Z     return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+2026-10-22T21:08:06.9801664Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-22T21:08:06.9802558Z   File "/usr/lib/python3.12/subprocess.py", line 571, in run
+2026-10-22T21:08:06.9803459Z     raise CalledProcessError(retcode, process.args,
+2026-10-22T21:08:06.9804701Z subprocess.CalledProcessError: Command '['adb', 'root']' returned non-zero exit status 1.
+2026-10-22T21:08:06.9959912Z ##[error]The process '/usr/bin/sh' failed with exit code 1
+2026-10-22T21:08:06.9962512Z ##[group]Terminate Emulator
+2026-10-22T21:08:06.9978731Z [command]/usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 emu kill
+2026-10-22T21:08:07.0012533Z OK: killing emulator, bye bye
+2026-10-22T21:08:07.0013289Z OK
+2026-10-22T21:08:07.0016687Z INFO         | Wait for emulator (pid 2789) 20 seconds to shutdown gracefully before kill;you can set environment variable ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL(in seconds) to change the default value (20 seconds)
+2026-10-22T21:08:07.0017819Z 
+2026-10-22T21:08:07.0019973Z ##[endgroup]
+2026-10-22T21:08:07.0061308Z USER_INFO    | Snapshots have been disabled by the user, save request is ignored.
+2026-10-22T21:08:07.0063080Z INFO         | Saving snapshot 'default_boot' took 0 ms
+2026-10-22T21:08:07.8743768Z ERROR        | stop: Not implemented
+2026-10-22T21:08:07.8745640Z WARNING      | Emulator client has not yet been configured.. Call configure me first!
+2026-10-22T21:08:07.8874524Z INFO         | removeAll
+2026-10-22T21:08:07.9092077Z WARNING      | adb command '/usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 shell settings put system screen_off_timeout 2147483647 ' failed: 'adb: device offline'
+2026-10-22T21:08:08.4063744Z ##[group]Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+2026-10-22T21:08:08.4064219Z with:
+2026-10-22T21:08:08.4064472Z   name: attachment-poc-api26
+2026-10-22T21:08:08.4066200Z   path: app/build/reports/demo/
+core/data/build/reports/androidTests/
+core/data/build/reports/ansm-write-process-death/
+core/data/build/reports/gate2/
+core/data/build/reports/gate3/
+core/data/build/reports/b3/
+app/build/reports/androidTests/
+app/build/reports/attachment-poc-evidence.json
+
+2026-10-22T21:08:08.4067410Z   if-no-files-found: warn
+2026-10-22T21:08:08.4067698Z   compression-level: 6
+2026-10-22T21:08:08.4067968Z   overwrite: false
+2026-10-22T21:08:08.4068234Z   include-hidden-files: false
+2026-10-22T21:08:08.4068519Z env:
+2026-10-22T21:08:08.4068865Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-10-22T21:08:08.4069403Z   JAVA_HOME_21_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-10-22T21:08:08.4069896Z   ANDROID_HOME: /usr/local/lib/android/sdk
+2026-10-22T21:08:08.4070245Z   ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+2026-10-22T21:08:08.4070608Z   GRADLE_ACTION_ID: gradle/actions/setup-gradle
+2026-10-22T21:08:08.4070966Z   GRADLE_USER_HOME: /home/runner/.gradle
+2026-10-22T21:08:08.4071300Z   GRADLE_BUILD_ACTION_SETUP_COMPLETED: true

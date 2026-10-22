@@ -1,0 +1,9 @@
+{
+  "source": "f86d4a5e904758bcb646d56eedbbefe620d28fe2",
+  "run": 39854454660,
+  "job": 120089049019,
+  "job_status": "FAIL",
+  "actual_tests": "NOT_RUN",
+  "reason": "emulator disappeared/offline before configure_ansm_native_runtime.py adb root; no Gradle test executed",
+  "planned_action": "one failed-job-only rerun, unchanged source and limits; retain initial failure"
+}
