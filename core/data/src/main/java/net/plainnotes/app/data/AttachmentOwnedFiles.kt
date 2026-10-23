@@ -11,6 +11,8 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.nio.channels.FileLock
 import java.util.UUID
+import java.util.concurrent.Semaphore
+import java.util.concurrent.atomic.AtomicBoolean
 
 /** Private ciphertext only. Kernel-pinned parent, no-follow/exclusive creation, no rename/delete.
  * /proc/self/fd traverses our open directory descriptor, never an untrusted pathname ancestor.
@@ -21,13 +23,22 @@ internal class AttachmentOwnedFiles(context: Context) {
     data class Identity(val parentDevice: Long, val parentInode: Long, val device: Long, val inode: Long)
 
     fun locked(): Directory {
-        try { Os.mkdir(root.path, 448) } catch (e: ErrnoException) { if (e.errno != EEXIST) throw e }
-        val descriptor = Os.open(root.path, O_RDONLY or O_NONBLOCK or O_NOFOLLOW or O_CLOEXEC, 0)
-        val parent = try { ParcelFileDescriptor.dup(descriptor) } finally { Os.close(descriptor) }
+        val process=ProcessLease()
         try {
-            directory(Os.fstat(parent.fileDescriptor))
-            return Directory(parent)
-        } catch (failure: Throwable) { parent.close(); throw failure }
+            try { Os.mkdir(root.path, 448) } catch (e: ErrnoException) { if (e.errno != EEXIST) throw e }
+            val descriptor = Os.open(root.path, O_RDONLY or O_NONBLOCK or O_NOFOLLOW or O_CLOEXEC, 0)
+            val parent = try { ParcelFileDescriptor.dup(descriptor) } finally { Os.close(descriptor) }
+            try {
+                directory(Os.fstat(parent.fileDescriptor))
+                return Directory(parent,process)
+            } catch (failure: Throwable) { parent.close(); throw failure }
+        } catch(failure:Throwable) {process.close();throw failure}
+    }
+    /** Acquire BEFORE even opening lockfile: closing another fd can release this process's POSIX locks. */
+    internal class ProcessLease:AutoCloseable {
+        private val closed=AtomicBoolean(false)
+        init {check(processGate.tryAcquire()) {"Attachment storage busy"}}
+        override fun close() {if(closed.compareAndSet(false,true))processGate.release()}
     }
 
     private fun own(fd:java.io.FileDescriptor):ParcelFileDescriptor =
@@ -40,7 +51,8 @@ internal class AttachmentOwnedFiles(context: Context) {
         check(S_ISREG(stat.st_mode) && stat.st_uid == Os.getuid() && stat.st_nlink == 1L && stat.st_mode and 63 == 0) { "Unowned ciphertext" }
     }
 
-    inner class Directory internal constructor(private val parent: ParcelFileDescriptor): AutoCloseable {
+    inner class Directory internal constructor(private val parent: ParcelFileDescriptor, private val process:ProcessLease): AutoCloseable {
+        private val closed=AtomicBoolean(false)
         private val parentStat = Os.fstat(parent.fileDescriptor)
         private val anchor get() = "/proc/self/fd/${parent.fd}"
         private var lockStream: FileOutputStream? = null
@@ -93,9 +105,13 @@ internal class AttachmentOwnedFiles(context: Context) {
             catch(failure:Throwable) {owned.close();throw failure}
         }
         override fun close() {
-            try { lock?.release() } finally { try { lockStream?.close() } finally { parent.close() } }
+            if(!closed.compareAndSet(false,true))return
+            try { lock?.release() } finally {
+                try {lockStream?.close()} finally {try {parent.close()} finally {process.close()}}
+            }
         }
     }
+    companion object {private val processGate=Semaphore(1)}
     class Created internal constructor(private val output: FileOutputStream, val identity: Identity): AutoCloseable {
         /** Separate owned descriptor: crypto writer closes its sink, then coordinator fsyncs the original. */
         fun sink() = ParcelFileDescriptor.AutoCloseOutputStream(ParcelFileDescriptor.dup(output.fd))

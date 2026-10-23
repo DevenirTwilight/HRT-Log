@@ -64,7 +64,10 @@ records-only backup and containing only UUID leaves. Pin a private no-follow
 directory FD; `/proc/self/fd/<held-fd>/<UUID>` anchors every open/create to that
 same inode without hidden Android APIs/JNI. Check UID/type/private mode, parent
 dev/inode, file dev/inode, regular type and link count1. O_EXCL forbids replacement;
-fsync file/directory and containing directory. Kernel FileLock excludes live
+fsync file/directory and containing directory. A non-reentrant process semaphore is acquired **before opening** the lockfile,
+so a failed same-process probe cannot drop POSIX process-owned locks. The existing
+Gate3 RED/oracle is preserved; its separate PID peer also checks this production
+path. Kernel FileLock excludes live
 coordinators/recovery across processes; busy fails closed. No move-to-publish:
 SQLite pointer visibility avoids a rename/SQL atomicity gap. Existing objects
 are never opened writable by the production protocol. Read authenticates the

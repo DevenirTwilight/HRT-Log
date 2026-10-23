@@ -21,7 +21,7 @@ class AttachmentPersistentStoreAndroidTest {
     private val app get()=InstrumentationRegistry.getInstrumentation().targetContext
     private class Fixture(val app:Context):AutoCloseable {
         val name="synthetic-persistent-${UUID.randomUUID()}.db"
-        val directory=File(app.noBackupFilesDir,"synthetic-persistent-${UUID.randomUUID()}").apply {check(mkdir())}
+        val directory=File(app.noBackupFilesDir,"synthetic-gate2-persistent-${UUID.randomUUID()}").apply {check(mkdir())}
         val context=object:ContextWrapper(app) {override fun getNoBackupFilesDir()=directory}
         private val password=ByteArray(32) {67}
         lateinit var db:NotesDatabase
@@ -180,7 +180,15 @@ class AttachmentPersistentStoreAndroidTest {
                 link=File(f.directory,"attachment-objects-v1/$objectId")
                 android.system.Os.symlink(victim.path,link!!.path)
             }}.save(f.scope,f.session.issue(),r) {ByteArrayInputStream(bytes)}}
-            AttachmentOwnedFiles(f.context).locked().use {reject {f.store().recover(f.scope,f.session.issue())}}
+            AttachmentOwnedFiles(f.context).locked().use {
+                reject {f.store().recover(f.scope,f.session.issue())}
+                // Reuse frozen Gate3 peer/oracle: an unsuccessful same-process probe must NOT drop the kernel lock.
+                f.context.contentResolver.acquireUnstableContentProviderClient(Gate2PeerProvider.AUTHORITY)!!.use {peer->
+                    val result=peer.call("leaseState",null,android.os.Bundle().apply {putString("lock",File(f.directory,"attachment-objects-v1/lock").path)})!!
+                    assertNotEquals(android.os.Process.myPid(),result.getInt("pid"))
+                    assertEquals("HELD_OTHER_PROCESS",result.getString("state"))
+                }
+            }
             assertEquals(1,f.store().recover(f.scope,f.session.issue()));assertArrayEquals(byteArrayOf(8,8),victim.readBytes())
             assertTrue(java.nio.file.Files.isSymbolicLink(link!!.toPath()));assertEquals(0L,f.number("SELECT COUNT(*) FROM attachment_version"));f.safety()
         }

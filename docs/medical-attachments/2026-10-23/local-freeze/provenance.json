@@ -22,5 +22,13 @@
     "python_design": 61,
     "python_isolation": 4,
     "native_runtime": "PENDING_CI"
+  },
+  "posix_followup": {
+    "parent": "eb9f24ae4670061147297c3ba0c1f64a24e113b1",
+    "AttachmentOwnedFiles.kt_sha256": "b915b527dbdf0fde8155df81b43475aaa7bbb23d341ea779ef9e541a63e8afc0",
+    "AttachmentPersistentStoreAndroidTest.kt_sha256": "e61f65db0cf2fa1e13c8de2429185fb8b91c097b2d50deea9c0cbf533a8138c9",
+    "compile": "PASS",
+    "native_runtime": "PENDING_CI",
+    "oracle": "Existing Gate3 RED retained; production same-process failed recovery must leave separate PID peer HELD_OTHER_PROCESS"
   }
 }

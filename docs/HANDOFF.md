@@ -1,3 +1,9 @@
+## MED-02 复用既有 Gate3 反例补齐进程内门闩 — 2026-10-23
+
+文件锁复核发现必须沿用仓库已有 Gate3 的 POSIX 规则：同进程探测新开再关闭同一锁文件可能释放原 fcntl 锁，仅靠 FileChannel 的 OverlappingFileLockException 不足。生产 AttachmentOwnedFiles 在打开任何锁FD之前先取得非重入 Semaphore，持有至目录/锁真正关闭；所有异常路径只释放一次。不重做原型，不改既有 Gate3 RED/oracle。原生现有“活跃写入排斥恢复”合同复用 Gate2PeerProvider 的另一真实PID，断言同进程失败探测之后 peer 仍看到 HELD_OTHER_PROCESS；测试夹具仅改为其已允许的 synthetic-gate2-* 私有前缀，不新增provider/权限。
+
+此修复尚待最终原生运行证明，#106不转Ready/合并；默认入口OFF。旧eb9f24ae若有结果仅归该源；后续最终SHA独立验收，不复用旧绿。只修具体正确性缺口，不进行性能研究或另建调度系统。
+
 ## MED-02 最终迁移集成检查，准备冻结原生验收源 — 2026-10-23
 
 #106补齐应用级两个重启合同中的实际Room版本14（用药跳过撤销、化验panel）；仅修改版本断言，不改其原有业务/数据断言或生产功能。所有源文件扫描已区分业务备份13、旧fixture13与新Room14。App全部原生测试源码编译PASS，附件设计61和发布隔离4 Python检查PASS。reader在父目录/锁关闭异常时也明确关闭已创建读lease，避免返回失败时遗留资源；未改变认证、取消或提交规则。此后生产分支只因真实失败/冲突修根因，不推微小测试元数据触发整套CI。
