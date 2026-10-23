@@ -1,0 +1,79 @@
+{
+  "head": "5c8068d27f2cd1e78479b97c93b2793c9e2c7f1d",
+  "merge": "4dca6744e93ad585a2a824262bd72d083e4f2bce",
+  "run": 39979087267,
+  "artifacts": [
+    {
+      "api": 26,
+      "artifact_id": 12512722992,
+      "sha256": "66586d5d5a00978d772393d98b08c615844696d93c10b144611bfd105832c76e",
+      "github_upload_digest_matches": true,
+      "crc": "PASS",
+      "classes": {
+        "AttachmentBackupPreparationAndroidTest": {
+          "tests": 6,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentBackupCandidateAndroidTest": {
+          "tests": 6,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentPersistentStoreAndroidTest": {
+          "tests": 11,
+          "failures": 0,
+          "skipped": 0
+        }
+      }
+    },
+    {
+      "api": 29,
+      "artifact_id": 12513776122,
+      "sha256": "6eb864ae13ad5e9829a2b0c424fd3b560fe338f54cb77e2468a57d6f84f26d79",
+      "github_upload_digest_matches": true,
+      "crc": "PASS",
+      "classes": {
+        "AttachmentBackupPreparationAndroidTest": {
+          "tests": 6,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentBackupCandidateAndroidTest": {
+          "tests": 6,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentPersistentStoreAndroidTest": {
+          "tests": 11,
+          "failures": 0,
+          "skipped": 0
+        }
+      }
+    },
+    {
+      "api": 35,
+      "artifact_id": 12513014248,
+      "sha256": "d7039abcff28700ee67f721f34adaa88885878279744c470ffe92ffdec6c55f0",
+      "github_upload_digest_matches": true,
+      "crc": "PASS",
+      "classes": {
+        "AttachmentBackupPreparationAndroidTest": {
+          "tests": 6,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentBackupCandidateAndroidTest": {
+          "tests": 6,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentPersistentStoreAndroidTest": {
+          "tests": 11,
+          "failures": 0,
+          "skipped": 0
+        }
+      }
+    }
+  ]
+}

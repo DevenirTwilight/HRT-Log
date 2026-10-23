@@ -1,3 +1,9 @@
+## #111最终源三API原件补核，下一轮恢复准备独立开展 — 2026-10-23
+
+#111已合并4dca6744e93ad585a2a824262bd72d083e4f2bce，最终head5c8068d27f2cd1e78479b97c93b2793c9e2c7f1d的PR39979087267/push39979078536六必需门全部SUCCESS。三API官方ZIP均独立SHA256与上传digest一致/CRC通过；Preparation6、Candidate6、Store11各0fail/skip（Candidate始终TEST_ONLY，不冒充真实跨设备恢复）。原件及绑定JSON保存pr111-final-native。不重复跑分。
+
+本轮授权已在独立feature/med02-restore-preflight-20261023从4dca开始，提供格式无关预检/密文quarantine，不改Room14/PNBAK1/Tink/临床事实。生产源码checkpoint35a8ed8f，尚待自己的最终CI，不能借本批#111绿色；外审未通过、入口OFF。后续新证据在该分支HANDOFF，不覆盖接手分支或将本证据分支当最新runtime。
+
 ## MED-02 本轮原始证据闭合，并核对远端接手进度 — 2026-10-23
 
 #104、#106 已合并，#106真实持久化基线为 a2917086ead90b3967eee71908160e8021dfe89a（源0210ab9c、同树cd3d4347）。本次只归档已运行证据，没有触发测试或修改接手人的代码。主线39953226169的26/29/35官方ZIP均独立核对上传SHA256/CRC及Store7、Restart1、Foundation33、Migration5、Key2各0fail/skip；四个强停seam原件均在ZIP。原android主机失败的官方129MB ZIP也已核SHA/CRC，提取原BDPM方法HTML：Contract:62找不到drug-center-medication:1，发生在搜索前；不将其改记通过。压缩原日志、原ZIP和来源JSON在 pr106-main-native。
