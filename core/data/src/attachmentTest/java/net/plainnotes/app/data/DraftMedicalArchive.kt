@@ -31,6 +31,7 @@ internal object DraftMedicalArchive {
         val identity:UUID=UUID.randomUUID()
         private val key=random(32)
         var current:Restored?=null
+        fun sharesWrappingKey(other:Device)=java.security.MessageDigest.isEqual(key,other.key)
         fun wrap(dek:ByteArray,context:AttachmentObjectContext,dataset:UUID,epoch:UUID)=
             seal(key,dek,context.encode()+"/$identity/$dataset/$epoch".toByteArray(Charsets.US_ASCII))
         fun destroy() {key.fill(0)}

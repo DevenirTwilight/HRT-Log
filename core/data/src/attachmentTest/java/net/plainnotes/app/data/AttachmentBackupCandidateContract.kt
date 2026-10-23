@@ -48,6 +48,7 @@ abstract class AttachmentBackupCandidateContract {
                 val first=DraftMedicalArchive.restore(packet,f.password,a,f.targets);val second=DraftMedicalArchive.restore(packet,f.password,b,f.targets)
                 assertEquals(f.manifest,first.manifest);assertEquals(f.records.toString(),first.records.toString())
                 assertNotEquals(f.dataset,first.dataset);assertNotEquals(f.epoch,first.epoch);assertNotEquals(a.identity,b.identity)
+                assertFalse(a.sharesWrappingKey(b))
                 assertNotEquals(first.dataset,second.dataset);assertNotEquals(first.epoch,second.epoch)
                 f.members.forEachIndexed {i,m->
                     val actual=first.originalBytes.getValue(m.version.context.version);assertArrayEquals(f.plain[i],actual)
@@ -91,8 +92,10 @@ abstract class AttachmentBackupCandidateContract {
     @Test fun candidateInterruptedActivationAndWrongTypedMappingKeepOldLibrary() {
         Fixture().use {f->val packet=f.packet();val d=DraftMedicalArchive.Device()
             try {val old=DraftMedicalArchive.restore(packet,f.password,d,f.targets)
-                reject {DraftMedicalArchive.restore(packet,f.password,d,f.targets) {throw IOException("synthetic interruption before isolated activation")}};assertSame(old,d.current)
-                reject {DraftMedicalArchive.restore(packet,f.password,d,f.targets.map {it.copy(kind=AttachmentBackupManifest.Kind.LAB)})};assertSame(old,d.current)
+                var reached=false
+                reject {DraftMedicalArchive.restore(packet,f.password,d,f.targets) {reached=true;throw IOException("synthetic interruption before isolated activation")}}
+                assertTrue(reached);assertSame(old,d.current)
+                reject {DraftMedicalArchive.restore(packet,f.password,d,f.targets.mapIndexed {i,t->t.copy(kind=AttachmentBackupManifest.Kind.LAB,localId=100L+i)})};assertSame(old,d.current)
                 reject {DraftMedicalArchive.restore(packet,f.password,d,f.targets.dropLast(1))};assertSame(old,d.current)
             } finally {d.destroy()}
         }
@@ -108,6 +111,8 @@ abstract class AttachmentBackupCandidateContract {
             reject {m.mapTo(m.dataset,UUID.randomUUID(),f.targets)}
             reject {m.mapTo(UUID.randomUUID(),m.epoch,f.targets)}
             reject {m.mapTo(UUID.randomUUID(),UUID.randomUUID(),f.targets+f.targets.first())}
+            val sameKind=m.copy(records=m.records.mapIndexed {i,r->r.copy(kind=AttachmentBackupManifest.Kind.APPOINTMENT,sourceId=7L+i)})
+            reject {sameKind.mapTo(UUID.randomUUID(),UUID.randomUUID(),f.targets.map {it.copy(kind=AttachmentBackupManifest.Kind.APPOINTMENT)})}
         }
     }
     @Test fun purgedIdentityMapsOnlyToATombstoneAndNeverResurrectsClinicalRow() {

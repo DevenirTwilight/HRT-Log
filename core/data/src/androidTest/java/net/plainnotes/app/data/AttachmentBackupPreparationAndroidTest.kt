@@ -101,7 +101,9 @@ class AttachmentBackupPreparationAndroidTest {
         Fixture(app).use {f->
             val p=AttachmentBackupPreparation(f.context,f.db)
             val first=p.capture(f.scope,f.session.issue());lateinit var owned:ByteArray
-            first.records {owned=it};first.close();assertTrue(owned.all {it==0.toByte()});reject {first.records {error("Closed snapshot published records")}}
+            first.records {owned=it};assertTrue(owned.isNotEmpty());assertTrue(owned.any {it!=0.toByte()})
+            first.close();assertTrue(owned.all {it==0.toByte()})
+            var published=false;reject {first.records {published=true}};assertFalse(published)
             val next=p.capture(f.scope,f.session.issue())
             reject {next.records {owned=it
                 // An omitted application session revoke must still fail the POST-callback scope check.
