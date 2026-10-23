@@ -49,7 +49,7 @@ class AttachmentPersistentStoreAndroidTest {
             UUID.randomUUID(),doc,record,revision,"Synthetic attachment","REPORT","application/octet-stream",bytes.size.toLong(),sha(bytes))
         fun number(sql:String)=raw.query(sql).use {check(it.moveToFirst());it.getLong(0)}
         fun safety() {
-            assertEquals(0,number("SELECT feature_enabled FROM attachment_store WHERE store_state='CURRENT'"))
+            assertEquals(0L,number("SELECT feature_enabled FROM attachment_store WHERE store_state='CURRENT'"))
             raw.query("PRAGMA foreign_key_check").use {assertEquals(0,it.count)}
             raw.query("SELECT note FROM appointment WHERE id=1").use {assertTrue(it.moveToFirst());assertEquals("synthetic persistent sentinel",it.getString(0))}
             assertFalse(app.getDatabasePath(name).inputStream().use {String(ByteArray(16).also {header->java.io.DataInputStream(it).readFully(header)},Charsets.US_ASCII)}.startsWith("SQLite format 3"))

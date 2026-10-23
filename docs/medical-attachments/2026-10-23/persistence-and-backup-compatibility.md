@@ -1,6 +1,6 @@
 # MED-02 local persistence and portable-backup compatibility
 
-Authorization: REQUIREMENTS §145 (2026-10-23). Baseline #104 source 663901f9,
+Authorization: REQUIREMENTS §146 (2026-10-23). Baseline #104 source 663901f9,
 default branch d2223c0a at implementation start. No competing open Room migration
 was found. External review remains **NOT_REVIEWED_EXTERNALLY**. User entry OFF.
 Native acceptance status belongs in HANDOFF; implemented is not synonymous with passed.

@@ -17,7 +17,7 @@ import java.util.concurrent.CountDownLatch
 /** External harness kills this test process at exact production filesystem/SQL seams. */
 class AttachmentPersistentRestartAndroidTest {
     private val app get()=InstrumentationRegistry.getInstrumentation().targetContext
-    private val directory get()=File(app.noBackupFilesDir,"synthetic-persistent-restart").apply {mkdirs()}
+    private val directory get()=File(app.noBackupFilesDir,"synthetic-persistent-restart")
     private val context get()=object:ContextWrapper(app) {override fun getNoBackupFilesDir()=directory}
     private val marker get()=File(app.filesDir,"synthetic-persistent-restart-ready")
     private val name="synthetic-persistent-restart.db"

@@ -1,3 +1,9 @@
+## #104 已保护合并；持久化 Draft #106 验收中 — 2026-10-23
+
+#104 最终663901f9六必需门PASS、无未解决讨论，2026-10-23T10:34:40Z保护自动合并4f3c52a5；主线Android39940095721在途、Science39940095774已PASS。三API原始ZIP/SHA/CRC、Foundation32+Keystore2各全PASS已推送独立 docs/med02-storage-evidence-20261023（c32ed202），不是本次journal通过证据。
+
+真实持久化Draft #106，首次ca733bac、FD归属修复9c95ea6e，尚未原生通过/合并。本轮静态复核再修两个测试根因：restart目录getter不预先创建目录（由prepare独占创建），合成安全断言按SQLite Long精确比较0L；不删断言、不改生产语义或预算。发现并行PDF团队 #105已占需求§145，本任务改§146，保留对方授权和所有UI/PDF代码；Room14无竞争。同步已合并#104的默认基线后冻结CI，不为微小报告再推生产分支。完整备份为设计，入口OFF/外审NOT_REVIEWED_EXTERNALLY保持。
+
 ## MED-02 文件描述符归属复核 — 2026-10-23
 
 持久化首提交 ca733bac 已推送。复核补齐所有 Os.open 产生的持有FD：显式转交 ParcelFileDescriptor，原FD立即关闭，使用 AutoCloseInput/OutputStream；不依赖 Android 对 FileInput/OutputStream(FileDescriptor) 的隐含归属。seal 后写FD确实释放，锁和读channel也有明确owner。最终生产与原生测试源码编译通过，原生执行仍待CI；此为真实资源正确性修复，未削弱任何断言。此前 local-freeze 的文件哈希仍仅归旧工作树，新FD文件哈希见同目录 provenance 的 followup；不借旧源证据冒充最终源通过。#104 原生工件26/29/35均已下载，正在核验并保存在独立证据分支，主机最后检查仍在途。
@@ -12,7 +18,7 @@
 
 ## MED-02 持久化代码已进入独立工作树，验收在途 — 2026-10-23
 
-#104 修复源663901f9已推送；必需 CI 尚在运行，不提前宣称通过或合并。新分支 feature/med02-persistent-store-20261023 基于该源，已核真实 Room13，暂无其他开放 Schema PR。本轮新增授权见 §145。已编写默认 OFF 的 AttachmentPersistentStore、AttachmentOwnedFiles 和单表 attachment_journal（候选 Room14），复用现有 Tink/Keystore，不接应用入口。预留先于包装、同 UUID 请求承诺、完整认证与真实 SQL CAS 提交、重启隔离/逻辑回收站恢复已编码。旧记录无 journal 仍 UNKNOWN；业务备份最高13/PNBAK1不变。
+#104 修复源663901f9已推送；必需 CI 尚在运行，不提前宣称通过或合并。新分支 feature/med02-persistent-store-20261023 基于该源，已核真实 Room13，暂无其他开放 Schema PR。本轮新增授权见 §146。已编写默认 OFF 的 AttachmentPersistentStore、AttachmentOwnedFiles 和单表 attachment_journal（候选 Room14），复用现有 Tink/Keystore，不接应用入口。预留先于包装、同 UUID 请求承诺、完整认证与真实 SQL CAS 提交、重启隔离/逻辑回收站恢复已编码。旧记录无 journal 仍 UNKNOWN；业务备份最高13/PNBAK1不变。
 
 初轮生产编译、基础32与迁移4通过；全数据层548项有1项失败，原XML保留 local-first：旧12→13故障注入用例缺少新13→14路径，尚未到预期故障点，已补路径且保留原断言。新增13→14回滚/UNKNOWN/旧读者拒绝合同与原生合成闭环、三处外部强停脚本正在编译/验证；尚无原生持久化 PASS 证据。未知/未完成密文保留隔离，不自动删除或提交，别名/预算保留。完整医疗备份具体设计仍待补齐，外审及正式启用未完成。不要重复 P4 跑分或先宣称闭环验收完成。
 
