@@ -22,7 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 /*
- * UI-09 C / D (REQUIREMENTS §144): two borrowings from the Swiss style, kept inside the Material 3 Expressive look —
+ * UI-09 C / D (REQUIREMENTS §146): two borrowings from the Swiss style, kept inside the Material 3 Expressive look —
  * thin rules instead of some card fills, and numbered section headings. Display only: nothing here is stored or exported.
  */
 

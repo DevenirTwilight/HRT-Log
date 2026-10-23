@@ -14,6 +14,8 @@ android {
 kotlin { compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17) } }
 dependencies {
     implementation(project(":core:domain")); implementation(project(":importer")); implementation(libs.bouncycastle)
+    // Default-OFF MED-02 production adapter; no application entry or metadata publish yet.
+    implementation(libs.tink.android)
     implementation(libs.core.ktx)
     implementation(libs.coroutines)
     implementation(libs.room.runtime); implementation(libs.room.ktx); implementation(libs.sqlcipher); implementation(libs.sqlite)

@@ -26,7 +26,7 @@ import java.io.File
 import java.time.LocalDate
 import java.util.zip.ZipInputStream
 
-/** UI-09 (REQUIREMENTS §144) source guards: what stays centred, and the 4 dp grid on the pages this round touched. */
+/** UI-09 (REQUIREMENTS §146) source guards: what stays centred, and the 4 dp grid on the pages this round touched. */
 class Ui09SourceGuardTest {
     private val ui = File("src/main/java/net/plainnotes/app/ui")
     private val centring = Regex("""TextAlign\.Center|CenterHorizontally|Arrangement\.Center\b""")

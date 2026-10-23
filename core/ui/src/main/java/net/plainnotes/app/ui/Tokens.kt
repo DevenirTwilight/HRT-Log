@@ -13,7 +13,7 @@ object Spacing {
 }
 
 /**
- * UI-09 B (REQUIREMENTS §144): the phone grid. Four columns, 16 dp page margins and gutters, a 4 dp baseline; spacing uses
+ * UI-09 B (REQUIREMENTS §146): the phone grid. Four columns, 16 dp page margins and gutters, a 4 dp baseline; spacing uses
  * the 4 dp steps only (4/8/12/16/24/32). Cards pad 16 dp ([card]) or 20 dp ([cardLarge]).
  */
 object Grid {

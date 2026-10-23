@@ -194,7 +194,7 @@
 <string name="legend_labs">Analyses</string>
 <string name="legend_recorded">D\'après les prises</string>
 <string name="licenses">Licences libres</string>
-<string name="licenses_body">Construit avec Kotlin, AndroidX, Jetpack Compose, Room, Hilt, WorkManager et kotlinx.coroutines (Apache-2.0), SQLCipher pour Android (type BSD) et Bouncy Castle (MIT, avis ci-dessous). Voir THIRD_PARTY_NOTICES.md dans le code source.</string>
+<string name="licenses_body">Construit avec Kotlin, AndroidX, Jetpack Compose, Room, Hilt, WorkManager, kotlinx.coroutines et Tink (Apache-2.0), SQLCipher pour Android (type BSD) et Bouncy Castle (MIT, avis ci-dessous). Voir THIRD_PARTY_NOTICES.md dans le code source.</string>
 <string name="medication">Médicament</string>
 <string name="menu">Menu</string>
 <string name="minutes_unit">min</string>
