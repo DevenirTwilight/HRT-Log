@@ -1,3 +1,9 @@
+## MED-02 已合并主线三API原件核验完成 — 2026-10-23
+
+主线e6112698的Android40009477772：API26/API29/API35以及JVM均SUCCESS，Science40009478000 SUCCESS；仅host android尚在途。三个官方artifact12526521366/12526906692/12526711798已核SHA/CRC，main-e611-api26/29/35各新6+3+1、原Foundation33/Store11/Preparation8/Preflight5/Staging4/Migration5/Key2/Restart1/TEST_ONLY Candidate6均0fail/skip，原四对象+两quarantine真实新PID seam均OK1。source字段实际e611、tree09426d，非误标旧78bd。完整归档/新设备激活/真机/外审未因此通过。
+
+单一审批包review/med02-portable-approval-20261023现5ed3cde3，字段/数据与独立canonical原型仍为本地5/0/0/0、TEST_ONLY、CI_NOT_RUN。已经一次性向负责人请求OFF格式特有writer/独立reader/KDF/portable wrap/集合实施授权，尚无批准答复；并非永久冻结、全库激活或启用。等待host作业及授权期间不新增重复原生测试或擅自实现未批准协议。
+
 ## MED-02 #113一次补验成功、已正常保护合并 — 2026-10-23
 
 #113 source78bd4eaa未变；取消API29单项仅补验一次，attempt2 job120597910693 SUCCESS，其他四job成功结果保留。原始cancel证据并非测试失败或已证纯infra，已保存；retry artifact12525801130 SHA9de5121bc07bd916f232ad97aef4a309af9814eda952866a6a85fd2010ae38f9/CRC PASS，新6+3+1与原六新PID seam逐项PASS。源78bd、PR f28与merge `e61126989a7433d9ba2bf5e387c6b8a434e8f187` tree均09426d，required checks全PASS无未决review，GitHub正常auto-merge完成，无force/admin/bypass。主线Android40009477772/Science40009478000已自动启动、在途，不提前标PASS。

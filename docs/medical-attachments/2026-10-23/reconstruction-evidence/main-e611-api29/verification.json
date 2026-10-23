@@ -1,0 +1,97 @@
+{
+  "run": 40009477772,
+  "artifact": 12526906692,
+  "api": 29,
+  "source": "e61126989a7433d9ba2bf5e387c6b8a434e8f187",
+  "sha256": "0c89b0fe9e0c47166cc7772968ae8e2e0a78497cbf4b3cd90a6bab44ae49f132",
+  "crc": "PASS",
+  "classes": {
+    "AttachmentBusinessReconstructionAndroidTest": {
+      "tests": 6,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentBusinessRestoreAndroidTest": {
+      "tests": 3,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentFormatReadinessAndroidTest": {
+      "tests": 1,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentBackupPreparationAndroidTest": {
+      "tests": 8,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentRestorePreflightAndroidTest": {
+      "tests": 5,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentRestoreStagingAndroidTest": {
+      "tests": 4,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentFoundationAndroidTest": {
+      "tests": 33,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentPersistentStoreAndroidTest": {
+      "tests": 11,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentSqlCipherMigrationTest": {
+      "tests": 5,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentKeyAndroidTest": {
+      "tests": 2,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentPersistentRestartAndroidTest": {
+      "tests": 1,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentBackupCandidateAndroidTest": {
+      "tests": 6,
+      "failures": 0,
+      "skipped": 0
+    }
+  },
+  "restart_logs_verified": [
+    "core/data/build/reports/med02-persistent-restart/COMMITTED-verify.log",
+    "core/data/build/reports/med02-persistent-restart/IN_COMMIT-verify.log",
+    "core/data/build/reports/med02-persistent-restart/STAGED-verify.log",
+    "core/data/build/reports/med02-persistent-restart/WRITE-verify.log",
+    "core/data/build/reports/med02-restore-restart/COPY-verify.log",
+    "core/data/build/reports/med02-restore-restart/VERIFIED-verify.log"
+  ],
+  "resource": {
+    "api": 29,
+    "memory_kib": 65536,
+    "iterations": 3,
+    "parallelism": 1,
+    "elapsed_ns": 654288840,
+    "heap_limit_bytes": 201326592,
+    "baseline_heap_bytes": 4267056,
+    "sampled_peak_heap_bytes": 73793248,
+    "baseline_pss_bytes": 67502080,
+    "sampled_peak_pss_bytes": 204877824,
+    "sample_interval_ms": 10,
+    "independent_kat": true,
+    "scope": "TEST_ONLY_ISOLATED_KDF",
+    "formal_format_approved": false,
+    "joint_restore_budget_verified": false
+  },
+  "scope": "emulator native SQLCipher; not real device, external security review or portable restore",
+  "tree": "09426d156f312608c552c47ac67b6b2c60f89560"
+}
