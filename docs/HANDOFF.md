@@ -3291,3 +3291,33 @@ bba9562d原生39267083400/artifact12193548500再次在full_encrypted_backup退�
 独立#87已在最终21a10430两轮六类CI全PASS、无冲突/未解决审查后受保护合并080094ae；build33成品/source219bbf32不变，没有新APK。主线080094ae science已PASS，Android/domain复验仍运行。
 
 负责人新任务明确优先LAB-UI-03/LAB-03，不等待P4。已从主线080094ae创建隔离工作树/workflows：/workspace/HRT-Log-lab-ui03（feature/lab-ui03-home-20261019）负责主页/真实导航；/workspace/HRT-Log-lab03（feature/lab03-analytes-20261019）负责目录/单位。禁止把本P4未准入源码带入LAB分支；不争用Room或备份版本，正式附件OFF。
+
+## MED-02 portable备份准备独立分支启动 — 2026-10-23
+
+feature/med02-backup-preparation-20261023基于01f45fb8，不复制未合并PR-A。新portable格式未批准，先生产只读一致快照/全版本成员/类型化UUID映射和限额组件，及test-only密码/完整集合/新设备候选；不接正式备份入口、不写恢复SQL、不占Schema。具体提案portable-backup-format-proposal.md。本分支尚未测试，不声称生产备份可用。PR-A容量独立#110，避免两分支改相同writer/文件ownership/key代码。
+
+## portable准备组件及隔离候选已编码，初轮候选6项通过 — 2026-10-23
+
+新增AttachmentBackupManifest（全版本/回收站/链接闭包、显式类型化UUID映射、PURGED仅映射墓碑）和AttachmentBackupPreparation（同事务原业务JSON/元数据快照，复用独立全审计及原有held-FD/Tink/device-key逐版本认证，缺成员拒绝、父会话撤权/换库后拒绝并清零owned记录缓冲）。不写恢复SQL、不新增持久格式或应用入口。
+
+DraftMedicalArchive只在attachmentTest测试源集：2MiB内存reference，BC Argon2id测试专用1MiB/2次+成熟JCA AES-GCM封装、原Tink对象完整认证及集合/类型映射校验；不能用其magic/参数作为正式格式。候选跨软件新device key/dataset/epoch验证所有原字节、旧版本、trash/link、错密码/缺失/额外/重复/坏密文/未知版本/中断前旧库不变。本地初轮6项与native源码编译PASS。追加真实SQLCipher/Keystore只读快照4项（真实三页PDF/PNG/binary、历史坏尾/缺失、撤权清零、外层事务/错会话拒绝）后，最终源尚未测试。实际跨手机、归档恢复SQL事务/进程死亡、正式格式/KDF低内存验收NOT_IMPLEMENTED/NOT_RUN；旧PNBAK1和schema未改。源文件后续冻结才跑完整回归，不能借初轮候选6项称生产备份可用。
+
+## portable准备完整本地559项通过，最终native源码编译通过 — 2026-10-23
+
+541a6d42的完整core:data JVM559/0fail/error/skip，含6项隔离候选；Python发布隔离4项PASS。首次新增真实PDF fixture错误使用PdfDocument.use导致native源码编译FAIL，原日志initial-full-native-compile.log保留，不计原生执行。改显式try/finally.close，并增加真实就诊删除/恢复→快照保留原UUID/记录回收站/关联不自动恢复的正负测试，最新native Kotlin编译PASS（五个Snapshot测试+六个隔离Candidate，原生执行仍待CI）。生产源码和预算/旧PNBAK1未改，跨软件新device候选不是实际手机迁移或生产SQL恢复。
+
+具体正式格式评审选项现含80B独立PNMEDBK1 header、suite/KDF/域/帧顺序/全集认证/严格版本与大小限额、原子激活和未知多namespace策略；仅提案NOT_APPROVED，64MiB/3pass KDF低内存/正式wire长度推导/多namespace/恢复SQL及进程死亡验收未完成。测试参考magic与1MiB KDF绝不可升为正式格式。完整格式必须单独明确批准；本PR只合入无入口准备组件和隔离测试。
+
+## 只读快照撤权锁审查修复（仍OFF）— 2026-10-23
+
+代码复查发现只读capture误用写COMMIT授权监视器，可能让锁屏撤权等待完整audit/encode；records消费回调同样不应长期持有该锁。改为同一受控只读Room事务保持一致快照，完整审计不变，只在起点/owned记录缓冲转交/最终结果交付短窗口校验权限；编码失败或迟到转交清零，结果仍在全部对象认证和活scope校验后交付。records消费在监视器外，只允许私有有界staging，撤权可异步清零，返回前post-check拒绝迟到结果。没有缩减业务/历史检查、没有新写入或信任缓存。
+
+新增第六个真实Snapshot原生合同分别暂停记录缓冲转交前和记录消费中，另一线程revoke须在释放阻塞点前完成（5s死锁检测上界），owned记录清零，读任务拒绝且原临床/附件事实不变；不是P4性能预算测试。新源未执行原生，不先称安全问题已验收；继续编译/适用三API回归，保留Draft。
+
+## MED-02 两个独立交付整合检查点 — 2026-10-23
+
+PR #110 容量/生命周期保护已按保护规则合并，实际主线6bae935c8eefafdfb44161311e6f863cbd303318，源cb51a143六项必需CI全部PASS，26/29/35原生及进程重启契约PASS。保留c181原始FAIL及b5夹具修正证据，未弱化容量拒绝。
+
+PR #111 源4991e629六项必需CI全部PASS；真实快照6项及隔离候选6项已在API26/29/35运行成功。现一次同步已验收主线#110及#108的HANDOFF，无生产源码冲突（唯一共享文件HANDOFF完整保留两侧）；整合HEAD的CI必须独立验收，不能借旧源绿色。环境失联前源码/本地回归及原始工件均已推送；后续由GitHub远端接口正常非强推整合并验收。最新快照撤权合同证明回调期间revoke不等整个全量审计完成。
+
+状态：存储保护PRODUCTION_IMPLEMENTED但功能入口OFF；快照准备生产只读、候选归档TEST_ONLY；完整可携带备份NOT_IMPLEMENTED，格式NOT_APPROVED；外审NOT_REVIEWED_EXTERNALLY；永久密文/key删除政策未批准所以无自动回收。Room14/原业务schema及PNBAK1不变，不交付APK。新设备候选仅软件包装/模型原子性，实际临床SQL恢复/真实archive进程死亡/新物理世代激活仍未实现。真实手机/TalkBack/真实ENOSPC未运行。详见独立evidence分支docs/med02-postmerge-evidence-20261023原始日志和摘要。
