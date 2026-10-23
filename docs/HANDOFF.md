@@ -1,3 +1,9 @@
+## PR112最终三API原件及新进程探针全部核验，主机门仍在途 — 2026-10-23
+
+28198a21d681ba620f424e119b93330e68f2b23f / PR39986383632，实际checkout b9804918776569f99eca07db33634836d5ad4a99与head同树5724d0acddb4af66f712f632557c851ecc47b136（fetch/rev-parse已核）。26/29/35三官方ZIP均与GitHub上传SHA256一致、CRC通过。每API新Preflight5/Staging4/Preparation8，以及原Foundation33/Store11/Migration5/Key2/Restart1/TEST_ONLY Candidate6全部0fail/skip；每API COPY/VERIFIED两处真实新PID原日志各OK(1 test)，原四处对象强停也保留。证据在pr112-final-native，不以同名旧类或CI绿点冒充执行。
+
+目前PR仍Draft，PR/push主机android尚在途，未合并。下一步读完整最终门、无冲突/未解评审，再按§106保护合并与核主线。正式格式/跨设备SQL恢复/整库激活仍未获批准或实施，TEST_ONLY6不算换机成功，真实设备/正式Argon2/大档案流式/断电未执行。入口OFF、未外审/永久删除OFF，Room14及PNBAK1不变。不追加实现或重跑旧源。
+
 ## PR112最终候选API26/29原件通过，35/host未结束 — 2026-10-23
 
 独立PR112，当前head28198a21d681ba620f424e119b93330e68f2b23f，基线4dca6744（已合并#111）。实际PR39986383632 checkout b980491；head/checkout同树5724d0ac。26/29官方ZIP SHA与上传digest一致、CRC通过；每API Preflight5、Staging4、Preparation8、Foundation33、Store11、Migration5、Key2、旧Restart1、TEST_ONLY Candidate6各0fail/skip（合计75，候选6不冒充生产可移植格式）。新COPY/VERIFIED两处真实force-stop新PID原日志均OK(1 test)，旧对象四处强停保留。原ZIP/日志gz/来源JSON在pr112-final-native。尚未合并，35/host仍PENDING，不写成全绿。

@@ -121,11 +121,72 @@
         "VERIFIED": "PASS_FRESH_PID"
       },
       "candidate_scope": "TEST_ONLY portable candidate; all other listed classes production-path contracts"
+    },
+    {
+      "api": 35,
+      "artifact_id": 12516423509,
+      "sha256": "daf0694f3dc5c22c0afebd934a929090962558039f3766ef4007ccef3e4674a6",
+      "upload_digest_matches": true,
+      "zip_crc": "PASS",
+      "classes": {
+        "AttachmentRestorePreflightAndroidTest": {
+          "tests": 5,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentRestoreStagingAndroidTest": {
+          "tests": 4,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentBackupPreparationAndroidTest": {
+          "tests": 8,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentBackupCandidateAndroidTest": {
+          "tests": 6,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentFoundationAndroidTest": {
+          "tests": 33,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentKeyAndroidTest": {
+          "tests": 2,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentPersistentStoreAndroidTest": {
+          "tests": 11,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentSqlCipherMigrationTest": {
+          "tests": 5,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentPersistentRestartAndroidTest": {
+          "tests": 1,
+          "failures": 0,
+          "skipped": 0
+        }
+      },
+      "restore_restart": {
+        "COPY": "PASS_FRESH_PID",
+        "VERIFIED": "PASS_FRESH_PID"
+      },
+      "candidate_scope": "TEST_ONLY portable candidate; all other listed classes production-path contracts"
     }
   ],
-  "api35": "PENDING",
+  "api35": "PASS",
   "host": "PENDING",
   "entry": "OFF",
   "external_review": "NOT_REVIEWED_EXTERNALLY",
-  "portable_format": "NOT_APPROVED"
+  "portable_format": "NOT_APPROVED",
+  "checkout": "b9804918776569f99eca07db33634836d5ad4a99",
+  "checkout_and_head_tree_verified": true
 }
