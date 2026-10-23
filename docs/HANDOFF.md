@@ -1,3 +1,7 @@
+## #109主线API26/29原始证据已核，待35/host — 2026-10-23
+
+合并主线01f45fb8、Android39960227901的API26和29均SUCCESS；分别官方artifact12504912540/12504963158已核SHA256/ZIP CRC，均实际Store7/Restart1/Foundation33/Migration5/Key2合计48项零fail/skip，原ZIP/receipt在postmerge-a291-bdpm/main-green。Science/JVM亦SUCCESS，device35和host仍在运行，不能称主线全绿。没有重跑原生、没有新源码。独立UI/PDF交接PR108现在DIRTY，未覆盖其HANDOFF或UI/PDF代码。
+
 ## #109正式负载隔离与源码来源原日志复核 — 2026-10-23
 
 最终PR host job120425487035原日志已压缩保留pr-green/host-job.log.gz，实际fullRelease manifest无INTERNET、R8/DEX附件隔离及provenance全PASS。其SOURCE_SHA=dff8e30d（GitHub PR checkout），并非7ae分支提交；已fetch该SHA核tree ae90ff21与source7ae/主线01f45相同，不混淆commit身份。未签名CI构建不是交付APK/Release。production-review-scope另固定NotesDatabase/DataTransfer/BackupValidation/Gradle/CI/原restart脚本/隔离脚本及未接线AppLock/Session十项集成上下文SHA。主线39960227901仍在途，不提前报告通过。

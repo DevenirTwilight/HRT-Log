@@ -1,0 +1,34 @@
+{
+  "source": "01f45fb889d198b201b3bb1904ecf4c3f41eb501",
+  "run": 39960227901,
+  "artifact": 12504912540,
+  "sha256": "99acd3750fa57746b2e3486adbd2333de0fb2a677cfef9bdad6405d6916d9ccf",
+  "crc": "PASS",
+  "classes": {
+    "AttachmentPersistentStoreAndroidTest": {
+      "tests": 7,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentPersistentRestartAndroidTest": {
+      "tests": 1,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentFoundationAndroidTest": {
+      "tests": 33,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentSqlCipherMigrationTest": {
+      "tests": 5,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentKeyAndroidTest": {
+      "tests": 2,
+      "failures": 0,
+      "skipped": 0
+    }
+  }
+}
