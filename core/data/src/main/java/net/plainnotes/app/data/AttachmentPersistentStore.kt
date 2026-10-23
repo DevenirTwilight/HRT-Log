@@ -276,7 +276,8 @@ internal class AttachmentPersistentStore(context: Context, private val db: Notes
     private fun openChecked(scope:AttachmentIdentity.Scope,cap:AttachmentSession.Capability,document:UUID,trashed:Boolean):AttachmentObjectStreams.Reader {
         worker();scopeCheck(scope,cap)
         // Pin/verify inode and full content under the writer lock. Returned read-only descriptor remains pinned.
-        files.locked().use { directory ->
+        var issued:AttachmentObjectStreams.Reader?=null
+        try { files.locked().use { directory ->
             val operation=raw.query("""SELECT j.operation_uuid FROM attachment_document d JOIN attachment_version v ON v.store_uuid=d.store_uuid AND v.document_uuid=d.document_uuid AND v.version_uuid=d.active_version_uuid
                 JOIN attachment_journal j ON j.store_uuid=v.store_uuid AND j.version_uuid=v.version_uuid AND j.document_uuid=v.document_uuid
                 WHERE d.store_uuid=? AND d.document_uuid=? AND d.state=? AND v.status='VERIFIED' AND v.protocol_revision=1 AND j.proof='COMMITTED'""",arrayOf(scope.dataset,document.toString(),if(trashed) "TRASHED" else "ACTIVE")).use {check(it.moveToFirst()) {"No authenticated active attachment"};it.getString(0)}
@@ -288,6 +289,7 @@ internal class AttachmentPersistentStore(context: Context, private val db: Notes
             val key=keys.unwrapExisting(j.alias(AttachmentDeviceKeys.Role.ACTIVE),j.binding(scope,AttachmentDeviceKeys.Role.ACTIVE),envelope)
             val input=try { directory.open(j.context.objectId,requireNotNull(j.identity)) } catch(failure:Throwable) {key.fill(0);throw failure}
             return AttachmentObjectStreams.open(cap,requireNotNull(j.manifest),key,input.channel).also {
+                issued=it
                 try { scopeCheck(scope,cap) } catch(failure:Throwable) {it.close();throw failure}
             }
             } catch(failure:Exception) {
@@ -298,6 +300,9 @@ internal class AttachmentPersistentStore(context: Context, private val db: Notes
                 } } catch(cleanup:Exception) { failure.addSuppressed(cleanup) }
                 throw failure
             }
+        } } catch(failure:Throwable) {
+            try {issued?.close()} catch(cleanup:Throwable) {failure.addSuppressed(cleanup)}
+            throw failure
         }
     }
 

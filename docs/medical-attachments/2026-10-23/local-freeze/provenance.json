@@ -14,5 +14,13 @@
     "parent": "ca733bacbc21954d5a043b05e54e89572ebbdeeb",
     "AttachmentOwnedFiles.kt_sha256": "518d97f9213a6991f6b318f0fd1bceb545681387f724dc3d27d06a2ed8dd0201",
     "compile": "production and Android instrumentation compile PASS; native runtime pending"
+  },
+  "integration_followup": {
+    "parent": "bfdea54921c164616d8e393df911d1d70dbff044",
+    "AttachmentPersistentStore.kt_sha256": "b2b7656a5e3e604abc7452a15f41aced71c27d8f8ced762dbfdf9579b9c86d73",
+    "app_instrumentation_compile": "PASS",
+    "python_design": 61,
+    "python_isolation": 4,
+    "native_runtime": "PENDING_CI"
   }
 }
