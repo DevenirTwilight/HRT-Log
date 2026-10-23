@@ -97,7 +97,8 @@
       "Synthetic emulator data only, no physical device or hardware power-loss proof",
       "Raw restart seam stdout files missing from upload paths; four PASS markers retained in original job logs",
       "Internal tests and author review are not independent expert review"
-    ]
+    ],
+    "unsigned_release_guard": "Final PR host log retained in postmerge-a291-bdpm/pr-green/host-job.log.gz: no INTERNET, attachment R8/DEX isolation and provenance checks PASS. Unsigned CI build is not a signed delivery or release."
   },
   "review_obligations": [
     "Tink supported API and version maintenance; immutable context/domain encoding; fresh DEK and two single-use device aliases per attempt",
@@ -121,5 +122,47 @@
     "Feature activation",
     "New portable crypto format",
     "Signed build or Release"
+  ],
+  "integration_context_files": [
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/NotesDatabase.kt",
+      "sha256": "ed7a4477f0e8d70df92f9676bb8aa67e882f4cc4c6ab6e40624e1206f311e6fc"
+    },
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/DataTransfer.kt",
+      "sha256": "fe1b2b312d88eee40d80ece9d4b68f93a0b3739f147e612e3b5ad22aec347ce6"
+    },
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/BackupValidation.kt",
+      "sha256": "5a65ae13564faf8aa6120702cf141f7f4324a604b6effc5426c0c63719e7d9f1"
+    },
+    {
+      "path": "core/data/build.gradle.kts",
+      "sha256": "f7e4bb226a336bc7f5c4074be4d7d6113ed9b04fa6fcd5db757463afad7045ce"
+    },
+    {
+      "path": ".github/workflows/android.yml",
+      "sha256": "99c85a49ab56f54e782dbdb30860894b4fee95867daac5bbfaebdeb5fb0f8832"
+    },
+    {
+      "path": "scripts/run_attachment_persistent_restart.py",
+      "sha256": "065c415d9e7940a5b6a70e24f2a4b75f8d656591aa3fd518bc4ffe68dd23b2b1"
+    },
+    {
+      "path": "scripts/check_attachment_release_isolation.py",
+      "sha256": "9f810da5af84b6787e573da3f1e6032ba4830e2050f2d4e9b43420cba5826538"
+    },
+    {
+      "path": "scripts/check_release_manifest.py",
+      "sha256": "e2506bd946e02458257cac48b23a99e3d7a1ba787861fb771b234d64aef888c7"
+    },
+    {
+      "path": "app/src/main/java/net/plainnotes/app/security/AppLock.kt",
+      "sha256": "c464a4375e4d936f0e814e3ba2596817c2123e0fcac4848fbc68dd2fc66f9f09"
+    },
+    {
+      "path": "app/src/main/java/net/plainnotes/app/security/Session.kt",
+      "sha256": "9624adb1f3546fd32aa1e8133df6c8f45d5a30cf5b2a6aefa7ea4b44b7eff6e2"
+    }
   ]
 }

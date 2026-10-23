@@ -12,5 +12,7 @@
   "main_android_status": "IN_PROGRESS",
   "main_science_run": 39960227840,
   "main_science_status": "SUCCESS",
-  "production_change": false
+  "production_change": false,
+  "pr_checkout": "dff8e30d492726d08442619877fb57e67efeaf93",
+  "pr_checkout_tree": "ae90ff2111634ae16ead96a93ba001c2a908e7eb"
 }
