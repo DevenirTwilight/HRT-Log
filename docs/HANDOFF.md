@@ -1,3 +1,11 @@
+## MED-02 delivery checkpoint — 2026-10-23 15:37 UTC
+
+PR #110 protected-merged as 6bae935c8eefafdfb44161311e6f863cbd303318 after cb51a143 all six required checks PASS. Exact cb51 API26/29/35 original job logs now preserved under storage-budget-evidence/native-cb51; old b5 ZIP/HTML independent verification and initial c181 failure remain unchanged.
+
+PR #111 pre-integration source4991e629 all required checks PASS, real snapshot6 and isolated candidate6 executed on26/29/35. Integrated normal two-parent HEAD5c8068d27f2cd1e78479b97c93b2793c9e2c7f1d preserves accepted #110/main and both HANDOFF texts; exact merge union receipt is integration-merge-receipt.json. Latest integrated runs39979087267/39979078536 still running; science/JVM green, native/full-host pending. PR111 Ready with protected auto-merge enabled; not merged at this checkpoint. No green result borrowed from prior source.
+
+Source work is safely remote despite local execution environment loss. No format approved, no production archive restore, no permanent file/key deletion, no new Schema/PNBAK1 format, no UI entry. External review remains NOT_REVIEWED_EXTERNALLY and all attachment entry OFF. CI artefact metadata/logs obtained remotely are distinguished from older ZIPs independently SHA/CRC/HTML verified before environment loss. No real-device/TalkBack/physical disk-fill claim.
+
 ## 执行环境失联，源码/证据均已在远端；继续通过GitHub接口验收 — 2026-10-23 15:19 UTC
 
 本轮环境被标记unavailable，已停止失联环境中未返回的PR状态/正文命令（无git提交或生产写入）。两源码工作树此前clean，全部代码已推：PR110 cb51a14383cadbfca9dbd189c53ee221a40b61b4，PR111 4991e629df3352e8ab195c0a0a490ba0b65e4d61。最新原件证据含112c02eb（native-499 API29）已远端核实，不存在未提交实现只能靠本机的情况。后续无法本地编译/解ZIP时必须如实NOT_RUN/未再独立重读；原Actions作业仍继续，不能因此重新触发原生或降低门槛。
