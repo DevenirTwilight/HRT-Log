@@ -1,0 +1,37 @@
+{
+  "source": "7aecef43ee929ccbce668530abf9a92070b6851b",
+  "run": 39957082418,
+  "artifact": 12503073662,
+  "sha256": "fd6a40b4b121f799de84ef583d22446b106c69801010e353a38d0f2a4cf2ab8c",
+  "zip_crc": "PASS",
+  "classes": {
+    "AttachmentPersistentStoreAndroidTest": {
+      "tests": 7,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentPersistentRestartAndroidTest": {
+      "tests": 1,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentFoundationAndroidTest": {
+      "tests": 33,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentSqlCipherMigrationTest": {
+      "tests": 5,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentKeyAndroidTest": {
+      "tests": 2,
+      "failures": 0,
+      "skipped": 0
+    }
+  },
+  "environment": "actual API29 emulator",
+  "bdpm_flow_on_this_api": "NOT_CLAIMED_FROM_THIS_ARTIFACT; local four-locale proof separate",
+  "physical_device": "NOT_RUN"
+}

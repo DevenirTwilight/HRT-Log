@@ -1,3 +1,7 @@
+## #109精确源API29原始工件已核验 — 2026-10-23
+
+7aecef43、PR39957082418，官方artifact12503073662 SHA256 fd6a40b4b121f799de84ef583d22446b106c69801010e353a38d0f2a4cf2ab8c 与上传digest一致、ZIP CRC PASS。原HTML核验Store7/Restart1/Foundation33/Migration5/Key2均0fail/0skip；原ZIP与receipt保留postmerge-a291-bdpm/native。该API29工件不据此声称BDPM UI四语导航已原生执行，四语导航的12项本地Robolectric证据另列。当前PR仍待API26/35/完整host；push的API26已成功，但未借它提前报整PR通过。没有新源变更、没有新Schema或生产逻辑修改。
+
 ## #106现有三API原件独立复核，无重跑 — 2026-10-23
 
 #106已验收0210ab9c、PR测试checkout09120ae4与合并a291源码树均cd3d434715cb69df8e776f8742dafba8824cd224。独立再读三API原ZIP，SHA与官方upload digest/原manifest一致、CRC PASS；每API Store7/Restart1/Foundation33/Migration5/Keystore2均0fail/0skip；原job日志确有WRITE/STAGED/IN_COMMIT/COMMITTED四条生产restart PASS。新复核JSON在postmerge-a291-bdpm/pr106-independent-recheck.json，不借此宣称#109已过CI，不把进程强停当硬件断电。
