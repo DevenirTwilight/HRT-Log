@@ -37,7 +37,7 @@ internal object AttachmentIdentity {
     fun replaceStructuredDataset(db:SupportSQLiteDatabase) {
         check(db.inTransaction());val old=current(db) ?: return
         db.execSQL("UPDATE attachment_link SET state='QUARANTINED',revision=revision+1 WHERE store_uuid=? AND state!='QUARANTINED'",arrayOf(old.dataset))
-        db.execSQL("UPDATE attachment_operation SET phase='ABORTED',staged_wrapped_dek=NULL WHERE store_uuid=? AND phase IN('PREPARED','WRITING')",arrayOf(old.dataset))
+        db.execSQL("UPDATE attachment_operation SET phase='ABORTED',staged_wrapped_dek=NULL WHERE store_uuid=? AND phase IN('PREPARED','WRITING','AUTHENTICATED')",arrayOf(old.dataset))
         db.execSQL("UPDATE attachment_store SET store_state='RETIRED' WHERE store_uuid=? AND store_state='CURRENT'",arrayOf(old.dataset))
         fresh(db)
     }

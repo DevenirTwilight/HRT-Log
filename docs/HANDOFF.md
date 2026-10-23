@@ -1,3 +1,17 @@
+## MED-02 持久化实现与备份兼容设计待原生验收 — 2026-10-23
+
+独立分支 feature/med02-persistent-store-20261023：候选 Room14 单表 journal、文件归属、一次性包装预算、真实提交/CAS、UUID 重放查询、保守恢复、逻辑 trash/restore 已编码。备份具体字段/状态/兼容矩阵在 persistence-and-backup-compatibility.md，仅 DESIGN_ONLY；PNBAK1/业务备份最高13不变。默认 OFF，旧版本无 journal 仍 UNKNOWN；现有物理 namespace 仍 STAGING，不伪造整库代次 VALIDATED。每尝试2个新alias、失败密文/预算保留，不做危险 GC；全局配额/清理与正式导入/格式准入/AppLock接线仍是启用前工作。
+
+本地最终针对性32+5全部通过，最终原生测试源码编译通过；完整数据层任务先前通过，之后新增 operationState/写前恢复小调整，精确最终提交仍须完整 CI，不能借旧本地结果归源。local-first 保留原548项中1项旧故障注入缺迁移路径 FAIL；修复仅补13→14链，原断言全保留。local-freeze 有日志/XML/生产文件SHA256。原生生产闭环/四强停点尚 NOT_RUN；已接API26/29/35现有CI，不触发额外 P4 专项跑分。
+
+#104 源663901f9的三API及JVM/Science已绿，主机检查一绿一在途，未声称已合并。API26原工件已下载验SHA/CRC：Foundation32/0/0、实际Keystore2/0/0，尚待其他工件和最终保护合并/主线核验。曾短暂401，连接已恢复，不反复重跑。下一步：提交此实现，完成 #104 六门保护合并；持久化PR最终源原生/CI，根因修复后正常保护合并，不开启入口/不签名/不改外审状态。
+
+## MED-02 持久化代码已进入独立工作树，验收在途 — 2026-10-23
+
+#104 修复源663901f9已推送；必需 CI 尚在运行，不提前宣称通过或合并。新分支 feature/med02-persistent-store-20261023 基于该源，已核真实 Room13，暂无其他开放 Schema PR。本轮新增授权见 §145。已编写默认 OFF 的 AttachmentPersistentStore、AttachmentOwnedFiles 和单表 attachment_journal（候选 Room14），复用现有 Tink/Keystore，不接应用入口。预留先于包装、同 UUID 请求承诺、完整认证与真实 SQL CAS 提交、重启隔离/逻辑回收站恢复已编码。旧记录无 journal 仍 UNKNOWN；业务备份最高13/PNBAK1不变。
+
+初轮生产编译、基础32与迁移4通过；全数据层548项有1项失败，原XML保留 local-first：旧12→13故障注入用例缺少新13→14路径，尚未到预期故障点，已补路径且保留原断言。新增13→14回滚/UNKNOWN/旧读者拒绝合同与原生合成闭环、三处外部强停脚本正在编译/验证；尚无原生持久化 PASS 证据。未知/未完成密文保留隔离，不自动删除或提交，别名/预算保留。完整医疗备份具体设计仍待补齐，外审及正式启用未完成。不要重复 P4 跑分或先宣称闭环验收完成。
+
 ## MED-02：#104 最终源许可守卫修复，持久化授权已接收 — 2026-10-23
 
 默认分支 d2223c0a，#102/#103 已合并；#104 f86d4a5e 尚未合并。原 PR Android 39854454660：API26 job120089049019 在 adb/emulator 启动阶段失败（测试未运行）；同源 push API26 job120089018775 成功，PR API29/35、JVM 成功。另有真实主机失败 job120089049277：2255 项中 Ui08PdfSummaryUnchangedTest 1 FAIL、492 skip，原因是合法新增的四语 Tink 许可文字进入旧资源整文件哈希，不是 PDF 实现变化。

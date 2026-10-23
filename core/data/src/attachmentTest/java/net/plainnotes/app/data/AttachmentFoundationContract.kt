@@ -89,7 +89,7 @@ abstract class AttachmentFoundationContract : AttachmentObjectStreamsContract() 
         } finally {rawInput.close();pipe[1].close();session.revoke()}
     }
     @Test fun room11KeepsThreeAttachmentDomainsDefaultDisabled()=runBlocking {
-        assertEquals(13,raw.version)
+        assertEquals(14,raw.version)
         assertNotEquals(scope.dataset,scope.logicalVault);assertNotEquals(scope.dataset,scope.epoch)
         assertEquals(1,db.attachments().current().size)
         assertEquals(0L,db.attachments().current().single().feature_enabled)

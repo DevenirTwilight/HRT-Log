@@ -1,0 +1,13 @@
+{
+  "base": "663901f97e6806e217dd0f7066e156fdc88d7b83",
+  "scope": "working tree before first persistence commit; SHA binding uses per-source hashes; native execution NOT_RUN locally",
+  "source_sha256": {
+    "AttachmentPersistentStore.kt": "f6076c89e538f941e03469619a5811ea71da74bf87cc258ce1c33a694a79a819",
+    "AttachmentOwnedFiles.kt": "b63db9562acab54db068ecb85184d5cccbc715203288e8ca3a028a721ef97415",
+    "AttachmentJournalSchema.kt": "c3e32205dfb276576618af6cf676e57c7b5818524aac754ea2deccfe5fd73914",
+    "AttachmentJournalEntity.kt": "6cf5f3fc231bd260f3a1dca49b4b2fd48c40984ab7ee2fee38159d458d382946"
+  },
+  "local_targeted": "32 foundation + 5 migration, 0fail/error/skip; final Android instrumentation compile PASS",
+  "full_data_task": "PASS before final coordinator operation-state/recovery helper adjustment; final CI must validate exact committed source",
+  "external_review": "NOT_REVIEWED_EXTERNALLY"
+}
