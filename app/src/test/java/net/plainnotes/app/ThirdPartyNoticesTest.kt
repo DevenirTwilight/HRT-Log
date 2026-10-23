@@ -18,7 +18,7 @@ class ThirdPartyNoticesTest {
         "lifecycle.compose" to "AndroidX", "lifecycle.viewmodel" to "AndroidX", "sqlite" to "AndroidX",
         "compose.bom" to "Compose", "compose.icons" to "Compose", "compose.material" to "Compose", "compose.preview" to "Compose", "compose.ui" to "Compose",
         "room.ktx" to "Room", "room.runtime" to "Room", "work" to "WorkManager", "coroutines" to "kotlinx.coroutines",
-        "hilt.android" to "Hilt", "sqlcipher" to "SQLCipher", "bouncycastle" to "Bouncy Castle",
+        "tink.android" to "Tink", "hilt.android" to "Hilt", "sqlcipher" to "SQLCipher", "bouncycastle" to "Bouncy Castle",
     )
 
     @Test fun everyRuntimeLibraryHasANotice() {
@@ -45,4 +45,15 @@ class ThirdPartyNoticesTest {
             assertTrue("$locale licence text names Bouncy Castle", "Bouncy Castle" in read("app/src/main/res/$locale/strings.xml").substringAfter("name=\"licenses_body\">").substringBefore("</string>"))
         assertTrue("Settings shows the notice", "R.string.licenses_bouncycastle_notice" in read("app/src/main/java/net/plainnotes/app/ui/SettingsScreen.kt"))
     }
+    @Test fun tinkRuntimeDependencyHasFourLanguageAttribution() {
+        assertTrue("Pinned upstream attribution", "Tink Java / Android 1.23.0" in notices)
+        assertTrue("Upstream copyright", "Copyright Google LLC" in notices)
+        assertTrue("Upstream licence", "Apache License 2.0" in notices)
+        for (locale in listOf("values", "values-zh", "values-b+zh+Hant", "values-fr")) {
+            val body = read("app/src/main/res/$locale/strings.xml").substringAfter("name=\"licenses_body\">").substringBefore("</string>")
+            assertTrue("$locale names Tink", "Tink" in body)
+            assertTrue("$locale names Apache-2.0", "Apache-2.0" in body)
+        }
+    }
+
 }

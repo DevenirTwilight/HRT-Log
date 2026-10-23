@@ -308,7 +308,20 @@ class Ui08PdfSummaryUnchangedTest {
         val base = mapOf("values" to "caa533fbbe4165f32d7ba7f7a1f9c3620995c4b4a2de1e9f81353c9fd3a4638a", "values-zh" to "7d0d69f1e8734cde743aa0e94f669895003c4b6508acf76b6d2920b269f1ef84",
             "values-b+zh+Hant" to "2c53efeec7e47153485abac6f345dd11f43047849e9ebc140067b991be459a29", "values-fr" to "b12b41def544ec6069e8e941af03589bb9837403cb8426b4a1c16975c254eaf0")
         for ((dir, digest) in base) {
-            val text = File("src/main/res/$dir/strings.xml").readText()
+            val current = File("src/main/res/$dir/strings.xml").readText()
+            // MED-02 §144 authorizes only this Tink attribution addition. Normalize that
+            // exact edit inside licenses_body; keep all original resource/PDF digests.
+            val (added, original) = when (dir) {
+                "values" -> "WorkManager, kotlinx.coroutines and Tink" to "WorkManager and kotlinx.coroutines"
+                "values-fr" -> "WorkManager, kotlinx.coroutines et Tink" to "WorkManager et kotlinx.coroutines"
+                else -> "kotlinx.coroutines、Tink" to "kotlinx.coroutines"
+            }
+            val start = current.indexOf("<string name=\"licenses_body\">")
+            val end = current.indexOf("</string>", start)
+            assertTrue("$dir licence element", start >= 0 && end > start)
+            val licence = current.substring(start, end)
+            assertEquals("$dir exact approved attribution edit", 1, Regex(Regex.escape(added)).findAll(licence).count())
+            val text = current.replaceRange(start, end, licence.replace(added, original))
             val a = text.indexOf("<!-- UI-08 (REQUIREMENTS §140)"); val b = text.lastIndexOf("</resources>")
             assertTrue(dir, a in 0 until b)
             assertEquals(dir, digest, sha((text.substring(0, a) + text.substring(b)).toByteArray()))

@@ -194,7 +194,7 @@
 <string name="legend_labs">化验结果</string>
 <string name="legend_recorded">基于记录</string>
 <string name="licenses">开源许可</string>
-<string name="licenses_body">使用 Kotlin、AndroidX、Jetpack Compose、Room、Hilt、WorkManager、kotlinx.coroutines（Apache-2.0）、SQLCipher for Android（BSD 风格许可）和 Bouncy Castle（MIT，许可声明见下）构建。详见源代码中的 THIRD_PARTY_NOTICES.md。</string>
+<string name="licenses_body">使用 Kotlin、AndroidX、Jetpack Compose、Room、Hilt、WorkManager、kotlinx.coroutines、Tink（Apache-2.0）、SQLCipher for Android（BSD 风格许可）和 Bouncy Castle（MIT，许可声明见下）构建。详见源代码中的 THIRD_PARTY_NOTICES.md。</string>
 <string name="medication">药物</string>
 <string name="menu">菜单</string>
 <string name="minutes_unit">分钟</string>

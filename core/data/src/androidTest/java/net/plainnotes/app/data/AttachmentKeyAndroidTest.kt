@@ -11,7 +11,7 @@ import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
 
-/** Test-only synthetic wrapping transcript. Does not freeze a production envelope format. */
+/** Synthetic transcripts plus tests of the approved default-OFF production adapter. */
 class AttachmentKeyAndroidTest {
     @Test fun independentKeystoreAliasesCrossScopeRejectRotationAndMissingAliasFailClosed() {
         val store=KeyStore.getInstance("AndroidKeyStore").apply{load(null)}
@@ -43,4 +43,37 @@ class AttachmentKeyAndroidTest {
             assertFalse(store.containsAlias(a));assertArrayEquals(frozen,old)
         } finally {raw.fill(0);store.deleteEntry(a);store.deleteEntry(b)}
     }
+    @Test fun productionAdapterKeepsRolesAndBindingSeparateAndNeverRecreatesMissingKeys() {
+        val provider=AttachmentDeviceKeys()
+        val store=KeyStore.getInstance("AndroidKeyStore").apply {load(null)}
+        val stage=AttachmentDeviceKeys.Alias(UUID.randomUUID(),AttachmentDeviceKeys.Role.STAGING)
+        val active=AttachmentDeviceKeys.Alias(UUID.randomUUID(),AttachmentDeviceKeys.Role.ACTIVE)
+        val context=AttachmentObjectContext(UUID.randomUUID(),UUID.randomUUID(),UUID.randomUUID(),UUID.randomUUID(),UUID.randomUUID())
+        val binding=AttachmentDeviceKeys.Binding(context,UUID.randomUUID(),UUID.randomUUID(),UUID.randomUUID(),1,AttachmentDeviceKeys.Role.STAGING)
+        val original=ByteArray(32) { (it+3).toByte() }
+        fun reject(block:()->Unit) {try {block();fail("Invalid envelope accepted")} catch(_:java.security.GeneralSecurityException){} catch(_:IllegalArgumentException){} catch(_:IllegalStateException){}}
+        try {
+            provider.provisionNew(stage);provider.provisionNew(active)
+            reject {provider.provisionNew(stage)}
+            val raw=original.copyOf();val envelope=provider.wrapExisting(stage,binding,raw)
+            assertArrayEquals(ByteArray(32),raw);assertEquals(60,envelope.size)
+            assertArrayEquals(original,provider.unwrapExisting(stage,binding,envelope).also {assertEquals(32,it.size)})
+            val rotated=provider.wrapExisting(active,binding.copy(role=AttachmentDeviceKeys.Role.ACTIVE),original.copyOf())
+            assertArrayEquals(original,provider.unwrapExisting(active,binding.copy(role=AttachmentDeviceKeys.Role.ACTIVE),rotated))
+            val altered=listOf(binding.copy(wrapEpoch=2),binding.copy(localDataset=UUID.randomUUID()),
+                binding.copy(physicalGeneration=UUID.randomUUID()),binding.copy(operation=UUID.randomUUID()),
+                binding.copy(content=context.copy(version=UUID.randomUUID())))
+            altered.forEach { reject {provider.unwrapExisting(stage,it,envelope)} }
+            reject {provider.unwrapExisting(active,binding,envelope)}
+            reject {provider.unwrapExisting(active,binding.copy(role=AttachmentDeviceKeys.Role.ACTIVE),envelope)}
+            reject {provider.unwrapExisting(stage,binding,envelope.copyOf(59))}
+            reject {provider.unwrapExisting(stage,binding,envelope.copyOf().also {it[40]=(it[40].toInt() xor 1).toByte()})}
+            store.deleteEntry(stage.value)
+            reject {provider.unwrapExisting(stage,binding,envelope)}
+            val rejected=original.copyOf();reject {provider.wrapExisting(stage,binding,rejected)}
+            assertArrayEquals(ByteArray(32),rejected);assertFalse(store.containsAlias(stage.value))
+            assertArrayEquals(original,provider.unwrapExisting(active,binding.copy(role=AttachmentDeviceKeys.Role.ACTIVE),rotated))
+        } finally {original.fill(0);store.deleteEntry(stage.value);store.deleteEntry(active.value)}
+    }
+
 }

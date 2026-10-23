@@ -87,10 +87,16 @@ are embedded in the fixture. Independently generated draft transcripts are HRT L
 design evidence, not a production format or security certification. RFC5869 Appendix A.1
 and RFC9106 section 5.3 standard test inputs/outputs are identified in test names and report33.
 
-## MED-02B2 test-only Streaming AEAD evaluation
+## MED-02 Streaming AEAD
 
-Tink Java / Android 1.23.0 (`com.google.crypto.tink:tink` / `tink-android`) is used only by
-JVM tests and synthetic Android instrumentation, never by app runtime/release.
+Tink Java / Android 1.23.0 (`com.google.crypto.tink:tink` / `tink-android`) is used by
+JVM tests and synthetic Android instrumentation. Following the 2026-10-22 owner
+approval (REQUIREMENTS §144), `core/data` also declares the pinned Android runtime
+dependency for its default-disabled production stream adapter. There is no app
+entry/caller yet: the existing release-payload guard must continue proving that
+R8 removes the unused Tink path. This is not feature activation or external review.
+Activation must include the app's applicable open-source notices and renewed
+release-payload acceptance without permitting experimental namespaces or markers.
 Copyright Google LLC; Apache License 2.0. Upstream source and license:
 https://github.com/tink-crypto/tink-java/tree/v1.23.0
 https://github.com/tink-crypto/tink-java/blob/v1.23.0/LICENSE

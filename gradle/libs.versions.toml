@@ -8,7 +8,7 @@ hilt = "2.57.2"
 sqlcipher = "4.10.0"
 coroutines = "1.10.2"
 junit = "5.13.4"
-# Test-only attachment research; never a runtime/release dependency (release isolation check forbids Tink classes).
+# Pinned MED-02 streaming adapter. Default-OFF: R8 must still remove unused runtime crypto; POC classes remain forbidden.
 tink = "1.23.0"
 
 [libraries]
