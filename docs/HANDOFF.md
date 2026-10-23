@@ -1,3 +1,9 @@
+## PR112最终候选API26/29原件通过，35/host未结束 — 2026-10-23
+
+独立PR112，当前head28198a21d681ba620f424e119b93330e68f2b23f，基线4dca6744（已合并#111）。实际PR39986383632 checkout b980491；head/checkout同树5724d0ac。26/29官方ZIP SHA与上传digest一致、CRC通过；每API Preflight5、Staging4、Preparation8、Foundation33、Store11、Migration5、Key2、旧Restart1、TEST_ONLY Candidate6各0fail/skip（合计75，候选6不冒充生产可移植格式）。新COPY/VERIFIED两处真实force-stop新PID原日志均OK(1 test)，旧对象四处强停保留。原ZIP/日志gz/来源JSON在pr112-final-native。尚未合并，35/host仍PENDING，不写成全绿。
+
+实际生产新增严格typed预检和独立私有密文quarantine；修复DOSE引用trash快照拒绝，并拒绝retired typed-only/未知原目录文件等完整集合遗漏。当前DB/原件不变，receipt明确不具备outer全文件认证或激活权限。源代码/HANDOFF在feature/med02-restore-preflight-20261023；本证据分支不替代最新runtime。正式PNMEDBK1/整库原子激活仍待明确批准，TEST_ONLY不升级，入口OFF/未外审/无删除/无签名发布。后续仅等精确源其余门、读原件、按§106正常保护合并并核主线；不重跑已完成源。
+
 ## #111最终源三API原件补核，下一轮恢复准备独立开展 — 2026-10-23
 
 #111已合并4dca6744e93ad585a2a824262bd72d083e4f2bce，最终head5c8068d27f2cd1e78479b97c93b2793c9e2c7f1d的PR39979087267/push39979078536六必需门全部SUCCESS。三API官方ZIP均独立SHA256与上传digest一致/CRC通过；Preparation6、Candidate6、Store11各0fail/skip（Candidate始终TEST_ONLY，不冒充真实跨设备恢复）。原件及绑定JSON保存pr111-final-native。不重复跑分。

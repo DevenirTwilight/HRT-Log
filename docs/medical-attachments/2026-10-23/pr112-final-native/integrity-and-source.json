@@ -1,0 +1,131 @@
+{
+  "head": "28198a21d681ba620f424e119b93330e68f2b23f",
+  "run": 39986383632,
+  "checkout_prefix": "b980491",
+  "head_tree": "5724d0acddb4af66f712f632557c851ecc47b136",
+  "artifacts": [
+    {
+      "api": 26,
+      "artifact_id": 12517525942,
+      "sha256": "84924a57d2e2c837aa0ae8054e4523e2ac423597e9e3f2f6f00bc7174b2b7aaa",
+      "upload_digest_matches": true,
+      "zip_crc": "PASS",
+      "classes": {
+        "AttachmentRestorePreflightAndroidTest": {
+          "tests": 5,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentRestoreStagingAndroidTest": {
+          "tests": 4,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentBackupPreparationAndroidTest": {
+          "tests": 8,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentBackupCandidateAndroidTest": {
+          "tests": 6,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentFoundationAndroidTest": {
+          "tests": 33,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentKeyAndroidTest": {
+          "tests": 2,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentPersistentStoreAndroidTest": {
+          "tests": 11,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentSqlCipherMigrationTest": {
+          "tests": 5,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentPersistentRestartAndroidTest": {
+          "tests": 1,
+          "failures": 0,
+          "skipped": 0
+        }
+      },
+      "restore_restart": {
+        "COPY": "PASS_FRESH_PID",
+        "VERIFIED": "PASS_FRESH_PID"
+      },
+      "candidate_scope": "TEST_ONLY portable candidate; all other listed classes production-path contracts"
+    },
+    {
+      "api": 29,
+      "artifact_id": 12516432388,
+      "sha256": "eebffbe95807951ec67425b75fa267cb05d1322080a8914f01d10e7feac192c3",
+      "upload_digest_matches": true,
+      "zip_crc": "PASS",
+      "classes": {
+        "AttachmentRestorePreflightAndroidTest": {
+          "tests": 5,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentRestoreStagingAndroidTest": {
+          "tests": 4,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentBackupPreparationAndroidTest": {
+          "tests": 8,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentBackupCandidateAndroidTest": {
+          "tests": 6,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentFoundationAndroidTest": {
+          "tests": 33,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentKeyAndroidTest": {
+          "tests": 2,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentPersistentStoreAndroidTest": {
+          "tests": 11,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentSqlCipherMigrationTest": {
+          "tests": 5,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentPersistentRestartAndroidTest": {
+          "tests": 1,
+          "failures": 0,
+          "skipped": 0
+        }
+      },
+      "restore_restart": {
+        "COPY": "PASS_FRESH_PID",
+        "VERIFIED": "PASS_FRESH_PID"
+      },
+      "candidate_scope": "TEST_ONLY portable candidate; all other listed classes production-path contracts"
+    }
+  ],
+  "api35": "PENDING",
+  "host": "PENDING",
+  "entry": "OFF",
+  "external_review": "NOT_REVIEWED_EXTERNALLY",
+  "portable_format": "NOT_APPROVED"
+}
