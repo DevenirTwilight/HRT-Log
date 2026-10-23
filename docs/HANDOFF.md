@@ -1,3 +1,9 @@
+## UI-09 瑞士排版纪律（进行中）与 PDF-01（进行中）— 2026-10-23
+
+- **UI-09**（REQUIREMENTS §144，分支 `feature/ui09-swiss-discipline-20261023`，基线 d2223c0a）：实现与 `Ui09Test` 已提交（Grid 令牌、`Swiss.kt` 的 SectionRule/NumberedHeading/NumberedSection、EmptyState 左对齐、47 处间距取整、阶段回顾编号与细线、复诊详情编号区块、服药记录日期细线）。截图测试 `Ui09ScreenshotTest`（UI09_SHOTS=<label>）首轮因等待 ViewModel 超时全部失败，已改为直接传入状态，正在重跑。待办：前后截图（基线在 /home/user/wt-rem 复制测试渲染后删除副本）→ `docs/ui-audit/2026-10-23-ui09/` → 报告 75 → 完整单测/lint → PR 自动合并。
+- **PDF-01**（REQUIREMENTS §145，分支 `feature/pdf01-swiss-layout-20261023`，工作树 /home/user/wt-pdf01）：任务书 v2（章节之间不画线）为准。`PdfReport` 已改为 Sink/render/trace 结构并按 12 栏网格重排；测试侧冻结旧实现 `LegacyPdfReport` 做文字对照。`Pdf01Test`（文字四语一致、digest、图表调用不变、版式断言、无孤立标题、表头重复、章节间无线）正在首跑。待办：迁移 `Ui08PdfSummaryUnchangedTest` 的 Exports.kt 哈希；登记追加式批准记录；样张；报告 76；PR。
+- 两项都不交付 APK、不改 versionCode。
+
 ## 附件受限输入本地256项通过，真实密文sandbox集成通过；首轮平台断言失败保留 — 2026-10-22
 
 生产传输层未变；ce902c89的Foundation20项中1FAIL是新测试把Robolectric管道statSize误断言为-1，实际为0，发生在读取前。原日志/XML保留input-platform-red。改为JVM精确0/真实Android仍精确-1的平台hook，读取/限量/清理/feature0原断言全保留。修正后Foundation20/0/0，domain172/0/0、附件原型64/0/0（新增一项新输入层接既有Tink真实密文sandbox：超限旧cipher/pointer/revision不变、精确上限完整认证后才CAS）；Python69 PASS。不是正式Room文件writer或新格式审核。
