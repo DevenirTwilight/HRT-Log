@@ -1,3 +1,11 @@
+## 远端接手：#106主线真实BDPM等待竞态FAIL留原件 — 2026-10-23
+
+重新核对默认claude/new-session-1959qb HEAD a2917086：#104已合并4f3c52a5，#106已合并a2917086（Room14 journal和已验证本地持久化，不重复开发）。主线39953226169中API26/29/35和JVM SUCCESS，android job120412591904真实失败为简中320dp2x BDPM导航初始药物行缺失。官方build-results12502352491 SHA/CRC核验，原方法HTML与原日志摘录保留postmerge-a291-bdpm。
+
+独立fix/med02-postmerge-20261023源7aecef43仅修共享UI测试：model.sync()是异步IO，旧用例未驱动paused main looper等待真实VM快照就滚动。新增有界等待目标药物与loading完成，并断言无error且完整snapshot等于数据库读数；所有原CIS/CIP/取消/重开/解除与剂量、库存、历史、Profile不变断言原样保留。没有生产BDPM、UI09/PDF01或医疗数据层修改。本地四语合同+PeriodStability在途，尚不报PASS。已独立源码分支推送，PR创建及保护自动合并在跟进。
+
+下一步完成本地/精确源全CI、处理真实失败并核主线。附件入口继续OFF，NOT_REVIEWED_EXTERNALLY；完整备份仍设计，安全GC/总配额/正式格式准入与应用AppLock接线未启用。#108是别人独立UI/PDF交接，不覆盖其工作，不签名/交付APK/发布。
+
 ## MED-02 #106已受保护合并，主线复验在途 — 2026-10-23
 
 #106最终HEAD0210ab9ce8dc47c978d77417a32641872d92ade0，六必需门（push/PR两轮）全部SUCCESS，research-deep也PASS；无未解决评审、无冲突。自动合并已开启，在CLEAN状态下使用正常expected-head merge（无admin/force/旁路）完成合并a2917086ead90b3967eee71908160e8021dfe89a，2026-10-23T12:25:39Z。主线与已验收head/PR测试merge源码树都为cd3d434715cb69df8e776f8742dafba8824cd224，已fetch核对。合并回执和完整主机日志（单测/lint/build/unsigned release隔离PASS）与三API原ZIP/上传digest/SHA/CRC在pr106-protected-native。

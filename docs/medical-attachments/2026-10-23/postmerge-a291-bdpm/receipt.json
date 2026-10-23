@@ -1,0 +1,16 @@
+{
+  "baseline": "a2917086ead90b3967eee71908160e8021dfe89a",
+  "accepted_pr106_head": "0210ab9ce8dc47c978d77417a32641872d92ade0",
+  "main_run": 39953226169,
+  "failed_job": 120412591904,
+  "artifact": 12502352491,
+  "artifact_sha256": "1079092f9f8085f8d56c1f659436a837f26ae76495f006a8d0bf54f76492e7fe",
+  "zip_crc": "PASS",
+  "status": "FAIL",
+  "method": "BdpmReferenceFlowTest zh-rCN/320dp/2x realAppEntrySelectsOfficialPackageConfirmsAndReopensWithoutDoseStockOrProfileChanges",
+  "failure": "performScrollToNode drug-center-medication:1 before asynchronously refreshed snapshot",
+  "correction": "7aecef43: wait for actual committed VM medication + assert no error and exact snapshot equality; all old invariants unchanged",
+  "local_test_status": "IN_PROGRESS",
+  "native_jobs_api26_29_35": "PASS",
+  "production_changes": false
+}

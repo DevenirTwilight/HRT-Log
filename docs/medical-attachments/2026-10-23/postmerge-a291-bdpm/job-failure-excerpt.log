@@ -1,0 +1,27 @@
+2026-10-23T12:30:53.6898502Z > Task :app:testFullDebugUnitTest
+2026-10-23T12:31:15.7898127Z 
+2026-10-23T12:31:15.7925921Z BdpmReferenceFlowTest > [zh-rCN/320dp/2x] > realAppEntrySelectsOfficialPackageConfirmsAndReopensWithoutDoseStockOrProfileChanges[zh-rCN/320dp/2x] FAILED
+2026-10-23T12:31:15.7954512Z     java.lang.AssertionError at Actions.kt:257
+2026-10-23T12:32:55.3928143Z 
+2026-10-23T12:32:55.3955396Z > Task :core:data:mergeDebugGeneratedProguardFiles
+2026-10-23T12:32:55.3974555Z > Task :core:data:mergeDebugConsumerProguardFiles
+2026-10-23T12:32:55.7915018Z > Task :core:data:syncDebugLibJars
+2026-10-23T12:32:55.7934631Z > Task :core:data:bundleDebugLocalLintAar
+2026-10-23T12:32:55.8901603Z > Task :core:reminder:extractDebugAnnotations
+2026-10-23T12:46:09.0919457Z FAILURE: Build failed with an exception.
+2026-10-23T12:46:09.0944135Z 
+2026-10-23T12:46:09.0944700Z * What went wrong:
+2026-10-23T12:46:09.0974561Z Execution failed for task ':app:testFullDebugUnitTest'.
+2026-10-23T12:46:09.1035204Z > There were failing tests. See the report at: file:///home/runner/work/HRT-Log/HRT-Log/app/build/reports/tests/testFullDebugUnitTest/index.html
+2026-10-23T12:46:09.1044141Z 
+2026-10-23T12:46:09.1064345Z * Try:
+2026-10-23T12:46:09.1094741Z > Run with --scan to get full insights from a Build Scan (powered by Develocity).
+2026-10-23T12:46:09.1124006Z 
+2026-10-23T12:46:09.1124457Z BUILD FAILED in 19m 29s
+2026-10-23T12:46:09.2268511Z ##[error]Process completed with exit code 1.
+2026-10-23T12:46:09.2398397Z ##[group]Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+2026-10-23T12:46:09.2399231Z with:
+2026-10-23T12:46:09.2399668Z   name: build-results
+2026-10-23T12:46:09.2404574Z   path: app/build/reports/tests/
+app/build/ansm-p2-ui-shots/ci/
+app/build/reports/pk-p0/
