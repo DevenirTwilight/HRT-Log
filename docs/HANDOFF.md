@@ -1,3 +1,9 @@
+## MED-02 重开后输入所有权失败已定位，候选继续严格复验 — 2026-10-23
+
+源9e6db40c低内存run40032689569：5项/2FAIL/0skip。已越过原mmap/FD问题，完成全部对象安装并重开DB，独立verify报invalid JSON；原因是首次BackupJsonReader.indexed拥有传入数组且close清零，协调器错误复用同一frozen records。两次解析现各传copyOf，原parser清零/严格验证和最终独立审计完全保留，原冻结副本仍由cap在所有退出路径擦除；4倍预算未提高。最新native编译PASS，不能提前称原生修复成功。原失败日志和先前Android ELOOP取消记录已保存native-9e6db40c，官方ZIP SHA86b46dee…/CRC已核（不是绿）。
+
+发现connectedDebugAndroidTest结束会卸载测试包，原末尾run-as指标得到unknown package；不把该内容当内存数据。低内存脚本改为assemble同一测试APK→直接安装/原生AndroidJUnitRunner执行原5项（必须OK5、无FAIL/skip）→采样文件JSON验证→原三个真实强停seam，保留同一API26/512MiB/192MiB、全部断言及失败码，无缩夹具/放宽限额。普通CI原生/迁移路径保持原connected任务。以上新源仍需完整CI及真实PID证据，Draft/feature0，不合并发布。
+
 ## MED-02 连接/目录和迁移边界合并修正，待精确原生验收 — 2026-10-23
 
 源a4939480原生/低内存在途，不标PASS；本检查点新增候选修正后须由新HEAD重新验收。迁移合同发现13→14故障路径少14→15，可能因“无迁移”假通过；补完整路径，9→10及13→14均增加injected真实到达断言。新增14→15注入，要求原14库/附件scope/day_note和版本保持、两控制表不残留，重试升级15成功且不自动采用generation。最新本地迁移6及旧ID1共7/0fail/error/skip和全部native Kotlin编译PASS，XML/log在pinned-routing。

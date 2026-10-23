@@ -98,7 +98,7 @@ internal class LibraryRestoreCoordinator(private val access:DatabaseAccess,
             val key=LocalDatabaseKey(owned).open("notes.db","key.wrap",owned.databaseAlias,freshAlias=true).also {password=it}
             val db=open(owned,key).also {candidateDb=it}
             rootTransaction {root.openHelper.writableDatabase.execSQL("UPDATE library_candidate SET directory_device=?,directory_inode=? WHERE operation_uuid=? AND state='PREPARED'",arrayOf(owned.device,owned.inode,operation.toString()))}
-            BackupJsonReader.indexed(records,::checkCurrent).use {source->db.runInTransaction {
+            BackupJsonReader.indexed(records.copyOf(),::checkCurrent).use {source->db.runInTransaction {
                 RawData.reconstructGeneration(db.openHelper.writableDatabase,source.tables,owned,::checkCurrent)
                 AttachmentCandidateMetadata.compareBusiness(db.openHelper.writableDatabase,source.tables,::checkCurrent)
             }}
@@ -194,7 +194,7 @@ internal class LibraryRestoreCoordinator(private val access:DatabaseAccess,
     }
     private fun verify(context:LibraryGenerationContext,db:NotesDatabase,p:AttachmentRestorePreflight.Plan,
         records:ByteArray,parent:AttachmentSession.Capability,checkActive:()->Unit) {
-        BackupJsonReader.indexed(records,checkActive).use {source->db.runInTransaction {
+        BackupJsonReader.indexed(records.copyOf(),checkActive).use {source->db.runInTransaction {
             MeasuredConsumptionStore.auditStagedDataset(db.openHelper.writableDatabase,0,0)
             AttachmentCandidateMetadata.compareBusiness(db.openHelper.writableDatabase,source.tables,checkActive)
         }}
