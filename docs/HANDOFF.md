@@ -1,3 +1,9 @@
+## MED-02两独立PR实证检查点：A三API在途，B本地559通过 — 2026-10-23
+
+PR110最新b5e26ae5：API26/29 push39970434554和PR39970443750均SUCCESS；本分支已核官方push原ZIP SHA256/CRC，Store11/Foundation33/Migration5/Key2/Restart1共52项零fail/skip，每API四fresh-PID原verify日志均OK(1 test)。原c181失败仍保留，未放宽生产归属规则。等待35/host，Draft未合并。
+
+PR111最新bc133a7c：生产/共享/JVM源码与541a6d42逐字节相同，本地完整559零fail/error/skip，Candidate6、Python隔离4 PASS；native新增PDF fixture初轮编译FAIL原件保留，修显式close后最终bc源码编译PASS。五个真实Snapshot测试含临床trash/restore及records回调内换库后的post-check清零；六个隔离Candidate测试不是生产格式/跨手机证据。新源三API和六门在途，NOT_APPROVED/OFF/未外审，正式portable恢复SQL/真实归档恢复进程死亡未实施。结果与原日志/XML在backup-preparation-evidence，源码分支冻结等待，不用旧源绿色代替新CI。
+
 ## PR110首轮API29真实FAIL已留原件，修测试安排不放宽检查 — 2026-10-23
 
 c181 push39968772333/job120465970244真实FAIL：missingKeyAndReplacedFile用例在已经故意替换已选inode之后再创建wrong-key/tampered测试目标，新库存归属检查正确以INCOMPLETE_INVENTORY拒绝。原371测试中的该失败报告/ZIP SHA256/CRC和日志已保留storage-budget-evidence。修正只提前准备四个独立破坏目标，所有原missing-key/换key/路径替换/坏尾/未知文件保留/四版本CORRUPT断言保留，并追加破坏后新写不建journal、不开输入、不生alias。生产完整性及预算规则完全不变；新源仍需完整三API，不用旧绿/重跑掩盖原FAIL。

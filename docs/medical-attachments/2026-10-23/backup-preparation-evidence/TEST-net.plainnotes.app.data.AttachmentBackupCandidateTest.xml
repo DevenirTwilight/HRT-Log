@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.AttachmentBackupCandidateTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-10-23T14:42:32.704Z" hostname="4043b3b97612" time="0.508">
+  <properties/>
+  <testcase name="productionMembershipRejectsMissingIdentityClosureDuplicateVersionsAndLimits" classname="net.plainnotes.app.data.AttachmentBackupCandidateTest" time="0.105"/>
+  <testcase name="candidateWrongPasswordCipherDamageAndOrdinaryBackupPrefixNeverReplaceOldLibrary" classname="net.plainnotes.app.data.AttachmentBackupCandidateTest" time="0.053"/>
+  <testcase name="purgedIdentityMapsOnlyToATombstoneAndNeverResurrectsClinicalRow" classname="net.plainnotes.app.data.AttachmentBackupCandidateTest" time="0.031"/>
+  <testcase name="candidateNewDeviceRoundTripPreservesEveryVersionTrashLinkAndOriginalHashWithoutSourceKeys" classname="net.plainnotes.app.data.AttachmentBackupCandidateTest" time="0.127"/>
+  <testcase name="candidateAuthenticatedOmissionDuplicateExtraAndObjectCorruptionAllRefuse" classname="net.plainnotes.app.data.AttachmentBackupCandidateTest" time="0.121"/>
+  <testcase name="candidateInterruptedActivationAndWrongTypedMappingKeepOldLibrary" classname="net.plainnotes.app.data.AttachmentBackupCandidateTest" time="0.064"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
