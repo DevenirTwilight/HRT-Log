@@ -1,0 +1,14 @@
+{
+  "source": "62c3b92ebfd2803ffe90eb1a6d9bfa27b11b6cab",
+  "run": 40016845668,
+  "job": 120630984185,
+  "artifact": 12529301881,
+  "sha256": "8ef8973c16b4d4a0453c321aef30a953fc540484c7a784874da8bd1ce6c673b1",
+  "zipCrc": "PASS",
+  "medicalArchive": {
+    "tests": 9,
+    "failures": 1,
+    "skips": 0
+  },
+  "failure": "Fixture.safety assumes appointment1 live, synthetic end-to-end intentionally trashes it; writer has completed. No final reader/reconstruction success claimed."
+}
