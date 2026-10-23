@@ -140,6 +140,26 @@ class AttachmentBackupPreparationAndroidTest {
             assertEquals(0L,f.number("SELECT COUNT(*) FROM attachment_operation"));f.safety()
         }
     }
+    @Test fun retiredTypedIdentityWithoutVersionsAndUnknownCiphertextCannotBeSilentlyOmitted() {
+        Fixture(app).use {f->
+            f.raw.beginTransaction();try {AttachmentIdentity.replaceStructuredDataset(f.raw);f.raw.setTransactionSuccessful()}finally {f.raw.endTransaction()}
+            // Frozen old predicate was empty: no versions existed, but a retained typed identity did.
+            assertEquals(0L,f.number("SELECT COUNT(*) FROM attachment_version"))
+            assertEquals(1L,f.number("SELECT COUNT(*) FROM attachment_record_identity"))
+            val scope=requireNotNull(AttachmentIdentity.current(f.raw));val session=AttachmentSession(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch))
+            try {reject {AttachmentBackupPreparation(f.context,f.db).capture(scope,session.issue())}}finally {session.revoke()}
+            f.safety()
+        }
+        Fixture(app).use {f->
+            val bytes=byteArrayOf(2,7,1,8);f.store().save(f.scope,f.session.issue(),f.request(bytes)) {ByteArrayInputStream(bytes)}
+            val orphan=UUID.randomUUID()
+            AttachmentOwnedFiles(f.context).locked().use {d->d.create(orphan).use {c->c.sink().use {it.write(byteArrayOf(9,9,9))};c.seal()}}
+            // Original was verified; old per-version-only verification would never inspect the extra leaf.
+            reject {AttachmentBackupPreparation(f.context,f.db).capture(f.scope,f.session.issue())}
+            assertTrue(File(f.directory,"attachment-objects-v1/$orphan").exists())
+            assertEquals(1L,f.number("SELECT COUNT(*) FROM attachment_version"));f.safety()
+        }
+    }
     @Test fun softDeletedDoseAttachmentUsesExactReferenceTrashInsteadOfInventedSnapshotRows() {
         Fixture(app).use {f->
             val repo=NotesRepository(object:DatabaseAccess(f.app) {override fun get(space:Space)=f.db})

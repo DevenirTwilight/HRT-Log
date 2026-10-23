@@ -54,8 +54,15 @@ internal class AttachmentBackupPreparation(context:Context,private val db:NotesD
                         check(AttachmentIdentity.current(raw)==scope) {"Dataset changed"}
                     }
                     // A single-current-dataset preparation must never silently omit retired originals.
-                    raw.query("SELECT 1 FROM attachment_version WHERE store_uuid!=? LIMIT 1",arrayOf(scope.dataset)).use {
+                    raw.query("""SELECT 1 FROM attachment_store s WHERE s.store_uuid!=? AND (
+                        EXISTS(SELECT 1 FROM attachment_record_identity r WHERE r.store_uuid=s.store_uuid) OR
+                        EXISTS(SELECT 1 FROM attachment_document d WHERE d.store_uuid=s.store_uuid) OR
+                        EXISTS(SELECT 1 FROM attachment_version v WHERE v.store_uuid=s.store_uuid) OR
+                        EXISTS(SELECT 1 FROM attachment_link l WHERE l.store_uuid=s.store_uuid)) LIMIT 1""",arrayOf(scope.dataset)).use {
                         check(!it.moveToFirst()) {"Retained other dataset requires multi-namespace format review"}
+                    }
+                    raw.query("SELECT 1 FROM attachment_journal WHERE proof!='COMMITTED' LIMIT 1").use {
+                        check(!it.moveToFirst()) {"Unfinished/quarantined retention is not representable in this complete snapshot"}
                     }
                     var rows=0L
                     DOMAIN_TABLES.forEach {table->child.check();raw.query("SELECT COUNT(*) FROM $table").use {
@@ -122,6 +129,13 @@ internal class AttachmentBackupPreparation(context:Context,private val db:NotesD
                         AttachmentBackupManifest.Link(c.uuid(0),c.uuid(1),c.uuid(2),c.getLong(3),c.getString(4))}
                     AttachmentBackupManifest(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch),UUID.fromString(scope.logicalVault),records,documents,versions,links).also {it.validate(limits)}
                 })
+                // The manifest cannot represent unknown/orphan/incomplete leaves. Retaining them
+                // locally while claiming a complete export would silently omit protected bytes.
+                val inventory=directory.inventory(minOf(100000,limits.maximumVersions+1)) {child.check()}
+                val expected=sources.associateBy {it.version.context.objectId.toString()}
+                check(inventory.entries.size==expected.size && inventory.entries.all {e->
+                    e.privateRegular && expected[e.name]?.identity==e.identity
+                }) {"Unrepresented or missing retained ciphertext; complete backup refused"}
                 for(source in sources) {
                     child.check()
                     val key=keys.unwrapExisting(source.alias,source.binding,source.wrapped)

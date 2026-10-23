@@ -1,3 +1,9 @@
+## MED-02 完整集合边界的两项遗漏已拒绝，重新冻结验收 — 2026-10-23
+
+在PR112语义复核中发现#111及中间b694的per-version认证不足以表示完整集合：无version但仍有typed identity的retired dataset会漏掉；原objects目录的未知/孤立密文不在已知version扫描中。新增真实反例保留旧查询的阳性事实。生产capture现拒绝任何其他dataset保留的records/documents/versions/links、未COMMITTED journal，以及与全部期望源文件/归属不精确一致的有界目录inventory。不会删除/跳过文件换绿色，不能声称这些来源已完整备份；多namespace/保留未知原件模型仍待批准。
+
+新源码本地preflight5+原TEST_ONLY candidate6共11/0fail/error/skip通过，全部native源码编译PASS；retained-boundary日志/XML保存在同一evidence目录。新增原生反例与此前软删dose引用回归均必须在最终源三API独立通过。旧b694 CI即使绿色也不能证明新的完整集合要求；旧结果/源码保留，不重跑旧源、不用它合并。最终HEAD不再追加实现，除非实际失败/必要主线集成。入口OFF/NOT_REVIEWED_EXTERNALLY、格式NOT_APPROVED/无激活，Room14/PNBAK1不变。
+
 ## MED-02 恢复准备源码冻结，进入真实原生与完整CI — 2026-10-23
 
 生产/原生代码checkpoint35a8ed8f。本地此前完整数据层572/0fail/error/skip通过；随后合计manifest+business行数上限这一处加强后，精确冻结源码新preflight5项重新PASS、native Kotlin全部编译PASS，日志/XML/生产文件SHA在restore-preparation-evidence。不得将旧完整运行归给最终源码；最终HEAD完整回归仍以自己CI为准。
