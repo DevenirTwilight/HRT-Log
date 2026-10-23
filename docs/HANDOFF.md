@@ -1,3 +1,9 @@
+## MED-02 #113一次补验成功、已正常保护合并 — 2026-10-23
+
+#113 source78bd4eaa未变；取消API29单项仅补验一次，attempt2 job120597910693 SUCCESS，其他四job成功结果保留。原始cancel证据并非测试失败或已证纯infra，已保存；retry artifact12525801130 SHA9de5121bc07bd916f232ad97aef4a309af9814eda952866a6a85fd2010ae38f9/CRC PASS，新6+3+1与原六新PID seam逐项PASS。源78bd、PR f28与merge `e61126989a7433d9ba2bf5e387c6b8a434e8f187` tree均09426d，required checks全PASS无未决review，GitHub正常auto-merge完成，无force/admin/bypass。主线Android40009477772/Science40009478000已自动启动、在途，不提前标PASS。
+
+格式审查已单独推review/med02-portable-approval-20261023（f8d344bd）：唯一整合提案、独立Python编码/Kotlin严格解码合成canonical向量和本地5/0/0/0，TEST_ONLY、CI_NOT_RUN、不待保护合并，未接入production archive。原型/审批Handoff在该分支；生产源码仍e611/78bd，正式格式NOT_APPROVED/NOT_READY_TO_FREEZE。具体新阻断：1000版本预检需要2000新alias，高于现有默认512且还要保留旧资源；DatabaseAccess固定notes.db，无generation authority/旧句柄和unguarded maintenance屏障。未擅自升限、改Schema/加密或激活。下一步只核main CI，提交单一OFF格式实施审批（并非直接永久冻结或启用），不重写旧基础。
+
 ## MED-02 #113取消原因核查及一次有界补验已启动 — 2026-10-23 18:55 UTC
 
 最新默认主线仍0a95293d，#103–112逐一核实已合并，#113 HEAD仍78bd4eaa，OPEN/auto-merge且无未决review。PR39998254238 attempt1 CANCELLED，唯API29 job120567336683被取消，其他四Android jobs均SUCCESS。原始日志显示404/404 core:data native在18:00:38完成、BUILD SUCCESSFUL；全部6+3+1新合同及原六处restart seam均在原67,109B artifact12523058707中核官方SHA1d3f15a8…/CRC PASS。随后旧App附件POC卡66/71，自18:03:47至18:35:28收到operation canceled。没有生产测试失败记录，也无取消发起者证据，actor/triggering_actor是运行身份并非取消身份；没有同ref新run支持concurrency取消判断。不能称纯基础设施故障。完整旧失败/取消原件保存在cancelled-pr113-api29，不冒充workflow通过。
