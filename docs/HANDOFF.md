@@ -1,3 +1,11 @@
+## MED-02：#104 最终源许可守卫修复，持久化授权已接收 — 2026-10-23
+
+默认分支 d2223c0a，#102/#103 已合并；#104 f86d4a5e 尚未合并。原 PR Android 39854454660：API26 job120089049019 在 adb/emulator 启动阶段失败（测试未运行）；同源 push API26 job120089018775 成功，PR API29/35、JVM 成功。另有真实主机失败 job120089049277：2255 项中 Ui08PdfSummaryUnchangedTest 1 FAIL、492 skip，原因是合法新增的四语 Tink 许可文字进入旧资源整文件哈希，不是 PDF 实现变化。
+
+本次仅在该守卫中精确反归一化 licenses_body 内的一处获准 Tink 插入，再验证全部原冻结哈希；未更新任何期望哈希、PDF 代码、UI-08 逻辑或其他资源。独立 ThirdPartyNoticesTest 仍正向要求四语 Tink/Apache 归属。2026-10-23 本地针对此工作树：UI08 守卫1、许可3、PeriodStability5，合计9/9 PASS。最终提交需完整必需 CI，不把本地或旧源绿色当作新源验收；因需实际源码修复，不额外重跑旧 f86 的 API26 故障作业。
+
+负责人本轮明确授权默认关闭的最小非破坏性 Room/journal 持久化实现；接下来独立分支，先核真实 Schema13 与兼容设计，再实施 PREPARE→STAGE→AUTHENTICATE→COMMIT→RECOVER。完整医疗备份仅设计，不改 PNBAK1，不启用入口、不使用真实原件，外审仍 NOT_REVIEWED_EXTERNALLY。尚无持久化实现或迁移通过证据，不宣称闭环完成。
+
 ## #104发现并修复运行依赖许可守卫FAIL，旧失败保留 — 2026-10-22
 
 749bacb5的push Android39851821726/job120080459643中ThirdPartyNoticesTest.everyRuntimeLibraryHasANotice FAIL（新增runtime alias tink.android不在许可映射）；不是加密合同或数据层失败。三API先前PASS仍仅归旧源，不能宣称全CI通过。补齐原许可映射和四语licenses_body里的Tink Apache-2.0归属，并新增四语归属正向检查，所有旧断言保持；未改页面布局/导航或开启功能。原失败日志/工件保留并写证据分支，PR保持自动合并待全部最终门。新最终源需要复验许可、时期稳定性与六门，不靠重跑旧源挑绿色。
