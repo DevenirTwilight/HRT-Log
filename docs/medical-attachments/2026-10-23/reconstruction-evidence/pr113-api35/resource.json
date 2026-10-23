@@ -1,0 +1,17 @@
+{
+  "api": 35,
+  "memory_kib": 65536,
+  "iterations": 3,
+  "parallelism": 1,
+  "elapsed_ns": 480162181,
+  "heap_limit_bytes": 201326592,
+  "baseline_heap_bytes": 6832992,
+  "sampled_peak_heap_bytes": 76436320,
+  "baseline_pss_bytes": 72756224,
+  "sampled_peak_pss_bytes": 153426944,
+  "sample_interval_ms": 10,
+  "independent_kat": true,
+  "scope": "TEST_ONLY_ISOLATED_KDF",
+  "formal_format_approved": false,
+  "joint_restore_budget_verified": false
+}

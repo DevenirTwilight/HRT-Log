@@ -1,0 +1,15 @@
+{
+  "purpose": "independent synthetic KAT, not native resource acceptance",
+  "implementation": "argon2-cffi/libargon2",
+  "argon2-cffi": "25.1.0",
+  "argon2-cffi-bindings": "26.1.0",
+  "password_utf8": "SYNTHETIC PNMEDBK1 resource probe",
+  "salt_hex": "000102030405060708090a0b0c0d0e0f",
+  "argon_version": 19,
+  "memory_kib": 65536,
+  "iterations": 3,
+  "parallelism": 1,
+  "length": 32,
+  "output_hex": "809cb297135320843754f44d846dc5674bb8164bf7ae15a9026a1dc84a87d467",
+  "formal_format_approved": false
+}

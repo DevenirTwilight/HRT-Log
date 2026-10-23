@@ -15,6 +15,8 @@ Pinned Tink1.23.0 / existing64KiB AES256-GCM-HKDF boundary evidence is now execu
 
 `AttachmentFormatReadinessAndroidTest` is a **TEST_ONLY isolated KDF resource probe** of the exact proposed Argon2id v1.3 tuple65536KiB/3/1, with10ms sampled heap/PSS and elapsed time recorded, no weaker fallback. Synthetic fixed password `SYNTHETIC PNMEDBK1 resource probe`, salt bytes00..0f, output32B has independent argon2-cffi/libargon2 KAT `809cb297135320843754f44d846dc5674bb8164bf7ae15a9026a1dc84a87d467`. The CI collector preserves that same run's JSON without rerunning it; unexecuted API results must remain NOT_RUN. The probe explicitly starts after GC, excludes live manifest/SQL work, and **cannot prove the complete restore fits192MiB**. No production KDF/password API is introduced.
 
+Isolated tuple evidence (source78bd4eaa, official ZIP digest/CRC verified in reconstruction-evidence): API26 PR39998254238 0.515s, sampled heap72,875,816B/PSS177,831,936B; API35 same PR0.480s, heap76,436,320B/PSS153,426,944B; same-source push39998209198 API29 0.591s, heap73,850,336B/PSS206,227,456B. All heaps capped201,326,592B. These are emulator KAT/resource observations after explicit GC, not real-device or joint archive acceptance. The earlier NOT_RUN wording below is historical; full-stream/joint-budget acceptance remains NOT_RUN.
+
 ### Joint resource and activation approval blockers
 
 | Resource retained simultaneously | Required accounting before approval |

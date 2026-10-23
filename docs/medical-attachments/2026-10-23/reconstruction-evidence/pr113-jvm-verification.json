@@ -1,0 +1,16 @@
+{
+  "run": 39998254238,
+  "job": 120567336437,
+  "source": "78bd4eaa6ac10e0eb5e58d61fab542dfda1166b7",
+  "checkout": "f28e7fa47900d39e88716131be73a4e98fa5bb17",
+  "artifact": 12520308089,
+  "sha256": "62a8fd0c49436a1379d19d0dd7dfbfbd14bc1f9768bf2476ae7170699289a18e",
+  "crc": "PASS",
+  "counts": {
+    "tests": 372,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "scope": "domain/pk/importer/attachment-poc JVM; NOT core:data or native acceptance"
+}

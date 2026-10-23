@@ -1,3 +1,13 @@
+## MED-02 PR113 原生恢复底座已获得真实通过证据，CI收尾中 — 2026-10-23
+
+冻结源码78bd4eaa（PR checkout f28e7fa47900d39e88716131be73a4e98fa5bb17）两者tree均09426d156f312608c552c47ac67b6b2c60f89560。PR39998254238 API26/35作业SUCCESS；同源push39998209198 API29 SUCCESS。三个原ZIP官方SHA256及CRC均PASS，关键原报告在reconstruction-evidence/pr113-api26、pr113-api35、push-api29。每API新BusinessReconstruction6 + BusinessRestore3 + FormatReadiness1均0fail/skip；原Preparation8/Preflight5/Staging4/Foundation33/Store11/Migration5/Key2/Restart1、TEST_ONLY Candidate6均0fail/skip。保留原四对象+两隔离真实force-stop/newPID日志，每份均OK (1 test)；不是新完整候选跨进程激活证据。
+
+真实生产RAM SQLCipher重建已通过：合成临床更正和三种trash、PDF/PNG/binary及旧版本、ACTIVE/PURGED身份、typed links、完整字段/元信息/原库所有main表行不变、缺失/篡改/取消/重编号拒绝。并非仅比较数量，也没有把旧Tink/journal重做。fixture仅借用旧test辅助，不改既有断言。
+
+TEST_ONLY独立Argon2id65536KiB/3/1 KAT通过：API26 0.515s/采样heap72,875,816B/PSS177,831,936B；同源push API29 0.591s/heap73,850,336B/PSS206,227,456B；PR API35 0.480s/heap76,436,320B/PSS153,426,944B。ART上限均201,326,592B；GC后孤立探针、10ms采样，不是全流程峰值或完整档案低内存验收。独立libargon2版本/向量JSON已存。JVM原件372/0/0/0核SHA/CRC通过，非core:data/native结论。
+
+当前PR113仍Draft：主机Android及PR API29尚在途，未提前合并；不因已有同源push绿色代替最终PR门禁。后续只读取这批已有验收、补核原件并按§106处理，不推元数据触发runtime重跑。入口OFF/外审未通过，格式和全库durable激活仍未批准，下一步不可宣称换机恢复或启用附件。
+
 ## MED-02 PR113 已提交；最终原生验收进行中 — 2026-10-23
 
 生产源码冻结 `78bd4eaa6ac10e0eb5e58d61fab542dfda1166b7`，PR https://github.com/DevenirTwilight/HRT-Log/pull/113 （Draft）。PR Android39998254238/Science39998254149、同源push Android39998209198/Science39998209373为已有自动CI，尚在途，不手动重复触发。本地最终业务6/0fail/error/skip、native最终源码编译PASS，先前完整577 PASS对应同生产文件，新增第6项后完整回归看最终CI。本证据分支独立保存最终原件和状态，不向冻结runtime分支推元数据反复跑CI。
