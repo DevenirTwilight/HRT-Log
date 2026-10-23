@@ -1,3 +1,9 @@
+## PR110旧精确源六门全PASS并同步主线；PR111撤权修复已本地验证 — 2026-10-23
+
+110的b5源PR39970443750和push39970434554全部六门SUCCESS，三API原ZIP逐项SHA/CRC核完，附件各52零fail/skip、四restart原verify日志均OK(1 test)。最新主线e21c09bf仅#108交接，已正常合并至cb51a143，保留双方HANDOFF；git diff b5..cb仅HANDOFF，生产/测试逐字节不变。最新cb需自己的CI，Draft待核，不借旧绿。
+
+111最新4991e629修只读授权锁：同事务全审计/编码不再持有写COMMIT监视器，owned缓冲转交/结果短校验、后置scope/refusal及清零保留；records私有消费者可被异步撤权，不能提前发布。新增真实native死锁窗口合同（元数据转交前和消费中），与原5个source Snapshot合同共6；实际尚未执行原生。499本地候选6PASS、native Kotlin编译PASS，结果在backup-preparation-evidence/revocable-499。早期完整559只归属541，不冒充新源全回归；最终六门在途。格式仍NOT_APPROVED、生产跨设备恢复未实施、入口OFF/未外审。
+
 ## MED-02两独立PR实证检查点：A三API在途，B本地559通过 — 2026-10-23
 
 PR110最新b5e26ae5：API26/29 push39970434554和PR39970443750均SUCCESS；本分支已核官方push原ZIP SHA256/CRC，Store11/Foundation33/Migration5/Key2/Restart1共52项零fail/skip，每API四fresh-PID原verify日志均OK(1 test)。原c181失败仍保留，未放宽生产归属规则。等待35/host，Draft未合并。

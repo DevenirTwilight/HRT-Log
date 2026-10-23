@@ -1,0 +1,8 @@
+{
+  "source": "4991e629df3352e8ab195c0a0a490ba0b65e4d61",
+  "candidate_jvm": "6 PASS",
+  "native_kotlin_compile": "PASS including6 real Snapshot contracts; actual execution pending",
+  "read_only_monitor_fix": "No write-COMMIT monitor across audit/encoding or private record consumers; final scope/auth checks and owned buffer cleanup retained",
+  "full_data_jvm": "559 PASS belongs to earlier541 source; do not claim full suite499 passed locally. Final CI must run it.",
+  "format": "NOT_APPROVED; test candidate is not production archive restore"
+}
