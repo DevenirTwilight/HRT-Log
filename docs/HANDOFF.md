@@ -1,3 +1,7 @@
+## #104 最终源三API原始工件核验 — 2026-10-23
+
+663901f97e6806e217dd0f7066e156fdc88d7b83，PR运行39936584823；三API原始ZIP已保存到 pr104-final-native，SHA256/CRC均通过，各API Foundation32/0fail/0skip、实际Keystore2/0fail/0skip。此结论仅限 #104 加密/基础合同，不是后续持久化journal的原生通过。#104最后主机检查仍在途；未提前报告合并/主线成功。旧 f86 的API26启动失败和UI08冻结守卫FAIL保留在修复分支，不因最终绿色而删。持久化9c95ea6e已提交独立分支，等待其自己的真实运行，不重用本批证据。
+
 ## #104修正后精确f86源码：内部R8/发布隔离同样PASS — 2026-10-22
 
 本地8项许可/时期守卫后，f86d4a5e内部unsigned fullRelease构建PASS，源码标识完整f86d4a5e904758bcb646d56eedbbefe620d28fe2且SOURCE_DIRTY=false。原发布隔离与No INTERNET守卫PASS；mapping中Tink/新adapter保留0类，usage整类移除。原日志、移除清单、mapping/usage SHA保留storage-license-green。没有签名、交付或发布。CI还在运行，PR原生26的pre-test设备离线失败待工作流结束后单任务重试；不把本地R8当成完整六门通过。

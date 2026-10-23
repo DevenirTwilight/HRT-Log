@@ -1,0 +1,59 @@
+[
+  {
+    "api": 26,
+    "artifact_sha256": "317ff85cf21ea1976b4bb04091a1b22a9e261bdb6d471eaf601468f25dabb30f",
+    "bytes": 64518,
+    "source": "663901f97e6806e217dd0f7066e156fdc88d7b83",
+    "run": 39936584823,
+    "classes": {
+      "AttachmentFoundationAndroidTest": {
+        "tests": 32,
+        "failures": 0,
+        "skipped": 0
+      },
+      "AttachmentKeyAndroidTest": {
+        "tests": 2,
+        "failures": 0,
+        "skipped": 0
+      }
+    }
+  },
+  {
+    "api": 29,
+    "artifact_sha256": "53d1a01fcc2529c54aba75258d752eea3c0cfbd24b304cad715957df46a47099",
+    "bytes": 64504,
+    "source": "663901f97e6806e217dd0f7066e156fdc88d7b83",
+    "run": 39936584823,
+    "classes": {
+      "AttachmentFoundationAndroidTest": {
+        "tests": 32,
+        "failures": 0,
+        "skipped": 0
+      },
+      "AttachmentKeyAndroidTest": {
+        "tests": 2,
+        "failures": 0,
+        "skipped": 0
+      }
+    }
+  },
+  {
+    "api": 35,
+    "artifact_sha256": "8f1cdcd3af27ae7d6d7749b68970e455d1357468f7d779df9e78f17b98bc0758",
+    "bytes": 151551,
+    "source": "663901f97e6806e217dd0f7066e156fdc88d7b83",
+    "run": 39936584823,
+    "classes": {
+      "AttachmentFoundationAndroidTest": {
+        "tests": 32,
+        "failures": 0,
+        "skipped": 0
+      },
+      "AttachmentKeyAndroidTest": {
+        "tests": 2,
+        "failures": 0,
+        "skipped": 0
+      }
+    }
+  }
+]
