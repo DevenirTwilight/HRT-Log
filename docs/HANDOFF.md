@@ -1,3 +1,11 @@
+## PDF-01 PDF 瑞士版式（PR 前收尾）— 2026-10-23
+
+- 分支 `feature/pdf01-swiss-layout-20261023`（工作树 /home/user/wt-pdf01，基线 d2223c0a），REQUIREMENTS §145，报告 76。
+- `PdfReport` 改为 Sink/render/trace；测试侧冻结旧实现 `LegacyPdfReport`（哈希在 `Ui08PdfSummaryUnchangedTest` 固定），`Pdf01Test` 做文字四语逐字对照、digest、drawChart 调用对比，以及版式断言。
+- 已登记 `PD-2026-10-23-PDF01-EXPORTS`（407710c3… → 30067c52…，证据为提交 86b00f88 的 REQUIREMENTS）。**之后再改 Exports.kt 必须同步更新这条记录的 new_sha256**（或另加记录）。
+- 与 UI-09 的交叉：UI-09 的 `Ui09SourceGuardTest` 固定了 Exports.kt 的基线哈希 407710c3…。两个 PR 谁后合并，谁负责把该断言改为 PDF-01 之后的哈希（UI-09 并没有改导出）。REQUIREMENTS、HANDOFF、STATUS 文末或文首的追加需要合并。
+- 待办：完整单测/lint → PR 自动合并 → 默认分支 CI 复验。不交付 APK。
+
 ## 附件受限输入本地256项通过，真实密文sandbox集成通过；首轮平台断言失败保留 — 2026-10-22
 
 生产传输层未变；ce902c89的Foundation20项中1FAIL是新测试把Robolectric管道statSize误断言为-1，实际为0，发生在读取前。原日志/XML保留input-platform-red。改为JVM精确0/真实Android仍精确-1的平台hook，读取/限量/清理/feature0原断言全保留。修正后Foundation20/0/0，domain172/0/0、附件原型64/0/0（新增一项新输入层接既有Tink真实密文sandbox：超限旧cipher/pointer/revision不变、精确上限完整认证后才CAS）；Python69 PASS。不是正式Room文件writer或新格式审核。
