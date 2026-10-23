@@ -93,6 +93,8 @@ Pinned Tink1.23.0：plaintext `n` 的 ciphertext长度为 `n+40+16*max(1,ceil((n
 
 推荐未来本地方案：保留legacy notes.db作为加密control authority和旧库；新业务库/密文置于独立、受归属保护的generation，复用当前PRIMARY数据库key保护机制（新设备是自己的新PRIMARY key，不导出源key；不另设计KDF/SQLCipher格式）。一个原生authority事务CAS active dataset/epoch/generation/operation/whole-set proof并标完成，作为唯一逻辑可见性提交。候选依赖全部fsync/seal后才能进入该事务；不把跨文件rename/两DB提交说成原子。
 
+还必须覆盖延迟请求：现有NotesRepository的deleteRecord(id)、化验/复诊及提醒等存在整数参数；旧SavedState、PendingIntent或排队请求在切换后重新get()可能取得新库，却携带旧整数。仅退休旧DB句柄、关闭缓存或重启进程不足以证明安全。激活前必须定义并验证dataset/epoch绑定的写请求及后台intent合同，在真正执行点拒绝旧scope；需要与UI/提醒负责人协调接口，本轮不擅自改这些模块。
+
 这是**待审设计而非可执行激活协议**。实施前需明确新的非破坏性Room迁移（不在本文抢占版本）、DatabaseAccess唯一解析入口、old-app downgrade barrier、私有generation根及FD校验。旧generation的业务/附件写保护必须在authority切换前持久生效，避免排队旧整数ID写到新记录；RawData.unguarded/PNBAK1等maintenance不得移除或绕过退休保护。authority未提交时重启恢复旧写权限，提交后只开放已证明新generation；任何不一致先隔离、不得把库交给Repository。每个中间崩溃点、持久性和旧句柄拒绝都须原生反例/新PID验证，不能靠状态机图代替证明。
 
 |durable state|必需事实|中断/失败|

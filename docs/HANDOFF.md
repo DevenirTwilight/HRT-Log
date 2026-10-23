@@ -1,3 +1,7 @@
+## MED-02 激活审查补充：旧请求不等于旧DB句柄 — 2026-10-23
+
+沿现有NotesRepository整数参数与DatabaseAccess.get()复核，旧SavedState/PendingIntent/排队请求可在generation切换后取得新DB却仍带旧id。已补入同一审批提案的第3冻结阻断：退休旧句柄或进程重启均不能单独证明安全，未来执行点须验证dataset/epoch绑定的写请求与后台intent合同；与UI/提醒负责人协调，不在本轮擅自改模块。该发现不改变#113隔离候选正确性，因为候选无激活/公共写入口。格式特有生产开发仍待唯一整合授权；没有提出第二套crypto或额外零散选择。
+
 ## MED-02 #113已保护合并；单一portable审批审查分支 — 2026-10-23
 
 起点0a95293d；#103–112核实MERGED。#113保留78bd4eaa不变，取消原件证明404/404 native PASS后旧App POC卡66/71，被cancel、取消发起者未知，不冒充纯infra。仅取消API29单项补验一次（run39998254238 attempt2 job120597910693）16m24s SUCCESS，其他四job成功结果保留；required checks全部PASS、无未决review。GitHub正常auto-merge于19:11完成，主线 `e61126989a7433d9ba2bf5e387c6b8a434e8f187`；其tree09426d与78bd/PR f28完全一致。原cancel和retry12525801130官方SHA9de5121b…/CRC及新6+3+1、原六restart seam已核，见docs/med02-reconstruction-evidence-20261023。新主线Android40009477772/Science40009478000自动CI在途，不能提前PASS。
