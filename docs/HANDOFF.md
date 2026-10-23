@@ -1,3 +1,9 @@
+## PR114第一轮原生夹具断言FAIL，保留证据并作最小修正 — 2026-10-23
+
+62c3b92e的API26/29新MedicalArchive9项中8PASS，真实writer导出后唯一FAIL：新场景已将appointment1移入回收站，却误调用简单Fixture.safety()要求该行仍live。官方API26 artifact12529301881 SHA8ef8973c…/CRC已核，HTML明确栈在Fixture.safety:50；不是密码学失败或infra。现不改旧helper/期望、不删保护，改为精确检查该源行已删除、manifest typed记录TRASHED、全表前后相同、FK无错误及feature0。目标库仍沿用旧live行safety。生产密码学/SQL实现未变；最终新提交须自己的全部CI，不能借8PASS或本地585冒充最终端到端通过。
+
+另push API29 job120631204038在adb root连接关闭、测试开始前infra FAIL；原件已存独立证据分支。一次rerun请求因整个run仍active被GitHub拒绝，未发起任何重跑；因本次真实测试修正需新源码完整CI，不再重跑旧62c3的infra job。受保护auto-merge仍等待最终检查，不能合并旧FAIL。下一generation分支仅独立准备，不覆盖PR114，未启用/激活。
+
 ## MED-02 portable生产路径已编码，本地回归通过，进入精确源CI — 2026-10-23
 
 独立feature/med02-portable-archive-20261023，基线e6112698。§147.D授权默认OFF格式实施已落实：MedicalArchiveCrypto（80B头/严格密码/正式Argon64MiB3/1/HKDF/portable wrapping）、typed canonical encoder/独立逐token decoder、MedicalArchiveWriter、MedicalArchiveReader及完整outer/footer/set/全inner认证，接现有preflight和BusinessRestore。Snapshot新增受归属保护的密文/临时DEK消费接口及业务快照承诺；原preflight历史闭合规则复用于导出，没有删减旧审计。详细边界见portable-implementation-contract.md。

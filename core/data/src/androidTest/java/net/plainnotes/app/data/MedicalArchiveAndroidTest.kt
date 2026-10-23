@@ -37,7 +37,13 @@ class MedicalArchiveAndroidTest:MedicalArchiveContract() {
                     val before=allRows(source);val p="SYNTHETIC 移动 archive password".toCharArray()
                     val receipt=MedicalArchiveWriter.write(snapshot,source.session.issue(),p,archive.outputStream())
                     assertEquals(archive.length(),receipt.bytes);assertEquals(4,receipt.objects);assertFalse(receipt.activatable)
-                    assertTrue(p.all {it=='\u0000'});assertEquals(before,allRows(source));source.safety()
+                    assertTrue(p.all {it=='\u0000'});assertEquals(before,allRows(source))
+                    // This fixture deliberately trashes appointment 1. The simple preparation
+                    // fixture's safety() assumes it is live, so check the actual retained meaning.
+                    assertEquals(0L,source.number("SELECT feature_enabled FROM attachment_store WHERE store_state='CURRENT'"))
+                    source.raw.query("PRAGMA foreign_key_check").use {assertEquals(0,it.count)}
+                    assertEquals(0L,source.number("SELECT COUNT(*) FROM appointment WHERE id=1"))
+                    assertEquals("TRASHED",manifest.records.single {it.kind==AttachmentBackupManifest.Kind.APPOINTMENT && it.sourceId==1L}.state)
                 }
             }
             val ks=KeyStore.getInstance("AndroidKeyStore").apply {load(null)}
