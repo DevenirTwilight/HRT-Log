@@ -101,4 +101,9 @@ val migration13To14 = object : Migration(13,14) {
     override fun migrate(db:SupportSQLiteDatabase) = AttachmentJournalSchema.migrate(db)
 }
 
-fun allMigrations(today: () -> LocalDate = LocalDate::now): Array<Migration> = arrayOf(migration1To2(today), migration2To3, migration3To4, migration4To5, migration5To6, migration6To7, migration7To8, migration8To9, migration9To10, migration10To11, migration11To12, migration12To13, migration13To14)
+/** Additive local authority, never a business backup schema or a destructive replacement. */
+val migration14To15=object:Migration(14,15) {
+    override fun migrate(db:SupportSQLiteDatabase)=LibraryGenerationSchema.migrate(db)
+}
+
+fun allMigrations(today: () -> LocalDate = LocalDate::now): Array<Migration> = arrayOf(migration1To2(today), migration2To3, migration3To4, migration4To5, migration5To6, migration6To7, migration7To8, migration8To9, migration9To10, migration10To11, migration11To12, migration12To13, migration13To14, migration14To15)

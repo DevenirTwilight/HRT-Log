@@ -1,3 +1,9 @@
+## #114 已合并；旧ID真实RED→GREEN，持久authority继续实施 — 2026-10-23
+
+#114精确372b6981六必需门PASS、无冲突/讨论，按保护规则合并ca69ee5a。已下载三API原工件SHA/CRC及MedicalArchiveAndroidTest各9/0fail/skip；新分支正常同步，保留§147.C/D/E双方授权和完整交接。旧Repository反例真实FAIL：显示旧库ID1后切到新库ID1，旧保存误改新数据；当前generation路径绑定及共享pinned绑定、受控事务入口修正后原反例PASS。原RED/新GREEN及#114工件摘要已保存generation-evidence，不称完整恢复实现完成。
+
+正在独占Room15最小本地authority/candidate迁移及DatabaseAccess/NotesRepository共享入口，不改普通业务Schema13/PNBAK1。最终活动指针仅在原SQLCipher root的一个事务提交；候选先独立持久化。迁移/持久恢复/原生/低内存尚未验证，不得激活。入口OFF、外审未完成、旧密文和alias不删除。
+
 ## MED-02 持久恢复与单一authority任务已接手 — 2026-10-23
 
 实时起点e6112698，#103/104/106/110–113已合并；#114固定候选372b69812f6f2946c68853be6f1732ab84876915，PR三API/JVM/科学均PASS、主机PASS，push主机仍待结束，不重跑。新独立feature/med02-durable-generation-20261023工作树，未改其他树。负责人§147.E已明确授权必要默认OFF持久化/安全激活，外审、永久冻结格式/删除/公开入口仍未授权。

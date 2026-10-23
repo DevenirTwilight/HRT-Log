@@ -5,6 +5,7 @@ import android.os.UserManager
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.AtomicFile
+import androidx.room.withTransaction
 import androidx.room.Room
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
@@ -62,6 +63,24 @@ enum class Space(val file:String,val wrap:String,val alias:String) {
             // makes later concurrent reads fail to decrypt the same database.
             instances[space]=db;passphrases[space]=passphrase;return db
         } catch(e:Throwable) { passphrase.fill(0); throw e }
+    }
+    /** One root native transaction serializes the final authority switch with the ENTIRE
+     * selected database transaction (including its commit). No untrusted callback selects a path. */
+    internal suspend fun <T> withGenerationTransaction(space:Space,checkBinding:(NotesDatabase)->Unit,
+        action:suspend(NotesDatabase)->T):T {
+        val selected=get(space)
+        val root=synchronized(this) {instances[space]} ?: selected // overridden in-memory test access
+        return root.withTransaction {
+            val current=get(space)
+            checkBinding(current)
+            if(current===root) action(current) else current.withTransaction {action(current)}
+        }
+    }
+    companion object {
+        internal fun handleIdentity(db:NotesDatabase):String {
+            val path=db.openHelper.writableDatabase.path
+            return if(path.isNullOrEmpty() || path==":memory:") "memory:${System.identityHashCode(db)}" else path
+        }
     }
     @Synchronized fun close(space:Space=current) {
         measuredSaveGate.synchronousMutation(space) {

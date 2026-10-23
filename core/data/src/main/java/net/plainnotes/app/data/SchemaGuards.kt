@@ -49,6 +49,7 @@ object SchemaGuards : RoomDatabase.Callback() {
         }
     }
     fun install(db: SupportSQLiteDatabase) {
+        LibraryGenerationSchema.install(db)
         AttachmentSchema.install(db)
         ReferenceSchema.install(db)
         InventoryEncoding.install(db)
