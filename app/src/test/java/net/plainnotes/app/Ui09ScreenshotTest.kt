@@ -104,13 +104,16 @@ class Ui09ScreenshotTest(private val locale: String, private val width: Int, pri
         assumeTrue("set UI09_SHOTS to render", !label.isNullOrBlank())
         RuntimeEnvironment.setQualifiers("$locale-w${width}dp-h${if (width == 320) 640 else 891}dp-xxhdpi"); RuntimeEnvironment.setFontScale(font)
         rule.mainClock.autoAdvance = false
+        var open by mutableStateOf(true)
         rule.setContent { NotesTheme(if (dark) ThemeMode.DARK else ThemeMode.LIGHT) { androidx.compose.material3.Surface {
-            StageReviewDialog(StageReviewEntity(id = 1, date = today.toString(), effects_json = "{}", tolerance_note = "Synthetic tolerance"), emptyList(), emptyList(), emptyList(), {}, {}) } } }
+            if (open) StageReviewDialog(StageReviewEntity(id = 1, date = today.toString(), effects_json = "{}", tolerance_note = "Synthetic tolerance"), emptyList(), emptyList(), emptyList(), {}, {}) } } }
         rule.mainClock.advanceTimeBy(2_000)
         val dir = File("build/ui09-shots/$label").apply { mkdirs() }
         val suffix = "${locale}_${width}dp_${if (font == 1f) "1x" else "2x"}_${if (dark) "dark" else "light"}"
         val view = org.robolectric.shadows.ShadowDialog.getLatestDialog().window!!.decorView
         val img = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888); view.draw(android.graphics.Canvas(img))
         File(dir, "8_stage_review_$suffix.png").outputStream().use { img.compress(Bitmap.CompressFormat.PNG, 100, it) }
+        // Close the dialog before teardown: left open, Robolectric keeps relayouting its window for minutes.
+        open = false; rule.mainClock.advanceTimeBy(1_000)
     }
 }
