@@ -1,3 +1,9 @@
+## MED-02 首次真实低内存全闭环已通过；补持久库后续ID保留 — 2026-10-23
+
+源13a107c6、run40033692189真实API26/x86/512MiB/192MiB SUCCESS：原5项OK5，无skip；三个OBJECTS_COMMITTED/IN_SWITCH/SWITCHED真实force-stop、不同PID重启verify各OK1，已独立下载官方ZIP12535304464，SHA2e3ca49a…/CRC和原始逐项log已核并入native-13a107c6。正式writer→独立reader→新设备本地包装/持久SQLCipher→全业务/全部4版本/历史trash/typed图复验→单Root COMMIT→新PID重开逐字段/哈希比对，首次真实闭环成立，仅对该源码/合成夹具。内存阶段采样最大Java约73.9MiB、RSS约102.6MiB，不是进程峰值；真机/真实双设备/物理断电/极限满库NOT_RUN，外审未做/feature0。
+
+发现持久重建只重放live rows会丢sqlite_sequence高位：例如live2、墓碑3和trash9后，新ID会重用3。新增仅候选调用的LibraryRestoreSequences，从本应用安装schema识别真实AUTOINCREMENT PK，保留全部认证typed墓碑及既有已验证trash snapshots的ID高位；不改历史行、不降低已有seq、不传新字段/更改格式，Long.MAX_VALUE安全拒绝分配不wrap。2项本地实测：真实RawData重建确会next3（回滚观察，不降低计数器造反例），保留后new10且原trash9仍能恢复；高计数不降低、MAX拒绝。编译PASS，原生正向新增恢复后真正新建就诊ID不得落入历史身份范围。此新源尚须CI/native，不能借13a成功直接合并；新原件与此前失败都保留，不签名发布。
+
 ## MED-02 重开后输入所有权失败已定位，候选继续严格复验 — 2026-10-23
 
 源9e6db40c低内存run40032689569：5项/2FAIL/0skip。已越过原mmap/FD问题，完成全部对象安装并重开DB，独立verify报invalid JSON；原因是首次BackupJsonReader.indexed拥有传入数组且close清零，协调器错误复用同一frozen records。两次解析现各传copyOf，原parser清零/严格验证和最终独立审计完全保留，原冻结副本仍由cap在所有退出路径擦除；4倍预算未提高。最新native编译PASS，不能提前称原生修复成功。原失败日志和先前Android ELOOP取消记录已保存native-9e6db40c，官方ZIP SHA86b46dee…/CRC已核（不是绿）。

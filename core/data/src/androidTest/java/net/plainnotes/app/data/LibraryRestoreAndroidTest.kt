@@ -158,6 +158,8 @@ class LibraryRestoreAndroidTest {
                 val item=scoped.trash().single {it.kind==Trash.APPOINTMENT && it.ref==current.id.toString()}
                 scoped.restoreTrash(item.id,Instant.ofEpochMilli(10000))
                 assertEquals("SYNTHETIC scoped new edit",scoped.appointments().single().note)
+                val next=scoped.saveAppointment(AppointmentEntity(type="SYNTHETIC new",at_utc=11000,at_zone="UTC",remind_minutes_before=0))
+                assertTrue(next>source.manifest.records.filter {it.kind==AttachmentBackupManifest.Kind.APPOINTMENT}.maxOf {it.sourceId})
             }
             assertArrayEquals(original,target.facts());original.fill(0)
         }}
