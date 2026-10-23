@@ -3271,3 +3271,9 @@ bba9562d原生39267083400/artifact12193548500再次在full_encrypted_backup退�
 ## MED-02 portable备份准备独立分支启动 — 2026-10-23
 
 feature/med02-backup-preparation-20261023基于01f45fb8，不复制未合并PR-A。新portable格式未批准，先生产只读一致快照/全版本成员/类型化UUID映射和限额组件，及test-only密码/完整集合/新设备候选；不接正式备份入口、不写恢复SQL、不占Schema。具体提案portable-backup-format-proposal.md。本分支尚未测试，不声称生产备份可用。PR-A容量独立#110，避免两分支改相同writer/文件ownership/key代码。
+
+## portable准备组件及隔离候选已编码，初轮候选6项通过 — 2026-10-23
+
+新增AttachmentBackupManifest（全版本/回收站/链接闭包、显式类型化UUID映射、PURGED仅映射墓碑）和AttachmentBackupPreparation（同事务原业务JSON/元数据快照，复用独立全审计及原有held-FD/Tink/device-key逐版本认证，缺成员拒绝、父会话撤权/换库后拒绝并清零owned记录缓冲）。不写恢复SQL、不新增持久格式或应用入口。
+
+DraftMedicalArchive只在attachmentTest测试源集：2MiB内存reference，BC Argon2id测试专用1MiB/2次+成熟JCA AES-GCM封装、原Tink对象完整认证及集合/类型映射校验；不能用其magic/参数作为正式格式。候选跨软件新device key/dataset/epoch验证所有原字节、旧版本、trash/link、错密码/缺失/额外/重复/坏密文/未知版本/中断前旧库不变。本地初轮6项与native源码编译PASS。追加真实SQLCipher/Keystore只读快照4项（真实三页PDF/PNG/binary、历史坏尾/缺失、撤权清零、外层事务/错会话拒绝）后，最终源尚未测试。实际跨手机、归档恢复SQL事务/进程死亡、正式格式/KDF低内存验收NOT_IMPLEMENTED/NOT_RUN；旧PNBAK1和schema未改。源文件后续冻结才跑完整回归，不能借初轮候选6项称生产备份可用。
