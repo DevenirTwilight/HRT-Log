@@ -1,3 +1,19 @@
+## MED-02 本轮完成：恢复准备已合并，主线全绿；完整换机仍不可用 — 2026-10-23
+
+起始主线4dca6744e93ad585a2a824262bd72d083e4f2bce（#111）；最终主线0a95293d4743656d90464827893a7b39aaedcf2f（#112）。#103/104/106/110/111均已合并且已核最终状态；#111最终5c8068d2的三API原ZIP及六门已复核，不重复实现。#112最终28198a21、实际PR checkout b980491、合并main均同树5724d0ac。PR39986383632/push39986371583、Science39986383604/39986371648均通过；正常保护合并，无admin/force/未解评审。合并后Android39990596705五个作业全SUCCESS（JVM/host/API26/29/35），Science39990596652 SUCCESS，无重试。最终默认分支已ls-remote复核仍0a95293d。
+
+真实生产能力：AttachmentRestorePreflight严格indexed JSON/当前业务版本/完整成员历史与指针/typed来源和回收站证据/明确新ID计划及目标计划行/墓碑/空间与key预算；AttachmentRestoreStaging复用heldFD/独占私有密文/fsync只读封存/现有Tink全认证，独立quarantine物理UUID，cap/current-scope保护，零SQL写入/零新alias/零包装。receipt总为wholeArchiveAuthenticated=false、activatable=false。进程死亡后没有恢复授权，未知密文留存计费，不打开采用/删除/自动激活，不冒充durable full-restore journal。
+
+修复#111真实有效dose reference-trash被误当snapshot的问题；完整源集合还会拒绝retired typed-only身份/其他保留namespace、未完成或隔离journal、原对象目录与全部源身份不精确匹配的未知/缺失密文。保留旧查询阳性反例、完整审计与所有原安全断言；不删文件换通过。不能表示的来源明确整次拒绝，不声称其已有完整备份。
+
+最终证据：pr112-final-native三官方ZIP与上传SHA一致/CRC通过；每API生产Preflight5/Staging4/Preparation8、原Foundation33/Store11/Migration5/Key2/Restart1零fail/skip，另TEST_ONLY Candidate6零fail/skip不计为真实portable成功。每API COPY/VERIFIED两处真实新PID强停原日志各OK(1 test)，原四处对象COMMIT强停仍保留。精确源host官方ZIP SHA/CRC与原indices：data572/0fail/0skip、app2335/0fail/557原有skip、PeriodStability5/0fail/0skip，R8隔离PASS。主线原host/API35日志、GitHub逐job最终JSON亦存该目录；三API逐class原件归属同树PR，不伪称另外下载并重数全部main ZIP。JVM/模拟器与真机严格区分。
+
+**当前不能在新手机完整恢复医疗档案。** 可运行生产快照/预检/密文隔离及内层认证；不能运行正式portable writer/reader/password KDF/portable wrapping/集合codec/目标业务行与FK重建/整库恢复激活。DraftMedicalArchive仍TEST_ONLY/低成本KDF/小样本软件key，不升级生产。单一PNMEDBK1候选仍NOT_APPROVED，最新同名proposal在本证据分支补明NOT_READY_TO_FREEZE：精确canonical字段、Tink长度、低内存Argon2/大档案流式、完整业务及trash graph映射、retired/orphan政策与durable原子激活仍需具体审定及明确批准。此非新增竞争格式。
+
+Room14无新迁移，PNBAK1/SQLCipher/Tink/临床事实/BDPM/PK/P5/P6/UI未改；feature_enabled=0、正式导入/真实原件OFF、永久删除OFF、NOT_REVIEWED_EXTERNALLY，无签名/交付APK/Release。真实设备、真实断电/实际磁盘填满、正式64MiB Argon2/完整大档案stream restore NOT_RUN；没有全库激活代码故不宣称恢复COMMIT崩溃验收。
+
+下一可独立交付：复用已有RawData隔离业务preflight/完整oracle，准备受控的隔离结构化记录重建和typed/临床trash全图映射验证（共享文件须再核所有权），仍不修改当前DB或激活。正式格式实现须先补齐单一规范并获明确批准；全库原子激活另审，外部安全审核在启用之前完成。停止本轮追加实现/旧源跑分；不要把本证据分支当runtime分支，生产在主线0a95293d。
+
 ## PR112已保护合并，主线CI正在核对 — 2026-10-23
 
 最终head28198a21（PR checkout b980491，同树5724d0ac）在PR39986383632、push39986371583全部必需门SUCCESS，Science39986383604/39986371648完成，无冲突/未解决review thread。按§106正常ready+保护合并，主线0a95293d4743656d90464827893a7b39aaedcf2f，2026-10-23T16:53:57Z；未admin/force/跳门。原官方129MB host artifact SHA/CRC已核，data572/0fail/0skip，app2335/0fail/557原有skip，PeriodStability5/0fail/0skip，R8发布隔离PASS；原indices/loggz在pr112-final-native。三API75列明用例（其中Candidate6始终TEST_ONLY）及两新PID seam原件此前已独立核验，不能把候选逻辑当换机成功。

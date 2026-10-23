@@ -218,6 +218,10 @@
   "main_ci": {
     "android": 39990596705,
     "science": 39990596652,
-    "status": "PENDING"
+    "status": "ALL_SUCCESS",
+    "source": "0a95293d4743656d90464827893a7b39aaedcf2f",
+    "retry": "NONE",
+    "native_evidence": "All main native job states verified; main API35 original job log includes both fresh-PID probes. Full per-class three-API raw ZIPs independently verified on identical-tree final PR checkout.",
+    "source_tree_matches_final_pr": true
   }
 }
