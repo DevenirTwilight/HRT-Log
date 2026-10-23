@@ -92,9 +92,9 @@ abstract class AttachmentMigrationContract {
             fun open()=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass))
                 .addMigrations(*allMigrations()).addCallback(SchemaGuards).build()
             room=open();val db=room!!;val raw=db.openHelper.writableDatabase
-            assertEquals(13,raw.version);assertEquals(before,fingerprint(raw));raw.query("SELECT inventory_encoding FROM supply_container").use{c->while(c.moveToNext())assertEquals(InventoryEncoding.LEGACY,c.getString(0))}
+            assertEquals(14,raw.version);assertEquals(before,fingerprint(raw));raw.query("SELECT inventory_encoding FROM supply_container").use{c->while(c.moveToNext())assertEquals(InventoryEncoding.LEGACY,c.getString(0))}
             raw.query("PRAGMA foreign_key_check").use{assertEquals(0,it.count)}
-            raw.query("SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'attachment_%'").use{assertEquals(8,it.count)}
+            raw.query("SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'attachment_%'").use{assertEquals(9,it.count)}
             val scope=db.withTransaction { requireNotNull(AttachmentIdentity.initialize(raw,true)) }
             val id=db.withTransaction { AttachmentIdentity.bind(raw,scope,"APPOINTMENT",1) }
             val repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=db})
@@ -120,7 +120,7 @@ abstract class AttachmentMigrationContract {
             fixture(name,pass,1).use{it.writableDatabase.execSQL("INSERT INTO day_note(date,text) VALUES ('2026-01-01','synthetic oldest chain')")}
             room=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass))
                 .addMigrations(*allMigrations()).addCallback(SchemaGuards).build()
-            val raw=room!!.openHelper.writableDatabase;assertEquals(13,raw.version)
+            val raw=room!!.openHelper.writableDatabase;assertEquals(14,raw.version)
             raw.query("SELECT text FROM day_note").use{assertTrue(it.moveToFirst());assertEquals("synthetic oldest chain",it.getString(0))}
             raw.query("PRAGMA foreign_key_check").use{assertEquals(0,it.count)}
         } finally {room?.close();context.deleteDatabase(name);pass.fill(0)}
@@ -132,7 +132,7 @@ abstract class AttachmentMigrationContract {
             val fault=object:androidx.room.migration.Migration(9,10) {
                 override fun migrate(db:SupportSQLiteDatabase) {AttachmentSchema.migrate(db);error("synthetic migration interruption")}
             }
-            room=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(fault,migration10To11,migration11To12,migration12To13).build()
+            room=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(fault,migration10To11,migration11To12,migration12To13,migration13To14).build()
             try{room!!.openHelper.writableDatabase;fail("Interrupted migration reported success")}catch(_:IllegalStateException){}
             room!!.close();room=null
             fixture(name,pass,9).use {
@@ -140,9 +140,35 @@ abstract class AttachmentMigrationContract {
                 db.query("SELECT text FROM day_note").use{c->assertTrue(c.moveToFirst());assertEquals("synthetic rollback sentinel",c.getString(0))}
                 db.query("SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'attachment_%'").use{c->assertEquals(0,c.count)}
             }
-            room=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(migration9To10,migration10To11,migration11To12,migration12To13).addCallback(SchemaGuards).build()
-            assertEquals(13,room!!.openHelper.writableDatabase.version)
+            room=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(migration9To10,migration10To11,migration11To12,migration12To13,migration13To14).addCallback(SchemaGuards).build()
+            assertEquals(14,room!!.openHelper.writableDatabase.version)
         } finally {room?.close();context.deleteDatabase(name);pass.fill(0)}
+    }
+
+    @Test fun room13JournalMigrationPreservesLegacyUnknownAndRollsBackOnFailure() {
+        val name="synthetic-journal13-${UUID.randomUUID()}.db";val pass=ByteArray(32){29}
+        val dataset=UUID.randomUUID().toString();val doc=UUID.randomUUID().toString();val version=UUID.randomUUID().toString()
+        try {
+            fixture(name,pass,13).use {h->val db=h.writableDatabase
+                SchemaGuards.install(db)
+                db.execSQL("INSERT INTO attachment_store(store_uuid,logical_vault_uuid,store_state,space,record_epoch,generation,feature_enabled) VALUES (?,?,'CURRENT','PRIMARY',?,1,0)",arrayOf(dataset,UUID.randomUUID().toString(),UUID.randomUUID().toString()))
+                db.execSQL("INSERT INTO attachment_document(store_uuid,document_uuid,revision,title,category,state) VALUES (?,?,1,'synthetic legacy','OTHER','ACTIVE')",arrayOf(dataset,doc))
+                db.execSQL("INSERT INTO attachment_version(store_uuid,document_uuid,version_uuid,ordinal,object_uuid,protocol_revision,dek_handle_uuid,plaintext_sha256,ciphertext_sha256,plaintext_bytes,ciphertext_bytes,mime,status) VALUES (?,?,?,1,?,1,?,zeroblob(32),zeroblob(32),1,100,'application/pdf','STAGED')",arrayOf(dataset,doc,version,UUID.randomUUID().toString(),UUID.randomUUID().toString()))
+            }
+            val fault=object:androidx.room.migration.Migration(13,14) {override fun migrate(db:SupportSQLiteDatabase) {migration13To14.migrate(db);error("synthetic journal migration interruption")}}
+            val broken=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(fault).build()
+            try {try {broken.openHelper.writableDatabase;fail("Interrupted journal migration accepted")}catch(_:IllegalStateException){}} finally {broken.close()}
+            fixture(name,pass,13).use {h->assertEquals(13,h.writableDatabase.version);h.writableDatabase.query("SELECT name FROM sqlite_master WHERE name='attachment_journal'").use {assertEquals(0,it.count)}}
+            val room=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(*allMigrations()).addCallback(SchemaGuards).build()
+            try {val db=room.openHelper.writableDatabase;assertEquals(14,db.version)
+                db.query("SELECT status,plaintext_sha256,ciphertext_sha256 FROM attachment_version WHERE version_uuid=?",arrayOf(version)).use {assertTrue(it.moveToFirst());assertEquals("STAGED",it.getString(0));assertArrayEquals(ByteArray(32),it.getBlob(1));assertArrayEquals(ByteArray(32),it.getBlob(2))}
+                db.query("SELECT COUNT(*) FROM attachment_journal").use {assertTrue(it.moveToFirst());assertEquals(0,it.getInt(0))}
+                try {db.execSQL("UPDATE attachment_version SET status='VERIFIED'");fail("Legacy UNKNOWN promoted")}catch(_:android.database.SQLException){}
+                db.query("PRAGMA foreign_key_check").use {assertEquals(0,it.count)}
+            } finally {room.close()}
+            try {fixture(name,pass,13).use {it.writableDatabase};fail("Old database reader accepted newer schema")}catch(_:android.database.sqlite.SQLiteException){}
+            assertEncryptedDatabase(name)
+        } finally {context.deleteDatabase(name);pass.fill(0)}
     }
 
     @Test fun twoEncryptedDatabasesKeepSameIntegerTargetsAndAttachmentNamespaceSeparate()=runBlocking {
