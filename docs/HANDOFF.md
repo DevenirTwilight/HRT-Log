@@ -3267,3 +3267,7 @@ bba9562d原生39267083400/artifact12193548500再次在full_encrypted_backup退�
 独立#87已在最终21a10430两轮六类CI全PASS、无冲突/未解决审查后受保护合并080094ae；build33成品/source219bbf32不变，没有新APK。主线080094ae science已PASS，Android/domain复验仍运行。
 
 负责人新任务明确优先LAB-UI-03/LAB-03，不等待P4。已从主线080094ae创建隔离工作树/workflows：/workspace/HRT-Log-lab-ui03（feature/lab-ui03-home-20261019）负责主页/真实导航；/workspace/HRT-Log-lab03（feature/lab03-analytes-20261019）负责目录/单位。禁止把本P4未准入源码带入LAB分支；不争用Room或备份版本，正式附件OFF。
+
+## MED-02 portable备份准备独立分支启动 — 2026-10-23
+
+feature/med02-backup-preparation-20261023基于01f45fb8，不复制未合并PR-A。新portable格式未批准，先生产只读一致快照/全版本成员/类型化UUID映射和限额组件，及test-only密码/完整集合/新设备候选；不接正式备份入口、不写恢复SQL、不占Schema。具体提案portable-backup-format-proposal.md。本分支尚未测试，不声称生产备份可用。PR-A容量独立#110，避免两分支改相同writer/文件ownership/key代码。
