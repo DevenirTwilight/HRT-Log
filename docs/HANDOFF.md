@@ -1,3 +1,9 @@
+## MED-02 #113取消原因核查及一次有界补验已启动 — 2026-10-23 18:55 UTC
+
+最新默认主线仍0a95293d，#103–112逐一核实已合并，#113 HEAD仍78bd4eaa，OPEN/auto-merge且无未决review。PR39998254238 attempt1 CANCELLED，唯API29 job120567336683被取消，其他四Android jobs均SUCCESS。原始日志显示404/404 core:data native在18:00:38完成、BUILD SUCCESSFUL；全部6+3+1新合同及原六处restart seam均在原67,109B artifact12523058707中核官方SHA1d3f15a8…/CRC PASS。随后旧App附件POC卡66/71，自18:03:47至18:35:28收到operation canceled。没有生产测试失败记录，也无取消发起者证据，actor/triggering_actor是运行身份并非取消身份；没有同ref新run支持concurrency取消判断。不能称纯基础设施故障。完整旧失败/取消原件保存在cancelled-pr113-api29，不冒充workflow通过。
+
+同源push39998209198已全部SUCCESS、API29原件核验仍有效，适用相同78bd/tree09426d而非被取消PR作业结论。本轮按负责人明确有界补验授权，于18:54:37仅rerun取消job120567336683一次；不改源码、不重跑四成功job或整套基准、不删断言/伪造状态，保护自动合并保留。若再次实际失败须先读原始证据定位，不无界重复。正式格式/激活尚未批准，功能/真实原件/永久删除仍OFF、外审NOT_REVIEWED_EXTERNALLY。
+
 ## MED-02 本轮交付收口：代码可执行且已验，PR113等待既有API29作业 — 2026-10-23 18:35 UTC
 
 当前代码HEAD `78bd4eaa6ac10e0eb5e58d61fab542dfda1166b7`，默认主线仍 `0a95293d4743656d90464827893a7b39aaedcf2f`。PR113 OPEN/ready/auto-merge MERGE已开启，未合并。唯一合并门禁剩余PR39998254238的API29 job120567336683 IN_PROGRESS（约45分钟，尚无完成/失败日志），其余Android/JVM/API26/API35及Science均SUCCESS。同一最终SHA的push39998209198整套SUCCESS；API29原报告也已独立核验，但不能伪装成PR作业已结束。没有手动重跑、取消有效CI、删除断言或绕过保护。合理收口，停止重复查询；既有GitHub运行和自动合并保持。主线合并后CI尚未运行，不能提前PASS。
