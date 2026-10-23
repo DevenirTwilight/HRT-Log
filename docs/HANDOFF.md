@@ -1,3 +1,13 @@
+## MED-02 #113已保护合并；单一portable审批审查分支 — 2026-10-23
+
+起点0a95293d；#103–112核实MERGED。#113保留78bd4eaa不变，取消原件证明404/404 native PASS后旧App POC卡66/71，被cancel、取消发起者未知，不冒充纯infra。仅取消API29单项补验一次（run39998254238 attempt2 job120597910693）16m24s SUCCESS，其他四job成功结果保留；required checks全部PASS、无未决review。GitHub正常auto-merge于19:11完成，主线 `e61126989a7433d9ba2bf5e387c6b8a434e8f187`；其tree09426d与78bd/PR f28完全一致。原cancel和retry12525801130官方SHA9de5121b…/CRC及新6+3+1、原六restart seam已核，见docs/med02-reconstruction-evidence-20261023。新主线Android40009477772/Science40009478000自动CI在途，不能提前PASS。
+
+本review分支review/med02-portable-approval-20261023从已合并e611起，不争抢共享Room/Repository，也不触发第二轮原生基准；不是待合并生产分支，CI_NOT_RUN，不能以skip标绿或绕过保护合并。新增TEST_ONLY Python manifest encoder/stdlib inverse +独立Kotlin严格token decoder，4619B合成全字段向量、unsigned UUID/signed64/Unicode/control字段及非canonical拒绝，最终5/0fail/error/skip本地PASS，原件/源码SHA见portable-review-evidence。代码仅test/tools，不生成正式归档或进入APK，不是外审/全流程低内存证明。
+
+同一portable-backup-format-proposal.md已收敛为单一整合审批：推荐一次性批准固定候选的OFF格式特有writer/独立reader/KDF/portable wrapping/集合认证实施；不把此当永久冻结、全库激活或启用授权。现有Tink/Keystore/journal/快照/预检/重建不重写。明确完整头、password/domain、canonical字段、Tink边界、framing/footer集合、历史trash/PURGED、typed图、failure规则及唯一generation authority推荐；无新Room编号、未实现激活。当前DatabaseAccess固定notes.db，无generation路由；旧句柄/maintenance（RawData.unguarded）屏障尚缺，不能只换文件或用单对象COMMIT。发现候选1000版本需2000新alias，而现有默认512 alias/256MiB且还保留旧库，格式上限不等于准入承诺；不升限、不减样本伪称通过。联合资源和durable激活证明仍阻断冻结。
+
+生产交付仅#113隔离RAM SQLCipher真实业务重建现已MERGED、PR CI_PASS/NATIVE_VERIFIED；本次新增canonical证据是TEST_ONLY/本地PASS，未称新增正式生产备份。当前可演示合成capture→preflight→业务重建→全inner认证→独立比对，不能完整新手机可携带恢复。PHYSICAL_NOT_RUN、EXTERNAL_REVIEW_PENDING；feature0、真实原件/永久删除OFF。无需新APK，不签名发布。下一最小生产交付在获得整合OFF格式实施授权后做writer+独立reader+集合认证并接既有预检；未批准前暂停格式特有生产路径，主线核查继续。
+
 ## MED-02 隔离业务数据库重建已编码，进入精确源码验收 — 2026-10-23
 
 起点默认分支claude/new-session-1959qb `0a95293d4743656d90464827893a7b39aaedcf2f`。本轮实时核实#103/#104/#106/#110/#111/#112均已合并；主线Android39990596705、Science39990596652均SUCCESS。下面历史PENDING不代表最新状态；#112原三API工件已在独立证据分支docs/med02-storage-evidence-20261023（a4b5e45c）核验SHA/CRC、真实PID日志，不重跑旧源。无竞争Room/storage PR。独立worktree HRT-Log-med02-reconstruction，分支feature/med02-isolated-reconstruction-20261023。

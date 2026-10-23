@@ -1,0 +1,26 @@
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.3.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :attachment-poc:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:domain:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:domain:compileKotlin UP-TO-DATE
+> Task :core:domain:compileJava NO-SOURCE
+> Task :core:domain:processResources NO-SOURCE
+> Task :core:domain:classes UP-TO-DATE
+> Task :core:domain:jar UP-TO-DATE
+> Task :attachment-poc:compileKotlin UP-TO-DATE
+> Task :attachment-poc:compileJava NO-SOURCE
+> Task :attachment-poc:processResources NO-SOURCE
+> Task :attachment-poc:classes UP-TO-DATE
+> Task :attachment-poc:jar UP-TO-DATE
+> Task :attachment-poc:processTestResources UP-TO-DATE
+> Task :attachment-poc:compileTestKotlin
+> Task :attachment-poc:compileTestJava NO-SOURCE
+> Task :attachment-poc:testClasses UP-TO-DATE
+
+> Task :attachment-poc:test
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts
+
+BUILD SUCCESSFUL in 15s
+7 actionable tasks: 2 executed, 5 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.3.1/userguide/configuration_cache_enabling.html
