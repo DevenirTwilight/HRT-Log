@@ -1,0 +1,28 @@
+{
+  "source": "7aecef43ee929ccbce668530abf9a92070b6851b",
+  "baseline": "a2917086ead90b3967eee71908160e8021dfe89a",
+  "pr": 109,
+  "environment": "local JVM Robolectric SDK35; all four locales 320dp2x in the actual AppShell flow",
+  "results": {
+    "BdpmReferenceFlowTest": {
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "PeriodStabilityTest": {
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "android_pr_run": 39957082418,
+  "android_push_run": 39956960416,
+  "ci_status": "IN_PROGRESS",
+  "production_changes": false,
+  "not_run": [
+    "physical device",
+    "manual TalkBack"
+  ]
+}

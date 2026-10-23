@@ -1,3 +1,9 @@
+## #109本地四语真实导航12项+Period5全PASS — 2026-10-23
+
+独立PR109源7aecef43ee929ccbce668530abf9a92070b6851b，本地BdpmReferenceFlowTest12/0fail/error/skip（英法简繁320dp2x真实AppShell入口、搜索/关联/取消/重新打开/解除、旧数据不变）及PeriodStability5/0/0/0全部PASS。原XML和完整日志保留postmerge-a291-bdpm/local-green，原a291失败原件继续保留，不重写旧结果。源码仅测试等待与交接，没有修改生产BDPM/医学/数据/UI。
+
+PR109已启用正常保护自动合并，无未解决讨论。准确CI Android PR39957082418/push39956960416仍在途，Science39957081633/39956960426 SUCCESS；尚未合并，不把本地当作完整CI。#108他人独立交接仍开放，避免共享文件覆盖；若保护要求同步最新主线，先核实际差异再正常集成，不force/admin。后续继续等待当前任务真实结果和合并后主线，不能仅因CI在跑就结束。
+
 ## 远端接手：#106主线真实BDPM等待竞态FAIL留原件 — 2026-10-23
 
 重新核对默认claude/new-session-1959qb HEAD a2917086：#104已合并4f3c52a5，#106已合并a2917086（Room14 journal和已验证本地持久化，不重复开发）。主线39953226169中API26/29/35和JVM SUCCESS，android job120412591904真实失败为简中320dp2x BDPM导航初始药物行缺失。官方build-results12502352491 SHA/CRC核验，原方法HTML与原日志摘录保留postmerge-a291-bdpm。
