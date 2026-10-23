@@ -1,3 +1,13 @@
+## MED-02 本轮交付收口：代码可执行且已验，PR113等待既有API29作业 — 2026-10-23 18:35 UTC
+
+当前代码HEAD `78bd4eaa6ac10e0eb5e58d61fab542dfda1166b7`，默认主线仍 `0a95293d4743656d90464827893a7b39aaedcf2f`。PR113 OPEN/ready/auto-merge MERGE已开启，未合并。唯一合并门禁剩余PR39998254238的API29 job120567336683 IN_PROGRESS（约45分钟，尚无完成/失败日志），其余Android/JVM/API26/API35及Science均SUCCESS。同一最终SHA的push39998209198整套SUCCESS；API29原报告也已独立核验，但不能伪装成PR作业已结束。没有手动重跑、取消有效CI、删除断言或绕过保护。合理收口，停止重复查询；既有GitHub运行和自动合并保持。主线合并后CI尚未运行，不能提前PASS。
+
+可执行交付：生产AttachmentBusinessRestore + AttachmentCandidateMetadata + RawData.reconstructIsolated在新dataset/epoch/generation的私有RAM SQLCipher里真实插入完整业务图，保留原整数键并核显式typed UUID映射（任意重编号拒绝），原全历史审核+逐字段/行独立比较+main/TEMP FK检查；保留临床更正、三种trash、墓碑、全部附件历史/原时间/关系，再完整认证全部内层密文。无现库写入、生产VERIFIED伪证、持久明文或激活。真实合成native新恢复9项/API+独立KDF探针1项/API已在PR26/35及同源push29逐项0fail/skip；来源ZIP SHA/CRC、原报告、六处原有重启seam及资源JSON都存reconstruction-evidence。主机精确源data578/0fail/0skip、app2335/0fail/557原有skip、Period5/0/0。未执行真机或跨设备正式归档/重新包装/全库激活。
+
+PNMEDBK1仍NOT_APPROVED/NOT_READY_TO_FREEZE。新增规范化候选规则、Tink长度实测断言、API26/29/35孤立Argon65536KiB/3/1资源/KAT证据；仍缺独立双codec一致性/拒绝向量、完整流式档案联合RAM及存储预算、durable全库authority/activation/recovery及分配器下界证明。测试transport、旧候选归档、资源probe均TEST_ONLY，不是正式writer/reader/KDF。完整换机恢复仍不能用。负责人后续应明确v1遇未知/退役集合整次拒绝政策，格式和激活只能在阻断证据补齐后另批；本轮保护合并不等于批准格式。
+
+接手唯一先行操作：读PR113和既有run39998254238，不重新触发已完成验收。若API29完成SUCCESS，核其原artifact（6+3+1及六seam、resource JSON、源码78bd/tree09426d一致），确认服务器按§106合并，记录merge SHA/最新主线并核对自动主线CI。若FAILURE，先取原始job日志/工件定位；不能仅凭运行慢认定基础设施失败，更不能重复跑分。若仍IN_PROGRESS，保持门禁/自动合并并报告事实。正式入口feature0、NOT_REVIEWED_EXTERNALLY、真实原件/永久密文和密钥删除OFF；Room14、PNBAK1、SQLCipher/Tink/Keystore、BDPM/PK/P5/P6/UI不改，无签名交付发布。
+
 ## MED-02 PR113 已完成源码复核并开启保护自动合并 — 2026-10-23
 
 18:24 UTC对精确78bd4eaa核查无未解决评审、无冲突，#113已ready并按§106开启MERGE auto-merge；GitHub仍BLOCKED等待PR39998254238最后API29必需作业。不是手动绕过：源码push39998209198全部PASS，PR其余六门中Android/JVM/API26/API35/science-change-gate均PASS，research-deep亦PASS，PR API29仍在途。保持所有OFF与格式/激活未批准，不宣称已合并。合并后核主线tree和新CI；仅消费已有验收，不重复触发研究。
