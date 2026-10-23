@@ -112,6 +112,10 @@ internal class AttachmentPersistentStore(context: Context, private val db: Notes
                     replay=Committed(request.operation,request.document,prior.context.version,request.expectedRevision+1)
                     prior
                 } else {
+                    // A late retry must not reuse an old UUID under a restored dataset/epoch.
+                    raw.query("SELECT 1 FROM attachment_operation WHERE operation_uuid=? OR idempotency_uuid=? LIMIT 1",arrayOf(request.operation.toString(),request.operation.toString())).use {
+                        check(!it.moveToFirst()) {"Operation UUID belongs to another request or dataset"}
+                    }
                     checkRecord(scope,request.record.toString())
                     checkRevision(scope,request)
                     val gen=raw.query("SELECT generation,generation_uuid FROM attachment_store s JOIN attachment_generation g ON g.store_uuid=s.store_uuid WHERE s.store_uuid=? AND s.store_state='CURRENT' AND g.state='STAGING' ORDER BY g.created_utc,g.generation_uuid LIMIT 1",arrayOf(scope.dataset)).use {

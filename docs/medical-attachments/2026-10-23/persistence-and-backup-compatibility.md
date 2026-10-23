@@ -37,7 +37,9 @@ No raw key, provider URI, absolute patient path or plaintext temporary file.
 
 Success is returned only after transaction commit. A response lost after COMMIT is
 resolved by same UUID/same request returning the original committed receipt; it
-does not open input or wrap again. A different request under that UUID refuses.
+does not open input or wrap again. A different request under that UUID refuses, including explicit reuse under a
+new dataset/epoch; a serialized SQL preflight rejects an existing operation or
+idempotency UUID before provisioning or opening input.
 The request includes scope, operation, document, typed record, expected revision,
 title/category/MIME and expected byte count/hash. Actual stream must match it.
 The future importer must obtain that bounded identity safely, not spool plaintext.

@@ -30,5 +30,11 @@
     "compile": "PASS",
     "native_runtime": "PENDING_CI",
     "oracle": "Existing Gate3 RED retained; production same-process failed recovery must leave separate PID peer HELD_OTHER_PROCESS"
+  },
+  "cross_dataset_replay_followup": {
+    "parent": "7516996be85113dc99bc446817361652a5528ead",
+    "AttachmentPersistentStore.kt_sha256": "cd9bfac7e2401410235b8520142e66edb2925353b2c547f8643a4c2409ac1023",
+    "compile": "PASS",
+    "native_runtime": "PENDING_CI"
   }
 }

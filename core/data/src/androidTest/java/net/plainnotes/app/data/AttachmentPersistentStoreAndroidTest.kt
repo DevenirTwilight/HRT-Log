@@ -143,6 +143,11 @@ class AttachmentPersistentStoreAndroidTest {
             f.raw.beginTransaction();try {AttachmentIdentity.replaceStructuredDataset(f.raw);f.raw.setTransactionSuccessful()} finally {f.raw.endTransaction()}
             reject {f.store().open(old,f.session.issue(),r.document)}
             val next=requireNotNull(AttachmentIdentity.current(f.raw));assertNotEquals(old.epoch,next.epoch)
+            f.raw.beginTransaction();val nextRecord:UUID
+            try {nextRecord=UUID.fromString(AttachmentIdentity.bind(f.raw,next,"APPOINTMENT",1));f.raw.setTransactionSuccessful()} finally {f.raw.endTransaction()}
+            assertNotEquals(f.record,nextRecord)
+            val fresh=AttachmentSession(UUID.fromString(next.dataset),UUID.fromString(next.epoch))
+            try {reject {f.store().save(next,fresh.issue(),r.copy(record=nextRecord)) {error("Old operation UUID reused after restore")}}} finally {fresh.revoke()}
             assertEquals(1L,f.number("SELECT COUNT(*) FROM attachment_link WHERE state='QUARANTINED'"));f.safety()
         }
     }

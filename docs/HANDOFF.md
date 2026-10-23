@@ -1,3 +1,7 @@
+## MED-02 跨数据集 UUID 重试边界 — 2026-10-23
+
+最终合同补齐：操作 UUID 不仅在同一 scope 内比较完整请求；新建前也在原生事务中拒绝已属于其他数据集/旧协议请求的 operation/idempotency UUID，防止恢复后迟到任务换新 scope 复用旧 UUID。仍不猜测整数记录：原生同一合同用 APPOINTMENT整数1的新 typed UUID证明拒绝，源不打开、旧版本/关联保留。未添加跨事务缓存、队列或新表。精确最终源需CI，旧7516996b不能冒充后续源。此后等待真实原生结果，仅修实际失败/必要主线冲突，不继续扩展设计。
+
 ## MED-02 复用既有 Gate3 反例补齐进程内门闩 — 2026-10-23
 
 文件锁复核发现必须沿用仓库已有 Gate3 的 POSIX 规则：同进程探测新开再关闭同一锁文件可能释放原 fcntl 锁，仅靠 FileChannel 的 OverlappingFileLockException 不足。生产 AttachmentOwnedFiles 在打开任何锁FD之前先取得非重入 Semaphore，持有至目录/锁真正关闭；所有异常路径只释放一次。不重做原型，不改既有 Gate3 RED/oracle。原生现有“活跃写入排斥恢复”合同复用 Gate2PeerProvider 的另一真实PID，断言同进程失败探测之后 peer 仍看到 HELD_OTHER_PROCESS；测试夹具仅改为其已允许的 synthetic-gate2-* 私有前缀，不新增provider/权限。
