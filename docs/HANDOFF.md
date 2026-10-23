@@ -1,3 +1,9 @@
+## PR114唯一原生夹具根因修正已推送 — 2026-10-23
+
+PR114最终候选源改为后续Git提交（见GitHub headRefOid），仅改新原生场景对源回收站状态的检查和交接，生产代码逐字节仍62c3b92e。原生测试Kotlin编译PASS，API26/29/35必须按新HEAD完整验收，不重跑旧infra失败job。原first-red日志/HTML及官方SHA/CRC在本证据分支保留。auto-merge继续受六门保护，主线尚e6112698。
+
+最新任务已授权默认OFF generation隔离和旧scope拒绝基础（不批准新Room/持久authority/激活）。独立feature/med02-generation-foundation-20261023正在准备显式Legacy-vs-Candidate scope及实际Repository事务内检查；不改UI/提醒，旧非scope API仍是未来激活阻断。新组件尚未验收/推送，不将其称已交付。下一步先收尾PR114精确源CI，同时完成独立可验证防护；新SQLCipher候选只允许私有归属、旧库不变、无激活/长期key包装/新Schema。
+
 ## MED-02 PR114已创建，精确源码CI在途 — 2026-10-23
 
 生产分支HEAD `62c3b92ebfd2803ffe90eb1a6d9bfa27b11b6cab`，PR https://github.com/DevenirTwilight/HRT-Log/pull/114 。依§106已开启正常保护auto-merge，无admin/跳检查。PR Android40016845668：JVM已SUCCESS，其余android/API26/29/35在途；Science40016845679同源运行。尚未核实原生结果，不能标NATIVE_VERIFIED或MERGED。默认主线仍e6112698，#113原验收不替代新格式验收。
