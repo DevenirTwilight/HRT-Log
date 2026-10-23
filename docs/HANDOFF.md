@@ -1,3 +1,9 @@
+## MED-02 PR113 已提交；最终原生验收进行中 — 2026-10-23
+
+生产源码冻结 `78bd4eaa6ac10e0eb5e58d61fab542dfda1166b7`，PR https://github.com/DevenirTwilight/HRT-Log/pull/113 （Draft）。PR Android39998254238/Science39998254149、同源push Android39998209198/Science39998209373为已有自动CI，尚在途，不手动重复触发。本地最终业务6/0fail/error/skip、native最终源码编译PASS，先前完整577 PASS对应同生产文件，新增第6项后完整回归看最终CI。本证据分支独立保存最终原件和状态，不向冻结runtime分支推元数据反复跑CI。
+
+静态复核补充边界：现有业务JSON不导出sqlite_sequence/runtime housekeeping。候选只公开只读快照，无新增记录/激活接口；原临床行、历史、trash及typed UUID全部比对。未来持久激活必须另证整数分配下界（含purged/trash历史键）和跨namespace身份，不可仅按现存MAX(id)重置后宣称安全；这不是本轮内部只读候选的激活许可。正式跨手机恢复仍不可用；不把内部候选、KDF probe或CI绿当格式/外审批准。
+
 ## MED-02 隔离业务数据库重建已编码，进入精确源码验收 — 2026-10-23
 
 起点默认分支claude/new-session-1959qb `0a95293d4743656d90464827893a7b39aaedcf2f`。本轮实时核实#103/#104/#106/#110/#111/#112均已合并；主线Android39990596705、Science39990596652均SUCCESS。下面历史PENDING不代表最新状态；#112原三API工件已在独立证据分支docs/med02-storage-evidence-20261023（a4b5e45c）核验SHA/CRC、真实PID日志，不重跑旧源。无竞争Room/storage PR。独立worktree HRT-Log-med02-reconstruction，分支feature/med02-isolated-reconstruction-20261023。
