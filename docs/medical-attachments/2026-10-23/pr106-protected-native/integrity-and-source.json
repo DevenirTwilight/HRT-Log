@@ -139,6 +139,8 @@
   "main_ci": {
     "android_run": 39953226169,
     "science_run": 39953226326,
-    "status": "PENDING_ANDROID_SCIENCE_PASS"
+    "status": "COMPLETED_ANDROID_FAIL_BDPM_ASSERTION_SCIENCE_PASS",
+    "evidence": "../pr106-main-native/integrity-and-source.json",
+    "subsequent_fix": "PR109 / 01f45fb8 / main39960227901 SUCCESS"
   }
 }

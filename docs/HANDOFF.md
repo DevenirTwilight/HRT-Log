@@ -1,3 +1,11 @@
+## MED-02 本轮原始证据闭合，并核对远端接手进度 — 2026-10-23
+
+#104、#106 已合并，#106真实持久化基线为 a2917086ead90b3967eee71908160e8021dfe89a（源0210ab9c、同树cd3d4347）。本次只归档已运行证据，没有触发测试或修改接手人的代码。主线39953226169的26/29/35官方ZIP均独立核对上传SHA256/CRC及Store7、Restart1、Foundation33、Migration5、Key2各0fail/skip；四个强停seam原件均在ZIP。原android主机失败的官方129MB ZIP也已核SHA/CRC，提取原BDPM方法HTML：Contract:62找不到drug-center-medication:1，发生在搜索前；不将其改记通过。压缩原日志、原ZIP和来源JSON在 pr106-main-native。
+
+最新远端已由接手工作推进，不能按本分支下面的历史待办重复实施：#109已修复真实Room异步快照等待竞态并合并01f45fb8，主线39960227901全部SUCCESS；#108交接合并e21c09bf，主线39970675775全绿。#110容量/alias预算已合并6bae935c8eefafdfb44161311e6f863cbd303318，其主线39978847114尚在途（Science39978847347通过）。本轮未冒充已复核#110全部原始工件。#111完整备份准备在独立分支，最新5c8068d27f2cd1e78479b97c93b2793c9e2c7f1d已整合#110；API26/29及JVM/Science通过，host/API35仍在途，不能借旧源通过合并。接手人的进一步证据位于 docs/med02-postmerge-evidence-20261023；不覆盖、不另建同功能实现、不重复触发CI。
+
+本任务交付：生产PREPARE→STAGE→AUTHENTICATE→真实SQL COMMIT→幂等隔离RECOVER、重启解密、范围失效清零及Room13→14非破坏迁移已完成，PNBAK1不变。完整医疗备份仍为未批准格式设计；#111的TEST_ONLY候选也不等于生产跨设备恢复。入口OFF、外审NOT_REVIEWED_EXTERNALLY、永久删除OFF，真机/实际断电/实际卷耗尽NOT_RUN。后续只核接手分支自己的必需门与格式评审，不能再重做旧Tink/迁移或旧跑分。
+
 ## MED-02 #106已受保护合并，主线复验在途 — 2026-10-23
 
 #106最终HEAD0210ab9ce8dc47c978d77417a32641872d92ade0，六必需门（push/PR两轮）全部SUCCESS，research-deep也PASS；无未解决评审、无冲突。自动合并已开启，在CLEAN状态下使用正常expected-head merge（无admin/force/旁路）完成合并a2917086ead90b3967eee71908160e8021dfe89a，2026-10-23T12:25:39Z。主线与已验收head/PR测试merge源码树都为cd3d434715cb69df8e776f8742dafba8824cd224，已fetch核对。合并回执和完整主机日志（单测/lint/build/unsigned release隔离PASS）与三API原ZIP/上传digest/SHA/CRC在pr106-protected-native。

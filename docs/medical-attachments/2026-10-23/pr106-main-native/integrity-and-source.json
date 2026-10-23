@@ -1,0 +1,154 @@
+{
+  "source": "a2917086ead90b3967eee71908160e8021dfe89a",
+  "tree": "cd3d434715cb69df8e776f8742dafba8824cd224",
+  "android_run": 39953226169,
+  "android_overall": "FAIL_BDPM_UI_ASSERTION",
+  "science_run": 39953226326,
+  "science": "PASS",
+  "artifacts": [
+    {
+      "api": 26,
+      "artifact_id": 12501348928,
+      "sha256": "df009fe7c8fbf28305d3e785ab4d5c7dd9f92416d6e208dc908c2cae34a6f750",
+      "upload_digest_matches": true,
+      "crc": "PASS",
+      "classes": {
+        "AttachmentPersistentStoreAndroidTest": {
+          "tests": 7,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentPersistentRestartAndroidTest": {
+          "tests": 1,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentFoundationAndroidTest": {
+          "tests": 33,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentSqlCipherMigrationTest": {
+          "tests": 5,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentKeyAndroidTest": {
+          "tests": 2,
+          "failures": 0,
+          "skipped": 0
+        }
+      },
+      "restart_log_members": [
+        "core/data/build/reports/med02-persistent-restart/COMMITTED-killed.log",
+        "core/data/build/reports/med02-persistent-restart/IN_COMMIT-killed.log",
+        "core/data/build/reports/med02-persistent-restart/COMMITTED-verify.log",
+        "core/data/build/reports/med02-persistent-restart/IN_COMMIT-verify.log",
+        "core/data/build/reports/med02-persistent-restart/STAGED-killed.log",
+        "core/data/build/reports/med02-persistent-restart/STAGED-verify.log",
+        "core/data/build/reports/med02-persistent-restart/WRITE-killed.log",
+        "core/data/build/reports/med02-persistent-restart/WRITE-verify.log"
+      ]
+    },
+    {
+      "api": 29,
+      "artifact_id": 12501298395,
+      "sha256": "2aa69f942b055f07d9fa86f582d0af933a70ff821bf508a3b458f7f1b541604d",
+      "upload_digest_matches": true,
+      "crc": "PASS",
+      "classes": {
+        "AttachmentPersistentStoreAndroidTest": {
+          "tests": 7,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentPersistentRestartAndroidTest": {
+          "tests": 1,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentFoundationAndroidTest": {
+          "tests": 33,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentSqlCipherMigrationTest": {
+          "tests": 5,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentKeyAndroidTest": {
+          "tests": 2,
+          "failures": 0,
+          "skipped": 0
+        }
+      },
+      "restart_log_members": [
+        "core/data/build/reports/med02-persistent-restart/COMMITTED-killed.log",
+        "core/data/build/reports/med02-persistent-restart/COMMITTED-verify.log",
+        "core/data/build/reports/med02-persistent-restart/IN_COMMIT-killed.log",
+        "core/data/build/reports/med02-persistent-restart/IN_COMMIT-verify.log",
+        "core/data/build/reports/med02-persistent-restart/STAGED-killed.log",
+        "core/data/build/reports/med02-persistent-restart/STAGED-verify.log",
+        "core/data/build/reports/med02-persistent-restart/WRITE-killed.log",
+        "core/data/build/reports/med02-persistent-restart/WRITE-verify.log"
+      ]
+    },
+    {
+      "api": 35,
+      "artifact_id": 12502581304,
+      "sha256": "eb2ec41f9ed384591817e45316584137e4b06d180d746c485709a97c2cac4866",
+      "upload_digest_matches": true,
+      "crc": "PASS",
+      "classes": {
+        "AttachmentPersistentStoreAndroidTest": {
+          "tests": 7,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentPersistentRestartAndroidTest": {
+          "tests": 1,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentFoundationAndroidTest": {
+          "tests": 33,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentSqlCipherMigrationTest": {
+          "tests": 5,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentKeyAndroidTest": {
+          "tests": 2,
+          "failures": 0,
+          "skipped": 0
+        }
+      },
+      "restart_log_members": [
+        "core/data/build/reports/med02-persistent-restart/COMMITTED-killed.log",
+        "core/data/build/reports/med02-persistent-restart/COMMITTED-verify.log",
+        "core/data/build/reports/med02-persistent-restart/IN_COMMIT-killed.log",
+        "core/data/build/reports/med02-persistent-restart/IN_COMMIT-verify.log",
+        "core/data/build/reports/med02-persistent-restart/STAGED-killed.log",
+        "core/data/build/reports/med02-persistent-restart/STAGED-verify.log",
+        "core/data/build/reports/med02-persistent-restart/WRITE-killed.log",
+        "core/data/build/reports/med02-persistent-restart/WRITE-verify.log"
+      ]
+    }
+  ],
+  "host_artifact": {
+    "id": 12502352491,
+    "sha256": "1079092f9f8085f8d56c1f659436a837f26ae76495f006a8d0bf54f76492e7fe",
+    "crc": "PASS",
+    "original_method_html_extracted": true,
+    "failure": "No node found drug-center-medication:1 at BdpmReferenceFlowContract:62",
+    "retry": "NOT_REQUESTED",
+    "superseded_by": "PR109 / 01f45fb889d198b201b3bb1904ecf4c3f41eb501 main39960227901 PASS"
+  },
+  "physical_device": "NOT_RUN",
+  "external_review": "NOT_REVIEWED_EXTERNALLY",
+  "entry": "OFF"
+}
