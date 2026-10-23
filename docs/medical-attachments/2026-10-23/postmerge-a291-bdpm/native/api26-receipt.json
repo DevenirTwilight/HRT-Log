@@ -1,0 +1,35 @@
+{
+  "artifact_id": 12504241667,
+  "run": 39957082418,
+  "source": "7aecef43ee929ccbce668530abf9a92070b6851b",
+  "sha256": "1e7ab9479eed8deb3e4df41d5a7c8061fee95635f12c09f044dc05f420aeb2c4",
+  "crc": "PASS",
+  "classes": {
+    "AttachmentPersistentStoreAndroidTest": {
+      "tests": 7,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentPersistentRestartAndroidTest": {
+      "tests": 1,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentFoundationAndroidTest": {
+      "tests": 33,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentSqlCipherMigrationTest": {
+      "tests": 5,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentKeyAndroidTest": {
+      "tests": 2,
+      "failures": 0,
+      "skipped": 0
+    }
+  },
+  "scope": "Native API26 synthetic contracts; not physical-device or external-review evidence"
+}

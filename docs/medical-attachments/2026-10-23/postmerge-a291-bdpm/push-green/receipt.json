@@ -1,0 +1,20 @@
+{
+  "run": 39956960416,
+  "source": "7aecef43ee929ccbce668530abf9a92070b6851b",
+  "artifact_id": 12503632436,
+  "sha256": "7c45226c7983bfe345ddbc89f56833f90cf1ee002bbc527be2030422ee35b7cb",
+  "crc": "PASS",
+  "results": {
+    "BdpmReferenceFlowTest": {
+      "tests": 12,
+      "failures": 0,
+      "skipped": 0
+    },
+    "PeriodStabilityTest": {
+      "tests": 5,
+      "failures": 0,
+      "skipped": 0
+    }
+  },
+  "scope": "Same-source push full CI. PR required checks separately pending; no physical device claim"
+}

@@ -1,3 +1,7 @@
+## #109 API26与同源push完整CI已核验，PR仍在途 — 2026-10-23
+
+源7aecef43未变化。push39956960416完整五Android作业及Science全PASS；官方build-results12503632436 SHA256/CRC已核验，真实HTML中BdpmReferenceFlowTest四语320dp2x合计12/0fail/0skip、PeriodStability5/0/0。报告保留postmerge-a291-bdpm/push-green。PR39957082418的API26现SUCCESS，artifact12504241667 SHA256/CRC PASS，Store7/Restart1/Foundation33/Migration5/Key2全零失败跳过；原job四seam PASS日志压缩保留native。PR尚待device/host，不以push或本地替代PR保护门。未重跑、未变源码/Schema、无生产改动。
+
 ## #109精确源API29原始工件已核验 — 2026-10-23
 
 7aecef43、PR39957082418，官方artifact12503073662 SHA256 fd6a40b4b121f799de84ef583d22446b106c69801010e353a38d0f2a4cf2ab8c 与上传digest一致、ZIP CRC PASS。原HTML核验Store7/Restart1/Foundation33/Migration5/Key2均0fail/0skip；原ZIP与receipt保留postmerge-a291-bdpm/native。该API29工件不据此声称BDPM UI四语导航已原生执行，四语导航的12项本地Robolectric证据另列。当前PR仍待API26/35/完整host；push的API26已成功，但未借它提前报整PR通过。没有新源变更、没有新Schema或生产逻辑修改。
