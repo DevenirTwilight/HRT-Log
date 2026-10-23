@@ -73,7 +73,7 @@ internal object AttachmentRestorePreflight {
                 require(tables.keys()==DOMAIN_TABLES.toSet()) {"Incomplete or unknown structured table set"}
                 RecordBackupCompatibility.validateInventoryVersion(schema,tables)
                 RecordBackupCompatibility.validateReferenceVersion(schema,tables)
-                var rows=0L
+                var rows=m.records.size.toLong()+m.documents.size+m.versions.size+m.links.size
                 tables.keys().forEach {table->checkActive();rows=Math.addExact(rows,tables.getJSONArray(table).length().toLong());require(rows<=limits.maximumRows)}
                 fun exactId(row:org.json.JSONObject,key:String):Long {
                     val v=row.get(key);require(v is Int || v is Long);return (v as Number).toLong().also {require(it>0)}
