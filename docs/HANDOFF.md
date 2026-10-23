@@ -1,3 +1,10 @@
+## PDF-01 PDF 瑞士版式（PR 前收尾）— 2026-10-23
+
+- 分支 `feature/pdf01-swiss-layout-20261023`（工作树 /home/user/wt-pdf01，基线 d2223c0a），REQUIREMENTS §145，报告 76。
+- `PdfReport` 改为 Sink/render/trace；测试侧冻结旧实现 `LegacyPdfReport`（哈希在 `Ui08PdfSummaryUnchangedTest` 固定），`Pdf01Test` 做文字四语逐字对照、digest、drawChart 调用对比，以及版式断言。
+- 已登记 `PD-2026-10-23-PDF01-EXPORTS`（407710c3… → 30067c52…，证据为提交 86b00f88 的 REQUIREMENTS）。**之后再改 Exports.kt 必须同步更新这条记录的 new_sha256**（或另加记录）。
+- 与 UI-09 的交叉：UI-09 已把对 Exports.kt 的字节固定改为内容检查，不再冲突。MED-02（#104）先合并并占用了 §144，所以 PDF-01 用 §145，UI-09 改为 §146。
+- 待办：完整单测/lint → PR 自动合并 → 默认分支 CI 复验。不交付 APK。
 ## MED-02：#104 最终源许可守卫修复，持久化授权已接收 — 2026-10-23
 
 默认分支 d2223c0a，#102/#103 已合并；#104 f86d4a5e 尚未合并。原 PR Android 39854454660：API26 job120089049019 在 adb/emulator 启动阶段失败（测试未运行）；同源 push API26 job120089018775 成功，PR API29/35、JVM 成功。另有真实主机失败 job120089049277：2255 项中 Ui08PdfSummaryUnchangedTest 1 FAIL、492 skip，原因是合法新增的四语 Tink 许可文字进入旧资源整文件哈希，不是 PDF 实现变化。
