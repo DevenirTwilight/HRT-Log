@@ -1,0 +1,348 @@
+{
+  "source": "c1810d3e45ebf2a4813778c69f75031f292392e7",
+  "scope": "Full local data JVM suite and native test APK compilation; native execution pending",
+  "totals": {
+    "tests": 561,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "classes": [
+    {
+      "name": "net.plainnotes.app.data.BackupJsonReaderStreamingTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.P4LifecycleGrowthTest",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.ReferenceAuditStreamingTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.ReferenceMigrationTest",
+      "tests": "16",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.LabContextTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.HistoricalVisitTest",
+      "tests": "18",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.ReferenceCanonicalCompatibilityTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.NonBlockingWritePrototypeTest",
+      "tests": "7",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.HistoryIntegrityTest",
+      "tests": "6",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.SupplyLedgerTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.TrashDataTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.DailyTrashCollisionTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.ReferenceCatalogTest",
+      "tests": "6",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.SchemaConstraintTest",
+      "tests": "10",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.ReferencePayloadTest",
+      "tests": "10",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.KeyBoundaryTest",
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.LabPanelDataTest",
+      "tests": "14",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.AttachmentScopedReaderTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.HrtTrackerImportTest",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.NonBlockingRepositoryWriteTest",
+      "tests": "12",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.RegimenHistoryTest",
+      "tests": "8",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.AttachmentStorageBudgetTest",
+      "tests": "8",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.LabBatchSaveTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.PlanEditTest",
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.MeasuredConsumptionStoreTest",
+      "tests": "148",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.DataTransferTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.HistoryPeriodDataTest",
+      "tests": "9",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.VisitPackDataTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.WellbeingMigrationTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.MeasuredSaveCoordinatorTest",
+      "tests": "14",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.AttachmentFoundationTest",
+      "tests": "33",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.VoidedPackageTest",
+      "tests": "18",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.UndoSkippedTest",
+      "tests": "33",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.StockForecastTest",
+      "tests": "11",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.BdpmCatalogueTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.BackfillTest",
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.AttachmentMigrationTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.BackupReplacementTest",
+      "tests": "9",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.LedgerReplacementTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.ReferencePersistenceTest",
+      "tests": "23",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.HistoricalContextRepairTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.PackageMeasurementPayloadTest",
+      "tests": "13",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.Ansm03b0InventoryTest",
+      "tests": "13",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.StockCorrectionTest",
+      "tests": "9",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.WellbeingRecordsTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.IndexedBackupDocumentTest",
+      "tests": "7",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.MeasuredUsePayloadTest",
+      "tests": "12",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.data.MeasuredContainerStoreTest",
+      "tests": "19",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    }
+  ]
+}

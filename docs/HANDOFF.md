@@ -1,3 +1,7 @@
+## 存储容量PR110冻结源本地完整回归通过 — 2026-10-23
+
+源c1810d3e，本地core:data完整JVM {'tests': 561, 'failures': 0, 'errors': 0, 'skipped': 0}；Android测试APK编译PASS。新增Budget8、原Foundation33及ScopedReader3均零fail/error/skip。原初轮编译失败保留在source分支docs/storage-budget-evidence，修fixture尾随lambda未删断言；最终计数与XML/日志归档本分支storage-budget-evidence。PR110仍Draft，三API与host在途，不把本地编译当原生执行；源保持冻结，结果独立证据分支及时推送避免重置CI。
+
 ## 更正前轮日志归档判断：四seam原件已在原ZIP保留 — 2026-10-23
 
 重新逐项枚举#106和01f45主线原ZIP，实际均包含med02-persistent-restart下WRITE/STAGED/IN_COMMIT/COMMITTED的killed.log与verify.log；主线三API共12个verify均含OK(1 test)、无FAILURES。前轮“上传路径缺失”的判断不准确，已修正production-review-scope当前清单并写restart-log-correction.json；旧交接保留为历史，勿据此新增无谓CI路径或重跑。源码workflow本来已收这些日志。
