@@ -1,0 +1,22 @@
+{
+  "baseline_main": "e61126989a7433d9ba2bf5e387c6b8a434e8f187",
+  "scope": "TEST_ONLY manifest grammar; no production archive/crypto/activation API",
+  "counts": {
+    "tests": 5,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "files_sha256": {
+    "tools/attachment-poc/src/test/kotlin/net/plainnotes/attachmentpoc/PortableCanonicalReview.kt": "c0fdf3ee278ec27e5223d1dc71cc65ab291de6eefedafee175e11fbfc69ab504",
+    "tools/attachment-poc/src/test/kotlin/net/plainnotes/attachmentpoc/PortableCanonicalReviewTest.kt": "57a0d7b0060c83b09cf2e293d94960b5f3e53b65562f300df068ecdeaca7b239",
+    "tools/med02-format-review/canonical_reference.py": "ed0da380535e9c4a55df97028637647bc0739c695fa7e4e99b033931ad00ae04",
+    "tools/attachment-poc/src/test/resources/portable-review/canonical.sha256": "7e1ff8acad36e2024352a3fda430fd3e712973ce6af1ff13cfa12cf5a10b247f",
+    "tools/attachment-poc/src/test/resources/portable-review/source.json": "8fe9fe4ea73363bb54f282289d2db4de4405b5e18c12931edb0a1f192bbe01c6",
+    "tools/attachment-poc/src/test/resources/portable-review/canonical.bin": "20f623a150947966cc8660f6cdb6ea9ed3f49f7e65aec9f3acad17a69f853deb"
+  },
+  "native": "NOT_APPLICABLE_TO_PURE_JVM_REVIEW_CODEC; production native evidence separate",
+  "physical": "PHYSICAL_NOT_RUN",
+  "ci": "CI_NOT_RUN_REVIEW_ONLY_BRANCH",
+  "format": "NOT_APPROVED_NOT_READY_TO_FREEZE"
+}

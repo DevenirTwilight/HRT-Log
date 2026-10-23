@@ -1377,3 +1377,9 @@ PNMEDBK1继续单一NOT_APPROVED候选；正式writer/reader/KDF/portable wrappi
 负责人授权从最新#112主线实现格式无关、无正式激活入口的隔离业务恢复组件：完整业务快照和预检typed UUID映射进入全新dataset/epoch/generation候选，复用现有插入依赖、业务版本门与独立全历史审核，逐字段核对业务事实、历史、回收站和附件关系；缺失/损坏/重复/冲突/取消整次拒绝，原库不变。DOSE_RECORD reference trash与LAB/APPOINTMENT snapshot trash不得混淆，PURGED仅有明确墓碑证据时接受。只用合成样本，适用JVM和API26/29/35验证，按§106保护合并；不占新Room版本，不改变既有业务及PNBAK1。
 
 最小实现保留整个业务图的整数键于全新隔离库，并逐一核实显式typed UUID映射；不凭整数相同推断身份，也不擅自改写带哈希/历史/回收站的图。要求任意整数重编号的计划安全拒绝。候选仅私有内存SQLCipher及TEMP关系，不制造正式VERIFIED/密钥包装/活动指针。生产附件入口feature_enabled=0、NOT_REVIEWED_EXTERNALLY、真实原件/永久密文及密钥删除OFF。PNMEDBK1仍NOT_APPROVED/NOT_READY_TO_FREEZE；正式字节/KDF/wrapping/集合codec与durable全库激活须另行明确批准，研究probe不得升级生产。优先交付此闭环，不重复P4研究或已完成密码学底座。
+
+### 147.C MED-02 收尾恢复基础并整合一次性 portable 审批（2026-10-23）
+
+负责人要求先按实时事实收尾#113，区分取消/基础设施/测试失败，保留同源push证据；保护规则下只做必要有界补验，六门及审查满足后按§106合并并核主线。不得跳检查/删断言/伪造绿灯，不重写#103–112基础。继续默认OFF格式无关实现和必要验证，沿唯一PNMEDBK1候选完成canonical/header/KDF/domain/Tink边界/全集合/历史trash/portable DEK/typed恢复/原子激活/资源及崩溃审查，只提交一份整合推荐审批，不逐项追问。
+
+本提示不是正式字节/KDF或全库激活协议的批准。允许TEST_ONLY独立canonical编解码审查证据，不能升为生产归档codec；尚未授权格式特有生产路径停在明确边界，其余独立工作继续。feature0、NOT_REVIEWED_EXTERNALLY、真实原件/永久删除OFF；PNBAK1、SQLCipher/Tink/Keystore体系、BDPM/PK/P5/P6/无关UI不变，不增网络/遥测/云上传或签名交付发布。报告逐项区分IMPLEMENTED/MERGED/CI_PASS/NATIVE_VERIFIED/PHYSICAL_NOT_RUN/EXTERNAL_REVIEW_PENDING；内部组件不称正式换机交付。
