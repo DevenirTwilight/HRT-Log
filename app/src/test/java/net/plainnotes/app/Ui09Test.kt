@@ -73,10 +73,14 @@ class Ui09SourceGuardTest {
         assertFalse(s.contains("SectionCard(stringResource(R.string.visit_questions))")); assertFalse(s.contains("SectionCard(stringResource(R.string.visit_pack_title))"))
     }
 
-    /** Exports are untouched (the numbering is display only). */
+    /**
+     * The numbering is display only. UI-09 does not touch the export code; Exports.kt is not pinned here because PDF-01
+     * (REQUIREMENTS §145) changes its PDF layout under its own approval — that the CSV and review lines carry no numbering is
+     * checked on the output in Ui09ScreenTest, and the shared review text below stays the base.
+     */
     @Test fun exportCodeIsTheBase() {
         fun sha(f: File) = java.security.MessageDigest.getInstance("SHA-256").digest(f.readBytes()).joinToString("") { "%02x".format(it) }
-        assertEquals("407710c35904da6bede1a8f42b2d64c0491ebdaf641b893c11c9aa4ede2b192b", sha(File("src/main/java/net/plainnotes/app/export/Exports.kt")))
+        assertFalse(File("src/main/java/net/plainnotes/app/export/Exports.kt").readText().contains("NumberedHeading"))
         assertEquals("df0d246ba308f43dd869c131b5d781dfba4125ec940df9fd55dcc15ddb1c497b", sha(File("src/main/java/net/plainnotes/app/export/WellbeingSummary.kt")))
     }
 }
