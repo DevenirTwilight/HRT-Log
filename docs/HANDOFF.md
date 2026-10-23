@@ -1,3 +1,13 @@
+## MED-02 持久恢复生产路径已编码，尚待原生闭环验收 — 2026-10-23
+
+分支feature/med02-durable-generation-20261023；基于已保护合并#114 ca69ee5a。新增Room15仅本地library_authority/library_candidate，原Room1–14链保留，业务备份Schema13和PNBAK1不变。LibraryRestoreCoordinator实际执行：独立reader→联合预算/持久意图→新held-FD私有SQLCipher及新本地key→精确业务重建→原始内层密文复制/真实双alias预留包装和独立全认证→关闭并新连接/本地key重开逐字段/全历史/全版本复验→单一root authority原生COMMIT。原DB/原件/alias保留，无rename式伪原子。Root存初始来源的加密provenance，不执行archive SQL，不复制源Keystore alias。
+
+旧请求反例已RED→GREEN，现进一步规定：全库切换后，未显式携带LibraryRequestScope的旧UI/后台写接口一律拒绝，即使是重启后的新Repository，也不能凭旧整数ID重新贴标签；内部forGeneration支持明确新scope。所有真实Repository修改（包括导入/普通备份恢复/库存/回收站）经过root native事务与目标事务的共同屏障。旧附件句柄按同一持久authority拒绝。原页面/提醒尚未接新scope，这是公开启用前的真实集成门；本任务不开放UI。额外附件写入/旧quarantine准备在存在retained generation后先拒绝，不能绕过联合256MiB/512alias预算；读取、明确scope的普通事实写入及完整恢复自身另有受控路径。
+
+Root候选PREPARED/READY时普通写入冻结，成功后解除；异常尽量标ABORTED，撤权/进程死亡则必须以新授权显式abort，所有文件/key/预算继续保留，不自动采用/删除/退款。operation state可在新进程核真实提交，重复UUID不创建新库/包装，异载荷拒绝。锁顺序SQLite root→目标→session，完整审计/预检不持session monitor，实际COMMIT仍在授权内；WAL读避免跨库反向等待。
+
+本地原Room15目标45项中间源PASS、native源码编译PASS；首轮完整586项10FAIL均为旧Room14期待/故障链少最后迁移，原XML/log已保存first-full-room15。现在只更新实际末版本期待到15及补migration14To15，保留全部旧业务、回滚、下行拒绝断言；新源未重新验收。已新增真实生产E2E和三个fresh-PID seam，源码未执行原生，当前不能称闭环完成。无本地KVM；将用必需API26/29/35和独立512MiB/192MiB最短合成恢复验收，不跑P4大库/性能攻关。低内存/真机/外审均未获PASS；入口feature0、永久删除OFF、不冻结格式、不签名发布。
+
 ## #114 已合并；旧ID真实RED→GREEN，持久authority继续实施 — 2026-10-23
 
 #114精确372b6981六必需门PASS、无冲突/讨论，按保护规则合并ca69ee5a。已下载三API原工件SHA/CRC及MedicalArchiveAndroidTest各9/0fail/skip；新分支正常同步，保留§147.C/D/E双方授权和完整交接。旧Repository反例真实FAIL：显示旧库ID1后切到新库ID1，旧保存误改新数据；当前generation路径绑定及共享pinned绑定、受控事务入口修正后原反例PASS。原RED/新GREEN及#114工件摘要已保存generation-evidence，不称完整恢复实现完成。

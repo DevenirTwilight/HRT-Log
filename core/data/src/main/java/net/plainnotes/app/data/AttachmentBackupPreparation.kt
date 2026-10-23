@@ -15,7 +15,7 @@ import java.nio.channels.Channels
 /** Read-only preparation. No portable cipher, archive writer, restore SQL or application entry. */
 internal class AttachmentBackupPreparation(context:Context,private val db:NotesDatabase,
     private val keys:AttachmentDeviceKeys=AttachmentDeviceKeys(),private val beforeRecordTransfer:()->Unit={}) {
-    private val files=AttachmentOwnedFiles(context)
+    private val files=AttachmentOwnedFiles(DatabaseAccess.storageContext(db,context))
     private val raw get()=db.openHelper.writableDatabase
     class Snapshot internal constructor(private val db:NotesDatabase,private val scope:AttachmentIdentity.Scope,
         private val cap:AttachmentSession.Capability,private val owner:BackupPlaintextOwner,
@@ -24,11 +24,17 @@ internal class AttachmentBackupPreparation(context:Context,private val db:NotesD
         private fun checkCurrent() {
             check(Looper.myLooper()!=Looper.getMainLooper()) {"Backup snapshot requires a worker"}
             check(db.isOpen && !db.openHelper.writableDatabase.inTransaction())
-            check(AttachmentIdentity.current(db.openHelper.writableDatabase)==scope) {"Snapshot dataset changed"}
+            DatabaseAccess.assertActiveHandle(db);check(AttachmentIdentity.current(db.openHelper.writableDatabase)==scope) {"Snapshot dataset changed"}
         }
         private fun <T> current(block:()->T):T = try {
-            cap.publishFor(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch)) {
-                checkCurrent();val result=block();checkCurrent();result
+            checkCurrent()
+            DatabaseAccess.withActiveHandle(db) {
+                cap.publishFor(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch)) {
+                    check(AttachmentIdentity.current(db.openHelper.writableDatabase)==scope)
+                    val result=block()
+                    check(AttachmentIdentity.current(db.openHelper.writableDatabase)==scope)
+                    result
+                }
             }
         } catch(failure:Throwable) {try {close()}catch(cleanup:Throwable) {failure.addSuppressed(cleanup)};throw failure}
         fun manifest()=current {value}
@@ -76,7 +82,7 @@ internal class AttachmentBackupPreparation(context:Context,private val db:NotesD
                 // Do not hold the write-COMMIT authorization monitor across full audit/encoding.
                 val manifest=db.runInTransaction(Callable {
                     child.publishFor(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch)) {
-                        check(AttachmentIdentity.current(raw)==scope) {"Dataset changed"}
+                        DatabaseAccess.assertActiveHandle(db);check(AttachmentIdentity.current(raw)==scope) {"Dataset changed"}
                     }
                     // A single-current-dataset preparation must never silently omit retired originals.
                     raw.query("""SELECT 1 FROM attachment_store s WHERE s.store_uuid!=? AND (
@@ -169,7 +175,7 @@ internal class AttachmentBackupPreparation(context:Context,private val db:NotesD
                 }
                 val recordCommitment=MessageDigest.getInstance("SHA-256").digest(owner.bytes()).joinToString("") {"%02x".format(it.toInt() and 255)}
                 child.publishFor(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch)) {
-                    check(db.isOpen && AttachmentIdentity.current(raw)==scope) {"Dataset changed during snapshot authentication"}
+                    DatabaseAccess.assertActiveHandle(db);check(db.isOpen && AttachmentIdentity.current(raw)==scope) {"Dataset changed during snapshot authentication"}
                     child.own(AutoCloseable {sources.forEach {it.wrapped.fill(0)}})
                     Snapshot(db,scope,child,owner,manifest,files,keys,sources.associateBy {it.version.context.version},recordCommitment).also {transferred=true}
                 }

@@ -39,6 +39,19 @@ internal object RawData {
         check(db.inTransaction())
         db.query("PRAGMA database_list").use {c->while(c.moveToNext())check(c.getString(2).isNullOrEmpty()) {"Isolated reconstruction must stay in memory"}}
         db.query("PRAGMA temp_store").use {check(it.moveToFirst() && it.getInt(0)==2)}
+        reconstructEmpty(db,tables,checkActive)
+    }
+    /** Only the coordinator's newly created held-directory SQLCipher generation is admitted.
+     * The RAM-only entry above keeps its original stricter boundary. */
+    internal fun reconstructGeneration(db:SupportSQLiteDatabase,tables:BackupTables,
+        owned:LibraryGenerationContext,checkActive:()->Unit) {
+        check(db.inTransaction());owned.checkCurrent()
+        check(db.path==owned.getDatabasePath("notes.db").path)
+        db.query("PRAGMA database_list").use {c->while(c.moveToNext())check(c.getString(1) in setOf("main","temp"))}
+        db.query("PRAGMA temp_store").use {check(it.moveToFirst() && it.getInt(0)==2)}
+        reconstructEmpty(db,tables,checkActive)
+    }
+    private fun reconstructEmpty(db:SupportSQLiteDatabase,tables:BackupTables,checkActive:()->Unit) {
         require(tables.keys()==DOMAIN_TABLES.toSet())
         DOMAIN_TABLES.forEach {t->checkActive();db.query("SELECT 1 FROM $t LIMIT 1").use {check(!it.moveToFirst()) {"Candidate is not empty"}}}
         BackupValidation.validateRows(db,tables)

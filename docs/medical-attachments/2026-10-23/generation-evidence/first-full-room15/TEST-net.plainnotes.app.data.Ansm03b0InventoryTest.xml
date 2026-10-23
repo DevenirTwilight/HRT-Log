@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.Ansm03b0InventoryTest" tests="13" skipped="0" failures="2" errors="0" timestamp="2026-10-23T21:28:37.916Z" hostname="4043b3b97612" time="11.251">
+  <properties/>
+  <testcase name="oldBackupCannotSilentlyPreserveNewAssociationsOrGuardState" classname="net.plainnotes.app.data.Ansm03b0InventoryTest" time="5.578"/>
+  <testcase name="patchRemovalDoesNotConsumeAndRevisionReversesOriginalApplication" classname="net.plainnotes.app.data.Ansm03b0InventoryTest" time="0.472"/>
+  <testcase name="allOldRoomVersionsUpgradeThenAcceptSeparateCandidateWithoutBackfillingInventory" classname="net.plainnotes.app.data.Ansm03b0InventoryTest" time="0.489">
+    <failure message="java.lang.AssertionError: expected:&lt;14&gt; but was:&lt;15&gt;" type="java.lang.AssertionError">java.lang.AssertionError: expected:&lt;14&gt; but was:&lt;15&gt;
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at net.plainnotes.app.data.Ansm03b0InventoryContract.allOldRoomVersionsUpgradeThenAcceptSeparateCandidateWithoutBackfillingInventory(Ansm03b0InventoryContract.kt:366)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:26)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:27)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.robolectric.RobolectricTestRunner$HelperTestRunner$1.evaluate(RobolectricTestRunner.java:524)
+	at org.robolectric.internal.SandboxTestRunner.executeInSandbox(SandboxTestRunner.java:494)
+	at org.robolectric.internal.SandboxTestRunner.access$900(SandboxTestRunner.java:67)
+	at org.robolectric.internal.SandboxTestRunner$7.evaluate(SandboxTestRunner.java:442)
+	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+	at org.robolectric.internal.SandboxTestRunner.access$600(SandboxTestRunner.java:67)
+	at org.robolectric.internal.SandboxTestRunner$6.evaluate(SandboxTestRunner.java:333)
+	at org.robolectric.internal.SandboxTestRunner$3.evaluate(SandboxTestRunner.java:233)
+	at org.robolectric.internal.SandboxTestRunner$5.lambda$evaluate$0(SandboxTestRunner.java:317)
+	at org.robolectric.internal.bytecode.Sandbox.lambda$runOnMainThread$0(Sandbox.java:101)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+</failure>
+  </testcase>
+  <testcase name="realScalarPoolCannotProveMixedStrengthPackageSelection" classname="net.plainnotes.app.data.Ansm03b0InventoryTest" time="0.295"/>
+  <testcase name="candidateDDLFailureRollsBackWithoutChangingRoomVersionOrLegacyRows" classname="net.plainnotes.app.data.Ansm03b0InventoryTest" time="0.328">
+    <failure message="java.lang.AssertionError: expected:&lt;14&gt; but was:&lt;15&gt;" type="java.lang.AssertionError">java.lang.AssertionError: expected:&lt;14&gt; but was:&lt;15&gt;
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at net.plainnotes.app.data.Ansm03b0InventoryContract$candidateDDLFailureRollsBackWithoutChangingRoomVersionOrLegacyRows$1.invokeSuspend(Ansm03b0InventoryContract.kt:342)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:98)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:94)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:70)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:48)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source)
+	at net.plainnotes.app.data.Ansm03b0InventoryContract.candidateDDLFailureRollsBackWithoutChangingRoomVersionOrLegacyRows(Ansm03b0InventoryContract.kt:336)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:26)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:27)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.robolectric.RobolectricTestRunner$HelperTestRunner$1.evaluate(RobolectricTestRunner.java:524)
+	at org.robolectric.internal.SandboxTestRunner.executeInSandbox(SandboxTestRunner.java:494)
+	at org.robolectric.internal.SandboxTestRunner.access$900(SandboxTestRunner.java:67)
+	at org.robolectric.internal.SandboxTestRunner$7.evaluate(SandboxTestRunner.java:442)
+	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+	at org.robolectric.internal.SandboxTestRunner.access$600(SandboxTestRunner.java:67)
+	at org.robolectric.internal.SandboxTestRunner$6.evaluate(SandboxTestRunner.java:333)
+	at org.robolectric.internal.SandboxTestRunner$3.evaluate(SandboxTestRunner.java:233)
+	at org.robolectric.internal.SandboxTestRunner$5.lambda$evaluate$0(SandboxTestRunner.java:317)
+	at org.robolectric.internal.bytecode.Sandbox.lambda$runOnMainThread$0(Sandbox.java:101)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+</failure>
+  </testcase>
+  <testcase name="recordLedgerAndCandidateCaptureRollBackAtEveryTestTransactionBoundary" classname="net.plainnotes.app.data.Ansm03b0InventoryTest" time="0.438"/>
+  <testcase name="baselinePublicRecordEditReverseAdjustmentAndBackupPreserveAppendOnlyHistory" classname="net.plainnotes.app.data.Ansm03b0InventoryTest" time="1.531"/>
+  <testcase name="gelPumpAndMassRecordsNeedIndependentFrozenUnitsAndActualCapacity" classname="net.plainnotes.app.data.Ansm03b0InventoryTest" time="0.309"/>
+  <testcase name="unsafeMassScalarBridgeIsDetectedAgainstRealContainerConsumption" classname="net.plainnotes.app.data.Ansm03b0InventoryTest" time="0.311"/>
+  <testcase name="ledgerGuardsAndBusinessUuidConflictDetectActualBadWrites" classname="net.plainnotes.app.data.Ansm03b0InventoryTest" time="0.264"/>
+  <testcase name="unknownLegacyContainersStayUnknownAfterRenamingAndCurrentStrengthChanges" classname="net.plainnotes.app.data.Ansm03b0InventoryTest" time="0.269"/>
+  <testcase name="snapshotCaptureForeignKeysTombstonesAndRestoreWithoutCatalogAreIsolated" classname="net.plainnotes.app.data.Ansm03b0InventoryTest" time="0.306"/>
+  <testcase name="voidRestoreAndConsumedPackageRejectionKeepOriginalLedger" classname="net.plainnotes.app.data.Ansm03b0InventoryTest" time="0.347"/>
+  <system-out><![CDATA[ANSM03B0 patch-history.json 07c9c87a4d347c7aab47a8c6f1563bb2c16be5127a1d34c2eb25e7fba7f01557
+ANSM03B0 mixed-strength-unknown.json 0833eba0676db228dd6036cfbea77cb0e65f4013afe4b41ba4c1cf8eead49061
+ANSM03B0 ledger-baseline.json 1851d0f3c5948f5068d6f4eff584371f23f4d5f4a6b51c0ca1231b669bfa7378
+ANSM03B0 gel-capacity.json 808f87b84c51d16c9443e85946c0815cc8cc599cb29cf912fa4c69d1aebdcd1c
+ANSM03B0 unsafe-bridge-difference.json 66c92bd1b2d2e3c92cd1b8fb8e120f3276fc98af120f6f6a33c538303fa9aec4
+ANSM03B0 void-restore.json 64e28522a5e88b1afd17a54908b3395a0a3ad2f464fe3ab6205b060c364cff02
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

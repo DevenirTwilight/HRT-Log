@@ -37,6 +37,13 @@ internal object MedicalArchiveReader {
             val copy=records.copyOf();val lease=cap.ownBytes(copy)
             try {consume(copy)}finally {lease.close()}
         }
+        /** Authenticated provenance retained only inside the destination SQLCipher journal;
+         * not a new archive or a transferable local-device key envelope. */
+        internal fun <T> retainedManifest(consume:(ByteArray)->T):T=guarded {
+            val bytes=MedicalArchiveManifest.encode(manifest,envelopes,cap::check)
+            val lease=cap.ownBytes(bytes)
+            try {consume(bytes)} finally {lease.close()}
+        }
         override fun members()=guarded {Collections.unmodifiableList(manifest.versions.map {it.manifest})}
         override fun takeDek(version:UUID):ByteArray {
             var key:ByteArray?=null

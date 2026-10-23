@@ -10,15 +10,19 @@ import java.util.UUID
  */
 internal class AttachmentScopedReader(private val db:NotesDatabase,private val scope:AttachmentIdentity.Scope,
     private val capability:AttachmentSession.Capability,private val reader:AttachmentObjectStreams.Reader):AutoCloseable {
-    private fun <T> current(block:()->T):T = try { capability.publishFor(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch)) {
+    private fun <T> current(block:()->T):T = try {
         check(Looper.myLooper()!=Looper.getMainLooper()) {"Attachment reads require a worker thread"}
         check(db.isOpen) {"Attachment database closed"}
         val raw=db.openHelper.writableDatabase
         check(!raw.inTransaction()) {"Attachment read cannot use a stale caller transaction"}
-        check(AttachmentIdentity.current(raw)==scope) {"Attachment dataset changed"}
-        block()
-    } } catch(failure:Throwable) {
-        try {close()} catch(cleanup:Throwable) {failure.addSuppressed(cleanup)}
+        DatabaseAccess.withActiveHandle(db) {
+            capability.publishFor(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch)) {
+                check(AttachmentIdentity.current(raw)==scope) {"Attachment dataset changed"}
+                block()
+            }
+        }
+    } catch(failure:Throwable) {
+        try {close()}catch(cleanup:Throwable) {failure.addSuppressed(cleanup)}
         throw failure
     }
     val size:Long get()=current {reader.size}

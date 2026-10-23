@@ -16,11 +16,11 @@ val CHECKIN_DEFAULTS=DAILY_KEYS
 const val BACKFILL_MAX_DAYS=731L
 
 @Singleton class NotesRepository private constructor(private val access: DatabaseAccess, private val pinned: Space?,
-    private val generationBindings:java.util.concurrent.ConcurrentHashMap<Space,String>) {
+    private val generationBindings:java.util.concurrent.ConcurrentHashMap<Space,String>,private val requestScope:LibraryRequestScope?=null) {
     constructor(access:DatabaseAccess,pinned:Space?):this(access,pinned,java.util.concurrent.ConcurrentHashMap())
     @Inject constructor(access: DatabaseAccess) : this(access, null)
     /** A repository that always works on [space], whatever the UI has selected (used by background reminders). */
-    fun pinnedTo(space: Space) = NotesRepository(access, space, generationBindings)
+    fun pinnedTo(space: Space) = NotesRepository(access, space, generationBindings, requestScope)
     // Coroutine-local transaction routing, not a database-validity cache. Legacy sql()/db()
     // helpers must stay on the same target as their DAO when global UI selection changes.
     private val transactionSpace=ThreadLocal<Space?>()
@@ -32,10 +32,25 @@ const val BACKFILL_MAX_DAYS=731L
         check(bound==null || bound==identity) {"Request belongs to a retired database generation"}
         return database
     }
+    /** Caller must carry this scope with the displayed record/draft; never retag an old ID.
+     * Unscoped legacy UI/background writes fail closed after a full-library switch. */
+    fun forGeneration(scope:LibraryRequestScope)=NotesRepository(access,pinned,java.util.concurrent.ConcurrentHashMap(),scope)
+    suspend fun generationScope():LibraryRequestScope=withContext(Dispatchers.IO) {
+        val database=databaseFor(space);val scope=requireNotNull(AttachmentIdentity.current(database.openHelper.writableDatabase))
+        LibraryRequestScope(DatabaseAccess.handleIdentity(database),scope.dataset,scope.epoch)
+    }
+    private fun writeBinding(target:Space,database:NotesDatabase) {
+        bindDatabase(target,database)
+        if(DatabaseAccess.managedGeneration(database)) {
+            val expected=requireNotNull(requestScope) {"A generation-scoped request is required after full restore"}
+            val live=requireNotNull(AttachmentIdentity.current(database.openHelper.writableDatabase))
+            check(expected.generation==DatabaseAccess.handleIdentity(database) && expected.dataset==live.dataset && expected.epoch==live.epoch) {"Retired record request scope"}
+        }
+    }
     private fun databaseFor(target:Space)=bindDatabase(target,access.get(target))
     private fun db() = databaseFor(space)
     private suspend fun <T> boundTransaction(target:Space,block:suspend(NotesDatabase)->T):T =
-        access.withGenerationTransaction(target,{bindDatabase(target,it)}) {database->block(database)}
+        access.withGenerationTransaction(target,{writeBinding(target,it)}) {database->block(database)}
     internal val measuredSaveGate get()=access.measuredSaveGate
     suspend fun <T> transaction(block: suspend (NotesDao) -> T): T {
         val target=space

@@ -44,7 +44,7 @@ internal class AttachmentPersistentStore(context: Context, private val db: Notes
         }.toByteArray().let(::sha)
     }
     data class Committed(val operation: UUID, val document: UUID, val version: UUID, val revision: Long)
-    private val files = AttachmentOwnedFiles(context)
+    private val files = AttachmentOwnedFiles(DatabaseAccess.storageContext(db,context))
     private val raw: SupportSQLiteDatabase get() = db.openHelper.writableDatabase
     private fun worker() {
         check(Looper.myLooper() != Looper.getMainLooper()) { "Attachment IO requires a worker thread" }
@@ -61,9 +61,9 @@ internal class AttachmentPersistentStore(context: Context, private val db: Notes
     private fun insert(table: String, values: ContentValues) { check(raw.insert(table, SQLiteDatabase.CONFLICT_ABORT, values) != -1L) }
     private fun update(sql: String, vararg args: Any?) { raw.execSQL(sql, args) }
     private fun scopeCheck(scope: AttachmentIdentity.Scope, cap: AttachmentSession.Capability) {
-        cap.publishFor(UUID.fromString(scope.dataset), UUID.fromString(scope.epoch)) {
-            check(AttachmentIdentity.current(raw) == scope) { "Dataset changed" }
-        }
+        DatabaseAccess.assertActiveHandle(db)
+        val current=AttachmentIdentity.current(raw)
+        cap.publishFor(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch)) {check(current==scope) {"Dataset changed"}}
     }
     private data class Journal(val operation: String, val document: String, val record: String,
         val generation: String, val context: AttachmentObjectContext, val stageAlias: String,
@@ -113,6 +113,7 @@ internal class AttachmentPersistentStore(context: Context, private val db: Notes
                     replay=Committed(request.operation,request.document,prior.context.version,request.expectedRevision+1)
                     prior
                 } else {
+                    DatabaseAccess.requireUnpartitionedStorage(db)
                     // A late retry must not reuse an old UUID under a restored dataset/epoch.
                     raw.query("SELECT 1 FROM attachment_operation WHERE operation_uuid=? OR idempotency_uuid=? LIMIT 1",arrayOf(request.operation.toString(),request.operation.toString())).use {
                         check(!it.moveToFirst()) {"Operation UUID belongs to another request or dataset"}

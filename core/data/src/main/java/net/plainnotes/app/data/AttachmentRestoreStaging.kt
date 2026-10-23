@@ -34,7 +34,7 @@ internal class AttachmentRestoreStaging(context:Context,private val db:NotesData
         check(Looper.myLooper()!=Looper.getMainLooper()) {"Restore staging requires a worker"}
         cap.publishFor(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch)) {
             check(db.isOpen && !raw.inTransaction()) {"Cannot prepare from a caller SQL snapshot"}
-            check(AttachmentIdentity.current(raw)==scope) {"Restore destination changed"}
+            DatabaseAccess.assertActiveHandle(db);check(AttachmentIdentity.current(raw)==scope) {"Restore destination changed"}
         }
     }
     /** Bounded inventory is also the restart policy: retain/charge every leaf, never auto-resume,
@@ -48,6 +48,7 @@ internal class AttachmentRestoreStaging(context:Context,private val db:NotesData
     fun stage(scope:AttachmentIdentity.Scope,cap:AttachmentSession.Capability,
         plan:AttachmentRestorePreflight.Plan,source:CiphertextSource):Receipt {
         current(scope,cap)
+        DatabaseAccess.requireUnpartitionedStorage(db)
         val owner=cap.fork()
         try {
             val index=source.members().toList()
@@ -104,7 +105,7 @@ internal class AttachmentRestoreStaging(context:Context,private val db:NotesData
                 }
                 current(scope,owner)
                 owner.publishFor(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch)) {
-                    check(AttachmentIdentity.current(raw)==scope && !raw.inTransaction())
+                    DatabaseAccess.assertActiveHandle(db);check(AttachmentIdentity.current(raw)==scope && !raw.inTransaction())
                     Receipt(attempt,plan.namespace,staged)
                 }
             }
