@@ -1,0 +1,51 @@
+{
+  "base": "663901f97e6806e217dd0f7066e156fdc88d7b83",
+  "scope": "working tree before first persistence commit; SHA binding uses per-source hashes; native execution NOT_RUN locally",
+  "source_sha256": {
+    "AttachmentPersistentStore.kt": "f6076c89e538f941e03469619a5811ea71da74bf87cc258ce1c33a694a79a819",
+    "AttachmentOwnedFiles.kt": "b63db9562acab54db068ecb85184d5cccbc715203288e8ca3a028a721ef97415",
+    "AttachmentJournalSchema.kt": "c3e32205dfb276576618af6cf676e57c7b5818524aac754ea2deccfe5fd73914",
+    "AttachmentJournalEntity.kt": "6cf5f3fc231bd260f3a1dca49b4b2fd48c40984ab7ee2fee38159d458d382946"
+  },
+  "local_targeted": "32 foundation + 5 migration, 0fail/error/skip; final Android instrumentation compile PASS",
+  "full_data_task": "PASS before final coordinator operation-state/recovery helper adjustment; final CI must validate exact committed source",
+  "external_review": "NOT_REVIEWED_EXTERNALLY",
+  "fd_ownership_followup": {
+    "parent": "ca733bacbc21954d5a043b05e54e89572ebbdeeb",
+    "AttachmentOwnedFiles.kt_sha256": "518d97f9213a6991f6b318f0fd1bceb545681387f724dc3d27d06a2ed8dd0201",
+    "compile": "production and Android instrumentation compile PASS; native runtime pending"
+  },
+  "integration_followup": {
+    "parent": "bfdea54921c164616d8e393df911d1d70dbff044",
+    "AttachmentPersistentStore.kt_sha256": "b2b7656a5e3e604abc7452a15f41aced71c27d8f8ced762dbfdf9579b9c86d73",
+    "app_instrumentation_compile": "PASS",
+    "python_design": 61,
+    "python_isolation": 4,
+    "native_runtime": "PENDING_CI"
+  },
+  "posix_followup": {
+    "parent": "eb9f24ae4670061147297c3ba0c1f64a24e113b1",
+    "AttachmentOwnedFiles.kt_sha256": "b915b527dbdf0fde8155df81b43475aaa7bbb23d341ea779ef9e541a63e8afc0",
+    "AttachmentPersistentStoreAndroidTest.kt_sha256": "e61f65db0cf2fa1e13c8de2429185fb8b91c097b2d50deea9c0cbf533a8138c9",
+    "compile": "PASS",
+    "native_runtime": "PENDING_CI",
+    "oracle": "Existing Gate3 RED retained; production same-process failed recovery must leave separate PID peer HELD_OTHER_PROCESS"
+  },
+  "cross_dataset_replay_followup": {
+    "parent": "7516996be85113dc99bc446817361652a5528ead",
+    "AttachmentPersistentStore.kt_sha256": "cd9bfac7e2401410235b8520142e66edb2925353b2c547f8643a4c2409ac1023",
+    "compile": "PASS",
+    "native_runtime": "PENDING_CI"
+  },
+  "epoch_lease_and_native_transaction_followup": {
+    "parent": "0e02f7e79054446824bc63de758fab977608a51b",
+    "source_sha256": {
+      "AttachmentScopedReader.kt": "5a472028644ed494826834ec1fbdae0fd86a323e58beb0c56823a9576bb778bf",
+      "AttachmentPersistentStore.kt": "711f9fcfedb6809cd27616479cb79f5cada07b265175a3bae4eca0227466351d",
+      "AttachmentTransaction.kt": "1113192c5c038215fbe926b4636454235cf4b8880e24dabab5ea13d4e1b1e898"
+    },
+    "local": "Foundation33 + ScopedReader3 PASS, native test compilation PASS",
+    "old_source": "API26/29/35 green does NOT resolve old open-lease epoch defect; do not merge 0e02f7e7",
+    "native_runtime": "PENDING_CI for final source"
+  }
+}

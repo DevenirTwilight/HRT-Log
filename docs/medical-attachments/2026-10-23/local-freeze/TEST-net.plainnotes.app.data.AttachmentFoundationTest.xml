@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.AttachmentFoundationTest" tests="33" skipped="0" failures="0" errors="0" timestamp="2026-10-23T11:19:57.784Z" hostname="ed2a3e4b604e" time="8.786">
+  <properties/>
+  <testcase name="failedDatasetSwitchRollsBackAndStaleHandlesCannotBind" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="3.308"/>
+  <testcase name="cancelledReaderRejectsLatePipeOwnershipAndClosesIncomingDescriptor" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.201"/>
+  <testcase name="resourceRevocationClosesActualPipeAndClearsOnlyOwnedBuffer" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.142"/>
+  <testcase name="actualRoomCommitIsInsideAuthorityAndStaleCapabilityCannotPublish" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.133"/>
+  <testcase name="realIntakeUuidSurvivesEditsDuplicateDeleteAndRestoreWithoutStockCreation" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.196"/>
+  <testcase name="operationReplayOwnershipAndTerminalStateAreProtected" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.101"/>
+  <testcase name="wrongPasswordCorruptionAndFailedRestoreDoNotChangeRowsOrEpoch" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="1.03"/>
+  <testcase name="clearFailureRollsBackDataDatasetAndReinstallsAllProtection" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.169"/>
+  <testcase name="boundedUnknownLengthPipeReadsActualBytesWithoutActivatingAttachments" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.098"/>
+  <testcase name="room11KeepsThreeAttachmentDomainsDefaultDisabled" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.108"/>
+  <testcase name="boundedPipeRejectsOversizeAndDoesNotLeakPartialRead" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.09"/>
+  <testcase name="visitTrashRestoreKeepsUuidThenPurgePreventsIntegerReuse" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.132"/>
+  <testcase name="pnBakBusinessSchemaTenStillExcludesAttachmentsAndRestoreRetiresIdentity" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.603"/>
+  <testcase name="typedIdentityIsStableAndMissingOrSkippedTargetsReject" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.109"/>
+  <testcase name="draftLinksAreScopedAndOldRestoreQuarantinesEvenSameIntegerTargets" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.434"/>
+  <testcase name="journalReplayCancelAndFailedTransactionKeepReservationsConsistent" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.09"/>
+  <testcase name="callerTransactionCannotMasqueradeAsAnAttachmentCommit" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.078"/>
+  <testcase name="keyRolesPrivateSpaceAndMissingKeyCannotPretendRecovery" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.08"/>
+  <testcase name="unauthenticatedVersionsAndOperationsCannotBecomeReady" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.069"/>
+  <testcase name="labTrashRestoreKeepsTypedUuidAndContext" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.089"/>
+  <testcase name="changedTrashEvidenceFailsAndRestorationRollsBack" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.163"/>
+  <testcase name="wrongKeyTruncationTrailingBytesAndTrustedCommitmentMismatchAreRejected" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.168"/>
+  <testcase name="fullAuthenticationPrecedesRandomReadsAcrossAllSegmentBoundaries" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.122"/>
+  <testcase name="oversizeWriteAndInvalidLimitCloseAllTransferredResourcesWithoutReceipt" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.092"/>
+  <testcase name="cancelledReaderClosesChannelAndClearsRejectedCallerRangeOnly" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.065"/>
+  <testcase name="providerFailureRemainsPrimaryEvenWhenBothCleanupActionsFail" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.061"/>
+  <testcase name="everyContentIdentityFieldIsBoundByAead" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.065"/>
+  <testcase name="revokedBeforeOpenClosesTransferredChannelAndErasesTransferredKey" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.063"/>
+  <testcase name="canonicalPortableContextMatchesIndependentNetworkOrderVector" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.079"/>
+  <testcase name="freshEncryptionOfSameBytesHasIndependentCiphertextAndSiblingReaderSurvives" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.091"/>
+  <testcase name="supportedApiIsWireCompatibleWithFrozenUpstreamPrimitive" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.106"/>
+  <testcase name="encryptionFinalCloseFailureNeverProducesAStagedReceipt" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.084"/>
+  <testcase name="corruptFinalTagEvenWithUpdatedPublicHashNeverPublishesFirstByte" classname="net.plainnotes.app.data.AttachmentFoundationTest" time="0.076"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

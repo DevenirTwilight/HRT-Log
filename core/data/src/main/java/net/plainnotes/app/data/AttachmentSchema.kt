@@ -213,5 +213,6 @@ END""",
             }
             db.execSQL(statement)
         }
+        AttachmentJournalSchema.install(db)
     }
 }
