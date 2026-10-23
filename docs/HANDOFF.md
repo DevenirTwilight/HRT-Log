@@ -1,3 +1,7 @@
+## portable准备499精确源API29原件已核 — 2026-10-23
+
+PR111/39974366212官方12510822608 SHA256 93bff2601aaf57a7df7f752bf5f14d5cd450a4a0b18cfd0c7466bcec0b6fd797及CRC已核；真实Preparation6和Candidate6均0fail/skip，逐方法确认撤权不持有监视器、回调中换库拒绝清零、历史必要原件缺失/坏尾拒绝、就诊trash/restore保留UUID/不自动恢复关联实际执行PASS。基线原Store7/Foundation33/Migration5/Key2/Restart1亦全PASS。原ZIP/HTML/receipt在native-499。独立候选是software-key/library模型，不是生产归档格式/SQL激活或真实新手机；正式格式仍NOT_APPROVED，其他平台和完整CI待核。A110最新cb仅文档同步，尚未合并，不复制其开放分支生产代码。
+
 ## PR110旧精确源六门全PASS并同步主线；PR111撤权修复已本地验证 — 2026-10-23
 
 110的b5源PR39970443750和push39970434554全部六门SUCCESS，三API原ZIP逐项SHA/CRC核完，附件各52零fail/skip、四restart原verify日志均OK(1 test)。最新主线e21c09bf仅#108交接，已正常合并至cb51a143，保留双方HANDOFF；git diff b5..cb仅HANDOFF，生产/测试逐字节不变。最新cb需自己的CI，Draft待核，不借旧绿。

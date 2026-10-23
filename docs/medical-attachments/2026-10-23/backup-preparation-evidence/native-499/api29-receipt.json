@@ -1,0 +1,45 @@
+{
+  "source": "4991e629df3352e8ab195c0a0a490ba0b65e4d61",
+  "run": 39974366212,
+  "artifact": 12510822608,
+  "sha256": "93bff2601aaf57a7df7f752bf5f14d5cd450a4a0b18cfd0c7466bcec0b6fd797",
+  "crc": "PASS",
+  "classes": {
+    "AttachmentBackupCandidateAndroidTest": {
+      "tests": 6,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentBackupPreparationAndroidTest": {
+      "tests": 6,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentPersistentStoreAndroidTest": {
+      "tests": 7,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentFoundationAndroidTest": {
+      "tests": 33,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentSqlCipherMigrationTest": {
+      "tests": 5,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentKeyAndroidTest": {
+      "tests": 2,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentPersistentRestartAndroidTest": {
+      "tests": 1,
+      "failures": 0,
+      "skipped": 0
+    }
+  },
+  "scope": "Actual native source snapshot contracts and isolated software-device candidate. Not production full archive/database activation or physical device migration."
+}
